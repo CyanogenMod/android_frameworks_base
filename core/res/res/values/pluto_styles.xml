@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="PlutoWindowTitleBackground">
+        <item name="android:background">@drawable/pluto_section_header_element</item>
+    </style>
+
+    <style name="PlutoWindowTitle">
+        <item name="android:singleLine">true</item>
+        <item name="android:textAppearance">@style/TextAppearance.WindowTitle</item>
+        <item name="android:shadowColor">#BB000000</item>
+        <item name="android:shadowRadius">2.75</item>
+    </style>
+
+    <style name="PlutoDialogWindowTitle">
+        <item name="android:maxLines">1</item>
+        <item name="android:scrollHorizontally">true</item>
+        <item name="android:textAppearance">@style/TextAppearance.DialogWindowTitle</item>
+    </style>
+
+    <style name="PlutoAlertDialog">
+        <item name="android:fullDark">@drawable/popup_full_dark</item>
+        <item name="android:topDark">@drawable/popup_top_dark</item>
+        <item name="android:centerDark">@drawable/popup_center_dark</item>
+        <item name="android:bottomDark">@drawable/popup_bottom_dark</item>
+        <item name="android:fullBright">@drawable/popup_full_bright</item>
+        <item name="android:topBright">@drawable/popup_top_bright</item>
+        <item name="android:centerBright">@drawable/popup_center_bright</item>
+        <item name="android:bottomBright">@drawable/popup_bottom_bright</item>
+        <item name="android:bottomMedium">@drawable/popup_bottom_medium</item>
+        <item name="android:centerMedium">@drawable/popup_center_medium</item>
+    </style>
+    
+    <!-- Animations -->
+    <style name="PlutoAnimation" />
+    
+    <!-- Standard animations for a full-screen window or activity. -->
+    <style name="PlutoAnimation.Activity">
+        <item name="android:activityOpenEnterAnimation">@anim/task_open_enter</item>
+        <item name="android:activityOpenExitAnimation">@anim/task_open_exit</item>
+        <item name="android:activityCloseEnterAnimation">@anim/task_close_enter</item>
+        <item name="android:activityCloseExitAnimation">@anim/task_close_exit</item>
+        <item name="android:taskOpenEnterAnimation">@anim/task_open_enter</item>
+        <item name="android:taskOpenExitAnimation">@anim/task_open_exit</item>
+        <item name="android:taskCloseEnterAnimation">@anim/task_close_enter</item>
+        <item name="android:taskCloseExitAnimation">@anim/task_close_exit</item>
+        <item name="android:taskToFrontEnterAnimation">@anim/task_open_enter</item>
+        <item name="android:taskToFrontExitAnimation">@anim/task_open_exit</item>
+        <item name="android:taskToBackEnterAnimation">@anim/task_close_enter</item>
+        <item name="android:taskToBackExitAnimation">@anim/task_close_exit</item>
+    </style>
+
+    <!-- Standard animations for a non-full-screen window or activity. -->
+    <style name="PlutoAnimation.Dialog">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit</item>
+    </style>
+
+    <!-- Standard animations for hiding and showing the status bar. -->
+    <style name="PlutoAnimation.StatusBar">
+        <item name="android:windowEnterAnimation">@anim/status_bar_enter</item>
+        <item name="android:windowExitAnimation">@anim/status_bar_exit</item>
+    </style>
+
+    <!-- Standard animations for a translucent window or activity. -->
+    <style name="PlutoAnimation.Translucent">
+    </style>
+
+    <style name="PlutoAnimation.OptionsPanel">
+        <item name="android:windowEnterAnimation">@anim/options_panel_enter</item>
+        <item name="android:windowExitAnimation">@anim/options_panel_exit</item>
+    </style>
+
+    <style name="PlutoAnimation.SubMenuPanel">
+        <item name="android:windowEnterAnimation">@anim/submenu_enter</item>
+        <item name="android:windowExitAnimation">@anim/submenu_exit</item>
+    </style>
+
+    <style name="PlutoAnimation.TypingFilter">
+        <item name="android:windowEnterAnimation">@anim/grow_fade_in_center</item>
+        <item name="android:windowExitAnimation">@anim/shrink_fade_out_center</item>
+    </style>
+    
+    <style name="PlutoAnimation.TypingFilterRestore">
+        <item name="android:windowEnterAnimation">@null</item>
+        <item name="android:windowExitAnimation">@anim/shrink_fade_out_center</item>
+    </style>
+
+    <style name="PlutoAnimation.Toast">
+        <item name="android:windowEnterAnimation">@anim/toast_enter</item>
+        <item name="android:windowExitAnimation">@anim/toast_exit</item>
+    </style>
+
+    <style name="PlutoAnimation.DropDownDown">
+        <item name="android:windowEnterAnimation">@anim/grow_fade_in</item>
+        <item name="android:windowExitAnimation">@anim/shrink_fade_out</item>
+    </style>
+
+    <style name="PlutoAnimation.DropDownUp">
+        <item name="android:windowEnterAnimation">@anim/grow_fade_in_from_bottom</item>
+        <item name="android:windowExitAnimation">@anim/shrink_fade_out_from_bottom</item>
+    </style>
+
+    <!-- Window animations that are applied to input method overlay windows.
+         {@hide Pending API council approval} -->
+    <style name="PlutoAnimation.InputMethod">
+        <item name="android:windowEnterAnimation">@anim/input_method_enter</item>
+        <item name="android:windowExitAnimation">@anim/input_method_exit</item>
+    </style>
+
+    <!-- Window animations that are applied to the search bar overlay window.
+         {@hide Pending API council approval} -->
+    <style name="PlutoAnimation.SearchBar">
+        <item name="android:windowEnterAnimation">@anim/search_bar_enter</item>
+        <item name="android:windowExitAnimation">@anim/search_bar_exit</item>
+    </style>
+
+    <!-- Status Bar Styles -->
+
+    <style name="PlutoTextAppearance.StatusBarTitle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#ffffffff</item>
+    </style>
+
+
+    <!-- Widget Styles -->
+
+    <style name="PlutoWidget">
+        <item name="android:textAppearance">?android:attr/textAppearance</item>
+    </style>
+
+    <style name="PlutoWidget.AbsListView">
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:fadingEdge">vertical</item>
+    </style>
+
+    <style name="PlutoWidget.Button">
+        <item name="android:background">@drawable/pluto_btn_default</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmallInverse</item>
+        <item name="android:textColor">@color/primary_text_light_nodisable</item>
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+    </style>
+
+    <style name="PlutoWidget.Button.Small">
+        <item name="android:background">@drawable/pluto_btn_default_small</item>
+    </style>
+
+    <style name="PlutoWidget.Button.Inset">
+        <item name="android:background">@drawable/pluto_button_inset</item>
+    </style>
+
+    <style name="PlutoWidget.CompoundButton">
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textAppearance">?android:attr/textAppearance</item>
+        <item name="android:textColor">?android:attr/textColorPrimaryDisableOnly</item>
+        <item name="android:gravity">center_vertical|left</item>
+    </style>
+
+    <style name="PlutoWidget.CompoundButton.CheckBox">
+        <item name="android:background">@drawable/btn_check_label_background</item>
+        <item name="android:button">@drawable/pluto_btn_check</item>
+    </style>
+
+    <style name="PlutoWidget.CompoundButton.RadioButton">
+        <item name="android:background">@drawable/btn_radio_label_background</item>
+        <item name="android:button">@drawable/pluto_btn_radio</item>
+    </style>
+
+    <style name="PlutoWidget.CompoundButton.Star">
+        <item name="android:background">@drawable/btn_star_label_background</item>
+        <item name="android:button">@drawable/btn_star</item>
+    </style>
+
+    <style name="PlutoWidget.CompoundButton.StarButtonless">
+        <item name="android:background">@drawable/btn_star_label_background</item>
+        <item name="android:button">@drawable/btn_star_buttonless</item>
+    </style>
+
+    <style name="PlutoWidget.Button.Toggle">
+        <item name="android:background">@drawable/btn_toggle_bg</item>
+        <item name="android:disabledAlpha">?android:attr/disabledAlpha</item>
+    </style>
+
+    <style name="PlutoWidget.ProgressBar">
+        <item name="android:indeterminateOnly">true</item>
+        <item name="android:indeterminateDrawable">@drawable/progress_medium</item>
+        <item name="android:indeterminateBehavior">repeat</item>
+        <item name="android:indeterminateDuration">3500</item>
+        <item name="android:minWidth">48dip</item>
+        <item name="android:maxWidth">48dip</item>
+        <item name="android:minHeight">48dip</item>
+        <item name="android:maxHeight">48dip</item>
+    </style>
+
+    <style name="PlutoWidget.ProgressBar.Large">
+        <item name="android:indeterminateDrawable">@drawable/progress_large</item>
+        <item name="android:minWidth">76dip</item>
+        <item name="android:maxWidth">76dip</item>
+        <item name="android:minHeight">76dip</item>
+        <item name="android:maxHeight">76dip</item>
+    </style>
+    
+    <style name="PlutoWidget.ProgressBar.Small">
+        <item name="android:indeterminateDrawable">@drawable/progress_small</item>
+        <item name="android:minWidth">16dip</item>
+        <item name="android:maxWidth">16dip</item>
+        <item name="android:minHeight">16dip</item>
+        <item name="android:maxHeight">16dip</item>
+    </style>
+
+    <style name="PlutoWidget.ProgressBar.Small.Title">
+        <item name="android:indeterminateDrawable">@drawable/progress_small_titlebar</item>
+    </style>
+
+    <style name="PlutoWidget.ProgressBar.Horizontal">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/progress_horizontal</item>
+        <item name="android:indeterminateDrawable">@drawable/progress_indeterminate_horizontal</item>
+        <item name="android:minHeight">20dip</item>
+        <item name="android:maxHeight">20dip</item>
+    </style>
+
+    <style name="PlutoWidget.SeekBar">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/progress_horizontal</item>
+        <item name="android:indeterminateDrawable">@drawable/progress_horizontal</item>
+        <item name="android:minHeight">20dip</item>
+        <item name="android:maxHeight">20dip</item>
+        <item name="android:thumb">@drawable/seek_thumb</item>
+        <item name="android:thumbOffset">8px</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="PlutoWidget.RatingBar">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/ratingbar_full</item>
+        <item name="android:indeterminateDrawable">@drawable/ratingbar_full</item>
+        <item name="android:minHeight">57dip</item>
+        <item name="android:maxHeight">57dip</item>
+        <item name="android:thumb">@null</item>
+    </style>
+
+    <style name="PlutoWidget.RatingBar.Indicator">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/ratingbar</item>
+        <item name="android:indeterminateDrawable">@drawable/ratingbar</item>
+        <item name="android:minHeight">38dip</item>
+        <item name="android:maxHeight">38dip</item>
+        <item name="android:thumb">@null</item>
+        <item name="android:isIndicator">true</item>
+    </style>
+
+    <style name="PlutoWidget.RatingBar.Small">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/ratingbar_small</item>
+        <item name="android:indeterminateDrawable">@drawable/ratingbar_small</item>
+        <item name="android:minHeight">14dip</item>
+        <item name="android:maxHeight">14dip</item>
+        <item name="android:thumb">@null</item>
+        <item name="android:isIndicator">true</item>
+    </style>
+
+    <style name="PlutoWidget.TextView">
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+    </style>
+    
+    <style name="PlutoWidget.TextView.ListSeparator">
+        <item name="android:background">@drawable/pluto_section_header_element</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">27dip</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">#FF000000</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingLeft">5sp</item>         
+    </style>
+
+    <style name="PlutoWidget.EditText">
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/pluto_edit_text</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMediumInverse</item>
+        <item name="android:textColor">@color/primary_text_light</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    
+    <style name="PlutoWidget.ExpandableListView" parent="Widget.ListView">
+        <item name="android:groupIndicator">@drawable/expander_group</item>
+        <item name="android:indicatorLeft">?android:attr/expandableListPreferredItemIndicatorLeft</item>
+        <item name="android:indicatorRight">?android:attr/expandableListPreferredItemIndicatorRight</item>
+        <item name="android:childDivider">@drawable/pluto_list_divider_rest_bottom</item>
+    </style>
+
+    <style name="PlutoWidget.ImageWell">
+        <item name="android:background">@drawable/panel_picture_frame_background</item>
+    </style>
+
+    <style name="PlutoWidget.ImageButton">
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:scaleType">center</item>
+        <item name="android:background">@drawable/pluto_btn_default</item>
+    </style>
+
+    <style name="PlutoWidget.AutoCompleteTextView">
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:background">@drawable/pluto_edit_text</item>
+        <item name="android:completionHintView">@layout/simple_dropdown_hint</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMediumInverse</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:completionThreshold">2</item>
+        <item name="android:dropDownSelector">@drawable/pluto_carousel_header_list_focus</item>
+        <item name="android:popupBackground">@drawable/spinner_dropdown_background</item>
+        <item name="android:dropDownVerticalOffset">-8px</item>
+        <item name="android:dropDownHorizontalOffset">2px</item>
+    </style>
+
+    <style name="PlutoWidget.Spinner">
+        <item name="android:background">@drawable/pluto_btn_dropdown</item>
+        <item name="android:clickable">true</item>
+    </style>
+
+    <style name="PlutoWidget.TextView.PopupMenu">
+        <item name="android:clickable">true</item>
+        <item name="android:textAppearance">@style/TextAppearance.Widget.TextView.PopupMenu</item>
+    </style>
+
+    <style name="PlutoWidget.TextView.SpinnerItem">
+        <item name="android:textAppearance">@style/TextAppearance.Widget.TextView.SpinnerItem</item>
+    </style>
+
+    <style name="PlutoWidget.DropDownItem">
+        <item name="android:textAppearance">@style/TextAppearance.Widget.DropDownItem</item>
+        <item name="android:paddingLeft">6dip</item>
+        <item name="android:paddingRight">6dip</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    
+    <style name="PlutoWidget.DropDownItem.Spinner">
+        <item name="android:checkMark">@drawable/pluto_btn_radio</item>
+    </style>
+
+    <style name="PlutoWidget.ScrollView">
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:fadingEdge">vertical</item>
+    </style>
+
+    <style name="PlutoWidget.ListView" parent="Widget.AbsListView">
+        <item name="android:listSelector">@drawable/pluto_carousel_header_list_focus</item>
+        <item name="android:cacheColorHint">?android:attr/colorBackground</item>
+        <item name="android:divider">@drawable/pluto_list_divider_rest_bottom</item>
+    </style>
+    
+    <style name="PlutoWidget.ListView.White" parent="Widget.AbsListView">
+        <item name="android:listSelector">@drawable/pluto_carousel_header_list_focus</item>
+        <item name="android:background">@color/white</item>
+        <item name="android:divider">@drawable/pluto_list_divider_rest_bottom</item>
+    </style>    
+
+    <style name="PlutoWidget.ListView.DropDown">
+    	<item name="android:cacheColorHint">@null</item>
+        <item name="android:divider">@drawable/pluto_list_divider_rest_bottom</item>
+    </style>
+
+    <style name="PlutoWidget.ListView.Menu">
+		<item name="android:cacheColorHint">@null</item>
+        <item name="android:scrollbars">vertical</item>
+        <item name="android:fadingEdge">vertical</item>
+        <item name="android:listSelector">@drawable/pluto_carousel_header_list_focus</item>
+        <!-- Light background for the list in menus, so the divider for bright themes -->
+        <item name="android:divider">@drawable/pluto_list_divider_rest_bottom</item>
+    </style>
+
+    <style name="PlutoWidget.GridView" parent="Widget.AbsListView">
+        <item name="android:listSelector">@drawable/pluto_carousel_header_list_focus</item>
+    </style>
+
+    <style name="PlutoWidget.WebView">
+        <item name="android:focusable">true</item>
+        <item name="android:scrollbars">horizontal|vertical</item>
+    </style>
+
+    <style name="PlutoWidget.TabWidget">
+        <item name="android:textAppearance">@style/TextAppearance.Widget.TabWidget</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="PlutoWidget.Gallery">
+        <item name="android:fadingEdge">horizontal</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:spacing">-20px</item>
+        <item name="android:unselectedAlpha">0.85</item>
+    </style>
+    
+    <style name="PlutoWidget.PopupWindow">
+        <item name="android:popupBackground">@drawable/pluto_editbox_background</item>
+    </style>
+
+    <!-- Text Appearances -->
+    <eat-comment />
+
+    <style name="PlutoTextAppearance">
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:textColorHighlight">#FF1B82EB</item>
+        <item name="android:textColorHint">?android:textColorHint</item>
+        <item name="android:textColorLink">#5C5CFF</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="PlutoTextAppearance.Inverse">
+        <item name="textColor">?android:textColorPrimaryInverse</item>
+        <item name="android:textColorHint">?android:textColorHintInverse</item>
+        <item name="android:textColorLink">#0000EE</item>
+    </style>
+
+    <style name="PlutoTextAppearance.Pluto">
+    </style>
+
+    <style name="PlutoTextAppearance.DialogWindowTitle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+
+    <style name="PlutoTextAppearance.Large">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+
+    <style name="PlutoTextAppearance.Large.Inverse">
+        <item name="android:textColor">?android:textColorPrimaryInverse</item>
+        <item name="android:textColorHint">?android:textColorHintInverse</item>
+    </style>
+
+    <style name="PlutoTextAppearance.Medium">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">?android:textColorPrimary</item>
+    </style>
+
+    <style name="PlutoTextAppearance.Medium.Inverse">
+        <item name="android:textColor">?android:textColorPrimaryInverse</item>
+        <item name="android:textColorHint">?android:textColorHintInverse</item>
+    </style>
+
+    <style name="PlutoTextAppearance.Small">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">?android:textColorSecondary</item>
+    </style>
+
+    <style name="PlutoTextAppearance.Small.Inverse">
+        <item name="android:textColor">?android:textColorSecondaryInverse</item>
+        <item name="android:textColorHint">?android:textColorHintInverse</item>
+    </style>
+
+    <style name="PlutoTextAppearance.Pluto.Dialog" parent="PlutoTextAppearance.Pluto">
+    </style>
+
+    <style name="PlutoTextAppearance.Pluto.Dialog.AppError">
+        <item name="android:textColor">#ffffc0c0</item>
+    </style>
+
+    <style name="PlutoTextAppearance.Widget">
+    </style>
+
+    <style name="PlutoTextAppearance.Widget.Button" parent="PlutoTextAppearance.Small.Inverse">
+        <item name="android:textColor">@color/primary_text_light_nodisable</item>
+    </style>
+
+    <style name="PlutoTextAppearance.Widget.IconMenu.Item" parent="PlutoTextAppearance.Small">
+        <item name="android:textColor">?android:textColorPrimaryInverse</item>
+    </style>
+
+    <style name="PlutoTextAppearance.Widget.EditText">
+        <item name="android:textColor">@color/widget_edittext_dark</item>
+        <item name="android:textColorHint">@color/hint_foreground_light</item>
+    </style>
+
+    <style name="PlutoTextAppearance.Widget.TabWidget">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@color/tab_indicator_text</item>
+    </style>
+    
+    <style name="PlutoTextAppearance.Widget.TextView">
+        <item name="android:textColor">?android:textColorPrimaryDisableOnly</item>
+        <item name="android:textColorHint">?android:textColorHint</item>
+    </style>
+
+    <style name="PlutoTextAppearance.Widget.TextView.PopupMenu">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">?android:textColorPrimaryDisableOnly</item>
+        <item name="android:textColorHint">?android:textColorHint</item>
+    </style>
+
+    <style name="PlutoTextAppearance.Widget.DropDownHint">
+        <item name="android:textColor">?android:textColorPrimaryInverse</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="PlutoTextAppearance.Widget.DropDownItem">
+        <item name="android:textColor">@color/primary_text_light_disable_only</item>
+    </style>
+
+    <style name="PlutoTextAppearance.Widget.TextView.SpinnerItem">
+        <item name="android:textColor">@color/primary_text_light_disable_only</item>
+    </style>
+
+    <style name="PlutoTextAppearance.WindowTitle">
+        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="PlutoMediaButton">
+        <item name="android:background">@drawable/pluto_media_button_background</item>
+        <item name="android:layout_width">71px</item>
+        <item name="android:layout_height">52px</item>
+    </style>
+
+    <style name="PlutoMediaButton.Previous">
+        <item name="android:src">@drawable/ic_media_previous</item>
+    </style>
+
+    <style name="PlutoMediaButton.Next">
+        <item name="android:src">@drawable/ic_media_next</item>
+    </style>
+
+    <style name="PlutoMediaButton.Play">
+        <item name="android:src">@drawable/ic_media_play</item>
+    </style>
+
+    <style name="PlutoMediaButton.Ffwd">
+        <item name="android:src">@drawable/ic_media_ff</item>
+    </style>
+
+    <style name="PlutoMediaButton.Rew">
+        <item name="android:src">@drawable/ic_media_rew</item>
+    </style>
+
+    <style name="PlutoMediaButton.Pause">
+        <item name="android:src">@drawable/ic_media_pause</item>
+    </style>
+
+    <!-- Preference Styles -->
+
+    <style name="PlutoPreference">
+        <item name="android:layout">@layout/preference</item>
+    </style>
+    
+    <style name="PlutoPreference.Information">
+        <item name="android:layout">@layout/preference_information</item>
+        <item name="android:enabled">false</item>
+        <item name="android:shouldDisableView">false</item>
+    </style>
+    
+    <style name="PlutoPreference.Category">
+        <item name="android:layout">@layout/preference_category</item>
+        <!-- The title should not dim if the category is disabled, instead only the preference children should dim. -->
+        <item name="android:shouldDisableView">false</item>
+        <item name="android:selectable">false</item>
+    </style>
+    
+    <style name="PlutoPreference.CheckBoxPreference">
+        <item name="android:widgetLayout">@layout/preference_widget_checkbox</item>
+    </style>
+    
+    <style name="PlutoPreference.PreferenceScreen">
+        <item name="android:widgetLayout">@layout/preferences</item>
+    </style>
+
+    <style name="PlutoPreference.DialogPreference">
+        <item name="android:positiveButtonText">@android:string/ok</item>
+        <item name="android:negativeButtonText">@android:string/cancel</item>
+    </style>
+    
+    <style name="PlutoPreference.DialogPreference.YesNoPreference">
+        <item name="android:positiveButtonText">@android:string/yes</item>
+        <item name="android:negativeButtonText">@android:string/no</item>
+    </style>
+    
+    <style name="PlutoPreference.DialogPreference.EditTextPreference">
+        <item name="android:dialogLayout">@layout/preference_dialog_edittext</item>
+    </style>
+    
+    <style name="PlutoPreference.RingtonePreference">
+        <item name="android:ringtoneType">ringtone</item>
+        <item name="android:showSilent">true</item>
+        <item name="android:showDefault">true</item>
+    </style>
+
+    <style name="PlutoZoomControls">
+        <item name="android:background">@drawable/zoom_plate</item>
+        <item name="android:gravity">bottom</item>
+        <item name="android:paddingLeft">15dip</item>
+        <item name="android:paddingRight">15dip</item>
+    </style>
+</resources>
