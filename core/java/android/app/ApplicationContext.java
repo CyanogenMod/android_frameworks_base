@@ -152,6 +152,8 @@ class ApplicationContext extends Context {
 
     private static final Object sSync = new Object();
     private static AlarmManager sAlarmManager;
+    private static ThemeManager sThemeManager;
+    
     private static PowerManager sPowerManager;
     private static ConnectivityManager sConnectivityManager;
     private static WifiManager sWifiManager;
@@ -183,6 +185,7 @@ class ApplicationContext extends Context {
     private TelephonyManager mTelephonyManager = null;
     private ClipboardManager mClipboardManager = null;
 
+     
     private final Object mSync = new Object();
 
     private File mDatabasesDir;
@@ -917,6 +920,8 @@ class ApplicationContext extends Context {
             return getClipboardManager();
         } else if (INPUT_METHOD_SERVICE.equals(name)) {
             return InputMethodManager.getInstance(this);
+        }else if (THEME_SERVICE.equals(name)) {
+            return getThemeManager();
         }
 
         return null;
@@ -941,6 +946,17 @@ class ApplicationContext extends Context {
             }
         }
         return sAlarmManager;
+    }
+    
+    private ThemeManager getThemeManager() {
+        synchronized (sSync) {
+            if (sThemeManager == null) {
+                IBinder b = ServiceManager.getService(THEME_SERVICE);
+                IThemeManager service = IThemeManager.Stub.asInterface(b);
+                sThemeManager = new ThemeManager(service);
+            }
+        }
+        return sThemeManager;
     }
 
     private PowerManager getPowerManager() {

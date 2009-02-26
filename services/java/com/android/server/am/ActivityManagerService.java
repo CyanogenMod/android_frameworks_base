@@ -1438,6 +1438,9 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
             mAppBindArgs.put("window", ServiceManager.getService("window"));
             mAppBindArgs.put(Context.ALARM_SERVICE,
                     ServiceManager.getService(Context.ALARM_SERVICE));
+            
+            mAppBindArgs.put(Context.THEME_SERVICE,
+                    ServiceManager.getService(Context.THEME_SERVICE));
         }
         return mAppBindArgs;
     }
@@ -11022,6 +11025,10 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
                                      !values.locale.equals(mConfiguration.locale),
                                      values.userSetLocale);
                 }
+                
+                if(values.themeResource != 0){
+                	saveThemeResourceLocked(values.themeResource, (values.themeResource != mConfiguration.themeResource));
+                }
 
                 mConfiguration = newConfig;
 
@@ -11219,6 +11226,15 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
             SystemProperties.set("persist.sys.country", l.getCountry());
             SystemProperties.set("persist.sys.localevar", l.getVariant());
         }
+    }
+    
+    private void saveThemeResourceLocked(int themeResource, boolean isDiff){
+    	if(isDiff){
+    		Log.d("ActivityManagerService", "Saving Theme :"+ themeResource);
+    		SystemProperties.set("persist.sys.theme", new Integer(themeResource).toString());
+     		//Log.d("ActivityManagerService ", "get Theme :"+ SystemProperties.get("persist.sys.theme", "0"));
+    		
+    	}
     }
 
     // =========================================================

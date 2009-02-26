@@ -1239,6 +1239,8 @@ public abstract class Context {
      * @see android.text.ClipboardManager
      */
     public static final String CLIPBOARD_SERVICE = "clipboard";
+    
+    public static final String THEME_SERVICE = "theme";
 
     /**
      * Use with {@link #getSystemService} to retrieve a 

@@ -290,6 +290,14 @@ class ServerThread extends Thread {
                 Log.e(TAG, "Failure starting Wallpaper Service", e);
             }
 
+            //Theme Service
+            try {
+                Log.i(TAG, "Starting Theme Service");
+                ServiceManager.addService(Context.THEME_SERVICE, new ThemeManagerService());
+            } catch (Throwable e) {
+                Log.e(TAG, "Failure starting Theme Service", e);
+            }
+            
             try {
                 Log.i(TAG, "Starting Audio Service");
                 ServiceManager.addService(Context.AUDIO_SERVICE, new AudioService(context));

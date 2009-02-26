@@ -3,6 +3,7 @@ package android.content.res;
 import android.content.pm.ActivityInfo;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.SystemProperties;
 
 import java.util.Locale;
 
@@ -34,6 +35,8 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      */
     public Locale locale;
 
+    public int themeResource = com.android.internal.R.style.Theme;
+    
     /**
      * Locale should persist on setting.  This is hidden because it is really
      * questionable whether this is the right way to expose the functionality.
@@ -108,7 +111,8 @@ public final class Configuration implements Parcelable, Comparable<Configuration
     public static final int ORIENTATION_PORTRAIT = 1;
     public static final int ORIENTATION_LANDSCAPE = 2;
     public static final int ORIENTATION_SQUARE = 3;
-    
+   
+    public static final int THEME_UNDEFINED = 0;
     /**
      * Overall orientation of the screen.  May be one of
      * {@link #ORIENTATION_LANDSCAPE}, {@link #ORIENTATION_PORTRAIT},
@@ -141,6 +145,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         hardKeyboardHidden = o.hardKeyboardHidden;
         navigation = o.navigation;
         orientation = o.orientation;
+        themeResource = o.themeResource;
     }
 
     public String toString() {
@@ -148,7 +153,8 @@ public final class Configuration implements Parcelable, Comparable<Configuration
                 + " locale=" + locale
                 + " touch=" + touchscreen + " key=" + keyboard + "/"
                 + keyboardHidden + "/" + hardKeyboardHidden
-                + " nav=" + navigation + " orien=" + orientation + " }";
+                + " nav=" + navigation + " orien=" + orientation + 
+                " themeResource=" + themeResource + "}";
     }
 
     /**
@@ -165,6 +171,11 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         hardKeyboardHidden = HARDKEYBOARDHIDDEN_UNDEFINED;
         navigation = NAVIGATION_UNDEFINED;
         orientation = ORIENTATION_UNDEFINED;
+        //default theme
+        themeResource = SystemProperties.getInt("persist.sys.theme", 0);
+        if(themeResource == 0){
+        	themeResource = com.android.internal.R.style.Theme;
+        }
     }
 
     /** {@hide} */
@@ -236,6 +247,12 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             orientation = delta.orientation;
         }
         
+        if (delta.themeResource != THEME_UNDEFINED
+                && themeResource != delta.themeResource) {
+            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
+            themeResource = delta.themeResource;
+        }
+        
         return changed;
     }
 
@@ -302,6 +319,11 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             changed |= ActivityInfo.CONFIG_ORIENTATION;
         }
         
+        if (delta.themeResource != THEME_UNDEFINED
+                && themeResource != delta.themeResource) {
+            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
+        }
+        
         return changed;
     }
 
@@ -350,6 +372,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         dest.writeInt(hardKeyboardHidden);
         dest.writeInt(navigation);
         dest.writeInt(orientation);
+        dest.writeInt(themeResource);
     }
 
     public static final Parcelable.Creator<Configuration> CREATOR
@@ -381,6 +404,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         hardKeyboardHidden = source.readInt();
         navigation = source.readInt();
         orientation = source.readInt();
+        themeResource = source.readInt();
     }
 
     public int compareTo(Configuration that) {
@@ -410,6 +434,8 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         n = this.navigation - that.navigation;
         if (n != 0) return n;
         n = this.orientation - that.orientation;
+        
+        n = this.themeResource - that.themeResource;
         //if (n != 0) return n;
         return n;
     }
@@ -432,6 +458,6 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         return ((int)this.fontScale) + this.mcc + this.mnc
                 + this.locale.hashCode() + this.touchscreen
                 + this.keyboard + this.keyboardHidden + this.hardKeyboardHidden
-                + this.navigation + this.orientation;
+                + this.navigation + this.orientation + this.themeResource;
     }
 }

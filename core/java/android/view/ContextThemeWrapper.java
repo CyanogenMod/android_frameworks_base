@@ -16,6 +16,7 @@
 
 package android.view;
 
+import android.app.ThemeManager;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.res.Resources;
@@ -56,14 +57,17 @@ public class ContextThemeWrapper extends ContextWrapper {
         }
 
         if (mThemeResource == 0) {
-            mThemeResource = com.android.internal.R.style.Theme;
+            //mThemeResource = com.android.internal.R.style.Theme;
+        	ThemeManager themeManager = (ThemeManager)getSystemService(Context.THEME_SERVICE);
+            mThemeResource = themeManager.getCurrentTheme();
         }
         initializeTheme();
 
         return mTheme;
     }
 
-    @Override public Object getSystemService(String name) {
+    @Override 
+    public Object getSystemService(String name) {
         if (LAYOUT_INFLATER_SERVICE.equals(name)) {
             if (mInflater == null) {
                 mInflater = LayoutInflater.from(mBase).cloneInContext(this);
@@ -89,14 +93,15 @@ public class ContextThemeWrapper extends ContextWrapper {
     }
 
     private void initializeTheme() {
-        final boolean first = mTheme == null;
+        final boolean first = (mTheme == null);
         if (first) {
             mTheme = getResources().newTheme();
-            Resources.Theme theme = mBase.getTheme();
+              Resources.Theme theme = mBase.getTheme();
             if (theme != null) {
                 mTheme.setTo(theme);
             }
         }
+        
         onApplyThemeResource(mTheme, mThemeResource, first);
     }
 }
