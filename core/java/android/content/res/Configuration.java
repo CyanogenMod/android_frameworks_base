@@ -34,7 +34,10 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * Current user preference for the locale.
      */
     public Locale locale;
-
+    
+    /**
+     * @hide
+     */
     public int themeResource = com.android.internal.R.style.Theme;
     
     /**
@@ -112,6 +115,9 @@ public final class Configuration implements Parcelable, Comparable<Configuration
     public static final int ORIENTATION_LANDSCAPE = 2;
     public static final int ORIENTATION_SQUARE = 3;
    
+    /**
+     * @hide
+     */
     public static final int THEME_UNDEFINED = 0;
     /**
      * Overall orientation of the screen.  May be one of

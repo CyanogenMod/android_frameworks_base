@@ -234,6 +234,9 @@ public class ActivityInfo extends ComponentInfo
      */
     public static final int CONFIG_ORIENTATION = 0x0080;
     
+    /**
+     * @hide
+     */
     public static final int CONFIG_THEME_RESOURCE = 0x008000;
     /**
      * Bit in {@link #configChanges} that indicates that the activity

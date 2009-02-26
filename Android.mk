@@ -56,6 +56,7 @@ LOCAL_SRC_FILES += \
 	core/java/android/app/IActivityPendingResult.aidl \
 	core/java/android/app/IActivityWatcher.aidl \
 	core/java/android/app/IAlarmManager.aidl \
+	core/java/android/app/IThemeManager.aidl \
 	core/java/android/app/IInstrumentationWatcher.aidl \
 	core/java/android/app/IIntentReceiver.aidl \
 	core/java/android/app/IIntentSender.aidl \

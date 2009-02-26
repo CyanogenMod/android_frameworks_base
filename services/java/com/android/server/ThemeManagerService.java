@@ -46,7 +46,7 @@ public class ThemeManagerService extends IThemeManager.Stub {
 	}
 	
 	public void setThemePluto(){		
-		int id = com.android.internal.R.style.Theme_Pluto;
+		int id = com.android.internal.R.style.Pluto;
 		setTheme(id);
 	}
 }
