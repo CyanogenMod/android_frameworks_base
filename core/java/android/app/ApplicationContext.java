@@ -48,6 +48,7 @@ import android.content.pm.PermissionInfo;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
+import android.content.pm.ThemeInfo;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
@@ -1750,6 +1751,15 @@ class ApplicationContext extends Context {
         public List<PackageInfo> getInstalledPackages(int flags) {
             try {
                 return mPM.getInstalledPackages(flags);
+            } catch (RemoteException e) {
+                throw new RuntimeException("Package manager has died", e);
+            }
+        }
+
+        @Override
+        public List<ThemeInfo> getInstalledThemes() {
+            try {
+                return mPM.getInstalledThemes();
             } catch (RemoteException e) {
                 throw new RuntimeException("Package manager has died", e);
             }

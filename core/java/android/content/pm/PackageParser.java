@@ -103,6 +103,8 @@ public class PackageParser {
         pi.versionName = p.mVersionName;
         pi.sharedUserId = p.mSharedUserId;
         pi.sharedUserLabel = p.mSharedUserLabel;
+        pi.isThemeApk = p.mIsThemeApk;
+        pi.themeInfo = p.mThemeInfo;
         pi.applicationInfo = p.applicationInfo;
         if ((flags&PackageManager.GET_GIDS) != 0) {
             pi.gids = gids;
@@ -703,6 +705,24 @@ public class PackageParser {
                 // Just skip this tag
                 XmlUtils.skipCurrentTag(parser);
                 continue;
+            } else if (tagName.equals("themeapk")) {
+            	// this is a theme apk.
+            	// TODO:
+            	// The actions listed below should be implemented
+            	// in either a (theme-related) broadcast listener,
+            	// which listens for and handles the following
+            	// two events: package install && uninstall.
+            	// Or in the PackageManagerService, right where
+            	// these two broadcast events are sent.
+            	// NB: in order to perform actions 1&2 we must have AssetManager
+            	// object which knows how to access resources from the theme package.
+            	// 1. Fetch non-DRM media assets from the theme and put into MediaStore.
+            	// 2. Fetch DRM media assets from the theme and put into DrmStore.
+            	// 3. Keep a look-up table, to remove media assets
+            	// 	  from the appropriate store(s) on the apk un-install.
+            	// 4. For actions 1&2 remove the resources from resource/file cache.
+            	pkg.mIsThemeApk = true;
+            	pkg.mThemeInfo = new ThemeInfo(attrs);
             } else if (RIGID_PARSER) {
                 outError[0] = "Bad element under <manifest>: "
                     + parser.getName();
@@ -2059,6 +2079,12 @@ public class PackageParser {
         // For use by package manager service for quick lookup of
         // preferred up order.
         public int mPreferredOrder = 0;
+
+        // Is Theme Apk
+        public boolean mIsThemeApk = false;
+
+        // Theme info
+        public ThemeInfo mThemeInfo;
 
         // Additional data supplied by callers.
         public Object mExtras;

@@ -45,6 +45,7 @@ import android.content.pm.InstrumentationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageStats;
+import android.content.pm.ThemeInfo;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
@@ -292,7 +293,7 @@ class PackageManagerService extends IPackageManager.Stub {
         if (mSdkVersion <= 0) {
             Log.w(TAG, "**** ro.build.version.sdk not set!");
         }
-        
+
         mContext = context;
         mFactoryTest = factoryTest;
         mMetrics = new DisplayMetrics();
@@ -1552,6 +1553,20 @@ class PackageManagerService extends IPackageManager.Stub {
                     }
                 }
             }
+        }
+        return finalList;
+    }
+    
+    public List<ThemeInfo> getInstalledThemes() {
+    	// Returns a list of theme APKs.
+        ArrayList<ThemeInfo> finalList = new ArrayList<ThemeInfo>();
+        List<PackageInfo> installedPackagesList = getInstalledPackages(0);
+        Iterator<PackageInfo> i = installedPackagesList.iterator();
+        while (i.hasNext()) {
+        	final PackageInfo pi = i.next();
+        	if (pi != null && pi.isThemeApk) {
+        		finalList.add(pi.themeInfo);
+        	}
         }
         return finalList;
     }

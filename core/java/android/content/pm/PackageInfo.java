@@ -127,6 +127,12 @@ public class PackageInfo implements Parcelable {
      */
     public ConfigurationInfo[] configPreferences;
 
+    // Is Theme Apk
+    public boolean isThemeApk = false;
+
+    // ThemeInfo
+    public ThemeInfo themeInfo;
+
     public PackageInfo() {
     }
 
@@ -162,6 +168,12 @@ public class PackageInfo implements Parcelable {
         dest.writeStringArray(requestedPermissions);
         dest.writeTypedArray(signatures, parcelableFlags);
         dest.writeTypedArray(configPreferences, parcelableFlags);
+        if (themeInfo != null) {
+            dest.writeInt(1);
+            themeInfo.writeToParcel(dest, parcelableFlags);
+        } else {
+            dest.writeInt(0);
+        }
     }
 
     public static final Parcelable.Creator<PackageInfo> CREATOR
@@ -195,5 +207,9 @@ public class PackageInfo implements Parcelable {
         requestedPermissions = source.createStringArray();
         signatures = source.createTypedArray(Signature.CREATOR);
         configPreferences = source.createTypedArray(ConfigurationInfo.CREATOR);
+        int hasThemeInfo = source.readInt();
+        if (hasThemeInfo != 0) {
+        	themeInfo = ThemeInfo.CREATOR.createFromParcel(source);
+        }
     }
 }

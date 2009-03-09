@@ -723,6 +723,16 @@ public abstract class PackageManager {
     public abstract List<PackageInfo> getInstalledPackages(int flags);
 
     /**
+     * Return a List of all theme packages that are installed
+     * on the device.
+     *
+     * @return A List of ThemeInfo objects, one for each theme package
+     *         that is installed on the device.
+     * 
+     */
+    public abstract List<ThemeInfo> getInstalledThemes();
+
+    /**
      * Check whether a particular package has been granted a particular
      * permission.
      *
