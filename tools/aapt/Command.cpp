@@ -21,9 +21,11 @@ using namespace android;
  */
 int doVersion(Bundle* bundle)
 {
+#ifdef HOST_LIB
     if (bundle->getFileSpecCount() != 0)
         printf("(ignoring extra arguments)\n");
     printf("Android Asset Packaging Tool, v0.2\n");
+#endif // HOST_LIB
 
     return 0;
 }
@@ -42,13 +44,15 @@ ZipFile* openReadOnly(const char* fileName)
     zip = new ZipFile;
     result = zip->open(fileName, ZipFile::kOpenReadOnly);
     if (result != NO_ERROR) {
-        if (result == NAME_NOT_FOUND)
+#ifdef HOST_LIB
+       if (result == NAME_NOT_FOUND)
             fprintf(stderr, "ERROR: '%s' not found\n", fileName);
         else if (result == PERMISSION_DENIED)
             fprintf(stderr, "ERROR: '%s' access denied\n", fileName);
         else
             fprintf(stderr, "ERROR: failed opening '%s' as Zip file\n",
                 fileName);
+#endif // HOST_LIB
         delete zip;
         return NULL;
     }
@@ -119,6 +123,7 @@ int calcPercent(long uncompressedLen, long compressedLen)
 int doList(Bundle* bundle)
 {
     int result = 1;
+#ifdef HOST_LIB
     ZipFile* zip = NULL;
     const ZipEntry* entry;
     long totalUncLen, totalCompLen;
@@ -217,6 +222,7 @@ int doList(Bundle* bundle)
 
 bail:
     delete zip;
+#endif // HOST_LIB
     return result;
 }
 
@@ -341,6 +347,7 @@ const char *getComponentName(String8 &pkgName, String8 &componentName) {
 int doDump(Bundle* bundle)
 {
     status_t result = UNKNOWN_ERROR;
+#ifdef HOST_LIB
     Asset* asset = NULL;
 
     if (bundle->getFileSpecCount() < 1) {
@@ -690,6 +697,7 @@ bail:
     if (asset) {
         delete asset;
     }
+#endif // HOST_LIB
     return (result != NO_ERROR);
 }
 
@@ -706,24 +714,32 @@ int doAdd(Bundle* bundle)
 
     if (bundle->getUpdate()) {
         /* avoid confusion */
+#ifdef HOST_LIB
         fprintf(stderr, "ERROR: can't use '-u' with add\n");
+#endif // HOST_LIB
         goto bail;
     }
 
     if (bundle->getFileSpecCount() < 1) {
+#ifdef HOST_LIB
         fprintf(stderr, "ERROR: must specify zip file name\n");
+#endif // HOST_LIB
         goto bail;
     }
     zipFileName = bundle->getFileSpecEntry(0);
 
     if (bundle->getFileSpecCount() < 2) {
+#ifdef HOST_LIB
         fprintf(stderr, "NOTE: nothing to do\n");
+#endif // HOST_LIB
         goto bail;
     }
 
     zip = openReadWrite(zipFileName, true);
     if (zip == NULL) {
+#ifdef HOST_LIB
         fprintf(stderr, "ERROR: failed opening/creating '%s' as Zip file\n", zipFileName);
+#endif // HOST_LIB
         goto bail;
     }
 
@@ -731,13 +747,18 @@ int doAdd(Bundle* bundle)
         const char* fileName = bundle->getFileSpecEntry(i);
 
         if (strcasecmp(String8(fileName).getPathExtension().string(), ".gz") == 0) {
+#ifdef HOST_LIB
             printf(" '%s'... (from gzip)\n", fileName);
+#endif // HOST_LIB
             result = zip->addGzip(fileName, String8(fileName).getBasePath().string(), NULL);
         } else {
+#ifdef HOST_LIB
             printf(" '%s'...\n", fileName);
+#endif // HOST_LIB
             result = zip->add(fileName, bundle->getCompressionMethod(), NULL);
         }
         if (result != NO_ERROR) {
+#ifdef HOST_LIB
             fprintf(stderr, "Unable to add '%s' to '%s'", bundle->getFileSpecEntry(i), zipFileName);
             if (result == NAME_NOT_FOUND)
                 fprintf(stderr, ": file not found\n");
@@ -745,6 +766,7 @@ int doAdd(Bundle* bundle)
                 fprintf(stderr, ": already exists in archive\n");
             else
                 fprintf(stderr, "\n");
+#endif // HOST_LIB
             goto bail;
         }
     }
@@ -767,20 +789,26 @@ int doRemove(Bundle* bundle)
     const char* zipFileName;
 
     if (bundle->getFileSpecCount() < 1) {
+#ifdef HOST_LIB
         fprintf(stderr, "ERROR: must specify zip file name\n");
+#endif // HOST_LIB
         goto bail;
     }
     zipFileName = bundle->getFileSpecEntry(0);
 
     if (bundle->getFileSpecCount() < 2) {
+#ifdef HOST_LIB
         fprintf(stderr, "NOTE: nothing to do\n");
+#endif // HOST_LIB
         goto bail;
     }
 
     zip = openReadWrite(zipFileName, false);
     if (zip == NULL) {
+#ifdef HOST_LIB
         fprintf(stderr, "ERROR: failed opening Zip archive '%s'\n",
             zipFileName);
+#endif // HOST_LIB
         goto bail;
     }
 
@@ -790,15 +818,19 @@ int doRemove(Bundle* bundle)
 
         entry = zip->getEntryByName(fileName);
         if (entry == NULL) {
+#ifdef HOST_LIB
             printf(" '%s' NOT FOUND\n", fileName);
+#endif // HOST_LIB
             continue;
         }
 
         result = zip->remove(entry);
 
         if (result != NO_ERROR) {
+#ifdef HOST_LIB
             fprintf(stderr, "Unable to delete '%s' from '%s'\n",
                 bundle->getFileSpecEntry(i), zipFileName);
+#endif // HOST_LIB
             goto bail;
         }
     }
@@ -836,7 +868,9 @@ int doPackage(Bundle* bundle)
     N = bundle->getFileSpecCount();
     if (N < 1 && bundle->getResourceSourceDirs().size() == 0 && bundle->getJarFiles().size() == 0
             && bundle->getAndroidManifestFile() == NULL && bundle->getAssetSourceDir() == NULL) {
+#ifdef HOST_LIB
         fprintf(stderr, "ERROR: no input files\n");
+#endif // HOST_LIB
         goto bail;
     }
 
@@ -847,9 +881,11 @@ int doPackage(Bundle* bundle)
         FileType type;
         type = getFileType(outputAPKFile);
         if (type != kFileTypeNonexistent && type != kFileTypeRegular) {
+#ifdef HOST_LIB
             fprintf(stderr,
                 "ERROR: output file '%s' exists but is not regular file\n",
                 outputAPKFile);
+#endif // HOST_LIB
             goto bail;
         }
     }
@@ -900,7 +936,9 @@ int doPackage(Bundle* bundle)
     if (outputAPKFile) {
         err = writeAPK(bundle, assets, String8(outputAPKFile));
         if (err != NO_ERROR) {
+#ifdef HOST_LIB
             fprintf(stderr, "ERROR: packaging of '%s' failed\n", outputAPKFile);
+#endif // HOST_LIB
             goto bail;
         }
     }

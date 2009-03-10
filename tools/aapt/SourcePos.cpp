@@ -1,7 +1,12 @@
+// WARNING! Since arm compiler does not have STL library,
+// error reporting is disabled. We need to figure out how do we report errors.
+
 #include "SourcePos.h"
 
 #include <stdarg.h>
+#ifdef HOST_LIB
 #include <vector>
+#endif //HOST_LIB
 
 using namespace std;
 
@@ -26,7 +31,9 @@ struct ErrorPos
     void print(FILE* to) const;
 };
 
+#ifdef HOST_LIB
 static vector<ErrorPos> g_errors;
+#endif //HOST_LIB
 
 ErrorPos::ErrorPos()
     :line(-1), fatal(false)
@@ -86,6 +93,7 @@ ErrorPos::operator=(const ErrorPos& rhs)
 void
 ErrorPos::print(FILE* to) const
 {
+#ifdef HOST_LIB
     const char* type = fatal ? "ERROR" : "WARNING";
     
     if (this->line >= 0) {
@@ -93,6 +101,7 @@ ErrorPos::print(FILE* to) const
     } else {
         fprintf(to, "%s: %s %s\n", this->file.string(), type, this->error.string());
     }
+#endif // HOST_LIB
 }
 
 // SourcePos
@@ -120,6 +129,7 @@ int
 SourcePos::error(const char* fmt, ...) const
 {
     int retval=0;
+#ifdef HOST_LIB
     char buf[1024];
     va_list ap;
     va_start(ap, fmt);
@@ -131,6 +141,7 @@ SourcePos::error(const char* fmt, ...) const
         p--;
     }
     g_errors.push_back(ErrorPos(this->file, this->line, String8(buf), true));
+#endif // HOST_LIB
     return retval;
 }
 
@@ -155,16 +166,22 @@ SourcePos::warning(const char* fmt, ...) const
 bool
 SourcePos::hasErrors()
 {
+#ifdef HOST_LIB
     return g_errors.size() > 0;
+#else
+	return false;
+#endif // HOST_LIB
 }
 
 void
 SourcePos::printErrors(FILE* to)
 {
+#ifdef HOST_LIB
     vector<ErrorPos>::const_iterator it;
     for (it=g_errors.begin(); it!=g_errors.end(); it++) {
         it->print(to);
     }
+#endif // HOST_LIB
 }
 
 

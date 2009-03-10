@@ -2117,7 +2117,9 @@ status_t ResourceTable::addSymbols(const sp<AaptSymbols>& outSymbols) {
 void
 ResourceTable::addLocalization(const String16& name, const String8& locale)
 {
+#ifdef HOST_LIB
     mLocalizations[name].insert(locale);
+#endif // HOST_LIB
 }
 
 
@@ -2136,6 +2138,7 @@ ResourceTable::validateLocalizations(void)
     status_t err = NO_ERROR;
     const String8 defaultLocale;
 
+#ifdef HOST_LIB
     // For all strings...
     for (map<String16, set<String8> >::iterator nameIter = mLocalizations.begin();
          nameIter != mLocalizations.end();
@@ -2195,6 +2198,7 @@ ResourceTable::validateLocalizations(void)
            } while (comma != NULL);
         }
     }
+#endif // HOST_LIB
 
     return err;
 }

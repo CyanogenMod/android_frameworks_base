@@ -4,10 +4,15 @@
 // Build resource files from raw assets.
 //
 
+// WARNING! I disabled pseudolocalizing if we run on device,
+// since it does not seem important.
+
 #include "XMLNode.h"
 #include "ResourceTable.h"
 
+#ifdef HOST_LIB
 #include <host/pseudolocalize.h>
+#endif //HOST_LIB
 #include <utils/ByteOrder.h>
 #include <errno.h>
 #include <string.h>
@@ -96,13 +101,17 @@ status_t parseStyledString(Bundle* bundle,
                     pseudolocalize = false;
                 }
             }
+#ifdef HOST_LIB
             if (xliffDepth == 0 && pseudolocalize) {
                 std::string orig(String8(text).string());
                 std::string pseudo = pseudolocalize_string(orig);
                 curString.append(String16(String8(pseudo.c_str())));
             } else {
+#endif //HOST_LIB
                 curString.append(text);
+#ifdef HOST_LIB
             }
+#endif //HOST_LIB
         } else if (code == ResXMLTree::START_TAG) {
             const String16 element16(inXml->getElementName(&len));
             const String8 element8(element16);

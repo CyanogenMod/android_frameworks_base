@@ -4,14 +4,22 @@
 // Build resource files from raw assets.
 //
 
+// WARNING: Since arm compiler runtime does not include STL, we can't include <map> and <set> types.
+// Unless we want to provide our own implementation of these (which should not be too difficult,
+// since what we need is a simple hash table which keys are unicode strings and values are sets
+// of ASCII chars). On the other hand, since maps/sets are used only to validate localized strings,
+// I decided to disable this feature when code is executed on a device.
+
 #ifndef RESOURCE_TABLE_H
 #define RESOURCE_TABLE_H
 
 #include "StringPool.h"
 #include "SourcePos.h"
 
+#ifdef HOST_LIB
 #include <set>
 #include <map>
+#endif //HOST_LIB
 
 using namespace std;
 
@@ -514,8 +522,10 @@ private:
     SourcePos mCurrentXmlPos;
     Bundle* mBundle;
     
+#ifdef HOST_LIB
     // key = string resource name, value = set of locales in which that name is defined
     map<String16, set<String8> > mLocalizations;
+#endif //HOST_LIB
 };
 
 class ResourceFilter

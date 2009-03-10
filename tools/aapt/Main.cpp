@@ -129,9 +129,11 @@ int handleCommand(Bundle* bundle)
     //    printf("  %d: '%s'\n", i, bundle->getFileSpecEntry(i));
 
     switch (bundle->getCommand()) {
+#ifdef HOST_LIB
     case kCommandVersion:   return doVersion(bundle);
     case kCommandList:      return doList(bundle);
     case kCommandDump:      return doDump(bundle);
+#endif // HOST_LIB
     case kCommandAdd:       return doAdd(bundle);
     case kCommandRemove:    return doRemove(bundle);
     case kCommandPackage:   return doPackage(bundle);
@@ -364,6 +366,8 @@ bail:
         result = 2;
     }
 
-    //printf("--> returning %d\n", result);
+#ifndef HOST_LIB
+    printf("--> returning %d\n", result);
+#endif
     return result;
 }
