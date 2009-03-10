@@ -104,7 +104,15 @@ public class PackageParser {
         pi.sharedUserId = p.mSharedUserId;
         pi.sharedUserLabel = p.mSharedUserLabel;
         pi.isThemeApk = p.mIsThemeApk;
-        pi.themeInfo = p.mThemeInfo;
+        if (pi.isThemeApk) {
+        	int N = p.mThemeInfos.size();
+        	if (N > 0) {
+        		pi.themeInfos = new ThemeInfo[N];
+        		for (int i = 0; i < N; i++) {
+        			pi.themeInfos[i] = p.mThemeInfos.get(i);
+        		}
+        	}
+        }
         pi.applicationInfo = p.applicationInfo;
         if ((flags&PackageManager.GET_GIDS) != 0) {
             pi.gids = gids;
@@ -705,7 +713,7 @@ public class PackageParser {
                 // Just skip this tag
                 XmlUtils.skipCurrentTag(parser);
                 continue;
-            } else if (tagName.equals("themeapk")) {
+            } else if (tagName.equals("theme")) {
             	// this is a theme apk.
             	// TODO:
             	// The actions listed below should be implemented
@@ -722,7 +730,7 @@ public class PackageParser {
             	// 	  from the appropriate store(s) on the apk un-install.
             	// 4. For actions 1&2 remove the resources from resource/file cache.
             	pkg.mIsThemeApk = true;
-            	pkg.mThemeInfo = new ThemeInfo(attrs);
+            	pkg.mThemeInfos.add(new ThemeInfo(attrs));
             } else if (RIGID_PARSER) {
                 outError[0] = "Bad element under <manifest>: "
                     + parser.getName();
@@ -2084,7 +2092,7 @@ public class PackageParser {
         public boolean mIsThemeApk = false;
 
         // Theme info
-        public ThemeInfo mThemeInfo;
+        public final ArrayList<ThemeInfo> mThemeInfos = new ArrayList<ThemeInfo>(0);
 
         // Additional data supplied by callers.
         public Object mExtras;

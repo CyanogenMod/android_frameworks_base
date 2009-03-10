@@ -14,10 +14,10 @@ import android.util.AttributeSet;
 
 /**
  * Overall information about "theme" package.  This corresponds
- * to the information collected from AndroidManifest.xml (themeapk tag).
+ * to the information collected from AndroidManifest.xml (theme tag).
  *
- * Below is an example of themeapk tag
- *    <themeapk
+ * Below is an example of theme tag
+ *    <theme
  *        pluto:themeName="Pluto Default"
  *        pluto:themeThumbprint="@drawable/app_thumbnail"
  *        pluto:themeAuthor="John Doe"
@@ -79,12 +79,12 @@ public final class ThemeInfo implements Parcelable {
     public int theme = -1;
 
     /**
-     * The name of the theme package.
+     * The name of the theme (as displayed by UI).
      *
      * @see themeName attribute
      *
      */
-    public String themePackage;
+    public String themeName;
 
     /**
      * The name of the call ringtone audio file.
@@ -228,7 +228,7 @@ public final class ThemeInfo implements Parcelable {
     			switch (index) {
 	    			case THEME_PACKAGE_INDEX:
 	    				// theme name
-	    				themePackage = attrs.getAttributeValue(i);
+	    				themeName = attrs.getAttributeValue(i);
 	    				break;
 	
 	    			case THUMBNAIL_INDEX:
@@ -279,7 +279,7 @@ public final class ThemeInfo implements Parcelable {
     		}
     	}
     	if (numberOfCompulsoryAttributes < compulsoryAttributes.length) {
-    		throw new XmlPullParserException("Not all compulsory attributes are specified in <themeapk>");
+    		throw new XmlPullParserException("Not all compulsory attributes are specified in <theme>");
     	}
     }
 
@@ -311,7 +311,7 @@ public final class ThemeInfo implements Parcelable {
         dest.writeString(favesAppImageName);
         dest.writeInt(thumbnail);
         dest.writeInt(theme);
-        dest.writeString(themePackage);
+        dest.writeString(themeName);
         dest.writeString(ringtoneName);
         dest.writeString(notificationRingtoneName);
         dest.writeString(author);
@@ -335,7 +335,7 @@ public final class ThemeInfo implements Parcelable {
         favesAppImageName = source.readString();
         thumbnail = source.readInt();
         theme = source.readInt();
-        themePackage = source.readString();
+        themeName = source.readString();
         ringtoneName = source.readString();
         notificationRingtoneName = source.readString();
         author = source.readString();

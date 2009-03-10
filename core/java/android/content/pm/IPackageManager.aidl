@@ -101,7 +101,7 @@ interface IPackageManager {
 
     List<PackageInfo> getInstalledPackages(int flags);
 
-    List<ThemeInfo> getInstalledThemes();
+    List<PackageInfo> getInstalledThemePackages();
 
     List<ApplicationInfo> getInstalledApplications(int flags);
 

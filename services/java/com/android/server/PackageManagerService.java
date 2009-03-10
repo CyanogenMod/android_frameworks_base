@@ -45,7 +45,6 @@ import android.content.pm.InstrumentationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageStats;
-import android.content.pm.ThemeInfo;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED;
 import static android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED;
@@ -1557,15 +1556,15 @@ class PackageManagerService extends IPackageManager.Stub {
         return finalList;
     }
     
-    public List<ThemeInfo> getInstalledThemes() {
+    public List<PackageInfo> getInstalledThemePackages() {
     	// Returns a list of theme APKs.
-        ArrayList<ThemeInfo> finalList = new ArrayList<ThemeInfo>();
+        ArrayList<PackageInfo> finalList = new ArrayList<PackageInfo>();
         List<PackageInfo> installedPackagesList = getInstalledPackages(0);
         Iterator<PackageInfo> i = installedPackagesList.iterator();
         while (i.hasNext()) {
         	final PackageInfo pi = i.next();
         	if (pi != null && pi.isThemeApk) {
-        		finalList.add(pi.themeInfo);
+        		finalList.add(pi);
         	}
         }
         return finalList;

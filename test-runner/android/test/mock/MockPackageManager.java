@@ -121,7 +121,7 @@ public class MockPackageManager extends PackageManager {
     }
 
     @Override
-    public List<ThemeInfo> getInstalledThemes() {
+    public List<PackageInfo> getInstalledThemePackages() {
         throw new UnsupportedOperationException();
     }
 

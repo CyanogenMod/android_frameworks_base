@@ -1757,9 +1757,9 @@ class ApplicationContext extends Context {
         }
 
         @Override
-        public List<ThemeInfo> getInstalledThemes() {
+        public List<PackageInfo> getInstalledThemePackages() {
             try {
-                return mPM.getInstalledThemes();
+                return mPM.getInstalledThemePackages();
             } catch (RemoteException e) {
                 throw new RuntimeException("Package manager has died", e);
             }
