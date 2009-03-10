@@ -4,6 +4,7 @@ import android.app.ActivityManagerNative;
 import android.app.IThemeManager;
 import android.content.res.Configuration;
 import android.os.RemoteException;
+import android.util.Log;
 
 /**
  * 
@@ -34,14 +35,15 @@ public class ThemeManagerService extends IThemeManager.Stub {
 		return mPackageName;
 	}
 	
-	public void setTheme(int id){		
+	public void setTheme(int id){
+		Log.d("ThemeManagerService", "Setting Theme to :"+id);
 		mCurrentResourceTheme = id;
 		try	{
 			Configuration mCurConfig = ActivityManagerNative.getDefault().getConfiguration();
 			mCurConfig.themeResource = mCurrentResourceTheme;			
 			ActivityManagerNative.getDefault().updateConfiguration(mCurConfig);
 		}catch(RemoteException e){
-			
+			Log.d("ThemeManagerService", "Could not update config wiht themeid:"+ id, e);
 		}
 	}
 	

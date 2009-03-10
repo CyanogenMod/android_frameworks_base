@@ -50,6 +50,7 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.content.pm.ThemeInfo;
 import android.content.res.AssetManager;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.database.sqlite.SQLiteDatabase;
@@ -173,6 +174,7 @@ class ApplicationContext extends Context {
     private ApplicationContentResolver mContentResolver;
     private int mThemeResource = 0;
     private Resources.Theme mTheme = null;
+    private Resources.Theme mStyledTheme;
     private PackageManager mPackageManager;
     private NotificationManager mNotificationManager = null;
     private ActivityManager mActivityManager = null;
@@ -269,10 +271,46 @@ class ApplicationContext extends Context {
         return mTheme;
     }
 
+  @Override
+    public void setStyledTheme(String packageName, int resid) {
+
+    }
+
+    @Override
+    public Resources.Theme getStyledTheme() {
+        if (mStyledTheme != null) {
+            return mStyledTheme;
+        }
+
+        try {
+            // Configuration mCurConfig =
+            // ActivityManagerNative.getDefault().getConfiguration();
+            // int mStyledThemeResource = mCurConfig.themeResource;
+
+            // ThemeManager themeManager =
+            // (ThemeManager)getSystemService(Context.THEME_SERVICE);
+            String packageName = "com.tmobile.pluto.demo";
+            Context context = this.createPackageContext(packageName, 0);
+            int mStyledThemeResource = context.getResources().getIdentifier(
+                    "Theme", "style", packageName);
+            mStyledTheme = context.getTheme();
+            mStyledTheme.applyStyle(mStyledThemeResource, true);
+            // }catch(RemoteException e){
+
+        } catch (PackageManager.NameNotFoundException pne) {
+            Log.d("ApplicationContext:", "Package not found", pne);
+        }
+
+        if (mStyledTheme != null) {
+            Log.d("ApplicationContext:", mStyledTheme.toString());
+        }
+        return mStyledTheme;
+    }
+
     @Override
     public ClassLoader getClassLoader() {
-        return mPackageInfo != null ?
-                mPackageInfo.getClassLoader() : ClassLoader.getSystemClassLoader();
+        return mPackageInfo != null ? mPackageInfo.getClassLoader()
+                : ClassLoader.getSystemClassLoader();
     }
 
     @Override

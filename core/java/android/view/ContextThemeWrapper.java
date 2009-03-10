@@ -16,10 +16,15 @@
 
 package android.view;
 
+import android.app.ActivityManagerNative;
 import android.app.ThemeManager;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.os.RemoteException;
+import android.util.Log;
 
 /**
  * A ContextWrapper that allows you to modify the theme from what is in the 
@@ -29,6 +34,7 @@ public class ContextThemeWrapper extends ContextWrapper {
     private Context mBase;
     private int mThemeResource;
     private Resources.Theme mTheme;
+    private Resources.Theme mStyledTheme;
     private LayoutInflater mInflater;
 
     public ContextThemeWrapper() {
@@ -50,6 +56,14 @@ public class ContextThemeWrapper extends ContextWrapper {
         mThemeResource = resid;
         initializeTheme();
     }
+   
+    @Override public void setStyledTheme(String packageName, int styleResId) {
+    	
+    }
+    
+    @Override public Resources.Theme getStyledTheme() {
+    	return mBase.getStyledTheme();
+    }
     
     @Override public Resources.Theme getTheme() {
         if (mTheme != null) {
@@ -57,9 +71,7 @@ public class ContextThemeWrapper extends ContextWrapper {
         }
 
         if (mThemeResource == 0) {
-            //mThemeResource = com.android.internal.R.style.Theme;
-        	ThemeManager themeManager = (ThemeManager)getSystemService(Context.THEME_SERVICE);
-            mThemeResource = themeManager.getCurrentTheme();
+            mThemeResource = com.android.internal.R.style.Theme;
         }
         initializeTheme();
 
@@ -95,8 +107,8 @@ public class ContextThemeWrapper extends ContextWrapper {
     private void initializeTheme() {
         final boolean first = (mTheme == null);
         if (first) {
-            mTheme = getResources().newTheme();
-              Resources.Theme theme = mBase.getTheme();
+        	mTheme = getResources().newTheme();
+            Resources.Theme theme = mBase.getTheme();
             if (theme != null) {
                 mTheme.setTo(theme);
             }

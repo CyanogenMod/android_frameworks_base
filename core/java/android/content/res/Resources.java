@@ -1084,27 +1084,33 @@ public class Resources {
                 System.out.println("Attributes:");
                 String s = "  Attrs:";
                 int i;
-                for (i=0; i<set.getAttributeCount(); i++) {
-                    s = s + " " + set.getAttributeName(i);
-                    int id = set.getAttributeNameResource(i);
-                    if (id != 0) {
-                        s = s + "(0x" + Integer.toHexString(id) + ")";
-                    }
-                    s = s + "=" + set.getAttributeValue(i);
+                if(set != null){
+	                for (i=0; i<set.getAttributeCount(); i++) {
+	                    s = s + " " + set.getAttributeName(i);
+	                    int id = set.getAttributeNameResource(i);
+	                    if (id != 0) {
+	                        s = s + "(0x" + Integer.toHexString(id) + ")";
+	                    }
+	                    s = s + "=" + set.getAttributeValue(i);
+	                }
                 }
+                
                 System.out.println(s);
-                s = "  Found:";
-                TypedValue value = new TypedValue();
-                for (i=0; i<attrs.length; i++) {
-                    int d = i*AssetManager.STYLE_NUM_ENTRIES;
-                    value.type = data[d+AssetManager.STYLE_TYPE];
-                    value.data = data[d+AssetManager.STYLE_DATA];
-                    value.assetCookie = data[d+AssetManager.STYLE_ASSET_COOKIE];
-                    value.resourceId = data[d+AssetManager.STYLE_RESOURCE_ID];
-                    s = s + " 0x" + Integer.toHexString(attrs[i])
-                        + "=" + value;
+             
+                if(false){
+	                s = "  Found:";
+	                TypedValue value = new TypedValue();
+	                for (i=0; i<attrs.length; i++) {
+	                    int d = i*AssetManager.STYLE_NUM_ENTRIES;
+	                    value.type = data[d+AssetManager.STYLE_TYPE];
+	                    value.data = data[d+AssetManager.STYLE_DATA];
+	                    value.assetCookie = data[d+AssetManager.STYLE_ASSET_COOKIE];
+	                    value.resourceId = data[d+AssetManager.STYLE_RESOURCE_ID];
+	                    s = s + " 0x" + Integer.toHexString(attrs[i])
+	                        + "=" + value;
+	                }
+	                System.out.println(s);
                 }
-                System.out.println(s);
             }
 
             return array;
@@ -1201,7 +1207,9 @@ public class Resources {
         array.mRsrcs = attrs;
         array.mXml = parser;
 
-        return array;
+        
+        return new TypedArrayComposite(array, null, null);
+        //return array;
     }
     
     /**

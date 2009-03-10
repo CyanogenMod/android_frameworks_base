@@ -16,11 +16,22 @@
 
 package android.content;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.content.res.TypedArrayComposite;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -29,13 +40,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import android.util.Log;
+import android.util.TypedValue;
 
 /**
  * Interface to global information about an application environment.  This is
@@ -176,6 +182,13 @@ public abstract class Context {
      */
     public abstract Resources.Theme getTheme();
 
+    public abstract void setStyledTheme(String packageName, int resid);
+
+    /**
+     * Return the Theme object associated with this Context.
+     */
+    public abstract Resources.Theme getStyledTheme();
+
     /**
      * Retrieve styled attribute information in this Context's theme.  See
      * {@link Resources.Theme#obtainStyledAttributes(int[])}
@@ -185,6 +198,17 @@ public abstract class Context {
      */
     public final TypedArray obtainStyledAttributes(
             int[] attrs) {
+
+        TypedArrayComposite taComposite = null;
+        if(getStyledTheme() != null){
+            TypedArray customTypedArray = getStyledTheme().obtainStyledAttributes(attrs);
+
+            taComposite = new TypedArrayComposite(getTheme().obtainStyledAttributes(attrs),
+                    customTypedArray, null);
+
+            return taComposite;
+        }
+
         return getTheme().obtainStyledAttributes(attrs);
     }
 
@@ -197,7 +221,19 @@ public abstract class Context {
      */
     public final TypedArray obtainStyledAttributes(
             int resid, int[] attrs) throws Resources.NotFoundException {
+
+        TypedArrayComposite taComposite = null;
+           if(getStyledTheme() != null){
+               TypedArray customTypedArray = getStyledTheme().obtainStyledAttributes(resid, attrs);
+
+               taComposite = new TypedArrayComposite(getTheme().obtainStyledAttributes(resid, attrs),
+                       customTypedArray, null);
+               return taComposite;
+        }
+
+
         return getTheme().obtainStyledAttributes(resid, attrs);
+
     }
 
     /**
@@ -209,7 +245,19 @@ public abstract class Context {
      */
     public final TypedArray obtainStyledAttributes(
             AttributeSet set, int[] attrs) {
-        return getTheme().obtainStyledAttributes(set, attrs, 0, 0);
+
+        TypedArrayComposite taComposite = null;
+           if(getStyledTheme() != null){
+               TypedArray customTypedArray = getStyledTheme().obtainStyledAttributes(null, attrs, 0, 0);
+            taComposite = new TypedArrayComposite(getTheme().obtainStyledAttributes(set, attrs, 0, 0),
+                    customTypedArray, set);
+
+
+              return taComposite;
+        }
+
+
+      return getTheme().obtainStyledAttributes(set, attrs, 0, 0);
     }
 
     /**
@@ -221,9 +269,20 @@ public abstract class Context {
      */
     public final TypedArray obtainStyledAttributes(
             AttributeSet set, int[] attrs, int defStyleAttr, int defStyleRes) {
-        return getTheme().obtainStyledAttributes(
-            set, attrs, defStyleAttr, defStyleRes);
+
+        TypedArrayComposite taComposite = null;
+           if(getStyledTheme() != null){
+               TypedArray customTypedArray = getStyledTheme().obtainStyledAttributes(null, attrs, defStyleAttr, defStyleRes);
+             taComposite = new TypedArrayComposite(getTheme().obtainStyledAttributes(set, attrs, defStyleAttr, defStyleRes),
+                    customTypedArray, set);
+
+               return taComposite;
+        }
+
+        return getTheme().obtainStyledAttributes(set, attrs, defStyleAttr, defStyleRes);
+
     }
+
 
     /**
      * Return a class loader you can use to retrieve classes in this package.
