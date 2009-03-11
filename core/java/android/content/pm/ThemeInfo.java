@@ -122,6 +122,9 @@ public final class ThemeInfo implements Parcelable {
      */
     public String copyright;
 
+    // There is no corresposponding flag in manifest file
+    // This flag is set to true iff any media resource is DRM protected
+    public boolean isDrmProtected = false;
 
     /**
      * {@link #themePackage}
@@ -200,6 +203,8 @@ public final class ThemeInfo implements Parcelable {
     	"androidUiStyle",
     };
 
+    private static final String LOCKED_NAME = "locked/";
+
     private static Map<String, Integer> attributesLookupTable;
 
     static {
@@ -244,26 +249,31 @@ public final class ThemeInfo implements Parcelable {
 	    			case RINGTONE_NAME_INDEX:
 	    				// ringtone
 	    				ringtoneName = attrs.getAttributeValue(i);
+	    				changeDrmFlagIfNeeded(ringtoneName);
 	    				break;
 	
 	    			case NOTIFICATION_RINGTONE_NAME_INDEX:
 	    				// notification ringtone
 	    				notificationRingtoneName = attrs.getAttributeValue(i);
+	    				changeDrmFlagIfNeeded(notificationRingtoneName);
 	    				break;
-	
+
 	    			case FAVES_IMAGE_NAME_INDEX:
 	    				// faves background
 	    				favesImageName = attrs.getAttributeValue(i);
+	    				changeDrmFlagIfNeeded(favesImageName);
 	    				break;
-	
+
 	    			case FAVES_APP_IMAGE_NAME_INDEX:
 	    				// favesAppBackground attribute
 	    				favesAppImageName = attrs.getAttributeValue(i);
+	    				changeDrmFlagIfNeeded(favesAppImageName);
 	    				break;
 	
 	    			case WALLPAPER_IMAGE_NAME_INDEX:
 	    				// wallpaperImage attribute
 	    				wallpaperImageName = attrs.getAttributeValue(i);
+	    				changeDrmFlagIfNeeded(wallpaperImageName);
 	    				break;
 	
 	    			case COPYRIGHT_INDEX:
@@ -316,6 +326,7 @@ public final class ThemeInfo implements Parcelable {
         dest.writeString(notificationRingtoneName);
         dest.writeString(author);
         dest.writeString(copyright);
+        dest.writeInt(isDrmProtected? 1 : 0);
 	}
 
     public static final Parcelable.Creator<ThemeInfo> CREATOR
@@ -340,6 +351,13 @@ public final class ThemeInfo implements Parcelable {
         notificationRingtoneName = source.readString();
         author = source.readString();
         copyright = source.readString();
+        isDrmProtected = (source.readInt() != 0);
+    }
+
+    private void changeDrmFlagIfNeeded(String resourcePath) {
+    	if (resourcePath.contains(LOCKED_NAME)) {
+    		isDrmProtected = true;
+    	}
     }
 
 }

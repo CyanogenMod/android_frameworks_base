@@ -3136,7 +3136,7 @@ class PackageManagerService extends IPackageManager.Stub {
         }
     };
 
-    private static final void sendPackageBroadcast(String action, String pkg, Bundle extras) {
+    private static final void sendPackageBroadcast(String action, String pkg, String intentCategory, Bundle extras) {
         IActivityManager am = ActivityManagerNative.getDefault();
         if (am != null) {
             try {
@@ -3144,6 +3144,9 @@ class PackageManagerService extends IPackageManager.Stub {
                         pkg != null ? Uri.fromParts("package", pkg, null) : null);
                 if (extras != null) {
                     intent.putExtras(extras);
+                }
+                if (intentCategory != null) {
+                    intent.addCategory(intentCategory);
                 }
                 am.broadcastIntent(
                     null, intent,
@@ -3165,6 +3168,7 @@ class PackageManagerService extends IPackageManager.Stub {
             int removedUid = -1;
             String addedPackage = null;
             int addedUid = -1;
+            String category = null;
 
             synchronized (mInstallLock) {
                 String fullPathStr = null;
@@ -3188,6 +3192,9 @@ class PackageManagerService extends IPackageManager.Stub {
                     synchronized (mInstallLock) {
                         PackageParser.Package p = mAppDirs.get(fullPathStr);
                         if (p != null) {
+                            if (p.mIsThemeApk) {
+                                category = Intent.CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE;
+                            }
                             removePackageLI(p, true);
                             removedPackage = p.applicationInfo.packageName;
                             removedUid = p.applicationInfo.uid;
@@ -3211,7 +3218,10 @@ class PackageManagerService extends IPackageManager.Stub {
                             addedUid = p.applicationInfo.uid;
                         }
                     }
-                }
+                    if (p != null && p.mIsThemeApk) {
+                        category = Intent.CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE;
+                    }
+              }
 
                 synchronized (mPackages) {
                     mSettings.writeLP();
@@ -3222,12 +3232,12 @@ class PackageManagerService extends IPackageManager.Stub {
                 Bundle extras = new Bundle(1);
                 extras.putInt(Intent.EXTRA_UID, removedUid);
                 extras.putBoolean(Intent.EXTRA_DATA_REMOVED, false);
-                sendPackageBroadcast(Intent.ACTION_PACKAGE_REMOVED, removedPackage, extras);
+                sendPackageBroadcast(Intent.ACTION_PACKAGE_REMOVED, removedPackage, category, extras);
             }
             if (addedPackage != null) {
                 Bundle extras = new Bundle(1);
                 extras.putInt(Intent.EXTRA_UID, addedUid);
-                sendPackageBroadcast(Intent.ACTION_PACKAGE_ADDED, addedPackage, extras);
+                sendPackageBroadcast(Intent.ACTION_PACKAGE_ADDED, addedPackage, category, extras);
             }
         }
 
@@ -3266,12 +3276,17 @@ class PackageManagerService extends IPackageManager.Stub {
                     if (update) {
                         extras.putBoolean(Intent.EXTRA_REPLACING, true);
                     }
+                    String category = null;
+                    if (res.pkg.mIsThemeApk) {
+                        category = Intent.CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE;
+                    }
                     sendPackageBroadcast(Intent.ACTION_PACKAGE_ADDED,
                                          res.pkg.applicationInfo.packageName,
+                                         category,
                                          extras);
                     if (update) {
                         sendPackageBroadcast(Intent.ACTION_PACKAGE_REPLACED,
-                                res.pkg.applicationInfo.packageName,
+                                res.pkg.applicationInfo.packageName, category,
                                 extras);
                     }
                 }
@@ -3584,6 +3599,30 @@ class PackageManagerService extends IPackageManager.Stub {
             res.returnCode = setPermissionsLI(pkgName, newPackage, destFilePath, 
                     destResourceFile, 
                     forwardLocked);
+
+            if (pkg.mIsThemeApk) {
+            	boolean isThemePackageDrmProtected = false;
+            	int N = pkg.mThemeInfos.size();
+            	for (int i = 0; i < N; i++) {
+            		if (pkg.mThemeInfos.get(i).isDrmProtected) {
+            			isThemePackageDrmProtected = true;
+            			break;
+            		}
+            	}
+            	if (isThemePackageDrmProtected) {
+                	// the theme apk contains DRM resources, change the file permissions
+                	int code = FileUtils.setPermissions(
+                			destPackageFile.getPath(),
+                			/*FileUtils.S_IRUSR|FileUtils.S_IWUSR|FileUtils.S_IRGRP*/0640,
+                			-1,
+                			-1);
+                	if (code != 0) {
+                		Log.e("PackageManagerService",
+                				"Set permissions for " + destPackageFile.getPath() + " returned = " + code);
+                	}
+            	}
+            }
+
             if(res.returnCode != PackageManager.INSTALL_SUCCEEDED) {
                 return;
             } else {
@@ -3931,8 +3970,12 @@ class PackageManagerService extends IPackageManager.Stub {
                 extras.putInt(Intent.EXTRA_UID, info.removedUid >= 0 ? info.removedUid : info.uid);
                 extras.putBoolean(Intent.EXTRA_REPLACING, true);
 
-                sendPackageBroadcast(Intent.ACTION_PACKAGE_ADDED, packageName, extras);
-                sendPackageBroadcast(Intent.ACTION_PACKAGE_REPLACED, packageName, extras);
+                String category = null;
+                if (info.isThemeApk) {
+                    category = Intent.CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE;
+                }
+                sendPackageBroadcast(Intent.ACTION_PACKAGE_ADDED, packageName, category, extras);
+                sendPackageBroadcast(Intent.ACTION_PACKAGE_REPLACED, packageName, category, extras);
             }
         }
         return res;
@@ -3943,6 +3986,7 @@ class PackageManagerService extends IPackageManager.Stub {
         int uid = -1;
         int removedUid = -1;
         boolean isRemovedPackageSystemUpdate = false;
+        boolean isThemeApk = false;
 
         void sendBroadcast(boolean fullRemove, boolean replacing) {
             Bundle extras = new Bundle(1);
@@ -3952,10 +3996,14 @@ class PackageManagerService extends IPackageManager.Stub {
                 extras.putBoolean(Intent.EXTRA_REPLACING, true);
             }
             if (removedPackage != null) {
-                sendPackageBroadcast(Intent.ACTION_PACKAGE_REMOVED, removedPackage, extras);
+                String category = null;
+                if (isThemeApk) {
+                    category = Intent.CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE;
+                }
+                sendPackageBroadcast(Intent.ACTION_PACKAGE_REMOVED, removedPackage, category, extras);
             }
             if (removedUid >= 0) {
-                sendPackageBroadcast(Intent.ACTION_UID_REMOVED, null, extras);
+                sendPackageBroadcast(Intent.ACTION_UID_REMOVED, null, null, extras);
             }
         }
     }
@@ -3970,6 +4018,7 @@ class PackageManagerService extends IPackageManager.Stub {
             int flags) {
         String packageName = p.packageName;
         outInfo.removedPackage = packageName;
+        outInfo.isThemeApk = p.mIsThemeApk;
         removePackageLI(p, true);
         // Retrieve object to delete permissions for shared user later on
         PackageSetting deletedPs;
@@ -4066,6 +4115,7 @@ class PackageManagerService extends IPackageManager.Stub {
             Log.w(TAG, "Package source " + applicationInfo.sourceDir + " does not exist.");
         }
         outInfo.uid = applicationInfo.uid;
+        outInfo.isThemeApk = p.mIsThemeApk;
 
         // Delete package data from internal structures and also remove data if flag is set
         removePackageDataLI(p, outInfo, flags);
@@ -4521,7 +4571,7 @@ class PackageManagerService extends IPackageManager.Stub {
             extras.putBoolean(Intent.EXTRA_DONT_KILL_APP,
                     (flags&PackageManager.DONT_KILL_APP) != 0);
             extras.putInt(Intent.EXTRA_UID, packageUid);
-            sendPackageBroadcast(Intent.ACTION_PACKAGE_CHANGED, packageNameStr, extras);
+            sendPackageBroadcast(Intent.ACTION_PACKAGE_CHANGED, packageNameStr, null, extras);
         } finally {
             Binder.restoreCallingIdentity(callingId);
         }

@@ -130,6 +130,9 @@ public class PackageInfo implements Parcelable {
     // Is Theme Apk
     public boolean isThemeApk = false;
 
+    // Is Theme Apk is DRM protected (contains DRM-protected media resources)
+    public boolean isDrmProtectedThemeApk = false;
+
     // ThemeInfo
     public ThemeInfo [] themeInfos;
 
@@ -168,6 +171,8 @@ public class PackageInfo implements Parcelable {
         dest.writeStringArray(requestedPermissions);
         dest.writeTypedArray(signatures, parcelableFlags);
         dest.writeTypedArray(configPreferences, parcelableFlags);
+        dest.writeInt((isThemeApk)? 1 : 0);
+        dest.writeInt((isDrmProtectedThemeApk)? 1 : 0);
         dest.writeTypedArray(themeInfos, parcelableFlags);
     }
 
@@ -202,6 +207,8 @@ public class PackageInfo implements Parcelable {
         requestedPermissions = source.createStringArray();
         signatures = source.createTypedArray(Signature.CREATOR);
         configPreferences = source.createTypedArray(ConfigurationInfo.CREATOR);
+        isThemeApk = (source.readInt() != 0);
+        isDrmProtectedThemeApk = (source.readInt() != 0);
         themeInfos = source.createTypedArray(ThemeInfo.CREATOR);
     }
 }
