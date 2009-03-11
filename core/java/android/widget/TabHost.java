@@ -408,6 +408,11 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
             mIndicatorStrategy = new LabelAndIconIndicatorStrategy(label, icon);
             return this;
         }
+        
+        public TabSpec setIndicator(IndicatorStrategy indicatorFactory) {
+        	mIndicatorStrategy = new FactoryIndicatorStrategy(indicatorFactory);
+        	return this;
+        }
 
         /**
          * Specify the id of the view that should be used as the content
@@ -444,7 +449,7 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
     /**
      * Specifies what you do to create a tab indicator.
      */
-    private static interface IndicatorStrategy {
+    public static interface IndicatorStrategy {
 
         /**
          * Return the view for the indicator.
@@ -551,6 +556,25 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
         }
     }
 
+    /**
+     * How tab indicator is managed using {@link TabIndicatorFactory}.
+     */
+    private class FactoryIndicatorStrategy implements IndicatorStrategy {
+        private IndicatorStrategy mFactory;
+        private View mTabIndicator;
+
+        public FactoryIndicatorStrategy(IndicatorStrategy factory) {
+            mFactory = factory;
+        }
+
+        public View createIndicatorView() {
+        	if (mTabIndicator == null) {
+        		mTabIndicator = mFactory.createIndicatorView();
+            }
+            return mTabIndicator;
+        }
+    }
+    
     /**
      * How tab content is managed using {@link TabContentFactory}.
      */
