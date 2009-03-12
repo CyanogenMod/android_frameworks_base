@@ -94,6 +94,14 @@ public final class ThemeInfo implements Parcelable {
      * @see callRingtone attribute
      *
      */
+    public String ringtoneFileName;
+
+    /**
+     * The name of the call ringtone as shown to user.
+     *
+     * @see callRingtoneName attribute
+     *
+     */
     public String ringtoneName;
 
     /**
@@ -102,6 +110,14 @@ public final class ThemeInfo implements Parcelable {
      * If the parent's name is "locked" - DRM protected.
      *
      * @see notificationRingtone attribute
+     *
+     */
+    public String notificationRingtoneFileName;
+
+    /**
+     * The name of the notification ringtone as shown to user.
+     *
+     * @see notificationRingtoneName attribute
      *
      */
     public String notificationRingtoneName;
@@ -148,13 +164,13 @@ public final class ThemeInfo implements Parcelable {
      * {@link #ringtoneName}
      *
      */
-    private static final int RINGTONE_NAME_INDEX = 3;
+    private static final int RINGTONE_FILE_NAME_INDEX = 3;
 
     /**
      * {@link #notificationRingtoneName}
      *
      */
-    private static final int NOTIFICATION_RINGTONE_NAME_INDEX = 4;
+    private static final int NOTIFICATION_RINGTONE_FILE_NAME_INDEX = 4;
 
     /**
      * {@link #favesImageName}
@@ -186,6 +202,18 @@ public final class ThemeInfo implements Parcelable {
      */
     private static final int THEME_INDEX = 9;
 
+    /**
+     * {@link #ringtoneName}
+     *
+     */
+    private static final int RINGTONE_NAME_INDEX = 10;
+
+    /**
+     * {@link #notificationRingtoneName}
+     *
+     */
+    private static final int NOTIFICATION_RINGTONE_NAME_INDEX = 11;
+
     
     private static final String [] compulsoryAttributes = new String [] {
     	"themeName",
@@ -201,6 +229,8 @@ public final class ThemeInfo implements Parcelable {
     	"wallpaperImage",
     	"themeCopyright",
     	"androidUiStyle",
+    	"callRingtoneName",
+    	"notificationRingtoneName",
     };
 
     private static final String LOCKED_NAME = "locked/";
@@ -246,15 +276,15 @@ public final class ThemeInfo implements Parcelable {
 	    				author = attrs.getAttributeValue(i);
 	    				break;
 	
-	    			case RINGTONE_NAME_INDEX:
+	    			case RINGTONE_FILE_NAME_INDEX:
 	    				// ringtone
-	    				ringtoneName = attrs.getAttributeValue(i);
+	    				ringtoneFileName = attrs.getAttributeValue(i);
 	    				changeDrmFlagIfNeeded(ringtoneName);
 	    				break;
 	
-	    			case NOTIFICATION_RINGTONE_NAME_INDEX:
+	    			case NOTIFICATION_RINGTONE_FILE_NAME_INDEX:
 	    				// notification ringtone
-	    				notificationRingtoneName = attrs.getAttributeValue(i);
+	    				notificationRingtoneFileName = attrs.getAttributeValue(i);
 	    				changeDrmFlagIfNeeded(notificationRingtoneName);
 	    				break;
 
@@ -285,6 +315,15 @@ public final class ThemeInfo implements Parcelable {
 	    				// androidUiStyle attribute
 	    				theme = attrs.getAttributeResourceValue(i, -1);
 	    				break;
+	    				
+	    			case RINGTONE_NAME_INDEX:
+	    				// ringtone UI name
+	    				ringtoneName = attrs.getAttributeValue(i);
+	    				break;
+	
+	    			case NOTIFICATION_RINGTONE_NAME_INDEX:
+	    				// notification ringtone UI name
+	    				notificationRingtoneName = attrs.getAttributeValue(i);
     			}
     		}
     	}
