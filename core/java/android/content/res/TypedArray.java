@@ -674,6 +674,11 @@ public class TypedArray {
         return mResources.mAssets.getPooledString(
             cookie, data[index+AssetManager.STYLE_DATA]);
     }
+    
+    /* Hack to allow TypedArrayComposite to instantiate a simple wrapper. */
+    TypedArray() {
+        mResources = null;
+    }
 
     /*package*/ TypedArray(Resources resources, int[] data, int[] indices, int len) {
         mResources = resources;
@@ -684,5 +689,26 @@ public class TypedArray {
 
     public String toString() {
         return Arrays.toString(mData);
+    }
+    
+    /**
+     * @hide
+     */
+    void dump() {
+        int attrCount = getIndexCount();
+        int[] data = mData;
+        String s = "  Found:";
+        TypedValue value = new TypedValue();
+        for (int i=0; i<attrCount; i++) {
+            int attr = getIndex(i);
+            int d = i*AssetManager.STYLE_NUM_ENTRIES;
+            value.type = data[d+AssetManager.STYLE_TYPE];
+            value.data = data[d+AssetManager.STYLE_DATA];
+            value.assetCookie = data[d+AssetManager.STYLE_ASSET_COOKIE];
+            value.resourceId = data[d+AssetManager.STYLE_RESOURCE_ID];
+            s = s + " 0x" + Integer.toHexString(attr)
+                + "=" + value;
+        }
+        System.out.println(s);
     }
 }

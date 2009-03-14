@@ -238,6 +238,9 @@ public class ActivityInfo extends ComponentInfo
      * @hide
      */
     public static final int CONFIG_THEME_RESOURCE = 0x008000;
+    
+ 
+    
     /**
      * Bit in {@link #configChanges} that indicates that the activity
      * can itself handle changes to the font scaling factor.  Set from the

@@ -51,6 +51,7 @@ import android.content.pm.ServiceInfo;
 import android.content.pm.ThemeInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
+import android.content.res.CustomTheme;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.database.sqlite.SQLiteDatabase;
@@ -272,33 +273,50 @@ class ApplicationContext extends Context {
     }
 
   @Override
-    public void setStyledTheme(String packageName, int resid) {
-
+  /**
+   * @hide
+   */
+    public void setStyledTheme(String packageName, int themeResourceId) {
+      CustomTheme customTheme = null;
+      try	{    
+          customTheme = new CustomTheme(themeResourceId, packageName);
+          Configuration mCurConfig = ActivityManagerNative.getDefault().getConfiguration();                
+          mCurConfig.customTheme = customTheme;
+          ActivityManagerNative.getDefault().updateConfiguration(mCurConfig); 
+      }catch(Exception ex){
+          Log.e("ApplicationContext", "Could not set StyledTheme:", ex);
+      }
     }
 
-    @Override
+    
+    @Override 
+    /**
+     * @hide
+     */
     public Resources.Theme getStyledTheme() {
         if (mStyledTheme != null) {
             return mStyledTheme;
         }
 
         try {
-            // Configuration mCurConfig =
-            // ActivityManagerNative.getDefault().getConfiguration();
-            // int mStyledThemeResource = mCurConfig.themeResource;
-
-            // ThemeManager themeManager =
-            // (ThemeManager)getSystemService(Context.THEME_SERVICE);
-            String packageName = "com.tmobile.pluto.demo";
-            Context context = this.createPackageContext(packageName, 0);
-            int mStyledThemeResource = context.getResources().getIdentifier(
-                    "Theme", "style", packageName);
-            mStyledTheme = context.getTheme();
-            mStyledTheme.applyStyle(mStyledThemeResource, true);
-            // }catch(RemoteException e){
+             Configuration mCurConfig =
+             ActivityManagerNative.getDefault().getConfiguration();
+             CustomTheme customTheme = mCurConfig.customTheme;
+             if(customTheme != null) {
+                 int mStyledThemeResource = customTheme.getThemeId();
+                 String packageName = customTheme.getThemePackageName();
+                 if(packageName != null){
+                     Log.d("ApplicationContext", "ThemePackageName:"+ packageName + " styledThemeResourceId:"+ mStyledThemeResource);
+                     Context context = this.createPackageContext(packageName, 0);
+                     mStyledTheme = context.getTheme();
+                     mStyledTheme.applyStyle(mStyledThemeResource, true);
+                 }
+             }
 
         } catch (PackageManager.NameNotFoundException pne) {
             Log.d("ApplicationContext:", "Package not found", pne);
+        }catch (RemoteException re) {
+            Log.d("ApplicationContext:", "RemoteException", re);
         }
 
         if (mStyledTheme != null) {

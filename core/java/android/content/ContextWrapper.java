@@ -104,7 +104,9 @@ public class ContextWrapper extends Context {
         mBase.setTheme(resid);
     }
 
-    @Override
+    /**
+     * @hide
+     */
     public void setStyledTheme(String packageName, int resid) {
         mBase.setStyledTheme(packageName, resid);
     }
@@ -114,7 +116,9 @@ public class ContextWrapper extends Context {
         return mBase.getTheme();
     }
 
-    @Override
+    /**
+     * @hide
+     */
     public Resources.Theme getStyledTheme(){
         return mBase.getStyledTheme();
     }

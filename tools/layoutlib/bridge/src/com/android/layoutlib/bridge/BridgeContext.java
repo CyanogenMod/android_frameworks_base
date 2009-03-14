@@ -66,6 +66,8 @@ public final class BridgeContext extends Context {
     
     private Resources mResources;
     private Theme mTheme;
+    private Theme mStyledTheme;
+    private String mStylePackageName;
     private HashMap<View, Object> mViewKeyMap = new HashMap<View, Object>();
     private IStyleResourceValue mThemeValues;
     private final Object mProjectKey;
@@ -162,6 +164,11 @@ public final class BridgeContext extends Context {
     @Override
     public Theme getTheme() {
         return mTheme;
+    }
+
+    @Override
+    public Theme getStyledTheme() {
+        return mStyledTheme;
     }
 
     @Override
@@ -1083,6 +1090,11 @@ public final class BridgeContext extends Context {
     public void setTheme(int arg0) {
         // TODO Auto-generated method stub
         
+    }
+
+    @Override
+    public void setStyledTheme(String packageName, int arg0) {
+        // TODO Auto-generated method stub
     }
 
     @SuppressWarnings("unused")

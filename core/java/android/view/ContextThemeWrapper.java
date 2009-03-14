@@ -57,12 +57,18 @@ public class ContextThemeWrapper extends ContextWrapper {
         initializeTheme();
     }
    
-    @Override public void setStyledTheme(String packageName, int styleResId) {
-    	
+    /**
+     * @hide
+     */
+    public void setStyledTheme(String packageName, int styleResId) {
+        mBase.setStyledTheme(packageName, styleResId);
     }
     
-    @Override public Resources.Theme getStyledTheme() {
-    	return mBase.getStyledTheme();
+    /**
+     * @hide
+     */
+    public Resources.Theme getStyledTheme() {
+        return mBase.getStyledTheme();
     }
     
     @Override public Resources.Theme getTheme() {
@@ -107,7 +113,7 @@ public class ContextThemeWrapper extends ContextWrapper {
     private void initializeTheme() {
         final boolean first = (mTheme == null);
         if (first) {
-        	mTheme = getResources().newTheme();
+            mTheme = getResources().newTheme();
             Resources.Theme theme = mBase.getTheme();
             if (theme != null) {
                 mTheme.setTo(theme);

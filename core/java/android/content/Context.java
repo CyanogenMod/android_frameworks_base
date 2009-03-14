@@ -182,10 +182,17 @@ public abstract class Context {
      */
     public abstract Resources.Theme getTheme();
 
+    /**
+     * 
+     * @param packageName
+     * @param resid
+     * @hide
+     */
     public abstract void setStyledTheme(String packageName, int resid);
 
     /**
      * Return the Theme object associated with this Context.
+     * @hide
      */
     public abstract Resources.Theme getStyledTheme();
 
@@ -199,11 +206,11 @@ public abstract class Context {
     public final TypedArray obtainStyledAttributes(
             int[] attrs) {
 
-        TypedArrayComposite taComposite = null;
+        TypedArray taComposite = null;
         if(getStyledTheme() != null){
             TypedArray customTypedArray = getStyledTheme().obtainStyledAttributes(attrs);
 
-            taComposite = new TypedArrayComposite(getTheme().obtainStyledAttributes(attrs),
+            taComposite = TypedArrayComposite.newInstance(getTheme().obtainStyledAttributes(attrs),
                     customTypedArray, null);
 
             return taComposite;
@@ -222,11 +229,11 @@ public abstract class Context {
     public final TypedArray obtainStyledAttributes(
             int resid, int[] attrs) throws Resources.NotFoundException {
 
-        TypedArrayComposite taComposite = null;
+        TypedArray taComposite = null;
            if(getStyledTheme() != null){
                TypedArray customTypedArray = getStyledTheme().obtainStyledAttributes(resid, attrs);
 
-               taComposite = new TypedArrayComposite(getTheme().obtainStyledAttributes(resid, attrs),
+               taComposite = TypedArrayComposite.newInstance(getTheme().obtainStyledAttributes(resid, attrs),
                        customTypedArray, null);
                return taComposite;
         }
@@ -234,6 +241,23 @@ public abstract class Context {
 
         return getTheme().obtainStyledAttributes(resid, attrs);
 
+    }
+    
+    private List<Integer> getListOfAttributesWithValues(TypedArray defaultTypedArray){
+        List<Integer> listAttr = new ArrayList<Integer>();
+        int count = defaultTypedArray.getIndexCount();
+        for(int i=0; i < count; i++){
+            int attr = defaultTypedArray.getIndex(i);  
+            TypedValue outValue = new TypedValue();
+            defaultTypedArray.getValue(attr, outValue);
+            if(outValue.data != 0 && outValue.type == TypedValue.TYPE_STRING && outValue.assetCookie < 0){
+                listAttr.add(defaultTypedArray.getResourceId(i, 0));
+            }
+            
+            Log.d("Context:", "Attr:"+ attr + outValue.toString());
+         }
+        
+        return listAttr;
     }
 
     /**
@@ -246,10 +270,13 @@ public abstract class Context {
     public final TypedArray obtainStyledAttributes(
             AttributeSet set, int[] attrs) {
 
-        TypedArrayComposite taComposite = null;
+        TypedArray taComposite = null;
            if(getStyledTheme() != null){
+               
                TypedArray customTypedArray = getStyledTheme().obtainStyledAttributes(null, attrs, 0, 0);
-            taComposite = new TypedArrayComposite(getTheme().obtainStyledAttributes(set, attrs, 0, 0),
+               TypedArray defaultTypedArray = getTheme().obtainStyledAttributes(set, attrs, 0, 0);
+                          
+               taComposite = TypedArrayComposite.newInstance(defaultTypedArray,
                     customTypedArray, set);
 
 
@@ -270,10 +297,11 @@ public abstract class Context {
     public final TypedArray obtainStyledAttributes(
             AttributeSet set, int[] attrs, int defStyleAttr, int defStyleRes) {
 
-        TypedArrayComposite taComposite = null;
+        TypedArray taComposite = null;
            if(getStyledTheme() != null){
                TypedArray customTypedArray = getStyledTheme().obtainStyledAttributes(null, attrs, defStyleAttr, defStyleRes);
-             taComposite = new TypedArrayComposite(getTheme().obtainStyledAttributes(set, attrs, defStyleAttr, defStyleRes),
+               TypedArray defaultTypedArray = getTheme().obtainStyledAttributes(set, attrs, defStyleAttr, defStyleRes);               
+               taComposite = TypedArrayComposite.newInstance(defaultTypedArray,
                     customTypedArray, set);
 
                return taComposite;

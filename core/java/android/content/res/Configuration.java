@@ -35,10 +35,12 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      */
     public Locale locale;
     
+    
     /**
      * @hide
      */
-    public int themeResource = com.android.internal.R.style.Theme;
+    //public int themeResource = com.android.internal.R.style.Theme;
+    public CustomTheme customTheme;
     
     /**
      * Locale should persist on setting.  This is hidden because it is really
@@ -151,8 +153,11 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         hardKeyboardHidden = o.hardKeyboardHidden;
         navigation = o.navigation;
         orientation = o.orientation;
-        themeResource = o.themeResource;
-    }
+        //themeResource = o.themeResource;
+        if (o.customTheme != null) {
+            customTheme = (CustomTheme) o.customTheme.clone();
+        }
+     }
 
     public String toString() {
         return "{ scale=" + fontScale + " imsi=" + mcc + "/" + mnc
@@ -160,7 +165,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
                 + " touch=" + touchscreen + " key=" + keyboard + "/"
                 + keyboardHidden + "/" + hardKeyboardHidden
                 + " nav=" + navigation + " orien=" + orientation + 
-                " themeResource=" + themeResource + "}";
+                " themeResource=" + customTheme + "}";
     }
 
     /**
@@ -178,9 +183,15 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         navigation = NAVIGATION_UNDEFINED;
         orientation = ORIENTATION_UNDEFINED;
         //default theme
-        themeResource = SystemProperties.getInt("persist.sys.theme", 0);
-        if(themeResource == 0){
-        	themeResource = com.android.internal.R.style.Theme;
+//        themeResource = SystemProperties.getInt("persist.sys.theme", 0);
+//        if(themeResource == 0){
+//            themeResource = com.android.internal.R.style.Theme;
+//        }
+        
+        int themeResource = SystemProperties.getInt("persist.sys.theme", 0);
+        String themePackageName = SystemProperties.get("persist.sys.themePackageName", "");
+        if(themeResource != 0 && (themePackageName != null && themePackageName.trim().length() != 0)){
+            customTheme = new CustomTheme(themeResource, themePackageName);
         }
     }
 
@@ -253,12 +264,18 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             orientation = delta.orientation;
         }
         
-        if (delta.themeResource != THEME_UNDEFINED
-                && themeResource != delta.themeResource) {
-            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
-            themeResource = delta.themeResource;
-        }
+//        if (delta.themeResource != THEME_UNDEFINED
+//                && themeResource != delta.themeResource) {
+//            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
+//            themeResource = delta.themeResource;
+//        }
         
+        if (delta.customTheme != null
+                && (customTheme == null || !customTheme.equals(delta.customTheme))) {
+            changed |= ActivityInfo.CONFIG_LOCALE;
+            customTheme = delta.customTheme != null
+                    ? (CustomTheme) delta.customTheme.clone() : null;
+        }
         return changed;
     }
 
@@ -325,11 +342,15 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             changed |= ActivityInfo.CONFIG_ORIENTATION;
         }
         
-        if (delta.themeResource != THEME_UNDEFINED
-                && themeResource != delta.themeResource) {
+//        if (delta.themeResource != THEME_UNDEFINED
+//                && themeResource != delta.themeResource) {
+//            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
+//        }
+        
+        if (delta.customTheme != null
+                && (customTheme == null || !customTheme.equals(delta.customTheme))) {
             changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
         }
-        
         return changed;
     }
 
@@ -378,7 +399,14 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         dest.writeInt(hardKeyboardHidden);
         dest.writeInt(navigation);
         dest.writeInt(orientation);
-        dest.writeInt(themeResource);
+        //dest.writeInt(themeResource);
+        if (customTheme == null) {
+            dest.writeInt(0);
+        } else {
+            dest.writeInt(1);
+            dest.writeInt(customTheme.getThemeId());
+            dest.writeString(customTheme.getThemePackageName());
+        }
     }
 
     public static final Parcelable.Creator<Configuration> CREATOR
@@ -410,7 +438,10 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         hardKeyboardHidden = source.readInt();
         navigation = source.readInt();
         orientation = source.readInt();
-        themeResource = source.readInt();
+        //themeResource = source.readInt();
+        if (source.readInt() != 0) {
+            customTheme = new CustomTheme(source.readInt(), source.readString());
+        }
     }
 
     public int compareTo(Configuration that) {
@@ -440,9 +471,14 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         n = this.navigation - that.navigation;
         if (n != 0) return n;
         n = this.orientation - that.orientation;
+        if (n != 0) return n;
         
-        n = this.themeResource - that.themeResource;
+        //n = this.themeResource - that.themeResource;
         //if (n != 0) return n;
+        n = this.customTheme.getThemeId() - (that.customTheme.getThemeId());
+        if (n != 0) return n;
+        n = this.customTheme.getThemePackageName().compareTo(that.customTheme.getThemePackageName());
+       
         return n;
     }
 
@@ -464,6 +500,6 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         return ((int)this.fontScale) + this.mcc + this.mnc
                 + this.locale.hashCode() + this.touchscreen
                 + this.keyboard + this.keyboardHidden + this.hardKeyboardHidden
-                + this.navigation + this.orientation + this.themeResource;
+                + this.navigation + this.orientation + this.customTheme.hashCode();
     }
 }

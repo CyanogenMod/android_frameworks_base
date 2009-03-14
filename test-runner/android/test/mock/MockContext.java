@@ -84,15 +84,20 @@ public class MockContext extends Context {
         throw new UnsupportedOperationException();
     }
     
-    @Override
+    /**
+     * @hide
+     */
     public Resources.Theme getStyledTheme() {
         throw new UnsupportedOperationException();
     }
 
-    @Override
+    /**
+     * @hide
+     */
     public void setStyledTheme(String packageName, int resId) {
         throw new UnsupportedOperationException();
     }
+    
     @Override
     public Resources.Theme getTheme() {
         throw new UnsupportedOperationException();

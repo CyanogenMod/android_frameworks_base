@@ -16,14 +16,19 @@
 
 package com.android.server.am;
 
-import com.android.internal.os.BatteryStatsImpl;
-import com.android.internal.os.RuntimeInit;
-import com.android.server.IntentResolver;
-import com.android.server.ProcessMap;
-import com.android.server.ProcessStats;
-import com.android.server.SystemServer;
-import com.android.server.Watchdog;
-import com.android.server.WindowManagerService;
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -57,6 +62,7 @@ import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.content.res.Configuration;
+import android.content.res.CustomTheme;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Binder;
@@ -90,22 +96,16 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManagerPolicy;
 
-import dalvik.system.Zygote;
+import com.android.internal.os.BatteryStatsImpl;
+import com.android.internal.os.RuntimeInit;
+import com.android.server.IntentResolver;
+import com.android.server.ProcessMap;
+import com.android.server.ProcessStats;
+import com.android.server.SystemServer;
+import com.android.server.Watchdog;
+import com.android.server.WindowManagerService;
 
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.lang.IllegalStateException;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import dalvik.system.Zygote;
 
 public final class ActivityManagerService extends ActivityManagerNative implements Watchdog.Monitor {
     static final String TAG = "ActivityManager";
@@ -4920,10 +4920,10 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
                     r.state = ActivityState.PAUSED;
                     completePauseLocked();
                 } else {
-                	EventLog.writeEvent(LOG_AM_FAILED_TO_PAUSE_ACTIVITY,
-                	        System.identityHashCode(r), r.shortComponentName, 
-                			mPausingActivity != null
-                			    ? mPausingActivity.shortComponentName : "(none)");
+                    EventLog.writeEvent(LOG_AM_FAILED_TO_PAUSE_ACTIVITY,
+                            System.identityHashCode(r), r.shortComponentName, 
+                            mPausingActivity != null
+                                ? mPausingActivity.shortComponentName : "(none)");
                 }
             }
         }
@@ -11026,8 +11026,12 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
                                      values.userSetLocale);
                 }
                 
-                if(values.themeResource != 0){
-                	saveThemeResourceLocked(values.themeResource, (values.themeResource != mConfiguration.themeResource));
+//                if(values.themeResource != 0){
+//                    saveThemeResourceLocked(values.themeResource, (values.themeResource != mConfiguration.themeResource));
+//                }
+
+                if(values.customTheme != null){
+                    saveThemeResourceLocked(values.customTheme, (!values.customTheme.equals(mConfiguration.customTheme)));
                 }
 
                 mConfiguration = newConfig;
@@ -11228,13 +11232,13 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
         }
     }
     
-    private void saveThemeResourceLocked(int themeResource, boolean isDiff){
-    	if(isDiff){
-    		Log.d("ActivityManagerService", "Saving Theme :"+ themeResource);
-    		SystemProperties.set("persist.sys.theme", new Integer(themeResource).toString());
-     		//Log.d("ActivityManagerService ", "get Theme :"+ SystemProperties.get("persist.sys.theme", "0"));
-    		
-    	}
+    private void saveThemeResourceLocked(CustomTheme customTheme, boolean isDiff){
+        if(isDiff){
+            //Log.d("ActivityManagerService ", "get Theme :"+ SystemProperties.get("persist.sys.theme", "0"));
+            //Log.d("ActivityManagerService", "Saving Theme :"+ customTheme.toString());
+            SystemProperties.set("persist.sys.theme", new Integer(customTheme.getThemeId()).toString());
+            SystemProperties.set("persist.sys.themePackageName", customTheme.getThemePackageName());  
+        }
     }
 
     // =========================================================
