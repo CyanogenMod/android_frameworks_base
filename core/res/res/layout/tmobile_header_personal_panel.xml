@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <FrameLayout
+        android:paddingRight="5sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/headerIcon1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="center"
+            style="@style/HeaderSecondaryIcon" />
+
+        <ImageView
+            android:id="@+id/headerIcon2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:paddingBottom="3sp"
+            style="@style/HeaderSecondaryIcon" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:paddingLeft="5sp"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:id="@+id/innerLayout1"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/HeaderTextLabel"
+            android:id="@+id/headerId" />
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:id="@+id/innerLayout2"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/headerIcon3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/HeaderSecondaryIcon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/SubHeaderTextLabel"
+                android:id="@+id/subHeaderId1" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</merge>
+	

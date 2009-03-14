@@ -351,6 +351,8 @@
         <attr name="horizontalScrollViewStyle" format="reference" />
         <!-- Default Spinner style. -->
         <attr name="spinnerStyle" format="reference" />
+        <!-- Default Filmstrip style. -->
+        <attr name="filmstripStyle" format="reference" />
         <!-- Default Star style. -->
         <attr name="starStyle" format="reference" />
         <!-- Default TabWidget style. -->
@@ -369,6 +371,27 @@
         <attr name="spinnerItemStyle" format="reference" />
         <!-- Default MapView style. -->
         <attr name="mapViewStyle" format="reference" />
+
+        <!-- =================== -->
+        <!-- Header, section and list item styles   -->
+        <!-- =================== -->
+		<attr name="headerLayout" format="reference" />
+		<attr name="headerLayoutLabel" format="reference" />
+		<attr name="headerLayoutSubHeader" format="reference" />
+		<attr name="headerLayoutTwinSubHeader" format="reference" />
+		<attr name="headerLayoutIcon" format="reference" />
+		<attr name="headerLayoutSubHeaderIcon" format="reference" />
+		<attr name="headerLayoutTwinSubHeaderIcon" format="reference" />
+		<attr name="headerLayoutButton" format="reference" />
+		<attr name="headerLayoutSubHeaderIconButton" format="reference" />
+		<attr name="headerLayoutTwinButton" format="reference" />
+		<attr name="headerLayoutSecondaryIcon" format="reference" />
+		<attr name="headerLayoutSecondaryThreeIcon" format="reference" />
+		<attr name="headerLayoutSecondaryLargeIcon" format="reference" />
+		<attr name="headerLayoutPersonalPanel" format="reference" />
+        <attr name="headerLayoutProductPanel" format="reference" />
+        <attr name="sectionHeaderLayoutLabel" format="reference" />
+        <attr name="listItemLayout" format="reference" />
 
         <!-- =================== -->
         <!-- Preference styles   -->
@@ -1467,6 +1490,25 @@
         <!-- Sets the alpha on the items that are not selected. -->
         <attr name="unselectedAlpha" format="float" />
     </declare-styleable>
+    <declare-styleable name="HeaderLayout">
+        <attr name="headerText" format="string" />
+        <attr name="subHeaderText1" format="string" />
+        <attr name="subHeaderText2" format="string" />
+        <attr name="subLabel" format="string" />
+        <attr name="headerIcon" format="reference|integer" />
+        <attr name="iconSrc1" format="reference|integer" />
+        <attr name="iconSrc2" format="reference|integer" />
+        <attr name="iconSrc3" format="reference|integer" />
+        <attr name="iconSrc4" format="reference|integer" />
+        <attr name="iconSrc5" format="reference|integer" />
+        <attr name="buttonText1" format="string" />
+        <attr name="buttonText2" format="string" />
+    </declare-styleable>
+    <declare-styleable name="ListItemLayout">
+        <attr name="itemLabel" format="string" />
+        <attr name="itemText1" format="string" />
+        <attr name="itemText2" format="string" />
+    </declare-styleable>
     <declare-styleable name="GridView">
         <attr name="horizontalSpacing" format="dimension" />
         <attr name="verticalSpacing" format="dimension" />
@@ -1523,6 +1565,9 @@
         <attr name="textOff" format="string" />
         <!-- The alpha to apply to the indicator when disabled. -->
         <attr name="disabledAlpha" />
+        <attr name="onTextOffsetX" format="integer" min="0"/>
+        <attr name="offTextOffsetX" format="integer" min="0"/>
+        <attr name="textGap" format="integer" min="0"/>
     </declare-styleable>
     <declare-styleable name="RelativeLayout">
         <attr name="gravity" />
@@ -1997,6 +2042,12 @@
     <declare-styleable name="Spinner">
         <!-- The prompt to display when the spinner's dialog is shown. -->
         <attr name="prompt" format="reference" />
+    </declare-styleable>
+    <declare-styleable name="Filmstrip">
+        <attr name="previousButton" format="reference|color" />
+        <attr name="nextButton" format="reference|color" />
+        <attr name="frameBackground" format="reference|color" />
+        <attr name="frameSelectedBackground" format="reference|color" />
     </declare-styleable>
     <declare-styleable name="DatePicker">  
         <!-- The first year (inclusive) i.e. 1940 -->

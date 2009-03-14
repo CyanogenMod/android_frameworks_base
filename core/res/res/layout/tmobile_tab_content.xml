@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="horizontal"
+    android:layout_width="fill_parent" android:layout_height="fill_parent">
+
+    <com.tmobile.widget.TabScrollHost android:id="@+id/tabhost"
+        android:orientation="horizontal" android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <LinearLayout android:orientation="vertical"
+            android:layout_width="fill_parent" android:layout_height="fill_parent"
+            android:id="@+id/mainlayout1">
+
+            <com.tmobile.widget.TabScrollWidget
+                android:orientation="horizontal" android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:id="@+id/mainlayout2" />
+
+            <FrameLayout android:id="@android:id/tabcontent"
+                android:layout_width="fill_parent" android:layout_height="fill_parent"
+                android:layout_weight="1" android:background="#ffd8dcd8">
+
+
+                <TextView android:id="@+id/view1" android:layout_width="wrap_content"
+                    android:layout_gravity="center_horizontal|center_vertical"
+                    android:textSize="40sp" android:textColor="#ff000000"
+                    android:layout_height="wrap_content" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </com.tmobile.widget.TabScrollHost>
+
+</LinearLayout>

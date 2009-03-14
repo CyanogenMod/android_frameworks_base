@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<TextView android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingRight="10dp" 
+		android:layout_weight="1.0" 
+		style="@style/HeaderTextLabel" 
+		android:id="@+id/headerId" />
+
+	<Button android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		style="@style/HeaderButton"
+		android:id="@+id/button1" />
+</merge>

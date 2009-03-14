@@ -364,6 +364,14 @@
         <item name="android:clickable">true</item>
     </style>
 
+    <style name="Widget.Filmstrip">
+        <item name="android:background">@color/white</item>
+        <item name="android:previousButton">@drawable/ic_media_previous</item>
+        <item name="android:nextButton">@drawable/ic_media_next</item>
+        <item name="android:frameBackground">@color/white</item>
+        <item name="android:frameSelectedBackground">@drawable/list_selector_background</item>
+    </style>
+
     <style name="Widget.TextView.PopupMenu">
         <item name="android:clickable">true</item>
         <item name="android:textAppearance">@style/TextAppearance.Widget.TextView.PopupMenu</item>
@@ -658,6 +666,98 @@
 
     <style name="MediaButton.Pause">
         <item name="android:src">@android:drawable/ic_media_pause</item>
+    </style>
+
+	<style name="Widget.HeaderLayout" >
+	</style>
+	<style name="Widget.HeaderLayout.HeaderLabel">
+		<item name="android:gravity">center</item>
+	</style>
+	<style name="Widget.HeaderLayout.HeaderSubHeader">
+		<item name="android:orientation">vertical</item>
+		<item name="android:gravity">center</item>
+	</style>
+	<style name="Widget.HeaderLayout.HeaderTwinSubHeader">
+		<item name="android:orientation">vertical</item>
+		<item name="android:gravity">left|center_vertical</item>
+	</style>
+	<style name="Widget.HeaderLayout.HeaderIcon">
+		<item name="android:gravity">left|center</item>
+	</style>
+	<style name="Widget.HeaderLayout.HeaderSubHeaderIcon">
+		<item name="android:gravity">left|center</item>
+	</style>
+	<style name="Widget.HeaderLayout.HeaderTwinSubHeaderIcon">
+		<item name="android:gravity">left|center</item>
+	</style>
+    <style name="Widget.HeaderLayout.SectionHeaderLabel">
+        <item name="android:gravity">left|center_vertical</item>
+    </style>
+	<style name="Widget.HeaderLayout.HeaderButton">
+		<item name="android:gravity">center</item>
+	</style>
+	<style name="Widget.HeaderLayout.HeaderSubHeaderIconButton">
+		<item name="android:gravity">left|center</item>
+	</style>
+	<style name="Widget.HeaderLayout.HeaderTwinButton">
+		<item name="android:gravity">center</item>
+	</style>
+	<style name="Widget.HeaderLayout.HeaderSecondaryIcon">
+		<item name="android:orientation">vertical</item>
+		<item name="android:gravity">left|center</item>
+	</style>
+	<style name="Widget.HeaderLayout.HeaderSecondaryThreeIcon">
+		<item name="android:gravity">left|center</item>
+	</style>
+	<style name="Widget.HeaderLayout.HeaderSecondaryLargeIcon">
+		<item name="android:gravity">left|center</item>
+	</style>
+	<style name="Widget.HeaderLayout.HeaderPersonalPanel">
+		<item name="android:gravity">left|center</item>
+	</style>
+    <style name="Widget.HeaderLayout.HeaderProductPanel">
+        <item name="android:gravity">left|center</item>
+    </style>
+
+    <style name="Widget.ListItemLayout" >
+    </style>
+    <style name="Widget.ListItemLayout.ItemLabelText" >
+		<item name="android:gravity">left|center_vertical</item>
+    </style>
+    
+	<style name="TextLabel">
+		<item name="android:singleLine">true</item>
+	</style>
+	<style name="SubHeaderTextLabel" parent="TextLabel">
+	</style>
+	<style name="HeaderTextLabel" parent="TextLabel">
+	</style>
+	<style name="HeaderTextIcon" parent="SubHeaderTextLabel">
+	</style>
+	<style name="HeaderSecondaryIcon" parent="SubHeaderTextLabel">
+	</style>
+	<style name="HeaderSecondaryThreeIcon" parent="SubHeaderTextLabel">
+	</style>
+	<style name="HeaderButton">
+	</style>
+	<style name="HeaderButton.TwinLeft">
+        <item name="android:background">@android:drawable/btn_default</item>
+	</style>
+    <style name="HeaderButton.TwinRight">
+        <item name="android:background">@android:drawable/btn_default</item>
+	</style>
+    <style name="HeaderMainImage">
+    </style>
+
+    <style name="ListItemLabel" parent="TextLabel">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#FF000000</item>
+    </style>
+    <style name="ListItemText" parent="TextLabel">
+        <item name="android:textSize">22sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#FF000000</item>
     </style>
 
     <style name="ZoomControls">

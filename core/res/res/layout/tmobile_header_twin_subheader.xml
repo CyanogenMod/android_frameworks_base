@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+	<TextView
+		android:id="@+id/headerId"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		style="@style/HeaderTextLabel" />
+	<TextView
+		android:id="@+id/subHeaderId1"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		style="@style/SubHeaderTextLabel" />
+	<TextView
+		android:id="@+id/subHeaderId2"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		style="@style/SubHeaderTextLabel" />
+</merge>

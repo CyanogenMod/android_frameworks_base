@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="horizontal" 
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" 
+		android:id="@+id/outterLayout">
+
+		<ImageView android:id="@+id/headerIcon"
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content"
+			style="@style/HeaderTextIcon" />
+
+		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:orientation="vertical" 
+			android:layout_width="wrap_content"
+			android:id="@+id/innerLayout" 
+			android:layout_weight="1.0"
+			android:paddingRight="10dp"
+			android:layout_height="wrap_content">
+
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" 
+				style="@style/HeaderTextLabel" 
+				android:id="@+id/headerId" />
+
+			<TextView android:layout_width="wrap_content"
+				android:layout_height="wrap_content" 
+				style="@style/SubHeaderTextLabel" 
+				android:id="@+id/subHeaderId1" />
+
+		</LinearLayout>
+
+		<Button android:layout_width="wrap_content"
+			android:layout_height="wrap_content" 
+			style="@style/HeaderButton"
+			android:layout_gravity="center_vertical" 
+			android:id="@+id/button1" />
+	</LinearLayout>
+</merge>
+	
