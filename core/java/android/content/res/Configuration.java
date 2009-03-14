@@ -34,14 +34,12 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * Current user preference for the locale.
      */
     public Locale locale;
-    
-    
+
     /**
      * @hide
      */
-    //public int themeResource = com.android.internal.R.style.Theme;
     public CustomTheme customTheme;
-    
+
     /**
      * Locale should persist on setting.  This is hidden because it is really
      * questionable whether this is the right way to expose the functionality.
