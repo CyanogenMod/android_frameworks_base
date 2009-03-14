@@ -1078,7 +1078,8 @@ public class Resources {
             array.mRsrcs = attrs;
             array.mXml = parser;
 
-            if (false) {
+            boolean foo = false;
+            if (foo) {
                 int[] data = array.mData;
                 
                 System.out.println("Attributes:");
@@ -1097,7 +1098,7 @@ public class Resources {
                 
                 System.out.println(s);
              
-                if(false){
+                if(true){
                     s = "  Found:";
                     TypedValue value = new TypedValue();
                     for (i=0; i<attrs.length; i++) {
