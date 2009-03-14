@@ -1328,12 +1328,6 @@ public abstract class Context {
     public static final String CLIPBOARD_SERVICE = "clipboard";
     
     /**
-     * @hide
-     * @see #getSystemService
-     */
-    public static final String THEME_SERVICE = "theme";
-
-    /**
      * Use with {@link #getSystemService} to retrieve a 
      * {@link android.view.inputmethod.InputMethodManager} for accessing input
      * methods.
