@@ -279,13 +279,13 @@ public final class ThemeInfo implements Parcelable {
 	    			case RINGTONE_FILE_NAME_INDEX:
 	    				// ringtone
 	    				ringtoneFileName = attrs.getAttributeValue(i);
-	    				changeDrmFlagIfNeeded(ringtoneName);
+	    				changeDrmFlagIfNeeded(ringtoneFileName);
 	    				break;
 	
 	    			case NOTIFICATION_RINGTONE_FILE_NAME_INDEX:
 	    				// notification ringtone
 	    				notificationRingtoneFileName = attrs.getAttributeValue(i);
-	    				changeDrmFlagIfNeeded(notificationRingtoneName);
+	    				changeDrmFlagIfNeeded(notificationRingtoneFileName);
 	    				break;
 
 	    			case FAVES_IMAGE_NAME_INDEX:
@@ -361,6 +361,8 @@ public final class ThemeInfo implements Parcelable {
         dest.writeInt(thumbnail);
         dest.writeInt(theme);
         dest.writeString(themeName);
+        dest.writeString(ringtoneFileName);
+        dest.writeString(notificationRingtoneFileName);
         dest.writeString(ringtoneName);
         dest.writeString(notificationRingtoneName);
         dest.writeString(author);
@@ -386,6 +388,8 @@ public final class ThemeInfo implements Parcelable {
         thumbnail = source.readInt();
         theme = source.readInt();
         themeName = source.readString();
+        ringtoneFileName = source.readString();
+        notificationRingtoneFileName = source.readString();
         ringtoneName = source.readString();
         notificationRingtoneName = source.readString();
         author = source.readString();
@@ -394,7 +398,7 @@ public final class ThemeInfo implements Parcelable {
     }
 
     private void changeDrmFlagIfNeeded(String resourcePath) {
-    	if (resourcePath.contains(LOCKED_NAME)) {
+    	if (resourcePath != null && resourcePath.contains(LOCKED_NAME)) {
     		isDrmProtected = true;
     	}
     }
