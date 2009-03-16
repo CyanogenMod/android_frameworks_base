@@ -98,4 +98,8 @@ public class PlutoTabWidget extends TabWidget {
 		}
 	}
 	
+	public void setHost(TabScrollHost iPlutoTabHost) {
+		TabScrollWidget scroll = (TabScrollWidget)getParent();
+		scroll.setHost(iPlutoTabHost);
+	}
 }

@@ -365,7 +365,7 @@
     </style>
 
     <style name="Widget.Filmstrip">
-        <item name="android:background">@color/white</item>
+        <item name="android:background">@color/black</item>
         <item name="android:previousButton">@drawable/ic_media_previous</item>
         <item name="android:nextButton">@drawable/ic_media_next</item>
         <item name="android:frameBackground">@color/white</item>
@@ -669,6 +669,8 @@
     </style>
 
 	<style name="Widget.HeaderLayout" >
+		<item name="android:background">@color/black</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceInverse</item>
 	</style>
 	<style name="Widget.HeaderLayout.HeaderLabel">
 		<item name="android:gravity">center</item>

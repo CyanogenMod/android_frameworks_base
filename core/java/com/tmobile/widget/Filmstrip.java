@@ -226,8 +226,8 @@ public class Filmstrip extends RelativeLayout{
 	private FilmstripOnItemSelectedListener mFilmstripOnItemSelectedListener;
 	private int mFilmstripSelection = -1;
 	
-	private int mFrameBackground;
-	private int mFrameSelectedBackground;
+	private Drawable mFrameBackground;
+	private Drawable mFrameSelectedBackground;
 	private Gallery mFilmstripSelector;
 	private ImageView mLeftArrow;
 	private ImageView mRightArrow;
@@ -242,16 +242,12 @@ public class Filmstrip extends RelativeLayout{
 	
 	public Filmstrip(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		this.setFocusable(true);
-		this.setFocusableInTouchMode(true);
+		setFocusable(true);
+		setFocusableInTouchMode(true);
 		
 		TypedArray a = 
             context.obtainStyledAttributes(attrs, R.styleable.Filmstrip, defStyle, 0);
-		
-		int background = a.getInt(R.styleable.View_background, 0);
-		if (background != 0) {
-			this.setBackgroundResource(background);
-		}
+				
 		mFilmstripSelector = new Gallery(context, attrs, defStyle);
 		mLeftArrow = new ImageView(context, attrs, defStyle);
 		mRightArrow = new ImageView(context, attrs, defStyle);
@@ -259,8 +255,8 @@ public class Filmstrip extends RelativeLayout{
 		mFilmstripTitleAdapter = new FilmstripTitleAdapter();
 		mFilmstripOnItemSelectedListener = new FilmstripOnItemSelectedListener();
 		
-		mFrameBackground = a.getInt(R.styleable.Filmstrip_frameBackground, 0);		
-		mFrameSelectedBackground = a.getInt(R.styleable.Filmstrip_frameSelectedBackground, 0);
+		mFrameBackground = a.getDrawable(R.styleable.Filmstrip_frameBackground);		
+		mFrameSelectedBackground = a.getDrawable(R.styleable.Filmstrip_frameSelectedBackground);
 		
 		initWidget(a);
 		
@@ -340,9 +336,9 @@ public class Filmstrip extends RelativeLayout{
 		leftLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 		leftLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
 		
-		int leftImageResource = a.getInt(R.styleable.Filmstrip_previousButton, 0);
+		Drawable leftImageDrawable = a.getDrawable(R.styleable.Filmstrip_previousButton);
 		mLeftArrow.setLayoutParams(leftLayoutParams);
-		mLeftArrow.setImageResource(leftImageResource);
+		mLeftArrow.setImageDrawable(leftImageDrawable);
 		
 		this.addView(mLeftArrow, -1);
 		
@@ -352,9 +348,9 @@ public class Filmstrip extends RelativeLayout{
 		rightLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 		rightLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
 		
-		int rightImageResource = a.getInt(R.styleable.Filmstrip_previousButton, 0);
+		Drawable rightImageDrawable = a.getDrawable(R.styleable.Filmstrip_nextButton);
 		mRightArrow.setLayoutParams(rightLayoutParams);
-		mRightArrow.setImageResource(rightImageResource);
+		mRightArrow.setImageDrawable(rightImageDrawable);
 		
 		this.addView(mRightArrow, -1);
 	}
@@ -387,13 +383,13 @@ public class Filmstrip extends RelativeLayout{
 	
 
 	private void setBackgroundResource(int position, View view) {
-		int resid = mFrameBackground;
+		Drawable drawable = mFrameBackground;
 
 		if (position == mFilmstripSelection) {
-			resid = mFrameSelectedBackground;
+			drawable = mFrameSelectedBackground;
 		}
 		
-		view.setBackgroundResource(resid);
+		view.setBackgroundDrawable(drawable);
 	}
 	
 	

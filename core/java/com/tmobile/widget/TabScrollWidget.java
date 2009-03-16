@@ -47,7 +47,7 @@ public class TabScrollWidget extends LinearLayout {
 
 		mSelectedPosition = 0;
 
-		mPlutoTabWidget = (PlutoTabWidget) findViewById(android.R.id.tabs);
+		mPlutoTabWidget = (PlutoTabWidget) findViewById(R.id.tabs);
 
 		mMoveRight = (Button) findViewById(R.id.moveRight);
 		mMoveRight.setOnClickListener(new OnClickListener() {

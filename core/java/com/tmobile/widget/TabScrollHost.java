@@ -17,8 +17,8 @@ public class TabScrollHost extends android.widget.TabHost {
 	
 	public void setup() {
 		super.setup();
-		TabScrollWidget scroll = (TabScrollWidget) findViewById(R.id.mainlayout2);
-		scroll.setHost(this);
+		PlutoTabWidget widget = (PlutoTabWidget) findViewById(R.id.tabs);
+		widget.setHost(this);
 	}
     
 	//TODO: setIndicator using IndicatorStrategy
