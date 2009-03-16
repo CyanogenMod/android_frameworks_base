@@ -270,7 +270,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         
         if (delta.customTheme != null
                 && (customTheme == null || !customTheme.equals(delta.customTheme))) {
-            changed |= ActivityInfo.CONFIG_LOCALE;
+            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
             customTheme = delta.customTheme != null
                     ? (CustomTheme) delta.customTheme.clone() : null;
         }
