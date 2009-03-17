@@ -310,13 +310,17 @@ class ApplicationContext extends Context {
     private void intializeStyledTheme(CustomTheme customTheme){
         try {
             if(customTheme != null) {
-                int mStyledThemeResource = customTheme.getThemeId();
+                int themeResource = customTheme.getThemeId();
                 String packageName = customTheme.getThemePackageName();
+                Context context;
                 if(packageName != null){
-                    Context context = this.createPackageContext(packageName, 0);
-                    mStyledTheme = context.getTheme();
-                    mStyledTheme.applyStyle(mStyledThemeResource, true);
+                    context = createPackageContext(packageName, 0);
+                } else {
+                    context = this;
                 }
+                
+                mStyledTheme = context.getTheme();
+                mStyledTheme.applyStyle(themeResource, true);
             }
 
         } catch (PackageManager.NameNotFoundException pne) {
