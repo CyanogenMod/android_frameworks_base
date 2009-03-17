@@ -33,13 +33,13 @@ public class TypedArrayComposite extends TypedArray {
          * and determine what attributes we can still use from the theme. */
         boolean alwaysUseDefault = false;
         if (set != null) {
-            if (set.getStyleAttribute() != 0) {
+            int styleAttr = set.getStyleAttribute();
+            if (styleAttr != 0) {
                 alwaysUseDefault = true;
             }
         }
-//        mAlwaysUseDefault = alwaysUseDefault;
-        mAlwaysUseDefault = false;
-        
+        mAlwaysUseDefault = alwaysUseDefault;
+
         /* Construct a map which forces our custom theme to be overridden by
          * any attribute specified in XML. */
         if (alwaysUseDefault == false && set != null && attrs != null) {
