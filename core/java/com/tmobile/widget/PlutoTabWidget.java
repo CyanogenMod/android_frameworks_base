@@ -2,6 +2,7 @@ package com.tmobile.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TabWidget;
@@ -99,7 +100,7 @@ public class PlutoTabWidget extends TabWidget {
 	}
 	
 	public void setHost(TabScrollHost iPlutoTabHost) {
-		TabScrollWidget scroll = (TabScrollWidget)getParent();
+		TabScrollWidget scroll = (TabScrollWidget)getParent().getParent();
 		scroll.setHost(iPlutoTabHost);
 	}
 }
