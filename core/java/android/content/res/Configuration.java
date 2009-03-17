@@ -180,15 +180,10 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         hardKeyboardHidden = HARDKEYBOARDHIDDEN_UNDEFINED;
         navigation = NAVIGATION_UNDEFINED;
         orientation = ORIENTATION_UNDEFINED;
-        //default theme
-//        themeResource = SystemProperties.getInt("persist.sys.theme", 0);
-//        if(themeResource == 0){
-//            themeResource = com.android.internal.R.style.Theme;
-//        }
-        
-        int themeResource = SystemProperties.getInt("persist.sys.theme", 0);
+
+        int themeResource = SystemProperties.getInt("persist.sys.theme", -1);
         String themePackageName = SystemProperties.get("persist.sys.themePackageName", "");
-        if(themeResource != 0 && (themePackageName != null && themePackageName.trim().length() != 0)){
+        if(themeResource >= 0 && (themePackageName != null && themePackageName.trim().length() != 0)){
             customTheme = new CustomTheme(themeResource, themePackageName);
         }
     }
@@ -261,19 +256,16 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             changed |= ActivityInfo.CONFIG_ORIENTATION;
             orientation = delta.orientation;
         }
-        
-//        if (delta.themeResource != THEME_UNDEFINED
-//                && themeResource != delta.themeResource) {
-//            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
-//            themeResource = delta.themeResource;
-//        }
-        
         if (delta.customTheme != null
                 && (customTheme == null || !customTheme.equals(delta.customTheme))) {
             changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
             customTheme = delta.customTheme != null
                     ? (CustomTheme) delta.customTheme.clone() : null;
+        } else if (delta.customTheme == null && customTheme != null) {
+            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
+            customTheme = null;
         }
+
         return changed;
     }
 
@@ -339,16 +331,13 @@ public final class Configuration implements Parcelable, Comparable<Configuration
                 && orientation != delta.orientation) {
             changed |= ActivityInfo.CONFIG_ORIENTATION;
         }
-        
-//        if (delta.themeResource != THEME_UNDEFINED
-//                && themeResource != delta.themeResource) {
-//            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
-//        }
-        
         if (delta.customTheme != null
                 && (customTheme == null || !customTheme.equals(delta.customTheme))) {
             changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
+        } else if (delta.customTheme == null && customTheme != null) {
+            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
         }
+        
         return changed;
     }
 
@@ -438,7 +427,9 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         orientation = source.readInt();
         //themeResource = source.readInt();
         if (source.readInt() != 0) {
-            customTheme = new CustomTheme(source.readInt(), source.readString());
+            int themeId = source.readInt();
+            String themePackage = source.readString();
+            customTheme = new CustomTheme(themeId, themePackage);
         }
     }
 
@@ -470,9 +461,6 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         if (n != 0) return n;
         n = this.orientation - that.orientation;
         if (n != 0) return n;
-        
-        //n = this.themeResource - that.themeResource;
-        //if (n != 0) return n;
         n = this.customTheme.getThemeId() - (that.customTheme.getThemeId());
         if (n != 0) return n;
         n = this.customTheme.getThemePackageName().compareTo(that.customTheme.getThemePackageName());

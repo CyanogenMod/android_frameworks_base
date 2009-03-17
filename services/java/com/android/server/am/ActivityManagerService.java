@@ -11027,8 +11027,11 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
 //                    saveThemeResourceLocked(values.themeResource, (values.themeResource != mConfiguration.themeResource));
 //                }
 
-                if(values.customTheme != null){
-                    saveThemeResourceLocked(values.customTheme, (!values.customTheme.equals(mConfiguration.customTheme)));
+                if (values.customTheme != null) {
+                    saveThemeResourceLocked(values.customTheme,
+                            (!values.customTheme.equals(mConfiguration.customTheme)));
+                } else if (mConfiguration.customTheme != null) {
+                    saveThemeResourceLocked(null, true);
                 }
 
                 mConfiguration = newConfig;
@@ -11228,13 +11231,22 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
             SystemProperties.set("persist.sys.localevar", l.getVariant());
         }
     }
-    
+
     private void saveThemeResourceLocked(CustomTheme customTheme, boolean isDiff){
         if(isDiff){
-            //Log.d("ActivityManagerService ", "get Theme :"+ SystemProperties.get("persist.sys.theme", "0"));
-            //Log.d("ActivityManagerService", "Saving Theme :"+ customTheme.toString());
-            SystemProperties.set("persist.sys.theme", new Integer(customTheme.getThemeId()).toString());
-            SystemProperties.set("persist.sys.themePackageName", customTheme.getThemePackageName());  
+            int themeId;
+            String themePackage;
+
+            if (customTheme != null) {
+                themeId = customTheme.getThemeId();
+                themePackage = customTheme.getThemePackageName();
+            } else {
+                themeId = -1;
+                themePackage = "";
+            }
+
+            SystemProperties.set("persist.sys.theme", Integer.toString(themeId));
+            SystemProperties.set("persist.sys.themePackageName", themePackage);  
         }
     }
 
