@@ -97,7 +97,7 @@ public class ComboSpinner extends Spinner {
     }
 
     public ComboSpinner(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
+        this(context, attrs, R.attr.spinnerStyle);
     }
 
     public ComboSpinner(Context context, AttributeSet attrs, int defStyle) {

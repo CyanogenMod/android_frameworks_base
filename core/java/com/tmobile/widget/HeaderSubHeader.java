@@ -37,7 +37,7 @@ public class HeaderSubHeader extends LinearLayout {
         }
 
         mSubHeader = (TextView)findViewById(R.id.subHeaderId1);
-        String subHeaderText = a.getString(R.styleable.HeaderLayout_subHeaderText1);
+        String subHeaderText = a.getString(R.styleable.HeaderLayout_subHeaderText);
         if (subHeaderText != null) {
         	mSubHeader.setText(subHeaderText);
         }   
@@ -52,11 +52,11 @@ public class HeaderSubHeader extends LinearLayout {
 		mHeader.setText(text);
 	}
 	
-	public CharSequence getSubHeaderText1() {
+	public CharSequence getSubHeaderText() {
 		return mSubHeader.getText();
 	}
 	
-	public void setSubHeaderText1(CharSequence text) {
+	public void setSubHeaderText(CharSequence text) {
 		mSubHeader.setText(text);
 	}
 	

@@ -37,7 +37,7 @@ public class HeaderIcon extends LinearLayout {
         	mHeader.setText(headerText);
         }
 
-        Drawable icon = a.getDrawable(R.styleable.HeaderLayout_iconSrc1);
+        Drawable icon = a.getDrawable(R.styleable.HeaderLayout_iconSrc);
         if (icon != null) {
         	ImageView imageView = (ImageView)findViewById(R.id.headerIcon);
         	imageView.setImageDrawable(icon);

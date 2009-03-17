@@ -368,8 +368,8 @@
         <item name="android:background">@color/black</item>
         <item name="android:previousButton">@drawable/ic_media_previous</item>
         <item name="android:nextButton">@drawable/ic_media_next</item>
-        <item name="android:frameBackground">@color/white</item>
-        <item name="android:frameSelectedBackground">@drawable/list_selector_background</item>
+        <item name="android:frameBackground">@drawable/gallery_unselected_default</item>
+        <item name="android:frameSelectedBackground">@drawable/gallery_selected_focused</item>
     </style>
 
     <style name="Widget.TextView.PopupMenu">

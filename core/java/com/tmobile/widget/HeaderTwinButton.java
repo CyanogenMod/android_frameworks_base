@@ -13,7 +13,7 @@ import android.widget.TextView;
 public class HeaderTwinButton extends LinearLayout {
 	
 	private TextView mHeader;
-	private Button mButton1;
+	private Button mButton;
 	private Button mButton2;
 	
 	public HeaderTwinButton(Context context) {
@@ -38,16 +38,16 @@ public class HeaderTwinButton extends LinearLayout {
         	mHeader.setText(headerText);
         }
         
-        mButton1 = (Button)findViewById(R.id.button1);
-        String buttonText1 = a.getString(R.styleable.HeaderLayout_buttonText1);
-        if (buttonText1 != null) {
-        	mButton1.setText(buttonText1);
+        mButton = (Button)findViewById(R.id.button1);
+        String buttonText = a.getString(R.styleable.HeaderLayout_buttonText);
+        if (buttonText != null) {
+        	mButton.setText(buttonText);
         }
         
         mButton2 = (Button)findViewById(R.id.button2);
-        String buttonText2 = a.getString(R.styleable.HeaderLayout_buttonText2);
-        if (buttonText2 != null) {
-        	mButton2.setText(buttonText2);
+        String button2Text = a.getString(R.styleable.HeaderLayout_button2Text);
+        if (button2Text != null) {
+        	mButton2.setText(button2Text);
         }
         a.recycle();
 	}
@@ -60,24 +60,24 @@ public class HeaderTwinButton extends LinearLayout {
 		mHeader.setText(text);
 	}
 	
-	public CharSequence getButtonText1() {
-		return getButton1().getText();
+	public CharSequence getButtonText() {
+		return getButton().getText();
 	}
 
-	public void setButtonText1(CharSequence text) {
-		getButton1().setText(text);
+	public void setButtonText(CharSequence text) {
+		getButton().setText(text);
 	}
 	
-	public CharSequence getButtonText2() {
+	public CharSequence getButton2Text() {
 		return getButton2().getText();
 	}
 
-	public void setButtonText2(CharSequence text) {
+	public void setButton2Text(CharSequence text) {
 		getButton2().setText(text);
 	}
 
-	public Button getButton1() {
-		return mButton1;
+	public Button getButton() {
+		return mButton;
 	}
 	
 	public Button getButton2() {

@@ -15,7 +15,7 @@ import android.widget.TextView;
 public class HeaderProductPanel extends LinearLayout {
 
 	private TextView mHeader;
-	private TextView mSubHeader1;
+	private TextView mSubHeader;
 	private TextView mSubHeader2;
 	private TextView mSubLabel;
 
@@ -42,64 +42,46 @@ public class HeaderProductPanel extends LinearLayout {
 			mHeader.setText(headerText);
 		}
 
-		mSubHeader1 = (TextView) findViewById(R.id.subHeaderId1);
-		String subHeaderText1 = a
-				.getString(R.styleable.HeaderLayout_subHeaderText1);
-		if (subHeaderText1 != null) {
-			mSubHeader1.setText(subHeaderText1);
+		mSubHeader = (TextView) findViewById(R.id.subHeaderId1);
+		String subHeaderText = a.getString(R.styleable.HeaderLayout_subHeaderText);
+		if (subHeaderText != null) {
+			mSubHeader.setText(subHeaderText);
 		}
 
 		mSubHeader2 = (TextView) findViewById(R.id.subHeaderId2);
-		String subHeaderText2 = a
-				.getString(R.styleable.HeaderLayout_subHeaderText2);
-		if (subHeaderText2 != null) {
-			mSubHeader2.setText(subHeaderText2);
+		subHeaderText = a.getString(R.styleable.HeaderLayout_subHeader2Text);
+		if (subHeaderText != null) {
+			mSubHeader2.setText(subHeaderText);
 		}
 
 		mSubLabel = (TextView) findViewById(R.id.subLabel);
-		String subLabelText1 = a
-				.getString(R.styleable.HeaderLayout_subLabel);
-		if (subLabelText1 != null) {
-			mSubLabel.setText(subLabelText1);
+		String subLabelText = a
+				.getString(R.styleable.HeaderLayout_subLabelText);
+		if (subLabelText != null) {
+			mSubLabel.setText(subLabelText);
 		}
 
-		Drawable icon = a.getDrawable(R.styleable.HeaderLayout_iconSrc1);
-		if (icon != null) {
-			ImageView imageView = (ImageView) findViewById(R.id.headerIcon1);
-			imageView.setImageDrawable(icon);
-		}
-
-		icon = a.getDrawable(R.styleable.HeaderLayout_iconSrc2);
-		if (icon != null) {
-			ImageView imageView = (ImageView) findViewById(R.id.headerIcon2);
-			imageView.setImageDrawable(icon);
-		}
-
-		icon = a.getDrawable(R.styleable.HeaderLayout_iconSrc3);
-		if (icon != null) {
-			ImageView imageView = (ImageView) findViewById(R.id.headerIcon3);
-			imageView.setImageDrawable(icon);
-		}
-
-		icon = a.getDrawable(R.styleable.HeaderLayout_iconSrc4);
-		if (icon != null) {
-			ImageView imageView = (ImageView) findViewById(R.id.headerIcon4);
-			imageView.setImageDrawable(icon);
-		}
-
-		icon = a.getDrawable(R.styleable.HeaderLayout_iconSrc5);
-		if (icon != null) {
-			ImageView imageView = (ImageView) findViewById(R.id.headerIcon5);
-			imageView.setImageDrawable(icon);
-		}
-
-		icon = a.getDrawable(R.styleable.HeaderLayout_headerIcon);
+		Drawable icon = a.getDrawable(R.styleable.HeaderLayout_iconSrc);
 		if (icon != null) {
 			ImageView imageView = (ImageView) findViewById(R.id.headerIcon);
 			imageView.setImageDrawable(icon);
 		}
 
-		String buttonText = a.getString(R.styleable.HeaderLayout_buttonText1);
+		icon = a.getDrawable(R.styleable.HeaderLayout_icon2Src);
+		if (icon != null) {
+			ImageView imageView = (ImageView) findViewById(R.id.starIcon);
+			imageView.setImageDrawable(icon);
+			imageView = (ImageView) findViewById(R.id.star2Icon);
+			imageView.setImageDrawable(icon);
+			imageView = (ImageView) findViewById(R.id.star3Icon);
+			imageView.setImageDrawable(icon);
+			imageView = (ImageView) findViewById(R.id.star4Icon);
+			imageView.setImageDrawable(icon);
+			imageView = (ImageView) findViewById(R.id.star5Icon);
+			imageView.setImageDrawable(icon);
+		}
+
+		String buttonText = a.getString(R.styleable.HeaderLayout_buttonText);
 		if (buttonText != null) {
 			Button button = (Button) findViewById(R.id.button1);
 			button.setText(buttonText);
@@ -115,19 +97,19 @@ public class HeaderProductPanel extends LinearLayout {
 		mHeader.setText(text);
 	}
 
-	public CharSequence getSubHeaderText1() {
-		return mSubHeader1.getText();
+	public CharSequence getSubHeaderText() {
+		return mSubHeader.getText();
 	}
 
-	public void setSubHeaderText1(CharSequence text) {
-		mSubHeader1.setText(text);
+	public void setSubHeaderText(CharSequence text) {
+		mSubHeader.setText(text);
 	}
 
-	public CharSequence getSubHeaderText2() {
+	public CharSequence getSubHeader2Text() {
 		return mSubHeader2.getText();
 	}
 
-	public void setSubHeaderText2(CharSequence text) {
+	public void setSubHeader2Text(CharSequence text) {
 		mSubHeader2.setText(text);
 	}
 

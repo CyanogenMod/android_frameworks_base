@@ -14,7 +14,7 @@ import android.widget.TextView;
 public class HeaderTwinSubHeaderIcon extends LinearLayout {
 
 	private TextView mHeader;
-	private TextView mSubHeader1;
+	private TextView mSubHeader;
 	private TextView mSubHeader2;
 	
 	public HeaderTwinSubHeaderIcon(Context context) {
@@ -34,7 +34,7 @@ public class HeaderTwinSubHeaderIcon extends LinearLayout {
             context.obtainStyledAttributes(attrs, R.styleable.HeaderLayout, defStyle, 0);
 
 
-        Drawable icon = a.getDrawable(R.styleable.HeaderLayout_iconSrc1);
+        Drawable icon = a.getDrawable(R.styleable.HeaderLayout_iconSrc);
         if (icon != null) {
         	ImageView imageView = (ImageView)findViewById(R.id.headerIcon);
         	imageView.setImageDrawable(icon);
@@ -46,14 +46,14 @@ public class HeaderTwinSubHeaderIcon extends LinearLayout {
         	mHeader.setText(headerText);
         }
 
-        mSubHeader1 = (TextView)findViewById(R.id.subHeaderId1);
-        String subHeaderText = a.getString(R.styleable.HeaderLayout_subHeaderText1);
+        mSubHeader = (TextView)findViewById(R.id.subHeaderId1);
+        String subHeaderText = a.getString(R.styleable.HeaderLayout_subHeaderText);
         if (subHeaderText != null) {
-        	mSubHeader1.setText(subHeaderText);
+        	mSubHeader.setText(subHeaderText);
         }   
         
         mSubHeader2 = (TextView)findViewById(R.id.subHeaderId2);
-        subHeaderText = a.getString(R.styleable.HeaderLayout_subHeaderText2);
+        subHeaderText = a.getString(R.styleable.HeaderLayout_subHeader2Text);
         if (subHeaderText != null) {
         	mSubHeader2.setText(subHeaderText);
         } 
@@ -69,19 +69,19 @@ public class HeaderTwinSubHeaderIcon extends LinearLayout {
 		mHeader.setText(text);
 	}
 	
-	public CharSequence getSubHeaderText1() {
-		return mSubHeader1.getText();
+	public CharSequence getSubHeaderText() {
+		return mSubHeader.getText();
 	}
 	
-	public void setSubHeaderText1(CharSequence text) {
-		mSubHeader1.setText(text);
+	public void setSubHeaderText(CharSequence text) {
+		mSubHeader.setText(text);
 	}
 	
-	public CharSequence getSubHeaderText2() {
+	public CharSequence getSubHeader2Text() {
 		return mSubHeader2.getText();
 	}
 	
-	public void setSubHeaderText2(CharSequence text) {
+	public void setSubHeader2Text(CharSequence text) {
 		mSubHeader2.setText(text);
 	}
 }

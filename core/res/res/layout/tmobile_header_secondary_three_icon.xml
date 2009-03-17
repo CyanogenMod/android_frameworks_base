@@ -29,19 +29,19 @@
 				android:id="@+id/subHeaderId1" />
 		</LinearLayout>
 
-		<ImageView android:id="@+id/headerIcon1"
+		<ImageView android:id="@+id/headerIcon"
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content"
 			style="@style/HeaderSecondaryThreeIcon" 
 			/>
 
-		<ImageView android:id="@+id/headerIcon2"
+		<ImageView android:id="@+id/header2Icon"
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content"
 			style="@style/HeaderSecondaryThreeIcon" 
 			/>
 
-		<ImageView android:id="@+id/headerIcon3"
+		<ImageView android:id="@+id/header3Icon"
 			android:layout_width="wrap_content" 
 			android:layout_height="wrap_content"
 			style="@style/HeaderSecondaryThreeIcon" 

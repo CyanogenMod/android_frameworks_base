@@ -68,31 +68,31 @@
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:id="@+id/headerIcon1"
+                    android:id="@+id/starIcon"
                     style="@style/HeaderSecondaryThreeIcon" />
 
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:id="@+id/headerIcon2"
+                    android:id="@+id/star2Icon"
                     style="@style/HeaderSecondaryThreeIcon" />
 
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:id="@+id/headerIcon3"
+                    android:id="@+id/star3Icon"
                     style="@style/HeaderSecondaryThreeIcon" />
 
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:id="@+id/headerIcon4"
+                    android:id="@+id/star4Icon"
                     style="@style/HeaderSecondaryThreeIcon" />
 
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
-                    android:id="@+id/headerIcon5"
+                    android:id="@+id/star5Icon"
                     style="@style/HeaderSecondaryThreeIcon" />
             </LinearLayout>
 

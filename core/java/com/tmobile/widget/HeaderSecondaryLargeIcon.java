@@ -38,22 +38,22 @@ public class HeaderSecondaryLargeIcon extends LinearLayout {
         	mHeader.setText(headerText);
         } 
 
-        Drawable icon = a.getDrawable(R.styleable.HeaderLayout_iconSrc1);
+        Drawable icon = a.getDrawable(R.styleable.HeaderLayout_iconSrc);
         if (icon != null) {
-        	ImageView imageView = (ImageView)findViewById(R.id.headerIcon1);
+        	ImageView imageView = (ImageView)findViewById(R.id.headerIcon);
         	imageView.setImageDrawable(icon);
         }
         
-        icon = a.getDrawable(R.styleable.HeaderLayout_iconSrc2);
+        icon = a.getDrawable(R.styleable.HeaderLayout_icon2Src);
         if (icon != null) {
-        	ImageView imageView = (ImageView)findViewById(R.id.headerIcon2);
+        	ImageView imageView = (ImageView)findViewById(R.id.header2Icon);
         	imageView.setImageDrawable(icon);
         }
 
         mSubHeader = (TextView)findViewById(R.id.subHeaderId1);
-        String subHeaderText1 = a.getString(R.styleable.HeaderLayout_subHeaderText1);
-        if (subHeaderText1 != null) {
-        	mSubHeader.setText(subHeaderText1);
+        String subHeaderText = a.getString(R.styleable.HeaderLayout_subHeaderText);
+        if (subHeaderText != null) {
+        	mSubHeader.setText(subHeaderText);
         }
         
         a.recycle();
@@ -67,11 +67,11 @@ public class HeaderSecondaryLargeIcon extends LinearLayout {
 		mHeader.setText(text);
 	}
 	
-	public CharSequence getSubHeaderText1() {
+	public CharSequence getSubHeaderText() {
 		return mSubHeader.getText();
 	}
 	
-	public void setSubHeaderText1(CharSequence text) {
+	public void setSubHeaderText(CharSequence text) {
 		mSubHeader.setText(text);
 	}
 	

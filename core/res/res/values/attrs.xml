@@ -1492,22 +1492,18 @@
     </declare-styleable>
     <declare-styleable name="HeaderLayout">
         <attr name="headerText" format="string" />
-        <attr name="subHeaderText1" format="string" />
-        <attr name="subHeaderText2" format="string" />
-        <attr name="subLabel" format="string" />
-        <attr name="headerIcon" format="reference|integer" />
-        <attr name="iconSrc1" format="reference|integer" />
-        <attr name="iconSrc2" format="reference|integer" />
-        <attr name="iconSrc3" format="reference|integer" />
-        <attr name="iconSrc4" format="reference|integer" />
-        <attr name="iconSrc5" format="reference|integer" />
-        <attr name="buttonText1" format="string" />
-        <attr name="buttonText2" format="string" />
+        <attr name="subHeaderText" format="string" />
+        <attr name="subHeader2Text" format="string" />
+        <attr name="subLabelText" format="string" />
+        <attr name="buttonText" format="string" />
+        <attr name="button2Text" format="string" />
+        <attr name="iconSrc" format="reference|integer" />
+        <attr name="icon2Src" format="reference|integer" />
+        <attr name="icon3Src" format="reference|integer" />
     </declare-styleable>
     <declare-styleable name="ListItemLayout">
-        <attr name="itemLabel" format="string" />
-        <attr name="itemText1" format="string" />
-        <attr name="itemText2" format="string" />
+        <attr name="itemLabelText" format="string" />
+        <attr name="itemText" format="string" />
     </declare-styleable>
     <declare-styleable name="GridView">
         <attr name="horizontalSpacing" format="dimension" />
@@ -1565,8 +1561,6 @@
         <attr name="textOff" format="string" />
         <!-- The alpha to apply to the indicator when disabled. -->
         <attr name="disabledAlpha" />
-        <attr name="onTextOffsetX" format="integer" min="0"/>
-        <attr name="offTextOffsetX" format="integer" min="0"/>
         <attr name="textGap" format="integer" min="0"/>
     </declare-styleable>
     <declare-styleable name="RelativeLayout">

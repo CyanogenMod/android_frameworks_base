@@ -11,8 +11,8 @@ import android.widget.TextView;
 
 public class ListItemLabelText extends LinearLayout {
 
-	private TextView mLabel;
-	private TextView mText;
+	private TextView mItemLabel;
+	private TextView mItemText;
 	
 	public ListItemLabelText(Context context) {
 		this(context, null);
@@ -30,34 +30,34 @@ public class ListItemLabelText extends LinearLayout {
 		TypedArray a = 
             context.obtainStyledAttributes(attrs, R.styleable.ListItemLayout, defStyle, 0);
 
-		mLabel = (TextView)findViewById(R.id.itemLabel);
-		String headerText = a.getString(R.styleable.ListItemLayout_itemLabel);
-        if (headerText != null) {
-        	mLabel.setText(headerText);
+		mItemLabel = (TextView)findViewById(R.id.itemLabel);
+		String labelText = a.getString(R.styleable.ListItemLayout_itemLabelText);
+        if (labelText != null) {
+        	mItemLabel.setText(labelText);
         }
         
-        mText = (TextView)findViewById(R.id.itemText);
-        String buttonText = a.getString(R.styleable.ListItemLayout_itemText1);
-        if (buttonText != null) {
-        	mText.setText(buttonText);
+        mItemText = (TextView)findViewById(R.id.itemText);
+        String itemText = a.getString(R.styleable.ListItemLayout_itemText);
+        if (itemText != null) {
+        	mItemText.setText(itemText);
         }
         a.recycle();
 	}
 
-	public CharSequence getLabelText() {
-		return mLabel.getText();
+	public CharSequence getItemLabelText() {
+		return mItemLabel.getText();
 	}
 	
-	public void setLabelText(CharSequence text) {
-		mLabel.setText(text);
+	public void setItemLabelText(CharSequence text) {
+		mItemLabel.setText(text);
 	}
 	
-	public CharSequence getText() {
-		return mText.getText();
+	public CharSequence getItemText() {
+		return mItemText.getText();
 	}
 	
-	public void setText(CharSequence text) {
-		mText.setText(text);
+	public void setItemText(CharSequence text) {
+		mItemText.setText(text);
 	}
 	
 }

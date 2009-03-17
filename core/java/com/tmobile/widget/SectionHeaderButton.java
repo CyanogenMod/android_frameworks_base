@@ -38,7 +38,7 @@ public class SectionHeaderButton extends LinearLayout {
         }
         
         mButton = (Button)findViewById(R.id.button1);
-        String buttonText = a.getString(R.styleable.HeaderLayout_buttonText1);
+        String buttonText = a.getString(R.styleable.HeaderLayout_buttonText);
         if (buttonText != null) {
         	mButton.setText(buttonText);
         }
