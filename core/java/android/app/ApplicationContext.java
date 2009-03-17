@@ -16,8 +16,24 @@
 
 package android.app;
 
-import com.google.android.collect.Maps;
-import com.android.internal.util.XmlUtils;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Map.Entry;
+
+import org.xmlpull.v1.XmlPullParserException;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.IBluetoothDevice;
@@ -37,9 +53,9 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.ComponentInfo;
 import android.content.pm.IPackageDataObserver;
 import android.content.pm.IPackageDeleteObserver;
-import android.content.pm.IPackageStatsObserver;
 import android.content.pm.IPackageInstallObserver;
 import android.content.pm.IPackageManager;
+import android.content.pm.IPackageStatsObserver;
 import android.content.pm.InstrumentationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -48,7 +64,6 @@ import android.content.pm.PermissionInfo;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
-import android.content.pm.ThemeInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.CustomTheme;
@@ -71,15 +86,15 @@ import android.net.wifi.IWifiManager;
 import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.Bundle;
-import android.os.Looper;
-import android.os.RemoteException;
 import android.os.FileUtils;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.IPowerManager;
+import android.os.Looper;
 import android.os.ParcelFileDescriptor;
 import android.os.PowerManager;
 import android.os.Process;
+import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.Vibrator;
 import android.os.FileUtils.FileStatus;
@@ -93,25 +108,8 @@ import android.view.WindowManagerImpl;
 import android.view.inputmethod.InputMethodManager;
 
 import com.android.internal.policy.PolicyManager;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Map.Entry;
-
-import org.xmlpull.v1.XmlPullParserException;
+import com.android.internal.util.XmlUtils;
+import com.google.android.collect.Maps;
 
 class ReceiverRestrictedContext extends ContextWrapper {
     ReceiverRestrictedContext(Context base) {
@@ -279,9 +277,7 @@ class ApplicationContext extends Context {
       CustomTheme customTheme = null;
       try	{    
           customTheme = new CustomTheme(themeResourceId, packageName);
-          Configuration mCurConfig = ActivityManagerNative.getDefault().getConfiguration();                
-          mCurConfig.customTheme = customTheme;
-          ActivityManagerNative.getDefault().updateConfiguration(mCurConfig); 
+          intializeStyledTheme(customTheme);
       }catch(Exception ex){
           Log.e("ApplicationContext", "Could not set StyledTheme:", ex);
       }
@@ -298,22 +294,9 @@ class ApplicationContext extends Context {
         }
 
         try {
-             Configuration mCurConfig =
-             ActivityManagerNative.getDefault().getConfiguration();
+             Configuration mCurConfig = ActivityManagerNative.getDefault().getConfiguration();
              CustomTheme customTheme = mCurConfig.customTheme;
-             if(customTheme != null) {
-                 int mStyledThemeResource = customTheme.getThemeId();
-                 String packageName = customTheme.getThemePackageName();
-                 if(packageName != null){
-                     Log.d("ApplicationContext", "ThemePackageName:"+ packageName + " styledThemeResourceId:"+ mStyledThemeResource);
-                     Context context = this.createPackageContext(packageName, 0);
-                     mStyledTheme = context.getTheme();
-                     mStyledTheme.applyStyle(mStyledThemeResource, true);
-                 }
-             }
-
-        } catch (PackageManager.NameNotFoundException pne) {
-            Log.d("ApplicationContext:", "Package not found", pne);
+             intializeStyledTheme(customTheme);
         }catch (RemoteException re) {
             Log.d("ApplicationContext:", "RemoteException", re);
         }
@@ -324,6 +307,23 @@ class ApplicationContext extends Context {
         return mStyledTheme;
     }
 
+    private void intializeStyledTheme(CustomTheme customTheme){
+        try {
+            if(customTheme != null) {
+                int mStyledThemeResource = customTheme.getThemeId();
+                String packageName = customTheme.getThemePackageName();
+                if(packageName != null){
+                    Context context = this.createPackageContext(packageName, 0);
+                    mStyledTheme = context.getTheme();
+                    mStyledTheme.applyStyle(mStyledThemeResource, true);
+                }
+            }
+
+        } catch (PackageManager.NameNotFoundException pne) {
+            Log.d("ApplicationContext:", "Package not found", pne);
+        }
+    }
+    
     @Override
     public ClassLoader getClassLoader() {
         return mPackageInfo != null ? mPackageInfo.getClassLoader()
