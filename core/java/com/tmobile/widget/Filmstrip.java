@@ -235,7 +235,7 @@ public class Filmstrip extends RelativeLayout implements OnFocusChangeListener {
 	private ImageView mRightArrow;
 	
 	public Filmstrip(Context context) {
-		this(context, null, 0);
+		this(context, null);
 	}
 	
 	public Filmstrip(Context context, AttributeSet attrs) {
