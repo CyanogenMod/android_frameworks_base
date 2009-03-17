@@ -10,8 +10,10 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnFocusChangeListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
@@ -22,7 +24,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.android.internal.R;
 
-public class Filmstrip extends RelativeLayout{
+public class Filmstrip extends RelativeLayout implements OnFocusChangeListener {
 
 	// The max label length is defined in the style guide
 	private static final int MAX_LABEL_LENGTH = 16;
@@ -43,7 +45,7 @@ public class Filmstrip extends RelativeLayout{
 
 	private static final Gallery.LayoutParams TextViewLayoutParams = new Gallery.LayoutParams(
 			Gallery.LayoutParams.WRAP_CONTENT,
-			Gallery.LayoutParams.WRAP_CONTENT);
+			Gallery.LayoutParams.FILL_PARENT);
 
 	 class FilmstripItem extends Object {
 
@@ -177,7 +179,7 @@ public class Filmstrip extends RelativeLayout{
 						oldTextView.setWidth(TITLE_TEXT_FIELD_WIDTH);
 						oldTextView.setTextSize(TITLE_TEXT_SIZE_UNSELECTED);
 						oldTextView.setTypeface(TITLE_TYPEFACE, Typeface.NORMAL);
-						
+						oldTextView.setGravity(Gravity.CENTER);
 						setBackgroundResource(position, oldTextView);
 					}
 				} else if (oldView instanceof ImageView) {
@@ -201,7 +203,7 @@ public class Filmstrip extends RelativeLayout{
 				newTextView.setWidth(TITLE_TEXT_FIELD_WIDTH);
 				newTextView.setTextSize(TITLE_TEXT_SIZE_SELECTED);
 				newTextView.setTypeface(TITLE_TYPEFACE, Typeface.BOLD);
-
+				newTextView.setGravity(Gravity.CENTER);
 				setBackgroundResource(position, newTextView);
 			} else if (view instanceof ImageView) {
 				ImageView newImageView = (ImageView) view;
@@ -270,11 +272,10 @@ public class Filmstrip extends RelativeLayout{
 	
 	
 	private void initWidget(TypedArray a) {
-//		mFilmstripSelector.setFocusable(true);
-//		mFilmstripSelector.setFocusableInTouchMode(true);
-//		
-//		mFilmstripSelector.setBackgroundResource(R.drawable.pluto_carousel_header_background);
-
+		setOnFocusChangeListener(this);
+		
+		setOnItemSelectedListener(new FilmstripOnItemSelectedListener());
+		
 		RelativeLayout.LayoutParams rowLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, 50);
 		rowLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 		this.setGravity(Gravity.LEFT);
@@ -329,10 +330,7 @@ public class Filmstrip extends RelativeLayout{
 		
 		this.addView(mFilmstripSelector, -1);
 		
-		mLeftArrow.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-		
-		
-		RelativeLayout.LayoutParams leftLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+		RelativeLayout.LayoutParams leftLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.FILL_PARENT);
 		leftLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 		leftLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
 		
@@ -341,8 +339,6 @@ public class Filmstrip extends RelativeLayout{
 		mLeftArrow.setImageDrawable(leftImageDrawable);
 		
 		this.addView(mLeftArrow, -1);
-		
-		mRightArrow.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 		
 		RelativeLayout.LayoutParams rightLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		rightLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -419,11 +415,20 @@ public class Filmstrip extends RelativeLayout{
 		return mFilmstripItems.get(position);
 	}
 	
+public void onFocusChange(View v, boolean hasFocus) {
+		
+		if (hasFocus && v == this) {
+			System.out.println ( " v is:" + v.getClass().toString());
+			
+			
+		}		
+	}
+
+	// Dispatch LEFT/RIGTH key to gallery to move gallery items
+	@Override
+	public boolean dispatchKeyEvent(KeyEvent event) {
+		return mFilmstripSelector.dispatchKeyEvent(event);
+	}
 	
-//	@Override
-//	protected void onFocusChanged(boolean gainFocus, int direction,
-//			Rect previouslyFocusedRect) {
-//		// TODO Auto-generated method stub
-//		super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
-//	}
+
 }

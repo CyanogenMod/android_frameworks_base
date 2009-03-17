@@ -7,6 +7,8 @@ import android.widget.AdapterView;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 
+import android.widget.AdapterView.OnItemSelectedListener;
+
 public class CarouselTabWidget extends TabWidget {
 
 	private Filmstrip mFilmstrip;
@@ -22,17 +24,12 @@ public class CarouselTabWidget extends TabWidget {
 
 	public CarouselTabWidget(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		mFilmstrip = new Filmstrip(context, attrs);
+		mFilmstrip = new Filmstrip(context, attrs, defStyle);
 		
 		this.addView(mFilmstrip, -1);
 
 		mFilmstrip
 				.setOnItemSelectedListener(new CarouselTabWidgetOnItemSelectedListener());
-		
-//		this.setFocusable(true);
-//		this.setFocusableInTouchMode(true);
-//		
-//		this.setBackgroundResource(R.drawable.pluto_carousel_header_background);
 		
 	}
 
@@ -40,15 +37,8 @@ public class CarouselTabWidget extends TabWidget {
 	@Override
 	public void focusCurrentTab(int index) {
 		// Do nothing
-		
-		System.out.println (" focusCurrentTab index" + index);
 	}
 
-
-//	public void removeAllViews() {
-//		super.removeAllViews();
-//
-//	}
 
 	public class CarouselTabWidgetOnItemSelectedListener extends
 	Filmstrip.FilmstripOnItemSelectedListener {
@@ -79,6 +69,14 @@ public class CarouselTabWidget extends TabWidget {
 		return mFilmstrip;
 	}
 	
+	public int getFilmstripSelection() {
+		return mFilmstrip.getFilmstripSelection();
+	}
+	
+	public void setOnItemSelectedListener(OnItemSelectedListener l){
+		mFilmstrip.setOnItemSelectedListener(l);
+		
+	}
 	
 	@Override
 	 public void onFocusChange(View v, boolean hasFocus) {
@@ -96,5 +94,8 @@ public class CarouselTabWidget extends TabWidget {
 				}
 			}
 		 }
+		 
+		 super.onFocusChange(v, hasFocus);
 	 }
+	
 }

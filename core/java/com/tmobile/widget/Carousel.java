@@ -1,5 +1,7 @@
 package com.tmobile.widget;
 
+import com.tmobile.widget.CarouselTabWidget.CarouselTabWidgetOnItemSelectedListener;
+
 import android.app.LocalActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -7,21 +9,27 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TabHost;
 
 public class Carousel extends TabHost {
 
 	private CarouselTabWidget mTabWidget;
-	private CarouselLayout mCarouselLayout;
+	private CarouselTabContentLayout mCarouselLayout;
+	
 	protected LocalActivityManager mLocalActivityManager = null;
 
 	public Carousel(Context context) {
 		super(context);
+		
+		setOnTabChangedListener(null);
 	}
 
 	public Carousel(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		
+		setOnTabChangedListener(null);
 	}
 
 	public class CarouselViewAdapter extends BaseAdapter {
@@ -51,6 +59,25 @@ public class Carousel extends TabHost {
 		}
 	}
 
+	public class CarouselOnItemSelectedListener extends
+			CarouselTabWidgetOnItemSelectedListener {
+
+		CarouselOnItemSelectedListener() {
+			mTabWidget.super();
+		}
+
+		public void onItemSelected(AdapterView<?> parent, View view,
+				int position, long id) {
+			super.onItemSelected(parent, view, position, id);
+			
+			if ( (mCarouselLayout != null) && (mTabWidget != null) ) {
+				mCarouselLayout.setSelection(mTabWidget.getFilmstripSelection(),
+					true);
+			}
+		}
+
+	}
+
 	public void addTab(TabSpec tabSpec, Context context, String name,
 			Intent intent) {
 
@@ -60,11 +87,11 @@ public class Carousel extends TabHost {
 			Filmstrip filmstrip = mTabWidget.getFilmstrip();
 
 			if (filmstrip != null) {
+				
 				filmstrip.add(context, name, intent);
-				
-				mLocalActivityManager.startActivity(name,
-						intent);
-				
+
+				mLocalActivityManager.startActivity(name, intent);
+
 			}
 		}
 	}
@@ -73,26 +100,30 @@ public class Carousel extends TabHost {
 	@Override
 	public void setup(LocalActivityManager activityGroup) {
 
-		super.setup(activityGroup);	
-		
+		super.setup(activityGroup);
+
 		mLocalActivityManager = activityGroup;
-		
+
 		int childCount = getChildCount();
-		
-		// A Hack to setup reference to CarouselTabWidget and CarouselLayout 
+
+		// A Hack to setup reference to CarouselTabWidget and CarouselLayout
 		for (int i = 0; i < childCount; i++) {
-			View child = getChildAt(0);
+			View child = getChildAt(i);
 
 			if (child instanceof CarouselTabWidget) {
 				mTabWidget = (CarouselTabWidget) child;
 
-			} else if (child instanceof CarouselLayout) {
-				mCarouselLayout = (CarouselLayout) child;
+			} else if (child instanceof CarouselTabContentLayout) {
+				mCarouselLayout = (CarouselTabContentLayout) child;
 			}
+			
 		}
 
 		if (mTabWidget != null) {
 			mTabWidget.setTabHost(this);
+			mTabWidget
+					.setOnItemSelectedListener(new CarouselOnItemSelectedListener());
+
 		}
 
 		if (mCarouselLayout != null) {

@@ -1,20 +1,15 @@
 package com.tmobile.widget;
 
-import com.android.internal.R;
-
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.AbsoluteLayout;
 import android.widget.Adapter;
-import android.widget.FrameLayout;
 import android.widget.Scroller;
 
-public class CarouselLayout extends FrameLayout {
-    
-    private static final int SCROLL_DURATION_DEFAULT = 400;
+public class CarouselLayout extends AbsoluteLayout {
 
     private class ScrollerRunnable implements Runnable {
 
@@ -72,7 +67,7 @@ public class CarouselLayout extends FrameLayout {
     private int mOldSelectedPosition = INVALID_POSITION;
     private int mSelectedPosition = INVALID_POSITION;
     private Adapter mAdapter;
-    private int mScrollDuration = SCROLL_DURATION_DEFAULT;
+    private int mScrollDuration = 0;
     private ScrollerRunnable mScrollerRunnable = new ScrollerRunnable();
 
     public CarouselLayout(Context context) {
@@ -86,12 +81,18 @@ public class CarouselLayout extends FrameLayout {
     public CarouselLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Gallery, defStyle, 0);
-        mScrollDuration = a.getInt(R.styleable.Gallery_animationDuration, SCROLL_DURATION_DEFAULT);
-        a.recycle();
+//        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CarouselLayout, defStyle, 0);
+//        mScrollDuration = a.getInt(R.styleable.CarouselLayout_animationDuration, SCROLL_DURATION_DEFAULT);
+//        a.recycle();
     }
     
-    private void resetLayout() {
+    
+    
+    public void setMScrollDuration(int scrollDuration) {
+		mScrollDuration = scrollDuration;
+	}
+
+	private void resetLayout() {
         removeAllViewsInLayout();
         mOldSelectedPosition = INVALID_POSITION;
         mSelectedPosition = INVALID_POSITION;
@@ -162,6 +163,17 @@ public class CarouselLayout extends FrameLayout {
             } else {
                 removeOldSelectedView();
             }
+            
+            
+            ViewParent parent = theSelectedView.getParent();
+    		
+    		if (parent != null) {
+    			if (parent == this) {
+    				this.removeView(theSelectedView);
+    			}
+    		
+    		}
+    		
             addView(theSelectedView,
                     new AbsoluteLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
                                                     ViewGroup.LayoutParams.FILL_PARENT, xView, 0));

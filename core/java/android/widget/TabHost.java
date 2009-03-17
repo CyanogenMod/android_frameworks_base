@@ -440,6 +440,11 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
             return this;
         }
 
+	public TabSpec setCarouselContent(Intent intent) {
+            mContentStrategy = new IntentContentStrategy(mTag, intent, false);
+            return this;
+        }
+
 
         String getTag() {
             return mTag;
@@ -609,12 +614,20 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
 
         private final String mTag;
         private final Intent mIntent;
+	private final boolean mCloseView;
 
         private View mLaunchedView;
 
         private IntentContentStrategy(String tag, Intent intent) {
             mTag = tag;
             mIntent = intent;
+	    mCloseView = true;
+        }
+
+	private IntentContentStrategy(String tag, Intent intent, boolean closeView) {
+            mTag = tag;
+            mIntent = intent;
+	    mCloseView = closeView;
         }
 
         public View getContentView() {
@@ -648,7 +661,9 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
 
         public void tabClosed() {
             if (mLaunchedView != null) {
-                mLaunchedView.setVisibility(View.GONE);
+		if (mCloseView) {
+		    mLaunchedView.setVisibility(View.GONE);
+		}
             }
         }
     }
