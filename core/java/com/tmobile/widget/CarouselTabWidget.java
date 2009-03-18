@@ -57,7 +57,6 @@ public class CarouselTabWidget extends TabWidget {
 			super.onNothingSelected(parent);
 
 		}
-
 	}
 
 
@@ -75,7 +74,6 @@ public class CarouselTabWidget extends TabWidget {
 	
 	public void setOnItemSelectedListener(OnItemSelectedListener l){
 		mFilmstrip.setOnItemSelectedListener(l);
-		
 	}
 	
 	@Override
@@ -97,5 +95,9 @@ public class CarouselTabWidget extends TabWidget {
 		 
 		 super.onFocusChange(v, hasFocus);
 	 }
+
+	public void setFilmstripSelection(int position) {
+		mFilmstrip.setFilmstripSelection(position);
+	}
 	
 }

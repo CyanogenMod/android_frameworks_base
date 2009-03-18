@@ -6,30 +6,34 @@ import android.app.LocalActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.GestureDetector.OnGestureListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TabHost;
 
-public class Carousel extends TabHost {
+public class Carousel extends TabHost implements OnGestureListener {
 
 	private CarouselTabWidget mTabWidget;
-	private CarouselTabContentLayout mCarouselLayout;
+	private CarouselTabContentLayout mCarouselTabContentLayout;
+	private GestureDetector mGestureDetector;
 	
 	protected LocalActivityManager mLocalActivityManager = null;
 
 	public Carousel(Context context) {
-		super(context);
-		
-		setOnTabChangedListener(null);
+		this(context, null);
 	}
 
 	public Carousel(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		
 		setOnTabChangedListener(null);
+		
+		mGestureDetector = new GestureDetector(this);
 	}
 
 	public class CarouselViewAdapter extends BaseAdapter {
@@ -70,8 +74,8 @@ public class Carousel extends TabHost {
 				int position, long id) {
 			super.onItemSelected(parent, view, position, id);
 			
-			if ( (mCarouselLayout != null) && (mTabWidget != null) ) {
-				mCarouselLayout.setSelection(mTabWidget.getFilmstripSelection(),
+			if ( (mCarouselTabContentLayout != null) && (mTabWidget != null) ) {
+				mCarouselTabContentLayout.setSelection(mTabWidget.getFilmstripSelection(),
 					true);
 			}
 		}
@@ -114,7 +118,7 @@ public class Carousel extends TabHost {
 				mTabWidget = (CarouselTabWidget) child;
 
 			} else if (child instanceof CarouselTabContentLayout) {
-				mCarouselLayout = (CarouselTabContentLayout) child;
+				mCarouselTabContentLayout = (CarouselTabContentLayout) child;
 			}
 			
 		}
@@ -126,9 +130,73 @@ public class Carousel extends TabHost {
 
 		}
 
-		if (mCarouselLayout != null) {
-			mCarouselLayout.setAdapter(new CarouselViewAdapter());
+		if (mCarouselTabContentLayout != null) {
+			mCarouselTabContentLayout.setAdapter(new CarouselViewAdapter());
 		}
 	}
 
+	 public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+		   
+			float x1 = e1.getX();
+			float x2 = e2.getX();
+			
+			int selectedPosition = mCarouselTabContentLayout.getSelectedPosition();
+			int newSelectedPosition = selectedPosition;
+			
+			if (x1 > x2) {
+				newSelectedPosition -= 1;
+			} else {
+				newSelectedPosition += 1;
+			}
+			
+			int size = mTabWidget.getFilmstrip().getFilmstripSize();
+			
+			if (newSelectedPosition < 0) {
+				newSelectedPosition = 0;
+			} else if (newSelectedPosition >= size) {
+				newSelectedPosition = size -1;
+			}
+			
+			mCarouselTabContentLayout.setSelection(newSelectedPosition);
+			mTabWidget.setFilmstripSelection(newSelectedPosition);
+			
+			return true;
+		}
+
+	
+	    public boolean onDown(MotionEvent e) {		
+			return true;
+		}
+	 
+		public void onLongPress(MotionEvent e) {
+			// Do nothing
+		}
+
+		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+				float distanceY) {
+			// let onFling handles the event
+			return false;
+		}
+
+		public void onShowPress(MotionEvent e) {
+			// Do nothing
+			
+		}
+
+		public boolean onSingleTapUp(MotionEvent e) {
+			
+			return true;
+		}
+		
+		@Override
+	    public boolean onTouchEvent(MotionEvent event) {
+
+	        // Give everything to the gesture detector
+	        return mGestureDetector.onTouchEvent(event);
+
+	    }
+
+		public void setTabWidget(CarouselTabWidget tabWidget) {
+			mTabWidget = tabWidget;
+		}
 }

@@ -88,7 +88,7 @@ public class CarouselLayout extends AbsoluteLayout {
     
     
     
-    public void setMScrollDuration(int scrollDuration) {
+    public void setScrollDuration(int scrollDuration) {
 		mScrollDuration = scrollDuration;
 	}
 
@@ -118,6 +118,11 @@ public class CarouselLayout extends AbsoluteLayout {
     public Adapter getAdapter() {
         return mAdapter;
     }
+    
+    public int getSelectedPosition() {
+    	return mSelectedPosition;
+  	}
+
 
     private void removeOldSelectedView() {
         if (INVALID_POSITION == mOldSelectedPosition) return;

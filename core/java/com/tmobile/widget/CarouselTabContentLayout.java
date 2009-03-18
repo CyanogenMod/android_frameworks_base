@@ -1,7 +1,5 @@
 package com.tmobile.widget;
 
-import com.android.internal.R;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -10,13 +8,16 @@ import android.view.View;
 import android.widget.Adapter;
 import android.widget.FrameLayout;
 
+import com.android.internal.R;
 
-public class CarouselTabContentLayout extends FrameLayout {
+
+public class CarouselTabContentLayout extends FrameLayout  {
 
 	private CarouselLayout mCarouselLayout;
+
 	
-	  private int mScrollDuration = SCROLL_DURATION_DEFAULT;
-	  private static final int SCROLL_DURATION_DEFAULT = 400;
+	private int mScrollDuration = SCROLL_DURATION_DEFAULT;
+	private static final int SCROLL_DURATION_DEFAULT = 400;
 	
 	public CarouselTabContentLayout(Context context) {
 		this(context, null, 0);
@@ -29,6 +30,8 @@ public class CarouselTabContentLayout extends FrameLayout {
 	public CarouselTabContentLayout(Context context, AttributeSet attrs,
 			int defStyle) {
 		super(context, attrs, defStyle);
+
+		
 		
 		setFocusable(false);
 		
@@ -41,7 +44,7 @@ public class CarouselTabContentLayout extends FrameLayout {
 		
 		mCarouselLayout = new CarouselLayout(context, attrs, defStyle);
 		
-		mCarouselLayout.setMScrollDuration(mScrollDuration);
+		mCarouselLayout.setScrollDuration(mScrollDuration);
 		
 		LayoutParams layoutParams = generateDefaultLayoutParams();
 		
@@ -149,5 +152,17 @@ public class CarouselTabContentLayout extends FrameLayout {
 		
 		return mCarouselLayout.dispatchKeyEvent(event);
 	}
+	
+	
+	
+	public int getSelectedPosition() {
+		return mCarouselLayout.getSelectedPosition();
+	}
+	
+	public void setSelection(int position) {
+		mCarouselLayout.setSelection(position, true);
+	}
+	
+	
 	
 }

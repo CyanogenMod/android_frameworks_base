@@ -13,7 +13,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnFocusChangeListener;
+
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
@@ -24,7 +24,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.android.internal.R;
 
-public class Filmstrip extends RelativeLayout implements OnFocusChangeListener {
+public class Filmstrip extends RelativeLayout {
 
 	// The max label length is defined in the style guide
 	private static final int MAX_LABEL_LENGTH = 16;
@@ -272,7 +272,7 @@ public class Filmstrip extends RelativeLayout implements OnFocusChangeListener {
 	
 	
 	private void initWidget(TypedArray a) {
-		setOnFocusChangeListener(this);
+		
 		
 		setOnItemSelectedListener(new FilmstripOnItemSelectedListener());
 		
@@ -415,14 +415,6 @@ public class Filmstrip extends RelativeLayout implements OnFocusChangeListener {
 		return mFilmstripItems.get(position);
 	}
 	
-public void onFocusChange(View v, boolean hasFocus) {
-		
-		if (hasFocus && v == this) {
-			System.out.println ( " v is:" + v.getClass().toString());
-			
-			
-		}		
-	}
 
 	// Dispatch LEFT/RIGTH key to gallery to move gallery items
 	@Override
