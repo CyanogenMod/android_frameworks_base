@@ -46,6 +46,7 @@ public class TypedArrayComposite extends TypedArray {
             int n = set.getAttributeCount();
             mAttrsMap = new boolean[attrs.length];
             while (n-- > 0) {
+            //for(int ind=n-1; ind >= 0; ind--){
                 /* When we encounter something like andorid:layout_height="?android:attr/listPreferredItemHeight",
                  * it's important that we allow the custom theme to resolve it.
                  * XXX: Do we need to check that the theme has actually
@@ -304,10 +305,16 @@ public class TypedArrayComposite extends TypedArray {
     }
     
     public int getIndex(int at) {
+        if(mCustomTypedArray.getIndex(at) > 0){
+            return mCustomTypedArray.getIndex(at);
+        }
         return mDefaultTypedArray.getIndex(at);
     }
 
     public int getIndexCount() {
+        if(mCustomTypedArray.getIndexCount() > mDefaultTypedArray.getIndexCount()){
+            return mCustomTypedArray.getIndexCount();
+        }
         return mDefaultTypedArray.getIndexCount();
     }
 
