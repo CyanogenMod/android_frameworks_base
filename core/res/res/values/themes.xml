@@ -181,6 +181,8 @@
         <item name="headerLayoutProductPanel">@android:style/Widget.HeaderLayout.HeaderProductPanel</item>
         <item name="sectionHeaderLayoutLabel">@android:style/Widget.HeaderLayout.SectionHeaderLabel</item>
         <item name="listItemLayout">@android:style/Widget.ListItemLayout.ItemLabelText</item>
+        <item name="listItemLayoutItemLabelTwinText">@android:style/Widget.ListItemLayout.ItemLabelTwinText</item>
+        <item name="listItemLabelSecondaryText">@android:style/Widget.ListItemLayout.ItemLabelSecondaryText</item>
 
         <!-- Preference styles -->
         <item name="preferenceScreenStyle">@android:style/Preference.PreferenceScreen</item>

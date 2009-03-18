@@ -392,6 +392,9 @@
         <attr name="headerLayoutProductPanel" format="reference" />
         <attr name="sectionHeaderLayoutLabel" format="reference" />
         <attr name="listItemLayout" format="reference" />
+        <attr name="listItemLayoutItemLabelTwinText" format="reference" />
+        <attr name="listItemLayoutItemTwinLabelText" format="reference" />
+        <attr name="listItemLabelSecondaryText" format="reference" />
 
         <!-- =================== -->
         <!-- Preference styles   -->
@@ -1503,7 +1506,9 @@
     </declare-styleable>
     <declare-styleable name="ListItemLayout">
         <attr name="itemLabelText" format="string" />
+        <attr name="itemLabel2Text" format="string" />
         <attr name="itemText" format="string" />
+        <attr name="item2Text" format="string" />
     </declare-styleable>
     <declare-styleable name="GridView">
         <attr name="horizontalSpacing" format="dimension" />

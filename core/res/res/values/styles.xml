@@ -726,6 +726,16 @@
     <style name="Widget.ListItemLayout.ItemLabelText" >
 		<item name="android:gravity">left|center_vertical</item>
     </style>
+    <style name="Widget.ListItemLayout.ItemLabelTwinText" >
+        <item name="android:gravity">left|center_vertical</item>
+    </style>
+    <style name="Widget.ListItemLayout.ItemTwinLabelText" >
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">left|center_vertical</item>
+    </style>
+    <style name="Widget.ListItemLayout.ItemLabelSecondaryText" >
+        <item name="android:gravity">center_vertical</item>
+    </style>
     
 	<style name="TextLabel">
 		<item name="android:singleLine">true</item>
@@ -760,6 +770,11 @@
         <item name="android:textSize">22sp</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textColor">#FF000000</item>
+    </style>
+    <style name="ListItemSecondaryText" parent="TextLabel">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">#666666</item>
     </style>
 
     <style name="ZoomControls">

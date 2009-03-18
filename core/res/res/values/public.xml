@@ -1099,6 +1099,7 @@
   <public type="attr" name="icon2Src" id="0x0101025f" />
   <public type="attr" name="icon3Src" id="0x01010260" />
   <public type="attr" name="itemLabelText" id="0x01010261" />
-  <public type="attr" name="itemText" id="0x01010262" />
-
+  <public type="attr" name="itemLabel2Text" id="0x01010262" />
+  <public type="attr" name="itemText" id="0x01010263" />
+  <public type="attr" name="item2Text" id="0x01010264" />
 </resources>
