@@ -7,32 +7,34 @@
 		android:layout_height="wrap_content"
 		android:layout_weight="1.0"
 		android:gravity="center|left"
+		android:orientation="vertical"
 		android:paddingRight="10dp">
 		<TextView
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			style="@style/ListItemLabel"
+			android:textAppearance="?android:attr/textAppearanceLabelListItem"
 			android:id="@+id/itemLabelText" />
 		<TextView
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			style="@style/ListItemLabel"
+			android:textAppearance="?android:attr/textAppearanceLabelListItem"
 			android:id="@+id/itemLabel2Text" />
 	</LinearLayout>
 	<LinearLayout
 		android:layout_width="85dp"
 		android:layout_height="wrap_content"
 		android:gravity="center|right"
+		android:orientation="vertical"
 		>
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			style="@style/ListItemSecondaryText"
+			android:textAppearance="?android:attr/textAppearanceLabelListItemText"
 			android:id="@+id/itemText" />
 		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			style="@style/ListItemSecondaryText"
+			android:textAppearance="?android:attr/textAppearanceLabelListItemText"
 			android:id="@+id/item2Text" />
 	</LinearLayout>
 </merge>

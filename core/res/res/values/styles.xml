@@ -676,73 +676,135 @@
 	<style name="Widget.HeaderLayout" >
 		<item name="android:background">@color/black</item>
         <item name="android:textAppearance">?android:attr/textAppearanceInverse</item>
+		<item name="android:paddingLeft">10dp</item>
+		<item name="android:paddingRight">10dp</item>
+		<item name="android:paddingTop">0dp</item>
+		<item name="android:paddingBottom">0dp</item>
 	</style>
+	
 	<style name="Widget.HeaderLayout.HeaderLabel">
+		<item name="android:textAppearance">?android:attr/textAppearanceLabelHeader</item>
+		<item name="android:minHeight">50dp</item>
 		<item name="android:gravity">center</item>
 	</style>
+	
 	<style name="Widget.HeaderLayout.HeaderSubHeader">
 		<item name="android:orientation">vertical</item>
+		<item name="android:minHeight">80dp</item>
 		<item name="android:gravity">center</item>
 	</style>
+	
 	<style name="Widget.HeaderLayout.HeaderTwinSubHeader">
 		<item name="android:orientation">vertical</item>
+		<item name="android:minHeight">100dp</item>
 		<item name="android:gravity">left|center_vertical</item>
 	</style>
+	
 	<style name="Widget.HeaderLayout.HeaderIcon">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:minHeight">50dp</item>
 		<item name="android:gravity">left|center</item>
 	</style>
+	
 	<style name="Widget.HeaderLayout.HeaderSubHeaderIcon">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:minHeight">80dp</item>
 		<item name="android:gravity">left|center</item>
 	</style>
+    
 	<style name="Widget.HeaderLayout.HeaderTwinSubHeaderIcon">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:minHeight">100dp</item>
 		<item name="android:gravity">left|center</item>
 	</style>
+	
     <style name="Widget.HeaderLayout.SectionHeaderLabel">
+        <item name="android:textAppearance">?android:attr/textAppearanceLabelHeader</item>
+        <item name="android:minHeight">40dp</item>
         <item name="android:gravity">left|center_vertical</item>
     </style>
+    
 	<style name="Widget.HeaderLayout.HeaderButton">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:minHeight">50dp</item>
 		<item name="android:gravity">center</item>
 	</style>
+	
 	<style name="Widget.HeaderLayout.HeaderSubHeaderIconButton">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:minHeight">80dp</item>
 		<item name="android:gravity">left|center</item>
 	</style>
+	
 	<style name="Widget.HeaderLayout.HeaderTwinButton">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:minHeight">50dp</item>
 		<item name="android:gravity">center</item>
 	</style>
+	
 	<style name="Widget.HeaderLayout.HeaderSecondaryIcon">
 		<item name="android:orientation">vertical</item>
+		<item name="android:minHeight">80dp</item>
 		<item name="android:gravity">left|center</item>
 	</style>
+	
 	<style name="Widget.HeaderLayout.HeaderSecondaryThreeIcon">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:minHeight">80dp</item>
 		<item name="android:gravity">left|center</item>
 	</style>
+	
 	<style name="Widget.HeaderLayout.HeaderSecondaryLargeIcon">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:minHeight">80dp</item>
 		<item name="android:gravity">left|center</item>
 	</style>
+	
 	<style name="Widget.HeaderLayout.HeaderPersonalPanel">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:minHeight">80dp</item>
 		<item name="android:gravity">left|center</item>
 	</style>
+	
     <style name="Widget.HeaderLayout.HeaderProductPanel">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:minHeight">100dp</item>
         <item name="android:gravity">left|center</item>
     </style>
-
-    <style name="Widget.ListItemLayout" >
+	
+	<style name="Widget.CompoundButton.ToggleButton">
+		<item name="android:textSize">12sp</item>
+		<item name="android:disabledAlpha">?android:attr/disabledAlpha</item>
+		<item name="android:textGap">10</item>
+	</style>
+		
+	<style name="Widget.ListItemLayout" >
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
     </style>
+    
     <style name="Widget.ListItemLayout.ItemLabelText" >
+        <item name="android:minHeight">50dp</item>
 		<item name="android:gravity">left|center_vertical</item>
     </style>
     <style name="Widget.ListItemLayout.ItemLabelTwinText" >
+        <item name="android:minHeight">80dp</item>
         <item name="android:gravity">left|center_vertical</item>
     </style>
     <style name="Widget.ListItemLayout.ItemTwinLabelText" >
+        <item name="android:minHeight">80dp</item>
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">left|center_vertical</item>
     </style>
     <style name="Widget.ListItemLayout.ItemLabelSecondaryText" >
+        <item name="android:minHeight">50dp</item>
         <item name="android:gravity">center_vertical</item>
     </style>
     <style name="Widget.ListItemLayout.ItemTwinLabelSecondaryText" >
-        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">80dp</item>
+        <item name="android:gravity">left|center_vertical</item>
     </style>
     
 	<style name="TextAppearance.Label">
