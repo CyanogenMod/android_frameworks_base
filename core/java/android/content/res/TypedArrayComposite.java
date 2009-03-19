@@ -316,14 +316,18 @@ public class TypedArrayComposite extends TypedArray {
     }
     
     public int getIndex(int at) {
-        if(mCustomTypedArray.getIndex(at) > 0){
-            return mCustomTypedArray.getIndex(at);
+        if (useCustomTypedArray(at)) {
+            try {
+                return mCustomTypedArray.getIndex(at);
+            } catch (Exception e) {
+                Log.e(TAG, "Failure resolving value from theme!", e);
+            }
         }
-        return mDefaultTypedArray.getIndex(at);
+            return mDefaultTypedArray.getIndex(at);
     }
 
     public int getIndexCount() {
-        if(mCustomTypedArray.getIndexCount() > mDefaultTypedArray.getIndexCount()){
+        if(mCustomTypedArray.getIndexCount() >= mDefaultTypedArray.getIndexCount()){
             return mCustomTypedArray.getIndexCount();
         }
         return mDefaultTypedArray.getIndexCount();
