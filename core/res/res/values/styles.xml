@@ -217,6 +217,11 @@
         <item name="android:disabledAlpha">?android:attr/disabledAlpha</item>
     </style>
 
+    <style name="Widget.Button.SplitLeft">
+    </style>
+    <style name="Widget.Button.SplitRight">
+    </style>
+
     <style name="Widget.ProgressBar">
         <item name="android:indeterminateOnly">true</item>
         <item name="android:indeterminateDrawable">@android:drawable/progress_medium</item>
@@ -737,45 +742,41 @@
         <item name="android:gravity">center_vertical</item>
     </style>
     
-	<style name="TextLabel">
+	<style name="TextAppearance.Label">
 		<item name="android:singleLine">true</item>
 	</style>
-	<style name="SubHeaderTextLabel" parent="TextLabel">
+	<style name="TextAppearance.Label.Header">
 	</style>
-	<style name="HeaderTextLabel" parent="TextLabel">
+	<style name="TextAppearance.Label.SubHeader">
 	</style>
-	<style name="HeaderTextIcon" parent="SubHeaderTextLabel">
+    <style name="TextAppearance.Label.ListItem">
+    </style>
+    <style name="TextAppearance.Label.ListItemText">
+    </style>
+    <style name="TextAppearance.Label.ListItemSecondaryText">
+    </style>
+	<style name="HeaderTextIcon">
+        <item name="android:textAppearance">?android:attr/textAppearanceLabelSubHeader</item>
+		<item name="android:paddingRight">10dp</item>
+		<item name="android:gravity">top</item>
+		<item name="android:paddingTop">8dp</item>
 	</style>
-	<style name="HeaderSecondaryIcon" parent="SubHeaderTextLabel">
+	<style name="HeaderSecondaryIcon">
+        <item name="android:textAppearance">?android:attr/textAppearanceLabelSubHeader</item>
+		<item name="android:paddingRight">3dp</item>
+		<item name="android:gravity">top</item>
+		<item name="android:paddingTop">4dp</item>
 	</style>
-	<style name="HeaderSecondaryThreeIcon" parent="SubHeaderTextLabel">
+	<style name="HeaderSecondaryThreeIcon">
+        <item name="android:textAppearance">?android:attr/textAppearanceLabelSubHeader</item>
+	    <item name="android:paddingLeft">3dp</item>
+		<item name="android:paddingRight">3dp</item>
+		<item name="android:gravity">top</item>
+		<item name="android:paddingTop">8dp</item>
 	</style>
 	<style name="HeaderButton">
+	    <item name="android:height">30dp</item>
 	</style>
-	<style name="HeaderButton.TwinLeft">
-        <item name="android:background">@android:drawable/btn_default</item>
-	</style>
-    <style name="HeaderButton.TwinRight">
-        <item name="android:background">@android:drawable/btn_default</item>
-	</style>
-    <style name="HeaderMainImage">
-    </style>
-
-    <style name="ListItemLabel" parent="TextLabel">
-        <item name="android:textSize">20sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textColor">#FF000000</item>
-    </style>
-    <style name="ListItemText" parent="TextLabel">
-        <item name="android:textSize">22sp</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:textColor">#FF000000</item>
-    </style>
-    <style name="ListItemSecondaryText" parent="TextLabel">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textStyle">normal</item>
-        <item name="android:textColor">#666666</item>
-    </style>
 
     <style name="ZoomControls">
         <item name="android:gravity">bottom</item>

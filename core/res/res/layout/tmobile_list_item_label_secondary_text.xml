@@ -8,13 +8,13 @@
 		android:layout_weight="1.0"
 		android:layout_gravity="top"
 		android:paddingRight="10dp"
-		style="@style/ListItemLabel"
+		android:textAppearance="?android:attr/textAppearanceLabelListItem"
 		android:id="@+id/itemLabelText" />
 
 	<TextView
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:gravity="right"
-		style="@style/ListItemSecondaryText"
+		android:textAppearance="?android:attr/textAppearanceLabelListItemSecondaryText"
 		android:id="@+id/itemText" />
 </merge>

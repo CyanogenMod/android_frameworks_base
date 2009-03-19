@@ -5,11 +5,11 @@
 		android:layout_height="wrap_content"
 		android:paddingRight="10dp" 
 		android:layout_weight="1.0" 
-		style="@style/HeaderTextLabel" 
+		android:textAppearance="?android:attr/textAppearanceLabelHeader" 
 		android:id="@+id/headerId" />
 
 	<Button android:layout_width="wrap_content"
 		android:layout_height="wrap_content" 
-		style="@style/HeaderButton"
+		style="@android:style/HeaderButton"
 		android:id="@+id/button1" />
 </merge>

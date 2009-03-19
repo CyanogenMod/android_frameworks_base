@@ -10,7 +10,8 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:id="@+id/headerIcon"
-            style="@style/HeaderMainImage" />
+        	android:layout_gravity="top"
+			android:paddingTop="8dp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -23,19 +24,19 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/HeaderTextLabel"
+                android:textAppearance="?android:attr/textAppearanceLabelHeader"
                 android:id="@+id/headerId" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/SubHeaderTextLabel"
+                android:textAppearance="?android:attr/textAppearanceLabelSubHeader"
                 android:id="@+id/subHeaderId1" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/SubHeaderTextLabel"
+                android:textAppearance="?android:attr/textAppearanceLabelSubHeader"
                 android:id="@+id/subHeaderId2" />
         </LinearLayout>
 
@@ -53,7 +54,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/SubHeaderTextLabel"
+                android:textAppearance="?android:attr/textAppearanceLabelSubHeader"
                 android:layout_gravity="right"
                 android:id="@+id/subLabel" />
 
@@ -69,37 +70,37 @@
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:id="@+id/starIcon"
-                    style="@style/HeaderSecondaryThreeIcon" />
+                    style="@android:style/HeaderSecondaryThreeIcon" />
 
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:id="@+id/star2Icon"
-                    style="@style/HeaderSecondaryThreeIcon" />
+                    style="@android:style/HeaderSecondaryThreeIcon" />
 
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:id="@+id/star3Icon"
-                    style="@style/HeaderSecondaryThreeIcon" />
+                    style="@android:style/HeaderSecondaryThreeIcon" />
 
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:id="@+id/star4Icon"
-                    style="@style/HeaderSecondaryThreeIcon" />
+                    style="@android:style/HeaderSecondaryThreeIcon" />
 
                 <ImageView
                     android:layout_width="16dp"
                     android:layout_height="16dp"
                     android:id="@+id/star5Icon"
-                    style="@style/HeaderSecondaryThreeIcon" />
+                    style="@android:style/HeaderSecondaryThreeIcon" />
             </LinearLayout>
 
             <Button
                 android:layout_width="120dp"
                 android:layout_height="wrap_content"
-                style="@style/HeaderButton"
+                style="@android:style/HeaderButton"
                 android:layout_gravity="right"
                 android:id="@+id/button1" />
 

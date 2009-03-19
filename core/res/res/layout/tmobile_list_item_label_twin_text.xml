@@ -11,7 +11,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="top"
             android:paddingRight="10dp"
-            style="@style/ListItemLabel"
+            android:textAppearance="?android:attr/textAppearanceLabelListItem"
             android:id="@+id/itemLabel" />
 
         <LinearLayout
@@ -23,12 +23,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/ListItemText"
+                android:textAppearance="?android:attr/textAppearanceLabelListItemText"
                 android:id="@+id/item1Text" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/ListItemText"
+                android:textAppearance="?android:attr/textAppearanceLabelListItemText"
                 android:id="@+id/item2Text" />
         </LinearLayout>
     </LinearLayout>

@@ -5,18 +5,22 @@
 		android:layout_height="wrap_content" 
 		android:layout_weight="1.0"
 		android:paddingRight="10dp"
-		style="@style/HeaderTextLabel" 
+		android:textAppearance="?android:attr/textAppearanceLabelHeader" 
 		android:id="@+id/headerId" />
 
 		<Button android:layout_width="wrap_content"
 			android:layout_height="wrap_content" 
-			style="@style/HeaderButton.TwinLeft"
+			android:paddingLeft="3dp"
+			android:paddingRight="3dp"
+			style="?android:attr/buttonStyleSplitLeft"
 			android:id="@+id/button1" />
 		<!-- <ImageView android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:src="@drawable/pluto_splitbutton_seperator"/> -->
 		<Button android:layout_width="wrap_content"
 			android:layout_height="wrap_content" 
-			style="@style/HeaderButton.TwinRight"
+			android:paddingLeft="3dp"
+			android:paddingRight="3dp"
+			style="?android:attr/buttonStyleSplitRight"
 			android:id="@+id/button2" />
 </merge>

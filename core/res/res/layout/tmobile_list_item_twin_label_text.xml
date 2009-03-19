@@ -6,7 +6,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:paddingRight="10dp"
-        style="@style/ListItemLabel"
+        android:textAppearance="?android:attr/textAppearanceLabelListItem"
         android:id="@+id/itemLabelText" />
 
     <LinearLayout
@@ -18,12 +18,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingRight="10dp"
-            style="@style/ListItemLabel"
+            android:textAppearance="?android:attr/textAppearanceLabelListItem"
             android:id="@+id/itemLabel2Text" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/ListItemText"
+            android:textAppearance="?android:attr/textAppearanceLabelListItemText"
             android:id="@+id/itemText" />
     </LinearLayout>
 </merge>

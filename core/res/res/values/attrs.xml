@@ -130,6 +130,10 @@
         <!-- ToggleButton style. -->
         <attr name="buttonStyleToggle" format="reference" />
 
+        <!-- Split Button styles. -->
+        <attr name="buttonStyleSplitLeft" format="reference" />
+        <attr name="buttonStyleSplitRight" format="reference" />
+
         <!-- ============== -->
         <!-- Gallery styles -->
         <!-- ============== -->
@@ -375,6 +379,13 @@
         <!-- =================== -->
         <!-- Header, section and list item styles   -->
         <!-- =================== -->
+		<attr name="textAppearanceLabel" format="reference" />
+		<attr name="textAppearanceLabelHeader" format="reference" />
+		<attr name="textAppearanceLabelSubHeader" format="reference" />
+		<attr name="textAppearanceLabelListItem" format="reference" />
+		<attr name="textAppearanceLabelListItemText" format="reference" />
+		<attr name="textAppearanceLabelListItemSecondaryText" format="reference" />
+
 		<attr name="headerLayout" format="reference" />
 		<attr name="headerLayoutLabel" format="reference" />
 		<attr name="headerLayoutSubHeader" format="reference" />

@@ -1102,4 +1102,14 @@
   <public type="attr" name="itemLabel2Text" id="0x01010262" />
   <public type="attr" name="itemText" id="0x01010263" />
   <public type="attr" name="item2Text" id="0x01010264" />
+
+  <public type="attr" name="textAppearanceLabel" id="0x01010265" />
+  <public type="attr" name="textAppearanceLabelHeader" id="0x01010266" />
+  <public type="attr" name="textAppearanceLabelSubHeader" id="0x01010267" />
+  <public type="attr" name="textAppearanceLabelListItem" id="0x01010268" />
+  <public type="attr" name="textAppearanceLabelListItemText" id="0x01010269" />
+  <public type="attr" name="textAppearanceLabelListItemSecondaryText" id="0x0101026a" />
+
+  <public type="attr" name="buttonStyleSplitLeft" id="0x0101026b" />
+  <public type="attr" name="buttonStyleSplitRight" id="0x0101026c" />
 </resources>

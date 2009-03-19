@@ -73,6 +73,9 @@
 
         <item name="buttonStyleToggle">@android:style/Widget.Button.Toggle</item>
 
+        <item name="buttonStyleSplitLeft">@android:style/Widget.Button.SplitLeft</item>
+        <item name="buttonStyleSplitRight">@android:style/Widget.Button.SplitRight</item>
+        
         <!-- List attributes -->
         <item name="listPreferredItemHeight">64dip</item>
         <item name="listDivider">@drawable/divider_horizontal_dark</item>
@@ -164,6 +167,13 @@
         <item name="keyboardViewStyle">@android:style/Widget.KeyboardView</item>
         
         <!-- Header, section and list item styles -->
+		<item name="textAppearanceLabel">@android:style/TextAppearance.Label</item>
+		<item name="textAppearanceLabelHeader">@android:style/TextAppearance.Label.Header</item>
+		<item name="textAppearanceLabelSubHeader">@android:style/TextAppearance.Label.SubHeader</item>
+		<item name="textAppearanceLabelListItem">@android:style/TextAppearance.Label.ListItem</item>
+		<item name="textAppearanceLabelListItemText">@android:style/TextAppearance.Label.ListItemText</item>
+		<item name="textAppearanceLabelListItemSecondaryText">@android:style/TextAppearance.Label.ListItemSecondaryText</item>
+
 		<item name="headerLayout">@android:style/Widget.HeaderLayout</item>
 		<item name="headerLayoutLabel">@android:style/Widget.HeaderLayout.HeaderLabel</item>
 		<item name="headerLayoutSubHeader">@android:style/Widget.HeaderLayout.HeaderSubHeader</item>
