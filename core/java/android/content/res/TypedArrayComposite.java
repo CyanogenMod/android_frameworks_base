@@ -34,7 +34,7 @@ public class TypedArrayComposite extends TypedArray {
         boolean alwaysUseDefault = false;
         if (set != null) {
             int styleAttr = set.getStyleAttribute();
-            if (styleAttr != 0) {
+            if (styleAttr != 0) {                
                 alwaysUseDefault = true;
             }
         }
@@ -46,8 +46,7 @@ public class TypedArrayComposite extends TypedArray {
             int n = set.getAttributeCount();
             mAttrsMap = new boolean[attrs.length];
             while (n-- > 0) {
-            //for(int ind=n-1; ind >= 0; ind--){
-                /* When we encounter something like andorid:layout_height="?android:attr/listPreferredItemHeight",
+                 /* When we encounter something like andorid:layout_height="?android:attr/listPreferredItemHeight",
                  * it's important that we allow the custom theme to resolve it.
                  * XXX: Do we need to check that the theme has actually
                  * provided this attribute? */
@@ -272,6 +271,18 @@ public class TypedArrayComposite extends TypedArray {
 //                Log.e(TAG, "Failure resolving value from theme!", e);
 //            }
 //        }
+        int customResId = mCustomTypedArray.getResourceId(index, -1);
+        if (customResId >= 0) {
+            int defaultResId = mDefaultTypedArray.getResourceId(index, -1);
+            if (defaultResId != customResId) {
+                try {
+                    throw new RuntimeException();
+                } catch (RuntimeException e) {
+                    Log.d(TAG, "Freak out: customResId=" + customResId + ", defaultResId=" + defaultResId, e);
+                }
+            }
+            return customResId;
+        }
         return mDefaultTypedArray.getResourceId(index, defValue);
     }
 
