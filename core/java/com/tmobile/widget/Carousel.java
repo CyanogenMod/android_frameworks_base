@@ -143,7 +143,9 @@ public class Carousel extends TabHost implements OnGestureListener {
 			int selectedPosition = mCarouselTabContentLayout.getSelectedPosition();
 			int newSelectedPosition = selectedPosition;
 			
-			if (x1 > x2) {
+			if (x1 == x2) {
+				return false;
+			} else if (x1 < x2) {
 				newSelectedPosition -= 1;
 			} else {
 				newSelectedPosition += 1;
@@ -155,6 +157,10 @@ public class Carousel extends TabHost implements OnGestureListener {
 				newSelectedPosition = 0;
 			} else if (newSelectedPosition >= size) {
 				newSelectedPosition = size -1;
+			}
+			
+			if (newSelectedPosition == selectedPosition) {
+				return false;
 			}
 			
 			mCarouselTabContentLayout.setSelection(newSelectedPosition);
