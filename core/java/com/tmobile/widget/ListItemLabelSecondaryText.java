@@ -11,8 +11,8 @@ import com.android.internal.R;
 
 public class ListItemLabelSecondaryText extends LinearLayout {
 
-	private TextView mLabel1;
-	private TextView mText1;
+	private TextView mItemLabel;
+	private TextView mItemText;
 	
 	public ListItemLabelSecondaryText(Context context) {
 		this(context, null);
@@ -30,34 +30,34 @@ public class ListItemLabelSecondaryText extends LinearLayout {
 		TypedArray a = 
             context.obtainStyledAttributes(attrs, R.styleable.ListItemLayout, defStyle, 0);
 
-		mLabel1 = (TextView)findViewById(R.id.itemLabelText);
+		mItemLabel = (TextView)findViewById(R.id.itemLabelText);
 		String text = a.getString(R.styleable.ListItemLayout_itemLabelText);
         if (text != null) {
-        	mLabel1.setText(text);
+        	mItemLabel.setText(text);
         }
         
-        mText1 = (TextView)findViewById(R.id.itemText);
+        mItemText = (TextView)findViewById(R.id.itemText);
         text = a.getString(R.styleable.ListItemLayout_itemText);
         if (text != null) {
-        	mText1.setText(text);
+        	mItemText.setText(text);
         }
         a.recycle();
 	}
 
-	public CharSequence getLabel1() {
-		return mLabel1.getText();
+	public CharSequence getItemLabelText() {
+		return mItemLabel.getText();
 	}
 	
-	public void setLabel1(CharSequence text) {
-		mLabel1.setText(text);
+	public void setItemLabelText(CharSequence text) {
+		mItemLabel.setText(text);
 	}
 	
-	public CharSequence getText1() {
-		return mText1.getText();
+	public CharSequence getItemText() {
+		return mItemText.getText();
 	}
 	
-	public void setText1(CharSequence text) {
-		mText1.setText(text);
+	public void setItemText(CharSequence text) {
+		mItemText.setText(text);
 	}
 	
 }

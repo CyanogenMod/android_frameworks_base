@@ -11,9 +11,9 @@ import com.android.internal.R;
 
 public class ListItemLabelTwinText extends LinearLayout {
 
-	private TextView mLabel;
-	private TextView mText1;
-	private TextView mText2;
+	private TextView mItemLabel;
+	private TextView mItemText;
+	private TextView mItem2Text;
 	
 	public ListItemLabelTwinText(Context context) {
 		this(context, null);
@@ -31,48 +31,48 @@ public class ListItemLabelTwinText extends LinearLayout {
 		TypedArray a = 
             context.obtainStyledAttributes(attrs, R.styleable.ListItemLayout, defStyle, 0);
 
-		mLabel = (TextView)findViewById(R.id.itemLabel);
+		mItemLabel = (TextView)findViewById(R.id.itemLabel);
 		String headerText = a.getString(R.styleable.ListItemLayout_itemLabelText);
         if (headerText != null) {
-        	mLabel.setText(headerText);
+        	mItemLabel.setText(headerText);
         }
         
-        mText1 = (TextView)findViewById(R.id.item1Text);
+        mItemText = (TextView)findViewById(R.id.item1Text);
         String buttonText = a.getString(R.styleable.ListItemLayout_itemText);
         if (buttonText != null) {
-        	mText1.setText(buttonText);
+        	mItemText.setText(buttonText);
         }
         
-        mText2 = (TextView)findViewById(R.id.item2Text);
+        mItem2Text = (TextView)findViewById(R.id.item2Text);
         buttonText = a.getString(R.styleable.ListItemLayout_item2Text);
         if (buttonText != null) {
-        	mText2.setText(buttonText);
+        	mItem2Text.setText(buttonText);
         }
         a.recycle();
 	}
 
-	public CharSequence getLabel() {
-		return mLabel.getText();
+	public CharSequence getItemLabelText() {
+		return mItemLabel.getText();
 	}
 	
-	public void setLabel(CharSequence text) {
-		mLabel.setText(text);
+	public void setItemLabelText(CharSequence text) {
+		mItemLabel.setText(text);
 	}
 	
-	public CharSequence getText1() {
-		return mText1.getText();
+	public CharSequence getItemText() {
+		return mItemText.getText();
 	}
 	
-	public void setText1(CharSequence text) {
-		mText1.setText(text);
+	public void setItemText(CharSequence text) {
+		mItemText.setText(text);
 	}
 	
-	public CharSequence getText2() {
-		return mText2.getText();
+	public CharSequence getItem2Text() {
+		return mItem2Text.getText();
 	}
 	
-	public void setText2(CharSequence text) {
-		mText2.setText(text);
+	public void setItem2Text(CharSequence text) {
+		mItem2Text.setText(text);
 	}
 	
 }

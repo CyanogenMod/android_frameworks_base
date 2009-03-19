@@ -741,6 +741,9 @@
     <style name="Widget.ListItemLayout.ItemLabelSecondaryText" >
         <item name="android:gravity">center_vertical</item>
     </style>
+    <style name="Widget.ListItemLayout.ItemTwinLabelSecondaryText" >
+        <item name="android:gravity">center_vertical</item>
+    </style>
     
 	<style name="TextAppearance.Label">
 		<item name="android:singleLine">true</item>
@@ -776,6 +779,9 @@
 	</style>
 	<style name="HeaderButton">
 	    <item name="android:height">30dp</item>
+	</style>
+    <style name="ListItemIcon">
+		<item name="android:gravity">center_vertical</item>
 	</style>
 
     <style name="ZoomControls">

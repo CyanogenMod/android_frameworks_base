@@ -406,6 +406,7 @@
         <attr name="listItemLayoutItemLabelTwinText" format="reference" />
         <attr name="listItemLayoutItemTwinLabelText" format="reference" />
         <attr name="listItemLabelSecondaryText" format="reference" />
+        <attr name="listItemTwinLabelSecondaryText" format="reference" />
 
         <!-- =================== -->
         <!-- Preference styles   -->

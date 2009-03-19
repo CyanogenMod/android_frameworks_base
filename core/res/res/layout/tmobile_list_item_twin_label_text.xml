@@ -20,6 +20,13 @@
             android:paddingRight="10dp"
             android:textAppearance="?android:attr/textAppearanceLabelListItem"
             android:id="@+id/itemLabel2Text" />
+             
+        <ImageView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            style="@style/ListItemIcon"
+            android:src="@drawable/reticle"/>
+            
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
