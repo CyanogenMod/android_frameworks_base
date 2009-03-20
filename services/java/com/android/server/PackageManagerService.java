@@ -261,6 +261,8 @@ class PackageManagerService extends IPackageManager.Stub {
     ComponentName mResolveComponentName;
     PackageParser.Package mPlatformPackage;
 
+    private String lockedZipFilePath = null;
+
     public static final IPackageManager main(Context context, boolean factoryTest) {
         PackageManagerService m = new PackageManagerService(context, factoryTest);
     	if (null != _singleton) {
@@ -3661,19 +3663,26 @@ class PackageManagerService extends IPackageManager.Stub {
     	zipOutStream.flush();
     }
 
-    private String getLockedZipFileName(String originalPackagePath) {
-        if (originalPackagePath.endsWith(".apk")) {
-        	return originalPackagePath.substring(0, originalPackagePath.length() - 4) +
+    public String getLockedZipFileName(String originalPackagePath) {
+    	return lockedZipFilePath;
+    }
+
+    private void setLockedZipFileName(String originalPackagePath) {
+    	if (originalPackagePath.endsWith(".apk")) {
+    		lockedZipFilePath = originalPackagePath.substring(0, originalPackagePath.length() - 4) +
     			".locked.zip";
     	} else {
-    		return originalPackagePath + ".locked.zip";
+    		lockedZipFilePath = originalPackagePath + ".locked.zip";
     	}
     }
 
     private void deleteLockedZipFileIfExists(String originalPackagePath) {
     	// TODO: perform check that the theme package specified by the path
     	// has DRM-protected resources. And delete the file ONLY if pass the check.
-    	File zipFile = new File(getLockedZipFileName(originalPackagePath));
+    	if (lockedZipFilePath == null) {
+    		return;
+    	}
+    	File zipFile = new File(lockedZipFilePath);
     	if (zipFile.exists() && zipFile.isFile()) {
     		if (!zipFile.delete()) {
     			Log.w(TAG, "Couldn't delete locked zip file: " + originalPackagePath);
@@ -3690,7 +3699,7 @@ class PackageManagerService extends IPackageManager.Stub {
         }
         tmpPackageFile.deleteOnExit();
 
-    	String lockedZipFilePath = getLockedZipFileName(originalPackagePath);
+    	setLockedZipFileName(originalPackagePath);
         try {
         	final File publicZipFile = new File(originalPackagePath);
             final ZipOutputStream publicZipOutStream =

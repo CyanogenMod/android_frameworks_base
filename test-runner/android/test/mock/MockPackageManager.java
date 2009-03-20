@@ -40,7 +40,6 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.RemoteException;
 
 import java.util.List;
 

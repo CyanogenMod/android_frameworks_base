@@ -222,14 +222,14 @@ public final class ThemeInfo implements Parcelable {
     };
 
     private static final String [] optionalAttributes = new String [] {
-    	"callRingtone",
-    	"notificationRingtone",
+    	"ringtoneFileName",
+    	"notificationRingtoneFileName",
     	"favesBackground",
     	"favesAppsBackground",
     	"wallpaperImage",
     	"themeCopyright",
     	"androidUiStyle",
-    	"callRingtoneName",
+    	"ringtoneName",
     	"notificationRingtoneName",
     };
 
