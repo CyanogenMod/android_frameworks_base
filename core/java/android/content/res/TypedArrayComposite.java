@@ -316,13 +316,9 @@ public class TypedArrayComposite extends TypedArray {
     }
     
     public int getIndex(int at) {
-        if (useCustomTypedArray(at)) {
-            try {
+            if(mCustomTypedArray.getIndex(at) > 0){
                 return mCustomTypedArray.getIndex(at);
-            } catch (Exception e) {
-                Log.e(TAG, "Failure resolving value from theme!", e);
             }
-        }
             return mDefaultTypedArray.getIndex(at);
     }
 
