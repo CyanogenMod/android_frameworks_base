@@ -271,18 +271,18 @@ public class TypedArrayComposite extends TypedArray {
 //                Log.e(TAG, "Failure resolving value from theme!", e);
 //            }
 //        }
-        int customResId = mCustomTypedArray.getResourceId(index, -1);
-        if (customResId >= 0) {
-            int defaultResId = mDefaultTypedArray.getResourceId(index, -1);
-            if (defaultResId != customResId) {
-                try {
-                    throw new RuntimeException();
-                } catch (RuntimeException e) {
-                    Log.d(TAG, "Freak out: customResId=" + customResId + ", defaultResId=" + defaultResId, e);
-                }
-            }
-            return customResId;
-        }
+//        int customResId = mCustomTypedArray.getResourceId(index, -1);
+//        if (customResId >= 0) {
+//            int defaultResId = mDefaultTypedArray.getResourceId(index, -1);
+//            if (defaultResId != customResId) {
+//                try {
+//                    throw new RuntimeException();
+//                } catch (RuntimeException e) {
+//                    Log.d(TAG, "Freak out: customResId=" + customResId + ", defaultResId=" + defaultResId, e);
+//                }
+//            }
+//            return customResId;
+//        }
         return mDefaultTypedArray.getResourceId(index, defValue);
     }
 
