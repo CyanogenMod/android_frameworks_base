@@ -1,14 +1,13 @@
 package com.tmobile.widget;
 
-import com.android.internal.R;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+
+import com.android.internal.R;
 
 public class ProgressBarOverlayLayout extends RelativeLayout {
 
