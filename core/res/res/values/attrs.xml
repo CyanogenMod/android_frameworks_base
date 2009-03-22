@@ -1516,6 +1516,13 @@
         <attr name="icon2Src" format="reference|integer" />
         <attr name="icon3Src" format="reference|integer" />
     </declare-styleable>
+    <declare-styleable name="ProgressOverlayLayout">
+        <attr name="progressType">
+            <flag name="progressIndicator" value="0" />
+            <flag name="progressBar" value="1" />
+            <flag name="progressBarBottom" value="2" />
+        </attr>
+    </declare-styleable>
     <declare-styleable name="ListItemLayout">
         <attr name="itemLabelText" format="string" />
         <attr name="itemLabel2Text" format="string" />

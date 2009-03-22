@@ -1112,4 +1112,6 @@
 
   <public type="attr" name="buttonStyleSplitLeft" id="0x0101026b" />
   <public type="attr" name="buttonStyleSplitRight" id="0x0101026c" />
+
+  <public type="attr" name="progressType" id="0x0101026d" />
 </resources>
