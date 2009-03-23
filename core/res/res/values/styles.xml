@@ -341,14 +341,14 @@
         <item name="android:background">@android:drawable/panel_picture_frame_background</item>
     </style>
 
-<!--
+
     <style name="Widget.ImageButton">
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
         <item name="android:scaleType">center</item>
         <item name="android:background">@android:drawable/btn_default</item>
     </style>
--->
+
 
     <style name="Widget.AutoCompleteTextView">
         <item name="android:focusable">true</item>
