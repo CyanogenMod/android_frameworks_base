@@ -1114,4 +1114,7 @@
   <public type="attr" name="buttonStyleSplitRight" id="0x0101026c" />
 
   <public type="attr" name="progressType" id="0x0101026d" />
+
+  <public type="layout" name="tmobile_spinner_item" id="0x01090014" />
+  <public type="layout" name="tmobile_spinner_dropdown_item" id="0x01090015" />
 </resources>
