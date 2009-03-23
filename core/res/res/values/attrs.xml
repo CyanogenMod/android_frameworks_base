@@ -1505,6 +1505,10 @@
         <!-- Sets the alpha on the items that are not selected. -->
         <attr name="unselectedAlpha" format="float" />
     </declare-styleable>
+    <declare-styleable name="TextFieldLabel">
+        <attr name="labelText" format="string" />
+        <attr name="labelPosition" format="string" />
+    </declare-styleable>
     <declare-styleable name="HeaderLayout">
         <attr name="headerText" format="string" />
         <attr name="subHeaderText" format="string" />
