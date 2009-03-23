@@ -88,6 +88,14 @@ public class PackageParser {
         return name.endsWith(".apk");
     }
 
+    public static String getLockedZipFilePath(String path) {
+        if (isPackageFilename(path)) {
+            return path.substring(0, path.length() - 4) + ".locked.zip";
+        } else {
+            return path + ".locked.zip";
+        }
+    }
+
     /**
      * Generate and return the {@link PackageInfo} for a parsed package.
      *
@@ -104,15 +112,18 @@ public class PackageParser {
         pi.sharedUserId = p.mSharedUserId;
         pi.sharedUserLabel = p.mSharedUserLabel;
         pi.isThemeApk = p.mIsThemeApk;
-        pi.isDrmProtectedThemeApk = false;
+        pi.setDrmProtectedThemeApk(false);
         if (pi.isThemeApk) {
         	int N = p.mThemeInfos.size();
         	if (N > 0) {
         		pi.themeInfos = new ThemeInfo[N];
         		for (int i = 0; i < N; i++) {
         			pi.themeInfos[i] = p.mThemeInfos.get(i);
-        			pi.isDrmProtectedThemeApk = pi.isDrmProtectedThemeApk || pi.themeInfos[i].isDrmProtected;
+        			pi.setDrmProtectedThemeApk(pi.isDrmProtectedThemeApk() || pi.themeInfos[i].isDrmProtected);
         		}
+                if (pi.isDrmProtectedThemeApk()) {
+                    pi.setLockedZipFilePath(PackageParser.getLockedZipFilePath(p.mPath));
+                }
         	}
         }
         pi.applicationInfo = p.applicationInfo;

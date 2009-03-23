@@ -269,6 +269,4 @@ interface IPackageManager {
     boolean isSafeMode();
     void systemReady();
     boolean hasSystemUidErrors();
-
-    String getLockedZipFileName(String originalPackagePath);
 }

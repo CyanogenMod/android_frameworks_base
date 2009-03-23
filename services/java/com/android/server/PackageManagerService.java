@@ -261,8 +261,6 @@ class PackageManagerService extends IPackageManager.Stub {
     ComponentName mResolveComponentName;
     PackageParser.Package mPlatformPackage;
 
-    private String lockedZipFilePath = null;
-
     public static final IPackageManager main(Context context, boolean factoryTest) {
         PackageManagerService m = new PackageManagerService(context, factoryTest);
     	if (null != _singleton) {
@@ -3663,25 +3661,8 @@ class PackageManagerService extends IPackageManager.Stub {
     	zipOutStream.flush();
     }
 
-    public String getLockedZipFileName(String originalPackagePath) {
-    	return lockedZipFilePath;
-    }
-
-    private void setLockedZipFileName(String originalPackagePath) {
-    	if (originalPackagePath.endsWith(".apk")) {
-    		lockedZipFilePath = originalPackagePath.substring(0, originalPackagePath.length() - 4) +
-    			".locked.zip";
-    	} else {
-    		lockedZipFilePath = originalPackagePath + ".locked.zip";
-    	}
-    }
-
     private void deleteLockedZipFileIfExists(String originalPackagePath) {
-    	// TODO: perform check that the theme package specified by the path
-    	// has DRM-protected resources. And delete the file ONLY if pass the check.
-    	if (lockedZipFilePath == null) {
-    		return;
-    	}
+        String lockedZipFilePath = PackageParser.getLockedZipFilePath(originalPackagePath);
     	File zipFile = new File(lockedZipFilePath);
     	if (zipFile.exists() && zipFile.isFile()) {
     		if (!zipFile.delete()) {
@@ -3699,7 +3680,7 @@ class PackageManagerService extends IPackageManager.Stub {
         }
         tmpPackageFile.deleteOnExit();
 
-    	setLockedZipFileName(originalPackagePath);
+        String lockedZipFilePath = PackageParser.getLockedZipFilePath(originalPackagePath);
         try {
         	final File publicZipFile = new File(originalPackagePath);
             final ZipOutputStream publicZipOutStream =

@@ -2526,19 +2526,6 @@ class ApplicationContext extends Context {
             return PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
         }
 
-        @Override
-        /**
-         * @hide
-         */
-		public String getLockedZipFileName(String originalPackagePath) {
-            try {
-                return mPM.getLockedZipFileName(originalPackagePath);
-            } catch (RemoteException e) {
-                // Should never happen!
-            }
-			return null;
-		}
-
         private final ApplicationContext mContext;
         private final IPackageManager mPM;
 
