@@ -772,12 +772,6 @@
         <item name="android:gravity">left|center</item>
     </style>
 	
-	<style name="Widget.CompoundButton.ToggleButton">
-		<item name="android:textSize">12sp</item>
-		<item name="android:disabledAlpha">?android:attr/disabledAlpha</item>
-		<item name="android:textGap">10</item>
-	</style>
-		
 	<style name="Widget.ListItemLayout" >
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">10dp</item>

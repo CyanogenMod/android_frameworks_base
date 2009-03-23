@@ -1585,7 +1585,6 @@
         <attr name="textOff" format="string" />
         <!-- The alpha to apply to the indicator when disabled. -->
         <attr name="disabledAlpha" />
-        <attr name="textGap" format="integer" min="0"/>
     </declare-styleable>
     <declare-styleable name="RelativeLayout">
         <attr name="gravity" />
