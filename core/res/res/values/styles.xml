@@ -477,6 +477,11 @@
         <item name="android:shadowRadius">2.75</item>
     </style>
 
+    <style name="Toast" >
+    </style>
+    <style name="Toast.Background" >
+        <item name="android:background">@@android:drawable/toast_frame</item>
+    </style>
     <!-- Text Appearances -->
     <eat-comment />
 

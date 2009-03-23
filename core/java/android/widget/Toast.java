@@ -21,8 +21,8 @@ import android.app.ITransientNotification;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
-import android.os.RemoteException;
 import android.os.Handler;
+import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
 import android.view.Gravity;
@@ -307,7 +307,7 @@ public class Toast {
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                     | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
             mParams.format = PixelFormat.TRANSLUCENT;
-            mParams.windowAnimations = com.android.internal.R.style.Animation_Toast;
+            mParams.windowAnimations = com.android.internal.R.attr.toastAnimation;
             mParams.type = WindowManager.LayoutParams.TYPE_TOAST;
             mParams.setTitle("Toast");
         }
