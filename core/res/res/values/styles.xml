@@ -371,6 +371,7 @@
 
     <style name="Widget.Filmstrip">
         <item name="android:background">@color/black</item>
+        <item name="android:gravity">center_vertical</item>
         <item name="android:previousButton">@drawable/ic_media_previous</item>
         <item name="android:nextButton">@drawable/ic_media_next</item>
         <item name="android:frameBackground">@drawable/gallery_unselected_default</item>

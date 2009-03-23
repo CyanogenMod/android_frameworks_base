@@ -8,6 +8,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -28,10 +29,10 @@ public class Filmstrip extends RelativeLayout {
 
 	// The max label length is defined in the style guide
 	private static final int MAX_LABEL_LENGTH = 16;
-	private static final int TITLE_TEXT_FIELD_WIDTH = 156;
+	private static final int TITLE_TEXT_FIELD_WIDTH = 110;
 
-	private static final int TITLE_TEXT_SIZE_SELECTED = 22;
-	private static final int TITLE_TEXT_SIZE_UNSELECTED = 20;
+	private static final int TITLE_TEXT_SIZE_SELECTED = 14;
+	private static final int TITLE_TEXT_SIZE_UNSELECTED = 13;
 
 	private static final String TITLE_TYPEFACE_NAME = "sans";
 	private static final Typeface TITLE_TYPEFACE = Typeface.create(
@@ -104,6 +105,8 @@ public class Filmstrip extends RelativeLayout {
 					mTitleView.setGravity(Gravity.CENTER);
 					mTitleView.setWidth(TITLE_TEXT_FIELD_WIDTH);
 					mTitleView.setPadding(10, 5, 10, 5);
+					mTitleView.setSingleLine(true);
+					mTitleView.setEllipsize(TextUtils.TruncateAt.END);
 				}
 				return mTitleView;
 			} else {
@@ -250,9 +253,9 @@ public class Filmstrip extends RelativeLayout {
 		TypedArray a = 
             context.obtainStyledAttributes(attrs, R.styleable.Filmstrip, defStyle, 0);
 				
-		mFilmstripSelector = new Gallery(context, attrs, defStyle);
-		mLeftArrow = new ImageView(context, attrs, defStyle);
-		mRightArrow = new ImageView(context, attrs, defStyle);
+		mFilmstripSelector = new Gallery(context, attrs);
+		mLeftArrow = new ImageView(context, attrs);
+		mRightArrow = new ImageView(context, attrs);
 		mFilmstripItems = new ArrayList<FilmstripItem>();
 		mFilmstripTitleAdapter = new FilmstripTitleAdapter();
 		mFilmstripOnItemSelectedListener = new FilmstripOnItemSelectedListener();
