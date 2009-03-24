@@ -386,6 +386,7 @@
 		<attr name="textAppearanceLabelListItemText" format="reference" />
 		<attr name="textAppearanceLabelListItemSecondaryText" format="reference" />
 
+		<attr name="headerLayoutBackground" format="reference" />
 		<attr name="headerLayout" format="reference" />
 		<attr name="headerLayoutLabel" format="reference" />
 		<attr name="headerLayoutSubHeader" format="reference" />
@@ -401,6 +402,7 @@
 		<attr name="headerLayoutSecondaryLargeIcon" format="reference" />
 		<attr name="headerLayoutPersonalPanel" format="reference" />
         <attr name="headerLayoutProductPanel" format="reference" />
+		<attr name="sectionHeaderLayoutBackground" format="reference" />
         <attr name="sectionHeaderLayoutLabel" format="reference" />
         <attr name="listItemLayout" format="reference" />
         <attr name="listItemLayoutItemLabelTwinText" format="reference" />

@@ -682,10 +682,10 @@
     </style>
 
 	<style name="Widget.HeaderLayout" >
-		<item name="android:background">@color/black</item>
+		<item name="android:background">?android:attr/headerLayoutBackground</item>
         <item name="android:textAppearance">?android:attr/textAppearanceInverse</item>
-		<item name="android:paddingLeft">10dp</item>
-		<item name="android:paddingRight">10dp</item>
+		<item name="android:paddingLeft">8dp</item>
+		<item name="android:paddingRight">8dp</item>
 		<item name="android:paddingTop">0dp</item>
 		<item name="android:paddingBottom">0dp</item>
 	</style>
@@ -727,6 +727,7 @@
 	</style>
 	
     <style name="Widget.HeaderLayout.SectionHeaderLabel">
+		<item name="android:background">?android:attr/sectionHeaderLayoutBackground</item>
         <item name="android:textAppearance">?android:attr/textAppearanceLabelHeader</item>
         <item name="android:minHeight">40dp</item>
         <item name="android:gravity">left|center_vertical</item>
@@ -781,8 +782,8 @@
     </style>
 	
 	<style name="Widget.ListItemLayout" >
-        <item name="android:paddingLeft">10dp</item>
-        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
         <item name="android:paddingTop">0dp</item>
         <item name="android:paddingBottom">0dp</item>
     </style>
@@ -816,18 +817,27 @@
     </style>
     
 	<style name="TextAppearance.Label">
-		<item name="android:singleLine">true</item>
+        <item name="android:singleLine">true</item>
+		<item name="android:includeFontPadding">false</item>
 	</style>
 	<style name="TextAppearance.Label.Header">
+        <item name="android:textColor">?textColorPrimaryInverse</item>
+        <item name="android:textStyle">bold</item>
 	</style>
 	<style name="TextAppearance.Label.SubHeader">
+        <item name="android:textColor">?textColorPrimaryInverse</item>
+        <item name="android:textSize">14sp</item>
 	</style>
     <style name="TextAppearance.Label.ListItem">
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="TextAppearance.Label.ListItemText">
+        <item name="android:textSize">14sp</item>
     </style>
     <style name="TextAppearance.Label.ListItemSecondaryText">
+        <item name="android:textSize">13sp</item>
     </style>
+    
 	<style name="HeaderTextIcon">
         <item name="android:textAppearance">?android:attr/textAppearanceLabelSubHeader</item>
 		<item name="android:paddingRight">10dp</item>

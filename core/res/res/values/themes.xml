@@ -174,6 +174,7 @@
 		<item name="textAppearanceLabelListItemText">@android:style/TextAppearance.Label.ListItemText</item>
 		<item name="textAppearanceLabelListItemSecondaryText">@android:style/TextAppearance.Label.ListItemSecondaryText</item>
 
+		<item name="headerLayoutBackground">@color/black</item>
 		<item name="headerLayout">@android:style/Widget.HeaderLayout</item>
 		<item name="headerLayoutLabel">@android:style/Widget.HeaderLayout.HeaderLabel</item>
 		<item name="headerLayoutSubHeader">@android:style/Widget.HeaderLayout.HeaderSubHeader</item>
@@ -189,6 +190,7 @@
 		<item name="headerLayoutSecondaryLargeIcon">@android:style/Widget.HeaderLayout.HeaderSecondaryLargeIcon</item>
 		<item name="headerLayoutPersonalPanel">@android:style/Widget.HeaderLayout.HeaderPersonalPanel</item>
         <item name="headerLayoutProductPanel">@android:style/Widget.HeaderLayout.HeaderProductPanel</item>
+		<item name="sectionHeaderLayoutBackground">@color/black</item>
         <item name="sectionHeaderLayoutLabel">@android:style/Widget.HeaderLayout.SectionHeaderLabel</item>
         <item name="listItemLayout">@android:style/Widget.ListItemLayout.ItemLabelText</item>
         <item name="listItemLayoutItemLabelTwinText">@android:style/Widget.ListItemLayout.ItemLabelTwinText</item>
