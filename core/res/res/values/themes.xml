@@ -166,7 +166,7 @@
         <item name="dropDownHintAppearance">@android:style/TextAppearance.Widget.DropDownHint</item>
         <item name="keyboardViewStyle">@android:style/Widget.KeyboardView</item>
         <item name="toastBackground">@android:style/Toast.Background</item>
-        <item name="toastAnimation">@android:style/Animation.Toast</item>
+        <item name="toastAnimationStyle">@android:style/Animation.Toast</item>
         
         <!-- Header, section and list item styles -->
 		<item name="textAppearanceLabel">@android:style/TextAppearance.Label</item>
@@ -197,6 +197,7 @@
         <item name="listItemLayoutItemTwinLabelText">@style/Widget.ListItemLayout.ItemTwinLabelText</item>
         <item name="listItemLabelSecondaryText">@android:style/Widget.ListItemLayout.ItemLabelSecondaryText</item>
         <item name="listItemTwinLabelSecondaryText">@android:style/Widget.ListItemLayout.ItemTwinLabelSecondaryText</item>
+        <item name="listItemHeaderTwinLabelSecondaryText">@android:style/Widget.ListItemLayout.ItemTwinLabelSecondaryText</item>
 
         <!-- Preference styles -->
         <item name="preferenceScreenStyle">@android:style/Preference.PreferenceScreen</item>

@@ -16,10 +16,13 @@
 
 package android.widget;
 
+import com.android.internal.R;
+
 import android.app.INotificationManager;
 import android.app.ITransientNotification;
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.RemoteException;
@@ -307,9 +310,13 @@ public class Toast {
                     | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
                     | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
             mParams.format = PixelFormat.TRANSLUCENT;
-            mParams.windowAnimations = com.android.internal.R.attr.toastAnimation;
+            TypedArray a = 
+                context.obtainStyledAttributes(null, R.styleable.ToastStyle);
+            int resId = a.getResourceId(R.styleable.ToastStyle_toastAnimation, -1);
+            mParams.windowAnimations = resId;
             mParams.type = WindowManager.LayoutParams.TYPE_TOAST;
             mParams.setTitle("Toast");
+            a.recycle();
         }
 
         /**

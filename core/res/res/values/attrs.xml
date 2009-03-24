@@ -407,13 +407,14 @@
         <attr name="listItemLayoutItemTwinLabelText" format="reference" />
         <attr name="listItemLabelSecondaryText" format="reference" />
         <attr name="listItemTwinLabelSecondaryText" format="reference" />
+        <attr name="listItemHeaderTwinLabelSecondaryText" format="reference" />
         
         <!-- ============ -->
         <!-- TOAST styles -->
         <!-- ============ -->
         <eat-comment />
         <attr name="toastBackground" format="reference"/>
-        <attr name="toastAnimation" format="reference"/>
+        <attr name="toastAnimationStyle" format="reference"/>
 
         <!-- =================== -->
         <!-- Preference styles   -->
@@ -1535,6 +1536,7 @@
         </attr>
     </declare-styleable>
     <declare-styleable name="ListItemLayout">
+        <attr name="itemHeaderLabelText" format="string" />
         <attr name="itemLabelText" format="string" />
         <attr name="itemLabel2Text" format="string" />
         <attr name="itemText" format="string" />
@@ -1554,6 +1556,9 @@
             <enum name="auto_fit" value="-1" />
         </attr>
         <attr name="gravity" />
+    </declare-styleable>
+    <declare-styleable name="ToastStyle">
+        <attr name="toastAnimation" format="reference" />
     </declare-styleable>
     <declare-styleable name="ImageSwitcher">
     </declare-styleable>
