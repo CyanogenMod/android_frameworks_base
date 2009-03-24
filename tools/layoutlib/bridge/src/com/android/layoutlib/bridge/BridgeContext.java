@@ -167,11 +167,6 @@ public final class BridgeContext extends Context {
     }
 
     @Override
-    public Theme getStyledTheme() {
-        return mStyledTheme;
-    }
-
-    @Override
     public ClassLoader getClassLoader() {
         return this.getClass().getClassLoader();
     }
@@ -1090,11 +1085,6 @@ public final class BridgeContext extends Context {
     public void setTheme(int arg0) {
         // TODO Auto-generated method stub
         
-    }
-
-    @Override
-    public void setStyledTheme(String packageName, int arg0) {
-        // TODO Auto-generated method stub
     }
 
     @SuppressWarnings("unused")
