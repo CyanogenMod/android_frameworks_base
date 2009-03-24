@@ -165,8 +165,6 @@
         <item name="spinnerItemStyle">@android:style/Widget.TextView.SpinnerItem</item>
         <item name="dropDownHintAppearance">@android:style/TextAppearance.Widget.DropDownHint</item>
         <item name="keyboardViewStyle">@android:style/Widget.KeyboardView</item>
-        <item name="toastBackground">@android:style/Toast.Background</item>
-        <item name="toastAnimationStyle">@android:style/Animation.Toast</item>
         
         <!-- Header, section and list item styles -->
 		<item name="textAppearanceLabel">@android:style/TextAppearance.Label</item>

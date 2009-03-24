@@ -409,13 +409,6 @@
         <attr name="listItemTwinLabelSecondaryText" format="reference" />
         <attr name="listItemHeaderTwinLabelSecondaryText" format="reference" />
         
-        <!-- ============ -->
-        <!-- TOAST styles -->
-        <!-- ============ -->
-        <eat-comment />
-        <attr name="toastBackground" format="reference"/>
-        <attr name="toastAnimationStyle" format="reference"/>
-
         <!-- =================== -->
         <!-- Preference styles   -->
         <!-- =================== -->
