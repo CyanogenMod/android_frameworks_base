@@ -172,6 +172,8 @@ public class RingtoneManager {
     public static final String EXTRA_RINGTONE_PICKED_URI =
             "android.intent.extra.ringtone.PICKED_URI";
     
+    private static final String THEME_AUTHORITY = "com.tmobile.thememanager.packageresources";
+
     // Make sure the column ordering and then ..._COLUMN_INDEX are in sync
     
     private static final String[] INTERNAL_COLUMNS = new String[] {
@@ -187,6 +189,11 @@ public class RingtoneManager {
     private static final String[] MEDIA_COLUMNS = new String[] {
         MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE,
         "\"" + MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "\""
+    };
+
+    private static final String[] THEME_COLUMNS = new String[] {
+    	MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE,
+        "\"" + Uri.parse("content://" + THEME_AUTHORITY + "/ringtone") + "\""
     };
     
     /**
@@ -359,8 +366,9 @@ public class RingtoneManager {
         final Cursor internalCursor = getInternalRingtones();
         final Cursor drmCursor = mIncludeDrm ? getDrmRingtones() : null;
         final Cursor mediaCursor = getMediaRingtones();
+        final Cursor themeCursor = getThemeManagerRingtones();
              
-        return mCursor = new SortCursor(new Cursor[] { internalCursor, drmCursor, mediaCursor },
+        return mCursor = new SortCursor(new Cursor[] { internalCursor, drmCursor, mediaCursor, themeCursor },
                 MediaStore.MediaColumns.TITLE);
     }
 
@@ -460,6 +468,10 @@ public class RingtoneManager {
             uri = getValidRingtoneUriFromCursorAndClose(context, rm.getDrmRingtones());
         }
         
+        if (uri == null) {
+            uri = getValidRingtoneUriFromCursorAndClose(context, rm.getThemeManagerRingtones());
+        }
+        
         return uri;
     }
     
@@ -503,6 +515,12 @@ public class RingtoneManager {
                     constructBooleanTrueWhereClause(mFilterColumns), null,
                     MediaStore.Audio.Media.DEFAULT_SORT_ORDER)
                 : null;
+    }
+
+    private Cursor getThemeManagerRingtones() {
+        return query(
+        		Uri.parse("content://" + THEME_AUTHORITY + "/ringtones"), THEME_COLUMNS,
+                null, null, null);
     }
     
     private void setFilterColumnsList(int type) {
