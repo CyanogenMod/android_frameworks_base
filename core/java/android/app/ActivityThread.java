@@ -442,12 +442,16 @@ public final class ActivityThread {
         public AssetManager getAssets(ActivityThread mainThread) {
             return getResources(mainThread).getAssets();
         }
-
-        public Resources getResources(ActivityThread mainThread) {
-            if (mResources == null) {
+        
+        public Resources getResources(ActivityThread mainThread, boolean force) {
+            if (mResources == null || force == true) {
                 mResources = mainThread.getTopLevelResources(mResDir);
             }
-            return mResources;
+            return mResources;            
+        }
+        
+        public Resources getResources(ActivityThread mainThread) {
+            return getResources(mainThread, false);
         }
 
         public Application makeApplication() {
@@ -3259,6 +3263,15 @@ public final class ActivityThread {
             savedState = performPauseActivity(r.token, false, true);
         }
         
+        /* Update the resources object if the theme has changed.  We swapped
+         * out the theme package assets. */
+        if ((configChanges & ActivityInfo.CONFIG_THEME_RESOURCE) != 0) {
+            Context context = r.activity.getBaseContext();
+            if (context instanceof ApplicationContext) {
+                ((ApplicationContext)context).refreshResources();
+            }
+        }
+        
         handleDestroyActivity(r.token, false, configChanges, true);
         
         r.activity = null;
@@ -3440,7 +3453,10 @@ public final class ActivityThread {
                 while (it.hasNext()) {
                     WeakReference<Resources> v = it.next();
                     Resources r = v.get();
-                    if (r != null && (diff & ActivityInfo.CONFIG_THEME_RESOURCE) != 0) {
+                    /* If the theme has changed, remove the cached Resources
+                     * object anyway.  Similarly, each Application will need
+                     * to refresh its internal resources object. */
+                    if (r != null && (diff & ActivityInfo.CONFIG_THEME_RESOURCE) == 0) {
                         r.updateConfiguration(config, dm);
                         //Log.i(TAG, "Updated app resources " + v.getKey()
                         //        + " " + r + ": " + r.getConfiguration());

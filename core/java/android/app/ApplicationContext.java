@@ -220,6 +220,15 @@ class ApplicationContext extends Context {
     public Resources getResources() {
         return mResources;
     }
+    
+    /**
+     * Refresh resources object which may have been changed by a theme
+     * configuration change.
+     */
+    /* package */ void refreshResources() {
+        mResources = mPackageInfo.getResources(mMainThread, true);
+        mTheme = null;
+    }
 
     @Override
     public PackageManager getPackageManager() {
@@ -261,7 +270,9 @@ class ApplicationContext extends Context {
             try {
                 Configuration config = ActivityManagerNative.getDefault().getConfiguration();
                 if (config.customTheme != null) {
-                    return config.customTheme.getThemeId();
+                    int themeId = config.customTheme.getThemeId();
+                    if (themeId >= 0)
+                        return themeId;
                 }
             } catch (RemoteException e) {
                 Log.e(TAG, "Unable to access configuration, reverting to original system default theme", e);
