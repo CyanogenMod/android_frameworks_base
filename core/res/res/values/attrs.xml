@@ -1552,9 +1552,7 @@
         </attr>
         <attr name="gravity" />
     </declare-styleable>
-    <declare-styleable name="ToastStyle">
-        <attr name="toastAnimation" format="reference" />
-    </declare-styleable>
+    
     <declare-styleable name="ImageSwitcher">
     </declare-styleable>
     <declare-styleable name="ImageView">
