@@ -33,6 +33,7 @@ import android.content.pm.ProviderInfo;
 import android.content.pm.ServiceInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
+import android.content.res.CustomTheme;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDebug;
@@ -180,10 +181,17 @@ public final class ActivityThread {
             if (assets.addAssetPath(appDir) == 0) {
                 return null;
             }
-            Log.i(TAG, "Adding /system/app/PlutoTheme.apk...");
-            assets.addAssetPath("/system/app/PlutoTheme.apk");
+            Configuration config = getConfiguration();
+            if (config != null && config.customTheme != null) {
+                PackageInfo pi = getPackageInfo(config.customTheme.getThemePackageName(), 0);
+                String resDir = pi.getResDir();
+                Log.i(TAG, "Adding theme resdir=" + resDir);
+                if (assets.addAssetPath(resDir) == 0) {
+                    Log.e(TAG, "Unable to add theme resdir=" + resDir);
+                }
+            }
             DisplayMetrics metrics = getDisplayMetricsLocked(false);
-            r = new Resources(assets, metrics, getConfiguration());
+            r = new Resources(assets, metrics, config);
             //Log.i(TAG, "Created app resources " + r + ": " + r.getConfiguration());
             // XXX need to remove entries when weak references go away
             mActiveResources.put(appDir, new WeakReference<Resources>(r));
@@ -3412,7 +3420,7 @@ public final class ActivityThread {
             if (mConfiguration == null) {
                 mConfiguration = new Configuration();
             }
-            mConfiguration.updateFrom(config);
+            int diff = mConfiguration.updateFrom(config);
             DisplayMetrics dm = getDisplayMetricsLocked(true);
 
             // set it for java, this also affects newly created Resources
@@ -3432,7 +3440,7 @@ public final class ActivityThread {
                 while (it.hasNext()) {
                     WeakReference<Resources> v = it.next();
                     Resources r = v.get();
-                    if (r != null) {
+                    if (r != null && (diff & ActivityInfo.CONFIG_THEME_RESOURCE) != 0) {
                         r.updateConfiguration(config, dm);
                         //Log.i(TAG, "Updated app resources " + v.getKey()
                         //        + " " + r + ": " + r.getConfiguration());

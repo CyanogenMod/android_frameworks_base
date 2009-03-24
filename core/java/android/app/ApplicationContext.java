@@ -172,7 +172,6 @@ class ApplicationContext extends Context {
     private ApplicationContentResolver mContentResolver;
     private int mThemeResource = 0;
     private Resources.Theme mTheme = null;
-    private Resources.Theme mStyledTheme;
     private PackageManager mPackageManager;
     private NotificationManager mNotificationManager = null;
     private ActivityManager mActivityManager = null;
@@ -257,80 +256,32 @@ class ApplicationContext extends Context {
         mThemeResource = resid;
     }
     
+    private int determineDefaultThemeResource() {
+        if (getResources() != Resources.getSystem()) {
+            try {
+                Configuration config = ActivityManagerNative.getDefault().getConfiguration();
+                if (config.customTheme != null) {
+                    return config.customTheme.getThemeId();
+                }
+            } catch (RemoteException e) {
+                Log.e(TAG, "Unable to access configuration, reverting to original system default theme", e);
+            }
+        }
+
+        /* Fallback... */
+        return com.android.internal.R.style.Theme;
+    }
+    
     @Override
     public Resources.Theme getTheme() {
         if (mTheme == null) {
             if (mThemeResource == 0) {
-                try {
-                    mResources.getResourceName(0x02060034);
-                    mThemeResource = 0x02060034; // com.tmobile.pluto.theme.R.style.ThemePluto
-                } catch (Resources.NotFoundException e) {
-                    mThemeResource = com.android.internal.R.style.Theme;
-                }
+                mThemeResource = determineDefaultThemeResource();
             }
             mTheme = mResources.newTheme();
             mTheme.applyStyle(mThemeResource, true);
         }
         return mTheme;
-    }
-
-  @Override
-  /**
-   * @hide
-   */
-    public void setStyledTheme(String packageName, int themeResourceId) {
-      CustomTheme customTheme = null;
-      try	{    
-          customTheme = new CustomTheme(themeResourceId, packageName);
-          intializeStyledTheme(customTheme);
-      }catch(Exception ex){
-          Log.e("ApplicationContext", "Could not set StyledTheme:", ex);
-      }
-    }
-
-    
-    @Override 
-    /**
-     * @hide
-     */
-    public Resources.Theme getStyledTheme() {
-        if (mStyledTheme != null) {
-            return mStyledTheme;
-        }
-
-        try {
-             Configuration mCurConfig = ActivityManagerNative.getDefault().getConfiguration();
-             CustomTheme customTheme = mCurConfig.customTheme;
-             intializeStyledTheme(customTheme);
-        }catch (RemoteException re) {
-            Log.d("ApplicationContext:", "RemoteException", re);
-        }
-
-        if (mStyledTheme != null) {
-            Log.d("ApplicationContext:", mStyledTheme.toString());
-        }
-        return mStyledTheme;
-    }
-
-    private void intializeStyledTheme(CustomTheme customTheme){
-        try {
-            if(customTheme != null) {
-                int themeResource = customTheme.getThemeId();
-                String packageName = customTheme.getThemePackageName();
-                Context context;
-                if(packageName != null){
-                    context = createPackageContext(packageName, 0);
-                } else {
-                    context = this;
-                }
-                
-                mStyledTheme = context.getTheme();
-                mStyledTheme.applyStyle(themeResource, true);
-            }
-
-        } catch (PackageManager.NameNotFoundException pne) {
-            Log.d("ApplicationContext:", "Package not found", pne);
-        }
     }
     
     @Override

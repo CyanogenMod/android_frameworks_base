@@ -28,7 +28,6 @@ public class ContextThemeWrapper extends ContextWrapper {
     private Context mBase;
     private int mThemeResource;
     private Resources.Theme mTheme;
-    private Resources.Theme mStyledTheme;
     private LayoutInflater mInflater;
 
     public ContextThemeWrapper() {
@@ -50,33 +49,18 @@ public class ContextThemeWrapper extends ContextWrapper {
         mThemeResource = resid;
         initializeTheme();
     }
-   
-    /**
-     * @hide
-     */
-    public void setStyledTheme(String packageName, int styleResId) {
-        mBase.setStyledTheme(packageName, styleResId);
-    }
-    
-    /**
-     * @hide
-     */
-    public Resources.Theme getStyledTheme() {
-        return mBase.getStyledTheme();
-    }
-    
+       
     @Override public Resources.Theme getTheme() {
         if (mTheme != null) {
             return mTheme;
         }
 
         if (mThemeResource == 0) {
-            mThemeResource = 0x02060034; // com.tmobile.pluto.theme.R.style.ThemePluto
-//            mThemeResource = com.android.internal.R.style.Theme;
+            return mBase.getTheme();
+        } else {
+            initializeTheme();
+            return mTheme;
         }
-        initializeTheme();
-
-        return mTheme;
     }
 
     @Override 
