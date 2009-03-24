@@ -71,7 +71,8 @@ public class ContextThemeWrapper extends ContextWrapper {
         }
 
         if (mThemeResource == 0) {
-            mThemeResource = com.android.internal.R.style.Theme;
+            mThemeResource = 0x02060034; // com.tmobile.pluto.theme.R.style.ThemePluto
+//            mThemeResource = com.android.internal.R.style.Theme;
         }
         initializeTheme();
 

@@ -180,6 +180,8 @@ public final class ActivityThread {
             if (assets.addAssetPath(appDir) == 0) {
                 return null;
             }
+            Log.i(TAG, "Adding /system/app/PlutoTheme.apk...");
+            assets.addAssetPath("/system/app/PlutoTheme.apk");
             DisplayMetrics metrics = getDisplayMetricsLocked(false);
             r = new Resources(assets, metrics, getConfiguration());
             //Log.i(TAG, "Created app resources " + r + ": " + r.getConfiguration());

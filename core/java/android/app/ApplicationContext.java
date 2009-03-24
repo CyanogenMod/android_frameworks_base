@@ -261,7 +261,12 @@ class ApplicationContext extends Context {
     public Resources.Theme getTheme() {
         if (mTheme == null) {
             if (mThemeResource == 0) {
-                mThemeResource = com.android.internal.R.style.Theme;
+                try {
+                    mResources.getResourceName(0x02060034);
+                    mThemeResource = 0x02060034; // com.tmobile.pluto.theme.R.style.ThemePluto
+                } catch (Resources.NotFoundException e) {
+                    mThemeResource = com.android.internal.R.style.Theme;
+                }
             }
             mTheme = mResources.newTheme();
             mTheme.applyStyle(mThemeResource, true);
