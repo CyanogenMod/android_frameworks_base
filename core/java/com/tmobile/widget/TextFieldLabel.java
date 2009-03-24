@@ -54,4 +54,7 @@ public class TextFieldLabel extends LinearLayout {
 		mTextField = (EditText) findViewById(R.id.textFieldId);
 	}
 
+	public EditText getEditText() {
+		return mTextField;
+	}
 }
