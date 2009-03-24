@@ -99,8 +99,7 @@
 
             <Button
                 android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                style="@android:style/HeaderButton"
+				android:layout_height="@android:dimen/header_button_height"
                 android:layout_gravity="right"
                 android:id="@+id/button1" />
 

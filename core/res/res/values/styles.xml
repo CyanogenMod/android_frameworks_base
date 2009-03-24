@@ -841,9 +841,6 @@
 		<item name="android:gravity">top</item>
 		<item name="android:paddingTop">8dp</item>
 	</style>
-	<style name="HeaderButton">
-	    <item name="android:height">30dp</item>
-	</style>
     <style name="ListItemIcon">
 		<item name="android:gravity">center_vertical</item>
 	</style>

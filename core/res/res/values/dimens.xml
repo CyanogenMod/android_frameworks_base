@@ -28,4 +28,5 @@
     <dimen name="toast_y_offset">64dip</dimen>
     <!-- Height of the status bar -->
     <dimen name="status_bar_height">25dip</dimen>
+    <dimen name="header_button_height">30dp</dimen>
 </resources>

@@ -33,8 +33,7 @@
 		</LinearLayout>
 
 		<Button android:layout_width="wrap_content"
-			android:layout_height="wrap_content" 
-			style="@android:style/HeaderButton"
+			android:layout_height="@android:dimen/header_button_height"
 			android:layout_gravity="center_vertical" 
 			android:id="@+id/button1" />
 	</LinearLayout>
