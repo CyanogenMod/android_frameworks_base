@@ -16,9 +16,16 @@
 
 package android.view;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.ContextWrapper;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.AssetManager;
+import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.util.DisplayMetrics;
+import android.util.Log;
 
 /**
  * A ContextWrapper that allows you to modify the theme from what is in the 
@@ -29,6 +36,11 @@ public class ContextThemeWrapper extends ContextWrapper {
     private int mThemeResource;
     private Resources.Theme mTheme;
     private LayoutInflater mInflater;
+    
+    /* XXX: Hack to allow themes to be applied on a per-activity basis.  Used
+     * by ThemeManager for real-time theme preview. */
+    private boolean mUseThemedResources = false;
+    private Resources mThemedResources = null;
 
     public ContextThemeWrapper() {
         super(null);
@@ -43,6 +55,60 @@ public class ContextThemeWrapper extends ContextWrapper {
     @Override protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(newBase);
         mBase = newBase;
+    }
+
+    @Override
+    public AssetManager getAssets() {
+        return getResources().getAssets();
+    }
+
+    @Override
+    public Resources getResources() {
+        if (mUseThemedResources == true) {
+            return mThemedResources;
+        } else {
+            return mBase.getResources();
+        }
+    }
+    
+    private String getPackageResDir(String packageName) {
+        PackageInfo pi;
+        try {
+            pi = getPackageManager().getPackageInfo(packageName, 0);
+            if (pi == null || pi.applicationInfo == null)
+                return null;
+            return pi.applicationInfo.publicSourceDir;
+        } catch (NameNotFoundException e) {
+            return null;
+        }
+    }
+
+    /**
+     * {@hide}
+     * XXX: Hack to support theme preview by temporarily overriding the ApplicationContext's
+     * Resources on a per-activity basis.  Very ugly.
+     */
+    public void useThemedResources(String themePackage) {
+        if (themePackage == null) {
+            mUseThemedResources = false;
+            mThemedResources = null;
+        } else {
+            AssetManager assets = new AssetManager();
+            assets.addAssetPath(getPackageResDir(getPackageName()));
+            assets.addAssetPath(getPackageResDir(themePackage));
+
+            DisplayMetrics metrics = new DisplayMetrics();
+            WindowManager wm = (WindowManager)getSystemService(WINDOW_SERVICE);
+            wm.getDefaultDisplay().getMetrics(metrics);
+
+            ActivityManager am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
+            Configuration config = am.getConfiguration();
+            mThemedResources = new Resources(assets, metrics, config);
+            mUseThemedResources = true;
+            mTheme = null;
+
+            Log.i("ContextThemeWrapper", "Successfully applied theme preview hack!");
+        }
     }
     
     @Override public void setTheme(int resid) {
@@ -102,4 +168,3 @@ public class ContextThemeWrapper extends ContextWrapper {
         onApplyThemeResource(mTheme, mThemeResource, first);
     }
 }
-
