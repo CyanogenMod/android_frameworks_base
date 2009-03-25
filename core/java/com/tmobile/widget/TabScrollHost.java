@@ -17,7 +17,7 @@ public class TabScrollHost extends android.widget.TabHost {
 	
 	public void setup() {
 		super.setup();
-		PlutoTabWidget widget = (PlutoTabWidget) findViewById(R.id.tabs);
+		TabScrollTabWidget widget = (TabScrollTabWidget) findViewById(R.id.tabs);
 		widget.setHost(this);
 	}
     

@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TabWidget;
 
-public class PlutoTabWidget extends TabWidget {
+public class TabScrollTabWidget extends TabWidget {
 
 	static final int PRT_MIN_TAB_WIDTH = 95;
 	static final int LND_MIN_TAB_WIDTH = 165;
@@ -18,16 +18,16 @@ public class PlutoTabWidget extends TabWidget {
 
 	Context mContext;
 
-	public PlutoTabWidget(Context context) {
+	public TabScrollTabWidget(Context context) {
 		super(context);
 		mContext = context;
 	}
 
-	public PlutoTabWidget(Context context, AttributeSet attrs) {
+	public TabScrollTabWidget(Context context, AttributeSet attrs) {
 		this(context, attrs, android.R.attr.tabWidgetStyle);
 	}
 
-	public PlutoTabWidget(Context context, AttributeSet attrs, int defStyle) {
+	public TabScrollTabWidget(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		mContext = context;
 	}

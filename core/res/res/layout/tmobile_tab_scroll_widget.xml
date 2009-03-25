@@ -5,7 +5,7 @@
 		android:layout_weight="1"
 		android:layout_height="wrap_content" android:id="@+id/mainlayout3">
 	
-		<com.tmobile.widget.PlutoTabWidget
+		<com.tmobile.widget.TabScrollTabWidget
 			android:layout_weight="1" android:id="@android:id/tabs"
 			android:layout_width="0px" android:layout_height="wrap_content" />
 	</LinearLayout>

@@ -23,7 +23,7 @@ public class TabScrollWidget extends LinearLayout {
 	boolean mScrolledByClick;
 
 	TabScrollHost mPlutoTabHost;
-	PlutoTabWidget mPlutoTabWidget;
+	TabScrollTabWidget mPlutoTabWidget;
 	View mTab;
 	Button mMoveRight;
 	Button mMoveLeft;
@@ -47,7 +47,7 @@ public class TabScrollWidget extends LinearLayout {
 
 		mSelectedPosition = 0;
 
-		mPlutoTabWidget = (PlutoTabWidget) findViewById(R.id.tabs);
+		mPlutoTabWidget = (TabScrollTabWidget) findViewById(R.id.tabs);
 
 		mMoveRight = (Button) findViewById(R.id.moveRight);
 		mMoveRight.setOnClickListener(new OnClickListener() {
