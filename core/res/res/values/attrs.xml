@@ -17,6 +17,7 @@
 <resources>
     <!-- These are the standard attributes that make up a complete theme. -->
     <declare-styleable name="Theme">
+    
         <!-- ============== -->
         <!-- Generic styles -->
         <!-- ============== -->
@@ -1554,6 +1555,14 @@
         </attr>
         <attr name="gravity" />
     </declare-styleable>
+
+    <!-- ============== -->
+    <!-- Toast styles -->
+    <!-- ============== -->
+    <eat-comment /> 
+    <declare-styleable name="ToastStyle">
+         <attr name="toastAnimation" format="reference" />
+    </declare-styleable>  
     
     <declare-styleable name="ImageSwitcher">
     </declare-styleable>
@@ -1714,7 +1723,7 @@
         <attr name="maxHeight" />
         <attr name="interpolator" format="reference" />        
     </declare-styleable>
-    
+     
     <declare-styleable name="SeekBar">
         <!-- Draws the thumb on a seekbar -->    
         <attr name="thumb" format="reference" />

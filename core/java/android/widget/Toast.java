@@ -20,6 +20,7 @@ import android.app.INotificationManager;
 import android.app.ITransientNotification;
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.PixelFormat;
 import android.os.RemoteException;
 import android.os.Handler;
@@ -308,6 +309,13 @@ public class Toast {
                     | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
             mParams.format = PixelFormat.TRANSLUCENT;
             mParams.windowAnimations = com.android.internal.R.style.Animation_Toast;
+            //TODO: this should work once themes are applied at the phonewindow level.
+            Log.d("~~~TOAST~~~", "windowAnimations:" + mParams.windowAnimations);
+            TypedArray a = context.obtainStyledAttributes(null, com.android.internal.R.styleable.ToastStyle);
+            mParams.windowAnimations = a.getResourceId(com.android.internal.R.styleable.ToastStyle_toastAnimation, com.android.internal.R.style.Animation_Toast);
+            Log.d("~~~TOAST~~~", "a count:" + a.getIndexCount());
+            Log.d("~~~TOAST~~~", "windowAnimations:" + mParams.windowAnimations);
+            a.recycle();
             mParams.type = WindowManager.LayoutParams.TYPE_TOAST;
             mParams.setTitle("Toast");
         }
