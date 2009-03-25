@@ -185,7 +185,6 @@ public final class ActivityThread {
             if (config != null && config.customTheme != null) {
                 PackageInfo pi = getPackageInfo(config.customTheme.getThemePackageName(), 0);
                 String resDir = pi.getResDir();
-                Log.i(TAG, "Adding theme resdir=" + resDir);
                 if (assets.addAssetPath(resDir) == 0) {
                     Log.e(TAG, "Unable to add theme resdir=" + resDir);
                 }
