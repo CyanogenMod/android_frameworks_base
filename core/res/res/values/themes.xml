@@ -170,6 +170,8 @@
 		<item name="textAppearanceLabel">@android:style/TextAppearance.Label</item>
 		<item name="textAppearanceLabelHeader">@android:style/TextAppearance.Label.Header</item>
 		<item name="textAppearanceLabelSubHeader">@android:style/TextAppearance.Label.SubHeader</item>
+		<item name="textAppearanceLabelPersonalHeader">@android:style/TextAppearance.Label.PersonalHeader</item>
+		<item name="textAppearanceLabelPersonalSubHeader">@android:style/TextAppearance.Label.PersonalSubHeader</item>
 		<item name="textAppearanceLabelListItem">@android:style/TextAppearance.Label.ListItem</item>
 		<item name="textAppearanceLabelListItemText">@android:style/TextAppearance.Label.ListItemText</item>
 		<item name="textAppearanceLabelListItemSecondaryText">@android:style/TextAppearance.Label.ListItemSecondaryText</item>

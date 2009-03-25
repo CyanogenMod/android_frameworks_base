@@ -382,6 +382,8 @@
 		<attr name="textAppearanceLabel" format="reference" />
 		<attr name="textAppearanceLabelHeader" format="reference" />
 		<attr name="textAppearanceLabelSubHeader" format="reference" />
+		<attr name="textAppearanceLabelPersonalHeader" format="reference" />
+		<attr name="textAppearanceLabelPersonalSubHeader" format="reference" />
 		<attr name="textAppearanceLabelListItem" format="reference" />
 		<attr name="textAppearanceLabelListItemText" format="reference" />
 		<attr name="textAppearanceLabelListItemSecondaryText" format="reference" />
