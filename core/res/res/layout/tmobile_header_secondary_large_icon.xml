@@ -1,45 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge
+	xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:paddingRight="5sp"
-		android:layout_width="wrap_content" 
-		android:layout_height="wrap_content">
-
-		<ImageView android:id="@+id/headerIcon"
-			android:layout_width="fill_parent" 
-			android:layout_height="wrap_content"
-			android:scaleType="center" 
-			style="@android:style/HeaderSecondaryIcon"
-			/>
-
-		<ImageView android:id="@+id/header2Icon"
-			android:layout_width="wrap_content" 
-			android:layout_height="wrap_content"
-			android:layout_gravity="bottom|right" 
-			android:paddingBottom="3sp"
-			style="@android:style/HeaderSecondaryIcon" 
-			/>
-	</FrameLayout>
-			<!--android:layout_marginBottom="0dip" android:padding="40dip"-->
-
-
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:paddingLeft="5sp"
-		android:orientation="vertical" 
+	<FrameLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:paddingRight="8dp"
 		android:layout_width="wrap_content"
-		android:id="@+id/innerLayout" 
 		android:layout_height="wrap_content">
 
-		<TextView android:layout_width="wrap_content"
-			android:layout_height="wrap_content" 
-			android:textAppearance="?android:attr/textAppearanceLabelHeader" 
+		<ImageView
+			android:id="@+id/headerIcon"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:scaleType="center" />
+
+		<ImageView
+			android:id="@+id/header2Icon"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="bottom|right"
+			android:layout_margin="3dp" />
+	</FrameLayout>
+
+	<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+		android:layout_width="wrap_content"
+		android:id="@+id/innerLayout"
+		android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceLabelHeader"
+			android:singleLine="true"
 			android:id="@+id/headerId" />
 
-		<TextView android:layout_width="wrap_content"
+		<TextView
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:textAppearance="?android:attr/textAppearanceLabelSubHeader"
-            android:id="@+id/subHeaderId1" />
+			android:singleLine="true"
+			android:id="@+id/subHeaderId1" />
 
 	</LinearLayout>
 

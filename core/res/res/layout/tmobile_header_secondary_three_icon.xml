@@ -1,50 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge
+	xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:orientation="horizontal" 
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:gravity="left" 
+	<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="horizontal"
+		android:layout_width="fill_parent"
+		android:gravity="left"
 		android:id="@+id/innerLayout"
-		>
-
-		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			android:orientation="vertical" 
+		android:layout_height="wrap_content">
+		<TextView
 			android:layout_width="wrap_content"
-			android:gravity="left" 
-			android:id="@+id/innerLayout" 
+			android:gravity="left"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceLabelHeader"
+			android:singleLine="true"
 			android:layout_weight="1.0"
-			android:layout_height="wrap_content">
-			<TextView android:layout_width="wrap_content"
-				android:gravity="left" 
-				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceLabelHeader"
-				android:id="@+id/headerId" />
+			android:id="@+id/headerId" />
 
-			<TextView android:layout_width="wrap_content"
-				android:gravity="left" 
-				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceLabelSubHeader"
-				android:id="@+id/subHeaderId1" />
-		</LinearLayout>
-
-		<ImageView android:id="@+id/headerIcon"
-			android:layout_width="wrap_content" 
+		<ImageView
+			android:id="@+id/headerIcon"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			style="@android:style/HeaderSecondaryThreeIcon" 
-			/>
+			android:paddingLeft="8dp"
+			android:paddingRight="6dp" />
 
-		<ImageView android:id="@+id/header2Icon"
-			android:layout_width="wrap_content" 
+		<ImageView
+			android:id="@+id/header2Icon"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			style="@android:style/HeaderSecondaryThreeIcon" 
-			/>
+			android:paddingRight="6dp" />
 
-		<ImageView android:id="@+id/header3Icon"
-			android:layout_width="wrap_content" 
-			android:layout_height="wrap_content"
-			style="@android:style/HeaderSecondaryThreeIcon" 
-			/>
+		<ImageView
+			android:id="@+id/header3Icon"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
 	</LinearLayout>
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:gravity="left"
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceLabelSubHeader"
+		android:singleLine="true"
+		android:id="@+id/subHeaderId1" />
 </merge>

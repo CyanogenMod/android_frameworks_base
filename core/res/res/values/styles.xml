@@ -760,7 +760,7 @@
 	</style>
 	
 	<style name="Widget.HeaderLayout.HeaderSecondaryThreeIcon">
-		<item name="android:orientation">horizontal</item>
+		<item name="android:orientation">vertical</item>
 		<item name="android:minHeight">80dp</item>
 		<item name="android:gravity">left|center</item>
 	</style>
