@@ -8,7 +8,7 @@
 		android:textAppearance="?android:attr/textAppearance"
 		android:gravity="left"
 		android:id="@+id/labelId"
-		android:layout_marginRight="8sp" />
+		android:layout_marginRight="8dp" />
 
 	<EditText
 		android:layout_width="fill_parent"

@@ -19,7 +19,7 @@ public class TextFieldLabel extends LinearLayout {
 	}
 
 	public TextFieldLabel(Context context, AttributeSet attrs) {
-		this(context, attrs, 0);
+		this(context, attrs, R.attr.textFieldStyle);
 	}
 
 	public TextFieldLabel(Context context, AttributeSet attrs, int defStyle) {

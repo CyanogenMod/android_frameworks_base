@@ -314,6 +314,8 @@
         <attr name="dropDownListViewStyle" format="reference" />
         <!-- Default EditText style. -->
         <attr name="editTextStyle" format="reference" />
+        <!-- Default TextField style. -->
+        <attr name="textFieldStyle" format="reference" />
         <!-- Default ExpandableListView style. -->
         <attr name="expandableListViewStyle" format="reference" />
         <!-- Default Gallery style. -->

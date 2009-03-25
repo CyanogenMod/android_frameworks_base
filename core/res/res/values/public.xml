@@ -1120,4 +1120,5 @@
   <public type="attr" name="labelPosition" id="0x0101026e" />
   <public type="attr" name="progressType" id="0x0101026f" />
 
+  <public type="attr" name="textFieldStyle" id="0x01010270" />
 </resources>
