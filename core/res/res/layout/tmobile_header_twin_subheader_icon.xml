@@ -2,48 +2,40 @@
 <merge
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<LinearLayout
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		android:orientation="horizontal"
+	<ImageView
+		android:id="@+id/headerIcon"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:id="@+id/outterLayout">
+		android:paddingRight="8dp" />
 
-		<ImageView
-			android:id="@+id/headerIcon"
+	<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical"
+		android:layout_width="wrap_content"
+		android:id="@+id/innerLayout"
+		android:layout_height="wrap_content">
+
+		<TextView
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			style="@android:style/HeaderTextIcon" />
+			android:textAppearance="?android:attr/textAppearanceLabelHeader"
+			android:singleLine="true"
+			android:id="@+id/headerId" />
 
-		<LinearLayout
-			xmlns:android="http://schemas.android.com/apk/res/android"
-			android:orientation="vertical"
+		<TextView
 			android:layout_width="wrap_content"
-			android:id="@+id/innerLayout"
-			android:layout_height="wrap_content">
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceLabelSubHeader"
+			android:singleLine="true"
+			android:id="@+id/subHeaderId1" />
 
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceLabelHeader"
-				android:singleLine="true"
-				android:id="@+id/headerId" />
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceLabelSubHeader"
-				android:singleLine="true"
-				android:id="@+id/subHeaderId1" />
-
-			<TextView
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:textAppearance="?android:attr/textAppearanceLabelSubHeader"
-				android:singleLine="true"
-				android:id="@+id/subHeaderId2" />
-		</LinearLayout>
-
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:textAppearance="?android:attr/textAppearanceLabelSubHeader"
+			android:singleLine="true"
+			android:id="@+id/subHeaderId2" />
 	</LinearLayout>
+
 </merge>
 	
