@@ -1,41 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge
+	xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-		android:orientation="horizontal" 
+	<LinearLayout
+		android:orientation="horizontal"
 		android:layout_width="wrap_content"
-		android:layout_height="wrap_content" 
+		android:layout_height="wrap_content"
+		android:layout_weight="1.0"
 		android:id="@+id/outterLayout">
 
-		<ImageView android:id="@+id/headerIcon"
-			android:layout_width="wrap_content" 
-			android:layout_height="wrap_content"
-			style="@android:style/HeaderTextIcon" />
-
-		<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			android:orientation="vertical" 
+		<ImageView
+			android:id="@+id/headerIcon"
 			android:layout_width="wrap_content"
-			android:id="@+id/innerLayout" 
-			android:layout_weight="1.0"
-			android:paddingRight="10dp"
+			android:layout_height="wrap_content"
+			android:paddingRight="8dp" />
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="wrap_content"
+			android:id="@+id/innerLayout"
 			android:layout_height="wrap_content">
 
-			<TextView android:layout_width="wrap_content"
-				android:layout_height="wrap_content" 
-				android:textAppearance="?android:attr/textAppearanceLabelHeader" 
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceLabelHeader"
+				android:singleLine="true"
 				android:id="@+id/headerId" />
 
-			<TextView android:layout_width="wrap_content"
-				android:layout_height="wrap_content" 
-				android:textAppearance="?android:attr/textAppearanceLabelSubHeader" 
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:textAppearance="?android:attr/textAppearanceLabelSubHeader"
+				android:singleLine="true"
 				android:id="@+id/subHeaderId1" />
 
 		</LinearLayout>
 
-		<Button android:layout_width="wrap_content"
-			android:layout_height="@android:dimen/header_button_height"
-			android:layout_gravity="center_vertical" 
-			android:id="@+id/button1" />
 	</LinearLayout>
+	<Button
+		android:layout_width="@android:dimen/header_button_width"
+		android:layout_height="@android:dimen/header_button_height"
+		android:paddingLeft="8dp"
+		android:id="@+id/button1" />
 </merge>
 	

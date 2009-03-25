@@ -6,17 +6,18 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_weight="1.0"
-		android:paddingRight="8dp"
+		android:singleLine="true"
 		android:textAppearance="?android:attr/textAppearanceLabelHeader"
 		android:id="@+id/headerId" />
 
 	<Button
-		android:layout_width="wrap_content"
+		android:layout_width="@android:dimen/header_split_button_width"
 		android:layout_height="@android:dimen/header_button_height"
+		android:paddingLeft="8dp"
 		style="?android:attr/buttonStyleSplitLeft"
 		android:id="@+id/button1" />
 	<Button
-		android:layout_width="wrap_content"
+		android:layout_width="@android:dimen/header_split_button_width"
 		android:layout_height="@android:dimen/header_button_height"
 		style="?android:attr/buttonStyleSplitRight"
 		android:id="@+id/button2" />

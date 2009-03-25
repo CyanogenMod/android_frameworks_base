@@ -839,10 +839,6 @@
         <item name="android:textSize">13sp</item>
     </style>
     
-	<style name="HeaderTextIcon">
-		<item name="android:paddingRight">8dp</item>
-		<item name="android:paddingTop">8dp</item>
-	</style>
 	<style name="HeaderSecondaryIcon">
         <item name="android:textAppearance">?android:attr/textAppearanceLabelSubHeader</item>
 		<item name="android:paddingRight">3dp</item>
