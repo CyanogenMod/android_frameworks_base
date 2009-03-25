@@ -50,7 +50,8 @@ public class TextFieldLabel extends LinearLayout {
 			}
 
 		}
-
+		a.recycle();
+		
 		mTextField = (EditText) findViewById(R.id.textFieldId);
 	}
 
