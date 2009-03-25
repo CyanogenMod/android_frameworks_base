@@ -14,14 +14,14 @@
 			android:gravity="center|left"
 			android:layout_weight="1.0"
 			android:paddingRight="10dp"
-			android:id="@+id/itemLabelText" />
+			android:id="@+id/itemText" />
 		<TextView
 			android:layout_width="85dp"
 			android:layout_height="wrap_content"
 			android:gravity="center|right"
 			android:textAppearance="?android:attr/textAppearanceLabelListItemText"
 			android:singleLine="true"
-			android:id="@+id/itemText" />
+			android:id="@+id/itemLabelText" />
 
 	</LinearLayout>
 	<LinearLayout
@@ -36,13 +36,13 @@
 			android:gravity="center|left"
 			android:layout_weight="1.0"
 			android:paddingRight="10dp"
-			android:id="@+id/itemLabel2Text" />
+			android:id="@+id/item2Text" />
 		<TextView
 			android:layout_width="85dp"
 			android:layout_height="wrap_content"
 			android:gravity="center|right"
 			android:textAppearance="?android:attr/textAppearanceLabelListItemText"
 			android:singleLine="true"
-			android:id="@+id/item2Text" />
+			android:id="@+id/itemLabel2Text" />
 	</LinearLayout>
 </merge>

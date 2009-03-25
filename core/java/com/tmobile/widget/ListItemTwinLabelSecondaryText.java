@@ -16,7 +16,6 @@ public class ListItemTwinLabelSecondaryText extends LinearLayout {
 	private TextView mItemText;
 	private TextView mItem2Text;
 	
-	
 	public ListItemTwinLabelSecondaryText(Context context) {
 		this(context, null);
 	}
@@ -34,9 +33,11 @@ public class ListItemTwinLabelSecondaryText extends LinearLayout {
 
 		mItemLabel = (TextView)findViewById(R.id.itemLabelText);
 		String text = a.getString(R.styleable.ListItemLayout_itemLabelText);
-        if (text != null) {
+        if (text != null && !"".equals(text)) {
         	mItemLabel.setText(text);
-        } 
+        } else {
+        	mItemLabel.setVisibility(GONE);
+        }
 
         mItemText = (TextView)findViewById(R.id.itemText);
         text = a.getString(R.styleable.ListItemLayout_itemText);
@@ -64,7 +65,12 @@ public class ListItemTwinLabelSecondaryText extends LinearLayout {
 	}
 	
 	public void setItemLabelText(CharSequence text) {
+		if(text != null && !"".equals(text)) {
         	mItemLabel.setText(text);
+        	mItemLabel.setVisibility(VISIBLE);
+		} else {
+			mItemLabel.setVisibility(GONE);
+		}
 	}
 	
 	public CharSequence getItemText() {

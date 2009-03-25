@@ -17,7 +17,6 @@ public class ListItemHeaderTwinLabelSecondaryText extends LinearLayout {
 	private TextView mItemText;
 	private TextView mItem2Text;
 	
-	
 	public ListItemHeaderTwinLabelSecondaryText(Context context) {
 		this(context, null);
 	}
