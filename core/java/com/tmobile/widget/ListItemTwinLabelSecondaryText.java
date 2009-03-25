@@ -2,7 +2,6 @@ package com.tmobile.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.os.Debug;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
@@ -28,7 +27,6 @@ public class ListItemTwinLabelSecondaryText extends LinearLayout {
 	
 	public ListItemTwinLabelSecondaryText(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-//		Debug.stopMethodTracing();
 		LayoutInflater.from(context).inflate(R.layout.tmobile_list_item_twin_label_secondary_text, this, true);
 
 		TypedArray a = 
@@ -36,12 +34,10 @@ public class ListItemTwinLabelSecondaryText extends LinearLayout {
 
 		mItemLabel = (TextView)findViewById(R.id.itemLabelText);
 		String text = a.getString(R.styleable.ListItemLayout_itemLabelText);
-        if (text != null && !"".equals(text)) {
+        if (text != null) {
         	mItemLabel.setText(text);
-        } else {
-        	mItemLabel.setVisibility(GONE);
-        }
-        
+        } 
+
         mItemText = (TextView)findViewById(R.id.itemText);
         text = a.getString(R.styleable.ListItemLayout_itemText);
         if (text != null) {
@@ -59,6 +55,7 @@ public class ListItemTwinLabelSecondaryText extends LinearLayout {
         if (text != null) {
         	mItem2Text.setText(text);
         }
+       
         a.recycle();
 	}
 
@@ -67,12 +64,7 @@ public class ListItemTwinLabelSecondaryText extends LinearLayout {
 	}
 	
 	public void setItemLabelText(CharSequence text) {
-		if (text != null && !"".equals(text)) {
         	mItemLabel.setText(text);
-        	mItemLabel.setVisibility(VISIBLE);
-        } else {
-        	mItemLabel.setVisibility(GONE);
-        }
 	}
 	
 	public CharSequence getItemText() {
@@ -80,7 +72,7 @@ public class ListItemTwinLabelSecondaryText extends LinearLayout {
 	}
 	
 	public void setItemText(CharSequence text) {
-		mItemText.setText(text);
+  	    mItemText.setText(text);
 	}
 	
 	public CharSequence getItemLabel2Text() {
