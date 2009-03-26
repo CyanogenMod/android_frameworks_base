@@ -15,6 +15,8 @@ public class HeaderSecondaryLargeIcon extends LinearLayout {
 	
 	private TextView mHeader;
 	private TextView mSubHeader;
+	private ImageView mImageView;
+	private ImageView mImage2View;
 	
 	public HeaderSecondaryLargeIcon(Context context) {
 		this(context, null);
@@ -38,16 +40,16 @@ public class HeaderSecondaryLargeIcon extends LinearLayout {
         	mHeader.setText(headerText);
         } 
 
+        mImageView = (ImageView)findViewById(R.id.headerIcon);
         Drawable icon = a.getDrawable(R.styleable.HeaderLayout_iconSrc);
         if (icon != null) {
-        	ImageView imageView = (ImageView)findViewById(R.id.headerIcon);
-        	imageView.setImageDrawable(icon);
+        	mImageView.setImageDrawable(icon);
         }
         
+        mImage2View = (ImageView)findViewById(R.id.header2Icon);
         icon = a.getDrawable(R.styleable.HeaderLayout_icon2Src);
         if (icon != null) {
-        	ImageView imageView = (ImageView)findViewById(R.id.header2Icon);
-        	imageView.setImageDrawable(icon);
+        	mImage2View.setImageDrawable(icon);
         }
 
         mSubHeader = (TextView)findViewById(R.id.subHeaderId1);
@@ -75,4 +77,19 @@ public class HeaderSecondaryLargeIcon extends LinearLayout {
 		mSubHeader.setText(text);
 	}
 	
+	public Drawable getIconSrc() {
+		return mImageView.getDrawable();
+	}
+	
+	public void setIconSrc(Drawable drawable) {
+		mImageView.setImageDrawable(drawable);
+	}
+	
+	public Drawable getIcon2Src() {
+		return mImage2View.getDrawable();
+	}
+	
+	public void setIcon2Src(Drawable drawable) {
+		mImage2View.setImageDrawable(drawable);
+	}
 }
