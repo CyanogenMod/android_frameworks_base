@@ -253,9 +253,9 @@ public class Filmstrip extends RelativeLayout {
 		TypedArray a = 
             context.obtainStyledAttributes(attrs, R.styleable.Filmstrip, defStyle, 0);
 				
-		mFilmstripSelector = new Gallery(context, attrs);
-		mLeftArrow = new ImageView(context, attrs);
-		mRightArrow = new ImageView(context, attrs);
+		mFilmstripSelector = new Gallery(context);
+		mLeftArrow = new ImageView(context);
+		mRightArrow = new ImageView(context);
 		mFilmstripItems = new ArrayList<FilmstripItem>();
 		mFilmstripTitleAdapter = new FilmstripTitleAdapter();
 		mFilmstripOnItemSelectedListener = new FilmstripOnItemSelectedListener();
