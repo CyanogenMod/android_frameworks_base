@@ -857,6 +857,7 @@
     </style>
     <style name="TextAppearance.Label.ListItemSecondaryText">
         <item name="android:textSize">13sp</item>
+        <item name="android:textColor">#FF666666</item>
     </style>
     
     <style name="ZoomControls">
