@@ -3474,7 +3474,6 @@ public final class ActivityThread {
                 if (cb instanceof Activity || cb instanceof Application) {
                     Context context = ((ContextWrapper)cb).getBaseContext();
                     if (context instanceof ApplicationContext) {
-                        Log.i(TAG, "Refreshing context=" + context);
                         ((ApplicationContext)context).refreshResources();
                     }
                 }
