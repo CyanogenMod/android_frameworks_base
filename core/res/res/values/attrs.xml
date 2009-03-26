@@ -417,6 +417,7 @@
         <attr name="listItemLabelSecondaryText" format="reference" />
         <attr name="listItemTwinLabelSecondaryText" format="reference" />
         <attr name="listItemHeaderTwinLabelSecondaryText" format="reference" />
+        <attr name="listItemTwinIconLayout" format="reference" />
         
         <!-- =================== -->
         <!-- Preference styles   -->
@@ -1543,6 +1544,8 @@
         <attr name="itemLabel2Text" format="string" />
         <attr name="itemText" format="string" />
         <attr name="item2Text" format="string" />
+        <attr name="itemIconSrc" format="reference|integer" />
+        <attr name="itemIcon2Src" format="reference|integer" />
     </declare-styleable>
     <declare-styleable name="GridView">
         <attr name="horizontalSpacing" format="dimension" />
