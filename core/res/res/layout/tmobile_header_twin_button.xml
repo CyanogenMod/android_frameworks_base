@@ -12,13 +12,13 @@
 
 	<Button
 		android:layout_width="@android:dimen/header_split_button_width"
-		android:layout_height="@android:dimen/header_button_height"
+		android:layout_height="wrap_content"
 		android:paddingLeft="8dp"
 		style="?android:attr/buttonStyleSplitLeft"
 		android:id="@+id/button1" />
 	<Button
 		android:layout_width="@android:dimen/header_split_button_width"
-		android:layout_height="@android:dimen/header_button_height"
+		android:layout_height="wrap_content"
 		style="?android:attr/buttonStyleSplitRight"
 		android:id="@+id/button2" />
 </merge>

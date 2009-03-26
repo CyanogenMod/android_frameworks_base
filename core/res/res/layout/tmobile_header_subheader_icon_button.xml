@@ -40,7 +40,7 @@
 	</LinearLayout>
 	<Button
 		android:layout_width="@android:dimen/header_button_width"
-		android:layout_height="@android:dimen/header_button_height"
+		android:layout_height="wrap_content"
 		android:paddingLeft="8dp"
 		android:id="@+id/button1" />
 </merge>
