@@ -15,6 +15,7 @@ public class HeaderSubHeaderIcon extends LinearLayout {
 	
 	private TextView mHeader;
 	private TextView mSubHeader;
+	private ImageView mImageView;
 		
 	public HeaderSubHeaderIcon(Context context) {
 		this(context, null);
@@ -32,10 +33,10 @@ public class HeaderSubHeaderIcon extends LinearLayout {
 		TypedArray a = 
             context.obtainStyledAttributes(attrs, R.styleable.HeaderLayout, defStyle, 0);
 
+		mImageView = (ImageView)findViewById(R.id.headerIcon);
         Drawable mIcon = a.getDrawable(R.styleable.HeaderLayout_iconSrc);
         if (mIcon != null) {
-        	ImageView imageView = (ImageView)findViewById(R.id.headerIcon);
-        	imageView.setImageDrawable(mIcon);
+        	mImageView.setImageDrawable(mIcon);
         }
 
         mHeader = (TextView)findViewById(R.id.headerId);
@@ -69,4 +70,11 @@ public class HeaderSubHeaderIcon extends LinearLayout {
 		mSubHeader.setText(text);
 	}
 	
+	public Drawable getIconSrc() {
+		return mImageView.getDrawable();
+	}
+	
+	public void setIconSrc(Drawable drawable) {
+		mImageView.setImageDrawable(drawable);
+	}
 }
