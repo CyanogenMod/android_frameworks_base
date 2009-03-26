@@ -1,35 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge
-    xmlns:android="http://schemas.android.com/apk/res/android">
+	xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/innerLayout">
-        <TextView
-            android:layout_width="110dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:paddingRight="10dp"
-            android:textAppearance="?android:attr/textAppearanceLabelListItem"
-            android:id="@+id/itemLabel" />
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:id="@+id/innerLayout">
+		<TextView
+			android:layout_width="70dp"
+			android:layout_height="wrap_content"
+			android:layout_gravity="top"
+			android:singleLine="true"
+			android:layout_marginRight="8dp"
+			android:textAppearance="?android:attr/textAppearanceLabelListItem"
+			android:id="@+id/itemLabel" />
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+			android:textAppearance="?android:attr/textAppearanceLabelListItemText"
+			android:id="@+id/item1Text" />
+	</LinearLayout>
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="top"
-            android:orientation="vertical"
-            android:id="@+id/innerLayout">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLabelListItemText"
-                android:id="@+id/item1Text" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLabelListItemText"
-                android:id="@+id/item2Text" />
-        </LinearLayout>
-    </LinearLayout>
+	<TextView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:singleLine="true"
+		android:layout_marginLeft="78dp"
+		android:textAppearance="?android:attr/textAppearanceLabelListItemText"
+		android:id="@+id/item2Text" />
 </merge>
