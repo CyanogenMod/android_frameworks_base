@@ -21,6 +21,7 @@ import android.content.ComponentCallbacks;
 import android.content.ComponentName;
 import android.content.ContentProvider;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.IContentProvider;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -3262,15 +3263,6 @@ public final class ActivityThread {
             savedState = performPauseActivity(r.token, false, true);
         }
         
-        /* Update the resources object if the theme has changed.  We swapped
-         * out the theme package assets. */
-        if ((configChanges & ActivityInfo.CONFIG_THEME_RESOURCE) != 0) {
-            Context context = r.activity.getBaseContext();
-            if (context instanceof ApplicationContext) {
-                ((ApplicationContext)context).refreshResources();
-            }
-        }
-        
         handleDestroyActivity(r.token, false, configChanges, true);
         
         r.activity = null;
@@ -3400,7 +3392,7 @@ public final class ActivityThread {
                 }
             }
         }
-        
+
         if (shouldChangeConfig) {
             cb.onConfigurationChanged(config);
             
@@ -3428,11 +3420,13 @@ public final class ActivityThread {
         ArrayList<ComponentCallbacks> callbacks
                 = new ArrayList<ComponentCallbacks>();
         
+        int diff;
+        
         synchronized(mPackages) {
             if (mConfiguration == null) {
                 mConfiguration = new Configuration();
             }
-            int diff = mConfiguration.updateFrom(config);
+            diff = mConfiguration.updateFrom(config);
             DisplayMetrics dm = getDisplayMetricsLocked(true);
 
             // set it for java, this also affects newly created Resources
@@ -3471,7 +3465,20 @@ public final class ActivityThread {
         
         final int N = callbacks.size();
         for (int i=0; i<N; i++) {
-            performConfigurationChanged(callbacks.get(i), config);
+            ComponentCallbacks cb = callbacks.get(i);
+            performConfigurationChanged(cb, config);
+            
+            // We removed the old resources object from the mActiveResources
+            // cache, now we need to trigger an update for each application.
+            if ((diff & ActivityInfo.CONFIG_THEME_RESOURCE) != 0) {
+                if (cb instanceof Activity || cb instanceof Application) {
+                    Context context = ((ContextWrapper)cb).getBaseContext();
+                    if (context instanceof ApplicationContext) {
+                        Log.i(TAG, "Refreshing context=" + context);
+                        ((ApplicationContext)context).refreshResources();
+                    }
+                }
+            }
         }
     }
 

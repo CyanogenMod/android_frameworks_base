@@ -226,6 +226,10 @@ class ApplicationContext extends Context {
      * configuration change.
      */
     /* package */ void refreshResources() {
+        if (mResources == Resources.getSystem()) {
+            Log.e(TAG, "FIXME: refreshResources called on system resources!");
+            return;
+        }
         mResources = mPackageInfo.getResources(mMainThread, true);
         mTheme = null;
     }
@@ -286,11 +290,14 @@ class ApplicationContext extends Context {
     @Override
     public Resources.Theme getTheme() {
         if (mTheme == null) {
+            int themeId;
             if (mThemeResource == 0) {
-                mThemeResource = determineDefaultThemeResource();
+                themeId = determineDefaultThemeResource();
+            } else {
+                themeId = mThemeResource;
             }
             mTheme = mResources.newTheme();
-            mTheme.applyStyle(mThemeResource, true);
+            mTheme.applyStyle(themeId, true);
         }
         return mTheme;
     }
