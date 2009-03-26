@@ -2,19 +2,12 @@
 <merge
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<LinearLayout
+	<TextView
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:orientation="horizontal">
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceLabelListItem"
-			android:singleLine="true"
-			android:gravity="center|left"
-			android:paddingRight="10dp"
-			android:id="@+id/itemHeaderLabelText" />
-	</LinearLayout>
+		android:textAppearance="?android:attr/textAppearanceLabelListItemLarge"
+		android:singleLine="true"
+		android:id="@+id/itemHeaderLabelText" />
 	<LinearLayout
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
@@ -22,18 +15,18 @@
 		<TextView
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceLabelListItem"
+			android:textAppearance="?android:attr/textAppearanceLabelListItemTextSmall"
 			android:singleLine="true"
-			android:gravity="center|left"
 			android:layout_weight="1.0"
-			android:paddingRight="10dp"
 			android:id="@+id/itemLabelText" />
 		<TextView
-			android:layout_width="85dp"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:gravity="center|right"
-			android:textAppearance="?android:attr/textAppearanceLabelListItemText"
+			android:layout_marginLeft="8dp"
+			android:layout_gravity="right"
+			android:textAppearance="?android:attr/textAppearanceLabelListItemSecondaryText"
 			android:singleLine="true"
+			android:maxWidth="70dp"
 			android:id="@+id/itemText" />
 
 	</LinearLayout>
@@ -44,18 +37,18 @@
 		<TextView
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceLabelListItem"
+			android:textAppearance="?android:attr/textAppearanceLabelListItemTextSmall"
 			android:singleLine="true"
-			android:gravity="center|left"
 			android:layout_weight="1.0"
-			android:paddingRight="10dp"
 			android:id="@+id/itemLabel2Text" />
 		<TextView
-			android:layout_width="85dp"
+			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:gravity="center|right"
-			android:textAppearance="?android:attr/textAppearanceLabelListItemText"
+			android:layout_marginLeft="8dp"
+			android:layout_gravity="right"
+			android:textAppearance="?android:attr/textAppearanceLabelListItemSecondaryText"
 			android:singleLine="true"
+			android:maxWidth="70dp"
 			android:id="@+id/item2Text" />
 	</LinearLayout>
 </merge>
