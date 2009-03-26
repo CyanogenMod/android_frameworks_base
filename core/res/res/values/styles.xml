@@ -814,7 +814,7 @@
         <item name="android:gravity">center_vertical</item>
     </style>
     <style name="Widget.ListItemLayout.ItemTwinLabelSecondaryText" >
-        <item name="android:minHeight">80dp</item>
+        <item name="android:minHeight">60dp</item>
         <item name="android:gravity">left|center_vertical</item>
         <item name="android:orientation">vertical</item>
     </style>
