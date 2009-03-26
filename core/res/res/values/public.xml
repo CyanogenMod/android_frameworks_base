@@ -1103,22 +1103,15 @@
   <public type="attr" name="itemText" id="0x01010263" />
   <public type="attr" name="item2Text" id="0x01010264" />
 
-  <public type="attr" name="textAppearanceLabel" id="0x01010265" />
-  <public type="attr" name="textAppearanceLabelHeader" id="0x01010266" />
-  <public type="attr" name="textAppearanceLabelSubHeader" id="0x01010267" />
-  <public type="attr" name="textAppearanceLabelListItem" id="0x01010268" />
-  <public type="attr" name="textAppearanceLabelListItemText" id="0x01010269" />
-  <public type="attr" name="textAppearanceLabelListItemSecondaryText" id="0x0101026a" />
+  <public type="attr" name="buttonStyleSplitLeft" id="0x01010265" />
+  <public type="attr" name="buttonStyleSplitRight" id="0x01010266" />
+  
+  <public type="attr" name="labelText" id="0x01010267" />
+  <public type="attr" name="labelPosition" id="0x01010268" />
+  <public type="attr" name="progressType" id="0x01010269" />
 
-  <public type="attr" name="buttonStyleSplitLeft" id="0x0101026b" />
-  <public type="attr" name="buttonStyleSplitRight" id="0x0101026c" />
+  <public type="attr" name="textFieldStyle" id="0x0101026a" />
 
   <public type="layout" name="tmobile_spinner_item" id="0x01090014" />
   <public type="layout" name="tmobile_spinner_dropdown_item" id="0x01090015" />
-  
-  <public type="attr" name="labelText" id="0x0101026d" />
-  <public type="attr" name="labelPosition" id="0x0101026e" />
-  <public type="attr" name="progressType" id="0x0101026f" />
-
-  <public type="attr" name="textFieldStyle" id="0x01010270" />
 </resources>
