@@ -89,6 +89,9 @@ public class PackageParser {
     }
 
     public static String getLockedZipFilePath(String path) {
+        if (path == null) {
+            return null;
+        }
         if (isPackageFilename(path)) {
             return path.substring(0, path.length() - 4) + ".locked.zip";
         } else {
