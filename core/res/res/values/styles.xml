@@ -805,7 +805,7 @@
         <item name="android:gravity">left|center_vertical</item>
     </style>
     <style name="Widget.ListItemLayout.ItemTwinLabelText" >
-        <item name="android:minHeight">80dp</item>
+        <item name="android:minHeight">70dp</item>
         <item name="android:orientation">vertical</item>
         <item name="android:gravity">left|center_vertical</item>
     </style>
@@ -847,7 +847,13 @@
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
     </style>
+    <style name="TextAppearance.Label.ListItemLarge">
+        <item name="android:textStyle">bold</item>
+    </style>
     <style name="TextAppearance.Label.ListItemText">
+    </style>
+    <style name="TextAppearance.Label.ListItemTextSmall">
+        <item name="android:textSize">14sp</item>
     </style>
     <style name="TextAppearance.Label.ListItemSecondaryText">
         <item name="android:textSize">13sp</item>

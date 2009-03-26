@@ -174,7 +174,9 @@
 		<item name="textAppearanceLabelPersonalHeader">@android:style/TextAppearance.Label.PersonalHeader</item>
 		<item name="textAppearanceLabelPersonalSubHeader">@android:style/TextAppearance.Label.PersonalSubHeader</item>
 		<item name="textAppearanceLabelListItem">@android:style/TextAppearance.Label.ListItem</item>
+		<item name="textAppearanceLabelListItemLarge">@android:style/TextAppearance.Label.ListItemLarge</item>
 		<item name="textAppearanceLabelListItemText">@android:style/TextAppearance.Label.ListItemText</item>
+		<item name="textAppearanceLabelListItemTextSmall">@android:style/TextAppearance.Label.ListItemTextSmall</item>
 		<item name="textAppearanceLabelListItemSecondaryText">@android:style/TextAppearance.Label.ListItemSecondaryText</item>
 
 		<item name="headerLayoutBackground">@color/black</item>

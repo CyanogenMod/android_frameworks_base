@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge
-    xmlns:android="http://schemas.android.com/apk/res/android">
+	xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingRight="10dp"
-        android:textAppearance="?android:attr/textAppearanceLabelListItem"
-        android:id="@+id/itemLabelText" />
+	<TextView
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:singleLine="true"
+		android:textAppearance="?android:attr/textAppearanceLabelListItemLarge"
+		android:id="@+id/itemLabelText" />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/innerLayout">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="10dp"
-            android:textAppearance="?android:attr/textAppearanceLabelListItem"
-            android:id="@+id/itemLabel2Text" />
-             
-        <ImageView android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-			android:gravity="center_vertical"
-            android:src="@drawable/reticle"/>
-            
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLabelListItemText"
-            android:id="@+id/itemText" />
-    </LinearLayout>
+	<LinearLayout
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal"
+		android:id="@+id/innerLayout">
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+			android:textAppearance="?android:attr/textAppearanceLabelListItemTextSmall"
+			android:id="@+id/itemLabel2Text" />
+
+		<ImageView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginLeft="8dp"
+			android:layout_marginRight="8dp"
+			android:layout_gravity="center_vertical"
+			android:src="@drawable/reticle" />
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:singleLine="true"
+			android:textAppearance="?android:attr/textAppearanceLabelListItemTextSmall"
+			android:id="@+id/itemText" />
+	</LinearLayout>
 </merge>
