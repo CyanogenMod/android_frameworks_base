@@ -843,19 +843,15 @@
         <item name="android:textColor">?textColorPrimaryInverse</item>
 	</style>
     <style name="TextAppearance.Label.ListItem">
+        <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
     </style>
     <style name="TextAppearance.Label.ListItemText">
-        <item name="android:textSize">14sp</item>
     </style>
     <style name="TextAppearance.Label.ListItemSecondaryText">
         <item name="android:textSize">13sp</item>
     </style>
     
-    <style name="ListItemIcon">
-		<item name="android:gravity">center_vertical</item>
-	</style>
-
     <style name="ZoomControls">
         <item name="android:gravity">bottom</item>
         <item name="android:paddingLeft">15dip</item>

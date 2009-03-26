@@ -3,15 +3,17 @@
 	xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<TextView
-		android:layout_width="110dp"
+		android:layout_width="70dp"
 		android:layout_height="wrap_content"
-		android:paddingRight="10dp"
+		android:layout_marginRight="8dp"
+		android:singleLine="true"
 		android:textAppearance="?android:attr/textAppearanceLabelListItem"
 		android:id="@+id/itemLabel" />
 
 	<TextView
-		android:layout_width="wrap_content"
+		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
+		android:singleLine="true"
 		android:textAppearance="?android:attr/textAppearanceLabelListItemText"
 		android:id="@+id/itemText" />
 </merge>
