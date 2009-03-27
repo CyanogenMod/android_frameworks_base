@@ -3671,6 +3671,8 @@ class PackageManagerService extends IPackageManager.Stub {
     	}
     }
 
+    // Sergey: The changes I am oing to make are for the March sprint demo.
+    // They should be reverted after the demo.
     private void splitThemePackage(File originalFile, File tmpPackageFile) {
     	final String originalPackagePath = originalFile.getPath();
 
@@ -3682,12 +3684,13 @@ class PackageManagerService extends IPackageManager.Stub {
 
         String lockedZipFilePath = PackageParser.getLockedZipFilePath(originalPackagePath);
         try {
+            final File lockedZipFile = new File(lockedZipFilePath);
+            FileUtils.copyFile(tmpPackageFile, lockedZipFile);
         	final File publicZipFile = new File(originalPackagePath);
             final ZipOutputStream publicZipOutStream =
                     new ZipOutputStream(new FileOutputStream(publicZipFile));
-        	final File lockedZipFile = new File(lockedZipFilePath);
-            final ZipOutputStream lockedZipOutStream =
-                    new ZipOutputStream(new FileOutputStream(lockedZipFile));
+//            final ZipOutputStream lockedZipOutStream =
+//                    new ZipOutputStream(new FileOutputStream(lockedZipFile));
             final ZipFile privateZip = new ZipFile(tmpPackageFile.getPath());
 
         	final Enumeration<? extends ZipEntry> privateZipEntries = privateZip.entries();
@@ -3697,7 +3700,7 @@ class PackageManagerService extends IPackageManager.Stub {
 					final String zipEntryName = zipEntry.getName();
 					if (zipEntryName.startsWith("assets/") && zipEntryName.contains("/locked/")) {
 			            // Copy DRM-protected resources to the privateZip zip file.
-						copyZipEntry(privateZip, zipEntry, lockedZipOutStream);
+//						copyZipEntry(privateZip, zipEntry, lockedZipOutStream);
 					} else {
 			            // Copy non-DRM resources to the publicZip zip file.
 						copyZipEntry(privateZip, zipEntry, publicZipOutStream);
@@ -3706,18 +3709,18 @@ class PackageManagerService extends IPackageManager.Stub {
 			} catch (IOException e) {
 				try {
 					publicZipOutStream.close();
-					lockedZipOutStream.close();
+//					lockedZipOutStream.close();
 
 					Log.e(TAG, "Failure to generate new zip files for theme");
 		            return;
 				} finally {
 					publicZipFile.delete();
-					lockedZipFile.delete();
+//					lockedZipFile.delete();
 				}
 			}
 
         	publicZipOutStream.close();
-			lockedZipOutStream.close();
+//			lockedZipOutStream.close();
         	int code = FileUtils.setPermissions(
         			lockedZipFile.getPath(),
         			0640,

@@ -520,7 +520,7 @@ public class RingtoneManager {
     private Cursor getThemeManagerRingtones() {
         return query(
         		Uri.parse("content://" + THEME_AUTHORITY + "/ringtones"), THEME_COLUMNS,
-                null, null, null);
+                constructBooleanTrueWhereClause(mFilterColumns), null, null);
     }
     
     private void setFilterColumnsList(int type) {
