@@ -444,6 +444,18 @@ public final class AssetManager {
 
     /**
      * {@hide}
+     * Split a theme pakage with DRM-protected resources into two files.
+     * 
+     * @param packageFileName Original theme package file name.
+     * @param lockedFileName Name of the new "locked" file with DRM resources.
+     * @param drmProtectedresources Array of names of DRM-protected assets.
+     */
+    public final int splitDrmProtectedThemePackage(String packageFileName, String lockedFileName, String [] drmProtectedresources) {
+        return splitThemePackage(packageFileName, lockedFileName, drmProtectedresources);
+    }
+
+    /**
+     * {@hide}
      * Retrieve a non-asset as a compiled XML file.  Not for use by
      * applications.
      * 
@@ -682,6 +694,8 @@ public final class AssetManager {
     private native final String[] getArrayStringResource(int arrayRes);
     private native final int[] getArrayStringInfo(int arrayRes);
     /*package*/ native final int[] getArrayIntResource(int arrayRes);
+
+    private native final int splitThemePackage(String srcFileName, String dstFileName, String [] drmProtectedAssetNames);
 
     private native final void init();
     private native final void destroy();

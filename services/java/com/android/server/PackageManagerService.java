@@ -3621,7 +3621,7 @@ class PackageManagerService extends IPackageManager.Stub {
             		}
             	}
             	if (isThemePackageDrmProtected) {
-            		splitThemePackage(destPackageFile, tmpPackageFile);
+            		splitThemePackage(destPackageFile);
             	}
             }
 
@@ -3649,18 +3649,6 @@ class PackageManagerService extends IPackageManager.Stub {
         }
     }
 
-    private void copyZipEntry(ZipFile privateZip, ZipEntry zipEntry, ZipOutputStream zipOutStream) throws IOException {
-        ZipEntry newEntry = new ZipEntry(zipEntry.getName());
-        zipOutStream.putNextEntry(newEntry);
-    	InputStream data = privateZip.getInputStream(zipEntry);
-    	int num;
-    	byte [] buffer = new byte[4096];
-    	while ((num = data.read(buffer)) > 0) {
-    		zipOutStream.write(buffer, 0, num);
-    	}
-    	zipOutStream.flush();
-    }
-
     private void deleteLockedZipFileIfExists(String originalPackagePath) {
         String lockedZipFilePath = PackageParser.getLockedZipFilePath(originalPackagePath);
     	File zipFile = new File(lockedZipFilePath);
@@ -3671,77 +3659,53 @@ class PackageManagerService extends IPackageManager.Stub {
     	}
     }
 
-    // Sergey: The changes I am oing to make are for the March sprint demo.
-    // They should be reverted after the demo.
-    private void splitThemePackage(File originalFile, File tmpPackageFile) {
+    private void splitThemePackage(File originalFile) {
     	final String originalPackagePath = originalFile.getPath();
+        final String lockedZipFilePath = PackageParser.getLockedZipFilePath(originalPackagePath);
 
-        if (!originalFile.renameTo(tmpPackageFile)) {
-            Log.e(TAG, "Couldn't move package file to: " + tmpPackageFile);
-            return;
-        }
-        tmpPackageFile.deleteOnExit();
-
-        String lockedZipFilePath = PackageParser.getLockedZipFilePath(originalPackagePath);
         try {
-            final File lockedZipFile = new File(lockedZipFilePath);
-            FileUtils.copyFile(tmpPackageFile, lockedZipFile);
-        	final File publicZipFile = new File(originalPackagePath);
-            final ZipOutputStream publicZipOutStream =
-                    new ZipOutputStream(new FileOutputStream(publicZipFile));
-//            final ZipOutputStream lockedZipOutStream =
-//                    new ZipOutputStream(new FileOutputStream(lockedZipFile));
-            final ZipFile privateZip = new ZipFile(tmpPackageFile.getPath());
+        	final List<String> drmProtectedEntries = new ArrayList<String>();
+            final ZipFile privateZip = new ZipFile(originalFile.getPath());
 
         	final Enumeration<? extends ZipEntry> privateZipEntries = privateZip.entries();
-			try {
-				while (privateZipEntries.hasMoreElements()) {
-					final ZipEntry zipEntry = privateZipEntries.nextElement();
-					final String zipEntryName = zipEntry.getName();
-					if (zipEntryName.startsWith("assets/") && zipEntryName.contains("/locked/")) {
-			            // Copy DRM-protected resources to the privateZip zip file.
-//						copyZipEntry(privateZip, zipEntry, lockedZipOutStream);
-					} else {
-			            // Copy non-DRM resources to the publicZip zip file.
-						copyZipEntry(privateZip, zipEntry, publicZipOutStream);
-					}
-				}
-			} catch (IOException e) {
-				try {
-					publicZipOutStream.close();
-//					lockedZipOutStream.close();
+        	while (privateZipEntries.hasMoreElements()) {
+        	    final ZipEntry zipEntry = privateZipEntries.nextElement();
+        	    final String zipEntryName = zipEntry.getName();
+        	    if (zipEntryName.startsWith("assets/") && zipEntryName.contains("/locked/")) {
+        	        drmProtectedEntries.add(zipEntryName);
+        	    }
+        	}
+        	privateZip.close();
 
-					Log.e(TAG, "Failure to generate new zip files for theme");
-		            return;
-				} finally {
-					publicZipFile.delete();
-//					lockedZipFile.delete();
-				}
-			}
-
-        	publicZipOutStream.close();
-//			lockedZipOutStream.close();
-        	int code = FileUtils.setPermissions(
-        			lockedZipFile.getPath(),
+        	String [] args = new String[0];
+        	args = drmProtectedEntries.toArray(args);
+        	int code = mContext.getAssets().splitDrmProtectedThemePackage(
+        	        originalPackagePath,
+        	        lockedZipFilePath,
+        	        args);
+            if (code != 0) {
+                Log.e("PackageManagerService",
+                        "splitDrmProtectedThemePackage returned = " + code);
+            }
+        	code = FileUtils.setPermissions(
+        	        lockedZipFilePath,
         			0640,
         			-1,
         			THEME_MAMANER_GUID);
         	if (code != 0) {
         		Log.e("PackageManagerService",
-        				"Set permissions for " + lockedZipFile.getPath() + " returned = " + code);
+        				"Set permissions for " + lockedZipFilePath + " returned = " + code);
         	}
         	code = FileUtils.setPermissions(
-        			publicZipFile.getPath(),
+        	        originalPackagePath,
         			0644,
         			-1, -1);
         	if (code != 0) {
         		Log.e("PackageManagerService",
-        				"Set permissions for " + publicZipFile.getPath() + " returned = " + code);
+        				"Set permissions for " + originalPackagePath + " returned = " + code);
         	}
 		} catch (IOException e) {
 			Log.e(TAG, "Failure to generate new zip files for theme");
-        } finally {
-            tmpPackageFile.delete();
         }
     }
 
