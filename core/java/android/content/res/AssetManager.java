@@ -444,7 +444,7 @@ public final class AssetManager {
 
     /**
      * {@hide}
-     * Split a theme pakage with DRM-protected resources into two files.
+     * Split a theme package with DRM-protected resources into two files.
      * 
      * @param packageFileName Original theme package file name.
      * @param lockedFileName Name of the new "locked" file with DRM resources.
@@ -452,6 +452,25 @@ public final class AssetManager {
      */
     public final int splitDrmProtectedThemePackage(String packageFileName, String lockedFileName, String [] drmProtectedresources) {
         return splitThemePackage(packageFileName, lockedFileName, drmProtectedresources);
+    }
+
+    /**
+     * {@hide}
+     * Mark asset paths stack for future un-install.
+     * 
+     */
+    public final int markAssetPaths() {
+        return markAssetPathStack();
+    }
+
+    /**
+     * {@hide}
+     * Un-install asset paths added after the mark.
+     * 
+     * @param restoreMark Un-install mark (all assets added the mark would be un-installed).
+     */
+    public final void restoreAssetPaths(int restoreMark) {
+        restoreAssetPathStack(restoreMark);
     }
 
     /**
@@ -696,6 +715,8 @@ public final class AssetManager {
     /*package*/ native final int[] getArrayIntResource(int arrayRes);
 
     private native final int splitThemePackage(String srcFileName, String dstFileName, String [] drmProtectedAssetNames);
+    private native final int markAssetPathStack();
+    private native final void restoreAssetPathStack(int restoreMark);
 
     private native final void init();
     private native final void destroy();

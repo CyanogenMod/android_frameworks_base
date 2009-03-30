@@ -1570,6 +1570,31 @@ static jint android_content_AssetManager_splitThemePackage(JNIEnv* env, jobject 
     return (jint)result;
 }
 
+static jint android_content_AssetManager_markAssetPathStack(JNIEnv* env, jobject clazz)
+{
+    AssetManager* am = assetManagerForJavaObject(env, clazz);
+    if (am == NULL) {
+        doThrow(env, "java/lang/OutOfMemoryError");
+        return -1;
+    }
+
+    LOGV("markAssetPathStack in %p (Java object %p)\n", am, clazz);
+
+    return (jint)am->markAssetPathStack();
+}
+
+static void android_content_AssetManager_restoreAssetPathStack(JNIEnv* env, jobject clazz, jint restoreIndex)
+{
+    AssetManager* am = assetManagerForJavaObject(env, clazz);
+    if (am == NULL) {
+        doThrow(env, "java/lang/OutOfMemoryError");
+        return;
+    }
+
+    LOGV("restoreAssetPathStack in %p (Java object %p)\n", am, clazz);
+    am->restoreAssetPathStack(restoreIndex);
+}
+
 static void android_content_AssetManager_init(JNIEnv* env, jobject clazz)
 {
     AssetManager* am = new AssetManager();
@@ -1713,9 +1738,17 @@ static JNINativeMethod gAssetManagerMethods[] = {
     { "getGlobalAssetManagerCount", "()I",
         (void*) android_content_AssetManager_getGlobalAssetCount },
 
-        // Split theme package apk into two.
-        { "splitThemePackage","(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)I",
-            (void*) android_content_AssetManager_splitThemePackage },
+    // Split theme package apk into two.
+    { "splitThemePackage","(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)I",
+        (void*) android_content_AssetManager_splitThemePackage },
+
+    // Mark asset path "stack".
+    { "markAssetPathStack","()I",
+        (void*) android_content_AssetManager_markAssetPathStack },
+
+    // Restore asset path "stack".
+    { "restoreAssetPathStack","(I)V",
+        (void*) android_content_AssetManager_restoreAssetPathStack },
 };
 
 int register_android_content_AssetManager(JNIEnv* env)

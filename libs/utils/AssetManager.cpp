@@ -122,7 +122,7 @@ bool AssetManager::addAssetPath(const String8& path, void** cookie)
             return true;
         }
     }
-    
+
     LOGV("In %p Asset %s path: %s", this,
          ap.type == kFileTypeDirectory ? "dir" : "zip", ap.path.string());
 
@@ -185,7 +185,7 @@ void AssetManager::setLocaleLocked(const char* locale)
         delete[] mLocale;
     }
     mLocale = strdupNew(locale);
-    
+
     updateResourceParamsLocked();
 }
 
@@ -591,7 +591,7 @@ Asset* AssetManager::openInLocaleVendorLocked(const char* fileName, AccessMode m
             /* look at the filesystem on disk */
             String8 path(createPathNameLocked(ap, locale, vendor));
             path.appendPath(fileName);
-    
+
             String8 excludeName(path);
             excludeName.append(kExcludeExtension);
             if (::getFileType(excludeName.string()) != kFileTypeNonexistent) {
@@ -599,28 +599,28 @@ Asset* AssetManager::openInLocaleVendorLocked(const char* fileName, AccessMode m
                 //printf("+++ excluding '%s'\n", (const char*) excludeName);
                 return kExcludedAsset;
             }
-    
+
             pAsset = openAssetFromFileLocked(path, mode);
-    
+
             if (pAsset == NULL) {
                 /* try again, this time with ".gz" */
                 path.append(".gz");
                 pAsset = openAssetFromFileLocked(path, mode);
             }
-    
+
             if (pAsset != NULL)
                 pAsset->setAssetSource(path);
         } else {
             /* find in cache */
             String8 path(createPathNameLocked(ap, locale, vendor));
             path.appendPath(fileName);
-    
+
             AssetDir::FileInfo tmpInfo;
             bool found = false;
-    
+
             String8 excludeName(path);
             excludeName.append(kExcludeExtension);
-    
+
             if (mCache.indexOf(excludeName) != NAME_NOT_FOUND) {
                 /* go no farther */
                 //printf("+++ Excluding '%s'\n", (const char*) excludeName);
@@ -1384,7 +1384,7 @@ bool AssetManager::fncScanAndMergeDirLocked(
 
     // XXX This is broken -- the filename cache needs to hold the base
     // asset path separately from its filename.
-    
+
     partialPath = createPathNameLocked(ap, locale, vendor);
     if (dirName[0] != '\0') {
         partialPath.appendPath(dirName);
@@ -1635,3 +1635,22 @@ int AssetManager::ZipSet::getIndex(const String8& zip) const
     return mZipPath.size()-1;
 }
 
+/*
+ * Mark asset path "stack" to support un-install from the mAssetPaths.
+ */
+int AssetManager::markAssetPathStack()
+{
+    return (int)mAssetPaths.size();
+}
+
+/*
+ * Restore asset path "stack" by un-installing from the mAssetPaths
+ * all assets installed after restoreIndex.
+ */
+void AssetManager::restoreAssetPathStack(int restoreIndex)
+{
+    int i = (int)mAssetPaths.size();
+    while (i > restoreIndex) {
+        mAssetPaths.removeAt(--i);
+    }
+}
