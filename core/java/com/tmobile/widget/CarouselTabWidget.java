@@ -24,7 +24,7 @@ public class CarouselTabWidget extends TabWidget {
 
 	public CarouselTabWidget(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		mFilmstrip = new Filmstrip(context, attrs);
+		mFilmstrip = new Filmstrip(context);
 		
 		this.addView(mFilmstrip, -1);
 
