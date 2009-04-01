@@ -1525,7 +1525,7 @@ static jint android_content_AssetManager_splitThemePackage(JNIEnv* env, jobject 
 
     const char* dstFileName8 = env->GetStringUTFChars(dstFileName, NULL);
     ZipFile* dstZip = new ZipFile;
-    err = dstZip->open(dstFileName8, ZipFile::kOpenReadWrite | ZipFile::kOpenCreate);
+    err = dstZip->open(dstFileName8, ZipFile::kOpenReadWrite | ZipFile::kOpenTruncate | ZipFile::kOpenCreate);
 
     if (err != NO_ERROR) {
         LOGV("error opening zip file %s\n", dstFileName8);
