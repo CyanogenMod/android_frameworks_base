@@ -48,7 +48,8 @@ public class CarouselTabContentLayout extends FrameLayout  {
 		
 		LayoutParams layoutParams = generateDefaultLayoutParams();
 		
-		setPadding(0, 62, 0, 0);
+		// The height of filmstrip is 50, hence set the y padding to 50
+		setPadding(0, 50, 0, 0);
 		super.addView(mCarouselLayout, -1, layoutParams);
 	}
 	

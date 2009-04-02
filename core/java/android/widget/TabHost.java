@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.SoundEffectConstants;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import com.android.internal.R;
@@ -176,7 +177,7 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
             // leaving touch mode.. if nothing has focus, let's give it to
             // the indicator of the current tab
             if (!mCurrentView.hasFocus() || mCurrentView.isFocused()) {
-                mTabWidget.getChildAt(mCurrentTab).requestFocus();
+                dispatchKeyUpEvent();
             }
         }
     }
@@ -195,8 +196,10 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
             throw new IllegalArgumentException("you must specify a way to create the tab content");
         }
         View tabIndicator = tabSpec.mIndicatorStrategy.createIndicatorView();
-        tabIndicator.setOnKeyListener(mTabKeyListener);
-        mTabWidget.addView(tabIndicator);
+        if (tabIndicator != null) {
+        	tabIndicator.setOnKeyListener(mTabKeyListener);
+        	mTabWidget.addView(tabIndicator);
+        }
         mTabSpecs.add(tabSpec);
 
         if (mCurrentTab == -1) {
@@ -272,12 +275,16 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
                 && (mCurrentView.isRootNamespace())
                 && (mCurrentView.hasFocus())
                 && (mCurrentView.findFocus().focusSearch(View.FOCUS_UP) == null)) {
-            mTabWidget.getChildAt(mCurrentTab).requestFocus();
+            dispatchKeyUpEvent();
             playSoundEffect(SoundEffectConstants.NAVIGATION_UP);
             return true;
         }
         return handled;        
     }
+
+	protected void dispatchKeyUpEvent() {
+		mTabWidget.getChildAt(mCurrentTab).requestFocus();
+	}
 
 
     @Override
@@ -413,6 +420,12 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
         	mIndicatorStrategy = new FactoryIndicatorStrategy(indicatorFactory);
         	return this;
         }
+        
+        public TabSpec setIndicator() {
+        	mIndicatorStrategy = new ViewStubIndicatorStrategy();
+        	//mIndicatorStrategy = new LabelIndicatorStrategy("");
+        	return this;
+        }
 
         /**
          * Specify the id of the view that should be used as the content
@@ -479,6 +492,17 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
         void tabClosed();
     }
 
+    private class ViewStubIndicatorStrategy implements IndicatorStrategy {
+
+		public View createIndicatorView() {
+			View view = new ViewStub(getContext());
+		
+			return view;
+		}
+    	
+    	
+    }
+    
     /**
      * How to create a tab indicator that just has a label.
      */

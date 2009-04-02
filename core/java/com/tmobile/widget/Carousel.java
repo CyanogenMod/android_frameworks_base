@@ -1,5 +1,6 @@
 package com.tmobile.widget;
 
+
 import com.tmobile.widget.CarouselTabWidget.CarouselTabWidgetOnItemSelectedListener;
 
 import android.app.LocalActivityManager;
@@ -134,7 +135,9 @@ public class Carousel extends TabHost implements OnGestureListener {
 			mCarouselTabContentLayout.setAdapter(new CarouselViewAdapter());
 		}
 	}
-
+	
+   
+    
 	 public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
 		   
 			float x1 = e1.getX();
@@ -205,4 +208,10 @@ public class Carousel extends TabHost implements OnGestureListener {
 		public void setTabWidget(CarouselTabWidget tabWidget) {
 			mTabWidget = tabWidget;
 		}
+		
+		protected void dispatchKeyUpEvent() {
+			mTabWidget.getFilmstrip().requestFocus();
+		}
+		
+
 }
