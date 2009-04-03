@@ -423,7 +423,7 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
         
         public TabSpec setIndicator() {
         	mIndicatorStrategy = new ViewStubIndicatorStrategy();
-        	//mIndicatorStrategy = new LabelIndicatorStrategy("");
+        	
         	return this;
         }
 
