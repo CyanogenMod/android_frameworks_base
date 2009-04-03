@@ -213,5 +213,11 @@ public class Carousel extends TabHost implements OnGestureListener {
 			mTabWidget.getFilmstrip().requestFocus();
 		}
 		
-
+		public void setSelection(int index) {
+             
+            setCurrentTab(index);
+            mTabWidget.getFilmstrip().setFilmstripSelection(index);
+            
+            mCarouselTabContentLayout.setSelection(index, false);
+        }
 }
