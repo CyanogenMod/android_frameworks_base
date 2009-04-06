@@ -123,39 +123,6 @@ public class CarouselTabContentLayout extends FrameLayout  {
 		// Do nothing
 	}
 	
-	
-	@Override
-	public View findFocus() {
-		
-		return mCarouselLayout.findFocus();
-	}
-	
-	@Override
-	public View focusSearch(int direction) {
-		
-		return mCarouselLayout.focusSearch(direction);
-	}
-	
-	@Override
-	public View focusSearch(View focused, int direction) {
-		
-		return mCarouselLayout.focusSearch(focused, direction);
-	}
-	
-	@Override
-	public View getFocusedChild() {
-
-		return mCarouselLayout.getFocusedChild();
-	}
-	
-	@Override
-	public boolean dispatchKeyEvent(KeyEvent event) {
-		
-		return mCarouselLayout.dispatchKeyEvent(event);
-	}
-	
-	
-	
 	public int getSelectedPosition() {
 		return mCarouselLayout.getSelectedPosition();
 	}

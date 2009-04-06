@@ -422,7 +422,7 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
         }
         
         public TabSpec setIndicator() {
-        	mIndicatorStrategy = new ViewStubIndicatorStrategy();
+        	mIndicatorStrategy = new NullIndicatorStrategy();
         	
         	return this;
         }
@@ -492,6 +492,15 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
         void tabClosed();
     }
 
+    private class NullIndicatorStrategy implements IndicatorStrategy {
+
+        public View createIndicatorView() {
+           return null;
+        }
+        
+        
+    }
+    
     private class ViewStubIndicatorStrategy implements IndicatorStrategy {
 
 		public View createIndicatorView() {

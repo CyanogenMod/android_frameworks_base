@@ -50,6 +50,9 @@ public class CarouselTabWidget extends TabWidget {
 		public void onItemSelected(AdapterView<?> parent, View view,
 				int position, long id) {
 			super.onItemSelected(parent, view, position, id);
+			
+			CarouselTabWidget.this.requestFocus();
+			
 			mTabHost.setCurrentTab(position);
 		}
 
