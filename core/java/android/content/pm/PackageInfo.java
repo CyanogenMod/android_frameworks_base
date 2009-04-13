@@ -133,6 +133,9 @@ public class PackageInfo implements Parcelable {
     // ThemeInfo
     public ThemeInfo [] themeInfos;
 
+    // SoundsInfo
+    public SoundsInfo [] soundInfos;
+
     public PackageInfo() {
     }
 
@@ -219,6 +222,7 @@ public class PackageInfo implements Parcelable {
         dest.writeInt((isThemeApk)? 1 : 0);
         dest.writeInt((drmProtectedThemeApk)? 1 : 0);
         dest.writeTypedArray(themeInfos, parcelableFlags);
+        dest.writeTypedArray(soundInfos, parcelableFlags);
         dest.writeString(lockedZipFilePath);
     }
 
@@ -256,6 +260,7 @@ public class PackageInfo implements Parcelable {
         isThemeApk = (source.readInt() != 0);
         drmProtectedThemeApk = (source.readInt() != 0);
         themeInfos = source.createTypedArray(ThemeInfo.CREATOR);
+        soundInfos = source.createTypedArray(SoundsInfo.CREATOR);
         lockedZipFilePath = source.readString();
     }
 }

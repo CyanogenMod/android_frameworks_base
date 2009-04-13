@@ -18,12 +18,12 @@ import android.util.AttributeSet;
  *
  * Below is an example of theme tag
  *    <theme
- *        pluto:themeName="Pluto Default"
- *        pluto:themeThumbprint="@drawable/app_thumbnail"
- *        pluto:themeAuthor="John Doe"
- *        pluto:callRingtone="media/audio/ringtone.mp3"
- *        pluto:notificationRingtone="media/audio/locked/notification.mp3"
- *        pluto:themeCopyright="T-Mobile, 2009"
+ *        pluto:name="Pluto Default"
+ *        pluto:thumbnail="@drawable/app_thumbnail"
+ *        pluto:author="John Doe"
+ *        pluto:ringtoneFileName="media/audio/ringtone.mp3"
+ *        pluto:notificationRingtoneFileName="media/audio/locked/notification.mp3"
+ *        pluto:copyright="T-Mobile, 2009"
  *        pluto:wallpaperImage="media/images/wallpaper.jpg"
  *        pluto:favesBackground="media/images/locked/background.jpg"
  *    />
@@ -64,7 +64,7 @@ public final class ThemeInfo implements Parcelable {
      * The resource id of theme thumbnail.
      * Specifies a theme thumbnail image resource as @drawable/foo.
      *
-     * @see themeThumbprint attribute
+     * @see thumbnail attribute
      *
      */
     public int thumbnail = - 1;
@@ -81,7 +81,7 @@ public final class ThemeInfo implements Parcelable {
     /**
      * The name of the theme (as displayed by UI).
      *
-     * @see themeName attribute
+     * @see name attribute
      *
      */
     public String themeName;
@@ -91,7 +91,7 @@ public final class ThemeInfo implements Parcelable {
      * Specifies a relative path in assets subfolder.
      * If the parent's name is "locked" - DRM protected.
      *
-     * @see callRingtone attribute
+     * @see ringtoneFileName attribute
      *
      */
     public String ringtoneFileName;
@@ -99,7 +99,7 @@ public final class ThemeInfo implements Parcelable {
     /**
      * The name of the call ringtone as shown to user.
      *
-     * @see callRingtoneName attribute
+     * @see ringtoneName attribute
      *
      */
     public String ringtoneName;
@@ -109,7 +109,7 @@ public final class ThemeInfo implements Parcelable {
      * Specifies a relative path in assets subfolder.
      * If the parent's name is "locked" - DRM protected.
      *
-     * @see notificationRingtone attribute
+     * @see notificationRingtoneFileName attribute
      *
      */
     public String notificationRingtoneFileName;
@@ -125,7 +125,7 @@ public final class ThemeInfo implements Parcelable {
     /**
      * The author name of the theme package.
      *
-     * @see themeAuthor attribute
+     * @see author attribute
      *
      */
     public String author;
@@ -133,7 +133,7 @@ public final class ThemeInfo implements Parcelable {
     /**
      * The copyright text.
      *
-     * @see themeCopyright attribute
+     * @see copyright attribute
      *
      */
     public String copyright;
@@ -141,6 +141,14 @@ public final class ThemeInfo implements Parcelable {
     // There is no corresposponding flag in manifest file
     // This flag is set to true iff any media resource is DRM protected
     public boolean isDrmProtected = false;
+
+    /**
+     * The name of a sound pack.
+     *
+     * @see soundpack attribute
+     *
+     */
+    public String soundPackName;
 
     /**
      * {@link #themePackage}
@@ -184,7 +192,7 @@ public final class ThemeInfo implements Parcelable {
      */
     private static final int FAVES_APP_IMAGE_NAME_INDEX = 6;
 
-	/**
+    /**
      * {@link #wallpaperImageName}
      *
      */
@@ -214,23 +222,29 @@ public final class ThemeInfo implements Parcelable {
      */
     private static final int NOTIFICATION_RINGTONE_NAME_INDEX = 11;
 
-    
+    /**
+     * {@link #soundPackName}
+     *
+     */
+    private static final int SOUNDPACK_NAME_INDEX = 12;
+
     private static final String [] compulsoryAttributes = new String [] {
-    	"themeName",
-    	"themeThumbprint",
-    	"themeAuthor",
+        "name",
+        "thumbnail",
+        "author",
     };
 
     private static final String [] optionalAttributes = new String [] {
-    	"ringtoneFileName",
-    	"notificationRingtoneFileName",
-    	"favesBackground",
-    	"favesAppsBackground",
-    	"wallpaperImage",
-    	"themeCopyright",
-    	"androidUiStyle",
-    	"ringtoneName",
-    	"notificationRingtoneName",
+        "ringtoneFileName",
+        "notificationRingtoneFileName",
+        "favesBackground",
+        "favesAppsBackground",
+        "wallpaperImage",
+        "copyright",
+        "androidUiStyle",
+        "ringtoneName",
+        "notificationRingtoneName",
+        "soundpackName",
     };
 
     private static final String LOCKED_NAME = "locked/";
@@ -238,98 +252,103 @@ public final class ThemeInfo implements Parcelable {
     private static Map<String, Integer> attributesLookupTable;
 
     static {
-    	attributesLookupTable = new HashMap<String, Integer>();
-    	for (int i = 0; i < compulsoryAttributes.length; i++) {
-    		attributesLookupTable.put(compulsoryAttributes[i], i);
-    	}
+        attributesLookupTable = new HashMap<String, Integer>();
+        for (int i = 0; i < compulsoryAttributes.length; i++) {
+            attributesLookupTable.put(compulsoryAttributes[i], i);
+        }
 
-    	for (int i = 0; i < optionalAttributes.length; i++) {
-    		attributesLookupTable.put(optionalAttributes[i], compulsoryAttributes.length + i);
-    	}
+        for (int i = 0; i < optionalAttributes.length; i++) {
+            attributesLookupTable.put(optionalAttributes[i], compulsoryAttributes.length + i);
+        }
     }
 
     public ThemeInfo(AttributeSet attrs) throws XmlPullParserException {
-    	Map<String, Integer> tempMap = new HashMap<String, Integer>(attributesLookupTable);
-    	int numberOfCompulsoryAttributes = 0;
-    	for (int i = 0; i < attrs.getAttributeCount(); i++) {
-    		String key = attrs.getAttributeName(i);
-    		if (tempMap.containsKey(key)) {
-    			int index = tempMap.get(key);
-    			tempMap.remove(key);
+        Map<String, Integer> tempMap = new HashMap<String, Integer>(attributesLookupTable);
+        int numberOfCompulsoryAttributes = 0;
+        for (int i = 0; i < attrs.getAttributeCount(); i++) {
+            String key = attrs.getAttributeName(i);
+            if (tempMap.containsKey(key)) {
+                int index = tempMap.get(key);
+                tempMap.remove(key);
 
-    			if (index < compulsoryAttributes.length) {
-    				numberOfCompulsoryAttributes++;
-    			}
-    			switch (index) {
-	    			case THEME_PACKAGE_INDEX:
-	    				// theme name
-	    				themeName = attrs.getAttributeValue(i);
-	    				break;
-	
-	    			case THUMBNAIL_INDEX:
-	    				// theme thumbprint
-	    				thumbnail = attrs.getAttributeResourceValue(i, -1);
-	    				break;
-	
-	    			case AUTHOR_INDEX:
-	    				// theme author
-	    				author = attrs.getAttributeValue(i);
-	    				break;
-	
-	    			case RINGTONE_FILE_NAME_INDEX:
-	    				// ringtone
-	    				ringtoneFileName = attrs.getAttributeValue(i);
-	    				changeDrmFlagIfNeeded(ringtoneFileName);
-	    				break;
-	
-	    			case NOTIFICATION_RINGTONE_FILE_NAME_INDEX:
-	    				// notification ringtone
-	    				notificationRingtoneFileName = attrs.getAttributeValue(i);
-	    				changeDrmFlagIfNeeded(notificationRingtoneFileName);
-	    				break;
+                if (index < compulsoryAttributes.length) {
+                    numberOfCompulsoryAttributes++;
+                }
+                switch (index) {
+                    case THEME_PACKAGE_INDEX:
+                        // theme name
+                        themeName = attrs.getAttributeValue(i);
+                        break;
 
-	    			case FAVES_IMAGE_NAME_INDEX:
-	    				// faves background
-	    				favesImageName = attrs.getAttributeValue(i);
-	    				changeDrmFlagIfNeeded(favesImageName);
-	    				break;
+                    case THUMBNAIL_INDEX:
+                        // theme thumbprint
+                        thumbnail = attrs.getAttributeResourceValue(i, -1);
+                        break;
 
-	    			case FAVES_APP_IMAGE_NAME_INDEX:
-	    				// favesAppBackground attribute
-	    				favesAppImageName = attrs.getAttributeValue(i);
-	    				changeDrmFlagIfNeeded(favesAppImageName);
-	    				break;
-	
-	    			case WALLPAPER_IMAGE_NAME_INDEX:
-	    				// wallpaperImage attribute
-	    				wallpaperImageName = attrs.getAttributeValue(i);
-	    				changeDrmFlagIfNeeded(wallpaperImageName);
-	    				break;
-	
-	    			case COPYRIGHT_INDEX:
-	    				// themeCopyright attribute
-	    				copyright = attrs.getAttributeValue(i);
-	    				break;
-	
-	    			case THEME_INDEX:
-	    				// androidUiStyle attribute
-	    				theme = attrs.getAttributeResourceValue(i, -1);
-	    				break;
-	    				
-	    			case RINGTONE_NAME_INDEX:
-	    				// ringtone UI name
-	    				ringtoneName = attrs.getAttributeValue(i);
-	    				break;
-	
-	    			case NOTIFICATION_RINGTONE_NAME_INDEX:
-	    				// notification ringtone UI name
-	    				notificationRingtoneName = attrs.getAttributeValue(i);
-    			}
-    		}
-    	}
-    	if (numberOfCompulsoryAttributes < compulsoryAttributes.length) {
-    		throw new XmlPullParserException("Not all compulsory attributes are specified in <theme>");
-    	}
+                    case AUTHOR_INDEX:
+                        // theme author
+                        author = attrs.getAttributeValue(i);
+                        break;
+
+                    case RINGTONE_FILE_NAME_INDEX:
+                        // ringtone
+                        ringtoneFileName = attrs.getAttributeValue(i);
+                        changeDrmFlagIfNeeded(ringtoneFileName);
+                        break;
+
+                    case NOTIFICATION_RINGTONE_FILE_NAME_INDEX:
+                        // notification ringtone
+                        notificationRingtoneFileName = attrs.getAttributeValue(i);
+                        changeDrmFlagIfNeeded(notificationRingtoneFileName);
+                        break;
+
+                    case FAVES_IMAGE_NAME_INDEX:
+                        // faves background
+                        favesImageName = attrs.getAttributeValue(i);
+                        changeDrmFlagIfNeeded(favesImageName);
+                        break;
+
+                    case FAVES_APP_IMAGE_NAME_INDEX:
+                        // favesAppBackground attribute
+                        favesAppImageName = attrs.getAttributeValue(i);
+                        changeDrmFlagIfNeeded(favesAppImageName);
+                        break;
+
+                    case WALLPAPER_IMAGE_NAME_INDEX:
+                        // wallpaperImage attribute
+                        wallpaperImageName = attrs.getAttributeValue(i);
+                        changeDrmFlagIfNeeded(wallpaperImageName);
+                        break;
+
+                    case COPYRIGHT_INDEX:
+                        // themeCopyright attribute
+                        copyright = attrs.getAttributeValue(i);
+                        break;
+
+                    case THEME_INDEX:
+                        // androidUiStyle attribute
+                        theme = attrs.getAttributeResourceValue(i, -1);
+                        break;
+
+                    case RINGTONE_NAME_INDEX:
+                        // ringtone UI name
+                        ringtoneName = attrs.getAttributeValue(i);
+                        break;
+
+                    case NOTIFICATION_RINGTONE_NAME_INDEX:
+                        // notification ringtone UI name
+                        notificationRingtoneName = attrs.getAttributeValue(i);
+                        break;
+
+                    case SOUNDPACK_NAME_INDEX:
+                        soundPackName = attrs.getAttributeValue(i);
+                        break;
+                }
+            }
+        }
+        if (numberOfCompulsoryAttributes < compulsoryAttributes.length) {
+            throw new XmlPullParserException("Not all compulsory attributes are specified in <theme>");
+        }
     }
 
     /*
@@ -339,22 +358,22 @@ public final class ThemeInfo implements Parcelable {
      * @return a bitmask indicating the set of special object types marshalled
      * by the Parcelable.
      *
-	 * @see android.os.Parcelable#describeContents()
-	 */
-	public int describeContents() {
-		return 0;
-	}
+     * @see android.os.Parcelable#describeContents()
+     */
+    public int describeContents() {
+        return 0;
+    }
 
-	/*
+    /*
      * Flatten this object in to a Parcel.
      * 
      * @param dest The Parcel in which the object should be written.
      * @param flags Additional flags about how the object should be written.
      * May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
      * 
-	 * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
-	 */
-	public void writeToParcel(Parcel dest, int flags) {
+     * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
+     */
+    public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(wallpaperImageName);
         dest.writeString(favesImageName);
         dest.writeString(favesAppImageName);
@@ -368,7 +387,8 @@ public final class ThemeInfo implements Parcelable {
         dest.writeString(author);
         dest.writeString(copyright);
         dest.writeInt(isDrmProtected? 1 : 0);
-	}
+        dest.writeString(soundPackName);
+    }
 
     public static final Parcelable.Creator<ThemeInfo> CREATOR
             = new Parcelable.Creator<ThemeInfo>() {
@@ -395,12 +415,13 @@ public final class ThemeInfo implements Parcelable {
         author = source.readString();
         copyright = source.readString();
         isDrmProtected = (source.readInt() != 0);
+        soundPackName = source.readString();
     }
 
     private void changeDrmFlagIfNeeded(String resourcePath) {
-    	if (resourcePath != null && resourcePath.contains(LOCKED_NAME)) {
-    		isDrmProtected = true;
-    	}
+        if (resourcePath != null && resourcePath.contains(LOCKED_NAME)) {
+            isDrmProtected = true;
+        }
     }
 
 }
