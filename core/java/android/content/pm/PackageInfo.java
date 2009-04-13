@@ -131,9 +131,15 @@ public class PackageInfo implements Parcelable {
     public boolean isThemeApk = false;
 
     // ThemeInfo
+    /**
+     * {@hide}
+     */
     public ThemeInfo [] themeInfos;
 
     // SoundsInfo
+    /**
+     * {@hide}
+     */
     public SoundsInfo [] soundInfos;
 
     public PackageInfo() {
