@@ -152,6 +152,22 @@ public final class ThemeInfo implements Parcelable {
     public String soundPackName;
 
     /**
+     * The theme resource id of parent theme
+     *
+     * @see parentThemeId attribute
+     *
+     */
+    public int parentThemeId = -1;
+
+    /**
+     * The package name of parent theme
+     *
+     * @see parentThemePackageName attribute
+     *
+     */
+    public String parentThemePackageName = "";
+
+    /**
      * {@link #themePackage}
      *
      */
@@ -229,6 +245,17 @@ public final class ThemeInfo implements Parcelable {
      */
     private static final int SOUNDPACK_NAME_INDEX = 12;
 
+    /**
+     * {@link #parentThemeId}
+     *
+     */
+    private static final int PARENT_THEME_INDEX = 13;
+    /**
+     * {@link #parentThemePackageName}
+     *
+     */
+    private static final int PARENT_THEME_PACKAGE_INDEX = 14;
+
     private static final String [] compulsoryAttributes = new String [] {
         "name",
         "thumbnail",
@@ -246,6 +273,8 @@ public final class ThemeInfo implements Parcelable {
         "ringtoneName",
         "notificationRingtoneName",
         "soundpackName",
+        "parentThemeId",
+        "parentThemePackageName",
     };
 
     private static final String LOCKED_NAME = "locked/";
@@ -344,6 +373,12 @@ public final class ThemeInfo implements Parcelable {
                     case SOUNDPACK_NAME_INDEX:
                         soundPackName = attrs.getAttributeValue(i);
                         break;
+                    case PARENT_THEME_INDEX:
+                        parentThemeId = attrs.getAttributeIntValue(i, -1);
+                        break;  
+                    case PARENT_THEME_PACKAGE_INDEX:
+                        parentThemePackageName = attrs.getAttributeValue(i);
+                        break;  
                 }
             }
         }
@@ -389,6 +424,8 @@ public final class ThemeInfo implements Parcelable {
         dest.writeString(copyright);
         dest.writeInt(isDrmProtected? 1 : 0);
         dest.writeString(soundPackName);
+        dest.writeInt(parentThemeId);
+        dest.writeString(parentThemePackageName);
     }
 
     public static final Parcelable.Creator<ThemeInfo> CREATOR
@@ -417,6 +454,8 @@ public final class ThemeInfo implements Parcelable {
         copyright = source.readString();
         isDrmProtected = (source.readInt() != 0);
         soundPackName = source.readString();
+        parentThemeId = source.readInt();
+        parentThemePackageName = source.readString();
     }
 
     private void changeDrmFlagIfNeeded(String resourcePath) {
