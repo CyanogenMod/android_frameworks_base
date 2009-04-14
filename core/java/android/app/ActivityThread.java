@@ -16,6 +16,22 @@
 
 package android.app;
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.TimeZone;
+import java.util.regex.Pattern;
+
+import org.apache.harmony.xnet.provider.jsse.OpenSSLSocketImpl;
+
 import android.content.BroadcastReceiver;
 import android.content.ComponentCallbacks;
 import android.content.ComponentName;
@@ -29,12 +45,13 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.IPackageManager;
 import android.content.pm.InstrumentationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ServiceInfo;
+import android.content.pm.ThemeInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
-import android.content.res.CustomTheme;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDebug;
@@ -68,22 +85,6 @@ import android.view.WindowManagerImpl;
 import com.android.internal.os.BinderInternal;
 import com.android.internal.os.RuntimeInit;
 import com.android.internal.util.ArrayUtils;
-
-import org.apache.harmony.xnet.provider.jsse.OpenSSLSocketImpl;
-
-import java.io.File;
-import java.io.FileDescriptor;
-import java.io.FileOutputStream;
-import java.io.PrintWriter;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.TimeZone;
-import java.util.regex.Pattern;
 
 final class IntentReceiverLeaked extends AndroidRuntimeException {
     public IntentReceiverLeaked(String msg) {
@@ -184,12 +185,34 @@ public final class ActivityThread {
             }
             Configuration config = getConfiguration();
             if (config != null && config.customTheme != null) {
+//                PackageInfo pi = getPackageInfo(config.customTheme.getThemePackageName(), 0);
+//                String resDir = pi.getResDir();
+//                if (assets.addAssetPath(resDir) == 0) {
+//                    Log.e(TAG, "Unable to add theme resdir=" + resDir);
+//                }
+//                
+                
+                int themeId = config.customTheme.getThemeId();
+                
+                ThemeInfo themeInfo = getThemeInfo(themeId);
+                if(themeInfo != null && themeInfo.parentThemePackageName != null && themeInfo.parentThemeId > 0) {
+                    PackageInfo parentPackageInfo = getPackageInfo(themeInfo.parentThemePackageName, 0);
+                    if(parentPackageInfo != null){
+                        String diffResDir = parentPackageInfo.getResDir();
+                        if (assets.addAssetPath(diffResDir) == 0) {
+                            Log.e(TAG, "Unable to add parent theme resdir=" + diffResDir);
+                        }
+                    }
+                }
                 PackageInfo pi = getPackageInfo(config.customTheme.getThemePackageName(), 0);
                 String resDir = pi.getResDir();
                 if (assets.addAssetPath(resDir) == 0) {
                     Log.e(TAG, "Unable to add theme resdir=" + resDir);
                 }
+                
+  
             }
+
             DisplayMetrics metrics = getDisplayMetricsLocked(false);
             r = new Resources(assets, metrics, config);
             //Log.i(TAG, "Created app resources " + r + ": " + r.getConfiguration());
@@ -199,6 +222,26 @@ public final class ActivityThread {
         }
     }
 
+    public ThemeInfo getThemeInfo(int resourceId){
+        try {
+            List<android.content.pm.PackageInfo> themes = getPackageManager().getInstalledThemePackages();
+            for (android.content.pm.PackageInfo pi : themes) {
+                if (pi != null && pi.themeInfos != null) {
+                    for (ThemeInfo themeInfo : pi.themeInfos) {
+                        if (themeInfo.theme == resourceId) {
+                           return themeInfo;
+                        }
+                    }
+                }
+    
+            }
+        }catch(RemoteException re){
+            Log.e(TAG, "Unable to get ThemeInfo for resourceId "+ resourceId, re);
+        }
+        
+        return null; 
+    }
+    
     final Handler getHandler() {
         return mH;
     }

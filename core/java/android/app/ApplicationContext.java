@@ -64,6 +64,7 @@ import android.content.pm.PermissionInfo;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
+import android.content.pm.ThemeInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.CustomTheme;
@@ -291,15 +292,47 @@ class ApplicationContext extends Context {
     public Resources.Theme getTheme() {
         if (mTheme == null) {
             int themeId;
+            int deltaThemeId = -1;
             if (mThemeResource == 0) {
                 themeId = determineDefaultThemeResource();
             } else {
                 themeId = mThemeResource;
             }
+            
+            //if this is delta then apply the parent theme first
+            ThemeInfo themeInfo = getThemeInfo(themeId);
+            if(themeInfo != null && themeInfo.parentThemeId > 0) {
+                deltaThemeId = themeId;
+                themeId = themeInfo.parentThemeId;
+                
+            }
             mTheme = mResources.newTheme();
             mTheme.applyStyle(themeId, true);
+            
+//          Log.d(TAG, "******ThemeId :"+ themeId);
+            if(deltaThemeId > 0){
+                mTheme.applyStyle(deltaThemeId, true);
+            }
+                       
         }
         return mTheme;
+    }
+    
+    
+    public ThemeInfo getThemeInfo(int resourceId){
+        List<PackageInfo> themes = getPackageManager().getInstalledThemePackages();
+        for (PackageInfo pi : themes) {
+            if (pi != null && pi.themeInfos != null) {
+                for (ThemeInfo themeInfo : pi.themeInfos) {
+                    if (themeInfo.theme == resourceId) {
+                       return themeInfo;
+                    }
+                }
+            }
+
+        }
+        
+        return null; 
     }
     
     @Override
@@ -1799,7 +1832,8 @@ class ApplicationContext extends Context {
             } catch (RemoteException e) {
                 throw new RuntimeException("Package manager has died", e);
             }
-        }
+        }        
+
 
         @Override
         public List<ApplicationInfo> getInstalledApplications(int flags) {
