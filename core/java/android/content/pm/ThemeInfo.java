@@ -26,6 +26,7 @@ import android.util.AttributeSet;
  *        pluto:copyright="T-Mobile, 2009"
  *        pluto:wallpaperImage="media/images/wallpaper.jpg"
  *        pluto:favesBackground="media/images/locked/background.jpg"
+ *        pluto:soundpackName="<package_name>/<sound_pack_name>"
  *    />
  *
  */
