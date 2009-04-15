@@ -11,7 +11,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
-import android.content.res.Resources;
 
 /**
  * Overall information about "theme" package.  This corresponds
@@ -145,7 +144,7 @@ public final class ThemeInfo extends BaseThemeInfo {
         }
     }
 
-    public ThemeInfo(Resources res, AttributeSet attrs) throws XmlPullParserException {
+    public ThemeInfo(AttributeSet attrs) throws XmlPullParserException {
         super();
 
         type = InfoObjectType.TYPE_THEME;
@@ -169,7 +168,6 @@ public final class ThemeInfo extends BaseThemeInfo {
                     case THUMBNAIL_INDEX:
                         // theme thumbprint
                         thumbnail = attrs.getAttributeResourceValue(i, -1);
-                        setBitmap(res, thumbnail);
                         break;
 
                     case AUTHOR_INDEX:

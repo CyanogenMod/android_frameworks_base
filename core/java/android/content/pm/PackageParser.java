@@ -743,11 +743,11 @@ public class PackageParser {
             } else if (tagName.equals("theme")) {
                 // this is a theme apk.
                 pkg.mIsThemeApk = true;
-                pkg.mThemeInfos.add(new ThemeInfo(res, attrs));
+                pkg.mThemeInfos.add(new ThemeInfo(attrs));
             } else if (tagName.equals("sounds")) {
                 // this is a theme apk.
                 pkg.mIsThemeApk = true;
-                pkg.mSoundInfos.add(new SoundsInfo(res, attrs));
+                pkg.mSoundInfos.add(new SoundsInfo(attrs));
             } else if (RIGID_PARSER) {
                 outError[0] = "Bad element under <manifest>: "
                     + parser.getName();

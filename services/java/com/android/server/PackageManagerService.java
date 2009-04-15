@@ -138,8 +138,6 @@ class PackageManagerService extends IPackageManager.Stub {
     static final int LOG_BOOT_PROGRESS_PMS_SCAN_END = 3090;
     static final int LOG_BOOT_PROGRESS_PMS_READY = 3100;
 
-    static PackageManagerService _singleton = null;
-
     final HandlerThread mHandlerThread = new HandlerThread("PackageManager",
             Process.THREAD_PRIORITY_BACKGROUND);
     final Handler mHandler;
@@ -263,10 +261,6 @@ class PackageManagerService extends IPackageManager.Stub {
 
     public static final IPackageManager main(Context context, boolean factoryTest) {
         PackageManagerService m = new PackageManagerService(context, factoryTest);
-    	if (null != _singleton) {
-    		Log.e(TAG, "Multiple instances of PackageManagerService");
-    	}
-        _singleton = m;
         ServiceManager.addService("package", m);
         return m;
     }
@@ -3651,61 +3645,61 @@ class PackageManagerService extends IPackageManager.Stub {
 
     private void deleteLockedZipFileIfExists(String originalPackagePath) {
         String lockedZipFilePath = PackageParser.getLockedZipFilePath(originalPackagePath);
-    	File zipFile = new File(lockedZipFilePath);
-    	if (zipFile.exists() && zipFile.isFile()) {
-    		if (!zipFile.delete()) {
-    			Log.w(TAG, "Couldn't delete locked zip file: " + originalPackagePath);
-    		}
-    	}
+        File zipFile = new File(lockedZipFilePath);
+        if (zipFile.exists() && zipFile.isFile()) {
+            if (!zipFile.delete()) {
+                Log.w(TAG, "Couldn't delete locked zip file: " + originalPackagePath);
+            }
+        }
     }
 
     private void splitThemePackage(File originalFile) {
-    	final String originalPackagePath = originalFile.getPath();
+        final String originalPackagePath = originalFile.getPath();
         final String lockedZipFilePath = PackageParser.getLockedZipFilePath(originalPackagePath);
 
         try {
-        	final List<String> drmProtectedEntries = new ArrayList<String>();
+            final List<String> drmProtectedEntries = new ArrayList<String>();
             final ZipFile privateZip = new ZipFile(originalFile.getPath());
 
-        	final Enumeration<? extends ZipEntry> privateZipEntries = privateZip.entries();
-        	while (privateZipEntries.hasMoreElements()) {
-        	    final ZipEntry zipEntry = privateZipEntries.nextElement();
-        	    final String zipEntryName = zipEntry.getName();
-        	    if (zipEntryName.startsWith("assets/") && zipEntryName.contains("/locked/")) {
-        	        drmProtectedEntries.add(zipEntryName);
-        	    }
-        	}
-        	privateZip.close();
+            final Enumeration<? extends ZipEntry> privateZipEntries = privateZip.entries();
+            while (privateZipEntries.hasMoreElements()) {
+                final ZipEntry zipEntry = privateZipEntries.nextElement();
+                final String zipEntryName = zipEntry.getName();
+                if (zipEntryName.startsWith("assets/") && zipEntryName.contains("/locked/")) {
+                    drmProtectedEntries.add(zipEntryName);
+                }
+            }
+            privateZip.close();
 
-        	String [] args = new String[0];
-        	args = drmProtectedEntries.toArray(args);
-        	int code = mContext.getAssets().splitDrmProtectedThemePackage(
-        	        originalPackagePath,
-        	        lockedZipFilePath,
-        	        args);
+            String [] args = new String[0];
+            args = drmProtectedEntries.toArray(args);
+            int code = mContext.getAssets().splitDrmProtectedThemePackage(
+                    originalPackagePath,
+                    lockedZipFilePath,
+                    args);
             if (code != 0) {
                 Log.e("PackageManagerService",
                         "splitDrmProtectedThemePackage returned = " + code);
             }
-        	code = FileUtils.setPermissions(
-        	        lockedZipFilePath,
-        			0640,
-        			-1,
-        			THEME_MAMANER_GUID);
-        	if (code != 0) {
-        		Log.e("PackageManagerService",
-        				"Set permissions for " + lockedZipFilePath + " returned = " + code);
-        	}
-        	code = FileUtils.setPermissions(
-        	        originalPackagePath,
-        			0644,
-        			-1, -1);
-        	if (code != 0) {
-        		Log.e("PackageManagerService",
-        				"Set permissions for " + originalPackagePath + " returned = " + code);
-        	}
-		} catch (IOException e) {
-			Log.e(TAG, "Failure to generate new zip files for theme");
+            code = FileUtils.setPermissions(
+                    lockedZipFilePath,
+                    0640,
+                    -1,
+                    THEME_MAMANER_GUID);
+            if (code != 0) {
+                Log.e("PackageManagerService",
+                        "Set permissions for " + lockedZipFilePath + " returned = " + code);
+            }
+            code = FileUtils.setPermissions(
+                    originalPackagePath,
+                    0644,
+                    -1, -1);
+            if (code != 0) {
+                Log.e("PackageManagerService",
+                        "Set permissions for " + originalPackagePath + " returned = " + code);
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "Failure to generate new zip files for theme");
         }
     }
 
@@ -4017,6 +4011,14 @@ class PackageManagerService extends IPackageManager.Stub {
         PackageRemovedInfo info = new PackageRemovedInfo();
         boolean res;
 
+        synchronized (mPackages) {
+            PackageParser.Package p = mPackages.get(packageName);
+            info.isThemeApk = p.mIsThemeApk;
+            if (info.isThemeApk && deleteCodeAndResources &&
+                !info.isRemovedPackageSystemUpdate && sendBroadCast) {
+                deleteLockedZipFileIfExists(p.mPath);
+            }
+        }
         synchronized (mInstallLock) {
             res = deletePackageLI(packageName, deleteCodeAndResources, flags, info);
         }
@@ -4059,18 +4061,10 @@ class PackageManagerService extends IPackageManager.Stub {
                 extras.putBoolean(Intent.EXTRA_REPLACING, true);
             }
             if (removedPackage != null) {
-            	String category = null;
-            	if (null == _singleton) {
-            		Log.e(TAG, "PackageManagerService has not been instantiated?!");
-            	} else {
-            		PackageParser.Package pkg = _singleton.mPackages.get(removedPackage);
-            		if (pkg != null && pkg.mIsThemeApk) {
-            			if (deleteLockedZipFileIfExists) {
-            				_singleton.deleteLockedZipFileIfExists(pkg.mPath);
-            			}
-                		category = Intent.CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE;
-            		}
-            	}
+                String category = null;
+                if (isThemeApk) {
+                    category = Intent.CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE;
+                }
                 sendPackageBroadcast(Intent.ACTION_PACKAGE_REMOVED, removedPackage, category, extras);
             }
             if (removedUid >= 0) {
@@ -6588,7 +6582,7 @@ class PackageManagerService extends IPackageManager.Stub {
                         "Error in package manager settings: package "
                         + name + " has bad userId " + idStr + " at "
                         + parser.getPositionDescription());
-            };
+            }
 
             if (su != null) {
                 int outerDepth = parser.getDepth();

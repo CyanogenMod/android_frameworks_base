@@ -5,7 +5,6 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.os.Parcelable;
 import android.os.Parcel;
 import android.util.AttributeSet;
-import android.content.res.Resources;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -96,7 +95,7 @@ public class SoundsInfo extends BaseThemeInfo {
     private static final int COPYRIGHT_INDEX = 7;
 
 
-    public SoundsInfo(Resources res, AttributeSet attrs) throws XmlPullParserException {
+    public SoundsInfo(AttributeSet attrs) throws XmlPullParserException {
         super();
 
         type = InfoObjectType.TYPE_SOUNDPACK;
@@ -114,7 +113,6 @@ public class SoundsInfo extends BaseThemeInfo {
 
                     case THUMBNAIL_INDEX:
                         thumbnail = attrs.getAttributeResourceValue(i, -1);
-                        setBitmap(res, thumbnail);
                         break;
 
                     case AUTHOR_INDEX:
