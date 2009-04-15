@@ -11,6 +11,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.content.res.Resources;
 
 /**
  * Overall information about "theme" package.  This corresponds
@@ -30,145 +31,10 @@ import android.util.AttributeSet;
  *    />
  *
  */
-public final class ThemeInfo implements Parcelable {
+public final class ThemeInfo extends BaseThemeInfo {
 
     /**
-     * The name of the wallpaper image file.
-     * Specifies a relative path in assets subfolder.
-     * If the parent's name is "locked" - DRM protected.
-     *
-     * @see wallpaperImage attribute
-     */
-    public String wallpaperImageName;
-
-    /**
-     * The name of the favorites background image file.
-     * Specifies a relative path in assets subfolder.
-     * If the parent's name is "locked" - DRM protected.
-     *
-     * @see favesBackground attribute
-     *
-     */
-    public String favesImageName;
-
-    /**
-     * The name of the favorite apps background image file.
-     * Specifies a relative path in assets subfolder.
-     * If the parent's name is "locked" - DRM protected.
-     *
-     * @see favesAppBackground attribute
-     *
-     */
-    public String favesAppImageName;
-
-    /**
-     * The resource id of theme thumbnail.
-     * Specifies a theme thumbnail image resource as @drawable/foo.
-     *
-     * @see thumbnail attribute
-     *
-     */
-    public int thumbnail = - 1;
-
-    /**
-     * The resource id of Android UI Style.
-     * Specifies an Android UI Style as @style/bar.
-     *
-     * @see androidUiStyle attribute
-     * 
-     */
-    public int theme = -1;
-
-    /**
-     * The name of the theme (as displayed by UI).
-     *
-     * @see name attribute
-     *
-     */
-    public String themeName;
-
-    /**
-     * The name of the call ringtone audio file.
-     * Specifies a relative path in assets subfolder.
-     * If the parent's name is "locked" - DRM protected.
-     *
-     * @see ringtoneFileName attribute
-     *
-     */
-    public String ringtoneFileName;
-
-    /**
-     * The name of the call ringtone as shown to user.
-     *
-     * @see ringtoneName attribute
-     *
-     */
-    public String ringtoneName;
-
-    /**
-     * The name of the notification ringtone audio file.
-     * Specifies a relative path in assets subfolder.
-     * If the parent's name is "locked" - DRM protected.
-     *
-     * @see notificationRingtoneFileName attribute
-     *
-     */
-    public String notificationRingtoneFileName;
-
-    /**
-     * The name of the notification ringtone as shown to user.
-     *
-     * @see notificationRingtoneName attribute
-     *
-     */
-    public String notificationRingtoneName;
-
-    /**
-     * The author name of the theme package.
-     *
-     * @see author attribute
-     *
-     */
-    public String author;
-
-    /**
-     * The copyright text.
-     *
-     * @see copyright attribute
-     *
-     */
-    public String copyright;
-
-    // There is no corresposponding flag in manifest file
-    // This flag is set to true iff any media resource is DRM protected
-    public boolean isDrmProtected = false;
-
-    /**
-     * The name of a sound pack.
-     *
-     * @see soundpack attribute
-     *
-     */
-    public String soundPackName;
-
-    /**
-     * The theme resource id of parent theme
-     *
-     * @see parentThemeId attribute
-     *
-     */
-    public int parentThemeId = -1;
-
-    /**
-     * The package name of parent theme
-     *
-     * @see parentThemePackageName attribute
-     *
-     */
-    public String parentThemePackageName = "";
-
-    /**
-     * {@link #themePackage}
+     * {@link #name}
      *
      */
     private static final int THEME_PACKAGE_INDEX = 0;
@@ -245,17 +111,6 @@ public final class ThemeInfo implements Parcelable {
      */
     private static final int SOUNDPACK_NAME_INDEX = 12;
 
-    /**
-     * {@link #parentThemeId}
-     *
-     */
-    private static final int PARENT_THEME_INDEX = 13;
-    /**
-     * {@link #parentThemePackageName}
-     *
-     */
-    private static final int PARENT_THEME_PACKAGE_INDEX = 14;
-
     private static final String [] compulsoryAttributes = new String [] {
         "name",
         "thumbnail",
@@ -277,8 +132,6 @@ public final class ThemeInfo implements Parcelable {
         "parentThemePackageName",
     };
 
-    private static final String LOCKED_NAME = "locked/";
-
     private static Map<String, Integer> attributesLookupTable;
 
     static {
@@ -292,7 +145,10 @@ public final class ThemeInfo implements Parcelable {
         }
     }
 
-    public ThemeInfo(AttributeSet attrs) throws XmlPullParserException {
+    public ThemeInfo(Resources res, AttributeSet attrs) throws XmlPullParserException {
+        super();
+
+        type = InfoObjectType.TYPE_THEME;
         Map<String, Integer> tempMap = new HashMap<String, Integer>(attributesLookupTable);
         int numberOfCompulsoryAttributes = 0;
         for (int i = 0; i < attrs.getAttributeCount(); i++) {
@@ -307,12 +163,13 @@ public final class ThemeInfo implements Parcelable {
                 switch (index) {
                     case THEME_PACKAGE_INDEX:
                         // theme name
-                        themeName = attrs.getAttributeValue(i);
+                        name = attrs.getAttributeValue(i);
                         break;
 
                     case THUMBNAIL_INDEX:
                         // theme thumbprint
                         thumbnail = attrs.getAttributeResourceValue(i, -1);
+                        setBitmap(res, thumbnail);
                         break;
 
                     case AUTHOR_INDEX:
@@ -387,47 +244,6 @@ public final class ThemeInfo implements Parcelable {
         }
     }
 
-    /*
-     * Describe the kinds of special objects contained in this Parcelable's
-     * marshalled representation.
-     *  
-     * @return a bitmask indicating the set of special object types marshalled
-     * by the Parcelable.
-     *
-     * @see android.os.Parcelable#describeContents()
-     */
-    public int describeContents() {
-        return 0;
-    }
-
-    /*
-     * Flatten this object in to a Parcel.
-     * 
-     * @param dest The Parcel in which the object should be written.
-     * @param flags Additional flags about how the object should be written.
-     * May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
-     * 
-     * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
-     */
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(wallpaperImageName);
-        dest.writeString(favesImageName);
-        dest.writeString(favesAppImageName);
-        dest.writeInt(thumbnail);
-        dest.writeInt(theme);
-        dest.writeString(themeName);
-        dest.writeString(ringtoneFileName);
-        dest.writeString(notificationRingtoneFileName);
-        dest.writeString(ringtoneName);
-        dest.writeString(notificationRingtoneName);
-        dest.writeString(author);
-        dest.writeString(copyright);
-        dest.writeInt(isDrmProtected? 1 : 0);
-        dest.writeString(soundPackName);
-        dest.writeInt(parentThemeId);
-        dest.writeString(parentThemePackageName);
-    }
-
     public static final Parcelable.Creator<ThemeInfo> CREATOR
             = new Parcelable.Creator<ThemeInfo>() {
         public ThemeInfo createFromParcel(Parcel source) {
@@ -440,28 +256,7 @@ public final class ThemeInfo implements Parcelable {
     };
 
     private ThemeInfo(Parcel source) {
-        wallpaperImageName = source.readString();
-        favesImageName = source.readString();
-        favesAppImageName = source.readString();
-        thumbnail = source.readInt();
-        theme = source.readInt();
-        themeName = source.readString();
-        ringtoneFileName = source.readString();
-        notificationRingtoneFileName = source.readString();
-        ringtoneName = source.readString();
-        notificationRingtoneName = source.readString();
-        author = source.readString();
-        copyright = source.readString();
-        isDrmProtected = (source.readInt() != 0);
-        soundPackName = source.readString();
-        parentThemeId = source.readInt();
-        parentThemePackageName = source.readString();
-    }
-
-    private void changeDrmFlagIfNeeded(String resourcePath) {
-        if (resourcePath != null && resourcePath.contains(LOCKED_NAME)) {
-            isDrmProtected = true;
-        }
+        super(source);
     }
 
 }

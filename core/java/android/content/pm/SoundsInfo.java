@@ -5,6 +5,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.os.Parcelable;
 import android.os.Parcel;
 import android.util.AttributeSet;
+import android.content.res.Resources;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -24,80 +25,7 @@ import java.util.HashMap;
  *    />
  *
  */
-public class SoundsInfo implements Parcelable {
-
-    /**
-     * The resource id of theme thumbnail.
-     * Specifies a theme thumbnail image resource as @drawable/foo.
-     *
-     * @see thumbnail attribute
-     *
-     */
-    public int thumbnail = - 1;
-
-    /**
-     * The name of the theme (as displayed by UI).
-     *
-     * @see name attribute
-     *
-     */
-    public String name;
-
-    /**
-     * The name of the call ringtone audio file.
-     * Specifies a relative path in assets subfolder.
-     * If the parent's name is "locked" - DRM protected.
-     *
-     * @see ringtoneFileName attribute
-     *
-     */
-    public String ringtoneFileName;
-
-    /**
-     * The name of the call ringtone as shown to user.
-     *
-     * @see ringtoneName attribute
-     *
-     */
-    public String ringtoneName;
-
-    /**
-     * The name of the notification ringtone audio file.
-     * Specifies a relative path in assets subfolder.
-     * If the parent's name is "locked" - DRM protected.
-     *
-     * @see notificationRingtoneFileName attribute
-     *
-     */
-    public String notificationRingtoneFileName;
-
-    /**
-     * The name of the notification ringtone as shown to user.
-     *
-     * @see notificationRingtoneName attribute
-     *
-     */
-    public String notificationRingtoneName;
-
-    /**
-     * The author name of the theme package.
-     *
-     * @see author attribute
-     *
-     */
-    public String author;
-
-    /**
-     * The copyright text.
-     *
-     * @see copyright attribute
-     *
-     */
-    public String copyright;
-
-    // There is no corresposponding flag in manifest file
-    // This flag is set to true iff any media resource is DRM protected
-    public boolean isDrmProtected = false;
+public class SoundsInfo extends BaseThemeInfo {
 
     private static final String [] attributes = new String [] {
         "name",
@@ -109,8 +37,6 @@ public class SoundsInfo implements Parcelable {
         "notificationRingtoneName",
         "copyright",
     };
-
-    private static final String LOCKED_NAME = "locked/";
 
     private static Map<String, Integer> attributesLookupTable;
 
@@ -170,7 +96,10 @@ public class SoundsInfo implements Parcelable {
     private static final int COPYRIGHT_INDEX = 7;
 
 
-    public SoundsInfo(AttributeSet attrs) throws XmlPullParserException {
+    public SoundsInfo(Resources res, AttributeSet attrs) throws XmlPullParserException {
+        super();
+
+        type = InfoObjectType.TYPE_SOUNDPACK;
         Map<String, Integer> tempMap = new HashMap<String, Integer>(attributesLookupTable);
         for (int i = 0; i < attrs.getAttributeCount(); i++) {
             String key = attrs.getAttributeName(i);
@@ -185,6 +114,7 @@ public class SoundsInfo implements Parcelable {
 
                     case THUMBNAIL_INDEX:
                         thumbnail = attrs.getAttributeResourceValue(i, -1);
+                        setBitmap(res, thumbnail);
                         break;
 
                     case AUTHOR_INDEX:
@@ -219,40 +149,6 @@ public class SoundsInfo implements Parcelable {
         }
     }
 
-    /*
-     * Describe the kinds of special objects contained in this Parcelable's
-     * marshalled representation.
-     *
-     * @return a bitmask indicating the set of special object types marshalled
-     * by the Parcelable.
-     *
-     * @see android.os.Parcelable#describeContents()
-     */
-    public int describeContents() {
-        return 0;
-    }
-
-    /*
-     * Flatten this object in to a Parcel.
-     *
-     * @param dest The Parcel in which the object should be written.
-     * @param flags Additional flags about how the object should be written.
-     * May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
-     *
-     * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
-     */
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeInt(thumbnail);
-        dest.writeString(author);
-        dest.writeString(copyright);
-        dest.writeString(ringtoneFileName);
-        dest.writeString(notificationRingtoneFileName);
-        dest.writeString(ringtoneName);
-        dest.writeString(notificationRingtoneName);
-        dest.writeInt(isDrmProtected? 1 : 0);
-    }
-
     public static final Parcelable.Creator<SoundsInfo> CREATOR
             = new Parcelable.Creator<SoundsInfo>() {
         public SoundsInfo createFromParcel(Parcel source) {
@@ -265,21 +161,7 @@ public class SoundsInfo implements Parcelable {
     };
 
     private SoundsInfo(Parcel source) {
-        name = source.readString();
-        thumbnail = source.readInt();
-        author = source.readString();
-        copyright = source.readString();
-        ringtoneFileName = source.readString();
-        notificationRingtoneFileName = source.readString();
-        ringtoneName = source.readString();
-        notificationRingtoneName = source.readString();
-        isDrmProtected = (source.readInt() != 0);
-    }
-
-    private void changeDrmFlagIfNeeded(String resourcePath) {
-        if (resourcePath != null && resourcePath.contains(LOCKED_NAME)) {
-            isDrmProtected = true;
-        }
+        super(source);
     }
 
 }
