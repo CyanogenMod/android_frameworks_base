@@ -711,7 +711,7 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
     }
 
     // Implemented by Carousel (a child class of TabHost)
-    protected void removeViewFromLayout(View mLaunchedView) {
+    protected void removeViewFromLayout(View aView) {
         
     }
 }
