@@ -319,20 +319,20 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
         mCurrentView = spec.mContentStrategy.getContentView();
 
         if (mCurrentView != null) {
-        if (mCurrentView.getParent() == null) {
-            mTabContent
-                    .addView(
-                            mCurrentView,
-                            new ViewGroup.LayoutParams(
-                                    ViewGroup.LayoutParams.FILL_PARENT,
-                                    ViewGroup.LayoutParams.FILL_PARENT));
-        }
+            if (mCurrentView.getParent() == null) {
+                mTabContent
+                .addView(
+                        mCurrentView,
+                        new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.FILL_PARENT,
+                                ViewGroup.LayoutParams.FILL_PARENT));
+            }
 
-        if (!mTabWidget.hasFocus()) {
-            // if the tab widget didn't take focus (likely because we're in touch mode)
-            // give the current tab content view a shot
-            mCurrentView.requestFocus();
-        }
+            if (!mTabWidget.hasFocus()) {
+                // if the tab widget didn't take focus (likely because we're in touch mode)
+                // give the current tab content view a shot
+                mCurrentView.requestFocus();
+            }
         }
         
         //mTabContent.requestFocus(View.FOCUS_FORWARD);
@@ -651,26 +651,23 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
 
         private final String mTag;
         private final Intent mIntent;
-	private final boolean mCloseView;
+        private final boolean mCloseView;
 
         private View mLaunchedView;
 
         private IntentContentStrategy(String tag, Intent intent) {
             mTag = tag;
             mIntent = intent;
-	    mCloseView = true;
+            mCloseView = true;
         }
 
-	private IntentContentStrategy(String tag, Intent intent, boolean closeView) {
+        private IntentContentStrategy(String tag, Intent intent, boolean closeView) {
             mTag = tag;
             mIntent = intent;
-	    mCloseView = closeView;
+            mCloseView = closeView;
         }
 
         public View getContentView() {
-            
-//            if (!mCloseView)
-//                return null;
             
             if (mLocalActivityManager == null) {
                 throw new IllegalStateException("Did you forget to call 'public void setup(LocalActivityManager activityGroup)'?");
@@ -713,6 +710,7 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
        
     }
 
+    // Implemented by Carousel (a child class of TabHost)
     protected void removeViewFromLayout(View mLaunchedView) {
         
     }
