@@ -8,6 +8,7 @@ import android.view.ViewParent;
 import android.widget.AbsoluteLayout;
 import android.widget.Adapter;
 import android.widget.Scroller;
+import android.widget.TabHost;
 
 public class CarouselLayout extends AbsoluteLayout {
 
@@ -68,6 +69,8 @@ public class CarouselLayout extends AbsoluteLayout {
     private int mSelectedPosition = INVALID_POSITION;
     private Adapter mAdapter;
     private int mScrollDuration = 0;
+    private TabHost mTabHost;
+    
     private ScrollerRunnable mScrollerRunnable = new ScrollerRunnable();
 
     public CarouselLayout(Context context) {
@@ -127,33 +130,28 @@ public class CarouselLayout extends AbsoluteLayout {
     private void removeOldSelectedView() {
         if (INVALID_POSITION == mOldSelectedPosition) return;
 
-        View theOldSelectedView = mAdapter.getView(mOldSelectedPosition, null, this);
-        removeView(theOldSelectedView);
         mOldSelectedPosition = INVALID_POSITION;
     }
+    
+    public void removeViewFromLayout(View aView) {
+        removeView(aView);
+    }
+    
     
     private void snapToCurrentSelection() {
         mScrollerRunnable.stop();
         removeOldSelectedView();
-        if (INVALID_POSITION != mSelectedPosition) {
-            View theSelectedView = mAdapter.getView(mSelectedPosition, null, this);
-            theSelectedView.setLayoutParams(new AbsoluteLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
-                                                                            ViewGroup.LayoutParams.FILL_PARENT, 0, 0));
-            requestLayout();
-            theSelectedView.setFocusable(true);
-            theSelectedView.setFocusableInTouchMode(true);
-            ((ViewGroup) theSelectedView).setDescendantFocusability(FOCUS_AFTER_DESCENDANTS);
-            
-            // Do not request focus in order to keep the focus in Gallery when it has the focus
-            //theSelectedView.requestFocus();
-        }
     }
     
     public void setSelection(int position) {
-        setSelection(position, false);
+        setSelection(position, false, false);
     }
     
-    public void setSelection(int position, boolean animate) {
+    public void setTabHost(TabHost aTabHost) {
+        mTabHost = aTabHost;
+    }
+    
+    public void setSelection(int position, boolean animate, boolean startActivity) {
         if (position == mSelectedPosition) return;
         
         snapToCurrentSelection();
@@ -161,7 +159,16 @@ public class CarouselLayout extends AbsoluteLayout {
         mSelectedPosition = position;
         if (INVALID_POSITION != mSelectedPosition) {
             int xView = 0;
-            View theSelectedView = mAdapter.getView(mSelectedPosition, null, this);
+            
+            View theSelectedView = null;
+            
+            if (startActivity) {
+                theSelectedView = mAdapter.getView(mSelectedPosition, null, this);
+            } else {
+                theSelectedView = mTabHost.getCurrentView();
+            }
+           
+            
             if (animate && (INVALID_POSITION != mOldSelectedPosition)) {
                 xView = (mSelectedPosition > mOldSelectedPosition) ? getWidth() : -getWidth();
                 mScrollerRunnable.scrollBy(-xView, mScrollDuration);
@@ -182,9 +189,12 @@ public class CarouselLayout extends AbsoluteLayout {
             addView(theSelectedView,
                     new AbsoluteLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
                                                     ViewGroup.LayoutParams.FILL_PARENT, xView, 0));
+                                                    
+                 
+        
         } else {
-            removeOldSelectedView();
-        }
+           removeOldSelectedView();
+       }
         requestLayout();
     }
 

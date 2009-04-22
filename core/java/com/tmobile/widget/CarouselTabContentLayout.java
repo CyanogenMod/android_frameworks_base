@@ -7,6 +7,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.FrameLayout;
+import android.widget.TabHost;
 
 import com.android.internal.R;
 
@@ -54,11 +55,15 @@ public class CarouselTabContentLayout extends FrameLayout  {
 	}
 	
 	public void setSelection(int position, boolean animate) {
-		mCarouselLayout.setSelection(position, animate);
+		mCarouselLayout.setSelection(position, animate, false);
     }
 	
 	public void setAdapter(Adapter adapter) {
 		mCarouselLayout.setAdapter(adapter);
+	}
+	
+	public void setTabHost(TabHost aTabHost) {
+	    mCarouselLayout.setTabHost(aTabHost);
 	}
 
 	@Override
@@ -128,9 +133,15 @@ public class CarouselTabContentLayout extends FrameLayout  {
 	}
 	
 	public void setSelection(int position) {
-		mCarouselLayout.setSelection(position, true);
+		mCarouselLayout.setSelection(position, true, false);
 	}
 	
+	public void setSelection(int position, boolean animate, boolean startActivity) {
+        mCarouselLayout.setSelection(position, animate, startActivity);
+    }
 	
+	protected void removeViewFromLayout(View aView) {
+	    mCarouselLayout.removeViewFromLayout(aView);
+    }
 	
 }

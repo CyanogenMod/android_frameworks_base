@@ -132,6 +132,7 @@ public class Carousel extends TabHost implements OnGestureListener {
 		}
 
 		if (mCarouselTabContentLayout != null) {
+		    mCarouselTabContentLayout.setTabHost(this);
 			mCarouselTabContentLayout.setAdapter(new CarouselViewAdapter());
 		}
 	}
@@ -166,7 +167,7 @@ public class Carousel extends TabHost implements OnGestureListener {
 				return false;
 			}
 			
-			mCarouselTabContentLayout.setSelection(newSelectedPosition);
+			mCarouselTabContentLayout.setSelection(newSelectedPosition, true, true);
 			mTabWidget.setFilmstripSelection(newSelectedPosition);
 			
 			return true;
@@ -220,4 +221,9 @@ public class Carousel extends TabHost implements OnGestureListener {
             
             mCarouselTabContentLayout.setSelection(index, false);
         }
+		
+		// Call carousel tab layout to remove view
+		protected void removeViewFromLayout(View aView) {
+		    mCarouselTabContentLayout.removeViewFromLayout(aView);
+		}
 }

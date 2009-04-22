@@ -289,7 +289,9 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
 
     @Override
     public void dispatchWindowFocusChanged(boolean hasFocus) {
-        mCurrentView.dispatchWindowFocusChanged(hasFocus);
+        if (mCurrentView != null) {
+            mCurrentView.dispatchWindowFocusChanged(hasFocus);
+        }
     }
 
     public void setCurrentTab(int index) {
@@ -316,6 +318,7 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
         // tab content
         mCurrentView = spec.mContentStrategy.getContentView();
 
+        if (mCurrentView != null) {
         if (mCurrentView.getParent() == null) {
             mTabContent
                     .addView(
@@ -330,7 +333,8 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
             // give the current tab content view a shot
             mCurrentView.requestFocus();
         }
-
+        }
+        
         //mTabContent.requestFocus(View.FOCUS_FORWARD);
         invokeOnTabChangeListener();
     }
@@ -664,6 +668,10 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
         }
 
         public View getContentView() {
+            
+//            if (!mCloseView)
+//                return null;
+            
             if (mLocalActivityManager == null) {
                 throw new IllegalStateException("Did you forget to call 'public void setup(LocalActivityManager activityGroup)'?");
             }
@@ -694,11 +702,18 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
 
         public void tabClosed() {
             if (mLaunchedView != null) {
-		if (mCloseView) {
-		    mLaunchedView.setVisibility(View.GONE);
-		}
+                if (mCloseView) {
+                    mLaunchedView.setVisibility(View.GONE);
+                } else {
+                    removeViewFromLayout(mLaunchedView);
+                }
             }
         }
+
+       
     }
 
+    protected void removeViewFromLayout(View mLaunchedView) {
+        
+    }
 }
