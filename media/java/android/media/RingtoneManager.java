@@ -518,9 +518,14 @@ public class RingtoneManager {
     }
 
     private Cursor getThemeManagerRingtones() {
+        String clause = constructBooleanTrueWhereClause(mFilterColumns);
+        if (!mIncludeDrm) {
+            // filter out DRM-protected resources
+            clause = clause + " and is_drm=0";
+        }
         return query(
-        		Uri.parse("content://" + THEME_AUTHORITY + "/ringtones"), THEME_COLUMNS,
-        		constructBooleanTrueWhereClause(mFilterColumns), null, null);
+                Uri.parse("content://" + THEME_AUTHORITY + "/ringtones"), THEME_COLUMNS,
+                clause, null, null);
     }
     
     private void setFilterColumnsList(int type) {
