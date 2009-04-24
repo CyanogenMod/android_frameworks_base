@@ -1,5 +1,7 @@
 package com.tmobile.widget;
 
+import com.tmobile.widget.Carousel.CarouselViewAdapter;
+
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
@@ -8,7 +10,6 @@ import android.view.ViewParent;
 import android.widget.AbsoluteLayout;
 import android.widget.Adapter;
 import android.widget.Scroller;
-import android.widget.TabHost;
 
 public class CarouselLayout extends AbsoluteLayout {
 
@@ -22,6 +23,7 @@ public class CarouselLayout extends AbsoluteLayout {
         }
 
         public void scrollBy(int distance, int duration) {
+             
             if (distance == 0) return;
             
             removeCallbacks(this);
@@ -67,9 +69,8 @@ public class CarouselLayout extends AbsoluteLayout {
     
     private int mOldSelectedPosition = INVALID_POSITION;
     private int mSelectedPosition = INVALID_POSITION;
-    private Adapter mAdapter;
+    private CarouselViewAdapter mAdapter;
     private int mScrollDuration = 0;
-    private TabHost mTabHost;
     
     private ScrollerRunnable mScrollerRunnable = new ScrollerRunnable();
 
@@ -102,7 +103,7 @@ public class CarouselLayout extends AbsoluteLayout {
         invalidate();
     }
 
-    public void setAdapter(Adapter adapter) {
+    public void setAdapter(CarouselViewAdapter adapter) {
         if (null != mAdapter) {
             //mAdapter.unregisterDataSetObserver(mDataSetObserver);
             resetLayout();
@@ -130,28 +131,38 @@ public class CarouselLayout extends AbsoluteLayout {
     private void removeOldSelectedView() {
         if (INVALID_POSITION == mOldSelectedPosition) return;
 
+        View theOldSelectedView = mAdapter.getView(mOldSelectedPosition);
+        removeView(theOldSelectedView);
+        
         mOldSelectedPosition = INVALID_POSITION;
     }
-    
-    public void removeViewFromLayout(View aView) {
-        removeView(aView);
-    }
-    
+  
     
     private void snapToCurrentSelection() {
         mScrollerRunnable.stop();
         removeOldSelectedView();
+
+        
+        if (INVALID_POSITION != mSelectedPosition) {
+            View theSelectedView = mAdapter.getView(mSelectedPosition);
+            theSelectedView.setLayoutParams(new AbsoluteLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
+                                                                            ViewGroup.LayoutParams.FILL_PARENT, 0, 0));
+            requestLayout();
+            theSelectedView.setFocusable(true);
+            theSelectedView.setFocusableInTouchMode(true);
+            ((ViewGroup) theSelectedView).setDescendantFocusability(FOCUS_AFTER_DESCENDANTS);
+            
+            // Do not request focus in order to keep the focus in Gallery when it has the focus
+            //theSelectedView.requestFocus();
+        }
+	  
     }
     
     public void setSelection(int position) {
-        setSelection(position, false, false);
+        setSelection(position, false);
     }
     
-    public void setTabHost(TabHost aTabHost) {
-        mTabHost = aTabHost;
-    }
-    
-    public void setSelection(int position, boolean animate, boolean startActivity) {
+    public void setSelection(int position, boolean animate) {
         if (position == mSelectedPosition) return;
         
         snapToCurrentSelection();
@@ -160,16 +171,10 @@ public class CarouselLayout extends AbsoluteLayout {
         if (INVALID_POSITION != mSelectedPosition) {
             int xView = 0;
             
-            View theSelectedView = null;
-            
-            if (startActivity) {
-                theSelectedView = mAdapter.getView(mSelectedPosition, null, this);
-            } else {
-                theSelectedView = mTabHost.getCurrentView();
-            }
-           
+            View theSelectedView = mAdapter.getView(mSelectedPosition);
             
             if (animate && (INVALID_POSITION != mOldSelectedPosition)) {
+                
                 xView = (mSelectedPosition > mOldSelectedPosition) ? getWidth() : -getWidth();
                 mScrollerRunnable.scrollBy(-xView, mScrollDuration);
             } else {
@@ -199,6 +204,7 @@ public class CarouselLayout extends AbsoluteLayout {
     }
 
     private void handleScroll(int inChangeInX) {
+           
         if (getChildCount() == 0) return;
         
         for (int i = getChildCount() - 1; i >= 0; i--) {

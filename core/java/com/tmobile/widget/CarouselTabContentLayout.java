@@ -1,22 +1,19 @@
 package com.tmobile.widget;
 
+import com.android.internal.R;
+import com.tmobile.widget.Carousel.CarouselViewAdapter;
+
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.FrameLayout;
-import android.widget.TabHost;
-
-import com.android.internal.R;
 
 
 public class CarouselTabContentLayout extends FrameLayout  {
 
 	private CarouselLayout mCarouselLayout;
 
-	
 	private int mScrollDuration = SCROLL_DURATION_DEFAULT;
 	private static final int SCROLL_DURATION_DEFAULT = 400;
 	
@@ -32,12 +29,9 @@ public class CarouselTabContentLayout extends FrameLayout  {
 			int defStyle) {
 		super(context, attrs, defStyle);
 
-		
-		
 		setFocusable(false);
-		
+		               
 		setFocusableInTouchMode(false);
-		
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Gallery, defStyle, 0);
         mScrollDuration = a.getInt(R.styleable.Gallery_animationDuration, SCROLL_DURATION_DEFAULT);
@@ -55,15 +49,11 @@ public class CarouselTabContentLayout extends FrameLayout  {
 	}
 	
 	public void setSelection(int position, boolean animate) {
-		mCarouselLayout.setSelection(position, animate, false);
+		mCarouselLayout.setSelection(position, animate);
     }
 	
-	public void setAdapter(Adapter adapter) {
+	public void setAdapter(CarouselViewAdapter adapter) {
 		mCarouselLayout.setAdapter(adapter);
-	}
-	
-	public void setTabHost(TabHost aTabHost) {
-	    mCarouselLayout.setTabHost(aTabHost);
 	}
 
 	@Override
@@ -119,12 +109,13 @@ public class CarouselTabContentLayout extends FrameLayout  {
 	}
 
 	@Override
-	public void removeViews(int start, int count) {
-		// Do nothing
+	public void removeViewsInLayout(int start, int count) {
+       // Do nothing
 	}
 
+	
 	@Override
-	public void removeViewsInLayout(int start, int count) {
+	public void removeViews(int start, int count) {
 		// Do nothing
 	}
 	
@@ -133,15 +124,7 @@ public class CarouselTabContentLayout extends FrameLayout  {
 	}
 	
 	public void setSelection(int position) {
-		mCarouselLayout.setSelection(position, true, false);
+		mCarouselLayout.setSelection(position, true);
 	}
-	
-	public void setSelection(int position, boolean animate, boolean startActivity) {
-        mCarouselLayout.setSelection(position, animate, startActivity);
-    }
-	
-	protected void removeViewFromLayout(View aView) {
-	    mCarouselLayout.removeViewFromLayout(aView);
-    }
 	
 }

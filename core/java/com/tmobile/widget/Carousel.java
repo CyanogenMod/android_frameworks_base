@@ -3,6 +3,7 @@ package com.tmobile.widget;
 
 import com.tmobile.widget.CarouselTabWidget.CarouselTabWidgetOnItemSelectedListener;
 
+import android.app.Activity;
 import android.app.LocalActivityManager;
 import android.content.Context;
 import android.content.Intent;
@@ -62,6 +63,25 @@ public class Carousel extends TabHost implements OnGestureListener {
 
 			return windowDecor;
 		}
+		
+		public View getView(int position) {
+	        String name = mTabWidget.getFilmstrip().getFilmstripItem(position)
+	                    .getName();
+	       
+	            Activity activity = mLocalActivityManager.getActivity(name);
+	            
+	            if (activity != null) {
+	              
+	                Window window  = activity.getWindow();
+	                
+	                View windowDecor = (window != null) ? window.getDecorView() : null;
+
+	                return windowDecor;
+	            }
+	            
+	         
+	            return getView(position, null, null);
+	       }
 	}
 
 	public class CarouselOnItemSelectedListener extends
@@ -132,7 +152,6 @@ public class Carousel extends TabHost implements OnGestureListener {
 		}
 
 		if (mCarouselTabContentLayout != null) {
-		    mCarouselTabContentLayout.setTabHost(this);
 			mCarouselTabContentLayout.setAdapter(new CarouselViewAdapter());
 		}
 	}
@@ -167,7 +186,7 @@ public class Carousel extends TabHost implements OnGestureListener {
 				return false;
 			}
 			
-			mCarouselTabContentLayout.setSelection(newSelectedPosition, true, true);
+			mCarouselTabContentLayout.setSelection(newSelectedPosition, true);
 			mTabWidget.setFilmstripSelection(newSelectedPosition);
 			
 			return true;
@@ -211,6 +230,7 @@ public class Carousel extends TabHost implements OnGestureListener {
 		}
 		
 		protected void dispatchKeyUpEvent() {
+		   
 			mTabWidget.getFilmstrip().requestFocus();
 		}
 		
@@ -221,9 +241,5 @@ public class Carousel extends TabHost implements OnGestureListener {
             
             mCarouselTabContentLayout.setSelection(index, false);
         }
-		
-		// Call carousel tab layout to remove view
-		protected void removeViewFromLayout(View aView) {
-		    mCarouselTabContentLayout.removeViewFromLayout(aView);
-		}
+
 }

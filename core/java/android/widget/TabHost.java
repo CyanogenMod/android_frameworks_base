@@ -333,6 +333,7 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
                 // give the current tab content view a shot
                 mCurrentView.requestFocus();
             }
+
         }
         
         //mTabContent.requestFocus(View.FOCUS_FORWARD);
@@ -701,17 +702,10 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
             if (mLaunchedView != null) {
                 if (mCloseView) {
                     mLaunchedView.setVisibility(View.GONE);
-                } else {
-                    removeViewFromLayout(mLaunchedView);
                 }
             }
         }
 
        
-    }
-
-    // Implemented by Carousel (a child class of TabHost)
-    protected void removeViewFromLayout(View aView) {
-        
     }
 }
