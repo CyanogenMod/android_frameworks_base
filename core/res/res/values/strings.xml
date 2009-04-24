@@ -2325,4 +2325,8 @@
     <!-- This string array should be overridden by the manufacture to present a list of carrier-id,locale pairs.  This is used at startup to set a default locale by checking the system property ro.carrier for the carrier-id and searching through this array -->
     <string-array translatable="false" name="carrier_locales">
     </string-array>    
+    
+    <string name="ringtone_button_done">Done</string>
+    <string name="ringtone_button_cancel">Cancel</string>
+    <string name="ringtone_header">Select Ringtone</string>
 </resources>
