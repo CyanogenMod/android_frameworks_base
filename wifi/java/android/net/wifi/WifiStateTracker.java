@@ -1063,11 +1063,10 @@ public class WifiStateTracker extends NetworkStateTracker {
 
             case EVENT_INTERFACE_CONFIGURATION_SUCCEEDED:
                 /**
-                 * Since this event is sent from another thread, it might have been
-                 * sent after we closed our connection to the supplicant in the course
-                 * of disabling Wi-Fi. In that case, we should just ignore the event.
+		 *  We should call or handle a configuration succeeded event if we
+		 *  are already associated.
                  */
-                if (mWifiInfo.getSupplicantState() == SupplicantState.UNINITIALIZED) {
+                if (mWifiInfo.getSupplicantState() == SupplicantState.COMPLETED) {
                     break;
                 }
                 mReconnectCount = 0;
@@ -1865,7 +1864,7 @@ public class WifiStateTracker extends NetworkStateTracker {
             }
             checkUseStaticIp();
 
-            if (mWifiInfo.getSupplicantState() == SupplicantState.UNINITIALIZED) {
+            if (mWifiInfo.getSupplicantState() != SupplicantState.COMPLETED) {
                 return;
             }
 
