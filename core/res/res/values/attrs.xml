@@ -49,6 +49,7 @@
         <attr name="colorTertiary" format="reference|color" />
         <attr name="colorDisabled" format="reference|color" />
         <attr name="colorRest" format="reference|color" />
+        <attr name="colorRestStroke" format="reference|color" />
 
         <!-- =========== -->
         <!-- Text styles -->
