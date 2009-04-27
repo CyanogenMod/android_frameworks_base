@@ -5,6 +5,7 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.content.Context;
 import com.android.internal.util.XmlUtils;
 
 import java.util.Arrays;
@@ -268,6 +269,9 @@ public class TypedArray {
                 return csl.getDefaultColor();
             }
             return defValue;
+        } else if (type == TypedValue.TYPE_ATTRIBUTE && mResources.getContext() != null) {
+            mResources.getContext().getTheme().resolveAttribute(data[index+AssetManager.STYLE_DATA], mValue, true);
+            return mValue.data;
         }
 
         throw new UnsupportedOperationException("Can't convert to color: type=0x"
@@ -528,9 +532,9 @@ public class TypedArray {
      * gets the resource ID of the selected attribute, and uses
      * {@link Resources#getDrawable Resources.getDrawable} of the owning
      * Resources object to retrieve its Drawable.
-     * 
+     *
      * @param index Index of attribute to retrieve.
-     * 
+     *
      * @return Drawable for the attribute, or null if not defined.
      */
     public Drawable getDrawable(int index) {

@@ -32,6 +32,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.SparseArray;
 import android.util.TypedValue;
+import android.content.Context;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -81,6 +82,8 @@ public class Resources {
     private final Configuration mConfiguration = new Configuration();
     /*package*/ final DisplayMetrics mMetrics = new DisplayMetrics();
     PluralRules mPluralRule;
+
+    private Context context;
 
     /**
      * This exception is thrown by the resource APIs when a requested resource
@@ -875,6 +878,20 @@ public class Resources {
             return;
         }
         throw new NotFoundException("String resource name " + name);
+    }
+
+    /**
+     * @hide
+     */
+    public Context getContext() {
+        return context;
+    }
+
+    /**
+     * @hide
+     */
+    public void setContext(Context _context) {
+        context = _context;
     }
 
     /**
