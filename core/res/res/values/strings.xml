@@ -2329,4 +2329,5 @@
     <string name="ringtone_button_done">Done</string>
     <string name="ringtone_button_cancel">Cancel</string>
     <string name="ringtone_header">Select Ringtone</string>
+    <string name="buy_ringtones">Buy Ringtones</string>
 </resources>

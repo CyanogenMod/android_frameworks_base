@@ -15,7 +15,8 @@
    <com.tmobile.widget.HeaderIcon
      android:layout_width="fill_parent"
      android:layout_height="wrap_content"
-     android:headerText="@string/ringtone_header" />
+     android:headerText="@string/buy_ringtones" 
+     android:iconSrc="@drawable/pluto_mall_icon" />
       
    <ListView
     android:layout_width="fill_parent"
