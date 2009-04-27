@@ -33,7 +33,28 @@ import android.util.AttributeSet;
 public final class ThemeInfo extends BaseThemeInfo {
 
     /**
-     * {@link #name}
+     * The theme resource id of parent theme
+     *
+     * @see parentThemeId attribute
+     *
+     */
+    public int parentThemeId = -1;
+
+    /**
+     * The package name of parent theme
+     *
+     * @see parentThemePackageName attribute
+     *
+     */
+    public String parentThemePackageName = "";
+
+    /**
+     * {@hide}
+     */
+    public boolean hasColorPalette = false;
+
+    /**
+     * {@link #themePackage}
      *
      */
     private static final int THEME_PACKAGE_INDEX = 0;
@@ -242,6 +263,22 @@ public final class ThemeInfo extends BaseThemeInfo {
         }
     }
 
+    /*
+     * Flatten this object in to a Parcel.
+     * 
+     * @param dest The Parcel in which the object should be written.
+     * @param flags Additional flags about how the object should be written.
+     * May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
+     * 
+     * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
+     */
+    public void writeToParcel(Parcel dest, int flags) {
+        super.writeToParcel(dest, flags);
+        dest.writeInt(parentThemeId);
+        dest.writeString(parentThemePackageName);
+        dest.writeInt(hasColorPalette? 1 : 0);
+    }
+
     public static final Parcelable.Creator<ThemeInfo> CREATOR
             = new Parcelable.Creator<ThemeInfo>() {
         public ThemeInfo createFromParcel(Parcel source) {
@@ -255,6 +292,10 @@ public final class ThemeInfo extends BaseThemeInfo {
 
     private ThemeInfo(Parcel source) {
         super(source);
+
+        parentThemeId = source.readInt();
+        parentThemePackageName = source.readString();
+        hasColorPalette = source.readInt() != 0;
     }
 
 }
