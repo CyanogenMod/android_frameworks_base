@@ -131,6 +131,25 @@ public final class ThemeInfo extends BaseThemeInfo {
      */
     private static final int SOUNDPACK_NAME_INDEX = 12;
 
+    /**
+     * {@link #parentThemeId}
+     *
+     */
+    private static final int PARENT_THEME_INDEX = 13;
+
+    /**
+     * {@link #parentThemePackageName}
+     *
+     */
+    private static final int PARENT_THEME_PACKAGE_INDEX = 14;
+
+    /**
+     * {@link #parentThemePackageName}
+     *
+     */
+    private static final int THEME_HAS_COLOR_PALETTE_INDEX = 15;
+
+
     private static final String [] compulsoryAttributes = new String [] {
         "name",
         "thumbnail",
@@ -150,6 +169,7 @@ public final class ThemeInfo extends BaseThemeInfo {
         "soundpackName",
         "parentThemeId",
         "parentThemePackageName",
+        "hasColorPalette",
     };
 
     private static Map<String, Integer> attributesLookupTable;
@@ -249,12 +269,18 @@ public final class ThemeInfo extends BaseThemeInfo {
                     case SOUNDPACK_NAME_INDEX:
                         soundPackName = attrs.getAttributeValue(i);
                         break;
+
                     case PARENT_THEME_INDEX:
                         parentThemeId = attrs.getAttributeIntValue(i, -1);
                         break;  
+
                     case PARENT_THEME_PACKAGE_INDEX:
                         parentThemePackageName = attrs.getAttributeValue(i);
                         break;  
+
+                    case THEME_HAS_COLOR_PALETTE_INDEX:
+                        hasColorPalette = attrs.getAttributeValue(i).equalsIgnoreCase("true");
+                        break;
                 }
             }
         }
