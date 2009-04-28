@@ -69,7 +69,9 @@ public abstract class CompoundButton extends Button implements Checkable {
                 context.obtainStyledAttributes(
                         attrs, com.android.internal.R.styleable.CompoundButton, defStyle, 0);
 
+        a.getResources().setContext(context);
         Drawable d = a.getDrawable(com.android.internal.R.styleable.CompoundButton_button);
+        a.getResources().setContext(null);
         if (d != null) {
             setButtonDrawable(d);
         }
