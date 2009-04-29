@@ -276,8 +276,9 @@ class ApplicationContext extends Context {
                 Configuration config = ActivityManagerNative.getDefault().getConfiguration();
                 if (config.customTheme != null) {
                     int themeId = config.customTheme.getThemeId();
-                    if (themeId >= 0)
+                    if (themeId >= 0) {
                         return themeId;
+                    }
                 }
             } catch (RemoteException e) {
                 Log.e(TAG, "Unable to access configuration, reverting to original system default theme", e);
