@@ -24,16 +24,14 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Debug;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.provider.Settings;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
@@ -271,7 +269,8 @@ public final class RingtonePickerActivity extends Activity implements AdapterVie
         if (positiveResult) {
             Intent resultIntent = new Intent();
             Uri uri = null;
-            
+            String title = null;
+
             if (mClickedPos == mDefaultRingtonePos) {
                 // Set it to the default Uri that they originally gave us
                 uri = mUriForDefaultItem;
@@ -279,10 +278,13 @@ public final class RingtonePickerActivity extends Activity implements AdapterVie
                 // A null Uri is for the 'Silent' item
                 uri = null;
             } else {
+                Cursor cursor = (Cursor)mListView.getAdapter().getItem(mClickedPos);
+                title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
                 uri = mRingtoneManager.getRingtoneUri(getRingtoneManagerPosition(mClickedPos));
             }
 
             resultIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI, uri);
+            resultIntent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, title);
             setResult(RESULT_OK, resultIntent);
 //            RingtoneManager.setActualDefaultRingtoneUri(this, RingtoneManager.TYPE_RINGTONE,uri);
         } else {
