@@ -1511,6 +1511,13 @@ public class Intent implements Parcelable {
     public static final String ACTION_REBOOT =
             "android.intent.action.REBOOT";
 
+    /**
+     * Activity Action: Pick wallpaper from a list.
+     * Used instead of SET_WALLPAPER when we only need to pick wallpaper and do not set it.
+     * @hide
+     */
+    public static final String ACTION_PICK_WALLPAPER = "com.tmobile.intent.action.PICK_WALLPAPER";
+
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------
     // Standard intent categories (see addCategory()).
@@ -1756,6 +1763,40 @@ public class Intent implements Parcelable {
      * delivered.
      */
     public static final String EXTRA_ALARM_COUNT = "android.intent.extra.ALARM_COUNT";
+
+    /**
+     * Used as a boolean extra field in {@link com.tmobile.intent.action.PICK_WALLPAPER}
+     * intents to tell the caller if {@link com.tmobile.intent.extra.WALLPAPER_IMAGE}
+     * delievered with the intent is a resource id.
+     * 
+     * @hide
+     */
+    public static final String EXTRA_WALLPAPER_ID = "com.tmobile.intent.extra.WALLPAPER_ID";
+
+    /**
+     * Used as a string extra field in {@link com.tmobile.intent.action.PICK_WALLPAPER}
+     * intents to tell the caller how to access bitmap resource.
+     * This can be either a Uri, a resource id or a relative path for raw resource.
+     *
+     * @hide
+     */
+    public static final String EXTRA_WALLPAPER_IMAGE = "com.tmobile.intent.extra.WALLPAPER_IMAGE";
+
+    /**
+     * Used as a string extra field in {@link com.tmobile.intent.action.PICK_WALLPAPER}
+     * intents to tell the caller the bitmap UI name (to be shown to the user).
+     *
+     * @hide
+     */
+    public static final String EXTRA_WALLPAPER_IMAGE_NAME = "com.tmobile.intent.extra.WALLPAPER_IMAGE_NAME";
+
+    /**
+     * Used as a bitmap extra field in {@link com.tmobile.intent.action.PICK_WALLPAPER}
+     * intents containing thumbnail image.
+     *
+     * @hide
+     */
+    public static final String EXTRA_WALLPAPER_THUMBNAIL = "com.tmobile.intent.extra.EXTRA_WALLPAPER_THUMBNAIL";
 
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------
