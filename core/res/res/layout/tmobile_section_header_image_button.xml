@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_weight="1.0"
+		android:singleLine="true"
+		android:textAppearance="?android:attr/textAppearanceLabelHeader"
+		android:id="@+id/headerId" />
+
+	<Button
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingLeft="8dp"
+		android:id="@+id/button1"
+		android:background="@drawable/pluto_button_add_element_rest"/>
+</merge>
