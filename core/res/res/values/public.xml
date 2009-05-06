@@ -1089,7 +1089,9 @@
   <public type="attr" name="colorTertiary" id="0x01010282" />
   <public type="attr" name="colorDisabled" id="0x01010283" />
   <public type="attr" name="colorRest" id="0x01010284" />
-  <public type="attr" name="colorRestStroke" id="0x01010289" />
+  <public type="attr" name="colorRestStroke" id="0x01010285" />
+  
+  <public type="attr" name="listItemBackground" id="0x01010286" />
 
   <public type="integer" name="config_shortAnimTime" id="0x010e0000" />
   <public type="integer" name="config_mediumAnimTime" id="0x010e0001" />

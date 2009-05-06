@@ -1334,6 +1334,8 @@
              Otherwise the selector is drawn behind the selected item. The default
              value is false. -->
         <attr name="drawSelectorOnTop" format="boolean" />
+        <!-- Drawable used to colorize an item's background in the list. -->
+        <attr name="listItemBackground" format="color|reference" />
         <!-- Used by ListView and GridView to stack their content from the bottom. -->
         <attr name="stackFromBottom" format="boolean" />
         <!-- When set to true, the list uses a drawing cache during scrolling.
