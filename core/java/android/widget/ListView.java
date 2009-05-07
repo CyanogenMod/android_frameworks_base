@@ -116,6 +116,8 @@ public class ListView extends AbsListView {
     private boolean mClipDivider;
     private boolean mHeaderDividersEnabled;
     private boolean mFooterDividersEnabled;
+    
+    private Drawable mDefaultItemBackground;
 
     private boolean mAreAllItemsSelectable = true;
 
@@ -168,6 +170,8 @@ public class ListView extends AbsListView {
 
         mHeaderDividersEnabled = a.getBoolean(R.styleable.ListView_headerDividersEnabled, true);
         mFooterDividersEnabled = a.getBoolean(R.styleable.ListView_footerDividersEnabled, true);
+        
+        mDefaultItemBackground = a.getDrawable(com.android.internal.R.styleable.ListView_listItemBackground); 
 
         a.recycle();
     }
@@ -1617,11 +1621,15 @@ public class ListView extends AbsListView {
 
                 return child;
             }
-        }
+        }      
 
         // Make a new view for this position, or convert an unused view if possible
         child = obtainView(position);
-
+        if (child.getBackground() == null && mDefaultItemBackground != null) {            
+            if (mAdapter.getItemViewType(position) != Adapter.IGNORE_ITEM_VIEW_TYPE)                
+                child.setBackgroundDrawable(mDefaultItemBackground);        
+        }  
+        
         // This needs to be positioned and measured
         setupChild(child, position, y, flow, childrenLeft, selected, false);
 
