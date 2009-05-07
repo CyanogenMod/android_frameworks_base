@@ -6,6 +6,8 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.content.Context;
+import android.content.res.Resources.NotFoundException;
+
 import com.android.internal.util.XmlUtils;
 
 import java.util.Arrays;
@@ -552,6 +554,22 @@ public class TypedArray {
             return mResources.loadDrawable(value, value.resourceId);
         }
         return null;
+    }
+
+    /**
+     * Very crude hack to allow {@link #getColor} to succeed in looking up
+     * values from the current theme. This method is necessary as we use
+     * LayerDrawables which use color attribute references.
+     * 
+     * @hide
+     */
+    public Drawable getDrawableWithContext(Context context, int id) throws NotFoundException {
+        mResources.setContext(context);
+        try {
+            return getDrawable(id);
+        } finally {
+            mResources.setContext(null);
+        }
     }
 
     /**

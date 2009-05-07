@@ -504,9 +504,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         TypedArray a = context.obtainStyledAttributes(attrs,
                 com.android.internal.R.styleable.AbsListView, defStyle, 0);
 
-        a.getResources().setContext(context);
-        Drawable d = a.getDrawable(com.android.internal.R.styleable.AbsListView_listSelector);
-        a.getResources().setContext(null);
+        Drawable d = a.getDrawableWithContext(context, com.android.internal.R.styleable.AbsListView_listSelector);
         if (d != null) {
             setSelector(d);
         }
