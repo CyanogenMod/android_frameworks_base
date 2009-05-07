@@ -141,22 +141,6 @@ public class BaseThemeInfo implements Parcelable {
      */
     public String soundPackName;
 
-    /**
-     * The name of a wallpaper thumbnail asset.
-     *
-     * @see wallpaperPreview attribute
-     *
-     */
-    public String wallpaperThumbnailName;
-
-    /**
-     * The name of a color palette thumbnail asset.
-     *
-     * @see colorPalettePreview attribute
-     *
-     */
-    public String colorPaletteThumbnailName;
-
 
     private static final String LOCKED_NAME = "locked/";
 
@@ -198,8 +182,6 @@ public class BaseThemeInfo implements Parcelable {
         dest.writeString(copyright);
         dest.writeInt(isDrmProtected? 1 : 0);
         dest.writeString(soundPackName);
-        dest.writeString(wallpaperThumbnailName);
-        dest.writeString(colorPaletteThumbnailName);
     }
 
     protected BaseThemeInfo() {
@@ -221,8 +203,6 @@ public class BaseThemeInfo implements Parcelable {
         copyright = source.readString();
         isDrmProtected = (source.readInt() != 0);
         soundPackName = source.readString();
-        wallpaperThumbnailName = source.readString();
-        colorPaletteThumbnailName = source.readString();
     }
 
     protected void changeDrmFlagIfNeeded(String resourcePath) {

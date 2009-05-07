@@ -149,18 +149,6 @@ public final class ThemeInfo extends BaseThemeInfo {
      */
     private static final int THEME_HAS_COLOR_PALETTE_INDEX = 15;
 
-    /**
-     * {@link #parentThemePackageName}
-     *
-     */
-    private static final int WALLPAPER_THUMBNAIL_INDEX = 16;
-
-    /**
-     * {@link #parentThemePackageName}
-     *
-     */
-    private static final int COLORPALETTE_THUMBNAIL_INDEX = 17;
-
 
     private static final String [] compulsoryAttributes = new String [] {
         "name",
@@ -182,8 +170,6 @@ public final class ThemeInfo extends BaseThemeInfo {
         "parentThemeId",
         "parentThemePackageName",
         "hasColorPalette",
-        "wallpaperPreview",
-        "colorPalettePreview",
     };
 
     private static Map<String, Integer> attributesLookupTable;
@@ -294,14 +280,6 @@ public final class ThemeInfo extends BaseThemeInfo {
 
                     case THEME_HAS_COLOR_PALETTE_INDEX:
                         hasColorPalette = attrs.getAttributeValue(i).equalsIgnoreCase("true");
-                        break;
-
-                    case WALLPAPER_THUMBNAIL_INDEX:
-                        wallpaperThumbnailName = attrs.getAttributeValue(i);
-                        break;
-
-                    case COLORPALETTE_THUMBNAIL_INDEX:
-                        colorPaletteThumbnailName = attrs.getAttributeValue(i);
                         break;
                 }
             }
