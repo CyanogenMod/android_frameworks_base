@@ -931,6 +931,11 @@ public class Resources {
             AssetManager.applyThemeStyle(mTheme, resid, force);
         }
 
+        /** @hide */
+        public void setAttributeValue(int attr, int color) {
+            AssetManager.setAttributeValue(mTheme, attr, color);
+        }
+
         /**
          * Set this theme to hold the same contents as the theme
          * <var>other</var>.  If both of these themes are from the same

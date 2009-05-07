@@ -1524,6 +1524,7 @@ public:
 
         status_t applyStyle(uint32_t resID, bool force=false);
         status_t setTo(const Theme& other);
+        void setAttributeValue(uint32_t attribute, uint32_t value);
 
         /**
          * Retrieve a value in the theme.  If the theme defines this
