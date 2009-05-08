@@ -22,6 +22,7 @@ import static android.os.ParcelFileDescriptor.*;
 import android.app.IWallpaperService;
 import android.app.IWallpaperServiceCallback;
 import android.backup.BackupManager;
+import android.app.ActivityManagerNative;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -192,7 +193,9 @@ class WallpaperService extends IWallpaperService.Stub {
         }
         mCallbacks.finishBroadcast();
         final Intent intent = new Intent(Intent.ACTION_WALLPAPER_CHANGED);
-        mContext.sendBroadcast(intent);
+        /* Broadcasting the event only when the system is ready */
+        if (ActivityManagerNative.isSystemReady())
+            mContext.sendBroadcast(intent);
     }
 
     private void checkPermission(String permission) {
