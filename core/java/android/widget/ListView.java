@@ -2725,6 +2725,10 @@ public class ListView extends AbsListView {
     private View addViewAbove(View theView, int position) {
         int abovePosition = position - 1;
         View view = obtainView(abovePosition);
+        if (view.getBackground() == null && mDefaultItemBackground != null) {            
+            if (mAdapter.getItemViewType(position) != Adapter.IGNORE_ITEM_VIEW_TYPE)                
+                view.setBackgroundDrawable(mDefaultItemBackground);
+        }
         int edgeOfNewChild = theView.getTop() - mDividerHeight;
         setupChild(view, abovePosition, edgeOfNewChild, false, mListPadding.left, false, false);
         return view;
@@ -2733,6 +2737,10 @@ public class ListView extends AbsListView {
     private View addViewBelow(View theView, int position) {
         int belowPosition = position + 1;
         View view = obtainView(belowPosition);
+        if (view.getBackground() == null && mDefaultItemBackground != null) {            
+            if (mAdapter.getItemViewType(position) != Adapter.IGNORE_ITEM_VIEW_TYPE)                
+                view.setBackgroundDrawable(mDefaultItemBackground);  
+        }
         int edgeOfNewChild = theView.getBottom() + mDividerHeight;
         setupChild(view, belowPosition, edgeOfNewChild, true, mListPadding.left, false, false);
         return view;
