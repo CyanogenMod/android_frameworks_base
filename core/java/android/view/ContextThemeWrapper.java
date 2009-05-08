@@ -106,8 +106,6 @@ public class ContextThemeWrapper extends ContextWrapper {
             mThemedResources = new Resources(assets, metrics, config);
             mUseThemedResources = true;
             mTheme = null;
-
-            Log.i("ContextThemeWrapper", "Successfully applied theme preview hack!");
         }
     }
     
