@@ -49,11 +49,6 @@ public final class ThemeInfo extends BaseThemeInfo {
     public String parentThemePackageName = "";
 
     /**
-     * {@hide}
-     */
-    public boolean hasColorPalette = false;
-
-    /**
      * {@link #themePackage}
      *
      */
@@ -143,12 +138,6 @@ public final class ThemeInfo extends BaseThemeInfo {
      */
     private static final int PARENT_THEME_PACKAGE_INDEX = 14;
 
-    /**
-     * {@link #parentThemePackageName}
-     *
-     */
-    private static final int THEME_HAS_COLOR_PALETTE_INDEX = 15;
-
 
     private static final String [] compulsoryAttributes = new String [] {
         "name",
@@ -169,7 +158,6 @@ public final class ThemeInfo extends BaseThemeInfo {
         "soundpackName",
         "parentThemeId",
         "parentThemePackageName",
-        "hasColorPalette",
     };
 
     private static Map<String, Integer> attributesLookupTable;
@@ -277,10 +265,6 @@ public final class ThemeInfo extends BaseThemeInfo {
                     case PARENT_THEME_PACKAGE_INDEX:
                         parentThemePackageName = attrs.getAttributeValue(i);
                         break;  
-
-                    case THEME_HAS_COLOR_PALETTE_INDEX:
-                        hasColorPalette = attrs.getAttributeValue(i).equalsIgnoreCase("true");
-                        break;
                 }
             }
         }
@@ -302,7 +286,6 @@ public final class ThemeInfo extends BaseThemeInfo {
         super.writeToParcel(dest, flags);
         dest.writeInt(parentThemeId);
         dest.writeString(parentThemePackageName);
-        dest.writeInt(hasColorPalette? 1 : 0);
     }
 
     public static final Parcelable.Creator<ThemeInfo> CREATOR
@@ -321,7 +304,6 @@ public final class ThemeInfo extends BaseThemeInfo {
 
         parentThemeId = source.readInt();
         parentThemePackageName = source.readString();
-        hasColorPalette = source.readInt() != 0;
     }
 
 }
