@@ -1626,8 +1626,9 @@ public class ListView extends AbsListView {
         // Make a new view for this position, or convert an unused view if possible
         child = obtainView(position);
         if (child.getBackground() == null && mDefaultItemBackground != null) {            
-            if (mAdapter.getItemViewType(position) != Adapter.IGNORE_ITEM_VIEW_TYPE)                
+            if (mAdapter.getItemViewType(position) != Adapter.IGNORE_ITEM_VIEW_TYPE && !selected) {                
                 child.setBackgroundDrawable(mDefaultItemBackground);        
+            }
         }  
         
         // This needs to be positioned and measured
@@ -1779,6 +1780,14 @@ public class ListView extends AbsListView {
     @Override
     void setSelectionInt(int position) {
         setNextSelectedPositionInt(position);
+        // remove item background if any since this position is selected
+        if (position >= 0) {
+            View selectedView = obtainView(position);
+            if (selectedView.getBackground() != null &&
+                mAdapter.getItemViewType(position) != Adapter.IGNORE_ITEM_VIEW_TYPE) {
+                selectedView.setBackgroundDrawable(null);
+            }
+        }
         layoutChildren();
     }
 
@@ -2244,15 +2253,24 @@ public class ListView extends AbsListView {
 
         final int numChildren = getChildCount();
 
+        boolean isSelected;
         // start with top view: is it changing size?
         if (topView != null) {
-            topView.setSelected(!newFocusAssigned && topSelected);
+            isSelected = !newFocusAssigned && topSelected;
+            if (mDefaultItemBackground != null) {
+                topView.setBackgroundDrawable(isSelected ? null : mDefaultItemBackground);
+            }
+            topView.setSelected(isSelected);
             measureAndAdjustDown(topView, topViewIndex, numChildren);
         }
 
         // is the bottom view changing size?
         if (bottomView != null) {
-            bottomView.setSelected(!newFocusAssigned && !topSelected);
+            isSelected = !newFocusAssigned && !topSelected;
+            if (mDefaultItemBackground != null) {
+                bottomView.setBackgroundDrawable(isSelected ? null : mDefaultItemBackground);
+            }
+            bottomView.setSelected(isSelected);
             measureAndAdjustDown(bottomView, bottomViewIndex, numChildren);
         }
     }
