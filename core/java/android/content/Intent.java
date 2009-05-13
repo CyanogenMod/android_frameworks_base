@@ -1765,15 +1765,6 @@ public class Intent implements Parcelable {
     public static final String EXTRA_ALARM_COUNT = "android.intent.extra.ALARM_COUNT";
 
     /**
-     * Used as a boolean extra field in {@link com.tmobile.intent.action.PICK_WALLPAPER}
-     * intents to tell the caller if {@link com.tmobile.intent.extra.WALLPAPER_IMAGE}
-     * delievered with the intent is a resource id.
-     * 
-     * @hide
-     */
-    public static final String EXTRA_WALLPAPER_ID = "com.tmobile.intent.extra.WALLPAPER_ID";
-
-    /**
      * Used as a string extra field in {@link com.tmobile.intent.action.PICK_WALLPAPER}
      * intents to tell the caller how to access bitmap resource.
      * This can be either a Uri, a resource id or a relative path for raw resource.
