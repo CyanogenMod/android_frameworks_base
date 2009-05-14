@@ -61,14 +61,14 @@ public class AlertDialog extends Dialog implements DialogInterface {
 
     protected AlertDialog(Context context, int theme) {
         super(context, theme);
-        mAlert = new AlertController(context, this, getWindow());
+        mAlert = new AlertController(getContext(), this, getWindow());
     }
 
     protected AlertDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
         super(context, com.android.internal.R.style.Theme_Dialog_Alert);
         setCancelable(cancelable);
         setOnCancelListener(cancelListener);
-        mAlert = new AlertController(context, this, getWindow());
+        mAlert = new AlertController(getContext(), this, getWindow());
     }
 
     /**
@@ -264,13 +264,15 @@ public class AlertDialog extends Dialog implements DialogInterface {
     }
     
     public static class Builder {
+        private final Context mContext;
         private final AlertController.AlertParams P;
         
         /**
          * Constructor using a context for this builder and the {@link AlertDialog} it creates.
          */
         public Builder(Context context) {
-            P = new AlertController.AlertParams(context);
+            mContext = context;
+            P = new AlertController.AlertParams();
         }
         
         /**
@@ -279,7 +281,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setTitle(int titleId) {
-            P.mTitle = P.mContext.getText(titleId);
+            P.mTitle = mContext.getText(titleId);
             return this;
         }
         
@@ -315,7 +317,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setMessage(int messageId) {
-            P.mMessage = P.mContext.getText(messageId);
+            P.mMessage = mContext.getText(messageId);
             return this;
         }
         
@@ -357,7 +359,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setPositiveButton(int textId, final OnClickListener listener) {
-            P.mPositiveButtonText = P.mContext.getText(textId);
+            P.mPositiveButtonText = mContext.getText(textId);
             P.mPositiveButtonListener = listener;
             return this;
         }
@@ -383,7 +385,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setNegativeButton(int textId, final OnClickListener listener) {
-            P.mNegativeButtonText = P.mContext.getText(textId);
+            P.mNegativeButtonText = mContext.getText(textId);
             P.mNegativeButtonListener = listener;
             return this;
         }
@@ -409,7 +411,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setNeutralButton(int textId, final OnClickListener listener) {
-            P.mNeutralButtonText = P.mContext.getText(textId);
+            P.mNeutralButtonText = mContext.getText(textId);
             P.mNeutralButtonListener = listener;
             return this;
         }
@@ -465,7 +467,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setItems(int itemsId, final OnClickListener listener) {
-            P.mItems = P.mContext.getResources().getTextArray(itemsId);
+            P.mItems = mContext.getResources().getTextArray(itemsId);
             P.mOnClickListener = listener;
             return this;
         }
@@ -538,7 +540,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
          */
         public Builder setMultiChoiceItems(int itemsId, boolean[] checkedItems, 
                 final OnMultiChoiceClickListener listener) {
-            P.mItems = P.mContext.getResources().getTextArray(itemsId);
+            P.mItems = mContext.getResources().getTextArray(itemsId);
             P.mOnCheckboxClickListener = listener;
             P.mCheckedItems = checkedItems;
             P.mIsMultiChoice = true;
@@ -617,7 +619,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
          */
         public Builder setSingleChoiceItems(int itemsId, int checkedItem, 
                 final OnClickListener listener) {
-            P.mItems = P.mContext.getResources().getTextArray(itemsId);
+            P.mItems = mContext.getResources().getTextArray(itemsId);
             P.mOnClickListener = listener;
             P.mCheckedItem = checkedItem;
             P.mIsSingleChoice = true;
@@ -783,7 +785,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
          * to do and want this to be created and displayed.
          */
         public AlertDialog create() {
-            final AlertDialog dialog = new AlertDialog(P.mContext);
+            final AlertDialog dialog = new AlertDialog(mContext);
             P.apply(dialog.mAlert);
             dialog.setCancelable(P.mCancelable);
             dialog.setOnCancelListener(P.mOnCancelListener);
