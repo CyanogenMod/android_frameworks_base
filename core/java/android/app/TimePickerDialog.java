@@ -95,7 +95,7 @@ public class TimePickerDialog extends AlertDialog implements OnClickListener,
         mInitialMinute = minute;
         mIs24HourView = is24HourView;
 
-        mDateFormat = DateFormat.getTimeFormat(context);
+        mDateFormat = DateFormat.getTimeFormat(getContext());
         mCalendar = Calendar.getInstance();
         updateTitle(mInitialHourOfDay, mInitialMinute);
         
@@ -104,7 +104,7 @@ public class TimePickerDialog extends AlertDialog implements OnClickListener,
         setIcon(R.drawable.ic_dialog_time);
         
         LayoutInflater inflater = 
-                (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.time_picker_dialog, null);
         setView(view);
         mTimePicker = (TimePicker) view.findViewById(R.id.timePicker);
