@@ -109,6 +109,8 @@
         <item name="android:windowSoftInputMode">stateUnspecified|adjustUnspecified</item>
 
         <!-- Dialog attributes -->
+        <item name="dialogTheme">@android:style/Theme.Dialog</item>
+        <item name="alertDialogTheme">@android:style/Theme.Dialog.Alert</item>
         <item name="alertDialogStyle">@android:style/AlertDialog</item>
         
         <!-- Panel attributes -->

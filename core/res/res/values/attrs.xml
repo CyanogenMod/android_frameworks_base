@@ -285,6 +285,13 @@
              must immediately quit without waiting for user interaction,
              because there will be no such interaction coming. -->
         <attr name="windowNoDisplay" format="boolean" />
+
+        <!-- ============ -->
+        <!-- General Dialog theme -->
+        <!-- ============ -->
+        <eat-comment />
+        <attr name="dialogTheme" format="reference" />
+        <attr name="alertDialogTheme" format="reference" />
         
         <!-- ============ -->
         <!-- Alert Dialog styles -->

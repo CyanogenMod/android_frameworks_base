@@ -56,19 +56,25 @@ public class AlertDialog extends Dialog implements DialogInterface {
     private AlertController mAlert;
 
     protected AlertDialog(Context context) {
-        this(context, com.android.internal.R.style.Theme_Dialog_Alert);
+        this(context, 0);
     }
 
     protected AlertDialog(Context context, int theme) {
-        super(context, theme);
+        super(context, resolveDefaultTheme(context, theme));
         mAlert = new AlertController(getContext(), this, getWindow());
     }
 
     protected AlertDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
-        super(context, com.android.internal.R.style.Theme_Dialog_Alert);
+        super(context, resolveDefaultTheme(context, 0));
         setCancelable(cancelable);
         setOnCancelListener(cancelListener);
         mAlert = new AlertController(getContext(), this, getWindow());
+    }
+    
+    private static int resolveDefaultTheme(Context context, int theme) {
+        return Dialog.resolveDefaultTheme(context, theme,
+                android.R.styleable.Theme_alertDialogTheme,
+                com.android.internal.R.style.Theme_Dialog_Alert);
     }
 
     /**
