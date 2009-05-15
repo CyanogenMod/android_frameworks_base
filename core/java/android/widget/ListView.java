@@ -1718,7 +1718,46 @@ public class ListView extends AbsListView {
             child.setDrawingCacheEnabled(true);
         }
     }
+    
+    /**
+     * Sets the background of the currently selected item so that we don't lose 
+     * it in touch mode.
+     * @hide
+     */
+    @Override
+    void hideSelector() {
+        if (mSelectedPosition != INVALID_POSITION) {
+            final int selectedIndex = mSelectedPosition - mFirstPosition;
+            View selected = getChildAt(selectedIndex);
+            if (selected != null && selected.getBackground() == null && mDefaultItemBackground != null) {
+                if (mAdapter.getItemViewType(mSelectedPosition) != Adapter.IGNORE_ITEM_VIEW_TYPE) {
+                    selected.setBackgroundDrawable(mDefaultItemBackground);
+                }
+            }
+            super.hideSelector();
+        }
+    }
+    
+    /**
+     * Removes the background of the resurrect-to item.
+     * @hide
+     */
+    @Override
+    boolean resurrectSelection() {
+        boolean resurrectResult = super.resurrectSelection();
 
+        if (resurrectResult) {
+            final int nextIndex = mNextSelectedPosition - mFirstPosition;
+            View next = getChildAt(nextIndex);
+            if (next.getBackground() != null &&
+                mAdapter.getItemViewType(mNextSelectedPosition) != Adapter.IGNORE_ITEM_VIEW_TYPE) {
+                next.setBackgroundDrawable(null);
+            }
+        }
+        
+        return resurrectResult;
+    }
+    
     @Override
     protected boolean canAnimate() {
         return super.canAnimate() && mItemCount > 0;
@@ -1780,14 +1819,6 @@ public class ListView extends AbsListView {
     @Override
     void setSelectionInt(int position) {
         setNextSelectedPositionInt(position);
-        // remove item background if any since this position is selected
-        if (position >= 0) {
-            View selectedView = obtainView(position);
-            if (selectedView.getBackground() != null &&
-                mAdapter.getItemViewType(position) != Adapter.IGNORE_ITEM_VIEW_TYPE) {
-                selectedView.setBackgroundDrawable(null);
-            }
-        }
         layoutChildren();
     }
 
