@@ -417,6 +417,7 @@
         <attr name="listItemLabelSecondaryText" format="reference" />
         <attr name="listItemTwinLabelSecondaryText" format="reference" />
         <attr name="listItemHeaderTwinLabelSecondaryText" format="reference" />
+        <attr name="listItemIconTwinLabelSecondryText" format="reference" />
         <attr name="listItemTwinIconLayout" format="reference" />
         
         <!-- =================== -->
@@ -1530,6 +1531,7 @@
         <attr name="iconSrc" format="reference|integer" />
         <attr name="icon2Src" format="reference|integer" />
         <attr name="icon3Src" format="reference|integer" />
+        <attr name="icon4Src" format="reference|integer" />
     </declare-styleable>
     <declare-styleable name="ProgressOverlayLayout">
         <attr name="progressType">
@@ -1546,10 +1548,12 @@
         <attr name="item2Text" format="string" />
         <attr name="itemIconSrc" format="reference|integer" />
         <attr name="itemIcon2Src" format="reference|integer" />
+        <attr name="itemIcon3Src" format="reference|integer" />
+        <attr name="itemIcon4Src" format="reference|integer" />
     </declare-styleable>
     <declare-styleable name="GridView">
         <attr name="horizontalSpacing" format="dimension" />
-        <attr name="verticalSpacing" format="dimension" />
+        <attr name="verticalSpacing" format="dimension" />      
         <attr name="stretchMode">
             <enum name="none" value="0"/>
             <enum name="spacingWidth" value="1" />

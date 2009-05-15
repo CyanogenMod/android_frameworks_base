@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -29,7 +30,10 @@ public class Filmstrip extends RelativeLayout {
 
 	// The max label length is defined in the style guide
 	private static final int MAX_LABEL_LENGTH = 16;
-	private static final int TITLE_TEXT_FIELD_WIDTH = 110;
+	private static final int SELECTED_TITLE_TEXT_FIELD_WIDTH = 110;
+	//Made the variable non final as the value need to be changed for Landscape mode, for landscape it is 75
+	private static int UNSELECTED_TITLE_TEXT_FIELD_WIDTH_PORTRAIT = 78;
+	private static int UNSELECTED_TITLE_TEXT_FIELD_WIDTH_LANDSCAPE = 75;
 
 	private static final int TITLE_TEXT_SIZE_SELECTED = 14;
 	private static final int TITLE_TEXT_SIZE_UNSELECTED = 13;
@@ -103,8 +107,12 @@ public class Filmstrip extends RelativeLayout {
 					mTitleView.setId(position);
 					mTitleView.setTextColor(Color.WHITE);
 					mTitleView.setGravity(Gravity.CENTER);
-					mTitleView.setWidth(TITLE_TEXT_FIELD_WIDTH);
-					mTitleView.setPadding(10, 5, 10, 5);
+					if(isPortrait) {
+						mTitleView.setWidth(UNSELECTED_TITLE_TEXT_FIELD_WIDTH_PORTRAIT);
+					} else {
+						mTitleView.setWidth(UNSELECTED_TITLE_TEXT_FIELD_WIDTH_LANDSCAPE);	
+					}
+//					mTitleView.setPadding(10, 5, 10, 5);
 					mTitleView.setSingleLine(true);
 					mTitleView.setEllipsize(TextUtils.TruncateAt.END);
 				}
@@ -179,7 +187,11 @@ public class Filmstrip extends RelativeLayout {
 					if (null != oldTextView) {
 						// make the unselected button look unselected
 						// oldText.setBackgroundDrawable(null);
-						oldTextView.setWidth(TITLE_TEXT_FIELD_WIDTH);
+						if(isPortrait) {
+							oldTextView.setWidth(UNSELECTED_TITLE_TEXT_FIELD_WIDTH_PORTRAIT);
+						} else {
+							oldTextView.setWidth(UNSELECTED_TITLE_TEXT_FIELD_WIDTH_LANDSCAPE);	
+						}
 						oldTextView.setTextSize(TITLE_TEXT_SIZE_UNSELECTED);
 						oldTextView.setTypeface(TITLE_TYPEFACE, Typeface.NORMAL);
 						oldTextView.setGravity(Gravity.CENTER);
@@ -203,9 +215,10 @@ public class Filmstrip extends RelativeLayout {
 				// make the selected button look selected
 				// newText.setBackgroundDrawable(mCarouselSelectionTitleBackground);
 				// newText.setBackgroundResource(R.drawable.element_carousel_highlight_dark);
-				newTextView.setWidth(TITLE_TEXT_FIELD_WIDTH);
+				newTextView.setWidth(SELECTED_TITLE_TEXT_FIELD_WIDTH);
 				newTextView.setTextSize(TITLE_TEXT_SIZE_SELECTED);
 				newTextView.setTypeface(TITLE_TYPEFACE, Typeface.BOLD);
+				newTextView.setPadding(10, 5, 10, 5);
 				newTextView.setGravity(Gravity.CENTER);
 				setBackgroundResource(position, newTextView);
 			} else if (view instanceof ImageView) {
@@ -236,7 +249,7 @@ public class Filmstrip extends RelativeLayout {
 	private Gallery mFilmstripSelector;
 	private ImageView mLeftArrow;
 	private ImageView mRightArrow;
-	
+	private boolean isPortrait;
 	public Filmstrip(Context context) {
 		this(context, null);
 	}
@@ -249,7 +262,11 @@ public class Filmstrip extends RelativeLayout {
 		super(context, attrs, defStyle);
 		setFocusable(true);
 		setFocusableInTouchMode(true);
-		
+		//Fix: To change the unselected textview width to 75 in the Landscape mode
+		Configuration config = getResources().getConfiguration();
+		int mOrientation = config.orientation;
+		isPortrait = mOrientation == Configuration.ORIENTATION_PORTRAIT? true : false;
+		//Fix End
 		TypedArray a = 
             context.obtainStyledAttributes(attrs, R.styleable.Filmstrip, defStyle, 0);
 				
@@ -325,10 +342,15 @@ public class Filmstrip extends RelativeLayout {
 				
 			}
 		});
-
-		mFilmstripSelector.setPadding(13, 0, 13, 0);
-		mFilmstripSelector.setSpacing(4);
-		
+		//According to Red Line document there should be margin of 21px from the edge 
+		mFilmstripSelector.setPadding(21, 0, 21, 0);
+		//Space between the two filmstrip elements should be 6px
+		if (isPortrait) {
+			mFilmstripSelector.setSpacing(6);
+		} else {
+			mFilmstripSelector.setSpacing(8);
+		}
+				
 		mFilmstripSelector.setAnimationDuration(500);
 		
 		this.addView(mFilmstripSelector, -1);

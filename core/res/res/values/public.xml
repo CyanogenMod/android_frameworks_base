@@ -1089,26 +1089,25 @@
 <!-- ===============================================================
      Resources added in tmobile version of the platform.
      =============================================================== -->
-  <public type="attr" name="headerText" id="0x01010258" />
-  <public type="attr" name="subHeaderText" id="0x01010259" />
-  <public type="attr" name="subHeader2Text" id="0x0101025a" />
-  <public type="attr" name="subLabelText" id="0x0101025b" />
-  <public type="attr" name="buttonText" id="0x0101025c" />
-  <public type="attr" name="button2Text" id="0x0101025d" />
-  <public type="attr" name="iconSrc" id="0x0101025e" />
-  <public type="attr" name="icon2Src" id="0x0101025f" />
-  <public type="attr" name="icon3Src" id="0x01010260" />
-  <public type="attr" name="itemLabelText" id="0x01010261" />
-  <public type="attr" name="itemLabel2Text" id="0x01010262" />
-  <public type="attr" name="itemText" id="0x01010263" />
-  <public type="attr" name="item2Text" id="0x01010264" />
-
-  <public type="attr" name="buttonStyleSplitLeft" id="0x01010265" />
-  <public type="attr" name="buttonStyleSplitRight" id="0x01010266" />
-  
-  <public type="attr" name="labelText" id="0x01010267" />
-  <public type="attr" name="labelPosition" id="0x01010268" />
-  <public type="attr" name="progressType" id="0x01010269" />
+  <public type="attr" name="headerText" id="0x0101026b" />
+  <public type="attr" name="subHeaderText" id="0x0101026c" />
+  <public type="attr" name="subHeader2Text" id="0x0101026d" />
+  <public type="attr" name="subLabelText" id="0x0101026e" />
+  <public type="attr" name="buttonText" id="0x0101026f" />
+  <public type="attr" name="button2Text" id="0x01010270" />
+  <public type="attr" name="iconSrc" id="0x01010271" />
+  <public type="attr" name="icon2Src" id="0x01010272" />
+  <public type="attr" name="icon3Src" id="0x01010273" />
+  <public type="attr" name="icon4Src" id="0x0101028a" />
+  <public type="attr" name="itemLabelText" id="0x01010274" />
+  <public type="attr" name="itemLabel2Text" id="0x01010275" />
+  <public type="attr" name="itemText" id="0x01010276" />
+  <public type="attr" name="item2Text" id="0x01010277" />
+  <public type="attr" name="buttonStyleSplitLeft" id="0x01010278" />
+  <public type="attr" name="buttonStyleSplitRight" id="0x01010279" />
+  <public type="attr" name="labelText" id="0x0101027a" />
+  <public type="attr" name="labelPosition" id="0x0101027b" />
+  <public type="attr" name="progressType" id="0x0101027c" />
 
   <public type="attr" name="textFieldStyle" id="0x0101026a" />
 
