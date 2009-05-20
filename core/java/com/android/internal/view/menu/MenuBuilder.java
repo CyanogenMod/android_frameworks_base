@@ -175,7 +175,7 @@ public class MenuBuilder implements Menu {
         LayoutInflater getInflater() {
             // Create an inflater that uses the given theme for the Views it inflates
             if (mInflater == null) {
-                Context wrappedContext = new ContextThemeWrapper(mContext,
+                Context wrappedContext = new ContextThemeWrapper(getContext(),
                         THEME_RES_FOR_TYPE[mMenuType]); 
                 mInflater = (LayoutInflater) wrappedContext
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
