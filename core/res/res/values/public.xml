@@ -1095,6 +1095,7 @@
 
   <public type="attr" name="dialogTheme" id="0x01010287" />
   <public type="attr" name="alertDialogTheme" id="0x01010288" />
+  <public type="attr" name="listItemTextViewStyle" id="0x01010289" />
 
   <public type="integer" name="config_shortAnimTime" id="0x010e0000" />
   <public type="integer" name="config_mediumAnimTime" id="0x010e0001" />

@@ -77,6 +77,7 @@
         <item name="listPreferredItemHeight">64dip</item>
         <item name="listDivider">@drawable/divider_horizontal_dark</item>
         <item name="listSeparatorTextViewStyle">@android:style/Widget.TextView.ListSeparator</item>   
+        <item name="listItemTextViewStyle">@android:style/Widget.TextView.ListItem</item>
         
 		<item name="listChoiceIndicatorSingle">@android:drawable/btn_radio</item>
     	<item name="listChoiceIndicatorMultiple">@android:drawable/btn_check</item>    

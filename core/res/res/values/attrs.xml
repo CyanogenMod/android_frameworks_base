@@ -164,6 +164,8 @@
         <attr name="listDivider" format="reference" />
         <!-- TextView style for list separators. -->
         <attr name="listSeparatorTextViewStyle" format="reference" />
+        <!-- TextView style for regular list items. -->
+        <attr name="listItemTextViewStyle" format="reference" />
         <!-- The preferred left padding for an expandable list item (for child-specific layouts,
              use expandableListPreferredChildPaddingLeft). This takes into account
              the indicator that will be shown to next to the item. --> 

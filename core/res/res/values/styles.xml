@@ -315,6 +315,13 @@
         <item name="android:textColor">?textColorSecondaryInverse</item>
     </style>
 
+    <style name="Widget.TextView.ListItem">
+    </style>
+
+    <style name="Widget.TextView.ListItem.White">
+        <item name="android:textColor">@android:color/primary_text_light</item>
+    </style>
+
     <style name="Widget.EditText">
         <item name="android:focusable">true</item>
         <item name="android:focusableInTouchMode">true</item>
