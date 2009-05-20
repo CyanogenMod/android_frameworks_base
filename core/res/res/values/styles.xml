@@ -406,6 +406,15 @@
         <item name="android:divider">@android:drawable/divider_horizontal_bright</item>
     </style>    
 
+    <style name="Widget.ListView.Dialog" parent="Widget.ListView.White">
+        <item name="textColorPrimary">@android:color/primary_text_light</item>
+        <item name="textColorSecondary">@android:color/secondary_text_light</item>
+        <item name="textColorTertiary">@android:color/tertiary_text_light</item>
+        <item name="textColorPrimaryInverse">@android:color/primary_text_dark</item>
+        <item name="textColorSecondaryInverse">@android:color/secondary_text_dark</item>
+        <item name="textColorTertiaryInverse">@android:color/tertiary_text_dark</item>
+    </style>
+
     <style name="Widget.ListView.DropDown">
     	<item name="android:cacheColorHint">@null</item>
         <item name="android:divider">@android:drawable/divider_horizontal_bright</item>
