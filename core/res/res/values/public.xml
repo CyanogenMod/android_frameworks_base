@@ -175,6 +175,7 @@
   <public type="attr" name="preferenceInformationStyle" id="0x0101008d" />
   <public type="attr" name="preferenceStyle" id="0x0101008e" />
   <public type="attr" name="checkBoxPreferenceStyle" id="0x0101008f" />
+  <public type="attr" name="spinnerPreferenceStyle" id="0x010102bb" />
   <public type="attr" name="yesNoPreferenceStyle" id="0x01010090" />
   <public type="attr" name="dialogPreferenceStyle" id="0x01010091" />
   <public type="attr" name="editTextPreferenceStyle" id="0x01010092" />

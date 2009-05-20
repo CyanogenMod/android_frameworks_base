@@ -86,9 +86,14 @@ public class ComboSpinner extends Spinner {
             return getCount() == 0;
         }
     }
-
+	
+    public interface IDataBinder {
+		public void onSelectionChange(int value);
+	}
+	
     private PopupWindow mWindow;
 	private ListView mList;
+	private IDataBinder dataBinder;
 	
 	static private final int kPopupWindowPadding = 6;
 	
@@ -129,6 +134,10 @@ public class ComboSpinner extends Spinner {
 			setSelection(position);
 			dismissPopup();
 			requestFocus();
+			if (dataBinder != null) {
+				dataBinder.onSelectionChange(position);
+			}
+
 		}
 	};
 	
@@ -162,5 +171,8 @@ public class ComboSpinner extends Spinner {
         showPopup();
         return true;
     }
-
+    
+	public void setDataBinder(IDataBinder binder) {
+		dataBinder = binder;
+	}
 }

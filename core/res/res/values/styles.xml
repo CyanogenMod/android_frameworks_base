@@ -629,6 +629,10 @@
         <item name="android:widgetLayout">@android:layout/preference_widget_checkbox</item>
     </style>
     
+    <style name="Preference.SpinnerPreference">
+        <item name="android:widgetLayout">@android:layout/preference_widget_spinner</item>
+    </style>
+    
     <style name="Preference.PreferenceScreen">
         <item name="android:widgetLayout">@android:layout/preferences</item>
     </style>
