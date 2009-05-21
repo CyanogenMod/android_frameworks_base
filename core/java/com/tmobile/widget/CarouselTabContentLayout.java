@@ -6,6 +6,7 @@ import com.tmobile.widget.Carousel.CarouselViewAdapter;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -44,7 +45,9 @@ public class CarouselTabContentLayout extends FrameLayout  {
 		LayoutParams layoutParams = generateDefaultLayoutParams();
 		
 		// The height of filmstrip is 50, hence set the y padding to 50
-		setPadding(0, 50, 0, 0);
+		int height = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50,
+				getResources().getDisplayMetrics());
+		setPadding(0, height, 0, 0);
 		super.addView(mCarouselLayout, -1, layoutParams);
 	}
 	

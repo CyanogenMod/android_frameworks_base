@@ -11,6 +11,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -296,7 +297,11 @@ class CarouselWidget extends RelativeLayout {
 		
 		setOnItemSelectedListener(new CarouselWidgetOnItemSelectedListener());
 		
-		RelativeLayout.LayoutParams rowLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, 50);
+		int height = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50,
+				getResources().getDisplayMetrics());
+		
+		RelativeLayout.LayoutParams rowLayoutParams = 
+			new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, height);
 		rowLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 		this.setGravity(Gravity.LEFT);
 		this.setLayoutParams(rowLayoutParams);
