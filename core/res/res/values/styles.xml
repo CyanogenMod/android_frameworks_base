@@ -376,7 +376,7 @@
         <item name="android:clickable">true</item>
     </style>
 
-    <style name="Widget.Filmstrip">
+    <style name="Widget.CarouselWidget">
         <item name="android:background">@color/black</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:previousButton">@drawable/ic_media_play_reverse</item>

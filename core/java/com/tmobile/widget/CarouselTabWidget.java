@@ -11,7 +11,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 
 public class CarouselTabWidget extends TabWidget {
 
-	private Filmstrip mFilmstrip;
+	private CarouselWidget mWidget;
 	private TabHost mTabHost;
 
 	public CarouselTabWidget(Context context) {
@@ -24,11 +24,11 @@ public class CarouselTabWidget extends TabWidget {
 
 	public CarouselTabWidget(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		mFilmstrip = new Filmstrip(context);
+		mWidget = new CarouselWidget(context);
 		
-		this.addView(mFilmstrip, -1);
+		this.addView(mWidget, -1);
 
-		mFilmstrip
+		mWidget
 				.setOnItemSelectedListener(new CarouselTabWidgetOnItemSelectedListener());
 		
 	}
@@ -41,10 +41,10 @@ public class CarouselTabWidget extends TabWidget {
 
 
 	public class CarouselTabWidgetOnItemSelectedListener extends
-	Filmstrip.FilmstripOnItemSelectedListener {
+	CarouselWidget.CarouselWidgetOnItemSelectedListener {
 
 		CarouselTabWidgetOnItemSelectedListener() {
-			mFilmstrip.super();
+			mWidget.super();
 		}
 
 		public void onItemSelected(AdapterView<?> parent, View view,
@@ -67,16 +67,16 @@ public class CarouselTabWidget extends TabWidget {
 		mTabHost = aTabHost;
 	}
 
-	public Filmstrip getFilmstrip() {
-		return mFilmstrip;
+	public CarouselWidget getCarouselWidget() {
+		return mWidget;
 	}
 	
 	public int getFilmstripSelection() {
-		return mFilmstrip.getFilmstripSelection();
+		return mWidget.getCarouselWidgetSelection();
 	}
 	
 	public void setOnItemSelectedListener(OnItemSelectedListener l){
-		mFilmstrip.setOnItemSelectedListener(l);
+		mWidget.setOnItemSelectedListener(l);
 	}
 	
 	@Override
@@ -90,7 +90,7 @@ public class CarouselTabWidget extends TabWidget {
 				View aChild = getChildAt(i);
 				
 				if (aChild == v) {
-					mFilmstrip.requestFocus();
+					mWidget.requestFocus();
 					return;
 				}
 			}
@@ -99,8 +99,8 @@ public class CarouselTabWidget extends TabWidget {
 		 super.onFocusChange(v, hasFocus);
 	 }
 
-	public void setFilmstripSelection(int position) {
-		mFilmstrip.setFilmstripSelection(position);
+	public void setCarouselWidgetSelection(int position) {
+		mWidget.setCarouselWidgetSelection(position);
 	}
 	
 }

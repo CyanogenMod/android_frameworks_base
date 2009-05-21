@@ -26,7 +26,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 
 import com.android.internal.R;
 
-public class Filmstrip extends RelativeLayout {
+class CarouselWidget extends RelativeLayout {
 
 	// The max label length is defined in the style guide
 	private static final int MAX_LABEL_LENGTH = 16;
@@ -52,7 +52,7 @@ public class Filmstrip extends RelativeLayout {
 			Gallery.LayoutParams.WRAP_CONTENT,
 			Gallery.LayoutParams.FILL_PARENT);
 
-	 class FilmstripItem extends Object {
+	 class CarouselWidgetItem extends Object {
 
 		private Context mContext;
 		private String mName;
@@ -62,7 +62,7 @@ public class Filmstrip extends RelativeLayout {
 		private Drawable mImageDrawable;
 		private ImageView mImageView;
 
-		private FilmstripItem(Context context, String name, Intent intent) {
+		private CarouselWidgetItem(Context context, String name, Intent intent) {
 			mContext = context;
 			mIntent = intent;
 			mTitleView = null;
@@ -79,7 +79,7 @@ public class Filmstrip extends RelativeLayout {
 
 		}
 
-		private FilmstripItem(Context context, Drawable imageResource) {
+		private CarouselWidgetItem(Context context, Drawable imageResource) {
 
 			mContext = context;
 
@@ -133,10 +133,10 @@ public class Filmstrip extends RelativeLayout {
 		}
 	}
 
-	private class FilmstripTitleAdapter extends BaseAdapter {
+	private class CarouselWidgetTitleAdapter extends BaseAdapter {
 
 		public int getCount() {
-			return getFilmstripSize();
+			return getCarouselWidgetSize();
 		}
 
 		public Object getItem(int position) {
@@ -148,12 +148,12 @@ public class Filmstrip extends RelativeLayout {
 		}
 
 		public View getView(int position, View convertView, ViewGroup parent) {
-			View view = mFilmstripItems.get(position).getView(position);
+			View view = mCarouselWidgetItems.get(position).getView(position);
 
 			if (view instanceof TextView) {
 				TextView textView = (TextView) view;
 				 textView
-				 .setTextSize((position != mFilmstripSelection) ?
+				 .setTextSize((position != mCarouselWidgetSelection) ?
 				 TITLE_TEXT_SIZE_UNSELECTED
 				 : TITLE_TEXT_SIZE_SELECTED);
 
@@ -166,20 +166,20 @@ public class Filmstrip extends RelativeLayout {
 		}
 	}
 
-	public class FilmstripOnItemSelectedListener implements
+	public class CarouselWidgetOnItemSelectedListener implements
 			OnItemSelectedListener {
 
 		public void onItemSelected(AdapterView<?> parent, View view,
 				int position, long id) {
-			if ((position < 0) || (mFilmstripItems.size() <= position))
+			if ((position < 0) || (mCarouselWidgetItems.size() <= position))
 				return;
 
-			if ((position < 0) || (mFilmstripItems.size() <= position))
+			if ((position < 0) || (mCarouselWidgetItems.size() <= position))
 				return;
 			
-			if (mFilmstripSelection != -1) {
+			if (mCarouselWidgetSelection != -1) {
 				View oldView = parent
-						.findViewById(mFilmstripSelection);
+						.findViewById(mCarouselWidgetSelection);
 				
 				if (oldView instanceof TextView) {
 					TextView oldTextView = (TextView) oldView;
@@ -207,7 +207,7 @@ public class Filmstrip extends RelativeLayout {
 				}
 			}
 			
-			mFilmstripSelection = position;
+			mCarouselWidgetSelection = position;
 			
 			if (view instanceof TextView) {
 				TextView newTextView = (TextView) view;
@@ -239,26 +239,26 @@ public class Filmstrip extends RelativeLayout {
 	}
 
 
-	private ArrayList<FilmstripItem> mFilmstripItems;
-	private FilmstripTitleAdapter mFilmstripTitleAdapter;
-	private FilmstripOnItemSelectedListener mFilmstripOnItemSelectedListener;
-	private int mFilmstripSelection = -1;
+	private ArrayList<CarouselWidgetItem> mCarouselWidgetItems;
+	private CarouselWidgetTitleAdapter mCarouselWidgetTitleAdapter;
+	private CarouselWidgetOnItemSelectedListener mCarouselWidgetOnItemSelectedListener;
+	private int mCarouselWidgetSelection = -1;
 	
 	private Drawable mFrameBackground;
 	private Drawable mFrameSelectedBackground;
-	private Gallery mFilmstripSelector;
+	private Gallery mCarouselWidgetSelector;
 	private ImageView mLeftArrow;
 	private ImageView mRightArrow;
 	private boolean isPortrait;
-	public Filmstrip(Context context) {
+	public CarouselWidget(Context context) {
 		this(context, null);
 	}
 	
-	public Filmstrip(Context context, AttributeSet attrs) {
-		this(context, attrs, R.attr.filmstripStyle);
+	public CarouselWidget(Context context, AttributeSet attrs) {
+		this(context, attrs, R.attr.carouselWidgetStyle);
 	}
 	
-	public Filmstrip(Context context, AttributeSet attrs, int defStyle) {
+	public CarouselWidget(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		setFocusable(true);
 		setFocusableInTouchMode(true);
@@ -268,17 +268,17 @@ public class Filmstrip extends RelativeLayout {
 		isPortrait = mOrientation == Configuration.ORIENTATION_PORTRAIT? true : false;
 		//Fix End
 		TypedArray a = 
-            context.obtainStyledAttributes(attrs, R.styleable.Filmstrip, defStyle, 0);
+			context.obtainStyledAttributes(attrs, R.styleable.CarouselWidget, defStyle, 0);
 				
-		mFilmstripSelector = new Gallery(context);
+		mCarouselWidgetSelector = new Gallery(context);
 		mLeftArrow = new ImageView(context);
 		mRightArrow = new ImageView(context);
-		mFilmstripItems = new ArrayList<FilmstripItem>();
-		mFilmstripTitleAdapter = new FilmstripTitleAdapter();
-		mFilmstripOnItemSelectedListener = new FilmstripOnItemSelectedListener();
+		mCarouselWidgetItems = new ArrayList<CarouselWidgetItem>();
+		mCarouselWidgetTitleAdapter = new CarouselWidgetTitleAdapter();
+		mCarouselWidgetOnItemSelectedListener = new CarouselWidgetOnItemSelectedListener();
 		
-		mFrameBackground = a.getDrawable(R.styleable.Filmstrip_frameBackground);		
-		mFrameSelectedBackground = a.getDrawable(R.styleable.Filmstrip_frameSelectedBackground);
+		mFrameBackground = a.getDrawable(R.styleable.CarouselWidget_frameBackground);		
+		mFrameSelectedBackground = a.getDrawable(R.styleable.CarouselWidget_frameSelectedBackground);
 		
 		initWidget(a);
 		
@@ -286,7 +286,7 @@ public class Filmstrip extends RelativeLayout {
 	}
 
 	public void setOnItemSelectedListener(OnItemSelectedListener l){
-		mFilmstripSelector.setOnItemSelectedListener(l);
+		mCarouselWidgetSelector.setOnItemSelectedListener(l);
 		
 	}
 	
@@ -294,7 +294,7 @@ public class Filmstrip extends RelativeLayout {
 	private void initWidget(TypedArray a) {
 		
 		
-		setOnItemSelectedListener(new FilmstripOnItemSelectedListener());
+		setOnItemSelectedListener(new CarouselWidgetOnItemSelectedListener());
 		
 		RelativeLayout.LayoutParams rowLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, 50);
 		rowLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -302,16 +302,16 @@ public class Filmstrip extends RelativeLayout {
 		this.setLayoutParams(rowLayoutParams);
 		
 		
-		if (mFilmstripSelector != null) {
-			mFilmstripSelector.setAdapter(getFilmstripTitleAdapter());
+		if (mCarouselWidgetSelector != null) {
+			mCarouselWidgetSelector.setAdapter(getCarouselWidgetTitleAdapter());
 			
-			mFilmstripSelector.setLayoutParams(new Gallery.LayoutParams(Gallery.LayoutParams.FILL_PARENT, Gallery.LayoutParams.FILL_PARENT));
+			mCarouselWidgetSelector.setLayoutParams(new Gallery.LayoutParams(Gallery.LayoutParams.FILL_PARENT, Gallery.LayoutParams.FILL_PARENT));
 		}
 		
 		mLeftArrow.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				
-				int index = mFilmstripSelector.getSelectedItemPosition();
+				int index = mCarouselWidgetSelector.getSelectedItemPosition();
 				
 				index --;
 				
@@ -319,7 +319,7 @@ public class Filmstrip extends RelativeLayout {
 					index = 0;
 				}
 				
-				mFilmstripSelector.setSelection(index);
+				mCarouselWidgetSelector.setSelection(index);
 				
 			
 			}
@@ -328,38 +328,38 @@ public class Filmstrip extends RelativeLayout {
 		mRightArrow.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 
-				int index = mFilmstripSelector.getSelectedItemPosition();
+				int index = mCarouselWidgetSelector.getSelectedItemPosition();
 				
 				index ++;
 				
-				int size = mFilmstripSelector.getCount();
+				int size = mCarouselWidgetSelector.getCount();
 				
 				if (index >= size) {
 					index = size -1 ;
 				}
 				
-				mFilmstripSelector.setSelection(index);
+				mCarouselWidgetSelector.setSelection(index);
 				
 			}
 		});
 		//According to Red Line document there should be margin of 21px from the edge 
-		mFilmstripSelector.setPadding(21, 0, 21, 0);
+		mCarouselWidgetSelector.setPadding(21, 0, 21, 0);
 		//Space between the two filmstrip elements should be 6px
 		if (isPortrait) {
-			mFilmstripSelector.setSpacing(6);
+			mCarouselWidgetSelector.setSpacing(6);
 		} else {
-			mFilmstripSelector.setSpacing(8);
+			mCarouselWidgetSelector.setSpacing(8);
 		}
 				
-		mFilmstripSelector.setAnimationDuration(500);
+		mCarouselWidgetSelector.setAnimationDuration(500);
 		
-		this.addView(mFilmstripSelector, -1);
+		this.addView(mCarouselWidgetSelector, -1);
 		
 		RelativeLayout.LayoutParams leftLayoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.FILL_PARENT);
 		leftLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 		leftLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
 		
-		Drawable leftImageDrawable = a.getDrawable(R.styleable.Filmstrip_previousButton);
+		Drawable leftImageDrawable = a.getDrawable(R.styleable.CarouselWidget_previousButton);
 		mLeftArrow.setLayoutParams(leftLayoutParams);
 		mLeftArrow.setImageDrawable(leftImageDrawable);
 		
@@ -369,25 +369,25 @@ public class Filmstrip extends RelativeLayout {
 		rightLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 		rightLayoutParams.addRule(RelativeLayout.CENTER_VERTICAL);
 		
-		Drawable rightImageDrawable = a.getDrawable(R.styleable.Filmstrip_nextButton);
+		Drawable rightImageDrawable = a.getDrawable(R.styleable.CarouselWidget_nextButton);
 		mRightArrow.setLayoutParams(rightLayoutParams);
 		mRightArrow.setImageDrawable(rightImageDrawable);
 		
 		this.addView(mRightArrow, -1);
 	}
 	
-	public FilmstripTitleAdapter getFilmstripTitleAdapter() {
-		return mFilmstripTitleAdapter;
+	public CarouselWidgetTitleAdapter getCarouselWidgetTitleAdapter() {
+		return mCarouselWidgetTitleAdapter;
 	}
 	
-	public FilmstripOnItemSelectedListener getFilmstripOnItemSelectedListener() {
-		return mFilmstripOnItemSelectedListener;
+	public CarouselWidgetOnItemSelectedListener getCarouselWidgetOnItemSelectedListener() {
+		return mCarouselWidgetOnItemSelectedListener;
 	}
 
 	public void add(Context context, String name, Intent intent) {
 			
-		mFilmstripItems.add(new FilmstripItem(context, name, intent));
-		mFilmstripTitleAdapter.notifyDataSetChanged();
+		mCarouselWidgetItems.add(new CarouselWidgetItem(context, name, intent));
+		mCarouselWidgetTitleAdapter.notifyDataSetChanged();
 		
 		updateArrowStates();
 		
@@ -395,8 +395,8 @@ public class Filmstrip extends RelativeLayout {
 
 	public void add(Context context, Drawable imageResource) {
 		
-		mFilmstripItems.add(new FilmstripItem(context, imageResource));
-		mFilmstripTitleAdapter.notifyDataSetChanged();
+		mCarouselWidgetItems.add(new CarouselWidgetItem(context, imageResource));
+		mCarouselWidgetTitleAdapter.notifyDataSetChanged();
 		
 		updateArrowStates();
 	}
@@ -406,7 +406,7 @@ public class Filmstrip extends RelativeLayout {
 	private void setBackgroundResource(int position, View view) {
 		Drawable drawable = mFrameBackground;
 
-		if (position == mFilmstripSelection) {
+		if (position == mCarouselWidgetSelection) {
 			drawable = mFrameSelectedBackground;
 		}
 		
@@ -414,37 +414,37 @@ public class Filmstrip extends RelativeLayout {
 	}
 	
 	
-	public void setFilmstripSelection(int itemIndex) {
-		mFilmstripSelector.setSelection(itemIndex);
+	public void setCarouselWidgetSelection(int itemIndex) {
+		mCarouselWidgetSelector.setSelection(itemIndex);
 		updateArrowStates();
 	}
 
 	private void updateArrowStates() {
 		mLeftArrow
-		.setVisibility((mFilmstripSelector.getSelectedItemPosition() > 0) ? View.VISIBLE
+		.setVisibility((mCarouselWidgetSelector.getSelectedItemPosition() > 0) ? View.VISIBLE
 				: View.INVISIBLE);
 		mRightArrow
-		.setVisibility((mFilmstripSelector.getSelectedItemPosition() < (mFilmstripSelector
+		.setVisibility((mCarouselWidgetSelector.getSelectedItemPosition() < (mCarouselWidgetSelector
 				.getCount() - 1)) ? View.VISIBLE : View.INVISIBLE);
 	}
 
-	public int getFilmstripSize() {
-		return mFilmstripItems.size();
+	public int getCarouselWidgetSize() {
+		return mCarouselWidgetItems.size();
 	}
 
-	public int getFilmstripSelection() {
-		return mFilmstripSelection;
+	public int getCarouselWidgetSelection() {
+		return mCarouselWidgetSelection;
 	}
 
-	public FilmstripItem getFilmstripItem(int position) {
-		return mFilmstripItems.get(position);
+	public CarouselWidgetItem getCarouselWidgetItem(int position) {
+		return mCarouselWidgetItems.get(position);
 	}
 	
 
 	// Dispatch LEFT/RIGTH key to gallery to move gallery items
 	@Override
 	public boolean dispatchKeyEvent(KeyEvent event) {
-		return mFilmstripSelector.dispatchKeyEvent(event);
+		return mCarouselWidgetSelector.dispatchKeyEvent(event);
 	}
 	
 

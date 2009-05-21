@@ -41,7 +41,7 @@ public class Carousel extends TabHost implements OnGestureListener {
 	public class CarouselViewAdapter extends BaseAdapter {
 
 		public int getCount() {
-			return mTabWidget.getFilmstrip().getFilmstripSize();
+			return mTabWidget.getCarouselWidget().getCarouselWidgetSize();
 		}
 
 		public Object getItem(int position) {
@@ -53,10 +53,10 @@ public class Carousel extends TabHost implements OnGestureListener {
 		}
 
 		public View getView(int position, View convertView, ViewGroup parent) {
-			String name = mTabWidget.getFilmstrip().getFilmstripItem(position)
+			String name = mTabWidget.getCarouselWidget().getCarouselWidgetItem(position)
 					.getName();
-			Intent intent = mTabWidget.getFilmstrip()
-					.getFilmstripItem(position).getIntent();
+			Intent intent = mTabWidget.getCarouselWidget()
+					.getCarouselWidgetItem(position).getIntent();
 
 			Window window = mLocalActivityManager.startActivity(name, intent);
 			View windowDecor = (window != null) ? window.getDecorView() : null;
@@ -65,7 +65,7 @@ public class Carousel extends TabHost implements OnGestureListener {
 		}
 		
 		public View getView(int position) {
-	        String name = mTabWidget.getFilmstrip().getFilmstripItem(position)
+			String name = mTabWidget.getCarouselWidget().getCarouselWidgetItem(position)
 	                    .getName();
 	       
 	            Activity activity = mLocalActivityManager.getActivity(name);
@@ -109,7 +109,7 @@ public class Carousel extends TabHost implements OnGestureListener {
 		super.addTab(tabSpec);
 
 		if (mTabWidget != null) {
-			Filmstrip filmstrip = mTabWidget.getFilmstrip();
+			CarouselWidget filmstrip = mTabWidget.getCarouselWidget();
 
 			if (filmstrip != null) {
 				
@@ -174,7 +174,7 @@ public class Carousel extends TabHost implements OnGestureListener {
 				newSelectedPosition += 1;
 			}
 			
-			int size = mTabWidget.getFilmstrip().getFilmstripSize();
+			int size = mTabWidget.getCarouselWidget().getCarouselWidgetSize();
 			
 			if (newSelectedPosition < 0) {
 				newSelectedPosition = 0;
@@ -187,7 +187,7 @@ public class Carousel extends TabHost implements OnGestureListener {
 			}
 			
 			mCarouselTabContentLayout.setSelection(newSelectedPosition, true);
-			mTabWidget.setFilmstripSelection(newSelectedPosition);
+			mTabWidget.setCarouselWidgetSelection(newSelectedPosition);
 			
 			return true;
 		}
@@ -231,13 +231,13 @@ public class Carousel extends TabHost implements OnGestureListener {
 		
 		protected void dispatchKeyUpEvent() {
 		   
-			mTabWidget.getFilmstrip().requestFocus();
+			mTabWidget.getCarouselWidget().requestFocus();
 		}
 		
 		public void setSelection(int index) {
              
             setCurrentTab(index);
-            mTabWidget.getFilmstrip().setFilmstripSelection(index);
+			mTabWidget.getCarouselWidget().setCarouselWidgetSelection(index);
             
             mCarouselTabContentLayout.setSelection(index, false);
         }

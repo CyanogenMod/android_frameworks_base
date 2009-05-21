@@ -358,8 +358,8 @@
         <attr name="horizontalScrollViewStyle" format="reference" />
         <!-- Default Spinner style. -->
         <attr name="spinnerStyle" format="reference" />
-        <!-- Default Filmstrip style. -->
-        <attr name="filmstripStyle" format="reference" />
+        <!-- Default carouselWidget style. -->
+        <attr name="carouselWidgetStyle" format="reference" />
         <!-- Default Star style. -->
         <attr name="starStyle" format="reference" />
         <!-- Default TabWidget style. -->
@@ -2093,7 +2093,7 @@
         <!-- The prompt to display when the spinner's dialog is shown. -->
         <attr name="prompt" format="reference" />
     </declare-styleable>
-    <declare-styleable name="Filmstrip">
+    <declare-styleable name="CarouselWidget">
         <attr name="previousButton" format="reference|color" />
         <attr name="nextButton" format="reference|color" />
         <attr name="frameBackground" format="reference|color" />
