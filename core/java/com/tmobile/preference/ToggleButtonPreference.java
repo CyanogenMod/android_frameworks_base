@@ -1,4 +1,4 @@
-package com.tmobile.preferences;
+package com.tmobile.preference;
 
 
 import android.content.Context;
