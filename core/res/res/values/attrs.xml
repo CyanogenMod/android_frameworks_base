@@ -358,8 +358,10 @@
         <attr name="horizontalScrollViewStyle" format="reference" />
         <!-- Default Spinner style. -->
         <attr name="spinnerStyle" format="reference" />
-        <!-- Default carouselWidget style. -->
+        <!-- Default CarouselWidget style. -->
         <attr name="carouselWidgetStyle" format="reference" />
+        <!-- Default Filmstrip style. -->
+        <attr name="filmstripStyle" format="reference" />
         <!-- Default Star style. -->
         <attr name="starStyle" format="reference" />
         <!-- Default TabWidget style. -->

@@ -385,6 +385,10 @@
         <item name="android:frameSelectedBackground">@color/black</item>
     </style>
 
+    <style name="Widget.Filmstrip" parent="Widget.Gallery">
+        <item name="android:spacing">0px</item>
+    </style>
+
     <style name="Widget.TextView.PopupMenu">
         <item name="android:clickable">true</item>
         <item name="android:textAppearance">@style/TextAppearance.Widget.TextView.PopupMenu</item>
