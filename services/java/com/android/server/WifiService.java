@@ -491,8 +491,11 @@ public class WifiService extends IWifiManager.Stub {
         if (enable && isAirplaneModeOn()) {
             return false;
         }
+        if (mWifiState == WIFI_STATE_UNKNOWN) {
+            setWifiEnabledState(enable ? WIFI_STATE_ENABLING : WIFI_STATE_DISABLING, uid);
+            return false;
+        }
 
-        setWifiEnabledState(enable ? WIFI_STATE_ENABLING : WIFI_STATE_DISABLING, uid);
 
         if (enable) {
             if (!WifiNative.loadDriver()) {
@@ -508,7 +511,7 @@ public class WifiService extends IWifiManager.Stub {
             }
             registerForBroadcasts();
             mWifiStateTracker.startEventLoop();
-        } else {
+        } else if (mWifiState != WIFI_STATE_DISABLING) {
 
             mContext.unregisterReceiver(mReceiver);
            // Remove notification (it will no-op if it isn't visible)
@@ -534,8 +537,12 @@ public class WifiService extends IWifiManager.Stub {
             if (failedToStopSupplicantOrUnloadDriver) {
                 return false;
             }
+        } else {
+            Log.d(TAG,"Trying to disable wifi again");
+            return true;
         }
 
+        setWifiEnabledState(enable ? WIFI_STATE_ENABLING : WIFI_STATE_DISABLING, uid);
         // Success!
 
         if (persist) {
