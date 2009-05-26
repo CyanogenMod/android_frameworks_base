@@ -119,6 +119,32 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * @hide
      */
     public static final int THEME_UNDEFINED = 0;
+
+    /**
+     * @hide
+     */
+    public static final String THEME_ID_PERSISTENCE_PROPERTY = "persist.sys.themeId";
+
+    /**
+     * @hide
+     */
+    public static final String THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY = "persist.sys.themePackageName";
+
+    /**
+     * @hide
+     */
+    public static final String THEME_PARENT_ID_PERSISTENCE_PROPERTY = "persist.sys.parentThemeId";
+
+    /**
+     * @hide
+     */
+    public static final String THEME_RESOURCE_PATH_PERSISTENCE_PROPERTY = "persist.sys.themeResourcePath";
+
+    /**
+     * @hide
+     */
+    public static final String THEME_FORCE_UPDATE_PERSISTENCE_PROPERTY = "persist.sys.themeForceUpdate";
+
     /**
      * Overall orientation of the screen.  May be one of
      * {@link #ORIENTATION_LANDSCAPE}, {@link #ORIENTATION_PORTRAIT},
@@ -181,10 +207,13 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         navigation = NAVIGATION_UNDEFINED;
         orientation = ORIENTATION_UNDEFINED;
 
-        int themeResource = SystemProperties.getInt("persist.sys.theme", -1);
-        String themePackageName = SystemProperties.get("persist.sys.themePackageName", "");
-        if(themeResource >= 0 && (themePackageName != null && themePackageName.trim().length() != 0)){
+        int themeResource = SystemProperties.getInt(THEME_ID_PERSISTENCE_PROPERTY, -1);
+        String themePackageName = SystemProperties.get(THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, "");
+        if (themeResource >= 0 && (themePackageName != null && themePackageName.trim().length() != 0)) {
             customTheme = new CustomTheme(themeResource, themePackageName);
+            customTheme.setParentThemeId(SystemProperties.getInt(THEME_PARENT_ID_PERSISTENCE_PROPERTY, -1));
+            customTheme.setThemeResourcePath(SystemProperties.getLongString(THEME_RESOURCE_PATH_PERSISTENCE_PROPERTY, null));
+            customTheme.setForceUpdate(SystemProperties.getBoolean(THEME_FORCE_UPDATE_PERSISTENCE_PROPERTY, false));
         }
     }
 
@@ -393,6 +422,14 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             dest.writeInt(1);
             dest.writeInt(customTheme.getThemeId());
             dest.writeString(customTheme.getThemePackageName());
+            if (customTheme.getThemeResourcePath() != null) {
+                dest.writeInt(1);
+                dest.writeString(customTheme.getThemeResourcePath());
+            } else {
+                dest.writeInt(0);
+            }
+            dest.writeInt(customTheme.getParentThemeId());
+            dest.writeInt(customTheme.isForceUpdate()? 1 : 0);
         }
     }
 
@@ -430,6 +467,11 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             int themeId = source.readInt();
             String themePackage = source.readString();
             customTheme = new CustomTheme(themeId, themePackage);
+            if (source.readInt() != 0) {
+                customTheme.setThemeResourcePath(source.readString());
+            }
+            customTheme.setParentThemeId(source.readInt());
+            customTheme.setForceUpdate(source.readInt() != 0);
         }
     }
 

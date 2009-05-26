@@ -20,14 +20,11 @@ import android.app.ActivityManager;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.pm.PackageInfo;
-import android.content.pm.BaseThemeInfo;
-import android.content.pm.ThemeInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 /**
  * A ContextWrapper that allows you to modify the theme from what is in the 
@@ -90,7 +87,7 @@ public class ContextThemeWrapper extends ContextWrapper {
      * XXX: Hack to support theme preview by temporarily overriding the ApplicationContext's
      * Resources on a per-activity basis.  Very ugly.
      */
-    public void useThemedResources(String themePackage, BaseThemeInfo info) {
+    public void useThemedResources(String themePackage, String resourceBundlePath) {
         if (themePackage == null) {
             mUseThemedResources = false;
             mThemedResources = null;
@@ -98,11 +95,8 @@ public class ContextThemeWrapper extends ContextWrapper {
             AssetManager assets = new AssetManager();
             assets.addAssetPath(getPackageResDir(getPackageName()));
             assets.addAssetPath(getPackageResDir(themePackage));
-            if (info.type.equals(BaseThemeInfo.InfoObjectType.TYPE_THEME)) {
-                String parentThemePackageName = ((ThemeInfo)info).parentThemePackageName;
-                if (parentThemePackageName != null && parentThemePackageName.length() > 0) {
-                    assets.addAssetPath(getPackageResDir(parentThemePackageName));
-                }
+            if (resourceBundlePath != null) {
+                assets.addAssetPath(resourceBundlePath);
             }
 
             DisplayMetrics metrics = new DisplayMetrics();

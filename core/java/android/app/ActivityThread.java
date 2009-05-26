@@ -45,11 +45,9 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.IPackageManager;
 import android.content.pm.InstrumentationInfo;
-import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ServiceInfo;
-import android.content.pm.ThemeInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -190,18 +188,11 @@ public final class ActivityThread {
 //                if (assets.addAssetPath(resDir) == 0) {
 //                    Log.e(TAG, "Unable to add theme resdir=" + resDir);
 //                }
-//                
-                
-                int themeId = config.customTheme.getThemeId();
-                
-                ThemeInfo themeInfo = getThemeInfo(themeId);
-                if(themeInfo != null && themeInfo.parentThemePackageName != null && themeInfo.parentThemeId > 0) {
-                    PackageInfo parentPackageInfo = getPackageInfo(themeInfo.parentThemePackageName, 0);
-                    if(parentPackageInfo != null){
-                        String diffResDir = parentPackageInfo.getResDir();
-                        if (assets.addAssetPath(diffResDir) == 0) {
-                            Log.e(TAG, "Unable to add parent theme resdir=" + diffResDir);
-                        }
+
+                String resourcePath = config.customTheme.getThemeResourcePath();
+                if (resourcePath != null) {
+                    if (assets.addAssetPath(resourcePath) == 0) {
+                        Log.e(TAG, "Unable to add parent theme resdir=" + resourcePath);
                     }
                 }
                 PackageInfo pi = getPackageInfo(config.customTheme.getThemePackageName(), 0);
@@ -222,26 +213,6 @@ public final class ActivityThread {
         }
     }
 
-    public ThemeInfo getThemeInfo(int resourceId){
-        try {
-            List<android.content.pm.PackageInfo> themes = getPackageManager().getInstalledThemePackages();
-            for (android.content.pm.PackageInfo pi : themes) {
-                if (pi != null && pi.themeInfos != null) {
-                    for (ThemeInfo themeInfo : pi.themeInfos) {
-                        if (themeInfo.theme == resourceId) {
-                           return themeInfo;
-                        }
-                    }
-                }
-    
-            }
-        }catch(RemoteException re){
-            Log.e(TAG, "Unable to get ThemeInfo for resourceId "+ resourceId, re);
-        }
-        
-        return null; 
-    }
-    
     final Handler getHandler() {
         return mH;
     }

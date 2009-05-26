@@ -33,22 +33,6 @@ import android.util.AttributeSet;
 public final class ThemeInfo extends BaseThemeInfo {
 
     /**
-     * The theme resource id of parent theme
-     *
-     * @see parentThemeId attribute
-     *
-     */
-    public int parentThemeId = -1;
-
-    /**
-     * The package name of parent theme
-     *
-     * @see parentThemePackageName attribute
-     *
-     */
-    public String parentThemePackageName = "";
-
-    /**
      * {@link #themePackage}
      *
      */
@@ -126,18 +110,6 @@ public final class ThemeInfo extends BaseThemeInfo {
      */
     private static final int SOUNDPACK_NAME_INDEX = 12;
 
-    /**
-     * {@link #parentThemeId}
-     *
-     */
-    private static final int PARENT_THEME_INDEX = 13;
-
-    /**
-     * {@link #parentThemePackageName}
-     *
-     */
-    private static final int PARENT_THEME_PACKAGE_INDEX = 14;
-
 
     private static final String [] compulsoryAttributes = new String [] {
         "name",
@@ -156,8 +128,6 @@ public final class ThemeInfo extends BaseThemeInfo {
         "ringtoneName",
         "notificationRingtoneName",
         "soundpackName",
-        "parentThemeId",
-        "parentThemePackageName",
     };
 
     private static Map<String, Integer> attributesLookupTable;
@@ -257,14 +227,6 @@ public final class ThemeInfo extends BaseThemeInfo {
                     case SOUNDPACK_NAME_INDEX:
                         soundPackName = attrs.getAttributeValue(i);
                         break;
-
-                    case PARENT_THEME_INDEX:
-                        parentThemeId = attrs.getAttributeIntValue(i, -1);
-                        break;  
-
-                    case PARENT_THEME_PACKAGE_INDEX:
-                        parentThemePackageName = attrs.getAttributeValue(i);
-                        break;  
                 }
             }
         }
@@ -284,8 +246,6 @@ public final class ThemeInfo extends BaseThemeInfo {
      */
     public void writeToParcel(Parcel dest, int flags) {
         super.writeToParcel(dest, flags);
-        dest.writeInt(parentThemeId);
-        dest.writeString(parentThemePackageName);
     }
 
     public static final Parcelable.Creator<ThemeInfo> CREATOR
@@ -301,9 +261,6 @@ public final class ThemeInfo extends BaseThemeInfo {
 
     private ThemeInfo(Parcel source) {
         super(source);
-
-        parentThemeId = source.readInt();
-        parentThemePackageName = source.readString();
     }
 
 }

@@ -64,10 +64,8 @@ import android.content.pm.PermissionInfo;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
-import android.content.pm.ThemeInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
-import android.content.res.CustomTheme;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.database.sqlite.SQLiteDatabase;
@@ -172,6 +170,7 @@ class ApplicationContext extends Context {
     private IBinder mActivityToken = null;
     private ApplicationContentResolver mContentResolver;
     private int mThemeResource = 0;
+    private int mParentThemeId = -1;
     private Resources.Theme mTheme = null;
     private PackageManager mPackageManager;
     private NotificationManager mNotificationManager = null;
@@ -268,6 +267,7 @@ class ApplicationContext extends Context {
     @Override
     public void setTheme(int resid) {
         mThemeResource = resid;
+        mParentThemeId = -1;
     }
     
     private int determineDefaultThemeResource() {
@@ -275,6 +275,7 @@ class ApplicationContext extends Context {
             try {
                 Configuration config = ActivityManagerNative.getDefault().getConfiguration();
                 if (config.customTheme != null) {
+                    mParentThemeId = config.customTheme.getParentThemeId();
                     int themeId = config.customTheme.getThemeId();
                     if (themeId >= 0) {
                         return themeId;
@@ -294,48 +295,33 @@ class ApplicationContext extends Context {
         if (mTheme == null) {
             int themeId;
             int deltaThemeId = -1;
+            mParentThemeId = -1;
             if (mThemeResource == 0) {
                 themeId = determineDefaultThemeResource();
             } else {
                 themeId = mThemeResource;
             }
-            
+
             //if this is delta then apply the parent theme first
-            ThemeInfo themeInfo = getThemeInfo(themeId);
-            if(themeInfo != null && themeInfo.parentThemeId > 0) {
+            // This is a minor performance improvement:
+            // DeltaThemeInfo may just customize a wallpaper or a sound.
+            // In this case parentThemeId and the themeId would be the same.
+            if (mParentThemeId > 0 && mParentThemeId != themeId) {
                 deltaThemeId = themeId;
-                themeId = themeInfo.parentThemeId;
-                
+                themeId = mParentThemeId;
             }
             mTheme = mResources.newTheme();
             mTheme.applyStyle(themeId, true);
-            
+
 //          Log.d(TAG, "******ThemeId :"+ themeId);
-            if(deltaThemeId > 0){
+            if (deltaThemeId > 0) {
                 mTheme.applyStyle(deltaThemeId, true);
-            }
-                       
-        }
-        return mTheme;
-    }
-    
-    
-    public ThemeInfo getThemeInfo(int resourceId){
-        List<PackageInfo> themes = getPackageManager().getInstalledThemePackages();
-        for (PackageInfo pi : themes) {
-            if (pi != null && pi.themeInfos != null) {
-                for (ThemeInfo themeInfo : pi.themeInfos) {
-                    if (themeInfo.theme == resourceId) {
-                       return themeInfo;
-                    }
-                }
             }
 
         }
-        
-        return null; 
+        return mTheme;
     }
-    
+
     @Override
     public ClassLoader getClassLoader() {
         return mPackageInfo != null ? mPackageInfo.getClassLoader()
