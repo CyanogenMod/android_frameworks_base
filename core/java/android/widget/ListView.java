@@ -1749,7 +1749,7 @@ public class ListView extends AbsListView {
         if (resurrectResult) {
             final int nextIndex = mNextSelectedPosition - mFirstPosition;
             View next = getChildAt(nextIndex);
-            if (next.getBackground() != null &&
+            if (next != null && next.getBackground() != null &&
                 mAdapter.getItemViewType(mNextSelectedPosition) != Adapter.IGNORE_ITEM_VIEW_TYPE) {
                 next.setBackgroundDrawable(null);
             }
@@ -2288,21 +2288,23 @@ public class ListView extends AbsListView {
         // start with top view: is it changing size?
         if (topView != null) {
             isSelected = !newFocusAssigned && topSelected;
-            if (mDefaultItemBackground != null) {
-                topView.setBackgroundDrawable(isSelected ? null : mDefaultItemBackground);
-            }
             topView.setSelected(isSelected);
             measureAndAdjustDown(topView, topViewIndex, numChildren);
+            if (mDefaultItemBackground != null && 
+                    mAdapter.getItemViewType(topViewIndex + mFirstPosition) != Adapter.IGNORE_ITEM_VIEW_TYPE) {
+                topView.setBackgroundDrawable(isSelected ? null : mDefaultItemBackground);
+            }
         }
 
         // is the bottom view changing size?
         if (bottomView != null) {
             isSelected = !newFocusAssigned && !topSelected;
-            if (mDefaultItemBackground != null) {
-                bottomView.setBackgroundDrawable(isSelected ? null : mDefaultItemBackground);
-            }
             bottomView.setSelected(isSelected);
             measureAndAdjustDown(bottomView, bottomViewIndex, numChildren);
+            if (mDefaultItemBackground != null &&
+                    mAdapter.getItemViewType(bottomViewIndex + mFirstPosition) != Adapter.IGNORE_ITEM_VIEW_TYPE) {
+                bottomView.setBackgroundDrawable(isSelected ? null : mDefaultItemBackground);
+            }
         }
     }
 
