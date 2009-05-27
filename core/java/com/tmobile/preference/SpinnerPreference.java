@@ -40,18 +40,6 @@ public class SpinnerPreference extends Preference implements
 		notifyChanged();
 	}
 
-	@Override
-	protected void onClick() {
-		super.onClick();
-
-		int newValue = getSelectedIndex();
-
-		if (!callChangeListener(newValue)) {
-			return;
-		}
-		setSelectedIndex(newValue);
-	}
-
 	public void setAdapter(SpinnerAdapter adapter) {
 		mAdapter = adapter;
 	}
@@ -145,7 +133,9 @@ public class SpinnerPreference extends Preference implements
 	}
 
 	public void onSelectionChange(int value) {
-
+		if (!callChangeListener(value)) {
+			return;
+		}
 		setSelectedIndex(value);
 	}
 
