@@ -449,6 +449,8 @@
         <attr name="preferenceLayoutChild" format="reference" />
         <!-- Default style for SpinnerPreference. -->
         <attr name="spinnerPreferenceStyle" format="reference" />
+        <!-- Default style for SeekbarPreference. -->
+        <attr name="seekBarPreferenceStyle" format="reference" />
         
     </declare-styleable>
 
@@ -3092,7 +3094,7 @@
              dependents will be disabled when this is unchecked, so the value of this preference is false. -->
         <attr name="disableDependentsState" format="boolean" />
     </declare-styleable>
-
+    
     <!-- Base attributes available to DialogPreference. -->
     <declare-styleable name="DialogPreference">
         <!-- The title in the dialog. -->

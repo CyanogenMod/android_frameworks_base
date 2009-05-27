@@ -214,6 +214,7 @@
         <item name="preferenceInformationStyle">@android:style/Preference.Information</item>
         <item name="checkBoxPreferenceStyle">@android:style/Preference.CheckBoxPreference</item>
         <item name="spinnerPreferenceStyle">@android:style/Preference.SpinnerPreference</item>
+        <item name="seekBarPreferenceStyle">@android:style/Preference.SeekbarPreference</item>
         <item name="yesNoPreferenceStyle">@android:style/Preference.DialogPreference.YesNoPreference</item>
         <item name="dialogPreferenceStyle">@android:style/Preference.DialogPreference</item>
         <item name="editTextPreferenceStyle">@android:style/Preference.DialogPreference.EditTextPreference</item>

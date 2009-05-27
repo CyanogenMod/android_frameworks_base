@@ -634,7 +634,11 @@
     </style>
     
     <style name="Preference.SpinnerPreference">
-        <item name="android:widgetLayout">@android:layout/preference_widget_spinner</item>
+        <item name="android:widgetLayout">@android:layout/tmobile_preference_widget_spinner</item>
+    </style>
+    
+    <style name="Preference.SeekbarPreference">
+        <item name="android:widgetLayout">@android:layout/tmobile_preference_widget_seekbar</item>
     </style>
     
     <style name="Preference.PreferenceScreen">
