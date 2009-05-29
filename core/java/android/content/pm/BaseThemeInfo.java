@@ -184,6 +184,18 @@ public class BaseThemeInfo implements Parcelable {
         dest.writeString(soundPackName);
     }
 
+    /** @hide */
+    public static final Parcelable.Creator<BaseThemeInfo> CREATOR
+            = new Parcelable.Creator<BaseThemeInfo>() {
+        public BaseThemeInfo createFromParcel(Parcel source) {
+            return new BaseThemeInfo(source);
+        }
+
+        public BaseThemeInfo[] newArray(int size) {
+            return new BaseThemeInfo[size];
+        }
+    };
+
     protected BaseThemeInfo() {
     }
 
