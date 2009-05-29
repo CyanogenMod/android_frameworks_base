@@ -33,6 +33,7 @@ import android.util.DisplayMetrics;
 public class ContextThemeWrapper extends ContextWrapper {
     private Context mBase;
     private int mThemeResource;
+    private int mParentThemeResource;
     private Resources.Theme mTheme;
     private LayoutInflater mInflater;
     
@@ -87,10 +88,12 @@ public class ContextThemeWrapper extends ContextWrapper {
      * XXX: Hack to support theme preview by temporarily overriding the ApplicationContext's
      * Resources on a per-activity basis.  Very ugly.
      */
-    public void useThemedResources(String themePackage, String resourceBundlePath) {
+    public void useThemedResources(String themePackage, String resourceBundlePath, 
+            int parentThemeId) {
         if (themePackage == null) {
-            mUseThemedResources = false;
             mThemedResources = null;
+            mUseThemedResources = false;
+            mTheme = null;
         } else {
             AssetManager assets = new AssetManager();
             assets.addAssetPath(getPackageResDir(getPackageName()));
@@ -108,6 +111,7 @@ public class ContextThemeWrapper extends ContextWrapper {
             mThemedResources = new Resources(assets, metrics, config);
             mUseThemedResources = true;
             mTheme = null;
+            mParentThemeResource = parentThemeId;
         }
     }
     
@@ -163,6 +167,10 @@ public class ContextThemeWrapper extends ContextWrapper {
             if (theme != null) {
                 mTheme.setTo(theme);
             }
+        }
+        
+        if (mUseThemedResources == true && mParentThemeResource > 0) {
+            onApplyThemeResource(mTheme, mParentThemeResource, first);
         }
         
         onApplyThemeResource(mTheme, mThemeResource, first);
