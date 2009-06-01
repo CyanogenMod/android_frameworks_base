@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Parcel;
@@ -117,7 +118,7 @@ public class ListView extends AbsListView {
     private boolean mHeaderDividersEnabled;
     private boolean mFooterDividersEnabled;
     
-    private Drawable mDefaultItemBackground;
+    private BitmapDrawable mDefaultItemBackground;
 
     private boolean mAreAllItemsSelectable = true;
 
@@ -171,7 +172,17 @@ public class ListView extends AbsListView {
         mHeaderDividersEnabled = a.getBoolean(R.styleable.ListView_headerDividersEnabled, true);
         mFooterDividersEnabled = a.getBoolean(R.styleable.ListView_footerDividersEnabled, true);
         
-        mDefaultItemBackground = a.getDrawable(com.android.internal.R.styleable.ListView_listItemBackground); 
+        BitmapDrawable temp = (BitmapDrawable)a.getDrawable(com.android.internal.R.styleable.ListView_listItemBackground); 
+        if (temp != null) {
+            mDefaultItemBackground = new BitmapDrawable(temp.getBitmap()) {
+                @Override
+                public void setBounds(int left, int top, int right, int bottom) {
+                    if (getBounds().isEmpty()) {
+                        super.setBounds(left, top, right, bottom);
+                    }
+                }
+            };
+        } 
 
         a.recycle();
     }
