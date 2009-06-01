@@ -449,6 +449,8 @@
         <attr name="preferenceLayoutChild" format="reference" />
         <!-- Default style for SpinnerPreference. -->
         <attr name="spinnerPreferenceStyle" format="reference" />
+        <!-- Default style for InlineEditTextPreference. -->
+        <attr name="tmobileEditTextPreferenceStyle" format="reference" />
         <!-- Default style for SeekbarPreference. -->
         <attr name="seekBarPreferenceStyle" format="reference" />
         
