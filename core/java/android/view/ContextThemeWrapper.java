@@ -94,6 +94,7 @@ public class ContextThemeWrapper extends ContextWrapper {
             mThemedResources = null;
             mUseThemedResources = false;
             mTheme = null;
+            mParentThemeResource = -1;
         } else {
             AssetManager assets = new AssetManager();
             assets.addAssetPath(getPackageResDir(getPackageName()));
