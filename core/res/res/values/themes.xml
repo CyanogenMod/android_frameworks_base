@@ -180,7 +180,7 @@
         <!-- Style for the inflated indicator widget itself, not the text or
              image views typically contained within. -->
         <item name="tabIndicatorStyle">@android:style/Widget.TabIndicator</item>
-        
+        <item name="textAppearanceTab">@android:style/TextAppearance.Widget.TabWidget</item>
         
     </style>
     

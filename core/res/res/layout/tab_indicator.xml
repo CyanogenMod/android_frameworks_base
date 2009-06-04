@@ -33,7 +33,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        style="?android:attr/tabWidgetStyle"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceTab"
     />
 
 </RelativeLayout>

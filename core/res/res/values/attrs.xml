@@ -152,6 +152,10 @@
         <!-- Style for the inflated indicator widget itself, not the text or
              image views typically contained within. -->
         <attr name="tabIndicatorStyle" format="reference" />
+
+        <!-- Style for the text label on the default indicator.  Previously
+             was lumped with tabWidgetStyle. -->
+        <attr name="textAppearanceTab" format="reference" />
         
         <!-- ============== -->
         <!-- Gallery styles -->
