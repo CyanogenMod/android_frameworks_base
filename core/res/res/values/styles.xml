@@ -451,7 +451,9 @@
     </style>
 
     <style name="Widget.TabIndicator">
-        <item name="android:minHeight">64dp</item>
+        <item name="android:layout_width">0px</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">64dp</item>
         <item name="android:background">@android:drawable/tab_indicator</item>
     </style>
 
