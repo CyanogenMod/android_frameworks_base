@@ -1070,6 +1070,8 @@
   <public type="style" name="ButtonBar" id="0x01030058" />
   <public type="style" name="Theme.Panel" id="0x01030059" />
   <public type="style" name="Theme.Light.Panel" id="0x0103005a" />
+
+  <public type="style" name="Widget.TabIndicator" id="0x0103005b" />
   
   <public type="string" name="dialog_alert_title" id="0x01040014" />
   <public type="string" name="VideoView_error_text_invalid_progressive_playback" id="0x01040015" />
@@ -1096,6 +1098,11 @@
   <public type="attr" name="dialogTheme" id="0x01010287" />
   <public type="attr" name="alertDialogTheme" id="0x01010288" />
   <public type="attr" name="listItemTextViewStyle" id="0x01010289" />
+  <!-- Someone is already using 0x0101028a? -->
+  <eat-comment />
+  <public type="attr" name="bottomLeftStrip" id="0x0101028d" />
+  <public type="attr" name="bottomRightStrip" id="0x0101028b" />
+  <public type="attr" name="tabIndicatorStyle" id="0x0101028c" />
 
   <public type="integer" name="config_shortAnimTime" id="0x010e0000" />
   <public type="integer" name="config_mediumAnimTime" id="0x010e0001" />

@@ -23,6 +23,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnFocusChangeListener;
@@ -59,13 +60,18 @@ public class TabWidget extends LinearLayout implements OnFocusChangeListener {
     }
 
     public TabWidget(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs);
+        super(context, attrs, defStyle);
         initTabWidget();
 
         TypedArray a = 
             context.obtainStyledAttributes(attrs, com.android.internal.R.styleable.TabWidget,
                     defStyle, 0);
-
+        
+        mBottomLeftStrip = a.getDrawableWithContext(context, 
+                com.android.internal.R.styleable.TabWidget_bottomLeftStrip);
+        mBottomRightStrip = a.getDrawableWithContext(context,
+                com.android.internal.R.styleable.TabWidget_bottomRightStrip);
+        
         a.recycle();
     }
     
@@ -77,10 +83,6 @@ public class TabWidget extends LinearLayout implements OnFocusChangeListener {
 
     private void initTabWidget() {
         setOrientation(LinearLayout.HORIZONTAL);
-        mBottomLeftStrip = mContext.getResources().getDrawable(
-                com.android.internal.R.drawable.tab_bottom_left);
-        mBottomRightStrip = mContext.getResources().getDrawable(
-                com.android.internal.R.drawable.tab_bottom_right);
         // Deal with focus, as we don't want the focus to go by default
         // to a tab other than the current tab
         setFocusable(true);

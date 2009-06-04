@@ -449,6 +449,13 @@
         <item name="android:textAppearance">@style/TextAppearance.Widget.TabWidget</item>
         <item name="ellipsize">marquee</item>
         <item name="singleLine">true</item>
+        <item name="android:bottomLeftStrip">@android:drawable/tab_bottom_left</item>
+        <item name="android:bottomRightStrip">@android:drawable/tab_bottom_right</item>
+    </style>
+
+    <style name="Widget.TabIndicator">
+        <item name="android:minHeight">64dp</item>
+        <item name="android:background">@android:drawable/tab_indicator</item>
     </style>
 
     <style name="Widget.Gallery">
