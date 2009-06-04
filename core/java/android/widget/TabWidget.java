@@ -77,7 +77,9 @@ public class TabWidget extends LinearLayout implements OnFocusChangeListener {
     
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        mStripMoved = true;
+        if (mBottomLeftStrip != null || mBottomRightStrip != null) {
+            mStripMoved = true;
+        }
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
@@ -104,31 +106,43 @@ public class TabWidget extends LinearLayout implements OnFocusChangeListener {
 
         View selectedChild = getChildAt(mSelectedTab);
         
-        mBottomLeftStrip.setState(selectedChild.getDrawableState());
-        mBottomRightStrip.setState(selectedChild.getDrawableState());
+        if (mBottomLeftStrip != null) {
+            mBottomLeftStrip.setState(selectedChild.getDrawableState());
+        }
+        if (mBottomRightStrip != null) {
+            mBottomRightStrip.setState(selectedChild.getDrawableState());
+        }
         
         if (mStripMoved) {
             Rect selBounds = new Rect(); // Bounds of the selected tab indicator
             selBounds.left = selectedChild.getLeft();
             selBounds.right = selectedChild.getRight();
             final int myHeight = getHeight();
-            mBottomLeftStrip.setBounds(
-                    Math.min(0, selBounds.left 
-                                 - mBottomLeftStrip.getIntrinsicWidth()),
-                    myHeight - mBottomLeftStrip.getIntrinsicHeight(),
-                    selBounds.left,
-                    getHeight());
-            mBottomRightStrip.setBounds(
-                    selBounds.right,
-                    myHeight - mBottomRightStrip.getIntrinsicHeight(),
-                    Math.max(getWidth(), 
-                            selBounds.right + mBottomRightStrip.getIntrinsicWidth()),
-                    myHeight);
+            if (mBottomLeftStrip != null) {
+                mBottomLeftStrip.setBounds(
+                        Math.min(0, selBounds.left 
+                                     - mBottomLeftStrip.getIntrinsicWidth()),
+                        myHeight - mBottomLeftStrip.getIntrinsicHeight(),
+                        selBounds.left,
+                        getHeight());
+            }
+            if (mBottomRightStrip != null) {
+                mBottomRightStrip.setBounds(
+                        selBounds.right,
+                        myHeight - mBottomRightStrip.getIntrinsicHeight(),
+                        Math.max(getWidth(), 
+                                selBounds.right + mBottomRightStrip.getIntrinsicWidth()),
+                        myHeight);
+            }
             mStripMoved = false;
         }
         
-        mBottomLeftStrip.draw(canvas);
-        mBottomRightStrip.draw(canvas);
+        if (mBottomLeftStrip != null) {
+            mBottomLeftStrip.draw(canvas);
+        }
+        if (mBottomRightStrip != null) {
+            mBottomRightStrip.draw(canvas);
+        }
     }
 
     /**
@@ -166,7 +180,9 @@ public class TabWidget extends LinearLayout implements OnFocusChangeListener {
         getChildAt(mSelectedTab).setSelected(false);
         mSelectedTab = index;
         getChildAt(mSelectedTab).setSelected(true);
-        mStripMoved = true;
+        if (mBottomLeftStrip != null || mBottomRightStrip != null) {
+            mStripMoved = true;
+        }
     }
     
     /**
