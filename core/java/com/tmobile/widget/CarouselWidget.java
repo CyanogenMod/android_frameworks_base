@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -49,9 +50,18 @@ class CarouselWidget extends RelativeLayout {
 	private static final Gallery.LayoutParams SelectedImageViewLayoutParams = new Gallery.LayoutParams(
 			40, 40);
 
-	private static final Gallery.LayoutParams TextViewLayoutParams = new Gallery.LayoutParams(
-			Gallery.LayoutParams.WRAP_CONTENT,
+	private static final LinearLayout.LayoutParams TextViewLayoutParams;
+	
+	private static final Gallery.LayoutParams LayoutTextViewLayoutParams = new Gallery.LayoutParams(
+			110,
 			Gallery.LayoutParams.FILL_PARENT);
+
+	static {
+		TextViewLayoutParams = new LinearLayout.LayoutParams(
+				Gallery.LayoutParams.WRAP_CONTENT,
+				Gallery.LayoutParams.WRAP_CONTENT);
+		TextViewLayoutParams.gravity = Gravity.CENTER;
+	}
 
 	 class CarouselWidgetItem extends Object {
 
@@ -59,6 +69,7 @@ class CarouselWidget extends RelativeLayout {
 		private String mName;
 		private Intent mIntent;
 		private TextView mTitleView;
+		private LinearLayout mTitleViewLayout;
 
 		private Drawable mImageDrawable;
 		private ImageView mImageView;
@@ -100,14 +111,16 @@ class CarouselWidget extends RelativeLayout {
 
 			if (null == mImageDrawable) {
 				if (null == mTitleView) {
+					mTitleViewLayout = new LinearLayout(mContext);
+					mTitleViewLayout.setLayoutParams(LayoutTextViewLayoutParams);
+					
 					mTitleView = new TextView(mContext);
 					mTitleView.setTypeface(TITLE_TYPEFACE);
 					mTitleView.setText(mName);
-					mTitleView.setLayoutParams(TextViewLayoutParams);
 					mTitleView.setTextSize(TITLE_TEXT_SIZE_UNSELECTED);
 					mTitleView.setId(position);
 					mTitleView.setTextColor(Color.WHITE);
-					mTitleView.setGravity(Gravity.CENTER);
+					mTitleView.setGravity(Gravity.CENTER_HORIZONTAL);
 					if(isPortrait) {
 						mTitleView.setWidth(UNSELECTED_TITLE_TEXT_FIELD_WIDTH_PORTRAIT);
 					} else {
@@ -116,8 +129,10 @@ class CarouselWidget extends RelativeLayout {
 //					mTitleView.setPadding(10, 5, 10, 5);
 					mTitleView.setSingleLine(true);
 					mTitleView.setEllipsize(TextUtils.TruncateAt.END);
+					
+					mTitleViewLayout.addView(mTitleView, TextViewLayoutParams);
 				}
-				return mTitleView;
+				return mTitleViewLayout;
 			} else {
 				if (null == mImageView) {
 					mImageView = new ImageView(mContext);
@@ -151,8 +166,8 @@ class CarouselWidget extends RelativeLayout {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view = mCarouselWidgetItems.get(position).getView(position);
 
-			if (view instanceof TextView) {
-				TextView textView = (TextView) view;
+			if (view instanceof LinearLayout) {
+				TextView textView = (TextView)(((ViewGroup)view).getChildAt(0));
 				 textView
 				 .setTextSize((position != mCarouselWidgetSelection) ?
 				 TITLE_TEXT_SIZE_UNSELECTED
@@ -195,7 +210,7 @@ class CarouselWidget extends RelativeLayout {
 						}
 						oldTextView.setTextSize(TITLE_TEXT_SIZE_UNSELECTED);
 						oldTextView.setTypeface(TITLE_TYPEFACE, Typeface.NORMAL);
-						oldTextView.setGravity(Gravity.CENTER);
+//                        oldTextView.setGravity(Gravity.CENTER);
 						setBackgroundResource(position, oldTextView);
 					}
 				} else if (oldView instanceof ImageView) {
@@ -210,8 +225,8 @@ class CarouselWidget extends RelativeLayout {
 			
 			mCarouselWidgetSelection = position;
 			
-			if (view instanceof TextView) {
-				TextView newTextView = (TextView) view;
+			if (view instanceof LinearLayout) {
+				TextView newTextView = (TextView)(((ViewGroup)view).getChildAt(0));
 			
 				// make the selected button look selected
 				// newText.setBackgroundDrawable(mCarouselSelectionTitleBackground);
@@ -219,8 +234,8 @@ class CarouselWidget extends RelativeLayout {
 				newTextView.setWidth(SELECTED_TITLE_TEXT_FIELD_WIDTH);
 				newTextView.setTextSize(TITLE_TEXT_SIZE_SELECTED);
 				newTextView.setTypeface(TITLE_TYPEFACE, Typeface.BOLD);
-				newTextView.setPadding(10, 5, 10, 5);
-				newTextView.setGravity(Gravity.CENTER);
+//                newTextView.setPadding(10, 5, 10, 5);
+//                newTextView.setGravity(Gravity.CENTER);
 				setBackgroundResource(position, newTextView);
 			} else if (view instanceof ImageView) {
 				ImageView newImageView = (ImageView) view;
