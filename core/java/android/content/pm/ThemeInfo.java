@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParser;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -143,13 +144,16 @@ public final class ThemeInfo extends BaseThemeInfo {
         }
     }
 
-    public ThemeInfo(AttributeSet attrs) throws XmlPullParserException {
+    public ThemeInfo(XmlPullParser parser, AttributeSet attrs) throws XmlPullParserException {
         super();
 
         type = InfoObjectType.TYPE_THEME;
         Map<String, Integer> tempMap = new HashMap<String, Integer>(attributesLookupTable);
         int numberOfCompulsoryAttributes = 0;
         for (int i = 0; i < attrs.getAttributeCount(); i++) {
+            if (!ApplicationInfo.isPlutoNamespace(parser.getAttributeNamespace(i))) {
+                continue;
+            }
             String key = attrs.getAttributeName(i);
             if (tempMap.containsKey(key)) {
                 int index = tempMap.get(key);

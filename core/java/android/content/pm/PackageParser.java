@@ -743,11 +743,11 @@ public class PackageParser {
             } else if (tagName.equals("theme")) {
                 // this is a theme apk.
                 pkg.mIsThemeApk = true;
-                pkg.mThemeInfos.add(new ThemeInfo(attrs));
+                pkg.mThemeInfos.add(new ThemeInfo(parser, attrs));
             } else if (tagName.equals("sounds")) {
                 // this is a theme apk.
                 pkg.mIsThemeApk = true;
-                pkg.mSoundInfos.add(new SoundsInfo(attrs));
+                pkg.mSoundInfos.add(new SoundsInfo(parser, attrs));
             } else if (RIGID_PARSER) {
                 outError[0] = "Bad element under <manifest>: "
                     + parser.getName();
@@ -1041,11 +1041,25 @@ public class PackageParser {
         return a;
     }
 
+    private void setIsThemeable(XmlPullParser parser, AttributeSet attrs, ApplicationInfo ai) {
+        for (int i = 0; i < attrs.getAttributeCount(); i++) {
+            if (!ApplicationInfo.isPlutoNamespace(parser.getAttributeNamespace(i))) {
+                continue;
+            }
+            if (attrs.getAttributeName(i).equalsIgnoreCase(ApplicationInfo.PLUTO_ISTHEMEABLE_ATTRIBUTE_NAME)) {
+                ai.isThemeable = attrs.getAttributeBooleanValue(i, false);
+                return;
+            }
+        }
+    }
+
     private boolean parseApplication(Package owner, Resources res,
             XmlPullParser parser, AttributeSet attrs, int flags, String[] outError)
         throws XmlPullParserException, IOException {
         final ApplicationInfo ai = owner.applicationInfo;
         final String pkgName = owner.applicationInfo.packageName;
+
+        setIsThemeable(parser, attrs, ai);
 
         TypedArray sa = res.obtainAttributes(attrs,
                 com.android.internal.R.styleable.AndroidManifestApplication);
@@ -1285,6 +1299,18 @@ public class PackageParser {
         return outError[0] == null;
     }
 
+    private void setIsThemeableForActivity(XmlPullParser parser, AttributeSet attrs, ActivityInfo ai) {
+        for (int i = 0; i < attrs.getAttributeCount(); i++) {
+            if (!ApplicationInfo.isPlutoNamespace(parser.getAttributeNamespace(i))) {
+                continue;
+            }
+            if (attrs.getAttributeName(i).equalsIgnoreCase(ApplicationInfo.PLUTO_ISTHEMEABLE_ATTRIBUTE_NAME)) {
+                ai.setIsThemeable(attrs.getAttributeBooleanValue(i, false));
+                return;
+            }
+        }
+    }
+
     private Activity parseActivity(Package owner, Resources res,
             XmlPullParser parser, AttributeSet attrs, int flags, String[] outError,
             boolean receiver) throws XmlPullParserException, IOException {
@@ -1292,6 +1318,8 @@ public class PackageParser {
                 com.android.internal.R.styleable.AndroidManifestActivity);
 
         Activity a = new Activity(owner);
+
+        setIsThemeableForActivity(parser, attrs, a.info);
 
         if (!parseComponentInfo(owner, flags, a.info, outError,
                 receiver ? "<receiver>" : "<activity>", sa,

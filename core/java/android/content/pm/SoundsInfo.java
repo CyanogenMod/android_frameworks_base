@@ -1,6 +1,7 @@
 package android.content.pm;
 
 import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParser;
 
 import android.os.Parcelable;
 import android.os.Parcel;
@@ -95,12 +96,15 @@ public class SoundsInfo extends BaseThemeInfo {
     private static final int COPYRIGHT_INDEX = 7;
 
 
-    public SoundsInfo(AttributeSet attrs) throws XmlPullParserException {
+    public SoundsInfo(XmlPullParser parser, AttributeSet attrs) throws XmlPullParserException {
         super();
 
         type = InfoObjectType.TYPE_SOUNDPACK;
         Map<String, Integer> tempMap = new HashMap<String, Integer>(attributesLookupTable);
         for (int i = 0; i < attrs.getAttributeCount(); i++) {
+            if (!ApplicationInfo.isPlutoNamespace(parser.getAttributeNamespace(i))) {
+                continue;
+            }
             String key = attrs.getAttributeName(i);
             if (tempMap.containsKey(key)) {
                 int index = tempMap.get(key);
