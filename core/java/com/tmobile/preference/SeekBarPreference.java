@@ -28,7 +28,6 @@ public class SeekBarPreference extends Preference implements
 
 	public SeekBarPreference(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-
 	}
 
 	public SeekBarPreference(Context context, AttributeSet attrs) {
@@ -49,11 +48,11 @@ public class SeekBarPreference extends Preference implements
 			seekbar.setProgress(mProgress);
 			if (mThumb != null)
 				seekbar.setThumb(mThumb);
-			if (mThumbOffset < 0)
+			if (mThumbOffset > 0)
 				seekbar.setThumbOffset(mThumbOffset);
-			if (mMinWidth < 0)
+			if (mMinWidth > 0)
 				seekbar.setMinimumWidth(mMinWidth);
-			if (mMax < 0)
+			if (mMax > 0)
 				seekbar.setMax(mMax);
 			seekbar.setOnSeekBarChangeListener(this);
 		}
