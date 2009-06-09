@@ -337,6 +337,22 @@ public class ActivityInfo extends ComponentInfo
     public final int getThemeResource() {
         return theme != 0 ? theme : applicationInfo.theme;
     }
+    
+    /**
+     * @hide
+     */
+    public final boolean isThemeable() {
+        switch (isThemeable) {
+            case ISTHEMEABLE_TRUE:
+                return true;
+                
+            case ISTHEMEABLE_INHERITED:
+                return applicationInfo.isThemeable;
+                
+            default:
+                return false;
+        }
+    }
 
     public void dump(Printer pw, String prefix) {
         super.dumpFront(pw, prefix);

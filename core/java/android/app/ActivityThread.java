@@ -2253,6 +2253,8 @@ public final class ActivityThread {
                 int theme = r.activityInfo.getThemeResource();
                 if (theme != 0) {
                     activity.setTheme(theme);
+                } else if (r.activityInfo.isThemeable() == false) {
+                    activity.setTheme(android.R.style.Theme);
                 }
 
                 activity.mCalled = false;
