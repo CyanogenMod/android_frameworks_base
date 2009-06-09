@@ -298,26 +298,24 @@ class ApplicationContext extends Context {
             mParentThemeId = -1;
             if (mThemeResource == 0) {
                 themeId = determineDefaultThemeResource();
+                //if this is delta then apply the parent theme first
+                // This is a minor performance improvement:
+                // DeltaThemeInfo may just customize a wallpaper or a sound.
+                // In this case parentThemeId and the themeId would be the same.
+                if (mParentThemeId > 0 && mParentThemeId != themeId) {
+                    deltaThemeId = themeId;
+                    themeId = mParentThemeId;
+                }
             } else {
                 themeId = mThemeResource;
             }
 
-            //if this is delta then apply the parent theme first
-            // This is a minor performance improvement:
-            // DeltaThemeInfo may just customize a wallpaper or a sound.
-            // In this case parentThemeId and the themeId would be the same.
-            if (mParentThemeId > 0 && mParentThemeId != themeId) {
-                deltaThemeId = themeId;
-                themeId = mParentThemeId;
-            }
             mTheme = mResources.newTheme();
             mTheme.applyStyle(themeId, true);
 
-//          Log.d(TAG, "******ThemeId :"+ themeId);
             if (deltaThemeId > 0) {
                 mTheme.applyStyle(deltaThemeId, true);
             }
-
         }
         return mTheme;
     }
