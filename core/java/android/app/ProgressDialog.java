@@ -77,9 +77,9 @@ public class ProgressDialog extends AlertDialog {
     }
 
     public ProgressDialog(Context context, int theme) {
-        super(context, theme);
+        super(context, resolveDefaultTheme(context, theme));
     }
-
+    
     public static ProgressDialog show(Context context, CharSequence title,
             CharSequence message) {
         return show(context, title, message, false);

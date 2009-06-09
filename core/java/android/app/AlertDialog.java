@@ -71,7 +71,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
         mAlert = new AlertController(getContext(), this, getWindow());
     }
     
-    private static int resolveDefaultTheme(Context context, int theme) {
+    static int resolveDefaultTheme(Context context, int theme) {
         return Dialog.resolveDefaultTheme(context, theme,
                 android.R.styleable.Theme_alertDialogTheme,
                 com.android.internal.R.style.Theme_Dialog_Alert);
