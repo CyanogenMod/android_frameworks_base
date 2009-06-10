@@ -196,12 +196,13 @@ public final class ActivityThread {
                     }
                 }
                 PackageInfo pi = getPackageInfo(config.customTheme.getThemePackageName(), 0);
-                String resDir = pi.getResDir();
-                if (assets.addAssetPath(resDir) == 0) {
-                    Log.e(TAG, "Unable to add theme resdir=" + resDir);
+                if (pi != null) {
+                    String resDir = pi.getResDir();
+                    if (assets.addAssetPath(resDir) == 0) {
+                        Log.e(TAG, "Unable to add theme resdir=" + resDir);
+                    }
                 }
-                
-  
+
             }
 
             DisplayMetrics metrics = getDisplayMetricsLocked(false);
