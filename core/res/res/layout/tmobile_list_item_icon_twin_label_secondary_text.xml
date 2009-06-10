@@ -16,8 +16,8 @@
             android:id="@+id/icon2"
             android:layout_height="16sp"
             android:layout_width="16sp"
-            android:layout_marginBottom="9sp"
-            android:layout_marginRight="9sp"
+            android:layout_marginBottom="3sp"
+            android:layout_marginRight="3sp"
             android:layout_alignBottom="@id/icon1"
             android:layout_alignRight="@id/icon1">
         </ImageView>
