@@ -730,6 +730,7 @@
   <public type="color" name="background_light" id="0x0106000f" />
   <public type="color" name="tertiary_text_dark" id="0x01060010" />
   <public type="color" name="tertiary_text_light" id="0x01060011" />
+  <public type="color" name="bright_text_dark_focused" id="0x01060012" />
 
   <public type="array" name="emailAddressTypes" id="0x01070000" />
   <public type="array" name="imProtocols" id="0x01070001" />
@@ -1072,6 +1073,9 @@
   <public type="style" name="Theme.Light.Panel" id="0x0103005a" />
 
   <public type="style" name="Widget.TabIndicator" id="0x0103005b" />
+  <public type="style" name="LauncherWorkspaceIcon" id="0x0103005c" />
+  <public type="style" name="LauncherWorkspaceIcon.Portrait" id="0x0103005d" />
+  <public type="style" name="LauncherWorkspaceIcon.Landscape" id="0x0103005e" />
   
   <public type="string" name="dialog_alert_title" id="0x01040014" />
   <public type="string" name="VideoView_error_text_invalid_progressive_playback" id="0x01040015" />
@@ -1104,6 +1108,18 @@
   <public type="attr" name="bottomRightStrip" id="0x0101028b" />
   <public type="attr" name="tabIndicatorStyle" id="0x0101028c" />
   <public type="attr" name="textAppearanceTab" id="0x0101028e" />
+ 
+  <public type="attr" name="handleViewStyle" id="0x01010290" />
+  <public type="attr" name="allAppsGridViewStyle" id="0x01010291" />
+  <public type="attr" name="workspaceStyle" id="0x01010292" />
+  <public type="attr" name="workspaceStyleLandscape" id="0x01010293" />
+  <public type="attr" name="workspaceStylePortrait" id="0x01010294" />
+  <public type="attr" name="allAppsTextViewStyle" id="0x01010295" />
+  <public type="attr" name="allAppsTextAppearance" id="0x01010296" />
+  <public type="attr" name="liveFolderGridStyle" id="0x01010297" />
+  <public type="attr" name="liveFolderListStyle" id="0x01010298" />
+  <public type="attr" name="liveFolderButtonStyle" id="0x01010299" />
+  <public type="attr" name="deleteZoneStyle" id="0x0101029a" />
 
   <public type="integer" name="config_shortAnimTime" id="0x010e0000" />
   <public type="integer" name="config_mediumAnimTime" id="0x010e0001" />

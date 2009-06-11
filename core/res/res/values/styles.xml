@@ -698,4 +698,69 @@
         <item name="android:paddingBottom">1dip</item>
         <item name="android:background">@android:drawable/bottom_bar</item>
     </style>
+    
+    <!-- Launcher Default Styles -->
+    <eat-comment />
+    
+    <style name="LauncherWorkspaceIcon">
+        <item name="android:textSize">13dip</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:shadowColor">#FF000000</item>
+        <item name="android:shadowRadius">2.0</item>
+        <item name="android:textColor">#FFF</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:background">@android:drawable/launcher_shortcut_selector</item>
+        <item name="android:paddingLeft">5dip</item>
+        <item name="android:paddingRight">5dip</item>
+    </style>
+    
+     <style name="LauncherWorkspaceIcon.Portrait">
+        <item name="android:drawablePadding">5dip</item>
+        <item name="android:paddingTop">4dip</item>
+        <item name="android:layout_marginLeft">3dip</item>
+        <item name="android:layout_marginRight">3dip</item>
+        <item name="android:layout_marginTop">13dip</item>
+        <item name="android:layout_marginBottom">8dip</item>
+    </style>
+
+    <style name="LauncherWorkspaceIcon.Landscape">
+        <item name="android:drawablePadding">3dip</item>
+        <item name="android:paddingTop">2dip</item>
+        <item name="android:layout_marginLeft">10dip</item>
+        <item name="android:layout_marginRight">10dip</item>
+    </style>
+    
+    <style name="LauncherHandleView">
+    	<item name="android:background">@android:drawable/launcher_handle</item>
+    	<item name="android:src">@android:drawable/launcher_handle_icon</item>
+    </style>
+    
+    <style name="LauncherDeleteZone">
+    	<item name="android:background">@android:drawable/launcher_delete_zone_selector</item>
+    	<item name="android:src">@android:drawable/ic_delete</item>
+    </style>
+    
+    <style name="LauncherAllAppsGridView" parent="Widget.GridView">
+    	<item name="android:listSelector">@android:drawable/launcher_shortcut_selector</item>
+    </style>
+    
+    <style name="LauncherAllAppsTextView">
+    	<item name="android:textColor">?allAppsTextAppearance</item>
+    </style>
+    
+    <style name="LiveFolderButtonStyle">
+    	<item name="android:background">@android:drawable/box_launcher_top</item>
+    </style>
+    
+    <style name="LiveFolderListStyle">
+    	<item name="android:background">@android:drawable/box_launcher_bottom</item>
+    </style>
+    
+    <style name="LiveFolderGridStyle">
+    	<item name="android:background">@android:drawable/box_launcher_bottom</item>
+    	<item name="android:listSelector">@android:drawable/launcher_shortcut_selector</item>
+    </style>
 </resources>

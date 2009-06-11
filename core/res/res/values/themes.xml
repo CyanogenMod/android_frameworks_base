@@ -182,6 +182,18 @@
         <item name="tabIndicatorStyle">@android:style/Widget.TabIndicator</item>
         <item name="textAppearanceTab">@android:style/TextAppearance.Widget.TabWidget</item>
         
+        <!-- Default Launcher Styles -->
+        <item name="deleteZoneStyle">@android:style/LauncherDeleteZone</item>
+        <item name="handleViewStyle">@android:style/LauncherHandleView</item>
+        <item name="allAppsGridViewStyle">@android:style/LauncherAllAppsGridView</item>
+        <item name="allAppsTextViewStyle">@android:style/LauncherAllAppsTextView</item>
+        <item name="workspaceStyle">@android:style/LauncherWorkspaceIcon</item>
+        <item name="workspaceStyleLandscape">@android:style/LauncherWorkspaceIcon.Landscape</item>
+        <item name="workspaceStylePortrait">@android:style/LauncherWorkspaceIcon.Portrait</item>
+        <item name="liveFolderButtonStyle">@android:style/LiveFolderButtonStyle</item>
+        <item name="liveFolderListStyle">@android:style/LiveFolderListStyle</item>
+        <item name="liveFolderGridStyle">@android:style/LiveFolderGridStyle</item>
+        <item name="allAppsTextAppearance">@android:color/bright_text_dark_focused</item>
     </style>
     
     <!-- Variant of the default (dark) theme with no title bar -->

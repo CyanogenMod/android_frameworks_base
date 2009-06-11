@@ -432,6 +432,27 @@
         <!-- The preference layout that has the child/tabbed effect. -->
         <attr name="preferenceLayoutChild" format="reference" />
         
+        <!-- =================== -->
+        <!-- Launcher styles   -->
+        <!-- =================== -->
+        <eat-comment />
+        <!-- Default style for com.android.launcher.DeleteZone. -->
+        <attr name="deleteZoneStyle" format="reference" />
+        <!-- Default style for com.android.launcher.HandleView. -->
+        <attr name="handleViewStyle" format="reference" />
+        <!-- Default styles for com.android.launcher.AllAppsGridView. -->
+        <attr name="allAppsGridViewStyle" format="reference" />
+        <attr name="allAppsTextViewStyle" format="reference" />
+        <attr name="allAppsTextAppearance" format="reference" />
+        <!-- Default styles for com.android.launcher.Workspace. -->
+        <attr name="workspaceStyle" format="reference" />
+        <attr name="workspaceStyleLandscape" format="reference" />
+        <attr name="workspaceStylePortrait" format="reference" />
+        <!-- Default styles for com.android.launcher.LiveFolder. -->
+        <attr name="liveFolderButtonStyle" format="reference" />
+        <attr name="liveFolderGridStyle" format="reference" />
+        <attr name="liveFolderListStyle" format="reference" />
+        
     </declare-styleable>
 
     <!-- **************************************************************** -->
