@@ -14,7 +14,7 @@ import android.widget.Gallery;
 import android.widget.SpinnerAdapter;
 
 public class Filmstrip extends Gallery {
-    private Drawable mSelector;
+    private Drawable.ConstantState mSelector;
 
     public Filmstrip(Context context) {
         this(context, null);
@@ -39,13 +39,13 @@ public class Filmstrip extends Gallery {
     }
 
     public void setSelector(Drawable selector) {
-        if (mSelector != selector) {
+        if (mSelector != selector.getConstantState()) {
             if (mSelector == null) {
                 if (getAdapter() != null) {
                     throw new UnsupportedOperationException("Cannot currently set selector after an adapter has been assigned.  Please fix.");
                 }
             }
-            mSelector = selector;
+            mSelector = selector.getConstantState();
             requestLayout();
         }
     }
@@ -86,7 +86,7 @@ public class Filmstrip extends Gallery {
             View view = mBase.getView(position, convertView, parent);
 
             if (convertView == null && view.getBackground() == null && mSelector != null) {
-                view.setBackgroundDrawable(mSelector);
+                view.setBackgroundDrawable(mSelector.newDrawable());
             }
 
             return view; 
