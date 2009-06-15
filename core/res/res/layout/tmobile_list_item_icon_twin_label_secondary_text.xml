@@ -34,7 +34,7 @@
         <TextView
             android:id="@+id/itemLabelText"
             android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLabelListItemTextSmall"
             android:layout_marginBottom="0sp"
             android:gravity="left"
@@ -47,6 +47,18 @@
             android:layout_alignTop="@id/itemLabelText"
             android:layout_height="16sp"
             android:layout_width="16sp" />
+        <TextView
+            android:id="@+id/itemRightLabelText"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/itemLabelText"
+            android:textAppearance="?android:attr/textAppearanceLabelListItemTextSmall"
+            android:layout_marginBottom="0sp"
+            android:gravity="right"
+            android:lines="1"
+            android:scrollHorizontally="false"
+            android:ellipsize="end" />
         <ImageView
             android:id="@+id/icon3"
             android:layout_alignLeft="@id/itemLabelText"
@@ -68,5 +80,48 @@
             android:scrollHorizontally="true"
             android:ellipsize="end"
             android:lines="1" />
+       <TextView
+            android:id="@+id/itemRightLabel2Text"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceLabelListItemSecondaryText"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@id/itemLabel2Text"
+            android:layout_marginTop="1sp"
+            android:gravity="right"
+            android:scrollHorizontally="false"
+            android:ellipsize="end"
+            android:lines="1" />
     </RelativeLayout>
+    <!-- Column 3 (RelativeLayout) 
+    <RelativeLayout
+        android:id="@+id/row_column_3"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10sp"
+        android:layout_toRightOf="@id/row_column_2"
+        android:layout_marginRight="10sp">
+        <TextView
+            android:id="@+id/itemRightLabelText"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceLabelListItemTextSmall"
+            android:layout_marginBottom="0sp"
+            android:gravity="right"
+            android:lines="1"
+            android:scrollHorizontally="false"
+            android:ellipsize="end" />
+        <TextView
+            android:id="@+id/itemRightLabel2Text"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceLabelListItemSecondaryText"
+            android:layout_below="@id/itemRightLabelText"
+            android:layout_marginTop="1sp"
+            android:gravity="right"
+            android:scrollHorizontally="false"
+            android:ellipsize="end"
+            android:lines="1" />
+    </RelativeLayout>-->
 </merge>

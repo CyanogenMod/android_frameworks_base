@@ -20,6 +20,8 @@ public class ListItemIconTwinLabelSecondaryText extends LinearLayout {
 	private ImageView mImage2;
 	private ImageView mImage3;
 	private ImageView mImage4;
+	private TextView mRightItemLabel;
+    private TextView mRightItemLabel2;
 	
 	public ListItemIconTwinLabelSecondaryText(Context context) {
 		this(context, null);
@@ -46,7 +48,7 @@ public class ListItemIconTwinLabelSecondaryText extends LinearLayout {
         mItemLabel2 = (TextView)findViewById(R.id.itemLabel2Text);
 		String item1Text = a.getString(R.styleable.ListItemLayout_itemLabel2Text);
         if (item1Text != null) {
-        	mItemLabel2.setText(labelText);
+        	mItemLabel2.setText(item1Text);
         }
         
         mImage1 = (ImageView)findViewById(R.id.icon1);
@@ -72,6 +74,18 @@ public class ListItemIconTwinLabelSecondaryText extends LinearLayout {
         if (imageSrc != null) {
         	mImage4.setImageDrawable(imageSrc);
         }
+        
+        mRightItemLabel = (TextView)findViewById(R.id.itemRightLabelText);
+        String rightLabelText = a.getString(R.styleable.ListItemLayout_itemLabelText);
+//        if (rightLabelText != null) {
+        mRightItemLabel.setText("Test");
+//        }
+        
+        mRightItemLabel2 = (TextView)findViewById(R.id.itemRightLabel2Text);
+        String rightItem1Text = a.getString(R.styleable.ListItemLayout_itemLabel2Text);
+//        if (rightItem1Text != null) {
+        mRightItemLabel2.setText("Test");
+//        }
         
         a.recycle();
 	}
