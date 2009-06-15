@@ -491,10 +491,7 @@ public class WifiService extends IWifiManager.Stub {
         if (enable && isAirplaneModeOn()) {
             return false;
         }
-        if (mWifiState == WIFI_STATE_UNKNOWN) {
-            setWifiEnabledState(enable ? WIFI_STATE_ENABLING : WIFI_STATE_DISABLING, uid);
-            return false;
-        }
+        setWifiEnabledState(enable ? WIFI_STATE_ENABLING : WIFI_STATE_DISABLING, uid);
 
 
         if (enable) {
@@ -511,7 +508,7 @@ public class WifiService extends IWifiManager.Stub {
             }
             registerForBroadcasts();
             mWifiStateTracker.startEventLoop();
-        } else if (mWifiState != WIFI_STATE_DISABLING) {
+        } else if (mWifiState == WIFI_STATE_ENABLED) {
 
             mContext.unregisterReceiver(mReceiver);
            // Remove notification (it will no-op if it isn't visible)
@@ -542,7 +539,6 @@ public class WifiService extends IWifiManager.Stub {
             return true;
         }
 
-        setWifiEnabledState(enable ? WIFI_STATE_ENABLING : WIFI_STATE_DISABLING, uid);
         // Success!
 
         if (persist) {
