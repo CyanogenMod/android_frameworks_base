@@ -1554,6 +1554,8 @@
         <attr name="itemLabel2Text" format="string" />
         <attr name="itemText" format="string" />
         <attr name="item2Text" format="string" />
+        <attr name="item3Text" format="string" />
+        <attr name="item4Text" format="string" />
         <attr name="itemIconSrc" format="reference|integer" />
         <attr name="itemIcon2Src" format="reference|integer" />
         <attr name="itemIcon3Src" format="reference|integer" />

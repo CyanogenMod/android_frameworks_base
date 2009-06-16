@@ -1108,6 +1108,8 @@
   <public type="attr" name="itemLabel2Text" id="0x01010275" />
   <public type="attr" name="itemText" id="0x01010276" />
   <public type="attr" name="item2Text" id="0x01010277" />
+  <public type="attr" name="item3Text" id="0x0101029b" />
+  <public type="attr" name="item4Text" id="0x0101029c" />
   <public type="attr" name="buttonStyleSplitLeft" id="0x01010278" />
   <public type="attr" name="buttonStyleSplitRight" id="0x01010279" />
   <public type="attr" name="labelText" id="0x0101027a" />

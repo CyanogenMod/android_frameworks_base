@@ -76,16 +76,16 @@ public class ListItemIconTwinLabelSecondaryText extends LinearLayout {
         }
         
         mRightItemLabel = (TextView)findViewById(R.id.itemRightLabelText);
-        String rightLabelText = a.getString(R.styleable.ListItemLayout_itemLabelText);
-//        if (rightLabelText != null) {
-        mRightItemLabel.setText("Test");
-//        }
+        String rightLabelText = a.getString(R.styleable.ListItemLayout_item3Text);
+        if (rightLabelText != null) {
+            mRightItemLabel.setText(rightLabelText);
+        }
         
         mRightItemLabel2 = (TextView)findViewById(R.id.itemRightLabel2Text);
-        String rightItem1Text = a.getString(R.styleable.ListItemLayout_itemLabel2Text);
-//        if (rightItem1Text != null) {
-        mRightItemLabel2.setText("Test");
-//        }
+        String rightItem1Text = a.getString(R.styleable.ListItemLayout_item4Text);
+        if (rightItem1Text != null) {
+            mRightItemLabel2.setText(rightItem1Text);
+        }
         
         a.recycle();
 	}
@@ -105,6 +105,22 @@ public class ListItemIconTwinLabelSecondaryText extends LinearLayout {
 	public void setItemLabel2Text(CharSequence text2) {
 		mItemLabel2.setText(text2);
 	}
+	
+	public CharSequence getRightItemLabelText() {
+        return mRightItemLabel.getText();
+    }
+    
+    public void setRightItemLabelText(CharSequence text) {
+        mRightItemLabel.setText(text);
+    }
+    
+    public CharSequence getRightItemLabel2Text() {
+        return mRightItemLabel2.getText();
+    }
+
+    public void setRightItemLabel2Text(CharSequence text2) {
+        mRightItemLabel2.setText(text2);
+    }
 	
 	public Drawable getIcon1() {
 		return mImage1.getDrawable();
