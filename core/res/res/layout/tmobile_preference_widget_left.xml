@@ -29,13 +29,13 @@
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:gravity="center_vertical"
-        android:paddingLeft="8sp"
+        android:paddingLeft="15sp"
         android:orientation="vertical" />
     
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="-8sp"
+        android:layout_marginLeft="-6sp"
         android:layout_marginRight="8sp"
         android:layout_marginTop="6sp"
         android:layout_marginBottom="6sp"
