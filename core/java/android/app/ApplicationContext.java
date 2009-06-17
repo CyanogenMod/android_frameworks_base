@@ -64,8 +64,10 @@ import android.content.pm.PermissionInfo;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
+import android.content.pm.ThemeInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
+import android.content.res.CustomTheme;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.database.sqlite.SQLiteDatabase;
@@ -83,22 +85,12 @@ import android.net.IConnectivityManager;
 import android.net.Uri;
 import android.net.wifi.IWifiManager;
 import android.net.wifi.WifiManager;
-import android.os.Binder;
-import android.os.Bundle;
-import android.os.FileUtils;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.IPowerManager;
-import android.os.Looper;
-import android.os.ParcelFileDescriptor;
-import android.os.PowerManager;
+import android.os.*;
 import android.os.Process;
-import android.os.RemoteException;
-import android.os.ServiceManager;
-import android.os.Vibrator;
 import android.os.FileUtils.FileStatus;
 import android.telephony.TelephonyManager;
 import android.text.ClipboardManager;
+import android.text.TextUtils;
 import android.util.AndroidRuntimeException;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -170,7 +162,7 @@ class ApplicationContext extends Context {
     private IBinder mActivityToken = null;
     private ApplicationContentResolver mContentResolver;
     private int mThemeResource = 0;
-    private int mParentThemeId = -1;
+    private int mParentThemeStyleId = -1;
     private Resources.Theme mTheme = null;
     private PackageManager mPackageManager;
     private NotificationManager mNotificationManager = null;
@@ -267,17 +259,48 @@ class ApplicationContext extends Context {
     @Override
     public void setTheme(int resid) {
         mThemeResource = resid;
-        mParentThemeId = -1;
+        mParentThemeStyleId = -1;
     }
-    
+
     private int determineDefaultThemeResource() {
         if (getResources() != Resources.getSystem()) {
             try {
                 Configuration config = ActivityManagerNative.getDefault().getConfiguration();
                 if (config.customTheme != null) {
-                    mParentThemeId = config.customTheme.getParentThemeId();
-                    int themeId = config.customTheme.getThemeId();
-                    if (themeId >= 0) {
+                    int themeId = -1;
+                    if (config.customTheme.hasParentTheme()) {
+                        mParentThemeStyleId = CustomTheme.getStyleId(this,
+                                config.customTheme.getThemePackageName(),
+                                config.customTheme.getThemeId());
+                        // This is a delta theme
+                        // Find style id for the delta theme, @see DeltaThemeGenerator#generateStyle
+                        String styleName = CustomTheme.getDeltaThemeStyleName(config.customTheme.getThemeId());
+                        String packageName = CustomTheme.getDeltaThemePackageName(styleName);
+                        themeId = CustomTheme.getDeltaThemeStyleId(this, styleName, packageName, config.customTheme.getThemeResourcePath());
+                        if (themeId == -1) {
+                            themeId = mParentThemeStyleId;
+                        }
+                    } else {
+                        mParentThemeStyleId = -1;
+                        themeId = CustomTheme.getStyleId(this,
+                                config.customTheme.getThemePackageName(),
+                                config.customTheme.getThemeId());
+                    }
+                    if (themeId == -1) {
+                        CustomTheme defaultTheme = CustomTheme.getDefault();
+                        if (config.customTheme.equals(defaultTheme)) {
+                            return com.android.internal.R.style.Theme;
+                        } else {
+                            themeId = CustomTheme.getStyleId(this,
+                                    defaultTheme.getThemePackageName(),
+                                    defaultTheme.getThemeId());
+                            if (themeId == -1) {
+                                return com.android.internal.R.style.Theme;
+                            } else {
+                                return themeId;
+                            }
+                        }
+                    } else {
                         return themeId;
                     }
                 }
@@ -295,16 +318,16 @@ class ApplicationContext extends Context {
         if (mTheme == null) {
             int themeId;
             int deltaThemeId = -1;
-            mParentThemeId = -1;
+            mParentThemeStyleId = -1;
             if (mThemeResource == 0) {
                 themeId = determineDefaultThemeResource();
                 //if this is delta then apply the parent theme first
                 // This is a minor performance improvement:
                 // DeltaThemeInfo may just customize a wallpaper or a sound.
                 // In this case parentThemeId and the themeId would be the same.
-                if (mParentThemeId > 0 && mParentThemeId != themeId) {
+                if (mParentThemeStyleId != -1 && mParentThemeStyleId != themeId) {
                     deltaThemeId = themeId;
-                    themeId = mParentThemeId;
+                    themeId = mParentThemeStyleId;
                 }
             } else {
                 themeId = mThemeResource;
@@ -557,8 +580,18 @@ class ApplicationContext extends Context {
     @Override
     public Drawable getWallpaper() {
         Drawable dr = peekWallpaper();
-        return dr != null ? dr : getResources().getDrawable(
-                com.android.internal.R.drawable.default_wallpaper);
+        if (dr != null) {
+            return dr;
+        }
+        InputStream is = getDefaultThemeWallpaperStream();
+        if (is != null) {
+            try {
+                return new BitmapDrawable(is);
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to retrieve drawable for default theme wallpaper", e);
+            }
+        }
+        return getResources().getDrawable(com.android.internal.R.drawable.default_wallpaper);
     }
 
     @Override
@@ -654,6 +687,40 @@ class ApplicationContext extends Context {
         }
     }
 
+    // If the default theme specifies wallpaper, returns the wallpaper Uri, otherwise returns null
+    private InputStream getDefaultThemeWallpaperStream() {
+        CustomTheme defaultTheme = CustomTheme.getDefault();
+        String themeId = defaultTheme.getThemeId();
+        String packageName = defaultTheme.getThemePackageName();
+        if (!TextUtils.isEmpty(themeId) &&
+            !TextUtils.isEmpty(packageName)) {
+            try {
+                PackageInfo pi = getPackageManager().getPackageInfo(packageName, 0);
+                ThemeInfo[] infos = pi.themeInfos;
+                String wallpaperPath = null;
+                if (infos != null) {
+                    for (ThemeInfo ti : infos) {
+                        if (ti.themeId.equals(themeId)) {
+                            wallpaperPath = ti.wallpaperImageName;
+                            break;
+                        }
+                    }
+                }
+                if (TextUtils.isEmpty(wallpaperPath)) {
+                    return null;
+                }
+                // Unfortunately, we can't use ContentProvider and walpaper uri:
+                // due to timing issue, the uri of interest may still be not
+                // available by the time launcher needs to render the wallpaper.
+                Resources res = getPackageManager().getResourcesForApplication(packageName);
+                return res.getAssets().open(wallpaperPath);
+            } catch (Exception e) {
+                Log.e(TAG, "Can't get wallpaper for default theme in clearWallpaper", e);
+            }
+        }
+        return null;
+    }
+
     @Override
     public void clearWallpaper() throws IOException {
         try {
@@ -663,8 +730,11 @@ class ApplicationContext extends Context {
                 FileOutputStream fos = null;
                 try {
                     fos = new ParcelFileDescriptor.AutoCloseOutputStream(fd);
-                    setWallpaper(getResources().openRawResource(
-                            com.android.internal.R.drawable.default_wallpaper),
+                    InputStream is = getDefaultThemeWallpaperStream();
+                    setWallpaper(
+                        (is == null)?
+                            getResources().openRawResource(com.android.internal.R.drawable.default_wallpaper) :
+                            is,
                             fos);
                 } finally {
                     if (fos != null) {

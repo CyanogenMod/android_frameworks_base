@@ -11235,30 +11235,30 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
 
     private void saveThemeResourceLocked(CustomTheme customTheme, boolean isDiff){
         if(isDiff){
-            int themeId;
+            String themeId;
             String themePackage;
             String resourcePath;
-            int parentId;
+            boolean hasParent;
             boolean forceUpdate;
 
             if (customTheme != null) {
                 themeId = customTheme.getThemeId();
                 themePackage = customTheme.getThemePackageName();
                 resourcePath = customTheme.getThemeResourcePath();
-                parentId = customTheme.getParentThemeId();
+                hasParent = customTheme.hasParentTheme();
                 forceUpdate = customTheme.isForceUpdate();
             } else {
-                themeId = -1;
+                themeId = null;
                 themePackage = "";
                 resourcePath = null;
-                parentId = -1;
+                hasParent = false;
                 forceUpdate = false;
             }
 
-            SystemProperties.set(Configuration.THEME_ID_PERSISTENCE_PROPERTY, Integer.toString(themeId));
+            SystemProperties.set(Configuration.THEME_ID_PERSISTENCE_PROPERTY, themeId);
             SystemProperties.set(Configuration.THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, themePackage);  
-            SystemProperties.set(Configuration.THEME_PARENT_ID_PERSISTENCE_PROPERTY, Integer.toString(parentId));
             SystemProperties.setLongString(Configuration.THEME_RESOURCE_PATH_PERSISTENCE_PROPERTY, resourcePath);
+            SystemProperties.set(Configuration.THEME_HAS_PARENT_PERSISTENCE_PROPERTY, Boolean.toString(hasParent));
             SystemProperties.set(Configuration.THEME_FORCE_UPDATE_PERSISTENCE_PROPERTY, Boolean.toString(forceUpdate));
         }
     }

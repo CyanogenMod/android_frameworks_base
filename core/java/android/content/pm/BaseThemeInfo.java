@@ -45,13 +45,22 @@ public class BaseThemeInfo implements Parcelable {
     public int thumbnail = - 1;
 
     /**
-     * The resource id of Android UI Style.
-     * Specifies an Android UI Style as @style/bar.
+     * The theme id, which does not change when the theme is modified.
+     * Specifies an Android UI Style using style name.
      *
-     * @see androidUiStyle attribute
+     * @see themeId attribute
      *
      */
-    public int theme = -1;
+    public String themeId;
+
+    /**
+     * The style resource id of Android UI Style, supplied by the resource commpiler.
+     * Specifies an Android UI Style id.
+     *
+     * @see styleId attribute
+     *
+     */
+    public int styleResourceId;
 
     /**
      * The name of the theme (as displayed by UI).
@@ -172,7 +181,8 @@ public class BaseThemeInfo implements Parcelable {
         dest.writeString(favesImageName);
         dest.writeString(favesAppImageName);
         dest.writeInt(thumbnail);
-        dest.writeInt(theme);
+        dest.writeString(themeId);
+        dest.writeInt(styleResourceId);
         dest.writeString(name);
         dest.writeString(ringtoneFileName);
         dest.writeString(notificationRingtoneFileName);
@@ -205,7 +215,8 @@ public class BaseThemeInfo implements Parcelable {
         favesImageName = source.readString();
         favesAppImageName = source.readString();
         thumbnail = source.readInt();
-        theme = source.readInt();
+        themeId = source.readString();
+        styleResourceId = source.readInt();
         name = source.readString();
         ringtoneFileName = source.readString();
         notificationRingtoneFileName = source.readString();

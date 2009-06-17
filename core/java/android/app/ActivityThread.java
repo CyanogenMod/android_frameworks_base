@@ -51,6 +51,7 @@ import android.content.pm.ServiceInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.CustomTheme;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDebug;
 import android.graphics.Bitmap;
@@ -79,6 +80,7 @@ import android.view.ViewManager;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManagerImpl;
+import android.text.TextUtils;
 
 import com.android.internal.os.BinderInternal;
 import com.android.internal.os.RuntimeInit;
@@ -182,12 +184,10 @@ public final class ActivityThread {
                 return null;
             }
             Configuration config = getConfiguration();
-            if (config != null && config.customTheme != null) {
-//                PackageInfo pi = getPackageInfo(config.customTheme.getThemePackageName(), 0);
-//                String resDir = pi.getResDir();
-//                if (assets.addAssetPath(resDir) == 0) {
-//                    Log.e(TAG, "Unable to add theme resdir=" + resDir);
-//                }
+            if (config != null) {
+                if (config.customTheme == null) {
+                    config.customTheme = CustomTheme.getDefault();
+                }
 
                 String resourcePath = config.customTheme.getThemeResourcePath();
                 if (resourcePath != null) {
@@ -195,14 +195,16 @@ public final class ActivityThread {
                         Log.e(TAG, "Unable to add parent theme resdir=" + resourcePath);
                     }
                 }
-                PackageInfo pi = getPackageInfo(config.customTheme.getThemePackageName(), 0);
-                if (pi != null) {
-                    String resDir = pi.getResDir();
-                    if (assets.addAssetPath(resDir) == 0) {
-                        Log.e(TAG, "Unable to add theme resdir=" + resDir);
+
+                if (!TextUtils.isEmpty(config.customTheme.getThemePackageName())) {
+                    PackageInfo pi = getPackageInfo(config.customTheme.getThemePackageName(), 0);
+                    if (pi != null) {
+                        String resDir = pi.getResDir();
+                        if (assets.addAssetPath(resDir) == 0) {
+                            Log.e(TAG, "Unable to add theme resdir=" + resDir);
+                        }
                     }
                 }
-
             }
 
             DisplayMetrics metrics = getDisplayMetricsLocked(false);

@@ -34,7 +34,7 @@ import android.util.AttributeSet;
 public final class ThemeInfo extends BaseThemeInfo {
 
     /**
-     * {@link #themePackage}
+     * {@link #name}
      *
      */
     private static final int THEME_PACKAGE_INDEX = 0;
@@ -52,46 +52,46 @@ public final class ThemeInfo extends BaseThemeInfo {
     private static final int AUTHOR_INDEX = 2;
 
     /**
+     * {@link #themeId}
+     *
+     */
+    private static final int THEME_INDEX = 3;
+
+    /**
      * {@link #ringtoneName}
      *
      */
-    private static final int RINGTONE_FILE_NAME_INDEX = 3;
+    private static final int RINGTONE_FILE_NAME_INDEX = 4;
 
     /**
      * {@link #notificationRingtoneName}
      *
      */
-    private static final int NOTIFICATION_RINGTONE_FILE_NAME_INDEX = 4;
+    private static final int NOTIFICATION_RINGTONE_FILE_NAME_INDEX = 5;
 
     /**
      * {@link #favesImageName}
      *
      */
-    private static final int FAVES_IMAGE_NAME_INDEX = 5;
+    private static final int FAVES_IMAGE_NAME_INDEX = 6;
 
     /**
      * {@link #favesAppImageName}
      *
      */
-    private static final int FAVES_APP_IMAGE_NAME_INDEX = 6;
+    private static final int FAVES_APP_IMAGE_NAME_INDEX = 7;
 
     /**
      * {@link #wallpaperImageName}
      *
      */
-    private static final int WALLPAPER_IMAGE_NAME_INDEX = 7;
+    private static final int WALLPAPER_IMAGE_NAME_INDEX = 8;
 
     /**
      * {@link #copyright}
      *
      */
-    private static final int COPYRIGHT_INDEX = 8;
-
-    /**
-     * {@link #theme}
-     *
-     */
-    private static final int THEME_INDEX = 9;
+    private static final int COPYRIGHT_INDEX = 9;
 
     /**
      * {@link #ringtoneName}
@@ -111,11 +111,18 @@ public final class ThemeInfo extends BaseThemeInfo {
      */
     private static final int SOUNDPACK_NAME_INDEX = 12;
 
+    /**
+     * {@link #styleResourceId}
+     *
+     */
+    private static final int STYLE_INDEX = 13;
+
 
     private static final String [] compulsoryAttributes = new String [] {
         "name",
         "thumbnail",
         "author",
+        "themeId",
     };
 
     private static final String [] optionalAttributes = new String [] {
@@ -125,10 +132,10 @@ public final class ThemeInfo extends BaseThemeInfo {
         "favesAppsBackground",
         "wallpaperImage",
         "copyright",
-        "androidUiStyle",
         "ringtoneName",
         "notificationRingtoneName",
         "soundpackName",
+        "styleId",
     };
 
     private static Map<String, Integer> attributesLookupTable;
@@ -178,6 +185,11 @@ public final class ThemeInfo extends BaseThemeInfo {
                         author = attrs.getAttributeValue(i);
                         break;
 
+                    case THEME_INDEX:
+                        // androidUiStyle attribute
+                        themeId = attrs.getAttributeValue(i);
+                        break;
+
                     case RINGTONE_FILE_NAME_INDEX:
                         // ringtone
                         ringtoneFileName = attrs.getAttributeValue(i);
@@ -213,11 +225,6 @@ public final class ThemeInfo extends BaseThemeInfo {
                         copyright = attrs.getAttributeValue(i);
                         break;
 
-                    case THEME_INDEX:
-                        // androidUiStyle attribute
-                        theme = attrs.getAttributeResourceValue(i, -1);
-                        break;
-
                     case RINGTONE_NAME_INDEX:
                         // ringtone UI name
                         ringtoneName = attrs.getAttributeValue(i);
@@ -230,6 +237,10 @@ public final class ThemeInfo extends BaseThemeInfo {
 
                     case SOUNDPACK_NAME_INDEX:
                         soundPackName = attrs.getAttributeValue(i);
+                        break;
+
+                    case STYLE_INDEX:
+                        styleResourceId = attrs.getAttributeResourceValue(i, -1);
                         break;
                 }
             }
