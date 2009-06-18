@@ -20,7 +20,6 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Parcel;
@@ -118,7 +117,7 @@ public class ListView extends AbsListView {
     private boolean mHeaderDividersEnabled;
     private boolean mFooterDividersEnabled;
     
-    private BitmapDrawable mDefaultItemBackground;
+    private Drawable.ConstantState mDefaultItemBackground;
 
     private boolean mAreAllItemsSelectable = true;
 
@@ -172,17 +171,10 @@ public class ListView extends AbsListView {
         mHeaderDividersEnabled = a.getBoolean(R.styleable.ListView_headerDividersEnabled, true);
         mFooterDividersEnabled = a.getBoolean(R.styleable.ListView_footerDividersEnabled, true);
         
-        BitmapDrawable temp = (BitmapDrawable)a.getDrawable(com.android.internal.R.styleable.ListView_listItemBackground); 
-        if (temp != null) {
-            mDefaultItemBackground = new BitmapDrawable(temp.getBitmap()) {
-                @Override
-                public void setBounds(int left, int top, int right, int bottom) {
-                    if (getBounds().isEmpty()) {
-                        super.setBounds(left, top, right, bottom);
-                    }
-                }
-            };
-        } 
+        Drawable defaultItemBackground = a.getDrawable(com.android.internal.R.styleable.ListView_listItemBackground); 
+        if (defaultItemBackground != null) {
+            mDefaultItemBackground = defaultItemBackground.getConstantState();
+        }
 
         a.recycle();
     }
@@ -1637,8 +1629,8 @@ public class ListView extends AbsListView {
         // Make a new view for this position, or convert an unused view if possible
         child = obtainView(position);
         if (child.getBackground() == null && mDefaultItemBackground != null) {            
-            if (mAdapter.getItemViewType(position) != Adapter.IGNORE_ITEM_VIEW_TYPE && !selected) {                
-                child.setBackgroundDrawable(mDefaultItemBackground);        
+            if (mAdapter.getItemViewType(position) != Adapter.IGNORE_ITEM_VIEW_TYPE) {                
+                child.setBackgroundDrawable(mDefaultItemBackground.newDrawable());        
             }
         }  
         
@@ -1728,45 +1720,6 @@ public class ListView extends AbsListView {
         if (mCachingStarted && !child.isDrawingCacheEnabled()) {
             child.setDrawingCacheEnabled(true);
         }
-    }
-    
-    /**
-     * Sets the background of the currently selected item so that we don't lose 
-     * it in touch mode.
-     * @hide
-     */
-    @Override
-    void hideSelector() {
-        if (mSelectedPosition != INVALID_POSITION) {
-            final int selectedIndex = mSelectedPosition - mFirstPosition;
-            View selected = getChildAt(selectedIndex);
-            if (selected != null && selected.getBackground() == null && mDefaultItemBackground != null) {
-                if (mAdapter.getItemViewType(mSelectedPosition) != Adapter.IGNORE_ITEM_VIEW_TYPE) {
-                    selected.setBackgroundDrawable(mDefaultItemBackground);
-                }
-            }
-            super.hideSelector();
-        }
-    }
-    
-    /**
-     * Removes the background of the resurrect-to item.
-     * @hide
-     */
-    @Override
-    boolean resurrectSelection() {
-        boolean resurrectResult = super.resurrectSelection();
-
-        if (resurrectResult) {
-            final int nextIndex = mNextSelectedPosition - mFirstPosition;
-            View next = getChildAt(nextIndex);
-            if (next != null && next.getBackground() != null &&
-                mAdapter.getItemViewType(mNextSelectedPosition) != Adapter.IGNORE_ITEM_VIEW_TYPE) {
-                next.setBackgroundDrawable(null);
-            }
-        }
-        
-        return resurrectResult;
     }
     
     @Override
@@ -2295,27 +2248,16 @@ public class ListView extends AbsListView {
 
         final int numChildren = getChildCount();
 
-        boolean isSelected;
         // start with top view: is it changing size?
         if (topView != null) {
-            isSelected = !newFocusAssigned && topSelected;
-            topView.setSelected(isSelected);
+            topView.setSelected(!newFocusAssigned && topSelected);
             measureAndAdjustDown(topView, topViewIndex, numChildren);
-            if (mDefaultItemBackground != null && 
-                    mAdapter.getItemViewType(topViewIndex + mFirstPosition) != Adapter.IGNORE_ITEM_VIEW_TYPE) {
-                topView.setBackgroundDrawable(isSelected ? null : mDefaultItemBackground);
-            }
         }
 
         // is the bottom view changing size?
         if (bottomView != null) {
-            isSelected = !newFocusAssigned && !topSelected;
-            bottomView.setSelected(isSelected);
+            bottomView.setSelected(!newFocusAssigned && !topSelected);
             measureAndAdjustDown(bottomView, bottomViewIndex, numChildren);
-            if (mDefaultItemBackground != null &&
-                    mAdapter.getItemViewType(bottomViewIndex + mFirstPosition) != Adapter.IGNORE_ITEM_VIEW_TYPE) {
-                bottomView.setBackgroundDrawable(isSelected ? null : mDefaultItemBackground);
-            }
         }
     }
 
@@ -2789,7 +2731,7 @@ public class ListView extends AbsListView {
         View view = obtainView(abovePosition);
         if (view.getBackground() == null && mDefaultItemBackground != null) {            
             if (mAdapter.getItemViewType(position) != Adapter.IGNORE_ITEM_VIEW_TYPE)                
-                view.setBackgroundDrawable(mDefaultItemBackground);
+                view.setBackgroundDrawable(mDefaultItemBackground.newDrawable());
         }
         int edgeOfNewChild = theView.getTop() - mDividerHeight;
         setupChild(view, abovePosition, edgeOfNewChild, false, mListPadding.left, false, false);
@@ -2801,7 +2743,7 @@ public class ListView extends AbsListView {
         View view = obtainView(belowPosition);
         if (view.getBackground() == null && mDefaultItemBackground != null) {            
             if (mAdapter.getItemViewType(position) != Adapter.IGNORE_ITEM_VIEW_TYPE)                
-                view.setBackgroundDrawable(mDefaultItemBackground);  
+                view.setBackgroundDrawable(mDefaultItemBackground.newDrawable());  
         }
         int edgeOfNewChild = theView.getBottom() + mDividerHeight;
         setupChild(view, belowPosition, edgeOfNewChild, true, mListPadding.left, false, false);
