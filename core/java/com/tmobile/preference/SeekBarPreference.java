@@ -45,15 +45,16 @@ public class SeekBarPreference extends Preference implements
 		SeekBar seekbar = (SeekBar) view
 				.findViewById(com.android.internal.R.id.seekbar_preference);
 		if (seekbar != null) {
-			seekbar.setProgress(mProgress);
+			if (mMax > 0)
+				seekbar.setMax(mMax);
 			if (mThumb != null)
 				seekbar.setThumb(mThumb);
 			if (mThumbOffset > 0)
 				seekbar.setThumbOffset(mThumbOffset);
 			if (mMinWidth > 0)
 				seekbar.setMinimumWidth(mMinWidth);
-			if (mMax > 0)
-				seekbar.setMax(mMax);
+			if (mProgress > 0)
+				seekbar.setProgress(mProgress);
 			seekbar.setOnSeekBarChangeListener(this);
 		}
 	}
