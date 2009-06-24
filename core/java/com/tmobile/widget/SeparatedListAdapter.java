@@ -1,5 +1,6 @@
 /**
  * 
+ * class SeparatedListAdapter
  */
 package com.tmobile.widget;
 
