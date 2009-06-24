@@ -421,7 +421,8 @@
         <attr name="listItemHeaderTwinLabelSecondaryText" format="reference" />
         <attr name="listItemIconTwinLabelSecondryText" format="reference" />
         <attr name="listItemTwinIconLayout" format="reference" />
-        
+        <attr name="listItemTwoRowLayout" format="reference" />
+
         <!-- =================== -->
         <!-- Preference styles   -->
         <!-- =================== -->

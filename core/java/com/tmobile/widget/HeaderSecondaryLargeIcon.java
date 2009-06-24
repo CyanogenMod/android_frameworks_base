@@ -4,6 +4,7 @@ import com.android.internal.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -80,10 +81,22 @@ public class HeaderSecondaryLargeIcon extends LinearLayout {
 	public Drawable getIconSrc() {
 		return mImageView.getDrawable();
 	}
-	
-	public void setIconSrc(Drawable drawable) {
-		mImageView.setImageDrawable(drawable);
-	}
+    
+    public void setIconSrc(Drawable drawable) {
+        mImageView.setImageDrawable(drawable);
+    }
+    
+    public void setIconSrc(Bitmap bm) {
+        mImageView.setImageBitmap(bm);
+    }
+    
+    public void setIconImageResource(int id) {
+        mImageView.setImageResource(id);
+    }
+    
+    public void setIconVisibility(int flag) {
+        mImageView.setVisibility(flag);
+    }
 	
 	public Drawable getIcon2Src() {
 		return mImage2View.getDrawable();
@@ -92,4 +105,16 @@ public class HeaderSecondaryLargeIcon extends LinearLayout {
 	public void setIcon2Src(Drawable drawable) {
 		mImage2View.setImageDrawable(drawable);
 	}
+    
+    public void setIcon2Src(Bitmap bm) {
+        mImage2View.setImageBitmap(bm);
+    }
+    
+    public void setIcon2ImageResource(int id) {
+        mImage2View.setImageResource(id);
+    }
+    
+    public void setIcon2Visibility(int flag) {
+        mImage2View.setVisibility(flag);
+    }
 }

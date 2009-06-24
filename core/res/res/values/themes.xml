@@ -206,6 +206,7 @@
         <item name="listItemHeaderTwinLabelSecondaryText">@android:style/Widget.ListItemLayout.ItemTwinLabelSecondaryText</item>
         <item name="listItemIconTwinLabelSecondryText">@android:style/Widget.ListItemLayout.ItemIconTwinLabelSecondaryText</item>
         <item name="listItemTwinIconLayout">@android:style/Widget.ListItemLayout.ItemTwinIconLabelText</item>
+        <item name="listItemTwoRowLayout">@android:style/Widget.ListItemLayout.ItemTwoRowLabelText</item>
 
         <!-- Preference styles -->
         <item name="preferenceScreenStyle">@android:style/Preference.PreferenceScreen</item>
