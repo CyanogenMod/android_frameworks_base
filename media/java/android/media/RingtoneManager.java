@@ -172,7 +172,7 @@ public class RingtoneManager {
     public static final String EXTRA_RINGTONE_PICKED_URI =
             "android.intent.extra.ringtone.PICKED_URI";
     
-    private static final String THEME_AUTHORITY = "com.tmobile.thememanager.packageresources";
+    static final String THEME_AUTHORITY = "com.tmobile.thememanager.packageresources";
 
     // Make sure the column ordering and then ..._COLUMN_INDEX are in sync
     
@@ -192,7 +192,7 @@ public class RingtoneManager {
     };
 
     private static final String[] THEME_COLUMNS = new String[] {
-    	MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE,
+        MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE,
         "\"" + Uri.parse("content://" + THEME_AUTHORITY + "/ringtone") + "\""
     };
     

@@ -20,8 +20,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.DrmStore;
 import android.provider.MediaStore;
@@ -53,6 +51,12 @@ public class Ringtone {
         DrmStore.Audio._ID,
         DrmStore.Audio.DATA,
         DrmStore.Audio.TITLE
+    };
+    
+    private static final String[] THEME_COLUMNS = new String[] {
+        MediaStore.Audio.Media._ID,
+        "asset_path" /* {@link PackageResources.RingtoneColumns.ASSET_PATH} */,
+        MediaStore.Audio.Media.TITLE
     };
 
     private MediaPlayer mAudio;
@@ -135,6 +139,8 @@ public class Ringtone {
                     cursor = res.query(uri, DRM_COLUMNS, null, null, null);
                 } else if (MediaStore.AUTHORITY.equals(authority)) {
                     cursor = res.query(uri, MEDIA_COLUMNS, null, null, null);
+                } else if (RingtoneManager.THEME_AUTHORITY.equals(authority)) {
+                    cursor = res.query(uri, THEME_COLUMNS, null, null, null);
                 }
                 
                 if (cursor != null && cursor.getCount() == 1) {
