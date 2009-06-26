@@ -59,8 +59,7 @@ public class SeparatedListAdapter extends BaseAdapter {
 
         public int getViewTypeCount() {
             // assume that headers count as one, then total all sections
-            //int total = 1;
-            int total = (!this.sections.isEmpty() ? 1 : 0);
+            int total = 1;
             for(Adapter adapter : this.sections.values())
                 total += adapter.getViewTypeCount();
             return total;
