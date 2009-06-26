@@ -58,7 +58,7 @@ public abstract class CheckedTextView extends TextView implements Checkable {
         TypedArray a = context.obtainStyledAttributes(attrs,
                 R.styleable.CheckedTextView, defStyle, 0);
 
-        Drawable d = a.getDrawable(R.styleable.CheckedTextView_checkMark);
+        Drawable d = a.getDrawableWithContext(context, R.styleable.CheckedTextView_checkMark);
         if (d != null) {
             setCheckMarkDrawable(d);
         }
