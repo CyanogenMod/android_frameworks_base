@@ -202,13 +202,13 @@ public abstract class ContentResolver {
             // This is a work around for the following bug.
             // If an asset is stored in a separate file, then AssetFileDescriptor.createInputStream
             // works. However, if an asset is stored in .apk or .zip file, then
-            // AssetFileDescriptor.createInputStream returns a stream which does not not
+            // AssetFileDescriptor.createInputStream returns a stream which does not
             // contain valid data (I can repro the bug using SDK 1.1 and "regular" apk).
             // To work around the bug, we try to get the input stream from AssetManager
             // first and only if that failed, fall back to the "standard" approach.
             InputStream stream = openInputStreamEx(uri);
             if (stream != null) {
-            	return stream;
+                return stream;
             }
             AssetFileDescriptor fd = openAssetFileDescriptor(uri, "r");
             try {
@@ -220,23 +220,23 @@ public abstract class ContentResolver {
     }
 
     private InputStream openInputStreamEx(Uri uri) {
-    	IContentProvider provider = acquireProvider(uri);
-    	ContentProvider cp = null;
-    	if (provider == null) {
-    	    return null;
-    	}
-    	if (provider instanceof ContentProvider.Transport) {
-    		cp = ((ContentProvider.Transport)provider).getContentProvider();
-    	} else if (provider instanceof ContentProvider) {
-    		cp = (ContentProvider)provider;
-    	}
-    	if (cp == null) {
-    		return null;
-    	}
-    	if (cp instanceof IExtendedContentProvider) {
-    		return ((IExtendedContentProvider)cp).openInputStream(uri);
-    	}
-    	return null;
+        IContentProvider provider = acquireProvider(uri);
+        ContentProvider cp = null;
+        if (provider == null) {
+            return null;
+        }
+        if (provider instanceof ContentProvider.Transport) {
+            cp = ((ContentProvider.Transport)provider).getContentProvider();
+        } else if (provider instanceof ContentProvider) {
+            cp = (ContentProvider)provider;
+        }
+        if (cp == null) {
+            return null;
+        }
+        if (cp instanceof IExtendedContentProvider) {
+            return ((IExtendedContentProvider)cp).openInputStream(uri);
+        }
+        return null;
     }
 
     /**
