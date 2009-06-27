@@ -60,7 +60,7 @@ public class BaseThemeInfo implements Parcelable {
      * @see styleId attribute
      *
      */
-    public int styleResourceId;
+    public int styleResourceId = -1;
 
     /**
      * The name of the theme (as displayed by UI).
