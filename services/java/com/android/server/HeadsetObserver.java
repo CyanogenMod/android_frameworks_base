@@ -97,7 +97,7 @@ class HeadsetObserver extends UEventObserver {
 
     private synchronized final void update(String newName, int newState) {
         if (newName != mHeadsetName || newState != mHeadsetState) {
-            boolean isUnplug = (newState == 0 && mHeadsetState == 1);
+            boolean isUnplug = (newState == 0 && mHeadsetState > 0);
             mHeadsetName = newName;
             mHeadsetState = newState;
             mAudioRouteNeedsUpdate = true;
@@ -137,7 +137,7 @@ class HeadsetObserver extends UEventObserver {
 
     private synchronized final void updateAudioRoute() {
         if (mAudioRouteNeedsUpdate) {
-            mAudioManager.setWiredHeadsetOn(mHeadsetState == 1);
+            mAudioManager.setWiredHeadsetOn(mHeadsetState > 0);
             mAudioRouteNeedsUpdate = false;
         }
     }
