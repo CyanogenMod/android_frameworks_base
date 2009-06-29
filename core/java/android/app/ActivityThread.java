@@ -57,6 +57,7 @@ import android.database.sqlite.SQLiteDebug;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.http.AndroidHttpClient;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
 import android.os.Handler;
@@ -73,13 +74,7 @@ import android.util.Config;
 import android.util.DisplayMetrics;
 import android.util.EventLog;
 import android.util.Log;
-import android.view.Display;
-import android.view.View;
-import android.view.ViewDebug;
-import android.view.ViewManager;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.WindowManagerImpl;
+import android.view.*;
 import android.text.TextUtils;
 
 import com.android.internal.os.BinderInternal;
@@ -2309,6 +2304,16 @@ public final class ActivityThread {
 
         } catch (Exception e) {
             if (!mInstrumentation.onException(activity, e)) {
+                if (e instanceof InflateException) {
+                    Log.e(TAG, "Failed to inflate", e);
+                    String pkg = null;
+                    if (r.packageInfo != null && !TextUtils.isEmpty(r.packageInfo.getPackageName())) {
+                        pkg = r.packageInfo.getPackageName();
+                    }
+                    Intent intent = new Intent(Intent.ACTION_APP_LAUNCH_FAILURE,
+                            (pkg != null)? Uri.fromParts("package", pkg, null) : null);
+                    getSystemContext().sendBroadcast(intent);
+                }
                 throw new RuntimeException(
                     "Unable to start activity " + component
                     + ": " + e.toString(), e);

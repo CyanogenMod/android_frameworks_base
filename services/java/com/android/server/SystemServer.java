@@ -19,20 +19,14 @@ package com.android.server;
 import com.android.server.am.ActivityManagerService;
 import com.android.server.status.StatusBarService;
 
-import dalvik.system.PathClassLoader;
 import dalvik.system.VMRuntime;
 
 import android.app.ActivityManagerNative;
-import android.content.ComponentName;
-import android.content.ContentResolver;
-import android.content.ContentService;
-import android.content.Context;
-import android.content.Intent;
+import android.content.*;
 import android.content.pm.IPackageManager;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.media.AudioService;
-import android.os.IBinder;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -45,9 +39,6 @@ import android.server.BluetoothDeviceService;
 import android.server.search.SearchManagerService;
 import android.util.EventLog;
 import android.util.Log;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 
 class ServerThread extends Thread {
     private static final String TAG = "SystemServer";
@@ -345,6 +336,15 @@ class ServerThread extends Thread {
         if (appWidget != null) {
             appWidget.systemReady(safeMode);
         }
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_APP_LAUNCH_FAILURE);
+        filter.addAction(Intent.ACTION_APP_LAUNCH_FAILURE_RESET);
+        filter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        filter.addCategory(Intent.CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE);
+        filter.addDataScheme("package");
+        context.registerReceiver(new AppsLaunchFailureReceiver(), filter);
 
         // After making the following code, third party code may be running...
         try {

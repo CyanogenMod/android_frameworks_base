@@ -1512,6 +1512,19 @@ public class Intent implements Parcelable {
             "android.intent.action.REBOOT";
 
     /**
+     * Broadcast Action: Indicate that unrecoverable error happened during app launch.
+     * Could indicate that curently applied theme is malicious.
+     * @hide
+     */
+    public static final String ACTION_APP_LAUNCH_FAILURE = "com.tmobile.intent.action.APP_LAUNCH_FAILURE";
+
+    /**
+     * Broadcast Action: Request to reset the unrecoverable errors count to 0.
+     * @hide
+     */
+    public static final String ACTION_APP_LAUNCH_FAILURE_RESET = "com.tmobile.intent.action.APP_LAUNCH_FAILURE_RESET";
+
+    /**
      * Activity Action: Pick wallpaper from a list.
      * Used instead of SET_WALLPAPER when we only need to pick wallpaper and do not set it.
      * @hide
