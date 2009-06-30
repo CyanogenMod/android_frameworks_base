@@ -11,8 +11,6 @@ import android.view.WindowManager;
 import android.text.TextUtils;
 
 /**
- * 
- * @author pankaj
  * @hide
  */
 public final class CustomTheme implements Cloneable {
