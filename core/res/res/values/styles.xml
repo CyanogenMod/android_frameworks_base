@@ -645,6 +645,11 @@
         <item name="android:widgetLayout">@android:layout/tmobile_preference_widget_seekbar</item>
     </style>
     
+    <style name="Preference.RadioButtonPreference">
+    	<item name="android:layout">@android:layout/tmobile_preference_layout_none</item>
+        <item name="android:widgetLayout">@android:layout/tmobile_preference_widget_radiobutton</item>
+    </style>
+    
     <style name="Preference.PreferenceScreen">
         <item name="android:widgetLayout">@android:layout/preferences</item>
     </style>

@@ -177,7 +177,7 @@
   <public type="attr" name="checkBoxPreferenceStyle" id="0x0101008f" />
   <public type="attr" name="spinnerPreferenceStyle" id="0x010102bb" />
   <public type="attr" name="seekBarPreferenceStyle" id="0x010102bc" />
-  
+  <public type="attr" name="radioButtonPreferenceStyle" id="0x010102bf" />
   <public type="attr" name="tmobileEditTextPreferenceStyle" id="0x010102bd" />
   
   <public type="attr" name="yesNoPreferenceStyle" id="0x01010090" />

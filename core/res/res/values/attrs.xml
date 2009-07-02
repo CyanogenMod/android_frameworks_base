@@ -454,6 +454,8 @@
         <attr name="tmobileEditTextPreferenceStyle" format="reference" />
         <!-- Default style for SeekbarPreference. -->
         <attr name="seekBarPreferenceStyle" format="reference" />
+        <!-- Default style for RadioButtonPreference. -->
+        <attr name="radioButtonPreferenceStyle" format="reference"/>
         
     </declare-styleable>
 
@@ -3130,6 +3132,12 @@
         <attr name="entryValues" format="reference" />
     </declare-styleable>
 
+	<!-- Base attributes available to RadioButtonPreference. -->
+    <declare-styleable name="RadioButtonPreference">
+        <!-- The human-readable array to present as a radio buttons. -->
+        <attr name="entries" />
+    </declare-styleable>
+
     <!-- Base attributes available to RingtonePreference. -->
     <declare-styleable name="RingtonePreference">
         <!-- Which ringtone type(s) to show in the picker. -->
@@ -3301,4 +3309,3 @@
     
     
 </resources>
-

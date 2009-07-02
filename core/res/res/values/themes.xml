@@ -216,7 +216,7 @@
         <item name="checkBoxPreferenceStyle">@android:style/Preference.CheckBoxPreference</item>
         <item name="spinnerPreferenceStyle">@android:style/Preference.SpinnerPreference</item>
         <item name="seekBarPreferenceStyle">@android:style/Preference.SeekbarPreference</item>
-        
+        <item name="radioButtonPreferenceStyle">@android:style/Preference.RadioButtonPreference</item>
         <item name="tmobileEditTextPreferenceStyle">@android:style/Preference.EditTextPreference</item>
         
         <item name="yesNoPreferenceStyle">@android:style/Preference.DialogPreference.YesNoPreference</item>
