@@ -31,6 +31,11 @@
             android:layout_height="wrap_content"
          />
 
+        <Button android:id="@+id/reboot"
+            android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:text="@string/reboot_system" />
+
         <Button android:id="@+id/off"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
