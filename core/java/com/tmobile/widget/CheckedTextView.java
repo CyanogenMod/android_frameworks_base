@@ -58,7 +58,7 @@ public abstract class CheckedTextView extends TextView implements Checkable {
 		TypedArray a = context.obtainStyledAttributes(attrs,
 				R.styleable.CheckedTextView, defStyle, 0);
 
-		Drawable d = a.getDrawable(R.styleable.CheckedTextView_checkMark);
+		Drawable d = a.getDrawableWithContext(context, R.styleable.CheckedTextView_checkMark);
 		if (d != null) {
 			setCheckMarkDrawable(d);
 		}
@@ -133,7 +133,7 @@ public abstract class CheckedTextView extends TextView implements Checkable {
 			setMinHeight(d.getIntrinsicHeight());
 
 			mCheckMarkWidth = d.getIntrinsicWidth();
-			// Text should have padding of padding to the left of the box +
+			// Should have padding to the left of the box +
 			// width of the box + padding between the box and text
 			mPaddingLeft = mCheckMarkWidth + mBasePaddingLeft + mPaddingLeft;
 			d.setState(getDrawableState());
