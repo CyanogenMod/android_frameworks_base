@@ -12,8 +12,7 @@
         <ImageView
             android:id="@+id/headerIcon"
             android:layout_width="64dp"
-            android:layout_height="64dp"
-            android:scaleType="center" />
+            android:layout_height="64dp" />
 
         <ImageView
             android:id="@+id/header2Icon"
