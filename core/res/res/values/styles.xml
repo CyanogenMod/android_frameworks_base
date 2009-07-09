@@ -386,7 +386,10 @@
     </style>
 
     <style name="Widget.Filmstrip" parent="Widget.Gallery">
-        <item name="android:spacing">0px</item>
+        <item name="android:background">?android:attr/colorBackground</item>
+        <item name="android:spacing">10dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
     </style>
 
     <style name="Widget.TextView.PopupMenu">
