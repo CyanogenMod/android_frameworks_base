@@ -219,7 +219,7 @@ class ApplicationContext extends Context {
      */
     /* package */ void refreshResources() {
         if (mResources == Resources.getSystem()) {
-            Log.e(TAG, "FIXME: refreshResources called on system resources!");
+            /* FIXME: refreshResources called on system resources! */
             return;
         }
         mResources = mPackageInfo.getResources(mMainThread, true);
