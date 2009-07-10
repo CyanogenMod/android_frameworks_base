@@ -14,9 +14,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/text1"
     android:layout_width="fill_parent"
-    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:layout_height="50dp"
     android:textAppearance="?android:attr/textAppearanceLabelListItemText"
     android:gravity="center_vertical"
     android:checkMark="?android:attr/listChoiceIndicatorMultiple"
-    android:paddingLeft="8dip"
-    android:paddingRight="8dip" />
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp" />
