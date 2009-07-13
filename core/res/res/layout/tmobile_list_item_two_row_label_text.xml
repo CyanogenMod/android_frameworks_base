@@ -8,28 +8,28 @@
 		<RelativeLayout 
 			android:id="@+id/topRow"
 			android:layout_span="3"
-			android:layout_column="0"
-			
+			android:layout_column="0"			
 	        android:layout_width="fill_parent"
 			android:layout_height="wrap_content" >
 	        
 			<TextView
 				android:layout_width="70dp"
 				android:layout_height="wrap_content"
-				android:layout_marginRight="8dp"
-                android:paddingTop="11dip"
+				android:layout_marginRight="8dp"             
 				android:lines="1"
 				android:textAppearance="?android:attr/textAppearanceLabelListItem"
-				android:id="@+id/itemLabel" />
+				android:id="@+id/itemLabel" 
+                android:layout_alignBaseline="@id/itemText"/>
 		
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
 				android:lines="1"
 				android:textAppearance="?android:attr/textAppearanceLabelListItemText"
 				android:id="@+id/itemText"
 				android:layout_toRightOf="@id/itemLabel"
-				android:layout_alignBaseline="@id/itemLabel" />
+				 />
 	    </RelativeLayout>
 	    
 		<RelativeLayout 
@@ -45,20 +45,20 @@
 				android:layout_width="70dp"
 				android:layout_height="wrap_content"
 				android:layout_marginRight="8dp"
-                android:paddingTop="11dp"
-				android:lines="1"
+                android:lines="1"
 				android:textAppearance="?android:attr/textAppearanceLabelListItem"
-				android:id="@+id/item2Label" />
+				android:id="@+id/item2Label" 
+                android:layout_alignBaseline="@id/item2Text" />
 		
 			<TextView
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:layout_marginBottom="11dp"
 				android:lines="1"
 				android:textAppearance="?android:attr/textAppearanceLabelListItemText"
 				android:id="@+id/item2Text"
-				android:layout_toRightOf="@id/item2Label"
-				android:layout_alignBaseline="@id/item2Label" 
-                android:paddingBottom="11dp"/>
+				android:layout_toRightOf="@id/item2Label"/>
 	    </RelativeLayout>
     </LinearLayout>
 </merge>
