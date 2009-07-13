@@ -9,7 +9,7 @@
 			android:id="@+id/topRow"
 			android:layout_span="3"
 			android:layout_column="0"
-			android:gravity="left|center_vertical"
+			
 	        android:layout_width="fill_parent"
 			android:layout_height="wrap_content" >
 	        
@@ -17,6 +17,7 @@
 				android:layout_width="70dp"
 				android:layout_height="wrap_content"
 				android:layout_marginRight="8dp"
+                android:paddingTop="11dip"
 				android:lines="1"
 				android:textAppearance="?android:attr/textAppearanceLabelListItem"
 				android:id="@+id/itemLabel" />
@@ -44,6 +45,7 @@
 				android:layout_width="70dp"
 				android:layout_height="wrap_content"
 				android:layout_marginRight="8dp"
+                android:paddingTop="11dp"
 				android:lines="1"
 				android:textAppearance="?android:attr/textAppearanceLabelListItem"
 				android:id="@+id/item2Label" />
@@ -55,7 +57,8 @@
 				android:textAppearance="?android:attr/textAppearanceLabelListItemText"
 				android:id="@+id/item2Text"
 				android:layout_toRightOf="@id/item2Label"
-				android:layout_alignBaseline="@id/item2Label" />
+				android:layout_alignBaseline="@id/item2Label" 
+                android:paddingBottom="11dp"/>
 	    </RelativeLayout>
     </LinearLayout>
 </merge>
