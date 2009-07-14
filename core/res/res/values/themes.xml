@@ -139,6 +139,7 @@
         <item name="galleryStyle">@android:style/Widget.Gallery</item>
         <item name="gridViewStyle">@android:style/Widget.GridView</item>        
         <item name="imageButtonStyle">@android:style/Widget.ImageButton</item>
+        <item name="imageButtonCircleStyle">@android:style/Widget.ImageButton.Circle</item>
         <item name="imageWellStyle">@android:style/Widget.ImageWell</item>
         <item name="listViewStyle">@android:style/Widget.ListView</item>
         <item name="listViewWhiteStyle">@android:style/Widget.ListView.White</item>

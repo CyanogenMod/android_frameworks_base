@@ -354,6 +354,9 @@
         <item name="android:background">@android:drawable/btn_default</item>
     </style>
 
+    <style name="Widget.ImageButton.Circle">
+        <item name="android:background">@android:drawable/btn_circle</item>
+    </style>
 
     <style name="Widget.AutoCompleteTextView">
         <item name="android:focusable">true</item>
