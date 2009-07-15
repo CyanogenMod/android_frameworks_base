@@ -25,19 +25,22 @@ public class RoundRectImageButton extends ImageButton {
     public RoundRectImageButton(Context context, AttributeSet attr, int defStyle) {
         super(context, attr, defStyle);
         init(context);
-        Log.e(TAG, "constructor RoundRectImageButton(Context, AttributeSet, int) - attr count = " + attr.getAttributeCount() + " defStyle = " + defStyle);
+        if (Log.isLoggable(TAG, Log.DEBUG))
+            Log.d(TAG, "constructor RoundRectImageButton(Context, AttributeSet, int) - attr count = " + attr.getAttributeCount() + " defStyle = " + defStyle);
     }
 
     public RoundRectImageButton(Context context, AttributeSet attr) {
         super(context, attr);
         init(context);
-        Log.e(TAG, "constructor RoundRectImageButton(Context, AttributeSet) - attr count = " + attr.getAttributeCount());
+        if (Log.isLoggable(TAG, Log.DEBUG))
+            Log.d(TAG, "constructor RoundRectImageButton(Context, AttributeSet) - attr count = " + attr.getAttributeCount());
     }
 
     public RoundRectImageButton(Context context) {
         super(context);
         init(context);
-        Log.e(TAG, "constructor RoundRectImageButton(Context)");
+        if (Log.isLoggable(TAG, Log.DEBUG))
+            Log.d(TAG, "constructor RoundRectImageButton(Context)");
     }
     
     private void init(Context context) {
@@ -49,9 +52,11 @@ public class RoundRectImageButton extends ImageButton {
     protected void onDraw(Canvas canvas) {
         try {
             drawImage(canvas);
-            Log.e(TAG, "onDraw");
+            if (Log.isLoggable(TAG, Log.DEBUG))
+                Log.d(TAG, "onDraw");
         } catch (Exception e) {
-            Log.e(TAG, "onDraw", e);
+            if (Log.isLoggable(TAG, Log.ERROR))
+                Log.e(TAG, "onDraw", e);
         }
     }
     
