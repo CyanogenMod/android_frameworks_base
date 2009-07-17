@@ -1077,6 +1077,8 @@
   <public type="style" name="LauncherWorkspaceIcon.Portrait" id="0x0103005d" />
   <public type="style" name="LauncherWorkspaceIcon.Landscape" id="0x0103005e" />
   
+  <public type="style" name="Widget.EditText.TimePicker" id="0x0103005f" />
+  
   <public type="string" name="dialog_alert_title" id="0x01040014" />
   <public type="string" name="VideoView_error_text_invalid_progressive_playback" id="0x01040015" />
 
@@ -1120,6 +1122,9 @@
   <public type="attr" name="liveFolderListStyle" id="0x0101029b" />
   <public type="attr" name="liveFolderButtonStyle" id="0x0101029c" />
   <public type="attr" name="deleteZoneStyle" id="0x0101029d" />
+  <public type="attr" name="timePickerInputStyle" id="0x0101029e" />
+  <public type="attr" name="buttonStyleTimePickerUp" id="0x0101029f" />
+  <public type="attr" name="buttonStyleTimePickerDown" id="0x010102a0" />
 
   <public type="integer" name="config_shortAnimTime" id="0x010e0000" />
   <public type="integer" name="config_mediumAnimTime" id="0x010e0001" />

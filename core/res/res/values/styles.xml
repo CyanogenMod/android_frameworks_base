@@ -332,6 +332,13 @@
         <item name="android:gravity">center_vertical</item>
     </style>
     
+    <style name="Widget.EditText.TimePicker">
+        <item name="android:background">@android:drawable/timepicker_input</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLargeInverse</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">30sp</item>
+    </style>
+    
     <style name="Widget.ExpandableListView" parent="Widget.ListView">
         <item name="android:groupIndicator">@android:drawable/expander_group</item>
         <item name="android:indicatorLeft">?android:attr/expandableListPreferredItemIndicatorLeft</item>
@@ -697,6 +704,14 @@
         <item name="android:paddingRight">4dip</item>
         <item name="android:paddingBottom">1dip</item>
         <item name="android:background">@android:drawable/bottom_bar</item>
+    </style>
+    
+    <style name="TimePickerUpButton">
+        <item name="android:background">@android:drawable/timepicker_up_btn</item>
+    </style>
+    
+     <style name="TimePickerDownButton">
+        <item name="android:background">@android:drawable/timepicker_down_btn</item>
     </style>
     
     <!-- Launcher Default Styles -->
