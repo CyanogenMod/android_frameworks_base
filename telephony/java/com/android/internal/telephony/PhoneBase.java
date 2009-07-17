@@ -456,7 +456,7 @@ public abstract class PhoneBase implements Phone {
     private void setLocaleByCarrier() {
         String carrier = SystemProperties.get("ro.carrier");
 
-        if (null == carrier || 0 == carrier.length()) {
+        if (null == carrier || 0 == carrier.length() || "unknown".equals(carrier)) {
             return;
         }
 
