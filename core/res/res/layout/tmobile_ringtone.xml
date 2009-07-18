@@ -11,13 +11,13 @@
       android:headerText="@string/ringtone_header"
       android:buttonText="@string/ringtone_button_done"
       android:button2Text="@string/ringtone_button_cancel" />
-
+<!--
    <com.tmobile.widget.HeaderIcon
      android:layout_width="fill_parent"
      android:layout_height="wrap_content"
      android:headerText="@string/buy_ringtones" 
      android:iconSrc="@drawable/pluto_mall_icon" />
-      
+-->
    <ListView
     android:layout_width="fill_parent"
     android:layout_height="0px"
