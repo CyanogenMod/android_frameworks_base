@@ -2,6 +2,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:state_checked="true"
-          android:drawable="@drawable/pluto_chechkbox_focus" />
+          android:drawable="@drawable/btn_check_buttonless_on" />
 
 </selector>
