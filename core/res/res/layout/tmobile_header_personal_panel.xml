@@ -44,17 +44,18 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_below="@id/headerId"
+            android:layout_marginTop="4sp"
             android:layout_marginRight="6dp" />
 
         <TextView
             android:id="@+id/subHeaderId1"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1sp"
             android:textAppearance="?android:attr/textAppearanceLabelPersonalSubHeader"
             android:singleLine="true"
             android:layout_below="@id/headerId"
             android:layout_toRightOf="@id/header3Icon"
+            android:layout_alignBaseline="@id/header3Icon"
             android:ellipsize="end" />
 
     </RelativeLayout>
