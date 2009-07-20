@@ -4,17 +4,16 @@ import com.android.internal.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class SectionHeaderImageButton extends LinearLayout {
 
 	private TextView mHeader;
-    private Button mButton;
+    private ImageButton mButton;
 	
 	public SectionHeaderImageButton(Context context) {
 		this(context, null);
@@ -38,7 +37,7 @@ public class SectionHeaderImageButton extends LinearLayout {
         	mHeader.setText(headerText);
         }
         
-        mButton = (Button)findViewById(R.id.button1);
+        mButton = (ImageButton)findViewById(R.id.button1);
         a.recycle();
 	}
 
@@ -50,7 +49,7 @@ public class SectionHeaderImageButton extends LinearLayout {
 		mHeader.setText(text);
 	}
 	
-	public Button getButton() {
+	public ImageButton getButton() {
 		return mButton;
 	}
 	
