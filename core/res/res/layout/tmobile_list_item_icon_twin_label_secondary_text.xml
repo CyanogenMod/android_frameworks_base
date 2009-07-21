@@ -39,24 +39,29 @@
             android:lines="1"
             android:scrollHorizontally="false"
             android:ellipsize="end" />
-        <ImageView
-            android:id="@+id/icon4"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@id/itemLabelText"
-            android:layout_height="16sp"
-            android:layout_width="16sp" />
-        <TextView
-            android:id="@+id/itemRightLabelText"
-            android:layout_height="wrap_content"
-            android:layout_width="fill_parent"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@id/itemLabelText"
-            android:textAppearance="?android:attr/textAppearanceLabelListItemSecondaryText"
-            android:layout_marginBottom="0sp"
-            android:gravity="right"
-            android:lines="1"
-            android:scrollHorizontally="false"
-            android:ellipsize="end" />
+        <LinearLayout
+		    android:orientation="horizontal"
+		    android:layout_alignParentRight="true"
+		    android:layout_alignTop="@id/itemLabelText"
+		    android:gravity="right"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content" >
+	        <TextView
+	            android:id="@+id/itemRightLabelText"
+	            android:layout_height="wrap_content"
+	            android:layout_width="fill_parent"
+	            android:textAppearance="?android:attr/textAppearanceLabelListItemSecondaryText"
+	            android:layout_marginBottom="0sp"
+	            android:layout_marginRight="5sp"
+	            android:lines="1"
+	            android:scrollHorizontally="false"
+	            android:ellipsize="end" />
+	        <ImageView
+	            android:id="@+id/icon4"
+	            android:layout_alignParentRight="true"
+	            android:layout_height="16sp"
+	            android:layout_width="16sp" />
+        </LinearLayout>
         <ImageView
             android:id="@+id/icon3"
             android:layout_alignLeft="@id/itemLabelText"
