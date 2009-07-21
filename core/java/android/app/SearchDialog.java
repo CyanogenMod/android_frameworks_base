@@ -134,7 +134,13 @@ public class SearchDialog extends Dialog implements OnItemClickListener, OnItemS
      * @param context Application Context we can use for system acess
      */
     public SearchDialog(Context context) {
-        super(context, com.android.internal.R.style.Theme_SearchBar);
+        super(context, resolveDefaultTheme(context, 0));
+    }
+
+    static int resolveDefaultTheme(Context context, int theme) {
+        return Dialog.resolveDefaultTheme(context, theme,
+                android.R.styleable.Theme_searchDialogTheme,
+                com.android.internal.R.style.Theme_SearchBar);
     }
 
     /**

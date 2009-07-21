@@ -1103,6 +1103,7 @@
 
   <public type="attr" name="dialogTheme" id="0x0101028a" />
   <public type="attr" name="alertDialogTheme" id="0x0101028b" />
+  <public type="attr" name="searchDialogTheme" id="0x0101028d" />
   <public type="attr" name="listItemTextViewStyle" id="0x0101028c" />
   <!-- Someone is already using 0x0101028a? -->
   <eat-comment />

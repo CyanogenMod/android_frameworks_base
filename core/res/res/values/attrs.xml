@@ -311,6 +311,7 @@
         <eat-comment />
         <attr name="dialogTheme" format="reference" />
         <attr name="alertDialogTheme" format="reference" />
+        <attr name="searchDialogTheme" format="reference" />
         
         <!-- ============ -->
         <!-- Alert Dialog styles -->
