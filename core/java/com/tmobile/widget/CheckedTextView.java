@@ -17,186 +17,49 @@ package com.tmobile.widget;
  */
 
 import android.content.Context;
-import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.view.Gravity;
-import android.widget.Checkable;
-import android.widget.TextView;
+import android.graphics.drawable.Drawable;
 
-import com.android.internal.R;
-
-/**
- * An extension to TextView that supports the {@link android.widget.Checkable}
- * interface. This is useful when used in a {@link android.widget.ListView
- * ListView} where the it's {@link android.widget.ListView#setChoiceMode(int)
- * setChoiceMode} has been set to something other than
- * {@link android.widget.ListView#CHOICE_MODE_NONE CHOICE_MODE_NONE}.
- * 
+// The only difference between this class and android.widget.CheckedTextView
+// is that it places check mark at the left, while android.widget.CheckedTextView
+// places the check mark at the right end.
+/*
+ ** @hide
  */
-public abstract class CheckedTextView extends TextView implements Checkable {
-	private boolean mChecked;
-	private int mCheckMarkResource;
-	private Drawable mCheckMarkDrawable;
-	private int mBasePaddingLeft;
-	private int mCheckMarkWidth;
+public final class CheckedTextView extends android.widget.CheckedTextView {
 
-	private static final int[] CHECKED_STATE_SET = { R.attr.state_checked };
+    public CheckedTextView(Context context) {
+        this(context, null);
+    }
 
-	public CheckedTextView(Context context) {
-		this(context, null);
-	}
+    public CheckedTextView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
 
-	public CheckedTextView(Context context, AttributeSet attrs) {
-		this(context, attrs, 0);
-	}
+    public CheckedTextView(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        // Although this call is redundant, it's used here.
+        setIsLeftAligned(true);
+    }
 
-	public CheckedTextView(Context context, AttributeSet attrs, int defStyle) {
-		super(context, attrs, defStyle);
+    @Override
+    public void setPadding(int left, int top, int right, int bottom) {
+        // Hacky way to make sure that mIsLeftAligned is set to true
+        // BEFORE we invoke any method which checks the flag.
+        // This is necessary, since the method is invoked BEFORE
+        // setIsLeftAligned(true) is called in the constructor.
+        setIsLeftAligned(true);
+        super.setPadding(left, top, right, bottom);
+    }
 
-		TypedArray a = context.obtainStyledAttributes(attrs,
-				R.styleable.CheckedTextView, defStyle, 0);
-
-		Drawable d = a.getDrawableWithContext(context, R.styleable.CheckedTextView_checkMark);
-		if (d != null) {
-			setCheckMarkDrawable(d);
-		}
-
-		boolean checked = a.getBoolean(R.styleable.CheckedTextView_checked,
-				false);
-		setChecked(checked);
-
-		a.recycle();
-	}
-
-	public void toggle() {
-		setChecked(!mChecked);
-	}
-
-	public boolean isChecked() {
-		return mChecked;
-	}
-
-	/**
-	 * <p>
-	 * Changes the checked state of this text view.
-	 * </p>
-	 * 
-	 * @param checked
-	 *            true to check the text, false to uncheck it
-	 */
-	public void setChecked(boolean checked) {
-		if (mChecked != checked) {
-			mChecked = checked;
-			refreshDrawableState();
-		}
-	}
-
-	/**
-	 * Set the checkmark to a given Drawable, identified by its resourece id.
-	 * This will be drawn when {@link #isChecked()} is true.
-	 * 
-	 * @param resid
-	 *            The Drawable to use for the checkmark.
-	 */
-	public void setCheckMarkDrawable(int resid) {
-		if (resid != 0 && resid == mCheckMarkResource) {
-			return;
-		}
-
-		mCheckMarkResource = resid;
-
-		Drawable d = null;
-		if (mCheckMarkResource != 0) {
-			d = getResources().getDrawable(mCheckMarkResource);
-		}
-		setCheckMarkDrawable(d);
-	}
-
-	/**
-	 * Set the checkmark to a given Drawable. This will be drawn when
-	 * {@link #isChecked()} is true.
-	 * 
-	 * @param d
-	 *            The Drawable to use for the checkmark.
-	 */
-	public void setCheckMarkDrawable(Drawable d) {
-		if (d != null) {
-			if (mCheckMarkDrawable != null) {
-				mCheckMarkDrawable.setCallback(null);
-				unscheduleDrawable(mCheckMarkDrawable);
-			}
-			d.setCallback(this);
-			d.setVisible(getVisibility() == VISIBLE, false);
-			d.setState(CHECKED_STATE_SET);
-			setMinHeight(d.getIntrinsicHeight());
-
-			mCheckMarkWidth = d.getIntrinsicWidth();
-			// Should have padding to the left of the box +
-			// width of the box + padding between the box and text
-			mPaddingLeft = mCheckMarkWidth + mBasePaddingLeft + mPaddingLeft;
-			d.setState(getDrawableState());
-			mCheckMarkDrawable = d;
-		} else {
-			mPaddingLeft = mBasePaddingLeft;
-		}
-		requestLayout();
-	}
-
-	@Override
-	public void setPadding(int left, int top, int right, int bottom) {
-		super.setPadding(left, top, right, bottom);
-		mBasePaddingLeft = mPaddingLeft;
-	}
-
-	@Override
-	protected void onDraw(Canvas canvas) {
-		super.onDraw(canvas);
-		final Drawable checkMarkDrawable = mCheckMarkDrawable;
-		if (checkMarkDrawable != null) {
-			final int verticalGravity = getGravity()
-					& Gravity.VERTICAL_GRAVITY_MASK;
-			final int height = checkMarkDrawable.getIntrinsicHeight();
-
-			int y = 0;
-
-			switch (verticalGravity) {
-			case Gravity.BOTTOM:
-				y = getHeight() - height;
-				break;
-			case Gravity.CENTER_VERTICAL:
-				y = (getHeight() - height) / 2;
-				break;
-			}
-			checkMarkDrawable.setBounds(mBasePaddingLeft, y, mCheckMarkWidth
-					+ mBasePaddingLeft, y + height);
-
-			checkMarkDrawable.draw(canvas);
-		}
-	}
-
-	@Override
-	protected int[] onCreateDrawableState(int extraSpace) {
-		final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
-		if (isChecked()) {
-			mergeDrawableStates(drawableState, CHECKED_STATE_SET);
-		}
-		return drawableState;
-	}
-
-	@Override
-	protected void drawableStateChanged() {
-		super.drawableStateChanged();
-
-		if (mCheckMarkDrawable != null) {
-			int[] myDrawableState = getDrawableState();
-
-			// Set the state of the Drawable
-			mCheckMarkDrawable.setState(myDrawableState);
-
-			invalidate();
-		}
-	}
+    @Override
+    public void setCheckMarkDrawable(Drawable d) {
+        // Hacky way to make sure that mIsLeftAligned is set to true
+        // BEFORE we invoke any method which checks the flag.
+        // This is necessary, since the method is invoked BEFORE
+        // setIsLeftAligned(true) is called in the constructor.
+        setIsLeftAligned(true);
+        super.setCheckMarkDrawable(d);
+    }
 
 }
