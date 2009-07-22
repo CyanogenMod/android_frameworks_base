@@ -440,6 +440,14 @@
         <attr name="preferenceLayoutChild" format="reference" />
         
         <!-- =================== -->
+        <!-- Dialer styles   -->
+        <!-- =================== -->
+        <eat-comment />
+        <attr name="dialerInputStyle" format="reference" />
+        <attr name="dialerDeleteButtonStyle" format="reference" />
+        <attr name="dialerScreenBackgroundStyle" format="reference" />
+        <attr name="dialerDialpadButtonStyle" format="reference" />
+        <!-- =================== -->
         <!-- Launcher styles   -->
         <!-- =================== -->
         <eat-comment />

@@ -187,6 +187,12 @@
         <item name="tabIndicatorStyle">@android:style/Widget.TabIndicator</item>
         <item name="textAppearanceTab">@android:style/TextAppearance.Widget.TabWidget</item>
         
+        <!-- Default Dialer Styles -->
+        <item name="dialerInputStyle">@android:style/Widget.EditText.Dialer</item>
+        <item name="dialerDeleteButtonStyle">@android:style/Widget.Button.DialerDelete</item>
+        <item name="dialerScreenBackgroundStyle">@android:style/DialerScreenBackground</item>
+        <item name="dialerDialpadButtonStyle">@android:style/Widget.ImageButton.Dialpad</item>
+        
         <!-- Default Launcher Styles -->
         <item name="deleteZoneStyle">@android:style/LauncherDeleteZone</item>
         <item name="handleViewStyle">@android:style/LauncherHandleView</item>

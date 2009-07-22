@@ -715,6 +715,27 @@
         <item name="android:background">@android:drawable/timepicker_down_btn</item>
     </style>
     
+    <!-- Dialer Default Styles -->
+    <eat-comment />
+    <style name="Widget.EditText.Dialer">
+        <item name="android:background">@android:drawable/btn_dial_textfield</item>
+        <item name="android:focusableInTouchMode">false</item>
+        <item name="android:textSize">28sp</item>
+    </style>
+
+    <style name="Widget.Button.DialerDelete">
+        <item name="android:background">@android:drawable/btn_dial_delete</item>
+    </style>
+    
+    <style name="Widget.ImageButton.Dialpad">
+        <item name="android:background">@android:drawable/btn_dial</item>
+    </style>
+    
+    <style name="DialerScreenBackground">
+        <item name="android:background">@android:drawable/screen_background_dark</item>
+    </style>
+    
+    
     <!-- Launcher Default Styles -->
     <eat-comment />
     
