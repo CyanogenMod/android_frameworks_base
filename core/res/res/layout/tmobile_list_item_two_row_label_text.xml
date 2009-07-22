@@ -17,7 +17,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginRight="8dp"             
 				android:lines="1"
-				android:textAppearance="?android:attr/textAppearanceLabelListItem"
+				android:textAppearance="?android:attr/textAppearanceLabelListItemPrimaryMedium"
 				android:id="@+id/itemLabel" 
                 android:layout_alignBaseline="@id/itemText"/>
 		
@@ -26,7 +26,7 @@
 				android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
 				android:lines="1"
-				android:textAppearance="?android:attr/textAppearanceLabelListItemText"
+				android:textAppearance="?android:attr/textAppearanceLabelListItemSecondaryLarge"
 				android:id="@+id/itemText"
 				android:layout_toRightOf="@id/itemLabel"
 				 />
@@ -46,7 +46,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginRight="8dp"
                 android:lines="1"
-				android:textAppearance="?android:attr/textAppearanceLabelListItem"
+				android:textAppearance="?android:attr/textAppearanceLabelListItemPrimaryMedium"
 				android:id="@+id/item2Label" 
                 android:layout_alignBaseline="@id/item2Text" />
 		
@@ -56,7 +56,7 @@
                 android:layout_marginTop="9dp"
                 android:layout_marginBottom="11dp"
 				android:lines="1"
-				android:textAppearance="?android:attr/textAppearanceLabelListItemText"
+				android:textAppearance="?android:attr/textAppearanceLabelListItemSecondaryLarge"
 				android:id="@+id/item2Text"
 				android:layout_toRightOf="@id/item2Label"/>
 	    </RelativeLayout>

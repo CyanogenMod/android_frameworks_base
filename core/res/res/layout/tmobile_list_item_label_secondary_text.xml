@@ -7,7 +7,7 @@
 		android:layout_height="wrap_content"
 		android:layout_weight="1.0"
 		android:singleLine="true"
-		android:textAppearance="?android:attr/textAppearanceLabelListItemTextSmall"
+		android:textAppearance="?android:attr/textAppearanceLabelListItemPrimaryMediumSingleLine"
 		android:id="@+id/itemLabelText" />
 
 	<TextView
@@ -17,6 +17,6 @@
 		android:layout_marginLeft="8dp"
 		android:layout_gravity="right"
 		android:maxWidth="70dp"
-		android:textAppearance="?android:attr/textAppearanceLabelListItemSecondaryText"
+		android:textAppearance="?android:attr/textAppearanceLabelListItemSecondarySmall"
 		android:id="@+id/itemText" />
 </merge>

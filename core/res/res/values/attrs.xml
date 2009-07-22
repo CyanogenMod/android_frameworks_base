@@ -390,12 +390,14 @@
 		<attr name="textAppearanceLabelHeader" format="reference" />
 		<attr name="textAppearanceLabelSubHeader" format="reference" />
 		<attr name="textAppearanceLabelPersonalHeader" format="reference" />
-		<attr name="textAppearanceLabelPersonalSubHeader" format="reference" />
-		<attr name="textAppearanceLabelListItem" format="reference" />
-		<attr name="textAppearanceLabelListItemLarge" format="reference" />
-		<attr name="textAppearanceLabelListItemText" format="reference" />
-		<attr name="textAppearanceLabelListItemTextSmall" format="reference" />
-		<attr name="textAppearanceLabelListItemSecondaryText" format="reference" />
+		<attr name="textAppearanceLabelPersonalSubHeader" format="reference" />		
+		<attr name="textAppearanceLabelListItemPrimaryLarge" format="reference" />
+        <attr name="textAppearanceLabelListItemPrimaryMedium" format="reference" />
+        <attr name="textAppearanceLabelListItemPrimaryLargeSingleLine" format="reference" />
+        <attr name="textAppearanceLabelListItemPrimaryMediumSingleLine" format="reference" />
+        <attr name="textAppearanceLabelListItemSecondaryLarge" format="reference" />
+		<attr name="textAppearanceLabelListItemSecondaryMedium" format="reference" />
+		<attr name="textAppearanceLabelListItemSecondarySmall" format="reference" />
 
 		<attr name="headerLayoutBackground" format="reference" />
 		<attr name="headerLayout" format="reference" />

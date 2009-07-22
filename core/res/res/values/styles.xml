@@ -884,19 +884,25 @@
 	<style name="TextAppearance.Label.PersonalSubHeader">
         <item name="android:textColor">?textColorPrimaryInverse</item>
 	</style>
-    <style name="TextAppearance.Label.ListItem">
+    <style name="TextAppearance.Label.ListItemPrimaryMedium">
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
     </style>
-    <style name="TextAppearance.Label.ListItemLarge">
+    <style name="TextAppearance.Label.ListItemPrimaryLarge">
         <item name="android:textStyle">bold</item>
     </style>
-    <style name="TextAppearance.Label.ListItemText">
+    <style name="TextAppearance.Label.ListItemPrimaryLargeSingleLine">
     </style>
-    <style name="TextAppearance.Label.ListItemTextSmall">
+        <style name="TextAppearance.Label.ListItemPrimaryMediumSingleLine">
         <item name="android:textSize">14sp</item>
+    </style>    
+    <style name="TextAppearance.Label.ListItemSecondaryLarge">
     </style>
-    <style name="TextAppearance.Label.ListItemSecondaryText">
+    <style name="TextAppearance.Label.ListItemSecondaryMedium">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#FF666666</item>
+    </style>
+    <style name="TextAppearance.Label.ListItemSecondarySmall">
         <item name="android:textSize">13sp</item>
         <item name="android:textColor">#FF666666</item>
     </style>

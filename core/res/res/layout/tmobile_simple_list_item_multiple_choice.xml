@@ -15,7 +15,7 @@
     android:id="@android:id/text1"
     android:layout_width="fill_parent"
     android:layout_height="50dp"
-    android:textAppearance="?android:attr/textAppearanceLabelListItemText"
+    android:textAppearance="?android:attr/textAppearanceLabelListItemPrimaryLargeSingleLine"
     android:gravity="center_vertical"
     android:checkMark="?android:attr/listChoiceIndicatorMultiple"
     android:paddingLeft="8dp"

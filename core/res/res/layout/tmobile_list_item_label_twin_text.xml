@@ -13,13 +13,13 @@
 			android:layout_gravity="top"
 			android:singleLine="true"
 			android:layout_marginRight="8dp"
-			android:textAppearance="?android:attr/textAppearanceLabelListItem"
+			android:textAppearance="?android:attr/textAppearanceLabelListItemPrimaryMedium"
 			android:id="@+id/itemLabel" />
 		<TextView
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:singleLine="true"
-			android:textAppearance="?android:attr/textAppearanceLabelListItemText"
+			android:textAppearance="?android:attr/textAppearanceLabelListItemSecondaryLarge"
 			android:id="@+id/item1Text" />
 	</LinearLayout>
 
@@ -28,6 +28,6 @@
 		android:layout_height="wrap_content"
 		android:singleLine="true"
 		android:layout_marginLeft="78dp"
-		android:textAppearance="?android:attr/textAppearanceLabelListItemText"
+		android:textAppearance="?android:attr/textAppearanceLabelListItemSecondaryLarge"
 		android:id="@+id/item2Text" />
 </merge>

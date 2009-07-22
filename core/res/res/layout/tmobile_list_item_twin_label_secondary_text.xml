@@ -9,7 +9,7 @@
 		<TextView
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceLabelListItemLarge"
+			android:textAppearance="?android:attr/textAppearanceLabelListItemPrimaryLarge"
 			android:singleLine="true"
 			android:layout_weight="1.0"
 			android:id="@+id/itemText" />
@@ -18,7 +18,7 @@
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="8dp"
 			android:layout_gravity="right"
-			android:textAppearance="?android:attr/textAppearanceLabelListItemSecondaryText"
+			android:textAppearance="?android:attr/textAppearanceLabelListItemSecondarySmall"
 			android:singleLine="true"
 			android:maxWidth="70dp"
 			android:id="@+id/itemLabelText" />
@@ -31,7 +31,7 @@
 		<TextView
 			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:textAppearance="?android:attr/textAppearanceLabelListItemTextSmall"
+			android:textAppearance="?android:attr/textAppearanceLabelListItemSecondaryMedium"
 			android:singleLine="true"
 			android:layout_weight="1.0"
 			android:id="@+id/item2Text" />
@@ -40,7 +40,7 @@
 			android:layout_height="wrap_content"
 			android:layout_marginLeft="8dp"
 			android:layout_gravity="right"
-			android:textAppearance="?android:attr/textAppearanceLabelListItemSecondaryText"
+			android:textAppearance="?android:attr/textAppearanceLabelListItemSecondarySmall"
 			android:singleLine="true"
 			android:maxWidth="70dp"
 			android:id="@+id/itemLabel2Text" />

@@ -6,7 +6,7 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:singleLine="true"
-		android:textAppearance="?android:attr/textAppearanceLabelListItemLarge"
+		android:textAppearance="?android:attr/textAppearanceLabelListItemPrimaryLarge"
 		android:id="@+id/itemLabelText" />
 
 	<LinearLayout
@@ -18,7 +18,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:singleLine="true"
-			android:textAppearance="?android:attr/textAppearanceLabelListItemTextSmall"
+			android:textAppearance="?android:attr/textAppearanceLabelListItemPrimaryMediumSingleLine"
 			android:id="@+id/itemLabel2Text" />
 
 		<ImageView
@@ -33,7 +33,7 @@
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:singleLine="true"
-			android:textAppearance="?android:attr/textAppearanceLabelListItemTextSmall"
+			android:textAppearance="?android:attr/textAppearanceLabelListItemSecondaryMedium"
 			android:id="@+id/itemText" />
 	</LinearLayout>
 </merge>

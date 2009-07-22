@@ -175,11 +175,13 @@
 		<item name="textAppearanceLabelSubHeader">@android:style/TextAppearance.Label.SubHeader</item>
 		<item name="textAppearanceLabelPersonalHeader">@android:style/TextAppearance.Label.PersonalHeader</item>
 		<item name="textAppearanceLabelPersonalSubHeader">@android:style/TextAppearance.Label.PersonalSubHeader</item>
-		<item name="textAppearanceLabelListItem">@android:style/TextAppearance.Label.ListItem</item>
-		<item name="textAppearanceLabelListItemLarge">@android:style/TextAppearance.Label.ListItemLarge</item>
-		<item name="textAppearanceLabelListItemText">@android:style/TextAppearance.Label.ListItemText</item>
-		<item name="textAppearanceLabelListItemTextSmall">@android:style/TextAppearance.Label.ListItemTextSmall</item>
-		<item name="textAppearanceLabelListItemSecondaryText">@android:style/TextAppearance.Label.ListItemSecondaryText</item>
+		<item name="textAppearanceLabelListItemPrimaryLarge">@android:style/TextAppearance.Label.ListItemPrimaryLarge</item>
+        <item name="textAppearanceLabelListItemPrimaryMedium">@android:style/TextAppearance.Label.ListItemPrimaryMedium</item>
+		<item name="textAppearanceLabelListItemPrimaryLargeSingleLine">@android:style/TextAppearance.Label.ListItemPrimaryLargeSingleLine</item>
+		<item name="textAppearanceLabelListItemPrimaryMediumSingleLine">@android:style/TextAppearance.Label.ListItemPrimaryLargeSingleLine</item>
+        <item name="textAppearanceLabelListItemSecondaryLarge">@android:style/TextAppearance.Label.ListItemSecondaryLarge</item>
+		<item name="textAppearanceLabelListItemSecondaryMedium">@android:style/TextAppearance.Label.ListItemSecondaryMedium</item>
+        <item name="textAppearanceLabelListItemSecondarySmall">@android:style/TextAppearance.Label.ListItemSecondarySmall</item>
 
 		<item name="headerLayoutBackground">@color/white</item>
 		<item name="headerLayout">@android:style/Widget.HeaderLayout</item>

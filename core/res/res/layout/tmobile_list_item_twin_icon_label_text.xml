@@ -16,7 +16,7 @@
             android:layout_height="fill_parent"
             android:gravity="center_vertical"
             android:lines="1"
-            android:textAppearance="?android:attr/textAppearanceLabelListItemText"
+            android:textAppearance="?android:attr/textAppearanceLabelListItemPrimaryLargeSingleLine"
             android:id="@+id/itemLabelText" />
     </LinearLayout>
     <ImageView
