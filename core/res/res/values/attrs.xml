@@ -467,7 +467,12 @@
         <attr name="liveFolderButtonStyle" format="reference" />
         <attr name="liveFolderGridStyle" format="reference" />
         <attr name="liveFolderListStyle" format="reference" />
-        
+
+        <!-- =================== -->
+        <!-- DigitalClock attributes -->
+        <!-- =================== -->
+        <attr name="menuItemBackground" format="reference" />
+
     </declare-styleable>
 
     <!-- **************************************************************** -->

@@ -1130,6 +1130,7 @@
   <public type="attr" name="dialerDeleteButtonStyle" id="0x010102a2" />
   <public type="attr" name="dialerScreenBackgroundStyle" id="0x010102a3" />
   <public type="attr" name="dialerDialpadButtonStyle" id="0x010102a4" />
+  <public type="attr" name="menuItemBackground" id="0x010102a5" />
 
   <public type="integer" name="config_shortAnimTime" id="0x010e0000" />
   <public type="integer" name="config_mediumAnimTime" id="0x010e0001" />
