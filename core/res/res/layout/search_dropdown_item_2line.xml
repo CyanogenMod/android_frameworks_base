@@ -38,6 +38,7 @@
             android:id="@android:id/text1"
             style="?android:attr/dropDownItemStyle"
             android:textAppearance="?android:attr/textAppearanceMediumInverse"
+            android:textColor="@android:color/primary_text_light"
             android:singleLine="true"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
@@ -46,7 +47,7 @@
             android:id="@android:id/text2"
             style="?android:attr/dropDownItemStyle"
             android:textAppearance="?android:attr/textAppearanceSmallInverse"
-            android:textColor="?android:attr/textColorSecondaryInverse"
+            android:textColor="@android:color/secondary_text_light"
             android:singleLine="true"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
