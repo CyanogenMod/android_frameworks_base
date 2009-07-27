@@ -347,6 +347,7 @@
 
         <!-- Use light themes for various components. -->
         <item name="listViewStyle">@android:style/Widget.ListView.Dialog</item>
+        <item name="expandableListViewStyle>@android:style/Widget.ExpandableListView.Dialog</item>
         <item name="listDivider">@drawable/divider_horizontal_bright</item>
         <item name="listSeparatorTextViewStyle">@android:style/Widget.TextView.ListSeparator.White</item>
         <item name="listItemTextViewStyle">@android:style/Widget.TextView.ListItem.White</item>
