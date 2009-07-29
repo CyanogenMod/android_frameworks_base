@@ -1661,17 +1661,4 @@ public abstract class PackageManager {
      * Return whether the device has been booted into safe mode.
      */
     public abstract boolean isSafeMode();
-    
-    /**
-     * Return locked file path, which contains DRM-protected resources for theme package.
-     * If the package is not a theme package or does not have DRM-protected resources,
-     * the method returns null.
-     *
-     * @param originalPackagePath The full path for theme package.
-     * @return Returns locked file path.
-     * 
-     * @hide
-     *
-     */
-    public abstract String getLockedZipFileName(String originalPackagePath);
 }
