@@ -314,6 +314,12 @@
         <attr name="searchDialogTheme" format="reference" />
         
         <!-- ============ -->
+        <!-- Menu theme -->
+        <!-- ============ -->
+        <eat-comment />
+        <attr name="expandedMenuTheme" format="reference" />
+        
+        <!-- ============ -->
         <!-- Alert Dialog styles -->
         <!-- ============ -->
         <eat-comment />

@@ -118,6 +118,9 @@
         <item name="alertDialogStyle">@android:style/AlertDialog</item>
         <item name="searchDialogTheme">@android:style/Theme.SearchBar</item>
         
+        <!-- Menu attributes -->
+        <item name="expandedMenuTheme">@android:style/Theme.ExpandedMenu</item>
+        
         <!-- Panel attributes -->
         <item name="panelBackground">@android:drawable/menu_background</item>
         <item name="panelFullBackground">@android:drawable/menu_background_fill_parent_width</item>

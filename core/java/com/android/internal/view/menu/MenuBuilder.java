@@ -24,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -175,8 +176,17 @@ public class MenuBuilder implements Menu {
         LayoutInflater getInflater() {
             // Create an inflater that uses the given theme for the Views it inflates
             if (mInflater == null) {
-                Context wrappedContext = new ContextThemeWrapper(getContext(),
-                        THEME_RES_FOR_TYPE[mMenuType]); 
+                Context wrappedContext = null;
+                // We theme expanded menu view only for now.
+                if (mMenuType == TYPE_EXPANDED) {
+                    wrappedContext = new ContextThemeWrapper(getContext(), 
+                            resolveDefaultTheme(getContext(), 0, 
+                                    com.android.internal.R.styleable.Theme_expandedMenuTheme, 
+                                    com.android.internal.R.style.Theme_ExpandedMenu));
+                } else {
+                    wrappedContext = new ContextThemeWrapper(getContext(),
+                            THEME_RES_FOR_TYPE[mMenuType]);
+                }
                 mInflater = (LayoutInflater) wrappedContext
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             }
@@ -215,6 +225,18 @@ public class MenuBuilder implements Menu {
         
         boolean hasMenuView() {
             return mMenuView != null && mMenuView.get() != null;
+        }
+        
+        int resolveDefaultTheme(Context context, int theme, int themeAttrIndex,
+                int defStyle) {
+            if (theme != 0) {
+                return theme;
+            } else {
+                TypedArray a = context.obtainStyledAttributes(android.R.styleable.Theme);
+                int newTheme = a.getResourceId(themeAttrIndex, defStyle);
+                a.recycle();
+                return newTheme;
+            }
         }
     }
     
