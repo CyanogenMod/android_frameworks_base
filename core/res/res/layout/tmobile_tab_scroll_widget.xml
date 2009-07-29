@@ -1,16 +1,31 @@
-<merge xmlns:android="http://schemas.android.com/apk/res/android">
+<merge
+	xmlns:android="http://schemas.android.com/apk/res/android">
 
-	<LinearLayout android:orientation="horizontal"
-		android:layout_width="fill_parent" 
+	<LinearLayout
+		android:orientation="horizontal"
+		android:layout_width="fill_parent"
 		android:layout_weight="1"
-		android:layout_height="wrap_content" android:id="@+id/mainlayout3">
-	
+		android:layout_height="wrap_content"
+		android:id="@+id/mainlayout3">
+
 		<com.tmobile.widget.TabScrollTabWidget
-			android:layout_weight="1" android:id="@android:id/tabs"
-			android:layout_width="0px" android:layout_height="wrap_content" />
+			android:layout_weight="1"
+			android:id="@android:id/tabs"
+			android:layout_width="0px"
+			android:layout_height="wrap_content" />
 	</LinearLayout>
-		<Button android:id="@+id/moveLeft" android:text="@string/less_than" android:layout_gravity="center"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" />
-		<Button android:id="@+id/moveRight" android:text="@string/greater_than" android:layout_gravity="center"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" />
+	<Button
+		android:id="@+id/moveLeft"
+		android:text="@string/less_than"
+		android:focusable="false"
+		android:layout_gravity="center"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" />
+	<Button
+		android:id="@+id/moveRight"
+		android:text="@string/greater_than"
+		android:focusable="false"
+		android:layout_gravity="center"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content" />
 </merge>
