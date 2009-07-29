@@ -175,10 +175,6 @@
   <public type="attr" name="preferenceInformationStyle" id="0x0101008d" />
   <public type="attr" name="preferenceStyle" id="0x0101008e" />
   <public type="attr" name="checkBoxPreferenceStyle" id="0x0101008f" />
-  <public type="attr" name="spinnerPreferenceStyle" id="0x010102bb" />
-  <public type="attr" name="seekBarPreferenceStyle" id="0x010102bc" />
-  <public type="attr" name="radioButtonPreferenceStyle" id="0x010102bf" />
-  <public type="attr" name="tmobileEditTextPreferenceStyle" id="0x010102bd" />
   
   <public type="attr" name="yesNoPreferenceStyle" id="0x01010090" />
   <public type="attr" name="dialogPreferenceStyle" id="0x01010091" />
@@ -1117,6 +1113,11 @@
   <public type="attr" name="progressType" id="0x0101027c" />
 
   <public type="attr" name="textFieldStyle" id="0x0101026a" />
+
+  <public type="attr" name="spinnerPreferenceStyle" id="0x0101027d" />
+  <public type="attr" name="seekBarPreferenceStyle" id="0x0101027e" />
+  <public type="attr" name="radioButtonPreferenceStyle" id="0x0101027f" />
+  <public type="attr" name="tmobileEditTextPreferenceStyle" id="0x01010280" />
 
   <public type="layout" name="tmobile_spinner_item" id="0x01090014" />
   <public type="layout" name="tmobile_spinner_dropdown_item" id="0x01090015" />
