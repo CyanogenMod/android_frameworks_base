@@ -1088,38 +1088,38 @@
   <!--  Drawable to use as a background for a taller version of the titlebar -->
   <public type="drawable" name="title_bar_tall" id="0x010800a6" />
 
-  <public type="attr" name="colorPrimaryFocus" id="0x0101027e" />
-  <public type="attr" name="colorPrimaryPressed" id="0x0101027f" />
-  <public type="attr" name="colorSecondaryFocus" id="0x01010280" />
-  <public type="attr" name="colorSecondaryPressed" id="0x01010281" />
-  <public type="attr" name="colorTertiary" id="0x01010282" />
-  <public type="attr" name="colorDisabled" id="0x01010283" />
-  <public type="attr" name="colorRest" id="0x01010284" />
-  <public type="attr" name="colorRestStroke" id="0x01010285" />
+  <public type="attr" name="colorPrimaryFocus" id="0x01010281" />
+  <public type="attr" name="colorPrimaryPressed" id="0x01010282" />
+  <public type="attr" name="colorSecondaryFocus" id="0x01010283" />
+  <public type="attr" name="colorSecondaryPressed" id="0x01010284" />
+  <public type="attr" name="colorTertiary" id="0x01010285" />
+  <public type="attr" name="colorDisabled" id="0x01010286" />
+  <public type="attr" name="colorRest" id="0x01010287" />
+  <public type="attr" name="colorRestStroke" id="0x01010288" />
   
-  <public type="attr" name="listItemBackground" id="0x01010286" />
+  <public type="attr" name="listItemBackground" id="0x01010289" />
 
-  <public type="attr" name="dialogTheme" id="0x01010287" />
-  <public type="attr" name="alertDialogTheme" id="0x01010288" />
-  <public type="attr" name="listItemTextViewStyle" id="0x01010289" />
+  <public type="attr" name="dialogTheme" id="0x0101028a" />
+  <public type="attr" name="alertDialogTheme" id="0x0101028b" />
+  <public type="attr" name="listItemTextViewStyle" id="0x0101028c" />
   <!-- Someone is already using 0x0101028a? -->
   <eat-comment />
-  <public type="attr" name="bottomLeftStrip" id="0x0101028d" />
-  <public type="attr" name="bottomRightStrip" id="0x0101028b" />
-  <public type="attr" name="tabIndicatorStyle" id="0x0101028c" />
-  <public type="attr" name="textAppearanceTab" id="0x0101028e" />
+  <public type="attr" name="bottomLeftStrip" id="0x01010290" />
+  <public type="attr" name="bottomRightStrip" id="0x0101028e" />
+  <public type="attr" name="tabIndicatorStyle" id="0x0101028f" />
+  <public type="attr" name="textAppearanceTab" id="0x01010291" />
  
-  <public type="attr" name="handleViewStyle" id="0x01010290" />
-  <public type="attr" name="allAppsGridViewStyle" id="0x01010291" />
-  <public type="attr" name="workspaceStyle" id="0x01010292" />
-  <public type="attr" name="workspaceStyleLandscape" id="0x01010293" />
-  <public type="attr" name="workspaceStylePortrait" id="0x01010294" />
-  <public type="attr" name="allAppsTextViewStyle" id="0x01010295" />
-  <public type="attr" name="allAppsTextAppearance" id="0x01010296" />
-  <public type="attr" name="liveFolderGridStyle" id="0x01010297" />
-  <public type="attr" name="liveFolderListStyle" id="0x01010298" />
-  <public type="attr" name="liveFolderButtonStyle" id="0x01010299" />
-  <public type="attr" name="deleteZoneStyle" id="0x0101029a" />
+  <public type="attr" name="handleViewStyle" id="0x01010293" />
+  <public type="attr" name="allAppsGridViewStyle" id="0x01010294" />
+  <public type="attr" name="workspaceStyle" id="0x01010295" />
+  <public type="attr" name="workspaceStyleLandscape" id="0x01010296" />
+  <public type="attr" name="workspaceStylePortrait" id="0x01010297" />
+  <public type="attr" name="allAppsTextViewStyle" id="0x01010298" />
+  <public type="attr" name="allAppsTextAppearance" id="0x01010299" />
+  <public type="attr" name="liveFolderGridStyle" id="0x0101029a" />
+  <public type="attr" name="liveFolderListStyle" id="0x0101029b" />
+  <public type="attr" name="liveFolderButtonStyle" id="0x0101029c" />
+  <public type="attr" name="deleteZoneStyle" id="0x0101029d" />
 
   <public type="integer" name="config_shortAnimTime" id="0x010e0000" />
   <public type="integer" name="config_mediumAnimTime" id="0x010e0001" />
