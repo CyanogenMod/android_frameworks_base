@@ -64,7 +64,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String TAG = "SettingsProvider";
     private static final String DATABASE_NAME = "settings.db";
-    private static final int DATABASE_VERSION = 35;
+    private static final int DATABASE_VERSION = 36;
 
     private Context mContext;
 
@@ -399,7 +399,22 @@ class DatabaseHelper extends SQLiteOpenHelper {
             }
             upgradeVersion = 35;
         }
-        
+
+        if (upgradeVersion == 35) {
+            db.beginTransaction();
+            try {
+                SQLiteStatement stmt = db.compileStatement("INSERT OR IGNORE INTO system(name,value)"
+                        + " VALUES(?,?);");
+                loadStringSetting(stmt, Settings.System.AIRPLANE_MODE_TOGGLEABLE_RADIOS,
+                        R.string.airplane_mode_toggleable_radios);
+                stmt.close();
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+            }
+            upgradeVersion = 36;
+        }
+
         if (upgradeVersion != currentVersion) {
             Log.w(TAG, "Got stuck trying to upgrade from version " + upgradeVersion
                     + ", must wipe the settings provider");
@@ -626,6 +641,9 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
         loadStringSetting(stmt, Settings.System.AIRPLANE_MODE_RADIOS,
                 R.string.def_airplane_mode_radios);
+
+        loadStringSetting(stmt, Settings.System.AIRPLANE_MODE_TOGGLEABLE_RADIOS,
+                R.string.airplane_mode_toggleable_radios);
 
         loadBooleanSetting(stmt, Settings.System.AUTO_TIME,
                 R.bool.def_auto_time); // Sync time to NITZ
