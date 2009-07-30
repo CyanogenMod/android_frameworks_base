@@ -217,6 +217,11 @@
         <item name="android:disabledAlpha">?android:attr/disabledAlpha</item>
     </style>
 
+    <style name="Widget.Button.SplitLeft">
+    </style>
+    <style name="Widget.Button.SplitRight">
+    </style>
+
     <style name="Widget.ProgressBar">
         <item name="android:indeterminateOnly">true</item>
         <item name="android:indeterminateDrawable">@android:drawable/progress_medium</item>
@@ -338,6 +343,11 @@
         <item name="android:gravity">center</item>
         <item name="android:textSize">30sp</item>
     </style>
+
+    <style name="Widget.TextField">
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingRight">10dp</item>
+    </style>
     
     <style name="Widget.ExpandableListView" parent="Widget.ListView">
         <item name="android:groupIndicator">@android:drawable/expander_group</item>
@@ -360,11 +370,16 @@
         <item name="android:background">@android:drawable/panel_picture_frame_background</item>
     </style>
 
+
     <style name="Widget.ImageButton">
         <item name="android:focusable">true</item>
         <item name="android:clickable">true</item>
         <item name="android:scaleType">center</item>
         <item name="android:background">@android:drawable/btn_default</item>
+    </style>
+
+    <style name="Widget.ImageButton.Circle">
+        <item name="android:background">@android:drawable/btn_circle</item>
     </style>
 
     <style name="Widget.AutoCompleteTextView">
@@ -387,6 +402,22 @@
     <style name="Widget.Spinner">
         <item name="android:background">@android:drawable/btn_dropdown</item>
         <item name="android:clickable">true</item>
+    </style>
+
+    <style name="Widget.CarouselWidget">
+        <item name="android:background">@color/black</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:previousButton">@drawable/ic_media_play_reverse</item>
+        <item name="android:nextButton">@drawable/ic_media_play</item>
+        <item name="android:frameBackground">@color/black</item>
+        <item name="android:frameSelectedBackground">@color/black</item>
+    </style>
+
+    <style name="Widget.Filmstrip" parent="Widget.Gallery">
+        <item name="android:background">?android:attr/colorBackground</item>
+        <item name="android:spacing">10dp</item>
+        <item name="android:paddingTop">4dp</item>
+        <item name="android:paddingBottom">4dp</item>
     </style>
 
     <style name="Widget.TextView.PopupMenu">
@@ -501,6 +532,11 @@
         <item name="android:shadowRadius">2.75</item>
     </style>
 
+    <style name="Toast" >
+    </style>
+    <style name="Toast.Background" >
+        <item name="android:background">@@android:drawable/toast_frame</item>
+    </style>
     <!-- Text Appearances -->
     <eat-comment />
 
@@ -643,6 +679,23 @@
         <item name="android:widgetLayout">@android:layout/preference_widget_checkbox</item>
     </style>
     
+    <style name="Preference.SpinnerPreference">
+        <item name="android:widgetLayout">@android:layout/tmobile_preference_widget_spinner</item>
+    </style>
+    
+    <style name="Preference.EditTextPreference">
+        <item name="android:widgetLayout">@android:layout/tmobile_preference_widget_edittext</item>
+    </style>
+    
+    <style name="Preference.SeekbarPreference">
+        <item name="android:widgetLayout">@android:layout/tmobile_preference_widget_seekbar</item>
+    </style>
+    
+    <style name="Preference.RadioButtonPreference">
+    	<item name="android:layout">@android:layout/tmobile_preference_layout_none</item>
+        <item name="android:widgetLayout">@android:layout/tmobile_preference_widget_radiobutton</item>
+    </style>
+    
     <style name="Preference.PreferenceScreen">
         <item name="android:widgetLayout">@android:layout/preferences</item>
     </style>
@@ -700,6 +753,200 @@
         <item name="android:src">@android:drawable/ic_media_pause</item>
     </style>
 
+	<style name="Widget.HeaderLayout" >
+		<item name="android:background">?android:attr/headerLayoutBackground</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceInverse</item>
+		<item name="android:paddingLeft">8dp</item>
+		<item name="android:paddingRight">8dp</item>
+		<item name="android:paddingTop">0dp</item>
+		<item name="android:paddingBottom">0dp</item>
+	</style>
+	
+	<style name="Widget.HeaderLayout.HeaderLabel">
+		<item name="android:textAppearance">?android:attr/textAppearanceLabelHeader</item>
+		<item name="android:minHeight">50dp</item>
+		<item name="android:gravity">center</item>
+		<item name="android:singleLine">true</item>
+	</style>
+	
+	<style name="Widget.HeaderLayout.HeaderSubHeader">
+		<item name="android:orientation">vertical</item>
+		<item name="android:minHeight">80dp</item>
+		<item name="android:gravity">center</item>
+	</style>
+	
+	<style name="Widget.HeaderLayout.HeaderTwinSubHeader">
+		<item name="android:orientation">vertical</item>
+		<item name="android:minHeight">100dp</item>
+		<item name="android:gravity">left|center_vertical</item>
+	</style>
+	
+	<style name="Widget.HeaderLayout.HeaderIcon">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:minHeight">50dp</item>
+		<item name="android:gravity">left|center</item>
+	</style>
+	
+	<style name="Widget.HeaderLayout.HeaderSubHeaderIcon">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:minHeight">80dp</item>
+		<item name="android:gravity">left|center</item>
+	</style>
+    
+	<style name="Widget.HeaderLayout.HeaderTwinSubHeaderIcon">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:minHeight">100dp</item>
+		<item name="android:gravity">left|center</item>
+	</style>
+	
+    <style name="Widget.HeaderLayout.SectionHeaderLabel">
+		<item name="android:background">?android:attr/sectionHeaderLayoutBackground</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLabelHeader</item>
+        <item name="android:minHeight">40dp</item>
+        <item name="android:gravity">left|center_vertical</item>
+		<item name="android:singleLine">true</item>
+    </style>
+    
+	<style name="Widget.HeaderLayout.HeaderButton">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:minHeight">50dp</item>
+		<item name="android:gravity">center</item>
+	</style>
+	
+	<style name="Widget.HeaderLayout.HeaderSubHeaderIconButton">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:minHeight">80dp</item>
+		<item name="android:gravity">left|center</item>
+	</style>
+	
+	<style name="Widget.HeaderLayout.HeaderTwinButton">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:minHeight">50dp</item>
+		<item name="android:gravity">center</item>
+	</style>
+	
+	<style name="Widget.HeaderLayout.HeaderSecondaryIcon">
+		<item name="android:orientation">vertical</item>
+		<item name="android:minHeight">80dp</item>
+		<item name="android:gravity">left|center</item>
+	</style>
+	
+	<style name="Widget.HeaderLayout.HeaderSecondaryThreeIcon">
+		<item name="android:orientation">vertical</item>
+		<item name="android:minHeight">80dp</item>
+		<item name="android:gravity">left|center</item>
+	</style>
+	
+	<style name="Widget.HeaderLayout.HeaderSecondaryLargeIcon">
+		<item name="android:orientation">horizontal</item>
+		<item name="android:minHeight">80dp</item>
+		<item name="android:gravity">left|center</item>
+	</style>
+	
+	<style name="Widget.HeaderLayout.HeaderPersonalPanel">
+        <item name="android:paddingLeft">0dp</item>
+		<item name="android:orientation">horizontal</item>
+		<item name="android:minHeight">64dp</item>
+		<item name="android:gravity">left|center</item>
+	</style>
+	
+    <style name="Widget.HeaderLayout.HeaderProductPanel">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:minHeight">100dp</item>
+        <item name="android:gravity">left|center</item>
+    </style>
+	
+	<style name="Widget.ListItemLayout" >
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingTop">0dp</item>
+        <item name="android:paddingBottom">0dp</item>
+    </style>
+    
+    <style name="Widget.ListItemLayout.ItemLabelText" >
+        <item name="android:minHeight">50dp</item>
+		<item name="android:gravity">left|center_vertical</item>
+    </style>
+    <style name="Widget.ListItemLayout.ItemLabelTwinText" >
+        <item name="android:minHeight">70dp</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">left|center_vertical</item>
+    </style>
+    <style name="Widget.ListItemLayout.ItemTwinLabelText" >
+        <item name="android:minHeight">70dp</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:gravity">left|center_vertical</item>
+    </style>
+    <style name="Widget.ListItemLayout.ItemLabelSecondaryText" >
+        <item name="android:minHeight">50dp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+    <style name="Widget.ListItemLayout.ItemTwinLabelSecondaryText" >
+        <item name="android:minHeight">60dp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+    <style name="Widget.ListItemLayout.ItemHeaderTwinLabelSecondaryText" >
+        <item name="android:minHeight">70dp</item>
+        <item name="android:gravity">left|center_vertical</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+    <style name="Widget.ListItemLayout.ItemTwinIconLabelText" >
+        <item name="android:minHeight">50dp</item>
+		<item name="android:gravity">left|center_vertical</item>
+    </style>
+    <style name="Widget.ListItemLayout.ItemIconTwinLabelSecondaryText" >
+        <item name="android:minHeight">60sp</item>
+		<item name="android:gravity">left|center_vertical</item>
+    </style>
+    
+    <style name="Widget.ListItemLayout.ItemTwoRowLabelText" >
+        <item name="android:minHeight">100dp</item>
+		<item name="android:gravity">left|center_vertical</item>
+    </style>
+    
+	<style name="TextAppearance.Label">
+		<item name="android:includeFontPadding">false</item>
+	</style>
+	<style name="TextAppearance.Label.Header">
+        <item name="android:textColor">?textColorPrimaryInverse</item>
+        <item name="android:textStyle">bold</item>
+	</style>
+	<style name="TextAppearance.Label.SubHeader">
+        <item name="android:textColor">?textColorPrimaryInverse</item>
+        <item name="android:textSize">14sp</item>
+	</style>
+	<style name="TextAppearance.Label.PersonalHeader">
+        <item name="android:textColor">?textColorPrimaryInverse</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textStyle">bold</item>
+	</style>
+	<style name="TextAppearance.Label.PersonalSubHeader">
+        <item name="android:textColor">?textColorPrimaryInverse</item>
+	</style>
+    <style name="TextAppearance.Label.ListItemPrimaryMedium">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="TextAppearance.Label.ListItemPrimaryLarge">
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="TextAppearance.Label.ListItemPrimaryLargeSingleLine">
+    </style>
+        <style name="TextAppearance.Label.ListItemPrimaryMediumSingleLine">
+        <item name="android:textSize">14sp</item>
+    </style>    
+    <style name="TextAppearance.Label.ListItemSecondaryLarge">
+    </style>
+    <style name="TextAppearance.Label.ListItemSecondaryMedium">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#FF666666</item>
+    </style>
+    <style name="TextAppearance.Label.ListItemSecondarySmall">
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">#FF666666</item>
+    </style>
+    
     <style name="ZoomControls">
         <item name="android:gravity">bottom</item>
         <item name="android:paddingLeft">15dip</item>

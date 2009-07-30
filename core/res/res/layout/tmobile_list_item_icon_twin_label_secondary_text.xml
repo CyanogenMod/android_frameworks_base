@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge
+	xmlns:android="http://schemas.android.com/apk/res/android">
+    <RelativeLayout
+        android:id="@+id/row_column_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        >
+        <ImageView
+            android:id="@+id/icon1"
+            android:layout_width="48sp"
+            android:layout_height="48sp" />
+        <ImageView
+            android:id="@+id/icon2"
+            android:layout_height="16sp"
+            android:layout_width="16sp"
+            android:layout_marginBottom="3sp"
+            android:layout_marginRight="3sp"
+            android:layout_alignBottom="@id/icon1"
+            android:layout_alignRight="@id/icon1">
+        </ImageView>
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/row_column_2"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10sp"
+        android:layout_toRightOf="@id/row_column_1"
+        android:layout_marginRight="10sp">
+        <TextView
+            android:id="@+id/itemLabelText"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLabelListItemPrimaryLarge"
+            android:layout_marginBottom="0sp"
+            android:gravity="left"
+            android:lines="1"
+            android:scrollHorizontally="false"
+            android:ellipsize="end" />
+        <LinearLayout
+		    android:orientation="horizontal"
+		    android:layout_alignParentRight="true"
+		    android:layout_alignTop="@id/itemLabelText"
+		    android:gravity="right"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content" >
+	        <TextView
+	            android:id="@+id/itemRightLabelText"
+	            android:layout_height="wrap_content"
+	            android:layout_width="fill_parent"
+	            android:textAppearance="?android:attr/textAppearanceLabelListItemSecondarySmall"
+	            android:layout_marginBottom="0sp"
+	            android:layout_marginRight="5sp"
+	            android:lines="1"
+	            android:scrollHorizontally="false"
+	            android:ellipsize="end" />
+	        <ImageView
+	            android:id="@+id/icon4"
+	            android:layout_alignParentRight="true"
+	            android:layout_height="16sp"
+	            android:layout_width="16sp" />
+        </LinearLayout>
+        <ImageView
+            android:id="@+id/icon3"
+            android:layout_alignLeft="@id/itemLabelText"
+            android:layout_below="@id/itemLabelText"
+            android:layout_height="16sp"
+            android:layout_width="16sp"
+            android:layout_marginTop="3sp"
+            android:layout_marginRight="3sp" 
+            />
+        <TextView
+            android:id="@+id/itemLabel2Text"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceLabelListItemSecondaryMedium"
+            android:layout_below="@id/itemLabelText"
+            android:layout_toRightOf="@id/icon3"
+            android:layout_marginTop="1sp"
+            android:gravity="left"
+            android:scrollHorizontally="true"
+            android:ellipsize="end"
+            android:lines="1" />
+       <TextView
+            android:id="@+id/itemRightLabel2Text"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:textAppearance="?android:attr/textAppearanceLabelListItemSecondarySmall"
+            android:layout_alignParentRight="true"
+            android:layout_alignBottom="@id/itemLabel2Text"
+            android:layout_marginTop="1sp"
+            android:gravity="right"
+            android:scrollHorizontally="false"
+            android:ellipsize="end"
+            android:lines="1" />
+    </RelativeLayout>
+</merge>

@@ -32,6 +32,9 @@ import com.android.internal.R;
  * {@link android.widget.ListView#setChoiceMode(int) setChoiceMode} has been set to
  * something other than {@link android.widget.ListView#CHOICE_MODE_NONE CHOICE_MODE_NONE}.
  *
+ * This class was extended to allow changing the location of check mark.
+ * By default, the check mark is placed at the right end of the text view control.
+ * If mIsLeftAligned is set to true, the check mark is placed at the left end of the control.
  */
 public abstract class CheckedTextView extends TextView implements Checkable {
     private boolean mChecked;
@@ -39,6 +42,9 @@ public abstract class CheckedTextView extends TextView implements Checkable {
     private Drawable mCheckMarkDrawable;
     private int mBasePaddingRight;
     private int mCheckMarkWidth;
+
+    private int mBasePaddingLeft;
+    private boolean mIsLeftAligned;
 
     private static final int[] CHECKED_STATE_SET = {
         R.attr.state_checked
@@ -54,6 +60,8 @@ public abstract class CheckedTextView extends TextView implements Checkable {
 
     public CheckedTextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+
+        mIsLeftAligned = false;
 
         TypedArray a = context.obtainStyledAttributes(attrs,
                 R.styleable.CheckedTextView, defStyle, 0);
@@ -127,19 +135,33 @@ public abstract class CheckedTextView extends TextView implements Checkable {
             setMinHeight(d.getIntrinsicHeight());
             
             mCheckMarkWidth = d.getIntrinsicWidth();
-            mPaddingRight = mCheckMarkWidth + mBasePaddingRight;
+            if (mIsLeftAligned) {
+                // Should have padding to the left of the box +
+                // width of the box + padding between the box and text
+                mPaddingLeft = mCheckMarkWidth + mBasePaddingLeft + mPaddingLeft;
+            } else {
+                mPaddingRight = mCheckMarkWidth + mBasePaddingRight;
+            }
             d.setState(getDrawableState());
             mCheckMarkDrawable = d;
         } else {
-            mPaddingRight = mBasePaddingRight;
+            if (mIsLeftAligned) {
+                mPaddingLeft = mBasePaddingLeft;
+            } else {
+                mPaddingRight = mBasePaddingRight;
+            }
         }
         requestLayout();
     }
-    
+
     @Override
     public void setPadding(int left, int top, int right, int bottom) {
         super.setPadding(left, top, right, bottom);
-        mBasePaddingRight = mPaddingRight;
+        if (mIsLeftAligned) {
+            mBasePaddingLeft = mPaddingLeft;
+        } else {
+            mBasePaddingRight = mPaddingRight;
+        }
     }
 
     @Override
@@ -161,13 +183,19 @@ public abstract class CheckedTextView extends TextView implements Checkable {
                     y = (getHeight() - height) / 2;
                     break;
             }
-            
-            int right = getWidth();
-            checkMarkDrawable.setBounds(
-                    right - mCheckMarkWidth - mBasePaddingRight, 
-                    y, 
-                    right - mBasePaddingRight, 
-                    y + height);
+
+            if (mIsLeftAligned) {
+                checkMarkDrawable.setBounds(mBasePaddingLeft, y, mCheckMarkWidth
+                        + mBasePaddingLeft, y + height);
+            } else {
+                int right = getWidth();
+                checkMarkDrawable.setBounds(
+                        right - mCheckMarkWidth - mBasePaddingRight,
+                        y,
+                        right - mBasePaddingRight,
+                        y + height);
+            }
+
             checkMarkDrawable.draw(canvas);
         }
     }
@@ -194,5 +222,9 @@ public abstract class CheckedTextView extends TextView implements Checkable {
             invalidate();
         }
     }
-    
+
+    protected void setIsLeftAligned(boolean isLeftAligned) {
+        mIsLeftAligned = isLeftAligned;
+    }
+
 }

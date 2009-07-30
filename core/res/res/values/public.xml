@@ -175,6 +175,7 @@
   <public type="attr" name="preferenceInformationStyle" id="0x0101008d" />
   <public type="attr" name="preferenceStyle" id="0x0101008e" />
   <public type="attr" name="checkBoxPreferenceStyle" id="0x0101008f" />
+  
   <public type="attr" name="yesNoPreferenceStyle" id="0x01010090" />
   <public type="attr" name="dialogPreferenceStyle" id="0x01010091" />
   <public type="attr" name="editTextPreferenceStyle" id="0x01010092" />
@@ -1101,7 +1102,7 @@
   
   <public type="attr" name="listItemBackground" id="0x01010289" />
 
-  <public type="attr" name="dialogTheme" id="0x0101028a" />
+  <public type="attr" name="dialogTheme" id="0x010102a7" />
   <public type="attr" name="alertDialogTheme" id="0x0101028b" />
   <public type="attr" name="searchDialogTheme" id="0x0101028d" />
   <public type="attr" name="listItemTextViewStyle" id="0x0101028c" />
@@ -1136,5 +1137,44 @@
   <public type="integer" name="config_shortAnimTime" id="0x010e0000" />
   <public type="integer" name="config_mediumAnimTime" id="0x010e0001" />
   <public type="integer" name="config_longAnimTime" id="0x010e0002" />
+
+<!-- ===============================================================
+     Resources added in tmobile version of the platform.
+     =============================================================== -->
+  <public type="attr" name="headerText" id="0x0101026b" />
+  <public type="attr" name="subHeaderText" id="0x0101026c" />
+  <public type="attr" name="subHeader2Text" id="0x0101026d" />
+  <public type="attr" name="subLabelText" id="0x0101026e" />
+  <public type="attr" name="buttonText" id="0x0101026f" />
+  <public type="attr" name="button2Text" id="0x01010270" />
+  <public type="attr" name="iconSrc" id="0x01010271" />
+  <public type="attr" name="icon2Src" id="0x01010272" />
+  <public type="attr" name="icon3Src" id="0x01010273" />
+  <public type="attr" name="icon4Src" id="0x0101028a" />
+  <public type="attr" name="itemLabelText" id="0x01010274" />
+  <public type="attr" name="itemLabel2Text" id="0x01010275" />
+  <public type="attr" name="itemText" id="0x01010276" />
+  <public type="attr" name="item2Text" id="0x01010277" />
+  <public type="attr" name="item3Text" id="0x0101029b" />
+  <public type="attr" name="item4Text" id="0x0101029c" />
+  <public type="attr" name="buttonStyleSplitLeft" id="0x01010278" />
+  <public type="attr" name="buttonStyleSplitRight" id="0x01010279" />
+  <public type="attr" name="labelText" id="0x0101027a" />
+  <public type="attr" name="labelPosition" id="0x0101027b" />
+  <public type="attr" name="progressType" id="0x0101027c" />
+
+  <public type="attr" name="textFieldStyle" id="0x0101026a" />
+
+  <public type="attr" name="spinnerPreferenceStyle" id="0x0101027d" />
+  <public type="attr" name="seekBarPreferenceStyle" id="0x0101027e" />
+  <public type="attr" name="radioButtonPreferenceStyle" id="0x0101027f" />
+  <public type="attr" name="tmobileEditTextPreferenceStyle" id="0x01010280" />
+
+  <public type="attr" name="imageButtonCircleStyle" id="0x01010281" />
+
+  <public type="layout" name="tmobile_spinner_item" id="0x01090014" />
+  <public type="layout" name="tmobile_spinner_dropdown_item" id="0x01090015" />
+  <public type="layout" name="tmobile_simple_list_item_multiple_choice" id="0x01090016" />
+  <public type="layout" name="tmobile_list_item_label_checkable" id="0x01090017" />
   
 </resources>

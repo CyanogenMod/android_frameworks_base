@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.SoundEffectConstants;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import com.android.internal.R;
@@ -176,7 +177,7 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
             // leaving touch mode.. if nothing has focus, let's give it to
             // the indicator of the current tab
             if (!mCurrentView.hasFocus() || mCurrentView.isFocused()) {
-                mTabWidget.getChildAt(mCurrentTab).requestFocus();
+                dispatchKeyUpEvent();
             }
         }
     }
@@ -195,8 +196,10 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
             throw new IllegalArgumentException("you must specify a way to create the tab content");
         }
         View tabIndicator = tabSpec.mIndicatorStrategy.createIndicatorView();
-        tabIndicator.setOnKeyListener(mTabKeyListener);
-        mTabWidget.addView(tabIndicator);
+        if (tabIndicator != null) {
+        	tabIndicator.setOnKeyListener(mTabKeyListener);
+        	mTabWidget.addView(tabIndicator);
+        }
         mTabSpecs.add(tabSpec);
 
         if (mCurrentTab == -1) {
@@ -272,17 +275,23 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
                 && (mCurrentView.isRootNamespace())
                 && (mCurrentView.hasFocus())
                 && (mCurrentView.findFocus().focusSearch(View.FOCUS_UP) == null)) {
-            mTabWidget.getChildAt(mCurrentTab).requestFocus();
+            dispatchKeyUpEvent();
             playSoundEffect(SoundEffectConstants.NAVIGATION_UP);
             return true;
         }
         return handled;        
     }
 
+	protected void dispatchKeyUpEvent() {
+		mTabWidget.getChildAt(mCurrentTab).requestFocus();
+	}
+
 
     @Override
     public void dispatchWindowFocusChanged(boolean hasFocus) {
-        mCurrentView.dispatchWindowFocusChanged(hasFocus);
+        if (mCurrentView != null) {
+            mCurrentView.dispatchWindowFocusChanged(hasFocus);
+        }
     }
 
     public void setCurrentTab(int index) {
@@ -309,21 +318,24 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
         // tab content
         mCurrentView = spec.mContentStrategy.getContentView();
 
-        if (mCurrentView.getParent() == null) {
-            mTabContent
-                    .addView(
-                            mCurrentView,
-                            new ViewGroup.LayoutParams(
-                                    ViewGroup.LayoutParams.FILL_PARENT,
-                                    ViewGroup.LayoutParams.FILL_PARENT));
-        }
+        if (mCurrentView != null) {
+            if (mCurrentView.getParent() == null) {
+                mTabContent
+                .addView(
+                        mCurrentView,
+                        new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.FILL_PARENT,
+                                ViewGroup.LayoutParams.FILL_PARENT));
+            }
 
-        if (!mTabWidget.hasFocus()) {
-            // if the tab widget didn't take focus (likely because we're in touch mode)
-            // give the current tab content view a shot
-            mCurrentView.requestFocus();
-        }
+            if (!mTabWidget.hasFocus()) {
+                // if the tab widget didn't take focus (likely because we're in touch mode)
+                // give the current tab content view a shot
+                mCurrentView.requestFocus();
+            }
 
+        }
+        
         //mTabContent.requestFocus(View.FOCUS_FORWARD);
         invokeOnTabChangeListener();
     }
@@ -408,6 +420,17 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
             mIndicatorStrategy = new LabelAndIconIndicatorStrategy(label, icon);
             return this;
         }
+        
+        public TabSpec setIndicator(IndicatorStrategy indicatorFactory) {
+        	mIndicatorStrategy = new FactoryIndicatorStrategy(indicatorFactory);
+        	return this;
+        }
+        
+        public TabSpec setIndicator() {
+        	mIndicatorStrategy = new NullIndicatorStrategy();
+        	
+        	return this;
+        }
 
         /**
          * Specify the id of the view that should be used as the content
@@ -435,6 +458,11 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
             return this;
         }
 
+	public TabSpec setCarouselContent(Intent intent) {
+            mContentStrategy = new IntentContentStrategy(mTag, intent, false);
+            return this;
+        }
+
 
         String getTag() {
             return mTag;
@@ -444,7 +472,7 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
     /**
      * Specifies what you do to create a tab indicator.
      */
-    private static interface IndicatorStrategy {
+    public static interface IndicatorStrategy {
 
         /**
          * Return the view for the indicator.
@@ -469,6 +497,26 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
         void tabClosed();
     }
 
+    private class NullIndicatorStrategy implements IndicatorStrategy {
+
+        public View createIndicatorView() {
+           return null;
+        }
+        
+        
+    }
+    
+    private class ViewStubIndicatorStrategy implements IndicatorStrategy {
+
+		public View createIndicatorView() {
+			View view = new ViewStub(getContext());
+		
+			return view;
+		}
+    	
+    	
+    }
+    
     /**
      * How to create a tab indicator that just has a label.
      */
@@ -552,6 +600,25 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
     }
 
     /**
+     * How tab indicator is managed using {@link TabIndicatorFactory}.
+     */
+    private class FactoryIndicatorStrategy implements IndicatorStrategy {
+        private IndicatorStrategy mFactory;
+        private View mTabIndicator;
+
+        public FactoryIndicatorStrategy(IndicatorStrategy factory) {
+            mFactory = factory;
+        }
+
+        public View createIndicatorView() {
+        	if (mTabIndicator == null) {
+        		mTabIndicator = mFactory.createIndicatorView();
+            }
+            return mTabIndicator;
+        }
+    }
+    
+    /**
      * How tab content is managed using {@link TabContentFactory}.
      */
     private class FactoryContentStrategy implements ContentStrategy {
@@ -585,15 +652,24 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
 
         private final String mTag;
         private final Intent mIntent;
+        private final boolean mCloseView;
 
         private View mLaunchedView;
 
         private IntentContentStrategy(String tag, Intent intent) {
             mTag = tag;
             mIntent = intent;
+            mCloseView = true;
+        }
+
+        private IntentContentStrategy(String tag, Intent intent, boolean closeView) {
+            mTag = tag;
+            mIntent = intent;
+            mCloseView = closeView;
         }
 
         public View getContentView() {
+            
             if (mLocalActivityManager == null) {
                 throw new IllegalStateException("Did you forget to call 'public void setup(LocalActivityManager activityGroup)'?");
             }
@@ -624,9 +700,12 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
 
         public void tabClosed() {
             if (mLaunchedView != null) {
-                mLaunchedView.setVisibility(View.GONE);
+                if (mCloseView) {
+                    mLaunchedView.setVisibility(View.GONE);
+                }
             }
         }
-    }
 
+       
+    }
 }

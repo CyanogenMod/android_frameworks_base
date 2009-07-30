@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<com.tmobile.widget.ComboSpinner xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+android:id/spinner_preferences" 
+    android:layout_width="130sp"
+    android:layout_height="wrap_content" />
+
