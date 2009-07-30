@@ -160,6 +160,7 @@ public final class RingtonePickerActivity extends Activity implements AdapterVie
         btnSave.setId(ID_SAVE_BUTTON);
   
         mListView.setOnItemClickListener(this);
+        mListView.setOnItemSelectedListener(this);
     }
 
     public void addStaticHeaders() {
