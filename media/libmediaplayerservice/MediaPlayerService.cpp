@@ -47,6 +47,7 @@
 
 #include "MidiFile.h"
 #include "VorbisPlayer.h"
+#include "FLACPlayer.h"
 #include <media/PVPlayer.h>
 
 /* desktop Linux needs a little help with gettid() */
@@ -80,6 +81,7 @@ extmap FILE_EXTS [] =  {
         {".ota", SONIVOX_PLAYER},
         {".ogg", VORBIS_PLAYER},
         {".oga", VORBIS_PLAYER},
+        {".flac", FLAC_PLAYER},
 };
 
 // TODO: Find real cause of Audio/Video delay in PV framework and remove this workaround
@@ -487,6 +489,9 @@ static player_type getPlayerType(int fd, int64_t offset, int64_t length)
     if (ident == 0x5367674f) // 'OggS'
         return VORBIS_PLAYER;
 
+    if (ident == 0x43614c66) // 'fLaC'
+        return FLAC_PLAYER;
+
     // Some kind of MIDI?
     EAS_DATA_HANDLE easdata;
     if (EAS_Init(&easdata) == EAS_SUCCESS) {
@@ -543,6 +548,10 @@ static sp<MediaPlayerBase> createPlayer(player_type playerType, void* cookie,
         case VORBIS_PLAYER:
             LOGV(" create VorbisPlayer");
             p = new VorbisPlayer();
+            break;
+        case FLAC_PLAYER:
+            LOGV(" create FLACPlayer");
+            p = new FLACPlayer();
             break;
     }
     if (p != NULL) {

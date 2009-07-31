@@ -506,7 +506,8 @@ public class MediaScanner
                             mFileType == MediaFile.FILE_TYPE_3GPP2 ||
                             mFileType == MediaFile.FILE_TYPE_OGG ||
                             mFileType == MediaFile.FILE_TYPE_MID ||
-                            mFileType == MediaFile.FILE_TYPE_WMA) {
+                            mFileType == MediaFile.FILE_TYPE_WMA ||
+                            mFileType == MediaFile.FILE_TYPE_FLAC) {
                         // we only extract metadata from MP3, M4A, OGG, MID and WMA files.
                         // check MP4 files, to determine if they contain only audio.
                         processFile(path, mimeType, this);

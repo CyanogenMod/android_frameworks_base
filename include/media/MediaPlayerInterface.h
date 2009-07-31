@@ -30,7 +30,8 @@ namespace android {
 enum player_type {
     PV_PLAYER = 1,
     SONIVOX_PLAYER = 2,
-    VORBIS_PLAYER = 3
+    VORBIS_PLAYER = 3,
+    FLAC_PLAYER = 4
 };
 
 #define DEFAULT_AUDIOSINK_BUFFERCOUNT 4

@@ -41,8 +41,9 @@ public class MediaFile {
     public static final int FILE_TYPE_AWB     = 5;
     public static final int FILE_TYPE_WMA     = 6;
     public static final int FILE_TYPE_OGG     = 7;
+    public static final int FILE_TYPE_FLAC    = 8;
     private static final int FIRST_AUDIO_FILE_TYPE = FILE_TYPE_MP3;
-    private static final int LAST_AUDIO_FILE_TYPE = FILE_TYPE_OGG;
+    private static final int LAST_AUDIO_FILE_TYPE = FILE_TYPE_FLAC;
 
     // MIDI file types
     public static final int FILE_TYPE_MID     = 11;
@@ -104,6 +105,7 @@ public class MediaFile {
         addFileType("WMA", FILE_TYPE_WMA, "audio/x-ms-wma");    
         addFileType("OGG", FILE_TYPE_OGG, "application/ogg");
         addFileType("OGA", FILE_TYPE_OGG, "application/ogg");
+        addFileType("FLAC", FILE_TYPE_FLAC, "audio/flac");
  
         addFileType("MID", FILE_TYPE_MID, "audio/midi");
         addFileType("MIDI", FILE_TYPE_MID, "audio/midi");
