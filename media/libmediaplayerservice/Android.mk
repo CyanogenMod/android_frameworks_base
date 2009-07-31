@@ -13,6 +13,7 @@ LOCAL_SRC_FILES:=               \
     TestPlayerStub.cpp          \
     VorbisPlayer.cpp            \
     VorbisMetadataRetriever.cpp \
+    FLACPlayer.cpp              \
     MidiMetadataRetriever.cpp \
     MidiFile.cpp
 
@@ -37,6 +38,7 @@ LOCAL_SHARED_LIBRARIES :=     \
 	libsonivox            \
 	libopencore_player    \
 	libopencore_author    \
+	libFLAC               \
 	libmedia              \
 	libandroid_runtime    \
 	libstagefright        \
@@ -47,6 +49,7 @@ LOCAL_SHARED_LIBRARIES += libdl
 endif
 
 LOCAL_C_INCLUDES := external/tremor/Tremor                              \
+	external/flac/include                                           \
 	$(JNI_H_INCLUDE)                                                \
 	$(call include-path-for, graphics corecg)                       \
 	$(TOP)/external/opencore/extern_libs_v2/khronos/openmax/include \

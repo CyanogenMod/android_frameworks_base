@@ -57,6 +57,7 @@
 
 #include "MidiFile.h"
 #include "VorbisPlayer.h"
+#include "FLACPlayer.h"
 #include <media/PVPlayer.h>
 #include "TestPlayerStub.h"
 #include "StagefrightPlayer.h"
@@ -199,6 +200,7 @@ extmap FILE_EXTS [] =  {
         {".ota", SONIVOX_PLAYER},
         {".ogg", VORBIS_PLAYER},
         {".oga", VORBIS_PLAYER},
+        {".flac", FLAC_PLAYER},
 };
 
 // TODO: Find real cause of Audio/Video delay in PV framework and remove this workaround
@@ -650,6 +652,9 @@ player_type getPlayerType(int fd, int64_t offset, int64_t length)
     if (ident == 0x5367674f) // 'OggS'
         return VORBIS_PLAYER;
 
+    if (ident == 0x43614c66) // 'fLaC'
+        return FLAC_PLAYER;
+
     // Some kind of MIDI?
     EAS_DATA_HANDLE easdata;
     if (EAS_Init(&easdata) == EAS_SUCCESS) {
@@ -719,6 +724,10 @@ static sp<MediaPlayerBase> createPlayer(player_type playerType, void* cookie,
         case TEST_PLAYER:
             LOGV("Create Test Player stub");
             p = new TestPlayerStub();
+            break;
+        case FLAC_PLAYER:
+            LOGV(" create FLACPlayer");
+            p = new FLACPlayer();
             break;
     }
     if (p != NULL) {
