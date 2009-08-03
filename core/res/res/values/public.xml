@@ -1091,7 +1091,7 @@
   <!--  Drawable to use as a background for a taller version of the titlebar -->
   <public type="drawable" name="title_bar_tall" id="0x010800a6" />
 
-  <public type="attr" name="colorPrimaryFocus" id="0x01010281" />
+  <public type="attr" name="colorPrimaryFocus" id="0x010102a8" />
   <public type="attr" name="colorPrimaryPressed" id="0x01010282" />
   <public type="attr" name="colorSecondaryFocus" id="0x01010283" />
   <public type="attr" name="colorSecondaryPressed" id="0x01010284" />
@@ -1121,8 +1121,8 @@
   <public type="attr" name="allAppsTextViewStyle" id="0x01010298" />
   <public type="attr" name="allAppsTextAppearance" id="0x01010299" />
   <public type="attr" name="liveFolderGridStyle" id="0x0101029a" />
-  <public type="attr" name="liveFolderListStyle" id="0x0101029b" />
-  <public type="attr" name="liveFolderButtonStyle" id="0x0101029c" />
+  <public type="attr" name="liveFolderListStyle" id="0x010102aa" />
+  <public type="attr" name="liveFolderButtonStyle" id="0x010102a9" />
   <public type="attr" name="deleteZoneStyle" id="0x0101029d" />
   <public type="attr" name="timePickerInputStyle" id="0x0101029e" />
   <public type="attr" name="buttonStyleTimePickerUp" id="0x0101029f" />
