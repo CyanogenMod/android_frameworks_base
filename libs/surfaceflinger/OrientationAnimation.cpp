@@ -21,6 +21,7 @@
 #include <limits.h>
 
 #include "LayerOrientationAnim.h"
+#include "LayerOrientationAnimRotate.h"
 #include "OrientationAnimation.h"
 #include "SurfaceFlinger.h"
 #include "VRamHeap.h"
@@ -111,8 +112,13 @@ bool OrientationAnimation::prepare()
 
     LayerOrientationAnimBase* l;
     
-    l = new LayerOrientationAnim(
-            mFlinger.get(), 0, this, bitmap, bitmapIn);
+    if (mType & 0x80) {
+        l = new LayerOrientationAnimRotate(
+                mFlinger.get(), 0, this, bitmap, bitmapIn);
+    } else {
+        l = new LayerOrientationAnim(
+                mFlinger.get(), 0, this, bitmap, bitmapIn);
+    }
 
     l->initStates(w, h, 0);
     l->setLayer(INT_MAX-1);
@@ -131,7 +137,7 @@ bool OrientationAnimation::phase1()
         return true;
         
     }
-    //mLayerOrientationAnim->invalidate();
+    mLayerOrientationAnim->invalidate();
     return false;
 }
 
