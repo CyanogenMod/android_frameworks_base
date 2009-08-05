@@ -9,4 +9,5 @@
     android:paddingLeft="6dip"
     android:checkMark="@android:drawable/pluto_btn_check"
     android:ellipsize="marquee"
+    style="?android:attr/listItemTextViewStyle" 
     />
