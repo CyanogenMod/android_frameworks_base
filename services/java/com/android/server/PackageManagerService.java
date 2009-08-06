@@ -4013,10 +4013,12 @@ class PackageManagerService extends IPackageManager.Stub {
 
         synchronized (mPackages) {
             PackageParser.Package p = mPackages.get(packageName);
-            info.isThemeApk = p.mIsThemeApk;
-            if (info.isThemeApk && deleteCodeAndResources &&
-                !info.isRemovedPackageSystemUpdate && sendBroadCast) {
-                deleteLockedZipFileIfExists(p.mPath);
+            if (p != null) {
+                info.isThemeApk = p.mIsThemeApk;
+                if (info.isThemeApk && deleteCodeAndResources &&
+                    !info.isRemovedPackageSystemUpdate && sendBroadCast) {
+                    deleteLockedZipFileIfExists(p.mPath);
+                }
             }
         }
         synchronized (mInstallLock) {
