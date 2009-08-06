@@ -66,8 +66,6 @@ public final class BridgeContext extends Context {
     
     private Resources mResources;
     private Theme mTheme;
-    private Theme mStyledTheme;
-    private String mStylePackageName;
     private HashMap<View, Object> mViewKeyMap = new HashMap<View, Object>();
     private IStyleResourceValue mThemeValues;
     private final Object mProjectKey;
