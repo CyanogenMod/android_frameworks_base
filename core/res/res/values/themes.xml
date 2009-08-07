@@ -265,9 +265,6 @@
         <item name="liveFolderListStyle">@android:style/LiveFolderListStyle</item>
         <item name="liveFolderGridStyle">@android:style/LiveFolderGridStyle</item>
         <item name="allAppsTextAppearance">@android:color/bright_text_dark_focused</item>
-
-        <!-- Toast styles -->
-        <item name="toastAnimation">@android:style/Animation.Toast</item>
         
     </style>
     

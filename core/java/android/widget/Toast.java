@@ -308,10 +308,6 @@ public class Toast {
                     | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
             mParams.format = PixelFormat.TRANSLUCENT;
             mParams.windowAnimations = com.android.internal.R.style.Animation_Toast;
-            //TODO: this should work once themes are applied at the phonewindow level.
-//            TypedArray a = context.obtainStyledAttributes(null, com.android.internal.R.styleable.ToastStyle);
-//            mParams.windowAnimations = a.getResourceId(com.android.internal.R.styleable.ToastStyle_toastAnimation, com.android.internal.R.style.Animation_Toast);
-//            a.recycle();
             mParams.type = WindowManager.LayoutParams.TYPE_TOAST;
             mParams.setTitle("Toast");
         }
