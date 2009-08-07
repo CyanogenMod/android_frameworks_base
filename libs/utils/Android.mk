@@ -41,6 +41,8 @@ commonSources:= \
     ZipFileCRO.cpp \
 	ZipFileRO.cpp \
 	ZipUtils.cpp \
+	ZipEntry.cpp \
+	ZipFile.cpp \
 	misc.cpp \
 	ported.cpp \
 	LogSocket.cpp
@@ -56,9 +58,7 @@ commonSources:= \
 hostSources:= \
 	InetAddress.cpp \
 	Pipe.cpp \
-	Socket.cpp \
-	ZipEntry.cpp \
-	ZipFile.cpp
+	Socket.cpp
 
 # For the host
 # =====================================================
