@@ -42,8 +42,7 @@ public class AppsLaunchFailureReceiver extends BroadcastReceiver {
                     Configuration currentConfig = am.getConfiguration();
                     currentConfig.customTheme = new CustomTheme(
                             defaultTheme.getThemeId(),
-                            defaultTheme.getThemePackageName(),
-                            false);
+                            defaultTheme.getThemePackageName());
                     am.updateConfiguration(currentConfig);
                 }
             }

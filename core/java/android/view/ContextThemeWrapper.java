@@ -33,7 +33,6 @@ import android.util.DisplayMetrics;
 public class ContextThemeWrapper extends ContextWrapper {
     private Context mBase;
     private int mThemeResource;
-    private int mParentThemeResource;
     private Resources.Theme mTheme;
     private LayoutInflater mInflater;
     
@@ -88,20 +87,15 @@ public class ContextThemeWrapper extends ContextWrapper {
      * XXX: Hack to support theme preview by temporarily overriding the ApplicationContext's
      * Resources on a per-activity basis.  Very ugly.
      */
-    public void useThemedResources(String themePackage, String resourceBundlePath, 
-            int parentThemeId) {
+    public void useThemedResources(String themePackage) {
         if (themePackage == null) {
             mThemedResources = null;
             mUseThemedResources = false;
             mTheme = null;
-            mParentThemeResource = -1;
         } else {
             AssetManager assets = new AssetManager();
             assets.addAssetPath(getPackageResDir(getPackageName()));
             assets.addAssetPath(getPackageResDir(themePackage));
-            if (resourceBundlePath != null) {
-                assets.addAssetPath(resourceBundlePath);
-            }
 
             DisplayMetrics metrics = new DisplayMetrics();
             WindowManager wm = (WindowManager)getSystemService(WINDOW_SERVICE);
@@ -112,7 +106,6 @@ public class ContextThemeWrapper extends ContextWrapper {
             mThemedResources = new Resources(assets, metrics, config);
             mUseThemedResources = true;
             mTheme = null;
-            mParentThemeResource = parentThemeId;
         }
     }
     
@@ -168,10 +161,6 @@ public class ContextThemeWrapper extends ContextWrapper {
             if (theme != null) {
                 mTheme.setTo(theme);
             }
-        }
-        
-        if (mUseThemedResources == true && mParentThemeResource > 0) {
-            onApplyThemeResource(mTheme, mParentThemeResource, first);
         }
         
         onApplyThemeResource(mTheme, mThemeResource, first);

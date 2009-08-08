@@ -184,13 +184,6 @@ public final class ActivityThread {
                     config.customTheme = CustomTheme.getDefault();
                 }
 
-                String resourcePath = config.customTheme.getThemeResourcePath();
-                if (resourcePath != null) {
-                    if (assets.addAssetPath(resourcePath) == 0) {
-                        Log.e(TAG, "Unable to add parent theme resdir=" + resourcePath);
-                    }
-                }
-
                 if (!TextUtils.isEmpty(config.customTheme.getThemePackageName())) {
                     PackageInfo pi = getPackageInfo(config.customTheme.getThemePackageName(), 0);
                     if (pi != null) {

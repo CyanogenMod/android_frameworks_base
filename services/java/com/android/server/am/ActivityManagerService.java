@@ -11244,9 +11244,6 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
             if (customTheme != null) {
                 themeId = customTheme.getThemeId();
                 themePackage = customTheme.getThemePackageName();
-                resourcePath = customTheme.getThemeResourcePath();
-                hasParent = customTheme.hasParentTheme();
-                forceUpdate = customTheme.isForceUpdate();
             } else {
                 themeId = null;
                 themePackage = "";
@@ -11257,9 +11254,6 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
 
             SystemProperties.set(Configuration.THEME_ID_PERSISTENCE_PROPERTY, themeId);
             SystemProperties.set(Configuration.THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, themePackage);  
-            SystemProperties.setLongString(Configuration.THEME_RESOURCE_PATH_PERSISTENCE_PROPERTY, resourcePath);
-            SystemProperties.set(Configuration.THEME_HAS_PARENT_PERSISTENCE_PROPERTY, Boolean.toString(hasParent));
-            SystemProperties.set(Configuration.THEME_FORCE_UPDATE_PERSISTENCE_PROPERTY, Boolean.toString(forceUpdate));
         }
     }
 

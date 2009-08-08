@@ -267,25 +267,9 @@ class ApplicationContext extends Context {
             try {
                 Configuration config = ActivityManagerNative.getDefault().getConfiguration();
                 if (config.customTheme != null) {
-                    int themeId = -1;
-                    if (config.customTheme.hasParentTheme()) {
-                        mParentThemeStyleId = CustomTheme.getStyleId(this,
+                    int themeId = CustomTheme.getStyleId(this,
                                 config.customTheme.getThemePackageName(),
                                 config.customTheme.getThemeId());
-                        // This is a delta theme
-                        // Find style id for the delta theme, @see DeltaThemeGenerator#generateStyle
-                        String styleName = CustomTheme.getDeltaThemeStyleName(config.customTheme.getThemeId());
-                        String packageName = CustomTheme.getDeltaThemePackageName(styleName);
-                        themeId = CustomTheme.getDeltaThemeStyleId(this, styleName, packageName, config.customTheme.getThemeResourcePath());
-                        if (themeId == -1) {
-                            themeId = mParentThemeStyleId;
-                        }
-                    } else {
-                        mParentThemeStyleId = -1;
-                        themeId = CustomTheme.getStyleId(this,
-                                config.customTheme.getThemePackageName(),
-                                config.customTheme.getThemeId());
-                    }
                     if (themeId == -1) {
                         CustomTheme defaultTheme = CustomTheme.getDefault();
                         if (config.customTheme.equals(defaultTheme)) {
