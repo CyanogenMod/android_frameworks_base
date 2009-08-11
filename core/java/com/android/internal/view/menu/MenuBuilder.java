@@ -183,6 +183,11 @@ public class MenuBuilder implements Menu {
                             resolveDefaultTheme(getContext(), 0, 
                                     com.android.internal.R.styleable.Theme_expandedMenuTheme, 
                                     com.android.internal.R.style.Theme_ExpandedMenu));
+                } else if (mMenuType == TYPE_ICON) {
+                    wrappedContext = new ContextThemeWrapper(getContext(),
+                            resolveDefaultTheme(getContext(), 0, 
+                                    com.android.internal.R.styleable.Theme_iconMenuTheme, 
+                                    com.android.internal.R.style.Theme_IconMenu));    
                 } else {
                     wrappedContext = new ContextThemeWrapper(getContext(),
                             THEME_RES_FOR_TYPE[mMenuType]);

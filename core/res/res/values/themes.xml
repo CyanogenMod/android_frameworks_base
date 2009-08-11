@@ -122,6 +122,7 @@
         <item name="searchDialogTheme">@android:style/Theme.SearchBar</item>
         
         <!-- Menu attributes -->
+        <item name="iconMenuTheme">@android:style/Theme.IconMenu</item>
         <item name="expandedMenuTheme">@android:style/Theme.ExpandedMenu</item>
         
         <!-- Panel attributes -->

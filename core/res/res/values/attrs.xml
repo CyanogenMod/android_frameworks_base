@@ -322,6 +322,7 @@
         <!-- Menu theme -->
         <!-- ============ -->
         <eat-comment />
+        <attr name="iconMenuTheme" format="reference" />
         <attr name="expandedMenuTheme" format="reference" />
         
         <!-- ============ -->
