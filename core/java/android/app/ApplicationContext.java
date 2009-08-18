@@ -261,7 +261,7 @@ class ApplicationContext extends Context {
     }
 
     private int determineDefaultThemeResource() {
-        if (getResources() != Resources.getSystem()) {
+        if (getResources() != Resources.getSystem() && mPackageInfo.mApplicationInfo.isThemeable) {
             try {
                 Configuration config = ActivityManagerNative.getDefault().getConfiguration();
                 if (config.customTheme != null) {

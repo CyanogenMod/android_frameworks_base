@@ -211,7 +211,7 @@ public final class ActivityThread {
     public final static class PackageInfo {
 
         private final ActivityThread mActivityThread;
-        private final ApplicationInfo mApplicationInfo;
+        /* package */ final ApplicationInfo mApplicationInfo;
         private final String mPackageName;
         private final String mAppDir;
         private final String mResDir;
@@ -2255,8 +2255,6 @@ public final class ActivityThread {
                     } else {
                         activity.setTheme(theme);
                     }
-                } else if (r.activityInfo.isThemeable() == false) {
-                    activity.setTheme(android.R.style.Theme);
                 }
 
                 activity.mCalled = false;
