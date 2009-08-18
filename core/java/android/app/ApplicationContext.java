@@ -162,7 +162,6 @@ class ApplicationContext extends Context {
     private IBinder mActivityToken = null;
     private ApplicationContentResolver mContentResolver;
     private int mThemeResource = 0;
-    private int mParentThemeStyleId = -1;
     private Resources.Theme mTheme = null;
     private PackageManager mPackageManager;
     private NotificationManager mNotificationManager = null;
@@ -259,7 +258,6 @@ class ApplicationContext extends Context {
     @Override
     public void setTheme(int resid) {
         mThemeResource = resid;
-        mParentThemeStyleId = -1;
     }
 
     private int determineDefaultThemeResource() {
@@ -301,28 +299,14 @@ class ApplicationContext extends Context {
     public Resources.Theme getTheme() {
         if (mTheme == null) {
             int themeId;
-            int deltaThemeId = -1;
-            mParentThemeStyleId = -1;
             if (mThemeResource == 0) {
                 themeId = determineDefaultThemeResource();
-                //if this is delta then apply the parent theme first
-                // This is a minor performance improvement:
-                // DeltaThemeInfo may just customize a wallpaper or a sound.
-                // In this case parentThemeId and the themeId would be the same.
-                if (mParentThemeStyleId != -1 && mParentThemeStyleId != themeId) {
-                    deltaThemeId = themeId;
-                    themeId = mParentThemeStyleId;
-                }
             } else {
                 themeId = mThemeResource;
             }
 
             mTheme = mResources.newTheme();
             mTheme.applyStyle(themeId, true);
-
-            if (deltaThemeId > 0) {
-                mTheme.applyStyle(deltaThemeId, true);
-            }
         }
         return mTheme;
     }
