@@ -266,17 +266,17 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
     }
     InputContentType mInputContentType;
 
-    class InputMethodState {
-        Rect mCursorRectInWindow = new Rect();
-        RectF mTmpRectF = new RectF();
-        float[] mTmpOffset = new float[2];
-        ExtractedTextRequest mExtracting;
-        final ExtractedText mTmpExtracted = new ExtractedText();
-        int mBatchEditNesting;
-        boolean mCursorChanged;
-        boolean mSelectionModeChanged;
-        boolean mContentChanged;
-        int mChangedStart, mChangedEnd, mChangedDelta;
+    public class InputMethodState {
+        public Rect mCursorRectInWindow = new Rect();
+        public RectF mTmpRectF = new RectF();
+        public float[] mTmpOffset = new float[2];
+        public ExtractedTextRequest mExtracting;
+        public final ExtractedText mTmpExtracted = new ExtractedText();
+        public int mBatchEditNesting;
+        public boolean mCursorChanged;
+        public boolean mSelectionModeChanged;
+        public boolean mContentChanged;
+        public int mChangedStart, mChangedEnd, mChangedDelta;
     }
     public InputMethodState mInputMethodState;
 
