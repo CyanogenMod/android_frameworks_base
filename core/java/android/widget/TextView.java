@@ -278,7 +278,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         boolean mContentChanged;
         int mChangedStart, mChangedEnd, mChangedDelta;
     }
-    InputMethodState mInputMethodState;
+    public InputMethodState mInputMethodState;
 
     /*
      * Kick-start the font cache for the zygote process (to pay the cost of
