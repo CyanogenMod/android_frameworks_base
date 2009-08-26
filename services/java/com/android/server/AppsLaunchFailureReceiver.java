@@ -11,7 +11,6 @@ import android.os.SystemClock;
 
 public class AppsLaunchFailureReceiver extends BroadcastReceiver {
 
-    private static final String TAG = "com.android.server.AppsLaunchFailureReceiver";
     private static final int FAILURES_THRESHOLD = 5;
     private static final int EXPIRATION_TIME_IN_MILLISECONDS = 30000; // 30 seconds
 
@@ -26,7 +25,6 @@ public class AppsLaunchFailureReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String action = intent.getAction();
-        Log.d(TAG, action);
         if (action.equals(Intent.ACTION_APP_LAUNCH_FAILURE)) {
             long currentTime = SystemClock.uptimeMillis();
             if (currentTime - mStartTime > EXPIRATION_TIME_IN_MILLISECONDS) {
