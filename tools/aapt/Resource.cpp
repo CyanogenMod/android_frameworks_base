@@ -1176,7 +1176,8 @@ status_t buildResources(Bundle* bundle, const sp<AaptAssets>& assets, sp<ApkBuil
         packageType = ResourceTable::AppFeature;
     }
 
-    ResourceTable table(bundle, String16(assets->getPackage()), packageType);
+    int extendedPackageId = bundle->getExtendedPackageId();
+    ResourceTable table(bundle, String16(assets->getPackage()), packageType, extendedPackageId);
     err = table.addIncludedResources(bundle, assets);
     if (err != NO_ERROR) {
         return err;

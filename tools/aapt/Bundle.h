@@ -49,7 +49,7 @@ public:
     Bundle(void)
         : mCmd(kCommandUnknown), mVerbose(false), mAndroidList(false),
           mForce(false), mGrayscaleTolerance(0), mMakePackageDirs(false),
-          mUpdate(false), mExtending(false),
+          mUpdate(false), mExtending(false), mExtendedPackageId(0),
           mRequireLocalization(false), mPseudolocalize(NO_PSEUDOLOCALIZATION),
           mWantUTF16(false), mValues(false), mIncludeMetaData(false),
           mCompressionMethod(0), mJunkPath(false), mOutputAPKFile(NULL),
@@ -95,6 +95,8 @@ public:
     void setUpdate(bool val) { mUpdate = val; }
     bool getExtending(void) const { return mExtending; }
     void setExtending(bool val) { mExtending = val; }
+    int getExtendedPackageId(void) const { return mExtendedPackageId; }
+    void setExtendedPackageId(int val) { mExtendedPackageId = val; }
     bool getRequireLocalization(void) const { return mRequireLocalization; }
     void setRequireLocalization(bool val) { mRequireLocalization = val; }
     short getPseudolocalize(void) const { return mPseudolocalize; }
@@ -286,6 +288,7 @@ private:
     bool        mMakePackageDirs;
     bool        mUpdate;
     bool        mExtending;
+    int         mExtendedPackageId;
     bool        mRequireLocalization;
     short       mPseudolocalize;
     bool        mWantUTF16;
