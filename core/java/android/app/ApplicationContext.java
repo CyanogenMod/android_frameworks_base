@@ -216,13 +216,16 @@ class ApplicationContext extends Context {
      * Refresh resources object which may have been changed by a theme
      * configuration change.
      */
-    /* package */ void refreshResources() {
+    /* package */ void refreshResourcesIfNecessary() {
         if (mResources == Resources.getSystem()) {
             /* FIXME: refreshResources called on system resources! */
             return;
         }
-        mResources = mPackageInfo.getResources(mMainThread, true);
-        mTheme = null;
+
+        if (mPackageInfo.mApplicationInfo.isThemeable) {
+            mResources = mPackageInfo.getResources(mMainThread, true, true);
+            mTheme = null;
+        }
     }
 
     @Override
@@ -261,7 +264,7 @@ class ApplicationContext extends Context {
     }
 
     private int determineDefaultThemeResource() {
-        if (getResources() != Resources.getSystem() && mPackageInfo.mApplicationInfo.isThemeable) {
+        if (getResources() != Resources.getSystem()) {
             try {
                 Configuration config = ActivityManagerNative.getDefault().getConfiguration();
                 if (config.customTheme != null) {
@@ -1476,7 +1479,8 @@ class ApplicationContext extends Context {
     final void init(ActivityThread.PackageInfo packageInfo,
             IBinder activityToken, ActivityThread mainThread) {
         mPackageInfo = packageInfo;
-        mResources = mPackageInfo.getResources(mainThread);
+        mResources = mPackageInfo.getResources(mainThread, 
+                packageInfo.mApplicationInfo.isThemeable, false);
         mMainThread = mainThread;
         mContentResolver = new ApplicationContentResolver(this, mainThread);
 
@@ -2113,7 +2117,7 @@ class ApplicationContext extends Context {
             }
             Resources r = mContext.mMainThread.getTopLevelResources(
                     app.uid == Process.myUid() ? app.sourceDir
-                    : app.publicSourceDir);
+                    : app.publicSourceDir, app.isThemeable);
             if (r != null) {
                 return r;
             }

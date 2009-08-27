@@ -160,6 +160,10 @@ public final class ActivityThread {
     }
 
     Resources getTopLevelResources(String appDir) {
+        return getTopLevelResources(appDir, false);
+    }
+    
+    Resources getTopLevelResources(String appDir, boolean isThemable) {
         synchronized (mPackages) {
             //Log.w(TAG, "getTopLevelResources: " + appDir);
             WeakReference<Resources> wr = mActiveResources.get(appDir);
@@ -179,7 +183,7 @@ public final class ActivityThread {
                 return null;
             }
             Configuration config = getConfiguration();
-            if (config != null) {
+            if (isThemable && config != null) {
                 if (config.customTheme == null) {
                     config.customTheme = CustomTheme.getDefault();
                 }
@@ -444,19 +448,26 @@ public final class ActivityThread {
             return mDataDirFile;
         }
 
+        /**
+         * @deprecated getResources has additional parameters introduced to
+         *             support theming which make less sense to extend to this
+         *             method.
+         */
         public AssetManager getAssets(ActivityThread mainThread) {
             return getResources(mainThread).getAssets();
         }
         
-        public Resources getResources(ActivityThread mainThread, boolean force) {
+        public Resources getResources(ActivityThread mainThread, boolean themeable,
+                boolean force) {
             if (mResources == null || force == true) {
-                mResources = mainThread.getTopLevelResources(mResDir);
+                mResources = mainThread.getTopLevelResources(mResDir, themeable);
             }
             return mResources;            
         }
         
+        /** @deprecated */
         public Resources getResources(ActivityThread mainThread) {
-            return getResources(mainThread, false);
+            return getResources(mainThread, false, false);
         }
 
         public Application makeApplication() {
@@ -3500,7 +3511,7 @@ public final class ActivityThread {
                 if (cb instanceof Activity || cb instanceof Application) {
                     Context context = ((ContextWrapper)cb).getBaseContext();
                     if (context instanceof ApplicationContext) {
-                        ((ApplicationContext)context).refreshResources();
+                        ((ApplicationContext)context).refreshResourcesIfNecessary();
                     }
                 }
             }
