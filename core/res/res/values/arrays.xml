@@ -124,6 +124,7 @@
         <item><xliff:g id="id">sync_active</xliff:g></item>
         <item><xliff:g id="id">sync_failing</xliff:g></item>
         <item><xliff:g id="id">ime</xliff:g></item>
+        <item><xliff:g id="id">headset_plug</xliff:g></item>
     </string-array>
 
     <!-- Do not translate. Each string points to the component name of an ACTION_WEB_SEARCH

@@ -353,6 +353,9 @@ public class StatusBarPolicy {
     private IBinder mCdmaRoamingIndicatorIcon;
     private IconData mCdmaRoamingIndicatorIconData;
 
+    // headset
+    private IBinder mHeadsetIcon;
+    
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -403,6 +406,8 @@ public class StatusBarPolicy {
             }
             else if (action.equals(TtyIntent.TTY_ENABLED_CHANGE_ACTION)) {
                 updateTTY(intent);
+            else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+            	updateHeadsetState(intent);
             }
         }
     };
@@ -514,6 +519,9 @@ public class StatusBarPolicy {
         service.setIconVisibility(mVolumeIcon, false);
         updateVolume();
         
+        // headset
+        mHeadsetIcon = service.addIcon(IconData.makeIcon("headset_plug", null, com.android.internal.R.drawable.stat_sys_headset, 0, 0), null);
+        
         IntentFilter filter = new IntentFilter();
 
         // Register for Intent broadcasts for...
@@ -537,6 +545,7 @@ public class StatusBarPolicy {
         filter.addAction(GpsLocationProvider.GPS_FIX_CHANGE_ACTION);
         filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
         filter.addAction(TtyIntent.TTY_ENABLED_CHANGE_ACTION);
+        filter.addAction(Intent.ACTION_HEADSET_PLUG);
         mContext.registerReceiver(mIntentReceiver, filter, null, mHandler);
     }
 
@@ -564,6 +573,11 @@ public class StatusBarPolicy {
         //mService.setIconVisibility(mSyncFailingIcon, isFailing && !isActive);
     }
 
+    private final void updateHeadsetState(Intent intent) {
+    	boolean headsetActive = intent.getIntExtra("state", 0) > 0 && "Headset".equals(intent.getStringExtra("name"));
+    	mService.setIconVisibility(mHeadsetIcon, headsetActive);
+    }
+    
     private void pickNextBatteryLevel(int level) {
         final int N = mBatteryThresholds.length;
         for (int i=0; i<N; i++) {
