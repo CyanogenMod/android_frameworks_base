@@ -26,7 +26,7 @@
          of it a dark color.
     -->
     <style name="Theme">
-    
+
         <item name="colorForeground">@android:color/bright_foreground_dark</item>
         <item name="colorForegroundInverse">@android:color/bright_foreground_dark_inverse</item>
         <item name="colorBackground">@android:color/background_dark</item>
@@ -141,6 +141,10 @@
 
         <!-- DigitalClock attributes -->
         <item name="menuItemBackground">@android:drawable/menuitem_background</item>
+
+        <!-- status bar related attributes -->
+        <item name="statusBarExpandedBackgroundColor">@android:color/black</item>
+        <item name="statusBarLatestItemBackground">@android:drawable/list_selector_background</item>
 
         <!-- Widget styles -->
         <item name="absListViewStyle">@android:style/Widget.AbsListView</item>
@@ -313,6 +317,9 @@
         <item name="listViewStyle">@android:style/Widget.ListView.White</item>
         <item name="listDivider">@drawable/divider_horizontal_bright</item>
         <item name="listSeparatorTextViewStyle">@android:style/Widget.TextView.ListSeparator.White</item>
+
+        <!-- status bar related attributes -->
+        <item name="statusBarExpandedBackgroundColor">@android:color/white</item>
     </style>
     
     <!-- Variant of the light theme with no title bar -->

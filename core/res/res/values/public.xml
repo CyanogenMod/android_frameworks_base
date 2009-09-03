@@ -1177,5 +1177,8 @@
   <public type="layout" name="tmobile_spinner_dropdown_item" id="0x01090015" />
   <public type="layout" name="tmobile_simple_list_item_multiple_choice" id="0x01090016" />
   <public type="layout" name="tmobile_list_item_label_checkable" id="0x01090017" />
-  
+
+  <public type="attr" name="statusBarExpandedBackgroundColor" id="0x010102ac" />
+  <public type="attr" name="statusBarLatestItemBackground" id="0x010102ad" />
+
 </resources>

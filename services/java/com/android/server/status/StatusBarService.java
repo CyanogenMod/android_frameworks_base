@@ -18,17 +18,13 @@ package com.android.server.status;
 
 import com.android.internal.R;
 import com.android.internal.util.CharSequences;
+import com.android.server.am.ActivityManagerService;
 
-import android.app.Dialog;
-import android.app.IStatusBar;
-import android.app.PendingIntent;
-import android.app.StatusBarManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.app.*;
+import android.content.*;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.content.res.CustomTheme;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -40,6 +36,8 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.provider.Telephony;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -225,6 +223,10 @@ public class StatusBarService extends IStatusBar.Stub
     ArrayList<DisableRecord> mDisableRecords = new ArrayList<DisableRecord>();
     int mDisabled = 0;
 
+    private String mThemeId;
+    private String mThemePackageName;
+    private ContextThemeWrapper mThemeContext;
+
     /**
      * Construct the service, add the status bar view to the window manager
      */
@@ -240,6 +242,36 @@ public class StatusBarService extends IStatusBar.Stub
         mNotificationCallbacks = listener;
     }
 
+    private void createThemedExpandedView(Context context) {
+        try {
+            CustomTheme theme = ActivityManagerService.getDefault().getConfiguration().customTheme;
+            mThemeId = theme.getThemeId();
+            mThemePackageName = theme.getThemePackageName();
+            int styleId = CustomTheme.getStyleId(context, mThemePackageName, mThemeId);
+            mThemeContext = new ContextThemeWrapper(context, styleId);
+            mThemeContext.useThemedResources(theme.getThemePackageName());
+            ExpandedView expanded = (ExpandedView)View.inflate(mThemeContext,
+                       com.android.internal.R.layout.status_bar_expanded, null);
+            // Uncomment this line iff we want to make the dialog theme'able
+//            mExpandedDialog = new ExpandedDialog(themeContext);
+            expanded.mService = this;
+            mExpandedView = expanded;
+            mOngoingTitle = (TextView)expanded.findViewById(R.id.ongoingTitle);
+            mOngoingItems = (LinearLayout)expanded.findViewById(R.id.ongoingItems);
+            mLatestTitle = (TextView)expanded.findViewById(R.id.latestTitle);
+            mLatestItems = (LinearLayout)expanded.findViewById(R.id.latestItems);
+            mNoNotificationsTitle = (TextView)expanded.findViewById(R.id.noNotificationsTitle);
+            mClearButton = (TextView)expanded.findViewById(R.id.clear_all_button);
+            mClearButton.setOnClickListener(mClearButtonListener);
+            mSpnLabel = (TextView)expanded.findViewById(R.id.spnLabel);
+            mPlmnLabel = (TextView)expanded.findViewById(R.id.plmnLabel);
+            mScrollView = (ScrollView)expanded.findViewById(R.id.scroll);
+            mNotificationLinearLayout = expanded.findViewById(R.id.notificationLinearLayout);
+        } catch (RemoteException e) {
+            Log.e("StatusBarService", "Failed to get configuration", e);
+        }
+    }
+
     // ================================================================================
     // Constructing the view
     // ================================================================================
@@ -248,9 +280,9 @@ public class StatusBarService extends IStatusBar.Stub
         mRightIconSlots = res.getStringArray(com.android.internal.R.array.status_bar_icon_order);
         mRightIcons = new StatusBarIcon[mRightIconSlots.length];
 
-        ExpandedView expanded = (ExpandedView)View.inflate(context,
-                com.android.internal.R.layout.status_bar_expanded, null);
-        expanded.mService = this;
+        createThemedExpandedView(context);
+        // Comment out this line iff we want to make the dialog theme'able
+        mExpandedDialog = new ExpandedDialog(context);
         StatusBarView sb = (StatusBarView)View.inflate(context,
                 com.android.internal.R.layout.status_bar, null);
         sb.mService = this;
@@ -270,29 +302,12 @@ public class StatusBarService extends IStatusBar.Stub
         mTickerView = sb.findViewById(R.id.ticker);
         mDateView = (DateView)sb.findViewById(R.id.date);
 
-        mExpandedDialog = new ExpandedDialog(context);
-        mExpandedView = expanded;
-        mOngoingTitle = (TextView)expanded.findViewById(R.id.ongoingTitle);
-        mOngoingItems = (LinearLayout)expanded.findViewById(R.id.ongoingItems);
-        mLatestTitle = (TextView)expanded.findViewById(R.id.latestTitle);
-        mLatestItems = (LinearLayout)expanded.findViewById(R.id.latestItems);
-        mNoNotificationsTitle = (TextView)expanded.findViewById(R.id.noNotificationsTitle);
-        mClearButton = (TextView)expanded.findViewById(R.id.clear_all_button);
-        mClearButton.setOnClickListener(mClearButtonListener);
-        mSpnLabel = (TextView)expanded.findViewById(R.id.spnLabel);
-        mPlmnLabel = (TextView)expanded.findViewById(R.id.plmnLabel);
-        mScrollView = (ScrollView)expanded.findViewById(R.id.scroll);
-        mNotificationLinearLayout = expanded.findViewById(R.id.notificationLinearLayout);
-
-        mOngoingTitle.setVisibility(View.GONE);
-        mLatestTitle.setVisibility(View.GONE);
-        
         mTicker = new MyTicker(context, sb);
 
         TickerView tickerView = (TickerView)sb.findViewById(R.id.tickerText);
         tickerView.mTicker = mTicker;
 
-        mTrackingView = (TrackingView)View.inflate(context,
+        mTrackingView = (TrackingView)View.inflate(mThemeContext,
                 com.android.internal.R.layout.status_bar_tracking, null);
         mTrackingView.mService = this;
         mCloseView = (CloseDragHandle)mTrackingView.findViewById(R.id.close);
@@ -819,8 +834,8 @@ public class StatusBarService extends IStatusBar.Stub
         }
 
         // create the row view
-        LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(
-                Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater =
+            (LayoutInflater)mThemeContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View row = inflater.inflate(com.android.internal.R.layout.status_bar_latest_event, parent, false);
 
         // bind the click event to the content area
@@ -1711,6 +1726,44 @@ public class StatusBarService extends IStatusBar.Stub
      * meantime, just update the things that we know change.
      */
     void updateResources() {
+        try {
+            CustomTheme customTheme = ActivityManagerService.getDefault().getConfiguration().customTheme;
+            boolean themeChanged =
+                !customTheme.getThemeId().equalsIgnoreCase(mThemeId) ||
+                !customTheme.getThemePackageName().equalsIgnoreCase(mThemePackageName);
+            if (themeChanged) {
+                createThemedExpandedView(mContext);
+
+                TypedValue outValue = new TypedValue();
+                boolean result = mThemeContext.getTheme().resolveAttribute(com.android.internal.R.attr.statusBarExpandedBackgroundColor, outValue, true);
+                if (result) {
+                    int color = outValue.data;
+                    mTrackingView.setBackgroundColor(color);
+                }
+
+                mExpandedDialog.setContentView(mExpandedView,
+                    new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
+                                               ViewGroup.LayoutParams.WRAP_CONTENT));
+                // re-wire notifications if needed
+                NotificationViewList oldList = mNotificationData;
+                mNotificationData = new NotificationViewList();
+                if (oldList.latestCount() > 0) {
+                    for (int i = 0; i < oldList.latestCount(); i++) {
+                        StatusBarNotification notification = oldList.getLatest(i);
+                        updateNotificationView(notification, null);
+                    }
+                }
+                if (oldList.ongoingCount() > 0) {
+                    for (int i = 0; i < oldList.ongoingCount(); i++) {
+                        StatusBarNotification notification = oldList.getOngoing(i);
+                        updateNotificationView(notification, null);
+                    }
+                }
+                setAreThereNotifications();
+            }
+        } catch (RemoteException e) {
+            Log.e("StatusBarService", "Can't retrieve default theme", e);
+        }
         mClearButton.setText(mContext.getText(R.string.status_bar_clear_all_button));
         mOngoingTitle.setText(mContext.getText(R.string.status_bar_ongoing_events_title));
         mLatestTitle.setText(mContext.getText(R.string.status_bar_latest_events_title));
