@@ -1871,7 +1871,7 @@ class PackageManagerService extends IPackageManager.Stub {
             scanMode |= SCAN_FORWARD_LOCKED;
         }
         File resFile = destResourceFile;
-        if ((scanMode & SCAN_FORWARD_LOCKED) != 0) {
+        if (ps != null && (scanMode & SCAN_FORWARD_LOCKED) != 0) {
             resFile = getFwdLockedResource(ps.name);
         }
         // Note that we invoke the following method only if we are about to unpack an application
