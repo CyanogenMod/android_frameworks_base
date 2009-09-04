@@ -3,6 +3,8 @@ package android.content.pm;
 import android.os.Parcelable;
 import android.os.Parcel;
 import android.util.Log;
+import android.util.AttributeSet;
+import android.content.res.Resources;
 
 public class BaseThemeInfo implements Parcelable {
 
@@ -130,6 +132,14 @@ public class BaseThemeInfo implements Parcelable {
     public boolean isDrmProtected = false;
 
     /**
+     * The name of the "main" theme style (as displayed by UI).
+     *
+     * @see themeStyleName attribute
+     *
+     */
+    public String themeStyleName;
+
+    /**
      * {@hide}
      */
     public enum InfoObjectType {
@@ -192,6 +202,7 @@ public class BaseThemeInfo implements Parcelable {
         dest.writeString(copyright);
         dest.writeInt(isDrmProtected? 1 : 0);
         dest.writeString(soundPackName);
+        dest.writeString(themeStyleName);
     }
 
     /** @hide */
@@ -205,6 +216,15 @@ public class BaseThemeInfo implements Parcelable {
             return new BaseThemeInfo[size];
         }
     };
+
+    /** @hide */
+    public final String getResolvedString(Resources res, AttributeSet attrs, int index) {
+        int resId = attrs.getAttributeResourceValue(index, 0);
+        if (resId !=0 ) {
+            return res.getString(resId);
+        }
+        return attrs.getAttributeValue(index);
+    }
 
     protected BaseThemeInfo() {
     }
@@ -226,6 +246,7 @@ public class BaseThemeInfo implements Parcelable {
         copyright = source.readString();
         isDrmProtected = (source.readInt() != 0);
         soundPackName = source.readString();
+        themeStyleName = source.readString();
     }
 
     protected void changeDrmFlagIfNeeded(String resourcePath) {

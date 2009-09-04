@@ -6,6 +6,7 @@ import org.xmlpull.v1.XmlPullParser;
 import android.os.Parcelable;
 import android.os.Parcel;
 import android.util.AttributeSet;
+import android.content.res.Resources;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -96,7 +97,7 @@ public class SoundsInfo extends BaseThemeInfo {
     private static final int COPYRIGHT_INDEX = 7;
 
 
-    public SoundsInfo(XmlPullParser parser, AttributeSet attrs) throws XmlPullParserException {
+    public SoundsInfo(XmlPullParser parser, Resources res, AttributeSet attrs) throws XmlPullParserException {
         super();
 
         type = InfoObjectType.TYPE_SOUNDPACK;
@@ -112,7 +113,7 @@ public class SoundsInfo extends BaseThemeInfo {
 
                 switch (index) {
                     case NAME_INDEX:
-                        name = attrs.getAttributeValue(i);
+                        name = getResolvedString(res, attrs, i);
                         break;
 
                     case THUMBNAIL_INDEX:
@@ -120,7 +121,7 @@ public class SoundsInfo extends BaseThemeInfo {
                         break;
 
                     case AUTHOR_INDEX:
-                        author = attrs.getAttributeValue(i);
+                        author = getResolvedString(res, attrs, i);
                         break;
 
                     case RINGTONE_FILE_NAME_INDEX:
@@ -141,7 +142,7 @@ public class SoundsInfo extends BaseThemeInfo {
                         notificationRingtoneName = attrs.getAttributeValue(i);
 
                     case COPYRIGHT_INDEX:
-                        copyright = attrs.getAttributeValue(i);
+                        copyright = getResolvedString(res, attrs, i);
                         break;
                 }
             }

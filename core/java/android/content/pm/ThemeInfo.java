@@ -12,6 +12,7 @@ import org.xmlpull.v1.XmlPullParser;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.AttributeSet;
+import android.content.res.Resources;
 
 /**
  * Overall information about "theme" package.  This corresponds
@@ -58,64 +59,70 @@ public final class ThemeInfo extends BaseThemeInfo {
     private static final int THEME_INDEX = 3;
 
     /**
+     * {@link #themeStyleName}
+     *
+     */
+    private static final int THEME_STYLE_NAME_INDEX = 4;
+
+    /**
      * {@link #ringtoneName}
      *
      */
-    private static final int RINGTONE_FILE_NAME_INDEX = 4;
+    private static final int RINGTONE_FILE_NAME_INDEX = 5;
 
     /**
      * {@link #notificationRingtoneName}
      *
      */
-    private static final int NOTIFICATION_RINGTONE_FILE_NAME_INDEX = 5;
+    private static final int NOTIFICATION_RINGTONE_FILE_NAME_INDEX = 6;
 
     /**
      * {@link #favesImageName}
      *
      */
-    private static final int FAVES_IMAGE_NAME_INDEX = 6;
+    private static final int FAVES_IMAGE_NAME_INDEX = 7;
 
     /**
      * {@link #favesAppImageName}
      *
      */
-    private static final int FAVES_APP_IMAGE_NAME_INDEX = 7;
+    private static final int FAVES_APP_IMAGE_NAME_INDEX = 8;
 
     /**
      * {@link #wallpaperImageName}
      *
      */
-    private static final int WALLPAPER_IMAGE_NAME_INDEX = 8;
+    private static final int WALLPAPER_IMAGE_NAME_INDEX = 9;
 
     /**
      * {@link #copyright}
      *
      */
-    private static final int COPYRIGHT_INDEX = 9;
+    private static final int COPYRIGHT_INDEX = 10;
 
     /**
      * {@link #ringtoneName}
      *
      */
-    private static final int RINGTONE_NAME_INDEX = 10;
+    private static final int RINGTONE_NAME_INDEX = 11;
 
     /**
      * {@link #notificationRingtoneName}
      *
      */
-    private static final int NOTIFICATION_RINGTONE_NAME_INDEX = 11;
+    private static final int NOTIFICATION_RINGTONE_NAME_INDEX = 12;
 
     /**
      * {@link #soundPackName}
      *
      */
-    private static final int SOUNDPACK_NAME_INDEX = 12;
+    private static final int SOUNDPACK_NAME_INDEX = 13;
 
     /**
      * {@link #styleResourceId}
      *
      */
-    private static final int STYLE_INDEX = 13;
+    private static final int STYLE_INDEX = 14;
 
 
     private static final String [] compulsoryAttributes = new String [] {
@@ -123,6 +130,7 @@ public final class ThemeInfo extends BaseThemeInfo {
         "thumbnail",
         "author",
         "themeId",
+        "styleName",
     };
 
     private static final String [] optionalAttributes = new String [] {
@@ -151,7 +159,7 @@ public final class ThemeInfo extends BaseThemeInfo {
         }
     }
 
-    public ThemeInfo(XmlPullParser parser, AttributeSet attrs) throws XmlPullParserException {
+    public ThemeInfo(XmlPullParser parser, Resources res, AttributeSet attrs) throws XmlPullParserException {
         super();
 
         type = InfoObjectType.TYPE_THEME;
@@ -172,7 +180,7 @@ public final class ThemeInfo extends BaseThemeInfo {
                 switch (index) {
                     case THEME_PACKAGE_INDEX:
                         // theme name
-                        name = attrs.getAttributeValue(i);
+                        name = getResolvedString(res, attrs, i);
                         break;
 
                     case THUMBNAIL_INDEX:
@@ -182,12 +190,16 @@ public final class ThemeInfo extends BaseThemeInfo {
 
                     case AUTHOR_INDEX:
                         // theme author
-                        author = attrs.getAttributeValue(i);
+                        author = getResolvedString(res, attrs, i);
                         break;
 
                     case THEME_INDEX:
                         // androidUiStyle attribute
                         themeId = attrs.getAttributeValue(i);
+                        break;
+
+                    case THEME_STYLE_NAME_INDEX:
+                        themeStyleName = getResolvedString(res, attrs, i);
                         break;
 
                     case RINGTONE_FILE_NAME_INDEX:
@@ -222,7 +234,7 @@ public final class ThemeInfo extends BaseThemeInfo {
 
                     case COPYRIGHT_INDEX:
                         // themeCopyright attribute
-                        copyright = attrs.getAttributeValue(i);
+                        copyright = getResolvedString(res, attrs, i);
                         break;
 
                     case RINGTONE_NAME_INDEX:
