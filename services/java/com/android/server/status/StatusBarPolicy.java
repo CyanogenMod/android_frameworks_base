@@ -406,6 +406,7 @@ public class StatusBarPolicy {
             }
             else if (action.equals(TtyIntent.TTY_ENABLED_CHANGE_ACTION)) {
                 updateTTY(intent);
+            }
             else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
             	updateHeadsetState(intent);
             }
