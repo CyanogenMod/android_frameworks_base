@@ -36,6 +36,7 @@ import android.os.SystemClock;
 import com.android.internal.telephony.ITelephony;
 import android.util.Log;
 import android.view.WindowManager;
+import java.io.IOException;
 
 public final class ShutdownThread extends Thread {
     // constants
@@ -48,7 +49,8 @@ public final class ShutdownThread extends Thread {
     // state tracking
     private static Object sIsStartedGuard = new Object();
     private static boolean sIsStarted = false;
-    
+    private static boolean sIsRebooting = false;
+
     // static instance of this thread
     private static final ShutdownThread sInstance = new ShutdownThread();
     
@@ -60,6 +62,14 @@ public final class ShutdownThread extends Thread {
     private ShutdownThread() {
     }
  
+    public static void shutdown(final Context context, boolean confirm) {
+        shutdown(context, confirm, false);
+    }
+
+    public static void reboot(final Context context, boolean confirm) {
+        shutdown(context, confirm, true);
+    }
+
     /** 
      * Request a clean shutdown, waiting for subsystems to clean up their
      * state etc.  Must be called from a Looper thread in which its UI
@@ -67,7 +77,7 @@ public final class ShutdownThread extends Thread {
      * 
      * @param context Context used to display the shutdown progress dialog.
      */
-    public static void shutdown(final Context context, boolean confirm) {
+    public static void shutdown(final Context context, boolean confirm, final boolean reboot) {
         // ensure that only one thread is trying to power down.
         // any additional calls are just returned
         synchronized (sIsStartedGuard){
@@ -82,11 +92,11 @@ public final class ShutdownThread extends Thread {
         if (confirm) {
             final AlertDialog dialog = new AlertDialog.Builder(context)
                     .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setTitle(com.android.internal.R.string.power_off)
-                    .setMessage(com.android.internal.R.string.shutdown_confirm)
+                    .setTitle(reboot ? com.android.internal.R.string.reboot_system : com.android.internal.R.string.power_off)
+                    .setMessage(reboot ? com.android.internal.R.string.reboot_confirm : com.android.internal.R.string.shutdown_confirm)
                     .setPositiveButton(com.android.internal.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            beginShutdownSequence(context);
+                            beginShutdownSequence(context, reboot);
                         }
                     })
                     .setNegativeButton(com.android.internal.R.string.no, null)
@@ -98,20 +108,21 @@ public final class ShutdownThread extends Thread {
             }
             dialog.show();
         } else {
-            beginShutdownSequence(context);
+            beginShutdownSequence(context, reboot);
         }
     }
 
-    private static void beginShutdownSequence(Context context) {
+    private static void beginShutdownSequence(Context context, boolean reboot) {
         synchronized (sIsStartedGuard) {
             sIsStarted = true;
+            sIsRebooting = reboot;
         }
 
         // throw up an indeterminate system dialog to indicate radio is
         // shutting down.
         ProgressDialog pd = new ProgressDialog(context);
-        pd.setTitle(context.getText(com.android.internal.R.string.power_off));
-        pd.setMessage(context.getText(com.android.internal.R.string.shutdown_progress));
+        pd.setTitle(context.getText(reboot ? com.android.internal.R.string.reboot_system : com.android.internal.R.string.power_off));
+        pd.setMessage(context.getText(reboot ? com.android.internal.R.string.reboot_progress : com.android.internal.R.string.shutdown_progress));
         pd.setIndeterminate(true);
         pd.setCancelable(false);
         pd.getWindow().setType(WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG);
@@ -242,7 +253,17 @@ public final class ShutdownThread extends Thread {
         }
 
         //shutdown power
-        Log.i(TAG, "Performing low-level shutdown...");
-        Power.shutdown();
+        if (sIsRebooting) {
+            Log.i(TAG, "Rebooting system...");
+            try {
+                Power.reboot(null);
+            } catch (IOException e) {
+                Log.e(TAG, "Reboot failed: " + e.getMessage());
+                Power.shutdown();
+            }
+        } else {
+            Log.i(TAG, "Performing low-level shutdown...");
+            Power.shutdown();
+        }
     }
 }
