@@ -2148,6 +2148,11 @@ class PackageManagerService extends IPackageManager.Stub {
         File scanFile, File destCodeFile, File destResourceFile,
         PackageParser.Package pkg, int parseFlags, int scanMode) {
 
+        if (destResourceFile == null) {
+            mLastScanError = PackageManager.INSTALL_FAILED_INVALID_APK;
+            return null;
+        }
+
         mScanningPath = scanFile;
         if (pkg == null) {
             mLastScanError = PackageManager.INSTALL_PARSE_FAILED_BAD_PACKAGE_NAME;
@@ -5825,7 +5830,7 @@ class PackageManagerService extends IPackageManager.Stub {
             this.codePath = codePath;
             this.codePathString = codePath.toString();
             this.resourcePath = resourcePath;
-            this.resourcePathString = resourcePath.toString();
+            this.resourcePathString = resourcePath == null ? null : resourcePath.toString();
             this.versionCode = pVersionCode;
         }
 
