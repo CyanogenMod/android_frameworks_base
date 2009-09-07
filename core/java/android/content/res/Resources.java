@@ -1600,7 +1600,20 @@ public class Resources {
             flushLayoutCache();
         }
     }
-    
+
+    /**
+     * {@hide}
+     */
+    public final void clearCaches() {
+        synchronized (mTmpValue) {
+            mCachedStyledAttributes = null;
+            mDrawableCache.clear();
+            mColorStateListCache.clear();
+            flushLayoutCache();
+            mAssets.recreateStringBlocks();
+        }
+    }
+
     /*package*/ Drawable loadDrawable(TypedValue value, int id)
             throws NotFoundException {
 

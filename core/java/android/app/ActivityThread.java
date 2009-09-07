@@ -41,13 +41,7 @@ import android.content.ContextWrapper;
 import android.content.IContentProvider;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.ActivityInfo;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.IPackageManager;
-import android.content.pm.InstrumentationInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.ProviderInfo;
-import android.content.pm.ServiceInfo;
+import android.content.pm.*;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -3445,6 +3439,19 @@ public final class ActivityThread {
         }
     }
 
+    private String getPackageResDir(String packageName) {
+        android.content.pm.PackageInfo pi;
+        try {
+            pi = getPackageManager().getPackageInfo(packageName, 0);
+            if (pi == null || pi.applicationInfo == null)
+                return null;
+            return pi.applicationInfo.publicSourceDir;
+        } catch (RemoteException e) {
+            Log.e("ActivityThread", "Exception in getPackageResDir", e);
+        }
+        return null;
+    }
+
     final void handleConfigurationChanged(Configuration config) {
         
         synchronized (mRelaunchingActivities) {
@@ -3458,6 +3465,7 @@ public final class ActivityThread {
                 = new ArrayList<ComponentCallbacks>();
         
         int diff;
+        String originalThemePackageName = (mConfiguration == null)? null : mConfiguration.customTheme.getThemePackageName();
         
         synchronized(mPackages) {
             if (mConfiguration == null) {
@@ -3486,8 +3494,27 @@ public final class ActivityThread {
                     /* If the theme has changed, remove the cached Resources
                      * object anyway.  Similarly, each Application will need
                      * to refresh its internal resources object. */
-                    if (r != null && (diff & ActivityInfo.CONFIG_THEME_RESOURCE) == 0) {
-                        r.updateConfiguration(config, dm);
+                    if (r != null) {
+                        if ((diff & ActivityInfo.CONFIG_THEME_RESOURCE) == 0) {
+                            r.updateConfiguration(config, dm);
+                        } else {
+                            AssetManager am = r.getAssets();
+                            if (originalThemePackageName != null) {
+//                                Log.i(TAG, "============ Dump resources BEFORE removeAssetPath");
+//                                am.dumpResources();
+                                am.removeAssetPath(originalThemePackageName, getPackageResDir(originalThemePackageName));
+//                                Log.i(TAG, "============ Dump resources AFTER removeAssetPath");
+//                                am.dumpResources();
+                            }
+                            String resDir = getPackageResDir(config.customTheme.getThemePackageName());
+                            if (resDir != null) {
+                                am.updateResourcesWithAssetPath(resDir);
+//                                Log.i(TAG, "============ Dump resources AFTER addAssetPath");
+//                                am.dumpResources();
+                            }
+                            r.clearCaches();
+                            r.getConfiguration().customTheme = config.customTheme;
+                        }
                         //Log.i(TAG, "Updated app resources " + v.getKey()
                         //        + " " + r + ": " + r.getConfiguration());
                     } else {

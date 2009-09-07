@@ -1580,31 +1580,6 @@ static jint android_content_AssetManager_splitThemePackage(JNIEnv* env, jobject 
     return (jint)result;
 }
 
-static jint android_content_AssetManager_markAssetPathStack(JNIEnv* env, jobject clazz)
-{
-    AssetManager* am = assetManagerForJavaObject(env, clazz);
-    if (am == NULL) {
-        doThrow(env, "java/lang/OutOfMemoryError");
-        return -1;
-    }
-
-    LOGV("markAssetPathStack in %p (Java object %p)\n", am, clazz);
-
-    return (jint)am->markAssetPathStack();
-}
-
-static void android_content_AssetManager_restoreAssetPathStack(JNIEnv* env, jobject clazz, jint restoreIndex)
-{
-    AssetManager* am = assetManagerForJavaObject(env, clazz);
-    if (am == NULL) {
-        doThrow(env, "java/lang/OutOfMemoryError");
-        return;
-    }
-
-    LOGV("restoreAssetPathStack in %p (Java object %p)\n", am, clazz);
-    am->restoreAssetPathStack(restoreIndex);
-}
-
 static void android_content_AssetManager_init(JNIEnv* env, jobject clazz)
 {
     AssetManager* am = new AssetManager();
@@ -1638,6 +1613,60 @@ static jint android_content_AssetManager_getGlobalAssetCount(JNIEnv* env, jobjec
 static jint android_content_AssetManager_getGlobalAssetManagerCount(JNIEnv* env, jobject clazz)
 {
     return AssetManager::getGlobalCount();
+}
+
+static jboolean android_content_AssetManager_removeAssetPath(JNIEnv* env, jobject clazz,
+            jstring packageName, jstring path)
+{
+    if (path == NULL) {
+        doThrow(env, "java/lang/NullPointerException");
+        return JNI_FALSE;
+    }
+
+    AssetManager* am = assetManagerForJavaObject(env, clazz);
+    if (am == NULL) {
+        return JNI_FALSE;
+    }
+
+    const char* name8 = env->GetStringUTFChars(packageName, NULL);
+    const char* path8 = env->GetStringUTFChars(path, NULL);
+    bool res = am->removeAssetPath(String8(name8), String8(path8));
+    env->ReleaseStringUTFChars(path, path8);
+    env->ReleaseStringUTFChars(packageName, name8);
+
+    return res;
+}
+
+static jint android_content_AssetManager_updateResourcesWithAssetPath(
+            JNIEnv* env, jobject clazz, jstring path)
+{
+    if (path == NULL) {
+        doThrow(env, "java/lang/NullPointerException");
+        return JNI_FALSE;
+    }
+
+    AssetManager* am = assetManagerForJavaObject(env, clazz);
+    if (am == NULL) {
+        return JNI_FALSE;
+    }
+
+    const char* path8 = env->GetStringUTFChars(path, NULL);
+
+    void* cookie;
+    bool res = am->updateWithAssetPath(String8(path8), &cookie);
+
+    env->ReleaseStringUTFChars(path, path8);
+
+    return (res) ? (jint)cookie : 0;
+}
+
+static void android_content_AssetManager_dumpRes(JNIEnv* env, jobject clazz)
+{
+    AssetManager* am = assetManagerForJavaObject(env, clazz);
+    if (am == NULL) {
+        return;
+    }
+    am->dumpRes();
 }
 
 // ----------------------------------------------------------------------------
@@ -1754,13 +1783,12 @@ static JNINativeMethod gAssetManagerMethods[] = {
     { "splitThemePackage","(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)I",
         (void*) android_content_AssetManager_splitThemePackage },
 
-    // Mark asset path "stack".
-    { "markAssetPathStack","()I",
-        (void*) android_content_AssetManager_markAssetPathStack },
-
-    // Restore asset path "stack".
-    { "restoreAssetPathStack","(I)V",
-        (void*) android_content_AssetManager_restoreAssetPathStack },
+    { "removeAssetPath", "(Ljava/lang/String;Ljava/lang/String;)Z",
+        (void*) android_content_AssetManager_removeAssetPath },
+    { "updateResourcesWithAssetPath",   "(Ljava/lang/String;)I",
+        (void*) android_content_AssetManager_updateResourcesWithAssetPath },
+    { "dumpResources", "()V",
+        (void*) android_content_AssetManager_dumpRes },
 };
 
 int register_android_content_AssetManager(JNIEnv* env)

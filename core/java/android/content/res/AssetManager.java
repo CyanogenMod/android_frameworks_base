@@ -237,6 +237,12 @@ public final class AssetManager {
         }
     }
 
+    /*package*/ final void recreateStringBlocks() {
+        synchronized (mSync) {
+            makeStringBlocks(true);
+        }
+    }
+
     private final void makeStringBlocks(boolean copyFromSystem) {
         final int sysNum = copyFromSystem ? mSystem.mStringBlocks.length : 0;
         final int num = getStringBlockCount();
@@ -455,25 +461,6 @@ public final class AssetManager {
 
     /**
      * {@hide}
-     * Mark asset paths stack for future un-install.
-     * 
-     */
-    public final int markAssetPaths() {
-        return markAssetPathStack();
-    }
-
-    /**
-     * {@hide}
-     * Un-install asset paths added after the mark.
-     * 
-     * @param restoreMark Un-install mark (all assets added the mark would be un-installed).
-     */
-    public final void restoreAssetPaths(int restoreMark) {
-        restoreAssetPathStack(restoreMark);
-    }
-
-    /**
-     * {@hide}
      * Retrieve a non-asset as a compiled XML file.  Not for use by
      * applications.
      * 
@@ -604,6 +591,31 @@ public final class AssetManager {
     public native final int addAssetPath(String path);
 
     /**
+     * Delete a set of assets from the asset manager.  This can be
+     * either a directory or ZIP file.  Not for use by applications.  Returns
+     * true if succeeded or false on failure.
+     * {@hide}
+     */
+    public native final boolean removeAssetPath(String packageName, String path);
+
+    /**
+     * Add an additional set of assets to the asset manager.  This can be
+     * either a directory or ZIP file. Force updating of ResTable object.
+     * Not for use by applications.
+     * Returnsthe cookie of the added asset, or 0 on failure.
+     * {@hide}
+     */
+    public native final int updateResourcesWithAssetPath(String path);
+
+    /**
+     * Delete a set of assets from the asset manager.  This can be
+     * either a directory or ZIP file.  Not for use by applications.  Returns
+     * true if succeeded or false on failure.
+     * {@hide}
+     */
+    public native final void dumpResources();
+
+    /**
      * Determine whether the state in this asset manager is up-to-date with
      * the files on the filesystem.  If false is returned, you need to
      * instantiate a new AssetManager class to see the new data.
@@ -715,8 +727,6 @@ public final class AssetManager {
     /*package*/ native final int[] getArrayIntResource(int arrayRes);
 
     private native final int splitThemePackage(String srcFileName, String dstFileName, String [] drmProtectedAssetNames);
-    private native final int markAssetPathStack();
-    private native final void restoreAssetPathStack(int restoreMark);
 
     private native final void init();
     private native final void destroy();

@@ -1676,9 +1676,12 @@ public:
 
     void getLocales(Vector<String8>* locales) const;
 
+    void removeAssetsByCookie(const String8 &packageName, void* cookie);
+
 #ifndef HAVE_ANDROID_OS
     void print() const;
 #endif
+    void dump() const;
 
 private:
     struct Header;

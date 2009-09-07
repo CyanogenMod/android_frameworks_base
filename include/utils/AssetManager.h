@@ -186,15 +186,15 @@ public:
     void getLocales(Vector<String8>* locales) const;
 
     /*
-     * Mark asset path "stack" to support un-install from the mAssetPaths.
+     * Remove existing source for assets.  It can be either a directory (for
+     * deleting assets as raw files on the disk) or a ZIP file.
+     * Also, updates the ResTable object to reflect the change.
+     *
+     * Returns "true" on success, "false" on failure.
      */
-    int markAssetPathStack();
-
-    /*
-     * Restore asset path "stack" by un-installing from the mAssetPaths
-     * all assets installed after restoreIndex.
-     */
-    void restoreAssetPathStack(int restoreIndex);
+    bool removeAssetPath(const String8 &packageName, const String8 &assetPath);
+    bool updateWithAssetPath(const String8& path, void** cookie);
+    void dumpRes();
 
 private:
     struct asset_path
@@ -203,6 +203,7 @@ private:
         FileType type;
     };
 
+    void updateResTableFromAssetPath(ResTable *rt, const asset_path& ap, void *cookie) const;
     Asset* openInPathLocked(const char* fileName, AccessMode mode,
         const asset_path& path);
     Asset* openNonAssetInPathLocked(const char* fileName, AccessMode mode,

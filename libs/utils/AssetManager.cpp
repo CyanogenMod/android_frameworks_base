@@ -392,45 +392,13 @@ const ResTable* AssetManager::getResTable(bool required) const
     if (mCacheMode != CACHE_OFF && !mCacheValid)
         const_cast<AssetManager*>(this)->loadFileNameCacheLocked();
 
-    const size_t N = mAssetPaths.size();
-    for (size_t i=0; i<N; i++) {
-        Asset* ass = NULL;
-        bool shared = true;
-        const asset_path& ap = mAssetPaths.itemAt(i);
-        LOGV("Looking for resource asset in '%s'\n", ap.path.string());
-        if (ap.type != kFileTypeDirectory) {
-            ass = const_cast<AssetManager*>(this)->
-                mZipSet.getZipResourceTable(ap.path);
-            if (ass == NULL) {
-                LOGV("loading resource table %s\n", ap.path.string());
-                ass = const_cast<AssetManager*>(this)->
-                    openNonAssetInPathLocked("resources.arsc",
-                                             Asset::ACCESS_BUFFER,
-                                             ap);
-                if (ass != NULL && ass != kExcludedAsset) {
-                    ass = const_cast<AssetManager*>(this)->
-                        mZipSet.setZipResourceTable(ap.path, ass);
-                }
-            }
-        } else {
-            LOGV("loading resource table %s\n", ap.path.string());
-            Asset* ass = const_cast<AssetManager*>(this)->
-                openNonAssetInPathLocked("resources.arsc",
-                                         Asset::ACCESS_BUFFER,
-                                         ap);
-            shared = false;
-        }
-        if (ass != NULL && ass != kExcludedAsset) {
-            if (rt == NULL) {
-                mResources = rt = new ResTable();
-                updateResourceParamsLocked();
-            }
-            LOGV("Installing resource asset %p in to table %p\n", ass, mResources);
-            rt->add(ass, (void*)(i+1), !shared);
+    mResources = rt = new ResTable();
 
-            if (!shared) {
-                delete ass;
-            }
+    if (rt) {
+        const size_t N = mAssetPaths.size();
+        for (size_t i=0; i<N; i++) {
+            const asset_path& ap = mAssetPaths.itemAt(i);
+            updateResTableFromAssetPath(rt, ap, (void*)(i+1));
         }
     }
 
@@ -438,7 +406,46 @@ const ResTable* AssetManager::getResTable(bool required) const
     if (!rt) {
         mResources = rt = new ResTable();
     }
+
     return rt;
+}
+
+void AssetManager::updateResTableFromAssetPath(ResTable *rt, const asset_path& ap, void *cookie) const
+{
+    Asset* ass = NULL;
+    bool shared = true;
+    LOGV("Looking for resource asset in '%s'\n", ap.path.string());
+    if (ap.type != kFileTypeDirectory) {
+        ass = const_cast<AssetManager*>(this)->
+            mZipSet.getZipResourceTable(ap.path);
+        if (ass == NULL) {
+            LOGV("loading resource table %s\n", ap.path.string());
+            ass = const_cast<AssetManager*>(this)->
+                openNonAssetInPathLocked("resources.arsc",
+                    Asset::ACCESS_BUFFER,
+                    ap);
+            if (ass != NULL && ass != kExcludedAsset) {
+                ass = const_cast<AssetManager*>(this)->
+                    mZipSet.setZipResourceTable(ap.path, ass);
+            }
+        }
+    } else {
+        LOGV("loading resource table %s\n", ap.path.string());
+        Asset* ass = const_cast<AssetManager*>(this)->
+            openNonAssetInPathLocked("resources.arsc",
+                Asset::ACCESS_BUFFER,
+                ap);
+        shared = false;
+    }
+    if (ass != NULL && ass != kExcludedAsset) {
+        updateResourceParamsLocked();
+        LOGV("Installing resource asset %p in to table %p\n", ass, mResources);
+        rt->add(ass, cookie, !shared);
+
+        if (!shared) {
+            delete ass;
+        }
+    }
 }
 
 void AssetManager::updateResourceParamsLocked() const
@@ -1635,22 +1642,58 @@ int AssetManager::ZipSet::getIndex(const String8& zip) const
     return mZipPath.size()-1;
 }
 
-/*
- * Mark asset path "stack" to support un-install from the mAssetPaths.
- */
-int AssetManager::markAssetPathStack()
+bool AssetManager::updateWithAssetPath(const String8& path, void** cookie)
 {
-    return (int)mAssetPaths.size();
+    bool res = addAssetPath(path, cookie);
+    ResTable* rt = mResources;
+	if (res && rt != NULL && ((size_t)*cookie == mAssetPaths.size())) {
+        AutoMutex _l(mLock);
+        const asset_path& ap = mAssetPaths.itemAt((size_t)*cookie - 1);
+        updateResTableFromAssetPath(rt, ap, *cookie);
+    }
+    return res;
 }
 
-/*
- * Restore asset path "stack" by un-installing from the mAssetPaths
- * all assets installed after restoreIndex.
- */
-void AssetManager::restoreAssetPathStack(int restoreIndex)
+bool AssetManager::removeAssetPath(const String8 &packageName, const String8 &assetPath)
 {
-    int i = (int)mAssetPaths.size();
-    while (i > restoreIndex) {
-        mAssetPaths.removeAt(--i);
+    AutoMutex _l(mLock);
+
+    String8 realPath(assetPath);
+    if (kAppZipName) {
+        realPath.appendPath(kAppZipName);
     }
+
+    // Check if the path exists.
+    size_t cookie = 0;
+    for (size_t i = 0; i < mAssetPaths.size(); i++) {
+        if (strcmp(mAssetPaths[i].path, realPath) == 0) {
+            mAssetPaths.removeAt(i);
+            cookie = i + 1;
+            break;
+        }
+    }
+
+    if (cookie == 0) {
+        return false;
+    }
+
+    ResTable* rt = mResources;
+    if (rt == NULL) {
+        LOGV("ResTable must not be NULL");
+        return false;
+    }
+
+    rt->removeAssetsByCookie(packageName, (void *)cookie);
+
+    return true;
+}
+
+void AssetManager::dumpRes()
+{
+    ResTable* rt = mResources;
+    if (rt == NULL) {
+        fprintf(stderr, "ResTable must not be NULL");
+        return;
+    }
+    rt->dump();
 }
