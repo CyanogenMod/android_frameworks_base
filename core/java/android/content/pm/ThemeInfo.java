@@ -185,7 +185,7 @@ public final class ThemeInfo extends BaseThemeInfo {
 
                     case THUMBNAIL_INDEX:
                         // theme thumbprint
-                        thumbnail = attrs.getAttributeResourceValue(i, -1);
+                        thumbnail = attrs.getAttributeValue(i);
                         break;
 
                     case AUTHOR_INDEX:

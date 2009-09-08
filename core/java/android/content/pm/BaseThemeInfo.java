@@ -44,7 +44,7 @@ public class BaseThemeInfo implements Parcelable {
      * @see thumbnail attribute
      *
      */
-    public int thumbnail = - 1;
+    public String thumbnail;
 
     /**
      * The theme id, which does not change when the theme is modified.
@@ -190,7 +190,7 @@ public class BaseThemeInfo implements Parcelable {
         dest.writeString(wallpaperImageName);
         dest.writeString(favesImageName);
         dest.writeString(favesAppImageName);
-        dest.writeInt(thumbnail);
+        dest.writeString(thumbnail);
         dest.writeString(themeId);
         dest.writeInt(styleResourceId);
         dest.writeString(name);
@@ -234,7 +234,7 @@ public class BaseThemeInfo implements Parcelable {
         wallpaperImageName = source.readString();
         favesImageName = source.readString();
         favesAppImageName = source.readString();
-        thumbnail = source.readInt();
+        thumbnail = source.readString();
         themeId = source.readString();
         styleResourceId = source.readInt();
         name = source.readString();

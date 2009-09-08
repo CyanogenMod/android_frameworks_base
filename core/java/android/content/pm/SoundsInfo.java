@@ -117,7 +117,7 @@ public class SoundsInfo extends BaseThemeInfo {
                         break;
 
                     case THUMBNAIL_INDEX:
-                        thumbnail = attrs.getAttributeResourceValue(i, -1);
+                        thumbnail = attrs.getAttributeValue(i);
                         break;
 
                     case AUTHOR_INDEX:
