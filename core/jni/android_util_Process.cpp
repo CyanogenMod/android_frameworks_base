@@ -37,6 +37,7 @@
 #include <grp.h>
 #include <pwd.h>
 #include <signal.h>
+#include <sched.h>
 
 /* desktop Linux needs a little help with gettid() */
 #if defined(HAVE_GETTID) && !defined(HAVE_ANDROID_OS)
@@ -51,12 +52,20 @@ pid_t gettid() { return syscall(__NR_gettid);}
 #endif
 
 /*
- * List of cgroup names which map to ANDROID_TGROUP_ values in Thread.h
- * and Process.java
- * These names are used to construct the path to the cgroup control dir
+ constants are from the O(1)-sched kernel's include/sched.h
+ I don't want to include kernel-headers.
+ Included those defines for improved readability.
  */
-
-static const char *cgroup_names[] = { NULL, "bg_non_interactive", "fg_boost" };
+#undef SCHED_NORMAL
+#undef SCHED_FIFO
+#undef SCHED_RR
+#undef SCHED_BATCH
+#define SCHED_NORMAL    0
+#define SCHED_FIFO  1
+#define SCHED_RR    2
+#define SCHED_BATCH 3
+#define SCHED_ISO   4
+#define SCHED_IDLEPRIO  5
 
 using namespace android;
 
@@ -194,26 +203,14 @@ jint android_os_Process_getGidForName(JNIEnv* env, jobject clazz, jstring name)
     return -1;
 }
 
-static int add_pid_to_cgroup(int pid, int grp)
-{
-    int fd;
-    char path[255];
-    char text[64];
-
-    sprintf(path, "/dev/cpuctl/%s/tasks",
-           (cgroup_names[grp] ? cgroup_names[grp] : ""));
-
-    if ((fd = open(path, O_WRONLY)) < 0)
-        return -1;
-
-    sprintf(text, "%d", pid);
-    if (write(fd, text, strlen(text)) < 0) {
-        close(fd);
-        return -1;
+static int set_scheduler_group(int pid, int grp) {
+    if (grp == ANDROID_TGROUP_BG_NONINTERACT) {
+        struct sched_param p;
+        p.sched_priority = 0;
+        return sched_setscheduler(pid, SCHED_IDLEPRIO, &p);
+    } else {
+        return 0; 
     }
-
-    close(fd);
-    return 0;
 }
 
 void android_os_Process_setThreadGroup(JNIEnv* env, jobject clazz, int pid, jint grp)
@@ -223,7 +220,7 @@ void android_os_Process_setThreadGroup(JNIEnv* env, jobject clazz, int pid, jint
         return;
     }
 
-    if (add_pid_to_cgroup(pid, grp)) {
+    if (set_scheduler_group(pid, grp)) {
         // If the thread exited on us, don't generate an exception
         if (errno != ESRCH && errno != ENOENT)
             signalExceptionForGroupError(env, clazz, errno);
@@ -271,7 +268,7 @@ void android_os_Process_setProcessGroup(JNIEnv* env, jobject clazz, int pid, jin
             continue;
         }
      
-        if (add_pid_to_cgroup(t_pid, grp)) {
+        if (set_scheduler_group(t_pid, grp)) {
             // If the thread exited on us, ignore it and keep going
             if (errno != ESRCH && errno != ENOENT) {
                 signalExceptionForGroupError(env, clazz, errno);
@@ -287,10 +284,8 @@ void android_os_Process_setThreadPriority(JNIEnv* env, jobject clazz,
                                               jint pid, jint pri)
 {
     if (pri >= ANDROID_PRIORITY_BACKGROUND) {
-        add_pid_to_cgroup(pid, ANDROID_TGROUP_BG_NONINTERACT);
-    } else if (getpriority(PRIO_PROCESS, pid) >= ANDROID_PRIORITY_BACKGROUND) {
-        add_pid_to_cgroup(pid, ANDROID_TGROUP_DEFAULT);
-    }
+        set_scheduler_group(pid, ANDROID_TGROUP_BG_NONINTERACT);
+    } 
 
     if (setpriority(PRIO_PROCESS, pid, pri) < 0) {
         signalExceptionForPriorityError(env, clazz, errno);
