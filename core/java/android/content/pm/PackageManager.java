@@ -1383,8 +1383,22 @@ public abstract class PackageManager {
         return PackageParser.generatePackageInfo(pkg, null, flags);
     }
 
-    /*
-     * @hide
+    /**
+     * Install a package. Since this may take a little while, the result will
+     * be posted back to the given observer.  An installation will fail if the calling context
+     * lacks the {@link android.Manifest.permission#INSTALL_PACKAGES} permission, if the
+     * package named in the package file's manifest is already installed, or if there's no space
+     * available on the device.
+     *
+     * @param packageURI The location of the package file to install.  This can be a 'file:' or a
+     * 'content:' URI.
+     * @param observer An observer callback to get notified when the package installation is
+     * complete. {@link IPackageInstallObserver#packageInstalled(String, int)} will be
+     * called when that happens.  observer may be null to indicate that no callback is desired.
+     * @param flags - possible values: {@link #INSTALL_FORWARD_LOCK},
+     * {@link #INSTALL_REPLACE_EXISTING}, {@link #INSTALL_ALLOW_TEST}.
+     *
+     * @hide 
      */
      public void installPackage(Uri packageURI, IPackageInstallObserver observer, int flags) {
              installPackage(packageURI, observer, flags, null);
