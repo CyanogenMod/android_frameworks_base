@@ -204,12 +204,12 @@ jint android_os_Process_getGidForName(JNIEnv* env, jobject clazz, jstring name)
 }
 
 static int set_scheduler_group(int pid, int grp) {
+    struct sched_param p;
+    p.sched_priority = 0;
     if (grp == ANDROID_TGROUP_BG_NONINTERACT) {
-        struct sched_param p;
-        p.sched_priority = 0;
-        return sched_setscheduler(pid, SCHED_IDLEPRIO, &p);
+        return sched_setscheduler(pid, SCHED_BATCH, &p);
     } else {
-        return 0; 
+        return sched_setscheduler(pid, SCHED_OTHER, &p);
     }
 }
 
