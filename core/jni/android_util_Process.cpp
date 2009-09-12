@@ -208,6 +208,8 @@ static int set_scheduler_group(int pid, int grp) {
     p.sched_priority = 0;
     if (grp == ANDROID_TGROUP_BG_NONINTERACT) {
         return sched_setscheduler(pid, SCHED_BATCH, &p);
+    } else if (grp == ANDROID_TGROUP_FG_BOOST) {
+        return sched_setscheduler(pid, SCHED_ISO, &p);
     } else {
         return sched_setscheduler(pid, SCHED_OTHER, &p);
     }
@@ -285,6 +287,12 @@ void android_os_Process_setThreadPriority(JNIEnv* env, jobject clazz,
 {
     if (pri >= ANDROID_PRIORITY_BACKGROUND) {
         set_scheduler_group(pid, ANDROID_TGROUP_BG_NONINTERACT);
+        LOGD("Setting SCHED_BATCH for pid: %d prio: %d", pid, pri);
+    } else if (pri <= ANDROID_PRIORITY_FOREGROUND) {
+        set_scheduler_group(pid, ANDROID_TGROUP_FG_BOOST);
+        LOGD("Setting SCHED_ISO for pid: %d prio: %d", pid, pri);
+    } else if (getpriority(PRIO_PROCESS, pid) >= ANDROID_PRIORITY_BACKGROUND) {
+        set_scheduler_group(pid, ANDROID_TGROUP_DEFAULT);
     } 
 
     if (setpriority(PRIO_PROCESS, pid, pri) < 0) {
