@@ -26,6 +26,7 @@ import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Process;
 import android.os.ResultReceiver;
 import android.os.SystemClock;
 import android.provider.Settings;
@@ -1149,6 +1150,7 @@ public class InputMethodService extends AbstractInputMethodService {
      * same text field as before.
      */
     public void onStartInputView(EditorInfo info, boolean restarting) {
+    	Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_DISPLAY);
     }
     
     /**
@@ -1171,6 +1173,7 @@ public class InputMethodService extends AbstractInputMethodService {
                 ic.finishComposingText();
             }
         }
+        Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);
     }
     
     /**
@@ -1423,6 +1426,8 @@ public class InputMethodService extends AbstractInputMethodService {
     }
 
     void doStartInput(InputConnection ic, EditorInfo attribute, boolean restarting) {
+    	Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_DISPLAY);
+    	
         if (!restarting) {
             doFinishInput();
         }
@@ -1463,6 +1468,7 @@ public class InputMethodService extends AbstractInputMethodService {
         if (ic != null) {
             ic.finishComposingText();
         }
+        Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);
     }
     
     /**
