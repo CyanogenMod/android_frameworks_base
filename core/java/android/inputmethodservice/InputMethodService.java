@@ -945,6 +945,11 @@ public class InputMethodService extends AbstractInputMethodService {
         boolean isShown = mShowInputRequested && onEvaluateInputViewShown();
         if (mIsInputViewShown != isShown && mWindowVisible) {
             mIsInputViewShown = isShown;
+            if (isShown) {
+            	Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_DISPLAY);
+            } else {
+            	Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);
+            }
             mInputFrame.setVisibility(isShown ? View.VISIBLE : View.GONE);
             if (mInputView == null) {
                 initialize();
@@ -1150,7 +1155,7 @@ public class InputMethodService extends AbstractInputMethodService {
      * same text field as before.
      */
     public void onStartInputView(EditorInfo info, boolean restarting) {
-    	Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_DISPLAY);
+    	
     }
     
     /**
@@ -1173,7 +1178,6 @@ public class InputMethodService extends AbstractInputMethodService {
                 ic.finishComposingText();
             }
         }
-        Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);
     }
     
     /**
@@ -1426,7 +1430,6 @@ public class InputMethodService extends AbstractInputMethodService {
     }
 
     void doStartInput(InputConnection ic, EditorInfo attribute, boolean restarting) {
-    	Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_DISPLAY);
     	
         if (!restarting) {
             doFinishInput();
@@ -1468,7 +1471,6 @@ public class InputMethodService extends AbstractInputMethodService {
         if (ic != null) {
             ic.finishComposingText();
         }
-        Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);
     }
     
     /**
