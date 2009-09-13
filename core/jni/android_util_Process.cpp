@@ -288,7 +288,7 @@ void android_os_Process_setThreadPriority(JNIEnv* env, jobject clazz,
     if (pri >= ANDROID_PRIORITY_BACKGROUND) {
         set_scheduler_group(pid, ANDROID_TGROUP_BG_NONINTERACT);
         LOGD("Setting SCHED_BATCH for pid: %d prio: %d", pid, pri);
-    } else if (pri <= ANDROID_PRIORITY_FOREGROUND) {
+    } else if (pri <= ANDROID_PRIORITY_URGENT_AUDIO) {
         set_scheduler_group(pid, ANDROID_TGROUP_FG_BOOST);
         LOGD("Setting SCHED_ISO for pid: %d prio: %d", pid, pri);
     } else if (getpriority(PRIO_PROCESS, pid) >= ANDROID_PRIORITY_BACKGROUND) {

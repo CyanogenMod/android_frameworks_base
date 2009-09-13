@@ -47,6 +47,22 @@
 #endif
 
 /*
+ constants are from the O(1)-sched kernel's include/sched.h
+ I don't want to include kernel-headers.
+ Included those defines for improved readability.
+ */
+#undef SCHED_NORMAL
+#undef SCHED_FIFO
+#undef SCHED_RR
+#undef SCHED_BATCH
+#define SCHED_NORMAL    0
+#define SCHED_FIFO  1
+#define SCHED_RR    2
+#define SCHED_BATCH 3
+#define SCHED_ISO   4
+#define SCHED_IDLEPRIO  5
+
+/*
  * ===========================================================================
  *      Thread wrappers
  * ===========================================================================
@@ -61,6 +77,31 @@ using namespace android;
 #pragma mark PTHREAD
 #endif
 // ----------------------------------------------------------------------------
+
+static int set_scheduler_group(int pid, int pri) {
+
+    int grp = ANDROID_TGROUP_DEFAULT;
+
+    if (pri >= ANDROID_PRIORITY_BACKGROUND) {
+        grp = ANDROID_TGROUP_BG_NONINTERACT;
+        LOGD("Setting SCHED_BATCH for pid: %d prio: %d", pid, pri);
+    } else if (pri <= ANDROID_PRIORITY_URGENT_AUDIO) {
+        grp = ANDROID_TGROUP_FG_BOOST;
+        LOGD("Setting SCHED_ISO for pid: %d prio: %d", pid, pri);
+    }
+
+    setpriority(PRIO_PROCESS, 0, pri);
+
+    struct sched_param p;
+    p.sched_priority = 0;
+    if (grp == ANDROID_TGROUP_BG_NONINTERACT) {
+        return sched_setscheduler(pid, SCHED_BATCH, &p);
+    } else if (grp == ANDROID_TGROUP_FG_BOOST) {
+        return sched_setscheduler(pid, SCHED_ISO, &p);
+    } else {
+        return sched_setscheduler(pid, SCHED_OTHER, &p);
+    }
+}
 
 /*
  * Create and run a new thead.
@@ -84,7 +125,7 @@ struct thread_data_t {
         int prio = t->priority;
         char * name = t->threadName;
         delete t;
-        setpriority(PRIO_PROCESS, 0, prio);
+        set_scheduler_group(0, prio);
         if (name) {
 #if defined(HAVE_PRCTL)
             // Mac OS doesn't have this, and we build libutil for the host too
