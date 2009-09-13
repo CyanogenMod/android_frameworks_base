@@ -225,7 +225,7 @@ CameraService::Client::Client(const sp<CameraService>& cameraService,
     mHardware = openCameraHardware();
     mUseOverlay = mHardware->useOverlay();
 
-    //mMediaPlayerClick = newMediaPlayer("/system/media/audio/ui/camera_click.ogg");
+    mMediaPlayerClick = newMediaPlayer("/system/media/audio/ui/camera_click.ogg");
     mMediaPlayerBeep = newMediaPlayer("/system/media/audio/ui/VideoRecord.ogg");
 
     // Callback is disabled by default
