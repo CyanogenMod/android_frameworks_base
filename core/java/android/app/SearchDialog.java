@@ -423,6 +423,14 @@ public class SearchDialog extends Dialog implements OnItemClickListener, OnItemS
      * Closes and gets rid of the suggestions adapter.
      */
     private void closeSuggestionsAdapter() {
+        // Stop the filtering operation happening in background thread
+        if ((mSuggestionsAdapter != null) && (mSuggestionsAdapter.getFilter() != null)) {
+            Handler handler = mSuggestionsAdapter.getFilter().getHandler();
+            if (handler != null) {
+                Message message = handler.obtainMessage(FINISH_TOKEN);
+                handler.sendMessage(message);
+            }
+        }
         // remove the adapter from the autocomplete first, to avoid any updates
         // when we drop the cursor
         mSearchAutoComplete.setAdapter((SuggestionsAdapter)null);
