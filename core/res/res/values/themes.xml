@@ -76,9 +76,6 @@
         <item name="buttonStyleTimePickerUp">@android:style/TimePickerUpButton</item>
         <item name="buttonStyleTimePickerDown">@android:style/TimePickerDownButton</item>
 
-        <item name="buttonStyleSplitLeft">@android:style/Widget.Button.SplitLeft</item>
-        <item name="buttonStyleSplitRight">@android:style/Widget.Button.SplitRight</item>
-        
         <!-- List attributes -->
         <item name="listPreferredItemHeight">64dip</item>
         <item name="listDivider">@drawable/divider_horizontal_dark</item>
@@ -153,12 +150,10 @@
         <item name="dropDownListViewStyle">@android:style/Widget.ListView.DropDown</item>
         <item name="editTextStyle">@android:style/Widget.EditText</item>
         <item name="timePickerInputStyle">@android:style/Widget.EditText.TimePicker</item>
-        <item name="textFieldStyle">@android:style/Widget.TextField</item>
         <item name="expandableListViewStyle">@android:style/Widget.ExpandableListView</item>
         <item name="galleryStyle">@android:style/Widget.Gallery</item>
         <item name="gridViewStyle">@android:style/Widget.GridView</item>        
         <item name="imageButtonStyle">@android:style/Widget.ImageButton</item>
-        <item name="imageButtonCircleStyle">@android:style/Widget.ImageButton.Circle</item>
         <item name="imageWellStyle">@android:style/Widget.ImageWell</item>
         <item name="listViewStyle">@android:style/Widget.ListView</item>
         <item name="listViewWhiteStyle">@android:style/Widget.ListView.White</item>
@@ -176,8 +171,6 @@
         <item name="scrollViewStyle">@android:style/Widget.ScrollView</item>
         <item name="horizontalScrollViewStyle">@android:style/Widget.HorizontalScrollView</item>
         <item name="spinnerStyle">@android:style/Widget.Spinner</item>
-        <item name="carouselWidgetStyle">@android:style/Widget.CarouselWidget</item>
-        <item name="filmstripStyle">@android:style/Widget.Filmstrip</item>
         <item name="starStyle">@android:style/Widget.CompoundButton.Star</item>
         <item name="tabWidgetStyle">@android:style/Widget.TabWidget</item>
         <item name="textViewStyle">@android:style/Widget.TextView</item>
@@ -188,59 +181,12 @@
         <item name="dropDownHintAppearance">@android:style/TextAppearance.Widget.DropDownHint</item>
         <item name="keyboardViewStyle">@android:style/Widget.KeyboardView</item>
         
-        <!-- Header, section and list item styles -->
-		<item name="textAppearanceLabel">@android:style/TextAppearance.Label</item>
-		<item name="textAppearanceLabelHeader">@android:style/TextAppearance.Label.Header</item>
-		<item name="textAppearanceLabelSubHeader">@android:style/TextAppearance.Label.SubHeader</item>
-		<item name="textAppearanceLabelPersonalHeader">@android:style/TextAppearance.Label.PersonalHeader</item>
-		<item name="textAppearanceLabelPersonalSubHeader">@android:style/TextAppearance.Label.PersonalSubHeader</item>
-		<item name="textAppearanceLabelListItemPrimaryLarge">@android:style/TextAppearance.Label.ListItemPrimaryLarge</item>
-        <item name="textAppearanceLabelListItemPrimaryMedium">@android:style/TextAppearance.Label.ListItemPrimaryMedium</item>
-		<item name="textAppearanceLabelListItemPrimaryLargeSingleLine">@android:style/TextAppearance.Label.ListItemPrimaryLargeSingleLine</item>
-		<item name="textAppearanceLabelListItemPrimaryMediumSingleLine">@android:style/TextAppearance.Label.ListItemPrimaryLargeSingleLine</item>
-        <item name="textAppearanceLabelListItemSecondaryLarge">@android:style/TextAppearance.Label.ListItemSecondaryLarge</item>
-		<item name="textAppearanceLabelListItemSecondaryMedium">@android:style/TextAppearance.Label.ListItemSecondaryMedium</item>
-        <item name="textAppearanceLabelListItemSecondarySmall">@android:style/TextAppearance.Label.ListItemSecondarySmall</item>
-
-		<item name="headerLayoutBackground">@color/white</item>
-		<item name="headerLayout">@android:style/Widget.HeaderLayout</item>
-		<item name="headerLayoutLabel">@android:style/Widget.HeaderLayout.HeaderLabel</item>
-		<item name="headerLayoutSubHeader">@android:style/Widget.HeaderLayout.HeaderSubHeader</item>
-		<item name="headerLayoutTwinSubHeader">@android:style/Widget.HeaderLayout.HeaderTwinSubHeader</item>
-		<item name="headerLayoutIcon">@android:style/Widget.HeaderLayout.HeaderIcon</item>
-		<item name="headerLayoutSubHeaderIcon">@android:style/Widget.HeaderLayout.HeaderSubHeaderIcon</item>
-		<item name="headerLayoutTwinSubHeaderIcon">@android:style/Widget.HeaderLayout.HeaderTwinSubHeaderIcon</item>
-		<item name="headerLayoutButton">@android:style/Widget.HeaderLayout.HeaderButton</item>
-		<item name="headerLayoutSubHeaderIconButton">@android:style/Widget.HeaderLayout.HeaderSubHeaderIconButton</item>
-		<item name="headerLayoutTwinButton">@android:style/Widget.HeaderLayout.HeaderTwinButton</item>
-		<item name="headerLayoutSecondaryIcon">@android:style/Widget.HeaderLayout.HeaderSecondaryIcon</item>
-		<item name="headerLayoutSecondaryThreeIcon">@android:style/Widget.HeaderLayout.HeaderSecondaryThreeIcon</item>
-		<item name="headerLayoutSecondaryLargeIcon">@android:style/Widget.HeaderLayout.HeaderSecondaryLargeIcon</item>
-		<item name="headerLayoutPersonalPanel">@android:style/Widget.HeaderLayout.HeaderPersonalPanel</item>
-        <item name="headerLayoutProductPanel">@android:style/Widget.HeaderLayout.HeaderProductPanel</item>
-		<item name="sectionHeaderLayoutBackground">@color/white</item>
-        <item name="sectionHeaderLayoutLabel">@android:style/Widget.HeaderLayout.SectionHeaderLabel</item>
-        <item name="listItemLayout">@android:style/Widget.ListItemLayout.ItemLabelText</item>
-        <item name="listItemLayoutItemLabelTwinText">@android:style/Widget.ListItemLayout.ItemLabelTwinText</item>
-        <item name="listItemLayoutItemTwinLabelText">@style/Widget.ListItemLayout.ItemTwinLabelText</item>
-        <item name="listItemLabelSecondaryText">@android:style/Widget.ListItemLayout.ItemLabelSecondaryText</item>
-        <item name="listItemTwinLabelSecondaryText">@android:style/Widget.ListItemLayout.ItemTwinLabelSecondaryText</item>
-        <item name="listItemHeaderTwinLabelSecondaryText">@android:style/Widget.ListItemLayout.ItemTwinLabelSecondaryText</item>
-        <item name="listItemIconTwinLabelSecondryText">@android:style/Widget.ListItemLayout.ItemIconTwinLabelSecondaryText</item>
-        <item name="listItemTwinIconLayout">@android:style/Widget.ListItemLayout.ItemTwinIconLabelText</item>
-        <item name="listItemTwoRowLayout">@android:style/Widget.ListItemLayout.ItemTwoRowLabelText</item>
-
         <!-- Preference styles -->
         <item name="preferenceScreenStyle">@android:style/Preference.PreferenceScreen</item>
         <item name="preferenceCategoryStyle">@android:style/Preference.Category</item>
         <item name="preferenceStyle">@android:style/Preference</item>
         <item name="preferenceInformationStyle">@android:style/Preference.Information</item>
         <item name="checkBoxPreferenceStyle">@android:style/Preference.CheckBoxPreference</item>
-        <item name="spinnerPreferenceStyle">@android:style/Preference.SpinnerPreference</item>
-        <item name="seekBarPreferenceStyle">@android:style/Preference.SeekbarPreference</item>
-        <item name="radioButtonPreferenceStyle">@android:style/Preference.RadioButtonPreference</item>
-        <item name="tmobileEditTextPreferenceStyle">@android:style/Preference.EditTextPreference</item>
-        
         <item name="yesNoPreferenceStyle">@android:style/Preference.DialogPreference.YesNoPreference</item>
         <item name="dialogPreferenceStyle">@android:style/Preference.DialogPreference</item>
         <item name="editTextPreferenceStyle">@android:style/Preference.DialogPreference.EditTextPreference</item>

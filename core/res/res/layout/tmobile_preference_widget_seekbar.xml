@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<SeekBar xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/seekbar_preference" 
-	android:layout_width="76sp"
-	android:layout_height="wrap_content" />

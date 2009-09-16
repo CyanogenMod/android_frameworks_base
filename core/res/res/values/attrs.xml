@@ -17,7 +17,6 @@
 <resources>
     <!-- These are the standard attributes that make up a complete theme. -->
     <declare-styleable name="Theme">
-    
         <!-- ============== -->
         <!-- Generic styles -->
         <!-- ============== -->
@@ -148,10 +147,6 @@
         <!-- TimePicker Button styles. -->
         <attr name="buttonStyleTimePickerUp" format="reference" />
         <attr name="buttonStyleTimePickerDown" format="reference" />
-
-        <!-- Split Button styles. -->
-        <attr name="buttonStyleSplitLeft" format="reference" />
-        <attr name="buttonStyleSplitRight" format="reference" />
 
         <!-- ============== -->
         <!-- Tab styles -->
@@ -364,8 +359,6 @@
         <attr name="editTextStyle" format="reference" />
         <!-- Default TimePicker Input style. -->
         <attr name="timePickerInputStyle" format="reference" />
-        <!-- Default TextField style. -->
-        <attr name="textFieldStyle" format="reference" />
         <!-- Default ExpandableListView style. -->
         <attr name="expandableListViewStyle" format="reference" />
         <!-- Default Gallery style. -->
@@ -374,8 +367,6 @@
         <attr name="gridViewStyle" format="reference" />
         <!-- The style resource to use for an ImageButton -->
         <attr name="imageButtonStyle" format="reference" />
-        <!-- The style resource to use for an ImageButton with a circle button image -->
-        <attr name="imageButtonCircleStyle" format="reference" />
         <!-- The style resource to use for an ImageButton that is an image well -->
         <attr name="imageWellStyle" format="reference" />
         <!-- Default ListView style. -->
@@ -410,10 +401,6 @@
         <attr name="horizontalScrollViewStyle" format="reference" />
         <!-- Default Spinner style. -->
         <attr name="spinnerStyle" format="reference" />
-        <!-- Default CarouselWidget style. -->
-        <attr name="carouselWidgetStyle" format="reference" />
-        <!-- Default Filmstrip style. -->
-        <attr name="filmstripStyle" format="reference" />
         <!-- Default Star style. -->
         <attr name="starStyle" format="reference" />
         <!-- Default TabWidget style. -->
@@ -432,50 +419,6 @@
         <attr name="spinnerItemStyle" format="reference" />
         <!-- Default MapView style. -->
         <attr name="mapViewStyle" format="reference" />
-
-        <!-- =================== -->
-        <!-- Header, section and list item styles   -->
-        <!-- =================== -->
-		<attr name="textAppearanceLabel" format="reference" />
-		<attr name="textAppearanceLabelHeader" format="reference" />
-		<attr name="textAppearanceLabelSubHeader" format="reference" />
-		<attr name="textAppearanceLabelPersonalHeader" format="reference" />
-		<attr name="textAppearanceLabelPersonalSubHeader" format="reference" />		
-		<attr name="textAppearanceLabelListItemPrimaryLarge" format="reference" />
-        <attr name="textAppearanceLabelListItemPrimaryMedium" format="reference" />
-        <attr name="textAppearanceLabelListItemPrimaryLargeSingleLine" format="reference" />
-        <attr name="textAppearanceLabelListItemPrimaryMediumSingleLine" format="reference" />
-        <attr name="textAppearanceLabelListItemSecondaryLarge" format="reference" />
-		<attr name="textAppearanceLabelListItemSecondaryMedium" format="reference" />
-		<attr name="textAppearanceLabelListItemSecondarySmall" format="reference" />
-
-		<attr name="headerLayoutBackground" format="reference" />
-		<attr name="headerLayout" format="reference" />
-		<attr name="headerLayoutLabel" format="reference" />
-		<attr name="headerLayoutSubHeader" format="reference" />
-		<attr name="headerLayoutTwinSubHeader" format="reference" />
-		<attr name="headerLayoutIcon" format="reference" />
-		<attr name="headerLayoutSubHeaderIcon" format="reference" />
-		<attr name="headerLayoutTwinSubHeaderIcon" format="reference" />
-		<attr name="headerLayoutButton" format="reference" />
-		<attr name="headerLayoutSubHeaderIconButton" format="reference" />
-		<attr name="headerLayoutTwinButton" format="reference" />
-		<attr name="headerLayoutSecondaryIcon" format="reference" />
-		<attr name="headerLayoutSecondaryThreeIcon" format="reference" />
-		<attr name="headerLayoutSecondaryLargeIcon" format="reference" />
-		<attr name="headerLayoutPersonalPanel" format="reference" />
-        <attr name="headerLayoutProductPanel" format="reference" />
-		<attr name="sectionHeaderLayoutBackground" format="reference" />
-        <attr name="sectionHeaderLayoutLabel" format="reference" />
-        <attr name="listItemLayout" format="reference" />
-        <attr name="listItemLayoutItemLabelTwinText" format="reference" />
-        <attr name="listItemLayoutItemTwinLabelText" format="reference" />
-        <attr name="listItemLabelSecondaryText" format="reference" />
-        <attr name="listItemTwinLabelSecondaryText" format="reference" />
-        <attr name="listItemHeaderTwinLabelSecondaryText" format="reference" />
-        <attr name="listItemIconTwinLabelSecondryText" format="reference" />
-        <attr name="listItemTwinIconLayout" format="reference" />
-        <attr name="listItemTwoRowLayout" format="reference" />
 
         <!-- =================== -->
         <!-- Preference styles   -->
@@ -502,14 +445,6 @@
         <attr name="ringtonePreferenceStyle" format="reference" />
         <!-- The preference layout that has the child/tabbed effect. -->
         <attr name="preferenceLayoutChild" format="reference" />
-        <!-- Default style for SpinnerPreference. -->
-        <attr name="spinnerPreferenceStyle" format="reference" />
-        <!-- Default style for InlineEditTextPreference. -->
-        <attr name="tmobileEditTextPreferenceStyle" format="reference" />
-        <!-- Default style for SeekbarPreference. -->
-        <attr name="seekBarPreferenceStyle" format="reference" />
-        <!-- Default style for RadioButtonPreference. -->
-        <attr name="radioButtonPreferenceStyle" format="reference"/>
         
         <!-- =================== -->
         <!-- Dialer styles   -->
@@ -1622,45 +1557,9 @@
         <!-- Sets the alpha on the items that are not selected. -->
         <attr name="unselectedAlpha" format="float" />
     </declare-styleable>
-    <declare-styleable name="TextFieldLabel">
-        <attr name="labelText" format="string" />
-        <attr name="labelPosition" format="string" />
-    </declare-styleable>
-    <declare-styleable name="HeaderLayout">
-        <attr name="headerText" format="string" />
-        <attr name="subHeaderText" format="string" />
-        <attr name="subHeader2Text" format="string" />
-        <attr name="subLabelText" format="string" />
-        <attr name="buttonText" format="string" />
-        <attr name="button2Text" format="string" />
-        <attr name="iconSrc" format="reference|integer" />
-        <attr name="icon2Src" format="reference|integer" />
-        <attr name="icon3Src" format="reference|integer" />
-        <attr name="icon4Src" format="reference|integer" />
-    </declare-styleable>
-    <declare-styleable name="ProgressOverlayLayout">
-        <attr name="progressType">
-            <flag name="progressIndicator" value="0" />
-            <flag name="progressBar" value="1" />
-            <flag name="progressBarBottom" value="2" />
-        </attr>
-    </declare-styleable>
-    <declare-styleable name="ListItemLayout">
-        <attr name="itemHeaderLabelText" format="string" />
-        <attr name="itemLabelText" format="string" />
-        <attr name="itemLabel2Text" format="string" />
-        <attr name="itemText" format="string" />
-        <attr name="item2Text" format="string" />
-        <attr name="item3Text" format="string" />
-        <attr name="item4Text" format="string" />
-        <attr name="itemIconSrc" format="reference|integer" />
-        <attr name="itemIcon2Src" format="reference|integer" />
-        <attr name="itemIcon3Src" format="reference|integer" />
-        <attr name="itemIcon4Src" format="reference|integer" />
-    </declare-styleable>
     <declare-styleable name="GridView">
         <attr name="horizontalSpacing" format="dimension" />
-        <attr name="verticalSpacing" format="dimension" />      
+        <attr name="verticalSpacing" format="dimension" />
         <attr name="stretchMode">
             <enum name="none" value="0"/>
             <enum name="spacingWidth" value="1" />
@@ -1673,7 +1572,6 @@
         </attr>
         <attr name="gravity" />
     </declare-styleable>
-
     <declare-styleable name="ImageSwitcher">
     </declare-styleable>
     <declare-styleable name="ImageView">
@@ -1835,7 +1733,7 @@
         <attr name="maxHeight" />
         <attr name="interpolator" format="reference" />        
     </declare-styleable>
-     
+    
     <declare-styleable name="SeekBar">
         <!-- Draws the thumb on a seekbar -->    
         <attr name="thumb" format="reference" />
@@ -2195,12 +2093,6 @@
     <declare-styleable name="Spinner">
         <!-- The prompt to display when the spinner's dialog is shown. -->
         <attr name="prompt" format="reference" />
-    </declare-styleable>
-    <declare-styleable name="CarouselWidget">
-        <attr name="previousButton" format="reference|color" />
-        <attr name="nextButton" format="reference|color" />
-        <attr name="frameBackground" format="reference|color" />
-        <attr name="frameSelectedBackground" format="reference|color" />
     </declare-styleable>
     <declare-styleable name="DatePicker">  
         <!-- The first year (inclusive) i.e. 1940 -->
@@ -3196,7 +3088,7 @@
              dependents will be disabled when this is unchecked, so the value of this preference is false. -->
         <attr name="disableDependentsState" format="boolean" />
     </declare-styleable>
-    
+
     <!-- Base attributes available to DialogPreference. -->
     <declare-styleable name="DialogPreference">
         <!-- The title in the dialog. -->
@@ -3225,12 +3117,6 @@
              entries is selected. If a user clicks on the second item in entries, the
              second item in this array will be saved to the preference. -->
         <attr name="entryValues" format="reference" />
-    </declare-styleable>
-
-	<!-- Base attributes available to RadioButtonPreference. -->
-    <declare-styleable name="RadioButtonPreference">
-        <!-- The human-readable array to present as a radio buttons. -->
-        <attr name="entries" />
     </declare-styleable>
 
     <!-- Base attributes available to RingtonePreference. -->
@@ -3404,3 +3290,4 @@
     
     
 </resources>
+
