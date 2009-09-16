@@ -24,6 +24,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 /**
@@ -88,7 +89,7 @@ public class ContextThemeWrapper extends ContextWrapper {
      * Resources on a per-activity basis.  Very ugly.
      */
     public void useThemedResources(String themePackage) {
-        if (themePackage == null || themePackage.compareTo("") == 0) {
+        if (TextUtils.isEmpty(themePackage)) {
             mThemedResources = null;
             mUseThemedResources = false;
             mTheme = null;
