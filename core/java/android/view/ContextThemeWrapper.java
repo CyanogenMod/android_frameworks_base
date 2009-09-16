@@ -88,7 +88,7 @@ public class ContextThemeWrapper extends ContextWrapper {
      * Resources on a per-activity basis.  Very ugly.
      */
     public void useThemedResources(String themePackage) {
-        if (themePackage == null) {
+        if (themePackage == null || themePackage.compareTo("") == 0) {
             mThemedResources = null;
             mUseThemedResources = false;
             mTheme = null;
