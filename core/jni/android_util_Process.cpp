@@ -397,7 +397,7 @@ jint android_os_Process_getFreeMemory(JNIEnv* env, jobject clazz)
         return -1;
     }
     
-    char buffer[256];
+    char buffer[512];
     const int len = read(fd, buffer, sizeof(buffer)-1);
     close(fd);
     
@@ -410,11 +410,11 @@ jint android_os_Process_getFreeMemory(JNIEnv* env, jobject clazz)
     int numFound = 0;
     int mem = 0;
     
-    static const char* const sums[] = { "MemFree:", "Cached:", NULL };
-    static const int sumsLen[] = { strlen("MemFree:"), strlen("Cached:"), NULL };
+    static const char* const sums[] = { "MemFree:", "Cached:", "SwapFree:", "SwapCached:", NULL };
+    static const int sumsLen[] = { strlen("MemFree:"), strlen("Cached:"), strlen("SwapFree:"), strlen("SwapCached:"), NULL };
     
     char* p = buffer;
-    while (*p && numFound < 2) {
+    while (*p && numFound < (sizeof(sums)/sizeof(sums[0]))) {
         int i = 0;
         while (sums[i]) {
             if (strncmp(p, sums[i], sumsLen[i]) == 0) {
@@ -435,6 +435,8 @@ jint android_os_Process_getFreeMemory(JNIEnv* env, jobject clazz)
         }
         p++;
     }
+    
+    LOGI("Free memory: %d KiB (sum of %d elements)", mem >> 10, numFound);
     
     return numFound > 0 ? mem : -1;
 }
