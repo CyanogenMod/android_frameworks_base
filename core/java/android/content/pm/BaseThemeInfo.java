@@ -140,6 +140,15 @@ public class BaseThemeInfo implements Parcelable {
     public String themeStyleName;
 
     /**
+     * The filename of the preview image.
+     * Specifies a theme preview image resource as a path into the assets
+     * subfolder.
+     *
+     * @see preview attribute
+     */
+    public String preview;
+
+    /**
      * {@hide}
      */
     public enum InfoObjectType {
@@ -203,6 +212,7 @@ public class BaseThemeInfo implements Parcelable {
         dest.writeInt(isDrmProtected? 1 : 0);
         dest.writeString(soundPackName);
         dest.writeString(themeStyleName);
+        dest.writeString(preview);
     }
 
     /** @hide */
@@ -247,6 +257,7 @@ public class BaseThemeInfo implements Parcelable {
         isDrmProtected = (source.readInt() != 0);
         soundPackName = source.readString();
         themeStyleName = source.readString();
+        preview = source.readString();
     }
 
     protected void changeDrmFlagIfNeeded(String resourcePath) {

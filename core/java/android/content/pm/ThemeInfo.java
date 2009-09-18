@@ -22,6 +22,7 @@ import android.content.res.Resources;
  *    <theme
  *        pluto:name="Pluto Default"
  *        pluto:thumbnail="media/images/app_thumbnail.png"
+ *        pluto:preview="media/images/preview.png"
  *        pluto:author="John Doe"
  *        pluto:ringtoneFileName="media/audio/ringtone.mp3"
  *        pluto:notificationRingtoneFileName="media/audio/locked/notification.mp3"
@@ -47,87 +48,94 @@ public final class ThemeInfo extends BaseThemeInfo {
     private static final int THUMBNAIL_INDEX = 1;
 
     /**
+     * {@link #preview}
+     *
+     */
+    private static final int PREVIEW_INDEX = 2;
+
+    /**
      * {@link #author}
      *
      */
-    private static final int AUTHOR_INDEX = 2;
+    private static final int AUTHOR_INDEX = 3;
 
     /**
      * {@link #themeId}
      *
      */
-    private static final int THEME_INDEX = 3;
+    private static final int THEME_INDEX = 4;
 
     /**
      * {@link #themeStyleName}
      *
      */
-    private static final int THEME_STYLE_NAME_INDEX = 4;
+    private static final int THEME_STYLE_NAME_INDEX = 5;
 
     /**
      * {@link #ringtoneName}
      *
      */
-    private static final int RINGTONE_FILE_NAME_INDEX = 5;
+    private static final int RINGTONE_FILE_NAME_INDEX = 6;
 
     /**
      * {@link #notificationRingtoneName}
      *
      */
-    private static final int NOTIFICATION_RINGTONE_FILE_NAME_INDEX = 6;
+    private static final int NOTIFICATION_RINGTONE_FILE_NAME_INDEX = 7;
 
     /**
      * {@link #favesImageName}
      *
      */
-    private static final int FAVES_IMAGE_NAME_INDEX = 7;
+    private static final int FAVES_IMAGE_NAME_INDEX = 8;
 
     /**
      * {@link #favesAppImageName}
      *
      */
-    private static final int FAVES_APP_IMAGE_NAME_INDEX = 8;
+    private static final int FAVES_APP_IMAGE_NAME_INDEX = 9;
 
     /**
      * {@link #wallpaperImageName}
      *
      */
-    private static final int WALLPAPER_IMAGE_NAME_INDEX = 9;
+    private static final int WALLPAPER_IMAGE_NAME_INDEX = 10;
 
     /**
      * {@link #copyright}
      *
      */
-    private static final int COPYRIGHT_INDEX = 10;
+    private static final int COPYRIGHT_INDEX = 11;
 
     /**
      * {@link #ringtoneName}
      *
      */
-    private static final int RINGTONE_NAME_INDEX = 11;
+    private static final int RINGTONE_NAME_INDEX = 12;
 
     /**
      * {@link #notificationRingtoneName}
      *
      */
-    private static final int NOTIFICATION_RINGTONE_NAME_INDEX = 12;
+    private static final int NOTIFICATION_RINGTONE_NAME_INDEX = 13;
 
     /**
      * {@link #soundPackName}
      *
      */
-    private static final int SOUNDPACK_NAME_INDEX = 13;
+    private static final int SOUNDPACK_NAME_INDEX = 14;
 
     /**
      * {@link #styleResourceId}
      *
      */
-    private static final int STYLE_INDEX = 14;
+    private static final int STYLE_INDEX = 15;
 
 
     private static final String [] compulsoryAttributes = new String [] {
         "name",
         "thumbnail",
+        "preview",
         "author",
         "themeId",
         "styleName",
@@ -253,6 +261,11 @@ public final class ThemeInfo extends BaseThemeInfo {
 
                     case STYLE_INDEX:
                         styleResourceId = attrs.getAttributeResourceValue(i, -1);
+                        break;
+
+                    case PREVIEW_INDEX:
+                        // theme thumbprint
+                        preview = attrs.getAttributeValue(i);
                         break;
                 }
             }
