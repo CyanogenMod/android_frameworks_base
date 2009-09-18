@@ -21,7 +21,7 @@ import android.content.res.Resources;
  * Below is an example of theme tag
  *    <theme
  *        pluto:name="Pluto Default"
- *        pluto:thumbnail="@drawable/app_thumbnail"
+ *        pluto:thumbnail="media/images/app_thumbnail.png"
  *        pluto:author="John Doe"
  *        pluto:ringtoneFileName="media/audio/ringtone.mp3"
  *        pluto:notificationRingtoneFileName="media/audio/locked/notification.mp3"
