@@ -184,7 +184,11 @@ public class HeaderViewListAdapter implements WrapperListAdapter, Filterable {
             int adjPosition = position - numHeaders;
             int adapterCount = mAdapter.getCount();
             if (adjPosition >= adapterCount) {
-                if (mFooterViewInfos != null) {
+               // When adjPosition >= adapterCount get the footer view at
+               // that postion but ensure that the total footers count is
+               // greater than adjPosition - adapterCount.
+                if (mFooterViewInfos != null &&
+                    getFootersCount() > (adjPosition - adapterCount)) {
                     return mFooterViewInfos.get(adjPosition - adapterCount).view;
                 }
             } else {

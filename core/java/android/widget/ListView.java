@@ -636,7 +636,8 @@ public class ListView extends AbsListView {
             boolean selected = pos == mSelectedPosition;
             View child = makeAndAddView(pos, nextTop, true, mListPadding.left, selected);
 
-            nextTop = child.getBottom() + mDividerHeight;
+            if (child != null)
+                nextTop = child.getBottom() + mDividerHeight;
             if (selected) {
                 selectedView = child;
             }
@@ -1668,7 +1669,8 @@ public class ListView extends AbsListView {
         child = obtainView(position);
 
         // This needs to be positioned and measured
-        setupChild(child, position, y, flow, childrenLeft, selected, false);
+        if (child != null)
+            setupChild(child, position, y, flow, childrenLeft, selected, false);
 
         return child;
     }
@@ -2567,7 +2569,7 @@ public class ListView extends AbsListView {
             int startPos = (mSelectedPosition != INVALID_POSITION) ?
                     mSelectedPosition - 1 :
                     firstPosition + getChildCount() - 1;
-            if (startPos < 0) {
+            if (startPos < 0 || startPos >= mAdapter.getCount()) {
                 return INVALID_POSITION;
             }
             if (startPos > last) {

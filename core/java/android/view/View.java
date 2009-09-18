@@ -2382,6 +2382,25 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
         if (mOnLongClickListener != null) {
             handled = mOnLongClickListener.onLongClick(View.this);
         }
+
+        // This is to avoid the Race condition when the parent window get
+        // destroyed and context Menu window still tries to attach itself
+        // to the parent window
+        if (mAttachInfo != null) {
+            final Rect displayFrame = new Rect();
+            try {
+                mAttachInfo.mSession.getDisplayFrame(mAttachInfo.mWindow,
+                                                     displayFrame);
+            } catch (RemoteException e) {
+                return handled;
+            }
+            if ((displayFrame.top == 0) && (displayFrame.bottom == 0) &&
+                (displayFrame.left == 0) && (displayFrame.right == 0)) {
+                Log.w(VIEW_LOG_TAG, "Warning: Parent window is already destroyed. So do nothing");
+               return true;
+            }
+        }
+
         if (!handled) {
             handled = showContextMenu();
         }
