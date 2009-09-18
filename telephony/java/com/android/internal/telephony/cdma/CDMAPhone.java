@@ -1331,4 +1331,12 @@ public class CDMAPhone extends PhoneBase {
             }
         }
     }
+
+    /**
+     * Notify data connection lost
+     */
+    public void notifyDataConnectionLost() {
+        mDataConnection.onCleanUpConnection(false, REASON_RADIO_TURNED_OFF);
+    }
+
 }
