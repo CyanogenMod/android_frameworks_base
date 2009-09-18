@@ -1255,6 +1255,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
 
             child = mAdapter.getView(position, scrapView, this);
 
+            if (child != null) {
             if (ViewDebug.TRACE_RECYCLER) {
                 ViewDebug.trace(child, ViewDebug.RecyclerTraceType.BIND_VIEW,
                         position, getChildCount());
@@ -1270,15 +1271,19 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                             position, -1);
                 }
             }
+	    }
         } else {
             child = mAdapter.getView(position, null, this);
             if (mCacheColorHint != 0) {
                 child.setDrawingCacheBackgroundColor(mCacheColorHint);
             }
+
+	    if (child != null) {
             if (ViewDebug.TRACE_RECYCLER) {
                 ViewDebug.trace(child, ViewDebug.RecyclerTraceType.NEW_VIEW,
                         position, getChildCount());
             }
+        }
         }
 
         return child;
@@ -1937,8 +1942,12 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         case MotionEvent.ACTION_DOWN: {
             int motionPosition = pointToPosition(x, y);
             if (!mDataChanged) {
+                // Check if the position that we paqss is valid.
+                // Check if position >= 0 and also position is always less
+                // than the total count of ListAdapter
                 if ((mTouchMode != TOUCH_MODE_FLING) && (motionPosition >= 0)
-                        && (getAdapter().isEnabled(motionPosition))) {
+                    && (motionPosition < getAdapter().getCount())
+                    && (getAdapter().isEnabled(motionPosition))) {
                     // User clicked on an actual view (and was not stopping a fling). It might be a
                     // click or a scroll. Assume it is a click until proven otherwise
                     mTouchMode = TOUCH_MODE_DOWN;

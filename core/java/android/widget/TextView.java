@@ -6573,9 +6573,14 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
                     int newSelEnd = Selection.getSelectionEnd(mText);
                     CommitSelectionReceiver csr = null;
                     if (newSelStart != oldSelStart || newSelEnd != oldSelEnd) {
-                        csr = new CommitSelectionReceiver();
-                        csr.mNewStart = newSelStart;
-                        csr.mNewEnd = newSelEnd;
+                        // Check if the selection bounds does not exceed the length.
+                        // check the posible race condition.
+                        if ((newSelStart <= mText.length()) &&
+                            (newSelEnd <= mText.length())) {
+                            csr = new CommitSelectionReceiver();
+                            csr.mNewStart = newSelStart;
+                            csr.mNewEnd = newSelEnd;
+                        }
                     }
                     
                     if (imm.showSoftInput(this, 0, csr) && csr != null) {

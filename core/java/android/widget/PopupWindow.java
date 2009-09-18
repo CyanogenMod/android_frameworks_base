@@ -36,6 +36,7 @@ import android.graphics.drawable.StateListDrawable;
 import android.os.IBinder;
 import android.util.AttributeSet;
 
+import android.util.Log;
 import java.lang.ref.WeakReference;
 
 /**
@@ -720,6 +721,22 @@ public class PopupWindow {
     public void showAsDropDown(View anchor, int xoff, int yoff) {
         if (isShowing() || mContentView == null) {
             return;
+        }
+
+        // This is to avoid the Race condition when the parent window
+        // gets destroyed and popup window still tries to attach itself
+        // to the parent window.
+        // Added check to verify whether the parent window is
+        // live or dead. getWindowVisibleDisplayFrame function will return
+        // the empty frame if the parent window died. Empty frame has
+        // all top, bottom, left and right equal to 0.
+        final Rect displayFrame = new Rect();
+        anchor.getWindowVisibleDisplayFrame(displayFrame);
+        if ((displayFrame.top == 0) && (displayFrame.bottom == 0) &&
+             (displayFrame.left == 0) && (displayFrame.right == 0)) {
+             Log.d("PopupWindow","Warning: Parent window is already destroyed. "
+                   + "So do nothing");
+           return;
         }
 
         registerForScrollChanged(anchor, xoff, yoff);

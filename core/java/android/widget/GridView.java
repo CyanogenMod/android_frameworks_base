@@ -301,6 +301,12 @@ public class GridView extends AbsListView {
         while (nextBottom > end && pos >= 0) {
 
             View temp = makeRow(pos, nextBottom, false);
+
+            // Added the check to Avoid the Race condition.
+            if (mReferenceView == null) {
+                return selectedView;
+            }
+
             if (temp != null) {
                 selectedView = temp;
             }

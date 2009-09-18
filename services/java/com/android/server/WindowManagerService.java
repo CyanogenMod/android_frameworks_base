@@ -4456,7 +4456,7 @@ public class WindowManagerService extends IWindowManager.Stub implements Watchdo
                 MotionEvent nextMotion, boolean isPointerEvent,
                 boolean failIfTimeout, int callingPid, int callingUid) {
             long startTime = SystemClock.uptimeMillis();
-            long keyDispatchingTimeout = 5 * 1000;
+            long keyDispatchingTimeout = 10 * 1000;
             long waitedFor = 0;
 
             while (true) {
