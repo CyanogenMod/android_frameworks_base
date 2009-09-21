@@ -1137,7 +1137,6 @@ class NotificationManagerService extends INotificationManager.Stub
                         mAdbNotification = new Notification();
                         mAdbNotification.icon = com.android.internal.R.drawable.stat_sys_adb;
                         mAdbNotification.when = 0;
-                        mAdbNotification.flags = Notification.FLAG_ONGOING_EVENT;
                         mAdbNotification.tickerText = title;
                         mAdbNotification.defaults = 0; // please be quiet
                         mAdbNotification.sound = null;
