@@ -850,7 +850,9 @@ public class LocationManagerService extends ILocationManager.Stub implements Run
          */
         void disposeLocked() {
             ArrayList<UpdateRecord> records = mRecordsByProvider.get(this.mProvider);
-            records.remove(this);
+            if (records != null) {
+                records.remove(this);
+            }
         }
 
         @Override
