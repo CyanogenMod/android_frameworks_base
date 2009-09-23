@@ -158,9 +158,9 @@ import java.io.PrintWriter;
  * happens, the system will later try to restart the service.  An important
  * consequence of this is that if you implement {@link #onStartCommand onStartCommand()}
  * to schedule work to be done asynchronously or in another thread, then you
- * may want to use {@link #START_FLAG_REDELIVERY} to have the system
- * re-deliver an Intent for you so that it does not get lost if your service
- * is killed while processing it.
+ * may want to write information about that work into persistent storage
+ * during the onStartCommand() call so that it does not get lost if the service later
+ * gets killed.
  * 
  * <p>Other application components running in the same process as the service
  * (such as an {@link android.app.Activity}) can, of course, increase the
