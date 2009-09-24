@@ -102,6 +102,7 @@ void LayerBuffer::unregisterBuffers()
     sp<Source> source(clearSource());
     if (source != 0)
         source->unregisterBuffers();
+    mSource.clear();
 }
 
 uint32_t LayerBuffer::doTransaction(uint32_t flags)
