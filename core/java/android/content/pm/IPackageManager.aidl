@@ -281,6 +281,8 @@ interface IPackageManager {
      */
     FeatureInfo[] getSystemAvailableFeatures();
 
+    boolean hasSystemFeature(String name);
+    
     void enterSafeMode();
     boolean isSafeMode();
     void systemReady();
