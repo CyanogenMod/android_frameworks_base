@@ -623,7 +623,12 @@ public abstract class ContentResolver {
     {
         IContentProvider provider = acquireProvider(url);
         if (provider == null) {
-            throw new IllegalArgumentException("Unknown URL " + url);
+        	// Fail quietly if this is a checkin request and there is no provider
+        	if (url.getHost().equals("android.server.checkin")) {
+        		return null;
+        	} else {
+        		throw new IllegalArgumentException("Unknown URL " + url);
+        	}
         }
         try {
             return provider.insert(url, values);
