@@ -195,22 +195,26 @@ public class RingtoneManager {
     
     private static final String[] INTERNAL_COLUMNS = new String[] {
         MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE,
-        "\"" + MediaStore.Audio.Media.INTERNAL_CONTENT_URI + "\""
+        "\"" + MediaStore.Audio.Media.INTERNAL_CONTENT_URI + "\"",
+        "null"
     };
 
     private static final String[] DRM_COLUMNS = new String[] {
         DrmStore.Audio._ID, DrmStore.Audio.TITLE,
-        "\"" + DrmStore.Audio.CONTENT_URI + "\""
+        "\"" + DrmStore.Audio.CONTENT_URI + "\"",
+        "null"
     };
 
     private static final String[] MEDIA_COLUMNS = new String[] {
         MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE,
-        "\"" + MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "\""
+        "\"" + MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "\"",
+        "null"
     };
 
     private static final String[] THEME_COLUMNS = new String[] {
         MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE,
-        "\"" + Uri.parse("content://" + THEME_AUTHORITY + "/ringtone") + "\""
+        "\"" + Uri.parse("content://" + THEME_AUTHORITY + "/ringtone") + "\"",
+        "package"
     };
     
     /**
@@ -230,6 +234,12 @@ public class RingtoneManager {
      * media provider's URI.
      */
     public static final int URI_COLUMN_INDEX = 2;
+
+    /**
+     * Optional part to append to the final URI.
+     * @hide
+     */
+    public static final int URI_PART_COLUMN_INDEX = 3;
 
     private Activity mActivity;
     private Context mContext;
@@ -420,10 +430,22 @@ public class RingtoneManager {
         
         return getUriFromCursor(cursor);
     }
-    
+
+    private static Uri getUriFromCursor(Uri baseUri, Cursor cursor) {
+        Uri.Builder builder = baseUri.buildUpon();
+
+        String uriPartString = cursor.getString(URI_PART_COLUMN_INDEX);
+        if (uriPartString != null) {
+            builder.appendPath(uriPartString);
+        }
+
+        builder.appendEncodedPath(String.valueOf(cursor.getLong(ID_COLUMN_INDEX)));
+
+        return builder.build();
+    }
+
     private static Uri getUriFromCursor(Cursor cursor) {
-        return ContentUris.withAppendedId(Uri.parse(cursor.getString(URI_COLUMN_INDEX)), cursor
-                .getLong(ID_COLUMN_INDEX));
+        return getUriFromCursor(Uri.parse(cursor.getString(URI_COLUMN_INDEX)), cursor);
     }
     
     /**
@@ -451,9 +473,8 @@ public class RingtoneManager {
             if (currentUri == null || !uriString.equals(previousUriString)) {
                 currentUri = Uri.parse(uriString);
             }
-            
-            if (ringtoneUri.equals(ContentUris.withAppendedId(currentUri, cursor
-                    .getLong(ID_COLUMN_INDEX)))) {
+
+            if (ringtoneUri.equals(getUriFromCursor(currentUri, cursor))) {
                 return i;
             }
             
