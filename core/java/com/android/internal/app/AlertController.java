@@ -18,18 +18,14 @@ package com.android.internal.app;
 
 import static android.view.ViewGroup.LayoutParams.FILL_PARENT;
 import android.app.AlertDialog;
-import android.app.ActivityManagerNative;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
-import android.content.res.CustomTheme;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Message;
-import android.os.RemoteException;
 import android.text.TextUtils;
-import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -53,7 +49,6 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import com.android.internal.R;
 
@@ -171,15 +166,6 @@ public class AlertController {
     }
 
     public AlertController(Context context, DialogInterface di, Window window) {
-        try {
-            CustomTheme theme = ActivityManagerNative.getDefault().getConfiguration().customTheme;
-            int styleId = CustomTheme.getStyleId(context, theme.getThemePackageName(), theme.getThemeId());
-            ContextThemeWrapper themeContext = new ContextThemeWrapper(context, styleId);
-            themeContext.useThemedResources(theme.getThemePackageName());
-            context = themeContext;
-        } catch (RemoteException e) {
-            Log.e("AlertController", "Failed to get current theme", e);
-        }
         mContext = context;
         mInflater = LayoutInflater.from(context);
         mDialogInterface = di;
