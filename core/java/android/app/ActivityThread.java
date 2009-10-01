@@ -37,7 +37,6 @@ import android.content.ComponentCallbacks;
 import android.content.ComponentName;
 import android.content.ContentProvider;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.IContentProvider;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -3495,9 +3494,8 @@ public final class ActivityThread {
                      * object anyway.  Similarly, each Application will need
                      * to refresh its internal resources object. */
                     if (r != null) {
-                        if ((diff & ActivityInfo.CONFIG_THEME_RESOURCE) == 0) {
-                            r.updateConfiguration(config, dm);
-                        } else {
+                        boolean themeChanged = (diff & ActivityInfo.CONFIG_THEME_RESOURCE) != 0;
+                        if (themeChanged) {
                             AssetManager am = r.getAssets();
                             if (originalThemePackageName != null) {
 //                                Log.i(TAG, "============ Dump resources BEFORE removeAssetPath");
@@ -3512,8 +3510,10 @@ public final class ActivityThread {
 //                                Log.i(TAG, "============ Dump resources AFTER addAssetPath");
 //                                am.dumpResources();
                             }
-                            r.clearCaches();
-                            r.getConfiguration().customTheme = config.customTheme;
+                        }
+                        r.updateConfiguration(config, dm);
+                        if (themeChanged) {
+                            r.updateStringCache();
                         }
                         //Log.i(TAG, "Updated app resources " + v.getKey()
                         //        + " " + r + ": " + r.getConfiguration());
@@ -3531,17 +3531,6 @@ public final class ActivityThread {
         for (int i=0; i<N; i++) {
             ComponentCallbacks cb = callbacks.get(i);
             performConfigurationChanged(cb, config);
-            
-            // We removed the old resources object from the mActiveResources
-            // cache, now we need to trigger an update for each application.
-            if ((diff & ActivityInfo.CONFIG_THEME_RESOURCE) != 0) {
-                if (cb instanceof Activity || cb instanceof Application) {
-                    Context context = ((ContextWrapper)cb).getBaseContext();
-                    if (context instanceof ApplicationContext) {
-                        ((ApplicationContext)context).refreshResourcesIfNecessary();
-                    }
-                }
-            }
         }
     }
 

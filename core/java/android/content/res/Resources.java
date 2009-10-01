@@ -1604,12 +1604,8 @@ public class Resources {
     /**
      * {@hide}
      */
-    public final void clearCaches() {
+    public final void updateStringCache() {
         synchronized (mTmpValue) {
-            mCachedStyledAttributes = null;
-            mDrawableCache.clear();
-            mColorStateListCache.clear();
-            flushLayoutCache();
             mAssets.recreateStringBlocks();
         }
     }

@@ -211,22 +211,6 @@ class ApplicationContext extends Context {
     public Resources getResources() {
         return mResources;
     }
-    
-    /**
-     * Refresh resources object which may have been changed by a theme
-     * configuration change.
-     */
-    /* package */ void refreshResourcesIfNecessary() {
-        if (mResources == Resources.getSystem()) {
-            /* FIXME: refreshResources called on system resources! */
-            return;
-        }
-
-        if (mPackageInfo.mApplicationInfo.isThemeable) {
-            mResources = mPackageInfo.getResources(mMainThread, true, true);
-            mTheme = null;
-        }
-    }
 
     @Override
     public PackageManager getPackageManager() {
