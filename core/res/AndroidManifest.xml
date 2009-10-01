@@ -952,7 +952,8 @@
                  android:hasCode="false"
                  android:label="@string/android_system_label"
                  android:allowClearUserData="false"
-                 android:icon="@drawable/ic_launcher_android">
+                 android:icon="@drawable/ic_launcher_android"
+                 pluto:isThemeable="true">
         <activity android:name="com.android.internal.app.ChooserActivity"
                 android:theme="@style/Theme.Dialog.Alert"
                 android:excludeFromRecents="true"
@@ -965,8 +966,7 @@
         <activity android:name="com.android.internal.app.RingtonePickerActivity"
                 android:theme="@style/Theme.Dialog.Alert"
                 android:excludeFromRecents="true"
-                android:multiprocess="true"
-                pluto:isThemeable="true">
+                android:multiprocess="true">
             <intent-filter>
                 <action android:name="android.intent.action.RINGTONE_PICKER" />
                 <category android:name="android.intent.category.DEFAULT" />
