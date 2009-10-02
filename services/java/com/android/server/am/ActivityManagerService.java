@@ -4622,10 +4622,9 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
         // Log the ANR to the event log.
         EventLog.writeEvent(LOG_ANR, app.pid, app.processName, annotation);
         
-        // If we are on a secure build and the application is not interesting to the user (it is
+        // If the application is not interesting to the user (it is
         // not visible or in the background), just kill it instead of displaying a dialog.
-        boolean isSecure = "1".equals(SystemProperties.get(SYSTEM_SECURE, "0"));
-        if (isSecure && !app.isInterestingToUserLocked() && Process.myPid() != app.pid) {
+        if (!app.isInterestingToUserLocked() && Process.myPid() != app.pid) {
             Process.killProcess(app.pid);
             return;
         }
