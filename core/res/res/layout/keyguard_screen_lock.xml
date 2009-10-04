@@ -46,12 +46,12 @@
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
                   android:gravity="center"
-                  android:textSize="34sp"/>
+                  android:textSize="30sp"/>
         <TextView android:id="@+id/headerSimOk2"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
                   android:gravity="center"
-                  android:textSize="34sp"/>
+                  android:textSize="30sp"/>
 
         <!-- when sim is missing / locked -->
         <TextView android:id="@+id/headerSimBad1"
@@ -81,13 +81,13 @@
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
                   android:gravity="center"
-                  android:textSize="34sp"/>
+                  android:textSize="24sp"/>
 
         <TextView android:id="@+id/date"
                   android:layout_width="fill_parent"
                   android:layout_height="wrap_content"
                   android:gravity="center"
-                  android:textSize="18sp"/>
+                  android:textSize="12sp"/>
 
         <!-- spacer after time and date -->
         <View
@@ -116,7 +116,7 @@
             <TextView android:id="@+id/batteryInfoText"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:textSize="18sp"
+                      android:textSize="14sp"
                       android:gravity="center"
             />
 
@@ -152,7 +152,7 @@
             <TextView android:id="@+id/nextAlarmText"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
-                      android:textSize="18sp"
+                      android:textSize="12sp"
                       android:gravity="center"
             />
         </LinearLayout>
@@ -186,7 +186,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
+                android:textSize="14sp"
                 android:text="@android:string/lockscreen_screen_locked"
                 android:gravity="center"
                     />
@@ -199,7 +199,7 @@
                   android:layout_height="wrap_content"
                   android:layout_marginBottom="5dip"
                   android:gravity="center"
-                  android:textSize="14sp"/>
+                  android:textSize="12sp"/>
 
 
         <!-- emergency call button shown when sim is missing or PUKd -->
