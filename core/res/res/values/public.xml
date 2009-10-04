@@ -1132,6 +1132,11 @@
   <public type="style" name="Widget.ProgressBar.Large.Inverse" id="0x0103005c" />
   <public type="style" name="Widget.ProgressBar.Small.Inverse" id="0x0103005d" /> 
 
+  <public type="string" name="reboot_system" id="0x010402ca" />
+  <public type="string" name="reboot_progress" id="0x010402cb" />
+  <public type="string" name="reboot_confirm" id="0x010402cc" />
+  <public type="string" name="global_action_reboot" id="0x010402cd" />
+
   <public type="drawable" name="stat_sys_vp_phone_call" id="0x010800a7" />
   <public type="drawable" name="stat_sys_vp_phone_call_on_hold" id="0x010800a8" />
   
