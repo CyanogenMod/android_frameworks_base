@@ -185,7 +185,9 @@ public final class ActivityThread {
                     PackageInfo pi = getPackageInfo(config.customTheme.getThemePackageName(), 0);
                     if (pi != null) {
                         String resDir = pi.getResDir();
-                        if (assets.addAssetPath(resDir) == 0) {
+                        if (assets.addAssetPath(resDir) != 0) {
+                            assets.setThemePackageName(config.customTheme.getThemePackageName());
+                        } else {
                             Log.e(TAG, "Unable to add theme resdir=" + resDir);
                         }
                     }
@@ -3498,6 +3500,7 @@ public final class ActivityThread {
                         if (themeChanged) {
                             AssetManager am = r.getAssets();
                             if (originalThemePackageName != null) {
+                                am.setThemePackageName(null);
 //                                Log.i(TAG, "============ Dump resources BEFORE removeAssetPath");
 //                                am.dumpResources();
                                 am.removeAssetPath(originalThemePackageName, getPackageResDir(originalThemePackageName));
@@ -3506,6 +3509,7 @@ public final class ActivityThread {
                             }
                             String resDir = getPackageResDir(config.customTheme.getThemePackageName());
                             if (resDir != null) {
+                                am.setThemePackageName(config.customTheme.getThemePackageName());
                                 am.updateResourcesWithAssetPath(resDir);
 //                                Log.i(TAG, "============ Dump resources AFTER addAssetPath");
 //                                am.dumpResources();

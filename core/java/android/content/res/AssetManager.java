@@ -74,6 +74,8 @@ public final class AssetManager {
     private String mAssetDir;
     private String mAppName;
 
+    private String mThemePackageName;
+
     /**
      * Create a new AssetManager containing only the basic system assets.
      * Applications will not generally use this method, instead retrieving the
@@ -614,6 +616,22 @@ public final class AssetManager {
      * {@hide}
      */
     public native final void dumpResources();
+
+    /**
+     * Get package name of current theme (may return null).
+     * {@hide}
+     */
+    public final String getThemePackageName() {
+        return mThemePackageName;
+    }
+
+    /**
+     * Sets package name for current theme (null is allowed).
+     * {@hide}
+     */
+    public final void setThemePackageName(String packageName) {
+        mThemePackageName = packageName;
+    }
 
     /**
      * Determine whether the state in this asset manager is up-to-date with

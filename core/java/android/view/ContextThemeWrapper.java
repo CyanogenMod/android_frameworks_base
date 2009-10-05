@@ -97,6 +97,7 @@ public class ContextThemeWrapper extends ContextWrapper {
             AssetManager assets = new AssetManager();
             assets.addAssetPath(getPackageResDir(getPackageName()));
             assets.addAssetPath(getPackageResDir(themePackage));
+            assets.setThemePackageName(themePackage);
 
             DisplayMetrics metrics = new DisplayMetrics();
             WindowManager wm = (WindowManager)getSystemService(WINDOW_SERVICE);
