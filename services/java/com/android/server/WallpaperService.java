@@ -65,7 +65,7 @@ class WallpaperService extends IWallpaperService.Stub {
      * everytime the wallpaper is changed.
      */
     private final FileObserver mWallpaperObserver = new FileObserver(
-            WALLPAPER_DIR.getAbsolutePath(), CREATE | CLOSE_WRITE) {
+            WALLPAPER_DIR.getAbsolutePath(), CLOSE_WRITE) {
                 @Override
                 public void onEvent(int event, String path) {
                     if (path == null) {
