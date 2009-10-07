@@ -37,6 +37,7 @@ import android.content.ComponentCallbacks;
 import android.content.ComponentName;
 import android.content.ContentProvider;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.IContentProvider;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -3535,6 +3536,17 @@ public final class ActivityThread {
         for (int i=0; i<N; i++) {
             ComponentCallbacks cb = callbacks.get(i);
             performConfigurationChanged(cb, config);
+
+            // We removed the old resources object from the mActiveResources
+            // cache, now we need to trigger an update for each application.
+            if ((diff & ActivityInfo.CONFIG_THEME_RESOURCE) != 0) {
+                if (cb instanceof Activity || cb instanceof Application) {
+                    Context context = ((ContextWrapper)cb).getBaseContext();
+                    if (context instanceof ApplicationContext) {
+                        ((ApplicationContext)context).refreshResourcesIfNecessary();
+                    }
+                }
+            }
         }
     }
 

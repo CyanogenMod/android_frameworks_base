@@ -212,6 +212,20 @@ class ApplicationContext extends Context {
         return mResources;
     }
 
+    /**
+     * Refresh resources object which may have been changed by a theme
+     * configuration change.
+     */
+    /* package */ void refreshResourcesIfNecessary() {
+        if (mResources == Resources.getSystem()) {
+            return;
+        }
+
+        if (mPackageInfo.mApplicationInfo.isThemeable) {
+            mTheme = null;
+        }
+    }
+
     @Override
     public PackageManager getPackageManager() {
         if (mPackageManager != null) {
