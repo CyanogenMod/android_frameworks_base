@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (c) 2009, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -596,7 +597,11 @@ public class SmsMessage extends SmsMessageBase {
         addr.numberOfDigits = (byte)addr.origBytes.length;
         addr.numberMode = CdmaSmsAddress.NUMBER_MODE_NOT_DATA_NETWORK;
         addr.numberPlan = CdmaSmsAddress.NUMBERING_PLAN_ISDN_TELEPHONY;
-        addr.ton = CdmaSmsAddress.TON_INTERNATIONAL_OR_IP;
+        if (addrStr.startsWith("+")) {
+            addr.ton = CdmaSmsAddress.TON_INTERNATIONAL_OR_IP;
+        } else {
+            addr.ton = CdmaSmsAddress.TON_NATIONAL_OR_EMAIL;
+        }
         return addr;
     }
 
