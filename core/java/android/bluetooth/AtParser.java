@@ -273,7 +273,7 @@ public class AtParser {
         // Ok we have a command that starts with AT. Process it
         int index = 2;
         AtCommandResult result =
-                new AtCommandResult(AtCommandResult.UNSOLICITED);
+                new AtCommandResult(AtCommandResult.OK);
         while (index < input.length()) {
             char c = input.charAt(index);
 
