@@ -883,6 +883,7 @@ public final class ViewRoot extends Handler implements ViewParent,
                         // all at once.
                         newSurface = true;
                         fullRedrawNeeded = true;
+                        mPreviousTransparentRegion.setEmpty();
 
                         if (mGlWanted && !mUseGL) {
                             initializeGL();
