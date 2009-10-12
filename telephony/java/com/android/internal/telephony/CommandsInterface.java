@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * Copyright (c) 2009, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -249,6 +250,12 @@ public interface CommandsInterface {
      */
     void registerForRUIMReady(Handler h, int what, Object obj);
     void unregisterForRUIMReady(Handler h);
+
+    /**
+     * Fires on any change in ICC status
+     */
+    void registerForIccStatusChanged(Handler h, int what, Object obj);
+    void unregisterForIccStatusChanged(Handler h);
 
     /**
      * unlike the register* methods, there's only one new SMS handler

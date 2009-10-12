@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * Copyright (c) 2009, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,6 +76,7 @@ public final class RuimCard extends Handler implements IccCard {
     static final int EVENT_CHANGE_RUIM_PASSWORD_DONE = 9;
     static final int EVENT_QUERY_FACILITY_FDN_DONE = 10;
     static final int EVENT_CHANGE_FACILITY_FDN_DONE = 11;
+    static final int EVENT_RUIM_STATUS_CHANGED = 101;
 
 
     //***** Constructor
@@ -90,6 +92,9 @@ public final class RuimCard extends Handler implements IccCard {
 
         phone.mCM.registerForRUIMReady(
                         this, EVENT_RUIM_READY, null);
+
+        phone.mCM.registerForIccStatusChanged(
+                        this, EVENT_RUIM_STATUS_CHANGED, null);
 
         updateStateProperty();
     }
@@ -137,6 +142,7 @@ public final class RuimCard extends Handler implements IccCard {
         phone.mCM.unregisterForRUIMLockedOrAbsent(this);
         phone.mCM.unregisterForOffOrNotAvailable(this);
         phone.mCM.unregisterForRUIMReady(this);
+        phone.mCM.unregisterForIccStatusChanged(this);
     }
 
     protected void finalize() {
@@ -382,6 +388,10 @@ public final class RuimCard extends Handler implements IccCard {
                 AsyncResult.forMessage(((Message)ar.userObj)).exception
                                                     = ar.exception;
                 ((Message)ar.userObj).sendToTarget();
+                break;
+            case EVENT_RUIM_STATUS_CHANGED:
+                Log.d(LOG_TAG, "Event EVENT_RUIM_STATUS_CHANGED Received");
+                phone.mCM.getIccStatus(obtainMessage(EVENT_GET_RUIM_STATUS_DONE));
                 break;
             default:
                 Log.e(LOG_TAG, "[CdmaRuimCard] Unknown Event " + msg.what);
