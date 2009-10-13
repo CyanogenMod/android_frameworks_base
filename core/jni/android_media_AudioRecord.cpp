@@ -153,9 +153,7 @@ android_media_AudioRecord_setup(JNIEnv *env, jobject thiz, jobject weak_this,
     size_t frameCount = buffSizeInBytes / frameSize;
     
     // convert and check input source value
-    // input_source values defined in AudioRecord.h are equal to
-    // JAVA MediaRecord.AudioSource values minus 1.
-    AudioRecord::input_source arSource = (AudioRecord::input_source)(source - 1);
+    AudioRecord::input_source arSource = (AudioRecord::input_source)(source);
     if (arSource < AudioRecord::DEFAULT_INPUT ||
         arSource >= AudioRecord::NUM_INPUT_SOURCES) {
         LOGE("Error creating AudioRecord: unknown source.");
