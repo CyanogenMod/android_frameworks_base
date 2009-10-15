@@ -213,6 +213,10 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             mMediaPlayer.setDisplay(mSurfaceHolder);
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             mMediaPlayer.setScreenOnWhilePlaying(true);
+            if (mSeekWhenPrepared != 0) {
+                mMediaPlayer.seekTo(mSeekWhenPrepared);
+                mSeekWhenPrepared = 0;
+            }
             mMediaPlayer.prepareAsync();
             // we don't set the target state here either, but preserve the
             // target state that was there before.
