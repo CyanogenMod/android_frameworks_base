@@ -396,7 +396,7 @@ int VorbisPlayer::renderThread(void* p) {
     return ((VorbisPlayer*)p)->render();
 }
 
-#define AUDIOBUFFER_SIZE 4096
+#define AUDIOBUFFER_SIZE 8192 
 
 int VorbisPlayer::render() {
     int result = -1;
