@@ -219,16 +219,18 @@ void android_os_Process_setThreadGroup(JNIEnv* env, jobject clazz, int pid, jint
         signalExceptionForGroupError(env, clazz, EINVAL);
         return;
     }
-
+#ifdef USE_SCHED_POLICIES
     if (set_scheduler_group(pid, grp)) {
         // If the thread exited on us, don't generate an exception
         if (errno != ESRCH && errno != ENOENT)
             signalExceptionForGroupError(env, clazz, errno);
     }
+#endif
 }
 
 void android_os_Process_setProcessGroup(JNIEnv* env, jobject clazz, int pid, jint grp) 
 {
+#ifdef USE_SCHED_POLICIES
     DIR *d;
     FILE *fp;
     char proc_path[255];
@@ -278,18 +280,20 @@ void android_os_Process_setProcessGroup(JNIEnv* env, jobject clazz, int pid, jin
         }
     }
     closedir(d);
+#endif
 }
 
 void android_os_Process_setThreadPriority(JNIEnv* env, jobject clazz,
                                               jint pid, jint pri)
 {
+#ifdef USE_SCHED_POLICIES
     if (pri >= ANDROID_PRIORITY_BACKGROUND) {
         set_scheduler_group(pid, ANDROID_TGROUP_BG_NONINTERACT);
         LOGD("Setting SCHED_BATCH for pid: %d prio: %d", pid, pri);
     } else if (getpriority(PRIO_PROCESS, pid) >= ANDROID_PRIORITY_BACKGROUND) {
         set_scheduler_group(pid, ANDROID_TGROUP_DEFAULT);
     } 
-
+#endif
     if (setpriority(PRIO_PROCESS, pid, pri) < 0) {
         signalExceptionForPriorityError(env, clazz, errno);
     }
