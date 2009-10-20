@@ -1734,13 +1734,6 @@ public class StatusBarService extends IStatusBar.Stub
             if (themeChanged) {
                 createThemedExpandedView(mContext);
 
-                TypedValue outValue = new TypedValue();
-                boolean result = mThemeContext.getTheme().resolveAttribute(com.android.internal.R.attr.statusBarExpandedBackgroundColor, outValue, true);
-                if (result) {
-                    int color = outValue.data;
-                    mTrackingView.setBackgroundColor(color);
-                }
-
                 mExpandedDialog.setContentView(mExpandedView,
                     new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,
                                                ViewGroup.LayoutParams.WRAP_CONTENT));

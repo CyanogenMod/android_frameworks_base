@@ -37,20 +37,6 @@
              window is floating. -->
         <attr name="backgroundDimEnabled" format="boolean" />
 
-		<!-- ============== -->
-        <!-- Pluto color palette styles -->
-        <!-- ============== -->
-        <eat-comment />
-        
-        <attr name="colorPrimaryFocus" format="reference|color" />
-        <attr name="colorPrimaryPressed" format="reference|color" />
-        <attr name="colorSecondaryFocus" format="reference|color" />
-        <attr name="colorSecondaryPressed" format="reference|color" />
-        <attr name="colorTertiary" format="reference|color" />
-        <attr name="colorDisabled" format="reference|color" />
-        <attr name="colorRest" format="reference|color" />
-        <attr name="colorRestStroke" format="reference|color" />
-
         <!-- =========== -->
         <!-- Text styles -->
         <!-- =========== -->
@@ -454,8 +440,8 @@
         <!-- =================== -->
         <!-- status bar related attributes -->
         <!-- =================== -->
-        <attr name="statusBarExpandedBackgroundColor" format="reference" />
-        <attr name="statusBarLatestItemBackground" format="reference" />
+        <attr name="com_android_server_status_expandedView" format="reference" />
+        <attr name="com_android_server_status_latestItemView" format="reference" />
 
     </declare-styleable>
 

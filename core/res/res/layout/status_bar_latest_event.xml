@@ -7,7 +7,6 @@
     <com.android.server.status.LatestItemView android:id="@+id/content"
             android:layout_width="fill_parent"
             android:layout_height="64sp"
-            android:background="?android:attr/statusBarLatestItemBackground"
             android:focusable="true"
             android:clickable="true"
             android:paddingRight="6sp"

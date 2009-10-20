@@ -140,8 +140,8 @@
         <item name="menuItemBackground">@android:drawable/menuitem_background</item>
 
         <!-- status bar related attributes -->
-        <item name="statusBarExpandedBackgroundColor">@android:color/black</item>
-        <item name="statusBarLatestItemBackground">@android:drawable/list_selector_background</item>
+        <item name="com_android_server_status_expandedView">@style/com_android_server_status_ExpandedView</item>
+        <item name="com_android_server_status_latestItemView">@style/com_android_server_status_LatestItemView</item>
 
         <!-- Widget styles -->
         <item name="absListViewStyle">@android:style/Widget.AbsListView</item>
@@ -245,8 +245,6 @@
         <item name="listDivider">@drawable/divider_horizontal_bright</item>
         <item name="listSeparatorTextViewStyle">@android:style/Widget.TextView.ListSeparator.White</item>
 
-        <!-- status bar related attributes -->
-        <item name="statusBarExpandedBackgroundColor">@android:color/white</item>
     </style>
     
     <!-- Variant of the light theme with no title bar -->

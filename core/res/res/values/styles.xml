@@ -159,6 +159,14 @@
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 
+    <style name="com_android_server_status_ExpandedView">
+        <item name="android:background">@android:drawable/status_bar_background</item>
+    </style>
+
+    <style name="com_android_server_status_LatestItemView">
+        <item name="android:background">@android:drawable/list_selector_background</item>
+    </style>
+
     <!-- Widget Styles -->
 
     <style name="Widget">

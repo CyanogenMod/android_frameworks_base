@@ -83,7 +83,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fadingEdge="none"
-            android:background="?android:attr/statusBarExpandedBackgroundColor"
             >
             <com.android.server.status.NotificationLinearLayout
                 android:id="@+id/notificationLinearLayout"
