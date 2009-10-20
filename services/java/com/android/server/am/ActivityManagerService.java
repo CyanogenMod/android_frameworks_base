@@ -12402,7 +12402,7 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
         } else if (app == mHomeProcess) {
             // This process is hosting what we currently consider to be the
             // home app, so we don't want to let it go into the background.
-            adj = HOME_APP_ADJ;
+            adj = VISIBLE_APP_ADJ;
             app.adjType = "home";
         } else if ((N=app.activities.size()) != 0) {
             // This app is in the background with paused activities.
