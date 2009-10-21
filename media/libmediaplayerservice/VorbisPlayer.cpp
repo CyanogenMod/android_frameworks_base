@@ -396,7 +396,10 @@ int VorbisPlayer::renderThread(void* p) {
     return ((VorbisPlayer*)p)->render();
 }
 
-#define AUDIOBUFFER_SIZE 8192 
+#define AUDIOBUFFER_SIZE 4096*4
+#define READ_CNT 4
+#define READ_SIZE 4096
+
 
 int VorbisPlayer::render() {
     int result = -1;
@@ -422,6 +425,7 @@ int VorbisPlayer::render() {
 
     while (1) {
         long numread = 0;
+        long tempcnt = 0;
         {
             Mutex::Autolock l(mMutex);
 
@@ -445,15 +449,24 @@ int VorbisPlayer::render() {
             // flag so we don't try to render in stop or reset state.
             if (!mRender) continue;
 
-            // render vorbis data into the input buffer
-            numread = ov_read(&mVorbisFile, mAudioBuffer, AUDIOBUFFER_SIZE, &current_section);
+            tempcnt = 0;
+            for(int i=0;i<READ_CNT;i++)
+            {
+                // render vorbis data into the input buffer
+                numread = ov_read(&mVorbisFile, mAudioBuffer+tempcnt, READ_SIZE, &current_section);
+                tempcnt += numread;
+                if(numread == 0)
+                  break;
+            }
+            numread = tempcnt;
+
             if (numread == 0) {
                 // end of file, do we need to loop?
                 // ...
                 if (mLoop || mAndroidLoop) {
                     ov_time_seek(&mVorbisFile, 0);
                     current_section = 0;
-                    numread = ov_read(&mVorbisFile, mAudioBuffer, AUDIOBUFFER_SIZE, &current_section);
+                    numread = ov_read(&mVorbisFile, mAudioBuffer, READ_SIZE, &current_section);
                 } else {
                     mAudioSink->stop();
                     audioStarted = false;
@@ -477,7 +490,7 @@ int VorbisPlayer::render() {
                             ov_time_seek(&mVorbisFile, 0);
                         }
                         current_section = 0;
-                        numread = ov_read(&mVorbisFile, mAudioBuffer, AUDIOBUFFER_SIZE, &current_section);
+                        numread = ov_read(&mVorbisFile, mAudioBuffer, READ_SIZE, &current_section);
                     }
                 }
             }
