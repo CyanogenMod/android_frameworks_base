@@ -1098,33 +1098,25 @@ static DBusHandlerResult oppserver_agent_cancel_handler(DBusConnection *conn,
     JNIEnv *env = NULL;
     nat->vm->GetEnv((void**)&env, nat->envVer);
 
-    if (!dbus_message_get_args(msg, NULL, DBUS_TYPE_INVALID)) {
+    const char *c_transfer = NULL;
+
+    if (!dbus_message_get_args(msg, NULL, DBUS_TYPE_OBJECT_PATH, &c_transfer,
+                               DBUS_TYPE_INVALID)) {
         LOGE("%s: Invalid arguments for %s() method", __FUNCTION__,
              OBEXD_DBUS_SRV_AGENT_CANCEL);
         return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
     }
 
-    const char *c_path;
+    LOGV("Authorize for transfer %s cancelled by remote", c_transfer);
 
-    c_path = dbus_message_get_path(msg);
+    jstring transfer = env->NewStringUTF(c_transfer);
 
-    if (!c_path){
-        LOGE("Function %s:%d Unable to get path",
-                 __FUNCTION__, __LINE__);
-    } else {
-        LOGV("... Authorize for transfer %s cancelled by OBEX", c_path);
+    env->CallBooleanMethod(nat->me, method_onObexAuthorizeCancel,
+                           transfer);
 
-        jstring path = env->NewStringUTF(c_path);
+    env->DeleteLocalRef(transfer);
 
-        env->CallBooleanMethod(nat->me, method_onObexAuthorizeCancel,
-                               path);
-
-        env->DeleteLocalRef(path);
-
-        return DBUS_HANDLER_RESULT_HANDLED;
-    }
-
-    return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+    return DBUS_HANDLER_RESULT_HANDLED;
 }
 
 

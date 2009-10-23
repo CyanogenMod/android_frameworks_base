@@ -271,11 +271,9 @@ public class BluetoothOppService extends IBluetoothOpp.Stub {
         // Remove the transfer from the transfer database
         mTransferDb.deleteByFilename(dbItem.mFilename);
 
-        // Send a transfer complete (failure) intent towards the application
-        Intent intent = new Intent(BluetoothObexIntent.RX_COMPLETE_ACTION);
+        // Send an authorize cancel (failure) intent towards the application
+        Intent intent = new Intent(BluetoothObexIntent.AUTHORIZE_CANCEL_ACTION);
         intent.putExtra(BluetoothObexIntent.OBJECT_FILENAME, dbItem.mFilename);
-        intent.putExtra(BluetoothObexIntent.PROFILE, BluetoothObexIntent.PROFILE_OPP);
-        intent.putExtra(BluetoothObexIntent.SUCCESS, false);
         mContext.sendBroadcast(intent, BLUETOOTH_PERM);
 
         return true;

@@ -135,4 +135,17 @@ public interface BluetoothObexIntent {
     @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
     public static final String AUTHORIZE_ACTION =
         "android.bluetooth.obex.intent.action.AUTHORIZE";
+
+    /**
+     * Broadcasted to indicate authorization for an incoming OBEX transfer has
+     * been cancelled by the remote device.
+     * <p>
+     * Extras:
+     * <ul>
+     *   <li>OBJECT_FILENAME (string) - Filename containing OBEX object
+     * </ul>
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String AUTHORIZE_CANCEL_ACTION =
+        "android.bluetooth.obex.intent.action.AUTHORIZE_CANCEL";
 }
