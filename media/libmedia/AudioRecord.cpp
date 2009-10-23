@@ -104,7 +104,8 @@ status_t AudioRecord::set(
         return NO_INIT;
     }
 
-    if (inputSource == DEFAULT_INPUT) {
+    // DEFAULT can be mapped to -1 if directly called from pre-built library
+    if ((inputSource == DEFAULT_INPUT) || (inputSource == (DEFAULT_INPUT - 1))) {
         inputSource = MIC_INPUT;
     }
 
