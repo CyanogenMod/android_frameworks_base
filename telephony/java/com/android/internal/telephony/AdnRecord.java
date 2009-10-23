@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
- *
+ * Copyright (C) 2009, Code Aurora Forum. All rights reserved
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -187,51 +187,59 @@ public class AdnRecord implements Parcelable {
      *          return nulll for wrong format of dialing nubmer or tag
      */
     public byte[] buildAdnString(int recordSize) {
-        byte[] bcdNumber;
         byte[] byteTag;
         byte[] adnString = null;
         int footerOffset = recordSize - FOOTER_SIZE_BYTES;
-
-        if (number == null || number.equals("") ||
-                alphaTag == null || alphaTag.equals("")) {
-
-            Log.w(LOG_TAG, "[buildAdnString] Empty alpha tag or number");
-            adnString = new byte[recordSize];
-            for (int i = 0; i < recordSize; i++) {
-                adnString[i] = (byte) 0xFF;
-            }
-        } else if (number.length()
-                > (ADN_DAILING_NUMBER_END - ADN_DAILING_NUMBER_START + 1) * 2) {
-            Log.w(LOG_TAG,
-                    "[buildAdnString] Max length of dailing number is 20");
-        } else if (alphaTag.length() > footerOffset) {
-            Log.w(LOG_TAG,
-                    "[buildAdnString] Max length of tag is " + footerOffset);
-        } else {
-
-            adnString = new byte[recordSize];
-            for (int i = 0; i < recordSize; i++) {
-                adnString[i] = (byte) 0xFF;
-            }
-
-            bcdNumber = PhoneNumberUtils.numberToCalledPartyBCD(number);
-
-            System.arraycopy(bcdNumber, 0, adnString,
-                    footerOffset + ADN_TON_AND_NPI, bcdNumber.length);
-
-            adnString[footerOffset + ADN_BCD_NUMBER_LENGTH]
-                    = (byte) (bcdNumber.length);
-            adnString[footerOffset + ADN_CAPABILITY_ID]
-                    = (byte) 0xFF; // Capacility Id
-            adnString[footerOffset + ADN_EXTENSION_ID]
-                    = (byte) 0xFF; // Extension Record Id
-
-            byteTag = GsmAlphabet.stringToGsm8BitPacked(alphaTag);
-            System.arraycopy(byteTag, 0, adnString, 0, byteTag.length);
-
+        adnString = new byte[recordSize];
+        for (int i = 0; i < recordSize; i++) {
+           adnString[i] = (byte) 0xFF;
         }
 
+        if ((alphaTag == null || alphaTag.equals(""))
+              && (number == null || number.equals(""))) {
+
+           Log.w(LOG_TAG, "[buildAdnString] Empty alpha tag and number");
+        }
+
+        if (alphaTag != null && !(alphaTag.equals(""))) {
+           if (alphaTag.length() > footerOffset) {
+              Log.w(LOG_TAG,
+                    "[buildAdnString] Max length of tag is " + footerOffset);
+             return null;
+           }
+           byteTag = GsmAlphabet.stringToGsm8BitPacked(alphaTag);
+           System.arraycopy(byteTag, 0, adnString, 0, byteTag.length);
+        }
+
+        if (number != null && !(number.equals(""))) {
+           adnString = buildNumber(adnString, footerOffset, recordSize);
+        }
         return adnString;
+    }
+
+    private byte[] buildNumber(byte[] adnString, int footerOffset, int recordSize) {
+       // This function checks for number length and adds the number
+       byte[] bcdNumber;
+       if (number.length()
+             > (ADN_DAILING_NUMBER_END - ADN_DAILING_NUMBER_START + 1) * 2) {
+          Log.w(LOG_TAG,
+                "[buildAdnString] Max length of dailing number is 20");
+          adnString = null;
+       } else {
+
+          bcdNumber = PhoneNumberUtils.numberToCalledPartyBCD(number);
+
+          System.arraycopy(bcdNumber, 0, adnString,
+                footerOffset + ADN_TON_AND_NPI, bcdNumber.length);
+
+          adnString[footerOffset + ADN_BCD_NUMBER_LENGTH]
+             = (byte) (bcdNumber.length);
+          adnString[footerOffset + ADN_CAPABILITY_ID]
+             = (byte) 0xFF; // Capacility Id
+          adnString[footerOffset + ADN_EXTENSION_ID]
+             = (byte) 0xFF; // Extension Record Id
+       }
+       return adnString;
     }
 
     /**
