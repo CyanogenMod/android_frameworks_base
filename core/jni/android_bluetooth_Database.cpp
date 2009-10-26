@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * Copyright (c) 2009, Code Aurora Forum, Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,6 +71,7 @@ static jint addServiceRecordNative(JNIEnv *env, jobject object,
         jbyte* c_record = env->GetByteArrayElements(record, NULL);
         DBusMessage *reply = dbus_func_args(env,
                                             conn,
+                                            BLUEZ_DBUS_BASE_SVC,
                                             BLUEZ_DBUS_BASE_PATH,
                                             DBUS_CLASS_NAME,
                                             "AddServiceRecord",
@@ -92,6 +94,7 @@ static jint addServiceRecordFromXmlNative(JNIEnv *env, jobject object,
         const char *c_record = env->GetStringUTFChars(record, NULL);
         DBusMessage *reply = dbus_func_args(env,
                                             conn,
+                                            BLUEZ_DBUS_BASE_SVC,
                                             BLUEZ_DBUS_BASE_PATH,
                                             DBUS_CLASS_NAME,
                                             "AddServiceRecordFromXML",
@@ -113,6 +116,7 @@ static void updateServiceRecordNative(JNIEnv *env, jobject object,
         jbyte* c_record = env->GetByteArrayElements(record, NULL);
         DBusMessage *reply = dbus_func_args(env,
                                             conn,
+                                            BLUEZ_DBUS_BASE_SVC,
                                             BLUEZ_DBUS_BASE_PATH,
                                             DBUS_CLASS_NAME,
                                             "UpdateServiceRecord",
@@ -135,6 +139,7 @@ static void updateServiceRecordFromXmlNative(JNIEnv *env, jobject object,
         const char *c_record = env->GetStringUTFChars(record, NULL);
         DBusMessage *reply = dbus_func_args(env,
                                             conn,
+                                            BLUEZ_DBUS_BASE_SVC,
                                             BLUEZ_DBUS_BASE_PATH,
                                             DBUS_CLASS_NAME,
                                             "UpdateServiceRecordFromXML",
@@ -154,6 +159,7 @@ static void removeServiceRecordNative(JNIEnv *env, jobject object,
     if (conn != NULL) {
         DBusMessage *reply = dbus_func_args(env,
                                             conn,
+                                            BLUEZ_DBUS_BASE_SVC,
                                             BLUEZ_DBUS_BASE_PATH,
                                             DBUS_CLASS_NAME,
                                             "RemoveServiceRecord",

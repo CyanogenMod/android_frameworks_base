@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * Copyright (c) 2009, Code Aurora Forum, Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +40,8 @@ import android.os.SystemProperties;
 import android.provider.Contacts.People;
 import android.provider.Settings;
 import android.server.BluetoothA2dpService;
+import android.server.BluetoothFtpService;
+import android.server.BluetoothOppService;
 import android.server.BluetoothDeviceService;
 import android.server.search.SearchManagerService;
 import android.util.EventLog;
@@ -89,6 +92,8 @@ class ServerThread extends Thread {
         WindowManagerService wm = null;
         BluetoothDeviceService bluetooth = null;
         BluetoothA2dpService bluetoothA2dp = null;
+        BluetoothFtpService bluetoothFtp = null;
+        BluetoothOppService bluetoothOpp = null;
         HeadsetObserver headset = null;
 
         // Critical services...
@@ -171,6 +176,15 @@ class ServerThread extends Thread {
                 bluetoothA2dp = new BluetoothA2dpService(context);
                 ServiceManager.addService(BluetoothA2dpService.BLUETOOTH_A2DP_SERVICE,
                                           bluetoothA2dp);
+
+                if (SystemProperties.getBoolean("ro.qualcomm.proprietary_obex", false)) {
+                    bluetoothFtp = new BluetoothFtpService(context);
+                    ServiceManager.addService(BluetoothFtpService.BLUETOOTH_FTP_SERVICE,
+                            bluetoothFtp);
+                    bluetoothOpp = new BluetoothOppService(context);
+                    ServiceManager.addService(BluetoothOppService.BLUETOOTH_OPP_SERVICE,
+                            bluetoothOpp);
+                }
 
                 int bluetoothOn = Settings.Secure.getInt(mContentResolver,
                     Settings.Secure.BLUETOOTH_ON, 0);

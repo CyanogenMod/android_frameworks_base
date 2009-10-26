@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * Copyright (c) 2009, Code Aurora Forum, Inc. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -911,6 +912,33 @@ public final class Parcel {
     }
 
     /**
+     * Flatten a List containing Map objects into the parcel, at
+     * the current dataPosition() and growing dataCapacity() if needed.  They
+     * can later be retrieved with {@link #createMapArrayList} or
+     * {@link #readMapList}.
+     *
+     * @param val The list of maps to be written.
+     *
+     * @see #createMapArrayList
+     * @see #readMapList
+     *
+     * @hide
+     */
+    public final void writeMapList(List<Map> val) {
+        if (val == null) {
+            writeInt(-1);
+            return;
+        }
+        int N = val.size();
+        int i=0;
+        writeInt(N);
+        while (i < N) {
+            writeMap(val.get(i));
+            i++;
+        }
+    }
+
+    /**
      * Flatten a List containing IBinder objects into the parcel, at
      * the current dataPosition() and growing dataCapacity() if needed.  They
      * can later be retrieved with {@link #createBinderArrayList} or
@@ -1541,6 +1569,34 @@ public final class Parcel {
     }
 
     /**
+     * Read and return a new ArrayList containing Map objects from
+     * the parcel that was written with {@link #writeMapList} at the
+     * current dataPosition().  Returns null if the
+     * previously written list object was null.
+     *
+     * @return A newly created ArrayList containing maps with the same data
+     *         as those that were previously written.
+     *
+     * @see #writeMapList
+     *
+     * @hide
+     */
+    public final ArrayList<Map> createMapArrayList() {
+        int N = readInt();
+        if (N < 0) {
+            return null;
+        }
+        ArrayList<Map> l = new ArrayList<Map>(N);
+        while (N > 0) {
+            Map t = new HashMap();
+            readMap(t, null);
+            l.add(t);
+            N--;
+        }
+        return l;
+    }
+
+    /**
      * Read and return a new ArrayList containing IBinder objects from
      * the parcel that was written with {@link #writeBinderList} at the
      * current dataPosition().  Returns null if the
@@ -1582,6 +1638,38 @@ public final class Parcel {
         }
         for (; i<N; i++) {
             list.add(readString());
+        }
+        for (; i<M; i++) {
+            list.remove(N);
+        }
+    }
+
+    /**
+     * Read into the given List items Map objects that were written with
+     * {@link #writeMapList} at the current dataPosition().
+     *
+     * @return A newly created ArrayList containing maps with the same data
+     *         as those that were previously written.
+     *
+     * @see #writeMapList
+     *
+     * @hide
+     */
+    public final void readMapList(List<Map> list) {
+        int M = list.size();
+        int N = readInt();
+        int i = 0;
+        for (; i < M && i < N; i++) {
+            Map t = new HashMap();
+            readMap(t, null);
+
+            list.set(i, t);
+        }
+        for (; i<N; i++) {
+            Map t = new HashMap();
+            readMap(t, null);
+
+            list.add(t);
         }
         for (; i<M; i++) {
             list.remove(N);

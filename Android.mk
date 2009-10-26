@@ -1,5 +1,6 @@
 #
 # Copyright (C) 2008 The Android Open Source Project
+# Copyright (c) 2009, Code Aurora Forum. All rights reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -65,7 +66,7 @@ endif
 ## READ ME: ########################################################
 LOCAL_SRC_FILES += \
 	core/java/android/accessibilityservice/IAccessibilityServiceConnection.aidl \
-  core/java/android/accessibilityservice/IEventListener.aidl \
+	core/java/android/accessibilityservice/IEventListener.aidl \
 	core/java/android/accounts/IAccountsService.aidl \
 	core/java/android/app/IActivityController.aidl \
 	core/java/android/app/IActivityPendingResult.aidl \
@@ -89,6 +90,9 @@ LOCAL_SRC_FILES += \
 	core/java/android/bluetooth/IBluetoothDevice.aidl \
 	core/java/android/bluetooth/IBluetoothDeviceCallback.aidl \
 	core/java/android/bluetooth/IBluetoothHeadset.aidl \
+	core/java/android/bluetooth/obex/IBluetoothOpp.aidl \
+	core/java/android/bluetooth/obex/IBluetoothFtp.aidl \
+	core/java/android/bluetooth/obex/IBluetoothFtpCallback.aidl \
 	core/java/android/content/IContentService.aidl \
 	core/java/android/content/IIntentReceiver.aidl \
 	core/java/android/content/IIntentSender.aidl \

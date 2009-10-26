@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (c) 2009, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@ import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothError;
 import android.bluetooth.BluetoothIntent;
+import android.bluetooth.BluetoothHeadset;
 import android.bluetooth.IBluetoothA2dp;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -65,11 +67,13 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
     private HashMap<String, SinkState> mAudioDevices;
     private final AudioManager mAudioManager;
     private final BluetoothDevice mBluetooth;
+    private final BluetoothHeadset mBluetoothHeadset;
+
 
     // list of disconnected sinks to process after a delay
     private final ArrayList<String> mPendingDisconnects = new ArrayList<String>();
     // number of active sinks
-    private int mSinkCount = 0; 
+    private int mSinkCount = 0;
 
     private class SinkState {
         public String address;
@@ -90,6 +94,14 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
         if (!initNative()) {
             throw new RuntimeException("Could not init BluetoothA2dpService");
         }
+
+        /**
+         * Instance of the bluetooth headset helper. This needs to be created
+         * early because there is a delay before it actually 'connects', as
+         * noted by its javadoc. Otherwise, a service listener needs to be
+         * implemented to detect and synchronize the connection.
+         */
+        mBluetoothHeadset = new BluetoothHeadset(mContext, null);
 
         mIntentFilter = new IntentFilter(BluetoothIntent.BLUETOOTH_STATE_CHANGED_ACTION);
         mIntentFilter.addAction(BluetoothIntent.BOND_STATE_CHANGED_ACTION);
@@ -157,10 +169,14 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
             switch (msg.what) {
             case MESSAGE_CONNECT_TO:
                 String address = (String)msg.obj;
-                // check bluetooth is still on, device is still preferred, and
-                // nothing is currently connected
+                int headsetState = mBluetoothHeadset.getState();
+
+                // check bluetooth is still on, device is still preferred, a Bluetooth connection
+                // still exists and nothing is currently connected to A2DP
                 if (mBluetooth.isEnabled() &&
                         getSinkPriority(address) > BluetoothA2dp.PRIORITY_OFF &&
+                        (headsetState == BluetoothHeadset.STATE_CONNECTING ||
+                        headsetState == BluetoothHeadset.STATE_CONNECTED) &&
                         lookupSinksMatchingStates(new int[] {
                             BluetoothA2dp.STATE_CONNECTING,
                             BluetoothA2dp.STATE_CONNECTED,
@@ -375,7 +391,7 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
     }
 
     private synchronized void onSinkDisconnected(String path) {
-        // This is to work around a problem in bluez that results 
+        // This is to work around a problem in bluez that results
         // sink disconnect events being sent, immediately followed by a reconnect.
         // To avoid unnecessary audio routing changes, we defer handling
         // sink disconnects until after a short delay.
@@ -459,7 +475,7 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
 
         if (state != prevState) {
             if (DBG) log("state " + address + " (" + path + ") " + prevState + "->" + state);
-            
+
             // keep track of the number of active sinks
             if (prevState == BluetoothA2dp.STATE_DISCONNECTED) {
                 mSinkCount++;

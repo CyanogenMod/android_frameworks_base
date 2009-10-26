@@ -1,5 +1,6 @@
 /*
 ** Copyright 2008, The Android Open Source Project
+** Copyright (c) 2009, Code Aurora Forum, Inc. All rights reserved.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -105,7 +106,7 @@ static jobjectArray listHeadsetsNative(JNIEnv *env, jobject object) {
     LOGV(__FUNCTION__);
     if (nat) {
         DBusMessage *reply =
-            dbus_func_args(env, nat->conn, "/org/bluez/audio",
+            dbus_func_args(env, nat->conn, "org.bluez", "/org/bluez/audio",
                            "org.bluez.audio.Manager", "ListHeadsets",
                            DBUS_TYPE_INVALID);
         return reply ? dbus_returns_array_of_strings(env, reply) : NULL;
@@ -122,7 +123,7 @@ static jstring createHeadsetNative(JNIEnv *env, jobject object,
         const char *c_address = env->GetStringUTFChars(address, NULL);
         LOGV("... address = %s\n", c_address);
         DBusMessage *reply =
-            dbus_func_args(env, nat->conn, "/org/bluez/audio",
+            dbus_func_args(env, nat->conn, "org.bluez", "/org/bluez/audio",
                            "org.bluez.audio.Manager", "CreateHeadset",
                            DBUS_TYPE_STRING, &c_address,
                            DBUS_TYPE_INVALID);
@@ -139,7 +140,7 @@ static jstring removeHeadsetNative(JNIEnv *env, jobject object, jstring path) {
     if (nat) {
         const char *c_path = env->GetStringUTFChars(path, NULL);
         DBusMessage *reply =
-            dbus_func_args(env, nat->conn, "/org/bluez/audio",
+            dbus_func_args(env, nat->conn, "org.bluez", "/org/bluez/audio",
                            "org.bluez.audio.Manager", "RemoveHeadset",
                            DBUS_TYPE_STRING, &c_path,
                            DBUS_TYPE_INVALID);
@@ -156,7 +157,7 @@ static jstring getAddressNative(JNIEnv *env, jobject object, jstring path) {
     if (nat) {
         const char *c_path = env->GetStringUTFChars(path, NULL);
         DBusMessage *reply =
-            dbus_func_args(env, nat->conn, c_path,
+            dbus_func_args(env, nat->conn, "org.bluez", c_path,
                            "org.bluez.audio.Device", "GetAddress",
                            DBUS_TYPE_INVALID);
         env->ReleaseStringUTFChars(path, c_path);
@@ -178,7 +179,7 @@ static jboolean connectSinkNative(JNIEnv *env, jobject object, jstring path) {
         bool ret =
             dbus_func_args_async(env, nat->conn, -1,
                            onConnectSinkResult, (void *)c_path_copy, nat,
-                           c_path,
+                           "org.bluez", c_path,
                            "org.bluez.audio.Sink", "Connect",
                            DBUS_TYPE_INVALID);
 
@@ -206,7 +207,7 @@ static jboolean disconnectSinkNative(JNIEnv *env, jobject object,
         bool ret =
             dbus_func_args_async(env, nat->conn, -1,
                            onDisconnectSinkResult, (void *)c_path_copy, nat,
-                           c_path,
+                           "org.bluez", c_path,
                            "org.bluez.audio.Sink", "Disconnect",
                            DBUS_TYPE_INVALID);
         env->ReleaseStringUTFChars(path, c_path);
@@ -226,7 +227,7 @@ static jboolean isSinkConnectedNative(JNIEnv *env, jobject object, jstring path)
     if (nat) {
         const char *c_path = env->GetStringUTFChars(path, NULL);
         DBusMessage *reply =
-            dbus_func_args(env, nat->conn, c_path,
+            dbus_func_args(env, nat->conn, "org.bluez", c_path,
                            "org.bluez.audio.Sink", "IsConnected",
                            DBUS_TYPE_INVALID);
         env->ReleaseStringUTFChars(path, c_path);
@@ -256,9 +257,15 @@ static void onConnectSinkResult(DBusMessage *msg, void *user, void *natData) {
         /* if (!strcmp(err.name, BLUEZ_DBUS_BASE_IFC ".Error.AuthenticationFailed")) */
         LOGE("%s: D-Bus error: %s (%s)\n", __FUNCTION__, err.name, err.message);
         dbus_error_free(&err);
+
+        jstring path = env->NewStringUTF(c_path);
+
         env->CallVoidMethod(nat->me,
                             method_onSinkDisconnected,
-                            env->NewStringUTF(c_path));
+                            path);
+
+        env->DeleteLocalRef(path);
+
         if (env->ExceptionCheck()) {
             LOGE("VM Exception occurred in native function %s (%s:%d)",
                  __FUNCTION__, __FILE__, __LINE__);
@@ -286,17 +293,23 @@ static void onDisconnectSinkResult(DBusMessage *msg, void *user, void *natData) 
     if (dbus_set_error_from_message(&err, msg)) {
         /* if (!strcmp(err.name, BLUEZ_DBUS_BASE_IFC ".Error.AuthenticationFailed")) */
         LOGE("%s: D-Bus error: %s (%s)\n", __FUNCTION__, err.name, err.message);
+
+        jstring path = env->NewStringUTF(c_path);
+
         if (strcmp(err.name, "org.bluez.Error.NotConnected") == 0) {
             // we were already disconnected, so report disconnect
             env->CallVoidMethod(nat->me,
                                 method_onSinkDisconnected,
-                                env->NewStringUTF(c_path));
+                                path);
         } else {
             // Assume it is still connected
             env->CallVoidMethod(nat->me,
                                 method_onSinkConnected,
-                                env->NewStringUTF(c_path));
+                                path);
         }
+
+        env->DeleteLocalRef(path);
+
         dbus_error_free(&err);
         if (env->ExceptionCheck()) {
             LOGE("VM Exception occurred in native function %s (%s:%d)",
@@ -332,9 +345,14 @@ DBusHandlerResult a2dp_event_filter(DBusMessage *msg, JNIEnv *env) {
                                   DBUS_TYPE_STRING, &c_path,
                                   DBUS_TYPE_INVALID)) {
             LOGV("... path = %s", c_path);
+
+            jstring path = env->NewStringUTF(c_path);
+
             env->CallVoidMethod(nat->me,
                                 method_onHeadsetCreated,
-                                env->NewStringUTF(c_path));
+                                path);
+
+            env->DeleteLocalRef(path);
         } else LOG_AND_FREE_DBUS_ERROR_WITH_MSG(&err, msg);
         result = DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg,
@@ -345,9 +363,14 @@ DBusHandlerResult a2dp_event_filter(DBusMessage *msg, JNIEnv *env) {
                                   DBUS_TYPE_STRING, &c_path,
                                   DBUS_TYPE_INVALID)) {
             LOGV("... path = %s", c_path);
+
+            jstring path = env->NewStringUTF(c_path);
+
             env->CallVoidMethod(nat->me,
                                 method_onHeadsetRemoved,
-                                env->NewStringUTF(c_path));
+                                path);
+
+            env->DeleteLocalRef(path);
         } else LOG_AND_FREE_DBUS_ERROR_WITH_MSG(&err, msg);
         result = DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg,
@@ -355,36 +378,56 @@ DBusHandlerResult a2dp_event_filter(DBusMessage *msg, JNIEnv *env) {
                                       "Connected")) {
         const char *c_path = dbus_message_get_path(msg);
         LOGV("... path = %s", c_path);
+
+        jstring path = env->NewStringUTF(c_path);
+
         env->CallVoidMethod(nat->me,
                             method_onSinkConnected,
-                            env->NewStringUTF(c_path));
+                            path);
+
+        env->DeleteLocalRef(path);
         result = DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg,
                                       "org.bluez.audio.Sink",
                                       "Disconnected")) {
         const char *c_path = dbus_message_get_path(msg);
         LOGV("... path = %s", c_path);
+
+        jstring path = env->NewStringUTF(c_path);
+
         env->CallVoidMethod(nat->me,
                             method_onSinkDisconnected,
-                            env->NewStringUTF(c_path));
+                            path);
+
+        env->DeleteLocalRef(path);
         result = DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg,
                                       "org.bluez.audio.Sink",
                                       "Playing")) {
         const char *c_path = dbus_message_get_path(msg);
         LOGV("... path = %s", c_path);
+
+        jstring path = env->NewStringUTF(c_path);
+
         env->CallVoidMethod(nat->me,
                             method_onSinkPlaying,
-                            env->NewStringUTF(c_path));
+                            path);
+
+        env->DeleteLocalRef(path);
         result = DBUS_HANDLER_RESULT_HANDLED;
     } else if (dbus_message_is_signal(msg,
                                       "org.bluez.audio.Sink",
                                       "Stopped")) {
         const char *c_path = dbus_message_get_path(msg);
         LOGV("... path = %s", c_path);
+
+        jstring path = env->NewStringUTF(c_path);
+
         env->CallVoidMethod(nat->me,
                             method_onSinkStopped,
-                            env->NewStringUTF(c_path));
+                            path);
+
+        env->DeleteLocalRef(path);
         result = DBUS_HANDLER_RESULT_HANDLED;
     }
 

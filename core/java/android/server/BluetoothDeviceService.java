@@ -270,7 +270,7 @@ public class BluetoothDeviceService extends IBluetoothDevice.Stub {
         if (!disable(false)) {
             mRestart = false;
         }
-    }   
+    }
 
     private synchronized void setBluetoothState(int state) {
         if (state == mBluetoothState) {

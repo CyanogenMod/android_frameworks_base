@@ -564,6 +564,12 @@ IBinderType::IBinderType()
 {
 }
 
+string
+IBinderType::CreatorName() const
+{
+    return "android.os.Parcel.iBinderTypeCreator";
+}
+
 void
 IBinderType::WriteToParcel(StatementBlock* addTo, Variable* v, Variable* parcel, int flags)
 {
@@ -701,6 +707,12 @@ ParcelableInterfaceType::CreateFromParcel(StatementBlock* addTo, Variable* v, Va
 MapType::MapType()
     :Type("java.util", "Map", BUILT_IN, true, true)
 {
+}
+
+string
+MapType::CreatorName() const
+{
+    return "android.os.Parcel.mapTypeCreator";
 }
 
 void
@@ -1000,6 +1012,8 @@ GenericListType::WriteToParcel(StatementBlock* addTo, Variable* v, Variable* par
 {
     if (m_creator == STRING_TYPE->CreatorName()) {
         addTo->Add(new MethodCall(parcel, "writeStringList", 1, v));
+    } else if (m_creator == MAP_TYPE->CreatorName()) {
+        addTo->Add(new MethodCall(parcel, "writeMapList", 1, v));
     } else if (m_creator == IBINDER_TYPE->CreatorName()) {
         addTo->Add(new MethodCall(parcel, "writeBinderList", 1, v));
     } else {
@@ -1014,6 +1028,9 @@ GenericListType::CreateFromParcel(StatementBlock* addTo, Variable* v, Variable* 
     if (m_creator == STRING_TYPE->CreatorName()) {
         addTo->Add(new Assignment(v,
                    new MethodCall(parcel, "createStringArrayList", 0)));
+    } else if (m_creator == MAP_TYPE->CreatorName()) {
+        addTo->Add(new Assignment(v,
+                   new MethodCall(parcel, "createMapArrayList", 0)));
     } else if (m_creator == IBINDER_TYPE->CreatorName()) {
         addTo->Add(new Assignment(v,
                    new MethodCall(parcel, "createBinderArrayList", 0)));
@@ -1031,6 +1048,8 @@ GenericListType::ReadFromParcel(StatementBlock* addTo, Variable* v,
 {
     if (m_creator == STRING_TYPE->CreatorName()) {
         addTo->Add(new MethodCall(parcel, "readStringList", 1, v));
+    } else if (m_creator == MAP_TYPE->CreatorName()) {
+        addTo->Add(new MethodCall(parcel, "readMapList", 1, v));
     } else if (m_creator == IBINDER_TYPE->CreatorName()) {
         addTo->Add(new MethodCall(parcel, "readBinderList", 1, v));
     } else {

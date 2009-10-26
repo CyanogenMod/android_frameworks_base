@@ -1,6 +1,7 @@
 /* //device/libs/android_runtime/AndroidRuntime.cpp
 **
 ** Copyright 2006, The Android Open Source Project
+** Copyright (c) 2009, Code Aurora Forum, Inc. All rights reserved.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License"); 
 ** you may not use this file except in compliance with the License. 
@@ -151,6 +152,8 @@ extern int register_android_bluetooth_ScoSocket(JNIEnv *env);
 extern int register_android_server_BluetoothDeviceService(JNIEnv* env);
 extern int register_android_server_BluetoothEventLoop(JNIEnv *env);
 extern int register_android_server_BluetoothA2dpService(JNIEnv* env);
+extern int register_android_server_BluetoothFtpService(JNIEnv* env);
+extern int register_android_server_BluetoothOppService(JNIEnv* env);
 extern int register_android_ddm_DdmHandleNativeHeap(JNIEnv *env);
 extern int register_com_android_internal_os_ZygoteInit(JNIEnv* env);
 extern int register_android_util_Base64(JNIEnv* env);
@@ -1125,6 +1128,8 @@ static const RegJNIRec gRegJNI[] = {
     REG_JNI(register_android_server_BluetoothDeviceService),
     REG_JNI(register_android_server_BluetoothEventLoop),
     REG_JNI(register_android_server_BluetoothA2dpService),
+    REG_JNI(register_android_server_BluetoothFtpService),
+    REG_JNI(register_android_server_BluetoothOppService),
     REG_JNI(register_android_message_digest_sha1),
     REG_JNI(register_android_ddm_DdmHandleNativeHeap),
     REG_JNI(register_android_util_Base64),

@@ -113,6 +113,8 @@ LOCAL_SRC_FILES:= \
 	android_server_BluetoothDeviceService.cpp \
 	android_server_BluetoothEventLoop.cpp \
 	android_server_BluetoothA2dpService.cpp \
+	android_server_BluetoothFtpService.cpp \
+	android_server_BluetoothOppService.cpp \
 	android_message_digest_sha1.cpp \
 	android_ddm_DdmHandleNativeHeap.cpp \
 	android_location_GpsLocationProvider.cpp \
@@ -143,7 +145,8 @@ LOCAL_C_INCLUDES += \
 	external/tremor/Tremor \
 	external/icu4c/i18n \
 	external/icu4c/common \
-	frameworks/opt/emoji
+	frameworks/opt/emoji \
+	kernel/include
 
 LOCAL_SHARED_LIBRARIES := \
 	libexpat \
@@ -172,8 +175,11 @@ LOCAL_SHARED_LIBRARIES := \
 
 ifeq ($(BOARD_HAVE_BLUETOOTH),true)
 LOCAL_C_INCLUDES += \
-	external/dbus \
-	system/bluetooth/bluez-clean-headers
+    external/dbus \
+    external/bluez/libs/include \
+    system/bluetooth/bluedroid/include \
+    system/bluetooth/bluez-clean-headers	
+
 LOCAL_CFLAGS += -DHAVE_BLUETOOTH
 LOCAL_SHARED_LIBRARIES += libbluedroid libdbus
 endif

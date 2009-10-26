@@ -211,6 +211,8 @@ class IBinderType : public Type
 public:
                     IBinderType();
 
+    virtual string  CreatorName() const;
+
     virtual void    WriteToParcel(StatementBlock* addTo, Variable* v,
                                     Variable* parcel, int flags);
     virtual void    CreateFromParcel(StatementBlock* addTo, Variable* v,
@@ -283,6 +285,8 @@ class MapType : public Type
 {
 public:
                     MapType();
+
+    virtual string  CreatorName() const;
 
     virtual void    WriteToParcel(StatementBlock* addTo, Variable* v,
                                     Variable* parcel, int flags);
