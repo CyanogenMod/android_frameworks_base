@@ -53,12 +53,6 @@ public class Ringtone {
         DrmStore.Audio.TITLE
     };
     
-    private static final String[] THEME_COLUMNS = new String[] {
-        MediaStore.Audio.Media._ID,
-        "asset_path" /* {@link PackageResources.RingtoneColumns.ASSET_PATH} */,
-        MediaStore.Audio.Media.TITLE
-    };
-
     private MediaPlayer mAudio;
 
     private Uri mUri;
@@ -114,6 +108,19 @@ public class Ringtone {
         if (mTitle != null) return mTitle;
         return mTitle = getTitle(context, mUri, true);
     }
+    
+    private static String stringForQuery(Cursor cursor) {
+        if (cursor != null) {
+            try {
+                if (cursor.moveToFirst()) {
+                    return cursor.getString(0);
+                }
+            } finally {
+                cursor.close();
+            }
+        }
+        return null;
+    }
 
     private static String getTitle(Context context, Uri uri, boolean followSettingsUri) {
         Cursor cursor = null;
@@ -133,16 +140,21 @@ public class Ringtone {
                             .getString(com.android.internal.R.string.ringtone_default_with_actual,
                                     actualTitle);
                 }
+            } else if (RingtoneManager.THEME_AUTHORITY.equals(authority)) {
+                Uri themes = Uri.parse("content://com.tmobile.thememanager.themes/themes");
+                title = stringForQuery(res.query(themes, new String[] { "ringtone_name" },
+                    "ringtone_uri = ?", new String[] { uri.toString() }, null));
+                if (title == null) {
+                    title = stringForQuery(res.query(themes, new String[] { "notif_ringtone_name" },
+                            "notif_ringtone_uri = ?", new String[] { uri.toString() }, null));
+                }
             } else {
-                
                 if (DrmStore.AUTHORITY.equals(authority)) {
                     cursor = res.query(uri, DRM_COLUMNS, null, null, null);
                 } else if (MediaStore.AUTHORITY.equals(authority)) {
                     cursor = res.query(uri, MEDIA_COLUMNS, null, null, null);
-                } else if (RingtoneManager.THEME_AUTHORITY.equals(authority)) {
-                    cursor = res.query(uri, THEME_COLUMNS, null, null, null);
                 }
-                
+
                 if (cursor != null && cursor.getCount() == 1) {
                     cursor.moveToFirst();
                     return cursor.getString(2);
