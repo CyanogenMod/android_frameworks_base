@@ -76,7 +76,7 @@ class ServerThread extends Thread {
             boolean enableCompcache = (Settings.Secure.getInt(mContentResolver,
                 Settings.Secure.COMPCACHE_ENABLED, 0) > 0);
             // setting this secure property will start or stop compcache
-           SystemProperties.set("persist.service.compcache.enable", enableCompcache ? "1" : "0");
+           SystemProperties.set("persist.service.compcache", enableCompcache ? "1" : "0");
         }
     }
     
