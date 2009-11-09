@@ -530,13 +530,18 @@ int zipalign(const char *apk_path, uid_t uid, int is_public)
             LOGE("zipalign cannot chown '%s'", za_path);
             goto fail;
         }
+	if (chmod(za_path, S_IRUSR|S_IWUSR|S_IRGRP |
+		 (is_public ? S_IROTH : 0)) < 0) {
+	    LOGE("zipalign cannot chmod '%s'\n", za_path);
+	    goto fail;
+	}
     }
     
     unlink(apk_path);
     rename(za_path, apk_path);
     ut.actime = apk_stat.st_atime;
     ut.modtime = apk_stat.st_mtime;
-    utime(za_path, &ut);
+    utime(apk_path, &ut);
     return 0;
 
 fail:
