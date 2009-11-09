@@ -304,7 +304,7 @@ int get_size(const char *pkgname, const char *apkpath,
         /* count the source apk as code -- but only if it's not
          * on the /system partition
          */
-    if (strncmp(apkpath, "/system", 7) == 0) {
+    if (strncmp(apkpath, "/system", 7) != 0) {
         if (stat(apkpath, &s) == 0) {
             codesize += stat_size(&s);
         }
