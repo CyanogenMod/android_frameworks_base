@@ -1960,6 +1960,7 @@ public final class Settings {
 
         /**
          * Weather Compcache is eanbled.
+	 * @hide
          */
         public static final String COMPCACHE_ENABLED = "compcache_enabled";
         
