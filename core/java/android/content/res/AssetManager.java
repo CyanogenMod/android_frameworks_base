@@ -74,6 +74,7 @@ public final class AssetManager {
     private String mAssetDir;
     private String mAppName;
 
+    private boolean mThemeSupport;
     private String mThemePackageName;
 
     /**
@@ -616,6 +617,25 @@ public final class AssetManager {
      * {@hide}
      */
     public native final void dumpResources();
+
+    /**
+     * Sets a flag indicating that this AssetManager should have themes
+     * attached, according to the initial request to create it by the
+     * ApplicationContext.
+     *
+     * {@hide}
+     */
+    public final void setThemeSupport(boolean themeSupport) {
+        mThemeSupport = themeSupport;
+    }
+
+    /**
+     * Should this AssetManager have themes attached, according to the initial
+     * request to create it by the ApplicationContext?
+     */
+    public final boolean hasThemeSupport() {
+        return mThemeSupport;
+    }
 
     /**
      * Get package name of current theme (may return null).

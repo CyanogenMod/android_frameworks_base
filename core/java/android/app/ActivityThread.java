@@ -173,6 +173,7 @@ public final class ActivityThread {
             //}
 
             AssetManager assets = new AssetManager();
+            assets.setThemeSupport(isThemable);
             if (assets.addAssetPath(appDir) == 0) {
                 return null;
             }
@@ -3467,7 +3468,6 @@ public final class ActivityThread {
                 = new ArrayList<ComponentCallbacks>();
         
         int diff;
-        String originalThemePackageName = (mConfiguration == null)? null : mConfiguration.customTheme.getThemePackageName();
         
         synchronized(mPackages) {
             if (mConfiguration == null) {
@@ -3493,27 +3493,29 @@ public final class ActivityThread {
                 while (it.hasNext()) {
                     WeakReference<Resources> v = it.next();
                     Resources r = v.get();
-                    /* If the theme has changed, remove the cached Resources
-                     * object anyway.  Similarly, each Application will need
-                     * to refresh its internal resources object. */
                     if (r != null) {
                         boolean themeChanged = (diff & ActivityInfo.CONFIG_THEME_RESOURCE) != 0;
                         if (themeChanged) {
                             AssetManager am = r.getAssets();
-                            if (originalThemePackageName != null) {
-                                am.setThemePackageName(null);
-//                                Log.i(TAG, "============ Dump resources BEFORE removeAssetPath");
-//                                am.dumpResources();
-                                am.removeAssetPath(originalThemePackageName, getPackageResDir(originalThemePackageName));
-//                                Log.i(TAG, "============ Dump resources AFTER removeAssetPath");
-//                                am.dumpResources();
-                            }
-                            String resDir = getPackageResDir(config.customTheme.getThemePackageName());
-                            if (resDir != null) {
-                                am.setThemePackageName(config.customTheme.getThemePackageName());
-                                am.updateResourcesWithAssetPath(resDir);
-//                                Log.i(TAG, "============ Dump resources AFTER addAssetPath");
-//                                am.dumpResources();
+                            /*
+                             * Dynamically modify the AssetManager object to
+                             * replace the old asset path with the new one. This
+                             * is made possibly by native layer changes made by
+                             * T-Mobile.
+                             */
+                            if (am.hasThemeSupport()) {
+                                String oldThemePackage = am.getThemePackageName();
+                                if (!TextUtils.isEmpty(oldThemePackage)) {
+                                    am.setThemePackageName(null);
+                                    am.removeAssetPath(oldThemePackage,
+                                            getPackageResDir(oldThemePackage));
+                                }
+                                String newThemePackage = config.customTheme.getThemePackageName();
+                                String resDir = getPackageResDir(newThemePackage);
+                                if (resDir != null) {
+                                    am.setThemePackageName(newThemePackage);
+                                    am.updateResourcesWithAssetPath(resDir);
+                                }
                             }
                         }
                         r.updateConfiguration(config, dm);
@@ -3535,7 +3537,6 @@ public final class ActivityThread {
         final int N = callbacks.size();
         for (int i=0; i<N; i++) {
             ComponentCallbacks cb = callbacks.get(i);
-            performConfigurationChanged(cb, config);
 
             // We removed the old resources object from the mActiveResources
             // cache, now we need to trigger an update for each application.
@@ -3547,6 +3548,8 @@ public final class ActivityThread {
                     }
                 }
             }
+
+            performConfigurationChanged(cb, config);
         }
     }
 
