@@ -225,7 +225,7 @@ public class StatusBarService extends IStatusBar.Stub
 
     private String mThemeId;
     private String mThemePackageName;
-    private ContextThemeWrapper mThemeContext;
+    private Context mThemeContext;
 
     /**
      * Construct the service, add the status bar view to the window manager
@@ -248,8 +248,13 @@ public class StatusBarService extends IStatusBar.Stub
             mThemeId = theme.getThemeId();
             mThemePackageName = theme.getThemePackageName();
             int styleId = CustomTheme.getStyleId(context, mThemePackageName, mThemeId);
-            mThemeContext = new ContextThemeWrapper(context, styleId);
-            mThemeContext.useThemedResources(theme.getThemePackageName());
+            if (styleId != -1) {
+                ContextThemeWrapper themeContext = new ContextThemeWrapper(context, styleId);
+                themeContext.useThemedResources(theme.getThemePackageName());
+                mThemeContext = themeContext;
+            } else {
+                mThemeContext = context;
+            }
             ExpandedView expanded = (ExpandedView)View.inflate(mThemeContext,
                        com.android.internal.R.layout.status_bar_expanded, null);
             // Uncomment this line iff we want to make the dialog theme'able
