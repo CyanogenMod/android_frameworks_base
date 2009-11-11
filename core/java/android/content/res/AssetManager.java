@@ -632,6 +632,8 @@ public final class AssetManager {
     /**
      * Should this AssetManager have themes attached, according to the initial
      * request to create it by the ApplicationContext?
+     *
+     * {@hide}
      */
     public final boolean hasThemeSupport() {
         return mThemeSupport;
