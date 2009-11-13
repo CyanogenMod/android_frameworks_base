@@ -521,17 +521,8 @@ class ApplicationContext extends Context {
     @Override
     public Drawable getWallpaper() {
         Drawable dr = peekWallpaper();
-        /* Setting Wallpaper will write in to a file so that
-           on next retrieval we dont have to create the bitmap again */
-        if (dr != null)
-            return dr;
-        try {
-            setWallpaper(getResources().openRawResource(
-                         com.android.internal.R.drawable.default_wallpaper));
-        } catch (Exception e) {
-            Log.e(TAG, "Setting wallpaper failed");
-        }
-        return peekWallpaper();
+        return dr != null ? dr : getResources().getDrawable(
+                com.android.internal.R.drawable.default_wallpaper);
     }
 
     @Override
