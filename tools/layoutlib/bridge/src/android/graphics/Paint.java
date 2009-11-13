@@ -755,10 +755,42 @@ public class Paint extends _Original_Paint {
     @Override
     public int breakText(String text, boolean measureForwards,
                                 float maxWidth, float[] measuredWidth) {
-        // NOTE: javadoc doesn't match. Just a guess.
         return breakText(text,
                 0 /* start */, text.length() /* end */,
                 measureForwards, maxWidth, measuredWidth);
+    }
+
+    /**
+     * Measure the text, stopping early if the measured width exceeds maxWidth.
+     * Return the number of chars that were measured, and if measuredWidth is
+     * not null, return in it the actual width measured.
+     *
+     * @param text  The text to measure
+     * @param start The offset into text to begin measuring at
+     * @param end   The end of the text slice to measure.
+     * @param measureForwards If true, measure forwards, starting at start.
+     *                        Otherwise, measure backwards, starting with end.
+     * @param maxWidth The maximum width to accumulate.
+     * @param measuredWidth Optional. If not null, returns the actual width
+     *                     measured.
+     * @return The number of chars that were measured. Will always be <=
+     *         abs(end - start).
+     */
+    @Override
+    public int breakText(CharSequence text, int start, int end, boolean measureForwards,
+            float maxWidth, float[] measuredWidth) {
+        char[] buf = new char[end - start];
+        int result;
+
+        TextUtils.getChars(text, start, end, buf, 0);
+
+        if (measureForwards) {
+            result = breakText(buf, 0, end - start, maxWidth, measuredWidth);
+        } else {
+            result = breakText(buf, 0, -(end - start), maxWidth, measuredWidth);
+        }
+
+        return result;
     }
 
     /**
