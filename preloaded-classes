@@ -1226,10 +1226,11 @@ org.apache.harmony.kernel.vm.ReflectionAccess
 org.apache.harmony.lang.annotation.AnnotationFactory
 org.apache.harmony.lang.annotation.AnnotationMember
 org.apache.harmony.lang.annotation.AnnotationMember$DefaultValues
-org.apache.harmony.luni.internal.net.www.protocol.http.HttpURLConnection
-org.apache.harmony.luni.internal.net.www.protocol.https.Handler
+org.apache.harmony.luni.internal.net.www.protocol.http.HttpConfiguration
+org.apache.harmony.luni.internal.net.www.protocol.http.HttpConnection
 org.apache.harmony.luni.internal.net.www.protocol.jar.Handler
-org.apache.harmony.luni.internal.net.www.protocol.jar.JarURLConnection
+org.apache.harmony.luni.internal.util.TimezoneGetter
+org.apache.harmony.luni.internal.util.ZoneInfo
 org.apache.harmony.luni.internal.util.ZoneInfoDB
 org.apache.harmony.luni.net.GenericIPMreq
 org.apache.harmony.luni.net.PlainSocketImpl
