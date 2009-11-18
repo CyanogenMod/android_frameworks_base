@@ -26,6 +26,9 @@ else
         LOCAL_CFLAGS += -DHAVE_ARM_TLS_REGISTER
     endif
     # we need to access the private Bionic header <bionic_tls.h>
+    ifeq ($(ARCH_ARM_HAVE_TLS_REGISTER),true)
+        LOCAL_CFLAGS += -DHAVE_ARM_TLS_REGISTER
+    endif
     LOCAL_C_INCLUDES += bionic/libc/private
 endif
 
