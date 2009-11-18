@@ -473,7 +473,7 @@ public class Contacts {
             Uri photoUri = Uri.withAppendedPath(person, Contacts.Photos.CONTENT_DIRECTORY);
             Cursor cursor = cr.query(photoUri, new String[]{Photos.DATA}, null, null, null);
             try {
-                if (!cursor.moveToNext()) {
+                if (cursor == null || !cursor.moveToNext()) {
                     return null;
                 }
                 byte[] data = cursor.getBlob(0);
@@ -482,7 +482,7 @@ public class Contacts {
                 }
                 return new ByteArrayInputStream(data);
             } finally {
-                cursor.close();
+                if (cursor != null) cursor.close();
             }
         }
 
