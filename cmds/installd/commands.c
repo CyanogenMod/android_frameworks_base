@@ -528,14 +528,11 @@ int zipalign(const char *apk_path, uid_t uid, int is_public)
         }
    }
     
-    unlink(apk_path);
-    rename(za_path, apk_path);
-
-    if (chown(apk_path, apk_stat.st_uid, apk_stat.st_gid) < 0) {
+    if (chown(za_path, apk_stat.st_uid, apk_stat.st_gid) < 0) {
         LOGE("zipalign cannot chown '%s'", apk_path);
         goto fail;
     }
-    if (chmod(apk_path, S_IRUSR|S_IWUSR|S_IRGRP |
+    if (chmod(za_path, S_IRUSR|S_IWUSR|S_IRGRP |
         (is_public ? S_IROTH : 0)) < 0) {
 	    LOGE("zipalign cannot chmod '%s'\n", apk_path);
 	    goto fail;
@@ -543,7 +540,10 @@ int zipalign(const char *apk_path, uid_t uid, int is_public)
 
     ut.actime = apk_stat.st_atime;
     ut.modtime = apk_stat.st_mtime;
-    utime(apk_path, &ut);
+    utime(za_path, &ut);
+
+    unlink(apk_path);
+    rename(za_path, apk_path);
 
     return 0;
 
