@@ -41,16 +41,10 @@ class HeadsetObserver extends UEventObserver {
     private static final String HEADSET_STATE_PATH = "/sys/class/switch/h2w/state";
     private static final String HEADSET_NAME_PATH = "/sys/class/switch/h2w/name";
 
-    private static final int BIT_HEADSET = (1 << 0);
-    private static final int BIT_HEADSET_NO_MIC = (1 << 1);
-    private static final int BIT_TTY = (1 << 2);
-    private static final int BIT_FM_HEADSET = (1 << 3);
-    private static final int BIT_FM_SPEAKER = (1 << 4);
-
     private int mHeadsetState;
-    private int mPrevHeadsetState;
     private String mHeadsetName;
-    private boolean mPendingIntent;
+    private boolean mAudioRouteNeedsUpdate;
+    private AudioManager mAudioManager;
 
     private final Context mContext;
     private final WakeLock mWakeLock;  // held while there is a pending route change
@@ -82,7 +76,6 @@ class HeadsetObserver extends UEventObserver {
 
         String newName = mHeadsetName;
         int newState = mHeadsetState;
-        mPrevHeadsetState = mHeadsetState;
         try {
             FileReader file = new FileReader(HEADSET_STATE_PATH);
             int len = file.read(buffer, 0, 1024);
@@ -98,25 +91,20 @@ class HeadsetObserver extends UEventObserver {
             Log.e(TAG, "" , e);
         }
 
+        mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
         update(newName, newState);
     }
 
     private synchronized final void update(String newName, int newState) {
         if (newName != mHeadsetName || newState != mHeadsetState) {
-            boolean isUnplug = false;
-            if ( (mHeadsetState & BIT_HEADSET) > 0 || (mHeadsetState & BIT_HEADSET_NO_MIC) > 0) {
-                if ((newState & BIT_HEADSET) == 0 && (newState & BIT_HEADSET_NO_MIC) == 0)
-                    isUnplug = true;
-            }
+            boolean isUnplug = (newState == 0 && mHeadsetState > 0);
             mHeadsetName = newName;
-            mPrevHeadsetState = mHeadsetState;
             mHeadsetState = newState;
-            mPendingIntent = true;
+            mAudioRouteNeedsUpdate = true;
+
+            sendIntent(isUnplug);
 
             if (isUnplug) {
-                Intent intent = new Intent(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
-                mContext.sendBroadcast(intent);
-
                 // It can take hundreds of ms flush the audio pipeline after
                 // apps pause audio playback, but audio route changes are
                 // immediate, so delay the route change by 1000ms.
@@ -125,13 +113,12 @@ class HeadsetObserver extends UEventObserver {
                 mWakeLock.acquire();
                 mHandler.sendEmptyMessageDelayed(0, 1000);
             } else {
-                sendIntent();
-                mPendingIntent = false;
+                updateAudioRoute();
             }
         }
     }
 
-    private synchronized final void sendIntent() {
+    private synchronized final void sendIntent(boolean isUnplug) {
         //  Pack up the values and broadcast them to everyone
         Intent intent = new Intent(Intent.ACTION_HEADSET_PLUG);
         intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
@@ -141,15 +128,24 @@ class HeadsetObserver extends UEventObserver {
 
         // TODO: Should we require a permission?
         ActivityManagerNative.broadcastStickyIntent(intent, null);
+
+        if (isUnplug) {
+            intent = new Intent(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+            mContext.sendBroadcast(intent);
+        }
+    }
+
+    private synchronized final void updateAudioRoute() {
+        if (mAudioRouteNeedsUpdate) {
+            mAudioManager.setWiredHeadsetOn(mHeadsetState > 0);
+            mAudioRouteNeedsUpdate = false;
+        }
     }
 
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (mPendingIntent) {
-                sendIntent();
-                mPendingIntent = false;
-            }
+            updateAudioRoute();
             mWakeLock.release();
         }
     };
