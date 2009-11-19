@@ -825,7 +825,7 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
             return mEgl.eglGetError() != EGL11.EGL_CONTEXT_LOST;
         }
 
-        public void finish() {
+        public void destroySurface() {
             if (mEglSurface != null) {
                 mEgl.eglMakeCurrent(mEglDisplay, EGL10.EGL_NO_SURFACE,
                         EGL10.EGL_NO_SURFACE,
@@ -833,6 +833,9 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
                 mEgl.eglDestroySurface(mEglDisplay, mEglSurface);
                 mEglSurface = null;
             }
+        }
+
+        public void finish() {
             if (mEglContext != null) {
                 mEgl.eglDestroyContext(mEglDisplay, mEglContext);
                 mEglContext = null;
@@ -918,10 +921,18 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
                         r.run();
                     }
                     if (mPaused) {
+                        mEglHelper.destroySurface();
                         mEglHelper.finish();
                         needStart = true;
                     }
                     while (needToWait()) {
+                        if (!mHasSurface) {
+                            if (!mWaitingForSurface) {
+                                mEglHelper.destroySurface();
+                                mWaitingForSurface = true;
+                                notify();
+                            }
+                        }
                         wait();
                     }
                     if (mDone) {
@@ -932,6 +943,11 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
                     h = mHeight;
                     mSizeChanged = false;
                     mRequestRender = false;
+                    if (mHasSurface && mWaitingForSurface) {
+                        changed = true;
+                        mWaitingForSurface = false;
+                        mRequestRender = true; // Forces a redraw for RENDERMODE_RENDER_WHEN_DIRTY
+                    }
                 }
                 if (needStart) {
                     mEglHelper.start();
@@ -965,6 +981,7 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
             /*
              * clean-up everything...
              */
+            mEglHelper.destroySurface();
             mEglHelper.finish();
         }
 
@@ -1020,6 +1037,13 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
             synchronized(this) {
                 mHasSurface = false;
                 notify();
+                while(!mWaitingForSurface) {
+                    try {
+                        wait();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                }
             }
         }
 
@@ -1082,6 +1106,7 @@ public class GLSurfaceView extends SurfaceView implements SurfaceHolder.Callback
         private boolean mDone;
         private boolean mPaused;
         private boolean mHasSurface;
+        private boolean mWaitingForSurface;
         private int mWidth;
         private int mHeight;
         private int mRenderMode;
