@@ -2818,10 +2818,7 @@ class ApplicationContext extends Context {
              */
             final ApplicationContext applicationContext = mContext.get();
             if (applicationContext != null) {
-                if (applicationContext.mWallpaper != null) {
-                    ((BitmapDrawable)applicationContext.mWallpaper).getBitmap().recycle();
-                    applicationContext.mWallpaper = null;
-                }
+                applicationContext.mWallpaper = null;
             }
         }
     }
