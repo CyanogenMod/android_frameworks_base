@@ -507,7 +507,7 @@ int zipalign(const char *apk_path, uid_t uid, int is_public)
     struct utimbuf ut;
     struct stat za_stat, apk_stat;
     int res;
-
+    
     memset(&apk_stat, 0, sizeof(apk_stat));
     stat(apk_path, &apk_stat);
 
@@ -526,22 +526,25 @@ int zipalign(const char *apk_path, uid_t uid, int is_public)
             LOGE("zipalign failed on '%s' res = %d\n", za_path, res);
             goto fail;
         }
-        if (chown(za_path, AID_SYSTEM, uid) < 0) {
-            LOGE("zipalign cannot chown '%s'", za_path);
-            goto fail;
-        }
-	if (chmod(za_path, S_IRUSR|S_IWUSR|S_IRGRP |
-		 (is_public ? S_IROTH : 0)) < 0) {
-	    LOGE("zipalign cannot chmod '%s'\n", za_path);
-	    goto fail;
-	}
-    }
+   }
     
     unlink(apk_path);
     rename(za_path, apk_path);
+
+    if (chown(apk_path, apk_stat.st_uid, apk_stat.st_gid) < 0) {
+        LOGE("zipalign cannot chown '%s'", apk_path);
+        goto fail;
+    }
+    if (chmod(apk_path, S_IRUSR|S_IWUSR|S_IRGRP |
+        (is_public ? S_IROTH : 0)) < 0) {
+	    LOGE("zipalign cannot chmod '%s'\n", apk_path);
+	    goto fail;
+    }
+
     ut.actime = apk_stat.st_atime;
     ut.modtime = apk_stat.st_mtime;
     utime(apk_path, &ut);
+
     return 0;
 
 fail:
