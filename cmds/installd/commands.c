@@ -512,7 +512,7 @@ int zipalign(const char *apk_path, uid_t uid, int is_public)
     stat(apk_path, &apk_stat);
 
     strcpy(za_path, apk_path);
-    strcat(za_path, ".za");
+    strcat(za_path, ".tmp");
     LOGD("ZipAlign: --- BEGIN '%s' ---\n", apk_path);
     
     pid_t pid;
