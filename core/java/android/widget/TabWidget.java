@@ -27,6 +27,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnFocusChangeListener;
@@ -65,19 +66,26 @@ public class TabWidget extends LinearLayout implements OnFocusChangeListener {
     }
 
     public TabWidget(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs);
+        super(context, attrs, defStyle);
         initTabWidget();
 
         TypedArray a =
             context.obtainStyledAttributes(attrs, com.android.internal.R.styleable.TabWidget,
                     defStyle, 0);
-
+        
+        mBottomLeftStrip = a.getDrawableWithContext(context, 
+                com.android.internal.R.styleable.TabWidget_bottomLeftStrip);
+        mBottomRightStrip = a.getDrawableWithContext(context,
+                com.android.internal.R.styleable.TabWidget_bottomRightStrip);
+        
         a.recycle();
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        mStripMoved = true;
+        if (mBottomLeftStrip != null || mBottomRightStrip != null) {
+            mStripMoved = true;
+        }
         super.onSizeChanged(w, h, oldw, oldh);
     }
 
@@ -101,20 +109,21 @@ public class TabWidget extends LinearLayout implements OnFocusChangeListener {
         final Context context = mContext;
         final Resources resources = context.getResources();
         
-        if (context.getApplicationInfo().targetSdkVersion <= Build.VERSION_CODES.DONUT) {
-            // Donut apps get old color scheme
-            mBottomLeftStrip = resources.getDrawable(
-                    com.android.internal.R.drawable.tab_bottom_left_v4);
-            mBottomRightStrip = resources.getDrawable(
-                    com.android.internal.R.drawable.tab_bottom_right_v4); 
-        } else {
-            // Use modern color scheme for Eclair and beyond
-            mBottomLeftStrip = resources.getDrawable(
-                    com.android.internal.R.drawable.tab_bottom_left);
-            mBottomRightStrip = resources.getDrawable(
-                    com.android.internal.R.drawable.tab_bottom_right); 
+        if (mBottomLeftStrip == null || mBottomRightStrip == null) {
+            if (context.getApplicationInfo().targetSdkVersion <= Build.VERSION_CODES.DONUT) {
+                // Donut apps get old color scheme
+                mBottomLeftStrip = resources.getDrawable(
+                        com.android.internal.R.drawable.tab_bottom_left_v4);
+                mBottomRightStrip = resources.getDrawable(
+                        com.android.internal.R.drawable.tab_bottom_right_v4); 
+            } else {
+                // Use modern color scheme for Eclair and beyond
+                mBottomLeftStrip = resources.getDrawable(
+                        com.android.internal.R.drawable.tab_bottom_left);
+                mBottomRightStrip = resources.getDrawable(
+                        com.android.internal.R.drawable.tab_bottom_right); 
+            }
         }
-
 
         // Deal with focus, as we don't want the focus to go by default
         // to a tab other than the current tab
@@ -203,31 +212,43 @@ public class TabWidget extends LinearLayout implements OnFocusChangeListener {
 
         View selectedChild = getChildTabViewAt(mSelectedTab);
 
-        mBottomLeftStrip.setState(selectedChild.getDrawableState());
-        mBottomRightStrip.setState(selectedChild.getDrawableState());
+        if (mBottomLeftStrip != null) {
+            mBottomLeftStrip.setState(selectedChild.getDrawableState());
+        }
+        if (mBottomRightStrip != null) {
+            mBottomRightStrip.setState(selectedChild.getDrawableState());
+        }
 
         if (mStripMoved) {
             Rect selBounds = new Rect(); // Bounds of the selected tab indicator
             selBounds.left = selectedChild.getLeft();
             selBounds.right = selectedChild.getRight();
             final int myHeight = getHeight();
-            mBottomLeftStrip.setBounds(
-                    Math.min(0, selBounds.left
-                                 - mBottomLeftStrip.getIntrinsicWidth()),
-                    myHeight - mBottomLeftStrip.getIntrinsicHeight(),
-                    selBounds.left,
-                    getHeight());
-            mBottomRightStrip.setBounds(
-                    selBounds.right,
-                    myHeight - mBottomRightStrip.getIntrinsicHeight(),
-                    Math.max(getWidth(),
-                            selBounds.right + mBottomRightStrip.getIntrinsicWidth()),
-                    myHeight);
+            if (mBottomLeftStrip != null) {
+                mBottomLeftStrip.setBounds(
+                        Math.min(0, selBounds.left
+                                     - mBottomLeftStrip.getIntrinsicWidth()),
+                        myHeight - mBottomLeftStrip.getIntrinsicHeight(),
+                        selBounds.left,
+                        getHeight());
+            }
+            if (mBottomRightStrip != null) {
+                mBottomRightStrip.setBounds(
+                        selBounds.right,
+                        myHeight - mBottomRightStrip.getIntrinsicHeight(),
+                        Math.max(getWidth(),
+                                selBounds.right + mBottomRightStrip.getIntrinsicWidth()),
+                        myHeight);
+            }
             mStripMoved = false;
         }
 
-        mBottomLeftStrip.draw(canvas);
-        mBottomRightStrip.draw(canvas);
+        if (mBottomLeftStrip != null) {
+            mBottomLeftStrip.draw(canvas);
+        }
+        if (mBottomRightStrip != null) {
+            mBottomRightStrip.draw(canvas);
+        }
     }
 
     /**
@@ -265,7 +286,9 @@ public class TabWidget extends LinearLayout implements OnFocusChangeListener {
         getChildTabViewAt(mSelectedTab).setSelected(false);
         mSelectedTab = index;
         getChildTabViewAt(mSelectedTab).setSelected(true);
-        mStripMoved = true;
+        if (mBottomLeftStrip != null || mBottomRightStrip != null) {
+            mStripMoved = true;
+        }
     }
 
     /**

@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.ComponentName;
 import android.content.ContextWrapper;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -134,8 +135,9 @@ public class Dialog implements DialogInterface, Window.Callback,
      * <var>context</var>.  If 0, the default dialog theme will be used.
      */
     public Dialog(Context context, int theme) {
-        mContext = new ContextThemeWrapper(
-            context, theme == 0 ? com.android.internal.R.style.Theme_Dialog : theme);
+        mContext = new ContextThemeWrapper(context,
+                resolveDefaultTheme(context, theme, android.R.styleable.Theme_dialogTheme, 
+                        com.android.internal.R.style.Theme_Dialog));
         mWindowManager = (WindowManager)context.getSystemService("window");
         Window w = PolicyManager.makeNewWindow(mContext);
         mWindow = w;
@@ -144,6 +146,23 @@ public class Dialog implements DialogInterface, Window.Callback,
         w.setGravity(Gravity.CENTER);
         mUiThread = Thread.currentThread();
         mListenersHandler = new ListenersHandler(this);
+    }
+
+    /**
+     * This method is provided to work around the constructor pattern limitation
+     * present in Dialog. We must resolve theme==0 to the runtime specified
+     * theme, but this cannot be done by subclasses except through this method.
+     */
+    static int resolveDefaultTheme(Context context, int theme, int themeAttrIndex,
+            int staticDefault) {
+        if (theme != 0) {
+            return theme;
+        } else {
+            TypedArray a = context.obtainStyledAttributes(android.R.styleable.Theme);
+            int newTheme = a.getResourceId(themeAttrIndex, staticDefault);
+            a.recycle();
+            return newTheme;
+        }
     }
 
     /**

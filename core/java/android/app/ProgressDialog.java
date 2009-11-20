@@ -73,13 +73,13 @@ public class ProgressDialog extends AlertDialog {
     private Handler mViewUpdateHandler;
     
     public ProgressDialog(Context context) {
-        this(context, com.android.internal.R.style.Theme_Dialog_Alert);
+        this(context, 0);
     }
 
     public ProgressDialog(Context context, int theme) {
-        super(context, theme);
+        super(context, resolveDefaultTheme(context, theme));
     }
-
+    
     public static ProgressDialog show(Context context, CharSequence title,
             CharSequence message) {
         return show(context, title, message, false);

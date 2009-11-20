@@ -1756,6 +1756,26 @@ public class Intent implements Parcelable {
     public static final String ACTION_PRE_BOOT_COMPLETED =
             "android.intent.action.PRE_BOOT_COMPLETED";
 
+    /**
+     * Broadcast Action: Indicate that unrecoverable error happened during app launch.
+     * Could indicate that curently applied theme is malicious.
+     * @hide
+     */
+    public static final String ACTION_APP_LAUNCH_FAILURE = "com.tmobile.intent.action.APP_LAUNCH_FAILURE";
+
+    /**
+     * Broadcast Action: Request to reset the unrecoverable errors count to 0.
+     * @hide
+     */
+    public static final String ACTION_APP_LAUNCH_FAILURE_RESET = "com.tmobile.intent.action.APP_LAUNCH_FAILURE_RESET";
+
+    /**
+     * Activity Action: Pick wallpaper from a list.
+     * Used instead of SET_WALLPAPER when we only need to pick wallpaper and do not set it.
+     * @hide
+     */
+    public static final String ACTION_PICK_WALLPAPER = "com.tmobile.intent.action.PICK_WALLPAPER";
+
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------
     // Standard intent categories (see addCategory()).
@@ -1883,6 +1903,7 @@ public class Intent implements Parcelable {
      */
     public static final String CATEGORY_FRAMEWORK_INSTRUMENTATION_TEST =
             "android.intent.category.FRAMEWORK_INSTRUMENTATION_TEST";
+
     /**
      * An activity to run when device is inserted into a car dock.
      * Used with {@link #ACTION_MAIN} to launch an activity.
@@ -1897,6 +1918,14 @@ public class Intent implements Parcelable {
      */
     @SdkConstant(SdkConstantType.INTENT_CATEGORY)
     public static final String CATEGORY_DESK_DOCK = "android.intent.category.DESK_DOCK";
+
+    /**
+     * Used to indicate that a theme package has been installed or un-installed.
+     * 
+     * @hide
+     */
+    public static final String CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE =
+            "com.tmobile.intent.category.THEME_PACKAGE_INSTALL_STATE_CHANGE";
 
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------
@@ -2111,6 +2140,31 @@ public class Intent implements Parcelable {
      */
     public static final String EXTRA_CLIENT_INTENT =
             "android.intent.extra.client_intent";
+
+    /**
+     * Used as a string extra field in {@link com.tmobile.intent.action.PICK_WALLPAPER}
+     * intents to tell the caller how to access bitmap resource.
+     * This can be either a Uri, a resource id or a relative path for raw resource.
+     *
+     * @hide
+     */
+    public static final String EXTRA_WALLPAPER_IMAGE = "com.tmobile.intent.extra.WALLPAPER_IMAGE";
+
+    /**
+     * Used as a string extra field in {@link com.tmobile.intent.action.PICK_WALLPAPER}
+     * intents to tell the caller the bitmap UI name (to be shown to the user).
+     *
+     * @hide
+     */
+    public static final String EXTRA_WALLPAPER_IMAGE_NAME = "com.tmobile.intent.extra.WALLPAPER_IMAGE_NAME";
+
+    /**
+     * Used as a bitmap extra field in {@link com.tmobile.intent.action.PICK_WALLPAPER}
+     * intents containing thumbnail image.
+     *
+     * @hide
+     */
+    public static final String EXTRA_WALLPAPER_THUMBNAIL = "com.tmobile.intent.extra.EXTRA_WALLPAPER_THUMBNAIL";
 
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------

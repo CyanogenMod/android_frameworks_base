@@ -153,7 +153,24 @@
 
         <!-- ToggleButton style. -->
         <attr name="buttonStyleToggle" format="reference" />
+        
+        <!-- TimePicker Button styles. -->
+        <attr name="buttonStyleTimePickerUp" format="reference" />
+        <attr name="buttonStyleTimePickerDown" format="reference" />
 
+        <!-- ============== -->
+        <!-- Tab styles -->
+        <!-- ============== -->
+        <eat-comment />
+        
+        <!-- Style for the inflated indicator widget itself, not the text or
+             image views typically contained within. -->
+        <attr name="tabIndicatorStyle" format="reference" />
+
+        <!-- Style for the text label on the default indicator.  Previously
+             was lumped with tabWidgetStyle. -->
+        <attr name="textAppearanceTab" format="reference" />
+        
         <!-- ============== -->
         <!-- Gallery styles -->
         <!-- ============== -->
@@ -176,6 +193,8 @@
         <attr name="listDivider" format="reference" />
         <!-- TextView style for list separators. -->
         <attr name="listSeparatorTextViewStyle" format="reference" />
+        <!-- TextView style for regular list items. -->
+        <attr name="listItemTextViewStyle" format="reference" />
         <!-- The preferred left padding for an expandable list item (for child-specific layouts,
              use expandableListPreferredChildPaddingLeft). This takes into account
              the indicator that will be shown to next to the item. -->
@@ -302,6 +321,21 @@
         <attr name="windowNoDisplay" format="boolean" />
 
         <!-- ============ -->
+        <!-- General Dialog theme -->
+        <!-- ============ -->
+        <eat-comment />
+        <attr name="dialogTheme" format="reference" />
+        <attr name="alertDialogTheme" format="reference" />
+        <attr name="searchDialogTheme" format="reference" />
+        
+        <!-- ============ -->
+        <!-- Menu theme -->
+        <!-- ============ -->
+        <eat-comment />
+        <attr name="iconMenuTheme" format="reference" />
+        <attr name="expandedMenuTheme" format="reference" />
+        
+        <!-- ============ -->
         <!-- Alert Dialog styles -->
         <!-- ============ -->
         <eat-comment />
@@ -338,6 +372,8 @@
         <attr name="dropDownListViewStyle" format="reference" />
         <!-- Default EditText style. -->
         <attr name="editTextStyle" format="reference" />
+        <!-- Default TimePicker Input style. -->
+        <attr name="timePickerInputStyle" format="reference" />
         <!-- Default ExpandableListView style. -->
         <attr name="expandableListViewStyle" format="reference" />
         <!-- Default Gallery style. -->
@@ -446,6 +482,17 @@
         <attr name="ringtonePreferenceStyle" format="reference" />
         <!-- The preference layout that has the child/tabbed effect. -->
         <attr name="preferenceLayoutChild" format="reference" />
+        
+        <!-- =================== -->
+        <!-- DigitalClock attributes -->
+        <!-- =================== -->
+        <attr name="menuItemBackground" format="reference" />
+
+        <!-- =================== -->
+        <!-- status bar related attributes -->
+        <!-- =================== -->
+        <attr name="com_android_server_status_expandedView" format="reference" />
+        <attr name="com_android_server_status_latestItemView" format="reference" />
 
     </declare-styleable>
 
@@ -1722,6 +1769,8 @@
         <!-- When set to false, the ListView will not draw the divider before each footer view.
              The default value is true. -->
         <attr name="footerDividersEnabled" format="boolean" />
+        <!-- Drawable used to colorize an item's background in the list. -->
+        <attr name="listItemBackground" format="color|reference" />
     </declare-styleable>
     <declare-styleable name="MenuView">
         <!-- Default appearance of menu item text. -->
@@ -1842,6 +1891,10 @@
         <attr name="layout_span" format="integer" />
     </declare-styleable>
     <declare-styleable name="TabWidget">
+        <!-- Bottom-left tab strip. -->
+        <attr name="bottomLeftStrip" format="reference" />
+        <!-- Bottom-right tab strip. -->
+        <attr name="bottomRightStrip" format="reference" />
     </declare-styleable>
     <declare-styleable name="TextAppearance">
         <!-- Text color. -->
@@ -2330,6 +2383,8 @@
              value is false.  See
              {@link android.graphics.drawable.Drawable#setVisible}. -->
         <attr name="visible" format="boolean" />
+        <!-- Set a tinting color -->
+        <attr name="tint" />
     </declare-styleable>
 
     <declare-styleable name="StateListDrawable">
@@ -2447,6 +2502,7 @@
         <attr name="bottom" />
         <attr name="drawable" />
         <attr name="id" />
+        <attr name="tint" />
     </declare-styleable>
 
     <declare-styleable name="LevelListDrawableItem">

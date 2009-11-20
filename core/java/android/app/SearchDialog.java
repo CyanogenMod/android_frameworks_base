@@ -159,7 +159,7 @@ public class SearchDialog extends Dialog implements OnItemClickListener, OnItemS
      * @param context Application Context we can use for system acess
      */
     public SearchDialog(Context context) {
-        super(context, com.android.internal.R.style.Theme_GlobalSearchBar);
+        super(context, resolveDefaultTheme(context, 0));
 
         // Save voice intent for later queries/launching
         mVoiceWebSearchIntent = new Intent(RecognizerIntent.ACTION_WEB_SEARCH);
@@ -169,6 +169,12 @@ public class SearchDialog extends Dialog implements OnItemClickListener, OnItemS
 
         mVoiceAppSearchIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         mVoiceAppSearchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    }
+
+    static int resolveDefaultTheme(Context context, int theme) {
+        return Dialog.resolveDefaultTheme(context, theme,
+                android.R.styleable.Theme_searchDialogTheme,
+                com.android.internal.R.style.Theme_SearchBar);
     }
 
     /**

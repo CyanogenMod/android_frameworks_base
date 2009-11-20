@@ -3,6 +3,8 @@ package android.content.res;
 import android.content.pm.ActivityInfo;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.SystemProperties;
+import android.text.TextUtils;
 
 import java.util.Locale;
 
@@ -33,6 +35,11 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * Current user preference for the locale.
      */
     public Locale locale;
+
+    /**
+     * @hide
+     */
+    public CustomTheme customTheme;
 
     /**
      * Locale should persist on setting.  This is hidden because it is really
@@ -154,7 +161,22 @@ public final class Configuration implements Parcelable, Comparable<Configuration
     public static final int ORIENTATION_PORTRAIT = 1;
     public static final int ORIENTATION_LANDSCAPE = 2;
     public static final int ORIENTATION_SQUARE = 3;
-    
+   
+    /**
+     * @hide
+     */
+    public static final int THEME_UNDEFINED = 0;
+
+    /**
+     * @hide
+     */
+    public static final String THEME_ID_PERSISTENCE_PROPERTY = "persist.sys.themeId";
+
+    /**
+     * @hide
+     */
+    public static final String THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY = "persist.sys.themePackageName";
+
     /**
      * Overall orientation of the screen.  May be one of
      * {@link #ORIENTATION_LANDSCAPE}, {@link #ORIENTATION_PORTRAIT},
@@ -189,6 +211,11 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         navigationHidden = o.navigationHidden;
         orientation = o.orientation;
         screenLayout = o.screenLayout;
+        if (o.customTheme != null) {
+            customTheme = (CustomTheme) o.customTheme.clone();
+        } else {
+            customTheme = CustomTheme.getDefault();
+        }
     }
 
     public String toString() {
@@ -217,6 +244,8 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         sb.append(orientation);
         sb.append(" layout=");
         sb.append(screenLayout);
+        sb.append(" themeResource=");
+        sb.append(customTheme);
         sb.append('}');
         return sb.toString();
     }
@@ -237,6 +266,14 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         navigationHidden = NAVIGATIONHIDDEN_UNDEFINED;
         orientation = ORIENTATION_UNDEFINED;
         screenLayout = SCREENLAYOUT_SIZE_UNDEFINED;
+
+        String themeResource = SystemProperties.get(THEME_ID_PERSISTENCE_PROPERTY, null);
+        String themePackageName = SystemProperties.get(THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, "");
+        if (!TextUtils.isEmpty(themeResource) && !TextUtils.isEmpty(themePackageName)) {
+            customTheme = new CustomTheme(themeResource, themePackageName);
+        } else {
+            customTheme = CustomTheme.getDefault();
+        }
     }
 
     /** {@hide} */
@@ -317,7 +354,14 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             changed |= ActivityInfo.CONFIG_SCREEN_LAYOUT;
             screenLayout = delta.screenLayout;
         }
-        
+        if (delta.customTheme != null
+                && (customTheme == null || !customTheme.equals(delta.customTheme))) {
+            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
+            customTheme = (CustomTheme) delta.customTheme.clone();
+        } else if (delta.customTheme == null && customTheme != null) {
+            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
+            customTheme = CustomTheme.getDefault();
+        }
         return changed;
     }
 
@@ -393,6 +437,12 @@ public final class Configuration implements Parcelable, Comparable<Configuration
                 && screenLayout != delta.screenLayout) {
             changed |= ActivityInfo.CONFIG_SCREEN_LAYOUT;
         }
+        if (delta.customTheme != null
+                && (customTheme == null || !customTheme.equals(delta.customTheme))) {
+            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
+        } else if (delta.customTheme == null && customTheme != null) {
+            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
+        }
         
         return changed;
     }
@@ -444,6 +494,14 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         dest.writeInt(navigationHidden);
         dest.writeInt(orientation);
         dest.writeInt(screenLayout);
+
+        if (customTheme == null) {
+            dest.writeInt(0);
+        } else {
+            dest.writeInt(1);
+            dest.writeString(customTheme.getThemeId());
+            dest.writeString(customTheme.getThemePackageName());
+        }
     }
 
     public static final Parcelable.Creator<Configuration> CREATOR
@@ -477,6 +535,12 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         navigationHidden = source.readInt();
         orientation = source.readInt();
         screenLayout = source.readInt();
+
+        if (source.readInt() != 0) {
+            String themeId = source.readString();
+            String themePackage = source.readString();
+            customTheme = new CustomTheme(themeId, themePackage);
+        }
     }
 
     public int compareTo(Configuration that) {
@@ -511,6 +575,10 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         if (n != 0) return n;
         n = this.screenLayout - that.screenLayout;
         //if (n != 0) return n;
+        n = this.customTheme.getThemeId().compareTo(that.customTheme.getThemeId());
+        if (n != 0) return n;
+        n = this.customTheme.getThemePackageName().compareTo(that.customTheme.getThemePackageName());
+
         return n;
     }
 
@@ -533,6 +601,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
                 + this.locale.hashCode() + this.touchscreen
                 + this.keyboard + this.keyboardHidden + this.hardKeyboardHidden
                 + this.navigation + this.navigationHidden
-                + this.orientation + this.screenLayout;
+                + this.orientation + this.screenLayout
+                + this.customTheme.hashCode();
     }
 }

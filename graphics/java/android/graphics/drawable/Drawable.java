@@ -811,6 +811,11 @@ public abstract class Drawable {
 
         TypedArray a = r.obtainAttributes(attrs, com.android.internal.R.styleable.Drawable);
         inflateWithAttributes(r, parser, a, com.android.internal.R.styleable.Drawable_visible);
+        int tint = a.getColor(com.android.internal.R.styleable.Drawable_tint, 0);
+        if (tint != 0) {
+            setColorFilter(tint, PorterDuff.Mode.SRC_ATOP);
+        }
+
         a.recycle();
     }
 

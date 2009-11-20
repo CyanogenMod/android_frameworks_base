@@ -20,6 +20,23 @@ import com.android.internal.policy.PolicyManager;
 import com.android.internal.util.XmlUtils;
 import com.google.android.collect.Maps;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Map.Entry;
+
 import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.BroadcastReceiver;
@@ -52,7 +69,10 @@ import android.content.pm.PermissionInfo;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
+import android.content.pm.ThemeInfo;
 import android.content.res.AssetManager;
+import android.content.res.Configuration;
+import android.content.res.CustomTheme;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.database.sqlite.SQLiteDatabase;
@@ -80,9 +100,11 @@ import android.os.Process;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.Vibrator;
+import android.os.Process;
 import android.os.FileUtils.FileStatus;
 import android.telephony.TelephonyManager;
 import android.text.ClipboardManager;
+import android.text.TextUtils;
 import android.util.AndroidRuntimeException;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -109,6 +131,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.Map.Entry;
+
+import com.android.internal.policy.PolicyManager;
+import com.android.internal.util.XmlUtils;
+import com.google.android.collect.Maps;
 
 class ReceiverRestrictedContext extends ContextWrapper {
     ReceiverRestrictedContext(Context base) {
@@ -152,6 +178,7 @@ class ApplicationContext extends Context {
 
     private static final Object sSync = new Object();
     private static AlarmManager sAlarmManager;
+    
     private static PowerManager sPowerManager;
     private static ConnectivityManager sConnectivityManager;
     private static WifiManager sWifiManager;
@@ -183,6 +210,7 @@ class ApplicationContext extends Context {
     private boolean mRestricted;
     private AccountManager mAccountManager; // protected by mSync
 
+     
     private final Object mSync = new Object();
 
     private File mDatabasesDir;
@@ -214,6 +242,20 @@ class ApplicationContext extends Context {
     @Override
     public Resources getResources() {
         return mResources;
+    }
+
+    /**
+     * Refresh resources object which may have been changed by a theme
+     * configuration change.
+     */
+    /* package */ void refreshResourcesIfNecessary() {
+        if (mResources == Resources.getSystem()) {
+            return;
+        }
+
+        if (mPackageInfo.mApplicationInfo.isThemeable) {
+            mTheme = null;
+        }
     }
 
     @Override
@@ -250,23 +292,62 @@ class ApplicationContext extends Context {
     public void setTheme(int resid) {
         mThemeResource = resid;
     }
+
+    private int determineDefaultThemeResource() {
+        if (getResources() != Resources.getSystem() && mPackageInfo.mApplicationInfo.isThemeable) {
+            try {
+                Configuration config = ActivityManagerNative.getDefault().getConfiguration();
+                if (config.customTheme != null) {
+                    int themeId = CustomTheme.getStyleId(this,
+                                config.customTheme.getThemePackageName(),
+                                config.customTheme.getThemeId());
+                    if (themeId == -1) {
+                        CustomTheme defaultTheme = CustomTheme.getDefault();
+                        if (config.customTheme.equals(defaultTheme)) {
+                            return com.android.internal.R.style.Theme;
+                        } else {
+                            themeId = CustomTheme.getStyleId(this,
+                                    defaultTheme.getThemePackageName(),
+                                    defaultTheme.getThemeId());
+                            if (themeId == -1) {
+                                return com.android.internal.R.style.Theme;
+                            } else {
+                                return themeId;
+                            }
+                        }
+                    } else {
+                        return themeId;
+                    }
+                }
+            } catch (RemoteException e) {
+                Log.e(TAG, "Unable to access configuration, reverting to original system default theme", e);
+            }
+        }
+
+        /* Fallback... */
+        return com.android.internal.R.style.Theme;
+    }
     
     @Override
     public Resources.Theme getTheme() {
         if (mTheme == null) {
+            int themeId;
             if (mThemeResource == 0) {
-                mThemeResource = com.android.internal.R.style.Theme;
+                themeId = determineDefaultThemeResource();
+            } else {
+                themeId = mThemeResource;
             }
+
             mTheme = mResources.newTheme();
-            mTheme.applyStyle(mThemeResource, true);
+            mTheme.applyStyle(themeId, true);
         }
         return mTheme;
     }
 
     @Override
     public ClassLoader getClassLoader() {
-        return mPackageInfo != null ?
-                mPackageInfo.getClassLoader() : ClassLoader.getSystemClassLoader();
+        return mPackageInfo != null ? mPackageInfo.getClassLoader()
+                : ClassLoader.getSystemClassLoader();
     }
 
     @Override
@@ -537,6 +618,40 @@ class ApplicationContext extends Context {
     @Override
     public void setWallpaper(InputStream data) throws IOException {
         getWallpaperManager().setStream(data);
+    }
+
+    // If the default theme specifies wallpaper, returns the wallpaper Uri, otherwise returns null
+    private InputStream getDefaultThemeWallpaperStream() {
+        CustomTheme defaultTheme = CustomTheme.getDefault();
+        String themeId = defaultTheme.getThemeId();
+        String packageName = defaultTheme.getThemePackageName();
+        if (!TextUtils.isEmpty(themeId) &&
+            !TextUtils.isEmpty(packageName)) {
+            try {
+                PackageInfo pi = getPackageManager().getPackageInfo(packageName, 0);
+                ThemeInfo[] infos = pi.themeInfos;
+                String wallpaperPath = null;
+                if (infos != null) {
+                    for (ThemeInfo ti : infos) {
+                        if (ti.themeId.equals(themeId)) {
+                            wallpaperPath = ti.wallpaperImageName;
+                            break;
+                        }
+                    }
+                }
+                if (TextUtils.isEmpty(wallpaperPath)) {
+                    return null;
+                }
+                // Unfortunately, we can't use ContentProvider and walpaper uri:
+                // due to timing issue, the uri of interest may still be not
+                // available by the time launcher needs to render the wallpaper.
+                Resources res = getPackageManager().getResourcesForApplication(packageName);
+                return res.getAssets().open(wallpaperPath);
+            } catch (Exception e) {
+                Log.e(TAG, "Can't get wallpaper for default theme in clearWallpaper", e);
+            }
+        }
+        return null;
     }
 
     @Override
@@ -932,7 +1047,7 @@ class ApplicationContext extends Context {
         }
         return sAlarmManager;
     }
-
+    
     private PowerManager getPowerManager() {
         synchronized (sSync) {
             if (sPowerManager == null) {
@@ -1363,7 +1478,8 @@ class ApplicationContext extends Context {
                 IBinder activityToken, ActivityThread mainThread,
                 Resources container) {
         mPackageInfo = packageInfo;
-        mResources = mPackageInfo.getResources(mainThread);
+        mResources = mPackageInfo.getResources(mainThread,
+                packageInfo.mApplicationInfo.isThemeable, false);
 
         if (container != null && container.getCompatibilityInfo().applicationScale !=
             mResources.getCompatibilityInfo().applicationScale) {
@@ -1372,7 +1488,8 @@ class ApplicationContext extends Context {
                         " compatiblity info:" + container.getDisplayMetrics());
             }
             mResources = mainThread.getTopLevelResources(
-                    mPackageInfo.getResDir(), container.getCompatibilityInfo().copy());
+                    mPackageInfo.getResDir(), container.getCompatibilityInfo().copy(),
+                    packageInfo.mApplicationInfo.isThemeable);
         }
         mMainThread = mainThread;
         mContentResolver = new ApplicationContentResolver(this, mainThread);
@@ -1763,6 +1880,16 @@ class ApplicationContext extends Context {
         }
 
         @Override
+        public List<PackageInfo> getInstalledThemePackages() {
+            try {
+                return mPM.getInstalledThemePackages();
+            } catch (RemoteException e) {
+                throw new RuntimeException("Package manager has died", e);
+            }
+        }        
+
+
+        @Override
         public List<ApplicationInfo> getInstalledApplications(int flags) {
             try {
                 return mPM.getInstalledApplications(flags);
@@ -2026,7 +2153,8 @@ class ApplicationContext extends Context {
             }
             Resources r = mContext.mMainThread.getTopLevelResources(
                     app.uid == Process.myUid() ? app.sourceDir
-                    : app.publicSourceDir, mContext.mPackageInfo);
+                    : app.publicSourceDir, mContext.mPackageInfo,
+                    app.isThemeable);
             if (r != null) {
                 return r;
             }

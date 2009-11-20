@@ -43,6 +43,7 @@ import android.util.Log;
 public class SettingsProvider extends ContentProvider {
     private static final String TAG = "SettingsProvider";
     private static final boolean LOCAL_LOGV = false;
+    private static String EXTRA_AUTHORITY = "com.tmobile.thememanager.packageresources";
 
     private static final String TABLE_FAVORITES = "favorites";
     private static final String TABLE_OLD_FAVORITES = "old_favorites";
@@ -404,7 +405,8 @@ public class SettingsProvider extends ContentProvider {
                 // Only proxy the openFile call to drm or media providers
                 String authority = soundUri.getAuthority();
                 boolean isDrmAuthority = authority.equals(DrmStore.AUTHORITY);
-                if (isDrmAuthority || authority.equals(MediaStore.AUTHORITY)) {
+                if (isDrmAuthority || authority.equals(MediaStore.AUTHORITY) ||
+                        (EXTRA_AUTHORITY != null && authority.equals(EXTRA_AUTHORITY))) {
 
                     if (isDrmAuthority) {
                         try {

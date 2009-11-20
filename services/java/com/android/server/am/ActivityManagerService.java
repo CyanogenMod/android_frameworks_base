@@ -25,6 +25,20 @@ import com.android.server.SystemServer;
 import com.android.server.Watchdog;
 import com.android.server.WindowManagerService;
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManagerNative;
@@ -65,6 +79,7 @@ import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.content.res.Configuration;
+import android.content.res.CustomTheme;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Binder;
@@ -103,7 +118,14 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManagerPolicy;
 
-import dalvik.system.Zygote;
+import com.android.internal.os.BatteryStatsImpl;
+import com.android.internal.os.RuntimeInit;
+import com.android.server.IntentResolver;
+import com.android.server.ProcessMap;
+import com.android.server.ProcessStats;
+import com.android.server.SystemServer;
+import com.android.server.Watchdog;
+import com.android.server.WindowManagerService;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -113,15 +135,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import dalvik.system.Zygote;
+
 import java.lang.IllegalStateException;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 public final class ActivityManagerService extends ActivityManagerNative implements Watchdog.Monitor {
     static final String TAG = "ActivityManager";
@@ -5696,10 +5713,10 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
                     r.state = ActivityState.PAUSED;
                     completePauseLocked();
                 } else {
-                	EventLog.writeEvent(LOG_AM_FAILED_TO_PAUSE_ACTIVITY,
-                	        System.identityHashCode(r), r.shortComponentName, 
-                			mPausingActivity != null
-                			    ? mPausingActivity.shortComponentName : "(none)");
+                    EventLog.writeEvent(LOG_AM_FAILED_TO_PAUSE_ACTIVITY,
+                            System.identityHashCode(r), r.shortComponentName, 
+                            mPausingActivity != null
+                                ? mPausingActivity.shortComponentName : "(none)");
                 }
             }
         }
@@ -12780,6 +12797,17 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
                                      !values.locale.equals(mConfiguration.locale),
                                      values.userSetLocale);
                 }
+                
+//                if(values.themeResource != 0){
+//                    saveThemeResourceLocked(values.themeResource, (values.themeResource != mConfiguration.themeResource));
+//                }
+
+                if (values.customTheme != null) {
+                    saveThemeResourceLocked(values.customTheme,
+                            (!values.customTheme.equals(mConfiguration.customTheme)));
+                } else if (mConfiguration.customTheme != null) {
+                    saveThemeResourceLocked(null, true);
+                }
 
                 mConfiguration = newConfig;
                 Log.i(TAG, "Config changed: " + newConfig);
@@ -12994,6 +13022,30 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
             SystemProperties.set("persist.sys.language", l.getLanguage());
             SystemProperties.set("persist.sys.country", l.getCountry());
             SystemProperties.set("persist.sys.localevar", l.getVariant());
+        }
+    }
+
+    private void saveThemeResourceLocked(CustomTheme customTheme, boolean isDiff){
+        if(isDiff){
+            String themeId;
+            String themePackage;
+            String resourcePath;
+            boolean hasParent;
+            boolean forceUpdate;
+
+            if (customTheme != null) {
+                themeId = customTheme.getThemeId();
+                themePackage = customTheme.getThemePackageName();
+            } else {
+                themeId = null;
+                themePackage = "";
+                resourcePath = null;
+                hasParent = false;
+                forceUpdate = false;
+            }
+
+            SystemProperties.set(Configuration.THEME_ID_PERSISTENCE_PROPERTY, themeId);
+            SystemProperties.set(Configuration.THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, themePackage);  
         }
     }
 

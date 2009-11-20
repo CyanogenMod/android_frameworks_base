@@ -21,8 +21,8 @@ import com.android.internal.database.SortCursor;
 import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.app.Activity;
-import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.net.Uri;
@@ -52,6 +52,11 @@ import java.util.List;
 public class RingtoneManager {
 
     private static final String TAG = "RingtoneManager";
+
+    /**
+     * @hide
+     */
+    public static final String ACTION_RINGTONE_CHANGED = "com.tmobile.intent.action.RINGTONE_CHANGED";
 
     // Make sure these are in sync with attrs.xml:
     // <attr name="ringtoneType">
@@ -110,6 +115,17 @@ public class RingtoneManager {
      */
     public static final String EXTRA_RINGTONE_SHOW_SILENT =
             "android.intent.extra.ringtone.SHOW_SILENT";
+
+    /**
+     * Given to the ringtone picker as a boolean. Whether to show an item for
+     * "Buy ringtones".
+     *
+     * @see #ACTION_RINGTONE_PICKER
+     *
+     * @hide
+     */
+    public static final String EXTRA_RINGTONE_SHOW_BUY =
+            "com.tmobile.intent.extra.ringtone.SHOW_BUY";
 
     /**
      * Given to the ringtone picker as a boolean. Whether to include DRM ringtones.
@@ -175,26 +191,28 @@ public class RingtoneManager {
     public static final String EXTRA_RINGTONE_PICKED_URI =
             "android.intent.extra.ringtone.PICKED_URI";
     
+    static final String THEME_AUTHORITY = "com.tmobile.thememanager.packageresources";
+
     // Make sure the column ordering and then ..._COLUMN_INDEX are in sync
     
     private static final String[] INTERNAL_COLUMNS = new String[] {
         MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE,
-        "\"" + MediaStore.Audio.Media.INTERNAL_CONTENT_URI + "\"",
+        "\"" + MediaStore.Audio.Media.INTERNAL_CONTENT_URI + "/\" || " + MediaStore.Audio.Media._ID,
         MediaStore.Audio.Media.TITLE_KEY
     };
 
     private static final String[] DRM_COLUMNS = new String[] {
         DrmStore.Audio._ID, DrmStore.Audio.TITLE,
-        "\"" + DrmStore.Audio.CONTENT_URI + "\"",
+        "\"" + DrmStore.Audio.CONTENT_URI + "/\" || " + DrmStore.Audio._ID,
         DrmStore.Audio.TITLE + " AS " + MediaStore.Audio.Media.TITLE_KEY
     };
 
     private static final String[] MEDIA_COLUMNS = new String[] {
         MediaStore.Audio.Media._ID, MediaStore.Audio.Media.TITLE,
-        "\"" + MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "\"",
+        "\"" + MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/\" || " + MediaStore.Audio.Media._ID,
         MediaStore.Audio.Media.TITLE_KEY
     };
-    
+
     /**
      * The column index (in the cursor returned by {@link #getCursor()} for the
      * row ID.
@@ -212,6 +230,14 @@ public class RingtoneManager {
      * media provider's URI.
      */
     public static final int URI_COLUMN_INDEX = 2;
+
+    /**
+     * Full uri, rather than just the root stem of the Uri prior to
+     * concatenation of the id.
+     * 
+     * @hide
+     */
+    public static final int URI_FULL_COLUMN_INDEX = 3;
 
     private Activity mActivity;
     private Context mContext;
@@ -365,8 +391,10 @@ public class RingtoneManager {
         final Cursor internalCursor = getInternalRingtones();
         final Cursor drmCursor = mIncludeDrm ? getDrmRingtones() : null;
         final Cursor mediaCursor = getMediaRingtones();
-             
-        return mCursor = new SortCursor(new Cursor[] { internalCursor, drmCursor, mediaCursor },
+        final Cursor[] themeCursor = getThemeManagerRingtones();
+
+        return mCursor = new SortCursor(new Cursor[] { internalCursor, drmCursor, mediaCursor,
+                themeCursor[0], themeCursor[1] },
                 MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
     }
 
@@ -401,12 +429,11 @@ public class RingtoneManager {
         
         return getUriFromCursor(cursor);
     }
-    
+
     private static Uri getUriFromCursor(Cursor cursor) {
-        return ContentUris.withAppendedId(Uri.parse(cursor.getString(URI_COLUMN_INDEX)), cursor
-                .getLong(ID_COLUMN_INDEX));
+        return Uri.parse(cursor.getString(URI_FULL_COLUMN_INDEX));
     }
-    
+
     /**
      * Gets the position of a {@link Uri} within this {@link RingtoneManager}.
      * 
@@ -424,23 +451,12 @@ public class RingtoneManager {
             return -1;
         }
         
-        // Only create Uri objects when the actual URI changes
-        Uri currentUri = null;
-        String previousUriString = null;
         for (int i = 0; i < cursorCount; i++) {
-            String uriString = cursor.getString(URI_COLUMN_INDEX);
-            if (currentUri == null || !uriString.equals(previousUriString)) {
-                currentUri = Uri.parse(uriString);
-            }
-            
-            if (ringtoneUri.equals(ContentUris.withAppendedId(currentUri, cursor
-                    .getLong(ID_COLUMN_INDEX)))) {
+            if (ringtoneUri.equals(getUriFromCursor(cursor))) {
                 return i;
             }
             
             cursor.move(1);
-            
-            previousUriString = uriString;
         }
         
         return -1;
@@ -466,6 +482,18 @@ public class RingtoneManager {
             uri = getValidRingtoneUriFromCursorAndClose(context, rm.getDrmRingtones());
         }
         
+        if (uri == null) {
+            Cursor[] cursors = rm.getThemeManagerRingtones();
+            if (cursors != null) {
+                for (Cursor cursor: cursors) {
+                    uri = getValidRingtoneUriFromCursorAndClose(context, cursor);
+                    if (uri != null) {
+                        break;
+                    }
+                }
+            }
+        }
+
         return uri;
     }
     
@@ -510,7 +538,34 @@ public class RingtoneManager {
                     MediaStore.Audio.Media.DEFAULT_SORT_ORDER)
                 : null;
     }
-    
+
+    private String getThemeWhereClause(String uriColumn) {
+        String clause = uriColumn + " IS NOT NULL";
+        if (mIncludeDrm) {
+            return clause;
+        } else {
+            return clause + " AND " + uriColumn + " NOT LIKE '%/assets/%locked%'";
+        }
+    }
+
+    private Cursor[] getThemeManagerRingtones() {
+        Cursor[] cursors = new Cursor[2];
+
+        if ((mType & TYPE_RINGTONE) != 0) {
+            cursors[0] = query(Uri.parse("content://com.tmobile.thememanager.themes/themes"),
+                    new String[] { "_id", "ringtone_name AS title", "null", "ringtone_uri" }, 
+                    getThemeWhereClause("ringtone_uri"), null, "title");
+        }
+
+        if ((mType & TYPE_NOTIFICATION) != 0) {
+            cursors[1] = query(Uri.parse("content://com.tmobile.thememanager.themes/themes"),
+                    new String[] { "_id", "notif_ringtone_name AS title", "null", "notif_ringtone_name" },
+                    getThemeWhereClause("notif_ringtone_uri"), null, "title");
+        }
+
+        return cursors;
+    }
+
     private void setFilterColumnsList(int type) {
         List<String> columns = mFilterColumns;
         columns.clear();
@@ -642,6 +697,10 @@ public class RingtoneManager {
         if (setting == null) return;
         Settings.System.putString(context.getContentResolver(), setting,
                 ringtoneUri != null ? ringtoneUri.toString() : null);
+        Intent intent = new Intent();
+        intent.setAction(ACTION_RINGTONE_CHANGED);
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, type);
+        context.sendBroadcast(intent);
     }
     
     private static String getSettingForType(int type) {

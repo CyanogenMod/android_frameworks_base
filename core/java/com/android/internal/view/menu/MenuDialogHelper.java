@@ -21,6 +21,7 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.IBinder;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -39,13 +40,13 @@ public class MenuDialogHelper implements DialogInterface.OnKeyListener, DialogIn
     public MenuDialogHelper(MenuBuilder menu) {
         mMenu = menu;
     }
-
+    
     /**
-     * Shows menu as a dialog. 
+     * Creates menu as a dialog.  Does not show.
      * 
      * @param windowToken Optional token to assign to the window.
      */
-    public void show(IBinder windowToken) {
+    public Dialog create(IBinder windowToken) {
         // Many references to mMenu, create local reference
         final MenuBuilder menu = mMenu;
         
@@ -81,8 +82,18 @@ public class MenuDialogHelper implements DialogInterface.OnKeyListener, DialogIn
         if (windowToken != null) {
             lp.token = windowToken;
         }
-        lp.flags |= WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
+        lp.flags |= WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;      
         
+        return mDialog;
+    }
+
+    /**
+     * Shows menu as a dialog. 
+     * 
+     * @param windowToken Optional token to assign to the window.
+     */
+    public void show(IBinder windowToken) {
+        create(windowToken);
         mDialog.show();
     }
     

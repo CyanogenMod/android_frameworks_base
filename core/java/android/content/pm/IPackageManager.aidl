@@ -34,6 +34,7 @@ import android.content.pm.PermissionGroupInfo;
 import android.content.pm.PermissionInfo;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
+import android.content.pm.ThemeInfo;
 import android.net.Uri;
 import android.content.IntentSender;
 
@@ -104,6 +105,8 @@ interface IPackageManager {
             String resolvedType, int flags);
 
     List<PackageInfo> getInstalledPackages(int flags);
+
+    List<PackageInfo> getInstalledThemePackages();
 
     List<ApplicationInfo> getInstalledApplications(int flags);
 

@@ -1733,6 +1733,7 @@ public:
 
         status_t applyStyle(uint32_t resID, bool force=false);
         status_t setTo(const Theme& other);
+        void setAttributeValue(uint32_t attribute, uint32_t value);
 
         /**
          * Retrieve a value in the theme.  If the theme defines this
@@ -1885,9 +1886,12 @@ public:
 
     void getLocales(Vector<String8>* locales) const;
 
+    void removeAssetsByCookie(const String8 &packageName, void* cookie);
+
 #ifndef HAVE_ANDROID_OS
     void print(bool inclValues) const;
 #endif
+    void dump() const;
 
 private:
     struct Header;

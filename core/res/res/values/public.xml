@@ -1205,4 +1205,31 @@
   <public type="attr" name="wallpaperAuthor" />
   <public type="attr" name="wallpaperDescription" />
   
+
+<!-- ===============================================================
+     Resources added to support dynamic theming.
+     =============================================================== -->
+  <eat-comment />
+
+  <public type="style" name="Widget.TabIndicator" />
+  <public type="style" name="Widget.EditText.TimePicker" />
+
+  <public type="attr" name="listItemBackground" />
+
+  <public type="attr" name="dialogTheme" />
+  <public type="attr" name="alertDialogTheme" />
+  <public type="attr" name="searchDialogTheme" />
+  <public type="attr" name="listItemTextViewStyle" />
+  <public type="attr" name="bottomLeftStrip" />
+  <public type="attr" name="bottomRightStrip" />
+  <public type="attr" name="tabIndicatorStyle" />
+  <public type="attr" name="textAppearanceTab" />
+
+  <public type="attr" name="timePickerInputStyle" />
+  <public type="attr" name="buttonStyleTimePickerUp" />
+  <public type="attr" name="buttonStyleTimePickerDown" />
+  <public type="attr" name="menuItemBackground" />
+  <public type="attr" name="expandedMenuTheme" />
+  <public type="attr" name="iconMenuTheme" />
+
 </resources>
