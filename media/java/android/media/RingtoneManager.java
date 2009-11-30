@@ -231,14 +231,6 @@ public class RingtoneManager {
      */
     public static final int URI_COLUMN_INDEX = 2;
 
-    /**
-     * Full uri, rather than just the root stem of the Uri prior to
-     * concatenation of the id.
-     * 
-     * @hide
-     */
-    public static final int URI_FULL_COLUMN_INDEX = 3;
-
     private Activity mActivity;
     private Context mContext;
     
@@ -391,10 +383,11 @@ public class RingtoneManager {
         final Cursor internalCursor = getInternalRingtones();
         final Cursor drmCursor = mIncludeDrm ? getDrmRingtones() : null;
         final Cursor mediaCursor = getMediaRingtones();
-        final Cursor[] themeCursor = getThemeManagerRingtones();
+        final Cursor themeRegularCursor = getThemeRegularRingtones();
+        final Cursor themeNotifCursor = getThemeNotificationRingtones();
 
         return mCursor = new SortCursor(new Cursor[] { internalCursor, drmCursor, mediaCursor,
-                themeCursor[0], themeCursor[1] },
+                themeRegularCursor, themeNotifCursor },
                 MediaStore.Audio.Media.DEFAULT_SORT_ORDER);
     }
 
@@ -431,7 +424,7 @@ public class RingtoneManager {
     }
 
     private static Uri getUriFromCursor(Cursor cursor) {
-        return Uri.parse(cursor.getString(URI_FULL_COLUMN_INDEX));
+        return Uri.parse(cursor.getString(URI_COLUMN_INDEX));
     }
 
     /**
@@ -483,15 +476,11 @@ public class RingtoneManager {
         }
         
         if (uri == null) {
-            Cursor[] cursors = rm.getThemeManagerRingtones();
-            if (cursors != null) {
-                for (Cursor cursor: cursors) {
-                    uri = getValidRingtoneUriFromCursorAndClose(context, cursor);
-                    if (uri != null) {
-                        break;
-                    }
-                }
-            }
+            uri = getValidRingtoneUriFromCursorAndClose(context, rm.getThemeRegularRingtones());
+        }
+        
+        if (uri == null) {
+            uri = getValidRingtoneUriFromCursorAndClose(context, rm.getThemeNotificationRingtones());
         }
 
         return uri;
@@ -548,22 +537,26 @@ public class RingtoneManager {
         }
     }
 
-    private Cursor[] getThemeManagerRingtones() {
-        Cursor[] cursors = new Cursor[2];
-
+    private Cursor getThemeRegularRingtones() {
         if ((mType & TYPE_RINGTONE) != 0) {
-            cursors[0] = query(Uri.parse("content://com.tmobile.thememanager.themes/themes"),
-                    new String[] { "_id", "ringtone_name AS title", "null", "ringtone_uri" }, 
-                    getThemeWhereClause("ringtone_uri"), null, "title");
+            return query(Uri.parse("content://com.tmobile.thememanager.themes/themes"),
+                    new String[] { "_id", "ringtone_name", "ringtone_uri",
+                        "ringtone_name AS " + MEDIA_COLUMNS[3] },
+                    getThemeWhereClause("ringtone_uri"), null, MEDIA_COLUMNS[3]);
+        } else {
+            return null;
         }
+    }
 
+    private Cursor getThemeNotificationRingtones() {
         if ((mType & TYPE_NOTIFICATION) != 0) {
-            cursors[1] = query(Uri.parse("content://com.tmobile.thememanager.themes/themes"),
-                    new String[] { "_id", "notif_ringtone_name AS title", "null", "notif_ringtone_name" },
-                    getThemeWhereClause("notif_ringtone_uri"), null, "title");
+            return query(Uri.parse("content://com.tmobile.thememanager.themes/themes"),
+                    new String[] { "_id", "notif_ringtone_name", "notif_ringtone_uri",
+                        "notif_ringtone_name AS " + MEDIA_COLUMNS[3] },
+                    getThemeWhereClause("notif_ringtone_uri"), null, MEDIA_COLUMNS[3]);
+        } else {
+            return null;
         }
-
-        return cursors;
     }
 
     private void setFilterColumnsList(int type) {
