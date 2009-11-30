@@ -549,6 +549,11 @@ void Layer::unlockPageFlip(
         // chance to reevaluate their condition.
         mFlinger->scheduleBroadcast(client);
     }
+    if (visibleRegionScreen.isEmpty()) {
+        // an invisible layer should not hold a freeze-lock
+        // (because it may never be updated and thereore never release it)
+        mFreezeLock.clear();
+    }
 }
 
 void Layer::finishPageFlip()
