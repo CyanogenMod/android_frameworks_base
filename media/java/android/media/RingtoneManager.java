@@ -191,7 +191,10 @@ public class RingtoneManager {
     public static final String EXTRA_RINGTONE_PICKED_URI =
             "android.intent.extra.ringtone.PICKED_URI";
     
-    static final String THEME_AUTHORITY = "com.tmobile.thememanager.packageresources";
+    /**
+     * @hide
+     */
+    public static final String THEME_AUTHORITY = "com.tmobile.thememanager.packageresources";
 
     // Make sure the column ordering and then ..._COLUMN_INDEX are in sync
     
