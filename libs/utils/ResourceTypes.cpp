@@ -3951,15 +3951,16 @@ void ResTable::removeAssetsByCookie(const String8 &packageName, void* cookie)
             if (id != 0 && id < 256) {
                 mPackageMap[id] = 0;
             }
-            pg->packages.removeAt(index);
-            delete pkg;
             if (pkgCount == 1) {
                 LOGV("Delete Package Group %d id=%d packageCount=%d name=%s\n",
                       (int)pgIndex, pg->id, (int)pg->packages.size(),
                       String8(pg->name).string());
                 mPackageGroups.removeAt(pgIndex);
+                delete pg;
+            } else {
+                pg->packages.removeAt(index);
+                delete pkg;
             }
-            delete pg;
             return;
         }
     }
