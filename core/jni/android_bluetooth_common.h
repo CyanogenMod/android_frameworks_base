@@ -1,5 +1,6 @@
 /*
 ** Copyright 2006, The Android Open Source Project
+** Copyright (c) 2009, Code Aurora Forum, Inc. All rights reserved.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -17,8 +18,10 @@
 #ifndef ANDROID_BLUETOOTH_COMMON_H
 #define ANDROID_BLUETOOTH_COMMON_H
 
-// Set to 0 to enable verbose bluetooth logging
+// Set to 0 to enable verbose, debug, and/or info bluetooth logging
 #define LOG_NDEBUG 1
+#define LOG_NDDEBUG 1
+#define LOG_NIDEBUG 1
 
 #include "jni.h"
 #include "utils/Log.h"
@@ -36,8 +39,12 @@
 namespace android {
 
 #ifdef HAVE_BLUETOOTH
+#define BLUEZ_DBUS_BASE_SVC       "org.bluez"
 #define BLUEZ_DBUS_BASE_PATH      "/org/bluez"
 #define BLUEZ_DBUS_BASE_IFC       "org.bluez"
+
+#define ANDROID_DBUS_AGENT_BASE_PATH "/android/bluetooth"
+#define ANDROID_PASSKEY_AGENT_PATH   ANDROID_DBUS_AGENT_BASE_PATH"/agent"
 
 // It would be nicer to retrieve this from bluez using GetDefaultAdapter,
 // but this is only possible when the adapter is up (and hcid is running).
@@ -49,6 +56,13 @@ namespace android {
 
 // size of the dbus event loops pollfd structure, hopefully never to be grown
 #define DEFAULT_INITIAL_POLLFD_COUNT 8
+
+typedef struct {
+    void (*user_cb)(DBusMessage *, void *, void *);
+    void *user;
+    void *nat;
+    JNIEnv *env;
+} dbus_async_call_t;
 
 jfieldID get_field(JNIEnv *env,
                    jclass clazz,
@@ -96,12 +110,25 @@ struct _Properties {
 };
 typedef struct _Properties Properties;
 
+dbus_bool_t dbus_func_args_async_valist(JNIEnv *env,
+                                        DBusConnection *conn,
+                                        int timeout_ms,
+                                        void (*reply)(DBusMessage *, void *),
+                                        void *user,
+                                        const char *dest,
+                                        const char *path,
+                                        const char *ifc,
+                                        const char *func,
+                                        int first_arg_type,
+                                        va_list args);
+
 dbus_bool_t dbus_func_args_async(JNIEnv *env,
                                  DBusConnection *conn,
                                  int timeout_ms,
                                  void (*reply)(DBusMessage *, void *, void *),
                                  void *user,
                                  void *nat,
+                                 const char *dest,
                                  const char *path,
                                  const char *ifc,
                                  const char *func,
@@ -110,6 +137,7 @@ dbus_bool_t dbus_func_args_async(JNIEnv *env,
 
 DBusMessage * dbus_func_args(JNIEnv *env,
                              DBusConnection *conn,
+                             const char *dest,
                              const char *path,
                              const char *ifc,
                              const char *func,
@@ -119,6 +147,7 @@ DBusMessage * dbus_func_args(JNIEnv *env,
 DBusMessage * dbus_func_args_error(JNIEnv *env,
                                    DBusConnection *conn,
                                    DBusError *err,
+                                   const char *dest,
                                    const char *path,
                                    const char *ifc,
                                    const char *func,
@@ -128,6 +157,7 @@ DBusMessage * dbus_func_args_error(JNIEnv *env,
 DBusMessage * dbus_func_args_timeout(JNIEnv *env,
                                      DBusConnection *conn,
                                      int timeout_ms,
+                                     const char *dest,
                                      const char *path,
                                      const char *ifc,
                                      const char *func,
@@ -138,6 +168,7 @@ DBusMessage * dbus_func_args_timeout_valist(JNIEnv *env,
                                             DBusConnection *conn,
                                             int timeout_ms,
                                             DBusError *err,
+                                            const char *dest,
                                             const char *path,
                                             const char *ifc,
                                             const char *func,

@@ -1,5 +1,6 @@
 /*
 ** Copyright 2006, The Android Open Source Project
+** Copyright (c) 2009, Code Aurora Forum, Inc. All rights reserved.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -82,13 +83,6 @@ jfieldID get_field(JNIEnv *env, jclass clazz, const char *member,
     return field;
 }
 
-typedef struct {
-    void (*user_cb)(DBusMessage *, void *, void *);
-    void *user;
-    void *nat;
-    JNIEnv *env;
-} dbus_async_call_t;
-
 void dbus_func_args_async_callback(DBusPendingCall *call, void *data) {
 
     dbus_async_call_t *req = (dbus_async_call_t *)data;
@@ -120,6 +114,7 @@ static dbus_bool_t dbus_func_args_async_valist(JNIEnv *env,
                                                         void*),
                                         void *user,
                                         void *nat,
+                                        const char *dest,
                                         const char *path,
                                         const char *ifc,
                                         const char *func,
@@ -131,7 +126,7 @@ static dbus_bool_t dbus_func_args_async_valist(JNIEnv *env,
     dbus_bool_t reply = FALSE;
 
     /* Compose the command */
-    msg = dbus_message_new_method_call(BLUEZ_DBUS_BASE_IFC, path, ifc, func);
+    msg = dbus_message_new_method_call(dest, path, ifc, func);
 
     if (msg == NULL) {
         LOGE("Could not allocate D-Bus message object!");
@@ -163,6 +158,8 @@ static dbus_bool_t dbus_func_args_async_valist(JNIEnv *env,
                                          dbus_func_args_async_callback,
                                          pending,
                                          NULL);
+        } else {
+            free(pending);
         }
     }
 
@@ -177,6 +174,7 @@ dbus_bool_t dbus_func_args_async(JNIEnv *env,
                                  void (*reply)(DBusMessage *, void *, void*),
                                  void *user,
                                  void *nat,
+                                 const char *dest,
                                  const char *path,
                                  const char *ifc,
                                  const char *func,
@@ -188,7 +186,7 @@ dbus_bool_t dbus_func_args_async(JNIEnv *env,
     ret = dbus_func_args_async_valist(env, conn,
                                       timeout_ms,
                                       reply, user, nat,
-                                      path, ifc, func,
+                                      dest, path, ifc, func,
                                       first_arg_type, lst);
     va_end(lst);
     return ret;
@@ -204,6 +202,7 @@ DBusMessage * dbus_func_args_timeout_valist(JNIEnv *env,
                                             DBusConnection *conn,
                                             int timeout_ms,
                                             DBusError *err,
+                                            const char *dest,
                                             const char *path,
                                             const char *ifc,
                                             const char *func,
@@ -220,7 +219,7 @@ DBusMessage * dbus_func_args_timeout_valist(JNIEnv *env,
     }
 
     /* Compose the command */
-    msg = dbus_message_new_method_call(BLUEZ_DBUS_BASE_IFC, path, ifc, func);
+    msg = dbus_message_new_method_call(dest, path, ifc, func);
 
     if (msg == NULL) {
         LOGE("Could not allocate D-Bus message object!");
@@ -250,6 +249,7 @@ done:
 DBusMessage * dbus_func_args_timeout(JNIEnv *env,
                                      DBusConnection *conn,
                                      int timeout_ms,
+                                     const char *dest,
                                      const char *path,
                                      const char *ifc,
                                      const char *func,
@@ -259,7 +259,7 @@ DBusMessage * dbus_func_args_timeout(JNIEnv *env,
     va_list lst;
     va_start(lst, first_arg_type);
     ret = dbus_func_args_timeout_valist(env, conn, timeout_ms, NULL,
-                                        path, ifc, func,
+                                        dest, path, ifc, func,
                                         first_arg_type, lst);
     va_end(lst);
     return ret;
@@ -267,6 +267,7 @@ DBusMessage * dbus_func_args_timeout(JNIEnv *env,
 
 DBusMessage * dbus_func_args(JNIEnv *env,
                              DBusConnection *conn,
+                             const char *dest,
                              const char *path,
                              const char *ifc,
                              const char *func,
@@ -276,7 +277,7 @@ DBusMessage * dbus_func_args(JNIEnv *env,
     va_list lst;
     va_start(lst, first_arg_type);
     ret = dbus_func_args_timeout_valist(env, conn, -1, NULL,
-                                        path, ifc, func,
+                                        dest, path, ifc, func,
                                         first_arg_type, lst);
     va_end(lst);
     return ret;
@@ -285,6 +286,7 @@ DBusMessage * dbus_func_args(JNIEnv *env,
 DBusMessage * dbus_func_args_error(JNIEnv *env,
                                    DBusConnection *conn,
                                    DBusError *err,
+                                   const char *dest,
                                    const char *path,
                                    const char *ifc,
                                    const char *func,
@@ -294,7 +296,7 @@ DBusMessage * dbus_func_args_error(JNIEnv *env,
     va_list lst;
     va_start(lst, first_arg_type);
     ret = dbus_func_args_timeout_valist(env, conn, -1, err,
-                                        path, ifc, func,
+                                        dest, path, ifc, func,
                                         first_arg_type, lst);
     va_end(lst);
     return ret;

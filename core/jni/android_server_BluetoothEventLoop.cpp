@@ -1,5 +1,6 @@
 /*
 ** Copyright 2008, The Android Open Source Project
+** Copyright (c) 2009, Code Aurora Forum, Inc. All rights reserved.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -169,8 +170,8 @@ static DBusHandlerResult event_filter(DBusConnection *conn, DBusMessage *msg,
 DBusHandlerResult agent_event_filter(DBusConnection *conn,
                                      DBusMessage *msg,
                                      void *data);
-static int register_agent(native_data_t *nat,
-                          const char *agent_path, const char *capabilities);
+static int register_agents(native_data_t *nat,
+                           const char *agent_path, const char *capabilities);
 
 static const DBusObjectPathVTable agent_vtable = {
     NULL, agent_event_filter, NULL, NULL, NULL, NULL
@@ -211,6 +212,7 @@ static jboolean setUpEventLoop(native_data_t *nat) {
             LOG_AND_FREE_DBUS_ERROR(&err);
             return JNI_FALSE;
         }
+
         dbus_bus_add_match(nat->conn,
                 "type='signal',interface='"BLUEZ_DBUS_BASE_IFC".Adapter'",
                 &err);
@@ -218,6 +220,7 @@ static jboolean setUpEventLoop(native_data_t *nat) {
             LOG_AND_FREE_DBUS_ERROR(&err);
             return JNI_FALSE;
         }
+
         dbus_bus_add_match(nat->conn,
                 "type='signal',interface='"BLUEZ_DBUS_BASE_IFC".Device'",
                 &err);
@@ -225,6 +228,7 @@ static jboolean setUpEventLoop(native_data_t *nat) {
             LOG_AND_FREE_DBUS_ERROR(&err);
             return JNI_FALSE;
         }
+
         dbus_bus_add_match(nat->conn,
                 "type='signal',interface='org.bluez.AudioSink'",
                 &err);
@@ -233,9 +237,9 @@ static jboolean setUpEventLoop(native_data_t *nat) {
             return JNI_FALSE;
         }
 
-        const char *agent_path = "/android/bluetooth/agent";
+        const char *agent_path = ANDROID_PASSKEY_AGENT_PATH;
         const char *capabilities = "DisplayYesNo";
-        if (register_agent(nat, agent_path, capabilities) < 0) {
+        if (register_agents(nat, agent_path, capabilities) < 0) {
             dbus_connection_unregister_object_path (nat->conn, agent_path);
             return JNI_FALSE;
         }
@@ -243,7 +247,6 @@ static jboolean setUpEventLoop(native_data_t *nat) {
     }
     return JNI_FALSE;
 }
-
 
 const char * get_adapter_path(DBusConnection *conn) {
     DBusMessage *msg = NULL, *reply = NULL;
@@ -300,8 +303,8 @@ failed:
     return NULL;
 }
 
-static int register_agent(native_data_t *nat,
-                          const char * agent_path, const char * capabilities)
+static int register_agents(native_data_t *nat,
+                           const char * agent_path, const char * capabilities)
 {
     DBusMessage *msg, *reply;
     DBusError err;
@@ -324,6 +327,7 @@ static int register_agent(native_data_t *nat,
               __FUNCTION__);
         return -1;
     }
+
     dbus_message_append_args(msg, DBUS_TYPE_OBJECT_PATH, &agent_path,
                              DBUS_TYPE_STRING, &capabilities,
                              DBUS_TYPE_INVALID);
@@ -340,7 +344,10 @@ static int register_agent(native_data_t *nat,
         return -1;
     }
 
+    LOGV("Registered Passkey Agent Path %s", agent_path);
+
     dbus_message_unref(reply);
+
     dbus_connection_flush(nat->conn);
 
     return 0;
@@ -588,7 +595,7 @@ static void *eventLoopMain(void *ptr) {
                 break;
             }
         }
-        while (dbus_connection_dispatch(nat->conn) == 
+        while (dbus_connection_dispatch(nat->conn) ==
                 DBUS_DISPATCH_DATA_REMAINS) {
         }
 
@@ -1200,6 +1207,8 @@ static JNINativeMethod sMethods[] = {
 };
 
 int register_android_server_BluetoothEventLoop(JNIEnv *env) {
+    LOGV(__FUNCTION__);
+
     return AndroidRuntime::registerNativeMethods(env,
             "android/server/BluetoothEventLoop", sMethods, NELEM(sMethods));
 }

@@ -1,5 +1,6 @@
 /*
 ** Copyright 2006, The Android Open Source Project
+** Copyright (c) 2009, Code Aurora Forum, Inc. All rights reserved.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License"); 
 ** you may not use this file except in compliance with the License. 
@@ -14,6 +15,7 @@
 ** limitations under the License.
 */
 
+#define DBUS_SVC_NAME BLUEZ_DBUS_BASE_SVC
 #define DBUS_ADAPTER_IFACE BLUEZ_DBUS_BASE_IFC ".Adapter"
 #define DBUS_DEVICE_IFACE BLUEZ_DBUS_BASE_IFC ".Device"
 #define LOG_TAG "BluetoothService.cpp"
@@ -309,6 +311,7 @@ static jboolean createPairedDeviceNative(JNIEnv *env, jobject object,
                                         onCreatePairedDeviceResult, // callback
                                         context_address,
                                         eventLoopNat,
+                                        DBUS_SVC_NAME,
                                         get_adapter_path(env, object),
                                         DBUS_ADAPTER_IFACE,
                                         "CreatePairedDevice",
@@ -339,7 +342,7 @@ static jint getDeviceServiceChannelNative(JNIEnv *env, jobject object,
         LOGV("... pattern = %s", c_pattern);
         LOGV("... attr_id = %#X", attr_id);
         DBusMessage *reply =
-            dbus_func_args(env, nat->conn, c_path,
+            dbus_func_args(env, nat->conn, DBUS_SVC_NAME, c_path,
                            DBUS_DEVICE_IFACE, "GetServiceAttributeValue",
                            DBUS_TYPE_STRING, &c_pattern,
                            DBUS_TYPE_UINT16, &attr_id,
@@ -364,7 +367,7 @@ static jboolean cancelDeviceCreationNative(JNIEnv *env, jobject object,
         dbus_error_init(&err);
         LOGV("... address = %s", c_address);
         DBusMessage *reply =
-            dbus_func_args_timeout(env, nat->conn, -1,
+            dbus_func_args_timeout(env, nat->conn, -1, DBUS_SVC_NAME,
                                    get_adapter_path(env, object),
                                    DBUS_ADAPTER_IFACE, "CancelDeviceCreation",
                                    DBUS_TYPE_STRING, &c_address,
@@ -395,6 +398,7 @@ static jboolean removeDeviceNative(JNIEnv *env, jobject object, jstring object_p
                                         NULL,
                                         NULL,
                                         NULL,
+                                        DBUS_SVC_NAME,
                                         get_adapter_path(env, object),
                                         DBUS_ADAPTER_IFACE,
                                         "RemoveDevice",
@@ -558,7 +562,7 @@ static jobjectArray getDevicePropertiesNative(JNIEnv *env, jobject object,
 
         const char *c_path = env->GetStringUTFChars(path, NULL);
         reply = dbus_func_args_timeout(env,
-                                   nat->conn, -1, c_path,
+                                   nat->conn, -1, DBUS_SVC_NAME, c_path,
                                    DBUS_DEVICE_IFACE, "GetProperties",
                                    DBUS_TYPE_INVALID);
         env->ReleaseStringUTFChars(path, c_path);
@@ -596,7 +600,7 @@ static jobjectArray getAdapterPropertiesNative(JNIEnv *env, jobject object) {
         dbus_error_init(&err);
 
         reply = dbus_func_args_timeout(env,
-                                   nat->conn, -1, get_adapter_path(env, object),
+                                   nat->conn, -1, DBUS_SVC_NAME, get_adapter_path(env, object),
                                    DBUS_ADAPTER_IFACE, "GetProperties",
                                    DBUS_TYPE_INVALID);
         if (!reply) {
@@ -770,6 +774,7 @@ static jboolean createDeviceNative(JNIEnv *env, jobject object,
                                         onCreateDeviceResult,
                                         context_address,
                                         eventLoopNat,
+                                        DBUS_SVC_NAME,
                                         get_adapter_path(env, object),
                                         DBUS_ADAPTER_IFACE,
                                         "CreateDevice",
@@ -805,6 +810,7 @@ static jboolean discoverServicesNative(JNIEnv *env, jobject object,
                                         onDiscoverServicesResult,
                                         context_path,
                                         eventLoopNat,
+                                        DBUS_SVC_NAME,
                                         c_path,
                                         DBUS_DEVICE_IFACE,
                                         "DiscoverServices",
@@ -830,6 +836,7 @@ static jint addRfcommServiceRecordNative(JNIEnv *env, jobject object,
         LOGV("... uuid2 = %llX", uuidLsb);
         LOGV("... channel = %d", channel);
         DBusMessage *reply = dbus_func_args(env, nat->conn,
+                           DBUS_SVC_NAME,
                            get_adapter_path(env, object),
                            DBUS_ADAPTER_IFACE, "AddRfcommServiceRecord",
                            DBUS_TYPE_STRING, &c_name,
@@ -851,6 +858,7 @@ static jboolean removeServiceRecordNative(JNIEnv *env, jobject object, jint hand
     if (nat) {
         LOGV("... handle = %X", handle);
         DBusMessage *reply = dbus_func_args(env, nat->conn,
+                           DBUS_SVC_NAME,
                            get_adapter_path(env, object),
                            DBUS_ADAPTER_IFACE, "RemoveServiceRecord",
                            DBUS_TYPE_UINT32, &handle,
