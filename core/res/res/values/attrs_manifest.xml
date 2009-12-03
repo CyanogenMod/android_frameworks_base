@@ -520,6 +520,8 @@
         <!-- The screen orientation has changed, that is the user has
              rotated the device. -->
         <flag name="orientation" value="0x0080" />
+        <!-- System-wide default theme. -->
+        <flag name="theme" value="0x008000" />
         <!-- The screen orientation has changed, that is the user has
              rotated the device. -->
         <flag name="screenLayout" value="0x0100" />
