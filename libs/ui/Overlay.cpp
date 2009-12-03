@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * Copyright (c) 2009, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,6 +82,12 @@ status_t Overlay::getCrop(uint32_t* x, uint32_t* y, uint32_t* w, uint32_t* h)
 {
     if (mStatus != NO_ERROR) return mStatus;
     return mOverlayData->getCrop(mOverlayData, x, y, w, h);
+}
+
+status_t Overlay::setFd(int fd)
+{
+    if (mStatus != NO_ERROR) return mStatus;
+    return mOverlayData->setFd(mOverlayData, fd);
 }
 
 int32_t Overlay::getBufferCount() const
