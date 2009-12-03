@@ -19,7 +19,7 @@ public class ExpandedView extends LinearLayout {
     int mPrevHeight = -1;
 
     public ExpandedView(Context context, AttributeSet attrs) {
-        super(context, attrs, com.tmobile.widget.Utils.resolveDefaultStyleAttr(context,
+        super(context, attrs, Utils.resolveDefaultStyleAttr(context,
                 "com_android_server_status_expandedView",
                 com.android.internal.R.attr.com_android_server_status_expandedView));
         mDisplay = ((WindowManager)context.getSystemService(

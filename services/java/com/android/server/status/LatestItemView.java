@@ -8,7 +8,7 @@ import android.widget.FrameLayout;
 public class LatestItemView extends FrameLayout {
 
     public LatestItemView(Context context, AttributeSet attrs) {
-        super(context, attrs, com.tmobile.widget.Utils.resolveDefaultStyleAttr(context,
+        super(context, attrs, Utils.resolveDefaultStyleAttr(context,
             "com_android_server_status_latestItemView",
             com.android.internal.R.attr.com_android_server_status_latestItemView));
     }
