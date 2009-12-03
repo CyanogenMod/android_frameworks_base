@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * Copyright (c) 2009, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,6 +92,7 @@ public:
 
     /* set the buffer attributes */
     status_t setParameter(int param, int value);
+    status_t setFd(int fd);
 
     /* returns the address of a given buffer if supported, NULL otherwise. */
     void* getBufferAddress(overlay_buffer_t buffer);
