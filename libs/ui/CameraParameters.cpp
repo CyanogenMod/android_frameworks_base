@@ -56,6 +56,10 @@ const char CameraParameters::KEY_FLASH_MODE[] = "flash-mode";
 const char CameraParameters::KEY_SUPPORTED_FLASH_MODES[] = "flash-mode-values";
 const char CameraParameters::KEY_FOCUS_MODE[] = "focus-mode";
 const char CameraParameters::KEY_SUPPORTED_FOCUS_MODES[] = "focus-mode-values";
+const char CameraParameters::KEY_ISO_MODE[] = "iso";
+const char CameraParameters::KEY_SUPPORTED_ISO_MODES[] = "iso-values";
+const char CameraParameters::KEY_LENSSHADE[] = "lensshade";
+const char CameraParameters::KEY_SUPPORTED_LENSSHADE_MODES[] = "lensshade-values";
 
 // Values for white balance settings.
 const char CameraParameters::WHITE_BALANCE_AUTO[] = "auto";
@@ -120,6 +124,20 @@ const char CameraParameters::FOCUS_MODE_AUTO[] = "auto";
 const char CameraParameters::FOCUS_MODE_INFINITY[] = "infinity";
 const char CameraParameters::FOCUS_MODE_MACRO[] = "macro";
 const char CameraParameters::FOCUS_MODE_FIXED[] = "fixed";
+
+// Values for ISO Settings
+const char CameraParameters::ISO_AUTO[] = "auto";
+const char CameraParameters::ISO_HJR[] = "ISO_HJR";
+const char CameraParameters::ISO_100[] = "ISO100";
+const char CameraParameters::ISO_200[] = "ISO200";
+const char CameraParameters::ISO_400[] = "ISO400";
+const char CameraParameters::ISO_800[] = "ISO800";
+
+//Values for Lens Shading
+const char CameraParameters::LENSSHADE_ENABLE[] = "enable";
+const char CameraParameters::LENSSHADE_DISABLE[] = "disable";
+
+
 
 static const char* portrait = "portrait";
 static const char* landscape = "landscape";

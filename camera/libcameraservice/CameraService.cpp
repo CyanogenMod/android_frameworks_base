@@ -33,6 +33,8 @@
 #include "CameraService.h"
 
 #include <cutils/atomic.h>
+#include <cutils/properties.h>
+#include <linux/fb.h>
 
 namespace android {
 
@@ -69,6 +71,7 @@ static int getCallingPid() {
     return IPCThreadState::self()->getCallingPid();
 }
 
+static Mutex connlock;
 // ----------------------------------------------------------------------------
 
 void CameraService::instantiate() {
@@ -99,6 +102,7 @@ sp<ICamera> CameraService::connect(const sp<ICameraClient>& cameraClient)
             cameraClient->asBinder().get());
 
     Mutex::Autolock lock(mServiceLock);
+    Mutex::Autolock l(connlock);
     sp<Client> client;
     if (mClient != 0) {
         sp<Client> currentClient = mClient.promote();
@@ -380,9 +384,10 @@ void CameraService::Client::disconnect()
 {
     int callingPid = getCallingPid();
 
-    LOGD("Client::disconnect() E (pid %d client %p)",
-            callingPid, getCameraClient()->asBinder().get());
-
+    LOGD("Client (%p) E disconnect from (%d)",
+            getCameraClient()->asBinder().get(),
+            IPCThreadState::self()->getCallingPid());
+    Mutex::Autolock l(connlock);
     Mutex::Autolock lock(mLock);
     if (mClientPid <= 0) {
         LOGD("camera is unlocked (mClientPid = %d), don't tear down hardware", mClientPid);
