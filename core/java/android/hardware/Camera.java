@@ -681,6 +681,7 @@ public class Camera {
         private static final String KEY_GPS_TIMESTAMP = "gps-timestamp";
         private static final String KEY_WHITE_BALANCE = "whitebalance";
         private static final String KEY_EFFECT = "effect";
+        private static final String KEY_AUTO_EXPOSURE = "auto-exposure";
         private static final String KEY_ANTIBANDING = "antibanding";
         private static final String KEY_SCENE_MODE = "scene-mode";
         private static final String KEY_FLASH_MODE = "flash-mode";
@@ -710,6 +711,11 @@ public class Camera {
         public static final String EFFECT_WHITEBOARD = "whiteboard";
         public static final String EFFECT_BLACKBOARD = "blackboard";
         public static final String EFFECT_AQUA = "aqua";
+
+        // Values for auto exposure settings.
+        public static final String AUTO_EXPOSURE_FRAME_AVG = "frame-average";
+        public static final String AUTO_EXPOSURE_CENTER_WEIGHTED = "center-weighted";
+        public static final String AUTO_EXPOSURE_SPOT_METERING = "spot-metering";
 
         // Values for antibanding settings.
         public static final String ANTIBANDING_AUTO = "auto";
@@ -1345,6 +1351,38 @@ public class Camera {
             return split(str);
         }
 
+         /**
+         * Gets the current auto exposure setting.
+         *
+         * @return one of AUTO_EXPOSURE_XXX string constant. null if auto exposure
+         *         setting is not supported.
+         * @hide
+         */
+        public String getAutoExposure() {
+            return get(KEY_AUTO_EXPOSURE);
+        }
+
+        /**
+         * Sets the current auto exposure setting.
+         *
+         * @param value AUTO_EXPOSURE_XXX string constants.
+         * @hide
+         */
+        public void setAutoExposure(String value) {
+            set(KEY_AUTO_EXPOSURE, value);
+        }
+
+       /**
+         * Gets the supported auto exposure setting.
+         *
+         * @return a List of AUTO_EXPOSURE_XXX string constants. null if auto exposure
+         *         setting is not supported.
+         * @hide
+         */
+        public List<String> getSupportedAutoexposure() {
+            String str = get(KEY_AUTO_EXPOSURE + SUPPORTED_VALUES_SUFFIX);
+            return split(str);
+        }
 
         /**
          * Gets the current antibanding setting.
