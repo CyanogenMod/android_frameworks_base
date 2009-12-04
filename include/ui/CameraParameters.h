@@ -271,6 +271,7 @@ public:
     // Focus is set at infinity. Applications should not call
     // CameraHardwareInterface.autoFocus in this mode.
     static const char FOCUS_MODE_INFINITY[];
+    static const char FOCUS_MODE_NORMAL[];
     static const char FOCUS_MODE_MACRO[];
     // Focus is fixed. The camera is always in this mode if the focus is not
     // adjustable. If the camera has auto-focus, this mode can fix the

@@ -129,6 +129,7 @@ const char CameraParameters::PIXEL_FORMAT_JPEG[] = "jpeg";
 // Values for focus mode settings.
 const char CameraParameters::FOCUS_MODE_AUTO[] = "auto";
 const char CameraParameters::FOCUS_MODE_INFINITY[] = "infinity";
+const char CameraParameters::FOCUS_MODE_NORMAL[] = "normal";
 const char CameraParameters::FOCUS_MODE_MACRO[] = "macro";
 const char CameraParameters::FOCUS_MODE_FIXED[] = "fixed";
 
