@@ -137,6 +137,7 @@ const char CameraParameters::FOCUS_MODE_INFINITY[] = "infinity";
 const char CameraParameters::FOCUS_MODE_MACRO[] = "macro";
 const char CameraParameters::FOCUS_MODE_FIXED[] = "fixed";
 const char CameraParameters::FOCUS_MODE_EDOF[] = "edof";
+const char CameraParameters::FOCUS_MODE_NORMAL[] = "normal";
 
 
 const char CameraParameters::KEY_SUPPORTED_THUMBNAIL_SIZES[] = "jpeg-thumbnail-size-values";

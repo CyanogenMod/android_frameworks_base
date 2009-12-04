@@ -874,6 +874,7 @@ public class Camera {
          * {@link #autoFocus(AutoFocusCallback)} in this mode.
          */
         public static final String FOCUS_MODE_INFINITY = "infinity";
+        public static final String FOCUS_MODE_NORMAL = "normal";
         public static final String FOCUS_MODE_MACRO = "macro";
 
         /**
