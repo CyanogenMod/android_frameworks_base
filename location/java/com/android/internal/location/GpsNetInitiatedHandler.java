@@ -322,7 +322,7 @@ public class GpsNetInitiatedHandler {
     			/* If the next 7-bit character is a CR (0x0D) and it is the last
     			 ** character, then it indicates a padding character. Drop it.
     			 */
-    			if (nPckidx == num_bytes || (cCurr >> 1) == CHAR_CR)
+                        if (nPckidx == num_bytes && (cCurr >> 1) == CHAR_CR)
     			{
     				break;
     			}
