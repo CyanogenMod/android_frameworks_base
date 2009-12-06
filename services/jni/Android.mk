@@ -35,7 +35,11 @@ ifeq ($(WITH_MALLOC_LEAK_CHECK),true)
 	LOCAL_CFLAGS += -DMALLOC_LEAK_CHECK
 endif
 
+ifeq ($(TARGET_HAVE_TSLIB),true)
+	LOCAL_CFLAGS += -DHAVE_TSLIB
+	LOCAL_C_INCLUDES += external/tslib/src
+endif
+
 LOCAL_MODULE:= libandroid_servers
 
 include $(BUILD_SHARED_LIBRARY)
-    

@@ -27,6 +27,10 @@
 
 #include <linux/input.h>
 
+#ifdef HAVE_TSLIB
+    #include "tslib-private.h"
+#endif
+
 struct pollfd;
 
 namespace android {
@@ -149,6 +153,15 @@ private:
 
     bool            mOpened;
     List<String8>   mExcludedDevices;
+
+    //tslib
+#ifdef HAVE_TSLIB
+    struct tsdev *mTS;
+    //Keeps track of number of events sent to the upper layer
+    //out of total number of events raw read by input-raw plugin
+    int numOfEventsSent;
+    struct ts_sample samp;
+#endif
 
     // device ids that report particular switches.
 #ifdef EV_SW
