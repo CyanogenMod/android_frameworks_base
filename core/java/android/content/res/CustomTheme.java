@@ -59,6 +59,16 @@ public final class CustomTheme implements Cloneable {
         return false;
     }
 
+    public static boolean nullSafeEquals(CustomTheme a, CustomTheme b) {
+        if (a == b) {
+            return true;
+        }
+        if (a != null && a.equals(b)) {
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public final String toString() {
         StringBuilder result = new StringBuilder();
