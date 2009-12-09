@@ -641,30 +641,43 @@ public class BluetoothFtpService extends IBluetoothFtp.Stub {
      * @param success true if push successful, else false
      * @param error if success is false, should hold a user-readable error message
      */
-    public synchronized void onObexTransferComplete(String transfer, boolean success,
-            String error) {
-        BluetoothObexDatabase.TransferDbItem dbItem = mSessionDb.getByTransfer(transfer);
+    public synchronized void onObexTransferComplete(String transfer, String filename,
+            boolean success, String error) {
 
-        if (dbItem == null) {
-            if (DBG) log("onObexTransferComplete() could not match transfer: " + transfer);
-        } else {
-            Intent intent = null;
-            if (dbItem.mDirection == BluetoothObexDatabase.TransferDirection.TX) {
-                intent = new Intent(BluetoothObexIntent.TX_COMPLETE_ACTION);
-                intent.putExtra(BluetoothObexIntent.ERROR_MESSAGE, error);
-            } else { // (dbItem.mDirection == TransferDirection.RX)
-                intent = new Intent(BluetoothObexIntent.RX_COMPLETE_ACTION);
+        if (transfer != null) {
+            BluetoothObexDatabase.TransferDbItem dbItem = mSessionDb.getByTransfer(transfer);
+
+            if (dbItem == null) {
+                if (DBG) log("onObexTransferComplete() could not match transfer: " + transfer);
+            } else {
+                Intent intent = null;
+                if (dbItem.mDirection == BluetoothObexDatabase.TransferDirection.TX) {
+                    intent = new Intent(BluetoothObexIntent.TX_COMPLETE_ACTION);
+                    intent.putExtra(BluetoothObexIntent.ERROR_MESSAGE, error);
+                } else { // (dbItem.mDirection == TransferDirection.RX)
+                    intent = new Intent(BluetoothObexIntent.RX_COMPLETE_ACTION);
+                }
+
+                if (intent != null) {
+                    intent.putExtra(BluetoothObexIntent.OBJECT_FILENAME, dbItem.mFilename);
+                    intent.putExtra(BluetoothObexIntent.PROFILE, BluetoothObexIntent.PROFILE_FTP);
+                    intent.putExtra(BluetoothObexIntent.SUCCESS, success);
+                    mContext.sendBroadcast(intent, BLUETOOTH_PERM);
+                }
+
+                // Remove transfer database entry
+                mSessionDb.deleteByFilename(dbItem.mFilename);
             }
+        } else if (filename != null) {
+            Intent intent = null;
+            intent = new Intent(BluetoothObexIntent.RX_COMPLETE_ACTION);
 
             if (intent != null) {
-                intent.putExtra(BluetoothObexIntent.OBJECT_FILENAME, dbItem.mFilename);
+                intent.putExtra(BluetoothObexIntent.OBJECT_FILENAME, filename);
                 intent.putExtra(BluetoothObexIntent.PROFILE, BluetoothObexIntent.PROFILE_FTP);
                 intent.putExtra(BluetoothObexIntent.SUCCESS, success);
                 mContext.sendBroadcast(intent, BLUETOOTH_PERM);
             }
-
-            // Remove transfer database entry
-            mSessionDb.deleteByFilename(dbItem.mFilename);
         }
     }
 

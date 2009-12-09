@@ -791,7 +791,7 @@ static DBusHandlerResult ftp_agent_complete_handler(DBusConnection *conn,
     jstring transfer = env->NewStringUTF(c_transfer);
 
     env->CallVoidMethod(nat->me, method_onObexTransferComplete,
-                        transfer, JNI_TRUE, NULL);
+                        transfer, NULL, JNI_TRUE, NULL);
 
     if (env->ExceptionCheck()) {
         env->ExceptionDescribe();
@@ -1029,14 +1029,28 @@ DBusHandlerResult ftp_event_filter(DBusMessage *msg, JNIEnv *env)
     } else if (dbus_message_is_signal(msg, OBEXD_DBUS_SRV_MGR_IFC,
                                       OBEXD_DBUS_SRV_MGR_SGNL_FTP_TRANS_COMPLETED)) {
         char *c_transfer;
+        char *c_filename;
         dbus_bool_t c_success;
 
         if (dbus_message_get_args(msg, &err,
                                   DBUS_TYPE_OBJECT_PATH, &c_transfer,
+                                  DBUS_TYPE_STRING, &c_filename,
                                   DBUS_TYPE_BOOLEAN, &c_success,
                                   DBUS_TYPE_INVALID)) {
-            LOGV("... Transfer Completed = %s  Success = %d", c_transfer,
-                 c_success);
+
+            LOGV("FTP Server Transfer Completed = %s  filename = %s  Success = %d", c_transfer,
+                 c_filename, c_success);
+
+            jstring transfer = env->NewStringUTF(c_transfer);
+            jstring filename = env->NewStringUTF(c_filename);
+            jboolean success = c_success ? JNI_TRUE : JNI_FALSE;
+
+            env->CallVoidMethod(nat->me, method_onObexTransferComplete,
+                                NULL, filename, success, NULL);
+
+            env->DeleteLocalRef(transfer);
+            env->DeleteLocalRef(filename);
+
         } else {
             LOG_AND_FREE_DBUS_ERROR_WITH_MSG(&err, msg);
         }
@@ -1782,7 +1796,7 @@ int register_android_server_BluetoothFtpService(JNIEnv *env)
   method_onDeleteComplete = env->GetMethodID( clazz, "onDeleteComplete", "(Ljava/lang/String;Ljava/lang/String;Z)V" );
   method_onObexRequest = env->GetMethodID( clazz, "onObexRequest", "(Ljava/lang/String;)Ljava/lang/String;" );
   method_onObexProgress = env->GetMethodID( clazz, "onObexProgress", "(Ljava/lang/String;I)V" );
-  method_onObexTransferComplete = env->GetMethodID( clazz, "onObexTransferComplete", "(Ljava/lang/String;ZLjava/lang/String;)V" );
+  method_onObexTransferComplete = env->GetMethodID( clazz, "onObexTransferComplete", "(Ljava/lang/String;Ljava/lang/String;ZLjava/lang/String;)V" );
   method_onObexSessionClosed = env->GetMethodID(clazz,"onObexSessionClosed", "(Ljava/lang/String;)V");
 #endif
 
