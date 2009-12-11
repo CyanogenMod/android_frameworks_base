@@ -862,8 +862,8 @@ public final class CdmaDataConnectionTracker extends DataConnectionTracker {
     }
 
     protected void onDataStateChanged (AsyncResult ar) {
-        ArrayList<DataCallState> dataCallStates = (ArrayList<DataCallState>)(ar.result);
 
+        ArrayList<DataCallState> dataCallStates = (ArrayList<DataCallState>)(ar.result);
         if (ar.exception != null) {
             // This is probably "radio not available" or something
             // of that sort. If so, the whole connection is going
@@ -871,9 +871,24 @@ public final class CdmaDataConnectionTracker extends DataConnectionTracker {
             return;
         }
 
+        // Trying to obtain the element in the DATA_CALL_LIST array which is
+        // currently active
+        int active_element;
+        for (active_element = 0; active_element < dataCallStates.size(); active_element++) {
+            if (dataCallStates.get(active_element).active != 0) {
+                break;
+            }
+        }
+
+        // To avoid ArrayIndexOutOfBoundsException
+        if (active_element == dataCallStates.size()) {
+            Log.i(LOG_TAG, "onDataStateChanged: No active connection");
+            active_element--;
+        }
+
         if (state == State.CONNECTED) {
             if (dataCallStates.size() >= 1) {
-                switch (dataCallStates.get(0).active) {
+                switch (dataCallStates.get(active_element).active) {
                 case DATA_CONNECTION_ACTIVE_PH_LINK_UP:
                     Log.v(LOG_TAG, "onDataStateChanged: active=LINK_ACTIVE && CONNECTED, ignore");
                     activity = Activity.NONE;
@@ -892,7 +907,7 @@ public final class CdmaDataConnectionTracker extends DataConnectionTracker {
                     break;
                 default:
                     Log.v(LOG_TAG, "onDataStateChanged: IGNORE unexpected DataCallState.active="
-                            + dataCallStates.get(0).active);
+                            + dataCallStates.get(active_element).active);
                 }
             } else {
                 Log.v(LOG_TAG, "onDataStateChanged: network disconnected, clean up");
@@ -943,6 +958,12 @@ public final class CdmaDataConnectionTracker extends DataConnectionTracker {
     }
 
     public void handleMessage (Message msg) {
+
+        CommandsInterface cm = phone.mCM;
+        if (cm.getRadioState().isGsm()) {
+            Log.d(LOG_TAG, "Ignore CDMA data state change");
+            return;
+        }
 
         switch (msg.what) {
             case EVENT_RECORDS_LOADED:

@@ -195,7 +195,9 @@ public final class SIMRecords extends IccRecords {
 
     protected void onRadioOffOrNotAvailable() {
         imsi = null;
-        msisdn = null;
+       // By not reinitializing msisdn to null, allow user to get msisdn
+       // information even if he switches to airplane mode
+       // msisdn = null;
         voiceMailNum = null;
         countVoiceMessages = 0;
         mncLength = 0;

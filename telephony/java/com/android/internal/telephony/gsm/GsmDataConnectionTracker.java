@@ -48,6 +48,7 @@ import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.Log;
 
+import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.DataCallState;
 import com.android.internal.telephony.DataConnection;
 import com.android.internal.telephony.DataConnectionTracker;
@@ -543,8 +544,8 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
 
     //****** Called from ServiceStateTracker
     /**
-     * Invoked when ServiceStateTracker observes a transition from GPRS
-     * attach to detach.
+     * Invoked when ServiceStateTracker observes a transition from GPRS attach
+     * to detach.
      */
     protected void onGprsDetached() {
         /*
@@ -808,15 +809,36 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
         // TODO: It'd be nice to only do this if the changed entrie(s)
         // match the current operator.
         createAllApnList();
-        if (state != State.DISCONNECTING) {
-            cleanUpConnection(isConnected, Phone.REASON_APN_CHANGED);
-            if (!isConnected) {
-                // reset reconnect timer
-                nextReconnectDelay = RECONNECT_DELAY_INITIAL_MILLIS;
-                mReregisterOnReconnectFailure = false;
-                trySetupData(Phone.REASON_APN_CHANGED);
-            }
+        if ( IsPreferredApnChanged()) {
+           if (state != State.DISCONNECTING) {
+              cleanUpConnection(isConnected, Phone.REASON_APN_CHANGED);
+              if (!isConnected) {
+                 // reset reconnect timer
+                 nextReconnectDelay = RECONNECT_DELAY_INITIAL_MILLIS;
+                 mReregisterOnReconnectFailure = false;
+                 trySetupData(Phone.REASON_APN_CHANGED);
+              }
+           }
         }
+    }
+
+    /**
+     * Checks if the PreferredApn is Changed
+     */
+    private boolean IsPreferredApnChanged() {
+        boolean change= true;
+        Log.d(LOG_TAG, "mActiveApn: "+ mActiveApn);
+        Log.d(LOG_TAG, "Preferred APN: " +  preferredApn );
+
+        if ((preferredApn != null )&& ( mActiveApn != null))  {
+           if( (mActiveApn.toString().equals(preferredApn.toString() )) &&
+               (mActiveApn.user.equals(preferredApn.user))  &&
+               (mActiveApn.password.equals(preferredApn.password)))  {
+               change = false;
+           }
+        }
+        Log.d(LOG_TAG, "Is Preferred APN changed: "+ change);
+        return change;
     }
 
     /**
@@ -826,10 +848,9 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
      * previous state
      */
     protected void onPdpStateChanged (AsyncResult ar, boolean explicitPoll) {
+
         ArrayList<DataCallState> pdpStates;
-
         pdpStates = (ArrayList<DataCallState>)(ar.result);
-
         if (ar.exception != null) {
             // This is probably "radio not available" or something
             // of that sort. If so, the whole connection is going
@@ -1640,6 +1661,12 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
     }
 
     public void handleMessage (Message msg) {
+
+        CommandsInterface cm = mGsmPhone.mCM;
+        if (cm.getRadioState().isCdma()) {
+            Log.d(LOG_TAG, "Ignore GSM data state change");
+            return;
+        }
 
         switch (msg.what) {
             case EVENT_RECORDS_LOADED:
