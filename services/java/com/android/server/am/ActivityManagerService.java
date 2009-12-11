@@ -12440,15 +12440,6 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
         }
 
         if (app.services.size() != 0 && adj > FOREGROUND_APP_ADJ) {
-            // If this process has active services running in it, we would
-            // like to avoid killing it unless it would prevent the current
-            // application from running.  By default we put the process in
-            // with the rest of the background processes; as we scan through
-            // its services we may bump it up from there.
-            if (adj > hiddenAdj) {
-                adj = hiddenAdj;
-                app.adjType = "bg-services";
-            }
             final long now = SystemClock.uptimeMillis();
             // This process is more important if the top activity is
             // bound to the service.
@@ -12512,17 +12503,19 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
                     }
                 }
             }
+            
+            // Finally, f this process has active services running in it, we
+            // would like to avoid killing it unless it would prevent the current
+            // application from running.  By default we put the process in
+            // with the rest of the background processes; as we scan through
+            // its services we may bump it up from there.
+            if (adj > hiddenAdj) {
+                adj = hiddenAdj;
+                app.adjType = "bg-services";
+            }
         }
 
         if (app.pubProviders.size() != 0 && adj > FOREGROUND_APP_ADJ) {
-            // If this process has published any content providers, then
-            // its adjustment makes it at least as important as any of the
-            // processes using those providers, and no less important than
-            // CONTENT_PROVIDER_ADJ, which is just shy of EMPTY.
-            if (adj > CONTENT_PROVIDER_ADJ) {
-                adj = CONTENT_PROVIDER_ADJ;
-                app.adjType = "pub-providers";
-            }
             Iterator jt = app.pubProviders.values().iterator();
             while (jt.hasNext() && adj > FOREGROUND_APP_ADJ) {
                 ContentProviderRecord cpr = (ContentProviderRecord)jt.next();
@@ -12563,6 +12556,15 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
                         app.adjTarget = cpr.info.name;
                     }
                 }
+            }
+            
+            // Finally, if this process has published any content providers,
+            // then its adjustment makes it at least as important as any of the
+            // processes using those providers, and no less important than
+            // CONTENT_PROVIDER_ADJ, which is just shy of EMPTY.
+            if (adj > CONTENT_PROVIDER_ADJ) {
+                adj = CONTENT_PROVIDER_ADJ;
+                app.adjType = "pub-providers";
             }
         }
 
