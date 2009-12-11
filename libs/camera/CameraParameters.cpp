@@ -147,8 +147,8 @@ const char CameraParameters::KEY_GPS_LATITUDE_REF[] = "gps-latitude-ref";
 const char CameraParameters::KEY_GPS_LONGITUDE_REF[] = "gps-longitude-ref";
 const char CameraParameters::KEY_GPS_ALTITUDE_REF[] = "gps-altitude-ref";
 const char CameraParameters::KEY_GPS_STATUS[] = "gps-status";
-
 const char CameraParameters::KEY_EXIF_DATETIME[] = "exif-datetime";
+
 const char CameraParameters::KEY_AUTO_EXPOSURE[] = "auto-exposure";
 const char CameraParameters::KEY_SUPPORTED_AUTO_EXPOSURE[] = "auto-exposure-values";
 

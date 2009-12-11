@@ -735,7 +735,12 @@ public class Camera {
         private static final String KEY_GPS_LATITUDE = "gps-latitude";
         private static final String KEY_GPS_LONGITUDE = "gps-longitude";
         private static final String KEY_GPS_ALTITUDE = "gps-altitude";
+        private static final String KEY_GPS_LATITUDE_REF = "gps-latitude-ref";
+        private static final String KEY_GPS_LONGITUDE_REF = "gps-longitude-ref";
+        private static final String KEY_GPS_ALTITUDE_REF = "gps-altitude-ref";
+        private static final String KEY_GPS_STATUS = "gps-status";
         private static final String KEY_GPS_TIMESTAMP = "gps-timestamp";
+        private static final String KEY_EXIF_DATETIME = "exif-datetime";
         private static final String KEY_GPS_PROCESSING_METHOD = "gps-processing-method";
         private static final String KEY_WHITE_BALANCE = "whitebalance";
         private static final String KEY_EFFECT = "effect";
@@ -1352,6 +1357,15 @@ public class Camera {
         }
 
         /**
+         * Sets GPS latitude reference coordinate. This will be stored in JPEG EXIF
+         * header.
+         * @param latitude GPS latitude reference coordinate.
+         */
+        public void setGpsLatitudeRef(String latRef) {
+            set(KEY_GPS_LATITUDE_REF, latRef);
+        }
+
+        /**
          * Sets GPS latitude coordinate. This will be stored in JPEG EXIF
          * header.
          *
@@ -1362,6 +1376,15 @@ public class Camera {
         }
 
         /**
+         * Sets GPS longitude reference coordinate. This will be stored in JPEG EXIF
+         * header.
+         * @param latitude GPS longitude reference coordinate.
+         */
+        public void setGpsLongitudeRef(String lonRef) {
+            set(KEY_GPS_LONGITUDE_REF, lonRef);
+        }
+
+        /**
          * Sets GPS longitude coordinate. This will be stored in JPEG EXIF
          * header.
          *
@@ -1369,6 +1392,14 @@ public class Camera {
          */
         public void setGpsLongitude(double longitude) {
             set(KEY_GPS_LONGITUDE, Double.toString(longitude));
+        }
+
+        /**
+         * Sets GPS altitude reference. This will be stored in JPEG EXIF header.
+         * @param altitude reference GPS altitude in meters.
+         */
+        public void setGpsAltitudeRef(double altRef) {
+            set(KEY_GPS_ALTITUDE_REF, Double.toString(altRef));
         }
 
         /**
@@ -1398,6 +1429,27 @@ public class Camera {
          */
         public void setGpsProcessingMethod(String processing_method) {
             set(KEY_GPS_PROCESSING_METHOD, processing_method);
+
+        }
+
+        /**
+         * Sets system timestamp. This will be stored in JPEG EXIF header.
+         *
+         * @param timestamp current timestamp (UTC in seconds since January 1,
+         *                  1970).
+         */
+        public void setExifDateTime(String dateTime) {
+            set(KEY_EXIF_DATETIME, dateTime);
+        }
+
+        /**
+         * Sets GPS Status. This will be stored in JPEG EXIF header.
+         *
+         * @param status GPS status (UTC in seconds since January 1,
+         *                  1970).
+         */
+        public void setGpsStatus(double status) {
+            set(KEY_GPS_STATUS, Double.toString(status));
         }
 
         /**
@@ -1405,8 +1457,11 @@ public class Camera {
          * parameters.
          */
         public void removeGpsData() {
+            remove(KEY_GPS_LATITUDE_REF);
             remove(KEY_GPS_LATITUDE);
+            remove(KEY_GPS_LONGITUDE_REF);
             remove(KEY_GPS_LONGITUDE);
+            remove(KEY_GPS_ALTITUDE_REF);
             remove(KEY_GPS_ALTITUDE);
             remove(KEY_GPS_TIMESTAMP);
             remove(KEY_GPS_PROCESSING_METHOD);
