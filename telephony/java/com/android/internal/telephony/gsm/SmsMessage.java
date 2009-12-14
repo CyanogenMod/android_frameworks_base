@@ -225,7 +225,7 @@ public class SmsMessage extends SmsMessageBase{
     public static SubmitPdu getSubmitPdu(String scAddress,
             String destinationAddress, String message,
             boolean statusReportRequested, byte[] header) {
-        return getSubmitPdu(scAddress, destinationAddress, message, statusReportRequested, header, ENCODING_UNKNOWN);
+        return getSubmitPdu(scAddress, destinationAddress, message, statusReportRequested, header, ENCODING_7BIT);
     }
     
     
@@ -249,6 +249,8 @@ public class SmsMessage extends SmsMessageBase{
             return null;
         }
 
+        Log.i(LOG_TAG, "Using encoding supplied as: " + encoding);
+        		
         SubmitPdu ret = new SubmitPdu();
         // MTI = SMS-SUBMIT, UDHI = header != null
         byte mtiByte = (byte)(0x01 | (header != null ? 0x40 : 0x00));
@@ -257,37 +259,33 @@ public class SmsMessage extends SmsMessageBase{
                 statusReportRequested, ret);
         // User Data (and length)
         byte[] userData;
-        if(encoding == ENCODING_UNKNOWN){
-            // First, try encoding it with the GSM alphabet
-            encoding = ENCODING_7BIT;
-        }
+
         try {
-            if(encoding == ENCODING_7BIT){
-                userData = GsmAlphabet.stringToGsm7BitPackedWithHeader(message, header);
-            }else{ //assume UCS-2
-                try{
-                    userData = encodeUCS2(message, header);
-                }catch(UnsupportedEncodingException uex){
-                    Log.e(LOG_TAG,
-                            "Implausible UnsupportedEncodingException ",
-                            uex);
-                    return null;
-                }
-            }
-        } catch (EncodeException ex) {
-            // Encoding to the 7-bit alphabet failed. Let's see if we can
-            // send it as a UCS-2 encoded message
-            try{
-                userData = encodeUCS2(message, header);
-            }catch(UnsupportedEncodingException uex){
-                Log.e(LOG_TAG,
-                        "Implausible UnsupportedEncodingException ",
-                        uex);
-                return null;
-            }
+        	try {
+        		if(encoding == ENCODING_7BIT){
+        			userData = GsmAlphabet.stringToGsm7BitPackedWithHeader(message, header);
+        		}
+        		else { //assume UCS-2
+        			userData = encodeUCS2(message, header);
+        			encoding = ENCODING_16BIT;
+        		}
+
+        	} catch (EncodeException ex) {
+        		// Encoding to the 7-bit alphabet failed. Let's see if we can
+        		// send it as a UCS-2 encoded message
+        		Log.i(LOG_TAG, "7-bit encode failed, trying UCS2");
+        		userData = encodeUCS2(message, header);
+        		encoding = ENCODING_16BIT;
+        	}
+
+        } catch (UnsupportedEncodingException uex) {
+        	Log.e(LOG_TAG,
+        			"Implausible UnsupportedEncodingException ",
+        			uex);
+        	return null;
         }
-        
-        if(encoding == ENCODING_7BIT){
+              
+        if (encoding == ENCODING_7BIT) {
             if ((0xff & userData[0]) > MAX_USER_DATA_SEPTETS) {
                 // Message too long
                 return null;
@@ -301,7 +299,7 @@ public class SmsMessage extends SmsMessageBase{
             // the receiver's SIM card. You can then send messages to yourself
             // (on a phone with this change) and they'll end up on the SIM card.
             bo.write(0x00);
-        }else{ //assume UCS-2
+        } else { //assume UCS-2
             if ((0xff & userData[0]) > MAX_USER_DATA_BYTES) {
                 // Message too long
                 return null;
@@ -309,9 +307,11 @@ public class SmsMessage extends SmsMessageBase{
             // TP-Data-Coding-Scheme
             // Class 3, UCS-2 encoding, uncompressed
             bo.write(0x0b);
+            
+            // (no TP-Validity-Period)
+
         }
         
-        // (no TP-Validity-Period)
         bo.write(userData, 0, userData.length);
         ret.encodedMessage = bo.toByteArray();
         return ret;
@@ -339,8 +339,8 @@ public class SmsMessage extends SmsMessageBase{
             userData = textPart;
         }
         byte[] ret = new byte[userData.length+1];
-        ret[0] = (byte) (userData.length & 0xff );
-        System.arraycopy(userData, 0, ret, 1, userData.length);
+		ret[0] = (byte) (userData.length & 0xff );
+		System.arraycopy(userData, 0, ret, 1, userData.length);
         return ret;
     }
 
