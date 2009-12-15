@@ -20,34 +20,19 @@ import com.android.internal.policy.PolicyManager;
 import com.android.internal.util.XmlUtils;
 import com.google.android.collect.Maps;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.WeakHashMap;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Map.Entry;
-
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.accounts.AccountManager;
+import android.accounts.IAccountManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.IContentProvider;
+import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.IIntentReceiver;
 import android.content.IntentSender;
 import android.content.ReceiverCallNotAllowedException;
 import android.content.ServiceConnection;
@@ -69,7 +54,6 @@ import android.content.pm.PermissionInfo;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
-import android.content.pm.ThemeInfo;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.content.res.CustomTheme;
@@ -100,11 +84,9 @@ import android.os.Process;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.Vibrator;
-import android.os.Process;
 import android.os.FileUtils.FileStatus;
 import android.telephony.TelephonyManager;
 import android.text.ClipboardManager;
-import android.text.TextUtils;
 import android.util.AndroidRuntimeException;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
@@ -112,8 +94,6 @@ import android.view.LayoutInflater;
 import android.view.WindowManagerImpl;
 import android.view.accessibility.AccessibilityManager;
 import android.view.inputmethod.InputMethodManager;
-import android.accounts.AccountManager;
-import android.accounts.IAccountManager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -131,10 +111,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.WeakHashMap;
 import java.util.Map.Entry;
-
-import com.android.internal.policy.PolicyManager;
-import com.android.internal.util.XmlUtils;
-import com.google.android.collect.Maps;
 
 class ReceiverRestrictedContext extends ContextWrapper {
     ReceiverRestrictedContext(Context base) {
@@ -618,40 +594,6 @@ class ApplicationContext extends Context {
     @Override
     public void setWallpaper(InputStream data) throws IOException {
         getWallpaperManager().setStream(data);
-    }
-
-    // If the default theme specifies wallpaper, returns the wallpaper Uri, otherwise returns null
-    private InputStream getDefaultThemeWallpaperStream() {
-        CustomTheme defaultTheme = CustomTheme.getDefault();
-        String themeId = defaultTheme.getThemeId();
-        String packageName = defaultTheme.getThemePackageName();
-        if (!TextUtils.isEmpty(themeId) &&
-            !TextUtils.isEmpty(packageName)) {
-            try {
-                PackageInfo pi = getPackageManager().getPackageInfo(packageName, 0);
-                ThemeInfo[] infos = pi.themeInfos;
-                String wallpaperPath = null;
-                if (infos != null) {
-                    for (ThemeInfo ti : infos) {
-                        if (ti.themeId.equals(themeId)) {
-                            wallpaperPath = ti.wallpaperImageName;
-                            break;
-                        }
-                    }
-                }
-                if (TextUtils.isEmpty(wallpaperPath)) {
-                    return null;
-                }
-                // Unfortunately, we can't use ContentProvider and walpaper uri:
-                // due to timing issue, the uri of interest may still be not
-                // available by the time launcher needs to render the wallpaper.
-                Resources res = getPackageManager().getResourcesForApplication(packageName);
-                return res.getAssets().open(wallpaperPath);
-            } catch (Exception e) {
-                Log.e(TAG, "Can't get wallpaper for default theme in clearWallpaper", e);
-            }
-        }
-        return null;
     }
 
     @Override
