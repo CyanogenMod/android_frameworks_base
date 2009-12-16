@@ -676,8 +676,8 @@
     <string name="adb_active_notification_title" msgid="6729044778949189918">"Отладка USB подключена"</string>
     <string name="adb_active_notification_message" msgid="4661997077344501389">"Компьютер подключен к телефону."</string>
     <string name="select_input_method" msgid="2086499663193509436">"Выберите способ ввода"</string>
-    <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
-    <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
+    <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZабвгдеёжзийклмнопрстуфхцчшщъыьэюя"</string>
+    <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZабвгдеёжзийклмнопрстуфхцчшщъыьэюя"</string>
     <string name="candidates_style" msgid="4333913089637062257"><u>"варианты"</u></string>
     <string name="ext_media_checking_notification_title" msgid="5457603418970994050">"Подготовка карты SD"</string>
     <string name="ext_media_checking_notification_message" msgid="8287319882926737053">"Проверка ошибок."</string>
