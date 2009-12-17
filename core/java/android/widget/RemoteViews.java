@@ -863,16 +863,20 @@ public class RemoteViews implements Parcelable, Filter {
         if (packageName != null) {
             try {
                 c = context.createPackageContext(packageName, Context.CONTEXT_RESTRICTED);
-                CustomTheme theme = ActivityManagerNative.getDefault().getConfiguration().customTheme;
-                int styleId = CustomTheme.getStyleId(c, theme.getThemePackageName(), theme.getThemeId());
-                ContextThemeWrapper themeContext = new ContextThemeWrapper(c, styleId);
-                themeContext.useThemedResources(theme.getThemePackageName());
-                c = themeContext;
+                try {
+                    CustomTheme theme = ActivityManagerNative.getDefault().getConfiguration().customTheme;
+                    if (theme != null && !TextUtils.isEmpty(theme.getThemePackageName())) {
+                        int styleId = CustomTheme.getStyleId(c, theme.getThemePackageName(),
+                                theme.getThemeId());
+                        ContextThemeWrapper themeContext = new ContextThemeWrapper(c, styleId);
+                        themeContext.useThemedResources(theme.getThemePackageName());
+                        c = themeContext;
+                    }
+                } catch (RemoteException e) {
+                    Log.e(LOG_TAG, "Failed to get current theme", e);
+                }
             } catch (NameNotFoundException e) {
                 Log.e(LOG_TAG, "Package name " + packageName + " not found");
-                c = context;
-            } catch (RemoteException e) {
-                Log.e(LOG_TAG, "Failed to get current theme", e);
                 c = context;
             }
         } else {

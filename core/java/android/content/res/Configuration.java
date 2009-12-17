@@ -268,8 +268,8 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         screenLayout = SCREENLAYOUT_SIZE_UNDEFINED;
 
         String themeResource = SystemProperties.get(THEME_ID_PERSISTENCE_PROPERTY, null);
-        String themePackageName = SystemProperties.get(THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, "");
-        if (!TextUtils.isEmpty(themeResource) && !TextUtils.isEmpty(themePackageName)) {
+        String themePackageName = SystemProperties.get(THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, null);
+        if (themeResource != null && themePackageName != null) {
             customTheme = new CustomTheme(themeResource, themePackageName);
         } else {
             customTheme = CustomTheme.getDefault();
