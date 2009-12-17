@@ -737,6 +737,7 @@
     <string name="usb_storage_stop_notification_title" msgid="2336058396663516017">"Выключить USB-накопитель"</string>
     <string name="usb_storage_stop_notification_message" msgid="2591813490269841539">"Выберите, чтобы выключить USB-накопитель."</string>
     <string name="usb_storage_stop_title" msgid="6014127947456185321">"Выключить USB-накопитель"</string>
+
     <string name="usb_storage_stop_message" msgid="2390958966725232848">"Перед выключением USB-накопителя обязательно отключите USB-хост. Выберите \"Выключить\", чтобы выключить USB-накопитель."</string>
     <string name="usb_storage_stop_button_mount" msgid="1181858854166273345">"Выключить"</string>
     <string name="usb_storage_stop_button_unmount" msgid="3774611918660582898">"Отмена"</string>
@@ -747,8 +748,8 @@
     <string name="adb_active_notification_title" msgid="6729044778949189918">"Отладка USB подключена"</string>
     <string name="adb_active_notification_message" msgid="8470296818270110396">"Нажмите, чтобы отключить отладку USB."</string>
     <string name="select_input_method" msgid="6865512749462072765">"Выберите способ ввода"</string>
-    <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZабвгдеёжзийклмнопрстуфхцчшщъыьэюя"</string>
-    <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZабвгдеёжзийклмнопрстуфхцчшщъыьэюя"</string>
+    <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"</string>
+    <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"</string>
     <string name="candidates_style" msgid="4333913089637062257"><u>"варианты"</u></string>
     <string name="ext_media_checking_notification_title" msgid="5457603418970994050">"Подготовка карты SD"</string>
     <string name="ext_media_checking_notification_message" msgid="8287319882926737053">"Проверка ошибок."</string>
