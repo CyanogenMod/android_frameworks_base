@@ -15,8 +15,8 @@ import android.text.TextUtils;
  */
 public final class CustomTheme implements Cloneable {
 
-    private String mThemeId;
-    private String mThemePackageName;
+    private final String mThemeId;
+    private final String mThemePackageName;
 
     private static final CustomTheme sDefaultTheme = new CustomTheme();
 
@@ -92,10 +92,6 @@ public final class CustomTheme implements Cloneable {
 
     public String getThemePackageName() {
         return mThemePackageName;
-    }
-
-    public void setThemePackageName(String themePackageName) {
-        mThemePackageName = themePackageName;
     }
 
     public static CustomTheme getDefault() {
