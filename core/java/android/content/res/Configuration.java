@@ -354,13 +354,10 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             changed |= ActivityInfo.CONFIG_SCREEN_LAYOUT;
             screenLayout = delta.screenLayout;
         }
-        if (delta.customTheme != null
-                && (customTheme == null || !customTheme.equals(delta.customTheme))) {
+        if (!CustomTheme.nullSafeEquals(delta.customTheme, customTheme)) {
             changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
-            customTheme = (CustomTheme) delta.customTheme.clone();
-        } else if (delta.customTheme == null && customTheme != null) {
-            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
-            customTheme = CustomTheme.getDefault();
+            customTheme = (delta != null ? (CustomTheme)delta.customTheme.clone() :
+                CustomTheme.getDefault());
         }
         return changed;
     }
