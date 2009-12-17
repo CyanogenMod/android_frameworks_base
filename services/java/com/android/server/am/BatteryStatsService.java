@@ -196,7 +196,7 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
     public void noteAirplaneMode(boolean airplaneMode) {
         enforceCallingPermission();
         synchronized (mStats) {
-            mStats.noteAirplaneModeLocked(airplaneMode);
+      //      mStats.noteAirplaneModeLocked(airplaneMode);
         }
     }
 
