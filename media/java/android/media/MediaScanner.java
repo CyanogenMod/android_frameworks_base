@@ -505,8 +505,14 @@ public class MediaScanner
                     mFileType == MediaFile.FILE_TYPE_AAC ||
                     mFileType == MediaFile.FILE_TYPE_FLAC ||
                     mFileType == MediaFile.FILE_TYPE_MID ||
-                    mFileType == MediaFile.FILE_TYPE_WMA) {
-                // we only extract metadata from MP3, M4A, OGG, MID, AAC, FLAC and WMA files.
+                    mFileType == MediaFile.FILE_TYPE_WMA ||
+                    mFileType == MediaFile.FILE_TYPE_WMV ||
+                    mFileType == MediaFile.FILE_TYPE_ASF ||
+                    mFileType == MediaFile.FILE_TYPE_AMR ||
+                    mFileType == MediaFile.FILE_TYPE_AWB ||
+                    mFileType == MediaFile.FILE_TYPE_WAV ) {
+                // we only extract metadata from MP3, M4A, 3GP, OGG, MID, WMA,
+                // WMV, ASF, AAC, AMR(amr-nb), AWB(amr-wb), FLAC and WAV files.
                 // check MP4 files, to determine if they contain only audio.
                 return true;
             }
