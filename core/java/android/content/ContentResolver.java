@@ -389,12 +389,12 @@ public abstract class ContentResolver {
         }
     }
 
-    class OpenResourceIdResult {
-        Resources r;
-        int id;
+    public class OpenResourceIdResult {
+        public Resources r;
+        public int id;
     }
     
-    OpenResourceIdResult getResourceId(Uri uri) throws FileNotFoundException {
+    public OpenResourceIdResult getResourceId(Uri uri) throws FileNotFoundException {
         String authority = uri.getAuthority();
         Resources r;
         if (TextUtils.isEmpty(authority)) {

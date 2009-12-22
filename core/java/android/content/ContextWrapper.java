@@ -249,6 +249,14 @@ public class ContextWrapper extends Context {
     }
 
     @Override
+    public void startIntentSender(IntentSender intent,
+            Intent fillInIntent, int flagsMask, int flagsValues, int extraFlags)
+            throws IntentSender.SendIntentException {
+        mBase.startIntentSender(intent, fillInIntent, flagsMask,
+                flagsValues, extraFlags);
+    }
+    
+    @Override
     public void sendBroadcast(Intent intent) {
         mBase.sendBroadcast(intent);
     }
@@ -279,6 +287,17 @@ public class ContextWrapper extends Context {
         mBase.sendStickyBroadcast(intent);
     }
 
+
+    @Override
+    public void sendStickyOrderedBroadcast(
+        Intent intent, BroadcastReceiver resultReceiver,
+        Handler scheduler, int initialCode, String initialData,
+        Bundle initialExtras) {
+        mBase.sendStickyOrderedBroadcast(intent,
+                resultReceiver, scheduler, initialCode,
+                initialData, initialExtras);
+    }
+    
     @Override
     public void removeStickyBroadcast(Intent intent) {
         mBase.removeStickyBroadcast(intent);

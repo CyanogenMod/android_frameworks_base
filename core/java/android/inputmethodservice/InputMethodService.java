@@ -26,7 +26,6 @@ import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.Process;
 import android.os.ResultReceiver;
 import android.os.SystemClock;
 import android.provider.Settings;
@@ -555,7 +554,7 @@ public class InputMethodService extends AbstractInputMethodService {
         mImm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
         mInflater = (LayoutInflater)getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
-        mWindow = new SoftInputWindow(this, mTheme);
+        mWindow = new SoftInputWindow(this, mTheme, mDispatcherState);
         initViews();
         mWindow.getWindow().setLayout(FILL_PARENT, WRAP_CONTENT);
     }
@@ -945,11 +944,6 @@ public class InputMethodService extends AbstractInputMethodService {
         boolean isShown = mShowInputRequested && onEvaluateInputViewShown();
         if (mIsInputViewShown != isShown && mWindowVisible) {
             mIsInputViewShown = isShown;
-            if (isShown) {
-            	Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_DISPLAY);
-            } else {
-            	Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);
-            }
             mInputFrame.setVisibility(isShown ? View.VISIBLE : View.GONE);
             if (mInputView == null) {
                 initialize();
@@ -1155,7 +1149,6 @@ public class InputMethodService extends AbstractInputMethodService {
      * same text field as before.
      */
     public void onStartInputView(EditorInfo info, boolean restarting) {
-    	
     }
     
     /**
@@ -1430,7 +1423,6 @@ public class InputMethodService extends AbstractInputMethodService {
     }
 
     void doStartInput(InputConnection ic, EditorInfo attribute, boolean restarting) {
-    	
         if (!restarting) {
             doFinishInput();
         }
@@ -1565,6 +1557,28 @@ public class InputMethodService extends AbstractInputMethodService {
         mImm.showSoftInputFromInputMethod(mToken, flags);
     }
     
+    private boolean handleBack(boolean doIt) {
+        if (mShowInputRequested) {
+            // If the soft input area is shown, back closes it and we
+            // consume the back key.
+            if (doIt) requestHideSelf(0);
+            return true;
+        } else if (mWindowVisible) {
+            if (mCandidatesVisibility == View.VISIBLE) {
+                // If we are showing candidates even if no input area, then
+                // hide them.
+                if (doIt) setCandidatesViewShown(false);
+            } else {
+                // If we have the window visible for some other reason --
+                // most likely to show candidates -- then just get rid
+                // of it.  This really shouldn't happen, but just in case...
+                if (doIt) hideWindow();
+            }
+            return true;
+        }
+        return false;
+    }
+    
     /**
      * Override this to intercept key down events before they are processed by the
      * application.  If you return true, the application will not itself
@@ -1572,35 +1586,30 @@ public class InputMethodService extends AbstractInputMethodService {
      * will occur as if the IME had not seen the event at all.
      * 
      * <p>The default implementation intercepts {@link KeyEvent#KEYCODE_BACK
-     * KeyEvent.KEYCODE_BACK} to hide the current IME UI if it is shown.  In
-     * additional, in fullscreen mode only, it will consume DPAD movement
+     * KeyEvent.KEYCODE_BACK} if the IME is currently shown, to
+     * possibly hide it when the key goes up (if not canceled or long pressed).  In
+     * addition, in fullscreen mode only, it will consume DPAD movement
      * events to move the cursor in the extracted text view, not allowing
      * them to perform navigation in the underlying application.
      */
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK
-                && event.getRepeatCount() == 0) {
-            if (mShowInputRequested) {
-                // If the soft input area is shown, back closes it and we
-                // consume the back key.
-                requestHideSelf(0);
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK) {
+            if (handleBack(false)) {
+                event.startTracking();
                 return true;
-            } else if (mWindowVisible) {
-                if (mCandidatesVisibility == View.VISIBLE) {
-                    // If we are showing candidates even if no input area, then
-                    // hide them.
-                    setCandidatesViewShown(false);
-                    return true;
-                } else {
-                    // If we have the window visible for some other reason --
-                    // most likely to show candidates -- then just get rid
-                    // of it.  This really shouldn't happen, but just in case...
-                    hideWindow();
-                    return true;
-                }
             }
+            return false;
         }
         return doMovementKey(keyCode, event, MOVEMENT_DOWN);
+    }
+
+    /**
+     * Default implementation of {@link KeyEvent.Callback#onKeyLongPress(int, KeyEvent)
+     * KeyEvent.Callback.onKeyLongPress()}: always returns false (doesn't handle
+     * the event).
+     */
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        return false;
     }
 
     /**
@@ -1625,12 +1634,18 @@ public class InputMethodService extends AbstractInputMethodService {
      * process the event.  If you return true, the normal application processing
      * will occur as if the IME had not seen the event at all.
      * 
-     * <p>The default implementation always returns false, except when
-     * in fullscreen mode, where it will consume DPAD movement
+     * <p>The default implementation intercepts {@link KeyEvent#KEYCODE_BACK
+     * KeyEvent.KEYCODE_BACK} to hide the current IME UI if it is shown.  In
+     * addition, in fullscreen mode only, it will consume DPAD movement
      * events to move the cursor in the extracted text view, not allowing
      * them to perform navigation in the underlying application.
      */
     public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_BACK && event.isTracking()
+                && !event.isCanceled()) {
+            return handleBack(true);
+        }
+        
         return doMovementKey(keyCode, event, MOVEMENT_UP);
     }
 
@@ -1966,19 +1981,15 @@ public class InputMethodService extends AbstractInputMethodService {
                 ei.inputType != InputType.TYPE_NULL);
         if (hasAction) {
             mExtractAccessories.setVisibility(View.VISIBLE);
-            if (mExtractAction != null) {
-                if (ei.actionLabel != null) {
-                    mExtractAction.setText(ei.actionLabel);
-                } else {
-                    mExtractAction.setText(getTextForImeAction(ei.imeOptions));
-                }
-                mExtractAction.setOnClickListener(mActionClickListener);
+            if (ei.actionLabel != null) {
+                mExtractAction.setText(ei.actionLabel);
+            } else {
+                mExtractAction.setText(getTextForImeAction(ei.imeOptions));
             }
+            mExtractAction.setOnClickListener(mActionClickListener);
         } else {
             mExtractAccessories.setVisibility(View.GONE);
-            if (mExtractAction != null) {
-                mExtractAction.setOnClickListener(null);
-            }
+            mExtractAction.setOnClickListener(null);
         }
     }
     
@@ -2004,8 +2015,9 @@ public class InputMethodService extends AbstractInputMethodService {
             req.flags = InputConnection.GET_TEXT_WITH_STYLES;
             req.hintMaxLines = 10;
             req.hintMaxChars = 10000;
-            mExtractedText = getCurrentInputConnection().getExtractedText(req,
-                    InputConnection.GET_EXTRACTED_TEXT_MONITOR);
+            InputConnection ic = getCurrentInputConnection();
+            mExtractedText = ic == null? null
+                    : ic.getExtractedText(req, InputConnection.GET_EXTRACTED_TEXT_MONITOR);
             
             final EditorInfo ei = getCurrentInputEditorInfo();
             

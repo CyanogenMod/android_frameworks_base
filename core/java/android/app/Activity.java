@@ -24,6 +24,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IIntentSender;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -1813,10 +1814,22 @@ public class Activity extends ContextThemeWrapper
     }
 
     /**
+     * Default implementation of {@link KeyEvent.Callback#onKeyLongPress(int, KeyEvent)
+     * KeyEvent.Callback.onKeyLongPress()}: always returns false (doesn't handle
+     * the event).
+     */
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        return false;
+    }
+    
+    /**
      * Called when a key was released and not handled by any of the views
      * inside of the activity. So, for example, key presses while the cursor 
      * is inside a TextView will not trigger the event (unless it is a navigation
      * to another object) because TextView handles its own key presses.
+     * 
+     * <p>The default implementation handles KEYCODE_BACK to stop the activity
+     * and go back.
      * 
      * @return Return <code>true</code> to prevent this event from being propagated
      * further, or <code>false</code> to indicate that you have not handled 
@@ -1825,6 +1838,12 @@ public class Activity extends ContextThemeWrapper
      * @see KeyEvent
      */
     public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.isTracking()
+                && !event.isCanceled()) {
+            onBackPressed();
+            return true;
+        }
+     
         return false;
     }
 
@@ -1835,6 +1854,15 @@ public class Activity extends ContextThemeWrapper
      */
     public boolean onKeyMultiple(int keyCode, int repeatCount, KeyEvent event) {
         return false;
+    }
+    
+    /**
+     * Called when the activity has detected the user's press of the back
+     * key.  The default implementation simply finishes the current activity,
+     * but you can override this to do whatever you want.
+     */
+    public void onBackPressed() {
+        finish();
     }
     
     /**
@@ -1964,12 +1992,16 @@ public class Activity extends ContextThemeWrapper
      */
     public boolean dispatchKeyEvent(KeyEvent event) {
         onUserInteraction();
-        if (getWindow().superDispatchKeyEvent(event)) {
+        Window win = getWindow();
+        if (win.superDispatchKeyEvent(event)) {
             return true;
         }
-        return event.dispatch(this);
+        View decor = mDecor;
+        if (decor == null) decor = win.getDecorView();
+        return event.dispatch(this, decor != null
+                ? decor.getKeyDispatcherState() : null, this);
     }
-
+    
     /**
      * Called to process touch screen events.  You can override this to
      * intercept all touch screen events before they are dispatched to the
@@ -2683,6 +2715,67 @@ public class Activity extends ContextThemeWrapper
     }
 
     /**
+     * Like {@link #startActivityForResult(Intent, int)}, but allowing you
+     * to use a IntentSender to describe the activity to be started.  If
+     * the IntentSender is for an activity, that activity will be started
+     * as if you had called the regular {@link #startActivityForResult(Intent, int)}
+     * here; otherwise, its associated action will be executed (such as
+     * sending a broadcast) as if you had called
+     * {@link IntentSender#sendIntent IntentSender.sendIntent} on it.
+     * 
+     * @param intent The IntentSender to launch.
+     * @param requestCode If >= 0, this code will be returned in
+     *                    onActivityResult() when the activity exits.
+     * @param fillInIntent If non-null, this will be provided as the
+     * intent parameter to {@link IntentSender#sendIntent}.
+     * @param flagsMask Intent flags in the original IntentSender that you
+     * would like to change.
+     * @param flagsValues Desired values for any bits set in
+     * <var>flagsMask</var>
+     * @param extraFlags Always set to 0.
+     */
+    public void startIntentSenderForResult(IntentSender intent, int requestCode,
+            Intent fillInIntent, int flagsMask, int flagsValues, int extraFlags)
+            throws IntentSender.SendIntentException {
+        if (mParent == null) {
+            startIntentSenderForResultInner(intent, requestCode, fillInIntent,
+                    flagsMask, flagsValues, this);
+        } else {
+            mParent.startIntentSenderFromChild(this, intent, requestCode,
+                    fillInIntent, flagsMask, flagsValues, extraFlags);
+        }
+    }
+    
+    private void startIntentSenderForResultInner(IntentSender intent, int requestCode,
+            Intent fillInIntent, int flagsMask, int flagsValues, Activity activity)
+            throws IntentSender.SendIntentException {
+        try {
+            String resolvedType = null;
+            if (fillInIntent != null) {
+                resolvedType = fillInIntent.resolveTypeIfNeeded(getContentResolver());
+            }
+            int result = ActivityManagerNative.getDefault()
+                .startActivityIntentSender(mMainThread.getApplicationThread(), intent,
+                        fillInIntent, resolvedType, mToken, activity.mEmbeddedID,
+                        requestCode, flagsMask, flagsValues);
+            if (result == IActivityManager.START_CANCELED) {
+                throw new IntentSender.SendIntentException();
+            }
+            Instrumentation.checkStartActivityResult(result, null);
+        } catch (RemoteException e) {
+        }
+        if (requestCode >= 0) {
+            // If this start is requesting a result, we can avoid making
+            // the activity visible until the result is received.  Setting
+            // this code during onCreate(Bundle savedInstanceState) or onResume() will keep the
+            // activity hidden during this time, to avoid flickering.
+            // This can only be done when a result is requested because
+            // that guarantees we will get information back when the
+            // activity is finished, no matter what happens to it.
+            mStartedActivity = true;
+        }
+    }
+    /**
      * Launch a new activity.  You will not receive any information about when
      * the activity exits.  This implementation overrides the base version,
      * providing information about
@@ -2825,6 +2918,20 @@ public class Activity extends ContextThemeWrapper
         }
     }
 
+    /**
+     * Like {@link #startActivityFromChild(Activity, Intent, int)}, but
+     * taking a IntentSender; see
+     * {@link #startIntentSenderForResult(IntentSender, int, Intent, int, int, int)}
+     * for more information.
+     */
+    public void startIntentSenderFromChild(Activity child, IntentSender intent,
+            int requestCode, Intent fillInIntent, int flagsMask, int flagsValues,
+            int extraFlags)
+            throws IntentSender.SendIntentException {
+        startIntentSenderForResultInner(intent, requestCode, fillInIntent,
+                flagsMask, flagsValues, child);
+    }
+    
     /**
      * Call this to set the result that your activity will return to its
      * caller.
@@ -3256,7 +3363,7 @@ public class Activity extends ContextThemeWrapper
                 throw new IllegalArgumentException("no ident");
             }
         }
-        mSearchManager.setIdent(ident);
+        mSearchManager.setIdent(ident, getComponentName());
     }
     
     @Override

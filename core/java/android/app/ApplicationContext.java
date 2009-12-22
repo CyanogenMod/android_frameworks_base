@@ -656,6 +656,27 @@ class ApplicationContext extends Context {
     }
 
     @Override
+    public void startIntentSender(IntentSender intent,
+            Intent fillInIntent, int flagsMask, int flagsValues, int extraFlags)
+            throws IntentSender.SendIntentException {
+        try {
+            String resolvedType = null;
+            if (fillInIntent != null) {
+                resolvedType = fillInIntent.resolveTypeIfNeeded(getContentResolver());
+            }
+            int result = ActivityManagerNative.getDefault()
+                .startActivityIntentSender(mMainThread.getApplicationThread(), intent,
+                        fillInIntent, resolvedType, null, null,
+                        0, flagsMask, flagsValues);
+            if (result == IActivityManager.START_CANCELED) {
+                throw new IntentSender.SendIntentException();
+            }
+            Instrumentation.checkStartActivityResult(result, null);
+        } catch (RemoteException e) {
+        }
+    }
+    
+    @Override
     public void sendBroadcast(Intent intent) {
         String resolvedType = intent.resolveTypeIfNeeded(getContentResolver());
         try {
@@ -732,6 +753,38 @@ class ApplicationContext extends Context {
         }
     }
 
+    @Override
+    public void sendStickyOrderedBroadcast(Intent intent,
+            BroadcastReceiver resultReceiver,
+            Handler scheduler, int initialCode, String initialData,
+            Bundle initialExtras) {
+        IIntentReceiver rd = null;
+        if (resultReceiver != null) {
+            if (mPackageInfo != null) {
+                if (scheduler == null) {
+                    scheduler = mMainThread.getHandler();
+                }
+                rd = mPackageInfo.getReceiverDispatcher(
+                    resultReceiver, getOuterContext(), scheduler,
+                    mMainThread.getInstrumentation(), false);
+            } else {
+                if (scheduler == null) {
+                    scheduler = mMainThread.getHandler();
+                }
+                rd = new ActivityThread.PackageInfo.ReceiverDispatcher(
+                        resultReceiver, getOuterContext(), scheduler, null, false).getIIntentReceiver();
+            }
+        }
+        String resolvedType = intent.resolveTypeIfNeeded(getContentResolver());
+        try {
+            ActivityManagerNative.getDefault().broadcastIntent(
+                mMainThread.getApplicationThread(), intent, resolvedType, rd,
+                initialCode, initialData, initialExtras, null,
+                true, true);
+        } catch (RemoteException e) {
+        }
+    }
+    
     @Override
     public void removeStickyBroadcast(Intent intent) {
         String resolvedType = intent.resolveTypeIfNeeded(getContentResolver());
