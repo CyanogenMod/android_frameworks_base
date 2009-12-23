@@ -600,12 +600,10 @@ android.webkit.CallbackProxy$ResultTransport
 android.webkit.CookieManager
 android.webkit.CookieSyncManager
 android.webkit.DataLoader
-android.webkit.GearsPermissionsManager
 android.webkit.HttpDateTime
 android.webkit.JWebCoreJavaBridge
 android.webkit.LoadListener
 android.webkit.MimeTypeMap
-android.webkit.TextDialog
 android.webkit.URLUtil
 android.webkit.WebIconDatabase$IconListener
 android.webkit.WebSettings
@@ -614,9 +612,6 @@ android.webkit.WebView
 android.webkit.WebView$HitTestResult
 android.webkit.WebViewCore
 android.webkit.WebViewDatabase
-android.webkit.gears.ApacheHttpRequestAndroid
-android.webkit.gears.ApacheHttpRequestAndroid$Buffer
-android.webkit.gears.NativeDialog
 android.widget.AbsListView
 android.widget.AbsListView$3
 android.widget.AbsListView$PerformClick
