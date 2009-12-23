@@ -390,7 +390,8 @@ extends Layout
                         cur = d;
                     } else if (d == Character.DIRECTIONALITY_EUROPEAN_NUMBER ||
                                d == Character.DIRECTIONALITY_ARABIC_NUMBER) {
-                        cur = Character.DIRECTIONALITY_RIGHT_TO_LEFT;
+			cur = Character.DIRECTIONALITY_LEFT_TO_RIGHT;
+                        //cur = Character.DIRECTIONALITY_RIGHT_TO_LEFT;
                     } else {
                         byte dd = SOR;
                         int k;
@@ -404,7 +405,7 @@ extends Layout
                             }
                             if (dd == Character.DIRECTIONALITY_EUROPEAN_NUMBER ||
                                 dd == Character.DIRECTIONALITY_ARABIC_NUMBER) {
-                                dd = Character.DIRECTIONALITY_RIGHT_TO_LEFT;
+                                dd = Character.DIRECTIONALITY_LEFT_TO_RIGHT;
                                 break;
                             }
                         }
