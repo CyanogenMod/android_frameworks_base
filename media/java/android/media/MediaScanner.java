@@ -652,7 +652,7 @@ public class MediaScanner
             entry.mTableUri = tableUri;
 
              // use album artist if artist is missing
-            if (mArtist == null || mArtist.length() == 0) {
+            if (mAlbumArtist != null && mAlbumArtist.length() != 0) {
                 mArtist = mAlbumArtist;
             }
 
