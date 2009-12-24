@@ -449,7 +449,16 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
      */
     @Deprecated
     public final void setForeground(boolean isForeground) {
-        Log.w(TAG, "setForeground: ignoring old API call on " + getClass().getName());
+        if (mActivityManager == null) {
+            return;
+        }
+        try {
+            mActivityManager.setServiceForeground(
+                    new ComponentName(this, mClassName), mToken, 0, null, isForeground);
+        } catch (RemoteException ex) {
+        }
+   
+        Log.w(TAG, "setForeground: This API will be removed!!  at " + getClass().getName());
     }
     
     /**
