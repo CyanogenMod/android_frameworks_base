@@ -375,7 +375,7 @@ extends Layout
                         cur = d;
 
                     if (d == Character.DIRECTIONALITY_EUROPEAN_NUMBER)
-                        chdirs[j] = cur;
+                        chdirs[j] = Character.DIRECTIONALITY_LEFT_TO_RIGHT;
                 }
 
                 // dump(chdirs, n, "W7");
@@ -390,8 +390,8 @@ extends Layout
                         cur = d;
                     } else if (d == Character.DIRECTIONALITY_EUROPEAN_NUMBER ||
                                d == Character.DIRECTIONALITY_ARABIC_NUMBER) {
-			cur = Character.DIRECTIONALITY_LEFT_TO_RIGHT;
-                        //cur = Character.DIRECTIONALITY_RIGHT_TO_LEFT;
+						cur = Character.DIRECTIONALITY_LEFT_TO_RIGHT;
+						// cur = Character.DIRECTIONALITY_RIGHT_TO_LEFT;
                     } else {
                         byte dd = SOR;
                         int k;
