@@ -98,7 +98,6 @@ import android.view.RawInputEvent;
 import android.view.Surface;
 import android.view.SurfaceSession;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.WindowManagerImpl;
@@ -125,8 +124,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /** {@hide} */
-public class WindowManagerService extends IWindowManager.Stub 
-		implements Watchdog.Monitor, KeyInputQueue.HapticFeedbackCallback {
+public class WindowManagerService extends IWindowManager.Stub implements Watchdog.Monitor {
     static final String TAG = "WindowManager";
     static final boolean DEBUG = false;
     static final boolean DEBUG_FOCUS = false;
@@ -3246,7 +3244,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 "getScancodeState()")) {
             throw new SecurityException("Requires READ_INPUT_STATE permission");
         }
-        return mQueue.getScancodeState(sw);
+        return KeyInputQueue.getScancodeState(sw);
     }
 
     public int getScancodeStateForDevice(int devid, int sw) {
@@ -3254,7 +3252,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 "getScancodeStateForDevice()")) {
             throw new SecurityException("Requires READ_INPUT_STATE permission");
         }
-        return mQueue.getScancodeState(devid, sw);
+        return KeyInputQueue.getScancodeState(devid, sw);
     }
 
     public int getKeycodeState(int sw) {
@@ -3262,7 +3260,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 "getKeycodeState()")) {
             throw new SecurityException("Requires READ_INPUT_STATE permission");
         }
-        return mQueue.getKeycodeState(sw);
+        return KeyInputQueue.getKeycodeState(sw);
     }
 
     public int getKeycodeStateForDevice(int devid, int sw) {
@@ -3270,7 +3268,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 "getKeycodeStateForDevice()")) {
             throw new SecurityException("Requires READ_INPUT_STATE permission");
         }
-        return mQueue.getKeycodeState(devid, sw);
+        return KeyInputQueue.getKeycodeState(devid, sw);
     }
 
     public boolean hasKeys(int[] keycodes, boolean[] keyExists) {
@@ -5111,7 +5109,7 @@ public class WindowManagerService extends IWindowManager.Stub
         PowerManager.WakeLock mHoldingScreen;
 
         KeyQ() {
-            super(mContext, WindowManagerService.this);
+            super(mContext);
             PowerManager pm = (PowerManager)mContext.getSystemService(Context.POWER_SERVICE);
             mHoldingScreen = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK,
                     "KEEP_SCREEN_ON_FLAG");
@@ -5282,7 +5280,6 @@ public class WindowManagerService extends IWindowManager.Stub
             // Last keydown time for auto-repeating keys
             long lastKeyTime = SystemClock.uptimeMillis();
             long nextKeyTime = lastKeyTime+LONG_WAIT;
-            long downTime = 0;
 
             // How many successive repeats we generated
             int keyRepeatCount = 0;
@@ -5308,16 +5305,9 @@ public class WindowManagerService extends IWindowManager.Stub
                 if (DEBUG_INPUT && ev != null) Log.v(
                         TAG, "Event: type=" + ev.classType + " data=" + ev.event);
 
-                if (lastKey != null && !mPolicy.allowKeyRepeat()) {
-                    // cancel key repeat at the request of the policy.
-                    lastKey = null;
-                    downTime = 0;
-                    lastKeyTime = curTime;
-                    nextKeyTime = curTime + LONG_WAIT;
-                }
                 try {
                     if (ev != null) {
-                        curTime = SystemClock.uptimeMillis();
+                        curTime = ev.when;
                         int eventType;
                         if (ev.classType == RawInputEvent.CLASS_TOUCHSCREEN) {
                             eventType = eventType((MotionEvent)ev.event);
@@ -5328,45 +5318,31 @@ public class WindowManagerService extends IWindowManager.Stub
                             eventType = LocalPowerManager.OTHER_EVENT;
                         }
                         try {
-                            if ((curTime - mLastBatteryStatsCallTime)
+                            long now = SystemClock.uptimeMillis();
+
+                            if ((now - mLastBatteryStatsCallTime)
                                     >= MIN_TIME_BETWEEN_USERACTIVITIES) {
-                                mLastBatteryStatsCallTime = curTime;
+                                mLastBatteryStatsCallTime = now;
                                 mBatteryStats.noteInputEvent();
                             }
                         } catch (RemoteException e) {
                             // Ignore
                         }
-
-                        if (eventType != TOUCH_EVENT
-                                && eventType != LONG_TOUCH_EVENT
-                                && eventType != CHEEK_EVENT) {
-                            mPowerManager.userActivity(curTime, false,
-                                    eventType, false);
-                        } else if (mLastTouchEventType != eventType
-                                || (curTime - mLastUserActivityCallTime)
-                                >= MIN_TIME_BETWEEN_USERACTIVITIES) {
-                            mLastUserActivityCallTime = curTime;
-                            mLastTouchEventType = eventType;
-                            mPowerManager.userActivity(curTime, false,
-                                    eventType, false);
-                        }
-
+                        mPowerManager.userActivity(curTime, false, eventType, false);
                         switch (ev.classType) {
                             case RawInputEvent.CLASS_KEYBOARD:
                                 KeyEvent ke = (KeyEvent)ev.event;
                                 if (ke.isDown()) {
                                     lastKey = ke;
-                                    downTime = curTime;
                                     keyRepeatCount = 0;
                                     lastKeyTime = curTime;
                                     nextKeyTime = lastKeyTime
-                                            + ViewConfiguration.getLongPressTimeout();
+                                            + KEY_REPEAT_FIRST_DELAY;
                                     if (DEBUG_INPUT) Log.v(
                                         TAG, "Received key down: first repeat @ "
                                         + nextKeyTime);
                                 } else {
                                     lastKey = null;
-                                    downTime = 0;
                                     // Arbitrary long timeout.
                                     lastKeyTime = curTime;
                                     nextKeyTime = curTime + LONG_WAIT;
@@ -5414,19 +5390,7 @@ public class WindowManagerService extends IWindowManager.Stub
                         if (DEBUG_INPUT) Log.v(
                             TAG, "Key repeat: count=" + keyRepeatCount
                             + ", next @ " + nextKeyTime);
-                        KeyEvent newEvent;
-                        if (downTime != 0 && (downTime
-                                + ViewConfiguration.getLongPressTimeout())
-                                <= curTime) {
-                            newEvent = KeyEvent.changeTimeRepeat(lastKey,
-                                    curTime, keyRepeatCount,
-                                    lastKey.getFlags() | KeyEvent.FLAG_LONG_PRESS);
-                            downTime = 0;
-                        } else {
-                            newEvent = KeyEvent.changeTimeRepeat(lastKey,
-                                    curTime, keyRepeatCount);
-                        }
-                        dispatchKey(newEvent, 0, 0);
+                        dispatchKey(KeyEvent.changeTimeRepeat(lastKey, curTime, keyRepeatCount), 0, 0);
 
                     } else {
                         curTime = SystemClock.uptimeMillis();
@@ -5442,7 +5406,6 @@ public class WindowManagerService extends IWindowManager.Stub
             }
         }
     }
-
 
     // -------------------------------------------------------------
     // Client Session State
@@ -9205,10 +9168,6 @@ public class WindowManagerService extends IWindowManager.Stub
         synchronized (mKeyWaiter) { }
     }
 
-    public void virtualKeyFeedback(KeyEvent event) {
-    	mPolicy.keyFeedbackFromInput(event);
-    }
-    
     /**
      * DimAnimator class that controls the dim animation. This holds the surface and
      * all state used for dim animation. 

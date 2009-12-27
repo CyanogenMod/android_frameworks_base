@@ -790,23 +790,10 @@ public interface WindowManagerPolicy {
      * Call from application to perform haptic feedback on its window.
      */
     public boolean performHapticFeedbackLw(WindowState win, int effectId, boolean always);
-
-    /**
-     * A special function that is called from the very low-level input queue
-     * to provide feedback to the user.  Currently only called for virtual
-     * keys.
-     */
-    public void keyFeedbackFromInput(KeyEvent event);
-
+    
     /**
      * Called when we have stopped keeping the screen on because a window
      * requesting this is no longer visible.
      */
     public void screenOnStoppedLw();
-    
-    /**
-     * Return false to disable key repeat events from being generated.
-     */
-    public boolean allowKeyRepeat();
-
 }
