@@ -803,6 +803,15 @@ public final class MediaStore {
             public static final String ARTIST = "artist";
 
             /**
+             * @hide
+             * The artist who created the audio album, if any
+             *  [ it does not get into the database yet, so hidden from
+             *  public API ]
+             *  <P>Type: TEXT</P>
+             */
+            public static final String ALBUM_ARTIST = "album_artist";
+            
+            /**
              * A non human readable key calculated from the ARTIST, used for
              * searching, sorting and grouping
              * <P>Type: TEXT</P>
