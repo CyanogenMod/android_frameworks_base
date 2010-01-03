@@ -450,6 +450,7 @@ public class AccountManager {
             throws OperationCanceledException, IOException, AuthenticatorException {
         Bundle bundle = getAuthToken(account, authTokenType, notifyAuthFailure, null /* callback */,
                 null /* handler */).getResult();
+        if ( bundle == null ) return null;
         return bundle.getString(KEY_AUTHTOKEN);
     }
 
