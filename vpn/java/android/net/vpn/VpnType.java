@@ -26,7 +26,8 @@ public enum VpnType {
     L2TP_IPSEC_PSK("L2TP/IPSec PSK", "Pre-shared key based L2TP/IPSec VPN",
             L2tpIpsecPskProfile.class),
     L2TP_IPSEC("L2TP/IPSec CRT", "Certificate based L2TP/IPSec VPN",
-            L2tpIpsecProfile.class);
+	       L2tpIpsecProfile.class),
+    OPENVPN("Openvpn", "", OpenvpnProfile.class);
 
     private String mDisplayName;
     private String mDescription;

@@ -75,7 +75,7 @@ static  struct ucred cr;
 
 static int check_get_perm(int uid)
 {
-    if (uid == AID_WIFI || uid == AID_VPN) return 0;
+    if (uid == AID_WIFI || uid == AID_VPN || uid == AID_ROOT) return 0;
     return -1;
 }
 
