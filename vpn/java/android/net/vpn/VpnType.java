@@ -29,6 +29,9 @@ public enum VpnType {
             L2tpIpsecPskProfile.class),
     L2TP_IPSEC("L2TP/IPSec CRT", R.string.l2tp_ipsec_crt_vpn_description,
             L2tpIpsecProfile.class);
+    L2TP_IPSEC("L2TP/IPSec CRT", "Certificate based L2TP/IPSec VPN",
+	       L2tpIpsecProfile.class),
+    OPENVPN("OpenVPN", "", OpenvpnProfile.class);
 
     private String mDisplayName;
     private int mDescriptionId;
