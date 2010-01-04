@@ -375,7 +375,7 @@ extends Layout
                         cur = d;
 
                     if (d == Character.DIRECTIONALITY_EUROPEAN_NUMBER)
-                        chdirs[j] = DIRECTIONALITY_LEFT_TO_RIGHT;
+                        chdirs[j] = Character.DIRECTIONALITY_LEFT_TO_RIGHT;
                 }
 
                 // dump(chdirs, n, "W7");
