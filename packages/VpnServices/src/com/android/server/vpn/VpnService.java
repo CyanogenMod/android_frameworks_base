@@ -85,6 +85,13 @@ abstract class VpnService<E extends VpnProfile> implements Serializable {
             String password) throws IOException;
 
     /**
+     * Disconnects the vpn
+     */
+    protected void disconnect() {
+            mDaemons.stopAll();
+    }
+
+    /**
      * Returns the daemons management class for this service object.
      */
     protected VpnDaemons getDaemons() {
@@ -110,13 +117,18 @@ abstract class VpnService<E extends VpnProfile> implements Serializable {
         recover(context);
     }
 
+    // intended for override by subclasses
+    protected void recover() {
+        startConnectivityMonitor();
+    }
+
     void recover(VpnServiceBinder context) {
         mContext = context;
         mNotification = new NotificationHelper();
 
         if (VpnState.CONNECTED.equals(mState)) {
             Log.i("VpnService", "     recovered: " + mProfile.getName());
-            startConnectivityMonitor();
+            recover();
         }
     }
 
@@ -147,7 +159,7 @@ abstract class VpnService<E extends VpnProfile> implements Serializable {
             setState(VpnState.DISCONNECTING);
             mNotification.showDisconnect();
 
-            mDaemons.stopAll();
+            disconnect();
         } catch (Throwable e) {
             Log.e(TAG, "onDisconnect()", e);
         } finally {
@@ -155,7 +167,7 @@ abstract class VpnService<E extends VpnProfile> implements Serializable {
         }
     }
 
-    private void onError(Throwable error) {
+    void onError(Throwable error) {
         // error may occur during or after connection setup
         // and it may be due to one or all services gone
         if (mError != null) {
@@ -167,7 +179,7 @@ abstract class VpnService<E extends VpnProfile> implements Serializable {
         onDisconnect();
     }
 
-    private void onError(int errorCode) {
+    void onError(int errorCode) {
         onError(new VpnConnectingError(errorCode));
     }
 
@@ -183,7 +195,7 @@ abstract class VpnService<E extends VpnProfile> implements Serializable {
         }
     }
 
-    private void waitUntilConnectedOrTimedout() throws IOException {
+    void waitUntilConnectedOrTimedout() throws IOException {
         sleep(2000); // 2 seconds
         for (int i = 0; i < 80; i++) {
             if (mState != VpnState.CONNECTING) {
@@ -205,6 +217,21 @@ abstract class VpnService<E extends VpnProfile> implements Serializable {
         if (mState == VpnState.CONNECTING) {
             onError(new IOException("Connecting timed out"));
         }
+    }
+
+    void setVpnStateUp(boolean state) throws IOException {
+        if (state) {
+            SystemProperties.set(VPN_STATUS, VPN_IS_UP);
+            onConnected();
+            mNotification.update(System.currentTimeMillis());
+        } else {
+            SystemProperties.set(VPN_STATUS, VPN_IS_DOWN);
+        }
+    }
+
+    void vpnStateUpdate(long in, long out) {
+        // currently don't show in and out bytes in status
+        mNotification.update(System.currentTimeMillis());
     }
 
     private synchronized void onConnected() throws IOException {
@@ -276,6 +303,11 @@ abstract class VpnService<E extends VpnProfile> implements Serializable {
     private void setVpnDns() {
         String vpnDns1 = SystemProperties.get(VPN_DNS1);
         String vpnDns2 = SystemProperties.get(VPN_DNS2);
+        if (vpnDns1.length() == 0) {
+            Log.i(TAG, "No vpn dns supplied, not updating");
+            return;
+        }
+
         SystemProperties.set(DNS1, vpnDns1);
         SystemProperties.set(DNS2, vpnDns2);
         Log.i(TAG, String.format("set vpn dns prop: %s, %s",
@@ -323,7 +355,7 @@ abstract class VpnService<E extends VpnProfile> implements Serializable {
         }
     }
 
-    private void startConnectivityMonitor() {
+    void startConnectivityMonitor() {
         new Thread(new Runnable() {
             public void run() {
                 Log.i(TAG, "VPN connectivity monitor running");

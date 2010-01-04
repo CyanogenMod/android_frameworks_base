@@ -22,6 +22,7 @@ import android.net.vpn.IVpnService;
 import android.net.vpn.L2tpIpsecProfile;
 import android.net.vpn.L2tpIpsecPskProfile;
 import android.net.vpn.L2tpProfile;
+import android.net.vpn.OpenvpnProfile;
 import android.net.vpn.PptpProfile;
 import android.net.vpn.VpnManager;
 import android.net.vpn.VpnProfile;
@@ -47,7 +48,7 @@ public class VpnServiceBinder extends Service {
     private static final String TAG = VpnServiceBinder.class.getSimpleName();
     private static final boolean DBG = true;
 
-    private static final String STATES_FILE_RELATIVE_PATH = "/misc/vpn/.states";
+    private static final String STATES_FILE_RELATIVE_PATH = "/data/misc/vpn/.states";
 
     // The actual implementation is delegated to the VpnService class.
     private VpnService<? extends VpnProfile> mService;
@@ -161,6 +162,11 @@ public class VpnServiceBinder extends Service {
                 L2tpService l2tp = new L2tpService();
                 l2tp.setContext(this, (L2tpProfile) p);
                 return l2tp;
+
+            case OPENVPN:
+                OpenvpnService ovpn = new OpenvpnService();
+                ovpn.setContext(this, (OpenvpnProfile)p );
+                return ovpn;
 
             case PPTP:
                 PptpService pptp = new PptpService();
