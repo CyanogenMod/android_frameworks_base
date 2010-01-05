@@ -1440,13 +1440,6 @@ public abstract class PackageManager {
         return PackageParser.generatePackageInfo(pkg, null, flags);
     }
 
-    /*
-     * @hide
-     */
-     public void installPackage(Uri packageURI, IPackageInstallObserver observer, int flags) {
-             installPackage(packageURI, observer, flags, null);
-     }
-
     /**
      * @hide
      * 
