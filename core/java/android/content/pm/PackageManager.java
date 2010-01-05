@@ -1449,13 +1449,6 @@ public abstract class PackageManager {
 
     /**
      * @hide
-     */
-     public void installPackage(Uri packageURI, IPackageInstallObserver observer, int flags) {
-             installPackage(packageURI, observer, flags, null);
-     }
-
-    /**
-     * @hide
      * 
      * Install a package. Since this may take a little while, the result will
      * be posted back to the given observer.  An installation will fail if the calling context
