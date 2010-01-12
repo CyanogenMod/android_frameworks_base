@@ -32,6 +32,8 @@ import android.os.RemoteException;
 import android.os.Power;
 import android.os.ServiceManager;
 import android.os.SystemClock;
+import android.os.IMountService;
+
 import com.android.internal.telephony.ITelephony;
 import android.util.Log;
 import android.view.WindowManager;
@@ -193,6 +195,10 @@ public final class ShutdownThread extends Thread {
         final IBluetoothDevice bluetooth =
                 IBluetoothDevice.Stub.asInterface(ServiceManager.checkService(
                         Context.BLUETOOTH_SERVICE));
+
+        final IMountService mount =
+                IMountService.Stub.asInterface(
+                        ServiceManager.checkService("mount"));
         
         try {
             bluetoothOff = bluetooth == null ||
@@ -243,6 +249,17 @@ public final class ShutdownThread extends Thread {
                 break;
             }
             SystemClock.sleep(PHONE_STATE_POLL_SLEEP_MSEC);
+        }
+
+        // Shutdown MountService to ensure media is in a safe state
+        try {
+            if (mount != null) {
+                mount.shutdown();
+            } else {
+                Log.w(TAG, "MountService unavailable for shutdown");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Exception during MountService shutdown", e);
         }
 
         //shutdown power
