@@ -453,8 +453,8 @@ public abstract class Service extends ContextWrapper implements ComponentCallbac
             return;
         }
         try {
-            mActivityManager.setServiceForeground(
-                    new ComponentName(this, mClassName), mToken, 0, null, isForeground);
+            mActivityManager.setServiceForegroundLegacy(
+                    new ComponentName(this, mClassName), mToken, isForeground);
         } catch (RemoteException ex) {
         }
    

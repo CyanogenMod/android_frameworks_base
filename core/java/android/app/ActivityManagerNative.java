@@ -598,6 +598,16 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             return true;
         }
 
+        case SET_SERVICE_FOREGROUND_LEGACY_TRANSACTION: {
+            data.enforceInterface(IActivityManager.descriptor);
+            ComponentName className = ComponentName.readFromParcel(data);
+            IBinder token = data.readStrongBinder();
+            boolean isForeground = data.readInt() != 0;
+            setServiceForegroundLegacy(className, token, isForeground);
+            reply.writeNoException();
+            return true;
+        }
+
         case BIND_SERVICE_TRANSACTION: {
             data.enforceInterface(IActivityManager.descriptor);
             IBinder b = data.readStrongBinder();
@@ -1762,6 +1772,7 @@ class ActivityManagerProxy implements IActivityManager
         data.recycle();
         return res;
     }
+    
     public boolean stopServiceToken(ComponentName className, IBinder token,
             int startId) throws RemoteException {
         Parcel data = Parcel.obtain();
@@ -1777,6 +1788,19 @@ class ActivityManagerProxy implements IActivityManager
         reply.recycle();
         return res;
     }
+    public void setServiceForegroundLegacy(ComponentName className, IBinder token,
+            boolean isForeground) throws RemoteException {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        ComponentName.writeToParcel(className, data);
+        data.writeStrongBinder(token);
+        data.writeInt(isForeground ? 1 : 0);
+        mRemote.transact(SET_SERVICE_FOREGROUND_LEGACY_TRANSACTION, data, reply, 0);
+        reply.readException();
+        data.recycle();
+        reply.recycle();
+    }    
     public void setServiceForeground(ComponentName className, IBinder token,
             int id, Notification notification, boolean removeNotification) throws RemoteException {
         Parcel data = Parcel.obtain();
@@ -1797,6 +1821,7 @@ class ActivityManagerProxy implements IActivityManager
         data.recycle();
         reply.recycle();
     }
+    
     public int bindService(IApplicationThread caller, IBinder token,
             Intent service, String resolvedType, IServiceConnection connection,
             int flags) throws RemoteException {

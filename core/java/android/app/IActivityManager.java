@@ -148,6 +148,8 @@ public interface IActivityManager extends IInterface {
             String resolvedType) throws RemoteException;
     public boolean stopServiceToken(ComponentName className, IBinder token,
             int startId) throws RemoteException;
+    public void setServiceForegroundLegacy(ComponentName className, IBinder token,
+            boolean isForeground) throws RemoteException;
     public void setServiceForeground(ComponentName className, IBinder token,
             int id, Notification notification, boolean keepNotification) throws RemoteException;
     public int bindService(IApplicationThread caller, IBinder token,
@@ -448,4 +450,5 @@ public interface IActivityManager extends IInterface {
     int KILL_APPLICATION_PROCESS_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+98;
     int START_ACTIVITY_INTENT_SENDER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+99;
     int OVERRIDE_PENDING_TRANSITION_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+100;
+    int SET_SERVICE_FOREGROUND_LEGACY_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+101;
 }

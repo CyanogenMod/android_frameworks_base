@@ -10896,6 +10896,24 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
         return false;
     }
 
+    public void setServiceForegroundLegacy(ComponentName className, IBinder token,
+            boolean isForeground) {
+        synchronized(this) {
+            ServiceRecord r = findServiceLocked(className, token);
+            if (r != null) {
+                if (r.isForeground != isForeground) {
+                    final long origId = Binder.clearCallingIdentity();
+                    r.isForeground = isForeground;
+                    if (r.app != null) {
+                        updateServiceForegroundLocked(r.app, true);
+                    }
+                    Binder.restoreCallingIdentity(origId);
+                }
+            }
+        }
+    }
+
+
     public void setServiceForeground(ComponentName className, IBinder token,
             int id, Notification notification, boolean removeNotification) {
         final long origId = Binder.clearCallingIdentity();
