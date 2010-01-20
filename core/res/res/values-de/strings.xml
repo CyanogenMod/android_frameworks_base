@@ -122,18 +122,21 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Funk ausschalten"</string>
     <string name="screen_lock" msgid="799094655496098153">"Bildschirmsperre"</string>
     <string name="power_off" msgid="4266614107412865048">"Ausschalten"</string>
+    <string name="reboot_system">Neu starten</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Herunterfahren..."</string>
+    <string name="reboot_progress">Ihr Telefon wird neu gestartet\u2026</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"Ihr Telefon wird heruntergefahren."</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"Keine neuen Anwendungen."</string>
     <string name="global_actions" msgid="2406416831541615258">"Telefonoptionen"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Bildschirmsperre"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Ausschalten"</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Lautlos"</string>
-    <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Ton ist bereits AUS"</string>
+    <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Ton ist momentan AUS"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Ton ist momentan AN"</string>
     <string name="global_actions_toggle_airplane_mode" msgid="5884330306926307456">"Flugmodus"</string>
     <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"Flugmodus ist AN"</string>
     <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"Flugmodus ist AUS"</string>
+    <string name="global_action_reboot">Starte Telefon neu...</string>
     <string name="safeMode" msgid="2788228061547930246">"Abgesicherter Modus"</string>
     <string name="android_system_label" msgid="6577375335728551336">"Android System"</string>
     <string name="permgrouplab_costMoney" msgid="5429808217861460401">"Kostenpflichtige Dienste"</string>
