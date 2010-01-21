@@ -43,7 +43,7 @@ public class ViewAnimator extends FrameLayout {
 
     public ViewAnimator(Context context) {
         super(context);
-        initViewAnimator();
+        initViewAnimator(context, null);
     }
 
     public ViewAnimator(Context context, AttributeSet attrs) {
@@ -61,11 +61,28 @@ public class ViewAnimator extends FrameLayout {
         }
         a.recycle();
 
-        initViewAnimator();
+        initViewAnimator(context, attrs);
     }
 
-    private void initViewAnimator() {
-        mMeasureAllChildren = true;
+    /**
+     * Initialize this {@link ViewAnimator}, possibly setting
+     * {@link #setMeasureAllChildren(boolean)} based on {@link FrameLayout} flags.
+     */
+    private void initViewAnimator(Context context, AttributeSet attrs) {
+        if (attrs == null) {
+            // For compatibility, always measure children when undefined.
+            mMeasureAllChildren = true;
+            return;
+        }
+
+        // For compatibility, default to measure children, but allow XML
+        // attribute to override.
+        final TypedArray a = context.obtainStyledAttributes(attrs,
+                com.android.internal.R.styleable.FrameLayout);
+        final boolean measureAllChildren = a.getBoolean(
+                com.android.internal.R.styleable.FrameLayout_measureAllChildren, true);
+        setMeasureAllChildren(measureAllChildren);
+        a.recycle();
     }
     
     /**
@@ -121,14 +138,15 @@ public class ViewAnimator extends FrameLayout {
         final int count = getChildCount();
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
+            final boolean checkForFirst = (!mFirstTime || mAnimateFirstTime);
             if (i == childIndex) {
-                if ((!mFirstTime || mAnimateFirstTime) && mInAnimation != null) {
+                if (checkForFirst && mInAnimation != null) {
                     child.startAnimation(mInAnimation);
                 }
                 child.setVisibility(View.VISIBLE);
                 mFirstTime = false;
             } else {
-                if (mOutAnimation != null && child.getVisibility() == View.VISIBLE) {
+                if (checkForFirst && mOutAnimation != null && child.getVisibility() == View.VISIBLE) {
                     child.startAnimation(mOutAnimation);
                 } else if (child.getAnimation() == mInAnimation)
                     child.clearAnimation();

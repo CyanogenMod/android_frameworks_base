@@ -172,7 +172,8 @@ final class GsmSMSDispatcher extends SMSDispatcher {
         for (int i = 0; i < msgCount; i++) {
             TextEncodingDetails details = SmsMessage.calculateLength(parts.get(i), false);
             if (encoding != details.codeUnitSize
-                    && (encoding == android.telephony.SmsMessage.ENCODING_UNKNOWN || encoding == android.telephony.SmsMessage.ENCODING_7BIT)) {
+                    && (encoding == android.telephony.SmsMessage.ENCODING_UNKNOWN
+                            || encoding == android.telephony.SmsMessage.ENCODING_7BIT)) {
                 encoding = details.codeUnitSize;
             }
         }
@@ -203,7 +204,8 @@ final class GsmSMSDispatcher extends SMSDispatcher {
             }
 
             SmsMessage.SubmitPdu pdus = SmsMessage.getSubmitPdu(scAddress, destinationAddress,
-                    parts.get(i), deliveryIntent != null, SmsHeader.toByteArray(smsHeader), encoding);
+                    parts.get(i), deliveryIntent != null, SmsHeader.toByteArray(smsHeader),
+                    encoding);
 
             sendRawPdu(pdus.encodedScAddress, pdus.encodedMessage, sentIntent, deliveryIntent);
         }
@@ -259,7 +261,8 @@ final class GsmSMSDispatcher extends SMSDispatcher {
         for (int i = 0; i < msgCount; i++) {
             TextEncodingDetails details = SmsMessage.calculateLength(parts.get(i), false);
             if (encoding != details.codeUnitSize
-                    && (encoding == android.telephony.SmsMessage.ENCODING_UNKNOWN || encoding == android.telephony.SmsMessage.ENCODING_7BIT)) {
+                    && (encoding == android.telephony.SmsMessage.ENCODING_UNKNOWN
+                            || encoding == android.telephony.SmsMessage.ENCODING_7BIT)) {
                 encoding = details.codeUnitSize;
             }
         }
@@ -284,7 +287,8 @@ final class GsmSMSDispatcher extends SMSDispatcher {
             }
 
             SmsMessage.SubmitPdu pdus = SmsMessage.getSubmitPdu(scAddress, destinationAddress,
-                    parts.get(i), deliveryIntent != null, SmsHeader.toByteArray(smsHeader), encoding);
+                    parts.get(i), deliveryIntent != null, SmsHeader.toByteArray(smsHeader),
+                    encoding);
 
             HashMap<String, Object> map = new HashMap<String, Object>();
             map.put("smsc", pdus.encodedScAddress);

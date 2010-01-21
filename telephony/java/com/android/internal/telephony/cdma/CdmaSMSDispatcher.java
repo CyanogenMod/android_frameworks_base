@@ -373,7 +373,8 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
         for (int i = 0; i < msgCount; i++) {
             TextEncodingDetails details = SmsMessage.calculateLength(parts.get(i), false);
             if (encoding != details.codeUnitSize
-                    && (encoding == android.telephony.SmsMessage.ENCODING_UNKNOWN || encoding == android.telephony.SmsMessage.ENCODING_7BIT)) {
+                    && (encoding == android.telephony.SmsMessage.ENCODING_UNKNOWN
+                            || encoding == android.telephony.SmsMessage.ENCODING_7BIT)) {
                 encoding = details.codeUnitSize;
             }
         }
@@ -400,11 +401,12 @@ final class CdmaSMSDispatcher extends SMSDispatcher {
             UserData uData = new UserData();
             uData.payloadStr = parts.get(i);
             uData.userDataHeader = smsHeader;
-            if(encoding == android.telephony.SmsMessage.ENCODING_7BIT){
+            if (encoding == android.telephony.SmsMessage.ENCODING_7BIT) {
                 uData.msgEncoding = UserData.ENCODING_GSM_7BIT_ALPHABET;
-            }else{ // assume UTF-16
+            } else { // assume UTF-16
                 uData.msgEncoding = UserData.ENCODING_UNICODE_16;
             }
+            uData.msgEncodingSet = true;
 
             /* By setting the statusReportRequested bit only for the
              * last message fragment, this will result in only one

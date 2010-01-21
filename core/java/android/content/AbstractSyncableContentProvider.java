@@ -136,9 +136,9 @@ public abstract class AbstractSyncableContentProvider extends SyncableContentPro
             bootstrapDatabase(db);
             mSyncState.createDatabase(db);
             if (!isTemporary()) {
-                ContentResolver.requestSync(null /* all accounts */,
+		ContentResolver.requestSync(null /* all accounts */,
                     mContentUri.getAuthority(), new Bundle());
-            }
+	    }
         }
 
         @Override
