@@ -64,7 +64,7 @@
 
 #define DALVIK_CACHE_PREFIX   "/data/dalvik-cache/"
 #define DALVIK_CACHE_POSTFIX  "/classes.dex"
-
+#define DALVIK_SYSTEM_CACHE_PREFIX "/cache/dalvik-cache/"
 
 #define PKG_NAME_MAX  128   /* largest allowed package name */
 #define PKG_PATH_MAX  256   /* max size of any path we use */
