@@ -42,7 +42,44 @@ public class WifiConfiguration implements Parcelable {
     public static final String priorityVarName = "priority";
     /** {@hide} */
     public static final String hiddenSSIDVarName = "scan_ssid";
-
+    /** {@hide} */
+    public static final String modeVarName = "mode";
+    /** {@hide} */
+    public static final String frequencyVarName = "frequency";
+   
+    /** {@hide} */
+    public static final String modeInfrastructure = "0";
+    /** {@hide} */
+    public static final String modeAdhoc = "1";
+    
+    /**
+     * Channel Frequency Values, to be used for setting up Adhoc Networks
+     */
+    public static class ChannelFrequency {
+    private ChannelFrequency() { }
+	       
+    /** Channel Frequencies by Channel Number
+     *  Allowed use may vary by region
+     *  USA allows use of channels 1 through 11
+     *  Europe allows channels 1 through 13
+     *  Japan uses all channels, with 14 restricted to 802.11b traffic
+     */
+    public static final int CHANNEL_1 = 2412;
+    public static final int CHANNEL_2 = 2417;
+    public static final int CHANNEL_3 = 2422;
+    public static final int CHANNEL_4 = 2427;
+    public static final int CHANNEL_5 = 2432;
+    public static final int CHANNEL_6 = 2437;
+    public static final int CHANNEL_7 = 2442;
+    public static final int CHANNEL_8 = 2447;
+    public static final int CHANNEL_9 = 2452;
+    public static final int CHANNEL_10 = 2457;
+    public static final int CHANNEL_11 = 2462;
+    public static final int CHANNEL_12 = 2467;
+    public static final int CHANNEL_13 = 2472;
+	public static final int CHANNEL_14 = 2484;
+	}
+    
     /** {@hide} */
     public class EnterpriseField {
         private String varName;
@@ -294,13 +331,27 @@ public class WifiConfiguration implements Parcelable {
      */
     public BitSet allowedGroupCiphers;
 
-
+    /**
+     * This signal is an Adhoc signal, so it must make sure that scan mode
+     * is set to 2 and that mode is set to 1 (IBSS) for {@code wpa_supplicant}
+     */
+    public boolean isAdhoc;
+   
+    /**
+     * If the signal is Adhoc, then frequency must be set
+     * otherwise, we don't care what the frequency is
+     */
+    public int frequency;
+	    
+	
     public WifiConfiguration() {
         networkId = -1;
         SSID = null;
         BSSID = null;
         priority = 0;
+        frequency = 0;
         hiddenSSID = false;
+        isAdhoc = false;
         allowedKeyManagement = new BitSet();
         allowedProtocols = new BitSet();
         allowedAuthAlgorithms = new BitSet();
@@ -444,6 +495,8 @@ public class WifiConfiguration implements Parcelable {
         dest.writeInt(wepTxKeyIndex);
         dest.writeInt(priority);
         dest.writeInt(hiddenSSID ? 1 : 0);
+        dest.writeInt(isAdhoc ? 1 : 0);
+		dest.writeInt(frequency);
 
         writeBitSet(dest, allowedKeyManagement);
         writeBitSet(dest, allowedProtocols);
@@ -471,6 +524,8 @@ public class WifiConfiguration implements Parcelable {
                 config.wepTxKeyIndex = in.readInt();
                 config.priority = in.readInt();
                 config.hiddenSSID = in.readInt() != 0;
+                config.isAdhoc = in.readInt() != 0;
+    			config.frequency = in.readInt();
                 config.allowedKeyManagement   = readBitSet(in);
                 config.allowedProtocols       = readBitSet(in);
                 config.allowedAuthAlgorithms  = readBitSet(in);

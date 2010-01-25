@@ -413,6 +413,21 @@ public class WifiManager {
             return false;
         }
     }
+    
+    /**
+     * Set the adhoc mode state of the service.  If this is set to true
+     * The device will connect to an adhoc network.  This should not be set
+     * For connecting to non-adhoc signals.
+     * @param adhoc whether we should be in adhoc mode
+     * @return {@code true} if the operation succeeded 
+     */
+    public boolean setAdhocMode(boolean adhoc) {
+    	try {
+    		return mService.setAdhocMode(adhoc);
+    	} catch (RemoteException e) {
+    		return false;
+    	}
+    }
 
     /**
      * Disassociate from the currently active access point. This may result
