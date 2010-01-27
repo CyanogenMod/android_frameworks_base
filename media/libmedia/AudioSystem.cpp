@@ -548,6 +548,25 @@ audio_io_handle_t AudioSystem::getOutput(stream_type stream,
     return output;
 }
 
+audio_io_handle_t AudioSystem::getSession(stream_type   stream,
+                                          uint32_t      format,
+                                          output_flags  flags,
+                                          int           sessionId)
+{
+    audio_io_handle_t output = 0;
+
+    if ((flags & AudioSystem::OUTPUT_FLAG_DIRECT) == 0) {
+        return 0;
+    }
+
+    const sp<IAudioPolicyService>& aps = AudioSystem::get_audio_policy_service();
+    if (aps == 0) return 0;
+
+    output = aps->getSession(stream, format, flags, sessionId);
+
+    return output;
+}
+
 status_t AudioSystem::startOutput(audio_io_handle_t output, AudioSystem::stream_type stream)
 {
     const sp<IAudioPolicyService>& aps = AudioSystem::get_audio_policy_service();
@@ -567,6 +586,13 @@ void AudioSystem::releaseOutput(audio_io_handle_t output)
     const sp<IAudioPolicyService>& aps = AudioSystem::get_audio_policy_service();
     if (aps == 0) return;
     aps->releaseOutput(output);
+}
+
+void AudioSystem::closeSession(audio_io_handle_t output)
+{
+    const sp<IAudioPolicyService>& aps = AudioSystem::get_audio_policy_service();
+    if (aps == 0) return;
+    aps->closeSession(output);
 }
 
 audio_io_handle_t AudioSystem::getInput(int inputSource,

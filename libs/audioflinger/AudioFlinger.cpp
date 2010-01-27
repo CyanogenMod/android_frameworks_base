@@ -144,6 +144,10 @@ AudioFlinger::~AudioFlinger()
         // closeOutput() will remove first entry from mPlaybackThreads
         closeOutput(mPlaybackThreads.keyAt(0));
     }
+    while (!mOutputSessions.isEmpty()) {
+        // closeOutput() will remove first entry from mOutputSessions
+        closeSession(mOutputSessions.keyAt(0));
+    }
     if (mAudioHardware) {
         delete mAudioHardware;
     }
@@ -474,6 +478,12 @@ status_t AudioFlinger::setStreamVolume(int stream, float value, int output)
     }
 
     AutoMutex lock(mLock);
+
+    if(mOutputSessions.indexOfKey(output) >= 0) {
+        mOutputSessions.valueFor(output)->setVolume(value, value);
+        return NO_ERROR;
+    }
+
     PlaybackThread *thread = NULL;
     if (output) {
         thread = checkPlaybackThread_l(output);
@@ -552,6 +562,9 @@ bool AudioFlinger::isMusicActive() const
             return true;
         }
     }
+    if (!mOutputSessions.isEmpty()) {
+        return true;
+    }
     return false;
 }
 
@@ -574,7 +587,11 @@ status_t AudioFlinger::setParameters(int ioHandle, const String8& keyValuePairs)
         mHardwareStatus = AUDIO_HW_IDLE;
         return result;
     }
-
+    // Check Direct outputs
+    if (mOutputSessions.indexOfKey(ioHandle) >= 0) {
+        result = mOutputSessions.valueFor(ioHandle)->setParameters(keyValuePairs);
+        return result;
+    }
     // hold a strong ref on thread in case closeOutput() or closeInput() is called
     // and the thread is exited once the lock is released
     sp<ThreadBase> thread;
@@ -3651,6 +3668,67 @@ int AudioFlinger::openOutput(uint32_t *pDevices,
     }
 
     return 0;
+}
+
+int AudioFlinger::openSession(uint32_t *pDevices,
+                                   uint32_t *pFormat,
+                                   uint32_t flags,
+                                   int32_t  sessionId)
+{
+    status_t status;
+    mHardwareStatus = AUDIO_HW_OUTPUT_OPEN;
+    uint32_t format = pFormat ? *pFormat : 0;
+
+    LOGV("openSession(), Device %x, Format %d, flags %x sessionId %x",
+            pDevices ? *pDevices : 0,
+            format,
+            flags,
+            sessionId);
+
+    if (pDevices == NULL || *pDevices == 0) {
+        return 0;
+    }
+    Mutex::Autolock _l(mLock);
+
+    AudioStreamOut *output = mAudioHardware->openOutputSession(*pDevices,
+                                                             (int *)&format,
+                                                             &status,
+															 sessionId);
+    LOGV("openSession() openOutputSession returned output %p, Format %d, status %d",
+            output,
+            format,
+            status);
+
+    mHardwareStatus = AUDIO_HW_IDLE;
+    if (output != 0) {
+        mNextThreadId++;
+        mOutputSessions.add(mNextThreadId, output);
+
+        if (pFormat) *pFormat = format;
+        return mNextThreadId;
+    }
+
+    return 0;
+}
+
+status_t AudioFlinger::closeSession(int output)
+{
+    Mutex::Autolock _l(mLock);
+    LOGV("closeSession() %d", output);
+
+    // Is this required?
+    //AudioSystem::stopOutput(output, (AudioSystem::stream_type)mStreamType);
+
+    // Delete the Audio session
+    if(mOutputSessions.indexOfKey(output) >= 0) {
+        AudioStreamOut* audioOut = mOutputSessions.valueFor(output);
+        audioOut->standby();
+        delete mOutputSessions.valueFor(output);
+
+        mOutputSessions.removeItem(output);
+    }
+
+    return NO_ERROR;
 }
 
 int AudioFlinger::openDuplicateOutput(int output1, int output2)

@@ -1335,6 +1335,7 @@ MediaPlayerService::AudioOutput::AudioOutput()
     : mCallback(NULL),
       mCallbackCookie(NULL) {
     mTrack = 0;
+    mSession = 0;
     mStreamType = AudioSystem::MUSIC;
     mLeftVolume = 1.0;
     mRightVolume = 1.0;
@@ -1347,6 +1348,7 @@ MediaPlayerService::AudioOutput::AudioOutput()
 MediaPlayerService::AudioOutput::~AudioOutput()
 {
     close();
+    closeSession();
 }
 
 void MediaPlayerService::AudioOutput::setMinBufferCount()
@@ -1402,6 +1404,33 @@ uint32_t MediaPlayerService::AudioOutput::latency () const
 float MediaPlayerService::AudioOutput::msecsPerFrame() const
 {
     return mMsecsPerFrame;
+}
+
+status_t MediaPlayerService::AudioOutput::openSession(
+        int format, int sessionId)
+{
+    uint32_t flags = 0;
+    mCallback = NULL;
+    mCallbackCookie = NULL;
+    if (mSession) close();
+    mSession = NULL;
+
+    flags |= AudioSystem::OUTPUT_FLAG_DIRECT;
+
+    AudioTrack *t = new AudioTrack(
+                mStreamType,
+                format,
+                flags,
+                sessionId);
+    LOGV("openSession: AudioTrack created successfully track(%p)",t);
+    if ((t == 0) || (t->initCheck() != NO_ERROR)) {
+        LOGE("Unable to create audio track");
+        delete t;
+        return NO_INIT;
+    }
+    LOGV("openSession: Out");
+    mSession = t;
+    return NO_ERROR;
 }
 
 status_t MediaPlayerService::AudioOutput::open(
@@ -1530,8 +1559,19 @@ void MediaPlayerService::AudioOutput::pause()
 void MediaPlayerService::AudioOutput::close()
 {
     LOGV("close");
-    delete mTrack;
-    mTrack = 0;
+    if(mTrack != NULL) {
+        delete mTrack;
+        mTrack = 0;
+    }
+}
+
+void MediaPlayerService::AudioOutput::closeSession()
+{
+    LOGV("closeSession");
+    if(mSession != NULL) {
+        delete mSession;
+        mSession = 0;
+    }
 }
 
 void MediaPlayerService::AudioOutput::setVolume(float left, float right)

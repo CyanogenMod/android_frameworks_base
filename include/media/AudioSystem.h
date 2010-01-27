@@ -271,7 +271,8 @@ public:
     // request to open a direct output with getOutput() (by opposition to sharing an output with other AudioTracks)
     enum output_flags {
         OUTPUT_FLAG_INDIRECT = 0x0,
-        OUTPUT_FLAG_DIRECT = 0x1
+        OUTPUT_FLAG_DIRECT = 0x1,
+        OUTPUT_FLAG_SESSION = 0x2
     };
 
     // device categories used for setForceUse()
@@ -337,6 +338,11 @@ public:
                                         uint32_t format = FORMAT_DEFAULT,
                                         uint32_t channels = CHANNEL_OUT_STEREO,
                                         output_flags flags = OUTPUT_FLAG_INDIRECT);
+    static audio_io_handle_t getSession(stream_type stream,
+                                        uint32_t format = FORMAT_DEFAULT,
+                                        output_flags flags = OUTPUT_FLAG_DIRECT,
+                                        int32_t sessionId = -1);
+    static void closeSession(audio_io_handle_t output);
     static status_t startOutput(audio_io_handle_t output, AudioSystem::stream_type stream);
     static status_t stopOutput(audio_io_handle_t output, AudioSystem::stream_type stream);
     static void releaseOutput(audio_io_handle_t output);

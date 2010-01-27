@@ -35,6 +35,8 @@ enum {
     SET_FORCE_USE,
     GET_FORCE_USE,
     GET_OUTPUT,
+    GET_SESSION,
+    CLOSE_SESSION,
     START_OUTPUT,
     STOP_OUTPUT,
     RELEASE_OUTPUT,
@@ -134,6 +136,31 @@ public:
         data.writeInt32(channels);
         data.writeInt32(static_cast <uint32_t>(flags));
         remote()->transact(GET_OUTPUT, data, &reply);
+        return static_cast <audio_io_handle_t> (reply.readInt32());
+    }
+
+    virtual audio_io_handle_t getSession(
+                                        AudioSystem::stream_type stream,
+                                        uint32_t format,
+                                        AudioSystem::output_flags flags,
+                                        int32_t sessionId)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(IAudioPolicyService::getInterfaceDescriptor());
+        data.writeInt32(static_cast <uint32_t>(stream));
+        data.writeInt32(static_cast <uint32_t>(format));
+        data.writeInt32(static_cast <uint32_t>(flags));
+        data.writeInt32(static_cast <int32_t>(sessionId));
+        remote()->transact(GET_SESSION, data, &reply);
+        return static_cast <audio_io_handle_t> (reply.readInt32());
+    }
+
+    virtual status_t closeSession(audio_io_handle_t output)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(IAudioPolicyService::getInterfaceDescriptor());
+        data.writeInt32(output);
+        remote()->transact(CLOSE_SESSION, data, &reply);
         return static_cast <audio_io_handle_t> (reply.readInt32());
     }
 
@@ -313,6 +340,29 @@ status_t BnAudioPolicyService::onTransact(
                                                  channels,
                                                  flags);
             reply->writeInt32(static_cast <int>(output));
+            return NO_ERROR;
+        } break;
+
+        case GET_SESSION: {
+            CHECK_INTERFACE(IAudioPolicyService, data, reply);
+            AudioSystem::stream_type stream = static_cast <AudioSystem::stream_type>(data.readInt32());
+            uint32_t format = data.readInt32();
+            AudioSystem::output_flags flags = static_cast <AudioSystem::output_flags>(data.readInt32());
+            int32_t sessionId = data.readInt32();
+    
+            audio_io_handle_t output = getSession(stream,
+                                                 format,
+                                                 flags,
+                                                 sessionId);
+            reply->writeInt32(static_cast <int>(output));
+            return NO_ERROR;
+        } break;
+
+        case CLOSE_SESSION: {
+            CHECK_INTERFACE(IAudioPolicyService, data, reply);
+            audio_io_handle_t output = static_cast <audio_io_handle_t>(data.readInt32());
+            status_t status = closeSession(output);
+            reply->writeInt32(static_cast <int>(status));
             return NO_ERROR;
         } break;
 
