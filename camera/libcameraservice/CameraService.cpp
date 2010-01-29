@@ -833,8 +833,8 @@ void CameraService::Client::stopRecording()
             mMediaPlayerBeep->start();
         }
 
-        mHardware->stopRecording();
         mHardware->disableMsgType(CAMERA_MSG_VIDEO_FRAME);
+        mHardware->stopRecording();
         LOGV("stopRecording(), hardware stopped OK");
     }
 
