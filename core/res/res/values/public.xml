@@ -1207,14 +1207,27 @@
   
 
 <!-- ===============================================================
-     Resources added to support dynamic theming.
+     Resources added to support dynamic theming.  id="..." must be adjusted so
+     that these entries are placed at the very end of the generated R.java.
+     Verify with aapt dump resources
+     $ANDROID_PRODUCT_OUT/system/framework/framework-res.apk.
+     !!! THIS IS A TEMPORARY SOLUTION !!!
      =============================================================== -->
   <eat-comment />
 
-  <public type="style" name="Widget.TabIndicator" />
+  <public type="style" name="Widget.TabIndicator" id="0x0103009d" />
   <public type="style" name="Widget.EditText.TimePicker" />
+  <public type="style" name="com_android_server_status_ExpandedView" />
+  <public type="style" name="com_android_server_status_LatestItemView" />
+  <public type="style" name="Widget.TextView.ListItem" />
+  <public type="style" name="Widget.TextView.ListItem.White" />
+  <public type="style" name="Widget.ExpandableListView.White" />
+  <public type="style" name="Widget.ExpandableListView.Dialog" />
+  <public type="style" name="Widget.ListView.Dialog" />
+  <public type="style" name="TimePickerUpButton" />
+  <public type="style" name="TimePickerDownButton" />
 
-  <public type="attr" name="listItemBackground" />
+  <public type="attr" name="listItemBackground" id="0x010102c1" />
 
   <public type="attr" name="dialogTheme" />
   <public type="attr" name="alertDialogTheme" />
@@ -1231,5 +1244,14 @@
   <public type="attr" name="menuItemBackground" />
   <public type="attr" name="expandedMenuTheme" />
   <public type="attr" name="iconMenuTheme" />
+
+  <!-- The following have been temporarily added here to avoid any accidental
+       modifications to R.attr and R.id.  Will be removed shortly. -->
+  <eat-comment />
+
+  <public type="attr" name="com_android_server_status_expandedView" />
+  <public type="attr" name="com_android_server_status_latestItemView" />
+
+  <public type="string" name="buy_ringtones" id="0x01040325" />
 
 </resources>
