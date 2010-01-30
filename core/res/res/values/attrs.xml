@@ -2383,8 +2383,6 @@
              value is false.  See
              {@link android.graphics.drawable.Drawable#setVisible}. -->
         <attr name="visible" format="boolean" />
-        <!-- Set a tinting color -->
-        <attr name="tint" />
     </declare-styleable>
 
     <declare-styleable name="StateListDrawable">
@@ -2502,7 +2500,6 @@
         <attr name="bottom" />
         <attr name="drawable" />
         <attr name="id" />
-        <attr name="tint" />
     </declare-styleable>
 
     <declare-styleable name="LevelListDrawableItem">
