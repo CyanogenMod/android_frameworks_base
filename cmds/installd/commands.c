@@ -21,7 +21,6 @@ int install(const char *pkgname, uid_t uid, gid_t gid)
     char pkgdir[PKG_PATH_MAX];
     char libdir[PKG_PATH_MAX];
 
-    LOGI("installer: dir: %s pkg: %s", pkgdir, pkgname);
     if ((uid < AID_SYSTEM) || (gid < AID_SYSTEM)) {
         LOGE("invalid uid/gid: %d %d\n", uid, gid);
         return -1;
@@ -393,7 +392,9 @@ int create_cache_path(char path[PKG_PATH_MAX], const char *src)
         return -1;
     }
 
-    dstlen = srclen + strlen(DALVIK_CACHE_PREFIX) + 
+    const char *cache_path = strncmp(src, "/system", 7) ? DALVIK_CACHE_PREFIX : DALVIK_SYSTEM_CACHE_PREFIX;
+
+    dstlen = srclen + strlen(cache_path) + 
         strlen(DALVIK_CACHE_POSTFIX) + 1;
     
     if (dstlen > PKG_PATH_MAX) {
@@ -401,11 +402,11 @@ int create_cache_path(char path[PKG_PATH_MAX], const char *src)
     }
 
     sprintf(path,"%s%s%s",
-            DALVIK_CACHE_PREFIX,
+            cache_path,
             src + 1, /* skip the leading / */
             DALVIK_CACHE_POSTFIX);
     
-    for(tmp = path + strlen(DALVIK_CACHE_PREFIX); *tmp; tmp++) {
+    for(tmp = path + strlen(cache_path); *tmp; tmp++) {
         if (*tmp == '/') {
             *tmp = '@';
         }

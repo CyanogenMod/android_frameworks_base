@@ -43,6 +43,8 @@ interface IWifiManager
     boolean startScan(boolean forceActive);
 
     List<ScanResult> getScanResults();
+    
+    boolean setAdhocMode(boolean adhoc);
 
     boolean disconnect();
 
