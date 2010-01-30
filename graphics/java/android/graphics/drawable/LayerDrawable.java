@@ -41,7 +41,6 @@ import java.io.IOException;
  * @attr ref android.R.styleable#LayerDrawableItem_bottom
  * @attr ref android.R.styleable#LayerDrawableItem_drawable
  * @attr ref android.R.styleable#LayerDrawableItem_id
- * @attr ref android.R.styleable#LayerDrawableItem_tint
 */
 public class LayerDrawable extends Drawable implements Drawable.Callback {
     LayerState mLayerState;
@@ -137,12 +136,6 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
                     com.android.internal.R.styleable.LayerDrawableItem_drawable, 0);
             int id = a.getResourceId(com.android.internal.R.styleable.LayerDrawableItem_id,
                     View.NO_ID);
-            int tint = a.getColor(com.android.internal.R.styleable.LayerDrawableItem_tint, 0);
-            ColorFilter colorFilter = null;
-            if (tint != 0) {
-                colorFilter = new PorterDuffColorFilter(tint, PorterDuff.Mode.SRC_ATOP);
-                android.util.Log.d("Themes", "Setting tint=" + tint + " for drawable res=" + drawableRes + " (colorFilter=" + colorFilter + ")");
-            }
 
             a.recycle();
 
@@ -159,8 +152,8 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
                 }
                 dr = Drawable.createFromXmlInner(r, parser, attrs);
             }
-            
-            addLayer(dr, id, left, top, right, bottom, colorFilter);
+
+            addLayer(dr, id, left, top, right, bottom);
         }
 
         ensurePadding();
@@ -176,10 +169,8 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
      * @param top The top padding of the new layer.
      * @param right The right padding of the new layer.
      * @param bottom The bottom padding of the new layer.
-     * @param colorFilter Optional color filter for the new layer.
      */
-    private void addLayer(Drawable layer, int id, int left, int top, int right, int bottom,
-            ColorFilter colorFilter) {
+    private void addLayer(Drawable layer, int id, int left, int top, int right, int bottom) {
         final LayerState st = mLayerState;
         int N = st.mChildren != null ? st.mChildren.length : 0;
         int i = st.mNum;
@@ -201,7 +192,6 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
         childDrawable.mInsetT = top;
         childDrawable.mInsetR = right;
         childDrawable.mInsetB = bottom;
-        childDrawable.mColorFilter = colorFilter;
         st.mNum++;
 
         layer.setCallback(this);
@@ -327,11 +317,6 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
         final ChildDrawable[] array = mLayerState.mChildren;
         final int N = mLayerState.mNum;
         for (int i=0; i<N; i++) {
-            if (array[i].mColorFilter != null) {
-                android.util.Log.d("Themes", "Applying colorFilter=" + 
-                        array[i].mColorFilter + " to " + array[i].mDrawable);
-                array[i].mDrawable.setColorFilter(array[i].mColorFilter);
-            }
             array[i].mDrawable.draw(canvas);
         }
     }
@@ -560,7 +545,6 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
         public Drawable mDrawable;
         public int mInsetL, mInsetT, mInsetR, mInsetB;
         public int mId;
-        public ColorFilter mColorFilter;
     }
 
     static class LayerState extends ConstantState {
@@ -604,7 +588,6 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
                     r.mInsetR = or.mInsetR;
                     r.mInsetB = or.mInsetB;
                     r.mId = or.mId;
-                    r.mColorFilter = or.mColorFilter;
                 }
 
                 mHaveOpacity = orig.mHaveOpacity;
