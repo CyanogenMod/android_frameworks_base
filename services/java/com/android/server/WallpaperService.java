@@ -183,7 +183,6 @@ class WallpaperService extends IWallpaperService.Stub {
         for (int i = 0; i < n; i++) {
             try {
                 mCallbacks.getBroadcastItem(i).onWallpaperChanged();
-                mCallbacks.unregister(mCallbacks.getBroadcastItem(i));
             } catch (RemoteException e) {
 
                 // The RemoteCallbackList will take care of removing
