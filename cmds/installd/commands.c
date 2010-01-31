@@ -21,7 +21,6 @@ int install(const char *pkgname, uid_t uid, gid_t gid)
     char pkgdir[PKG_PATH_MAX];
     char libdir[PKG_PATH_MAX];
 
-    LOGI("installer: dir: %s pkg: %s", pkgdir, pkgname);
     if ((uid < AID_SYSTEM) || (gid < AID_SYSTEM)) {
         LOGE("invalid uid/gid: %d %d\n", uid, gid);
         return -1;
