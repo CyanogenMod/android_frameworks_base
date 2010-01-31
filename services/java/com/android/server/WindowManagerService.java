@@ -8505,7 +8505,8 @@ public class WindowManagerService extends IWindowManager.Stub
 
                 // Update effect.
                 if (!obscured) {
-                    if (w.mSurface != null) {
+                    if (w.mSurface != null && (w.mAttrs==null 
+                                            ||!"StatusBarExpanded".equals(w.mAttrs.getTitle()))) {
                         if ((attrFlags&FLAG_KEEP_SCREEN_ON) != 0) {
                             holdScreen = w.mSession;
                         }
