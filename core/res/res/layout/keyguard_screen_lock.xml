@@ -49,7 +49,7 @@
                   android:textSize="34sp"/>
         <TextView android:id="@+id/headerSimOk2"
                   android:layout_width="fill_parent"
-                  android:layout_height="wrap_content"
+                  android:layout_height="0dip"
                   android:gravity="center"
                   android:textSize="34sp"/>
 
