@@ -242,7 +242,7 @@ public final class AssetManager {
     }
 
     /*package*/ final void recreateStringBlocks() {
-        synchronized (mSync) {
+        synchronized (this) {
             makeStringBlocks(true);
         }
     }
