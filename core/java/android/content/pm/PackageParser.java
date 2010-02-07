@@ -888,10 +888,6 @@ public class PackageParser {
                         }
                     }
                     
-                    int maxVers = sa.getInt(
-                            com.android.internal.R.styleable.AndroidManifestUsesSdk_maxSdkVersion,
-                            SDK_VERSION);
-
                     sa.recycle();
 
                     if (minCode != null) {
@@ -930,13 +926,6 @@ public class PackageParser {
                                 = android.os.Build.VERSION_CODES.CUR_DEVELOPMENT;
                     } else {
                         pkg.applicationInfo.targetSdkVersion = targetVers;
-                    }
-                    
-                    if (maxVers < SDK_VERSION) {
-                        outError[0] = "Requires older sdk version #" + maxVers
-                                + " (current version is #" + SDK_VERSION + ")";
-                        mParseError = PackageManager.INSTALL_FAILED_OLDER_SDK;
-                        return null;
                     }
                 }
 
