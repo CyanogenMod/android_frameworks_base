@@ -429,11 +429,43 @@ static void run_dexopt(int zip_fd, int odex_fd, const char* input_file_name,
     LOGE("execl(%s) failed: %s\n", DEX_OPT_BIN, strerror(errno));
 }
 
+static void run_check_zipalign(const char* input_file)
+{
+    static const char* ZIPALIGN_BIN = "/system/bin/zipalign";
+    execl(ZIPALIGN_BIN, ZIPALIGN_BIN, "-c", "4", input_file, (char*) NULL);
+}
+
 static void run_zipalign(const char* input_file, const char* output_file)
 {
     static const char* ZIPALIGN_BIN = "/system/bin/zipalign";
     execl(ZIPALIGN_BIN, ZIPALIGN_BIN, "4", input_file, output_file, (char*) NULL);
     LOGE("execl(%s) failed: %s\n", ZIPALIGN_BIN, strerror(errno));
+}
+
+static int wait_check_zipalign(pid_t pid, const char* apk_path)
+{
+    int status;
+    pid_t got_pid;
+
+    while (1) {
+        got_pid = waitpid(pid, &status, 0);
+        if (got_pid == -1 && errno == EINTR) {
+            printf("waitpid interrupted, retrying\n");
+        } else {
+            break;
+        }
+    }
+
+    if (got_pid != pid) {
+        return 1;
+    }
+    if (WIFEXITED(status) && WEXITSTATUS(status) == 0) {
+        LOGD("CheckZipAlign: --- END '%s' (not needed) ---\n", apk_path);
+        return 0;
+    } else {
+        LOGW("CheckZipAlign: --- END '%s' (needed) ---\n", apk_path);
+        return status;
+    }
 }
 
 static int wait_zipalign(pid_t pid, const char* apk_path)
@@ -506,6 +538,18 @@ int zipalign(const char *apk_path, uid_t uid, int is_public)
     struct utimbuf ut;
     struct stat za_stat, apk_stat;
     int res;
+
+    pid_t pid;
+    pid = fork();
+    if (pid == 0) {
+        run_check_zipalign(apk_path);
+        exit(67);
+    } else {
+        res = wait_check_zipalign(pid, apk_path);
+        if (res == 0) {
+            goto notneeded;
+        }
+    }
     
     memset(&apk_stat, 0, sizeof(apk_stat));
     stat(apk_path, &apk_stat);
@@ -514,7 +558,6 @@ int zipalign(const char *apk_path, uid_t uid, int is_public)
     strcat(za_path, ".tmp");
     LOGD("ZipAlign: --- BEGIN '%s' ---\n", apk_path);
     
-    pid_t pid;
     pid = fork();
     if (pid == 0) {
         run_zipalign(apk_path, za_path);
@@ -544,6 +587,9 @@ int zipalign(const char *apk_path, uid_t uid, int is_public)
     unlink(apk_path);
     rename(za_path, apk_path);
 
+    return 0;
+
+notneeded:
     return 0;
 
 fail:
