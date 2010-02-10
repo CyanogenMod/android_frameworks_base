@@ -839,6 +839,7 @@ EGLBoolean eglGetConfigs(   EGLDisplay dpy,
 {
     egl_display_t const * const dp = get_display(dpy);
     if (!dp) return setError(EGL_BAD_DISPLAY, EGL_FALSE);
+    if (!num_config) return setError(EGL_BAD_PARAMETER, EGL_FALSE);
 
     GLint numConfigs = dp->numTotalConfigs;
     if (!configs) {
