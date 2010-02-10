@@ -11,16 +11,15 @@ home=true
                             </div><!-- end homeTitle -->
                             <div id="announcement-block">
                             <!-- total max width is 520px -->
-                                <img src="{@docRoot}assets/images/home/android_adc.png" alt="Android Developer Challenge 2" width="232px" />
-                                <div id="announcement" style="width:275px">
-                                  <p>The second Android Developer Challenge has begun! In this contest,
-                                  real-world users will help review and score applications and the overall winner will 
-                                  take away $250,000. The deadline for submissions was August 31, 2009.</p>
-                                  <p><a href="http://code.google.com/android/adc/">Learn more about ADC 2 &raquo;</a></p>
+                                  <img src="/assets/images/home/Android_Dev_Lab_l.png" alt="Android developer labs" width="100px" style="padding-left:78px;padding-right:46px;padding-bottom: 8px;"/>
+                                  <div id="announcement" style="width:275px">
+<p>We're hosting the next Android Developer Lab in Barcelona at <a href="http://www.mobileworldcongress.com/index.htm">Mobile World Congress&nbsp;&raquo;</a> on Wednesday February 17th at <a href="http://www.mobileworldcongress.com/exhibition/app_planet.htm">App Planet&nbsp;&raquo;</a>, located in Hall 7.  Come visit us to attend a technical presentation, talk to our Android developer relations team, and meet other members of the developer community.</p><p><a href="http://sites.google.com/site/androidmwc/home">Learn more &raquo;</a></p>
+<!--<p><a href="http://android-developers.blogspot.com/2009/11/bring-your-lab-coats.html">Learn more &raquo;</a></p>-->
                                 </div> <!-- end annoucement -->
-                            </div> <!-- end annoucement-block -->  
+                            </div> <!-- end annoucement-block -->
                         </div><!-- end topAnnouncement -->
-                        <div id="carouselMain" style="height:215px"> <!-- this height can be adjusted based on the content height -->
+                        <div id="carouselMain" style="height:200px"> <!-- this height can be
+                                                            adjusted based on the content height -->
                         </div>
                             <div class="clearer"></div>
                         <div id="carouselWheel">
@@ -46,7 +45,7 @@ home=true
                                       <td class="imageCell"><a href="{@docRoot}sdk/index.html"><img src="{@docRoot}assets/images/icon_download.jpg" style="padding:0" /></a></td>
                                       <td>
                                               <h2 class="green">Download</h2>
-                                              <p>The Android SDK  the tools, sample code, and docs you need to create great apps.</p>
+                                              <p>The Android SDK has the tools, sample code, and docs you need to create great apps.</p>
                                               <p><a href="{@docRoot}sdk/index.html">Learn more &raquo;</a></p>
                                       </td>
                               </tr>
@@ -126,18 +125,31 @@ href="{@docRoot}resources/dashboard/platform-versions.html">Learn more &raquo;</
     'sdk': {
       'layout':"imgLeft",
       'icon':"sdk-small.png",
-      'name':"Android 2.0.1",
-      'img':"eclair-android.png",
-      'title':"Android 2.0.1",
-      'desc': "<p>Android 2.0.1 is a minor platform update to Android 2.0. "
-               + "For information about what's included in the new platform, read "
-               + "the <a href='{@docRoot}sdk/android-2.0.1.html'>Android 2.0.1 "
+      'name':"Android 2.1",
+      'img':"sdk-large.png",
+      'title':"Android 2.1 is now available",
+      'desc': "<p>Android 2.1 is a small feature release that includes new developer APIs "
+               + "and documentation. For information about what's included in the platform, "
+               + "read the <a href='{@docRoot}sdk/android-2.1.html'>Android 2.1 "
                + "version notes</a>.</p>"
-               + "<p>You can update your existing environment "
-               + "by installing the Android 2.0.1 platform and updated tools as"
-               + " <a href='{@docRoot}sdk/adding-components.html'>SDK "
-               + "components</a>. Otherwise, "
-               + "<a href='{@docRoot}sdk/index.html'>download a new Android SDK</a>.</p>"
+               + "<p>You can update your existing development environment "
+               + "by installing the Android 2.1 platform as an "
+               + "<a href='{@docRoot}sdk/adding-components.html'>SDK "
+               + "component</a>."
+    },
+
+    'adc2': {
+      'layout':"imgLeft",
+      'icon':"adc2_s.png",
+      'name':"ADC 2",
+      'img':"adc2_l.png",
+      'title':"Android Developer Challenge 2",
+      'desc': "<p>We're pleased to announce the "
+               + "<a href='http://code.google.com/android/adc/gallery_winners.html'>winners "
+               + "of the Android Developer Challenge 2</a>! Please see our "
+               + "<a href='http://android-developers.blogspot.com/2009/11/announcing-winners-of-adc-2.html'>blog post</a> "
+               + "for full information. Thanks to everyone who participated by submitting an application or judging!</p>"
+               + "<p><a href='http://code.google.com/android/adc/'>Learn more about ADC 2 &raquo;</a></p>"
     },
 
     'devphone': {

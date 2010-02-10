@@ -1727,24 +1727,34 @@ writeProguardForAndroidManifest(ProguardKeepSet* keep, const sp<AaptAssets>& ass
         depth++;
         String8 tag(tree.getElementName(&len));
         // printf("Depth %d tag %s\n", depth, tag.string());
+        bool keepTag = false;
         if (depth == 1) {
             if (tag != "manifest") {
                 fprintf(stderr, "ERROR: manifest does not start with <manifest> tag\n");
                 return -1;
             }
             pkg = getAttribute(tree, NULL, "package", NULL);
-        } else if (depth == 2 && tag == "application") {
-            inApplication = true;
+        } else if (depth == 2) {
+            if (tag == "application") {
+                inApplication = true;
+                keepTag = true;
+            } else if (tag == "instrumentation") {
+                keepTag = true;
+            }
         }
-        if (inApplication) {
-            if (tag == "application" || tag == "activity" || tag == "service" || tag == "receiver"
-                    || tag == "provider") {
-                String8 name = getAttribute(tree, "http://schemas.android.com/apk/res/android",
-                        "name", &error);
-                if (error != "") {
-                    fprintf(stderr, "ERROR: %s\n", error.string());
-                    return -1;
-                }
+        if (!keepTag && inApplication && depth == 3) {
+            if (tag == "activity" || tag == "service" || tag == "receiver" || tag == "provider") {
+                keepTag = true;
+            }
+        }
+        if (keepTag) {
+            String8 name = getAttribute(tree, "http://schemas.android.com/apk/res/android",
+                    "name", &error);
+            if (error != "") {
+                fprintf(stderr, "ERROR: %s\n", error.string());
+                return -1;
+            }
+            if (name.length() > 0) {
                 // asdf     --> package.asdf
                 // .asdf  .a.b  --> package.asdf package.a.b
                 // asdf.adsf --> asdf.asdf
@@ -1821,10 +1831,16 @@ status_t
 writeProguardForLayouts(ProguardKeepSet* keep, const sp<AaptAssets>& assets)
 {
     status_t err;
-    sp<AaptDir> layout = assets->resDir(String8("layout"));
+    const Vector<sp<AaptDir> >& dirs = assets->resDirs();
+    const size_t K = dirs.size();
+    for (size_t k=0; k<K; k++) {
+        const sp<AaptDir>& d = dirs.itemAt(k);
+        const String8& dirName = d->getLeaf();
+        if ((dirName != String8("layout")) && (strncmp(dirName.string(), "layout-", 7) != 0)) {
+            continue;
+        }
 
-    if (layout != NULL) {
-        const KeyedVector<String8,sp<AaptGroup> > groups = layout->getFiles();
+        const KeyedVector<String8,sp<AaptGroup> > groups = d->getFiles();
         const size_t N = groups.size();
         for (size_t i=0; i<N; i++) {
             const sp<AaptGroup>& group = groups.valueAt(i);

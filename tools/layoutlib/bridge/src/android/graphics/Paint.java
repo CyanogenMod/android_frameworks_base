@@ -21,6 +21,7 @@ import android.text.SpannableStringBuilder;
 import android.text.SpannedString;
 import android.text.TextUtils;
 
+import java.awt.BasicStroke;
 import java.awt.Font;
 import java.awt.Toolkit;
 import java.awt.font.FontRenderContext;
@@ -59,23 +60,14 @@ public class Paint extends _Original_Paint {
     private final FontRenderContext mFontContext = new FontRenderContext(
             new AffineTransform(), true, true);
 
-    @SuppressWarnings("hiding")
     public static final int ANTI_ALIAS_FLAG       = _Original_Paint.ANTI_ALIAS_FLAG;
-    @SuppressWarnings("hiding")
     public static final int FILTER_BITMAP_FLAG    = _Original_Paint.FILTER_BITMAP_FLAG;
-    @SuppressWarnings("hiding")
     public static final int DITHER_FLAG           = _Original_Paint.DITHER_FLAG;
-    @SuppressWarnings("hiding")
     public static final int UNDERLINE_TEXT_FLAG   = _Original_Paint.UNDERLINE_TEXT_FLAG;
-    @SuppressWarnings("hiding")
     public static final int STRIKE_THRU_TEXT_FLAG = _Original_Paint.STRIKE_THRU_TEXT_FLAG;
-    @SuppressWarnings("hiding")
     public static final int FAKE_BOLD_TEXT_FLAG   = _Original_Paint.FAKE_BOLD_TEXT_FLAG;
-    @SuppressWarnings("hiding")
     public static final int LINEAR_TEXT_FLAG      = _Original_Paint.LINEAR_TEXT_FLAG;
-    @SuppressWarnings("hiding")
     public static final int SUBPIXEL_TEXT_FLAG    = _Original_Paint.SUBPIXEL_TEXT_FLAG;
-    @SuppressWarnings("hiding")
     public static final int DEV_KERN_TEXT_FLAG    = _Original_Paint.DEV_KERN_TEXT_FLAG;
 
     public static class FontMetrics extends _Original_Paint.FontMetrics {
@@ -136,6 +128,19 @@ public class Paint extends _Original_Paint {
             this.nativeInt = nativeInt;
         }
         final int nativeInt;
+
+        /** custom for layoutlib */
+        public int getJavaCap() {
+            switch (this) {
+                case BUTT:
+                    return BasicStroke.CAP_BUTT;
+                case ROUND:
+                    return BasicStroke.CAP_ROUND;
+                default:
+                case SQUARE:
+                    return BasicStroke.CAP_SQUARE;
+            }
+        }
     }
 
     /**
@@ -160,6 +165,19 @@ public class Paint extends _Original_Paint {
             this.nativeInt = nativeInt;
         }
         final int nativeInt;
+
+        /** custom for layoutlib */
+        public int getJavaJoin() {
+            switch (this) {
+                default:
+                case MITER:
+                    return BasicStroke.JOIN_MITER;
+                case ROUND:
+                    return BasicStroke.JOIN_ROUND;
+                case BEVEL:
+                    return BasicStroke.JOIN_BEVEL;
+            }
+        }
     }
 
     /**

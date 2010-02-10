@@ -111,6 +111,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         public int mType;
         public int mRadio;
         public int mPriority;
+        public NetworkInfo.State mLastState;
         public NetworkAttributes(String init) {
             String fragments[] = init.split(",");
             mName = fragments[0].toLowerCase();
@@ -131,6 +132,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 mType = ConnectivityManager.TYPE_MOBILE_HIPRI;
             }
             mPriority = Integer.parseInt(fragments[2]);
+            mLastState = NetworkInfo.State.UNKNOWN;
         }
         public boolean isDefault() {
             return (mType == mRadio);
@@ -452,6 +454,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         IBinder mBinder;
         int mPid;
         int mUid;
+        long mCreateTime;
 
         FeatureUser(int type, String feature, IBinder binder) {
             super();
@@ -460,6 +463,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             mBinder = binder;
             mPid = getCallingPid();
             mUid = getCallingUid();
+            mCreateTime = System.currentTimeMillis();
 
             try {
                 mBinder.linkToDeath(this, 0);
@@ -474,14 +478,21 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
         public void binderDied() {
             Log.d(TAG, "ConnectivityService FeatureUser binderDied(" +
-                    mNetworkType + ", " + mFeature + ", " + mBinder);
+                    mNetworkType + ", " + mFeature + ", " + mBinder + "), created " +
+                    (System.currentTimeMillis() - mCreateTime) + " mSec ago");
             stopUsingNetworkFeature(this, false);
         }
 
         public void expire() {
             Log.d(TAG, "ConnectivityService FeatureUser expire(" +
-                    mNetworkType + ", " + mFeature + ", " + mBinder);
+                    mNetworkType + ", " + mFeature + ", " + mBinder +"), created " +
+                    (System.currentTimeMillis() - mCreateTime) + " mSec ago");
             stopUsingNetworkFeature(this, false);
+        }
+
+        public String toString() {
+            return "FeatureUser("+mNetworkType+","+mFeature+","+mPid+","+mUid+"), created " +
+                    (System.currentTimeMillis() - mCreateTime) + " mSec ago";
         }
     }
 
@@ -594,6 +605,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             return stopUsingNetworkFeature(u, true);
         } else {
             // none found!
+            if (DBG) Log.d(TAG, "ignoring stopUsingNetworkFeature - not a live request");
             return 1;
         }
     }
@@ -638,6 +650,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     if (x.mUid == u.mUid && x.mPid == u.mPid &&
                             x.mNetworkType == u.mNetworkType &&
                             TextUtils.equals(x.mFeature, u.mFeature)) {
+                        if (DBG) Log.d(TAG, "ignoring stopUsingNetworkFeature as dup is found");
                         return 1;
                     }
                 }
@@ -659,8 +672,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             tracker =  mNetTrackers[usedNetworkType];
             if(usedNetworkType != networkType) {
                 Integer currentPid = new Integer(pid);
-                reassessPidDns(pid, true);
                 mNetRequestersPids[usedNetworkType].remove(currentPid);
+                reassessPidDns(pid, true);
                 if (mNetRequestersPids[usedNetworkType].size() != 0) {
                     if (DBG) Log.d(TAG, "not tearing down special network - " +
                            "others still using it");
@@ -798,6 +811,31 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     info.getExtraInfo());
         }
 
+        NetworkStateTracker newNet = null;
+        if (mNetAttributes[prevNetType].isDefault()) {
+            newNet = tryFailover(prevNetType);
+            if (newNet != null) {
+                NetworkInfo switchTo = newNet.getNetworkInfo();
+                intent.putExtra(ConnectivityManager.EXTRA_OTHER_NETWORK_INFO, switchTo);
+            } else {
+                intent.putExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, true);
+            }
+        }
+        // do this before we broadcast the change
+        handleConnectivityChange();
+
+        sendStickyBroadcast(intent);
+        /*
+         * If the failover network is already connected, then immediately send
+         * out a followup broadcast indicating successful failover
+         */
+        if (newNet != null && newNet.getNetworkInfo().isConnected()) {
+            sendConnectedBroadcast(newNet.getNetworkInfo());
+        }
+    }
+
+    // returns null if no failover available
+    private NetworkStateTracker tryFailover(int prevNetType) {
         /*
          * If this is a default network, check if other defaults are available
          * or active
@@ -810,8 +848,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
             int newType = -1;
             int newPriority = -1;
-            for (int checkType=0; checkType <=
-                    ConnectivityManager.MAX_NETWORK_TYPE; checkType++) {
+            for (int checkType=0; checkType <= ConnectivityManager.MAX_NETWORK_TYPE; checkType++) {
                 if (checkType == prevNetType) {
                     continue;
                 }
@@ -826,8 +863,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     if (mRadioAttributes[mNetAttributes[checkType].mRadio].
                             mPriority > newPriority) {
                         newType = checkType;
-                        newPriority = mRadioAttributes[mNetAttributes[newType].
-                                mRadio].mPriority;
+                        newPriority = mRadioAttributes[mNetAttributes[newType].mRadio].mPriority;
                     }
                 }
             }
@@ -857,29 +893,13 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                                     switchTo.getTypeName());
                         }
                     }
-                    intent.putExtra(ConnectivityManager.
-                            EXTRA_OTHER_NETWORK_INFO, switchTo);
                 } else {
-                    intent.putExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY,
-                            true);
                     newNet.reconnect();
                 }
-            } else {
-                intent.putExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY,
-                        true);
             }
         }
 
-        // do this before we broadcast the change
-        handleConnectivityChange();
-
-        sendStickyBroadcast(intent);
-        /*
-         * If the failover network is already connected, then immediately send
-         * out a followup broadcast indicating successful failover
-         */
-        if (newNet != null && newNet.getNetworkInfo().isConnected())
-            sendConnectedBroadcast(newNet.getNetworkInfo());
+        return newNet;
     }
 
     private void sendConnectedBroadcast(NetworkInfo info) {
@@ -935,7 +955,29 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             intent.putExtra(ConnectivityManager.EXTRA_IS_FAILOVER, true);
             info.setFailover(false);
         }
+
+        NetworkStateTracker newNet = null;
+        if (mNetAttributes[info.getType()].isDefault()) {
+            newNet = tryFailover(info.getType());
+            if (newNet != null) {
+                NetworkInfo switchTo = newNet.getNetworkInfo();
+                intent.putExtra(ConnectivityManager.EXTRA_OTHER_NETWORK_INFO, switchTo);
+            } else {
+                intent.putExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, true);
+            }
+        }
+
+        // do this before we broadcast the change
+        handleConnectivityChange();
+
         sendStickyBroadcast(intent);
+        /*
+         * If the failover network is already connected, then immediately send
+         * out a followup broadcast indicating successful failover
+         */
+        if (newNet != null && newNet.getNetworkInfo().isConnected()) {
+            sendConnectedBroadcast(newNet.getNetworkInfo());
+        }
     }
 
     private void sendStickyBroadcast(Intent intent) {
@@ -1196,14 +1238,32 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         }
         pw.println();
         for (NetworkStateTracker nst : mNetTrackers) {
-            if (nst.getNetworkInfo().isConnected()) {
-                pw.println("Active network: " + nst.getNetworkInfo().
-                        getTypeName());
+            if (nst != null) {
+                if (nst.getNetworkInfo().isConnected()) {
+                    pw.println("Active network: " + nst.getNetworkInfo().
+                            getTypeName());
+                }
+                pw.println(nst.getNetworkInfo());
+                pw.println(nst);
+                pw.println();
             }
-            pw.println(nst.getNetworkInfo());
-            pw.println(nst);
-            pw.println();
         }
+
+        pw.println("Network Requester Pids:");
+        for (int net : mPriorityList) {
+            String pidString = net + ": ";
+            for (Object pid : mNetRequestersPids[net]) {
+                pidString = pidString + pid.toString() + ", ";
+            }
+            pw.println(pidString);
+        }
+        pw.println();
+
+        pw.println("FeatureUsers:");
+        for (Object requester : mFeatureUsers) {
+            pw.println(requester.toString());
+        }
+        pw.println();
     }
 
     // must be stateless - things change under us.
@@ -1214,9 +1274,29 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             switch (msg.what) {
                 case NetworkStateTracker.EVENT_STATE_CHANGED:
                     info = (NetworkInfo) msg.obj;
+                    int type = info.getType();
+                    NetworkInfo.State state = info.getState();
+                    // only do this optimization for wifi.  It going into scan mode for location
+                    // services generates alot of noise.  Meanwhile the mms apn won't send out
+                    // subsequent notifications when on default cellular because it never
+                    // disconnects..  so only do this to wifi notifications.  Fixed better when the
+                    // APN notifications are standardized.
+                    if (mNetAttributes[type].mLastState == state &&
+                            mNetAttributes[type].mRadio == ConnectivityManager.TYPE_WIFI) {
+                        if (DBG) {
+                            // TODO - remove this after we validate the dropping doesn't break
+                            // anything
+                            Log.d(TAG, "Dropping ConnectivityChange for " +
+                                    info.getTypeName() + ": " +
+                                    state + "/" + info.getDetailedState());
+                        }
+                        return;
+                    }
+                    mNetAttributes[type].mLastState = state;
+
                     if (DBG) Log.d(TAG, "ConnectivityChange for " +
                             info.getTypeName() + ": " +
-                            info.getState() + "/" + info.getDetailedState());
+                            state + "/" + info.getDetailedState());
 
                     // Connectivity state changed:
                     // [31-13] Reserved for future use
@@ -1234,10 +1314,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     if (info.getDetailedState() ==
                             NetworkInfo.DetailedState.FAILED) {
                         handleConnectionFailure(info);
-                    } else if (info.getState() ==
-                            NetworkInfo.State.DISCONNECTED) {
+                    } else if (state == NetworkInfo.State.DISCONNECTED) {
                         handleDisconnect(info);
-                    } else if (info.getState() == NetworkInfo.State.SUSPENDED) {
+                    } else if (state == NetworkInfo.State.SUSPENDED) {
                         // TODO: need to think this over.
                         // the logic here is, handle SUSPENDED the same as
                         // DISCONNECTED. The only difference being we are
@@ -1246,7 +1325,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                         // opportunity to handle DISCONNECTED and SUSPENDED
                         // differently, or not.
                         handleDisconnect(info);
-                    } else if (info.getState() == NetworkInfo.State.CONNECTED) {
+                    } else if (state == NetworkInfo.State.CONNECTED) {
                         handleConnect(info);
                     }
                     break;
