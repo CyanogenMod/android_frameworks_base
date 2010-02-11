@@ -3828,4 +3828,26 @@ public class Activity extends ContextThemeWrapper
             onActivityResult(requestCode, resultCode, data);
         }
     }
+
+    /**
+     * Adjusts the configChanges value attached to this Activity, OR'ing the
+     * current value with the specified flag.
+     *
+     * @hide Added by T-Mobile to avoid adding a "theme" flag to the
+     *       "configChanges" manifest attribute.
+     */
+    public void setConfigChangesFlag(int flag) {
+        mActivityInfo.configChanges |= flag;
+    }
+
+    /**
+     * Adjusts the configChanges value attached to this Activity, removing the
+     * specified flag from the current value.
+     *
+     * @hide Added by T-Mobile to avoid adding a "theme" flag to the
+     *       "configChanges" manifest attribute.
+     */
+    public void unsetConfigChangesFlag(int flag) {
+        mActivityInfo.configChanges &= ~flag;
+    }
 }
