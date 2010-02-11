@@ -344,7 +344,6 @@ public class WifiService extends IWifiManager.Stub {
         setWifiEnabledState(enable ? WIFI_STATE_ENABLING : WIFI_STATE_DISABLING, uid);
 
         if (enable) {
-            setWifiEnabledState(WIFI_STATE_ENABLING, uid);
             if (!WifiNative.loadDriver()) {
                 Log.e(TAG, "Failed to load Wi-Fi driver.");
                 setWifiEnabledState(WIFI_STATE_UNKNOWN, uid);
@@ -358,8 +357,7 @@ public class WifiService extends IWifiManager.Stub {
             }
             registerForBroadcasts();
             mWifiStateTracker.startEventLoop();
-        } else if (mWifiState == WIFI_STATE_ENABLED) {
-            setWifiEnabledState(WIFI_STATE_DISABLING, uid);
+        } else {
 
             mContext.unregisterReceiver(mReceiver);
            // Remove notification (it will no-op if it isn't visible)
@@ -385,9 +383,6 @@ public class WifiService extends IWifiManager.Stub {
             if (failedToStopSupplicantOrUnloadDriver) {
                 return false;
             }
-        } else {
-            Log.d(TAG,"Trying to disable wifi again");
-            return true;
         }
 
         // Success!
