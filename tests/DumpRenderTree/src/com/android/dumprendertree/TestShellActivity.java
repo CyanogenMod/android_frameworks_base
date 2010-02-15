@@ -512,6 +512,94 @@ public class TestShellActivity extends Activity implements LayoutTestController 
             result.confirm();
             return true;
         }
+
+        @Override
+        public boolean onJsTimeout() {
+            Log.v(LOGTAG, "JavaScript timeout");
+            return false;
+        }
+
+        @Override
+        public void onExceededDatabaseQuota(String url_str,
+                String databaseIdentifier, long currentQuota,
+                long estimatedSize, long totalUsedQuota,
+                WebStorage.QuotaUpdater callback) {
+            if (mDumpDatabaseCallbacks) {
+                if (mDatabaseCallbackStrings == null) {
+                    mDatabaseCallbackStrings = new StringBuffer();
+                }
+
+                String protocol = "";
+                String host = "";
+                int port = 0;
+
+                try {
+                    URL url = new URL(url_str);
+                    protocol = url.getProtocol();
+                    host = url.getHost();
+                    if (url.getPort() > -1) {
+                        port = url.getPort();
+                    }
+                } catch (MalformedURLException e) {}
+
+                String databaseCallbackString =
+                        "UI DELEGATE DATABASE CALLBACK: " +
+                        "exceededDatabaseQuotaForSecurityOrigin:{" + protocol +
+                        ", " + host + ", " + port + "} database:" +
+                        databaseIdentifier + "\n";
+                Log.v(LOGTAG, "LOG: "+databaseCallbackString);
+                mDatabaseCallbackStrings.append(databaseCallbackString);
+            }
+            // Give 5MB more quota.
+            callback.updateQuota(currentQuota + 1024 * 1024 * 5);
+        }
+
+        /**
+         * Instructs the client to show a prompt to ask the user to set the
+         * Geolocation permission state for the specified origin.
+         */
+        @Override
+        public void onGeolocationPermissionsShowPrompt(String origin,
+                GeolocationPermissions.Callback callback) {
+            if (mGeolocationPermissionSet) {
+                callback.invoke(origin, mGeolocationPermission, false);
+            }
+        }
+
+        @Override
+        public void onConsoleMessage(String message, int lineNumber,
+                String sourceID) {
+            if (mConsoleMessages == null) {
+                mConsoleMessages = new StringBuffer();
+            }
+            String consoleMessage = "CONSOLE MESSAGE: line "
+                    + lineNumber +": "+ message +"\n";
+            mConsoleMessages.append(consoleMessage);
+            Log.v(LOGTAG, "LOG: "+consoleMessage);
+        }
+
+        @Override
+        public boolean onCreateWindow(WebView view, boolean dialog,
+                boolean userGesture, Message resultMsg) {
+            if (!mCanOpenWindows) {
+                return false;
+            }
+
+            // We never display the new window, just create the view and
+            // allow it's content to execute and be recorded by the test
+            // runner.
+
+            HashMap<String, Object> jsIfaces = new HashMap<String, Object>();
+            jsIfaces.put("layoutTestController", mCallbackProxy);
+            jsIfaces.put("eventSender", mCallbackProxy);
+            WebView newWindowView = new NewWindowWebView(TestShellActivity.this, jsIfaces);
+            setupWebViewForLayoutTests(newWindowView, mCallbackProxy);
+            WebView.WebViewTransport transport =
+                    (WebView.WebViewTransport) resultMsg.obj;
+            transport.setWebView(newWindowView);
+            resultMsg.sendToTarget();
+            return true;
+        }
     };
 
     private void resetTestStatus() {
