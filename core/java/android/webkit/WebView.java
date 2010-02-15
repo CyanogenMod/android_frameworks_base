@@ -4143,7 +4143,7 @@ public class WebView extends AbsoluteLayout
                         if (mInZoomOverview && count > 0) {
                             settings.setDoubleTapToastCount(--count);
                             Toast.makeText(mContext,
-                                    com.android.internal.R.string.double_tap_toast,
+                                    "Tip: double-tap to zoom in and out.",
                                     Toast.LENGTH_LONG).show();
                         }
                     }
