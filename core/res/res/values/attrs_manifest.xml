@@ -830,7 +830,6 @@
               allow the application to be installed even if the library
               doesn't exist, and you will need to check for its presence
               dynamically at runtime. -->
-        <attr name="required" />
     </declare-styleable>
     
     <!-- The <code>supports-screens</code> specifies the screen dimensions an

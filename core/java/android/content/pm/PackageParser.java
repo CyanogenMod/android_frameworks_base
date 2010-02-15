@@ -764,30 +764,13 @@ public class PackageParser {
                 FeatureInfo fi = new FeatureInfo();
                 sa = res.obtainAttributes(attrs,
                         com.android.internal.R.styleable.AndroidManifestUsesFeature);
-                fi.name = sa.getNonResourceString(
-                        com.android.internal.R.styleable.AndroidManifestUsesFeature_name);
-                if (fi.name == null) {
-                    fi.reqGlEsVersion = sa.getInt(
-                            com.android.internal.R.styleable.AndroidManifestUsesFeature_glEsVersion,
-                            FeatureInfo.GL_ES_VERSION_UNDEFINED);
-                }
-                if (sa.getBoolean(
-                        com.android.internal.R.styleable.AndroidManifestUsesFeature_required,
-                        true)) {
-                    fi.flags |= FeatureInfo.FLAG_REQUIRED;
-                }
+                fi.flags |= FeatureInfo.FLAG_REQUIRED;
                 sa.recycle();
                 if (pkg.reqFeatures == null) {
                     pkg.reqFeatures = new ArrayList<FeatureInfo>();
                 }
                 pkg.reqFeatures.add(fi);
                 
-                if (fi.name == null) {
-                    ConfigurationInfo cPref = new ConfigurationInfo();
-                    cPref.reqGlEsVersion = fi.reqGlEsVersion;
-                    pkg.configPreferences.add(cPref);
-                }
-
                 XmlUtils.skipCurrentTag(parser);
 
             } else if (tagName.equals("uses-sdk")) {
@@ -1450,9 +1433,7 @@ public class PackageParser {
 
                 String lname = sa.getNonResourceString(
                         com.android.internal.R.styleable.AndroidManifestUsesLibrary_name);
-                boolean req = sa.getBoolean(
-                        com.android.internal.R.styleable.AndroidManifestUsesLibrary_required,
-                        true);
+                boolean req = true;
 
                 sa.recycle();
 
