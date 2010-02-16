@@ -150,8 +150,6 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
     /**
      * When set, the drawing method will call {@link #getChildDrawingOrder(int, int)}
      * to get the index of the child to draw for that iteration.
-     * 
-     * @hide
      */
     protected static final int FLAG_USE_CHILD_DRAWING_ORDER = 0x400;
 
