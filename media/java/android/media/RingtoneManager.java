@@ -22,7 +22,6 @@ import android.annotation.SdkConstant;
 import android.annotation.SdkConstant.SdkConstantType;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
 import android.net.Uri;
@@ -52,11 +51,6 @@ import java.util.List;
 public class RingtoneManager {
 
     private static final String TAG = "RingtoneManager";
-
-    /**
-     * @hide
-     */
-    public static final String ACTION_RINGTONE_CHANGED = "com.tmobile.intent.action.RINGTONE_CHANGED";
 
     // Make sure these are in sync with attrs.xml:
     // <attr name="ringtoneType">
@@ -693,10 +687,6 @@ public class RingtoneManager {
         if (setting == null) return;
         Settings.System.putString(context.getContentResolver(), setting,
                 ringtoneUri != null ? ringtoneUri.toString() : null);
-        Intent intent = new Intent();
-        intent.setAction(ACTION_RINGTONE_CHANGED);
-        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, type);
-        context.sendBroadcast(intent);
     }
     
     private static String getSettingForType(int type) {
