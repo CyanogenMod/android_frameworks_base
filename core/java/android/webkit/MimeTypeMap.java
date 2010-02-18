@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * Copyright (C) 2010 Sony Ericsson Mobile Communications AB
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -362,10 +363,13 @@ public class MimeTypeMap {
             sMimeTypeMap.loadEntry("application/x-xcf", "xcf");
             sMimeTypeMap.loadEntry("application/x-xfig", "fig");
             sMimeTypeMap.loadEntry("application/xhtml+xml", "xhtml");
+            sMimeTypeMap.loadEntry("audio/amr", "amr");
             sMimeTypeMap.loadEntry("audio/basic", "snd");
             sMimeTypeMap.loadEntry("audio/midi", "mid");
             sMimeTypeMap.loadEntry("audio/midi", "midi");
             sMimeTypeMap.loadEntry("audio/midi", "kar");
+            sMimeTypeMap.loadEntry("audio/midi", "xmf");
+            sMimeTypeMap.loadEntry("audio/mobile-xmf", "mxmf");
             sMimeTypeMap.loadEntry("audio/mpeg", "mpga");
             sMimeTypeMap.loadEntry("audio/mpeg", "mpega");
             sMimeTypeMap.loadEntry("audio/mpeg", "mp2");
