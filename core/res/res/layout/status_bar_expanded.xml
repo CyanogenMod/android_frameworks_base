@@ -54,7 +54,7 @@
                 <TextView android:id="@+id/spnLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="0dip"
                     android:textAppearance="?android:attr/textAppearanceLarge"
                     android:textColor="?android:attr/textColorSecondaryInverse"
                     android:paddingLeft="4dp"
