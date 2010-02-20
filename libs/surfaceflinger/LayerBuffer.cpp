@@ -513,7 +513,7 @@ status_t LayerBuffer::BufferSource::initTempBuffer() const
             glDeleteTextures(1, &mTexture.name);
             eglDestroyImageKHR(dpy, mTexture.image);
             Texture defaultTexture;
-            mTexture = defaultTexture;
+            mTexture.name = mLayer.createTexture();
             mTempGraphicBuffer.clear();
         } else {
             // we're good, we have an EGLImageKHR and it's (still) the
