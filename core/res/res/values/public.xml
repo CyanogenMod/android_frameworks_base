@@ -1225,7 +1225,7 @@
      =============================================================== -->
   <eat-comment />
 
-  <public type="style" name="Widget.TabIndicator" id="0x0103009d" />
+  <public type="style" name="Widget.TabIndicator" id="0x010300a0" />
   <public type="style" name="Widget.EditText.TimePicker" />
   <public type="style" name="com_android_server_status_ExpandedView" />
   <public type="style" name="com_android_server_status_LatestItemView" />
@@ -1262,6 +1262,6 @@
   <public type="attr" name="com_android_server_status_expandedView" />
   <public type="attr" name="com_android_server_status_latestItemView" />
 
-  <public type="string" name="buy_ringtones" id="0x01040325" />
+  <public type="string" name="buy_ringtones" id="0x0104032b" />
 
 </resources>
