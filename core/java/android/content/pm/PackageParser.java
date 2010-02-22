@@ -1336,14 +1336,31 @@ public class PackageParser {
         return a;
     }
 
-    private void setIsThemeable(XmlPullParser parser, AttributeSet attrs, ApplicationInfo ai) {
+    private void parseAndApplyPlutoAttributes(XmlPullParser parser, AttributeSet attrs,
+            ApplicationInfo appInfo) {
         for (int i = 0; i < attrs.getAttributeCount(); i++) {
             if (!ApplicationInfo.isPlutoNamespace(parser.getAttributeNamespace(i))) {
                 continue;
             }
-            if (attrs.getAttributeName(i).equalsIgnoreCase(ApplicationInfo.PLUTO_ISTHEMEABLE_ATTRIBUTE_NAME)) {
-                ai.isThemeable = attrs.getAttributeBooleanValue(i, false);
+            String attrName = attrs.getAttributeName(i);
+            if (attrName.equalsIgnoreCase(ApplicationInfo.PLUTO_ISTHEMEABLE_ATTRIBUTE_NAME)) {
+                appInfo.isThemeable = attrs.getAttributeBooleanValue(i, false);
                 return;
+            }
+        }
+    }
+
+    private void parseAndApplyPlutoAttributes(XmlPullParser parser, AttributeSet attrs,
+            ActivityInfo ai) {
+        for (int i = 0; i < attrs.getAttributeCount(); i++) {
+            if (!ApplicationInfo.isPlutoNamespace(parser.getAttributeNamespace(i))) {
+                continue;
+            }
+            String attrName = attrs.getAttributeName(i);
+            if (attrName.equalsIgnoreCase(ApplicationInfo.PLUTO_ISTHEMEABLE_ATTRIBUTE_NAME)) {
+                ai.setIsThemeable(attrs.getAttributeBooleanValue(i, false));
+            } else if (attrName.equalsIgnoreCase(ApplicationInfo.PLUTO_HANDLE_THEME_CONFIG_CHANGES_ATTRIBUTE_NAME)) {
+                ai.configChanges |= ActivityInfo.CONFIG_THEME_RESOURCE;
             }
         }
     }
@@ -1354,7 +1371,7 @@ public class PackageParser {
         final ApplicationInfo ai = owner.applicationInfo;
         final String pkgName = owner.applicationInfo.packageName;
 
-        setIsThemeable(parser, attrs, ai);
+        parseAndApplyPlutoAttributes(parser, attrs, ai);
 
         TypedArray sa = res.obtainAttributes(attrs,
                 com.android.internal.R.styleable.AndroidManifestApplication);
@@ -1628,18 +1645,6 @@ public class PackageParser {
         return true;
     }
 
-    private void setIsThemeableForActivity(XmlPullParser parser, AttributeSet attrs, ActivityInfo ai) {
-        for (int i = 0; i < attrs.getAttributeCount(); i++) {
-            if (!ApplicationInfo.isPlutoNamespace(parser.getAttributeNamespace(i))) {
-                continue;
-            }
-            if (attrs.getAttributeName(i).equalsIgnoreCase(ApplicationInfo.PLUTO_ISTHEMEABLE_ATTRIBUTE_NAME)) {
-                ai.setIsThemeable(attrs.getAttributeBooleanValue(i, false));
-                return;
-            }
-        }
-    }
-
     private Activity parseActivity(Package owner, Resources res,
             XmlPullParser parser, AttributeSet attrs, int flags, String[] outError,
             boolean receiver) throws XmlPullParserException, IOException {
@@ -1661,7 +1666,6 @@ public class PackageParser {
         mParseActivityArgs.flags = flags;
         
         Activity a = new Activity(mParseActivityArgs, new ActivityInfo());
-        setIsThemeableForActivity(parser, attrs, a.info);
 
         if (outError[0] != null) {
             sa.recycle();
@@ -1770,6 +1774,8 @@ public class PackageParser {
         if (outError[0] != null) {
             return null;
         }
+
+        parseAndApplyPlutoAttributes(parser, attrs, a.info);
 
         int outerDepth = parser.getDepth();
         int type;

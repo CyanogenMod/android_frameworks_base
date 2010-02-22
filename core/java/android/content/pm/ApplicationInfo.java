@@ -279,8 +279,12 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
     public static final String PLUTO_ISTHEMEABLE_ATTRIBUTE_NAME = "isThemeable";
 
     /**
-     *
-     *  @hide
+     * @hide
+     */
+    public static final String PLUTO_HANDLE_THEME_CONFIG_CHANGES_ATTRIBUTE_NAME = "handleThemeConfigChanges";
+
+    /**
+     * @hide
      */
     public static boolean isPlutoNamespace(String namespace) {
         return namespace != null && namespace.equalsIgnoreCase(PLUTO_SCHEMA);
