@@ -78,9 +78,6 @@
 
         <item name="buttonStyleToggle">@android:style/Widget.Button.Toggle</item>
         
-        <item name="buttonStyleTimePickerUp">@android:style/TimePickerUpButton</item>
-        <item name="buttonStyleTimePickerDown">@android:style/TimePickerDownButton</item>
-
         <!-- List attributes -->
         <item name="listPreferredItemHeight">64dip</item>
         <!-- @hide -->
@@ -159,7 +156,6 @@
         <item name="checkboxStyle">@android:style/Widget.CompoundButton.CheckBox</item>
         <item name="dropDownListViewStyle">@android:style/Widget.ListView.DropDown</item>
         <item name="editTextStyle">@android:style/Widget.EditText</item>
-        <item name="timePickerInputStyle">@android:style/Widget.EditText.TimePicker</item>
         <item name="expandableListViewStyle">@android:style/Widget.ExpandableListView</item>
         <item name="galleryStyle">@android:style/Widget.Gallery</item>
         <item name="gestureOverlayViewStyle">@android:style/Widget.GestureOverlayView</item>
@@ -450,10 +446,6 @@
         <item name="listItemTextViewStyle">@android:style/Widget.TextView.ListItem.White</item>
         <item name="colorBackground">@android:color/white</item>
         <item name="cacheColorHint">@android:color/white</item>
-        
-        <item name="android:timePickerInputStyle">@android:style/Widget.EditText.TimePicker</item>
-        <item name="android:buttonStyleTimePickerUp">@android:style/TimePickerUpButton</item>
-        <item name="android:buttonStyleTimePickerDown">@android:style/TimePickerDownButton</item>
     </style>
     
     <!-- Default dark theme for panel windows.  This removes all extraneous

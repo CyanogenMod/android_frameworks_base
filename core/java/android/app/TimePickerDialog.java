@@ -73,7 +73,8 @@ public class TimePickerDialog extends AlertDialog implements OnClickListener,
     public TimePickerDialog(Context context,
             OnTimeSetListener callBack,
             int hourOfDay, int minute, boolean is24HourView) {
-        this(context, 0, callBack, hourOfDay, minute, is24HourView);
+        this(context, com.android.internal.R.style.Theme_Dialog_Alert,
+                callBack, hourOfDay, minute, is24HourView);
     }
 
     /**
@@ -94,7 +95,7 @@ public class TimePickerDialog extends AlertDialog implements OnClickListener,
         mInitialMinute = minute;
         mIs24HourView = is24HourView;
 
-        mDateFormat = DateFormat.getTimeFormat(getContext());
+        mDateFormat = DateFormat.getTimeFormat(context);
         mCalendar = Calendar.getInstance();
         updateTitle(mInitialHourOfDay, mInitialMinute);
         
@@ -103,7 +104,7 @@ public class TimePickerDialog extends AlertDialog implements OnClickListener,
         setIcon(R.drawable.ic_dialog_time);
         
         LayoutInflater inflater = 
-                (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.time_picker_dialog, null);
         setView(view);
         mTimePicker = (TimePicker) view.findViewById(R.id.timePicker);

@@ -845,13 +845,6 @@
         <item name="android:textColor">@android:color/primary_text_light</item>
     </style>
     
-    <style name="Widget.EditText.TimePicker">
-        <item name="android:background">@android:drawable/timepicker_input</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceLargeInverse</item>
-        <item name="android:gravity">center</item>
-        <item name="android:textSize">30sp</item>
-    </style>
-    
     <style name="Widget.ExpandableListView.White" parent="Widget.ListView.White">
         <item name="android:groupIndicator">@android:drawable/expander_group</item>
         <item name="android:indicatorLeft">?android:attr/expandableListPreferredItemIndicatorLeft</item>
@@ -869,13 +862,5 @@
         <item name="textColorPrimaryInverse">@android:color/primary_text_dark</item>
         <item name="textColorSecondaryInverse">@android:color/secondary_text_dark</item>
         <item name="textColorTertiaryInverse">@android:color/tertiary_text_dark</item>
-    </style>
-    
-    <style name="TimePickerUpButton">
-        <item name="android:background">@android:drawable/timepicker_up_btn</item>
-    </style>
-    
-     <style name="TimePickerDownButton">
-        <item name="android:background">@android:drawable/timepicker_down_btn</item>
     </style>
 </resources>
