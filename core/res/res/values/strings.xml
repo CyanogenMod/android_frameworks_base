@@ -2113,4 +2113,5 @@
     <string name="l2tp_vpn_description">Layer 2 Tunneling Protocol</string>
     <string name="l2tp_ipsec_psk_vpn_description">Pre-shared key based L2TP/IPSec VPN</string>
     <string name="l2tp_ipsec_crt_vpn_description">Certificate based L2TP/IPSec VPN</string>
+    <string name="openvpn_vpn_description">OpenVPN SSL VPN</string>
 </resources>
