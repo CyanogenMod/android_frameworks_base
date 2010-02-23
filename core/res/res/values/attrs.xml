@@ -176,8 +176,6 @@
         <attr name="listDivider" format="reference" />
         <!-- TextView style for list separators. -->
         <attr name="listSeparatorTextViewStyle" format="reference" />
-        <!-- TextView style for regular list items. -->
-        <attr name="listItemTextViewStyle" format="reference" />
         <!-- The preferred left padding for an expandable list item (for child-specific layouts,
              use expandableListPreferredChildPaddingLeft). This takes into account
              the indicator that will be shown to next to the item. -->
@@ -303,14 +301,6 @@
              because there will be no such interaction coming. -->
         <attr name="windowNoDisplay" format="boolean" />
 
-        <!-- ============ -->
-        <!-- General Dialog theme -->
-        <!-- ============ -->
-        <eat-comment />
-        <attr name="dialogTheme" format="reference" />
-        <attr name="alertDialogTheme" format="reference" />
-        <attr name="searchDialogTheme" format="reference" />
-        
         <!-- ============ -->
         <!-- Menu theme -->
         <!-- ============ -->

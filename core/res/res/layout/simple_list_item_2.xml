@@ -29,7 +29,6 @@
         android:layout_marginLeft="6dip"
         android:layout_marginTop="6dip"
 		android:textAppearance="?android:attr/textAppearanceLarge"
-		style="?android:attr/listItemTextViewStyle"
 	/>
 		
 	<TextView android:id="@android:id/text2"
@@ -38,7 +37,6 @@
 		android:layout_below="@android:id/text1"
         android:layout_alignLeft="@android:id/text1"
 		android:textAppearance="?android:attr/textAppearanceSmall"
-		style="?android:attr/listItemTextViewStyle"
 	/>
 
 </TwoLineListItem>

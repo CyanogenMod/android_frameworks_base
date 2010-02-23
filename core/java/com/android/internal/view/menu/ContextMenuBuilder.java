@@ -16,7 +16,6 @@
 
 package com.android.internal.view.menu;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.IBinder;
@@ -39,7 +38,6 @@ import android.view.View;
  * with a view's context menu items and show the context menu.
  */
 public class ContextMenuBuilder extends MenuBuilder implements ContextMenu {
-    private Context mContext;
     
     public ContextMenuBuilder(Context context) {
         super(context);
@@ -87,27 +85,12 @@ public class ContextMenuBuilder extends MenuBuilder implements ContextMenu {
             EventLog.writeEvent(50001, 1);
             
             MenuDialogHelper helper = new MenuDialogHelper(this); 
-            Dialog d = helper.create(token);
-            mContext = d.getContext();
-            d.show();
+            helper.show(token);
             
             return helper;
         }
         
         return null;
     }
-
-    /**
-     * The dialog holding this context menu can be themed separately from the
-     * Context that created it. This is here to ensure that the right context
-     * is used during inflation.
-     */
-    @Override
-    public Context getContext() {
-        if (mContext != null) {
-            return mContext;
-        } else {
-            return super.getContext();
-        }
-    }
+    
 }

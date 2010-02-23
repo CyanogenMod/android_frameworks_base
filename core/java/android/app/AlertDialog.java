@@ -56,25 +56,19 @@ public class AlertDialog extends Dialog implements DialogInterface {
     private AlertController mAlert;
 
     protected AlertDialog(Context context) {
-        this(context, 0);
+        this(context, com.android.internal.R.style.Theme_Dialog_Alert);
     }
 
     protected AlertDialog(Context context, int theme) {
-        super(context, resolveDefaultTheme(context, theme));
-        mAlert = new AlertController(getContext(), this, getWindow());
+        super(context, theme);
+        mAlert = new AlertController(context, this, getWindow());
     }
 
     protected AlertDialog(Context context, boolean cancelable, OnCancelListener cancelListener) {
-        super(context, resolveDefaultTheme(context, 0));
+        super(context, com.android.internal.R.style.Theme_Dialog_Alert);
         setCancelable(cancelable);
         setOnCancelListener(cancelListener);
-        mAlert = new AlertController(getContext(), this, getWindow());
-    }
-    
-    static int resolveDefaultTheme(Context context, int theme) {
-        return Dialog.resolveDefaultTheme(context, theme,
-                android.R.styleable.Theme_alertDialogTheme,
-                com.android.internal.R.style.Theme_Dialog_Alert);
+        mAlert = new AlertController(context, this, getWindow());
     }
 
     /**
@@ -270,15 +264,13 @@ public class AlertDialog extends Dialog implements DialogInterface {
     }
     
     public static class Builder {
-        private final Context mContext;
         private final AlertController.AlertParams P;
         
         /**
          * Constructor using a context for this builder and the {@link AlertDialog} it creates.
          */
         public Builder(Context context) {
-            mContext = context;
-            P = new AlertController.AlertParams();
+            P = new AlertController.AlertParams(context);
         }
         
         /**
@@ -287,7 +279,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setTitle(int titleId) {
-            P.mTitle = mContext.getText(titleId);
+            P.mTitle = P.mContext.getText(titleId);
             return this;
         }
         
@@ -323,7 +315,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setMessage(int messageId) {
-            P.mMessage = mContext.getText(messageId);
+            P.mMessage = P.mContext.getText(messageId);
             return this;
         }
         
@@ -365,7 +357,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setPositiveButton(int textId, final OnClickListener listener) {
-            P.mPositiveButtonText = mContext.getText(textId);
+            P.mPositiveButtonText = P.mContext.getText(textId);
             P.mPositiveButtonListener = listener;
             return this;
         }
@@ -391,7 +383,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setNegativeButton(int textId, final OnClickListener listener) {
-            P.mNegativeButtonText = mContext.getText(textId);
+            P.mNegativeButtonText = P.mContext.getText(textId);
             P.mNegativeButtonListener = listener;
             return this;
         }
@@ -417,7 +409,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setNeutralButton(int textId, final OnClickListener listener) {
-            P.mNeutralButtonText = mContext.getText(textId);
+            P.mNeutralButtonText = P.mContext.getText(textId);
             P.mNeutralButtonListener = listener;
             return this;
         }
@@ -473,7 +465,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
          * @return This Builder object to allow for chaining of calls to set methods
          */
         public Builder setItems(int itemsId, final OnClickListener listener) {
-            P.mItems = mContext.getResources().getTextArray(itemsId);
+            P.mItems = P.mContext.getResources().getTextArray(itemsId);
             P.mOnClickListener = listener;
             return this;
         }
@@ -546,7 +538,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
          */
         public Builder setMultiChoiceItems(int itemsId, boolean[] checkedItems, 
                 final OnMultiChoiceClickListener listener) {
-            P.mItems = mContext.getResources().getTextArray(itemsId);
+            P.mItems = P.mContext.getResources().getTextArray(itemsId);
             P.mOnCheckboxClickListener = listener;
             P.mCheckedItems = checkedItems;
             P.mIsMultiChoice = true;
@@ -625,7 +617,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
          */
         public Builder setSingleChoiceItems(int itemsId, int checkedItem, 
                 final OnClickListener listener) {
-            P.mItems = mContext.getResources().getTextArray(itemsId);
+            P.mItems = P.mContext.getResources().getTextArray(itemsId);
             P.mOnClickListener = listener;
             P.mCheckedItem = checkedItem;
             P.mIsSingleChoice = true;
@@ -791,7 +783,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
          * to do and want this to be created and displayed.
          */
         public AlertDialog create() {
-            final AlertDialog dialog = new AlertDialog(mContext);
+            final AlertDialog dialog = new AlertDialog(P.mContext);
             P.apply(dialog.mAlert);
             dialog.setCancelable(P.mCancelable);
             dialog.setOnCancelListener(P.mOnCancelListener);

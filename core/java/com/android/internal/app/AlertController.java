@@ -59,7 +59,6 @@ public class AlertController {
     private final Context mContext;
     private final DialogInterface mDialogInterface;
     private final Window mWindow;
-    private final LayoutInflater mInflater;
     
     private CharSequence mTitle;
 
@@ -167,7 +166,6 @@ public class AlertController {
 
     public AlertController(Context context, DialogInterface di, Window window) {
         mContext = context;
-        mInflater = LayoutInflater.from(context);
         mDialogInterface = di;
         mWindow = window;
         mHandler = new ButtonHandler(di);
@@ -697,6 +695,9 @@ public class AlertController {
     }
 
     public static class AlertParams {
+        public final Context mContext;
+        public final LayoutInflater mInflater;
+        
         public int mIconId = -1;
         public Drawable mIcon;
         public CharSequence mTitle;
@@ -746,8 +747,10 @@ public class AlertController {
             void onPrepareListView(ListView listView);
         }
         
-        public AlertParams() {
+        public AlertParams(Context context) {
+            mContext = context;
             mCancelable = true;
+            mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
     
         public void apply(AlertController dialog) {
@@ -807,13 +810,13 @@ public class AlertController {
         
         private void createListView(final AlertController dialog) {
             final RecycleListView listView = (RecycleListView)
-                    dialog.mInflater.inflate(R.layout.select_dialog, null);
+                    mInflater.inflate(R.layout.select_dialog, null);
             ListAdapter adapter;
             
             if (mIsMultiChoice) {
                 if (mCursor == null) {
                     adapter = new ArrayAdapter<CharSequence>(
-                            dialog.mContext, R.layout.select_dialog_multichoice, R.id.text1, mItems) {
+                            mContext, R.layout.select_dialog_multichoice, R.id.text1, mItems) {
                         @Override
                         public View getView(int position, View convertView, ViewGroup parent) {
                             View view = super.getView(position, convertView, parent);
@@ -827,7 +830,7 @@ public class AlertController {
                         }
                     };
                 } else {
-                    adapter = new CursorAdapter(dialog.mContext, mCursor, false) {
+                    adapter = new CursorAdapter(mContext, mCursor, false) {
                         private final int mLabelIndex;
                         private final int mIsCheckedIndex;
 
@@ -847,7 +850,7 @@ public class AlertController {
     
                         @Override
                         public View newView(Context context, Cursor cursor, ViewGroup parent) {
-                            return dialog.mInflater.inflate(R.layout.select_dialog_multichoice,
+                            return mInflater.inflate(R.layout.select_dialog_multichoice,
                                     parent, false);
                         }
                         
@@ -858,10 +861,9 @@ public class AlertController {
                         ? R.layout.select_dialog_singlechoice : R.layout.select_dialog_item;
                 if (mCursor == null) {
                     adapter = (mAdapter != null) ? mAdapter
-                            : new ArrayAdapter<CharSequence>(dialog.mContext,
-                                    layout, R.id.text1, mItems);
+                            : new ArrayAdapter<CharSequence>(mContext, layout, R.id.text1, mItems);
                 } else {
-                    adapter = new SimpleCursorAdapter(dialog.mContext, layout, 
+                    adapter = new SimpleCursorAdapter(mContext, layout, 
                             mCursor, new String[]{mLabelColumn}, new int[]{R.id.text1});
                 }
             }

@@ -84,7 +84,6 @@
         <item name="searchResultListItemHeight">58dip</item>
         <item name="listDivider">@drawable/divider_horizontal_dark</item>
         <item name="listSeparatorTextViewStyle">@android:style/Widget.TextView.ListSeparator</item>   
-        <item name="listItemTextViewStyle">@android:style/Widget.TextView.ListItem</item>
         
 		<item name="listChoiceIndicatorSingle">@android:drawable/btn_radio</item>
     	<item name="listChoiceIndicatorMultiple">@android:drawable/btn_check</item>    
@@ -118,10 +117,7 @@
         <item name="android:windowSoftInputMode">stateUnspecified|adjustUnspecified</item>
 
         <!-- Dialog attributes -->
-        <item name="dialogTheme">@android:style/Theme.Dialog</item>
-        <item name="alertDialogTheme">@android:style/Theme.Dialog.Alert</item>
         <item name="alertDialogStyle">@android:style/AlertDialog</item>
-        <item name="searchDialogTheme">@android:style/Theme.SearchBar</item>
         
         <!-- Menu attributes -->
         <item name="iconMenuTheme">@android:style/Theme.IconMenu</item>
@@ -437,15 +433,6 @@
         <item name="windowTitleStyle">@android:style/DialogWindowTitle</item>
         <item name="windowIsFloating">true</item>
         <item name="windowContentOverlay">@null</item>
-
-        <!-- Use light themes for various components. -->
-        <item name="listViewStyle">@android:style/Widget.ListView.Dialog</item>
-        <item name="expandableListViewStyle">@android:style/Widget.ExpandableListView.Dialog</item>
-        <item name="listDivider">@drawable/divider_horizontal_bright</item>
-        <item name="listSeparatorTextViewStyle">@android:style/Widget.TextView.ListSeparator.White</item>
-        <item name="listItemTextViewStyle">@android:style/Widget.TextView.ListItem.White</item>
-        <item name="colorBackground">@android:color/white</item>
-        <item name="cacheColorHint">@android:color/white</item>
     </style>
     
     <!-- Default dark theme for panel windows.  This removes all extraneous

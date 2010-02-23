@@ -47,7 +47,7 @@ public abstract class AlertActivity extends Activity implements DialogInterface 
         super.onCreate(savedInstanceState);
         
         mAlert = new AlertController(this, this, getWindow());
-        mAlertParams = new AlertController.AlertParams();
+        mAlertParams = new AlertController.AlertParams(this);        
     }
 
     public void cancel() {
