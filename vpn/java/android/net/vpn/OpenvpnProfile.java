@@ -17,7 +17,6 @@
 package android.net.vpn;
 
 import android.os.Parcel;
-import android.security.CertTool;
 
 /**
  * The profile for Openvpn type of VPN.
@@ -84,10 +83,6 @@ public class OpenvpnProfile extends VpnProfile {
 	mUserAuth = auth;
     }
 
-    public String getCAFile() {
-	return CertTool.getInstance().getCaCertificate(mCA) ;
-    }
-
     public String getCAName() {
 	return mCA;
     }
@@ -96,20 +91,12 @@ public class OpenvpnProfile extends VpnProfile {
 	mCA = name;
     }
 
-    public String getCertFile() {
-        return CertTool.getInstance().getUserCertificate(mCert);
-    }
-
     public String getCertName() {
 	return mCert;
     }
 
     public void setCertName(String name) {
 	mCert = name;
-    }
-
-    public String getKeyFile() {
-        return CertTool.getInstance().getUserPrivateKey(mCert);
     }
 
     public void setUseCompLzo(boolean b) {

@@ -16,17 +16,17 @@
 
 package com.android.server.vpn;
 
-import android.net.LocalSocket;
-import android.net.LocalSocketAddress;
-import android.net.vpn.OpenvpnProfile;
-import android.net.vpn.VpnManager;
-import android.os.SystemProperties;
-import android.util.Log;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+
+import android.net.LocalSocket;
+import android.net.LocalSocketAddress;
+import android.net.vpn.OpenvpnProfile;
+import android.net.vpn.VpnManager;
+import android.security.Credentials;
+import android.util.Log;
 
 /**
  * The service that manages the openvpn VPN connection.
@@ -66,9 +66,9 @@ class OpenvpnService extends VpnService<OpenvpnProfile> {
 	args.add("--proto"); args.add(p.getProto());
 	args.add("--client");
 	args.add("--rport"); args.add(p.getPort());
-	args.add("--ca"); args.add(USE_INLINE); args.add(USE_KEYSTORE + p.getCAFile());
-	args.add("--cert"); args.add(USE_INLINE); args.add(USE_KEYSTORE + p.getCertFile());
-	args.add("--key"); args.add(USE_INLINE); args.add(USE_KEYSTORE + p.getKeyFile());
+	args.add("--ca"); args.add(USE_INLINE); args.add(USE_KEYSTORE + Credentials.CA_CERTIFICATE + p.getCAName());
+	args.add("--cert"); args.add(USE_INLINE); args.add(USE_KEYSTORE + Credentials.USER_CERTIFICATE + p.getCertName());
+	args.add("--key"); args.add(USE_INLINE); args.add(USE_KEYSTORE + Credentials.USER_PRIVATE_KEY + p.getCertName());
 	args.add("--persist-tun");
 	args.add("--persist-key");
 	args.add("--management"); args.add("/dev/socket/" + socketName); args.add("unix");
@@ -84,7 +84,7 @@ class OpenvpnService extends VpnService<OpenvpnProfile> {
 	    args.add("--ifconfig"); args.add(p.getLocalAddr()); args.add(p.getRemoteAddr());
 	}
 
-	DaemonProxy mtpd = startDaemon(MTPD);
+	DaemonProxy mtpd = new VpnDaemons().startDaemon(MTPD);
 	mtpd.sendCommand(args.toArray(new String[args.size()]));
     }
 
@@ -100,11 +100,6 @@ class OpenvpnService extends VpnService<OpenvpnProfile> {
 	thread.openvpnStart();
 	thread.waitConnect(60);
 	setVpnStateUp(true);
-    }
-
-    @Override
-    protected void stopPreviouslyRunDaemons() {
-        stopDaemon(MtpdHelper.MTPD);
     }
 
     @Override
