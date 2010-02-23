@@ -1416,6 +1416,13 @@ public final class Settings {
         public static final String NOTIFICATION_LIGHT_PULSE = "notification_light_pulse";
 
         /**
+         * Whether to pulse the notification LED while the screen is on. The value is
+         * boolean (1 or 0).
+         * @hide
+         */
+        public static final String NOTIFICATION_SCREEN_ON = "notification_screen_on";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          * @hide
@@ -1470,7 +1477,8 @@ public final class Settings {
             SOUND_EFFECTS_ENABLED,
             HAPTIC_FEEDBACK_ENABLED,
             SHOW_WEB_SUGGESTIONS,
-            NOTIFICATION_LIGHT_PULSE
+            NOTIFICATION_LIGHT_PULSE,
+            NOTIFICATION_SCREEN_ON
         };
 
         // Settings moved to Settings.Secure
