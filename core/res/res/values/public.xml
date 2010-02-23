@@ -1225,8 +1225,7 @@
      =============================================================== -->
   <eat-comment />
 
-  <public type="style" name="Widget.TabIndicator" id="0x010300a0" />
-  <public type="style" name="Widget.EditText.TimePicker" />
+  <public type="style" name="Widget.EditText.TimePicker" id="0x010300a0" />
   <public type="style" name="com_android_server_status_ExpandedView" />
   <public type="style" name="com_android_server_status_LatestItemView" />
   <public type="style" name="Widget.TextView.ListItem" />
@@ -1243,10 +1242,6 @@
   <public type="attr" name="alertDialogTheme" />
   <public type="attr" name="searchDialogTheme" />
   <public type="attr" name="listItemTextViewStyle" />
-  <public type="attr" name="bottomLeftStrip" />
-  <public type="attr" name="bottomRightStrip" />
-  <public type="attr" name="tabIndicatorStyle" />
-  <public type="attr" name="textAppearanceTab" />
 
   <public type="attr" name="timePickerInputStyle" />
   <public type="attr" name="buttonStyleTimePickerUp" />

@@ -159,19 +159,6 @@
         <attr name="buttonStyleTimePickerDown" format="reference" />
 
         <!-- ============== -->
-        <!-- Tab styles -->
-        <!-- ============== -->
-        <eat-comment />
-        
-        <!-- Style for the inflated indicator widget itself, not the text or
-             image views typically contained within. -->
-        <attr name="tabIndicatorStyle" format="reference" />
-
-        <!-- Style for the text label on the default indicator.  Previously
-             was lumped with tabWidgetStyle. -->
-        <attr name="textAppearanceTab" format="reference" />
-        
-        <!-- ============== -->
         <!-- Gallery styles -->
         <!-- ============== -->
         <eat-comment />
@@ -1891,10 +1878,6 @@
         <attr name="layout_span" format="integer" />
     </declare-styleable>
     <declare-styleable name="TabWidget">
-        <!-- Bottom-left tab strip. -->
-        <attr name="bottomLeftStrip" format="reference" />
-        <!-- Bottom-right tab strip. -->
-        <attr name="bottomRightStrip" format="reference" />
     </declare-styleable>
     <declare-styleable name="TextAppearance">
         <!-- Text color. -->

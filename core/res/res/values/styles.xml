@@ -500,8 +500,9 @@
     </style>
 
     <style name="Widget.TabWidget">
-        <item name="android:bottomLeftStrip">@android:drawable/tab_bottom_left</item>
-        <item name="android:bottomRightStrip">@android:drawable/tab_bottom_right</item>
+        <item name="android:textAppearance">@style/TextAppearance.Widget.TabWidget</item>
+        <item name="ellipsize">marquee</item>
+        <item name="singleLine">true</item>
     </style>
 
     <style name="Widget.Gallery">
@@ -868,15 +869,6 @@
         <item name="textColorPrimaryInverse">@android:color/primary_text_dark</item>
         <item name="textColorSecondaryInverse">@android:color/secondary_text_dark</item>
         <item name="textColorTertiaryInverse">@android:color/tertiary_text_dark</item>
-    </style>
-    
-    <style name="Widget.TabIndicator">
-        <item name="android:layout_width">0px</item>
-        <item name="android:layout_weight">1</item>
-        <item name="android:layout_height">64dp</item>
-        <item name="android:layout_marginLeft">-3dp</item>
-        <item name="android:layout_marginRight">-3dp</item>
-        <item name="android:background">@android:drawable/tab_indicator</item>
     </style>
     
     <style name="TimePickerUpButton">

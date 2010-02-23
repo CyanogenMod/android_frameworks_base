@@ -215,12 +215,6 @@
 
         <!-- Search widget styles -->
         <item name="searchWidgetCorpusItemBackground">@android:color/search_widget_corpus_item_background</item>
-        
-        <!-- Style for the inflated indicator widget itself, not the text or
-             image views typically contained within. -->
-        <item name="tabIndicatorStyle">@android:style/Widget.TabIndicator</item>
-        <item name="textAppearanceTab">@android:style/TextAppearance.Widget.TabWidget</item>
-        
     </style>
     
     <!-- Variant of the default (dark) theme with no title bar -->

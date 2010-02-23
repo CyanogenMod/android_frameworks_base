@@ -15,9 +15,13 @@
 -->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="0dip"
+    android:layout_height="64dip"
+    android:layout_weight="1"
+    android:layout_marginLeft="-3dip"
+    android:layout_marginRight="-3dip"
     android:orientation="vertical"
-    style="?android:attr/tabIndicatorStyle"
-    >
+    android:background="@android:drawable/tab_indicator">
 
     <ImageView android:id="@+id/icon"
         android:layout_width="wrap_content"
@@ -30,9 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:ellipsize="marquee"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceTab"
+        style="?android:attr/tabWidgetStyle"
     />
 
 </RelativeLayout>
