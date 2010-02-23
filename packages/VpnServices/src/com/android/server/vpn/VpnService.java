@@ -220,18 +220,18 @@ abstract class VpnService<E extends VpnProfile> implements Serializable {
     }
 
     void setVpnStateUp(boolean state) throws IOException {
-	if (state) {
-	    SystemProperties.set(VPN_STATUS, VPN_IS_UP);
-	    onConnected();
-	    mNotification.update();
-	} else {
-	    SystemProperties.set(VPN_STATUS, VPN_IS_DOWN);
-	}
+    	if (state) {
+    		SystemProperties.set(VPN_STATUS, VPN_IS_UP);
+    		onConnected();
+    		mNotification.update(System.currentTimeMillis());
+    	} else {
+    		SystemProperties.set(VPN_STATUS, VPN_IS_DOWN);
+    	}
     }
 
     void vpnStateUpdate(long in, long out) {
-	// currently don't show in and out bytes in status
-	mNotification.update();
+    	// currently don't show in and out bytes in status
+    	mNotification.update(System.currentTimeMillis());
     }
 
     private synchronized void onConnected() throws IOException {

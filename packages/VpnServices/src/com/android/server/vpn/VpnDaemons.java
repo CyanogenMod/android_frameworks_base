@@ -99,7 +99,7 @@ class VpnDaemons implements Serializable {
         return 0;
     }
 
-    private synchronized DaemonProxy startDaemon(String daemonName)
+    synchronized DaemonProxy startDaemon(String daemonName)
             throws IOException {
         DaemonProxy daemon = new DaemonProxy(daemonName);
         mDaemonList.add(daemon);
