@@ -98,6 +98,7 @@ class NotificationManagerService extends INotificationManager.Stub
 
     // for enabling and disabling notification pulse behavior
     private boolean mScreenOn = true;
+    private boolean mNotificationScreenOn;
     private boolean mNotificationPulseEnabled;
 
     // for adb connected notifications
@@ -358,6 +359,8 @@ class NotificationManagerService extends INotificationManager.Stub
                     Settings.Secure.ADB_ENABLED), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_LIGHT_PULSE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_SCREEN_ON), false, this);
             update();
         }
 
@@ -377,6 +380,12 @@ class NotificationManagerService extends INotificationManager.Stub
                         Settings.System.NOTIFICATION_LIGHT_PULSE, 0) != 0;
             if (mNotificationPulseEnabled != pulseEnabled) {
                 mNotificationPulseEnabled = pulseEnabled;
+                updateNotificationPulse();
+            }
+            boolean screenOn = Settings.System.getInt(resolver,
+                        Settings.System.NOTIFICATION_SCREEN_ON, 0) != 0;
+            if (mNotificationScreenOn != screenOn) {
+                mNotificationScreenOn = screenOn;
                 updateNotificationPulse();
             }
         }
@@ -1026,7 +1035,7 @@ class NotificationManagerService extends INotificationManager.Stub
         }
 
         // we only flash if screen is off and persistent pulsing is enabled
-        if (mLedNotification == null || mScreenOn || !mNotificationPulseEnabled) {
+        if (mLedNotification == null || (mScreenOn && !mNotificationScreenOn) || !mNotificationPulseEnabled) {
             mHardware.setLightOff_UNCHECKED(HardwareService.LIGHT_ID_NOTIFICATIONS);
         } else {
             mHardware.setLightFlashing_UNCHECKED(
