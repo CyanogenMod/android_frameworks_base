@@ -292,6 +292,15 @@ public class MockPackageManager extends PackageManager {
             int flags, String installerPackageName) {
         throw new UnsupportedOperationException();
     }
+
+    /**
+     * @hide - to match hiding in superclass
+     */
+    @Override
+    public void installPackageExt(Uri packageURI, IPackageInstallObserver observer,
+            int flags, String installerPackageName, boolean extInstall) {
+        throw new UnsupportedOperationException();
+    }
     
     /**
      * @hide - to match hiding in superclass

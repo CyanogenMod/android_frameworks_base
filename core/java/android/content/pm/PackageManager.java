@@ -1518,6 +1518,15 @@ public abstract class PackageManager {
             String installerPackageName);
 
     /**
+     * @hide
+     *
+     * TODO: Write docs.
+     */
+    public abstract void installPackageExt(
+            Uri packageURI, IPackageInstallObserver observer, int flags,
+            String installerPackageName, boolean extInstall);
+
+    /**
      * Attempts to delete a package.  Since this may take a little while, the result will
      * be posted back to the given observer.  A deletion will fail if the calling context
      * lacks the {@link android.Manifest.permission#DELETE_PACKAGES} permission, if the

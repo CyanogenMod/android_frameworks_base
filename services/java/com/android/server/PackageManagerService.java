@@ -165,6 +165,9 @@ class PackageManagerService extends IPackageManager.Stub {
     // This is the object monitoring mAppInstallDir.
     final FileObserver mAppInstallObserver;
 
+    // This is the object monitoring mSdExtInstallDir.
+    final FileObserver mSdExtInstallObserver;
+
     // This is the object monitoring mDrmAppPrivateInstallDir.
     final FileObserver mDrmAppInstallObserver;
 
@@ -175,6 +178,10 @@ class PackageManagerService extends IPackageManager.Stub {
     final File mFrameworkDir;
     final File mSystemAppDir;
     final File mAppInstallDir;
+    final File mSdExtInstallDir;
+
+    // Whether or not we are installing on the EXT partition.
+    boolean mExtInstall;
 
     // Directory containing the private parts (e.g. code and non-resource assets) of forward-locked
     // apps.
@@ -358,7 +365,9 @@ class PackageManagerService extends IPackageManager.Stub {
             mHandler = new Handler(mHandlerThread.getLooper());
             
             File dataDir = Environment.getDataDirectory();
+            File sdExtDir = Environment.getSdExtDirectory();
             mAppDataDir = new File(dataDir, "data");
+            mSdExtInstallDir = new File(sdExtDir, "app");
             mDrmAppPrivateInstallDir = new File(dataDir, "app-private");
 
             if (mInstaller == null) {
@@ -369,6 +378,7 @@ class PackageManagerService extends IPackageManager.Stub {
                 miscDir.mkdirs();
                 mAppDataDir.mkdirs();
                 mDrmAppPrivateInstallDir.mkdirs();
+                mSdExtInstallDir.mkdirs();
             }
 
             readPermissions();
@@ -500,6 +510,11 @@ class PackageManagerService extends IPackageManager.Stub {
                 mAppInstallDir.getPath(), OBSERVER_EVENTS, false);
             scanDirLI(mAppInstallDir, 0, scanMode);
             mAppInstallObserver.startWatching();
+
+            mSdExtInstallObserver = new AppDirObserver(
+                mSdExtInstallDir.getPath(), OBSERVER_EVENTS, false);
+            scanDirLI(mSdExtInstallDir, 0, scanMode);
+            mSdExtInstallObserver.startWatching();
 
             mDrmAppInstallObserver = new AppDirObserver(
                 mDrmAppPrivateInstallDir.getPath(), OBSERVER_EVENTS, false);
@@ -3526,12 +3541,33 @@ class PackageManagerService extends IPackageManager.Stub {
         installPackage(packageURI, observer, flags, null);
     }
     
+    /* Called when a downloaded package installation is completed (usually by the Market) */
+    public void installPackage(final Uri packageURI, final IPackageInstallObserver observer, final int flags, final String installerPackageName) {
+       // Here we need to throw an Intent to prompt the user to choose the install location.
+       
+       Intent intent = new Intent();
+       intent.setData(packageURI);
+       intent.putExtra("installerPackageName", installerPackageName);
+       intent.putExtra("flags", flags);
+       intent.setComponent(new ComponentName("com.android.packageinstaller","com.android.packageinstaller.MarketInstallerActivity"));
+       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+       mContext.startActivity(intent);
+       
+       return;
+    }
+
+    public void installPackageExt(final Uri packageURI, final IPackageInstallObserver observer, final int flags, final String installerPackageName, boolean extInstall) {
+       installPackageFinal(packageURI, observer, flags, installerPackageName, extInstall);
+    }
+
     /* Called when a downloaded package installation has been confirmed by the user */
-    public void installPackage(
+    public void installPackageFinal(
             final Uri packageURI, final IPackageInstallObserver observer, final int flags,
-            final String installerPackageName) {
+            final String installerPackageName, boolean extInstall) {
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.INSTALL_PACKAGES, null);
+
+        mExtInstall = extInstall;
         
         // Queue up an async operation since the package installation may take a little while.
         mHandler.post(new Runnable() {
@@ -4026,9 +4062,18 @@ class PackageManagerService extends IPackageManager.Stub {
             res.name = pkgName;
             //initialize some variables before installing pkg
             final String pkgFileName = pkgName + ".apk";
-            final File destDir = ((pFlags&PackageManager.INSTALL_FORWARD_LOCK) != 0)
-                                 ?  mDrmAppPrivateInstallDir
-                                 : mAppInstallDir;
+
+            // determine the destination directory.
+            // TODO: add support for app-private on /sd-ext
+            File destDir = null;
+            if (mExtInstall) {
+                destDir = mSdExtInstallDir;
+            } else if ((pFlags&PackageManager.INSTALL_FORWARD_LOCK) != 0) {
+                destDir = mDrmAppPrivateInstallDir;
+            } else {
+                destDir = mAppInstallDir;
+            }
+
             final File destPackageFile = new File(destDir, pkgFileName);
             final String destFilePath = destPackageFile.getAbsolutePath();
             File destResourceFile;
@@ -4208,8 +4253,10 @@ class PackageManagerService extends IPackageManager.Stub {
 
     private File createTempPackageFile() {
         File tmpPackageFile;
+        File dir = mAppInstallDir;
+        if (mExtInstall) dir = mSdExtInstallDir;
         try {
-            tmpPackageFile = File.createTempFile("vmdl", ".tmp", mAppInstallDir);
+            tmpPackageFile = File.createTempFile("vmdl", ".tmp", dir);
         } catch (IOException e) {
             Log.e(TAG, "Couldn't create temp file for downloaded package file.");
             return null;
