@@ -162,7 +162,7 @@ interface IPackageManager {
      * @param extInstall - Specify whether or not the package should be installed on the SD Card's
      * ext partition.
      */
-    void installPackage(in Uri packageURI, IPackageInstallObserver observer, int flags,
+    void installPackageExt(in Uri packageURI, IPackageInstallObserver observer, int flags,
             in String installerPackageName, boolean extInstall);
 
     /**
