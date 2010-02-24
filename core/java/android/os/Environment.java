@@ -36,7 +36,7 @@ public class Environment {
     private static final File DATA_DIRECTORY
             = getDirectory("ANDROID_DATA", "/data");
 
-    private static final File = SD_EXT_DIRECTORY
+    private static final File SD_EXT_DIRECTORY
             = getDirectory("SD_EXT_DIRECTORY", "/sd-ext");
 
     private static final File EXTERNAL_STORAGE_DIRECTORY
