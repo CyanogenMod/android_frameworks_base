@@ -56,7 +56,7 @@ public class Environment {
      * Gets the SD EXT directory.
      * @hide
      */
-    public static File getDataDirectory() {
+    public static File getSdExtDirectory() {
         return SD_EXT_DIRECTORY;
     }
 
