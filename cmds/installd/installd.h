@@ -57,6 +57,7 @@
 #define CACHE_DIR_POSTFIX      "/cache"
 
 #define APK_DIR_PREFIX         "/data/app/"
+#define APK_EXT_DIR_PREFIX     "/sd-ext/app/"
 
 /* other handy constants */
 

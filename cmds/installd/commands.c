@@ -159,23 +159,15 @@ int free_cache(int free_size)
  */
 static int is_valid_apk_path(const char *path)
 {
-    int len = strlen(APK_DIR_PREFIX);
-    if (strncmp(path, APK_DIR_PREFIX, len)) {
-        len = strlen(PROTECTED_DIR_PREFIX);
-        if (strncmp(path, PROTECTED_DIR_PREFIX, len)) {
-            LOGE("invalid apk path '%s' (bad prefix)\n", path);
-            return 0;
-        }
-    }
-    if (strchr(path + len, '/')) {
-        LOGE("invalid apk path '%s' (subdir?)\n", path);
-        return 0;
-    }
-    if (path[len] == '.') {
-        LOGE("invalid apk path '%s' (trickery)\n", path);
-        return 0;
-    }
-    return 1;
+    int len1 = strlen(APK_DIR_PREFIX);
+    int len2 = strlen(PROTECTED_DIR_PREFIX);
+    int len3 = strlen(APK_EXT_DIR_PREFIX);
+
+    if (strncmp(path, APK_DIR_PREFIX, len1)==0) return 1;
+    if (strncmp(path, PROTECTED_DIR_PREFIX, len2)==0) return 1;
+    if (strncmp(path, APK_EXT_DIR_PREFIX, len3)==0) return 1;
+
+    return 0;
 }
 
 int move_dex(const char *src, const char *dst)
