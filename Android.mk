@@ -355,6 +355,8 @@ framework_docs_LOCAL_ADDITIONAL_JAVA_DIR:=$(call intermediates-dir-for,JAVA_LIBR
 
 sample_dir := development/samples
 
+# the list here should match the list of samples included in the sdk samples package
+# (see development/build/sdk.atree)
 web_docs_sample_code_flags := \
 		-hdf android.hasSamples 1 \
 		-samplecode $(sample_dir)/ApiDemos \
@@ -365,6 +367,8 @@ web_docs_sample_code_flags := \
 		            resources/samples/BusinessCard "Business Card" \
 		-samplecode $(sample_dir)/ContactManager \
 		            resources/samples/ContactManager "Contact Manager" \
+                -samplecode $(sample_dir)/CubeLiveWallpaper \
+                            resources/samples/CubeLiveWallpaper "Live Wallpaper" \
 		-samplecode $(sample_dir)/Home \
 		            resources/samples/Home "Home" \
 		-samplecode $(sample_dir)/JetBoy \
@@ -375,6 +379,8 @@ web_docs_sample_code_flags := \
 		            resources/samples/MultiResolution "Multiple Resolutions" \
 		-samplecode $(sample_dir)/NotePad \
 		            resources/samples/NotePad "Note Pad" \
+                -samplecode $(sample_dir)/SampleSyncAdapter \
+                            resources/samples/SampleSyncAdapter "Sample Sync Adapter" \
 		-samplecode $(sample_dir)/SearchableDictionary \
 		            resources/samples/SearchableDictionary "Searchable Dictionary" \
 		-samplecode $(sample_dir)/Snake \
@@ -388,7 +394,7 @@ web_docs_sample_code_flags := \
 
 ## SDK version identifiers used in the published docs
   # major[.minor] version for current SDK. (full releases only)
-framework_docs_SDK_VERSION:=2.0.1
+framework_docs_SDK_VERSION:=2.1
   # release version (ie "Release x")  (full releases only)
 framework_docs_SDK_REL_ID:=1
   # name of current SDK directory (full releases only)
