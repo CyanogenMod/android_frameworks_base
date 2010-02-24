@@ -66,9 +66,13 @@ class OpenvpnService extends VpnService<OpenvpnProfile> {
 	args.add("--proto"); args.add(p.getProto());
 	args.add("--client");
 	args.add("--rport"); args.add(p.getPort());
-	args.add("--ca"); args.add(USE_INLINE); args.add(USE_KEYSTORE + Credentials.CA_CERTIFICATE + p.getCAName());
-	args.add("--cert"); args.add(USE_INLINE); args.add(USE_KEYSTORE + Credentials.USER_CERTIFICATE + p.getCertName());
-	args.add("--key"); args.add(USE_INLINE); args.add(USE_KEYSTORE + Credentials.USER_PRIVATE_KEY + p.getCertName());
+	if (p.getCAName() != null) {
+		args.add("--ca"); args.add(USE_INLINE); args.add(USE_KEYSTORE + Credentials.CA_CERTIFICATE + p.getCAName());
+	}
+	if (p.getCertName() != null) {
+		args.add("--cert"); args.add(USE_INLINE); args.add(USE_KEYSTORE + Credentials.USER_CERTIFICATE + p.getCertName());
+		args.add("--key"); args.add(USE_INLINE); args.add(USE_KEYSTORE + Credentials.USER_PRIVATE_KEY + p.getCertName());
+	}
 	args.add("--persist-tun");
 	args.add("--persist-key");
 	args.add("--management"); args.add("/dev/socket/" + socketName); args.add("unix");
