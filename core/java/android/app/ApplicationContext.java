@@ -2420,7 +2420,7 @@ class ApplicationContext extends Context {
         public void installPackageExt(Uri packageURI, IPackageInstallObserver observer, int flags,
                 String installerPackageName, boolean extInstall) {
             try {
-                mPM.installPackageExtInstall(packageURI, observer, flags, installerPackageName);
+                mPM.installPackageExt(packageURI, observer, flags, installerPackageName);
             } catch (RemoteException e) {
                 // Should never happen!
             }
