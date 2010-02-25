@@ -586,13 +586,13 @@ class PackageManagerService extends IPackageManager.Stub {
                     SystemClock.uptimeMillis());
             mAppInstallObserver = new AppDirObserver(
                 mAppInstallDir.getPath(), OBSERVER_EVENTS, false);
-            scanDirLI(mAppInstallDir, 0, scanMode);
             mAppInstallObserver.startWatching();
+            scanDirLI(mAppInstallDir, 0, scanMode);
 
             mDrmAppInstallObserver = new AppDirObserver(
                 mDrmAppPrivateInstallDir.getPath(), OBSERVER_EVENTS, false);
-            scanDirLI(mDrmAppPrivateInstallDir, 0, scanMode | SCAN_FORWARD_LOCKED);
             mDrmAppInstallObserver.startWatching();
+            scanDirLI(mDrmAppPrivateInstallDir, 0, scanMode | SCAN_FORWARD_LOCKED);
 
             EventLog.writeEvent(LOG_BOOT_PROGRESS_PMS_SCAN_END,
                     SystemClock.uptimeMillis());
@@ -1861,7 +1861,7 @@ class PackageManagerService extends IPackageManager.Stub {
                         && (p.applicationInfo.flags&ApplicationInfo.FLAG_PERSISTENT) != 0
                         && (!mSafeMode || (p.applicationInfo.flags
                                 &ApplicationInfo.FLAG_SYSTEM) != 0)) {
-                    finalList.add(PackageParser.generateApplicationInfo(p, flags));
+                    finalList.add(p.applicationInfo);
                 }
             }
         }
@@ -5898,7 +5898,7 @@ class PackageManagerService extends IPackageManager.Stub {
             this.codePath = codePath;
             this.codePathString = codePath.toString();
             this.resourcePath = resourcePath;
-            this.resourcePathString = resourcePath == null ? null : resourcePath.toString();
+            this.resourcePathString = resourcePath.toString();
             this.versionCode = pVersionCode;
         }
 
