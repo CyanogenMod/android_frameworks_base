@@ -156,6 +156,13 @@ public abstract class WindowOrientationListener {
 	private static final int LP_UPPER_2 = 1;
 	private static final int PORTRAIT_LOWER_2 = 300;
 
+	private static final int LP_LOWER_3 = 220;
+	private static final int PL_UPPER_3 = 245;
+	private static final int LP_UPPER_3 = 181;
+	private static final int PL_UPPER_4 = 115;
+	private static final int LP_LOWER_4 = 140;
+	private static final int LP_UPPER_4 = 179;
+
         // Internal value used for calculating linear variant
         private static final float PL_LF_UPPER_2 =
             ((float)(PL_UPPER_2-PL_LOWER_2))/((float)(PIVOT_UPPER-PIVOT));
@@ -166,6 +173,29 @@ public abstract class WindowOrientationListener {
             ((float)(LP_UPPER_2 - LP_LOWER_2))/((float)(PIVOT_UPPER-PIVOT));
         private static final float LP_LF_LOWER_2 =
             ((float)(LP_UPPER_2 - LP_LOWER_2))/((float)(PIVOT-PIVOT_LOWER)); 
+
+        // Internal value used for calculating linear variant
+        private static final float PL_LF_UPPER_3 =
+            ((float)(PL_UPPER_3-PL_LOWER))/((float)(PIVOT_UPPER-PIVOT));
+        private static final float PL_LF_LOWER_3 =
+            ((float)(PL_UPPER_3-PL_LOWER))/((float)(PIVOT-PIVOT_LOWER));
+        //  Internal value used for calculating linear variant
+        private static final float LP_LF_UPPER_3 =
+            ((float)(LP_UPPER_3 - LP_LOWER_3))/((float)(PIVOT_UPPER-PIVOT));
+        private static final float LP_LF_LOWER_3 =
+            ((float)(LP_UPPER_3 - LP_LOWER_3))/((float)(PIVOT-PIVOT_LOWER)); 
+
+        // Internal value used for calculating linear variant
+        private static final float PL_LF_UPPER_4 =
+            ((float)(PL_UPPER_4-PL_LOWER_2))/((float)(PIVOT_UPPER-PIVOT));
+        private static final float PL_LF_LOWER_4 =
+            ((float)(PL_UPPER_4-PL_LOWER_2))/((float)(PIVOT-PIVOT_LOWER));
+        //  Internal value used for calculating linear variant
+        private static final float LP_LF_UPPER_4 =
+            ((float)(LP_UPPER_4 - LP_LOWER_4))/((float)(PIVOT_UPPER-PIVOT));
+        private static final float LP_LF_LOWER_4 =
+            ((float)(LP_UPPER_4 - LP_LOWER_4))/((float)(PIVOT-PIVOT_LOWER)); 
+
 	// End h4x vars        
 
 
@@ -211,9 +241,9 @@ public abstract class WindowOrientationListener {
                     } else {
                         if (delta < 0) {
                             // Delta is negative
-                            threshold = PL_UPPER+(PL_LF_LOWER * delta);
+                            threshold = PL_UPPER + (PL_LF_LOWER * delta);
                         } else {
-                            threshold = PL_UPPER-(PL_LF_UPPER * delta);
+                            threshold = PL_UPPER - (PL_LF_UPPER * delta);
                         }
                         rotation = (orientation <= threshold) ? Surface.ROTATION_90: Surface.ROTATION_0;
                     }
@@ -241,15 +271,49 @@ public abstract class WindowOrientationListener {
 			}
 			rotation = (orientation >= threshold) ? Surface.ROTATION_270 : Surface.ROTATION_0; 
 	           }
-		   Log.i("H4X - Section 1: ", "Rotation: " + rotation + " mSensorRotation: " + mSensorRotation);
                 } else if ((orientation <= LANDSCAPE_LOWER_2) && (orientation > LP_LOWER_2)){
 		    rotation = Surface.ROTATION_270;
-	   	    Log.i("H4X - Section 2: ", "Rotation: " + rotation + " mSensorRotation: " + mSensorRotation);
+		} else if ((orientation <= PL_LOWER) && (orientation >= LP_UPPER_3)){
+		    float threshold;
+                    float delta = zyangle - PIVOT;
+		    if(mSensorRotation == Surface.ROTATION_90) {
+			if (delta < 0){
+			    threshold = LP_LOWER_3 - (LP_LF_LOWER_3 * delta);
+			} else {
+			    threshold = LP_LOWER_3 + (LP_LF_UPPER_3 * delta);
+		        }
+			rotation = (orientation <= threshold) ? Surface.ROTATION_180 : Surface.ROTATION_90;
+		    } else {
+			if(delta < 0){
+			    threshold = PL_UPPER_3 + (PL_LF_LOWER_3 * delta);
+			} else {
+			    threshold = PL_UPPER_3 - (PL_LF_UPPER_3 * delta);
+			}
+			rotation = (orientation >= threshold) ? Surface.ROTATION_90 : Surface.ROTATION_180;
+		    }
+		} else if ((orientation <= LP_LOWER_3) && (orientation >= LP_LOWER_4)){
+		    rotation = Surface.ROTATION_180;
+		} else if ((orientation >= PL_LOWER_2) && (orientation <= LP_UPPER_4)){
+		    float threshold;
+		    float delta = zyangle - PIVOT;
+	   	    if(mSensorRotation == Surface.ROTATION_270){
+			if(delta < 0){
+			    threshold = LP_LOWER_4 - (LP_LF_LOWER_4 * delta);
+			} else {
+			    threshold = LP_LOWER_4 + (LP_LF_UPPER_4 * delta);
+			}
+			rotation = (orientation >= threshold) ? Surface.ROTATION_180 : Surface.ROTATION_270;
+		    } else {
+			if(delta < 0){
+			    threshold = PL_UPPER_4 + (PL_LF_UPPER_4 * delta);
+			} else {
+			    threshold = PL_UPPER_4 - (PL_LF_UPPER_4 * delta);
+			}
+			rotation = (orientation <= threshold) ? Surface.ROTATION_270 : Surface.ROTATION_180;
+		    }
 		}
 		// End orientation h4x
-		Log.i("H4X - Section 3: ", "Rotation: " + rotation + " mSensorRotation: " + mSensorRotation);
                 if ((rotation != -1) && (rotation != mSensorRotation)) {
-		    Log.i("H4X - Section 4:"," WTF?");
                     mSensorRotation = rotation;
                     onOrientationChanged(mSensorRotation);
                 }
