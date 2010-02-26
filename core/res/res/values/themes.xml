@@ -142,10 +142,6 @@
         <!-- DigitalClock attributes -->
         <item name="menuItemBackground">@android:drawable/menuitem_background</item>
 
-        <!-- status bar related attributes -->
-        <item name="com_android_server_status_expandedView">@style/com_android_server_status_ExpandedView</item>
-        <item name="com_android_server_status_latestItemView">@style/com_android_server_status_LatestItemView</item>
-
         <!-- Widget styles -->
         <item name="absListViewStyle">@android:style/Widget.AbsListView</item>
         <item name="autoCompleteTextViewStyle">@android:style/Widget.AutoCompleteTextView</item>        

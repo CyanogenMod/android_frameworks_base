@@ -458,13 +458,6 @@
         <!-- DigitalClock attributes -->
         <!-- =================== -->
         <attr name="menuItemBackground" format="reference" />
-
-        <!-- =================== -->
-        <!-- status bar related attributes -->
-        <!-- =================== -->
-        <attr name="com_android_server_status_expandedView" format="reference" />
-        <attr name="com_android_server_status_latestItemView" format="reference" />
-
     </declare-styleable>
 
     <!-- **************************************************************** -->

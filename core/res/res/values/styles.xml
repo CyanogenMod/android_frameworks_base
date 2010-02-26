@@ -823,17 +823,4 @@
         <item name="android:paddingBottom">1dip</item>
         <item name="android:background">@android:drawable/bottom_bar</item>
     </style>
-        
-    <!-- 
-        T-Mobile added styles
-        IMPORTANT: These must always be added to the end of the file
-     -->
-    
-    <style name="com_android_server_status_ExpandedView">
-        <item name="android:background">@android:drawable/status_bar_background</item>
-    </style>
-
-    <style name="com_android_server_status_LatestItemView">
-        <item name="android:background">@android:drawable/list_selector_background</item>
-    </style>
 </resources>
