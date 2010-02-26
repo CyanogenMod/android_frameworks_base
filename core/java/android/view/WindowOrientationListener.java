@@ -241,15 +241,11 @@ public abstract class WindowOrientationListener {
 			}
 			rotation = (orientation >= threshold) ? Surface.ROTATION_270 : Surface.ROTATION_0; 
 	           }
-		   Log.i("H4X - Section 1: ", "Rotation: " + rotation + " mSensorRotation: " + mSensorRotation);
                 } else if ((orientation <= LANDSCAPE_LOWER_2) && (orientation > LP_LOWER_2)){
 		    rotation = Surface.ROTATION_270;
-	   	    Log.i("H4X - Section 2: ", "Rotation: " + rotation + " mSensorRotation: " + mSensorRotation);
 		}
 		// End orientation h4x
-		Log.i("H4X - Section 3: ", "Rotation: " + rotation + " mSensorRotation: " + mSensorRotation);
                 if ((rotation != -1) && (rotation != mSensorRotation)) {
-		    Log.i("H4X - Section 4:"," WTF?");
                     mSensorRotation = rotation;
                     onOrientationChanged(mSensorRotation);
                 }
