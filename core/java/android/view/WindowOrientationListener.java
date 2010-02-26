@@ -133,7 +133,7 @@ public abstract class WindowOrientationListener {
         private static final int LANDSCAPE_LOWER = 235;
         // Minimum angle which is considered portrait
         private static final int PORTRAIT_LOWER = 60;
-
+        
         // Internal value used for calculating linear variant
         private static final float PL_LF_UPPER =
             ((float)(PL_UPPER-PL_LOWER))/((float)(PIVOT_UPPER-PIVOT));
@@ -144,32 +144,6 @@ public abstract class WindowOrientationListener {
             ((float)(LP_UPPER - LP_LOWER))/((float)(PIVOT_UPPER-PIVOT));
         private static final float LP_LF_LOWER =
             ((float)(LP_UPPER - LP_LOWER))/((float)(PIVOT-PIVOT_LOWER)); 
-
-
-	// new orientation h4x start here
-	// -- optedoblivion
-
-	private static final int LANDSCAPE_LOWER_2 = 125;
-	private static final int LP_LOWER_2 = 40;
-	private static final int PL_UPPER_2 = 65;
-	private static final int PL_LOWER_2 = 90;
-	private static final int LP_UPPER_2 = 1;
-	private static final int PORTRAIT_LOWER_2 = 300;
-
-        // Internal value used for calculating linear variant
-        private static final float PL_LF_UPPER_2 =
-            ((float)(PL_UPPER_2-PL_LOWER_2))/((float)(PIVOT_UPPER-PIVOT));
-        private static final float PL_LF_LOWER_2 =
-            ((float)(PL_UPPER_2-PL_LOWER_2))/((float)(PIVOT-PIVOT_LOWER));
-        //  Internal value used for calculating linear variant
-        private static final float LP_LF_UPPER_2 =
-            ((float)(LP_UPPER_2 - LP_LOWER_2))/((float)(PIVOT_UPPER-PIVOT));
-        private static final float LP_LF_LOWER_2 =
-            ((float)(LP_UPPER_2 - LP_LOWER_2))/((float)(PIVOT-PIVOT_LOWER)); 
-	// End h4x vars        
-
-
-
         
         public void onSensorChanged(SensorEvent event) {
             float[] values = event.values;
@@ -221,30 +195,7 @@ public abstract class WindowOrientationListener {
                     rotation = Surface.ROTATION_90;
                 } else if ((orientation >= PL_UPPER) || (orientation <= PORTRAIT_LOWER)) {
                     rotation = Surface.ROTATION_0;
-		// Start orientation h4x
-		// --optedoblivion
-		} else if ((orientation <= PL_LOWER_2) && (orientation >= LP_UPPER_2)){
-		    float threshold;
-		    float delta = zyangle - PIVOT;
-		    if(mSensorRotation == Surface.ROTATION_270) {
-			if (delta < 0){
-			    threshold = LP_LOWER_2 - (LP_LF_LOWER_2 * delta);
-			} else {
-                            threshold = LP_LOWER_2 + (LP_LF_UPPER_2 * delta);
-                        }
-                        rotation = (orientation <= threshold) ? Surface.ROTATION_0 : Surface.ROTATION_270;
-		    } else {
-		        if (delta < 0){
-			    threshold = PL_UPPER_2 + (PL_LF_LOWER_2 * delta);
-			} else {
-			    threshold = PL_UPPER_2 - (PL_LF_UPPER_2 * delta);
-			}
-			rotation = (orientation >= threshold) ? Surface.ROTATION_270 : Surface.ROTATION_0; 
-	           }
-                } else if ((orientation <= LANDSCAPE_LOWER_2) && (orientation > LP_LOWER_2)){
-		    rotation = Surface.ROTATION_270;
-		}
-		// End orientation h4x
+                }
                 if ((rotation != -1) && (rotation != mSensorRotation)) {
                     mSensorRotation = rotation;
                     onOrientationChanged(mSensorRotation);
