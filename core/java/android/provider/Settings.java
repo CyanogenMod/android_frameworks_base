@@ -1393,6 +1393,12 @@ public final class Settings {
             SHOW_WEB_SUGGESTIONS
         };
 
+        /**
+         * Should 180 degree orientation be enabled. 
+         * @hide
+         */
+        public static final String USE_180_ORIENTATION = "use_180_orientation";
+        
         // Settings moved to Settings.Secure
 
         /**
