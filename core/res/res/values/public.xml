@@ -1227,7 +1227,6 @@
 
   <public type="attr" name="listItemBackground" id="0x010102c1" />
 
-  <public type="attr" name="menuItemBackground" />
   <public type="attr" name="expandedMenuTheme" />
   <public type="attr" name="iconMenuTheme" />
 
