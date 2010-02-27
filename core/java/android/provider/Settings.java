@@ -1481,6 +1481,12 @@ public final class Settings {
             NOTIFICATION_SCREEN_ON
         };
 
+        /**
+         * Should 180 degree orientation be enabled. 
+         * @hide
+         */
+        public static final String USE_180_ORIENTATION = "use_180_orientation";
+        
         // Settings moved to Settings.Secure
 
         /**
