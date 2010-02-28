@@ -27,6 +27,7 @@ import org.xmlpull.v1.XmlSerializer;
 import android.app.ActivityManagerNative;
 import android.app.IActivityManager;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -57,6 +58,7 @@ import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.content.pm.Signature;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
@@ -3772,17 +3774,34 @@ class PackageManagerService extends IPackageManager.Stub {
     
     /* Called when a downloaded package installation is completed (usually by the Market) */
     public void installPackage(final Uri packageURI, final IPackageInstallObserver observer, final int flags, final String installerPackageName) {
-       // Here we need to throw an Intent to prompt the user to choose the install location.
-       
-       Intent intent = new Intent();
-       intent.setData(packageURI);
-       intent.putExtra("installerPackageName", installerPackageName);
-       intent.putExtra("flags", flags);
-       intent.setComponent(new ComponentName("com.android.packageinstaller","com.android.packageinstaller.MarketInstallerActivity"));
-       intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-       mContext.startActivity(intent);
-       
-       return;
+    	// Here we need to throw an Intent to prompt the user to choose the install location.
+    	Boolean prompt = false;
+    	
+    	ContentResolver cr = mContext.getContentResolver();
+    	Cursor c = cr.query(Uri.parse("content://org.ducktape.provider.Settings/settings"), new String[] { "value" }, "key='apps2sd_prompt'", null, null);
+    	c.moveToFirst();
+    	if (c.getCount()==0){
+    		prompt = false;
+    	} else if (c.getString(0).equals("1")) {
+    		prompt = true;
+    	}
+    	c.close();
+    	
+    	if (prompt) { 		
+	    	Intent intent = new Intent();
+	    	Bundle bundle = new Bundle();
+	    	bundle.putInt("flags", flags);
+	    	bundle.putString("installerPackageName", installerPackageName);
+	    	intent.setData(packageURI);
+	    	intent.putExtras(bundle);
+	    	intent.setComponent(new ComponentName("com.android.packageinstaller","com.android.packageinstaller.MarketInstallerActivity"));
+	    	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	    	mContext.startActivity(intent);
+    	} else {
+    		installPackageExt(packageURI, observer, flags, installerPackageName, false);
+    	}
+    	
+    	return;
     }
 
     public void installPackageExt(final Uri packageURI, final IPackageInstallObserver observer, final int flags, final String installerPackageName, boolean extInstall) {
