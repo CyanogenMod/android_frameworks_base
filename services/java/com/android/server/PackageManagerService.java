@@ -3550,13 +3550,6 @@ class PackageManagerService extends IPackageManager.Stub {
 
     	a2sd = Settings.Secure.getInt(mContext.getContentResolver(),Settings.Secure.APPS2SD, 0) > 0;
     	
-    	if (c.getCount()==0){
-    		a2sd = false;
-    	} else if (c.getString(0).equals("1")) {
-    		a2sd = true;
-    	}
-    	c.close();
-
     	if (a2sd) { 		
     		installPackageExt(packageURI, observer, flags, installerPackageName, true);
     	} else {
