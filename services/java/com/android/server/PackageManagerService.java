@@ -144,8 +144,6 @@ class PackageManagerService extends IPackageManager.Stub {
     static final int LOG_BOOT_PROGRESS_PMS_DATA_SCAN_START = 3080;
     static final int LOG_BOOT_PROGRESS_PMS_SCAN_END = 3090;
     static final int LOG_BOOT_PROGRESS_PMS_READY = 3100;
-    
-    static final Uri DUCKTAPE_SETTINGS = Uri.parse("content://org.ducktape.provider.Settings/settings");
 
     final HandlerThread mHandlerThread = new HandlerThread("PackageManager",
             Process.THREAD_PRIORITY_BACKGROUND);
@@ -3781,9 +3779,6 @@ class PackageManagerService extends IPackageManager.Stub {
 
     	a2sd = Settings.Secure.getInt(mContext.getContentResolver(),Settings.Secure.APPS2SD, 0) > 0;
     	
-    	ContentResolver cr = mContext.getContentResolver();
-    	Cursor c = cr.query(DUCKTAPE_SETTINGS, new String[] { "value" }, "key='apps2sd'", null, null);
-    	c.moveToFirst();
     	if (c.getCount()==0){
     		a2sd = false;
     	} else if (c.getString(0).equals("1")) {
