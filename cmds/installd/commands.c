@@ -389,7 +389,7 @@ int create_cache_path(char path[PKG_PATH_MAX], const char *src)
         cache_path = DALVIK_SYSTEM_CACHE_PREFIX;
     }
     if (!strncmp(src, "/sd-ext", 7)) {
-        cache_path = "/sd-ext/dalvik-cache/";
+        cache_path = DALVIK_SDEXT_CACHE_PREFIX;
     }
 
     dstlen = srclen + strlen(cache_path) + 
