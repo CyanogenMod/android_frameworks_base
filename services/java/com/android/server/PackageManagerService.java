@@ -3549,25 +3549,17 @@ class PackageManagerService extends IPackageManager.Stub {
     	Boolean prompt = false;
     	
     	ContentResolver cr = mContext.getContentResolver();
-    	Cursor c = cr.query(Uri.parse("content://org.ducktape.provider.Settings/settings"), new String[] { "value" }, "key='apps2sd_prompt'", null, null);
+    	Cursor c = cr.query(Uri.parse("content://org.ducktape.provider.Settings/settings"), new String[] { "value" }, "key='apps2sd'", null, null);
     	c.moveToFirst();
     	if (c.getCount()==0){
-    		prompt = false;
+    		a2sd = false;
     	} else if (c.getString(0).equals("1")) {
-    		prompt = true;
+    		ad2sd = true;
     	}
     	c.close();
     	
-    	if (prompt) { 		
-	    	Intent intent = new Intent();
-	    	Bundle bundle = new Bundle();
-	    	bundle.putInt("flags", flags);
-	    	bundle.putString("installerPackageName", installerPackageName);
-	    	intent.setData(packageURI);
-	    	intent.putExtras(bundle);
-	    	intent.setComponent(new ComponentName("com.android.packageinstaller","com.android.packageinstaller.MarketInstallerActivity"));
-	    	intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-	    	mContext.startActivity(intent);
+    	if (a2sd) { 		
+                installPackageExt(packageURI, observer, flags, installerPackageName, true);
     	} else {
     		installPackageExt(packageURI, observer, flags, installerPackageName, false);
     	}
