@@ -246,6 +246,7 @@ class DatabaseHelper extends SQLiteOpenHelper {
                     Settings.Secure.DEVICE_PROVISIONED,
                     Settings.Secure.HTTP_PROXY,
                     Settings.Secure.INSTALL_NON_MARKET_APPS,
+                    Settings.Secure.APPS2SD,
                     Settings.Secure.LOCATION_PROVIDERS_ALLOWED,
                     Settings.Secure.LOGGING_ID,
                     Settings.Secure.NETWORK_PREFERENCE,
@@ -681,6 +682,9 @@ class DatabaseHelper extends SQLiteOpenHelper {
 
         loadBooleanSetting(stmt, Settings.Secure.INSTALL_NON_MARKET_APPS,
                 R.bool.def_install_non_market_apps);
+
+        loadBooleanSetting(stmt, Settings.Secure.APPS2SD,
+                R.bool.def_apps2sd);
 
         loadStringSetting(stmt, Settings.Secure.LOCATION_PROVIDERS_ALLOWED,
                 R.string.def_location_providers_allowed);
