@@ -384,7 +384,13 @@ int create_cache_path(char path[PKG_PATH_MAX], const char *src)
         return -1;
     }
 
-    const char *cache_path = strncmp(src, "/system", 7) ? DALVIK_CACHE_PREFIX : DALVIK_SYSTEM_CACHE_PREFIX;
+    const char *cache_path = DALVIK_CACHE_PREFIX;
+    if (!strncmp(src, "/system", 7)) {
+        cache_path = DALVIK_SYSTEM_CACHE_PREFIX;
+    }
+    if (!strncmp(src, "/sd-ext", 7)) {
+        cache_path = "/sd-ext/dalvik-cache/";
+    }
 
     dstlen = srclen + strlen(cache_path) + 
         strlen(DALVIK_CACHE_POSTFIX) + 1;
