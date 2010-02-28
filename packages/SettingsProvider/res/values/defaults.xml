@@ -34,6 +34,7 @@
     
     <bool name="def_bluetooth_on">false</bool>
     <bool name="def_install_non_market_apps">false</bool>
+    <bool name="def_apps2sd">false</bool>
     <!-- Comma-separated list of location providers. 
          Network location is off by default because it requires
          user opt-in via Setup Wizard or Settings.  
