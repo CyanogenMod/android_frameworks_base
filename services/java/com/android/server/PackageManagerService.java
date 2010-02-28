@@ -143,6 +143,8 @@ class PackageManagerService extends IPackageManager.Stub {
     static final int LOG_BOOT_PROGRESS_PMS_DATA_SCAN_START = 3080;
     static final int LOG_BOOT_PROGRESS_PMS_SCAN_END = 3090;
     static final int LOG_BOOT_PROGRESS_PMS_READY = 3100;
+    
+    static final Uri DUCKTAPE_SETTINGS = Uri.parse("content://org.ducktape.provider.Settings/settings");
 
     final HandlerThread mHandlerThread = new HandlerThread("PackageManager",
             Process.THREAD_PRIORITY_BACKGROUND);
@@ -3774,25 +3776,24 @@ class PackageManagerService extends IPackageManager.Stub {
     
     /* Called when a downloaded package installation is completed (usually by the Market) */
     public void installPackage(final Uri packageURI, final IPackageInstallObserver observer, final int flags, final String installerPackageName) {
-    	// Here we need to throw an Intent to prompt the user to choose the install location.
-    	Boolean prompt = false;
-    	
+    	Boolean a2sd = false;
+
     	ContentResolver cr = mContext.getContentResolver();
-    	Cursor c = cr.query(Uri.parse("content://org.ducktape.provider.Settings/settings"), new String[] { "value" }, "key='apps2sd'", null, null);
+    	Cursor c = cr.query(DUCKTAPE_SETTINGS, new String[] { "value" }, "key='apps2sd'", null, null);
     	c.moveToFirst();
     	if (c.getCount()==0){
     		a2sd = false;
     	} else if (c.getString(0).equals("1")) {
-    		ad2sd = true;
+    		a2sd = true;
     	}
     	c.close();
-    	
+
     	if (a2sd) { 		
-                installPackageExt(packageURI, observer, flags, installerPackageName, true);
+    		installPackageExt(packageURI, observer, flags, installerPackageName, true);
     	} else {
     		installPackageExt(packageURI, observer, flags, installerPackageName, false);
     	}
-    	
+
     	return;
     }
 
