@@ -77,6 +77,7 @@ import android.os.Process;
 import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.util.*;
 import android.view.Display;
 import android.view.WindowManager;
@@ -223,7 +224,7 @@ class PackageManagerService extends IPackageManager.Stub {
     final HashMap<String, PackageParser.Package> mPackages =
             new HashMap<String, PackageParser.Package>();
 
-    final Settings mSettings;
+    final DynamicSettings mSettings;
     boolean mRestoredSettings;
     boolean mReportedUidError;
 
@@ -382,7 +383,7 @@ class PackageManagerService extends IPackageManager.Stub {
         mFactoryTest = factoryTest;
         mNoDexOpt = "eng".equals(SystemProperties.get("ro.build.type"));
         mMetrics = new DisplayMetrics();
-        mSettings = new Settings();
+        mSettings = new DynamicSettings();
         mSettings.addSharedUserLP("android.uid.system",
                 Process.SYSTEM_UID, ApplicationInfo.FLAG_SYSTEM);
         mSettings.addSharedUserLP("android.uid.phone",
@@ -3778,6 +3779,8 @@ class PackageManagerService extends IPackageManager.Stub {
     public void installPackage(final Uri packageURI, final IPackageInstallObserver observer, final int flags, final String installerPackageName) {
     	Boolean a2sd = false;
 
+    	a2sd = Settings.Secure.getInt(mContext.getContentResolver(),Settings.Secure.APPS2SD, 0) > 0;
+    	
     	ContentResolver cr = mContext.getContentResolver();
     	Cursor c = cr.query(DUCKTAPE_SETTINGS, new String[] { "value" }, "key='apps2sd'", null, null);
     	c.moveToFirst();
@@ -6071,7 +6074,7 @@ class PackageManagerService extends IPackageManager.Stub {
     /**
      * Holds information about dynamic settings.
      */
-    private static final class Settings {
+    private static final class DynamicSettings {
         private final File mSettingsFilename;
         private final File mBackupSettingsFilename;
         private final HashMap<String, PackageSetting> mPackages =
@@ -6134,7 +6137,7 @@ class PackageManagerService extends IPackageManager.Stub {
         private final ArrayList<PendingPackage> mPendingPackages
                 = new ArrayList<PendingPackage>();
 
-        Settings() {
+        DynamicSettings() {
             File dataDir = Environment.getDataDirectory();
             File systemDir = new File(dataDir, "system");
             systemDir.mkdirs();
