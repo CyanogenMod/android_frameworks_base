@@ -17,20 +17,11 @@
 package android.content;
 
 import android.content.pm.ApplicationInfo;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -39,6 +30,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.AttributeSet;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Interface to global information about an application environment.  This is
@@ -202,7 +200,7 @@ public abstract class Context {
             int resid, int[] attrs) throws Resources.NotFoundException {
         return getTheme().obtainStyledAttributes(resid, attrs);
     }
-    
+
     /**
      * Retrieve styled attribute information in this Context's theme.  See
      * {@link Resources.Theme#obtainStyledAttributes(AttributeSet, int[], int, int)}
@@ -1292,7 +1290,7 @@ public abstract class Context {
      * @see android.text.ClipboardManager
      */
     public static final String CLIPBOARD_SERVICE = "clipboard";
-    
+
     /**
      * Use with {@link #getSystemService} to retrieve a 
      * {@link android.view.inputmethod.InputMethodManager} for accessing input
