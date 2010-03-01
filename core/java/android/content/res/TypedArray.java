@@ -1,12 +1,11 @@
 package android.content.res;
 
-import com.android.internal.util.XmlUtils;
-
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import com.android.internal.util.XmlUtils;
 
 import java.util.Arrays;
 
@@ -529,9 +528,9 @@ public class TypedArray {
      * gets the resource ID of the selected attribute, and uses
      * {@link Resources#getDrawable Resources.getDrawable} of the owning
      * Resources object to retrieve its Drawable.
-     *
+     * 
      * @param index Index of attribute to retrieve.
-     *
+     * 
      * @return Drawable for the attribute, or null if not defined.
      */
     public Drawable getDrawable(int index) {
@@ -676,11 +675,6 @@ public class TypedArray {
         return mResources.mAssets.getPooledString(
             cookie, data[index+AssetManager.STYLE_DATA]);
     }
-    
-    /* Hack to allow TypedArrayComposite to instantiate a simple wrapper. */
-    TypedArray() {
-        mResources = null;
-    }
 
     /*package*/ TypedArray(Resources resources, int[] data, int[] indices, int len) {
         mResources = resources;
@@ -691,26 +685,5 @@ public class TypedArray {
 
     public String toString() {
         return Arrays.toString(mData);
-    }
-    
-    /**
-     * @hide
-     */
-    void dump() {
-        int attrCount = getIndexCount();
-        int[] data = mData;
-        String s = "  Found:";
-        TypedValue value = new TypedValue();
-        for (int i=0; i<attrCount; i++) {
-            int attr = getIndex(i);
-            int d = i*AssetManager.STYLE_NUM_ENTRIES;
-            value.type = data[d+AssetManager.STYLE_TYPE];
-            value.data = data[d+AssetManager.STYLE_DATA];
-            value.assetCookie = data[d+AssetManager.STYLE_ASSET_COOKIE];
-            value.resourceId = data[d+AssetManager.STYLE_RESOURCE_ID];
-            s = s + " 0x" + Integer.toHexString(attr)
-                + "=" + value;
-        }
-        System.out.println(s);
     }
 }
