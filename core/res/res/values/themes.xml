@@ -26,7 +26,7 @@
          of it a dark color.
     -->
     <style name="Theme">
-
+    
         <item name="colorForeground">@android:color/bright_foreground_dark</item>
         <item name="colorForegroundInverse">@android:color/bright_foreground_dark_inverse</item>
         <item name="colorBackground">@android:color/background_dark</item>
@@ -77,7 +77,7 @@
         <item name="buttonStyleInset">@android:style/Widget.Button.Inset</item>
 
         <item name="buttonStyleToggle">@android:style/Widget.Button.Toggle</item>
-        
+
         <!-- List attributes -->
         <item name="listPreferredItemHeight">64dip</item>
         <!-- @hide -->
@@ -255,7 +255,6 @@
 		<item name="progressBarStyleInverse">@android:style/Widget.ProgressBar</item>
 		<item name="progressBarStyleSmallInverse">@android:style/Widget.ProgressBar.Small</item>
 		<item name="progressBarStyleLargeInverse">@android:style/Widget.ProgressBar.Large</item> 
-
     </style>
     
     <!-- Variant of the light theme with no title bar -->
