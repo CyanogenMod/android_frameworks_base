@@ -1847,7 +1847,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
             int attr = a.getIndex(i);
             switch (attr) {
                 case com.android.internal.R.styleable.View_background:
-                    background = a.getDrawableWithContext(context, attr);
+                    background = a.getDrawable(attr);
                     break;
                 case com.android.internal.R.styleable.View_padding:
                     padding = a.getDimensionPixelSize(attr, -1);

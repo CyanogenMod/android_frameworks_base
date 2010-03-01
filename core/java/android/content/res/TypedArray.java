@@ -1,14 +1,12 @@
 package android.content.res;
 
+import com.android.internal.util.XmlUtils;
+
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
-import android.content.Context;
-import android.content.res.Resources.NotFoundException;
-
-import com.android.internal.util.XmlUtils;
 
 import java.util.Arrays;
 
@@ -271,9 +269,6 @@ public class TypedArray {
                 return csl.getDefaultColor();
             }
             return defValue;
-        } else if (type == TypedValue.TYPE_ATTRIBUTE && mResources.getContext() != null) {
-            mResources.getContext().getTheme().resolveAttribute(data[index+AssetManager.STYLE_DATA], mValue, true);
-            return mValue.data;
         }
 
         throw new UnsupportedOperationException("Can't convert to color: type=0x"
@@ -554,22 +549,6 @@ public class TypedArray {
             return mResources.loadDrawable(value, value.resourceId);
         }
         return null;
-    }
-
-    /**
-     * Very crude hack to allow {@link #getColor} to succeed in looking up
-     * values from the current theme. This method is necessary as we use
-     * LayerDrawables which use color attribute references.
-     * 
-     * @hide
-     */
-    public Drawable getDrawableWithContext(Context context, int id) throws NotFoundException {
-        mResources.setContext(context);
-        try {
-            return getDrawable(id);
-        } finally {
-            mResources.setContext(null);
-        }
     }
 
     /**

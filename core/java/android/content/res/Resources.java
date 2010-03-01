@@ -35,7 +35,6 @@ import android.util.SparseArray;
 import android.util.TypedValue;
 import android.util.LongSparseArray;
 import android.view.Display;
-import android.content.Context;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -106,8 +105,6 @@ public class Resources {
     private static <T> LongSparseArray<T> emptySparseArray() {
         return (LongSparseArray<T>) EMPTY_ARRAY;
     }
-
-    private Context mContext;
 
     /**
      * This exception is thrown by the resource APIs when a requested resource
@@ -923,14 +920,6 @@ public class Resources {
             return;
         }
         throw new NotFoundException("String resource name " + name);
-    }
-    
-    Context getContext() {
-        return mContext;
-    }
-    
-    void setContext(Context context) {
-        mContext = context;
     }
 
     /**
