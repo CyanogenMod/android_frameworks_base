@@ -1728,8 +1728,6 @@
         <!-- When set to false, the ListView will not draw the divider before each footer view.
              The default value is true. -->
         <attr name="footerDividersEnabled" format="boolean" />
-        <!-- Drawable used to colorize an item's background in the list. -->
-        <attr name="listItemBackground" format="color|reference" />
     </declare-styleable>
     <declare-styleable name="MenuView">
         <!-- Default appearance of menu item text. -->

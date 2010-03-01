@@ -1225,9 +1225,7 @@
      =============================================================== -->
   <eat-comment />
 
-  <public type="attr" name="listItemBackground" id="0x010102c1" />
-
-  <public type="attr" name="expandedMenuTheme" />
+  <public type="attr" name="expandedMenuTheme" id="0x010102c1" />
   <public type="attr" name="iconMenuTheme" />
 
   <!-- The following have been temporarily added here to avoid any accidental
