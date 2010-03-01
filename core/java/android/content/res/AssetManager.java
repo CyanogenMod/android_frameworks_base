@@ -760,7 +760,6 @@ public final class AssetManager {
     private native final int newTheme();
     private native final void deleteTheme(int theme);
     /*package*/ native static final void applyThemeStyle(int theme, int styleRes, boolean force);
-    /*package*/ native static final void setAttributeValue(int theme, int attr, int color);
     /*package*/ native static final void copyTheme(int dest, int source);
     /*package*/ native static final int loadThemeAttributeValue(int theme, int ident,
                                                                 TypedValue outValue,

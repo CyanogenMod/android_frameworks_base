@@ -831,16 +831,6 @@ static void android_content_AssetManager_applyThemeStyle(JNIEnv* env, jobject cl
     theme->applyStyle(styleRes, force ? true : false);
 }
 
-static void android_content_AssetManager_setAttributeValue(JNIEnv* env, jobject clazz,
-                                                           jint themeInt,
-                                                           jint attribute,
-                                                           jint value)
-{
-    ResTable::Theme* theme = (ResTable::Theme*)themeInt;
-    theme->setAttributeValue(attribute, value);
-}
-
-
 static void android_content_AssetManager_copyTheme(JNIEnv* env, jobject clazz,
                                                    jint destInt, jint srcInt)
 {
@@ -1802,8 +1792,6 @@ static JNINativeMethod gAssetManagerMethods[] = {
         (void*) android_content_AssetManager_getArraySize },
     { "retrieveArray","(I[I)I",
         (void*) android_content_AssetManager_retrieveArray },
-    { "setAttributeValue", "(III)V",
-	(void*) android_content_AssetManager_setAttributeValue },
 
     // XML files.
     { "openXmlAssetNative", "(ILjava/lang/String;)I",
