@@ -25,6 +25,7 @@ import java.util.HashMap;
  *        pluto:copyright="T-Mobile, 2009"
  *    />
  *
+ * @hide
  */
 public class SoundsInfo extends BaseThemeInfo {
 
