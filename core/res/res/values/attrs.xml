@@ -302,13 +302,6 @@
         <attr name="windowNoDisplay" format="boolean" />
 
         <!-- ============ -->
-        <!-- Menu theme -->
-        <!-- ============ -->
-        <eat-comment />
-        <attr name="iconMenuTheme" format="reference" />
-        <attr name="expandedMenuTheme" format="reference" />
-        
-        <!-- ============ -->
         <!-- Alert Dialog styles -->
         <!-- ============ -->
         <eat-comment />

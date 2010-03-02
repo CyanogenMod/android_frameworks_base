@@ -119,10 +119,6 @@
         <!-- Dialog attributes -->
         <item name="alertDialogStyle">@android:style/AlertDialog</item>
         
-        <!-- Menu attributes -->
-        <item name="iconMenuTheme">@android:style/Theme.IconMenu</item>
-        <item name="expandedMenuTheme">@android:style/Theme.ExpandedMenu</item>
-        
         <!-- Panel attributes -->
         <item name="panelBackground">@android:drawable/menu_background</item>
         <item name="panelFullBackground">@android:drawable/menu_background_fill_parent_width</item>
