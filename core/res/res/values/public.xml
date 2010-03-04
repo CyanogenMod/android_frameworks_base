@@ -1215,20 +1215,4 @@
   <public type="attr" name="author" id="0x010102b4" />
   <public type="attr" name="autoStart" id="0x010102b5" />
   
-
-<!-- ===============================================================
-     Resources added to support dynamic theming.  id="..." must be adjusted so
-     that these entries are placed at the very end of the generated R.java.
-     Verify with aapt dump resources
-     $ANDROID_PRODUCT_OUT/system/framework/framework-res.apk.
-     !!! THIS IS A TEMPORARY SOLUTION !!!
-     =============================================================== -->
-  <eat-comment />
-
-  <!-- The following have been temporarily added here to avoid any accidental
-       modifications to R.attr and R.id.  Will be removed shortly. -->
-  <eat-comment />
-
-  <public type="string" name="buy_ringtones" id="0x0104032b" />
-
 </resources>

@@ -446,6 +446,7 @@
         <attr name="ringtonePreferenceStyle" format="reference" />
         <!-- The preference layout that has the child/tabbed effect. -->
         <attr name="preferenceLayoutChild" format="reference" />
+
     </declare-styleable>
 
     <!-- **************************************************************** -->
