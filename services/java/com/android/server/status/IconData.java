@@ -14,6 +14,11 @@ public class IconData {
     public static final int ICON = 2;
 
     /**
+       * Indicates ths item represents an integer displayed on top of an icon.
+       */
+    public static final int ICON_NUMBER = 3;
+
+    /**
      * The type of this item. One of TEXT, ICON, or LEVEL_ICON.
      */
     public int type;
@@ -72,6 +77,18 @@ public class IconData {
         return data;
     }
 
+    public static IconData makeIconNumber(String slot,
+            String iconPackage, int iconId, int iconLevel, int number) {
+        IconData data = new IconData();
+        data.type = ICON_NUMBER;
+        data.slot = slot;
+        data.iconPackage = iconPackage;
+        data.iconId = iconId;
+        data.iconLevel = iconLevel;
+        data.number = number;
+        return data;
+    }
+
     public void copyFrom(IconData that) {
         this.type = that.type;
         this.slot = that.slot;
@@ -98,6 +115,13 @@ public class IconData {
                     + " package=" + this.iconPackage
                     + " iconId=" + Integer.toHexString(this.iconId)
                     + " iconLevel=" + this.iconLevel + ")"; 
+        }
+        else if (this.type == ICON_NUMBER) {
+            return "IconData(slot=" + (this.slot != null ? "'" + this.slot + "'" : "null")
+                    + " package=" + this.iconPackage
+                    + " iconId=" + Integer.toHexString(this.iconId)
+                    + " iconLevel=" + this.iconLevel
+                    + " number='" + this.number + "')"; 
         }
         else {
             return "IconData(type=" + type + ")";

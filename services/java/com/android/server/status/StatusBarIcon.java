@@ -77,6 +77,40 @@ class StatusBarIcon {
                 }
                 break;
             }
+
+            case IconData.ICON_NUMBER: {
+                // container
+                LayoutInflater inflater = (LayoutInflater)context.getSystemService(
+                                                Context.LAYOUT_INFLATER_SERVICE);
+                View v = inflater.inflate(com.android.internal.R.layout.status_bar_icon, parent, false);
+                this.view = v;
+
+                // icon
+                AnimatedImageView im = (AnimatedImageView)v.findViewById(com.android.internal.R.id.image);
+                im.setImageDrawable(getIcon(context, data));
+                im.setImageLevel(data.iconLevel);
+                mImageView = im;
+
+                // number
+                TextView nv = (TextView)v.findViewById(com.android.internal.R.id.number);
+                mNumberView = nv;
+
+                //remove background, center, and change gravity of text
+                mNumberView.setLayoutParams(
+                    new FrameLayout.LayoutParams(
+                        FrameLayout.LayoutParams.WRAP_CONTENT,
+                        FrameLayout.LayoutParams.WRAP_CONTENT,
+                        Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL));
+                mNumberView.setBackgroundDrawable(null);
+                mNumberView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+
+                if (data.number > 0) {
+                    nv.setText("" + data.number);
+                } else {
+                    nv.setText("");
+                }
+                break;
+            }
         }
     }
 
@@ -92,6 +126,7 @@ class StatusBarIcon {
             }
             break;
         case IconData.ICON:
+        case IconData.ICON_NUMBER:
             if (((mData.iconPackage != null && data.iconPackage != null)
                         && !mData.iconPackage.equals(data.iconPackage))
                     || mData.iconId != data.iconId
