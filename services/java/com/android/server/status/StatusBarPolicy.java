@@ -426,7 +426,7 @@ public class StatusBarPolicy {
         updateClock();
 
         // battery
-        mBatteryData = IconData.makeIcon("battery",
+        mBatteryData = IconData.makeIconNumber("battery",
                 null, com.android.internal.R.drawable.stat_sys_battery_unknown, 0, 0);
         mBatteryIcon = service.addIcon(mBatteryData, null);
 
@@ -595,10 +595,19 @@ public class StatusBarPolicy {
     private final void updateBattery(Intent intent) {
         mBatteryData.iconId = intent.getIntExtra("icon-small", 0);
         mBatteryData.iconLevel = intent.getIntExtra("level", 0);
-        mService.updateIcon(mBatteryIcon, mBatteryData, null);
 
         int plugged = intent.getIntExtra("plugged", 0);
         int level = intent.getIntExtra("level", -1);
+
+        //show battery percentage if not plugged in
+        if (plugged) {
+            mBatteryData.number = -1;
+        } else {
+            mBatteryData.number = level;
+        }
+
+        mService.updateIcon(mBatteryIcon, mBatteryData, null);
+
         if (false) {
             Log.d(TAG, "updateBattery level=" + level
                     + " plugged=" + plugged
