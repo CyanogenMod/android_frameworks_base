@@ -586,6 +586,9 @@ public class WebView extends AbsoluteLayout
     public static final String SCHEME_GEO = "geo:0,0?q=";
 
     private int mBackgroundColor = Color.WHITE;
+    
+    //Wysie
+    private boolean showZoomControls = true;
 
     // Used to notify listeners of a new picture.
     private PictureListener mPictureListener;
@@ -765,6 +768,11 @@ public class WebView extends AbsoluteLayout
         }
         updateMultiTouchSupport(context);
     }
+    
+    //Wysie
+    void showZoomControls(boolean value) {
+        showZoomControls = value;
+    }
 
     void updateMultiTouchSupport(Context context) {
         WebSettings settings = getSettings();
@@ -780,6 +788,10 @@ public class WebView extends AbsoluteLayout
     }
 
     private void updateZoomButtonsEnabled() {
+        if (!showZoomControls) {
+            mZoomButtonsController.getZoomControls().setVisibility(View.GONE);
+        }
+        else {
         boolean canZoomIn = mActualScale < mMaxZoomScale;
         boolean canZoomOut = mActualScale > mMinZoomScale && !mInZoomOverview;
         if (!canZoomIn && !canZoomOut) {
@@ -794,6 +806,7 @@ public class WebView extends AbsoluteLayout
             // or out.
             mZoomButtonsController.setZoomInEnabled(canZoomIn);
             mZoomButtonsController.setZoomOutEnabled(canZoomOut);
+        }
         }
     }
 
