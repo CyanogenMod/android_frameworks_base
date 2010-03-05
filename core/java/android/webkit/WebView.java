@@ -812,6 +812,9 @@ public class WebView extends AbsoluteLayout
     public static final String SCHEME_GEO = "geo:0,0?q=";
 
     private int mBackgroundColor = Color.WHITE;
+    
+    //Wysie
+    private boolean showZoomControls = true;
 
     // Used to notify listeners of a new picture.
     private PictureListener mPictureListener;
@@ -983,6 +986,11 @@ public class WebView extends AbsoluteLayout
 
         updateMultiTouchSupport(context);
     }
+    
+    //Wysie
+    void showZoomControls(boolean value) {
+        showZoomControls = value;
+    }
 
     void updateMultiTouchSupport(Context context) {
         WebSettings settings = getSettings();
@@ -1001,17 +1009,21 @@ public class WebView extends AbsoluteLayout
 
     private void updateZoomButtonsEnabled() {
         if (mZoomButtonsController == null) return;
-        boolean canZoomIn = mActualScale < mMaxZoomScale;
-        boolean canZoomOut = mActualScale > mMinZoomScale && !mInZoomOverview;
-        if (!canZoomIn && !canZoomOut) {
-            // Hide the zoom in and out buttons, as well as the fit to page
-            // button, if the page cannot zoom
+        if (!showZoomControls) {
             mZoomButtonsController.getZoomControls().setVisibility(View.GONE);
         } else {
-            // Set each one individually, as a page may be able to zoom in
-            // or out.
-            mZoomButtonsController.setZoomInEnabled(canZoomIn);
-            mZoomButtonsController.setZoomOutEnabled(canZoomOut);
+            boolean canZoomIn = mActualScale < mMaxZoomScale;
+            boolean canZoomOut = mActualScale > mMinZoomScale && !mInZoomOverview;
+                if (!canZoomIn && !canZoomOut) {
+                // Hide the zoom in and out buttons, as well as the fit to page
+                // button, if the page cannot zoom
+                mZoomButtonsController.getZoomControls().setVisibility(View.GONE);
+            } else {
+                // Set each one individually, as a page may be able to zoom in
+                // or out.
+                mZoomButtonsController.setZoomInEnabled(canZoomIn);
+                mZoomButtonsController.setZoomOutEnabled(canZoomOut);
+            }
         }
     }
 
