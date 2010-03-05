@@ -315,7 +315,7 @@ public class HardwareService extends IHardwareService.Stub {
                 mPulsing = true;
                 setLight_native(mNativePointer, LIGHT_ID_ATTENTION, 0x00ffffff,
                         LIGHT_FLASH_HARDWARE, 7, 0, 0);
-                mH.sendMessageDelayed(Message.obtain(mH, 1), 3000);
+                mH.sendMessageDelayed(Message.obtain(mH, 1), 2000);
             }
         }
     }

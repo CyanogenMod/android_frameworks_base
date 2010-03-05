@@ -100,6 +100,7 @@ class NotificationManagerService extends INotificationManager.Stub
     private boolean mScreenOn = true;
     private boolean mNotificationScreenOn;
     private boolean mNotificationPulseEnabled;
+    private boolean mPulseBreathingLight;
 
     // for adb connected notifications
     private boolean mUsbConnected;
@@ -709,7 +710,8 @@ class NotificationManagerService extends INotificationManager.Stub
                     long identity = Binder.clearCallingIdentity();
                     try {
                         r.statusBarKey = mStatusBarService.addIcon(icon, n);
-                        mHardware.pulseBreathingLight();
+                        // Only pulse breathing light if we're not going to flash the notification LED
+                        mPulseBreathingLight = true;
                     }
                     finally {
                         Binder.restoreCallingIdentity(identity);
@@ -1036,7 +1038,12 @@ class NotificationManagerService extends INotificationManager.Stub
 
         // we only flash if screen is off and persistent pulsing is enabled
         if (mLedNotification == null || (mScreenOn && !mNotificationScreenOn) || !mNotificationPulseEnabled) {
-            mHardware.setLightOff_UNCHECKED(HardwareService.LIGHT_ID_NOTIFICATIONS);
+            if (mPulseBreathingLight) {
+                mHardware.pulseBreathingLight();
+                mPulseBreathingLight = false;
+            } else {
+                mHardware.setLightOff_UNCHECKED(HardwareService.LIGHT_ID_NOTIFICATIONS);
+            }
         } else {
             mHardware.setLightFlashing_UNCHECKED(
                     HardwareService.LIGHT_ID_NOTIFICATIONS,
