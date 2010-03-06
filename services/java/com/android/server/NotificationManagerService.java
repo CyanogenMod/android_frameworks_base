@@ -1040,7 +1040,6 @@ class NotificationManagerService extends INotificationManager.Stub
         if (mLedNotification == null || (mScreenOn && !mNotificationScreenOn) || !mNotificationPulseEnabled) {
             if (mPulseBreathingLight) {
                 mHardware.pulseBreathingLight();
-                mPulseBreathingLight = false;
             } else {
                 mHardware.setLightOff_UNCHECKED(HardwareService.LIGHT_ID_NOTIFICATIONS);
             }
@@ -1052,6 +1051,7 @@ class NotificationManagerService extends INotificationManager.Stub
                     mLedNotification.notification.ledOnMS,
                     mLedNotification.notification.ledOffMS);
         }
+        mPulseBreathingLight = false;
     }
 
     // lock on mNotificationList
