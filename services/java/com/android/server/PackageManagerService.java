@@ -1985,16 +1985,17 @@ class PackageManagerService extends IPackageManager.Stub {
 
         String[] files = dir.list();
 
-        int i;
-        for (i=0; i<files.length; i++) {
-            File file = new File(dir, files[i]);
-            File resFile = file;
-            // Pick up the resource path from settings for fwd locked apps
-            if ((scanMode & SCAN_FORWARD_LOCKED) != 0) {
-                resFile = null;
+        if (files != null) {
+            for (int i=0; i<files.length; i++) {
+                File file = new File(dir, files[i]);
+                File resFile = file;
+                // Pick up the resource path from settings for fwd locked apps
+                if ((scanMode & SCAN_FORWARD_LOCKED) != 0) {
+                    resFile = null;
+                }
+                PackageParser.Package pkg = scanPackageLI(file, file, resFile,
+                        flags|PackageParser.PARSE_MUST_BE_APK, scanMode);
             }
-            PackageParser.Package pkg = scanPackageLI(file, file, resFile,
-                    flags|PackageParser.PARSE_MUST_BE_APK, scanMode);
         }
     }
 
