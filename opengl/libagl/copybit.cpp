@@ -469,7 +469,13 @@ static bool copybit(GLint x, GLint y,
         err = copybit->stretch(copybit, &dst, &src, &drect, &srect, &it);
     }
     if (err != NO_ERROR) {
-        c->textures.tmu[0].texture->try_copybit = false;
+        /* copybit could fail if the service is turned down
+         * that does not mean we should not be using copybit
+         * again. A valid scenario is LCD is being turned off
+         * when copybit request is made.
+         */
+        if (!copybit || (copybit && err != -EPERM))
+            c->textures.tmu[0].texture->try_copybit = false;
     }
     return err == NO_ERROR ? true : false;
 }

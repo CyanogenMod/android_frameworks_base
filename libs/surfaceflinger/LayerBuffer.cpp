@@ -48,7 +48,7 @@ gralloc_module_t const* LayerBuffer::sGrallocModule = 0;
 LayerBuffer::LayerBuffer(SurfaceFlinger* flinger, DisplayID display,
         const sp<Client>& client, int32_t i)
     : LayerBaseClient(flinger, display, client, i),
-      mNeedsBlending(false), mBlitEngine(0)
+      mNeedsBlending(false), mBlitEngine(0), mInvalidEGLImage(false)
 {
 }
 
@@ -489,6 +489,7 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
         t.data = (GGLubyte*)src.img.base;
         const Region dirty(Rect(t.width, t.height));
         mLayer.loadTexture(&mTexture, dirty, t);
+        mLayer.mInvalidEGLImage = true;
     }
 
     mTexture.transform = mBufferHeap.transform;
@@ -513,14 +514,16 @@ status_t LayerBuffer::BufferSource::initTempBuffer() const
             glDeleteTextures(1, &mTexture.name);
             eglDestroyImageKHR(dpy, mTexture.image);
             Texture defaultTexture;
-            mTexture = defaultTexture;
+            mTexture.name = mLayer.createTexture();
             mTempGraphicBuffer.clear();
-        } else {
+        } else if (!mLayer.mInvalidEGLImage) {
             // we're good, we have an EGLImageKHR and it's (still) the
             // right size
             return NO_ERROR;
         }
     }
+
+    mLayer.mInvalidEGLImage = false;
 
     // figure out if we need linear filtering
     if (buffers.w * h == buffers.h * w) {

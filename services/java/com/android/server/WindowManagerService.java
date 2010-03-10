@@ -2243,8 +2243,21 @@ public class WindowManagerService extends IWindowManager.Stub
                     curWallpaperIndex--;
                     WindowState wallpaper = token.windows.get(curWallpaperIndex);
                     try {
-                        wallpaper.mClient.dispatchWallpaperCommand(action,
-                                x, y, z, extras, sync);
+                        if (action.equals("hide"))  {
+			    if (wallpaper.mWallpaperVisible != false) {
+			        wallpaper.mWallpaperVisible = false;
+                                wallpaper.mClient.dispatchAppVisibility(false); 
+			    }
+			}
+                        else if (action.equals("show"))  {
+			    if (wallpaper.mWallpaperVisible != true) {
+			        wallpaper.mWallpaperVisible = true;
+                                wallpaper.mClient.dispatchAppVisibility(true); 
+			    }
+			}
+                        else
+                            wallpaper.mClient.dispatchWallpaperCommand(action,
+                                   x, y, z, extras, sync);
                         // We only want to be synchronous with one wallpaper.
                         sync = false;
                     } catch (RemoteException e) {

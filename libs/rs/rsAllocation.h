@@ -34,6 +34,7 @@ public:
     // By policy this allocation will hold a pointer to the type
     // but will not destroy it on destruction.
     Allocation(Context *rsc, const Type *);
+    Allocation(Context *rsc, const Type *, int index);
     virtual ~Allocation();
 
     void setCpuWritable(bool);
@@ -77,6 +78,7 @@ protected:
     bool mCpuRead;
     bool mGpuWrite;
     bool mGpuRead;
+    bool mUseEarlierAllocation;
 
     // more usage hint data from the application
     // which can be used by a driver to pick the best memory type.
