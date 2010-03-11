@@ -494,52 +494,6 @@ nAllocationCreateFromBitmap(JNIEnv *_env, jobject _this, jint dstFmt, jboolean g
 }
 
 static int
-nAllocationCreateFromBitmap1(JNIEnv *_env, jobject _this, jint index, jint dstFmt, jboolean genMips, jobject jbitmap)
-{
-    RsContext con = (RsContext)(_env->GetIntField(_this, gContextId));
-    SkBitmap const * nativeBitmap =
-            (SkBitmap const *)_env->GetIntField(jbitmap, gNativeBitmapID);
-    const SkBitmap& bitmap(*nativeBitmap);
-    SkBitmap::Config config = bitmap.getConfig();
-
-    RsElement e = SkBitmapToPredefined(config);
-    if (e) {
-        bitmap.lockPixels();
-        const int w = bitmap.width();
-        const int h = bitmap.height();
-        const void* ptr = bitmap.getPixels();
-        jint id = (jint)rsAllocationCreateFromBitmap1(con, w, h, (RsElement)dstFmt, e, genMips, ptr, index);
-        bitmap.unlockPixels();
-        return id;
-    }
-    return 0;
-}
-
-static int
-nAllocationAddToAllocationList(JNIEnv *_env, jobject _this, jint index)
-{
-    RsContext con = (RsContext)(_env->GetIntField(_this, gContextId));
-    rsAllocationAddToAllocationList(con, index);
-    return 0;
-}
-
-static int
-nAllocationRemoveFromAllocationList(JNIEnv *_env, jobject _this, jint index)
-{
-    RsContext con = (RsContext)(_env->GetIntField(_this, gContextId));
-    rsAllocationRemoveFromAllocationList(con, index);
-    return 0;
-}
-
-static int
-nAllocationCreateAllocationList(JNIEnv *_env, jobject _this, jint index)
-{
-    RsContext con = (RsContext)(_env->GetIntField(_this, gContextId));
-    rsAllocationCreateAllocationList(con, index);
-    return 0;
-}
-
-static int
 nAllocationCreateFromAssetStream(JNIEnv *_env, jobject _this, jint dstFmt, jboolean genMips, jint native_asset)
 {
     RsContext con = (RsContext)(_env->GetIntField(_this, gContextId));
@@ -1423,10 +1377,6 @@ static JNINativeMethod methods[] = {
 
 {"nAllocationCreateTyped",         "(I)I",                                 (void*)nAllocationCreateTyped },
 {"nAllocationCreateFromBitmap",    "(IZLandroid/graphics/Bitmap;)I",       (void*)nAllocationCreateFromBitmap },
-{"nAllocationCreateFromBitmap1",   "(IIZLandroid/graphics/Bitmap;)I",      (void*)nAllocationCreateFromBitmap1 },
-{"nAllocationAddToAllocationList", "(I)I",                                 (void*)nAllocationAddToAllocationList},
-{"nAllocationRemoveFromAllocationList", "(I)I",                            (void*)nAllocationRemoveFromAllocationList},
-{"nAllocationCreateAllocationList", "(I)I",                                (void*)nAllocationCreateAllocationList},
 {"nAllocationCreateFromBitmapBoxed","(IZLandroid/graphics/Bitmap;)I",      (void*)nAllocationCreateFromBitmapBoxed },
 {"nAllocationCreateFromAssetStream","(IZI)I",                              (void*)nAllocationCreateFromAssetStream },
 {"nAllocationUploadToTexture",     "(II)V",                                (void*)nAllocationUploadToTexture },
