@@ -253,6 +253,19 @@ public class Allocation extends BaseObj {
         return new Allocation(id, rs, t);
     }
 
+    static public void createAndUploadFromBitmap(RenderScript rs, Bitmap b, Element dstFmt, boolean genMips, String name,int basemipLevel)
+        throws IllegalArgumentException {
+        rs.validate();
+	int id = rs.nAllocationCreateAndUploadFromBitmap(dstFmt.mID, genMips, b,basemipLevel);
+	try{
+	byte bytes[] = name.getBytes("UTF-8");
+	rs.nAssignName(id,bytes);
+	}catch(java.io.UnsupportedEncodingException e){
+	throw new RuntimeException(e);
+	}
+        return;
+    }
+
     static public Allocation createFromBitmap(RenderScript rs, Bitmap b, Element dstFmt, boolean genMips)
         throws IllegalArgumentException {
 
@@ -291,7 +304,36 @@ public class Allocation extends BaseObj {
         int id = rs.nAllocationCreateFromBitmapBoxed(dstFmt.mID, genMips, b);
         return new Allocation(id, rs, null);
     }
-
+    static public void createAndUploadFromBitmapResource(RenderScript rs, Resources res, int id, Element dstFmt, boolean genMips ,String name ,int basemipLevel)
+	throws IllegalArgumentException {
+	rs.validate();
+	InputStream is = null;
+	try {
+		final TypedValue value = new TypedValue();
+		is = res.openRawResource(id, value);
+		int asset = ((AssetManager.AssetInputStream) is).getAssetInt();
+		int allocationId = rs.nAllocationCreateAndUploadFromAssetStream(dstFmt.mID, genMips,
+				asset,basemipLevel);
+		try{
+		byte bytes[] = name.getBytes("UTF-8");
+		rs.nAssignName(allocationId,bytes);
+		}catch(java.io.UnsupportedEncodingException e){
+		throw new RuntimeException(e);
+		}
+		return;
+	} catch (Exception e) {
+		// Ignore
+		} finally {
+		if (is != null) {
+		try {
+			is.close();
+			} catch (IOException e) {
+			// Ignore
+			}
+		}
+	}
+	return;
+	}
     static public Allocation createFromBitmapResource(RenderScript rs, Resources res, int id, Element dstFmt, boolean genMips)
         throws IllegalArgumentException {
 

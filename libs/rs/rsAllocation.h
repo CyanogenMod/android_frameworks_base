@@ -45,6 +45,7 @@ public:
     bool fixAllocation();
 
     void * getPtr() const {return mPtr;}
+    void ** getPtrAddr() {return &mPtr;}
     const Type * getType() const {return mType.get();}
 
     void uploadToTexture(Context *rsc, uint32_t lodOffset = 0);

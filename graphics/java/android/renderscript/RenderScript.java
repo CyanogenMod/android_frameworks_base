@@ -101,12 +101,14 @@ public class RenderScript {
 
     native int  nAllocationCreateTyped(int type);
     native int  nAllocationCreateFromBitmap(int dstFmt, boolean genMips, Bitmap bmp);
+    native int  nAllocationCreateAndUploadFromBitmap(int dstFmt, boolean genMips, Bitmap bmp,int basemipLevel);
     native int  nAllocationCreateFromBitmap1(int index, int dstFmt, boolean genMips, Bitmap bmp);
     native int  nAllocationAddToAllocationList(int index);
     native int  nAllocationRemoveFromAllocationList(int index);
     native int  nAllocationCreateAllocationList(int count);
     native int  nAllocationCreateFromBitmapBoxed(int dstFmt, boolean genMips, Bitmap bmp);
     native int  nAllocationCreateFromAssetStream(int dstFmt, boolean genMips, int assetStream);
+    native int  nAllocationCreateAndUploadFromAssetStream(int dstFmt, boolean genMips, int assetStream,int basemipLevel);
 
     native void nAllocationUploadToTexture(int alloc, int baseMioLevel);
     native void nAllocationUploadToBufferObject(int alloc);
