@@ -573,7 +573,7 @@ static void *eventLoopMain(void *ptr) {
                         nat->vm->DetachCurrentThread();
 
                         int fd = nat->controlFdR;
-                        nat->controlFdr = 0;
+                        nat->controlFdR = 0;
                         close(fd);
                         return NULL;
                     }
