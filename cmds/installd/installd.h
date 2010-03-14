@@ -62,6 +62,7 @@
 /* other handy constants */
 
 #define PROTECTED_DIR_PREFIX  "/data/app-private/"
+#define PROTECTED_EXT_DIR_PREFIX "/sd-ext/app-private/"
 
 #define DALVIK_CACHE_PREFIX   "/data/dalvik-cache/"
 #define DALVIK_CACHE_POSTFIX  "/classes.dex"
