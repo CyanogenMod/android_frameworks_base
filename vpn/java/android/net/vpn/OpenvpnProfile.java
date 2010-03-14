@@ -19,24 +19,36 @@ package android.net.vpn;
 import android.os.Parcel;
 
 /**
- * The profile for Openvpn type of VPN.
+ * The profile for Openvpn type of VPN. 
  * {@hide}
  */
 public class OpenvpnProfile extends VpnProfile {
     private static final long serialVersionUID = 1L;
+
     private static final String PROTO_UDP = "udp";
+
     private static final String PROTO_TCP = "tcp";
 
     // Standard Settings
     private boolean mUserAuth = false;
+
     private String mCA;
+
     private String mCert;
+
     // Advanced Settings
     private int mPort = 1194;
+
     private String mProto = PROTO_UDP;
+
     private boolean mUseCompLzo = false;
+
     private boolean mSupplyAddr = false;
+
+    private boolean mRedirectGateway = false;
+
     private String mLocalAddr;
+
     private String mRemoteAddr;
 
     @Override
@@ -45,11 +57,11 @@ public class OpenvpnProfile extends VpnProfile {
     }
 
     public void setPort(String port) {
-	try {
-	    mPort = Integer.parseInt(port);
-	} catch (NumberFormatException e) {
-	    // no update
-	}
+        try {
+            mPort = Integer.parseInt(port);
+        } catch (NumberFormatException e) {
+            // no update
+        }
     }
 
     public String getPort() {
@@ -57,105 +69,114 @@ public class OpenvpnProfile extends VpnProfile {
     }
 
     public String getProto() {
-	return mProto;
+        return mProto;
     }
 
     public CharSequence[] getProtoList() {
-	String[] s = new String[2];
-	s[0] = PROTO_UDP;
-	s[1] = PROTO_TCP;
-	return s;
+        String[] s = new String[2];
+        s[0] = PROTO_UDP;
+        s[1] = PROTO_TCP;
+        return s;
     }
 
     public void setProto(String p) {
-	if (p.contains(PROTO_TCP))
-	    mProto = PROTO_TCP;
-	else if(p.contains(PROTO_UDP))
-	    mProto = PROTO_UDP;
+        if (p.contains(PROTO_TCP))
+            mProto = PROTO_TCP;
+        else if (p.contains(PROTO_UDP))
+            mProto = PROTO_UDP;
     }
-	
 
     public boolean getUserAuth() {
-	return mUserAuth;
+        return mUserAuth;
     }
 
     public void setUserAuth(boolean auth) {
-	mUserAuth = auth;
+        mUserAuth = auth;
     }
 
     public String getCAName() {
-	return mCA;
+        return mCA;
     }
 
     public void setCAName(String name) {
-	mCA = name;
+        mCA = name;
     }
 
     public String getCertName() {
-	return mCert;
+        return mCert;
     }
 
     public void setCertName(String name) {
-	mCert = name;
+        mCert = name;
     }
 
     public void setUseCompLzo(boolean b) {
-	mUseCompLzo = b;
+        mUseCompLzo = b;
     }
 
     public boolean getUseCompLzo() {
-	return mUseCompLzo;
+        return mUseCompLzo;
     }
 
+    public void setRedirectGateway(boolean b) {
+        mRedirectGateway = b;
+    }
+    
+    public boolean getRedirectGateway() {
+        return mRedirectGateway;
+    }
+    
     public void setSupplyAddr(boolean b) {
-	mSupplyAddr = b;
+        mSupplyAddr = b;
     }
 
     public boolean getSupplyAddr() {
-	return mSupplyAddr;
+        return mSupplyAddr;
     }
 
     public void setLocalAddr(String addr) {
-	mLocalAddr = addr;
+        mLocalAddr = addr;
     }
 
     public String getLocalAddr() {
-	return mLocalAddr;
+        return mLocalAddr;
     }
 
     public void setRemoteAddr(String addr) {
-	mRemoteAddr = addr;
+        mRemoteAddr = addr;
     }
 
     public String getRemoteAddr() {
-	return mRemoteAddr;
+        return mRemoteAddr;
     }
 
     @Override
     protected void readFromParcel(Parcel in) {
         super.readFromParcel(in);
         mPort = in.readInt();
-	mProto = in.readString();
-	mUserAuth = in.readInt() == 1;
-	mCA = in.readString();
-	mCert = in.readString();
-	mUseCompLzo = in.readInt() == 1;
-	mSupplyAddr = in.readInt() == 1;
-	mLocalAddr = in.readString();
-	mRemoteAddr = in.readString();
+        mProto = in.readString();
+        mUserAuth = in.readInt() == 1;
+        mCA = in.readString();
+        mCert = in.readString();
+        mUseCompLzo = in.readInt() == 1;
+        mRedirectGateway = in.readInt() == 1;
+        mSupplyAddr = in.readInt() == 1;
+        mLocalAddr = in.readString();
+        mRemoteAddr = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
         super.writeToParcel(parcel, flags);
         parcel.writeInt(mPort);
-	parcel.writeString(mProto);
-	parcel.writeInt(mUserAuth ? 1 : 0);
+        parcel.writeString(mProto);
+        parcel.writeInt(mUserAuth ? 1 : 0);
         parcel.writeString(mCA);
         parcel.writeString(mCert);
-	parcel.writeInt(mUseCompLzo ? 1 : 0);
-	parcel.writeInt(mSupplyAddr ? 1 : 0);
-	parcel.writeString(mLocalAddr);
-	parcel.writeString(mRemoteAddr);
+        parcel.writeInt(mUseCompLzo ? 1 : 0);
+        parcel.writeInt(mRedirectGateway ? 1 : 0);
+        parcel.writeInt(mSupplyAddr ? 1 : 0);
+        parcel.writeString(mLocalAddr);
+        parcel.writeString(mRemoteAddr);
     }
 }
