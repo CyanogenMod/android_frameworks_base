@@ -21,7 +21,6 @@ import com.android.server.status.NotificationData;
 import com.android.server.status.StatusBarService;
 
 import android.app.ActivityManagerNative;
-import android.app.AlarmManager;
 import android.app.IActivityManager;
 import android.app.INotificationManager;
 import android.app.ITransientNotification;
@@ -51,7 +50,6 @@ import android.os.Message;
 import android.os.Power;
 import android.os.Process;
 import android.os.RemoteException;
-import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.Vibrator;
 import android.provider.Settings;
@@ -103,16 +101,6 @@ class NotificationManagerService extends INotificationManager.Stub
     private boolean mNotificationScreenOn;
     private boolean mNotificationPulseEnabled;
     private boolean mPulseBreathingLight;
-
-    // Used for trackball notifications in succession
-    private AlarmManager mAlarmMgr;
-    private PendingIntent mTrackballOnPendingIntent;
-    private PendingIntent mTrackballOffPendingIntent;
-    private boolean mScheduled = true;
-    private int mCurrentLightIndex = 0;
-    
-    private static final String TRACKBALL_OFF_ACTION = "com.android.server.TRACKBALL_OFF";
-    private static final String TRACKBALL_ON_ACTION = "com.android.server.TRACKBALL_ON";
 
     // for adb connected notifications
     private boolean mUsbConnected;
@@ -307,9 +295,8 @@ class NotificationManagerService extends INotificationManager.Stub
                 }
 
                 // light
-                Log.d(TAG, "Removing all lights");
                 mLights.clear();
-                mScheduled = false;
+                mLedNotification = null;
                 updateLightsLocked();
             }
         }
@@ -358,10 +345,6 @@ class NotificationManagerService extends INotificationManager.Stub
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 mScreenOn = false;
                 updateNotificationPulse();
-            } else if (action.equals(TRACKBALL_ON_ACTION)) {
-                handleTrackballOnAlarm();
-            } else if (action.equals(TRACKBALL_OFF_ACTION)) {
-                handleTrackballOffAlarm();
             }
         }
     };
@@ -423,12 +406,6 @@ class NotificationManagerService extends INotificationManager.Stub
         mStatusBarService = statusBar;
         statusBar.setNotificationCallbacks(mNotificationCallbacks);
 
-        mAlarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-        Intent trackballOnIntent = new Intent(TRACKBALL_ON_ACTION);
-        mTrackballOnPendingIntent = PendingIntent.getBroadcast(context, 0, trackballOnIntent, 0);
-        Intent trackballOffIntent = new Intent(TRACKBALL_OFF_ACTION);
-        mTrackballOffPendingIntent = PendingIntent.getBroadcast(context, 0, trackballOffIntent, 0);
-        
         // Don't start allowing notifications until the setup wizard has run once.
         // After that, including subsequent boots, init with notifications turned on.
         // This works on the first boot because the setup wizard will toggle this
@@ -447,8 +424,6 @@ class NotificationManagerService extends INotificationManager.Stub
         filter.addAction(Intent.ACTION_PACKAGE_RESTARTED);
         filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
-        filter.addAction(TRACKBALL_OFF_ACTION);
-        filter.addAction(TRACKBALL_ON_ACTION);
         mContext.registerReceiver(mIntentReceiver, filter);
         
         SettingsObserver observer = new SettingsObserver(mHandler);
@@ -811,27 +786,16 @@ class NotificationManagerService extends INotificationManager.Stub
 
             // this option doesn't shut off the lights
 
+            // light
+            // the most recent thing gets the light
+            mLights.remove(old);
+            if (mLedNotification == old) {
+                mLedNotification = null;
+            }
+            //Log.i(TAG, "notification.lights="
+            //        + ((old.notification.lights.flags & Notification.FLAG_SHOW_LIGHTS) != 0));
             if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0) {
-                boolean add = true;
-                for(int i = 0; i < mLights.size(); i++) {
-                    NotificationRecord nr = mLights.get(i);
-                    
-                    // Found a notification that we are already showing
-                    if (nr.pkg.equals(r.pkg) && nr.id == r.id) {
-                        
-                        // Update the color of the light if it has changed
-                        if (nr.notification.ledARGB != r.notification.ledARGB) {
-                            nr.notification.ledARGB = r.notification.ledARGB;
-                        }
-
-                        add = false;
-                        break;
-                    }
-                }
-
-                if (add)
                 mLights.add(r);
-                
                 updateLightsLocked();
             } else {
                 if (old != null
@@ -901,10 +865,10 @@ class NotificationManagerService extends INotificationManager.Stub
         }
 
         // light
-        Log.d(TAG, "Removing light notification: " + r);
         mLights.remove(r);
-        if(mLights.size() == 0)
-            mScheduled = false;
+        if (mLedNotification == r) {
+            mLedNotification = null;
+        }
     }
 
     /**
@@ -1063,18 +1027,29 @@ class NotificationManagerService extends INotificationManager.Stub
             mHardware.setLightOff_UNCHECKED(HardwareService.LIGHT_ID_BATTERY);
         }
 
+        // handle notification lights
+        if (mLedNotification == null) {
+            // get next notification, if any
+            int n = mLights.size();
+            if (n > 0) {
+                mLedNotification = mLights.get(n-1);
+            }
+        }
+
         // we only flash if screen is off and persistent pulsing is enabled
-        Log.d(TAG, "Trackball notification seen");
-        if ((mScreenOn && !mNotificationScreenOn) || !mNotificationPulseEnabled) {
+        if (mLedNotification == null || (mScreenOn && !mNotificationScreenOn) || !mNotificationPulseEnabled) {
             if (mPulseBreathingLight) {
                 mHardware.pulseBreathingLight();
             } else {
-                mScheduled = false;
+                mHardware.setLightOff_UNCHECKED(HardwareService.LIGHT_ID_NOTIFICATIONS);
             }
-        } else if (!mScheduled && mLights.size() > 0) {
-            Log.d(TAG, "Scheduling the trackball to show!!!");
-            mScheduled = true;
-            mAlarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime(), mTrackballOnPendingIntent);
+        } else {
+            mHardware.setLightFlashing_UNCHECKED(
+                    HardwareService.LIGHT_ID_NOTIFICATIONS,
+                    mLedNotification.notification.ledARGB,
+                    HardwareService.LIGHT_FLASH_TIMED,
+                    mLedNotification.notification.ledOnMS,
+                    mLedNotification.notification.ledOffMS);
         }
         mPulseBreathingLight = false;
     }
@@ -1217,43 +1192,6 @@ class NotificationManagerService extends INotificationManager.Stub
             pw.println("  mVibrateNotification=" + mVibrateNotification);
             pw.println("  mDisabledNotifications=0x" + Integer.toHexString(mDisabledNotifications));
             pw.println("  mSystemReady=" + mSystemReady);
-        }
-    }
-    
-    private void handleTrackballOnAlarm() {
-        synchronized(mNotificationList) {
-
-            Log.d(TAG, "Trackball turning lights on");
-            
-            if (!mScheduled || mLights.size() == 0)
-                return;
-            
-            ++mCurrentLightIndex;
-            if (mCurrentLightIndex >= mLights.size())
-                mCurrentLightIndex = 0;
-            
-            NotificationRecord nr = mLights.get(mCurrentLightIndex);
-            int duration = nr.notification.ledOnMS;
-            
-            mHardware.setLightFlashing_UNCHECKED(HardwareService.LIGHT_ID_NOTIFICATIONS,
-                    nr.notification.ledARGB, HardwareService.LIGHT_FLASH_TIMED,
-                    nr.notification.ledOnMS, nr.notification.ledOffMS);
-            
-            mAlarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + duration, mTrackballOffPendingIntent);
-        }
-    }
-    
-    private void handleTrackballOffAlarm() {
-        synchronized(mNotificationList) {
-            
-            Log.d(TAG, "Trackball turning lights off");
-            NotificationRecord nr = mLights.get(mCurrentLightIndex);
-            int duration = nr.notification.ledOffMS;
-            
-            mHardware.setLightOff_UNCHECKED(HardwareService.LIGHT_ID_NOTIFICATIONS);
-            
-            if (mScheduled)
-                mAlarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + duration, mTrackballOnPendingIntent);
         }
     }
 }
