@@ -2340,6 +2340,11 @@ class PackageManagerService extends IPackageManager.Stub {
 
             // Just create the setting, don't add it yet. For already existing packages
             // the PkgSetting exists already and doesn't have to be created.
+            if (destResourceFile == null && ((scanMode&SCAN_FORWARD_LOCKED) != 0)) {
+                // Resource file was null, but we are in forward locked mode.. fix that.
+                destResourceFile = this.getFwdLockedResource(pkgName, destCodeFile.getAbsolutePath());
+                pkg.mForwardLocked = true;
+            }
             pkgSetting = mSettings.getPackageLP(pkg, suid, destCodeFile,
                             destResourceFile, pkg.applicationInfo.flags, true, false);
             if (pkgSetting == null) {
