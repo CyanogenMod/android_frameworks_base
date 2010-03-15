@@ -239,12 +239,14 @@ class Installer {
         return execute(builder.toString());
     }
 
-    public int setForwardLockPerm(String packageName, int gid) {
+    public int setForwardLockPerm(String packageName, int gid, boolean external) {
         StringBuilder builder = new StringBuilder("protect");
         builder.append(' ');
         builder.append(packageName);
         builder.append(' ');
         builder.append(gid);
+        builder.append(' ');
+        builder.append(external ? "1" : "0");
         return execute(builder.toString());
     }
     

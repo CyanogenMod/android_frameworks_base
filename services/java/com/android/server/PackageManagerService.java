@@ -2106,7 +2106,7 @@ class PackageManagerService extends IPackageManager.Stub {
         }
         File resFile = destResourceFile;
         if (ps != null && ((scanMode & SCAN_FORWARD_LOCKED) != 0)) {
-            resFile = getFwdLockedResource(ps.name);
+            resFile = getFwdLockedResource(ps.name, ps.codePath.getAbsolutePath());
         }
         // Note that we invoke the following method only if we are about to unpack an application
         return scanPackageLI(scanFile, destCodeFile, resFile,
@@ -4223,9 +4223,9 @@ class PackageManagerService extends IPackageManager.Stub {
         }
     }
     
-    private File getFwdLockedResource(String pkgName) {
+    private File getFwdLockedResource(String pkgName, String codePath) {
         final String publicZipFileName = pkgName + ".zip";
-        return new File(mAppInstallDir, publicZipFileName);
+        return new File(codePath.startsWith(Environment.getSdExtDirectory().getAbsolutePath()) ? mSdExtInstallDir : mAppInstallDir, publicZipFileName);
     }
 
     private File copyTempInstallFile(Uri pPackageURI,
@@ -4308,7 +4308,6 @@ class PackageManagerService extends IPackageManager.Stub {
             final String pkgFileName = pkgName + ".apk";
 
             // determine the destination directory.
-            // TODO: add support for app-private on /sd-ext
             File destDir = null;
             if ((pFlags&PackageManager.INSTALL_FORWARD_LOCK) != 0) {
                 destDir = mExtInstall ? mDrmSdExtPrivateInstallDir : mDrmAppPrivateInstallDir;
@@ -4320,7 +4319,7 @@ class PackageManagerService extends IPackageManager.Stub {
             final String destFilePath = destPackageFile.getAbsolutePath();
             File destResourceFile;
             if ((pFlags&PackageManager.INSTALL_FORWARD_LOCK) != 0) {
-                destResourceFile = getFwdLockedResource(pkgName);
+                destResourceFile = getFwdLockedResource(pkgName, destFilePath);
                 forwardLocked = true;
             } else {
                 destResourceFile = destPackageFile;
@@ -4393,7 +4392,8 @@ class PackageManagerService extends IPackageManager.Stub {
             }
             if (mInstaller != null) {
                 retCode = mInstaller.setForwardLockPerm(pkgName,
-                        newPackage.applicationInfo.uid);
+                        newPackage.applicationInfo.uid, 
+                        destFilePath.startsWith(Environment.getSdExtDirectory().getAbsolutePath()));
             } else {
                 final int filePermissions =
                         FileUtils.S_IRUSR|FileUtils.S_IWUSR|FileUtils.S_IRGRP;

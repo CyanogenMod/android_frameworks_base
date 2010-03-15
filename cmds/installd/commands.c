@@ -205,14 +205,14 @@ int rm_dex(const char *path)
     }
 }
 
-int protect(char *pkgname, gid_t gid)
+int protect(char *pkgname, gid_t gid, int external)
 {
     struct stat s;
     char pkgpath[PKG_PATH_MAX];
 
     if (gid < AID_SYSTEM) return -1;
 
-    if (create_pkg_path(pkgpath, PROTECTED_DIR_PREFIX, pkgname, ".apk"))
+    if (create_pkg_path(pkgpath, (external == 1 ? PROTECTED_EXT_DIR_PREFIX : PROTECTED_DIR_PREFIX), pkgname, ".apk"))
         return -1;
 
     if (stat(pkgpath, &s) < 0) return -1;

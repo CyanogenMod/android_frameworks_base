@@ -96,7 +96,7 @@ int delete_user_data(const char *pkgname);
 int delete_cache(const char *pkgname);
 int move_dex(const char *src, const char *dst);
 int rm_dex(const char *path);
-int protect(char *pkgname, gid_t gid);
+int protect(char *pkgname, gid_t gid, int external);
 int get_size(const char *pkgname, const char *apkpath, const char *fwdlock_apkpath,
              int *codesize, int *datasize, int *cachesize);
 int free_cache(int free_size);
