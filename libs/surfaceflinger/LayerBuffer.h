@@ -130,7 +130,7 @@ private:
         virtual bool transformed() const;
         virtual void destroy() { }
     private:
-        status_t initTempBuffer() const;
+        status_t initTempBuffer(int w, int h) const;
         mutable Mutex                   mBufferSourceLock;
         sp<Buffer>                      mBuffer;
         status_t                        mStatus;
