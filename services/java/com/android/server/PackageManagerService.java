@@ -178,6 +178,9 @@ class PackageManagerService extends IPackageManager.Stub {
     // This is the object monitoring mDrmAppPrivateInstallDir.
     final FileObserver mDrmAppInstallObserver;
 
+    // This is the object monitoring mDrmSdExtPrivateInstallDir.
+    final FileObserver mDrmSdExtInstallObserver;
+    
     // Used for priviledge escalation.  MUST NOT BE CALLED WITH mPackages
     // LOCK HELD.  Can be called with mInstallLock held.
     final Installer mInstaller;
@@ -194,6 +197,7 @@ class PackageManagerService extends IPackageManager.Stub {
     // Directory containing the private parts (e.g. code and non-resource assets) of forward-locked
     // apps.
     final File mDrmAppPrivateInstallDir;
+    final File mDrmSdExtPrivateInstallDir;
     
     // ----------------------------------------------------------------
     
@@ -435,7 +439,8 @@ class PackageManagerService extends IPackageManager.Stub {
             mAppDataDir = new File(dataDir, "data");
             mSdExtInstallDir = new File(sdExtDir, "app");
             mDrmAppPrivateInstallDir = new File(dataDir, "app-private");
-
+            mDrmSdExtPrivateInstallDir = new File(sdExtDir, "app-private");
+            
             if (mInstaller == null) {
                 // Make sure these dirs exist, when we are running in
                 // the simulator.
@@ -445,6 +450,7 @@ class PackageManagerService extends IPackageManager.Stub {
                 mAppDataDir.mkdirs();
                 mDrmAppPrivateInstallDir.mkdirs();
                 mSdExtInstallDir.mkdirs();
+                mDrmSdExtPrivateInstallDir.mkdirs();
             }
 
             readPermissions();
@@ -604,14 +610,19 @@ class PackageManagerService extends IPackageManager.Stub {
 
             mSdExtInstallObserver = new AppDirObserver(
                 mSdExtInstallDir.getPath(), OBSERVER_EVENTS, false);
-            scanDirLI(mSdExtInstallDir, 0, scanMode);
             mSdExtInstallObserver.startWatching();
-
+            scanDirLI(mSdExtInstallDir, 0, scanMode);
+            
             mDrmAppInstallObserver = new AppDirObserver(
                 mDrmAppPrivateInstallDir.getPath(), OBSERVER_EVENTS, false);
             mDrmAppInstallObserver.startWatching();
             scanDirLI(mDrmAppPrivateInstallDir, 0, scanMode | SCAN_FORWARD_LOCKED);
 
+            mDrmSdExtInstallObserver = new AppDirObserver(
+                mDrmSdExtPrivateInstallDir.getPath(), OBSERVER_EVENTS, false);
+            mDrmSdExtInstallObserver.startWatching();
+            scanDirLI(mDrmSdExtPrivateInstallDir, 0, scanMode | SCAN_FORWARD_LOCKED);
+                
             EventLog.writeEvent(LOG_BOOT_PROGRESS_PMS_SCAN_END,
                     SystemClock.uptimeMillis());
             Log.i(TAG, "Time to scan packages: "
@@ -4299,12 +4310,10 @@ class PackageManagerService extends IPackageManager.Stub {
             // determine the destination directory.
             // TODO: add support for app-private on /sd-ext
             File destDir = null;
-            if (mExtInstall) {
-                destDir = mSdExtInstallDir;
-            } else if ((pFlags&PackageManager.INSTALL_FORWARD_LOCK) != 0) {
-                destDir = mDrmAppPrivateInstallDir;
+            if ((pFlags&PackageManager.INSTALL_FORWARD_LOCK) != 0) {
+                destDir = mExtInstall ? mDrmSdExtPrivateInstallDir : mDrmAppPrivateInstallDir;
             } else {
-                destDir = mAppInstallDir;
+                destDir = mExtInstall ? mSdExtInstallDir : mAppInstallDir;
             }
 
             final File destPackageFile = new File(destDir, pkgFileName);
@@ -4406,7 +4415,8 @@ class PackageManagerService extends IPackageManager.Stub {
 
     private boolean isForwardLocked(PackageParser.Package deletedPackage) {
         final ApplicationInfo applicationInfo = deletedPackage.applicationInfo;
-        return applicationInfo.sourceDir.startsWith(mDrmAppPrivateInstallDir.getAbsolutePath());
+        return applicationInfo.sourceDir.startsWith(mDrmAppPrivateInstallDir.getAbsolutePath())
+            || applicationInfo.sourceDir.startsWith(mDrmSdExtPrivateInstallDir.getAbsolutePath());
     }
 
     private void extractPublicFiles(PackageParser.Package newPackage,
