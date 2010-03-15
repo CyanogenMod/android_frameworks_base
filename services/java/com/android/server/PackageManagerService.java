@@ -3562,14 +3562,18 @@ class PackageManagerService extends IPackageManager.Stub {
     
     /* Called when a downloaded package installation is completed (usually by the Market) */
     public void installPackage(final Uri packageURI, final IPackageInstallObserver observer, final int flags, final String installerPackageName) {
-    	Boolean a2sd = false;
+    	Boolean a2sd = Settings.Secure.getInt(
+            mContext.getContentResolver(),Settings.Secure.APPS2SD, 0) > 0;
 
-    	a2sd = Settings.Secure.getInt(mContext.getContentResolver(),Settings.Secure.APPS2SD, 0) > 0;
+        /* Do not allow a2sd if cm.a2sd.active is false */
+        if (!SystemProperties.getBoolean("cm.a2sd.active", false)) {
+            a2sd = false;
+        }
     	
     	if (a2sd) { 		
-    		installPackageExt(packageURI, observer, flags, installerPackageName, true);
+    	    installPackageExt(packageURI, observer, flags, installerPackageName, true);
     	} else {
-    		installPackageExt(packageURI, observer, flags, installerPackageName, false);
+    	    installPackageExt(packageURI, observer, flags, installerPackageName, false);
     	}
 
     	return;
