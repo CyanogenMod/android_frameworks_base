@@ -103,6 +103,7 @@ class StatusBarIcon {
                         Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL));
                 mNumberView.setBackgroundDrawable(null);
                 mNumberView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+                mNumberView.setTextSize(12);
 
                 if (data.number > 0) {
                     nv.setText("" + data.number);
