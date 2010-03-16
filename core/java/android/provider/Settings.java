@@ -1339,6 +1339,16 @@ public final class Settings {
         public static final String ACCELEROMETER_ROTATION = "accelerometer_rotation";
 
         /**
+         * Control the type of rotation which can be performed using the accelerometer
+         * if ACCELEROMETER_ROTATION is enabled.
+         *                  0 = Normal (left only)
+         *                  1 = 270 degrees (left/right)
+         *                  2 = 360 degrees (full rotation, including inverted)
+         * @hide
+         */
+        public static final String ACCELEROMETER_ROTATION_MODE = "accelerometer_rotation_mode";
+        
+        /**
          * Whether the audible DTMF tones are played by the dialer when dialing. The value is
          * boolean (1 or 0).
          */
@@ -1487,11 +1497,6 @@ public final class Settings {
             NOTIFICATION_SCREEN_ON
         };
 
-        /**
-         * Should 180 degree orientation be enabled. 
-         * @hide
-         */
-        public static final String USE_180_ORIENTATION = "use_180_orientation";
         
         // Settings moved to Settings.Secure
 
