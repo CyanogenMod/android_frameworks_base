@@ -525,7 +525,8 @@ public class RingtoneManager {
     }
 
     private String getThemeWhereClause(String uriColumn) {
-        String clause = uriColumn + " IS NOT NULL";
+        /* Filter out themes with no ringtone and the default theme (which has no package). */
+        String clause = uriColumn + " IS NOT NULL AND LENGTH(theme_package) > 0";
         if (mIncludeDrm) {
             return clause;
         } else {
