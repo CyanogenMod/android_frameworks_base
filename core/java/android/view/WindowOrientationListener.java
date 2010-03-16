@@ -111,28 +111,36 @@ public abstract class WindowOrientationListener {
     
     class SensorEventListenerImpl implements SensorEventListener {
         private static final int _DATA_X = 0;
+
         private static final int _DATA_Y = 1;
+
         private static final int _DATA_Z = 2;
+
         // Angle around x-axis thats considered almost perfect vertical to hold
         // the device
         private static final int PIVOT = 20;
+
         // Angle around x-asis that's considered almost too vertical. Beyond
-        // this angle will not result in any orientation changes. f phone faces uses,
+        // this angle will not result in any orientation changes. f phone faces
+        // uses,
         // the device is leaning backward.
         private static final int PIVOT_UPPER = 65;
+
         // Angle about x-axis that's considered negative vertical. Beyond this
-        // angle will not result in any orientation changes. If phone faces uses,
+        // angle will not result in any orientation changes. If phone faces
+        // uses,
         // the device is leaning forward.
         private static final int PIVOT_LOWER = -10;
-        
+
         // Elanthis rotate code starts
         // Upper threshold limit for switching from portrait to landscape
         private static final int PL_UPPER = 65;
+
         // Lower threshold limit for switching from landscape to portrait
         private static final int LP_LOWER = 25;
 
         private static final float OneEightyOverPi = 57.29577957855f;
-        
+
         public void onSensorChanged(SensorEvent event) {
             float[] values = event.values;
             float X = values[_DATA_X];
@@ -146,12 +154,12 @@ public abstract class WindowOrientationListener {
                 int orientation = 90 - (int) Math.round(angle);
                 // normalize to 0 - 359 range
                 orientation %= 360;
-                if (orientation < 0) 
+                if (orientation < 0)
                     orientation += 360;
-                
+
                 int quadrant = orientation / 90;
                 orientation %= 90;
-                
+
                 // If you are in the 2nd or 4th quadrant we should reorient to
                 // get the mirror of the angle
                 if (quadrant == 1 || quadrant == 3)
@@ -161,51 +169,46 @@ public abstract class WindowOrientationListener {
                         || (mSensorRotation == Surface.ROTATION_270);
 
                 boolean newrot = false;
-                // If the sensor doesn't help you, figure out which way it should be
-                if (mSensorRotation == -1)
-                {
-                    if (orientation <= LP_LOWER)
-                    {
+                // If the sensor doesn't help you, figure out which way it
+                // should be
+                if (mSensorRotation == -1) {
+                    if (orientation <= LP_LOWER) {
                         newrot = true;
                         landscape = true;
-                    }
-                    else if (orientation >= PL_UPPER)
-                    {
+                    } else if (orientation >= PL_UPPER) {
                         newrot = true;
                         landscape = false;
                     }
-                }
-                else if (landscape)
+                } else if (landscape)
                     newrot = (orientation <= LP_LOWER);
                 else
                     newrot = orientation >= PL_UPPER;
 
-                if (landscape ^ newrot)
-                {
+                if (landscape ^ newrot) {
                     if (quadrant == 0 || quadrant == 1)
-                    rotation = Surface.ROTATION_270;
+                        rotation = Surface.ROTATION_270;
                     else
                         rotation = Surface.ROTATION_90;
-                    }
-                else
-                {
+                } else {
                     if (quadrant == 0 || quadrant == 3)
                         rotation = Surface.ROTATION_0;
                     else
-                    rotation = Surface.ROTATION_180;
-                    }
-
+                        rotation = Surface.ROTATION_180;
                 }
+
+            }
             if (mSensorRotation != rotation) {
-            // End Elanthis rotate code
-                    if (Surface.ROTATION_180 != rotation || (Surface.ROTATION_180 == rotation && 
-                            (Settings.System.getInt(mContext.getContentResolver(), 
-                                    Settings.System.USE_180_ORIENTATION, 0) > 0))) {            
-                        mSensorRotation = rotation;
-                        onOrientationChanged(mSensorRotation);
-                    }
+                // End Elanthis rotate code
+                int mode = Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.ACCELEROMETER_ROTATION_MODE, 0);
+                if ((Surface.ROTATION_180 == rotation && mode == 2)
+                        || (Surface.ROTATION_270 == rotation && mode > 0)
+                        || Surface.ROTATION_90 == rotation || Surface.ROTATION_0 == rotation) {
+                    mSensorRotation = rotation;
+                    onOrientationChanged(mSensorRotation);
                 }
             }
+        }
 
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
