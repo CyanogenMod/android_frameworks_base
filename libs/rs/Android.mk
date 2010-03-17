@@ -105,6 +105,8 @@ LOCAL_LDLIBS := -lpthread -ldl
 LOCAL_MODULE:= libRS
 LOCAL_MODULE_TAGS := optional
 
+LOCAL_ARM_MODE := arm
+
 include $(BUILD_SHARED_LIBRARY)
 
 
