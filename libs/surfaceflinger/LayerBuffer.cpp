@@ -475,8 +475,10 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
             else if ((src.crop.b-src.crop.t)*mag < h)
                 yscale = mag;
 
-            w = floorf((src.crop.r-src.crop.l) * xscale);
-            h = floorf((src.crop.b-src.crop.t) * yscale);
+            if (xscale != 1.0f || yscale != 1.0f) {
+                w = floorf((src.crop.r-src.crop.l) * xscale);
+                h = floorf((src.crop.b-src.crop.t) * yscale);
+           }
 
             // create our EGLImageKHR the first time
             err = initTempBuffer(w, h);
