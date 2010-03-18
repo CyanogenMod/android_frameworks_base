@@ -61,6 +61,8 @@
             android:textSize="48dp"
             android:textColor="#ffffffff"
             android:gravity="center"
+            android:paddingLeft="1dip"
+            android:paddingBottom="1dip"
             />
     </FrameLayout>
 
