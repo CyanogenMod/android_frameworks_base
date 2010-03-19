@@ -109,6 +109,8 @@ class OpenvpnService extends VpnService<OpenvpnProfile> {
             args.add(p.getLocalAddr());
             args.add(p.getRemoteAddr());
         }
+        args.add("--up");
+        args.add("/system/xbin/openvpn-up.sh");
 
         DaemonProxy mtpd = getDaemons().startDaemon(MTPD);
         mtpd.sendCommand(args.toArray(new String[args.size()]));
