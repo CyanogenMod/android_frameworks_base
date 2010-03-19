@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (c) 2010, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -383,6 +384,13 @@ class BluetoothEventLoop {
             if (propValues[1].equals("true")) {
                 intent = new Intent(BluetoothDevice.ACTION_ACL_CONNECTED);
             } else {
+                // Check and clean-up if bonding is in progress
+                if (mBluetoothService.getBondState().getBondState(address) ==
+                        BluetoothDevice.BOND_BONDING) {
+                    mBluetoothService.getBondState().setBondState(address,
+                          BluetoothDevice.BOND_NONE);
+                }
+
                 intent = new Intent(BluetoothDevice.ACTION_ACL_DISCONNECTED);
             }
             intent.putExtra(BluetoothDevice.EXTRA_DEVICE, device);
