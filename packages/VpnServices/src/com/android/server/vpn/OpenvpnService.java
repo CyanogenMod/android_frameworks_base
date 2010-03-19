@@ -54,42 +54,61 @@ class OpenvpnService extends VpnService<OpenvpnProfile> {
     protected void connect(String serverIp, String username, String password)
             throws IOException {
         OpenvpnProfile p = getProfile();
-	ArrayList<String> args = new ArrayList<String>();
+        ArrayList<String> args = new ArrayList<String>();
 
-	mUsername = username;
-	mPassword = password;
+        mUsername = username;
+        mPassword = password;
 
-	args.add(OPENVPN_DAEMON);
-	args.add("--dev"); args.add("tun");
-	args.add("--remote"); args.add(serverIp);
-	args.add("--nobind");
-	args.add("--proto"); args.add(p.getProto());
-	args.add("--client");
-	args.add("--rport"); args.add(p.getPort());
-	if (p.getCAName() != null) {
-		args.add("--ca"); args.add(USE_INLINE); args.add(USE_KEYSTORE + Credentials.CA_CERTIFICATE + p.getCAName());
-	}
-	if (p.getCertName() != null) {
-		args.add("--cert"); args.add(USE_INLINE); args.add(USE_KEYSTORE + Credentials.USER_CERTIFICATE + p.getCertName());
-		args.add("--key"); args.add(USE_INLINE); args.add(USE_KEYSTORE + Credentials.USER_PRIVATE_KEY + p.getCertName());
-	}
-	args.add("--persist-tun");
-	args.add("--persist-key");
-	args.add("--management"); args.add("/dev/socket/" + socketName); args.add("unix");
-	args.add("--management-hold");
-	if (p.getUseCompLzo()) {
-	    args.add("--comp-lzo");
-	}
-	if (p.getUserAuth()) {
-	    args.add("--auth-user-pass");
-	    args.add("--management-query-passwords");
-	}
-	if (p.getSupplyAddr()) {
-	    args.add("--ifconfig"); args.add(p.getLocalAddr()); args.add(p.getRemoteAddr());
-	}
+        args.add(OPENVPN_DAEMON);
+        args.add("--dev");
+        args.add("tun");
+        args.add("--remote");
+        args.add(serverIp);
+        args.add("--nobind");
+        args.add("--proto");
+        args.add(p.getProto());
+        args.add("--client");
+        args.add("--rport");
+        args.add(p.getPort());
+        if (p.getCAName() != null) {
+            args.add("--ca");
+            args.add(USE_INLINE);
+            args.add(USE_KEYSTORE + Credentials.CA_CERTIFICATE + p.getCAName());
+        }
+        if (p.getCertName() != null) {
+            args.add("--cert");
+            args.add(USE_INLINE);
+            args.add(USE_KEYSTORE + Credentials.USER_CERTIFICATE + p.getCertName());
+            args.add("--key");
+            args.add(USE_INLINE);
+            args.add(USE_KEYSTORE + Credentials.USER_PRIVATE_KEY + p.getCertName());
+        }
+        args.add("--persist-tun");
+        args.add("--persist-key");
+        args.add("--management");
+        args.add("/dev/socket/" + socketName);
+        args.add("unix");
+        args.add("--management-hold");
+        if (p.getUseCompLzo()) {
+            args.add("--comp-lzo");
+        }
+        if (p.getRedirectGateway()) {
+            args.add("--redirect-gateway def1");
+        }
+        if (p.getUserAuth()) {
+            args.add("--auth-user-pass");
+            args.add("--management-query-passwords");
+        }
+        if (p.getSupplyAddr()) {
+            args.add("--ifconfig");
+            args.add(p.getLocalAddr());
+            args.add(p.getRemoteAddr());
+        }
+        args.add("--up");
+        args.add("/system/xbin/openvpn-up.sh");
 
-	DaemonProxy mtpd = new VpnDaemons().startDaemon(MTPD);
-	mtpd.sendCommand(args.toArray(new String[args.size()]));
+        DaemonProxy mtpd = getDaemons().startDaemon(MTPD);
+        mtpd.sendCommand(args.toArray(new String[args.size()]));
     }
 
     @Override
