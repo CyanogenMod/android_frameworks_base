@@ -3799,6 +3799,11 @@ class PackageManagerService extends IPackageManager.Stub {
         if (!SystemProperties.getBoolean("cm.a2sd.active", false)) {
             a2sd = false;
         }
+
+        /* Force A2SD if cm.a2sd.force is true */
+        if (SystemProperties.getBoolean("cm.ap2sd.force", false)) {
+            a2sd = true;
+        }
     	
     	if (a2sd) { 		
     	    installPackageExt(packageURI, observer, flags, installerPackageName, true);
