@@ -1044,7 +1044,7 @@ class NotificationManagerService extends INotificationManager.Stub
         // we only flash if screen is off and persistent pulsing is enabled
         if (mLedNotification == null || (mScreenOn && !mNotificationScreenOn) || !mNotificationPulseEnabled) {
             if (mPulseBreathingLight) {
-                mHardware.pulseBreathingLight(mBreathingLightColor);
+                mHardware.pulseBreathingLightColor(mBreathingLightColor);
             } else {
                 mHardware.setLightOff_UNCHECKED(HardwareService.LIGHT_ID_NOTIFICATIONS);
             }
