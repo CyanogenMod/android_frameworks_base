@@ -1041,6 +1041,13 @@ class NotificationManagerService extends INotificationManager.Stub
             }
         }
 
+        // Blend all the colors together
+        int ledARGB = 0;
+        if (mLedNotification != null) ledARGB = mLedNotification.notification.ledARGB;
+        for (int n=0; n < mLights.size(); n++) {
+            ledARGB |= mLights.get(n).notification.ledARGB;
+        }
+	
         // we only flash if screen is off and persistent pulsing is enabled
         if (mLedNotification == null || (mScreenOn && !mNotificationScreenOn) || !mNotificationPulseEnabled) {
             if (mPulseBreathingLight) {
@@ -1051,7 +1058,7 @@ class NotificationManagerService extends INotificationManager.Stub
         } else {
             mHardware.setLightFlashing_UNCHECKED(
                     HardwareService.LIGHT_ID_NOTIFICATIONS,
-                    mLedNotification.notification.ledARGB,
+                    ledARGB,
                     HardwareService.LIGHT_FLASH_TIMED,
                     mLedNotification.notification.ledOnMS,
                     mLedNotification.notification.ledOffMS);
