@@ -305,10 +305,10 @@ public class HardwareService extends IHardwareService.Stub {
 
     // Overload this function to prevent possibly breaking anything.
     public void pulseBreathingLight() {
-        pulseBreathingLight(0x00ffffff);
+        pulseBreathingLightColor(0x00ffffff);
     }
 
-    public void pulseBreathingLight(int color) {
+    public void pulseBreathingLightColor(int color) {
         synchronized (this) {
             // HACK: Added at the last minute of cupcake -- design this better;
             // Don't reuse the attention light -- make another one.
