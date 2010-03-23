@@ -587,6 +587,8 @@ status_t CameraService::Client::startRecordingMode()
         return NO_ERROR;
     }
 
+    mHardware->enableMsgType(CAMERA_MSG_VIDEO_FRAME);
+
     // start recording mode
     ret = mHardware->startRecording();
     if (ret != NO_ERROR) {
@@ -771,9 +773,6 @@ status_t CameraService::Client::startRecording()
             mMediaPlayerBeep->start();
         }
     }
-
-    mHardware->enableMsgType(CAMERA_MSG_VIDEO_FRAME);
-
     return startCameraMode(CAMERA_RECORDING_MODE);
 }
 
