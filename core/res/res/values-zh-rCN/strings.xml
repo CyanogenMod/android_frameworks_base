@@ -124,7 +124,9 @@
     <string name="screen_lock" msgid="799094655496098153">"屏幕锁定"</string>
     <string name="power_off" msgid="4266614107412865048">"关机"</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"正在关机..."</string>
-    <string name="shutdown_confirm" msgid="649792175242821353">"您的手机会关机。"</string>
+    <string name="shutdown_confirm" msgid="649792175242821353">"您的手机将会关机。"</string>
+    <string name="reboot_system">"重启"</string>
+    <string name="reboot_confirm">"您的手机将被重启。"</string> 
     <string name="no_recent_tasks" msgid="279702952298056674">"没有最近的应用程序。"</string>
     <string name="global_actions" msgid="2406416831541615258">"手机选项"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"屏幕锁定"</string>

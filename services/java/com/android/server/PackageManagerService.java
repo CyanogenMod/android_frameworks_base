@@ -190,7 +190,8 @@ class PackageManagerService extends IPackageManager.Stub {
     final File mAppInstallDir;
     final File mSdExtInstallDir;
     final File mDalvikCacheDir;
-
+    final File mSdExtDalvikCacheDir;
+    
     // Whether or not we are installing on the EXT partition.
     boolean mExtInstall;
 
@@ -471,6 +472,7 @@ class PackageManagerService extends IPackageManager.Stub {
             
             mFrameworkDir = new File(Environment.getRootDirectory(), "framework");
             mDalvikCacheDir = new File(dataDir, "dalvik-cache");
+            mSdExtDalvikCacheDir = new File(sdExtDir, "dalvik-cache");
             
             if (mInstaller != null) {
                 boolean didDexOpt = false;
@@ -569,6 +571,19 @@ class PackageManagerService extends IPackageManager.Stub {
                                     || fn.startsWith("data@app-private@")) {
                                 Log.i(TAG, "Pruning dalvik file: " + fn);
                                 (new File(mDalvikCacheDir, fn)).delete();
+                            }
+                        }
+                    }
+                    if (isA2SDActive()) {
+                        files = mSdExtDalvikCacheDir.list();
+                        if (files != null) {
+                            for (int i=0; i<files.length; i++) {
+                                String fn = files[i];
+                                if (fn.startsWith("sd-ext@app@")
+                                        || fn.startsWith("sd-ext@app-private@")) {
+                                    Log.i(TAG, "Pruning dalvik file: " + fn);
+                                    (new File(mSdExtDalvikCacheDir, fn)).delete();
+                                }
                             }
                         }
                     }
@@ -2512,6 +2527,19 @@ class PackageManagerService extends IPackageManager.Stub {
                         mLastScanError = PackageManager.INSTALL_FAILED_INSUFFICIENT_STORAGE;
                         return null;
                     }
+                    if (pkg.mForwardLocked) {
+                        // We found a package that should be forward locked, but no
+                        // data dir. This happens after a data wipe when apps are on
+                        // external storage.  Fix it.
+                        Log.i(TAG, "Fixing forward-locked package permissions: " + pkgName 
+                                + " uid: " + pkg.applicationInfo.uid);
+                        ret = mInstaller.setForwardLockPerm(pkgName, pkg.applicationInfo.uid,
+                                scanFile.getAbsolutePath().startsWith(Environment.getSdExtDirectory().getAbsolutePath()));
+                        if (ret < 0) {
+                            mLastScanError = PackageManager.INSTALL_FAILED_INSUFFICIENT_STORAGE;
+                            return null;
+                        }
+                    }
                 } else {
                     dataPath.mkdirs();
                     if (dataPath.exists()) {
@@ -3784,6 +3812,11 @@ class PackageManagerService extends IPackageManager.Stub {
         private final boolean mIsRom;
     }
 
+    private boolean isA2SDActive() {
+        return SystemProperties.getBoolean("cm.a2sd.active", false) ||
+               SystemProperties.getBoolean("cm.a2sd.force", false)  ;        
+    }
+    
     /* Called when a downloaded package installation has been confirmed by the user */
     public void installPackage(
             final Uri packageURI, final IPackageInstallObserver observer, final int flags) {
@@ -3792,26 +3825,10 @@ class PackageManagerService extends IPackageManager.Stub {
     
     /* Called when a downloaded package installation is completed (usually by the Market) */
     public void installPackage(final Uri packageURI, final IPackageInstallObserver observer, final int flags, final String installerPackageName) {
-    	Boolean a2sd = Settings.Secure.getInt(
-            mContext.getContentResolver(),Settings.Secure.APPS2SD, 0) > 0;
-
-        /* Do not allow a2sd if cm.a2sd.active is false */
-        if (!SystemProperties.getBoolean("cm.a2sd.active", false)) {
-            a2sd = false;
-        }
-
-        /* Force A2SD if cm.a2sd.force is true */
-        if (SystemProperties.getBoolean("cm.ap2sd.force", false)) {
-            a2sd = true;
-        }
+    	boolean a2sd = Settings.Secure.getInt(
+            mContext.getContentResolver(),Settings.Secure.APPS2SD, 0) > 0 && isA2SDActive();
     	
-    	if (a2sd) { 		
-    	    installPackageExt(packageURI, observer, flags, installerPackageName, true);
-    	} else {
-    	    installPackageExt(packageURI, observer, flags, installerPackageName, false);
-    	}
-
-    	return;
+    	installPackageExt(packageURI, observer, flags, installerPackageName, a2sd);
     }
 
     public void installPackageExt(final Uri packageURI, final IPackageInstallObserver observer, final int flags, final String installerPackageName, boolean extInstall) {

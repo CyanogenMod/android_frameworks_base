@@ -303,7 +303,12 @@ public class HardwareService extends IHardwareService.Stub {
         }
     }
 
+    // Overload this function to prevent possibly breaking anything.
     public void pulseBreathingLight() {
+        pulseBreathingLightColor(0x00ffffff);
+    }
+
+    public void pulseBreathingLightColor(int color) {
         synchronized (this) {
             // HACK: Added at the last minute of cupcake -- design this better;
             // Don't reuse the attention light -- make another one.
@@ -313,7 +318,8 @@ public class HardwareService extends IHardwareService.Stub {
             }
             if (!mAttentionLightOn && !mPulsing) {
                 mPulsing = true;
-                setLight_native(mNativePointer, LIGHT_ID_ATTENTION, 0x00ffffff,
+                // Use LIGHT_ID_NOTIFICATIONS to allow full color. LIGHT_ID_ATTENTION only allows white and blue
+                setLight_native(mNativePointer, LIGHT_ID_NOTIFICATIONS, color,
                         LIGHT_FLASH_HARDWARE, 7, 0, 0);
                 mH.sendMessageDelayed(Message.obtain(mH, 1), 2000);
             }
@@ -329,7 +335,8 @@ public class HardwareService extends IHardwareService.Stub {
                 }
                 if (mPulsing) {
                     mPulsing = false;
-                    setLight_native(mNativePointer, LIGHT_ID_ATTENTION,
+                    // Use LIGHT_ID_NOTIFICATIONS to allow full color. LIGHT_ID_ATTENTION only allows white and blue
+                    setLight_native(mNativePointer, LIGHT_ID_NOTIFICATIONS,
                             mAttentionLightOn ? 0xffffffff : 0,
                             LIGHT_FLASH_NONE, 0, 0, 0);
                 }
