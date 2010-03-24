@@ -4598,6 +4598,10 @@ public class WindowManagerService extends IWindowManager.Stub
                         //dump();
                         if (targetWin != null) {
                             at = targetWin.getAppToken();
+                            if (at == null) {
+                               removeWindowInnerLocked(targetWin.mSession, targetWin);
+                               return null;
+                            }
                         } else if (targetApp != null) {
                             at = targetApp.appToken;
                         }
