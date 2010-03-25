@@ -121,7 +121,7 @@ public class NumberPicker extends LinearLayout implements OnClickListener,
         mText = (EditText) findViewById(R.id.timepicker_input);
         mText.setOnFocusChangeListener(this);
         mText.setFilters(new InputFilter[] {inputFilter});
-        mText.setRawInputType(InputType.TYPE_CLASS_NUMBER);
+        mText.setRawInputType(InputType.TYPE_CLASS_PHONE);
 
         if (!isEnabled()) {
             setEnabled(false);
