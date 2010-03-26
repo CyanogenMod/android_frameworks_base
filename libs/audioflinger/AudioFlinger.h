@@ -57,7 +57,7 @@ class AudioResampler;
 
 static const nsecs_t kStandbyTimeInNsecs = seconds(3);
 
-class AudioFlinger : public BnAudioFlinger, public IBinder::DeathRecipient
+class AudioFlinger : public BnAudioFlinger
 {
 public:
     static void instantiate();
@@ -136,9 +136,6 @@ public:
 
     virtual status_t setVoiceVolume(float volume);
 
-    // IBinder::DeathRecipient
-    virtual     void        binderDied(const wp<IBinder>& who);
-
     enum hardware_call_state {
         AUDIO_HW_IDLE = 0,
         AUDIO_HW_INIT,
@@ -200,6 +197,23 @@ private:
         sp<AudioFlinger>    mAudioFlinger;
         sp<MemoryDealer>    mMemoryDealer;
         pid_t               mPid;
+    };
+
+    // --- Grave ---
+    // Enabling Track stopping/cleanup of active tracks belonging to killed processes.
+    // Not using Client above, since mClients contains WeakPointers, while mGraveyard needs
+    // StrongPointers, otherwise the IBinder::binderDied callback is never called.
+    // Alternatively, Client above could have been made to implement DeathRecipient,
+    // while changing mClients to be sp<> instead of wp<>. However, I dont feel qualified
+    // enough to make this change (not sure about how/when clients in that list are
+    // removed/destroyed).
+    class Grave : public IBinder::DeathRecipient {
+    public:
+                            Grave(const sp<AudioFlinger>& audioFlinger, pid_t pid);
+            virtual void    binderDied(const wp<IBinder>& who); // IBinder::DeathRecipient
+    private:
+            sp<AudioFlinger>    mAudioFlinger;
+            pid_t               mPid;
     };
 
 
@@ -778,6 +792,7 @@ private:
     mutable     Mutex                               mLock;
 
                 DefaultKeyedVector< pid_t, wp<Client> >     mClients;
+                SortedVector< sp<Grave> >           mGraveyard;
 
                 mutable     Mutex                   mHardwareLock;
                 AudioHardwareInterface*             mAudioHardware;

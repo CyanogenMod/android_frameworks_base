@@ -641,8 +641,10 @@ void AudioFlinger::registerClient(const sp<IAudioFlingerClient>& client)
 
     sp<IBinder> binder = client->asBinder();
     if (mNotificationClients.indexOf(binder) < 0) {
-        LOGV("Adding notification client %p", binder.get());
-        binder->linkToDeath(this);
+        LOGV("Adding notification client %p, and registering a new Grave DeathReceiver", binder.get());
+        sp<Grave> aGrave = new Grave(this, IPCThreadState::self()->getCallingPid());
+        binder->linkToDeath(aGrave);
+        mGraveyard.add(aGrave);
         mNotificationClients.add(binder);
     }
 
@@ -654,22 +656,6 @@ void AudioFlinger::registerClient(const sp<IAudioFlingerClient>& client)
 
     for (size_t i = 0; i < mRecordThreads.size(); i++) {
         mRecordThreads.valueAt(i)->sendConfigEvent(AudioSystem::INPUT_OPENED);
-    }
-}
-
-void AudioFlinger::binderDied(const wp<IBinder>& who) {
-
-    LOGV("binderDied() %p, tid %d, calling tid %d", who.unsafe_get(), gettid(), IPCThreadState::self()->getCallingPid());
-    Mutex::Autolock _l(mLock);
-
-    IBinder *binder = who.unsafe_get();
-
-    if (binder != NULL) {
-        int index = mNotificationClients.indexOf(binder);
-        if (index >= 0) {
-            LOGV("Removing notification client %p", binder);
-            mNotificationClients.removeAt(index);
-        }
     }
 }
 
@@ -2915,6 +2901,62 @@ AudioFlinger::Client::~Client()
 const sp<MemoryDealer>& AudioFlinger::Client::heap() const
 {
     return mMemoryDealer;
+}
+
+// ----------------------------------------------------------------------------
+
+AudioFlinger::Grave::Grave(const sp<AudioFlinger>& audioFlinger, pid_t pid)
+    :   mAudioFlinger(audioFlinger),
+        mPid(pid)
+{
+}
+
+void AudioFlinger::Grave::binderDied(const wp<IBinder>& who)
+{
+    LOGV("binderDied() %p, tid %d, calling tid %d", who.unsafe_get(), gettid(), IPCThreadState::self()->getCallingPid());
+    Mutex::Autolock _l(mAudioFlinger->mLock);
+
+    // holding a list of tracks to destory (avoiding modification of AF::MT::mTracks while iterating it)
+    SortedVector< wp<MixerThread::Track> > tracksToRemove;
+
+    for (size_t i = 0; i < mAudioFlinger->mPlaybackThreads.size(); i++) {
+        PlaybackThread *thread = mAudioFlinger->mPlaybackThreads.valueAt(i).get();
+
+        for (size_t i=0; i<thread->mActiveTracks.size(); i++) {
+            wp<MixerThread::Track> wtrack = thread->mActiveTracks[i];
+            sp<MixerThread::Track> strack = wtrack.unsafe_get();
+            if (strack != NULL && strack->mClient->pid() == mPid) {
+                tracksToRemove.add(wtrack);
+            }
+        }
+
+        // remove all the tracks that need to be...
+        size_t count = tracksToRemove.size();
+        if (UNLIKELY(count)) {
+            for (size_t i=0 ; i<count ; i++) {
+                const sp<MixerThread::Track>& track = tracksToRemove[i].promote();
+                thread->mActiveTracks.remove(track);
+                if (track->isTerminated()) {
+                    thread->mTracks.remove(track);
+                    thread->deleteTrackName_l(track->mName);
+                }
+            }
+        }
+
+        tracksToRemove.clear();
+    }
+
+    IBinder *binder = who.unsafe_get();
+
+    if (binder != NULL) {
+        int index = mAudioFlinger->mNotificationClients.indexOf(binder);
+        if (index >= 0) {
+            LOGV("Removing notification client %p", binder);
+            mAudioFlinger->mNotificationClients.removeAt(index);
+        }
+    }
+
+    mAudioFlinger->mGraveyard.remove(this);
 }
 
 // ----------------------------------------------------------------------------
