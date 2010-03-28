@@ -1037,7 +1037,9 @@ class NotificationManagerService extends INotificationManager.Stub
     // to accidentally lose.
     private void updateAdbNotification() {
         if (mAdbEnabled && mUsbConnected) {
-            if ("0".equals(SystemProperties.get("persist.adb.notify"))) {
+            if ("0".equals(SystemProperties.get("persist.adb.notify")) ||
+                   Settings.Secure.getInt(mContext.getContentResolver(),
+                           Settings.Secure.ADB_NOTIFY, 1) == 0) {
                 return;
             }
             if (!mAdbNotificationShown) {
