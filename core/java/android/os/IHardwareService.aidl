@@ -31,5 +31,8 @@ interface IHardwareService
 
     // for the phone
     void setAttentionLight(boolean on, int color);
+
+    // for LED color previews
+    void pulseBreathingLightColor(int color);
 }
 
