@@ -2004,8 +2004,14 @@ public final class Settings {
         public static final String ADB_ENABLED = "adb_enabled";
 
         /**
+         * Whether to show ADB notifications.
+         * @hide
+         */
+        public static final String ADB_NOTIFY = "adb_notify";
+            
+        /**
          * Weather Compcache is eanbled.
-	 * @hide
+         * @hide
          */
         public static final String COMPCACHE_ENABLED = "compcache_enabled";
         
