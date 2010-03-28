@@ -100,7 +100,7 @@ class StatusBarIcon {
                     new FrameLayout.LayoutParams(
                         FrameLayout.LayoutParams.WRAP_CONTENT,
                         FrameLayout.LayoutParams.WRAP_CONTENT,
-                        Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL));
+                        Gravity.RIGHT | Gravity.CENTER_VERTICAL));
                 mNumberView.setBackgroundDrawable(null);
                 mNumberView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
                 mNumberView.setTextSize(12);
