@@ -256,6 +256,38 @@ public abstract class Animation implements Cloneable {
     }
 
     /**
+     * Cancel the animation. Cancelling an animation invokes the animation
+     * listener, if set, to notify the end of the animation.
+     * 
+     * If you cancel an animation manually, you must call {@link #reset()}
+     * before starting the animation again.
+     * 
+     * @see #reset() 
+     * @see #start() 
+     * @see #startNow() 
+     * @hide
+     */
+    public void cancel() {
+        if (mStarted && !mEnded) {
+            if (mListener != null) mListener.onAnimationEnd(this);
+            mEnded = true;
+        }
+        // Make sure we move the animation to the end
+        mStartTime = Long.MIN_VALUE;
+        mMore = mOneMoreTime = false;
+    }
+
+    /**
+     * @hide
+     */
+    public void detach() {
+        if (mStarted && !mEnded) {
+            mEnded = true;
+            if (mListener != null) mListener.onAnimationEnd(this);
+        }
+    }
+
+    /**
      * Whether or not the animation has been initialized.
      *
      * @return Has this animation been initialized.
@@ -745,10 +777,10 @@ public abstract class Animation implements Cloneable {
         if (expired) {
             if (mRepeatCount == mRepeated) {
                 if (!mEnded) {
+                    mEnded = true;
                     if (mListener != null) {
                         mListener.onAnimationEnd(this);
                     }
-                    mEnded = true;
                 }
             } else {
                 if (mRepeatCount > 0) {

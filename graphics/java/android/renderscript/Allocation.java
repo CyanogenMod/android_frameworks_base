@@ -39,15 +39,17 @@ public class Allocation extends BaseObj {
         mType = t;
     }
 
+    public Type getType() {
+        return mType;
+    }
+
     public void uploadToTexture(int baseMipLevel) {
         mRS.validate();
-        mRS.validateSurface();
         mRS.nAllocationUploadToTexture(mID, baseMipLevel);
     }
 
     public void uploadToBufferObject() {
         mRS.validate();
-        mRS.validateSurface();
         mRS.nAllocationUploadToBufferObject(mID);
     }
 
@@ -171,9 +173,10 @@ public class Allocation extends BaseObj {
     public Adapter1D createAdapter1D() {
         mRS.validate();
         int id = mRS.nAdapter1DCreate();
-        if (id != 0) {
-            mRS.nAdapter1DBindAllocation(id, mID);
+        if(id == 0) {
+            throw new IllegalStateException("allocation failed.");
         }
+        mRS.nAdapter1DBindAllocation(id, mID);
         return new Adapter1D(id, mRS);
     }
 
@@ -213,9 +216,10 @@ public class Allocation extends BaseObj {
     public Adapter2D createAdapter2D() {
         mRS.validate();
         int id = mRS.nAdapter2DCreate();
-        if (id != 0) {
-            mRS.nAdapter2DBindAllocation(id, mID);
+        if(id == 0) {
+            throw new IllegalStateException("allocation failed.");
         }
+        mRS.nAdapter2DBindAllocation(id, mID);
         return new Adapter2D(id, mRS);
     }
 
@@ -253,87 +257,28 @@ public class Allocation extends BaseObj {
         return new Allocation(id, rs, t);
     }
 
-    static public void createAndUploadFromBitmap(RenderScript rs, Bitmap b, Element dstFmt, boolean genMips, String name,int basemipLevel)
-        throws IllegalArgumentException {
-        rs.validate();
-	int id = rs.nAllocationCreateAndUploadFromBitmap(dstFmt.mID, genMips, b,basemipLevel);
-	try{
-	byte bytes[] = name.getBytes("UTF-8");
-	rs.nAssignName(id,bytes);
-	}catch(java.io.UnsupportedEncodingException e){
-	throw new RuntimeException(e);
-	}
-        return;
-    }
-
     static public Allocation createFromBitmap(RenderScript rs, Bitmap b, Element dstFmt, boolean genMips)
         throws IllegalArgumentException {
 
         rs.validate();
         int id = rs.nAllocationCreateFromBitmap(dstFmt.mID, genMips, b);
+        if(id == 0) {
+            throw new IllegalStateException("Load failed.");
+        }
         return new Allocation(id, rs, null);
     }
 
-    static public Allocation createFromBitmap(RenderScript rs, Bitmap b, Element dstFmt, boolean genMips, int index)
-        throws IllegalArgumentException {
-
-        rs.validate();
-        int id = rs.nAllocationCreateFromBitmap1(index, dstFmt.mID, genMips, b);
-        return new Allocation(id, rs, null);
-    }
-
-    static public void addToAllocation(RenderScript rs, int index)
-        throws IllegalArgumentException {
-	rs.nAllocationAddToAllocationList(index);
-    }
-
-    static public void removeFromAllocation(RenderScript rs, int index)
-        throws IllegalArgumentException {
-	rs.nAllocationRemoveFromAllocationList(index);
-    }
-
-    static public void createAllocationList(RenderScript rs, int count)
-        throws IllegalArgumentException {
-	rs.nAllocationCreateAllocationList(count);
-    }
-
-    static public Allocation createFromBitmapBoxed(RenderScript rs, Bitmap b, Element dstFmt, boolean genMips)
+    static Allocation createFromBitmapBoxed(RenderScript rs, Bitmap b, Element dstFmt, boolean genMips)
         throws IllegalArgumentException {
 
         rs.validate();
         int id = rs.nAllocationCreateFromBitmapBoxed(dstFmt.mID, genMips, b);
+        if(id == 0) {
+            throw new IllegalStateException("Load failed.");
+        }
         return new Allocation(id, rs, null);
     }
-    static public void createAndUploadFromBitmapResource(RenderScript rs, Resources res, int id, Element dstFmt, boolean genMips ,String name ,int basemipLevel)
-	throws IllegalArgumentException {
-	rs.validate();
-	InputStream is = null;
-	try {
-		final TypedValue value = new TypedValue();
-		is = res.openRawResource(id, value);
-		int asset = ((AssetManager.AssetInputStream) is).getAssetInt();
-		int allocationId = rs.nAllocationCreateAndUploadFromAssetStream(dstFmt.mID, genMips,
-				asset,basemipLevel);
-		try{
-		byte bytes[] = name.getBytes("UTF-8");
-		rs.nAssignName(allocationId,bytes);
-		}catch(java.io.UnsupportedEncodingException e){
-		throw new RuntimeException(e);
-		}
-		return;
-	} catch (Exception e) {
-		// Ignore
-		} finally {
-		if (is != null) {
-		try {
-			is.close();
-			} catch (IOException e) {
-			// Ignore
-			}
-		}
-	}
-	return;
-	}
+
     static public Allocation createFromBitmapResource(RenderScript rs, Resources res, int id, Element dstFmt, boolean genMips)
         throws IllegalArgumentException {
 
@@ -347,6 +292,9 @@ public class Allocation extends BaseObj {
             int allocationId = rs.nAllocationCreateFromAssetStream(dstFmt.mID, genMips,
                     asset);
 
+            if(allocationId == 0) {
+                throw new IllegalStateException("Load failed.");
+            }
             return new Allocation(allocationId, rs, null);
         } catch (Exception e) {
             // Ignore
