@@ -434,54 +434,6 @@ static ElementConverter_t pickConverter(const Element *dst, const Element *src)
     return 0;
 }
 
-RsAllocation rsi_AllocationCreateAndUploadFromBitmap(Context *rsc, uint32_t w, uint32_t h, RsElement _dst, RsElement _src,  bool genMips, const void *data, uint32_t basemipLevel)
-{
-    const Element *src = static_cast<const Element *>(_src);
-    const Element *dst = static_cast<const Element *>(_dst);
-    rsAssert(!(w & (w-1)));
-    rsAssert(!(h & (h-1)));
-
-    //LOGE("rsi_AllocationCreateFromBitmap %i %i %i %i %i", w, h, dstFmt, srcFmt, genMips);
-    rsi_TypeBegin(rsc, _dst);
-    rsi_TypeAdd(rsc, RS_DIMENSION_X, w);
-    rsi_TypeAdd(rsc, RS_DIMENSION_Y, h);
-    if (genMips) {
-        rsi_TypeAdd(rsc, RS_DIMENSION_LOD, 1);
-    }
-    RsType type = rsi_TypeCreate(rsc);
-    RsAllocation vTexAlloc = rsi_AllocationCreateTyped(rsc, type);
-    Allocation *texAlloc = static_cast<Allocation *>(vTexAlloc);
-    if (texAlloc == NULL) {
-        LOGE("Memory allocation failure");
-        return NULL;
-    }
-
-	void** temp_buffer = texAlloc->getPtrAddr();
-	if(*temp_buffer != NULL){
-		free(*temp_buffer);
-		*temp_buffer = NULL;
-		}
-	*temp_buffer = const_cast<void*>(data);
-
-    //ElementConverter_t cvt = pickConverter(dst, src);
-    //cvt(texAlloc->getPtr(), data, w * h);
-
-    if (genMips) {
-        Adapter2D adapt(rsc, texAlloc);
-        Adapter2D adapt2(rsc, texAlloc);
-        for(uint32_t lod=0; lod < (texAlloc->getType()->getLODCount() -1); lod++) {
-            adapt.setLOD(lod);
-            adapt2.setLOD(lod + 1);
-            mip(adapt2, adapt);
-        }
-    }
-
-	texAlloc->uploadToTexture(rsc,basemipLevel);
-	*temp_buffer = NULL;
-
-
-    return texAlloc;
-}
 
 RsAllocation rsi_AllocationCreateFromBitmap(Context *rsc, uint32_t w, uint32_t h, RsElement _dst, RsElement _src,  bool genMips, const void *data)
 {

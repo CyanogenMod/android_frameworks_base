@@ -99,16 +99,6 @@ AllocationCreateSized {
 	ret RsAllocation
 	}
 
-AllocationCreateAndUploadFromBitmap {
-	param uint32_t width
-	param uint32_t height
-	param RsElement dstFmt
-	param RsElement srcFmt
-	param bool genMips
-	param const void * data
-	param uint32_t basemipLevel
-	ret RsAllocation
-	}
 AllocationCreateFromBitmap {
 	param uint32_t width
 	param uint32_t height
