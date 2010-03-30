@@ -101,10 +101,6 @@ public class RenderScript {
 
     native int  nAllocationCreateTyped(int type);
     native int  nAllocationCreateFromBitmap(int dstFmt, boolean genMips, Bitmap bmp);
-    native int  nAllocationCreateFromBitmap1(int index, int dstFmt, boolean genMips, Bitmap bmp);
-    native int  nAllocationAddToAllocationList(int index);
-    native int  nAllocationRemoveFromAllocationList(int index);
-    native int  nAllocationCreateAllocationList(int count);
     native int  nAllocationCreateFromBitmapBoxed(int dstFmt, boolean genMips, Bitmap bmp);
     native int  nAllocationCreateFromAssetStream(int dstFmt, boolean genMips, int assetStream);
 

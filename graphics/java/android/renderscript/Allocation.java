@@ -261,29 +261,6 @@ public class Allocation extends BaseObj {
         return new Allocation(id, rs, null);
     }
 
-    static public Allocation createFromBitmap(RenderScript rs, Bitmap b, Element dstFmt, boolean genMips, int index)
-        throws IllegalArgumentException {
-
-        rs.validate();
-        int id = rs.nAllocationCreateFromBitmap1(index, dstFmt.mID, genMips, b);
-        return new Allocation(id, rs, null);
-    }
-
-    static public void addToAllocation(RenderScript rs, int index)
-        throws IllegalArgumentException {
-	rs.nAllocationAddToAllocationList(index);
-    }
-
-    static public void removeFromAllocation(RenderScript rs, int index)
-        throws IllegalArgumentException {
-	rs.nAllocationRemoveFromAllocationList(index);
-    }
-
-    static public void createAllocationList(RenderScript rs, int count)
-        throws IllegalArgumentException {
-	rs.nAllocationCreateAllocationList(count);
-    }
-
     static public Allocation createFromBitmapBoxed(RenderScript rs, Bitmap b, Element dstFmt, boolean genMips)
         throws IllegalArgumentException {
 
