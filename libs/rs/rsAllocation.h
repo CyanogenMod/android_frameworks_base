@@ -23,7 +23,7 @@
 namespace android {
 namespace renderscript {
 
-
+class Program;
 
 class Allocation : public ObjectBase
 {
@@ -34,7 +34,6 @@ public:
     // By policy this allocation will hold a pointer to the type
     // but will not destroy it on destruction.
     Allocation(Context *rsc, const Type *);
-    Allocation(Context *rsc, const Type *, int index);
     virtual ~Allocation();
 
     void setCpuWritable(bool);
@@ -45,13 +44,14 @@ public:
     bool fixAllocation();
 
     void * getPtr() const {return mPtr;}
-    void ** getPtrAddr() {return &mPtr;}
     const Type * getType() const {return mType.get();}
 
-    void uploadToTexture(Context *rsc, uint32_t lodOffset = 0);
+    void deferedUploadToTexture(const Context *rsc, uint32_t lodOffset);
+    void uploadToTexture(const Context *rsc);
     uint32_t getTextureID() const {return mTextureID;}
 
-    void uploadToBufferObject();
+    void deferedUploadToBufferObject(const Context *rsc);
+    void uploadToBufferObject(const Context *rsc);
     uint32_t getBufferObjectID() const {return mBufferID;}
 
 
@@ -67,19 +67,26 @@ public:
     void enableGLVertexBuffers() const;
     void setupGLIndexBuffers() const;
 
+    void addProgramToDirty(const Program *);
+    void removeProgramToDirty(const Program *);
+
     virtual void dumpLOGV(const char *prefix) const;
 
+    virtual void uploadCheck(const Context *rsc);
 
 protected:
+    void sendDirty() const;
+
     ObjectBaseRef<const Type> mType;
     void * mPtr;
+
+    Vector<const Program *> mToDirtyList;
 
     // Usage restrictions
     bool mCpuWrite;
     bool mCpuRead;
     bool mGpuWrite;
     bool mGpuRead;
-    bool mUseEarlierAllocation;
 
     // more usage hint data from the application
     // which can be used by a driver to pick the best memory type.
@@ -91,6 +98,7 @@ protected:
     // Is this a legal structure to be used as a texture source.
     // Initially this will require 1D or 2D and color data
     bool mIsTexture;
+    uint32_t mTextureLOD;
     uint32_t mTextureID;
 
     // Is this a legal structure to be used as a vertex source.
@@ -98,6 +106,8 @@ protected:
     // is allowed.
     bool mIsVertexBuffer;
     uint32_t mBufferID;
+
+    bool mUploadDefered;
 };
 
 }
