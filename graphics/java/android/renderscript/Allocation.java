@@ -268,11 +268,22 @@ public class Allocation extends BaseObj {
         return new Allocation(id, rs, null);
     }
 
-    static Allocation createFromBitmapBoxed(RenderScript rs, Bitmap b, Element dstFmt, boolean genMips)
+    static public Allocation createFromBitmapBoxed(RenderScript rs, Bitmap b, Element dstFmt, boolean genMips)
         throws IllegalArgumentException {
 
         rs.validate();
         int id = rs.nAllocationCreateFromBitmapBoxed(dstFmt.mID, genMips, b);
+        if(id == 0) {
+            throw new IllegalStateException("Load failed.");
+        }
+        return new Allocation(id, rs, null);
+    }
+
+    static public Allocation createFromBitmapStretched(RenderScript rs, Bitmap b, Element dstFmt, boolean genMips)
+        throws IllegalArgumentException {
+
+        rs.validate();
+        int id = rs.nAllocationCreateFromBitmapStretched(dstFmt.mID, genMips, b);
         if(id == 0) {
             throw new IllegalStateException("Load failed.");
         }

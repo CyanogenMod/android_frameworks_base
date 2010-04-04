@@ -100,6 +100,7 @@ public class RenderScript {
     native int  nAllocationCreateTyped(int type);
     native int  nAllocationCreateFromBitmap(int dstFmt, boolean genMips, Bitmap bmp);
     native int  nAllocationCreateFromBitmapBoxed(int dstFmt, boolean genMips, Bitmap bmp);
+    native int  nAllocationCreateFromBitmapStretched(int dstFmt, boolean genMips, Bitmap bmp);
     native int  nAllocationCreateFromAssetStream(int dstFmt, boolean genMips, int assetStream);
 
     native void nAllocationUploadToTexture(int alloc, int baseMioLevel);
