@@ -122,6 +122,9 @@
     <string name="turn_on_radio" msgid="3912793092339962371">"Zapnout bezdrátové připojení"</string>
     <string name="turn_off_radio" msgid="8198784949987062346">"Vypnout bezdrátové připojení"</string>
     <string name="screen_lock" msgid="799094655496098153">"Zámek obrazovky"</string>
+    <string name="reboot_system">Restartovat</string>
+    <string name="reboot_confirm">Váš telefon bude restartován.</string>
+    <string name="reboot_progress">Restartování...</string>
     <string name="power_off" msgid="4266614107412865048">"Vypnout"</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Vypínání..."</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"Váš telefon bude vypnut."</string>
@@ -129,6 +132,7 @@
     <string name="global_actions" msgid="2406416831541615258">"Možnosti telefonu"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Zámek obrazovky"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Vypnout"</string>
+    <string name="global_action_reboot">Restartovat</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Tichý režim"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Zvuk je VYPNUTÝ."</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Zvuk je zapnutý"</string>
