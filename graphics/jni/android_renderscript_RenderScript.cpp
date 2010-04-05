@@ -1402,9 +1402,12 @@ static JNINativeMethod methods[] = {
 {"nTypeSetupFields",               "(Landroid/renderscript/Type;[I[I[Ljava/lang/reflect/Field;)V", (void*)nTypeSetupFields },
 
 {"nAllocationCreateTyped",         "(I)I",                                 (void*)nAllocationCreateTyped },
+#ifndef BOARD_GL_TEX_POW2_DIMENSION_REQUIRED
 {"nAllocationCreateFromBitmap",    "(IZLandroid/graphics/Bitmap;)I",       (void*)nAllocationCreateFromBitmap },
+#else
+{"nAllocationCreateFromBitmap",    "(IZLandroid/graphics/Bitmap;)I",       (void*)nAllocationCreateFromBitmapStretched },
+#endif
 {"nAllocationCreateFromBitmapBoxed","(IZLandroid/graphics/Bitmap;)I",      (void*)nAllocationCreateFromBitmapBoxed },
-{"nAllocationCreateFromBitmapStretched","(IZLandroid/graphics/Bitmap;)I",      (void*)nAllocationCreateFromBitmapStretched },
 {"nAllocationCreateFromAssetStream","(IZI)I",                              (void*)nAllocationCreateFromAssetStream },
 {"nAllocationUploadToTexture",     "(II)V",                                (void*)nAllocationUploadToTexture },
 {"nAllocationUploadToBufferObject","(I)V",                                 (void*)nAllocationUploadToBufferObject },

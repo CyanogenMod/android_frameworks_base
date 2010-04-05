@@ -33,6 +33,10 @@ LOCAL_C_INCLUDES += \
 
 LOCAL_CFLAGS +=
 
+ifdef BOARD_GL_TEX_POW2_DIMENSION_REQUIRED
+    LOCAL_CFLAGS += -DBOARD_GL_TEX_POW2_DIMENSION_REQUIRED
+endif
+
 LOCAL_LDLIBS := -lpthread
 LOCAL_ADDITIONAL_DEPENDENCIES := $(addprefix $(rs_generated_include_dir)/,rsgApiFuncDecl.h)
 LOCAL_MODULE:= librs_jni
