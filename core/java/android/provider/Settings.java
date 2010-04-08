@@ -1445,6 +1445,11 @@ public final class Settings {
         public static final String TRACKBALL_WAKE_SCREEN = "trackball_wake_screen";
 
         /**
+         * Whether to show the 4 columns or 5 columns on the launcher.
+         * @hide
+         */
+        public static final String LAUNCHER_COLUMN_NUMBER = "launcher_column_number";
+        /**
          * Whether to show the battery level percentage overlayed on the icon.
          * @hide
          */

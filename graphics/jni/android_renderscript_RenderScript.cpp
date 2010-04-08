@@ -26,6 +26,7 @@
 #include <ui/Surface.h>
 
 #include <core/SkBitmap.h>
+#include <core/SkCanvas.h>
 #include <core/SkPixelRef.h>
 #include <core/SkStream.h>
 #include <core/SkTemplates.h>
@@ -40,6 +41,7 @@
 
 #include <RenderScript.h>
 #include <RenderScriptEnv.h>
+#include <rsUtils.h>
 
 //#define LOG_API LOGE
 #define LOG_API(...)
@@ -521,6 +523,49 @@ nAllocationCreateFromAssetStream(JNIEnv *_env, jobject _this, jint dstFmt, jbool
 }
 
 static int
+nAllocationCreateFromBitmapStretched(JNIEnv *_env, jobject _this, jint dstFmt, jboolean genMips, jobject jbitmap)
+{
+    RsContext con = (RsContext)(_env->GetIntField(_this, gContextId));
+    SkBitmap const * nativeBitmap =
+            (SkBitmap const *)_env->GetIntField(jbitmap, gNativeBitmapID);
+    const SkBitmap& bitmap(*nativeBitmap);
+    SkBitmap::Config config = bitmap.getConfig();
+
+    RsElement e = SkBitmapToPredefined(config);
+
+    if (e) {
+        const int w = bitmap.width();
+        const int h = bitmap.height();
+        const int w2 = android::renderscript::rsHigherPow2(w);
+        const int h2 = android::renderscript::rsHigherPow2(h);
+
+        if ((w2 != w) || (h2 != h)) {
+            SkBitmap resized;
+            resized.setConfig(config, w2, h2);
+            resized.allocPixels();
+            SkCanvas canvas(resized);
+            canvas.drawColor(0, SkXfermode::kClear_Mode);
+            SkRect rect;
+            rect.set(0, 0, w2, h2);
+            canvas.drawBitmapRect(bitmap, NULL, rect);
+            resized.lockPixels();
+            const void* ptr = resized.getPixels();
+            jint id = (jint)rsAllocationCreateFromBitmap(con, w2, h2, (RsElement)dstFmt, e, genMips, ptr);
+            resized.unlockPixels();
+            return id;
+        }
+        else {
+            bitmap.lockPixels();
+            const void* ptr = bitmap.getPixels();
+            jint id = (jint)rsAllocationCreateFromBitmap(con, w, h, (RsElement)dstFmt, e, genMips, ptr);
+            bitmap.unlockPixels();
+            return id;
+        }
+    }
+    return 0;
+}
+
+static int
 nAllocationCreateFromBitmapBoxed(JNIEnv *_env, jobject _this, jint dstFmt, jboolean genMips, jobject jbitmap)
 {
     RsContext con = (RsContext)(_env->GetIntField(_this, gContextId));
@@ -542,7 +587,6 @@ nAllocationCreateFromBitmapBoxed(JNIEnv *_env, jobject _this, jint dstFmt, jbool
     }
     return 0;
 }
-
 
 static void
 nAllocationSubData1D_i(JNIEnv *_env, jobject _this, jint alloc, jint offset, jint count, jintArray data, int sizeBytes)
@@ -1358,7 +1402,11 @@ static JNINativeMethod methods[] = {
 {"nTypeSetupFields",               "(Landroid/renderscript/Type;[I[I[Ljava/lang/reflect/Field;)V", (void*)nTypeSetupFields },
 
 {"nAllocationCreateTyped",         "(I)I",                                 (void*)nAllocationCreateTyped },
+#ifndef BOARD_GL_TEX_POW2_DIMENSION_REQUIRED
 {"nAllocationCreateFromBitmap",    "(IZLandroid/graphics/Bitmap;)I",       (void*)nAllocationCreateFromBitmap },
+#else
+{"nAllocationCreateFromBitmap",    "(IZLandroid/graphics/Bitmap;)I",       (void*)nAllocationCreateFromBitmapStretched },
+#endif
 {"nAllocationCreateFromBitmapBoxed","(IZLandroid/graphics/Bitmap;)I",      (void*)nAllocationCreateFromBitmapBoxed },
 {"nAllocationCreateFromAssetStream","(IZI)I",                              (void*)nAllocationCreateFromAssetStream },
 {"nAllocationUploadToTexture",     "(II)V",                                (void*)nAllocationUploadToTexture },
