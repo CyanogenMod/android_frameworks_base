@@ -135,6 +135,8 @@ public:
     virtual status_t setStreamOutput(uint32_t stream, int output) = 0;
 
     virtual status_t setVoiceVolume(float volume) = 0;
+
+    virtual status_t deregisterClient(const sp<IAudioFlingerClient>& client) { return false; };
 };
 
 

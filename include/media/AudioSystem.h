@@ -307,6 +307,7 @@ public:
         INPUT_CLOSED,
         INPUT_CONFIG_CHANGED,
         STREAM_CONFIG_CHANGED,
+        A2DP_OUTPUT_STATE,
         NUM_CONFIG_EVENTS
     };
 
