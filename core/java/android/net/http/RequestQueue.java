@@ -21,31 +21,25 @@
 
 package android.net.http;
 
+import org.apache.http.HttpHost;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Proxy;
 import android.net.WebAddress;
-import android.os.Handler;
-import android.os.Message;
-import android.os.SystemProperties;
-import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.InputStream;
-import java.util.Comparator;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.ListIterator;
 import java.util.Map;
-
-import org.apache.http.HttpHost;
 
 /**
  * {@hide}
@@ -59,7 +53,6 @@ public class RequestQueue implements RequestFeeder {
     private final LinkedHashMap<HttpHost, LinkedList<Request>> mPending;
     private final Context mContext;
     private final ActivePool mActivePool;
-    private final ConnectivityManager mConnectivityManager;
     private final HashSet<HttpHost> mPriorities;
 
     private HttpHost mProxyHost = null;
@@ -222,8 +215,6 @@ public class RequestQueue implements RequestFeeder {
         mActivePool = new ActivePool(connectionCount);
         mActivePool.startup();
 
-        mConnectivityManager = (ConnectivityManager)
-                context.getSystemService(Context.CONNECTIVITY_SERVICE);
     }
 
     public synchronized boolean setRequestPriority(WebAddress uri, int priority) {
@@ -317,18 +308,10 @@ public class RequestQueue implements RequestFeeder {
      * synchronize setting the proxy
      */
     private synchronized void setProxyConfig() {
-        NetworkInfo info = mConnectivityManager.getActiveNetworkInfo();
-        if (info != null && info.getType() == ConnectivityManager.TYPE_WIFI) {
-            mProxyHost = null;
-        } else {
-            String host = Proxy.getHost(mContext);
-            if (HttpLog.LOGV) HttpLog.v("RequestQueue.setProxyConfig " + host);
-            if (host == null) {
-                mProxyHost = null;
-            } else {
-                mActivePool.disablePersistence();
-                mProxyHost = new HttpHost(host, Proxy.getPort(mContext), "http");
-            }
+        mProxyHost = Proxy.getPreferredHttpHost(mContext, null);
+        if (HttpLog.LOGV) HttpLog.v("RequestQueue.setProxyConfig ");
+        if (mProxyHost != null) {
+            mActivePool.disablePersistence();
         }
     }
 
@@ -502,8 +485,6 @@ public class RequestQueue implements RequestFeeder {
                 String hostName = entry.getKey().getHostName();
                 StringBuilder line = new StringBuilder("p" + count++ + " " + hostName + " ");
 
-                LinkedList<Request> reqList = entry.getValue();
-                ListIterator reqIter = reqList.listIterator(0);
                 while (iter.hasNext()) {
                     Request request = (Request)iter.next();
                     line.append(request + " ");
@@ -639,21 +620,6 @@ public class RequestQueue implements RequestFeeder {
 
     public void stopTiming() {
         mActivePool.stopTiming();
-    }
-
-    /* helper */
-    private Request removeFirst(LinkedHashMap<HttpHost, LinkedList<Request>> requestQueue) {
-        Request ret = null;
-        Iterator<Map.Entry<HttpHost, LinkedList<Request>>> iter = requestQueue.entrySet().iterator();
-        if (iter.hasNext()) {
-            Map.Entry<HttpHost, LinkedList<Request>> entry = iter.next();
-            LinkedList<Request> reqList = entry.getValue();
-            ret = reqList.removeFirst();
-            if (reqList.isEmpty()) {
-                requestQueue.remove(entry.getKey());
-            }
-        }
-        return ret;
     }
 
     /**

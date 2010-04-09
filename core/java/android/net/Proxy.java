@@ -24,7 +24,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.os.SystemProperties;
 import android.provider.Settings;
-import android.util.Log;
 
 import java.net.InetAddress;
 import java.net.URI;
@@ -59,7 +58,7 @@ final public class Proxy {
         String host = Settings.Secure.getString(
                 contentResolver,
                 Settings.Secure.HTTP_PROXY);
-        if (host != null) {
+        if (host != null && !host.equals("")) {
             int i = host.indexOf(':');
             if (i == -1) {
                 if (DEBUG) {
@@ -132,8 +131,9 @@ final public class Proxy {
 
     /**
      * Returns the preferred proxy to be used by clients. This is a wrapper
-     * around {@link android.net.Proxy#getHost()}. Currently no proxy will
-     * be returned for localhost or if the active network is Wi-Fi.
+     * around {@link android.net.Proxy#getHost()}. No proxy will be returned
+     * for localhost, and Settings.Secure.HTTP_PROXY_WIFI_ONLY will be checked
+     * if the user is on wifi.
      *
      * @param context the context which will be passed to
      * {@link android.net.Proxy#getHost()}
@@ -147,7 +147,11 @@ final public class Proxy {
      */
     static final public HttpHost getPreferredHttpHost(Context context,
             String url) {
-        if (!isLocalHost(url) && !isNetworkWifi(context)) {
+        if (!isLocalHost(url)) {
+            if (isProxyForWifiOnly(context) && !isNetworkWifi(context)) {
+                return null;
+            }
+
             final String proxyHost = Proxy.getHost(context);
             if (proxyHost != null) {
                 return new HttpHost(proxyHost, Proxy.getPort(context), "http");
@@ -200,4 +204,16 @@ final public class Proxy {
 
         return false;
     }
+
+    /**
+     * @param ctx
+     * @return if we should only proxy while on wifi
+     * @hide
+     */
+    static final public boolean isProxyForWifiOnly(Context ctx) {
+        boolean ret = Settings.Secure.getInt(ctx.getContentResolver(),
+                Settings.Secure.HTTP_PROXY_WIFI_ONLY, 1) != 0;
+        return ret;
+    }
+
 };
