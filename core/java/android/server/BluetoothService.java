@@ -1737,6 +1737,13 @@ public class BluetoothService extends IBluetooth.Stub {
                 Settings.System.AIRPLANE_MODE_ON, 0) == 1;
     }
 
+    private boolean isAirplaneToggleable() {
+        String toggleableRadios = Settings.System.getString(mContext.getContentResolver(),
+                Settings.System.AIRPLANE_MODE_TOGGLEABLE_RADIOS);
+        return toggleableRadios != null
+            && toggleableRadios.contains(Settings.System.RADIO_BLUETOOTH);
+    }
+    
     /* Broadcast the Uuid intent */
     /*package*/ synchronized void sendUuidIntent(String address) {
         ParcelUuid[] uuid = getUuidFromCache(address);
