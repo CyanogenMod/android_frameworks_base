@@ -90,6 +90,16 @@ final public class Proxy {
     }
 
     /**
+     * @param ctx
+     * @return if we should only proxy while on wifi
+     * @hide
+     */
+    static final public boolean isProxyForWifiOnly(Context ctx) {
+        return Settings.Secure.getInt(ctx.getContentResolver(),
+                Settings.Secure.HTTP_PROXY_WIFI_ONLY, 1) != 0;
+    }
+    
+    /**
      * Return the default proxy host specified by the carrier.
      * @return String containing the host name or null if there is no proxy for
      * this carrier.
