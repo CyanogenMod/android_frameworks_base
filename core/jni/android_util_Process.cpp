@@ -227,6 +227,7 @@ void android_os_Process_setProcessGroup(JNIEnv* env, jobject clazz, int pid, jin
         cmdline[rc] = 0;
         close(fd);
     }
+
     if (grp == ANDROID_TGROUP_BG_NONINTERACT) {
         LOGD("setProcessGroup: vvv pid %d (%s)", pid, cmdline);
     } else {
