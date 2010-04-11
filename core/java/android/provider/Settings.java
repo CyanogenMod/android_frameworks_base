@@ -2093,6 +2093,12 @@ public final class Settings {
         public static final String HTTP_PROXY = "http_proxy";
 
         /**
+         * If proxy should be active on wifi only
+         * @hide
+         */
+        public static final String HTTP_PROXY_WIFI_ONLY = "http_proxy_wifi_only";
+        
+        /**
          * Whether the package installer should allow installation of apps downloaded from
          * sources other than the Android Market (vending machine).
          *
