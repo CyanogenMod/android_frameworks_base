@@ -600,7 +600,7 @@ public class StatusBarPolicy {
         int level = intent.getIntExtra("level", -1);
 
         //show battery percentage if not plugged in and status is enabled
-        if (plugged || level >= 100 || 
+        if (plugged != 0 || level >= 100 || 
 	        Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.BATTERY_PERCENTAGE_STATUS_ICON, 1) == 0) {
             mBatteryData.number = -1;
