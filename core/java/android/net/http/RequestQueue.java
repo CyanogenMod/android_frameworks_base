@@ -237,6 +237,7 @@ public class RequestQueue implements RequestFeeder {
             mContext.registerReceiver(mProxyChangeReceiver,
                                       new IntentFilter(Proxy.PROXY_CHANGE_ACTION));
         }
+        setProxyConfig();	
     }
 
     /**
@@ -258,17 +259,14 @@ public class RequestQueue implements RequestFeeder {
      */
     private synchronized void setProxyConfig() {
         NetworkInfo info = mConnectivityManager.getActiveNetworkInfo();
-        if (info != null && info.getType() == ConnectivityManager.TYPE_WIFI) {
+        String host = Proxy.getHost(mContext);
+        if (HttpLog.LOGV) HttpLog.v("RequestQueue.setProxyConfig " + host);
+        if (host == null || (Proxy.isProxyForWifiOnly(mContext) &&
+                (info == null || info.getType() != ConnectivityManager.TYPE_WIFI))) {
             mProxyHost = null;
         } else {
-            String host = Proxy.getHost(mContext);
-            if (HttpLog.LOGV) HttpLog.v("RequestQueue.setProxyConfig " + host);
-            if (host == null) {
-                mProxyHost = null;
-            } else {
-                mActivePool.disablePersistence();
-                mProxyHost = new HttpHost(host, Proxy.getPort(mContext), "http");
-            }
+            mActivePool.disablePersistence();
+            mProxyHost = new HttpHost(host, Proxy.getPort(mContext), "http");
         }
     }
 

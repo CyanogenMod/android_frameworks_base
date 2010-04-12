@@ -1443,12 +1443,18 @@ public final class Settings {
          * @hide
          */
         public static final String TRACKBALL_WAKE_SCREEN = "trackball_wake_screen";
-
+        /**
+         * Whether to unlock the screen with the trackball. The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String TRACKBALL_UNLOCK_SCREEN = "trackball_unlock_screen";
+        
         /**
          * Whether to show the 4 columns or 5 columns on the launcher.
          * @hide
          */
         public static final String LAUNCHER_COLUMN_NUMBER = "launcher_column_number";
+        
         /**
          * Whether to show the battery level percentage overlayed on the icon.
          * @hide
@@ -2086,6 +2092,12 @@ public final class Settings {
          */
         public static final String HTTP_PROXY = "http_proxy";
 
+        /**
+         * If proxy should be active on wifi only
+         * @hide
+         */
+        public static final String HTTP_PROXY_WIFI_ONLY = "http_proxy_wifi_only";
+        
         /**
          * Whether the package installer should allow installation of apps downloaded from
          * sources other than the Android Market (vending machine).

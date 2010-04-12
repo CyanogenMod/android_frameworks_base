@@ -370,7 +370,7 @@ public class BluetoothService extends IBluetooth.Stub {
                                                 "Need BLUETOOTH_ADMIN permission");
 
         // Airplane mode can prevent Bluetooth radio from being turned on.
-        if (mIsAirplaneSensitive && isAirplaneModeOn()) {
+        if (mIsAirplaneSensitive && isAirplaneModeOn() && !isAirplaneToggleable()) {
             return false;
         }
         if (mBluetoothState != BluetoothAdapter.STATE_OFF) {
@@ -545,7 +545,7 @@ public class BluetoothService extends IBluetooth.Stub {
                 mEventLoop.onPropertyChanged(propVal);
             }
 
-            if (mIsAirplaneSensitive && isAirplaneModeOn()) {
+            if (mIsAirplaneSensitive && isAirplaneModeOn() && !isAirplaneToggleable()) {
                 disable(false);
             }
 
@@ -1612,6 +1612,13 @@ public class BluetoothService extends IBluetooth.Stub {
                 Settings.System.AIRPLANE_MODE_ON, 0) == 1;
     }
 
+    private boolean isAirplaneToggleable() {
+        String toggleableRadios = Settings.System.getString(mContext.getContentResolver(),
+                Settings.System.AIRPLANE_MODE_TOGGLEABLE_RADIOS);
+        return toggleableRadios != null
+            && toggleableRadios.contains(Settings.System.RADIO_BLUETOOTH);
+    }
+    
     /* Broadcast the Uuid intent */
     /*package*/ synchronized void sendUuidIntent(String address) {
         ParcelUuid[] uuid = getUuidFromCache(address);
