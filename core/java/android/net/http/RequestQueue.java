@@ -261,7 +261,8 @@ public class RequestQueue implements RequestFeeder {
         NetworkInfo info = mConnectivityManager.getActiveNetworkInfo();
         String host = Proxy.getHost(mContext);
         if (HttpLog.LOGV) HttpLog.v("RequestQueue.setProxyConfig " + host);
-        if (host == null) {
+        if (host == null || (Proxy.isProxyForWifiOnly(mContext) &&
+                (info == null || info.getType() != ConnectivityManager.TYPE_WIFI))) {
             mProxyHost = null;
         } else {
             mActivePool.disablePersistence();
