@@ -827,14 +827,15 @@ void CameraService::Client::stopRecording()
             return;
         }
 
+        mHardware->disableMsgType(CAMERA_MSG_VIDEO_FRAME);
+        mHardware->stopRecording();
+        LOGV("stopRecording(), hardware stopped OK");
+
         if (mMediaPlayerBeep.get() != NULL) {
             mMediaPlayerBeep->seekTo(0);
             mMediaPlayerBeep->start();
         }
 
-        mHardware->disableMsgType(CAMERA_MSG_VIDEO_FRAME);
-        mHardware->stopRecording();
-        LOGV("stopRecording(), hardware stopped OK");
     }
 
     // hold preview buffer lock
