@@ -1439,6 +1439,9 @@ public class BluetoothService extends IBluetooth.Stub {
         int channel;
         if (DBG) log("updateDeviceServiceChannelCache(" + address + ")");
 
+        // Remove service channel timeout handler
+        mHandler.removeMessages(MESSAGE_UUID_INTENT);
+
         ArrayList<ParcelUuid> applicationUuids = new ArrayList();
 
         synchronized (this) {
