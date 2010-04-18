@@ -498,7 +498,7 @@ void Context::setSurface(uint32_t w, uint32_t h, android_native_window_t *sur)
         if (!mEGL.mContext) {
             first = true;
             pthread_mutex_lock(&gInitMutex);
-            initEGL(true);
+            initEGL(checkVersion2_0());
             pthread_mutex_unlock(&gInitMutex);
         }
 
