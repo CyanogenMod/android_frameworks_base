@@ -123,8 +123,13 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"ワイヤレス接続をOFFにする"</string>
     <string name="screen_lock" msgid="799094655496098153">"画面をロック"</string>
     <string name="power_off" msgid="4266614107412865048">"電源を切る"</string>
+    <string name="reboot_system">"再起動する"</string>
+
     <string name="shutdown_progress" msgid="2281079257329981203">"シャットダウン中..."</string>
+    <string name="reboot_progress">"再起動中..."</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"携帯電話の電源を切ります。"</string>
+    <string name="reboot_confirm">"携帯電話を再起動します。"</string>
+
     <string name="no_recent_tasks" msgid="279702952298056674">"最近使ったアプリケーションはありません。"</string>
     <string name="global_actions" msgid="2406416831541615258">"携帯電話オプション"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"画面ロック"</string>
@@ -135,6 +140,9 @@
     <string name="global_actions_toggle_airplane_mode" msgid="5884330306926307456">"機内モード"</string>
     <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"機内モードON"</string>
     <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"機内モードOFF"</string>
+
+    <string name="global_action_reboot">"再起動する"</string>
+
     <string name="safeMode" msgid="2788228061547930246">"セーフモード"</string>
     <string name="android_system_label" msgid="6577375335728551336">"Androidシステム"</string>
     <string name="permgrouplab_costMoney" msgid="5429808217861460401">"料金の発生するサービス"</string>
@@ -796,4 +804,5 @@
     <string name="l2tp_vpn_description" msgid="3750692169378923304">"レイヤー2トンネリングプロトコル"</string>
     <string name="l2tp_ipsec_psk_vpn_description" msgid="3945043564008303239">"L2TP/IPSec VPNベースの事前共有鍵"</string>
     <string name="l2tp_ipsec_crt_vpn_description" msgid="5382714073103653577">"L2TP/IPSec VPNベースの証明書"</string>
+    <string name="openvpn_vpn_description">OpenVPN SSL VPN</string>
 </resources>
