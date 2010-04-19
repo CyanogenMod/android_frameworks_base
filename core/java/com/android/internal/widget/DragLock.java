@@ -49,7 +49,7 @@ import java.util.List;
  * Is also capable of displaying a static pattern in "in progress", "wrong" or
  * "correct" states.
  */
-public class LockPatternView extends View {
+public class DragLock extends View implements LockPattern {
     // Vibrator pattern for creating a tactile bump
     private static final long[] DEFAULT_VIBE_PATTERN = {0, 1, 40, 41};
 
@@ -69,7 +69,7 @@ public class LockPatternView extends View {
      */
     private static final int MILLIS_PER_CIRCLE_ANIMATING = 700;
 
-    private OnPatternListener mOnPatternListener;
+    private EventListener mEventListener;
     private ArrayList<Cell> mPattern = new ArrayList<Cell>(9);
 
     /**
@@ -90,11 +90,10 @@ public class LockPatternView extends View {
 
     private long mAnimatingPeriodStart;
 
-    private DisplayMode mPatternDisplayMode = DisplayMode.Correct;
+    private State mState = State.Record;
     private boolean mInputEnabled = true;
     private boolean mInStealthMode = false;
     private boolean mTactileFeedbackEnabled = true;
-    private boolean mPatternInProgress = false;
 
     private float mDiameterFactor = 0.5f;
     private float mHitFactor = 0.6f;
@@ -116,124 +115,17 @@ public class LockPatternView extends View {
 
     private int mBitmapWidth;
     private int mBitmapHeight;
-   
+
 
     private Vibrator vibe; // Vibrator for creating tactile feedback
 
     private long[] mVibePattern;
 
-    /**
-     * Represents a cell in the 3 X 3 matrix of the unlock pattern view.
-     */
-    public static class Cell {
-        int row;
-        int column;
-
-        // keep # objects limited to 9
-        static Cell[][] sCells = new Cell[3][3];
-        static {
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
-                    sCells[i][j] = new Cell(i, j);
-                }
-            }
-        }
-
-        /**
-         * @param row The row of the cell.
-         * @param column The column of the cell.
-         */
-        private Cell(int row, int column) {
-            checkRange(row, column);
-            this.row = row;
-            this.column = column;
-        }
-
-        public int getRow() {
-            return row;
-        }
-
-        public int getColumn() {
-            return column;
-        }
-
-        /**
-         * @param row The row of the cell.
-         * @param column The column of the cell.
-         */
-        public static synchronized Cell of(int row, int column) {
-            checkRange(row, column);
-            return sCells[row][column];
-        }
-
-        private static void checkRange(int row, int column) {
-            if (row < 0 || row > 2) {
-                throw new IllegalArgumentException("row must be in range 0-2");
-            }
-            if (column < 0 || column > 2) {
-                throw new IllegalArgumentException("column must be in range 0-2");
-            }
-        }
-
-        public String toString() {
-            return "(row=" + row + ",clmn=" + column + ")";
-        }
-    }
-
-    /**
-     * How to display the current pattern.
-     */
-    public enum DisplayMode {
-
-        /**
-         * The pattern drawn is correct (i.e draw it in a friendly color)
-         */
-        Correct,
-
-        /**
-         * Animate the pattern (for demo, and help).
-         */
-        Animate,
-
-        /**
-         * The pattern is wrong (i.e draw a foreboding color)
-         */
-        Wrong
-    }
-
-    /**
-     * The call back interface for detecting patterns entered by the user.
-     */
-    public static interface OnPatternListener {
-
-        /**
-         * A new pattern has begun.
-         */
-        void onPatternStart();
-
-        /**
-         * The pattern was cleared.
-         */
-        void onPatternCleared();
-
-        /**
-         * The user extended the pattern currently being drawn by one cell.
-         * @param pattern The pattern with newly added cell.
-         */
-        void onPatternCellAdded(List<Cell> pattern);
-
-        /**
-         * A pattern was detected from the user.
-         * @param pattern The pattern.
-         */
-        void onPatternDetected(List<Cell> pattern);
-    }
-
-    public LockPatternView(Context context) {
+    public DragLock(Context context) {
         this(context, null);
     }
 
-    public LockPatternView(Context context, AttributeSet attrs) {
+    public DragLock(Context context, AttributeSet attrs) {
         super(context, attrs);
         vibe = new Vibrator();
 
@@ -283,6 +175,10 @@ public class LockPatternView extends View {
         return tmpPattern;
     }
 
+    public View getView() {
+        return this;
+    }
+
     private Bitmap getBitmapFor(int resId) {
         return BitmapFactory.decodeResource(getContext().getResources(), resId);
     }
@@ -323,20 +219,19 @@ public class LockPatternView extends View {
 
     /**
      * Set the call back for pattern detection.
-     * @param onPatternListener The call back.
+     * @param eventeListener The call back.
      */
-    public void setOnPatternListener(
-            OnPatternListener onPatternListener) {
-        mOnPatternListener = onPatternListener;
+    public void setEventListener(EventListener eventeListener) {
+        mEventListener = eventeListener;
     }
 
     /**
      * Set the pattern explicitely (rather than waiting for the user to input
      * a pattern).
-     * @param displayMode How to display the pattern.
+     * @param state How to display the pattern.
      * @param pattern The pattern.
      */
-    public void setPattern(DisplayMode displayMode, List<Cell> pattern) {
+    public void setPattern(State state, List<Cell> pattern) {
         mPattern.clear();
         mPattern.addAll(pattern);
         clearPatternDrawLookup();
@@ -344,7 +239,7 @@ public class LockPatternView extends View {
             mPatternDrawLookup[cell.getRow()][cell.getColumn()] = true;
         }
 
-        setDisplayMode(displayMode);
+        setState(state);
     }
 
     /**
@@ -353,9 +248,9 @@ public class LockPatternView extends View {
      * in progress result to correct or wrong.
      * @param displayMode The display mode.
      */
-    public void setDisplayMode(DisplayMode displayMode) {
-        mPatternDisplayMode = displayMode;
-        if (displayMode == DisplayMode.Animate) {
+    public void setState(State state) {
+        mState = state;
+        if (state == State.Replay) {
             if (mPattern.size() == 0) {
                 throw new IllegalStateException("you must have a pattern to "
                         + "animate if you want to set the display mode to animate");
@@ -365,6 +260,9 @@ public class LockPatternView extends View {
             mInProgressX = getCenterXForColumn(first.getColumn());
             mInProgressY = getCenterYForRow(first.getRow());
             clearPatternDrawLookup();
+        }
+        else if (state == State.Record) {
+            resetPattern();
         }
         invalidate();
     }
@@ -382,7 +280,7 @@ public class LockPatternView extends View {
     private void resetPattern() {
         mPattern.clear();
         clearPatternDrawLookup();
-        mPatternDisplayMode = DisplayMode.Correct;
+        mState = State.Record;
         invalidate();
     }
 
@@ -410,6 +308,14 @@ public class LockPatternView extends View {
      */
     public void enableInput() {
         mInputEnabled = true;
+    }
+
+    public int getCorrectDelay() {
+        return 0;
+    }
+
+    public int getIncorrectDelay() {
+        return 1500;
     }
 
     @Override
@@ -478,8 +384,9 @@ public class LockPatternView extends View {
     private void addCellToPattern(Cell newCell) {
         mPatternDrawLookup[newCell.getRow()][newCell.getColumn()] = true;
         mPattern.add(newCell);
-        if (mOnPatternListener != null) {
-            mOnPatternListener.onPatternCellAdded(mPattern);
+        if (mEventListener != null) {
+            mEventListener.onUserInteraction();
+            //mEventListener.onPatternCellAdded(mPattern);
         }
     }
 
@@ -548,6 +455,10 @@ public class LockPatternView extends View {
             return false;
         }
 
+        if (mState != State.Record) {
+            return false;
+        }
+
         final float x = motionEvent.getX();
         final float y = motionEvent.getY();
         Cell hitCell;
@@ -555,13 +466,10 @@ public class LockPatternView extends View {
             case MotionEvent.ACTION_DOWN:
                 resetPattern();
                 hitCell = detectAndAddHit(x, y);
-                if (hitCell != null && mOnPatternListener != null) {
-                    mPatternInProgress = true;
-                    mPatternDisplayMode = DisplayMode.Correct;
-                    mOnPatternListener.onPatternStart();
-                } else if (mOnPatternListener != null) {
-                    mPatternInProgress = false;
-                    mOnPatternListener.onPatternCleared();
+                if (hitCell != null && mEventListener != null) {
+                    mEventListener.onPatternStart();
+                } else if (mEventListener != null) {
+                    mEventListener.onPatternCleared();
                 }
                 if (hitCell != null) {
                     final float startX = getCenterXForColumn(hitCell.column);
@@ -584,9 +492,8 @@ public class LockPatternView extends View {
                 return true;
             case MotionEvent.ACTION_UP:
                 // report pattern detected
-                if (!mPattern.isEmpty() && mOnPatternListener != null) {
-                    mPatternInProgress = false;
-                    mOnPatternListener.onPatternDetected(mPattern);
+                if (!mPattern.isEmpty() && mEventListener != null) {
+                    mEventListener.onPatternDetected(mPattern);
                     invalidate();
                 }
                 if (PROFILE_DRAWING) {
@@ -600,9 +507,8 @@ public class LockPatternView extends View {
                 final int patternSizePreHitDetect = mPattern.size();
                 hitCell = detectAndAddHit(x, y);
                 final int patternSize = mPattern.size();
-                if (hitCell != null && (mOnPatternListener != null) && (patternSize == 1)) {
-                    mPatternInProgress = true;
-                    mOnPatternListener.onPatternStart();
+                if (hitCell != null && (mEventListener != null) && (patternSize == 1)) {
+                    mEventListener.onPatternStart();
                 }
                 // note current x and y for rubber banding of in progress
                 // patterns
@@ -615,7 +521,7 @@ public class LockPatternView extends View {
                     mInProgressX = x;
                     mInProgressY = y;
 
-                    if (mPatternInProgress && patternSize > 0) {
+                    if (mState == State.Record && patternSize > 0) {
                         final ArrayList<Cell> pattern = mPattern;
                         final float radius = mSquareWidth * mDiameterFactor * 0.5f;
 
@@ -718,9 +624,8 @@ public class LockPatternView extends View {
                 return true;
             case MotionEvent.ACTION_CANCEL:
                 resetPattern();
-                if (mOnPatternListener != null) {
-                    mPatternInProgress = false;
-                    mOnPatternListener.onPatternCleared();
+                if (mEventListener != null) {
+                    mEventListener.onPatternCleared();
                 }
                 if (PROFILE_DRAWING) {
                     if (mDrawingProfilingStarted) {
@@ -747,7 +652,7 @@ public class LockPatternView extends View {
         final int count = pattern.size();
         final boolean[][] drawLookup = mPatternDrawLookup;
 
-        if (mPatternDisplayMode == DisplayMode.Animate) {
+        if (mState == State.Replay) {
 
             // figure out which circles to draw
 
@@ -802,7 +707,7 @@ public class LockPatternView extends View {
         // only the last segment of the path should be computed here
         // draw the path of the pattern (unless the user is in progress, and
         // we are in stealth mode)
-        final boolean drawPath = (!mInStealthMode || mPatternDisplayMode == DisplayMode.Wrong);
+        final boolean drawPath = (!mInStealthMode || mState == State.Incorrect);
         if (drawPath) {
             boolean anyCircles = false;
             for (int i = 0; i < count; i++) {
@@ -826,7 +731,7 @@ public class LockPatternView extends View {
             }
 
             // add last in progress section
-            if ((mPatternInProgress || mPatternDisplayMode == DisplayMode.Animate)
+            if ((mState == State.Record || mState == State.Replay)
                     && anyCircles) {
                 currentPath.lineTo(mInProgressX, mInProgressY);
             }
@@ -872,7 +777,7 @@ public class LockPatternView extends View {
     }
 
     private void drawArrow(Canvas canvas, float leftX, float topY, Cell start, Cell end) {
-        boolean green = mPatternDisplayMode != DisplayMode.Wrong;
+        boolean green = mState != State.Incorrect;
 
         final int endRow = end.row;
         final int startRow = start.row;
@@ -890,17 +795,17 @@ public class LockPatternView extends View {
         Matrix matrix = new Matrix();
         final int cellWidth = mBitmapCircleDefault.getWidth();
         final int cellHeight = mBitmapCircleDefault.getHeight();
-        
+
         // the up arrow bitmap is at 12:00, so find the rotation from x axis and add 90 degrees.
         final float theta = (float) Math.atan2(
                 (double) (endRow - startRow), (double) (endColumn - startColumn));
-        final float angle = (float) Math.toDegrees(theta) + 90.0f; 
-        
+        final float angle = (float) Math.toDegrees(theta) + 90.0f;
+
         // compose matrix
         matrix.setTranslate(leftX + offsetX, topY + offsetY); // transform to cell position
         matrix.preRotate(angle, cellWidth / 2.0f, cellHeight / 2.0f);  // rotate about cell center
         matrix.preTranslate((cellWidth - arrow.getWidth()) / 2.0f, 0.0f); // translate to 12:00 pos
-        canvas.drawBitmap(arrow, matrix, mPaint); 
+        canvas.drawBitmap(arrow, matrix, mPaint);
     }
 
     /**
@@ -913,25 +818,25 @@ public class LockPatternView extends View {
         Bitmap outerCircle;
         Bitmap innerCircle;
 
-        if (!partOfPattern || (mInStealthMode && mPatternDisplayMode != DisplayMode.Wrong)) {
+        if (!partOfPattern || (mInStealthMode && mState != State.Incorrect)) {
             // unselected circle
             outerCircle = mBitmapCircleDefault;
             innerCircle = mBitmapBtnDefault;
-        } else if (mPatternInProgress) {
+        } else if (mState == State.Record) {
             // user is in middle of drawing a pattern
             outerCircle = mBitmapCircleGreen;
             innerCircle = mBitmapBtnTouched;
-        } else if (mPatternDisplayMode == DisplayMode.Wrong) {
+        } else if (mState == State.Incorrect) {
             // the pattern is wrong
             outerCircle = mBitmapCircleRed;
             innerCircle = mBitmapBtnDefault;
-        } else if (mPatternDisplayMode == DisplayMode.Correct ||
-                mPatternDisplayMode == DisplayMode.Animate) {
+        } else if (mState == State.Correct ||
+                mState == State.Replay) {
             // the pattern is correct
             outerCircle = mBitmapCircleGreen;
             innerCircle = mBitmapBtnDefault;
         } else {
-            throw new IllegalStateException("unknown display mode " + mPatternDisplayMode);
+            throw new IllegalStateException("unknown display mode " + mState);
         }
 
         final int width = mBitmapWidth;
@@ -952,7 +857,7 @@ public class LockPatternView extends View {
         Parcelable superState = super.onSaveInstanceState();
         return new SavedState(superState,
                 LockPatternUtils.patternToString(mPattern),
-                mPatternDisplayMode.ordinal(),
+                mState.ordinal(),
                 mInputEnabled, mInStealthMode, mTactileFeedbackEnabled);
     }
 
@@ -960,10 +865,10 @@ public class LockPatternView extends View {
     protected void onRestoreInstanceState(Parcelable state) {
         final SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
-        setPattern(
-                DisplayMode.Correct,
+        DragLock.this.setPattern(
+                State.Correct,
                 LockPatternUtils.stringToPattern(ss.getSerializedPattern()));
-        mPatternDisplayMode = DisplayMode.values()[ss.getDisplayMode()];
+        mState = State.values()[ss.getState()];
         mInputEnabled = ss.isInputEnabled();
         mInStealthMode = ss.isInStealthMode();
         mTactileFeedbackEnabled = ss.isTactileFeedbackEnabled();
@@ -975,7 +880,7 @@ public class LockPatternView extends View {
     private static class SavedState extends BaseSavedState {
 
         private final String mSerializedPattern;
-        private final int mDisplayMode;
+        private final int mState;
         private final boolean mInputEnabled;
         private final boolean mInStealthMode;
         private final boolean mTactileFeedbackEnabled;
@@ -987,7 +892,7 @@ public class LockPatternView extends View {
                 boolean inputEnabled, boolean inStealthMode, boolean tactileFeedbackEnabled) {
             super(superState);
             mSerializedPattern = serializedPattern;
-            mDisplayMode = displayMode;
+            mState = displayMode;
             mInputEnabled = inputEnabled;
             mInStealthMode = inStealthMode;
             mTactileFeedbackEnabled = tactileFeedbackEnabled;
@@ -999,18 +904,18 @@ public class LockPatternView extends View {
         private SavedState(Parcel in) {
             super(in);
             mSerializedPattern = in.readString();
-            mDisplayMode = in.readInt();
+            mState = in.readInt();
             mInputEnabled = (Boolean) in.readValue(null);
             mInStealthMode = (Boolean) in.readValue(null);
             mTactileFeedbackEnabled = (Boolean) in.readValue(null);
         }
-        
+
         public String getSerializedPattern() {
             return mSerializedPattern;
         }
 
-        public int getDisplayMode() {
-            return mDisplayMode;
+        public int getState() {
+            return mState;
         }
 
         public boolean isInputEnabled() {
@@ -1029,7 +934,7 @@ public class LockPatternView extends View {
         public void writeToParcel(Parcel dest, int flags) {
             super.writeToParcel(dest, flags);
             dest.writeString(mSerializedPattern);
-            dest.writeInt(mDisplayMode);
+            dest.writeInt(mState);
             dest.writeValue(mInputEnabled);
             dest.writeValue(mInStealthMode);
             dest.writeValue(mTactileFeedbackEnabled);
