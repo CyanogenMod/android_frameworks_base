@@ -698,8 +698,7 @@ public class PduParser {
                 case PduHeaders.ADDITIONAL_HEADERS:
                 case PduHeaders.ATTRIBUTES:
                 default: {
-                    log("Unknown header: '" + headerField + "', exit parsing.");
-		    keepParsing = false;
+                    log("Unknown header");
                 }
             }
         }
