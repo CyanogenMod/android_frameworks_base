@@ -157,7 +157,6 @@ public class PduParser {
                 }
                 String ctTypeStr = new String(contentType);
                 if (ctTypeStr.equals(ContentType.MULTIPART_MIXED)
-                        || ctTypeStr.equals(ContentType.MULTIPART_ALTERNATIVE)
                         || ctTypeStr.equals(ContentType.MULTIPART_RELATED)) {
                     // The MMS content type must be "application/vnd.wap.multipart.mixed"
                     // or "application/vnd.wap.multipart.related"
@@ -699,8 +698,7 @@ public class PduParser {
                 case PduHeaders.ADDITIONAL_HEADERS:
                 case PduHeaders.ATTRIBUTES:
                 default: {
-                    log("Unknown header: '" + headerField + "', exit parsing.");
-		    keepParsing = false;
+                    log("Unknown header");
                 }
             }
         }
@@ -740,7 +738,6 @@ public class PduParser {
             } else {
                 part.setContentType((PduContentTypes.contentTypes[0]).getBytes()); //"*/*"
             }
-	    String contentTypeStr = new String(part.getContentType());
 
             /* get name parameter */
             byte[] name = (byte[]) map.get(PduPart.P_NAME);
@@ -782,11 +779,6 @@ public class PduParser {
             if (dataLength > 0) {
                 byte[] partData = new byte[dataLength];
                 pduDataStream.read(partData, 0, dataLength);
-		if (contentTypeStr.equalsIgnoreCase(ContentType.MULTIPART_ALTERNATIVE)) {
-		    PduBody nestedBody = parseParts(new ByteArrayInputStream(partData));
-		    part = nestedBody.getPart(0);
-
-		} else {
                 // Check Content-Transfer-Encoding.
                 byte[] partDataEncoding = part.getContentTransferEncoding();
                 if (null != partDataEncoding) {
@@ -806,7 +798,6 @@ public class PduParser {
                     return null;
                 }
                 part.setData(partData);
-		} /*  multipart/alternative */
             }
 
             /* add this part to body */
