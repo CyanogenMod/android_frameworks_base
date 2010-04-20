@@ -190,7 +190,7 @@
     </LinearLayout>
 
     <!-- right side: lock pattern -->
-    <com.android.internal.widget.LockPatternView android:id="@+id/lockPattern"
+    <FrameLayout android:id="@+id/lockPattern"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content" />
 

@@ -43,7 +43,7 @@ import com.android.internal.util.XmlUtils;
 import com.android.internal.telephony.RILConstants;
 
 import com.android.internal.widget.LockPatternUtils;
-import com.android.internal.widget.LockPatternView;
+import com.android.internal.widget.LockPattern;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -568,7 +568,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 // Convert lock pattern
                 try {
                     LockPatternUtils lpu = new LockPatternUtils(mContext.getContentResolver());
-                    List<LockPatternView.Cell> cellPattern =
+                    List<LockPattern.Cell> cellPattern =
                             LockPatternUtils.stringToPattern(lockPattern);
                     lpu.saveLockPattern(cellPattern);
                 } catch (IllegalArgumentException e) {
