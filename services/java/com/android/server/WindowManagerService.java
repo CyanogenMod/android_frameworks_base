@@ -181,7 +181,7 @@ public class WindowManagerService extends IWindowManager.Stub
     /** Amount of time (in milliseconds) to animate the dim surface from one
      * value to another, when no window animation is driving it.
      */
-    static final int DEFAULT_DIM_DURATION = 200;
+    static final int DEFAULT_DIM_DURATION = 30;
 
     /** Amount of time (in milliseconds) to animate the fade-in-out transition for
      * compatible windows.
@@ -190,7 +190,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
     /** Adjustment to time to perform a dim, to make it more dramatic.
      */
-    static final int DIM_DURATION_MULTIPLIER = 6;
+    static final int DIM_DURATION_MULTIPLIER = 20;
 
     static final int INJECT_FAILED = 0;
     static final int INJECT_SUCCEEDED = 1;
@@ -10247,7 +10247,7 @@ public class WindowManagerService extends IWindowManager.Stub
                                 + " obscured=" + obscured
                                 + " displayed=" + displayed);
                         if ((attrFlags&FLAG_DIM_BEHIND) != 0) {
-                            if (!dimming) {
+                            if (!dimming && !w.mAnimating) {
                                 //Log.i(TAG, "DIM BEHIND: " + w);
                                 dimming = true;
                                 if (mDimAnimator == null) {
@@ -11065,9 +11065,10 @@ public class WindowManagerService extends IWindowManager.Stub
                 // If the desired dim level has changed, then
                 // start an animation to it.
                 mLastDimAnimTime = currentTime;
-                long duration = (w.mAnimating && w.mAnimation != null)
-                        ? w.mAnimation.computeDurationHint()
-                        : DEFAULT_DIM_DURATION;
+                //long duration = (w.mAnimating && w.mAnimation != null)
+                //        ? w.mAnimation.computeDurationHint()
+                //        : DEFAULT_DIM_DURATION;
+                long duration = DEFAULT_DIM_DURATION;
                 if (target > mDimTargetAlpha) {
                     // This is happening behind the activity UI,
                     // so we can make it run a little longer to
