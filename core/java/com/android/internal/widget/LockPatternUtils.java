@@ -78,8 +78,12 @@ public class LockPatternUtils {
     private final static String LOCKOUT_PERMANENT_KEY = "lockscreen.lockedoutpermanently";
     private final static String LOCKOUT_ATTEMPT_DEADLINE = "lockscreen.lockoutattemptdeadline";
     private final static String PATTERN_EVER_CHOSEN = "lockscreen.patterneverchosen";
-    private static final String PIN_BASED_LOCKING_ENABLED = "lockscreen.pinbased";
+    private final static String PIN_BASED_LOCKING_ENABLED = "lockscreen.pinbased";
+    private final static String PIN_CHECK_TIMEOUT = "lockscreen.pinchecktimeout";
 
+    private static final int PIN_CHECK_TIMEOUT_MIN = 500;
+    private static final int PIN_CHECK_TIMEOUT_DEFAULT = 1500;
+    
     private final ContentResolver mContentResolver;
 
     private static String sLockPatternFilename;
@@ -295,6 +299,23 @@ public class LockPatternUtils {
     }
 
     /**
+     * @return delay when accepting patterns for the PIN lock mechanism
+     */
+    public int getPinCheckTimeout() {
+    	return Math.max(
+			PIN_CHECK_TIMEOUT_MIN,
+			getInt(PIN_CHECK_TIMEOUT, PIN_CHECK_TIMEOUT_DEFAULT));
+    }
+    
+    /**
+     * Set the timeout pin check timeout, in milliseconds
+     */
+    public void setPinCheckTimeout(int timeoutMillis) {
+    	timeoutMillis = Math.max(timeoutMillis, PIN_CHECK_TIMEOUT_MIN);
+    	setInt(PIN_CHECK_TIMEOUT, timeoutMillis);
+    }
+    
+    /**
      * Set and store the lockout deadline, meaning the user can't attempt his/her unlock
      * pattern until the deadline has passed.
      * @return the chosen deadline.
@@ -375,5 +396,11 @@ public class LockPatternUtils {
         android.provider.Settings.System.putLong(mContentResolver, systemSettingKey, value);
     }
 
+    private int getInt(String systemSettingKey, int def) {
+        return android.provider.Settings.System.getInt(mContentResolver, systemSettingKey, def);
+    }
 
+    private void setInt(String systemSettingKey, int value) {
+        android.provider.Settings.System.putInt(mContentResolver, systemSettingKey, value);
+    }
 }

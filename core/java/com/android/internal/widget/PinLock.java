@@ -50,13 +50,13 @@ public class PinLock extends View implements LockPattern {
     private final static String TAG = "PinLock";
     private static final int STATUS_BAR_HEIGHT = 25;
     private static final int REPLAY_INCREMENT_DURATION_MS = 600;
-    private static final int PATTERN_COMPLETE_DELAY_MS = 1250;
     private static final boolean DEBUG = false;
     private static final long[] DEFAULT_VIBE_PATTERN = {0, 1, 40, 41};
 
     private EventListener mEventListener;
     private Handler mHandler = new Handler();
     private Paint mPaint = new Paint();
+    private LockPatternUtils mLockPatternUtils;
     private ArrayList<Cell> mPattern = new ArrayList<Cell>(9);
     private int mReplayIndex = 0;
     private State mState = State.Record;
@@ -99,7 +99,8 @@ public class PinLock extends View implements LockPattern {
         mBitmapWidth = mBitmapBtnDefault.getWidth();
         mBitmapHeight = mBitmapBtnDefault.getHeight();
 
-        // vibrator fun
+        mLockPatternUtils = new LockPatternUtils(context.getContentResolver());
+        
         mVibe = new Vibrator();
         mVibePattern = loadVibratePattern(com.android.internal.R.array.config_virtualKeyVibePattern);
     }
@@ -270,7 +271,7 @@ public class PinLock extends View implements LockPattern {
         }
     };
 
-    private Runnable mCheckPatternCompleteRunnable = new Runnable() {
+    private Runnable mPatternEntryFinishedRunnable = new Runnable() {
         public void run() {
             if (mEventListener != null) {
                 mEventListener.onPatternDetected(mPattern);
@@ -349,7 +350,7 @@ public class PinLock extends View implements LockPattern {
         final Cell cell = checkForNewHit(x, y);
 
         if ((mDown != null) && (cell == mDown)) {
-            addCellToPattern(cell);
+        	mPattern.add(cell);
 
             if (mTactileFeedbackEnabled){
                 mVibe.vibrate(mVibePattern, -1);
@@ -361,14 +362,18 @@ public class PinLock extends View implements LockPattern {
         return null;
     }
 
-    private void addCellToPattern(Cell newCell) {
-        mPattern.add(newCell);
+    private void stopWaitingForTimeout() {
+    	
+    }
+    
+    void cancelPatternEntryFinishedTimeout() {
+        mHandler.removeCallbacks(mPatternEntryFinishedRunnable);
+    }
 
-        mHandler.removeCallbacks(mCheckPatternCompleteRunnable);
-
+    void schedulePatternEntryFinishedTimeout() {
         mHandler.postDelayed(
-            mCheckPatternCompleteRunnable,
-            PATTERN_COMPLETE_DELAY_MS);
+            mPatternEntryFinishedRunnable,
+            mLockPatternUtils.getPinCheckTimeout());
     }
 
     // helper method to find which cell a point maps to
@@ -436,14 +441,15 @@ public class PinLock extends View implements LockPattern {
         Cell hitCell;
         switch(motionEvent.getAction()) {
             case MotionEvent.ACTION_DOWN:
-        if (DEBUG) Log.i(TAG, "down");
+            	if (DEBUG) Log.i(TAG, "down");
+        		cancelPatternEntryFinishedTimeout();
                 mCurrent = mDown = checkForNewHit(x, y);
                 invalidate();
                 onUserInteraction();
                 return true;
 
             case MotionEvent.ACTION_UP:
-        if (DEBUG) Log.i(TAG, "up");
+            	if (DEBUG) Log.i(TAG, "up");
                 hitCell = detectAndAddHit(x, y);
                 if (hitCell != null) {
                     if (mPattern.size() == 1) {
@@ -457,6 +463,7 @@ public class PinLock extends View implements LockPattern {
                 mCurrent = mDown = null;
                 invalidate();
                 onUserInteraction();
+                schedulePatternEntryFinishedTimeout();
                 return true;
 
             case MotionEvent.ACTION_MOVE:
