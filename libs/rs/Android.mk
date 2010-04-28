@@ -102,6 +102,9 @@ LOCAL_SRC_FILES:= \
 	rsType.cpp \
 	rsVertexArray.cpp
 
+ifdef BOARD_NO_GL2
+	LOCAL_CFLAGS += -DBOARD_NO_GL2
+endif
 
 LOCAL_SHARED_LIBRARIES += libcutils libutils libEGL libGLESv1_CM libGLESv2 libui libacc
 LOCAL_LDLIBS := -lpthread -ldl
