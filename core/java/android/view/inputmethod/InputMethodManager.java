@@ -1348,6 +1348,7 @@ public final class InputMethodManager {
                     callback.finishedEvent(seq, false);
                 } catch (RemoteException ex) {
                 }
+                clearBindingLocked();
             }
         }
     }
