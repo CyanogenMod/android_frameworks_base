@@ -1,5 +1,6 @@
 /* 
  ** Copyright 2007, The Android Open Source Project
+ ** Copyright (C) 2010, Code Aurora Forum. All rights reserved.
  **
  ** Licensed under the Apache License, Version 2.0 (the "License"); 
  ** you may not use this file except in compliance with the License. 
@@ -1027,9 +1028,10 @@ EGLContext eglCreateContext(EGLDisplay dpy, EGLConfig config,
     int i=0, index=0;
     egl_connection_t* cnx = validate_display_config(dpy, config, dp, i, index);
     if (cnx) {
+        EGLContext sl = share_list ? get_context(share_list)->context : EGL_NO_CONTEXT;
         EGLContext context = cnx->egl.eglCreateContext(
                 dp->disp[i].dpy, dp->disp[i].config[index],
-                share_list, attrib_list);
+                sl, attrib_list);
         if (context != EGL_NO_CONTEXT) {
             // figure out if it's a GLESv1 or GLESv2
             int version = 0;
