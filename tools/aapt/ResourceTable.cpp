@@ -12,6 +12,8 @@
 #include <utils/ResourceTypes.h>
 #include <stdarg.h>
 
+#include <set>
+
 #define NOISY(x) //x
 
 status_t compileXmlFile(const sp<AaptAssets>& assets,
@@ -2516,6 +2518,34 @@ ResourceFilter::match(const ResTable_config& config)
     return true;
 }
 
+class entry_sort_t {
+public:
+	sp<ResourceTable::Package> p;
+	sp<ResourceTable::Type> t;
+	sp<ResourceTable::ConfigList> c;
+	ResourceTable::ConfigDescription config;
+	sp<ResourceTable::Entry> e;
+
+	entry_sort_t() { }
+	entry_sort_t(
+		sp<ResourceTable::Package> p,
+		sp<ResourceTable::Type> t,
+		sp<ResourceTable::ConfigList> c,
+		const ResourceTable::ConfigDescription &config,
+		sp<ResourceTable::Entry> e)
+	: p(p), t(t), c(c), config(config), e(e) { }
+
+	bool operator < (const entry_sort_t &o) const {
+		int cmp;
+		if ((cmp = compare_type(config, o.config))) return cmp < 0;
+		if ((cmp = compare_type(t, o.t))) return cmp < 0;
+		if ((cmp = compare_type(e, o.e))) return cmp < 0;
+		if ((cmp = compare_type(c, o.c))) return cmp < 0;
+		if ((cmp = compare_type(p, o.p))) return cmp < 0;
+		return false;
+	}
+};
+
 status_t ResourceTable::flatten(Bundle* bundle, const sp<AaptFile>& dest)
 {
     ResourceFilter filter;
@@ -2528,6 +2558,7 @@ status_t ResourceTable::flatten(Bundle* bundle, const sp<AaptFile>& dest)
     size_t pi;
 
     bool useUTF8 = !bundle->getWantUTF16() && bundle->isMinSdkAtLeast(SDK_FROYO);
+    std::set< entry_sort_t > sortedEntries;
 
     // Iterate through all data, collecting all values (strings,
     // references, etc).
@@ -2568,10 +2599,7 @@ status_t ResourceTable::flatten(Bundle* bundle, const sp<AaptFile>& dest)
                         continue;
                     }
                     e->setNameIndex(keyStrings.add(e->getName(), true));
-                    status_t err = e->prepareFlatten(&valueStrings, this);
-                    if (err != NO_ERROR) {
-                        return err;
-                    }
+                    sortedEntries.insert(entry_sort_t(p, t, c, config, e));
                 }
             }
         }
@@ -2579,6 +2607,16 @@ status_t ResourceTable::flatten(Bundle* bundle, const sp<AaptFile>& dest)
         p->setTypeStrings(typeStrings.createStringBlock());
         p->setKeyStrings(keyStrings.createStringBlock());
     }
+
+    for (std::set< entry_sort_t >::iterator ei=sortedEntries.begin(); ei!=sortedEntries.end(); ++ei) {
+        sp<Entry> e = ei->e;
+        status_t err = e->prepareFlatten(&valueStrings, this);
+        if (err != NO_ERROR) {
+            return err;
+        }
+    }
+
+    sortedEntries.clear();
 
     ssize_t strAmt = 0;
     
