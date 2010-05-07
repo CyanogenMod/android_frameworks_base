@@ -16,7 +16,6 @@
 
 package com.android.server;
 
-import com.android.cts.stub.R;
 import com.android.internal.app.IBatteryStats;
 import com.android.server.am.BatteryStatsService;
 
