@@ -4259,9 +4259,6 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
     }
 
     public void noteStartWakeLock(int uid, String tag, int type) {
-        if (uid == Process.SYSTEM_UID)
-            return;
-
         Integer iuid = Integer.valueOf(uid);
         synchronized (this) {
             Integer count = mUidWakeLocks.get(iuid);
@@ -4277,9 +4274,6 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
     }
 
     public void noteStopWakeLock(int uid, String tag, int type) {
-        if (uid == Process.SYSTEM_UID)
-            return;
-
         Integer iuid = Integer.valueOf(uid);
         synchronized (this) {
             Integer count = mUidWakeLocks.get(iuid);
