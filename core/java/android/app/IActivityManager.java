@@ -300,6 +300,9 @@ public interface IActivityManager extends IInterface {
     
     public void overridePendingTransition(IBinder token, String packageName,
             int enterAnim, int exitAnim) throws RemoteException;
+
+    public void noteStartWakeLock(int uid, String tag, int type) throws RemoteException;
+    public void noteStopWakeLock(int uid, String tag, int type) throws RemoteException;
     
     public boolean isUserAMonkey() throws RemoteException;
     
@@ -513,4 +516,6 @@ public interface IActivityManager extends IInterface {
     int WILL_ACTIVITY_BE_VISIBLE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+105;
     int START_ACTIVITY_WITH_CONFIG_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+106;
     int GET_RUNNING_EXTERNAL_APPLICATIONS_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+107;
+    int NOTE_START_WAKELOCK_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+108;
+    int NOTE_STOP_WAKELOCK_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+109;
 }
