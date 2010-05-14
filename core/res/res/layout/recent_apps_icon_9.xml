@@ -24,13 +24,13 @@
     style="?android:attr/buttonStyle"
     android:background="@drawable/btn_application_selector"
     android:layout_width="87dip"
-    android:layout_height="88dip"
+    android:layout_height="72dip"
     android:layout_margin="3dip"
     android:textColor="@color/primary_text_dark_focused"
 
     android:paddingTop="3dip"
     android:paddingBottom="0dip"
-    android:drawablePadding="2dip"
+    android:drawablePadding="4dip"
 
     android:textSize="12dip"
     android:singleLine="true"
