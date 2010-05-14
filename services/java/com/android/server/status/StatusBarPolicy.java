@@ -29,6 +29,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.TypedArray;
+import android.database.ContentObserver;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -444,6 +445,16 @@ public class StatusBarPolicy {
                 Settings.System.BATTERY_PERCENTAGE_STATUS_COLOR);
         mBatteryIcon = service.addIcon(mBatteryData, null);
 
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.BATTERY_PERCENTAGE_STATUS_ICON),
+                false,
+                new ContentObserver(null) {
+                    @Override
+                    public void onChange(boolean selfChange) {
+                        updateBattery(null);
+                    }
+                });
+
         // phone_signal
         mPhone = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
         mPhoneData = IconData.makeIcon("phone_signal",
@@ -684,11 +695,19 @@ public class StatusBarPolicy {
     }
 
     private final void updateBattery(Intent intent) {
-        mBatteryData.iconId = intent.getIntExtra("icon-small", 0);
-        mBatteryData.iconLevel = intent.getIntExtra("level", 0);
+        boolean plugged;
+        int level;
 
-        boolean plugged = intent.getIntExtra("plugged", 0) != 0;
-        int level = intent.getIntExtra("level", -1);
+        if(intent != null) {
+            mBatteryData.iconId = intent.getIntExtra("icon-small", 0);
+            mBatteryData.iconLevel = intent.getIntExtra("level", 0);
+
+            plugged = intent.getIntExtra("plugged", 0) != 0;
+            level = intent.getIntExtra("level", -1);
+        } else {
+            plugged = mBatteryPlugged;
+            level = mBatteryLevel;
+        }
 
         //show battery percentage if not plugged in and status is enabled
         if (plugged || level >= 100 ||
