@@ -93,6 +93,9 @@ public class DragLock extends View implements LockPattern {
     private State mState = State.Record;
     private boolean mInputEnabled = true;
     private boolean mInStealthMode = false;
+    private boolean mVisibleDots = true;
+    private boolean mShowErrorPath = true;
+    
     private boolean mTactileFeedbackEnabled = true;
 
     private float mDiameterFactor = 0.5f;
@@ -205,6 +208,22 @@ public class DragLock extends View implements LockPattern {
      */
     public void setInStealthMode(boolean inStealthMode) {
         mInStealthMode = inStealthMode;
+    }
+    
+    public void setVisibleDots(boolean visibleDots) {
+        mVisibleDots = visibleDots;
+    }
+    
+    public boolean isVisibleDots() {
+        return mVisibleDots;
+    }
+    
+    public void setShowErrorPath(boolean showErrorPath) {
+        mShowErrorPath = showErrorPath;
+    }
+    
+    public boolean isShowErrorPath() {
+        return mShowErrorPath;
     }
 
     /**
@@ -707,7 +726,7 @@ public class DragLock extends View implements LockPattern {
         // only the last segment of the path should be computed here
         // draw the path of the pattern (unless the user is in progress, and
         // we are in stealth mode)
-        final boolean drawPath = (!mInStealthMode || mState == State.Incorrect);
+        final boolean drawPath = ((!mInStealthMode && mState != State.Incorrect) || (mState == State.Incorrect && mShowErrorPath));
         if (drawPath) {
             boolean anyCircles = false;
             for (int i = 0; i < count; i++) {
@@ -737,18 +756,20 @@ public class DragLock extends View implements LockPattern {
             }
             canvas.drawPath(currentPath, mPathPaint);
         }
-
+        
         // draw the circles
         final int paddingTop = mPaddingTop;
         final int paddingLeft = mPaddingLeft;
-
-        for (int i = 0; i < 3; i++) {
-            float topY = paddingTop + i * squareHeight;
-            //float centerY = mPaddingTop + i * mSquareHeight + (mSquareHeight / 2);
-            for (int j = 0; j < 3; j++) {
-                float leftX = paddingLeft + j * squareWidth;
-                drawCircle(canvas, (int) leftX, (int) topY, drawLookup[i][j]);
-            }
+        
+        if (mVisibleDots) {
+            for (int i = 0; i < 3; i++) {
+                float topY = paddingTop + i * squareHeight;
+                //float centerY = mPaddingTop + i * mSquareHeight + (mSquareHeight / 2);
+                for (int j = 0; j < 3; j++) {
+                    float leftX = paddingLeft + j * squareWidth;
+                    drawCircle(canvas, (int) leftX, (int) topY, drawLookup[i][j]);
+                }
+            }        
         }
 
         // draw the arrows associated with the path (unless the user is in progress, and
@@ -828,8 +849,14 @@ public class DragLock extends View implements LockPattern {
             innerCircle = mBitmapBtnTouched;
         } else if (mState == State.Incorrect) {
             // the pattern is wrong
-            outerCircle = mBitmapCircleRed;
-            innerCircle = mBitmapBtnDefault;
+            if (mShowErrorPath) {
+                outerCircle = mBitmapCircleRed;
+                innerCircle = mBitmapBtnDefault;
+            }
+            else {
+                outerCircle = mBitmapCircleDefault;
+                innerCircle = mBitmapBtnDefault;
+            }
         } else if (mState == State.Correct ||
                 mState == State.Replay) {
             // the pattern is correct
@@ -858,7 +885,7 @@ public class DragLock extends View implements LockPattern {
         return new SavedState(superState,
                 LockPatternUtils.patternToString(mPattern),
                 mState.ordinal(),
-                mInputEnabled, mInStealthMode, mTactileFeedbackEnabled);
+                mInputEnabled, mInStealthMode, mTactileFeedbackEnabled, mVisibleDots, mShowErrorPath);
     }
 
     @Override
@@ -872,6 +899,8 @@ public class DragLock extends View implements LockPattern {
         mInputEnabled = ss.isInputEnabled();
         mInStealthMode = ss.isInStealthMode();
         mTactileFeedbackEnabled = ss.isTactileFeedbackEnabled();
+        mVisibleDots = ss.isVisibleDots();
+        mShowErrorPath = ss.isShowErrorPath();
     }
 
     /**
@@ -884,18 +913,22 @@ public class DragLock extends View implements LockPattern {
         private final boolean mInputEnabled;
         private final boolean mInStealthMode;
         private final boolean mTactileFeedbackEnabled;
+        private final boolean mVisibleDots;
+        private final boolean mShowErrorPath;
 
         /**
          * Constructor called from {@link LockPatternView#onSaveInstanceState()}
          */
         private SavedState(Parcelable superState, String serializedPattern, int displayMode,
-                boolean inputEnabled, boolean inStealthMode, boolean tactileFeedbackEnabled) {
+                boolean inputEnabled, boolean inStealthMode, boolean tactileFeedbackEnabled, boolean visibleDots, boolean showErrorPath) {
             super(superState);
             mSerializedPattern = serializedPattern;
             mState = displayMode;
             mInputEnabled = inputEnabled;
             mInStealthMode = inStealthMode;
             mTactileFeedbackEnabled = tactileFeedbackEnabled;
+            mVisibleDots = visibleDots;
+            mShowErrorPath = showErrorPath;
         }
 
         /**
@@ -908,6 +941,8 @@ public class DragLock extends View implements LockPattern {
             mInputEnabled = (Boolean) in.readValue(null);
             mInStealthMode = (Boolean) in.readValue(null);
             mTactileFeedbackEnabled = (Boolean) in.readValue(null);
+            mVisibleDots = (Boolean) in.readValue(null);
+            mShowErrorPath = (Boolean) in.readValue(null);
         }
 
         public String getSerializedPattern() {
@@ -929,6 +964,14 @@ public class DragLock extends View implements LockPattern {
         public boolean isTactileFeedbackEnabled(){
             return mTactileFeedbackEnabled;
         }
+        
+        public boolean isVisibleDots() {
+            return mVisibleDots;
+        }
+        
+        public boolean isShowErrorPath() {
+            return mShowErrorPath;
+        }
 
         @Override
         public void writeToParcel(Parcel dest, int flags) {
@@ -938,6 +981,8 @@ public class DragLock extends View implements LockPattern {
             dest.writeValue(mInputEnabled);
             dest.writeValue(mInStealthMode);
             dest.writeValue(mTactileFeedbackEnabled);
+            dest.writeValue(mVisibleDots);
+            dest.writeValue(mShowErrorPath);
         }
 
         public static final Parcelable.Creator<SavedState> CREATOR =

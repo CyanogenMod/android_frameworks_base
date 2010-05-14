@@ -20,6 +20,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.FrameLayout;
+import android.view.Gravity;
 
 public class LockPatternFactory {
     public static LockPattern inject(FrameLayout container) {
@@ -36,7 +37,8 @@ public class LockPatternFactory {
             pattern.getView(),
             new FrameLayout.LayoutParams(
                 LayoutParams.FILL_PARENT,
-                LayoutParams.FILL_PARENT));
+                LayoutParams.FILL_PARENT,
+                Gravity.CENTER));
 
         return pattern;
     }

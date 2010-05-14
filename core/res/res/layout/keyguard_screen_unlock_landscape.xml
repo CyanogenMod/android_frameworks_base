@@ -133,6 +133,13 @@
                 android:drawablePadding="4dip"
                 />
         </LinearLayout>
+        
+        <TextView
+            android:id="@+id/customMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            />
 
         <!-- fill space between header and button below -->
         <View

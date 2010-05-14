@@ -80,6 +80,11 @@ public class LockPatternUtils {
     private final static String PATTERN_EVER_CHOSEN = "lockscreen.patterneverchosen";
     private final static String PIN_BASED_LOCKING_ENABLED = "lockscreen.pinbased";
     private final static String PIN_CHECK_TIMEOUT = "lockscreen.pinchecktimeout";
+    private final static String LOCK_DOTS_VISIBLE = "lockscreen.dotsvisible";
+    private final static String LOCK_SHOW_ERROR_PATH = "lockscreen.showerrorpath";
+    private final static String LOCK_SHOW_CUSTOM_MSG = "lockscreen.showcustommsg";
+    private final static String LOCK_CUSTOM_MSG = "lockscreen.custommsg";
+    private final static String LOCK_SHOW_SLIDERS = "lockscreen.showsliders";
 
     private static final int PIN_CHECK_TIMEOUT_MIN = 500;
     private static final int PIN_CHECK_TIMEOUT_DEFAULT = 1500;
@@ -290,6 +295,46 @@ public class LockPatternUtils {
     public boolean isPinLockingEnabled() {
         return getBoolean(PIN_BASED_LOCKING_ENABLED);
     }
+    
+    public void setVisibleDotsEnabled(boolean enabled) {
+        setBoolean(LOCK_DOTS_VISIBLE, enabled);        
+    }
+    
+    public boolean isVisibleDotsEnabled() {
+        return getBoolean(LOCK_DOTS_VISIBLE);
+    }
+    
+    public void setShowErrorPath(boolean enabled) {
+        setBoolean(LOCK_SHOW_ERROR_PATH, enabled);        
+    }
+    
+    public boolean isShowErrorPath() {
+        return getBoolean(LOCK_SHOW_ERROR_PATH);
+    }
+    
+    public void setShowCustomMsg(boolean enabled) {
+        setBoolean(LOCK_SHOW_CUSTOM_MSG, enabled);
+    }
+    
+    public boolean isShowCustomMsg() {
+        return getBoolean(LOCK_SHOW_CUSTOM_MSG);
+    }
+    
+    public void setCustomMsg(String msg) {
+        setString(LOCK_CUSTOM_MSG, msg);
+    }
+    
+    public String getCustomMsg() {
+        return getString(LOCK_CUSTOM_MSG);
+    }
+    
+    public void setShowSliders(boolean enabled) {
+        setBoolean(LOCK_SHOW_SLIDERS, enabled);
+    }
+    
+    public boolean isShowSliders() {
+        return getBoolean(LOCK_SHOW_SLIDERS);
+    }
 
     /**
      * Set whether tactile feedback for the pattern is enabled.
@@ -402,5 +447,19 @@ public class LockPatternUtils {
 
     private void setInt(String systemSettingKey, int value) {
         android.provider.Settings.System.putInt(mContentResolver, systemSettingKey, value);
+    }    
+    
+    private String getString(String systemSettingKey) {
+        String s = android.provider.Settings.System.getString(mContentResolver, systemSettingKey);
+        
+        if (s == null)
+            return "";
+        return s;
     }
+    
+    private void setString(String systemSettingKey, String value) {
+        android.provider.Settings.System.putString(mContentResolver, systemSettingKey, value);
+    }
+    
+    
 }

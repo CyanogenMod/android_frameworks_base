@@ -68,6 +68,8 @@ public class PinLock extends View implements LockPattern {
     private Vibrator mVibe;
     private long[] mVibePattern;
     private boolean mTactileFeedbackEnabled = true;
+    private boolean mVisibleDots = true;
+    private boolean mShowErrorPath = true;
 
     private float mSquareWidth;
     private float mSquareHeight;
@@ -131,6 +133,22 @@ public class PinLock extends View implements LockPattern {
      */
     public void setInStealthMode(boolean inStealthMode) {
         mInStealthMode = inStealthMode;
+    }
+    
+    public void setVisibleDots(boolean visibleDots) {
+        mVisibleDots = visibleDots;
+    }
+    
+    public boolean isVisibleDots() {
+        return mVisibleDots;
+    }
+    
+    public void setShowErrorPath(boolean showErrorPath) {
+        mShowErrorPath = showErrorPath;
+    }
+    
+    public boolean isShowErrorPath() {
+        return mShowErrorPath;
     }
 
     /**
@@ -511,12 +529,14 @@ public class PinLock extends View implements LockPattern {
         final int paddingTop = this.getPaddingTop();
         final int paddingLeft = this.getPaddingLeft();
 
-        for (int i = 0; i < 3; i++) {
-            float topY = paddingTop + i * squareHeight;
-
-            for (int j = 0; j < 3; j++) {
-                float leftX = paddingLeft + j * squareWidth;
-                drawCircle(canvas, (int) leftX, (int) topY, Cell.sCells[i][j]);
+        if (mVisibleDots || (mState == LockPattern.State.Incorrect && mShowErrorPath)) {
+            for (int i = 0; i < 3; i++) {
+                float topY = paddingTop + i * squareHeight;
+    
+                for (int j = 0; j < 3; j++) {
+                    float leftX = paddingLeft + j * squareWidth;
+                    drawCircle(canvas, (int) leftX, (int) topY, Cell.sCells[i][j]);
+                }
             }
         }
     }
@@ -549,7 +569,7 @@ public class PinLock extends View implements LockPattern {
             }
         }
         else {
-            if (mState == LockPattern.State.Incorrect) {
+            if (mState == LockPattern.State.Incorrect && mShowErrorPath) {
                 outerCircle = mBitmapCircleRed;
                 innerCircle = mBitmapBtnTouched;
             }
@@ -581,7 +601,7 @@ public class PinLock extends View implements LockPattern {
         return new SavedState(superState,
                 LockPatternUtils.patternToString(mPattern),
                 mState.ordinal(),
-                mInputEnabled, mInStealthMode, mTactileFeedbackEnabled);
+                mInputEnabled, mInStealthMode, mTactileFeedbackEnabled, mVisibleDots, mShowErrorPath);
     }
 
     protected void onRestoreInstanceState(Parcelable state) {
@@ -594,6 +614,8 @@ public class PinLock extends View implements LockPattern {
         mInputEnabled = ss.isInputEnabled();
         mInStealthMode = ss.isInStealthMode();
         mTactileFeedbackEnabled = ss.isTactileFeedbackEnabled();
+        mVisibleDots = ss.isVisibleDots();
+        mShowErrorPath = ss.isShowErrorPath();
     }
 
     /**
@@ -606,18 +628,22 @@ public class PinLock extends View implements LockPattern {
         private final boolean mInputEnabled;
         private final boolean mInStealthMode;
         private final boolean mTactileFeedbackEnabled;
+        private final boolean mVisibleDots;
+        private final boolean mShowErrorPath;
 
         /**
          * Constructor called from {@link LockPatternView#onSaveInstanceState()}
          */
         private SavedState(Parcelable superState, String serializedPattern, int displayMode,
-                boolean inputEnabled, boolean inStealthMode, boolean tactileFeedbackEnabled) {
+                boolean inputEnabled, boolean inStealthMode, boolean tactileFeedbackEnabled, boolean visibleDots, boolean showErrorPath) {
             super(superState);
             mSerializedPattern = serializedPattern;
             mDisplayMode = displayMode;
             mInputEnabled = inputEnabled;
             mInStealthMode = inStealthMode;
             mTactileFeedbackEnabled = tactileFeedbackEnabled;
+            mVisibleDots = visibleDots;
+            mShowErrorPath = showErrorPath;
         }
 
         /**
@@ -630,6 +656,8 @@ public class PinLock extends View implements LockPattern {
             mInputEnabled = (Boolean) in.readValue(null);
             mInStealthMode = (Boolean) in.readValue(null);
             mTactileFeedbackEnabled = (Boolean) in.readValue(null);
+            mVisibleDots = (Boolean) in.readValue(null);
+            mShowErrorPath = (Boolean) in.readValue(null);
         }
 
         public String getSerializedPattern() {
@@ -651,6 +679,14 @@ public class PinLock extends View implements LockPattern {
         public boolean isTactileFeedbackEnabled(){
             return mTactileFeedbackEnabled;
         }
+        
+        public boolean isVisibleDots() {
+            return mVisibleDots;
+        }
+        
+        public boolean isShowErrorPath() {
+            return mShowErrorPath;
+        }        
 
         public void writeToParcel(Parcel dest, int flags) {
             super.writeToParcel(dest, flags);
@@ -659,6 +695,8 @@ public class PinLock extends View implements LockPattern {
             dest.writeValue(mInputEnabled);
             dest.writeValue(mInStealthMode);
             dest.writeValue(mTactileFeedbackEnabled);
+            dest.writeValue(mVisibleDots);
+            dest.writeValue(mShowErrorPath);
         }
 
         public static final Parcelable.Creator<SavedState> CREATOR =
