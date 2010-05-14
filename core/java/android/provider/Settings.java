@@ -1349,6 +1349,13 @@ public final class Settings {
         public static final String ACCELEROMETER_ROTATION_MODE = "accelerometer_rotation_mode";
         
         /**
+         * Wysie_Soh
+         * Specifies the number of recent apps to show (6, 9, 12, 15);
+         * @hide
+         */
+        public static final String RECENT_APPS_NUMBER = "recent_apps_number";
+        
+        /**
          * Whether the audible DTMF tones are played by the dialer when dialing. The value is
          * boolean (1 or 0).
          */
