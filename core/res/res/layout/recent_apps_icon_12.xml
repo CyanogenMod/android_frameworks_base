@@ -23,7 +23,7 @@
     android:id="@+id/label"
     style="?android:attr/buttonStyle"
     android:background="@drawable/btn_application_selector"
-    android:layout_width="67dip"
+    android:layout_width="65dip"
     android:layout_height="72dip"
     android:layout_margin="3dip"
     android:textColor="@color/primary_text_dark_focused"
