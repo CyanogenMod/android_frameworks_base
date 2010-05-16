@@ -239,7 +239,7 @@ public class PinLock extends View implements LockPattern {
     }
 
     public int getCorrectDelay() {
-        return 750;
+        return 0;
     }
 
     public int getIncorrectDelay() {
