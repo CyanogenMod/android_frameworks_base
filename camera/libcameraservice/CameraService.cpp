@@ -232,10 +232,8 @@ CameraService::Client::Client(const sp<CameraService>& cameraService,
     mHardware->enableMsgType(CAMERA_MSG_ERROR |
                              CAMERA_MSG_ZOOM |
                              CAMERA_MSG_FOCUS);
-    property_get("persist.camera.shutter.disable", value, "0");
-    int disableShutterSound = atoi(value);
-    if(disableShutterSound != 1)
-        mMediaPlayerClick = newMediaPlayer("/system/media/audio/ui/camera_click.ogg");
+
+    mMediaPlayerClick = newMediaPlayer("/system/media/audio/ui/camera_click.ogg");
     mMediaPlayerBeep = newMediaPlayer("/system/media/audio/ui/VideoRecord.ogg");
     mOverlayW = 0;
     mOverlayH = 0;
