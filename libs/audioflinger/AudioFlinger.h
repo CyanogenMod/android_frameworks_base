@@ -143,8 +143,6 @@ public:
 
     virtual status_t setVoiceVolume(float volume);
 
-    virtual status_t deregisterClient(const sp<IAudioFlingerClient>& client);
-
     enum hardware_call_state {
         AUDIO_HW_IDLE = 0,
         AUDIO_HW_INIT,
@@ -817,7 +815,6 @@ private:
 
                 SortedVector< sp<IBinder> >         mNotificationClients;
                 int                                 mNextThreadId;
-                int                                 mA2DPHandle; // Handle to notify client (MIO)
                 KeyedVector<audio_io_handle_t, AudioStreamOut *> mOutputSessions;   // list of output descriptors
 };
 

@@ -265,7 +265,6 @@ status_t AudioTrack::set(
     mNewPosition = 0;
     mUpdatePeriod = 0;
     mFlags = flags;
-    mAudioSession = -1;
 
     return NO_ERROR;
 }
