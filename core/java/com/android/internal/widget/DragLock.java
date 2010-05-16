@@ -97,6 +97,8 @@ public class DragLock extends View implements LockPattern {
     private boolean mShowErrorPath = true;
     
     private boolean mTactileFeedbackEnabled = true;
+    
+    private int mDelay = 1500;
 
     private float mDiameterFactor = 0.5f;
     private float mHitFactor = 0.6f;
@@ -334,7 +336,11 @@ public class DragLock extends View implements LockPattern {
     }
 
     public int getIncorrectDelay() {
-        return 1500;
+        return mDelay;
+    }
+    
+    public void setIncorrectDelay(int delay) {
+        mDelay = delay;
     }
 
     @Override

@@ -85,6 +85,7 @@ public class LockPatternUtils {
     private final static String LOCK_SHOW_CUSTOM_MSG = "lockscreen.showcustommsg";
     private final static String LOCK_CUSTOM_MSG = "lockscreen.custommsg";
     private final static String LOCK_SHOW_SLIDERS = "lockscreen.showsliders";
+    private final static String LOCK_INCORRECT_DELAY = "lockscreen.incorrectdelay";
 
     private static final int PIN_CHECK_TIMEOUT_MIN = 500;
     private static final int PIN_CHECK_TIMEOUT_DEFAULT = 1500;
@@ -334,6 +335,14 @@ public class LockPatternUtils {
     
     public boolean isShowSliders() {
         return getBoolean(LOCK_SHOW_SLIDERS);
+    }
+    
+    public int getIncorrectDelay() {
+        return getInt(LOCK_INCORRECT_DELAY, 1500);
+    }
+    
+    public void setIncorrectDelay(int delay) {
+        setInt(LOCK_INCORRECT_DELAY, delay);
     }
 
     /**

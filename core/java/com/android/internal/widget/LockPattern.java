@@ -96,5 +96,6 @@ public interface LockPattern {
     public void enableInput();
     public int getCorrectDelay();
     public int getIncorrectDelay();
+    public void setIncorrectDelay(int delay);
     public View getView();
 }

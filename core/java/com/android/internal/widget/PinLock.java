@@ -70,6 +70,7 @@ public class PinLock extends View implements LockPattern {
     private boolean mTactileFeedbackEnabled = true;
     private boolean mVisibleDots = true;
     private boolean mShowErrorPath = true;
+    private int mDelay = 1500;
 
     private float mSquareWidth;
     private float mSquareHeight;
@@ -242,7 +243,11 @@ public class PinLock extends View implements LockPattern {
     }
 
     public int getIncorrectDelay() {
-        return 1500;
+        return mDelay;
+    }
+    
+    public void setIncorrectDelay(int delay) {
+        mDelay = delay;
     }
 
     private long[] loadVibratePattern(int id) {
