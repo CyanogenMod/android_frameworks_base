@@ -88,17 +88,6 @@ AudioStreamOut* A2dpAudioInterface::openOutputStream(
     return mOutput;
 }
 
-AudioStreamOut* A2dpAudioInterface::openOutputSession(
-        uint32_t devices, int *format, status_t *status, int sessionId)
-{
-    if (!AudioSystem::isA2dpDevice((AudioSystem::audio_devices)devices)) {
-        LOGV("A2dpAudioInterface::openOutputSession() open HW device: %x", devices);
-        return mHardwareInterface->openOutputSession(devices, format, status, sessionId);
-    }
-    LOGE("A2dpAudioInterface:: No A2DP support for Tunnel decoding");
-    return NULL;
-}
-
 void A2dpAudioInterface::closeOutputStream(AudioStreamOut* out) {
     if (mOutput == 0 || mOutput != out) {
         mHardwareInterface->closeOutputStream(out);
