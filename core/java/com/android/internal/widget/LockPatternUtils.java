@@ -302,7 +302,7 @@ public class LockPatternUtils {
     }
     
     public boolean isVisibleDotsEnabled() {
-        return getBoolean(LOCK_DOTS_VISIBLE);
+        return getBoolean(LOCK_DOTS_VISIBLE, true);
     }
     
     public void setShowErrorPath(boolean enabled) {
@@ -310,7 +310,7 @@ public class LockPatternUtils {
     }
     
     public boolean isShowErrorPath() {
-        return getBoolean(LOCK_SHOW_ERROR_PATH);
+        return getBoolean(LOCK_SHOW_ERROR_PATH, true);
     }
     
     public void setShowCustomMsg(boolean enabled) {
@@ -318,7 +318,7 @@ public class LockPatternUtils {
     }
     
     public boolean isShowCustomMsg() {
-        return getBoolean(LOCK_SHOW_CUSTOM_MSG);
+        return getBoolean(LOCK_SHOW_CUSTOM_MSG, false);
     }
     
     public void setCustomMsg(String msg) {
@@ -334,7 +334,7 @@ public class LockPatternUtils {
     }
     
     public boolean isShowSliders() {
-        return getBoolean(LOCK_SHOW_SLIDERS);
+        return getBoolean(LOCK_SHOW_SLIDERS, true);
     }
     
     public int getIncorrectDelay() {
@@ -435,6 +435,13 @@ public class LockPatternUtils {
                         systemSettingKey, 0);
     }
 
+    private boolean getBoolean(String systemSettingKey, boolean defaultValue) {
+        return 1 ==
+                android.provider.Settings.System.getInt(
+                        mContentResolver,
+                        systemSettingKey, defaultValue ? 1 : 0);
+    }
+    
     private void setBoolean(String systemSettingKey, boolean enabled) {
         android.provider.Settings.System.putInt(
                         mContentResolver,
