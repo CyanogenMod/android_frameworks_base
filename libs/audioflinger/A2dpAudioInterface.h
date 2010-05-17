@@ -57,11 +57,6 @@ public:
                                 uint32_t *channels=0,
                                 uint32_t *sampleRate=0,
                                 status_t *status=0);
-    virtual AudioStreamOut* openOutputSession(
-                                uint32_t devices,
-                                int *format=0,
-                                status_t *status=0,
-                                int sessionId=-1);
     virtual    void        closeOutputStream(AudioStreamOut* out);
 
     virtual AudioStreamIn* openInputStream(

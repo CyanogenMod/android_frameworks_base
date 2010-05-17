@@ -118,7 +118,6 @@ AudioFlinger::AudioFlinger()
         mAudioHardware(0), mMasterVolume(1.0f), mMasterMute(false), mNextThreadId(0)
 {
     mHardwareStatus = AUDIO_HW_IDLE;
-    mA2DPHandle = -1;
 
     mAudioHardware = AudioHardwareInterface::create();
 
@@ -144,10 +143,6 @@ AudioFlinger::~AudioFlinger()
     while (!mPlaybackThreads.isEmpty()) {
         // closeOutput() will remove first entry from mPlaybackThreads
         closeOutput(mPlaybackThreads.keyAt(0));
-    }
-    while (!mOutputSessions.isEmpty()) {
-        // closeOutput() will remove first entry from mOutputSessions
-        closeSession(mOutputSessions.keyAt(0));
     }
     if (mAudioHardware) {
         delete mAudioHardware;
@@ -479,12 +474,6 @@ status_t AudioFlinger::setStreamVolume(int stream, float value, int output)
     }
 
     AutoMutex lock(mLock);
-
-    if(mOutputSessions.indexOfKey(output) >= 0) {
-        mOutputSessions.valueFor(output)->setVolume(value, value);
-        return NO_ERROR;
-    }
-
     PlaybackThread *thread = NULL;
     if (output) {
         thread = checkPlaybackThread_l(output);
@@ -563,9 +552,6 @@ bool AudioFlinger::isMusicActive() const
             return true;
         }
     }
-    if (!mOutputSessions.isEmpty()) {
-        return true;
-    }
     return false;
 }
 
@@ -588,11 +574,7 @@ status_t AudioFlinger::setParameters(int ioHandle, const String8& keyValuePairs)
         mHardwareStatus = AUDIO_HW_IDLE;
         return result;
     }
-    // Check Direct outputs
-    if (mOutputSessions.indexOfKey(ioHandle) >= 0) {
-        result = mOutputSessions.valueFor(ioHandle)->setParameters(keyValuePairs);
-        return result;
-    }
+
     // hold a strong ref on thread in case closeOutput() or closeInput() is called
     // and the thread is exited once the lock is released
     sp<ThreadBase> thread;
@@ -675,29 +657,6 @@ void AudioFlinger::registerClient(const sp<IAudioFlingerClient>& client)
     for (size_t i = 0; i < mRecordThreads.size(); i++) {
         mRecordThreads.valueAt(i)->sendConfigEvent(AudioSystem::INPUT_OPENED);
     }
-
-    // Send the notification to the client only once.
-    if (mA2DPHandle != -1) {
-        LOGV("A2DP active. Notifying the registered client");
-        client->ioConfigChanged(AudioSystem::A2DP_OUTPUT_STATE, mA2DPHandle, NULL);
-    }
-}
-
-status_t AudioFlinger::deregisterClient(const sp<IAudioFlingerClient>& client)
-{
-    LOGV("deregisterClient() %p, tid %d, calling tid %d", client.get(), gettid(), IPCThreadState::self()->getCallingPid());
-    Mutex::Autolock _l(mLock);
-
-	sp<IBinder> binder = client->asBinder();
-
-	int index = mNotificationClients.indexOf(binder);
-
-    if (index >= 0) {
-		mNotificationClients.removeAt(index);
-        return true;
-    }
-
-    return false;
 }
 
 // audioConfigChanged_l() must be called with AudioFlinger::mLock held
@@ -1174,13 +1133,7 @@ void AudioFlinger::PlaybackThread::audioConfigChanged(int event, int param) {
         break;
     }
     Mutex::Autolock _l(mAudioFlinger->mLock);
-    if (event != AudioSystem::A2DP_OUTPUT_STATE) {
-       mAudioFlinger->audioConfigChanged_l(event, mId, param2);
-    }
-    else
-    {
-        mAudioFlinger->audioConfigChanged_l(event, param, NULL);
-    }
+    mAudioFlinger->audioConfigChanged_l(event, mId, param2);
 }
 
 void AudioFlinger::PlaybackThread::readOutputParameters()
@@ -3694,77 +3647,10 @@ int AudioFlinger::openOutput(uint32_t *pDevices,
         if (pChannels) *pChannels = channels;
         if (pLatencyMs) *pLatencyMs = thread->latency();
 
-        // if the device is a A2DP, then this is an A2DP Output
-        if ( true == AudioSystem::isA2dpDevice((AudioSystem::audio_devices) *pDevices) )
-        {
-            mA2DPHandle = mNextThreadId;
-            LOGV("A2DP device activated. The handle is set to %d", mA2DPHandle);
-        }
         return mNextThreadId;
     }
 
     return 0;
-}
-
-int AudioFlinger::openSession(uint32_t *pDevices,
-                                   uint32_t *pFormat,
-                                   uint32_t flags,
-                                   int32_t  sessionId)
-{
-    status_t status;
-    mHardwareStatus = AUDIO_HW_OUTPUT_OPEN;
-    uint32_t format = pFormat ? *pFormat : 0;
-
-    LOGV("openSession(), Device %x, Format %d, flags %x sessionId %x",
-            pDevices ? *pDevices : 0,
-            format,
-            flags,
-            sessionId);
-
-    if (pDevices == NULL || *pDevices == 0) {
-        return 0;
-    }
-    Mutex::Autolock _l(mLock);
-
-    AudioStreamOut *output = mAudioHardware->openOutputSession(*pDevices,
-                                                             (int *)&format,
-                                                             &status,
-															 sessionId);
-    LOGV("openSession() openOutputSession returned output %p, Format %d, status %d",
-            output,
-            format,
-            status);
-
-    mHardwareStatus = AUDIO_HW_IDLE;
-    if (output != 0) {
-        mNextThreadId++;
-        mOutputSessions.add(mNextThreadId, output);
-
-        if (pFormat) *pFormat = format;
-        return mNextThreadId;
-    }
-
-    return 0;
-}
-
-status_t AudioFlinger::closeSession(int output)
-{
-    Mutex::Autolock _l(mLock);
-    LOGV("closeSession() %d", output);
-
-    // Is this required?
-    //AudioSystem::stopOutput(output, (AudioSystem::stream_type)mStreamType);
-
-    // Delete the Audio session
-    if(mOutputSessions.indexOfKey(output) >= 0) {
-        AudioStreamOut* audioOut = mOutputSessions.valueFor(output);
-        audioOut->standby();
-        delete mOutputSessions.valueFor(output);
-
-        mOutputSessions.removeItem(output);
-    }
-
-    return NO_ERROR;
 }
 
 int AudioFlinger::openDuplicateOutput(int output1, int output2)
@@ -3810,13 +3696,6 @@ status_t AudioFlinger::closeOutput(int output)
         void *param2 = 0;
         audioConfigChanged_l(AudioSystem::OUTPUT_CLOSED, output, param2);
         mPlaybackThreads.removeItem(output);
-
-        if (mA2DPHandle == output)
-        {
-            mA2DPHandle = -1;
-            LOGV("A2DP OutputClosed Notifying Client");
-            audioConfigChanged_l(AudioSystem::A2DP_OUTPUT_STATE, mA2DPHandle, param2);
-        }
     }
     thread->exit();
 
@@ -3974,11 +3853,6 @@ status_t AudioFlinger::setStreamOutput(uint32_t stream, int output)
     }
 
     dstThread->sendConfigEvent(AudioSystem::STREAM_CONFIG_CHANGED, stream);
-
-    if ( mA2DPHandle == output ) {
-        LOGV("A2DP Activated and hence notifying the client");
-        dstThread->sendConfigEvent(AudioSystem::A2DP_OUTPUT_STATE, mA2DPHandle);
-    }
 
     return NO_ERROR;
 }
