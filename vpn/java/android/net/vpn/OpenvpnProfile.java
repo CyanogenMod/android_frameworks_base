@@ -29,6 +29,10 @@ public class OpenvpnProfile extends VpnProfile {
 
     private static final String PROTO_TCP = "tcp";
 
+    private static final String DEVICE_TUN = "tun";
+
+    private static final String DEVICE_TAP = "tap";
+
     // Standard Settings
     private boolean mUserAuth = false;
 
@@ -50,6 +54,8 @@ public class OpenvpnProfile extends VpnProfile {
     private String mLocalAddr;
 
     private String mRemoteAddr;
+
+    private String mDevice = DEVICE_TUN;
 
     @Override
     public VpnType getType() {
@@ -84,6 +90,24 @@ public class OpenvpnProfile extends VpnProfile {
             mProto = PROTO_TCP;
         else if (p.contains(PROTO_UDP))
             mProto = PROTO_UDP;
+    }
+
+    public String getDevice() {
+        return mDevice;
+    }
+
+    public CharSequence[] getDeviceList() {
+        String[] s = new String[2];
+        s[0] = DEVICE_TUN;
+        s[1] = DEVICE_TAP;
+        return s;
+    }
+
+    public void setDevice(String p) {
+        if (p.contains(DEVICE_TAP))
+            mDevice = DEVICE_TAP;
+        else if (p.contains(DEVICE_TUN))
+            mDevice = DEVICE_TUN;
     }
 
     public boolean getUserAuth() {
@@ -163,6 +187,7 @@ public class OpenvpnProfile extends VpnProfile {
         mSupplyAddr = in.readInt() == 1;
         mLocalAddr = in.readString();
         mRemoteAddr = in.readString();
+        mDevice = in.readString();
     }
 
     @Override
@@ -178,5 +203,6 @@ public class OpenvpnProfile extends VpnProfile {
         parcel.writeInt(mSupplyAddr ? 1 : 0);
         parcel.writeString(mLocalAddr);
         parcel.writeString(mRemoteAddr);
+        parcel.writeString(mDevice);
     }
 }
