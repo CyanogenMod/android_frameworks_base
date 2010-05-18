@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -30,6 +31,8 @@ class StatusBarIcon {
     private TextView mTextView;
     private AnimatedImageView mImageView;
     private TextView mNumberView;
+    private int clockColor = 0xff000000;
+    private int currClockColor;
 
     public StatusBarIcon(Context context, IconData data, ViewGroup parent) {
         mData = data.clone();
@@ -43,7 +46,7 @@ class StatusBarIcon {
                         LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.FILL_PARENT);
                 t.setTextSize(16);
-                t.setTextColor(0xff000000);
+                updateColors(context);
                 t.setTypeface(Typeface.DEFAULT_BOLD);
                 t.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
                 t.setPadding(6, 0, 0, 0);
@@ -203,6 +206,14 @@ class StatusBarIcon {
 
     int getNumber() {
         return mData.number;
+    }
+    
+    private void updateColors(Context context) {
+        clockColor = Settings.System.getInt(context.getContentResolver(), Settings.System.CLOCK_COLOR, clockColor);
+        if (currClockColor != clockColor) {
+            mTextView.setTextColor(clockColor);
+            currClockColor = clockColor;
+        }
     }
 }
 
