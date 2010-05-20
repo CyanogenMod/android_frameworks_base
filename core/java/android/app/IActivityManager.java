@@ -287,6 +287,9 @@ public interface IActivityManager extends IInterface {
     
     public void overridePendingTransition(IBinder token, String packageName,
             int enterAnim, int exitAnim) throws RemoteException;
+
+    public void noteStartWakeLock(int uid, String tag, int type) throws RemoteException;
+    public void noteStopWakeLock(int uid, String tag, int type) throws RemoteException;
     
     /*
      * Private non-Binder interfaces
@@ -448,4 +451,6 @@ public interface IActivityManager extends IInterface {
     int KILL_APPLICATION_PROCESS_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+98;
     int START_ACTIVITY_INTENT_SENDER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+99;
     int OVERRIDE_PENDING_TRANSITION_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+100;
+    int NOTE_START_WAKELOCK_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+101;
+    int NOTE_STOP_WAKELOCK_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+102;
 }

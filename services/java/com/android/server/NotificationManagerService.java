@@ -100,6 +100,7 @@ class NotificationManagerService extends INotificationManager.Stub
     private boolean mScreenOn = true;
     private boolean mNotificationScreenOn;
     private boolean mNotificationPulseEnabled;
+    private boolean mNotificationPulseBlend;
     private boolean mPulseBreathingLight;
     private int mBreathingLightColor;
 
@@ -384,6 +385,12 @@ class NotificationManagerService extends INotificationManager.Stub
                         Settings.System.NOTIFICATION_LIGHT_PULSE, 0) != 0;
             if (mNotificationPulseEnabled != pulseEnabled) {
                 mNotificationPulseEnabled = pulseEnabled;
+                updateNotificationPulse();
+            }
+            boolean pulseBlend = Settings.System.getInt(resolver,
+                        Settings.System.NOTIFICATION_PULSE_BLEND, 0) != 0;
+            if (mNotificationPulseBlend != pulseBlend) {
+                mNotificationPulseBlend = pulseBlend;
                 updateNotificationPulse();
             }
             boolean screenOn = Settings.System.getInt(resolver,
@@ -1049,9 +1056,18 @@ class NotificationManagerService extends INotificationManager.Stub
                 mHardware.setLightOff_UNCHECKED(HardwareService.LIGHT_ID_NOTIFICATIONS);
             }
         } else {
+            int ledARGB = mLedNotification.notification.ledARGB;
+
+            if (mNotificationPulseBlend) {
+                // Blend all the colors together
+                for (int n=0; n < mLights.size(); n++) {
+                    ledARGB |= mLights.get(n).notification.ledARGB;
+                }
+            }
+	
             mHardware.setLightFlashing_UNCHECKED(
                     HardwareService.LIGHT_ID_NOTIFICATIONS,
-                    mLedNotification.notification.ledARGB,
+                    ledARGB,
                     HardwareService.LIGHT_FLASH_TIMED,
                     mLedNotification.notification.ledOnMS,
                     mLedNotification.notification.ledOffMS);

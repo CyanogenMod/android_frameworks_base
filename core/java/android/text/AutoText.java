@@ -23,9 +23,13 @@ import android.view.View;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.IOException;
 import java.util.Locale;
+
+import java.io.FileInputStream;
+import java.io.BufferedInputStream;
 
 /**
  * This class accesses a dictionary of corrections to frequent misspellings.
@@ -53,8 +57,12 @@ public class AutoText {
 
     private static final int RIGHT = 9300; // Size of 'right' 13 Aug 2007
 
-    private static AutoText sInstance = new AutoText(Resources.getSystem());
+    private static AutoText sInstance = new AutoText(Resources.getSystem(), false);
     private static Object sLock = new Object();
+    
+    private static AutoText sUserInstance = new AutoText(null, true);
+    
+    private static final String TAG = "AutoText";
 
     // TODO:
     //
@@ -70,10 +78,13 @@ public class AutoText {
     private String mText;
     private Locale mLocale;
     private int mSize;
+    private boolean initialized;
 
-    private AutoText(Resources resources) {
-        mLocale = resources.getConfiguration().locale;
-        init(resources);
+    private AutoText(Resources resources, boolean isUserInstance) {
+        if(!isUserInstance) {
+          mLocale = resources.getConfiguration().locale;
+        }
+        initialized = init(resources, isUserInstance);
     }
 
     /**
@@ -91,7 +102,7 @@ public class AutoText {
             instance = sInstance;
 
             if (!locale.equals(instance.mLocale)) {
-                instance = new AutoText(res);
+                instance = new AutoText(res, false);
                 sInstance = instance;
             }
         }
@@ -106,7 +117,16 @@ public class AutoText {
      */
     public static String get(CharSequence src, final int start, final int end,
                              View view) {
-        return getInstance(view).lookup(src, start, end);
+        
+        String userCorrection = null;
+        if(sUserInstance.initialized) {
+          userCorrection = sUserInstance.lookup(src, start, end);
+        }
+        if(userCorrection == null) {
+          return getInstance(view).lookup(src, start, end);
+        } else {
+          return userCorrection;
+        }
     }
 
     /**
@@ -125,6 +145,14 @@ public class AutoText {
      */
     private int getSize() {
         return mSize;
+    }
+    
+    /**
+     * Refreshes the list of user-defined corrections in the file
+     * /data/local/user_autotext.xml .
+     */
+    private static void refreshUserCorrections() {
+      sUserInstance = new AutoText(null, true);
     }
 
     private String lookup(CharSequence src, final int start, final int end) {
@@ -156,14 +184,31 @@ public class AutoText {
         return null;
     }
 
-    private void init(Resources r) {
-        XmlResourceParser parser = r.getXml(com.android.internal.R.xml.autotext);
+    private boolean init(Resources r, boolean isUserInstance) {
+        XmlPullParser parser = null;
+        BufferedInputStream bufstream = null;
+        FileInputStream fstream = null;
+        
+        if(isUserInstance) {
+          try {
+            parser = XmlPullParserFactory.newInstance().newPullParser();
+            fstream = new FileInputStream("/data/local/user_autotext.xml");
+            bufstream = new BufferedInputStream(fstream);
+            parser.setInput(bufstream, null);
+          } catch(IOException e) {
+            return false;
+          } catch(XmlPullParserException e) {
+            return false;
+          }
+        } else {
+          parser = r.getXml(com.android.internal.R.xml.autotext);
+        }
 
-        StringBuilder right = new StringBuilder(RIGHT);
         mTrie = new char[DEFAULT];
         mTrie[TRIE_ROOT] = TRIE_NULL;
         mTrieUsed = TRIE_ROOT + 1;
-
+        StringBuilder right = new StringBuilder(RIGHT);
+        
         try {
             XmlUtils.beginDocument(parser, "words");
             String odest = "";
@@ -178,6 +223,7 @@ public class AutoText {
                 }
 
                 String src = parser.getAttributeValue(null, "src");
+                
                 if (parser.next() == XmlPullParser.TEXT) {
                     String dest = parser.getText();
                     char off;
@@ -193,18 +239,30 @@ public class AutoText {
                     add(src, off);
                 }
             }
-
-            // Don't let Resources cache a copy of all these strings.
-            r.flushLayoutCache();
+            
+            if(r != null) {
+              // Don't let Resources cache a copy of all these strings.
+              r.flushLayoutCache();
+            }
         } catch (XmlPullParserException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
-            parser.close();
+            if(isUserInstance) {
+              try {
+                fstream.close();
+                bufstream.close();
+              } catch(IOException e) {
+                throw new RuntimeException(e);
+              }
+            } else {
+              ((XmlResourceParser)parser).close();
+            }
         }
-
+        
         mText = right.toString();
+        return true;
     }
 
     private void add(String src, char off) {

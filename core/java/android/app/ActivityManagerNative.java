@@ -1167,6 +1167,24 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             overridePendingTransition(token, packageName, enterAnim, exitAnim);
             return true;
         }
+
+        case NOTE_START_WAKELOCK_TRANSACTION: {
+            data.enforceInterface(IActivityManager.descriptor);
+            int uid = data.readInt();
+            String tag = data.readString();
+            int type = data.readInt();
+            noteStartWakeLock(uid, tag, type);
+            return true;
+        }
+
+        case NOTE_STOP_WAKELOCK_TRANSACTION: {
+            data.enforceInterface(IActivityManager.descriptor);
+            int uid = data.readInt();
+            String tag = data.readString();
+            int type = data.readInt();
+            noteStopWakeLock(uid, tag, type);
+            return true;
+        }
         }
         
         return super.onTransact(code, data, reply, flags);
@@ -2565,5 +2583,31 @@ class ActivityManagerProxy implements IActivityManager
         reply.recycle();
     }
     
+    public void noteStartWakeLock(int uid, String tag, int type) throws RemoteException {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        data.writeInt(uid);
+        data.writeString(tag);
+        data.writeInt(type);
+        mRemote.transact(NOTE_START_WAKELOCK_TRANSACTION, data, reply, 0);
+        reply.readException();
+        data.recycle();
+        reply.recycle();
+    }
+
+    public void noteStopWakeLock(int uid, String tag, int type) throws RemoteException {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        data.writeInt(uid);
+        data.writeString(tag);
+        data.writeInt(type);
+        mRemote.transact(NOTE_STOP_WAKELOCK_TRANSACTION, data, reply, 0);
+        reply.readException();
+        data.recycle();
+        reply.recycle();
+    }
+
     private IBinder mRemote;
 }

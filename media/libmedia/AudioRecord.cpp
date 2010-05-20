@@ -41,6 +41,10 @@
 #define LIKELY( exp )       (__builtin_expect( (exp) != 0, true  ))
 #define UNLIKELY( exp )     (__builtin_expect( (exp) != 0, false ))
 
+// Max. time to wait to get the buffer - This is max. for AAC which approximately
+// contains 80 frames each of 20 msec.
+// Time-out for obtainBuffer = 80*20/10 = 160
+#define WAIT_TIME 160
 namespace android {
 
 // ---------------------------------------------------------------------------
@@ -546,7 +550,7 @@ ssize_t AudioRecord::read(void* buffer, size_t userSize)
 
         // Calling obtainBuffer() with a negative wait count causes
         // an (almost) infinite wait time.
-        status_t err = obtainBuffer(&audioBuffer, -1);
+        status_t err = obtainBuffer(&audioBuffer, WAIT_TIME);
         if (err < 0) {
             // out of buffers, return #bytes written
             if (err == status_t(NO_MORE_BUFFERS))

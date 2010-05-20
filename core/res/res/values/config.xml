@@ -218,4 +218,8 @@
     <!-- Component name of the default wallpaper. This will be ImageWallpaper if not 
          specified -->
     <string name="default_wallpaper_component">@null</string>
+
+    <!-- Use notification light instead of attention light -->
+    <bool name="config_hasIntrusiveLed">false</bool>
+
 </resources>

@@ -710,6 +710,12 @@ class PowerManagerService extends IPowerManager.Stub
 
         if (acquireType >= 0) {
             try {
+                mActivityService.noteStartWakeLock(acquireUid, acquireName, acquireType);
+            } catch (RemoteException e) {
+                // Ignore
+            }
+
+            try {
                 mBatteryStats.noteStartWakelock(acquireUid, acquireName, acquireType);
             } catch (RemoteException e) {
                 // Ignore
@@ -778,6 +784,12 @@ class PowerManagerService extends IPowerManager.Stub
         releaseType = wl.monitorType;
 
         if (releaseType >= 0) {
+            try {
+                mActivityService.noteStopWakeLock(releaseUid, releaseName, releaseType);
+            } catch (RemoteException e) {
+                // Ignore
+            }
+
             long origId = Binder.clearCallingIdentity();
             try {
                 mBatteryStats.noteStopWakelock(releaseUid, releaseName, releaseType);

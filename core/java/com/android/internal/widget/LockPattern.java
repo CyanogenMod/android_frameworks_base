@@ -84,6 +84,10 @@ public interface LockPattern {
     public void setTactileFeedbackEnabled(boolean tactileFeedbackEnabled);
     public boolean isInStealthMode();
     public void setInStealthMode(boolean inStealthMode);
+    public void setVisibleDots(boolean visibleDots);
+    public boolean isVisibleDots();
+    public void setShowErrorPath(boolean showErrorPath);
+    public boolean isShowErrorPath();    
     public void setEventListener(EventListener eventListener);
     public void setPattern(State state, List<Cell> pattern);
     public void setState(State state);
@@ -92,5 +96,6 @@ public interface LockPattern {
     public void enableInput();
     public int getCorrectDelay();
     public int getIncorrectDelay();
+    public void setIncorrectDelay(int delay);
     public View getView();
 }

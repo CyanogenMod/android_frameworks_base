@@ -113,12 +113,23 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:drawablePadding="4dip"
         />
+        
+	<TextView
+        android:id="@+id/customMsg" 
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:layout_marginTop="4.0dip" 
+		android:layout_marginLeft="24dip"
+        android:layout_marginRight="24dip"
+		android:layout_below="@id/status2"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+		/>
 
     <TextView
         android:id="@+id/screenLocked"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/status2"
+        android:layout_below="@id/customMsg"
         android:layout_marginLeft="24dip"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_marginTop="12dip"

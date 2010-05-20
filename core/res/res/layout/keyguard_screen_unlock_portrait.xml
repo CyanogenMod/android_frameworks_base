@@ -97,6 +97,17 @@
             />
 
     </RelativeLayout>
+    
+	<TextView
+        android:id="@+id/customMsg" 
+		android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"
+		android:layout_marginTop="4dip" 
+		android:layout_marginLeft="24dip"
+        android:layout_marginRight="24dip"
+		android:layout_below="@id/status2"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+		/>
 
     <View
         android:id="@+id/divider"
@@ -144,8 +155,7 @@
             android:drawablePadding="4dip"
             />
     </LinearLayout>
-
-
+    
     <!--
     <com.android.internal.widget.LockPatternView
         android:id="@+id/lockPattern"
@@ -162,6 +172,7 @@
         android:layout_height="0dip"
         android:layout_weight="1"
         android:layout_marginTop="2dip"
+        android:layout_gravity="center"
          />
 
     <!-- footer -->

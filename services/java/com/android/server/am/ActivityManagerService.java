@@ -685,6 +685,11 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
             = new ArrayList<ServiceRecord>();
 
     /**
+     * Count of WakeLocks held per uid
+     */
+    final HashMap<Integer, Integer> mUidWakeLocks = new HashMap<Integer, Integer>();
+
+    /**
      * Backup/restore process management
      */
     String mBackupAppName = null;
@@ -4250,6 +4255,36 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
             }
             
             Binder.restoreCallingIdentity(origId);
+        }
+    }
+
+    public void noteStartWakeLock(int uid, String tag, int type) {
+        Integer iuid = Integer.valueOf(uid);
+        synchronized (mUidWakeLocks) {
+            Integer count = mUidWakeLocks.get(iuid);
+            if (count == null) {
+                count = new Integer(1);
+            } else {
+                ++count;
+            }
+            mUidWakeLocks.put(iuid, count);
+        }
+    }
+
+    public void noteStopWakeLock(int uid, String tag, int type) {
+        Integer iuid = Integer.valueOf(uid);
+        synchronized (mUidWakeLocks) {
+            Integer count = mUidWakeLocks.get(iuid);
+            if (count != null) {
+                if (--count > 0) {
+                    mUidWakeLocks.put(iuid, count);
+                } else {
+                    mUidWakeLocks.remove(iuid);
+                }
+            } else {
+                Log.e(TAG, "Stopping stopped wake lock for uid "
+                    + uid + ": " + tag);
+            }
         }
     }
     
@@ -13146,6 +13181,11 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
             // counts as being in the foreground.
             adj = FOREGROUND_APP_ADJ;
             app.adjType = "exec-service";
+        } else if (mUidWakeLocks.get(app.info.uid) != null) {
+            // An app that is currently holding a wakelock also
+            // counts as being in the foreground.
+            adj = FOREGROUND_APP_ADJ;
+            app.adjType = "wakelock";
         } else if (app.foregroundServices) {
             // The user is aware of this app, so make it visible.
             adj = VISIBLE_APP_ADJ;

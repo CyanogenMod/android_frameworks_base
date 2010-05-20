@@ -605,6 +605,22 @@ public class RingtoneManager {
             Log.e(TAG, "Failed to open ringtone " + ringtoneUri);
         }
 
+        // Ringtone doesn't exist, use the fallback ringtone.
+        try {
+            AssetFileDescriptor afd = context.getResources().openRawResourceFd(
+                    com.android.internal.R.raw.fallbackring);
+            if (afd != null) {
+                Ringtone r = new Ringtone(context);
+                r.open(afd);
+                afd.close();
+                return r;
+            }
+        } catch (Exception ex) {
+            Log.e(TAG, "unable to find a usable fallback ringtone");
+        }
+
+        // we should never get here
+        Log.e(TAG, "unable to find a usable ringtone");
         return null;
     }
     

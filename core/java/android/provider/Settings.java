@@ -1349,6 +1349,13 @@ public final class Settings {
         public static final String ACCELEROMETER_ROTATION_MODE = "accelerometer_rotation_mode";
         
         /**
+         * Wysie_Soh
+         * Specifies the number of recent apps to show (6, 9, 12, 15);
+         * @hide
+         */
+        public static final String RECENT_APPS_NUMBER = "recent_apps_number";
+        
+        /**
          * Whether the audible DTMF tones are played by the dialer when dialing. The value is
          * boolean (1 or 0).
          */
@@ -1424,6 +1431,14 @@ public final class Settings {
          * @hide
          */
         public static final String NOTIFICATION_LIGHT_PULSE = "notification_light_pulse";
+
+        /**
+         * Whether the notification LED color should be blended with all
+	 * active notifications.
+	 * The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String NOTIFICATION_PULSE_BLEND = "notification_light_pulse_blend";
 
         /**
          * Whether to pulse the notification LED while the screen is on. The value is

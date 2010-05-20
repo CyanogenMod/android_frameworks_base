@@ -456,7 +456,33 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
         copybit_device_t* copybit = mLayer.mBlitEngine;
         if (copybit) {
             // create our EGLImageKHR the first time
-            err = initTempBuffer();
+            // Ensure that we honor copybit limitations
+            uint32_t w = mLayer.mTransformedBounds.width();
+            uint32_t h = mLayer.mTransformedBounds.height();
+
+            const float min = copybit->get(copybit, COPYBIT_MINIFICATION_LIMIT);
+            const float mag = copybit->get(copybit, COPYBIT_MAGNIFICATION_LIMIT);
+
+            float xscale = 1.0f;
+            if ((src.crop.r-src.crop.l) > w*min)
+                xscale = 1.0f / min;
+            else if ((src.crop.r-src.crop.l)*mag < w)
+                xscale = mag;
+
+            float yscale = 1.0f;
+            if ((src.crop.b-src.crop.t) > h*min)
+                yscale = 1.0f / min;
+            else if ((src.crop.b-src.crop.t)*mag < h)
+                yscale = mag;
+
+            if (xscale != 1.0f || yscale != 1.0f) {
+                w = floorf((src.crop.r-src.crop.l) * xscale);
+                h = floorf((src.crop.b-src.crop.t) * yscale);
+           }
+
+            // create our EGLImageKHR the first time
+            err = initTempBuffer(w, h);
+
             if (err == NO_ERROR) {
                 // NOTE: Assume the buffer is allocated with the proper USAGE flags
                 const NativeBuffer& dst(mTempBuffer);
@@ -496,13 +522,10 @@ void LayerBuffer::BufferSource::onDraw(const Region& clip) const
     mLayer.drawWithOpenGL(clip, mTexture);
 }
 
-status_t LayerBuffer::BufferSource::initTempBuffer() const
+status_t LayerBuffer::BufferSource::initTempBuffer(int w, int h) const
 {
-    // figure out the size we need now
     const ISurface::BufferHeap& buffers(mBufferHeap);
-    uint32_t w = mLayer.mTransformedBounds.width();
-    uint32_t h = mLayer.mTransformedBounds.height();
-    if (buffers.w * h != buffers.h * w) {
+    if (mLayer.getOrientation() & Transform::ROT_90) {
         int t = w; w = h; h = t;
     }
 
@@ -514,6 +537,7 @@ status_t LayerBuffer::BufferSource::initTempBuffer() const
             glDeleteTextures(1, &mTexture.name);
             eglDestroyImageKHR(dpy, mTexture.image);
             Texture defaultTexture;
+            mTexture = defaultTexture;
             mTexture.name = mLayer.createTexture();
             mTempGraphicBuffer.clear();
         } else if (!mLayer.mInvalidEGLImage) {

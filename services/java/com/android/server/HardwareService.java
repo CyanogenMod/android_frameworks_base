@@ -319,7 +319,10 @@ public class HardwareService extends IHardwareService.Stub {
             if (!mAttentionLightOn && !mPulsing) {
                 mPulsing = true;
                 // Use LIGHT_ID_NOTIFICATIONS to allow full color. LIGHT_ID_ATTENTION only allows white and blue
-                setLight_native(mNativePointer, LIGHT_ID_NOTIFICATIONS, color,
+                int lightId = mContext.getResources().getBoolean(
+                        com.android.internal.R.bool.config_hasIntrusiveLed)
+                        ? LIGHT_ID_NOTIFICATIONS : LIGHT_ID_ATTENTION;
+                setLight_native(mNativePointer, lightId, color,
                         LIGHT_FLASH_HARDWARE, 7, 0, 0);
                 mH.sendMessageDelayed(Message.obtain(mH, 1), 2000);
             }
@@ -336,7 +339,10 @@ public class HardwareService extends IHardwareService.Stub {
                 if (mPulsing) {
                     mPulsing = false;
                     // Use LIGHT_ID_NOTIFICATIONS to allow full color. LIGHT_ID_ATTENTION only allows white and blue
-                    setLight_native(mNativePointer, LIGHT_ID_NOTIFICATIONS,
+                    int lightId = mContext.getResources().getBoolean(
+                            com.android.internal.R.bool.config_hasIntrusiveLed)
+                            ? LIGHT_ID_NOTIFICATIONS : LIGHT_ID_ATTENTION;
+                    setLight_native(mNativePointer, lightId,
                             mAttentionLightOn ? 0xffffffff : 0,
                             LIGHT_FLASH_NONE, 0, 0, 0);
                 }
