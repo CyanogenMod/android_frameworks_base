@@ -1356,6 +1356,27 @@ public final class Settings {
         public static final String RECENT_APPS_NUMBER = "recent_apps_number";
         
         /**
+         * Wysie_Soh
+         * Specifies the clock color
+         * @hide
+         */
+        public static final String CLOCK_COLOR = "clock_color";
+        
+        /**
+         * Wysie_Soh
+         * Specifies the date color
+         * @hide
+         */
+        public static final String DATE_COLOR = "date_color";
+        public static final String NEW_NOTIF_TICKER_COLOR = "new_notifications_ticker_color";
+        public static final String NO_NOTIF_COLOR = "no_notifications_color";
+        public static final String LATEST_NOTIF_COLOR = "latest_notifications_color";
+        public static final String ONGOING_NOTIF_COLOR = "ongoing_notifications_color";
+        public static final String SPN_LABEL_COLOR = "spnlabel_color";
+        public static final String PLMN_LABEL_COLOR = "plmnLabel_color";
+        public static final String CLEAR_BUTTON_LABEL_COLOR = "clearbutton_color";
+        
+        /**
          * Whether the audible DTMF tones are played by the dialer when dialing. The value is
          * boolean (1 or 0).
          */
@@ -1475,6 +1496,8 @@ public final class Settings {
          * @hide
          */
         public static final String BATTERY_PERCENTAGE_STATUS_ICON = "battery_percentage_status_icon";
+        
+        public static final String BATTERY_PERCENTAGE_STATUS_COLOR = "battery_status_color_title";
         
         /**
          * Settings to backup. This is here so that it's in the same place as the settings

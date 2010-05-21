@@ -348,6 +348,7 @@ public class PinLock extends View implements LockPattern {
     }
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        /*
         final WindowManager wm = (WindowManager) getContext()
                 .getSystemService(Context.WINDOW_SERVICE);
         final int width = wm.getDefaultDisplay().getWidth();
@@ -358,7 +359,11 @@ public class PinLock extends View implements LockPattern {
         if (width > height) {
             squareSide -= STATUS_BAR_HEIGHT;
         }
-
+        */
+        
+        final int width = MeasureSpec.getSize(widthMeasureSpec);
+        final int height = MeasureSpec.getSize(heightMeasureSpec);
+        final int squareSide = Math.min(width, height);
         setMeasuredDimension(squareSide, squareSide);
     }
 
