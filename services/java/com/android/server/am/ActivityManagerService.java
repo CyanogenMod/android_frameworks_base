@@ -13181,6 +13181,11 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
             // counts as being in the foreground.
             adj = FOREGROUND_APP_ADJ;
             app.adjType = "exec-service";
+        } else if (mUidWakeLocks.get(app.info.uid) != null) {
+            // An app that is currently holding a wakelock also
+            // counts as being in the foreground.
+            adj = FOREGROUND_APP_ADJ;
+            app.adjType = "wakelock";
         } else if (app.foregroundServices) {
             // The user is aware of this app, so make it visible.
             adj = VISIBLE_APP_ADJ;
@@ -13373,20 +13378,10 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
             adj = app.maxAdj;
         }
 
+        app.curAdj = adj;
         app.curSchedGroup = adj > VISIBLE_APP_ADJ
                 ? Process.THREAD_GROUP_BG_NONINTERACTIVE
                 : Process.THREAD_GROUP_DEFAULT;
-        
-        // An app that is currently holding a wakelock also
-        // counts as being in the foreground.
-        // We do this after setting the schedgroup so that it can't
-        // escalate beyond it's original priority
-        if (mUidWakeLocks.get(app.info.uid) != null) {
-            adj = FOREGROUND_APP_ADJ;
-            app.adjType = "wakelock";
-        } 
-        
-        app.curAdj = adj;
         
         return adj;
     }
