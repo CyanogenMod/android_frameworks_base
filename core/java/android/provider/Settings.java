@@ -1376,6 +1376,10 @@ public final class Settings {
         public static final String PLMN_LABEL_COLOR = "plmnLabel_color";
         public static final String CLEAR_BUTTON_LABEL_COLOR = "clearbutton_color";
         
+        public static final String NOTIF_ITEM_TITLE_COLOR = "notifications_title_color";
+        public static final String NOTIF_ITEM_TEXT_COLOR = "notifications_text_color";
+        public static final String NOTIF_ITEM_TIME_COLOR = "notifications_time_color";
+        
         /**
          * Whether the audible DTMF tones are played by the dialer when dialing. The value is
          * boolean (1 or 0).
