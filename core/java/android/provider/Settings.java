@@ -1368,14 +1368,77 @@ public final class Settings {
          * @hide
          */
         public static final String DATE_COLOR = "date_color";
+
+        /**
+         * Wysie_Soh
+         * Specifies new notification ticker color
+         * @hide
+         */
         public static final String NEW_NOTIF_TICKER_COLOR = "new_notifications_ticker_color";
+
+        /**
+         * Wysie_Soh
+         * Specifies no notifications color
+         * @hide
+         */
         public static final String NO_NOTIF_COLOR = "no_notifications_color";
+
+        /**
+         * Wysie_Soh
+         * Specifies latest nofitication color
+         * @hide
+         */
         public static final String LATEST_NOTIF_COLOR = "latest_notifications_color";
+
+        /**
+         * Wysie_Soh
+         * Specifies ongoing notification color
+         * @hide
+         */
         public static final String ONGOING_NOTIF_COLOR = "ongoing_notifications_color";
+
+        /**
+         * Wysie_Soh
+         * Specifies spn label color 
+         * @hide 
+         */
         public static final String SPN_LABEL_COLOR = "spnlabel_color";
+
+        /**
+         * Wysie_Soh
+         * Specifies plmn color
+         * @hide
+         */
         public static final String PLMN_LABEL_COLOR = "plmnLabel_color";
+
+        /**
+         * Wysie_Soh
+         * Specifies clear button color
+         * @hide
+         */
         public static final String CLEAR_BUTTON_LABEL_COLOR = "clearbutton_color";
         
+        /**
+         * Wysie_Soh
+         * Specifies notification item title color.
+         * @hide
+         */
+        public static final String NOTIF_ITEM_TITLE_COLOR = "notif_item_title_color";
+
+        /**
+         * Wysie_Soh
+         * Specifies notification item text color.
+         * @hide
+         */
+        public static final String NOTIF_ITEM_TEXT_COLOR = "notif_item_text_color";
+
+        /**
+         * Wysie_Soh
+         * Specifies notification item time color.
+         * @hide
+         */
+        public static final String NOTIF_ITEM_TIME_COLOR = "notif_item_time_color";
+
         /**
          * Whether the audible DTMF tones are played by the dialer when dialing. The value is
          * boolean (1 or 0).
@@ -1496,7 +1559,12 @@ public final class Settings {
          * @hide
          */
         public static final String BATTERY_PERCENTAGE_STATUS_ICON = "battery_percentage_status_icon";
-        
+
+        /**
+         * Wysie_Soh
+         * Specifies battery percentage status color
+         * @hide
+         */
         public static final String BATTERY_PERCENTAGE_STATUS_COLOR = "battery_status_color_title";
         
         /**
