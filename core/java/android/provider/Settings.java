@@ -1418,6 +1418,10 @@ public final class Settings {
          */
         public static final String CLEAR_BUTTON_LABEL_COLOR = "clearbutton_color";
         
+        public static final String NOTIF_ITEM_TITLE_COLOR = "notifications_title_color";
+        public static final String NOTIF_ITEM_TEXT_COLOR = "notifications_text_color";
+        public static final String NOTIF_ITEM_TIME_COLOR = "notifications_time_color";
+        
         /**
          * Wysie_Soh
          * Specifies notification item title color.
