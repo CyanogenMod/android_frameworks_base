@@ -66,7 +66,11 @@ class OpenvpnService extends VpnService<OpenvpnProfile> {
 
         args.add(OPENVPN_DAEMON);
         args.add("--dev");
-        args.add("tun");
+        if (p.getDevice() != null) {
+            args.add(p.getDevice());
+        } else {
+            args.add("tun");
+        }
         args.add("--remote");
         args.add(serverIp);
         args.add("--nobind");

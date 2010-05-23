@@ -114,16 +114,16 @@
         android:drawablePadding="4dip"
         />
         
-	<TextView
-        android:id="@+id/customMsg" 
-		android:layout_width="wrap_content" 
-		android:layout_height="wrap_content"
-		android:layout_marginTop="4.0dip" 
-		android:layout_marginLeft="24dip"
+    <TextView
+        android:id="@+id/customMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4.0dip"
+        android:layout_marginLeft="24dip"
         android:layout_marginRight="24dip"
-		android:layout_below="@id/status2"
+        android:layout_below="@id/status2"
         android:textAppearance="?android:attr/textAppearanceSmall"
-		/>
+        />
 
     <TextView
         android:id="@+id/screenLocked"
@@ -149,12 +149,14 @@
         android:id="@+id/emergencyCallButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@id/tab_selector"
+        android:layout_marginTop="120dip"
+        android:layout_marginBottom="8dip"
         android:layout_centerHorizontal="true"
         android:drawableLeft="@drawable/ic_emergency"
         style="@style/Widget.Button.Transparent"
         android:drawablePadding="8dip"
-       />
+    />
 
 </RelativeLayout>
 

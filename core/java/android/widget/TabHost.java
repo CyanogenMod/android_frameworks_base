@@ -51,6 +51,14 @@ public class TabHost extends FrameLayout implements ViewTreeObserver.OnTouchMode
      * {@hide}
      */
     protected int mCurrentTab = -1;
+    /**
+     * This field when set to true ensures that first tab is not set as the current tab
+     * by preventing the addTab() from calling setCurrentTab() with index set to 0.
+     * To ensure that the operations of an application are not changed, it should be set to
+     * false whenever mCurrenttab is set to -1.
+     * {@hide}
+     */
+    private boolean mAvoidFirstTabLoad = false;
     private View mCurrentView = null;
     /**
      * This field should be made private, so it is hidden from the SDK.
@@ -75,6 +83,7 @@ public class TabHost extends FrameLayout implements ViewTreeObserver.OnTouchMode
         setDescendantFocusability(FOCUS_AFTER_DESCENDANTS);
 
         mCurrentTab = -1;
+        mAvoidFirstTabLoad = false;
         mCurrentView = null;
     }
 
@@ -209,7 +218,9 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
         mTabWidget.addView(tabIndicator);
         mTabSpecs.add(tabSpec);
 
-        if (mCurrentTab == -1) {
+	// The second test is always true except when an application explicitly sets
+	// mAvoidFirstTabLoad to true.
+        if (mCurrentTab == -1 && !mAvoidFirstTabLoad) {
             setCurrentTab(0);
         }
     }
@@ -252,7 +263,18 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
     public View getCurrentView() {
         return mCurrentView;
     }
-
+    /**
+     * {@hide}
+     */
+    public void setAvoidFirstTabLoad(boolean flag) {
+	mAvoidFirstTabLoad = flag;
+    }
+    /**
+     * {@hide}
+     */
+    public void setCurrentTabToZero() {
+	mCurrentTab = 0;
+    }
     public void setCurrentTabByTag(String tag) {
         int i;
         for (i = 0; i < mTabSpecs.size(); i++) {

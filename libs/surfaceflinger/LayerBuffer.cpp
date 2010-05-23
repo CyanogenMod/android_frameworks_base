@@ -537,7 +537,6 @@ status_t LayerBuffer::BufferSource::initTempBuffer(int w, int h) const
             glDeleteTextures(1, &mTexture.name);
             eglDestroyImageKHR(dpy, mTexture.image);
             Texture defaultTexture;
-            mTexture = defaultTexture;
             mTexture.name = mLayer.createTexture();
             mTempGraphicBuffer.clear();
         } else if (!mLayer.mInvalidEGLImage) {
