@@ -1357,6 +1357,13 @@ public final class Settings {
         
         /**
          * Wysie_Soh
+         * Specifies whether to show or hide clock
+         * @hide
+         */
+        public static final String SHOW_STATUS_CLOCK = "show_status_clock";
+        
+        /**
+         * Wysie_Soh
          * Specifies the clock color
          * @hide
          */

@@ -67,6 +67,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+import java.lang.reflect.Field;
 
 
 /**
@@ -864,6 +865,27 @@ public class StatusBarService extends IStatusBar.Stub
             return null;
         }
         
+        /* Lame attempt at trying to retrieve all TextViews, any more ideas? A good way will be
+         * to use something like setForegroundColor on child, but no such method exists for Views.
+         * The main reason for doing this is certain apps like Quick Setttings, and even the in-call
+         * notification item does not get overwritten by this mod :(. - Wysie
+         * Class cl = child.getClass();
+         * Field[] fields = cl.getFields();
+         * TextView temp = null;
+         * int count = fields.length;
+         *
+         * for (int i = 0; i < count; i++) {
+         *    try {
+         *        Log.d("TITLE", "" + com.android.internal.R.id.title);
+         *        temp = (TextView) child.findViewById(fields[i].getInt(child));
+         *        temp.setTextColor(whiteColor);
+         *    }
+         *    catch (Exception e) {
+         *        Log.d("WYSIE", e.toString());
+         *    }
+         * }
+         */
+
         //Try-catch cause it does not work with QuickSettings, possibly other apps too :( (Won't work thru XML as well)
         try {
             TextView tv1 = (TextView) child.findViewById(com.android.internal.R.id.title);
