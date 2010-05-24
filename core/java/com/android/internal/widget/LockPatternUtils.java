@@ -86,9 +86,11 @@ public class LockPatternUtils {
     private final static String LOCK_CUSTOM_MSG = "lockscreen.custommsg";
     private final static String LOCK_SHOW_SLIDERS = "lockscreen.showsliders";
     private final static String LOCK_INCORRECT_DELAY = "lockscreen.incorrectdelay";
+    private final static String SHOW_UNLOCK_TEXT = "lockscreen.show_unlock_text";
+    private final static String SHOW_UNLOCK_ERR_TEXT = "lockscreen.show_unlock_err_text";
 
-    private static final int PIN_CHECK_TIMEOUT_MIN = 500;
-    private static final int PIN_CHECK_TIMEOUT_DEFAULT = 1500;
+    private final static int PIN_CHECK_TIMEOUT_MIN = 500;
+    private final static int PIN_CHECK_TIMEOUT_DEFAULT = 1500;
     
     private final ContentResolver mContentResolver;
 
@@ -343,6 +345,22 @@ public class LockPatternUtils {
     
     public void setIncorrectDelay(int delay) {
         setInt(LOCK_INCORRECT_DELAY, delay);
+    }
+    
+    public void setShowUnlockMsg(boolean enabled) {
+        setBoolean(SHOW_UNLOCK_TEXT, enabled);
+    }
+    
+    public boolean isShowUnlockMsg() {
+        return getBoolean(SHOW_UNLOCK_TEXT, true);
+    }
+    
+    public void setShowUnlockErrMsg(boolean enabled) {
+        setBoolean(SHOW_UNLOCK_ERR_TEXT, enabled);
+    }
+    
+    public boolean isShowUnlockErrMsg() {
+        return getBoolean(SHOW_UNLOCK_ERR_TEXT, true);
     }
 
     /**
