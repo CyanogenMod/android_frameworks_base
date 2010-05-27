@@ -1395,6 +1395,13 @@ public final class Settings {
         
         /**
          * Wysie_Soh
+         * Specifies notification count color
+         * @hide
+         */
+        public static final String NOTIF_COUNT_COLOR = "notif_count_color";
+        
+        /**
+         * Wysie_Soh
          * Specifies the date color
          * @hide
          */

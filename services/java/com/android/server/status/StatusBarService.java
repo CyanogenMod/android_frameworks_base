@@ -1790,8 +1790,8 @@ public class StatusBarService extends IStatusBar.Stub
 
     void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn) {
 // Double carrier
-        mShowPlmnSb = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.SHOW_PLMN_SB, 0) == 1);
-        mShowSpnSb = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.SHOW_SPN_SB, 0) == 1);
+        mShowPlmnSb = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.SHOW_PLMN_SB, 1) == 1);
+        mShowSpnSb = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.SHOW_SPN_SB, 1) == 1);
         if (false) {
             Log.d(TAG, "updateNetworkName showSpn=" + showSpn + " spn=" + spn
                     + " ShowPlmn=" + showPlmn + " plmn=" + plmn);
