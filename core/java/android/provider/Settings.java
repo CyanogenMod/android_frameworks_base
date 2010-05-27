@@ -1354,6 +1354,30 @@ public final class Settings {
          * @hide
          */
         public static final String RECENT_APPS_NUMBER = "recent_apps_number";
+
+		/**
+		 * bcrook - Double Carrier
+		 * Toggles whether to display the PLMN field on the Lockscreen
+		 */
+		public static final String SHOW_PLMN_LS = "show_plmn_ls";
+
+		/**
+		 * bcrook - Double Carrier
+		 * Toggles whether to display the SPN field on the Lockscreen
+		 */
+		public static final String SHOW_SPN_LS = "show_spn_ls";
+
+		/**
+		 * bcrook - Double Carrier
+		 * Toggles whether to display the PLMN field on the Notification bar
+		 */
+		public static final String SHOW_PLMN_SB = "show_plmn_sb";
+
+		/**
+		 * bcrook - Double Carrier
+		 * Toggles whether to display the SPN field on the Notification bar
+		 */
+		public static final String SHOW_SPN_SB = "show_spn_sb";
         
         /**
          * Wysie_Soh

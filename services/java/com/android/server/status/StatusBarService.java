@@ -90,6 +90,10 @@ public class StatusBarService extends IStatusBar.Stub
     static final String TAG = "StatusBar";
     static final boolean SPEW = false;
 
+	//Double carrier
+	private boolean mShowPlmnSb;
+	private boolean mShowSpnSb;
+
     static final int EXPANDED_LEAVE_ALONE = -10000;
     static final int EXPANDED_FULL_OPEN = -10001;
 
@@ -1785,12 +1789,16 @@ public class StatusBarService extends IStatusBar.Stub
     };
 
     void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn) {
+// Double carrier
+        mShowPlmnSb = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.SHOW_PLMN_SB, 0) == 1);
+        mShowSpnSb = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.SHOW_SPN_SB, 0) == 1);
         if (false) {
             Log.d(TAG, "updateNetworkName showSpn=" + showSpn + " spn=" + spn
-                    + " showPlmn=" + showPlmn + " plmn=" + plmn);
+                    + " ShowPlmn=" + showPlmn + " plmn=" + plmn);
         }
         boolean something = false;
-        if (showPlmn) {
+// Double carrier - bcrook
+        if (showPlmn && mShowPlmnSb) {
             mPlmnLabel.setVisibility(View.VISIBLE);
             if (plmn != null) {
                 mPlmnLabel.setText(plmn);
@@ -1801,7 +1809,11 @@ public class StatusBarService extends IStatusBar.Stub
             mPlmnLabel.setText("");
             mPlmnLabel.setVisibility(View.GONE);
         }
-        if (showSpn && spn != null) {
+
+// Double carrier - bcrook, refinements from Wysie
+
+
+        if (showSpn && spn != null && mShowSpnSb) {
             mSpnLabel.setText(spn);
             mSpnLabel.setVisibility(View.VISIBLE);
             something = true;
@@ -1809,6 +1821,7 @@ public class StatusBarService extends IStatusBar.Stub
             mSpnLabel.setText("");
             mSpnLabel.setVisibility(View.GONE);
         }
+
     }
 
     /**
