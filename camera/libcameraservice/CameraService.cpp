@@ -216,6 +216,7 @@ CameraService::Client::Client(const sp<CameraService>& cameraService,
         const sp<ICameraClient>& cameraClient, pid_t clientPid)
 {
     int callingPid = getCallingPid();
+    char propVal[PROPERTY_VALUE_MAX];
     LOGD("Client::Client E (pid %d)", callingPid);
     mCameraService = cameraService;
     mCameraClient = cameraClient;
@@ -233,7 +234,9 @@ CameraService::Client::Client(const sp<CameraService>& cameraService,
                              CAMERA_MSG_ZOOM |
                              CAMERA_MSG_FOCUS);
 
-    mMediaPlayerClick = newMediaPlayer("/system/media/audio/ui/camera_click.ogg");
+    property_get("persist.camera.shutter.disable", propVal, "0");
+    if(atoi(propVal) != 1)
+        mMediaPlayerClick = newMediaPlayer("/system/media/audio/ui/camera_click.ogg");
     mMediaPlayerBeep = newMediaPlayer("/system/media/audio/ui/VideoRecord.ogg");
     mOverlayW = 0;
     mOverlayH = 0;

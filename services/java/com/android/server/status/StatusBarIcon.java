@@ -35,6 +35,7 @@ class StatusBarIcon {
     private TextView mNumberView;
     private int clockColor = 0xff000000;
     private int batteryPercentColor = 0xffffffff;
+    private int notifCountColor = 0xffffffff;
     private Context mContext;
 
     public StatusBarIcon(Context context, IconData data, ViewGroup parent) {
@@ -88,6 +89,9 @@ class StatusBarIcon {
                 mNumberView = nv;
                 if (data.number > 0) {
                     nv.setText("" + data.number);
+                    notifCountColor = Settings.System.getInt(mContext.getContentResolver(),
+                                        Settings.System.NOTIF_COUNT_COLOR, notifCountColor);
+                    nv.setTextColor(notifCountColor);                    
                     nv.setVisibility(View.VISIBLE);
                 } else {
                     nv.setVisibility(View.GONE);
