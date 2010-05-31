@@ -202,7 +202,7 @@ public class Color {
      * 'yellow', 'lightgray', 'darkgray'
      */
     public static int parseColor(String colorString) {
-        if (colorString.charAt(0) == '#') {
+        if (colorString.startsWith("#")) {
             // Use a long to avoid rollovers on #ffXXXXXX
             long color = Long.parseLong(colorString.substring(1), 16);
             if (colorString.length() == 7) {
