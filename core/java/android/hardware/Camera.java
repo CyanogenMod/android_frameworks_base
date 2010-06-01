@@ -1163,6 +1163,9 @@ public class Camera {
          */
         public List<Integer> getSupportedPreviewFormats() {
             String str = get(KEY_PREVIEW_FORMAT + SUPPORTED_VALUES_SUFFIX);
+            if (str == null) {
+                str = get(KEY_PREVIEW_FORMAT);
+            }
             ArrayList<Integer> formats = new ArrayList<Integer>();
             for (String s : split(str)) {
                 int f = pixelFormatForCameraFormat(s);
