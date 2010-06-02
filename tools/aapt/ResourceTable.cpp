@@ -1740,13 +1740,6 @@ status_t ResourceTable::startBag(const SourcePos& sourcePos,
     
     // If a parent is explicitly specified, set it.
     if (bagParent.size() > 0) {
-        String16 curPar = e->getParent();
-        if (curPar.size() > 0 && curPar != bagParent) {
-            sourcePos.error("Conflicting parents specified, was '%s', now '%s'\n",
-                            String8(e->getParent()).string(),
-                            String8(bagParent).string());
-            return UNKNOWN_ERROR;
-        }
         e->setParent(bagParent);
     }
 
@@ -1794,13 +1787,6 @@ status_t ResourceTable::addBag(const SourcePos& sourcePos,
 
     // If a parent is explicitly specified, set it.
     if (bagParent.size() > 0) {
-        String16 curPar = e->getParent();
-        if (curPar.size() > 0 && curPar != bagParent) {
-            sourcePos.error("Conflicting parents specified, was '%s', now '%s'\n",
-                    String8(e->getParent()).string(),
-                    String8(bagParent).string());
-            return UNKNOWN_ERROR;
-        }
         e->setParent(bagParent);
     }
 
