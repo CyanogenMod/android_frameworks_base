@@ -124,8 +124,12 @@ public final class GsmMmiCode extends Handler implements MmiCode {
 
     // See TS 22.030 6.5.2 "Structure of the MMI"
 
+    // Note that some nonstandard MMI codes seem to end with an asterisk, eg. "#190*1660#*"
+    // (http://code.google.com/p/android/issues/detail?id=2226).  Make sure this doesn't get
+    // merged into MATCH_GROUP_DIALING_NUMBER.
+
     static Pattern sPatternSuppService = Pattern.compile(
-        "((\\*|#|\\*#|\\*\\*|##)(\\d{2,3})(\\*([^*#]*)(\\*([^*#]*)(\\*([^*#]*)(\\*([^*#]*))?)?)?)?#)(.*)");
+        "((\\*|#|\\*#|\\*\\*|##)(\\d{2,3})(\\*([^*#]*)(\\*([^*#]*)(\\*([^*#]*)(\\*([^*#]*))?)?)?)?#\\*?)(.*)");
 /*       1  2                    3          4  5       6   7         8    9     10  11             12
 
          1 = Full string up to and including #
@@ -134,7 +138,7 @@ public final class GsmMmiCode extends Handler implements MmiCode {
          5 = SIA
          7 = SIB
          9 = SIC
-         10 = dialing number
+         12 = dialing number
 */
 
     static final int MATCH_GROUP_POUND_STRING = 1;
