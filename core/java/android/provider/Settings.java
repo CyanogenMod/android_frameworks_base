@@ -1398,7 +1398,7 @@ public final class Settings {
          * Specifies notification count color
          * @hide
          */
-        public static final String NOTIF_COUNT_COLOR = "notif_count_color";
+        public static final String NOTIF_COUNT_COLOR = "notifications_count_color";
         
         /**
          * Wysie_Soh
@@ -1440,42 +1440,42 @@ public final class Settings {
          * Specifies spn label color 
          * @hide 
          */
-        public static final String SPN_LABEL_COLOR = "spnlabel_color";
+        public static final String SPN_LABEL_COLOR = "spn_label_color";
 
         /**
          * Wysie_Soh
          * Specifies plmn color
          * @hide
          */
-        public static final String PLMN_LABEL_COLOR = "plmnLabel_color";
+        public static final String PLMN_LABEL_COLOR = "plmn_label_color";
 
         /**
          * Wysie_Soh
          * Specifies clear button color
          * @hide
          */
-        public static final String CLEAR_BUTTON_LABEL_COLOR = "clearbutton_color";
+        public static final String CLEAR_BUTTON_LABEL_COLOR = "clear_button_label_color";
         
         /**
          * Wysie_Soh
          * Specifies notification item title color.
          * @hide
          */
-        public static final String NOTIF_ITEM_TITLE_COLOR = "notif_item_title_color";
+        public static final String NOTIF_ITEM_TITLE_COLOR = "notifications_title_color";
 
         /**
          * Wysie_Soh
          * Specifies notification item text color.
          * @hide
          */
-        public static final String NOTIF_ITEM_TEXT_COLOR = "notif_item_text_color";
+        public static final String NOTIF_ITEM_TEXT_COLOR = "notifications_text_color";
 
         /**
          * Wysie_Soh
          * Specifies notification item time color.
          * @hide
          */
-        public static final String NOTIF_ITEM_TIME_COLOR = "notif_item_time_color";
+        public static final String NOTIF_ITEM_TIME_COLOR = "notifications_time_color";
 
         /**
          * Whether the audible DTMF tones are played by the dialer when dialing. The value is
