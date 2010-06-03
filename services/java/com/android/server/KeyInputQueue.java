@@ -315,7 +315,9 @@ public abstract class KeyInputQueue {
         mLast = new QueuedEvent();
         mFirst.next = mLast;
         mLast.prev = mFirst;
+    }
 
+    void start() {
         mThread.start();
     }
 
