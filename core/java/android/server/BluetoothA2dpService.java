@@ -22,6 +22,8 @@
 
 package android.server;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -35,6 +37,7 @@ import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -55,7 +58,7 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
 
     private static final String BLUETOOTH_ENABLED = "bluetooth_enabled";
 
-    private static final int MESSAGE_CONNECT_TO = 1;
+    private static final String ACTION_CONNECT_TO = "android.bluetooth_a2dp.action.CONNECT_TO";
 
     private static final String PROPERTY_STATE = "State";
 
@@ -111,8 +114,24 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
                     // after a delay. We delay to avoid connection collisions,
                     // and to give other profiles such as HFP a chance to
                     // connect first.
-                    Message msg = Message.obtain(mHandler, MESSAGE_CONNECT_TO, device);
-                    mHandler.sendMessageDelayed(msg, 6000);
+                    AlarmManager mgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+                    Intent i = new Intent(ACTION_CONNECT_TO);
+                    i.putExtra(BluetoothDevice.EXTRA_DEVICE, device);
+                    PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
+                    mgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 6000, pi);
+                }
+            } else if (action.equals(ACTION_CONNECT_TO)) {
+                // check bluetooth is still on, device is still preferred, and
+                // nothing is currently connected
+                if (mBluetoothService.isEnabled() &&
+                        getSinkPriority(device) == BluetoothA2dp.PRIORITY_AUTO_CONNECT &&
+                        lookupSinksMatchingStates(new int[] {
+                            BluetoothA2dp.STATE_CONNECTING,
+                            BluetoothA2dp.STATE_CONNECTED,
+                            BluetoothA2dp.STATE_PLAYING,
+                            BluetoothA2dp.STATE_DISCONNECTING}).size() == 0) {
+                    log("Auto-connecting A2DP to sink " + device);
+                    connectSink(device);
                 }
             } else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
                 synchronized (this) {
@@ -145,6 +164,7 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
         mIntentFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
         mIntentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
         mIntentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+        mIntentFilter.addAction(ACTION_CONNECT_TO);
         mContext.registerReceiver(mReceiver, mIntentFilter);
 
         mAudioDevices = new HashMap<BluetoothDevice, Integer>();
@@ -166,23 +186,6 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-            case MESSAGE_CONNECT_TO:
-                BluetoothDevice device = (BluetoothDevice) msg.obj;
-                // check bluetooth is still on, device is still preferred, and
-                // nothing is currently connected
-                if (mBluetoothService.isEnabled() &&
-                        getSinkPriority(device) == BluetoothA2dp.PRIORITY_AUTO_CONNECT &&
-                        lookupSinksMatchingStates(new int[] {
-                            BluetoothA2dp.STATE_CONNECTING,
-                            BluetoothA2dp.STATE_CONNECTED,
-                            BluetoothA2dp.STATE_PLAYING,
-                            BluetoothA2dp.STATE_DISCONNECTING}).size() == 0) {
-                    log("Auto-connecting A2DP to sink " + device);
-                    connectSink(device);
-                }
-                break;
-            }
         }
     };
 
