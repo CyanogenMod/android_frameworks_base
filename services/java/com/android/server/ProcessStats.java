@@ -514,20 +514,23 @@ public class ProcessStats {
             StringTokenizer st = new StringTokenizer(file, "\n ");
             while (st.hasMoreElements()) {
                 String token = st.nextToken();
-                try {
-                    long val = Long.parseLong(token);
-                    tempSpeeds[speed] = val;
-                    token = st.nextToken();
-                    val = Long.parseLong(token);
-                    tempTimes[speed] = val;
-                    speed++;
-                    if (speed == MAX_SPEEDS) break; // No more
-                    if (localLOGV && out == null) {
-                        Log.v(TAG, "First time : Speed/Time = " + tempSpeeds[speed - 1]
-                              + "\t" + tempTimes[speed - 1]);
+                if (st.hasMoreElements()) {
+                    try {
+
+                        long val = Long.parseLong(token);
+                        tempSpeeds[speed] = val;
+                        token = st.nextToken();
+                        val = Long.parseLong(token);
+                        tempTimes[speed] = val;
+                        speed++;
+                        if (speed == MAX_SPEEDS) break; // No more
+                        if (localLOGV && out == null) {
+                            Log.v(TAG, "First time : Speed/Time = " + tempSpeeds[speed - 1]
+                                                                                 + "\t" + tempTimes[speed - 1]);
+                        }
+                    } catch (NumberFormatException nfe) {
+                        Log.i(TAG, "Unable to parse time_in_state");
                     }
-                } catch (NumberFormatException nfe) {
-                    Log.i(TAG, "Unable to parse time_in_state");
                 }
             }
         }
