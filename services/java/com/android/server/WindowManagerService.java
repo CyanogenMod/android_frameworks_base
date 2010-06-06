@@ -10254,8 +10254,8 @@ public class WindowManagerService extends IWindowManager.Stub
                                     mDimAnimator = new DimAnimator(mFxSession);
                                 }
                                 mDimAnimator.show(dw, dh);
+                                mDimAnimator.updateParameters(w, currentTime);
                             }
-                            mDimAnimator.updateParameters(w, currentTime);
                         }
                         if ((attrFlags&FLAG_BLUR_BEHIND) != 0) {
                             if (!blurring) {
