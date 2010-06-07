@@ -33,6 +33,10 @@
 #include "SurfaceFlinger.h"
 #include "DisplayHardware/DisplayHardware.h"
 
+#define RENDER_EFFECT_NIGHT 1
+#define RENDER_EFFECT_TERMINAL 2
+#define RENDER_EFFECT_AMBER 3
+#define RENDER_EFFECT_SALMON 4
 
 namespace android {
 
@@ -401,7 +405,10 @@ void LayerBase::drawWithOpenGL(const Region& clip, const Texture& texture) const
     
     glEnable(GL_TEXTURE_2D);
 
-    if (UNLIKELY(s.alpha < 0xFF)) {
+    int renderEffect = mFlinger->getRenderEffect();
+    bool noEffect = renderEffect == 0;
+
+    if (UNLIKELY(s.alpha < 0xFF) && noEffect) {
         // We have an alpha-modulation. We need to modulate all
         // texture components by alpha because we're always using 
         // premultiplied alpha.
@@ -423,7 +430,7 @@ void LayerBase::drawWithOpenGL(const Region& clip, const Texture& texture) const
         glEnable(GL_BLEND);
         glBlendFunc(src, GL_ONE_MINUS_SRC_ALPHA);
         glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, env);
-    } else {
+    } else if (noEffect) {
         glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
         glColor4x(0x10000, 0x10000, 0x10000, 0x10000);
         if (needsBlending()) {
@@ -433,6 +440,29 @@ void LayerBase::drawWithOpenGL(const Region& clip, const Texture& texture) const
         } else {
             glDisable(GL_BLEND);
         }
+    } else {
+        // Apply a render effect, which is simple color masks for now.
+        GLenum env, src;
+        env = GL_MODULATE;
+        src = mPremultipliedAlpha ? GL_ONE : GL_SRC_ALPHA;
+        const GGLfixed alpha = (s.alpha << 16)/255;
+        switch (renderEffect) {
+            case RENDER_EFFECT_NIGHT:
+                glColor4x(alpha, 0, 0, alpha);
+                break;
+            case RENDER_EFFECT_TERMINAL:
+                glColor4x(0, alpha, 0, alpha);
+                break;
+            case RENDER_EFFECT_AMBER:
+                glColor4x(alpha, alpha*0.75, 0, alpha);
+                break;
+            case RENDER_EFFECT_SALMON:
+                glColor4x(alpha, alpha*0.5, alpha*0.5, alpha);
+                break;
+        }
+        glEnable(GL_BLEND);
+        glBlendFunc(src, GL_ONE_MINUS_SRC_ALPHA);
+        glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, env);
     }
 
     Region::const_iterator it = clip.begin();

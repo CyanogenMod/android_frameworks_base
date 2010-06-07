@@ -184,6 +184,7 @@ SurfaceFlinger::SurfaceFlinger()
         mFreezeDisplayTime(0),
         mDebugRegion(0),
         mDebugBackground(0),
+        mRenderEffect(0),
         mDebugInSwapBuffers(0),
         mLastSwapBufferTime(0),
         mDebugInTransaction(0),
@@ -205,6 +206,8 @@ void SurfaceFlinger::init()
     mDebugRegion = atoi(value);
     property_get("debug.sf.showbackground", value, "0");
     mDebugBackground = atoi(value);
+    property_get("debug.sf.render_effect", value, "0");
+    mRenderEffect = atoi(value);
 
     LOGI_IF(mDebugRegion,           "showupdates enabled");
     LOGI_IF(mDebugBackground,       "showbackground enabled");
@@ -1692,11 +1695,17 @@ status_t SurfaceFlinger::onTransact(
                 reply->writeInt32(0);
                 reply->writeInt32(mDebugRegion);
                 reply->writeInt32(mDebugBackground);
+                reply->writeInt32(mRenderEffect);
                 return NO_ERROR;
             case 1013: {
                 Mutex::Autolock _l(mStateLock);
                 const DisplayHardware& hw(graphicPlane(0).displayHardware());
                 reply->writeInt32(hw.getPageFlipCount());
+            }
+            case 1014: { // RENDER_EFFECT
+                // TODO: filter to only allow valid effects
+                mRenderEffect = data.readInt32();
+                return NO_ERROR;
             }
             return NO_ERROR;
         }

@@ -174,6 +174,8 @@ public:
 
             overlay_control_device_t* getOverlayEngine() const;
 
+            inline int                  getRenderEffect() const { return mRenderEffect; }
+
             
     status_t removeLayer(const sp<LayerBase>& layer);
     status_t addLayer(const sp<LayerBase>& layer);
@@ -354,6 +356,7 @@ private:
                 // don't use a lock for these, we don't care
                 int                         mDebugRegion;
                 int                         mDebugBackground;
+                int                         mRenderEffect;
                 volatile nsecs_t            mDebugInSwapBuffers;
                 nsecs_t                     mLastSwapBufferTime;
                 volatile nsecs_t            mDebugInTransaction;
