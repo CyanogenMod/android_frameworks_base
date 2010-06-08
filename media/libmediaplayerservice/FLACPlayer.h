@@ -75,6 +75,7 @@ private:
 
     FLAC__int8 *         mAudioBuffer;
     uint32_t             mAudioBufferSize;
+    uint32_t             mAudioBufferFilled;
 
     Mutex                mMutex;
     Condition            mCondition;
