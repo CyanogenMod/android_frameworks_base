@@ -965,10 +965,12 @@ public class AccountManagerService
                 return;
             }
 
-            try {
-                mAuthenticator.hasFeatures(this, mAccountsOfType[mCurrentAccount], mFeatures);
-            } catch (RemoteException e) {
-                onError(AccountManager.ERROR_CODE_REMOTE_EXCEPTION, "remote exception");
+            if (mAuthenticator != null) { 
+                try {
+                    mAuthenticator.hasFeatures(this, mAccountsOfType[mCurrentAccount], mFeatures);
+                } catch (RemoteException e) {
+                    onError(AccountManager.ERROR_CODE_REMOTE_EXCEPTION, "remote exception");
+                }
             }
         }
 
