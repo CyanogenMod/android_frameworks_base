@@ -56,7 +56,8 @@ static status_t STATE_OPEN = 2;
 FLACPlayer::FLACPlayer() :
     mTotalSamples(-1), mCurrentSample(0), mBytesPerSample(-1),
     mChannels(-1), mSampleRate(-1), mAudioBuffer(NULL),
-    mAudioBufferSize(0), mState(STATE_ERROR), mStreamType(AudioSystem::MUSIC),
+    mAudioBufferSize(0), mAudioBufferFilled(0),
+    mState(STATE_ERROR), mStreamType(AudioSystem::MUSIC),
     mLoop(false), mAndroidLoop(false), mExit(false), mPaused(false),
     mRender(false), mRenderTid(-1)
 {
@@ -429,11 +430,7 @@ FLAC__StreamDecoderWriteStatus FLACPlayer::vp_write(const FLAC__StreamDecoder *d
             }
         }
     }
-
-    if (!self->mAudioSink->write(self->mAudioBuffer, frame_size)) {
-        LOGE("Error in FLAC decoder: %s\n", FLAC__stream_decoder_get_resolved_state_string(self->mDecoder));
-        return FLAC__STREAM_DECODER_WRITE_STATUS_ABORT;
-    }
+    self->mAudioBufferFilled = frame_size;
 
     return FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
 }
@@ -547,6 +544,18 @@ int FLACPlayer::render() {
             sendEvent(MEDIA_ERROR);
             break;
         }
+
+        if (mAudioBufferFilled > 0) {
+            /* Be sure to clear mAudioBufferFilled even if there's an error. */
+            uint32_t toPlay = mAudioBufferFilled;
+            mAudioBufferFilled = 0;
+
+            if (!mAudioSink->write(mAudioBuffer, toPlay)) {
+                LOGE("Error in FLAC decoder: %s\n", FLAC__stream_decoder_get_resolved_state_string(mDecoder));
+                sendEvent(MEDIA_ERROR);
+                break;
+            }
+        }
     }
 
 threadExit:
@@ -555,6 +564,7 @@ threadExit:
         delete [] mAudioBuffer;
         mAudioBuffer = NULL;
         mAudioBufferSize = 0;
+        mAudioBufferFilled = 0;
     }
 
     // tell main thread goodbye
