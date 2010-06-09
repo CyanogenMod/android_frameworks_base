@@ -69,7 +69,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class WifiStateTracker extends NetworkStateTracker {
 
     private static final boolean LOCAL_LOGD = Config.LOGD || false;
-    
+
     private static final String TAG = "WifiStateTracker";
 
     // Event log tags (must be in sync with event-log-tags)
@@ -216,12 +216,12 @@ public class WifiStateTracker extends NetworkStateTracker {
     private boolean mUseStaticIp = false;
     private int mReconnectCount;
 
-    // used to store the (non-persisted) num determined during device boot 
+    // used to store the (non-persisted) num determined during device boot
     // (from mcc or other phone info) before the driver is started.
     private int mNumAllowedChannels = 0;
 
     // Variables relating to the 'available networks' notification
-    
+
     /**
      * The icon to show in the 'available networks' notification. This will also
      * be the ID of the Notification given to the NotificationManager.
@@ -273,7 +273,7 @@ public class WifiStateTracker extends NetworkStateTracker {
      * Observes the static IP address settings.
      */
     private SettingsObserver mSettingsObserver;
-    
+
     private boolean mIsScanModeActive;
     private boolean mEnableRssiPolling;
 
@@ -313,8 +313,6 @@ public class WifiStateTracker extends NetworkStateTracker {
     private String mInterfaceName;
     private static String LS = System.getProperty("line.separator");
 
-    private static String[] sDnsPropNames;
-
     /**
      * A structure for supplying information about a supplicant state
      * change in the STATE_CHANGE event message that comes from the
@@ -350,7 +348,7 @@ public class WifiStateTracker extends NetworkStateTracker {
 
     public WifiStateTracker(Context context, Handler target) {
         super(context, target, ConnectivityManager.TYPE_WIFI, 0, "WIFI", "");
-        
+
         mWifiInfo = new WifiInfo();
         mWifiMonitor = new WifiMonitor(this);
         mHaveIpAddress = false;
@@ -363,7 +361,7 @@ public class WifiStateTracker extends NetworkStateTracker {
         mRunState = RUN_STATE_STARTING;
 
         // Setting is in seconds
-        NOTIFICATION_REPEAT_DELAY_MS = Settings.Secure.getInt(context.getContentResolver(), 
+        NOTIFICATION_REPEAT_DELAY_MS = Settings.Secure.getInt(context.getContentResolver(),
                 Settings.Secure.WIFI_NETWORKS_AVAILABLE_REPEAT_DELAY, 900) * 1000l;
         mNotificationEnabledSettingObserver = new NotificationEnabledSettingObserver(new Handler());
         mNotificationEnabledSettingObserver.register();
@@ -371,9 +369,9 @@ public class WifiStateTracker extends NetworkStateTracker {
         mSettingsObserver = new SettingsObserver(new Handler());
 
         mInterfaceName = SystemProperties.get("wifi.interface", "tiwlan0");
-        sDnsPropNames = new String[] {
-            "dhcp." + mInterfaceName + ".dns1",
-            "dhcp." + mInterfaceName + ".dns2"
+        mDnsPropNames = new String[] {
+            "net." + mInterfaceName + ".dns1",
+            "net." + mInterfaceName + ".dns2"
         };
         mBatteryStats = IBatteryStats.Stub.asInterface(ServiceManager.getService("batteryinfo"));
 
@@ -415,15 +413,6 @@ public class WifiStateTracker extends NetworkStateTracker {
     private void setTornDownByConnMgr(boolean flag) {
         mTornDownByConnMgr = flag;
         updateNetworkInfo();
-    }
-
-    /**
-     * Return the IP addresses of the DNS servers available for the WLAN
-     * network interface.
-     * @return a list of DNS addresses, with no holes.
-     */
-    public String[] getNameServers() {
-        return getNameServerList(sDnsPropNames);
     }
 
     /**
@@ -994,10 +983,10 @@ public class WifiStateTracker extends NetworkStateTracker {
 
                 // Wi-Fi network state changed:
                 // [31- 6] Reserved for future use
-                // [ 5- 0] Detailed state ordinal (as defined by NetworkInfo.DetailedState)   
+                // [ 5- 0] Detailed state ordinal (as defined by NetworkInfo.DetailedState)
                 eventLogParam = (result.state.ordinal() & 0x3f);
                 EventLog.writeEvent(EVENTLOG_NETWORK_STATE_CHANGED, eventLogParam);
-                
+
                 if (LOCAL_LOGD) Log.v(TAG, "New network state is " + result.state);
                 /*
                  * If we're in scan-only mode, don't advance the state machine, and
@@ -1085,7 +1074,7 @@ public class WifiStateTracker extends NetworkStateTracker {
                     checkPollTimer();
                 }
                 break;
-            
+
             case EVENT_DEFERRED_DISCONNECT:
                 if (mWifiInfo.getSupplicantState() != SupplicantState.UNINITIALIZED) {
                     handleDisconnectedState(DetailedState.DISCONNECTED, true);
@@ -1137,7 +1126,7 @@ public class WifiStateTracker extends NetworkStateTracker {
                 if (LOCAL_LOGD) Log.v(TAG, "IP configuration: " + mDhcpInfo);
                 // Wi-Fi interface configuration state changed:
                 // [31- 1] Reserved for future use
-                // [ 0- 0] Interface configuration succeeded (1) or failed (0)   
+                // [ 0- 0] Interface configuration succeeded (1) or failed (0)
                 EventLog.writeEvent(EVENTLOG_INTERFACE_CONFIGURATION_STATE_CHANGED, 1);
 
                 // We've connected successfully, so allow the notification again in the future
@@ -2094,7 +2083,7 @@ public class WifiStateTracker extends NetworkStateTracker {
                         numOpenNetworks++;
                     }
                 }
-            
+
                 if (numOpenNetworks > 0) {
                     if (++mNumScansSinceNetworkStateChange >= NUM_SCANS_BEFORE_ACTUALLY_SCANNING) {
                         /*
@@ -2110,7 +2099,7 @@ public class WifiStateTracker extends NetworkStateTracker {
                 }
             }
         }
-        
+
         // No open networks in range, remove the notification
         setNotificationVisible(false, 0, false, 0);
     }
@@ -2125,13 +2114,13 @@ public class WifiStateTracker extends NetworkStateTracker {
      * visible or invisible.
      */
     public void setNotificationVisible(boolean visible, int numNetworks, boolean force, int delay) {
-        
+
         // Since we use auto cancel on the notification, when the
         // mNetworksAvailableNotificationShown is true, the notification may
         // have actually been canceled.  However, when it is false we know
         // for sure that it is not being shown (it will not be shown any other
         // place than here)
-        
+
         // If it should be hidden and it is already hidden, then noop
         if (!visible && !mNotificationShown && !force) {
             return;
@@ -2139,12 +2128,12 @@ public class WifiStateTracker extends NetworkStateTracker {
 
         Message message;
         if (visible) {
-            
+
             // Not enough time has passed to show the notification again
             if (System.currentTimeMillis() < mNotificationRepeatTime) {
                 return;
             }
-            
+
             if (mNotification == null) {
                 // Cache the Notification mainly so we can remove the
                 // EVENT_NOTIFICATION_CHANGED message with this Notification from
@@ -2163,22 +2152,22 @@ public class WifiStateTracker extends NetworkStateTracker {
                     com.android.internal.R.plurals.wifi_available_detailed, numNetworks);
             mNotification.tickerText = title;
             mNotification.setLatestEventInfo(mContext, title, details, mNotification.contentIntent);
-            
+
             mNotificationRepeatTime = System.currentTimeMillis() + NOTIFICATION_REPEAT_DELAY_MS;
 
             message = mTarget.obtainMessage(EVENT_NOTIFICATION_CHANGED, 1,
                     ICON_NETWORKS_AVAILABLE, mNotification);
-            
+
         } else {
 
             // Remove any pending messages to show the notification
             mTarget.removeMessages(EVENT_NOTIFICATION_CHANGED, mNotification);
-            
+
             message = mTarget.obtainMessage(EVENT_NOTIFICATION_CHANGED, 0, ICON_NETWORKS_AVAILABLE);
         }
 
         mTarget.sendMessageDelayed(message, delay);
-        
+
         mNotificationShown = visible;
     }
 
@@ -2193,7 +2182,7 @@ public class WifiStateTracker extends NetworkStateTracker {
         mNotificationRepeatTime = 0;
         mNumScansSinceNetworkStateChange = 0;
     }
-    
+
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
@@ -2217,7 +2206,7 @@ public class WifiStateTracker extends NetworkStateTracker {
     private class DhcpHandler extends Handler {
 
         private Handler mTarget;
-        
+
         /**
          * Whether to skip the DHCP result callback to the target. For example,
          * this could be set if the network we were requesting an IP for has
@@ -2237,11 +2226,11 @@ public class WifiStateTracker extends NetworkStateTracker {
          * in an error state and we will not disable coexistence.
          */
         private BluetoothHeadset mBluetoothHeadset;
-        
+
         public DhcpHandler(Looper looper, Handler target) {
             super(looper);
             mTarget = target;
-            
+
             mBluetoothHeadset = new BluetoothHeadset(mContext, null);
         }
 
@@ -2250,7 +2239,7 @@ public class WifiStateTracker extends NetworkStateTracker {
 
             switch (msg.what) {
                 case EVENT_DHCP_START:
-                    
+
                     boolean modifiedBluetoothCoexistenceMode = false;
                     if (shouldDisableCoexistenceMode()) {
                         /*
@@ -2319,7 +2308,7 @@ public class WifiStateTracker extends NetworkStateTracker {
          * headset/handsfree state is disconnected. This means if it is in an
          * error state, we will NOT disable coexistence mode to err on the side
          * of safety.
-         * 
+         *
          * @return Whether to disable coexistence mode.
          */
         private boolean shouldDisableCoexistenceMode() {
@@ -2327,7 +2316,7 @@ public class WifiStateTracker extends NetworkStateTracker {
             return state == BluetoothHeadset.STATE_DISCONNECTED;
         }
     }
-    
+
     private void checkUseStaticIp() {
         mUseStaticIp = false;
         final ContentResolver cr = mContext.getContentResolver();
