@@ -280,7 +280,9 @@ public class HardwareService extends IHardwareService.Stub {
     }
 
     void setLightBrightness_UNCHECKED(int light, int brightness, int brightnessMode) {
-        int b = brightness & 0x000000ff;
+        int b = brightness;
+        if(b > 0xFF)
+            b = 0xFF;
         b = 0xff000000 | (b << 16) | (b << 8) | b;
         setLight_native(mNativePointer, light, b, LIGHT_FLASH_NONE, 0, 0, brightnessMode);
     }
