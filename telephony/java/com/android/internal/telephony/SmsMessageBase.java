@@ -19,6 +19,8 @@ package com.android.internal.telephony;
 import android.util.Log;
 import com.android.internal.telephony.SmsHeader;
 import java.util.Arrays;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 import static android.telephony.SmsMessage.MessageClass;
 
@@ -382,10 +384,11 @@ public abstract class SmsMessageBase {
          * -or-
          * 2. [x@y][ ]/[body]
          */
-         String[] parts = messageBody.split("( /)|( )", 2);
-         if (parts.length < 2) return;
-         emailFrom = parts[0];
-         emailBody = parts[1];
+         Matcher mat = Pattern.compile("([^ ]+@[^ ]+) (?:/ ?)?(.*)", Pattern.DOTALL).matcher(messageBody);
+         if (!mat.matches())
+             return;
+         emailFrom = mat.group(1);
+         emailBody = mat.group(2);
          isEmail = true;
     }
 
