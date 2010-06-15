@@ -656,7 +656,6 @@ public class MediaScanner
                 map.put(Images.Media.DATE_TAKEN, mLastModified * 1000);
             } else if (MediaFile.isAudioFileType(mFileType)) {
                 map.put(Audio.Media.ARTIST, (mArtist != null && mArtist.length() > 0 ? mArtist : MediaFile.UNKNOWN_STRING));
-                map.put(Audio.Media.ALBUM_ARTIST, (mAlbumArtist != null && mAlbumArtist.length() > 0 ? mAlbumArtist : MediaFile.UNKNOWN_STRING));
                 map.put(Audio.Media.ALBUM, (mAlbum != null && mAlbum.length() > 0 ? mAlbum : MediaFile.UNKNOWN_STRING));
                 map.put(Audio.Media.COMPOSER, mComposer);
                 if (mYear != 0) {
