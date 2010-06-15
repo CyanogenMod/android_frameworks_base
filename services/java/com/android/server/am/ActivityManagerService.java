@@ -4834,7 +4834,7 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
                 fileReady = f.delete();
             }
             
-            if (removeExisting) {
+            if (removeExisting || !f.exists()) {
                 try {
                     f.createNewFile();
                     FileUtils.setPermissions(f.getAbsolutePath(),
