@@ -50,6 +50,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileInputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -308,7 +309,7 @@ public class MediaScanner
 
     // used when scanning the image database so we know whether we have to prune
     // old thumbnail files
-    private int mOriginalCount;
+    private int mOriginalImageCount;
     /** Whether the scanner has set a default sound for the ringer ringtone. */
     private boolean mDefaultRingtoneSet;
     /** Whether the scanner has set a default sound for the notification ringtone. */
@@ -889,6 +890,7 @@ public class MediaScanner
         Cursor c = null;
         String where = null;
         String[] selectionArgs = null;
+        int originalVideoCount = 0;
 
         if (mFileCache == null) {
             mFileCache = new HashMap<String, FileCacheEntry>();
@@ -945,6 +947,7 @@ public class MediaScanner
 
             if (c != null) {
                 try {
+                    originalVideoCount = c.getCount();
                     while (c.moveToNext()) {
                         long rowId = c.getLong(ID_VIDEO_COLUMN_INDEX);
                         String path = c.getString(PATH_VIDEO_COLUMN_INDEX);
@@ -974,12 +977,12 @@ public class MediaScanner
             } else {
                 where = null;
             }
-            mOriginalCount = 0;
+            mOriginalImageCount = 0;
             c = mMediaProvider.query(mImagesUri, IMAGES_PROJECTION, where, selectionArgs, null);
 
             if (c != null) {
                 try {
-                    mOriginalCount = c.getCount();
+                    mOriginalImageCount = c.getCount();
                     while (c.moveToNext()) {
                         long rowId = c.getLong(ID_IMAGES_COLUMN_INDEX);
                         String path = c.getString(PATH_IMAGES_COLUMN_INDEX);
@@ -1041,6 +1044,19 @@ public class MediaScanner
                 c.close();
             }
         }
+
+        // Clear micro thumb databases now if applicable, instead of after scan
+        // to avoid undoing work that has been done by the thumbnail queue
+        // during scan.
+        if (originalVideoCount == 0 && mImagesUri.equals(Video.Media.getContentUri("external"))) {
+            MiniThumbFile.instance(MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
+                    .removeMiniThumbDataFile();
+        }
+
+        if (mOriginalImageCount == 0 && mImagesUri.equals(Images.Media.getContentUri("external"))) {
+            MiniThumbFile.instance(MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+                    .removeMiniThumbDataFile();
+        }
     }
 
     private boolean inScanDirectory(String path, String[] directories) {
@@ -1055,7 +1071,16 @@ public class MediaScanner
     private void pruneDeadThumbnailFiles() {
         HashSet<String> existingFiles = new HashSet<String>();
         String directory = "/sdcard/DCIM/.thumbnails";
-        String [] files = (new File(directory)).list();
+        String[] files = (new File(directory)).list(new FilenameFilter() {
+
+            // Do not process non-thumbnail files.
+            public boolean accept(File dir, String filename) {
+                return filename.toLowerCase().endsWith(".jpg") ||
+                       filename.toLowerCase().endsWith(".jpeg");
+            }
+
+        });
+
         if (files == null)
             files = new String[0];
 
@@ -1145,7 +1170,7 @@ public class MediaScanner
             processPlayLists();
         }
 
-        if (mOriginalCount == 0 && mImagesUri.equals(Images.Media.getContentUri("external")))
+        if (mOriginalImageCount == 0 && mImagesUri.equals(Images.Media.getContentUri("external")))
             pruneDeadThumbnailFiles();
 
         // allow GC to clean up
