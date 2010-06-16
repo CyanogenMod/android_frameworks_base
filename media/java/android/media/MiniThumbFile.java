@@ -89,12 +89,10 @@ public class MiniThumbFile {
     private void removeOldFile() {
         String oldPath = randomAccessFilePath(MINI_THUMB_DATA_FILE_VERSION - 1);
         File oldFile = new File(oldPath);
-        if (oldFile.exists()) {
-            try {
-                oldFile.delete();
-            } catch (SecurityException ex) {
-                // ignore
-            }
+        try {
+            oldFile.delete();
+        } catch (SecurityException ex) {
+            // ignore
         }
     }
 
@@ -147,7 +145,11 @@ public class MiniThumbFile {
     public synchronized void removeMiniThumbDataFile() {
         String path = randomAccessFilePath(MINI_THUMB_DATA_FILE_VERSION);
         File file = new File(path);
-        file.delete();
+        try {
+            file.delete();
+        } catch (SecurityException ex) {
+            // ignore
+        }
     }
 
     // Get the magic number for the specified id in the mini-thumb file.
