@@ -1184,6 +1184,13 @@ public final class Settings {
         public static final String NOTIFICATIONS_USE_RING_VOLUME =
             "notifications_use_ring_volume";
 
+	/**
+	 * Whether notification sounds are always sent to the speaker, even if
+	 * headphones are plugged in.
+	 * @hide
+	 */
+        public static final String NOTIFICATIONS_TO_SPEAKER = "notifications_to_speaker";
+
         /**
          * The mapping of stream type (integer) to its setting.
          */
