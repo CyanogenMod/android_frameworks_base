@@ -107,7 +107,7 @@ public class Styled
                     }
 
                     canvas.drawText(tmp, tmpstart, tmpend,
-                                    x - ret, y + workPaint.baselineShift, workPaint);
+                                    x - ret, y + workPaint.baselineShift, workPaint,false);
                 } else {
                     if (needwid) {
                         if (!havewid) {
@@ -117,7 +117,7 @@ public class Styled
                     }
 
                     canvas.drawText(tmp, tmpstart, tmpend,
-                                    x, y + workPaint.baselineShift, workPaint);
+                                    x, y + workPaint.baselineShift, workPaint,false);
                 }
             } else {
                 if (needwid && !havewid) {
@@ -214,13 +214,13 @@ public class Styled
 
                 if (canvas != null)
                     canvas.drawText(tmp, 0, tmpend,
-                                    x - ret, y, paint);
+                                    x - ret, y, paint,false);
             } else {
                 if (needWidth)
                     ret = paint.measureText(text, start, end);
 
                 if (canvas != null)
-                    canvas.drawText(text, start, end, x, y, paint);
+                    canvas.drawText(text, start, end, x, y, paint,false);
             }
 
             if (fmi != null) {

@@ -49,6 +49,8 @@ import javax.microedition.khronos.opengles.GL;
  */
 public class Canvas extends _Original_Canvas {
 
+    private static final char FIRST_RIGHT_TO_LEFT = '\u0590';
+    private static final char LAST_RIGHT_TO_LEFT = '\u07b1';
     private BufferedImage mBufferedImage;
     private final Stack<Graphics2D> mGraphicsStack = new Stack<Graphics2D>();
     private final ILayoutLog mLogger;
@@ -649,11 +651,111 @@ public class Canvas extends _Original_Canvas {
         getGraphics2d().scale(sx, sy);
     }
 
-    /* (non-Javadoc)
-     * @see android.graphics.Canvas#drawText(char[], int, int, float, float, android.graphics.Paint)
-     */
-    @Override
-    public void drawText(char[] text, int index, int count, float x, float y, Paint paint) {
+    public char[] bidiProcess(char[] text,int start,int src_count) {
+        String str;
+        String oldstr=new String(text,start,src_count);
+        boolean hasbidi=false;
+        int strlen=oldstr.length();
+        char[] ca=new char[strlen];
+
+        oldstr.getChars(0, strlen, ca, 0);
+        for (int i=0;i<oldstr.length();i++){
+            if (ca[i]>=FIRST_RIGHT_TO_LEFT&&ca[i]<=LAST_RIGHT_TO_LEFT){
+                hasbidi=true;
+                break;
+            }
+        }
+        if (hasbidi) {
+            char[] ca2=new char[strlen];
+            int count=0,srcindex=0;
+            boolean rtlmode=true;
+            for (int i=0;i<strlen;i++){
+                srcindex=strlen-1-i;
+                if (ca[srcindex]>=FIRST_RIGHT_TO_LEFT&&ca[srcindex]<=LAST_RIGHT_TO_LEFT){
+                    ca2[i]=ca[srcindex];
+                    rtlmode=true;
+                }
+                else {
+                    srcindex=strlen-1-i;
+                    if (count==0) {
+                        if (ca[srcindex]<='\u002f' ||
+                            (ca[srcindex]>'\u0039' && ca[srcindex]<='\u0040') ||
+                            (ca[srcindex]>'\u005a' && ca[srcindex]<='\u0060')||
+                            (ca[srcindex]>'\u007a' && ca[srcindex]<='\u00BF')) {
+
+                            if (rtlmode){
+                                switch (ca[srcindex]) {
+                                case '[':
+                                    ca2[i]=']';
+                                    break;
+                                case ']':
+                                    ca2[i]='[';
+                                    break;
+                                case '}':
+                                    ca2[i]='{';
+                                    break;
+                                case '{':
+                                    ca2[i]='}';
+                                    break;
+                                case '(':
+                                    ca2[i]=')';
+                                    break;
+                                case ')':
+                                    ca2[i]='(';
+                                    break;
+                                case '>':
+                                    ca2[i]='<';
+                                    break;
+                                case '<':
+                                    ca2[i]='>';
+                                    break;
+                                default:
+                                    ca2[i]=ca[srcindex];
+                                    break;
+                                }
+                            } else ca2[i]=ca[srcindex];
+                        } else {
+
+                            while (((srcindex-count)>=0)&&(ca[srcindex-count]<FIRST_RIGHT_TO_LEFT)){
+                                count++;
+                            }
+                            int index=0;
+                            int punctuation_marks=0;
+
+                            while ((srcindex-(count)>=0) &&
+                                    (ca[srcindex-(count-1)]<='\u002f' ||
+                                            (ca[srcindex-(count-1)]>'\u0039' && ca[srcindex-(count-1)]<='\u0040') ||
+                                            (ca[srcindex-(count-1)]>'\u005a' && ca[srcindex-(count-1)]<='\u0060')||
+                                            (ca[srcindex-(count-1)]>'\u007a' && ca[srcindex-(count-1)]<='\u00BF'))){
+                                ca2[i+(count-1)]=ca[srcindex-(count-1)];
+                                count--;
+                                punctuation_marks++;
+                            }
+
+                            while (count>0){
+                                ca2[i+index]=ca[srcindex-(count-1)];
+                                count--;
+                                index++;
+                            }
+                            count=index+punctuation_marks-1;
+                        }
+                    }
+                    else {
+                        count--;
+                    }
+                    rtlmode=false;
+                }
+            }
+            str=new String(ca2);
+        } else
+        {
+            str=new String(oldstr);
+        }
+        return str.toCharArray();
+
+    }
+
+    public void drawText(char[] text, int index, int count, float x, float y, Paint paint, boolean bidi) {
         // WARNING: the logic in this method is similar to Paint.measureText.
         // Any change to this method should be reflected in Paint.measureText
         Graphics2D g = getGraphics2d();
@@ -686,21 +788,29 @@ public class Canvas extends _Original_Canvas {
                 FontInfo mainFont = fonts.get(0);
                 int i = index;
                 int lastIndex = index + count;
+                char[] bidiText;
+                if (bidi) {
+                    bidiText=bidiProcess(text,index,count);
+                    i=0;
+                    lastIndex=count;
+                } else {
+                    bidiText=text;
+                }
                 while (i < lastIndex) {
                     // always start with the main font.
-                    int upTo = mainFont.mFont.canDisplayUpTo(text, i, lastIndex);
+                    int upTo = mainFont.mFont.canDisplayUpTo(bidiText, i, lastIndex);
                     if (upTo == -1) {
                         // draw all the rest and exit.
                         g.setFont(mainFont.mFont);
-                        g.drawChars(text, i, lastIndex - i, (int)x, (int)y);
+                        g.drawChars(bidiText, i, lastIndex - i, (int)x, (int)y);
                         return;
                     } else if (upTo > 0) {
                         // draw what's possible
                         g.setFont(mainFont.mFont);
-                        g.drawChars(text, i, upTo - i, (int)x, (int)y);
+                        g.drawChars(bidiText, i, upTo - i, (int)x, (int)y);
 
                         // compute the width that was drawn to increase x
-                        x += mainFont.mMetrics.charsWidth(text, i, upTo - i);
+                        x += mainFont.mMetrics.charsWidth(bidiText, i, upTo - i);
 
                         // move index to the first non displayed char.
                         i = upTo;
@@ -720,15 +830,15 @@ public class Canvas extends _Original_Canvas {
 
                         // need to check that the font can display the character. We test
                         // differently if the char is a high surrogate.
-                        int charCount = Character.isHighSurrogate(text[i]) ? 2 : 1;
-                        upTo = fontInfo.mFont.canDisplayUpTo(text, i, i + charCount);
+                        int charCount = Character.isHighSurrogate(bidiText[i]) ? 2 : 1;
+                        upTo = fontInfo.mFont.canDisplayUpTo(bidiText, i, i + charCount);
                         if (upTo == -1) {
                             // draw that char
                             g.setFont(fontInfo.mFont);
-                            g.drawChars(text, i, charCount, (int)x, (int)y);
+                            g.drawChars(bidiText, i, charCount, (int)x, (int)y);
 
                             // update x
-                            x += fontInfo.mMetrics.charsWidth(text, i, charCount);
+                            x += fontInfo.mMetrics.charsWidth(bidiText, i, charCount);
 
                             // update the index in the text, and move on
                             i += charCount;
@@ -741,13 +851,13 @@ public class Canvas extends _Original_Canvas {
                     // in case no font can display the char, display it with the main font.
                     // (it'll put a square probably)
                     if (foundFont == false) {
-                        int charCount = Character.isHighSurrogate(text[i]) ? 2 : 1;
+                        int charCount = Character.isHighSurrogate(bidiText[i]) ? 2 : 1;
 
                         g.setFont(mainFont.mFont);
-                        g.drawChars(text, i, charCount, (int)x, (int)y);
+                        g.drawChars(bidiText, i, charCount, (int)x, (int)y);
 
                         // measure it to advance x
-                        x += mainFont.mMetrics.charsWidth(text, i, charCount);
+                        x += mainFont.mMetrics.charsWidth(bidiText, i, charCount);
 
                         // and move to the next chars.
                         i += charCount;
@@ -759,6 +869,13 @@ public class Canvas extends _Original_Canvas {
         }
     }
 
+    /* (non-Javadoc)
+     * @see android.graphics.Canvas#drawText(char[], int, int, float, float, android.graphics.Paint)
+     */
+    @Override
+    public void drawText(char[] text, int index, int count, float x, float y, Paint paint) {
+        drawText(text, index, count, x, y, paint, true);
+    }
     /* (non-Javadoc)
      * @see android.graphics.Canvas#drawText(java.lang.CharSequence, int, int, float, float, android.graphics.Paint)
      */
@@ -1145,7 +1262,10 @@ public class Canvas extends _Original_Canvas {
     public void drawTextOnPath(char[] text, int index, int count, Path path, float offset,
             float offset2, Paint paint) {
         // TODO Auto-generated method stub
-        super.drawTextOnPath(text, index, count, path, offset, offset2, paint);
+        int i = 0;
+        char[] bidiText;
+        bidiText=bidiProcess(text,index,count);
+        super.drawTextOnPath(bidiText, i, count, path, offset, offset2, paint);
     }
 
     /* (non-Javadoc)
@@ -1154,7 +1274,10 @@ public class Canvas extends _Original_Canvas {
     @Override
     public void drawTextOnPath(String text, Path path, float offset, float offset2, Paint paint) {
         // TODO Auto-generated method stub
-        super.drawTextOnPath(text, path, offset, offset2, paint);
+        int i = 0;
+        String bidiText;
+        bidiText=new String(bidiProcess(text.toCharArray(),0,text.length()));
+        super.drawTextOnPath(bidiText, path, offset, offset2, paint);
     }
 
     /* (non-Javadoc)

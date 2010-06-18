@@ -34,6 +34,8 @@ import javax.microedition.khronos.opengles.GL;
 public class Canvas {
     // assigned in constructors, freed in finalizer
     final int mNativeCanvas;
+    private static final char FIRST_RIGHT_TO_LEFT = '\u0590';
+    private static final char LAST_RIGHT_TO_LEFT = '\u07b1';
     
     /*  Our native canvas can be either a raster, gl, or picture canvas.
         If we are raster, then mGL will be null, and mBitmap may or may not be
@@ -1230,6 +1232,130 @@ public class Canvas {
                            vertOffset, texs, texOffset, colors, colorOffset,
                           indices, indexOffset, indexCount, paint.mNativePaint);
     }
+
+    /** @hide */
+    public char[] bidiProcess(char[] text,int start,int src_count) {
+        String str;
+        String oldstr=new String(text,start,src_count);
+        boolean hasbidi=false;
+        int strlen=oldstr.length();
+        char[] ca=new char[strlen];
+
+        oldstr.getChars(0, strlen, ca, 0);
+        for (int i=0;i<oldstr.length();i++){
+            if (ca[i]>=FIRST_RIGHT_TO_LEFT&&ca[i]<=LAST_RIGHT_TO_LEFT){
+                hasbidi=true;
+                break;
+            }
+        }
+        if (hasbidi) {
+            char[] ca2=new char[strlen];
+            int count=0,srcindex=0;
+            boolean rtlmode=true;
+            for (int i=0;i<strlen;i++){
+                srcindex=strlen-1-i;
+                if (ca[srcindex]>=FIRST_RIGHT_TO_LEFT&&ca[srcindex]<=LAST_RIGHT_TO_LEFT){
+                    ca2[i]=ca[srcindex];
+                    rtlmode=true;
+                }
+                else {
+                    srcindex=strlen-1-i;
+                    if (count==0) {
+                        if (ca[srcindex]<='\u002f' ||
+                            (ca[srcindex]>'\u0039' && ca[srcindex]<='\u0040') ||
+                            (ca[srcindex]>'\u005a' && ca[srcindex]<='\u0060')||
+                            (ca[srcindex]>'\u007a' && ca[srcindex]<='\u00BF')) {
+
+                            if (rtlmode){
+                                switch (ca[srcindex]) {
+                                case '[':
+                                    ca2[i]=']';
+                                    break;
+                                case ']':
+                                    ca2[i]='[';
+                                    break;
+                                case '}':
+                                    ca2[i]='{';
+                                    break;
+                                case '{':
+                                    ca2[i]='}';
+                                    break;
+                                case '(':
+                                    ca2[i]=')';
+                                    break;
+                                case ')':
+                                    ca2[i]='(';
+                                    break;
+                                case '>':
+                                    ca2[i]='<';
+                                    break;
+                                case '<':
+                                    ca2[i]='>';
+                                    break;
+                                default:
+                                    ca2[i]=ca[srcindex];
+                                    break;
+                                }
+                            } else ca2[i]=ca[srcindex];
+                        } else {
+
+                            while (((srcindex-count)>=0)&&(ca[srcindex-count]<FIRST_RIGHT_TO_LEFT)){
+                                count++;
+                            }
+                            int index=0;
+                            int punctuation_marks=0;
+
+                            while (count>0 && (srcindex-(count)>=0) &&
+                                    (ca[srcindex-(count-1)]<='\u002f' ||
+                                            (ca[srcindex-(count-1)]>'\u0039' && ca[srcindex-(count-1)]<='\u0040') ||
+                                            (ca[srcindex-(count-1)]>'\u005a' && ca[srcindex-(count-1)]<='\u0060')||
+                                            (ca[srcindex-(count-1)]>'\u007a' && ca[srcindex-(count-1)]<='\u00BF'))){
+                                ca2[i+(count-1)]=ca[srcindex-(count-1)];
+                                count--;
+                                punctuation_marks++;
+                            }
+
+                            while (count>0){
+                                ca2[i+index]=ca[srcindex-(count-1)];
+                                count--;
+                                index++;
+                            }
+                            count=index+punctuation_marks-1;
+                        }
+                    }
+                    else {
+                        count--;
+                    }
+                    rtlmode=false;
+                }
+            }
+            str=new String(ca2);
+        } else
+        {
+            str=new String(oldstr);
+        }
+        return str.toCharArray();
+
+    }
+    
+    /** @hide **/
+    public void drawText(char[] text, int index, int count, float x, float y,
+            Paint paint,boolean bidi) {
+        if ((index | count | (index + count) |
+                (text.length - index - count)) < 0) {
+            throw new IndexOutOfBoundsException();
+        }
+
+        if (bidi) {
+            char[] bidiText;
+            bidiText=bidiProcess(text,index,count);
+            native_drawText(mNativeCanvas, bidiText, index, count, x, y,
+                    paint.mNativePaint);
+        } else {
+            native_drawText(mNativeCanvas, text, index, count, x, y,
+                    paint.mNativePaint);
+        }
+    }
     
     /**
      * Draw the text, with origin at (x,y), using the specified paint. The
@@ -1246,7 +1372,10 @@ public class Canvas {
             (text.length - index - count)) < 0) {
             throw new IndexOutOfBoundsException();
         }
-        native_drawText(mNativeCanvas, text, index, count, x, y,
+        
+        char[] bidiText;
+        bidiText=bidiProcess(text,index,count);
+        native_drawText(mNativeCanvas, bidiText, index, count, x, y,
                         paint.mNativePaint);
     }
 
@@ -1259,7 +1388,23 @@ public class Canvas {
      * @param y     The y-coordinate of the origin of the text being drawn
      * @param paint The paint used for the text (e.g. color, size, style)
      */
-    public native void drawText(String text, float x, float y, Paint paint);
+    private native void native_drawText(String text, float x, float y, Paint paint);
+
+    /** @hide */
+    public void drawText(String text, float x, float y, Paint paint,boolean bidi){
+        if (!bidi) {
+            native_drawText(text,x,y,paint);
+        } else {
+            if (text.length() > 0) {
+                String bidiText;
+                bidiText=new String(bidiProcess(text.toCharArray(),0,text.length()));
+                native_drawText(bidiText,x,y,paint);
+            }
+	}
+    }
+    public void drawText(String text, float x, float y, Paint paint){
+        drawText(text,x,y,paint,true);
+    }
 
     /**
      * Draw the text, with origin at (x,y), using the specified paint.
@@ -1277,7 +1422,10 @@ public class Canvas {
         if ((start | end | (end - start) | (text.length() - end)) < 0) {
             throw new IndexOutOfBoundsException();
         }
-        native_drawText(mNativeCanvas, text, start, end, x, y,
+        int i = 0;
+        String bidiText;
+        bidiText=new String(bidiProcess(text.toCharArray(),start,end-start));
+        native_drawText(mNativeCanvas, bidiText, i, end-start, x, y,
                         paint.mNativePaint);
     }
 
@@ -1298,8 +1446,10 @@ public class Canvas {
                          float y, Paint paint) {
         if (text instanceof String || text instanceof SpannedString ||
             text instanceof SpannableString) {
-            native_drawText(mNativeCanvas, text.toString(), start, end, x, y,
-                            paint.mNativePaint);
+            String bidiText;
+            bidiText=new String(bidiProcess(text.toString().toCharArray(),start,end-start));
+            native_drawText(mNativeCanvas, bidiText.toString(), 0, end-start, x, y,
+                        paint.mNativePaint);
         }
         else if (text instanceof GraphicsOperations) {
             ((GraphicsOperations) text).drawText(this, start, end, x, y,
@@ -1308,9 +1458,36 @@ public class Canvas {
         else {
             char[] buf = TemporaryBuffer.obtain(end - start);
             TextUtils.getChars(text, start, end, buf, 0);
-            drawText(buf, 0, end - start, x, y, paint);
+            drawText(buf, 0, end - start, x, y, paint,false);
             TemporaryBuffer.recycle(buf);
         }
+    }
+    
+    /** @hide */
+    public void drawText(CharSequence text, int start, int end, float x,
+            float y, Paint paint,boolean bidi) {
+        if (text instanceof String || text instanceof SpannedString ||
+                text instanceof SpannableString) {
+            if (bidi) {
+                String bidiText;
+                bidiText=new String(bidiProcess(text.toString().toCharArray(),start,end-start));
+                native_drawText(mNativeCanvas, bidiText.toString(), 0, end-start, x, y,
+                        paint.mNativePaint);
+            } else {
+                native_drawText(mNativeCanvas, text.toString(), start, end, x, y,
+                        paint.mNativePaint);
+            }
+        }
+        else if (text instanceof GraphicsOperations) {
+            ((GraphicsOperations) text).drawText(this, start, end, x, y,
+                    paint);
+    	}
+    	else {
+    		char[] buf = TemporaryBuffer.obtain(end - start);
+    		TextUtils.getChars(text, start, end, buf, 0);
+    		drawText(buf, 0, end - start, x, y, paint,false);
+    		TemporaryBuffer.recycle(buf);
+    	}
     }
 
     /**
@@ -1329,8 +1506,12 @@ public class Canvas {
         if (index < 0 || index + count > text.length || count*2 > pos.length) {
             throw new IndexOutOfBoundsException();
         }
-        native_drawPosText(mNativeCanvas, text, index, count, pos,
+        
+        char[] bidiText;
+        bidiText=bidiProcess(text,index,count);
+        native_drawPosText(mNativeCanvas, bidiText, 0, count, pos,
                            paint.mNativePaint);
+        // TODO: handle starting from higher index
     }
 
     /**
@@ -1345,7 +1526,10 @@ public class Canvas {
         if (text.length()*2 > pos.length) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        native_drawPosText(mNativeCanvas, text, pos, paint.mNativePaint);
+        
+        String bidiText;
+        bidiText=new String(bidiProcess(text.toCharArray(),0,text.length()));
+        native_drawPosText(mNativeCanvas, bidiText, pos, paint.mNativePaint);
     }
 
     /**
@@ -1366,7 +1550,10 @@ public class Canvas {
         if (index < 0 || index + count > text.length) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        native_drawTextOnPath(mNativeCanvas, text, index, count,
+        int i = 0;
+        char[] bidiText;
+        bidiText=bidiProcess(text,index,count);
+        native_drawTextOnPath(mNativeCanvas, bidiText, i, count,
                               path.ni(), hOffset, vOffset,
                               paint.mNativePaint);
     }
@@ -1387,7 +1574,10 @@ public class Canvas {
     public void drawTextOnPath(String text, Path path, float hOffset,
                                float vOffset, Paint paint) {
         if (text.length() > 0) {
-            native_drawTextOnPath(mNativeCanvas, text, path.ni(),
+            int i = 0;
+            String bidiText;
+            bidiText=new String(bidiProcess(text.toCharArray(),0,text.length()));
+            native_drawTextOnPath(mNativeCanvas, bidiText, path.ni(),
                                   hOffset, vOffset, paint.mNativePaint);
         }
     }

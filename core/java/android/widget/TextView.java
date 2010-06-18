@@ -2774,7 +2774,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
 
         public void drawText(Canvas c, int start, int end,
                              float x, float y, Paint p) {
-            c.drawText(mChars, start + mStart, end - start, x, y, p);
+            c.drawText(mChars, start + mStart, end - start, x, y, p,false);
         }
 
         public float measureText(int start, int end, Paint p) {

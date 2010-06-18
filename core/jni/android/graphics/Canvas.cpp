@@ -953,7 +953,7 @@ static JNINativeMethod gCanvasMethods[] = {
         (void*) SkCanvasGlue::drawText___CIIFFPaint},
     {"native_drawText","(ILjava/lang/String;IIFFI)V",
         (void*) SkCanvasGlue::drawText__StringIIFFPaint},
-    {"drawText","(Ljava/lang/String;FFLandroid/graphics/Paint;)V",
+    {"native_drawText","(Ljava/lang/String;FFLandroid/graphics/Paint;)V",
         (void*) SkCanvasGlue::drawString},
     {"native_drawPosText","(I[CII[FI)V",
         (void*) SkCanvasGlue::drawPosText___CII_FPaint},
