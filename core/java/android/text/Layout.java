@@ -364,8 +364,7 @@ public abstract class Layout {
                     Assert.assertTrue(dir == DIR_LEFT_TO_RIGHT);
                     Assert.assertNotNull(c);
                 }
-                // XXX: assumes there's nothing additional to be done
-                c.drawText(buf, start, end, x, lbaseline, paint);
+                c.drawText(buf, start, end, x, lbaseline, paint,false);
             } else {
                 drawText(c, buf, start, end, dir, directions,
                     x, ltop, lbaseline, lbottom, paint, mWorkPaint,

@@ -406,7 +406,7 @@ public class AndroidGraphics2D extends Graphics2D {
             mP.setStrokeWidth(0);
 
             mC.drawText(str.toCharArray(), 0, str.toCharArray().length, x, y,
-                    mP);
+                    mP,false);
             mP.setStyle(tmp);
     }
 
@@ -1276,7 +1276,7 @@ public class AndroidGraphics2D extends Graphics2D {
     
     @Override
     public void drawChars(char[] data, int offset, int length, int x, int y) {
-        mC.drawText(data, offset, length, x, y, mP);
+        mC.drawText(data, offset, length, x, y, mP,false);
     }
     
     @Override

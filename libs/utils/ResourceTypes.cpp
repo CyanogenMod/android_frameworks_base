@@ -4393,7 +4393,6 @@ void ResTable::print(bool inclValues) const
                         }
                         printf("\n");
                         
-                        if (inclValues) {
                             if (valuePtr != NULL) {
                                 printf("          ");
                                 print_value(pkg, value);
@@ -4413,7 +4412,6 @@ void ResTable::print(bool inclValues) const
                                             + size + sizeof(*mapPtr)-sizeof(mapPtr->value));
                                 }
                             }
-                        }
                     }
                 }
             }
