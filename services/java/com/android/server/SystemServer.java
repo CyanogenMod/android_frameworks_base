@@ -79,6 +79,19 @@ class ServerThread extends Thread {
            SystemProperties.set("persist.service.compcache", enableCompcache ? "1" : "0");
         }
     }
+
+    private class NotificationSettingsObserver extends ContentObserver {
+        public NotificationSettingsObserver() {
+            super(null);
+        }
+        @Override
+        public void onChange(boolean selfChange) {
+            boolean enabled = (Settings.System.getInt(mContentResolver,
+                Settings.System.NOTIFICATIONS_TO_SPEAKER, 1) > 0);
+            Log.i(TAG, "Settings.System.NOTIFICATIONS_TO_SPEAKER " + enabled);
+           SystemProperties.set("persist.sys.speaker-notif", enabled ? "1" : "0");
+        }
+    }
     
     @Override
     public void run() {
@@ -382,6 +395,9 @@ class ServerThread extends Thread {
 
 	mContentResolver.registerContentObserver(Settings.Secure.getUriFor(Settings.Secure.COMPCACHE_ENABLED),
         		false, new CompcacheSettingsObserver());
+
+        mContentResolver.registerContentObserver(Settings.System.getUriFor(Settings.System.NOTIFICATIONS_TO_SPEAKER),
+                        false, new NotificationSettingsObserver());
  
         // Before things start rolling, be sure we have decided whether
         // we are in safe mode.
