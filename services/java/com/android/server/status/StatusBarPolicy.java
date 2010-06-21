@@ -388,6 +388,7 @@ public class StatusBarPolicy {
                     action.equals(BluetoothHeadset.ACTION_STATE_CHANGED) ||
                     action.equals(BluetoothHid.HID_DEVICE_STATE_CHANGED_ACTION) ||
                     action.equals(BluetoothA2dp.ACTION_SINK_STATE_CHANGED) ||
+                    action.equals(BluetoothHid.HID_DEVICE_STATE_CHANGED_ACTION) ||
                     action.equals(BluetoothPbap.PBAP_STATE_CHANGED_ACTION)) {
                 updateBluetooth(intent);
             }
