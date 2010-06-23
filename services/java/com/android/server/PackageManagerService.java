@@ -962,13 +962,13 @@ class PackageManagerService extends IPackageManager.Stub {
                     SystemClock.uptimeMillis());
             mAppInstallObserver = new AppDirObserver(
                 mAppInstallDir.getPath(), OBSERVER_EVENTS, false);
-            mAppInstallObserver.startWatching();
             scanDirLI(mAppInstallDir, 0, scanMode);
+            mAppInstallObserver.startWatching();
 
             mDrmAppInstallObserver = new AppDirObserver(
                 mDrmAppPrivateInstallDir.getPath(), OBSERVER_EVENTS, false);
-            mDrmAppInstallObserver.startWatching();
             scanDirLI(mDrmAppPrivateInstallDir, PackageParser.PARSE_FORWARD_LOCK, scanMode);
+            mDrmAppInstallObserver.startWatching();
 
             EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_PMS_SCAN_END,
                     SystemClock.uptimeMillis());

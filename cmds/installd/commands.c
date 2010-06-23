@@ -21,6 +21,7 @@ int install(const char *pkgname, uid_t uid, gid_t gid)
     char pkgdir[PKG_PATH_MAX];
     char libdir[PKG_PATH_MAX];
 
+    LOGI("installer: dir: %s pkg: %s", pkgdir, pkgname);
     if ((uid < AID_SYSTEM) || (gid < AID_SYSTEM)) {
         LOGE("invalid uid/gid: %d %d\n", uid, gid);
         return -1;
@@ -454,6 +455,45 @@ static void run_dexopt(int zip_fd, int odex_fd, const char* input_file_name,
     LOGE("execl(%s) failed: %s\n", DEX_OPT_BIN, strerror(errno));
 }
 
+static void run_zipalign(const char* input_file, const char* output_file)
+{
+    static const char* ZIPALIGN_BIN = "/system/bin/zipalign";
+    execl(ZIPALIGN_BIN, ZIPALIGN_BIN, "4", input_file, output_file, (char*) NULL);
+    LOGE("execl(%s) failed: %s\n", ZIPALIGN_BIN, strerror(errno));
+}
+
+static int wait_zipalign(pid_t pid, const char* apk_path)
+{
+    int status;
+    pid_t got_pid;
+
+    /*
+     * Wait for the zipalign process to finish.
+     */
+    while (1) {
+        got_pid = waitpid(pid, &status, 0);
+        if (got_pid == -1 && errno == EINTR) {
+            printf("waitpid interrupted, retrying\n");
+        } else {
+            break;
+        }
+    }
+    if (got_pid != pid) {
+        LOGW("waitpid failed: wanted %d, got %d: %s\n",
+            (int) pid, (int) got_pid, strerror(errno));
+        return 1;
+    }
+
+    if (WIFEXITED(status) && WEXITSTATUS(status) == 0) {
+        LOGD("ZipAlign: --- END '%s' (success) ---\n", apk_path);
+        return 0;
+    } else {
+        LOGW("ZipAlign: --- END '%s' --- status=0x%04x, process failed\n",
+            apk_path, status);
+        return status;      /* always nonzero */
+    }
+}
+
 static int wait_dexopt(pid_t pid, const char* apk_path)
 {
     int status;
@@ -486,6 +526,58 @@ static int wait_dexopt(pid_t pid, const char* apk_path)
     }
 }
 
+int zipalign(const char *apk_path, uid_t uid, int is_public)
+{
+    char za_path[PKG_PATH_MAX];
+    struct utimbuf ut;
+    struct stat za_stat, apk_stat;
+    int res;
+    
+    memset(&apk_stat, 0, sizeof(apk_stat));
+    stat(apk_path, &apk_stat);
+
+    strcpy(za_path, apk_path);
+    strcat(za_path, ".tmp");
+    LOGD("ZipAlign: --- BEGIN '%s' ---\n", apk_path);
+    
+    pid_t pid;
+    pid = fork();
+    if (pid == 0) {
+        run_zipalign(apk_path, za_path);
+        exit(67);
+    } else {
+        res = wait_zipalign(pid, za_path);
+        if (res != 0) {
+            LOGE("zipalign failed on '%s' res = %d\n", za_path, res);
+            goto fail;
+        }
+   }
+    
+    if (chown(za_path, apk_stat.st_uid, apk_stat.st_gid) < 0) {
+        LOGE("zipalign cannot chown '%s'", apk_path);
+        goto fail;
+    }
+    if (chmod(za_path, S_IRUSR|S_IWUSR|S_IRGRP |
+        (is_public ? S_IROTH : 0)) < 0) {
+	    LOGE("zipalign cannot chmod '%s'\n", apk_path);
+	    goto fail;
+    }
+
+    ut.actime = apk_stat.st_atime;
+    ut.modtime = apk_stat.st_mtime;
+    utime(za_path, &ut);
+
+    unlink(apk_path);
+    rename(za_path, apk_path);
+
+    return 0;
+
+fail:
+    unlink(za_path);
+    return -1;
+
+}
+
 int dexopt(const char *apk_path, uid_t uid, int is_public)
 {
     struct utimbuf ut;
@@ -500,6 +592,10 @@ int dexopt(const char *apk_path, uid_t uid, int is_public)
          */
     if (strlen(apk_path) >= (PKG_PATH_MAX - 8)) {
         return -1;
+    }
+    
+    if (strncmp(apk_path, "/system", 7) != 0) {
+        zipalign(apk_path, uid, is_public);
     }
 
     /* platform-specific flags affecting optimization and verification */
