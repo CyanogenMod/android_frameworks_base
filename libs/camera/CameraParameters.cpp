@@ -137,6 +137,7 @@ const char CameraParameters::PIXEL_FORMAT_YUV420SP[] = "yuv420sp";
 const char CameraParameters::PIXEL_FORMAT_YUV422I[] = "yuv422i-yuyv";
 const char CameraParameters::PIXEL_FORMAT_RGB565[] = "rgb565";
 const char CameraParameters::PIXEL_FORMAT_JPEG[] = "jpeg";
+const char CameraParameters::PIXEL_FORMAT_RAW[] = "raw";
 
 // Values for focus mode settings.
 const char CameraParameters::FOCUS_MODE_AUTO[] = "auto";
@@ -144,7 +145,49 @@ const char CameraParameters::FOCUS_MODE_INFINITY[] = "infinity";
 const char CameraParameters::FOCUS_MODE_MACRO[] = "macro";
 const char CameraParameters::FOCUS_MODE_FIXED[] = "fixed";
 const char CameraParameters::FOCUS_MODE_EDOF[] = "edof";
+const char CameraParameters::FOCUS_MODE_NORMAL[] = "normal";
 const char CameraParameters::FOCUS_MODE_CONTINUOUS_VIDEO[] = "continuous-video";
+
+const char CameraParameters::KEY_SUPPORTED_THUMBNAIL_SIZES[] = "jpeg-thumbnail-size-values";
+const char CameraParameters::KEY_GPS_LATITUDE_REF[] = "gps-latitude-ref";
+const char CameraParameters::KEY_GPS_LONGITUDE_REF[] = "gps-longitude-ref";
+const char CameraParameters::KEY_GPS_ALTITUDE_REF[] = "gps-altitude-ref";
+const char CameraParameters::KEY_GPS_STATUS[] = "gps-status";
+
+const char CameraParameters::KEY_EXIF_DATETIME[] = "exif-datetime";
+const char CameraParameters::KEY_AUTO_EXPOSURE[] = "auto-exposure";
+const char CameraParameters::KEY_SUPPORTED_AUTO_EXPOSURE[] = "auto-exposure-values";
+
+const char CameraParameters::KEY_ISO_MODE[] = "iso";
+const char CameraParameters::KEY_SUPPORTED_ISO_MODES[] = "iso-values";
+const char CameraParameters::KEY_LENSSHADE[] = "lensshade";
+const char CameraParameters::KEY_SUPPORTED_LENSSHADE_MODES[] = "lensshade-values";
+const char CameraParameters::KEY_SHARPNESS[] = "sharpness";
+const char CameraParameters::KEY_MAX_SHARPNESS[] = "max-sharpness";
+const char CameraParameters::KEY_CONTRAST[] = "contrast";
+const char CameraParameters::KEY_MAX_CONTRAST[] = "max-contrast";
+const char CameraParameters::KEY_SATURATION[] = "saturation";
+const char CameraParameters::KEY_MAX_SATURATION[] = "max-saturation";
+
+
+// Values for auto exposure settings.
+const char CameraParameters::AUTO_EXPOSURE_FRAME_AVG[] = "frame-average";
+const char CameraParameters::AUTO_EXPOSURE_CENTER_WEIGHTED[] = "center-weighted";
+const char CameraParameters::AUTO_EXPOSURE_SPOT_METERING[] = "spot-metering";
+
+ // Values for ISO Settings
+const char CameraParameters::ISO_AUTO[] = "auto";
+const char CameraParameters::ISO_HJR[] = "ISO_HJR";
+const char CameraParameters::ISO_100[] = "ISO100";
+const char CameraParameters::ISO_200[] = "ISO200";
+const char CameraParameters::ISO_400[] = "ISO400";
+const char CameraParameters::ISO_800[] = "ISO800";
+const char CameraParameters::ISO_1600[] = "ISO1600";
+
+ //Values for Lens Shading
+const char CameraParameters::LENSSHADE_ENABLE[] = "enable";
+const char CameraParameters::LENSSHADE_DISABLE[] = "disable";
+
 
 //Values for Continuous AF
 const char CameraParameters::CAF_OFF[] = "caf-off";
