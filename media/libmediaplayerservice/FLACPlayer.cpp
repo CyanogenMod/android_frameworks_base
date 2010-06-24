@@ -88,9 +88,9 @@ FLACPlayer::~FLACPlayer() {
     release();
 }
 
-status_t FLACPlayer::setDataSource(const char* path)
-{
-    return setdatasource(path, -1, 0, 0x7ffffffffffffffLL); // intentionally less than LONG_MAX
+status_t FLACPlayer::setDataSource(
+        const char *uri, const KeyedVector<String8, String8> *headers) {
+    return setdatasource(uri, -1, 0, 0x7ffffffffffffffLL); // intentionally less than LONG_MAX
 }
 
 status_t FLACPlayer::setDataSource(int fd, int64_t offset, int64_t length)
