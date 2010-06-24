@@ -104,6 +104,10 @@ public:
     // The height (in pixels) of EXIF thumbnail in Jpeg picture.
     // Example value: "384". Read/write.
     static const char KEY_JPEG_THUMBNAIL_HEIGHT[];
+
+    //++TODO is the following parameter is needed when jpeg thumbnail is available
+    static const char KEY_SUPPORTED_THUMBNAIL_SIZES[];
+
     // Supported EXIF thumbnail sizes (width x height). 0x0 means not thumbnail
     // in EXIF.
     // Example value: "512x384,320x240,0x0". Read only.
@@ -137,6 +141,33 @@ public:
     // GPS altitude. This will be stored in JPEG EXIF header.
     // Example value: "21.0". Write only.
     static const char KEY_GPS_ALTITUDE[];
+
+    static const char KEY_GPS_LATITUDE_REF[];
+    static const char KEY_GPS_LONGITUDE_REF[];
+    static const char KEY_GPS_ALTITUDE_REF[];
+    static const char KEY_GPS_STATUS[];
+    static const char KEY_EXIF_DATETIME[];
+
+    static const char KEY_AUTO_EXPOSURE[];
+    static const char KEY_SUPPORTED_AUTO_EXPOSURE[];
+    static const char KEY_ISO_MODE[];
+    static const char KEY_SUPPORTED_ISO_MODES[];
+    static const char KEY_LENSSHADE[] ;
+    static const char KEY_SUPPORTED_LENSSHADE_MODES[] ;
+    static const char KEY_SHARPNESS[];
+    static const char KEY_MAX_SHARPNESS[];
+    static const char KEY_CONTRAST[];
+    static const char KEY_MAX_CONTRAST[];
+    static const char KEY_SATURATION[];
+    static const char KEY_MAX_SATURATION[];
+
+    // Values for auto exposure settings.
+    static const char AUTO_EXPOSURE_FRAME_AVG[];
+    static const char AUTO_EXPOSURE_CENTER_WEIGHTED[];
+    static const char AUTO_EXPOSURE_SPOT_METERING[];
+
+
+
     // GPS timestamp (UTC in seconds since January 1, 1970). This should be
     // stored in JPEG EXIF header.
     // Example value: "1251192757". Write only.
@@ -301,6 +332,7 @@ public:
     static const char PIXEL_FORMAT_YUV422I[]; // YUY2
     static const char PIXEL_FORMAT_RGB565[];
     static const char PIXEL_FORMAT_JPEG[];
+    static const char PIXEL_FORMAT_RAW[];
 
     // Values for focus mode settings.
     // Auto-focus mode.
@@ -308,6 +340,7 @@ public:
     // Focus is set at infinity. Applications should not call
     // CameraHardwareInterface.autoFocus in this mode.
     static const char FOCUS_MODE_INFINITY[];
+    static const char FOCUS_MODE_NORMAL[];
     static const char FOCUS_MODE_MACRO[];
     // Focus is fixed. The camera is always in this mode if the focus is not
     // adjustable. If the camera has auto-focus, this mode can fix the
@@ -319,6 +352,16 @@ public:
     // CameraHardwareInterface.autoFocus in this mode.
     static const char FOCUS_MODE_EDOF[];
 
+    static const char ISO_AUTO[];
+    static const char ISO_HJR[] ;
+    static const char ISO_100[];
+    static const char ISO_200[] ;
+    static const char ISO_400[];
+    static const char ISO_800[];
+    static const char ISO_1600[];
+    // Values for Lens Shading
+    static const char LENSSHADE_ENABLE[] ;
+    static const char LENSSHADE_DISABLE[] ;
 private:
     DefaultKeyedVector<String8,String8>    mMap;
 };
@@ -326,3 +369,4 @@ private:
 }; // namespace android
 
 #endif
+
