@@ -743,6 +743,8 @@ public class Camera {
         private static final String KEY_SCENE_MODE = "scene-mode";
         private static final String KEY_FLASH_MODE = "flash-mode";
         private static final String KEY_FOCUS_MODE = "focus-mode";
+        private static final String KEY_ISO_MODE = "iso";
+        private static final String KEY_LENSSHADE = "lensshade";
         private static final String KEY_FOCAL_LENGTH = "focal-length";
         private static final String KEY_HORIZONTAL_VIEW_ANGLE = "horizontal-view-angle";
         private static final String KEY_VERTICAL_VIEW_ANGLE = "vertical-view-angle";
@@ -786,6 +788,22 @@ public class Camera {
         public static final String ANTIBANDING_50HZ = "50hz";
         public static final String ANTIBANDING_60HZ = "60hz";
         public static final String ANTIBANDING_OFF = "off";
+
+        //Values for ISO settings
+
+        public static final String ISO_AUTO = "auto";
+        public static final String ISO_HJR = "ISO_HJR";
+        public static final String ISO_100 = "ISO100";
+        public static final String ISO_200 = "ISO200";
+        public static final String ISO_400 = "ISO400";
+        public static final String ISO_800 = "ISO800";
+
+        //Values for Lens Shading
+
+        public static final String LENSSHADE_ENABLE = "enable";
+        public static final String LENSSHADE_DISABLE= "disable";
+
+
 
         // Values for flash mode settings.
         /**
@@ -1807,6 +1825,66 @@ public class Camera {
             String str = get(KEY_SMOOTH_ZOOM_SUPPORTED);
             return TRUE.equals(str);
         }
+
+        /**
+         * Gets the current ISO setting.
+         *
+         * @return one of ISO_XXX string constant. null if ISO
+         *         setting is not supported.
+         */
+        public String getISOValue() {
+            return get(KEY_ISO_MODE);
+        }
+
+        /**
+         * Sets the ISO.
+         *
+         * @param iso ISO_XXX string constant.
+         */
+        public void setISOValue(String iso) {
+            set(KEY_ISO_MODE, iso);
+        }
+
+         /**
+         * Gets the supported ISO values.
+         *
+         * @return a List of FLASH_MODE_XXX string constants. null if flash mode
+         *         setting is not supported.
+         */
+        public List<String> getSupportedIsoValues() {
+            String str = get(KEY_ISO_MODE + SUPPORTED_VALUES_SUFFIX);
+            return split(str);
+        }
+
+         /**
+         * Gets the current LensShade Mode.
+         *
+         * @return LensShade Mode
+         */
+        public String getLensShade() {
+            return get(KEY_LENSSHADE);
+        }
+
+        /**
+         * Sets the current LensShade Mode.
+         *
+         * @return LensShade Mode
+         */
+        public void setLensShade(String lensshade) {
+            set(KEY_LENSSHADE, lensshade);
+        }
+
+         /**
+         * Gets the supported Lensshade modes.
+         *
+         * @return a List of LENS_MODE_XXX string constants. null if lens mode
+         *         setting is not supported.
+         */
+        public List<String> getSupportedLensShadeModes() {
+            String str = get(KEY_LENSSHADE + SUPPORTED_VALUES_SUFFIX);
+            return split(str);
+        }
+
 
         // Splits a comma delimited string to an ArrayList of String.
         // Return null if the passing string is null or the size is 0.
