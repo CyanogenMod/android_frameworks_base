@@ -1299,7 +1299,7 @@ public class Canvas {
                             } else ca2[i]=ca[srcindex];
                         } else {
 
-                            while (((srcindex-count)>=0)&&(ca[srcindex-count]<FIRST_RIGHT_TO_LEFT)){
+                            while (((srcindex-count)>=0)&&((ca[srcindex-count]<FIRST_RIGHT_TO_LEFT)||(ca[srcindex-count]>LAST_RIGHT_TO_LEFT))){
                                 count++;
                             }
                             int index=0;
