@@ -46,6 +46,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.ServiceManager;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.text.IClipboard;
 import android.text.Selection;
 import android.text.Spannable;
@@ -4613,6 +4614,10 @@ public class WebView extends AbsoluteLayout
                 boolean reflowNow = (mActualScale - mMinZoomScale
                         <= MINIMUM_SCALE_INCREMENT)
                         || ((mActualScale <= 0.8 * mTextWrapScale));
+                if(mActualScale > mTextWrapScale) {
+                    reflowNow |= Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.WEB_VIEW_PINCH_REFLOW, 0) != 0;
+                }
                 // force zoom after mPreviewZoomOnly is set to false so that the
                 // new view size will be passed to the WebKit
                 setNewZoomScale(mActualScale, reflowNow, true);
