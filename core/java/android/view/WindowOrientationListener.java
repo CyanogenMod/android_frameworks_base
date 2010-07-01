@@ -16,11 +16,15 @@
 
 package android.view;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.ContentObserver;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Handler;
+import android.provider.Settings;
 import android.util.Config;
 import android.util.Log;
 
@@ -39,6 +43,10 @@ public abstract class WindowOrientationListener {
     private int mRate;
     private Sensor mSensor;
     private SensorEventListenerImpl mSensorEventListener;
+    private Context mContext;
+    private Handler mHandler;
+    private SettingsObserver mSettingsObserver;
+    private int mAccelerometerMode;
 
     /**
      * Creates a new WindowOrientationListener.
@@ -70,6 +78,8 @@ public abstract class WindowOrientationListener {
             // Create listener only if sensors do exist
             mSensorEventListener = new SensorEventListenerImpl();
         }
+        mContext = context;
+        mHandler = new Handler();
     }
 
     /**
@@ -85,6 +95,10 @@ public abstract class WindowOrientationListener {
             if (localLOGV) Log.d(TAG, "WindowOrientationListener enabled");
             mSensorManager.registerListener(mSensorEventListener, mSensor, mRate);
             mEnabled = true;
+            if (mSettingsObserver == null) {
+                mSettingsObserver = new SettingsObserver(mHandler);
+            }
+            mSettingsObserver.observe();
         }
     }
 
@@ -100,6 +114,10 @@ public abstract class WindowOrientationListener {
             if (localLOGV) Log.d(TAG, "WindowOrientationListener disabled");
             mSensorManager.unregisterListener(mSensorEventListener);
             mEnabled = false;
+            if (mSettingsObserver != null) {
+                mSettingsObserver.stop();
+                mSettingsObserver = null;
+            }
         }
     }
 
@@ -110,6 +128,38 @@ public abstract class WindowOrientationListener {
         return -1;
     }
     
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ACCELEROMETER_ROTATION_MODE), false, this);
+            if (localLOGV) Log.i(TAG, "SettingsObserver enabled");
+            update();
+        }
+
+        public void stop() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.unregisterContentObserver(this);
+            if (localLOGV) Log.i(TAG, "SettingsObserver disabled");
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            update();
+        }
+
+        public void update() {
+            ContentResolver resolver = mContext.getContentResolver();
+            mAccelerometerMode = Settings.System.getInt(resolver,
+                    Settings.System.ACCELEROMETER_ROTATION_MODE, 5);
+            if (localLOGV) Log.i(TAG, "mAccelerometerMode=" + mAccelerometerMode);
+        }
+    }
+
     class SensorEventListenerImpl implements SensorEventListener {
         // We work with all angles in degrees in this class.
         private static final float RADIANS_TO_DEGREES = (float) (180 / Math.PI);
@@ -123,14 +173,15 @@ public abstract class WindowOrientationListener {
         // ROTATION_90 = right side of device facing the sky, etc.
         private static final int ROTATION_0 = 0;
         private static final int ROTATION_90 = 1;
-        private static final int ROTATION_270 = 2;
+        private static final int ROTATION_180 = 2;
+        private static final int ROTATION_270 = 3;
 
         // Current orientation state
         private int mRotation = ROTATION_0;
 
         // Mapping our internal aliases into actual Surface rotation values
         private final int[] SURFACE_ROTATIONS = new int[] {Surface.ROTATION_0, Surface.ROTATION_90,
-                Surface.ROTATION_270};
+                Surface.ROTATION_180, Surface.ROTATION_270};
 
         // Threshold ranges of orientation angle to transition into other orientation states.
         // The first list is for transitions from ROTATION_0, the next for ROTATION_90, etc.
@@ -140,16 +191,18 @@ public abstract class WindowOrientationListener {
         // between two states with a swing of 30 degrees for hysteresis.  For ROTATION_180,
         // however, we enforce stricter thresholds, pushing the thresholds 15 degrees closer to 180.
         private final int[][][] THRESHOLDS = new int[][][] {
-                {{60, 180}, {180, 300}},
-                {{0, 45}, {45, 165}, {330, 360}},
-                {{0, 30}, {195, 315}, {315, 360}}
+                {{60, 165}, {165, 195}, {195, 300}},
+                {{0, 30}, {150, 210}, {30, 150}, {330, 360}},
+                {{240, 345}, {15, 120}, {0, 15}, {345, 360}},
+                {{0, 30}, {150, 195}, {195, 315}, {315, 360}}
         };
 
         // See THRESHOLDS
         private final int[][] ROTATE_TO = new int[][] {
-                {ROTATION_270, ROTATION_90},
-                {ROTATION_0, ROTATION_270, ROTATION_0},
-                {ROTATION_0, ROTATION_90, ROTATION_0}
+                {ROTATION_270, ROTATION_180, ROTATION_90},
+                {ROTATION_0, ROTATION_180, ROTATION_270, ROTATION_0},
+                {ROTATION_90, ROTATION_270, ROTATION_0, ROTATION_0},
+                {ROTATION_0, ROTATION_180, ROTATION_90, ROTATION_0}
         };
 
         // Maximum absolute tilt angle at which to consider orientation changes.  Beyond this (i.e.
@@ -159,7 +212,7 @@ public abstract class WindowOrientationListener {
         // Additional limits on tilt angle to transition to each new orientation.  We ignore all
         // vectors with tilt beyond MAX_TILT, but we can set stricter limits on transition to a
         // particular orientation here.
-        private final int[] MAX_TRANSITION_TILT = new int[] {MAX_TILT, MAX_TILT, MAX_TILT};
+        private final int[] MAX_TRANSITION_TILT = new int[] {MAX_TILT, MAX_TILT, MAX_TILT, MAX_TILT};
 
         // Between this tilt angle and MAX_TILT, we'll allow orientation changes, but we'll filter
         // with a higher time constant, making us less sensitive to change.  This primarily helps
@@ -222,6 +275,25 @@ public abstract class WindowOrientationListener {
             if (tiltAngle > MAX_TRANSITION_TILT[rotation]) {
                 // tilted too far flat to go to this rotation
                 return;
+            }
+
+            boolean allowed = rotation == ROTATION_0;
+            if (!allowed) {
+               switch (rotation) {
+                  case ROTATION_90:
+                     allowed = (mAccelerometerMode & 1) != 0;
+                     break;
+                  case ROTATION_180:
+                     allowed = (mAccelerometerMode & 2) != 0;
+                     break;
+                  case ROTATION_270:
+                     allowed = (mAccelerometerMode & 4) != 0;
+                     break;
+               }
+            }
+            if (!allowed) {
+               if (localLOGV) Log.i(TAG, " not allowed rotation = " + rotation);
+               return;
             }
 
             if (localLOGV) Log.i(TAG, " new rotation = " + rotation);
