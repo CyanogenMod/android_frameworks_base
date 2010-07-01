@@ -967,6 +967,7 @@ void CameraService::Client::handleShutter(
             mHardware->getRawHeap());
 
         mSurface->registerBuffers(buffers);
+        IPCThreadState::self()->flushCommands();
     }
 }
 
