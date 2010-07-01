@@ -48,7 +48,7 @@ public class VpnServiceBinder extends Service {
     private static final String TAG = VpnServiceBinder.class.getSimpleName();
     private static final boolean DBG = true;
 
-    private static final String STATES_FILE_RELATIVE_PATH = "/misc/vpn/.states";
+    private static final String STATES_FILE_RELATIVE_PATH = "/data/misc/vpn/.states";
 
     // The actual implementation is delegated to the VpnService class.
     private VpnService<? extends VpnProfile> mService;
