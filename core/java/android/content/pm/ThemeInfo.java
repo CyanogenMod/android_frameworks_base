@@ -32,6 +32,7 @@ import android.content.res.Resources;
  *        pluto:soundpackName="<package_name>/<sound_pack_name>"
  *    />
  *
+ * @hide
  */
 public final class ThemeInfo extends BaseThemeInfo {
 

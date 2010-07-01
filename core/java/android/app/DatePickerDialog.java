@@ -80,7 +80,7 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
             int year,
             int monthOfYear,
             int dayOfMonth) {
-        this(context, 0, 
+        this(context, com.android.internal.R.style.Theme_Dialog_Alert, 
                 callBack, year, monthOfYear, dayOfMonth);
     }
 

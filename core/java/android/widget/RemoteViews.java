@@ -17,14 +17,10 @@
 package android.widget;
 
 import android.app.PendingIntent;
-import android.app.ActivityManagerNative;
-import android.app.PendingIntent.CanceledException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.Resources;
-import android.content.res.CustomTheme;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
@@ -32,10 +28,12 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.*;
+import android.view.LayoutInflater;
+import android.view.RemotableViewMethod;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.LayoutInflater.Filter;
 import android.view.View.OnClickListener;
 
@@ -936,18 +934,6 @@ public class RemoteViews implements Parcelable, Filter {
         if (packageName != null) {
             try {
                 c = context.createPackageContext(packageName, Context.CONTEXT_RESTRICTED);
-                try {
-                    CustomTheme theme = ActivityManagerNative.getDefault().getConfiguration().customTheme;
-                    if (theme != null && !TextUtils.isEmpty(theme.getThemePackageName())) {
-                        int styleId = CustomTheme.getStyleId(c, theme.getThemePackageName(),
-                                theme.getThemeId());
-                        ContextThemeWrapper themeContext = new ContextThemeWrapper(c, styleId);
-                        themeContext.useThemedResources(theme.getThemePackageName());
-                        c = themeContext;
-                    }
-                } catch (RemoteException e) {
-                    Log.e(LOG_TAG, "Failed to get current theme", e);
-                }
             } catch (NameNotFoundException e) {
                 Log.e(LOG_TAG, "Package name " + packageName + " not found");
                 c = context;

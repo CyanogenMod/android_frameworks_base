@@ -1307,29 +1307,6 @@ ResTable::Theme::package_info* ResTable::Theme::copy_package(package_info* pi)
     return newpi;
 }
 
-void ResTable::Theme::setAttributeValue(uint32_t attrID, uint32_t value)
-{
-	const ssize_t p = mTable.getResourcePackageIndex(attrID);
-	const uint32_t t = Res_GETTYPE(attrID);
-	const uint32_t e = Res_GETENTRY(attrID);
-
-	TABLE_NOISY(LOGV("Looking up attr 0x%08x in theme %p", attrID, this));
-
-	if (p >= 0) {
-		const package_info* const pi = mPackages[p];
-		if (pi != NULL) {
-			if (t < pi->numTypes) {
-				const type_info& ti = pi->types[t];
-				if (e < ti.numEntries) {
-					theme_entry& te = ti.entries[e];
-					te.value.data = value;
-					te.value.dataType = Res_value::TYPE_FIRST_INT;
-				}
-			}
-		}
-	}
-}
-
 status_t ResTable::Theme::applyStyle(uint32_t resID, bool force)
 {
     const bag_entry* bag;

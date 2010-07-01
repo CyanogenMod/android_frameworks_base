@@ -196,10 +196,6 @@ final class XmlBlock {
         public int getAttributeCount() {
             return mEventType == START_TAG ? nativeGetAttributeCount(mParseState) : -1;
         }
-        /** @hide */
-        public int getAttributeDataType(int index) {
-            return nativeGetAttributeDataType(mParseState, index);
-        }
         public String getAttributeValue(int index) {
             int id = nativeGetAttributeStringValue(mParseState, index);
             if (DEBUG) System.out.println("getAttributeValue of " + index + " = " + id);

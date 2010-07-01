@@ -873,6 +873,7 @@ public abstract class PackageManager {
      * @return A List of PackageInfo objects, one for each theme package
      *         that is installed on the device.
      * 
+     * @hide
      */
     public abstract List<PackageInfo> getInstalledThemePackages();
 

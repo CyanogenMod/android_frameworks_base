@@ -26,7 +26,7 @@
          of it a dark color.
     -->
     <style name="Theme">
-
+    
         <item name="colorForeground">@android:color/bright_foreground_dark</item>
         <item name="colorForegroundInverse">@android:color/bright_foreground_dark_inverse</item>
         <item name="colorBackground">@android:color/background_dark</item>
@@ -77,9 +77,6 @@
         <item name="buttonStyleInset">@android:style/Widget.Button.Inset</item>
 
         <item name="buttonStyleToggle">@android:style/Widget.Button.Toggle</item>
-        
-        <item name="buttonStyleTimePickerUp">@android:style/TimePickerUpButton</item>
-        <item name="buttonStyleTimePickerDown">@android:style/TimePickerDownButton</item>
 
         <!-- List attributes -->
         <item name="listPreferredItemHeight">64dip</item>
@@ -87,7 +84,6 @@
         <item name="searchResultListItemHeight">58dip</item>
         <item name="listDivider">@drawable/divider_horizontal_dark</item>
         <item name="listSeparatorTextViewStyle">@android:style/Widget.TextView.ListSeparator</item>   
-        <item name="listItemTextViewStyle">@android:style/Widget.TextView.ListItem</item>
         
 		<item name="listChoiceIndicatorSingle">@android:drawable/btn_radio</item>
     	<item name="listChoiceIndicatorMultiple">@android:drawable/btn_check</item>    
@@ -121,14 +117,7 @@
         <item name="android:windowSoftInputMode">stateUnspecified|adjustUnspecified</item>
 
         <!-- Dialog attributes -->
-        <item name="dialogTheme">@android:style/Theme.Dialog</item>
-        <item name="alertDialogTheme">@android:style/Theme.Dialog.Alert</item>
         <item name="alertDialogStyle">@android:style/AlertDialog</item>
-        <item name="searchDialogTheme">@android:style/Theme.SearchBar</item>
-        
-        <!-- Menu attributes -->
-        <item name="iconMenuTheme">@android:style/Theme.IconMenu</item>
-        <item name="expandedMenuTheme">@android:style/Theme.ExpandedMenu</item>
         
         <!-- Panel attributes -->
         <item name="panelBackground">@android:drawable/menu_background</item>
@@ -146,20 +135,12 @@
         <item name="scrollbarTrackHorizontal">@null</item>
         <item name="scrollbarTrackVertical">@null</item>
 
-        <!-- DigitalClock attributes -->
-        <item name="menuItemBackground">@android:drawable/menuitem_background</item>
-
-        <!-- status bar related attributes -->
-        <item name="com_android_server_status_expandedView">@style/com_android_server_status_ExpandedView</item>
-        <item name="com_android_server_status_latestItemView">@style/com_android_server_status_LatestItemView</item>
-
         <!-- Widget styles -->
         <item name="absListViewStyle">@android:style/Widget.AbsListView</item>
         <item name="autoCompleteTextViewStyle">@android:style/Widget.AutoCompleteTextView</item>        
         <item name="checkboxStyle">@android:style/Widget.CompoundButton.CheckBox</item>
         <item name="dropDownListViewStyle">@android:style/Widget.ListView.DropDown</item>
         <item name="editTextStyle">@android:style/Widget.EditText</item>
-        <item name="timePickerInputStyle">@android:style/Widget.EditText.TimePicker</item>
         <item name="expandableListViewStyle">@android:style/Widget.ExpandableListView</item>
         <item name="galleryStyle">@android:style/Widget.Gallery</item>
         <item name="gestureOverlayViewStyle">@android:style/Widget.GestureOverlayView</item>
@@ -215,12 +196,6 @@
 
         <!-- Search widget styles -->
         <item name="searchWidgetCorpusItemBackground">@android:color/search_widget_corpus_item_background</item>
-        
-        <!-- Style for the inflated indicator widget itself, not the text or
-             image views typically contained within. -->
-        <item name="tabIndicatorStyle">@android:style/Widget.TabIndicator</item>
-        <item name="textAppearanceTab">@android:style/TextAppearance.Widget.TabWidget</item>
-        
     </style>
     
     <!-- Variant of the default (dark) theme with no title bar -->
@@ -276,7 +251,6 @@
 		<item name="progressBarStyleInverse">@android:style/Widget.ProgressBar</item>
 		<item name="progressBarStyleSmallInverse">@android:style/Widget.ProgressBar.Small</item>
 		<item name="progressBarStyleLargeInverse">@android:style/Widget.ProgressBar.Large</item> 
-
     </style>
     
     <!-- Variant of the light theme with no title bar -->
@@ -447,19 +421,6 @@
         <item name="windowTitleStyle">@android:style/DialogWindowTitle</item>
         <item name="windowIsFloating">true</item>
         <item name="windowContentOverlay">@null</item>
-
-        <!-- Use light themes for various components. -->
-        <item name="listViewStyle">@android:style/Widget.ListView.Dialog</item>
-        <item name="expandableListViewStyle">@android:style/Widget.ExpandableListView.Dialog</item>
-        <item name="listDivider">@drawable/divider_horizontal_bright</item>
-        <item name="listSeparatorTextViewStyle">@android:style/Widget.TextView.ListSeparator.White</item>
-        <item name="listItemTextViewStyle">@android:style/Widget.TextView.ListItem.White</item>
-        <item name="colorBackground">@android:color/white</item>
-        <item name="cacheColorHint">@android:color/white</item>
-        
-        <item name="android:timePickerInputStyle">@android:style/Widget.EditText.TimePicker</item>
-        <item name="android:buttonStyleTimePickerUp">@android:style/TimePickerUpButton</item>
-        <item name="android:buttonStyleTimePickerDown">@android:style/TimePickerDownButton</item>
     </style>
     
     <!-- Default dark theme for panel windows.  This removes all extraneous

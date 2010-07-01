@@ -174,7 +174,7 @@ public class ProgressBar extends View {
         
         mNoInvalidate = true;
         
-        Drawable drawable = a.getDrawableWithContext(context, R.styleable.ProgressBar_progressDrawable);
+        Drawable drawable = a.getDrawable(R.styleable.ProgressBar_progressDrawable);
         if (drawable != null) {
             drawable = tileify(drawable, false);
             setProgressDrawable(drawable);
@@ -204,7 +204,7 @@ public class ProgressBar extends View {
         setSecondaryProgress(
                 a.getInt(R.styleable.ProgressBar_secondaryProgress, mSecondaryProgress));
 
-        drawable = a.getDrawableWithContext(context, R.styleable.ProgressBar_indeterminateDrawable);
+        drawable = a.getDrawable(R.styleable.ProgressBar_indeterminateDrawable);
         if (drawable != null) {
             drawable = tileifyIndeterminate(drawable);
             setIndeterminateDrawable(drawable);

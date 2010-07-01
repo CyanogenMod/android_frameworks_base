@@ -2494,18 +2494,7 @@ public final class ActivityThread {
                 activity.mStartedActivity = false;
                 int theme = r.activityInfo.getThemeResource();
                 if (theme != 0) {
-                    // Following is a workaround to have those activity managed dialogs to be themed when the theme flag is on.
-                    if (r.activityInfo.isThemeable() && (theme == android.R.style.Theme_Dialog || 
-                            theme == com.android.internal.R.style.Theme_Dialog_Alert)) {
-                        if (theme == android.R.style.Theme_Dialog) {
-                            activity.setTheme(Dialog.resolveDefaultTheme(activity, 0, android.R.styleable.Theme_dialogTheme, 
-                                    com.android.internal.R.style.Theme_Dialog));
-                        } else if (theme == com.android.internal.R.style.Theme_Dialog_Alert) {
-                            activity.setTheme(AlertDialog.resolveDefaultTheme(activity, 0));
-                        }
-                    } else {
-                        activity.setTheme(theme);
-                    }
+                    activity.setTheme(theme);
                 }
 
                 activity.mCalled = false;

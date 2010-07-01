@@ -60,7 +60,7 @@ public class CharacterPickerDialog extends Dialog
         mText = text;
         mOptions = options;
         mInsert = insert;
-        mInflater = LayoutInflater.from(getContext());
+        mInflater = LayoutInflater.from(context);
     }
 
     @Override

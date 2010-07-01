@@ -1,21 +1,13 @@
-package com.android.server.status;
+package com.android.internal.view.menu;
 
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 
 /**
- * This class was partially copied from com.tmobile.widget.Utils. Linking with
- * the com.tmobile.widget library from the status bar creates unusual
- * side-effects in Dalvik which cause every process forked from Zygote to have
- * the com.tmobile.widget.Utils class both defined and initialized. This causes
- * duplicate class errors for apps that actually need the com.tmobile.widget
- * library. The end result is that updates to com.tmobile.widget.jar might not
- * be reflected in newly launched apps (even after reset) because the old copy
- * would have been statically linked into the system_server.
- * <p>
- * Copying the functionality here eliminates this issue by not linking with
- * com.tmobile.widget.jar at all.
+ * This class was partially copied from com.tmobile.widget.Utils.  Copied here
+ * to avoid a bizarre framework dependency on a platform library provided by
+ * T-Mobile.
  */
 public class Utils {
     /**

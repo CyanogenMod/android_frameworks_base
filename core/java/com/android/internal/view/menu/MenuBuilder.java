@@ -75,6 +75,16 @@ public class MenuBuilder implements Menu {
         com.android.internal.R.style.Theme_ExpandedMenu,
         0,
     };
+
+    /**
+     * Added by T-Mobile to allow dynamic lookup of the menu style based on the
+     * currently applied global theme.  Must be ordered to match {@link #THEME_RES_FOR_TYPE}.
+     */
+    static final String THEME_ATTR_FOR_TYPE[] = new String[] {
+        "com_tmobile_framework_iconMenuTheme",
+        "com_tmobile_framework_expandedMenuTheme",
+        null,
+    };
     
     // Order must be the same order as the TYPE_*
     static final int LAYOUT_RES_FOR_TYPE[] = new int[] {
@@ -177,22 +187,9 @@ public class MenuBuilder implements Menu {
         LayoutInflater getInflater() {
             // Create an inflater that uses the given theme for the Views it inflates
             if (mInflater == null) {
-                Context wrappedContext = null;
-                // We theme expanded menu view only for now.
-                if (mMenuType == TYPE_EXPANDED) {
-                    wrappedContext = new ContextThemeWrapper(getContext(), 
-                            resolveDefaultTheme(getContext(), 0, 
-                                    com.android.internal.R.styleable.Theme_expandedMenuTheme, 
-                                    com.android.internal.R.style.Theme_ExpandedMenu));
-                } else if (mMenuType == TYPE_ICON) {
-                    wrappedContext = new ContextThemeWrapper(getContext(),
-                            resolveDefaultTheme(getContext(), 0, 
-                                    com.android.internal.R.styleable.Theme_iconMenuTheme, 
-                                    com.android.internal.R.style.Theme_IconMenu));    
-                } else {
-                    wrappedContext = new ContextThemeWrapper(getContext(),
-                            THEME_RES_FOR_TYPE[mMenuType]);
-                }
+                Context wrappedContext = new ContextThemeWrapper(getContext(),
+                        resolveDefaultTheme(getContext(), THEME_ATTR_FOR_TYPE[mMenuType],
+                                THEME_RES_FOR_TYPE[mMenuType]));
                 mInflater = (LayoutInflater) wrappedContext
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             }
@@ -232,17 +229,30 @@ public class MenuBuilder implements Menu {
         boolean hasMenuView() {
             return mMenuView != null && mMenuView.get() != null;
         }
-        
-        int resolveDefaultTheme(Context context, int theme, int themeAttrIndex,
-                int defStyle) {
-            if (theme != 0) {
-                return theme;
-            } else {
-                TypedArray a = context.obtainStyledAttributes(android.R.styleable.Theme);
-                int newTheme = a.getResourceId(themeAttrIndex, defStyle);
-                a.recycle();
-                return newTheme;
+
+        /**
+         * Dynamically search for a suitable menu theme based on the menu type
+         * and the currently applied global theme.
+         * 
+         * @param themeAttrName Attribute name to search for dynamically in the
+         *            current theme. Should be a reference to a style.
+         * @param fallbackStyleId Hardcoded Android style to fallback to if the
+         *            theme provides no value.
+         * @return Style id pointing to the theme chosen.
+         */
+        int resolveDefaultTheme(Context context, String themeAttrName, int fallbackStyleId) {
+            if (themeAttrName != null) {
+                int attrId = Utils.resolveDefaultStyleAttr(context, themeAttrName, 0);
+                if (attrId != 0) {
+                    TypedArray a = context.obtainStyledAttributes(new int[] { attrId });
+                    try {
+                        return a.getResourceId(0, fallbackStyleId);
+                    } finally {
+                        a.recycle();
+                    }
+                }
             }
+            return fallbackStyleId;
         }
     }
     

@@ -85,7 +85,7 @@ public class MockContext extends Context {
     public void setTheme(int resid) {
         throw new UnsupportedOperationException();
     }
-    
+
     @Override
     public Resources.Theme getTheme() {
         throw new UnsupportedOperationException();

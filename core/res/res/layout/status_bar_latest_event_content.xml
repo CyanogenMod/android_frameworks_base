@@ -25,8 +25,9 @@
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
             android:textStyle="bold"
+            android:textSize="18sp"
             android:paddingLeft="4dp"
-            android:textAppearance="@style/TextAppearance.Medium" />
+            android:textColor="#ff000000" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="fill_parent"
@@ -37,10 +38,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:textColor="#ff000000"
             android:singleLine="true"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
-            android:textAppearance="@style/TextAppearance.Small"
+            android:textSize="14sp"
             android:paddingLeft="4dp"
             />
         <TextView android:id="@+id/time"
@@ -48,7 +50,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:singleLine="true"
+            android:textSize="14sp"
             android:paddingRight="5dp"
-            android:textAppearance="@style/TextAppearance.Small" />
+            android:textColor="#ff000000" />
     </LinearLayout>
 </LinearLayout>

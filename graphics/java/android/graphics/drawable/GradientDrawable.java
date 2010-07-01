@@ -783,9 +783,8 @@ public class GradientDrawable extends Drawable {
                     setCornerRadii(new float[] {
                             topLeftRadius, topLeftRadius,
                             topRightRadius, topRightRadius,
-                            bottomRightRadius, bottomRightRadius,
-                            bottomLeftRadius, bottomLeftRadius
-                            
+                            bottomLeftRadius, bottomLeftRadius,
+                            bottomRightRadius, bottomRightRadius
                     });
                 }
                 a.recycle();

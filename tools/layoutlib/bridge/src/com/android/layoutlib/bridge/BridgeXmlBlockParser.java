@@ -193,11 +193,6 @@ public class BridgeXmlBlockParser implements XmlResourceParser {
         return mParser.getAttributeNamespace(index);
     }
 
-	/** @hide */
-	public int getAttributeDataType(int index) {
-		throw new RuntimeException("getAttributeDataType not supported");
-	}
-
     public String getAttributeName(int index) {
         return mParser.getAttributeName(index);
     }

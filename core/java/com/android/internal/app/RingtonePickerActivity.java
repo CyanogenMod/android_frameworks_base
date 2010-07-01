@@ -16,11 +16,10 @@
 
 package com.android.internal.app;
 
-import com.android.internal.app.AlertActivity;
-import com.android.internal.app.AlertController;
-
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -222,17 +221,31 @@ public final class RingtonePickerActivity extends AlertActivity implements
      * @return The position of the inserted item.
      */
     private int addStaticItem(ListView listView, int resId, int textResId) {
+        return addStaticItem(listView, resId, getResources().getText(textResId));
+    }
+
+    private int addStaticItem(ListView listView, int resId, CharSequence text) {
         TextView textView = (TextView) getLayoutInflater().inflate(resId, listView, false);
-        textView.setText(textResId);
+        textView.setText(text);
         listView.addHeaderView(textView);
         mStaticItemCount++;
         return listView.getHeaderViewsCount() - 1;
     }
 
     private int addBuyItem(ListView listView) {
-        return addStaticItem(listView,
-                com.android.internal.R.layout.simple_list_item_1,
-                com.android.internal.R.string.buy_ringtones);
+        String buyRingtones = null;
+        try {
+            Resources res = getPackageManager().getResourcesForApplication("com.tmobile.resources");
+            int textResId = res.getIdentifier("buy_ringtones", "string", "com.tmobile.resources");
+            if (textResId != 0) {
+                return addStaticItem(listView,
+                        com.android.internal.R.layout.select_dialog_item,
+                        res.getText(textResId));
+            }
+        } catch (NameNotFoundException e) {
+            /* Ignore, we just won't the "buy ringtones" option. */
+        }
+        return -1;
     }
 
     private int addDefaultRingtoneItem(ListView listView) {

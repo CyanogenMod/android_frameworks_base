@@ -133,6 +133,9 @@ public class PackageInfo implements Parcelable {
     public FeatureInfo[] reqFeatures;
     
     // Is Theme Apk
+    /**
+     * {@hide}
+     */
     public boolean isThemeApk = false;
 
     // ThemeInfo

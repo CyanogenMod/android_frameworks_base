@@ -6,6 +6,9 @@ import android.util.Log;
 import android.util.AttributeSet;
 import android.content.res.Resources;
 
+/**
+ * @hide
+ */
 public class BaseThemeInfo implements Parcelable {
 
     /**
