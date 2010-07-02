@@ -67,6 +67,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+import android.provider.Settings;
+import java.lang.reflect.Field;
+
 
 /**
  * The public (ok, semi-public) service for the status bar.
@@ -87,6 +90,9 @@ public class StatusBarService extends IStatusBar.Stub
 {
     static final String TAG = "StatusBar";
     static final boolean SPEW = false;
+
+    private boolean mShowPlmnSb;
+    private boolean mShowSpnSb;
 
     static final int EXPANDED_LEAVE_ALONE = -10000;
     static final int EXPANDED_FULL_OPEN = -10001;
@@ -206,6 +212,7 @@ public class StatusBarService extends IStatusBar.Stub
     private Ticker mTicker;
     private View mTickerView;
     private boolean mTicking;
+    private TickerView tickerView;
     
     // Tracking finger for opening/closing.
     int mEdgeBorder; // corresponds to R.dimen.status_bar_edge_ignore
@@ -224,6 +231,11 @@ public class StatusBarService extends IStatusBar.Stub
     boolean mAnimatingReveal = false;
     int mViewDelta;
     int[] mAbsPos = new int[2];
+    private int blackColor = 0xff000000;
+    private int whiteColor = 0xffffffff;
+    private int notificationTitleColor = blackColor;
+    private int notificationTextColor = blackColor;
+    private int notificationTimeColor = blackColor;
     
     // for disabling the status bar
     ArrayList<DisableRecord> mDisableRecords = new ArrayList<DisableRecord>();
@@ -234,9 +246,13 @@ public class StatusBarService extends IStatusBar.Stub
      */
     public StatusBarService(Context context) {
         mContext = context;
+        notificationTitleColor = Settings.System.getInt(mContext.getContentResolver(), Settings.System.NOTIF_ITEM_TITLE_COLOR, blackColor);
+        notificationTextColor = Settings.System.getInt(mContext.getContentResolver(), Settings.System.NOTIF_ITEM_TEXT_COLOR, blackColor);
+        notificationTimeColor = Settings.System.getInt(mContext.getContentResolver(), Settings.System.NOTIF_ITEM_TIME_COLOR, blackColor);
         mDisplay = ((WindowManager)context.getSystemService(
                 Context.WINDOW_SERVICE)).getDefaultDisplay();
         makeStatusBarView(context);
+        updateColors();
         mUninstallReceiver = new UninstallReceiver();
     }
 
@@ -294,7 +310,7 @@ public class StatusBarService extends IStatusBar.Stub
         
         mTicker = new MyTicker(context, sb);
 
-        TickerView tickerView = (TickerView)sb.findViewById(R.id.tickerText);
+        tickerView = (TickerView)sb.findViewById(R.id.tickerText);
         tickerView.mTicker = mTicker;
 
         mTrackingView = (TrackingView)View.inflate(context,
@@ -860,6 +876,19 @@ public class StatusBarService extends IStatusBar.Stub
             Slog.e(TAG, "couldn't inflate view for package " + n.pkg, exception);
             return null;
         }
+
+        //Try-catch cause it does not work with QuickSettings, possibly other apps too :( (Won't work thru XML as well)
+        try {
+            TextView tv1 = (TextView) child.findViewById(com.android.internal.R.id.title);
+            TextView tv2 = (TextView) child.findViewById(com.android.internal.R.id.text);
+            TextView tv3 = (TextView) child.findViewById(com.android.internal.R.id.time);
+            tv1.setTextColor(notificationTitleColor);
+            tv2.setTextColor(notificationTextColor);
+            tv3.setTextColor(notificationTimeColor);
+        }
+        catch (Exception e) {
+        }
+  
         content.addView(child);
 
         row.setDrawingCacheEnabled(true);
@@ -1730,6 +1759,17 @@ public class StatusBarService extends IStatusBar.Stub
             }
         }
     }
+    
+    private void updateColors() {
+        mDateView.setTextColor(Settings.System.getInt(mContext.getContentResolver(), Settings.System.DATE_COLOR, blackColor));
+        mNoNotificationsTitle.setTextColor(Settings.System.getInt(mContext.getContentResolver(), Settings.System.NO_NOTIF_COLOR, whiteColor));
+        mLatestTitle.setTextColor(Settings.System.getInt(mContext.getContentResolver(), Settings.System.LATEST_NOTIF_COLOR, whiteColor));
+        mOngoingTitle.setTextColor(Settings.System.getInt(mContext.getContentResolver(), Settings.System.ONGOING_NOTIF_COLOR, whiteColor));
+        mSpnLabel.setTextColor(Settings.System.getInt(mContext.getContentResolver(), Settings.System.SPN_LABEL_COLOR, blackColor));
+        mPlmnLabel.setTextColor(Settings.System.getInt(mContext.getContentResolver(), Settings.System.PLMN_LABEL_COLOR, blackColor));
+        mClearButton.setTextColor(Settings.System.getInt(mContext.getContentResolver(), Settings.System.CLEAR_BUTTON_LABEL_COLOR, blackColor));
+        tickerView.updateColors(Settings.System.getInt(mContext.getContentResolver(), Settings.System.NEW_NOTIF_TICKER_COLOR, blackColor));
+    }
 
     private View.OnClickListener mClearButtonListener = new View.OnClickListener() {
         public void onClick(View v) {
@@ -1758,12 +1798,16 @@ public class StatusBarService extends IStatusBar.Stub
     };
 
     void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn) {
+        // Double carrier
+        mShowPlmnSb = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.SHOW_PLMN_SB, 1) == 1);
+        mShowSpnSb = (Settings.System.getInt(mContext.getContentResolver(), Settings.System.SHOW_SPN_SB, 1) == 1);
         if (false) {
             Slog.d(TAG, "updateNetworkName showSpn=" + showSpn + " spn=" + spn
                     + " showPlmn=" + showPlmn + " plmn=" + plmn);
         }
         boolean something = false;
-        if (showPlmn) {
+        // Double carrier - bcrook
+        if (showPlmn && mShowPlmnSb) {
             mPlmnLabel.setVisibility(View.VISIBLE);
             if (plmn != null) {
                 mPlmnLabel.setText(plmn);
@@ -1774,7 +1818,8 @@ public class StatusBarService extends IStatusBar.Stub
             mPlmnLabel.setText("");
             mPlmnLabel.setVisibility(View.GONE);
         }
-        if (showSpn && spn != null) {
+        // Double carrier - bcrook, refinements from Wysie
+        if (showSpn && spn != null && mShowSpnSb) {
             mSpnLabel.setText(spn);
             mSpnLabel.setVisibility(View.VISIBLE);
             something = true;
