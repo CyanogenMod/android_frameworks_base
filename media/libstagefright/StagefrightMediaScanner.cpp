@@ -30,6 +30,9 @@
 #include <Tremolo/ivorbiscodec.h>
 #include <Tremolo/ivorbisfile.h>
 
+// FLAC includes
+#include <FLAC/all.h>
+
 namespace android {
 
 StagefrightMediaScanner::StagefrightMediaScanner()
@@ -42,7 +45,8 @@ static bool FileHasAcceptableExtension(const char *extension) {
     static const char *kValidExtensions[] = {
         ".mp3", ".mp4", ".m4a", ".3gp", ".3gpp", ".3g2", ".3gpp2",
         ".mpeg", ".ogg", ".mid", ".smf", ".imy", ".wma", ".aac",
-        ".wav", ".amr", ".midi", ".xmf", ".rtttl", ".rtx", ".ota"
+        ".wav", ".amr", ".midi", ".xmf", ".rtttl", ".rtx", ".ota",
+        ".flac"
     };
     static const size_t kNumValidExtensions =
         sizeof(kValidExtensions) / sizeof(kValidExtensions[0]);
@@ -144,10 +148,78 @@ failure:
     return UNKNOWN_ERROR;
 }
 
+static FLAC__StreamDecoderWriteStatus flac_write(const FLAC__StreamDecoder *decoder, const FLAC__Frame *frame, const FLAC__int32 *const buffer[], void *client_data) {
+    (void)decoder, (void)frame, (void)buffer, (void)client_data;
+    return FLAC__STREAM_DECODER_WRITE_STATUS_CONTINUE;
+}
+
+static void flac_error(const FLAC__StreamDecoder *decoder, FLAC__StreamDecoderErrorStatus status, void *client_data) {
+    (void)decoder, (void)status, (void)client_data;
+}
+
+static void flac_metadata(const FLAC__StreamDecoder *decoder, const FLAC__StreamMetadata *metadata, void *client_data) {
+    MediaScannerClient *client = (MediaScannerClient *)client_data;
+
+    if (metadata->type == FLAC__METADATA_TYPE_STREAMINFO) {
+        FLAC__uint64 duration = 1000 * metadata->data.stream_info.total_samples / metadata->data.stream_info.sample_rate;
+        if (duration > 0) {
+            char buffer[20];
+            sprintf(buffer, "%lld", duration);
+            if (!client->addStringTag("duration", buffer))
+                return;
+        }
+    } else if (metadata->type == FLAC__METADATA_TYPE_VORBIS_COMMENT) {
+        for (uint32_t i = 0; i < metadata->data.vorbis_comment.num_comments; i++) {
+            char *ptr = (char *)metadata->data.vorbis_comment.comments[i].entry;
+
+            char *val = strchr(ptr, '=');
+            if (val) {
+                int keylen = val++ - ptr;
+                char key[keylen + 1];
+                strncpy(key, ptr, keylen);
+                key[keylen] = 0;
+                LOGD("flac_metadata: key: %s value: %s", key, val);
+                if (!client->addStringTag(key, val)) return;
+            }
+        }
+    }
+}
+
+static status_t HandleFLAC(const char *filename, MediaScannerClient *client)
+{
+    status_t status = UNKNOWN_ERROR;
+
+    FLAC__StreamDecoder *decoder;
+
+    decoder = FLAC__stream_decoder_new();
+    if (!decoder)
+        return status;
+
+    FLAC__stream_decoder_set_md5_checking(decoder, false);
+    FLAC__stream_decoder_set_metadata_ignore_all(decoder);
+    FLAC__stream_decoder_set_metadata_respond(decoder, FLAC__METADATA_TYPE_STREAMINFO);
+    FLAC__stream_decoder_set_metadata_respond(decoder, FLAC__METADATA_TYPE_VORBIS_COMMENT);
+
+    FLAC__StreamDecoderInitStatus init_status;
+    init_status = FLAC__stream_decoder_init_file(decoder, filename, flac_write, flac_metadata, flac_error, client);
+    if (init_status != FLAC__STREAM_DECODER_INIT_STATUS_OK)
+        goto exit;
+
+    if (!FLAC__stream_decoder_process_until_end_of_metadata(decoder))
+        goto exit;
+
+    status = OK;
+
+exit:
+    FLAC__stream_decoder_finish(decoder);
+    FLAC__stream_decoder_delete(decoder);
+
+    return OK;
+}
+
 status_t StagefrightMediaScanner::processFile(
         const char *path, const char *mimeType,
         MediaScannerClient &client) {
-    LOGV("processFile '%s'.", path);
 
     client.setLocale(locale());
     client.beginFile();
@@ -177,6 +249,10 @@ status_t StagefrightMediaScanner::processFile(
 
     if (!strcasecmp(extension, ".ogg")) {
         return HandleOGG(path, &client);
+    }
+
+    if (!strcasecmp(extension, ".flac")) {
+        return HandleFLAC(path, &client);
     }
 
     if (mRetriever->setDataSource(path) == OK

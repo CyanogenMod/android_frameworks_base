@@ -47,10 +47,11 @@ LOCAL_CFLAGS += -DBUILD_WITH_FULL_STAGEFRIGHT
 endif
 
 LOCAL_C_INCLUDES:= \
-	$(JNI_H_INCLUDE) \
+        $(JNI_H_INCLUDE) \
         $(TOP)/external/opencore/extern_libs_v2/khronos/openmax/include \
         $(TOP)/external/opencore/android \
-        $(TOP)/external/tremolo
+        $(TOP)/external/tremolo \
+        $(TOP)/external/flac/include
 
 LOCAL_SHARED_LIBRARIES := \
         libbinder         \
@@ -61,7 +62,8 @@ LOCAL_SHARED_LIBRARIES := \
         libsonivox        \
         libvorbisidec     \
         libsurfaceflinger_client \
-        libcamera_client
+        libcamera_client  \
+        libFLAC
 
 LOCAL_STATIC_LIBRARIES := \
         libstagefright_aacdec \
