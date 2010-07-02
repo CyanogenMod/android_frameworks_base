@@ -1042,14 +1042,14 @@ implements CharSequence, GetChars, Spannable, Editable, Appendable,
         checkRange("drawText", start, end);
 
         if (end <= mGapStart) {
-            c.drawText(mText, start, end - start, x, y, p,false);
+            c.drawText(mText, start, end - start, x, y, p,true);
         } else if (start >= mGapStart) {
-            c.drawText(mText, start + mGapLength, end - start, x, y, p,false);
+            c.drawText(mText, start + mGapLength, end - start, x, y, p,true);
         } else {
             char[] buf = TextUtils.obtain(end - start);
 
             getChars(start, end, buf, 0);
-            c.drawText(buf, 0, end - start, x, y, p,false);
+            c.drawText(buf, 0, end - start, x, y, p,true);
             TextUtils.recycle(buf);
         }
     }
