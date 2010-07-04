@@ -1572,6 +1572,126 @@ public final class Settings {
         public static final String SELECTED_CUSTOM_APP = "selected_custom_app";
 
         /**
+         * Toggles whether to display the PLMN field on the Lockscreen
+         * @hide
+         */
+        public static final String SHOW_PLMN_LS = "show_plmn_ls";
+
+        /**
+         * Toggles whether to display the SPN field on the Lockscreen
+         * @hide
+         */
+        public static final String SHOW_SPN_LS = "show_spn_ls";
+
+        /**
+         * Toggles whether to display the PLMN field on the Notification bar
+         * @hide
+         */
+        public static final String SHOW_PLMN_SB = "show_plmn_sb";
+
+        /**
+         * Toggles whether to display the SPN field on the Notification bar
+         * @hide
+         */
+        public static final String SHOW_SPN_SB = "show_spn_sb";
+        
+        /**
+         * Specifies whether to show or hide clock
+         * @hide
+         */
+        public static final String SHOW_STATUS_CLOCK = "show_status_clock";
+        
+        /**
+         * Specifies the clock color
+         * @hide
+         */
+        public static final String CLOCK_COLOR = "clock_color";
+        
+        /**
+         * Specifies notification count color
+         * @hide
+         */
+        public static final String NOTIF_COUNT_COLOR = "notifications_count_color";
+        
+        /**
+         * Specifies the date color
+         * @hide
+         */
+        public static final String DATE_COLOR = "date_color";
+
+        /**
+         * Specifies new notification ticker color
+         * @hide
+         */
+        public static final String NEW_NOTIF_TICKER_COLOR = "new_notifications_ticker_color";
+
+        /**
+         * Specifies no notifications color
+         * @hide
+         */
+        public static final String NO_NOTIF_COLOR = "no_notifications_color";
+
+        /**
+         * Specifies latest nofitication color
+         * @hide
+         */
+        public static final String LATEST_NOTIF_COLOR = "latest_notifications_color";
+
+        /**
+         * Specifies ongoing notification color
+         * @hide
+         */
+        public static final String ONGOING_NOTIF_COLOR = "ongoing_notifications_color";
+
+        /**
+         * Specifies spn label color 
+         * @hide 
+         */
+        public static final String SPN_LABEL_COLOR = "spn_label_color";
+
+        /**
+         * Specifies plmn color
+         * @hide
+         */
+        public static final String PLMN_LABEL_COLOR = "plmn_label_color";
+
+        /**
+         * Specifies clear button color
+         * @hide
+         */
+        public static final String CLEAR_BUTTON_LABEL_COLOR = "clear_button_label_color";
+        
+        /**
+         * Specifies notification item title color.
+         * @hide
+         */
+        public static final String NOTIF_ITEM_TITLE_COLOR = "notifications_title_color";
+
+        /**
+         * Specifies notification item text color.
+         * @hide
+         */
+        public static final String NOTIF_ITEM_TEXT_COLOR = "notifications_text_color";
+
+        /**
+         * Specifies notification item time color.
+         * @hide
+         */
+        public static final String NOTIF_ITEM_TIME_COLOR = "notifications_time_color";
+
+        /**
+         * Whether to show the battery level percentage overlayed on the icon.
+          * @hide
+          */
+        public static final String BATTERY_PERCENTAGE_STATUS_ICON = "battery_percentage_status_icon";
+ 
+         /**
+         * Specifies battery percentage status color
+         * @hide
+         */
+        public static final String BATTERY_PERCENTAGE_STATUS_COLOR = "battery_status_color_title";
+        
+        /**
          * Whether the audible DTMF tones are played by the dialer when dialing. The value is
          * boolean (1 or 0).
          */
@@ -1733,7 +1853,7 @@ public final class Settings {
          * @hide
          */
         public static final String MENU_UNLOCK_SCREEN = "menu_unlock_screen";
-        
+
         /**
          * Whether to use br0tips.  The value is boolean (1 or 0).
          * @hide

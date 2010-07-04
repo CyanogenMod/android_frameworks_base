@@ -30,6 +30,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.graphics.drawable.AnimationDrawable;
+import android.provider.Settings;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.util.DisplayMetrics;
 
 class StatusBarIcon {
     // TODO: get this from a resource
@@ -44,8 +49,13 @@ class StatusBarIcon {
     private TextView mTextView;
     private AnimatedImageView mImageView;
     private TextView mNumberView;
+    private int clockColor = 0xff000000;
+    private int batteryPercentColor = 0xffffffff;
+    private int notifCountColor = 0xffffffff;
+    private Context mContext;
 
     public StatusBarIcon(Context context, IconData data, ViewGroup parent) {
+        mContext = context;
         mData = data.clone();
 
         switch (data.type) {
@@ -55,15 +65,25 @@ class StatusBarIcon {
                 mTextView = t;
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.MATCH_PARENT);
+                        LinearLayout.LayoutParams.FILL_PARENT);
                 t.setTextSize(16);
-                t.setTextColor(0xff000000);
                 t.setTypeface(Typeface.DEFAULT_BOLD);
                 t.setGravity(Gravity.CENTER_VERTICAL | Gravity.LEFT);
                 t.setPadding(6, 0, 0, 0);
                 t.setLayoutParams(layoutParams);
                 t.setText(data.text);
                 this.view = t;
+                
+                clockColor = Settings.System.getInt(mContext.getContentResolver(), Settings.System.CLOCK_COLOR, clockColor);
+                t.setTextColor(clockColor);
+                
+                if (getBoolean(Settings.System.SHOW_STATUS_CLOCK, true)) {
+                    t.setVisibility(View.VISIBLE);
+                }
+                else {
+                    t.setVisibility(View.GONE);
+                }
+
                 break;
             }
 
@@ -85,9 +105,68 @@ class StatusBarIcon {
                 mNumberView = nv;
                 if (data.number > 0) {
                     nv.setText("" + data.number);
+                    notifCountColor = Settings.System.getInt(mContext.getContentResolver(),
+                                        Settings.System.NOTIF_COUNT_COLOR, notifCountColor);
+                    nv.setTextColor(notifCountColor);   
                     nv.setVisibility(View.VISIBLE);
                 } else {
                     nv.setVisibility(View.GONE);
+                }
+                break;
+            }
+            case IconData.ICON_NUMBER: {
+                // container
+                LayoutInflater inflater = (LayoutInflater)context.getSystemService(
+                                                Context.LAYOUT_INFLATER_SERVICE);
+                View v = inflater.inflate(com.android.internal.R.layout.status_bar_icon, parent, false);
+                this.view = v;
+
+                // icon
+                AnimatedImageView im = (AnimatedImageView)v.findViewById(com.android.internal.R.id.image);
+                im.setImageDrawable(getIcon(context, data));
+                im.setImageLevel(data.iconLevel);
+                mImageView = im;
+
+                // number
+                TextView nv = (TextView)v.findViewById(com.android.internal.R.id.number);
+                mNumberView = nv;
+                
+                //remove background, center, and change gravity of text                
+                // attempt to correct position on both hdpi and mdpi
+                DisplayMetrics dm = new DisplayMetrics();
+                ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(dm);
+        
+                if (DisplayMetrics.DENSITY_HIGH == dm.densityDpi) {               
+                    mNumberView.setLayoutParams(
+                        new FrameLayout.LayoutParams(
+                            FrameLayout.LayoutParams.WRAP_CONTENT,
+                            FrameLayout.LayoutParams.WRAP_CONTENT,
+                            Gravity.RIGHT | Gravity.CENTER_VERTICAL));
+
+                    mNumberView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
+                }
+                else {
+                    mNumberView.setLayoutParams(
+                        new FrameLayout.LayoutParams(
+                            FrameLayout.LayoutParams.WRAP_CONTENT,
+                            FrameLayout.LayoutParams.WRAP_CONTENT,
+                            Gravity.CENTER | Gravity.CENTER_VERTICAL));
+
+                    mNumberView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);                    
+                }
+                
+                mNumberView.setBackgroundDrawable(null);                
+                batteryPercentColor = Settings.System.getInt(mContext.getContentResolver(),
+                                        Settings.System.BATTERY_PERCENTAGE_STATUS_COLOR, batteryPercentColor);
+                mNumberView.setTextColor(batteryPercentColor);
+                mNumberView.setTextSize(12);
+
+                if (data.number == 100) {
+                    nv.setText("" + 99);
+                } else if ((data.number > 0)&&(data.number < 100)) {
+                    nv.setText("" + data.number);
+                } else {
+                    nv.setText("");
                 }
                 break;
             }
@@ -106,6 +185,7 @@ class StatusBarIcon {
             }
             break;
         case IconData.ICON:
+        case IconData.ICON_NUMBER:
             if (((mData.iconPackage != null && data.iconPackage != null)
                         && !mData.iconPackage.equals(data.iconPackage))
                     || mData.iconId != data.iconId
@@ -181,6 +261,9 @@ class StatusBarIcon {
 
     int getNumber() {
         return mData.number;
+    }
+    private boolean getBoolean(String systemSettingKey, boolean defaultValue) {
+        return 1 == android.provider.Settings.System.getInt(mContext.getContentResolver(), systemSettingKey, defaultValue ? 1 : 0);
     }
 }
 
