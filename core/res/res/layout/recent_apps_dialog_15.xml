@@ -28,8 +28,9 @@
 
     <!-- Title -->
     <TextView
+        android:id="@+id/recent_title"
         android:layout_width="wrap_content"
-        android:layout_height="40dip"
+        android:layout_height="20dip"
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#80FFFFFF"
@@ -57,28 +58,24 @@
         >
 
         <include
-            layout="@android:layout/recent_apps_icon"
+            layout="@android:layout/recent_apps_icon_15"
             android:id="@+id/button0" />
 
         <include
-            layout="@android:layout/recent_apps_icon"
+            layout="@android:layout/recent_apps_icon_15"
             android:id="@+id/button1" />
 
         <include
-            layout="@android:layout/recent_apps_icon"
+            layout="@android:layout/recent_apps_icon_15"
             android:id="@+id/button2" />
 
         <include
-            layout="@android:layout/recent_apps_icon"
+            layout="@android:layout/recent_apps_icon_15"
             android:id="@+id/button3" />
             
         <include
-            layout="@android:layout/recent_apps_icon"
+            layout="@android:layout/recent_apps_icon_15"
             android:id="@+id/button4" />
-
-        <include
-            layout="@android:layout/recent_apps_icon"
-            android:id="@+id/button5" />
 
     </LinearLayout>
 
@@ -88,35 +85,57 @@
         android:orientation="horizontal" >
 
         <include
-            layout="@android:layout/recent_apps_icon"
+            layout="@android:layout/recent_apps_icon_15"
+            android:id="@+id/button5" />
+
+        <include
+            layout="@android:layout/recent_apps_icon_15"
             android:id="@+id/button6" />
 
         <include
-            layout="@android:layout/recent_apps_icon"
+            layout="@android:layout/recent_apps_icon_15"
             android:id="@+id/button7" />
             
         <include
-            layout="@android:layout/recent_apps_icon"
+            layout="@android:layout/recent_apps_icon_15"
             android:id="@+id/button8" />
 
         <include
-            layout="@android:layout/recent_apps_icon"
+            layout="@android:layout/recent_apps_icon_15"
             android:id="@+id/button9" />
-
-        <include
-            layout="@android:layout/recent_apps_icon"
-            android:id="@+id/button10" />
-
-        <include
-            layout="@android:layout/recent_apps_icon"
-            android:id="@+id/button11" />
 
     </LinearLayout>
     
+    <LinearLayout
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <include
+            layout="@android:layout/recent_apps_icon_15"
+            android:id="@+id/button10" />
+
+        <include
+            layout="@android:layout/recent_apps_icon_15"
+            android:id="@+id/button11" />
+            
+        <include
+            layout="@android:layout/recent_apps_icon_15"
+            android:id="@+id/button12" />
+
+        <include
+            layout="@android:layout/recent_apps_icon_15"
+            android:id="@+id/button13" />
+
+        <include
+            layout="@android:layout/recent_apps_icon_15"
+            android:id="@+id/button14" />
+
+    </LinearLayout>
 
     <!-- spacer to balance out the title above -->
     <FrameLayout
-        android:layout_height="40dip"
+        android:layout_height="20dip"
         android:layout_width="match_parent"
         />
 </com.android.internal.policy.impl.RecentApplicationsBackground>
