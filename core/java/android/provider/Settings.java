@@ -1560,6 +1560,12 @@ public final class Settings {
         public static final String RECENT_APPS_NUMBER = "recent_apps_number";
         
         /**
+         * Specifies the number of recent apps to show (8, 12, 16)
+         * @hide
+         */
+        public static final String RECENT_APPS_SHOW_TITLE = "recent_apps_show_title";
+        
+        /**
          * Specifies whether or not to use a custom app instead of the recent applications dialog
          * @hide
          */
