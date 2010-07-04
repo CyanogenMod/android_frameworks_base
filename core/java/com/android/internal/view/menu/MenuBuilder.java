@@ -24,6 +24,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -73,6 +74,16 @@ public class MenuBuilder implements Menu {
         com.android.internal.R.style.Theme_IconMenu,
         com.android.internal.R.style.Theme_ExpandedMenu,
         0,
+    };
+
+    /**
+     * Added by T-Mobile to allow dynamic lookup of the menu style based on the
+     * currently applied global theme.  Must be ordered to match {@link #THEME_RES_FOR_TYPE}.
+     */
+    static final String THEME_ATTR_FOR_TYPE[] = new String[] {
+        "com_tmobile_framework_iconMenuTheme",
+        "com_tmobile_framework_expandedMenuTheme",
+        null,
     };
     
     // Order must be the same order as the TYPE_*
@@ -176,8 +187,9 @@ public class MenuBuilder implements Menu {
         LayoutInflater getInflater() {
             // Create an inflater that uses the given theme for the Views it inflates
             if (mInflater == null) {
-                Context wrappedContext = new ContextThemeWrapper(mContext,
-                        THEME_RES_FOR_TYPE[mMenuType]); 
+                Context wrappedContext = new ContextThemeWrapper(getContext(),
+                        resolveDefaultTheme(getContext(), THEME_ATTR_FOR_TYPE[mMenuType],
+                                THEME_RES_FOR_TYPE[mMenuType]));
                 mInflater = (LayoutInflater) wrappedContext
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             }
@@ -216,6 +228,31 @@ public class MenuBuilder implements Menu {
         
         boolean hasMenuView() {
             return mMenuView != null && mMenuView.get() != null;
+        }
+
+        /**
+         * Dynamically search for a suitable menu theme based on the menu type
+         * and the currently applied global theme.
+         * 
+         * @param themeAttrName Attribute name to search for dynamically in the
+         *            current theme. Should be a reference to a style.
+         * @param fallbackStyleId Hardcoded Android style to fallback to if the
+         *            theme provides no value.
+         * @return Style id pointing to the theme chosen.
+         */
+        int resolveDefaultTheme(Context context, String themeAttrName, int fallbackStyleId) {
+            if (themeAttrName != null) {
+                int attrId = Utils.resolveDefaultStyleAttr(context, themeAttrName, 0);
+                if (attrId != 0) {
+                    TypedArray a = context.obtainStyledAttributes(new int[] { attrId });
+                    try {
+                        return a.getResourceId(0, fallbackStyleId);
+                    } finally {
+                        a.recycle();
+                    }
+                }
+            }
+            return fallbackStyleId;
         }
     }
     

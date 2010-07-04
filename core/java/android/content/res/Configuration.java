@@ -19,6 +19,8 @@ package android.content.res;
 import android.content.pm.ActivityInfo;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.SystemProperties;
+import android.text.TextUtils;
 
 import java.util.Locale;
 
@@ -49,6 +51,11 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * Current user preference for the locale.
      */
     public Locale locale;
+
+    /**
+     * @hide
+     */
+    public CustomTheme customTheme;
 
     /**
      * Locale should persist on setting.  This is hidden because it is really
@@ -170,7 +177,22 @@ public final class Configuration implements Parcelable, Comparable<Configuration
     public static final int ORIENTATION_PORTRAIT = 1;
     public static final int ORIENTATION_LANDSCAPE = 2;
     public static final int ORIENTATION_SQUARE = 3;
-    
+   
+    /**
+     * @hide
+     */
+    public static final int THEME_UNDEFINED = 0;
+
+    /**
+     * @hide
+     */
+    public static final String THEME_ID_PERSISTENCE_PROPERTY = "persist.sys.themeId";
+
+    /**
+     * @hide
+     */
+    public static final String THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY = "persist.sys.themePackageName";
+
     /**
      * Overall orientation of the screen.  May be one of
      * {@link #ORIENTATION_LANDSCAPE}, {@link #ORIENTATION_PORTRAIT},
@@ -240,6 +262,11 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         screenLayout = o.screenLayout;
         uiMode = o.uiMode;
         seq = o.seq;
+        if (o.customTheme != null) {
+            customTheme = (CustomTheme) o.customTheme.clone();
+        } else {
+            customTheme = CustomTheme.getDefault();
+        }
     }
     
     public String toString() {
@@ -274,6 +301,8 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             sb.append(" seq=");
             sb.append(seq);
         }
+        sb.append(" themeResource=");
+        sb.append(customTheme);
         sb.append('}');
         return sb.toString();
     }
@@ -296,6 +325,14 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         screenLayout = SCREENLAYOUT_SIZE_UNDEFINED;
         uiMode = UI_MODE_TYPE_UNDEFINED;
         seq = 0;
+
+        String themeResource = SystemProperties.get(THEME_ID_PERSISTENCE_PROPERTY, null);
+        String themePackageName = SystemProperties.get(THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, null);
+        if (themeResource != null && themePackageName != null) {
+            customTheme = new CustomTheme(themeResource, themePackageName);
+        } else {
+            customTheme = CustomTheme.getDefault();
+        }
     }
 
     /** {@hide} */
@@ -393,6 +430,11 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             seq = delta.seq;
         }
         
+        if (!CustomTheme.nullSafeEquals(delta.customTheme, customTheme)) {
+            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
+            customTheme = (delta != null ? (CustomTheme)delta.customTheme.clone() :
+                CustomTheme.getDefault());
+        }
         return changed;
     }
 
@@ -471,6 +513,9 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         if (delta.uiMode != (UI_MODE_TYPE_UNDEFINED|UI_MODE_NIGHT_UNDEFINED)
                 && uiMode != delta.uiMode) {
             changed |= ActivityInfo.CONFIG_UI_MODE;
+        }
+        if (!CustomTheme.nullSafeEquals(delta.customTheme, customTheme)) {
+            changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
         }
         
         return changed;
@@ -554,6 +599,14 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         dest.writeInt(screenLayout);
         dest.writeInt(uiMode);
         dest.writeInt(seq);
+
+        if (customTheme == null) {
+            dest.writeInt(0);
+        } else {
+            dest.writeInt(1);
+            dest.writeString(customTheme.getThemeId());
+            dest.writeString(customTheme.getThemePackageName());
+        }
     }
 
     public void readFromParcel(Parcel source) {
@@ -575,6 +628,12 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         screenLayout = source.readInt();
         uiMode = source.readInt();
         seq = source.readInt();
+
+        if (source.readInt() != 0) {
+            String themeId = source.readString();
+            String themePackage = source.readString();
+            customTheme = new CustomTheme(themeId, themePackage);
+        }
     }
     
     public static final Parcelable.Creator<Configuration> CREATOR
@@ -635,6 +694,10 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         if (n != 0) return n;
         n = this.uiMode - that.uiMode;
         //if (n != 0) return n;
+        n = this.customTheme.getThemeId().compareTo(that.customTheme.getThemeId());
+        if (n != 0) return n;
+        n = this.customTheme.getThemePackageName().compareTo(that.customTheme.getThemePackageName());
+
         return n;
     }
 
@@ -658,6 +721,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
                 + this.touchscreen
                 + this.keyboard + this.keyboardHidden + this.hardKeyboardHidden
                 + this.navigation + this.navigationHidden
-                + this.orientation + this.screenLayout + this.uiMode;
+                + this.orientation + this.screenLayout + this.uiMode
+                + this.customTheme.hashCode();
     }
 }

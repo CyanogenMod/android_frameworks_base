@@ -16,11 +16,10 @@
 
 package com.android.internal.app;
 
-import com.android.internal.app.AlertActivity;
-import com.android.internal.app.AlertController;
-
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -59,6 +58,9 @@ public final class RingtonePickerActivity extends AlertActivity implements
     /** The position in the list of the 'Default' item. */
     private int mDefaultRingtonePos = -1;
 
+    /** The position in the list of the 'Buy ringtone' item (should be 0). */
+    private int mBuyPos = -1;
+
     /** The position in the list of the last clicked item. */
     private int mClickedPos = -1;
     
@@ -67,7 +69,10 @@ public final class RingtonePickerActivity extends AlertActivity implements
 
     /** Whether this list has the 'Silent' item. */
     private boolean mHasSilentItem;
-    
+
+    /** Whether this list has the 'Buy ringtone' item. */
+    private boolean mHasBuyItem;
+
     /** The Uri to place a checkmark next to. */
     private Uri mExistingUri;
     
@@ -94,13 +99,19 @@ public final class RingtonePickerActivity extends AlertActivity implements
          * On item clicked
          */
         public void onClick(DialogInterface dialog, int which) {
+            if (which == mBuyPos) {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://wap.t-zones.com")));
+                finish();
+            }
+
             // Save the position of most recently clicked item
             mClickedPos = which;
-            
+
             // Play clip
             playRingtone(which, 0);
         }
-        
+
     };
 
     @Override
@@ -120,10 +131,13 @@ public final class RingtonePickerActivity extends AlertActivity implements
         if (mUriForDefaultItem == null) {
             mUriForDefaultItem = Settings.System.DEFAULT_RINGTONE_URI;
         }
-        
+
         // Get whether to show the 'Silent' item
         mHasSilentItem = intent.getBooleanExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
-        
+
+        // Get whether to show the 'Buy ringtones' item
+        mHasBuyItem = intent.getBooleanExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_BUY, false);
+
         // Give the Activity so it can do managed queries
         mRingtoneManager = new RingtoneManager(this);
 
@@ -168,7 +182,11 @@ public final class RingtonePickerActivity extends AlertActivity implements
     }
 
     public void onPrepareListView(ListView listView) {
-        
+
+        if (mHasBuyItem) {
+            mBuyPos = addBuyItem(listView);
+        }
+
         if (mHasDefaultItem) {
             mDefaultRingtonePos = addDefaultRingtoneItem(listView);
             
@@ -202,29 +220,52 @@ public final class RingtonePickerActivity extends AlertActivity implements
      * @param textResId The resource ID of the text for the item.
      * @return The position of the inserted item.
      */
-    private int addStaticItem(ListView listView, int textResId) {
-        TextView textView = (TextView) getLayoutInflater().inflate(
-                com.android.internal.R.layout.select_dialog_singlechoice, listView, false);
-        textView.setText(textResId);
+    private int addStaticItem(ListView listView, int resId, int textResId) {
+        return addStaticItem(listView, resId, getResources().getText(textResId));
+    }
+
+    private int addStaticItem(ListView listView, int resId, CharSequence text) {
+        TextView textView = (TextView) getLayoutInflater().inflate(resId, listView, false);
+        textView.setText(text);
         listView.addHeaderView(textView);
         mStaticItemCount++;
         return listView.getHeaderViewsCount() - 1;
     }
-    
+
+    private int addBuyItem(ListView listView) {
+        String buyRingtones = null;
+        try {
+            Resources res = getPackageManager().getResourcesForApplication("com.tmobile.resources");
+            int textResId = res.getIdentifier("buy_ringtones", "string", "com.tmobile.resources");
+            if (textResId != 0) {
+                return addStaticItem(listView,
+                        com.android.internal.R.layout.select_dialog_item,
+                        res.getText(textResId));
+            }
+        } catch (NameNotFoundException e) {
+            /* Ignore, we just won't the "buy ringtones" option. */
+        }
+        return -1;
+    }
+
     private int addDefaultRingtoneItem(ListView listView) {
-        return addStaticItem(listView, com.android.internal.R.string.ringtone_default);
+        return addStaticItem(listView,
+                com.android.internal.R.layout.select_dialog_singlechoice,
+                com.android.internal.R.string.ringtone_default);
     }
     
     private int addSilentItem(ListView listView) {
-        return addStaticItem(listView, com.android.internal.R.string.ringtone_silent);
+        return addStaticItem(listView,
+                com.android.internal.R.layout.select_dialog_singlechoice,
+                com.android.internal.R.string.ringtone_silent);
     }
     
     /*
      * On click of Ok/Cancel buttons
      */
     public void onClick(DialogInterface dialog, int which) {
-        boolean positiveResult = which == BUTTON1;
-        
+        boolean positiveResult = which == BUTTON1 && mClickedPos != mBuyPos;
+
         // Stop playing the previous ringtone
         mRingtoneManager.stopPreviousRingtone();
         

@@ -42,6 +42,8 @@ commonSources:= \
     ZipFileCRO.cpp \
 	ZipFileRO.cpp \
 	ZipUtils.cpp \
+	../../tools/aapt/ZipFile.cpp \
+	../../tools/aapt/ZipEntry.cpp \
 	misc.cpp
 
 

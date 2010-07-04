@@ -22,15 +22,17 @@ import com.google.android.collect.Maps;
 
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.accounts.AccountManager;
+import android.accounts.IAccountManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.IContentProvider;
+import android.content.IIntentReceiver;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.IIntentReceiver;
 import android.content.IntentSender;
 import android.content.ReceiverCallNotAllowedException;
 import android.content.ServiceConnection;
@@ -55,6 +57,8 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.content.pm.PackageParser.Package;
 import android.content.res.AssetManager;
+import android.content.res.Configuration;
+import android.content.res.CustomTheme;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.database.sqlite.SQLiteDatabase;
@@ -164,6 +168,7 @@ class ContextImpl extends Context {
 
     private static final Object sSync = new Object();
     private static AlarmManager sAlarmManager;
+    
     private static PowerManager sPowerManager;
     private static ConnectivityManager sConnectivityManager;
     private static ThrottleManager sThrottleManager;
@@ -200,6 +205,7 @@ class ContextImpl extends Context {
     private DevicePolicyManager mDevicePolicyManager = null;
     private UiModeManager mUiModeManager = null;
 
+     
     private final Object mSync = new Object();
 
     private File mDatabasesDir;
@@ -234,6 +240,20 @@ class ContextImpl extends Context {
     @Override
     public Resources getResources() {
         return mResources;
+    }
+
+    /**
+     * Refresh resources object which may have been changed by a theme
+     * configuration change.
+     */
+    /* package */ void refreshResourcesIfNecessary() {
+        if (mResources == Resources.getSystem()) {
+            return;
+        }
+
+        if (mPackageInfo.mApplicationInfo.isThemeable) {
+            mTheme = null;
+        }
     }
 
     @Override
@@ -271,23 +291,62 @@ class ContextImpl extends Context {
     public void setTheme(int resid) {
         mThemeResource = resid;
     }
+
+    private int determineDefaultThemeResource() {
+        if (getResources() != Resources.getSystem() && mPackageInfo.mApplicationInfo.isThemeable) {
+            try {
+                Configuration config = ActivityManagerNative.getDefault().getConfiguration();
+                if (config.customTheme != null) {
+                    int themeId = CustomTheme.getStyleId(this,
+                                config.customTheme.getThemePackageName(),
+                                config.customTheme.getThemeId());
+                    if (themeId == -1) {
+                        CustomTheme defaultTheme = CustomTheme.getDefault();
+                        if (config.customTheme.equals(defaultTheme)) {
+                            return com.android.internal.R.style.Theme;
+                        } else {
+                            themeId = CustomTheme.getStyleId(this,
+                                    defaultTheme.getThemePackageName(),
+                                    defaultTheme.getThemeId());
+                            if (themeId == -1) {
+                                return com.android.internal.R.style.Theme;
+                            } else {
+                                return themeId;
+                            }
+                        }
+                    } else {
+                        return themeId;
+                    }
+                }
+            } catch (RemoteException e) {
+                Log.e(TAG, "Unable to access configuration, reverting to original system default theme", e);
+            }
+        }
+
+        /* Fallback... */
+        return com.android.internal.R.style.Theme;
+    }
     
     @Override
     public Resources.Theme getTheme() {
         if (mTheme == null) {
+            int themeId;
             if (mThemeResource == 0) {
-                mThemeResource = com.android.internal.R.style.Theme;
+                themeId = determineDefaultThemeResource();
+            } else {
+                themeId = mThemeResource;
             }
+
             mTheme = mResources.newTheme();
-            mTheme.applyStyle(mThemeResource, true);
+            mTheme.applyStyle(themeId, true);
         }
         return mTheme;
     }
 
     @Override
     public ClassLoader getClassLoader() {
-        return mPackageInfo != null ?
-                mPackageInfo.getClassLoader() : ClassLoader.getSystemClassLoader();
+        return mPackageInfo != null ? mPackageInfo.getClassLoader()
+                : ClassLoader.getSystemClassLoader();
     }
 
     @Override
@@ -1009,7 +1068,7 @@ class ContextImpl extends Context {
         }
         return sAlarmManager;
     }
-
+    
     private PowerManager getPowerManager() {
         synchronized (sSync) {
             if (sPowerManager == null) {
@@ -1497,7 +1556,8 @@ class ContextImpl extends Context {
                 IBinder activityToken, ActivityThread mainThread,
                 Resources container) {
         mPackageInfo = packageInfo;
-        mResources = mPackageInfo.getResources(mainThread);
+        mResources = mPackageInfo.getResources(mainThread,
+                packageInfo.mApplicationInfo.isThemeable, false);
 
         if (mResources != null && container != null
                 && container.getCompatibilityInfo().applicationScale !=
@@ -1507,7 +1567,8 @@ class ContextImpl extends Context {
                         " compatiblity info:" + container.getDisplayMetrics());
             }
             mResources = mainThread.getTopLevelResources(
-                    mPackageInfo.getResDir(), container.getCompatibilityInfo().copy());
+                    mPackageInfo.getResDir(), container.getCompatibilityInfo().copy(),
+                    packageInfo.mApplicationInfo.isThemeable);
         }
         mMainThread = mainThread;
         mContentResolver = new ApplicationContentResolver(this, mainThread);
@@ -1948,6 +2009,16 @@ class ContextImpl extends Context {
         }
 
         @Override
+        public List<PackageInfo> getInstalledThemePackages() {
+            try {
+                return mPM.getInstalledThemePackages();
+            } catch (RemoteException e) {
+                throw new RuntimeException("Package manager has died", e);
+            }
+        }        
+
+
+        @Override
         public List<ApplicationInfo> getInstalledApplications(int flags) {
             try {
                 return mPM.getInstalledApplications(flags);
@@ -2187,7 +2258,8 @@ class ContextImpl extends Context {
             }
             Resources r = mContext.mMainThread.getTopLevelResources(
                     app.uid == Process.myUid() ? app.sourceDir
-                    : app.publicSourceDir, mContext.mPackageInfo);
+                    : app.publicSourceDir, mContext.mPackageInfo,
+                    app.isThemeable);
             if (r != null) {
                 return r;
             }

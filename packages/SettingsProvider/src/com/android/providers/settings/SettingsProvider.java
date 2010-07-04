@@ -512,7 +512,8 @@ public class SettingsProvider extends ContentProvider {
                 // Only proxy the openFile call to drm or media providers
                 String authority = soundUri.getAuthority();
                 boolean isDrmAuthority = authority.equals(DrmStore.AUTHORITY);
-                if (isDrmAuthority || authority.equals(MediaStore.AUTHORITY)) {
+                if (isDrmAuthority || authority.equals(MediaStore.AUTHORITY) ||
+                        authority.equals(RingtoneManager.THEME_AUTHORITY)) {
 
                     if (isDrmAuthority) {
                         try {
@@ -553,7 +554,8 @@ public class SettingsProvider extends ContentProvider {
                 // Only proxy the openFile call to drm or media providers
                 String authority = soundUri.getAuthority();
                 boolean isDrmAuthority = authority.equals(DrmStore.AUTHORITY);
-                if (isDrmAuthority || authority.equals(MediaStore.AUTHORITY)) {
+                if (isDrmAuthority || authority.equals(MediaStore.AUTHORITY) ||
+                        authority.equals(RingtoneManager.THEME_AUTHORITY)) {
 
                     if (isDrmAuthority) {
                         try {
@@ -566,10 +568,8 @@ public class SettingsProvider extends ContentProvider {
                         }
                     }
 
-                    ParcelFileDescriptor pfd = null;
                     try {
-                        pfd = context.getContentResolver().openFileDescriptor(soundUri, mode);
-                        return new AssetFileDescriptor(pfd, 0, -1);
+                        return context.getContentResolver().openAssetFileDescriptor(soundUri, mode);
                     } catch (FileNotFoundException ex) {
                         // fall through and open the fallback ringtone below
                     }

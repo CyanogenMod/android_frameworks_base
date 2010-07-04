@@ -63,6 +63,8 @@ namespace android {
 #endif
 #endif
 
+#define PACKAGE_RESOURCE_ID_TO_DUMP 10
+
 static void printToLogFunc(void* cookie, const char* txt)
 {
     LOGV("%s", txt);
@@ -3998,8 +4000,61 @@ status_t ResTable::parsePackage(const ResTable_package* const pkg,
     return NO_ERROR;
 }
 
-#ifndef HAVE_ANDROID_OS
+void ResTable::removeAssetsByCookie(const String8 &packageName, void* cookie)
+{
+    mError = NO_ERROR;
+
+    size_t N = mHeaders.size();
+    for (size_t i = 0; i < N; i++) {
+        Header* header = mHeaders[i];
+        if ((size_t)header->cookie == (size_t)cookie) {
+            if (header->ownedData != NULL) {
+                free(header->ownedData);
+            }
+            mHeaders.removeAt(i);
+            break;
+        }
+    }
+    size_t pgCount = mPackageGroups.size();
+    for (size_t pgIndex = 0; pgIndex < pgCount; pgIndex++) {
+        PackageGroup* pg = mPackageGroups[pgIndex];
+
+        size_t pkgCount = pg->packages.size();
+        size_t index = pkgCount;
+        for (size_t pkgIndex = 0; pkgIndex < pkgCount; pkgIndex++) {
+            const Package* pkg = pg->packages[pkgIndex];
+            if (String8(String16(pkg->package->name)).compare(packageName) == 0) {
+                index = pkgIndex;
+                LOGV("Delete Package %d id=%d name=%s\n",
+                     (int)pkgIndex, pkg->package->id,
+                     String8(String16(pkg->package->name)).string());
+                break;
+            }
+        }
+        if (index < pkgCount) {
+            const Package* pkg = pg->packages[index];
+            uint32_t id = dtohl(pkg->package->id);
+            if (id != 0 && id < 256) {
+                mPackageMap[id] = 0;
+            }
+            if (pkgCount == 1) {
+                LOGV("Delete Package Group %d id=%d packageCount=%d name=%s\n",
+                      (int)pgIndex, pg->id, (int)pg->packages.size(),
+                      String8(pg->name).string());
+                mPackageGroups.removeAt(pgIndex);
+                delete pg;
+            } else {
+                pg->packages.removeAt(index);
+                delete pkg;
+            }
+            return;
+        }
+    }
+}
+
 #define CHAR16_TO_CSTR(c16, len) (String8(String16(c16,len)).string())
+
+#ifndef HAVE_ANDROID_OS
 
 #define CHAR16_ARRAY_EQ(constant, var, len) \
         ((len == (sizeof(constant)/sizeof(constant[0]))) && (0 == memcmp((var), (constant), (len))))
@@ -4422,5 +4477,159 @@ void ResTable::print(bool inclValues) const
 }
 
 #endif // HAVE_ANDROID_OS
+
+void ResTable::dump() const
+{
+    LOGI("mError=0x%x (%s)\n", mError, strerror(mError));
+#if 0
+    LOGI("mParams=%c%c-%c%c,\n",
+          mParams.language[0], mParams.language[1],
+          mParams.country[0], mParams.country[1]);
+#endif
+    size_t pgCount = mPackageGroups.size();
+    LOGI("Package Groups (%d)\n", (int)pgCount);
+    for (size_t pgIndex=0; pgIndex<pgCount; pgIndex++) {
+        const PackageGroup* pg = mPackageGroups[pgIndex];
+        LOGI("Package Group %d id=%d packageCount=%d name=%s\n",
+             (int)pgIndex, pg->id, (int)pg->packages.size(),
+             String8(pg->name).string());
+
+        size_t pkgCount = pg->packages.size();
+        for (size_t pkgIndex=0; pkgIndex<pkgCount; pkgIndex++) {
+            const Package* pkg = pg->packages[pkgIndex];
+            if (pkg->package->id != PACKAGE_RESOURCE_ID_TO_DUMP) continue; // HACK!
+            size_t count = 0;
+            size_t typeCount = pkg->types.size();
+            LOGI("  Package %d id=%d name=%s typeCount=%d\n", (int)pkgIndex,
+                 pkg->package->id, String8(String16(pkg->package->name)).string(),
+                 (int)typeCount);
+            for (size_t typeIndex=0; typeIndex<typeCount&&count<10; typeIndex++) {
+                const Type* typeConfigs = pkg->getType(typeIndex);
+                if (typeConfigs == NULL) {
+                    LOGI("    type %d NULL\n", (int)typeIndex);
+                    continue;
+                }
+                const size_t NTC = typeConfigs->configs.size();
+                LOGI("    type %d configCount=%d entryCount=%d\n",
+                     (int)typeIndex, (int)NTC, (int)typeConfigs->entryCount);
+                if (typeConfigs->typeSpecFlags != NULL) {
+                    for (size_t entryIndex=0; entryIndex<typeConfigs->entryCount&&count<10; entryIndex++) {
+                        uint32_t resID = (0xff000000 & ((pkg->package->id)<<24))
+                        | (0x00ff0000 & ((typeIndex+1)<<16))
+                        | (0x0000ffff & (entryIndex));
+                        resource_name resName;
+                        this->getResourceName(resID, &resName);
+                        count++;
+                        LOGI("      spec resource 0x%08x %s:%s/%s: flags=0x%08x\n",
+                             resID,
+                             CHAR16_TO_CSTR(resName.package, resName.packageLen),
+                             CHAR16_TO_CSTR(resName.type, resName.typeLen),
+                             CHAR16_TO_CSTR(resName.name, resName.nameLen),
+                             dtohl(typeConfigs->typeSpecFlags[entryIndex]));
+                    }
+                }
+                for (size_t configIndex=0; configIndex<NTC&&count<10; configIndex++) {
+                    const ResTable_type* type = typeConfigs->configs[configIndex];
+                    if ((((uint64_t)type)&0x3) != 0) {
+                        LOGI("      NON-INTEGER ResTable_type ADDRESS: %p\n", type);
+                        continue;
+                    }
+                    count++;
+                    LOGI("      config %d lang=%c%c cnt=%c%c orien=%d touch=%d density=%d key=%d infl=%d nav=%d w=%d h=%d\n",
+                         (int)configIndex,
+                         type->config.language[0] ? type->config.language[0] : '-',
+                         type->config.language[1] ? type->config.language[1] : '-',
+                         type->config.country[0] ? type->config.country[0] : '-',
+                         type->config.country[1] ? type->config.country[1] : '-',
+                         type->config.orientation,
+                         type->config.touchscreen,
+                         dtohs(type->config.density),
+                         type->config.keyboard,
+                         type->config.inputFlags,
+                         type->config.navigation,
+                         dtohs(type->config.screenWidth),
+                         dtohs(type->config.screenHeight));
+                    size_t entryCount = dtohl(type->entryCount);
+                    uint32_t entriesStart = dtohl(type->entriesStart);
+                    if ((entriesStart&0x3) != 0) {
+                        LOGI("      NON-INTEGER ResTable_type entriesStart OFFSET: %p\n", (void*)entriesStart);
+                        continue;
+                    }
+                    uint32_t typeSize = dtohl(type->header.size);
+                    if ((typeSize&0x3) != 0) {
+                        LOGI("      NON-INTEGER ResTable_type header.size: %p\n", (void*)typeSize);
+                        continue;
+                    }
+                    for (size_t entryIndex=0; entryIndex<entryCount&&count<10; entryIndex++) {
+                        const uint8_t* const end = ((const uint8_t*)type)
+                            + dtohl(type->header.size);
+                        const uint32_t* const eindex = (const uint32_t*)
+                            (((const uint8_t*)type) + dtohs(type->header.headerSize));
+                        uint32_t thisOffset = dtohl(eindex[entryIndex]);
+                        if (thisOffset == ResTable_type::NO_ENTRY) {
+                            continue;
+                        }
+
+                        uint32_t resID = (0xff000000 & ((pkg->package->id)<<24))
+                            | (0x00ff0000 & ((typeIndex+1)<<16))
+                            | (0x0000ffff & (entryIndex));
+                        resource_name resName;
+                        this->getResourceName(resID, &resName);
+                        count++;
+                        LOGI("        resource 0x%08x %s:%s/%s: ", resID,
+                             CHAR16_TO_CSTR(resName.package, resName.packageLen),
+                             CHAR16_TO_CSTR(resName.type, resName.typeLen),
+                             CHAR16_TO_CSTR(resName.name, resName.nameLen));
+                        if ((thisOffset&0x3) != 0) {
+                            LOGI("NON-INTEGER OFFSET: %p\n", (void*)thisOffset);
+                            continue;
+                        }
+                        if ((thisOffset+sizeof(ResTable_entry)) > typeSize) {
+                            LOGI("OFFSET OUT OF BOUNDS: %p+%p (size is %p)\n",
+                                 (void*)entriesStart, (void*)thisOffset,
+                                 (void*)typeSize);
+                            continue;
+                        }
+
+                        const ResTable_entry* ent = (const ResTable_entry*)
+                            (((const uint8_t*)type) + entriesStart + thisOffset);
+                        if (((entriesStart + thisOffset)&0x3) != 0) {
+                            LOGI("NON-INTEGER ResTable_entry OFFSET: %p\n",
+                                 (void*)(entriesStart + thisOffset));
+                            continue;
+                        }
+                        if ((dtohs(ent->flags)&ResTable_entry::FLAG_COMPLEX) != 0) {
+                            LOGI("<bag>");
+                        } else {
+                            uint16_t esize = dtohs(ent->size);
+                            if ((esize&0x3) != 0) {
+                                LOGI("NON-INTEGER ResTable_entry SIZE: %p\n", (void*)esize);
+                                continue;
+                            }
+                            if ((thisOffset+esize) > typeSize) {
+                                LOGI("ResTable_entry OUT OF BOUNDS: %p+%p+%p (size is %p)\n",
+                                     (void*)entriesStart, (void*)thisOffset,
+                                     (void*)esize, (void*)typeSize);
+                                continue;
+                            }
+
+                            const Res_value* value = (const Res_value*)
+                                (((const uint8_t*)ent) + esize);
+                            count++;
+                            LOGI("t=0x%02x d=0x%08x (s=0x%04x r=0x%02x)",
+                                 (int)value->dataType, (int)dtohl(value->data),
+                                 (int)dtohs(value->size), (int)value->res0);
+                        }
+
+                        if ((dtohs(ent->flags)&ResTable_entry::FLAG_PUBLIC) != 0) {
+                            LOGI(" (PUBLIC)");
+                        }
+                        LOGI("\n");
+                    }
+                }
+            }
+        }
+    }
+}
 
 }   // namespace android

@@ -31,11 +31,16 @@ import android.content.ContentResolver;
 import android.content.ContentService;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.IPackageManager;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.media.AudioService;
-import android.os.*;
+import android.os.Looper;
+import android.os.RemoteException;
+import android.os.ServiceManager;
+import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.provider.Contacts.People;
 import android.provider.Settings;
 import android.server.BluetoothA2dpService;
@@ -462,6 +467,15 @@ class ServerThread extends Thread {
             pm.systemReady();
         } catch (RemoteException e) {
         }
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_APP_LAUNCH_FAILURE);
+        filter.addAction(Intent.ACTION_APP_LAUNCH_FAILURE_RESET);
+        filter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        filter.addCategory(Intent.CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE);
+        filter.addDataScheme("package");
+        context.registerReceiver(new AppsLaunchFailureReceiver(), filter);
 
         // These are needed to propagate to the runnable below.
         final BatteryService batteryF = battery;

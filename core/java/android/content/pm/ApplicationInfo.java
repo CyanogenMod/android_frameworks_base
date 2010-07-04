@@ -348,6 +348,31 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      */
     public boolean enabled = true;
 
+    /**
+     * Is given application theme agnostic, i.e. behaves properly when default theme is changed.
+     *  {@hide}
+     */
+    public boolean isThemeable = false;
+
+    private static final String PLUTO_SCHEMA = "http://www.w3.org/2001/pluto.html";
+
+    /**
+     * @hide
+     */
+    public static final String PLUTO_ISTHEMEABLE_ATTRIBUTE_NAME = "isThemeable";
+
+    /**
+     * @hide
+     */
+    public static final String PLUTO_HANDLE_THEME_CONFIG_CHANGES_ATTRIBUTE_NAME = "handleThemeConfigChanges";
+
+    /**
+     * @hide
+     */
+    public static boolean isPlutoNamespace(String namespace) {
+        return namespace != null && namespace.equalsIgnoreCase(PLUTO_SCHEMA);
+    }
+
     public void dump(Printer pw, String prefix) {
         super.dumpFront(pw, prefix);
         if (className != null) {
@@ -423,6 +448,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         enabled = orig.enabled;
         manageSpaceActivityName = orig.manageSpaceActivityName;
         descriptionRes = orig.descriptionRes;
+        isThemeable = orig.isThemeable;
     }
 
 
@@ -455,6 +481,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         dest.writeString(manageSpaceActivityName);
         dest.writeString(backupAgentName);
         dest.writeInt(descriptionRes);
+        dest.writeInt(isThemeable? 1 : 0);
     }
 
     public static final Parcelable.Creator<ApplicationInfo> CREATOR
@@ -486,6 +513,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         manageSpaceActivityName = source.readString();
         backupAgentName = source.readString();
         descriptionRes = source.readInt();
+        isThemeable = source.readInt() != 0;
     }
 
     /**

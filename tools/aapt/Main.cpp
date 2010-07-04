@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <getopt.h>
 #include <assert.h>
+#include <ctype.h>
 
 using namespace android;
 
@@ -55,7 +56,7 @@ void usage(void)
         "   xmltree          Print the compiled xmls in the given assets.\n"
         "   xmlstrings       Print the strings of the given compiled xml assets.\n\n", gProgName);
     fprintf(stderr,
-        " %s p[ackage] [-d][-f][-m][-u][-v][-x][-z][-M AndroidManifest.xml] \\\n"
+        " %s p[ackage] [-d][-f][-m][-u][-v][-x[ extending-resource-id]][-z][-M AndroidManifest.xml] \\\n"
         "        [-0 extension [-0 extension ...]] [-g tolerance] [-j jarfile] \\\n"
         "        [--min-sdk-version VAL] [--target-sdk-version VAL] \\\n"
         "        [--app-version VAL] [--app-version-name TEXT] [--custom-package VAL] \\\n"
@@ -108,7 +109,7 @@ void usage(void)
 #endif
         "   -u  update existing packages (add new, replace older, remove deleted files)\n"
         "   -v  verbose output\n"
-        "   -x  create extending (non-application) resource IDs\n"
+        "   -x  either create or assign (if specified) extending (non-application) resource IDs\n"
         "   -z  require localization of resource attributes marked with\n"
         "       localization=\"suggested\"\n"
         "   -A  additional directory in which to find raw asset files\n"
@@ -271,6 +272,14 @@ int main(int argc, char* const argv[])
                 break;
             case 'x':
                 bundle.setExtending(true);
+                argc--;
+                argv++;
+                if (!argc || !isdigit(argv[0][0])) {
+                    argc++;
+                    argv--;
+                } else {
+                    bundle.setExtendedPackageId(atoi(argv[0]));
+                }
                 break;
             case 'z':
                 bundle.setRequireLocalization(true);

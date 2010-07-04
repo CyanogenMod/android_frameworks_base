@@ -77,6 +77,12 @@ public final class AssetManager {
     private boolean mOpen = true;
     private HashMap<Integer, RuntimeException> mRefStacks; 
  
+    private String mAssetDir;
+    private String mAppName;
+
+    private boolean mThemeSupport;
+    private String mThemePackageName;
+
     /**
      * Create a new AssetManager containing only the basic system assets.
      * Applications will not generally use this method, instead retrieving the
@@ -247,6 +253,12 @@ public final class AssetManager {
                     makeStringBlocks(true);
                 }
             }
+        }
+    }
+
+    /*package*/ final void recreateStringBlocks() {
+        synchronized (this) {
+            makeStringBlocks(true);
         }
     }
 
@@ -458,6 +470,18 @@ public final class AssetManager {
 
     /**
      * {@hide}
+     * Split a theme package with DRM-protected resources into two files.
+     * 
+     * @param packageFileName Original theme package file name.
+     * @param lockedFileName Name of the new "locked" file with DRM resources.
+     * @param drmProtectedresources Array of names of DRM-protected assets.
+     */
+    public final int splitDrmProtectedThemePackage(String packageFileName, String lockedFileName, String [] drmProtectedresources) {
+        return splitThemePackage(packageFileName, lockedFileName, drmProtectedresources);
+    }
+
+    /**
+     * {@hide}
      * Retrieve a non-asset as a compiled XML file.  Not for use by
      * applications.
      * 
@@ -623,6 +647,68 @@ public final class AssetManager {
     }
 
     /**
+     * Delete a set of assets from the asset manager.  This can be
+     * either a directory or ZIP file.  Not for use by applications.  Returns
+     * true if succeeded or false on failure.
+     * {@hide}
+     */
+    public native final boolean removeAssetPath(String packageName, String path);
+
+    /**
+     * Add an additional set of assets to the asset manager.  This can be
+     * either a directory or ZIP file. Force updating of ResTable object.
+     * Not for use by applications.
+     * Returnsthe cookie of the added asset, or 0 on failure.
+     * {@hide}
+     */
+    public native final int updateResourcesWithAssetPath(String path);
+
+    /**
+     * Delete a set of assets from the asset manager.  This can be
+     * either a directory or ZIP file.  Not for use by applications.  Returns
+     * true if succeeded or false on failure.
+     * {@hide}
+     */
+    public native final void dumpResources();
+
+    /**
+     * Sets a flag indicating that this AssetManager should have themes
+     * attached, according to the initial request to create it by the
+     * ApplicationContext.
+     *
+     * {@hide}
+     */
+    public final void setThemeSupport(boolean themeSupport) {
+        mThemeSupport = themeSupport;
+    }
+
+    /**
+     * Should this AssetManager have themes attached, according to the initial
+     * request to create it by the ApplicationContext?
+     *
+     * {@hide}
+     */
+    public final boolean hasThemeSupport() {
+        return mThemeSupport;
+    }
+
+    /**
+     * Get package name of current theme (may return null).
+     * {@hide}
+     */
+    public final String getThemePackageName() {
+        return mThemePackageName;
+    }
+
+    /**
+     * Sets package name for current theme (null is allowed).
+     * {@hide}
+     */
+    public final void setThemePackageName(String packageName) {
+        mThemePackageName = packageName;
+    }
+
+    /**
      * Determine whether the state in this asset manager is up-to-date with
      * the files on the filesystem.  If false is returned, you need to
      * instantiate a new AssetManager class to see the new data.
@@ -737,6 +823,8 @@ public final class AssetManager {
     private native final String[] getArrayStringResource(int arrayRes);
     private native final int[] getArrayStringInfo(int arrayRes);
     /*package*/ native final int[] getArrayIntResource(int arrayRes);
+
+    private native final int splitThemePackage(String srcFileName, String dstFileName, String [] drmProtectedAssetNames);
 
     private native final void init();
     private native final void destroy();

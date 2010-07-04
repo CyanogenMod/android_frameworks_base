@@ -177,6 +177,17 @@ public class PackageParser {
         return name.endsWith(".apk");
     }
 
+    public static String getLockedZipFilePath(String path) {
+        if (path == null) {
+            return null;
+        }
+        if (isPackageFilename(path)) {
+            return path.substring(0, path.length() - 4) + ".locked.zip";
+        } else {
+            return path + ".locked.zip";
+        }
+    }
+
     /**
      * Generate and return the {@link PackageInfo} for a parsed package.
      *
@@ -192,6 +203,32 @@ public class PackageParser {
         pi.versionName = p.mVersionName;
         pi.sharedUserId = p.mSharedUserId;
         pi.sharedUserLabel = p.mSharedUserLabel;
+        pi.isThemeApk = p.mIsThemeApk;
+        pi.setDrmProtectedThemeApk(false);
+        if (pi.isThemeApk) {
+            int N = p.mThemeInfos.size();
+            if (N > 0) {
+                pi.themeInfos = new ThemeInfo[N];
+                for (int i = 0; i < N; i++) {
+                    pi.themeInfos[i] = p.mThemeInfos.get(i);
+                    pi.setDrmProtectedThemeApk(pi.isDrmProtectedThemeApk() || pi.themeInfos[i].isDrmProtected);
+                }
+                if (pi.isDrmProtectedThemeApk()) {
+                    pi.setLockedZipFilePath(PackageParser.getLockedZipFilePath(p.mPath));
+                }
+            }
+            N = p.mSoundInfos.size();
+            if (N > 0) {
+                pi.soundInfos = new SoundsInfo[N];
+                for (int i = 0; i < N; i++) {
+                    pi.soundInfos[i] = p.mSoundInfos.get(i);
+                    pi.setDrmProtectedThemeApk(pi.isDrmProtectedThemeApk() || pi.soundInfos[i].isDrmProtected);
+                }
+                if (pi.isDrmProtectedThemeApk()) {
+                    pi.setLockedZipFilePath(PackageParser.getLockedZipFilePath(p.mPath));
+                }
+            }
+        }
         pi.applicationInfo = p.applicationInfo;
         pi.installLocation = p.installLocation;
         if ((flags&PackageManager.GET_GIDS) != 0) {
@@ -1074,7 +1111,14 @@ public class PackageParser {
                 // Just skip this tag
                 XmlUtils.skipCurrentTag(parser);
                 continue;
-                
+            } else if (tagName.equals("theme")) {
+                // this is a theme apk.
+                pkg.mIsThemeApk = true;
+                pkg.mThemeInfos.add(new ThemeInfo(parser, res, attrs));
+            } else if (tagName.equals("sounds")) {
+                // this is a theme apk.
+                pkg.mIsThemeApk = true;
+                pkg.mSoundInfos.add(new SoundsInfo(parser, res, attrs));
             } else if (RIGID_PARSER) {
                 outError[0] = "Bad element under <manifest>: "
                     + parser.getName();
@@ -1421,11 +1465,42 @@ public class PackageParser {
         return a;
     }
 
+    private void parseAndApplyPlutoAttributes(XmlPullParser parser, AttributeSet attrs,
+            ApplicationInfo appInfo) {
+        for (int i = 0; i < attrs.getAttributeCount(); i++) {
+            if (!ApplicationInfo.isPlutoNamespace(parser.getAttributeNamespace(i))) {
+                continue;
+            }
+            String attrName = attrs.getAttributeName(i);
+            if (attrName.equalsIgnoreCase(ApplicationInfo.PLUTO_ISTHEMEABLE_ATTRIBUTE_NAME)) {
+                appInfo.isThemeable = attrs.getAttributeBooleanValue(i, false);
+                return;
+            }
+        }
+    }
+
+    private void parseAndApplyPlutoAttributes(XmlPullParser parser, AttributeSet attrs,
+            ActivityInfo ai) {
+        for (int i = 0; i < attrs.getAttributeCount(); i++) {
+            if (!ApplicationInfo.isPlutoNamespace(parser.getAttributeNamespace(i))) {
+                continue;
+            }
+            String attrName = attrs.getAttributeName(i);
+            if (attrName.equalsIgnoreCase(ApplicationInfo.PLUTO_ISTHEMEABLE_ATTRIBUTE_NAME)) {
+                ai.setIsThemeable(attrs.getAttributeBooleanValue(i, false));
+            } else if (attrName.equalsIgnoreCase(ApplicationInfo.PLUTO_HANDLE_THEME_CONFIG_CHANGES_ATTRIBUTE_NAME)) {
+                ai.configChanges |= ActivityInfo.CONFIG_THEME_RESOURCE;
+            }
+        }
+    }
+
     private boolean parseApplication(Package owner, Resources res,
             XmlPullParser parser, AttributeSet attrs, int flags, String[] outError)
         throws XmlPullParserException, IOException {
         final ApplicationInfo ai = owner.applicationInfo;
         final String pkgName = owner.applicationInfo.packageName;
+
+        parseAndApplyPlutoAttributes(parser, attrs, ai);
 
         TypedArray sa = res.obtainAttributes(attrs,
                 com.android.internal.R.styleable.AndroidManifestApplication);
@@ -1756,6 +1831,7 @@ public class PackageParser {
         mParseActivityArgs.flags = flags;
         
         Activity a = new Activity(mParseActivityArgs, new ActivityInfo());
+
         if (outError[0] != null) {
             sa.recycle();
             return null;
@@ -1863,6 +1939,8 @@ public class PackageParser {
         if (outError[0] != null) {
             return null;
         }
+
+        parseAndApplyPlutoAttributes(parser, attrs, a.info);
 
         int outerDepth = parser.getDepth();
         int type;
@@ -2706,6 +2784,15 @@ public class PackageParser {
         // For use by package manager to keep track of where it has done dexopt.
         public boolean mDidDexOpt;
         
+        // Is Theme Apk
+        public boolean mIsThemeApk = false;
+
+        // Theme info
+        public final ArrayList<ThemeInfo> mThemeInfos = new ArrayList<ThemeInfo>(0);
+
+        // Sound info
+        public final ArrayList<SoundsInfo> mSoundInfos = new ArrayList<SoundsInfo>(0);
+
         // Additional data supplied by callers.
         public Object mExtras;
         

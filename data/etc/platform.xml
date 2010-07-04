@@ -72,6 +72,11 @@
         <group gid="diag" />
     </permission>
 
+    <!-- Permissions to read DRM-protected theme resources. -->
+    <permission name="com.tmobile.permission.ACCESS_DRM_THEME" >
+        <group gid="theme_manager" />
+    </permission>
+
     <!-- ================================================================== -->
     <!-- ================================================================== -->
     <!-- ================================================================== -->

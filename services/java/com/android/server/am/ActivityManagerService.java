@@ -70,6 +70,7 @@ import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.content.res.Configuration;
+import android.content.res.CustomTheme;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Binder;
@@ -113,6 +114,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+
+import dalvik.system.Zygote;
+
 import java.lang.IllegalStateException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -13529,6 +13533,17 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
                                      !values.locale.equals(mConfiguration.locale),
                                      values.userSetLocale);
                 }
+                
+//                if(values.themeResource != 0){
+//                    saveThemeResourceLocked(values.themeResource, (values.themeResource != mConfiguration.themeResource));
+//                }
+
+                if (values.customTheme != null) {
+                    saveThemeResourceLocked(values.customTheme,
+                            (!values.customTheme.equals(mConfiguration.customTheme)));
+                } else if (mConfiguration.customTheme != null) {
+                    saveThemeResourceLocked(null, true);
+                }
 
                 mConfigurationSeq++;
                 if (mConfigurationSeq <= 0) {
@@ -13767,6 +13782,30 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
             SystemProperties.set("persist.sys.language", l.getLanguage());
             SystemProperties.set("persist.sys.country", l.getCountry());
             SystemProperties.set("persist.sys.localevar", l.getVariant());
+        }
+    }
+
+    private void saveThemeResourceLocked(CustomTheme customTheme, boolean isDiff){
+        if(isDiff){
+            String themeId;
+            String themePackage;
+            String resourcePath;
+            boolean hasParent;
+            boolean forceUpdate;
+
+            if (customTheme != null) {
+                themeId = customTheme.getThemeId();
+                themePackage = customTheme.getThemePackageName();
+            } else {
+                themeId = null;
+                themePackage = "";
+                resourcePath = null;
+                hasParent = false;
+                forceUpdate = false;
+            }
+
+            SystemProperties.set(Configuration.THEME_ID_PERSISTENCE_PROPERTY, themeId);
+            SystemProperties.set(Configuration.THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, themePackage);  
         }
     }
 
