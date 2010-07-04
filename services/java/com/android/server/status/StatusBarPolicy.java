@@ -658,8 +658,10 @@ public class StatusBarPolicy {
         boolean plugged = intent.getIntExtra("plugged", 0) != 0;
         int level = intent.getIntExtra("level", -1);
 
-        //show battery percentage if not plugged in
-        if (plugged) {
+        //show battery percentage if not plugged in and status is enabled
+        if (plugged || level >= 100 ||
+                Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.BATTERY_PERCENTAGE_STATUS_ICON, 0) == 0) {
             mBatteryData.number = -1;
         } else {
             mBatteryData.number = level;
