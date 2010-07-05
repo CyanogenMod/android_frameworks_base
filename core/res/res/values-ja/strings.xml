@@ -132,8 +132,11 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"ワイヤレス接続をOFFにする"</string>
     <string name="screen_lock" msgid="799094655496098153">"画面をロック"</string>
     <string name="power_off" msgid="4266614107412865048">"電源を切る"</string>
+    <string name="reboot_system">"再起動する"</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"シャットダウン中..."</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"携帯電話の電源を切ります。"</string>
+    <string name="reboot_progress">"再起動中..."</string>
+    <string name="reboot_confirm">"携帯電話を再起動します。"</string>
     <string name="recent_tasks_title" msgid="3691764623638127888">"新着"</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"最近使ったアプリケーションはありません。"</string>
     <string name="global_actions" msgid="2406416831541615258">"携帯電話オプション"</string>
