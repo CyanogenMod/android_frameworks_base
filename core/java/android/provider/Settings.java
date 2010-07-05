@@ -2541,6 +2541,15 @@ public final class Settings {
          */
         public static final String LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED =
             "lock_pattern_tactile_feedback_enabled";
+            
+        public static final String LOCK_DOTS_VISIBLE = "lock_pattern_dotsvisible";
+        public static final String LOCK_SHOW_ERROR_PATH = "lock_pattern_show_error_path";
+        public static final String LOCK_INCORRECT_DELAY = "lock_pattern_incorrect_delay";
+        public static final String SHOW_UNLOCK_TEXT = "lock_pattern_show_unlock_text";
+        public static final String SHOW_UNLOCK_ERR_TEXT = "lock_pattern_show_unlock_err_text";
+        
+        public static final String LOCK_SHOW_CUSTOM_MSG = "lock_screen_show_custom_msg";
+        public static final String LOCK_CUSTOM_MSG = "lock_screen_custom_msg";
 
         /**
          * Whether assisted GPS should be enabled or not.
