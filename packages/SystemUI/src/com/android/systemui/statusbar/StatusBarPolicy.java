@@ -21,6 +21,7 @@ import android.app.AlertDialog;
 import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothHeadset;
+import android.bluetooth.BluetoothHid;
 import android.bluetooth.BluetoothPbap;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
@@ -321,6 +322,7 @@ public class StatusBarPolicy {
     // bluetooth device status
     private int mBluetoothHeadsetState;
     private boolean mBluetoothA2dpConnected;
+    private int mBluetoothHidState;
     private int mBluetoothPbapState;
     private boolean mBluetoothEnabled;
 
@@ -370,7 +372,9 @@ public class StatusBarPolicy {
             }
             else if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED) ||
                     action.equals(BluetoothHeadset.ACTION_STATE_CHANGED) ||
+                    action.equals(BluetoothHid.HID_DEVICE_STATE_CHANGED_ACTION) ||
                     action.equals(BluetoothA2dp.ACTION_SINK_STATE_CHANGED) ||
+                    action.equals(BluetoothHid.HID_DEVICE_STATE_CHANGED_ACTION) ||
                     action.equals(BluetoothPbap.PBAP_STATE_CHANGED_ACTION)) {
                 updateBluetooth(intent);
             }
@@ -500,6 +504,7 @@ public class StatusBarPolicy {
         filter.addAction(AudioManager.VIBRATE_SETTING_CHANGED_ACTION);
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         filter.addAction(BluetoothHeadset.ACTION_STATE_CHANGED);
+        filter.addAction(BluetoothHid.HID_DEVICE_STATE_CHANGED_ACTION);
         filter.addAction(BluetoothA2dp.ACTION_SINK_STATE_CHANGED);
         filter.addAction(BluetoothPbap.PBAP_STATE_CHANGED_ACTION);
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
@@ -1085,11 +1090,15 @@ public class StatusBarPolicy {
         } else if (action.equals(BluetoothPbap.PBAP_STATE_CHANGED_ACTION)) {
             mBluetoothPbapState = intent.getIntExtra(BluetoothPbap.PBAP_STATE,
                     BluetoothPbap.STATE_DISCONNECTED);
+        } else if (action.equals(BluetoothHid.HID_DEVICE_STATE_CHANGED_ACTION)) {
+            mBluetoothHidState = intent.getIntExtra(BluetoothHid.HID_DEVICE_STATE,
+                    BluetoothHid.STATE_DISCONNECTED);
         } else {
             return;
         }
 
         if (mBluetoothHeadsetState == BluetoothHeadset.STATE_CONNECTED || mBluetoothA2dpConnected ||
+                mBluetoothHidState == BluetoothHid.STATE_CONNECTED ||
                 mBluetoothPbapState == BluetoothPbap.STATE_CONNECTED) {
             iconId = R.drawable.stat_sys_data_bluetooth_connected;
         }

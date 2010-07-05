@@ -201,6 +201,12 @@ public final class BluetoothClass implements Parcelable {
         //public static final int AUDIO_VIDEO_RESERVED              = 0x0444;
         public static final int AUDIO_VIDEO_VIDEO_GAMING_TOY        = 0x0448;
 
+        // Devices in the PERIPHERAL major class
+        public static final int PERIPHERAL_UNCATEGORIZED           = 0x0500;
+        public static final int PERIPHERAL_KEYBORD                 = 0x0540;
+        public static final int PERIPHERAL_POINTING_DEVICE         = 0x0580;
+        public static final int PERIPHERAL_COMBO_KEYBORD_POINTING  = 0x05C0;
+
         // Devices in the WEARABLE major class
         public static final int WEARABLE_UNCATEGORIZED              = 0x0700;
         public static final int WEARABLE_WRIST_WATCH                = 0x0704;
@@ -259,6 +265,8 @@ public final class BluetoothClass implements Parcelable {
     public static final int PROFILE_A2DP = 1;
     /** @hide */
     public static final int PROFILE_OPP = 2;
+    /** @hide */
+    public static final int PROFILE_HID = 3;
 
     /**
      * Check class bits for possible bluetooth profile support.
