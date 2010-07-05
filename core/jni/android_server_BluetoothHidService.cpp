@@ -109,7 +109,7 @@ static jobjectArray getHidPropertiesNative(JNIEnv *env, jobject object,
 
         const char *c_path = env->GetStringUTFChars(path, NULL);
         reply = dbus_func_args_timeout(env,
-                                   nat->conn, -1, BLUEZ_DBUS_BASE_SVC, c_path,
+                                   nat->conn, -1, c_path,
                                    "org.bluez.Input", "GetProperties",
                                    DBUS_TYPE_INVALID);
         env->ReleaseStringUTFChars(path, c_path);
@@ -141,7 +141,7 @@ static jboolean connectHidDeviceNative(JNIEnv *env, jobject object, jstring path
         bool ret =
             dbus_func_args_async(env, nat->conn, -1, onConnectHidDeviceResult, 
 				(void *)c_path_copy, nat,
-				BLUEZ_DBUS_BASE_SVC, c_path, "org.bluez.Input",
+				c_path, "org.bluez.Input",
 				"Connect", DBUS_TYPE_INVALID);
 
         env->ReleaseStringUTFChars(path, c_path);
@@ -163,7 +163,6 @@ static jboolean disconnectHidDeviceNative(JNIEnv *env, jobject object,
         const char *c_path = env->GetStringUTFChars(path, NULL);
 
         bool ret = dbus_func_args_async(env, nat->conn, -1, NULL, NULL, nat,
-                                    BLUEZ_DBUS_BASE_SVC,
                                     c_path, "org.bluez.Input", "Disconnect",
                                     DBUS_TYPE_INVALID);
         LOGD("... path = %s", c_path);
