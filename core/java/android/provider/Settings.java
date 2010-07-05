@@ -2469,6 +2469,14 @@ public final class Settings {
         }
 
         /**
+         * Get the key that retrieves a bluetooth hid device's priority.
+         * @hide
+         */
+        public static final String getBluetoothHidDevicePriorityKey(String address) {
+            return ("bluetooth_hid_device_priority_" + address.toUpperCase());
+        }
+
+        /**
          * Whether or not data roaming is enabled. (0 = false, 1 = true)
          */
         public static final String DATA_ROAMING = "data_roaming";
