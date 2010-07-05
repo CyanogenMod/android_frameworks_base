@@ -90,7 +90,7 @@ public class LockPatternUtils {
     private final static String LOCKOUT_ATTEMPT_DEADLINE = "lockscreen.lockoutattemptdeadline";
     private final static String PATTERN_EVER_CHOSEN_KEY = "lockscreen.patterneverchosen";
     public final static String PASSWORD_TYPE_KEY = "lockscreen.password_type";
-    private final static String LOCK_PASSWORD_SALT_KEY = "lockscreen.password_salt";
+    private final static String LOCK_PASSWORD_SALT_KEY = "lockscreen.password_salt";    
 
     private final Context mContext;
     private final ContentResolver mContentResolver;
@@ -572,6 +572,62 @@ public class LockPatternUtils {
     public void setTactileFeedbackEnabled(boolean enabled) {
         setBoolean(Settings.Secure.LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED, enabled);
     }
+    
+    public void setVisibleDotsEnabled(boolean enabled) {
+        setBoolean(Settings.Secure.LOCK_DOTS_VISIBLE, enabled);        
+    }
+    
+    public boolean isVisibleDotsEnabled() {
+        return getBoolean(Settings.Secure.LOCK_DOTS_VISIBLE, true);
+    }
+    
+    public void setShowErrorPath(boolean enabled) {
+        setBoolean(Settings.Secure.LOCK_SHOW_ERROR_PATH, enabled);        
+    }
+    
+    public boolean isShowErrorPath() {
+        return getBoolean(Settings.Secure.LOCK_SHOW_ERROR_PATH, true);
+    }
+    
+    public void setShowCustomMsg(boolean enabled) {
+        setBoolean(Settings.Secure.LOCK_SHOW_CUSTOM_MSG, enabled);
+    }
+    
+    public boolean isShowCustomMsg() {
+        return getBoolean(Settings.Secure.LOCK_SHOW_CUSTOM_MSG, false);
+    }
+    
+    public void setCustomMsg(String msg) {
+        setString(Settings.Secure.LOCK_CUSTOM_MSG, msg);
+    }
+    
+    public String getCustomMsg() {
+        return getString(Settings.Secure.LOCK_CUSTOM_MSG);
+    }
+    
+    public int getIncorrectDelay() {
+        return getInt(Settings.Secure.LOCK_INCORRECT_DELAY, 2000);
+    }
+    
+    public void setIncorrectDelay(int delay) {
+        setInt(Settings.Secure.LOCK_INCORRECT_DELAY, delay);
+    }
+    
+    public void setShowUnlockMsg(boolean enabled) {
+        setBoolean(Settings.Secure.SHOW_UNLOCK_TEXT, enabled);
+    }
+    
+    public boolean isShowUnlockMsg() {
+        return getBoolean(Settings.Secure.SHOW_UNLOCK_TEXT, true);
+    }
+    
+    public void setShowUnlockErrMsg(boolean enabled) {
+        setBoolean(Settings.Secure.SHOW_UNLOCK_ERR_TEXT, enabled);
+    }
+    
+    public boolean isShowUnlockErrMsg() {
+        return getBoolean(Settings.Secure.SHOW_UNLOCK_ERR_TEXT, true);
+    }
 
     /**
      * Set and store the lockout deadline, meaning the user can't attempt his/her unlock
@@ -636,6 +692,13 @@ public class LockPatternUtils {
         return 1 ==
                 android.provider.Settings.Secure.getInt(mContentResolver, secureSettingKey, 0);
     }
+    
+    private boolean getBoolean(String systemSettingKey, boolean defaultValue) {
+        return 1 ==
+                android.provider.Settings.Secure.getInt(
+                        mContentResolver,
+                        systemSettingKey, defaultValue ? 1 : 0);
+    }
 
     private void setBoolean(String secureSettingKey, boolean enabled) {
         android.provider.Settings.Secure.putInt(mContentResolver, secureSettingKey,
@@ -648,6 +711,27 @@ public class LockPatternUtils {
 
     private void setLong(String secureSettingKey, long value) {
         android.provider.Settings.Secure.putLong(mContentResolver, secureSettingKey, value);
+    }
+    
+    private int getInt(String systemSettingKey, int def) {
+        return android.provider.Settings.Secure.getInt(mContentResolver, systemSettingKey, def);
+    }
+
+    private void setInt(String systemSettingKey, int value) {
+        android.provider.Settings.Secure.putInt(mContentResolver, systemSettingKey, value);
+    }
+    
+    private String getString(String systemSettingKey) {
+        String s = android.provider.Settings.Secure.getString(mContentResolver, systemSettingKey);
+        
+        if (s == null)
+            return "";
+    
+        return s;
+    }
+    
+    private void setString(String systemSettingKey, String value) {
+        android.provider.Settings.Secure.putString(mContentResolver, systemSettingKey, value);
     }
 
     public boolean isSecure() {
