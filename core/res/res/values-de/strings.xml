@@ -134,11 +134,23 @@
     <string name="power_off" msgid="4266614107412865048">"Ausschalten"</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Wird heruntergefahren..."</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"Ihr Telefon wird heruntergefahren."</string>
+
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system">Neu starten</string>
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">Neu starten...</string>
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
+    <string name="reboot_confirm">Ihr Telefon wird neu gestartet.</string>
+
     <string name="recent_tasks_title" msgid="3691764623638127888">"Zuletzt verwendet"</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"Keine zuletzt verwendeten Anwendungen"</string>
     <string name="global_actions" msgid="2406416831541615258">"Telefonoptionen"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Display-Sperre"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Ausschalten"</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">Neu starten</string>
+
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Lautlos"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Ton ist AUS"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Ton ist AN"</string>
