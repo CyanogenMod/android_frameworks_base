@@ -2541,14 +2541,47 @@ public final class Settings {
          */
         public static final String LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED =
             "lock_pattern_tactile_feedback_enabled";
-            
+
+        /**
+         * LOCK_DOTS_VISIBLE
+         * @hide
+         */
         public static final String LOCK_DOTS_VISIBLE = "lock_pattern_dotsvisible";
+
+        /**
+         * LOCK_SHOW_ERROR_PATH
+         * @hide
+         */
         public static final String LOCK_SHOW_ERROR_PATH = "lock_pattern_show_error_path";
+
+        /**
+         * LOCK_INCORRECT_DELAY
+         * @hide
+         */
         public static final String LOCK_INCORRECT_DELAY = "lock_pattern_incorrect_delay";
+
+        /**
+         * SHOW_UNLOCK_TEXT
+         * @hide
+         */
         public static final String SHOW_UNLOCK_TEXT = "lock_pattern_show_unlock_text";
+
+        /**
+         * SHOW_UNLOCK_ERR_TEXT
+         * @hide
+         */
         public static final String SHOW_UNLOCK_ERR_TEXT = "lock_pattern_show_unlock_err_text";
-        
+
+        /**
+         * LOCK_SHOW_CUSTOM_MSG
+         * @hide
+         */
         public static final String LOCK_SHOW_CUSTOM_MSG = "lock_screen_show_custom_msg";
+
+        /**
+         * LOCK_CUSTOM_MSG
+         * @hide
+         */
         public static final String LOCK_CUSTOM_MSG = "lock_screen_custom_msg";
 
         /**
