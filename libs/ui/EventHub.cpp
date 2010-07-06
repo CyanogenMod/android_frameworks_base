@@ -642,7 +642,10 @@ int EventHub::open_device(const char *deviceName)
         if (ioctl(fd, EVIOCGBIT(EV_REL, sizeof(rel_bitmask)), rel_bitmask) >= 0)
         {
             if (test_bit(REL_X, rel_bitmask) && test_bit(REL_Y, rel_bitmask)) {
-                device->classes |= CLASS_TRACKBALL;
+                if (test_bit(BTN_LEFT, key_bitmask) && test_bit(BTN_RIGHT, key_bitmask))
+                    device->classes |= CLASS_MOUSE;
+                else
+                    device->classes |= CLASS_TRACKBALL;
             }
         }
     }

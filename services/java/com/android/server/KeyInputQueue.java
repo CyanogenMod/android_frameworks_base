@@ -50,10 +50,13 @@ import java.util.ArrayList;
 
 public abstract class KeyInputQueue {
     static final String TAG = "KeyInputQueue";
+    static final int UPKEY_KEYWORD = 19;
+    static final int DOWNKEY_KEYWORD = 20;
 
     static final boolean DEBUG = false;
     static final boolean DEBUG_VIRTUAL_KEYS = false;
     static final boolean DEBUG_POINTERS = false;
+    static final boolean DEBUG_MOUSE = false;
     
     /**
      * Turn on some hacks we have to improve the touch interaction with a
@@ -85,6 +88,8 @@ public abstract class KeyInputQueue {
     Display mDisplay = null;
     int mDisplayWidth;
     int mDisplayHeight;
+    int mCx;
+    int mCy;
     
     int mOrientation = Surface.ROTATION_0;
     int[] mKeyRotationMap = null;
@@ -322,6 +327,8 @@ public abstract class KeyInputQueue {
         // buttons based on that display.
         mDisplayWidth = display.getWidth();
         mDisplayHeight = display.getHeight();
+        mCx = mDisplayWidth / 2;
+        mCy = mDisplayHeight / 2;
     }
     
     public void getInputConfiguration(Configuration config) {
@@ -639,11 +646,35 @@ public abstract class KeyInputQueue {
                                 di.mAbs.mDown[0] = ev.value != 0;
                             
                             // Trackball (mouse) protocol: press down or up.
-                            } else if (ev.scancode == RawInputEvent.BTN_MOUSE &&
-                                    (classes&RawInputEvent.CLASS_TRACKBALL) != 0) {
-                                di.mRel.changed = true;
-                                di.mRel.mNextNumPointers = ev.value != 0 ? 1 : 0;
-                                send = true;
+                            } else if (ev.scancode == RawInputEvent.BTN_MOUSE) {
+                                if ((classes&RawInputEvent.CLASS_TRACKBALL) != 0) {
+                                    di.mRel.changed = true;
+                                    di.mRel.mNextNumPointers = ev.value != 0 ? 1 : 0;
+                                    send = true;
+                                } else if ((classes&RawInputEvent.CLASS_MOUSE) != 0) {
+                                    if (DEBUG_MOUSE)
+                                        Slog.i(TAG, "Mouse key event found, down:"
+                                            + ev.value + " was :" +
+                                            di.mAbs.mDown[0] + " Send " + send);
+                                    di.mAbs.changed = true;
+                                    di.mAbs.mNextNumPointers = (ev.value != 0) ? 1 : 2;
+                                    send = true;
+                                }
+                            } else if ((ev.scancode == RawInputEvent.BTN_RIGHT ||
+                                    ev.scancode == RawInputEvent.BTN_MIDDLE) &&
+                                    (classes&RawInputEvent.CLASS_MOUSE) != 0) {
+                                boolean down = (ev.value != 0);
+                                if (down)
+                                    di.mKeyDownTime = curTime;
+
+                                addLocked(di, curTime, ev.flags,
+                                    RawInputEvent.CLASS_KEYBOARD,
+                                    newKeyEvent(di, di.mKeyDownTime, curTime, down,
+                                        (ev.scancode == RawInputEvent.BTN_RIGHT)
+                                        ? KeyEvent.KEYCODE_BACK : KeyEvent.KEYCODE_MENU,
+                                        0, scancode,
+                                        ((ev.flags & WindowManagerPolicy.FLAG_WOKE_HERE) != 0)
+                                        ? KeyEvent.FLAG_WOKE_HERE : 0));
                             }
     
                         // Process position events from multitouch protocol.
@@ -695,15 +726,59 @@ public abstract class KeyInputQueue {
                             }
     
                         // Process movement events from trackball (mouse) protocol.
-                        } else if (ev.type == RawInputEvent.EV_REL &&
-                                (classes&RawInputEvent.CLASS_TRACKBALL) != 0) {
-                            // Add this relative movement into our totals.
-                            if (ev.scancode == RawInputEvent.REL_X) {
-                                di.mRel.changed = true;
-                                di.mRel.mNextData[MotionEvent.SAMPLE_X] += ev.value;
-                            } else if (ev.scancode == RawInputEvent.REL_Y) {
-                                di.mRel.changed = true;
-                                di.mRel.mNextData[MotionEvent.SAMPLE_Y] += ev.value;
+                        } else if (ev.type == RawInputEvent.EV_REL) {
+                            if (DEBUG_MOUSE)
+                                Slog.i(TAG, "rel event found, class :" + classes + " mouse value: " + RawInputEvent.CLASS_MOUSE);
+                            if ((classes&RawInputEvent.CLASS_TRACKBALL) != 0) {
+                                // Add this relative movement into our totals.
+                                if (ev.scancode == RawInputEvent.REL_X) {
+                                    di.mRel.changed = true;
+                                    di.mRel.mNextData[MotionEvent.SAMPLE_X] += ev.value;
+                                } else if (ev.scancode == RawInputEvent.REL_Y) {
+                                    di.mRel.changed = true;
+                                    di.mRel.mNextData[MotionEvent.SAMPLE_Y] += ev.value;
+                                }
+                            } else if ((classes&RawInputEvent.CLASS_MOUSE) != 0) {
+                                if (ev.scancode == RawInputEvent.REL_X) {
+                                    di.mAbs.changed = true;
+                                    mCx += (int)ev.value;
+                                    mCx = ((mCx < 0) ? 0 : (mCx >= mDisplayWidth ? mDisplayWidth - 1 : mCx));
+                                    di.mAbs.mNextData[MotionEvent.SAMPLE_X] = mCx;
+                                } else if (ev.scancode == RawInputEvent.REL_Y) {
+                                    di.mAbs.changed = true;
+                                    mCy += (int)ev.value;
+                                    mCy = ((mCy < 0) ? 0 : (mCy >= mDisplayHeight ? mDisplayHeight - 1 : mCy));
+                                    di.mAbs.mNextData[MotionEvent.SAMPLE_Y] = mCy;
+                                } else if (ev.scancode == RawInputEvent.REL_WHEEL &&
+                                               (classes&RawInputEvent.CLASS_MOUSE) != 0) {
+                                    boolean down;
+                                    int keycode;
+                                    if (ev.value != 0) {
+                                        down = true;
+                                        di.mKeyDownTime = curTime;
+                                    } else {
+                                        down = false;
+                                    }
+                                    if (ev.value < 0){
+                                        keycode = rotateKeyCodeLocked(DOWNKEY_KEYWORD);
+                                    } else if(ev.value > 0){
+                                        keycode = rotateKeyCodeLocked(UPKEY_KEYWORD);
+                                    } else {
+                                        keycode = rotateKeyCodeLocked(ev.keycode);
+                                    }
+                                    addLocked(di, curTime, ev.flags,
+                                            RawInputEvent.CLASS_KEYBOARD,
+                                            newKeyEvent(di, di.mKeyDownTime, curTime, down,
+                                                    keycode, 0, scancode,
+                                                    ((ev.flags & WindowManagerPolicy.FLAG_WOKE_HERE) != 0)
+                                                    ? KeyEvent.FLAG_WOKE_HERE : 0));
+                                    addLocked(di, curTime, ev.flags,
+                                            RawInputEvent.CLASS_KEYBOARD,
+                                            newKeyEvent(di, di.mKeyDownTime, curTime, !down,
+                                                    keycode, 0, scancode,
+                                                    ((ev.flags & WindowManagerPolicy.FLAG_WOKE_HERE) != 0)
+                                                    ? KeyEvent.FLAG_WOKE_HERE : 0));
+                                }
                             }
                         }
                         
@@ -790,7 +865,8 @@ public abstract class KeyInputQueue {
                                             me = ms.generateAbsMotion(di, curTime,
                                                     curTimeNano, mDisplay,
                                                     mOrientation, mGlobalMetaState);
-                                            if (DEBUG_POINTERS) Slog.v(TAG, "Absolute: x="
+                                            if (DEBUG_POINTERS || DEBUG_MOUSE)
+                                                Slog.v(TAG, "Absolute: x="
                                                     + di.mAbs.mNextData[MotionEvent.SAMPLE_X]
                                                     + " y="
                                                     + di.mAbs.mNextData[MotionEvent.SAMPLE_Y]
@@ -799,8 +875,15 @@ public abstract class KeyInputQueue {
                                                 if (WindowManagerPolicy.WATCH_POINTER) {
                                                     Slog.i(TAG, "Enqueueing: " + me);
                                                 }
-                                                addLocked(di, curTimeNano, ev.flags,
-                                                        RawInputEvent.CLASS_TOUCHSCREEN, me);
+                                                if ((classes & RawInputEvent.CLASS_TOUCHSCREEN) != 0) {
+                                                    addLocked(di, curTime, ev.flags,
+                                                            RawInputEvent.CLASS_TOUCHSCREEN, me);
+                                                } else if ((classes & RawInputEvent.CLASS_MOUSE) != 0) {
+                                                    addLocked(di, curTime, ev.flags,
+                                                            RawInputEvent.CLASS_MOUSE, me);
+                                                } else {
+                                                    Slog.w(TAG, "Unknown classes? " + classes);
+                                                }
                                             }
                                         } while (ms.hasMore());
                                     } else {

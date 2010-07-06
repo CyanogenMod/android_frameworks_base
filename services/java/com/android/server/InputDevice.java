@@ -23,27 +23,32 @@ import android.view.Surface;
 import android.view.WindowManagerPolicy;
 
 import java.io.PrintWriter;
+import java.io.FileInputStream;
+import java.util.StringTokenizer;
+import android.view.RawInputEvent;
 
 public class InputDevice {
     static final boolean DEBUG_POINTERS = false;
     static final boolean DEBUG_HACKS = false;
-    
+    static final boolean DEBUG_MOUSE = false;
+    static final String TAG = "InputDevice";
+
     /** Amount that trackball needs to move in order to generate a key event. */
     static final int TRACKBALL_MOVEMENT_THRESHOLD = 6;
 
     /** Maximum number of pointers we will track and report. */
     static final int MAX_POINTERS = 10;
-    
+
     /**
      * Slop distance for jumpy pointer detection.
      * The vertical range of the screen divided by this is our epsilon value.
      */
     private static final int JUMPY_EPSILON_DIVISOR = 212;
-    
+
     /** Number of jumpy points to drop for touchscreens that need it. */
     private static final int JUMPY_TRANSITION_DROPS = 3;
     private static final int JUMPY_DROP_LIMIT = 3;
-    
+
     final int id;
     final int classes;
     final String name;
@@ -51,18 +56,18 @@ public class InputDevice {
     final AbsoluteInfo absY;
     final AbsoluteInfo absPressure;
     final AbsoluteInfo absSize;
-    
+
     long mKeyDownTime = 0;
     int mMetaKeysState = 0;
-    
+
     // For use by KeyInputQueue for keeping track of the current touch
     // data in the old non-multi-touch protocol.
     final int[] curTouchVals = new int[MotionEvent.NUM_SAMPLE_DATA * 2];
-    
+
     final MotionState mAbs = new MotionState(0, 0);
     final MotionState mRel = new MotionState(TRACKBALL_MOVEMENT_THRESHOLD,
             TRACKBALL_MOVEMENT_THRESHOLD);
-    
+
     static class MotionState {
         int xPrecision;
         int yPrecision;
@@ -72,16 +77,16 @@ public class InputDevice {
         boolean changed = false;
         boolean everChanged = false;
         long mDownTime = 0;
-        
+
         // The currently assigned pointer IDs, corresponding to the last data.
         int[] mPointerIds = new int[MAX_POINTERS];
-        
+
         // This is the last generated pointer data, ordered to match
         // mPointerIds.
         boolean mSkipLastPointers;
         int mLastNumPointers = 0;
         final int[] mLastData = new int[MotionEvent.NUM_SAMPLE_DATA * MAX_POINTERS];
-        
+
         // This is the next set of pointer data being generated.  It is not
         // in any known order, and will be propagated in to mLastData
         // as part of mapping it to the appropriate pointer IDs.
@@ -90,14 +95,14 @@ public class InputDevice {
         int mNextNumPointers = 0;
         final int[] mNextData = new int[(MotionEvent.NUM_SAMPLE_DATA * MAX_POINTERS)
                                         + MotionEvent.NUM_SAMPLE_DATA];
-        
+
         // Used to determine whether we dropped bad data, to avoid doing
         // it repeatedly.
         final boolean[] mDroppedBadPoint = new boolean[MAX_POINTERS];
 
         // Used to count the number of jumpy points dropped.
         private int mJumpyPointsDropped = 0;
-        
+
         // Used to perform averaging of reported coordinates, to smooth
         // the data and filter out transients during a release.
         static final int HISTORY_SIZE = 5;
@@ -106,19 +111,19 @@ public class InputDevice {
         final int[] mHistoryData = new int[(MotionEvent.NUM_SAMPLE_DATA * MAX_POINTERS)
                                         * HISTORY_SIZE];
         final int[] mAveragedData = new int[MotionEvent.NUM_SAMPLE_DATA * MAX_POINTERS];
-        
+
         // Temporary data structures for doing the pointer ID mapping.
         final int[] mLast2Next = new int[MAX_POINTERS];
         final int[] mNext2Last = new int[MAX_POINTERS];
         final long[] mNext2LastDistance = new long[MAX_POINTERS];
-        
+
         // Temporary data structure for generating the final motion data.
         final float[] mReportData = new float[MotionEvent.NUM_SAMPLE_DATA * MAX_POINTERS];
-        
+
         // This is not used here, but can be used by callers for state tracking.
         int mAddingPointerOffset = 0;
         final boolean[] mDown = new boolean[MAX_POINTERS];
-        
+
         void dumpIntArray(PrintWriter pw, int[] array) {
             pw.print("[");
             for (int i=0; i<array.length; i++) {
@@ -127,7 +132,7 @@ public class InputDevice {
             }
             pw.print("]");
         }
-        
+
         void dumpBooleanArray(PrintWriter pw, boolean[] array) {
             pw.print("[");
             for (int i=0; i<array.length; i++) {
@@ -136,7 +141,7 @@ public class InputDevice {
             }
             pw.print("]");
         }
-        
+
         void dump(PrintWriter pw, String prefix) {
             pw.print(prefix); pw.print("xPrecision="); pw.print(xPrecision);
                     pw.print(" yPrecision="); pw.println(yPrecision);
@@ -168,7 +173,7 @@ public class InputDevice {
             pw.print(prefix); pw.print("mDown=");
                     dumpBooleanArray(pw, mDown); pw.println("");
         }
-        
+
         MotionState(int mx, int my) {
             xPrecision = mx;
             yPrecision = my;
@@ -178,7 +183,7 @@ public class InputDevice {
                 mPointerIds[i] = i;
             }
         }
-        
+
         /**
          * Special hack for devices that have bad screen data: if one of the
          * points has moved more than a screen height from the last position,
@@ -195,13 +200,13 @@ public class InputDevice {
             if (mNextNumPointers != mLastNumPointers) {
                 return;
             }
-            
+
             // We consider a single movement across more than a 7/16 of
             // the long size of the screen to be bad.  This was a magic value
             // determined by looking at the maximum distance it is feasible
             // to actually move in one sample.
             final int maxDy = ((dev.absY.maxValue-dev.absY.minValue)*7)/16;
-            
+
             // Look through all new points and see if any are farther than
             // acceptable from all previous points.
             for (int i=mNextNumPointers-1; i>=0; i--) {
@@ -244,31 +249,31 @@ public class InputDevice {
                 mDroppedBadPoint[i] = dropped;
             }
         }
-        
+
         void dropJumpyPoint(InputDevice dev) {
             // We should always have absY, but let's be paranoid.
             if (dev.absY == null) {
                 return;
             }
             final int jumpyEpsilon = dev.absY.range / JUMPY_EPSILON_DIVISOR;
-            
+
             final int nextNumPointers = mNextNumPointers;
             final int lastNumPointers = mLastNumPointers;
             final int[] nextData = mNextData;
             final int[] lastData = mLastData;
-            
+
             if (nextNumPointers != mLastNumPointers) {
                 if (DEBUG_HACKS) {
-                    Slog.d("InputDevice", "Different pointer count " + lastNumPointers + 
+                    Slog.d("InputDevice", "Different pointer count " + lastNumPointers +
                             " -> " + nextNumPointers);
                     for (int i = 0; i < nextNumPointers; i++) {
                         int ioff = i * MotionEvent.NUM_SAMPLE_DATA;
-                        Slog.d("InputDevice", "Pointer " + i + " (" + 
+                        Slog.d("InputDevice", "Pointer " + i + " (" +
                                 mNextData[ioff + MotionEvent.SAMPLE_X] + ", " +
                                 mNextData[ioff + MotionEvent.SAMPLE_Y] + ")");
                     }
                 }
-                
+
                 // Just drop the first few events going from 1 to 2 pointers.
                 // They're bad often enough that they're not worth considering.
                 if (lastNumPointers == 1 && nextNumPointers == 2
@@ -278,36 +283,36 @@ public class InputDevice {
                 } else if (lastNumPointers == 2 && nextNumPointers == 1
                         && mJumpyPointsDropped < JUMPY_TRANSITION_DROPS) {
                     // The event when we go from 2 -> 1 tends to be messed up too
-                    System.arraycopy(lastData, 0, nextData, 0, 
+                    System.arraycopy(lastData, 0, nextData, 0,
                             lastNumPointers * MotionEvent.NUM_SAMPLE_DATA);
                     mNextNumPointers = lastNumPointers;
                     mJumpyPointsDropped++;
-                    
+
                     if (DEBUG_HACKS) {
                         for (int i = 0; i < mNextNumPointers; i++) {
                             int ioff = i * MotionEvent.NUM_SAMPLE_DATA;
-                            Slog.d("InputDevice", "Pointer " + i + " replaced (" + 
+                            Slog.d("InputDevice", "Pointer " + i + " replaced (" +
                                     mNextData[ioff + MotionEvent.SAMPLE_X] + ", " +
                                     mNextData[ioff + MotionEvent.SAMPLE_Y] + ")");
                         }
                     }
                 } else {
                     mJumpyPointsDropped = 0;
-                    
+
                     if (DEBUG_HACKS) {
                         Slog.d("InputDevice", "Transition - drop limit reset");
                     }
                 }
                 return;
             }
-            
+
             // A 'jumpy' point is one where the coordinate value for one axis
             // has jumped to the other pointer's location. No need to do anything
             // else if we only have one pointer.
             if (nextNumPointers < 2) {
                 return;
             }
-            
+
             int badPointerIndex = -1;
             int badPointerReplaceXWith = 0;
             int badPointerReplaceYWith = 0;
@@ -315,13 +320,13 @@ public class InputDevice {
             for (int i = nextNumPointers - 1; i >= 0; i--) {
                 boolean dropx = false;
                 boolean dropy = false;
-                
+
                 // Limit how many times a jumpy point can get dropped.
                 if (mJumpyPointsDropped < JUMPY_DROP_LIMIT) {
                     final int ioff = i * MotionEvent.NUM_SAMPLE_DATA;
                     final int x = nextData[ioff + MotionEvent.SAMPLE_X];
                     final int y = nextData[ioff + MotionEvent.SAMPLE_Y];
-                    
+
                     if (DEBUG_HACKS) {
                         Slog.d("InputDevice", "Point " + i + " (" + x + ", " + y + ")");
                     }
@@ -339,14 +344,14 @@ public class InputDevice {
                         dropx = Math.abs(x - xOther) <= jumpyEpsilon;
                         dropy = Math.abs(y - yOther) <= jumpyEpsilon;
                     }
-                    
+
                     if (dropx) {
                         int xreplace = lastData[MotionEvent.SAMPLE_X];
                         int yreplace = lastData[MotionEvent.SAMPLE_Y];
                         int distance = Math.abs(yreplace - y);
                         for (int j = 1; j < lastNumPointers; j++) {
                             final int joff = j * MotionEvent.NUM_SAMPLE_DATA;
-                            int lasty = lastData[joff + MotionEvent.SAMPLE_Y];   
+                            int lasty = lastData[joff + MotionEvent.SAMPLE_Y];
                             int currDist = Math.abs(lasty - y);
                             if (currDist < distance) {
                                 xreplace = lastData[joff + MotionEvent.SAMPLE_X];
@@ -354,7 +359,7 @@ public class InputDevice {
                                 distance = currDist;
                             }
                         }
-                        
+
                         int badXDelta = Math.abs(xreplace - x);
                         if (badXDelta > badPointerDistance) {
                             badPointerDistance = badXDelta;
@@ -368,7 +373,7 @@ public class InputDevice {
                         int distance = Math.abs(xreplace - x);
                         for (int j = 1; j < lastNumPointers; j++) {
                             final int joff = j * MotionEvent.NUM_SAMPLE_DATA;
-                            int lastx = lastData[joff + MotionEvent.SAMPLE_X];   
+                            int lastx = lastData[joff + MotionEvent.SAMPLE_X];
                             int currDist = Math.abs(lastx - x);
                             if (currDist < distance) {
                                 xreplace = lastx;
@@ -376,7 +381,7 @@ public class InputDevice {
                                 distance = currDist;
                             }
                         }
-                        
+
                         int badYDelta = Math.abs(yreplace - y);
                         if (badYDelta > badPointerDistance) {
                             badPointerDistance = badYDelta;
@@ -402,7 +407,7 @@ public class InputDevice {
                 mJumpyPointsDropped = 0;
             }
         }
-        
+
         /**
          * Special hack for devices that have bad screen data: aggregate and
          * compute averages of the coordinate data, to reduce the amount of
@@ -484,7 +489,7 @@ public class InputDevice {
                         }
                     }
                 }
-                
+
                 // Now compute the average.
                 int start = mHistoryDataStart[i];
                 int end = mHistoryDataEnd[i];
@@ -519,7 +524,7 @@ public class InputDevice {
             }
             return mAveragedData;
         }
-        
+
         private boolean assignPointer(int nextIndex, boolean allowOverlap) {
             final int lastNumPointers = mLastNumPointers;
             final int[] next2Last = mNext2Last;
@@ -528,12 +533,12 @@ public class InputDevice {
             final int[] lastData = mLastData;
             final int[] nextData = mNextData;
             final int id = nextIndex * MotionEvent.NUM_SAMPLE_DATA;
-            
+
             if (DEBUG_POINTERS) Slog.v("InputDevice", "assignPointer: nextIndex="
                     + nextIndex + " dataOff=" + id);
             final int x1 = nextData[id + MotionEvent.SAMPLE_X];
             final int y1 = nextData[id + MotionEvent.SAMPLE_Y];
-            
+
             long bestDistance = -1;
             int bestIndex = -1;
             for (int j=0; j<lastNumPointers; j++) {
@@ -552,51 +557,51 @@ public class InputDevice {
                     bestIndex = j;
                 }
             }
-            
+
             if (DEBUG_POINTERS) Slog.v("InputDevice", "New index " + nextIndex
                     + " best old index=" + bestIndex + " (distance="
                     + bestDistance + ")");
             next2Last[nextIndex] = bestIndex;
             next2LastDistance[nextIndex] = bestDistance;
-            
+
             if (bestIndex < 0) {
                 return true;
             }
-            
+
             if (last2Next[bestIndex] == -1) {
                 last2Next[bestIndex] = nextIndex;
                 return false;
             }
-            
+
             if (DEBUG_POINTERS) Slog.v("InputDevice", "Old index " + bestIndex
                     + " has multiple best new pointers!");
-            
+
             last2Next[bestIndex] = -2;
             return true;
         }
-        
+
         private int updatePointerIdentifiers() {
             final int[] lastData = mLastData;
             final int[] nextData = mNextData;
             final int nextNumPointers = mNextNumPointers;
             final int lastNumPointers = mLastNumPointers;
-            
+
             if (nextNumPointers == 1 && lastNumPointers == 1) {
                 System.arraycopy(nextData, 0, lastData, 0,
                         MotionEvent.NUM_SAMPLE_DATA);
                 return -1;
             }
-            
+
             // Clear our old state.
             final int[] last2Next = mLast2Next;
             for (int i=0; i<lastNumPointers; i++) {
                 last2Next[i] = -1;
             }
-            
+
             if (DEBUG_POINTERS) Slog.v("InputDevice",
                     "Update pointers: lastNumPointers=" + lastNumPointers
                     + " nextNumPointers=" + nextNumPointers);
-            
+
             // Figure out the closes new points to the previous points.
             final int[] next2Last = mNext2Last;
             final long[] next2LastDistance = mNext2LastDistance;
@@ -604,25 +609,25 @@ public class InputDevice {
             for (int i=0; i<nextNumPointers; i++) {
                 conflicts |= assignPointer(i, true);
             }
-            
+
             // Resolve ambiguities in pointer mappings, when two or more
             // new pointer locations find their best previous location is
             // the same.
             if (conflicts) {
                 if (DEBUG_POINTERS) Slog.v("InputDevice", "Resolving conflicts");
-                
+
                 for (int i=0; i<lastNumPointers; i++) {
                     if (last2Next[i] != -2) {
                         continue;
                     }
-                    
+
                     // Note that this algorithm is far from perfect.  Ideally
                     // we should do something like the one described at
                     // http://portal.acm.org/citation.cfm?id=997856
-                    
+
                     if (DEBUG_POINTERS) Slog.v("InputDevice",
                             "Resolving last index #" + i);
-                    
+
                     int numFound;
                     do {
                         numFound = 0;
@@ -638,7 +643,7 @@ public class InputDevice {
                                 worstJ = j;
                             }
                         }
-                        
+
                         if (worstJ >= 0) {
                             if (DEBUG_POINTERS) Slog.v("InputDevice",
                                     "Worst new pointer: " + worstJ
@@ -652,9 +657,9 @@ public class InputDevice {
                     } while (numFound > 2);
                 }
             }
-            
+
             int retIndex = -1;
-            
+
             if (lastNumPointers < nextNumPointers) {
                 // We have one or more new pointers that are down.  Create a
                 // new pointer identifier for one of them.
@@ -678,14 +683,14 @@ public class InputDevice {
                     i++;
                     nextId++;
                 }
-                
+
                 if (DEBUG_POINTERS) Slog.v("InputDevice",
                         "New pointer id " + nextId + " at index " + i);
-                
+
                 mLastNumPointers++;
                 retIndex = i;
                 mPointerIds[i] = nextId;
-                
+
                 // And assign this identifier to the first new pointer.
                 for (int j=0; j<nextNumPointers; j++) {
                     if (next2Last[j] < 0) {
@@ -696,7 +701,7 @@ public class InputDevice {
                     }
                 }
             }
-            
+
             // Propagate all of the current data into the appropriate
             // location in the old data to match the pointer ID that was
             // assigned to it.
@@ -711,7 +716,7 @@ public class InputDevice {
                             MotionEvent.NUM_SAMPLE_DATA);
                 }
             }
-            
+
             if (lastNumPointers > nextNumPointers) {
                 // One or more pointers has gone up.  Find the first one,
                 // and adjust accordingly.
@@ -725,10 +730,10 @@ public class InputDevice {
                     }
                 }
             }
-            
+
             return retIndex;
         }
-        
+
         void removeOldPointer(int index) {
             final int lastNumPointers = mLastNumPointers;
             if (index >= 0 && index < lastNumPointers) {
@@ -740,20 +745,20 @@ public class InputDevice {
                 mLastNumPointers--;
             }
         }
-        
+
         MotionEvent generateAbsMotion(InputDevice device, long curTime,
                 long curTimeNano, Display display, int orientation,
                 int metaState) {
-            
+            boolean isMouse = (device.classes & RawInputEvent.CLASS_MOUSE) != 0;
             if (mSkipLastPointers) {
                 mSkipLastPointers = false;
                 mLastNumPointers = 0;
             }
-            
-            if (mNextNumPointers <= 0 && mLastNumPointers <= 0) {
+
+            if (!isMouse && (mNextNumPointers <= 0 && mLastNumPointers <= 0)) {
                 return null;
             }
-            
+
             final int lastNumPointers = mLastNumPointers;
             final int nextNumPointers = mNextNumPointers;
             if (mNextNumPointers > MAX_POINTERS) {
@@ -761,24 +766,28 @@ public class InputDevice {
                         + " exceeded maximum of " + MAX_POINTERS);
                 mNextNumPointers = MAX_POINTERS;
             }
-            
-            int upOrDownPointer = updatePointerIdentifiers();
-            
+
+            /*
+             * This is not used for mouse
+             */
+            int upOrDownPointer = isMouse ? 0 : updatePointerIdentifiers();
+
             final float[] reportData = mReportData;
             final int[] rawData;
-            if (KeyInputQueue.BAD_TOUCH_HACK) {
+            if (!isMouse && KeyInputQueue.BAD_TOUCH_HACK) {
                 rawData = generateAveragedData(upOrDownPointer, lastNumPointers,
                         nextNumPointers);
             } else {
-                rawData = mLastData;
+                rawData = isMouse ? mNextData : mLastData;
             }
-            
-            final int numPointers = mLastNumPointers;
-            
-            if (DEBUG_POINTERS) Slog.v("InputDevice", "Processing "
+
+            final int numPointers = isMouse ? 1 : mLastNumPointers;
+
+            if (DEBUG_POINTERS || DEBUG_MOUSE)
+                    Slog.v("InputDevice", "Processing "
                     + numPointers + " pointers (going from " + lastNumPointers
-                    + " to " + nextNumPointers + ")");
-            
+                    + " to " + nextNumPointers + ")" + " touch hack "
+                    + KeyInputQueue.BAD_TOUCH_HACK);
             for (int i=0; i<numPointers; i++) {
                 final int pos = i * MotionEvent.NUM_SAMPLE_DATA;
                 reportData[pos + MotionEvent.SAMPLE_X] = rawData[pos + MotionEvent.SAMPLE_X];
@@ -786,31 +795,50 @@ public class InputDevice {
                 reportData[pos + MotionEvent.SAMPLE_PRESSURE] = rawData[pos + MotionEvent.SAMPLE_PRESSURE];
                 reportData[pos + MotionEvent.SAMPLE_SIZE] = rawData[pos + MotionEvent.SAMPLE_SIZE];
             }
-            
+
             int action;
             int edgeFlags = 0;
-            if (nextNumPointers != lastNumPointers) {
-                if (nextNumPointers > lastNumPointers) {
-                    if (lastNumPointers == 0) {
+            if (!isMouse) {
+                 if (nextNumPointers != lastNumPointers) {
+                    if (nextNumPointers > lastNumPointers) {
+                        if (lastNumPointers == 0) {
+                            action = MotionEvent.ACTION_DOWN;
+                            mDownTime = curTime;
+                        } else {
+                            action = MotionEvent.ACTION_POINTER_DOWN
+                                    | (upOrDownPointer << MotionEvent.ACTION_POINTER_ID_SHIFT);
+                        }
+                    } else {
+                        if (numPointers == 1) {
+                             action = MotionEvent.ACTION_UP;
+                        } else {
+                            action = MotionEvent.ACTION_POINTER_UP
+                                | (upOrDownPointer << MotionEvent.ACTION_POINTER_INDEX_SHIFT);
+                        }
+                    }
+                    currentMove = null;
+                } else {
+                    action = MotionEvent.ACTION_MOVE;
+                }
+            } else {
+                if (mNextNumPointers != mLastNumPointers) {
+                    if (mNextNumPointers == 1) {
                         action = MotionEvent.ACTION_DOWN;
                         mDownTime = curTime;
-                    } else {
-                        action = MotionEvent.ACTION_POINTER_DOWN
-                                | (upOrDownPointer << MotionEvent.ACTION_POINTER_INDEX_SHIFT);
-                    }
-                } else {
-                    if (numPointers == 1) {
+                    } else if (mNextNumPointers == 2) {
                         action = MotionEvent.ACTION_UP;
                     } else {
-                        action = MotionEvent.ACTION_POINTER_UP
-                                | (upOrDownPointer << MotionEvent.ACTION_POINTER_INDEX_SHIFT);
+                        action = MotionEvent.ACTION_MOVE;
                     }
+                    mLastNumPointers = mNextNumPointers;
+                    currentMove = null;
+                } else {
+                    action = MotionEvent.ACTION_MOVE;
                 }
-                currentMove = null;
-            } else {
-                action = MotionEvent.ACTION_MOVE;
+                if (DEBUG_MOUSE)
+                    Slog.i(TAG, "mouse action " + action);
             }
-            
+
             final int dispW = display.getWidth()-1;
             final int dispH = display.getHeight()-1;
             int w = dispW;
@@ -821,14 +849,14 @@ public class InputDevice {
                 w = h;
                 h = tmp;
             }
-            
+
             final AbsoluteInfo absX = device.absX;
             final AbsoluteInfo absY = device.absY;
             final AbsoluteInfo absPressure = device.absPressure;
             final AbsoluteInfo absSize = device.absSize;
             for (int i=0; i<numPointers; i++) {
                 final int j = i * MotionEvent.NUM_SAMPLE_DATA;
-            
+
                 if (absX != null) {
                     reportData[j + MotionEvent.SAMPLE_X] =
                             ((reportData[j + MotionEvent.SAMPLE_X]-absX.minValue)
@@ -840,16 +868,16 @@ public class InputDevice {
                                 / absY.range) * h;
                 }
                 if (absPressure != null) {
-                    reportData[j + MotionEvent.SAMPLE_PRESSURE] = 
+                    reportData[j + MotionEvent.SAMPLE_PRESSURE] =
                             ((reportData[j + MotionEvent.SAMPLE_PRESSURE]-absPressure.minValue)
                                 / (float)absPressure.range);
                 }
                 if (absSize != null) {
-                    reportData[j + MotionEvent.SAMPLE_SIZE] = 
+                    reportData[j + MotionEvent.SAMPLE_SIZE] =
                             ((reportData[j + MotionEvent.SAMPLE_SIZE]-absSize.minValue)
                                 / (float)absSize.range);
                 }
-                
+
                 switch (orientation) {
                     case Surface.ROTATION_90: {
                         final float temp = reportData[j + MotionEvent.SAMPLE_X];
@@ -870,7 +898,7 @@ public class InputDevice {
                     }
                 }
             }
-            
+
             // We only consider the first pointer when computing the edge
             // flags, since they are global to the event.
             if (action == MotionEvent.ACTION_DOWN) {
@@ -885,9 +913,9 @@ public class InputDevice {
                     edgeFlags |= MotionEvent.EDGE_BOTTOM;
                 }
             }
-            
+
             if (currentMove != null) {
-                if (false) Slog.i("InputDevice", "Adding batch x="
+                if (DEBUG_MOUSE) Slog.i("InputDevice", "Adding batch x="
                         + reportData[MotionEvent.SAMPLE_X]
                         + " y=" + reportData[MotionEvent.SAMPLE_Y]
                         + " to " + currentMove);
@@ -897,42 +925,42 @@ public class InputDevice {
                 }
                 return null;
             }
-            
+
             MotionEvent me = MotionEvent.obtainNano(mDownTime, curTime,
                     curTimeNano, action, numPointers, mPointerIds, reportData,
                     metaState, xPrecision, yPrecision, device.id, edgeFlags);
             if (action == MotionEvent.ACTION_MOVE) {
                 currentMove = me;
             }
-            
-            if (nextNumPointers < lastNumPointers) {
+
+            if ((!isMouse) && (nextNumPointers < lastNumPointers)) {
                 removeOldPointer(upOrDownPointer);
             }
-            
+
             return me;
         }
-        
+
         boolean hasMore() {
             return mLastNumPointers != mNextNumPointers;
         }
-        
+
         void finish() {
             mNextNumPointers = mAddingPointerOffset = 0;
             mNextData[MotionEvent.SAMPLE_PRESSURE] = 0;
         }
-        
+
         MotionEvent generateRelMotion(InputDevice device, long curTime,
                 long curTimeNano, int orientation, int metaState) {
-            
+
             final float[] scaled = mReportData;
-            
+
             // For now we only support 1 pointer with relative motions.
             scaled[MotionEvent.SAMPLE_X] = mNextData[MotionEvent.SAMPLE_X];
             scaled[MotionEvent.SAMPLE_Y] = mNextData[MotionEvent.SAMPLE_Y];
             scaled[MotionEvent.SAMPLE_PRESSURE] = 1.0f;
             scaled[MotionEvent.SAMPLE_SIZE] = 0;
             int edgeFlags = 0;
-            
+
             int action;
             if (mNextNumPointers != mLastNumPointers) {
                 mNextData[MotionEvent.SAMPLE_X] =
@@ -950,7 +978,7 @@ public class InputDevice {
             } else {
                 action = MotionEvent.ACTION_MOVE;
             }
-            
+
             scaled[MotionEvent.SAMPLE_X] *= xMoveScale;
             scaled[MotionEvent.SAMPLE_Y] *= yMoveScale;
             switch (orientation) {
@@ -972,7 +1000,7 @@ public class InputDevice {
                     break;
                 }
             }
-            
+
             if (currentMove != null) {
                 if (false) Slog.i("InputDevice", "Adding batch x="
                         + scaled[MotionEvent.SAMPLE_X]
@@ -984,7 +1012,7 @@ public class InputDevice {
                 }
                 return null;
             }
-            
+
             MotionEvent me = MotionEvent.obtainNano(mDownTime, curTime,
                     curTimeNano, action, 1, mPointerIds, scaled, metaState,
                     xPrecision, yPrecision, device.id, edgeFlags);
@@ -994,14 +1022,14 @@ public class InputDevice {
             return me;
         }
     }
-    
+
     static class AbsoluteInfo {
         int minValue;
         int maxValue;
         int range;
         int flat;
         int fuzz;
-        
+
         final void dump(PrintWriter pw) {
             pw.print("minValue="); pw.print(minValue);
             pw.print(" maxValue="); pw.print(maxValue);
@@ -1010,7 +1038,7 @@ public class InputDevice {
             pw.print(" fuzz="); pw.print(fuzz);
         }
     };
-    
+
     InputDevice(int _id, int _classes, String _name,
             AbsoluteInfo _absX, AbsoluteInfo _absY,
             AbsoluteInfo _absPressure, AbsoluteInfo _absSize) {

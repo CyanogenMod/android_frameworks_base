@@ -64,6 +64,7 @@ import android.content.pm.PackageManager;
 import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.Region;
@@ -132,6 +133,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+
+import android.graphics.Canvas;
+import android.graphics.Path;
 
 /** {@hide} */
 public class WindowManagerService extends IWindowManager.Stub
@@ -386,6 +390,13 @@ public class WindowManagerService extends IWindowManager.Stub
     private DimAnimator mDimAnimator = null;
     Surface mBlurSurface;
     boolean mBlurShown;
+
+    Surface mMouseSurface;
+    int mShowMouse = 0;
+    int mMlx;
+    int mMly;
+    int mMlw;
+    int mMlh;
 
     int mTransactionSequence = 0;
 
@@ -5260,7 +5271,7 @@ public class WindowManagerService extends IWindowManager.Stub
         // dispatch the event.
         try {
             if (DEBUG_INPUT || DEBUG_FOCUS || WindowManagerPolicy.WATCH_POINTER) {
-                Slog.v(TAG, "Delivering pointer " + qev + " to " + target);
+                Slog.v(TAG, "Delivering pointer " + qev + " Ev " + ev + " to " + target);
             }
 
             if (MEASURE_LATENCY) {
@@ -6169,7 +6180,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 if (qev != null) {
                     res = (MotionEvent)qev.event;
                     if (DEBUG_INPUT) Slog.v(TAG,
-                            "Returning pending motion: " + res);
+                            "Returning pending motion: " + res + " q: " + qev);
                     mQueue.recycleEvent(qev);
                     if (win != null && returnWhat == RETURN_PENDING_POINTER) {
                         res.offsetLocation(-win.mFrame.left, -win.mFrame.top);
@@ -6394,7 +6405,8 @@ public class WindowManagerService extends IWindowManager.Stub
                     if (screenIsOff) {
                         if (!mPolicy.isWakeRelMovementTq(event.deviceId,
                                 device.classes, event)) {
-                            //Slog.i(TAG, "dropping because screenIsOff and !isWakeKey");
+                            if (DEBUG_INPUT)
+                                Slog.i(TAG, "dropping because screenIsOff and !isWakeKey");
                             return false;
                         }
                         event.flags |= WindowManagerPolicy.FLAG_WOKE_HERE;
@@ -6540,7 +6552,8 @@ public class WindowManagerService extends IWindowManager.Stub
                         if (ev.classType == RawInputEvent.CLASS_TOUCHSCREEN) {
                             eventType = eventType((MotionEvent)ev.event);
                         } else if (ev.classType == RawInputEvent.CLASS_KEYBOARD ||
-                                    ev.classType == RawInputEvent.CLASS_TRACKBALL) {
+                                   ev.classType == RawInputEvent.CLASS_TRACKBALL ||
+                                   ev.classType == RawInputEvent.CLASS_MOUSE) {
                             eventType = LocalPowerManager.BUTTON_EVENT;
                         } else {
                             eventType = LocalPowerManager.OTHER_EVENT;
@@ -6599,6 +6612,38 @@ public class WindowManagerService extends IWindowManager.Stub
                                 break;
                             case RawInputEvent.CLASS_TOUCHSCREEN:
                                 //Slog.i(TAG, "Read next event " + ev);
+                                dispatchPointer(ev, (MotionEvent)ev.event, 0, 0);
+                                break;
+                            case RawInputEvent.CLASS_MOUSE:
+                                MotionEvent mmev = (MotionEvent)ev.event;
+                                int mcx = (int)mmev.getX();
+                                int mcy = (int)mmev.getY();
+
+                                if (mMouseSurface != null && (mMlx != mcx || mMly != mcy)) {
+                                    Surface.openTransaction();
+                                    if (DEBUG_INPUT)
+                                        Slog.i(TAG, "Open transaction for the mouse surface");
+                                    WindowState top =
+                                        (WindowState)mWindows.get(mWindows.size() - 1);
+                                    try {
+                                        if (DEBUG_INPUT)
+                                            Slog.i(TAG, "Move surf, x: " +
+                                                  Integer.toString(mcx) + " y:"
+                                                  + Integer.toString(mcy));
+
+                                        mMouseSurface.setPosition(mcx, mcy);
+                                        mMouseSurface.setLayer(top.mAnimLayer + 1);
+                                        if (mShowMouse != 1) {
+                                            mMouseSurface.show();
+                                            mShowMouse = 1;
+                                        }
+                                        mMlx = mcx;
+                                        mMly = mcy;
+                                    } catch ( RuntimeException e) {
+                                        Slog.e(TAG, "Failure showing mouse surface",e);
+                                    }
+                                    Surface.closeTransaction();
+                                }
                                 dispatchPointer(ev, (MotionEvent)ev.event, 0, 0);
                                 break;
                             case RawInputEvent.CLASS_TRACKBALL:
@@ -9582,6 +9627,61 @@ public class WindowManagerService extends IWindowManager.Stub
         
         if (mFxSession == null) {
             mFxSession = new SurfaceSession();
+        }
+
+        if (mMouseSurface == null) {
+            int mMx, mMy, mMw, mMh;
+            Canvas mCanvas;
+            Path mPath = new Path();
+
+            if (DEBUG_INPUT)
+                Slog.i(TAG, "Create Mouse Surface");
+
+            mMw = 12;
+            mMh = 20;
+            mMx = (mDisplay.getWidth() - mMw) / 2;
+            mMy = (mDisplay.getHeight() - mMh) / 2;
+
+            try {
+
+                /*
+                 *First Mouse event, create Surface
+                 */
+
+                mMouseSurface =
+                    new Surface(mFxSession,
+                                0, -1, mMw, mMh,
+                                PixelFormat.TRANSPARENT,
+                                Surface.FX_SURFACE_NORMAL);
+                mCanvas = mMouseSurface.lockCanvas(null);
+                Paint tPaint = new Paint();
+                tPaint.setStyle(Paint.Style.STROKE);
+                tPaint.setStrokeWidth(2);
+                tPaint.setColor(0xffffffff);
+                mPath.moveTo(0.0f, 0.0f);
+                mPath.lineTo(12.0f, 12.0f);
+                mPath.lineTo(7.0f, 12.0f);
+                mPath.lineTo(11.0f, 20.0f);
+                mPath.lineTo(8.0f, 21.0f);
+                mPath.lineTo(4.0f, 13.0f);
+                mPath.lineTo(0.0f, 17.0f);
+                mPath.close();
+                mCanvas.clipPath(mPath);
+                mCanvas.drawColor(0xff000000);
+                mCanvas.drawPath(mPath, tPaint);
+
+                mMouseSurface.unlockCanvasAndPost(mCanvas);
+                mMouseSurface.openTransaction();
+                mMouseSurface.setSize(mMw, mMh);
+                mMouseSurface.closeTransaction();
+
+            } catch (Exception e) {
+                Slog.e(TAG, "Exception creating mouse surface",e);
+            }
+            mMlx = mMx;
+            mMly = mMy;
+            mMlw = mMw;
+            mMlh = mMh;
         }
 
         if (SHOW_TRANSACTIONS) Slog.i(TAG, ">>> OPEN TRANSACTION");
