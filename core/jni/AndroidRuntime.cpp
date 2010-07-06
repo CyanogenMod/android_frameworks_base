@@ -556,7 +556,10 @@ int AndroidRuntime::startVm(JavaVM** pJavaVM, JNIEnv** pEnv)
         }
     }
 
-    property_get("dalvik.vm.execution-mode", propBuf, "");
+    property_get("persist.sys.jit-mode", propBuf, "");
+    if (strcmp(propBuf, "") == 0) {
+        property_get("dalvik.vm.execution-mode", propBuf, "");
+    }
     if (strcmp(propBuf, "int:portable") == 0) {
         executionMode = kEMIntPortable;
     } else if (strcmp(propBuf, "int:fast") == 0) {
