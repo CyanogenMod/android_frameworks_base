@@ -1760,6 +1760,72 @@ public final class Settings {
         public static final String HAPTIC_FEEDBACK_ENABLED = "haptic_feedback_enabled";
 
         /**
+         * Whether haptic feedback is enabled on virtual key release (as opposed to pressed)
+         * boolean (1 or 0).
+         * @hide
+         */
+        public static final String HAPTIC_FEEDBACK_UP_ENABLED = "haptic_feedback_up_enabled";
+
+        /**
+         * Whether haptic is also activated for all screen interaction (follows Sound Effects Enabled behaviour)
+         * boolean (1 or 0).
+         * @hide
+         */
+        public static final String HAPTIC_FEEDBACK_ALL_ENABLED = "haptic_feedback_all_enabled";
+
+        /**
+         * Value for haptic down (string will be converted to array -
+         * format is ***"delay in msec before turning on"_"delay in msec before turning off__**repeat**)
+         * @hide
+         */
+        public static final String HAPTIC_DOWN_ARRAY = "haptic_down_array";
+
+        /**
+         * Value for haptic up - same format as _DOWN_ARRAY
+         * @hide
+         */
+        public static final String HAPTIC_UP_ARRAY = "haptic_up_array";
+        
+        /**
+         * Value for long presses - same format as _DOWN_ARRAY
+         * @hide
+         */
+        public static final String HAPTIC_LONG_ARRAY = "haptic_long_array";
+
+        /**
+         * these store the ORIGINAL default haptic values from config.xml
+         * this is so HapticAdjust can easily pull them when resetting defaults
+         * these are created and acted on in PhoneWindowManager
+         * @hide
+         */
+        public static final String HAPTIC_DOWN_ARRAY_DEFAULT = "haptic_down_array_default";
+
+        /**
+         * Same as HAPTIC_DOWN_ARRAY_DEFAULT but for key releases
+         * @hide
+         */
+        public static final String HAPTIC_UP_ARRAY_DEFAULT = "haptic_up_array_default";
+
+        /**
+         * Same as HAPTIC_DOWN_ARRAY_DEFAULT but for key releases
+         * @hide
+         */
+        public static final String HAPTIC_LONG_ARRAY_DEFAULT = "haptic_long_array_default";
+
+        /**
+         * Set values for haptic feedback from typing on keypad (new for Froyo)
+         * @hide
+         */
+        public static final String HAPTIC_TAP_ARRAY = "haptic_tap_array";
+
+        /**
+         * Default values for haptic feedback from typing on keypad (new for Froyo) - pulled
+         * from config.xml
+         * @hide
+         */
+        public static final String HAPTIC_TAP_ARRAY_DEFAULT = "haptic_tap_array_default";
+
+        /**
          * Whether live web suggestions while the user types into search dialogs are
          * enabled. Browsers and other search UIs should respect this, as it allows
          * a user to avoid sending partial queries to a search engine, if it poses
@@ -1926,7 +1992,17 @@ public final class Settings {
             DOCK_SOUNDS_ENABLED,
             LOCKSCREEN_SOUNDS_ENABLED,
             SHOW_WEB_SUGGESTIONS,
-            NOTIFICATION_LIGHT_PULSE
+            NOTIFICATION_LIGHT_PULSE,
+            HAPTIC_FEEDBACK_UP_ENABLED,
+            HAPTIC_FEEDBACK_ALL_ENABLED,
+            HAPTIC_DOWN_ARRAY,
+            HAPTIC_UP_ARRAY,
+            HAPTIC_LONG_ARRAY,
+            HAPTIC_DOWN_ARRAY_DEFAULT,
+            HAPTIC_UP_ARRAY_DEFAULT,
+            HAPTIC_LONG_ARRAY_DEFAULT,
+            HAPTIC_TAP_ARRAY,
+            HAPTIC_TAP_ARRAY_DEFAULT
         };
 
         // Settings moved to Settings.Secure
