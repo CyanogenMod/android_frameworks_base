@@ -84,17 +84,6 @@ class ServerThread extends Thread {
         }
     }
     
-    private class JitModeSettingsObserver extends ContentObserver {
-        public JitModeSettingsObserver() {
-            super(null);
-        }
-        @Override
-        public void onChange(boolean selfChange) {
-            SystemProperties.set("persist.sys.jit-mode",
-                    Settings.Secure.getString(mContentResolver, Settings.Secure.JIT_MODE));
-        }
-    }
-    
     @Override
     public void run() {
         EventLog.writeEvent(EventLogTags.BOOT_PROGRESS_SYSTEM_RUN,
@@ -457,11 +446,8 @@ class ServerThread extends Thread {
                 false, new AdbSettingsObserver());
 
         mContentResolver.registerContentObserver(Settings.Secure.getUriFor(Settings.Secure.COMPCACHE_ENABLED),
-        		false, new CompcacheSettingsObserver());
+                false, new CompcacheSettingsObserver());
  
-        mContentResolver.registerContentObserver(Settings.Secure.getUriFor(Settings.Secure.JIT_MODE),
-                false, new JitModeSettingsObserver());
-        
         // Before things start rolling, be sure we have decided whether
         // we are in safe mode.
         final boolean safeMode = wm.detectSafeMode();

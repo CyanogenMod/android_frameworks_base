@@ -2437,12 +2437,6 @@ public final class Settings {
         public static final String COMPCACHE_ENABLED = "compcache_enabled";
 
         /**
-         * The user-defined JIT mode to use
-         * @hide
-         */
-        public static final String JIT_MODE = "jit_mode";
-        
-        /**
          * Setting to allow mock locations and location provider status to be injected into the
          * LocationManager service for testing purposes during application development.  These
          * locations and status values  override actual location and status information generated
