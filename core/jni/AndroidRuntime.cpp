@@ -607,8 +607,12 @@ int AndroidRuntime::startVm(JavaVM** pJavaVM, JNIEnv** pEnv)
     //options[curOpt++].optionString = "-verbose:class";
 
     strcpy(heapsizeOptsBuf, "-Xmx");
-    property_get("dalvik.vm.heapsize", heapsizeOptsBuf+4, "16m");
-    //LOGI("Heap size: %s", heapsizeOptsBuf);
+    property_get("persist.sys.vm.heapsize", propBuf, "");
+    if (strcmp(propBuf, "") == 0) {
+        property_get("dalvim.vm.heapsize", propBuf, "16m");
+    }
+    strcpy(heapsizeOptsBuf+4, propBuf);
+    LOGI("Heap size: %s", heapsizeOptsBuf);
     opt.optionString = heapsizeOptsBuf;
     mOptions.add(opt);
 
