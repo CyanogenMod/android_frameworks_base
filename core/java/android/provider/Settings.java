@@ -2429,12 +2429,6 @@ public final class Settings {
          * @hide
          */
         public static final String ADB_NOTIFY = "adb_notify";
-            
-        /**
-         * Whether Compcache is eanbled.
-         * @hide
-         */
-        public static final String COMPCACHE_ENABLED = "compcache_enabled";
 
         /**
          * Setting to allow mock locations and location provider status to be injected into the
