@@ -1171,9 +1171,11 @@ public class NotificationManagerService extends INotificationManager.Stub
             }
         }
 
+        int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_SCREEN_ON, 0);
+        
         // we only flash if screen is off and persistent pulsing is enabled
         // and we are not currently in a call
-        if (!mPendingPulseNotification || mScreenOn || mInCall) {
+        if (!mPendingPulseNotification || (mScreenOn && (mPulseScreen == 0)) || mInCall) {
             mNotificationLight.turnOff();
         } else {
             int ledARGB = mLedNotification.notification.ledARGB;
