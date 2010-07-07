@@ -1921,6 +1921,12 @@ public final class Settings {
         public static final String TRACKBALL_UNLOCK_SCREEN = "trackball_unlock_screen";
 
         /**
+         * Pulse the Trackball with Screen On.  The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String TRACKBALL_SCREEN_ON = "trackball_screen_on";
+        
+        /**
          * Whether to unlock the menu key.  The value is boolean (1 or 0).
          * @hide
          */
