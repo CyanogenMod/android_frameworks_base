@@ -1933,12 +1933,6 @@ public final class Settings {
         public static final String MENU_UNLOCK_SCREEN = "menu_unlock_screen";
 
         /**
-         * Whether to use br0tips.  The value is boolean (1 or 0).
-         * @hide
-         */
-        public static final String BROTIPS = "brotips";
-
-        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          * @hide
