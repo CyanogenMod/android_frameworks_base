@@ -134,6 +134,9 @@
     <string name="power_off" msgid="4266614107412865048">"Spegni"</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Spegnimento..."</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"Il telefono verrà spento."</string>
+     <string name="reboot_system">Riavvia</string>
+     <string name="reboot_progress">Riavvio in corso\u2026</string>
+     <string name="reboot_confirm">Il telefono verrà riavviato.</string>
     <string name="recent_tasks_title" msgid="3691764623638127888">"Recenti"</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"Nessuna applicazione recente."</string>
     <string name="global_actions" msgid="2406416831541615258">"Opzioni telefono"</string>
