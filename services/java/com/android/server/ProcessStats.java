@@ -154,7 +154,7 @@ public class ProcessStats {
 
     private boolean mFirst = true;
 
-    private byte[] mBuffer = new byte[256];
+    private byte[] mBuffer = new byte[1024];
 
     /**
      * The time in microseconds that the CPU has been running at each speed.
@@ -568,20 +568,22 @@ public class ProcessStats {
             StringTokenizer st = new StringTokenizer(file, "\n ");
             while (st.hasMoreElements()) {
                 String token = st.nextToken();
-                try {
-                    long val = Long.parseLong(token);
-                    tempSpeeds[speed] = val;
-                    token = st.nextToken();
-                    val = Long.parseLong(token);
-                    tempTimes[speed] = val;
-                    speed++;
-                    if (speed == MAX_SPEEDS) break; // No more
-                    if (localLOGV && out == null) {
-                        Slog.v(TAG, "First time : Speed/Time = " + tempSpeeds[speed - 1]
-                              + "\t" + tempTimes[speed - 1]);
+                if (st.hasMoreElements()) {
+                    try {
+                        long val = Long.parseLong(token);
+                        tempSpeeds[speed] = val;
+                        token = st.nextToken();
+                        val = Long.parseLong(token);
+                        tempTimes[speed] = val;
+                        speed++;
+                        if (speed == MAX_SPEEDS) break; // No more
+                        if (localLOGV && out == null) {
+                            Slog.v(TAG, "First time : Speed/Time = " + tempSpeeds[speed - 1]
+                                    + "\t" + tempTimes[speed - 1]);
+                        }
+                    } catch (NumberFormatException nfe) {
+                        Slog.i(TAG, "Unable to parse time_in_state");
                     }
-                } catch (NumberFormatException nfe) {
-                    Slog.i(TAG, "Unable to parse time_in_state");
                 }
             }
         }
