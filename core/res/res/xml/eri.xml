@@ -114,5 +114,11 @@
                   EriText="T-CDMA Roam 75"
                   CallPromptId="0"
                   AlertId="0"/>
-
+ 
+	  <EriInfo RoamingIndicator="128"
+                  IconIndex="1"
+                  IconMode="0"
+                  EriText="Sprint"
+                  CallPromptId="0"
+                  AlertId="0"/>
 </EriFile>
