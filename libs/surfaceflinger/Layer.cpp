@@ -133,10 +133,14 @@ status_t Layer::setBuffers( uint32_t w, uint32_t h,
     mNeedsBlending = (info.h_alpha - info.l_alpha) > 0;
     mNoEGLImageForSwBuffers = !(hwFlags & DisplayHardware::CACHED_BUFFERS);
 
-    // we use the red index
-    int displayRedSize = displayInfo.getSize(PixelFormatInfo::INDEX_RED);
-    int layerRedsize = info.getSize(PixelFormatInfo::INDEX_RED);
-    mNeedsDithering = layerRedsize > displayRedSize;
+    if (mFlinger->getUseDithering()) {
+        // we use the red index
+        int displayRedSize = displayInfo.getSize(PixelFormatInfo::INDEX_RED);
+        int layerRedsize = info.getSize(PixelFormatInfo::INDEX_RED);
+        mNeedsDithering = layerRedsize > displayRedSize;
+    } else {
+        mNeedsDithering = false;
+    }
 
     for (size_t i=0 ; i<NUM_BUFFERS ; i++) {
         mBuffers[i] = new GraphicBuffer();

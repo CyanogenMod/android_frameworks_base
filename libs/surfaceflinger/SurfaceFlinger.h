@@ -175,6 +175,7 @@ public:
             overlay_control_device_t* getOverlayEngine() const;
 
             inline int                  getRenderEffect() const { return mRenderEffect; }
+            inline int                  getUseDithering() const { return mUseDithering; }
 
             
     status_t removeLayer(const sp<LayerBase>& layer);
@@ -375,6 +376,7 @@ private:
 
    // only written in the main thread, only read in other threads
    volatile     int32_t                     mSecureFrameBuffer;
+                bool                        mUseDithering;
 };
 
 // ---------------------------------------------------------------------------
