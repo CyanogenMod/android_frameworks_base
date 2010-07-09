@@ -87,15 +87,16 @@ SurfaceFlinger::SurfaceFlinger()
         mDebugBackground(0),
         mRenderEffect(0),
         mRenderColorR(0),
-	mRenderColorG(0),
-	mRenderColorB(0),
+        mRenderColorG(0),
+        mRenderColorB(0),
         mDebugInSwapBuffers(0),
         mLastSwapBufferTime(0),
         mDebugInTransaction(0),
         mLastTransactionTime(0),
         mBootFinished(false),
         mConsoleSignals(0),
-        mSecureFrameBuffer(0)
+        mSecureFrameBuffer(0),
+        mUseDithering(true)
 {
     init();
 }
@@ -112,9 +113,12 @@ void SurfaceFlinger::init()
     mDebugBackground = atoi(value);
     property_get("debug.sf.render_effect", value, "0");
     mRenderEffect = atoi(value);
+    property_get("persist.sys.use_dithering", value, "1");
+    mUseDithering = atoi(value) == 1;
 
     LOGI_IF(mDebugRegion,       "showupdates enabled");
     LOGI_IF(mDebugBackground,   "showbackground enabled");
+    LOGI_IF(mUseDithering,      "dithering enabled");
 
     // default calibration color set (disabled by default)
     property_get("debug.sf.render_color_red", value, "975");
