@@ -1614,6 +1614,18 @@ public final class Settings {
         public static final String CLOCK_COLOR = "clock_color";
         
         /**
+         * Specifies whether to show or hide the dbm signal level
+         * @hide
+         */
+        public static final String SHOW_STATUS_DBM = "show_status_dbm";
+
+        /**
+         * Specifies the dbm signal level color
+         * @hide
+         */
+        public static final String DBM_COLOR = "dbm_color";
+
+        /**
          * Specifies notification count color
          * @hide
          */

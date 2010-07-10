@@ -74,10 +74,10 @@ class StatusBarIcon {
                 t.setText(data.text);
                 this.view = t;
                 
-                clockColor = Settings.System.getInt(mContext.getContentResolver(), Settings.System.CLOCK_COLOR, clockColor);
-                t.setTextColor(clockColor);
+                data.textColor = Settings.System.getInt(mContext.getContentResolver(), data.colorSetting, data.textColor);
+                t.setTextColor(data.textColor);
                 
-                if (getBoolean(Settings.System.SHOW_STATUS_CLOCK, true)) {
+                if (getBoolean(context, data.visibleSetting, data.defVisibility)) {
                     t.setVisibility(View.VISIBLE);
                 }
                 else {
@@ -105,9 +105,9 @@ class StatusBarIcon {
                 mNumberView = nv;
                 if (data.number > 0) {
                     nv.setText("" + data.number);
-                    notifCountColor = Settings.System.getInt(mContext.getContentResolver(),
-                                        Settings.System.NOTIF_COUNT_COLOR, notifCountColor);
-                    nv.setTextColor(notifCountColor);   
+                    data.textColor = Settings.System.getInt(mContext.getContentResolver(),
+                                        data.colorSetting, data.textColor);
+                    nv.setTextColor(data.textColor);
                     nv.setVisibility(View.VISIBLE);
                 } else {
                     nv.setVisibility(View.GONE);
@@ -155,10 +155,10 @@ class StatusBarIcon {
                     mNumberView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);                    
                 }
                 
-                mNumberView.setBackgroundDrawable(null);                
-                batteryPercentColor = Settings.System.getInt(mContext.getContentResolver(),
-                                        Settings.System.BATTERY_PERCENTAGE_STATUS_COLOR, batteryPercentColor);
-                mNumberView.setTextColor(batteryPercentColor);
+                mNumberView.setBackgroundDrawable(null);
+                data.textColor = Settings.System.getInt(context.getContentResolver(),
+                        data.colorSetting, data.textColor);
+                mNumberView.setTextColor(data.textColor);
                 mNumberView.setTextSize(12);
 
                 if (data.number == 100) {
@@ -262,8 +262,8 @@ class StatusBarIcon {
     int getNumber() {
         return mData.number;
     }
-    private boolean getBoolean(String systemSettingKey, boolean defaultValue) {
-        return 1 == android.provider.Settings.System.getInt(mContext.getContentResolver(), systemSettingKey, defaultValue ? 1 : 0);
+    private boolean getBoolean(Context context, String systemSettingKey, boolean defaultValue) {
+        return 1 == android.provider.Settings.System.getInt(context.getContentResolver(), systemSettingKey, defaultValue ? 1 : 0);
     }
 }
 

@@ -122,6 +122,9 @@ public class StatusBarPolicy {
 
     //***** Signal strength icons
     private IconData mPhoneData;
+    private IBinder mPhoneDbmIcon;
+    private IconData mPhoneDbmData;
+
     //GSM/UMTS
     private static final int[] sSignalImages = new int[] {
         com.android.internal.R.drawable.stat_sys_signal_0,
@@ -418,7 +421,7 @@ public class StatusBarPolicy {
 
         // clock
         mCalendar = Calendar.getInstance(TimeZone.getDefault());
-        mClockData = IconData.makeText("clock", "");
+        mClockData = IconData.makeText("clock", "", Settings.System.CLOCK_COLOR, Settings.System.SHOW_STATUS_CLOCK, true);
         mClockIcon = service.addIcon(mClockData, null);
         updateClock();
 
@@ -429,7 +432,8 @@ public class StatusBarPolicy {
 
         // battery
         mBatteryData = IconData.makeIconNumber("battery",
-                null, com.android.internal.R.drawable.stat_sys_battery_unknown, 0, 0);
+                null, com.android.internal.R.drawable.stat_sys_battery_unknown, 0, 0,
+                Settings.System.BATTERY_PERCENTAGE_STATUS_COLOR);
         mBatteryIcon = service.addIcon(mBatteryData, null);
 
         // phone_signal
@@ -437,6 +441,10 @@ public class StatusBarPolicy {
         mPhoneData = IconData.makeIcon("phone_signal",
                 null, com.android.internal.R.drawable.stat_sys_signal_null, 0, 0);
         mPhoneIcon = service.addIcon(mPhoneData, null);
+
+        // dbm signal level
+        mPhoneDbmData = IconData.makeText("phone_dbm_signal", "", Settings.System.DBM_COLOR, Settings.System.SHOW_STATUS_DBM, false);
+        mPhoneDbmIcon = service.addIcon(mPhoneDbmData, null);
 
         // register for phone state notifications.
         ((TelephonyManager)mContext.getSystemService(Context.TELEPHONY_SERVICE))
@@ -994,6 +1002,7 @@ public class StatusBarPolicy {
 
     private final void updateSignalStrength() {
         int iconLevel = -1;
+        int dBm = 0;
         int[] iconList;
 
         // Display signal strength while in "emergency calls only" mode
@@ -1006,6 +1015,7 @@ public class StatusBarPolicy {
                 mPhoneData.iconId = com.android.internal.R.drawable.stat_sys_signal_null;
             }
             mService.updateIcon(mPhoneIcon, mPhoneData, null);
+            mService.updateIcon(mPhoneDbmIcon, mPhoneDbmData, null);
             return;
         }
 
@@ -1022,6 +1032,10 @@ public class StatusBarPolicy {
             else if (asu >= 5)  iconLevel = 2;
             else iconLevel = 1;
 
+            if (asu != 99) {
+                dBm = asu * 2 - 113;
+            }
+
             // Though mPhone is a Manager, this call is not an IPC
             if (mPhone.isNetworkRoaming()) {
                 iconList = sSignalImages_r;
@@ -1036,15 +1050,19 @@ public class StatusBarPolicy {
             // If a voice call is made then RSSI should switch to 1x.
             if ((mPhoneState == TelephonyManager.CALL_STATE_IDLE) && isEvdo()){
                 iconLevel = getEvdoLevel();
+                dBm = mSignalStrength.getEvdoDbm();
                 if (false) {
                     Slog.d(TAG, "use Evdo level=" + iconLevel + " to replace Cdma Level=" + getCdmaLevel());
                 }
             } else {
                 iconLevel = getCdmaLevel();
+                dBm = mSignalStrength.getCdmaDbm();
             }
         }
         mPhoneData.iconId = iconList[iconLevel];
         mService.updateIcon(mPhoneIcon, mPhoneData, null);
+        mPhoneDbmData.text = Integer.toString(dBm);
+        mService.updateIcon(mPhoneDbmIcon, mPhoneDbmData, null);
     }
 
     private int getCdmaLevel() {
