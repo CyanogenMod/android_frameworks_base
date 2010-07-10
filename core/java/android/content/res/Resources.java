@@ -1342,8 +1342,8 @@ public class Resources {
                     keyboardHidden, mConfiguration.navigation, width, height,
                     mConfiguration.screenLayout, mConfiguration.uiMode, sSdkVersion);
 
-            clearDrawableCache(mDrawableCache, configChanges);
-            clearDrawableCache(mColorDrawableCache, configChanges);
+            drawableCacheClear(mDrawableCache, configChanges);
+            drawableCacheClear(mColorDrawableCache, configChanges);
 
             mColorStateListCache.clear();
 
@@ -1357,7 +1357,7 @@ public class Resources {
         }
     }
 
-    private void clearDrawableCache(
+    private void drawableCacheClear(
             LongSparseArray<WeakReference<ConstantState>> cache,
             int configChanges) {
         int N = cache.size();
@@ -1818,7 +1818,7 @@ public class Resources {
                     //Log.i(TAG, "Returning cached drawable @ #" +
                     //        Integer.toHexString(((Integer)key).intValue())
                     //        + " in " + this + ": " + entry);
-                    return entry.newDrawable(this);
+                    return entry.newDrawable();
                 }
                 else {  // our entry has been purged
                     drawableCache.delete(key);
