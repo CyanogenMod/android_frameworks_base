@@ -16,6 +16,8 @@
 
 package android.app;
 
+import java.io.FileOutputStream;
+
 import android.content.Context;
 import android.os.Binder;
 import android.os.RemoteException;
@@ -23,6 +25,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.ServiceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Class to notify the user of events that happen.  This is how you tell
@@ -91,6 +94,21 @@ public class NotificationManager
         notify(null, id, notification);
     }
 
+    public void updatePackageList() {
+    	try {
+    		if(mContext.getPackageName().equals("com.cyanogenmod.cmparts")) {
+    			return;
+    		}
+    		//File file = new File(appContext.getFilesDir(), "trackball_lights");
+    		FileOutputStream fos = mContext.openFileOutput("trackball_lights", Context.MODE_WORLD_READABLE);
+    		String blank = "yes";
+    		fos.write(blank.getBytes());
+    		fos.close();
+    	} catch(Exception e) {
+    		Log.d("WriteApps", "Error: " + e.toString() );
+    	}
+    }
+
     /**
      * Persistent notification on the status bar,
      *
@@ -106,9 +124,14 @@ public class NotificationManager
         int[] idOut = new int[1];
         INotificationManager service = getService();
         String pkg = mContext.getPackageName();
+        if(((notification.flags & Notification.FLAG_ONGOING_EVENT) == 0)
+	|| ((notification.flags & Notification.FLAG_FOREGROUND_SERVICE) == 0)) {
+		updatePackageList();
+        }
         if (localLOGV) Log.v(TAG, pkg + ": notify(" + id + ", " + notification + ")");
         try {
             service.enqueueNotificationWithTag(pkg, tag, id, notification, idOut);
+            //Log.i("NotificationManager", "Pulsing: " + pkg);
             if (id != idOut[0]) {
                 Log.w(TAG, "notify: id corrupted: sent " + id + ", got back " + idOut[0]);
             }
