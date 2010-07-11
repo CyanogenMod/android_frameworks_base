@@ -35,8 +35,10 @@
 
 #define RENDER_EFFECT_NIGHT 1
 #define RENDER_EFFECT_TERMINAL 2
-#define RENDER_EFFECT_AMBER 3
-#define RENDER_EFFECT_SALMON 4
+#define RENDER_EFFECT_BLUE 3
+#define RENDER_EFFECT_AMBER 4
+#define RENDER_EFFECT_SALMON 5
+#define RENDER_EFFECT_FUSCIA 6
 
 namespace android {
 
@@ -453,11 +455,17 @@ void LayerBase::drawWithOpenGL(const Region& clip, const Texture& texture) const
             case RENDER_EFFECT_TERMINAL:
                 glColor4x(0, alpha, 0, alpha);
                 break;
+            case RENDER_EFFECT_BLUE:
+                glColor4x(0, 0, alpha, alpha);
+                break;
             case RENDER_EFFECT_AMBER:
                 glColor4x(alpha, alpha*0.75, 0, alpha);
                 break;
             case RENDER_EFFECT_SALMON:
                 glColor4x(alpha, alpha*0.5, alpha*0.5, alpha);
+                break;
+            case RENDER_EFFECT_FUSCIA:
+                glColor4x(alpha, 0, alpha*0.5, alpha);
                 break;
         }
         glEnable(GL_BLEND);
