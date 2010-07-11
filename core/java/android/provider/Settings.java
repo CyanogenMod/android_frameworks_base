@@ -3680,6 +3680,13 @@ public final class Settings {
 
 
         /**
+         * Whether to allow move of any app to external storage
+         * @hide
+         */
+        public static final String ALLOW_MOVE_ALL_APPS_EXTERNAL =
+                "allow_move_all_apps_external";
+        
+        /**
          * @hide
          */
         public static final String[] SETTINGS_TO_BACKUP = {
