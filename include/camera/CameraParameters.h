@@ -25,6 +25,12 @@ namespace android {
 class CameraParameters
 {
 public:
+    enum {
+        CAMERA_ORIENTATION_UNKNOWN = 0,
+        CAMERA_ORIENTATION_PORTRAIT = 1,
+        CAMERA_ORIENTATION_LANDSCAPE = 2,
+    };
+    
     CameraParameters();
     CameraParameters(const String8 &params) { unflatten(params); }
     ~CameraParameters();
@@ -51,6 +57,9 @@ public:
     void getPictureSize(int *width, int *height) const;
     void setPictureFormat(const char *format);
     const char *getPictureFormat() const;
+
+    int getOrientation() const;
+    void setOrientation(int orientation);
 
     void dump() const;
     status_t dump(int fd, const Vector<String16>& args) const;

@@ -48,9 +48,13 @@ LOCAL_SHARED_LIBRARIES:= \
     libutils \
     libbinder \
     libcutils \
-    libmedia \
-    libcamera_client \
-    libsurfaceflinger_client
+    libmedia
+
+ifneq ($(BOARD_USES_ECLAIR_LIBCAMERA),true)
+    LOCAL_SHARED_LIBRARIES += \
+    	libsurfaceflinger_client \
+    	libcamera_client
+endif
 
 LOCAL_MODULE:= libcameraservice
 

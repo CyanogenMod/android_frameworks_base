@@ -21,8 +21,12 @@ LOCAL_SHARED_LIBRARIES := \
     libui \
 	libskia \
     libEGL \
-    libGLESv1_CM \
-    libsurfaceflinger_client
+    libGLESv1_CM
+    
+ifneq ($(BOARD_USES_ECLAIR_LIBCAMERA),true)
+    LOCAL_SHARED_LIBRARIES += \
+    	libsurfaceflinger_client
+endif
 
 LOCAL_C_INCLUDES := \
 	$(call include-path-for, corecg graphics)

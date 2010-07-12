@@ -8,6 +8,10 @@ LOCAL_SRC_FILES:= \
 	ICameraClient.cpp \
 	ICameraService.cpp
 
+LOCAL_MODULE:= libcamera_client
+
+ifneq ($(BOARD_USES_ECLAIR_LIBCAMERA),true)
+
 LOCAL_SHARED_LIBRARIES := \
 	libcutils \
 	libutils \
@@ -16,10 +20,14 @@ LOCAL_SHARED_LIBRARIES := \
 	libsurfaceflinger_client \
 	libui
 
-LOCAL_MODULE:= libcamera_client
-
 ifeq ($(TARGET_SIMULATOR),true)
     LOCAL_LDLIBS += -lpthread
 endif
 
 include $(BUILD_SHARED_LIBRARY)
+
+else
+
+include $(BUILD_STATIC_LIBRARY)
+
+endif

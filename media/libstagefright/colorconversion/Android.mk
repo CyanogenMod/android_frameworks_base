@@ -13,9 +13,13 @@ LOCAL_SHARED_LIBRARIES :=       \
         libmedia                \
         libutils                \
         libui                   \
-        libcutils				\
-        libsurfaceflinger_client\
-        libcamera_client
+        libcutils
+
+ifneq ($(BOARD_USES_ECLAIR_LIBCAMERA),true)
+    LOCAL_SHARED_LIBRARIES += \
+    	libsurfaceflinger_client \
+    	libcamera_client
+endif
 
 LOCAL_MODULE:= libstagefright_color_conversion
 
