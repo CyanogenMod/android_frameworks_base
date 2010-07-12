@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
@@ -108,11 +109,23 @@ class OpenvpnService extends VpnService<OpenvpnProfile> {
             args.add(p.getLocalAddr());
             args.add(p.getRemoteAddr());
         }
+        if (p.getCipher() != null) {
+            args.add("--cipher");
+            args.add(p.getCipher());
+        }
+        if (p.getKeySize() != null && !p.getKeySize().equals("")) {
+            args.add("--keysize");
+            args.add(p.getKeySize());
+        }
         args.add("--up");
         args.add("/system/xbin/openvpn-up.sh");
         args.add("--script-security");
         args.add("2");
 
+        if (p.getExtra() != null && !p.getExtra().equals("")) {
+            Scanner s = new Scanner(p.getExtra());
+            while(s.hasNext()) args.add(s.next());
+        }
         DaemonProxy mtpd = getDaemons().startDaemon(MTPD);
         mtpd.sendCommand(args.toArray(new String[args.size()]));
     }

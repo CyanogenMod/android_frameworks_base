@@ -19,7 +19,7 @@ package android.net.vpn;
 import android.os.Parcel;
 
 /**
- * The profile for Openvpn type of VPN. 
+ * The profile for Openvpn type of VPN.
  * {@hide}
  */
 public class OpenvpnProfile extends VpnProfile {
@@ -56,6 +56,12 @@ public class OpenvpnProfile extends VpnProfile {
     private String mRemoteAddr;
 
     private String mDevice = DEVICE_TUN;
+
+    private String mCipher;
+
+    private int mKeySize;
+
+    private String mExtra;
 
     @Override
     public VpnType getType() {
@@ -145,11 +151,11 @@ public class OpenvpnProfile extends VpnProfile {
     public void setRedirectGateway(boolean b) {
         mRedirectGateway = b;
     }
-    
+
     public boolean getRedirectGateway() {
         return mRedirectGateway;
     }
-    
+
     public void setSupplyAddr(boolean b) {
         mSupplyAddr = b;
     }
@@ -174,6 +180,37 @@ public class OpenvpnProfile extends VpnProfile {
         return mRemoteAddr;
     }
 
+    public void setCipher(String cipher) {
+        mCipher = cipher;
+    }
+
+    public String getCipher() {
+        return mCipher;
+    }
+
+    public void setKeySize(String keysize) {
+        try {
+            if (keysize.equals("0"))
+                mKeySize = 0;
+            else
+                mKeySize = Integer.parseInt(keysize);
+        } catch (NumberFormatException e) {
+            // no update
+        }
+    }
+
+    public String getKeySize() {
+        return Integer.toString(mKeySize);
+    }
+
+    public void setExtra(String extra) {
+        mExtra = extra;
+    }
+
+    public String getExtra() {
+        return mExtra;
+    }
+
     @Override
     protected void readFromParcel(Parcel in) {
         super.readFromParcel(in);
@@ -188,6 +225,9 @@ public class OpenvpnProfile extends VpnProfile {
         mLocalAddr = in.readString();
         mRemoteAddr = in.readString();
         mDevice = in.readString();
+        mCipher = in.readString();
+        mKeySize = in.readInt();
+        mExtra = in.readString();
     }
 
     @Override
@@ -204,5 +244,8 @@ public class OpenvpnProfile extends VpnProfile {
         parcel.writeString(mLocalAddr);
         parcel.writeString(mRemoteAddr);
         parcel.writeString(mDevice);
+        parcel.writeString(mCipher);
+        parcel.writeInt(mKeySize);
+        parcel.writeString(mExtra);
     }
 }
