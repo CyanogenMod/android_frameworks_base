@@ -16,6 +16,7 @@
 
 package com.android.server.status;
 
+import android.provider.Settings;
 import android.util.Slog;
 
 public class IconData {
@@ -33,6 +34,13 @@ public class IconData {
       * Indicates ths item represents an integer displayed on top of an icon.
       */
     public static final int ICON_NUMBER = 3;
+
+    /**
+     * Default colors to use for any text appearing on each type of icon.
+     */
+    private static final int DEFAULT_TEXT_COLOR = 0xff000000;
+    private static final int DEFAULT_ICON_COLOR = 0xffffffff;
+    private static final int DEFAULT_ICON_NUMBER_COLOR = 0xffffffff;
 
     /**
       * The type of this item. One of TEXT, ICON, or LEVEL_ICON.
@@ -70,6 +78,23 @@ public class IconData {
      */
     public CharSequence text;
 
+    /**
+     * The default color of any text associated with this icon.
+     */
+    public int textColor;
+
+    /**
+     * The system setting that holds the text color for this icon.
+     */
+    public String colorSetting;
+
+    /**
+     * The system setting that determines whether the icon is visible or not.
+     * Currently this only applies to the TEXT type.
+     */
+    public String visibleSetting;
+    public boolean defVisibility;
+
     private IconData() {
     }
 
@@ -82,19 +107,26 @@ public class IconData {
         data.iconId = iconId;
         data.iconLevel = iconLevel;
         data.number = number;
+        data.textColor = DEFAULT_ICON_COLOR;
+        data.colorSetting = Settings.System.NOTIF_COUNT_COLOR;
         return data;
     }
     
-    public static IconData makeText(String slot, CharSequence text) {
+    public static IconData makeText(String slot, CharSequence text, String colorSetting,
+            String visibleSetting, boolean defVisibility) {
         IconData data = new IconData();
         data.type = TEXT;
         data.slot = slot;
         data.text = text;
+        data.textColor = DEFAULT_TEXT_COLOR;
+        data.colorSetting = colorSetting;
+        data.visibleSetting = visibleSetting;
+        data.defVisibility = defVisibility;
         return data;
     }
 
     public static IconData makeIconNumber(String slot,
-            String iconPackage, int iconId, int iconLevel, int number) {
+            String iconPackage, int iconId, int iconLevel, int number, String colorSetting) {
         IconData data = new IconData();
         data.type = ICON_NUMBER;
         data.slot = slot;
@@ -102,6 +134,8 @@ public class IconData {
         data.iconId = iconId;
         data.iconLevel = iconLevel;
         data.number = number;
+        data.textColor = DEFAULT_ICON_NUMBER_COLOR;
+        data.colorSetting = colorSetting;
         return data;
     }
 
@@ -113,6 +147,10 @@ public class IconData {
         this.iconLevel = that.iconLevel;
         this.number = that.number;
         this.text = that.text; // should we clone this?
+        this.textColor = that.textColor;
+        this.colorSetting = that.colorSetting;
+        this.visibleSetting = that.visibleSetting;
+        this.defVisibility = that.defVisibility;
     }
 
     public IconData clone() {
