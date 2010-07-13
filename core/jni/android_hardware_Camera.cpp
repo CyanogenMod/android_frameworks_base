@@ -476,7 +476,8 @@ static void android_hardware_Camera_setParameters(JNIEnv *env, jobject thiz, jst
         env->ReleaseStringCritical(params, str);
     }
     if (camera->setParameters(params8) != NO_ERROR) {
-        jniThrowException(env, "java/lang/RuntimeException", "setParameters failed");
+	LOGE("setParameters failed!");
+        //jniThrowException(env, "java/lang/RuntimeException", "setParameters failed");
         return;
     }
 }
