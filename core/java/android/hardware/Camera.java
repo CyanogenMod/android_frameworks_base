@@ -1739,7 +1739,11 @@ public class Camera {
          * @param value zoom value. The valid range is 0 to {@link #getMaxZoom}.
          */
         public void setZoom(int value) {
-            set(KEY_ZOOM, value);
+            if (mMap.containsKey("taking-picture-zoom")) {
+                set("taking-picture-zoom", value);
+            } else {
+                set(KEY_ZOOM, value);
+            }
         }
 
         /**
@@ -1763,7 +1767,11 @@ public class Camera {
          * @return the maximum zoom value supported by the camera.
          */
         public int getMaxZoom() {
-            return getInt(KEY_MAX_ZOOM, 0);
+            if (mMap.containsKey("taking-picture-zoom-max")) {
+                return getInt("taking-picture-zoom-max", 0);
+            } else {
+                return getInt(KEY_MAX_ZOOM, 0);
+            }
         }
 
         /**
