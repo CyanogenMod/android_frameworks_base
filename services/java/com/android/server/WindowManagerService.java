@@ -6641,7 +6641,7 @@ public class WindowManagerService extends IWindowManager.Stub
                                         mMouseSurface.setLayer(top.mAnimLayer + 1);
                                         if (!mMouseDisplayed) {
                                             mMouseSurface.show();
-                                            mMouseDisplayede = true;
+                                            mMouseDisplayed = true;
                                         }
                                         mMlx = mcx;
                                         mMly = mcy;
