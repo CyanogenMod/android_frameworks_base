@@ -392,7 +392,7 @@ public class WindowManagerService extends IWindowManager.Stub
     boolean mBlurShown;
 
     Surface mMouseSurface;
-    int mShowMouse = 0;
+    boolean mMouseDisplayed = false;
     int mMlx;
     int mMly;
     int mMlw;
@@ -6613,6 +6613,12 @@ public class WindowManagerService extends IWindowManager.Stub
                             case RawInputEvent.CLASS_TOUCHSCREEN:
                                 //Slog.i(TAG, "Read next event " + ev);
                                 dispatchPointer(ev, (MotionEvent)ev.event, 0, 0);
+                                if (mMouseDisplayed) {
+                                    Surface.openTransaction();
+                                    mMouseSurface.hide();
+                                    Surface.closeTransaction();
+                                    mMouseDisplayed = false;
+                                }
                                 break;
                             case RawInputEvent.CLASS_MOUSE:
                                 MotionEvent mmev = (MotionEvent)ev.event;
@@ -6633,9 +6639,9 @@ public class WindowManagerService extends IWindowManager.Stub
 
                                         mMouseSurface.setPosition(mcx, mcy);
                                         mMouseSurface.setLayer(top.mAnimLayer + 1);
-                                        if (mShowMouse != 1) {
+                                        if (!mMouseDisplayed) {
                                             mMouseSurface.show();
-                                            mShowMouse = 1;
+                                            mMouseDisplayede = true;
                                         }
                                         mMlx = mcx;
                                         mMly = mcy;
