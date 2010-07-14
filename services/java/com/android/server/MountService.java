@@ -272,6 +272,8 @@ class MountService extends IMountService.Stub
     private static final int RETRY_UNMOUNT_DELAY = 30; // in ms
     private static final int MAX_UNMOUNT_RETRIES = 4;
 
+    /*used to send the mount command after state is idle.*/
+    boolean insertionMountPending = false;
     class UnmountCallBack {
         final String path;
         final boolean force;
@@ -636,6 +638,26 @@ class MountService extends IMountService.Stub
              * Format: "NNN Volume <label> <path> state changed
              * from <old_#> (<old_str>) to <new_#> (<new_str>)"
              */
+            if ((Integer.parseInt(cooked[10]) == VolumeState.Idle) &&
+                 insertionMountPending == true) {
+                /* If the state moves to idle after a insertion
+                 * try to mount the device "Insertion mount"
+                 */
+                final String path = cooked[3];
+                insertionMountPending = false;
+                new Thread() {
+                    public void run() {
+                        try {
+                            int rc;
+                            if ((rc = doMountVolume(path)) != StorageResultCode.OperationSucceeded) {
+                                Slog.w(TAG, String.format("Insertion mount failed (%d)", rc));
+                            }
+                        } catch (Exception ex) {
+                            Slog.w(TAG, "Failed to mount media on insertion", ex);
+                        }
+                    }
+                }.start();
+           }
             notifyVolumeStateChange(
                     cooked[2], cooked[3], Integer.parseInt(cooked[7]),
                             Integer.parseInt(cooked[10]));
@@ -667,18 +689,11 @@ class MountService extends IMountService.Stub
             }
 
             if (code == VoldResponseCode.VolumeDiskInserted) {
-                new Thread() {
-                    public void run() {
-                        try {
-                            int rc;
-                            if ((rc = doMountVolume(path)) != StorageResultCode.OperationSucceeded) {
-                                Slog.w(TAG, String.format("Insertion mount failed (%d)", rc));
-                            }
-                        } catch (Exception ex) {
-                            Slog.w(TAG, "Failed to mount media on insertion", ex);
-                        }
-                    }
-                }.start();
+               /* Instead of tring to mount here, wait for
+                * the state to be Idle before atempting the
+                * insertion mount, else "insertion mount" may fail.
+                */
+               insertionMountPending = true;
             } else if (code == VoldResponseCode.VolumeDiskRemoved) {
                 /*
                  * This event gets trumped if we're already in BAD_REMOVAL state
