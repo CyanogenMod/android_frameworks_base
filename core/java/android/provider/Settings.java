@@ -1943,7 +1943,19 @@ public final class Settings {
          * @hide
          */
         public static final String MENU_UNLOCK_SCREEN = "menu_unlock_screen";
+        
+        /**
+         * Color mask tp apply to notification bar when custom is set
+         * @hide
+         */
+        public static final String NOTIF_BAR_COLOR = "notif_bar_color";
 
+        /**
+         * Whether to use custom notification bar
+         * @hide
+         */
+        public static final String NOTIF_BAR_CUSTOM = "notif_bar_custom";
+        
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
@@ -2014,7 +2026,9 @@ public final class Settings {
             HAPTIC_UP_ARRAY_DEFAULT,
             HAPTIC_LONG_ARRAY_DEFAULT,
             HAPTIC_TAP_ARRAY,
-            HAPTIC_TAP_ARRAY_DEFAULT
+            HAPTIC_TAP_ARRAY_DEFAULT,
+            NOTIF_BAR_COLOR,
+            NOTIF_BAR_CUSTOM,
         };
 
         // Settings moved to Settings.Secure

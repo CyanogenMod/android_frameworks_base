@@ -70,6 +70,9 @@ import java.util.Set;
 import android.provider.Settings;
 import java.lang.reflect.Field;
 
+import android.graphics.PorterDuff.Mode;
+import android.widget.Toast;
+
 
 /**
  * The public (ok, semi-public) service for the status bar.
@@ -107,6 +110,9 @@ public class StatusBarService extends IStatusBar.Stub
     private static final int OP_EXPAND = 5;
     private static final int OP_TOGGLE = 6;
     private static final int OP_DISABLE = 7;
+    private static final int NOT_BAR_STOCK = 10;
+    private static final int NOT_BAR_CUSTOM = 11;
+    
     private class PendingOp {
         IBinder key;
         int code;
@@ -236,6 +242,10 @@ public class StatusBarService extends IStatusBar.Stub
     private int notificationTitleColor = blackColor;
     private int notificationTextColor = blackColor;
     private int notificationTimeColor = blackColor;
+    int notBarType = 0;
+    int colorMask;
+    Mode PDMode = Mode.SCREEN;
+    
     
     // for disabling the status bar
     ArrayList<DisableRecord> mDisableRecords = new ArrayList<DisableRecord>();
@@ -267,7 +277,7 @@ public class StatusBarService extends IStatusBar.Stub
         Resources res = context.getResources();
         mRightIconSlots = res.getStringArray(com.android.internal.R.array.status_bar_icon_order);
         mRightIcons = new StatusBarIcon[mRightIconSlots.length];
-
+        getNotBarConfig();        
         ExpandedView expanded = (ExpandedView)View.inflate(context,
                 com.android.internal.R.layout.status_bar_expanded, null);
         expanded.mService = this;
@@ -281,14 +291,28 @@ public class StatusBarService extends IStatusBar.Stub
         if (bg != null) {
             mPixelFormat = bg.getOpacity();
         }
-
         mStatusBarView = sb;
+        mDateView = (DateView)sb.findViewById(R.id.date);
+        switch (notBarType) {
+            case NOT_BAR_STOCK:
+        	    break; // this is on startup, bgdrawable is already set thru xml layout;
+            case NOT_BAR_CUSTOM:
+        	    mStatusBarView.setBackgroundDrawable(res.getDrawable(com.android.internal.R.drawable.statusbar_background_sq,
+            	    colorMask, PDMode));
+        	    mDateView.setBackgroundDrawable(res.getDrawable(com.android.internal.R.drawable.statusbar_background_sq,
+            	    colorMask, PDMode));
+        	    break;
+            }
+        mDateView.setOnLongClickListener(mResetColorsListener);
+        mStatusBarView.refreshDrawableState();
+        mDateView.refreshDrawableState();
+        
         mStatusIcons = (LinearLayout)sb.findViewById(R.id.statusIcons);
         mNotificationIcons = (IconMerger)sb.findViewById(R.id.notificationIcons);
         mNotificationIcons.service = this;
         mIcons = (LinearLayout)sb.findViewById(R.id.icons);
         mTickerView = sb.findViewById(R.id.ticker);
-        mDateView = (DateView)sb.findViewById(R.id.date);
+        
 
         mExpandedDialog = new ExpandedDialog(context);
         mExpandedView = expanded;
@@ -1778,6 +1802,43 @@ public class StatusBarService extends IStatusBar.Stub
         }
     };
 
+    
+    private View.OnLongClickListener mResetColorsListener = new View.OnLongClickListener() {
+
+		@Override
+		public boolean onLongClick(View v) {
+		    updateColors();
+		    getNotBarConfig();
+		    mDateView.refreshDrawableState();
+	        mNoNotificationsTitle.refreshDrawableState();
+	        mLatestTitle.refreshDrawableState();
+	        mOngoingTitle.refreshDrawableState();
+	        mSpnLabel.refreshDrawableState();
+	        mPlmnLabel.refreshDrawableState();
+	        mClearButton.refreshDrawableState();
+	        tickerView.refreshDrawableState();
+	        Resources res = mContext.getResources();
+	        switch (notBarType) {
+	        case NOT_BAR_STOCK:
+	        	mStatusBarView.setBackgroundDrawable(res.getDrawable(com.android.internal.R.drawable.statusbar_background));
+	        	mDateView.setBackgroundDrawable(res.getDrawable(com.android.internal.R.drawable.statusbar_background));
+	        	break;
+	        case NOT_BAR_CUSTOM:
+	        	mStatusBarView.setBackgroundDrawable(res.getDrawable(com.android.internal.R.drawable.statusbar_background_sq,
+	            	    colorMask, PDMode));
+	        	mDateView.setBackgroundDrawable(res.getDrawable(com.android.internal.R.drawable.statusbar_background_sq,
+	            	    colorMask, PDMode));
+	        	break;
+	        }		    
+		    		    
+	        mStatusBarView.refreshDrawableState();
+	        mDateView.refreshDrawableState();
+			return true;
+		}
+	};
+    
+    
+    
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -1921,6 +1982,19 @@ public class StatusBarService extends IStatusBar.Stub
                     removeIcon(list.get(i).key);
                 }
             }
+        }
+    }
+    
+    private void getNotBarConfig() {
+    	int ret[];
+    	boolean useCustom = Settings.System.getInt(mContext.getContentResolver(),
+       	        Settings.System.NOTIF_BAR_CUSTOM, 0) == 1;
+        colorMask = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.NOTIF_BAR_COLOR, whiteColor);
+        if (!useCustom) {
+        	notBarType = NOT_BAR_STOCK;
+        } else {
+            notBarType = NOT_BAR_CUSTOM;
         }
     }
 }
