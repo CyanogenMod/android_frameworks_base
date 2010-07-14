@@ -13881,6 +13881,7 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
             // An app that is currently holding a wakelock also
             // counts as being in the foreground.
             adj = FOREGROUND_APP_ADJ;
+            schedGroup = Process.THREAD_GROUP_DEFAULT;
             app.adjType = "wakelock";
         } else if (app.foregroundServices) {
             // The user is aware of this app, so make it visible.
