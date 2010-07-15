@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * Copyright (c) 2010, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1295,6 +1296,13 @@ public class WebView extends AbsoluteLayout
      */
     public void setJsFlags(String flags) {
         mWebViewCore.sendMessage(EventHub.SET_JS_FLAGS, flags);
+    }
+
+    /**
+     * @hide pending API council approval.
+     */
+    public void startDnsPrefetch() {
+        mWebViewCore.sendMessage(EventHub.START_DNS_PREFETCH);
     }
 
     /**
