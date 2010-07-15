@@ -65,6 +65,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+//For Notification Colors.
+import android.graphics.Color;
+
 class NotificationManagerService extends INotificationManager.Stub
 {
     private static final String TAG = "NotificationService";
@@ -1035,10 +1038,29 @@ class NotificationManagerService extends INotificationManager.Stub
             updateLightsLocked();
         }
     }
-
+    //Grab our Array Information For Lights
+	public static String[] getArray(String mGetFrom) {
+		if(mGetFrom == null || mGetFrom == "|" || mGetFrom.length() == 0) {
+			String[] tempfalse = new String[15];
+			return tempfalse;
+		}
+		String[] temp = mGetFrom.split("\\|");
+		return temp;
+	}
+	
+	public static String[] getPackageAndColor(String mString) {
+		if(mString == null || mString == "=" || mString.length() == 0) {
+			return null;
+		}
+		String[] temp;
+		temp = mString.split("=");
+		return temp;
+	}
+	
     // lock on mNotificationList
     private void updateLightsLocked()
     {
+    	String[] mPackages;
         // Battery low always shows, other states only show if charging.
         if (mBatteryLow) {
             if (mBatteryCharging) {
@@ -1057,7 +1079,7 @@ class NotificationManagerService extends INotificationManager.Stub
         } else {
             mBatteryLight.turnOff();
         }
-
+        
         // handle notification lights
         if (mLedNotification == null) {
             // get next notification, if any
@@ -1066,7 +1088,8 @@ class NotificationManagerService extends INotificationManager.Stub
                 mLedNotification = mLights.get(n-1);
             }
         }
-
+        String mPackageList = Settings.System.getString(mContext.getContentResolver(), Settings.System.NOTIFICATION_PACKAGE_COLORS);
+        mPackages = getArray(mPackageList);
         int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_SCREEN_ON, 0);
  //       String packages[][] = NotificationActivity.PackageArray;
         // we only flash if screen is off and persistent pulsing is enabled
@@ -1082,6 +1105,16 @@ class NotificationManagerService extends INotificationManager.Stub
                 ledARGB = mDefaultNotificationColor;
                 ledOnMS = mDefaultNotificationLedOn;
                 ledOffMS = mDefaultNotificationLedOff;
+            }
+            int i = 0;
+            for(i = 0; i < mPackages.length; i++) {
+            	String[] mPackageInfo = getPackageAndColor(mPackages[i]);
+            	if(mPackageInfo == null) {
+            		break;
+            	}
+            	if(mPackageInfo[0].matches(mLedNotification.pkg)) {
+            		ledARGB = Color.parseColor(mPackageInfo[1].toLowerCase());
+            	}
             }
             Log.i("Lights", "Color: " + ledARGB + " Package: " + mLedNotification.pkg);
             if (mNotificationPulseEnabled) {

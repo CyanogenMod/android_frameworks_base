@@ -1949,6 +1949,12 @@ public final class Settings {
          * @hide
          */
         public static final String TRACKBALL_SCREEN_ON = "trackball_screen_on";
+    
+        /**
+         * Trackball Notification Colors. The value is String  pkg=color|pkg=color
+         * @hide
+         */
+        public static final String NOTIFICATION_PACKAGE_COLORS = "|";
         
         /**
          * Whether to unlock the menu key.  The value is boolean (1 or 0).
