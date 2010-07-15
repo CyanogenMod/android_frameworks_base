@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * Copyright (c) 2010, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -197,6 +198,8 @@ final class WebViewCore {
         // The transferMessages call will transfer all pending messages to the
         // WebCore thread handler.
         mEventHub.transferMessages();
+
+        DnsResolver.createDnsResolver();
 
         // Send a message back to WebView to tell it that we have set up the
         // WebCore thread.
@@ -779,6 +782,7 @@ final class WebViewCore {
             "ON_RESUME",    // = 144
             "FREE_MEMORY",  // = 145
             "VALID_NODE_BOUNDS", // = 146
+            "START_DNS_PREFETCH",  // = 151
         };
 
     class EventHub {
@@ -847,6 +851,7 @@ final class WebViewCore {
 
         // Network-based messaging
         static final int CLEAR_SSL_PREF_TABLE = 150;
+        static final int START_DNS_PREFETCH = 151;
 
         // Test harness messages
         static final int REQUEST_EXT_REPRESENTATION = 160;
@@ -952,6 +957,7 @@ final class WebViewCore {
                             break;
 
                         case LOAD_URL: {
+                            DnsResolver.getInstance().pauseDnsResolverThreadPool();
                             GetUrlData param = (GetUrlData) msg.obj;
                             loadUrl(param.mUrl, param.mExtraHeaders);
                             break;
@@ -1008,6 +1014,7 @@ final class WebViewCore {
                             break;
 
                         case RELOAD:
+                            DnsResolver.getInstance().pauseDnsResolverThreadPool();
                             mBrowserFrame.reload(false);
                             break;
 
@@ -1051,6 +1058,7 @@ final class WebViewCore {
                             if (!mBrowserFrame.committed() && msg.arg1 == -1 &&
                                     (mBrowserFrame.loadType() ==
                                     BrowserFrame.FRAME_LOADTYPE_STANDARD)) {
+                                DnsResolver.getInstance().pauseDnsResolverThreadPool();
                                 mBrowserFrame.reload(true);
                             } else {
                                 mBrowserFrame.goBackOrForward(msg.arg1);
@@ -1365,6 +1373,10 @@ final class WebViewCore {
                             BrowserFrame.sJavaBridge.removePackageName(
                                     (String) msg.obj);
                             break;
+
+                        case START_DNS_PREFETCH:
+                            mBrowserFrame.startDnsPrefetch();
+                            break;
                     }
                 }
             };
@@ -1552,6 +1564,7 @@ final class WebViewCore {
             }
             mEventHub.blockMessages();
         }
+        DnsResolver.getInstance().destroyDnsResolver();
     }
 
     //-------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * Copyright (c) 2010, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -339,6 +340,34 @@ public class Browser {
             if (c != null) c.close();
         }
         return str;
+    }
+
+    /**
+     *  Returns top num of visited URLs in the history.
+     *  Requires {@link android.Manifest.permission#READ_HISTORY_BOOKMARKS}
+     *  @param cr   The ContentResolver used to access the database.
+     *  @hide pending API council approval
+     */
+    public static final String[] getVisitedHistoryByOrder(ContentResolver cr, String order, int num) {
+        try {
+            String[] projection = new String[] {
+                "url"
+            };
+            Cursor c = cr.query(BOOKMARKS_URI, projection, "visits > 0", null,
+                    order);
+
+            int count = (c.getCount() > num)? num:c.getCount();
+            String[] str = new String[count];
+            int i = 0;
+            while ((i<count) && c.moveToNext()) {
+                str[i] = c.getString(0);
+                i++;
+            }
+            c.deactivate();
+            return str;
+        } catch (IllegalStateException e) {
+            return new String[0];
+        }
     }
 
     /**
