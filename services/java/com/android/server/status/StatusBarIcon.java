@@ -179,6 +179,9 @@ class StatusBarIcon {
         }
         switch (data.type) {
         case IconData.TEXT:
+            data.textColor = Settings.System.getInt(mContext.getContentResolver(),
+                    data.colorSetting, data.textColor);
+            mTextView.setTextColor(data.textColor);
             if (!TextUtils.equals(mData.text, data.text)) {
                 TextView tv = mTextView;
                 tv.setText(data.text);
@@ -194,6 +197,9 @@ class StatusBarIcon {
                 im.setImageDrawable(getIcon(context, data));
                 im.setImageLevel(data.iconLevel);
             }
+            data.textColor = Settings.System.getInt(mContext.getContentResolver(),
+                    data.colorSetting, data.textColor);
+            mNumberView.setTextColor(data.textColor);
             if (mData.number != data.number) {
                 TextView nv = mNumberView;
                 if (data.number > 0) {
