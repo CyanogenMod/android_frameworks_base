@@ -4413,26 +4413,29 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
 
     public void noteStartWakeLock(int uid, String tag, int type) {
         Integer iuid = Integer.valueOf(uid);
-        synchronized (mUidWakeLocks) {
+        synchronized (this) {
             Integer count = mUidWakeLocks.get(iuid);
             if (count == null) {
                 count = new Integer(1);
+                mUidWakeLocks.put(iuid, count);
+                updateOomAdjLocked();
             } else {
                 ++count;
+                mUidWakeLocks.put(iuid, count);
             }
-            mUidWakeLocks.put(iuid, count);
         }
     }
 
     public void noteStopWakeLock(int uid, String tag, int type) {
         Integer iuid = Integer.valueOf(uid);
-        synchronized (mUidWakeLocks) {
+        synchronized (this) {
             Integer count = mUidWakeLocks.get(iuid);
             if (count != null) {
                 if (--count > 0) {
                     mUidWakeLocks.put(iuid, count);
                 } else {
                     mUidWakeLocks.remove(iuid);
+                    updateOomAdjLocked();
                 }
             } else {
                 Log.e(TAG, "Stopping stopped wake lock for uid "
