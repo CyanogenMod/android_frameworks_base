@@ -13814,7 +13814,13 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
         int adj;
         int schedGroup;
         int N;
-        if (app == TOP_APP) {
+        if ("com.android.mms".equals(app.processName)) {
+            // MMS can die in situations of heavy memory pressure.
+            // Always push it to the top.
+            adj = FOREGROUND_APP_ADJ;
+            schedGroup = Process.THREAD_GROUP_DEFAULT;
+            app.adjType = "mms";
+        } else if (app == TOP_APP) {
             // The last app on the list is the foreground app.
             adj = FOREGROUND_APP_ADJ;
             schedGroup = Process.THREAD_GROUP_DEFAULT;
