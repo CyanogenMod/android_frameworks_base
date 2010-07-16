@@ -53,6 +53,16 @@ static void setLogLevel(int level) {
 
 // ----------------------------------------------------------------------------
 
+struct camera_size_type {
+    int width;
+    int height;
+};
+
+static const camera_size_type preview_sizes[] = {
+    { 1280, 720 }, // 720P
+    { 768, 432 },
+};
+
 static int getCallingPid() {
     return IPCThreadState::self()->getCallingPid();
 }
@@ -551,6 +561,13 @@ status_t CameraService::Client::registerPreviewBuffers() {
     CameraParameters params(mHardware->getParameters());
     params.getPreviewSize(&w, &h);
 
+    //for 720p recording , preview can be 800X448
+    if(w ==  preview_sizes[0].width && h== preview_sizes[0].height){
+        LOGD("registerpreviewbufs :changing dimensions to 768X432 for 720p recording.");
+        w = preview_sizes[1].width;
+        h = preview_sizes[1].height;
+    }
+
     // FIXME: don't use a hardcoded format here.
     ISurface::BufferHeap buffers(w, h, w, h,
                                  HAL_PIXEL_FORMAT_YCrCb_420_SP,
@@ -569,6 +586,13 @@ status_t CameraService::Client::setOverlay() {
     int w, h;
     CameraParameters params(mHardware->getParameters());
     params.getPreviewSize(&w, &h);
+
+    //for 720p recording , preview can be 800X448
+    if(w == preview_sizes[0].width && h==preview_sizes[0].height){
+        LOGD("Changing overlay dimensions to 768X432 for 720p recording.");
+        w = preview_sizes[1].width;
+        h = preview_sizes[1].height;
+    }
 
     if (w != mOverlayW || h != mOverlayH || mOrientationChanged) {
         // Force the destruction of any previous overlay
