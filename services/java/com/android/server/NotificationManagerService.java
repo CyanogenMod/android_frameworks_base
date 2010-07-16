@@ -1110,7 +1110,7 @@ class NotificationManagerService extends INotificationManager.Stub
             for(i = 0; i < mPackages.length; i++) {
             	String[] mPackageInfo = getPackageAndColor(mPackages[i]);
             	if(mPackageInfo == null) {
-            		break;
+            		continue;
             	}
             	if(mPackageInfo[0].matches(mLedNotification.pkg)) {
             		ledARGB = Color.parseColor(mPackageInfo[1].toLowerCase());
