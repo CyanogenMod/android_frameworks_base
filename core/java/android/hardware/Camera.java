@@ -87,9 +87,20 @@ public class Camera {
      * Returns a new Camera object.
      */
     public static Camera open() {
+        CameraSwitch.openMainCamera();
         return new Camera();
     }
 
+    /**
+     * For secondary camera via HTC api
+     * 
+     * @hide
+     */
+    protected static Camera open(String cameraNode) {
+        CameraSwitch.openCamera(cameraNode);
+        return new Camera();
+    }
+    
     Camera() {
         mShutterCallback = null;
         mRawImageCallback = null;
