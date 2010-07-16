@@ -8,7 +8,7 @@ package android.hardware;
 public class HtcFrontFacingCamera extends Camera {
 
     public static Camera getCamera() {
-        return Camera.open(CameraSwitch.SWITCH_CAMERA_SECONDARY);
+        return open(CameraSwitch.SWITCH_CAMERA_SECONDARY);
     }
     
 }
