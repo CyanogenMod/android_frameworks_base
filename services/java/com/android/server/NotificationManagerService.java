@@ -1091,7 +1091,7 @@ class NotificationManagerService extends INotificationManager.Stub
         String mPackageList = Settings.System.getString(mContext.getContentResolver(), Settings.System.NOTIFICATION_PACKAGE_COLORS);
         mPackages = getArray(mPackageList);
         int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_SCREEN_ON, 0);
- //       String packages[][] = NotificationActivity.PackageArray;
+
         // we only flash if screen is off and persistent pulsing is enabled
         // and we are not currently in a call
         if (mLedNotification == null || (mScreenOn && (mPulseScreen == 0)) || mInCall) {
@@ -1116,7 +1116,7 @@ class NotificationManagerService extends INotificationManager.Stub
             		ledARGB = Color.parseColor(mPackageInfo[1].toLowerCase());
             	}
             }
-            Log.i("Lights", "Color: " + ledARGB + " Package: " + mLedNotification.pkg);
+            Log.i("Lights", "Color: " + ledARGB + " Package: " + mLedNotification.pkg);           
             if (mNotificationPulseEnabled) {
                 // pulse repeatedly
                 mNotificationLight.setFlashing(ledARGB, LightsService.LIGHT_FLASH_TIMED,

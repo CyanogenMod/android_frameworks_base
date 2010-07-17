@@ -1957,6 +1957,12 @@ public final class Settings {
         public static final String NOTIFICATION_PACKAGE_COLORS = "|";
         
         /**
+         * Trackball Notification Colors Debugging. The value is boolean (1 or 0)
+         * @hide
+         */
+        public static final String NOTIFICATION_PACKAGE_COLORS_GET_PACK = "0";
+        
+        /**
          * Whether to unlock the menu key.  The value is boolean (1 or 0).
          * @hide
          */
