@@ -900,7 +900,12 @@ public class ThrottleService extends IThrottleManager.Stub {
                 dataFile = new File(throttleDir, imsiHash);
             }
             // touch the file so it's not LRU
-            dataFile.setLastModified(System.currentTimeMillis());
+	    if (System.currentTimeMillis() >= 0) {
+		dataFile.setLastModified(System.currentTimeMillis());
+	    } else {
+		// system clock is out of whack, but that doesn't mean we can't boot
+		dataFile.setLastModified(Long.MAX_VALUE);
+	    }
             checkAndDeleteLRUDataFile(throttleDir);
             return dataFile;
         }
