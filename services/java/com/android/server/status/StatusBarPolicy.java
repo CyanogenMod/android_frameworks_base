@@ -580,7 +580,12 @@ public class StatusBarPolicy {
         if (b24) {
             res = R.string.twenty_four_hour_time_format;
         } else {
-            res = R.string.twelve_hour_time_format;
+            if (Settings.System.getInt(mContext.getContentResolver(), Settings.System.SHOW_TWELVE_HOUR_CLOCK_PERIOD, 1) == 1) {
+                res = R.string.twelve_hour_time_format;
+            }
+            else {
+                res = R.string.twelve_hour_time_format_no_period;
+            }
         }
 
         final char MAGIC1 = '\uEF00';

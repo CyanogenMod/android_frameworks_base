@@ -1709,6 +1709,12 @@ public final class Settings {
          */
         public static final String BATTERY_PERCENTAGE_STATUS_COLOR = "battery_status_color_title";
         
+         /**
+         * Specifies whether to show AM/PM indicators for 12-hour clock
+         * @hide
+         */
+        public static final String SHOW_TWELVE_HOUR_CLOCK_PERIOD = "show_clock_period";
+        
         /**
          * Whether the audible DTMF tones are played by the dialer when dialing. The value is
          * boolean (1 or 0).
