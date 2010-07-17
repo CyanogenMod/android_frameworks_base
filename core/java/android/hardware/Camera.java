@@ -92,11 +92,9 @@ public class Camera {
     }
 
     /**
-     * For secondary camera via HTC api
-     * 
-     * @hide
+     * Returns a new Camera object for the given cameraNode
      */
-    protected static Camera open(String cameraNode) {
+    public static Camera open(String cameraNode) {
         CameraSwitch.openCamera(cameraNode);
         return new Camera();
     }

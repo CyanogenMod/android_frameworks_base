@@ -9,8 +9,6 @@ import java.io.IOException;
 
 /**
  * Handle switching for devices with dual cameras.
- * 
- * @hide
  */
 public class CameraSwitch {
     
