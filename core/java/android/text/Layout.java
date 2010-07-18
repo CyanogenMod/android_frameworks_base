@@ -305,13 +305,13 @@ public abstract class Layout {
                     if (spans[n] instanceof LeadingMarginSpan) {
                         LeadingMarginSpan margin = (LeadingMarginSpan) spans[n];
 
-                        if (dir == DIR_RIGHT_TO_LEFT) {
-                            margin.drawLeadingMargin(c, paint, right, dir, ltop,
-                                                     lbaseline, lbottom, buf,
-                                                     start, end, isFirstParaLine, this);
-                                
-                            right -= margin.getLeadingMargin(isFirstParaLine);
-                        } else {
+                       // if (dir == DIR_RIGHT_TO_LEFT) {
+                       //     margin.drawLeadingMargin(c, paint, right, dir, ltop,
+                         //                            lbaseline, lbottom, buf,
+                          //                           start, end, isFirstParaLine, this);
+                          //      
+                         //   right -= margin.getLeadingMargin(isFirstParaLine);
+                        //} else {
                             margin.drawLeadingMargin(c, paint, left, dir, ltop,
                                                      lbaseline, lbottom, buf,
                                                      start, end, isFirstParaLine, this);
@@ -320,7 +320,7 @@ public abstract class Layout {
                             if (margin instanceof LeadingMarginSpan.LeadingMarginSpan2) {
                                 int count = ((LeadingMarginSpan.LeadingMarginSpan2)margin).getLeadingMarginLineCount();
                                 useMargin = count > i;
-                            }
+                          //  }
                             left += margin.getLeadingMargin(useMargin);
                         }
                     }
