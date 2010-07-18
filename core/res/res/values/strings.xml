@@ -2281,7 +2281,7 @@
     <!-- Shown when the users bandwidth is reduced because of excessive data use -->
     <string name="throttled_notification_title">Mobile data limit exceeded</string>
     <string name="throttled_notification_message">Touch to learn more about mobile data use</string>
-    
+
     <!-- Reboot recommended after applying color changes (CM) -->
     <string name="toast_reboot_recommend">Caution: Reboot recommended after finishing customization!</string>
 </resources>

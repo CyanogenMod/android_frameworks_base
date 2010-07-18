@@ -873,4 +873,7 @@
     <string name="throttle_warning_notification_message" msgid="2609734763845705708">"Weitere Informationen über die Mobildatennutzung durch Berühren aufrufen"</string>
     <string name="throttled_notification_title" msgid="6269541897729781332">"Mobildatenlimit überschritten"</string>
     <string name="throttled_notification_message" msgid="4712369856601275146">"Weitere Informationen über die Mobildatennutzung durch Berühren aufrufen"</string>
+
+    <!-- Reboot recommended after applying color changes (CM) -->
+    <string name="toast_reboot_recommend">Achtung: Neustart wird empfohlen nach Beendigung der Anpassungen!</string>
 </resources>
