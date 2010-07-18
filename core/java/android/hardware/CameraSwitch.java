@@ -8,7 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 /**
- * Handle switching for devices with dual cameras.
+ * Handle switching for HTC devices with dual cameras.
  */
 public class CameraSwitch {
     
@@ -20,13 +20,15 @@ public class CameraSwitch {
     
     private static final String LOG_TAG = "CameraSwitch";
     
-    private static boolean hasHTCCameraSwitch() {
+    private static final boolean HAS_CAMERA_SWITCH;
+    
+    static {
         final File file = new File(SWITCH_CAMERA_FILE_PATH);
-        return file.exists();
+        HAS_CAMERA_SWITCH = file.exists();
     }
     
     private static boolean setHTCCameraSwitch(String cameraSwitch) {
-        if (!hasHTCCameraSwitch()) {
+        if (!HAS_CAMERA_SWITCH) {
             return false;
         }
         
@@ -72,4 +74,7 @@ public class CameraSwitch {
         setHTCCameraSwitch(SWITCH_CAMERA_MAIN);
     }
     
+    public static boolean hasCameraSwitch() {
+        return HAS_CAMERA_SWITCH;
+    }
 }
