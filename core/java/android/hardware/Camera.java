@@ -768,11 +768,11 @@ public class Camera {
         private static final String KEY_ZOOM_SUPPORTED = "zoom-supported";
         private static final String KEY_SMOOTH_ZOOM_SUPPORTED = "smooth-zoom-supported";
         private static final String KEY_SHARPNESS = "sharpness";
-        private static final String KEY_MAX_SHARPNESS = "max-sharpness";
+        private static final String KEY_MAX_SHARPNESS = "sharpness-max";
         private static final String KEY_CONTRAST = "contrast";
-        private static final String KEY_MAX_CONTRAST = "max-contrast";
+        private static final String KEY_MAX_CONTRAST = "contrast-max";
         private static final String KEY_SATURATION = "saturation";
-        private static final String KEY_MAX_SATURATION = "max-saturation";
+        private static final String KEY_MAX_SATURATION = "saturation-max";
         // Parameter key suffix for supported values.
         private static final String SUPPORTED_VALUES_SUFFIX = "-values";
 
@@ -1027,7 +1027,8 @@ public class Camera {
          * @return the int value of the parameter
          */
         public int getInt(String key) {
-            return Integer.parseInt(mMap.get(key));
+            String value = mMap.get(key);
+            return value == null ? 0 : Integer.parseInt(value);
         }
 
         /**
