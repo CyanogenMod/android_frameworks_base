@@ -1626,6 +1626,12 @@ public final class Settings {
         public static final String DBM_COLOR = "dbm_color";
 
         /**
+         * Specifies whether to prompt on the power dialog
+         * @hide
+         */
+        public static final String POWER_DIALOG_PROMPT = "power_dialog_prompt";
+
+        /**
          * Specifies notification count color
          * @hide
          */
