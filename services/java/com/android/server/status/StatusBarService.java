@@ -303,7 +303,6 @@ public class StatusBarService extends IStatusBar.Stub
             	    colorMask, PDMode));
         	    break;
             }
-        mDateView.setOnLongClickListener(mResetColorsListener);
         mStatusBarView.refreshDrawableState();
         mDateView.refreshDrawableState();
         
@@ -1801,43 +1800,6 @@ public class StatusBarService extends IStatusBar.Stub
             addPendingOp(OP_EXPAND, null, false);
         }
     };
-
-    
-    private View.OnLongClickListener mResetColorsListener = new View.OnLongClickListener() {
-
-		@Override
-		public boolean onLongClick(View v) {
-		    updateColors();
-		    getNotBarConfig();
-		    mDateView.refreshDrawableState();
-	        mNoNotificationsTitle.refreshDrawableState();
-	        mLatestTitle.refreshDrawableState();
-	        mOngoingTitle.refreshDrawableState();
-	        mSpnLabel.refreshDrawableState();
-	        mPlmnLabel.refreshDrawableState();
-	        mClearButton.refreshDrawableState();
-	        tickerView.refreshDrawableState();
-	        Resources res = mContext.getResources();
-	        switch (notBarType) {
-	        case NOT_BAR_STOCK:
-	        	mStatusBarView.setBackgroundDrawable(res.getDrawable(com.android.internal.R.drawable.statusbar_background));
-	        	mDateView.setBackgroundDrawable(res.getDrawable(com.android.internal.R.drawable.statusbar_background));
-	        	break;
-	        case NOT_BAR_CUSTOM:
-	        	mStatusBarView.setBackgroundDrawable(res.getDrawable(com.android.internal.R.drawable.statusbar_background_sq,
-	            	    colorMask, PDMode));
-	        	mDateView.setBackgroundDrawable(res.getDrawable(com.android.internal.R.drawable.statusbar_background_sq,
-	            	    colorMask, PDMode));
-	        	break;
-	        }		    
-		    		    
-	        mStatusBarView.refreshDrawableState();
-	        mDateView.refreshDrawableState();
-			return true;
-		}
-	};
-    
-    
     
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
