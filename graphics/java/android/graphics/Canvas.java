@@ -1233,108 +1233,118 @@ public class Canvas {
                           indices, indexOffset, indexCount, paint.mNativePaint);
     }
 
-    /** @hide */
-    public char[] bidiProcess(char[] text,int start,int src_count) {
-        String str;
-        String oldstr=new String(text,start,src_count);
-        boolean hasbidi=false;
-        int strlen=oldstr.length();
-        char[] ca=new char[strlen];
+    /**
+    * A lightweight BiDi processing to make all draw text work with RTL languages.
+    * written from scratch by David Kohen (kohen dot d at gmail dot com) - 2010
+    * @hide 
+    **/
+    public char[] bidiProcess(char[] text,int start,int srcCount) {
 
-        oldstr.getChars(0, strlen, ca, 0);
-        for (int i=0;i<oldstr.length();i++){
-            if (ca[i]>=FIRST_RIGHT_TO_LEFT&&ca[i]<=LAST_RIGHT_TO_LEFT){
-                hasbidi=true;
+        boolean hasBidi=false;
+        char[] destCharArray=new char[srcCount];
+
+    	char[] buf = TemporaryBuffer.obtain(srcCount);
+        System.arraycopy(text,start, buf, 0, srcCount);
+
+        // Check if there are BiDi characters in the string, of so, we need to work. 
+        for (int i=0;i<srcCount;i++){
+            if (buf[i]>=FIRST_RIGHT_TO_LEFT&&buf[i]<=LAST_RIGHT_TO_LEFT){
+                hasBidi=true;
                 break;
             }
         }
-        if (hasbidi) {
-            char[] ca2=new char[strlen];
-            int count=0,srcindex=0;
-            boolean rtlmode=true;
-            for (int i=0;i<strlen;i++){
-                srcindex=strlen-1-i;
-                if (ca[srcindex]>=FIRST_RIGHT_TO_LEFT&&ca[srcindex]<=LAST_RIGHT_TO_LEFT){
-                    ca2[i]=ca[srcindex];
-                    rtlmode=true;
+        if (hasBidi) {
+            // I'm doing the processing from the end of the string, since it worked well this way.
+            int count=0,srcIndex=0;
+            boolean rtlMode=true;
+            for (int i=0;i<srcCount;i++){
+                srcIndex=srcCount-1-i;
+                if (buf[srcIndex]>=FIRST_RIGHT_TO_LEFT&&buf[srcIndex]<=LAST_RIGHT_TO_LEFT){
+                    destCharArray[i]=buf[srcIndex];
+                    // In rtl mode I'm mirroring glyphs.
+                    rtlMode=true;
                 }
                 else {
-                    srcindex=strlen-1-i;
+                    srcIndex=srcCount-1-i;
                     if (count==0) {
-                        if (ca[srcindex]<='\u002f' ||
-                            (ca[srcindex]>'\u0039' && ca[srcindex]<='\u0040') ||
-                            (ca[srcindex]>'\u005a' && ca[srcindex]<='\u0060')||
-                            (ca[srcindex]>'\u007a' && ca[srcindex]<='\u00BF')) {
+                        // Direction neutral characters
+                        if (buf[srcIndex]<='\u002f' ||
+                            (buf[srcIndex]>'\u0039' && buf[srcIndex]<='\u0040') ||
+                            (buf[srcIndex]>'\u005a' && buf[srcIndex]<='\u0060')||
+                            (buf[srcIndex]>'\u007a' && buf[srcIndex]<='\u00BF')) {
 
-                            if (rtlmode){
-                                switch (ca[srcindex]) {
+                            if (rtlMode){
+                                switch (buf[srcIndex]) {
                                 case '[':
-                                    ca2[i]=']';
+                                    destCharArray[i]=']';
                                     break;
                                 case ']':
-                                    ca2[i]='[';
+                                    destCharArray[i]='[';
                                     break;
                                 case '}':
-                                    ca2[i]='{';
+                                    destCharArray[i]='{';
                                     break;
                                 case '{':
-                                    ca2[i]='}';
+                                    destCharArray[i]='}';
                                     break;
                                 case '(':
-                                    ca2[i]=')';
+                                    destCharArray[i]=')';
                                     break;
                                 case ')':
-                                    ca2[i]='(';
+                                    destCharArray[i]='(';
                                     break;
                                 case '>':
-                                    ca2[i]='<';
+                                    destCharArray[i]='<';
                                     break;
                                 case '<':
-                                    ca2[i]='>';
+                                    destCharArray[i]='>';
                                     break;
                                 default:
-                                    ca2[i]=ca[srcindex];
+                                    destCharArray[i]=buf[srcIndex];
                                     break;
                                 }
-                            } else ca2[i]=ca[srcindex];
+                            } else destCharArray[i]=buf[srcIndex];
                         } else {
-
-                            while (((srcindex-count)>=0)&&((ca[srcindex-count]<FIRST_RIGHT_TO_LEFT)||(ca[srcindex-count]>LAST_RIGHT_TO_LEFT))){
+                            // Handling LTR embedded strings.
+                            while (((srcIndex-count)>=0)&&((buf[srcIndex-count]<FIRST_RIGHT_TO_LEFT)||(buf[srcIndex-count]>LAST_RIGHT_TO_LEFT))){
                                 count++;
                             }
                             int index=0;
-                            int punctuation_marks=0;
+                            int punctuationMarks=0;
 
-                            while (count>0 && (srcindex-(count)>=0) &&
-                                    (ca[srcindex-(count-1)]<='\u002f' ||
-                                            (ca[srcindex-(count-1)]>'\u0039' && ca[srcindex-(count-1)]<='\u0040') ||
-                                            (ca[srcindex-(count-1)]>'\u005a' && ca[srcindex-(count-1)]<='\u0060')||
-                                            (ca[srcindex-(count-1)]>'\u007a' && ca[srcindex-(count-1)]<='\u00BF'))){
-                                ca2[i+(count-1)]=ca[srcindex-(count-1)];
+                            // Handling direction neutral characters in the middle of LTR
+                            while (count>0 && (srcIndex-(count)>=0) &&
+                                    (buf[srcIndex-(count-1)]<='\u002f' ||
+                                            (buf[srcIndex-(count-1)]>'\u0039' && buf[srcIndex-(count-1)]<='\u0040') ||
+                                            (buf[srcIndex-(count-1)]>'\u005a' && buf[srcIndex-(count-1)]<='\u0060')||
+                                            (buf[srcIndex-(count-1)]>'\u007a' && buf[srcIndex-(count-1)]<='\u00BF'))){
+                                destCharArray[i+(count-1)]=buf[srcIndex-(count-1)];
                                 count--;
-                                punctuation_marks++;
+                                punctuationMarks++;
                             }
 
                             while (count>0){
-                                ca2[i+index]=ca[srcindex-(count-1)];
+                                destCharArray[i+index]=buf[srcIndex-(count-1)];
                                 count--;
                                 index++;
                             }
-                            count=index+punctuation_marks-1;
+                            count=index+punctuationMarks-1;
                         }
                     }
                     else {
+                        // Avoiding spaghetti code and mangling of loop counter 
                         count--;
                     }
-                    rtlmode=false;
+                    rtlMode=false;
                 }
             }
-            str=new String(ca2);
         } else
         {
-            str=new String(oldstr);
+            // We don't want to return a temporary buffer, do we?
+            System.arraycopy(buf, 0 , destCharArray, 0, srcCount);
+            TemporaryBuffer.recycle(buf);
         }
-        return str.toCharArray();
+        return destCharArray;
 
     }
 
@@ -1422,10 +1432,9 @@ public class Canvas {
         if ((start | end | (end - start) | (text.length() - end)) < 0) {
             throw new IndexOutOfBoundsException();
         }
-        int i = 0;
         String bidiText;
         bidiText=new String(bidiProcess(text.toCharArray(),start,end-start));
-        native_drawText(mNativeCanvas, bidiText, i, end-start, x, y,
+        native_drawText(mNativeCanvas, bidiText, 0, end-start, x, y,
                         paint.mNativePaint);
     }
 
@@ -1550,10 +1559,9 @@ public class Canvas {
         if (index < 0 || index + count > text.length) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        int i = 0;
         char[] bidiText;
         bidiText=bidiProcess(text,index,count);
-        native_drawTextOnPath(mNativeCanvas, bidiText, i, count,
+        native_drawTextOnPath(mNativeCanvas, bidiText, 0, count,
                               path.ni(), hOffset, vOffset,
                               paint.mNativePaint);
     }
@@ -1574,7 +1582,6 @@ public class Canvas {
     public void drawTextOnPath(String text, Path path, float hOffset,
                                float vOffset, Paint paint) {
         if (text.length() > 0) {
-            int i = 0;
             String bidiText;
             bidiText=new String(bidiProcess(text.toCharArray(),0,text.length()));
             native_drawTextOnPath(mNativeCanvas, bidiText, path.ni(),
