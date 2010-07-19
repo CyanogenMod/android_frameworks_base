@@ -1545,7 +1545,6 @@ public class PduParser {
                         tempPos = pduDataStream.available();
                         lastLen = length - (startPos - tempPos);
                         break;
-
                     case PduPart.P_DEP_CONTENT_DISPOSITION:
                     case PduPart.P_CONTENT_DISPOSITION:
                         /**
@@ -1556,26 +1555,23 @@ public class PduParser {
                          * Attachment = <Octet 129>
                          * Inline = <Octet 130>
                          */
-// Sprint sends the content disposition token, but without a length value
-// so parsevaluelength doesn't handle and throws an exception -- cb
-// Sprint mms recv hack
-                        int len = 31;//parseValueLength(pduDataStream);
+                        int len = parseValueLength(pduDataStream);
                         pduDataStream.mark(1);
                         int thisStartPos = pduDataStream.available();
                         int thisEndPos = 0;
                         int value = pduDataStream.read();
-//                        if (value == PduPart.P_DISPOSITION_FROM_DATA ) {
-//                            part.setContentDisposition(PduPart.DISPOSITION_FROM_DATA);
-//                        } else if (value == PduPart.P_DISPOSITION_ATTACHMENT) {
-//                            part.setContentDisposition(PduPart.DISPOSITION_ATTACHMENT);
-//                        } else if (value == PduPart.P_DISPOSITION_INLINE) {
-//                            part.setContentDisposition(PduPart.DISPOSITION_INLINE);
-//                        } else {
+
+                        if (value == PduPart.P_DISPOSITION_FROM_DATA ) {
+                            part.setContentDisposition(PduPart.DISPOSITION_FROM_DATA);
+                        } else if (value == PduPart.P_DISPOSITION_ATTACHMENT) {
+                            part.setContentDisposition(PduPart.DISPOSITION_ATTACHMENT);
+                        } else if (value == PduPart.P_DISPOSITION_INLINE) {
+                            part.setContentDisposition(PduPart.DISPOSITION_INLINE);
+                        } else {
                             pduDataStream.reset();
                             /* Token-text */
                             part.setContentDisposition(parseWapString(pduDataStream, TYPE_TEXT_STRING));
-//                        }
-// end Sprint mms recv hack
+                        }
 
                         /* get filename parameter and skip other parameters */
                         thisEndPos = pduDataStream.available();
