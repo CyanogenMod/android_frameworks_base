@@ -21,6 +21,7 @@ import android.text.SpannedString;
 import android.text.SpannableString;
 import android.text.GraphicsOperations;
 import android.util.DisplayMetrics;
+import android.graphics.utils.ArabicReshape;
 
 import javax.microedition.khronos.opengles.GL;
 
@@ -1234,6 +1235,40 @@ public class Canvas {
     }
 
     /**
+    * Since the reshaping algorithm does not test for arabic prior to starting, this is made to 
+    * @hide 
+    **/
+    public boolean bidiTest(char[] text,int start,int srcCount) {
+
+        boolean hasBidi=false;
+
+        // Check if there are BiDi characters in the string, of so, we need to work. 
+        for (int i=start;i<(srcCount+start);i++){
+            if (text[i]>=FIRST_RIGHT_TO_LEFT&&text[i]<=LAST_RIGHT_TO_LEFT){
+                hasBidi=true;
+                break;
+            }
+        }
+        return hasBidi;
+    }
+    /**
+    * Since the reshaping algorithm does not test for arabic prior to starting, this is made to 
+    * @hide 
+    **/
+    public boolean bidiTest(String text,int start,int srcCount) {
+
+        boolean hasBidi=false;
+
+        // Check if there are BiDi characters in the string, of so, we need to work. 
+        for (int i=start;i<(srcCount+start);i++){
+            if (text.charAt(i)>=FIRST_RIGHT_TO_LEFT&&text.charAt(i)<=LAST_RIGHT_TO_LEFT){
+                hasBidi=true;
+                break;
+            }
+        }
+        return hasBidi;
+    }
+    /**
     * A lightweight BiDi processing to make all draw text work with RTL languages.
     * written from scratch by David Kohen (kohen dot d at gmail dot com) - 2010
     * @hide 
@@ -1246,106 +1281,91 @@ public class Canvas {
     	char[] buf = TemporaryBuffer.obtain(srcCount);
         System.arraycopy(text,start, buf, 0, srcCount);
 
-        // Check if there are BiDi characters in the string, of so, we need to work. 
+        // I'm doing the processing from the end of the string, since it worked well this way.
+        int count=0,srcIndex=0;
+        boolean rtlMode=true;
         for (int i=0;i<srcCount;i++){
-            if (buf[i]>=FIRST_RIGHT_TO_LEFT&&buf[i]<=LAST_RIGHT_TO_LEFT){
-                hasBidi=true;
-                break;
+            srcIndex=srcCount-1-i;
+            if (buf[srcIndex]>=FIRST_RIGHT_TO_LEFT&&buf[srcIndex]<=LAST_RIGHT_TO_LEFT){
+                destCharArray[i]=buf[srcIndex];
+                // In rtl mode I'm mirroring glyphs.
+                rtlMode=true;
             }
-        }
-        if (hasBidi) {
-            // I'm doing the processing from the end of the string, since it worked well this way.
-            int count=0,srcIndex=0;
-            boolean rtlMode=true;
-            for (int i=0;i<srcCount;i++){
+            else {
                 srcIndex=srcCount-1-i;
-                if (buf[srcIndex]>=FIRST_RIGHT_TO_LEFT&&buf[srcIndex]<=LAST_RIGHT_TO_LEFT){
-                    destCharArray[i]=buf[srcIndex];
-                    // In rtl mode I'm mirroring glyphs.
-                    rtlMode=true;
+                if (count==0) {
+                    // Direction neutral characters
+                    if (buf[srcIndex]<='\u002f' ||
+                        (buf[srcIndex]>'\u0039' && buf[srcIndex]<='\u0040') ||
+                        (buf[srcIndex]>'\u005a' && buf[srcIndex]<='\u0060')||
+                        (buf[srcIndex]>'\u007a' && buf[srcIndex]<='\u00BF')) {
+
+                        if (rtlMode){
+                            switch (buf[srcIndex]) {
+                            case '[':
+                                destCharArray[i]=']';
+                                break;
+                            case ']':
+                                destCharArray[i]='[';
+                                break;
+                            case '}':
+                                destCharArray[i]='{';
+                                break;
+                            case '{':
+                                destCharArray[i]='}';
+                                break;
+                            case '(':
+                                destCharArray[i]=')';
+                                break;
+                            case ')':
+                                destCharArray[i]='(';
+                                break;
+                            case '>':
+                                destCharArray[i]='<';
+                                break;
+                            case '<':
+                                destCharArray[i]='>';
+                                break;
+                            default:
+                                destCharArray[i]=buf[srcIndex];
+                                break;
+                            }
+                        } else destCharArray[i]=buf[srcIndex];
+                    } else {
+                        // Handling LTR embedded strings.
+                        while (((srcIndex-count)>=0)&&((buf[srcIndex-count]<FIRST_RIGHT_TO_LEFT)||(buf[srcIndex-count]>LAST_RIGHT_TO_LEFT))){
+                            count++;
+                        }
+                        int index=0;
+                        int punctuationMarks=0;
+
+                        // Handling direction neutral characters in the middle of LTR
+                        while (count>0 && (srcIndex-(count)>=0) &&
+                                (buf[srcIndex-(count-1)]<='\u002f' ||
+                                        (buf[srcIndex-(count-1)]>'\u0039' && buf[srcIndex-(count-1)]<='\u0040') ||
+                                        (buf[srcIndex-(count-1)]>'\u005a' && buf[srcIndex-(count-1)]<='\u0060')||
+                                        (buf[srcIndex-(count-1)]>'\u007a' && buf[srcIndex-(count-1)]<='\u00BF'))){
+                            destCharArray[i+(count-1)]=buf[srcIndex-(count-1)];
+                            count--;
+                            punctuationMarks++;
+                        }
+
+                        while (count>0){
+                            destCharArray[i+index]=buf[srcIndex-(count-1)];
+                            count--;
+                            index++;
+                        }
+                        count=index+punctuationMarks-1;
+                    }
                 }
                 else {
-                    srcIndex=srcCount-1-i;
-                    if (count==0) {
-                        // Direction neutral characters
-                        if (buf[srcIndex]<='\u002f' ||
-                            (buf[srcIndex]>'\u0039' && buf[srcIndex]<='\u0040') ||
-                            (buf[srcIndex]>'\u005a' && buf[srcIndex]<='\u0060')||
-                            (buf[srcIndex]>'\u007a' && buf[srcIndex]<='\u00BF')) {
-
-                            if (rtlMode){
-                                switch (buf[srcIndex]) {
-                                case '[':
-                                    destCharArray[i]=']';
-                                    break;
-                                case ']':
-                                    destCharArray[i]='[';
-                                    break;
-                                case '}':
-                                    destCharArray[i]='{';
-                                    break;
-                                case '{':
-                                    destCharArray[i]='}';
-                                    break;
-                                case '(':
-                                    destCharArray[i]=')';
-                                    break;
-                                case ')':
-                                    destCharArray[i]='(';
-                                    break;
-                                case '>':
-                                    destCharArray[i]='<';
-                                    break;
-                                case '<':
-                                    destCharArray[i]='>';
-                                    break;
-                                default:
-                                    destCharArray[i]=buf[srcIndex];
-                                    break;
-                                }
-                            } else destCharArray[i]=buf[srcIndex];
-                        } else {
-                            // Handling LTR embedded strings.
-                            while (((srcIndex-count)>=0)&&((buf[srcIndex-count]<FIRST_RIGHT_TO_LEFT)||(buf[srcIndex-count]>LAST_RIGHT_TO_LEFT))){
-                                count++;
-                            }
-                            int index=0;
-                            int punctuationMarks=0;
-
-                            // Handling direction neutral characters in the middle of LTR
-                            while (count>0 && (srcIndex-(count)>=0) &&
-                                    (buf[srcIndex-(count-1)]<='\u002f' ||
-                                            (buf[srcIndex-(count-1)]>'\u0039' && buf[srcIndex-(count-1)]<='\u0040') ||
-                                            (buf[srcIndex-(count-1)]>'\u005a' && buf[srcIndex-(count-1)]<='\u0060')||
-                                            (buf[srcIndex-(count-1)]>'\u007a' && buf[srcIndex-(count-1)]<='\u00BF'))){
-                                destCharArray[i+(count-1)]=buf[srcIndex-(count-1)];
-                                count--;
-                                punctuationMarks++;
-                            }
-
-                            while (count>0){
-                                destCharArray[i+index]=buf[srcIndex-(count-1)];
-                                count--;
-                                index++;
-                            }
-                            count=index+punctuationMarks-1;
-                        }
-                    }
-                    else {
-                        // Avoiding spaghetti code and mangling of loop counter 
-                        count--;
-                    }
-                    rtlMode=false;
+                    // Avoiding spaghetti code and mangling of loop counter 
+                    count--;
                 }
+                rtlMode=false;
             }
-        } else
-        {
-            // We don't want to return a temporary buffer, do we?
-            System.arraycopy(buf, 0 , destCharArray, 0, srcCount);
-            TemporaryBuffer.recycle(buf);
         }
         return destCharArray;
-
     }
 
     /** @hide **/
@@ -1355,12 +1375,17 @@ public class Canvas {
                 (text.length - index - count)) < 0) {
             throw new IndexOutOfBoundsException();
         }
-
-        if (bidi) {
-            char[] bidiText;
-            bidiText=bidiProcess(text,index,count);
-            native_drawText(mNativeCanvas, bidiText, 0, count, x, y,
-                    paint.mNativePaint);
+        boolean hasBidi=bidiTest(text,index,count);
+        if (hasBidi) {
+            if (bidi) {
+                char[] bidiText;
+                bidiText=bidiProcess(text,index,count);
+                native_drawText(mNativeCanvas, ArabicReshape.reshape(new String(bidiText)).toCharArray(), 0, count, x, y,
+                        paint.mNativePaint);
+            } else {
+                native_drawText(mNativeCanvas, ArabicReshape.reshape(new String(text)).toCharArray(), index, count, x, y,
+                        paint.mNativePaint);
+            }
         } else {
             native_drawText(mNativeCanvas, text, index, count, x, y,
                     paint.mNativePaint);
@@ -1383,10 +1408,16 @@ public class Canvas {
             throw new IndexOutOfBoundsException();
         }
 
-        char[] bidiText;
-        bidiText=bidiProcess(text,index,count);
-        native_drawText(mNativeCanvas, bidiText, 0, count, x, y,
-                        paint.mNativePaint);
+        boolean hasBidi=bidiTest(text,index,count);
+        if (hasBidi) {
+            char[] bidiText;
+            bidiText=bidiProcess(text,index,count);
+            native_drawText(mNativeCanvas, ArabicReshape.reshape(new String(bidiText)).toCharArray(), 0, count, x, y,
+                            paint.mNativePaint);
+        } else {
+            native_drawText(mNativeCanvas, text, index, count, x, y,
+                            paint.mNativePaint);
+        }
     }
 
     /**
@@ -1402,15 +1433,20 @@ public class Canvas {
 
     /** @hide */
     public void drawText(String text, float x, float y, Paint paint,boolean bidi){
-        if (!bidi) {
-            native_drawText(text,x,y,paint);
-        } else {
-            if (text.length() > 0) {
-                String bidiText;
-                bidiText=new String(bidiProcess(text.toCharArray(),0,text.length()));
-                native_drawText(bidiText,x,y,paint);
+        boolean hasBidi=bidiTest(text,0,text.length());
+        if (hasBidi) {
+            if (!bidi) {
+                native_drawText(ArabicReshape.reshape(text),x,y,paint);
+            } else {
+                if (text.length() > 0) {
+                    String bidiText;
+                    bidiText=new String(bidiProcess(text.toCharArray(),0,text.length()));
+                    native_drawText(ArabicReshape.reshape(bidiText),x,y,paint);
+                }
             }
-	}
+        } else {
+            native_drawText(text,x,y,paint);
+        }
     }
     public void drawText(String text, float x, float y, Paint paint){
         drawText(text,x,y,paint,true);
@@ -1432,10 +1468,16 @@ public class Canvas {
         if ((start | end | (end - start) | (text.length() - end)) < 0) {
             throw new IndexOutOfBoundsException();
         }
-        String bidiText;
-        bidiText=new String(bidiProcess(text.toCharArray(),start,end-start));
-        native_drawText(mNativeCanvas, bidiText, 0, end-start, x, y,
-                        paint.mNativePaint);
+        boolean hasBidi=bidiTest(text,start,end-start);
+        if (hasBidi) {
+            String bidiText;
+            bidiText=new String(bidiProcess(text.toCharArray(),start,end-start));
+            native_drawText(mNativeCanvas, ArabicReshape.reshape(bidiText), 0, end-start, x, y,
+                            paint.mNativePaint);
+        } else {
+            native_drawText(mNativeCanvas, text, start, end, x, y,
+                            paint.mNativePaint);
+        }
     }
 
     /**
@@ -1453,12 +1495,18 @@ public class Canvas {
      */
     public void drawText(CharSequence text, int start, int end, float x,
                          float y, Paint paint) {
+        boolean hasBidi=bidiTest(text.toString(),start,end-start);
         if (text instanceof String || text instanceof SpannedString ||
             text instanceof SpannableString) {
-            String bidiText;
-            bidiText=new String(bidiProcess(text.toString().toCharArray(),start,end-start));
-            native_drawText(mNativeCanvas, bidiText.toString(), 0, end-start, x, y,
-                        paint.mNativePaint);
+            if (hasBidi) {
+                String bidiText;
+                bidiText=new String(bidiProcess(text.toString().toCharArray(),start,end-start));
+                native_drawText(mNativeCanvas, ArabicReshape.reshape(bidiText), 0, end-start, x, y,
+                            paint.mNativePaint);
+            } else {
+                native_drawText(mNativeCanvas, text.toString() , start, end, x, y,
+                            paint.mNativePaint);
+            }
         }
         else if (text instanceof GraphicsOperations) {
             ((GraphicsOperations) text).drawText(this, start, end, x, y,
@@ -1467,7 +1515,11 @@ public class Canvas {
         else {
             char[] buf = TemporaryBuffer.obtain(end - start);
             TextUtils.getChars(text, start, end, buf, 0);
-            drawText(buf, 0, end - start, x, y, paint,false);
+            if (hasBidi) {
+                drawText(ArabicReshape.reshape(new String(buf)).toCharArray(), 0, end - start, x, y, paint,false);
+            } else {
+                drawText(buf, 0, end - start, x, y, paint,false);
+            }
             TemporaryBuffer.recycle(buf);
         }
     }
@@ -1475,16 +1527,22 @@ public class Canvas {
     /** @hide */
     public void drawText(CharSequence text, int start, int end, float x,
             float y, Paint paint,boolean bidi) {
+        boolean hasBidi=bidiTest(text.toString(),start,end-start);
         if (text instanceof String || text instanceof SpannedString ||
                 text instanceof SpannableString) {
-            if (bidi) {
-                String bidiText;
-                bidiText=new String(bidiProcess(text.toString().toCharArray(),start,end-start));
-                native_drawText(mNativeCanvas, bidiText.toString(), 0, end-start, x, y,
-                        paint.mNativePaint);
+            if (hasBidi) {
+                if (bidi) {
+                    String bidiText;
+                    bidiText=new String(bidiProcess(text.toString().toCharArray(),start,end-start));
+                    native_drawText(mNativeCanvas, ArabicReshape.reshape(bidiText), 0, end-start, x, y,
+                                paint.mNativePaint);
+                } else {
+                    native_drawText(mNativeCanvas, ArabicReshape.reshape(text.toString()), 0, end-start, x, y,
+                            paint.mNativePaint);
+                }
             } else {
-                native_drawText(mNativeCanvas, text.toString(), start, end, x, y,
-                        paint.mNativePaint);
+                native_drawText(mNativeCanvas, text.toString() , start, end, x, y,
+                            paint.mNativePaint);
             }
         }
         else if (text instanceof GraphicsOperations) {
@@ -1494,7 +1552,11 @@ public class Canvas {
     	else {
     		char[] buf = TemporaryBuffer.obtain(end - start);
     		TextUtils.getChars(text, start, end, buf, 0);
-    		drawText(buf, 0, end - start, x, y, paint,false);
+                if (hasBidi) {
+                    drawText(ArabicReshape.reshape(new String(buf)).toCharArray(), 0, end - start, x, y, paint,false);
+                } else {
+                    drawText(buf, 0, end - start, x, y, paint,false);
+                }
     		TemporaryBuffer.recycle(buf);
     	}
     }
@@ -1512,15 +1574,22 @@ public class Canvas {
      */
     public void drawPosText(char[] text, int index, int count, float[] pos,
                             Paint paint) {
-        if (index < 0 || index + count > text.length || count*2 > pos.length) {
+        if (index < 0 || index + count > text.length || (index+count)*2 > pos.length) {
             throw new IndexOutOfBoundsException();
         }
 
-        char[] bidiText;
-        bidiText=bidiProcess(text,index,count);
-        native_drawPosText(mNativeCanvas, bidiText, 0, count, pos,
-                           paint.mNativePaint);
-        // TODO: handle starting from higher index
+        boolean hasBidi=bidiTest(text,index,count);
+        if (hasBidi) {
+            float[] relativePos = new float[count*2];
+            System.arraycopy(pos , index*2 , relativePos , 0, count*2);
+            char[] bidiText;
+            bidiText=bidiProcess(text,index,count);
+            native_drawPosText(mNativeCanvas, ArabicReshape.reshape(new String(bidiText)).toCharArray(), 0, count, relativePos,
+                               paint.mNativePaint);
+        } else {
+            native_drawPosText(mNativeCanvas, text, index, count, pos,
+                               paint.mNativePaint);
+        }
     }
 
     /**
@@ -1536,9 +1605,15 @@ public class Canvas {
             throw new ArrayIndexOutOfBoundsException();
         }
 
-        String bidiText;
-        bidiText=new String(bidiProcess(text.toCharArray(),0,text.length()));
-        native_drawPosText(mNativeCanvas, bidiText, pos, paint.mNativePaint);
+        boolean hasBidi=bidiTest(text,0,text.length());
+        if (hasBidi) {
+            String bidiText;
+            bidiText=new String(bidiProcess(text.toCharArray(),0,text.length()));
+            native_drawPosText(mNativeCanvas, ArabicReshape.reshape(bidiText), pos, paint.mNativePaint);
+        } else {
+            native_drawPosText(mNativeCanvas, text, pos,
+                               paint.mNativePaint);
+        }
     }
 
     /**
@@ -1559,11 +1634,19 @@ public class Canvas {
         if (index < 0 || index + count > text.length) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        char[] bidiText;
-        bidiText=bidiProcess(text,index,count);
-        native_drawTextOnPath(mNativeCanvas, bidiText, 0, count,
-                              path.ni(), hOffset, vOffset,
-                              paint.mNativePaint);
+        boolean hasBidi=bidiTest(text,index,count);
+        if (hasBidi) {
+            char[] bidiText;
+            bidiText=bidiProcess(text,index,count);
+            native_drawTextOnPath(mNativeCanvas, ArabicReshape.reshape(new String(bidiText)).toCharArray(), 0, count,
+                                  path.ni(), hOffset, vOffset,
+                                  paint.mNativePaint);
+        } else {
+            native_drawTextOnPath(mNativeCanvas, text, index, count,
+                                  path.ni(), hOffset, vOffset,
+                                  paint.mNativePaint);
+        }
+        // TODO: Handle index>0
     }
 
     /**
@@ -1582,10 +1665,17 @@ public class Canvas {
     public void drawTextOnPath(String text, Path path, float hOffset,
                                float vOffset, Paint paint) {
         if (text.length() > 0) {
-            String bidiText;
-            bidiText=new String(bidiProcess(text.toCharArray(),0,text.length()));
-            native_drawTextOnPath(mNativeCanvas, bidiText, path.ni(),
-                                  hOffset, vOffset, paint.mNativePaint);
+            boolean hasBidi=bidiTest(text,0,text.length());
+            if (hasBidi) {
+                String bidiText;
+                bidiText=new String(bidiProcess(text.toCharArray(),0,text.length()));
+                native_drawTextOnPath(mNativeCanvas, ArabicReshape.reshape(bidiText), path.ni(),
+                                      hOffset, vOffset, paint.mNativePaint);
+            } else {
+                native_drawTextOnPath(mNativeCanvas, text,
+                                      path.ni(), hOffset, vOffset,
+                                      paint.mNativePaint);
+            }
         }
     }
 

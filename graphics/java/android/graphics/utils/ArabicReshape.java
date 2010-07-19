@@ -244,9 +244,9 @@ public class ArabicReshape {
 	    	 char pre_pre=' ';
 	    	 
 	    	 while (i<len){
-	 			pre=Temp.charAt(i);
+	 			pre=Temp.charAt(i+2);
 				at=Temp.charAt(i+1);
-				post=Temp.charAt(i+2);
+				post=Temp.charAt(i);
 				
 
 				int which_case=getCase(at);
