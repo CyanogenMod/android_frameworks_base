@@ -150,6 +150,55 @@
             android:layout_marginTop="12dip"
             android:drawablePadding="4dip"
             />
+   <!-- music control buttons -->
+    <ImageButton
+        android:id="@+id/musicControlPlay"
+        android:src="@drawable/ic_media_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dip"
+        android:padding="8px"
+        android:background="@color/transparent"
+        android:visibility="gone"
+        />
+    <ImageButton
+        android:id="@+id/musicControlPause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_media_pause"
+        android:layout_centerInParent="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dip"
+        android:padding="8px"
+        android:background="@color/transparent"
+        android:visibility="gone"
+        />
+    <ImageButton
+        android:id="@+id/musicControlPrevious"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_media_previous"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dip"
+        android:padding="8px"
+        android:layout_toLeftOf="@+id/musicControlPause"
+        android:background="@color/transparent"
+        android:visibility="gone"
+        />
+    <ImageButton
+        android:id="@+id/musicControlNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_media_next"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="30dip"
+        android:padding="8px"
+        android:layout_toRightOf="@+id/musicControlPause"
+        android:background="@color/transparent"
+        android:visibility="gone"
+        />
 
     </RelativeLayout>
 
