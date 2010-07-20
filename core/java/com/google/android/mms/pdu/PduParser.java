@@ -1555,18 +1555,36 @@ public class PduParser {
                          * Attachment = <Octet 129>
                          * Inline = <Octet 130>
                          */
-                        int len = parseValueLength(pduDataStream);
+                        int len = -1;
+                        boolean validDispositionLength = true;
+                        pduDataStream.mark(1);
+                        
+                        try {
+                            len = parseValueLength(pduDataStream);
+                        } catch (RuntimeException e) { 
+                            // tolerate invalid content-disposition length
+                            len = 31;
+                            validDispositionLength = false;
+                            pduDataStream.reset();
+                        }
+                        
                         pduDataStream.mark(1);
                         int thisStartPos = pduDataStream.available();
                         int thisEndPos = 0;
                         int value = pduDataStream.read();
-
-                        if (value == PduPart.P_DISPOSITION_FROM_DATA ) {
-                            part.setContentDisposition(PduPart.DISPOSITION_FROM_DATA);
-                        } else if (value == PduPart.P_DISPOSITION_ATTACHMENT) {
-                            part.setContentDisposition(PduPart.DISPOSITION_ATTACHMENT);
-                        } else if (value == PduPart.P_DISPOSITION_INLINE) {
-                            part.setContentDisposition(PduPart.DISPOSITION_INLINE);
+                        
+                        if (validDispositionLength) {
+                            if (value == PduPart.P_DISPOSITION_FROM_DATA ) {
+                                part.setContentDisposition(PduPart.DISPOSITION_FROM_DATA);
+                            } else if (value == PduPart.P_DISPOSITION_ATTACHMENT) {
+                                part.setContentDisposition(PduPart.DISPOSITION_ATTACHMENT);
+                            } else if (value == PduPart.P_DISPOSITION_INLINE) {
+                                part.setContentDisposition(PduPart.DISPOSITION_INLINE);
+                            } else {
+                                pduDataStream.reset();
+                                /* Token-text */
+                                part.setContentDisposition(parseWapString(pduDataStream, TYPE_TEXT_STRING));
+                            }
                         } else {
                             pduDataStream.reset();
                             /* Token-text */
