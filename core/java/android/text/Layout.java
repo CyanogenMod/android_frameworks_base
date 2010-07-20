@@ -1823,7 +1823,7 @@ public abstract class Layout {
             mDirections = dirs;
         }
 
-        static int baseDirection(Directions dir,int length) {
+        public static int baseDirection(Directions dir,int length) {
             if (dir == DIRS_ALL_LEFT_TO_RIGHT) {
                 return DIR_LEFT_TO_RIGHT;
             } else if (dir == DIRS_ALL_RIGHT_TO_LEFT) {
