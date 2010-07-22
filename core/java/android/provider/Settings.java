@@ -1973,6 +1973,12 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_MUSIC_CONTROLS = "lockscreen_music_controls";
+
+        /**
+         * Whether to use custom notification bar
+         * @hide
+         */
+        public static final String LOCKSCREEN_ALWAYS_MUSIC_CONTROLS = "lockscreen_always_music_controls";
         
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
