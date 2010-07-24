@@ -42,6 +42,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Binder;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -56,9 +57,15 @@ import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.Slog;
 import android.util.Log;
+import java.util.Timer;
+import java.util.TimerTask;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
@@ -134,6 +141,9 @@ class NotificationManagerService extends INotificationManager.Stub
     private static final int BATTERY_FULL_ARGB = 0xFF00FF00; // Charging Full - green solid on
     private static final int BATTERY_BLINK_ON = 125;
     private static final int BATTERY_BLINK_OFF = 2875;
+    
+    private static int mLastLight = 0;
+    private static boolean isTimer = false;
 
     private static String idDebugString(Context baseContext, String packageName, int id) {
         Context c = null;
@@ -826,6 +836,7 @@ class NotificationManagerService extends INotificationManager.Stub
             if (mLedNotification == old) {
                 mLedNotification = null;
             }
+	    //updatePackageList(pkg);
             //Slog.i(TAG, "notification.lights="
             //        + ((old.notification.lights.flags & Notification.FLAG_SHOW_LIGHTS) != 0));
             if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0) {
@@ -1038,17 +1049,28 @@ class NotificationManagerService extends INotificationManager.Stub
             updateLightsLocked();
         }
     }
+    
+	public boolean isNull(String mString) {
+		if(mString == null || mString.matches("null") 
+		|| mString.length() == 0
+		|| mString.matches("|")
+		|| mString.matches("")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+    
     //Grab our Array Information For Lights
-	public static String[] getArray(String mGetFrom) {
-		if(mGetFrom == null || mGetFrom == "|" || mGetFrom.length() == 0) {
-			String[] tempfalse = new String[15];
-			return tempfalse;
+	public String[] getArray(String mGetFrom) {
+		if(isNull(mGetFrom)) {
+			return null;
 		}
 		String[] temp = mGetFrom.split("\\|");
 		return temp;
 	}
 	
-	public static String[] getPackageAndColor(String mString) {
+	public String[] getPackageInfo(String mString) {
 		if(mString == null || mString == "=" || mString.length() == 0) {
 			return null;
 		}
@@ -1061,6 +1083,11 @@ class NotificationManagerService extends INotificationManager.Stub
     private void updateLightsLocked()
     {
     	String[] mPackages;
+        String mPackageList = Settings.System.getString(mContext.getContentResolver(), Settings.System.NOTIFICATION_PACKAGE_COLORS);
+        mPackages = getArray(mPackageList);
+        int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_SCREEN_ON, 0);
+    	int mSucsession = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_SUCESSION, 0);
+    	
         // Battery low always shows, other states only show if charging.
         if (mBatteryLow) {
             if (mBatteryCharging) {
@@ -1085,20 +1112,37 @@ class NotificationManagerService extends INotificationManager.Stub
             // get next notification, if any
             int n = mLights.size();
             if (n > 0) {
+            	mLastLight = n;
                 mLedNotification = mLights.get(n-1);
             }
         }
-        String mPackageList = Settings.System.getString(mContext.getContentResolver(), Settings.System.NOTIFICATION_PACKAGE_COLORS);
-        mPackages = getArray(mPackageList);
-        int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_SCREEN_ON, 0);
+        
+        //Pulse around abit
+        if(mSucsession != 0) {
+        	int n = mLights.size();
+        	if (n > 0) {
+        		int thisLight = n;
+        			if(mLastLight > thisLight) {
+        				thisLight = 1;
+        			} else {
+        				thisLight = mLastLight + 1;
+        			}
+        			//One last arthmetic check for sanitys sake.
+        			if((thisLight == (mLastLight - 1)) || (thisLight > n)) {
+        				thisLight = 1;
+        			}
+        			Log.i("Sucession", "mLights.size="+n+" thisLight: "+thisLight+" mLastLight: " +mLastLight+" mLights: " + mLights.toString());
+        			mLedNotification = mLights.get(thisLight-1);
+        			mLastLight = thisLight;
+        	}
+        }
 
         // we only flash if screen is off and persistent pulsing is enabled
         // and we are not currently in a call
         if (mLedNotification == null || (mScreenOn && (mPulseScreen == 0)) || mInCall) {
             mNotificationLight.turnOff();
-        } else {
-            int ledARGB = mLedNotification.notification.ledARGB;
-            //int ledARGB = 0xFFFF0000;
+        } else { 
+        	int ledARGB = mLedNotification.notification.ledARGB;
         	int ledOnMS = mLedNotification.notification.ledOnMS;
             int ledOffMS = mLedNotification.notification.ledOffMS;
             if ((mLedNotification.notification.defaults & Notification.DEFAULT_LIGHTS) != 0) {
@@ -1106,21 +1150,49 @@ class NotificationManagerService extends INotificationManager.Stub
                 ledOnMS = mDefaultNotificationLedOn;
                 ledOffMS = mDefaultNotificationLedOff;
             }
-            int i = 0;
-            for(i = 0; i < mPackages.length; i++) {
-            	String[] mPackageInfo = getPackageAndColor(mPackages[i]);
-            	if(mPackageInfo == null) {
-            		continue;
-            	}
-            	if(mPackageInfo[0].matches(mLedNotification.pkg)) {
-            		ledARGB = Color.parseColor(mPackageInfo[1].toLowerCase());
+            //String[] mPackageInfo = findPackage(mLedNotification.pkg);
+            //if(mPackageInfo != null) {
+            //		ledARGB = Color.parseColor(mPackageInfo[1]);
+    		//		ledOffMS = Integer.parseInt(mPackageInfo[2]);
+            //}
+            if(mPackages != null) {
+            	int i = 0;
+            	for(i = 0; i < mPackages.length; i++) {
+            		String[] mPackageInfo = getPackageInfo(mPackages[i]);
+            		if(mPackageInfo == null) {
+            			continue;
+            		}
+            		if(mPackageInfo[0].matches(mLedNotification.pkg)) {
+            			ledARGB = Color.parseColor(mPackageInfo[1]);
+            			ledOffMS = Integer.parseInt(mPackageInfo[2]);
+            		}
             	}
             }
-            Log.i("Lights", "Color: " + ledARGB + " Package: " + mLedNotification.pkg);           
             if (mNotificationPulseEnabled) {
                 // pulse repeatedly
-                mNotificationLight.setFlashing(ledARGB, LightsService.LIGHT_FLASH_TIMED,
-                        ledOnMS, ledOffMS);
+            	if(mSucsession != 0) {
+            		if(isTimer == false) {
+				isTimer = true;
+				TimerTask updateTask;
+                		Timer timer = new Timer();
+                		updateTask = new TimerTask() {
+                        		public void run() {
+						isTimer = false;
+						updateNotificationPulse();
+                        		}
+                    		};
+
+	                	long scheduleTime = ledOnMS+ledOffMS;
+        		        if(scheduleTime < 2500) {
+                	    		scheduleTime = 2500;
+         	           	}
+            			timer.schedule(updateTask, scheduleTime);
+			}
+            		mNotificationLight.notificationPulse(ledARGB, ledOnMS, ledOffMS);
+            	} else {
+                    	mNotificationLight.setFlashing(ledARGB, LightsService.LIGHT_FLASH_TIMED,
+                            ledOnMS, ledOffMS);
+            	}
             } else {
                 // pulse only once
                 mNotificationLight.pulse(ledARGB, ledOnMS);
