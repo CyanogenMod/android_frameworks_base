@@ -929,11 +929,56 @@ public class StatusBarService extends IStatusBar.Stub
             return null;
         }
 
-        // This will try to handle text color for all notifications from apps, applying the appropriate
-        // color if ID is possible, otherwise setting it to notification text color
-       	startRecurse(child);
-
-       	content.addView(child);
+        boolean customview = false;
+        try {
+            TextView tv1 = (TextView) child.findViewById(com.android.internal.R.id.title);
+            TextView tv2 = (TextView) child.findViewById(com.android.internal.R.id.text);
+            TextView tv3 = (TextView) child.findViewById(com.android.internal.R.id.time);
+            tv1.setTextColor(notificationTitleColor);
+            tv2.setTextColor(notificationTextColor);
+            tv3.setTextColor(notificationTimeColor);
+        }
+        catch (Exception e) {
+        	customview = true;
+        }
+  
+        // This will try to handle text color for custom notifications from apps
+        // This only works if the notification's view hierarchy is 2 layers deep or less
+        // Applies the same color to all views (no distinguishing title from body - but better than nothing
+        if (customview) {
+        	int viewcount;
+        	int i;
+        	int j;
+        	View current;
+        	ViewGroup vg = (ViewGroup)child;
+        	viewcount = vg.getChildCount();
+        	for (i = 0; i < viewcount; i++) {
+        		try {
+        			current = (View) vg.getChildAt(i);
+        			ViewGroup childasvg = (ViewGroup)current;
+        			int subchildcount = childasvg.getChildCount();
+        			if (subchildcount > 0) {
+        			    for (j = 0; j < subchildcount; j++) {
+        			    	try {
+        			    		TextView subtv = (TextView) childasvg.getChildAt(j);
+        			    		subtv.setTextColor(notificationTextColor);
+        			    	} catch (Exception e){
+        			    	}
+        			    }
+        			    
+        			} else {
+        				try {
+        					TextView tv = (TextView) current;
+        					tv.setTextColor(notificationTextColor);
+        				} catch (Exception e) {
+        				}
+        			}
+        		}
+        		catch (Exception e) {
+        		}
+          	}
+        }
+        content.addView(child);
 
         row.setDrawingCacheEnabled(true);
 
