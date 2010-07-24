@@ -430,6 +430,12 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
     public NetworkInfo getNetworkInfo(int networkType) {
         enforceAccessPermission();
+
+        // HACK! - return a stub NetworkInfo object to make bad apps happy.
+        if (ConnectivityManager.TYPE_WIMAX == networkType) {
+            return NetworkInfo.getEmptyWimaxNetworkInfo(); 
+        }
+
         if (ConnectivityManager.isNetworkTypeValid(networkType)) {
             NetworkStateTracker t = mNetTrackers[networkType];
             if (t != null)

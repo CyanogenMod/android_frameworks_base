@@ -373,4 +373,13 @@ public class NetworkInfo implements Parcelable {
                 return new NetworkInfo[size];
             }
         };
+
+    /**
+     * HACK! Get an empty NetworkInfo object for WIMAX stub
+     * @hide
+     */
+    public static final NetworkInfo getEmptyWimaxNetworkInfo() {
+        return new NetworkInfo(ConnectivityManager.TYPE_WIMAX, 0, "", "");
+    }
+    
 }
