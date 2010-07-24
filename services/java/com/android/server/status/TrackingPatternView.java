@@ -17,7 +17,9 @@
 package com.android.server.status;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Slog;
 import android.view.View;
@@ -25,6 +27,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.drawable.BitmapDrawable;
+
 
 public class TrackingPatternView extends View {
     private Bitmap mTexture;
@@ -34,9 +40,7 @@ public class TrackingPatternView extends View {
     
     public TrackingPatternView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        mTexture = BitmapFactory.decodeResource(getResources(), 
-                com.android.internal.R.drawable.status_bar_background);
+        setTexture();
         mTextureWidth = mTexture.getWidth();
         mTextureHeight = mTexture.getHeight();
 
@@ -66,5 +70,22 @@ public class TrackingPatternView extends View {
             }
             x += textureWidth;
         }
+    }
+    
+    private void setTexture() {
+    	boolean useCustomExp = Settings.System.getInt(mContext.getContentResolver(),
+       	        Settings.System.NOTIF_EXPANDED_BAR_CUSTOM, 0) == 1;
+    	int expBarColorMask = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.NOTIF_EXPANDED_BAR_COLOR, 0xFF000000);
+        if (useCustomExp) {
+        	Bitmap tempbm = BitmapFactory.decodeResource(getResources(), 
+                    com.android.internal.R.drawable.status_bar_background_cust);
+        	Bitmap mutable = Bitmap.createBitmap(tempbm.getWidth(), tempbm.getHeight(), Bitmap.Config.ARGB_8888);
+        	mutable.eraseColor(expBarColorMask);
+        	mTexture = mutable;
+            } else {
+            mTexture = BitmapFactory.decodeResource(getResources(), 
+                        com.android.internal.R.drawable.status_bar_background);
+            }
     }
 }

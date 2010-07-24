@@ -1981,6 +1981,18 @@ public final class Settings {
         public static final String LOCKSCREEN_ALWAYS_MUSIC_CONTROLS = "lockscreen_always_music_controls";
         
         /**
+         * Whether to use a custom pull-down notification screen
+         * @hide 
+         */
+        public static final String NOTIF_EXPANDED_BAR_COLOR = "notif_expanded_bar_color";
+        
+        /**
+         * Color mask to apply to pull-down notification screen
+         * @hide
+         */
+        public static final String NOTIF_EXPANDED_BAR_CUSTOM = "notif_expanded_bar_custom";
+        
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          * @hide
@@ -2053,6 +2065,9 @@ public final class Settings {
             HAPTIC_TAP_ARRAY_DEFAULT,
             NOTIF_BAR_COLOR,
             NOTIF_BAR_CUSTOM,
+            NOTIF_EXPANDED_BAR_COLOR,
+            NOTIF_EXPANDED_BAR_CUSTOM
+            
         };
 
         // Settings moved to Settings.Secure
