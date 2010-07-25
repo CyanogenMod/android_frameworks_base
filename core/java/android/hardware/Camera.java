@@ -761,7 +761,7 @@ public class Camera {
         private static final String KEY_MAX_EXPOSURE_COMPENSATION = "max-exposure-compensation";
         private static final String KEY_MIN_EXPOSURE_COMPENSATION = "min-exposure-compensation";
         private static final String KEY_EXPOSURE_COMPENSATION_STEP = "exposure-compensation-step";
-        private static final String KEY_AUTO_EXPOSURE = "auto-exposure";
+        private static final String KEY_AUTO_EXPOSURE = "meter-mode";
         private static final String KEY_ZOOM = "zoom";
         private static final String KEY_MAX_ZOOM = "max-zoom";
         private static final String KEY_ZOOM_RATIOS = "zoom-ratios";
@@ -769,10 +769,18 @@ public class Camera {
         private static final String KEY_SMOOTH_ZOOM_SUPPORTED = "smooth-zoom-supported";
         private static final String KEY_SHARPNESS = "sharpness";
         private static final String KEY_MAX_SHARPNESS = "sharpness-max";
+        private static final String KEY_DEFAULT_SHARPNESS = "sharpness-def";
         private static final String KEY_CONTRAST = "contrast";
         private static final String KEY_MAX_CONTRAST = "contrast-max";
+        private static final String KEY_DEFAULT_CONTRAST = "contrast-def";
         private static final String KEY_SATURATION = "saturation";
         private static final String KEY_MAX_SATURATION = "saturation-max";
+        private static final String KEY_DEFAULT_SATURATION = "saturation-def";
+        private static final String KEY_BRIGHTNESS = "brightness";
+        private static final String KEY_MAX_BRIGHTNESS = "brightness-max";
+        private static final String KEY_DEFAULT_BRIGHTNESS = "brightness-def";
+        private static final String KEY_SMART_CONTRAST = "smart-contrast";
+        
         // Parameter key suffix for supported values.
         private static final String SUPPORTED_VALUES_SUFFIX = "-values";
 
@@ -800,9 +808,9 @@ public class Camera {
         public static final String EFFECT_AQUA = "aqua";
 
         // Values for auto exposure settings.
-        public static final String AUTO_EXPOSURE_FRAME_AVG = "frame-average";
-        public static final String AUTO_EXPOSURE_CENTER_WEIGHTED = "center-weighted";
-        public static final String AUTO_EXPOSURE_SPOT_METERING = "spot-metering";
+        public static final String AUTO_EXPOSURE_FRAME_AVG = "meter-average";
+        public static final String AUTO_EXPOSURE_CENTER_WEIGHTED = "meter-center";
+        public static final String AUTO_EXPOSURE_SPOT_METERING = "meter-spot";
 
         // Values for antibanding settings.
         public static final String ANTIBANDING_AUTO = "auto";
@@ -813,12 +821,13 @@ public class Camera {
         //Values for ISO settings
 
         public static final String ISO_AUTO = "auto";
-        public static final String ISO_HJR = "ISO_HJR";
-        public static final String ISO_100 = "ISO100";
-        public static final String ISO_200 = "ISO200";
-        public static final String ISO_400 = "ISO400";
-        public static final String ISO_800 = "ISO800";
-
+        public static final String ISO_HJR = "deblur";
+        public static final String ISO_100 = "100";
+        public static final String ISO_200 = "200";
+        public static final String ISO_400 = "400";
+        public static final String ISO_800 = "800";
+        public static final String ISO_1250 = "1250";
+        
         //Values for Lens Shading
 
         public static final String LENSSHADE_ENABLE = "enable";
@@ -1566,8 +1575,8 @@ public class Camera {
          *
          * @return sharpness level
          */
-        public int getSharpness(){
-            return getInt(KEY_SHARPNESS);
+        public float getSharpness(){
+            return getFloat(KEY_SHARPNESS, 0.0f);
         }
 
         /**
@@ -1575,7 +1584,7 @@ public class Camera {
          *
          * @param sharpness level
          */
-        public void setSharpness(int sharpness){
+        public void setSharpness(float sharpness){
             if((sharpness < 0) || (sharpness > getMaxSharpness()) )
                 throw new IllegalArgumentException(
                         "Invalid Sharpness " + sharpness);
@@ -1588,17 +1597,26 @@ public class Camera {
          *
          * @return max sharpness level
          */
-        public int getMaxSharpness(){
-            return getInt(KEY_MAX_SHARPNESS);
+        public float getMaxSharpness(){
+            return getFloat(KEY_MAX_SHARPNESS, 0.0f);
         }
 
+        /**
+         * Get default sharpness level
+         * 
+         * @return default sharpness level
+         */
+        public float getDefaultSharpness() {
+            return getFloat(KEY_DEFAULT_SHARPNESS, 0.0f);
+        }
+        
         /**
          * Get Contrast level
          *
          * @return contrast level
          */
-        public int getContrast(){
-            return getInt(KEY_CONTRAST);
+        public float getContrast(){
+            return getFloat(KEY_CONTRAST, 0.0f);
         }
 
         /**
@@ -1606,7 +1624,7 @@ public class Camera {
          *
          * @param contrast level
          */
-        public void setContrast(int contrast){
+        public void setContrast(float contrast){
             if((contrast < 0 ) || (contrast > getMaxContrast()))
                 throw new IllegalArgumentException(
                         "Invalid Contrast " + contrast);
@@ -1619,25 +1637,34 @@ public class Camera {
          *
          * @return max contrast level
          */
-        public int getMaxContrast(){
-            return getInt(KEY_MAX_CONTRAST);
+        public float getMaxContrast(){
+            return getFloat(KEY_MAX_CONTRAST, 0.0f);
         }
 
+        /**
+         * Get default contrast level
+         * 
+         * @return default contrast level
+         */
+        public float getDefaultContrast() {
+            return getFloat(KEY_DEFAULT_CONTRAST, 0.0f);
+        }
+        
         /**
          * Get Saturation level
          *
          * @return saturation level
          */
-        public int getSaturation(){
-            return getInt(KEY_SATURATION);
+        public float getSaturation(){
+            return getFloat(KEY_SATURATION, 0.0f);
         }
-
+        
         /**
          * Set Saturation Level
          *
          * @param saturation level
          */
-        public void setSaturation(int saturation){
+        public void setSaturation(float saturation){
             if((saturation < 0 ) || (saturation > getMaxSaturation()))
                 throw new IllegalArgumentException(
                         "Invalid Saturation " + saturation);
@@ -1650,10 +1677,59 @@ public class Camera {
          *
          * @return max contrast level
          */
-        public int getMaxSaturation(){
-            return getInt(KEY_MAX_SATURATION);
+        public float getMaxSaturation(){
+            return getFloat(KEY_MAX_SATURATION, 0.0f);
         }
 
+        /**
+         * Get default saturation level
+         * 
+         * @return default saturation level
+         */
+        public float getDefaultSaturation() {
+            return getFloat(KEY_DEFAULT_SATURATION, 0.0f);
+        }
+        
+        /**
+         * Get brightness level
+         *
+         * @return brightness level
+         */
+        public float getBrightness(){
+            return getFloat(KEY_BRIGHTNESS, 0.0f);
+        }
+        
+        /**
+         * Set brightness level
+         *
+         * @param brightness level
+         */
+        public void setBrightness(float brightness){
+            if((brightness < 0 ) || (brightness > getMaxBrightness()))
+                throw new IllegalArgumentException(
+                        "Invalid Brightness " + brightness);
+
+            set(KEY_BRIGHTNESS, String.valueOf(brightness));
+        }
+
+        /**
+         * Get Max Brightness Level
+         *
+         * @return max brightness level
+         */
+        public float getMaxBrightness(){
+            return getFloat(KEY_MAX_BRIGHTNESS, 0.0f);
+        }
+        
+        /**
+         * Get default brightness level
+         * 
+         * @return default brightness level
+         */
+        public float getDefaultBrightness() {
+            return getFloat(KEY_DEFAULT_BRIGHTNESS, 0.0f);
+        }
+        
         /**
          * Gets the current antibanding setting.
          *
@@ -2070,7 +2146,7 @@ public class Camera {
             set(KEY_AUTO_EXPOSURE, value);
         }
 
-       /**
+        /**
          * Gets the supported auto exposure setting.
          *
          * @return a List of AUTO_EXPOSURE_XXX string constants. null if auto exposure
@@ -2081,6 +2157,23 @@ public class Camera {
             return split(str);
         }
 
+        /**
+         * Sets the smart-contrast feature
+         * @param boolean
+         */
+        public void setSmartContrastEnabled(boolean enabled) {
+            set(KEY_SMART_CONTRAST, enabled ? "on" : "off");
+        }
+        
+        /**
+         * Gets the value of smart-contrast
+         *
+         * @return if smart-contrast is enabled
+         */
+        public boolean isSmartContrastEnabled() {
+            return "on".equals(get(KEY_SMART_CONTRAST));
+        }
+        
         // Splits a comma delimited string to an ArrayList of String.
         // Return null if the passing string is null or the size is 0.
         private ArrayList<String> split(String str) {
