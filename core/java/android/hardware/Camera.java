@@ -1947,7 +1947,7 @@ public class Camera {
          */
         public boolean isZoomSupported() {
             String str = get(KEY_ZOOM_SUPPORTED);
-            return TRUE.equals(str);
+            return TRUE.equals(str) && getMaxZoom() > 0;
         }
 
         /**
