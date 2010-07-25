@@ -2205,6 +2205,9 @@ public class Camera {
 
         // Returns the value of a float parameter.
         private float getFloat(String key, float defaultValue) {
+            if (!mMap.containsKey(key)) {
+                return defaultValue;
+            }
             try {
                 return Float.parseFloat(mMap.get(key));
             } catch (NumberFormatException ex) {
@@ -2214,6 +2217,9 @@ public class Camera {
 
         // Returns the value of a integer parameter.
         private int getInt(String key, int defaultValue) {
+            if (!mMap.containsKey(key)) {
+                return defaultValue;
+            }
             try {
                 return Integer.parseInt(mMap.get(key));
             } catch (NumberFormatException ex) {
