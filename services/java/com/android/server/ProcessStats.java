@@ -556,7 +556,7 @@ public class ProcessStats {
     private long[] getCpuSpeedTimes(long[] out) {
         long[] tempTimes = out;
         long[] tempSpeeds = mCpuSpeeds;
-        final int MAX_SPEEDS = 20;
+        final int MAX_SPEEDS = 30;
         if (out == null) {
             tempTimes = new long[MAX_SPEEDS]; // Hopefully no more than that
             tempSpeeds = new long[MAX_SPEEDS];
