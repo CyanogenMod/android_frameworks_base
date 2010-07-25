@@ -48,12 +48,16 @@ public class CamcorderProfile
      * resolution and higher audio sampling rate, etc, than those with low quality
      * level.
      *
+     * An optional profile, "front" is defined as a high quality profile for devices
+     * with a front-facing camera.
+     * 
      * Do not change these values/ordinals without updating their counterpart
      * in include/media/MediaProfiles.h!
      */
     public static final int QUALITY_LOW  = 0;
     public static final int QUALITY_HIGH = 1;
-
+    public static final int QUALITY_FRONT = 2;
+    
     /**
      * Default recording duration in seconds before the session is terminated.
      * This is useful for applications like MMS has limited file size requirement.
@@ -123,7 +127,7 @@ public class CamcorderProfile
      * @param quality the target quality level for the camcorder profile
      */
     public static CamcorderProfile get(int quality) {
-        if (quality < QUALITY_LOW || quality > QUALITY_HIGH) {
+        if (quality < QUALITY_LOW || quality > QUALITY_FRONT) {
             String errMessage = "Unsupported quality level: " + quality;
             throw new IllegalArgumentException(errMessage);
         }

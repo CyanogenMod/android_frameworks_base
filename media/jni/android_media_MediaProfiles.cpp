@@ -165,7 +165,7 @@ static jobject
 android_media_MediaProfiles_native_get_camcorder_profile(JNIEnv *env, jobject thiz, jint quality)
 {
     LOGV("native_get_camcorder_profile: %d", quality);
-    if (quality != CAMCORDER_QUALITY_HIGH && quality != CAMCORDER_QUALITY_LOW) {
+    if (quality != CAMCORDER_QUALITY_HIGH && quality != CAMCORDER_QUALITY_LOW && quality != CAMCORDER_QUALITY_FRONT) {
         jniThrowException(env, "java/lang/RuntimeException", "Unknown camcorder profile quality");
         return NULL;
     }
