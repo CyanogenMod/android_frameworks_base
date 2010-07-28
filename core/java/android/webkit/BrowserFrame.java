@@ -660,7 +660,9 @@ class BrowserFrame extends Handler {
                                               boolean userGesture,
                                               boolean synchronous,
                                               String username,
-                                              String password) {
+                                              String password,
+                                              int priority,
+                                              boolean commit) {
         PerfChecker checker = new PerfChecker();
 
         if (mSettings.getCacheMode() != WebSettings.LOAD_DEFAULT) {
@@ -734,6 +736,8 @@ class BrowserFrame extends Handler {
         LoadListener loadListener = LoadListener.getLoadListener(mContext,
                 this, url, loaderHandle, synchronous, isMainFramePage,
                 mainResource, userGesture, postDataIdentifier, username, password);
+        loadListener.setPriority(priority);
+        loadListener.setShouldCommit(commit);
 
         mCallbackProxy.onLoadResource(url);
 
