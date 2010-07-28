@@ -71,6 +71,9 @@ class Request {
     /** True if request has been cancelled */
     volatile boolean mCancelled = false;
 
+    /** Priority */
+    volatile int mPriority = -1;
+
     int mFailCount = 0;
 
     // This will be used to set the Range field if we retry a connection. This
@@ -111,13 +114,15 @@ class Request {
     Request(String method, HttpHost host, HttpHost proxyHost, String path,
             InputStream bodyProvider, int bodyLength,
             EventHandler eventHandler,
-            Map<String, String> headers) {
+            Map<String, String> headers,
+            int pri) {
         mEventHandler = eventHandler;
         mHost = host;
         mProxyHost = proxyHost;
         mPath = path;
         mBodyProvider = bodyProvider;
         mBodyLength = bodyLength;
+        mPriority = pri;
 
         if (bodyProvider == null && !"POST".equalsIgnoreCase(method)) {
             mHttpRequest = new BasicHttpRequest(method, getUri());

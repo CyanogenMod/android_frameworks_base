@@ -40,6 +40,8 @@ class ConnectionThread extends Thread {
     private Context mContext;
     private RequestQueue.ConnectionManager mConnectionManager;
     private RequestFeeder mRequestFeeder;
+    private volatile HttpHost mCurrentHost;
+    private volatile Request mNewRequest;
 
     private int mId;
     Connection mConnection;
@@ -54,13 +56,23 @@ class ConnectionThread extends Thread {
         mId = id;
         mConnectionManager = connectionManager;
         mRequestFeeder = requestFeeder;
+        mCurrentHost = null;
+        mNewRequest = null;
     }
 
-    void requestStop() {
+    public void requestStop() {
         synchronized (mRequestFeeder) {
             mRunning = false;
             mRequestFeeder.notify();
         }
+    }
+
+    public HttpHost getCurrentHost() {
+        return mCurrentHost;
+    }
+
+    public void setNewRequest(Request req) {
+        mNewRequest = req;
     }
 
     /**
@@ -87,7 +99,11 @@ class ConnectionThread extends Thread {
             Request request;
 
             /* Get a request to process */
-            request = mRequestFeeder.getRequest();
+            if (mNewRequest != null) {
+                request = mNewRequest;
+                mNewRequest = null;
+            } else
+                request = mRequestFeeder.getRequest();
 
             /* wait for work */
             if (request == null) {
@@ -103,13 +119,18 @@ class ConnectionThread extends Thread {
                         mCurrentThreadTime = SystemClock
                                 .currentThreadTimeMillis();
                     }
+                    // Make sure the connection does not start to drain before the first request has been processed
                 }
             } else {
                 if (HttpLog.LOGV) HttpLog.v("ConnectionThread: new request " +
                                             request.mHost + " " + request );
 
-                mConnection = mConnectionManager.getConnection(mContext,
-                        request.mHost);
+                // ### this should possibly have some kind of lock to prevent the requestqueue from seeing the host as busy when it's not
+                mCurrentHost = request.mHost;
+                synchronized (this) {
+                    mConnection = mConnectionManager.getConnection(mContext, request.mHost);
+                    mConnection.setConnectionThread(this);
+                }
                 mConnection.processRequests(request);
                 if (mConnection.getCanPersist()) {
                     if (!mConnectionManager.recycleConnection(mConnection)) {
@@ -118,7 +139,12 @@ class ConnectionThread extends Thread {
                 } else {
                     mConnection.closeConnection();
                 }
-                mConnection = null;
+                synchronized (this) {
+                    mConnection.setConnectionThread(null);
+                    mConnection = null;
+                }
+
+                mCurrentHost = null;
 
                 if (mCurrentThreadTime > 0) {
                     long start = mCurrentThreadTime;

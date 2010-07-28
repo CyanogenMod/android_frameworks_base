@@ -359,7 +359,7 @@ class HTML5VideoViewProxy extends Handler
         // Start the download. Called on WebCore thread.
         public void start() {
             retainQueue();
-            mRequestHandle = mRequestQueue.queueRequest(mUrl, "GET", null, this, null, 0);
+            mRequestHandle = mRequestQueue.queueRequest(mUrl, "GET", null, this, null, 0, -1, false);
         }
         // Cancel the download if active and release the queue. Called on WebCore thread.
         public void cancelAndReleaseQueue() {

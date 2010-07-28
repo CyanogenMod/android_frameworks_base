@@ -36,6 +36,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.InputStream;
+import java.util.Comparator;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -57,6 +60,7 @@ public class RequestQueue implements RequestFeeder {
     private final Context mContext;
     private final ActivePool mActivePool;
     private final ConnectivityManager mConnectivityManager;
+    private final HashSet<HttpHost> mPriorities;
 
     private HttpHost mProxyHost = null;
     private BroadcastReceiver mProxyChangeReceiver;
@@ -213,12 +217,65 @@ public class RequestQueue implements RequestFeeder {
         mContext = context;
 
         mPending = new LinkedHashMap<HttpHost, LinkedList<Request>>(32);
+        mPriorities = new HashSet<HttpHost>();
 
         mActivePool = new ActivePool(connectionCount);
         mActivePool.startup();
 
         mConnectivityManager = (ConnectivityManager)
                 context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    }
+
+    public synchronized boolean setRequestPriority(WebAddress uri, int priority) {
+        // ### this lookup won't work if a proxy is being used
+        HttpHost host = new HttpHost(uri.mHost, uri.mPort, uri.mScheme);
+        if (mPending.containsKey(host)) {
+            LinkedList<Request> reqList = mPending.get(host);
+            // ### O(n) lookup, certainly not ideal
+            ListIterator iter = reqList.listIterator(0);
+            while (iter.hasNext()) {
+                Request request = (Request)iter.next();
+                if (request.mPath.equals(uri.mPath)) {
+                    request.mPriority = priority;
+                    mPriorities.add(host);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void commitPrioritiesForList(LinkedList<Request> reqList) {
+        Collections.sort(reqList, new Comparator<Object>() {
+            public int compare(Object o1, Object o2) {
+                int r1 = ((Request)o1).mPriority;
+                int r2 = ((Request)o2).mPriority;
+
+                if (r1 == r2)
+                    return 0;
+                else if (r1 == -1)
+                    return 1;
+                else if (r2 == -1)
+                    return -1;
+                else if (r1 < r2)
+                    return -1;
+                return 1;
+            }
+        });
+    }
+
+    public synchronized void commitRequestPriorities() {
+        if (mPriorities.isEmpty())
+            return;
+        Iterator iter = mPriorities.iterator();
+        while (iter.hasNext()) {
+            HttpHost host = (HttpHost)iter.next();
+            if (mPending.containsKey(host)) {
+                LinkedList<Request> reqList = mPending.get(host);
+                commitPrioritiesForList(reqList);
+            }
+        }
+        mPriorities.clear();
     }
 
     /**
@@ -297,9 +354,17 @@ public class RequestQueue implements RequestFeeder {
             String url, String method,
             Map<String, String> headers, EventHandler eventHandler,
             InputStream bodyProvider, int bodyLength) {
+        return queueRequest(url, method, headers, eventHandler,
+                            bodyProvider, bodyLength, -1, false);
+    }
+
+    public RequestHandle queueRequest(
+            String url, String method,
+            Map<String, String> headers, EventHandler eventHandler,
+            InputStream bodyProvider, int bodyLength, int pri, boolean commit) {
         WebAddress uri = new WebAddress(url);
         return queueRequest(url, uri, method, headers, eventHandler,
-                            bodyProvider, bodyLength);
+                            bodyProvider, bodyLength, pri, commit);
     }
 
     /**
@@ -316,7 +381,7 @@ public class RequestQueue implements RequestFeeder {
     public RequestHandle queueRequest(
             String url, WebAddress uri, String method, Map<String, String> headers,
             EventHandler eventHandler,
-            InputStream bodyProvider, int bodyLength) {
+            InputStream bodyProvider, int bodyLength, int pri, boolean commit) {
 
         if (HttpLog.LOGV) HttpLog.v("RequestQueue.queueRequest " + uri);
 
@@ -331,9 +396,9 @@ public class RequestQueue implements RequestFeeder {
 
         // set up request
         req = new Request(method, httpHost, mProxyHost, uri.mPath, bodyProvider,
-                          bodyLength, eventHandler, headers);
+                          bodyLength, eventHandler, headers, pri);
 
-        queueRequest(req, false);
+        queueRequest(req, false, commit);
 
         mActivePool.mTotalRequest++;
 
@@ -359,11 +424,17 @@ public class RequestQueue implements RequestFeeder {
         public Request getRequest(HttpHost host) {
             return getRequest();
         }
+        public Request peekRequest() {
+            return mRequest;
+        }
         public boolean haveRequest(HttpHost host) {
             return mRequest != null;
         }
         public void requeueRequest(Request r) {
             mRequest = r;
+        }
+        public void requeueRequest(Request r, boolean commit, boolean notif) {
+            requeueRequest(r);
         }
     }
 
@@ -378,7 +449,7 @@ public class RequestQueue implements RequestFeeder {
         HttpHost host = new HttpHost(uri.mHost, uri.mPort, uri.mScheme);
 
         Request req = new Request(method, host, mProxyHost, uri.mPath,
-                bodyProvider, bodyLength, eventHandler, headers);
+                bodyProvider, bodyLength, eventHandler, headers, 0);
 
         // Open a new connection that uses our special RequestFeeder
         // implementation.
@@ -444,16 +515,55 @@ public class RequestQueue implements RequestFeeder {
         HttpLog.v(dump.toString());
     }
 
+    private Map.Entry<HttpHost, LinkedList<Request>> priorityList() {
+        int curPri = -1;
+        int entryPri;
+        Map.Entry<HttpHost, LinkedList<Request>> ret = null;
+        if (!mPending.isEmpty()) {
+            Iterator<Map.Entry<HttpHost, LinkedList<Request>>> iter = mPending.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry<HttpHost, LinkedList<Request>> entry = iter.next();
+                if (ret == null) {
+                    ret = entry;
+                }
+                entryPri = entry.getValue().getFirst().mPriority;
+                if (entryPri != -1 && (curPri == -1 || curPri > entryPri)) {
+                    ret = entry;
+                    curPri = entryPri;
+                }
+            }
+        }
+        return ret;
+    }
+
+    public synchronized Request peekRequest() {
+        Request ret = null;
+
+        Map.Entry<HttpHost, LinkedList<Request>> entry = priorityList();
+        if (entry != null && !entry.getValue().isEmpty()) {
+            if (entry.getValue().getFirst().mPriority != -1)
+                ret = entry.getValue().getFirst();
+        }
+
+        return ret;
+    }
+
     /*
      * RequestFeeder implementation
      */
     public synchronized Request getRequest() {
         Request ret = null;
 
-        if (!mPending.isEmpty()) {
-            ret = removeFirst(mPending);
+        Map.Entry<HttpHost, LinkedList<Request>> entry = priorityList();
+        if (entry != null) {
+            LinkedList<Request> reqList = entry.getValue();
+            ret = reqList.removeFirst();
+            if (reqList.isEmpty()) {
+                mPending.remove(entry.getKey());
+            }
         }
         if (HttpLog.LOGV) HttpLog.v("RequestQueue.getRequest() => " + ret);
+
         return ret;
     }
 
@@ -485,7 +595,13 @@ public class RequestQueue implements RequestFeeder {
      * Put request back on head of queue
      */
     public void requeueRequest(Request request) {
-        queueRequest(request, true);
+        requeueRequest(request, true, true);
+    }
+
+    public void requeueRequest(Request request, boolean commit, boolean notif) {
+        queueRequest(request, true, commit);
+        if (notif)
+            mActivePool.startConnectionThread();
     }
 
     /**
@@ -495,7 +611,7 @@ public class RequestQueue implements RequestFeeder {
         mActivePool.shutdown();
     }
 
-    protected synchronized void queueRequest(Request request, boolean head) {
+    protected synchronized void queueRequest(Request request, boolean head, boolean commit) {
         HttpHost host = request.mProxyHost == null ? request.mHost : request.mProxyHost;
         LinkedList<Request> reqList;
         if (mPending.containsKey(host)) {
@@ -508,6 +624,11 @@ public class RequestQueue implements RequestFeeder {
             reqList.addFirst(request);
         } else {
             reqList.add(request);
+        }
+        if (commit && request.mPriority != -1) {
+            commitPrioritiesForList(reqList);
+        } else if (!commit && request.mPriority != -1) {
+            mPriorities.add(host);
         }
     }
 
