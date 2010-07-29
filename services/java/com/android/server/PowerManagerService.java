@@ -2113,8 +2113,11 @@ class PowerManagerService extends IPowerManager.Stub
             Slog.d(TAG, "lightSensorChangedLocked " + value);
         }
 
-        // do not allow light sensor value to decrease
-        if (mHighestLightSensorValue < value) {
+        // do not allow light sensor value to decrease unless the environment it's very dark
+        if (value < 300) {
+            mHighestLightSensorValue = value;
+        }
+        else if (mHighestLightSensorValue < value) {
             mHighestLightSensorValue = value;
         }
 
