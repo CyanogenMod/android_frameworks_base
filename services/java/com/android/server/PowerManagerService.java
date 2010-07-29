@@ -2114,7 +2114,7 @@ class PowerManagerService extends IPowerManager.Stub
         }
 
         // do not allow light sensor value to decrease unless the environment it's very dark
-        if (value < 300) {
+        if (value < 200) {
             mHighestLightSensorValue = value;
         }
         else if (mHighestLightSensorValue < value) {
