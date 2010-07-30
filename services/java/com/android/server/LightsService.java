@@ -95,16 +95,16 @@ public class LightsService {
 
         public void pulse(int color, int onMS) {
             synchronized (this) {
-		//if (mColor == 0 && !mFlashing) { Pedlar: Look into this.
+		if (mColor == 0 && !mFlashing) { //Pedlar: Look into this.
                 //if (mColor == 0) {
                     setLightLocked(color, LIGHT_FLASH_HARDWARE, onMS, 1000, BRIGHTNESS_MODE_USER);
                     mH.sendMessageDelayed(Message.obtain(mH, 1, this), onMS);
-                //}
+                }
             }
         }
 
 	public void notificationPulse(int color, int onMs, int offMs) {
-		setLightLocked(color, LIGHT_FLASH_PULSE, onMs, offMs, BRIGHTNESS_MODE_USER);
+		setLightLocked(color, LIGHT_FLASH_PULSE, onMs, 1000, BRIGHTNESS_MODE_USER);
                 mH.sendMessageDelayed(Message.obtain(mH, 1, this), onMs);
 	}
 
@@ -123,19 +123,19 @@ public class LightsService {
         private void setLightLocked(int color, int mode, int onMS, int offMS, int brightnessMode) {
 		if(mode == LIGHT_FLASH_PULSE) {
 			mColor = color;
-			mMode = mode;
+			mMode = LIGHT_FLASH_HARDWARE;
 			mOnMS = onMS;
 			mOffMS = offMS;
-			setLight_native(mNativePointer, mId, color, mode, onMS, offMS, brightnessMode);
+			setLight_native(mNativePointer, mId, color, LIGHT_FLASH_HARDWARE, onMS, offMS, brightnessMode);
+			return;
 		}
-
-	     if (color != mColor || mode != mMode || onMS != mOnMS || offMS != mOffMS) {
-                mColor = color;
-                mMode = mode;
-                mOnMS = onMS;
-                mOffMS = offMS;
-                setLight_native(mNativePointer, mId, color, mode, onMS, offMS, brightnessMode);
-            }
+	        else if (color != mColor || mode != mMode || onMS != mOnMS || offMS != mOffMS) {
+                	mColor = color;
+                	mMode = mode;
+                	mOnMS = onMS;
+                	mOffMS = offMS;
+                	setLight_native(mNativePointer, mId, color, mode, onMS, offMS, brightnessMode);
+            	}
         }
 
         private int mId;

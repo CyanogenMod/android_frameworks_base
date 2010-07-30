@@ -62,6 +62,9 @@ import java.util.TimerTask;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import android.os.PowerManager;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -116,6 +119,7 @@ class NotificationManagerService extends INotificationManager.Stub
 
     // for enabling and disabling notification pulse behavior
     private boolean mScreenOn = true;
+    private boolean mScreenUpdate = false;
     private boolean mInCall = false;
     private boolean mNotificationPulseEnabled;
 
@@ -142,9 +146,14 @@ class NotificationManagerService extends INotificationManager.Stub
     private static final int BATTERY_FULL_ARGB = 0xFF00FF00; // Charging Full - green solid on
     private static final int BATTERY_BLINK_ON = 125;
     private static final int BATTERY_BLINK_OFF = 2875;
-    
-    private static int mLastLight = 0;
-    private static boolean isTimer = false;
+
+    private static ExecutorService threadExecutor;
+    private int mLastLight = 0;
+    private boolean isTimer = false;
+    private static boolean hasLights = false;
+    private PowerManager PowerMan;
+    private static PowerManager.WakeLock powerWake = null;
+    //private static ExecutorService threadExecutor;
 
     private static String idDebugString(Context baseContext, String packageName, int id) {
         Context c = null;
@@ -372,10 +381,18 @@ class NotificationManagerService extends INotificationManager.Stub
                 }
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 mScreenOn = true;
-                updateNotificationPulse();
+                mScreenUpdate = true;
+		int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_SCREEN_ON, 0);
+                if(mPulseScreen == 0) { //Why bother if we are going to pulse anyways?
+                	updateNotificationPulse();
+                }
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 mScreenOn = false;
-                updateNotificationPulse();
+		mScreenUpdate = true;
+                int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_SCREEN_ON, 0);
+                if(mPulseScreen == 0) { //Why bother if we are going to pulse anyways?
+                        updateNotificationPulse();
+                }
             } else if (action.equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
                 mInCall = (intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(TelephonyManager.EXTRA_STATE_OFFHOOK));
                 updateNotificationPulse();
@@ -923,7 +940,7 @@ class NotificationManagerService extends INotificationManager.Stub
      */
     private void cancelNotification(String pkg, String tag, int id, int mustHaveFlags,
             int mustNotHaveFlags) {
-        EventLog.writeEvent(EventLogTags.NOTIFICATION_CANCEL, pkg, id, mustHaveFlags);
+            EventLog.writeEvent(EventLogTags.NOTIFICATION_CANCEL, pkg, id, mustHaveFlags);
 
         synchronized (mNotificationList) {
             int index = indexOfNotificationLocked(pkg, tag, id);
@@ -1079,9 +1096,37 @@ class NotificationManagerService extends INotificationManager.Stub
 		temp = mString.split("=");
 		return temp;
 	}
+	
+	public class StartTimerClass implements Runnable {
+		private long sleepTimer;
+
+		public StartTimerClass(long timer) {
+			sleepTimer = timer;
+		}
+
+		public void run() {
+			powerWake.acquire();
+			try {
+				while(hasLights == true) {
+					Thread.sleep(sleepTimer);
+					updateLights();
+					Log.i("StartTimer", "Pulsing light after sleeping for "+sleepTimer);
+				}
+			} catch (InterruptedException e) {
+				Log.e("StartClass Sleep", e.toString());
+			}
+			powerWake.release();
+			threadExecutor = null;
+			Log.i("StartTimer", "Ended");
+		}
+	}
 
     private int lastColor = 1;
     private String[] colorList = {"green", "white", "red", "blue", "yellow", "cyan", "#800080", "#ffc0cb", "#ffa500", "#add8e6"};
+
+    public void newExecutor() {
+	threadExecutor = Executors.newSingleThreadExecutor();
+    }
 
     // lock on mNotificationList
     private void updateLightsLocked()
@@ -1091,7 +1136,7 @@ class NotificationManagerService extends INotificationManager.Stub
         mPackages = getArray(mPackageList);
         int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_SCREEN_ON, 0);
     	int mSucsession = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_SUCESSION, 0);
-	int mRandomColor = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_RANDOM, 0);
+    	int mRandomColor = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_RANDOM, 0);
     	int mPulseAllColor = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_PULSE_ORDER, 0);
 
         // Battery low always shows, other states only show if charging.
@@ -1123,32 +1168,32 @@ class NotificationManagerService extends INotificationManager.Stub
             }
         }
 
-        //Pulse around abit
-        if(mSucsession != 0) {
-        	int n = mLights.size();
-        	if (n > 0) {
-        		int thisLight = n;
-        			if(mLastLight > thisLight) {
-        				thisLight = 1;
-        			} else {
-        				thisLight = mLastLight + 1;
-        			}
-        			//One last arthmetic check for sanitys sake.
-        			if((thisLight == (mLastLight - 1)) || (thisLight > n)) {
-        				thisLight = 1;
-        			}
-        			//Log.i("Sucession", "mLights.size="+n+" thisLight: "+thisLight+" mLastLight: " +mLastLight+" mLights: " + mLights.toString());
-        			mLedNotification = mLights.get(thisLight-1);
-        			mLastLight = thisLight;
-        	}
-        }
-
         // we only flash if screen is off and persistent pulsing is enabled
         // and we are not currently in a call
         if (mLedNotification == null || (mScreenOn && (mPulseScreen == 0)) || mInCall) {
             mNotificationLight.turnOff();
+	    hasLights = false;
         } else { 
-        	int ledARGB = mLedNotification.notification.ledARGB;
+		hasLights = true;
+                if(mSucsession != 0) {
+                        int n = mLights.size();
+                        if (n > 0) {
+                                int thisLight = n;
+                                if(mLastLight > thisLight) {
+                                        thisLight = 1;
+                                } else {
+                                        thisLight = mLastLight + 1;
+                                }
+                                //One last arthmetic check for sanitys sake.
+                                if((thisLight == (mLastLight - 1)) || (thisLight > n)) {
+                                        thisLight = 1;
+                                }
+                                Log.i("Sucession", "mLights.size="+n+" thisLight: "+thisLight+" mLastLight: " +mLastLight+" mLights: " + mLights.toString());
+                                mLedNotification = mLights.get(thisLight-1);
+                                mLastLight = thisLight;
+                       }
+                }
+	       	int ledARGB = mLedNotification.notification.ledARGB;
         	int ledOnMS = mLedNotification.notification.ledOnMS;
             int ledOffMS = mLedNotification.notification.ledOffMS;
             if ((mLedNotification.notification.defaults & Notification.DEFAULT_LIGHTS) != 0) {
@@ -1170,13 +1215,13 @@ class NotificationManagerService extends INotificationManager.Stub
             			continue;
             		}
             		if(mPackageInfo[0].matches(mLedNotification.pkg)) {
-				if(mPackageInfo[1].equals("random")) {
-					Random generator = new Random();
-                			int x = generator.nextInt(colorList.length - 1);
+            			if(mPackageInfo[1].equals("random")) {
+            				Random generator = new Random();
+            				int x = generator.nextInt(colorList.length - 1);
                 			ledARGB = Color.parseColor(colorList[x]);
-				} else {
+            			} else {
             				ledARGB = Color.parseColor(mPackageInfo[1]);
-				}
+            			}
             			ledOffMS = Integer.parseInt(mPackageInfo[2]);
             		}
             	}
@@ -1188,24 +1233,43 @@ class NotificationManagerService extends INotificationManager.Stub
                 int x = generator.nextInt(colorList.length - 1);
                 ledARGB = Color.parseColor(colorList[x]);
             } else if(mPulseAllColor != 0) {
-		if(lastColor >= colorList.length)
-			lastColor = 1;
-		ledARGB = Color.parseColor(colorList[lastColor - 1]);
-		lastColor = lastColor + 1;
-	    }
+            	if(lastColor >= colorList.length)
+            		lastColor = 1;
+            	ledARGB = Color.parseColor(colorList[lastColor - 1]);
+            	lastColor = lastColor + 1;
+            }
 
             if (mNotificationPulseEnabled) {
                 // pulse repeatedly
             	if((mSucsession != 0) || (mRandomColor != 0) || (mPulseAllColor != 0)) {
-            		if(isTimer == false) {
-				isTimer = true;
-				TimerTask updateTask;
+
+
+			/* Our wake lock information to keep us alive */
+			if(powerWake == null) {
+				PowerMan = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+				powerWake = PowerMan.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "NotificationLights");
+			}
+            		long scheduleTime = ledOnMS+ledOffMS;
+    		        if(scheduleTime < 2500) {
+            	    		scheduleTime = 2500;
+     	           	}
+			StartTimerClass timerRun = new StartTimerClass(scheduleTime);
+      			if(threadExecutor == null) {
+	      			//StartTimerClass timerRun = new StartTimerClass(scheduleTime);
+				Log.i("CreateThread", "Creating new Executor Thread");
+				newExecutor();
+			}
+			Log.i("ExecuteThread", "Executing TimerRun");
+                        threadExecutor.execute(timerRun);
+/*            		if(isTimer == false) {
+            			isTimer = true;
+            			TimerTask updateTask;
                 		Timer timer = new Timer();
                 		updateTask = new TimerTask() {
                         		public void run() {
-						isTimer = false;
-						updateLightsLocked();
-                                                //updateNotificationPulse();
+                        			isTimer = false;
+                        			updateLightsLocked();
+                                    //updateNotificationPulse();
                         		}
                     		};
 
@@ -1214,7 +1278,7 @@ class NotificationManagerService extends INotificationManager.Stub
                 	    		scheduleTime = 2500;
          	           	}
             			timer.schedule(updateTask, scheduleTime);
-			}
+					}*/
             		mNotificationLight.notificationPulse(ledARGB, ledOnMS, ledOffMS);
             	} else {
                     	mNotificationLight.setFlashing(ledARGB, LightsService.LIGHT_FLASH_TIMED,
