@@ -1991,7 +1991,13 @@ public final class Settings {
          * @hide
          */
         public static final String NOTIF_EXPANDED_BAR_CUSTOM = "notif_expanded_bar_custom";
-        
+
+        /**
+         * Whether to keep the home app at a higher OOM adjustement
+         * @hide
+         */
+        public static final String LOCK_HOME_IN_MEMORY = "lock_home_in_memory";
+
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
