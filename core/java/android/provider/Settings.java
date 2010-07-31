@@ -1900,6 +1900,12 @@ public final class Settings {
         public static final String TORCH_STATE = "torch_state";
 
         /**
+         * Whether to keep the home app at a higher OOM adjustement
+         * @hide
+         */
+        public static final String LOCK_HOME_IN_MEMORY = "lock_home_in_memory";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          * @hide
