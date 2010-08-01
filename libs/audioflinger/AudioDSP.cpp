@@ -26,7 +26,7 @@
 namespace android {
 
 /* Keep this in sync with AudioMixer's FP decimal count. */
-static const int fixedPointDecimals = 12;
+static const int32_t fixedPointDecimals = 12;
 
 const String8 AudioDSP::keyCompressionEnable = String8("dsp.compression.enable"); 
 const String8 AudioDSP::keyCompressionRatio = String8("dsp.compression.ratio"); 
@@ -40,17 +40,16 @@ const String8 AudioDSP::keyToneEq5 = String8("dsp.tone.eq5");
 
 const String8 AudioDSP::keyHeadphoneEnable = String8("dsp.headphone.enable"); 
 
-static int toFixedPoint(float x)
+static int16_t toFixedPoint(float x)
 {
-    return (int) (x * (1 << fixedPointDecimals) + 0.5f);
+    return int16_t(x * (1 << fixedPointDecimals) + 0.5f);
 }
 
-/* bah, rewrite me as a proper random number generator */
 static uint32_t seed = 1;
-static const uint32_t ditherBits = (1 << fixedPointDecimals) - 1;
-static int32_t dither() {
-    seed = (seed * 22695477) + 1;
-    return int32_t((seed >> 16) & ditherBits);
+static const uint32_t fixedPointBits = (1 << fixedPointDecimals) - 1;
+static int16_t prng() {
+    seed = (seed * 12345) + 1103515245;
+    return int16_t(seed & fixedPointBits);
 }
 
 Allpass::Allpass()
@@ -74,22 +73,21 @@ void Allpass::setParameters(float samplingFrequency, float k, float time)
         delete[] mState;
     }
     mState = new int32_t[mLength];
-    for (int i = 0; i < mLength; i ++) {
-        mState[i] = 0;
-    }
+    memset(mState, 0, mLength * sizeof(int32_t));
 }
 
-int Allpass::process(int x0)
+int32_t Allpass::process(int32_t x0)
 {
-    int tmp = x0 - mK * (mState[mIndex] >> fixedPointDecimals);
-    int y0 = mState[mIndex] + mK * (tmp >> fixedPointDecimals);
+    int32_t tmp = x0 - mK * (mState[mIndex] >> fixedPointDecimals);
+    int32_t y0 = mState[mIndex] + mK * (tmp >> fixedPointDecimals);
     mState[mIndex] = tmp;
     mIndex = (mIndex + 1) % mLength;
     return y0;
 }
 
 Biquad::Biquad()
-   : mA1(0), mA2(0), mB0(0), mB1(0), mB2(0), mY1(0), mY2(0), mX1(0), mX2(0), mY0over(0)
+   : mA1(0), mA2(0), mB0(0), mB1(0), mB2(0),
+     mY1(0), mY2(0), mX1(0), mX2(0), mY0(0)
 {
 }
 
@@ -160,14 +158,13 @@ void Biquad::setLowShelf(float center_frequency, float sampling_frequency, float
 }
 
 /* returns output scaled by fixedPoint factor */
-int Biquad::process(int x0)
+int32_t Biquad::process(int16_t x0)
 {
-    int y0 = mB0 * x0 + mB1 * mX1 + mB2 * mX2 - mY1 * mA1 - mY2 * mA2;
-
+    int32_t y0 = mY0 + mB0 * x0 + mB1 * mX1 + mB2 * mX2 - mY1 * mA1 - mY2 * mA2;
+    
     mY2 = mY1;
-    mY0over += y0 & ((1 << fixedPointDecimals) - 1);
-    mY1 = (y0 >> fixedPointDecimals) + (mY0over >> fixedPointDecimals);
-    mY0over &= (1 << fixedPointDecimals) - 1;
+    mY1 = y0 >> fixedPointDecimals;
+    mY0 = y0 & fixedPointBits;
 
     mX2 = mX1;
     mX1 = x0;
@@ -191,7 +188,6 @@ void Effect::configure(const float samplingFrequency) {
 
 
 EffectCompression::EffectCompression()
-    : mOldCorrectionDb(0), mCompressionRatio(2)
 {
 }
 
@@ -199,33 +195,36 @@ EffectCompression::~EffectCompression()
 {
 }
 
-void EffectCompression::setRatio(float compressionRatio) {
+void EffectCompression::configure(const float samplingFrequency)
+{
+    Effect::configure(samplingFrequency);
+}
+
+void EffectCompression::setRatio(float compressionRatio)
+{
     mCompressionRatio = compressionRatio;
 }
 
-void EffectCompression::process(int *inout, int frames)
+void EffectCompression::process(int32_t *inout, int32_t frames)
 {
 }
 
-int32_t EffectCompression::estimateLevel(const int16_t *audioData, int samples)
+int32_t EffectCompression::estimateLevel(const int16_t *audioData, int32_t frames, int32_t samplesPerFrame)
 {
-    int32_t power = 0;
-    int32_t powerAccum = 0;
-    for (int i = 0; i < samples; i ++) {
-        int32_t tmp = *audioData ++;
-        tmp = tmp * tmp;
-
-        powerAccum += tmp & 0xffff;
-        power += tmp >> 16;
-        power += powerAccum >> 16;
-        powerAccum &= 0xffff;
+    /* FIXME: find a cheap approximation of equal loudness curve and apply
+     * it here. Something like replaygain's, but not so darn expensive. */
+    uint32_t power = 0;
+    int32_t samples = frames * samplesPerFrame;
+    for (int32_t i = 0; i < samples; i ++) {
+        int16_t tmp = *audioData ++;
+        power += tmp * tmp >> 16;
     }
 
-    float signalPower = sqrtf((65536.0f*power + powerAccum) / samples);
-    float signalPowerDb = -96.0f;
-    if (signalPower != 0) {
-        signalPowerDb = logf(signalPower / 32768.0f) / logf(10) * 10;
-    }
+    float signalPower = (65536.0f*power) / samples / 32768.0f / 32768.0f;
+    /* -100 .. 0 dB */
+    float signalPowerDb = logf(signalPower + 1e-10f) / logf(10) * 10;
+    /* target 83 dB SPL */
+    signalPowerDb += 96 - 83;
 
     /* now we have an estimate of the signal power in range from
      * -96 dB to 0 dB. Now we estimate what level we want. */
@@ -233,34 +232,23 @@ int32_t EffectCompression::estimateLevel(const int16_t *audioData, int samples)
 
     /* turn back to multiplier */
     float correctionDb = desiredLevelDb - signalPowerDb;
-    /* filter envelope for stability. This is currently a crude approximation
-     * to get something semi-reasonable going. */
-    if (correctionDb > mOldCorrectionDb + 0.2f) {
-        correctionDb = mOldCorrectionDb + 0.2f;
-    }
-    if (correctionDb < mOldCorrectionDb - 0.2f) {
-        correctionDb = mOldCorrectionDb - 0.2f;
-    }
-    mOldCorrectionDb = correctionDb;
 
-    int32_t desiredMultiplier = int32_t(65536 * powf(10, correctionDb / 20));
-
-    return desiredMultiplier; 
+    return int32_t(65536 * powf(10, correctionDb / 20));
 }
 
 
 EffectTone::EffectTone()
 {
-    for (int i = 0; i < 5; i ++) {
+    for (int32_t i = 0; i < 5; i ++) {
         mBand[i] = 0;
     }
-    for (int i = 0; i < 5; i ++) {
+    for (int32_t i = 0; i < 5; i ++) {
         setBand(i, 0);
     }
 }
 
 EffectTone::~EffectTone() {
-    for (int i = 0; i < 4; i ++) {
+    for (int32_t i = 0; i < 4; i ++) {
         delete &mFilterL[i];
         delete &mFilterR[i];
     }
@@ -271,7 +259,7 @@ void EffectTone::configure(const float samplingFrequency) {
     refreshBands();
 }
  
-void EffectTone::setBand(int band, float dB)
+void EffectTone::setBand(int32_t band, float dB)
 {
     mBand[band] = dB;
     refreshBands();
@@ -280,7 +268,7 @@ void EffectTone::setBand(int band, float dB)
 void EffectTone::refreshBands() {
     mGain = toFixedPoint(powf(10, mBand[0] / 20));
 
-    for (int band = 0; band < 3; band ++) {
+    for (int32_t band = 0; band < 3; band ++) {
         float dB = mBand[band + 1] - mBand[0];
         float centerFrequency = 250.0f * powf(4, band);
 
@@ -289,7 +277,7 @@ void EffectTone::refreshBands() {
     }
 
     {
-        int band = 3;
+        int32_t band = 3;
 
         float dB = mBand[band + 1] - mBand[0];
         float centerFrequency = 250.0f * powf(4, band);
@@ -299,11 +287,11 @@ void EffectTone::refreshBands() {
     }
 }
 
-void EffectTone::process(int *inout, int frames)
+void EffectTone::process(int32_t *inout, int32_t frames)
 {
-    for (int i = 0; i < frames; i ++) {
-        int tmpL = inout[0] >> fixedPointDecimals;
-        int tmpR = inout[1] >> fixedPointDecimals;
+    for (int32_t i = 0; i < frames; i ++) {
+        int32_t tmpL = inout[0] >> fixedPointDecimals;
+        int32_t tmpR = inout[1] >> fixedPointDecimals;
         /* 16 bits */
        
         /* bass control is really a global gain compensated by other
@@ -312,10 +300,12 @@ void EffectTone::process(int *inout, int frames)
         tmpR = tmpR * mGain;
         /* 28 bits */
 
-        /* evaluate the other filters */
-        for (int j = 0; j < 4; j ++) {
-            tmpL = mFilterL[j].process(tmpL >> 12);
-            tmpR = mFilterR[j].process(tmpR >> 12);
+        /* evaluate the other filters.
+         * I'm ignoring the integer truncation problem here, but in reality
+         * it should be accounted for. */
+        for (int32_t j = 0; j < 4; j ++) {
+            tmpL = mFilterL[j].process(tmpL >> fixedPointDecimals);
+            tmpR = mFilterR[j].process(tmpR >> fixedPointDecimals);
         }
         /* 28 bits */
 
@@ -326,7 +316,7 @@ void EffectTone::process(int *inout, int frames)
 }
 
 EffectHeadphone::~EffectHeadphone() {
-    for (int i = 0; i < 4; i ++) {
+    for (int32_t i = 0; i < 4; i ++) {
         delete &mAllpassL[i];
         delete &mAllpassR[i];
     }
@@ -349,16 +339,14 @@ void EffectHeadphone::configure(const float samplingFrequency) {
     mLowpassR.setRC(4000.0, mSamplingFrequency);
 }
 
-void EffectHeadphone::process(int* inout, int frames)
+void EffectHeadphone::process(int32_t* inout, int32_t frames)
 {
-    for (int i = 0; i < frames; i ++) {
-        int dL = inout[0];
-        int dR = inout[1];
-        int pL = dL;
-        int pR = dR;
+    for (int32_t i = 0; i < frames; i ++) {
+        int32_t pL = inout[0];
+        int32_t pR = inout[1];
         /* 28 bits */
 
-        for (int j = 0; j < 4; j ++) {
+        for (int32_t j = 0; j < 4; j ++) {
             pL = mAllpassL[j].process(pL);
             pR = mAllpassR[j].process(pR);
         }
@@ -367,8 +355,8 @@ void EffectHeadphone::process(int* inout, int frames)
         pR = mLowpassR.process(pR >> fixedPointDecimals);
         /* 28 bits */
         
-        inout[0] = dL + pR;
-        inout[1] = dR + pL;
+        inout[0] += pR;
+        inout[1] += pL;
         inout += 2;
     }
 }
@@ -441,16 +429,17 @@ void AudioDSP::setParameters(const String8& keyValuePairs)
     }
 }
 
-int32_t AudioDSP::estimateLevel(const int16_t *input, int samples) {
+int32_t AudioDSP::estimateLevel(const int16_t *input, int32_t frames, int32_t samplesPerFrame)
+{
     if (! mCompressionEnable) {
         return 65536;
     } else {
-        return mCompression.estimateLevel(input, samples);
+        return mCompression.estimateLevel(input, frames, samplesPerFrame);
     }
 }
 
 /* input is 28-bit interleaved stereo in integer format */
-void AudioDSP::process(int32_t* audioData, int frames)
+void AudioDSP::process(int32_t* audioData, int32_t frames)
 {
     if (mToneEnable) {
         mTone.process(audioData, frames);
@@ -459,12 +448,11 @@ void AudioDSP::process(int32_t* audioData, int frames)
         mHeadphone.process(audioData, frames);
     }
 
-    /* Apply dither to output. This is the so-called
-     * high-pass triangular probability density function, discussed in
-     * "A Theory of Nonsubtractive Dither", by Robert A. Wannamaker,
-     * Stanley P. Lipshitz, John Vanderkooy, J. Nelson Fright. */
-    for (int i = 0; i < frames; i ++) {
-        int32_t ditherValue = dither();
+    /* Apply dither to output. This is the high-passed triangular
+     * probability density function, discussed in "A Theory of
+     * Nonsubtractive Dither", by Robert A. Wannamaker et al. */
+    for (int32_t i = 0; i < frames; i ++) {
+        int32_t ditherValue = prng();
         int32_t dithering = mDitherValue - ditherValue;
         mDitherValue = ditherValue;
         audioData[0] += ditherValue;
