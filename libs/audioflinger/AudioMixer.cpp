@@ -251,9 +251,6 @@ void AudioMixer::track_t::adjustVolumeRamp(AudioDSP& dsp)
         /* XXX: is this right with resampling? */
         int32_t volInc = d / int32_t(frameCount);
         volumeInc[i] = volInc;
-        if (volInc == 0) {
-            prevVolume[i] = desiredVolume;
-        }
     }
 }
 

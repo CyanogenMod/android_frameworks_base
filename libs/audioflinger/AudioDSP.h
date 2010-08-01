@@ -26,8 +26,8 @@ namespace android {
 class Allpass {
     int32_t mK;
     int32_t* mState;
-    int mIndex;
-    int mLength;
+    int32_t mIndex;
+    int32_t mLength;
 
     public:
     Allpass();
@@ -37,9 +37,8 @@ class Allpass {
 };
 
 class Biquad {
-    int32_t mA1, mA2, mB0, mB1, mB2;
-    int32_t mY1, mY2, mX1, mX2;
-    int32_t mY0over;
+    int16_t mA1, mA2, mB0, mB1, mB2;
+    int16_t mY1, mY2, mX1, mX2, mY0;
 
     void setCoefficients(float a0, float a1, float a2, float b0, float b1, float b2);
 
@@ -49,7 +48,7 @@ class Biquad {
     void setPeakingEqualizer(float cf, float sf, float gain, float bw);
     void setLowShelf(float cf, float sf, float gain, float slope);
     void setHighShelf(float cf, float sf, float gain, float slope);
-    int32_t process(int32_t x0);
+    int32_t process(int16_t x0);
 };
 
 class Effect {
@@ -60,7 +59,7 @@ class Effect {
     Effect();
     virtual ~Effect();
     virtual void configure(const float samplingFrequency);
-    virtual void process(int32_t* inout, int frames) = 0;
+    virtual void process(int32_t* inout, int32_t frames) = 0;
 };
 
 class EffectCompression : public Effect {
@@ -71,13 +70,13 @@ class EffectCompression : public Effect {
     EffectCompression();
     ~EffectCompression();
     void setRatio(float compressionRatio);
-    void process(int32_t* inout, int frames);
-    int32_t estimateLevel(const int16_t* audiodata, int samples);
+    void process(int32_t* inout, int32_t frames);
+    int32_t estimateLevel(const int16_t* audiodata, int32_t samples);
 };
 
 class EffectTone : public Effect {
     float mBand[5];
-    int mGain;
+    int32_t mGain;
     Biquad mFilterL[4], mFilterR[4];
 
     void refreshBands();
@@ -86,8 +85,8 @@ class EffectTone : public Effect {
     EffectTone();
     ~EffectTone();
     void configure(const float samplingFrequency);
-    void setBand(int idx, float dB);
-    void process(int32_t* inout, int frames);
+    void setBand(int32_t idx, float dB);
+    void process(int32_t* inout, int32_t frames);
 };
 
 class EffectHeadphone : public Effect {
@@ -97,7 +96,7 @@ class EffectHeadphone : public Effect {
     public:
     ~EffectHeadphone();
     void configure(const float samplingFrequency);
-    void process(int32_t* inout, int frames);
+    void process(int32_t* inout, int32_t frames);
 };
 
 class AudioDSP {
@@ -118,8 +117,8 @@ class AudioDSP {
 
     void configure(float samplingRate);
     void setParameters(const String8& keyValuePairs);
-    int32_t estimateLevel(const int16_t* audiodata, int samples);
-    void process(int32_t* inputInterleaved, int frames);
+    int32_t estimateLevel(const int16_t* audiodata, int32_t samples);
+    void process(int32_t* inputInterleaved, int32_t frames);
 
     static const String8 keyCompressionEnable;
     static const String8 keyCompressionRatio;
