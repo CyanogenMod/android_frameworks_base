@@ -73,7 +73,7 @@ void Allpass::setParameters(float samplingFrequency, float k, float time)
         delete[] mState;
     }
     mState = new int32_t[mLength];
-    memset(mState, 0, mLength * sizeof(int16_t));
+    memset(mState, 0, mLength * sizeof(int32_t));
 }
 
 int32_t Allpass::process(int32_t x0)
@@ -188,7 +188,6 @@ void Effect::configure(const float samplingFrequency) {
 
 
 EffectCompression::EffectCompression()
-    : mOldCorrectionDb(0), mCompressionRatio(2)
 {
 }
 
@@ -196,7 +195,13 @@ EffectCompression::~EffectCompression()
 {
 }
 
-void EffectCompression::setRatio(float compressionRatio) {
+void EffectCompression::configure(const float samplingFrequency)
+{
+    Effect::configure(samplingFrequency);
+}
+
+void EffectCompression::setRatio(float compressionRatio)
+{
     mCompressionRatio = compressionRatio;
 }
 
@@ -204,19 +209,18 @@ void EffectCompression::process(int32_t *inout, int32_t frames)
 {
 }
 
-int32_t EffectCompression::estimateLevel(const int16_t *audioData, int32_t samples)
+int32_t EffectCompression::estimateLevel(const int16_t *audioData, int32_t frames, int32_t samplesPerFrame)
 {
-    uint32_t power = 0;
-    uint32_t samplePow2 = 0;
     /* FIXME: find a cheap approximation of equal loudness curve and apply
      * it here. Something like replaygain's, but not so darn expensive. */
+    uint32_t power = 0;
+    int32_t samples = frames * samplesPerFrame;
     for (int32_t i = 0; i < samples; i ++) {
-        samplePow2 += audioData[i] * audioData[i];
-        power += samplePow2 >> 16;
-        samplePow2 &= 0xffff;
+        int16_t tmp = *audioData ++;
+        power += tmp * tmp >> 16;
     }
 
-    float signalPower = (65536.0f*power + samplePow2) / samples / 32768.0f / 32768.0f;
+    float signalPower = (65536.0f*power) / samples / 32768.0f / 32768.0f;
     /* -100 .. 0 dB */
     float signalPowerDb = logf(signalPower + 1e-10f) / logf(10) * 10;
     /* target 83 dB SPL */
@@ -228,19 +232,8 @@ int32_t EffectCompression::estimateLevel(const int16_t *audioData, int32_t sampl
 
     /* turn back to multiplier */
     float correctionDb = desiredLevelDb - signalPowerDb;
-    /* filter envelope for stability. This is currently a crude approximation
-     * to get something semi-reasonable going. */
-    if (correctionDb > mOldCorrectionDb + 0.002f) {
-        correctionDb = mOldCorrectionDb + 0.002f;
-    }
-    if (correctionDb < mOldCorrectionDb - 0.01f) {
-        correctionDb = mOldCorrectionDb - 0.01f;
-    }
-    mOldCorrectionDb = correctionDb;
 
-    int32_t desiredMultiplier = int32_t(65536 * powf(10, correctionDb / 20));
-
-    return desiredMultiplier; 
+    return int32_t(65536 * powf(10, correctionDb / 20));
 }
 
 
@@ -436,11 +429,12 @@ void AudioDSP::setParameters(const String8& keyValuePairs)
     }
 }
 
-int32_t AudioDSP::estimateLevel(const int16_t *input, int32_t samples) {
+int32_t AudioDSP::estimateLevel(const int16_t *input, int32_t frames, int32_t samplesPerFrame)
+{
     if (! mCompressionEnable) {
         return 65536;
     } else {
-        return mCompression.estimateLevel(input, samples);
+        return mCompression.estimateLevel(input, frames, samplesPerFrame);
     }
 }
 

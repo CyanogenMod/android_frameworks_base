@@ -63,15 +63,15 @@ class Effect {
 };
 
 class EffectCompression : public Effect {
-    float mOldCorrectionDb;
     float mCompressionRatio;
 
     public:
     EffectCompression();
     ~EffectCompression();
+    void configure(const float samplingFrequency);
     void setRatio(float compressionRatio);
     void process(int32_t* inout, int32_t frames);
-    int32_t estimateLevel(const int16_t* audiodata, int32_t samples);
+    int32_t estimateLevel(const int16_t* audiodata, int32_t frames, int32_t framesPerSample);
 };
 
 class EffectTone : public Effect {
@@ -117,7 +117,7 @@ class AudioDSP {
 
     void configure(float samplingRate);
     void setParameters(const String8& keyValuePairs);
-    int32_t estimateLevel(const int16_t* audiodata, int32_t samples);
+    int32_t estimateLevel(const int16_t* audiodata, int32_t frames, int32_t samplesPerFrame);
     void process(int32_t* inputInterleaved, int32_t frames);
 
     static const String8 keyCompressionEnable;

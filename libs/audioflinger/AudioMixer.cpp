@@ -239,17 +239,28 @@ bool AudioMixer::track_t::doesResample() const
 
 void AudioMixer::track_t::adjustVolumeRamp(AudioDSP& dsp)
 {
-    int32_t dynamicRangeCompressionFactor =
-        dsp.estimateLevel(static_cast<const int16_t*>(in),
-        channelCount * frameCount
+    int32_t dynamicRangeCompressionFactor = dsp.estimateLevel(
+        static_cast<const int16_t*>(in), frameCount, channelCount
     );
 
     for (int i = 0; i < 2; i ++) {
         /* Ramp from current to new volume level if necessary */
         int32_t desiredVolume = volume[i] * dynamicRangeCompressionFactor;
         int32_t d = desiredVolume - prevVolume[i];
-        /* XXX: is this right with resampling? */
+
+        /* limit change rate to smooth the compressor. */
+        int32_t volChangeLimit = prevVolume[i] >> 12;
+        if (volChangeLimit == 0) {
+            volChangeLimit = 1;
+        }
+
         int32_t volInc = d / int32_t(frameCount);
+        if (volInc > volChangeLimit) {
+            volInc = volChangeLimit;
+        }
+        if (volInc < -volChangeLimit) {
+            volInc = -volChangeLimit;
+        }
         volumeInc[i] = volInc;
     }
 }
