@@ -37,8 +37,15 @@ class Allpass {
 };
 
 class Biquad {
-    int16_t mA1, mA2, mB0, mB1, mB2;
-    int16_t mY1, mY2, mX1, mX2, mY0;
+    union {
+        struct {
+            int32_t mA, mB, mY, mX;
+        } i32;
+        struct {
+            int16_t mA1, mA2, mB1, mB2, mY1, mY2, mX1, mX2;
+        } i16;
+    } state;
+    int16_t mB0, mY0;
 
     void setCoefficients(float a0, float a1, float a2, float b0, float b1, float b2);
 

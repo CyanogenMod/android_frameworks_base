@@ -20,38 +20,29 @@
 
 #include "AudioDSP.h"
 
-/* 
- * Filter definitions from the good old Audio EQ Cookbook
- * by Robert Bristow-Johnson. */
 namespace android {
 
-/* Keep this in sync with AudioMixer's FP decimal count. */
+/* Keep this in sync with AudioMixer's FP decimal count. We
+ * use this count to generate the dither for ditherAndClamp(),
+ * among other things. */
 static const int32_t fixedPointDecimals = 12;
-
-const String8 AudioDSP::keyCompressionEnable = String8("dsp.compression.enable"); 
-const String8 AudioDSP::keyCompressionRatio = String8("dsp.compression.ratio"); 
-
-const String8 AudioDSP::keyToneEnable = String8("dsp.tone.enable"); 
-const String8 AudioDSP::keyToneEq1 = String8("dsp.tone.eq1"); 
-const String8 AudioDSP::keyToneEq2 = String8("dsp.tone.eq2"); 
-const String8 AudioDSP::keyToneEq3 = String8("dsp.tone.eq3"); 
-const String8 AudioDSP::keyToneEq4 = String8("dsp.tone.eq4"); 
-const String8 AudioDSP::keyToneEq5 = String8("dsp.tone.eq5"); 
-
-const String8 AudioDSP::keyHeadphoneEnable = String8("dsp.headphone.enable"); 
+static const int32_t fixedPointBits = (1 << fixedPointDecimals) - 1;
 
 static int16_t toFixedPoint(float x)
 {
     return int16_t(x * (1 << fixedPointDecimals) + 0.5f);
 }
 
-static uint32_t seed = 1;
-static const uint32_t fixedPointBits = (1 << fixedPointDecimals) - 1;
-static int16_t prng() {
+static int32_t seed = 1;
+inline static int16_t prng() {
     seed = (seed * 12345) + 1103515245;
     return int16_t(seed & fixedPointBits);
 }
 
+
+/***************************************************************************
+ * Allpass                                                                 *
+ ***************************************************************************/
 Allpass::Allpass()
     : mK(0), mState(0), mIndex(0), mLength(0)
 {
@@ -76,7 +67,7 @@ void Allpass::setParameters(float samplingFrequency, float k, float time)
     memset(mState, 0, mLength * sizeof(int32_t));
 }
 
-int32_t Allpass::process(int32_t x0)
+inline int32_t Allpass::process(int32_t x0)
 {
     int32_t tmp = x0 - mK * (mState[mIndex] >> fixedPointDecimals);
     int32_t y0 = mState[mIndex] + mK * (tmp >> fixedPointDecimals);
@@ -85,19 +76,26 @@ int32_t Allpass::process(int32_t x0)
     return y0;
 }
 
+
+/***************************************************************************
+ * Biquad                                                                  *
+ ***************************************************************************/
 Biquad::Biquad()
-   : mA1(0), mA2(0), mB0(0), mB1(0), mB2(0),
-     mY1(0), mY2(0), mX1(0), mX2(0), mY0(0)
+   : mB0(0), mY0(0)
 {
+     state.i32.mA = 0;
+     state.i32.mB = 0;
+     state.i32.mX = 0;
+     state.i32.mY = 0;
 }
 
 void Biquad::setCoefficients(float a0, float a1, float a2, float b0, float b1, float b2)
 {
-    mA1 = toFixedPoint(a1/a0);
-    mA2 = toFixedPoint(a2/a0);
+    state.i16.mA1 = -toFixedPoint(a1/a0);
+    state.i16.mA2 = -toFixedPoint(a2/a0);
     mB0 = toFixedPoint(b0/a0);
-    mB1 = toFixedPoint(b1/a0);
-    mB2 = toFixedPoint(b2/a0);
+    state.i16.mB1 = toFixedPoint(b1/a0);
+    state.i16.mB2 = toFixedPoint(b2/a0);
 }
 
 void Biquad::setRC(float center_frequency, float sampling_frequency)
@@ -109,6 +107,10 @@ void Biquad::setRC(float center_frequency, float sampling_frequency)
     setCoefficients(1, a1, 0, b0, 0, 0);
 }
 
+/*
+ * Peaking equalizer, low shelf and high shelf are taken from
+ * the good old Audio EQ Cookbook by Robert Bristow-Johnson.
+ */
 void Biquad::setPeakingEqualizer(float center_frequency, float sampling_frequency, float db_gain, float bandwidth)
 {
     float w0 = 2 * (float) M_PI * center_frequency / sampling_frequency;
@@ -122,22 +124,6 @@ void Biquad::setPeakingEqualizer(float center_frequency, float sampling_frequenc
     float a1 =  -2*cosf(w0);
     float a2 =   1 - alpha/A;
     
-    setCoefficients(a0, a1, a2, b0, b1, b2);
-}
-
-void Biquad::setHighShelf(float center_frequency, float sampling_frequency, float db_gain, float slope)
-{
-    float w0 = 2 * (float) M_PI * center_frequency / sampling_frequency;
-    float A = powf(10, db_gain/40);
-    float alpha = sinf(w0)/2 * sqrtf( (A + 1/A)*(1/slope - 1) + 2 );
-
-    float b0 =    A*( (A+1) + (A-1)*cosf(w0) + 2*sqrtf(A)*alpha );
-    float b1 = -2*A*( (A-1) + (A+1)*cosf(w0)                   );
-    float b2 =    A*( (A+1) + (A-1)*cosf(w0) - 2*sqrtf(A)*alpha );
-    float a0 =        (A+1) - (A-1)*cosf(w0) + 2*sqrtf(A)*alpha  ;
-    float a1 =    2*( (A-1) - (A+1)*cosf(w0)                   );
-    float a2 =        (A+1) - (A-1)*cosf(w0) - 2*sqrtf(A)*alpha  ;
-
     setCoefficients(a0, a1, a2, b0, b1, b2);
 }
 
@@ -157,27 +143,71 @@ void Biquad::setLowShelf(float center_frequency, float sampling_frequency, float
     setCoefficients(a0, a1, a2, b0, b1, b2);
 }
 
-/* returns output scaled by fixedPoint factor */
-int32_t Biquad::process(int16_t x0)
+void Biquad::setHighShelf(float center_frequency, float sampling_frequency, float db_gain, float slope)
 {
-    int32_t y0 = mY0 + mB0 * x0 + mB1 * mX1 + mB2 * mX2 - mY1 * mA1 - mY2 * mA2;
-    
-    mY2 = mY1;
-    mY1 = y0 >> fixedPointDecimals;
+    float w0 = 2 * (float) M_PI * center_frequency / sampling_frequency;
+    float A = powf(10, db_gain/40);
+    float alpha = sinf(w0)/2 * sqrtf( (A + 1/A)*(1/slope - 1) + 2 );
+
+    float b0 =    A*( (A+1) + (A-1)*cosf(w0) + 2*sqrtf(A)*alpha );
+    float b1 = -2*A*( (A-1) + (A+1)*cosf(w0)                   );
+    float b2 =    A*( (A+1) + (A-1)*cosf(w0) - 2*sqrtf(A)*alpha );
+    float a0 =        (A+1) - (A-1)*cosf(w0) + 2*sqrtf(A)*alpha  ;
+    float a1 =    2*( (A-1) - (A+1)*cosf(w0)                   );
+    float a2 =        (A+1) - (A-1)*cosf(w0) - 2*sqrtf(A)*alpha  ;
+
+    setCoefficients(a0, a1, a2, b0, b1, b2);
+}
+
+/* returns output scaled by fixedPoint factor */
+inline int32_t Biquad::process(int16_t x0)
+{
+    /* mY0 holds error from previous integer truncation. */
+    int32_t y0 = mY0 + mB0 * x0;
+
+#if defined(__arm__) && !defined(__thumb__)
+    asm(
+        "smlatt %[y0], %[i], %[j], %[y0]\n"
+        "smlabb %[y0], %[i], %[j], %[y0]\n"
+        "smlatt %[y0], %[k], %[l], %[y0]\n"
+        "smlabb %[y0], %[k], %[l], %[y0]\n"
+         : [y0]"+r"(y0)
+         : [i]"r"(state.i32.mA), [j]"r"(state.i32.mY),
+           [k]"r"(state.i32.mB), [l]"r"(state.i32.mX)
+         : );
+
+    /* GCC is going to issue loads for the state.i16, so I do it
+     * like this because the state.i32 is already in registers.
+     * ARM appears to have instructions that can handle these
+     * bit manipulations well, such as "orr r0, r0, r1, lsl #16".
+     */
+    state.i32.mY = (state.i32.mY << 16) | ((y0 >> fixedPointDecimals) & 0xffff);
+    state.i32.mX = (state.i32.mX << 16) | (x0 & 0xffff);
+#else
+    y0 += state.i16.mB1 * state.i16.mX1
+        + state.i16.mB2 * state.i16.mX2
+        + state.i16.mY1 * state.i16.mA1
+        + state.i16.mY2 * state.i16.mA2;
+
+    state.i16.mY2 = state.i16.mY1;
+    state.i16.mY1 = y0 >> fixedPointDecimals;
+
+    state.i16.mX2 = state.i16.mX1;
+    state.i16.mX1 = x0;
+#endif
+
     mY0 = y0 & fixedPointBits;
-
-    mX2 = mX1;
-    mX1 = x0;
-
     return y0;
 }
 
 
+/***************************************************************************
+ * Effect                                                                  *
+ ***************************************************************************/
 Effect::Effect()
     : mSamplingFrequency(44100)
 {
 }
-
 
 Effect::~Effect() {
 }
@@ -220,9 +250,11 @@ int32_t EffectCompression::estimateLevel(const int16_t *audioData, int32_t frame
         power += tmp * tmp >> 16;
     }
 
+    /* FIXME: code below should be ported to integer. */
     float signalPower = (65536.0f*power) / samples / 32768.0f / 32768.0f;
-    /* -100 .. 0 dB */
-    float signalPowerDb = logf(signalPower + 1e-10f) / logf(10) * 10;
+    /* -50 .. 0 dB.
+     * We don't go to -100 dB because of the >> 16 losing bits above. */
+    float signalPowerDb = logf(signalPower + 1e-5f) / logf(10) * 10;
     /* target 83 dB SPL */
     signalPowerDb += 96 - 83;
 
@@ -361,6 +393,21 @@ void EffectHeadphone::process(int32_t* inout, int32_t frames)
     }
 }
 
+
+/***************************************************************************
+ * AudioDSP                                                                *
+ ***************************************************************************/
+const String8 AudioDSP::keyCompressionEnable = String8("dsp.compression.enable");
+const String8 AudioDSP::keyCompressionRatio = String8("dsp.compression.ratio");
+
+const String8 AudioDSP::keyToneEnable = String8("dsp.tone.enable");
+const String8 AudioDSP::keyToneEq1 = String8("dsp.tone.eq1");
+const String8 AudioDSP::keyToneEq2 = String8("dsp.tone.eq2");
+const String8 AudioDSP::keyToneEq3 = String8("dsp.tone.eq3");
+const String8 AudioDSP::keyToneEq4 = String8("dsp.tone.eq4");
+const String8 AudioDSP::keyToneEq5 = String8("dsp.tone.eq5");
+
+const String8 AudioDSP::keyHeadphoneEnable = String8("dsp.headphone.enable");
 
 AudioDSP::AudioDSP()
     : mCompressionEnable(false), mToneEnable(false),  mHeadphoneEnable(false)
