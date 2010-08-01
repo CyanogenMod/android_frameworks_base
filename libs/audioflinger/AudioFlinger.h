@@ -38,6 +38,7 @@
 #include <hardware_legacy/AudioHardwareInterface.h>
 
 #include "AudioBufferProvider.h"
+#include "AudioDSP.h"
 
 namespace android {
 
@@ -798,6 +799,8 @@ private:
 
                 SortedVector< sp<IBinder> >         mNotificationClients;
                 int                                 mNextThreadId;
+
+    AudioDSP mDsp;
 };
 
 // ----------------------------------------------------------------------------
