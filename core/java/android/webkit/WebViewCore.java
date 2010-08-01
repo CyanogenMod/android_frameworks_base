@@ -533,6 +533,8 @@ final class WebViewCore {
 
     private native void nativeSetBackgroundColor(int color);
 
+    private native void nativeSetColorInversion(boolean invert);
+
     private native void nativeDumpDomTree(boolean useFile);
 
     private native void nativeDumpRenderTree(boolean useFile);
@@ -1804,6 +1806,7 @@ final class WebViewCore {
             df = mScrollFilter;
         }
         canvas.setDrawFilter(df);
+        nativeSetColorInversion(mSettings.getInvertColor());
         boolean tookTooLong = nativeDrawContent(canvas, color);
         canvas.setDrawFilter(null);
         if (tookTooLong && mSplitPictureIsScheduled == false) {

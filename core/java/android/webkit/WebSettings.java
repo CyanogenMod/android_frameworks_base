@@ -178,6 +178,7 @@ public class WebSettings {
     private boolean         mUseWideViewport = false;
     private boolean         mSupportMultipleWindows = false;
     private boolean         mShrinksStandaloneImagesToFit = false;
+    private boolean         mInvertColor = false;
     // HTML5 API flags
     private boolean         mAppCacheEnabled = false;
     private boolean         mDatabaseEnabled = false;
@@ -1416,6 +1417,23 @@ public class WebSettings {
             postSync();
         }
      }
+
+    /**
+     * @hide
+     */
+    public synchronized void setInvertColor(boolean invert) {
+        if (mInvertColor != invert) {
+            mInvertColor = invert;
+            postSync();
+        }
+    }
+
+    /**
+     * @hide
+     */
+    public synchronized boolean getInvertColor() {
+        return mInvertColor;
+    }
 
     int getDoubleTapToastCount() {
         return mDoubleTapToastCount;
