@@ -332,6 +332,16 @@ public class KeyEvent extends InputEvent implements Parcelable {
      * On a game controller, the button labeled Mode. */
     public static final int KEYCODE_BUTTON_MODE     = 110;
 
+    public static final int KEYCODE_FUNC_1          = 92;
+    public static final int KEYCODE_FUNC_2          = 93;
+    public static final int KEYCODE_FUNC_3          = 94;
+    public static final int KEYCODE_FUNC_4          = 95;
+    public static final int KEYCODE_FUNC_5          = 96;
+    public static final int KEYCODE_FUNC_6          = 97;
+    public static final int KEYCODE_FUNC_7          = 98;
+    public static final int KEYCODE_FUNC_8          = 99;
+    public static final int KEYCODE_QUECHAR         = 100;
+
     // NOTE: If you add a new keycode here you must also add it to:
     //  isSystem()
     //  native/include/android/keycodes.h
