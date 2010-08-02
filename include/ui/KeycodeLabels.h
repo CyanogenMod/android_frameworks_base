@@ -114,6 +114,15 @@ static const KeycodeLabel KEYCODES[] = {
     { "MEDIA_REWIND", 89 },
     { "MEDIA_FAST_FORWARD", 90 },
     { "MUTE", 91 },
+    { "FUNC_1", 92 },
+    { "FUNC_2", 93 },
+    { "FUNC_3", 94 },
+    { "FUNC_4", 95 },
+    { "FUNC_5", 96 },
+    { "FUNC_6", 97 },
+    { "FUNC_7", 98 },
+    { "FUNC_8", 99 },
+    { "QUECHAR", 100 },
 
     // NOTE: If you add a new keycode here you must also add it to:
     //   (enum KeyCode, in this file)
@@ -218,7 +227,16 @@ typedef enum KeyCode {
     kKeyCodePreviousSong = 88,
     kKeyCodeRewind = 89,
     kKeyCodeForward = 90,
-    kKeyCodeMute = 91
+    kKeyCodeMute = 91,
+    kKeyCodeFunc1 = 92,
+    kKeyCodeFunc2 = 93,
+    kKeyCodeFunc3 = 94,
+    kKeyCodeFunc4 = 95,
+    kKeyCodeFunc5 = 96,
+    kKeyCodeFunc6 = 97,
+    kKeyCodeFunc7 = 98,
+    kKeyCodeFunc8 = 99,
+    kKeyCodeQuechar = 100
 } KeyCode;
 
 static const KeycodeLabel FLAGS[] = {

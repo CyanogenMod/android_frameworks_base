@@ -120,6 +120,15 @@ public class KeyEvent implements Parcelable {
     public static final int KEYCODE_MEDIA_REWIND    = 89;
     public static final int KEYCODE_MEDIA_FAST_FORWARD = 90;
     public static final int KEYCODE_MUTE            = 91;
+    public static final int KEYCODE_FUNC_1          = 92;
+    public static final int KEYCODE_FUNC_2          = 93;
+    public static final int KEYCODE_FUNC_3          = 94;
+    public static final int KEYCODE_FUNC_4          = 95;
+    public static final int KEYCODE_FUNC_5          = 96;
+    public static final int KEYCODE_FUNC_6          = 97;
+    public static final int KEYCODE_FUNC_7          = 98;
+    public static final int KEYCODE_FUNC_8          = 99;
+    public static final int KEYCODE_QUECHAR         = 100;
 
     // NOTE: If you add a new keycode here you must also add it to:
     //  isSystem()
@@ -135,7 +144,7 @@ public class KeyEvent implements Parcelable {
     //  those new codes.  This is intended to maintain a consistent
     //  set of key code definitions across all Android devices.
    
-    private static final int LAST_KEYCODE           = KEYCODE_MUTE;
+    private static final int LAST_KEYCODE           = KEYCODE_QUECHAR;
     
     /**
      * @deprecated There are now more than MAX_KEYCODE keycodes.

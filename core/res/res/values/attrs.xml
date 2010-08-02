@@ -916,6 +916,15 @@
         <enum name="KEYCODE_MEDIA_REWIND" value="89" />
         <enum name="KEYCODE_MEDIA_FAST_FORWARD" value="90" />
         <enum name="KEYCODE_MUTE" value="91" />
+        <enum name="KEYCODE_FUNC_1" value="92" />
+        <enum name="KEYCODE_FUNC_2" value="93" />
+        <enum name="KEYCODE_FUNC_3" value="94" />
+        <enum name="KEYCODE_FUNC_4" value="95" />
+        <enum name="KEYCODE_FUNC_5" value="96" />
+        <enum name="KEYCODE_FUNC_6" value="97" />
+        <enum name="KEYCODE_FUNC_7" value="98" />
+        <enum name="KEYCODE_FUNC_8" value="99" />
+        <enum name="KEYCODE_QUECHAR" value="100" />	
     </attr>
 
     <!-- ***************************************************************** -->
