@@ -53,8 +53,10 @@ class Biquad {
     Biquad();
     void setRC(float cf, float sf);
     void setPeakingEqualizer(float cf, float sf, float gain, float bw);
+    void setBandPass(float cf, float sf, float resonance);
     void setLowShelf(float cf, float sf, float gain, float slope);
     void setHighShelf(float cf, float sf, float gain, float slope);
+    void reset();
     int32_t process(int16_t x0);
 };
 
@@ -70,9 +72,12 @@ class Effect {
 };
 
 class EffectCompression : public Effect {
-    float mCompressionRatio;
+    private:
+    Biquad mWeighter;
 
     public:
+    float mCompressionRatio;
+
     EffectCompression();
     ~EffectCompression();
     void configure(const float samplingFrequency);

@@ -107,6 +107,13 @@ void Biquad::setRC(float center_frequency, float sampling_frequency)
     setCoefficients(1, a1, 0, b0, 0, 0);
 }
 
+void Biquad::reset()
+{
+    mY0 = 0;
+    state.i32.mX = 0;
+    state.i32.mY = 0;
+}
+
 /*
  * Peaking equalizer, low shelf and high shelf are taken from
  * the good old Audio EQ Cookbook by Robert Bristow-Johnson.
@@ -155,6 +162,21 @@ void Biquad::setHighShelf(float center_frequency, float sampling_frequency, floa
     float a0 =        (A+1) - (A-1)*cosf(w0) + 2*sqrtf(A)*alpha  ;
     float a1 =    2*( (A-1) - (A+1)*cosf(w0)                   );
     float a2 =        (A+1) - (A-1)*cosf(w0) - 2*sqrtf(A)*alpha  ;
+
+    setCoefficients(a0, a1, a2, b0, b1, b2);
+}
+
+void Biquad::setBandPass(float center_frequency, float sampling_frequency, float resonance)
+{
+    float w0 = 2 * (float) M_PI * center_frequency / sampling_frequency;
+    float alpha = sinf(w0) / (2*resonance);
+
+    float b0 =   sinf(w0)/2;
+    float b1 =   0;
+    float b2 =  -sinf(w0)/2;
+    float a0 =   1 + alpha;
+    float a1 =  -2*cosf(w0);
+    float a2 =   1 - alpha;
 
     setCoefficients(a0, a1, a2, b0, b1, b2);
 }
@@ -228,6 +250,7 @@ EffectCompression::~EffectCompression()
 void EffectCompression::configure(const float samplingFrequency)
 {
     Effect::configure(samplingFrequency);
+    mWeighter.setBandPass(1000, samplingFrequency, sqrtf(2)/2);
 }
 
 void EffectCompression::setRatio(float compressionRatio)
@@ -241,33 +264,18 @@ void EffectCompression::process(int32_t *inout, int32_t frames)
 
 int32_t EffectCompression::estimateLevel(const int16_t *audioData, int32_t frames, int32_t samplesPerFrame)
 {
-    /* FIXME: find a cheap approximation of equal loudness curve and apply
-     * it here. Something like replaygain's, but not so darn expensive. */
+    mWeighter.reset();
     uint32_t power = 0;
-    int32_t samples = frames * samplesPerFrame;
-    for (int32_t i = 0; i < samples; i ++) {
-        int16_t tmp = *audioData ++;
-        power += tmp * tmp >> 16;
+    for (int32_t i = 0; i < frames; i ++) {
+        int16_t tmp = *audioData;
+        audioData += samplesPerFrame;
+
+        int32_t out = mWeighter.process(tmp) >> 12;
+        power += out * out >> 16;
     }
 
-    /* FIXME: code below should be ported to integer. */
-    float signalPower = (65536.0f*power) / samples / 32768.0f / 32768.0f;
-    /* -50 .. 0 dB.
-     * We don't go to -100 dB because of the >> 16 losing bits above. */
-    float signalPowerDb = logf(signalPower + 1e-5f) / logf(10) * 10;
-    /* target 83 dB SPL */
-    signalPowerDb += 96 - 83;
-
-    /* now we have an estimate of the signal power in range from
-     * -96 dB to 0 dB. Now we estimate what level we want. */
-    float desiredLevelDb = signalPowerDb / mCompressionRatio;
-
-    /* turn back to multiplier */
-    float correctionDb = desiredLevelDb - signalPowerDb;
-
-    return int32_t(65536 * powf(10, correctionDb / 20));
+    return power;
 }
-
 
 EffectTone::EffectTone()
 {
@@ -480,9 +488,32 @@ int32_t AudioDSP::estimateLevel(const int16_t *input, int32_t frames, int32_t sa
 {
     if (! mCompressionEnable) {
         return 65536;
-    } else {
-        return mCompression.estimateLevel(input, frames, samplesPerFrame);
     }
+
+    /* Analyze both channels separately, pick the maximum power measured. */
+    int maximumPower = 0;
+    for (int channel = 0; channel < samplesPerFrame; channel ++) {
+        int candidatePower = mCompression.estimateLevel(input + channel, frames, samplesPerFrame);
+        if (candidatePower > maximumPower) {
+            maximumPower = candidatePower;
+        }
+    }
+
+    /* FIXME: code below should be ported to integer. */
+    float signalPower = (65536.0f*maximumPower) / frames / 32768.0f / 32768.0f;
+    /* -30 .. 0 dB. */
+    float signalPowerDb = logf(signalPower + 1e-3f) / logf(10) * 10;
+    /* target 83 dB SPL, and the weighter function peaks at -3 dB */
+    signalPowerDb += 96 - 83 + 3;
+
+    /* now we have an estimate of the signal power in range from
+     * -96 dB to 0 dB. Now we estimate what level we want. */
+    float desiredLevelDb = signalPowerDb / mCompression.mCompressionRatio;
+
+    /* turn back to multiplier */
+    float correctionDb = desiredLevelDb - signalPowerDb;
+
+    return int32_t(65536 * powf(10, correctionDb / 20));
 }
 
 /* input is 28-bit interleaved stereo in integer format */

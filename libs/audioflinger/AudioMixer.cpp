@@ -249,18 +249,21 @@ void AudioMixer::track_t::adjustVolumeRamp(AudioDSP& dsp)
         int32_t d = desiredVolume - prevVolume[i];
 
         /* limit change rate to smooth the compressor. */
-        int32_t volChangeLimit = prevVolume[i] >> 12;
-        if (volChangeLimit == 0) {
-            volChangeLimit = 1;
-        }
+        int32_t volChangeLimit = (prevVolume[i] >> 11);
 
+        volChangeLimit += 1;
         int32_t volInc = d / int32_t(frameCount);
         if (volInc > volChangeLimit) {
             volInc = volChangeLimit;
         }
-        if (volInc < -volChangeLimit) {
-            volInc = -volChangeLimit;
+
+        /* Make ramps down slow, but ramps up fast. */
+        volChangeLimit >>= 3;
+        volChangeLimit -= 1;
+        if (volInc < -(volChangeLimit)) {
+            volInc = -(volChangeLimit);
         }
+
         volumeInc[i] = volInc;
     }
 }
