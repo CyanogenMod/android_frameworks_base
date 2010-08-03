@@ -237,10 +237,10 @@ bool AudioMixer::track_t::doesResample() const
     return resampler != 0;
 }
 
-void AudioMixer::track_t::adjustVolumeRamp(AudioDSP& dsp)
+void AudioMixer::track_t::adjustVolumeRamp(AudioDSP& dsp, size_t frames)
 {
     int32_t dynamicRangeCompressionFactor = dsp.estimateLevel(
-        static_cast<const int16_t*>(in), frameCount, channelCount
+        static_cast<const int16_t*>(in), int32_t(frames), channelCount
     );
 
     for (int i = 0; i < 2; i ++) {
@@ -252,7 +252,7 @@ void AudioMixer::track_t::adjustVolumeRamp(AudioDSP& dsp)
         int32_t volChangeLimit = (prevVolume[i] >> 11);
 
         volChangeLimit += 1;
-        int32_t volInc = d / int32_t(frameCount);
+        int32_t volInc = d / int32_t(frames);
         if (volInc > volChangeLimit) {
             volInc = volChangeLimit;
         }
@@ -509,7 +509,7 @@ void AudioMixer::track__nop(track_t* t, int32_t* out, size_t outFrameCount, int3
 
 void AudioMixer::volumeRampStereo(track_t* t, int32_t* out, size_t frameCount, int32_t* temp, AudioDSP& dsp)
 {
-    t->adjustVolumeRamp(dsp);
+    t->adjustVolumeRamp(dsp, frameCount);
     int32_t vl = t->prevVolume[0];
     int32_t vr = t->prevVolume[1];
     const int32_t vlInc = t->volumeInc[0];
@@ -536,7 +536,7 @@ void AudioMixer::track__16BitsStereo(track_t* t, int32_t* out, size_t frameCount
     int16_t const *in = static_cast<int16_t const *>(t->in);
 
     // ramp gain
-    t->adjustVolumeRamp(dsp);
+    t->adjustVolumeRamp(dsp, frameCount);
     if UNLIKELY(t->volumeInc[0]|t->volumeInc[1]) {
         int32_t vl = t->prevVolume[0];
         int32_t vr = t->prevVolume[1];
@@ -577,7 +577,7 @@ void AudioMixer::track__16BitsMono(track_t* t, int32_t* out, size_t frameCount, 
     int16_t const *in = static_cast<int16_t const *>(t->in);
 
     // ramp gain
-    t->adjustVolumeRamp(dsp);
+    t->adjustVolumeRamp(dsp, frameCount);
     if UNLIKELY(t->volumeInc[0]|t->volumeInc[1]) {
         int32_t vl = t->prevVolume[0];
         int32_t vr = t->prevVolume[1];

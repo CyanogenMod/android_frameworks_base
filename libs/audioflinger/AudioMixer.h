@@ -150,7 +150,7 @@ private:
 
         bool        setResampler(uint32_t sampleRate, uint32_t devSampleRate);
         bool        doesResample() const;
-        void        adjustVolumeRamp(AudioDSP& dsp);
+        void        adjustVolumeRamp(AudioDSP& dsp, size_t frames);
     };
 
     // pad to 32-bytes to fill cache line
