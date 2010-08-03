@@ -1371,8 +1371,8 @@ public class Canvas {
     /** @hide **/
     public void drawText(char[] text, int index, int count, float x, float y,
             Paint paint,boolean bidi) {
-        if ((index | count | (index + count) |
-                (text.length - index - count)) < 0) {
+        if (((index | count | (index + count)) < 0) ||
+            (text.length - index - count < 0)) {
             throw new IndexOutOfBoundsException();
         }
         boolean hasBidi=bidiTest(text,index,count);
