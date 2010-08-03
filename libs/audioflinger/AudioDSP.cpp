@@ -266,12 +266,15 @@ int32_t EffectCompression::estimateLevel(const int16_t *audioData, int32_t frame
 {
     mWeighter.reset();
     uint32_t power = 0;
+    uint32_t powerFraction = 0;
     for (int32_t i = 0; i < frames; i ++) {
         int16_t tmp = *audioData;
         audioData += samplesPerFrame;
 
         int32_t out = mWeighter.process(tmp) >> 12;
-        power += out * out >> 16;
+        powerFraction += out * out;
+        power += powerFraction >> 16;
+        powerFraction &= 0xffff;
     }
 
     return power;
