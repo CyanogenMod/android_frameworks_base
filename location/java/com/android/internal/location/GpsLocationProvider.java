@@ -74,7 +74,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
 
     private static final String TAG = "GpsLocationProvider";
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private static final boolean VERBOSE = false;
 
     /**
@@ -500,15 +500,16 @@ public class GpsLocationProvider implements LocationProviderInterface {
                     + " certainty: " + certainty
                     + " system time offset: " + systemTimeOffset);
 
-            // sanity check NTP time and do not use if it is too far from system time
+            // sanity check NTP time
             if (systemTimeOffset < 0) {
                 systemTimeOffset = -systemTimeOffset;
             }
-            if (systemTimeOffset < MAX_NTP_SYSTEM_TIME_OFFSET) {
                 native_inject_time(time, timeReference, certainty);
-            } else {
+
+            if (systemTimeOffset > MAX_NTP_SYSTEM_TIME_OFFSET) {
                 Log.e(TAG, "NTP time differs from system time by " + systemTimeOffset
-                        + "ms.  Ignoring.");
+                        + ".Injecting NTP time anyway as it is guranteed to be accurate.");
+
             }
             delay = NTP_INTERVAL;
         } else {
