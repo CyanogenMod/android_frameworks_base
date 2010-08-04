@@ -19,7 +19,6 @@ package com.android.server;
 import com.android.server.status.IconData;
 import com.android.server.status.NotificationData;
 import com.android.server.status.StatusBarService;
-
 import android.app.ActivityManagerNative;
 import android.app.IActivityManager;
 import android.app.INotificationManager;
@@ -43,6 +42,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Binder;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -57,14 +57,27 @@ import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.Slog;
 import android.util.Log;
+import java.util.Timer;
+import java.util.TimerTask;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import android.os.PowerManager;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
+
+//For Notification Colors.
+import android.graphics.Color;
 
 class NotificationManagerService extends INotificationManager.Stub
 {
@@ -106,6 +119,7 @@ class NotificationManagerService extends INotificationManager.Stub
 
     // for enabling and disabling notification pulse behavior
     private boolean mScreenOn = true;
+    private boolean mScreenUpdate = false;
     private boolean mInCall = false;
     private boolean mNotificationPulseEnabled;
 
@@ -125,6 +139,7 @@ class NotificationManagerService extends INotificationManager.Stub
     private boolean mBatteryCharging;
     private boolean mBatteryLow;
     private boolean mBatteryFull;
+    private int mBatteryLevel;
     private NotificationRecord mLedNotification;
 
     private static final int BATTERY_LOW_ARGB = 0xFFFF0000; // Charging Low - red solid on
@@ -132,6 +147,14 @@ class NotificationManagerService extends INotificationManager.Stub
     private static final int BATTERY_FULL_ARGB = 0xFF00FF00; // Charging Full - green solid on
     private static final int BATTERY_BLINK_ON = 125;
     private static final int BATTERY_BLINK_OFF = 2875;
+
+    private static ExecutorService threadExecutor;
+    private int mLastLight = 0;
+    private boolean isTimer = false;
+    private static boolean hasLights = false;
+    private PowerManager PowerMan;
+    private static PowerManager.WakeLock powerWake = null;
+    //private static ExecutorService threadExecutor;
 
     private static String idDebugString(Context baseContext, String packageName, int id) {
         Context c = null;
@@ -317,7 +340,9 @@ class NotificationManagerService extends INotificationManager.Stub
                 boolean batteryLow = (level >= 0 && level <= Power.LOW_BATTERY_THRESHOLD);
                 int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
                 boolean batteryFull = (status == BatteryManager.BATTERY_STATUS_FULL || level >= 90);
+		int percentage = intent.getIntExtra("scale", 100);
 
+		mBatteryLevel = level*100/percentage;
                 if (batteryCharging != mBatteryCharging ||
                         batteryLow != mBatteryLow ||
                         batteryFull != mBatteryFull) {
@@ -359,10 +384,18 @@ class NotificationManagerService extends INotificationManager.Stub
                 }
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 mScreenOn = true;
-                updateNotificationPulse();
+                mScreenUpdate = true;
+		int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_SCREEN_ON, 0);
+                if(mPulseScreen == 0) { //Why bother if we are going to pulse anyways?
+                	updateNotificationPulse();
+                }
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 mScreenOn = false;
-                updateNotificationPulse();
+		mScreenUpdate = true;
+                int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_SCREEN_ON, 0);
+                if(mPulseScreen == 0) { //Why bother if we are going to pulse anyways?
+                        updateNotificationPulse();
+                }
             } else if (action.equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
                 mInCall = (intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(TelephonyManager.EXTRA_STATE_OFFHOOK));
                 updateNotificationPulse();
@@ -824,6 +857,7 @@ class NotificationManagerService extends INotificationManager.Stub
             if (mLedNotification == old) {
                 mLedNotification = null;
             }
+	    //updatePackageList(pkg);
             //Slog.i(TAG, "notification.lights="
             //        + ((old.notification.lights.flags & Notification.FLAG_SHOW_LIGHTS) != 0));
             if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0) {
@@ -909,7 +943,7 @@ class NotificationManagerService extends INotificationManager.Stub
      */
     private void cancelNotification(String pkg, String tag, int id, int mustHaveFlags,
             int mustNotHaveFlags) {
-        EventLog.writeEvent(EventLogTags.NOTIFICATION_CANCEL, pkg, id, mustHaveFlags);
+            EventLog.writeEvent(EventLogTags.NOTIFICATION_CANCEL, pkg, id, mustHaveFlags);
 
         synchronized (mNotificationList) {
             int index = indexOfNotificationLocked(pkg, tag, id);
@@ -1036,10 +1070,94 @@ class NotificationManagerService extends INotificationManager.Stub
             updateLightsLocked();
         }
     }
+    
+	public boolean isNull(String mString) {
+		if(mString == null || mString.matches("null") 
+		|| mString.length() == 0
+		|| mString.matches("|")
+		|| mString.matches("")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+    
+    //Grab our Array Information For Lights
+	public String[] getArray(String mGetFrom) {
+		if(isNull(mGetFrom)) {
+			return null;
+		}
+		String[] temp = mGetFrom.split("\\|");
+		return temp;
+	}
+	
+	public String[] getPackageInfo(String mString) {
+		if(mString == null || mString == "=" || mString.length() == 0) {
+			return null;
+		}
+		String[] temp;
+		temp = mString.split("=");
+		return temp;
+	}
+	
+	public class StartTimerClass implements Runnable {
+		private long sleepTimer;
+
+		public StartTimerClass(long timer) {
+			sleepTimer = timer;
+		}
+
+/*		public void run() {
+			powerWake.acquire();
+			try {
+				while(hasLights == true) {
+					Thread.sleep(sleepTimer);
+					updateLights();
+					Log.i("StartTimer", "Pulsing light after sleeping for "+sleepTimer);
+				}
+			} catch (InterruptedException e) {
+				Log.e("StartClass Sleep", e.toString());
+			}
+			powerWake.release();
+			threadExecutor = null;
+			Log.i("StartTimer", "Ended");
+		}
+*/
+                public void run() {
+			powerWake.acquire(sleepTimer);
+                        try {
+                            Thread.sleep(sleepTimer);
+                        } catch (InterruptedException e) {
+                        }
+                        updateLights();
+                        threadExecutor = null;
+                }
+	}
+
+    private int lastColor = 1;
+    private String[] colorList = {"green", "white", "red", "blue", "yellow", "cyan", "#800080", "#ffc0cb", "#ffa500", "#add8e6"};
+
+    public void newExecutor() {
+	threadExecutor = Executors.newSingleThreadExecutor();
+    }
 
     // lock on mNotificationList
     private void updateLightsLocked()
     {
+    	String[] mPackages;
+        String mPackageList = Settings.System.getString(mContext.getContentResolver(), Settings.System.NOTIFICATION_PACKAGE_COLORS);
+        mPackages = getArray(mPackageList);
+        int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_SCREEN_ON, 0);
+    	int mSucsession = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_SUCESSION, 0);
+    	int mRandomColor = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_RANDOM, 0);
+    	int mPulseAllColor = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_PULSE_ORDER, 0);
+
+	if(mBatteryLevel <= 15) {
+		mSucsession = 0;
+		mRandomColor = 0;
+		mPulseAllColor = 0;
+	}
+
         // Battery low always shows, other states only show if charging.
         if (mBatteryLow) {
             if (mBatteryCharging) {
@@ -1064,29 +1182,104 @@ class NotificationManagerService extends INotificationManager.Stub
             // get next notification, if any
             int n = mLights.size();
             if (n > 0) {
+            	mLastLight = n;
                 mLedNotification = mLights.get(n-1);
             }
         }
 
-        int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_SCREEN_ON, 0);
-        
         // we only flash if screen is off and persistent pulsing is enabled
         // and we are not currently in a call
         if (mLedNotification == null || (mScreenOn && (mPulseScreen == 0)) || mInCall) {
             mNotificationLight.turnOff();
-        } else {
-            int ledARGB = mLedNotification.notification.ledARGB;
-            int ledOnMS = mLedNotification.notification.ledOnMS;
+	    hasLights = false;
+        } else { 
+		hasLights = true;
+                if(mSucsession != 0) {
+                        int n = mLights.size();
+                        if (n > 0) {
+                                int thisLight = n;
+                                if(mLastLight > thisLight) {
+                                        thisLight = 1;
+                                } else {
+                                        thisLight = mLastLight + 1;
+                                }
+                                //One last arthmetic check for sanitys sake.
+                                if((thisLight == (mLastLight - 1)) || (thisLight > n)) {
+                                        thisLight = 1;
+                                }
+//                              Log.i("Sucession", "mLights.size="+n+" thisLight: "+thisLight+" mLastLight: " +mLastLight+" mLights: " + mLights.toString());
+                                mLedNotification = mLights.get(thisLight-1);
+                                mLastLight = thisLight;
+                       }
+                }
+	       	int ledARGB = mLedNotification.notification.ledARGB;
+        	int ledOnMS = mLedNotification.notification.ledOnMS;
             int ledOffMS = mLedNotification.notification.ledOffMS;
             if ((mLedNotification.notification.defaults & Notification.DEFAULT_LIGHTS) != 0) {
                 ledARGB = mDefaultNotificationColor;
                 ledOnMS = mDefaultNotificationLedOn;
                 ledOffMS = mDefaultNotificationLedOff;
             }
+	    //Possible Cleaner way?
+            //String[] mPackageInfo = findPackage(mLedNotification.pkg);
+            //if(mPackageInfo != null) {
+            //		ledARGB = Color.parseColor(mPackageInfo[1]);
+    		//		ledOffMS = Integer.parseInt(mPackageInfo[2]);
+            //}
+            if(mPackages != null) {
+            	int i = 0;
+            	for(i = 0; i < mPackages.length; i++) {
+            		String[] mPackageInfo = getPackageInfo(mPackages[i]);
+            		if(mPackageInfo == null) {
+            			continue;
+            		}
+            		if(mPackageInfo[0].matches(mLedNotification.pkg)) {
+            			if(mPackageInfo[1].equals("random")) {
+            				Random generator = new Random();
+            				int x = generator.nextInt(colorList.length - 1);
+                			ledARGB = Color.parseColor(colorList[x]);
+            			} else {
+            				ledARGB = Color.parseColor(mPackageInfo[1]);
+            			}
+            			ledOffMS = Integer.parseInt(mPackageInfo[2]);
+            		}
+            	}
+            }
+
+            if(mRandomColor != 0) {
+                //Lets make this intresting...
+                Random generator = new Random();
+                int x = generator.nextInt(colorList.length - 1);
+                ledARGB = Color.parseColor(colorList[x]);
+            } else if(mPulseAllColor != 0) {
+            	if(lastColor >= colorList.length)
+            		lastColor = 1;
+            	ledARGB = Color.parseColor(colorList[lastColor - 1]);
+            	lastColor = lastColor + 1;
+            }
+
             if (mNotificationPulseEnabled) {
                 // pulse repeatedly
-                mNotificationLight.setFlashing(ledARGB, LightsService.LIGHT_FLASH_TIMED,
-                        ledOnMS, ledOffMS);
+            	if((mSucsession != 0) || (mRandomColor != 0) || (mPulseAllColor != 0)) {
+			/* Our wake lock information to keep us alive */
+			if(powerWake == null) {
+				PowerMan = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+				powerWake = PowerMan.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "NotificationLights");
+			}
+            		long scheduleTime = ledOnMS+ledOffMS;
+    		        if(scheduleTime < 2500) {
+            	    		scheduleTime = 2500;
+     	           	}
+			StartTimerClass timerRun = new StartTimerClass(scheduleTime);
+      			if(threadExecutor == null) {
+				newExecutor();
+			}
+                        threadExecutor.execute(timerRun);
+            		mNotificationLight.notificationPulse(ledARGB, ledOnMS, ledOffMS);
+            	} else {
+                    	mNotificationLight.setFlashing(ledARGB, LightsService.LIGHT_FLASH_TIMED,
+                            ledOnMS, ledOffMS);
+            	}
             } else {
                 // pulse only once
                 mNotificationLight.pulse(ledARGB, ledOnMS);
