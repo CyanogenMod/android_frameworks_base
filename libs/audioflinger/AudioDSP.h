@@ -83,7 +83,7 @@ class EffectCompression : public Effect {
     void configure(const float samplingFrequency);
     void setRatio(float compressionRatio);
     void process(int32_t* inout, int32_t frames);
-    int32_t estimateLevel(const int16_t* audiodata, int32_t frames, int32_t framesPerSample);
+    float estimateLevel(const int16_t* audiodata, int32_t frames, int32_t framesPerSample);
 };
 
 class EffectTone : public Effect {

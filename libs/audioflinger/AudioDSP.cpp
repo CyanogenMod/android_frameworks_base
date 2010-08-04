@@ -262,7 +262,7 @@ void EffectCompression::process(int32_t *inout, int32_t frames)
 {
 }
 
-int32_t EffectCompression::estimateLevel(const int16_t *audioData, int32_t frames, int32_t samplesPerFrame)
+float EffectCompression::estimateLevel(const int16_t *audioData, int32_t frames, int32_t samplesPerFrame)
 {
     mWeighter.reset();
     uint32_t power = 0;
@@ -277,7 +277,8 @@ int32_t EffectCompression::estimateLevel(const int16_t *audioData, int32_t frame
         powerFraction &= 0xffff;
     }
 
-    return power;
+    /* peak-to-peak is -32768 to 32767, but we are squared here. */
+    return (65536.0f * power + powerFraction) / (32768.0f * 32768.0f) / frames;
 }
 
 EffectTone::EffectTone()
@@ -494,23 +495,22 @@ int32_t AudioDSP::estimateLevel(const int16_t *input, int32_t frames, int32_t sa
     }
 
     /* Analyze both channels separately, pick the maximum power measured. */
-    int maximumPower = 0;
+    float maximumPowerSquared = 0;
     for (int channel = 0; channel < samplesPerFrame; channel ++) {
-        int candidatePower = mCompression.estimateLevel(input + channel, frames, samplesPerFrame);
-        if (candidatePower > maximumPower) {
-            maximumPower = candidatePower;
+        float candidatePowerSquared = mCompression.estimateLevel(input + channel, frames, samplesPerFrame);
+        if (candidatePowerSquared > maximumPowerSquared) {
+            maximumPowerSquared = candidatePowerSquared;
         }
     }
 
-    /* FIXME: code below should be ported to integer. */
-    float signalPower = (65536.0f*maximumPower) / frames / 32768.0f / 32768.0f;
-    /* -30 .. 0 dB. */
-    float signalPowerDb = logf(signalPower + 1e-3f) / logf(10) * 10;
-    /* target 83 dB SPL, and the weighter function peaks at -3 dB */
-    signalPowerDb += 96 - 83 + 3;
+    /* -100 .. 0 dB. */
+    float signalPowerDb = logf(maximumPowerSquared + 1e-10f) / logf(10) * 10;
+    /* target 83 dB SPL, and add 6 dB to compensate for the weighter, whose
+     * peak is at -3 dB. */
+    signalPowerDb += 96 - 83 + 6;
 
-    /* now we have an estimate of the signal power in range from
-     * -96 dB to 0 dB. Now we estimate what level we want. */
+    /* now we have an estimate of the signal power, with 0 level around 83 dB.
+     * we now select the level to boost to. */
     float desiredLevelDb = signalPowerDb / mCompression.mCompressionRatio;
 
     /* turn back to multiplier */
