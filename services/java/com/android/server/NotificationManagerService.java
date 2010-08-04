@@ -139,6 +139,7 @@ class NotificationManagerService extends INotificationManager.Stub
     private boolean mBatteryCharging;
     private boolean mBatteryLow;
     private boolean mBatteryFull;
+    private int mBatteryLevel;
     private NotificationRecord mLedNotification;
 
     private static final int BATTERY_LOW_ARGB = 0xFFFF0000; // Charging Low - red solid on
@@ -339,7 +340,9 @@ class NotificationManagerService extends INotificationManager.Stub
                 boolean batteryLow = (level >= 0 && level <= Power.LOW_BATTERY_THRESHOLD);
                 int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
                 boolean batteryFull = (status == BatteryManager.BATTERY_STATUS_FULL || level >= 90);
+		int percentage = intent.getIntExtra("scale", 100);
 
+		mBatteryLevel = level*100/percentage;
                 if (batteryCharging != mBatteryCharging ||
                         batteryLow != mBatteryLow ||
                         batteryFull != mBatteryFull) {
@@ -1104,7 +1107,7 @@ class NotificationManagerService extends INotificationManager.Stub
 			sleepTimer = timer;
 		}
 
-		public void run() {
+/*		public void run() {
 			powerWake.acquire();
 			try {
 				while(hasLights == true) {
@@ -1119,6 +1122,16 @@ class NotificationManagerService extends INotificationManager.Stub
 			threadExecutor = null;
 			Log.i("StartTimer", "Ended");
 		}
+*/
+                public void run() {
+			powerWake.acquire(sleepTimer);
+                        try {
+                            Thread.sleep(sleepTimer);
+                        } catch (InterruptedException e) {
+                        }
+                        updateLights();
+                        threadExecutor = null;
+                }
 	}
 
     private int lastColor = 1;
@@ -1138,6 +1151,12 @@ class NotificationManagerService extends INotificationManager.Stub
     	int mSucsession = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_SUCESSION, 0);
     	int mRandomColor = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_RANDOM, 0);
     	int mPulseAllColor = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_PULSE_ORDER, 0);
+
+	if(mBatteryLevel <= 15) {
+		mSucsession = 0;
+		mRandomColor = 0;
+		mPulseAllColor = 0;
+	}
 
         // Battery low always shows, other states only show if charging.
         if (mBatteryLow) {
@@ -1188,7 +1207,7 @@ class NotificationManagerService extends INotificationManager.Stub
                                 if((thisLight == (mLastLight - 1)) || (thisLight > n)) {
                                         thisLight = 1;
                                 }
-                                Log.i("Sucession", "mLights.size="+n+" thisLight: "+thisLight+" mLastLight: " +mLastLight+" mLights: " + mLights.toString());
+//                              Log.i("Sucession", "mLights.size="+n+" thisLight: "+thisLight+" mLastLight: " +mLastLight+" mLights: " + mLights.toString());
                                 mLedNotification = mLights.get(thisLight-1);
                                 mLastLight = thisLight;
                        }
@@ -1242,8 +1261,6 @@ class NotificationManagerService extends INotificationManager.Stub
             if (mNotificationPulseEnabled) {
                 // pulse repeatedly
             	if((mSucsession != 0) || (mRandomColor != 0) || (mPulseAllColor != 0)) {
-
-
 			/* Our wake lock information to keep us alive */
 			if(powerWake == null) {
 				PowerMan = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
@@ -1255,30 +1272,9 @@ class NotificationManagerService extends INotificationManager.Stub
      	           	}
 			StartTimerClass timerRun = new StartTimerClass(scheduleTime);
       			if(threadExecutor == null) {
-	      			//StartTimerClass timerRun = new StartTimerClass(scheduleTime);
-				Log.i("CreateThread", "Creating new Executor Thread");
 				newExecutor();
 			}
-			Log.i("ExecuteThread", "Executing TimerRun");
                         threadExecutor.execute(timerRun);
-/*            		if(isTimer == false) {
-            			isTimer = true;
-            			TimerTask updateTask;
-                		Timer timer = new Timer();
-                		updateTask = new TimerTask() {
-                        		public void run() {
-                        			isTimer = false;
-                        			updateLightsLocked();
-                                    //updateNotificationPulse();
-                        		}
-                    		};
-
-	                	long scheduleTime = ledOnMS+ledOffMS;
-        		        if(scheduleTime < 2500) {
-                	    		scheduleTime = 2500;
-         	           	}
-            			timer.schedule(updateTask, scheduleTime);
-					}*/
             		mNotificationLight.notificationPulse(ledARGB, ledOnMS, ledOffMS);
             	} else {
                     	mNotificationLight.setFlashing(ledARGB, LightsService.LIGHT_FLASH_TIMED,

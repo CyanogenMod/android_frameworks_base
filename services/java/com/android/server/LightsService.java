@@ -104,8 +104,10 @@ public class LightsService {
         }
 
 	public void notificationPulse(int color, int onMs, int offMs) {
-		setLightLocked(color, LIGHT_FLASH_PULSE, onMs, 1000, BRIGHTNESS_MODE_USER);
-                mH.sendMessageDelayed(Message.obtain(mH, 1, this), onMs);
+		synchronized (this) {
+			setLightLocked(color, LIGHT_FLASH_PULSE, onMs, 1000, BRIGHTNESS_MODE_USER);
+                	mH.sendMessageDelayed(Message.obtain(mH, 1, this), onMs);
+		}
 	}
 
         public void turnOff() {
