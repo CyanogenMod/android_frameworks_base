@@ -93,6 +93,7 @@ public class NotificationManager
         notify(null, id, notification);
     }
 
+    /** @hide */
     public void updatePackageList() {
     	try {
     		if(mContext.getPackageName().equals("com.cyanogenmod.cmparts")) {
