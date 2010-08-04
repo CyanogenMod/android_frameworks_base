@@ -75,6 +75,7 @@ include $(BUILD_STATIC_LIBRARY)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:=               \
+    AudioDSP.cpp.arm            \
     AudioFlinger.cpp            \
     AudioMixer.cpp.arm          \
     AudioResampler.cpp.arm      \

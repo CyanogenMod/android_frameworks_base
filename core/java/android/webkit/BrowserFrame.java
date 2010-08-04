@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * Copyright (c) 2010, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -227,6 +228,22 @@ class BrowserFrame extends Handler {
         if (DebugFlags.BROWSER_FRAME) {
             Log.v(LOGTAG, "BrowserFrame constructor: this=" + this);
         }
+    }
+
+    public void startDnsPrefetch() {
+        if (DebugFlags.BROWSER_FRAME) {
+            Log.v(LOGTAG, "Starting DNS prefetch");
+        }
+
+        DnsResolver dnsResolver = DnsResolver.getInstance();
+        if(dnsResolver == null )
+            return;
+
+        HashMap hostsMap = nativeGetEmbeddedHostNames(dnsResolver.getMaxParallelDnsQueryPerPage());
+        if(hostsMap == null)
+            return;
+
+        dnsResolver.resolveDnsForHostMap(hostsMap);
     }
 
     /**
@@ -966,6 +983,8 @@ class BrowserFrame extends Handler {
 
     private native void nativeLoadData(String baseUrl, String data,
             String mimeType, String encoding, String historyUrl);
+
+    private native HashMap nativeGetEmbeddedHostNames(int maxDnsHostCount);
 
     /**
      * Stop loading the current page.
