@@ -39,6 +39,7 @@
 #define RENDER_EFFECT_AMBER 4
 #define RENDER_EFFECT_SALMON 5
 #define RENDER_EFFECT_FUSCIA 6
+#define RENDER_EFFECT_N1_CALIBRATED 7
 
 namespace android {
 
@@ -467,6 +468,8 @@ void LayerBase::drawWithOpenGL(const Region& clip, const Texture& texture) const
             case RENDER_EFFECT_FUSCIA:
                 glColor4x(alpha, 0, alpha*0.5, alpha);
                 break;
+            case RENDER_EFFECT_N1_CALIBRATED:
+                glColor4x(alpha, alpha*0.98, alpha*0.82, alpha);
         }
         glEnable(GL_BLEND);
         glBlendFunc(src, GL_ONE_MINUS_SRC_ALPHA);
