@@ -33,12 +33,6 @@ static int16_t toFixedPoint(float x)
     return int16_t(x * (1 << fixedPointDecimals) + 0.5f);
 }
 
-static int32_t seed = 1;
-inline static int16_t prng() {
-    seed = (seed * 12345) + 1103515245;
-    return int16_t(seed & fixedPointBits);
-}
-
 
 /***************************************************************************
  * Delay                                                                   *
@@ -638,10 +632,13 @@ int32_t AudioDSP::estimateLevel(const int16_t* input, int32_t frames, int32_t sa
     }
 
     /* -100 .. 0 dB. */
-    float signalPowerDb = logf(maximumPowerSquared + 1e-10f) / logf(10) * 10;
+    float signalPowerDb = logf(maximumPowerSquared + 1e-10f) / logf(10.0f) * 10.0f;
     /* target 83 dB SPL, and add 6 dB to compensate for the weighter, whose
      * peak is at -3 dB. */
-    signalPowerDb += 96 - 83 + 6;
+    signalPowerDb += 96.0f - 83.0f + 6.0f;
+
+    /* Reduce extreme boosts. */
+    signalPowerDb -= powf(signalPowerDb/100, 3.0f) * (100.0f / 3.0f);
 
     /* now we have an estimate of the signal power, with 0 level around 83 dB.
      * we now select the level to boost to. */
@@ -650,7 +647,7 @@ int32_t AudioDSP::estimateLevel(const int16_t* input, int32_t frames, int32_t sa
     /* turn back to multiplier */
     float correctionDb = desiredLevelDb - signalPowerDb;
 
-    return int32_t(65536 * powf(10, correctionDb / 20));
+    return int32_t(65536.0f * powf(10.0f, correctionDb / 20.0f));
 }
 
 /* input is 28-bit interleaved stereo in integer format */
@@ -666,18 +663,6 @@ void AudioDSP::process(int32_t* audioData, int32_t frames)
 
     if (mHeadphoneEnable) {
         mHeadphone.process(audioData, frames);
-    }
-
-    /* Apply dither to output. This is the high-passed triangular
-     * probability density function, discussed in "A Theory of
-     * Nonsubtractive Dither", by Robert A. Wannamaker et al. */
-    for (int32_t i = 0; i < frames; i ++) {
-        int32_t ditherValue = prng();
-        int32_t dithering = mDitherValue - ditherValue;
-        mDitherValue = ditherValue;
-        audioData[0] += ditherValue;
-        audioData[1] += ditherValue;
-        audioData += 2;
     }
 }
 

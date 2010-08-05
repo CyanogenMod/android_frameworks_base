@@ -38,6 +38,12 @@ static inline int16_t clamp16(int32_t sample)
     return sample;
 }
 
+static int32_t seed = 1;
+inline static int32_t prng() {
+    seed = (seed * 12345) + 1103515245;
+    return int32_t(seed & 0xfff);
+}
+
 // ----------------------------------------------------------------------------
 
 AudioMixer::AudioMixer(size_t frameCount, uint32_t sampleRate, AudioDSP& dsp)
@@ -249,19 +255,19 @@ void AudioMixer::track_t::adjustVolumeRamp(AudioDSP& dsp, size_t frames)
         int32_t d = desiredVolume - prevVolume[i];
 
         /* limit change rate to smooth the compressor. */
-        int32_t volChangeLimit = (prevVolume[i] >> 11);
+        int32_t volChangeLimit = (prevVolume[i] >> 10);
 
         volChangeLimit += 1;
         int32_t volInc = d / int32_t(frames);
-        if (volInc > volChangeLimit) {
-            volInc = volChangeLimit;
-        }
-
-        /* Make ramps down slow, but ramps up fast. */
-        volChangeLimit >>= 3;
-        volChangeLimit -= 1;
         if (volInc < -(volChangeLimit)) {
             volInc = -(volChangeLimit);
+        }
+
+        /* Make ramps up slower, but ramps down fast. */
+        volChangeLimit >>= 3;
+        volChangeLimit -= 1;
+        if (volInc > volChangeLimit) {
+            volInc = volChangeLimit;
         }
 
         volumeInc[i] = volInc;
@@ -615,11 +621,20 @@ void AudioMixer::track__16BitsMono(track_t* t, int32_t* out, size_t frameCount, 
 
 void AudioMixer::ditherAndClamp(int32_t* out, int32_t const *sums, size_t c)
 {
+    int32_t oldDitherValue = prng();
     for (size_t i=0 ; i<c ; i++) {
         int32_t l = *sums++;
         int32_t r = *sums++;
-        int32_t nl = l >> 12;
-        int32_t nr = r >> 12;
+
+        /* Apply dither to output. This is the high-passed triangular
+         * probability density function, discussed in "A Theory of
+         * Nonsubtractive Dither", by Robert A. Wannamaker et al. */
+        int32_t ditherValue = prng();
+        int32_t dithering = oldDitherValue - ditherValue;
+        oldDitherValue = ditherValue;
+
+        int32_t nl = (l + ditherValue) >> 12;
+        int32_t nr = (r + ditherValue) >> 12;
         l = clamp16(nl);
         r = clamp16(nr);
         *out++ = (r<<16) | (l & 0xFFFF);
