@@ -1237,7 +1237,7 @@ public class Canvas {
     * Since the reshaping algorithm does not test for arabic prior to starting, this is made to 
     * @hide 
     **/
-    public boolean bidiTest(char[] text,int start,int srcCount) {
+    public static boolean bidiTest(char[] text,int start,int srcCount) {
 
         boolean hasBidi=false;
 
@@ -1254,7 +1254,7 @@ public class Canvas {
     * Since the reshaping algorithm does not test for arabic prior to starting, this is made to 
     * @hide 
     **/
-    public boolean bidiTest(String text,int start,int srcCount) {
+    public static boolean bidiTest(String text,int start,int srcCount) {
 
         boolean hasBidi=false;
 
@@ -1272,7 +1272,7 @@ public class Canvas {
     * written from scratch by David Kohen (kohen dot d at gmail dot com) - 2010
     * @hide 
     **/
-    public char[] bidiProcess(char[] text,int start,int srcCount) {
+    public static char[] bidiProcess(char[] text,int start,int srcCount) {
 
         boolean hasBidi=false;
         char[] destCharArray=new char[srcCount];
