@@ -149,10 +149,10 @@ class NotificationManagerService extends INotificationManager.Stub
     private static final int BATTERY_BLINK_OFF = 2875;
 
     private static ExecutorService threadExecutor;
-    private int mLastLight = 0;
-    private boolean isTimer = false;
+    private static int mLastLight = 0;
+    private static boolean isTimer = false;
     private static boolean hasLights = false;
-    private PowerManager PowerMan;
+    private static PowerManager PowerMan;
     private static PowerManager.WakeLock powerWake = null;
     //private static ExecutorService threadExecutor;
 
@@ -1129,8 +1129,9 @@ class NotificationManagerService extends INotificationManager.Stub
                             Thread.sleep(sleepTimer);
                         } catch (InterruptedException e) {
                         }
+			isTimer = false;
                         updateLights();
-                        threadExecutor = null;
+                        //threadExecutor = null;
                 }
 	}
 
@@ -1192,6 +1193,7 @@ class NotificationManagerService extends INotificationManager.Stub
         if (mLedNotification == null || (mScreenOn && (mPulseScreen == 0)) || mInCall) {
             mNotificationLight.turnOff();
 	    hasLights = false;
+	    isTimer = false;
         } else { 
 		hasLights = true;
                 if(mSuccession == 1) {
@@ -1214,7 +1216,7 @@ class NotificationManagerService extends INotificationManager.Stub
                 }
 	       	int ledARGB = mLedNotification.notification.ledARGB;
         	int ledOnMS = mLedNotification.notification.ledOnMS;
-            int ledOffMS = mLedNotification.notification.ledOffMS;
+                int ledOffMS = mLedNotification.notification.ledOffMS;
             if ((mLedNotification.notification.defaults & Notification.DEFAULT_LIGHTS) != 0) {
                 ledARGB = mDefaultNotificationColor;
                 ledOnMS = mDefaultNotificationLedOn;
@@ -1274,12 +1276,18 @@ class NotificationManagerService extends INotificationManager.Stub
       			if(threadExecutor == null) {
 				newExecutor();
 			}
-                        threadExecutor.execute(timerRun);
+                        if(isTimer == false) {
+				isTimer = true;
+				threadExecutor.execute(timerRun);
+			}
+			Log.i("SetTimer", "Set Flash off time: "+ledOffMS);
             		mNotificationLight.notificationPulse(ledARGB, ledOnMS, ledOffMS);
             	} else {
+			//We are going to divide the time in half, as it seems long when normal.
                     	mNotificationLight.setFlashing(ledARGB, LightsService.LIGHT_FLASH_TIMED,
-                            ledOnMS, ledOffMS);
-            	}
+                            ledOnMS, (ledOffMS/2));
+            		Log.i("SetFlashing", "Set Flash off time: "+(ledOffMS/2));
+		}
             } else {
                 // pulse only once
                 mNotificationLight.pulse(ledARGB, ledOnMS);
