@@ -23,6 +23,18 @@
 
 namespace android {
 
+class Delay {
+    int32_t* mState;
+    int32_t mIndex;
+    int32_t mLength;
+
+    public:
+    Delay();
+    ~Delay();
+    void setParameters(float rate, float time);
+    int32_t process(int32_t x0);
+};
+
 class Allpass {
     int32_t mK;
     int32_t* mState;
@@ -86,6 +98,21 @@ class EffectCompression : public Effect {
     float estimateLevel(const int16_t* audiodata, int32_t frames, int32_t framesPerSample);
 };
 
+class EffectReverb : public Effect {
+    Delay mDelayL, mDelayR;
+    bool mDeep, mWide;
+    int32_t mLevel, mDelayDataL, mDelayDataR;
+
+    public:
+    EffectReverb();
+    ~EffectReverb();
+    void configure(const float samplingFrequency);
+    void setDeep(bool enable);
+    void setWide(bool enable);
+    void setLevel(float level);
+    void process(int32_t* inout, int32_t frames);
+};
+
 class EffectTone : public Effect {
     float mBand[5];
     int32_t mGain;
@@ -102,7 +129,8 @@ class EffectTone : public Effect {
 };
 
 class EffectHeadphone : public Effect {
-    Allpass mAllpassL[4], mAllpassR[4];
+    Delay mDelayL, mDelayR;
+    Allpass mAllpassL[3], mAllpassR[3];
     Biquad mLowpassL, mLowpassR;
 
     public:
@@ -114,6 +142,9 @@ class EffectHeadphone : public Effect {
 class AudioDSP {
     bool mCompressionEnable;
     EffectCompression mCompression;
+    
+    bool mReverbEnable;
+    EffectReverb mReverb;
 
     bool mToneEnable;
     EffectTone mTone;
@@ -134,6 +165,11 @@ class AudioDSP {
 
     static const String8 keyCompressionEnable;
     static const String8 keyCompressionRatio;
+
+    static const String8 keyReverbEnable;
+    static const String8 keyReverbDeep;
+    static const String8 keyReverbWide;
+    static const String8 keyReverbLevel;
 
     static const String8 keyToneEnable;
     static const String8 keyToneEq1;
