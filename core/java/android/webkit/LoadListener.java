@@ -131,6 +131,9 @@ class LoadListener extends Handler implements EventHandler {
     private final String mUsername;
     private final String mPassword;
 
+    private int mPriority = -1;
+    private boolean mCommit = true;
+
     // =========================================================================
     // Public functions
     // =========================================================================
@@ -181,6 +184,22 @@ class LoadListener extends Handler implements EventHandler {
     private void clearNativeLoader() {
         sNativeLoaderCount -= 1;
         mNativeLoader = 0;
+    }
+
+    public void setPriority(int pri) {
+        mPriority = pri;
+    }
+
+    public int priority() {
+        return mPriority;
+    }
+
+    public void setShouldCommit(boolean commit) {
+        mCommit = commit;
+    }
+
+    public boolean shouldCommit() {
+        return mCommit;
     }
 
     /*
@@ -1239,6 +1258,24 @@ class LoadListener extends Handler implements EventHandler {
         if (mRequestHandle != null) {
             mRequestHandle.pauseRequest(pause);
         }
+    }
+
+    /**
+     * native callback
+     * Propagates the priority to the network stack
+     */
+    void setPriority(String url, int pri) {
+        Network net = Network.getInstance(mContext);
+        net.setPriority(url, pri);
+    }
+
+    /**
+     * native callback
+     * Commits the priorities set on the network stack
+     */
+    void commitPriorities() {
+        Network net = Network.getInstance(mContext);
+        net.commitPriorities();
     }
 
     /**

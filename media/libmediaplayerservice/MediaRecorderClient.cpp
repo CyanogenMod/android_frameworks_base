@@ -196,6 +196,16 @@ status_t MediaRecorderClient::setParameters(const String8& params) {
     return mRecorder->setParameters(params);
 }
 
+status_t MediaRecorderClient::setCameraParameters(const String8& params) {
+    LOGV("setCameraParameters(%s)", params.string());
+    Mutex::Autolock lock(mLock);
+    if (mRecorder == NULL) {
+        LOGE("recorder is not initialized");
+        return NO_INIT;
+    }
+    return mRecorder->setCameraParameters(params);
+}
+
 status_t MediaRecorderClient::prepare()
 {
     LOGV("prepare");

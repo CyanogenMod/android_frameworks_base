@@ -1148,12 +1148,12 @@ class NotificationManagerService extends INotificationManager.Stub
         String mPackageList = Settings.System.getString(mContext.getContentResolver(), Settings.System.NOTIFICATION_PACKAGE_COLORS);
         mPackages = getArray(mPackageList);
         int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_SCREEN_ON, 0);
-    	int mSucsession = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_SUCESSION, 0);
+    	int mSuccession = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_SUCCESSION, 0);
     	int mRandomColor = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_RANDOM, 0);
     	int mPulseAllColor = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_PULSE_ORDER, 0);
 
 	if(mBatteryLevel <= 15) {
-		mSucsession = 0;
+		mSuccession = 0;
 		mRandomColor = 0;
 		mPulseAllColor = 0;
 	}
@@ -1194,7 +1194,7 @@ class NotificationManagerService extends INotificationManager.Stub
 	    hasLights = false;
         } else { 
 		hasLights = true;
-                if(mSucsession == 1) {
+                if(mSuccession == 1) {
                         int n = mLights.size();
                         if (n > 0) {
                                 int thisLight = n;
@@ -1207,7 +1207,7 @@ class NotificationManagerService extends INotificationManager.Stub
                                 if((thisLight == (mLastLight - 1)) || (thisLight > n)) {
                                         thisLight = 1;
                                 }
-//                              Log.i("Sucession", "mLights.size="+n+" thisLight: "+thisLight+" mLastLight: " +mLastLight+" mLights: " + mLights.toString());
+//                              Log.i("Succession", "mLights.size="+n+" thisLight: "+thisLight+" mLastLight: " +mLastLight+" mLights: " + mLights.toString());
                                 mLedNotification = mLights.get(thisLight-1);
                                 mLastLight = thisLight;
                        }
@@ -1260,7 +1260,7 @@ class NotificationManagerService extends INotificationManager.Stub
 
             if (mNotificationPulseEnabled) {
                 // pulse repeatedly
-            	if((mSucsession == 1) || (mRandomColor == 1) || (mPulseAllColor == 1)) {
+            	if((mSuccession == 1) || (mRandomColor == 1) || (mPulseAllColor == 1)) {
 			/* Our wake lock information to keep us alive */
 			if(powerWake == null) {
 				PowerMan = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);

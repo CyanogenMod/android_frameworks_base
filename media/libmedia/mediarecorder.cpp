@@ -385,6 +385,28 @@ status_t MediaRecorder::setParameters(const String8& params) {
     return ret;
 }
 
+status_t MediaRecorder::setCameraParameters(const String8& params) {
+    LOGV("setCameraParameters(%s)", params.string());
+    if(mMediaRecorder == NULL) {
+        LOGE("media recorder is not initialized yet");
+        return INVALID_OPERATION;
+    }
+
+    bool isInvalidState = (mCurrentState &
+                            MEDIA_RECORDER_ERROR);
+    if (isInvalidState) {
+        LOGE("setCameraParameters is called in an invalid state: %d", mCurrentState);
+        return INVALID_OPERATION;
+    }
+
+    status_t ret = mMediaRecorder->setCameraParameters(params);
+    if (OK != ret) {
+        LOGE("setCameraParameters(%s) failed: %d", params.string(), ret);
+    }
+
+    return ret;
+}
+
 status_t MediaRecorder::prepare()
 {
     LOGV("prepare");
