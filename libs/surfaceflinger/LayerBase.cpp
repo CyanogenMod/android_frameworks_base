@@ -470,6 +470,7 @@ void LayerBase::drawWithOpenGL(const Region& clip, const Texture& texture) const
                 break;
             case RENDER_EFFECT_N1_CALIBRATED:
                 glColor4x(alpha, alpha*0.98, alpha*0.82, alpha);
+                break;
         }
         glEnable(GL_BLEND);
         glBlendFunc(src, GL_ONE_MINUS_SRC_ALPHA);
