@@ -1303,7 +1303,11 @@ public class Paint {
         if (hasBidi) {
             char[] bidiText;
             bidiText=Canvas.bidiProcess(text,index,count);
-            native_getTextPath(mNativePaint, ArabicReshape.reshape(new String(bidiText)).toCharArray(), 0, count, x, y, path.ni());
+            String reshapedText=ArabicReshape.reshape(new String(bidiText));
+            /* The reshaping may make the string smaller */
+            native_getTextPath(mNativePaint, reshapedText.toCharArray(), 0,
+                                count - ((count-reshapedText.length())>0 ? (count-reshapedText.length()) : 0,
+                                x, y, path.ni());
         } else {
             native_getTextPath(mNativePaint, text, index, count, x, y, path.ni());
         }
@@ -1331,7 +1335,10 @@ public class Paint {
         if (hasBidi) {
             char[] bidiText;
             bidiText=Canvas.bidiProcess(text.toCharArray(),start,start+end);
-            native_getTextPath(mNativePaint, ArabicReshape.reshape(new String(bidiText)), 0, end-start, x, y, path.ni());
+            String reshapedText=ArabicReshape.reshape(String(bidiText));
+            /* The reshaping may make the string smaller */
+            native_getTextPath(mNativePaint, reshapedText, 0, end-start - ((end-start - reshapedText.length())>0 ? (end-start - reshapedText.length()) : 0),
+                                x, y, path.ni());
         } else {
             native_getTextPath(mNativePaint, text, start, end, x, y, path.ni());
         }

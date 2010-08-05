@@ -1370,19 +1370,23 @@ public class Canvas {
     /** @hide **/
     public void drawText(char[] text, int index, int count, float x, float y,
             Paint paint,boolean bidi) {
-        if (((index | count | (index + count)) < 0) 
-            ) {
+        if (((index | count | (index + count)) < 0) ||
+            (index + count) > text.length) {
             throw new IndexOutOfBoundsException();
         }
         boolean hasBidi=bidiTest(text,index,count);
         if (hasBidi) {
             if (bidi) {
-                char[] bidiText;
-                bidiText=bidiProcess(text,index,count);
-                native_drawText(mNativeCanvas, ArabicReshape.reshape(new String(bidiText)).toCharArray(), 0, count, x, y,
+                char[] bidiText=bidiProcess(text,index,count);
+                String reshapedText=ArabicReshape.reshape(new String(bidiText));
+                /* The reshaping may make the string smaller */
+                native_drawText(mNativeCanvas, reshapedText.toCharArray(), 0, count - ((count - reshapedText.length())>0 ? (count - reshapedText.length()) : 0), x, y,
                         paint.mNativePaint);
             } else {
-                native_drawText(mNativeCanvas, ArabicReshape.reshape(new String(text)).toCharArray(), index, count, x, y,
+                String reshapedText=ArabicReshape.reshape(new String(text));
+                /* The reshaping may make the string smaller */
+                native_drawText(mNativeCanvas, reshapedText.toCharArray(), index, 
+                        count - ((text.length -  reshapedText.length())>0 ? (text.length -  reshapedText.length()) : 0), x, y,
                         paint.mNativePaint);
             }
         } else {
@@ -1409,13 +1413,10 @@ public class Canvas {
 
         boolean hasBidi=bidiTest(text,index,count);
         if (hasBidi) {
-            char[] bidiText;
-            bidiText=bidiProcess(text,index,count);
-            native_drawText(mNativeCanvas, ArabicReshape.reshape(new String(bidiText)).toCharArray(), 0, count, x, y,
-                            paint.mNativePaint);
+            drawText(text,index,count,x,y,paint,true);
         } else {
             native_drawText(mNativeCanvas, text, index, count, x, y,
-                            paint.mNativePaint);
+                    paint.mNativePaint);
         }
     }
 
@@ -1469,9 +1470,9 @@ public class Canvas {
         }
         boolean hasBidi=bidiTest(text,start,end-start);
         if (hasBidi) {
-            String bidiText;
-            bidiText=new String(bidiProcess(text.toCharArray(),start,end-start));
-            native_drawText(mNativeCanvas, ArabicReshape.reshape(bidiText), 0, end-start, x, y,
+            String reshapedText=ArabicReshape.reshape(new String(bidiProcess(text.toCharArray(),start,end-start)));
+            /* The reshaping may make the string smaller */
+            native_drawText(mNativeCanvas, reshapedText, 0, end-start - ((end-start - reshapedText.length())>0?(end-start - reshapedText.length()):0), x, y,
                             paint.mNativePaint);
         } else {
             native_drawText(mNativeCanvas, text, start, end, x, y,
@@ -1494,33 +1495,7 @@ public class Canvas {
      */
     public void drawText(CharSequence text, int start, int end, float x,
                          float y, Paint paint) {
-        boolean hasBidi=bidiTest(text.toString(),start,end-start);
-        if (text instanceof String || text instanceof SpannedString ||
-            text instanceof SpannableString) {
-            if (hasBidi) {
-                String bidiText;
-                bidiText=new String(bidiProcess(text.toString().toCharArray(),start,end-start));
-                native_drawText(mNativeCanvas, ArabicReshape.reshape(bidiText), 0, end-start, x, y,
-                            paint.mNativePaint);
-            } else {
-                native_drawText(mNativeCanvas, text.toString() , start, end, x, y,
-                            paint.mNativePaint);
-            }
-        }
-        else if (text instanceof GraphicsOperations) {
-            ((GraphicsOperations) text).drawText(this, start, end, x, y,
-                                                     paint);
-        }
-        else {
-            char[] buf = TemporaryBuffer.obtain(end - start);
-            TextUtils.getChars(text, start, end, buf, 0);
-            if (hasBidi) {
-                drawText(ArabicReshape.reshape(new String(buf)).toCharArray(), 0, end - start, x, y, paint,false);
-            } else {
-                drawText(buf, 0, end - start, x, y, paint,false);
-            }
-            TemporaryBuffer.recycle(buf);
-        }
+        drawText(text,start,end,x,y,paint,true);
     }
 
     /** @hide */
@@ -1531,12 +1506,15 @@ public class Canvas {
                 text instanceof SpannableString) {
             if (hasBidi) {
                 if (bidi) {
-                    String bidiText;
-                    bidiText=new String(bidiProcess(text.toString().toCharArray(),start,end-start));
-                    native_drawText(mNativeCanvas, ArabicReshape.reshape(bidiText), 0, end-start, x, y,
+                    String bidiText=new String(bidiProcess(text.toString().toCharArray(),start,end-start));
+                    String reshapedText=ArabicReshape.reshape(bidiText);
+                    /* The reshaping may make the string smaller */
+                    native_drawText(mNativeCanvas, reshapedText, 0, (end-start) - ((end-start - reshapedText.length())>0 ? (end-start - reshapedText.length()) : 0), x, y,
                                 paint.mNativePaint);
                 } else {
-                    native_drawText(mNativeCanvas, ArabicReshape.reshape(text.toString()), 0, end-start, x, y,
+                    String reshapedText=ArabicReshape.reshape(text.toString());
+                    /* The reshaping may make the string smaller */
+                    native_drawText(mNativeCanvas, reshapedText, 0, (end-start) - ((end-start - reshapedText.length())>0 ? (end-start - reshapedText.length()) : 0), x, y,
                             paint.mNativePaint);
                 }
             } else {
@@ -1552,7 +1530,9 @@ public class Canvas {
     		char[] buf = TemporaryBuffer.obtain(end - start);
     		TextUtils.getChars(text, start, end, buf, 0);
                 if (hasBidi) {
-                    drawText(ArabicReshape.reshape(new String(buf)).toCharArray(), 0, end - start, x, y, paint,false);
+                    String reshapedText=ArabicReshape.reshape(new String(buf));
+                    /* The reshaping may make the string smaller */
+                    drawText(reshapedText.toCharArray(), 0, (end - start) - (((end - start) - reshapedText.length())>0?((end - start) - reshapedText.length()):0), x, y, paint,false);
                 } else {
                     drawText(buf, 0, end - start, x, y, paint,false);
                 }
@@ -1583,7 +1563,9 @@ public class Canvas {
             System.arraycopy(pos , index*2 , relativePos , 0, count*2);
             char[] bidiText;
             bidiText=bidiProcess(text,index,count);
-            native_drawPosText(mNativeCanvas, ArabicReshape.reshape(new String(bidiText)).toCharArray(), 0, count, relativePos,
+            String reshapedText=ArabicReshape.reshape(new String(bidiText));
+            /* The reshaping may make the string smaller */
+            native_drawPosText(mNativeCanvas, reshapedText.toCharArray(), 0, count - ((count - reshapedText.length())>0 ? (count - reshapedText.length()) : 0), relativePos,
                                paint.mNativePaint);
         } else {
             native_drawPosText(mNativeCanvas, text, index, count, pos,
@@ -1637,7 +1619,9 @@ public class Canvas {
         if (hasBidi) {
             char[] bidiText;
             bidiText=bidiProcess(text,index,count);
-            native_drawTextOnPath(mNativeCanvas, ArabicReshape.reshape(new String(bidiText)).toCharArray(), 0, count,
+            String reshapedText=ArabicReshape.reshape(new String(bidiText));
+            /* The reshaping may make the string smaller */
+            native_drawTextOnPath(mNativeCanvas, reshapedText.toCharArray(), 0, count - ((count - reshapedText.length())>0 ? (count - reshapedText.length()) : 0),
                                   path.ni(), hOffset, vOffset,
                                   paint.mNativePaint);
         } else {
