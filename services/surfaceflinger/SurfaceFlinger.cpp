@@ -86,6 +86,9 @@ SurfaceFlinger::SurfaceFlinger()
         mDebugRegion(0),
         mDebugBackground(0),
         mRenderEffect(0),
+        mRenderColorR(0),
+	mRenderColorG(0),
+	mRenderColorB(0),
         mDebugInSwapBuffers(0),
         mLastSwapBufferTime(0),
         mDebugInTransaction(0),
@@ -112,6 +115,14 @@ void SurfaceFlinger::init()
 
     LOGI_IF(mDebugRegion,       "showupdates enabled");
     LOGI_IF(mDebugBackground,   "showbackground enabled");
+
+    // default calibration color set (disabled by default)
+    property_get("debug.sf.render_color_red", value, "975");
+    mRenderColorR = atoi(value);
+    property_get("debug.sf.render_color_green", value, "937");
+    mRenderColorG = atoi(value);
+    property_get("debug.sf.render_color_blue", value, "824");
+    mRenderColorB = atoi(value);
 }
 
 SurfaceFlinger::~SurfaceFlinger()
@@ -1544,6 +1555,18 @@ status_t SurfaceFlinger::onTransact(
                 mRenderEffect = data.readInt32();
                 return NO_ERROR;
             }
+	    case 1015: { // RENDER_COLOR_RED
+		mRenderColorR = data.readInt32();
+		return NO_ERROR;
+	    }
+	    case 1016: { // RENDER_COLOR_GREEN
+                mRenderColorG = data.readInt32();
+		return NO_ERROR;
+	    }
+	    case 1017: { // RENDER_COLOR_BLUE
+                mRenderColorB = data.readInt32();
+		return NO_ERROR;
+	    }
             return NO_ERROR;
         }
     }
