@@ -1194,7 +1194,7 @@ class NotificationManagerService extends INotificationManager.Stub
 	    hasLights = false;
         } else { 
 		hasLights = true;
-                if(mSucsession != 0) {
+                if(mSucsession == 1) {
                         int n = mLights.size();
                         if (n > 0) {
                                 int thisLight = n;
@@ -1246,12 +1246,12 @@ class NotificationManagerService extends INotificationManager.Stub
             	}
             }
 
-            if(mRandomColor != 0) {
+            if(mRandomColor == 1) {
                 //Lets make this intresting...
                 Random generator = new Random();
                 int x = generator.nextInt(colorList.length - 1);
                 ledARGB = Color.parseColor(colorList[x]);
-            } else if(mPulseAllColor != 0) {
+            } else if(mPulseAllColor == 1) {
             	if(lastColor >= colorList.length)
             		lastColor = 1;
             	ledARGB = Color.parseColor(colorList[lastColor - 1]);
@@ -1260,7 +1260,7 @@ class NotificationManagerService extends INotificationManager.Stub
 
             if (mNotificationPulseEnabled) {
                 // pulse repeatedly
-            	if((mSucsession != 0) || (mRandomColor != 0) || (mPulseAllColor != 0)) {
+            	if((mSucsession == 1) || (mRandomColor == 1) || (mPulseAllColor == 1)) {
 			/* Our wake lock information to keep us alive */
 			if(powerWake == null) {
 				PowerMan = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
