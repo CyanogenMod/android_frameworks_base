@@ -1,4 +1,5 @@
-package android.graphics.utils;
+/* @hide */		
+package android.graphics;
 
 /*
 This code is for Arabic Reshaping.
@@ -8,9 +9,9 @@ azizanroid@gmail.com
 This code is used in Mirsal, Ibrahim Keyboard, Arabic Contact, Arabic notepad applications
 
 
-
+@hide
 */
-public class ArabicReshape {
+class ArabicReshape {
 	
 
 	static final char RIGHT_LEFT_CHAR= 0x0001;
@@ -232,7 +233,7 @@ public class ArabicReshape {
      };
 
 	
-		
+             /* @hide*/		
 	     public static String reshape(String Str){
                 String Temp=" "+Str+"   ";
                 char pre,at,post;
