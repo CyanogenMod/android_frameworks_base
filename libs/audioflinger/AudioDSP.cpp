@@ -353,8 +353,8 @@ void EffectReverb::process(int32_t* inout, int32_t frames) {
         /* 28 bits */
 
         if (mDeep) {
-            dataL += mDelayDataL;
-            dataR += mDelayDataR;
+            dataL += mDelayDataR;
+            dataR += mDelayDataL;
         }
 
         dataL = mDelayL.process(dataL);
@@ -633,12 +633,10 @@ int32_t AudioDSP::estimateLevel(const int16_t* input, int32_t frames, int32_t sa
 
     /* -100 .. 0 dB. */
     float signalPowerDb = logf(maximumPowerSquared + 1e-10f) / logf(10.0f) * 10.0f;
+
     /* target 83 dB SPL, and add 6 dB to compensate for the weighter, whose
      * peak is at -3 dB. */
     signalPowerDb += 96.0f - 83.0f + 6.0f;
-
-    /* Reduce extreme boosts. */
-    signalPowerDb -= powf(signalPowerDb/100, 3.0f) * (100.0f / 3.0f);
 
     /* now we have an estimate of the signal power, with 0 level around 83 dB.
      * we now select the level to boost to. */
@@ -646,6 +644,10 @@ int32_t AudioDSP::estimateLevel(const int16_t* input, int32_t frames, int32_t sa
 
     /* turn back to multiplier */
     float correctionDb = desiredLevelDb - signalPowerDb;
+    
+    /* Reduce extreme boost by a smooth ramp.
+     * New range -50 .. 0 dB */
+    correctionDb -= powf(correctionDb/100, 2.0f) * (100.0f / 2.0f);
 
     return int32_t(65536.0f * powf(10.0f, correctionDb / 20.0f));
 }
