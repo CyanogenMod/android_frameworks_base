@@ -813,6 +813,11 @@ class BrowserFrame extends Handler {
         return null;
     }
 
+    private void resolveDnsForHost(String host) {
+        if(DnsResolver.getInstance() != null)
+            DnsResolver.getInstance().resolveDnsForHost(host,"1");
+    }
+
     /**
      * Try to focus this WebView.
      */
