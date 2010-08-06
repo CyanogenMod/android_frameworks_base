@@ -23,6 +23,7 @@ import android.os.IHardwareService;
 import android.os.ServiceManager;
 import android.os.Message;
 import android.util.Slog;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -104,7 +105,7 @@ public class LightsService {
 
 	public void notificationPulse(int color, int onMs, int offMs) {
 		synchronized (this) {
-			setLightLocked(color, LIGHT_FLASH_PULSE, onMs, 1000, BRIGHTNESS_MODE_USER);
+			setLightLocked(color, LIGHT_FLASH_HARDWARE, onMs, 1000, BRIGHTNESS_MODE_USER);
                 	mH.sendMessageDelayed(Message.obtain(mH, 1, this), onMs);
 		}
 	}
@@ -128,15 +129,14 @@ public class LightsService {
 			mOnMS = onMS;
 			mOffMS = offMS;
 			setLight_native(mNativePointer, mId, color, LIGHT_FLASH_HARDWARE, onMS, offMS, brightnessMode);
-			return;
 		}
-	        else if (color != mColor || mode != mMode || onMS != mOnMS || offMS != mOffMS) {
-                */	mColor = color;
+	        else*/ if (color != mColor || mode != mMode || onMS != mOnMS || offMS != mOffMS) {
+                	mColor = color;
                 	mMode = mode;
                 	mOnMS = onMS;
                 	mOffMS = offMS;
                 	setLight_native(mNativePointer, mId, color, mode, onMS, offMS, brightnessMode);
-            	//}
+            	}
         }
 
         private int mId;
