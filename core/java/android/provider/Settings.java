@@ -1722,6 +1722,18 @@ public final class Settings {
         public static final String SHOW_TWELVE_HOUR_CLOCK_PERIOD = "show_clock_period";
         
         /**
+         * How many ms to delay before enabling the screen lock when the screen goes off due to timeout
+         * @hide
+         */
+        public static final String SCREEN_LOCK_TIMEOUT_DELAY = "screen_lock_timeout_delay";
+        
+        /**
+         * How many ms to delay before enabling the screen lock when the screen is turned off by the user
+         * @hide
+         */
+        public static final String SCREEN_LOCK_SCREENOFF_DELAY = "screen_lock_screenoff_delay";
+        
+        /**
          * Whether the audible DTMF tones are played by the dialer when dialing. The value is
          * boolean (1 or 0).
          */
