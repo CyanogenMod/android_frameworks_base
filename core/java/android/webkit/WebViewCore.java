@@ -1556,7 +1556,10 @@ final class WebViewCore {
             }
             mEventHub.blockMessages();
         }
-        DnsResolver.getInstance().destroyDnsResolver();
+
+        DnsResolver r = DnsResolver.getInstance();
+        if (r != null)
+            r.destroyDnsResolver();
     }
 
     //-------------------------------------------------------------------------
