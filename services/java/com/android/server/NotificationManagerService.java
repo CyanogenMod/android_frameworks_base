@@ -1166,17 +1166,22 @@ class NotificationManagerService extends INotificationManager.Stub
             // get next notification, if any
             int n = mLights.size();
             if (n > 0) {
-            	mLastLight = n;
                 mLedNotification = mLights.get(n-1);
             }
-        }
+        } else if (mSuccession != 1) {
+		//We always want to have the newst notification to pulse without Succession
+		int n = mLights.size();
+                if (n > 0) {
+                	mLedNotification = mLights.get(n-1);
+            	}
+	}
 
         // we only flash if screen is off and persistent pulsing is enabled
         // and we are not currently in a call
         if (mLedNotification == null || (mScreenOn && (mPulseScreen == 0)) || mInCall) {
-            mNotificationLight.turnOff();
-	    hasLights = false;
-	    isTimer = false;
+ 		mNotificationLight.turnOff();
+		hasLights = false;
+		isTimer = false;
         } else {
 		hasLights = true;
                 if(mSuccession == 1) {
@@ -1199,80 +1204,80 @@ class NotificationManagerService extends INotificationManager.Stub
 	       	int ledARGB = mLedNotification.notification.ledARGB;
         	int ledOnMS = mLedNotification.notification.ledOnMS;
                 int ledOffMS = mLedNotification.notification.ledOffMS;
-            if ((mLedNotification.notification.defaults & Notification.DEFAULT_LIGHTS) != 0) {
-                ledARGB = mDefaultNotificationColor;
-                ledOnMS = mDefaultNotificationLedOn;
-                ledOffMS = mDefaultNotificationLedOff;
-            }
-	    //Possible Cleaner way?
-            //String[] mPackageInfo = findPackage(mLedNotification.pkg);
-            //if(mPackageInfo != null) {
-            //		ledARGB = Color.parseColor(mPackageInfo[1]);
+            	if ((mLedNotification.notification.defaults & Notification.DEFAULT_LIGHTS) != 0) {
+                	ledARGB = mDefaultNotificationColor;
+                	ledOnMS = mDefaultNotificationLedOn;
+                	ledOffMS = mDefaultNotificationLedOff;
+            	}
+	    	//Possible Cleaner way?
+            	//String[] mPackageInfo = findPackage(mLedNotification.pkg);
+            	//if(mPackageInfo != null) {
+            	//		ledARGB = Color.parseColor(mPackageInfo[1]);
     		//		ledOffMS = Integer.parseInt(mPackageInfo[2]);
-            //}
-            if(mPackages != null) {
-            	int i = 0;
-            	for(i = 0; i < mPackages.length; i++) {
-            		String[] mPackageInfo = getPackageInfo(mPackages[i]);
-            		if(mPackageInfo == null) {
-            			continue;
-            		}
-            		if(mPackageInfo[0].matches(mLedNotification.pkg)) {
-            			if(mPackageInfo[1].equals("random")) {
-            				Random generator = new Random();
-            				int x = generator.nextInt(colorList.length - 1);
-                			ledARGB = Color.parseColor(colorList[x]);
-            			} else {
-            				ledARGB = Color.parseColor(mPackageInfo[1]);
+		//}
+            	if(mPackages != null) {
+            		int i = 0;
+            		for(i = 0; i < mPackages.length; i++) {
+            			String[] mPackageInfo = getPackageInfo(mPackages[i]);
+            			if(mPackageInfo == null) {
+            				continue;
             			}
-            			ledOffMS = (Integer.parseInt(mPackageInfo[2]) * 1000);
+            			if(mPackageInfo[0].matches(mLedNotification.pkg)) {
+            				if(mPackageInfo[1].equals("random")) {
+            					Random generator = new Random();
+            					int x = generator.nextInt(colorList.length - 1);
+               		 			ledARGB = Color.parseColor(colorList[x]);
+            				} else {
+            					ledARGB = Color.parseColor(mPackageInfo[1]);
+            				}
+            				ledOffMS = (Integer.parseInt(mPackageInfo[2]) * 1000);
+            			}
             		}
             	}
-            }
 
-            if(mRandomColor == 1) {
-                //Lets make this intresting...
-                Random generator = new Random();
-                int x = generator.nextInt(colorList.length - 1);
-                ledARGB = Color.parseColor(colorList[x]);
-            } else if(mPulseAllColor == 1) {
-            	if(lastColor >= colorList.length)
-            		lastColor = 1;
+          	if(mRandomColor == 1) {
+			//Lets make this intresting...
+			Random generator = new Random();
+			int x = generator.nextInt(colorList.length - 1);
+			ledARGB = Color.parseColor(colorList[x]);
+		} else if(mPulseAllColor == 1) {
+			if(lastColor >= colorList.length)
+				lastColor = 1;
 
-	      	ledARGB = Color.parseColor(colorList[lastColor - 1]);
-            	lastColor = lastColor + 1;
-            }
-
-            if (mNotificationPulseEnabled) {
-                // pulse repeatedly
-            	if((mSuccession == 1) || (mRandomColor == 1) || (mPulseAllColor == 1)) {
-			/* Our wake lock information to keep us alive */
-			if(powerWake == null) {
-				PowerMan = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
-				powerWake = PowerMan.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "NotificationLights");
-			}
-            		long scheduleTime = ledOnMS+ledOffMS;
-    		        if(scheduleTime < 2500) {
-            	    		scheduleTime = 2500;
-     	           	}
-			StartTimerClass timerRun = new StartTimerClass(scheduleTime);
-      			if(threadExecutor == null) {
-				newExecutor();
-			}
-                        if(isTimer == false) {
-				isTimer = true;
-				threadExecutor.execute(timerRun);
-			}
-            		mNotificationLight.notificationPulse(ledARGB, ledOnMS, ledOffMS);
-            	} else {
-			//We are going to divide the time in half, as it seems long when normal.
-                    	mNotificationLight.setFlashing(ledARGB, LightsService.LIGHT_FLASH_TIMED,
-                            ledOnMS, ledOffMS);
+			ledARGB = Color.parseColor(colorList[lastColor - 1]);
+			lastColor = lastColor + 1;
 		}
-            } else {
+
+            	if (mNotificationPulseEnabled) {
+               	// pulse repeatedly
+           	 	if((mSuccession == 1) || (mRandomColor == 1) || (mPulseAllColor == 1)) {
+				/* Our wake lock information to keep us alive */
+				if(powerWake == null) {
+					PowerMan = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+					powerWake = PowerMan.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "NotificationLights");
+				}
+            			long scheduleTime = ledOnMS+ledOffMS;
+    			        if(scheduleTime < 2500) {
+            		    		scheduleTime = 2500;
+     	       		    	}
+				StartTimerClass timerRun = new StartTimerClass(scheduleTime);
+      				if(threadExecutor == null) {
+					newExecutor();
+				}
+				if(isTimer == false) {
+					isTimer = true;
+					threadExecutor.execute(timerRun);
+				}
+            			mNotificationLight.notificationPulse(ledARGB, ledOnMS, ledOffMS);
+            		} else {
+				//We are going to divide the time in half, as it seems long when normal.
+                    		mNotificationLight.setFlashing(ledARGB, LightsService.LIGHT_FLASH_TIMED,
+                       		     ledOnMS, ledOffMS);
+			}
+            	} else {
                 // pulse only once
-                mNotificationLight.pulse(ledARGB, ledOnMS);
-            }
+                	mNotificationLight.pulse(ledARGB, ledOnMS);
+            	}
         }
     }
 
