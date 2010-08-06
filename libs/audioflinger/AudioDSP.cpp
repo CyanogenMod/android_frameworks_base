@@ -418,8 +418,8 @@ void EffectHeadphone::configure(const float samplingFrequency) {
 
     mReverbDelayL.setParameters(mSamplingFrequency, 0.030f);
     mReverbDelayR.setParameters(mSamplingFrequency, 0.030f);
-    mDelayL.setParameters(mSamplingFrequency, 0.00033f);
-    mDelayR.setParameters(mSamplingFrequency, 0.00033f);
+    mDelayL.setParameters(mSamplingFrequency, 0.00045f);
+    mDelayR.setParameters(mSamplingFrequency, 0.00045f);
     mAllpassL[0].setParameters(mSamplingFrequency, 0.4f, 0.00031f);
     mAllpassR[0].setParameters(mSamplingFrequency, 0.4f, 0.00031f);
     mAllpassL[1].setParameters(mSamplingFrequency, 0.4f, 0.00021f);
