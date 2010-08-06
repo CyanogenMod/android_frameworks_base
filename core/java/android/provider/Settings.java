@@ -1963,6 +1963,15 @@ public final class Settings {
         public static final String TRACKBALL_SCREEN_ON = "trackball_screen_on";
 
          /**
+<<<<<<< HEAD
+          * Pulse notifications in Sucession.  The value is boolean (1 or 0).
+          * @hide
+          */
+         public static final String TRACKBALL_NOTIFICATION_SUCESSION = "trackball_sucession";
+
+         /**
+          * Pulse notifications in Sucession.  The value is boolean (1 or 0).
+=======
           * Pulse notifications in Succession.  The value is boolean (1 or 0).
           * @hide
           */
@@ -1970,12 +1979,17 @@ public final class Settings {
 
          /**
           * Pulse notifications in Succession.  The value is boolean (1 or 0).
+>>>>>>> 4aa3a0d
           * @hide
           */
          public static final String TRACKBALL_NOTIFICATION_RANDOM = "trackball_random_colors";
 
          /**
+<<<<<<< HEAD
+          * Pulse notifications in Sucession.  The value is boolean (1 or 0).
+=======
           * Pulse notifications in Succession.  The value is boolean (1 or 0).
+>>>>>>> 4aa3a0d
           * @hide
           */
          public static final String TRACKBALL_NOTIFICATION_PULSE_ORDER = "trackball_pulse_in_order";

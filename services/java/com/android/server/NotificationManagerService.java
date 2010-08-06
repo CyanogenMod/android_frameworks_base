@@ -149,10 +149,10 @@ class NotificationManagerService extends INotificationManager.Stub
     private static final int BATTERY_BLINK_OFF = 2875;
 
     private static ExecutorService threadExecutor;
-    private int mLastLight = 0;
-    private boolean isTimer = false;
+    private static int mLastLight = 0;
+    private static boolean isTimer = false;
     private static boolean hasLights = false;
-    private PowerManager PowerMan;
+    private static PowerManager PowerMan;
     private static PowerManager.WakeLock powerWake = null;
     //private static ExecutorService threadExecutor;
 
@@ -1065,12 +1065,6 @@ class NotificationManagerService extends INotificationManager.Stub
         }
     }
 
-    private void updateLights() {
-        synchronized (mNotificationList) {
-            updateLightsLocked();
-        }
-    }
-    
 	public boolean isNull(String mString) {
 		if(mString == null || mString.matches("null") 
 		|| mString.length() == 0
@@ -1081,8 +1075,8 @@ class NotificationManagerService extends INotificationManager.Stub
 			return false;
 		}
 	}
-    
-    //Grab our Array Information For Lights
+
+    	//Grab our Array Information For Lights
 	public String[] getArray(String mGetFrom) {
 		if(isNull(mGetFrom)) {
 			return null;
@@ -1090,7 +1084,7 @@ class NotificationManagerService extends INotificationManager.Stub
 		String[] temp = mGetFrom.split("\\|");
 		return temp;
 	}
-	
+
 	public String[] getPackageInfo(String mString) {
 		if(mString == null || mString == "=" || mString.length() == 0) {
 			return null;
@@ -1099,38 +1093,22 @@ class NotificationManagerService extends INotificationManager.Stub
 		temp = mString.split("=");
 		return temp;
 	}
-	
+
 	public class StartTimerClass implements Runnable {
 		private long sleepTimer;
 
 		public StartTimerClass(long timer) {
 			sleepTimer = timer;
 		}
-
-/*		public void run() {
-			powerWake.acquire();
-			try {
-				while(hasLights == true) {
-					Thread.sleep(sleepTimer);
-					updateLights();
-					Log.i("StartTimer", "Pulsing light after sleeping for "+sleepTimer);
-				}
-			} catch (InterruptedException e) {
-				Log.e("StartClass Sleep", e.toString());
-			}
-			powerWake.release();
-			threadExecutor = null;
-			Log.i("StartTimer", "Ended");
-		}
-*/
                 public void run() {
 			powerWake.acquire(sleepTimer);
                         try {
                             Thread.sleep(sleepTimer);
                         } catch (InterruptedException e) {
                         }
+			isTimer = false;
                         updateLights();
-                        threadExecutor = null;
+                        //threadExecutor = null;
                 }
 	}
 
@@ -1192,7 +1170,8 @@ class NotificationManagerService extends INotificationManager.Stub
         if (mLedNotification == null || (mScreenOn && (mPulseScreen == 0)) || mInCall) {
             mNotificationLight.turnOff();
 	    hasLights = false;
-        } else { 
+	    isTimer = false;
+        } else {
 		hasLights = true;
                 if(mSuccession == 1) {
                         int n = mLights.size();
@@ -1207,14 +1186,13 @@ class NotificationManagerService extends INotificationManager.Stub
                                 if((thisLight == (mLastLight - 1)) || (thisLight > n)) {
                                         thisLight = 1;
                                 }
-//                              Log.i("Succession", "mLights.size="+n+" thisLight: "+thisLight+" mLastLight: " +mLastLight+" mLights: " + mLights.toString());
                                 mLedNotification = mLights.get(thisLight-1);
                                 mLastLight = thisLight;
                        }
                 }
 	       	int ledARGB = mLedNotification.notification.ledARGB;
         	int ledOnMS = mLedNotification.notification.ledOnMS;
-            int ledOffMS = mLedNotification.notification.ledOffMS;
+                int ledOffMS = mLedNotification.notification.ledOffMS;
             if ((mLedNotification.notification.defaults & Notification.DEFAULT_LIGHTS) != 0) {
                 ledARGB = mDefaultNotificationColor;
                 ledOnMS = mDefaultNotificationLedOn;
@@ -1241,7 +1219,7 @@ class NotificationManagerService extends INotificationManager.Stub
             			} else {
             				ledARGB = Color.parseColor(mPackageInfo[1]);
             			}
-            			ledOffMS = Integer.parseInt(mPackageInfo[2]);
+            			ledOffMS = (Integer.parseInt(mPackageInfo[2]) * 1000);
             		}
             	}
             }
@@ -1254,7 +1232,8 @@ class NotificationManagerService extends INotificationManager.Stub
             } else if(mPulseAllColor == 1) {
             	if(lastColor >= colorList.length)
             		lastColor = 1;
-            	ledARGB = Color.parseColor(colorList[lastColor - 1]);
+
+	      	ledARGB = Color.parseColor(colorList[lastColor - 1]);
             	lastColor = lastColor + 1;
             }
 
@@ -1274,12 +1253,16 @@ class NotificationManagerService extends INotificationManager.Stub
       			if(threadExecutor == null) {
 				newExecutor();
 			}
-                        threadExecutor.execute(timerRun);
+                        if(isTimer == false) {
+				isTimer = true;
+				threadExecutor.execute(timerRun);
+			}
             		mNotificationLight.notificationPulse(ledARGB, ledOnMS, ledOffMS);
             	} else {
+			//We are going to divide the time in half, as it seems long when normal.
                     	mNotificationLight.setFlashing(ledARGB, LightsService.LIGHT_FLASH_TIMED,
                             ledOnMS, ledOffMS);
-            	}
+		}
             } else {
                 // pulse only once
                 mNotificationLight.pulse(ledARGB, ledOnMS);
