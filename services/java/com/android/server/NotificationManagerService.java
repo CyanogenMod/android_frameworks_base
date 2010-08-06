@@ -1065,6 +1065,12 @@ class NotificationManagerService extends INotificationManager.Stub
         }
     }
 
+    private void updateLights() {
+        synchronized (mNotificationList) {
+            updateLightsLocked();
+        }
+    }
+
 	public boolean isNull(String mString) {
 		if(mString == null || mString.matches("null") 
 		|| mString.length() == 0
