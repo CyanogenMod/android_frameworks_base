@@ -98,21 +98,6 @@ class EffectCompression : public Effect {
     float estimateLevel(const int16_t* audiodata, int32_t frames, int32_t framesPerSample);
 };
 
-class EffectReverb : public Effect {
-    Delay mDelayL, mDelayR;
-    bool mDeep, mWide;
-    int32_t mLevel, mDelayDataL, mDelayDataR;
-
-    public:
-    EffectReverb();
-    ~EffectReverb();
-    void configure(const float samplingFrequency);
-    void setDeep(bool enable);
-    void setWide(bool enable);
-    void setLevel(float level);
-    void process(int32_t* inout, int32_t frames);
-};
-
 class EffectTone : public Effect {
     float mBand[5];
     int32_t mGain;
@@ -129,13 +114,22 @@ class EffectTone : public Effect {
 };
 
 class EffectHeadphone : public Effect {
+    bool mDeep, mWide;
+    int32_t mLevel;
+
+    Delay mReverbDelayL, mReverbDelayR;
+    int32_t mDelayDataL, mDelayDataR;
     Delay mDelayL, mDelayR;
     Allpass mAllpassL[3], mAllpassR[3];
     Biquad mLowpassL, mLowpassR;
 
     public:
+    EffectHeadphone();
     ~EffectHeadphone();
     void configure(const float samplingFrequency);
+    void setDeep(bool enable);
+    void setWide(bool enable);
+    void setLevel(float level);
     void process(int32_t* inout, int32_t frames);
 };
 
@@ -143,16 +137,11 @@ class AudioDSP {
     bool mCompressionEnable;
     EffectCompression mCompression;
     
-    bool mReverbEnable;
-    EffectReverb mReverb;
-
     bool mToneEnable;
     EffectTone mTone;
 
     bool mHeadphoneEnable;
     EffectHeadphone mHeadphone;
-
-    int32_t mDitherValue;
 
     public:
     AudioDSP();
@@ -166,11 +155,6 @@ class AudioDSP {
     static const String8 keyCompressionEnable;
     static const String8 keyCompressionRatio;
 
-    static const String8 keyReverbEnable;
-    static const String8 keyReverbDeep;
-    static const String8 keyReverbWide;
-    static const String8 keyReverbLevel;
-
     static const String8 keyToneEnable;
     static const String8 keyToneEq1;
     static const String8 keyToneEq2;
@@ -179,6 +163,9 @@ class AudioDSP {
     static const String8 keyToneEq5;
     
     static const String8 keyHeadphoneEnable;
+    static const String8 keyHeadphoneDeep;
+    static const String8 keyHeadphoneWide;
+    static const String8 keyHeadphoneLevel;
 };
 
 }

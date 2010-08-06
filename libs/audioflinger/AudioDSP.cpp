@@ -313,75 +313,6 @@ float EffectCompression::estimateLevel(const int16_t* audioData, int32_t frames,
     return (65536.0f * power + powerFraction) / (32768.0f * 32768.0f) / frames;
 }
 
-EffectReverb::EffectReverb()
-    : mDeep(true), mWide(true), mLevel(-15.0f)
-{
-}
-
-EffectReverb::~EffectReverb()
-{
-    delete &mDelayL;
-    delete &mDelayR;
-}
-
-void EffectReverb::configure(float samplingFrequency)
-{
-    Effect::configure(samplingFrequency);
-    mDelayL.setParameters(samplingFrequency, 0.030f);
-    mDelayR.setParameters(samplingFrequency, 0.030f);
-}
-
-void EffectReverb::setDeep(bool deep)
-{
-    mDeep = deep;
-}
-
-void EffectReverb::setWide(bool wide)
-{
-    mWide = wide;
-}
-
-void EffectReverb::setLevel(float level)
-{
-    mLevel = toFixedPoint(powf(10, (level - 15.0f) / 20.0f));
-}
-
-void EffectReverb::process(int32_t* inout, int32_t frames) {
-    for (int i = 0; i < frames; i ++) {
-        int32_t dataL = inout[0];
-        int32_t dataR = inout[1];
-        /* 28 bits */
-
-        if (mDeep) {
-            dataL += mDelayDataR;
-            dataR += mDelayDataL;
-        }
-
-        dataL = mDelayL.process(dataL);
-        dataR = mDelayR.process(dataR);
-        /* 28 bits */
-
-        if (mWide) {
-            dataR = -dataR;
-        }
-
-        dataL >>= fixedPointDecimals;
-        dataR >>= fixedPointDecimals;
-        /* 16 bits */
-
-        dataL = dataL * mLevel;
-        dataR = dataR * mLevel;
-        /* 28 bits */
-
-        mDelayDataL = dataL;
-        mDelayDataR = dataR;
-
-        inout[0] += dataL;
-        inout[1] += dataR;
-        inout += 2;
-    }
-}
-
 
 EffectTone::EffectTone()
 {
@@ -461,7 +392,17 @@ void EffectTone::process(int32_t* inout, int32_t frames)
     }
 }
 
-EffectHeadphone::~EffectHeadphone() {
+EffectHeadphone::EffectHeadphone()
+    : mDeep(true), mWide(true),
+      mDelayDataL(0), mDelayDataR(0)
+{
+    setLevel(0);
+}
+
+EffectHeadphone::~EffectHeadphone()
+{
+    delete &mReverbDelayL;
+    delete &mReverbDelayR;
     delete &mDelayL;
     delete &mDelayR;
     for (int32_t i = 0; i < 3; i ++) {
@@ -475,6 +416,8 @@ EffectHeadphone::~EffectHeadphone() {
 void EffectHeadphone::configure(const float samplingFrequency) {
     Effect::configure(samplingFrequency);
 
+    mReverbDelayL.setParameters(mSamplingFrequency, 0.030f);
+    mReverbDelayR.setParameters(mSamplingFrequency, 0.030f);
     mDelayL.setParameters(mSamplingFrequency, 0.00033f);
     mDelayR.setParameters(mSamplingFrequency, 0.00033f);
     mAllpassL[0].setParameters(mSamplingFrequency, 0.4f, 0.00031f);
@@ -487,26 +430,75 @@ void EffectHeadphone::configure(const float samplingFrequency) {
     mLowpassR.setRC(4000.0f, mSamplingFrequency);
 }
 
+void EffectHeadphone::setDeep(bool deep)
+{
+    mDeep = deep;
+}
+
+void EffectHeadphone::setWide(bool wide)
+{
+    mWide = wide;
+}
+
+void EffectHeadphone::setLevel(float level)
+{
+    mLevel = toFixedPoint(powf(10, (level - 15.0f) / 20.0f));
+}
+
 void EffectHeadphone::process(int32_t* inout, int32_t frames)
 {
     for (int32_t i = 0; i < frames; i ++) {
-        int32_t pL = inout[0];
-        int32_t pR = inout[1];
-        /* 28 bits */
-
-        pL = mDelayL.process(pL);
-        pR = mDelayR.process(pR);
-        for (int32_t j = 0; j < 3; j ++) {
-            pL = mAllpassL[j].process(pL);
-            pR = mAllpassR[j].process(pR);
-        }
-
-        pL = mLowpassL.process(pL >> fixedPointDecimals);
-        pR = mLowpassR.process(pR >> fixedPointDecimals);
+        /* calculate reverb wet into dataL, dataR */
+        int32_t dryL = inout[0];
+        int32_t dryR = inout[1];
+        int32_t dataL = dryL;
+        int32_t dataR = dryR;
         /* 28 bits */
         
-        inout[0] += pR;
-        inout[1] += pL;
+        if (mDeep) {
+            dataL += mDelayDataR;
+            dataR += mDelayDataL;
+        }
+
+        dataL = mReverbDelayL.process(dataL);
+        dataR = mReverbDelayR.process(dataR);
+        /* 28 bits */
+
+        if (mWide) {
+            dataR = -dataR;
+        }
+
+        dataL = (dataL >> fixedPointDecimals) * mLevel;
+        dataR = (dataR >> fixedPointDecimals) * mLevel;
+        /* 28 bits */
+
+        mDelayDataL = dataL;
+        mDelayDataR = dataR;
+
+        /* Reverb wet done; mix with dry and do headphone virtualization */
+        dataL += dryL;
+        dataR += dryR;
+
+        /* Add fixed ear-to-ear propagation delay of about 10 cm, based
+         * on the idea that ear-to-ear distance is 30 cm and the speakers
+         * are placed in front of the listener, which means that the actual
+         * time delay will be somewhat less than the maximum. */
+        dataL = mDelayL.process(dataL);
+        dataR = mDelayR.process(dataR);
+        for (int32_t j = 0; j < 3; j ++) {
+            /* Confuse phase, simulating shoulder echoes and whatnot. */
+            dataL = mAllpassL[j].process(dataL);
+            dataR = mAllpassR[j].process(dataR);
+        }
+
+        /* Lowpass filter to estimate head shadow. */
+        dataL = mLowpassL.process(dataL >> fixedPointDecimals);
+        dataR = mLowpassR.process(dataR >> fixedPointDecimals);
+        /* 28 bits */
+        
+        /* Mix right-to-left and vice versa. */
+        inout[0] += dataR;
+        inout[1] += dataL;
         inout += 2;
     }
 }
@@ -518,11 +510,6 @@ void EffectHeadphone::process(int32_t* inout, int32_t frames)
 const String8 AudioDSP::keyCompressionEnable = String8("dsp.compression.enable");
 const String8 AudioDSP::keyCompressionRatio = String8("dsp.compression.ratio");
 
-const String8 AudioDSP::keyReverbEnable = String8("dsp.reverb.enable");
-const String8 AudioDSP::keyReverbDeep = String8("dsp.reverb.deep");
-const String8 AudioDSP::keyReverbWide = String8("dsp.reverb.wide");
-const String8 AudioDSP::keyReverbLevel = String8("dsp.reverb.level");
-
 const String8 AudioDSP::keyToneEnable = String8("dsp.tone.enable");
 const String8 AudioDSP::keyToneEq1 = String8("dsp.tone.eq1");
 const String8 AudioDSP::keyToneEq2 = String8("dsp.tone.eq2");
@@ -531,9 +518,12 @@ const String8 AudioDSP::keyToneEq4 = String8("dsp.tone.eq4");
 const String8 AudioDSP::keyToneEq5 = String8("dsp.tone.eq5");
 
 const String8 AudioDSP::keyHeadphoneEnable = String8("dsp.headphone.enable");
+const String8 AudioDSP::keyHeadphoneDeep = String8("dsp.headphone.deep");
+const String8 AudioDSP::keyHeadphoneWide = String8("dsp.headphone.wide");
+const String8 AudioDSP::keyHeadphoneLevel = String8("dsp.headphone.level");
 
 AudioDSP::AudioDSP()
-    : mCompressionEnable(false), mReverbEnable(false), mToneEnable(false),  mHeadphoneEnable(false)
+    : mCompressionEnable(false), mToneEnable(false),  mHeadphoneEnable(false)
 {
 }
 
@@ -547,7 +537,6 @@ AudioDSP::~AudioDSP()
 void AudioDSP::configure(const float samplingRate)
 {
     mCompression.configure(samplingRate);
-    mReverb.configure(samplingRate);
     mTone.configure(samplingRate);
     mHeadphone.configure(samplingRate);
 }
@@ -566,23 +555,6 @@ void AudioDSP::setParameters(const String8& keyValuePairs)
     result = param.getFloat(keyCompressionRatio, floatValue);
     if (result == NO_ERROR) {
         mCompression.setRatio(floatValue);
-    }
-
-    result = param.getInt(keyReverbEnable, intValue);
-    if (result == NO_ERROR) {
-        mReverbEnable = intValue != 0;
-    }
-    result = param.getInt(keyReverbDeep, intValue);
-    if (result == NO_ERROR) {
-        mReverb.setDeep(intValue != 0);
-    }
-    result = param.getInt(keyReverbWide, intValue);
-    if (result == NO_ERROR) {
-        mReverb.setWide(intValue != 0);
-    }
-    result = param.getFloat(keyReverbLevel, floatValue);
-    if (result == NO_ERROR) {
-        mReverb.setLevel(floatValue);
     }
 
     result = param.getInt(keyToneEnable, intValue);
@@ -613,6 +585,18 @@ void AudioDSP::setParameters(const String8& keyValuePairs)
     result = param.getInt(keyHeadphoneEnable, intValue);
     if (result == NO_ERROR) {
         mHeadphoneEnable = intValue != 0;
+    }
+    result = param.getInt(keyHeadphoneDeep, intValue);
+    if (result == NO_ERROR) {
+        mHeadphone.setDeep(intValue != 0);
+    }
+    result = param.getInt(keyHeadphoneWide, intValue);
+    if (result == NO_ERROR) {
+        mHeadphone.setWide(intValue != 0);
+    }
+    result = param.getFloat(keyHeadphoneLevel, floatValue);
+    if (result == NO_ERROR) {
+        mHeadphone.setLevel(floatValue);
     }
 }
 
@@ -655,10 +639,6 @@ int32_t AudioDSP::estimateLevel(const int16_t* input, int32_t frames, int32_t sa
 /* input is 28-bit interleaved stereo in integer format */
 void AudioDSP::process(int32_t* audioData, int32_t frames)
 {
-    if (mReverbEnable) {
-        mReverb.process(audioData, frames);
-    }
-
     if (mToneEnable) {
         mTone.process(audioData, frames);
     }
