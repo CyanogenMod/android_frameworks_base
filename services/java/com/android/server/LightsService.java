@@ -45,7 +45,6 @@ public class LightsService {
     static final int LIGHT_FLASH_NONE = 0;
     static final int LIGHT_FLASH_TIMED = 1;
     static final int LIGHT_FLASH_HARDWARE = 2;
-    static final int LIGHT_FLASH_PULSE = 3;
 
     /**
      * Light brightness is managed by a user setting.
@@ -105,7 +104,7 @@ public class LightsService {
 
 	public void notificationPulse(int color, int onMs, int offMs) {
 		synchronized (this) {
-			setLightLocked(color, LIGHT_FLASH_HARDWARE, onMs, 1000, BRIGHTNESS_MODE_USER);
+			setLightLocked(color, LIGHT_FLASH_TIMED, onMs, 1000, BRIGHTNESS_MODE_USER);
                 	mH.sendMessageDelayed(Message.obtain(mH, 1, this), onMs);
 		}
 	}
@@ -123,14 +122,7 @@ public class LightsService {
         }
 
         private void setLightLocked(int color, int mode, int onMS, int offMS, int brightnessMode) {
-		/*if(mode == LIGHT_FLASH_PULSE) {
-			mColor = color;
-			mMode = LIGHT_FLASH_HARDWARE;
-			mOnMS = onMS;
-			mOffMS = offMS;
-			setLight_native(mNativePointer, mId, color, LIGHT_FLASH_HARDWARE, onMS, offMS, brightnessMode);
-		}
-	        else*/ if (color != mColor || mode != mMode || onMS != mOnMS || offMS != mOffMS) {
+		if (color != mColor || mode != mMode || onMS != mOnMS || offMS != mOffMS) {
                 	mColor = color;
                 	mMode = mode;
                 	mOnMS = onMS;

@@ -1065,12 +1065,6 @@ class NotificationManagerService extends INotificationManager.Stub
         }
     }
 
-    private void updateLights() {
-        synchronized (mNotificationList) {
-            updateLightsLocked();
-        }
-    }
-
 	public boolean isNull(String mString) {
 		if(mString == null || mString.matches("null") 
 		|| mString.length() == 0
@@ -1082,7 +1076,7 @@ class NotificationManagerService extends INotificationManager.Stub
 		}
 	}
 
-    //Grab our Array Information For Lights
+    	//Grab our Array Information For Lights
 	public String[] getArray(String mGetFrom) {
 		if(isNull(mGetFrom)) {
 			return null;
@@ -1204,7 +1198,6 @@ class NotificationManagerService extends INotificationManager.Stub
                 ledOnMS = mDefaultNotificationLedOn;
                 ledOffMS = mDefaultNotificationLedOff;
             }
-	    Log.i("ledOffMS", "Default ledOffMS="+ledOffMS+" ledOnMS="+ledOnMS);
 	    //Possible Cleaner way?
             //String[] mPackageInfo = findPackage(mLedNotification.pkg);
             //if(mPackageInfo != null) {
@@ -1213,7 +1206,6 @@ class NotificationManagerService extends INotificationManager.Stub
             //}
             if(mPackages != null) {
             	int i = 0;
-		Log.i("PackageList", mPackageList);
             	for(i = 0; i < mPackages.length; i++) {
             		String[] mPackageInfo = getPackageInfo(mPackages[i]);
             		if(mPackageInfo == null) {
