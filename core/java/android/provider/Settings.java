@@ -1980,31 +1980,36 @@ public final class Settings {
           */
          public static final String TRACKBALL_NOTIFICATION_PULSE_ORDER = "trackball_pulse_in_order";
 
+	/**
+          * Beldn Notification Colors.  The value is boolean (1 or 0).
+          * @hide
+          */
+         public static final String TRACKBALL_NOTIFICATION_BLEND_COLOR = "trackball_blend_color";
 
         /**
          * Trackball Notification Colors. The value is String  pkg=color|pkg=color
          * @hide
          */
         public static final String NOTIFICATION_PACKAGE_COLORS = "|";
-        
+
         /**
          * Trackball Notification List. The value is String  pkg|pkg
          * @hide
          */
         public static final String NOTIFICATION_PACKAGE_LIST = "|";
-        
+
         /**
          * Trackball Notification Colors Debugging. The value is boolean (1 or 0)
          * @hide
          */
         public static final String NOTIFICATION_PACKAGE_COLORS_GET_PACK = "0";
-        
+
         /**
          * Whether to unlock the menu key.  The value is boolean (1 or 0).
          * @hide
          */
         public static final String MENU_UNLOCK_SCREEN = "menu_unlock_screen";
-        
+
         /**
          * Color mask tp apply to notification bar when custom is set
          * @hide
@@ -2028,13 +2033,13 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_ALWAYS_MUSIC_CONTROLS = "lockscreen_always_music_controls";
-        
+
         /**
          * Whether to use a custom pull-down notification screen
          * @hide 
          */
         public static final String NOTIF_EXPANDED_BAR_COLOR = "notif_expanded_bar_color";
-        
+
         /**
          * Color mask to apply to pull-down notification screen
          * @hide
@@ -2122,7 +2127,6 @@ public final class Settings {
             NOTIF_BAR_CUSTOM,
             NOTIF_EXPANDED_BAR_COLOR,
             NOTIF_EXPANDED_BAR_CUSTOM
-            
         };
 
         // Settings moved to Settings.Secure

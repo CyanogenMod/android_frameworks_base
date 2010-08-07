@@ -1135,8 +1135,9 @@ class NotificationManagerService extends INotificationManager.Stub
     	int mSuccession = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_SUCCESSION, 0);
     	int mRandomColor = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_RANDOM, 0);
     	int mPulseAllColor = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_PULSE_ORDER, 0);
+	int mBlendColor = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_NOTIFICATION_BLEND_COLOR, 0);
 
-	if(mBatteryLevel <= 15) {
+	if(mBatteryLevel <= 15 || (mBlendColor == 1)) {
 		mSuccession = 0;
 		mRandomColor = 0;
 		mPulseAllColor = 0;
@@ -1230,8 +1231,12 @@ class NotificationManagerService extends INotificationManager.Stub
             				} else {
             					ledARGB = Color.parseColor(mPackageInfo[1]);
             				}
-            				ledOffMS = (Integer.parseInt(mPackageInfo[2]) * 1000);
-            			}
+            				if(mPackageInfo[2].equals(".5")) {
+			                        ledOffMS = 500;
+                			} else {
+						ledOffMS = (Integer.parseInt(mPackageInfo[2]) * 1000);
+       					}
+	    			}
             		}
             	}
 
@@ -1246,8 +1251,35 @@ class NotificationManagerService extends INotificationManager.Stub
 
 			ledARGB = Color.parseColor(colorList[lastColor - 1]);
 			lastColor = lastColor + 1;
+		} else if(mBlendColor == 1) { // Blend lights: Credit to eshabtai for the application of this.
+			for (int n=0; n < mLights.size(); n++) {
+				int x = 0;
+				boolean found = false;
+				long pkgcolor = Color.parseColor("white");
+	                        for(x = 0; x < mPackages.length; x++) {
+	                                String[] mPackageInfo = getPackageInfo(mPackages[x]);
+        	                        if(mPackageInfo == null) {
+                	                        continue;
+                        	        }
+                                	if(mPackageInfo[0].matches(mLights.get(n).pkg)) {
+                                        	if(mPackageInfo[1].equals("random")) {
+                                                	Random generator = new Random();
+                        	                        int j = generator.nextInt(colorList.length - 1);
+                                	                pkgcolor = Color.parseColor(colorList[j]);
+                                        	} else {
+                                                	pkgcolor = Color.parseColor(mPackageInfo[1]);
+                                       		}
+						found = true;
+ 						break;
+	                              	}
+                        	}
+                                if(found) {
+                                        ledARGB |= pkgcolor;
+                                } else {
+                                        ledARGB |= mLights.get(n).notification.ledARGB;
+                                }
+			}
 		}
-
             	if (mNotificationPulseEnabled) {
                	// pulse repeatedly
            	 	if((mSuccession == 1) || (mRandomColor == 1) || (mPulseAllColor == 1)) {
