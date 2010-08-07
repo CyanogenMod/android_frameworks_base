@@ -186,8 +186,8 @@ SurfaceFlinger::SurfaceFlinger()
         mDebugBackground(0),
         mRenderEffect(0),
         mRenderColorR(0),
-	mRenderColorG(0),
-	mRenderColorB(0),
+	    mRenderColorG(0),
+	    mRenderColorB(0),
         mDebugInSwapBuffers(0),
         mLastSwapBufferTime(0),
         mDebugInTransaction(0),
@@ -1723,18 +1723,18 @@ status_t SurfaceFlinger::onTransact(
                 mRenderEffect = data.readInt32();
                 return NO_ERROR;
             }
-	    case 1015: { // RENDER_COLOR_RED
-		mRenderColorR = data.readInt32();
-		return NO_ERROR;
-	    }
-	    case 1016: { // RENDER_COLOR_GREEN
+	        case 1015: { // RENDER_COLOR_RED
+		        mRenderColorR = data.readInt32();
+		        return NO_ERROR;
+	        }
+	        case 1016: { // RENDER_COLOR_GREEN
                 mRenderColorG = data.readInt32();
-		return NO_ERROR;
-	    }
-	    case 1017: { // RENDER_COLOR_BLUE
+		        return NO_ERROR;
+	        }
+	        case 1017: { // RENDER_COLOR_BLUE
                 mRenderColorB = data.readInt32();
-		return NO_ERROR;
-	    }
+		        return NO_ERROR;
+	        }
             return NO_ERROR;
         }
     }
