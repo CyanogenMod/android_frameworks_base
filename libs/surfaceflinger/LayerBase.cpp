@@ -39,7 +39,9 @@
 #define RENDER_EFFECT_AMBER 4
 #define RENDER_EFFECT_SALMON 5
 #define RENDER_EFFECT_FUSCIA 6
-#define RENDER_EFFECT_N1_CALIBRATED 7
+#define RENDER_EFFECT_N1_CALIBRATED_N 7
+#define RENDER_EFFECT_N1_CALIBRATED_R 8
+#define RENDER_EFFECT_N1_CALIBRATED_C 9
 
 namespace android {
 
@@ -409,6 +411,10 @@ void LayerBase::drawWithOpenGL(const Region& clip, const Texture& texture) const
     glEnable(GL_TEXTURE_2D);
 
     int renderEffect = mFlinger->getRenderEffect();
+    int renderColorR = mFlinger->getRenderColorR();
+    int renderColorG = mFlinger->getRenderColorG();
+    int renderColorB = mFlinger->getRenderColorB();
+
     bool noEffect = renderEffect == 0;
 
     if (UNLIKELY(s.alpha < 0xFF) && noEffect) {
@@ -468,8 +474,14 @@ void LayerBase::drawWithOpenGL(const Region& clip, const Texture& texture) const
             case RENDER_EFFECT_FUSCIA:
                 glColor4x(alpha, 0, alpha*0.5, alpha);
                 break;
-            case RENDER_EFFECT_N1_CALIBRATED:
-                glColor4x(alpha, alpha*0.98, alpha*0.82, alpha);
+            case RENDER_EFFECT_N1_CALIBRATED_N:
+                glColor4x(alpha*renderColorR/1000, alpha*renderColorG/1000, alpha*renderColorB/1000, alpha);
+                break;
+            case RENDER_EFFECT_N1_CALIBRATED_R:
+                glColor4x(alpha*(renderColorR-50)/1000, alpha*renderColorG/1000, alpha*(renderColorB-30)/1000, alpha);
+                break;
+            case RENDER_EFFECT_N1_CALIBRATED_C:
+                glColor4x(alpha*renderColorR/1000, alpha*renderColorG/1000, alpha*(renderColorB+30)/1000, alpha);
                 break;
         }
         glEnable(GL_BLEND);
