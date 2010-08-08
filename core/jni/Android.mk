@@ -183,10 +183,12 @@ LOCAL_SHARED_LIBRARIES := \
 	libwpa_client \
 	libjpeg
 
-ifneq ($(BOARD_USES_ECLAIR_LIBCAMERA),true)
-    LOCAL_SHARED_LIBRARIES += \
-    	libsurfaceflinger_client \
-    	libcamera_client
+ifeq ($(BOARD_USES_ECLAIR_LIBCAMERA),true)
+	LOCAL_CFLAGS += -DUSE_ECLAIR_MEMORYDEALER
+else
+	LOCAL_SHARED_LIBRARIES += \
+		libsurfaceflinger_client \
+		libcamera_client
 endif
 
 ifeq ($(BOARD_HAVE_BLUETOOTH),true)

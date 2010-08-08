@@ -31,7 +31,11 @@
 #include <utils/Atomic.h>
 #include <utils/Errors.h>
 #include <utils/threads.h>
+#ifdef USE_ECLAIR_MEMORYDEALER
+#include <binder/MemoryDealerEclair.h>
+#else
 #include <binder/MemoryDealer.h>
+#endif
 #include <utils/SortedVector.h>
 #include <utils/Vector.h>
 

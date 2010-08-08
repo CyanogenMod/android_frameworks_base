@@ -1211,8 +1211,11 @@ status_t OMXCodec::allocateBuffersOnPort(OMX_U32 portIndex) {
     }
 
     size_t totalSize = def.nBufferCountActual * def.nBufferSize;
+#ifdef USE_ECLAIR_MEMORYDEALER
+    mDealer[portIndex] = new MemoryDealer(totalSize);
+#else
     mDealer[portIndex] = new MemoryDealer(totalSize, "OMXCodec");
-
+#endif
     for (OMX_U32 i = 0; i < def.nBufferCountActual; ++i) {
         sp<IMemory> mem = mDealer[portIndex]->allocate(def.nBufferSize);
         CHECK(mem.get() != NULL);

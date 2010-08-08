@@ -43,7 +43,9 @@ LOCAL_SHARED_LIBRARIES :=     		\
 	libstagefright_omx    			\
 	libstagefright_color_conversion
 
-ifneq ($(BOARD_USES_ECLAIR_LIBCAMERA),true)
+ifeq ($(BOARD_USES_ECLAIR_LIBCAMERA),true)
+    LOCAL_CFLAGS += -DUSE_ECLAIR_MEMORYDEALER
+else
     LOCAL_SHARED_LIBRARIES += \
     	libsurfaceflinger_client
 endif
