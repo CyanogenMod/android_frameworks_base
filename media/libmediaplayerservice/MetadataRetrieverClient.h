@@ -24,7 +24,6 @@
 #include <utils/Errors.h>
 #include <utils/KeyedVector.h>
 #include <binder/IMemory.h>
-
 #include <media/MediaMetadataRetrieverInterface.h>
 
 
@@ -63,6 +62,10 @@ private:
     int                                    mMode;
 
     // Keep the shared memory copy of album art and capture frame (for thumbnail)
+#ifdef USE_ECLAIR_MEMORYDEALER
+    sp<MemoryDealer>                       mAlbumArtDealer;
+    sp<MemoryDealer>                       mThumbnailDealer;
+#endif
     sp<IMemory>                            mAlbumArt;
     sp<IMemory>                            mThumbnail;
 };

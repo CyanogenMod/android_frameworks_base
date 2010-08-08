@@ -33,8 +33,8 @@ LOCAL_SHARED_LIBRARIES := \
 
 ifneq ($(BOARD_USES_ECLAIR_LIBCAMERA),true)
     LOCAL_SHARED_LIBRARIES += \
-    	libsurfaceflinger_client \
-    	libcamera_client
+        libsurfaceflinger_client \
+        libcamera_client
 endif
 
 LOCAL_MODULE:= libmedia

@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+#ifdef USE_ECLAIR_MEMORYDEALER
+#include <binder/MemoryDealerEclair.h>
+#else
+
 #ifndef ANDROID_MEMORY_DEALER_H
 #define ANDROID_MEMORY_DEALER_H
 
@@ -58,3 +62,4 @@ private:
 }; // namespace android
 
 #endif // ANDROID_MEMORY_DEALER_H
+#endif // USE_ECLAIR_MEMORYDEALER

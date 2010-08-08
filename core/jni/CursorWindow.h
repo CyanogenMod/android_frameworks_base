@@ -21,9 +21,12 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#ifdef USE_ECLAIR_MEMORYDEALER
+#include <binder/MemoryDealer.h>
+#else
 #include <binder/IMemory.h>
 #include <utils/RefBase.h>
-
+#endif
 #include <jni.h>
 
 #define DEFAULT_WINDOW_SIZE 4096
@@ -101,7 +104,11 @@ class CursorWindow
 public:
                         CursorWindow(size_t maxSize);
                         CursorWindow(){}
+#ifdef USE_ECLAIR_MEMORYDEALER
+    bool                setMemory(sp<IMemory>);
+#else
     bool                setMemory(const sp<IMemory>&);
+#endif
                         ~CursorWindow();
 
     bool                initBuffer(bool localOnly);
@@ -189,6 +196,9 @@ private:
     size_t mSize;
     size_t mMaxSize;
     window_header_t * mHeader;
+#ifdef USE_ECLAIR_MEMORYDEALER
+    sp<MemoryDealer> mHeap;
+#endif
     sp<IMemory> mMemory;
 
     /**

@@ -37,6 +37,10 @@
 #include <utils/Timers.h>
 #include <cutils/atomic.h>
 
+#ifdef USE_ECLAIR_MEMORYDEALER
+#include <binder/MemoryDealer.h>
+#endif
+
 #define LIKELY( exp )       (__builtin_expect( (exp) != 0, true  ))
 #define UNLIKELY( exp )     (__builtin_expect( (exp) != 0, false ))
 

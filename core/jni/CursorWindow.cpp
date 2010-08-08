@@ -18,9 +18,12 @@
 #define LOG_TAG "CursorWindow"
 
 #include <utils/Log.h>
+#ifdef USE_ECLAIR_MEMORYDEALER
+#include <binder/MemoryDealer.h>
+#else
 #include <binder/MemoryHeapBase.h>
 #include <binder/MemoryBase.h>
-
+#endif
 #include <assert.h>
 #include <string.h>
 #include <stdlib.h>
@@ -38,7 +41,11 @@ CursorWindow::CursorWindow(size_t maxSize) :
 {
 }
 
+#ifdef USE_ECLAIR_MEMORYDEALER
+bool CursorWindow::setMemory(sp<IMemory> memory)
+#else
 bool CursorWindow::setMemory(const sp<IMemory>& memory)
+#endif
 {
     mMemory = memory;
     mData = (uint8_t *) memory->pointer();
@@ -48,6 +55,9 @@ bool CursorWindow::setMemory(const sp<IMemory>& memory)
     mHeader = (window_header_t *) mData;
 
     // Make the window read-only
+#ifdef USE_ECLAIR_MEMORYDEALER
+    mHeap = NULL;
+#endif
     ssize_t size = memory->size();
     mSize = size;
     mMaxSize = size;
@@ -59,11 +69,16 @@ LOG_WINDOW("Created CursorWindow from existing IMemory: mFreeOffset = %d, numRow
 bool CursorWindow::initBuffer(bool localOnly)
 {
     //TODO Use a non-memory dealer mmap region for localOnly
-
+#ifdef USE_ECLAIR_MEMORYDEALER
+    mHeap = new MemoryDealer(new SharedHeap(mMaxSize, 0, "CursorWindow"));
+    if (mHeap != NULL) {
+        mMemory = mHeap->allocate(mMaxSize);
+#else
     sp<MemoryHeapBase> heap;
     heap = new MemoryHeapBase(mMaxSize, 0, "CursorWindow");
     if (heap != NULL) {
         mMemory = new MemoryBase(heap, 0, mMaxSize);
+#endif
         if (mMemory != NULL) {
             mData = (uint8_t *) mMemory->pointer();
             if (mData) {

@@ -20,18 +20,26 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+#ifdef USE_ECLAIR_MEMORYDEALER
+#include <binder/MemoryDealer.h>
+#endif
 #include <binder/MemoryHeapBase.h>
 #include <binder/IMemory.h>
 #include <utils/SortedVector.h>
+#ifndef USE_ECLAIR_MEMORYDEALER
 #include <utils/threads.h>
+#endif
 
 namespace android {
 
 class MemoryHeapBase;
 
 // ---------------------------------------------------------------------------
-
+#ifdef USE_ECLAIR_MEMORYDEALER
+class MemoryHeapPmem : public HeapInterface, public MemoryHeapBase
+#else
 class MemoryHeapPmem : public MemoryHeapBase
+#endif
 {
 public:
     class MemoryPmem : public BnMemory {
