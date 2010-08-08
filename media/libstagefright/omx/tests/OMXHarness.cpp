@@ -24,7 +24,11 @@
 
 #include <binder/ProcessState.h>
 #include <binder/IServiceManager.h>
+#ifdef USE_ECLAIR_MEMORYDEALER
+#include <binder/MemoryDealerEclair.h>
+#else
 #include <binder/MemoryDealer.h>
+#endif
 #include <media/IMediaPlayerService.h>
 #include <media/stagefright/DataSource.h>
 #include <media/stagefright/MediaBuffer.h>

@@ -30,7 +30,11 @@
 #include "include/ESDS.h"
 
 #include <binder/IServiceManager.h>
+#ifdef USE_ECLAIR_MEMORYDEALER
+#include <binder/MemoryDealerEclair.h>
+#else
 #include <binder/MemoryDealer.h>
+#endif
 #include <binder/ProcessState.h>
 #include <media/IMediaPlayerService.h>
 #include <media/stagefright/MediaBuffer.h>
