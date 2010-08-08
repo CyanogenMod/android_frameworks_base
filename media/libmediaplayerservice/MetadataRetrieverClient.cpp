@@ -29,7 +29,7 @@
 #include <cutils/atomic.h>
 #include <cutils/properties.h>
 #ifdef USE_ECLAIR_MEMORYDEALER
-#include <binder/MemoryDealer.h>
+#include <binder/MemoryDealerEclair.h>
 #else
 #include <binder/MemoryBase.h>
 #include <binder/MemoryHeapBase.h>
