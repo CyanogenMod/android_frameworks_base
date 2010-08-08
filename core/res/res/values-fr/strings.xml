@@ -132,13 +132,17 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Désactiver le mode sans fil"</string>
     <string name="screen_lock" msgid="799094655496098153">"Verrouillage de l\'écran"</string>
     <string name="power_off" msgid="4266614107412865048">"Éteindre"</string>
+    <string name="reboot_system">"Redémarrer"</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Arrêt en cours..."</string>
+    <string name="reboot_progress">"Redémarrage en cours..."</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"Votre téléphone va s\'éteindre."</string>
+    <string name="reboot_confirm">"Votre téléphone va redémarrer."</string>
     <string name="recent_tasks_title" msgid="3691764623638127888">"Récentes"</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"Aucune application récente"</string>
     <string name="global_actions" msgid="2406416831541615258">"Options du téléphone"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Verrouillage de l\'écran"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Éteindre"</string>
+    <string name="global_action_reboot">"Redémarrer"</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Mode silencieux"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Le son est désactivé."</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Le son est activé."</string>
@@ -849,6 +853,7 @@
     <string name="l2tp_vpn_description" msgid="3750692169378923304">"Protocole de tunnelisation de niveau 2"</string>
     <string name="l2tp_ipsec_psk_vpn_description" msgid="3945043564008303239">"VPN L2TP/IPSec basé sur une clé pré-partagée"</string>
     <string name="l2tp_ipsec_crt_vpn_description" msgid="5382714073103653577">"VPN L2TP/IPSec basé sur un certificat"</string>
+    <string name="openvpn_vpn_description">"VPN OpenVPN avec SSL"</string>
     <string name="upload_file" msgid="2897957172366730416">"Sélectionner un fichier"</string>
     <string name="reset" msgid="2448168080964209908">"Réinitialiser"</string>
     <string name="submit" msgid="1602335572089911941">"Envoyer"</string>
@@ -861,4 +866,5 @@
     <string name="throttle_warning_notification_message" msgid="2609734763845705708">"Touchez pour en savoir plus sur l\'utilisation des données mobiles"</string>
     <string name="throttled_notification_title" msgid="6269541897729781332">"Quota d\'utilisation des données mobiles dépassé"</string>
     <string name="throttled_notification_message" msgid="4712369856601275146">"Touchez pour en savoir plus sur l\'utilisation des données mobiles"</string>
+    <string name="toast_reboot_recommend">"Attention : Redémarrage requis après personnalisation !"</string>
 </resources>
