@@ -24,11 +24,7 @@
 
 #include <binder/ProcessState.h>
 #include <binder/IServiceManager.h>
-#ifdef USE_ECLAIR_MEMORYDEALER
-#include <binder/MemoryDealerEclair.h>
-#else
 #include <binder/MemoryDealer.h>
-#endif
 #include <media/IMediaPlayerService.h>
 #include <media/stagefright/DataSource.h>
 #include <media/stagefright/MediaBuffer.h>
@@ -290,11 +286,7 @@ status_t Harness::testStateTransitions(
         return OK;
     }
 
-#ifdef USE_ECLAIR_MEMORYDEALER
-    sp<MemoryDealer> dealer = new MemoryDealer(8 * 1024 * 1024);
-#else
     sp<MemoryDealer> dealer = new MemoryDealer(8 * 1024 * 1024, "OMXHarness");
-#endif
     IOMX::node_id node;
 
     status_t err =

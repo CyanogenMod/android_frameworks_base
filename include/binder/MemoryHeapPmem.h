@@ -20,9 +20,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#ifdef USE_ECLAIR_MEMORYDEALER
-#include <binder/MemoryDealerEclair.h>
-#endif
 #include <binder/MemoryHeapBase.h>
 #include <binder/IMemory.h>
 #include <utils/SortedVector.h>
@@ -33,11 +30,8 @@ namespace android {
 class MemoryHeapBase;
 
 // ---------------------------------------------------------------------------
-#ifdef USE_ECLAIR_MEMORYDEALER
-class MemoryHeapPmem : public HeapInterface, public MemoryHeapBase
-#else
+
 class MemoryHeapPmem : public MemoryHeapBase
-#endif
 {
 public:
     class MemoryPmem : public BnMemory {

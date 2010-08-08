@@ -30,11 +30,7 @@
 #include "include/ESDS.h"
 
 #include <binder/IServiceManager.h>
-#ifdef USE_ECLAIR_MEMORYDEALER
-#include <binder/MemoryDealerEclair.h>
-#else
 #include <binder/MemoryDealer.h>
-#endif
 #include <binder/ProcessState.h>
 #include <media/IMediaPlayerService.h>
 #include <media/stagefright/MediaBuffer.h>
@@ -1215,11 +1211,8 @@ status_t OMXCodec::allocateBuffersOnPort(OMX_U32 portIndex) {
     }
 
     size_t totalSize = def.nBufferCountActual * def.nBufferSize;
-#ifdef USE_ECLAIR_MEMORYDEALER
-    mDealer[portIndex] = new MemoryDealer(totalSize);
-#else
     mDealer[portIndex] = new MemoryDealer(totalSize, "OMXCodec");
-#endif
+
     for (OMX_U32 i = 0; i < def.nBufferCountActual; ++i) {
         sp<IMemory> mem = mDealer[portIndex]->allocate(def.nBufferSize);
         CHECK(mem.get() != NULL);

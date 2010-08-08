@@ -28,12 +28,8 @@
 #include <string.h>
 #include <cutils/atomic.h>
 #include <cutils/properties.h>
-#ifdef USE_ECLAIR_MEMORYDEALER
-#include <binder/MemoryDealerEclair.h>
-#else
 #include <binder/MemoryBase.h>
 #include <binder/MemoryHeapBase.h>
-#endif
 #include <android_runtime/ActivityManager.h>
 #include <binder/IPCThreadState.h>
 #include <binder/IServiceManager.h>
@@ -253,22 +249,13 @@ sp<IMemory> MetadataRetrieverClient::captureFrame()
         return NULL;
     }
     size_t size = sizeof(VideoFrame) + frame->mSize;
-#ifdef USE_ECLAIR_MEMORYDEALER
-    mThumbnailDealer = new MemoryDealer(size);
-    if (mThumbnailDealer == NULL) {
-#else
     sp<MemoryHeapBase> heap = new MemoryHeapBase(size, 0, "MetadataRetrieverClient");
     if (heap == NULL) {
-#endif
         LOGE("failed to create MemoryDealer");
         delete frame;
         return NULL;
     }
-#ifdef USE_ECLAIR_MEMORYDEALER
-    mThumbnail = mThumbnailDealer->allocate(size);
-#else
     mThumbnail = new MemoryBase(heap, 0, size);
-#endif
     if (mThumbnail == NULL) {
         LOGE("not enough memory for VideoFrame size=%u", size);
         delete frame;
@@ -301,22 +288,13 @@ sp<IMemory> MetadataRetrieverClient::extractAlbumArt()
         return NULL;
     }
     size_t size = sizeof(MediaAlbumArt) + albumArt->mSize;
-#ifdef USE_ECLAIR_MEMORYDEALER
-    mAlbumArtDealer = new MemoryDealer(size);
-    if (mAlbumArtDealer == NULL) {
-#else
     sp<MemoryHeapBase> heap = new MemoryHeapBase(size, 0, "MetadataRetrieverClient");
     if (heap == NULL) {
-#endif
         LOGE("failed to create MemoryDealer object");
         delete albumArt;
         return NULL;
     }
-#ifdef USE_ECLAIR_MEMORYDEALER
-    mAlbumArt = mAlbumArtDealer->allocate(size);
-#else
     mAlbumArt = new MemoryBase(heap, 0, size);
-#endif
     if (mAlbumArt == NULL) {
         LOGE("not enough memory for MediaAlbumArt size=%u", size);
         delete albumArt;

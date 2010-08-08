@@ -14,10 +14,6 @@ LOCAL_C_INCLUDES:= \
 	frameworks/base/media/libstagefright \
 	$(TOP)/external/opencore/extern_libs_v2/khronos/openmax/include
 
-ifeq ($(BOARD_USES_ECLAIR_LIBCAMERA),true)
-    LOCAL_CFLAGS += -DUSE_ECLAIR_MEMORYDEALER
-endif
-
 LOCAL_MODULE:= omx_tests
 
 include $(BUILD_EXECUTABLE)

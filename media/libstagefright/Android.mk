@@ -63,9 +63,7 @@ LOCAL_SHARED_LIBRARIES := \
         libvorbisidec     \
         libFLAC
 
-ifeq ($(BOARD_USES_ECLAIR_LIBCAMERA),true)
-    LOCAL_CFLAGS += -DUSE_ECLAIR_MEMORYDEALER
-else
+ifneq ($(BOARD_USES_ECLAIR_LIBCAMERA),true)
     LOCAL_SHARED_LIBRARIES += \
     	libsurfaceflinger_client \
     	libcamera_client
