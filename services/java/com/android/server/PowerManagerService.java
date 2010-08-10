@@ -262,7 +262,9 @@ class PowerManagerService extends IPowerManager.Stub
     private int mLightFilterSample = -1;
     private int[] mLightFilterSamples;
     private int mLightFilterIndex;
-    private int mLightFilterCounter;
+    private int mLightFilterSampleCounter;
+    private int mLightFilterSum;
+    private int mLightFilterEqualCounter;
     private int mLightFilterWindow;
     private int mLightFilterInterval;
     private int mLightFilterReset;
@@ -2214,35 +2216,41 @@ class PowerManagerService extends IPowerManager.Stub
             synchronized (mLocks) {
                 boolean again = false;
                 if (mLightFilterSample > 0 && !isScreenTurningOffLocked()) {
+                    int discarded = mLightFilterSamples[mLightFilterIndex];
                     mLightFilterSamples[mLightFilterIndex] = mLightFilterSample;
                     mLightFilterIndex = (mLightFilterIndex + 1) %
                             mLightFilterSamples.length;
-                    int sum, count, sample;
-                    sum = count = sample = 0;
-                    for (int i = 0; i < mLightFilterSamples.length; i++) {
-                        sample = mLightFilterSamples[i];
-                        if (sample < 0) {
-                            break;
-                        }
-                        sum += sample;
-                        count++;
+                    mLightFilterSampleCounter = Math.min(mLightFilterSampleCounter + 1,
+                             mLightFilterSamples.length);
+                    if (mLightFilterSampleCounter < mLightFilterSamples.length) {
+                        discarded = 0; // Don't subtract if window isn't full
                     }
+                    // Add new value...
+                    mLightFilterSum += mLightFilterSample;
+                    // ... and subtract discarded value
+                    mLightFilterSum -= discarded;
                     // Count can't be zero here
-                    int average = Math.round((float)sum / count);
+                    int average = Math.round(
+                                (float)mLightFilterSum / mLightFilterSampleCounter);
                     if (average != (int)mLightSensorValue) {
                         lightSensorChangedLocked(average);
                     }
                     if ((int)mLightSensorValue != mLightFilterSample) {
+                        mLightFilterEqualCounter = 0;
                         again = true;
                         if (mDebugLightSensor) {
                             Slog.d(TAGF, "Tick: " + (int)mLightSensorValue + "::" +
-                                    mLightFilterSample);
+                                    mLightFilterSample + " sum:" + mLightFilterSum +
+                                    " samples:" + mLightFilterSampleCounter);
                         }
-                    } else if (mDebugLightSensor) {
-                        mLightFilterCounter++;
-                        again = mLightFilterCounter < mLightFilterSamples.length;
-                        Slog.d(TAGF, "Done: " + (int)mLightSensorValue + " " +
-                                    mLightFilterCounter + "/" + mLightFilterSamples.length);
+                    } else {
+                        mLightFilterEqualCounter++;
+                        again = mLightFilterEqualCounter < mLightFilterSamples.length;
+                        if (mDebugLightSensor) {
+                            Slog.d(TAGF, "Done: " + (int)mLightSensorValue + " " +
+                            mLightFilterEqualCounter + "/" + mLightFilterSamples.length +
+                            " sum:" + mLightFilterSum + " samples:" + mLightFilterSampleCounter);
+                        }
                     }
                 }
                 if (again) {
@@ -2264,9 +2272,11 @@ class PowerManagerService extends IPowerManager.Stub
     }
 
     private void lightFilterReset(int initial) {
-        mLightFilterCounter = 0;
+        mLightFilterEqualCounter = 0;
         mLightFilterIndex = 0;
         mLightFilterSamples = new int[(mLightFilterWindow / mLightFilterInterval)];
+        mLightFilterSampleCounter = initial == -1 ? 0 : mLightFilterSamples.length;
+        mLightFilterSum = initial == -1 ? 0 : initial * mLightFilterSamples.length;
         java.util.Arrays.fill(mLightFilterSamples, initial);
         if (mDebugLightSensor) {
             Slog.d(TAGF, "reset: " + initial);
@@ -3134,9 +3144,8 @@ class PowerManagerService extends IPowerManager.Stub
                             // process the value immediately if screen has just turned on
                             lightFilterReset(-1);
                             lightSensorChangedLocked(value);
-                        } else {
-                            // Small changes -> filtered
-                            lightFilterReset((int)mLightSensorValue);
+                        }
+                        if (!mLightFilterRunning) {
                             if (mDebugLightSensor) {
                                 Slog.d(TAGF, "start: " + value);
                             }
