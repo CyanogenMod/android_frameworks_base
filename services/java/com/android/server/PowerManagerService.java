@@ -1813,7 +1813,7 @@ class PowerManagerService extends IPowerManager.Stub
             setLightBrightness(offMask, Power.BRIGHTNESS_OFF);
         }
         if (dimMask != 0) {
-            int brightness = Power.BRIGHTNESS_DIM;
+            int brightness = mScreenDim;
             if ((newState & BATTERY_LOW_BIT) != 0 &&
                     brightness > Power.BRIGHTNESS_LOW_BATTERY) {
                 brightness = Power.BRIGHTNESS_LOW_BATTERY;
@@ -2130,6 +2130,7 @@ class PowerManagerService extends IPowerManager.Stub
                     setPowerState(mUserState | mWakeLockState, noChangeLights,
                             WindowManagerPolicy.OFF_BECAUSE_OF_USER);
                     setTimeoutLocked(time, timeoutOverride, SCREEN_BRIGHT);
+                    mAlwaysOnAndDimmed = false;
                 }
             }
         }
