@@ -196,6 +196,19 @@ void Biquad::setHighShelf(float center_frequency, float sampling_frequency, floa
     setCoefficients(a0, a1, a2, b0, b1, b2);
 }
 
+void Biquad::setHighShelf1(float center_frequency, float sampling_frequency, float db_gain)
+{
+    float w0 = 2 * (float) M_PI * center_frequency / sampling_frequency;
+    float A = powf(10, db_gain/40);
+
+    float b0 = sinf(w0 / 2) + cosf(w0 / 2) * A;
+    float b1 = sinf(w0 / 2) - cosf(w0 / 2) * A;
+    float a0 = sinf(w0 / 2) + cosf(w0 / 2) / A;
+    float a1 = sinf(w0 / 2) - cosf(w0 / 2) / A;
+
+    setCoefficients(a0, a1, 0, b0, b1, 0);
+}
+
 void Biquad::setBandPass(float center_frequency, float sampling_frequency, float resonance)
 {
     float w0 = 2 * (float) M_PI * center_frequency / sampling_frequency;
@@ -411,8 +424,12 @@ void EffectHeadphone::configure(const float samplingFrequency) {
 
     mReverbDelayL.setParameters(mSamplingFrequency, 0.030f);
     mReverbDelayR.setParameters(mSamplingFrequency, 0.030f);
-    mLowpassL.setRC(700.0f, mSamplingFrequency);
-    mLowpassR.setRC(700.0f, mSamplingFrequency);
+    /* the -3 dB point is around 700 Hz, similar to the classic design
+     * in bs2b. */
+    mLowpassL.setHighShelf1(1500.0f, mSamplingFrequency, -16.0f);
+    mLowpassR.setHighShelf1(1500.0f, mSamplingFrequency, -16.0f);
+    /* Rockbox has a 0.3 ms delay line (13 samples at 44100 Hz), but
+     * I think it makes the whole effect sound pretty bad so I skipped it! */
 }
 
 void EffectHeadphone::setDeep(bool deep)
