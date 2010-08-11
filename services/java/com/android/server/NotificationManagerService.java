@@ -860,13 +860,28 @@ class NotificationManagerService extends INotificationManager.Stub
 	    //updatePackageList(pkg);
             //Slog.i(TAG, "notification.lights="
             //        + ((old.notification.lights.flags & Notification.FLAG_SHOW_LIGHTS) != 0));
-            if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0) {
-                mLights.add(r);
+            String[] mPackage = findPackage(pkg);
+	    boolean flashLight = false;
+	    if(mPackage != null) {
+		if(!mPackage[1].equals("none"))
+			flashLight = true;
+	    }
+	    //if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0) {
+            if(flashLight) {
+	        mLights.add(r);
                 updateLightsLocked();
             } else {
-                if (old != null
-                        && ((old.notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0)) {
-                    updateLightsLocked();
+		if (old != null) {
+               // if (old != null
+               //         && ((old.notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0)) {
+           		String[] mOldPackage = findPackage(old.pkg);
+            		boolean flashOldLight = false;
+            		if(mOldPackage != null) {
+              	  		if(!mOldPackage[1].equals("none"))
+                        		flashOldLight = true;
+            		}
+			if(flashOldLight)
+				updateLightsLocked();
                 }
             }
         }
@@ -1099,6 +1114,21 @@ class NotificationManagerService extends INotificationManager.Stub
 		temp = mString.split("=");
 		return temp;
 	}
+
+        public String[] findPackage(String pkg) {
+                String mBaseString = Settings.System.getString(mContext.getContentResolver(), Settings.System.NOTIFICATION_PACKAGE_COLORS);
+                String[] mBaseArray = getArray(mBaseString);
+                for(int i = 0; i < mBaseArray.length; i++) {
+                        if(isNull(mBaseArray[i])) {
+                                continue;
+                        }
+                        if(mBaseArray[i].contains(pkg)) {
+                                return getPackageInfo(mBaseArray[i]);
+                        }
+                }
+                return null;
+        }
+
 
 	public class StartTimerClass implements Runnable {
 		private long sleepTimer;
