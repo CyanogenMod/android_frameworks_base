@@ -329,9 +329,6 @@ float EffectCompression::estimateLevel(const int16_t* audioData, int32_t frames,
 EffectTone::EffectTone()
 {
     for (int32_t i = 0; i < 5; i ++) {
-        mBand[i] = 0;
-    }
-    for (int32_t i = 0; i < 5; i ++) {
         setBand(i, 0);
     }
 }
@@ -345,6 +342,9 @@ EffectTone::~EffectTone() {
 
 void EffectTone::configure(const float samplingFrequency) {
     Effect::configure(samplingFrequency);
+    for (int i = 0; i < 5; i ++) {
+        mBand[i] = 0;
+    }
     refreshBands();
 }
  
@@ -354,41 +354,30 @@ void EffectTone::setBand(int32_t band, float dB)
     refreshBands();
 }
 
-void EffectTone::refreshBands() {
+void EffectTone::refreshBands()
+{
     mGain = toFixedPoint(powf(10, mBand[0] / 20));
+    for (int band = 0; band < 4; band ++) {
+        float centerFrequency = 62.5f * powf(4, band);
+        float dB = mBand[band+1] - mBand[band];
 
-    for (int32_t band = 0; band < 3; band ++) {
-        float dB = mBand[band + 1] - mBand[0];
-        float centerFrequency = 250.0f * powf(4, band);
-
-        mFilterL[band].setPeakingEqualizer(centerFrequency, mSamplingFrequency, dB, 3.0f);
-        mFilterR[band].setPeakingEqualizer(centerFrequency, mSamplingFrequency, dB, 3.0f);
-    }
-
-    {
-        int32_t band = 3;
-
-        float dB = mBand[band + 1] - mBand[0];
-        float centerFrequency = 250.0f * powf(4, band);
-
-        mFilterL[band].setHighShelf(centerFrequency * 0.5f, mSamplingFrequency, dB, 1.0f);
-        mFilterR[band].setHighShelf(centerFrequency * 0.5f, mSamplingFrequency, dB, 1.0f);
+        mFilterL[band].setHighShelf(centerFrequency * 2.0f, mSamplingFrequency, dB, 1.0f);
+        mFilterR[band].setHighShelf(centerFrequency * 2.0f, mSamplingFrequency, dB, 1.0f);
     }
 }
 
 void EffectTone::process(int32_t* inout, int32_t frames)
 {
     for (int32_t i = 0; i < frames; i ++) {
-        int32_t tmpL = inout[0] >> fixedPointDecimals;
-        int32_t tmpR = inout[1] >> fixedPointDecimals;
-        /* 16 bits */
-       
-        /* bass control is really a global gain compensated by other
-         * controls */
-        tmpL = tmpL * mGain;
-        tmpR = tmpR * mGain;
+        int32_t tmpL = inout[0];
+        int32_t tmpR = inout[1];
         /* 28 bits */
-
+     
+        /* first "shelve" is just gain */ 
+        tmpL = (tmpL >> fixedPointDecimals) * mGain;
+        tmpR = (tmpR >> fixedPointDecimals) * mGain;
+        /* 28 bits */
+ 
         /* evaluate the other filters.
          * I'm ignoring the integer truncation problem here, but in reality
          * it should be accounted for. */
@@ -424,10 +413,9 @@ void EffectHeadphone::configure(const float samplingFrequency) {
 
     mReverbDelayL.setParameters(mSamplingFrequency, 0.030f);
     mReverbDelayR.setParameters(mSamplingFrequency, 0.030f);
-    /* the -3 dB point is around 700 Hz, similar to the classic design
-     * in bs2b. */
-    mLowpassL.setHighShelf1(1500.0f, mSamplingFrequency, -16.0f);
-    mLowpassR.setHighShelf1(1500.0f, mSamplingFrequency, -16.0f);
+    /* the -3 dB point is around 650 Hz, giving about 300 us to work with */
+    mLowpassL.setHighShelf(800.0f, mSamplingFrequency, -12.0f, 0.72f);
+    mLowpassR.setHighShelf(800.0f, mSamplingFrequency, -12.0f, 0.72f);
     /* Rockbox has a 0.3 ms delay line (13 samples at 44100 Hz), but
      * I think it makes the whole effect sound pretty bad so I skipped it! */
 }

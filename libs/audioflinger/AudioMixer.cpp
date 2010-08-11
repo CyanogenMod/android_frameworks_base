@@ -38,8 +38,8 @@ static inline int16_t clamp16(int32_t sample)
     return sample;
 }
 
-static int32_t seed = 1;
 inline static int32_t prng() {
+    static int32_t seed = 1;
     seed = (seed * 12345) + 1103515245;
     return int32_t(seed & 0xfff);
 }
@@ -59,6 +59,8 @@ AudioMixer::AudioMixer(size_t frameCount, uint32_t sampleRate, AudioDSP& dsp)
     track_t* t = mState.tracks;
     for (int i=0 ; i<32 ; i++) {
         t->needs = 0;
+        t->prevVolume[0] = UNITY_GAIN;
+        t->prevVolume[1] = UNITY_GAIN;
         t->volume[0] = UNITY_GAIN;
         t->volume[1] = UNITY_GAIN;
         t->volumeInc[0] = 0;
@@ -255,17 +257,17 @@ void AudioMixer::track_t::adjustVolumeRamp(AudioDSP& dsp, size_t frames)
         int32_t d = desiredVolume - prevVolume[i];
 
         /* limit change rate to smooth the compressor. */
-        int32_t volChangeLimit = (prevVolume[i] >> 10);
+        int32_t volChangeLimit = (prevVolume[i] >> 9);
 
-        volChangeLimit += 1;
+        volChangeLimit -= 1;
         int32_t volInc = d / int32_t(frames);
         if (volInc < -(volChangeLimit)) {
             volInc = -(volChangeLimit);
         }
 
         /* Make ramps up slower, but ramps down fast. */
-        volChangeLimit >>= 3;
-        volChangeLimit -= 1;
+        volChangeLimit >>= 4;
+        volChangeLimit += 1;
         if (volInc > volChangeLimit) {
             volInc = volChangeLimit;
         }
