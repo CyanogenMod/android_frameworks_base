@@ -103,6 +103,7 @@ public final class ShutdownThread extends Thread {
                         .setMessage(com.android.internal.R.string.reboot_confirm)
                         .setPositiveButton(com.android.internal.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
+                               mReboot = true;
                                 beginShutdownSequence(context);
                             }
                         })
@@ -127,6 +128,7 @@ public final class ShutdownThread extends Thread {
                 dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_BLUR_BEHIND);
             }
             dialog.show();
+           mReboot = false;
         } else {
             beginShutdownSequence(context);
         }
