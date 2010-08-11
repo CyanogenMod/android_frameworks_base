@@ -33,7 +33,6 @@ static int16_t toFixedPoint(float x)
     return int16_t(x * (1 << fixedPointDecimals) + 0.5f);
 }
 
-
 /***************************************************************************
  * Delay                                                                   *
  ***************************************************************************/
@@ -403,12 +402,6 @@ EffectHeadphone::~EffectHeadphone()
 {
     delete &mReverbDelayL;
     delete &mReverbDelayR;
-    delete &mDelayL;
-    delete &mDelayR;
-    for (int32_t i = 0; i < 3; i ++) {
-        delete &mAllpassL[i];
-        delete &mAllpassR[i];
-    }
     delete &mLowpassL;
     delete &mLowpassR;
 }
@@ -418,16 +411,8 @@ void EffectHeadphone::configure(const float samplingFrequency) {
 
     mReverbDelayL.setParameters(mSamplingFrequency, 0.030f);
     mReverbDelayR.setParameters(mSamplingFrequency, 0.030f);
-    mDelayL.setParameters(mSamplingFrequency, 0.00045f);
-    mDelayR.setParameters(mSamplingFrequency, 0.00045f);
-    mAllpassL[0].setParameters(mSamplingFrequency, 0.4f, 0.00031f);
-    mAllpassR[0].setParameters(mSamplingFrequency, 0.4f, 0.00031f);
-    mAllpassL[1].setParameters(mSamplingFrequency, 0.4f, 0.00021f);
-    mAllpassR[1].setParameters(mSamplingFrequency, 0.4f, 0.00021f);
-    mAllpassL[2].setParameters(mSamplingFrequency, 0.4f, 0.00011f);
-    mAllpassR[2].setParameters(mSamplingFrequency, 0.4f, 0.00011f);
-    mLowpassL.setRC(4000.0f, mSamplingFrequency);
-    mLowpassR.setRC(4000.0f, mSamplingFrequency);
+    mLowpassL.setRC(700.0f, mSamplingFrequency);
+    mLowpassR.setRC(700.0f, mSamplingFrequency);
 }
 
 void EffectHeadphone::setDeep(bool deep)
@@ -479,26 +464,14 @@ void EffectHeadphone::process(int32_t* inout, int32_t frames)
         dataL += dryL;
         dataR += dryR;
 
-        /* Add fixed ear-to-ear propagation delay of about 10 cm, based
-         * on the idea that ear-to-ear distance is 30 cm and the speakers
-         * are placed in front of the listener, which means that the actual
-         * time delay will be somewhat less than the maximum. */
-        dataL = mDelayL.process(dataL);
-        dataR = mDelayR.process(dataR);
-        for (int32_t j = 0; j < 3; j ++) {
-            /* Confuse phase, simulating shoulder echoes and whatnot. */
-            dataL = mAllpassL[j].process(dataL);
-            dataR = mAllpassR[j].process(dataR);
-        }
-
         /* Lowpass filter to estimate head shadow. */
         dataL = mLowpassL.process(dataL >> fixedPointDecimals);
         dataR = mLowpassR.process(dataR >> fixedPointDecimals);
         /* 28 bits */
         
         /* Mix right-to-left and vice versa. */
-        inout[0] += dataR;
-        inout[1] += dataL;
+        inout[0] += dataR >> 1;
+        inout[1] += dataL >> 1;
         inout += 2;
     }
 }

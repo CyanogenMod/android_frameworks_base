@@ -119,8 +119,6 @@ class EffectHeadphone : public Effect {
 
     Delay mReverbDelayL, mReverbDelayR;
     int32_t mDelayDataL, mDelayDataR;
-    Delay mDelayL, mDelayR;
-    Allpass mAllpassL[3], mAllpassR[3];
     Biquad mLowpassL, mLowpassR;
 
     public:
