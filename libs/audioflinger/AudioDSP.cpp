@@ -281,7 +281,7 @@ EffectCompression::~EffectCompression()
 void EffectCompression::configure(const float samplingFrequency)
 {
     Effect::configure(samplingFrequency);
-    mWeighter.setBandPass(1000, samplingFrequency, sqrtf(2)/2);
+    mWeighter.setBandPass(1700, samplingFrequency, sqrtf(2)/2);
 }
 
 void EffectCompression::setRatio(float compressionRatio)
