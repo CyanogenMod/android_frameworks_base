@@ -1240,38 +1240,24 @@ class NotificationManagerService extends INotificationManager.Stub
                 	ledOnMS = mDefaultNotificationLedOn;
                 	ledOffMS = mDefaultNotificationLedOff;
             	}
-	    	//Possible Cleaner way?
-            	//String[] mPackageInfo = findPackage(mLedNotification.pkg);
-            	//if(mPackageInfo != null) {
-            	//		ledARGB = Color.parseColor(mPackageInfo[1]);
-    		//		ledOffMS = Integer.parseInt(mPackageInfo[2]);
-		//}
-            	if(mPackages != null) {
-            		int i = 0;
-            		for(i = 0; i < mPackages.length; i++) {
-            			String[] mPackageInfo = getPackageInfo(mPackages[i]);
-            			if(mPackageInfo == null) {
-            				continue;
-            			}
-            			if(mPackageInfo[0].matches(mLedNotification.pkg)) {
-					if(mPackageInfo[1].equals("none"))
-						break;
 
-            				if(mPackageInfo[1].equals("random")) {
-            					Random generator = new Random();
-            					int x = generator.nextInt(colorList.length - 1);
-               		 			ledARGB = Color.parseColor(colorList[x]);
-            				} else {
-            					ledARGB = Color.parseColor(mPackageInfo[1]);
-            				}
-            				if(mPackageInfo[2].equals(".5")) {
-			                        ledOffMS = 500;
-                			} else {
-						ledOffMS = (Integer.parseInt(mPackageInfo[2]) * 1000);
-       					}
-	    			}
-            		}
-            	}
+		String[] mPackageInfo = findPackage(mLedNotification.pkg);
+                if(mPackageInfo != null) {
+			if(!mPackageInfo[1].equals("none")) {
+				if(mPackageInfo[1].equals("random")) {
+					Random generator = new Random();
+					int x = generator.nextInt(colorList.length - 1);
+					ledARGB = Color.parseColor(colorList[x]);
+				} else {
+					ledARGB = Color.parseColor(mPackageInfo[1]);
+				}
+				if(mPackageInfo[2].equals(".5")) {
+					ledOffMS = 500;
+				} else {
+					ledOffMS = (Integer.parseInt(mPackageInfo[2]) * 1000);
+				}
+			}
+		}
 
           	if(mRandomColor == 1) {
 			//Lets make this intresting...
