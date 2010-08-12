@@ -1273,28 +1273,16 @@ class NotificationManagerService extends INotificationManager.Stub
 		} else if(mBlendColor == 1) { // Blend lights: Credit to eshabtai for the application of this.
 			ledARGB = 0;
 			for (int n=0; n < mLights.size(); n++) {
-				int x = 0;
-				boolean found = false;
 				long pkgcolor = Color.parseColor("white");
-	                        for(x = 0; x < mPackages.length; x++) {
-	                                mPackageInfo = getPackageInfo(mPackages[x]);
-        	                        if(mPackageInfo == null) {
-                	                        continue;
-                        	        }
-                                	if(mPackageInfo[0].matches(mLights.get(n).pkg)) {
-                                        	if(mPackageInfo[1].equals("random")) {
-                                                	Random generator = new Random();
-                        	                        int j = generator.nextInt(colorList.length - 1);
-                                	                pkgcolor = Color.parseColor(colorList[j]);
-                                        	} else {
-                                                	pkgcolor = Color.parseColor(mPackageInfo[1]);
-                                       		}
-						found = true;
- 						break;
-	                              	}
-                        	}
-                                if(found) {
-                                        ledARGB |= pkgcolor;
+                                mPackageInfo = findPackage(mLights.get(n).pkg);
+       	                        if(mPackageInfo != null) {
+                                    	if(mPackageInfo[1].equals("random")) {
+                                               	Random generator = new Random();
+                       	                        int j = generator.nextInt(colorList.length - 1);
+                               	                ledARGB |= Color.parseColor(colorList[j]);
+                                       	} else {
+                                               	ledARGB |= Color.parseColor(mPackageInfo[1]);
+                              		}
                                 } else if ((mLights.get(n).notification.defaults & Notification.DEFAULT_LIGHTS) != 0) {
                                         ledARGB |= mLights.get(n).notification.ledARGB;
                                 }
