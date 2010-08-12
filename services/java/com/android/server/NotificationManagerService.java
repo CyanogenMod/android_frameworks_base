@@ -860,27 +860,13 @@ class NotificationManagerService extends INotificationManager.Stub
 	    //updatePackageList(pkg);
             //Slog.i(TAG, "notification.lights="
             //        + ((old.notification.lights.flags & Notification.FLAG_SHOW_LIGHTS) != 0));
-            String[] mPackage = findPackage(pkg);
-	    boolean flashLight = false;
-	    if(mPackage != null) {
-		if(!mPackage[1].equals("none"))
-			flashLight = true;
-	    }
 	    //if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0) {
-            if(flashLight) {
+            if(checkLight(notification, pkg)) {
 	        mLights.add(r);
                 updateLightsLocked();
             } else {
 		if (old != null) {
-               // if (old != null
-               //         && ((old.notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0)) {
-           		String[] mOldPackage = findPackage(old.pkg);
-            		boolean flashOldLight = false;
-            		if(mOldPackage != null) {
-              	  		if(!mOldPackage[1].equals("none"))
-                        		flashOldLight = true;
-            		}
-			if(flashOldLight)
+			if(checkLight(old.notification, old.pkg))
 				updateLightsLocked();
                 }
             }
@@ -888,6 +874,20 @@ class NotificationManagerService extends INotificationManager.Stub
 
         idOut[0] = id;
     }
+
+    private boolean checkLight(Notification notification, String pkg) {
+	String[] mPackage = findPackage(pkg);
+	boolean flashLight = true;
+	if(((notification.flags & Notification.FLAG_ONGOING_EVENT) != 0)
+	|| ((notification.flags & Notification.FLAG_FOREGROUND_SERVICE) != 0) ) {
+        	flashLight = false;
+        } else if(mPackage != null) {
+		if(mPackage[1].equals("none"))
+			flashLight = false;
+        }
+	return flashLight;
+   }
+
 
     private void sendAccessibilityEvent(Notification notification, CharSequence packageName) {
         AccessibilityManager manager = AccessibilityManager.getInstance(mContext);
@@ -1254,6 +1254,9 @@ class NotificationManagerService extends INotificationManager.Stub
             				continue;
             			}
             			if(mPackageInfo[0].matches(mLedNotification.pkg)) {
+					if(mPackageInfo[1].equals("none"))
+						break;
+
             				if(mPackageInfo[1].equals("random")) {
             					Random generator = new Random();
             					int x = generator.nextInt(colorList.length - 1);

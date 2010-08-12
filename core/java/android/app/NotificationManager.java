@@ -126,8 +126,9 @@ public class NotificationManager
         String pkg = mContext.getPackageName();
 //	Pedlar: adding support for all apps. Possibility of success?
 //        if((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0) {
-        updatePackageList();
-//        }
+        if(((notification.flags & Notification.FLAG_ONGOING_EVENT) == 0)) {
+		updatePackageList();
+        }
         if (localLOGV) Log.v(TAG, pkg + ": notify(" + id + ", " + notification + ")");
         try {
             service.enqueueNotificationWithTag(pkg, tag, id, notification, idOut);
