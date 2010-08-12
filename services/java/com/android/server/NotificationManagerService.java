@@ -1277,7 +1277,7 @@ class NotificationManagerService extends INotificationManager.Stub
 				boolean found = false;
 				long pkgcolor = Color.parseColor("white");
 	                        for(x = 0; x < mPackages.length; x++) {
-	                                String[] mPackageInfo = getPackageInfo(mPackages[x]);
+	                                mPackageInfo = getPackageInfo(mPackages[x]);
         	                        if(mPackageInfo == null) {
                 	                        continue;
                         	        }
