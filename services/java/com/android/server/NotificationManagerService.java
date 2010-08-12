@@ -1118,6 +1118,8 @@ class NotificationManagerService extends INotificationManager.Stub
         public String[] findPackage(String pkg) {
                 String mBaseString = Settings.System.getString(mContext.getContentResolver(), Settings.System.NOTIFICATION_PACKAGE_COLORS);
                 String[] mBaseArray = getArray(mBaseString);
+		if(mBaseArray == null)
+			return null;
                 for(int i = 0; i < mBaseArray.length; i++) {
                         if(isNull(mBaseArray[i])) {
                                 continue;
