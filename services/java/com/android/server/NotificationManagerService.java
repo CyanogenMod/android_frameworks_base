@@ -1271,6 +1271,7 @@ class NotificationManagerService extends INotificationManager.Stub
 			ledARGB = Color.parseColor(colorList[lastColor - 1]);
 			lastColor = lastColor + 1;
 		} else if(mBlendColor == 1) { // Blend lights: Credit to eshabtai for the application of this.
+			ledARGB = 0;
 			for (int n=0; n < mLights.size(); n++) {
 				int x = 0;
 				boolean found = false;
@@ -1294,9 +1295,12 @@ class NotificationManagerService extends INotificationManager.Stub
                         	}
                                 if(found) {
                                         ledARGB |= pkgcolor;
-                                } else {
+                                } else if ((mLights.get(n).notification.defaults & Notification.DEFAULT_LIGHTS) != 0) {
                                         ledARGB |= mLights.get(n).notification.ledARGB;
                                 }
+			}
+			if (ledARGB == 0) {
+				ledARGB = mDefaultNotificationColor;
 			}
 		}
             	if (mNotificationPulseEnabled) {
