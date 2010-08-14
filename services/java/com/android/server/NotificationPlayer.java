@@ -26,6 +26,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.util.Log;
 
 import java.io.IOException;
@@ -88,7 +89,9 @@ public class NotificationPlayer implements OnCompletionListener {
                     player.setDataSource(mCmd.context, mCmd.uri);
                     player.setLooping(mCmd.looping);
                     player.prepare();
-                    if ((mCmd.uri != null) && (mCmd.uri.getEncodedPath() != null)
+                    boolean requestFocus = Settings.System.getInt(mCmd.context.getContentResolver(),
+                            Settings.System.NOTIFICATIONS_AUDIO_FOCUS, 1) != 0;
+                    if (requestFocus && (mCmd.uri != null) && (mCmd.uri.getEncodedPath() != null)
                             && (mCmd.uri.getEncodedPath().length() > 0)) {
                         if (mCmd.looping) {
                             audioManager.requestAudioFocus(null, mCmd.stream,
