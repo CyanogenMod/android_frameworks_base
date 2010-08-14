@@ -19,6 +19,8 @@
 #include <utils/Log.h>
 #include <hardware_legacy/AudioPolicyManagerBase.h>
 #include <media/mediarecorder.h>
+#include <cutils/properties.h>
+#include <math.h>
 
 namespace android {
 
@@ -1476,6 +1478,7 @@ void AudioPolicyManagerBase::checkOutputForAllStrategies()
 {
     checkOutputForStrategy(STRATEGY_PHONE);
     checkOutputForStrategy(STRATEGY_SONIFICATION);
+    checkOutputForStrategy(STRATEGY_MEDIA_SONIFICATION);
     checkOutputForStrategy(STRATEGY_MEDIA);
     checkOutputForStrategy(STRATEGY_DTMF);
 }
@@ -1492,15 +1495,19 @@ uint32_t AudioPolicyManagerBase::getNewDevice(audio_io_handle_t output, bool fro
     //      use device for strategy phone
     // 2: the strategy sonification is active on the hardware output:
     //      use device for strategy sonification
-    // 3: the strategy media is active on the hardware output:
+    // 3: the strategy media sonification is active on the hardware output:
+    //      use device for strategy media sonification
+    // 4: the strategy media is active on the hardware output:
     //      use device for strategy media
-    // 4: the strategy DTMF is active on the hardware output:
+    // 5: the strategy DTMF is active on the hardware output:
     //      use device for strategy DTMF
     if (mPhoneState == AudioSystem::MODE_IN_CALL ||
         outputDesc->isUsedByStrategy(STRATEGY_PHONE)) {
         device = getDeviceForStrategy(STRATEGY_PHONE, fromCache);
     } else if (outputDesc->isUsedByStrategy(STRATEGY_SONIFICATION)) {
         device = getDeviceForStrategy(STRATEGY_SONIFICATION, fromCache);
+    } else if (outputDesc->isUsedByStrategy(STRATEGY_MEDIA_SONIFICATION)) {
+        device = getDeviceForStrategy(STRATEGY_MEDIA_SONIFICATION, fromCache);
     } else if (outputDesc->isUsedByStrategy(STRATEGY_MEDIA)) {
         device = getDeviceForStrategy(STRATEGY_MEDIA, fromCache);
     } else if (outputDesc->isUsedByStrategy(STRATEGY_DTMF)) {
@@ -1517,14 +1524,36 @@ uint32_t AudioPolicyManagerBase::getStrategyForStream(AudioSystem::stream_type s
 
 AudioPolicyManagerBase::routing_strategy AudioPolicyManagerBase::getStrategy(
         AudioSystem::stream_type stream) {
+    // http://code.google.com/p/android/issues/detail?id=5012
+    // http://code.google.com/p/cyanogenmod/issues/detail?id=1229
+    char buf[PROPERTY_VALUE_MAX];
+
     // stream to strategy mapping
     switch (stream) {
     case AudioSystem::VOICE_CALL:
     case AudioSystem::BLUETOOTH_SCO:
         return STRATEGY_PHONE;
     case AudioSystem::RING:
+        property_get("persist.sys.ring-speaker", buf, "0");
+        if (atoi(buf)) {
+            return STRATEGY_SONIFICATION;
+        } else {
+            return STRATEGY_MEDIA_SONIFICATION;
+        }
     case AudioSystem::NOTIFICATION:
+        property_get("persist.sys.notif-speaker", buf, "0");
+        if (atoi(buf)) {
+            return STRATEGY_SONIFICATION;
+        } else {
+            return STRATEGY_MEDIA_SONIFICATION;
+        }
     case AudioSystem::ALARM:
+        property_get("persist.sys.alarm-speaker", buf, "0");
+        if (atoi(buf)) {
+            return STRATEGY_SONIFICATION;
+        } else {
+            return STRATEGY_MEDIA_SONIFICATION;
+        }
     case AudioSystem::ENFORCED_AUDIBLE:
         return STRATEGY_SONIFICATION;
     case AudioSystem::DTMF:
@@ -1620,6 +1649,7 @@ uint32_t AudioPolicyManagerBase::getDeviceForStrategy(routing_strategy strategy,
     break;
 
     case STRATEGY_SONIFICATION:
+    case STRATEGY_MEDIA_SONIFICATION:
 
         // If incall, just select the STRATEGY_PHONE device: The rest of the behavior is handled by
         // handleIncallSonification().
@@ -1627,9 +1657,11 @@ uint32_t AudioPolicyManagerBase::getDeviceForStrategy(routing_strategy strategy,
             device = getDeviceForStrategy(STRATEGY_PHONE, false);
             break;
         }
-        device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_SPEAKER;
-        if (device == 0) {
-            LOGE("getDeviceForStrategy() speaker device not found");
+        if (strategy == STRATEGY_SONIFICATION) {
+            device = mAvailableOutputDevices & AudioSystem::DEVICE_OUT_SPEAKER;
+            if (device == 0) {
+                LOGE("getDeviceForStrategy() speaker device not found");
+            }
         }
         // The second device used for sonification is the same as the device used by media strategy
         // FALL THROUGH
@@ -1833,20 +1865,67 @@ float AudioPolicyManagerBase::computeVolume(int stream, int index, audio_io_hand
         AudioSystem::DEVICE_OUT_BLUETOOTH_A2DP_HEADPHONES |
         AudioSystem::DEVICE_OUT_WIRED_HEADSET |
         AudioSystem::DEVICE_OUT_WIRED_HEADPHONE)) &&
-        (getStrategy((AudioSystem::stream_type)stream) == STRATEGY_SONIFICATION) &&
+        ((getStrategy((AudioSystem::stream_type)stream) == STRATEGY_SONIFICATION) ||
+         (getStrategy((AudioSystem::stream_type)stream) == STRATEGY_MEDIA_SONIFICATION)) &&
         streamDesc.mCanBeMuted) {
-        volume *= SONIFICATION_HEADSET_VOLUME_FACTOR;
+        float origVol = volume;
+        char buf[PROPERTY_VALUE_MAX];
+        float volumeFactor = SONIFICATION_HEADSET_VOLUME_FACTOR;
+        switch ((AudioSystem::stream_type)stream) {
+            case AudioSystem::RING:
+                LOGV("computeVolume RING");
+                property_get("persist.sys.ring-attn", buf, "6");
+                volumeFactor = pow(10.0, -atof(buf)/20.0);
+                break;
+            case AudioSystem::NOTIFICATION:
+                LOGV("computeVolume NOTIFICATION");
+                property_get("persist.sys.notif-attn", buf, "6");
+                volumeFactor = pow(10.0, -atof(buf)/20.0);
+                break;
+            case AudioSystem::ALARM:
+                LOGV("computeVolume ALARM");
+                property_get("persist.sys.alarm-attn", buf, "6");
+                volumeFactor = pow(10.0, -atof(buf)/20.0);
+                break;
+            default:
+                // Squash enumeration value not handled warnings
+                break;
+        }
+        LOGV("computeVolume attenuation factor %f ", volumeFactor);
+        volume *= volumeFactor;
         // when the phone is ringing we must consider that music could have been paused just before
         // by the music application and behave as if music was active if the last music track was
         // just stopped
         if (outputDesc->mRefCount[AudioSystem::MUSIC] || mLimitRingtoneVolume) {
-            float musicVol = computeVolume(AudioSystem::MUSIC, mStreams[AudioSystem::MUSIC].mIndexCur, output, device);
-            float minVol = (musicVol > SONIFICATION_HEADSET_VOLUME_MIN) ? musicVol : SONIFICATION_HEADSET_VOLUME_MIN;
-            if (volume > minVol) {
-                volume = minVol;
-                LOGV("computeVolume limiting volume to %f musicVol %f", minVol, musicVol);
+            int limitVol = 1;
+            switch ((AudioSystem::stream_type)stream) {
+                case AudioSystem::RING:
+                    property_get("persist.sys.ring-limitvol", buf, "1");
+                    limitVol = atoi(buf);
+                    break;
+                case AudioSystem::NOTIFICATION:
+                    property_get("persist.sys.notif-limitvol", buf, "1");
+                    limitVol = atoi(buf);
+                    break;
+                case AudioSystem::ALARM:
+                    property_get("persist.sys.alarm-limitvol", buf, "1");
+                    limitVol = atoi(buf);
+                    break;
+                default:
+                    // Squash enumeration value not handled warnings
+                    break;
+            }
+            LOGV("computeVolume limitVol %i", limitVol);
+            if (limitVol) {
+                float musicVol = computeVolume(AudioSystem::MUSIC, mStreams[AudioSystem::MUSIC].mIndexCur, output, device);
+                float minVol = (musicVol > SONIFICATION_HEADSET_VOLUME_MIN) ? musicVol : SONIFICATION_HEADSET_VOLUME_MIN;
+                if (volume > minVol) {
+                    volume = minVol;
+                    LOGV("computeVolume limiting volume to %f musicVol %f", minVol, musicVol);
+                }
             }
         }
+        LOGV("computeVolume %f --> %f", origVol, volume);
     }
 
     return volume;
@@ -1964,7 +2043,8 @@ void AudioPolicyManagerBase::handleIncallSonification(int stream, bool starting,
     // if stateChange is true, we are called from setPhoneState() and we must mute or unmute as
     // many times as there are active tracks on the output
 
-    if (getStrategy((AudioSystem::stream_type)stream) == STRATEGY_SONIFICATION) {
+    if (getStrategy((AudioSystem::stream_type)stream) == STRATEGY_SONIFICATION ||
+        getStrategy((AudioSystem::stream_type)stream) == STRATEGY_MEDIA_SONIFICATION) {
         AudioOutputDescriptor *outputDesc = mOutputs.valueFor(mHardwareOutput);
         LOGV("handleIncallSonification() stream %d starting %d device %x stateChange %d",
                 stream, starting, outputDesc->mDevice, stateChange);

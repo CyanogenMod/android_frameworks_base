@@ -1528,6 +1528,15 @@ public final class Settings {
             "notifications_use_ring_volume";
 
         /**
+         * Whether notifications should request audio focus. Could be disabled
+         * if a users favorite app behaves badly when audio focus is requested.
+         * Value is boolean.
+         *
+         * @hide
+         */
+        public static final String NOTIFICATIONS_AUDIO_FOCUS = "notifications_audio_focus";
+
+        /**
          * Whether silent mode should allow vibration feedback. This is used
          * internally in AudioService and the Sound settings activity to
          * coordinate decoupling of vibrate and silent modes. This setting
