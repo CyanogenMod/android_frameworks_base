@@ -2337,9 +2337,9 @@ class PowerManagerService extends IPowerManager.Stub
             Slog.d(TAG, "lightSensorChangedLocked " + value);
         }
 
-        // do not allow light sensor value to decrease unless the
-        // environment is very dark or user has actively permitted it
-        if (mLightDecrease || value < 200) {
+        // do not allow light sensor value to decrease unless
+        // user has actively permitted it
+        if (mLightDecrease) {
             mHighestLightSensorValue = value;
         }
         else if (mHighestLightSensorValue < value) {
@@ -2635,7 +2635,7 @@ class PowerManagerService extends IPowerManager.Stub
         mLightFilterInterval = Settings.System.getInt(cr,
                 Settings.System.LIGHT_FILTER_INTERVAL, 1000);
         mLightFilterReset = Settings.System.getInt(cr,
-                Settings.System.LIGHT_FILTER_RESET, 800);
+                Settings.System.LIGHT_FILTER_RESET, -1);
         if (mCustomLightEnabled) {
             mScreenDim = Settings.System.getInt(cr,
                     Settings.System.LIGHT_SCREEN_DIM, Power.BRIGHTNESS_DIM);
@@ -3128,13 +3128,15 @@ class PowerManagerService extends IPowerManager.Stub
                 if (mAutoBrightessEnabled && mLightFilterEnabled) {
                     if (mLightFilterRunning && mLightSensorValue != -1) {
                         // Large changes -> quick response
-                        int diff = Math.abs((int)mLightSensorValue - value);
-                        if (diff > mLightFilterReset) {
+                        int diff = value - (int)mLightSensorValue;
+                        if (mLightFilterReset != -1 && diff > mLightFilterReset && // Only increasing
+                                mLightSensorValue < 1500) { // Only "indoors"
                             if (mDebugLightSensor) {
                                 Slog.d(TAGF, "reset cause: " + value +
                                         " " + mLightSensorValue + " " + diff);
                             }
-                            lightFilterReset(-1);
+                            // Push filter faster towards sensor value
+                            lightFilterReset((int)(mLightSensorValue + diff / 2f));
                         }
                         if (mDebugLightSensor) {
                             Slog.d(TAGF, "sample: " + value);
