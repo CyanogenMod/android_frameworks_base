@@ -9685,10 +9685,10 @@ public class WindowManagerService extends IWindowManager.Stub
                 mCanvas.drawPath(mPath, tPaint);
 
                 mMouseSurface.unlockCanvasAndPost(mCanvas);
-                mMouseSurface.openTransaction();
+                Surface.openTransaction();
                 mMouseSurface.setSize(mMw, mMh);
-                mMouseSurface.closeTransaction();
-
+                mMouseSurface.hide();
+                Surface.closeTransaction();
             } catch (Exception e) {
                 Slog.e(TAG, "Exception creating mouse surface",e);
             }
