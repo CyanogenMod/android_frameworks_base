@@ -41,6 +41,10 @@ enum {
     LIGHT_INDEX_ATTENTION = 5,
     LIGHT_INDEX_BLUETOOTH = 6,
     LIGHT_INDEX_WIFI = 7,
+    LIGHT_INDEX_CAPS = 8,
+    LIGHT_INDEX_FUNC = 9,
+    LIGHT_INDEX_WIMAX = 10,
+    LIGHT_INDEX_FLASHLIGHT = 11,
     LIGHT_COUNT
 };
 
@@ -86,6 +90,14 @@ static jint init_native(JNIEnv *env, jobject clazz)
                 = get_device(module, LIGHT_ID_BLUETOOTH);
         devices->lights[LIGHT_INDEX_WIFI]
                 = get_device(module, LIGHT_ID_WIFI);
+        devices->lights[LIGHT_INDEX_CAPS]
+                = get_device(module, LIGHT_ID_CAPS);
+        devices->lights[LIGHT_INDEX_FUNC]
+                = get_device(module, LIGHT_ID_FUNC);
+        devices->lights[LIGHT_INDEX_WIMAX]
+                = get_device(module, LIGHT_ID_WIMAX);
+        devices->lights[LIGHT_INDEX_FLASHLIGHT]
+                = get_device(module, LIGHT_ID_FLASHLIGHT);
     } else {
         memset(devices, 0, sizeof(Devices));
     }
