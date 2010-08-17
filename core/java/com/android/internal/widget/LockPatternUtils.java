@@ -90,7 +90,7 @@ public class LockPatternUtils {
     private final static String LOCKOUT_ATTEMPT_DEADLINE = "lockscreen.lockoutattemptdeadline";
     private final static String PATTERN_EVER_CHOSEN_KEY = "lockscreen.patterneverchosen";
     public final static String PASSWORD_TYPE_KEY = "lockscreen.password_type";
-    private final static String LOCK_PASSWORD_SALT_KEY = "lockscreen.password_salt";    
+    private final static String LOCK_PASSWORD_SALT_KEY = "lockscreen.password_salt";
 
     private final Context mContext;
     private final ContentResolver mContentResolver;
@@ -572,59 +572,67 @@ public class LockPatternUtils {
     public void setTactileFeedbackEnabled(boolean enabled) {
         setBoolean(Settings.Secure.LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED, enabled);
     }
-    
+
     public void setVisibleDotsEnabled(boolean enabled) {
-        setBoolean(Settings.Secure.LOCK_DOTS_VISIBLE, enabled);        
+        setBoolean(Settings.Secure.LOCK_DOTS_VISIBLE, enabled);
     }
-    
+
     public boolean isVisibleDotsEnabled() {
         return getBoolean(Settings.Secure.LOCK_DOTS_VISIBLE, true);
     }
-    
+
     public void setShowErrorPath(boolean enabled) {
-        setBoolean(Settings.Secure.LOCK_SHOW_ERROR_PATH, enabled);        
+        setBoolean(Settings.Secure.LOCK_SHOW_ERROR_PATH, enabled);
     }
-    
+
     public boolean isShowErrorPath() {
         return getBoolean(Settings.Secure.LOCK_SHOW_ERROR_PATH, true);
     }
-    
+
     public void setShowCustomMsg(boolean enabled) {
         setBoolean(Settings.Secure.LOCK_SHOW_CUSTOM_MSG, enabled);
     }
-    
+
     public boolean isShowCustomMsg() {
         return getBoolean(Settings.Secure.LOCK_SHOW_CUSTOM_MSG, false);
     }
-    
+
     public void setCustomMsg(String msg) {
         setString(Settings.Secure.LOCK_CUSTOM_MSG, msg);
     }
-    
+
     public String getCustomMsg() {
         return getString(Settings.Secure.LOCK_CUSTOM_MSG);
     }
-    
+
+    public void setCustomMsgColor(int color) {
+        setInt(Settings.Secure.CUSTOM_MSG_COLOR, color);
+    }
+
+    public int getCustomMsgColor() {
+        return getInt(Settings.Secure.CUSTOM_MSG_COLOR, -1);
+    }
+
     public int getIncorrectDelay() {
         return getInt(Settings.Secure.LOCK_INCORRECT_DELAY, 2000);
     }
-    
+
     public void setIncorrectDelay(int delay) {
         setInt(Settings.Secure.LOCK_INCORRECT_DELAY, delay);
     }
-    
+
     public void setShowUnlockMsg(boolean enabled) {
         setBoolean(Settings.Secure.SHOW_UNLOCK_TEXT, enabled);
     }
-    
+
     public boolean isShowUnlockMsg() {
         return getBoolean(Settings.Secure.SHOW_UNLOCK_TEXT, true);
     }
-    
+
     public void setShowUnlockErrMsg(boolean enabled) {
         setBoolean(Settings.Secure.SHOW_UNLOCK_ERR_TEXT, enabled);
     }
-    
+
     public boolean isShowUnlockErrMsg() {
         return getBoolean(Settings.Secure.SHOW_UNLOCK_ERR_TEXT, true);
     }
