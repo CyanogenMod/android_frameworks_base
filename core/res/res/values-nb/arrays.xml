@@ -1,0 +1,10 @@
+<resources>
+
+    <!-- Defines the shutdown options shown in the reboot dialog. -->
+    <array name="shutdown_reboot_options">
+        <item>Start på nytt</item>
+        <item>Gjenoppretting (recovery)</item>
+        <item>Bootloader</item>
+    </array>
+
+</resources>
