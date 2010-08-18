@@ -2930,12 +2930,6 @@ public final class Settings {
         public static final String CUSTOM_MSG_COLOR = "lock_screen_custom_msg_color";
 
         /**
-         * LOCK_CUSTOM_MSG_COLOR
-         * @hide
-         */
-        public static final String CUSTOM_MSG_COLOR = "lock_screen_custom_msg_color";
-
-        /**
          * Whether assisted GPS should be enabled or not.
          * @hide
          */
