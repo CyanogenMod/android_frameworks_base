@@ -71,7 +71,4 @@
 
     <!-- Default for Settings.System.VIBRATE_IN_SILENT -->
     <bool name="def_vibrate_in_silent">true</bool>
-
-    <!-- Default IME -->
-    <string name="default_input_method">com.android.inputmethod.latin/.LatinIME</string>
 </resources>
