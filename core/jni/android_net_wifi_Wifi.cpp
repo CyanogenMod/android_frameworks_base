@@ -454,8 +454,6 @@ static jboolean android_net_wifi_setBluetoothCoexistenceScanModeCommand(JNIEnv* 
 
 static jboolean android_net_wifi_saveConfigCommand(JNIEnv* env, jobject clazz)
 {
-    // Make sure we never write out a value for AP_SCAN other than 1
-    (void)doBooleanCommand("AP_SCAN 1", "OK");
     return doBooleanCommand("SAVE_CONFIG", "OK");
 }
 
