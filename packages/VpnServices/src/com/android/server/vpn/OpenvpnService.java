@@ -98,7 +98,8 @@ class OpenvpnService extends VpnService<OpenvpnProfile> {
             args.add("--comp-lzo");
         }
         if (p.getRedirectGateway()) {
-            args.add("--redirect-gateway def1");
+            args.add("--redirect-gateway");
+            args.add("def1");
         }
         if (p.getUserAuth()) {
             args.add("--auth-user-pass");
