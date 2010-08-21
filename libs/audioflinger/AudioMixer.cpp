@@ -59,10 +59,10 @@ AudioMixer::AudioMixer(size_t frameCount, uint32_t sampleRate, AudioDSP& dsp)
     track_t* t = mState.tracks;
     for (int i=0 ; i<32 ; i++) {
         t->needs = 0;
-        t->prevVolume[0] = UNITY_GAIN;
-        t->prevVolume[1] = UNITY_GAIN;
         t->volume[0] = UNITY_GAIN;
         t->volume[1] = UNITY_GAIN;
+        t->prevVolume[0] = UNITY_GAIN << 16;
+        t->prevVolume[1] = UNITY_GAIN << 16;
         t->volumeInc[0] = 0;
         t->volumeInc[1] = 0;
         t->channelCount = 2;
