@@ -132,7 +132,10 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Desativar a rede sem fio"</string>
     <string name="screen_lock" msgid="799094655496098153">"Bloquear tela"</string>
     <string name="power_off" msgid="4266614107412865048">"Desligar"</string>
-    <string name="shutdown_progress" msgid="2281079257329981203">"Encerrando…"</string>
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system">Reiniciar</string>
+
+    <string name="shutdown_progress" msgid="2281079257329981203">"Desligando…"</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"O seu telefone será desligado."</string>
     <string name="recent_tasks_title" msgid="3691764623638127888">"Recente"</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"Nenhum aplicativo recente."</string>
