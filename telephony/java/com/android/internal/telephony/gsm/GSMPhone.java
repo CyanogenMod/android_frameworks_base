@@ -1480,4 +1480,7 @@ public class GSMPhone extends PhoneBase {
         Log.e(LOG_TAG, "Error! This functionality is not implemented for GSM.");
     }
 
+    public boolean isCspPlmnEnabled() {
+        return mSIMRecords.isCspPlmnEnabled();
+    }
 }
