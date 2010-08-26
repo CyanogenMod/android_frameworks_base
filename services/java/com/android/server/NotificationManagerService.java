@@ -879,7 +879,8 @@ class NotificationManagerService extends INotificationManager.Stub
 	String[] mPackage = findPackage(pkg);
 	boolean flashLight = true;
 	if(((notification.flags & Notification.FLAG_ONGOING_EVENT) != 0)
-	|| ((notification.flags & Notification.FLAG_FOREGROUND_SERVICE) != 0) ) {
+	|| ((notification.flags & Notification.FLAG_FOREGROUND_SERVICE) != 0)
+	|| pkg.matches("android") ) {
         	flashLight = false;
         } else if(mPackage != null) {
 		if(mPackage[1].equals("none"))
