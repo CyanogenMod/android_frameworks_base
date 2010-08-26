@@ -415,6 +415,14 @@ void PrefetchedSource::cacheMore() {
         return;
     }
 
+    if(mSeekTimeUs >= 0) {
+        buffer->release();
+        buffer = NULL;
+        mCurrentlyPrefetching = false;
+        mCondition.signal();
+        return;
+    }
+
     CHECK(buffer != NULL);
 
     MediaBuffer *copy = new MediaBuffer(buffer->range_length());
