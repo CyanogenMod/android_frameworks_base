@@ -575,7 +575,6 @@ class MountService extends IMountService.Stub
     private void notifyVolumeStateChange(String label, String path, int oldState, int newState) {
         String vs = getVolumeState(path);
         if (DEBUG_EVENTS) Slog.i(TAG, "notifyVolumeStateChanged::" + vs);
-        Slog.i(TAG, String.format("notifyVolumeStateChange %s %s %s %s", label, path, oldState, newState));
 
         Intent in = null;
 
