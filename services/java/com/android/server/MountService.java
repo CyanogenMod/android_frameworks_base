@@ -976,9 +976,9 @@ class MountService extends IMountService.Stub
         }
         return doGetShareMethodAvailable("ums");
     }
-    
+
     private ArrayList<String> getShareableVolumes() {
-        // build.prop will specify additional volumes to mount in the 
+        // build.prop will specify additional volumes to mount in the
         // ro.additionalmounts property.
         // This is a semicolon delimited list of paths. Such as "/emmc;/foo", etc.
         ArrayList<String> volumesToMount = new ArrayList<String>();
