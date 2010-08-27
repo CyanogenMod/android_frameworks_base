@@ -240,17 +240,34 @@ public abstract class WindowOrientationListener {
         // When device is near-vertical (screen approximately facing the horizon)
         private static final int DEFAULT_TIME_CONSTANT_MS = 200;
         // When device is partially tilted towards the sky or ground
-        private static final int TILTED_TIME_CONSTANT_MS = 600;
+        private static final int TILTED_TIME_CONSTANT_MS = 200;
         // When device is under external acceleration, i.e. not just gravity.  We heavily distrust
         // such readings.
-        private static final int ACCELERATING_TIME_CONSTANT_MS = 5000;
+        private static final int ACCELERATING_TIME_CONSTANT_MS = 600;
+
+        // As is, the lowpass was creating an extra cycle in processing
+        // the orientation.
+        //
+        //
+        //
+        //              Y   C1
+        //              |  /
+        //              | / _C2
+        //       X  ____|/____
+        //              |
+        //              |
+        //              |
+        //
+        // We need to make C1 become C2
+        //
+        private static final float FIX_LOWPASS = 1.75f;
 
         private static final float DEFAULT_LOWPASS_ALPHA =
-            (float) SAMPLING_PERIOD_MS / (DEFAULT_TIME_CONSTANT_MS + SAMPLING_PERIOD_MS);
+            (float) (FIX_LOWPASS * SAMPLING_PERIOD_MS) / (DEFAULT_TIME_CONSTANT_MS + SAMPLING_PERIOD_MS);
         private static final float TILTED_LOWPASS_ALPHA =
-            (float) SAMPLING_PERIOD_MS / (TILTED_TIME_CONSTANT_MS + SAMPLING_PERIOD_MS);
+            (float) (FIX_LOWPASS * SAMPLING_PERIOD_MS) / (TILTED_TIME_CONSTANT_MS + SAMPLING_PERIOD_MS);
         private static final float ACCELERATING_LOWPASS_ALPHA =
-            (float) SAMPLING_PERIOD_MS / (ACCELERATING_TIME_CONSTANT_MS + SAMPLING_PERIOD_MS);
+            (float) (FIX_LOWPASS * SAMPLING_PERIOD_MS) / (ACCELERATING_TIME_CONSTANT_MS + SAMPLING_PERIOD_MS);
 
         // The low-pass filtered accelerometer data
         private float[] mFilteredVector = new float[] {0, 0, 0};
@@ -259,19 +276,49 @@ public abstract class WindowOrientationListener {
             return SURFACE_ROTATIONS[mRotation];
         }
 
-        private void calculateNewRotation(int orientation, int tiltAngle) {
-            if (localLOGV) Log.i(TAG, orientation + ", " + tiltAngle + ", " + mRotation);
+        private int testThreshold(int orientation){
+            // This is based on the fact that our threshold ranges
+            // are static.  There is no reason to loop through them
+            // every time.  That would make our runtime O(n).
+            // Working it this way will decrease runtime to something like
+            // O(1)
+            // Get current threshold ranges
             int thresholdRanges[][] = THRESHOLDS[mRotation];
             int row = -1;
-            for (int i = 0; i < thresholdRanges.length; i++) {
-                if (orientation >= thresholdRanges[i][0] && orientation < thresholdRanges[i][1]) {
-                    row = i;
-                    break;
+            boolean transition = false;
+            // Check current rotation is ROTATION_0 which only has 3 threshold
+            // ranges.
+            if (mRotation == ROTATION_0) {
+                if(orientation >= thresholdRanges[0][0] && orientation < thresholdRanges[0][1]){
+                    row = 0;
+                } else if(orientation >= thresholdRanges[1][0] && orientation < thresholdRanges[1][1]){
+                    row = 1;
+                } else if(orientation >= thresholdRanges[2][0] && orientation < thresholdRanges[2][1]){
+                    row = 2;
+                }
+            // Check the other rotation threshold ranges.  Set row accordingly.
+            }else{
+                if(orientation >= thresholdRanges[0][0] && orientation < thresholdRanges[0][1]){
+                    row = 0;
+                } else if(orientation >= thresholdRanges[1][0] && orientation < thresholdRanges[1][1]){
+                    row = 1;
+                } else if(orientation >= thresholdRanges[2][0] && orientation < thresholdRanges[2][1]){
+                    row = 2;
+                } else if(orientation >= thresholdRanges[3][0] && orientation < thresholdRanges[3][1]){
+                    row = 3;
                 }
             }
-            if (row == -1) return; // no matching transition
+            return row;
+        }
+
+        private void calculateNewRotation(int orientation, int tiltAngle) {
+            if (localLOGV) Log.i(TAG, orientation + ", " + tiltAngle + ", " + mRotation);
+
+            int row = testThreshold(orientation);
+            if (row == -1) return;
 
             int rotation = ROTATE_TO[mRotation][row];
+
             if (tiltAngle > MAX_TRANSITION_TILT[rotation]) {
                 // tilted too far flat to go to this rotation
                 return;
@@ -291,6 +338,7 @@ public abstract class WindowOrientationListener {
                      break;
                }
             }
+
             if (!allowed) {
                if (localLOGV) Log.i(TAG, " not allowed rotation = " + rotation);
                return;
