@@ -137,12 +137,31 @@ class StatusBarIcon {
                 ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(dm);
         
                 if (DisplayMetrics.DENSITY_HIGH == dm.densityDpi) {               
-                    mNumberView.setLayoutParams(
-                        new FrameLayout.LayoutParams(
-                            FrameLayout.LayoutParams.WRAP_CONTENT,
-                            FrameLayout.LayoutParams.WRAP_CONTENT,
-                            Gravity.RIGHT | Gravity.CENTER_VERTICAL));
-
+                    switch (Settings.System.getInt(mContext.getContentResolver(),
+                           Settings.System.HDPI_BATTERY_ALIGNMENT, 0))
+                    {
+                        case 0:
+                            mNumberView.setLayoutParams(
+                            new FrameLayout.LayoutParams(
+                                FrameLayout.LayoutParams.WRAP_CONTENT,
+                                FrameLayout.LayoutParams.WRAP_CONTENT,
+                                Gravity.RIGHT | Gravity.CENTER_VERTICAL));
+                            break;
+                        case 1:
+                            mNumberView.setLayoutParams(
+                            new FrameLayout.LayoutParams(
+                                FrameLayout.LayoutParams.WRAP_CONTENT,
+                                FrameLayout.LayoutParams.WRAP_CONTENT,
+                                Gravity.LEFT | Gravity.CENTER_VERTICAL));
+                            break;
+                        case 2:
+                            mNumberView.setLayoutParams(
+                            new FrameLayout.LayoutParams(
+                                FrameLayout.LayoutParams.WRAP_CONTENT,
+                                FrameLayout.LayoutParams.WRAP_CONTENT,
+                                Gravity.CENTER | Gravity.CENTER_VERTICAL));
+                            break;
+                    }
                     mNumberView.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.CENTER_VERTICAL);
                 }
                 else {
