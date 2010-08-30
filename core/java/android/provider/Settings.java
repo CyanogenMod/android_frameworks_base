@@ -2855,10 +2855,14 @@ public final class Settings {
         public static final String HTTP_PROXY = "http_proxy";
 
         /**
-         * If proxy should be active on wifi only
+         * If proxy should be active on wifi
          * @hide
          */
-        public static final String HTTP_PROXY_WIFI_ONLY = "http_proxy_wifi_only";
+        public static final String HTTP_PROXY_WIFI_ON = "http_proxy_wifi_on";
+	/**
+	 * Initialise necessary variables for wifi proxy support.
+	 */
+	public static final String HTTP_PROXY_WIFI = "http_proxy_wifi";
 
         /**
          * Whether the package installer should allow installation of apps downloaded from
