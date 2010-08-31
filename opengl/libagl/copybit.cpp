@@ -531,16 +531,16 @@ bool drawTriangleFanWithCopybit_impl(ogles_context_t* c, GLint first, GLsizei co
     // at this point, we know we are dealing with a rectangle, so we 
     // only need to consider 3 vertices for computing the jacobians
     
-    const int dx01 = v1.x - v0.x;
-    const int dx02 = v2.x - v0.x;
-    const int dy01 = v1.y - v0.y;
-    const int dy02 = v2.y - v0.y;
-    const int ds01 = t1.S - t0.S;
-    const int ds02 = t2.S - t0.S;
-    const int dt01 = t1.T - t0.T;
-    const int dt02 = t2.T - t0.T;
-    const int area = dx01*dy02 - dy01*dx02;
-    int dsdx, dsdy, dtdx, dtdy;
+    const long long dx01 = v1.x - v0.x;
+    const long long dx02 = v2.x - v0.x;
+    const long long dy01 = v1.y - v0.y;
+    const long long dy02 = v2.y - v0.y;
+    const long long ds01 = t1.S - t0.S;
+    const long long ds02 = t2.S - t0.S;
+    const long long dt01 = t1.T - t0.T;
+    const long long dt02 = t2.T - t0.T;
+    const long long area = dx01*dy02 - dy01*dx02;
+    long long dsdx, dsdy, dtdx, dtdy;
     if (area >= 0) {
         dsdx = ds01*dy02 - ds02*dy01;
         dtdx = dt01*dy02 - dt02*dy01;
