@@ -334,10 +334,6 @@ EffectTone::EffectTone()
 }
 
 EffectTone::~EffectTone() {
-    for (int32_t i = 0; i < 4; i ++) {
-        delete &mFilterL[i];
-        delete &mFilterR[i];
-    }
 }
 
 void EffectTone::configure(const float samplingFrequency) {
@@ -402,10 +398,6 @@ EffectHeadphone::EffectHeadphone()
 
 EffectHeadphone::~EffectHeadphone()
 {
-    delete &mReverbDelayL;
-    delete &mReverbDelayR;
-    delete &mLowpassL;
-    delete &mLowpassR;
 }
 
 void EffectHeadphone::configure(const float samplingFrequency) {
@@ -414,8 +406,7 @@ void EffectHeadphone::configure(const float samplingFrequency) {
     mReverbDelayL.setParameters(mSamplingFrequency, 0.030f);
     mReverbDelayR.setParameters(mSamplingFrequency, 0.030f);
     /* the -3 dB point is around 650 Hz, giving about 300 us to work with */
-    mLowpassL.setHighShelf(800.0f, mSamplingFrequency, -12.0f, 0.72f);
-    mLowpassR.setHighShelf(800.0f, mSamplingFrequency, -12.0f, 0.72f);
+    mLowpass.setHighShelf(850.0f, mSamplingFrequency, -10.0f, 0.72f);
     /* Rockbox has a 0.3 ms delay line (13 samples at 44100 Hz), but
      * I think it makes the whole effect sound pretty bad so I skipped it! */
 }
@@ -469,14 +460,13 @@ void EffectHeadphone::process(int32_t* inout, int32_t frames)
         dataL += dryL;
         dataR += dryR;
 
-        /* Lowpass filter to estimate head shadow. */
-        dataL = mLowpassL.process(dataL >> fixedPointDecimals);
-        dataR = mLowpassR.process(dataR >> fixedPointDecimals);
+        /* Lowpass filter difference to estimate head shadow. */
+        int32_t diff = mLowpass.process((dataL - dataR) >> fixedPointDecimals);
         /* 28 bits */
         
-        /* Mix right-to-left and vice versa. */
-        inout[0] += dataR >> 1;
-        inout[1] += dataL >> 1;
+        /* Mix difference between channels. */
+        inout[0] = dataL - (diff >> 1);
+        inout[1] = dataR + (diff >> 1);
         inout += 2;
     }
 }
@@ -507,9 +497,6 @@ AudioDSP::AudioDSP()
 
 AudioDSP::~AudioDSP()
 {
-    delete &mCompression;
-    delete &mTone;
-    delete &mHeadphone;
 }
 
 void AudioDSP::configure(const float samplingRate)

@@ -120,7 +120,7 @@ class EffectHeadphone : public Effect {
 
     Delay mReverbDelayL, mReverbDelayR;
     int32_t mDelayDataL, mDelayDataR;
-    Biquad mLowpassL, mLowpassR;
+    Biquad mLowpass;
 
     public:
     EffectHeadphone();
