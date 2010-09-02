@@ -68,7 +68,7 @@ class OpenvpnService extends VpnService<OpenvpnProfile> {
             args.add("tun");
         }
         args.add("--remote");
-        args.add(getProfile().getServerName());
+        args.add(p.getServerName());
         args.add("--nobind");
         args.add("--proto");
         args.add(p.getProto());
