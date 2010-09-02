@@ -298,6 +298,10 @@ public class StatusBarPolicy {
     private IconData mVolumeData;
     private boolean mVolumeVisible;
 
+    // headset
+    private IBinder mHeadsetIcon;
+    private IconData mHeadsetData;
+
     // bluetooth device status
     private IBinder mBluetoothIcon;
     private IconData mBluetoothData;
@@ -404,6 +408,9 @@ public class StatusBarPolicy {
             else if (action.equals(AudioManager.RINGER_MODE_CHANGED_ACTION) ||
                     action.equals(AudioManager.VIBRATE_SETTING_CHANGED_ACTION)) {
                 updateVolume();
+            }
+            else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                updateHeadset(intent);
             }
             else if (action.equals(TelephonyIntents.ACTION_SIM_STATE_CHANGED)) {
                 updateSimState(intent);
@@ -531,6 +538,12 @@ public class StatusBarPolicy {
         service.setIconVisibility(mVolumeIcon, false);
         updateVolume();
 
+        // headset
+        mHeadsetData = IconData.makeIcon("headset",
+                null, com.android.internal.R.drawable.stat_sys_headset, 0, 0);
+        mHeadsetIcon = service.addIcon(mHeadsetData, null);
+        service.setIconVisibility(mHeadsetIcon, false);
+
         IntentFilter filter = new IntentFilter();
 
         // Register for Intent broadcasts for...
@@ -544,6 +557,7 @@ public class StatusBarPolicy {
         filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
         filter.addAction(Intent.ACTION_ALARM_CHANGED);
         filter.addAction(Intent.ACTION_SYNC_STATE_CHANGED);
+        filter.addAction(Intent.ACTION_HEADSET_PLUG);
         filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
         filter.addAction(AudioManager.VIBRATE_SETTING_CHANGED_ACTION);
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
@@ -1236,6 +1250,11 @@ public class StatusBarPolicy {
             mService.setIconVisibility(mVolumeIcon, visible);
             mVolumeVisible = visible;
         }
+    }
+
+    private final void updateHeadset(Intent intent) {
+        int state = intent.getIntExtra("state", 0);
+        mService.setIconVisibility(mHeadsetIcon, (state == 1));
     }
 
     private final void updateBluetooth(Intent intent) {
