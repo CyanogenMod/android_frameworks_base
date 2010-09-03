@@ -5800,6 +5800,8 @@ public class WindowManagerService extends IWindowManager.Stub
                 // timeout checks from now; otherwise look at whether we timed
                 // out before awakening.
                 if (mWasFrozen) {
+                    // Set startTime to the current time in addition to setting waitedFor to zero.
+                    startTime = SystemClock.uptimeMillis();
                     waitedFor = 0;
                     mWasFrozen = false;
                 } else {
