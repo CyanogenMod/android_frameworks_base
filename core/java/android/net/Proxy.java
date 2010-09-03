@@ -99,6 +99,61 @@ final public class Proxy {
     }
 
     /**
+     * Return the proxy host set by the user.
+     * @param ctx A Context used to get the settings for the proxy host.
+     * @return String containing the host name. If the user did not set a host
+     *         name it returns the default host. A null value means that no
+     *         host is to be used.
+     * WIFI addition by Revoked test
+     */
+    static final public String getWifiHost(Context ctx) {
+        ContentResolver contentResolver = ctx.getContentResolver();
+        Assert.assertNotNull(contentResolver);
+        String host = Settings.Secure.getString(
+                contentResolver,
+                Settings.Secure.HTTP_PROXY_WIFI);
+        if (host != null && !host.equals("")) {
+            int i = host.indexOf(':');
+            if (i == -1) {
+                if (DEBUG) {
+                    Assert.assertTrue(host.length() == 0);
+                }
+                return null;
+            }
+            return host.substring(0, i);
+        }
+        return null;
+    }
+
+    /**
+     * Return the proxy port set by the user.
+     * @param ctx A Context used to get the settings for the proxy port.
+     * @return The port number to use or -1 if no proxy is to be used.
+     * WIFI addition by Revoked test
+     */
+    static final public int getWifiPort(Context ctx) {
+        ContentResolver contentResolver = ctx.getContentResolver();
+        Assert.assertNotNull(contentResolver);
+        String host = Settings.Secure.getString(
+                contentResolver,
+                Settings.Secure.HTTP_PROXY_WIFI);
+        if (host != null) {
+            int i = host.indexOf(':');
+            if (i == -1) {
+                if (DEBUG) {
+                    Assert.assertTrue(host.length() == 0);
+                }
+                return -1;
+            }
+            if (DEBUG) {
+                Assert.assertTrue(i < host.length());
+            }
+            return Integer.parseInt(host.substring(i+1));
+        }
+        return 0;
+    }
+
+    /**
      * Return the default proxy host specified by the carrier.
      * @return String containing the host name or null if there is no proxy for
      * this carrier.
@@ -132,7 +187,7 @@ final public class Proxy {
     /**
      * Returns the preferred proxy to be used by clients. This is a wrapper
      * around {@link android.net.Proxy#getHost()}. No proxy will be returned
-     * for localhost, and Settings.Secure.HTTP_PROXY_WIFI_ONLY will be checked
+     * for localhost, and Settings.Secure.HTTP_PROXY_WIFI_ON will be checked
      * if the user is on wifi.
      *
      * @param context the context which will be passed to
@@ -147,14 +202,22 @@ final public class Proxy {
      */
     static final public HttpHost getPreferredHttpHost(Context context,
             String url) {
+
+        String proxyHost = null;
+        int proxyPort = 0;
+
         if (!isLocalHost(url)) {
-            if (isProxyForWifiOnly(context) && !isNetworkWifi(context)) {
-                return null;
+            if (!isNetworkWifi(context)) {
+                proxyHost = Proxy.getHost(context);
+                proxyPort = Proxy.getPort(context);
+            }
+            else if (isProxyForWifiOn(context) && isNetworkWifi(context)) {
+                proxyHost = Proxy.getWifiHost(context);
+                proxyPort = Proxy.getWifiPort(context);
             }
 
-            final String proxyHost = Proxy.getHost(context);
             if (proxyHost != null) {
-                return new HttpHost(proxyHost, Proxy.getPort(context), "http");
+                return new HttpHost(proxyHost, proxyPort, "http");
             }
         }
 
@@ -210,10 +273,11 @@ final public class Proxy {
      * @return if we should only proxy while on wifi
      * @hide
      */
-    static final public boolean isProxyForWifiOnly(Context ctx) {
+    static final public boolean isProxyForWifiOn(Context ctx) {
         boolean ret = Settings.Secure.getInt(ctx.getContentResolver(),
-                Settings.Secure.HTTP_PROXY_WIFI_ONLY, 1) != 0;
+                Settings.Secure.HTTP_PROXY_WIFI_ON, 1) != 0;
         return ret;
     }
 
 };
+
