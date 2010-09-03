@@ -406,7 +406,8 @@ void EffectHeadphone::configure(const float samplingFrequency) {
     mReverbDelayL.setParameters(mSamplingFrequency, 0.030f);
     mReverbDelayR.setParameters(mSamplingFrequency, 0.030f);
     /* the -3 dB point is around 650 Hz, giving about 300 us to work with */
-    mLowpass.setHighShelf(850.0f, mSamplingFrequency, -10.0f, 0.72f);
+    mLocalizationL.setHighShelf(800.0f, mSamplingFrequency, -11.0f, 0.72f);
+    mLocalizationR.setHighShelf(800.0f, mSamplingFrequency, -11.0f, 0.72f);
     /* Rockbox has a 0.3 ms delay line (13 samples at 44100 Hz), but
      * I think it makes the whole effect sound pretty bad so I skipped it! */
 }
@@ -437,6 +438,7 @@ void EffectHeadphone::process(int32_t* inout, int32_t frames)
         /* 28 bits */
         
         if (mDeep) {
+            /* Note: a pinking filter here would be good. */
             dataL += mDelayDataR;
             dataR += mDelayDataL;
         }
@@ -460,13 +462,29 @@ void EffectHeadphone::process(int32_t* inout, int32_t frames)
         dataL += dryL;
         dataR += dryR;
 
-        /* Lowpass filter difference to estimate head shadow. */
-        int32_t diff = mLowpass.process((dataL - dataR) >> fixedPointDecimals);
+        /* In matrix decoding, center channel is mixed at 0.7 and the main channel at 1.
+         * It follows that the sum of them is 1.7, and the proportion of the main channel
+         * must be 1 / 1.7, or about 6/10. Assuming it is so, 4/10 is the contribution
+         * of center, and when 2 channels are combined, the scaler is 2/10 or 1/5.
+         *
+         * We could try to dynamically adjust this divisor based on cross-correlation
+         * between left/right channels, which would allow us to recover a reasonable
+         * estimate of the music's original center channel. */
+        int32_t center = (dataL + dataR) / 5;
+        int32_t directL = (dataL - center);
+        int32_t directR = (dataR - center);
+
+        /* We assume center channel reaches both ears with no coloration required.
+         * We could also handle it differently at reverb stage... */
+
+        /* Apply localization filter. */
+        int32_t localizedL = mLocalizationL.process(directL >> fixedPointDecimals);
+        int32_t localizedR = mLocalizationR.process(directR >> fixedPointDecimals);
         /* 28 bits */
         
-        /* Mix difference between channels. */
-        inout[0] = dataL - (diff >> 1);
-        inout[1] = dataR + (diff >> 1);
+        /* Mix difference between channels. dataX = directX + center. */
+        inout[0] = dataL + localizedR;
+        inout[1] = dataR + localizedL;
         inout += 2;
     }
 }
