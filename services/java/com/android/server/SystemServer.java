@@ -64,6 +64,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.lang.reflect.Constructor;
 
+/* TI-OMAP custom package */
+import com.ti.omap.omap_mm_library.UiCloningService;
+
 class ServerThread extends Thread {
     private static final String TAG = "SystemServer";
     private final static boolean INCLUDE_DEMO = false;
@@ -132,11 +135,13 @@ class ServerThread extends Thread {
         BluetoothHidService bluetoothHid = null;
         BluetoothNetworkService bluetoothNetwork = null;
         HeadsetObserver headset = null;
+        HDMIObserver hdmi = null;
         DockObserver dock = null;
         UsbService usb = null;
         UiModeManagerService uiMode = null;
         RecognitionManagerService recognition = null;
         ThrottleService throttle = null;
+        UiCloningService uiCloning = null;
         RingerSwitchObserver ringer = null;
 
         // Critical services...
@@ -427,6 +432,14 @@ class ServerThread extends Thread {
             }
 
             try {
+                Slog.i(TAG, "HDMI Observer");
+                // Listen for hdmi changes
+                hdmi = new HDMIObserver(context);
+            } catch (Throwable e) {
+                Slog.e(TAG, "Failure starting HDMIObserver", e);
+            }
+
+            try {
                 Slog.i(TAG, "Dock Observer");
                 // Listen for dock station changes
                 dock = new DockObserver(context, power);
@@ -518,6 +531,17 @@ class ServerThread extends Thread {
                         Slog.i(TAG, "Vendor service " + className + " started.");
                     } catch (Exception e) {
                         Slog.e(TAG, "Starting vendor service " + className + " failed.", e);
+                    }
+                }
+            }
+
+            if (SystemProperties.OMAP_ENHANCEMENT ) {
+                if(SystemProperties.getBoolean("tv.hdmi.uicloning.enable", false)) {
+                    try {
+                        Slog.i(TAG, "UiCloningService");
+                        uiCloning = new UiCloningService(context);
+                    } catch (Throwable e) {
+                        Slog.e(TAG, "Failure starting UiCloningService", e);
                     }
                 }
             }

@@ -50,6 +50,10 @@ public final class UiCloningService {
     private class UiCloningBroadcastReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (intent == null) {
+                Log.e(TAG, "UiCloningBroadcastReceiver intent is NULL!");
+                return;
+            }
             String action = intent.getAction();
 
             if (action.equals(ACTION_HDMI_PLUG)) {
