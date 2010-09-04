@@ -105,6 +105,7 @@ final public class Proxy {
      *         name it returns the default host. A null value means that no
      *         host is to be used.
      * WIFI addition by Revoked test
+     * @hide
      */
     static final public String getWifiHost(Context ctx) {
         ContentResolver contentResolver = ctx.getContentResolver();
@@ -130,6 +131,7 @@ final public class Proxy {
      * @param ctx A Context used to get the settings for the proxy port.
      * @return The port number to use or -1 if no proxy is to be used.
      * WIFI addition by Revoked test
+     * @hide
      */
     static final public int getWifiPort(Context ctx) {
         ContentResolver contentResolver = ctx.getContentResolver();

@@ -2861,6 +2861,7 @@ public final class Settings {
         public static final String HTTP_PROXY_WIFI_ON = "http_proxy_wifi_on";
 	/**
 	 * Initialise necessary variables for wifi proxy support.
+     * @hide
 	 */
 	public static final String HTTP_PROXY_WIFI = "http_proxy_wifi";
 
