@@ -81,6 +81,8 @@ static int getCallingPid() {
     return IPCThreadState::self()->getCallingPid();
 }
 
+static bool cleanOldclient = false;
+
 // ----------------------------------------------------------------------------
 
 void CameraService::instantiate() {
@@ -129,8 +131,14 @@ sp<ICamera> CameraService::connect(const sp<ICameraClient>& cameraClient)
                     currentClient->mClientPid, currentCameraClient->asBinder().get());
                 if (kill(currentClient->mClientPid, 0) == -1 && errno == ESRCH) {
                     LOGV("The old client is dead!");
+                    LOGE("forcefully terminating old client.. ref count ", currentClient->getStrongCount());
+                    cleanOldclient = true;
+                    mServiceLock.unlock();
+
+                    currentClient->disconnect();
+                    cleanOldclient = false;
                 }
-                return client;
+                else return client;
             }
         } else {
             // can't promote, the previous client has died...
@@ -144,7 +152,7 @@ sp<ICamera> CameraService::connect(const sp<ICameraClient>& cameraClient)
         LOGV("Still have client, rejected");
         return client;
     }
-
+    LOGV("creating new client");
     // create a new Client object
     client = new Client(this, cameraClient, callingPid);
     mClient = client;
@@ -396,12 +404,14 @@ void CameraService::Client::disconnect()
     LOGV("Client::disconnect() E (pid %d client %p)",
             callingPid, getCameraClient()->asBinder().get());
 
-    Mutex::Autolock lock(mLock);
+    if(!cleanOldclient)
+        Mutex::Autolock lock(mLock);
+
     if (mClientPid <= 0) {
         LOGV("camera is unlocked (mClientPid = %d), don't tear down hardware", mClientPid);
         return;
     }
-    if (checkPid() != NO_ERROR) {
+    if (!cleanOldclient && checkPid() != NO_ERROR) {
         LOGV("Different client - don't disconnect");
         return;
     }
