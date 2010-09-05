@@ -3399,7 +3399,7 @@ bool AudioFlinger::RecordThread::threadLoop()
                     // ditherAndClamp() works as long as all buffers returned by mActiveTrack->getNextBuffer()
                     // are 32 bit aligned which should be always true.
                     if (mChannelCount == 2 && mReqChannelCount == 1) {
-                        AudioMixer::ditherAndClamp(mRsmpOutBuffer, mRsmpOutBuffer, framesOut);
+                        AudioMixer::ditherAndClamp(&dither, mRsmpOutBuffer, mRsmpOutBuffer, framesOut);
                         // the resampler always outputs stereo samples: do post stereo to mono conversion
                         int16_t *src = (int16_t *)mRsmpOutBuffer;
                         int16_t *dst = buffer.i16;
@@ -3408,7 +3408,7 @@ bool AudioFlinger::RecordThread::threadLoop()
                             src += 2;
                         }
                     } else {
-                        AudioMixer::ditherAndClamp((int32_t *)buffer.raw, mRsmpOutBuffer, framesOut);
+                        AudioMixer::ditherAndClamp(&dither, (int32_t *)buffer.raw, mRsmpOutBuffer, framesOut);
                     }
 
                 }
