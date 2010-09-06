@@ -19,6 +19,7 @@
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
 
+    android:paddingRight="11dip"
     android:paddingLeft="11dip"
     android:paddingTop="6dip"
     android:paddingBottom="6dip"
@@ -29,6 +30,7 @@
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
         android:layout_marginRight="9dip"
             />
 
