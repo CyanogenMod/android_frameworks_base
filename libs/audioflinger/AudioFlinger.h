@@ -43,6 +43,7 @@
 
 #include "AudioBufferProvider.h"
 #include "AudioDSP.h"
+#include "AudioMixer.h"
 
 namespace android {
 
@@ -766,6 +767,7 @@ private:
                 int                                 mReqChannelCount;
                 uint32_t                            mReqSampleRate;
                 ssize_t                             mBytesRead;
+                dither_t                            dither;
     };
 
     class RecordHandle : public android::BnAudioRecord {

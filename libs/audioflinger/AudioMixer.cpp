@@ -38,10 +38,10 @@ static inline int16_t clamp16(int32_t sample)
     return sample;
 }
 
-inline static int32_t prng() {
-    static int32_t seed = 1;
-    seed = (seed * 12345) + 1103515245;
-    return int32_t(seed & 0xfff);
+inline static uint32_t prng() {
+    static uint32_t seed = 22222;
+    seed = (seed * 196314165) + 907633515;
+    return seed >> 20;
 }
 
 // ----------------------------------------------------------------------------
@@ -621,24 +621,51 @@ void AudioMixer::track__16BitsMono(track_t* t, int32_t* out, size_t frameCount, 
     t->in = in;
 }
 
-void AudioMixer::ditherAndClamp(int32_t* out, int32_t const *sums, size_t c)
+int32_t AudioMixer::lipshitz(int32_t* state, int32_t input)
 {
-    int32_t oldDitherValue = prng();
+#define COEFF(x) int32_t(x * 4096.0f + 0.5f)
+    int32_t output =
+          COEFF(-2.033f) * input
+        + COEFF(+2.165f) * state[0]
+        + COEFF(-1.959f) * state[1]
+        + COEFF(+1.590f) * state[2]
+        + COEFF(-0.6149f) * state[3];
+#undef COEFF
+
+    state[3] = state[2];
+    state[2] = state[1];
+    state[1] = state[0];
+    state[0] = input;
+
+    return output >> 12;
+}
+
+
+void AudioMixer::ditherAndClamp(dither_t* state, int32_t* out, int32_t const *sums, size_t c)
+{
     for (size_t i=0 ; i<c ; i++) {
         int32_t l = *sums++;
         int32_t r = *sums++;
 
-        /* Apply dither to output. This is the high-passed triangular
-         * probability density function, discussed in "A Theory of
-         * Nonsubtractive Dither", by Robert A. Wannamaker et al. */
-        int32_t ditherValue = prng();
-        int32_t dithering = oldDitherValue - ditherValue;
-        oldDitherValue = ditherValue;
+        /* Noise-shaped dither function. */
 
-        int32_t nl = (l + ditherValue) >> 12;
-        int32_t nr = (r + ditherValue) >> 12;
-        l = clamp16(nl);
-        r = clamp16(nr);
+        /* High-passed Triangular PDF according to
+         * "A Theory of Nonsubtractive Dither" by Robert Wannamaker et al.
+         * Other software seems to prefer (prng() + prng()) >> 1 as the
+         * random source, which they highpass, but that distribution is not
+         * triangular. */
+        int32_t newDither = prng();
+        int32_t dithering = newDither - state->oldDither;
+        state->oldDither = newDither;
+
+        l += lipshitz(state->lipshitzL, state->errorL) + dithering;
+        r += lipshitz(state->lipshitzR, state->errorR) + dithering;
+        state->errorL = l & 0xfff;
+        state->errorR = r & 0xfff;
+
+        l = clamp16(l >> 12);
+        r = clamp16(r >> 12);
+
         *out++ = (r<<16) | (l & 0xFFFF);
     }
 }
@@ -721,7 +748,7 @@ void AudioMixer::process__genericNoResampling(state_t* state, void* output, Audi
         }
 
         dsp.process(outTemp, BLOCKSIZE);
-        ditherAndClamp(out, outTemp, BLOCKSIZE);
+        ditherAndClamp(&state->dither, out, outTemp, BLOCKSIZE);
         out += BLOCKSIZE;
         numFrames -= BLOCKSIZE;
     } while (numFrames);
@@ -778,7 +805,7 @@ void AudioMixer::process__genericResampling(state_t* state, void* output, AudioD
     }
 
     dsp.process(outTemp, numFrames);
-    ditherAndClamp(out, outTemp, numFrames);
+    ditherAndClamp(&state->dither, out, outTemp, numFrames);
 }
 
 // ----------------------------------------------------------------------------
