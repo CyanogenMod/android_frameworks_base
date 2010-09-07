@@ -269,6 +269,15 @@ android_media_MediaRecorder_setCameraParameters(JNIEnv *env, jobject thiz, jstri
 }
 
 static void
+android_media_MediaRecorder_autoFocusCamera(JNIEnv *env, jobject thiz)
+{
+    LOGV("autoFocusCamera()");
+
+    sp<MediaRecorder> mr = getMediaRecorder(env, thiz);
+    process_media_recorder_call(env, mr->autoFocusCamera(), "java/lang/RuntimeException", "autoFocusCamera failed.");
+}
+
+static void
 android_media_MediaRecorder_setOutputFileFD(JNIEnv *env, jobject thiz, jobject fileDescriptor, jlong offset, jlong length)
 {
     LOGV("setOutputFile");
@@ -480,6 +489,7 @@ static JNINativeMethod gMethods[] = {
     {"setAudioEncoder",      "(I)V",                            (void *)android_media_MediaRecorder_setAudioEncoder},
     {"setParameter",         "(Ljava/lang/String;)V",           (void *)android_media_MediaRecorder_setParameter},
     {"setCameraParameters",         "(Ljava/lang/String;)V",           (void *)android_media_MediaRecorder_setCameraParameters},
+    {"autoFocusCamera",      "()V",                             (void *)android_media_MediaRecorder_autoFocusCamera},
     {"_setOutputFile",       "(Ljava/io/FileDescriptor;JJ)V",   (void *)android_media_MediaRecorder_setOutputFileFD},
     {"setVideoSize",         "(II)V",                           (void *)android_media_MediaRecorder_setVideoSize},
     {"setVideoFrameRate",    "(I)V",                            (void *)android_media_MediaRecorder_setVideoFrameRate},
