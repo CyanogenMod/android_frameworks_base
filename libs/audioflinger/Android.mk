@@ -90,6 +90,10 @@ LOCAL_SHARED_LIBRARIES := \
     libmedia \
     libhardware_legacy
 
+ifeq ($(ARCH_ARM_HAVE_VFP),true)
+    LOCAL_CFLAGS += -D__ARM_HAVE_VFP
+endif
+
 ifeq ($(strip $(BOARD_USES_GENERIC_AUDIO)),true)
   LOCAL_STATIC_LIBRARIES += libaudiointerface libaudiopolicybase
   LOCAL_CFLAGS += -DGENERIC_AUDIO
