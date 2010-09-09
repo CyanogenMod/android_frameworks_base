@@ -2284,4 +2284,7 @@
 
     <!-- Reboot recommended after applying color changes (CM) -->
     <string name="toast_reboot_recommend">Caution: Reboot recommended after finishing customization!</string>
+
+    <!--Application killed toast -->
+    <string name="app_killed_message">Application killed</string>
 </resources>
