@@ -868,4 +868,6 @@
 
     <!-- Reboot recommended after applying color changes (CM) -->
     <string name="toast_reboot_recommend">Attenzione: Riavvio richiesto dopo aver finito la personalizzazione!</string>
+    <!--Application killed toast -->
+    <string name="app_killed_message">Applicazione terminata</string>
 </resources>
