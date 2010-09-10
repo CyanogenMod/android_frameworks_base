@@ -74,6 +74,7 @@ import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Random;
 
 //For Notification Colors.
@@ -141,6 +142,18 @@ class NotificationManagerService extends INotificationManager.Stub
     private boolean mBatteryFull;
     private int mBatteryLevel;
     private NotificationRecord mLedNotification;
+
+    private boolean mQuietHoursEnabled = false;
+    // Minutes from midnight when quiet hours begin.
+    private int mQuietHoursStart = 0;
+    // Minutes from midnight when quiet hours end.
+    private int mQuietHoursEnd = 0;
+    // Don't play sounds.
+    private boolean mQuietHoursMute = true;
+    // Don't vibrate.
+    private boolean mQuietHoursStill = true;
+    // Dim LED if hardware supports it.
+    private boolean mQuietHoursDim = true;
 
     private static final int BATTERY_LOW_ARGB = 0xFFFF0000; // Charging Low - red solid on
     private static final int BATTERY_MEDIUM_ARGB = 0xFFFFFF00;    // Charging - orange solid on
@@ -414,6 +427,18 @@ class NotificationManagerService extends INotificationManager.Stub
                     Settings.Secure.ADB_ENABLED), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_LIGHT_PULSE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QUIET_HOURS_ENABLED), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QUIET_HOURS_START), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QUIET_HOURS_END), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QUIET_HOURS_MUTE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QUIET_HOURS_STILL), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.QUIET_HOURS_DIM), false, this);
             update();
         }
 
@@ -435,6 +460,19 @@ class NotificationManagerService extends INotificationManager.Stub
                 mNotificationPulseEnabled = pulseEnabled;
                 updateNotificationPulse();
             }
+
+            mQuietHoursEnabled = Settings.System.getInt(resolver,
+                        Settings.System.QUIET_HOURS_ENABLED, 0) != 0;
+            mQuietHoursStart = Settings.System.getInt(resolver,
+                        Settings.System.QUIET_HOURS_START, 0);
+            mQuietHoursEnd = Settings.System.getInt(resolver,
+                        Settings.System.QUIET_HOURS_END, 0);
+            mQuietHoursMute = Settings.System.getInt(resolver,
+                        Settings.System.QUIET_HOURS_MUTE, 0) != 0;
+            mQuietHoursStill = Settings.System.getInt(resolver,
+                        Settings.System.QUIET_HOURS_STILL, 0) != 0;
+            mQuietHoursDim = Settings.System.getInt(resolver,
+                        Settings.System.QUIET_HOURS_DIM, 0) != 0;
         }
     }
 
@@ -714,6 +752,21 @@ class NotificationManagerService extends INotificationManager.Stub
         }
 
         synchronized (mNotificationList) {
+            final boolean inQuietHours;
+            if (mQuietHoursEnabled && (mQuietHoursStart != mQuietHoursEnd)) {
+                // Get the date in "quiet hours" format.
+                Calendar c = Calendar.getInstance();
+                int minutes = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE);
+                if (mQuietHoursEnd < mQuietHoursStart) {
+                    // Starts at night, ends in the morning.
+                    inQuietHours = (minutes > mQuietHoursStart) || (minutes < mQuietHoursEnd);
+                } else {
+                    inQuietHours = (minutes > mQuietHoursStart) && (minutes < mQuietHoursEnd);
+                }
+            } else {
+                inQuietHours = false;
+            }
+
             NotificationRecord r = new NotificationRecord(pkg, tag, id, notification);
             NotificationRecord old = null;
 
@@ -808,7 +861,7 @@ class NotificationManagerService extends INotificationManager.Stub
                 // sound
                 final boolean useDefaultSound =
                     (notification.defaults & Notification.DEFAULT_SOUND) != 0;
-                if (useDefaultSound || notification.sound != null) {
+                if ((inQuietHours && !mQuietHoursMute) && (useDefaultSound || notification.sound != null)) {
                     Uri uri;
                     if (useDefaultSound) {
                         uri = Settings.System.DEFAULT_NOTIFICATION_URI;
@@ -839,7 +892,7 @@ class NotificationManagerService extends INotificationManager.Stub
                 // vibrate
                 final boolean useDefaultVibrate =
                     (notification.defaults & Notification.DEFAULT_VIBRATE) != 0;
-                if ((useDefaultVibrate || notification.vibrate != null)
+                if ((inQuietHours && !mQuietHoursStill) && (useDefaultVibrate || notification.vibrate != null)
                         && audioManager.shouldVibrate(AudioManager.VIBRATE_TYPE_NOTIFICATION)) {
                     mVibrateNotification = r;
 
@@ -849,7 +902,17 @@ class NotificationManagerService extends INotificationManager.Stub
                 }
             }
 
-            // this option doesn't shut off the lights
+            // Adjust the LED for quiet hours
+            if (inQuietHours && mQuietHoursDim) {
+                // Cut all of the channels by a factor of 16 to dim on capable hardware.
+                // Note that this should fail gracefully on other hardware.
+                int argb = notification.ledARGB;
+                int red = (((argb & 0xFF0000) >>> 16) >>> 4);
+                int green = (((argb & 0xFF00) >>> 8 ) >>> 4);
+                int blue = ((argb & 0xFF) >>> 4);
+
+                notification.ledARGB = (0xFF000000 | (red << 16) | (green << 8) | blue);
+            }
 
             // light
             // the most recent thing gets the light
@@ -857,18 +920,11 @@ class NotificationManagerService extends INotificationManager.Stub
             if (mLedNotification == old) {
                 mLedNotification = null;
             }
-	    //updatePackageList(pkg);
-            //Slog.i(TAG, "notification.lights="
-            //        + ((old.notification.lights.flags & Notification.FLAG_SHOW_LIGHTS) != 0));
-	    //if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0) {
-            if(checkLight(notification, pkg)) {
-	        mLights.add(r);
+            if (checkLight(notification, pkg)) {
+                mLights.add(r);
                 updateLightsLocked();
-            } else {
-		if (old != null) {
-			if(checkLight(old.notification, old.pkg))
-				updateLightsLocked();
-                }
+            } else if (old != null && checkLight(old.notification, old.pkg)) {
+                updateLightsLocked();
             }
         }
 
