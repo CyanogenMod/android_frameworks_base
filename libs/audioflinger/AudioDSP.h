@@ -23,8 +23,25 @@
 
 namespace android {
 
+class EffectCompressionInt;
+class EffectCompressionFloat;
+class BiquadFloat;
+class BiquadInt;
+
+/* Select appropriate types and implementations of primitives. */
+#if defined(__ARM_HAVE_VFP)
+typedef BiquadFloat Biquad;
+typedef EffectCompressionFloat EffectCompression;
+typedef float sample_t;
+#else
+typedef BiquadInt Biquad;
+typedef EffectCompressionInt EffectCompression;
+typedef int32_t sample_t;
+#endif
+
+/* Trickery with sample_t suffices; no separate float/int implementations. */
 class Delay {
-    int32_t* mState;
+    sample_t* mState;
     int32_t mIndex;
     int32_t mLength;
 
@@ -32,12 +49,13 @@ class Delay {
     Delay();
     ~Delay();
     void setParameters(float rate, float time);
-    int32_t process(int32_t x0);
+    sample_t process(sample_t x0);
 };
 
+/* Trickery with sample_t suffices; no separate float/int implementations. */
 class Allpass {
-    int32_t mK;
-    int32_t* mState;
+    sample_t mK;
+    sample_t* mState;
     int32_t mIndex;
     int32_t mLength;
 
@@ -45,32 +63,60 @@ class Allpass {
     Allpass();
     ~Allpass();
     void setParameters(float rate, float k, float time);
-    int32_t process(int32_t x0);
+    sample_t process(sample_t x0);
 };
 
-class Biquad {
-    union {
-        struct {
-            int32_t mA, mB, mY, mX;
-        } i32;
-        struct {
-            int16_t mA1, mA2, mB1, mB2, mY1, mY2, mX1, mX2;
-        } i16;
-    } state;
-    int16_t mB0, mY0;
-
-    void setCoefficients(float a0, float a1, float a2, float b0, float b1, float b2);
+/* Separate implementations for float, int and arm assembly. */
+class BiquadBase {
+    protected:
+    virtual ~BiquadBase() = 0;
+    virtual void setCoefficients(float a0, float a1, float a2, float b0, float b1, float b2) = 0;
 
     public:
-    Biquad();
     void setRC(float cf, float sf);
     void setPeakingEqualizer(float cf, float sf, float gain, float bw);
     void setBandPass(float cf, float sf, float resonance);
     void setLowShelf(float cf, float sf, float gain, float slope);
     void setHighShelf(float cf, float sf, float gain, float slope);
     void setHighShelf1(float cf, float sf, float gain);
+    virtual void reset() = 0;
+};
+
+class BiquadInt : public BiquadBase {
+    private:
+    union {
+        struct {
+            int32_t mA, mB;
+            int32_t mX, mY;
+        } i32;
+        struct {
+            int16_t mA1, mA2, mB1, mB2;
+            int16_t mX1, mX2, mY1, mY2;
+        } i16;
+    } state;
+    int16_t mB0, mY0;
+
+    protected:
+    void setCoefficients(float a0, float a1, float a2, float b0, float b1, float b2);
+
+    public:
+    BiquadInt();
+    int32_t process(int32_t x0);
     void reset();
-    int32_t process(int16_t x0);
+};
+
+class BiquadFloat : public BiquadBase {
+    private:
+    float mA1, mA2, mB0, mB1, mB2;
+    float mX1, mX2, mY0, mY1, mY2;
+    
+    protected:
+    void setCoefficients(float a0, float a1, float a2, float b0, float b1, float b2);
+
+    public:
+    BiquadFloat();
+    float process(float x0);
+    void reset();
 };
 
 class Effect {
@@ -81,27 +127,45 @@ class Effect {
     Effect();
     virtual ~Effect();
     virtual void configure(const float samplingFrequency);
-    virtual void process(int32_t* inout, int32_t frames) = 0;
+    virtual void process(sample_t* inout, int32_t frames) = 0;
 };
 
-class EffectCompression : public Effect {
-    private:
-    Biquad mWeighter;
-
+/* Separate implementations for float and int */
+class EffectCompressionBase : public Effect {
     public:
     float mCompressionRatio;
 
-    EffectCompression();
-    ~EffectCompression();
-    void configure(const float samplingFrequency);
+    EffectCompressionBase();
+    ~EffectCompressionBase();
     void setRatio(float compressionRatio);
-    void process(int32_t* inout, int32_t frames);
+    void process(sample_t* inout, int32_t frames);
+    
+    virtual void configure(const float samplingFrequency) = 0;
+    virtual float estimateLevel(const int16_t* audiodata, int32_t frames, int32_t framesPerSample) = 0;
+};
+
+class EffectCompressionInt : public EffectCompressionBase {
+    private:
+    BiquadInt mWeighter;
+
+    public:
+    void configure(const float samplingFrequency);
     float estimateLevel(const int16_t* audiodata, int32_t frames, int32_t framesPerSample);
 };
 
+class EffectCompressionFloat : public EffectCompressionBase {
+    private:
+    BiquadFloat mWeighter;
+
+    public:
+    void configure(const float samplingFrequency);
+    float estimateLevel(const int16_t* audiodata, int32_t frames, int32_t framesPerSample);
+};
+
+/* Trickery with sample_t and Biquad suffices. */
 class EffectTone : public Effect {
     float mBand[5];
-    int mGain;
+    sample_t mGain;
     Biquad mFilterL[4], mFilterR[4];
 
     void refreshBands();
@@ -111,15 +175,16 @@ class EffectTone : public Effect {
     ~EffectTone();
     void configure(const float samplingFrequency);
     void setBand(int32_t idx, float dB);
-    void process(int32_t* inout, int32_t frames);
+    void process(sample_t* inout, int32_t frames);
 };
 
+/* Trickery with sample_t and Biquad suffices. */
 class EffectHeadphone : public Effect {
     bool mDeep, mWide;
-    int32_t mLevel;
+    sample_t mLevel;
 
     Delay mReverbDelayL, mReverbDelayR;
-    int32_t mDelayDataL, mDelayDataR;
+    sample_t mDelayDataL, mDelayDataR;
     Biquad mLocalizationL, mLocalizationR;
 
     public:
@@ -129,7 +194,7 @@ class EffectHeadphone : public Effect {
     void setDeep(bool enable);
     void setWide(bool enable);
     void setLevel(float level);
-    void process(int32_t* inout, int32_t frames);
+    void process(sample_t* inout, int32_t frames);
 };
 
 class AudioDSP {

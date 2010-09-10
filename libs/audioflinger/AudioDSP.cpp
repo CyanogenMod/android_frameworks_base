@@ -22,16 +22,21 @@
 
 namespace android {
 
-/* Keep this in sync with AudioMixer's FP decimal count. We
- * use this count to generate the dither for ditherAndClamp(),
- * among other things. */
-static const int32_t fixedPointDecimals = 12;
-static const int32_t fixedPointBits = (1 << fixedPointDecimals) - 1;
-
-static int16_t toFixedPoint(float x)
-{
-    return int16_t(x * (1 << fixedPointDecimals) + 0.5f);
+#if defined(__ARM_HAVE_VFP)
+inline static sample_t toFixedPoint(float x) {
+    return x;
 }
+inline static sample_t multiply(sample_t a, sample_t b) {
+    return a * b;
+}
+#else
+inline static sample_t toFixedPoint(float x) {
+    return sample_t(x * (1 << 12) + 0.5f);
+}
+inline static sample_t multiply(sample_t a, sample_t b) {
+    return (a >> 12) * b;
+}
+#endif
 
 /***************************************************************************
  * Delay                                                                   *
@@ -55,14 +60,14 @@ void Delay::setParameters(float samplingFrequency, float time)
     if (mState != 0) {
         delete[] mState;
     }
-    mState = new int32_t[mLength];
-    memset(mState, 0, mLength * sizeof(int32_t));
+    mState = new sample_t[mLength];
+    memset(mState, 0, mLength * sizeof(sample_t));
     mIndex = 0;
 }
 
-inline int32_t Delay::process(int32_t x0)
+inline sample_t Delay::process(sample_t x0)
 {
-    int32_t y0 = mState[mIndex];
+    sample_t y0 = mState[mIndex];
     mState[mIndex] = x0;
     mIndex = (mIndex + 1) % mLength;
     return y0;
@@ -92,15 +97,15 @@ void Allpass::setParameters(float samplingFrequency, float k, float time)
     if (mState != 0) {
         delete[] mState;
     }
-    mState = new int32_t[mLength];
-    memset(mState, 0, mLength * sizeof(int32_t));
+    mState = new sample_t[mLength];
+    memset(mState, 0, mLength * sizeof(sample_t));
     mIndex = 0;
 }
 
-inline int32_t Allpass::process(int32_t x0)
+inline sample_t Allpass::process(sample_t x0)
 {
-    int32_t tmp = x0 - mK * (mState[mIndex] >> fixedPointDecimals);
-    int32_t y0 = mState[mIndex] + mK * (tmp >> fixedPointDecimals);
+    sample_t tmp = x0 - multiply(mState[mIndex], mK);
+    sample_t y0 = mState[mIndex] + multiply(tmp, mK);
     mState[mIndex] = tmp;
     mIndex = (mIndex + 1) % mLength;
     return y0;
@@ -110,16 +115,23 @@ inline int32_t Allpass::process(int32_t x0)
 /***************************************************************************
  * Biquad                                                                  *
  ***************************************************************************/
-Biquad::Biquad()
-   : mB0(0), mY0(0)
+BiquadBase::~BiquadBase()
 {
-     state.i32.mA = 0;
-     state.i32.mB = 0;
-     state.i32.mX = 0;
-     state.i32.mY = 0;
 }
 
-void Biquad::setCoefficients(float a0, float a1, float a2, float b0, float b1, float b2)
+BiquadInt::BiquadInt()
+    : mY0(0)
+{
+    state.i32.mX = 0;
+    state.i32.mY = 0;
+}
+
+BiquadFloat::BiquadFloat()
+    : mX1(0), mX2(0), mY0(0), mY1(0), mY2(0)
+{
+}
+
+void BiquadInt::setCoefficients(float a0, float a1, float a2, float b0, float b1, float b2)
 {
     state.i16.mA1 = -toFixedPoint(a1/a0);
     state.i16.mA2 = -toFixedPoint(a2/a0);
@@ -128,7 +140,29 @@ void Biquad::setCoefficients(float a0, float a1, float a2, float b0, float b1, f
     state.i16.mB2 = toFixedPoint(b2/a0);
 }
 
-void Biquad::setRC(float center_frequency, float sampling_frequency)
+void BiquadFloat::setCoefficients(float a0, float a1, float a2, float b0, float b1, float b2)
+{
+    mA1 = -a1/a0;
+    mA2 = -a2/a0;
+    mB0 = b0/a0;
+    mB1 = b1/a0;
+    mB2 = b2/a0;
+}
+
+void BiquadInt::reset()
+{
+    mY0 = 0;
+    state.i32.mX = 0;
+    state.i32.mY = 0;
+}
+
+void BiquadFloat::reset()
+{
+    mX1 = mX2 = 0;
+    mY0 = mY1 = mY2 = 0;
+}
+
+void BiquadBase::setRC(float center_frequency, float sampling_frequency)
 {
     float DT_div_RC = 2 * (float) M_PI * center_frequency / sampling_frequency;
     float b0 = DT_div_RC / (1 + DT_div_RC);
@@ -137,18 +171,11 @@ void Biquad::setRC(float center_frequency, float sampling_frequency)
     setCoefficients(1, a1, 0, b0, 0, 0);
 }
 
-void Biquad::reset()
-{
-    mY0 = 0;
-    state.i32.mX = 0;
-    state.i32.mY = 0;
-}
-
 /*
  * Peaking equalizer, low shelf and high shelf are taken from
  * the good old Audio EQ Cookbook by Robert Bristow-Johnson.
  */
-void Biquad::setPeakingEqualizer(float center_frequency, float sampling_frequency, float db_gain, float bandwidth)
+void BiquadBase::setPeakingEqualizer(float center_frequency, float sampling_frequency, float db_gain, float bandwidth)
 {
     float w0 = 2 * (float) M_PI * center_frequency / sampling_frequency;
     float A = powf(10, db_gain/40);
@@ -164,7 +191,7 @@ void Biquad::setPeakingEqualizer(float center_frequency, float sampling_frequenc
     setCoefficients(a0, a1, a2, b0, b1, b2);
 }
 
-void Biquad::setLowShelf(float center_frequency, float sampling_frequency, float db_gain, float slope)
+void BiquadBase::setLowShelf(float center_frequency, float sampling_frequency, float db_gain, float slope)
 {
     float w0 = 2 * (float) M_PI * center_frequency / sampling_frequency;
     float A = powf(10, db_gain/40);
@@ -180,7 +207,7 @@ void Biquad::setLowShelf(float center_frequency, float sampling_frequency, float
     setCoefficients(a0, a1, a2, b0, b1, b2);
 }
 
-void Biquad::setHighShelf(float center_frequency, float sampling_frequency, float db_gain, float slope)
+void BiquadBase::setHighShelf(float center_frequency, float sampling_frequency, float db_gain, float slope)
 {
     float w0 = 2 * (float) M_PI * center_frequency / sampling_frequency;
     float A = powf(10, db_gain/40);
@@ -196,7 +223,7 @@ void Biquad::setHighShelf(float center_frequency, float sampling_frequency, floa
     setCoefficients(a0, a1, a2, b0, b1, b2);
 }
 
-void Biquad::setHighShelf1(float center_frequency, float sampling_frequency, float db_gain)
+void BiquadBase::setHighShelf1(float center_frequency, float sampling_frequency, float db_gain)
 {
     float w0 = 2 * (float) M_PI * center_frequency / sampling_frequency;
     float A = powf(10, db_gain/40);
@@ -209,7 +236,7 @@ void Biquad::setHighShelf1(float center_frequency, float sampling_frequency, flo
     setCoefficients(a0, a1, 0, b0, b1, 0);
 }
 
-void Biquad::setBandPass(float center_frequency, float sampling_frequency, float resonance)
+void BiquadBase::setBandPass(float center_frequency, float sampling_frequency, float resonance)
 {
     float w0 = 2 * (float) M_PI * center_frequency / sampling_frequency;
     float alpha = sinf(w0) / (2*resonance);
@@ -224,9 +251,10 @@ void Biquad::setBandPass(float center_frequency, float sampling_frequency, float
     setCoefficients(a0, a1, a2, b0, b1, b2);
 }
 
-/* returns output scaled by fixedPoint factor */
-inline int32_t Biquad::process(int16_t x0)
+inline int32_t BiquadInt::process(int32_t x0)
 {
+    x0 >>= 12;
+
     /* mY0 holds error from previous integer truncation. */
     int32_t y0 = mY0 + mB0 * x0;
 
@@ -246,7 +274,7 @@ inline int32_t Biquad::process(int16_t x0)
      * ARM appears to have instructions that can handle these
      * bit manipulations well, such as "orr r0, r0, r1, lsl #16".
      */
-    state.i32.mY = (state.i32.mY << 16) | ((y0 >> fixedPointDecimals) & 0xffff);
+    state.i32.mY = (state.i32.mY << 16) | ((y0 >> 12) & 0xffff);
     state.i32.mX = (state.i32.mX << 16) | (x0 & 0xffff);
 #else
     y0 += state.i16.mB1 * state.i16.mX1
@@ -255,16 +283,29 @@ inline int32_t Biquad::process(int16_t x0)
         + state.i16.mY2 * state.i16.mA2;
 
     state.i16.mY2 = state.i16.mY1;
-    state.i16.mY1 = y0 >> fixedPointDecimals;
+    state.i16.mY1 = y0 >> 12;
 
     state.i16.mX2 = state.i16.mX1;
     state.i16.mX1 = x0;
 #endif
 
-    mY0 = y0 & fixedPointBits;
+    mY0 = y0 & 0xfff;
     return y0;
 }
 
+inline float BiquadFloat::process(float x0)
+{
+    float y0 = mB0 * x0 + mB1 * mX1 + mB2 * mX2;
+    y0 += mA1 * mY1 + mA2 * mY2;
+
+    mX2 = mX1;
+    mX1 = x0;
+
+    mY2 = mY1;
+    mY1 = y0;
+
+    return y0;
+}
 
 /***************************************************************************
  * Effect                                                                  *
@@ -282,37 +323,43 @@ void Effect::configure(const float samplingFrequency) {
 }
 
 
-EffectCompression::EffectCompression()
+EffectCompressionBase::EffectCompressionBase()
     : mCompressionRatio(2.0)
 {
 }
 
-EffectCompression::~EffectCompression()
+EffectCompressionBase::~EffectCompressionBase()
 {
 }
 
-void EffectCompression::configure(const float samplingFrequency)
+void EffectCompressionInt::configure(const float samplingFrequency)
 {
     Effect::configure(samplingFrequency);
     mWeighter.setBandPass(1700, samplingFrequency, sqrtf(2)/2);
 }
 
-void EffectCompression::setRatio(float compressionRatio)
+void EffectCompressionFloat::configure(const float samplingFrequency)
+{
+    Effect::configure(samplingFrequency);
+    mWeighter.setBandPass(1700, samplingFrequency, sqrtf(2)/2);
+}
+
+void EffectCompressionBase::setRatio(float compressionRatio)
 {
     mCompressionRatio = compressionRatio;
 }
 
-void EffectCompression::process(int32_t* inout, int32_t frames)
+void EffectCompressionBase::process(sample_t* inout, int32_t frames)
 {
 }
 
-float EffectCompression::estimateLevel(const int16_t* audioData, int32_t frames, int32_t samplesPerFrame)
+float EffectCompressionInt::estimateLevel(const int16_t* audioData, int32_t frames, int32_t samplesPerFrame)
 {
     mWeighter.reset();
     uint32_t power = 0;
     uint32_t powerFraction = 0;
     for (int32_t i = 0; i < frames; i ++) {
-        int16_t tmp = *audioData;
+        int32_t tmp = *audioData << 12;
         audioData += samplesPerFrame;
 
         int32_t out = mWeighter.process(tmp) >> 12;
@@ -323,6 +370,22 @@ float EffectCompression::estimateLevel(const int16_t* audioData, int32_t frames,
 
     /* peak-to-peak is -32768 to 32767, but we are squared here. */
     return (65536.0f * power + powerFraction) / (32768.0f * 32768.0f) / frames;
+}
+
+float EffectCompressionFloat::estimateLevel(const int16_t* audioData, int32_t frames, int32_t samplesPerFrame)
+{
+    mWeighter.reset();
+    float power = 0;
+    for (int32_t i = 0; i < frames; i ++) {
+        float tmp = *audioData;
+        audioData += samplesPerFrame;
+
+        float out = mWeighter.process(tmp);
+        power += out * out;
+    }
+
+    /* peak-to-peak is -32768 to 32767, but we are squared here. */
+    return power / (32768.0f * 32768.0f) / frames;
 }
 
 
@@ -352,7 +415,7 @@ void EffectTone::setBand(int32_t band, float dB)
 
 void EffectTone::refreshBands()
 {
-    mGain = toFixedPoint(powf(10, mBand[0] / 20));
+    mGain = toFixedPoint(powf(10.0f, mBand[0] / 20.0f));
     for (int band = 0; band < 4; band ++) {
         float centerFrequency = 62.5f * powf(4, band);
         float dB = mBand[band+1] - mBand[band];
@@ -362,26 +425,21 @@ void EffectTone::refreshBands()
     }
 }
 
-void EffectTone::process(int32_t* inout, int32_t frames)
+void EffectTone::process(sample_t* inout, int32_t frames)
 {
     for (int32_t i = 0; i < frames; i ++) {
-        int32_t tmpL = inout[0];
-        int32_t tmpR = inout[1];
-        /* 28 bits */
+        sample_t tmpL = inout[0];
+        sample_t tmpR = inout[1];
      
         /* first "shelve" is just gain */ 
-        tmpL = (tmpL >> fixedPointDecimals) * mGain;
-        tmpR = (tmpR >> fixedPointDecimals) * mGain;
-        /* 28 bits */
+        tmpL = multiply(tmpL, mGain);
+        tmpR = multiply(tmpR, mGain);
  
-        /* evaluate the other filters.
-         * I'm ignoring the integer truncation problem here, but in reality
-         * it should be accounted for. */
+        /* evaluate the other filters. */
         for (int32_t j = 0; j < 4; j ++) {
-            tmpL = mFilterL[j].process(tmpL >> fixedPointDecimals);
-            tmpR = mFilterR[j].process(tmpR >> fixedPointDecimals);
+            tmpL = mFilterL[j].process(tmpL);
+            tmpR = mFilterR[j].process(tmpR);
         }
-        /* 28 bits */
 
         inout[0] = tmpL;
         inout[1] = tmpR;
@@ -427,15 +485,14 @@ void EffectHeadphone::setLevel(float level)
     mLevel = toFixedPoint(powf(10, (level - 15.0f) / 20.0f));
 }
 
-void EffectHeadphone::process(int32_t* inout, int32_t frames)
+void EffectHeadphone::process(sample_t* inout, int32_t frames)
 {
     for (int32_t i = 0; i < frames; i ++) {
         /* calculate reverb wet into dataL, dataR */
-        int32_t dryL = inout[0];
-        int32_t dryR = inout[1];
-        int32_t dataL = dryL;
-        int32_t dataR = dryR;
-        /* 28 bits */
+        sample_t dryL = inout[0];
+        sample_t dryR = inout[1];
+        sample_t dataL = dryL;
+        sample_t dataR = dryR;
         
         if (mDeep) {
             /* Note: a pinking filter here would be good. */
@@ -445,15 +502,13 @@ void EffectHeadphone::process(int32_t* inout, int32_t frames)
 
         dataL = mReverbDelayL.process(dataL);
         dataR = mReverbDelayR.process(dataR);
-        /* 28 bits */
 
         if (mWide) {
             dataR = -dataR;
         }
 
-        dataL = (dataL >> fixedPointDecimals) * mLevel;
-        dataR = (dataR >> fixedPointDecimals) * mLevel;
-        /* 28 bits */
+        dataL = multiply(dataL, mLevel);
+        dataR = multiply(dataR, mLevel);
 
         mDelayDataL = dataL;
         mDelayDataR = dataR;
@@ -470,17 +525,16 @@ void EffectHeadphone::process(int32_t* inout, int32_t frames)
          * We could try to dynamically adjust this divisor based on cross-correlation
          * between left/right channels, which would allow us to recover a reasonable
          * estimate of the music's original center channel. */
-        int32_t center = (dataL + dataR) / 5;
-        int32_t directL = (dataL - center);
-        int32_t directR = (dataR - center);
+        sample_t center = (dataL + dataR) / 5;
+        sample_t directL = (dataL - center);
+        sample_t directR = (dataR - center);
 
         /* We assume center channel reaches both ears with no coloration required.
          * We could also handle it differently at reverb stage... */
 
         /* Apply localization filter. */
-        int32_t localizedL = mLocalizationL.process(directL >> fixedPointDecimals);
-        int32_t localizedR = mLocalizationR.process(directR >> fixedPointDecimals);
-        /* 28 bits */
+        sample_t localizedL = mLocalizationL.process(directL);
+        sample_t localizedR = mLocalizationR.process(directR);
         
         /* Mix difference between channels. dataX = directX + center. */
         inout[0] = dataL + localizedR;
@@ -622,6 +676,38 @@ int32_t AudioDSP::estimateLevel(const int16_t* input, int32_t frames, int32_t sa
 /* input is 28-bit interleaved stereo in integer format */
 void AudioDSP::process(int32_t* audioData, int32_t frames)
 {
+#if defined(__ARM_HAVE_VFP)
+    while (frames > 0) {
+#define AUDIO_BLOCK 64
+        /* Process audio a small chunk at a time */
+        sample_t audioDataProc[AUDIO_BLOCK];
+        int32_t samples = frames << 1;
+        if (samples > AUDIO_BLOCK) {
+            samples = AUDIO_BLOCK;
+        }
+        /* int32 -> float */
+        for (int32_t i = 0; i < samples; i ++) {
+            audioDataProc[i] = audioData[i];
+        }
+
+        if (mToneEnable) {
+            mTone.process(audioDataProc, samples >> 1);
+        }
+
+        if (mHeadphoneEnable) {
+            mHeadphone.process(audioDataProc, samples >> 1);
+        }
+
+        /* float -> int32 */
+        for (int32_t i = 0; i < samples; i ++) {
+            audioData[i] = audioDataProc[i];
+        }
+
+        audioData += samples;
+        frames -= samples >> 1;
+#undef AUDIO_BLOCK
+    }
+#else
     if (mToneEnable) {
         mTone.process(audioData, frames);
     }
@@ -629,6 +715,7 @@ void AudioDSP::process(int32_t* audioData, int32_t frames)
     if (mHeadphoneEnable) {
         mHeadphone.process(audioData, frames);
     }
+#endif
 }
 
 }
