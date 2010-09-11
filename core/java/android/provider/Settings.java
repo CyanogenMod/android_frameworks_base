@@ -1866,8 +1866,8 @@ public final class Settings {
 
         /**
          * Whether to show the battery level percentage overlayed on the icon.
-          * @hide
-          */
+         * @hide
+         */
         public static final String BATTERY_PERCENTAGE_STATUS_ICON = "battery_percentage_status_icon";
  
          /**
@@ -1894,6 +1894,11 @@ public final class Settings {
          */
         public static final String SCREEN_LOCK_SCREENOFF_DELAY = "screen_lock_screenoff_delay";
         
+        /**
+         * should we use rotary or tab lockscreen?
+         * @hide
+         */
+        public static final String USE_ROTARY_LOCKSCREEN = "use_rotary_lockscreen";
         /**
          * Whether the audible DTMF tones are played by the dialer when dialing. The value is
          * boolean (1 or 0).
