@@ -867,4 +867,6 @@
     <string name="throttled_notification_title" msgid="6269541897729781332">"Quota d\'utilisation des données mobiles dépassé"</string>
     <string name="throttled_notification_message" msgid="4712369856601275146">"Touchez pour en savoir plus sur l\'utilisation des données mobiles"</string>
     <string name="toast_reboot_recommend">"Attention : Redémarrage requis après personnalisation !"</string>
+    <!--Application killed toast -->
+    <string name="app_killed_message">Application tuée</string>
 </resources>
