@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.android.server.status.LatestItemContainer xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="65sp"
     android:orientation="vertical"
@@ -20,5 +20,5 @@
         android:background="@drawable/divider_horizontal_bright"
         />
 
-</LinearLayout>
+</com.android.server.status.LatestItemContainer>
 

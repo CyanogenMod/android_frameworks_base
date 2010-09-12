@@ -138,6 +138,7 @@ public class StatusBarService extends IStatusBar.Stub
         void onSetDisabled(int status);
         void onClearAll();
         void onNotificationClick(String pkg, String tag, int id);
+        void onNotificationClear(String pkg, String tag, int id);
         void onPanelRevealed();
     }
 
@@ -883,7 +884,7 @@ public class StatusBarService extends IStatusBar.Stub
     
     View makeNotificationView(StatusBarNotification notification, ViewGroup parent) {
     	Resources res = mContext.getResources();
-    	NotificationData n = notification.data;
+        final NotificationData n = notification.data;
         RemoteViews remoteViews = n.contentView;
         if (remoteViews == null) {
             return null;
@@ -892,7 +893,14 @@ public class StatusBarService extends IStatusBar.Stub
         // create the row view
         LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
-        View row = inflater.inflate(com.android.internal.R.layout.status_bar_latest_event, parent, false);
+        LatestItemContainer row = (LatestItemContainer) inflater.inflate(com.android.internal.R.layout.status_bar_latest_event, parent, false);
+        if (n.clearable) {
+            row.setOnSwipeCallback(new Runnable() {
+                public void run() {
+                    mNotificationCallbacks.onNotificationClear(n.pkg, n.tag, n.id);
+                }
+            });
+        }
         ViewGroup content = (ViewGroup)row.findViewById(com.android.internal.R.id.content);
         if (custExpBar) {
             StateListDrawable sld = new StateListDrawable();
