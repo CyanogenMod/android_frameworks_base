@@ -292,6 +292,10 @@ public class NotificationManagerService extends INotificationManager.Stub
                     Notification.FLAG_FOREGROUND_SERVICE);
         }
 
+        public void onNotificationClear(String pkg, String tag, int id) {
+            cancelNotification(pkg, tag, id, 0, Notification.FLAG_FOREGROUND_SERVICE);
+        }
+
         public void onPanelRevealed() {
             synchronized (mNotificationList) {
                 // sound
