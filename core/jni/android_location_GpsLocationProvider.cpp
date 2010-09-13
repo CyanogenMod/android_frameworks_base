@@ -199,7 +199,7 @@ static void android_location_GpsLocationProvider_class_init_native(JNIEnv* env, 
     method_reportLocation = env->GetMethodID(clazz, "reportLocation", "(IDDDFFFJ)V");
     method_reportStatus = env->GetMethodID(clazz, "reportStatus", "(I)V");
     method_reportSvStatus = env->GetMethodID(clazz, "reportSvStatus", "()V");
-    method_reportAGpsStatus = env->GetMethodID(clazz, "reportAGpsStatus", "(II)V");
+    method_reportAGpsStatus = env->GetMethodID(clazz, "reportAGpsStatus", "(III)V");
     method_reportNmea = env->GetMethodID(clazz, "reportNmea", "(IJ)V");
     method_xtraDownloadRequest = env->GetMethodID(clazz, "xtraDownloadRequest", "()V");
     method_reportNiNotification = env->GetMethodID(clazz, "reportNiNotification", "(IIIIILjava/lang/String;Ljava/lang/String;IILjava/lang/String;)V");
@@ -323,7 +323,7 @@ static void android_location_GpsLocationProvider_wait_for_event(JNIEnv* env, job
         env->CallVoidMethod(obj, method_reportSvStatus);
     }
     if (pendingCallbacks & kAGpsStatus) {
-        env->CallVoidMethod(obj, method_reportAGpsStatus, sAGpsStatusCopy.type, sAGpsStatusCopy.status);
+        env->CallVoidMethod(obj, method_reportAGpsStatus, sAGpsStatusCopy.type, sAGpsStatusCopy.status, sAGpsStatusCopy.ipaddr);
     }  
     if (pendingCallbacks & kNmeaAvailable) {
         for (int i = 0; i < nmeaSentenceCount; i++) {

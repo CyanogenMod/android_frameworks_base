@@ -248,6 +248,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
 
     private String mAGpsApn;
     private int mAGpsDataConnectionState;
+    private int mAGpsDataConnectionIpAddr;
     private final ConnectivityManager mConnMgr;
     private final GpsNetInitiatedHandler mNIHandler; 
 
@@ -457,6 +458,13 @@ public class GpsLocationProvider implements LocationProviderInterface {
             String apnName = info.getExtraInfo();
             if (mNetworkAvailable && apnName != null && apnName.length() > 0) {
                 mAGpsApn = apnName;
+                Log.d(TAG, "mAGpsDataConnectionIpAddr " + mAGpsDataConnectionIpAddr);
+                if (mAGpsDataConnectionIpAddr != 0xffffffff) {
+                    boolean route_result;
+                    if (DEBUG) Log.d(TAG, "call requestRouteToHost");
+                    route_result = mConnMgr.requestRouteToHost(ConnectivityManager.TYPE_MOBILE_SUPL, mAGpsDataConnectionIpAddr);
+                    if (route_result == false) Log.d(TAG, "call requestRouteToHost failed");
+                }
                 if (DEBUG) Log.d(TAG, "call native_agps_data_conn_open");
                 native_agps_data_conn_open(apnName);
                 mAGpsDataConnectionState = AGPS_DATA_CONNECTION_OPEN;
@@ -1180,13 +1188,21 @@ public class GpsLocationProvider implements LocationProviderInterface {
     /**
      * called from native code to update AGPS status
      */
-    private void reportAGpsStatus(int type, int status) {
+    private void reportAGpsStatus(int type, int status, int ipaddr) {
         switch (status) {
             case GPS_REQUEST_AGPS_DATA_CONN:
                  int result = mConnMgr.startUsingNetworkFeature(
                         ConnectivityManager.TYPE_MOBILE, Phone.FEATURE_ENABLE_SUPL);
+                mAGpsDataConnectionIpAddr = ipaddr;
                 if (result == Phone.APN_ALREADY_ACTIVE) {
                     if (mAGpsApn != null) {
+                        Log.d(TAG, "mAGpsDataConnectionIpAddr " + mAGpsDataConnectionIpAddr);
+                        if (mAGpsDataConnectionIpAddr != 0xffffffff) {
+                            boolean route_result;
+                            if (DEBUG) Log.d(TAG, "call requestRouteToHost");
+                            route_result = mConnMgr.requestRouteToHost(ConnectivityManager.TYPE_MOBILE_SUPL, mAGpsDataConnectionIpAddr);
+                            if (route_result == false) Log.d(TAG, "call requestRouteToHost failed");
+                        }
                         native_agps_data_conn_open(mAGpsApn);
                         mAGpsDataConnectionState = AGPS_DATA_CONNECTION_OPEN;
                     } else {
