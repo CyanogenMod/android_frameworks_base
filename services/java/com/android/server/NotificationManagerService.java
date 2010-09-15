@@ -908,18 +908,6 @@ class NotificationManagerService extends INotificationManager.Stub
                 }
             }
 
-            // Adjust the LED for quiet hours
-            if (inQuietHours && mQuietHoursDim) {
-                // Cut all of the channels by a factor of 16 to dim on capable hardware.
-                // Note that this should fail gracefully on other hardware.
-                int argb = notification.ledARGB;
-                int red = (((argb & 0xFF0000) >>> 16) >>> 4);
-                int green = (((argb & 0xFF00) >>> 8 ) >>> 4);
-                int blue = ((argb & 0xFF) >>> 4);
-
-                notification.ledARGB = (0xFF000000 | (red << 16) | (green << 8) | blue);
-            }
-
             // light
             // the most recent thing gets the light
             mLights.remove(old);
@@ -1355,6 +1343,33 @@ class NotificationManagerService extends INotificationManager.Stub
 				ledARGB = mDefaultNotificationColor;
 			}
 		}
+
+		final boolean inQuietHours;
+		if (mQuietHoursEnabled && (mQuietHoursStart != mQuietHoursEnd)) {
+			//Get the date in "quiet hours" format.
+			Calendar c = Calendar.getInstance();
+			int minutes = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE);
+			if (mQuietHoursEnd < mQuietHoursStart) {
+				// Starts at night, ends in the morning.
+				inQuietHours = (minutes > mQuietHoursStart) || (minutes < mQuietHoursEnd);
+			} else {
+				inQuietHours = (minutes > mQuietHoursStart) && (minutes < mQuietHoursEnd);
+			}
+		} else {
+			inQuietHours = false;
+		}
+		 // Adjust the LED for quiet hours
+		if (inQuietHours && mQuietHoursDim) {
+			// Cut all of the channels by a factor of 16 to dim on capable hardware.
+			// Note that this should fail gracefully on other hardware.
+			int argb = ledARGB;
+			int red = (((argb & 0xFF0000) >>> 16) >>> 4);
+			int green = (((argb & 0xFF00) >>> 8 ) >>> 4);
+			int blue = ((argb & 0xFF) >>> 4);
+
+			ledARGB = (0xFF000000 | (red << 16) | (green << 8) | blue);
+		}
+
             	if (mNotificationPulseEnabled) {
                	// pulse repeatedly
            	 	if((mSuccession == 1) || (mRandomColor == 1) || (mPulseAllColor == 1)) {
