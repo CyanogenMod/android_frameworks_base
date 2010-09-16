@@ -111,7 +111,7 @@ private:
     sp<ISurface> mISurface;
     sp<MediaPlayerBase::AudioSink> mAudioSink;
 
-    TimeSource *mTimeSource;
+    TimeSource *mTimeSource, *mFallbackTimeSource;
 
     String8 mUri;
     KeyedVector<String8, String8> mUriHeaders;
@@ -127,6 +127,17 @@ private:
     sp<MediaSource> mAudioSource;
     AudioPlayer *mAudioPlayer;
     int64_t mDurationUs;
+    /*
+       The below two members are needed in case
+       that the length of the audio track isn't
+       the same as the length of the video track.
+       We need to know (for seeking and a/v syncing)
+       at what point the shorter track has ended.
+       mDurationUs (and by extension getDuration())
+       returns the larger duration of the two tracks.
+    */
+    int64_t mAudioDurationUs, mVideoDurationUs;
+
 
     uint32_t mFlags;
     uint32_t mExtractorFlags;
@@ -141,6 +152,9 @@ private:
 
     bool mWatchForAudioSeekComplete;
     bool mWatchForAudioEOS;
+
+    bool mAudioEOSOccurred;
+    bool mVideoEOSOccurred; //not used for now
 
     sp<TimedEventQueue::Event> mVideoEvent;
     bool mVideoEventPending;
