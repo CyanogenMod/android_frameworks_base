@@ -99,6 +99,8 @@ public class NotificationManagerService extends INotificationManager.Stub
 
     private static final int DEFAULT_STREAM_TYPE = AudioManager.STREAM_NOTIFICATION;
 
+    private static final Calendar CALENDAR = Calendar.getInstance();
+
     final Context mContext;
     final IActivityManager mAm;
     final IBinder mForegroundToken = new Binder();
@@ -849,20 +851,7 @@ public class NotificationManagerService extends INotificationManager.Stub
         }
 
         synchronized (mNotificationList) {
-            final boolean inQuietHours;
-            if (mQuietHoursEnabled && (mQuietHoursStart != mQuietHoursEnd)) {
-                // Get the date in "quiet hours" format.
-                Calendar c = Calendar.getInstance();
-                int minutes = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE);
-                if (mQuietHoursEnd < mQuietHoursStart) {
-                    // Starts at night, ends in the morning.
-                    inQuietHours = (minutes > mQuietHoursStart) || (minutes < mQuietHoursEnd);
-                } else {
-                    inQuietHours = (minutes > mQuietHoursStart) && (minutes < mQuietHoursEnd);
-                }
-            } else {
-                inQuietHours = false;
-            }
+            final boolean inQuietHours = inQuietHours();
 
             NotificationRecord r = new NotificationRecord(pkg, tag, id,
                     callingUid, callingPid, notification);
@@ -1009,6 +998,20 @@ public class NotificationManagerService extends INotificationManager.Stub
         }
 
         idOut[0] = id;
+    }
+
+    private boolean inQuietHours() {
+        if (mQuietHoursEnabled && (mQuietHoursStart != mQuietHoursEnd)) {
+            // Get the date in "quiet hours" format.
+            int minutes = CALENDAR.get(Calendar.HOUR_OF_DAY) * 60 + CALENDAR.get(Calendar.MINUTE);
+            if (mQuietHoursEnd < mQuietHoursStart) {
+                // Starts at night, ends in the morning.
+                return (minutes > mQuietHoursStart) || (minutes < mQuietHoursEnd);
+            } else {
+                return (minutes > mQuietHoursStart) && (minutes < mQuietHoursEnd);
+            }
+        }
+        return false;
     }
 
     private boolean checkLight(Notification notification, String pkg) {
@@ -1494,6 +1497,7 @@ public class NotificationManagerService extends INotificationManager.Stub
                     }
                 }
             }
+
             if (mNotificationPulseEnabled) {
                 // pulse repeatedly
                 if ((mSuccession == 1) || (mRandomColor == 1) || (mPulseAllColor == 1)) {
