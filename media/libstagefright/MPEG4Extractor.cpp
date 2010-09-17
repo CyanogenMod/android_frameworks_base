@@ -425,6 +425,9 @@ status_t MPEG4Extractor::parseChunk(off_t *offset, int depth) {
     uint32_t chunk_type = ntohl(hdr[1]);
     off_t data_offset = *offset + 8;
 
+    if(chunk_size == 0)
+       return ERROR_MALFORMED;
+
     if (chunk_size == 1) {
         if (mDataSource->readAt(*offset + 8, &chunk_size, 8) < 8) {
             return ERROR_IO;
