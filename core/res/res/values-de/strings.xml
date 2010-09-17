@@ -876,4 +876,7 @@
 
     <!-- Reboot recommended after applying color changes (CM) -->
     <string name="toast_reboot_recommend">Achtung: Neustart wird empfohlen nach Beendigung der Anpassungen!</string>
+
+    <!--Application killed toast -->
+    <string name="app_killed_message">Anwendung beendet</string>
 </resources>
