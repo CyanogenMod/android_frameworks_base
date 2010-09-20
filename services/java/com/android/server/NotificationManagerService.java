@@ -113,6 +113,8 @@ class NotificationManagerService extends INotificationManager.Stub {
 
     private int mDefaultNotificationLedOff;
 
+    private boolean mAmberGreenLight;
+
     private NotificationRecord mSoundNotification;
 
     private NotificationPlayer mSound;
@@ -131,6 +133,14 @@ class NotificationManagerService extends INotificationManager.Stub {
     private boolean mInCall = false;
 
     private boolean mNotificationPulseEnabled;
+
+    private boolean mNotificationBlinkEnabled;
+
+    private boolean mNotificationAlwaysOnEnabled;
+
+    private boolean mNotificationChargingEnabled;
+
+    private boolean mGreenLightOn = false;
 
     // for adb connected notifications
     private boolean mUsbConnected;
@@ -384,7 +394,11 @@ class NotificationManagerService extends INotificationManager.Stub {
                     mBatteryCharging = batteryCharging;
                     mBatteryLow = batteryLow;
                     mBatteryFull = batteryFull;
-                    updateLights();
+                    if (mAmberGreenLight) {
+                        updateAmberLight();
+                    } else {
+                        updateRGBLights();
+                    }
                 }
             } else if (action.equals(Intent.ACTION_UMS_CONNECTED)) {
                 mUsbConnected = true;
@@ -421,24 +435,43 @@ class NotificationManagerService extends INotificationManager.Stub {
                 }
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 mScreenOn = true;
-                int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.TRACKBALL_SCREEN_ON, 0);
-                if (mPulseScreen == 0) { // Why bother if we are going to pulse
-                                         // anyways?
-                    updateNotificationPulse();
+                if (mAmberGreenLight) {
+                    if (!mNotificationAlwaysOnEnabled) {
+                        updateGreenLight();
+                    }
+                } else {
+                    int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(),
+                            Settings.System.TRACKBALL_SCREEN_ON, 0);
+                    if (mPulseScreen == 0) { // Why bother if we are going to pulse
+                                             // anyways?
+                        updateNotificationPulse();
+                    }
                 }
+
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 mScreenOn = false;
-                int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(),
-                        Settings.System.TRACKBALL_SCREEN_ON, 0);
-                if (mPulseScreen == 0) { // Why bother if we are going to pulse
-                                         // anyways?
-                    updateNotificationPulse();
+                if (mAmberGreenLight) {
+                    if (!mNotificationAlwaysOnEnabled) {
+                        updateGreenLight();
+                    }
+                } else {
+                    int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(),
+                            Settings.System.TRACKBALL_SCREEN_ON, 0);
+                    if (mPulseScreen == 0) { // Why bother if we are going to pulse
+                                             // anyways?
+                        updateNotificationPulse();
+                    }
                 }
             } else if (action.equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
                 mInCall = (intent.getStringExtra(TelephonyManager.EXTRA_STATE)
                         .equals(TelephonyManager.EXTRA_STATE_OFFHOOK));
-                updateNotificationPulse();
+                if (mAmberGreenLight) {
+                    if (mInCall) {
+                        updateGreenLight();
+                    }
+                } else {
+                    updateNotificationPulse();
+                }
             }
         }
     };
@@ -454,6 +487,12 @@ class NotificationManagerService extends INotificationManager.Stub {
                     Settings.Secure.getUriFor(Settings.Secure.ADB_ENABLED), false, this);
             resolver.registerContentObserver(Settings.System
                     .getUriFor(Settings.System.NOTIFICATION_LIGHT_PULSE), false, this);
+            resolver.registerContentObserver(Settings.System
+                    .getUriFor(Settings.System.NOTIFICATION_LIGHT_BLINK), false, this);
+            resolver.registerContentObserver(Settings.System
+                    .getUriFor(Settings.System.NOTIFICATION_LIGHT_ALWAYS_ON), false, this);
+            resolver.registerContentObserver(Settings.System
+                    .getUriFor(Settings.System.NOTIFICATION_LIGHT_CHARGING), false, this);
             resolver.registerContentObserver(Settings.System
                     .getUriFor(Settings.System.QUIET_HOURS_ENABLED), false, this);
             resolver.registerContentObserver(Settings.System
@@ -487,6 +526,24 @@ class NotificationManagerService extends INotificationManager.Stub {
             if (mNotificationPulseEnabled != pulseEnabled) {
                 mNotificationPulseEnabled = pulseEnabled;
                 updateNotificationPulse();
+            }
+            boolean blinkEnabled = Settings.System.getInt(resolver,
+                    Settings.System.NOTIFICATION_LIGHT_BLINK, 0) != 0;
+            if (mNotificationBlinkEnabled != blinkEnabled) {
+                mNotificationBlinkEnabled = blinkEnabled;
+                updateLights();
+            }
+            boolean alwaysOnEnabled = Settings.System.getInt(resolver,
+                    Settings.System.NOTIFICATION_LIGHT_ALWAYS_ON, 0) != 0;
+            if (mNotificationAlwaysOnEnabled != alwaysOnEnabled) {
+                mNotificationAlwaysOnEnabled = alwaysOnEnabled;
+                updateLights();
+            }
+            boolean chargingEnabled = Settings.System.getInt(resolver,
+                    Settings.System.NOTIFICATION_LIGHT_CHARGING, 0) != 0;
+            if (mNotificationChargingEnabled != chargingEnabled) {
+                mNotificationChargingEnabled = chargingEnabled;
+                updateAmberLight();
             }
 
             mQuietHoursEnabled = Settings.System.getInt(resolver,
@@ -526,6 +583,8 @@ class NotificationManagerService extends INotificationManager.Stub {
                 .getInteger(com.android.internal.R.integer.config_defaultNotificationLedOn);
         mDefaultNotificationLedOff = resources
                 .getInteger(com.android.internal.R.integer.config_defaultNotificationLedOff);
+        mAmberGreenLight = resources
+                .getBoolean(com.android.internal.R.bool.config_amber_green_light);
 
         // Don't start allowing notifications until the setup wizard has run
         // once.
@@ -947,12 +1006,25 @@ class NotificationManagerService extends INotificationManager.Stub {
     private boolean checkLight(Notification notification, String pkg) {
         String[] mPackage = findPackage(pkg);
         boolean flashLight = true;
-        if (((notification.flags & Notification.FLAG_ONGOING_EVENT) != 0)
-                || ((notification.flags & Notification.FLAG_FOREGROUND_SERVICE) != 0)) {
+
+        boolean noLight = false;
+        if (mAmberGreenLight) {
+            if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) == 0) {
+                noLight = true;
+            }
+        } else {
+            if (((notification.flags & Notification.FLAG_ONGOING_EVENT) != 0)
+                    || ((notification.flags & Notification.FLAG_FOREGROUND_SERVICE) != 0)) {
+                noLight = true;
+            }
+        }
+
+        if (noLight) {
             flashLight = false;
         } else if (mPackage != null) {
-            if (mPackage[1].equals("none"))
+            if (mPackage[1].equals("none")) {
                 flashLight = false;
+            }
         }
         return flashLight;
     }
@@ -1149,6 +1221,18 @@ class NotificationManagerService extends INotificationManager.Stub {
         }
     }
 
+    private void updateRGBLights() {
+        synchronized (mNotificationList) {
+            updateRGBLightsLocked();
+        }
+    }
+
+    private void updateGreenLight() {
+        synchronized (mNotificationList) {
+            updateGreenLightLocked();
+        }
+    }
+
     public boolean isNull(String mString) {
         if (mString == null || mString.matches("null") || mString.length() == 0
                 || mString.matches("|") || mString.matches("")) {
@@ -1180,8 +1264,9 @@ class NotificationManagerService extends INotificationManager.Stub {
         String mBaseString = Settings.System.getString(mContext.getContentResolver(),
                 Settings.System.NOTIFICATION_PACKAGE_COLORS);
         String[] mBaseArray = getArray(mBaseString);
-        if (mBaseArray == null)
+        if (mBaseArray == null) {
             return null;
+        }
         for (int i = 0; i < mBaseArray.length; i++) {
             if (isNull(mBaseArray[i])) {
                 continue;
@@ -1255,8 +1340,9 @@ class NotificationManagerService extends INotificationManager.Stub {
             int x = generator.nextInt(colorList.length - 1);
             rledARGB = Color.parseColor(colorList[x]);
         } else if (mPulseAllColor == 1) {
-            if (lastColor >= colorList.length)
+            if (lastColor >= colorList.length) {
                 lastColor = 1;
+            }
 
             rledARGB = Color.parseColor(colorList[lastColor - 1]);
             lastColor = lastColor + 1;
@@ -1300,6 +1386,14 @@ class NotificationManagerService extends INotificationManager.Stub {
 
     // lock on mNotificationList
     private void updateLightsLocked() {
+        if (mAmberGreenLight) {
+            updateGreenLightLocked();
+        } else {
+            updateRGBLightsLocked();
+        }
+    }
+
+    private void updateRGBLightsLocked() {
         int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.TRACKBALL_SCREEN_ON, 0);
         int mSuccession = Settings.System.getInt(mContext.getContentResolver(),
@@ -1427,6 +1521,56 @@ class NotificationManagerService extends INotificationManager.Stub {
                 mNotificationLight.pulse(ledARGB, ledOnMS);
             }
         }
+    }
+
+    private void updateGreenLightLocked() {
+        // handle notification light
+        if (mLedNotification == null) {
+            // get next notification, if any
+            int n = mLights.size();
+            if (n > 0) {
+                mLedNotification = mLights.get(n - 1);
+            }
+        }
+
+        boolean greenOn = mGreenLightOn;
+        final boolean inQuietHours = inQuietHours();
+
+        // disable light if screen is on and "always show" is off
+        if (mLedNotification == null || mInCall || inQuietHours
+                || (mScreenOn && !mNotificationAlwaysOnEnabled)) {
+            mNotificationLight.turnOff();
+            mGreenLightOn = false;
+        } else {
+            if (mNotificationBlinkEnabled) {
+                mNotificationLight.setFlashing(0xFF00FF00,
+                        LightsService.LIGHT_FLASH_HARDWARE, 0, 0);
+
+            } else {
+                mNotificationLight.setColor(0xFF00FF00);
+            }
+            mGreenLightOn = true;
+        }
+
+        if (greenOn != mGreenLightOn) {
+            updateAmberLight();
+        }
+    }
+
+    private void updateAmberLight() {
+        // disable LED if green LED is already on
+        if (!mGreenLightOn && !mInCall) {
+            final boolean inQuietHours = inQuietHours();
+
+            // enable amber only if low battery and not charging or charging
+            // and notification enabled
+            if (!inQuietHours && ((mBatteryLow && !mBatteryCharging) ||
+                    (mBatteryCharging && mNotificationChargingEnabled && !mBatteryFull))) {
+                mBatteryLight.setColor(0xFFFFFF00);
+                return;
+            }
+        }
+        mBatteryLight.turnOff();
     }
 
     // lock on mNotificationList
