@@ -1906,6 +1906,12 @@ public final class Settings {
         public static final String LOCK_HOME_IN_MEMORY = "lock_home_in_memory";
 
         /**
+         * Whether to keep the messaging app at a higher OOM adjustement
+         * @hide
+         */
+        public static final String LOCK_MMS_IN_MEMORY = "lock_mms_in_memory";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          * @hide
