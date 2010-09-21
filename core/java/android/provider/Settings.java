@@ -2192,6 +2192,12 @@ public final class Settings {
         public static final String LOCK_HOME_IN_MEMORY = "lock_home_in_memory";
 
         /**
+         * Whether to keep the messaging app at a higher OOM adjustement
+         * @hide
+         */
+        public static final String LOCK_MMS_IN_MEMORY = "lock_mms_in_memory";
+
+        /**
          * HDPI Devices only:  Align battery percentage text in status bar icon  right (0), left (1), center (2)
          * right (0) is default
          * @hide

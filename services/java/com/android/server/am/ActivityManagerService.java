@@ -13838,7 +13838,9 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
         int adj;
         int schedGroup;
         int N;
-        if ("com.android.mms".equals(app.processName)) {
+        if ("com.android.mms".equals(app.processName) &&
+            Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCK_MMS_IN_MEMORY, 1) == 1 ) {
             // MMS can die in situations of heavy memory pressure.
             // Always push it to the top.
             adj = FOREGROUND_APP_ADJ;
