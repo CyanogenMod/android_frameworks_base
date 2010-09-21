@@ -86,10 +86,6 @@ private:
 
     bool mStarted;
 
-    bool mIsFirstBuffer;
-    status_t mFirstBufferResult;
-    MediaBuffer *mFirstBuffer;
-
     sp<MediaPlayerBase::AudioSink> mAudioSink;
 
     static void AudioCallback(int event, void *user, void *info);
