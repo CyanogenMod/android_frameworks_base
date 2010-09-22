@@ -25,7 +25,6 @@ struct tPVMP4AudioDecoderExternal;
 namespace android {
 
 struct MediaBufferGroup;
-struct MetaData;
 
 struct AACDecoder : public MediaSource {
     AACDecoder(const sp<MediaSource> &source);
@@ -42,7 +41,6 @@ protected:
     virtual ~AACDecoder();
 
 private:
-    sp<MetaData>    mMeta;
     sp<MediaSource> mSource;
     bool mStarted;
 
@@ -52,11 +50,9 @@ private:
     void *mDecoderBuf;
     int64_t mAnchorTimeUs;
     int64_t mNumSamplesOutput;
-    status_t mInitCheck;
 
     MediaBuffer *mInputBuffer;
 
-    status_t initCheck();
     AACDecoder(const AACDecoder &);
     AACDecoder &operator=(const AACDecoder &);
 };
