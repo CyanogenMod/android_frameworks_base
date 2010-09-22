@@ -1,6 +1,7 @@
 /*
 **
 ** Copyright 2008, The Android Open Source Project
+** Copyright (C) 2010, Code Aurora Forum. All rights reserved.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -399,4 +400,12 @@ extern "C" sp<CameraHardwareInterface> openCameraHardware()
     return CameraHardwareStub::createInstance();
 }
 
+status_t CameraHardwareStub::getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize) {
+    /* No Support for this API in STUB Camera. Just return NULL */
+    Frame = NULL;
+    if( alignedSize != NULL)
+        *alignedSize = 0;
+
+    return UNKNOWN_ERROR;
+}
 }; // namespace android
