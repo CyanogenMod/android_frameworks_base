@@ -1,7 +1,5 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
- * Copyright (C) 2008 HTC Inc.
- * Copyright (C) 2010, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -128,9 +126,6 @@ public:
             // pass the buffered ISurface to the camera service
             status_t    setPreviewDisplay(const sp<Surface>& surface);
             status_t    setPreviewDisplay(const sp<ISurface>& surface);
-
-            // query the recording buffer information from HAL layer.
-            status_t    getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize);
 
             // start preview mode, must call setPreviewDisplay first
             status_t    startPreview();

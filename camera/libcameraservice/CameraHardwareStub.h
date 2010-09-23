@@ -1,7 +1,6 @@
 /*
 **
 ** Copyright 2008, The Android Open Source Project
-** Copyright (C) 2010, Code Aurora Forum. All rights reserved.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -60,8 +59,6 @@ public:
     virtual CameraParameters  getParameters() const;
     virtual status_t    sendCommand(int32_t command, int32_t arg1,
                                     int32_t arg2);
-    virtual status_t getBufferInfo( sp<IMemory>& Frame, size_t *alignedSize);
-
     virtual void release();
 
     static sp<CameraHardwareInterface> createInstance();
