@@ -1687,8 +1687,8 @@ public class Camera {
          *
          * @return sharpness level
          */
-        public float getSharpness(){
-            return getFloat(KEY_SHARPNESS, 0.0f);
+        public int getSharpness(){
+            return getInt(KEY_SHARPNESS, 0);
         }
 
         /**
@@ -1696,7 +1696,7 @@ public class Camera {
          *
          * @param sharpness level
          */
-        public void setSharpness(float sharpness){
+        public void setSharpness(int sharpness){
             if((sharpness < 0) || (sharpness > getMaxSharpness()) )
                 throw new IllegalArgumentException(
                         "Invalid Sharpness " + sharpness);
@@ -1709,8 +1709,8 @@ public class Camera {
          *
          * @return max sharpness level
          */
-        public float getMaxSharpness(){
-            return getFloat(KEY_MAX_SHARPNESS, 0.0f);
+        public int getMaxSharpness(){
+            return getInt(KEY_MAX_SHARPNESS, 0);
         }
 
         /**
@@ -1718,17 +1718,17 @@ public class Camera {
          * 
          * @return default sharpness level
          */
-        public float getDefaultSharpness() {
-            return getFloat(KEY_DEFAULT_SHARPNESS, 0.0f);
+        public int getDefaultSharpness() {
+            return getInt(KEY_DEFAULT_SHARPNESS, 0);
         }
-        
+
         /**
          * Get Contrast level
          *
          * @return contrast level
          */
-        public float getContrast(){
-            return getFloat(KEY_CONTRAST, 0.0f);
+        public int getContrast(){
+            return getInt(KEY_CONTRAST, 0);
         }
 
         /**
@@ -1736,7 +1736,7 @@ public class Camera {
          *
          * @param contrast level
          */
-        public void setContrast(float contrast){
+        public void setContrast(int contrast){
             if((contrast < 0 ) || (contrast > getMaxContrast()))
                 throw new IllegalArgumentException(
                         "Invalid Contrast " + contrast);
@@ -1749,8 +1749,8 @@ public class Camera {
          *
          * @return max contrast level
          */
-        public float getMaxContrast(){
-            return getFloat(KEY_MAX_CONTRAST, 0.0f);
+        public int getMaxContrast(){
+            return getInt(KEY_MAX_CONTRAST, 0);
         }
 
         /**
@@ -1758,25 +1758,25 @@ public class Camera {
          * 
          * @return default contrast level
          */
-        public float getDefaultContrast() {
-            return getFloat(KEY_DEFAULT_CONTRAST, 0.0f);
+        public int getDefaultContrast() {
+            return getInt(KEY_DEFAULT_CONTRAST, 0);
         }
-        
+
         /**
          * Get Saturation level
          *
          * @return saturation level
          */
-        public float getSaturation(){
-            return getFloat(KEY_SATURATION, 0.0f);
+        public int getSaturation(){
+            return getInt(KEY_SATURATION, 0);
         }
-        
+
         /**
          * Set Saturation Level
          *
          * @param saturation level
          */
-        public void setSaturation(float saturation){
+        public void setSaturation(int saturation){
             if((saturation < 0 ) || (saturation > getMaxSaturation()))
                 throw new IllegalArgumentException(
                         "Invalid Saturation " + saturation);
@@ -1789,8 +1789,8 @@ public class Camera {
          *
          * @return max contrast level
          */
-        public float getMaxSaturation(){
-            return getFloat(KEY_MAX_SATURATION, 0.0f);
+        public int getMaxSaturation(){
+            return getInt(KEY_MAX_SATURATION, 0);
         }
 
         /**
@@ -1798,25 +1798,25 @@ public class Camera {
          * 
          * @return default saturation level
          */
-        public float getDefaultSaturation() {
-            return getFloat(KEY_DEFAULT_SATURATION, 0.0f);
+        public int getDefaultSaturation() {
+            return getInt(KEY_DEFAULT_SATURATION, 0);
         }
-        
+
         /**
          * Get brightness level
          *
          * @return brightness level
          */
-        public float getBrightness(){
-            return getFloat(KEY_BRIGHTNESS, 0.0f);
+        public int getBrightness(){
+            return getInt(KEY_BRIGHTNESS, 0);
         }
-        
+
         /**
          * Set brightness level
          *
          * @param brightness level
          */
-        public void setBrightness(float brightness){
+        public void setBrightness(int brightness){
             if((brightness < 0 ) || (brightness > getMaxBrightness()))
                 throw new IllegalArgumentException(
                         "Invalid Brightness " + brightness);
@@ -1829,19 +1829,19 @@ public class Camera {
          *
          * @return max brightness level
          */
-        public float getMaxBrightness(){
-            return getFloat(KEY_MAX_BRIGHTNESS, 0.0f);
+        public int getMaxBrightness(){
+            return getInt(KEY_MAX_BRIGHTNESS, 0);
         }
-        
+
         /**
          * Get default brightness level
          * 
          * @return default brightness level
          */
-        public float getDefaultBrightness() {
-            return getFloat(KEY_DEFAULT_BRIGHTNESS, 0.0f);
+        public int getDefaultBrightness() {
+            return getInt(KEY_DEFAULT_BRIGHTNESS, 0);
         }
-        
+
         /**
          * Gets the current antibanding setting.
          *
