@@ -1358,8 +1358,6 @@ class NotificationManagerService extends INotificationManager.Stub {
         if (mLedNotification == null || (mScreenOn && (mPulseScreen == 0)) || mInCall) {
             mNotificationLight.turnOff();
             isTimer = false;
-            if(powerWake != null && powerWake.isHeld())
-                powerWake.release();
         } else {
             if (mSuccession == 1) {
                 int n = mLights.size();
