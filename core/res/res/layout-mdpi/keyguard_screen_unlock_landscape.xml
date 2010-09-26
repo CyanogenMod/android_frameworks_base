@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+**
+** Copyright 2008, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License")
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+
+<!-- This is the screen that shows the 9 circle unlock widget and instructs
+     the user how to unlock their device, or make an emergency call.  This
+     is the portrait layout.  -->
+
+<com.android.internal.widget.LinearLayoutWithDefaultTouchRecepient
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#70000000"
+        >
+
+    <!-- left side: instructions and emergency call button -->
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dip"
+            android:layout_height="match_parent"
+            android:layout_weight="1.0"
+            android:layout_marginLeft="24dip"
+            android:gravity="left"
+            >
+        <TextView
+            android:id="@+id/status1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dip"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            />
+
+        <TextView
+            android:id="@+id/carrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="17sp"
+            android:drawablePadding="4dip"
+            android:layout_marginTop="32dip"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:gravity="right|bottom"
+            />
+
+        <com.android.internal.widget.DigitalClock android:id="@+id/time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="8dip"
+            android:paddingBottom="8dip"
+            >
+
+        <TextView android:id="@+id/timeDisplay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:ellipsize="none"
+                android:textSize="72sp"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:shadowColor="#C0000000"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="3.0"
+                android:layout_marginBottom="6dip"
+                />
+
+
+            <TextView android:id="@+id/am_pm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/timeDisplay"
+                android:layout_alignBaseline="@id/timeDisplay"
+                android:singleLine="true"
+                android:ellipsize="none"
+                android:textSize="22sp"
+                android:layout_marginLeft="8dip"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:shadowColor="#C0000000"
+                android:shadowDx="0"
+                android:shadowDy="0"
+                android:shadowRadius="3.0"
+                />
+
+        </com.android.internal.widget.DigitalClock>
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/time"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            />
+
+        <!-- used for instructions such as "draw pattern to unlock", the next alarm, and charging
+             status.  -->
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dip"
+            android:gravity="center"
+            >
+            <TextView
+                android:id="@+id/statusSep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dip"
+                android:layout_marginRight="5dip"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="17sp"
+                />
+            <TextView
+                android:id="@+id/status2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="17sp"
+                android:drawablePadding="4dip"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/customMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            />
+
+        <!-- fill space between header and button below -->
+        <View
+            android:layout_weight="1.0"
+            android:layout_width="match_parent"
+            android:layout_height="0dip"
+            />
+
+        <!-- footer -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dip"
+            >
+
+            <!-- option 1: a single emergency call button -->
+            <RelativeLayout android:id="@+id/footerNormal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                >
+                <Button android:id="@+id/emergencyCallAlone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lockscreen_emergency_call"
+                    style="@style/Widget.Button.Transparent"
+                    android:drawableLeft="@drawable/ic_emergency"
+                    android:drawablePadding="8dip"
+                    />
+            </RelativeLayout>
+
+            <!-- option 2: an emergency call button, and a 'forgot pattern?' button -->
+            <LinearLayout android:id="@+id/footerForgotPattern"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                >
+                <Button android:id="@+id/forgotPattern"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.Button.Transparent"
+                    android:visibility="invisible"
+                    />
+                <Button android:id="@+id/emergencyCallTogether"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lockscreen_emergency_call"
+                    style="@style/Widget.Button.Transparent"
+                    android:drawableLeft="@drawable/ic_emergency"
+                    android:drawablePadding="8dip"
+                    />
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+    <!-- right side: lock pattern -->
+    <com.android.internal.widget.LockPatternView android:id="@+id/lockPattern"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content" />
+
+</com.android.internal.widget.LinearLayoutWithDefaultTouchRecepient>
