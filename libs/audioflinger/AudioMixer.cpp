@@ -56,6 +56,13 @@ AudioMixer::AudioMixer(size_t frameCount, uint32_t sampleRate, AudioDSP& dsp)
     mState.outputTemp   = 0;
     mState.resampleTemp = 0;
     mState.hook         = process__nop;
+    mState.dither.errorL = 0;
+    mState.dither.errorR = 0;
+    for (int i = 0; i < 4; i ++) {
+        mState.dither.lipshitzL[i] = 0;
+        mState.dither.lipshitzR[i] = 0;
+    }
+    mState.dither.oldDither = 0;
     track_t* t = mState.tracks;
     for (int i=0 ; i<32 ; i++) {
         t->needs = 0;
