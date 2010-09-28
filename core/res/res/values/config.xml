@@ -323,4 +323,8 @@
     <!-- 2 means give warning -->
     <integer name="config_datause_notification_type">2</integer>
 
+    <!-- Download GPS XTRA data on boot -->
+    <!-- This is known to cause issues on certain platforms -->
+    <bool name="config_gps_xtra_download_on_boot">true</bool>
+
 </resources>

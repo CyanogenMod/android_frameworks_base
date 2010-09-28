@@ -199,7 +199,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
     // flags to trigger NTP or XTRA data download when network becomes available
     // initialized to true so we do NTP and XTRA when the network comes up after booting
     private boolean mInjectNtpTimePending = true;
-    private boolean mDownloadXtraDataPending = false;
+    private boolean mDownloadXtraDataPending = true;
 
     // true if GPS is navigating
     private boolean mNavigating;
@@ -348,6 +348,10 @@ public class GpsLocationProvider implements LocationProviderInterface {
     public GpsLocationProvider(Context context, ILocationManager locationManager) {
         mContext = context;
         mLocationManager = locationManager;
+
+        mDownloadXtraDataPending = context.getResources().getBoolean(
+                com.android.internal.R.bool.config_gps_xtra_download_on_boot);
+
         mNIHandler = new GpsNetInitiatedHandler(context, this);
 
         mLocation.setExtras(mLocationExtras);
@@ -523,7 +527,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
     }
 
     private void handleDownloadXtraData() {
-     if (!mNetworkAvailable) {
+        if (!mDownloadXtraDataPending) {
             // try again when network is up
             mDownloadXtraDataPending = true;
             return;
