@@ -221,7 +221,7 @@ void SurfaceFlinger::init()
     property_get("debug.sf.render_color_blue", value, "824");
     mRenderColorB = atoi(value);
 
-    property_get("persist.sys.use_dithering", value, "1");
+    property_get("persist.sys.use_dithering", value, "0");
     mUseDithering = atoi(value) == 1;
 
     LOGI_IF(mDebugRegion,           "showupdates enabled");
