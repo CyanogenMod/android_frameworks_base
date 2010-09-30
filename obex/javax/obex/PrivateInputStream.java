@@ -44,9 +44,7 @@ public final class PrivateInputStream extends InputStream {
 
     private BaseStream mParent;
 
-    private byte[] mData;
-
-    private int mIndex;
+    private ObexByteBuffer mBuffer;
 
     private boolean mOpen;
 
@@ -56,8 +54,7 @@ public final class PrivateInputStream extends InputStream {
      */
     public PrivateInputStream(BaseStream p) {
         mParent = p;
-        mData = new byte[0];
-        mIndex = 0;
+        mBuffer = new ObexByteBuffer(0);
         mOpen = true;
     }
 
@@ -73,7 +70,7 @@ public final class PrivateInputStream extends InputStream {
     @Override
     public synchronized int available() throws IOException {
         ensureOpen();
-        return mData.length - mIndex;
+        return mBuffer.getLength();
     }
 
     /**
@@ -89,12 +86,12 @@ public final class PrivateInputStream extends InputStream {
     @Override
     public synchronized int read() throws IOException {
         ensureOpen();
-        while (mData.length == mIndex) {
+        while (mBuffer.getLength() == 0) {
             if (!mParent.continueOperation(true, true)) {
                 return -1;
             }
         }
-        return (mData[mIndex++] & 0xFF);
+        return (mBuffer.read() & 0xFF);
     }
 
     @Override
@@ -113,26 +110,23 @@ public final class PrivateInputStream extends InputStream {
         }
         ensureOpen();
 
-        int currentDataLength = mData.length - mIndex;
         int remainReadLength = length;
         int offset1 = offset;
         int result = 0;
 
-        while (currentDataLength <= remainReadLength) {
-            System.arraycopy(mData, mIndex, b, offset1, currentDataLength);
-            mIndex += currentDataLength;
-            offset1 += currentDataLength;
-            result += currentDataLength;
-            remainReadLength -= currentDataLength;
+        while (mBuffer.getLength() <= remainReadLength) {
+            int readBytes = mBuffer.read(b, offset1);
+
+            offset1 += readBytes;
+            result += readBytes;
+            remainReadLength -= readBytes;
 
             if (!mParent.continueOperation(true, true)) {
                 return result == 0 ? -1 : result;
             }
-            currentDataLength = mData.length - mIndex;
         }
         if (remainReadLength > 0) {
-            System.arraycopy(mData, mIndex, b, offset1, remainReadLength);
-            mIndex += remainReadLength;
+            mBuffer.read(b, offset1, remainReadLength);
             result += remainReadLength;
         }
         return result;
@@ -144,16 +138,8 @@ public final class PrivateInputStream extends InputStream {
      * @param body the data to add to the stream
      * @param start the start of the body to array to copy
      */
-    public synchronized void writeBytes(byte[] body, int start) {
-
-        int length = (body.length - start) + (mData.length - mIndex);
-        byte[] temp = new byte[length];
-
-        System.arraycopy(mData, mIndex, temp, 0, mData.length - mIndex);
-        System.arraycopy(body, start, temp, mData.length - mIndex, body.length - start);
-
-        mData = temp;
-        mIndex = 0;
+    public synchronized void writeBytes(ObexByteBuffer body, int start) {
+        mBuffer.write(body, start);
         notifyAll();
     }
 

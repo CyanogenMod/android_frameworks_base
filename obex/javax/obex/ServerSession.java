@@ -60,6 +60,10 @@ public final class ServerSession extends ObexSession implements Runnable {
 
     private boolean mClosed;
 
+    private ObexByteBuffer mData;
+
+    private ObexByteBuffer mHeaderBuffer;
+
     /**
      * Creates new ServerSession.
      * @param trans the connection to the client
@@ -80,6 +84,9 @@ public final class ServerSession extends ObexSession implements Runnable {
         mClosed = false;
         mProcessThread = new Thread(this);
         mProcessThread.start();
+
+        mData = new ObexByteBuffer(32);
+        mHeaderBuffer = new ObexByteBuffer(32);
     }
 
     /**
@@ -253,24 +260,22 @@ public final class ServerSession extends ObexSession implements Runnable {
      * @param header the headers to include in the response
      * @throws IOException if an IO error occurs
      */
-    public void sendResponse(int code, byte[] header) throws IOException {
+    public void sendResponse(int code, ObexByteBuffer header) throws IOException {
         int totalLength = 3;
-        byte[] data = null;
+        mData.reset();
 
         if (header != null) {
-            totalLength += header.length;
-            data = new byte[totalLength];
-            data[0] = (byte)code;
-            data[1] = (byte)(totalLength >> 8);
-            data[2] = (byte)totalLength;
-            System.arraycopy(header, 0, data, 3, header.length);
+            totalLength += header.getLength();
+            mData.write((byte)code);
+            mData.write((byte)(totalLength >> 8));
+            mData.write((byte)totalLength);
+            mData.write(header);
         } else {
-            data = new byte[totalLength];
-            data[0] = (byte)code;
-            data[1] = (byte)0x00;
-            data[2] = (byte)totalLength;
+            mData.write((byte)code);
+            mData.write((byte)0x00);
+            mData.write((byte)totalLength);
         }
-        mOutput.write(data);
+        mData.read(mOutput);
         mOutput.flush();
     }
 
@@ -291,7 +296,6 @@ public final class ServerSession extends ObexSession implements Runnable {
         int totalLength = 3;
         byte[] head = null;
         int code = -1;
-        int bytesReceived;
         HeaderSet request = new HeaderSet();
         HeaderSet reply = new HeaderSet();
 
@@ -305,15 +309,10 @@ public final class ServerSession extends ObexSession implements Runnable {
             totalLength = 3;
         } else {
             if (length > 5) {
-                byte[] headers = new byte[length - 5];
-                bytesReceived = mInput.read(headers);
+                mData.reset();
+                mData.write(mInput, length - 5);
 
-                while (bytesReceived != headers.length) {
-                    bytesReceived += mInput.read(headers, bytesReceived, headers.length
-                            - bytesReceived);
-                }
-
-                ObexHelper.updateHeaderSet(request, headers);
+                ObexHelper.updateHeaderSet(request, mData, null, mHeaderBuffer);
 
                 if (mListener.getConnectionId() != -1 && request.mConnectionID != null) {
                     mListener.setConnectionId(ObexHelper.convertToLong(request.mConnectionID));
@@ -386,18 +385,18 @@ public final class ServerSession extends ObexSession implements Runnable {
         }
 
         // Compute Length of OBEX SETPATH packet
-        byte[] replyData = new byte[totalLength];
-        replyData[0] = (byte)code;
-        replyData[1] = (byte)(totalLength >> 8);
-        replyData[2] = (byte)totalLength;
+        mData.reset();
+        mData.write((byte)code);
+        mData.write((byte)(totalLength >> 8));
+        mData.write((byte)totalLength);
         if (head != null) {
-            System.arraycopy(head, 0, replyData, 3, head.length);
+            mData.write(head);
         }
         /*
          * Write the OBEX SETPATH packet to the server. Byte 0: response code
          * Byte 1&2: Connect Packet Length Byte 3 to n: headers
          */
-        mOutput.write(replyData);
+        mData.read(mOutput);
         mOutput.flush();
     }
 
@@ -414,7 +413,6 @@ public final class ServerSession extends ObexSession implements Runnable {
         int code = ResponseCodes.OBEX_HTTP_OK;
         int totalLength = 3;
         byte[] head = null;
-        int bytesReceived;
         HeaderSet request = new HeaderSet();
         HeaderSet reply = new HeaderSet();
 
@@ -426,15 +424,10 @@ public final class ServerSession extends ObexSession implements Runnable {
             totalLength = 3;
         } else {
             if (length > 3) {
-                byte[] headers = new byte[length - 3];
-                bytesReceived = mInput.read(headers);
+                mData.reset();
+                mData.write(mInput, length - 3);
 
-                while (bytesReceived != headers.length) {
-                    bytesReceived += mInput.read(headers, bytesReceived, headers.length
-                            - bytesReceived);
-                }
-
-                ObexHelper.updateHeaderSet(request, headers);
+                ObexHelper.updateHeaderSet(request, mData, null, mHeaderBuffer);
             }
 
             if (mListener.getConnectionId() != -1 && request.mConnectionID != null) {
@@ -485,23 +478,18 @@ public final class ServerSession extends ObexSession implements Runnable {
         }
 
         // Compute Length of OBEX CONNECT packet
-        byte[] replyData;
+        mData.reset();
+        mData.write((byte)code);
+        mData.write((byte)(totalLength >> 8));
+        mData.write((byte)totalLength);
         if (head != null) {
-            replyData = new byte[3 + head.length];
-        } else {
-            replyData = new byte[3];
-        }
-        replyData[0] = (byte)code;
-        replyData[1] = (byte)(totalLength >> 8);
-        replyData[2] = (byte)totalLength;
-        if (head != null) {
-            System.arraycopy(head, 0, replyData, 3, head.length);
+            mData.write(head);
         }
         /*
          * Write the OBEX DISCONNECT packet to the server. Byte 0: response code
          * Byte 1&2: Connect Packet Length Byte 3 to n: headers
          */
-        mOutput.write(replyData);
+        mData.read(mOutput);
         mOutput.flush();
     }
 
@@ -525,7 +513,6 @@ public final class ServerSession extends ObexSession implements Runnable {
         int code = -1;
         HeaderSet request = new HeaderSet();
         HeaderSet reply = new HeaderSet();
-        int bytesReceived;
 
         /*
          * Read in the length of the OBEX packet, OBEX version, flags, and max
@@ -548,15 +535,10 @@ public final class ServerSession extends ObexSession implements Runnable {
             totalLength = 7;
         } else {
             if (packetLength > 7) {
-                byte[] headers = new byte[packetLength - 7];
-                bytesReceived = mInput.read(headers);
+                mData.reset();
+                mData.write(mInput, packetLength - 7);
 
-                while (bytesReceived != headers.length) {
-                    bytesReceived += mInput.read(headers, bytesReceived, headers.length
-                            - bytesReceived);
-                }
-
-                ObexHelper.updateHeaderSet(request, headers);
+                ObexHelper.updateHeaderSet(request, mData, null, mHeaderBuffer);
             }
 
             if (mListener.getConnectionId() != -1 && request.mConnectionID != null) {

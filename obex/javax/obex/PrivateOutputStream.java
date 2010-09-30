@@ -34,7 +34,6 @@ package javax.obex;
 
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.ByteArrayOutputStream;
 
 /**
  * This object provides an output stream to the Operation objects used in this
@@ -45,7 +44,7 @@ public final class PrivateOutputStream extends OutputStream {
 
     private BaseStream mParent;
 
-    private ByteArrayOutputStream mArray;
+    private ObexByteBuffer mBuffer;
 
     private boolean mOpen;
 
@@ -57,7 +56,7 @@ public final class PrivateOutputStream extends OutputStream {
      */
     public PrivateOutputStream(BaseStream p, int maxSize) {
         mParent = p;
-        mArray = new ByteArrayOutputStream();
+        mBuffer = new ObexByteBuffer(32);
         mMaxPacketSize = maxSize;
         mOpen = true;
     }
@@ -67,7 +66,7 @@ public final class PrivateOutputStream extends OutputStream {
      * @return the number of bytes written to the output stream
      */
     public int size() {
-        return mArray.size();
+        return mBuffer.getLength();
     }
 
     /**
@@ -82,8 +81,8 @@ public final class PrivateOutputStream extends OutputStream {
     public synchronized void write(int b) throws IOException {
         ensureOpen();
         mParent.ensureNotDone();
-        mArray.write(b);
-        if (mArray.size() == mMaxPacketSize) {
+        mBuffer.write((byte)b);
+        if (mBuffer.getLength() == mMaxPacketSize) {
             mParent.continueOperation(true, false);
         }
     }
@@ -108,38 +107,30 @@ public final class PrivateOutputStream extends OutputStream {
         ensureOpen();
         mParent.ensureNotDone();
         if (count < mMaxPacketSize) {
-            mArray.write(buffer, offset, count);
+            mBuffer.write(buffer, offset, count);
         } else {
             while (remainLength >= mMaxPacketSize) {
-                mArray.write(buffer, offset1, mMaxPacketSize);
+                mBuffer.write(buffer, offset1, mMaxPacketSize);
                 offset1 += mMaxPacketSize;
                 remainLength = count - offset1;
                 mParent.continueOperation(true, false);
             }
             if (remainLength > 0) {
-                mArray.write(buffer, offset1, remainLength);
+                mBuffer.write(buffer, offset1, remainLength);
             }
         }
     }
 
     /**
-     * Reads the bytes that have been written to this stream.
-     * @param size the size of the array to return
-     * @return the byte array that is written
+     * Write some of the bytes that have been written to this stream to
+     * an ObexByteBuffer.
+     *
+     * @param dest the stream to write to
+     * @param start where to write in the byte array
+     * @param size the number of bytes to write to the byte array
      */
-    public synchronized byte[] readBytes(int size) {
-        if (mArray.size() > 0) {
-            byte[] temp = mArray.toByteArray();
-            mArray.reset();
-            byte[] result = new byte[size];
-            System.arraycopy(temp, 0, result, 0, size);
-            if (temp.length != size) {
-                mArray.write(temp, size, temp.length - size);
-            }
-            return result;
-        } else {
-            return null;
-        }
+    public synchronized void writeTo(ObexByteBuffer dest, int size) throws IOException {
+        mBuffer.read(dest, size);
     }
 
     /**

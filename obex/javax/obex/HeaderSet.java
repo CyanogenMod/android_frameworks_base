@@ -126,7 +126,7 @@ public final class HeaderSet {
     /**
      * Represents the OBEX End of BODY header.
      * <P>
-     * The value of <code>BODY</code> is 0x49 (73).
+     * The value of <code>END_OF_BODY</code> is 0x49 (73).
      */
     public static final int END_OF_BODY = 0x49;
 
