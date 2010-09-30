@@ -1530,7 +1530,7 @@ public class WifiService extends IWifiManager.Stub {
                         scanResult.frequency = frequency;
                     } else {
                         // Do not add scan results that have no SSID set
-                        if (0 < ssid.trim().length()) {
+                        if (0 < ssid.length()) {
                             scanResult =
                                 new ScanResult(
                                     ssid, bssid, flags, level, frequency);
