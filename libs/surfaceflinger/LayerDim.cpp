@@ -54,11 +54,7 @@ void LayerDim::initDimmer(SurfaceFlinger* flinger, uint32_t w, uint32_t h)
     sWidth = w;
     sHeight = h;
     sUseTexture = false;
-    
-#if defined(DIM_WITH_TEXTURE) && defined(EGL_ANDROID_image_native_buffer)
 
-#warning "using a texture to implement LayerDim"
-    
     /* On some h/w like msm7K, it is faster to use a texture because the
      * software renderer will defer to copybit, for this to work we need to
      * use an EGLImage texture so copybit can actually make use of it.
@@ -68,7 +64,8 @@ void LayerDim::initDimmer(SurfaceFlinger* flinger, uint32_t w, uint32_t h)
     const DisplayHardware& hw(flinger->graphicPlane(0).displayHardware());
     uint32_t flags = hw.getFlags();
 
-    if (LIKELY(flags & DisplayHardware::DIRECT_TEXTURE)) {
+    if (LIKELY((flags & DisplayHardware::DIRECT_TEXTURE) &&
+        (flags & DisplayHardware::SLOW_CONFIG))) {
         sp<GraphicBuffer> buffer = new GraphicBuffer(w, h, PIXEL_FORMAT_RGB_565,
                  GraphicBuffer::USAGE_SW_WRITE_OFTEN |
                  GraphicBuffer::USAGE_HW_TEXTURE);
@@ -101,7 +98,6 @@ void LayerDim::initDimmer(SurfaceFlinger* flinger, uint32_t w, uint32_t h)
         buffer->unlock();
         sUseTexture = true;
     }
-#endif
 }
 
 LayerDim::~LayerDim()
@@ -117,13 +113,13 @@ void LayerDim::onDraw(const Region& clip) const
         const DisplayHardware& hw(graphicPlane(0).displayHardware());
         const GGLfixed alpha = (s.alpha << 16)/255;
         const uint32_t fbHeight = hw.getHeight();
+        const uint32_t flags = hw.getFlags();
         glDisable(GL_DITHER);
         glEnable(GL_BLEND);
         glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
         glColor4x(0, 0, 0, alpha);
-        
-#if defined(DIM_WITH_TEXTURE) && defined(EGL_ANDROID_image_native_buffer)
-        if (sUseTexture) {
+
+        if (sUseTexture && (flags & DisplayHardware::SLOW_CONFIG)) {
             glBindTexture(GL_TEXTURE_2D, sTexId);
             glEnable(GL_TEXTURE_2D);
             glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
@@ -138,7 +134,6 @@ void LayerDim::onDraw(const Region& clip) const
             glEnableClientState(GL_TEXTURE_COORD_ARRAY);
             glTexCoordPointer(2, GL_SHORT, 0, texCoords);
         } else
-#endif
         {
             glDisable(GL_TEXTURE_2D);
         }
