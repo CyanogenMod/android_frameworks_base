@@ -98,7 +98,7 @@ public class ObexSession {
 
                 case ObexHelper.OBEX_AUTH_REALM_CHARSET_UNICODE:
                     // UNICODE Encoding
-                    realm = ObexHelper.convertToUnicode(realmString, false);
+                    realm = ObexHelper.convertToUnicode(realmString, realmString.length, false);
                     break;
 
                 default:

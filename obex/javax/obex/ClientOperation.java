@@ -37,7 +37,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.ByteArrayOutputStream;
 
 /**
  * This class implements the <code>Operation</code> interface. It will read and
@@ -72,6 +71,8 @@ public final class ClientOperation implements Operation, BaseStream {
 
     private boolean mEndOfBodySent;
 
+    private ObexByteBuffer mOutBuffer;
+
     /**
      * Creates new OperationImpl to read and write data to a server
      * @param maxSize the maximum packet size
@@ -99,6 +100,8 @@ public final class ClientOperation implements Operation, BaseStream {
         mReplyHeader = new HeaderSet();
 
         mRequestHeader = new HeaderSet();
+
+        mOutBuffer = new ObexByteBuffer(32);
 
         int[] headerList = header.getHeaderList();
 
@@ -396,7 +399,7 @@ public final class ClientOperation implements Operation, BaseStream {
      */
     private boolean sendRequest(int opCode) throws IOException {
         boolean returnValue = false;
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
         int bodyLength = -1;
         byte[] headerArray = ObexHelper.createHeader(mRequestHeader, true);
         if (mPrivateOutput != null) {
@@ -437,9 +440,9 @@ public final class ClientOperation implements Operation, BaseStream {
                     throw new IOException("OBEX Packet exceeds max packet size");
                 }
 
-                byte[] sendHeader = new byte[end - start];
-                System.arraycopy(headerArray, start, sendHeader, 0, sendHeader.length);
-                if (!mParent.sendRequest(opCode, sendHeader, mReplyHeader, mPrivateInput)) {
+                mOutBuffer.reset();
+                mOutBuffer.write(headerArray, start, end - start);
+                if (!mParent.sendRequest(opCode, mOutBuffer, mReplyHeader, mPrivateInput)) {
                     return false;
                 }
 
@@ -456,7 +459,8 @@ public final class ClientOperation implements Operation, BaseStream {
                 return false;
             }
         } else {
-            out.write(headerArray);
+            mOutBuffer.reset();
+            mOutBuffer.write(headerArray);
         }
 
         if (bodyLength > 0) {
@@ -471,8 +475,6 @@ public final class ClientOperation implements Operation, BaseStream {
                 bodyLength = mMaxPacketSize - headerArray.length - 6;
             }
 
-            byte[] body = mPrivateOutput.readBytes(bodyLength);
-
             /*
              * Since this is a put request if the final bit is set or
              * the output stream is closed we need to send the 0x49
@@ -480,44 +482,40 @@ public final class ClientOperation implements Operation, BaseStream {
              */
             if ((mPrivateOutput.isClosed()) && (!returnValue) && (!mEndOfBodySent)
                     && ((opCode & 0x80) != 0)) {
-                out.write(0x49);
+                mOutBuffer.write((byte)0x49);
                 mEndOfBodySent = true;
             } else {
-                out.write(0x48);
+                mOutBuffer.write((byte)0x48);
             }
 
             bodyLength += 3;
-            out.write((byte)(bodyLength >> 8));
-            out.write((byte)bodyLength);
-
-            if (body != null) {
-                out.write(body);
-            }
+            mOutBuffer.write((byte)(bodyLength >> 8));
+            mOutBuffer.write((byte)bodyLength);
+            mPrivateOutput.writeTo(mOutBuffer, bodyLength - 3);
         }
 
         if (mPrivateOutputOpen && bodyLength <= 0 && !mEndOfBodySent) {
             // only 0x82 or 0x83 can send 0x49
             if ((opCode & 0x80) == 0) {
-                out.write(0x48);
+                mOutBuffer.write((byte)0x48);
             } else {
-                out.write(0x49);
+                mOutBuffer.write((byte)0x49);
                 mEndOfBodySent = true;
-
             }
 
             bodyLength = 3;
-            out.write((byte)(bodyLength >> 8));
-            out.write((byte)bodyLength);
+            mOutBuffer.write((byte)(bodyLength >> 8));
+            mOutBuffer.write((byte)bodyLength);
         }
 
-        if (out.size() == 0) {
+        if (mOutBuffer.getLength() == 0) {
             if (!mParent.sendRequest(opCode, null, mReplyHeader, mPrivateInput)) {
                 return false;
             }
             return returnValue;
         }
-        if ((out.size() > 0)
-                && (!mParent.sendRequest(opCode, out.toByteArray(), mReplyHeader, mPrivateInput))) {
+        if ((mOutBuffer.getLength() > 0)
+                && (!mParent.sendRequest(opCode, mOutBuffer, mReplyHeader, mPrivateInput))) {
             return false;
         }
 
