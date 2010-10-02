@@ -189,6 +189,8 @@ class PowerManagerService extends IPowerManager.Stub
     private LightsService.Light mButtonLight;
     private LightsService.Light mKeyboardLight;
     private LightsService.Light mAttentionLight;
+    private LightsService.Light mCapsLight;
+    private LightsService.Light mFnLight;
     private UnsynchronizedWakeLock mBroadcastWakeLock;
     private UnsynchronizedWakeLock mStayOnWhilePluggedInScreenDimLock;
     private UnsynchronizedWakeLock mStayOnWhilePluggedInPartialLock;
@@ -495,6 +497,8 @@ class PowerManagerService extends IPowerManager.Stub
         mButtonLight = lights.getLight(LightsService.LIGHT_ID_BUTTONS);
         mKeyboardLight = lights.getLight(LightsService.LIGHT_ID_KEYBOARD);
         mAttentionLight = lights.getLight(LightsService.LIGHT_ID_ATTENTION);
+        mCapsLight = lights.getLight(LightsService.LIGHT_ID_CAPS);
+        mFnLight = lights.getLight(LightsService.LIGHT_ID_FUNC);
 
         mHandlerThread = new HandlerThread("PowerManagerService") {
             @Override
@@ -2577,6 +2581,11 @@ class PowerManagerService extends IPowerManager.Stub
                     }
                     userActivity(SystemClock.uptimeMillis(), false, BUTTON_EVENT, true);
                 }
+                // If hiding keyboard, turn off leds
+                if (!visible) {
+                    setKeyboardLight(false, 1);
+                    setKeyboardLight(false, 2);
+                }
             }
         }
     }
@@ -3072,6 +3081,21 @@ class PowerManagerService extends IPowerManager.Stub
             }
         }
     }
+
+    public void setKeyboardLight(boolean on, int key) {
+        if (key == 1) {
+            if (on) 
+                mCapsLight.setColor(0x00ffffff);
+            else
+                mCapsLight.turnOff();
+        } else if (key == 2) {
+            if (on) 
+                mFnLight.setColor(0x00ffffff);
+            else
+                mFnLight.turnOff();
+        }
+    }
+
 
     SensorEventListener mProximityListener = new SensorEventListener() {
         public void onSensorChanged(SensorEvent event) {
