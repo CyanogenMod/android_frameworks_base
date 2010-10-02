@@ -28,7 +28,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
-public class LightsService {
+public class LightsService implements LightsServiceDefinition {
     private static final String TAG = "LightsService";
 
     static final int LIGHT_ID_BACKLIGHT = 0;
@@ -72,7 +72,7 @@ public class LightsService {
         }
     }
 
-    public final class Light {
+    public final class Light implements LightDefinition {
 
         private Light(int id) {
             mId = id;
@@ -208,7 +208,7 @@ public class LightsService {
         super.finalize();
     }
 
-    public Light getLight(int id) {
+    public LightDefinition getLight(int id) {
         return mLights[id];
     }
 

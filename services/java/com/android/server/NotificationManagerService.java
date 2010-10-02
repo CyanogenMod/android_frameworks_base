@@ -19,6 +19,8 @@ package com.android.server;
 import com.android.server.status.IconData;
 import com.android.server.status.NotificationData;
 import com.android.server.status.StatusBarService;
+import com.android.server.status.StatusBarServiceDefinition;
+
 import android.app.ActivityManagerNative;
 import android.app.IActivityManager;
 import android.app.INotificationManager;
@@ -73,7 +75,7 @@ import java.util.Random;
 //For Notification Colors.
 import android.graphics.Color;
 
-class NotificationManagerService extends INotificationManager.Stub {
+public class NotificationManagerService extends INotificationManager.Stub {
     private static final String TAG = "NotificationService";
 
     private static final boolean DBG = false;
@@ -99,13 +101,13 @@ class NotificationManagerService extends INotificationManager.Stub {
 
     private WorkerHandler mHandler;
 
-    private StatusBarService mStatusBarService;
+    private StatusBarServiceDefinition mStatusBarService;
 
-    private LightsService.Light mBatteryLight;
+    private LightsService.LightDefinition mBatteryLight;
 
-    private LightsService.Light mNotificationLight;
+    private LightsService.LightDefinition mNotificationLight;
 
-    private LightsService.Light mAttentionLight;
+    private LightsService.LightDefinition mAttentionLight;
 
     private int mDefaultNotificationColor;
 
@@ -562,12 +564,13 @@ class NotificationManagerService extends INotificationManager.Stub {
         }
     }
 
-    NotificationManagerService(Context context, StatusBarService statusBar, LightsService lights) {
+    public NotificationManagerService(Context context, StatusBarServiceDefinition statusBar,
+            LightsServiceDefinition lights) {
         super();
         mContext = context;
         mAm = ActivityManagerNative.getDefault();
         mSound = new NotificationPlayer(TAG);
-        mSound.setUsesWakeLock(context);
+        //mSound.setUsesWakeLock(context);
         mToastQueue = new ArrayList<ToastRecord>();
         mHandler = new WorkerHandler();
 
@@ -990,10 +993,13 @@ class NotificationManagerService extends INotificationManager.Stub {
         idOut[0] = id;
     }
 
-    private boolean inQuietHours() {
+    public boolean inQuietHours() {
+        return inQuietHours(Calendar.getInstance());
+    }
+
+    public boolean inQuietHours(Calendar calendar) {
         if (mQuietHoursEnabled && (mQuietHoursStart != mQuietHoursEnd)) {
             // Get the date in "quiet hours" format.
-            Calendar calendar = Calendar.getInstance();
             int minutes = calendar.get(Calendar.HOUR_OF_DAY) * 60 + calendar.get(Calendar.MINUTE);
             if (mQuietHoursEnd < mQuietHoursStart) {
                 // Starts at night, ends in the morning.
@@ -1714,5 +1720,18 @@ class NotificationManagerService extends INotificationManager.Stub {
             pw.println("  mDisabledNotifications=0x" + Integer.toHexString(mDisabledNotifications));
             pw.println("  mSystemReady=" + mSystemReady);
         }
+    }
+
+    /**
+     * Only for tests! Do not use!
+     */
+    public void setQuietHours(boolean enabled, int start, int end, boolean mute, boolean still,
+            boolean dim) {
+        mQuietHoursEnabled = enabled;
+        mQuietHoursStart = start;
+        mQuietHoursEnd = end;
+        mQuietHoursMute = mute;
+        mQuietHoursStill = still;
+        mQuietHoursDim = dim;
     }
 }

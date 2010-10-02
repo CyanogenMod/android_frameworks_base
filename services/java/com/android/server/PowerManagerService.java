@@ -185,12 +185,12 @@ class PowerManagerService extends IPowerManager.Stub
     private Intent mScreenOnIntent;
     private LightsService mLightsService;
     private Context mContext;
-    private LightsService.Light mLcdLight;
-    private LightsService.Light mButtonLight;
-    private LightsService.Light mKeyboardLight;
-    private LightsService.Light mAttentionLight;
-    private LightsService.Light mCapsLight;
-    private LightsService.Light mFnLight;
+    private LightsServiceDefinition.LightDefinition mLcdLight;
+    private LightsServiceDefinition.LightDefinition mButtonLight;
+    private LightsServiceDefinition.LightDefinition mKeyboardLight;
+    private LightsServiceDefinition.LightDefinition mAttentionLight;
+    private LightsServiceDefinition.LightDefinition mCapsLight;
+    private LightsServiceDefinition.LightDefinition mFnLight;
     private UnsynchronizedWakeLock mBroadcastWakeLock;
     private UnsynchronizedWakeLock mStayOnWhilePluggedInScreenDimLock;
     private UnsynchronizedWakeLock mStayOnWhilePluggedInPartialLock;
@@ -2492,7 +2492,7 @@ class PowerManagerService extends IPowerManager.Stub
                 synchronized (this) {
                     ShutdownThread.reboot(mContext, finalReason, false);
                 }
-                
+
             }
         };
         // ShutdownThread must run on a looper capable of displaying the UI.

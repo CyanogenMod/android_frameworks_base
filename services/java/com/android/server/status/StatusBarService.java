@@ -117,7 +117,7 @@ import com.android.server.status.widget.SleepButton;
  * separately throughout the code, although they both use the same key, which is assigned
  * when they are created.
  */
-public class StatusBarService extends IStatusBar.Stub
+public class StatusBarService extends IStatusBar.Stub implements StatusBarServiceDefinition
 {
     static final String TAG = "StatusBar";
     static final boolean SPEW = false;
@@ -186,7 +186,7 @@ public class StatusBarService extends IStatusBar.Stub
             return super.dispatchKeyEvent(event);
         }
     }
-    
+
     final Context mContext;
     final Display mDisplay;
     StatusBarView mStatusBarView;
@@ -195,7 +195,7 @@ public class StatusBarService extends IStatusBar.Stub
     Object mQueueLock = new Object();
     ArrayList<PendingOp> mQueue = new ArrayList<PendingOp>();
     NotificationCallbacks mNotificationCallbacks;
-    
+
     // All accesses to mIconMap and mNotificationData are syncronized on those objects,
     // but this is only so dump() can work correctly.  Modifying these outside of the UI
     // thread will not work, there are places in the code that unlock and reaquire between
@@ -246,14 +246,14 @@ public class StatusBarService extends IStatusBar.Stub
     private View mTickerView;
     private boolean mTicking;
     private TickerView tickerView;
-    
+
     // Tracking finger for opening/closing.
     int mEdgeBorder; // corresponds to R.dimen.status_bar_edge_ignore
     boolean mTracking;
     VelocityTracker mVelocityTracker;
-    
+
     static final int ANIM_FRAME_DURATION = (1000/60);
-    
+
     boolean mAnimating;
     long mCurAnimationTime;
     float mDisplayHeight;
@@ -279,8 +279,8 @@ public class StatusBarService extends IStatusBar.Stub
     Drawable expBarBackDrawable;
     Drawable expBarHeadDrawable;
     Drawable expBarNotifTitleDrawable;
-    
-    
+
+
     // for disabling the status bar
     ArrayList<DisableRecord> mDisableRecords = new ArrayList<DisableRecord>();
     int mDisabled = 0;
@@ -314,7 +314,7 @@ public class StatusBarService extends IStatusBar.Stub
         Resources res = context.getResources();
         mRightIconSlots = res.getStringArray(com.android.internal.R.array.status_bar_icon_order);
         mRightIcons = new StatusBarIcon[mRightIconSlots.length];
-        getNotBarConfig();        
+        getNotBarConfig();
         ExpandedView expanded = (ExpandedView)View.inflate(context,
                 com.android.internal.R.layout.status_bar_expanded, null);
         expanded.mService = this;
@@ -330,7 +330,7 @@ public class StatusBarService extends IStatusBar.Stub
         }
         mStatusBarView = sb;
         mDateView = (DateView)sb.findViewById(R.id.date);
-       
+
         if (custNotBar) {
         	    mStatusBarView.setBackgroundDrawable(res.getDrawable(com.android.internal.R.drawable.statusbar_background_sq,
                 	    notifBarColorMask, notifPDMode));
@@ -338,13 +338,13 @@ public class StatusBarService extends IStatusBar.Stub
                 	    notifBarColorMask, notifPDMode));
         	    mDateView.setPadding(6, 0, 6, 0);
         }
-        
+
         mStatusIcons = (LinearLayout)sb.findViewById(R.id.statusIcons);
         mNotificationIcons = (IconMerger)sb.findViewById(R.id.notificationIcons);
         mNotificationIcons.service = this;
         mIcons = (LinearLayout)sb.findViewById(R.id.icons);
         mTickerView = sb.findViewById(R.id.ticker);
-        
+
 
         mExpandedDialog = new ExpandedDialog(context);
         mExpandedView = expanded;
@@ -789,7 +789,7 @@ public class StatusBarService extends IStatusBar.Stub
                     && (oldData == null
                         || oldData.tickerText == null
                         || !CharSequences.equals(oldData.tickerText, n.tickerText))) {
-                if (0 == (mDisabled & 
+                if (0 == (mDisabled &
                     (StatusBarManager.DISABLE_NOTIFICATION_ICONS | StatusBarManager.DISABLE_NOTIFICATION_TICKER))) {
                     mTicker.addEntry(n, StatusBarIcon.getIcon(mContext, data), n.tickerText);
                 }
@@ -857,7 +857,7 @@ public class StatusBarService extends IStatusBar.Stub
             icon.view.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
-    
+
     /* private */ void performRemoveIcon(IBinder key) {
         synchronized (this) {
             if (SPEW) {
@@ -917,7 +917,7 @@ public class StatusBarService extends IStatusBar.Stub
             v.setSelected(hasFocus);
         }
     };
-    
+
     View makeNotificationView(StatusBarNotification notification, ViewGroup parent) {
     	Resources res = mContext.getResources();
         final NotificationData n = notification.data;
@@ -951,7 +951,7 @@ public class StatusBarService extends IStatusBar.Stub
             sld.mutate();
             sld.setColorFilter(expBarColorMask, expPDMode);
             content.setBackgroundDrawable(sld);
-            
+
         }
         content.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
         content.setOnFocusChangeListener(mFocusChangeListener);
@@ -1002,7 +1002,7 @@ public class StatusBarService extends IStatusBar.Stub
         	}
         }
     }
-    
+
     void setViewColors(TextView tv) {
         int tvID = 0;
         try {
@@ -1022,8 +1022,8 @@ public class StatusBarService extends IStatusBar.Stub
                 }
             } catch (Exception e) { }
     }
-    
-    
+
+
     void addNotificationView(StatusBarNotification notification) {
         if (notification.view != null) {
             throw new RuntimeException("Assertion failed: notification.view="
@@ -1117,19 +1117,19 @@ public class StatusBarService extends IStatusBar.Stub
         }
         mExpandedVisible = true;
         panelSlightlyVisible(true);
-        
+
         updateExpandedViewPos(EXPANDED_LEAVE_ALONE);
         mExpandedParams.flags &= ~WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         mExpandedParams.flags |= WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
         mExpandedDialog.getWindow().setAttributes(mExpandedParams);
         mExpandedView.requestFocus(View.FOCUS_FORWARD);
         mTrackingView.setVisibility(View.VISIBLE);
-        
+
         if (!mTicking) {
             setDateViewVisibility(true, com.android.internal.R.anim.fade_in);
         }
     }
-    
+
     void animateExpand() {
         if (SPEW) Slog.d(TAG, "Animate expand: expanded=" + mExpanded);
         if ((mDisabled & StatusBarManager.DISABLE_EXPAND) != 0) {
@@ -1142,7 +1142,7 @@ public class StatusBarService extends IStatusBar.Stub
         prepareTracking(0, true);
         performFling(0, 2000.0f, true);
     }
-    
+
     void animateCollapse() {
         if (SPEW) {
             Slog.d(TAG, "animateCollapse(): mExpanded=" + mExpanded
@@ -1152,7 +1152,7 @@ public class StatusBarService extends IStatusBar.Stub
                     + " mAnimY=" + mAnimY
                     + " mAnimVel=" + mAnimVel);
         }
-        
+
         if (!mExpandedVisible) {
             return;
         }
@@ -1169,7 +1169,7 @@ public class StatusBarService extends IStatusBar.Stub
         prepareTracking(y, false);
         performFling(y, -2000.0f, true);
     }
-    
+
     void performExpand() {
         if (SPEW) Slog.d(TAG, "performExpand: mExpanded=" + mExpanded);
         if ((mDisabled & StatusBarManager.DISABLE_EXPAND) != 0) {
@@ -1187,7 +1187,7 @@ public class StatusBarService extends IStatusBar.Stub
                 }
             }
         }
-        
+
         mExpanded = true;
         makeExpandedVisible();
         updateExpandedViewPos(EXPANDED_FULL_OPEN);
@@ -1198,7 +1198,7 @@ public class StatusBarService extends IStatusBar.Stub
     void performCollapse() {
         if (SPEW) Slog.d(TAG, "performCollapse: mExpanded=" + mExpanded
                 + " mExpandedVisible=" + mExpandedVisible);
-        
+
         if (!mExpandedVisible) {
             return;
         }
@@ -1213,7 +1213,7 @@ public class StatusBarService extends IStatusBar.Stub
             setNotificationIconVisibility(true, com.android.internal.R.anim.fade_in);
         }
         setDateViewVisibility(false, com.android.internal.R.anim.fade_out);
-        
+
         if (!mExpanded) {
             return;
         }
@@ -1280,7 +1280,7 @@ public class StatusBarService extends IStatusBar.Stub
             }
         }
     }
-    
+
     void prepareTracking(int y, boolean opening) {
         mTracking = true;
         mVelocityTracker = VelocityTracker.obtain();
@@ -1309,7 +1309,7 @@ public class StatusBarService extends IStatusBar.Stub
             updateExpandedViewPos(y + mViewDelta);
         }
     }
-    
+
     void performFling(int y, float vel, boolean always) {
         mAnimatingReveal = false;
         mDisplayHeight = mDisplay.getHeight();
@@ -1369,7 +1369,7 @@ public class StatusBarService extends IStatusBar.Stub
         mHandler.sendMessageAtTime(mHandler.obtainMessage(MSG_ANIMATE), mCurAnimationTime);
         stopTracking();
     }
-    
+
     boolean interceptTouchEvent(MotionEvent event) {
         if (SPEW) {
             Slog.d(TAG, "Touch: rawY=" + event.getRawY() + " event=" + event + " mDisabled="
@@ -1379,7 +1379,7 @@ public class StatusBarService extends IStatusBar.Stub
         if ((mDisabled & StatusBarManager.DISABLE_EXPAND) != 0) {
             return false;
         }
-        
+
         final int statusBarSize = mStatusBarView.getHeight();
         final int hitSize = statusBarSize*2;
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -1433,10 +1433,10 @@ public class StatusBarService extends IStatusBar.Stub
                 if (negative) {
                     vel = -vel;
                 }
-                
+
                 performFling((int)event.getRawY(), vel, false);
             }
-            
+
         }
         return false;
     }
@@ -1483,7 +1483,7 @@ public class StatusBarService extends IStatusBar.Stub
         MyTicker(Context context, StatusBarView sb) {
             super(context, sb);
         }
-        
+
         @Override
         void tickerStarting() {
             mTicking = true;
@@ -1551,7 +1551,7 @@ public class StatusBarService extends IStatusBar.Stub
                     + ", uid=" + Binder.getCallingUid());
             return;
         }
-        
+
         synchronized (mQueueLock) {
             pw.println("Current Status Bar state:");
             pw.println("  mExpanded=" + mExpanded
@@ -1630,7 +1630,7 @@ public class StatusBarService extends IStatusBar.Stub
                                 + " pkg=" + tok.pkg + " token=" + tok.token);
             }
         }
-        
+
         if (false) {
             pw.println("see the logcat for a dump of the views we have created.");
             // must happen on ui thread
@@ -2245,7 +2245,7 @@ public class StatusBarService extends IStatusBar.Stub
                 Settings.System.NOTIF_EXPANDED_BAR_COLOR, whiteColor);
         int noalpha = expBarColorMask | 0xFF000000;
         if (useCustomExp) {
-        	closerDrawable = res.getDrawable(com.android.internal.R.drawable.status_bar_close_on_cust);
+            closerDrawable = res.getDrawable(com.android.internal.R.drawable.status_bar_close_on_cust);
             expBarHeadDrawable = res.getDrawable(com.android.internal.R.drawable.status_bar_header_background_cust,
             		expBarColorMask, expPDMode);
             expBarNotifTitleDrawable = res.getDrawable(com.android.internal.R.drawable.title_bar_portrait_cust,
