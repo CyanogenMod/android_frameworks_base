@@ -450,6 +450,22 @@ public class PowerManager
         }
     }
 
+    /**
+     * sets the keyboard LED state
+     *
+     * @param on boolean state
+     * @param key 1 for caps, 2 for fn
+     *
+     * {@hide}
+     */
+    public void setKeyboardLight(boolean on, int key)
+    {
+        try {
+            mService.setKeyboardLight(on, key);
+        } catch (RemoteException e) {
+        }
+    }
+
    /**
      * Returns the set of flags for {@link #newWakeLock(int, String) newWakeLock()}
      * that are supported on the device.

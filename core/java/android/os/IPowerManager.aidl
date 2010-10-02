@@ -49,4 +49,6 @@ interface IPowerManager
     int getLightSensorScreenBrightness();
     int getLightSensorButtonBrightness();
     int getLightSensorKeyboardBrightness();
+
+    void setKeyboardLight(boolean on, int key);
 }
