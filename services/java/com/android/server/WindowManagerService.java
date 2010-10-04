@@ -6625,10 +6625,8 @@ public class WindowManagerService extends IWindowManager.Stub
                                 //Slog.i(TAG, "Read next event " + ev);
                                 dispatchPointer(ev, (MotionEvent)ev.event, 0, 0);
                                 if (mMouseDisplayed) {
-                                    Surface.openTransaction();
-                                    mMouseSurface.hide();
-                                    Surface.closeTransaction();
                                     mMouseDisplayed = false;
+                                    requestAnimationLocked(0);
                                 }
                                 break;
                             case RawInputEvent.CLASS_MOUSE:
@@ -6636,30 +6634,12 @@ public class WindowManagerService extends IWindowManager.Stub
                                 int mcx = (int)mmev.getX();
                                 int mcy = (int)mmev.getY();
 
-                                if (mMouseSurface != null && (mMlx != mcx || mMly != mcy)) {
-                                    Surface.openTransaction();
-                                    if (DEBUG_INPUT)
-                                        Slog.i(TAG, "Open transaction for the mouse surface");
-                                    WindowState top =
-                                        (WindowState)mWindows.get(mWindows.size() - 1);
-                                    try {
-                                        if (DEBUG_INPUT)
-                                            Slog.i(TAG, "Move surf, x: " +
-                                                  Integer.toString(mcx) + " y:"
-                                                  + Integer.toString(mcy));
-
-                                        mMouseSurface.setPosition(mcx, mcy);
-                                        mMouseSurface.setLayer(top.mAnimLayer + 1);
-                                        if (!mMouseDisplayed) {
-                                            mMouseSurface.show();
-                                            mMouseDisplayed = true;
-                                        }
-                                        mMlx = mcx;
-                                        mMly = mcy;
-                                    } catch ( RuntimeException e) {
-                                        Slog.e(TAG, "Failure showing mouse surface",e);
-                                    }
-                                    Surface.closeTransaction();
+                                if (mMlx != mcx || mMly != mcy) {
+                                    mMlx = mcx;
+                                    mMly = mcy;
+                                    if (!mMouseDisplayed)
+                                        mMouseDisplayed = true;
+                                    requestAnimationLocked(0);
                                 }
                                 dispatchPointer(ev, (MotionEvent)ev.event, 0, 0);
                                 break;
@@ -10735,6 +10715,27 @@ public class WindowManagerService extends IWindowManager.Stub
                     Slog.w(TAG, "Illegal argument exception hiding blur surface");
                 }
                 mBlurShown = false;
+            }
+
+            // FOURTH LOOP: Display Mouse
+            if (mMouseSurface != null) {
+                if (mMouseDisplayed) {
+                    WindowState top =
+                        (WindowState)mWindows.get(mWindows.size() - 1);
+                    try {
+                        if (DEBUG_INPUT)
+                            Slog.i(TAG, "Move surf, x: " +
+                                   Integer.toString(mMlx) + " y:"
+                                   + Integer.toString(mMly));
+                        mMouseSurface.show();
+                        mMouseSurface.setPosition(mMlx, mMly);
+                        mMouseSurface.setLayer(top.mAnimLayer + 1);
+                    } catch (RuntimeException e) {
+                        Slog.e(TAG, "Failure showing mouse surface", e);
+                    }
+                } else {
+                    mMouseSurface.hide();
+                }
             }
 
             if (SHOW_TRANSACTIONS) Slog.i(TAG, "<<< CLOSE TRANSACTION");
