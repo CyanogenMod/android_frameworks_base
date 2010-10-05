@@ -174,6 +174,11 @@ public abstract class ContentResolver {
     }
 
     /** @hide */
+    public final Context getContext() {
+        return mContext;
+    }
+
+    /** @hide */
     protected abstract IContentProvider acquireProvider(Context c, String name);
     /** @hide */
     public abstract boolean releaseProvider(IContentProvider icp);
