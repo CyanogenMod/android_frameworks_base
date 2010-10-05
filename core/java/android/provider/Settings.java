@@ -2195,6 +2195,13 @@ public final class Settings {
         public static final String LOCKSCREEN_ALWAYS_MUSIC_CONTROLS = "lockscreen_always_music_controls";
 
         /**
+         * Whether to use the custom quick unlock screen control
+         * @hide
+         */
+        public static final String LOCKSCREEN_QUICK_UNLOCK_CONTROL =
+            "lockscreen_quick_unlock_control";
+
+        /**
          * Whether to use a custom pull-down notification screen
          * @hide 
          */
