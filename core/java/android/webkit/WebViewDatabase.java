@@ -515,7 +515,11 @@ public class WebViewDatabase {
                 cookieVal.put(COOKIES_EXPIRES_COL, cookie.expires);
             }
             cookieVal.put(COOKIES_SECURE_COL, cookie.secure);
-            mDatabase.insert(mTableNames[TABLE_COOKIES_ID], null, cookieVal);
+            try {
+                mDatabase.insert(mTableNames[TABLE_COOKIES_ID], null, cookieVal);
+            } catch (Exception e) {
+                Log.e(LOGTAG, "addCookie", e);
+            }
         }
     }
 
@@ -843,8 +847,12 @@ public class WebViewDatabase {
             c.put(PASSWORD_HOST_COL, schemePlusHost);
             c.put(PASSWORD_USERNAME_COL, username);
             c.put(PASSWORD_PASSWORD_COL, password);
-            mDatabase.insert(mTableNames[TABLE_PASSWORD_ID], PASSWORD_HOST_COL,
-                    c);
+            try {
+                mDatabase.insert(mTableNames[TABLE_PASSWORD_ID],
+                        PASSWORD_HOST_COL, c);
+            } catch (Exception e) {
+                Log.e(LOGTAG, "setUsernamePassword", e);
+            }
         }
     }
 
@@ -937,8 +945,12 @@ public class WebViewDatabase {
             c.put(HTTPAUTH_REALM_COL, realm);
             c.put(HTTPAUTH_USERNAME_COL, username);
             c.put(HTTPAUTH_PASSWORD_COL, password);
-            mDatabase.insert(mTableNames[TABLE_HTTPAUTH_ID], HTTPAUTH_HOST_COL,
-                    c);
+            try {
+                mDatabase.insert(mTableNames[TABLE_HTTPAUTH_ID],
+                        HTTPAUTH_HOST_COL, c);
+            } catch (Exception e) {
+                Log.e(LOGTAG, "setHttpAuthUsernamePassword", e);
+            }
         }
     }
 
@@ -1054,7 +1066,12 @@ public class WebViewDatabase {
                     Entry<String, String> entry = iter.next();
                     map.put(FORMDATA_NAME_COL, entry.getKey());
                     map.put(FORMDATA_VALUE_COL, entry.getValue());
-                    mDatabase.insert(mTableNames[TABLE_FORMDATA_ID], null, map);
+                    try {
+                        mDatabase.insert(mTableNames[TABLE_FORMDATA_ID], null,
+                                map);
+                    } catch (Exception e) {
+                        Log.e(LOGTAG, "setFormData", e);
+                    }
                 }
             }
         }
