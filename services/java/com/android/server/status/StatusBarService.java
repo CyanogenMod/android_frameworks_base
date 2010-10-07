@@ -362,6 +362,7 @@ public class StatusBarService extends IStatusBar.Stub
         mPlmnLabel = (TextView)expanded.findViewById(R.id.plmnLabel);
         mScrollView = (ScrollView)expanded.findViewById(R.id.scroll);
         mNotificationLinearLayout = expanded.findViewById(R.id.notificationLinearLayout);
+
         if (custExpBar) {
             mExpandedView.findViewById(R.id.exp_view_lin_layout).
                 setBackgroundDrawable(expBarHeadDrawable);
@@ -369,6 +370,8 @@ public class StatusBarService extends IStatusBar.Stub
             mOngoingTitle.setBackgroundDrawable(expBarNotifTitleDrawable);
             mLatestTitle.setBackgroundDrawable(expBarNotifTitleDrawable);
         }
+
+        mExpandedView.setVisibility(View.GONE);
         mOngoingTitle.setVisibility(View.GONE);
         mLatestTitle.setVisibility(View.GONE);
 
@@ -1134,6 +1137,7 @@ public class StatusBarService extends IStatusBar.Stub
         mExpandedDialog.getWindow().setAttributes(mExpandedParams);
         mExpandedView.requestFocus(View.FOCUS_FORWARD);
         mTrackingView.setVisibility(View.VISIBLE);
+        mExpandedView.setVisibility(View.VISIBLE);
         
         if (!mTicking) {
             setDateViewVisibility(true, com.android.internal.R.anim.fade_in);
@@ -1218,6 +1222,7 @@ public class StatusBarService extends IStatusBar.Stub
         mExpandedParams.flags &= ~WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM;
         mExpandedDialog.getWindow().setAttributes(mExpandedParams);
         mTrackingView.setVisibility(View.GONE);
+        mExpandedView.setVisibility(View.GONE);
 
         if ((mDisabled & StatusBarManager.DISABLE_NOTIFICATION_ICONS) == 0) {
             setNotificationIconVisibility(true, com.android.internal.R.anim.fade_in);
