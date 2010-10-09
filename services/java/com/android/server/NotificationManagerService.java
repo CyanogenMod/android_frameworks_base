@@ -527,20 +527,22 @@ class NotificationManagerService extends INotificationManager.Stub {
                 mNotificationPulseEnabled = pulseEnabled;
                 updateNotificationPulse();
             }
+
+            // Next three settings are only for amber-green LED mode
             boolean blinkEnabled = Settings.System.getInt(resolver,
-                    Settings.System.NOTIFICATION_LIGHT_BLINK, 0) != 0;
+                    Settings.System.NOTIFICATION_LIGHT_BLINK, 1) != 0;
             if (mNotificationBlinkEnabled != blinkEnabled) {
                 mNotificationBlinkEnabled = blinkEnabled;
                 updateLights();
             }
             boolean alwaysOnEnabled = Settings.System.getInt(resolver,
-                    Settings.System.NOTIFICATION_LIGHT_ALWAYS_ON, 0) != 0;
+                    Settings.System.NOTIFICATION_LIGHT_ALWAYS_ON, 1) != 0;
             if (mNotificationAlwaysOnEnabled != alwaysOnEnabled) {
                 mNotificationAlwaysOnEnabled = alwaysOnEnabled;
                 updateLights();
             }
             boolean chargingEnabled = Settings.System.getInt(resolver,
-                    Settings.System.NOTIFICATION_LIGHT_CHARGING, 0) != 0;
+                    Settings.System.NOTIFICATION_LIGHT_CHARGING, 1) != 0;
             if (mNotificationChargingEnabled != chargingEnabled) {
                 mNotificationChargingEnabled = chargingEnabled;
                 updateAmberLight();
