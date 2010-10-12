@@ -178,7 +178,8 @@ public class AudioManager {
         7,  // STREAM_BLUETOOTH_SCO
         7,  // STREAM_SYSTEM_ENFORCED
         11, // STREAM_DTMF
-        11  // STREAM_TTS
+        11,  // STREAM_TTS
+        11 // STREAM_FM
     };
 
     /**

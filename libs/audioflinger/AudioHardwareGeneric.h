@@ -105,6 +105,7 @@ public:
     virtual             ~AudioHardwareGeneric();
     virtual status_t    initCheck();
     virtual status_t    setVoiceVolume(float volume);
+    virtual status_t    setFmVolume(float volume);
     virtual status_t    setMasterVolume(float volume);
 
     // mic mute
