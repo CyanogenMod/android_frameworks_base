@@ -70,6 +70,8 @@ public:
 
     status_t findThumbnailSample(uint32_t *sample_index);
 
+    uint32_t getNumSyncSamples();
+
 protected:
     ~SampleTable();
 
