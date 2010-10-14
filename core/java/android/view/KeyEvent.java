@@ -129,6 +129,11 @@ public class KeyEvent implements Parcelable {
     public static final int KEYCODE_FUNC_7          = 98;
     public static final int KEYCODE_FUNC_8          = 99;
     public static final int KEYCODE_QUECHAR         = 100;
+    public static final int KEYCODE_USER1           = 101;
+    public static final int KEYCODE_USER2           = 102;
+    public static final int KEYCODE_USER3           = 103;
+    public static final int KEYCODE_USER4           = 104;
+    public static final int KEYCODE_USER5           = 105;
 
     // NOTE: If you add a new keycode here you must also add it to:
     //  isSystem()
@@ -143,9 +148,9 @@ public class KeyEvent implements Parcelable {
     //  MUST contribute a patch to the open source project to define
     //  those new codes.  This is intended to maintain a consistent
     //  set of key code definitions across all Android devices.
-   
-    private static final int LAST_KEYCODE           = KEYCODE_QUECHAR;
-    
+
+    private static final int LAST_KEYCODE           = KEYCODE_USER5;
+
     /**
      * @deprecated There are now more than MAX_KEYCODE keycodes.
      * Use {@link #getMaxKeyCode()} instead.

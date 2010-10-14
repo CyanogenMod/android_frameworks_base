@@ -123,6 +123,11 @@ static const KeycodeLabel KEYCODES[] = {
     { "FUNC_7", 98 },
     { "FUNC_8", 99 },
     { "QUECHAR", 100 },
+    { "USER1", 101 },
+    { "USER2", 102 },
+    { "USER3", 103 },
+    { "USER4", 104 },
+    { "USER5", 105 },
 
     // NOTE: If you add a new keycode here you must also add it to:
     //   (enum KeyCode, in this file)
@@ -236,7 +241,12 @@ typedef enum KeyCode {
     kKeyCodeFunc6 = 97,
     kKeyCodeFunc7 = 98,
     kKeyCodeFunc8 = 99,
-    kKeyCodeQuechar = 100
+    kKeyCodeQuechar = 100,
+    kKeyCodeUser1 = 101,
+    kKeyCodeUser2 = 102,
+    kKeyCodeUser3 = 103,
+    kKeyCodeUser4 = 104,
+    kKeyCodeUser5 = 105
 } KeyCode;
 
 static const KeycodeLabel FLAGS[] = {
