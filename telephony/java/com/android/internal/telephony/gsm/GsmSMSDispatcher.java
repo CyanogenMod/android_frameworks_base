@@ -22,6 +22,7 @@ import android.app.PendingIntent.CanceledException;
 import android.content.Intent;
 import android.os.AsyncResult;
 import android.os.Message;
+import android.provider.Telephony.Sms;
 import android.provider.Telephony.Sms.Intents;
 import android.telephony.ServiceState;
 import android.util.Config;
@@ -66,8 +67,11 @@ final class GsmSMSDispatcher extends SMSDispatcher {
             for (int i = 0, count = deliveryPendingList.size(); i < count; i++) {
                 SmsTracker tracker = deliveryPendingList.get(i);
                 if (tracker.mMessageRef == messageRef) {
-                    // Found it.  Remove from list and broadcast.
-                    deliveryPendingList.remove(i);
+                    // Found it.  Remove from list if not pending, then broadcast.
+                    int status = sms.getStatus();
+                    if (status < Sms.STATUS_PENDING || status >= Sms.STATUS_FAILED) {
+                        deliveryPendingList.remove(i);
+                    }
                     PendingIntent intent = tracker.mDeliveryIntent;
                     Intent fillIn = new Intent();
                     fillIn.putExtra("pdu", IccUtils.hexStringToBytes(pduString));
