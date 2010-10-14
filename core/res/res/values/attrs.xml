@@ -961,7 +961,12 @@
         <enum name="KEYCODE_FUNC_6" value="97" />
         <enum name="KEYCODE_FUNC_7" value="98" />
         <enum name="KEYCODE_FUNC_8" value="99" />
-        <enum name="KEYCODE_QUECHAR" value="100" />	
+        <enum name="KEYCODE_QUECHAR" value="100" />
+        <enum name="KEYCODE_USER1" value="101" />
+        <enum name="KEYCODE_USER2" value="102" />
+        <enum name="KEYCODE_USER3" value="103" />
+        <enum name="KEYCODE_USER4" value="104" />
+        <enum name="KEYCODE_USER5" value="105" />
     </attr>
 
     <!-- ***************************************************************** -->

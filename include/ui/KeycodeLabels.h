@@ -144,6 +144,11 @@ static const KeycodeLabel KEYCODES[] = {
     { "FUNC_7", 98 },
     { "FUNC_8", 99 },
     { "QUECHAR", 100 },
+    { "USER1", 101 },
+    { "USER2", 102 },
+    { "USER3", 103 },
+    { "USER4", 104 },
+    { "USER5", 105 },
 
     // NOTE: If you add a new keycode here you must also add it to several other files.
     //       Refer to frameworks/base/core/java/android/view/KeyEvent.java for the full list.
