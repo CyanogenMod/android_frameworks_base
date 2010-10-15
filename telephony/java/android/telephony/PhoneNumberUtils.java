@@ -396,7 +396,7 @@ public class PhoneNumberUtils
      * enough for caller ID purposes.
      *
      * - Compares from right to left
-     * - requires MIN_MATCH (7) characters to match
+     * - requires MIN_MATCH (6) characters to match
      * - handles common trunk prefixes and international prefixes
      *   (basically, everything except the Russian trunk prefix)
      *
@@ -654,7 +654,7 @@ public class PhoneNumberUtils
     }
 
     /**
-     * Returns the rightmost MIN_MATCH (5) characters in the network portion
+     * Returns the rightmost MIN_MATCH (6) characters in the network portion
      * in *reversed* order
      *
      * This can be used to do a database lookup against the column
@@ -1321,9 +1321,9 @@ public class PhoneNumberUtils
     //
     // see http://en.wikipedia.org/wiki/Short_code#Regional_differences for reference
     //
-    // However, in order to loose match 650-555-1212 and 555-1212, we need to set the min match
-    // to 7.
-    static final int MIN_MATCH = 7;
+    // Some countries like Argentina and Cuba have six digits phone numbers. So, this
+    // constant must be set to 6.
+    static final int MIN_MATCH = 6;
 
     /**
      * isEmergencyNumber: checks a given number against the list of
