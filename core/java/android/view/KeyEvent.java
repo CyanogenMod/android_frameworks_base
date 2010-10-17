@@ -129,16 +129,10 @@ public class KeyEvent implements Parcelable {
     public static final int KEYCODE_FUNC_7          = 98;
     public static final int KEYCODE_FUNC_8          = 99;
     public static final int KEYCODE_QUECHAR         = 100;
-
-    /** @hide */
     public static final int KEYCODE_USER1           = 101;
-    /** @hide */
     public static final int KEYCODE_USER2           = 102;
-    /** @hide */
     public static final int KEYCODE_USER3           = 103;
-    /** @hide */
     public static final int KEYCODE_USER4           = 104;
-    /** @hide */
     public static final int KEYCODE_USER5           = 105;
 
     // NOTE: If you add a new keycode here you must also add it to:
