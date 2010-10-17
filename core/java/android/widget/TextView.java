@@ -953,7 +953,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
         if (!enabled) {
             // Hide the soft input if the currently active TextView is disabled
             InputMethodManager imm = InputMethodManager.peekInstance();
-            if (imm.isActive(this)) {
+            if (imm != null && imm.isActive(this)) {
                 imm.hideSoftInputFromWindow(getWindowToken(), 0);
             }
         }
