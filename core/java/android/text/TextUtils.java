@@ -47,6 +47,7 @@ import android.util.Printer;
 
 import com.android.internal.util.ArrayUtils;
 
+import java.text.Normalizer;
 import java.util.regex.Pattern;
 import java.util.Iterator;
 
@@ -856,7 +857,21 @@ public class TextUtils {
             else
                 offset -= 1;
         } else {
+            String decomposed = Normalizer.normalize(Character.toString(c), Normalizer.Form.NFKD);
+
             offset -= 1;
+            c = decomposed.charAt(0);
+
+            while (Character.getDirectionality(c) == Character.DIRECTIONALITY_NONSPACING_MARK) {
+                offset -= 1;
+
+                if (offset == 0)
+                    break;
+
+                decomposed = Normalizer.normalize(text.subSequence(offset, offset + 1),
+                                                    Normalizer.Form.NFKD);
+                c = decomposed.charAt(0);
+            }
         }
 
         if (text instanceof Spanned) {
@@ -894,6 +909,18 @@ public class TextUtils {
                 offset += 1;
         } else {
             offset += 1;
+
+            do {
+                String decomposed = Normalizer.normalize(text.subSequence(offset, offset + 1),
+                                                        Normalizer.Form.NFKD);
+
+                c = decomposed.charAt(0);
+
+                if (Character.getDirectionality(c) != Character.DIRECTIONALITY_NONSPACING_MARK)
+                    break;
+
+                offset += 1;
+            } while (offset < len);
         }
 
         if (text instanceof Spanned) {
