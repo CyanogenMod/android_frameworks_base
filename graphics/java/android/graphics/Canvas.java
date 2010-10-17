@@ -1268,104 +1268,78 @@ public class Canvas {
         }
         return hasBidi;
     }
+    /** @hide */
+    private static boolean isPunctuation(char c) {
+        return c<='\u002f' || c=='\u0040' || (c>'\u005a' && c<='\u0060') || (c>'\u007a' && c<='\u00BF');
+    }
+    /** @hide */
+    private static boolean isRTL(char c) {
+        return c>=FIRST_RIGHT_TO_LEFT && c<=LAST_RIGHT_TO_LEFT;
+    }
     /**
     * A lightweight BiDi processing to make all draw text work with RTL languages.
-    * written from scratch by David Kohen (kohen dot d at gmail dot com) - 2010
     * @hide 
     **/
-    public static char[] bidiProcess(char[] text,int start,int srcCount) {
-
-        boolean hasBidi=false;
-        char[] destCharArray=new char[srcCount];
-
-    	char[] buf = TemporaryBuffer.obtain(srcCount);
-        System.arraycopy(text,start, buf, 0, srcCount);
-
-        // I'm doing the processing from the end of the string, since it worked well this way.
-        int count=0,srcIndex=0;
-        boolean rtlMode=true;
-        for (int i=0;i<srcCount;i++){
-            srcIndex=srcCount-1-i;
-            if (buf[srcIndex]>=FIRST_RIGHT_TO_LEFT&&buf[srcIndex]<=LAST_RIGHT_TO_LEFT){
-                destCharArray[i]=buf[srcIndex];
-                // In rtl mode I'm mirroring glyphs.
-                rtlMode=true;
+    private static char reverseParen(char c) {
+        switch (c) {
+        case '[':
+            c=']';
+            break;
+        case ']':
+            c='[';
+            break;
+        case '}':
+            c='{';
+            break;
+        case '{':
+            c='}';
+            break;
+        case '(':
+            c=')';
+            break;
+        case ')':
+            c='(';
+            break;
+        case '>':
+            c='<';
+            break;
+        case '<':
+            c='>';
+            break;
+        }
+        return c;
+    }
+    /** @hide */
+    public static char[] bidiProcess(char[] text,int start,int count) {
+        String cut=new String(text,start,count);
+        char[] tt=new char[count];
+        cut.getChars(0, count, tt, 0);
+        boolean hasRTL=false;
+        for (int ii=0; ii<count; ++ii)
+            if (isRTL(tt[ii])) {
+                hasRTL = true;
+                break;
             }
-            else {
-                srcIndex=srcCount-1-i;
-                if (count==0) {
-                    // Direction neutral characters
-                    if (buf[srcIndex]<='\u002f' ||
-                        (buf[srcIndex]>'\u0039' && buf[srcIndex]<='\u0040') ||
-                        (buf[srcIndex]>'\u005a' && buf[srcIndex]<='\u0060')||
-                        (buf[srcIndex]>'\u007a' && buf[srcIndex]<='\u00BF')) {
-
-                        if (rtlMode){
-                            switch (buf[srcIndex]) {
-                            case '[':
-                                destCharArray[i]=']';
-                                break;
-                            case ']':
-                                destCharArray[i]='[';
-                                break;
-                            case '}':
-                                destCharArray[i]='{';
-                                break;
-                            case '{':
-                                destCharArray[i]='}';
-                                break;
-                            case '(':
-                                destCharArray[i]=')';
-                                break;
-                            case ')':
-                                destCharArray[i]='(';
-                                break;
-                            case '>':
-                                destCharArray[i]='<';
-                                break;
-                            case '<':
-                                destCharArray[i]='>';
-                                break;
-                            default:
-                                destCharArray[i]=buf[srcIndex];
-                                break;
-                            }
-                        } else destCharArray[i]=buf[srcIndex];
-                    } else {
-                        // Handling LTR embedded strings.
-                        while (((srcIndex-count)>=0)&&((buf[srcIndex-count]<FIRST_RIGHT_TO_LEFT)||(buf[srcIndex-count]>LAST_RIGHT_TO_LEFT))){
-                            count++;
-                        }
-                        int index=0;
-                        int punctuationMarks=0;
-
-                        // Handling direction neutral characters in the middle of LTR
-                        while (count>0 && (srcIndex-(count)>=0) &&
-                                (buf[srcIndex-(count-1)]<='\u002f' ||
-                                        (buf[srcIndex-(count-1)]>'\u0039' && buf[srcIndex-(count-1)]<='\u0040') ||
-                                        (buf[srcIndex-(count-1)]>'\u005a' && buf[srcIndex-(count-1)]<='\u0060')||
-                                        (buf[srcIndex-(count-1)]>'\u007a' && buf[srcIndex-(count-1)]<='\u00BF'))){
-                            destCharArray[i+(count-1)]=buf[srcIndex-(count-1)];
-                            count--;
-                            punctuationMarks++;
-                        }
-
-                        while (count>0){
-                            destCharArray[i+index]=buf[srcIndex-(count-1)];
-                            count--;
-                            index++;
-                        }
-                        count=index+punctuationMarks-1;
-                    }
+        if (hasRTL) {
+            char[] rev=new char[count];
+            for(int ii=0; ii<count; ++ii)
+                rev[ii] = tt[count-ii-1];
+            // now copy reverse back over tt, but reverse again (fixing) any non-RTL sequences:
+            for(int ii=0; ii<count; ) {
+                if (isRTL(rev[ii]) || isPunctuation(rev[ii])) {
+                    tt[ii] = reverseParen(rev[ii]);
+                    ++ii;
+                } else {
+                    int end=ii+1;
+                    while (end<count && !isRTL(rev[end]) && !isPunctuation(rev[end]))
+                        ++end;
+                    int jj=end;
+                    while (ii<end)
+                        tt[ii++] = rev[--jj];
                 }
-                else {
-                    // Avoiding spaghetti code and mangling of loop counter 
-                    count--;
-                }
-                rtlMode=false;
             }
         }
-        return destCharArray;
+        return tt;
     }
 
     /** @hide **/
@@ -1526,10 +1500,10 @@ public class Canvas {
         else if (text instanceof GraphicsOperations) {
             ((GraphicsOperations) text).drawText(this, start, end, x, y,
                     paint);
-    	}
-    	else {
-    		char[] buf = TemporaryBuffer.obtain(end - start);
-    		TextUtils.getChars(text, start, end, buf, 0);
+            }
+            else {
+                    char[] buf = TemporaryBuffer.obtain(end - start);
+                    TextUtils.getChars(text, start, end, buf, 0);
                 if (hasBidi) {
                     String reshapedText=ArabicReshape.reshape(new String(buf));
                     /* The reshaping may make the string smaller */
@@ -1537,8 +1511,8 @@ public class Canvas {
                 } else {
                     drawText(buf, 0, end - start, x, y, paint,false);
                 }
-    		TemporaryBuffer.recycle(buf);
-    	}
+                    TemporaryBuffer.recycle(buf);
+            }
     }
 
     /**

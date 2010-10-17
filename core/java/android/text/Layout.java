@@ -1820,43 +1820,12 @@ public abstract class Layout {
         // are left-to-right, the others are right-to-left.  So, for example,
         // a line that starts with a right-to-left run has 0 at mDirections[0],
         // since the 'first' (ltr) run is zero length.
-        //
-        // The code currently assumes that each run is adjacent to the previous
-        // one, progressing in the base line direction.  This isn't sufficient
-        // to handle nested runs, for example numeric text in an rtl context
-        // in an ltr paragraph.
         /* package */ Directions(short[] dirs) {
             mDirections = dirs;
         }
 
-        static int baseDirection(Directions dir,int length) {
-            if (dir == DIRS_ALL_LEFT_TO_RIGHT) {
-                return DIR_LEFT_TO_RIGHT;
-            } else if (dir == DIRS_ALL_RIGHT_TO_LEFT) {
-                return DIR_RIGHT_TO_LEFT;
-            } 
-
-            int sum=0;
-            int lastSwitch=0;
-            int i=0;
-            while ((i+1) < dir.mDirections.length) {
-                sum+=dir.mDirections[i];//-lastSwitch;
-                sum-=dir.mDirections[i+1];//-dir.mDirections[i];
-                lastSwitch=dir.mDirections[i+1];
-                i+=2;
-            }
-
-            if ((i+1)==dir.mDirections.length) {
-                sum+=dir.mDirections[i];//-lastSwitch);
-            } else if (i==dir.mDirections.length) {
-                sum-=length-lastSwitch;
-            }
-
-            if (sum>=0) {
-                return DIR_LEFT_TO_RIGHT;
-            } else {
-                return DIR_RIGHT_TO_LEFT;
-            }
+        boolean hasRTL() {
+            return mDirections.length>1 && mDirections[1]>0;
         }
     }
 
