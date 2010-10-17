@@ -1039,6 +1039,14 @@ public class StatusBarPolicy {
         }
     }
 
+    private final void updateStrengthIcon() {
+        boolean signalEnabled = (Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.SHOW_STATUS_HIDE_SIGNAL, 0) == 1);
+        boolean dbmEnabled = (Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.SHOW_STATUS_DBM, 0) == 1);
+        mService.setIconVisibility(mPhoneIcon, (signalEnabled && dbmEnabled));
+    }
+
     private final void updateSignalStrength() {
         int iconLevel = -1;
         int dBm = 0;
@@ -1056,6 +1064,7 @@ public class StatusBarPolicy {
             }
             mService.updateIcon(mPhoneIcon, mPhoneData, null);
             mService.updateIcon(mPhoneDbmIcon, mPhoneDbmData, null);
+            updateStrengthIcon();
             return;
         }
 
@@ -1103,6 +1112,7 @@ public class StatusBarPolicy {
         mService.updateIcon(mPhoneIcon, mPhoneData, null);
         mPhoneDbmData.text = Integer.toString(dBm);
         mService.updateIcon(mPhoneDbmIcon, mPhoneDbmData, null);
+        updateStrengthIcon();
     }
 
     private int getCdmaLevel() {

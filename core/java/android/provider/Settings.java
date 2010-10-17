@@ -1766,6 +1766,13 @@ public final class Settings {
         public static final String SHOW_STATUS_DBM = "show_status_dbm";
 
         /**
+         * Hide the icon strength icon when DBM enabled.
+         * @hide
+         */
+        public static final String SHOW_STATUS_HIDE_SIGNAL = "hide_signal_icon";
+
+
+        /**
          * Specifies the dbm signal level color
          * @hide
          */
