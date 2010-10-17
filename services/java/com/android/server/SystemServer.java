@@ -102,6 +102,7 @@ class ServerThread extends Thread {
         UiModeManagerService uiMode = null;
         RecognitionManagerService recognition = null;
         ThrottleService throttle = null;
+        RingerSwitchObserver ringer = null;
 
         // Critical services...
         try {
@@ -372,6 +373,16 @@ class ServerThread extends Thread {
             }
 
             try {
+                if (SystemProperties.get("ro.config.ringerswitch").equals("1")) {
+                    Slog.i(TAG, "RingerSwitch Observer");
+                    // Listen for hard ringer switch changes
+                    ringer = new RingerSwitchObserver(context);
+                }
+            } catch (Throwable e) {
+                Slog.e(TAG, "Failure starting RingerSwitchObserver", e);
+            }
+
+            try {
                 Slog.i(TAG, "Dock Observer");
                 // Listen for dock station changes
                 dock = new DockObserver(context, power);
@@ -422,6 +433,7 @@ class ServerThread extends Thread {
             } catch (Throwable e) {
                 Slog.e(TAG, "Failure starting DiskStats Service", e);
             }
+
         }
 
         // make sure the ADB_ENABLED setting value matches the secure property value
