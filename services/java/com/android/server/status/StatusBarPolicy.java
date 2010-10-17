@@ -1044,7 +1044,7 @@ public class StatusBarPolicy {
                     Settings.System.SHOW_STATUS_HIDE_SIGNAL, 0) == 1);
         boolean dbmEnabled = (Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.SHOW_STATUS_DBM, 0) == 1);
-        mService.setIconVisibility(mPhoneIcon, (signalEnabled && dbmEnabled));
+        mService.setIconVisibility(mPhoneIcon, !(signalEnabled && dbmEnabled));
     }
 
     private final void updateSignalStrength() {
@@ -1053,7 +1053,7 @@ public class StatusBarPolicy {
         int[] iconList;
 
         // Display signal strength while in "emergency calls only" mode
-        if (!hasService() && mServiceState != null 
+        if (!hasService() && mServiceState != null
                 && !mServiceState.isEmergencyOnly()) {
             //Slog.d(TAG, "updateSignalStrength: no service");
             if (Settings.System.getInt(mContext.getContentResolver(),
