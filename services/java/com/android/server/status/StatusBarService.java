@@ -279,8 +279,6 @@ public class StatusBarService extends IStatusBar.Stub
     Drawable expBarNotifTitleDrawable;
     
     
-    private WifiManager mWifiManager = null;
-    private BluetoothAdapter mBluetoothAdapter = null;
     // for disabling the status bar
     ArrayList<DisableRecord> mDisableRecords = new ArrayList<DisableRecord>();
     int mDisabled = 0;
@@ -437,8 +435,6 @@ public class StatusBarService extends IStatusBar.Stub
         lp.windowAnimations = R.style.Animation_StatusBar;
         WindowManagerImpl.getDefault().addView(view, lp);
 
-        mWifiManager = (WifiManager)mContext.getSystemService(Context.WIFI_SERVICE);
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         setupPowerWidget();
     }
 
@@ -2368,7 +2364,7 @@ public class StatusBarService extends IStatusBar.Stub
             }
 
             boolean powerWidget = Settings.System.getInt(mContext.getContentResolver(),
-                       Settings.System.EXPANDED_VIEW_WIDGET, 0) == 1;
+                       Settings.System.EXPANDED_VIEW_WIDGET, 1) == 1;
             if(!powerWidget) {
                 mExpandedView.findViewById(R.id.exp_power_stat).
                     setVisibility(View.GONE);
