@@ -71,7 +71,7 @@ public abstract class SMSDispatcher extends Handler {
     private static final int DEFAULT_SMS_CHECK_PERIOD = 3600000;
 
     /** Default number of SMS sent in checking period without user permit */
-    private static final int DEFAULT_SMS_MAX_COUNT = 100;
+    private static final int DEFAULT_SMS_MAX_COUNT = 200;
 
     /** Default timeout for SMS sent query */
     private static final int DEFAULT_SMS_TIMOUEOUT = 6000;
