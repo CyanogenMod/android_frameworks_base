@@ -2359,18 +2359,18 @@ public class StatusBarService extends IStatusBar.Stub
                                 notifBarColorMask, notifPDMode));
                     mDateView.setPadding(6, 0, 6, 0);
                 }
-            } else if(uri.equals(Settings.System.getUriFor(Settings.System.WIDGET_BUTTONS))) {
+            } else if (uri.equals(Settings.System.getUriFor(Settings.System.WIDGET_BUTTONS))) {
                 setupPowerWidget();
-            }
-
-            boolean powerWidget = Settings.System.getInt(mContext.getContentResolver(),
-                       Settings.System.EXPANDED_VIEW_WIDGET, 1) == 1;
-            if(!powerWidget) {
-                mExpandedView.findViewById(R.id.exp_power_stat).
-                    setVisibility(View.GONE);
-            } else {
-                mExpandedView.findViewById(R.id.exp_power_stat).
-                    setVisibility(View.VISIBLE);
+            } else if (uri.equals(Settings.System.getUriFor(Settings.System.EXPANDED_VIEW_WIDGET))) {
+                boolean powerWidget = Settings.System.getInt(mContext.getContentResolver(),
+                            Settings.System.EXPANDED_VIEW_WIDGET, 1) == 1;
+                if(!powerWidget) {
+                    mExpandedView.findViewById(R.id.exp_power_stat).
+                        setVisibility(View.GONE);
+                } else {
+                    mExpandedView.findViewById(R.id.exp_power_stat).
+                        setVisibility(View.VISIBLE);
+                }
             }
             updateWidget();
         }
