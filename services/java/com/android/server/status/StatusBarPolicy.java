@@ -434,6 +434,23 @@ public class StatusBarPolicy {
         mClockIcon = service.addIcon(mClockData, null);
         updateClock();
 
+        ContentObserver coClock = new ContentObserver(null) {
+            @Override
+            public void onChange(boolean selfChange) {
+                updateClock();
+            }
+        };
+
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.CLOCK_COLOR),
+                false,
+                coClock);
+
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.SHOW_STATUS_CLOCK),
+                false,
+                coClock);
+
         // storage
         mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
         mStorageManager.registerListener(
@@ -445,15 +462,22 @@ public class StatusBarPolicy {
                 Settings.System.BATTERY_PERCENTAGE_STATUS_COLOR);
         mBatteryIcon = service.addIcon(mBatteryData, null);
 
+        ContentObserver coBattery = new ContentObserver(null) {
+            @Override
+            public void onChange(boolean selfChange) {
+                updateBattery(null);
+            }
+        };
+
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.BATTERY_PERCENTAGE_STATUS_COLOR),
+                false,
+                coBattery);
+
         mContext.getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.BATTERY_PERCENTAGE_STATUS_ICON),
                 false,
-                new ContentObserver(null) {
-                    @Override
-                    public void onChange(boolean selfChange) {
-                        updateBattery(null);
-                    }
-                });
+                coBattery);
 
         // phone_signal
         mPhone = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -464,6 +488,23 @@ public class StatusBarPolicy {
         // dbm signal level
         mPhoneDbmData = IconData.makeText("phone_dbm_signal", "", Settings.System.DBM_COLOR, Settings.System.SHOW_STATUS_DBM, false);
         mPhoneDbmIcon = service.addIcon(mPhoneDbmData, null);
+
+        ContentObserver coSignal = new ContentObserver(null) {
+            @Override
+            public void onChange(boolean selfChange) {
+                updateSignalStrength();
+            }
+        };
+
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.DBM_COLOR),
+                false,
+                coSignal);
+
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.SHOW_STATUS_DBM),
+                false,
+                coSignal);
 
         // register for phone state notifications.
         ((TelephonyManager)mContext.getSystemService(Context.TELEPHONY_SERVICE))
