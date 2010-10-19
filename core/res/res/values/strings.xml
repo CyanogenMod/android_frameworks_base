@@ -2292,4 +2292,12 @@
 
     <!--Application killed toast -->
     <string name="app_killed_message">Application killed</string>
+
+    <!-- Phone goggles -->
+    <string name="phone_goggles_problem_count">Problem #%1$d: </string>
+    <string name="phone_goggles_description">Solve the %1$d following maths problems in less than %2$d seconds in order to perform your communication.</string>
+    <plurals name="phone_goggles_countdown">
+        <item quantity="one">%d second left</item>
+        <item quantity="other">%d seconds left</item>
+    </plurals>
 </resources>
