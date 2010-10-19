@@ -103,10 +103,7 @@ endif
 
 endif
 
-ifeq ($(TARGET_BOARD_PLATFORM),qsd8k)
-        LOCAL_CFLAGS += -DUSE_QCOM_OMX_FIX
-endif
-ifeq ($(TARGET_BOARD_PLATFORM),msm7k)
+ifneq ($(filter qsd8k msm7k msm7625, $(TARGET_BOARD_PLATFORM)),)
         LOCAL_CFLAGS += -DUSE_QCOM_OMX_FIX
 endif
 
