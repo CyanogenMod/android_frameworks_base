@@ -554,12 +554,12 @@ public class ProcessStats {
     }
 
     private long[] getCpuSpeedTimes(long[] out) {
-        long[] tempTimes = out;
-        long[] tempSpeeds = mCpuSpeeds;
         final int MAX_SPEEDS = 30;
-        if (out == null) {
-            tempTimes = new long[MAX_SPEEDS]; // Hopefully no more than that
-            tempSpeeds = new long[MAX_SPEEDS];
+        long[] tempTimes = new long[MAX_SPEEDS]; // Hopefully no more than that
+        long[] tempSpeeds = new long[MAX_SPEEDS];
+        if (out != null) {
+            System.arraycopy(out, 0, tempTimes, 0, out.length);
+            System.arraycopy(mCpuSpeeds, 0, tempSpeeds, 0, mCpuSpeeds.length);
         }
         int speed = 0;
         String file = readFile("/sys/devices/system/cpu/cpu0/cpufreq/stats/time_in_state", '\0');
@@ -589,10 +589,10 @@ public class ProcessStats {
         }
         if (out == null) {
             out = new long[speed];
-            mCpuSpeeds = new long[speed];
-            System.arraycopy(tempSpeeds, 0, mCpuSpeeds, 0, speed);
             System.arraycopy(tempTimes, 0, out, 0, speed);
         }
+        mCpuSpeeds = new long[speed];
+        System.arraycopy(tempSpeeds, 0, mCpuSpeeds, 0, speed);
         return out;
     }
 
