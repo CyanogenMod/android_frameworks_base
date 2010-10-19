@@ -2408,6 +2408,68 @@ public final class Settings {
         public static final String TORCH_STATE = "torch_state";
 
         /**
+         * Whether the phone goggles mode is enabled or not.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_ENABLED = "phone_goggles_enabled";
+
+        /**
+         * Which confirmation mode is used for phone goggles.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_CONFIRMATION_MODE =
+            "phone_goggles_confirmation_mode";
+
+        /**
+         * Whether the application use custom settings for PhoneGoggles or not.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_USE_CUSTOM = "phone_goggles_use_custom";
+
+        /**
+         * Sets when phone goggles start. This is stored in minutes from the start of the day.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_START = "phone_goggles_start";
+
+        /**
+         * Sets when phone goggles end. This is stored in minutes from the start of the day.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_END = "phone_goggles_end";
+
+        /**
+         * Whether the phone goggles mode is enabled or not for an app.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_APP_ENABLED =
+            "phone_goggles_app_enabled";
+
+        /**
+         * Level of the maths problems asked by the phone goggles.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_MATHS_LEVEL = "phone_goggles_maths_level";
+
+        /**
+         * Indicates if the work numbers must be filtered by phone goggles.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_WORK_FILTERED = "phone_goggles_work_filtered";
+
+        /**
+         * Indicates if the mobile numbers must be filtered by phone goggles.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_MOBILE_FILTERED = "phone_goggles_mobile_filtered";
+
+        /**
+         * Indicates if the other numbers must be filtered by phone goggles.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_OTHER_FILTERED = "phone_goggles_other_filtered";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          * @hide
