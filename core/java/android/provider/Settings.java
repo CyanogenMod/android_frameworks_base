@@ -2265,6 +2265,9 @@ public final class Settings {
         /** @hide */
         public static final String EXPANDED_RING_MODE = "expanded_ring_mode";
 
+        /** @hide */
+        public static final String EXPANDED_FLASH_MODE = "expanded_flash_mode";
+
         /**
          * Whether to keep the home app at a higher OOM adjustement
          * @hide
