@@ -2321,6 +2321,67 @@ public final class Settings {
         public static final String QUIET_HOURS_DIM = "quiet_hours_dim";
 
         /**
+         * Whether the phone goggles mode is enabled or not.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_ENABLED = "phone_goggles_enabled";
+
+        /**
+         * Which confirmation mode is used for phone goggles.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_CONFIRMATION_MODE =
+            "phone_goggles_confirmation_mode";
+
+        /**
+         * Sets when phone goggles start. This is stored in minutes from the start of the day.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_START = "phone_goggles_start";
+
+        /**
+         * Sets when phone goggles end. This is stored in minutes from the start of the day.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_END = "phone_goggles_end";
+
+        /**
+         * Whether the phone goggles filters phone calls or not.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_PHONE_ENABLED = "phone_goggles_phone_enabled";
+
+        /**
+         * Whether the phone goggles filters SMS or not.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_SMS_ENABLED = "phone_goggles_sms_enabled";
+
+        /**
+         * Level of the maths problems asked by the phone goggles.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_MATHS_LEVEL = "phone_goggles_maths_level";
+
+        /**
+         * Indicates if the work numbers must be filtered by phone goggles.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_WORK_FILTERED = "phone_goggles_work_filtered";
+
+        /**
+         * Indicates if the mobile numbers must be filtered by phone goggles.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_MOBILE_FILTERED = "phone_goggles_mobile_filtered";
+
+        /**
+         * Indicates if the other numbers must be filtered by phone goggles.
+         * @hide
+         */
+        public static final String PHONE_GOGGLES_OTHER_FILTERED = "phone_goggles_other_filtered";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          * @hide
@@ -2400,7 +2461,17 @@ public final class Settings {
             QUIET_HOURS_END,
             QUIET_HOURS_MUTE,
             QUIET_HOURS_STILL,
-            QUIET_HOURS_DIM
+            QUIET_HOURS_DIM,
+            PHONE_GOGGLES_ENABLED,
+            PHONE_GOGGLES_CONFIRMATION_MODE,
+            PHONE_GOGGLES_START,
+            PHONE_GOGGLES_END,
+            PHONE_GOGGLES_PHONE_ENABLED,
+            PHONE_GOGGLES_SMS_ENABLED,
+            PHONE_GOGGLES_MATHS_LEVEL,
+            PHONE_GOGGLES_WORK_FILTERED,
+            PHONE_GOGGLES_MOBILE_FILTERED,
+            PHONE_GOGGLES_OTHER_FILTERED
         };
 
         // Settings moved to Settings.Secure
