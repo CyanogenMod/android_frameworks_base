@@ -913,4 +913,12 @@
     <string name="media_unknown_state" msgid="729192782197290385">"État du support externe inconnu"</string>
     <!--Application killed toast -->
     <string name="app_killed_message">Application tuée</string>
+
+    <!-- Phone goggles -->
+    <string name="phone_goggles_problem_count">Problème #%1$d : </string>
+    <string name="phone_goggles_description">Répondez aux %1$d problèmes mathématiques suivants en moins de %2$d secondes pour autoriser la communication.</string>
+    <plurals name="phone_goggles_countdown">
+        <item quantity="one">%d seconde restante</item>
+        <item quantity="other">%d secondes restantes</item>
+    </plurals>
 </resources>
