@@ -29,8 +29,9 @@ public abstract class PowerButton {
     public static final String TOGGLE_LOCKSCREEN = "toggleLockScreen";
     public static final String TOGGLE_NETWORKMODE = "toggleNetworkMode";
     public static final String TOGGLE_AUTOROTATE = "toggleAutoRotate";
-    public static final String TOGGLE_FLASHLIGHT = "toggleFlashlight";
     public static final String TOGGLE_AIRPLANE = "toggleAirplane";
+    public static final String TOGGLE_FLASHLIGHT = "toggleFlashlight";
+    public static final String TOGGLE_SLEEPMODE = "toggleSleepMode";
 
     private Mode expPDMode = Mode.SCREEN;
     public static final int STATE_ENABLED = 1;
