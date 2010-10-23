@@ -75,7 +75,6 @@ public class FlashlightButton extends PowerButton {
             fis.close();
             return (result != '0');
         } catch (Exception e) {
-            Log.e(TAG, "getFlashlightEnabled failed", e);
             return false;
         }
     }
