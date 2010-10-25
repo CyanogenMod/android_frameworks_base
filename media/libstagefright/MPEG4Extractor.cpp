@@ -433,6 +433,8 @@ status_t MPEG4Extractor::parseChunk(off_t *offset, int depth) {
             return ERROR_IO;
         }
         chunk_size = ntoh64(chunk_size);
+        if (chunk_size == 0)
+            return ERROR_MALFORMED;
         data_offset += 8;
     }
 

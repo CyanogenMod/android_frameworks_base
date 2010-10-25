@@ -193,13 +193,14 @@ status_t SampleTable::setSampleSizeParams(
     if (type == kSampleSizeType32) {
         mSampleSizeFieldSize = 32;
 
+        if ((data_size < 12 + mNumSampleSizes * 4) && ((mDefaultSampleSize & 0xFF000000) != 0) ) {
+            return ERROR_MALFORMED;
+        }
+
         if (mDefaultSampleSize != 0) {
             return OK;
         }
 
-        if (data_size < 12 + mNumSampleSizes * 4) {
-            return ERROR_MALFORMED;
-        }
     } else {
         if ((mDefaultSampleSize & 0xffffff00) != 0) {
             // The high 24 bits are reserved and must be 0.
