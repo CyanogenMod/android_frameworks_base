@@ -45,9 +45,6 @@ struct MediaSource : public RefBase {
     // Returns the format of the data output by this media source.
     virtual sp<MetaData> getFormat() = 0;
 
-    //Logs statistics profiling
-    virtual void logTrackStatistics() {};
-
     struct ReadOptions;
 
     // Returns a new buffer of data. Call blocks until a

@@ -471,10 +471,5 @@ status_t SampleTable::getMetaDataForSample(
     return OK;
 }
 
-uint32_t SampleTable::getNumSyncSamples()
-{
-    return mNumSyncSamples;
-}
-
 }  // namespace android
 

@@ -169,19 +169,6 @@ private:
     sp<Prefetcher> mPrefetcher;
     sp<HTTPDataSource> mConnectingDataSource;
 
-    //Statistics profiling
-    uint32_t mFramesDropped;
-    uint32_t mConsecutiveFramesDropped;
-    uint32_t mCatchupTimeStart;
-    uint32_t mNumTimesSyncLoss;
-    uint32_t mMaxEarlyDelta;
-    uint32_t mMaxLateDelta;
-    uint32_t mMaxTimeSyncLoss;
-    uint32_t mTotalFrames;
-    int64_t mFirstFrameLatencyStartUs; //first frame latency start
-    bool mVeryFirstFrame;
-    bool mStatistics;
-
     struct SuspensionState {
         String8 mUri;
         KeyedVector<String8, String8> mUriHeaders;
@@ -241,17 +228,6 @@ private:
     status_t finishSetDataSource_l();
 
     static bool ContinuePreparation(void *cookie);
-
-    //Statistics Profiling
-    void logStatistics();
-    void logFirstFrame();
-    void logSeek();
-    void logPause();
-    void logCatchUp(int64_t ts, int64_t clock, int64_t delta);
-    void logLate(int64_t ts, int64_t clock, int64_t delta);
-    void logOnTime(int64_t ts, int64_t clock, int64_t delta);
-    void logSyncLoss();
-    int64_t getTimeOfDayUs();
 
     AwesomePlayer(const AwesomePlayer &);
     AwesomePlayer &operator=(const AwesomePlayer &);
