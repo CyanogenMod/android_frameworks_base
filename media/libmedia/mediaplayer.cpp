@@ -55,6 +55,7 @@ MediaPlayer::MediaPlayer()
     mLeftVolume = mRightVolume = 1.0;
     mVideoWidth = mVideoHeight = 0;
     mLockThreadId = 0;
+    mStateBeforeSuspend = mCurrentState;
 }
 
 MediaPlayer::~MediaPlayer()
@@ -172,12 +173,16 @@ status_t MediaPlayer::invoke(const Parcel& request, Parcel *reply)
 
 status_t MediaPlayer::suspend() {
     Mutex::Autolock _l(mLock);
+    mStateBeforeSuspend = mCurrentState;
+    mCurrentState = MEDIA_PLAYER_SUSPEND;
     return mPlayer->suspend();
 }
 
 status_t MediaPlayer::resume() {
     Mutex::Autolock _l(mLock);
-    return mPlayer->resume();
+    status_t ret = mPlayer->resume();
+    mCurrentState = mStateBeforeSuspend;
+    return ret;
 }
 
 status_t MediaPlayer::setMetadataFilter(const Parcel& filter)
