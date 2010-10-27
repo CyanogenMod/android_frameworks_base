@@ -44,7 +44,8 @@ class BroadcastRecord extends Binder {
     final boolean initialSticky; // initial broadcast from register to sticky?
     final String requiredPermission; // a permission the caller has required
     final List receivers;   // contains BroadcastFilter and ResolveInfo
-    final IIntentReceiver resultTo; // who receives final result if non-null
+    IIntentReceiver resultTo; // who receives final result if non-null
+    private final String resultToString; // resultTo.toString() used for debug purposes
     long dispatchTime;      // when dispatch started on this set of receivers
     long receiverTime;      // when current receiver started for timeouts.
     long finishTime;        // when we finished the broadcast.
@@ -100,8 +101,8 @@ class BroadcastRecord extends Binder {
         if (anrCount != 0) {
             pw.println(prefix + "anrCount=" + anrCount);
         }
-        if (resultTo != null || resultCode != -1 || resultData != null) {
-            pw.println(prefix + "resultTo=" + resultTo
+        if (resultToString != null || resultCode != -1 || resultData != null) {
+            pw.println(prefix + "resultTo=" + resultToString
                   + " resultCode=" + resultCode + " resultData=" + resultData);
         }
         if (resultExtras != null) {
@@ -164,6 +165,7 @@ class BroadcastRecord extends Binder {
         requiredPermission = _requiredPermission;
         receivers = _receivers;
         resultTo = _resultTo;
+        resultToString = resultTo == null ? null : resultTo.toString();
         resultCode = _resultCode;
         resultData = _resultData;
         resultExtras = _resultExtras;
