@@ -12024,6 +12024,7 @@ public final class ActivityManagerService extends ActivityManagerNative implemen
             }
             if (inStopping) {
                 mStoppingServices.remove(r);
+                r.bindings.clear();
             }
             updateOomAdjLocked(r.app);
         }
