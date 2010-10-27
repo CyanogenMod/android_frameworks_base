@@ -627,7 +627,9 @@ class BluetoothEventLoop {
         if (result) {
             mBluetoothService.updateRemoteDevicePropertiesCache(address);
         }
-        mBluetoothService.sendUuidIntent(address);
+        if (address != null) {
+            mBluetoothService.sendUuidIntent(address);
+        }
         mBluetoothService.makeServiceChannelCallbacks(address);
     }
 
