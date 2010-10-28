@@ -72,6 +72,8 @@ final class DnsResolver {
     private static Object mThreadPoolLock = new Object();
 
     public static synchronized DnsResolver createDnsResolver() {
+        if (DebugFlags.WEB_VIEW_CORE)
+            Log.v(LOGTAG, "Creating DNS resolver");
         if (sDnsResolver == null) {
             sDnsResolver = new DnsResolver();
         }
@@ -153,6 +155,8 @@ final class DnsResolver {
     }
 
     public synchronized void destroyDnsResolver() {
+        if (DebugFlags.WEB_VIEW_CORE)
+            Log.v(LOGTAG, "Destroying DNS Resolver");
         --mDnsResolverRefCount;
         if(mDnsResolverRefCount == 0) {
             mShutDownInProgress = true;
