@@ -76,6 +76,11 @@ namespace android {
 static const char *WAKE_LOCK_ID = "KeyEvents";
 static const char *device_path = "/dev/input";
 
+#ifdef HAVE_TSLIB
+static const char *ts_path = "/data/misc/tscal";
+static const char *pointercal_path = "/data/misc/tscal/pointercal";
+#endif
+
 /* return the larger integer */
 static inline int max(int v1, int v2)
 {
@@ -387,8 +392,8 @@ bool EventHub::getEvent(int32_t* outDeviceId, int32_t* outType,
 #ifdef HAVE_TSLIB
                             }
                             else{
-                                LOGI("mTS->fd = %d", mTS->fd);
-                                LOGI("tslib: calling ts_read from eventhub\n");
+                                LOGV("mTS->fd = %d", mTS->fd);
+                                LOGV("tslib: calling ts_read from eventhub\n");
                                 res = ts_read(mTS, &samp, 1);
 
                                 if (res < 0) {
@@ -514,6 +519,15 @@ bool EventHub::openPlatformInput(void)
     if(res < 0) {
         LOGE("could not add watch for %s, %s\n", device_path, strerror(errno));
     }
+#ifdef HAVE_TSLIB
+    res = inotify_add_watch(mFDs[0].fd, pointercal_path, IN_MODIFY);
+    if (res < 0) {
+        res = inotify_add_watch(mFDs[0].fd, ts_path, IN_MODIFY);
+        if (res < 0) {
+            LOGE("could not add watch for %s, %s\n", ts_path, strerror(errno));
+        }
+    }
+#endif
 #else
     /*
      * The code in EventHub::getEvent assumes that mFDs[0] is an inotify fd.
@@ -954,12 +968,31 @@ int EventHub::read_notify(int nfd)
         //printf("%d: %08x \"%s\"\n", event->wd, event->mask, event->len ? event->name : "");
         if(event->len) {
             strcpy(filename, event->name);
-            if(event->mask & IN_CREATE) {
-                open_device(devname);
+#ifdef HAVE_TSLIB
+            if (!strcmp(filename, "pointercal")) {
+                if (mTS->fd)
+                    ts_reload(mTS);
+                inotify_rm_watch(mFDs[0].fd, res);
+                res = inotify_add_watch(mFDs[0].fd, pointercal_path, IN_MODIFY);
+                if(res < 0) {
+                    LOGE("could not add watch for %s, %s\n", pointercal_path, strerror(errno));
+                }
+            } else {
+#else
+            {
+#endif
+                if(event->mask & IN_CREATE) {
+                    open_device(devname);
+                }
+                else {
+                    close_device(devname);
+                }
             }
-            else {
-                close_device(devname);
-            }
+#ifdef HAVE_TSLIB
+        } else {
+              if (mTS->fd)
+                  ts_reload(mTS);
+#endif
         }
         event_size = sizeof(*event) + event->len;
         res -= event_size;
