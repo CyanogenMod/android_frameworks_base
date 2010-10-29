@@ -861,4 +861,9 @@
     <string name="throttle_warning_notification_message" msgid="2609734763845705708">"모바일 데이터 사용에 대해 자세히 알아보려면 터치하세요."</string>
     <string name="throttled_notification_title" msgid="6269541897729781332">"모바일 데이터 제한을 초과했습니다."</string>
     <string name="throttled_notification_message" msgid="4712369856601275146">"모바일 데이터 사용에 대해 자세히 알아보려면 터치하세요."</string>
+    <!-- Reboot recommended after applying color changes (CM) -->
+    <string name="toast_reboot_recommend">경고: 설정을 마친 후 다시 시작을 하시기 바랍니다.</string>
+
+    <!--Application killed toast -->
+    <string name="app_killed_message">어플리케이션 종료됨</string>
 </resources>
