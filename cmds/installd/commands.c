@@ -329,7 +329,7 @@ int get_size(const char *pkgname, const char *apkpath,
         /* count the source apk as code -- but only if it's not
          * on the /system partition and its not on the sdcard.
          */
-    if (strncmp(apkpath, "/system", 7) != 0 &&
+    if (strncmp(apkpath, SYSTEM_DIR_PREFIX, strlen(SYSTEM_DIR_PREFIX)) != 0 &&
             strncmp(apkpath, SDCARD_DIR_PREFIX, 7) != 0) {
         if (stat(apkpath, &s) == 0) {
             codesize += stat_size(&s);
@@ -419,12 +419,15 @@ int create_cache_path(char path[PKG_PATH_MAX], const char *src)
     }
 
     const char *cache_path = DALVIK_CACHE_PREFIX;
-    if (!strncmp(src, "/system", 7)) {
+    if (!strncmp(src, SYSTEM_DIR_PREFIX, strlen(SYSTEM_DIR_PREFIX))) {
         property_get("dalvik.vm.dexopt-data-only", dexopt_data_only, "");
         if (strcmp(dexopt_data_only, "1") != 0) {
             cache_path = DALVIK_SYSTEM_CACHE_PREFIX;
         }
     }
+    /* apps on sdcard will have dex files on sdcard as well */
+    if (!strncmp(src, SDCARD_DIR_PREFIX, strlen(SDCARD_DIR_PREFIX)))
+        cache_path = DALVIK_SDCARD_CACHE_PREFIX;
 
     dstlen = srclen + strlen(cache_path) + 
         strlen(DALVIK_CACHE_POSTFIX) + 1;
@@ -648,7 +651,7 @@ int dexopt(const char *apk_path, uid_t uid, int is_public)
         return -1;
     }
     
-    if (strncmp(apk_path, "/system", 7) != 0) {
+    if (strncmp(apk_path, SYSTEM_DIR_PREFIX, strlen(SYSTEM_DIR_PREFIX)) != 0) {
         zipalign(apk_path, uid, is_public);
     }
 
