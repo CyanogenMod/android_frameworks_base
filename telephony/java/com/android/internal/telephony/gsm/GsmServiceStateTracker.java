@@ -171,6 +171,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(Intent.ACTION_LOCALE_CHANGED)) {
+                ss.updateOperatorI18nName();
                 // update emergency string whenever locale changed
                 updateSpnDisplay();
             }

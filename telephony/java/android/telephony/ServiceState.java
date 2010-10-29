@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
+import com.android.internal.telephony.CarrierNameI18n;
 
 /**
  * Contains phone state and service related information.
@@ -521,6 +522,22 @@ public class ServiceState implements Parcelable {
         mOperatorAlphaLong = longName;
         mOperatorAlphaShort = shortName;
         mOperatorNumeric = numeric;
+
+        updateOperatorI18nName();
+    }
+
+    /**
+     * Update operator name to i18n string
+     *
+     * @hide
+     */
+    public void updateOperatorI18nName() {
+        String name = null;
+
+        name = CarrierNameI18n.getName(mOperatorNumeric);
+        if (name != null) {
+            mOperatorAlphaLong = name;
+        }
     }
 
     /**
