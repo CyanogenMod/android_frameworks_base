@@ -2287,4 +2287,9 @@
 
     <!--Application killed toast -->
     <string name="app_killed_message">Application killed</string>
+
+    <!--Strings for carrier name -->
+    <string name="operator_china_mobile">China Mobile</string>
+    <string name="operator_china_unicom">China Unicom</string>
+    <string name="operator_china_telecom">China Telecom</string>
 </resources>

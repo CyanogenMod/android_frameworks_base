@@ -17,9 +17,11 @@
 package com.android.internal.telephony.cdma;
 
 import android.app.AlarmManager;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.os.AsyncResult;
 import android.os.Handler;
@@ -155,6 +157,17 @@ final class CdmaServiceStateTracker extends ServiceStateTracker {
         }
     };
 
+    private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals(Intent.ACTION_LOCALE_CHANGED)) {
+                ss.updateOperatorI18nName();
+                // update emergency string whenever locale changed
+                updateSpnDisplay();
+            }
+        }
+    };
+
     public CdmaServiceStateTracker(CDMAPhone phone) {
         super();
 
@@ -194,6 +207,11 @@ final class CdmaServiceStateTracker extends ServiceStateTracker {
         setSignalStrengthDefaultValues();
 
         mNeedToRegForRuimLoaded = true;
+
+        // Monitor locale change
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_LOCALE_CHANGED);
+        phone.getContext().registerReceiver(mIntentReceiver, filter);
     }
 
     public void dispose() {
