@@ -285,6 +285,8 @@ public class StatusBarService extends IStatusBar.Stub
     ArrayList<DisableRecord> mDisableRecords = new ArrayList<DisableRecord>();
     int mDisabled = 0;
 
+    private HashMap<String,PowerButton> mUsedPowerButtons = new HashMap<String,PowerButton>();
+
     /**
      * Construct the service, add the status bar view to the window manager
      */
@@ -1909,37 +1911,8 @@ public class StatusBarService extends IStatusBar.Stub
         public void onClick(View v) {
             LinearLayout layout = (LinearLayout)v;
             String type = (String)layout.getTag();
-            if(PowerButton.TOGGLE_WIFI.equals(type)) {
-                WifiButton.getInstance().toggleState(mContext);
-            } else if(PowerButton.TOGGLE_GPS.equals(type)) {
-                GPSButton.getInstance().toggleState(mContext);
-            } else if(PowerButton.TOGGLE_BLUETOOTH.equals(type)) {
-                BluetoothButton.getInstance().toggleState(mContext);
-            } else if(PowerButton.TOGGLE_BRIGHTNESS.equals(type)) {
-                BrightnessButton.getInstance().toggleState(mContext);
-            } else if(PowerButton.TOGGLE_SOUND.equals(type)) {
-                SoundButton.getInstance().toggleState(mContext);
-            } else if(PowerButton.TOGGLE_SYNC.equals(type)) {
-                SyncButton.getInstance().toggleState(mContext);
-            } else if(PowerButton.TOGGLE_WIFIAP.equals(type)) {
-                WifiApButton.getInstance().toggleState(mContext);
-            } else if(PowerButton.TOGGLE_SCREENTIMEOUT.equals(type)) {
-                ScreenTimeoutButton.getInstance().toggleState(mContext);
-            } else if(PowerButton.TOGGLE_MOBILEDATA.equals(type)) {
-                MobileDataButton.getInstance().toggleState(mContext);
-            } else if(PowerButton.TOGGLE_LOCKSCREEN.equals(type)) {
-                LockScreenButton.getInstance().toggleState(mContext);
-            } else if(PowerButton.TOGGLE_NETWORKMODE.equals(type)) {
-                NetworkModeButton.getInstance().toggleState(mContext);
-            } else if(PowerButton.TOGGLE_AUTOROTATE.equals(type)) {
-                AutoRotateButton.getInstance().toggleState(mContext);
-            } else if(PowerButton.TOGGLE_AIRPLANE.equals(type)) {
-                AirplaneButton.getInstance().toggleState(mContext);
-            } else if(PowerButton.TOGGLE_FLASHLIGHT.equals(type)) {
-                FlashlightButton.getInstance().toggleState(mContext);
-            } else if(PowerButton.TOGGLE_SLEEPMODE.equals(type)) {
-                SleepButton.getInstance().toggleState(mContext);
-            }
+            PowerButton btn = mUsedPowerButtons.get(type);
+            btn.toggleState(mContext);
             updateWidget();
         }
     };
@@ -1968,37 +1941,43 @@ public class StatusBarService extends IStatusBar.Stub
     }
 
     private void setupWidget(String buttonType, int position) {
-
+        PowerButton btn = null;
         if(PowerButton.TOGGLE_WIFI.equals(buttonType)) {
-            WifiButton.getInstance().setupButton(position);
+            btn = WifiButton.getInstance();
         } else if(PowerButton.TOGGLE_GPS.equals(buttonType)) {
-            GPSButton.getInstance().setupButton(position);
+            btn = GPSButton.getInstance();
         } else if(PowerButton.TOGGLE_BLUETOOTH.equals(buttonType)) {
-            BluetoothButton.getInstance().setupButton(position);
+            btn = BluetoothButton.getInstance();
         } else if(PowerButton.TOGGLE_BRIGHTNESS.equals(buttonType)) {
-            BrightnessButton.getInstance().setupButton(position);
+            btn = BrightnessButton.getInstance();
         } else if(PowerButton.TOGGLE_SOUND.equals(buttonType)) {
-            SoundButton.getInstance().setupButton(position);
+            btn = SoundButton.getInstance();
         } else if(PowerButton.TOGGLE_SYNC.equals(buttonType)) {
-            SyncButton.getInstance().setupButton(position);
+            btn = SyncButton.getInstance();
         } else if(PowerButton.TOGGLE_WIFIAP.equals(buttonType)) {
-            WifiApButton.getInstance().setupButton(position);
+            btn = WifiApButton.getInstance();
         } else if(PowerButton.TOGGLE_SCREENTIMEOUT.equals(buttonType)) {
-            ScreenTimeoutButton.getInstance().setupButton(position);
+            btn = ScreenTimeoutButton.getInstance();
         } else if(PowerButton.TOGGLE_MOBILEDATA.equals(buttonType)) {
-            MobileDataButton.getInstance().setupButton(position);
+            btn = MobileDataButton.getInstance();
         } else if(PowerButton.TOGGLE_LOCKSCREEN.equals(buttonType)) {
-            LockScreenButton.getInstance().setupButton(position);
+            btn = LockScreenButton.getInstance();
         } else if(PowerButton.TOGGLE_NETWORKMODE.equals(buttonType)) {
-            NetworkModeButton.getInstance().setupButton(position);
+            btn = NetworkModeButton.getInstance();
         } else if(PowerButton.TOGGLE_AUTOROTATE.equals(buttonType)) {
-            AutoRotateButton.getInstance().setupButton(position);
+            btn = AutoRotateButton.getInstance();
         } else if(PowerButton.TOGGLE_AIRPLANE.equals(buttonType)) {
-            AirplaneButton.getInstance().setupButton(position);
+            btn = AirplaneButton.getInstance();
         } else if(PowerButton.TOGGLE_FLASHLIGHT.equals(buttonType)) {
-            FlashlightButton.getInstance().setupButton(position);
+            btn = FlashlightButton.getInstance();
         } else if(PowerButton.TOGGLE_SLEEPMODE.equals(buttonType)) {
-            SleepButton.getInstance().setupButton(position);
+            btn = SleepButton.getInstance();
+        }
+	if (btn != null) {
+            synchronized(mUsedPowerButtons) {
+                btn.setupButton(position);
+                mUsedPowerButtons.put(buttonType, btn);
+            }
         }
     }
 
@@ -2008,57 +1987,34 @@ public class StatusBarService extends IStatusBar.Stub
             layout.setVisibility(View.GONE);
             layout.setTag("");
         }
-        WifiButton.getInstance().setupButton(0);
-        GPSButton.getInstance().setupButton(0);
-        BluetoothButton.getInstance().setupButton(0);
-        BrightnessButton.getInstance().setupButton(0);
-        SoundButton.getInstance().setupButton(0);
-        SyncButton.getInstance().setupButton(0);
-        WifiApButton.getInstance().setupButton(0);
-        ScreenTimeoutButton.getInstance().setupButton(0);
-        MobileDataButton.getInstance().setupButton(0);
-        LockScreenButton.getInstance().setupButton(0);
-        NetworkModeButton.getInstance().setupButton(0);
-        AutoRotateButton.getInstance().setupButton(0);
-        AirplaneButton.getInstance().setupButton(0);
-        FlashlightButton.getInstance().setupButton(0);
-        SleepButton.getInstance().setupButton(0);
+        synchronized(mUsedPowerButtons) {
+            Set<String> keys = mUsedPowerButtons.keySet();
+            for (String key: keys) {
+                PowerButton btn = mUsedPowerButtons.get(key);
+                btn.setupButton(0);
+            }
+            mUsedPowerButtons.clear();
+        }
     }
-
 
     private void updateStates() {
-        GPSButton.getInstance().updateState(mContext);
-        WifiButton.getInstance().updateState(mContext);
-        BluetoothButton.getInstance().updateState(mContext);
-        BrightnessButton.getInstance().updateState(mContext);
-        SoundButton.getInstance().updateState(mContext);
-        SyncButton.getInstance().updateState(mContext);
-        WifiApButton.getInstance().updateState(mContext);
-        ScreenTimeoutButton.getInstance().updateState(mContext);
-        MobileDataButton.getInstance().updateState(mContext);
-        LockScreenButton.getInstance().updateState(mContext);
-        NetworkModeButton.getInstance().updateState(mContext);
-        AutoRotateButton.getInstance().updateState(mContext);
-        AirplaneButton.getInstance().updateState(mContext);
-        FlashlightButton.getInstance().updateState(mContext);
-        SleepButton.getInstance().updateState(mContext);
+        synchronized(mUsedPowerButtons) {
+            Set<String> keys = mUsedPowerButtons.keySet();
+            for (String key: keys) {
+                PowerButton btn = mUsedPowerButtons.get(key);
+                btn.updateState(mContext);
+            }
+        }
     }
+
     private void updateViews() {
-        GPSButton.getInstance().updateView(mContext, mExpandedView);
-        WifiButton.getInstance().updateView(mContext, mExpandedView);
-        BluetoothButton.getInstance().updateView(mContext, mExpandedView);
-        BrightnessButton.getInstance().updateView(mContext, mExpandedView);
-        SoundButton.getInstance().updateView(mContext, mExpandedView);
-        SyncButton.getInstance().updateView(mContext, mExpandedView);
-        WifiApButton.getInstance().updateView(mContext, mExpandedView);
-        ScreenTimeoutButton.getInstance().updateView(mContext, mExpandedView);
-        MobileDataButton.getInstance().updateView(mContext, mExpandedView);
-        LockScreenButton.getInstance().updateView(mContext, mExpandedView);
-        NetworkModeButton.getInstance().updateView(mContext, mExpandedView);
-        AutoRotateButton.getInstance().updateView(mContext, mExpandedView);
-        AirplaneButton.getInstance().updateView(mContext, mExpandedView);
-        FlashlightButton.getInstance().updateView(mContext, mExpandedView);
-        SleepButton.getInstance().updateView(mContext, mExpandedView);
+        synchronized(mUsedPowerButtons) {
+            Set<String> keys = mUsedPowerButtons.keySet();
+            for (String key: keys) {
+                PowerButton btn = mUsedPowerButtons.get(key);
+                btn.updateView(mContext, mExpandedView);
+            }
+        }
     }
 
     private void updateWidget() {
@@ -2083,13 +2039,17 @@ public class StatusBarService extends IStatusBar.Stub
                 updateResources();
             }
             else if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(action)) {
-                WifiButton.getInstance().onReceive(context, intent);
-            } else if (WifiManager.WIFI_AP_STATE_CHANGED_ACTION.equals(intent.getAction())) {
-                WifiApButton.getInstance().onReceive(context, intent);
-            } else if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(intent.getAction())) {
-                BluetoothButton.getInstance().onReceive(context, intent);
-            } else if (NetworkModeButton.NETWORK_MODE_CHANGED.equals(intent.getAction())) {
-                NetworkModeButton.getInstance().onReceive(context, intent);
+		WifiButton btn = (WifiButton)mUsedPowerButtons.get(PowerButton.TOGGLE_WIFI);
+                if (btn != null) btn.onReceive(context, intent);
+            } else if (WifiManager.WIFI_AP_STATE_CHANGED_ACTION.equals(action)) {
+		WifiApButton btn = (WifiApButton)mUsedPowerButtons.get(PowerButton.TOGGLE_WIFIAP);
+                if (btn != null) btn.onReceive(context, intent);
+            } else if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+		BluetoothButton btn = (BluetoothButton)mUsedPowerButtons.get(PowerButton.TOGGLE_BLUETOOTH);
+                if (btn != null) btn.onReceive(context, intent);
+            } else if (NetworkModeButton.NETWORK_MODE_CHANGED.equals(action)) {
+		NetworkModeButton btn = (NetworkModeButton)mUsedPowerButtons.get(PowerButton.TOGGLE_NETWORKMODE);
+                if (btn != null) btn.onReceive(context, intent);
             }
             updateWidget();
         }
