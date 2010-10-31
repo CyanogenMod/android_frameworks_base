@@ -144,8 +144,10 @@ public:
     virtual status_t setVoiceVolume(float volume);
 
     virtual status_t getRenderPosition(uint32_t *halFrames, uint32_t *dspFrames, int output);
- 
+
+#ifdef HAVE_FM_RADIO
     virtual status_t setFmVolume(float volume);
+#endif
 
     // IBinder::DeathRecipient
     virtual     void        binderDied(const wp<IBinder>& who);
@@ -166,8 +168,13 @@ public:
         AUDIO_HW_GET_MIC_MUTE,
         AUDIO_HW_SET_MIC_MUTE,
         AUDIO_SET_VOICE_VOLUME,
+#ifndef HAVE_FM_RADIO
+        AUDIO_SET_PARAMETER
+#endif
+#ifdef HAVE_FM_RADIO
         AUDIO_SET_PARAMETER,
         AUDIO_SET_FM_VOLUME
+#endif
     };
 
     // record interface
@@ -808,8 +815,9 @@ private:
 
                 SortedVector< sp<IBinder> >         mNotificationClients;
                 int                                 mNextThreadId;
-
+#ifdef HAVE_FM_RADIO
                 bool                                mFmOn;
+#endif
     AudioDSP mDsp;
 };
 
