@@ -37,6 +37,7 @@ import java.io.InputStream;
 import java.io.DataInputStream;
 import java.io.OutputStream;
 import java.io.DataOutputStream;
+import java.io.ByteArrayOutputStream;
 
 /**
  * This class implements the Operation interface for server side connections.
@@ -87,12 +88,6 @@ public final class ServerOperation implements Operation, BaseStream {
 
     private boolean mHasBody;
 
-    private ObexByteBuffer mData;
-
-    private ObexByteBuffer mBodyBuffer;
-
-    private ObexByteBuffer mHeaderBuffer;
-
     /**
      * Creates new ServerOperation
      * @param p the parent that created this object
@@ -119,10 +114,7 @@ public final class ServerOperation implements Operation, BaseStream {
         mRequestFinished = false;
         mPrivateOutputOpen = false;
         mHasBody = false;
-
-        mData = new ObexByteBuffer(32);
-        mBodyBuffer = new ObexByteBuffer(32);
-        mHeaderBuffer = new ObexByteBuffer(32);
+        int bytesReceived;
 
         /*
          * Determine if this is a PUT request
@@ -173,12 +165,16 @@ public final class ServerOperation implements Operation, BaseStream {
          * Determine if any headers were sent in the initial request
          */
         if (length > 3) {
-            mData.reset();
-            mData.write(in, length - 3);
+            byte[] data = new byte[length - 3];
+            bytesReceived = in.read(data);
 
-            ObexHelper.updateHeaderSet(requestHeader, mData, mBodyBuffer, mHeaderBuffer);
+            while (bytesReceived != data.length) {
+                bytesReceived += in.read(data, bytesReceived, data.length - bytesReceived);
+            }
 
-            if (mBodyBuffer.getLength() > 0) {
+            byte[] body = ObexHelper.updateHeaderSet(requestHeader, data);
+
+            if (body != null) {
                 mHasBody = true;
             }
 
@@ -209,8 +205,8 @@ public final class ServerOperation implements Operation, BaseStream {
 
             }
 
-            if (mBodyBuffer.getLength() > 0) {
-                mPrivateInput.writeBytes(mBodyBuffer, 1);
+            if (body != null) {
+                mPrivateInput.writeBytes(body, 1);
             } else {
                 while ((!mGetOperation) && (!finalBitSet)) {
                     sendReply(ResponseCodes.OBEX_HTTP_CONTINUE);
@@ -285,7 +281,8 @@ public final class ServerOperation implements Operation, BaseStream {
      * @throws IOException if an IO error occurs
      */
     public synchronized boolean sendReply(int type) throws IOException {
-        mBodyBuffer.reset();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int bytesReceived;
 
         long id = mListener.getConnectionId();
         if (id == -1) {
@@ -325,10 +322,10 @@ public final class ServerOperation implements Operation, BaseStream {
                     mParent.sendResponse(ResponseCodes.OBEX_HTTP_INTERNAL_ERROR, null);
                     throw new IOException("OBEX Packet exceeds max packet size");
                 }
-                mHeaderBuffer.reset();
-                mHeaderBuffer.write(headerArray, start, end - start);
+                byte[] sendHeader = new byte[end - start];
+                System.arraycopy(headerArray, start, sendHeader, 0, sendHeader.length);
 
-                mParent.sendResponse(type, mHeaderBuffer);
+                mParent.sendResponse(type, sendHeader);
                 start = end;
             }
 
@@ -339,7 +336,7 @@ public final class ServerOperation implements Operation, BaseStream {
             }
 
         } else {
-            mBodyBuffer.write(headerArray);
+            out.write(headerArray);
         }
 
         // For Get operation: if response code is OBEX_HTTP_OK, then this is the
@@ -359,34 +356,36 @@ public final class ServerOperation implements Operation, BaseStream {
                     bodyLength = mMaxPacketLength - headerArray.length - 6;
                 }
 
+                byte[] body = mPrivateOutput.readBytes(bodyLength);
+
                 /*
                  * Since this is a put request if the final bit is set or
                  * the output stream is closed we need to send the 0x49
                  * (End of Body) otherwise, we need to send 0x48 (Body)
                  */
                 if ((finalBitSet) || (mPrivateOutput.isClosed())) {
-                    mBodyBuffer.write((byte)0x49);
+                    out.write(0x49);
                 } else {
-                    mBodyBuffer.write((byte)0x48);
+                    out.write(0x48);
                 }
 
                 bodyLength += 3;
-                mBodyBuffer.write((byte)(bodyLength >> 8));
-                mBodyBuffer.write((byte)bodyLength);
-                mBodyBuffer.read(mPrivateOutput, bodyLength);
+                out.write((byte)(bodyLength >> 8));
+                out.write((byte)bodyLength);
+                out.write(body);
             }
         }
 
         if ((finalBitSet) && (type == ResponseCodes.OBEX_HTTP_OK) && (orginalBodyLength <= 0)) {
-            mBodyBuffer.write((byte)0x49);
+            out.write(0x49);
             orginalBodyLength = 3;
-            mBodyBuffer.write((byte)(orginalBodyLength >> 8));
-            mBodyBuffer.write((byte)orginalBodyLength);
+            out.write((byte)(orginalBodyLength >> 8));
+            out.write((byte)orginalBodyLength);
 
         }
 
         mResponseSize = 3;
-        mParent.sendResponse(type, mBodyBuffer);
+        mParent.sendResponse(type, out.toByteArray());
 
         if (type == ResponseCodes.OBEX_HTTP_CONTINUE) {
             int headerID = mInput.read();
@@ -398,8 +397,12 @@ public final class ServerOperation implements Operation, BaseStream {
                     && (headerID != ObexHelper.OBEX_OPCODE_GET_FINAL)) {
 
                 if (length > 3) {
-                    mData.reset();
-                    mData.write(mInput, length);
+                    byte[] temp = new byte[length];
+                    bytesReceived = mInput.read(temp);
+
+                    while (bytesReceived != length) {
+                        bytesReceived += mInput.read(temp, bytesReceived, length - bytesReceived);
+                    }
                 }
 
                 /*
@@ -437,14 +440,17 @@ public final class ServerOperation implements Operation, BaseStream {
                  * Determine if any headers were sent in the initial request
                  */
                 if (length > 3) {
-                    mData.reset();
-                    mData.write(mInput, length - 3);
+                    byte[] data = new byte[length - 3];
+                    bytesReceived = mInput.read(data);
 
-                    ObexHelper.updateHeaderSet(requestHeader, mData, mBodyBuffer, mHeaderBuffer);
-                    if (mBodyBuffer.getLength() > 0) {
+                    while (bytesReceived != data.length) {
+                        bytesReceived += mInput.read(data, bytesReceived, data.length
+                                - bytesReceived);
+                    }
+                    byte[] body = ObexHelper.updateHeaderSet(requestHeader, data);
+                    if (body != null) {
                         mHasBody = true;
                     }
-
                     if (mListener.getConnectionId() != -1 && requestHeader.mConnectionID != null) {
                         mListener.setConnectionId(ObexHelper
                                 .convertToLong(requestHeader.mConnectionID));
@@ -473,8 +479,8 @@ public final class ServerOperation implements Operation, BaseStream {
                         requestHeader.mAuthChall = null;
                     }
 
-                    if (mBodyBuffer.getLength() > 0) {
-                        mPrivateInput.writeBytes(mBodyBuffer, 1);
+                    if (body != null) {
+                        mPrivateInput.writeBytes(body, 1);
                     }
                 }
             }

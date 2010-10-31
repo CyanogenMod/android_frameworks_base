@@ -151,22 +151,21 @@ public final class ObexHelper {
      * exception to be thrown. When it is thrown, it is ignored.
      * @param header the HeaderSet to update
      * @param headerArray the byte array containing headers
-     * @param bodyBuffer Buffer to return result in. Will be reset(). Can be null.
-     *   Will contain the result of the last start body or end body header provided;
-     *   the first byte in the result will specify if a body or end of body is received
-     * @param headerBuffer Buffer to use to avoid allocations. Will be reset().
+     * @return the result of the last start body or end body header provided;
+     *         the first byte in the result will specify if a body or end of
+     *         body is received
      * @throws IOException if an invalid header was found
      */
-    static void updateHeaderSet(HeaderSet header, ObexByteBuffer headerArray,
-            ObexByteBuffer bodyBuffer, ObexByteBuffer headerBuffer) throws IOException {
+    public static byte[] updateHeaderSet(HeaderSet header, byte[] headerArray) throws IOException {
         int index = 0;
         int length = 0;
         int headerID;
         byte[] value = null;
+        byte[] body = null;
         HeaderSet headerImpl = header;
         try {
-            while (index < headerArray.getLength()) {
-                headerID = 0xFF & headerArray.peek(index);
+            while (index < headerArray.length) {
+                headerID = 0xFF & headerArray[index];
                 switch (headerID & (0xC0)) {
 
                     /*
@@ -182,15 +181,14 @@ public final class ObexHelper {
                     case 0x40:
                         boolean trimTail = true;
                         index++;
-                        length = 0xFF & headerArray.peek(index);
+                        length = 0xFF & headerArray[index];
                         length = length << 8;
                         index++;
-                        length += 0xFF & headerArray.peek(index);
+                        length += 0xFF & headerArray[index];
                         length -= 3;
                         index++;
-                        headerBuffer.reset();
-                        headerBuffer.write(headerArray, index, length);
-                        value = headerBuffer.getBytes();
+                        value = new byte[length];
+                        System.arraycopy(headerArray, index, value, 0, length);
                         if (length == 0 || (length > 0 && (value[length - 1] != 0))) {
                             trimTail = false;
                         }
@@ -200,10 +198,10 @@ public final class ObexHelper {
                                     // Remove trailing null
                                     if (trimTail == false) {
                                         headerImpl.setHeader(headerID, new String(value, 0,
-                                                length, "ISO8859_1"));
+                                                value.length, "ISO8859_1"));
                                     } else {
                                         headerImpl.setHeader(headerID, new String(value, 0,
-                                                length - 1, "ISO8859_1"));
+                                                value.length - 1, "ISO8859_1"));
                                     }
                                 } catch (UnsupportedEncodingException e) {
                                     throw e;
@@ -212,27 +210,27 @@ public final class ObexHelper {
 
                             case HeaderSet.AUTH_CHALLENGE:
                                 headerImpl.mAuthChall = new byte[length];
-                                headerArray.peek(index, headerImpl.mAuthChall);
+                                System.arraycopy(headerArray, index, headerImpl.mAuthChall, 0,
+                                        length);
                                 break;
 
                             case HeaderSet.AUTH_RESPONSE:
                                 headerImpl.mAuthResp = new byte[length];
-                                headerArray.peek(index, headerImpl.mAuthResp);
+                                System.arraycopy(headerArray, index, headerImpl.mAuthResp, 0,
+                                        length);
                                 break;
 
                             case HeaderSet.BODY:
                                 /* Fall Through */
                             case HeaderSet.END_OF_BODY:
-                                if (bodyBuffer != null) {
-                                    bodyBuffer.reset();
-                                    bodyBuffer.write((byte)headerID);
-                                    bodyBuffer.write(headerArray, index, length);
-                                }
+                                body = new byte[length + 1];
+                                body[0] = (byte)headerID;
+                                System.arraycopy(headerArray, index, body, 1, length);
                                 break;
 
                             case HeaderSet.TIME_ISO_8601:
                                 try {
-                                    String dateString = new String(value, 0, length, "ISO8859_1");
+                                    String dateString = new String(value, "ISO8859_1");
                                     Calendar temp = Calendar.getInstance();
                                     if ((dateString.length() == 16)
                                             && (dateString.charAt(15) == 'Z')) {
@@ -259,7 +257,7 @@ public final class ObexHelper {
                             default:
                                 if ((headerID & 0xC0) == 0x00) {
                                     headerImpl.setHeader(headerID, ObexHelper.convertToUnicode(
-                                            value, length, true));
+                                            value, true));
                                 } else {
                                     headerImpl.setHeader(headerID, value);
                                 }
@@ -275,7 +273,7 @@ public final class ObexHelper {
                     case 0x80:
                         index++;
                         try {
-                            headerImpl.setHeader(headerID, Byte.valueOf(headerArray.peek(index)));
+                            headerImpl.setHeader(headerID, Byte.valueOf(headerArray[index]));
                         } catch (Exception e) {
                             // Not a valid header so ignore
                         }
@@ -290,7 +288,7 @@ public final class ObexHelper {
                     case 0xC0:
                         index++;
                         value = new byte[4];
-                        headerArray.peek(index, value);
+                        System.arraycopy(headerArray, index, value, 0, 4);
                         try {
                             if (headerID != HeaderSet.TIME_4_BYTE) {
                                 // Determine if it is a connection ID.  These
@@ -319,6 +317,8 @@ public final class ObexHelper {
         } catch (IOException e) {
             throw new IOException("Header was not formatted properly");
         }
+
+        return body;
     }
 
     /**
@@ -874,11 +874,11 @@ public final class ObexHelper {
      * @return a Unicode string
      * @throws IllegalArgumentException if the byte array has an odd length
      */
-    public static String convertToUnicode(byte[] b, int len, boolean includesNull) {
-        if (b == null || len == 0) {
+    public static String convertToUnicode(byte[] b, boolean includesNull) {
+        if (b == null || b.length == 0) {
             return null;
         }
-        int arrayLength = len;
+        int arrayLength = b.length;
         if (!((arrayLength % 2) == 0)) {
             throw new IllegalArgumentException("Byte array not of a valid form");
         }
