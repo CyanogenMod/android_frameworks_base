@@ -2222,6 +2222,12 @@ public final class Settings {
          */
         public static final String LOCKSCREEN_QUICK_UNLOCK_CONTROL =
             "lockscreen_quick_unlock_control";
+        
+        /**
+         * Whether to use the custom Phone and Messaging SlidingTab
+         * @hide
+         */
+        public static final String LOCKSCREEN_PHONE_MESSAGING_TAB = "lockscreen_phone_messaging_tab";
 
         /**
          * Whether to use a custom pull-down notification screen
