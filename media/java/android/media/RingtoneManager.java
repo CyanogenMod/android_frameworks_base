@@ -537,7 +537,7 @@ public class RingtoneManager {
     private Cursor getThemeRegularRingtones() {
         if ((mType & TYPE_RINGTONE) != 0) {
             return query(Uri.parse("content://com.tmobile.thememanager.themes/themes"),
-                    new String[] { "_id", "ringtone_name", "ringtone_uri",
+                    new String[] { "_id", "ringtone_name AS " + MEDIA_COLUMNS[1], "ringtone_uri",
                         "ringtone_name_key AS " + MEDIA_COLUMNS[3] },
                     getThemeWhereClause("ringtone_uri"), null, MEDIA_COLUMNS[3]);
         } else {
@@ -548,7 +548,7 @@ public class RingtoneManager {
     private Cursor getThemeNotificationRingtones() {
         if ((mType & TYPE_NOTIFICATION) != 0) {
             return query(Uri.parse("content://com.tmobile.thememanager.themes/themes"),
-                    new String[] { "_id", "notif_ringtone_name", "notif_ringtone_uri",
+                    new String[] { "_id", "notif_ringtone_name AS " + MEDIA_COLUMNS[1], "notif_ringtone_uri",
                         "notif_ringtone_name_key AS " + MEDIA_COLUMNS[3] },
                     getThemeWhereClause("notif_ringtone_uri"), null, MEDIA_COLUMNS[3]);
         } else {
