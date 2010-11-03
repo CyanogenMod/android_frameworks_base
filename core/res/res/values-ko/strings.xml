@@ -866,4 +866,12 @@
 
     <!--Application killed toast -->
     <string name="app_killed_message">어플리케이션 종료됨</string>
+
+    <string name="reboot_system">휴대전화 다시 시작</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">다시 시작</string>
+
+
+
 </resources>
