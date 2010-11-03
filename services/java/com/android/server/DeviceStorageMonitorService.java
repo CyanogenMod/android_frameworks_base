@@ -44,7 +44,7 @@ import android.provider.Settings;
  * This class implements a service to monitor the amount of disk
  * storage space on the device.  If the free storage on device is less
  * than a tunable threshold value (a secure settings parameter;
- * default 6%) a low memory notification is displayed to alert the
+ * default 10%, 0% if set in CMParts) a low memory notification is displayed to alert the
  * user. If the user clicks on the low memory notification the
  * Application Manager application gets launched to let the user free
  * storage space.
@@ -65,7 +65,17 @@ class DeviceStorageMonitorService extends Binder {
     private static final int DEVICE_MEMORY_WHAT = 1;
     private static final int MONITOR_INTERVAL = 1; //in minutes
     private static final int LOW_MEMORY_NOTIFICATION_ID = 1;
-    private static final int DEFAULT_THRESHOLD_PERCENTAGE = 6;
+    /*
+     * Check if the user deactivated the low-on-storage notification in CMParts,
+     * and if he did, set the threshold percentage to 0% instead
+     * of the regular 10%
+     */
+    String deactLowOnStorWarn = System.getProperty("persist.sys.lowstoragewarning");
+    if (deactLowOnStorWarn.equals(1)) {
+    	private static final int DEFAULT_THRESHOLD_PERCENTAGE = 0;
+    } else {
+    	private static final int DEFAULT_THRESHOLD_PERCENTAGE = 10;
+    }
     private static final int DEFAULT_FREE_STORAGE_LOG_INTERVAL_IN_MINUTES = 12*60; //in minutes
     private static final long DEFAULT_DISK_FREE_CHANGE_REPORTING_THRESHOLD = 2 * 1024 * 1024; // 2MB
     private static final long DEFAULT_CHECK_INTERVAL = MONITOR_INTERVAL*60*1000;

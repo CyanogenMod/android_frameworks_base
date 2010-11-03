@@ -2281,6 +2281,13 @@ public final class Settings {
         public static final String LOCK_MMS_IN_MEMORY = "lock_mms_in_memory";
 
         /**
+         * Whether to turn off the low-on-memory notification
+         * @hide
+         */
+
+        public static final String TURN_OFF_LOWONMEM_NOTF = "turn_off_lowonmem_notf";
+
+        /**
          * HDPI Devices only:  Align battery percentage text in status bar icon  right (0), left (1), center (2)
          * right (0) is default
          * @hide
