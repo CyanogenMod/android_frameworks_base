@@ -1649,6 +1649,10 @@ class PowerManagerService extends IPowerManager.Stub
         EventLog.writeEvent(EventLogTags.POWER_SCREEN_STATE, 0, reason, mTotalTouchDownTime, mTouchCycles);
         mLastTouchDown = 0;
         int err = setScreenStateLocked(false);
+        // Turn off the keyboard light aswell
+        if (reason == WindowManagerPolicy.OFF_BECAUSE_OF_TIMEOUT) {
+            setLightBrightness(LightsService.LIGHT_ID_KEYBOARD, LightsService.BRIGHTNESS_MODE_USER);
+        }
         if (err == 0) {
             mScreenOffReason = reason;
             sendNotificationLocked(false, reason);
