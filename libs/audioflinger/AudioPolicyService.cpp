@@ -556,12 +556,10 @@ status_t AudioPolicyService::setVoiceVolume(float volume, int delayMs)
     return mAudioCommandThread->voiceVolumeCommand(volume, delayMs);
 }
 
-#ifdef HAVE_FM_RADIO
 status_t AudioPolicyService::setFmVolume(float volume, int delayMs)
 {
     return mAudioCommandThread->fmVolumeCommand(volume, delayMs);
 }
-#endif
 
 // -----------  AudioPolicyService::AudioCommandThread implementation ----------
 
@@ -658,7 +656,6 @@ bool AudioPolicyService::AudioCommandThread::threadLoop()
                     }
                     delete data;
                     }break;
-#ifdef HAVE_FM_RADIO
                 case SET_FM_VOLUME: {
                     FmVolumeData *data = (FmVolumeData *)command->mParam;
                     LOGV("AudioCommandThread() processing set fm volume volume %f", data->mVolume);
@@ -669,7 +666,6 @@ bool AudioPolicyService::AudioCommandThread::threadLoop()
                     }
                     delete data;
                     }break;
-#endif
                 default:
                     LOGW("AudioCommandThread() unknown command %d", command->mCommand);
                 }
@@ -834,7 +830,6 @@ status_t AudioPolicyService::AudioCommandThread::voiceVolumeCommand(float volume
     return status;
 }
 
-#ifdef HAVE_FM_RADIO
 status_t AudioPolicyService::AudioCommandThread::fmVolumeCommand(float volume, int delayMs)
 {
     status_t status = NO_ERROR;
@@ -860,7 +855,7 @@ status_t AudioPolicyService::AudioCommandThread::fmVolumeCommand(float volume, i
     }
     return status;
 }
-#endif
+
 
 // insertCommand_l() must be called with mLock held
 void AudioPolicyService::AudioCommandThread::insertCommand_l(AudioCommand *command, int delayMs)
@@ -922,11 +917,9 @@ void AudioPolicyService::AudioCommandThread::insertCommand_l(AudioCommand *comma
             LOGV("Filtering out volume command on output %d for stream %d", data->mIO, data->mStream);
             removedCommands.add(command2);
         } break;
-#ifdef HAVE_FM_RADIO
         case SET_FM_VOLUME: {
             removedCommands.add(command2);
         } break;
-#endif
         case START_TONE:
         case STOP_TONE:
         default:
