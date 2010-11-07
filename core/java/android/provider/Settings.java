@@ -2077,6 +2077,12 @@ public final class Settings {
             "lockscreen_quick_unlock_control";
 
         /**
+         * Whether to use the custom Phone and Messaging SlidingTab
+         * @hide
+         */
+        public static final String LOCKSCREEN_PHONE_MESSAGING_TAB = "lockscreen_phone_messaging_tab";
+
+        /**
          * Pulse the Trackball with Screen On.  The value is boolean (1 or 0).
          * @hide
          */
