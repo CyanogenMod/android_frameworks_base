@@ -1011,16 +1011,19 @@ class MountService extends IMountService.Stub
             /*
              * USB mass storage disconnected while enabled
              */
+            final ArrayList<String> volumes = getShareableVolumes();
             new Thread() {
                 public void run() {
                     try {
                         int rc;
                         Slog.w(TAG, "Disabling UMS after cable disconnect");
-                        doShareUnshareVolume(path, "ums", false);
-                        if ((rc = doMountVolume(path)) != StorageResultCode.OperationSucceeded) {
-                            Slog.e(TAG, String.format(
-                                    "Failed to remount {%s} on UMS enabled-disconnect (%d)",
-                                            path, rc));
+                        for (String path: volumes) {
+                            doShareUnshareVolume(path, "ums", false);
+                            if ((rc = doMountVolume(path)) != StorageResultCode.OperationSucceeded) {
+                                Slog.e(TAG, String.format(
+                                        "Failed to remount {%s} on UMS enabled-disconnect (%d)",
+                                                path, rc));
+                            }
                         }
                     } catch (Exception ex) {
                         Slog.w(TAG, "Failed to mount media on UMS enabled-disconnect", ex);
