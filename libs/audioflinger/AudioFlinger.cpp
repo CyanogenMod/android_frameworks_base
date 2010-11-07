@@ -120,10 +120,13 @@ static bool settingsAllowed() {
 }
 
 // ----------------------------------------------------------------------------
-
 AudioFlinger::AudioFlinger()
     : BnAudioFlinger(),
+#ifdef HAVE_FM_RADIO
         mAudioHardware(0), mMasterVolume(1.0f), mMasterMute(false), mNextThreadId(0),  mFmOn(false)
+#else
+        mAudioHardware(0), mMasterVolume(1.0f), mMasterMute(false), mNextThreadId(0)
+#endif
 {
     mHardwareStatus = AUDIO_HW_IDLE;
 
@@ -568,9 +571,11 @@ bool AudioFlinger::isStreamActive(int stream) const
             return true;
         }
     }
+#ifdef HAVE_FM_RADIO
     if (mFmOn && stream == AudioSystem::MUSIC) {
         return true;
     }
+#endif
     return false;
 }
 
@@ -605,7 +610,7 @@ status_t AudioFlinger::setParameters(int ioHandle, const String8& keyValuePairs)
         }
     }
 #endif
-
+#ifdef HAVE_FM_RADIO
     AudioParameter param = AudioParameter(keyValuePairs);
     String8 key = String8(AudioParameter::keyRouting);
     int device;
@@ -628,7 +633,7 @@ status_t AudioFlinger::setParameters(int ioHandle, const String8& keyValuePairs)
         // Call hardware to switch FM on/off
         mAudioHardware->setParameters(keyValuePairs);
     }
-
+#endif
     // ioHandle == 0 means the parameters are global to the audio hardware interface
     if (ioHandle == 0) {
         /* Set global DSP parameters, if any. */
@@ -738,6 +743,7 @@ status_t AudioFlinger::getRenderPosition(uint32_t *halFrames, uint32_t *dspFrame
     return BAD_VALUE;
 }
 
+#ifdef HAVE_FM_RADIO
 status_t AudioFlinger::setFmVolume(float value)
 {
     // check calling permissions
@@ -752,6 +758,7 @@ status_t AudioFlinger::setFmVolume(float value)
 
     return ret;
 }
+#endif
 
 void AudioFlinger::registerClient(const sp<IAudioFlingerClient>& client)
 {

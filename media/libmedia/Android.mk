@@ -37,6 +37,10 @@ ifneq ($(BOARD_USES_ECLAIR_LIBCAMERA),true)
         libcamera_client
 endif
 
+ifeq ($(BOARD_HAVE_FM_RADIO),true)
+  LOCAL_CFLAGS += -DHAVE_FM_RADIO
+endif
+
 LOCAL_MODULE:= libmedia
 
 ifeq ($(TARGET_OS)-$(TARGET_SIMULATOR),linux-true)
