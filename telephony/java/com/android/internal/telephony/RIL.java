@@ -2070,6 +2070,9 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         serial = p.readInt();
         error = p.readInt();
 
+	Log.d(LOG_TAG,"Serial: "+ serial);
+        Log.d(LOG_TAG,"Error: "+ error);
+
         RILRequest rr;
 
         rr = findAndRemoveRequestFromList(serial);
@@ -2815,27 +2818,85 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         ArrayList<DriverCall> response;
         DriverCall dc;
 
+	int dataAvail = p.dataAvail();
+	int pos = p.dataPosition();
+	int size = p.dataSize();
+	
+	Log.d(LOG_TAG, "Parcel size = " + size);
+	Log.d(LOG_TAG, "Parcel pos = " + pos);
+	Log.d(LOG_TAG, "Parcel dataAvail = " + dataAvail);
+
+
+
+        //Samsung fucked up here
+
+/*
+
+// Native package assembly in the aosp rild
+
+p.writeInt32(p_cur->state);
+        p.writeInt32(p_cur->index);
+        p.writeInt32(p_cur->toa);
+        p.writeInt32(p_cur->isMpty);
+        p.writeInt32(p_cur->isMT);
+        p.writeInt32(p_cur->als);
+        p.writeInt32(p_cur->isVoice);
+        p.writeInt32(p_cur->isVoicePrivacy);
+        writeStringToParcel(p, p_cur->number);
+        p.writeInt32(p_cur->numberPresentation);
+        writeStringToParcel(p, p_cur->name);
+        p.writeInt32(p_cur->namePresentation);
+        Remove when partners upgrade to version 3
+        if ((s_callbacks.version < 3) || (p_cur->uusInfo == NULL || p_cur->uusInfo->uusData == NULL)) {
+            p.writeInt32(0);  UUS Information is absent 
+        } else {
+            RIL_UUS_Info *uusInfo = p_cur->uusInfo;
+            p.writeInt32(1);  UUS Information is present 
+            p.writeInt32(uusInfo->uusType);
+            p.writeInt3s2(uusInfo->uusDcs);
+            p.writeInt32(uusInfo->uusLength);
+            p.write(uusInfo->uusData, uusInfo->uusLength);
+        }
+
+*/
+
         num = p.readInt();
+
+	Log.d(LOG_TAG, "num = " + num);
         response = new ArrayList<DriverCall>(num);
 
         for (int i = 0 ; i < num ; i++) {
             dc = new DriverCall();
 
             dc.state = DriverCall.stateFromCLCC(p.readInt());
+  	    Log.d(LOG_TAG, "state = " + dc.state);
             dc.index = p.readInt();
+	    Log.d(LOG_TAG, "index = " + dc.index);
             dc.TOA = p.readInt();
+	    Log.d(LOG_TAG, "state = " + dc.TOA);
             dc.isMpty = (0 != p.readInt());
+            Log.d(LOG_TAG, "isMpty = " + dc.isMpty);
             dc.isMT = (0 != p.readInt());
+            Log.d(LOG_TAG, "isMT = " + dc.isMT);
             dc.als = p.readInt();
+	    Log.d(LOG_TAG, "als = " + dc.als);
             voiceSettings = p.readInt();
             dc.isVoice = (0 == voiceSettings) ? false : true;
-            dc.isVoicePrivacy = (0 != p.readInt());
+            Log.d(LOG_TAG, "isVoice = " + dc.isVoice);
+            dc.isVoicePrivacy =  (0 != p.readInt()); 
+            voiceSettings = p.readInt(); //Some Samsung magic data for Videocalls
+	    Log.d(LOG_TAG, "Samsung magic = " + voiceSettings); //printing it to cosole for later investigation
             dc.number = p.readString();
+            Log.d(LOG_TAG, "number = " + dc.number);
             int np = p.readInt();
+            Log.d(LOG_TAG, "np = " + np);
             dc.numberPresentation = DriverCall.presentationFromCLIP(np);
             dc.name = p.readString();
+            Log.d(LOG_TAG, "name = " + dc.name);
             dc.namePresentation = p.readInt();
+	    Log.d(LOG_TAG, "namePresentation = " + dc.namePresentation);
             int uusInfoPresent = p.readInt();
+            Log.d(LOG_TAG, "uusInfoPresent = " + uusInfoPresent);
             if (uusInfoPresent == 1) {
                 // TODO: Copy the data to dc to forward to the apps.
                 p.readInt();
