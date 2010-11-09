@@ -218,10 +218,6 @@ public class Scroller  {
                 }
 
 
-                if (mCurrX == mFinalX && mCurrY == mFinalY) {
-                    mFinished = true;
-                }
-
                 break;
         }
         return true;
