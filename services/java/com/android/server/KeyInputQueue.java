@@ -741,15 +741,29 @@ public abstract class KeyInputQueue {
                                     di.mRel.mNextData[MotionEvent.SAMPLE_Y] += ev.value;
                                 }
                             } else if ((classes&RawInputEvent.CLASS_MOUSE) != 0) {
+                                int dispW = mDisplayWidth, dispH = mDisplayHeight;
+                                if (mDisplay != null) {
+                                    if (mDisplay.getRotation() == Surface.ROTATION_90 ||
+                                            mDisplay.getRotation() == Surface.ROTATION_270) {
+                                        dispW = mDisplayHeight;
+                                        dispH = mDisplayWidth;
+                                    }
+                                }
                                 if (ev.scancode == RawInputEvent.REL_X) {
                                     di.mAbs.changed = true;
                                     mCx += (int)ev.value;
-                                    mCx = ((mCx < 0) ? 0 : (mCx >= mDisplayWidth ? mDisplayWidth - 1 : mCx));
+                                    if (mCx < 0)
+                                        mCx = 0;
+                                    else if (mCx >= dispW)
+                                        mCx = dispW - 1;
                                     di.mAbs.mNextData[MotionEvent.SAMPLE_X] = mCx;
                                 } else if (ev.scancode == RawInputEvent.REL_Y) {
                                     di.mAbs.changed = true;
                                     mCy += (int)ev.value;
-                                    mCy = ((mCy < 0) ? 0 : (mCy >= mDisplayHeight ? mDisplayHeight - 1 : mCy));
+                                    if (mCy < 0)
+                                        mCy = 0;
+                                    else if (mCy >= dispH)
+                                        mCy = dispH - 1;
                                     di.mAbs.mNextData[MotionEvent.SAMPLE_Y] = mCy;
                                 } else if (ev.scancode == RawInputEvent.REL_WHEEL &&
                                                (classes&RawInputEvent.CLASS_MOUSE) != 0) {

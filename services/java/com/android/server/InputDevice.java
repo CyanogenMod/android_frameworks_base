@@ -843,11 +843,10 @@ public class InputDevice {
             final int dispH = display.getHeight()-1;
             int w = dispW;
             int h = dispH;
-            if (orientation == Surface.ROTATION_90
-                    || orientation == Surface.ROTATION_270) {
-                int tmp = w;
-                w = h;
-                h = tmp;
+            if (!isMouse && (orientation == Surface.ROTATION_90
+                    || orientation == Surface.ROTATION_270)) {
+                w = dispH;
+                h = dispW;
             }
 
             final AbsoluteInfo absX = device.absX;
@@ -877,6 +876,8 @@ public class InputDevice {
                             ((reportData[j + MotionEvent.SAMPLE_SIZE]-absSize.minValue)
                                 / (float)absSize.range);
                 }
+                if (isMouse)
+                    continue;
 
                 switch (orientation) {
                     case Surface.ROTATION_90: {
