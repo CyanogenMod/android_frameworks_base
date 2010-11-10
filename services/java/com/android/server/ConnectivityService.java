@@ -1112,6 +1112,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private void handleConnect(NetworkInfo info) {
         int type = info.getType();
 
+	if (DBG) Slog.d(TAG, "Handling Connect");
+
         // snapshot isFailover, because sendConnectedBroadcast() resets it
         boolean isFailover = info.isFailover();
         NetworkStateTracker thisNet = mNetTrackers[type];
@@ -1119,6 +1121,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         // if this is a default net and other default is running
         // kill the one not preferred
         if (mNetAttributes[type].isDefault()) {
+		if (DBG) Slog.d(TAG, "Handling Connect: Interface is default");
             if (mActiveDefaultNetwork != -1 && mActiveDefaultNetwork != type) {
                 if ((type != mNetworkPreference &&
                         mNetAttributes[mActiveDefaultNetwork].mPriority >
@@ -1147,9 +1150,13 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             }
             mActiveDefaultNetwork = type;
         }
+	if (DBG) Slog.d(TAG, "Handling Connect: No Teardownrequest");
         thisNet.setTeardownRequested(false);
+	if (DBG) Slog.d(TAG, "Handling Connect: Updating Networksettings");
         thisNet.updateNetworkSettings();
+	if (DBG) Slog.d(TAG, "Handling Connect: handleConnectivityChange");
         handleConnectivityChange();
+	if (DBG) Slog.d(TAG, "Handling Connect: sendConnectedBroadcast");
         sendConnectedBroadcast(info);
     }
 
@@ -1193,16 +1200,23 @@ public class ConnectivityService extends IConnectivityManager.Stub {
          * will be only one default route, to ensure that all traffic
          * except MMS will travel via Wi-Fi.
          */
+	if (DBG) Slog.d(TAG, "handleConnectivityChange start");	
+
         handleDnsConfigurationChange();
 
         for (int netType : mPriorityList) {
+	    if (DBG) Slog.d(TAG, "handleConnectivityChange: netType = " + netType);
             if (mNetTrackers[netType].getNetworkInfo().isConnected()) {
+		if (DBG) Slog.d(TAG, "handleConnectivityChange: is Connected");
                 if (mNetAttributes[netType].isDefault()) {
+		if (DBG) Slog.d(TAG, "handleConnectivityChange: is Default");
                     mNetTrackers[netType].addDefaultRoute();
                 } else {
+		if (DBG) Slog.d(TAG, "handleConnectivityChange: is NOT Connected");
                     mNetTrackers[netType].addPrivateDnsRoutes();
                 }
             } else {
+                if (DBG) Slog.d(TAG, "handleConnectivityChange: is NOT Connected");
                 if (mNetAttributes[netType].isDefault()) {
                     mNetTrackers[netType].removeDefaultRoute();
                 } else {
@@ -1210,6 +1224,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 }
             }
         }
+	if (DBG) Slog.d(TAG, "handleConnectivityChange end");
     }
 
     /**
@@ -1372,6 +1387,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     }
 
     // must be stateless - things change under us.
+
+//lala
+
     private class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
@@ -1418,8 +1436,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
                     if (info.getDetailedState() ==
                             NetworkInfo.DetailedState.FAILED) {
+			  if (DBG) Slog.d(TAG, "Failure detected");
                         handleConnectionFailure(info);
                     } else if (state == NetworkInfo.State.DISCONNECTED) {
+                          if (DBG) Slog.d(TAG, "Disconnet detected");
                         handleDisconnect(info);
                     } else if (state == NetworkInfo.State.SUSPENDED) {
                         // TODO: need to think this over.
@@ -1429,8 +1449,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                         // suspended. This allows the applications an
                         // opportunity to handle DISCONNECTED and SUSPENDED
                         // differently, or not.
+			if (DBG) Slog.d(TAG, "Suspend detected");
                         handleDisconnect(info);
                     } else if (state == NetworkInfo.State.CONNECTED) {
+			if (DBG) Slog.d(TAG, "Connect detected");
                         handleConnect(info);
                     }
                     break;
