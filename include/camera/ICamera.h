@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
+ * Copyright (C) 2010, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,6 +52,9 @@ public:
     // set the preview callback flag to affect how the received frames from
     // preview are handled.
     virtual void            setPreviewCallbackFlag(int flag) = 0;
+
+    // get the recording buffer information from HAL layer.
+    virtual status_t        getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize) = 0;
 
     // start preview mode, must call setPreviewDisplay first
     virtual status_t        startPreview() = 0;
