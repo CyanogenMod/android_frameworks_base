@@ -1,6 +1,8 @@
 /*
 **
 ** Copyright (C) 2008, The Android Open Source Project
+** Copyright (C) 2008 HTC Inc.
+** Copyright (C) 2010, Code Aurora Forum. All rights reserved.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -598,7 +600,7 @@ status_t CameraService::Client::setOverlay()
             // Surfaceflinger may hold onto the previous overlay reference for some
             // time after we try to destroy it. retry a few times. In the future, we
             // should make the destroy call block, or possibly specify that we can
-            // wait in the createOverlay call if the previous overlay is in the 
+            // wait in the createOverlay call if the previous overlay is in the
             // process of being destroyed.
             for (int retry = 0; retry < 50; ++retry) {
                 mOverlayRef = mSurface->createOverlay(w, h, OVERLAY_FORMAT_DEFAULT,
@@ -1454,6 +1456,17 @@ status_t CameraService::onTransact(
 #endif // DEBUG_HEAP_LEAKS
 
     return err;
+}
+
+status_t CameraService::Client::getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize)
+{
+    LOGD(" getBufferInfo : E");
+    if (mHardware == NULL) {
+        LOGE("mHardware is NULL, returning.");
+        Frame = NULL;
+        return INVALID_OPERATION;
+    }
+    return mHardware->getBufferInfo(Frame, alignedSize);
 }
 
 }; // namespace android
