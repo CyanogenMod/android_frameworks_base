@@ -678,6 +678,19 @@ status_t CameraService::Client::startPreviewMode() {
     return result;
 }
 
+#ifdef USE_GETBUFFERINFO
+status_t CameraService::Client::getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize)
+{
+    LOGD(" getBufferInfo : E");
+    if (mHardware == NULL) {
+        LOGE("mHardware is NULL, returning.");
+        Frame = NULL;
+        return INVALID_OPERATION;
+    }
+    return mHardware->getBufferInfo(Frame, alignedSize);
+}
+#endif
+
 status_t CameraService::Client::startRecordingMode() {
     LOG1("startRecordingMode");
     status_t result = NO_ERROR;

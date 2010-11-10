@@ -18,6 +18,10 @@ LOCAL_SHARED_LIBRARIES := \
 
 LOCAL_MODULE:= libcamera_client
 
+ifeq ($(BOARD_CAMERA_USE_GETBUFFERINFO),true)
+    LOCAL_CFLAGS += -DUSE_GETBUFFERINFO
+endif
+
 ifeq ($(TARGET_SIMULATOR),true)
     LOCAL_LDLIBS += -lpthread
 endif
