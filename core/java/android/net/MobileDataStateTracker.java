@@ -32,6 +32,10 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.text.TextUtils;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
+
 /**
  * Track the state of mobile data connectivity. This is done by
  * receiving broadcast intents from the Phone process whenever
@@ -89,7 +93,9 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                 "net.gprs.dns1",
                 "net.gprs.dns2",
                 "net.ppp0.dns1",
-                "net.ppp0.dns2"};
+                "net.ppp0.dns2",
+		"net.pdp0.dns1",
+		"net.pdp0.dns2"};
 
     }
 
@@ -209,9 +215,18 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                                 break;
                             case CONNECTED:
                                 mInterfaceName = intent.getStringExtra(Phone.DATA_IFACE_NAME_KEY);
+				String prefix = "net." + mInterfaceName + ".";
+				mDefaultGatewayAddr = getIpFromString(SystemProperties.get(prefix + "gw"));
+
+				
                                 if (mInterfaceName == null) {
                                     Log.d(TAG, "CONNECTED event did not supply interface name.");
                                 }
+				
+				if (mDefaultGatewayAddr == -1) {
+                                    Log.w(TAG, "CONNECTED event did not supply Gateway.");
+                                }
+
                                 setDetailedState(DetailedState.CONNECTED, reason, apnName);
                                 break;
                         }
@@ -230,6 +245,24 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                 setSubtype(tm.getNetworkType(), tm.getNetworkTypeName());
             }
         }
+    }
+
+    private int getIpFromString(String ip)
+    {
+        InetAddress inetAddress;
+        try {
+            inetAddress = InetAddress.getByName(ip);
+        } catch (UnknownHostException e) {
+            return -1;
+        }
+        byte[] addrBytes;
+        int addr;
+        addrBytes = inetAddress.getAddress();
+        addr = ((addrBytes[3] & 0xff) << 24)
+                | ((addrBytes[2] & 0xff) << 16)
+                | ((addrBytes[1] & 0xff) << 8)
+                |  (addrBytes[0] & 0xff);
+        return addr;
     }
 
     private void getPhoneService(boolean forceRefresh) {
