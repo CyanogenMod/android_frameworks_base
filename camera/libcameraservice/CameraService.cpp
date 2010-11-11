@@ -158,6 +158,11 @@ sp<ICamera> CameraService::connect(const sp<ICameraClient>& cameraClient)
     // create a new Client object
     client = new Client(this, cameraClient, callingPid);
     mClient = client;
+    if (client->mHardware == NULL) {
+        client = NULL;
+        mClient = NULL;
+        return client;
+    }
 #if DEBUG_CLIENT_REFERENCES
     // Enable tracking for this object, and track increments and decrements of
     // the refcount.
@@ -239,27 +244,29 @@ CameraService::Client::Client(const sp<CameraService>& cameraService,
     mCameraClient = cameraClient;
     mClientPid = clientPid;
     mHardware = openCameraHardware();
-    mUseOverlay = mHardware->useOverlay();
+    if (mHardware != NULL) {
+        mUseOverlay = mHardware->useOverlay();
 
-    mHardware->setCallbacks(notifyCallback,
-                            dataCallback,
-                            dataCallbackTimestamp,
-                            mCameraService.get());
+        mHardware->setCallbacks(notifyCallback,
+                                dataCallback,
+                                dataCallbackTimestamp,
+                                mCameraService.get());
 
-    // Enable zoom, error, and focus messages by default
-    mHardware->enableMsgType(CAMERA_MSG_ERROR |
-                             CAMERA_MSG_ZOOM |
-                             CAMERA_MSG_FOCUS);
+        // Enable zoom, error, and focus messages by default
+        mHardware->enableMsgType(CAMERA_MSG_ERROR |
+                                 CAMERA_MSG_ZOOM |
+                                 CAMERA_MSG_FOCUS);
 
-    mMediaPlayerClick = newMediaPlayer("/system/media/audio/ui/camera_click.ogg");
-    mMediaPlayerBeep = newMediaPlayer("/system/media/audio/ui/VideoRecord.ogg");
-    mOverlayW = 0;
-    mOverlayH = 0;
+        mMediaPlayerClick = newMediaPlayer("/system/media/audio/ui/camera_click.ogg");
+        mMediaPlayerBeep = newMediaPlayer("/system/media/audio/ui/VideoRecord.ogg");
+        mOverlayW = 0;
+        mOverlayH = 0;
 
-    // Callback is disabled by default
-    mPreviewCallbackFlag = FRAME_CALLBACK_FLAG_NOOP;
-    mOrientation = 0;
-    cameraService->incUsers();
+        // Callback is disabled by default
+        mPreviewCallbackFlag = FRAME_CALLBACK_FLAG_NOOP;
+        mOrientation = 0;
+        cameraService->incUsers();
+    }
     LOGV("Client::Client X (pid %d)", callingPid);
 }
 
@@ -439,6 +446,10 @@ void CameraService::Client::disconnect()
     // Release the held overlay resources.
     if (mUseOverlay)
     {
+        /* Release previous overlay handle */
+        if (mOverlay != NULL) {
+            mOverlay->destroy();
+        }
         mOverlayRef = 0;
     }
     mHardware.clear();
@@ -479,9 +490,11 @@ status_t CameraService::Client::setPreviewDisplay(const sp<ISurface>& surface)
         mOverlayRef = 0;
         // If preview has been already started, set overlay or register preview
         // buffers now.
-        if (mHardware->previewEnabled()) {
+        if (mHardware->previewEnabled() || mUseOverlay) {
             if (mUseOverlay) {
-                result = setOverlay();
+                if (mSurface != NULL) {
+                  result = setOverlay();
+                }
             } else if (mSurface != 0) {
                 result = registerPreviewBuffers();
             }
@@ -590,6 +603,9 @@ status_t CameraService::Client::setOverlay()
         sp<Overlay> dummy;
         mHardware->setOverlay( dummy );
         mOverlayRef = 0;
+        if (mOverlay != NULL) {
+            mOverlay->destroy();
+        }
     }
 
     status_t ret = NO_ERROR;
@@ -603,7 +619,7 @@ status_t CameraService::Client::setOverlay()
             // wait in the createOverlay call if the previous overlay is in the
             // process of being destroyed.
             for (int retry = 0; retry < 50; ++retry) {
-                mOverlayRef = mSurface->createOverlay(w, h, OVERLAY_FORMAT_DEFAULT,
+                mOverlayRef = mSurface->createOverlay(w, h, OVERLAY_FORMAT_YCbCr_420_SP,
                                                       mOrientation);
                 if (mOverlayRef != NULL) break;
                 LOGW("Overlay create failed - retrying");
@@ -614,7 +630,8 @@ status_t CameraService::Client::setOverlay()
                 LOGE("Overlay Creation Failed!");
                 return -EINVAL;
             }
-            ret = mHardware->setOverlay(new Overlay(mOverlayRef));
+            mOverlay = new Overlay(mOverlayRef);
+            ret = mHardware->setOverlay(mOverlay);
         }
     } else {
         ret = mHardware->setOverlay(NULL);
@@ -676,8 +693,8 @@ status_t CameraService::Client::startPreviewMode()
         if (mSurface != 0) {
             ret = setOverlay();
         }
-        if (ret != NO_ERROR) return ret;
         ret = mHardware->startPreview();
+        if (ret != NO_ERROR) return ret;
     } else {
         mHardware->enableMsgType(CAMERA_MSG_PREVIEW_FRAME);
         ret = mHardware->startPreview();
@@ -740,6 +757,9 @@ void CameraService::Client::stopPreview()
 
         if (mSurface != 0 && !mUseOverlay) {
             mSurface->unregisterBuffers();
+        } else {
+          mOverlayW = 0;
+          mOverlayH = 0;
         }
     }
 
