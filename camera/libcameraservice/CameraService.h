@@ -199,6 +199,7 @@ private:
                     bool                        mUseOverlay;
 
                     sp<OverlayRef>              mOverlayRef;
+                    sp<Overlay>                 mOverlay;
                     int                         mOverlayW;
                     int                         mOverlayH;
 
