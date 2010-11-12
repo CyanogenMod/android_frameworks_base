@@ -21,6 +21,6 @@
     <array name="shutdown_reboot_options">
         <item>Redémarrage</item>
         <item>Recovery</item>
-        <item>Bootloader</item>
+        <item>Download Mode</item>
     </array>
 </resources>
