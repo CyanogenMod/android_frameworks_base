@@ -619,7 +619,12 @@ status_t CameraService::Client::setOverlay()
             // wait in the createOverlay call if the previous overlay is in the
             // process of being destroyed.
             for (int retry = 0; retry < 50; ++retry) {
-                mOverlayRef = mSurface->createOverlay(w, h, OVERLAY_FORMAT_YCbCr_420_SP,
+                mOverlayRef = mSurface->createOverlay(w, h, 
+#ifdef USE_OVERLAY_FORMAT_YCbCr_420_SP
+                                                      OVERLAY_FORMAT_YCbCr_420_SP,
+#else
+                                                      OVERLAY_FORMAT_DEFAULT,
+#endif
                                                       mOrientation);
                 if (mOverlayRef != NULL) break;
                 LOGW("Overlay create failed - retrying");
