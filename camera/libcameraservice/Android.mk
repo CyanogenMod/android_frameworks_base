@@ -68,6 +68,10 @@ ifeq ($(TARGET_SIMULATOR),true)
 LOCAL_CFLAGS += -DSINGLE_PROCESS
 endif
 
+ifeq ($(BOARD_OVERLAY_FORMAT_YCbCr_420_SP),true)
+LOCAL_CFLAGS += -DUSE_OVERLAY_FORMAT_YCbCr_420_SP
+endif
+
 ifeq ($(USE_CAMERA_STUB), true)
 LOCAL_STATIC_LIBRARIES += libcamerastub
 LOCAL_CFLAGS += -include CameraHardwareStub.h

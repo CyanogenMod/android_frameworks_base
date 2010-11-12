@@ -200,7 +200,9 @@ private:
                     bool                        mUseOverlay;
 
                     sp<OverlayRef>              mOverlayRef;
+#ifdef USE_OVERLAY_FORMAT_YCbCr_420_SP
                     sp<Overlay>                 mOverlay;
+#endif
                     int                         mOverlayW;
                     int                         mOverlayH;
 
