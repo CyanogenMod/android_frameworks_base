@@ -53,6 +53,11 @@ public:
     // preview are handled.
     virtual void            setPreviewCallbackFlag(int flag) = 0;
 
+#ifdef USE_GETBUFFERINFO
+    // get the recording buffer information from HAL layer.
+    virtual status_t        getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize) = 0;
+#endif
+
     // start preview mode, must call setPreviewDisplay first
     virtual status_t        startPreview() = 0;
 
@@ -66,7 +71,7 @@ public:
     virtual status_t        startRecording() = 0;
 
     // stop recording mode
-    virtual void            stopRecording() = 0;
+    virtual void            stopRecording() = 0;    
 
     // get recording state
     virtual bool            recordingEnabled() = 0;
@@ -91,9 +96,6 @@ public:
 
     // send command to camera driver
     virtual status_t        sendCommand(int32_t cmd, int32_t arg1, int32_t arg2) = 0;
-
-    // get the recording buffer information from HAL layer.
-    virtual status_t        getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize) = 0;
 };
 
 // ----------------------------------------------------------------------------

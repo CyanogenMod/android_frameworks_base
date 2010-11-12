@@ -127,6 +127,15 @@ public:
      */
     virtual status_t    startPreview() = 0;
 
+#ifdef USE_GETBUFFERINFO
+     /**
+     * Query the recording buffer information from HAL.
+     * This is needed because the opencore expects the buffer
+     * information before starting the recording.
+     */
+    virtual status_t    getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize) = 0;
+#endif
+
     /**
      * Only used if overlays are used for camera preview.
      */
@@ -212,14 +221,6 @@ public:
      * Dump state of the camera hardware
      */
     virtual status_t dump(int fd, const Vector<String16>& args) const = 0;
-
-    /**
-     * Query the recording buffer information from HAL.
-     * This is needed because the opencore expects the buffer
-     * information before starting the recording.
-     */
-    virtual status_t    getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize) = 0;
-
 };
 
 /** factory function to instantiate a camera hardware object */

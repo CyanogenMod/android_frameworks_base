@@ -86,6 +86,10 @@ private:
         // preview are handled.
         virtual void            setPreviewCallbackFlag(int callback_flag);
 
+#ifdef USE_GETBUFFERINFO
+        // get the recording buffers information from HAL Layer.
+        virtual status_t        getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize);
+#endif
         // start preview mode, must call setPreviewDisplay first
         virtual status_t        startPreview();
 
@@ -127,9 +131,6 @@ private:
 
         // our client...
         const sp<ICameraClient>&    getCameraClient() const { return mCameraClient; }
-
-        // get the recording buffers information from HAL Layer.
-        virtual status_t        getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize);
 
     private:
         friend class CameraService;

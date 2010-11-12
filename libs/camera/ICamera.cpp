@@ -46,7 +46,9 @@ enum {
     STOP_RECORDING,
     RECORDING_ENABLED,
     RELEASE_RECORDING_FRAME,
+#ifdef USE_GETBUFFERINFO
     GET_BUFFER_INFO,
+#endif
 };
 
 class BpCamera: public BpInterface<ICamera>
@@ -88,7 +90,7 @@ public:
         remote()->transact(SET_PREVIEW_CALLBACK_FLAG, data, &reply);
     }
 
-
+#ifdef USE_GETBUFFERINFO
     // get the recording buffer information.
     status_t getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize)
     {
@@ -102,7 +104,7 @@ public:
         *alignedSize = reply.readInt32();
         return ret;
     }
-
+#endif
 
     // start preview mode, must call setPreviewDisplay first
     status_t startPreview()
@@ -287,6 +289,7 @@ status_t BnCamera::onTransact(
             setPreviewCallbackFlag(callback_flag);
             return NO_ERROR;
         } break;
+#ifdef USE_GETBUFFERINFO
         case GET_BUFFER_INFO:{
             LOGV("GET_BUFFER_INFO");
             CHECK_INTERFACE(ICamera, data, reply);
@@ -296,6 +299,7 @@ status_t BnCamera::onTransact(
             reply->writeInt32(alignedSize);
             return NO_ERROR;
         } break;
+#endif
         case START_PREVIEW: {
             LOGV("START_PREVIEW");
             CHECK_INTERFACE(ICamera, data, reply);

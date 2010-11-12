@@ -400,6 +400,7 @@ extern "C" sp<CameraHardwareInterface> openCameraHardware()
     return CameraHardwareStub::createInstance();
 }
 
+#ifdef USE_GETBUFFERINFO
 status_t CameraHardwareStub::getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize) {
     /* No Support for this API in STUB Camera. Just return NULL */
     Frame = NULL;
@@ -408,4 +409,5 @@ status_t CameraHardwareStub::getBufferInfo(sp<IMemory>& Frame, size_t *alignedSi
 
     return UNKNOWN_ERROR;
 }
+#endif
 }; // namespace android

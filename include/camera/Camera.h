@@ -129,9 +129,10 @@ public:
             status_t    setPreviewDisplay(const sp<Surface>& surface);
             status_t    setPreviewDisplay(const sp<ISurface>& surface);
 
+#ifdef USE_GETBUFFERINFO
             // query the recording buffer information from HAL layer.
             status_t    getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize);
-
+#endif
             // start preview mode, must call setPreviewDisplay first
             status_t    startPreview();
 
