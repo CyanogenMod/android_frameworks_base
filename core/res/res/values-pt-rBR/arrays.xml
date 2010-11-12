@@ -33,7 +33,7 @@
     <array name="shutdown_reboot_options">
         <item>Reiniciar</item>
         <item>Modo Recovery</item>
-        <item>Modo Bootloader</item>
+        <item>Download Mode</item>
     </array>
 
 
