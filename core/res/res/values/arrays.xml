@@ -147,7 +147,7 @@
     <array name="shutdown_reboot_options">
         <item>Reboot</item>
         <item>Recovery</item>
-        <item>Bootloader</item>
+        <item>Download Mode</item>
     </array>
 
     <!-- Do not translate. Defines the shutdown actions passed to the kernel.
@@ -155,7 +155,7 @@
     <string-array name="shutdown_reboot_actions">
         <item></item>
         <item>recovery</item>
-        <item>bootloader</item>
+        <item>download</item>
     </string-array>
 
 
