@@ -55,8 +55,18 @@ public class KeyCharacterMap
      */
     public static final char PICKER_DIALOG_INPUT = '\uEF01';
 
+    /**
+     * Private use character denoting a .com suffix
+     */
+    public static final char DOT_COM_INPUT = '\uEF03';
+
+    /**
+     * Private use character denoting a www. prefix
+     */
+    public static final char DOT_WWW_INPUT = '\uEF04';
+
     private static Object sLock = new Object();
-    private static SparseArray<WeakReference<KeyCharacterMap>> sInstances 
+    private static SparseArray<WeakReference<KeyCharacterMap>> sInstances
         = new SparseArray<WeakReference<KeyCharacterMap>>();
 
     public static KeyCharacterMap load(int keyboard)
