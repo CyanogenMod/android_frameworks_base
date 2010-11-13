@@ -341,11 +341,11 @@ public class KeyEvent extends InputEvent implements Parcelable {
     public static final int KEYCODE_FUNC_7          = 98;
     public static final int KEYCODE_FUNC_8          = 99;
     public static final int KEYCODE_QUECHAR         = 100;
-    public static final int KEYCODE_USER1           = 101;
-    public static final int KEYCODE_USER2           = 102;
-    public static final int KEYCODE_USER3           = 103;
-    public static final int KEYCODE_USER4           = 104;
-    public static final int KEYCODE_USER5           = 105;
+    public static final int KEYCODE_USER1           = 92;
+    public static final int KEYCODE_USER2           = 93;
+    public static final int KEYCODE_USER3           = 94;
+    public static final int KEYCODE_USER4           = 95;
+    public static final int KEYCODE_USER5           = 96;
 
     // NOTE: If you add a new keycode here you must also add it to:
     //  isSystem()

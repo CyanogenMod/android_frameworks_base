@@ -934,7 +934,7 @@
         <enum name="KEYCODE_MEDIA_REWIND" value="89" />
         <enum name="KEYCODE_MEDIA_FAST_FORWARD" value="90" />
         <enum name="KEYCODE_MUTE" value="91" />
-        <enum name="KEYCODE_PAGE_UP" value="92" />
+        enum name="KEYCODE_PAGE_UP" value="92" />
         <enum name="KEYCODE_PAGE_DOWN" value="93" />
         <enum name="KEYCODE_PICTSYMBOLS" value="94" />
         <enum name="KEYCODE_SWITCH_CHARSET" value="95" />
@@ -962,11 +962,11 @@
         <enum name="KEYCODE_FUNC_7" value="98" />
         <enum name="KEYCODE_FUNC_8" value="99" />
         <enum name="KEYCODE_QUECHAR" value="100" />
-        <enum name="KEYCODE_USER1" value="101" />
-        <enum name="KEYCODE_USER2" value="102" />
-        <enum name="KEYCODE_USER3" value="103" />
-        <enum name="KEYCODE_USER4" value="104" />
-        <enum name="KEYCODE_USER5" value="105" />
+        <enum name="KEYCODE_USER1" value="92" />
+        <enum name="KEYCODE_USER2" value="93" />
+        <enum name="KEYCODE_USER3" value="94" />
+        <enum name="KEYCODE_USER4" value="95" />
+        <enum name="KEYCODE_USER5" value="96" />
     </attr>
 
     <!-- ***************************************************************** -->
