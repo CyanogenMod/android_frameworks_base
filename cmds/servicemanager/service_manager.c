@@ -30,6 +30,7 @@ static struct {
 #ifdef LVMX
     { AID_MEDIA, "com.lifevibes.mx.ipc" },
 #endif
+    { AID_COMPASS, "yamaha.hardware.sensors" },
     { AID_MEDIA, "media.audio_flinger" },
     { AID_MEDIA, "media.player" },
     { AID_MEDIA, "media.camera" },
