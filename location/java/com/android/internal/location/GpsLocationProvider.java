@@ -348,10 +348,6 @@ public class GpsLocationProvider implements LocationProviderInterface {
     public GpsLocationProvider(Context context, ILocationManager locationManager) {
         mContext = context;
         mLocationManager = locationManager;
-
-        mDownloadXtraDataPending = context.getResources().getBoolean(
-                com.android.internal.R.bool.config_gps_xtra_download_on_boot);
-
         mNIHandler = new GpsNetInitiatedHandler(context, this);
 
         mLocation.setExtras(mLocationExtras);
