@@ -872,6 +872,6 @@
     <!-- label for item that reboots the phone in phone options dialog -->
     <string name="global_action_reboot">다시 시작</string>
 
-
+    <string name="reboot_progress">다시 시작하는 중\u2026</string>
 
 </resources>
