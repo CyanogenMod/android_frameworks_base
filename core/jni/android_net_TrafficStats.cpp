@@ -98,25 +98,25 @@ static jlong readTotal(char const* suffix) {
 static jlong getMobileTxPackets(JNIEnv* env, jobject clazz) {
     return tryBoth(
             "/sys/class/net/rmnet0/statistics/tx_packets",
-            "/sys/class/net/ppp0/statistics/tx_packets");
+            "/sys/class/net/pdp0/statistics/tx_packets");
 }
 
 static jlong getMobileRxPackets(JNIEnv* env, jobject clazz) {
     return tryBoth(
             "/sys/class/net/rmnet0/statistics/rx_packets",
-            "/sys/class/net/ppp0/statistics/rx_packets");
+            "/sys/class/net/pdp0/statistics/rx_packets");
 }
 
 static jlong getMobileTxBytes(JNIEnv* env, jobject clazz) {
     return tryBoth(
             "/sys/class/net/rmnet0/statistics/tx_bytes",
-            "/sys/class/net/ppp0/statistics/tx_bytes");
+            "/sys/class/net/pdp0/statistics/tx_bytes");
 }
 
 static jlong getMobileRxBytes(JNIEnv* env, jobject clazz) {
     return tryBoth(
             "/sys/class/net/rmnet0/statistics/rx_bytes",
-            "/sys/class/net/ppp0/statistics/rx_bytes");
+            "/sys/class/net/pdp0/statistics/rx_bytes");
 }
 
 // Total stats are read less often, so we're willing to put up
