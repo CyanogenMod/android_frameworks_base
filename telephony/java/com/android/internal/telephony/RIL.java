@@ -3125,6 +3125,17 @@ p.writeInt32(p_cur->state);
             response[i] = p.readInt();
         }
 
+	/* Matching Samsung signal strength to asu.
+	   BER is not used by Samsung at all, they just set it to -1.
+	   I have no clue how cdma or evdo are handled, so lets only fix gsm for now.*/
+	if (response[6] == 1)
+	{
+		response[0] = (response[0] & 0xFF00) / 85;
+		for (int i = 1 ; i < (numInts - 1) ; i++) {
+		    response[i] = -1;
+		}
+	}
+
         return response;
     }
 
