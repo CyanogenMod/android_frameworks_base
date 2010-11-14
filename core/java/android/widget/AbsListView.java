@@ -387,7 +387,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
     /**
      * Content height divided by this is the overscroll limit.
      */
-    static final int OVERSCROLL_LIMIT_DIVISOR = 5;
+    static final int OVERSCROLL_LIMIT_DIVISOR = 1;
 
     /**
      * Used to request a layout when we changed touch mode
