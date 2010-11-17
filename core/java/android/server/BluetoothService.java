@@ -464,6 +464,12 @@ public class BluetoothService extends IBluetooth.Stub {
                 case 4:
                     Log.d(TAG, "Registering pbap record");
                     SystemService.start("pbap");
+                    mHandler.sendMessageDelayed(
+                           mHandler.obtainMessage(MESSAGE_REGISTER_SDP_RECORDS, 5, -1), 500);
+                    break;
+                case 5:
+                    Log.d(TAG, "Registering ftp record");
+                    SystemService.start("ftp");
                     break;
                 }
                 break;
