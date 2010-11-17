@@ -1732,6 +1732,24 @@ public final class Settings {
         public static final String SELECTED_CUSTOM_APP = "selected_custom_app";
 
         /**
+         * Stores the uri of the defined application for user key 1
+         * @hide
+         */
+        public static final String USER_DEFINED_KEY1_APP = "user_defined_key1_app";
+
+        /**
+         * Stores the uri of the defined application for user key 2
+         * @hide
+         */
+        public static final String USER_DEFINED_KEY2_APP = "user_defined_key2_app";
+
+        /**
+         * Stores the uri of the defined application for user key 3
+         * @hide
+         */
+        public static final String USER_DEFINED_KEY3_APP = "user_defined_key3_app";
+
+        /**
          * Toggles whether to display the PLMN field on the Lockscreen
          * @hide
          */
