@@ -1816,7 +1816,6 @@ public class PackageParser {
         mParseActivityArgs.flags = flags;
         
         Activity a = new Activity(mParseActivityArgs, new ActivityInfo());
-
         if (outError[0] != null) {
             sa.recycle();
             return null;

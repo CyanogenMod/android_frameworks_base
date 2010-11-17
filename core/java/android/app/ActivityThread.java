@@ -187,13 +187,13 @@ public final class ActivityThread {
      * @param resDir the resource directory.
      * @param compInfo the compability info. It will use the default compatibility info when it's
      * null.
-     * 
+     *
      * @deprecated use {@link #getTopLevelResources(String, CompatibilityInfo, boolean)} instead.
      */
     Resources getTopLevelResources(String resDir, CompatibilityInfo compInfo) {
         return getTopLevelResources(resDir, compInfo, false);
     }
-    
+
     Resources getTopLevelResources(String resDir, CompatibilityInfo compInfo, boolean isThemable) {
         ResourcesKey key = new ResourcesKey(resDir, compInfo.applicationScale);
         Resources r;
@@ -271,7 +271,7 @@ public final class ActivityThread {
 
     /**
      * Creates the top level resources for the given package.
-     * 
+     *
      * @deprecated {@link #getTopLevelResources(String, PackageInfo, boolean)}
      */
     Resources getTopLevelResources(String resDir, PackageInfo pkgInfo) {
@@ -652,15 +652,15 @@ public final class ActivityThread {
         public AssetManager getAssets(ActivityThread mainThread) {
             return getResources(mainThread).getAssets();
         }
-        
+
         public Resources getResources(ActivityThread mainThread, boolean themeable,
                 boolean force) {
             if (mResources == null || force == true) {
                 mResources = mainThread.getTopLevelResources(mResDir, this, themeable);
             }
-            return mResources;            
+            return mResources;
         }
-        
+
         /** @deprecated use {@link #getResources(ActivityThread, boolean, boolean)} instead. */
         public Resources getResources(ActivityThread mainThread) {
             return getResources(mainThread, false, false);

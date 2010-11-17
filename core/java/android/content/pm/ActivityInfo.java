@@ -259,14 +259,10 @@ public class ActivityInfo extends ComponentInfo
      * {@link android.R.attr#configChanges} attribute.
      */
     public static final int CONFIG_ORIENTATION = 0x0080;
-    
     /**
      * @hide
      */
     public static final int CONFIG_THEME_RESOURCE = 0x008000;
-    
- 
-    
     /**
      * Bit in {@link #configChanges} that indicates that the activity
      * can itself handle changes to the screen layout.  Set from the
@@ -327,12 +323,15 @@ public class ActivityInfo extends ComponentInfo
 
     /**
      * Is given activity theme agnostic, i.e. behaves properly when default theme is changed.
-     *  {@hide}
+     * 
+     * @deprecated Not fully supported; do not use.
+     * @hide
      */
     private int isThemeable = ISTHEMEABLE_INHERITED;
 
     /**
-     *  {@hide}
+     * @deprecated Not fully supported; do not use.
+     * @hide
      */
     public boolean getIsThemeable() {
         if (isThemeable == ISTHEMEABLE_INHERITED) {
@@ -342,7 +341,8 @@ public class ActivityInfo extends ComponentInfo
     }
 
     /**
-     *  {@hide}
+     * @deprecated Not fully supported; do not use.
+     * @hide
      */
     public void setIsThemeable(boolean value) {
         isThemeable = value? ISTHEMEABLE_TRUE : ISTHEMEABLE_FALSE;
@@ -375,18 +375,19 @@ public class ActivityInfo extends ComponentInfo
     public final int getThemeResource() {
         return theme != 0 ? theme : applicationInfo.theme;
     }
-    
+
     /**
+     * @deprecated Not fully supported; do not use.
      * @hide
      */
     public final boolean isThemeable() {
         switch (isThemeable) {
             case ISTHEMEABLE_TRUE:
                 return true;
-                
+
             case ISTHEMEABLE_INHERITED:
                 return applicationInfo.isThemeable;
-                
+
             default:
                 return false;
         }

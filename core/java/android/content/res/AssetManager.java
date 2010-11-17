@@ -664,9 +664,7 @@ public final class AssetManager {
     public native final int updateResourcesWithAssetPath(String path);
 
     /**
-     * Delete a set of assets from the asset manager.  This can be
-     * either a directory or ZIP file.  Not for use by applications.  Returns
-     * true if succeeded or false on failure.
+     * Debug method to dump resource information.
      * {@hide}
      */
     public native final void dumpResources();

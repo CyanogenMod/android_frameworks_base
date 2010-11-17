@@ -168,7 +168,6 @@ class ContextImpl extends Context {
 
     private static final Object sSync = new Object();
     private static AlarmManager sAlarmManager;
-    
     private static PowerManager sPowerManager;
     private static ConnectivityManager sConnectivityManager;
     private static ThrottleManager sThrottleManager;
@@ -205,7 +204,6 @@ class ContextImpl extends Context {
     private DevicePolicyManager mDevicePolicyManager = null;
     private UiModeManager mUiModeManager = null;
 
-     
     private final Object mSync = new Object();
 
     private File mDatabasesDir;
@@ -345,8 +343,8 @@ class ContextImpl extends Context {
 
     @Override
     public ClassLoader getClassLoader() {
-        return mPackageInfo != null ? mPackageInfo.getClassLoader()
-                : ClassLoader.getSystemClassLoader();
+        return mPackageInfo != null ?
+                mPackageInfo.getClassLoader() : ClassLoader.getSystemClassLoader();
     }
 
     @Override
@@ -1068,7 +1066,7 @@ class ContextImpl extends Context {
         }
         return sAlarmManager;
     }
-    
+
     private PowerManager getPowerManager() {
         synchronized (sSync) {
             if (sPowerManager == null) {
@@ -2015,8 +2013,7 @@ class ContextImpl extends Context {
             } catch (RemoteException e) {
                 throw new RuntimeException("Package manager has died", e);
             }
-        }        
-
+        }
 
         @Override
         public List<ApplicationInfo> getInstalledApplications(int flags) {
