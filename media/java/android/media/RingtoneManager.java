@@ -110,17 +110,6 @@ public class RingtoneManager {
             "android.intent.extra.ringtone.SHOW_SILENT";
 
     /**
-     * Given to the ringtone picker as a boolean. Whether to show an item for
-     * "Buy ringtones".
-     *
-     * @see #ACTION_RINGTONE_PICKER
-     *
-     * @hide
-     */
-    public static final String EXTRA_RINGTONE_SHOW_BUY =
-            "com.tmobile.intent.extra.ringtone.SHOW_BUY";
-
-    /**
      * Given to the ringtone picker as a boolean. Whether to include DRM ringtones.
      */
     public static final String EXTRA_RINGTONE_INCLUDE_DRM =
