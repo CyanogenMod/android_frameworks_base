@@ -37,6 +37,7 @@ import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.LocalPowerManager;
@@ -1319,7 +1320,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
             }
         }
-        
+
+        // Handle "Quick Keys" on Vision
+        if ("vision".equals(Build.DEVICE)
+                && (keyCode == KeyEvent.KEYCODE_USER1 || keyCode == KeyEvent.KEYCODE_USER2 || keyCode == KeyEvent.KEYCODE_USER3)) {
+            return handleQuickKeys(win, keyCode, down, keyguardOn);
+        }
+
         // Shortcuts are invoked through Search+key, so intercept those here
         if (mSearchKeyPressed) {
             if (down && repeatCount == 0 && !keyguardOn) {
@@ -1338,6 +1345,60 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
 
+        return false;
+    }
+
+    /**
+     * Quick Keys for Vision (HTC - G2)
+     */
+    private boolean handleQuickKeys(WindowState win, int code, boolean down, boolean keyguardOn) {
+
+        WindowManager.LayoutParams attrs = win != null ? win.getAttrs() : null;
+        if (attrs != null) {
+            final int type = attrs.type;
+            if (type == WindowManager.LayoutParams.TYPE_KEYGUARD
+                    || type == WindowManager.LayoutParams.TYPE_KEYGUARD_DIALOG) {
+                // the "app" is keyguard, so give it the key
+                return false;
+            }
+            if (down) {
+                if (!keyguardOn) {
+                    String property = null;
+                    switch (code) {
+                        case KeyEvent.KEYCODE_USER1:
+                            property = Settings.System.USER_DEFINED_KEY1_APP;
+                            break;
+                        case KeyEvent.KEYCODE_USER2:
+                            property = Settings.System.USER_DEFINED_KEY2_APP;
+                            break;
+                        case KeyEvent.KEYCODE_USER3:
+                            property = Settings.System.USER_DEFINED_KEY3_APP;
+                            break;
+                        default:
+                            return false;
+                    }
+                    String appUri = Settings.System.getString(mContext.getContentResolver(),
+                            property);
+                    if (appUri != null) {
+                        try {
+                            Intent qkIntent = Intent.parseUri(appUri, 0);
+                            qkIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                    | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                            mContext.startActivity(qkIntent);
+                        } catch (URISyntaxException e) {
+                            // TODO: Toast Message
+                        } catch (ActivityNotFoundException e) {
+                            // TODO: Toast Message
+                        }
+                    } else {
+                        // TODO: Open CMParts
+                    }
+                    // TODO: Add long press shortcut?
+                    // mHandler.postDelayed(mHomeLongPress, ViewConfiguration.getGlobalActionKeyTimeout());
+                }
+                return true;
+            }
+        }
         return false;
     }
 
