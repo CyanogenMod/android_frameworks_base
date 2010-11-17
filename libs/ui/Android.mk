@@ -38,6 +38,12 @@ ifeq ($(TARGET_SIMULATOR),true)
     LOCAL_LDLIBS += -lpthread
 endif
 
+ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),espresso)
+	LOCAL_CFLAGS += -DLATTE_KEYPAD
+else ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),vision)
+	LOCAL_CFLAGS += -DVISION_KEYPAD
+endif
+
 include $(BUILD_SHARED_LIBRARY)
 
 
