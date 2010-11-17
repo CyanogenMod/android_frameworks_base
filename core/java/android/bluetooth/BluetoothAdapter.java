@@ -649,6 +649,7 @@ public final class BluetoothAdapter {
             11,  // HSAG
             12,  // OPUSH
             19,  // PBAP
+	    20,  // FTP
         };
         private static LinkedList<Integer> sChannels;  // master list of non-reserved channels
         private static Random sRandom;
