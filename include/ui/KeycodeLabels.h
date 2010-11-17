@@ -114,6 +114,7 @@ static const KeycodeLabel KEYCODES[] = {
     { "MEDIA_REWIND", 89 },
     { "MEDIA_FAST_FORWARD", 90 },
     { "MUTE", 91 },
+#if defined(VISION_KEYPAD)
     { "USER1", 92 },
     { "USER2", 93 },
     { "USER3", 94 },
@@ -128,7 +129,17 @@ static const KeycodeLabel KEYCODES[] = {
     { "FUNC_7", 103 },
     { "FUNC_8", 104 },
     { "QUECHAR", 105 },
-    { "BTN_MOUSE", 106 },
+#elif defined(LATTE_KEYPAD)
+    { "FUNC_1", 92 },
+    { "FUNC_2", 93 },
+    { "FUNC_3", 94 },
+    { "FUNC_4", 95 },
+    { "FUNC_5", 96 },
+    { "FUNC_6", 97 },
+    { "FUNC_7", 98 },
+    { "FUNC_8", 99 },
+    { "QUECHAR", 100 },
+#endif
 
     // NOTE: If you add a new keycode here you must also add it to:
     //   (enum KeyCode, in this file)
@@ -234,11 +245,6 @@ typedef enum KeyCode {
     kKeyCodeRewind = 89,
     kKeyCodeForward = 90,
     kKeyCodeMute = 91,
-    kKeyCodeUser1 = 92,
-    kKeyCodeUser2 = 93,
-    kKeyCodeUser3 = 94,
-    kKeyCodeUser4 = 95,
-    kKeyCodeUser5 = 96,
 } KeyCode;
 
 static const KeycodeLabel FLAGS[] = {
