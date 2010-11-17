@@ -217,17 +217,6 @@ public class PackageParser {
                     pi.setLockedZipFilePath(PackageParser.getLockedZipFilePath(p.mPath));
                 }
             }
-            N = p.mSoundInfos.size();
-            if (N > 0) {
-                pi.soundInfos = new SoundsInfo[N];
-                for (int i = 0; i < N; i++) {
-                    pi.soundInfos[i] = p.mSoundInfos.get(i);
-                    pi.setDrmProtectedThemeApk(pi.isDrmProtectedThemeApk() || pi.soundInfos[i].isDrmProtected);
-                }
-                if (pi.isDrmProtectedThemeApk()) {
-                    pi.setLockedZipFilePath(PackageParser.getLockedZipFilePath(p.mPath));
-                }
-            }
         }
         pi.applicationInfo = p.applicationInfo;
         pi.installLocation = p.installLocation;
@@ -1115,10 +1104,6 @@ public class PackageParser {
                 // this is a theme apk.
                 pkg.mIsThemeApk = true;
                 pkg.mThemeInfos.add(new ThemeInfo(parser, res, attrs));
-            } else if (tagName.equals("sounds")) {
-                // this is a theme apk.
-                pkg.mIsThemeApk = true;
-                pkg.mSoundInfos.add(new SoundsInfo(parser, res, attrs));
             } else if (RIGID_PARSER) {
                 outError[0] = "Bad element under <manifest>: "
                     + parser.getName();
@@ -2789,9 +2774,6 @@ public class PackageParser {
 
         // Theme info
         public final ArrayList<ThemeInfo> mThemeInfos = new ArrayList<ThemeInfo>(0);
-
-        // Sound info
-        public final ArrayList<SoundsInfo> mSoundInfos = new ArrayList<SoundsInfo>(0);
 
         // Additional data supplied by callers.
         public Object mExtras;

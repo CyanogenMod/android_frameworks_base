@@ -156,7 +156,7 @@ public class BaseThemeInfo implements Parcelable {
      */
     public enum InfoObjectType {
         TYPE_THEME,
-        TYPE_SOUNDPACK,
+        TYPE_SOUNDPACK, /** Currently not supported. */
     }
 
     /**
