@@ -102,6 +102,8 @@ class StatusBarIcon {
 
                 // number
                 TextView nv = (TextView)v.findViewById(com.android.internal.R.id.number);
+                nv.setBackgroundDrawable(mContext.getResources()
+                        .getDrawable(com.android.internal.R.drawable.ic_notification_overlay_bottom_right));
                 mNumberView = nv;
                 if (data.number > 0) {
                     nv.setText("" + data.number);
