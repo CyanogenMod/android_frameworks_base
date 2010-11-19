@@ -21,9 +21,9 @@ import android.text.TextUtils;
 import android.view.View;
 
 /**
- * This class was partially copied from com.tmobile.widget.Utils.  Copied here
- * to avoid a bizarre framework dependency on a platform library provided by
- * T-Mobile.
+ * This class was modified from com.tmobile.themehelper.ThemeUtilities.
+ * Modifications made to improve performance by assuming that the theme-specific
+ * APIs are present (and therefore reflection is not necessary).
  */
 public class Utils {
     /**
