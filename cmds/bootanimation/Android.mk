@@ -15,7 +15,8 @@ LOCAL_SHARED_LIBRARIES := \
 	libskia \
     libEGL \
     libGLESv1_CM \
-    libgui
+    libgui \
+    libmedia
 
 LOCAL_C_INCLUDES := \
 	$(call include-path-for, corecg graphics)

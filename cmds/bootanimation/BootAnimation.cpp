@@ -49,6 +49,9 @@
 #include <GLES/glext.h>
 #include <EGL/eglext.h>
 
+#include <cutils/properties.h>
+#include <media/AudioSystem.h>
+
 #include "BootAnimation.h"
 
 #define USER_BOOTANIMATION_FILE "/data/local/bootanimation.zip"
@@ -84,6 +87,8 @@ void BootAnimation::binderDied(const wp<IBinder>& who)
 {
     // woah, surfaceflinger died!
     LOGD("SurfaceFlinger died, exiting...");
+
+    stopSound();
 
     // calling requestExit() is not enough here because the Surface code
     // might be blocked on a condition variable that will never be updated.
@@ -284,12 +289,115 @@ status_t BootAnimation::readyToRun() {
     return NO_ERROR;
 }
 
+bool BootAnimation::playSound()
+{
+    mZipFd = -1;
+    mPlayer = NULL;
+
+    char volume[32];
+    // The default boot sound volume is 73% of the max STREAM_MUSIC volume.
+    property_get("persist.sys.boot.sound.volume", volume, "73");
+    LOGD("persist.sys.boot.sound.volume:%s", volume);
+    int soundVolume = atoi(volume);
+    if (soundVolume < 0) {
+        soundVolume = 0;
+    }
+
+    if (soundVolume > 100) {
+        soundVolume = 100;
+    }
+
+    // If the phone is in the silent or silent+vibrate mode, do nothing.
+    if (soundVolume == 0) {
+        return true;
+    }
+
+    // opening the file again as there is no way to get hold of the file
+    // descriptor in the ZipFileRO. The fd is needed for the media player.
+    mZipFd = ::open(USER_BOOTANIMATION_FILE, O_RDONLY);
+    if (mZipFd < 0) {
+        mZipFd = ::open(SYSTEM_BOOTANIMATION_FILE, O_RDONLY);
+        if (mZipFd < 0) {
+            LOGW("Unable to open bootanimation.zip\n");
+            return false;
+        }
+    }
+
+    ZipFileRO& zip(mZip);
+    ZipEntryRO soundEntry = zip.findEntryByName("boot.ogg");
+    if (!soundEntry) {
+        soundEntry = zip.findEntryByName("boot.mp3");
+    }
+
+    if (!soundEntry) {
+        LOGI("Did not find sound file, tried with boot.ogg and boot.mp3\n");
+        return false;
+    }
+
+    FileMap* fileMap = zip.createEntryFileMap(soundEntry);
+    if (!fileMap) {
+        LOGI("Failed to create zip file map\n");
+        return false;
+    }
+
+    mPlayer = new MediaPlayer();
+    if (mPlayer == NULL) {
+        LOGE("Failed to create MediaPlayer()\n");
+        return false;
+    }
+
+    // assuming the file is stored (no compression)
+    status_t st = mPlayer->setDataSource(mZipFd, fileMap->getDataOffset(), fileMap->getDataLength());
+
+    if (st != NO_ERROR) {
+        LOGE("setDataSource failed (%d)\n", st);
+        return false;
+    }
+
+    if ((st = mPlayer->prepare()) != NO_ERROR) {
+        LOGE("prepare failed (%d)\n", st);
+        return false;
+    }
+
+    double dVolume = AudioSystem::linearToLog(soundVolume);
+    if ((st = mPlayer->setVolume(dVolume, dVolume)) != NO_ERROR) {
+        LOGE("setVolume failied (%d)\n", st);
+        return false;
+    }
+
+    if ((st = mPlayer->start()) != NO_ERROR) {
+        LOGE("start failed (%d)\n", st);
+        return false;
+    }
+
+    return true;
+}
+
+void BootAnimation::stopSound()
+{
+    if (mPlayer != NULL) {
+        status_t st = mPlayer->stop();
+        if (st != NO_ERROR) {
+            LOGE("stop failed (%d)\n", st);
+        }
+        mPlayer = NULL;
+    }
+
+    if (mZipFd >= 0) {
+        ::close(mZipFd);
+        mZipFd = -1;
+    }
+}
+
 bool BootAnimation::threadLoop()
 {
     bool r;
     if (mAndroidAnimation) {
         r = android();
     } else {
+        if (!playSound()) {
+            stopSound();
+        }
         r = movie();
     }
 
