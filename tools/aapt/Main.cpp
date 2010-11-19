@@ -1,5 +1,6 @@
 //
 // Copyright 2006 The Android Open Source Project
+// This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
 //
 // Android Asset Packaging Tool main entry point.
 //

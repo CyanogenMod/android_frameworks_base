@@ -1,5 +1,6 @@
 //
 // Copyright 2006 The Android Open Source Project
+// This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
 //
 // Build resource files from raw assets.
 //
