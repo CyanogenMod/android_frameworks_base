@@ -18,6 +18,8 @@
 package com.android.internal.view.menu;
 
 
+import com.android.internal.util.ThemeUtilities;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -243,7 +245,7 @@ public class MenuBuilder implements Menu {
          */
         int resolveDefaultTheme(Context context, String themeAttrName, int fallbackStyleId) {
             if (themeAttrName != null) {
-                int attrId = Utils.resolveDefaultStyleAttr(context, themeAttrName, 0);
+                int attrId = ThemeUtilities.resolveDefaultStyleAttr(context, themeAttrName, 0);
                 if (attrId != 0) {
                     TypedArray a = context.obtainStyledAttributes(new int[] { attrId });
                     try {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.internal.view.menu;
+package com.android.internal.util;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -25,7 +25,7 @@ import android.view.View;
  * Modifications made to improve performance by assuming that the theme-specific
  * APIs are present (and therefore reflection is not necessary).
  */
-public class Utils {
+public class ThemeUtilities {
     /**
      * Alternative to {@link #resolveDefaultStyleAttr(Context, String)} which
      * allows you to specify a resource id for fallback. This is merely an
