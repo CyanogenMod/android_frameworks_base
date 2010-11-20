@@ -16,12 +16,19 @@
 
 package android.text.method;
 
+import java.net.URISyntaxException;
+
 import android.text.*;
 import android.text.method.TextKeyListener.Capitalize;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.KeyCharacterMap;
 import android.view.KeyEvent;
 import android.view.View;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.provider.Settings;
+
 
 /**
  * This is the standard key listener for alphabetic input on qwerty
