@@ -10,6 +10,8 @@ import android.provider.Settings;
 
 public class SoundButton extends PowerButton {
 
+    Context mContext;
+
     static SoundButton ownButton = null;
 
     public static final int RINGER_MODE_UNKNOWN = 0;
@@ -193,25 +195,45 @@ public class SoundButton extends PowerButton {
 
     @Override
     public void updateState(Context context) {
+        mContext = context;
+        boolean useCustomExp = Settings.System.getInt(mContext.getContentResolver(),
+        Settings.System.NOTIF_EXPANDED_BAR_CUSTOM, 0) == 1;
+
         int soundState = getSoundState(context);
         currentMode = Settings.System.getInt(context.getContentResolver(),
                 Settings.System.EXPANDED_RING_MODE, DEFAULT_SETTING);
 
         switch (soundState) {
         case RINGER_MODE_SOUND_AND_VIBRATE:
-                currentIcon = R.drawable.stat_ring_on;
+                if (useCustomExp) {
+                    currentIcon = R.drawable.stat_ring_on_cust;
+                } else {
+                    currentIcon = R.drawable.stat_ring_on;
+                }
                 currentState = PowerButton.STATE_ENABLED;
             break;
         case RINGER_MODE_SOUND_ONLY:
-                currentIcon = R.drawable.stat_ring_on;
+                if (useCustomExp) {
+                    currentIcon = R.drawable.stat_ring_on_cust;
+                } else {
+                    currentIcon = R.drawable.stat_ring_on;
+                }
                 currentState = PowerButton.STATE_INTERMEDIATE;
             break;
         case RINGER_MODE_VIBRATE_ONLY:
-                currentIcon = R.drawable.stat_vibrate_off;
+                if (useCustomExp) {
+                    currentIcon = R.drawable.stat_vibrate_off_cust;
+                } else {
+                    currentIcon = R.drawable.stat_vibrate_off;
+                }
                 currentState = PowerButton.STATE_DISABLED;
             break;
         case RINGER_MODE_SILENT:
-                currentIcon = R.drawable.stat_silent;
+                if (useCustomExp) {
+                    currentIcon = R.drawable.stat_silent_cust;
+                } else {
+                    currentIcon = R.drawable.stat_silent;
+                }
                 currentState = PowerButton.STATE_DISABLED;
             break;
 

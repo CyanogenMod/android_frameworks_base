@@ -7,8 +7,11 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
+import android.provider.Settings;
 
 public class SyncButton extends PowerButton {
+
+    Context mContext;
 
     static SyncButton ownButton=null;
 
@@ -83,11 +86,23 @@ public class SyncButton extends PowerButton {
 
 
     public void updateState(Context context) {
+        mContext = context;
+        boolean useCustomExp = Settings.System.getInt(mContext.getContentResolver(),
+        Settings.System.NOTIF_EXPANDED_BAR_CUSTOM, 0) == 1;
+
         if (getSync(context)) {
-            currentIcon = R.drawable.stat_sync_on;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_sync_on_cust;
+            } else {
+                currentIcon = R.drawable.stat_sync_on;
+            }
             currentState = PowerButton.STATE_ENABLED;
         } else {
-            currentIcon = R.drawable.stat_sync_off;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_sync_off_cust;
+            } else {
+                currentIcon = R.drawable.stat_sync_off;
+            }
             currentState = PowerButton.STATE_DISABLED;
         }
     }

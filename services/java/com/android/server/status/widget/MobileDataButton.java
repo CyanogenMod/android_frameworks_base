@@ -10,6 +10,8 @@ import android.provider.Settings;
 
 public class MobileDataButton extends PowerButton {
 
+    Context mContext;
+
     public static final String MOBILE_DATA_CHANGED = "com.android.internal.telephony.MOBILE_DATA_CHANGED";
 
     static MobileDataButton ownButton = null;
@@ -51,14 +53,30 @@ public class MobileDataButton extends PowerButton {
 
     @Override
     public void updateState(Context context) {
+        mContext = context;
+        boolean useCustomExp = Settings.System.getInt(mContext.getContentResolver(),
+        Settings.System.NOTIF_EXPANDED_BAR_CUSTOM, 0) == 1;
+
         if (stateChangeRequest) {
-            currentIcon = R.drawable.stat_data_on;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_data_on_cust;
+            } else {
+                currentIcon = R.drawable.stat_data_on;
+            }
             currentState = PowerButton.STATE_INTERMEDIATE;
         } else  if (getDataState(context)) {
-            currentIcon = R.drawable.stat_data_on;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_data_on_cust;
+            } else {
+                currentIcon = R.drawable.stat_data_on;
+            }
             currentState = PowerButton.STATE_ENABLED;
         } else {
-            currentIcon = R.drawable.stat_data_off;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_data_off_cust;
+            } else {
+                currentIcon = R.drawable.stat_data_off;
+            }
             currentState = PowerButton.STATE_DISABLED;
         }
     }

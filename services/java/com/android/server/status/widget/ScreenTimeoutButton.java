@@ -10,6 +10,8 @@ import android.provider.Settings;
 
 public class ScreenTimeoutButton extends PowerButton {
 
+    Context mContext;
+
     public static final int SCREEN_MINIMUM_TIMEOUT = 15000;
     public static final int SCREEN_LOW_TIMEOUT = 30000;
     public static final int SCREEN_NORMAL_TIMEOUT = 60000;
@@ -83,19 +85,35 @@ public class ScreenTimeoutButton extends PowerButton {
     @Override
     public void updateState(Context context) {
 
+        mContext = context;
+        boolean useCustomExp = Settings.System.getInt(mContext.getContentResolver(),
+        Settings.System.NOTIF_EXPANDED_BAR_CUSTOM, 0) == 1;
+
         currentMode = Settings.System.getInt(context.getContentResolver(),
                 Settings.System.EXPANDED_SCREENTIMEOUT_MODE, DEFAULT_SETTING);
 
         int timeout=getScreenTtimeout(context);
         //TODO: ADD support for the possible values
         if (timeout <= SCREEN_LOW_TIMEOUT) {
-            currentIcon = R.drawable.stat_screen_timeout_off;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_screen_timeout_off_cust;
+            } else {
+                currentIcon = R.drawable.stat_screen_timeout_off;
+            }
             currentState = PowerButton.STATE_DISABLED;
         } else if (timeout <= SCREEN_HI_TIMEOUT) {
-            currentIcon = R.drawable.stat_screen_timeout_off;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_screen_timeout_off_cust;
+            } else {
+                currentIcon = R.drawable.stat_screen_timeout_off;
+            }
             currentState = PowerButton.STATE_INTERMEDIATE;
         } else {
-            currentIcon = R.drawable.stat_screen_timeout_on;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_screen_timeout_on_cust;
+            } else {
+                currentIcon = R.drawable.stat_screen_timeout_on;
+            }
             currentState = PowerButton.STATE_ENABLED;
         }
     }
