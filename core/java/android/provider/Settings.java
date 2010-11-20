@@ -2336,6 +2336,12 @@ public final class Settings {
         public static final String ALLOW_OVERSCROLL = "allow_overscroll";
 
         /**
+         * Sets the overscroller weight (edge bounce effect on lists)
+         * @hide
+         */
+        public static final String OVERSCROLL_WEIGHT = "overscroll_weight";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          * @hide
