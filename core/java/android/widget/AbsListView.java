@@ -51,6 +51,8 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputConnectionWrapper;
 import android.view.inputmethod.InputMethodManager;
 
+import android.provider.Settings;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -1172,7 +1174,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         layoutChildren();
         mInLayout = false;
         
-        mOverscrollMax = (b - t) / OVERSCROLL_LIMIT_DIVISOR;
+        mOverscrollMax = (b - t) / getOverscrollWeight();
     }
 
     /**
@@ -1291,6 +1293,22 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
      */
     public int getListPaddingRight() {
         return mListPadding.right;
+    }
+
+    /**
+     * Returns the overscroll weight for this view
+     *
+     * @return This view's overscroll weight.
+     */
+    public int getOverscrollWeight() {
+        int weight = Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.OVERSCROLL_WEIGHT, 0);
+
+        if (weight == 0) {
+            return OVERSCROLL_LIMIT_DIVISOR;
+        } else {
+            return weight;
+        }
     }
 
     /**
@@ -2407,7 +2425,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         final int childCount = getChildCount();
         if (childCount > 0) {
             return Math.min(mOverscrollMax,
-                    getChildAt(childCount - 1).getBottom() / OVERSCROLL_LIMIT_DIVISOR);
+                    getChildAt(childCount - 1).getBottom() / getOverscrollWeight());
         } else {
             return mOverscrollMax;
         }
