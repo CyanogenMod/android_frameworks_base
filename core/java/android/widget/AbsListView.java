@@ -1301,14 +1301,14 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
      * @return This view's overscroll weight.
      */
     public int getOverscrollWeight() {
-    	int weight = Settings.System.getInt(mContext.getContentResolver(), 
-    			Settings.System.OVERSCROLL_WEIGHT, 0);
+        int weight = Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.OVERSCROLL_WEIGHT, 0);
 
-    	if (weight == 0) {
-    		return OVERSCROLL_LIMIT_DIVISOR;
-    	} else {
-    		return weight;
-    	}
+        if (weight == 0) {
+            return OVERSCROLL_LIMIT_DIVISOR;
+        } else {
+            return weight;
+        }
     }
 
     /**
