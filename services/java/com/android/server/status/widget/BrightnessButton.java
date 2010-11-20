@@ -14,6 +14,8 @@ import android.util.Log;
 
 public class BrightnessButton extends PowerButton {
 
+    Context mContext;
+
     /**
      * Minimum and maximum brightnesses. Don't go to 0 since that makes the
      * display unusable
@@ -203,23 +205,47 @@ Low High Max
 
     @Override
     public void updateState(Context context) {
+        mContext = context;
+        boolean useCustomExp = Settings.System.getInt(mContext.getContentResolver(),
+        Settings.System.NOTIF_EXPANDED_BAR_CUSTOM, 0) == 1;
+
         currentMode = Settings.System.getInt(context.getContentResolver(),
                 Settings.System.EXPANDED_BRIGHTNESS_MODE, DEFAULT_SETTING);
 
         if (isBrightnessSetToAutomatic(context)) {
-            currentIcon = R.drawable.stat_brightness_auto;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_brightness_auto_cust;
+            } else {
+                currentIcon = R.drawable.stat_brightness_auto;
+            }
             currentState = PowerButton.STATE_ENABLED;
         } else if (getBrightnessState(context) == PowerButton.STATE_ENABLED) {
-            currentIcon = R.drawable.stat_brightness_on;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_brightness_on_cust;
+            } else {
+                currentIcon = R.drawable.stat_brightness_on;
+            }
             currentState = PowerButton.STATE_ENABLED;
         } else if (getBrightnessState(context) == PowerButton.STATE_TURNING_ON) {
-            currentIcon = R.drawable.stat_brightness_on;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_brightness_on_cust;
+            } else {
+                currentIcon = R.drawable.stat_brightness_on;
+            }
             currentState = PowerButton.STATE_INTERMEDIATE;
         } else if (getBrightnessState(context) == PowerButton.STATE_TURNING_OFF) {
-            currentIcon = R.drawable.stat_brightness_off;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_brightness_off_cust;
+            } else {
+                currentIcon = R.drawable.stat_brightness_off;
+            }
             currentState = PowerButton.STATE_INTERMEDIATE;
         } else {
-            currentIcon = R.drawable.stat_brightness_off;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_brightness_off_cust;
+            } else {
+                currentIcon = R.drawable.stat_brightness_off;
+            }
             currentState = PowerButton.STATE_DISABLED;
         }
     }

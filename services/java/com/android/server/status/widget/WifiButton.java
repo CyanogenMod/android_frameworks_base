@@ -12,8 +12,11 @@ import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.provider.Settings;
 
 public class WifiButton extends PowerButton{
+
+    Context mContext;
 
     static WifiButton ownButton = null;
 
@@ -104,13 +107,25 @@ public class WifiButton extends PowerButton{
 
 
     public void updateState(Context context) {
+        mContext = context;
+        boolean useCustomExp = Settings.System.getInt(mContext.getContentResolver(),
+        Settings.System.NOTIF_EXPANDED_BAR_CUSTOM, 0) == 1;
+
         currentState = sWifiState.getTriState(context);
         switch (currentState) {
             case STATE_DISABLED:
-                currentIcon = com.android.internal.R.drawable.stat_wifi_off;
+                if (useCustomExp) {
+                    currentIcon = com.android.internal.R.drawable.stat_wifi_off_cust;
+                } else {
+                    currentIcon = com.android.internal.R.drawable.stat_wifi_off;
+                }
                 break;
             case STATE_ENABLED:
-                currentIcon = com.android.internal.R.drawable.stat_wifi_on;
+                if (useCustomExp) {
+                    currentIcon = com.android.internal.R.drawable.stat_wifi_on_cust;
+                } else {
+                    currentIcon = com.android.internal.R.drawable.stat_wifi_on;
+                }
                 break;
             case STATE_INTERMEDIATE:
                 // In the transitional state, the bottom green bar
@@ -119,9 +134,17 @@ public class WifiButton extends PowerButton{
                 // user's intent. This is much easier to see in
                 // sunlight.
                 if (sWifiState.isTurningOn()) {
-                    currentIcon = com.android.internal.R.drawable.stat_wifi_on;
+                    if (useCustomExp) {
+                        currentIcon = com.android.internal.R.drawable.stat_wifi_on_cust;
+                    } else {
+                        currentIcon = com.android.internal.R.drawable.stat_wifi_on;
+                    }
                 } else {
-                    currentIcon = com.android.internal.R.drawable.stat_wifi_off;
+                    if (useCustomExp) {
+                        currentIcon = com.android.internal.R.drawable.stat_wifi_off_cust;
+                    } else {
+                        currentIcon = com.android.internal.R.drawable.stat_wifi_off;
+                    }
                 }
                 break;
         }

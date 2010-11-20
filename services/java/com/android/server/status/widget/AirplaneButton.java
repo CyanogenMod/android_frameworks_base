@@ -10,14 +10,28 @@ import android.provider.Settings;
 
 public class AirplaneButton extends PowerButton {
 
+    Context mContext;
+
     static AirplaneButton ownButton=null;
 
     public void updateState(Context context) {
+        mContext = context;
+        boolean useCustomExp = Settings.System.getInt(mContext.getContentResolver(),
+        Settings.System.NOTIF_EXPANDED_BAR_CUSTOM, 0) == 1;
+
         if (getState(context)) {
-            currentIcon = R.drawable.stat_airplane_on;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_airplane_on_cust;
+            } else {
+                currentIcon = R.drawable.stat_airplane_on;
+            }
             currentState = PowerButton.STATE_ENABLED;
         } else {
-            currentIcon = R.drawable.stat_airplane_off;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_airplane_off_cust;
+            } else {
+                currentIcon = R.drawable.stat_airplane_off;
+            }
             currentState = PowerButton.STATE_DISABLED;
         }
 

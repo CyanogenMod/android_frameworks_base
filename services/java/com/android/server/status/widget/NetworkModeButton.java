@@ -13,6 +13,8 @@ import com.android.internal.telephony.Phone;
 
 public class NetworkModeButton extends PowerButton{
 
+    Context mContext;
+
     public static final String NETWORK_MODE_CHANGED = "com.android.internal.telephony.NETWORK_MODE_CHANGED";
     public static final String REQUEST_NETWORK_MODE = "com.android.internal.telephony.REQUEST_NETWORK_MODE";
     public static final String MODIFY_NETWORK_MODE = "com.android.internal.telephony.MODIFY_NETWORK_MODE";
@@ -44,7 +46,6 @@ public class NetworkModeButton extends PowerButton{
         switch(networkMode) {
             case Phone.NT_MODE_WCDMA_PREF:
             case Phone.NT_MODE_WCDMA_ONLY:
-            case Phone.NT_MODE_GSM_UMTS:
                 return PowerButton.STATE_ENABLED;
             case Phone.NT_MODE_GSM_ONLY:
                 return PowerButton.STATE_DISABLED;
@@ -99,7 +100,6 @@ public class NetworkModeButton extends PowerButton{
         Intent intent = new Intent(MODIFY_NETWORK_MODE);
         switch (networkMode ) {
         case Phone.NT_MODE_WCDMA_PREF:
-        case Phone.NT_MODE_GSM_UMTS:
             intent.putExtra(NETWORK_MODE, Phone.NT_MODE_GSM_ONLY);
             currentInternalState = PowerButton.STATE_TURNING_OFF;
             intendedNetworkMode=Phone.NT_MODE_GSM_ONLY;
@@ -137,6 +137,10 @@ public class NetworkModeButton extends PowerButton{
 
     @Override
     public void updateState(Context context) {
+        mContext = context;
+        boolean useCustomExp = Settings.System.getInt(mContext.getContentResolver(),
+        Settings.System.NOTIF_EXPANDED_BAR_CUSTOM, 0) == 1;
+
         currentMode = Settings.System.getInt(context.getContentResolver(),
                 Settings.System.EXPANDED_NETWORK_MODE, DEFAULT_SETTING);
         networkMode = get2G3G(context);
@@ -144,13 +148,25 @@ public class NetworkModeButton extends PowerButton{
 
         switch (currentState) {
         case PowerButton.STATE_DISABLED:
-            currentIcon = R.drawable.stat_2g3g_off;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_2g3g_off_cust;
+            } else {
+                currentIcon = R.drawable.stat_2g3g_off;
+            }
             break;
         case PowerButton.STATE_ENABLED:
             if (networkMode == Phone.NT_MODE_WCDMA_ONLY) {
-                currentIcon = R.drawable.stat_3g_on;
+                if (useCustomExp) {
+                    currentIcon = R.drawable.stat_3g_on_cust;
+                } else {
+                    currentIcon = R.drawable.stat_3g_on;
+                }
             } else {
-                currentIcon = R.drawable.stat_2g3g_on;
+                if (useCustomExp) {
+                    currentIcon = R.drawable.stat_2g3g_on_cust;
+                } else {
+                    currentIcon = R.drawable.stat_2g3g_on;
+                }
             }
             break;
         case PowerButton.STATE_INTERMEDIATE:
@@ -161,12 +177,24 @@ public class NetworkModeButton extends PowerButton{
             // sunlight.
             if (currentInternalState == PowerButton.STATE_TURNING_ON) {
                 if (intendedNetworkMode == Phone.NT_MODE_WCDMA_ONLY) {
-                    currentIcon = R.drawable.stat_3g_on;
+                    if (useCustomExp) {
+                        currentIcon = R.drawable.stat_3g_on_cust;
+                    } else {
+                        currentIcon = R.drawable.stat_3g_on;
+                    }
                 } else {
-                    currentIcon = R.drawable.stat_2g3g_on;
+                    if (useCustomExp) {
+                        currentIcon = R.drawable.stat_2g3g_on_cust;
+                    } else {
+                        currentIcon = R.drawable.stat_2g3g_on;
+                    }
                 }
             } else {
-                currentIcon = R.drawable.stat_2g3g_off;
+                if (useCustomExp) {
+                    currentIcon = R.drawable.stat_2g3g_off_cust;
+                } else {
+                    currentIcon = R.drawable.stat_2g3g_off;
+                }
             }
             break;
         }

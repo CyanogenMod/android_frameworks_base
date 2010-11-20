@@ -11,10 +11,22 @@ import android.os.SystemClock;
 import android.util.Log;
 
 public class SleepButton extends PowerButton {
+
+    Context mContext;
+
     static SleepButton ownButton;
 
     public void updateState(Context context) {
-        currentIcon = com.android.internal.R.drawable.stat_sleep;
+
+        mContext = context;
+        boolean useCustomExp = Settings.System.getInt(mContext.getContentResolver(),
+        Settings.System.NOTIF_EXPANDED_BAR_CUSTOM, 0) == 1;
+
+        if (useCustomExp) {
+            currentIcon = com.android.internal.R.drawable.stat_sleep_cust;
+        } else {
+            currentIcon = com.android.internal.R.drawable.stat_sleep;
+        }
         currentState = STATE_DISABLED;
     }
 

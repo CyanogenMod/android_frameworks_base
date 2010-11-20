@@ -10,8 +10,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.provider.Settings;
 
 public class BluetoothButton extends PowerButton{
+
+    Context mContext;
 
     private static final StateTracker sBluetoothState = new BluetoothStateTracker();
 
@@ -104,13 +107,25 @@ public class BluetoothButton extends PowerButton{
 
     @Override
     public void updateState(Context context) {
+        mContext = context;
+        boolean useCustomExp = Settings.System.getInt(mContext.getContentResolver(),
+        Settings.System.NOTIF_EXPANDED_BAR_CUSTOM, 0) == 1;
+
         currentState = sBluetoothState.getTriState(context);
         switch (currentState) {
         case PowerButton.STATE_DISABLED:
-            currentIcon = R.drawable.stat_bluetooth_off;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_bluetooth_off_cust;
+            } else {
+                currentIcon = R.drawable.stat_bluetooth_off;
+            }
             break;
         case PowerButton.STATE_ENABLED:
-            currentIcon = R.drawable.stat_bluetooth_on;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_bluetooth_on_cust;
+            } else {
+                currentIcon = R.drawable.stat_bluetooth_on;
+            }
             break;
         case PowerButton.STATE_INTERMEDIATE:
             // In the transitional state, the bottom green bar
@@ -119,9 +134,17 @@ public class BluetoothButton extends PowerButton{
             // user's intent. This is much easier to see in
             // sunlight.
             if (sBluetoothState.isTurningOn()) {
-                currentIcon = R.drawable.stat_bluetooth_on;
+                if (useCustomExp) {
+                    currentIcon = R.drawable.stat_bluetooth_on_cust;
+                } else {
+                    currentIcon = R.drawable.stat_bluetooth_on;
+                }
             } else {
-                currentIcon = R.drawable.stat_bluetooth_off;
+                if (useCustomExp) {
+                    currentIcon = R.drawable.stat_bluetooth_off_cust;
+                } else {
+                    currentIcon = R.drawable.stat_bluetooth_off;
+                }
             }
             break;
         }

@@ -10,8 +10,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.Gravity;
 import android.widget.Toast;
+import android.provider.Settings;
 
 public class LockScreenButton extends PowerButton {
+
+    Context mContext;
 
     static Boolean lockScreen = null;
 
@@ -29,15 +32,31 @@ public class LockScreenButton extends PowerButton {
     }
 
     public void updateState(Context context) {
+        mContext = context;
+        boolean useCustomExp = Settings.System.getInt(mContext.getContentResolver(),
+        Settings.System.NOTIF_EXPANDED_BAR_CUSTOM, 0) == 1;
+
         getState(context);
         if (lockScreen == null) {
-            currentIcon = R.drawable.stat_lock_screen_off;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_lock_screen_off_cust;
+            } else {
+                currentIcon = R.drawable.stat_lock_screen_off;
+            }
             currentState = PowerButton.STATE_INTERMEDIATE;
         } else if (lockScreen) {
-            currentIcon = R.drawable.stat_lock_screen_on;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_lock_screen_on_cust;
+            } else {
+                currentIcon = R.drawable.stat_lock_screen_on;
+            }
             currentState = PowerButton.STATE_ENABLED;
         } else {
-            currentIcon = R.drawable.stat_lock_screen_off;
+            if (useCustomExp) {
+                currentIcon = R.drawable.stat_lock_screen_off_cust;
+            } else {
+                currentIcon = R.drawable.stat_lock_screen_off;
+            }
             currentState = PowerButton.STATE_DISABLED;
         }
     }
