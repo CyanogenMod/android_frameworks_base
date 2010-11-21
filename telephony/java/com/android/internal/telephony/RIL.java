@@ -2891,15 +2891,22 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         String strings[] = (String [])responseStrings(p);
         ArrayList<NetworkInfo> ret;
 
-        if (strings.length % 4 != 0) {
+        int items = 0;
+        if (strings.length % 5 == 0) {
+	        items = 5;
+	    } else if (strings.length % 4 == 0) {
+	        items = 4;
+	    }
+
+        if (items == 0) {
             throw new RuntimeException(
                 "RIL_REQUEST_QUERY_AVAILABLE_NETWORKS: invalid response. Got "
-                + strings.length + " strings, expected multible of 4");
+                + strings.length + " strings, expected multiple of 4 or 5");
         }
 
-        ret = new ArrayList<NetworkInfo>(strings.length / 4);
+        ret = new ArrayList<NetworkInfo>(strings.length / items);
 
-        for (int i = 0 ; i < strings.length ; i += 4) {
+        for (int i = 0 ; i < strings.length ; i += items) {
             ret.add (
                 new NetworkInfo(
                     strings[i+0],
@@ -2907,7 +2914,6 @@ public final class RIL extends BaseCommands implements CommandsInterface {
                     strings[i+2],
                     strings[i+3]));
         }
-
         return ret;
     }
 
