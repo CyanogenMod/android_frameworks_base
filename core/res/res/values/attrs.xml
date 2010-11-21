@@ -1315,7 +1315,8 @@
 
         <!-- Defines overscrolling behavior. This property is used only if the
              View is scrollable. Overscrolling is the ability for the user to
-             scroll a View beyond its content boundaries into empty space. -->
+             scroll a View beyond its content boundaries into empty space. 
+             @hide -->
         <attr name="overscrollMode">
             <!-- Always allow the user to overscroll the content. -->
             <enum name="always" value="0" />
@@ -1758,9 +1759,9 @@
         <!-- When set to false, the ListView will not draw the divider before each footer view.
              The default value is true. -->
         <attr name="footerDividersEnabled" format="boolean" />
-        <!-- Drawable to draw above list content. -->
+        <!-- Drawable to draw above list content. @hide -->
         <attr name="overscrollHeader" format="reference|color" />
-        <!-- Drawable to draw below list content. -->
+        <!-- Drawable to draw below list content. @hide -->
         <attr name="overscrollFooter" format="reference|color" />
     </declare-styleable>
     <declare-styleable name="MenuView">

@@ -3240,6 +3240,7 @@ public class ListView extends AbsListView {
      * Sets the drawable that will be drawn above all other list content.
      * This area can become visible when the user overscrolls the list.
      * 
+     * @hide
      * @param header The drawable to use
      */
     public void setOverscrollHeader(Drawable header) {
@@ -3250,6 +3251,7 @@ public class ListView extends AbsListView {
     }
     
     /**
+     * @hide
      * @return The drawable that will be drawn above all other list content
      */
     public Drawable getOverscrollHeader() {
@@ -3261,6 +3263,7 @@ public class ListView extends AbsListView {
      * This area can become visible when the user overscrolls the list,
      * or when the list's content does not fully fill the container area.
      * 
+     * @hide
      * @param footer The drawable to use
      */
     public void setOverscrollFooter(Drawable footer) {
@@ -3269,6 +3272,7 @@ public class ListView extends AbsListView {
     }
     
     /**
+     * @hide
      * @return The drawable that will be drawn below all other list content
      */
     public Drawable getOverscrollFooter() {

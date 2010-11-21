@@ -2524,6 +2524,9 @@ public class WebView extends AbsoluteLayout
     }
 
     @Override
+    /* 
+     * @hide 
+     */
     protected void onOverscrolled(int scrollX, int scrollY, boolean clampedX,
             boolean clampedY) {
         mInOverScrollMode = false;

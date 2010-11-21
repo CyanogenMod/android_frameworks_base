@@ -582,7 +582,10 @@ public class ScrollView extends FrameLayout {
             }
         }
     }
-    
+  
+    /*
+     * @hide
+     */  
     @Override
     protected void onOverscrolled(int scrollX, int scrollY,
             boolean clampedX, boolean clampedY) {

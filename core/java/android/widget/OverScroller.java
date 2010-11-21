@@ -26,6 +26,8 @@ import android.widget.Scroller.MagneticScroller;
  * This class encapsulates scrolling with the ability to overshoot the bounds
  * of a scrolling operation. This class is a drop-in replacement for
  * {@link android.widget.Scroller} in most cases.
+ *
+ * @hide
  */
 public class OverScroller {
     private int mMode;

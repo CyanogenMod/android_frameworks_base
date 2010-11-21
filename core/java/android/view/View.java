@@ -1525,6 +1525,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * Always allow a user to overscroll this view, provided it is a
      * view that can scroll.
      * 
+     * @hide
      * @see #getOverscrollMode()
      * @see #setOverscrollMode(int)
      */
@@ -1534,6 +1535,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * Allow a user to overscroll this view only if the content is large
      * enough to meaningfully scroll, provided it is a view that can scroll.
      * 
+     * @hide
      * @see #getOverscrollMode()
      * @see #setOverscrollMode(int)
      */
@@ -1542,6 +1544,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
     /**
      * Never allow a user to overscroll this view.
      * 
+     * @hide
      * @see #getOverscrollMode()
      * @see #setOverscrollMode(int)
      */
@@ -8714,6 +8717,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * 
      * Views can use this method to handle any touch or fling-based scrolling.
      * 
+     * @hide
      * @param deltaX Change in X in pixels 
      * @param deltaY Change in Y in pixels
      * @param scrollX Current X scroll value in pixels before applying deltaX
@@ -8819,6 +8823,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * Called by {@link #overscrollBy(int, int, int, int, int, int, int, int, boolean)} to
      * respond to the results of an overscroll operation.
      * 
+     * @hide
      * @param scrollX New X scroll value in pixels
      * @param scrollY New Y scroll value in pixels
      * @param clampedX True if scrollX was clamped to an overscroll boundary
@@ -8835,6 +8840,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * (allow overscrolling only if the view content is larger than the container),
      * or {@link #OVERSCROLL_NEVER}.
      * 
+     * @hide
      * @return This view's overscroll mode.
      */
     public int getOverscrollMode() {
@@ -8854,6 +8860,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * Setting the overscroll mode of a view will have an effect only if the
      * view is capable of scrolling.
      * 
+     * @hide
      * @param overscrollMode The new overscroll mode for this view.
      */
     public void setOverscrollMode(int overscrollMode) {

@@ -1298,6 +1298,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
     /**
      * Returns the overscroll weight for this view
      *
+     * @hide
      * @return This view's overscroll weight.
      */
     public int getOverscrollWeight() {
@@ -2406,7 +2407,10 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
 
         return true;
     }
-    
+   
+	/*
+     * @hide
+     */ 
     @Override
     protected void onOverscrolled(int scrollX, int scrollY,
             boolean clampedX, boolean clampedY) {

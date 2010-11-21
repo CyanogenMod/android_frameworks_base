@@ -498,6 +498,8 @@ public class WebSettings {
      * Set whether the WebView uses its background for over scroll background.
      * If true, it will use the WebView's background. If false, it will use an
      * internal pattern. Default is true.
+     *
+     * @hide
      */
     public void setUseWebViewBackgroundForOverscrollBackground(boolean view) {
         mUseWebViewBackgroundOverscrollBackground = view;
@@ -506,6 +508,8 @@ public class WebSettings {
     /**
      * Returns true if this WebView uses WebView's background instead of
      * internal pattern for over scroll background.
+     *
+     * @hide
      */
     public boolean getUseWebViewBackgroundForOverscrollBackground() {
         return mUseWebViewBackgroundOverscrollBackground;
