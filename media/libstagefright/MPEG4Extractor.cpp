@@ -1741,7 +1741,13 @@ status_t MPEG4Source::read(
         size_t dstOffset = 0;
 
         while (srcOffset < size) {
-            CHECK(srcOffset + mNALLengthSize <= size);
+            if(srcOffset + mNALLengthSize > size)
+            {
+               LOGE("unsupported NAL");
+               mBuffer->release();
+               mBuffer = NULL;
+               return ERROR_UNSUPPORTED;
+            }
             size_t nalLength = parseNALSize(&mSrcBuffer[srcOffset]);
             srcOffset += mNALLengthSize;
 
