@@ -8844,9 +8844,13 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * @return This view's overscroll mode.
      */
     public int getOverscrollMode() {
-		if (Settings.System.getInt(mContext.getContentResolver(), 
-				Settings.System.ALLOW_OVERSCROLL, 0) <= 0)
-			return OVERSCROLL_NEVER;
+        /* User explicit disable */
+        if (Settings.System.getInt(mContext.getContentResolver(), 
+                    Settings.System.ALLOW_OVERSCROLL, 0) <= 0)
+            return OVERSCROLL_NEVER;
+        /* Don't overscroll items without scrollbars */
+        else if ((mViewFlags & SCROLLBARS_VERTICAL) == 0 && (mViewFlags & SCROLLBARS_HORIZONTAL) == 0)
+            return OVERSCROLL_NEVER;
 
         return mOverscrollMode;
     }
