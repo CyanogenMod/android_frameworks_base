@@ -21,7 +21,16 @@
   state of the device, as well as instructions on how to get past it
   depending on the state of the device.  It is the same for landscape
   and portrait.-->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  
+<android.gesture.GestureOverlayView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/gestures"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gestureStrokeType="single"
+    android:eventsInterceptionEnabled="false"
+    android:orientation="vertical">
+<RelativeLayout
     xmlns:tabunlock="http://schemas.android.com/apk/res/com.android.tabunlock"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -236,7 +245,6 @@
         android:background="@color/transparent"
         android:visibility="gone"
         />
-        
 
 </RelativeLayout>
-
+</android.gesture.GestureOverlayView>
