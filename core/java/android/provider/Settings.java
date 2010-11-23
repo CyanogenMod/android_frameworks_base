@@ -2191,6 +2191,30 @@ public final class Settings {
         public static final String LOCKSCREEN_ALWAYS_MUSIC_CONTROLS = "lockscreen_always_music_controls";
         
         /**
+         * Whether to listen for gestures on the lockscreen
+         * @hide
+         */
+        public static final String LOCKSCREEN_GESTURES_ENABLED = "lockscreen_gestures_enabled";
+
+        /**
+         * Whether to show the gesture trail on the lockscreen
+         * @hide
+         */
+        public static final String LOCKSCREEN_GESTURES_TRAIL = "lockscreen_gestures_trail";
+
+        /**
+         * Sensitivity for parsing gestures on the lockscreen
+         * @hide
+         */
+        public static final String LOCKSCREEN_GESTURES_SENSITIVITY = "lockscreen_gestures_sensitivity";
+
+        /**
+         * Color value for gestures on lockscreen
+         * @hide
+         */
+        public static final String LOCKSCREEN_GESTURES_COLOR = "lockscreen_gestures_color";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          * @hide
@@ -2271,7 +2295,9 @@ public final class Settings {
             HAPTIC_UP_ARRAY_DEFAULT,
             HAPTIC_LONG_ARRAY_DEFAULT,
             HAPTIC_TAP_ARRAY,
-            HAPTIC_TAP_ARRAY_DEFAULT
+            HAPTIC_TAP_ARRAY_DEFAULT,
+            LOCKSCREEN_GESTURES_SENSITIVITY,
+            LOCKSCREEN_GESTURES_COLOR
         };
 
         // Settings moved to Settings.Secure
@@ -3995,6 +4021,12 @@ public final class Settings {
          */
         public static final String KILL_APP_LONGPRESS_BACK = "kill_app_on_longpress_back";
         
+        /**
+         * Whether to disable the lockscreen unlock tab
+         * @hide
+         */
+        public static final String LOCKSCREEN_GESTURES_DISABLE_UNLOCK = "lockscreen_gestures_disable_unlock";
+
         /**
          * @hide
          */
