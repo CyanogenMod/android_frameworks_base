@@ -4093,6 +4093,12 @@ public final class Settings {
         public static final String LOCKSCREEN_GESTURES_DISABLE_UNLOCK = "lockscreen_gestures_disable_unlock";
 
         /**
+         * Virtual network roaming
+         * @hide
+         */
+        public static final String MVNO_ROAMING = "button_mvno_roaming_key";
+
+        /**
          * @hide
          */
         public static final String[] SETTINGS_TO_BACKUP = {
