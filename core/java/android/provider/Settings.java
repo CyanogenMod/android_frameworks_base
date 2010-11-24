@@ -2671,6 +2671,8 @@ public final class Settings {
         @Deprecated
         public static final String WIFI_WATCHDOG_PING_TIMEOUT_MS =
             Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS;
+
+        public static final String BUTTON_MVNO_ROAMING_KEY = "button_mvno_roaming_key";
     }
 
     /**
