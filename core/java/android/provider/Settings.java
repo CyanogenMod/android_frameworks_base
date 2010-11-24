@@ -3479,6 +3479,12 @@ public final class Settings {
                 "inet_condition_debounce_down_delay";
 
         /**
+         * Virtual network roaming
+         * @hide
+         */
+        public static final String MVNO_ROAMING = "button_mvno_roaming_key";
+
+        /**
          * @hide
          */
         public static final String[] SETTINGS_TO_BACKUP = {
