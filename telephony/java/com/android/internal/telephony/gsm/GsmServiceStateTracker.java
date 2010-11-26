@@ -1289,7 +1289,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
         boolean mvnoRoaming = Settings.System.getInt(
                 phone.getContext().getContentResolver(),
-                Settings.System.BUTTON_MVNO_ROAMING_KEY, 0) == 1;
+                Settings.Secure.MVNO_ROAMING, 0) == 1;
 
         String spn;
 
