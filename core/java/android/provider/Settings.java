@@ -4180,6 +4180,12 @@ public final class Settings {
         public static final String MVNO_ROAMING = "button_mvno_roaming_key";
 
         /**
+         * Whether to disable the lockscreen unlock tab
+         * @hide
+         */
+        public static final String LOCKSCREEN_GESTURES_DISABLE_UNLOCK = "lockscreen_gestures_disable_unlock";
+
+        /**
          * @hide
          */
         public static final String[] SETTINGS_TO_BACKUP = {
