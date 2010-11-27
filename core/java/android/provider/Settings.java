@@ -2372,6 +2372,12 @@ public final class Settings {
         public static final String LOCKSCREEN_GESTURES_TRAIL = "lockscreen_gestures_trail";
 
         /**
+         * Whether to disable the lockscreen unlock tab
+         * @hide
+         */
+        public static final String LOCKSCREEN_GESTURES_DISABLE_UNLOCK = "lockscreen_gestures_disable_unlock";
+
+        /**
          * Sensitivity for parsing gestures on the lockscreen
          * @hide
          */
