@@ -22,6 +22,7 @@ import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.SlidingTab;
 import com.android.internal.widget.SlidingTab.OnTriggerListener;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -42,6 +43,7 @@ import android.provider.Settings;
 
 import java.util.Date;
 import java.io.File;
+import java.net.URISyntaxException;
 
 /**
  * The screen within {@link LockPatternKeyguardView} that shows general
@@ -119,6 +121,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     private boolean mLockPhoneMessagingTab = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_PHONE_MESSAGING_TAB, 0) == 1);
+
+    private String mMessagingTabApp = (Settings.System.getString(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_MESSAGING_TAB_APP));
 
     /**
      * The status of this lock screen.
@@ -350,11 +355,17 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                         getContext().startActivity(callIntent);
                         mCallback.goToUnlockScreen();
                     } else if (whichHandle == SlidingTab.OnTriggerListener.RIGHT_HANDLE) {
-                        Intent sendIntent = new Intent(Intent.ACTION_MAIN);
-                        sendIntent.setType("vnd.android-dir/mms-sms");
-                        sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        getContext().startActivity(sendIntent);
-                        mCallback.goToUnlockScreen();
+                        if (mMessagingTabApp != null) {
+                            try {
+                                Intent i = Intent.parseUri(mMessagingTabApp, 0);
+                                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                        | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                                mContext.startActivity(i);
+                                mCallback.goToUnlockScreen();
+                            } catch (URISyntaxException e) {
+                            } catch (ActivityNotFoundException e) {
+                            }
+                        }
                     }
                 }
 

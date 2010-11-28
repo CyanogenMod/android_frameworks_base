@@ -2083,6 +2083,12 @@ public final class Settings {
         public static final String LOCKSCREEN_PHONE_MESSAGING_TAB = "lockscreen_phone_messaging_tab";
 
         /**
+         * App to launch with the custom messaging tab
+         * @hide
+         */
+        public static final String LOCKSCREEN_MESSAGING_TAB_APP = "lockscreen_messaging_tab_app";
+
+        /**
          * Pulse the Trackball with Screen On.  The value is boolean (1 or 0).
          * @hide
          */
