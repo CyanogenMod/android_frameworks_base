@@ -2248,6 +2248,12 @@ public final class Settings {
         public static final String LOCKSCREEN_PHONE_MESSAGING_TAB = "lockscreen_phone_messaging_tab";
 
         /**
+         * App to launch with the custom messaging tab
+         * @hide
+         */
+        public static final String LOCKSCREEN_MESSAGING_TAB_APP = "lockscreen_messaging_tab_app";
+
+        /**
          * Whether to use a custom pull-down notification screen
          * @hide 
          */
