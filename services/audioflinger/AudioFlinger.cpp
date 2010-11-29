@@ -673,9 +673,9 @@ status_t AudioFlinger::setParameters(int ioHandle, const String8& keyValuePairs)
     String8 key = String8(AudioParameter::keyRouting);
     int device;
     if (param.getInt(key, device) == NO_ERROR) {
-        if((device & AudioSystem::DEVICE_OUT_FM) && mFmOn == false){
+        if((device & AudioSystem::DEVICE_OUT_FM_ALL) && mFmOn == false){
             mFmOn = true;
-         } else if (mFmOn == true && !(device & AudioSystem::DEVICE_OUT_FM)){
+         } else if (mFmOn == true && !(device & AudioSystem::DEVICE_OUT_FM_ALL)){
             mFmOn = false;
          }
     }
@@ -800,8 +800,43 @@ status_t AudioFlinger::getRenderPosition(uint32_t *halFrames, uint32_t *dspFrame
 }
 
 #ifdef HAVE_FM_RADIO
+#ifdef USE_BROADCOM_FM_VOLUME_HACK
+/*
+ * NASTY HACK: Send raw HCI data to adjust the FM volume.
+ *
+ * Normally we would do this in libaudio, but this is for the case where
+ * we have a prebuilt libaudio and cannot modify it.
+ */
+static status_t set_volume_fm(uint32_t volume)
+{
+    int returnval = 0;
+    float ratio = 2.5;
+
+     char s1[100] = "hcitool cmd 0x3f 0xa 0x5 0xc0 0x41 0xf 0 0x20 0 0 0";
+     char s2[100] = "hcitool cmd 0x3f 0xa 0x5 0xe4 0x41 0xf 0 0x00 0 0 0";
+     char s3[100] = "hcitool cmd 0x3f 0xa 0x5 0xe0 0x41 0xf 0 ";
+
+     char stemp[10] = "";
+     char *pstarget = s3;
+
+     volume = (unsigned int)(volume * ratio);
+
+     sprintf(stemp, "0x%x ", volume);
+     pstarget = strcat(s3, stemp);
+     pstarget = strcat(s3, "0 0 0");
+
+     system(s1);
+     system(s2);
+     system(s3);
+
+     return returnval;
+}
+#endif
+
 status_t AudioFlinger::setFmVolume(float value)
 {
+	status_t ret;
+
     // check calling permissions
     if (!settingsAllowed()) {
         return PERMISSION_DENIED;
@@ -809,7 +844,13 @@ status_t AudioFlinger::setFmVolume(float value)
 
     AutoMutex lock(mHardwareLock);
     mHardwareStatus = AUDIO_SET_FM_VOLUME;
-    status_t ret = mAudioHardware->setFmVolume(value);
+#ifdef USE_BROADCOM_FM_VOLUME_HACK
+    int vol = AudioSystem::logToLinear(value);
+    LOGI("setFmVolume %d", vol);
+    ret = set_volume_fm(vol);
+#else
+    ret = mAudioHardware->setFmVolume(value);
+#endif
     mHardwareStatus = AUDIO_HW_IDLE;
 
     return ret;

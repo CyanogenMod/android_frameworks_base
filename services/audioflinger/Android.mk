@@ -126,6 +126,10 @@ ifeq ($(BOARD_HAVE_FM_RADIO),true)
   LOCAL_CFLAGS += -DHAVE_FM_RADIO
 endif
 
+ifeq ($(BOARD_USE_BROADCOM_FM_VOLUME_HACK),true)
+  LOCAL_CFLAGS += -DUSE_BROADCOM_FM_VOLUME_HACK
+endif
+
 ifeq ($(TARGET_SIMULATOR),true)
     ifeq ($(HOST_OS),linux)
         LOCAL_LDLIBS += -lrt -lpthread
