@@ -28,7 +28,7 @@
     android:layout_height="fill_parent"
     android:gestureStrokeType="multiple"
     android:eventsInterceptionEnabled="false"
-    android:orientation="horizontal">
+    android:orientation="none">
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tabunlock="http://schemas.android.com/apk/res/com.android.tabunlock"

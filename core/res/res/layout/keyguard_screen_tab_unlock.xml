@@ -29,7 +29,7 @@
     android:layout_height="fill_parent"
     android:gestureStrokeType="multiple"
     android:eventsInterceptionEnabled="false"
-    android:orientation="vertical">
+    android:orientation="none">
     <RelativeLayout
         xmlns:tabunlock="http://schemas.android.com/apk/res/com.android.tabunlock"
         android:layout_width="match_parent"
