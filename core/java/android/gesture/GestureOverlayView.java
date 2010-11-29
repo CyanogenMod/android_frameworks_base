@@ -58,6 +58,7 @@ public class GestureOverlayView extends FrameLayout {
 
     public static final int ORIENTATION_HORIZONTAL = 0;
     public static final int ORIENTATION_VERTICAL = 1;
+    public static final int ORIENTATION_NONE = 2;
 
     private static final int FADE_ANIMATION_RATE = 16;
     private static final boolean GESTURE_RENDERING_ANTIALIAS = true;
@@ -645,7 +646,7 @@ public class GestureOverlayView extends FrameLayout {
                         angle = 180 - angle;
                     }
 
-                    if (box.squareness > mGestureStrokeSquarenessTreshold ||
+                    if (mOrientation == ORIENTATION_NONE || box.squareness > mGestureStrokeSquarenessTreshold ||
                             (mOrientation == ORIENTATION_VERTICAL ?
                                     angle < mGestureStrokeAngleThreshold :
                                     angle > mGestureStrokeAngleThreshold)) {
