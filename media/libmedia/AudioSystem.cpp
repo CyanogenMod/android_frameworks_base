@@ -759,7 +759,7 @@ bool AudioSystem::isInputDevice(audio_devices device)
 bool AudioSystem::isFmDevice(audio_devices device)
 {
     if ((popCount(device) == 1 ) &&
-        ((device & ~AudioSystem::DEVICE_OUT_FM) == 0)) {
+        ((device & ~AudioSystem::DEVICE_OUT_FM_ALL) == 0)) {
         return true;
     } else {
         return false;
