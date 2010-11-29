@@ -264,6 +264,10 @@ public:
     // Value for KEY_ZOOM_SUPPORTED or KEY_SMOOTH_ZOOM_SUPPORTED.
     static const char TRUE[];
 
+    //Continuous AF.
+    static const char KEY_CAF[];
+    static const char KEY_SUPPORTED_CAF[];
+
     // Values for white balance settings.
     static const char WHITE_BALANCE_AUTO[];
     static const char WHITE_BALANCE_INCANDESCENT[];
@@ -362,6 +366,11 @@ public:
     // Values for Lens Shading
     static const char LENSSHADE_ENABLE[] ;
     static const char LENSSHADE_DISABLE[] ;
+
+    // Values for Continuous AF
+    static const char CAF_OFF[] ;
+    static const char CAF_ON[] ;
+
 private:
     DefaultKeyedVector<String8,String8>    mMap;
 };
