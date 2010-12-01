@@ -2384,6 +2384,12 @@ public final class Settings {
         public static final String LOCKSCREEN_GESTURES_SENSITIVITY = "lockscreen_gestures_sensitivity";
 
         /**
+         * Color value for gestures on lockscreen
+         * @hide
+         */
+        public static final String LOCKSCREEN_GESTURES_COLOR = "lockscreen_gestures_color";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          * @hide
@@ -2464,7 +2470,8 @@ public final class Settings {
             QUIET_HOURS_MUTE,
             QUIET_HOURS_STILL,
             QUIET_HOURS_DIM,
-            LOCKSCREEN_GESTURES_SENSITIVITY
+            LOCKSCREEN_GESTURES_SENSITIVITY,
+            LOCKSCREEN_GESTURES_COLOR
         };
 
         // Settings moved to Settings.Secure
