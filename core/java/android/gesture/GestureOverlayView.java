@@ -58,6 +58,7 @@ public class GestureOverlayView extends FrameLayout {
 
     public static final int ORIENTATION_HORIZONTAL = 0;
     public static final int ORIENTATION_VERTICAL = 1;
+    /** @hide */
     public static final int ORIENTATION_NONE = 2;
 
     private static final int FADE_ANIMATION_RATE = 16;
