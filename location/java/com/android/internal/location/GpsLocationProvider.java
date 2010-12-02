@@ -540,7 +540,11 @@ public class GpsLocationProvider implements LocationProviderInterface {
             if (DEBUG) {
                 Log.d(TAG, "calling native_inject_xtra_data");
             }
-            native_inject_xtra_data(data, data.length);
+            if (!native_inject_xtra_data(data, data.length)) {
+                // try again later
+                mHandler.removeMessages(DOWNLOAD_XTRA_DATA);
+                mHandler.sendMessageDelayed(Message.obtain(mHandler, DOWNLOAD_XTRA_DATA), RETRY_INTERVAL);
+            }
         } else {
             // try again later
             mHandler.removeMessages(DOWNLOAD_XTRA_DATA);
@@ -1460,7 +1464,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
     // XTRA Support
     private native void native_inject_time(long time, long timeReference, int uncertainty);
     private native boolean native_supports_xtra();
-    private native void native_inject_xtra_data(byte[] data, int length);
+    private native boolean native_inject_xtra_data(byte[] data, int length);
 
     // DEBUG Support
     private native String native_get_internal_state();
