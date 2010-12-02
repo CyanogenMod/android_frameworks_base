@@ -440,7 +440,7 @@ static jboolean android_location_GpsLocationProvider_inject_xtra_data(JNIEnv* en
         ret = sGpsXtraInterface->inject_xtra_data((char *)bytes, length);
     }
     env->ReleaseByteArrayElements(data, bytes, 0);
-    return (ret != 0);
+    return (ret == 0);
 }
 #else
 static jboolean android_location_GpsLocationProvider_inject_xtra_data(JNIEnv* env, jobject obj,
@@ -450,7 +450,7 @@ static jboolean android_location_GpsLocationProvider_inject_xtra_data(JNIEnv* en
     jbyte* bytes = env->GetByteArrayElements(data, 0);
     ret = sGpsXtraInterface->inject_xtra_data((char *)bytes, length);
     env->ReleaseByteArrayElements(data, bytes, 0);
-    return (ret != 0);
+    return (ret == 0);
 }
 #endif
 
