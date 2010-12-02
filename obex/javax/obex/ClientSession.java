@@ -32,6 +32,7 @@
 
 package javax.obex;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -61,23 +62,11 @@ public final class ClientSession extends ObexSession {
 
     private final OutputStream mOutput;
 
-    private ObexByteBuffer mOutBuffer;
-
-    private ObexByteBuffer mData;
-
-    private ObexByteBuffer mBodyBuffer;
-
-    private ObexByteBuffer mHeaderBuffer;
-
     public ClientSession(final ObexTransport trans) throws IOException {
         mInput = trans.openInputStream();
         mOutput = trans.openOutputStream();
         mOpen = true;
         mRequestActive = false;
-        mOutBuffer = new ObexByteBuffer(32);
-        mData = new ObexByteBuffer(32);
-        mBodyBuffer = new ObexByteBuffer(32);
-        mHeaderBuffer = new ObexByteBuffer(32);
     }
 
     public HeaderSet connect(final HeaderSet header) throws IOException {
@@ -108,20 +97,19 @@ public final class ClientSession extends ObexSession {
         * Byte 5&6: Max OBEX Packet Length (Defined in MAX_PACKET_SIZE)
         * Byte 7 to n: headers
         */
-        ObexByteBuffer requestPacket = new ObexByteBuffer(totalLength);
-
+        byte[] requestPacket = new byte[totalLength];
         // We just need to start at  byte 3 since the sendRequest() method will
         // handle the length and 0x80.
-        requestPacket.write((byte)0x10);
-        requestPacket.write((byte)0x00);
-        requestPacket.write((byte)(ObexHelper.MAX_PACKET_SIZE_INT >> 8));
-        requestPacket.write((byte)(ObexHelper.MAX_PACKET_SIZE_INT & 0xFF));
+        requestPacket[0] = (byte)0x10;
+        requestPacket[1] = (byte)0x00;
+        requestPacket[2] = (byte)(ObexHelper.MAX_PACKET_SIZE_INT >> 8);
+        requestPacket[3] = (byte)(ObexHelper.MAX_PACKET_SIZE_INT & 0xFF);
         if (head != null) {
-            requestPacket.write(head);
+            System.arraycopy(head, 0, requestPacket, 4, head.length);
         }
 
         // check with local max packet size
-        if ((totalLength + 3) > ObexHelper.MAX_PACKET_SIZE_INT) {
+        if ((requestPacket.length + 3) > ObexHelper.MAX_PACKET_SIZE_INT) {
             throw new IOException("Packet size exceeds max packet size");
         }
 
@@ -226,14 +214,8 @@ public final class ClientSession extends ObexSession {
             }
         }
 
-        ObexByteBuffer headBuffer = null;
-        if (head != null) {
-            headBuffer = new ObexByteBuffer(head.length);
-            headBuffer.write(head);
-        }
-
         HeaderSet returnHeaderSet = new HeaderSet();
-        sendRequest(ObexHelper.OBEX_OPCODE_DISCONNECT, headBuffer, returnHeaderSet, null);
+        sendRequest(ObexHelper.OBEX_OPCODE_DISCONNECT, head, returnHeaderSet, null);
 
         /*
          * An OBEX DISCONNECT reply from the server:
@@ -358,11 +340,11 @@ public final class ClientSession extends ObexSession {
          * Byte 5: constants
          * Byte 6 & up: headers
          */
-        ObexByteBuffer packet = new ObexByteBuffer(totalLength);
-        packet.write((byte)flags);
-        packet.write((byte)0x00);
+        byte[] packet = new byte[totalLength];
+        packet[0] = (byte)flags;
+        packet[1] = (byte)0x00;
         if (headset != null) {
-            packet.write(head);
+            System.arraycopy(head, 0, packet, 2, head.length);
         }
 
         HeaderSet returnHeaderSet = new HeaderSet();
@@ -423,30 +405,31 @@ public final class ClientSession extends ObexSession {
      *        <code>false</code> if an authentication response failed to pass
      * @throws IOException if an IO error occurs
      */
-    public boolean sendRequest(int opCode, ObexByteBuffer head, HeaderSet header,
+    public boolean sendRequest(int opCode, byte[] head, HeaderSet header,
             PrivateInputStream privateInput) throws IOException {
         //check header length with local max size
         if (head != null) {
-            if ((head.getLength() + 3) > ObexHelper.MAX_PACKET_SIZE_INT) {
+            if ((head.length + 3) > ObexHelper.MAX_PACKET_SIZE_INT) {
                 throw new IOException("header too large ");
             }
         }
 
-        mOutBuffer.reset();
-        mOutBuffer.write((byte)opCode);
+        int bytesReceived;
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        out.write((byte)opCode);
 
         // Determine if there are any headers to send
         if (head == null) {
-            mOutBuffer.write((byte)0x00);
-            mOutBuffer.write((byte)0x03);
+            out.write(0x00);
+            out.write(0x03);
         } else {
-            mOutBuffer.write((byte)((head.getLength() + 3) >> 8));
-            mOutBuffer.write((byte)(head.getLength() + 3));
-            mOutBuffer.write(head, 0);
+            out.write((byte)((head.length + 3) >> 8));
+            out.write((byte)(head.length + 3));
+            out.write(head);
         }
 
         // Write the request to the output stream and flush the stream
-        mOutBuffer.peek(mOutput, mOutBuffer.getLength());
+        mOutput.write(out.toByteArray());
         mOutput.flush();
 
         header.responseCode = mInput.read();
@@ -457,7 +440,7 @@ public final class ClientSession extends ObexSession {
             throw new IOException("Packet received exceeds packet size limit");
         }
         if (length > ObexHelper.BASE_PACKET_LENGTH) {
-            mData.reset();
+            byte[] data = null;
             if (opCode == ObexHelper.OBEX_OPCODE_CONNECT) {
                 @SuppressWarnings("unused")
                 int version = mInput.read();
@@ -471,21 +454,31 @@ public final class ClientSession extends ObexSession {
                 }
 
                 if (length > 7) {
-                    mData.write(mInput, length - 7);
+                    data = new byte[length - 7];
+
+                    bytesReceived = mInput.read(data);
+                    while (bytesReceived != (length - 7)) {
+                        bytesReceived += mInput.read(data, bytesReceived, data.length
+                                - bytesReceived);
+                    }
                 } else {
                     return true;
                 }
             } else {
-                mData.write(mInput, length - 3);
+                data = new byte[length - 3];
+                bytesReceived = mInput.read(data);
+
+                while (bytesReceived != (length - 3)) {
+                    bytesReceived += mInput.read(data, bytesReceived, data.length - bytesReceived);
+                }
                 if (opCode == ObexHelper.OBEX_OPCODE_ABORT) {
                     return true;
                 }
             }
 
-            ObexHelper.updateHeaderSet(header, mData, mBodyBuffer, mHeaderBuffer);
-
-            if ((privateInput != null) && (mBodyBuffer.getLength() > 0)) {
-                privateInput.writeBytes(mBodyBuffer, 1);
+            byte[] body = ObexHelper.updateHeaderSet(header, data);
+            if ((privateInput != null) && (body != null)) {
+                privateInput.writeBytes(body, 1);
             }
 
             if (header.mConnectionID != null) {
@@ -504,23 +497,17 @@ public final class ClientSession extends ObexSession {
                     && (header.mAuthChall != null)) {
 
                 if (handleAuthChall(header)) {
-
-                    // This can't be a member variable and mOutBuffer can't be used here
-                    // since this is a recursive call.
-                    // That's OK since authentication should not happen very often.
-                    ObexByteBuffer sendHeadersBuffer = new ObexByteBuffer(
-                            (mOutBuffer.getLength() - 3) + header.mAuthResp.length + 3);
-                    sendHeadersBuffer.write(mOutBuffer, 3);
-
-                    sendHeadersBuffer.write((byte)HeaderSet.AUTH_RESPONSE);
-                    sendHeadersBuffer.write((byte)((header.mAuthResp.length + 3) >> 8));
-                    sendHeadersBuffer.write((byte)(header.mAuthResp.length + 3));
-                    sendHeadersBuffer.write(header.mAuthResp);
-
+                    out.write((byte)HeaderSet.AUTH_RESPONSE);
+                    out.write((byte)((header.mAuthResp.length + 3) >> 8));
+                    out.write((byte)(header.mAuthResp.length + 3));
+                    out.write(header.mAuthResp);
                     header.mAuthChall = null;
                     header.mAuthResp = null;
 
-                    return sendRequest(opCode, sendHeadersBuffer, header, privateInput);
+                    byte[] sendHeaders = new byte[out.size() - 3];
+                    System.arraycopy(out.toByteArray(), 3, sendHeaders, 0, sendHeaders.length);
+
+                    return sendRequest(opCode, sendHeaders, header, privateInput);
                 }
             }
         }
