@@ -409,6 +409,7 @@ public class SettingsProvider extends ContentProvider {
 
                     newProviders = providers.substring(0, index);
                     if (end < providers.length()) {
+                        if (newProviders.length() > 0) newProviders += ",";
                         newProviders += providers.substring(end);
                     }
                 } else {
