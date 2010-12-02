@@ -429,13 +429,30 @@ static jboolean android_location_GpsLocationProvider_supports_xtra(JNIEnv* env, 
     return (sGpsXtraInterface != NULL);
 }
 
-static void android_location_GpsLocationProvider_inject_xtra_data(JNIEnv* env, jobject obj,
+#ifdef USE_BROKEN_INJECT_XTRA_HACK
+static jboolean android_location_GpsLocationProvider_inject_xtra_data(JNIEnv* env, jobject obj,
         jbyteArray data, jint length)
 {
+    int ret = -1, tries;
     jbyte* bytes = env->GetByteArrayElements(data, 0);
-    sGpsXtraInterface->inject_xtra_data((char *)bytes, length);
+    for (tries = 0; tries < 5 && ret; ++tries) {
+        LOGV("Injecting XTRA data (try %d)\n", tries);
+        ret = sGpsXtraInterface->inject_xtra_data((char *)bytes, length);
+    }
     env->ReleaseByteArrayElements(data, bytes, 0);
+    return (ret != 0);
 }
+#else
+static jboolean android_location_GpsLocationProvider_inject_xtra_data(JNIEnv* env, jobject obj,
+        jbyteArray data, jint length)
+{
+    int ret;
+    jbyte* bytes = env->GetByteArrayElements(data, 0);
+    ret = sGpsXtraInterface->inject_xtra_data((char *)bytes, length);
+    env->ReleaseByteArrayElements(data, bytes, 0);
+    return (ret != 0);
+}
+#endif
 
 static void android_location_GpsLocationProvider_agps_data_conn_open(JNIEnv* env, jobject obj, jstring apn)
 {
@@ -525,7 +542,7 @@ static JNINativeMethod sMethods[] = {
     {"native_inject_time", "(JJI)V", (void*)android_location_GpsLocationProvider_inject_time},
     {"native_inject_location", "(DDF)V", (void*)android_location_GpsLocationProvider_inject_location},
     {"native_supports_xtra", "()Z", (void*)android_location_GpsLocationProvider_supports_xtra},
-    {"native_inject_xtra_data", "([BI)V", (void*)android_location_GpsLocationProvider_inject_xtra_data},
+    {"native_inject_xtra_data", "([BI)Z", (void*)android_location_GpsLocationProvider_inject_xtra_data},
     {"native_agps_data_conn_open", "(Ljava/lang/String;)V", (void*)android_location_GpsLocationProvider_agps_data_conn_open},
     {"native_agps_data_conn_closed", "()V", (void*)android_location_GpsLocationProvider_agps_data_conn_closed},
     {"native_agps_data_conn_failed", "()V", (void*)android_location_GpsLocationProvider_agps_data_conn_failed},
