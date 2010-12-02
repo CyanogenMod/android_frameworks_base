@@ -2272,6 +2272,12 @@ public final class Settings {
         public static final String EXPANDED_VIEW_WIDGET = "expanded_view_widget";
 
         /**
+         * Whether to hide the notification screen after clicking on a widget button
+         * @hide
+         */
+        public static final String EXPANDED_HIDE_ONCHANGE = "expanded_hide_onchange";
+
+        /**
          * Notification Indicator Color
          * @hide
          */
