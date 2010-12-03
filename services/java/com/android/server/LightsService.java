@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.IHardwareService;
 import android.os.ServiceManager;
 import android.os.Message;
+import android.util.Log;
 import android.util.Slog;
 
 import java.io.File;
@@ -118,7 +119,7 @@ public class LightsService {
 
 	public void notificationPulse(int color, int onMs, int offMs) {
 		synchronized (this) {
-			setLightLocked(color, LIGHT_FLASH_TIMED, onMs, 1000, BRIGHTNESS_MODE_USER);
+			setLightLocked(color, LIGHT_FLASH_TIMED, onMs, offMs, BRIGHTNESS_MODE_USER);
                 	mH.sendMessageDelayed(Message.obtain(mH, 1, this), onMs);
 		}
 	}
@@ -216,7 +217,7 @@ public class LightsService {
         @Override
         public void handleMessage(Message msg) {
             Light light = (Light)msg.obj;
-            light.stopFlashing();
+            light.turnOff();
         }
     };
 
