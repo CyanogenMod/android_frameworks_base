@@ -60,7 +60,7 @@ public:
             uint32_t sampleIndex,
             off64_t *offset,
             size_t *size,
-            uint32_t *decodingTime,
+            uint64_t *decodingTime,
             bool *isSyncSample = NULL);
 
     enum {
@@ -69,7 +69,7 @@ public:
         kFlagClosest
     };
     status_t findSampleAtTime(
-            uint32_t req_time, uint32_t *sample_index, uint32_t flags);
+            uint64_t req_time, uint32_t *sample_index, uint32_t flags);
 
     status_t findSyncSampleNear(
             uint32_t start_sample_index, uint32_t *sample_index,

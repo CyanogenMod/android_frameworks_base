@@ -37,7 +37,8 @@ SampleIterator::SampleIterator(SampleTable *table)
       mTTSSampleIndex(0),
       mTTSSampleTime(0),
       mTTSCount(0),
-      mTTSDuration(0) {
+      mTTSDuration(0),
+      mCurrentSampleTime(0) {
     reset();
 }
 
@@ -286,7 +287,7 @@ status_t SampleIterator::getSampleSizeDirect(
 }
 
 status_t SampleIterator::findSampleTime(
-        uint32_t sampleIndex, uint32_t *time) {
+        uint32_t sampleIndex, uint64_t *time) {
     if (sampleIndex >= mTable->mNumSampleSizes) {
         return ERROR_OUT_OF_RANGE;
     }

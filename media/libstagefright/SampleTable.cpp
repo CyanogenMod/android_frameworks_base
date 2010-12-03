@@ -332,22 +332,22 @@ uint32_t abs_difference(uint32_t time1, uint32_t time2) {
 }
 
 status_t SampleTable::findSampleAtTime(
-        uint32_t req_time, uint32_t *sample_index, uint32_t flags) {
+        uint64_t req_time, uint32_t *sample_index, uint32_t flags) {
     *sample_index = 0;
 
     Mutex::Autolock autoLock(mLock);
 
     uint32_t cur_sample = 0;
-    uint32_t time = 0;
+    uint64_t time = 0;
     for (uint32_t i = 0; i < mTimeToSampleCount; ++i) {
         uint32_t n = mTimeToSample[2 * i];
         uint32_t delta = mTimeToSample[2 * i + 1];
 
-        if (req_time < time + n * delta) {
+        if (req_time < (time + ((uint64_t)n * delta))) {
             int j = (req_time - time) / delta;
 
-            uint32_t time1 = time + j * delta;
-            uint32_t time2 = time1 + delta;
+            uint64_t time1 = time + ((uint64_t)j * delta);
+            uint64_t time2 = time1 + ((uint64_t)delta);
 
             uint32_t sampleTime;
             if (i+1 == mTimeToSampleCount
@@ -559,7 +559,7 @@ status_t SampleTable::getMetaDataForSample(
         uint32_t sampleIndex,
         off64_t *offset,
         size_t *size,
-        uint32_t *decodingTime,
+        uint64_t *decodingTime,
         bool *isSyncSample) {
     Mutex::Autolock autoLock(mLock);
 
