@@ -109,19 +109,19 @@ public class LightsService {
 
         public void pulse(int color, int onMS) {
             synchronized (this) {
-		if (mColor == 0 && !mFlashing) {
+                if (mColor == 0 && !mFlashing) {
                     setLightLocked(color, LIGHT_FLASH_HARDWARE, onMS, 1000, BRIGHTNESS_MODE_USER);
                     mH.sendMessageDelayed(Message.obtain(mH, 1, this), onMS);
                 }
             }
         }
 
-	public void notificationPulse(int color, int onMs, int offMs) {
-		synchronized (this) {
-			setLightLocked(color, LIGHT_FLASH_TIMED, onMs, 1000, BRIGHTNESS_MODE_USER);
-                	mH.sendMessageDelayed(Message.obtain(mH, 1, this), onMs);
-		}
-	}
+        public void notificationPulse(int color, int onMs, int offMs) {
+            synchronized (this) {
+                setLightLocked(color, LIGHT_FLASH_TIMED, onMs, offMs, BRIGHTNESS_MODE_USER);
+                    mH.sendMessageDelayed(Message.obtain(mH, 1, this), onMs);
+            }
+        }
 
         public void turnOff() {
             synchronized (this) {
@@ -216,7 +216,7 @@ public class LightsService {
         @Override
         public void handleMessage(Message msg) {
             Light light = (Light)msg.obj;
-            light.stopFlashing();
+            light.turnOff();
         }
     };
 
