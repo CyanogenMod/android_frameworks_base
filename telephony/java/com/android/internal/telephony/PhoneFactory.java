@@ -21,9 +21,12 @@ import android.net.LocalServerSocket;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
+import android.os.SystemProperties;
 
 import com.android.internal.telephony.cdma.CDMAPhone;
 import com.android.internal.telephony.gsm.GSMPhone;
+import java.lang.reflect.Constructor;
+
 
 /**
  * {@hide}
@@ -104,8 +107,33 @@ public class PhoneFactory {
                         Settings.Secure.PREFERRED_CDMA_SUBSCRIPTION, preferredCdmaSubscription);
                 Log.i(LOG_TAG, "Cdma Subscription set to " + Integer.toString(cdmaSubscription));
 
+                //loading the RIL implementation with dependency injection
+                //class name is supplyed from propery 
+                //this allows to change RIL implementation for phones like Samsung Galaxy S
+                //there is no static compile time dependency to the RIL implementation 
+
+                String rilClassName = SystemProperties.get("phone.ril.classname","");
+                
+
+                if(rilClassName != "")
+                {
+                    Log.d(LOG_TAG, "using RIL implementation: " + rilClassName);
+                    try{
+                        Class rilCalazz = Class.forName(rilClassName);
+
+                        Constructor constructor = rilCalazz.getConstructor(new Class[]{Context.class, int.class, int.class});
+                        sCommandsInterface = (CommandsInterface)constructor.newInstance(new Object[]{context, networkMode, cdmaSubscription});
+                        
+                    } catch (Throwable t) {
+                        Log.e(LOG_TAG,"Fatal Exception in Dependency Injection " + t.toString() );
+                    }
+                                
+                } else {
+                //fallback to static class loading if no property supplied
                 //reads the system properties and makes commandsinterface
+                Log.d(LOG_TAG, "no property supplied using static dependency for RIL");
                 sCommandsInterface = new RIL(context, networkMode, cdmaSubscription);
+                }
 
                 int phoneType = getPhoneType(networkMode);
                 if (phoneType == Phone.PHONE_TYPE_GSM) {
