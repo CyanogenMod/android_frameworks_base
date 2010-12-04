@@ -2396,6 +2396,12 @@ public final class Settings {
         public static final String LOCKSCREEN_GESTURES_COLOR = "lockscreen_gestures_color";
 
         /**
+         * Torch state (flashlight)
+         * @hide
+         */
+        public static final String TORCH_STATE = "torch_state";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          * @hide
