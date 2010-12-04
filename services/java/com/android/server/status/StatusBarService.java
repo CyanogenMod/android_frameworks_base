@@ -2330,6 +2330,10 @@ public class StatusBarService extends IStatusBar.Stub
             resolver.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.WIDGET_BUTTONS),
                          false, this);
+
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.TORCH_STATE),
+                         false, this);
         }
 
         @Override
