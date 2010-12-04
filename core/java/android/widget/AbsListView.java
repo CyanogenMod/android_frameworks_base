@@ -1967,7 +1967,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         // Check if we have moved far enough that it looks more like a
         // scroll than a tap
         final int distance = Math.abs(deltaY);
-        final boolean overscroll = mScrollY != 0;
+        final boolean overscroll = mScrollY != 0 && (getOverscrollMode() != OVERSCROLL_NEVER);
         if (overscroll || distance > mTouchSlop) {
             createScrollingCache();
             mTouchMode = overscroll ? TOUCH_MODE_OVERSCROLL : TOUCH_MODE_SCROLL;
@@ -2147,15 +2147,17 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                         int motionPosition = findMotionRow(y);
                         if (motionPosition >= 0) {
                             final View motionView = getChildAt(motionPosition - mFirstPosition);
-                            // Apply overscroll
-							final int motionViewRealTop = motionView.getTop();
-                            
-                            int overscroll = -incrementalDeltaY - 
+                            if (getOverscrollMode() != OVERSCROLL_NEVER) {
+                                // Apply overscroll
+                                final int motionViewRealTop = motionView.getTop();
+
+                                int overscroll = -incrementalDeltaY - 
                                     (motionViewRealTop - mMotionViewOriginalTop);
-                            overscrollBy(0, overscroll, 0, mScrollY, 0, 0,
-                                    0, getOverscrollMax(), true);
-                            mTouchMode = TOUCH_MODE_OVERSCROLL;
-                            invalidate();
+                                overscrollBy(0, overscroll, 0, mScrollY, 0, 0,
+                                        0, getOverscrollMax(), true);
+                                mTouchMode = TOUCH_MODE_OVERSCROLL;
+                                invalidate();
+                            }
                             mMotionViewOriginalTop = motionView.getTop();
                         }
                         mMotionY = y;
