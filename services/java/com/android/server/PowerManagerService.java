@@ -458,7 +458,8 @@ class PowerManagerService extends IPowerManager.Stub
                  // DIM_SCREEN
                 //mDimScreen = getInt(DIM_SCREEN) != 0;
 
-                mIgnoreLightSensor = (getInt(TORCH_STATE) != 0) && mFlashlightAffectsLightSensor;
+                int torchState = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TORCH_STATE, 0);
+                mIgnoreLightSensor = (torchState > 0) && mFlashlightAffectsLightSensor;
 
                 updateLightSettings();
 
