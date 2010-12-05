@@ -62,6 +62,7 @@ import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE;
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
 import static android.provider.Settings.System.SCREEN_OFF_TIMEOUT;
 import static android.provider.Settings.System.STAY_ON_WHILE_PLUGGED_IN;
+import static android.provider.Settings.System.TORCH_STATE;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
@@ -240,6 +241,8 @@ class PowerManagerService extends IPowerManager.Stub
     private int[] mButtonBacklightValues;
     private int[] mKeyboardBacklightValues;
     private int mLightSensorWarmupTime;
+    private boolean mFlashlightAffectsLightSensor;
+    private boolean mIgnoreLightSensor;
 
     // Custom light housekeeping
     private long mLightSettingsTag = -1;
@@ -455,6 +458,8 @@ class PowerManagerService extends IPowerManager.Stub
                  // DIM_SCREEN
                 //mDimScreen = getInt(DIM_SCREEN) != 0;
 
+                mIgnoreLightSensor = (getInt(TORCH_STATE) != 0) && mFlashlightAffectsLightSensor;
+
                 updateLightSettings();
 
                 // SCREEN_BRIGHTNESS_MODE
@@ -542,6 +547,8 @@ class PowerManagerService extends IPowerManager.Stub
         Resources resources = mContext.getResources();
 
         // read settings for auto-brightness
+        mFlashlightAffectsLightSensor = resources.getBoolean(
+                com.android.internal.R.bool.config_flashlight_affects_lightsensor);
         mUseSoftwareAutoBrightness = resources.getBoolean(
                 com.android.internal.R.bool.config_automatic_brightness_available);
         if (mUseSoftwareAutoBrightness) {
@@ -563,9 +570,10 @@ class PowerManagerService extends IPowerManager.Stub
                         + Settings.System.NAME + "=?) or ("
                         + Settings.System.NAME + "=?) or ("
                         + Settings.System.NAME + "=?) or ("
+                        + Settings.System.NAME + "=?) or ("
                         + Settings.System.NAME + "=?)",
                 new String[]{STAY_ON_WHILE_PLUGGED_IN, SCREEN_OFF_TIMEOUT, DIM_SCREEN,
-                        SCREEN_BRIGHTNESS_MODE, Settings.System.LIGHTS_CHANGED},
+                        SCREEN_BRIGHTNESS_MODE, TORCH_STATE, Settings.System.LIGHTS_CHANGED},
                 null);
         mSettings = new ContentQueryMap(settingsCursor, Settings.System.NAME, true, mHandler);
         SettingsObserver settingsObserver = new SettingsObserver();
@@ -3149,7 +3157,8 @@ class PowerManagerService extends IPowerManager.Stub
         public void onSensorChanged(SensorEvent event) {
             synchronized (mLocks) {
                 // ignore light sensor while screen is turning off
-                if (isScreenTurningOffLocked()) {
+                // or when flashlight would affect it
+                if (isScreenTurningOffLocked() || mIgnoreLightSensor) {
                     return;
                 }
 
