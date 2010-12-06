@@ -30,6 +30,8 @@ import android.text.style.*;
 import android.text.method.TextKeyListener;
 import android.view.KeyEvent;
 
+import java.text.Normalizer;
+
 /**
  * A base class that manages text layout in visual elements on 
  * the screen. 
@@ -1096,6 +1098,21 @@ public abstract class Layout {
 
             if (c1 >= '\uD800' && c1 <= '\uDBFF')
                 offset -= 1;
+        } else {
+            String decomposed = Normalizer.normalize(Character.toString(c), Normalizer.Form.NFKD);
+
+            c = decomposed.charAt(0);
+
+            while (Character.getDirectionality(c) == Character.DIRECTIONALITY_NONSPACING_MARK) {
+                offset--;
+
+                if (offset == 0)
+                    break;
+
+                decomposed = Normalizer.normalize(text.subSequence(offset, offset + 1),
+                                                    Normalizer.Form.NFKD);
+                c = decomposed.charAt(0);
+            }
         }
 
         if (mSpannedText) {
