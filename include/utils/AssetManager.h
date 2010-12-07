@@ -198,6 +198,9 @@ public:
      */
     void getLocales(Vector<String8>* locales) const;
 
+    void setThemePackageName(const char* packageName);
+    const char* getThemePackageName();
+
     /*
      * Remove existing source for assets.  It can be either a directory (for
      * deleting assets as raw files on the disk) or a ZIP file.
@@ -216,7 +219,12 @@ private:
         FileType type;
     };
 
-    void updateResTableFromAssetPath(ResTable *rt, const asset_path& ap, void *cookie) const;
+    SharedBuffer* generateRedirections(SharedBuffer* entriesByTypeBuf, ResTable* rt,
+        const char* themePackageName, const char16_t* resPackageName);
+    bool generateAndWriteRedirections(ResTable* rt, const char* themePackageName,
+        const char16_t* resPackageName, const char* redirPath, bool isFramework) const;
+    void loadRedirectionMappings(ResTable* rt) const;
+    void updateResTableFromAssetPath(ResTable* rt, const asset_path& ap, void* cookie) const;
     Asset* openInPathLocked(const char* fileName, AccessMode mode,
         const asset_path& path);
     Asset* openNonAssetInPathLocked(const char* fileName, AccessMode mode,
@@ -332,6 +340,10 @@ private:
     Vector<asset_path> mAssetPaths;
     char*           mLocale;
     char*           mVendor;
+
+    // If non-null, represents the theme package from which to construct the
+    // resource redirection map used by ResTable.
+    char*           mThemePackageName;
 
     mutable ResTable* mResources;
     ResTable_config* mConfig;

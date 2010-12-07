@@ -82,7 +82,6 @@ public final class AssetManager {
     private String mAppName;
 
     private boolean mThemeSupport;
-    private String mThemePackageName;
 
     /**
      * Create a new AssetManager containing only the basic system assets.
@@ -695,17 +694,13 @@ public final class AssetManager {
      * Get package name of current theme (may return null).
      * {@hide}
      */
-    public final String getThemePackageName() {
-        return mThemePackageName;
-    }
+    public native final String getThemePackageName();
 
     /**
      * Sets package name for current theme (null is allowed).
      * {@hide}
      */
-    public final void setThemePackageName(String packageName) {
-        mThemePackageName = packageName;
-    }
+    public native final void setThemePackageName(String packageName);
 
     /**
      * Determine whether the state in this asset manager is up-to-date with

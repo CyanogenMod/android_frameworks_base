@@ -124,11 +124,11 @@ public class ContextThemeWrapper extends ContextWrapper {
         }
 
         if (mThemeResource == 0) {
-            return mBase.getTheme();
-        } else {
-            initializeTheme();
-            return mTheme;
+            mThemeResource = com.android.internal.R.style.Theme;
         }
+        initializeTheme();
+
+        return mTheme;
     }
 
     @Override 
@@ -158,7 +158,7 @@ public class ContextThemeWrapper extends ContextWrapper {
     }
 
     private void initializeTheme() {
-        final boolean first = (mTheme == null);
+        final boolean first = mTheme == null;
         if (first) {
             mTheme = getResources().newTheme();
             Resources.Theme theme = mBase.getTheme();

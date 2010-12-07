@@ -226,6 +226,8 @@ public final class ActivityThread {
         if (assets.addAssetPath(resDir) == 0) {
             return null;
         }
+
+        /* Attach theme information to the resulting AssetManager when appropriate. */
         Configuration config = getConfiguration();
         if (isThemable && config != null) {
             if (config.customTheme == null) {
@@ -233,14 +235,8 @@ public final class ActivityThread {
             }
 
             if (!TextUtils.isEmpty(config.customTheme.getThemePackageName())) {
-                PackageInfo pi = getPackageInfo(config.customTheme.getThemePackageName(), 0);
-                if (pi != null) {
-                    String themeResDir = pi.getResDir();
-                    if (assets.addAssetPath(themeResDir) != 0) {
-                        assets.setThemePackageName(config.customTheme.getThemePackageName());
-                    } else {
-                        Log.e(TAG, "Unable to add theme resdir=" + themeResDir);
-                    }
+                if (!attachThemeAssets(assets, resDir, config.customTheme)) {
+                    Log.e(TAG, "Failed to attach theme " + config.customTheme + " to resource '" + resDir + "'");
                 }
             }
         }
@@ -253,7 +249,7 @@ public final class ActivityThread {
                     + r.getConfiguration() + " appScale="
                     + r.getCompatibilityInfo().applicationScale);
         }
-        
+
         synchronized (mPackages) {
             WeakReference<Resources> wr = mActiveResources.get(key);
             Resources existing = wr != null ? wr.get() : null;
@@ -268,6 +264,20 @@ public final class ActivityThread {
             mActiveResources.put(key, new WeakReference<Resources>(r));
             return r;
         }
+    }
+
+    private boolean attachThemeAssets(AssetManager assets, String resDir, CustomTheme theme) {
+        PackageInfo pi = getPackageInfo(theme.getThemePackageName(), 0);
+        if (pi != null) {
+            String themeResDir = pi.getResDir();
+            if (assets.addAssetPath(themeResDir) != 0) {
+                assets.setThemePackageName(theme.getThemePackageName());
+                return true;
+            } else {
+                Log.e(TAG, "Unable to add theme resdir=" + themeResDir);
+            }
+        }
+        return false;
     }
 
     /**

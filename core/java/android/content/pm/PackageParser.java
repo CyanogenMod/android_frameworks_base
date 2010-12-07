@@ -1472,9 +1472,7 @@ public class PackageParser {
                 continue;
             }
             String attrName = attrs.getAttributeName(i);
-            if (attrName.equalsIgnoreCase(ApplicationInfo.PLUTO_ISTHEMEABLE_ATTRIBUTE_NAME)) {
-                ai.setIsThemeable(attrs.getAttributeBooleanValue(i, false));
-            } else if (attrName.equalsIgnoreCase(ApplicationInfo.PLUTO_HANDLE_THEME_CONFIG_CHANGES_ATTRIBUTE_NAME)) {
+            if (attrName.equalsIgnoreCase(ApplicationInfo.PLUTO_HANDLE_THEME_CONFIG_CHANGES_ATTRIBUTE_NAME)) {
                 ai.configChanges |= ActivityInfo.CONFIG_THEME_RESOURCE;
             }
         }

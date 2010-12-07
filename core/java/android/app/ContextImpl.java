@@ -291,53 +291,15 @@ class ContextImpl extends Context {
         mThemeResource = resid;
     }
 
-    private int determineDefaultThemeResource() {
-        if (getResources() != Resources.getSystem() && mPackageInfo.mApplicationInfo.isThemeable) {
-            try {
-                Configuration config = ActivityManagerNative.getDefault().getConfiguration();
-                if (config.customTheme != null) {
-                    int themeId = CustomTheme.getStyleId(this,
-                                config.customTheme.getThemePackageName(),
-                                config.customTheme.getThemeId());
-                    if (themeId == -1) {
-                        CustomTheme defaultTheme = CustomTheme.getDefault();
-                        if (config.customTheme.equals(defaultTheme)) {
-                            return com.android.internal.R.style.Theme;
-                        } else {
-                            themeId = CustomTheme.getStyleId(this,
-                                    defaultTheme.getThemePackageName(),
-                                    defaultTheme.getThemeId());
-                            if (themeId == -1) {
-                                return com.android.internal.R.style.Theme;
-                            } else {
-                                return themeId;
-                            }
-                        }
-                    } else {
-                        return themeId;
-                    }
-                }
-            } catch (RemoteException e) {
-                Log.e(TAG, "Unable to access configuration, reverting to original system default theme", e);
-            }
-        }
-
-        /* Fallback... */
-        return com.android.internal.R.style.Theme;
-    }
-    
     @Override
     public Resources.Theme getTheme() {
         if (mTheme == null) {
-            int themeId;
             if (mThemeResource == 0) {
-                themeId = determineDefaultThemeResource();
-            } else {
-                themeId = mThemeResource;
+                mThemeResource = com.android.internal.R.style.Theme;
             }
 
             mTheme = mResources.newTheme();
-            mTheme.applyStyle(themeId, true);
+            mTheme.applyStyle(mThemeResource, true);
         }
         return mTheme;
     }

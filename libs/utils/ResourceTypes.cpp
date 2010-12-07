@@ -26,6 +26,7 @@
 #include <utils/String8.h>
 #include <utils/TextOutput.h>
 #include <utils/Log.h>
+#include <utils/misc.h>
 
 #include <stdlib.h>
 #include <string.h>
@@ -44,6 +45,7 @@
 #define TABLE_SUPER_NOISY(x) //x
 #define LOAD_TABLE_NOISY(x) //x
 #define TABLE_THEME(x) //x
+#define REDIRECT_NOISY(x) //x
 
 namespace android {
 
@@ -1411,6 +1413,13 @@ status_t ResTable::Theme::applyStyle(uint32_t resID, bool force)
     const bag_entry* bag;
     uint32_t bagTypeSpecFlags = 0;
     mTable.lock();
+    uint32_t redirect = mTable.lookupRedirectionMap(resID);
+    if (redirect != 0 || resID == 0x01030005) {
+        REDIRECT_NOISY(LOGW("applyStyle: PERFORMED REDIRECT OF ident=0x%08x FOR redirect=0x%08x\n", resID, redirect));
+    }
+    if (redirect != 0) {
+        resID = redirect;
+    }
     const ssize_t N = mTable.getBagLocked(resID, &bag, &bagTypeSpecFlags);
     TABLE_NOISY(LOGV("Applying style 0x%08x to theme %p, count=%d", resID, this, N));
     if (N < 0) {
@@ -1836,6 +1845,8 @@ void ResTable::uninit()
 
     mPackageGroups.clear();
     mHeaders.clear();
+
+    clearRedirections();
 }
 
 bool ResTable::getResourceName(uint32_t resID, resource_name* outName) const
@@ -2039,6 +2050,26 @@ ssize_t ResTable::resolveReference(Res_value* value, ssize_t blockIndex,
     return blockIndex;
 }
 
+uint32_t ResTable::lookupRedirectionMap(uint32_t resID) const
+{
+    if (mError != NO_ERROR) {
+        return 0;
+    }
+
+    const int p = Res_GETPACKAGE(resID)+1;
+    const int t = Res_GETTYPE(resID)+1;
+    const int e = Res_GETENTRY(resID);
+
+    const size_t N = mRedirectionMap.size();
+    for (size_t i=0; i<N; i++) {
+        PackageResMap* resMap = mRedirectionMap[i];
+        if (resMap->package == p) {
+            return resMap->lookup(t, e);
+        }
+    }
+    return 0;
+}
+
 const char16_t* ResTable::valueToString(
     const Res_value* value, size_t stringBlock,
     char16_t tmpBuffer[TMP_BUFFER_SIZE], size_t* outLen)
@@ -2214,7 +2245,19 @@ ssize_t ResTable::getBagLocked(uint32_t resID, const bag_entry** outBag,
             if (parent) {
                 const bag_entry* parentBag;
                 uint32_t parentTypeSpecFlags = 0;
-                const ssize_t NP = getBagLocked(parent, &parentBag, &parentTypeSpecFlags);
+                uint32_t parentRedirect = lookupRedirectionMap(parent);
+                uint32_t parentActual = parent;
+                if (parentRedirect != 0 || parent == 0x01030005) {
+                    if (parentRedirect == resID) {
+                        REDIRECT_NOISY(LOGW("applyStyle(parent): ignoring circular redirect from parent=0x%08x to parentRedirect=0x%08x\n", parent, parentRedirect));
+                    } else {
+                        REDIRECT_NOISY(LOGW("applyStyle(parent): PERFORMED REDIRECT OF parent=0x%08x FOR parentRedirect=0x%08x\n", parent, parentRedirect));
+                        if (parentRedirect != 0) {
+                            parentActual = parentRedirect;
+                        }
+                    }
+                }
+                const ssize_t NP = getBagLocked(parentActual, &parentBag, &parentTypeSpecFlags);
                 const size_t NT = ((NP >= 0) ? NP : 0) + N;
                 set = (bag_set*)malloc(sizeof(bag_set)+sizeof(bag_entry)*NT);
                 if (set == NULL) {
@@ -4051,6 +4094,260 @@ void ResTable::removeAssetsByCookie(const String8 &packageName, void* cookie)
             return;
         }
     }
+}
+
+ResTable::PackageResMap::PackageResMap()
+    : mEntriesByType(NULL)
+{
+}
+
+ResTable::PackageResMap::~PackageResMap()
+{
+    if (mEntriesByType != NULL) {
+        SharedBuffer* buf = SharedBuffer::bufferFromData(mEntriesByType);
+        const size_t N = buf->size() / sizeof(mEntriesByType[0]);
+        for (size_t i = 0; i < N; i++) {
+            uint32_t* entries = mEntriesByType[i];
+            if (entries != NULL) {
+                SharedBuffer::bufferFromData(entries)->release();
+            }
+        }
+        buf->release();
+    }
+}
+
+uint32_t* ResTable::PackageResMap::parseMapType(const unsigned char* ptr, const unsigned char* end)
+{
+    SharedBuffer* buf = NULL;
+    for (; ptr + 6 <= end; ptr += 6) {
+        uint16_t entry = *(uint16_t*)ptr;
+        uint32_t resID = *(uint32_t*)(ptr + 2);
+        REDIRECT_NOISY(LOGW("map type got entry=0x%04x, resID=0x%08x\n", entry, resID));
+        size_t currentSize = (buf != NULL) ? buf->size() : 0;
+        size_t entrySize = (entry+1) * sizeof(resID);
+        if (entrySize > currentSize) {
+            unsigned int requestSize = roundUpPower2(entrySize);
+            REDIRECT_NOISY(LOGW("allocating buffer (%p) at requestSize=%d\n", buf, (int)requestSize));
+            if (buf == NULL) {
+                buf = SharedBuffer::alloc(requestSize);
+            } else {
+                buf = buf->editResize(requestSize);
+            }
+            memset((unsigned char*)buf->data()+currentSize, 0, requestSize - currentSize);
+            REDIRECT_NOISY(LOGW("allocated buf=%p\n", buf));
+        }
+        uint32_t* entries = (uint32_t*)buf->data();
+        entries[entry] = resID;
+    }
+    return (buf != NULL) ? (uint32_t*)buf->data() : NULL;
+}
+
+/*
+ * Parse the resource mappings file.
+ *
+ * The format of this file begins with a simple header identifying the number
+ * of types inside, followed by a table mapping each type to an offset further
+ * in the file.  At each offset mentioned is a set of resource ID mappings to
+ * be parsed out and applied to a sparse array that is ultimately used to
+ * lookup resource redirections (the indices are entries in the associated
+ * package space and the values are the replacement resID's from the theme
+ * itself)
+ *
+ * Detailed information of each section:
+ *
+ *  | bytes | description
+ *  |-------+-----------------------
+ *  |     2 | file format version (first version is 1)
+ *  |     2 | number of resource types (think Res_GETTYPE) in the mapping
+ *
+ * For each resource type:
+ *
+ *  +-------+-----------------------
+ *  |     1 | type identifier
+ *  |     4 | file offset containing the entry mapping
+ *  |     4 | length of the entry mapping section for this type
+ *      ...
+ *
+ * At each file offset mentioned in the type header:
+ *
+ *  +-------+-----------------------
+ *  |     2 | entry id to be replaced (combined with the type and package this
+ *  |       | forms a resID)
+ *  |     4 | resID in the theme space which is to replace the previous entry
+ *      ...
+ */
+bool ResTable::PackageResMap::parseMap(const unsigned char* basePtr,
+    const unsigned char* endPtr)
+{
+    LOG_FATAL_IF(mEntriesByType != NULL, "parseMap must only be called once");
+
+    if (basePtr + 4 > endPtr) {
+        return false;
+    }
+    uint16_t version = *(uint16_t*)basePtr;
+    uint16_t numTypes = *(uint16_t*)(basePtr + 2);
+    const unsigned char* headerPtr = basePtr + 4;
+
+    REDIRECT_NOISY(LOGW("file version=%d\n", version));
+    REDIRECT_NOISY(LOGW("read %d numTypes\n", numTypes));
+
+    while (numTypes-- > 0) {
+        uint8_t type;
+        uint32_t* entries = NULL;
+        if (headerPtr + 9 < endPtr) {
+            type = *(uint8_t*)headerPtr;
+            uint32_t offset = *(uint32_t*)(headerPtr + 1);
+            uint32_t length = *(uint32_t*)(headerPtr + 5);
+            headerPtr += 9;
+            REDIRECT_NOISY(LOGW("got type=0x%02x\n", type));
+            if (basePtr + offset + length <= endPtr) {
+                REDIRECT_NOISY(LOGW("parsing type...\n"));
+                const unsigned char* entryStartPtr = basePtr + offset;
+                const unsigned char* entryEndPtr = entryStartPtr + length;
+                entries = parseMapType(entryStartPtr, entryEndPtr);
+            }
+        }
+        if (entries == NULL) {
+            return false;
+        }
+        REDIRECT_NOISY(LOGW("inserting type 0x%02x with %p\n", type, entries));
+        insert(type, entries);
+    }
+
+    return true;
+}
+
+/*
+ * Load the redirection map from the supplied map path.
+ *
+ * The path is expected to be a directory containing individual map cache files
+ * for each package that is to have resources redirected.  Only those packages
+ * that are included in this ResTable will be loaded into the redirection map.
+ * For this reason, this method should be called only after all resource
+ * bundles have been added to the table.
+ */
+status_t ResTable::addRedirections(int package, const char* cachePath)
+{
+    LOGV("Adding redirections for package 0x%02x at %s\n", package, cachePath);
+
+    if (package != 0x01 && package != 0x7f) {
+        REDIRECT_NOISY(LOGW("invalid package 0x%02x: should be either 0x01 (android) or 0x7f (application)\n", package));
+        return BAD_TYPE;
+    }
+
+    ResTable::PackageResMap* resMap = ResTable::PackageResMap::createFromCache(package, cachePath);
+    if (resMap != NULL) {
+        REDIRECT_NOISY(LOGW("loaded cache stuff for cachePath=%s (package=%d)\n", cachePath, package));
+        mRedirectionMap.add(resMap);
+        return NO_ERROR;
+    } else {
+        REDIRECT_NOISY(LOGW("failed to parse redirection path at %s\n", cachePath));
+        return BAD_TYPE;
+    }
+}
+
+void ResTable::clearRedirections()
+{
+    const size_t N = mRedirectionMap.size();
+    for (size_t i=0; i<N; i++) {
+        PackageResMap* resMap = mRedirectionMap[i];
+        delete resMap;
+    }
+    mRedirectionMap.clear();
+}
+
+ResTable::PackageResMap* ResTable::PackageResMap::createFromCache(int package, const char* cachePath)
+{
+    FILE* cacheFile = fopen(cachePath, "r");
+    if (cacheFile == NULL) {
+        REDIRECT_NOISY(LOGW("unable to open resource mapping path %s: %s\n", cachePath, strerror(errno)));
+        return NULL;
+    }
+
+    if (fseek(cacheFile, 0, SEEK_END) != 0) {
+        fclose(cacheFile);
+        return NULL;
+    }
+
+    long length = ftell(cacheFile);
+    REDIRECT_NOISY(LOGW("file length is %d\n", (int)length));
+    if (length < 4) {
+        fclose(cacheFile);
+        return NULL;
+    }
+
+    ResTable::PackageResMap* resMap = NULL;
+    FileMap* fileMap = new FileMap;
+    if (fileMap != NULL) {
+        if (fileMap->create(cachePath, fileno(cacheFile), 0, length, true)) {
+            REDIRECT_NOISY(LOGW("successfully mapped %s\n", cachePath));
+            resMap = new ResTable::PackageResMap();
+            if (resMap != NULL) {
+                resMap->package = package;
+                const unsigned char* ptr = (const unsigned char*)fileMap->getDataPtr();
+                if (!resMap->parseMap(ptr, ptr + length)) {
+                    REDIRECT_NOISY(LOGW("failed to parse map!\n"));
+                    delete resMap;
+                    resMap = NULL;
+                }
+            }
+        } else {
+            REDIRECT_NOISY(LOGW("unable to map '%s': %s\n", cachePath, strerror(errno)));
+        }
+
+        fileMap->release();
+    }
+
+    fclose(cacheFile);
+
+    return resMap;
+}
+
+uint32_t ResTable::PackageResMap::lookup(int type, int entry)
+{
+    if (mEntriesByType == NULL) {
+        return 0;
+    }
+    size_t maxTypes = SharedBuffer::bufferFromData(mEntriesByType)->size() /
+        sizeof(mEntriesByType[0]);
+    if (type < 0 || type >= maxTypes) {
+        return 0;
+    }
+    uint32_t* entries = mEntriesByType[type];
+    if (entries == NULL) {
+        return 0;
+    }
+    size_t maxEntries = SharedBuffer::bufferFromData(entries)->size() /
+        sizeof(entries[0]);
+    if (entry < 0 || entry >= maxEntries) {
+        return 0;
+    }
+    return entries[entry];
+}
+
+void ResTable::PackageResMap::insert(int type, const uint32_t* entries)
+{
+    SharedBuffer* buf = NULL;
+    size_t currentSize = 0;
+    if (mEntriesByType != NULL) {
+        buf = SharedBuffer::bufferFromData(mEntriesByType);
+        currentSize = buf->size();
+    }
+    size_t typeSize = (type+1) * sizeof(uint32_t*);
+    if (typeSize > currentSize) {
+        unsigned int requestSize = roundUpPower2(typeSize);
+        REDIRECT_NOISY(LOGW("allocating new type buffer (%p) at size requestSize=%d\n", buf, requestSize));
+        if (buf == NULL) {
+            buf = SharedBuffer::alloc(requestSize);
+        } else {
+            buf = buf->editResize(requestSize);
+        }
+        memset((unsigned char*)buf->data()+currentSize, 0, requestSize - currentSize);
+        REDIRECT_NOISY(LOGW("allocated new type buffer %p\n", buf));
+    }
+    uint32_t** entriesByType = (uint32_t**)buf->data();
+    entriesByType[type] = (uint32_t*)entries;
+    mEntriesByType = entriesByType;
 }
 
 #define CHAR16_TO_CSTR(c16, len) (String8(String16(c16,len)).string())

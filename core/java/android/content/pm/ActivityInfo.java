@@ -307,48 +307,6 @@ public class ActivityInfo extends ComponentInfo
      */
     public int softInputMode;
 
-    /**
-     * isThemeable flag is not explicitly set - use isThemeable value from ApllicationInfo.
-     */
-    private static final int ISTHEMEABLE_INHERITED = 0;
-
-    /**
-     * isThemeable flag is explicitly set to false.
-     */
-    private static final int ISTHEMEABLE_FALSE = 1;
-
-    /**
-     * isThemeable flag is explicitly set to true.
-     */
-    private static final int ISTHEMEABLE_TRUE = 2;
-
-    /**
-     * Is given activity theme agnostic, i.e. behaves properly when default theme is changed.
-     * 
-     * @deprecated Not fully supported; do not use.
-     * @hide
-     */
-    private int isThemeable = ISTHEMEABLE_INHERITED;
-
-    /**
-     * @deprecated Not fully supported; do not use.
-     * @hide
-     */
-    public boolean getIsThemeable() {
-        if (isThemeable == ISTHEMEABLE_INHERITED) {
-            return applicationInfo != null && applicationInfo.isThemeable;
-        }
-        return isThemeable != ISTHEMEABLE_FALSE;
-    }
-
-    /**
-     * @deprecated Not fully supported; do not use.
-     * @hide
-     */
-    public void setIsThemeable(boolean value) {
-        isThemeable = value? ISTHEMEABLE_TRUE : ISTHEMEABLE_FALSE;
-    }
-
     public ActivityInfo() {
     }
 
@@ -363,7 +321,6 @@ public class ActivityInfo extends ComponentInfo
         screenOrientation = orig.screenOrientation;
         configChanges = orig.configChanges;
         softInputMode = orig.softInputMode;
-        isThemeable = orig.isThemeable;
     }
     
     /**
@@ -375,23 +332,6 @@ public class ActivityInfo extends ComponentInfo
      */
     public final int getThemeResource() {
         return theme != 0 ? theme : applicationInfo.theme;
-    }
-
-    /**
-     * @deprecated Not fully supported; do not use.
-     * @hide
-     */
-    public final boolean isThemeable() {
-        switch (isThemeable) {
-            case ISTHEMEABLE_TRUE:
-                return true;
-
-            case ISTHEMEABLE_INHERITED:
-                return applicationInfo.isThemeable;
-
-            default:
-                return false;
-        }
     }
 
     public void dump(Printer pw, String prefix) {
@@ -412,7 +352,6 @@ public class ActivityInfo extends ComponentInfo
                     + " configChanges=0x" + Integer.toHexString(configChanges)
                     + " softInputMode=0x" + Integer.toHexString(softInputMode));
         }
-        pw.println(prefix + "isThemeable=" + isThemeable);
         super.dumpBack(pw, prefix);
     }
     
@@ -437,7 +376,6 @@ public class ActivityInfo extends ComponentInfo
         dest.writeInt(screenOrientation);
         dest.writeInt(configChanges);
         dest.writeInt(softInputMode);
-        dest.writeInt(isThemeable);
     }
 
     public static final Parcelable.Creator<ActivityInfo> CREATOR
@@ -461,6 +399,5 @@ public class ActivityInfo extends ComponentInfo
         screenOrientation = source.readInt();
         configChanges = source.readInt();
         softInputMode = source.readInt();
-        isThemeable = source.readInt();
     }
 }

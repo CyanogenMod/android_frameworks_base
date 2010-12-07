@@ -37,6 +37,8 @@
 
 #include <stdio.h>
 
+#define REDIRECT_NOISY(x) //x
+
 namespace android {
 
 // ----------------------------------------------------------------------------
@@ -718,17 +720,23 @@ static jint android_content_AssetManager_loadResourceValue(JNIEnv* env, jobject 
     }
     const ResTable& res(am->getResources());
 
+    uint32_t ref = res.lookupRedirectionMap(ident);
+    if (ref == 0) {
+        ref = ident;
+    } else {
+        REDIRECT_NOISY(LOGW("PERFORMED REDIRECT OF ident=0x%08x FOR ref=0x%08x\n", ident, ref));
+    }
+
     Res_value value;
     ResTable_config config;
     uint32_t typeSpecFlags;
-    ssize_t block = res.getResource(ident, &value, false, &typeSpecFlags, &config);
+    ssize_t block = res.getResource(ref, &value, false, &typeSpecFlags, &config);
 #if THROW_ON_BAD_ID
     if (block == BAD_INDEX) {
         jniThrowException(env, "java/lang/IllegalStateException", "Bad resource!");
         return 0;
     }
 #endif
-    uint32_t ref = ident;
     if (resolve) {
         block = res.resolveReference(&value, block, &ref);
 #if THROW_ON_BAD_ID
@@ -993,6 +1001,20 @@ static jboolean android_content_AssetManager_applyStyle(JNIEnv* env, jobject cla
     // Now lock down the resource object and start pulling stuff from it.
     res.lock();
 
+    // Apply theme redirections to the referenced styles.
+    if (defStyleRes != 0) {
+        uint32_t ref = res.lookupRedirectionMap(defStyleRes);
+        if (ref != 0) {
+            defStyleRes = ref;
+        }
+    }
+    if (style != 0) {
+        uint32_t ref = res.lookupRedirectionMap(style);
+        if (ref != 0) {
+            style = ref;
+        }
+    }
+
     // Retrieve the default style bag, if requested.
     const ResTable::bag_entry* defStyleEnt = NULL;
     uint32_t defStyleTypeSetFlags = 0;
@@ -1114,6 +1136,17 @@ static jboolean android_content_AssetManager_applyStyle(JNIEnv* env, jobject cla
         if (value.dataType == Res_value::TYPE_REFERENCE && value.data == 0) {
             DEBUG_STYLES(LOGI("-> Setting to @null!"));
             value.dataType = Res_value::TYPE_NULL;
+        }
+
+        // One final test for a resource redirection from the applied theme.
+        if (resid != 0) {
+            uint32_t redirect = res.lookupRedirectionMap(resid);
+            if (redirect != 0) {
+                REDIRECT_NOISY(LOGW("deep REDIRECT FROM resid=0x%08x TO redirect=0x%08x\n", resid, redirect));
+                block = res.getResource(redirect, &value, false, &typeSetFlags, &config);
+                block = res.resolveReference(&value, block, &redirect);
+                resid = redirect;
+            }
         }
 
         DEBUG_STYLES(LOGI("Attribute 0x%08x: type=0x%x, data=0x%08x",
@@ -1365,6 +1398,17 @@ static jint android_content_AssetManager_retrieveArray(JNIEnv* env, jobject claz
         // Deal with the special @null value -- it turns back to TYPE_NULL.
         if (value.dataType == Res_value::TYPE_REFERENCE && value.data == 0) {
             value.dataType = Res_value::TYPE_NULL;
+        }
+
+        // One final test for a resource redirection from the applied theme.
+        if (resid != 0) {
+            uint32_t redirect = res.lookupRedirectionMap(resid);
+            if (redirect != 0) {
+                REDIRECT_NOISY(LOGW("array REDIRECT FROM resid=0x%08x TO redirect=0x%08x\n", resid, redirect));
+                block = res.getResource(redirect, &value, false, &typeSetFlags, &config);
+                block = res.resolveReference(&value, block, &redirect);
+                resid = redirect;
+            }
         }
 
         //printf("Attribute 0x%08x: final type=0x%x, data=0x%08x\n", curIdent, value.dataType, value.data);
@@ -1723,6 +1767,38 @@ static jint android_content_AssetManager_getGlobalAssetManagerCount(JNIEnv* env,
     return AssetManager::getGlobalCount();
 }
 
+static void android_content_AssetManager_setThemePackageName(JNIEnv* env, jobject clazz,
+            jstring packageName)
+{
+    AssetManager* am = assetManagerForJavaObject(env, clazz);
+    if (am == NULL) {
+        return;
+    }
+
+    if (packageName != NULL) {
+        const char* packageName8 = env->GetStringUTFChars(packageName, NULL);
+        am->setThemePackageName(packageName8);
+        env->ReleaseStringUTFChars(packageName, packageName8);
+    } else {
+        am->setThemePackageName(NULL);
+    }
+}
+
+static jstring android_content_AssetManager_getThemePackageName(JNIEnv* env, jobject clazz)
+{
+    AssetManager* am = assetManagerForJavaObject(env, clazz);
+    if (am == NULL) {
+        return NULL;
+    }
+
+    const char* packageName = am->getThemePackageName();
+    if (packageName == NULL) {
+        return NULL;
+    }
+
+    return env->NewStringUTF(packageName);
+}
+
 static jboolean android_content_AssetManager_removeAssetPath(JNIEnv* env, jobject clazz,
             jstring packageName, jstring path)
 {
@@ -1891,6 +1967,11 @@ static JNINativeMethod gAssetManagerMethods[] = {
     { "splitThemePackage","(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/String;)I",
         (void*) android_content_AssetManager_splitThemePackage },
 
+    // Dynamic theme package support.
+    { "setThemePackageName", "(Ljava/lang/String;)V",
+        (void*) android_content_AssetManager_setThemePackageName },
+    { "getThemePackageName", "()Ljava/lang/String;",
+        (void*) android_content_AssetManager_getThemePackageName },
     { "removeAssetPath", "(Ljava/lang/String;Ljava/lang/String;)Z",
         (void*) android_content_AssetManager_removeAssetPath },
     { "updateResourcesWithAssetPath",   "(Ljava/lang/String;)I",
