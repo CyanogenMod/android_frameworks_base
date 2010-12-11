@@ -993,7 +993,7 @@ void CameraService::Client::handleShutter(
 {
     // Play shutter sound.
 
-    if(playShutterSoundOnly) {
+    if(true) {
 
         if (mMediaPlayerClick.get() != NULL) {
             // do not play shutter sound if stream volume is 0
