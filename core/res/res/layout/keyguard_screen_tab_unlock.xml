@@ -243,5 +243,55 @@
             android:background="@color/transparent"
             android:visibility="gone"
             />
+
+	<!-- black music control buttons -->
+        <ImageButton
+            android:id="@+id/musicControlPlaycust"
+            android:src="@drawable/ic_media_play_cust"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dip"
+            android:padding="10px"
+            android:background="@color/transparent"
+            android:visibility="gone"
+            />
+        <ImageButton
+            android:id="@+id/musicControlPausecust"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_media_pause_cust"
+            android:layout_centerInParent="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dip"
+            android:padding="10px"
+            android:background="@color/transparent"
+            android:visibility="gone"
+            />
+        <ImageButton
+            android:id="@+id/musicControlPreviouscust"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_media_previous_cust"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dip"
+            android:padding="10px"
+            android:layout_toLeftOf="@+id/musicControlPausecust"
+            android:background="@color/transparent"
+            android:visibility="gone"
+            />
+        <ImageButton
+            android:id="@+id/musicControlNextcust"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_media_next_cust"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dip"
+            android:padding="10px"
+            android:layout_toRightOf="@+id/musicControlPausecust"
+            android:background="@color/transparent"
+            android:visibility="gone"
+            />
     </RelativeLayout>
 </android.gesture.GestureOverlayView>
