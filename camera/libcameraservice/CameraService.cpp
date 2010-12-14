@@ -985,39 +985,32 @@ status_t CameraService::Client::takePicture()
 
 // snapshot taken
 void CameraService::Client::handleShutter(
-    image_rect_type *size, // The width and height of yuv picture for
+    image_rect_type *size // The width and height of yuv picture for
                           // registerBuffer. If this is NULL, use the picture
                           // size from parameters.
-   bool playShutterSoundOnly
 )
 {
     // Play shutter sound.
-
-    if(playShutterSoundOnly) {
-
-        if (mMediaPlayerClick.get() != NULL) {
-            // do not play shutter sound if stream volume is 0
-            // (typically because ringer mode is silent).
-            int index;
-            AudioSystem::getStreamVolumeIndex(AudioSystem::ENFORCED_AUDIBLE, &index);
-            if (index != 0) {
-                mMediaPlayerClick->seekTo(0);
-                mMediaPlayerClick->start();
-            }
+    if (mMediaPlayerClick.get() != NULL) {
+        // do not play shutter sound if stream volume is 0
+        // (typically because ringer mode is silent).
+        int index;
+        AudioSystem::getStreamVolumeIndex(AudioSystem::ENFORCED_AUDIBLE, &index);
+        if (index != 0) {
+            mMediaPlayerClick->seekTo(0);
+            mMediaPlayerClick->start();
         }
-        sp<ICameraClient> c = mCameraClient;
-        if (c != NULL) {
-            c->notifyCallback(CAMERA_MSG_SHUTTER, 0, 0);
-        }
-        return ;
     }
-
 
     // Screen goes black after the buffer is unregistered.
     if (mSurface != 0 && !mUseOverlay) {
         mSurface->unregisterBuffers();
     }
 
+    sp<ICameraClient> c = mCameraClient;
+    if (c != NULL) {
+        c->notifyCallback(CAMERA_MSG_SHUTTER, 0, 0);
+    }
     mHardware->disableMsgType(CAMERA_MSG_SHUTTER);
 
     // It takes some time before yuvPicture callback to be called.
@@ -1192,7 +1185,7 @@ void CameraService::Client::notifyCallback(int32_t msgType, int32_t ext1, int32_
     switch (msgType) {
         case CAMERA_MSG_SHUTTER:
             // ext1 is the dimension of the yuv picture.
-            client->handleShutter((image_rect_type *)ext1, (bool)ext2);
+            client->handleShutter((image_rect_type *)ext1);
             break;
         default:
             sp<ICameraClient> c = client->mCameraClient;
