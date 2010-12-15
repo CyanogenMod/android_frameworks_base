@@ -2254,8 +2254,14 @@ public final class Settings {
         public static final String LOCKSCREEN_MESSAGING_TAB_APP = "lockscreen_messaging_tab_app";
 
         /**
+         * Sets the lockscreen style
+         * @hide
+         */
+        public static final String LOCKSCREEN_STYLE_PREF = "lockscreen_style_pref";
+
+        /**
          * Whether to use a custom pull-down notification screen
-         * @hide 
+         * @hide
          */
         public static final String NOTIF_EXPANDED_BAR_COLOR = "notif_expanded_bar_color";
 
