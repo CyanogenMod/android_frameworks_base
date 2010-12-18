@@ -1292,4 +1292,31 @@ status_t CameraService::dump(int fd, const Vector<String16>& args) {
     return NO_ERROR;
 }
 
+#ifdef BOARD_USE_FROYO_LIBCAMERA
+static CameraInfo sCameraInfo[] = {
+    {
+        CAMERA_FACING_BACK,
+        90,  /* orientation */
+    }
+};
+
+extern "C" int HAL_getNumberOfCameras()
+{
+    return sizeof(sCameraInfo) / sizeof(sCameraInfo[0]);
+}
+
+extern "C" void HAL_getCameraInfo(int cameraId, struct CameraInfo* cameraInfo)
+{
+    memcpy(cameraInfo, &sCameraInfo[cameraId], sizeof(CameraInfo));
+}
+
+extern "C" sp<CameraHardwareInterface> openCameraHardware(int cameraId);
+
+extern "C" sp<CameraHardwareInterface> HAL_openCameraHardware(int cameraId)
+{
+    LOGV("openCameraHardware: call createInstance");
+    return openCameraHardware(cameraId);
+}
+#endif
+
 }; // namespace android
