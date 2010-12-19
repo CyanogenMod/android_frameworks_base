@@ -481,6 +481,8 @@ status_t MPEG4Extractor::parseChunk(off_t *offset, int depth) {
         return OK;
     }
 
+    LOGV("parsing chunk %c%c%c%c at depth %d", ((char *)&chunk_type)[3], ((char *)&chunk_type)[2], ((char *)&chunk_type)[1], ((char *)&chunk_type)[0], depth);
+
     switch(chunk_type) {
         case FOURCC('m', 'o', 'o', 'v'):
         case FOURCC('t', 'r', 'a', 'k'):
@@ -1040,7 +1042,8 @@ status_t MPEG4Extractor::parseChunk(off_t *offset, int depth) {
             *offset += chunk_size;
             break;
         }
-
+        case FOURCC('s', 'k', 'i' ,'p'):
+        //fall through; we can completely ignore this atom
         default:
         {
             *offset += chunk_size;
