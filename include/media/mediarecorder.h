@@ -191,6 +191,7 @@ public:
     status_t    close();
     status_t    release();
     void        notify(int msg, int ext1, int ext2);
+    status_t    setCameraParameters(const String8& params);
 
 private:
     void                    doCleanUp();

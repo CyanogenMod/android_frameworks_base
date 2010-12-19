@@ -46,6 +46,7 @@ enum {
     SET_VIDEO_SIZE,
     SET_VIDEO_FRAMERATE,
     SET_PARAMETERS,
+    SET_CAMERA_PARAMETERS,
     SET_PREVIEW_SURFACE,
     SET_CAMERA,
     SET_LISTENER
@@ -187,6 +188,16 @@ public:
         data.writeInterfaceToken(IMediaRecorder::getInterfaceDescriptor());
         data.writeString8(params);
         remote()->transact(SET_PARAMETERS, data, &reply);
+        return reply.readInt32();
+    }
+
+    status_t setCameraParameters(const String8& params)
+    {
+        LOGV("setCameraParameter(%s)", params.string());
+        Parcel data, reply;
+        data.writeInterfaceToken(IMediaRecorder::getInterfaceDescriptor());
+        data.writeString8(params);
+        remote()->transact(SET_CAMERA_PARAMETERS, data, &reply);
         return reply.readInt32();
     }
 
@@ -396,6 +407,12 @@ status_t BnMediaRecorder::onTransact(
             LOGV("SET_PARAMETER");
             CHECK_INTERFACE(IMediaRecorder, data, reply);
             reply->writeInt32(setParameters(data.readString8()));
+            return NO_ERROR;
+        } break;
+        case SET_CAMERA_PARAMETERS: {
+            LOGV("SET_CAMERA_PARAMETER");
+            CHECK_INTERFACE(IMediaRecorder, data, reply);
+            reply->writeInt32(setCameraParameters(data.readString8()));
             return NO_ERROR;
         } break;
         case SET_LISTENER: {
