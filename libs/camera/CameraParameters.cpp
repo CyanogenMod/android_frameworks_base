@@ -32,6 +32,10 @@ const char CameraParameters::KEY_PREVIEW_FRAME_RATE[] = "preview-frame-rate";
 const char CameraParameters::KEY_SUPPORTED_PREVIEW_FRAME_RATES[] = "preview-frame-rate-values";
 const char CameraParameters::KEY_PREVIEW_FPS_RANGE[] = "preview-fps-range";
 const char CameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE[] = "preview-fps-range-values";
+const char CameraParameters::KEY_PREVIEW_FRAME_RATE_MODE[] = "preview-frame-rate-mode";
+const char CameraParameters::KEY_SUPPORTED_PREVIEW_FRAME_RATE_MODES[] = "preview-frame-rate-modes";
+const char CameraParameters::KEY_PREVIEW_FRAME_RATE_AUTO_MODE[] = "frame-rate-auto";
+const char CameraParameters::KEY_PREVIEW_FRAME_RATE_FIXED_MODE[] = "frame-rate-fixed";
 const char CameraParameters::KEY_PICTURE_SIZE[] = "picture-size";
 const char CameraParameters::KEY_SUPPORTED_PICTURE_SIZES[] = "picture-size-values";
 const char CameraParameters::KEY_PICTURE_FORMAT[] = "picture-format";
@@ -402,6 +406,16 @@ void CameraParameters::getPreviewFpsRange(int *min_fps, int *max_fps) const
     const char *p = get(KEY_PREVIEW_FPS_RANGE);
     if (p == 0) return;
     parse_pair(p, min_fps, max_fps, ',');
+}
+
+void CameraParameters::setPreviewFrameRateMode(const char *mode)
+{
+    set(KEY_PREVIEW_FRAME_RATE_MODE, mode);
+}
+
+const char *CameraParameters::getPreviewFrameRateMode() const
+{
+    return get(KEY_PREVIEW_FRAME_RATE_MODE);
 }
 
 void CameraParameters::setPreviewFormat(const char *format)
