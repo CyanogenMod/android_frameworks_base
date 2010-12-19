@@ -993,6 +993,9 @@ public class Camera {
         private static final String KEY_PREVIEW_FORMAT = "preview-format";
         private static final String KEY_PREVIEW_FRAME_RATE = "preview-frame-rate";
         private static final String KEY_PREVIEW_FPS_RANGE = "preview-fps-range";
+        private static final String KEY_PREVIEW_FRAME_RATE_MODE = "preview-frame-rate-mode";
+        private static final String KEY_PREVIEW_FRAME_RATE_AUTO_MODE = "frame-rate-auto";
+        private static final String KEY_PREVIEW_FRAME_RATE_FIXED_MODE = "frame-rate-fixed";
         private static final String KEY_PICTURE_SIZE = "picture-size";
         private static final String KEY_PICTURE_FORMAT = "picture-format";
         private static final String KEY_JPEG_THUMBNAIL_SIZE = "jpeg-thumbnail-size";
@@ -2205,6 +2208,36 @@ public class Camera {
          */
         public List<String> getSupportedAntibanding() {
             String str = get(KEY_ANTIBANDING + SUPPORTED_VALUES_SUFFIX);
+            return split(str);
+        }
+
+        /**
+         * Gets the frame rate mode setting.
+         *
+         * @return one of FRAME_RATE_XXX_MODE string constant. null if this
+         *         setting is not supported.
+         */
+        public String getPreviewFrameRateMode() {
+            return get(KEY_PREVIEW_FRAME_RATE_MODE);
+        }
+
+        /**
+         * Sets the frame rate mode.
+         *
+         * @param value FRAME_RATE_XXX_MODE string constants.
+         */
+        public void setPreviewFrameRateMode(String value) {
+            set(KEY_PREVIEW_FRAME_RATE_MODE, value);
+        }
+
+        /**
+         * Gets the supported frame rate modes.
+         *
+         * @return a List of FRAME_RATE_XXX_MODE string constant. null if this
+         *         setting is not supported.
+         */
+        public List<String> getSupportedPreviewFrameRateModes() {
+            String str = get(KEY_PREVIEW_FRAME_RATE_MODE + SUPPORTED_VALUES_SUFFIX);
             return split(str);
         }
 
