@@ -41,6 +41,7 @@ public:
     virtual     status_t        setVideoFrameRate(int frames_per_second);
     virtual     status_t        setParameters(const String8& params);
     virtual     status_t        setListener(const sp<IMediaRecorderClient>& listener);
+    virtual     status_t        setCameraParameters(const String8& params);
     virtual     status_t        prepare();
     virtual     status_t        getMaxAmplitude(int* max);
     virtual     status_t        start();
