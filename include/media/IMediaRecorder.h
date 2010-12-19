@@ -52,6 +52,7 @@ public:
     virtual status_t        init() = 0;
     virtual status_t        close() = 0;
     virtual	status_t		release() = 0;
+    virtual     status_t                setCameraParameters(const String8& params) = 0;
 };
 
 // ----------------------------------------------------------------------------
