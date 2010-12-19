@@ -73,6 +73,8 @@ void Harness::onMessage(const omx_message &msg) {
     mMessageAddedCondition.signal();
 }
 
+void Harness::registerBuffers(const sp<IMemoryHeap> &mem) {
+}
 status_t Harness::dequeueMessageForNode(
         IOMX::node_id node, omx_message *msg, int64_t timeoutUs) {
     return dequeueMessageForNodeIgnoringBuffers(

@@ -55,6 +55,7 @@ public:
     // Increments the reference count.
     void add_ref();
 
+    void setData(void *);
     void *data() const;
     size_t size() const;
 

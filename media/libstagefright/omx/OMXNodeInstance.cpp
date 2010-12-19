@@ -27,9 +27,10 @@
 #endif
 
 #include <binder/IMemory.h>
+#include <binder/MemoryHeapBase.h>
+#include <binder/MemoryHeapPmem.h>
 #include <media/stagefright/MediaDebug.h>
 #include <media/stagefright/MediaErrors.h>
-
 namespace android {
 
 struct BufferMeta {
@@ -67,6 +68,7 @@ private:
     sp<IMemory> mMem;
     size_t mSize;
     bool mIsBackup;
+    char *mBase;
 
     BufferMeta(const BufferMeta &);
     BufferMeta &operator=(const BufferMeta &);
@@ -83,7 +85,8 @@ OMXNodeInstance::OMXNodeInstance(
       mNodeID(NULL),
       mHandle(NULL),
       mObserver(observer),
-      mDying(false) {
+      mDying(false),
+      pmem_registered_with_client(false){
 }
 
 OMXNodeInstance::~OMXNodeInstance() {
@@ -181,6 +184,10 @@ status_t OMXNodeInstance::freeNode(OMXMaster *master) {
             break;
     }
 
+    if(true == pmem_registered_with_client) {
+      mObserver->registerBuffers(NULL);
+      pmem_registered_with_client = false;
+    }
     OMX_ERRORTYPE err = master->destroyComponentInstance(
             static_cast<OMX_COMPONENTTYPE *>(mHandle));
 
@@ -427,7 +434,34 @@ void OMXNodeInstance::onMessage(const omx_message &msg) {
 
         BufferMeta *buffer_meta =
             static_cast<BufferMeta *>(buffer->pAppPrivate);
-
+        PLATFORM_PRIVATE_LIST *pPlatfromList = (PLATFORM_PRIVATE_LIST *)buffer->pPlatformPrivate;
+        PLATFORM_PRIVATE_ENTRY *pPlatformEntry;
+        PLATFORM_PRIVATE_PMEM_INFO *pPMEMInfo;
+        if(pPlatfromList && (false == pmem_registered_with_client)) {
+        sp<IMemoryHeap> mMem;
+        sp<MemoryHeapBase> master = NULL;
+            for(size_t i=0; i<pPlatfromList->nEntries; i++) {
+               if(pPlatfromList->entryList->type == PLATFORM_PRIVATE_PMEM)
+               {
+                  pPlatformEntry = (PLATFORM_PRIVATE_ENTRY *)pPlatfromList->entryList;
+                  pPMEMInfo = (PLATFORM_PRIVATE_PMEM_INFO *)pPlatformEntry->entry;
+                  if(pPMEMInfo) {
+                     master = (MemoryHeapBase *)pPMEMInfo->pmem_fd;
+                  }
+                  break;
+               }
+            }
+            if(master != NULL) {
+                master->setDevice("/dev/pmem_adsp");
+                uint32_t heap_flags = master->getFlags() & MemoryHeapBase::NO_CACHING;
+                sp<MemoryHeapPmem> heap = new MemoryHeapPmem(master, heap_flags);
+                heap->slap();
+                mMem = interface_cast<IMemoryHeap>(heap);
+                mBase = (OMX_U8 *)mMem->getBase();
+                mObserver->registerBuffers(mMem);
+                pmem_registered_with_client = true;
+            }
+        }
         buffer_meta->CopyFromOMX(buffer);
     }
 
@@ -456,6 +490,15 @@ OMX_ERRORTYPE OMXNodeInstance::OnEvent(
     OMXNodeInstance *instance = static_cast<OMXNodeInstance *>(pAppData);
     if (instance->mDying) {
         return OMX_ErrorNone;
+    }
+    if(eEvent == OMX_EventCmdComplete && nData1 == OMX_CommandPortDisable && nData2 == 1) {
+      /*This is needed to clear the reference on pmem fd.
+       * If this is skipped then we will see pmem leak.
+       */
+      if(true == instance->pmem_registered_with_client) {
+        instance->mObserver->registerBuffers(NULL);
+        instance->pmem_registered_with_client = false;
+      }
     }
     return instance->owner()->OnEvent(
             instance->nodeID(), eEvent, nData1, nData2, pEventData);

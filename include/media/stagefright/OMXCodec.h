@@ -60,6 +60,8 @@ struct OMXCodec : public MediaSource,
 
     virtual status_t pause();
 
+    void registerBuffers(const sp<IMemoryHeap> &mem);
+
     // from MediaBufferObserver
     virtual void signalBufferReturned(MediaBuffer *buffer);
 
@@ -116,6 +118,7 @@ private:
         kOutputBuffersAreUnreadable           = 8192,
         kStoreMetaDataInInputVideoBuffers     = 16384,
         kCanNotSetVideoParameters             = 32768,
+        kDoesNotRequireMemcpyOnOutputPort     = 65536
     };
 
     struct BufferInfo {
@@ -143,7 +146,7 @@ private:
     sp<MediaSource> mSource;
     Vector<CodecSpecificData *> mCodecSpecificData;
     size_t mCodecSpecificDataIndex;
-
+    sp<IMemoryHeap> mPmemInfo;
     sp<MemoryDealer> mDealer[2];
 
     State mState;

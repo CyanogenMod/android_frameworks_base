@@ -82,11 +82,14 @@ struct OMXNodeInstance {
 private:
     Mutex mLock;
 
+    bool pmem_registered_with_client;
+
     OMX *mOwner;
     OMX::node_id mNodeID;
     OMX_HANDLETYPE mHandle;
     sp<IOMXObserver> mObserver;
     bool mDying;
+    OMX_U8* mBase;
 
     struct ActiveBuffer {
         OMX_U32 mPortIndex;
