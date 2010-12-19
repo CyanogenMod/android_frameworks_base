@@ -87,7 +87,10 @@ void OMXMaster::addPlugin(OMXPluginBase *plugin) {
 
         mPluginByComponentName.add(name8, plugin);
     }
+
+#if !defined( TARGET_OMAP3)
     CHECK_EQ(err, OMX_ErrorNoMore);
+#endif
 }
 
 void OMXMaster::clearPlugins() {
