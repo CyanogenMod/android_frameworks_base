@@ -2011,7 +2011,10 @@ void OMXCodec::onEvent(OMX_EVENTTYPE event, OMX_U32 data1, OMX_U32 data2) {
 
         case OMX_EventPortSettingsChanged:
         {
-            onPortSettingsChanged(data1);
+            if(mState == EXECUTING)
+              onPortSettingsChanged(data1);
+            else
+              LOGE("Ignore PortSettingsChanged event \n");
             break;
         }
 
