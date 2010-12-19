@@ -73,7 +73,7 @@ AudioPolicyService::AudioPolicyService()
     // start audio commands thread
     mAudioCommandThread = new AudioCommandThread(String8("ApmCommandThread"));
 
-#if (defined GENERIC_AUDIO) || (defined AUDIO_POLICY_TEST)
+#if defined(GENERIC_AUDIO) || defined(AUDIO_POLICY_TEST)
     mpPolicyManager = new AudioPolicyManagerBase(this);
     LOGV("build for GENERIC_AUDIO - using generic audio policy");
 #else
