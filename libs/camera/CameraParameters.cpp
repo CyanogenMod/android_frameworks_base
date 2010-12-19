@@ -58,6 +58,7 @@ const char CameraParameters::KEY_SUPPORTED_EFFECTS[] = "effect-values";
 const char CameraParameters::KEY_TOUCH_AF_AEC[] = "touch-af-aec";
 const char CameraParameters::KEY_SUPPORTED_TOUCH_AF_AEC[] = "touch-af-aec-values";
 const char CameraParameters::KEY_TOUCH_INDEX_AEC[] = "touch-index-aec";
+const char CameraParameters::KEY_TOUCH_INDEX_AF[] = "touch-index-af";
 const char CameraParameters::KEY_ANTIBANDING[] = "antibanding";
 const char CameraParameters::KEY_SUPPORTED_ANTIBANDING[] = "antibanding-values";
 const char CameraParameters::KEY_SCENE_MODE[] = "scene-mode";
@@ -492,6 +493,30 @@ void CameraParameters::getTouchIndexAec(int *x, int *y) const
 
     // Get the current string, if it doesn't exist, leave the -1x-1
     const char *p = get(KEY_TOUCH_INDEX_AEC);
+    if (p == 0)
+        return;
+
+    int tempX, tempY;
+    if (parse_pair(p, &tempX, &tempY, 'x') == 0) {
+        *x = tempX;
+        *y = tempY;
+    }
+}
+
+void CameraParameters::setTouchIndexAf(int x, int y)
+{
+    char str[32];
+    sprintf(str, "%dx%d", x, y);
+    set(KEY_TOUCH_INDEX_AF, str);
+}
+
+void CameraParameters::getTouchIndexAf(int *x, int *y) const
+{
+    *x = -1;
+    *y = -1;
+
+    // Get the current string, if it doesn't exist, leave the -1x-1
+    const char *p = get(KEY_TOUCH_INDEX_AF);
     if (p == 0)
         return;
 

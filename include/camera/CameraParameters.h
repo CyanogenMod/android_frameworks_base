@@ -73,6 +73,8 @@ public:
     const char *getPictureFormat() const;
     void setTouchIndexAec(int x, int y);
     void getTouchIndexAec(int *x, int *y) const;
+    void setTouchIndexAf(int x, int y);
+    void getTouchIndexAf(int *x, int *y) const;
 
     void dump() const;
     status_t dump(int fd, const Vector<String16>& args) const;
@@ -233,6 +235,8 @@ public:
     static const char KEY_SUPPORTED_TOUCH_AF_AEC[];
     //Touch Index for AEC.
     static const char KEY_TOUCH_INDEX_AEC[];
+    //Touch Index for AF.
+    static const char KEY_TOUCH_INDEX_AF[];
     // Current antibanding setting.
     // Example value: "auto" or ANTIBANDING_XXX constants. Read/write.
     static const char KEY_ANTIBANDING[];
