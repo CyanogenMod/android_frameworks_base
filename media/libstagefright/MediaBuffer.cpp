@@ -91,6 +91,10 @@ void MediaBuffer::add_ref() {
     atomic_add(&mRefCount, 1);
 }
 
+void MediaBuffer::setData(void *data) {
+    mData = data;
+}
+
 void *MediaBuffer::data() const {
     return mData;
 }

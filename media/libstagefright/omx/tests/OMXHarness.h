@@ -75,6 +75,7 @@ struct Harness : public BnOMXObserver {
     status_t testAll();
 
     virtual void onMessage(const omx_message &msg);
+    virtual void registerBuffers(const sp<IMemoryHeap> &mem);
 
 protected:
     virtual ~Harness();
