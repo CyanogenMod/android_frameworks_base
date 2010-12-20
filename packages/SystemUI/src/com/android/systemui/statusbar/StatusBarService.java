@@ -984,6 +984,10 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
             return false;
         }
 
+        if (!mTrackingView.mIsAttachedToWindow) {
+            return false;
+        }
+
         final int statusBarSize = mStatusBarView.getHeight();
         final int hitSize = statusBarSize*2;
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
