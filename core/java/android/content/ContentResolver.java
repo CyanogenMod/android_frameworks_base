@@ -206,6 +206,7 @@ public abstract class ContentResolver {
             } catch (RemoteException e) {
                 return null;
             } catch (java.lang.Exception e) {
+                Log.w(TAG, "Failed to get type for: " + url + " (" + e.getMessage() + ")");
                 return null;
             } finally {
                 releaseProvider(provider);
@@ -220,6 +221,9 @@ public abstract class ContentResolver {
             String type = ActivityManagerNative.getDefault().getProviderMimeType(url);
             return type;
         } catch (RemoteException e) {
+            return null;
+        } catch (java.lang.Exception e) {
+            Log.w(TAG, "Failed to get type for: " + url + " (" + e.getMessage() + ")");
             return null;
         }
     }
