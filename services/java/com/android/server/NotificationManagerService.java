@@ -442,7 +442,7 @@ class NotificationManagerService extends INotificationManager.Stub {
                     }
                 } else {
                     int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(),
-                            Settings.System.TRACKBALL_SCREEN_ON, 0);
+                            Settings.System.TRACKBALL_SCREEN_ON, 1);
                     if (mPulseScreen == 0) { // Why bother if we are going to pulse
                                              // anyways?
                         updateNotificationPulse();
@@ -457,7 +457,7 @@ class NotificationManagerService extends INotificationManager.Stub {
                     }
                 } else {
                     int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(),
-                            Settings.System.TRACKBALL_SCREEN_ON, 0);
+                            Settings.System.TRACKBALL_SCREEN_ON, 1);
                     if (mPulseScreen == 0) { // Why bother if we are going to pulse
                                              // anyways?
                         updateNotificationPulse();
@@ -1399,7 +1399,7 @@ class NotificationManagerService extends INotificationManager.Stub {
     private void updateRGBLightsLocked() {
         boolean SHOLES_DEVICE = Build.DEVICE.contains("sholes");
         int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.TRACKBALL_SCREEN_ON, 0);
+                Settings.System.TRACKBALL_SCREEN_ON, 1);
         int mSuccession = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.TRACKBALL_NOTIFICATION_SUCCESSION, 0);
         int mRandomColor = Settings.System.getInt(mContext.getContentResolver(),
