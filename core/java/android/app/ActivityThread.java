@@ -270,8 +270,10 @@ public final class ActivityThread {
         PackageInfo pi = getPackageInfo(theme.getThemePackageName(), 0);
         if (pi != null) {
             String themeResDir = pi.getResDir();
-            if (assets.addAssetPath(themeResDir) != 0) {
+            int cookie = assets.addAssetPath(themeResDir);
+            if (cookie != 0) {
                 assets.setThemePackageName(theme.getThemePackageName());
+                assets.setThemeCookie(cookie);
                 return true;
             } else {
                 Log.e(TAG, "Unable to add theme resdir=" + themeResDir);
@@ -4047,16 +4049,18 @@ public final class ActivityThread {
                      */
                     if (am.hasThemeSupport()) {
                         String oldThemePackage = am.getThemePackageName();
-                        if (!TextUtils.isEmpty(oldThemePackage)) {
+                        int themeCookie = am.getThemeCookie();
+                        if (!TextUtils.isEmpty(oldThemePackage) && themeCookie != 0) {
                             am.setThemePackageName(null);
-                            am.removeAssetPath(oldThemePackage,
-                                    getPackageResDir(oldThemePackage));
+                            am.removeAssetPath(oldThemePackage, themeCookie);
+                            am.setThemeCookie(0);
                         }
                         String newThemePackage = config.customTheme.getThemePackageName();
                         String resDir = getPackageResDir(newThemePackage);
                         if (resDir != null) {
                             am.setThemePackageName(newThemePackage);
-                            am.updateResourcesWithAssetPath(resDir);
+                            int newCookie = am.updateResourcesWithAssetPath(resDir);
+                            am.setThemeCookie(newCookie);
                         }
                     }
                 }

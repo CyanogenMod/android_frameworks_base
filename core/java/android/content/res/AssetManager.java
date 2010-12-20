@@ -82,6 +82,7 @@ public final class AssetManager {
     private String mAppName;
 
     private boolean mThemeSupport;
+    private int mThemeCookie;
 
     /**
      * Create a new AssetManager containing only the basic system assets.
@@ -647,12 +648,11 @@ public final class AssetManager {
     }
 
     /**
-     * Delete a set of assets from the asset manager.  This can be
-     * either a directory or ZIP file.  Not for use by applications.  Returns
-     * true if succeeded or false on failure.
-     * {@hide}
+     * Delete a set of assets from the asset manager. Not for use by
+     * applications. Returns true if succeeded or false on failure. {@hide
+     * }
      */
-    public native final boolean removeAssetPath(String packageName, String path);
+    public native final boolean removeAssetPath(String packageName, int cookie);
 
     /**
      * Add an additional set of assets to the asset manager.  This can be
@@ -701,6 +701,22 @@ public final class AssetManager {
      * {@hide}
      */
     public native final void setThemePackageName(String packageName);
+
+    /**
+     * Get asset cookie for current theme (may return 0).
+     * {@hide}
+     */
+    public int getThemeCookie() {
+        return mThemeCookie;
+    }
+
+    /**
+     * Sets asset cookie for current theme (0 if not a themed asset manager).
+     * {@hide}
+     */
+    public void setThemeCookie(int cookie) {
+        mThemeCookie = cookie;
+    }
 
     /**
      * Determine whether the state in this asset manager is up-to-date with

@@ -1800,9 +1800,9 @@ static jstring android_content_AssetManager_getThemePackageName(JNIEnv* env, job
 }
 
 static jboolean android_content_AssetManager_removeAssetPath(JNIEnv* env, jobject clazz,
-            jstring packageName, jstring path)
+            jstring packageName, jint cookie)
 {
-    if (path == NULL) {
+    if (packageName == NULL) {
         doThrow(env, "java/lang/NullPointerException");
         return JNI_FALSE;
     }
@@ -1813,9 +1813,7 @@ static jboolean android_content_AssetManager_removeAssetPath(JNIEnv* env, jobjec
     }
 
     const char* name8 = env->GetStringUTFChars(packageName, NULL);
-    const char* path8 = env->GetStringUTFChars(path, NULL);
-    bool res = am->removeAssetPath(String8(name8), String8(path8));
-    env->ReleaseStringUTFChars(path, path8);
+    bool res = am->removeAssetPath(String8(name8), (void *)cookie);
     env->ReleaseStringUTFChars(packageName, name8);
 
     return res;
@@ -1972,7 +1970,7 @@ static JNINativeMethod gAssetManagerMethods[] = {
         (void*) android_content_AssetManager_setThemePackageName },
     { "getThemePackageName", "()Ljava/lang/String;",
         (void*) android_content_AssetManager_getThemePackageName },
-    { "removeAssetPath", "(Ljava/lang/String;Ljava/lang/String;)Z",
+    { "removeAssetPath", "(Ljava/lang/String;I)Z",
         (void*) android_content_AssetManager_removeAssetPath },
     { "updateResourcesWithAssetPath",   "(Ljava/lang/String;)I",
         (void*) android_content_AssetManager_updateResourcesWithAssetPath },

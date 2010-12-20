@@ -2236,28 +2236,9 @@ bool AssetManager::updateWithAssetPath(const String8& path, void** cookie)
     return res;
 }
 
-bool AssetManager::removeAssetPath(const String8 &packageName, const String8 &assetPath)
+bool AssetManager::removeAssetPath(const String8 &packageName, void* cookie)
 {
     AutoMutex _l(mLock);
-
-    String8 realPath(assetPath);
-    if (kAppZipName) {
-        realPath.appendPath(kAppZipName);
-    }
-
-    // Check if the path exists.
-    size_t cookie = 0;
-    for (size_t i = 0; i < mAssetPaths.size(); i++) {
-        if (strcmp(mAssetPaths[i].path, realPath) == 0) {
-            mAssetPaths.removeAt(i);
-            cookie = i + 1;
-            break;
-        }
-    }
-
-    if (cookie == 0) {
-        return false;
-    }
 
     ResTable* rt = mResources;
     if (rt == NULL) {

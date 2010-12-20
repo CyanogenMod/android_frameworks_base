@@ -202,13 +202,13 @@ public:
     const char* getThemePackageName();
 
     /*
-     * Remove existing source for assets.  It can be either a directory (for
-     * deleting assets as raw files on the disk) or a ZIP file.
-     * Also, updates the ResTable object to reflect the change.
+     * Remove existing source for assets.
+     *
+     * Also updates the ResTable object to reflect the change.
      *
      * Returns "true" on success, "false" on failure.
      */
-    bool removeAssetPath(const String8 &packageName, const String8 &assetPath);
+    bool removeAssetPath(const String8 &packageName, void *cookie);
     bool updateWithAssetPath(const String8& path, void** cookie);
     void dumpRes();
 
