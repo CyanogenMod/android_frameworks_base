@@ -17,12 +17,10 @@
 package android.widget;
 
 import com.android.internal.R;
-import com.android.internal.util.ThemeUtilities;
 
 import android.app.LocalActivityManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.AttributeSet;
@@ -497,14 +495,6 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
      */
     private class LabelIndicatorStrategy implements IndicatorStrategy {
 
-        /**
-         * Attribute that the global theme can use to override the framework
-         * default tab indicator background. This should be removed in favor of
-         * a translation table allowing the theme to simply replace
-         * android.R.drawable.tab_indicator.
-         */
-        private static final String ATTR_TAB_INDICATOR_BACKGROUND = "android_tabIndicatorBackground";
-
         private final CharSequence mLabel;
 
         private LabelIndicatorStrategy(CharSequence label) {
@@ -526,15 +516,6 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
                 // Donut apps get old color scheme
                 tabIndicator.setBackgroundResource(R.drawable.tab_indicator_v4);
                 tv.setTextColor(context.getResources().getColorStateList(R.color.tab_indicator_text_v4));
-            } else {
-                /* Check to see if the theme wants to override the background. */
-                int tabIndicatorAttrId = ThemeUtilities.resolveDefaultStyleAttr(context,
-                        ATTR_TAB_INDICATOR_BACKGROUND, 0);
-                if (tabIndicatorAttrId != 0) {
-                    TypedArray a = context.obtainStyledAttributes(new int[] { tabIndicatorAttrId });
-                    tabIndicator.setBackgroundDrawable(a.getDrawable(0));
-                    a.recycle();
-                }
             }
             
             return tabIndicator;
