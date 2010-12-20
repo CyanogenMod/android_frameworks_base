@@ -46,6 +46,8 @@ public abstract class ServiceStateTracker extends Handler {
     protected static final int DATA_ACCESS_HSPA = 11;
     protected static final int DATA_ACCESS_CDMA_EvDo_B = 12;
 
+    protected static final int DATA_ACCESS_LTE = 13;
+
     protected CommandsInterface cm;
 
     public ServiceState ss;
