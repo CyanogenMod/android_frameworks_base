@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * Copyright (c) 2010, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,6 +92,10 @@ public class ServiceState implements Parcelable {
     public static final int RADIO_TECHNOLOGY_HSPA = 11;
     /** @hide */
     public static final int RADIO_TECHNOLOGY_EVDO_B = 12;
+    /** @hide */
+    public static final int RADIO_TECHNOLOGY_EHRPD = 13;
+    /** @hide */
+    public static final int RADIO_TECHNOLOGY_LTE = 14;
 
     /**
      * Available registration states for GSM, UMTS and CDMA.
@@ -423,6 +428,12 @@ public class ServiceState implements Parcelable {
             break;
         case 12:
             radioTechnology = "EvDo rev. B";
+            break;
+        case RADIO_TECHNOLOGY_EHRPD:
+            radioTechnology = "EHRPD";
+            break;
+        case RADIO_TECHNOLOGY_LTE:
+            radioTechnology = "LTE";
             break;
         default:
             Log.w(LOG_TAG, "mRadioTechnology variable out of range.");
