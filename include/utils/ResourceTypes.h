@@ -1992,6 +1992,7 @@ public:
 
 #ifndef HAVE_ANDROID_OS
     void print(bool inclValues) const;
+    static String8 normalizeForOutput(const char* input);
 #endif
 
 private:
