@@ -69,7 +69,6 @@ public:
     // passed in.
     bool                enforceInterface(const String16& interface,
                                          IPCThreadState* threadState = NULL) const;
-    bool                enforceInterface(const String16& interface) const;
     bool                checkInterface(IBinder*) const;
 
     void                freeData();
