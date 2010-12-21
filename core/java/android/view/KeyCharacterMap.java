@@ -60,11 +60,13 @@ public class KeyCharacterMap
 
     /**
      * Private use character denoting a .com suffix
+     * @hide
      */
     public static final char DOT_COM_INPUT = '\uEF03';
 
     /**
      * Private use character denoting a www. prefix
+     * @hide
      */
     public static final char DOT_WWW_INPUT = '\uEF04';
 

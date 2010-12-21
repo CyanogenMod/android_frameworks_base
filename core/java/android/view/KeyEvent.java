@@ -332,19 +332,74 @@ public class KeyEvent extends InputEvent implements Parcelable {
      * On a game controller, the button labeled Mode. */
     public static final int KEYCODE_BUTTON_MODE     = 110;
 
+    /**
+     * @hide
+     */
     public static final int KEYCODE_FUNC_1          = 92;
+
+    /**
+     * @hide
+     */
     public static final int KEYCODE_FUNC_2          = 93;
+
+    /**
+     * @hide
+     */
     public static final int KEYCODE_FUNC_3          = 94;
+
+    /**
+     * @hide
+     */
     public static final int KEYCODE_FUNC_4          = 95;
+
+    /**
+     * @hide
+     */
     public static final int KEYCODE_FUNC_5          = 96;
+
+    /**
+     * @hide
+     */
     public static final int KEYCODE_FUNC_6          = 97;
+
+    /**
+     * @hide
+     */
     public static final int KEYCODE_FUNC_7          = 98;
+
+    /**
+     * @hide
+     */
     public static final int KEYCODE_FUNC_8          = 99;
+
+    /**
+     * @hide
+     */
     public static final int KEYCODE_QUECHAR         = 100;
+
+    /**
+     * @hide
+     */
     public static final int KEYCODE_USER1           = 92;
+
+    /**
+     * @hide
+     */
     public static final int KEYCODE_USER2           = 93;
+
+    /**
+     * @hide
+     */
     public static final int KEYCODE_USER3           = 94;
+
+    /**
+     * @hide
+     */
     public static final int KEYCODE_USER4           = 95;
+
+    /**
+     * @hide
+     */
     public static final int KEYCODE_USER5           = 96;
 
     // NOTE: If you add a new keycode here you must also add it to:
