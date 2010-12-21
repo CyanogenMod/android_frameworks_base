@@ -1,6 +1,5 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
- * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +16,9 @@
 
 package android.view;
 
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.AssetManager;
-import android.content.res.Configuration;
 import android.content.res.Resources;
-import android.text.TextUtils;
-import android.util.DisplayMetrics;
 
 /**
  * A ContextWrapper that allows you to modify the theme from what is in the 
@@ -37,11 +29,6 @@ public class ContextThemeWrapper extends ContextWrapper {
     private int mThemeResource;
     private Resources.Theme mTheme;
     private LayoutInflater mInflater;
-    
-    /* XXX: Hack to allow themes to be applied on a per-activity basis.  Used
-     * by ThemeManager for real-time theme preview. */
-    private boolean mUseThemedResources = false;
-    private Resources mThemedResources = null;
 
     public ContextThemeWrapper() {
         super(null);
@@ -57,67 +44,12 @@ public class ContextThemeWrapper extends ContextWrapper {
         super.attachBaseContext(newBase);
         mBase = newBase;
     }
-
-    @Override
-    public AssetManager getAssets() {
-        return getResources().getAssets();
-    }
-
-    @Override
-    public Resources getResources() {
-        if (mUseThemedResources == true) {
-            return mThemedResources;
-        } else {
-            return mBase.getResources();
-        }
-    }
-    
-    private String getPackageResDir(String packageName) {
-        PackageInfo pi;
-        try {
-            pi = getPackageManager().getPackageInfo(packageName, 0);
-            if (pi == null || pi.applicationInfo == null)
-                return null;
-            return pi.applicationInfo.publicSourceDir;
-        } catch (NameNotFoundException e) {
-            return null;
-        }
-    }
-
-    /**
-     * {@hide}
-     * XXX: Hack to support theme preview by temporarily overriding the ApplicationContext's
-     * Resources on a per-activity basis.  Very ugly.
-     */
-    public void useThemedResources(String themePackage) {
-        if (TextUtils.isEmpty(themePackage)) {
-            mThemedResources = null;
-            mUseThemedResources = false;
-            mTheme = null;
-        } else {
-            AssetManager assets = new AssetManager();
-            assets.addAssetPath(getPackageResDir(getPackageName()));
-            assets.addAssetPath(getPackageResDir(themePackage));
-            assets.setThemeSupport(true);
-            assets.setThemePackageName(themePackage);
-
-            DisplayMetrics metrics = new DisplayMetrics();
-            WindowManager wm = (WindowManager)getSystemService(WINDOW_SERVICE);
-            wm.getDefaultDisplay().getMetrics(metrics);
-
-            ActivityManager am = (ActivityManager)getSystemService(ACTIVITY_SERVICE);
-            Configuration config = am.getConfiguration();
-            mThemedResources = new Resources(assets, metrics, config);
-            mUseThemedResources = true;
-            mTheme = null;
-        }
-    }
     
     @Override public void setTheme(int resid) {
         mThemeResource = resid;
         initializeTheme();
     }
-       
+    
     @Override public Resources.Theme getTheme() {
         if (mTheme != null) {
             return mTheme;
@@ -131,8 +63,7 @@ public class ContextThemeWrapper extends ContextWrapper {
         return mTheme;
     }
 
-    @Override 
-    public Object getSystemService(String name) {
+    @Override public Object getSystemService(String name) {
         if (LAYOUT_INFLATER_SERVICE.equals(name)) {
             if (mInflater == null) {
                 mInflater = LayoutInflater.from(mBase).cloneInContext(this);
@@ -166,7 +97,7 @@ public class ContextThemeWrapper extends ContextWrapper {
                 mTheme.setTo(theme);
             }
         }
-        
         onApplyThemeResource(mTheme, mThemeResource, first);
     }
 }
+
