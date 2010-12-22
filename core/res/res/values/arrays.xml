@@ -106,4 +106,19 @@
         <item>3</item>
     </integer-array>
 
+    <!-- Defines the shutdown options shown in the reboot dialog. -->
+    <array name="shutdown_reboot_options">
+        <item>Reboot</item>
+        <item>Recovery</item>
+        <item>Bootloader</item>
+    </array>
+
+    <!-- Do not translate. Defines the shutdown actions passed to the kernel.
+         The first item should be empty for regular reboot. -->
+    <string-array name="shutdown_reboot_actions">
+        <item></item>
+        <item>recovery</item>
+        <item>bootloader</item>
+    </string-array>
+
 </resources>
