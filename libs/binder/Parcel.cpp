@@ -17,6 +17,7 @@
 #define LOG_TAG "Parcel"
 //#define LOG_NDEBUG 0
 
+#define _INTERNAL_BINDER_PARCEL_
 #include <binder/Parcel.h>
 
 #include <binder/IPCThreadState.h>
@@ -452,9 +453,15 @@ status_t Parcel::writeInterfaceToken(const String16& interface)
     return writeString16(interface);
 }
 
+bool Parcel::enforceInterface(const String16& interface) const
+{
+	return enforceInterface(interface,NULL);
+}
+
+
 bool Parcel::checkInterface(IBinder* binder) const
 {
-    return enforceInterface(binder->getInterfaceDescriptor());
+    return enforceInterface(binder->getInterfaceDescriptor(),NULL);
 }
 
 bool Parcel::enforceInterface(const String16& interface,
