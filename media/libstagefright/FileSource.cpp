@@ -44,7 +44,7 @@ status_t FileSource::initCheck() const {
     return mFile != NULL ? OK : NO_INIT;
 }
 
-ssize_t FileSource::readAt(off_t offset, void *data, size_t size) {
+ssize_t FileSource::readAt(off64_t offset, void *data, size_t size) {
     if (mFile == NULL) {
         return NO_INIT;
     }
@@ -61,16 +61,16 @@ ssize_t FileSource::readAt(off_t offset, void *data, size_t size) {
         }
     }
 
-    int err = fseeko(mFile, offset + mOffset, SEEK_SET);
+    off64_t err = lseek64(mFile->_file, offset + mOffset, SEEK_SET);
     if (err < 0) {
         LOGE("seek to %lld failed", offset + mOffset);
         return UNKNOWN_ERROR;
     }
 
-    return fread(data, 1, size, mFile);
+    return read(mFile->_file, data, size);
 }
 
-status_t FileSource::getSize(off_t *size) {
+status_t FileSource::getSize(off64_t *size) {
     if (mFile == NULL) {
         return NO_INIT;
     }

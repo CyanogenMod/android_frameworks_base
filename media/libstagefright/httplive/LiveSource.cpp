@@ -248,11 +248,11 @@ bool LiveSource::switchToNext() {
 
 static const ssize_t kHeaderSize = 188;
 
-ssize_t LiveSource::readAt(off_t offset, void *data, size_t size) {
+ssize_t LiveSource::readAt(off64_t offset, void *data, size_t size) {
     CHECK(offset >= mOffsetBias);
     offset -= mOffsetBias;
 
-    off_t delta = mSignalDiscontinuity ? kHeaderSize : 0;
+    off64_t delta = mSignalDiscontinuity ? kHeaderSize : 0;
 
     if (offset >= mSourceSize + delta) {
         CHECK_EQ(offset, mSourceSize + delta);
@@ -314,7 +314,7 @@ status_t LiveSource::fetchM3U(const char *url, sp<ABuffer> *out) {
         source = mSource;
     }
 
-    off_t size;
+    off64_t size;
     status_t err = source->getSize(&size);
 
     if (err != OK) {

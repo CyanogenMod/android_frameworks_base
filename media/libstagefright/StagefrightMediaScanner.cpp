@@ -248,7 +248,7 @@ status_t StagefrightMediaScanner::processFile(
 char *StagefrightMediaScanner::extractAlbumArt(int fd) {
     LOGV("extractAlbumArt %d", fd);
 
-    off_t size = lseek(fd, 0, SEEK_END);
+    off64_t size = lseek(fd, 0, SEEK_END);
     if (size < 0) {
         return NULL;
     }
