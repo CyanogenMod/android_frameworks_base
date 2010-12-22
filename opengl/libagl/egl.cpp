@@ -1980,7 +1980,11 @@ EGLBoolean eglSwapInterval(EGLDisplay dpy, EGLint interval)
     if (egl_display_t::is_valid(dpy) == EGL_FALSE)
         return setError(EGL_BAD_DISPLAY, EGL_FALSE);
     // TODO: eglSwapInterval()
-    return setError(EGL_BAD_PARAMETER, EGL_FALSE);
+    /* TODO: [ahatala 2009-10-09] changing this to default to succeeding,
+       as this will cause eglSwapInterval to fail even if the hw implementation
+       correctly supports it. */
+    //return setError(EGL_BAD_PARAMETER, EGL_FALSE);
+    return EGL_TRUE;
 }
 
 // ----------------------------------------------------------------------------
