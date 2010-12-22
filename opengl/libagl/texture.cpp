@@ -26,6 +26,10 @@
 #include <private/ui/android_natives_priv.h>
 #include <ETC1/etc1.h>
 
+#ifdef LIBAGL_USE_GRALLOC_COPYBITS
+#include "copybit.h"
+#endif // LIBAGL_USE_GRALLOC_COPYBITS
+
 namespace android {
 
 // ----------------------------------------------------------------------------
@@ -762,7 +766,6 @@ static void drawTexxOES(GLfixed x, GLfixed y, GLfixed z, GLfixed w, GLfixed h,
     // quickly reject empty rects
     if ((w|h) <= 0)
         return;
-
     drawTexxOESImp(x, y, z, w, h, c);
 }
 
@@ -781,7 +784,9 @@ static void drawTexiOES(GLint x, GLint y, GLint z, GLint w, GLint h, ogles_conte
         const GLint Hcr = textureObject->crop_rect[3];
 
         if ((w == Wcr) && (h == -Hcr)) {
+#ifndef LIBAGL_USE_GRALLOC_COPYBITS
             if ((w|h) <= 0) return; // quickly reject empty rects
+#endif
 
             if (u.dirty) {
                 c->rasterizer.procs.activeTexture(c, tmu);
@@ -1628,6 +1633,13 @@ void glEGLImageTargetTexture2DOES(GLenum target, GLeglImageOES image)
     // bind it to the texture unit
     sp<EGLTextureObject> tex = getAndBindActiveTextureObject(c);
     tex->setImage(native_buffer);
+
+#ifdef LIBAGL_USE_GRALLOC_COPYBITS
+    tex->try_copybit = false;
+    if (c->copybits.blitEngine != NULL) {
+        tex->try_copybit = true;
+    }
+#endif // LIBAGL_USE_GRALLOC_COPYBITS
 }
 
 void glEGLImageTargetRenderbufferStorageOES(GLenum target, GLeglImageOES image)
