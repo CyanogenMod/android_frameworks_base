@@ -64,7 +64,7 @@ public:
     bool isAvc() const { return mIsAvc; }
     bool isAudio() const { return mIsAudio; }
     bool isMPEG4() const { return mIsMPEG4; }
-    void addChunkOffset(off_t offset);
+    void addChunkOffset(off64_t offset);
     status_t dump(int fd, const Vector<String16>& args) const;
 
 private:
@@ -99,7 +99,7 @@ private:
     List<MediaBuffer *> mChunkSamples;
 
     size_t              mNumStcoTableEntries;
-    List<off_t>         mChunkOffsets;
+    List<off64_t>         mChunkOffsets;
 
     size_t              mNumStscTableEntries;
     struct StscTableEntry {
@@ -617,7 +617,7 @@ status_t MPEG4Writer::stop() {
     fseeko(mFile, mOffset, SEEK_SET);
 
     time_t now = time(NULL);
-    const off_t moovOffset = mOffset;
+    const off64_t moovOffset = mOffset;
     mWriteMoovBoxToMemory = true;
     mMoovBoxBuffer = (uint8_t *) malloc(mEstimatedMoovBoxSize);
     mMoovBoxBufferOffset = 0;
@@ -698,8 +698,8 @@ void MPEG4Writer::unlock() {
     mLock.unlock();
 }
 
-off_t MPEG4Writer::addSample_l(MediaBuffer *buffer) {
-    off_t old_offset = mOffset;
+off64_t MPEG4Writer::addSample_l(MediaBuffer *buffer) {
+    off64_t old_offset = mOffset;
 
     fwrite((const uint8_t *)buffer->data() + buffer->range_offset(),
            1, buffer->range_length(), mFile);
@@ -723,8 +723,8 @@ static void StripStartcode(MediaBuffer *buffer) {
     }
 }
 
-off_t MPEG4Writer::addLengthPrefixedSample_l(MediaBuffer *buffer) {
-    off_t old_offset = mOffset;
+off64_t MPEG4Writer::addLengthPrefixedSample_l(MediaBuffer *buffer) {
+    off64_t old_offset = mOffset;
 
     size_t length = buffer->range_length();
 
@@ -761,9 +761,9 @@ size_t MPEG4Writer::write(
 
     const size_t bytes = size * nmemb;
     if (mWriteMoovBoxToMemory) {
-        off_t moovBoxSize = 8 + mMoovBoxBufferOffset + bytes;
+        off64_t moovBoxSize = 8 + mMoovBoxBufferOffset + bytes;
         if (moovBoxSize > mEstimatedMoovBoxSize) {
-            for (List<off_t>::iterator it = mBoxes.begin();
+            for (List<off64_t>::iterator it = mBoxes.begin();
                  it != mBoxes.end(); ++it) {
                 (*it) += mOffset;
             }
@@ -800,7 +800,7 @@ void MPEG4Writer::beginBox(const char *fourcc) {
 void MPEG4Writer::endBox() {
     CHECK(!mBoxes.empty());
 
-    off_t offset = *--mBoxes.end();
+    off64_t offset = *--mBoxes.end();
     mBoxes.erase(--mBoxes.end());
 
     if (mWriteMoovBoxToMemory) {
@@ -985,7 +985,7 @@ void MPEG4Writer::Track::addOneSttsTableEntry(
     ++mNumSttsTableEntries;
 }
 
-void MPEG4Writer::Track::addChunkOffset(off_t offset) {
+void MPEG4Writer::Track::addChunkOffset(off64_t offset) {
     ++mNumStcoTableEntries;
     mChunkOffsets.push_back(offset);
 }
@@ -1100,7 +1100,7 @@ void MPEG4Writer::writeFirstChunk(ChunkInfo* info) {
     for (List<MediaBuffer *>::iterator it = chunkIt->mSamples.begin();
          it != chunkIt->mSamples.end(); ++it) {
 
-        off_t offset = info->mTrack->isAvc()
+        off64_t offset = info->mTrack->isAvc()
                             ? addLengthPrefixedSample_l(*it)
                             : addSample_l(*it);
         if (it == chunkIt->mSamples.begin()) {
@@ -1921,7 +1921,7 @@ status_t MPEG4Writer::Track::threadEntry() {
             trackProgressStatus(timestampUs);
         }
         if (mOwner->numTracks() == 1) {
-            off_t offset = mIsAvc? mOwner->addLengthPrefixedSample_l(copy)
+            off64_t offset = mIsAvc? mOwner->addLengthPrefixedSample_l(copy)
                                  : mOwner->addSample_l(copy);
             if (mChunkOffsets.empty()) {
                 addChunkOffset(offset);
@@ -2469,7 +2469,7 @@ void MPEG4Writer::Track::writeTrackHeader(
           mOwner->beginBox(use32BitOffset? "stco": "co64");
             mOwner->writeInt32(0);  // version=0, flags=0
             mOwner->writeInt32(mNumStcoTableEntries);
-            for (List<off_t>::iterator it = mChunkOffsets.begin();
+            for (List<off64_t>::iterator it = mChunkOffsets.begin();
                  it != mChunkOffsets.end(); ++it) {
                 if (use32BitOffset) {
                     mOwner->writeInt32(static_cast<int32_t>(*it));

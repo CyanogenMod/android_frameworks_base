@@ -16,14 +16,14 @@ struct NuHTTPDataSource : public DataSource {
     status_t connect(
             const char *uri,
             const KeyedVector<String8, String8> *headers = NULL,
-            off_t offset = 0);
+            off64_t offset = 0);
 
     void disconnect();
 
     virtual status_t initCheck() const;
 
-    virtual ssize_t readAt(off_t offset, void *data, size_t size);
-    virtual status_t getSize(off_t *size);
+    virtual ssize_t readAt(off64_t offset, void *data, size_t size);
+    virtual status_t getSize(off64_t *size);
     virtual uint32_t flags();
 
 protected:
@@ -46,17 +46,17 @@ private:
     String8 mHeaders;
 
     HTTPStream mHTTP;
-    off_t mOffset;
-    off_t mContentLength;
+    off64_t mOffset;
+    off64_t mContentLength;
     bool mContentLengthValid;
 
     status_t connect(
-            const char *uri, const String8 &headers, off_t offset);
+            const char *uri, const String8 &headers, off64_t offset);
 
     status_t connect(
             const char *host, unsigned port, const char *path,
             const String8 &headers,
-            off_t offset);
+            off64_t offset);
 
     void applyTimeoutResponse();
 

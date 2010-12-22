@@ -179,7 +179,7 @@ static bool get_mp3_frame_size(
 }
 
 static bool parse_xing_header(
-        const sp<DataSource> &source, off_t first_frame_pos,
+        const sp<DataSource> &source, off64_t first_frame_pos,
         int32_t *frame_number = NULL, int32_t *byte_number = NULL,
         char *table_of_contents = NULL, int32_t *quality_indicator = NULL,
         int64_t *duration = NULL) {
@@ -307,7 +307,7 @@ static bool parse_xing_header(
 
 static bool Resync(
         const sp<DataSource> &source, uint32_t match_header,
-        off_t *inout_pos, uint32_t *out_header) {
+        off64_t *inout_pos, uint32_t *out_header) {
     if (*inout_pos == 0) {
         // Skip an optional ID3 header if syncing at the very beginning
         // of the datasource.
@@ -342,7 +342,7 @@ static bool Resync(
         }
     }
 
-    off_t pos = *inout_pos;
+    off64_t pos = *inout_pos;
     bool valid = false;
     do {
         if (pos >= *inout_pos + 128 * 1024) {
@@ -376,7 +376,7 @@ static bool Resync(
         // We found what looks like a valid frame,
         // now find its successors.
 
-        off_t test_pos = pos + frame_size;
+        off64_t test_pos = pos + frame_size;
 
         valid = true;
         for (int j = 0; j < 3; ++j) {
@@ -426,7 +426,7 @@ class MP3Source : public MediaSource {
 public:
     MP3Source(
             const sp<MetaData> &meta, const sp<DataSource> &source,
-            off_t first_frame_pos, uint32_t fixed_header,
+            off64_t first_frame_pos, uint32_t fixed_header,
             int32_t byte_number, const char *table_of_contents);
 
     virtual status_t start(MetaData *params = NULL);
@@ -443,9 +443,9 @@ protected:
 private:
     sp<MetaData> mMeta;
     sp<DataSource> mDataSource;
-    off_t mFirstFramePos;
+    off64_t mFirstFramePos;
     uint32_t mFixedHeader;
-    off_t mCurrentPos;
+    off64_t mCurrentPos;
     int64_t mCurrentTimeUs;
     bool mStarted;
     int32_t mByteNumber; // total number of bytes in this MP3
@@ -464,7 +464,7 @@ MP3Extractor::MP3Extractor(
       mFirstFramePos(-1),
       mFixedHeader(0),
       mByteNumber(0) {
-    off_t pos = 0;
+    off64_t pos = 0;
     uint32_t header;
     bool success;
 
@@ -475,7 +475,7 @@ MP3Extractor::MP3Extractor(
             && meta->findInt32("header", (int32_t *)&meta_header)) {
         // The sniffer has already done all the hard work for us, simply
         // accept its judgement.
-        pos = (off_t)meta_offset;
+        pos = (off64_t)meta_offset;
         header = meta_header;
 
         success = true;
@@ -512,7 +512,7 @@ MP3Extractor::MP3Extractor(
     if (duration > 0) {
         mMeta->setInt64(kKeyDuration, duration);
     } else {
-        off_t fileSize;
+        off64_t fileSize;
         if (mDataSource->getSize(&fileSize) == OK) {
             mMeta->setInt64(
                     kKeyDuration,
@@ -549,7 +549,7 @@ sp<MetaData> MP3Extractor::getTrackMetaData(size_t index, uint32_t flags) {
 
 MP3Source::MP3Source(
         const sp<MetaData> &meta, const sp<DataSource> &source,
-        off_t first_frame_pos, uint32_t fixed_header,
+        off64_t first_frame_pos, uint32_t fixed_header,
         int32_t byte_number, const char *table_of_contents)
     : mMeta(meta),
       mDataSource(source),
@@ -674,7 +674,7 @@ status_t MP3Source::read(
         // Lost sync.
         LOGV("lost sync! header = 0x%08x, old header = 0x%08x\n", header, mFixedHeader);
 
-        off_t pos = mCurrentPos;
+        off64_t pos = mCurrentPos;
         if (!Resync(mDataSource, mFixedHeader, &pos, NULL)) {
             LOGE("Unable to resync. Signalling end of stream.");
 
@@ -780,7 +780,7 @@ sp<MetaData> MP3Extractor::getMetaData() {
 bool SniffMP3(
         const sp<DataSource> &source, String8 *mimeType,
         float *confidence, sp<AMessage> *meta) {
-    off_t pos = 0;
+    off64_t pos = 0;
     uint32_t header;
     if (!Resync(source, 0, &pos, &header)) {
         return false;
