@@ -111,6 +111,14 @@ public class SmsMessage extends SmsMessageBase{
     }
 
     /**
+     * 3GPP TS 23.040 9.2.3.9 specifies that Type Zero messages are indicated
+     * by TP_PID field set to value 0x40
+     */
+    public boolean isTypeZero() {
+        return (protocolIdentifier == 0x40);
+    }
+
+    /**
      * TS 27.005 3.4.1 lines[0] and lines[1] are the two lines read from the
      * +CMT unsolicited response (PDU mode, of course)
      *  +CMT: [&lt;alpha>],<length><CR><LF><pdu>
@@ -792,9 +800,10 @@ public class SmsMessage extends SmsMessageBase{
             int septets = GsmAlphabet.countGsmSeptets(msgBody, !use7bitOnly);
             ted.codeUnitCount = septets;
             if (septets > MAX_USER_DATA_SEPTETS) {
-                ted.msgCount = (septets / MAX_USER_DATA_SEPTETS_WITH_HEADER) + 1;
-                ted.codeUnitsRemaining = MAX_USER_DATA_SEPTETS_WITH_HEADER
-                    - (septets % MAX_USER_DATA_SEPTETS_WITH_HEADER);
+                ted.msgCount = (septets + (MAX_USER_DATA_SEPTETS_WITH_HEADER - 1)) /
+                        MAX_USER_DATA_SEPTETS_WITH_HEADER;
+                ted.codeUnitsRemaining = (ted.msgCount *
+                        MAX_USER_DATA_SEPTETS_WITH_HEADER) - septets;
             } else {
                 ted.msgCount = 1;
                 ted.codeUnitsRemaining = MAX_USER_DATA_SEPTETS - septets;
@@ -804,9 +813,10 @@ public class SmsMessage extends SmsMessageBase{
             int octets = msgBody.length() * 2;
             ted.codeUnitCount = msgBody.length();
             if (octets > MAX_USER_DATA_BYTES) {
-                ted.msgCount = (octets / MAX_USER_DATA_BYTES_WITH_HEADER) + 1;
-                ted.codeUnitsRemaining = (MAX_USER_DATA_BYTES_WITH_HEADER
-                          - (octets % MAX_USER_DATA_BYTES_WITH_HEADER))/2;
+                ted.msgCount = (octets + (MAX_USER_DATA_BYTES_WITH_HEADER - 1)) /
+                        MAX_USER_DATA_BYTES_WITH_HEADER;
+                ted.codeUnitsRemaining = ((ted.msgCount *
+                        MAX_USER_DATA_BYTES_WITH_HEADER) - octets) / 2;
             } else {
                 ted.msgCount = 1;
                 ted.codeUnitsRemaining = (MAX_USER_DATA_BYTES - octets)/2;

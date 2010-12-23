@@ -1,6 +1,6 @@
 /*
  **
- ** Copyright 2008, HTC Inc.
+ ** Copyright 2008, The Android Open Source Project
  **
  ** Licensed under the Apache License, Version 2.0 (the "License");
  ** you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
 #ifndef ANDROID_PVMEDIARECORDER_H
 #define ANDROID_PVMEDIARECORDER_H
 
-#include <media/IMediaPlayerClient.h>
+#include <media/IMediaRecorderClient.h>
 #include <media/MediaRecorderBase.h>
 
 namespace android {
@@ -45,13 +45,14 @@ public:
     virtual status_t setOutputFile(const char *path);
     virtual status_t setOutputFile(int fd, int64_t offset, int64_t length);
     virtual status_t setParameters(const String8& params);
-    virtual status_t setListener(const sp<IMediaPlayerClient>& listener);
+    virtual status_t setListener(const sp<IMediaRecorderClient>& listener);
     virtual status_t prepare();
     virtual status_t start();
     virtual status_t stop();
     virtual status_t close();
     virtual status_t reset();
     virtual status_t getMaxAmplitude(int *max);
+    virtual status_t dump(int fd, const Vector<String16>& args) const;
 
 private:
     status_t doStop();

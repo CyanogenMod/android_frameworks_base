@@ -23,6 +23,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.os.Handler;
 import android.os.RemoteException;
+import android.os.WorkSource;
 
 import java.util.List;
 
@@ -307,6 +308,16 @@ public class WifiManager {
     public static final String ACTION_PICK_WIFI_NETWORK = "android.net.wifi.PICK_WIFI_NETWORK";
 
     /**
+     * In this Wi-Fi lock mode, Wi-Fi will behave as in the mode
+     * {@link #WIFI_MODE_FULL} but it operates at high performance
+     * at the expense of power. This mode should be used
+     * only when the wifi connection needs to have minimum loss and low
+     * latency as it can impact the battery life.
+     * @hide
+     */
+    public static final int WIFI_MODE_FULL_HIGH_PERF = 3;
+
+    /**
      * In this Wi-Fi lock mode, Wi-Fi will be kept active,
      * and will behave normally, i.e., it will attempt to automatically
      * establish a connection to a remembered access point that is
@@ -559,7 +570,8 @@ public class WifiManager {
      */
     public boolean startScan() {
         try {
-            return mService.startScan(false);
+            mService.startScan(false);
+            return true;
         } catch (RemoteException e) {
             return false;
         }
@@ -577,7 +589,8 @@ public class WifiManager {
      */
     public boolean startScanActive() {
         try {
-            return mService.startScan(true);
+            mService.startScan(true);
+            return true;
         } catch (RemoteException e) {
             return false;
         }
@@ -824,6 +837,21 @@ public class WifiManager {
     }
 
     /**
+     * Sets the Wi-Fi AP Configuration.
+     * @return {@code true} if the operation succeeded, {@code false} otherwise
+     *
+     * @hide Dont open yet
+     */
+    public boolean setWifiApConfiguration(WifiConfiguration wifiConfig) {
+        try {
+            mService.setWifiApConfiguration(wifiConfig);
+            return true;
+        } catch (RemoteException e) {
+            return false;
+        }
+    }
+
+    /**
      * Allows an application to keep the Wi-Fi radio awake.
      * Normally the Wi-Fi radio may turn off when the user has not used the device in a while.
      * Acquiring a WifiLock will keep the radio on until the lock is released.  Multiple 
@@ -847,6 +875,7 @@ public class WifiManager {
         int mLockType;
         private boolean mRefCounted;
         private boolean mHeld;
+        private WorkSource mWorkSource;
 
         private WifiLock(int lockType, String tag) {
             mTag = tag;
@@ -872,7 +901,7 @@ public class WifiManager {
             synchronized (mBinder) {
                 if (mRefCounted ? (++mRefCount > 0) : (!mHeld)) {
                     try {
-                        mService.acquireWifiLock(mBinder, mLockType, mTag);
+                        mService.acquireWifiLock(mBinder, mLockType, mTag, mWorkSource);
                         synchronized (WifiManager.this) {
                             if (mActiveLockCount >= MAX_ACTIVE_LOCKS) {
                                 mService.releaseWifiLock(mBinder);
@@ -944,6 +973,32 @@ public class WifiManager {
             }
         }
 
+        public void setWorkSource(WorkSource ws) {
+            synchronized (mBinder) {
+                if (ws != null && ws.size() == 0) {
+                    ws = null;
+                }
+                boolean changed = true;
+                if (ws == null) {
+                    mWorkSource = null;
+                } else if (mWorkSource == null) {
+                    changed = mWorkSource != null;
+                    mWorkSource = new WorkSource(ws);
+                } else {
+                    changed = mWorkSource.diff(ws);
+                    if (changed) {
+                        mWorkSource.set(ws);
+                    }
+                }
+                if (changed && mHeld) {
+                    try {
+                        mService.updateWifiLockWorkSource(mBinder, mWorkSource);
+                    } catch (RemoteException e) {
+                    }
+                }
+            }
+        }
+
         public String toString() {
             String s1, s2, s3;
             synchronized (mBinder) {
@@ -978,8 +1033,9 @@ public class WifiManager {
     /**
      * Creates a new WifiLock.
      *
-     * @param lockType the type of lock to create. See {@link #WIFI_MODE_FULL} and
-     * {@link #WIFI_MODE_SCAN_ONLY} for descriptions of the types of Wi-Fi locks.
+     * @param lockType the type of lock to create. See {@link #WIFI_MODE_FULL},
+     * and {@link #WIFI_MODE_SCAN_ONLY} for descriptions of the types of Wi-Fi locks.
+     *
      * @param tag a tag for the WifiLock to identify it in debugging messages.  This string is 
      *            never shown to the user under normal conditions, but should be descriptive 
      *            enough to identify your application and the specific WifiLock within it, if it

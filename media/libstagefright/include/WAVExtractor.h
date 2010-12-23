@@ -22,6 +22,7 @@
 
 namespace android {
 
+struct AMessage;
 class DataSource;
 class String8;
 
@@ -43,6 +44,7 @@ private:
     sp<DataSource> mDataSource;
     status_t mInitCheck;
     bool mValidFormat;
+    uint16_t mWaveFormat;
     uint16_t mNumChannels;
     uint32_t mSampleRate;
     uint16_t mBitsPerSample;
@@ -57,7 +59,8 @@ private:
 };
 
 bool SniffWAV(
-        const sp<DataSource> &source, String8 *mimeType, float *confidence);
+        const sp<DataSource> &source, String8 *mimeType, float *confidence,
+        sp<AMessage> *);
 
 }  // namespace android
 

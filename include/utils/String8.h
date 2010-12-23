@@ -171,6 +171,9 @@ public:
             status_t            append(const char* other);
             status_t            append(const char* other, size_t numChars);
 
+            status_t            appendFormat(const char* fmt, ...)
+                    __attribute__((format (printf, 2, 3)));
+
             // Note that this function takes O(N) time to calculate the value.
             // No cache value is stored.
             size_t              getUtf32Length() const;
@@ -372,7 +375,7 @@ inline String8& String8::operator+=(const String8& other)
 
 inline String8 String8::operator+(const String8& other) const
 {
-    String8 tmp;
+    String8 tmp(*this);
     tmp += other;
     return tmp;
 }
@@ -385,7 +388,7 @@ inline String8& String8::operator+=(const char* other)
 
 inline String8 String8::operator+(const char* other) const
 {
-    String8 tmp;
+    String8 tmp(*this);
     tmp += other;
     return tmp;
 }

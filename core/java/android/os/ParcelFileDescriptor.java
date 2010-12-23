@@ -134,6 +134,25 @@ public class ParcelFileDescriptor implements Parcelable {
     private static native FileDescriptor getFileDescriptorFromSocket(Socket socket);
 
     /**
+     * Create two ParcelFileDescriptors structured as a data pipe.  The first
+     * ParcelFileDescriptor in the returned array is the read side; the second
+     * is the write side.
+     */
+    public static ParcelFileDescriptor[] createPipe() throws IOException {
+        FileDescriptor[] fds = new FileDescriptor[2];
+        int res = createPipeNative(fds);
+        if (res == 0) {
+            ParcelFileDescriptor[] pfds = new ParcelFileDescriptor[2];
+            pfds[0] = new ParcelFileDescriptor(fds[0]);
+            pfds[1] = new ParcelFileDescriptor(fds[1]);
+            return pfds;
+        }
+        throw new IOException("Unable to create pipe: errno=" + -res);
+    }
+
+    private static native int createPipeNative(FileDescriptor[] outFds);
+
+    /**
      * Retrieve the actual FileDescriptor associated with this object.
      * 
      * @return Returns the FileDescriptor associated with this object.
@@ -179,7 +198,7 @@ public class ParcelFileDescriptor implements Parcelable {
     /**
      * An InputStream you can create on a ParcelFileDescriptor, which will
      * take care of calling {@link ParcelFileDescriptor#close
-     * ParcelFileDescritor.close()} for you when the stream is closed.
+     * ParcelFileDescriptor.close()} for you when the stream is closed.
      */
     public static class AutoCloseInputStream extends FileInputStream {
         private final ParcelFileDescriptor mFd;
@@ -198,7 +217,7 @@ public class ParcelFileDescriptor implements Parcelable {
     /**
      * An OutputStream you can create on a ParcelFileDescriptor, which will
      * take care of calling {@link ParcelFileDescriptor#close
-     * ParcelFileDescritor.close()} for you when the stream is closed.
+     * ParcelFileDescriptor.close()} for you when the stream is closed.
      */
     public static class AutoCloseOutputStream extends FileOutputStream {
         private final ParcelFileDescriptor mFd;
@@ -250,6 +269,11 @@ public class ParcelFileDescriptor implements Parcelable {
         return Parcelable.CONTENTS_FILE_DESCRIPTOR;
     }
 
+    /**
+     * {@inheritDoc}
+     * If {@link Parcelable#PARCELABLE_WRITE_RETURN_VALUE} is set in flags,
+     * the file descriptor will be closed after a copy is written to the Parcel.
+     */
     public void writeToParcel(Parcel out, int flags) {
         out.writeFileDescriptor(mFileDescriptor);
         if ((flags&PARCELABLE_WRITE_RETURN_VALUE) != 0 && !mClosed) {

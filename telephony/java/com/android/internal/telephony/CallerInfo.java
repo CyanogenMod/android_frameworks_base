@@ -26,8 +26,8 @@ import static android.provider.ContactsContract.RawContacts;
 import android.text.TextUtils;
 import android.telephony.TelephonyManager;
 import android.telephony.PhoneNumberUtils;
-import android.util.Config;
 import android.util.Log;
+
 
 /**
  * Looks up caller information for the given phone number.
@@ -36,6 +36,7 @@ import android.util.Log;
  */
 public class CallerInfo {
     private static final String TAG = "CallerInfo";
+    private static final boolean VDBG = Log.isLoggable(TAG, Log.VERBOSE);
 
     public static final String UNKNOWN_NUMBER = "-1";
     public static final String PRIVATE_NUMBER = "-2";
@@ -128,7 +129,7 @@ public class CallerInfo {
         info.isCachedPhotoCurrent = false;
         info.contactExists = false;
 
-        if (Config.LOGV) Log.v(TAG, "construct callerInfo from cursor");
+        if (VDBG) Log.v(TAG, "construct callerInfo from cursor");
 
         if (cursor != null) {
             if (cursor.moveToFirst()) {
@@ -166,31 +167,30 @@ public class CallerInfo {
                 // Look for the person ID.
 
                 // TODO: This is pretty ugly now, see bug 2269240 for
-                // more details. With tel: URI the contact id is in
-                // col "_id" while when we use a
-                // content://contacts/data/phones URI, the contact id
-                // is col "contact_id". As a work around we use the
-                // type of the contact url to figure out which column
-                // we should look at to get the contact_id.
-
-                final String mimeType = context.getContentResolver().getType(contactRef);
+                // more details. The column to use depends upon the type of URL,
+                // for content://com.android.contacts/data/phones the "contact_id"
+                // column is used. For content/com.andriod.contacts/phone_lookup"
+                // the "_ID" column is used. If it is neither we leave columnIndex
+                // at -1 and no person ID will be available.
 
                 columnIndex = -1;
-                if (Phone.CONTENT_ITEM_TYPE.equals(mimeType)) {
-                    // content://com.android.contacts/data/phones URL
+                String url = contactRef.toString();
+                if (url.startsWith("content://com.android.contacts/data/phones")) {
+                    if (VDBG) Log.v(TAG,
+                        "URL path starts with 'data/phones' using RawContacts.CONTACT_ID");
                     columnIndex = cursor.getColumnIndex(RawContacts.CONTACT_ID);
-                } else {
-                    // content://com.android.contacts/phone_lookup URL
-                    // TODO: mime type is null here so we cannot test
-                    // if we have the right url type. phone_lookup URL
-                    // should resolve to a mime type.
+                } else if (url.startsWith("content://com.android.contacts/phone_lookup")) {
+                    if (VDBG) Log.v(TAG,
+                        "URL path starts with 'phone_lookup' using PhoneLookup._ID");
                     columnIndex = cursor.getColumnIndex(PhoneLookup._ID);
+                } else {
+                    Log.e(TAG, "Bad contact URL '" + url + "'");
                 }
 
                 if (columnIndex != -1) {
                     info.person_id = cursor.getLong(columnIndex);
                 } else {
-                    Log.e(TAG, "Column missing for " + contactRef);
+                    Log.e(TAG, "person_id column missing for " + contactRef);
                 }
 
                 // look for the custom ringtone, create from the string stored
@@ -260,6 +260,7 @@ public class CallerInfo {
         Uri contactUri = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
 
         CallerInfo info = getCallerInfo(context, contactUri);
+        info = doSecondaryLookupIfNecessary(context, number, info);
 
         // if no query results were returned with a viable number,
         // fill in the original number value we used to query with.
@@ -268,6 +269,30 @@ public class CallerInfo {
         }
 
         return info;
+    }
+
+    /**
+     * Performs another lookup if previous lookup fails and it's a SIP call
+     * and the peer's username is all numeric. Look up the username as it
+     * could be a PSTN number in the contact database.
+     *
+     * @param context the query context
+     * @param number the original phone number, could be a SIP URI
+     * @param previousResult the result of previous lookup
+     * @return previousResult if it's not the case
+     */
+    static CallerInfo doSecondaryLookupIfNecessary(Context context,
+            String number, CallerInfo previousResult) {
+        if (!previousResult.contactExists
+                && PhoneNumberUtils.isUriNumber(number)) {
+            String username = number.substring(0, number.indexOf('@'));
+            if (PhoneNumberUtils.isGlobalPhoneNumber(username)) {
+                previousResult = getCallerInfo(context,
+                        Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI,
+                                Uri.encode(username)));
+            }
+        }
+        return previousResult;
     }
 
     /**
@@ -383,8 +408,8 @@ public class CallerInfo {
      */
     public String toString() {
         return new StringBuilder(384)
-                .append("\nname: " + name)
-                .append("\nphoneNumber: " + phoneNumber)
+                .append("\nname: " + /*name*/ "nnnnnn")
+                .append("\nphoneNumber: " + /*phoneNumber*/ "xxxxxxx")
                 .append("\ncnapName: " + cnapName)
                 .append("\nnumberPresentation: " + numberPresentation)
                 .append("\nnamePresentation: " + namePresentation)
@@ -395,13 +420,14 @@ public class CallerInfo {
                 .append("\nphotoResource: " + photoResource)
                 .append("\nperson_id: " + person_id)
                 .append("\nneedUpdate: " + needUpdate)
-                .append("\ncontactRefUri: " + contactRefUri)
-                .append("\ncontactRingtoneUri: " + contactRefUri)
+                .append("\ncontactRefUri: " + /*contactRefUri*/ "xxxxxxx")
+                .append("\ncontactRingtoneUri: " + /*contactRefUri*/ "xxxxxxx")
                 .append("\nshouldSendToVoicemail: " + shouldSendToVoicemail)
                 .append("\ncachedPhoto: " + cachedPhoto)
                 .append("\nisCachedPhotoCurrent: " + isCachedPhotoCurrent)
                 .append("\nemergency: " + mIsEmergency)
                 .append("\nvoicemail " + mIsVoiceMail)
+                .append("\ncontactExists " + contactExists)
                 .toString();
     }
 }

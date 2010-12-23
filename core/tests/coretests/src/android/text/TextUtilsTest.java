@@ -26,9 +26,10 @@ import android.text.SpannedString;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.style.StyleSpan;
+import android.text.util.Rfc822Token;
+import android.text.util.Rfc822Tokenizer;
 import android.test.MoreAsserts;
 
-import com.android.common.Rfc822Validator;
 import com.google.android.collect.Lists;
 import com.google.android.collect.Maps;
 
@@ -236,37 +237,22 @@ public class TextUtilsTest extends TestCase {
         }
     }
 
-    //==============================================================================================
-    // Email validator
-    //==============================================================================================
-    
     @SmallTest
-    public void testEmailValidator() {
-        Rfc822Validator validator = new Rfc822Validator("gmail.com");
-        String[] validEmails = new String[] {
-            "a@b.com", "a@b.fr", "a+b@c.com", "a@b.info",
-        };
-        
-        for (String email : validEmails) {
-            assertTrue(email + " should be a valid email address", validator.isValid(email));
-        }
-        
-        String[] invalidEmails = new String[] {
-            "a", "a@b", "a b", "a@b.12"
-        };
+    public void testRfc822TokenizerFullAddress() {
+        Rfc822Token[] tokens = Rfc822Tokenizer.tokenize("Foo Bar (something) <foo@google.com>");
+        assertNotNull(tokens);
+        assertEquals(1, tokens.length);
+        assertEquals("foo@google.com", tokens[0].getAddress());
+        assertEquals("Foo Bar", tokens[0].getName());
+        assertEquals("something",tokens[0].getComment());
+    }
 
-        for (String email : invalidEmails) {
-            assertFalse(email + " should not be a valid email address", validator.isValid(email));
-        }
-        
-        Map<String, String> fixes = Maps.newHashMap();
-        fixes.put("a", "<a@gmail.com>");
-        fixes.put("a b", "<ab@gmail.com>");
-        fixes.put("a@b", "<a@b>");
-        
-        for (Map.Entry<String, String> e : fixes.entrySet()) {
-            assertEquals(e.getValue(), validator.fixText(e.getKey()).toString());
-        }
+    @SmallTest
+    public void testRfc822TokenizeItemWithError() {
+        Rfc822Token[] tokens = Rfc822Tokenizer.tokenize("\"Foo Bar\\");
+        assertNotNull(tokens);
+        assertEquals(1, tokens.length);
+        assertEquals("Foo Bar", tokens[0].getAddress());
     }
 
     @LargeTest
@@ -327,6 +313,26 @@ public class TextUtilsTest extends TestCase {
                 assertTrue("wid " + i + " pass " + j, p.measureText(keep1) == p.measureText(out1));
             }
         }
+    }
+
+    @SmallTest
+    public void testDelimitedStringContains() {
+        assertFalse(TextUtils.delimitedStringContains("", ',', null));
+        assertFalse(TextUtils.delimitedStringContains(null, ',', ""));
+        // Whole match
+        assertTrue(TextUtils.delimitedStringContains("gps", ',', "gps"));
+        // At beginning.
+        assertTrue(TextUtils.delimitedStringContains("gps,gpsx,network,mock", ',', "gps"));
+        assertTrue(TextUtils.delimitedStringContains("gps,network,mock", ',', "gps"));
+        // In middle, both without, before & after a false match.
+        assertTrue(TextUtils.delimitedStringContains("network,gps,mock", ',', "gps"));
+        assertTrue(TextUtils.delimitedStringContains("network,gps,gpsx,mock", ',', "gps"));
+        assertTrue(TextUtils.delimitedStringContains("network,gpsx,gps,mock", ',', "gps"));
+        // At the end.
+        assertTrue(TextUtils.delimitedStringContains("network,mock,gps", ',', "gps"));
+        assertTrue(TextUtils.delimitedStringContains("network,mock,gpsx,gps", ',', "gps"));
+        // Not present (but with a false match)
+        assertFalse(TextUtils.delimitedStringContains("network,mock,gpsx", ',', "gps"));
     }
 
     /**

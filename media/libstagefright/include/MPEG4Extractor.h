@@ -23,6 +23,7 @@
 
 namespace android {
 
+struct AMessage;
 class DataSource;
 class SampleTable;
 class String8;
@@ -70,12 +71,15 @@ private:
 
     static status_t verifyTrack(Track *track);
 
+    status_t parseTrackHeader(off_t data_offset, off_t data_size);
+
     MPEG4Extractor(const MPEG4Extractor &);
     MPEG4Extractor &operator=(const MPEG4Extractor &);
 };
 
 bool SniffMPEG4(
-        const sp<DataSource> &source, String8 *mimeType, float *confidence);
+        const sp<DataSource> &source, String8 *mimeType, float *confidence,
+        sp<AMessage> *);
 
 }  // namespace android
 

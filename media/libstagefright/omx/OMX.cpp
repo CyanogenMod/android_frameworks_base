@@ -43,7 +43,7 @@ namespace android {
 ////////////////////////////////////////////////////////////////////////////////
 
 struct OMX::CallbackDispatcher : public RefBase {
-    CallbackDispatcher(OMX *owner);
+    CallbackDispatcher(OMXNodeInstance *owner);
 
     void post(const omx_message &msg);
 
@@ -53,7 +53,7 @@ protected:
 private:
     Mutex mLock;
 
-    OMX *mOwner;
+    OMXNodeInstance *mOwner;
     bool mDone;
     Condition mQueueChanged;
     List<omx_message> mQueue;
@@ -69,7 +69,7 @@ private:
     CallbackDispatcher &operator=(const CallbackDispatcher &);
 };
 
-OMX::CallbackDispatcher::CallbackDispatcher(OMX *owner)
+OMX::CallbackDispatcher::CallbackDispatcher(OMXNodeInstance *owner)
     : mOwner(owner),
       mDone(false) {
     pthread_attr_t attr;
@@ -101,12 +101,11 @@ void OMX::CallbackDispatcher::post(const omx_message &msg) {
 }
 
 void OMX::CallbackDispatcher::dispatch(const omx_message &msg) {
-    OMXNodeInstance *instance = mOwner->findInstance(msg.node);
-    if (instance == NULL) {
+    if (mOwner == NULL) {
         LOGV("Would have dispatched a message to a node that's already gone.");
         return;
     }
-    instance->onMessage(msg);
+    mOwner->onMessage(msg);
 }
 
 // static
@@ -145,7 +144,6 @@ void OMX::CallbackDispatcher::threadEntry() {
 
 OMX::OMX()
     : mMaster(new OMXMaster),
-      mDispatcher(new CallbackDispatcher(this)),
       mNodeCounter(0) {
 }
 
@@ -165,6 +163,10 @@ void OMX::binderDied(const wp<IBinder> &the_late_who) {
 
         instance = mLiveNodes.editValueAt(index);
         mLiveNodes.removeItemsAt(index);
+
+        index = mDispatchers.indexOfKey(instance->nodeID());
+        CHECK(index >= 0);
+        mDispatchers.removeItemsAt(index);
 
         invalidateNodeID_l(instance->nodeID());
     }
@@ -226,6 +228,7 @@ status_t OMX::allocateNode(
     }
 
     *node = makeNodeID(instance);
+    mDispatchers.add(*node, new CallbackDispatcher(instance));
 
     instance->setHandle(*node, handle);
 
@@ -241,9 +244,16 @@ status_t OMX::freeNode(node_id node) {
     ssize_t index = mLiveNodes.indexOfKey(instance->observer()->asBinder());
     CHECK(index >= 0);
     mLiveNodes.removeItemsAt(index);
+
     instance->observer()->asBinder()->unlinkToDeath(this);
 
-    return instance->freeNode(mMaster);
+    status_t err = instance->freeNode(mMaster);
+
+    index = mDispatchers.indexOfKey(node);
+    CHECK(index >= 0);
+    mDispatchers.removeItemsAt(index);
+
+    return err;
 }
 
 status_t OMX::sendCommand(
@@ -341,7 +351,7 @@ OMX_ERRORTYPE OMX::OnEvent(
     msg.u.event_data.data1 = nData1;
     msg.u.event_data.data2 = nData2;
 
-    mDispatcher->post(msg);
+    findDispatcher(node)->post(msg);
 
     return OMX_ErrorNone;
 }
@@ -355,7 +365,7 @@ OMX_ERRORTYPE OMX::OnEmptyBufferDone(
     msg.node = node;
     msg.u.buffer_data.buffer = pBuffer;
 
-    mDispatcher->post(msg);
+    findDispatcher(node)->post(msg);
 
     return OMX_ErrorNone;
 }
@@ -375,7 +385,7 @@ OMX_ERRORTYPE OMX::OnFillBufferDone(
     msg.u.extended_buffer_data.platform_private = pBuffer->pPlatformPrivate;
     msg.u.extended_buffer_data.data_ptr = pBuffer->pBuffer;
 
-    mDispatcher->post(msg);
+    findDispatcher(node)->post(msg);
 
     return OMX_ErrorNone;
 }
@@ -395,6 +405,14 @@ OMXNodeInstance *OMX::findInstance(node_id node) {
     ssize_t index = mNodeIDToInstance.indexOfKey(node);
 
     return index < 0 ? NULL : mNodeIDToInstance.valueAt(index);
+}
+
+sp<OMX::CallbackDispatcher> OMX::findDispatcher(node_id node) {
+    Mutex::Autolock autoLock(mLock);
+
+    ssize_t index = mDispatchers.indexOfKey(node);
+
+    return index < 0 ? NULL : mDispatchers.valueAt(index);
 }
 
 void OMX::invalidateNodeID(node_id node) {
@@ -441,7 +459,8 @@ sp<IOMXRenderer> OMX::createRenderer(
         const char *componentName,
         OMX_COLOR_FORMATTYPE colorFormat,
         size_t encodedWidth, size_t encodedHeight,
-        size_t displayWidth, size_t displayHeight) {
+        size_t displayWidth, size_t displayHeight,
+        int32_t rotationDegrees) {
     Mutex::Autolock autoLock(mLock);
 
     VideoRenderer *impl = NULL;
@@ -449,6 +468,14 @@ sp<IOMXRenderer> OMX::createRenderer(
     void *libHandle = dlopen("libstagefrighthw.so", RTLD_NOW);
 
     if (libHandle) {
+        typedef VideoRenderer *(*CreateRendererWithRotationFunc)(
+                const sp<ISurface> &surface,
+                const char *componentName,
+                OMX_COLOR_FORMATTYPE colorFormat,
+                size_t displayWidth, size_t displayHeight,
+                size_t decodedWidth, size_t decodedHeight,
+                int32_t rotationDegrees);
+
         typedef VideoRenderer *(*CreateRendererFunc)(
                 const sp<ISurface> &surface,
                 const char *componentName,
@@ -456,20 +483,33 @@ sp<IOMXRenderer> OMX::createRenderer(
                 size_t displayWidth, size_t displayHeight,
                 size_t decodedWidth, size_t decodedHeight);
 
-        CreateRendererFunc func =
-            (CreateRendererFunc)dlsym(
+        CreateRendererWithRotationFunc funcWithRotation =
+            (CreateRendererWithRotationFunc)dlsym(
                     libHandle,
-                    "_Z14createRendererRKN7android2spINS_8ISurfaceEEEPKc20"
-                    "OMX_COLOR_FORMATTYPEjjjj");
+                    "_Z26createRendererWithRotationRKN7android2spINS_8"
+                    "ISurfaceEEEPKc20OMX_COLOR_FORMATTYPEjjjji");
 
-        if (func) {
-            impl = (*func)(surface, componentName, colorFormat,
-                    displayWidth, displayHeight, encodedWidth, encodedHeight);
+        if (funcWithRotation) {
+            impl = (*funcWithRotation)(
+                    surface, componentName, colorFormat,
+                    displayWidth, displayHeight, encodedWidth, encodedHeight,
+                    rotationDegrees);
+        } else {
+            CreateRendererFunc func =
+                (CreateRendererFunc)dlsym(
+                        libHandle,
+                        "_Z14createRendererRKN7android2spINS_8ISurfaceEEEPKc20"
+                        "OMX_COLOR_FORMATTYPEjjjj");
 
-            if (impl) {
-                impl = new SharedVideoRenderer(libHandle, impl);
-                libHandle = NULL;
+            if (func) {
+                impl = (*func)(surface, componentName, colorFormat,
+                        displayWidth, displayHeight, encodedWidth, encodedHeight);
             }
+        }
+
+        if (impl) {
+            impl = new SharedVideoRenderer(libHandle, impl);
+            libHandle = NULL;
         }
 
         if (libHandle) {

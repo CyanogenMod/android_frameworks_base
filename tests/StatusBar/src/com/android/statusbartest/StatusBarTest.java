@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter;
 import android.view.View;
 import android.widget.ListView;
 import android.content.Intent;
+import android.app.PendingIntent;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.StatusBarManager;
@@ -35,6 +36,8 @@ import android.os.SystemClock;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 import android.os.PowerManager;
+import android.view.Window;
+import android.view.WindowManager;
 
 public class StatusBarTest extends TestActivity
 {
@@ -57,6 +60,66 @@ public class StatusBarTest extends TestActivity
     }
 
     private Test[] mTests = new Test[] {
+        new Test("Double Remove") {
+            public void run() {
+                Log.d(TAG, "set 0");
+                mStatusBarManager.setIcon("speakerphone", R.drawable.stat_sys_phone, 0);
+                Log.d(TAG, "remove 1");
+                mStatusBarManager.removeIcon("tty");
+
+                SystemClock.sleep(1000);
+
+                Log.d(TAG, "set 1");
+                mStatusBarManager.setIcon("tty", R.drawable.stat_sys_phone, 0);
+                if (false) {
+                    Log.d(TAG, "set 2");
+                    mStatusBarManager.setIcon("tty", R.drawable.stat_sys_phone, 0);
+                }
+                Log.d(TAG, "remove 2");
+                mStatusBarManager.removeIcon("tty");
+                Log.d(TAG, "set 3");
+                mStatusBarManager.setIcon("speakerphone", R.drawable.stat_sys_phone, 0);
+            }
+        },
+        new Test("Hide") {
+            public void run() {
+                Window win = getWindow();
+                WindowManager.LayoutParams winParams = win.getAttributes();
+                winParams.flags |= WindowManager.LayoutParams.FLAG_FULLSCREEN;
+                win.setAttributes(winParams);
+            }
+        },
+        new Test("Show") {
+            public void run() {
+                Window win = getWindow();
+                WindowManager.LayoutParams winParams = win.getAttributes();
+                winParams.flags &= ~WindowManager.LayoutParams.FLAG_FULLSCREEN;
+                win.setAttributes(winParams);
+            }
+        },
+        new Test("fullScreenIntent") {
+            public void run() {
+                Notification not = new Notification(StatusBarTest.this,
+                                R.drawable.stat_sys_phone,
+                                "Incoming call from: Imperious Leader",
+                                System.currentTimeMillis()-(1000*60*60*24),
+                                "Imperious Leader",
+                                "(888) 555-5038",
+                                null
+                                );
+                Intent fullScreenIntent = new Intent(StatusBarTest.this, TestAlertActivity.class);
+                int id = (int)System.currentTimeMillis();
+                fullScreenIntent.putExtra("id", id);
+                not.fullScreenIntent = PendingIntent.getActivity(
+                    StatusBarTest.this,
+                    0,
+                    fullScreenIntent,
+                    PendingIntent.FLAG_CANCEL_CURRENT);
+                // if you tap on it you should get the original alert box
+                not.contentIntent = not.fullScreenIntent;
+                mNotificationManager.notify(id, not);
+            }
+        },
         new Test("Disable Alerts") {
             public void run() {
                 mStatusBarManager.disable(StatusBarManager.DISABLE_NOTIFICATION_ALERTS);
@@ -134,13 +197,9 @@ public class StatusBarTest extends TestActivity
                     }, 3000);
             }
         },
-        new Test("Expand in 3 sec.") {
+        new Test("Expand") {
             public void run() {
-                mHandler.postDelayed(new Runnable() {
-                        public void run() {
-                            mStatusBarManager.expand();
-                        }
-                    }, 3000);
+                mStatusBarManager.expand();
             }
         },
         new Test("Expand in 3 sec.") {
@@ -161,13 +220,21 @@ public class StatusBarTest extends TestActivity
                     }, 3000);
             }
         },
-        new Test("Toggle in 3 sec.") {
+        new Test("More icons") {
             public void run() {
-                mHandler.postDelayed(new Runnable() {
-                        public void run() {
-                            mStatusBarManager.toggle();
-                        }
-                    }, 3000);
+                for (String slot: new String[] {
+                            "sync_failing",
+                            "gps",
+                            "bluetooth",
+                            "tty",
+                            "speakerphone",
+                            "mute",
+                            "wifi",
+                            "alarm_clock",
+                            "secure",
+                        }) {
+                    mStatusBarManager.setIconVisibility(slot, true);
+                }
             }
         },
     };

@@ -542,6 +542,28 @@ import java.util.WeakHashMap;
  * take care of redrawing the appropriate views until the animation completes.
  * </p>
  *
+ * <a name="Security"></a>
+ * <h3>Security</h3>
+ * <p>
+ * Sometimes it is essential that an application be able to verify that an action
+ * is being performed with the full knowledge and consent of the user, such as
+ * granting a permission request, making a purchase or clicking on an advertisement.
+ * Unfortunately, a malicious application could try to spoof the user into
+ * performing these actions, unaware, by concealing the intended purpose of the view.
+ * As a remedy, the framework offers a touch filtering mechanism that can be used to
+ * improve the security of views that provide access to sensitive functionality.
+ * </p><p>
+ * To enable touch filtering, call {@link #setFilterTouchesWhenObscured} or set the
+ * andoird:filterTouchesWhenObscured attribute to true.  When enabled, the framework
+ * will discard touches that are received whenever the view's window is obscured by
+ * another visible window.  As a result, the view will not receive touches whenever a
+ * toast, dialog or other window appears above the view's window.
+ * </p><p>
+ * For more fine-grained control over security, consider overriding the
+ * {@link #onFilterTouchEventForSecurity} method to implement your own security policy.
+ * See also {@link MotionEvent#FLAG_WINDOW_IS_OBSCURED}.
+ * </p>
+ *
  * @attr ref android.R.styleable#View_background
  * @attr ref android.R.styleable#View_clickable
  * @attr ref android.R.styleable#View_contentDescription
@@ -550,6 +572,7 @@ import java.util.WeakHashMap;
  * @attr ref android.R.styleable#View_id
  * @attr ref android.R.styleable#View_fadingEdge
  * @attr ref android.R.styleable#View_fadingEdgeLength
+ * @attr ref android.R.styleable#View_filterTouchesWhenObscured
  * @attr ref android.R.styleable#View_fitsSystemWindows
  * @attr ref android.R.styleable#View_isScrollContainer
  * @attr ref android.R.styleable#View_focusable
@@ -711,7 +734,14 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      */
     static final int SCROLLBARS_MASK = 0x00000300;
 
-    // note 0x00000400 and 0x00000800 are now available for next flags...
+    /**
+     * Indicates that the view should filter touches when its window is obscured.
+     * Refer to the class comments for more information about this security feature.
+     * {@hide}
+     */
+    static final int FILTER_TOUCHES_WHEN_OBSCURED = 0x00000400;
+
+    // note flag value 0x00000800 is now available for next flags...
 
     /**
      * <p>This view doesn't show fading edges.</p>
@@ -1358,14 +1388,14 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * Width as measured during measure pass.
      * {@hide}
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "measurement")
     protected int mMeasuredWidth;
 
     /**
      * Height as measured during measure pass.
      * {@hide}
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "measurement")
     protected int mMeasuredHeight;
 
     /**
@@ -1420,8 +1450,8 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
     static final int MEASURED_DIMENSION_SET         = 0x00000800;
     /** {@hide} */
     static final int FORCE_LAYOUT                   = 0x00001000;
-
-    private static final int LAYOUT_REQUIRED        = 0x00002000;
+    /** {@hide} */
+    static final int LAYOUT_REQUIRED                = 0x00002000;
 
     private static final int PRESSED                = 0x00004000;
 
@@ -1521,6 +1551,40 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
     private static final int AWAKEN_SCROLL_BARS_ON_ATTACH = 0x08000000;
 
     /**
+     * Always allow a user to over-scroll this view, provided it is a
+     * view that can scroll.
+     *
+     * @see #getOverScrollMode()
+     * @see #setOverScrollMode(int)
+     */
+    public static final int OVER_SCROLL_ALWAYS = 0;
+
+    /**
+     * Allow a user to over-scroll this view only if the content is large
+     * enough to meaningfully scroll, provided it is a view that can scroll.
+     *
+     * @see #getOverScrollMode()
+     * @see #setOverScrollMode(int)
+     */
+    public static final int OVER_SCROLL_IF_CONTENT_SCROLLS = 1;
+
+    /**
+     * Never allow a user to over-scroll this view.
+     *
+     * @see #getOverScrollMode()
+     * @see #setOverScrollMode(int)
+     */
+    public static final int OVER_SCROLL_NEVER = 2;
+
+    /**
+     * Controls the over-scroll mode for this view.
+     * See {@link #overScrollBy(int, int, int, int, int, int, int, int, boolean)},
+     * {@link #OVER_SCROLL_ALWAYS}, {@link #OVER_SCROLL_IF_CONTENT_SCROLLS},
+     * and {@link #OVER_SCROLL_NEVER}.
+     */
+    private int mOverScrollMode;
+
+    /**
      * The parent this view is attached to.
      * {@hide}
      *
@@ -1575,28 +1639,28 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * to the left edge of this view.
      * {@hide}
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "layout")
     protected int mLeft;
     /**
      * The distance in pixels from the left edge of this view's parent
      * to the right edge of this view.
      * {@hide}
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "layout")
     protected int mRight;
     /**
      * The distance in pixels from the top edge of this view's parent
      * to the top edge of this view.
      * {@hide}
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "layout")
     protected int mTop;
     /**
      * The distance in pixels from the top edge of this view's parent
      * to the bottom edge of this view.
      * {@hide}
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "layout")
     protected int mBottom;
 
     /**
@@ -1604,14 +1668,14 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * horizontally.
      * {@hide}
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "scrolling")
     protected int mScrollX;
     /**
      * The offset, in pixels, by which the content of this view is scrolled
      * vertically.
      * {@hide}
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "scrolling")
     protected int mScrollY;
 
     /**
@@ -1619,28 +1683,28 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * left edge of this view and the left edge of its content.
      * {@hide}
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "padding")
     protected int mPaddingLeft;
     /**
      * The right padding in pixels, that is the distance in pixels between the
      * right edge of this view and the right edge of its content.
      * {@hide}
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "padding")
     protected int mPaddingRight;
     /**
      * The top padding in pixels, that is the distance in pixels between the
      * top edge of this view and the top edge of its content.
      * {@hide}
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "padding")
     protected int mPaddingTop;
     /**
      * The bottom padding in pixels, that is the distance in pixels between the
      * bottom edge of this view and the bottom edge of its content.
      * {@hide}
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "padding")
     protected int mPaddingBottom;
 
     /**
@@ -1651,13 +1715,13 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
     /**
      * Cache the paddingRight set by the user to append to the scrollbar's size.
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "padding")
     int mUserPaddingRight;
 
     /**
      * Cache the paddingBottom set by the user to append to the scrollbar's size.
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "padding")
     int mUserPaddingBottom;
 
     /**
@@ -1764,14 +1828,14 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * The minimum height of the view. We'll try our best to have the height
      * of this view to at least this amount.
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "measurement")
     private int mMinHeight;
 
     /**
      * The minimum width of the view. We'll try our best to have the width
      * of this view to at least this amount.
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "measurement")
     private int mMinWidth;
 
     /**
@@ -1812,6 +1876,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
         // Used for debug only
         //++sInstanceCount;
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
+        setOverScrollMode(OVER_SCROLL_IF_CONTENT_SCROLLS);
     }
 
     /**
@@ -1877,6 +1942,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
 
         int scrollbarStyle = SCROLLBARS_INSIDE_OVERLAY;
 
+        int overScrollMode = mOverScrollMode;
         final int N = a.getIndexCount();
         for (int i = 0; i < N; i++) {
             int attr = a.getIndex(i);
@@ -2017,6 +2083,12 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
                         viewFlagMasks |= KEEP_SCREEN_ON;
                     }
                     break;
+                case R.styleable.View_filterTouchesWhenObscured:
+                    if (a.getBoolean(attr, false)) {
+                        viewFlagValues |= FILTER_TOUCHES_WHEN_OBSCURED;
+                        viewFlagMasks |= FILTER_TOUCHES_WHEN_OBSCURED;
+                    }
+                    break;
                 case R.styleable.View_nextFocusLeft:
                     mNextFocusLeftId = a.getResourceId(attr, View.NO_ID);
                     break;
@@ -2076,8 +2148,13 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
                         });
                     }
                     break;
+                case R.styleable.View_overScrollMode:
+                    overScrollMode = a.getInt(attr, OVER_SCROLL_IF_CONTENT_SCROLLS);
+                    break;
             }
         }
+
+        setOverScrollMode(overScrollMode);
 
         if (background != null) {
             setBackgroundDrawable(background);
@@ -2413,11 +2490,10 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
     }
 
     /**
-     * Call this view's OnLongClickListener, if it is defined. Invokes the context menu
-     * if the OnLongClickListener did not consume the event.
+     * Call this view's OnLongClickListener, if it is defined. Invokes the context menu if the
+     * OnLongClickListener did not consume the event.
      *
-     * @return True there was an assigned OnLongClickListener that was called, false
-     *         otherwise is returned.
+     * @return True if one of the above receivers consumed the event, false otherwise.
      */
     public boolean performLongClick() {
         sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);
@@ -2602,7 +2678,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      *
      * @return True if this view has or contains focus, false otherwise.
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "focus")
     public boolean hasFocus() {
         return (mPrivateFlags & FOCUSED) != 0;
     }
@@ -2780,7 +2856,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      *
      * @return True if this view has focus, false otherwise.
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "focus")
     public boolean isFocused() {
         return (mPrivateFlags & FOCUSED) != 0;
     }
@@ -3005,6 +3081,16 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
     }
 
     /**
+     * Determine if this view has the FITS_SYSTEM_WINDOWS flag set.
+     * @return True if window has FITS_SYSTEM_WINDOWS set
+     *
+     * @hide
+     */
+    public boolean isFitsSystemWindowsFlagSet() {
+        return (mViewFlags & FITS_SYSTEM_WINDOWS) == FITS_SYSTEM_WINDOWS;
+    }
+
+    /**
      * Returns the visibility status for this view.
      *
      * @return One of {@link #VISIBLE}, {@link #INVISIBLE}, or {@link #GONE}.
@@ -3181,7 +3267,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      *
      * @return true if this view has nothing to draw, false otherwise
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "drawing")
     public boolean willNotDraw() {
         return (mViewFlags & DRAW_MASK) == WILL_NOT_DRAW;
     }
@@ -3204,7 +3290,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      *
      * @return true if this view does not cache its drawing, false otherwise
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "drawing")
     public boolean willNotCacheDrawing() {
         return (mViewFlags & WILL_NOT_CACHE_DRAWING) == WILL_NOT_CACHE_DRAWING;
     }
@@ -3340,6 +3426,35 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
         setFlags(enabled ? 0 : SAVE_DISABLED, SAVE_DISABLED_MASK);
     }
 
+    /**
+     * Gets whether the framework should discard touches when the view's
+     * window is obscured by another visible window.
+     * Refer to the {@link View} security documentation for more details.
+     *
+     * @return True if touch filtering is enabled.
+     *
+     * @see #setFilterTouchesWhenObscured(boolean)
+     * @attr ref android.R.styleable#View_filterTouchesWhenObscured
+     */
+    @ViewDebug.ExportedProperty
+    public boolean getFilterTouchesWhenObscured() {
+        return (mViewFlags & FILTER_TOUCHES_WHEN_OBSCURED) != 0;
+    }
+
+    /**
+     * Sets whether the framework should discard touches when the view's
+     * window is obscured by another visible window.
+     * Refer to the {@link View} security documentation for more details.
+     *
+     * @param enabled True if touch filtering should be enabled.
+     *
+     * @see #getFilterTouchesWhenObscured
+     * @attr ref android.R.styleable#View_filterTouchesWhenObscured
+     */
+    public void setFilterTouchesWhenObscured(boolean enabled) {
+        setFlags(enabled ? 0 : FILTER_TOUCHES_WHEN_OBSCURED,
+                FILTER_TOUCHES_WHEN_OBSCURED);
+    }
 
     /**
      * Returns whether this View is able to take focus.
@@ -3347,7 +3462,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * @return True if this view can take focus, or false otherwise.
      * @attr ref android.R.styleable#View_focusable
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "focus")
     public final boolean isFocusable() {
         return FOCUSABLE == (mViewFlags & FOCUSABLE_MASK);
     }
@@ -3759,11 +3874,32 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * @return True if the event was handled by the view, false otherwise.
      */
     public boolean dispatchTouchEvent(MotionEvent event) {
+        if (!onFilterTouchEventForSecurity(event)) {
+            return false;
+        }
+
         if (mOnTouchListener != null && (mViewFlags & ENABLED_MASK) == ENABLED &&
                 mOnTouchListener.onTouch(this, event)) {
             return true;
         }
         return onTouchEvent(event);
+    }
+
+    /**
+     * Filter the touch event to apply security policies.
+     *
+     * @param event The motion event to be filtered.
+     * @return True if the event should be dispatched, false if the event should be dropped.
+     * 
+     * @see #getFilterTouchesWhenObscured
+     */
+    public boolean onFilterTouchEventForSecurity(MotionEvent event) {
+        if ((mViewFlags & FILTER_TOUCHES_WHEN_OBSCURED) != 0
+                && (event.getFlags() & MotionEvent.FLAG_WINDOW_IS_OBSCURED) != 0) {
+            // Window is obscured, drop this touch.
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -4207,6 +4343,10 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
     /**
      * Show the context menu for this view. It is not safe to hold on to the
      * menu after returning from this method.
+     *
+     * You should normally not overload this method. Overload
+     * {@link #onCreateContextMenu(ContextMenu)} or define an
+     * {@link OnCreateContextMenuListener} to add items to the context menu.
      *
      * @param menu The context menu to populate
      */
@@ -4656,7 +4796,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      *
      * @return The width of your view, in pixels.
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "layout")
     public final int getWidth() {
         return mRight - mLeft;
     }
@@ -4666,7 +4806,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      *
      * @return The height of your view, in pixels.
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "layout")
     public final int getHeight() {
         return mBottom - mTop;
     }
@@ -5152,7 +5292,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      *
      * @return True if this View is guaranteed to be fully opaque, false otherwise.
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "drawing")
     public boolean isOpaque() {
         return (mPrivateFlags & OPAQUE_MASK) == OPAQUE_MASK;
     }
@@ -6237,7 +6377,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * @see #setDrawingCacheEnabled(boolean)
      * @see #getDrawingCache()
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "drawing")
     public boolean isDrawingCacheEnabled() {
         return (mViewFlags & DRAWING_CACHE_ENABLED) == DRAWING_CACHE_ENABLED;
     }
@@ -6393,11 +6533,11 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
 
             final int drawingCacheBackgroundColor = mDrawingCacheBackgroundColor;
             final boolean opaque = drawingCacheBackgroundColor != 0 || isOpaque();
-            final boolean translucentWindow = attachInfo != null && attachInfo.mTranslucentWindow;
+            final boolean use32BitCache = attachInfo != null && attachInfo.mUse32BitDrawingCache;
 
             if (width <= 0 || height <= 0 ||
                      // Projected bitmap size in bytes
-                    (width * height * (opaque && !translucentWindow ? 2 : 4) >
+                    (width * height * (opaque && !use32BitCache ? 2 : 4) >
                             ViewConfiguration.get(mContext).getScaledMaximumDrawingCacheSize())) {
                 destroyDrawingCache();
                 return;
@@ -6427,7 +6567,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
                 } else {
                     // Optimization for translucent windows
                     // If the window is translucent, use a 32 bits bitmap to benefit from memcpy()
-                    quality = translucentWindow ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
+                    quality = use32BitCache ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
                 }
 
                 // Try to cleanup memory
@@ -6441,7 +6581,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
                     } else {
                         mUnscaledDrawingCache = new SoftReference<Bitmap>(bitmap);
                     }
-                    if (opaque && translucentWindow) bitmap.setHasAlpha(false);
+                    if (opaque && use32BitCache) bitmap.setHasAlpha(false);
                 } catch (OutOfMemoryError e) {
                     // If there is not enough memory to create the bitmap cache, just
                     // ignore the issue as bitmap caches are not required to draw the
@@ -7890,7 +8030,9 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * without resorting to another data structure.
      *
      * The specified key should be an id declared in the resources of the
-     * application to ensure it is unique. Keys identified as belonging to
+     * application to ensure it is unique (see the <a
+     * href={@docRoot}guide/topics/resources/more-resources.html#Id">ID resource type</a>).
+     * Keys identified as belonging to
      * the Android framework or not associated with any package will cause
      * an {@link IllegalArgumentException} to be thrown.
      *
@@ -8104,7 +8246,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * @return the offset of the baseline within the widget's bounds or -1
      *         if baseline alignment is not supported
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "layout")
     public int getBaseline() {
         return -1;
     }
@@ -8666,6 +8808,128 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
     }
 
     /**
+     * Scroll the view with standard behavior for scrolling beyond the normal
+     * content boundaries. Views that call this method should override
+     * {@link #onOverScrolled(int, int, boolean, boolean)} to respond to the
+     * results of an over-scroll operation.
+     *
+     * Views can use this method to handle any touch or fling-based scrolling.
+     *
+     * @param deltaX Change in X in pixels
+     * @param deltaY Change in Y in pixels
+     * @param scrollX Current X scroll value in pixels before applying deltaX
+     * @param scrollY Current Y scroll value in pixels before applying deltaY
+     * @param scrollRangeX Maximum content scroll range along the X axis
+     * @param scrollRangeY Maximum content scroll range along the Y axis
+     * @param maxOverScrollX Number of pixels to overscroll by in either direction
+     *          along the X axis.
+     * @param maxOverScrollY Number of pixels to overscroll by in either direction
+     *          along the Y axis.
+     * @param isTouchEvent true if this scroll operation is the result of a touch event.
+     * @return true if scrolling was clamped to an over-scroll boundary along either
+     *          axis, false otherwise.
+     */
+    protected boolean overScrollBy(int deltaX, int deltaY,
+            int scrollX, int scrollY,
+            int scrollRangeX, int scrollRangeY,
+            int maxOverScrollX, int maxOverScrollY,
+            boolean isTouchEvent) {
+        final int overScrollMode = mOverScrollMode;
+        final boolean canScrollHorizontal =
+                computeHorizontalScrollRange() > computeHorizontalScrollExtent();
+        final boolean canScrollVertical =
+                computeVerticalScrollRange() > computeVerticalScrollExtent();
+        final boolean overScrollHorizontal = overScrollMode == OVER_SCROLL_ALWAYS ||
+                (overScrollMode == OVER_SCROLL_IF_CONTENT_SCROLLS && canScrollHorizontal);
+        final boolean overScrollVertical = overScrollMode == OVER_SCROLL_ALWAYS ||
+                (overScrollMode == OVER_SCROLL_IF_CONTENT_SCROLLS && canScrollVertical);
+
+        int newScrollX = scrollX + deltaX;
+        if (!overScrollHorizontal) {
+            maxOverScrollX = 0;
+        }
+
+        int newScrollY = scrollY + deltaY;
+        if (!overScrollVertical) {
+            maxOverScrollY = 0;
+        }
+
+        // Clamp values if at the limits and record
+        final int left = -maxOverScrollX;
+        final int right = maxOverScrollX + scrollRangeX;
+        final int top = -maxOverScrollY;
+        final int bottom = maxOverScrollY + scrollRangeY;
+
+        boolean clampedX = false;
+        if (newScrollX > right) {
+            newScrollX = right;
+            clampedX = true;
+        } else if (newScrollX < left) {
+            newScrollX = left;
+            clampedX = true;
+        }
+
+        boolean clampedY = false;
+        if (newScrollY > bottom) {
+            newScrollY = bottom;
+            clampedY = true;
+        } else if (newScrollY < top) {
+            newScrollY = top;
+            clampedY = true;
+        }
+
+        onOverScrolled(newScrollX, newScrollY, clampedX, clampedY);
+
+        return clampedX || clampedY;
+    }
+
+    /**
+     * Called by {@link #overScrollBy(int, int, int, int, int, int, int, int, boolean)} to
+     * respond to the results of an over-scroll operation.
+     *
+     * @param scrollX New X scroll value in pixels
+     * @param scrollY New Y scroll value in pixels
+     * @param clampedX True if scrollX was clamped to an over-scroll boundary
+     * @param clampedY True if scrollY was clamped to an over-scroll boundary
+     */
+    protected void onOverScrolled(int scrollX, int scrollY,
+            boolean clampedX, boolean clampedY) {
+        // Intentionally empty.
+    }
+
+    /**
+     * Returns the over-scroll mode for this view. The result will be
+     * one of {@link #OVER_SCROLL_ALWAYS} (default), {@link #OVER_SCROLL_IF_CONTENT_SCROLLS}
+     * (allow over-scrolling only if the view content is larger than the container),
+     * or {@link #OVER_SCROLL_NEVER}.
+     *
+     * @return This view's over-scroll mode.
+     */
+    public int getOverScrollMode() {
+        return mOverScrollMode;
+    }
+
+    /**
+     * Set the over-scroll mode for this view. Valid over-scroll modes are
+     * {@link #OVER_SCROLL_ALWAYS} (default), {@link #OVER_SCROLL_IF_CONTENT_SCROLLS}
+     * (allow over-scrolling only if the view content is larger than the container),
+     * or {@link #OVER_SCROLL_NEVER}.
+     *
+     * Setting the over-scroll mode of a view will have an effect only if the
+     * view is capable of scrolling.
+     *
+     * @param overScrollMode The new over-scroll mode for this view.
+     */
+    public void setOverScrollMode(int overScrollMode) {
+        if (overScrollMode != OVER_SCROLL_ALWAYS &&
+                overScrollMode != OVER_SCROLL_IF_CONTENT_SCROLLS &&
+                overScrollMode != OVER_SCROLL_NEVER) {
+            throw new IllegalArgumentException("Invalid overscroll mode " + overScrollMode);
+        }
+        mOverScrollMode = overScrollMode;
+    }
+
+    /**
      * A MeasureSpec encapsulates the layout requirements passed from parent to child.
      * Each MeasureSpec represents a requirement for either the width or the height.
      * A MeasureSpec is comprised of a size and a mode. There are three possible
@@ -9051,9 +9315,9 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
         int mWindowTop;
 
         /**
-         * Indicates whether the window is translucent/transparent
+         * Indicates whether views need to use 32-bit drawing caches
          */
-        boolean mTranslucentWindow;        
+        boolean mUse32BitDrawingCache;
 
         /**
          * For windows that are full-screen but using insets to layout inside

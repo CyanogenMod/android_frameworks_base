@@ -75,6 +75,22 @@ public final class MediaStore {
     public static final String INTENT_ACTION_MEDIA_SEARCH = "android.intent.action.MEDIA_SEARCH";
 
     /**
+     * An intent to perform a search for music media and automatically play content from the
+     * result when possible. This can be fired, for example, by the result of a voice recognition
+     * command to listen to music.
+     * <p>
+     * Contains the {@link android.app.SearchManager#QUERY} extra, which is a string
+     * that can contain any type of unstructured music search, like the name of an artist,
+     * an album, a song, a genre, or any combination of these.
+     * <p>
+     * Because this intent includes an open-ended unstructured search string, it makes the most
+     * sense for apps that can support large-scale search of music, such as services connected
+     * to an online database of music which can be streamed and played on the device.
+     */
+    public static final String INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH =
+            "android.media.action.MEDIA_PLAY_FROM_SEARCH";
+    
+    /**
      * The name of the Intent-extra used to define the artist
      */
     public static final String EXTRA_MEDIA_ARTIST = "android.intent.extra.artist";
@@ -249,6 +265,8 @@ public final class MediaStore {
         private static final int MICRO_KIND = 3;
         private static final String[] PROJECTION = new String[] {_ID, MediaColumns.DATA};
         static final int DEFAULT_GROUP_ID = 0;
+        private static final Object sThumbBufLock = new Object();
+        private static byte[] sThumbBuf;
 
         private static Bitmap getMiniThumbFromFile(Cursor c, Uri baseUri, ContentResolver cr, BitmapFactory.Options options) {
             Bitmap bitmap = null;
@@ -321,11 +339,15 @@ public final class MediaStore {
             long magic = thumbFile.getMagic(origId);
             if (magic != 0) {
                 if (kind == MICRO_KIND) {
-                    byte[] data = new byte[MiniThumbFile.BYTES_PER_MINTHUMB];
-                    if (thumbFile.getMiniThumbFromFile(origId, data) != null) {
-                        bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                        if (bitmap == null) {
-                            Log.w(TAG, "couldn't decode byte array.");
+                    synchronized (sThumbBufLock) {
+                        if (sThumbBuf == null) {
+                            sThumbBuf = new byte[MiniThumbFile.BYTES_PER_MINTHUMB];
+                        }
+                        if (thumbFile.getMiniThumbFromFile(origId, sThumbBuf) != null) {
+                            bitmap = BitmapFactory.decodeByteArray(sThumbBuf, 0, sThumbBuf.length);
+                            if (bitmap == null) {
+                                Log.w(TAG, "couldn't decode byte array.");
+                            }
                         }
                     }
                     return bitmap;
@@ -357,11 +379,15 @@ public final class MediaStore {
 
                 // Assuming thumbnail has been generated, at least original image exists.
                 if (kind == MICRO_KIND) {
-                    byte[] data = new byte[MiniThumbFile.BYTES_PER_MINTHUMB];
-                    if (thumbFile.getMiniThumbFromFile(origId, data) != null) {
-                        bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-                        if (bitmap == null) {
-                            Log.w(TAG, "couldn't decode byte array.");
+                    synchronized (sThumbBufLock) {
+                        if (sThumbBuf == null) {
+                            sThumbBuf = new byte[MiniThumbFile.BYTES_PER_MINTHUMB];
+                        }
+                        if (thumbFile.getMiniThumbFromFile(origId, sThumbBuf) != null) {
+                            bitmap = BitmapFactory.decodeByteArray(sThumbBuf, 0, sThumbBuf.length);
+                            if (bitmap == null) {
+                                Log.w(TAG, "couldn't decode byte array.");
+                            }
                         }
                     }
                 } else if (kind == MINI_KIND) {
@@ -1819,4 +1845,12 @@ public final class MediaStore {
      * Name of current volume being scanned by the media scanner.
      */
     public static final String MEDIA_SCANNER_VOLUME = "volume";
+
+    /**
+     * Name of the file signaling the media scanner to ignore media in the containing directory
+     * and its subdirectories. Developers should use this to avoid application graphics showing
+     * up in the Gallery and likewise prevent application sounds and music from showing up in
+     * the Music app.
+     */
+    public static final String MEDIA_IGNORE_FILENAME = ".nomedia";
 }

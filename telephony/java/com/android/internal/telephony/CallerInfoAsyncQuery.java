@@ -24,9 +24,11 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.SystemProperties;
+import android.provider.ContactsContract.CommonDataKinds.SipAddress;
+import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.PhoneLookup;
 import android.telephony.PhoneNumberUtils;
-import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -35,7 +37,6 @@ import android.util.Log;
  */
 
 public class CallerInfoAsyncQuery {
-
     private static final boolean DBG = false;
     private static final String LOG_TAG = "CallerInfoAsyncQuery";
 
@@ -127,14 +128,14 @@ public class CallerInfoAsyncQuery {
                     // However, if there is any code that this Handler calls (such as in
                     // super.handleMessage) that DOES place unexpected messages on the
                     // queue, then we need pass these messages on.
-                    if (DBG) log("Unexpected command (CookieWrapper is null): " + msg.what +
+                    if (DBG) Log.d(LOG_TAG, "Unexpected command (CookieWrapper is null): " + msg.what +
                             " ignored by CallerInfoWorkerHandler, passing onto parent.");
 
                     super.handleMessage(msg);
                 } else {
 
-                    if (DBG) log("Processing event: " + cw.event + " token (arg1): " + msg.arg1 +
-                            " command: " + msg.what + " query URI: " + args.uri);
+                    if (DBG) Log.d(LOG_TAG, "Processing event: " + cw.event + " token (arg1): " + msg.arg1 +
+                        " command: " + msg.what + " query URI: " + sanitizeUriToString(args.uri));
 
                     switch (cw.event) {
                         case EVENT_NEW_QUERY:
@@ -189,7 +190,7 @@ public class CallerInfoAsyncQuery {
          */
         @Override
         protected void onQueryComplete(int token, Object cookie, Cursor cursor) {
-            if (DBG) log("query complete for token: " + token);
+            if (DBG) Log.d(LOG_TAG, "##### onQueryComplete() #####   query complete for token: " + token);
 
             //get the cookie and notify the listener.
             CookieWrapper cw = (CookieWrapper) cookie;
@@ -198,7 +199,7 @@ public class CallerInfoAsyncQuery {
                 // from within this code.
                 // However, if there is any code that calls this method, we should
                 // check the parameters to make sure they're viable.
-                if (DBG) log("Cookie is null, ignoring onQueryComplete() request.");
+                if (DBG) Log.d(LOG_TAG, "Cookie is null, ignoring onQueryComplete() request.");
                 return;
             }
 
@@ -227,23 +228,33 @@ public class CallerInfoAsyncQuery {
                     mCallerInfo = new CallerInfo().markAsVoiceMail();
                 } else {
                     mCallerInfo = CallerInfo.getCallerInfo(mQueryContext, mQueryUri, cursor);
+                    if (DBG) Log.d(LOG_TAG, "==> Got mCallerInfo: " + mCallerInfo);
+
+                    CallerInfo newCallerInfo = CallerInfo.doSecondaryLookupIfNecessary(
+                            mQueryContext, cw.number, mCallerInfo);
+                    if (newCallerInfo != mCallerInfo) {
+                        mCallerInfo = newCallerInfo;
+                        if (DBG) Log.d(LOG_TAG, "#####async contact look up with numeric username"
+                                + mCallerInfo);
+                    }
+
                     // Use the number entered by the user for display.
                     if (!TextUtils.isEmpty(cw.number)) {
                         mCallerInfo.phoneNumber = PhoneNumberUtils.formatNumber(cw.number);
                     }
                 }
 
-                if (DBG) log("constructing CallerInfo object for token: " + token);
+                if (DBG) Log.d(LOG_TAG, "constructing CallerInfo object for token: " + token);
 
                 //notify that we can clean up the queue after this.
                 CookieWrapper endMarker = new CookieWrapper();
                 endMarker.event = EVENT_END_OF_QUEUE;
-                startQuery (token, endMarker, null, null, null, null, null);
+                startQuery(token, endMarker, null, null, null, null, null);
             }
 
             //notify the listener that the query is complete.
             if (cw.listener != null) {
-                if (DBG) log("notifying listener: " + cw.listener.getClass().toString() +
+                if (DBG) Log.d(LOG_TAG, "notifying listener: " + cw.listener.getClass().toString() +
                              " for token: " + token + mCallerInfo);
                 cw.listener.onQueryComplete(token, cw.cookie, mCallerInfo);
             }
@@ -266,7 +277,7 @@ public class CallerInfoAsyncQuery {
         CallerInfoAsyncQuery c = new CallerInfoAsyncQuery();
         c.allocate(context, contactRef);
 
-        if (DBG) log("starting query for URI: " + contactRef + " handler: " + c.toString());
+        if (DBG) Log.d(LOG_TAG, "starting query for URI: " + contactRef + " handler: " + c.toString());
 
         //create cookieWrapper, start query
         CookieWrapper cw = new CookieWrapper();
@@ -274,23 +285,81 @@ public class CallerInfoAsyncQuery {
         cw.cookie = cookie;
         cw.event = EVENT_NEW_QUERY;
 
-        c.mHandler.startQuery (token, cw, contactRef, null, null, null, null);
+        c.mHandler.startQuery(token, cw, contactRef, null, null, null, null);
 
         return c;
     }
 
     /**
-     * Factory method to start query with a number
+     * Factory method to start the query based on a number.
+     *
+     * Note: if the number contains an "@" character we treat it
+     * as a SIP address, and look it up directly in the Data table
+     * rather than using the PhoneLookup table.
+     * TODO: But eventually we should expose two separate methods, one for
+     * numbers and one for SIP addresses, and then have
+     * PhoneUtils.startGetCallerInfo() decide which one to call based on
+     * the phone type of the incoming connection.
      */
     public static CallerInfoAsyncQuery startQuery(int token, Context context, String number,
             OnQueryCompleteListener listener, Object cookie) {
-        //contruct the URI object and start Query.
-        Uri contactRef = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+        if (DBG) {
+            Log.d(LOG_TAG, "##### CallerInfoAsyncQuery startQuery()... #####");
+            Log.d(LOG_TAG, "- number: " + /*number*/ "xxxxxxx");
+            Log.d(LOG_TAG, "- cookie: " + cookie);
+        }
+
+        // Construct the URI object and query params, and start the query.
+
+        Uri contactRef;
+        String selection;
+        String[] selectionArgs;
+
+        if (PhoneNumberUtils.isUriNumber(number)) {
+            // "number" is really a SIP address.
+            if (DBG) Log.d(LOG_TAG, "  - Treating number as a SIP address: " + /*number*/ "xxxxxxx");
+
+            // We look up SIP addresses directly in the Data table:
+            contactRef = Data.CONTENT_URI;
+
+            // Note Data.DATA1 and SipAddress.SIP_ADDRESS are equivalent.
+            //
+            // Also note we use "upper(data1)" in the WHERE clause, and
+            // uppercase the incoming SIP address, in order to do a
+            // case-insensitive match.
+            //
+            // TODO: need to confirm that the use of upper() doesn't
+            // prevent us from using the index!  (Linear scan of the whole
+            // contacts DB can be very slow.)
+            //
+            // TODO: May also need to normalize by adding "sip:" as a
+            // prefix, if we start storing SIP addresses that way in the
+            // database.
+
+            selection = "upper(" + Data.DATA1 + ")=?"
+                    + " AND "
+                    + Data.MIMETYPE + "='" + SipAddress.CONTENT_ITEM_TYPE + "'";
+            selectionArgs = new String[] { number.toUpperCase() };
+
+        } else {
+            // "number" is a regular phone number.  Use the PhoneLookup table:
+            contactRef = Uri.withAppendedPath(PhoneLookup.CONTENT_FILTER_URI, Uri.encode(number));
+            selection = null;
+            selectionArgs = null;
+        }
+
+        if (DBG) {
+            Log.d(LOG_TAG, "==> contactRef: " + sanitizeUriToString(contactRef));
+            Log.d(LOG_TAG, "==> selection: " + selection);
+            if (selectionArgs != null) {
+                for (int i = 0; i < selectionArgs.length; i++) {
+                    Log.d(LOG_TAG, "==> selectionArgs[" + i + "]: " + selectionArgs[i]);
+                }
+            }
+        }
 
         CallerInfoAsyncQuery c = new CallerInfoAsyncQuery();
         c.allocate(context, contactRef);
-
-        if (DBG) log("starting query for number: " + number + " handler: " + c.toString());
 
         //create cookieWrapper, start query
         CookieWrapper cw = new CookieWrapper();
@@ -307,18 +376,23 @@ public class CallerInfoAsyncQuery {
             cw.event = EVENT_NEW_QUERY;
         }
 
-        c.mHandler.startQuery (token, cw, contactRef, null, null, null, null);
-
+        c.mHandler.startQuery(token,
+                              cw,  // cookie
+                              contactRef,  // uri
+                              null,  // projection
+                              selection,  // selection
+                              selectionArgs,  // selectionArgs
+                              null);  // orderBy
         return c;
-   }
+    }
 
     /**
      * Method to add listeners to a currently running query
      */
     public void addQueryListener(int token, OnQueryCompleteListener listener, Object cookie) {
 
-        if (DBG) log("adding listener to query: " + mHandler.mQueryUri + " handler: " +
-                mHandler.toString());
+        if (DBG) Log.d(LOG_TAG, "adding listener to query: " + sanitizeUriToString(mHandler.mQueryUri) +
+                " handler: " + mHandler.toString());
 
         //create cookieWrapper, add query request to end of queue.
         CookieWrapper cw = new CookieWrapper();
@@ -326,7 +400,7 @@ public class CallerInfoAsyncQuery {
         cw.cookie = cookie;
         cw.event = EVENT_ADD_LISTENER;
 
-        mHandler.startQuery (token, cw, null, null, null, null, null);
+        mHandler.startQuery(token, cw, null, null, null, null, null);
     }
 
     /**
@@ -352,10 +426,17 @@ public class CallerInfoAsyncQuery {
         mHandler = null;
     }
 
-    /**
-     * static logging method
-     */
-    private static void log(String msg) {
-        Log.d(LOG_TAG, msg);
+    private static String sanitizeUriToString(Uri uri) {
+        if (uri != null) {
+            String uriString = uri.toString();
+            int indexOfLastSlash = uriString.lastIndexOf('/');
+            if (indexOfLastSlash > 0) {
+                return uriString.substring(0, indexOfLastSlash) + "/xxxxxxx";
+            } else {
+                return uriString;
+            }
+        } else {
+            return "";
+        }
     }
 }

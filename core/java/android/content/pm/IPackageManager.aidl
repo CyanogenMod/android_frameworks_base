@@ -70,6 +70,8 @@ interface IPackageManager {
 
     ServiceInfo getServiceInfo(in ComponentName className, int flags);
 
+    ProviderInfo getProviderInfo(in ComponentName className, int flags);
+
     int checkPermission(String permName, String pkgName);
     
     int checkUidPermission(String permName, int uid);
@@ -323,4 +325,6 @@ interface IPackageManager {
 
     boolean setInstallLocation(int loc);
     int getInstallLocation();
+
+    void setPackageObbPath(String packageName, String path);
 }

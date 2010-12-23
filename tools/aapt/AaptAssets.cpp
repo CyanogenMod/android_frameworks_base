@@ -766,6 +766,11 @@ bool AaptGroupEntry::getScreenLayoutSizeName(const char* name,
                 (out->screenLayout&~ResTable_config::MASK_SCREENSIZE)
                 | ResTable_config::SCREENSIZE_LARGE;
         return true;
+    } else if (strcmp(name, "xlarge") == 0) {
+        if (out) out->screenLayout =
+                (out->screenLayout&~ResTable_config::MASK_SCREENSIZE)
+                | ResTable_config::SCREENSIZE_XLARGE;
+        return true;
     }
 
     return false;
@@ -1823,6 +1828,16 @@ ssize_t AaptAssets::slurpResourceTree(Bundle* bundle, const String8& srcDir)
                     entry->d_name);
             err = -1;
             continue;
+        }
+
+        if (bundle->getMaxResVersion() != NULL && group.version.length() != 0) {
+            int maxResInt = atoi(bundle->getMaxResVersion());
+            const char *verString = group.version.string();
+            int dirVersionInt = atoi(verString + 1); // skip 'v' in version name
+            if (dirVersionInt > maxResInt) {
+              fprintf(stderr, "max res %d, skipping %s\n", maxResInt, entry->d_name);
+              continue;
+            }
         }
 
         FileType type = getFileType(subdirName.string());

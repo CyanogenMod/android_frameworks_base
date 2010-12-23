@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+//#define LOG_NDEBUG 0
+#define LOG_TAG "VorbisDecoder"
+#include <utils/Log.h>
+
 #include "VorbisDecoder.h"
 
 #include <media/stagefright/MediaBufferGroup.h>
@@ -108,6 +112,12 @@ status_t VorbisDecoder::start(MetaData *params) {
 
     mAnchorTimeUs = 0;
     mNumFramesOutput = 0;
+
+    // If the source never limits the number of valid frames contained
+    // in the input data, we'll assume that all of the decoded frames are
+    // valid.
+    mNumFramesLeftOnPage = -1;
+
     mStarted = true;
 
     return OK;
@@ -188,6 +198,15 @@ int VorbisDecoder::decodePacket(MediaBuffer *packet, MediaBuffer *out) {
         }
     }
 
+    if (mNumFramesLeftOnPage >= 0) {
+        if (numFrames > mNumFramesLeftOnPage) {
+            LOGV("discarding %d frames at end of page",
+                 numFrames - mNumFramesLeftOnPage);
+            numFrames = mNumFramesLeftOnPage;
+        }
+        mNumFramesLeftOnPage -= numFrames;
+    }
+
     out->set_range(0, numFrames * sizeof(int16_t) * mNumChannels);
 
     return numFrames;
@@ -200,7 +219,8 @@ status_t VorbisDecoder::read(
     *out = NULL;
 
     int64_t seekTimeUs;
-    if (options && options->getSeekTo(&seekTimeUs)) {
+    ReadOptions::SeekMode mode;
+    if (options && options->getSeekTo(&seekTimeUs, &mode)) {
         CHECK(seekTimeUs >= 0);
 
         mNumFramesOutput = 0;
@@ -223,6 +243,13 @@ status_t VorbisDecoder::read(
     } else {
         // We must have a new timestamp after seeking.
         CHECK(seekTimeUs < 0);
+    }
+
+    int32_t numPageSamples;
+    if (inputBuffer->meta_data()->findInt32(
+                kKeyValidSamples, &numPageSamples)) {
+        CHECK(numPageSamples >= 0);
+        mNumFramesLeftOnPage = numPageSamples;
     }
 
     MediaBuffer *outputBuffer;

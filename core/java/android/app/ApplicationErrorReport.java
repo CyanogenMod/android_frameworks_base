@@ -24,9 +24,11 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.provider.Settings;
 import android.util.Printer;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
@@ -52,7 +54,6 @@ public class ApplicationErrorReport implements Parcelable {
     // System property defining default error report receiver
     static final String DEFAULT_ERROR_RECEIVER_PROPERTY = "ro.error.receiver.default";
 
-    
     /**
      * Uninitialized error report.
      */
@@ -74,8 +75,15 @@ public class ApplicationErrorReport implements Parcelable {
     public static final int TYPE_BATTERY = 3;
 
     /**
+     * A report from a user to a developer about a running service that the
+     * user doesn't think should be running.
+     */
+    public static final int TYPE_RUNNING_SERVICE = 5;
+
+    /**
      * Type of this report. Can be one of {@link #TYPE_NONE},
-     * {@link #TYPE_CRASH}, {@link #TYPE_ANR}, or {@link #TYPE_BATTERY}.
+     * {@link #TYPE_CRASH}, {@link #TYPE_ANR}, {@link #TYPE_BATTERY},
+     * or {@link #TYPE_RUNNING_SERVICE}.
      */
     public int type;
 
@@ -123,7 +131,13 @@ public class ApplicationErrorReport implements Parcelable {
      * of BatteryInfo; otherwise null.
      */
     public BatteryInfo batteryInfo;
-    
+
+    /**
+     * If this report is of type {@link #TYPE_RUNNING_SERVICE}, contains an instance
+     * of RunningServiceInfo; otherwise null.
+     */
+    public RunningServiceInfo runningServiceInfo;
+
     /**
      * Create an uninitialized instance of {@link ApplicationErrorReport}.
      */
@@ -218,6 +232,9 @@ public class ApplicationErrorReport implements Parcelable {
             case TYPE_BATTERY:
                 batteryInfo.writeToParcel(dest, flags);
                 break;
+            case TYPE_RUNNING_SERVICE:
+                runningServiceInfo.writeToParcel(dest, flags);
+                break;
         }
     }
 
@@ -234,16 +251,25 @@ public class ApplicationErrorReport implements Parcelable {
                 crashInfo = new CrashInfo(in);
                 anrInfo = null;
                 batteryInfo = null;
+                runningServiceInfo = null;
                 break;
             case TYPE_ANR:
                 anrInfo = new AnrInfo(in);
                 crashInfo = null;
                 batteryInfo = null;
+                runningServiceInfo = null;
                 break;
             case TYPE_BATTERY:
                 batteryInfo = new BatteryInfo(in);
                 anrInfo = null;
                 crashInfo = null;
+                runningServiceInfo = null;
+                break;
+            case TYPE_RUNNING_SERVICE:
+                batteryInfo = null;
+                anrInfo = null;
+                crashInfo = null;
+                runningServiceInfo = new RunningServiceInfo(in);
                 break;
         }
     }
@@ -471,6 +497,51 @@ public class ApplicationErrorReport implements Parcelable {
             pw.println(prefix + "durationMicros: " + durationMicros);
             pw.println(prefix + "usageDetails: " + usageDetails);
             pw.println(prefix + "checkinDetails: " + checkinDetails);
+        }
+    }
+
+    /**
+     * Describes a running service report.
+     */
+    public static class RunningServiceInfo {
+        /**
+         * Duration in milliseconds that the service has been running.
+         */
+        public long durationMillis;
+
+        /**
+         * Dump of debug information about the service.
+         */
+        public String serviceDetails;
+
+        /**
+         * Create an uninitialized instance of RunningServiceInfo.
+         */
+        public RunningServiceInfo() {
+        }
+
+        /**
+         * Create an instance of RunningServiceInfo initialized from a Parcel.
+         */
+        public RunningServiceInfo(Parcel in) {
+            durationMillis = in.readLong();
+            serviceDetails = in.readString();
+        }
+
+        /**
+         * Save a RunningServiceInfo instance to a parcel.
+         */
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeLong(durationMillis);
+            dest.writeString(serviceDetails);
+        }
+
+        /**
+         * Dump a BatteryInfo instance to a Printer.
+         */
+        public void dump(Printer pw, String prefix) {
+            pw.println(prefix + "durationMillis: " + durationMillis);
+            pw.println(prefix + "serviceDetails: " + serviceDetails);
         }
     }
 

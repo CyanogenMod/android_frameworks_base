@@ -31,8 +31,11 @@
 #include <media/stagefright/MediaErrors.h>
 #include <media/stagefright/MetaData.h>
 #include <media/stagefright/Utils.h>
+#include <media/stagefright/foundation/hexdump.h>
 
 namespace android {
+
+static const char kStartCode[4] = { 0x00, 0x00, 0x00, 0x01 };
 
 static int32_t Malloc(void *userData, int32_t size, int32_t attrs) {
     return reinterpret_cast<int32_t>(malloc(size));
@@ -49,7 +52,11 @@ AVCDecoder::AVCDecoder(const sp<MediaSource> &source)
       mInputBuffer(NULL),
       mAnchorTimeUs(0),
       mNumSamplesOutput(0),
-      mPendingSeekTimeUs(-1) {
+      mPendingSeekTimeUs(-1),
+      mPendingSeekMode(MediaSource::ReadOptions::SEEK_CLOSEST_SYNC),
+      mTargetTimeUs(-1),
+      mSPSSeen(false),
+      mPPSSeen(false) {
     memset(mHandle, 0, sizeof(tagAVCHandle));
     mHandle->AVCObject = NULL;
     mHandle->userData = this;
@@ -154,22 +161,25 @@ status_t AVCDecoder::start(MetaData *) {
         }
     }
 
-    sp<MetaData> params = new MetaData;
-    params->setInt32(kKeyWantsNALFragments, true);
-    mSource->start(params.get());
+    mSource->start();
 
     mAnchorTimeUs = 0;
     mNumSamplesOutput = 0;
     mPendingSeekTimeUs = -1;
+    mPendingSeekMode = ReadOptions::SEEK_CLOSEST_SYNC;
+    mTargetTimeUs = -1;
+    mSPSSeen = false;
+    mPPSSeen = false;
     mStarted = true;
 
     return OK;
 }
 
 void AVCDecoder::addCodecSpecificData(const uint8_t *data, size_t size) {
-    MediaBuffer *buffer = new MediaBuffer(size);
-    memcpy(buffer->data(), data, size);
-    buffer->set_range(0, size);
+    MediaBuffer *buffer = new MediaBuffer(size + 4);
+    memcpy(buffer->data(), kStartCode, 4);
+    memcpy((uint8_t *)buffer->data() + 4, data, size);
+    buffer->set_range(0, size + 4);
 
     mCodecSpecificData.push(buffer);
 }
@@ -200,16 +210,88 @@ sp<MetaData> AVCDecoder::getFormat() {
     return mFormat;
 }
 
+static void findNALFragment(
+        const MediaBuffer *buffer, const uint8_t **fragPtr, size_t *fragSize) {
+    const uint8_t *data =
+        (const uint8_t *)buffer->data() + buffer->range_offset();
+
+    size_t size = buffer->range_length();
+
+    CHECK(size >= 4);
+    CHECK(!memcmp(kStartCode, data, 4));
+
+    size_t offset = 4;
+    while (offset + 3 < size && memcmp(kStartCode, &data[offset], 4)) {
+        ++offset;
+    }
+
+    *fragPtr = &data[4];
+    if (offset + 3 >= size) {
+        *fragSize = size - 4;
+    } else {
+        *fragSize = offset - 4;
+    }
+}
+
+MediaBuffer *AVCDecoder::drainOutputBuffer() {
+    int32_t index;
+    int32_t Release;
+    AVCFrameIO Output;
+    Output.YCbCr[0] = Output.YCbCr[1] = Output.YCbCr[2] = NULL;
+    AVCDec_Status status = PVAVCDecGetOutput(mHandle, &index, &Release, &Output);
+
+    if (status != AVCDEC_SUCCESS) {
+        LOGV("PVAVCDecGetOutput returned error %d", status);
+        return NULL;
+    }
+
+    CHECK(index >= 0);
+    CHECK(index < (int32_t)mFrames.size());
+
+    MediaBuffer *mbuf = mFrames.editItemAt(index);
+
+    bool skipFrame = false;
+
+    if (mTargetTimeUs >= 0) {
+        int64_t timeUs;
+        CHECK(mbuf->meta_data()->findInt64(kKeyTime, &timeUs));
+        CHECK(timeUs <= mTargetTimeUs);
+
+        if (timeUs < mTargetTimeUs) {
+            // We're still waiting for the frame with the matching
+            // timestamp and we won't return the current one.
+            skipFrame = true;
+
+            LOGV("skipping frame at %lld us", timeUs);
+        } else {
+            LOGV("found target frame at %lld us", timeUs);
+
+            mTargetTimeUs = -1;
+        }
+    }
+
+    if (!skipFrame) {
+        mbuf->set_range(0, mbuf->size());
+        mbuf->add_ref();
+
+        return mbuf;
+    }
+
+    return new MediaBuffer(0);
+}
+
 status_t AVCDecoder::read(
         MediaBuffer **out, const ReadOptions *options) {
     *out = NULL;
 
     int64_t seekTimeUs;
-    if (options && options->getSeekTo(&seekTimeUs)) {
+    ReadOptions::SeekMode mode;
+    if (options && options->getSeekTo(&seekTimeUs, &mode)) {
         LOGV("seek requested to %lld us (%.2f secs)", seekTimeUs, seekTimeUs / 1E6);
 
         CHECK(seekTimeUs >= 0);
         mPendingSeekTimeUs = seekTimeUs;
+        mPendingSeekMode = mode;
 
         if (mInputBuffer) {
             mInputBuffer->release();
@@ -221,6 +303,8 @@ status_t AVCDecoder::read(
 
     if (mInputBuffer == NULL) {
         LOGV("fetching new input buffer.");
+
+        bool seeking = false;
 
         if (!mCodecSpecificData.isEmpty()) {
             mInputBuffer = mCodecSpecificData.editItemAt(0);
@@ -234,14 +318,17 @@ status_t AVCDecoder::read(
 
                 ReadOptions seekOptions;
                 if (mPendingSeekTimeUs >= 0) {
-                    seekOptions.setSeekTo(mPendingSeekTimeUs);
+                    seeking = true;
+
+                    seekOptions.setSeekTo(mPendingSeekTimeUs, mPendingSeekMode);
                     mPendingSeekTimeUs = -1;
                 }
                 status_t err = mSource->read(&mInputBuffer, &seekOptions);
                 seekOptions.clearSeekTo();
 
                 if (err != OK) {
-                    return err;
+                    *out = drainOutputBuffer();
+                    return (*out == NULL)  ? err : (status_t)OK;
                 }
 
                 if (mInputBuffer->range_length() > 0) {
@@ -252,186 +339,208 @@ status_t AVCDecoder::read(
                 mInputBuffer = NULL;
             }
         }
+
+        if (seeking) {
+            int64_t targetTimeUs;
+            if (mInputBuffer->meta_data()->findInt64(kKeyTargetTime, &targetTimeUs)
+                    && targetTimeUs >= 0) {
+                mTargetTimeUs = targetTimeUs;
+            } else {
+                mTargetTimeUs = -1;
+            }
+        }
     }
 
-    const uint8_t *inPtr =
-        (const uint8_t *)mInputBuffer->data() + mInputBuffer->range_offset();
+    const uint8_t *fragPtr;
+    size_t fragSize;
+    findNALFragment(mInputBuffer, &fragPtr, &fragSize);
+
+    bool releaseFragment = true;
+    status_t err = UNKNOWN_ERROR;
 
     int nalType;
     int nalRefIdc;
     AVCDec_Status res =
         PVAVCDecGetNALType(
-                const_cast<uint8_t *>(inPtr), mInputBuffer->range_length(),
+                const_cast<uint8_t *>(fragPtr), fragSize,
                 &nalType, &nalRefIdc);
 
     if (res != AVCDEC_SUCCESS) {
-        LOGE("cannot determine nal type");
-
-        mInputBuffer->release();
-        mInputBuffer = NULL;
-
-        return UNKNOWN_ERROR;
-    }
-
-    switch (nalType) {
-        case AVC_NALTYPE_SPS:
-        {
-            res = PVAVCDecSeqParamSet(
-                    mHandle, const_cast<uint8_t *>(inPtr),
-                    mInputBuffer->range_length());
-
-            if (res != AVCDEC_SUCCESS) {
-                mInputBuffer->release();
-                mInputBuffer = NULL;
-
-                return UNKNOWN_ERROR;
-            }
-
-            AVCDecObject *pDecVid = (AVCDecObject *)mHandle->AVCObject;
-
-            int32_t width =
-                (pDecVid->seqParams[0]->pic_width_in_mbs_minus1 + 1) * 16;
-
-            int32_t height =
-                (pDecVid->seqParams[0]->pic_height_in_map_units_minus1 + 1) * 16;
-
-            int32_t crop_left, crop_right, crop_top, crop_bottom;
-            if (pDecVid->seqParams[0]->frame_cropping_flag)
+        LOGV("cannot determine nal type");
+    } else if (nalType == AVC_NALTYPE_SPS || nalType == AVC_NALTYPE_PPS
+                || (mSPSSeen && mPPSSeen)) {
+        switch (nalType) {
+            case AVC_NALTYPE_SPS:
             {
-                crop_left = 2 * pDecVid->seqParams[0]->frame_crop_left_offset;
-                crop_right =
-                    width - (2 * pDecVid->seqParams[0]->frame_crop_right_offset + 1);
+                mSPSSeen = true;
 
-                if (pDecVid->seqParams[0]->frame_mbs_only_flag)
-                {
-                    crop_top = 2 * pDecVid->seqParams[0]->frame_crop_top_offset;
-                    crop_bottom =
-                        height -
-                        (2 * pDecVid->seqParams[0]->frame_crop_bottom_offset + 1);
+                res = PVAVCDecSeqParamSet(
+                        mHandle, const_cast<uint8_t *>(fragPtr),
+                        fragSize);
+
+                if (res != AVCDEC_SUCCESS) {
+                    LOGV("PVAVCDecSeqParamSet returned error %d", res);
+                    break;
                 }
-                else
+
+                AVCDecObject *pDecVid = (AVCDecObject *)mHandle->AVCObject;
+
+                int32_t width =
+                    (pDecVid->seqParams[0]->pic_width_in_mbs_minus1 + 1) * 16;
+
+                int32_t height =
+                    (pDecVid->seqParams[0]->pic_height_in_map_units_minus1 + 1) * 16;
+
+                int32_t crop_left, crop_right, crop_top, crop_bottom;
+                if (pDecVid->seqParams[0]->frame_cropping_flag)
                 {
-                    crop_top = 4 * pDecVid->seqParams[0]->frame_crop_top_offset;
-                    crop_bottom =
-                        height -
-                        (4 * pDecVid->seqParams[0]->frame_crop_bottom_offset + 1);
+                    crop_left = 2 * pDecVid->seqParams[0]->frame_crop_left_offset;
+                    crop_right =
+                        width - (2 * pDecVid->seqParams[0]->frame_crop_right_offset + 1);
+
+                    if (pDecVid->seqParams[0]->frame_mbs_only_flag)
+                    {
+                        crop_top = 2 * pDecVid->seqParams[0]->frame_crop_top_offset;
+                        crop_bottom =
+                            height -
+                            (2 * pDecVid->seqParams[0]->frame_crop_bottom_offset + 1);
+                    }
+                    else
+                    {
+                        crop_top = 4 * pDecVid->seqParams[0]->frame_crop_top_offset;
+                        crop_bottom =
+                            height -
+                            (4 * pDecVid->seqParams[0]->frame_crop_bottom_offset + 1);
+                    }
+                } else {
+                    crop_bottom = height - 1;
+                    crop_right = width - 1;
+                    crop_top = crop_left = 0;
                 }
-            } else {
-                crop_bottom = height - 1;
-                crop_right = width - 1;
-                crop_top = crop_left = 0;
+
+                int32_t aligned_width = (crop_right - crop_left + 1 + 15) & ~15;
+                int32_t aligned_height = (crop_bottom - crop_top + 1 + 15) & ~15;
+
+                int32_t oldWidth, oldHeight;
+                CHECK(mFormat->findInt32(kKeyWidth, &oldWidth));
+                CHECK(mFormat->findInt32(kKeyHeight, &oldHeight));
+
+                if (oldWidth != aligned_width || oldHeight != aligned_height) {
+                    mFormat->setInt32(kKeyWidth, aligned_width);
+                    mFormat->setInt32(kKeyHeight, aligned_height);
+
+                    err = INFO_FORMAT_CHANGED;
+                } else {
+                    *out = new MediaBuffer(0);
+                    err = OK;
+                }
+                break;
             }
 
-            int32_t aligned_width = (crop_right - crop_left + 1 + 15) & ~15;
-            int32_t aligned_height = (crop_bottom - crop_top + 1 + 15) & ~15;
-            mFormat->setInt32(kKeyWidth, aligned_width);
-            mFormat->setInt32(kKeyHeight, aligned_height);
+            case AVC_NALTYPE_PPS:
+            {
+                mPPSSeen = true;
 
-            mInputBuffer->release();
-            mInputBuffer = NULL;
+                res = PVAVCDecPicParamSet(
+                        mHandle, const_cast<uint8_t *>(fragPtr),
+                        fragSize);
 
-            return INFO_FORMAT_CHANGED;
-        }
+                if (res != AVCDEC_SUCCESS) {
+                    LOGV("PVAVCDecPicParamSet returned error %d", res);
+                    break;
+                }
 
-        case AVC_NALTYPE_PPS:
-        {
-            res = PVAVCDecPicParamSet(
-                    mHandle, const_cast<uint8_t *>(inPtr),
-                    mInputBuffer->range_length());
-
-            mInputBuffer->release();
-            mInputBuffer = NULL;
-
-            if (res != AVCDEC_SUCCESS) {
-                return UNKNOWN_ERROR;
-            }
-
-            *out = new MediaBuffer(0);
-
-            return OK;
-        }
-
-        case AVC_NALTYPE_SLICE:
-        case AVC_NALTYPE_IDR:
-        {
-            res = PVAVCDecodeSlice(
-                    mHandle, const_cast<uint8_t *>(inPtr),
-                    mInputBuffer->range_length());
-
-            if (res == AVCDEC_PICTURE_OUTPUT_READY) {
-                int32_t index;
-                int32_t Release;
-                AVCFrameIO Output;
-                Output.YCbCr[0] = Output.YCbCr[1] = Output.YCbCr[2] = NULL;
-                CHECK_EQ(PVAVCDecGetOutput(
-                            mHandle, &index, &Release, &Output),
-                         AVCDEC_SUCCESS);
-
-                CHECK(index >= 0);
-                CHECK(index < (int32_t)mFrames.size());
-
-                *out = mFrames.editItemAt(index);
-                (*out)->set_range(0, (*out)->size());
-                (*out)->add_ref();
-
-                // Do _not_ release input buffer yet.
-
-                return OK;
-            }
-
-            mInputBuffer->release();
-            mInputBuffer = NULL;
-
-            if (res == AVCDEC_PICTURE_READY || res == AVCDEC_SUCCESS) {
                 *out = new MediaBuffer(0);
 
-                return OK;
-            } else {
-                LOGV("failed to decode frame (res = %d)", res);
-                return UNKNOWN_ERROR;
-            }
-        }
-
-        case AVC_NALTYPE_SEI:
-        {
-            res = PVAVCDecSEI(
-                    mHandle, const_cast<uint8_t *>(inPtr),
-                    mInputBuffer->range_length());
-
-            mInputBuffer->release();
-            mInputBuffer = NULL;
-
-            if (res != AVCDEC_SUCCESS) {
-                return UNKNOWN_ERROR;
+                err = OK;
+                break;
             }
 
-            *out = new MediaBuffer(0);
+            case AVC_NALTYPE_SLICE:
+            case AVC_NALTYPE_IDR:
+            {
+                res = PVAVCDecodeSlice(
+                        mHandle, const_cast<uint8_t *>(fragPtr),
+                        fragSize);
 
-            return OK;
+                if (res == AVCDEC_PICTURE_OUTPUT_READY) {
+                    MediaBuffer *mbuf = drainOutputBuffer();
+                    if (mbuf == NULL) {
+                        break;
+                    }
+
+                    *out = mbuf;
+
+                    // Do _not_ release input buffer yet.
+
+                    releaseFragment = false;
+                    err = OK;
+                    break;
+                }
+
+                if (res == AVCDEC_PICTURE_READY || res == AVCDEC_SUCCESS) {
+                    *out = new MediaBuffer(0);
+
+                    err = OK;
+                } else {
+                    LOGV("PVAVCDecodeSlice returned error %d", res);
+                }
+                break;
+            }
+
+            case AVC_NALTYPE_SEI:
+            {
+                res = PVAVCDecSEI(
+                        mHandle, const_cast<uint8_t *>(fragPtr),
+                        fragSize);
+
+                if (res != AVCDEC_SUCCESS) {
+                    break;
+                }
+
+                *out = new MediaBuffer(0);
+
+                err = OK;
+                break;
+            }
+
+            case AVC_NALTYPE_AUD:
+            case AVC_NALTYPE_FILL:
+            case AVC_NALTYPE_EOSEQ:
+            {
+                *out = new MediaBuffer(0);
+
+                err = OK;
+                break;
+            }
+
+            default:
+            {
+                LOGE("Should not be here, unknown nalType %d", nalType);
+                CHECK(!"Should not be here");
+                break;
+            }
         }
+    } else {
+        // We haven't seen SPS or PPS yet.
 
-        case AVC_NALTYPE_AUD:
-        {
+        *out = new MediaBuffer(0);
+        err = OK;
+    }
+
+    if (releaseFragment) {
+        size_t offset = mInputBuffer->range_offset();
+        if (fragSize + 4 == mInputBuffer->range_length()) {
             mInputBuffer->release();
             mInputBuffer = NULL;
-
-            *out = new MediaBuffer(0);
-
-            return OK;
-        }
-
-        default:
-        {
-            LOGE("Should not be here, unknown nalType %d", nalType);
-            CHECK(!"Should not be here");
-            break;
+        } else {
+            mInputBuffer->set_range(
+                    offset + fragSize + 4,
+                    mInputBuffer->range_length() - fragSize - 4);
         }
     }
 
-    mInputBuffer->release();
-    mInputBuffer = NULL;
-
-    return UNKNOWN_ERROR;
+    return err;
 }
 
 // static

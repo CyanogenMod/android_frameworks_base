@@ -58,6 +58,9 @@ href="{@docRoot}resources/samples/get.html">Getting the Samples</a>.</p>
   <dd>A sample application that shows how to use resource directory qualifiers to
   provide different resources for different screen configurations.</dd>
 
+ <dt><a href="NFCDemo/index.html">NFCDemo</a></dt>
+  <dd>An application for reading NFC Forum Type 2 Tags using platform NFC apis.</a>.</dd>
+
  <dt><a href="NotePad/index.html">Note Pad</a></dt>
   <dd>An application for saving notes. Similar (but not identical) to the 
     <a href="{@docRoot}resources/tutorials/notepad/index.html">Notepad tutorial</a>.</dd>
@@ -72,6 +75,10 @@ adapter).</dd>
  <dt><a href="SearchableDictionary/index.html">Searchable Dictionary</a></dt>
   <dd>A sample application that demonstrates Android's search framework, 
   including how to provide search suggestions for Quick Search Box.</dd>
+
+ <dt><a href="SipDemo/index.html">SIP Demo</a></dt>
+ <dd>An application that demonstrates how to make an internet-based call using the SIP
+ API.</dd>
 
  <dt><a href="Snake/index.html">Snake</a></dt>
   <dd>An implementation of the classic game "Snake."</dd>

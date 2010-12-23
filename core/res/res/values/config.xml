@@ -19,7 +19,35 @@
 
 <!-- These resources are around just to allow their values to be customized
      for different hardware and product builds. -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Component to be used as the status bar service.  Must implement the IStatusBar
+         interface.  This name is in the ComponentName flattened format (package/class)  -->
+    <string name="config_statusBarComponent">com.android.systemui/com.android.systemui.statusbar.StatusBarService</string>
+
+    <!-- Do not translate. Defines the slots for the right-hand side icons.  That is to say, the
+         icons in the status bar that are not notifications. -->
+    <string-array name="config_statusBarIcons">
+       <item><xliff:g id="id">ime</xliff:g></item>
+       <item><xliff:g id="id">sync_failing</xliff:g></item>
+       <item><xliff:g id="id">sync_active</xliff:g></item>
+       <item><xliff:g id="id">gps</xliff:g></item>
+       <item><xliff:g id="id">bluetooth</xliff:g></item>
+       <item><xliff:g id="id">nfc</xliff:g></item>
+       <item><xliff:g id="id">tty</xliff:g></item>
+       <item><xliff:g id="id">speakerphone</xliff:g></item>
+       <item><xliff:g id="id">mute</xliff:g></item>
+       <item><xliff:g id="id">volume</xliff:g></item>
+       <item><xliff:g id="id">wifi</xliff:g></item>
+       <item><xliff:g id="id">cdma_eri</xliff:g></item>
+       <item><xliff:g id="id">data_connection</xliff:g></item>
+       <item><xliff:g id="id">phone_evdo_signal</xliff:g></item>
+       <item><xliff:g id="id">phone_signal</xliff:g></item>
+       <item><xliff:g id="id">battery</xliff:g></item>
+       <item><xliff:g id="id">alarm_clock</xliff:g></item>
+       <item><xliff:g id="id">secure</xliff:g></item>
+       <item><xliff:g id="id">clock</xliff:g></item>
+    </string-array>
+
     <!-- Flag indicating whether the surface flinger has limited
          alpha compositing functionality in hardware.  If set, the window
          manager will disable alpha trasformation in animations where not
@@ -43,6 +71,15 @@
     <!-- The duration (in milliseconds) that the radio will scan for a signal
          when there's no network connection. If the scan doesn't timeout, use zero -->
     <integer name="config_radioScanningTimeout">0</integer>
+
+    <!-- A product with no SD card == not removable. -->
+    <bool name="config_externalStorageRemovable" product="nosdcard">false</bool>
+    <!-- Configures whether the primary external storage device is
+         removable.  For example, if external storage is on an SD card,
+         it is removable; if it is built in to the device, it is not removable.
+         The default product has external storage on an SD card, which is
+         removable. -->
+    <bool name="config_externalStorageRemovable" product="default">true</bool>
 
     <!-- XXXXX NOTE THE FOLLOWING RESOURCES USE THE WRONG NAMING CONVENTION.
          Please don't copy them, copy anything else. -->
@@ -112,6 +149,15 @@
     <!-- Flag indicating whether the we should enable the automatic brightness in Settings.
          Software implementation will be used if config_hardware_auto_brightness_available is not set -->
     <bool name="config_automatic_brightness_available">false</bool>
+
+    <!-- Don't name config resources like this.  It should look like config_annoyDianne -->
+    <bool name="config_annoy_dianne">true</bool>
+
+    <!-- If this is true, the screen will come on when you unplug usb/power/whatever. -->
+    <bool name="config_unplugTurnsOnScreen">false</bool>
+    
+    <!-- If this is true, the screen will fade off. -->
+    <bool name="config_animateScreenLights">true</bool>
     
     <!-- XXXXXX END OF RESOURCES USING WRONG NAMING CONVENTION -->
 
@@ -230,9 +276,6 @@
     <!-- Allow the menu hard key to be disabled in LockScreen on some devices -->
     <bool name="config_disableMenuKeyInLockScreen">false</bool>
 
-    <!-- Control whether status bar should distinguish HSPA data icon form UMTS data icon on devices -->
-    <bool name="config_hspa_data_distinguishable">false</bool>
-
     <!-- Array of light sensor LUX values to define our levels for auto backlight brightness support.
          The N entries of this array define N + 1 zones as follows:
 
@@ -317,4 +360,10 @@
     <!-- 2 means give warning -->
     <integer name="config_datause_notification_type">2</integer>
 
+    <!-- Enables SIP on WIFI only -->
+    <bool name="config_sip_wifi_only">true</bool>
+
+    <!-- Boolean indicating if restoring network selection should be skipped -->
+    <!-- The restoring is handled by modem if it is true-->
+    <bool translatable="false" name="skip_restoring_network_selection">false</bool>
 </resources>

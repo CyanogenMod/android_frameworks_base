@@ -122,11 +122,11 @@ static void dumpstate() {
     run_command("PROCESSES AND THREADS", 10, "ps", "-t", "-p", "-P", NULL);
     run_command("LIBRANK", 10, "librank", NULL);
 
-    dump_file("BINDER FAILED TRANSACTION LOG", "/proc/binder/failed_transaction_log");
-    dump_file("BINDER TRANSACTION LOG", "/proc/binder/transaction_log");
-    dump_file("BINDER TRANSACTIONS", "/proc/binder/transactions");
-    dump_file("BINDER STATS", "/proc/binder/stats");
-    run_command("BINDER PROCESS STATE", 10, "sh", "-c", "cat /proc/binder/proc/*");
+    dump_file("BINDER FAILED TRANSACTION LOG", "/sys/kernel/debug/binder/failed_transaction_log");
+    dump_file("BINDER TRANSACTION LOG", "/sys/kernel/debug/binder/transaction_log");
+    dump_file("BINDER TRANSACTIONS", "/sys/kernel/debug/binder/transactions");
+    dump_file("BINDER STATS", "/sys/kernel/debug/binder/stats");
+    dump_file("BINDER STATE", "/sys/kernel/debug/binder/state");
 
     run_command("FILESYSTEMS & FREE SPACE", 10, "df", NULL);
 
@@ -216,10 +216,22 @@ int main(int argc, char *argv[]) {
         fclose(cmdline);
     }
 
-    /* switch to non-root user and group */
-    gid_t groups[] = { AID_LOG, AID_SDCARD_RW, AID_MOUNT };
-    setgroups(sizeof(groups)/sizeof(groups[0]), groups);
-    setuid(AID_SHELL);
+    if (getuid() == 0) {
+        /* switch to non-root user and group */
+        gid_t groups[] = { AID_LOG, AID_SDCARD_RW, AID_MOUNT };
+        if (setgroups(sizeof(groups)/sizeof(groups[0]), groups) != 0) {
+            LOGE("Unable to setgroups, aborting: %s\n", strerror(errno));
+            return -1;
+        }
+        if (setgid(AID_SHELL) != 0) {
+            LOGE("Unable to setgid, aborting: %s\n", strerror(errno));
+            return -1;
+        }
+        if (setuid(AID_SHELL) != 0) {
+            LOGE("Unable to setuid, aborting: %s\n", strerror(errno));
+            return -1;
+        }
+    }
 
     char path[PATH_MAX], tmp_path[PATH_MAX];
     pid_t gzip_pid = -1;

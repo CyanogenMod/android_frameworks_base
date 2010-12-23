@@ -185,12 +185,32 @@
         <item name="windowExitAnimation">@anim/fade_out</item>
     </style>
 
+    <!-- A special animation value used internally for popup windows. -->
+    <style name="Animation.PopupWindow" />
+
     <!-- Status Bar Styles -->
 
-    <style name="TextAppearance.StatusBarTitle">
-        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
-        <item name="android:textStyle">bold</item>
+    <style name="TextAppearance.StatusBar">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">normal</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+    <style name="TextAppearance.StatusBar.Ticker">
+    </style>
+    <style name="TextAppearance.StatusBar.Title">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="TextAppearance.StatusBar.Icon">
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="TextAppearance.StatusBar.EventContent">
+        <item name="android:textColor">#ff6b6b6b</item>
+    </style>
+    <style name="TextAppearance.StatusBar.EventContent.Title">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">?android:attr/textColorPrimaryInverse</item>
     </style>
 
     <!-- Widget Styles -->
@@ -367,6 +387,9 @@
 
     <style name="Widget.TextView">
         <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+        <item name="android:textSelectHandleLeft">?android:attr/textSelectHandleLeft</item>
+        <item name="android:textSelectHandleRight">?android:attr/textSelectHandleRight</item>
+        <item name="android:textSelectHandle">?android:attr/textSelectHandle</item>
     </style>
     
     <style name="Widget.TextView.ListSeparator">
@@ -491,7 +514,7 @@
         <item name="android:fadingEdge">vertical</item>
         <item name="listSelector">@android:drawable/menu_selector</item>
         <!-- Light background for the list in menus, so the divider for bright themes -->
-        <item name="android:divider">@android:drawable/divider_horizontal_bright</item>
+        <item name="android:divider">@android:drawable/divider_horizontal_dark</item>
     </style>
 
     <style name="Widget.GridView" parent="Widget.AbsListView">
@@ -529,6 +552,7 @@
     
     <style name="Widget.PopupWindow">
         <item name="android:popupBackground">@android:drawable/editbox_dropdown_background_dark</item>
+        <item name="android:popupAnimationStyle">@android:style/Animation.PopupWindow</item>
     </style>
 
     <style name="Widget.KeyboardView" parent="android:Widget">
@@ -547,7 +571,7 @@
     </style>
 
     <style name="Widget.QuickContactBadge">
-        <item name="android:layout_width">50dip</item>
+        <item name="android:layout_width">47.33333dip</item>
         <item name="android:layout_height">56dip</item>
         <item name="android:background">@android:drawable/quickcontact_badge</item>
         <item name="android:clickable">true</item>
@@ -661,7 +685,7 @@
     </style>
 
     <style name="TextAppearance.Widget.IconMenu.Item" parent="TextAppearance.Small">
-        <item name="android:textColor">?textColorPrimaryInverse</item>
+        <item name="android:textColor">?textColorPrimary</item>
     </style>
 
     <style name="TextAppearance.Widget.EditText">
@@ -838,5 +862,16 @@
         <item name="android:paddingRight">4dip</item>
         <item name="android:paddingBottom">1dip</item>
         <item name="android:background">@android:drawable/bottom_bar</item>
+    </style>
+
+    <!-- Style for the small popup windows that contain text selection anchors. -->
+    <style name="Widget.TextSelectHandle">
+        <item name="android:popupAnimationStyle">@android:style/Animation.TextSelectHandle</item>
+    </style>
+
+    <!-- Style for animating text selection handles. -->
+    <style name="Animation.TextSelectHandle">
+        <item name="windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="windowExitAnimation">@android:anim/fade_out</item>
     </style>
 </resources>

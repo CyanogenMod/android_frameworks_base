@@ -19,6 +19,7 @@ package com.android.server;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.NetworkUtils;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -253,6 +254,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         if (!checkNotifyPermission("notifyServiceState()")){
             return;
         }
+        Slog.i(TAG, "notifyServiceState: " + state);
         synchronized (mRecords) {
             mServiceState = state;
             for (int i = mRecords.size() - 1; i >= 0; i--) {
@@ -294,6 +296,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         if (!checkNotifyPermission("notifyMessageWaitingChanged()")) {
             return;
         }
+        Slog.i(TAG, "notifyMessageWaitingChanged: " + mwi);
         synchronized (mRecords) {
             mMessageWaiting = mwi;
             for (int i = mRecords.size() - 1; i >= 0; i--) {
@@ -313,6 +316,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         if (!checkNotifyPermission("notifyCallForwardingChanged()")) {
             return;
         }
+        Slog.i(TAG, "notifyCallForwardingChanged: " + cfi);
         synchronized (mRecords) {
             mCallForwarding = cfi;
             for (int i = mRecords.size() - 1; i >= 0; i--) {
@@ -348,10 +352,14 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
     }
 
     public void notifyDataConnection(int state, boolean isDataConnectivityPossible,
-            String reason, String apn, String[] apnTypes, String interfaceName, int networkType) {
+            String reason, String apn, String[] apnTypes, String interfaceName, int networkType,
+            String gateway) {
         if (!checkNotifyPermission("notifyDataConnection()" )) {
             return;
         }
+        Slog.i(TAG, "notifyDataConnection: state=" + state + " isDataConnectivityPossible="
+                + isDataConnectivityPossible + " reason=" + reason
+                + " interfaceName=" + interfaceName + " networkType=" + networkType);
         synchronized (mRecords) {
             mDataConnectionState = state;
             mDataConnectionPossible = isDataConnectivityPossible;
@@ -372,7 +380,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
             }
         }
         broadcastDataConnectionStateChanged(state, isDataConnectivityPossible, reason, apn,
-                apnTypes, interfaceName);
+                apnTypes, interfaceName, gateway);
     }
 
     public void notifyDataConnectionFailed(String reason) {
@@ -535,7 +543,7 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
 
     private void broadcastDataConnectionStateChanged(int state,
             boolean isDataConnectivityPossible,
-            String reason, String apn, String[] apnTypes, String interfaceName) {
+            String reason, String apn, String[] apnTypes, String interfaceName, String gateway) {
         // Note: not reporting to the battery stats service here, because the
         // status bar takes care of that after taking into account all of the
         // required info.
@@ -558,6 +566,12 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
         }
         intent.putExtra(Phone.DATA_APN_TYPES_KEY, types);
         intent.putExtra(Phone.DATA_IFACE_NAME_KEY, interfaceName);
+        int gatewayAddr = 0;
+        if (gateway != null) {
+            gatewayAddr = NetworkUtils.v4StringToInt(gateway);
+        }
+        intent.putExtra(Phone.DATA_GATEWAY_KEY, gatewayAddr);
+
         mContext.sendStickyBroadcast(intent);
     }
 

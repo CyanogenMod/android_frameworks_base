@@ -1,7 +1,6 @@
 /*
 **
 ** Copyright (C) 2008, The Android Open Source Project
-** Copyright (C) 2008 HTC Inc.
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -92,16 +91,35 @@ void Camera::init()
 
 Camera::~Camera()
 {
-    disconnect();
+    // We don't need to call disconnect() here because if the CameraService
+    // thinks we are the owner of the hardware, it will hold a (strong)
+    // reference to us, and we can't possibly be here. We also don't want to
+    // call disconnect() here if we are in the same process as mediaserver,
+    // because we may be invoked by CameraService::Client::connect() and will
+    // deadlock if we call any method of ICamera here.
 }
 
-sp<Camera> Camera::connect()
+int32_t Camera::getNumberOfCameras()
+{
+    const sp<ICameraService>& cs = getCameraService();
+    if (cs == 0) return 0;
+    return cs->getNumberOfCameras();
+}
+
+status_t Camera::getCameraInfo(int cameraId,
+                               struct CameraInfo* cameraInfo) {
+    const sp<ICameraService>& cs = getCameraService();
+    if (cs == 0) return UNKNOWN_ERROR;
+    return cs->getCameraInfo(cameraId, cameraInfo);
+}
+
+sp<Camera> Camera::connect(int cameraId)
 {
     LOGV("connect");
     sp<Camera> c = new Camera();
     const sp<ICameraService>& cs = getCameraService();
     if (cs != 0) {
-        c->mCamera = cs->connect(c);
+        c->mCamera = cs->connect(c, cameraId);
     }
     if (c->mCamera != 0) {
         c->mCamera->asBinder()->linkToDeath(c);

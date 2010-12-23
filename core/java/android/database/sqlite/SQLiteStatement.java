@@ -18,11 +18,16 @@ package android.database.sqlite;
 
 import android.os.SystemClock;
 
+import dalvik.system.BlockGuard;
+
 /**
  * A pre-compiled statement against a {@link SQLiteDatabase} that can be reused.
  * The statement cannot return multiple rows, but 1x1 result sets are allowed.
  * Don't use SQLiteStatement constructor directly, please use
  * {@link SQLiteDatabase#compileStatement(String)}
+ *
+ * SQLiteStatement is not internally synchronized so code using a SQLiteStatement from multiple
+ * threads should perform its own synchronization when using the SQLiteStatement.
  */
 public class SQLiteStatement extends SQLiteProgram
 {
@@ -44,6 +49,7 @@ public class SQLiteStatement extends SQLiteProgram
      *         some reason
      */
     public void execute() {
+        BlockGuard.getThreadPolicy().onWriteToDisk();
         if (!mDatabase.isOpen()) {
             throw new IllegalStateException("database " + mDatabase.getPath() + " already closed");
         }
@@ -70,6 +76,7 @@ public class SQLiteStatement extends SQLiteProgram
      *         some reason
      */
     public long executeInsert() {
+        BlockGuard.getThreadPolicy().onWriteToDisk();
         if (!mDatabase.isOpen()) {
             throw new IllegalStateException("database " + mDatabase.getPath() + " already closed");
         }
@@ -96,6 +103,7 @@ public class SQLiteStatement extends SQLiteProgram
      * @throws android.database.sqlite.SQLiteDoneException if the query returns zero rows
      */
     public long simpleQueryForLong() {
+        BlockGuard.getThreadPolicy().onReadFromDisk();
         if (!mDatabase.isOpen()) {
             throw new IllegalStateException("database " + mDatabase.getPath() + " already closed");
         }
@@ -122,6 +130,7 @@ public class SQLiteStatement extends SQLiteProgram
      * @throws android.database.sqlite.SQLiteDoneException if the query returns zero rows
      */
     public String simpleQueryForString() {
+        BlockGuard.getThreadPolicy().onReadFromDisk();
         if (!mDatabase.isOpen()) {
             throw new IllegalStateException("database " + mDatabase.getPath() + " already closed");
         }

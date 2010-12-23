@@ -4,6 +4,7 @@
 #include "SkPoint.h"
 #include "SkRect.h"
 #include "SkBitmap.h"
+#include "../images/SkImageDecoder.h"
 #include <jni.h>
 
 class SkCanvas;
@@ -76,8 +77,20 @@ public:
     virtual bool allocPixelRef(SkBitmap* bitmap, SkColorTable* ctable);
     
 private:
-    JNIEnv* fEnv;
+    JavaVM* fVM;
     bool fReportSizeToVM;
+};
+
+class JavaMemoryUsageReporter : public SkVMMemoryReporter {
+public:
+    JavaMemoryUsageReporter(JNIEnv* env);
+    virtual ~JavaMemoryUsageReporter();
+    // overrides
+    virtual bool reportMemory(size_t memorySize);
+
+private:
+    JavaVM* fVM;
+    size_t fTotalSize;
 };
 
 enum JNIAccess {
@@ -156,6 +169,7 @@ void doThrowIAE(JNIEnv* env, const char* msg = NULL);   // Illegal Argument
 void doThrowRE(JNIEnv* env, const char* msg = NULL);   // Runtime
 void doThrowISE(JNIEnv* env, const char* msg = NULL);   // Illegal State
 void doThrowOOME(JNIEnv* env, const char* msg = NULL);   // Out of memory
+void doThrowIOE(JNIEnv* env, const char* msg = NULL);   // IO Exception
 
 #define NPE_CHECK_RETURN_ZERO(env, object)    \
     do { if (NULL == (object)) { doThrowNPE(env); return 0; } } while (0)
@@ -164,4 +178,3 @@ void doThrowOOME(JNIEnv* env, const char* msg = NULL);   // Out of memory
     do { if (NULL == (object)) { doThrowNPE(env); return; } } while (0)
 
 #endif
-

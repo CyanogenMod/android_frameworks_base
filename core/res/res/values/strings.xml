@@ -60,6 +60,10 @@
     <!-- Displayed when the user dialed an MMI code whose function
          could not be performed. This will be displayed in a toast. -->
     <string name="mmiError">Connection problem or invalid MMI code.</string>
+    <!-- Displayed when the user dialed an MMI code whose function
+         could not be performed because FDN is enabled. This will be displayed in a toast. -->
+    <string name="mmiFdnError">Operation is restricted to fixed dialing numbers only.</string>
+
     <!-- Displayed when a phone feature such as call barring was activated. -->
     <string name="serviceEnabled">Service was enabled.</string>
     <!-- Displayed in front of the list of a set of service classes
@@ -377,8 +381,10 @@
 
     <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permgrouplab_storage">Storage</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this.   [CHAR LIMIT=30] -->
+    <string name="permgroupdesc_storage" product="nosdcard">Access the USB storage.</string>
     <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permgroupdesc_storage">Access the SD card.</string>
+    <string name="permgroupdesc_storage" product="default">Access the SD card.</string>
 
     <!--  Permissions -->
 
@@ -387,6 +393,11 @@
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_statusBar">Allows application to disable
         the status bar or add and remove system icons.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_statusBarService">status bar</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_statusBarService">Allows the application to be the status bar.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_expandStatusBar">expand/collapse status bar</string>
@@ -695,12 +706,12 @@
     <string name="permdesc_movePackage">Allows an application to move application resources from internal to external media and vice versa.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_readLogs">read system log files</string>
+    <string name="permlab_readLogs">read sensitive log data</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_readLogs">Allows an application to read from the
         system\'s various log files.  This allows it to discover general
-        information about what you are doing with the phone, but they should
-        not contain any personal or private information.</string>
+        information about what you are doing with the phone, potentially
+        including personal or private information.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_diagnostic">read/write to resources owned by diag</string>
@@ -773,20 +784,6 @@
     <string name="permdesc_writeContacts">Allows an application to modify the
         contact (address) data stored on your phone. Malicious
         applications can use this to erase or modify your contact data.</string>
-
-    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_writeOwnerData">write owner data</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_writeOwnerData">Allows an application to modify the
-        phone owner data stored on your phone. Malicious
-        applications can use this to erase or modify owner data.</string>
-
-    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_readOwnerData">read owner data</string>
-    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_readOwnerData">Allows an application read the
-        phone owner data stored on your phone. Malicious
-        applications can use this to read phone owner data.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_readCalendar">read calendar events</string>
@@ -863,9 +860,9 @@
         the audio record path.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_camera">take pictures</string>
+    <string name="permlab_camera">take pictures and videos</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_camera">Allows application to take pictures
+    <string name="permdesc_camera">Allows application to take pictures and videos
         with the camera. This allows the application at any time to collect
         images the camera is seeing.</string>
 
@@ -893,29 +890,29 @@
     <string name="permdesc_mount_format_filesystems">Allows the application to format removable storage.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_asec_access">get information on secure storage</string>
+    <string name="permlab_asec_access">get information on internal storage</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_asec_access">Allows the application to get information on secure storage.</string>
+    <string name="permdesc_asec_access">Allows the application to get information on internal storage.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_asec_create">create secure storage</string>
+    <string name="permlab_asec_create">create internal storage</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_asec_create">Allows the application to create secure storage.</string>
+    <string name="permdesc_asec_create">Allows the application to create internal storage.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_asec_destroy">destroy secure storage</string>
+    <string name="permlab_asec_destroy">destroy internal storage</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_asec_destroy">Allows the application to destroy secure storage.</string>
+    <string name="permdesc_asec_destroy">Allows the application to destroy internal storage.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_asec_mount_unmount">mount / unmount secure storage</string>
+    <string name="permlab_asec_mount_unmount">mount / unmount internal storage</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_asec_mount_unmount">Allows the application to mount / unmount secure storage.</string>
+    <string name="permdesc_asec_mount_unmount">Allows the application to mount / unmount internal storage.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_asec_rename">rename secure storage</string>
+    <string name="permlab_asec_rename">rename internal storage</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_asec_rename">Allows the application to rename secure storage.</string>
+    <string name="permdesc_asec_rename">Allows the application to rename internal storage.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_vibrate">control vibrator</string>
@@ -928,6 +925,11 @@
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_flashlight">Allows the application to control
         the flashlight.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accessUsb">access USB devices</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_accessUsb">Allows the application to access USB devices.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_hardware_test">test hardware</string>
@@ -1151,6 +1153,12 @@
       connections with paired devices.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_nfc">control Near Field Communication</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_nfc">Allows an application to communicate
+      with Near Field Communication (NFC) tags, cards, and readers.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_disableKeyguard">disable keylock</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_disableKeyguard">Allows an application to disable
@@ -1200,44 +1208,50 @@
     <string name="permdesc_writeDictionary">Allows an application to write new words into the
       user dictionary.</string>
 
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. [CHAR LIMIT=30] -->
+    <string name="permlab_sdcardWrite" product="nosdcard">modify/delete USB storage contents</string>
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permlab_sdcardWrite">modify/delete SD card contents</string>
+    <string name="permlab_sdcardWrite" product="default">modify/delete SD card contents</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. [CHAR LIMIT=30] -->
+    <string name="permdesc_sdcardWrite" product="nosdcard">Allows an application to write to the USB storage.</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
-    <string name="permdesc_sdcardWrite">Allows an application to write to the SD card.</string>
+    <string name="permdesc_sdcardWrite" product="default">Allows an application to write to the SD card.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_cache_filesystem">access the cache filesystem</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_cache_filesystem">Allows an application to read and write the cache filesystem.</string>
 
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_use_sip">make/receive Internet calls</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_use_sip">Allows an application to use the SIP service to make/receive Internet calls.</string>
+
     <!-- Policy administration -->
 
     <!-- Title of policy access to limiting the user's password choices -->
-    <string name="policylab_limitPassword">Limit password</string>
+    <string name="policylab_limitPassword">Set password rules</string>
     <!-- Description of policy access to limiting the user's password choices -->
-    <string name="policydesc_limitPassword">Restrict the types of passwords you
-        are allowed to use.</string>
+    <string name="policydesc_limitPassword">Control the length and the characters allowed in
+    screen-unlock passwords</string>
     <!-- Title of policy access to watch user login attempts -->
-    <string name="policylab_watchLogin">Watch login attempts</string>
+    <string name="policylab_watchLogin">Monitor screen-unlock attempts</string>
     <!-- Description of policy access to watch user login attempts -->
-    <string name="policydesc_watchLogin">Monitor failed attempts to login to
-        the device, to perform some action.</string>
+    <string name="policydesc_watchLogin">Monitor the number of incorrect passwords entered when unlocking 
+    the screen, and lock the phone or erase all the phone\'s data if too many incorrect passwords are entered
+    </string>
     <!-- Title of policy access to reset user's password -->
-    <string name="policylab_resetPassword">Reset password</string>
+    <string name="policylab_resetPassword">Change the screen-unlock password</string>
     <!-- Description of policy access to reset user's password -->
-    <string name="policydesc_resetPassword">Force your password
-        to a new value, requiring the administrator give it to you
-        before you can log in.</string>
+    <string name="policydesc_resetPassword">Change the screen-unlock password</string>
     <!-- Title of policy access to force lock the device -->
-    <string name="policylab_forceLock">Force lock</string>
+    <string name="policylab_forceLock">Lock the screen</string>
     <!-- Description of policy access to limiting the user's password choices -->
-    <string name="policydesc_forceLock">Control when device locks,
-        requiring you re-enter its password.</string>
+    <string name="policydesc_forceLock">Control how and when the screen locks</string>
     <!-- Title of policy access to wipe the user's data -->
     <string name="policylab_wipeData">Erase all data</string>
     <!-- Description of policy access to wipe the user's data -->
-    <string name="policydesc_wipeData">Perform a factory reset, deleting
-        all of your data without any confirmation.</string>
+    <string name="policydesc_wipeData">Erase the phone\'s data without warning, by performing a factory data reset</string>
 
     <!-- The order of these is important, don't reorder without changing Contacts.java --> <skip />
     <!-- Phone number types from android.provider.Contacts. This could be used when adding a new phone number for a contact, for example. -->
@@ -1379,7 +1393,7 @@
     <!-- Other IM address type -->
     <string name="imTypeOther">Other</string>
 
-    <!-- Custom IM address type -->
+    <!-- Custom IM protocol type -->
     <string name="imProtocolCustom">Custom</string>
     <!-- AIM IM protocol type -->
     <string name="imProtocolAim">AIM</string>
@@ -1406,6 +1420,15 @@
     <string name="orgTypeOther">Other</string>
     <!-- Custom organization type -->
     <string name="orgTypeCustom">Custom</string>
+
+    <!-- Custom SIP address type -->
+    <string name="sipAddressTypeCustom">Custom</string>
+    <!-- Home SIP address type -->
+    <string name="sipAddressTypeHome">Home</string>
+    <!-- Work SIP address type -->
+    <string name="sipAddressTypeWork">Work</string>
+    <!-- Other SIP address type -->
+    <string name="sipAddressTypeOther">Other</string>
 
     <!-- Attbution of a contact status update, when the time of update is unknown -->
     <string name="contact_status_update_attribution">via <xliff:g id="source" example="Google Talk">%1$s</xliff:g></string>
@@ -1563,45 +1586,6 @@
     <!-- A format string for 12-hour time of day, just the hour, not the minute, with capital "AM" or "PM" (example: "3PM"). -->
     <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
 
-    <!-- The text for the button in the notification window-shade that clears
-         all of the currently visible notifications. -->
-    <string name="status_bar_clear_all_button">Clear</string>
-
-    <!-- The label in the bar at the top of the status bar when there are no notifications
-         showing. -->
-    <string name="status_bar_no_notifications_title">No notifications</string>
-
-    <!-- The label for the group of notifications for ongoing events in the opened version of
-         the status bar.  An ongoing call is the prime example of this.  The MP3 music player
-         might be another example.  -->
-    <string name="status_bar_ongoing_events_title">Ongoing</string>
-
-    <!-- The label for the group of notifications for recent events in the opened version of
-         the status bar.  Recently received text messsages (SMS), emails, calendar alerts, etc. -->
-    <string name="status_bar_latest_events_title">Notifications</string>
-
-    <!-- The big percent text in the middle of the battery icon that appears when you plug in
-         the charger. -->
-    <string name="battery_status_text_percent_format"><xliff:g id="number" example="50">%d</xliff:g><xliff:g id="percent" example="%">%%</xliff:g></string>
-
-    <!-- The big percent text in the middle of the battery icon that appears when you plug in
-         the charger. This indicates the current status of the battery.  -->
-    <string name="battery_status_charging">Charging\u2026</string>
-
-    <!-- When the battery is low, this is displayed to the user in a dialog.  The title of the low battery alert. -->
-    <string name="battery_low_title">Please connect charger</string>
-
-    <!-- When the battery is low, this is displayed to the user in a dialog. The subtitle of the low battery alert. -->
-    <string name="battery_low_subtitle">The battery is getting low:</string>
-
-    <!-- A message that appears when the battery level is getting low in a dialog.  This is appened to the subtitle of the low battery alert. -->
-    <string name="battery_low_percent_format"><xliff:g id="number">%d%%</xliff:g>
-    or less remaining.</string>
-
-    <!-- When the battery is low, this is the label of the button to go to the
-         power usage activity to find out what drained the battery. -->
-    <string name="battery_low_why">Battery use</string>
-
     <!-- Title of the alert when something went wrong in the factory test. -->
     <string name="factorytest_failed">Factory test failed</string>
     <!-- Error message displayed when a non-system application tries to start a factory test. -->
@@ -1646,6 +1630,15 @@
     <string name="permdesc_writeHistoryBookmarks">Allows an application to modify the
         Browser\'s history or bookmarks stored on your phone. Malicious applications
         can use this to erase or modify your Browser\'s data.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+    <string name="permlab_setAlarm">set alarm in alarm clock</string>
+    <!-- Description of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+    <string name="permdesc_setAlarm">Allows the application to set an alarm in
+      an installed alarm clock application. Some alarm clock applications may
+      not implement this feature.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether
         they want to allow the application to do this. -->
@@ -1878,23 +1871,14 @@
     <!-- Item on EditText context menu. This action is used to select all text in the edit field. -->
     <string name="selectAll">Select all</string>
 
-    <!-- Item on EditText context menu. This action is used to start selecting text in the edit field. -->
-    <string name="selectText">Select text</string>
-
-    <!-- Item on EditText context menu. This action is used to start selecting text in the edit field. -->
-    <string name="stopSelectingText">Stop selecting text</string>
+    <!-- Item on EditText context menu. This action is used to start selecting text in the edit field. [CHAR LIMIT=20] -->
+    <string name="selectText">Select word</string>
 
     <!-- Item on EditText context menu.  This action is used to cut selected the text into the clipboard.  -->
     <string name="cut">Cut</string>
 
-    <!-- Item on EditText context menu. This action is used to cut all the text into the clipboard. -->
-    <string name="cutAll">Cut all</string>
-
     <!-- Item on EditText context menu. This action is used to cut selected the text into the clipboard. -->
     <string name="copy">Copy</string>
-
-    <!-- Item on EditText context menu. This action is used to copy all the text into the clipboard. -->
-    <string name="copyAll">Copy all</string>
 
     <!-- Item on EditText context menu. This action is used t o paste from the clipboard into the eidt field -->
     <string name="paste">Paste</string>
@@ -1947,7 +1931,7 @@
     <string name="noApplications">No applications can perform this action.</string>
     <!-- Title of the alert when an application has crashed. -->
     <string name="aerr_title">Sorry!</string>
-    <!-- Text of the alert that is displayed when an application is not responding. -->
+    <!-- Text of the alert that is displayed when an application has crashed. -->
     <string name="aerr_application">The application <xliff:g id="application">%1$s</xliff:g>
         (process <xliff:g id="process">%2$s</xliff:g>) has stopped unexpectedly. Please try again.</string>
     <!-- Text of the alert that is displayed when an application has crashed. -->
@@ -1969,9 +1953,43 @@
     <string name="report">Report</string>
     <!-- Button allowing the user to choose to wait for an application that is not responding to become responsive again. -->
     <string name="wait">Wait</string>
+    <!-- [CHAR LIMIT=25] Title of the alert when application launches on top of another. -->
+    <string name="launch_warning_title">Application redirected</string>
+    <!-- [CHAR LIMIT=50] Title of the alert when application launches on top of another. -->
+    <string name="launch_warning_replace"><xliff:g id="app_name">%1$s</xliff:g> is now running.</string>
+    <!-- [CHAR LIMIT=50] Title of the alert when application launches on top of another. -->
+    <string name="launch_warning_original"><xliff:g id="app_name">%1$s</xliff:g> was originally launched.</string>
 
+    <!-- Text of the alert that is displayed when an application has violated StrictMode. -->
+    <string name="smv_application">The application <xliff:g id="application">%1$s</xliff:g>
+        (process <xliff:g id="process">%2$s</xliff:g>) has violated its self-enforced StrictMode policy.</string>
+    <!-- Text of the alert that is displayed when an application has violated StrictMode. -->
+    <string name="smv_process">The process <xliff:g id="process">%1$s</xliff:g> has
+      has violated its self-enforced StrictMode policy.</string>
+
+    <!-- Notification text to tell the user that a heavy-weight application is running. -->
+    <string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g> running</string>
+    
+    <!-- Notification details to tell the user that a heavy-weight application is running. -->
+    <string name="heavy_weight_notification_detail">Select to switch to application</string>
+    
+    <!-- Title of dialog prompting whether user wants to switch between heavy-weight apps. -->
+    <string name="heavy_weight_switcher_title">Switch applications?</string>
+    
+    <!-- Descriptive text for switching to a new heavy-weight application. -->
+    <string name="heavy_weight_switcher_text">Another application is already running
+    that must be stopped before you can start a new one.</string>
+    
+    <string name="old_app_action">Return to <xliff:g id="old_app">%1$s</xliff:g></string>
+    <string name="old_app_description">Don\'t start the new application.</string>
+    
+    <string name="new_app_action">Start <xliff:g id="old_app">%1$s</xliff:g></string>
+    <string name="new_app_description">Stop the old application without saving.</string>
+    
     <!-- Displayed in the title of the chooser for things to do with text that
-         is to be sent to another application. For example, I can send text through SMS or IM.  A dialog with those choices would be shown, and this would be the title. -->
+         is to be sent to another application. For example, I can send
+         text through SMS or IM.  A dialog with those choices would be shown,
+         and this would be the title. -->
     <string name="sendText">Select an action for text</string>
 
     <!-- Title of the dialog where the user is adjusting the phone ringer volume -->
@@ -2054,12 +2072,16 @@
 
     <!-- See USB_STORAGE.  USB_STORAGE_DIALOG:  After the user selects the notification, a dialog is shown asking if he wants to mount.  This is the title. -->
     <string name="usb_storage_title">USB connected</string>
+    <!-- See USB_STORAGE.    This is the message. [CHAR LIMIT=NONE] -->
+    <string name="usb_storage_message" product="nosdcard">You have connected your phone to your computer via USB. Select the button below if you want to copy files between your computer and your Android\u2018s USB storage.</string>
     <!-- See USB_STORAGE.    This is the message. -->
-    <string name="usb_storage_message">You have connected your phone to your computer via USB. Select the button below if you want to copy files between your computer and your Android\u2018s SD card.</string>
+    <string name="usb_storage_message" product="default">You have connected your phone to your computer via USB. Select the button below if you want to copy files between your computer and your Android\u2018s SD card.</string>
     <!-- See USB_STORAGE.    This is the button text to mount the phone on the computer. -->
     <string name="usb_storage_button_mount">Turn on USB storage</string>
+    <!-- See USB_STORAGE_DIALOG.  If there was an error mounting, this is the text. [CHAR LIMIT=NONE] -->
+    <string name="usb_storage_error_message" product="nosdcard">There is a problem using your USB storage for USB mass storage.</string>
     <!-- See USB_STORAGE_DIALOG.  If there was an error mounting, this is the text. -->
-    <string name="usb_storage_error_message">There is a problem using your SD card for USB storage.</string>
+    <string name="usb_storage_error_message" product="default">There is a problem using your SD card for USB mass storage.</string>
     <!-- USB_STORAGE: When the user connects the phone to a computer via USB, we show a notification asking if he wants to share files across.  This is the title -->
     <string name="usb_storage_notification_title">USB connected</string>
     <!-- See USB_STORAGE. This is the message. -->
@@ -2074,8 +2096,10 @@
     <!-- This is the label for the activity, and should never be visible to the user. -->
     <!-- See USB_STORAGE_STOP.  USB_STORAGE_STOP_DIALOG:  After the user selects the notification, a dialog is shown asking if he wants to stop usb storage.  This is the title. -->
     <string name="usb_storage_stop_title">USB storage in use</string>
+    <!-- See USB_STORAGE_STOP.    This is the message. [CHAR LIMIT=NONE] -->
+    <string name="usb_storage_stop_message" product="nosdcard">Before turning off USB storage, make sure you have unmounted (\u201cejected\u201d) your Android\u2018s USB storage from your computer.</string>
     <!-- See USB_STORAGE_STOP.    This is the message. -->
-    <string name="usb_storage_stop_message">Before turning off USB storage, make sure you have unmounted (\u201cejected\u201d) your Android\u2018s SD card from your computer.</string>
+    <string name="usb_storage_stop_message" product="default">Before turning off USB storage, make sure you have unmounted (\u201cejected\u201d) your Android\u2018s SD card from your computer.</string>
     <!-- See USB_STORAGE_STOP.    This is the button text to stop usb storage. -->
     <string name="usb_storage_stop_button_mount">Turn off USB storage</string>
     <!-- See USB_STORAGE_STOP_DIALOG.  If there was an error stopping, this is the text. -->
@@ -2092,10 +2116,14 @@
 
     <!-- External media format dialog strings -->
     <!-- This is the label for the activity, and should never be visible to the user. -->
+    <!-- See EXTMEDIA_FORMAT.  EXTMEDIA_FORMAT_DIALOG:  After the user selects the notification, a dialog is shown asking if he wants to format the SD card.  This is the title. [CHAR LIMIT=20] -->
+    <string name="extmedia_format_title" product="nosdcard">Format USB storage</string>
     <!-- See EXTMEDIA_FORMAT.  EXTMEDIA_FORMAT_DIALOG:  After the user selects the notification, a dialog is shown asking if he wants to format the SD card.  This is the title. -->
-    <string name="extmedia_format_title">Format SD card</string>
+    <string name="extmedia_format_title" product="default">Format SD card</string>
+    <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
+    <string name="extmedia_format_message" product="nosdcard">Format USB storage, erasing all files stored there?  Action cannot be reversed!</string>
     <!-- See EXTMEDIA_FORMAT.   This is the message. -->
-    <string name="extmedia_format_message">Are you sure you want to format the SD card? All data on your card will be lost.</string>
+    <string name="extmedia_format_message" product="default">Are you sure you want to format the SD card? All data on your card will be lost.</string>
     <!-- See EXTMEDIA_FORMAT.    This is the button text to format the sd card. -->
     <string name="extmedia_format_button_format">Format</string>
 
@@ -2120,29 +2148,51 @@
     <string name="candidates_style"><u>candidates</u></string>
 
     <!-- External media notification strings -->
+    <!-- Shown when external media is being checked [CHAR LIMIT=30] -->
+    <string name="ext_media_checking_notification_title" product="nosdcard">Preparing USB storage</string>
     <!-- Shown when external media is being checked -->
-    <string name="ext_media_checking_notification_title">Preparing SD card</string>
+    <string name="ext_media_checking_notification_title" product="default">Preparing SD card</string>
     <string name="ext_media_checking_notification_message">Checking for errors.</string>
 
+    <!-- Shown when external media is blank (or unsupported filesystem) [CHAR LIMIT=30] -->
+    <string name="ext_media_nofs_notification_title" product="nosdcard">Blank USB storage</string>
     <!-- Shown when external media is blank (or unsupported filesystem) -->
-    <string name="ext_media_nofs_notification_title">Blank SD card</string>
-    <string name="ext_media_nofs_notification_message">SD card blank or has unsupported filesystem.</string>
+    <string name="ext_media_nofs_notification_title" product="default">Blank SD card</string>
+    <!-- Shown when USB storage cannot be read.  [CHAR LIMIT=NONE] -->
+    <string name="ext_media_nofs_notification_message" product="nosdcard">USB storage blank or has unsupported filesystem.</string>
+    <string name="ext_media_nofs_notification_message" product="default">SD card blank or has unsupported filesystem.</string>
 
+    <!-- Shown when external media is unmountable (corrupt)) [CHAR LIMIT=30] -->
+    <string name="ext_media_unmountable_notification_title" product="nosdcard">Damaged USB storage</string>
     <!-- Shown when external media is unmountable (corrupt)) -->
-    <string name="ext_media_unmountable_notification_title">Damaged SD card</string>
-    <string name="ext_media_unmountable_notification_message">SD card damaged. You may have to reformat it.</string>
+    <string name="ext_media_unmountable_notification_title" product="default">Damaged SD card</string>
+    <!-- Shown when USB storage cannot be read.  [CHAR LIMIT=NONE] -->
+    <string name="ext_media_unmountable_notification_message" product="nosdcard">USB storage damaged. You may have to reformat it.</string>
+    <string name="ext_media_unmountable_notification_message" product="default">SD card damaged. You may have to reformat it.</string>
 
+    <!-- Shown when external media is unsafely removed [CHAR LIMIT=30] -->
+    <string name="ext_media_badremoval_notification_title" product="nosdcard">USB storage unexpectedly removed</string>
     <!-- Shown when external media is unsafely removed -->
-    <string name="ext_media_badremoval_notification_title">SD card unexpectedly removed</string>
-    <string name="ext_media_badremoval_notification_message">Unmount SD card before removing to avoid data loss.</string>
+    <string name="ext_media_badremoval_notification_title" product="default">SD card unexpectedly removed</string>
+    <!-- Shown when external media is unsafely removed.  [CHAR LIMIT=NONE] -->
+    <string name="ext_media_badremoval_notification_message" product="nosdcard">Unmount USB storage before removing to avoid data loss.</string>
+    <string name="ext_media_badremoval_notification_message" product="default">Unmount SD card before removing to avoid data loss.</string>
 
+    <!-- Shown when external media has been safely removed [CHAR LIMIT=30] -->
+    <string name="ext_media_safe_unmount_notification_title" product="nosdcard">USB storage safe to remove</string>
     <!-- Shown when external media has been safely removed -->
-    <string name="ext_media_safe_unmount_notification_title">SD card safe to remove</string>
-    <string name="ext_media_safe_unmount_notification_message">You can safely remove SD card.</string>
+    <string name="ext_media_safe_unmount_notification_title" product="default">SD card safe to remove</string>
+    <!-- Shown when external media has been safely removed.  [CHAR LIMIT=NONE] -->
+    <string name="ext_media_safe_unmount_notification_message" product="nosdcard">You can safely remove USB storage.</string>
+    <string name="ext_media_safe_unmount_notification_message" product="default">You can safely remove SD card.</string>
 
+    <!-- Shown when external media is missing [CHAR LIMIT=30] -->
+    <string name="ext_media_nomedia_notification_title" product="nosdcard">Removed USB storage</string>
     <!-- Shown when external media is missing -->
-    <string name="ext_media_nomedia_notification_title">Removed SD card</string>
-    <string name="ext_media_nomedia_notification_message">SD card removed. Insert a new one.</string>
+    <string name="ext_media_nomedia_notification_title" product="default">Removed SD card</string>
+    <!-- Shown when external media is missing.  [CHAR LIMIT=NONE] -->
+    <string name="ext_media_nomedia_notification_message" product="nosdcard">USB storage removed. Insert new media.</string>
+    <string name="ext_media_nomedia_notification_message" product="default">SD card removed. Insert a new one.</string>
 
     <!-- Shown in LauncherActivity when the requested target Intent didn't return any matching Activities, leaving the list empty. -->
     <string name="activity_list_empty">No matching activities found</string>
@@ -2269,4 +2319,33 @@
     <!-- Shown when the users bandwidth is reduced because of excessive data use -->
     <string name="throttled_notification_title">Mobile data limit exceeded</string>
     <string name="throttled_notification_message">Touch to learn more about mobile data use</string>
+
+    <!-- Strings for ExternalStorageFormatter service. -->
+    <!-- Text for progress dialog while unmounting USB storage volume [CHAR LIMIT=NONE] -->
+    <string name="progress_unmounting" product="nosdcard">Unmounting USB storage...</string>
+    <!-- Text for progress dialog while unmounting SD card [CHAR LIMIT=NONE] -->
+    <string name="progress_unmounting" product="default">Unmounting SD card...</string>
+    <!-- Text for progress dialog while erasing USB storage volume [CHAR LIMIT=NONE] -->
+    <string name="progress_erasing" product="nosdcard">Erasing USB storage...</string>
+    <!-- Text for progress dialog while erasing SD card [CHAR LIMIT=NONE] -->
+    <string name="progress_erasing" product="default">Erasing SD card...</string>
+    <!-- Text for message to user that an error happened when formatting USB storage [CHAR LIMIT=NONE] -->
+    <string name="format_error" product="nosdcard">Failed to erase USB storage.</string>
+    <!-- Text for message to user that an error happened when formatting SD card [CHAR LIMIT=NONE] -->
+    <string name="format_error" product="default">Failed to erase SD card.</string>
+    <!-- Text for message to user that SD card has been removed while in use [CHAR LIMIT=NONE] -->
+    <string name="media_bad_removal">SD card was removed before being unmounted.</string>
+    <!-- Text for message to user USB storage is currently being checked [CHAR LIMIT=NONE] -->
+    <string name="media_checking" product="nosdcard">USB storage is currently being checked.</string>
+    <!-- Text for message to user SD card is currently being checked [CHAR LIMIT=NONE] -->
+    <string name="media_checking" product="default">SD card is currently being checked.</string>
+    <!-- Text for message to user SD card has been removed [CHAR LIMIT=NONE] -->
+    <string name="media_removed">SD card has been removed.</string>
+    <!-- Text for message to user USB storage is currently mounted on a computer [CHAR LIMIT=NONE] -->
+    <string name="media_shared" product="nosdcard">USB storage is currently in use by a computer.</string>
+    <!-- Text for message to user SD card is currently mounted on a computer [CHAR LIMIT=NONE] -->
+    <string name="media_shared" product="default">SD card is currently in use by a computer.</string>
+    <!-- Text for message for an unknown external media state [CHAR LIMIT=NONE] -->
+    <string name="media_unknown_state">External media in unknown state.</string>
+
 </resources>

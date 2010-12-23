@@ -26,6 +26,7 @@
 namespace android {
 
 struct MediaSource;
+struct MetaData;
 
 struct AMRWriter : public MediaWriter {
     AMRWriter(const char *filename);
@@ -35,25 +36,30 @@ struct AMRWriter : public MediaWriter {
 
     virtual status_t addSource(const sp<MediaSource> &source);
     virtual bool reachedEOS();
-    virtual status_t start();
-    virtual void stop();
+    virtual status_t start(MetaData *params = NULL);
+    virtual status_t stop();
+    virtual status_t pause();
 
 protected:
     virtual ~AMRWriter();
 
 private:
-    Mutex mLock;
-
     FILE *mFile;
     status_t mInitCheck;
     sp<MediaSource> mSource;
     bool mStarted;
+    volatile bool mPaused;
+    volatile bool mResumed;
     volatile bool mDone;
-    bool mReachedEOS;
+    volatile bool mReachedEOS;
     pthread_t mThread;
+    int64_t mEstimatedSizeBytes;
+    int64_t mEstimatedDurationUs;
 
     static void *ThreadWrapper(void *);
-    void threadFunc();
+    status_t threadFunc();
+    bool exceedsFileSizeLimit();
+    bool exceedsFileDurationLimit();
 
     AMRWriter(const AMRWriter &);
     AMRWriter &operator=(const AMRWriter &);

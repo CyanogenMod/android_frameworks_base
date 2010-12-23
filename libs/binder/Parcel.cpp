@@ -19,6 +19,7 @@
 
 #include <binder/Parcel.h>
 
+#include <binder/IPCThreadState.h>
 #include <binder/Binder.h>
 #include <binder/BpBinder.h>
 #include <utils/Debug.h>
@@ -46,6 +47,12 @@
 // ---------------------------------------------------------------------------
 
 #define PAD_SIZE(s) (((s)+3)&~3)
+
+// Note: must be kept in sync with android/os/StrictMode.java's PENALTY_GATHER
+#define STRICT_MODE_PENALTY_GATHER 0x100
+
+// Note: must be kept in sync with android/os/Parcel.java's EX_HAS_REPLY_HEADER
+#define EX_HAS_REPLY_HEADER -128
 
 // XXX This can be made public if we want to provide
 // support for typed data.
@@ -436,19 +443,37 @@ bool Parcel::hasFileDescriptors() const
     return mHasFds;
 }
 
+// Write RPC headers.  (previously just the interface token)
 status_t Parcel::writeInterfaceToken(const String16& interface)
 {
+    writeInt32(IPCThreadState::self()->getStrictModePolicy() |
+               STRICT_MODE_PENALTY_GATHER);
     // currently the interface identification token is just its name as a string
     return writeString16(interface);
 }
 
 bool Parcel::checkInterface(IBinder* binder) const
 {
-    return enforceInterface(binder->getInterfaceDescriptor()); 
+    return enforceInterface(binder->getInterfaceDescriptor());
 }
 
-bool Parcel::enforceInterface(const String16& interface) const
+bool Parcel::enforceInterface(const String16& interface,
+                              IPCThreadState* threadState) const
 {
+    int32_t strictPolicy = readInt32();
+    if (threadState == NULL) {
+        threadState = IPCThreadState::self();
+    }
+    if ((threadState->getLastTransactionBinderFlags() &
+         IBinder::FLAG_ONEWAY) != 0) {
+      // For one-way calls, the callee is running entirely
+      // disconnected from the caller, so disable StrictMode entirely.
+      // Not only does disk/network usage not impact the caller, but
+      // there's no way to commuicate back any violations anyway.
+      threadState->setStrictModePolicy(0);
+    } else {
+      threadState->setStrictModePolicy(strictPolicy);
+    }
     const String16 str(readString16());
     if (str == interface) {
         return true;
@@ -457,7 +482,7 @@ bool Parcel::enforceInterface(const String16& interface) const
                 String8(interface).string(), String8(str).string());
         return false;
     }
-} 
+}
 
 const size_t* Parcel::objects() const
 {
@@ -750,6 +775,11 @@ restart_write:
     goto restart_write;
 }
 
+status_t Parcel::writeNoException()
+{
+    return writeInt32(0);
+}
+
 void Parcel::remove(size_t start, size_t amt)
 {
     LOG_ALWAYS_FATAL("Parcel::remove() not yet implemented!");
@@ -938,6 +968,20 @@ wp<IBinder> Parcel::readWeakBinder() const
     return val;
 }
 
+int32_t Parcel::readExceptionCode() const
+{
+  int32_t exception_code = readAligned<int32_t>();
+  if (exception_code == EX_HAS_REPLY_HEADER) {
+    int32_t header_size = readAligned<int32_t>();
+    // Skip over fat responses headers.  Not used (or propagated) in
+    // native code
+    setDataPosition(dataPosition() + header_size);
+    // And fat response headers are currently only used when there are no
+    // exceptions, so return no error:
+    return 0;
+  }
+  return exception_code;
+}
 
 native_handle* Parcel::readNativeHandle() const
 {

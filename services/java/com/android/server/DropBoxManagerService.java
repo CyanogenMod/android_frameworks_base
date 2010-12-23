@@ -26,6 +26,7 @@ import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Debug;
 import android.os.DropBoxManager;
+import android.os.FileUtils;
 import android.os.Handler;
 import android.os.ParcelFileDescriptor;
 import android.os.StatFs;
@@ -36,6 +37,7 @@ import android.util.Slog;
 
 import com.android.internal.os.IDropBoxManagerService;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
@@ -179,7 +181,11 @@ public final class DropBoxManagerService extends IDropBoxManagerService.Stub {
             // the data in uncompressed form.
 
             temp = new File(mDropBoxDir, "drop" + Thread.currentThread().getId() + ".tmp");
-            output = new FileOutputStream(temp);
+            int bufferSize = mBlockSize;
+            if (bufferSize > 4096) bufferSize = 4096;
+            if (bufferSize < 512) bufferSize = 512;
+            FileOutputStream foutput = new FileOutputStream(temp);
+            output = new BufferedOutputStream(foutput, bufferSize);
             if (read == buffer.length && ((flags & DropBoxManager.IS_GZIPPED) == 0)) {
                 output = new GZIPOutputStream(output);
                 flags = flags | DropBoxManager.IS_GZIPPED;
@@ -196,6 +202,7 @@ public final class DropBoxManagerService extends IDropBoxManagerService.Stub {
 
                 read = input.read(buffer);
                 if (read <= 0) {
+                    FileUtils.sync(foutput);
                     output.close();  // Get a final size measurement
                     output = null;
                 } else {
@@ -690,8 +697,6 @@ public final class DropBoxManagerService extends IDropBoxManagerService.Stub {
         // was lost.  Tombstones are expunged by age (see above).
 
         if (mAllFiles.blocks > mCachedQuotaBlocks) {
-            Slog.i(TAG, "Usage (" + mAllFiles.blocks + ") > Quota (" + mCachedQuotaBlocks + ")");
-
             // Find a fair share amount of space to limit each tag
             int unsqueezed = mAllFiles.blocks, squeezed = 0;
             TreeSet<FileList> tags = new TreeSet<FileList>(mFilesByTag.values());

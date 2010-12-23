@@ -16,6 +16,7 @@
 */
 
 #include <android_runtime/AndroidRuntime.h>
+#include <android_runtime/android_view_Surface.h>
 #include <utils/misc.h>
 
 #include <EGL/egl.h>
@@ -94,9 +95,6 @@ static void nativeClassInit(JNIEnv *_env, jclass eglImplClass)
     gSurface_EGLSurfaceFieldID = _env->GetFieldID(gSurface_class, "mEGLSurface", "I");
     gSurface_NativePixelRefFieldID = _env->GetFieldID(gSurface_class, "mNativePixelRef", "I");
     gConfig_EGLConfigFieldID   = _env->GetFieldID(gConfig_class,  "mEGLConfig",  "I");
-
-    jclass surface_class = _env->FindClass("android/view/Surface");
-    gSurface_SurfaceFieldID = _env->GetFieldID(surface_class, "mSurface", "I");
 
     jclass bitmap_class = _env->FindClass("android/graphics/Bitmap");
     gBitmap_NativeBitmapFieldID = _env->GetFieldID(bitmap_class, "mNativeBitmap", "I");
@@ -325,19 +323,20 @@ static jint jni_eglCreateWindowSurface(JNIEnv *_env, jobject _this, jobject disp
     }
     EGLDisplay dpy = getDisplay(_env, display);
     EGLContext cnf = getConfig(_env, config);
-    Surface* window = 0;
+    sp<ANativeWindow> window;
     if (native_window == NULL) {
 not_valid_surface:
         doThrow(_env, "java/lang/IllegalArgumentException",
                 "Make sure the SurfaceView or associated SurfaceHolder has a valid Surface");
         return 0;
     }
-    window = (Surface*)_env->GetIntField(native_window, gSurface_SurfaceFieldID);
+
+    window = android_Surface_getNativeWindow(_env, native_window);
     if (window == NULL)
         goto not_valid_surface;
 
     jint* base = beginNativeAttribList(_env, attrib_list);
-    EGLSurface sur = eglCreateWindowSurface(dpy, cnf, window, base);
+    EGLSurface sur = eglCreateWindowSurface(dpy, cnf, window.get(), base);
     endNativeAttributeList(_env, attrib_list, base);
     return (jint)sur;
 }

@@ -152,12 +152,14 @@ public class ActivityInfo extends ComponentInfo
     public static final int FLAG_FINISH_ON_CLOSE_SYSTEM_DIALOGS = 0x0100;
     /**
      * Options that have been set in the activity declaration in the
-     * manifest: {@link #FLAG_MULTIPROCESS},
+     * manifest.
+     * These include:
+     * {@link #FLAG_MULTIPROCESS},
      * {@link #FLAG_FINISH_ON_TASK_LAUNCH}, {@link #FLAG_CLEAR_TASK_ON_LAUNCH},
      * {@link #FLAG_ALWAYS_RETAIN_TASK_STATE},
      * {@link #FLAG_STATE_NOT_NEEDED}, {@link #FLAG_EXCLUDE_FROM_RECENTS},
      * {@link #FLAG_ALLOW_TASK_REPARENTING}, {@link #FLAG_NO_HISTORY},
-     * {@link #FLAG_FINISH_ON_CLOSE_SYSTEM_DIALOGS}.
+     * {@link #FLAG_FINISH_ON_CLOSE_SYSTEM_DIALOGS},
      */
     public int flags;
 
@@ -193,10 +195,41 @@ public class ActivityInfo extends ComponentInfo
     public static final int SCREEN_ORIENTATION_SENSOR = 4;
   
     /**
-     * Constant corresponding to <code>sensor</code> in
+     * Constant corresponding to <code>nosensor</code> in
      * the {@link android.R.attr#screenOrientation} attribute.
      */
     public static final int SCREEN_ORIENTATION_NOSENSOR = 5;
+
+    /**
+     * Constant corresponding to <code>sensorLandscape</code> in
+     * the {@link android.R.attr#screenOrientation} attribute.
+     */
+    public static final int SCREEN_ORIENTATION_SENSOR_LANDSCAPE = 6;
+
+    /**
+     * Constant corresponding to <code>sensorPortrait</code> in
+     * the {@link android.R.attr#screenOrientation} attribute.
+     */
+    public static final int SCREEN_ORIENTATION_SENSOR_PORTRAIT = 7;
+
+    /**
+     * Constant corresponding to <code>reverseLandscape</code> in
+     * the {@link android.R.attr#screenOrientation} attribute.
+     */
+    public static final int SCREEN_ORIENTATION_REVERSE_LANDSCAPE = 8;
+
+    /**
+     * Constant corresponding to <code>reversePortrait</code> in
+     * the {@link android.R.attr#screenOrientation} attribute.
+     */
+    public static final int SCREEN_ORIENTATION_REVERSE_PORTRAIT = 9;
+
+    /**
+     * Constant corresponding to <code>fullSensor</code> in
+     * the {@link android.R.attr#screenOrientation} attribute.
+     */
+    public static final int SCREEN_ORIENTATION_FULL_SENSOR = 10;
+
     /**
      * The preferred screen orientation this activity would like to run in.
      * From the {@link android.R.attr#screenOrientation} attribute, one of
@@ -206,7 +239,12 @@ public class ActivityInfo extends ComponentInfo
      * {@link #SCREEN_ORIENTATION_USER},
      * {@link #SCREEN_ORIENTATION_BEHIND},
      * {@link #SCREEN_ORIENTATION_SENSOR},
-     * {@link #SCREEN_ORIENTATION_NOSENSOR}.
+     * {@link #SCREEN_ORIENTATION_NOSENSOR},
+     * {@link #SCREEN_ORIENTATION_SENSOR_LANDSCAPE},
+     * {@link #SCREEN_ORIENTATION_SENSOR_PORTRAIT},
+     * {@link #SCREEN_ORIENTATION_REVERSE_LANDSCAPE},
+     * {@link #SCREEN_ORIENTATION_REVERSE_PORTRAIT},
+     * {@link #SCREEN_ORIENTATION_FULL_SENSOR}.
      */
     public int screenOrientation = SCREEN_ORIENTATION_UNSPECIFIED;
     

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright (c) 2009, The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ * you may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at 
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0 
+ *
+ * Unless required by applicable law or agreed to in writing, software 
+ * distributed under the License is distributed on an "AS IS" BASIS, 
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
+ * See the License for the specific language governing permissions and 
+ * limitations under the License.
+ */
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Name of the status bar as seen in the applications info settings page. -->
+    <string name="app_label">Status Bar</string>
+
+    <!-- The text for the button in the notification window-shade that clears
+         all of the currently visible notifications. -->
+    <string name="status_bar_clear_all_button">Clear</string>
+
+    <!-- The label in the bar at the top of the status bar when there are no notifications
+         showing. -->
+    <string name="status_bar_no_notifications_title">No notifications</string>
+
+    <!-- The label for the group of notifications for ongoing events in the opened version of
+         the status bar.  An ongoing call is the prime example of this.  The MP3 music player
+         might be another example.  -->
+    <string name="status_bar_ongoing_events_title">Ongoing</string>
+
+    <!-- The label for the group of notifications for recent events in the opened version of
+         the status bar.  Recently received text messsages (SMS), emails, calendar alerts, etc. -->
+    <string name="status_bar_latest_events_title">Notifications</string>
+
+    <!-- When the battery is low, this is displayed to the user in a dialog.  The title of the low battery alert. -->
+    <string name="battery_low_title">Please connect charger</string>
+
+    <!-- When the battery is low, this is displayed to the user in a dialog. The subtitle of the low battery alert. -->
+    <string name="battery_low_subtitle">The battery is getting low:</string>
+
+    <!-- A message that appears when the battery level is getting low in a dialog.  This is appened to the subtitle of the low battery alert. -->
+    <string name="battery_low_percent_format"><xliff:g id="number">%d%%</xliff:g>
+    or less remaining.</string>
+
+    <!-- When the battery is low, this is the label of the button to go to the
+         power usage activity to find out what drained the battery. -->
+    <string name="battery_low_why">Battery use</string>
+
+</resources>

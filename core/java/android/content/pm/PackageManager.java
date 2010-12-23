@@ -28,8 +28,6 @@ import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.Environment;
-import android.os.StatFs;
 import android.util.AndroidException;
 import android.util.DisplayMetrics;
 
@@ -193,7 +191,7 @@ public abstract class PackageManager {
 
     /**
      * Signature check result: this is returned by {@link #checkSignatures}
-     * if the two packages have a matching signature.
+     * if all signatures on the two packages match.
      */
     public static final int SIGNATURE_MATCH = 0;
 
@@ -205,25 +203,25 @@ public abstract class PackageManager {
 
     /**
      * Signature check result: this is returned by {@link #checkSignatures}
-     * if the first package is not signed, but the second is.
+     * if the first package is not signed but the second is.
      */
     public static final int SIGNATURE_FIRST_NOT_SIGNED = -1;
 
     /**
      * Signature check result: this is returned by {@link #checkSignatures}
-     * if the second package is not signed, but the first is.
+     * if the second package is not signed but the first is.
      */
     public static final int SIGNATURE_SECOND_NOT_SIGNED = -2;
 
     /**
      * Signature check result: this is returned by {@link #checkSignatures}
-     * if both packages are signed but there is no matching signature.
+     * if not all signatures on both packages match.
      */
     public static final int SIGNATURE_NO_MATCH = -3;
 
     /**
      * Signature check result: this is returned by {@link #checkSignatures}
-     * if either of the given package names are not valid.
+     * if either of the packages are not valid.
      */
     public static final int SIGNATURE_UNKNOWN_PACKAGE = -4;
 
@@ -611,6 +609,16 @@ public abstract class PackageManager {
     public static final int MOVE_FAILED_INTERNAL_ERROR = -6;
 
     /**
+     * Error code that is passed to the {@link IPackageMoveObserver} by
+     * {@link #movePackage(android.net.Uri, IPackageMoveObserver)} if the
+     * specified package already has an operation pending in the
+     * {@link PackageHandler} queue.
+     * 
+     * @hide
+     */
+    public static final int MOVE_FAILED_OPERATION_PENDING = -7;
+
+    /**
      * Flag parameter for {@link #movePackage} to indicate that
      * the package should be moved to internal storage if its
      * been installed on external media.
@@ -624,6 +632,15 @@ public abstract class PackageManager {
      * @hide
      */
     public static final int MOVE_EXTERNAL_MEDIA = 0x00000002;
+
+    /**
+     * Feature for {@link #getSystemAvailableFeatures} and
+     * {@link #hasSystemFeature}: The device's audio pipeline is low-latency,
+     * more suitable for audio applications sensitive to delays or lag in
+     * sound input or output.
+     */
+    @SdkConstant(SdkConstantType.FEATURE)
+    public static final String FEATURE_AUDIO_LOW_LATENCY = "android.hardware.audio.low_latency";
 
     /**
      * Feature for {@link #getSystemAvailableFeatures} and
@@ -654,6 +671,13 @@ public abstract class PackageManager {
      */
     @SdkConstant(SdkConstantType.FEATURE)
     public static final String FEATURE_CAMERA_FLASH = "android.hardware.camera.flash";
+
+    /**
+     * Feature for {@link #getSystemAvailableFeatures} and
+     * {@link #hasSystemFeature}: The device has a front facing camera.
+     */
+    @SdkConstant(SdkConstantType.FEATURE)
+    public static final String FEATURE_CAMERA_FRONT = "android.hardware.camera.front";
 
     /**
      * Feature for {@link #getSystemAvailableFeatures} and
@@ -689,10 +713,11 @@ public abstract class PackageManager {
 
     /**
      * Feature for {@link #getSystemAvailableFeatures} and
-     * {@link #hasSystemFeature}: The device includes a magnetometer (compass).
+     * {@link #hasSystemFeature}: The device can communicate using Near-Field
+     * Communications (NFC).
      */
     @SdkConstant(SdkConstantType.FEATURE)
-    public static final String FEATURE_SENSOR_COMPASS = "android.hardware.sensor.compass";
+    public static final String FEATURE_NFC = "android.hardware.nfc";
 
     /**
      * Feature for {@link #getSystemAvailableFeatures} and
@@ -700,6 +725,28 @@ public abstract class PackageManager {
      */
     @SdkConstant(SdkConstantType.FEATURE)
     public static final String FEATURE_SENSOR_ACCELEROMETER = "android.hardware.sensor.accelerometer";
+
+    /**
+     * Feature for {@link #getSystemAvailableFeatures} and
+     * {@link #hasSystemFeature}: The device includes a barometer (air
+     * pressure sensor.)
+     */
+    @SdkConstant(SdkConstantType.FEATURE)
+    public static final String FEATURE_SENSOR_BAROMETER = "android.hardware.sensor.barometer";
+
+    /**
+     * Feature for {@link #getSystemAvailableFeatures} and
+     * {@link #hasSystemFeature}: The device includes a magnetometer (compass).
+     */
+    @SdkConstant(SdkConstantType.FEATURE)
+    public static final String FEATURE_SENSOR_COMPASS = "android.hardware.sensor.compass";
+
+    /**
+     * Feature for {@link #getSystemAvailableFeatures} and
+     * {@link #hasSystemFeature}: The device includes a gyroscope.
+     */
+    @SdkConstant(SdkConstantType.FEATURE)
+    public static final String FEATURE_SENSOR_GYROSCOPE = "android.hardware.sensor.gyroscope";
 
     /**
      * Feature for {@link #getSystemAvailableFeatures} and
@@ -736,7 +783,21 @@ public abstract class PackageManager {
      */
     @SdkConstant(SdkConstantType.FEATURE)
     public static final String FEATURE_TELEPHONY_GSM = "android.hardware.telephony.gsm";
-    
+
+    /**
+     * Feature for {@link #getSystemAvailableFeatures} and
+     * {@link #hasSystemFeature}: The SIP API is enabled on the device.
+     */
+    @SdkConstant(SdkConstantType.FEATURE)
+    public static final String FEATURE_SIP = "android.software.sip";
+
+    /**
+     * Feature for {@link #getSystemAvailableFeatures} and
+     * {@link #hasSystemFeature}: The device supports SIP-based VOIP.
+     */
+    @SdkConstant(SdkConstantType.FEATURE)
+    public static final String FEATURE_SIP_VOIP = "android.software.sip.voip";
+
     /**
      * Feature for {@link #getSystemAvailableFeatures} and
      * {@link #hasSystemFeature}: The device's display has a touch screen.
@@ -760,6 +821,15 @@ public abstract class PackageManager {
      */
     @SdkConstant(SdkConstantType.FEATURE)
     public static final String FEATURE_TOUCHSCREEN_MULTITOUCH_DISTINCT = "android.hardware.touchscreen.multitouch.distinct";
+
+    /**
+     * Feature for {@link #getSystemAvailableFeatures} and
+     * {@link #hasSystemFeature}: The device's touch screen is capable of
+     * tracking a full hand of fingers fully independently -- that is, 5 or
+     * more simultaneous independent pointers.
+     */
+    @SdkConstant(SdkConstantType.FEATURE)
+    public static final String FEATURE_TOUCHSCREEN_MULTITOUCH_JAZZHAND = "android.hardware.touchscreen.multitouch.jazzhand";
 
     /**
      * Feature for {@link #getSystemAvailableFeatures} and
@@ -980,9 +1050,9 @@ public abstract class PackageManager {
      * <p>Throws {@link NameNotFoundException} if an activity with the given
      * class name can not be found on the system.
      *
-     * @param className The full name (i.e.
-     *                  com.google.apps.contacts.ContactsList) of an Activity
-     *                  class.
+     * @param component The full component name (i.e.
+     * com.google.apps.contacts/com.google.apps.contacts.ContactsList) of an Activity
+     * class.
      * @param flags Additional option flags. Use any combination of 
      * {@link #GET_META_DATA}, {@link #GET_SHARED_LIBRARY_FILES},
      * to modify the data (in ApplicationInfo) returned.
@@ -993,7 +1063,7 @@ public abstract class PackageManager {
      * @see #GET_META_DATA
      * @see #GET_SHARED_LIBRARY_FILES
      */
-    public abstract ActivityInfo getActivityInfo(ComponentName className,
+    public abstract ActivityInfo getActivityInfo(ComponentName component,
             int flags) throws NameNotFoundException;
 
     /**
@@ -1003,9 +1073,9 @@ public abstract class PackageManager {
      * <p>Throws {@link NameNotFoundException} if a receiver with the given
      * class name can not be found on the system.
      *
-     * @param className The full name (i.e.
-     *                  com.google.apps.contacts.CalendarAlarm) of a Receiver
-     *                  class.
+     * @param component The full component name (i.e.
+     * com.google.apps.calendar/com.google.apps.calendar.CalendarAlarm) of a Receiver
+     * class.
      * @param flags Additional option flags.  Use any combination of 
      * {@link #GET_META_DATA}, {@link #GET_SHARED_LIBRARY_FILES},
      * to modify the data returned.
@@ -1016,7 +1086,7 @@ public abstract class PackageManager {
      * @see #GET_META_DATA
      * @see #GET_SHARED_LIBRARY_FILES
      */
-    public abstract ActivityInfo getReceiverInfo(ComponentName className,
+    public abstract ActivityInfo getReceiverInfo(ComponentName component,
             int flags) throws NameNotFoundException;
 
     /**
@@ -1026,9 +1096,9 @@ public abstract class PackageManager {
      * <p>Throws {@link NameNotFoundException} if a service with the given
      * class name can not be found on the system.
      *
-     * @param className The full name (i.e.
-     *                  com.google.apps.media.BackgroundPlayback) of a Service
-     *                  class.
+     * @param component The full component name (i.e.
+     * com.google.apps.media/com.google.apps.media.BackgroundPlayback) of a Service
+     * class.
      * @param flags Additional option flags.  Use any combination of 
      * {@link #GET_META_DATA}, {@link #GET_SHARED_LIBRARY_FILES},
      * to modify the data returned.
@@ -1038,7 +1108,29 @@ public abstract class PackageManager {
      * @see #GET_META_DATA
      * @see #GET_SHARED_LIBRARY_FILES
      */
-    public abstract ServiceInfo getServiceInfo(ComponentName className,
+    public abstract ServiceInfo getServiceInfo(ComponentName component,
+            int flags) throws NameNotFoundException;
+
+    /**
+     * Retrieve all of the information we know about a particular content
+     * provider class.
+     *
+     * <p>Throws {@link NameNotFoundException} if a provider with the given
+     * class name can not be found on the system.
+     *
+     * @param component The full component name (i.e.
+     * com.google.providers.media/com.google.providers.media.MediaProvider) of a
+     * ContentProvider class.
+     * @param flags Additional option flags.  Use any combination of
+     * {@link #GET_META_DATA}, {@link #GET_SHARED_LIBRARY_FILES},
+     * to modify the data returned.
+     *
+     * @return ProviderInfo containing information about the service.
+     *
+     * @see #GET_META_DATA
+     * @see #GET_SHARED_LIBRARY_FILES
+     */
+    public abstract ProviderInfo getProviderInfo(ComponentName component,
             int flags) throws NameNotFoundException;
 
     /**
@@ -1172,20 +1264,14 @@ public abstract class PackageManager {
      *
      * @param pkg1 First package name whose signature will be compared.
      * @param pkg2 Second package name whose signature will be compared.
-     * @return Returns an integer indicating whether there is a matching
-     * signature: the value is >= 0 if there is a match (or neither package
-     * is signed), or < 0 if there is not a match.  The match result can be
-     * further distinguished with the success (>= 0) constants
-     * {@link #SIGNATURE_MATCH}, {@link #SIGNATURE_NEITHER_SIGNED}; or
-     * failure (< 0) constants {@link #SIGNATURE_FIRST_NOT_SIGNED},
-     * {@link #SIGNATURE_SECOND_NOT_SIGNED}, {@link #SIGNATURE_NO_MATCH},
-     * or {@link #SIGNATURE_UNKNOWN_PACKAGE}.
+     *
+     * @return Returns an integer indicating whether all signatures on the
+     * two packages match. The value is >= 0 ({@link #SIGNATURE_MATCH}) if
+     * all signatures match or < 0 if there is not a match ({@link
+     * #SIGNATURE_NO_MATCH} or {@link #SIGNATURE_UNKNOWN_PACKAGE}).
      *
      * @see #checkSignatures(int, int)
      * @see #SIGNATURE_MATCH
-     * @see #SIGNATURE_NEITHER_SIGNED
-     * @see #SIGNATURE_FIRST_NOT_SIGNED
-     * @see #SIGNATURE_SECOND_NOT_SIGNED
      * @see #SIGNATURE_NO_MATCH
      * @see #SIGNATURE_UNKNOWN_PACKAGE
      */
@@ -1200,20 +1286,14 @@ public abstract class PackageManager {
      *
      * @param uid1 First UID whose signature will be compared.
      * @param uid2 Second UID whose signature will be compared.
-     * @return Returns an integer indicating whether there is a matching
-     * signature: the value is >= 0 if there is a match (or neither package
-     * is signed), or < 0 if there is not a match.  The match result can be
-     * further distinguished with the success (>= 0) constants
-     * {@link #SIGNATURE_MATCH}, {@link #SIGNATURE_NEITHER_SIGNED}; or
-     * failure (< 0) constants {@link #SIGNATURE_FIRST_NOT_SIGNED},
-     * {@link #SIGNATURE_SECOND_NOT_SIGNED}, {@link #SIGNATURE_NO_MATCH},
-     * or {@link #SIGNATURE_UNKNOWN_PACKAGE}.
      *
-     * @see #checkSignatures(int, int)
+     * @return Returns an integer indicating whether all signatures on the
+     * two packages match. The value is >= 0 ({@link #SIGNATURE_MATCH}) if
+     * all signatures match or < 0 if there is not a match ({@link
+     * #SIGNATURE_NO_MATCH} or {@link #SIGNATURE_UNKNOWN_PACKAGE}).
+     *
+     * @see #checkSignatures(String, String)
      * @see #SIGNATURE_MATCH
-     * @see #SIGNATURE_NEITHER_SIGNED
-     * @see #SIGNATURE_FIRST_NOT_SIGNED
-     * @see #SIGNATURE_SECOND_NOT_SIGNED
      * @see #SIGNATURE_NO_MATCH
      * @see #SIGNATURE_UNKNOWN_PACKAGE
      */
@@ -1318,11 +1398,18 @@ public abstract class PackageManager {
      * {@link Intent#resolveActivity} finds an activity if a class has not
      * been explicitly specified.
      *
+     * <p><em>Note: if using an implicit Intent (without an explicit ComponentName
+     * specified), be sure to consider whether to set the {@link #MATCH_DEFAULT_ONLY}
+     * only flag.  You need to do so to resolve the activity in the same way
+     * that {@link android.content.Context#startActivity(Intent)} and
+     * {@link android.content.Intent#resolveActivity(PackageManager)
+     * Intent.resolveActivity(PackageManager)} do.</p>
+     * 
      * @param intent An intent containing all of the desired specification
      *               (action, data, type, category, and/or component).
      * @param flags Additional option flags.  The most important is
-     *                    MATCH_DEFAULT_ONLY, to limit the resolution to only
-     *                    those activities that support the CATEGORY_DEFAULT.
+     * {@link #MATCH_DEFAULT_ONLY}, to limit the resolution to only
+     * those activities that support the {@link android.content.Intent#CATEGORY_DEFAULT}.
      *
      * @return Returns a ResolveInfo containing the final activity intent that
      *         was determined to be the best action.  Returns null if no
@@ -1341,13 +1428,13 @@ public abstract class PackageManager {
      *
      * @param intent The desired intent as per resolveActivity().
      * @param flags Additional option flags.  The most important is
-     *                    MATCH_DEFAULT_ONLY, to limit the resolution to only
-     *                    those activities that support the CATEGORY_DEFAULT.
+     * {@link #MATCH_DEFAULT_ONLY}, to limit the resolution to only
+     * those activities that support the {@link android.content.Intent#CATEGORY_DEFAULT}.
      *
-     * @return A List<ResolveInfo> containing one entry for each matching
+     * @return A List&lt;ResolveInfo&gt; containing one entry for each matching
      *         Activity. These are ordered from best to worst match -- that
      *         is, the first item in the list is what is returned by
-     *         resolveActivity().  If there are no matching activities, an empty
+     *         {@link #resolveActivity}.  If there are no matching activities, an empty
      *         list is returned.
      *
      * @see #MATCH_DEFAULT_ONLY
@@ -1372,10 +1459,10 @@ public abstract class PackageManager {
      *                  first specific results.  Can be null.
      * @param intent The desired intent as per resolveActivity().
      * @param flags Additional option flags.  The most important is
-     *                    MATCH_DEFAULT_ONLY, to limit the resolution to only
-     *                    those activities that support the CATEGORY_DEFAULT.
+     * {@link #MATCH_DEFAULT_ONLY}, to limit the resolution to only
+     * those activities that support the {@link android.content.Intent#CATEGORY_DEFAULT}.
      *
-     * @return A List<ResolveInfo> containing one entry for each matching
+     * @return A List&lt;ResolveInfo&gt; containing one entry for each matching
      *         Activity. These are ordered first by all of the intents resolved
      *         in <var>specifics</var> and then any additional activities that
      *         can handle <var>intent</var> but did not get included by one of
@@ -1393,11 +1480,9 @@ public abstract class PackageManager {
      * Retrieve all receivers that can handle a broadcast of the given intent.
      *
      * @param intent The desired intent as per resolveActivity().
-     * @param flags Additional option flags.  The most important is
-     *                    MATCH_DEFAULT_ONLY, to limit the resolution to only
-     *                    those activities that support the CATEGORY_DEFAULT.
+     * @param flags Additional option flags.
      *
-     * @return A List<ResolveInfo> containing one entry for each matching
+     * @return A List&lt;ResolveInfo&gt; containing one entry for each matching
      *         Receiver. These are ordered from first to last in priority.  If
      *         there are no matching receivers, an empty list is returned.
      *
@@ -1430,7 +1515,7 @@ public abstract class PackageManager {
      * @param intent The desired intent as per resolveService().
      * @param flags Additional option flags.
      *
-     * @return A List<ResolveInfo> containing one entry for each matching
+     * @return A List&lt;ResolveInfo&gt; containing one entry for each matching
      *         ServiceInfo. These are ordered from best to worst match -- that
      *         is, the first item in the list is what is returned by
      *         resolveService().  If there are no matching services, an empty
@@ -1467,7 +1552,7 @@ public abstract class PackageManager {
      *        uid owning the requested content providers.
      * @param flags Additional option flags.  Currently should always be 0.
      *
-     * @return A List<ContentProviderInfo> containing one entry for each
+     * @return A List&lt;ContentProviderInfo&gt; containing one entry for each
      *         content provider either patching <var>processName</var> or, if
      *         <var>processName</var> is null, all known content providers.
      *         <em>If there are no matching providers, null is returned.</em>
@@ -1503,7 +1588,7 @@ public abstract class PackageManager {
      *                      returned.
      * @param flags Additional option flags.  Currently should always be 0.
      *
-     * @return A List<InstrumentationInfo> containing one entry for each
+     * @return A List&lt;InstrumentationInfo&gt; containing one entry for each
      *         matching available Instrumentation.  Returns an empty list if
      *         there is no instrumentation available for the given package.
      */
@@ -1606,6 +1691,79 @@ public abstract class PackageManager {
      * @see #getApplicationIcon(ApplicationInfo)
      */
     public abstract Drawable getApplicationIcon(String packageName)
+            throws NameNotFoundException;
+
+    /**
+     * Retrieve the logo associated with an activity.  Given the full name of
+     * an activity, retrieves the information about it and calls
+     * {@link ComponentInfo#loadLogo ComponentInfo.loadLogo()} to return its logo.
+     * If the activity can not be found, NameNotFoundException is thrown.
+     *
+     * @param activityName Name of the activity whose logo is to be retrieved.
+     *
+     * @return Returns the image of the logo or null if the activity has no
+     * logo specified.
+     * 
+     * @throws NameNotFoundException Thrown if the resources for the given
+     * activity could not be loaded.
+     *
+     * @see #getActivityLogo(Intent)
+     */
+    public abstract Drawable getActivityLogo(ComponentName activityName)
+            throws NameNotFoundException;
+
+    /**
+     * Retrieve the logo associated with an Intent.  If intent.getClassName() is
+     * set, this simply returns the result of
+     * getActivityLogo(intent.getClassName()).  Otherwise it resolves the intent's
+     * component and returns the logo associated with the resolved component.
+     * If intent.getClassName() can not be found or the Intent can not be resolved
+     * to a component, NameNotFoundException is thrown.
+     *
+     * @param intent The intent for which you would like to retrieve a logo.
+     *
+     * @return Returns the image of the logo, or null if the activity has no
+     * logo specified.
+     * 
+     * @throws NameNotFoundException Thrown if the resources for application
+     * matching the given intent could not be loaded.
+     *
+     * @see #getActivityLogo(ComponentName)
+     */
+    public abstract Drawable getActivityLogo(Intent intent)
+            throws NameNotFoundException;
+
+    /**
+     * Retrieve the logo associated with an application.  If it has not specified
+     * a logo, this method returns null.
+     *
+     * @param info Information about application being queried.
+     *
+     * @return Returns the image of the logo, or null if no logo is specified
+     * by the application.
+     *
+     * @see #getApplicationLogo(String)
+     */
+    public abstract Drawable getApplicationLogo(ApplicationInfo info);
+
+    /**
+     * Retrieve the logo associated with an application.  Given the name of the
+     * application's package, retrieves the information about it and calls
+     * getApplicationLogo() to return its logo. If the application can not be
+     * found, NameNotFoundException is thrown.
+     *
+     * @param packageName Name of the package whose application logo is to be
+     *                    retrieved.
+     *
+     * @return Returns the image of the logo, or null if no application logo
+     * has been specified.
+     * 
+     * @throws NameNotFoundException Thrown if the resources for the given
+     * application could not be loaded.
+     *
+     * @see #getApplicationLogo(ApplicationInfo)
+     */
+    public abstract Drawable getApplicationLogo(String packageName)
             throws NameNotFoundException;
 
     /**
@@ -1745,7 +1903,7 @@ public abstract class PackageManager {
         if (pkg == null) {
             return null;
         }
-        return PackageParser.generatePackageInfo(pkg, null, flags);
+        return PackageParser.generatePackageInfo(pkg, null, flags, 0, 0);
     }
 
     /**
@@ -2125,4 +2283,17 @@ public abstract class PackageManager {
      */
     public abstract void movePackage(
             String packageName, IPackageMoveObserver observer, int flags);
+
+    /**
+     * Sets the Opaque Binary Blob (OBB) file location.
+     * <p>
+     * NOTE: The existence or format of this file is not currently checked, but
+     * it may be in the future.
+     * 
+     * @param packageName Name of the package with which to associate the .obb
+     *            file
+     * @param path Path on the filesystem to the .obb file
+     * @hide
+     */
+    public abstract void setPackageObbPath(String packageName, String path);
 }

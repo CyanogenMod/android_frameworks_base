@@ -29,8 +29,9 @@ namespace android {
 static const int32_t kNumSamplesPerFrame = 160;
 static const int32_t kSampleRate = 8000;
 
-AMRNBEncoder::AMRNBEncoder(const sp<MediaSource> &source)
+AMRNBEncoder::AMRNBEncoder(const sp<MediaSource> &source, const sp<MetaData> &meta)
     : mSource(source),
+      mMeta(meta),
       mStarted(false),
       mBufferGroup(NULL),
       mEncState(NULL),
@@ -69,7 +70,10 @@ static Mode PickModeFromBitrate(int32_t bps) {
 }
 
 status_t AMRNBEncoder::start(MetaData *params) {
-    CHECK(!mStarted);
+    if (mStarted) {
+        LOGW("Call start() when encoder already started");
+        return OK;
+    }
 
     mBufferGroup = new MediaBufferGroup;
     mBufferGroup->add_buffer(new MediaBuffer(32));
@@ -78,7 +82,7 @@ status_t AMRNBEncoder::start(MetaData *params) {
                 &mEncState, &mSidState, false /* dtx_enable */),
              0);
 
-    mSource->start();
+    mSource->start(params);
 
     mAnchorTimeUs = 0;
     mNumFramesOutput = 0;
@@ -96,7 +100,10 @@ status_t AMRNBEncoder::start(MetaData *params) {
 }
 
 status_t AMRNBEncoder::stop() {
-    CHECK(mStarted);
+    if (!mStarted) {
+        LOGW("Call stop() when encoder has not started.");
+        return OK;
+    }
 
     if (mInputBuffer) {
         mInputBuffer->release();
@@ -119,28 +126,16 @@ status_t AMRNBEncoder::stop() {
 sp<MetaData> AMRNBEncoder::getFormat() {
     sp<MetaData> srcFormat = mSource->getFormat();
 
-    int32_t numChannels;
-    int32_t sampleRate;
-
-    CHECK(srcFormat->findInt32(kKeyChannelCount, &numChannels));
-    CHECK_EQ(numChannels, 1);
-
-    CHECK(srcFormat->findInt32(kKeySampleRate, &sampleRate));
-    CHECK_EQ(sampleRate, kSampleRate);
-
-    sp<MetaData> meta = new MetaData;
-    meta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_AMR_NB);
-    meta->setInt32(kKeyChannelCount, numChannels);
-    meta->setInt32(kKeySampleRate, sampleRate);
+    mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_AMR_NB);
 
     int64_t durationUs;
     if (srcFormat->findInt64(kKeyDuration, &durationUs)) {
-        meta->setInt64(kKeyDuration, durationUs);
+        mMeta->setInt64(kKeyDuration, durationUs);
     }
 
-    meta->setCString(kKeyDecoderComponent, "AMRNBEncoder");
+    mMeta->setCString(kKeyDecoderComponent, "AMRNBEncoder");
 
-    return meta;
+    return mMeta;
 }
 
 status_t AMRNBEncoder::read(
@@ -150,7 +145,10 @@ status_t AMRNBEncoder::read(
     *out = NULL;
 
     int64_t seekTimeUs;
-    CHECK(options == NULL || !options->getSeekTo(&seekTimeUs));
+    ReadOptions::SeekMode mode;
+    CHECK(options == NULL || !options->getSeekTo(&seekTimeUs, &mode));
+    bool readFromSource = false;
+    int64_t wallClockTimeUs = -1;
 
     while (mNumInputSamples < kNumSamplesPerFrame) {
         if (mInputBuffer == NULL) {
@@ -170,12 +168,17 @@ status_t AMRNBEncoder::read(
 
             size_t align = mInputBuffer->range_length() % sizeof(int16_t);
             CHECK_EQ(align, 0);
+            readFromSource = true;
 
             int64_t timeUs;
-            if (mInputBuffer->meta_data()->findInt64(kKeyTime, &timeUs)) {
-                mAnchorTimeUs = timeUs;
-                mNumFramesOutput = 0;
+            if (mInputBuffer->meta_data()->findInt64(kKeyDriftTime, &timeUs)) {
+                wallClockTimeUs = timeUs;
             }
+            if (mInputBuffer->meta_data()->findInt64(kKeyAnchorTime, &timeUs)) {
+                mAnchorTimeUs = timeUs;
+            }
+        } else {
+            readFromSource = false;
         }
 
         size_t copy =
@@ -221,8 +224,14 @@ status_t AMRNBEncoder::read(
     buffer->set_range(0, res);
 
     // Each frame of 160 samples is 20ms long.
+    int64_t mediaTimeUs = mNumFramesOutput * 20000LL;
     buffer->meta_data()->setInt64(
-            kKeyTime, mAnchorTimeUs + mNumFramesOutput * 20000);
+            kKeyTime, mAnchorTimeUs + mediaTimeUs);
+
+    if (readFromSource && wallClockTimeUs != -1) {
+        buffer->meta_data()->setInt64(kKeyDriftTime,
+            mediaTimeUs - wallClockTimeUs);
+    }
 
     ++mNumFramesOutput;
 

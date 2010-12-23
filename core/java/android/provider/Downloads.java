@@ -17,11 +17,6 @@
 package android.provider;
 
 import android.net.Uri;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.content.Context;
-
-import java.io.File;
 
 /**
  * The Download Manager
@@ -65,7 +60,7 @@ public final class Downloads {
      * @hide
      */
     public static final Uri CONTENT_URI =
-        Uri.parse("content://downloads/download");
+        Uri.parse("content://downloads/my_downloads");
 
     /**
      * Broadcast Action: this is sent by the download manager to the app
@@ -305,6 +300,15 @@ public final class Downloads {
      */
     public static final String COLUMN_DESCRIPTION = "description";
 
+    /**
+     * Set to true if this download is deleted. It is completely removed from the database
+     * when MediaProvider database also deletes the metadata asociated with this downloaded file.
+     * <P>Type: BOOLEAN</P>
+     * <P>Owner can Read</P>
+     * @hide
+     */
+    public static final String COLUMN_DELETED = "deleted";
+
     /*
      * Lists the destinations that an application can specify for a download.
      */
@@ -383,16 +387,6 @@ public final class Downloads {
     }
 
     /**
-     * Returns whether the download is suspended. (i.e. whether the download
-     * won't complete without some action from outside the download
-     * manager).
-     * @hide
-     */
-    public static boolean isStatusSuspended(int status) {
-        return (status == STATUS_PENDING_PAUSED || status == STATUS_RUNNING_PAUSED);
-    }
-
-    /**
      * Returns whether the status is a success (i.e. 2xx).
      * @hide
      */
@@ -440,22 +434,10 @@ public final class Downloads {
     public static final int STATUS_PENDING = 190;
 
     /**
-     * This download hasn't stated yet and is paused
-     * @hide
-     */
-    public static final int STATUS_PENDING_PAUSED = 191;
-
-    /**
      * This download has started
      * @hide
      */
     public static final int STATUS_RUNNING = 192;
-
-    /**
-     * This download has started and is paused
-     * @hide
-     */
-    public static final int STATUS_RUNNING_PAUSED = 193;
 
     /**
      * This download has successfully completed.
@@ -618,7 +600,14 @@ public final class Downloads {
                 "android.permission.ACCESS_DOWNLOAD_MANAGER_ADVANCED";
 
         /**
-         * The permission to directly access the download manager's cache directory
+         * The permission to access the all the downloads in the manager.
+         */
+        public static final String PERMISSION_ACCESS_ALL =
+                "android.permission.ACCESS_ALL_DOWNLOADS";
+
+        /**
+         * The permission to directly access the download manager's cache
+         * directory
          */
         public static final String PERMISSION_CACHE = "android.permission.ACCESS_CACHE_FILESYSTEM";
 
@@ -629,18 +618,30 @@ public final class Downloads {
                 "android.permission.SEND_DOWNLOAD_COMPLETED_INTENTS";
 
         /**
-         * The permission to access downloads to {@link DESTINATION_EXTERNAL}
-         * which were downloaded by other applications.
-         * @hide
+         * The permission to download files to the cache partition that won't be automatically
+         * purged when space is needed.
          */
-        public static final String PERMISSION_SEE_ALL_EXTERNAL =
-                "android.permission.SEE_ALL_EXTERNAL";
+        public static final String PERMISSION_CACHE_NON_PURGEABLE =
+                "android.permission.DOWNLOAD_CACHE_NON_PURGEABLE";
 
         /**
-         * The content:// URI for the data table in the provider
+         * The permission to download files without any system notification being shown.
+         */
+        public static final String PERMISSION_NO_NOTIFICATION =
+                "android.permission.DOWNLOAD_WITHOUT_NOTIFICATION";
+
+        /**
+         * The content:// URI to access downloads owned by the caller's UID.
          */
         public static final Uri CONTENT_URI =
-            Uri.parse("content://downloads/download");
+                Uri.parse("content://downloads/my_downloads");
+
+        /**
+         * The content URI for accessing all downloads across all UIDs (requires the
+         * ACCESS_ALL_DOWNLOADS permission).
+         */
+        public static final Uri ALL_DOWNLOADS_CONTENT_URI =
+                Uri.parse("content://downloads/all_downloads");
 
         /**
          * Broadcast Action: this is sent by the download manager to the app
@@ -856,6 +857,63 @@ public final class Downloads {
          */
         public static final String COLUMN_DESCRIPTION = "description";
 
+        /**
+         * The name of the column indicating whether the download was requesting through the public
+         * API.  This controls some differences in behavior.
+         * <P>Type: BOOLEAN</P>
+         * <P>Owner can Init/Read</P>
+         */
+        public static final String COLUMN_IS_PUBLIC_API = "is_public_api";
+
+        /**
+         * The name of the column indicating whether roaming connections can be used.  This is only
+         * used for public API downloads.
+         * <P>Type: BOOLEAN</P>
+         * <P>Owner can Init/Read</P>
+         */
+        public static final String COLUMN_ALLOW_ROAMING = "allow_roaming";
+
+        /**
+         * The name of the column holding a bitmask of allowed network types.  This is only used for
+         * public API downloads.
+         * <P>Type: INTEGER</P>
+         * <P>Owner can Init/Read</P>
+         */
+        public static final String COLUMN_ALLOWED_NETWORK_TYPES = "allowed_network_types";
+
+        /**
+         * Whether or not this download should be displayed in the system's Downloads UI.  Defaults
+         * to true.
+         * <P>Type: INTEGER</P>
+         * <P>Owner can Init/Read</P>
+         */
+        public static final String COLUMN_IS_VISIBLE_IN_DOWNLOADS_UI = "is_visible_in_downloads_ui";
+
+        /**
+         * If true, the user has confirmed that this download can proceed over the mobile network
+         * even though it exceeds the recommended maximum size.
+         * <P>Type: BOOLEAN</P>
+         */
+        public static final String COLUMN_BYPASS_RECOMMENDED_SIZE_LIMIT =
+            "bypass_recommended_size_limit";
+
+        /**
+         * Set to true if this download is deleted. It is completely removed from the database
+         * when MediaProvider database also deletes the metadata asociated with this downloaded file.
+         * <P>Type: BOOLEAN</P>
+         * <P>Owner can Read</P>
+         */
+        public static final String COLUMN_DELETED = "deleted";
+
+        /**
+         * The URI to the corresponding entry in MediaProvider for this downloaded entry. It is
+         * used to delete the entries from MediaProvider database when it is deleted from the
+         * downloaded list.
+         * <P>Type: TEXT</P>
+         * <P>Owner can Read</P>
+         */
+        public static final String COLUMN_MEDIAPROVIDER_URI = "mediaprovider_uri";
+
         /*
          * Lists the destinations that an application can specify for a download.
          */
@@ -899,6 +957,12 @@ public final class Downloads {
         public static final int DESTINATION_CACHE_PARTITION_NOROAMING = 3;
 
         /**
+         * This download will be saved to the location given by the file URI in
+         * {@link #COLUMN_FILE_NAME_HINT}.
+         */
+        public static final int DESTINATION_FILE_URI = 4;
+
+        /**
          * This download is allowed to run.
          */
         public static final int CONTROL_RUN = 0;
@@ -924,15 +988,6 @@ public final class Downloads {
          */
         public static boolean isStatusInformational(int status) {
             return (status >= 100 && status < 200);
-        }
-
-        /**
-         * Returns whether the download is suspended. (i.e. whether the download
-         * won't complete without some action from outside the download
-         * manager).
-         */
-        public static boolean isStatusSuspended(int status) {
-            return (status == STATUS_PENDING_PAUSED || status == STATUS_RUNNING_PAUSED);
         }
 
         /**
@@ -977,19 +1032,30 @@ public final class Downloads {
         public static final int STATUS_PENDING = 190;
 
         /**
-         * This download hasn't stated yet and is paused
-         */
-        public static final int STATUS_PENDING_PAUSED = 191;
-
-        /**
          * This download has started
          */
         public static final int STATUS_RUNNING = 192;
 
         /**
-         * This download has started and is paused
+         * This download has been paused by the owning app.
          */
-        public static final int STATUS_RUNNING_PAUSED = 193;
+        public static final int STATUS_PAUSED_BY_APP = 193;
+
+        /**
+         * This download encountered some network error and is waiting before retrying the request.
+         */
+        public static final int STATUS_WAITING_TO_RETRY = 194;
+
+        /**
+         * This download is waiting for network connectivity to proceed.
+         */
+        public static final int STATUS_WAITING_FOR_NETWORK = 195;
+
+        /**
+         * This download exceeded a size limit for mobile networks and is waiting for a Wi-Fi
+         * connection to proceed.
+         */
+        public static final int STATUS_QUEUED_FOR_WIFI = 196;
 
         /**
          * This download has successfully completed.
@@ -1028,6 +1094,21 @@ public final class Downloads {
          * also used in situations where the client doesn't have an ETag at all.
          */
         public static final int STATUS_PRECONDITION_FAILED = 412;
+
+        /**
+         * The lowest-valued error status that is not an actual HTTP status code.
+         */
+        public static final int MIN_ARTIFICIAL_ERROR_STATUS = 488;
+
+        /**
+         * The requested destination file already exists.
+         */
+        public static final int STATUS_FILE_ALREADY_EXISTS_ERROR = 488;
+
+        /**
+         * Some possibly transient error occurred, but we can't resume the download.
+         */
+        public static final int STATUS_CANNOT_RESUME = 489;
 
         /**
          * This download was canceled
@@ -1109,5 +1190,26 @@ public final class Downloads {
          * This download doesn't show in the UI or in the notifications.
          */
         public static final int VISIBILITY_HIDDEN = 2;
+
+        /**
+         * Constants related to HTTP request headers associated with each download.
+         */
+        public static class RequestHeaders {
+            public static final String HEADERS_DB_TABLE = "request_headers";
+            public static final String COLUMN_DOWNLOAD_ID = "download_id";
+            public static final String COLUMN_HEADER = "header";
+            public static final String COLUMN_VALUE = "value";
+
+            /**
+             * Path segment to add to a download URI to retrieve request headers
+             */
+            public static final String URI_SEGMENT = "headers";
+
+            /**
+             * Prefix for ContentValues keys that contain HTTP header lines, to be passed to
+             * DownloadProvider.insert().
+             */
+            public static final String INSERT_KEY_PREFIX = "http_header_";
+        }
     }
 }

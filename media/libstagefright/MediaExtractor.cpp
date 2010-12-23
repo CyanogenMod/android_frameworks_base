@@ -23,7 +23,11 @@
 #include "include/MPEG4Extractor.h"
 #include "include/WAVExtractor.h"
 #include "include/OggExtractor.h"
+#include "include/MPEG2TSExtractor.h"
 
+#include "matroska/MatroskaExtractor.h"
+
+#include <media/stagefright/foundation/AMessage.h>
 #include <media/stagefright/DataSource.h>
 #include <media/stagefright/MediaDefs.h>
 #include <media/stagefright/MediaExtractor.h>
@@ -37,16 +41,18 @@ sp<MetaData> MediaExtractor::getMetaData() {
 }
 
 uint32_t MediaExtractor::flags() const {
-    return CAN_SEEK_BACKWARD | CAN_SEEK_FORWARD | CAN_PAUSE;
+    return CAN_SEEK_BACKWARD | CAN_SEEK_FORWARD | CAN_PAUSE | CAN_SEEK;
 }
 
 // static
 sp<MediaExtractor> MediaExtractor::Create(
         const sp<DataSource> &source, const char *mime) {
+    sp<AMessage> meta;
+
     String8 tmp;
     if (mime == NULL) {
         float confidence;
-        if (!source->sniff(&tmp, &confidence)) {
+        if (!source->sniff(&tmp, &confidence, &meta)) {
             LOGV("FAILED to autodetect media content.");
 
             return NULL;
@@ -61,7 +67,7 @@ sp<MediaExtractor> MediaExtractor::Create(
             || !strcasecmp(mime, "audio/mp4")) {
         return new MPEG4Extractor(source);
     } else if (!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_MPEG)) {
-        return new MP3Extractor(source);
+        return new MP3Extractor(source, meta);
     } else if (!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_AMR_NB)
             || !strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_AMR_WB)) {
         return new AMRExtractor(source);
@@ -69,6 +75,10 @@ sp<MediaExtractor> MediaExtractor::Create(
         return new WAVExtractor(source);
     } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_OGG)) {
         return new OggExtractor(source);
+    } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_MATROSKA)) {
+        return new MatroskaExtractor(source);
+    } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_MPEG2TS)) {
+        return new MPEG2TSExtractor(source);
     }
 
     return NULL;

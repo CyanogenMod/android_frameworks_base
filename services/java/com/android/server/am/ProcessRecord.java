@@ -17,7 +17,6 @@
 package com.android.server.am;
 
 import com.android.internal.os.BatteryStatsImpl;
-import com.android.server.Watchdog;
 
 import android.app.ActivityManager;
 import android.app.Dialog;
@@ -27,9 +26,9 @@ import android.content.ComponentName;
 import android.content.pm.ApplicationInfo;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.RemoteException;
 import android.os.SystemClock;
 import android.util.PrintWriterPrinter;
+import android.util.TimeUtils;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -40,12 +39,12 @@ import java.util.HashSet;
  * Full information about a particular process that
  * is currently running.
  */
-class ProcessRecord implements Watchdog.PssRequestor {
+class ProcessRecord {
     final BatteryStatsImpl.Uid.Proc batteryStats; // where to collect runtime statistics
     final ApplicationInfo info; // all about the first app in the process
     final String processName;   // name of the process
     // List of packages running in the process
-    final HashSet<String> pkgList = new HashSet();
+    final HashSet<String> pkgList = new HashSet<String>();
     IApplicationThread thread;  // the actual proc...  may be null only if
                                 // 'persistent' is true (in which case we
                                 // are in the process of launching the app)
@@ -61,6 +60,7 @@ class ProcessRecord implements Watchdog.PssRequestor {
     int setAdj;                 // Last set OOM adjustment for this process
     int curSchedGroup;          // Currently desired scheduling class
     int setSchedGroup;          // Last set to background scheduling class
+    boolean keeping;            // Actively running code so don't kill due to that?
     boolean setIsForeground;    // Running foreground UI when last set?
     boolean foregroundServices; // Running any services that are foreground?
     boolean bad;                // True if disabled in the bad process list
@@ -75,6 +75,9 @@ class ProcessRecord implements Watchdog.PssRequestor {
     Bundle instrumentationArguments;// as given to us
     ComponentName instrumentationResultClass;// copy of instrumentationClass
     BroadcastRecord curReceiver;// receiver currently running in the app
+    long lastWakeTime;          // How long proc held wake lock at last check
+    long lastCpuTime;           // How long proc has run CPU at last check
+    long curCpuTime;            // How long proc has run CPU most recently
     long lastRequestedGc;       // When we last asked the app to do a gc
     long lastLowMemory;         // When we last told the app that memory is low
     boolean reportLowMemory;    // Set to true when waiting to report low mem
@@ -87,9 +90,9 @@ class ProcessRecord implements Watchdog.PssRequestor {
     Object adjTarget;           // Debugging: target component impacting oom_adj.
     
     // contains HistoryRecord objects
-    final ArrayList activities = new ArrayList();
+    final ArrayList<ActivityRecord> activities = new ArrayList<ActivityRecord>();
     // all ServiceRecord running in this process
-    final HashSet services = new HashSet();
+    final HashSet<ServiceRecord> services = new HashSet<ServiceRecord>();
     // services that are currently executing code (need to remain foreground).
     final HashSet<ServiceRecord> executingServices
              = new HashSet<ServiceRecord>();
@@ -99,7 +102,8 @@ class ProcessRecord implements Watchdog.PssRequestor {
     // all IIntentReceivers that are registered from this process.
     final HashSet<ReceiverList> receivers = new HashSet<ReceiverList>();
     // class (String) -> ContentProviderRecord
-    final HashMap pubProviders = new HashMap(); 
+    final HashMap<String, ContentProviderRecord> pubProviders
+            = new HashMap<String, ContentProviderRecord>(); 
     // All ContentProviderRecord process is using
     final HashMap<ContentProviderRecord, Integer> conProviders
             = new HashMap<ContentProviderRecord, Integer>(); 
@@ -111,7 +115,6 @@ class ProcessRecord implements Watchdog.PssRequestor {
     Dialog anrDialog;           // dialog being displayed due to app not resp.
     boolean removed;            // has app package been removed from device?
     boolean debugging;          // was app launched for debugging?
-    int persistentActivities;   // number of activities that are persistent
     boolean waitedForDebugger;  // has process show wait for debugger dialog?
     Dialog waitDialog;          // current wait for debugger dialog
     
@@ -128,7 +131,8 @@ class ProcessRecord implements Watchdog.PssRequestor {
     ComponentName errorReportReceiver;
 
     void dump(PrintWriter pw, String prefix) {
-        long now = SystemClock.uptimeMillis();
+        final long now = SystemClock.uptimeMillis();
+
         if (info.className != null) {
             pw.print(prefix); pw.print("class="); pw.println(info.className);
         }
@@ -158,8 +162,10 @@ class ProcessRecord implements Watchdog.PssRequestor {
                 pw.print(" curReceiver="); pw.println(curReceiver);
         pw.print(prefix); pw.print("pid="); pw.print(pid); pw.print(" starting=");
                 pw.print(starting); pw.print(" lastPss="); pw.println(lastPss);
-        pw.print(prefix); pw.print("lastActivityTime="); pw.print(lastActivityTime);
-                pw.print(" lruWeight="); pw.println(lruWeight);
+        pw.print(prefix); pw.print("lastActivityTime=");
+                TimeUtils.formatDuration(lastActivityTime, now, pw);
+                pw.print(" lruWeight="); pw.print(lruWeight);
+                pw.print(" keeping="); pw.print(keeping);
                 pw.print(" hidden="); pw.print(hidden);
                 pw.print(" empty="); pw.println(empty);
         pw.print(prefix); pw.print("oom: max="); pw.print(maxAdj);
@@ -174,10 +180,28 @@ class ProcessRecord implements Watchdog.PssRequestor {
                 pw.print(" foregroundServices="); pw.print(foregroundServices);
                 pw.print(" forcingToForeground="); pw.println(forcingToForeground);
         pw.print(prefix); pw.print("persistent="); pw.print(persistent);
-                pw.print(" removed="); pw.print(removed);
-                pw.print(" persistentActivities="); pw.println(persistentActivities);
+                pw.print(" removed="); pw.println(removed);
         pw.print(prefix); pw.print("adjSeq="); pw.print(adjSeq);
                 pw.print(" lruSeq="); pw.println(lruSeq);
+        if (!keeping) {
+            long wtime;
+            synchronized (batteryStats.getBatteryStats()) {
+                wtime = batteryStats.getBatteryStats().getProcessWakeTime(info.uid,
+                        pid, SystemClock.elapsedRealtime());
+            }
+            long timeUsed = wtime - lastWakeTime;
+            pw.print(prefix); pw.print("lastWakeTime="); pw.print(lastWakeTime);
+                    pw.print(" time used=");
+                    TimeUtils.formatDuration(timeUsed, pw); pw.println("");
+            pw.print(prefix); pw.print("lastCpuTime="); pw.print(lastCpuTime);
+                    pw.print(" time used=");
+                    TimeUtils.formatDuration(curCpuTime-lastCpuTime, pw); pw.println("");
+        }
+        pw.print(prefix); pw.print("lastRequestedGc=");
+                TimeUtils.formatDuration(lastRequestedGc, now, pw);
+                pw.print(" lastLowMemory=");
+                TimeUtils.formatDuration(lastLowMemory, now, pw);
+                pw.print(" reportLowMemory="); pw.println(reportLowMemory);
         if (killedBackground) {
             pw.print(prefix); pw.print("killedBackground="); pw.println(killedBackground);
         }
@@ -233,7 +257,6 @@ class ProcessRecord implements Watchdog.PssRequestor {
         curAdj = setAdj = -100;
         persistent = false;
         removed = false;
-        persistentActivities = 0;
     }
 
     public void setPid(int _pid) {
@@ -249,7 +272,7 @@ class ProcessRecord implements Watchdog.PssRequestor {
     public boolean isInterestingToUserLocked() {
         final int size = activities.size();
         for (int i = 0 ; i < size ; i++) {
-            HistoryRecord r = (HistoryRecord) activities.get(i);
+            ActivityRecord r = activities.get(i);
             if (r.isInterestingToUserLocked()) {
                 return true;
             }
@@ -261,17 +284,7 @@ class ProcessRecord implements Watchdog.PssRequestor {
         int i = activities.size();
         while (i > 0) {
             i--;
-            ((HistoryRecord)activities.get(i)).stopFreezingScreenLocked(true);
-        }
-    }
-    
-    public void requestPss() {
-        IApplicationThread localThread = thread;
-        if (localThread != null) {
-            try {
-                localThread.requestPss();
-            } catch (RemoteException e) {
-            }
+            activities.get(i).stopFreezingScreenLocked(true);
         }
     }
     

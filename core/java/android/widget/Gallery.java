@@ -46,6 +46,9 @@ import android.view.animation.Transformation;
  * <p>
  * Views given to the Gallery should use {@link Gallery.LayoutParams} as their
  * layout parameters type.
+ *
+ * <p>See the <a href="{@docRoot}resources/tutorials/views/hello-gallery.html">Gallery
+ * tutorial</a>.</p>
  * 
  * @attr ref android.R.styleable#Gallery_animationDuration
  * @attr ref android.R.styleable#Gallery_spacing
@@ -1087,7 +1090,7 @@ public class Gallery extends AbsSpinner implements GestureDetector.OnGestureList
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         // Gallery steals all key events
-        return event.dispatch(this);
+        return event.dispatch(this, null, null);
     }
 
     /**

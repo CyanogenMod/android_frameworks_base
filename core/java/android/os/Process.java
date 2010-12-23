@@ -86,6 +86,12 @@ public class Process {
     public static final int WIFI_UID = 1010;
 
     /**
+     * Defines the UID/GID for the NFC service process.
+     * @hide
+     */
+    public static final int NFC_UID = 1022;
+
+    /**
      * Defines the start of a range of UIDs (and GIDs), going from this
      * number to {@link #LAST_APPLICATION_UID} that are reserved for assigning
      * to applications.
@@ -624,6 +630,15 @@ public class Process {
      */
     public static final native void setThreadPriority(int tid, int priority)
             throws IllegalArgumentException, SecurityException;
+
+    /**
+     * Call with 'false' to cause future calls to {@link #setThreadPriority(int)} to
+     * throw an exception if passed a background-level thread priority.  This is only
+     * effective if the JNI layer is built with GUARD_THREAD_PRIORITY defined to 1.
+     *
+     * @hide
+     */
+    public static final native void setCanSelfBackground(boolean backgroundOk);
 
     /**
      * Sets the scheduling group for a thread.

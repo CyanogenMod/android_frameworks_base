@@ -16,9 +16,11 @@
 
 package android.location;
 
+import android.location.Criteria;
 import android.location.Location;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.WorkSource;
 
 /**
  * Binder interface for services that implement location providers.
@@ -34,6 +36,7 @@ interface ILocationProvider {
     boolean supportsSpeed();
     boolean supportsBearing();
     int getPowerRequirement();
+    boolean meetsCriteria(in Criteria criteria);
     int getAccuracy();
     void enable();
     void disable();
@@ -41,7 +44,7 @@ interface ILocationProvider {
     long getStatusUpdateTime();
     String getInternalState();
     void enableLocationTracking(boolean enable);
-    void setMinTime(long minTime);
+    void setMinTime(long minTime, in WorkSource ws);
     void updateNetworkState(int state, in NetworkInfo info);
     void updateLocation(in Location location);
     boolean sendExtraCommand(String command, inout Bundle extras);

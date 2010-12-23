@@ -26,8 +26,7 @@ import com.android.internal.view.IInputMethodManager;
 import com.android.internal.view.IInputMethodSession;
 import com.android.internal.view.InputBindResult;
 
-import com.android.server.status.IconData;
-import com.android.server.status.StatusBarService;
+import com.android.server.StatusBarManagerService;
 
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -78,9 +77,12 @@ import android.view.inputmethod.EditorInfo;
 import java.io.FileDescriptor;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * This class provides a system service that manages input methods.
@@ -110,9 +112,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
     final Context mContext;
     final Handler mHandler;
     final SettingsObserver mSettingsObserver;
-    final StatusBarService mStatusBar;
-    final IBinder mInputMethodIcon;
-    final IconData mInputMethodData;
+    final StatusBarManagerService mStatusBar;
     final IWindowManager mIWindowManager;
     final HandlerCaller mCaller;
 
@@ -447,7 +447,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         }
     }
 
-    public InputMethodManagerService(Context context, StatusBarService statusBar) {
+    public InputMethodManagerService(Context context, StatusBarManagerService statusBar) {
         mContext = context;
         mHandler = new Handler(this);
         mIWindowManager = IWindowManager.Stub.asInterface(
@@ -466,14 +466,19 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         screenOnOffFilt.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
         mContext.registerReceiver(new ScreenOnOffReceiver(), screenOnOffFilt);
 
+        mStatusBar = statusBar;
+        statusBar.setIconVisibility("ime", false);
+
         buildInputMethodListLocked(mMethodList, mMethodMap);
 
         final String enabledStr = Settings.Secure.getString(
                 mContext.getContentResolver(),
                 Settings.Secure.ENABLED_INPUT_METHODS);
         Slog.i(TAG, "Enabled input methods: " + enabledStr);
-        if (enabledStr == null) {
-            Slog.i(TAG, "Enabled input methods has not been set, enabling all");
+        final String defaultIme = Settings.Secure.getString(mContext
+                .getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD);
+        if (enabledStr == null || TextUtils.isEmpty(defaultIme)) {
+            Slog.i(TAG, "Enabled input methods or default IME has not been set, enabling all");
             InputMethodInfo defIm = null;
             StringBuilder sb = new StringBuilder(256);
             final int N = mMethodList.size();
@@ -506,11 +511,6 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                         Settings.Secure.DEFAULT_INPUT_METHOD, defIm.getId());
             }
         }
-
-        mStatusBar = statusBar;
-        mInputMethodData = IconData.makeIcon("ime", null, 0, 0, 0);
-        mInputMethodIcon = statusBar.addIcon(mInputMethodData, null);
-        statusBar.setIconVisibility(mInputMethodIcon, false);
 
         mSettingsObserver = new SettingsObserver(mHandler);
         updateFromSettingsLocked();
@@ -889,16 +889,30 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     MSG_UNBIND_METHOD, mCurSeq, mCurClient.client));
         }
     }
+    
+    private void finishSession(SessionState sessionState) {
+        if (sessionState != null && sessionState.session != null) {
+            try {
+                sessionState.session.finishSession();
+            } catch (RemoteException e) {
+                Slog.w(TAG, "Session failed to close due to remote exception", e);
+            }
+        }
+    }
 
     void clearCurMethodLocked() {
         if (mCurMethod != null) {
             for (ClientState cs : mClients.values()) {
                 cs.sessionRequested = false;
+                finishSession(cs.curSession);
                 cs.curSession = null;
             }
+
+            finishSession(mEnabledSession);
+            mEnabledSession = null;
             mCurMethod = null;
         }
-        mStatusBar.setIconVisibility(mInputMethodIcon, false);
+        mStatusBar.setIconVisibility("ime", false);
     }
 
     public void onServiceDisconnected(ComponentName name) {
@@ -922,23 +936,22 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
     }
 
     public void updateStatusIcon(IBinder token, String packageName, int iconId) {
+        int uid = Binder.getCallingUid();
         long ident = Binder.clearCallingIdentity();
         try {
             if (token == null || mCurToken != token) {
-                Slog.w(TAG, "Ignoring setInputMethod of token: " + token);
+                Slog.w(TAG, "Ignoring setInputMethod of uid " + uid + " token: " + token);
                 return;
             }
 
             synchronized (mMethodMap) {
                 if (iconId == 0) {
                     if (DEBUG) Slog.d(TAG, "hide the small icon for the input method");
-                    mStatusBar.setIconVisibility(mInputMethodIcon, false);
+                    mStatusBar.setIconVisibility("ime", false);
                 } else if (packageName != null) {
                     if (DEBUG) Slog.d(TAG, "show a small icon for the input method");
-                    mInputMethodData.iconId = iconId;
-                    mInputMethodData.iconPackage = packageName;
-                    mStatusBar.updateIcon(mInputMethodIcon, mInputMethodData, null);
-                    mStatusBar.setIconVisibility(mInputMethodIcon, true);
+                    mStatusBar.setIcon("ime", packageName, iconId, 0);
+                    mStatusBar.setIconVisibility("ime", true);
                 }
             }
         } finally {
@@ -971,7 +984,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
     void setInputMethodLocked(String id) {
         InputMethodInfo info = mMethodMap.get(id);
         if (info == null) {
-            throw new IllegalArgumentException("Unknown id: " + mCurMethodId);
+            throw new IllegalArgumentException("Unknown id: " + id);
         }
 
         if (id.equals(mCurMethodId)) {
@@ -998,6 +1011,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
 
     public boolean showSoftInput(IInputMethodClient client, int flags,
             ResultReceiver resultReceiver) {
+        int uid = Binder.getCallingUid();
         long ident = Binder.clearCallingIdentity();
         try {
             synchronized (mMethodMap) {
@@ -1008,7 +1022,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                         // focus in the window manager, to allow this call to
                         // be made before input is started in it.
                         if (!mIWindowManager.inputMethodClientHasFocus(client)) {
-                            Slog.w(TAG, "Ignoring showSoftInput of: " + client);
+                            Slog.w(TAG, "Ignoring showSoftInput of uid " + uid + ": " + client);
                             return false;
                         }
                     } catch (RemoteException e) {
@@ -1062,6 +1076,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
 
     public boolean hideSoftInput(IInputMethodClient client, int flags,
             ResultReceiver resultReceiver) {
+        int uid = Binder.getCallingUid();
         long ident = Binder.clearCallingIdentity();
         try {
             synchronized (mMethodMap) {
@@ -1072,7 +1087,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                         // focus in the window manager, to allow this call to
                         // be made before input is started in it.
                         if (!mIWindowManager.inputMethodClientHasFocus(client)) {
-                            Slog.w(TAG, "Ignoring hideSoftInput of: " + client);
+                            if (DEBUG) Slog.w(TAG, "Ignoring hideSoftInput of uid "
+                                    + uid + ": " + client);
                             return false;
                         }
                     } catch (RemoteException e) {
@@ -1207,7 +1223,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         synchronized (mMethodMap) {
             if (mCurClient == null || client == null
                     || mCurClient.client.asBinder() != client.asBinder()) {
-                Slog.w(TAG, "Ignoring showInputMethodDialogFromClient of: " + client);
+                Slog.w(TAG, "Ignoring showInputMethodDialogFromClient of uid "
+                        + Binder.getCallingUid() + ": " + client);
             }
 
             mHandler.sendEmptyMessage(MSG_SHOW_IM_PICKER);
@@ -1225,7 +1242,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                             + android.Manifest.permission.WRITE_SECURE_SETTINGS);
                 }
             } else if (mCurToken != token) {
-                Slog.w(TAG, "Ignoring setInputMethod of token: " + token);
+                Slog.w(TAG, "Ignoring setInputMethod of uid " + Binder.getCallingUid()
+                        + " token: " + token);
                 return;
             }
 
@@ -1241,7 +1259,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
     public void hideMySoftInput(IBinder token, int flags) {
         synchronized (mMethodMap) {
             if (token == null || mCurToken != token) {
-                Slog.w(TAG, "Ignoring hideInputMethod of token: " + token);
+                if (DEBUG) Slog.w(TAG, "Ignoring hideInputMethod of uid "
+                        + Binder.getCallingUid() + " token: " + token);
                 return;
             }
             long ident = Binder.clearCallingIdentity();
@@ -1256,7 +1275,8 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
     public void showMySoftInput(IBinder token, int flags) {
         synchronized (mMethodMap) {
             if (token == null || mCurToken != token) {
-                Slog.w(TAG, "Ignoring hideInputMethod of token: " + token);
+                Slog.w(TAG, "Ignoring showMySoftInput of uid "
+                        + Binder.getCallingUid() + " token: " + token);
                 return;
             }
             long ident = Binder.clearCallingIdentity();
@@ -1469,7 +1489,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
 
         String defaultIme = Settings.Secure.getString(mContext
                 .getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD);
-        if (!map.containsKey(defaultIme)) {
+        if (!TextUtils.isEmpty(defaultIme) && !map.containsKey(defaultIme)) {
             if (chooseNewDefaultIMELocked()) {
                 updateFromSettingsLocked();
             }
@@ -1499,21 +1519,22 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
             hideInputMethodMenuLocked();
 
             int N = immis.size();
-    
-            mItems = new CharSequence[N];
-            mIms = new InputMethodInfo[N];
-    
-            int j = 0;
+
+            final Map<CharSequence, InputMethodInfo> imMap =
+                new TreeMap<CharSequence, InputMethodInfo>(Collator.getInstance());
+
             for (int i = 0; i < N; ++i) {
                 InputMethodInfo property = immis.get(i);
                 if (property == null) {
                     continue;
                 }
-                mItems[j] = property.loadLabel(pm);
-                mIms[j] = property;
-                j++;
+                imMap.put(property.loadLabel(pm), property);
             }
-    
+
+            N = imMap.size();
+            mItems = imMap.keySet().toArray(new CharSequence[N]);
+            mIms = imMap.values().toArray(new InputMethodInfo[N]);
+
             int checkedItem = 0;
             for (int i = 0; i < N; ++i) {
                 if (mIms[i].getId().equals(lastInputMethodId)) {
@@ -1720,8 +1741,6 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                 p.println("    sessionRequested=" + ci.sessionRequested);
                 p.println("    curSession=" + ci.curSession);
             }
-            p.println("  mInputMethodIcon=" + mInputMethodIcon);
-            p.println("  mInputMethodData=" + mInputMethodData);
             p.println("  mCurMethodId=" + mCurMethodId);
             client = mCurClient;
             p.println("  mCurClient=" + client + " mCurSeq=" + mCurSeq);
@@ -1740,24 +1759,28 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
             p.println("  mSystemReady=" + mSystemReady + " mScreenOn=" + mScreenOn);
         }
 
+        p.println(" ");
         if (client != null) {
-            p.println(" ");
             pw.flush();
             try {
                 client.client.asBinder().dump(fd, args);
             } catch (RemoteException e) {
                 p.println("Input method client dead: " + e);
             }
+        } else {
+            p.println("No input method client.");
         }
 
+        p.println(" ");
         if (method != null) {
-            p.println(" ");
             pw.flush();
             try {
                 method.asBinder().dump(fd, args);
             } catch (RemoteException e) {
                 p.println("Input method service dead: " + e);
             }
+        } else {
+            p.println("No input method service.");
         }
     }
 }

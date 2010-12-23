@@ -47,6 +47,7 @@ import java.lang.IllegalStateException;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @hide
@@ -54,6 +55,8 @@ import java.net.UnknownHostException;
 class NetworkManagementService extends INetworkManagementService.Stub {
 
     private static final String TAG = "NetworkManagmentService";
+    private static final boolean DBG = false;
+    private static final String NETD_TAG = "NetdConnector";
 
     class NetdResponseCode {
         public static final int InterfaceListResult       = 110;
@@ -84,6 +87,9 @@ class NetworkManagementService extends INetworkManagementService.Stub {
      */
     private NativeDaemonConnector mConnector;
 
+    private Thread mThread;
+    private final CountDownLatch mConnectedSignal = new CountDownLatch(1);
+
     private ArrayList<INetworkManagementEventObserver> mObservers;
 
     /**
@@ -91,9 +97,8 @@ class NetworkManagementService extends INetworkManagementService.Stub {
      *
      * @param context  Binder context for this service
      */
-    public NetworkManagementService(Context context) {
+    private NetworkManagementService(Context context) {
         mContext = context;
-
         mObservers = new ArrayList<INetworkManagementEventObserver>();
 
         if ("simulator".equals(SystemProperties.get("ro.product.device"))) {
@@ -101,9 +106,18 @@ class NetworkManagementService extends INetworkManagementService.Stub {
         }
 
         mConnector = new NativeDaemonConnector(
-                new NetdCallbackReceiver(), "netd", 10, "NetdConnector");
-        Thread thread = new Thread(mConnector, NativeDaemonConnector.class.getName());
-        thread.start();
+                new NetdCallbackReceiver(), "netd", 10, NETD_TAG);
+        mThread = new Thread(mConnector, NETD_TAG);
+    }
+
+    public static NetworkManagementService create(Context context) throws InterruptedException {
+        NetworkManagementService service = new NetworkManagementService(context);
+        if (DBG) Slog.d(TAG, "Creating NetworkManagementService");
+        service.mThread.start();
+        if (DBG) Slog.d(TAG, "Awaiting socket connection");
+        service.mConnectedSignal.await();
+        if (DBG) Slog.d(TAG, "Connected");
+        return service;
     }
 
     public void registerObserver(INetworkManagementEventObserver obs) {
@@ -155,6 +169,14 @@ class NetworkManagementService extends INetworkManagementService.Stub {
         }
     }
 
+    /**
+     * Let us know the daemon is connected
+     */
+    protected void onConnected() {
+        if (DBG) Slog.d(TAG, "onConnected");
+        mConnectedSignal.countDown();
+    }
+
 
     //
     // Netd Callback handling
@@ -162,6 +184,7 @@ class NetworkManagementService extends INetworkManagementService.Stub {
 
     class NetdCallbackReceiver implements INativeDaemonConnectorCallbacks {
         public void onDaemonConnected() {
+            NetworkManagementService.this.onConnected();
             new Thread() {
                 public void run() {
                 }

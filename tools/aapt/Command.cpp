@@ -141,9 +141,9 @@ int doList(Bundle* bundle)
     if (bundle->getVerbose()) {
         printf("Archive:  %s\n", zipFileName);
         printf(
-            " Length   Method    Size  Ratio   Date   Time   CRC-32    Name\n");
+            " Length   Method    Size  Ratio   Offset      Date  Time  CRC-32    Name\n");
         printf(
-            "--------  ------  ------- -----   ----   ----   ------    ----\n");
+            "--------  ------  ------- -----  -------      ----  ----  ------    ----\n");
     }
 
     totalUncLen = totalCompLen = 0;
@@ -159,12 +159,13 @@ int doList(Bundle* bundle)
             strftime(dateBuf, sizeof(dateBuf), "%m-%d-%y %H:%M",
                 localtime(&when));
 
-            printf("%8ld  %-7.7s %7ld %3d%%  %s  %08lx  %s\n",
+            printf("%8ld  %-7.7s %7ld %3d%%  %8zd  %s  %08lx  %s\n",
                 (long) entry->getUncompressedLen(),
                 compressionName(entry->getCompressionMethod()),
                 (long) entry->getCompressedLen(),
                 calcPercent(entry->getUncompressedLen(),
                             entry->getCompressedLen()),
+                (size_t) entry->getLFHOffset(),
                 dateBuf,
                 entry->getCRC32(),
                 entry->getFileName());
@@ -331,12 +332,15 @@ enum {
     REQ_FIVE_WAY_NAV_ATTR = 0x01010232,
     TARGET_SDK_VERSION_ATTR = 0x01010270,
     TEST_ONLY_ATTR = 0x01010272,
-    DENSITY_ATTR = 0x0101026c,
+    ANY_DENSITY_ATTR = 0x0101026c,
     GL_ES_VERSION_ATTR = 0x01010281,
     SMALL_SCREEN_ATTR = 0x01010284,
     NORMAL_SCREEN_ATTR = 0x01010285,
     LARGE_SCREEN_ATTR = 0x01010286,
+    XLARGE_SCREEN_ATTR = 0x010102bf,
     REQUIRED_ATTR = 0x0101028e,
+    SCREEN_SIZE_ATTR = 0x010102ca,
+    SCREEN_DENSITY_ATTR = 0x010102cb,
 };
 
 const char *getComponentName(String8 &pkgName, String8 &componentName) {
@@ -351,6 +355,42 @@ const char *getComponentName(String8 &pkgName, String8 &componentName) {
         return componentName.string();
     }
     return retStr.string();
+}
+
+static void printCompatibleScreens(ResXMLTree& tree) {
+    size_t len;
+    ResXMLTree::event_code_t code;
+    int depth = 0;
+    bool first = true;
+    printf("compatible-screens:");
+    while ((code=tree.next()) != ResXMLTree::END_DOCUMENT && code != ResXMLTree::BAD_DOCUMENT) {
+        if (code == ResXMLTree::END_TAG) {
+            depth--;
+            if (depth < 0) {
+                break;
+            }
+            continue;
+        }
+        if (code != ResXMLTree::START_TAG) {
+            continue;
+        }
+        depth++;
+        String8 tag(tree.getElementName(&len));
+        if (tag == "screen") {
+            int32_t screenSize = getIntegerAttribute(tree,
+                    SCREEN_SIZE_ATTR, NULL, -1);
+            int32_t screenDensity = getIntegerAttribute(tree,
+                    SCREEN_DENSITY_ATTR, NULL, -1);
+            if (screenSize > 0 && screenDensity > 0) {
+                if (!first) {
+                    printf(",");
+                }
+                first = false;
+                printf("'%d/%d'", screenSize, screenDensity);
+            }
+        }
+    }
+    printf("\n");
 }
 
 /*
@@ -569,6 +609,8 @@ int doDump(Bundle* bundle)
             int smallScreen = 1;
             int normalScreen = 1;
             int largeScreen = 1;
+            int xlargeScreen = 1;
+            int anyDensity = 1;
             String8 pkg;
             String8 activityName;
             String8 activityLabel;
@@ -736,14 +778,6 @@ int doDump(Bundle* bundle)
                             printf(" reqFiveWayNav='%d'", reqFiveWayNav);
                         }
                         printf("\n");
-                    } else if (tag == "supports-density") {
-                        int32_t dens = getIntegerAttribute(tree, DENSITY_ATTR, &error);
-                        if (error != "") {
-                            fprintf(stderr, "ERROR getting 'android:density' attribute: %s\n",
-                                    error.string());
-                            goto bail;
-                        }
-                        printf("supports-density:'%d'\n", dens);
                     } else if (tag == "supports-screens") {
                         smallScreen = getIntegerAttribute(tree,
                                 SMALL_SCREEN_ATTR, NULL, 1);
@@ -751,6 +785,10 @@ int doDump(Bundle* bundle)
                                 NORMAL_SCREEN_ATTR, NULL, 1);
                         largeScreen = getIntegerAttribute(tree,
                                 LARGE_SCREEN_ATTR, NULL, 1);
+                        xlargeScreen = getIntegerAttribute(tree,
+                                XLARGE_SCREEN_ATTR, NULL, 1);
+                        anyDensity = getIntegerAttribute(tree,
+                                ANY_DENSITY_ATTR, NULL, 1);
                     } else if (tag == "uses-feature") {
                         String8 name = getAttribute(tree, NAME_ATTR, &error);
 
@@ -848,6 +886,15 @@ int doDump(Bundle* bundle)
                                     error.string());
                             goto bail;
                         }
+                    } else if (tag == "uses-package") {
+                        String8 name = getAttribute(tree, NAME_ATTR, &error);
+                        if (name != "" && error == "") {
+                            printf("uses-package:'%s'\n", name.string());
+                        } else {
+                            fprintf(stderr, "ERROR getting 'android:name' attribute: %s\n",
+                                    error.string());
+                                goto bail;
+                        }
                     } else if (tag == "original-package") {
                         String8 name = getAttribute(tree, NAME_ATTR, &error);
                         if (name != "" && error == "") {
@@ -857,6 +904,18 @@ int doDump(Bundle* bundle)
                                     error.string());
                                 goto bail;
                         }
+                    } else if (tag == "uses-gl-texture") {
+                        String8 name = getAttribute(tree, NAME_ATTR, &error);
+                        if (name != "" && error == "") {
+                            printf("uses-gl-texture:'%s'\n", name.string());
+                        } else {
+                            fprintf(stderr, "ERROR getting 'android:name' attribute: %s\n",
+                                    error.string());
+                                goto bail;
+                        }
+                    } else if (tag == "compatible-screens") {
+                        printCompatibleScreens(tree);
+                        depth--;
                     }
                 } else if (depth == 3 && withinApplication) {
                     withinActivity = false;
@@ -1079,11 +1138,21 @@ int doDump(Bundle* bundle)
             if (largeScreen > 0) {
                 largeScreen = targetSdk >= 4 ? -1 : 0;
             }
+            if (xlargeScreen > 0) {
+                // Introduced in Gingerbread.
+                xlargeScreen = targetSdk >= 9 ? -1 : 0;
+            }
+            if (anyDensity > 0) {
+                anyDensity = targetSdk >= 4 ? -1 : 0;
+            }
             printf("supports-screens:");
             if (smallScreen != 0) printf(" 'small'");
             if (normalScreen != 0) printf(" 'normal'");
             if (largeScreen != 0) printf(" 'large'");
+            if (xlargeScreen != 0) printf(" 'xlarge'");
             printf("\n");
+
+            printf("supports-any-density: '%s'\n", anyDensity ? "true" : "false");
 
             printf("locales:");
             Vector<String8> locales;

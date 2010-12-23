@@ -1,0 +1,29 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        package="com.android.systemui"
+        android:sharedUserId="android.uid.system"
+        android:process="system"
+        >
+
+    <uses-permission android:name="android.permission.STATUS_BAR_SERVICE" />
+
+    <application
+        android:persistent="true"
+        android:allowClearUserData="false"
+        android:label="@string/app_label"
+        android:icon="@drawable/ic_launcher_settings">
+                 
+        <service
+            android:name=".statusbar.StatusBarService"
+            android:exported="false"
+            />
+
+        <activity android:name=".usb.UsbStorageActivity"
+                android:excludeFromRecents="true">
+        </activity>
+        <activity android:name="com.android.internal.app.ExternalMediaFormatActivity"
+                android:theme="@*android:style/Theme.Dialog.Alert"
+                android:excludeFromRecents="true">
+        </activity>
+
+    </application>
+</manifest>

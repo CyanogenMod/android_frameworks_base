@@ -22,6 +22,7 @@
 #include <utils/ZipFileRO.h>
 #include <utils/Log.h>
 #include <utils/misc.h>
+#include <utils/threads.h>
 
 #include <zlib.h>
 
@@ -29,6 +30,38 @@
 #include <fcntl.h>
 #include <errno.h>
 #include <assert.h>
+#include <unistd.h>
+
+#if HAVE_PRINTF_ZD
+#  define ZD "%zd"
+#  define ZD_TYPE ssize_t
+#else
+#  define ZD "%ld"
+#  define ZD_TYPE long
+#endif
+
+/*
+ * We must open binary files using open(path, ... | O_BINARY) under Windows.
+ * Otherwise strange read errors will happen.
+ */
+#ifndef O_BINARY
+#  define O_BINARY  0
+#endif
+
+/*
+ * TEMP_FAILURE_RETRY is defined by some, but not all, versions of
+ * <unistd.h>. (Alas, it is not as standard as we'd hoped!) So, if it's
+ * not already defined, then define it here.
+ */
+#ifndef TEMP_FAILURE_RETRY
+/* Used to retry syscalls that can return EINTR. */
+#define TEMP_FAILURE_RETRY(exp) ({         \
+    typeof (exp) _rc;                      \
+    do {                                   \
+        _rc = (exp);                       \
+    } while (_rc == -1 && errno == EINTR); \
+    _rc; })
+#endif
 
 using namespace android;
 
@@ -38,6 +71,7 @@ using namespace android;
 #define kEOCDSignature      0x06054b50
 #define kEOCDLen            22
 #define kEOCDNumEntries     8               // offset to #of entries in file
+#define kEOCDSize           12              // size of the central directory
 #define kEOCDFileOffset     16              // offset to central directory
 
 #define kMaxCommentLen      65535           // longest possible in ushort
@@ -68,6 +102,16 @@ using namespace android;
  */
 #define kZipEntryAdj        10000
 
+ZipFileRO::~ZipFileRO() {
+    free(mHashTable);
+    if (mDirectoryMap)
+        mDirectoryMap->release();
+    if (mFd >= 0)
+        TEMP_FAILURE_RETRY(close(mFd));
+    if (mFileName)
+        free(mFileName);
+}
+
 /*
  * Convert a ZipEntryRO to a hash table index, verifying that it's in a
  * valid range.
@@ -90,184 +134,250 @@ int ZipFileRO::entryToIndex(const ZipEntryRO entry) const
 status_t ZipFileRO::open(const char* zipFileName)
 {
     int fd = -1;
-    off_t length;
 
-    assert(mFileMap == NULL);
+    assert(mDirectoryMap == NULL);
 
     /*
      * Open and map the specified file.
      */
-    fd = ::open(zipFileName, O_RDONLY);
+    fd = ::open(zipFileName, O_RDONLY | O_BINARY);
     if (fd < 0) {
         LOGW("Unable to open zip '%s': %s\n", zipFileName, strerror(errno));
         return NAME_NOT_FOUND;
     }
 
-    length = lseek(fd, 0, SEEK_END);
-    if (length < 0) {
-        close(fd);
+    mFileLength = lseek(fd, 0, SEEK_END);
+    if (mFileLength < kEOCDLen) {
+        TEMP_FAILURE_RETRY(close(fd));
         return UNKNOWN_ERROR;
     }
 
-    mFileMap = new FileMap();
-    if (mFileMap == NULL) {
-        close(fd);
-        return NO_MEMORY;
+    if (mFileName != NULL) {
+        free(mFileName);
     }
-    if (!mFileMap->create(zipFileName, fd, 0, length, true)) {
-        LOGW("Unable to map '%s': %s\n", zipFileName, strerror(errno));
-        close(fd);
-        return UNKNOWN_ERROR;
-    }
+    mFileName = strdup(zipFileName);
 
     mFd = fd;
 
     /*
-     * Got it mapped, verify it and create data structures for fast access.
+     * Find the Central Directory and store its size and number of entries.
+     */
+    if (!mapCentralDirectory()) {
+        goto bail;
+    }
+
+    /*
+     * Verify Central Directory and create data structures for fast access.
      */
     if (!parseZipArchive()) {
-        mFileMap->release();
-        mFileMap = NULL;
-        return UNKNOWN_ERROR;
+        goto bail;
     }
 
     return OK;
+
+bail:
+    free(mFileName);
+    mFileName = NULL;
+    TEMP_FAILURE_RETRY(close(fd));
+    return UNKNOWN_ERROR;
 }
 
 /*
  * Parse the Zip archive, verifying its contents and initializing internal
  * data structures.
  */
+bool ZipFileRO::mapCentralDirectory(void)
+{
+    ssize_t readAmount = kMaxEOCDSearch;
+    if (readAmount > (ssize_t) mFileLength)
+        readAmount = mFileLength;
+
+    unsigned char* scanBuf = (unsigned char*) malloc(readAmount);
+    if (scanBuf == NULL) {
+        LOGW("couldn't allocate scanBuf: %s", strerror(errno));
+        free(scanBuf);
+        return false;
+    }
+
+    /*
+     * Make sure this is a Zip archive.
+     */
+    if (lseek(mFd, 0, SEEK_SET) != 0) {
+        LOGW("seek to start failed: %s", strerror(errno));
+        free(scanBuf);
+        return false;
+    }
+
+    ssize_t actual = TEMP_FAILURE_RETRY(read(mFd, scanBuf, sizeof(int32_t)));
+    if (actual != (ssize_t) sizeof(int32_t)) {
+        LOGI("couldn't read first signature from zip archive: %s", strerror(errno));
+        free(scanBuf);
+        return false;
+    }
+
+    {
+        unsigned int header = get4LE(scanBuf);
+        if (header == kEOCDSignature) {
+            LOGI("Found Zip archive, but it looks empty\n");
+            free(scanBuf);
+            return false;
+        } else if (header != kLFHSignature) {
+            LOGV("Not a Zip archive (found 0x%08x)\n", header);
+            free(scanBuf);
+            return false;
+        }
+    }
+
+    /*
+     * Perform the traditional EOCD snipe hunt.
+     *
+     * We're searching for the End of Central Directory magic number,
+     * which appears at the start of the EOCD block.  It's followed by
+     * 18 bytes of EOCD stuff and up to 64KB of archive comment.  We
+     * need to read the last part of the file into a buffer, dig through
+     * it to find the magic number, parse some values out, and use those
+     * to determine the extent of the CD.
+     *
+     * We start by pulling in the last part of the file.
+     */
+    off_t searchStart = mFileLength - readAmount;
+
+    if (lseek(mFd, searchStart, SEEK_SET) != searchStart) {
+        LOGW("seek %ld failed: %s\n",  (long) searchStart, strerror(errno));
+        free(scanBuf);
+        return false;
+    }
+    actual = TEMP_FAILURE_RETRY(read(mFd, scanBuf, readAmount));
+    if (actual != (ssize_t) readAmount) {
+        LOGW("Zip: read " ZD ", expected " ZD ". Failed: %s\n",
+            (ZD_TYPE) actual, (ZD_TYPE) readAmount, strerror(errno));
+        free(scanBuf);
+        return false;
+    }
+
+    /*
+     * Scan backward for the EOCD magic.  In an archive without a trailing
+     * comment, we'll find it on the first try.  (We may want to consider
+     * doing an initial minimal read; if we don't find it, retry with a
+     * second read as above.)
+     */
+    int i;
+    for (i = readAmount - kEOCDLen; i >= 0; i--) {
+        if (scanBuf[i] == 0x50 && get4LE(&scanBuf[i]) == kEOCDSignature) {
+            LOGV("+++ Found EOCD at buf+%d\n", i);
+            break;
+        }
+    }
+    if (i < 0) {
+        LOGD("Zip: EOCD not found, %s is not zip\n", mFileName);
+        free(scanBuf);
+        return false;
+    }
+
+    off_t eocdOffset = searchStart + i;
+    const unsigned char* eocdPtr = scanBuf + i;
+
+    assert(eocdOffset < mFileLength);
+
+    /*
+     * Grab the CD offset and size, and the number of entries in the
+     * archive. After that, we can release our EOCD hunt buffer.
+     */
+    unsigned int numEntries = get2LE(eocdPtr + kEOCDNumEntries);
+    unsigned int dirSize = get4LE(eocdPtr + kEOCDSize);
+    unsigned int dirOffset = get4LE(eocdPtr + kEOCDFileOffset);
+    free(scanBuf);
+
+    // Verify that they look reasonable.
+    if ((long long) dirOffset + (long long) dirSize > (long long) eocdOffset) {
+        LOGW("bad offsets (dir %ld, size %u, eocd %ld)\n",
+            (long) dirOffset, dirSize, (long) eocdOffset);
+        return false;
+    }
+    if (numEntries == 0) {
+        LOGW("empty archive?\n");
+        return false;
+    }
+
+    LOGV("+++ numEntries=%d dirSize=%d dirOffset=%d\n",
+        numEntries, dirSize, dirOffset);
+
+    mDirectoryMap = new FileMap();
+    if (mDirectoryMap == NULL) {
+        LOGW("Unable to create directory map: %s", strerror(errno));
+        return false;
+    }
+
+    if (!mDirectoryMap->create(mFileName, mFd, dirOffset, dirSize, true)) {
+        LOGW("Unable to map '%s' (" ZD " to " ZD "): %s\n", mFileName,
+                (ZD_TYPE) dirOffset, (ZD_TYPE) (dirOffset + dirSize), strerror(errno));
+        return false;
+    }
+
+    mNumEntries = numEntries;
+    mDirectoryOffset = dirOffset;
+
+    return true;
+}
+
 bool ZipFileRO::parseZipArchive(void)
 {
-#define CHECK_OFFSET(_off) {                                                \
-        if ((unsigned int) (_off) >= maxOffset) {                           \
-            LOGE("ERROR: bad offset %u (max %d): %s\n",                     \
-                (unsigned int) (_off), maxOffset, #_off);                   \
-            goto bail;                                                      \
-        }                                                                   \
-    }
-    const unsigned char* basePtr = (const unsigned char*)mFileMap->getDataPtr();
-    const unsigned char* ptr;
-    size_t length = mFileMap->getDataLength();
     bool result = false;
-    unsigned int i, numEntries, cdOffset;
-    unsigned int val;
-
-    /*
-     * The first 4 bytes of the file will either be the local header
-     * signature for the first file (kLFHSignature) or, if the archive doesn't
-     * have any files in it, the end-of-central-directory signature
-     * (kEOCDSignature).
-     */
-    val = get4LE(basePtr);
-    if (val == kEOCDSignature) {
-        LOGI("Found Zip archive, but it looks empty\n");
-        goto bail;
-    } else if (val != kLFHSignature) {
-        LOGV("Not a Zip archive (found 0x%08x)\n", val);
-        goto bail;
-    }
-
-    /*
-     * Find the EOCD.  We'll find it immediately unless they have a file
-     * comment.
-     */
-    ptr = basePtr + length - kEOCDLen;
-
-    while (ptr >= basePtr) {
-        if (*ptr == (kEOCDSignature & 0xff) && get4LE(ptr) == kEOCDSignature)
-            break;
-        ptr--;
-    }
-    if (ptr < basePtr) {
-        LOGI("Could not find end-of-central-directory in Zip\n");
-        goto bail;
-    }
-
-    /*
-     * There are two interesting items in the EOCD block: the number of
-     * entries in the file, and the file offset of the start of the
-     * central directory.
-     *
-     * (There's actually a count of the #of entries in this file, and for
-     * all files which comprise a spanned archive, but for our purposes
-     * we're only interested in the current file.  Besides, we expect the
-     * two to be equivalent for our stuff.)
-     */
-    numEntries = get2LE(ptr + kEOCDNumEntries);
-    cdOffset = get4LE(ptr + kEOCDFileOffset);
-
-    /* valid offsets are [0,EOCD] */
-    unsigned int maxOffset;
-    maxOffset = (ptr - basePtr) +1;
-
-    LOGV("+++ numEntries=%d cdOffset=%d\n", numEntries, cdOffset);
-    if (numEntries == 0 || cdOffset >= length) {
-        LOGW("Invalid entries=%d offset=%d (len=%zd)\n",
-            numEntries, cdOffset, length);
-        goto bail;
-    }
+    const unsigned char* cdPtr = (const unsigned char*) mDirectoryMap->getDataPtr();
+    size_t cdLength = mDirectoryMap->getDataLength();
+    int numEntries = mNumEntries;
 
     /*
      * Create hash table.  We have a minimum 75% load factor, possibly as
      * low as 50% after we round off to a power of 2.
      */
-    mNumEntries = numEntries;
-    mHashTableSize = roundUpPower2(1 + ((numEntries * 4) / 3));
-    mHashTable = (HashEntry*) calloc(1, sizeof(HashEntry) * mHashTableSize);
+    mHashTableSize = roundUpPower2(1 + (numEntries * 4) / 3);
+    mHashTable = (HashEntry*) calloc(mHashTableSize, sizeof(HashEntry));
 
     /*
      * Walk through the central directory, adding entries to the hash
      * table.
      */
-    ptr = basePtr + cdOffset;
-    for (i = 0; i < numEntries; i++) {
-        unsigned int fileNameLen, extraLen, commentLen, localHdrOffset;
-        const unsigned char* localHdr;
-        unsigned int hash;
-
+    const unsigned char* ptr = cdPtr;
+    for (int i = 0; i < numEntries; i++) {
         if (get4LE(ptr) != kCDESignature) {
             LOGW("Missed a central dir sig (at %d)\n", i);
             goto bail;
         }
-        if (ptr + kCDELen > basePtr + length) {
+        if (ptr + kCDELen > cdPtr + cdLength) {
             LOGW("Ran off the end (at %d)\n", i);
             goto bail;
         }
 
-        localHdrOffset = get4LE(ptr + kCDELocalOffset);
-        CHECK_OFFSET(localHdrOffset);
+        long localHdrOffset = (long) get4LE(ptr + kCDELocalOffset);
+        if (localHdrOffset >= mDirectoryOffset) {
+            LOGW("bad LFH offset %ld at entry %d\n", localHdrOffset, i);
+            goto bail;
+        }
+
+        unsigned int fileNameLen, extraLen, commentLen, hash;
+
         fileNameLen = get2LE(ptr + kCDENameLen);
         extraLen = get2LE(ptr + kCDEExtraLen);
         commentLen = get2LE(ptr + kCDECommentLen);
-
-        //LOGV("+++ %d: localHdr=%d fnl=%d el=%d cl=%d\n",
-        //    i, localHdrOffset, fileNameLen, extraLen, commentLen);
-        //LOGV(" '%.*s'\n", fileNameLen, ptr + kCDELen);
 
         /* add the CDE filename to the hash table */
         hash = computeHash((const char*)ptr + kCDELen, fileNameLen);
         addToHash((const char*)ptr + kCDELen, fileNameLen, hash);
 
-        localHdr = basePtr + localHdrOffset;
-        if (get4LE(localHdr) != kLFHSignature) {
-            LOGW("Bad offset to local header: %d (at %d)\n",
-                localHdrOffset, i);
+        ptr += kCDELen + fileNameLen + extraLen + commentLen;
+        if ((size_t)(ptr - cdPtr) > cdLength) {
+            LOGW("bad CD advance (%d vs " ZD ") at entry %d\n",
+                (int) (ptr - cdPtr), (ZD_TYPE) cdLength, i);
             goto bail;
         }
-
-        ptr += kCDELen + fileNameLen + extraLen + commentLen;
-        CHECK_OFFSET(ptr - basePtr);
     }
-
+    LOGV("+++ zip good scan %d entries\n", numEntries);
     result = true;
 
 bail:
     return result;
-#undef CHECK_OFFSET
 }
-
 
 /*
  * Simple string hash function for non-null-terminated strings.
@@ -302,10 +412,18 @@ void ZipFileRO::addToHash(const char* str, int strLen, unsigned int hash)
 /*
  * Find a matching entry.
  *
- * Returns 0 if not found.
+ * Returns NULL if not found.
  */
 ZipEntryRO ZipFileRO::findEntryByName(const char* fileName) const
 {
+    /*
+     * If the ZipFileRO instance is not initialized, the entry number will
+     * end up being garbage since mHashTableSize is -1.
+     */
+    if (mHashTableSize <= 0) {
+        return NULL;
+    }
+
     int nameLen = strlen(fileName);
     unsigned int hash = computeHash(fileName, nameLen);
     int ent = hash & (mHashTableSize-1);
@@ -315,7 +433,7 @@ ZipEntryRO ZipFileRO::findEntryByName(const char* fileName) const
             memcmp(mHashTable[ent].name, fileName, nameLen) == 0)
         {
             /* match */
-            return (ZipEntryRO) (ent + kZipEntryAdj);
+            return (ZipEntryRO)(long)(ent + kZipEntryAdj);
         }
 
         ent = (ent + 1) & (mHashTableSize-1);
@@ -354,20 +472,24 @@ ZipEntryRO ZipFileRO::findEntryByIndex(int idx) const
  * Returns "false" if the offsets to the fields or the contents of the fields
  * appear to be bogus.
  */
-bool ZipFileRO::getEntryInfo(ZipEntryRO entry, int* pMethod, long* pUncompLen,
-    long* pCompLen, off_t* pOffset, long* pModWhen, long* pCrc32) const
+bool ZipFileRO::getEntryInfo(ZipEntryRO entry, int* pMethod, size_t* pUncompLen,
+    size_t* pCompLen, off_t* pOffset, long* pModWhen, long* pCrc32) const
 {
-    int ent = entryToIndex(entry);
+    bool ret = false;
+
+    const int ent = entryToIndex(entry);
     if (ent < 0)
         return false;
 
+    HashEntry hashEntry = mHashTable[ent];
+
     /*
      * Recover the start of the central directory entry from the filename
-     * pointer.
+     * pointer.  The filename is the first entry past the fixed-size data,
+     * so we can just subtract back from that.
      */
-    const unsigned char* basePtr = (const unsigned char*)mFileMap->getDataPtr();
-    const unsigned char* ptr = (const unsigned char*) mHashTable[ent].name;
-    size_t zipLength = mFileMap->getDataLength();
+    const unsigned char* ptr = (const unsigned char*) hashEntry.name;
+    off_t cdOffset = mDirectoryOffset;
 
     ptr -= kCDELen;
 
@@ -380,48 +502,117 @@ bool ZipFileRO::getEntryInfo(ZipEntryRO entry, int* pMethod, long* pUncompLen,
     if (pCrc32 != NULL)
         *pCrc32 = get4LE(ptr + kCDECRC);
 
+    size_t compLen = get4LE(ptr + kCDECompLen);
+    if (pCompLen != NULL)
+        *pCompLen = compLen;
+    size_t uncompLen = get4LE(ptr + kCDEUncompLen);
+    if (pUncompLen != NULL)
+        *pUncompLen = uncompLen;
+
     /*
-     * We need to make sure that the lengths are not so large that somebody
-     * trying to map the compressed or uncompressed data runs off the end
-     * of the mapped region.
+     * If requested, determine the offset of the start of the data.  All we
+     * have is the offset to the Local File Header, which is variable size,
+     * so we have to read the contents of the struct to figure out where
+     * the actual data starts.
+     *
+     * We also need to make sure that the lengths are not so large that
+     * somebody trying to map the compressed or uncompressed data runs
+     * off the end of the mapped region.
+     *
+     * Note we don't verify compLen/uncompLen if they don't request the
+     * dataOffset, because dataOffset is expensive to determine.  However,
+     * if they don't have the file offset, they're not likely to be doing
+     * anything with the contents.
      */
-    unsigned long localHdrOffset = get4LE(ptr + kCDELocalOffset);
-    if (localHdrOffset + kLFHLen >= zipLength) {
-        LOGE("ERROR: bad local hdr offset in zip\n");
-        return false;
-    }
-    const unsigned char* localHdr = basePtr + localHdrOffset;
-    off_t dataOffset = localHdrOffset + kLFHLen
-        + get2LE(localHdr + kLFHNameLen) + get2LE(localHdr + kLFHExtraLen);
-    if ((unsigned long) dataOffset >= zipLength) {
-        LOGE("ERROR: bad data offset in zip\n");
-        return false;
-    }
-
-    if (pCompLen != NULL) {
-        *pCompLen = get4LE(ptr + kCDECompLen);
-        if (*pCompLen < 0 || (size_t)(dataOffset + *pCompLen) >= zipLength) {
-            LOGE("ERROR: bad compressed length in zip\n");
-            return false;
-        }
-    }
-    if (pUncompLen != NULL) {
-        *pUncompLen = get4LE(ptr + kCDEUncompLen);
-        if (*pUncompLen < 0) {
-            LOGE("ERROR: negative uncompressed length in zip\n");
-            return false;
-        }
-        if (method == kCompressStored &&
-            (size_t)(dataOffset + *pUncompLen) >= zipLength)
-        {
-            LOGE("ERROR: bad uncompressed length in zip\n");
-            return false;
-        }
-    }
-
     if (pOffset != NULL) {
+        long localHdrOffset = get4LE(ptr + kCDELocalOffset);
+        if (localHdrOffset + kLFHLen >= cdOffset) {
+            LOGE("ERROR: bad local hdr offset in zip\n");
+            return false;
+        }
+
+        unsigned char lfhBuf[kLFHLen];
+
+#ifdef HAVE_PREAD
+        /*
+         * This file descriptor might be from zygote's preloaded assets,
+         * so we need to do an pread() instead of a lseek() + read() to
+         * guarantee atomicity across the processes with the shared file
+         * descriptors.
+         */
+        ssize_t actual =
+                TEMP_FAILURE_RETRY(pread(mFd, lfhBuf, sizeof(lfhBuf), localHdrOffset));
+
+        if (actual != sizeof(lfhBuf)) {
+            LOGW("failed reading lfh from offset %ld\n", localHdrOffset);
+            return false;
+        }
+
+        if (get4LE(lfhBuf) != kLFHSignature) {
+            LOGW("didn't find signature at start of lfh; wanted: offset=%ld data=0x%08x; "
+                    "got: data=0x%08lx\n",
+                    localHdrOffset, kLFHSignature, get4LE(lfhBuf));
+            return false;
+        }
+#else /* HAVE_PREAD */
+        /*
+         * For hosts don't have pread() we cannot guarantee atomic reads from
+         * an offset in a file. Android should never run on those platforms.
+         * File descriptors inherited from a fork() share file offsets and
+         * there would be nothing to protect from two different processes
+         * calling lseek() concurrently.
+         */
+
+        {
+            AutoMutex _l(mFdLock);
+
+            if (lseek(mFd, localHdrOffset, SEEK_SET) != localHdrOffset) {
+                LOGW("failed seeking to lfh at offset %ld\n", localHdrOffset);
+                return false;
+            }
+
+            ssize_t actual =
+                    TEMP_FAILURE_RETRY(read(mFd, lfhBuf, sizeof(lfhBuf)));
+            if (actual != sizeof(lfhBuf)) {
+                LOGW("failed reading lfh from offset %ld\n", localHdrOffset);
+                return false;
+            }
+
+            if (get4LE(lfhBuf) != kLFHSignature) {
+                off_t actualOffset = lseek(mFd, 0, SEEK_CUR);
+                LOGW("didn't find signature at start of lfh; wanted: offset=%ld data=0x%08x; "
+                        "got: offset=" ZD " data=0x%08lx\n",
+                        localHdrOffset, kLFHSignature, (ZD_TYPE) actualOffset, get4LE(lfhBuf));
+                return false;
+            }
+        }
+#endif /* HAVE_PREAD */
+
+        off_t dataOffset = localHdrOffset + kLFHLen
+            + get2LE(lfhBuf + kLFHNameLen) + get2LE(lfhBuf + kLFHExtraLen);
+        if (dataOffset >= cdOffset) {
+            LOGW("bad data offset %ld in zip\n", (long) dataOffset);
+            return false;
+        }
+
+        /* check lengths */
+        if ((off_t)(dataOffset + compLen) > cdOffset) {
+            LOGW("bad compressed length in zip (%ld + " ZD " > %ld)\n",
+                (long) dataOffset, (ZD_TYPE) compLen, (long) cdOffset);
+            return false;
+        }
+
+        if (method == kCompressStored &&
+            (off_t)(dataOffset + uncompLen) > cdOffset)
+        {
+            LOGE("ERROR: bad uncompressed length in zip (%ld + " ZD " > %ld)\n",
+                (long) dataOffset, (ZD_TYPE) uncompLen, (long) cdOffset);
+            return false;
+        }
+
         *pOffset = dataOffset;
     }
+
     return true;
 }
 
@@ -457,14 +648,14 @@ FileMap* ZipFileRO::createEntryFileMap(ZipEntryRO entry) const
      */
 
     FileMap* newMap;
-    long compLen;
+    size_t compLen;
     off_t offset;
 
     if (!getEntryInfo(entry, NULL, NULL, &compLen, &offset, NULL, NULL))
         return NULL;
 
     newMap = new FileMap();
-    if (!newMap->create(mFileMap->getFileName(), mFd, offset, compLen, true)) {
+    if (!newMap->create(mFileName, mFd, offset, compLen, true)) {
         newMap->release();
         return NULL;
     }
@@ -480,18 +671,25 @@ FileMap* ZipFileRO::createEntryFileMap(ZipEntryRO entry) const
  */
 bool ZipFileRO::uncompressEntry(ZipEntryRO entry, void* buffer) const
 {
-    const int kSequentialMin = 32768;
+    const size_t kSequentialMin = 32768;
     bool result = false;
     int ent = entryToIndex(entry);
     if (ent < 0)
         return -1;
 
-    const unsigned char* basePtr = (const unsigned char*)mFileMap->getDataPtr();
     int method;
-    long uncompLen, compLen;
+    size_t uncompLen, compLen;
     off_t offset;
+    const unsigned char* ptr;
 
     getEntryInfo(entry, &method, &uncompLen, &compLen, &offset, NULL, NULL);
+
+    FileMap* file = createEntryFileMap(entry);
+    if (file == NULL) {
+        goto bail;
+    }
+
+    ptr = (const unsigned char*) file->getDataPtr();
 
     /*
      * Experiment with madvise hint.  When we want to uncompress a file,
@@ -507,20 +705,22 @@ bool ZipFileRO::uncompressEntry(ZipEntryRO entry, void* buffer) const
      * pair of system calls are negated by a reduction in page faults.
      */
     if (compLen > kSequentialMin)
-        mFileMap->advise(FileMap::SEQUENTIAL);
+        file->advise(FileMap::SEQUENTIAL);
 
     if (method == kCompressStored) {
-        memcpy(buffer, basePtr + offset, uncompLen);
+        memcpy(buffer, ptr, uncompLen);
     } else {
-        if (!inflateBuffer(buffer, basePtr + offset, uncompLen, compLen))
-            goto bail;
+        if (!inflateBuffer(buffer, ptr, uncompLen, compLen))
+            goto unmap;
     }
 
     if (compLen > kSequentialMin)
-        mFileMap->advise(FileMap::NORMAL);
+        file->advise(FileMap::NORMAL);
 
     result = true;
 
+unmap:
+    file->release();
 bail:
     return result;
 }
@@ -537,34 +737,41 @@ bool ZipFileRO::uncompressEntry(ZipEntryRO entry, int fd) const
     if (ent < 0)
         return -1;
 
-    const unsigned char* basePtr = (const unsigned char*)mFileMap->getDataPtr();
     int method;
-    long uncompLen, compLen;
+    size_t uncompLen, compLen;
     off_t offset;
+    const unsigned char* ptr;
 
     getEntryInfo(entry, &method, &uncompLen, &compLen, &offset, NULL, NULL);
 
-    if (method == kCompressStored) {
-        ssize_t actual;
+    FileMap* file = createEntryFileMap(entry);
+    if (file == NULL) {
+        goto bail;
+    }
 
-        actual = write(fd, basePtr + offset, uncompLen);
+    ptr = (const unsigned char*) file->getDataPtr();
+
+    if (method == kCompressStored) {
+        ssize_t actual = write(fd, ptr, uncompLen);
         if (actual < 0) {
             LOGE("Write failed: %s\n", strerror(errno));
-            goto bail;
-        } else if (actual != uncompLen) {
-            LOGE("Partial write during uncompress (%d of %ld)\n",
-                (int)actual, uncompLen);
-            goto bail;
+            goto unmap;
+        } else if ((size_t) actual != uncompLen) {
+            LOGE("Partial write during uncompress (" ZD " of " ZD ")\n",
+                (ZD_TYPE) actual, (ZD_TYPE) uncompLen);
+            goto unmap;
         } else {
             LOGI("+++ successful write\n");
         }
     } else {
-        if (!inflateBuffer(fd, basePtr+offset, uncompLen, compLen))
-            goto bail;
+        if (!inflateBuffer(fd, ptr, uncompLen, compLen))
+            goto unmap;
     }
 
     result = true;
 
+unmap:
+    file->release();
 bail:
     return result;
 }
@@ -573,7 +780,7 @@ bail:
  * Uncompress "deflate" data from one buffer to another.
  */
 /*static*/ bool ZipFileRO::inflateBuffer(void* outBuf, const void* inBuf,
-    long uncompLen, long compLen)
+    size_t uncompLen, size_t compLen)
 {
     bool result = false;
     z_stream zstream;
@@ -582,7 +789,7 @@ bail:
     /*
      * Initialize the zlib stream struct.
      */
-	memset(&zstream, 0, sizeof(zstream));
+    memset(&zstream, 0, sizeof(zstream));
     zstream.zalloc = Z_NULL;
     zstream.zfree = Z_NULL;
     zstream.opaque = Z_NULL;
@@ -592,10 +799,10 @@ bail:
     zstream.avail_out = uncompLen;
     zstream.data_type = Z_UNKNOWN;
 
-	/*
-	 * Use the undocumented "negative window bits" feature to tell zlib
-	 * that there's no zlib header waiting for it.
-	 */
+    /*
+     * Use the undocumented "negative window bits" feature to tell zlib
+     * that there's no zlib header waiting for it.
+     */
     zerr = inflateInit2(&zstream, -MAX_WBITS);
     if (zerr != Z_OK) {
         if (zerr == Z_VERSION_ERROR) {
@@ -619,9 +826,9 @@ bail:
     }
 
     /* paranoia */
-    if ((long) zstream.total_out != uncompLen) {
-        LOGW("Size mismatch on inflated file (%ld vs %ld)\n",
-            zstream.total_out, uncompLen);
+    if (zstream.total_out != uncompLen) {
+        LOGW("Size mismatch on inflated file (%ld vs " ZD ")\n",
+            zstream.total_out, (ZD_TYPE) uncompLen);
         goto z_bail;
     }
 
@@ -638,10 +845,10 @@ bail:
  * Uncompress "deflate" data from one buffer to an open file descriptor.
  */
 /*static*/ bool ZipFileRO::inflateBuffer(int fd, const void* inBuf,
-    long uncompLen, long compLen)
+    size_t uncompLen, size_t compLen)
 {
     bool result = false;
-    const int kWriteBufSize = 32768;
+    const size_t kWriteBufSize = 32768;
     unsigned char writeBuf[kWriteBufSize];
     z_stream zstream;
     int zerr;
@@ -649,7 +856,7 @@ bail:
     /*
      * Initialize the zlib stream struct.
      */
-	memset(&zstream, 0, sizeof(zstream));
+    memset(&zstream, 0, sizeof(zstream));
     zstream.zalloc = Z_NULL;
     zstream.zfree = Z_NULL;
     zstream.opaque = Z_NULL;
@@ -659,10 +866,10 @@ bail:
     zstream.avail_out = sizeof(writeBuf);
     zstream.data_type = Z_UNKNOWN;
 
-	/*
-	 * Use the undocumented "negative window bits" feature to tell zlib
-	 * that there's no zlib header waiting for it.
-	 */
+    /*
+     * Use the undocumented "negative window bits" feature to tell zlib
+     * that there's no zlib header waiting for it.
+     */
     zerr = inflateInit2(&zstream, -MAX_WBITS);
     if (zerr != Z_OK) {
         if (zerr == Z_VERSION_ERROR) {
@@ -708,9 +915,9 @@ bail:
     assert(zerr == Z_STREAM_END);       /* other errors should've been caught */
 
     /* paranoia */
-    if ((long) zstream.total_out != uncompLen) {
-        LOGW("Size mismatch on inflated file (%ld vs %ld)\n",
-            zstream.total_out, uncompLen);
+    if (zstream.total_out != uncompLen) {
+        LOGW("Size mismatch on inflated file (%ld vs " ZD ")\n",
+            zstream.total_out, (ZD_TYPE) uncompLen);
         goto z_bail;
     }
 

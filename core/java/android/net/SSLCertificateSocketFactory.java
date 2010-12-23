@@ -46,10 +46,9 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
+import org.apache.harmony.xnet.provider.jsse.OpenSSLContextImpl;
 import org.apache.harmony.xnet.provider.jsse.OpenSSLSocketImpl;
 import org.apache.harmony.xnet.provider.jsse.SSLClientSessionCache;
-import org.apache.harmony.xnet.provider.jsse.SSLContextImpl;
-import org.apache.harmony.xnet.provider.jsse.SSLParameters;
 
 /**
  * SSLSocketFactory implementation with several extra features:
@@ -103,6 +102,7 @@ public class SSLCertificateSocketFactory extends SSLSocketFactory {
     private final boolean mSecure;
 
     /** @deprecated Use {@link #getDefault(int)} instead. */
+    @Deprecated
     public SSLCertificateSocketFactory(int handshakeTimeoutMillis) {
         this(handshakeTimeoutMillis, null, true);
     }
@@ -210,8 +210,9 @@ public class SSLCertificateSocketFactory extends SSLSocketFactory {
 
     private SSLSocketFactory makeSocketFactory(TrustManager[] trustManagers) {
         try {
-            SSLContextImpl sslContext = new SSLContextImpl();
-            sslContext.engineInit(null, trustManagers, null, mSessionCache, null);
+            OpenSSLContextImpl sslContext = new OpenSSLContextImpl();
+            sslContext.engineInit(null, trustManagers, null);
+            sslContext.engineGetClientSessionContext().setPersistentCache(mSessionCache);
             return sslContext.engineGetSocketFactory();
         } catch (KeyManagementException e) {
             Log.wtf(TAG, e);

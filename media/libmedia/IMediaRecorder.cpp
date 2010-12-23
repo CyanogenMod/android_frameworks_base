@@ -1,6 +1,6 @@
 /*
  **
- ** Copyright 2008, HTC Inc.
+ ** Copyright 2008, The Android Open Source Project
  **
  ** Licensed under the Apache License, Version 2.0 (the "License");
  ** you may not use this file except in compliance with the License.
@@ -21,8 +21,9 @@
 #include <binder/Parcel.h>
 #include <surfaceflinger/ISurface.h>
 #include <camera/ICamera.h>
-#include <media/IMediaPlayerClient.h>
+#include <media/IMediaRecorderClient.h>
 #include <media/IMediaRecorder.h>
+#include <unistd.h>
 
 namespace android {
 
@@ -189,7 +190,7 @@ public:
         return reply.readInt32();
     }
 
-    status_t setListener(const sp<IMediaPlayerClient>& listener)
+    status_t setListener(const sp<IMediaRecorderClient>& listener)
     {
         LOGV("setListener(%p)", listener.get());
         Parcel data, reply;
@@ -373,6 +374,7 @@ status_t BnMediaRecorder::onTransact(
             int64_t offset = data.readInt64();
             int64_t length = data.readInt64();
             reply->writeInt32(setOutputFile(fd, offset, length));
+            ::close(fd);
             return NO_ERROR;
         } break;
         case SET_VIDEO_SIZE: {
@@ -399,8 +401,8 @@ status_t BnMediaRecorder::onTransact(
         case SET_LISTENER: {
             LOGV("SET_LISTENER");
             CHECK_INTERFACE(IMediaRecorder, data, reply);
-            sp<IMediaPlayerClient> listener =
-                interface_cast<IMediaPlayerClient>(data.readStrongBinder());
+            sp<IMediaRecorderClient> listener =
+                interface_cast<IMediaRecorderClient>(data.readStrongBinder());
             reply->writeInt32(setListener(listener));
             return NO_ERROR;
         } break;

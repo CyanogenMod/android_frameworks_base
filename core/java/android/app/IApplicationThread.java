@@ -95,7 +95,6 @@ public interface IApplicationThread extends IInterface {
             throws RemoteException;
     void scheduleLowMemory() throws RemoteException;
     void scheduleActivityConfigurationChanged(IBinder token) throws RemoteException;
-    void requestPss() throws RemoteException;
     void profilerControl(boolean start, String path, ParcelFileDescriptor fd)
             throws RemoteException;
     void setSchedulingGroup(int group) throws RemoteException;
@@ -103,6 +102,7 @@ public interface IApplicationThread extends IInterface {
     static final int PACKAGE_REMOVED = 0;
     static final int EXTERNAL_STORAGE_UNAVAILABLE = 1;
     void dispatchPackageBroadcast(int cmd, String[] packages) throws RemoteException;
+    void scheduleCrash(String msg) throws RemoteException;
     
     String descriptor = "android.app.IApplicationThread";
 
@@ -131,7 +131,7 @@ public interface IApplicationThread extends IInterface {
     int SCHEDULE_LOW_MEMORY_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+23;
     int SCHEDULE_ACTIVITY_CONFIGURATION_CHANGED_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+24;
     int SCHEDULE_RELAUNCH_ACTIVITY_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+25;
-    int REQUEST_PSS_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+26;
+
     int PROFILER_CONTROL_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+27;
     int SET_SCHEDULING_GROUP_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+28;
     int SCHEDULE_CREATE_BACKUP_AGENT_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+29;
@@ -139,4 +139,5 @@ public interface IApplicationThread extends IInterface {
     int GET_MEMORY_INFO_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+31;
     int SCHEDULE_SUICIDE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+32;
     int DISPATCH_PACKAGE_BROADCAST_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+33;
+    int SCHEDULE_CRASH_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+34;
 }

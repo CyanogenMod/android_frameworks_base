@@ -392,6 +392,20 @@ static jboolean android_net_wifi_setPowerModeCommand(JNIEnv* env, jobject clazz,
     return (jboolean)!cmdTooLong && doBooleanCommand(cmdstr, "OK");
 }
 
+static jint android_net_wifi_getPowerModeCommand(JNIEnv* env, jobject clazz)
+{
+    char reply[256];
+    int power;
+
+    if (doCommand("DRIVER GETPOWER", reply, sizeof(reply)) != 0) {
+        return (jint)-1;
+    }
+    // reply comes back in the form "powermode = XX" where XX is the
+    // number we're interested in.
+    sscanf(reply, "%*s = %u", &power);
+    return (jint)power;
+}
+
 static jboolean android_net_wifi_setNumAllowedChannelsCommand(JNIEnv* env, jobject clazz, jint numChannels)
 {
     char cmdstr[256];
@@ -479,6 +493,15 @@ static jboolean android_net_wifi_clearBlacklistCommand(JNIEnv* env, jobject claz
     return doBooleanCommand("BLACKLIST clear", "OK");
 }
 
+static jboolean android_net_wifi_setSuspendOptimizationsCommand(JNIEnv* env, jobject clazz, jboolean enabled)
+{
+    char cmdstr[25];
+
+    snprintf(cmdstr, sizeof(cmdstr), "DRIVER SETSUSPENDOPT %d", enabled ? 0 : 1);
+    return doBooleanCommand(cmdstr, "OK");
+}
+
+
 static jboolean android_net_wifi_doDhcpRequest(JNIEnv* env, jobject clazz, jobject info)
 {
     jint ipaddr, gateway, mask, dns1, dns2, server, lease;
@@ -540,6 +563,7 @@ static JNINativeMethod gWifiMethods[] = {
     { "startPacketFiltering", "()Z", (void*) android_net_wifi_startPacketFiltering },
     { "stopPacketFiltering", "()Z", (void*) android_net_wifi_stopPacketFiltering },
     { "setPowerModeCommand", "(I)Z", (void*) android_net_wifi_setPowerModeCommand },
+    { "getPowerModeCommand", "()I", (void*) android_net_wifi_getPowerModeCommand },
     { "setNumAllowedChannelsCommand", "(I)Z", (void*) android_net_wifi_setNumAllowedChannelsCommand },
     { "getNumAllowedChannelsCommand", "()I", (void*) android_net_wifi_getNumAllowedChannelsCommand },
     { "setBluetoothCoexistenceModeCommand", "(I)Z",
@@ -556,6 +580,7 @@ static JNINativeMethod gWifiMethods[] = {
     { "setScanResultHandlingCommand", "(I)Z", (void*) android_net_wifi_setScanResultHandlingCommand },
     { "addToBlacklistCommand", "(Ljava/lang/String;)Z", (void*) android_net_wifi_addToBlacklistCommand },
     { "clearBlacklistCommand", "()Z", (void*) android_net_wifi_clearBlacklistCommand },
+    { "setSuspendOptimizationsCommand", "(Z)Z", (void*) android_net_wifi_setSuspendOptimizationsCommand},
 
     { "doDhcpRequest", "(Landroid/net/DhcpInfo;)Z", (void*) android_net_wifi_doDhcpRequest },
     { "getDhcpError", "()Ljava/lang/String;", (void*) android_net_wifi_getDhcpError },

@@ -58,7 +58,7 @@ import static android.telephony.SmsMessage.MessageClass;
 /**
  * TODO(cleanup): internally returning null in many places makes
  * debugging very hard (among many other reasons) and should be made
- * more meaningful (replaced with execptions for example).  Null
+ * more meaningful (replaced with exceptions for example).  Null
  * returns should only occur at the very outside of the module/class
  * scope.
  */
@@ -287,7 +287,7 @@ public class SmsMessage extends SmsMessageBase {
      * @param destAddr              Address of the recipient.
      * @param message               String representation of the message payload.
      * @param statusReportRequested Indicates whether a report is requested for this message.
-     * @param headerData            Array containing the data for the User Data Header, preceded
+     * @param smsHeader             Array containing the data for the User Data Header, preceded
      *                              by the Element Identifiers.
      * @return a <code>SubmitPdu</code> containing the encoded SC
      *         address, if applicable, and the encoded message.
@@ -313,7 +313,7 @@ public class SmsMessage extends SmsMessageBase {
     }
 
     /**
-     * Get an SMS-SUBMIT PDU for a data message to a destination address &amp; port
+     * Get an SMS-SUBMIT PDU for a data message to a destination address and port.
      *
      * @param scAddr Service Centre address. null == use default
      * @param destAddr the address of the destination for the message
@@ -355,7 +355,7 @@ public class SmsMessage extends SmsMessageBase {
      * Get an SMS-SUBMIT PDU for a data message to a destination address &amp; port
      *
      * @param destAddr the address of the destination for the message
-     * @param userDara the data for the message
+     * @param userData the data for the message
      * @param statusReportRequested Indicates whether a report is requested for this message.
      * @return a <code>SubmitPdu</code> containing the encoded SC
      *         address, if applicable, and the encoded message.
@@ -446,7 +446,7 @@ public class SmsMessage extends SmsMessageBase {
      */
     public static TextEncodingDetails calculateLength(CharSequence messageBody,
             boolean use7bitOnly) {
-        return BearerData.calcTextEncodingDetails(messageBody.toString(), use7bitOnly);
+        return BearerData.calcTextEncodingDetails(messageBody, use7bitOnly);
     }
 
     /**
@@ -614,7 +614,7 @@ public class SmsMessage extends SmsMessageBase {
      * incrementing within the range 1..65535 remembering the state
      * via a persistent system property.  (See C.S0015-B, v2.0,
      * 4.3.1.5) Since this routine is expected to be accessed via via
-     * binder-call, and hence should be threadsafe, it has been
+     * binder-call, and hence should be thread-safe, it has been
      * synchronized.
      */
     private synchronized static int getNextMessageId() {

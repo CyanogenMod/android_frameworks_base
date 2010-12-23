@@ -38,6 +38,7 @@ import android.os.SystemProperties;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.WorkSource;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.EventLog;
@@ -59,6 +60,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Track the state of Wifi connectivity. All event handling is done here,
@@ -216,6 +218,9 @@ public class WifiStateTracker extends NetworkStateTracker {
     private boolean mUseStaticIp = false;
     private int mReconnectCount;
 
+    /* Tracks if any network in the configuration is disabled */
+    private AtomicBoolean mIsAnyNetworkDisabled = new AtomicBoolean(false);
+
     // used to store the (non-persisted) num determined during device boot 
     // (from mcc or other phone info) before the driver is started.
     private int mNumAllowedChannels = 0;
@@ -276,6 +281,9 @@ public class WifiStateTracker extends NetworkStateTracker {
     
     private boolean mIsScanModeActive;
     private boolean mEnableRssiPolling;
+    private boolean mIsHighPerfEnabled;
+    private int mPowerModeRefCount = 0;
+    private int mOptimizationsDisabledRefCount = 0;
 
     /**
      * One of  {@link WifiManager#WIFI_STATE_DISABLED},
@@ -314,6 +322,21 @@ public class WifiStateTracker extends NetworkStateTracker {
     private static String LS = System.getProperty("line.separator");
 
     private static String[] sDnsPropNames;
+
+    /**
+     * Keep track of whether we last told the battery stats we had started.
+     */
+    private boolean mReportedRunning = false;
+
+    /**
+     * Most recently set source of starting WIFI.
+     */
+    private final WorkSource mRunningWifiUids = new WorkSource();
+
+    /**
+     * The last reported UIDs that were responsible for starting WIFI.
+     */
+    private final WorkSource mLastRunningWifiUids = new WorkSource();
 
     /**
      * A structure for supplying information about a supplicant state
@@ -625,12 +648,35 @@ public class WifiStateTracker extends NetworkStateTracker {
         return mRunState == RUN_STATE_STOPPED || mRunState == RUN_STATE_STOPPING;
     }
 
-    private void noteRunState() {
+    public void updateBatteryWorkSourceLocked(WorkSource newSource) {
         try {
+            if (newSource != null) {
+                mRunningWifiUids.set(newSource);
+            }
             if (mRunState == RUN_STATE_RUNNING) {
-                mBatteryStats.noteWifiRunning();
+                if (mReportedRunning) {
+                    // If the work source has changed since last time, need
+                    // to remove old work from battery stats.
+                    if (mLastRunningWifiUids.diff(mRunningWifiUids)) {
+                        mBatteryStats.noteWifiRunningChanged(mLastRunningWifiUids,
+                                mRunningWifiUids);
+                        mLastRunningWifiUids.set(mRunningWifiUids);
+                    }
+                } else {
+                    // Now being started, report it.
+                    mBatteryStats.noteWifiRunning(mRunningWifiUids);
+                    mLastRunningWifiUids.set(mRunningWifiUids);
+                    mReportedRunning = true;
+                }
             } else if (mRunState == RUN_STATE_STOPPED) {
-                mBatteryStats.noteWifiStopped();
+                if (mReportedRunning) {
+                    // Last reported we were running, time to stop.
+                    mBatteryStats.noteWifiStopped(mLastRunningWifiUids);
+                    mLastRunningWifiUids.clear();
+                    mReportedRunning = false;
+                }
+            } else {
+                // State in transition -- nothing to update yet.
             }
         } catch (RemoteException ignore) {
         }
@@ -656,6 +702,67 @@ public class WifiStateTracker extends NetworkStateTracker {
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Set suspend mode optimizations. These include:
+     * - packet filtering
+     * - turn off roaming
+     * - DTIM settings
+     *
+     * Uses reference counting to keep the suspend optimizations disabled
+     * as long as one entity wants optimizations disabled.
+     *
+     * For example, WifiLock can keep suspend optimizations disabled
+     * or the user setting (wifi never sleeps) can keep suspend optimizations
+     * disabled. As long as one entity wants it disabled, it should stay
+     * that way
+     *
+     * @param enabled true if optimizations need enabled, false otherwise
+     */
+    public synchronized void setSuspendModeOptimizations(boolean enabled) {
+
+        /* It is good to plumb suspend optimization enable
+         * or disable even if ref count indicates already done
+         * since we could have a case of previous failure.
+         */
+        if (!enabled) {
+            mOptimizationsDisabledRefCount++;
+        } else {
+            mOptimizationsDisabledRefCount--;
+            if (mOptimizationsDisabledRefCount > 0) {
+                return;
+            } else {
+                /* Keep refcount from becoming negative */
+                mOptimizationsDisabledRefCount = 0;
+            }
+        }
+
+        if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
+            return;
+        }
+
+        WifiNative.setSuspendOptimizationsCommand(enabled);
+    }
+
+
+    /**
+     * Set high performance mode of operation. This would mean
+     * use active power mode and disable suspend optimizations
+     * @param enabled true if enabled, false otherwise
+     */
+    public synchronized void setHighPerfMode(boolean enabled) {
+        if (mIsHighPerfEnabled != enabled) {
+            if (enabled) {
+                setPowerMode(DRIVER_POWER_MODE_ACTIVE);
+                setSuspendModeOptimizations(false);
+            } else {
+                setPowerMode(DRIVER_POWER_MODE_AUTO);
+                setSuspendModeOptimizations(true);
+            }
+            mIsHighPerfEnabled = enabled;
+            Log.d(TAG,"high performance mode: " + enabled);
         }
     }
 
@@ -733,7 +840,15 @@ public class WifiStateTracker extends NetworkStateTracker {
         switch (msg.what) {
             case EVENT_SUPPLICANT_CONNECTION:
                 mRunState = RUN_STATE_RUNNING;
-                noteRunState();
+                String macaddr;
+                synchronized (this) {
+                    updateBatteryWorkSourceLocked(null);
+                    macaddr = WifiNative.getMacAddressCommand();
+                }
+                if (macaddr != null) {
+                    mWifiInfo.setMacAddress(macaddr);
+                }
+
                 checkUseStaticIp();
                 /* Reset notification state on new connection */
                 resetNotificationTimer();
@@ -744,20 +859,16 @@ public class WifiStateTracker extends NetworkStateTracker {
                 dhcpThread.start();
                 mDhcpTarget = new DhcpHandler(dhcpThread.getLooper(), this);
                 mIsScanModeActive = true;
+                mIsHighPerfEnabled = false;
+                mOptimizationsDisabledRefCount = 0;
+                mPowerModeRefCount = 0;
                 mTornDownByConnMgr = false;
                 mLastBssid = null;
                 mLastSsid = null;
+                mIsAnyNetworkDisabled.set(false);
                 requestConnectionInfo();
                 SupplicantState supplState = mWifiInfo.getSupplicantState();
-                /**
-                 * The MAC address isn't going to change, so just request it
-                 * once here.
-                 */
-                String macaddr = getMacAddress();
 
-                if (macaddr != null) {
-                    mWifiInfo.setMacAddress(macaddr);
-                }
                 if (LOCAL_LOGD) Log.v(TAG, "Connection to supplicant established, state=" +
                     supplState);
                 // Wi-Fi supplicant connection state changed:
@@ -803,7 +914,9 @@ public class WifiStateTracker extends NetworkStateTracker {
 
             case EVENT_SUPPLICANT_DISCONNECT:
                 mRunState = RUN_STATE_STOPPED;
-                noteRunState();
+                synchronized (this) {
+                    updateBatteryWorkSourceLocked(null);
+                }
                 boolean died = mWifiState.get() != WIFI_STATE_DISABLED &&
                                mWifiState.get() != WIFI_STATE_DISABLING;
                 if (died) {
@@ -1132,7 +1245,8 @@ public class WifiStateTracker extends NetworkStateTracker {
                     setDetailedState(DetailedState.CONNECTED);
                     sendNetworkStateChangeBroadcast(mWifiInfo.getBSSID());
                 } else {
-                    mTarget.sendEmptyMessage(EVENT_CONFIGURATION_CHANGED);
+                    msg = mTarget.obtainMessage(EVENT_CONFIGURATION_CHANGED, mNetworkInfo);
+                    msg.sendToTarget();
                 }
                 if (LOCAL_LOGD) Log.v(TAG, "IP configuration: " + mDhcpInfo);
                 // Wi-Fi interface configuration state changed:
@@ -1173,15 +1287,17 @@ public class WifiStateTracker extends NetworkStateTracker {
                      */
                     setNumAllowedChannels();
                     synchronized (this) {
-                        if (mRunState == RUN_STATE_STARTING) {
-                            mRunState = RUN_STATE_RUNNING;
-                            if (!mIsScanOnly) {
-                                reconnectCommand();
-                            } else {
-                                // In some situations, supplicant needs to be kickstarted to
-                                // start the background scanning
-                                scan(true);
-                            }
+                        macaddr = WifiNative.getMacAddressCommand();
+                        if (macaddr != null) {
+                            mWifiInfo.setMacAddress(macaddr);
+                        }
+                        mRunState = RUN_STATE_RUNNING;
+                        if (!mIsScanOnly) {
+                            reconnectCommand();
+                        } else {
+                            // In some situations, supplicant needs to be kickstarted to
+                            // start the background scanning
+                            scan(true);
                         }
                     }
                     break;
@@ -1194,7 +1310,9 @@ public class WifiStateTracker extends NetworkStateTracker {
                     mWM.setWifiEnabled(true);
                     break;
                 }
-                noteRunState();
+                synchronized (this) {
+                    updateBatteryWorkSourceLocked(null);
+                }
                 break;
 
             case EVENT_PASSWORD_KEY_MAY_BE_INCORRECT:
@@ -1483,27 +1601,26 @@ public class WifiStateTracker extends NetworkStateTracker {
      * disconnect or stop command was initiated.
      */
     public synchronized boolean disconnectAndStop() {
+        boolean ret = true;;
         if (mRunState != RUN_STATE_STOPPING && mRunState != RUN_STATE_STOPPED) {
             // Take down any open network notifications
             setNotificationVisible(false, 0, false, 0);
 
-            mRunState = RUN_STATE_STOPPING;
             if (mWifiInfo.getSupplicantState() == SupplicantState.DORMANT) {
-                return stopDriver();
+                ret = stopDriver();
             } else {
-                return disconnect();
+                ret = disconnect();
             }
+            mRunState = RUN_STATE_STOPPING;
         }
-        return true;
+        return ret;
     }
 
     public synchronized boolean restart() {
-        if (mRunState == RUN_STATE_STOPPED) {
+        if (isDriverStopped()) {
             mRunState = RUN_STATE_STARTING;
             resetConnections(true);
             return startDriver();
-        } else if (mRunState == RUN_STATE_STOPPING) {
-            mRunState = RUN_STATE_STARTING;
         }
         return true;
     }
@@ -1514,6 +1631,10 @@ public class WifiStateTracker extends NetworkStateTracker {
 
     public void setWifiState(int wifiState) {
         mWifiState.set(wifiState);
+    }
+
+    public boolean isAnyNetworkDisabled() {
+        return mIsAnyNetworkDisabled.get();
     }
 
    /**
@@ -1605,7 +1726,7 @@ public class WifiStateTracker extends NetworkStateTracker {
      * @return {@code true} if the operation succeeds, {@code false} otherwise
      */
     public synchronized boolean scan(boolean forceActive) {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
+        if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
             return false;
         }
         return WifiNative.scanCommand(forceActive);
@@ -1621,7 +1742,7 @@ public class WifiStateTracker extends NetworkStateTracker {
      * @return {@code true} if the operation succeeds, {@code false} otherwise
      */
     public synchronized boolean setScanResultHandling(int mode) {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
+        if (mWifiState.get() != WIFI_STATE_ENABLED) {
             return false;
         }
         return WifiNative.setScanResultHandlingCommand(mode);
@@ -1635,7 +1756,7 @@ public class WifiStateTracker extends NetworkStateTracker {
      * 00:bb:cc:dd:cc:ff       2412    165     [WPA-EAP-TKIP][WPA2-EAP-CCMP]   Net2
      */
     public synchronized String scanResults() {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
+        if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
             return null;
         }
         return WifiNative.scanResultsCommand();
@@ -1647,7 +1768,7 @@ public class WifiStateTracker extends NetworkStateTracker {
      * @return {@code true} if the operation succeeds, {@code false} otherwise
      */
     public synchronized boolean setScanMode(boolean isScanModeActive) {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
+        if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
             return false;
         }
         if (mIsScanModeActive != isScanModeActive) {
@@ -1662,7 +1783,7 @@ public class WifiStateTracker extends NetworkStateTracker {
      * @return {@code true} if the operation succeeds, {@code false} otherwise
      */
     public synchronized boolean disconnect() {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
+        if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
             return false;
         }
         return WifiNative.disconnectCommand();
@@ -1674,7 +1795,7 @@ public class WifiStateTracker extends NetworkStateTracker {
      * @return {@code true} if the operation succeeds, {@code false} otherwise
      */
     public synchronized boolean reconnectCommand() {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
+        if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
             return false;
         }
         return WifiNative.reconnectCommand();
@@ -1716,7 +1837,25 @@ public class WifiStateTracker extends NetworkStateTracker {
         if (mWifiState.get() != WIFI_STATE_ENABLED) {
             return false;
         }
+        if (disableOthers) mIsAnyNetworkDisabled.set(true);
         return WifiNative.enableNetworkCommand(netId, disableOthers);
+    }
+
+    /**
+     * Enable all networks
+     *
+     * @param networks list of configured networks
+     */
+    public synchronized void enableAllNetworks(List<WifiConfiguration> networks) {
+        if (mWifiState.get() != WIFI_STATE_ENABLED) {
+            return;
+        }
+        mIsAnyNetworkDisabled.set(false);
+        for (WifiConfiguration config : networks) {
+            if (config.status == WifiConfiguration.Status.DISABLED) {
+                WifiNative.enableNetworkCommand(config.networkId, false);
+            }
+        }
     }
 
     /**
@@ -1729,6 +1868,7 @@ public class WifiStateTracker extends NetworkStateTracker {
         if (mWifiState.get() != WIFI_STATE_ENABLED) {
             return false;
         }
+        mIsAnyNetworkDisabled.set(true);
         return WifiNative.disableNetworkCommand(netId);
     }
 
@@ -1738,7 +1878,7 @@ public class WifiStateTracker extends NetworkStateTracker {
      * @return {@code true} if the operation succeeds, {@code false} otherwise
      */
     public synchronized boolean reassociate() {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
+        if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
             return false;
         }
         return WifiNative.reassociateCommand();
@@ -1837,7 +1977,7 @@ public class WifiStateTracker extends NetworkStateTracker {
      * @return RSSI value, -1 on failure
      */
     public synchronized int getRssi() {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
+        if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
             return -1;
         }
         return WifiNative.getRssiApproxCommand();
@@ -1849,7 +1989,7 @@ public class WifiStateTracker extends NetworkStateTracker {
      * @return RSSI value, -1 on failure
      */
     public synchronized int getRssiApprox() {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
+        if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
             return -1;
         }
         return WifiNative.getRssiApproxCommand();
@@ -1861,22 +2001,10 @@ public class WifiStateTracker extends NetworkStateTracker {
      * @return link speed, -1 on failure
      */
     public synchronized int getLinkSpeed() {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
+        if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
             return -1;
         }
         return WifiNative.getLinkSpeedCommand();
-    }
-
-    /**
-     * Get MAC address of radio
-     *
-     * @return MAC address, null on failure
-     */
-    public synchronized String getMacAddress() {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
-            return null;
-        }
-        return WifiNative.getMacAddressCommand();
     }
 
     /**
@@ -1897,7 +2025,9 @@ public class WifiStateTracker extends NetworkStateTracker {
      * @return {@code true} if the operation succeeds, {@code false} otherwise
      */
     public synchronized boolean stopDriver() {
-        if (mWifiState.get() != WIFI_STATE_ENABLED) {
+        /* Driver stop should not happen only when supplicant event
+         * DRIVER_STOPPED has already been handled */
+        if (mWifiState.get() != WIFI_STATE_ENABLED || mRunState == RUN_STATE_STOPPED) {
             return false;
         }
         return WifiNative.stopDriverCommand();
@@ -1909,7 +2039,7 @@ public class WifiStateTracker extends NetworkStateTracker {
      * @return {@code true} if the operation succeeds, {@code false} otherwise
      */
     public synchronized boolean startPacketFiltering() {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
+        if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
             return false;
         }
         return WifiNative.startPacketFiltering();
@@ -1921,10 +2051,21 @@ public class WifiStateTracker extends NetworkStateTracker {
      * @return {@code true} if the operation succeeds, {@code false} otherwise
      */
     public synchronized boolean stopPacketFiltering() {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
+        if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
             return false;
         }
         return WifiNative.stopPacketFiltering();
+    }
+
+    /**
+     * Get power mode
+     * @return power mode
+     */
+    public synchronized int getPowerMode() {
+        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
+            return -1;
+        }
+        return WifiNative.getPowerModeCommand();
     }
 
     /**
@@ -1932,13 +2073,41 @@ public class WifiStateTracker extends NetworkStateTracker {
      * @param mode
      *     DRIVER_POWER_MODE_AUTO
      *     DRIVER_POWER_MODE_ACTIVE
-     * @return {@code true} if the operation succeeds, {@code false} otherwise
+     *
+     * Uses reference counting to keep power mode active
+     * as long as one entity wants power mode to be active.
+     *
+     * For example, WifiLock high perf mode can keep power mode active
+     * or a DHCP session can keep it active. As long as one entity wants
+     * it enabled, it should stay that way
+     *
      */
-    public synchronized boolean setPowerMode(int mode) {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
-            return false;
+    private synchronized void setPowerMode(int mode) {
+
+        /* It is good to plumb power mode change
+         * even if ref count indicates already done
+         * since we could have a case of previous failure.
+         */
+        switch(mode) {
+            case DRIVER_POWER_MODE_ACTIVE:
+                mPowerModeRefCount++;
+                break;
+            case DRIVER_POWER_MODE_AUTO:
+                mPowerModeRefCount--;
+                if (mPowerModeRefCount > 0) {
+                    return;
+                } else {
+                    /* Keep refcount from becoming negative */
+                    mPowerModeRefCount = 0;
+                }
+                break;
         }
-        return WifiNative.setPowerModeCommand(mode);
+
+        if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
+            return;
+        }
+
+        WifiNative.setPowerModeCommand(mode);
     }
 
     /**
@@ -1948,7 +2117,7 @@ public class WifiStateTracker extends NetworkStateTracker {
      * the number of channels is invalid.
      */
     public synchronized boolean setNumAllowedChannels() {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
+        if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
             return false;
         }
         try {
@@ -1973,7 +2142,7 @@ public class WifiStateTracker extends NetworkStateTracker {
      * {@code numChannels} is outside the valid range.
      */
     public synchronized boolean setNumAllowedChannels(int numChannels) {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
+        if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
             return false;
         }
         mNumAllowedChannels = numChannels;
@@ -1986,7 +2155,7 @@ public class WifiStateTracker extends NetworkStateTracker {
      * @return channel count, -1 on failure
      */
     public synchronized int getNumAllowedChannels() {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
+        if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
             return -1;
         }
         return WifiNative.getNumAllowedChannelsCommand();
@@ -2002,7 +2171,7 @@ public class WifiStateTracker extends NetworkStateTracker {
      * @return {@code true} if the operation succeeds, {@code false} otherwise
      */
     public synchronized boolean setBluetoothCoexistenceMode(int mode) {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
+        if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
             return false;
         }
         return WifiNative.setBluetoothCoexistenceModeCommand(mode);
@@ -2016,7 +2185,7 @@ public class WifiStateTracker extends NetworkStateTracker {
      * @param isBluetoothPlaying whether to enable or disable this mode
      */
     public synchronized void setBluetoothScanMode(boolean isBluetoothPlaying) {
-        if (mWifiState.get() != WIFI_STATE_ENABLED && !isDriverStopped()) {
+        if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
             return;
         }
         WifiNative.setBluetoothCoexistenceScanModeCommand(isBluetoothPlaying);
@@ -2252,6 +2421,8 @@ public class WifiStateTracker extends NetworkStateTracker {
                 case EVENT_DHCP_START:
                     
                     boolean modifiedBluetoothCoexistenceMode = false;
+                    int powerMode = DRIVER_POWER_MODE_AUTO;
+
                     if (shouldDisableCoexistenceMode()) {
                         /*
                          * There are problems setting the Wi-Fi driver's power
@@ -2276,7 +2447,15 @@ public class WifiStateTracker extends NetworkStateTracker {
                                 WifiNative.BLUETOOTH_COEXISTENCE_MODE_DISABLED);
                     }
 
-                    setPowerMode(DRIVER_POWER_MODE_ACTIVE);
+                    powerMode = getPowerMode();
+                    if (powerMode < 0) {
+                        // Handle the case where supplicant driver does not support
+                        // getPowerModeCommand.
+                        powerMode = DRIVER_POWER_MODE_AUTO;
+                    }
+                    if (powerMode != DRIVER_POWER_MODE_ACTIVE) {
+                        setPowerMode(DRIVER_POWER_MODE_ACTIVE);
+                    }
 
                     synchronized (this) {
                         // A new request is being made, so assume we will callback
@@ -2292,7 +2471,9 @@ public class WifiStateTracker extends NetworkStateTracker {
                             NetworkUtils.getDhcpError());
                     }
 
-                    setPowerMode(DRIVER_POWER_MODE_AUTO);
+                    if (powerMode != DRIVER_POWER_MODE_ACTIVE) {
+                        setPowerMode(powerMode);
+                    }
 
                     if (modifiedBluetoothCoexistenceMode) {
                         // Set the coexistence mode back to its default value
@@ -2323,7 +2504,7 @@ public class WifiStateTracker extends NetworkStateTracker {
          * @return Whether to disable coexistence mode.
          */
         private boolean shouldDisableCoexistenceMode() {
-            int state = mBluetoothHeadset.getState();
+            int state = mBluetoothHeadset.getState(mBluetoothHeadset.getCurrentHeadset());
             return state == BluetoothHeadset.STATE_DISCONNECTED;
         }
     }
@@ -2450,7 +2631,8 @@ public class WifiStateTracker extends NetworkStateTracker {
                 resetConnections(true);
                 configureInterface();
                 if (mUseStaticIp) {
-                    mTarget.sendEmptyMessage(EVENT_CONFIGURATION_CHANGED);
+                    Message msg = mTarget.obtainMessage(EVENT_CONFIGURATION_CHANGED, mNetworkInfo);
+                    msg.sendToTarget();
                 }
             }
         }

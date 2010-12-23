@@ -109,6 +109,10 @@ final class NativeDaemonConnector implements Runnable {
                 int count = inputStream.read(buffer, start, BUFFER_SIZE - start);
                 if (count < 0) break;
 
+                // Add our starting point to the count and reset the start.
+                count += start;
+                start = 0;
+
                 for (int i = 0; i < count; i++) {
                     if (buffer[i] == 0) {
                         String event = new String(buffer, start, i - start);
@@ -140,6 +144,9 @@ final class NativeDaemonConnector implements Runnable {
                         start = i + 1;
                     }
                 }
+
+                // We should end at the amount we read. If not, compact then
+                // buffer and read again.
                 if (start != count) {
                     final int remaining = BUFFER_SIZE - start;
                     System.arraycopy(buffer, start, buffer, 0, remaining);
@@ -173,7 +180,8 @@ final class NativeDaemonConnector implements Runnable {
         }
     }
 
-    private void sendCommand(String command) {
+    private void sendCommand(String command)
+            throws NativeDaemonConnectorException  {
         sendCommand(command, null);
     }
 
@@ -183,11 +191,13 @@ final class NativeDaemonConnector implements Runnable {
      * @param command  The command to send to the daemon
      * @param argument The argument to send with the command (or null)
      */
-    private void sendCommand(String command, String argument) {
+    private void sendCommand(String command, String argument)
+            throws NativeDaemonConnectorException  {
         synchronized (this) {
             if (LOCAL_LOGD) Slog.d(TAG, String.format("SND -> {%s} {%s}", command, argument));
             if (mOutputStream == null) {
                 Slog.e(TAG, "No connection to daemon", new IllegalStateException());
+                throw new NativeDaemonConnectorException("No output stream!");
             } else {
                 StringBuilder builder = new StringBuilder(command);
                 if (argument != null) {
@@ -217,6 +227,7 @@ final class NativeDaemonConnector implements Runnable {
 
         while (!complete) {
             try {
+                // TODO - this should not block forever
                 String line = mResponseQueue.take();
                 if (LOCAL_LOGD) Slog.d(TAG, String.format("RSP <- {%s}", line));
                 String[] tokens = line.split(" ");

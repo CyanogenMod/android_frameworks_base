@@ -46,13 +46,22 @@ public:
     {
     }
 
-    virtual sp<ISurfaceFlingerClient> createConnection()
+    virtual sp<ISurfaceComposerClient> createConnection()
     {
         uint32_t n;
         Parcel data, reply;
         data.writeInterfaceToken(ISurfaceComposer::getInterfaceDescriptor());
         remote()->transact(BnSurfaceComposer::CREATE_CONNECTION, data, &reply);
-        return interface_cast<ISurfaceFlingerClient>(reply.readStrongBinder());
+        return interface_cast<ISurfaceComposerClient>(reply.readStrongBinder());
+    }
+
+    virtual sp<ISurfaceComposerClient> createClientConnection()
+    {
+        uint32_t n;
+        Parcel data, reply;
+        data.writeInterfaceToken(ISurfaceComposer::getInterfaceDescriptor());
+        remote()->transact(BnSurfaceComposer::CREATE_CLIENT_CONNECTION, data, &reply);
+        return interface_cast<ISurfaceComposerClient>(reply.readStrongBinder());
     }
 
     virtual sp<IMemoryHeap> getCblk() const
@@ -115,6 +124,42 @@ public:
         remote()->transact(BnSurfaceComposer::BOOT_FINISHED, data, &reply);
     }
 
+    virtual status_t captureScreen(DisplayID dpy,
+            sp<IMemoryHeap>* heap,
+            uint32_t* width, uint32_t* height, PixelFormat* format,
+            uint32_t reqWidth, uint32_t reqHeight)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(ISurfaceComposer::getInterfaceDescriptor());
+        data.writeInt32(dpy);
+        data.writeInt32(reqWidth);
+        data.writeInt32(reqHeight);
+        remote()->transact(BnSurfaceComposer::CAPTURE_SCREEN, data, &reply);
+        *heap = interface_cast<IMemoryHeap>(reply.readStrongBinder());
+        *width = reply.readInt32();
+        *height = reply.readInt32();
+        *format = reply.readInt32();
+        return reply.readInt32();
+    }
+
+    virtual status_t turnElectronBeamOff(int32_t mode)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(ISurfaceComposer::getInterfaceDescriptor());
+        data.writeInt32(mode);
+        remote()->transact(BnSurfaceComposer::TURN_ELECTRON_BEAM_OFF, data, &reply);
+        return reply.readInt32();
+    }
+
+    virtual status_t turnElectronBeamOn(int32_t mode)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(ISurfaceComposer::getInterfaceDescriptor());
+        data.writeInt32(mode);
+        remote()->transact(BnSurfaceComposer::TURN_ELECTRON_BEAM_ON, data, &reply);
+        return reply.readInt32();
+    }
+
     virtual void signal() const
     {
         Parcel data, reply;
@@ -134,6 +179,11 @@ status_t BnSurfaceComposer::onTransact(
         case CREATE_CONNECTION: {
             CHECK_INTERFACE(ISurfaceComposer, data, reply);
             sp<IBinder> b = createConnection()->asBinder();
+            reply->writeStrongBinder(b);
+        } break;
+        case CREATE_CLIENT_CONNECTION: {
+            CHECK_INTERFACE(ISurfaceComposer, data, reply);
+            sp<IBinder> b = createClientConnection()->asBinder();
             reply->writeStrongBinder(b);
         } break;
         case OPEN_GLOBAL_TRANSACTION: {
@@ -176,6 +226,34 @@ status_t BnSurfaceComposer::onTransact(
             sp<IBinder> b = getCblk()->asBinder();
             reply->writeStrongBinder(b);
         } break;
+        case CAPTURE_SCREEN: {
+            CHECK_INTERFACE(ISurfaceComposer, data, reply);
+            DisplayID dpy = data.readInt32();
+            uint32_t reqWidth = data.readInt32();
+            uint32_t reqHeight = data.readInt32();
+            sp<IMemoryHeap> heap;
+            uint32_t w, h;
+            PixelFormat f;
+            status_t res = captureScreen(dpy, &heap, &w, &h, &f,
+                    reqWidth, reqHeight);
+            reply->writeStrongBinder(heap->asBinder());
+            reply->writeInt32(w);
+            reply->writeInt32(h);
+            reply->writeInt32(f);
+            reply->writeInt32(res);
+        } break;
+        case TURN_ELECTRON_BEAM_OFF: {
+            CHECK_INTERFACE(ISurfaceComposer, data, reply);
+            int32_t mode = data.readInt32();
+            status_t res = turnElectronBeamOff(mode);
+            reply->writeInt32(res);
+        }
+        case TURN_ELECTRON_BEAM_ON: {
+            CHECK_INTERFACE(ISurfaceComposer, data, reply);
+            int32_t mode = data.readInt32();
+            status_t res = turnElectronBeamOn(mode);
+            reply->writeInt32(res);
+        }
         default:
             return BBinder::onTransact(code, data, reply, flags);
     }

@@ -301,8 +301,9 @@ void String8::setTo(const String8& other)
 
 status_t String8::setTo(const char* other)
 {
+    const char *newString = allocFromUTF8(other, strlen(other));
     SharedBuffer::bufferFromData(mString)->release();
-    mString = allocFromUTF8(other, strlen(other));
+    mString = newString;
     if (mString) return NO_ERROR;
 
     mString = getEmptyString();
@@ -311,8 +312,9 @@ status_t String8::setTo(const char* other)
 
 status_t String8::setTo(const char* other, size_t len)
 {
+    const char *newString = allocFromUTF8(other, len);
     SharedBuffer::bufferFromData(mString)->release();
-    mString = allocFromUTF8(other, len);
+    mString = newString;
     if (mString) return NO_ERROR;
 
     mString = getEmptyString();
@@ -321,8 +323,9 @@ status_t String8::setTo(const char* other, size_t len)
 
 status_t String8::setTo(const char16_t* other, size_t len)
 {
+    const char *newString = allocFromUTF16(other, len);
     SharedBuffer::bufferFromData(mString)->release();
-    mString = allocFromUTF16(other, len);
+    mString = newString;
     if (mString) return NO_ERROR;
 
     mString = getEmptyString();
@@ -331,8 +334,9 @@ status_t String8::setTo(const char16_t* other, size_t len)
 
 status_t String8::setTo(const char32_t* other, size_t len)
 {
+    const char *newString = allocFromUTF32(other, len);
     SharedBuffer::bufferFromData(mString)->release();
-    mString = allocFromUTF32(other, len);
+    mString = newString;
     if (mString) return NO_ERROR;
 
     mString = getEmptyString();
@@ -366,6 +370,27 @@ status_t String8::append(const char* other, size_t otherLen)
     }
 
     return real_append(other, otherLen);
+}
+
+status_t String8::appendFormat(const char* fmt, ...)
+{
+    va_list ap;
+    va_start(ap, fmt);
+
+    int result = NO_ERROR;
+    int n = vsnprintf(NULL, 0, fmt, ap);
+    if (n != 0) {
+        size_t oldLength = length();
+        char* buf = lockBuffer(oldLength + n);
+        if (buf) {
+            vsnprintf(buf + oldLength, n + 1, fmt, ap);
+        } else {
+            result = NO_MEMORY;
+        }
+    }
+
+    va_end(ap);
+    return result;
 }
 
 status_t String8::real_append(const char* other, size_t otherLen)
@@ -407,15 +432,16 @@ status_t String8::unlockBuffer(size_t size)
     if (size != this->size()) {
         SharedBuffer* buf = SharedBuffer::bufferFromData(mString)
             ->editResize(size+1);
-        if (buf) {
-            char* str = (char*)buf->data();
-            str[size] = 0;
-            mString = str;
-            return NO_ERROR;
+        if (! buf) {
+            return NO_MEMORY;
         }
+
+        char* str = (char*)buf->data();
+        str[size] = 0;
+        mString = str;
     }
-    
-    return NO_MEMORY;
+
+    return NO_ERROR;
 }
 
 ssize_t String8::find(const char* other, size_t start) const

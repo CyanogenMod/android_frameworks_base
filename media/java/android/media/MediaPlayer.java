@@ -133,7 +133,7 @@ import java.lang.ref.WeakReference;
  *         <li>It is good programming practice to have your application
  *         register a OnErrorListener to look out for error notifications from
  *         the internal player engine.</li>
- *         <li>IlleglStateException is
+ *         <li>IllegalStateException is
  *         thrown to prevent programming errors such as calling {@link #prepare()},
  *         {@link #prepareAsync()}, or one of the overloaded <code>setDataSource
  *         </code> methods in an invalid state. </li>
@@ -273,6 +273,16 @@ import java.lang.ref.WeakReference;
  *     <td>Valid Sates </p></td>
  *     <td>Invalid States </p></td>
  *     <td>Comments </p></td></tr>
+ * <tr><td>attachAuxEffect </p></td>
+ *     <td>{Initialized, Prepared, Started, Paused, Stopped, PlaybackCompleted} </p></td>
+ *     <td>{Idle, Error} </p></td>
+ *     <td>This method must be called after setDataSource.
+ *     Calling it does not change the object state. </p></td></tr>
+ * <tr><td>getAudioSessionId </p></td>
+ *     <td>any </p></td>
+ *     <td>{} </p></td>
+ *     <td>This method can be called in any state and calling it does not change
+ *         the object state. </p></td></tr>
  * <tr><td>getCurrentPosition </p></td>
  *     <td>{Idle, Initialized, Prepared, Started, Paused, Stopped,
  *         PlaybackCompleted} </p></td>
@@ -340,6 +350,12 @@ import java.lang.ref.WeakReference;
  *     <td>Successful invoke of this method in a valid state does not change
  *         the state. Calling this method in an invalid state transfers the
  *         object to the <em>Error</em> state. </p></td></tr>
+ * <tr><td>setAudioSessionId </p></td>
+ *     <td>{Idle} </p></td>
+ *     <td>{Initialized, Prepared, Started, Paused, Stopped, PlaybackCompleted,
+ *          Error} </p></td>
+ *     <td>This method must be called in idle state as the audio session ID must be known before
+ *         calling setDataSource. Calling it does not change the object state. </p></td></tr>
  * <tr><td>setAudioStreamType </p></td>
  *     <td>{Idle, Initialized, Stopped, Prepared, Started, Paused,
  *          PlaybackCompleted}</p></td>
@@ -347,6 +363,10 @@ import java.lang.ref.WeakReference;
  *     <td>Successful invoke of this method does not change the state. In order for the
  *         target audio stream type to become effective, this method must be called before
  *         prepare() or prepareAsync().</p></td></tr>
+ * <tr><td>setAuxEffectSendLevel </p></td>
+ *     <td>any</p></td>
+ *     <td>{} </p></td>
+ *     <td>Calling this method does not change the object state. </p></td></tr>
  * <tr><td>setDataSource </p></td>
  *     <td>{Idle} </p></td>
  *     <td>{Initialized, Prepared, Started, Paused, Stopped, PlaybackCompleted,
@@ -423,6 +443,7 @@ import java.lang.ref.WeakReference;
  *     <td>Successful invoke of this method in a valid state transfers the
  *         object to the <em>Stopped</em> state. Calling this method in an
  *         invalid state transfers the object to the <em>Error</em> state.</p></td></tr>
+ *
  * </table>
  *
  * <a name="Permissions"></a>
@@ -1159,6 +1180,62 @@ public class MediaPlayer
     public native Bitmap getFrameAt(int msec) throws IllegalStateException;
 
     /**
+     * Sets the audio session ID.
+     *
+     * @param sessionId the audio session ID.
+     * The audio session ID is a system wide unique identifier for the audio stream played by
+     * this MediaPlayer instance.
+     * The primary use of the audio session ID  is to associate audio effects to a particular
+     * instance of MediaPlayer: if an audio session ID is provided when creating an audio effect,
+     * this effect will be applied only to the audio content of media players within the same
+     * audio session and not to the output mix.
+     * When created, a MediaPlayer instance automatically generates its own audio session ID.
+     * However, it is possible to force this player to be part of an already existing audio session
+     * by calling this method.
+     * This method must be called before one of the overloaded <code> setDataSource </code> methods.
+     * @throws IllegalStateException if it is called in an invalid state
+     */
+    public native void setAudioSessionId(int sessionId)  throws IllegalArgumentException, IllegalStateException;
+
+    /**
+     * Returns the audio session ID.
+     *
+     * @return the audio session ID. {@see #setAudioSessionId(int)}
+     * Note that the audio session ID is 0 only if a problem occured when the MediaPlayer was contructed.
+     */
+    public native int getAudioSessionId();
+
+    /**
+     * Attaches an auxiliary effect to the player. A typical auxiliary effect is a reverberation
+     * effect which can be applied on any sound source that directs a certain amount of its
+     * energy to this effect. This amount is defined by setAuxEffectSendLevel().
+     * {@see #setAuxEffectSendLevel(float)}.
+     * <p>After creating an auxiliary effect (e.g.
+     * {@link android.media.audiofx.EnvironmentalReverb}), retrieve its ID with
+     * {@link android.media.audiofx.AudioEffect#getId()} and use it when calling this method
+     * to attach the player to the effect.
+     * <p>To detach the effect from the player, call this method with a null effect id.
+     * <p>This method must be called after one of the overloaded <code> setDataSource </code>
+     * methods.
+     * @param effectId system wide unique id of the effect to attach
+     */
+    public native void attachAuxEffect(int effectId);
+
+    /**
+     * Sets the send level of the player to the attached auxiliary effect
+     * {@see #attachAuxEffect(int)}. The level value range is 0 to 1.0.
+     * <p>By default the send level is 0, so even if an effect is attached to the player
+     * this method must be called for the effect to be applied.
+     * <p>Note that the passed level value is a raw scalar. UI controls should be scaled
+     * logarithmically: the gain applied by audio framework ranges from -72dB to 0dB,
+     * so an appropriate conversion from linear UI input x to level is:
+     * x == 0 -> level = 0
+     * 0 < x <= R -> level = 10^(72*(x-R)/20/R)
+     * @param level send level scalar
+     */
+    public native void setAuxEffectSendLevel(float level);
+
+    /**
      * @param request Parcel destinated to the media player. The
      *                Interface token must be set to the IMediaPlayer
      *                one to be routed correctly through the system.
@@ -1523,6 +1600,15 @@ public class MediaPlayer
      */
     public static final int MEDIA_INFO_VIDEO_TRACK_LAGGING = 700;
 
+    /** MediaPlayer is temporarily pausing playback internally in order to
+     * buffer more data.
+     */
+    public static final int MEDIA_INFO_BUFFERING_START = 701;
+
+    /** MediaPlayer is resuming playback after filling buffers.
+     */
+    public static final int MEDIA_INFO_BUFFERING_END = 702;
+
     /** Bad interleaving means that a media has been improperly interleaved or
      * not interleaved at all, e.g has all the video samples first then all the
      * audio ones. Video is playing but a lot of disk seeks may be happening.
@@ -1579,8 +1665,4 @@ public class MediaPlayer
 
     private OnInfoListener mOnInfoListener;
 
-    /**
-     * @hide
-     */
-    public native static int snoop(short [] outData, int kind);
 }

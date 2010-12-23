@@ -19,9 +19,9 @@ package android.core;
 import junit.framework.TestCase;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.harmony.xnet.provider.jsse.SSLContextImpl;
-import org.apache.harmony.xnet.provider.jsse.SSLClientSessionCache;
 import org.apache.harmony.xnet.provider.jsse.FileClientSessionCache;
+import org.apache.harmony.xnet.provider.jsse.OpenSSLContextImpl;
+import org.apache.harmony.xnet.provider.jsse.SSLClientSessionCache;
 
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -907,11 +907,12 @@ public class SSLSocketTest extends TestCase {
      */
     public void testClientSessionCaching() throws IOException,
             KeyManagementException {
-        SSLContextImpl context = new SSLContextImpl();
+        OpenSSLContextImpl context = new OpenSSLContextImpl();
 
         // Cache size = 2.
         FakeClientSessionCache fakeCache = new FakeClientSessionCache();
-        context.engineInit(null, null, null, fakeCache, null);
+        context.engineInit(null, null, null);
+        context.engineGetClientSessionContext().setPersistentCache(fakeCache);
         SSLSocketFactory socketFactory = context.engineGetSocketFactory();
         context.engineGetClientSessionContext().setSessionCacheSize(2);
         makeRequests(socketFactory);
@@ -933,7 +934,8 @@ public class SSLSocketTest extends TestCase {
 
         // Cache size = 3.
         fakeCache = new FakeClientSessionCache();
-        context.engineInit(null, null, null, fakeCache, null);
+        context.engineInit(null, null, null);
+        context.engineGetClientSessionContext().setPersistentCache(fakeCache);
         socketFactory = context.engineGetSocketFactory();
         context.engineGetClientSessionContext().setSessionCacheSize(3);
         makeRequests(socketFactory);
@@ -952,7 +954,8 @@ public class SSLSocketTest extends TestCase {
 
         // Cache size = 4.
         fakeCache = new FakeClientSessionCache();
-        context.engineInit(null, null, null, fakeCache, null);
+        context.engineInit(null, null, null);
+        context.engineGetClientSessionContext().setPersistentCache(fakeCache);
         socketFactory = context.engineGetSocketFactory();
         context.engineGetClientSessionContext().setSessionCacheSize(4);
         makeRequests(socketFactory);
@@ -997,7 +1000,7 @@ public class SSLSocketTest extends TestCase {
 
     public void testFileBasedClientSessionCache() throws IOException,
             KeyManagementException {
-        SSLContextImpl context = new SSLContextImpl();
+        OpenSSLContextImpl context = new OpenSSLContextImpl();
         String tmpDir = System.getProperty("java.io.tmpdir");
         if (tmpDir == null) {
             fail("Please set 'java.io.tmpdir' system property.");
@@ -1010,7 +1013,8 @@ public class SSLSocketTest extends TestCase {
         try {
             ClientSessionCacheProxy cacheProxy
                     = new ClientSessionCacheProxy(fileCache);
-            context.engineInit(null, null, null, cacheProxy, null);
+            context.engineInit(null, null, null);
+            context.engineGetClientSessionContext().setPersistentCache(cacheProxy);
             SSLSocketFactory socketFactory = context.engineGetSocketFactory();
             context.engineGetClientSessionContext().setSessionCacheSize(1);
             makeRequests(socketFactory);
@@ -1033,7 +1037,8 @@ public class SSLSocketTest extends TestCase {
             // Try again now that file-based cache is populated.
             fileCache = FileClientSessionCache.usingDirectory(cacheDir);
             cacheProxy = new ClientSessionCacheProxy(fileCache);
-            context.engineInit(null, null, null, cacheProxy, null);
+            context.engineInit(null, null, null);
+            context.engineGetClientSessionContext().setPersistentCache(cacheProxy);
             socketFactory = context.engineGetSocketFactory();
             context.engineGetClientSessionContext().setSessionCacheSize(1);
             makeRequests(socketFactory);

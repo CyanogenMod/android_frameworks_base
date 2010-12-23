@@ -28,6 +28,8 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothClass;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothHeadset;
+import android.bluetooth.BluetoothDeviceProfileState;
+import android.bluetooth.BluetoothProfileState;
 import android.bluetooth.BluetoothSocket;
 import android.bluetooth.BluetoothUuid;
 import android.bluetooth.IBluetooth;
@@ -48,6 +50,7 @@ import android.os.ServiceManager;
 import android.os.SystemService;
 import android.provider.Settings;
 import android.util.Log;
+import android.util.Pair;
 
 import com.android.internal.app.IBatteryStats;
 
@@ -101,6 +104,14 @@ public class BluetoothService extends IBluetooth.Stub {
     private static final int MESSAGE_FINISH_DISABLE = 2;
     private static final int MESSAGE_UUID_INTENT = 3;
     private static final int MESSAGE_DISCOVERABLE_TIMEOUT = 4;
+    private static final int MESSAGE_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY = 5;
+
+    // The time (in millisecs) to delay the pairing attempt after the first
+    // auto pairing attempt fails. We use an exponential delay with
+    // INIT_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY as the initial value and
+    // MAX_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY as the max value.
+    private static final long INIT_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY = 3000;
+    private static final long MAX_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY = 12000;
 
     // The timeout used to sent the UUIDs Intent
     // This timeout should be greater than the page timeout
@@ -112,7 +123,7 @@ public class BluetoothService extends IBluetooth.Stub {
             BluetoothUuid.HSP,
             BluetoothUuid.ObexObjectPush };
 
-
+    // TODO(): Optimize all these string handling
     private final Map<String, String> mAdapterProperties;
     private final HashMap<String, Map<String, String>> mDeviceProperties;
 
@@ -121,6 +132,13 @@ public class BluetoothService extends IBluetooth.Stub {
     private final HashMap<RemoteService, IBluetoothCallback> mUuidCallbackTracker;
 
     private final HashMap<Integer, Integer> mServiceRecordToPid;
+
+    private final HashMap<String, BluetoothDeviceProfileState> mDeviceProfileState;
+    private final BluetoothProfileState mA2dpProfileState;
+    private final BluetoothProfileState mHfpProfileState;
+
+    private BluetoothA2dpService mA2dpService;
+    private final HashMap<String, Pair<byte[], byte[]>> mDeviceOobData;
 
     private static String mDockAddress;
     private String mDockPin;
@@ -176,9 +194,16 @@ public class BluetoothService extends IBluetooth.Stub {
         mDeviceProperties = new HashMap<String, Map<String,String>>();
 
         mDeviceServiceChannelCache = new HashMap<String, Map<ParcelUuid, Integer>>();
+        mDeviceOobData = new HashMap<String, Pair<byte[], byte[]>>();
         mUuidIntentTracker = new ArrayList<String>();
         mUuidCallbackTracker = new HashMap<RemoteService, IBluetoothCallback>();
         mServiceRecordToPid = new HashMap<Integer, Integer>();
+        mDeviceProfileState = new HashMap<String, BluetoothDeviceProfileState>();
+        mA2dpProfileState = new BluetoothProfileState(mContext, BluetoothProfileState.A2DP);
+        mHfpProfileState = new BluetoothProfileState(mContext, BluetoothProfileState.HFP);
+
+        mHfpProfileState.start();
+        mA2dpProfileState.start();
 
         IntentFilter filter = new IntentFilter();
         registerForAirplaneMode(filter);
@@ -187,7 +212,7 @@ public class BluetoothService extends IBluetooth.Stub {
         mContext.registerReceiver(mReceiver, filter);
     }
 
-     public static synchronized String readDockBluetoothAddress() {
+    public static synchronized String readDockBluetoothAddress() {
         if (mDockAddress != null) return mDockAddress;
 
         BufferedInputStream file = null;
@@ -439,7 +464,7 @@ public class BluetoothService extends IBluetooth.Stub {
                 // forked multiple times in a row, probably because there is
                 // some race in sdptool or bluez when operated in parallel.
                 // As a workaround, delay 500ms between each fork of sdptool.
-                // TODO: Don't fork sdptool in order to regsiter service
+                // TODO: Don't fork sdptool in order to register service
                 // records, use a DBUS call instead.
                 switch (msg.arg1) {
                 case 1:
@@ -483,6 +508,13 @@ public class BluetoothService extends IBluetooth.Stub {
                     // This is ok for now, because we only use
                     // CONNECTABLE and CONNECTABLE_DISCOVERABLE
                     setScanMode(BluetoothAdapter.SCAN_MODE_CONNECTABLE, -1);
+                }
+                break;
+            case MESSAGE_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY:
+                address = (String)msg.obj;
+                if (address != null) {
+                    createBond(address);
+                    return;
                 }
                 break;
             }
@@ -534,6 +566,7 @@ public class BluetoothService extends IBluetooth.Stub {
                 mIsDiscovering = false;
                 mBondState.readAutoPairingData();
                 mBondState.loadBondState();
+                initProfileState();
                 mHandler.sendMessageDelayed(
                         mHandler.obtainMessage(MESSAGE_REGISTER_SDP_RECORDS, 1, -1), 3000);
 
@@ -573,14 +606,74 @@ public class BluetoothService extends IBluetooth.Stub {
         Binder.restoreCallingIdentity(origCallerIdentityToken);
     }
 
-    /* package */ BondState getBondState() {
-        return mBondState;
+    /*package*/ synchronized boolean attemptAutoPair(String address) {
+        if (!mBondState.hasAutoPairingFailed(address) &&
+                !mBondState.isAutoPairingBlacklisted(address)) {
+            mBondState.attempt(address);
+            setPin(address, BluetoothDevice.convertPinToBytes("0000"));
+            return true;
+        }
+        return false;
+    }
+
+    /*package*/ synchronized void onCreatePairedDeviceResult(String address, int result) {
+        if (result == BluetoothDevice.BOND_SUCCESS) {
+            setBondState(address, BluetoothDevice.BOND_BONDED);
+            if (mBondState.isAutoPairingAttemptsInProgress(address)) {
+                mBondState.clearPinAttempts(address);
+            }
+        } else if (result == BluetoothDevice.UNBOND_REASON_AUTH_FAILED &&
+                mBondState.getAttempt(address) == 1) {
+            mBondState.addAutoPairingFailure(address);
+            pairingAttempt(address, result);
+        } else if (result == BluetoothDevice.UNBOND_REASON_REMOTE_DEVICE_DOWN &&
+              mBondState.isAutoPairingAttemptsInProgress(address)) {
+            pairingAttempt(address, result);
+        } else {
+            setBondState(address, BluetoothDevice.BOND_NONE, result);
+            if (mBondState.isAutoPairingAttemptsInProgress(address)) {
+                mBondState.clearPinAttempts(address);
+            }
+        }
+    }
+
+    /*package*/ synchronized String getPendingOutgoingBonding() {
+        return mBondState.getPendingOutgoingBonding();
+    }
+
+    private void pairingAttempt(String address, int result) {
+        // This happens when our initial guess of "0000" as the pass key
+        // fails. Try to create the bond again and display the pin dialog
+        // to the user. Use back-off while posting the delayed
+        // message. The initial value is
+        // INIT_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY and the max value is
+        // MAX_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY. If the max value is
+        // reached, display an error to the user.
+        int attempt = mBondState.getAttempt(address);
+        if (attempt * INIT_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY >
+                    MAX_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY) {
+            mBondState.clearPinAttempts(address);
+            setBondState(address, BluetoothDevice.BOND_NONE, result);
+            return;
+        }
+
+        Message message = mHandler.obtainMessage(MESSAGE_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY);
+        message.obj = address;
+        boolean postResult =  mHandler.sendMessageDelayed(message,
+                                        attempt * INIT_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY);
+        if (!postResult) {
+            mBondState.clearPinAttempts(address);
+            setBondState(address,
+                    BluetoothDevice.BOND_NONE, result);
+            return;
+        }
+        mBondState.attempt(address);
     }
 
     /** local cache of bonding state.
     /* we keep our own state to track the intermediate state BONDING, which
     /* bluez does not track.
-     * All addreses must be passed in upper case.
+     * All addresses must be passed in upper case.
      */
     public class BondState {
         private final HashMap<String, Integer> mState = new HashMap<String, Integer>();
@@ -646,6 +739,12 @@ public class BluetoothService extends IBluetooth.Stub {
                 if (address.equals(mPendingOutgoingBonding)) {
                     mPendingOutgoingBonding = null;
                 }
+            }
+
+            if (state == BluetoothDevice.BOND_BONDED) {
+                addProfileState(address);
+            } else if (state == BluetoothDevice.BOND_NONE) {
+                removeProfileState(address);
             }
 
             if (DBG) log(address + " bond state " + oldState + " -> " + state + " (" +
@@ -833,7 +932,7 @@ public class BluetoothService extends IBluetooth.Stub {
             }
         }
 
-        // This function adds a bluetooth address to the auto pairing blacklis
+        // This function adds a bluetooth address to the auto pairing blacklist
         // file. These addresses are added to DynamicAddressBlacklistSection
         private void updateAutoPairingData(String address) {
             BufferedWriter out = null;
@@ -899,7 +998,7 @@ public class BluetoothService extends IBluetooth.Stub {
                 Log.e(TAG, "Error:Adapter Property at index" + i + "is null");
                 continue;
             }
-            if (name.equals("Devices")) {
+            if (name.equals("Devices") || name.equals("UUIDs")) {
                 StringBuilder str = new StringBuilder();
                 len = Integer.valueOf(properties[++i]);
                 for (int j = 0; j < len; j++) {
@@ -963,7 +1062,7 @@ public class BluetoothService extends IBluetooth.Stub {
      * a device discoverable; you need to call setMode() to make the device
      * explicitly discoverable.
      *
-     * @param timeout_s The discoverable timeout in seconds.
+     * @param timeout The discoverable timeout in seconds.
      */
     public synchronized boolean setDiscoverableTimeout(int timeout) {
         mContext.enforceCallingOrSelfPermission(BLUETOOTH_ADMIN_PERM,
@@ -1099,7 +1198,7 @@ public class BluetoothService extends IBluetooth.Stub {
         mIsDiscovering = isDiscovering;
     }
 
-    public synchronized boolean createBond(String address) {
+    private boolean isBondingFeasible(String address) {
         mContext.enforceCallingOrSelfPermission(BLUETOOTH_ADMIN_PERM,
                                                 "Need BLUETOOTH_ADMIN permission");
         if (!isEnabledInternal()) return false;
@@ -1129,8 +1228,13 @@ public class BluetoothService extends IBluetooth.Stub {
                 return false;
             }
         }
+        return true;
+    }
 
-        if (!createPairedDeviceNative(address, 60000 /* 1 minute */)) {
+    public synchronized boolean createBond(String address) {
+        if (!isBondingFeasible(address)) return false;
+
+        if (!createPairedDeviceNative(address, 60000  /*1 minute*/ )) {
             return false;
         }
 
@@ -1138,6 +1242,51 @@ public class BluetoothService extends IBluetooth.Stub {
         mBondState.setBondState(address, BluetoothDevice.BOND_BONDING);
 
         return true;
+    }
+
+    public synchronized boolean createBondOutOfBand(String address, byte[] hash,
+                                                    byte[] randomizer) {
+        if (!isBondingFeasible(address)) return false;
+
+        if (!createPairedDeviceOutOfBandNative(address, 60000 /* 1 minute */)) {
+            return false;
+        }
+
+        setDeviceOutOfBandData(address, hash, randomizer);
+        mBondState.setPendingOutgoingBonding(address);
+        mBondState.setBondState(address, BluetoothDevice.BOND_BONDING);
+
+        return true;
+    }
+
+    public synchronized boolean setDeviceOutOfBandData(String address, byte[] hash,
+            byte[] randomizer) {
+        mContext.enforceCallingOrSelfPermission(BLUETOOTH_ADMIN_PERM,
+                                                "Need BLUETOOTH_ADMIN permission");
+        if (!isEnabledInternal()) return false;
+
+        Pair <byte[], byte[]> value = new Pair<byte[], byte[]>(hash, randomizer);
+
+        if (DBG) {
+            log("Setting out of band data for:" + address + ":" +
+              Arrays.toString(hash) + ":" + Arrays.toString(randomizer));
+        }
+
+        mDeviceOobData.put(address, value);
+        return true;
+    }
+
+    Pair<byte[], byte[]> getDeviceOutOfBandData(BluetoothDevice device) {
+        return mDeviceOobData.get(device.getAddress());
+    }
+
+
+    public synchronized byte[] readOutOfBandData() {
+        mContext.enforceCallingOrSelfPermission(BLUETOOTH_PERM,
+                                                "Need BLUETOOTH permission");
+        if (!isEnabledInternal()) return null;
+
+        return readAdapterOutOfBandDataNative();
     }
 
     public synchronized boolean cancelBondProcess(String address) {
@@ -1167,6 +1316,16 @@ public class BluetoothService extends IBluetooth.Stub {
         if (!BluetoothAdapter.checkBluetoothAddress(address)) {
             return false;
         }
+        BluetoothDeviceProfileState state = mDeviceProfileState.get(address);
+        if (state != null) {
+            state.sendMessage(BluetoothDeviceProfileState.UNPAIR);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public synchronized boolean removeBondInternal(String address) {
         return removeDeviceNative(getObjectPathFromAddress(address));
     }
 
@@ -1175,12 +1334,25 @@ public class BluetoothService extends IBluetooth.Stub {
         return mBondState.listInState(BluetoothDevice.BOND_BONDED);
     }
 
+    /*package*/ synchronized String[] listInState(int state) {
+      return mBondState.listInState(state);
+    }
+
     public synchronized int getBondState(String address) {
         mContext.enforceCallingOrSelfPermission(BLUETOOTH_PERM, "Need BLUETOOTH permission");
         if (!BluetoothAdapter.checkBluetoothAddress(address)) {
             return BluetoothDevice.ERROR;
         }
         return mBondState.getBondState(address.toUpperCase());
+    }
+
+    /*package*/ synchronized boolean setBondState(String address, int state) {
+        return setBondState(address, state, 0);
+    }
+
+    /*package*/ synchronized boolean setBondState(String address, int state, int reason) {
+        mBondState.setBondState(address.toUpperCase(), state);
+        return true;
     }
 
     public synchronized boolean isBluetoothDock(String address) {
@@ -1521,6 +1693,32 @@ public class BluetoothService extends IBluetooth.Stub {
         return setPairingConfirmationNative(address, confirm, data.intValue());
     }
 
+    public synchronized boolean setRemoteOutOfBandData(String address) {
+        mContext.enforceCallingOrSelfPermission(BLUETOOTH_ADMIN_PERM,
+                                                "Need BLUETOOTH_ADMIN permission");
+        if (!isEnabledInternal()) return false;
+        address = address.toUpperCase();
+        Integer data = mEventLoop.getPasskeyAgentRequestData().remove(address);
+        if (data == null) {
+            Log.w(TAG, "setRemoteOobData(" + address + ") called but no native data available, " +
+                  "ignoring. Maybe the PasskeyAgent Request was cancelled by the remote device" +
+                  " or by bluez.\n");
+            return false;
+        }
+
+        Pair<byte[], byte[]> val = mDeviceOobData.get(address);
+        byte[] hash, randomizer;
+        if (val == null) {
+            // TODO: check what should be passed in this case.
+            hash = new byte[16];
+            randomizer = new byte[16];
+        } else {
+            hash = val.first;
+            randomizer = val.second;
+        }
+        return setRemoteOutOfBandDataNative(address, hash, randomizer, data.intValue());
+    }
+
     public synchronized boolean cancelPairingUserInput(String address) {
         mContext.enforceCallingOrSelfPermission(BLUETOOTH_ADMIN_PERM,
                                                 "Need BLUETOOTH_ADMIN permission");
@@ -1707,7 +1905,7 @@ public class BluetoothService extends IBluetooth.Stub {
                         mContext.getSharedPreferences(SHARED_PREFERENCES_NAME,
                                 mContext.MODE_PRIVATE).edit();
                     editor.putBoolean(SHARED_PREFERENCE_DOCK_ADDRESS + mDockAddress, true);
-                    editor.commit();
+                    editor.apply();
                 }
             }
         }
@@ -1836,7 +2034,7 @@ public class BluetoothService extends IBluetooth.Stub {
         // Rather not do this from here, but no-where else and I need this
         // dump
         pw.println("\n--Headset Service--");
-        switch (headset.getState()) {
+        switch (headset.getState(headset.getCurrentHeadset())) {
         case BluetoothHeadset.STATE_DISCONNECTED:
             pw.println("getState() = STATE_DISCONNECTED");
             break;
@@ -1885,12 +2083,12 @@ public class BluetoothService extends IBluetooth.Stub {
     /*package*/ String getAddressFromObjectPath(String objectPath) {
         String adapterObjectPath = getPropertyInternal("ObjectPath");
         if (adapterObjectPath == null || objectPath == null) {
-            Log.e(TAG, "getAddressFromObjectPath: AdpaterObjectPath:" + adapterObjectPath +
+            Log.e(TAG, "getAddressFromObjectPath: AdapterObjectPath:" + adapterObjectPath +
                     "  or deviceObjectPath:" + objectPath + " is null");
             return null;
         }
         if (!objectPath.startsWith(adapterObjectPath)) {
-            Log.e(TAG, "getAddressFromObjectPath: AdpaterObjectPath:" + adapterObjectPath +
+            Log.e(TAG, "getAddressFromObjectPath: AdapterObjectPath:" + adapterObjectPath +
                     "  is not a prefix of deviceObjectPath:" + objectPath +
                     "bluetoothd crashed ?");
             return null;
@@ -1919,6 +2117,126 @@ public class BluetoothService extends IBluetooth.Stub {
         if (!result) log("Set Link Timeout to:" + num_slots + " slots failed");
     }
 
+    public boolean connectHeadset(String address) {
+        BluetoothDeviceProfileState state = mDeviceProfileState.get(address);
+        if (state != null) {
+            Message msg = new Message();
+            msg.arg1 = BluetoothDeviceProfileState.CONNECT_HFP_OUTGOING;
+            msg.obj = state;
+            mHfpProfileState.sendMessage(msg);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean disconnectHeadset(String address) {
+        BluetoothDeviceProfileState state = mDeviceProfileState.get(address);
+        if (state != null) {
+            Message msg = new Message();
+            msg.arg1 = BluetoothDeviceProfileState.DISCONNECT_HFP_OUTGOING;
+            msg.obj = state;
+            mHfpProfileState.sendMessage(msg);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean connectSink(String address) {
+        BluetoothDeviceProfileState state = mDeviceProfileState.get(address);
+        if (state != null) {
+            Message msg = new Message();
+            msg.arg1 = BluetoothDeviceProfileState.CONNECT_A2DP_OUTGOING;
+            msg.obj = state;
+            mA2dpProfileState.sendMessage(msg);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean disconnectSink(String address) {
+        BluetoothDeviceProfileState state = mDeviceProfileState.get(address);
+        if (state != null) {
+            Message msg = new Message();
+            msg.arg1 = BluetoothDeviceProfileState.DISCONNECT_A2DP_OUTGOING;
+            msg.obj = state;
+            mA2dpProfileState.sendMessage(msg);
+            return true;
+        }
+        return false;
+    }
+
+    private BluetoothDeviceProfileState addProfileState(String address) {
+        BluetoothDeviceProfileState state = mDeviceProfileState.get(address);
+        if (state != null) return state;
+
+        state = new BluetoothDeviceProfileState(mContext, address, this, mA2dpService);
+        mDeviceProfileState.put(address, state);
+        state.start();
+        return state;
+    }
+
+    private void removeProfileState(String address) {
+        mDeviceProfileState.remove(address);
+    }
+
+    private void initProfileState() {
+        String []bonds = null;
+        String val = getPropertyInternal("Devices");
+        if (val != null) {
+            bonds = val.split(",");
+        }
+        if (bonds == null) {
+            return;
+        }
+
+        for (String path : bonds) {
+            String address = getAddressFromObjectPath(path);
+            BluetoothDeviceProfileState state = addProfileState(address);
+            // Allow 8 secs for SDP records to get registered.
+            Message msg = new Message();
+            msg.what = BluetoothDeviceProfileState.AUTO_CONNECT_PROFILES;
+            state.sendMessageDelayed(msg, 8000);
+        }
+    }
+
+    public boolean notifyIncomingConnection(String address) {
+        BluetoothDeviceProfileState state =
+             mDeviceProfileState.get(address);
+        if (state != null) {
+            Message msg = new Message();
+            msg.what = BluetoothDeviceProfileState.CONNECT_HFP_INCOMING;
+            state.sendMessage(msg);
+            return true;
+        }
+        return false;
+    }
+
+    /*package*/ boolean notifyIncomingA2dpConnection(String address) {
+       BluetoothDeviceProfileState state =
+            mDeviceProfileState.get(address);
+       if (state != null) {
+           Message msg = new Message();
+           msg.what = BluetoothDeviceProfileState.CONNECT_A2DP_INCOMING;
+           state.sendMessage(msg);
+           return true;
+       }
+       return false;
+    }
+
+    /*package*/ void setA2dpService(BluetoothA2dpService a2dpService) {
+        mA2dpService = a2dpService;
+    }
+
+    public void sendProfileStateMessage(int profile, int cmd) {
+        Message msg = new Message();
+        msg.what = cmd;
+        if (profile == BluetoothProfileState.HFP) {
+            mHfpProfileState.sendMessage(msg);
+        } else if (profile == BluetoothProfileState.A2DP) {
+            mA2dpProfileState.sendMessage(msg);
+        }
+    }
+
     private static void log(String msg) {
         Log.d(TAG, msg);
     }
@@ -1944,6 +2262,9 @@ public class BluetoothService extends IBluetooth.Stub {
     private native boolean stopDiscoveryNative();
 
     private native boolean createPairedDeviceNative(String address, int timeout_ms);
+    private native boolean createPairedDeviceOutOfBandNative(String address, int timeout_ms);
+    private native byte[] readAdapterOutOfBandDataNative();
+
     private native boolean cancelDeviceCreationNative(String address);
     private native boolean removeDeviceNative(String objectPath);
     private native int getDeviceServiceChannelNative(String objectPath, String uuid,
@@ -1954,6 +2275,9 @@ public class BluetoothService extends IBluetooth.Stub {
     private native boolean setPasskeyNative(String address, int passkey, int nativeData);
     private native boolean setPairingConfirmationNative(String address, boolean confirm,
             int nativeData);
+    private native boolean setRemoteOutOfBandDataNative(String address, byte[] hash,
+                                                        byte[] randomizer, int nativeData);
+
     private native boolean setDevicePropertyBooleanNative(String objectPath, String key,
             int value);
     private native boolean createDeviceNative(String address);

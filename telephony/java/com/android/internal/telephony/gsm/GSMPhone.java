@@ -67,6 +67,7 @@ import com.android.internal.telephony.PhoneNotifier;
 import com.android.internal.telephony.PhoneProxy;
 import com.android.internal.telephony.PhoneSubInfo;
 import com.android.internal.telephony.TelephonyProperties;
+import com.android.internal.telephony.UUSInfo;
 import com.android.internal.telephony.gsm.stk.StkService;
 import com.android.internal.telephony.test.SimulatedRadioControl;
 import com.android.internal.telephony.IccVmNotSupportedException;
@@ -116,10 +117,6 @@ public class GSMPhone extends PhoneBase {
     Thread debugPortThread;
     ServerSocket debugSocket;
 
-    private int mReportedRadioResets;
-    private int mReportedAttemptedConnects;
-    private int mReportedSuccessfulConnects;
-
     private String mImei;
     private String mImeiSv;
     private String mVmNumber;
@@ -150,7 +147,7 @@ public class GSMPhone extends PhoneBase {
         mSimCard = new SimCard(this);
         if (!unitTestMode) {
             mSimPhoneBookIntManager = new SimPhoneBookInterfaceManager(this);
-            mSimSmsIntManager = new SimSmsInterfaceManager(this);
+            mSimSmsIntManager = new SimSmsInterfaceManager(this, mSMS);
             mSubInfo = new PhoneSubInfo(this);
         }
         mStkService = StkService.getInstance(mCM, mSIMRecords, mContext,
@@ -711,7 +708,12 @@ public class GSMPhone extends PhoneBase {
     }
 
     public Connection
-    dial (String dialString) throws CallStateException {
+    dial(String dialString) throws CallStateException {
+        return dial(dialString, null);
+    }
+
+    public Connection
+    dial (String dialString, UUSInfo uusInfo) throws CallStateException {
         // Need to make sure dialString gets parsed properly
         String newDialString = PhoneNumberUtils.stripSeparators(dialString);
 
@@ -727,9 +729,9 @@ public class GSMPhone extends PhoneBase {
                                "dialing w/ mmi '" + mmi + "'...");
 
         if (mmi == null) {
-            return mCT.dial(newDialString);
+            return mCT.dial(newDialString, uusInfo);
         } else if (mmi.isTemporaryModeCLIR()) {
-            return mCT.dial(mmi.dialingNumber, mmi.getCLIRMode());
+            return mCT.dial(mmi.dialingNumber, mmi.getCLIRMode(), uusInfo);
         } else {
             mPendingMMIs.add(mmi);
             mMmiRegistrants.notifyRegistrants(new AsyncResult(null, mmi, null));
@@ -801,7 +803,7 @@ public class GSMPhone extends PhoneBase {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(VM_NUMBER, number);
-        editor.commit();
+        editor.apply();
         setVmSimImsi(getSubscriberId());
     }
 
@@ -824,7 +826,7 @@ public class GSMPhone extends PhoneBase {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = sp.edit();
         editor.putString(VM_SIM_IMSI, imsi);
-        editor.commit();
+        editor.apply();
     }
 
     public String getVoiceMailAlphaTag() {

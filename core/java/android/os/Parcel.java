@@ -176,6 +176,7 @@ import java.util.Set;
  */
 public final class Parcel {
     private static final boolean DEBUG_RECYCLE = false;
+    private static final String TAG = "Parcel";
 
     @SuppressWarnings({"UnusedDeclaration"})
     private int mObject; // used by native code
@@ -214,12 +215,14 @@ public final class Parcel {
     private static final int VAL_BOOLEANARRAY = 23;
     private static final int VAL_CHARSEQUENCEARRAY = 24;
 
+    // The initial int32 in a Binder call's reply Parcel header:
     private static final int EX_SECURITY = -1;
     private static final int EX_BAD_PARCELABLE = -2;
     private static final int EX_ILLEGAL_ARGUMENT = -3;
     private static final int EX_NULL_POINTER = -4;
     private static final int EX_ILLEGAL_STATE = -5;
-    
+    private static final int EX_HAS_REPLY_HEADER = -128;  // special; see below
+
     public final static Parcelable.Creator<String> STRING_CREATOR
              = new Parcelable.Creator<String>() {
         public String createFromParcel(Parcel source) {
@@ -437,6 +440,12 @@ public final class Parcel {
     /**
      * Write a FileDescriptor into the parcel at the current dataPosition(),
      * growing dataCapacity() if needed.
+     *
+     * <p class="caution">The file descriptor will not be closed, which may
+     * result in file descriptor leaks when objects are returned from Binder
+     * calls.  Use {@link ParcelFileDescriptor#writeToParcel} instead, which
+     * accepts contextual flags and will close the original file descriptor
+     * if {@link Parcelable#PARCELABLE_WRITE_RETURN_VALUE} is set.</p>
      */
     public final native void writeFileDescriptor(FileDescriptor val);
 
@@ -1000,7 +1009,7 @@ public final class Parcel {
     /**
      * Flatten a generic object in to a parcel.  The given Object value may
      * currently be one of the following types:
-     * 
+     *
      * <ul>
      * <li> null
      * <li> String
@@ -1023,7 +1032,7 @@ public final class Parcel {
      * <li> Parcelable[]
      * <li> CharSequence (as supported by {@link TextUtils#writeToParcel}).
      * <li> List (as supported by {@link #writeList}).
-     * <li> {@link SparseArray} (as supported by {@link #writeSparseArray}).
+     * <li> {@link SparseArray} (as supported by {@link #writeSparseArray(SparseArray)}).
      * <li> {@link IBinder}
      * <li> Any object that implements Serializable (but see
      *      {@link #writeSerializable} for caveats).  Note that all of the
@@ -1032,6 +1041,13 @@ public final class Parcel {
      *      approach is much less efficient and should be avoided whenever
      *      possible.
      * </ul>
+     *
+     * <p class="caution">{@link Parcelable} objects are written with
+     * {@link Parcelable#writeToParcel} using contextual flags of 0.  When
+     * serializing objects containing {@link ParcelFileDescriptor}s,
+     * this may result in file descriptor leaks when they are returned from
+     * Binder calls (where {@link Parcelable#PARCELABLE_WRITE_RETURN_VALUE}
+     * should be used).</p>
      */
     public final void writeValue(Object v) {
         if (v == null) {
@@ -1120,7 +1136,7 @@ public final class Parcel {
     /**
      * Flatten the name of the class of the Parcelable and its contents
      * into the parcel.
-     * 
+     *
      * @param p The Parcelable object to be written.
      * @param parcelableFlags Contextual flags as per
      * {@link Parcelable#writeToParcel(Parcel, int) Parcelable.writeToParcel()}.
@@ -1199,6 +1215,7 @@ public final class Parcel {
             code = EX_ILLEGAL_STATE;
         }
         writeInt(code);
+        StrictMode.clearGatheredViolations();
         if (code == 0) {
             if (e instanceof RuntimeException) {
                 throw (RuntimeException) e;
@@ -1216,7 +1233,31 @@ public final class Parcel {
      * @see #readException
      */
     public final void writeNoException() {
-        writeInt(0);
+        // Despite the name of this function ("write no exception"),
+        // it should instead be thought of as "write the RPC response
+        // header", but because this function name is written out by
+        // the AIDL compiler, we're not going to rename it.
+        //
+        // The response header, in the non-exception case (see also
+        // writeException above, also called by the AIDL compiler), is
+        // either a 0 (the default case), or EX_HAS_REPLY_HEADER if
+        // StrictMode has gathered up violations that have occurred
+        // during a Binder call, in which case we write out the number
+        // of violations and their details, serialized, before the
+        // actual RPC respons data.  The receiving end of this is
+        // readException(), below.
+        if (StrictMode.hasGatheredViolations()) {
+            writeInt(EX_HAS_REPLY_HEADER);
+            final int sizePosition = dataPosition();
+            writeInt(0);  // total size of fat header, to be filled in later
+            StrictMode.writeGatheredViolationsToParcel(this);
+            final int payloadPosition = dataPosition();
+            setDataPosition(sizePosition);
+            writeInt(payloadPosition - sizePosition);  // header size
+            setDataPosition(payloadPosition);
+        } else {
+            writeInt(0);
+        }
     }
 
     /**
@@ -1229,10 +1270,44 @@ public final class Parcel {
      * @see #writeNoException
      */
     public final void readException() {
+        int code = readExceptionCode();
+        if (code != 0) {
+            String msg = readString();
+            readException(code, msg);
+        }
+    }
+
+    /**
+     * Parses the header of a Binder call's response Parcel and
+     * returns the exception code.  Deals with lite or fat headers.
+     * In the common successful case, this header is generally zero.
+     * In less common cases, it's a small negative number and will be
+     * followed by an error string.
+     *
+     * This exists purely for android.database.DatabaseUtils and
+     * insulating it from having to handle fat headers as returned by
+     * e.g. StrictMode-induced RPC responses.
+     *
+     * @hide
+     */
+    public final int readExceptionCode() {
         int code = readInt();
-        if (code == 0) return;
-        String msg = readString();
-        readException(code, msg);
+        if (code == EX_HAS_REPLY_HEADER) {
+            int headerSize = readInt();
+            if (headerSize == 0) {
+                Log.e(TAG, "Unexpected zero-sized Parcel reply header.");
+            } else {
+                // Currently the only thing in the header is StrictMode stacks,
+                // but discussions around event/RPC tracing suggest we might
+                // put that here too.  If so, switch on sub-header tags here.
+                // But for now, just parse out the StrictMode stuff.
+                StrictMode.readAndHandleBinderCallViolations(this);
+            }
+            // And fat response headers are currently only used when
+            // there are no exceptions, so return no error:
+            return 0;
+        }
+        return code;
     }
 
     /**
@@ -1872,13 +1947,13 @@ public final class Parcel {
                     creator = (Parcelable.Creator)f.get(null);
                 }
                 catch (IllegalAccessException e) {
-                    Log.e("Parcel", "Class not found when unmarshalling: "
+                    Log.e(TAG, "Class not found when unmarshalling: "
                                         + name + ", e: " + e);
                     throw new BadParcelableException(
                             "IllegalAccessException when unmarshalling: " + name);
                 }
                 catch (ClassNotFoundException e) {
-                    Log.e("Parcel", "Class not found when unmarshalling: "
+                    Log.e(TAG, "Class not found when unmarshalling: "
                                         + name + ", e: " + e);
                     throw new BadParcelableException(
                             "ClassNotFoundException when unmarshalling: " + name);
@@ -1983,7 +2058,7 @@ public final class Parcel {
         if (DEBUG_RECYCLE) {
             mStack = new RuntimeException();
         }
-        //Log.i("Parcel", "Initializing obj=0x" + Integer.toHexString(obj), mStack);
+        //Log.i(TAG, "Initializing obj=0x" + Integer.toHexString(obj), mStack);
         init(obj);
     }
 
@@ -1991,7 +2066,7 @@ public final class Parcel {
     protected void finalize() throws Throwable {
         if (DEBUG_RECYCLE) {
             if (mStack != null) {
-                Log.w("Parcel", "Client did not call Parcel.recycle()", mStack);
+                Log.w(TAG, "Client did not call Parcel.recycle()", mStack);
             }
         }
         destroy();
@@ -2015,7 +2090,7 @@ public final class Parcel {
         ClassLoader loader) {
         while (N > 0) {
             Object value = readValue(loader);
-            //Log.d("Parcel", "Unmarshalling value=" + value);
+            //Log.d(TAG, "Unmarshalling value=" + value);
             outVal.add(value);
             N--;
         }
@@ -2025,7 +2100,7 @@ public final class Parcel {
         ClassLoader loader) {
         for (int i = 0; i < N; i++) {
             Object value = readValue(loader);
-            //Log.d("Parcel", "Unmarshalling value=" + value);
+            //Log.d(TAG, "Unmarshalling value=" + value);
             outVal[i] = value;
         }
     }
@@ -2035,7 +2110,7 @@ public final class Parcel {
         while (N > 0) {
             int key = readInt();
             Object value = readValue(loader);
-            //Log.i("Parcel", "Unmarshalling key=" + key + " value=" + value);
+            //Log.i(TAG, "Unmarshalling key=" + key + " value=" + value);
             outVal.append(key, value);
             N--;
         }
@@ -2046,7 +2121,7 @@ public final class Parcel {
         while (N > 0) {
             int key = readInt();
             boolean value = this.readByte() == 1;
-            //Log.i("Parcel", "Unmarshalling key=" + key + " value=" + value);
+            //Log.i(TAG, "Unmarshalling key=" + key + " value=" + value);
             outVal.append(key, value);
             N--;
         }

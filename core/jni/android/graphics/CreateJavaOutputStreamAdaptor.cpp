@@ -5,6 +5,7 @@
 
 static jclass       gInputStream_Clazz;
 static jmethodID    gInputStream_resetMethodID;
+static jmethodID    gInputStream_markMethodID;
 static jmethodID    gInputStream_availableMethodID;
 static jmethodID    gInputStream_readMethodID;
 static jmethodID    gInputStream_skipMethodID;
@@ -52,7 +53,7 @@ public:
                 return 0;
             }
             
-            if (n <= 0) {
+            if (n < 0) { // n == 0 should not be possible, see InputStream read() specifications.
                 break;  // eof
             }
             
@@ -76,17 +77,19 @@ public:
     
     size_t doSkip(size_t size) {
         JNIEnv* env = fEnv;
+
         jlong skipped = env->CallLongMethod(fJavaInputStream,
                                             gInputStream_skipMethodID, (jlong)size);
         if (env->ExceptionCheck()) {
             env->ExceptionDescribe();
             env->ExceptionClear();
-            SkDebugf("------- available threw an exception\n");
+            SkDebugf("------- skip threw an exception\n");
             return 0;
         }
         if (skipped < 0) {
             skipped = 0;
         }
+
         return (size_t)skipped;
     }
     
@@ -115,7 +118,7 @@ public:
                  */
                 size_t amountSkipped = 0;
                 do {
-                    size_t amount = this->doSkip(size);
+                    size_t amount = this->doSkip(size - amountSkipped);
                     if (0 == amount) {
                         char tmp;
                         amount = this->doRead(&tmp, 1);
@@ -141,7 +144,7 @@ private:
 };
 
 SkStream* CreateJavaInputStreamAdaptor(JNIEnv* env, jobject stream,
-                                       jbyteArray storage) {
+                                       jbyteArray storage, int markSize) {
     static bool gInited;
 
     if (!gInited) {
@@ -151,6 +154,8 @@ SkStream* CreateJavaInputStreamAdaptor(JNIEnv* env, jobject stream,
 
         gInputStream_resetMethodID      = env->GetMethodID(gInputStream_Clazz,
                                                            "reset", "()V");
+        gInputStream_markMethodID       = env->GetMethodID(gInputStream_Clazz,
+                                                           "mark", "(I)V");
         gInputStream_availableMethodID  = env->GetMethodID(gInputStream_Clazz,
                                                            "available", "()I");
         gInputStream_readMethodID       = env->GetMethodID(gInputStream_Clazz,
@@ -159,11 +164,16 @@ SkStream* CreateJavaInputStreamAdaptor(JNIEnv* env, jobject stream,
                                                            "skip", "(J)J");
 
         RETURN_NULL_IF_NULL(gInputStream_resetMethodID);
+        RETURN_NULL_IF_NULL(gInputStream_markMethodID);
         RETURN_NULL_IF_NULL(gInputStream_availableMethodID);
         RETURN_NULL_IF_NULL(gInputStream_availableMethodID);
         RETURN_NULL_IF_NULL(gInputStream_skipMethodID);
 
         gInited = true;
+    }
+
+    if (markSize) {
+        env->CallVoidMethod(stream, gInputStream_markMethodID, markSize);
     }
 
     return new JavaInputStreamAdaptor(env, stream, storage);

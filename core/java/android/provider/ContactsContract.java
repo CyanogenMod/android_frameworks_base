@@ -409,6 +409,14 @@ public final class ContactsContract {
         public static final String CONTACT_PRESENCE = "contact_presence";
 
         /**
+         * Contact Chat Capabilities. See {@link StatusUpdates} for individual
+         * definitions.
+         * <p>Type: NUMBER</p>
+         * @hide
+         */
+        public static final String CONTACT_CHAT_CAPABILITY = "contact_chat_capability";
+
+        /**
          * Contact's latest status update.
          * <p>Type: TEXT</p>
          */
@@ -1950,6 +1958,33 @@ public final class ContactsContract {
          * <p>Type: NUMBER</p>
          */
         public static final String STATUS_ICON = "status_icon";
+
+        /**
+         * Contact's audio/video chat capability level.
+         * <P>Type: INTEGER (one of the values below)</P>
+         * @hide
+         */
+        public static final String CHAT_CAPABILITY = "chat_capability";
+
+        /**
+         * An allowed value of {@link #CHAT_CAPABILITY}. Indicates that the contact's device can
+         * display a video feed.
+         * @hide
+         */
+        public static final int CAPABILITY_HAS_VIDEO_PLAYBACK_ONLY = 1;
+
+        /**
+         * An allowed value of {@link #CHAT_CAPABILITY}. Indicates audio-chat capability.
+         * @hide
+         */
+        public static final int CAPABILITY_HAS_VOICE = 2;
+
+        /**
+         * An allowed value of {@link #CHAT_CAPABILITY}. Indicates that the contact's device has a
+         * camera that can be used for video chat (e.g. a front-facing camera on a phone).
+         * @hide
+         */
+        public static final int CAPABILITY_HAS_CAMERA = 4;
     }
 
     /**
@@ -2275,6 +2310,7 @@ public final class ContactsContract {
      * <li>{@link CommonDataKinds.Website Website.CONTENT_ITEM_TYPE}</li>
      * <li>{@link CommonDataKinds.Event Event.CONTENT_ITEM_TYPE}</li>
      * <li>{@link CommonDataKinds.Relation Relation.CONTENT_ITEM_TYPE}</li>
+     * <li>{@link CommonDataKinds.SipAddress SipAddress.CONTENT_ITEM_TYPE}</li>
      * </ul>
      * </p>
      * </td>
@@ -3088,12 +3124,6 @@ public final class ContactsContract {
      * <li>{@link #AVAILABLE}</li>
      * </ul>
      * </p>
-     * <p>
-     * Since presence status is inherently volatile, the content provider
-     * may choose not to store this field in long-term storage.
-     * </p>
-     * </td>
-     * </tr>
      * <tr>
      * <td>String</td>
      * <td>{@link #STATUS}</td>
@@ -3502,7 +3532,7 @@ public final class ContactsContract {
          * <li>{@link #TYPE_CUSTOM}. Put the actual type in {@link #LABEL}.</li>
          * <li>{@link #TYPE_DEFAULT}</li>
          * <li>{@link #TYPE_OTHER_NAME}</li>
-         * <li>{@link #TYPE_MAINDEN_NAME}</li>
+         * <li>{@link #TYPE_MAIDEN_NAME}</li>
          * <li>{@link #TYPE_SHORT_NAME}</li>
          * <li>{@link #TYPE_INITIALS}</li>
          * </ul>
@@ -3528,6 +3558,9 @@ public final class ContactsContract {
 
             public static final int TYPE_DEFAULT = 1;
             public static final int TYPE_OTHER_NAME = 2;
+            public static final int TYPE_MAIDEN_NAME = 3;
+            /** @deprecated Use TYPE_MAIDEN_NAME instead. */
+            @Deprecated
             public static final int TYPE_MAINDEN_NAME = 3;
             public static final int TYPE_SHORT_NAME = 4;
             public static final int TYPE_INITIALS = 5;
@@ -4811,6 +4844,98 @@ public final class ContactsContract {
              */
             public static final String URL = DATA;
         }
+
+        /**
+         * <p>
+         * A data kind representing a SIP address for the contact.
+         * </p>
+         * <p>
+         * You can use all columns defined for {@link ContactsContract.Data} as
+         * well as the following aliases.
+         * </p>
+         * <h2>Column aliases</h2>
+         * <table class="jd-sumtable">
+         * <tr>
+         * <th>Type</th>
+         * <th>Alias</th><th colspan='2'>Data column</th>
+         * </tr>
+         * <tr>
+         * <td>String</td>
+         * <td>{@link #SIP_ADDRESS}</td>
+         * <td>{@link #DATA1}</td>
+         * <td></td>
+         * </tr>
+         * <tr>
+         * <td>int</td>
+         * <td>{@link #TYPE}</td>
+         * <td>{@link #DATA2}</td>
+         * <td>Allowed values are:
+         * <p>
+         * <ul>
+         * <li>{@link #TYPE_CUSTOM}. Put the actual type in {@link #LABEL}.</li>
+         * <li>{@link #TYPE_HOME}</li>
+         * <li>{@link #TYPE_WORK}</li>
+         * <li>{@link #TYPE_OTHER}</li>
+         * </ul>
+         * </p>
+         * </td>
+         * </tr>
+         * <tr>
+         * <td>String</td>
+         * <td>{@link #LABEL}</td>
+         * <td>{@link #DATA3}</td>
+         * <td></td>
+         * </tr>
+         * </table>
+         */
+        public static final class SipAddress implements DataColumnsWithJoins, CommonColumns {
+            /**
+             * This utility class cannot be instantiated
+             */
+            private SipAddress() {}
+
+            /** MIME type used when storing this in data table. */
+            public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/sip_address";
+
+            public static final int TYPE_HOME = 1;
+            public static final int TYPE_WORK = 2;
+            public static final int TYPE_OTHER = 3;
+
+            /**
+             * The SIP address.
+             * <P>Type: TEXT</P>
+             */
+            public static final String SIP_ADDRESS = DATA1;
+            // ...and TYPE and LABEL come from the CommonColumns interface.
+
+            /**
+             * Return the string resource that best describes the given
+             * {@link #TYPE}. Will always return a valid resource.
+             */
+            public static final int getTypeLabelResource(int type) {
+                switch (type) {
+                    case TYPE_HOME: return com.android.internal.R.string.sipAddressTypeHome;
+                    case TYPE_WORK: return com.android.internal.R.string.sipAddressTypeWork;
+                    case TYPE_OTHER: return com.android.internal.R.string.sipAddressTypeOther;
+                    default: return com.android.internal.R.string.sipAddressTypeCustom;
+                }
+            }
+
+            /**
+             * Return a {@link CharSequence} that best describes the given type,
+             * possibly substituting the given {@link #LABEL} value
+             * for {@link #TYPE_CUSTOM}.
+             */
+            public static final CharSequence getTypeLabel(Resources res, int type,
+                    CharSequence label) {
+                if (type == TYPE_CUSTOM && !TextUtils.isEmpty(label)) {
+                    return label;
+                } else {
+                    final int labelRes = getTypeLabelResource(type);
+                    return res.getText(labelRes);
+                }
+            }
+        }
     }
 
     /**
@@ -5418,6 +5543,14 @@ public final class ContactsContract {
         public static final int MODE_LARGE = 3;
 
         /**
+         * Extra used to specify the last selected tab index of the Contacts app.
+         * If this is not given or -1
+         * @hide
+         */
+        public static final String EXTRA_SELECTED_CONTACTS_APP_TAB_INDEX =
+                "SELECTED_TAB_INDEX";
+
+        /**
          * Trigger a dialog that lists the various methods of interacting with
          * the requested {@link Contacts} entry. This may be based on available
          * {@link ContactsContract.Data} rows under that contact, and may also
@@ -5442,6 +5575,16 @@ public final class ContactsContract {
          */
         public static void showQuickContact(Context context, View target, Uri lookupUri, int mode,
                 String[] excludeMimes) {
+            context.startActivity(getQuickContactIntent(context, target, lookupUri, mode,
+                    excludeMimes));
+        }
+
+        /**
+         * Creates the Intent to launch Quick Contacts
+         * @hide
+         */
+        public static Intent getQuickContactIntent(Context context, View target, Uri lookupUri,
+                int mode, String[] excludeMimes) {
             // Find location and bounds of target view, adjusting based on the
             // assumed local density.
             final float appScale = context.getResources().getCompatibilityInfo().applicationScale;
@@ -5455,7 +5598,7 @@ public final class ContactsContract {
             rect.bottom = (int) ((pos[1] + target.getHeight()) * appScale + 0.5f);
 
             // Trigger with obtained rectangle
-            showQuickContact(context, rect, lookupUri, mode, excludeMimes);
+            return getQuickContactIntent(context, rect, lookupUri, mode, excludeMimes);
         }
 
         /**
@@ -5486,6 +5629,16 @@ public final class ContactsContract {
          */
         public static void showQuickContact(Context context, Rect target, Uri lookupUri, int mode,
                 String[] excludeMimes) {
+            context.startActivity(getQuickContactIntent(context, target, lookupUri, mode,
+                    excludeMimes));
+        }
+
+        /**
+         * Creates the Intent to launch Quick Contacts
+         * @hide
+         */
+        public static Intent getQuickContactIntent(Context context, Rect target, Uri lookupUri,
+                int mode, String[] excludeMimes) {
             // Launch pivot dialog through intent for now
             final Intent intent = new Intent(ACTION_QUICK_CONTACT);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -5495,7 +5648,7 @@ public final class ContactsContract {
             intent.setSourceBounds(target);
             intent.putExtra(EXTRA_MODE, mode);
             intent.putExtra(EXTRA_EXCLUDE_MIMES, excludeMimes);
-            context.startActivity(intent);
+            return intent;
         }
     }
 

@@ -56,7 +56,7 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
     /**
      * The position of the first child displayed
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "scrolling")
     int mFirstPosition = 0;
 
     /**
@@ -141,7 +141,7 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
      * The position within the adapter's data set of the item to select
      * during the next layout.
      */
-    @ViewDebug.ExportedProperty    
+    @ViewDebug.ExportedProperty(category = "list")
     int mNextSelectedPosition = INVALID_POSITION;
 
     /**
@@ -152,7 +152,7 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
     /**
      * The position within the adapter's data set of the currently selected item.
      */
-    @ViewDebug.ExportedProperty    
+    @ViewDebug.ExportedProperty(category = "list")
     int mSelectedPosition = INVALID_POSITION;
 
     /**
@@ -168,7 +168,7 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
     /**
      * The number of items in the current adapter.
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "list")
     int mItemCount;
 
     /**
@@ -808,7 +808,6 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
             mNextSelectedPosition = INVALID_POSITION;
             mNextSelectedRowId = INVALID_ROW_ID;
             mNeedSync = false;
-            checkSelectionChanged();
 
             checkFocus();
             requestLayout();
@@ -819,13 +818,21 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
         }
     }
 
-    private class SelectionNotifier extends Handler implements Runnable {
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        removeCallbacks(mSelectionNotifier);
+    }
+
+    private class SelectionNotifier implements Runnable {
         public void run() {
             if (mDataChanged) {
                 // Data has changed between when this SelectionNotifier
                 // was posted and now. We need to wait until the AdapterView
                 // has been synched to the new data.
-                post(this);
+                if (getAdapter() != null) {
+                    post(this);
+                }
             } else {
                 fireOnSelected();
             }
@@ -842,7 +849,7 @@ public abstract class AdapterView<T extends Adapter> extends ViewGroup {
                 if (mSelectionNotifier == null) {
                     mSelectionNotifier = new SelectionNotifier();
                 }
-                mSelectionNotifier.post(mSelectionNotifier);
+                post(mSelectionNotifier);
             } else {
                 fireOnSelected();
             }

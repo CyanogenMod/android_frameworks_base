@@ -29,7 +29,7 @@ static int do_ping(char **arg, char reply[REPLY_MAX])
 
 static int do_install(char **arg, char reply[REPLY_MAX])
 {
-    return install(arg[0], atoi(arg[1]), atoi(arg[2])); /* pkgname, uid, gid */
+    return install(arg[0], atoi(arg[1]), atoi(arg[2]), atoi(arg[3])); /* pkgname, uid, gid */
 }
 
 static int do_dexopt(char **arg, char reply[REPLY_MAX])
@@ -50,22 +50,22 @@ static int do_rm_dex(char **arg, char reply[REPLY_MAX])
 
 static int do_remove(char **arg, char reply[REPLY_MAX])
 {
-    return uninstall(arg[0]); /* pkgname */
+    return uninstall(arg[0], atoi(arg[1])); /* pkgname */
 }
 
 static int do_rename(char **arg, char reply[REPLY_MAX])
 {
-    return renamepkg(arg[0], arg[1]); /* oldpkgname, newpkgname */
+    return renamepkg(arg[0], arg[1], atoi(arg[2])); /* oldpkgname, newpkgname */
 }
 
 static int do_free_cache(char **arg, char reply[REPLY_MAX]) /* TODO int:free_size */
 {
-    return free_cache(atoi(arg[0])); /* free_size */
+    return free_cache((int64_t)atoll(arg[0])); /* free_size */
 }
 
 static int do_rm_cache(char **arg, char reply[REPLY_MAX])
 {
-    return delete_cache(arg[0]); /* pkgname */
+    return delete_cache(arg[0], atoi(arg[1])); /* pkgname */
 }
 
 static int do_protect(char **arg, char reply[REPLY_MAX])
@@ -75,26 +75,40 @@ static int do_protect(char **arg, char reply[REPLY_MAX])
 
 static int do_get_size(char **arg, char reply[REPLY_MAX])
 {
-    int codesize = 0;
-    int datasize = 0;
-    int cachesize = 0;
+    int64_t codesize = 0;
+    int64_t datasize = 0;
+    int64_t cachesize = 0;
     int res = 0;
 
         /* pkgdir, apkpath */
-    res = get_size(arg[0], arg[1], arg[2], &codesize, &datasize, &cachesize);
+    res = get_size(arg[0], arg[1], arg[2], &codesize, &datasize, &cachesize, atoi(arg[3]));
 
-    sprintf(reply,"%d %d %d", codesize, datasize, cachesize);
+    /*
+     * Each int64_t can take up 22 characters printed out. Make sure it
+     * doesn't go over REPLY_MAX in the future.
+     */
+    snprintf(reply, REPLY_MAX, "%" PRId64 " %" PRId64 " %" PRId64, codesize, datasize, cachesize);
     return res;
 }
 
 static int do_rm_user_data(char **arg, char reply[REPLY_MAX])
 {
-    return delete_user_data(arg[0]); /* pkgname */
+    return delete_user_data(arg[0], atoi(arg[1])); /* pkgname */
 }
 
 static int do_movefiles(char **arg, char reply[REPLY_MAX])
 {
     return movefiles();
+}
+
+static int do_linklib(char **arg, char reply[REPLY_MAX])
+{
+    return linklib(arg[0], arg[1]);
+}
+
+static int do_unlinklib(char **arg, char reply[REPLY_MAX])
+{
+    return unlinklib(arg[0]);
 }
 
 struct cmdinfo {
@@ -105,18 +119,20 @@ struct cmdinfo {
 
 struct cmdinfo cmds[] = {
     { "ping",                 0, do_ping },
-    { "install",              3, do_install },
+    { "install",              4, do_install },
     { "dexopt",               3, do_dexopt },
     { "movedex",              2, do_move_dex },
     { "rmdex",                1, do_rm_dex },
-    { "remove",               1, do_remove },
-    { "rename",               2, do_rename },
+    { "remove",               2, do_remove },
+    { "rename",               3, do_rename },
     { "freecache",            1, do_free_cache },
-    { "rmcache",              1, do_rm_cache },
+    { "rmcache",              2, do_rm_cache },
     { "protect",              2, do_protect },
-    { "getsize",              3, do_get_size },
-    { "rmuserdata",           1, do_rm_user_data },
+    { "getsize",              4, do_get_size },
+    { "rmuserdata",           2, do_rm_user_data },
     { "movefiles",            0, do_movefiles },
+    { "linklib",              2, do_linklib },
+    { "unlinklib",            1, do_unlinklib },
 };
 
 static int readx(int s, void *_buf, int count)

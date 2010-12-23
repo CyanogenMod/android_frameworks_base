@@ -70,16 +70,6 @@ jclass g_stringClass = NULL;
 
 // ----------------------------------------------------------------------------
 
-static void doThrow(JNIEnv* env, const char* exc, const char* msg = NULL)
-{
-    jclass npeClazz;
-
-    npeClazz = env->FindClass(exc);
-    LOG_FATAL_IF(npeClazz == NULL, "Unable to find class %s", exc);
-
-    env->ThrowNew(npeClazz, msg);
-}
-
 enum {
     STYLE_NUM_ENTRIES = 6,
     STYLE_TYPE = 0,
@@ -135,14 +125,14 @@ static jint android_content_AssetManager_openAsset(JNIEnv* env, jobject clazz,
 
     LOGV("openAsset in %p (Java object %p)\n", am, clazz);
 
-    if (fileName == NULL || am == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+    if (fileName == NULL) {
+        jniThrowException(env, "java/lang/NullPointerException", "fileName");
         return -1;
     }
 
     if (mode != Asset::ACCESS_UNKNOWN && mode != Asset::ACCESS_RANDOM
         && mode != Asset::ACCESS_STREAMING && mode != Asset::ACCESS_BUFFER) {
-        doThrow(env, "java/lang/IllegalArgumentException");
+        jniThrowException(env, "java/lang/IllegalArgumentException", "Bad access mode");
         return -1;
     }
 
@@ -150,7 +140,7 @@ static jint android_content_AssetManager_openAsset(JNIEnv* env, jobject clazz,
     Asset* a = am->open(fileName8, (Asset::AccessMode)mode);
 
     if (a == NULL) {
-        doThrow(env, "java/io/FileNotFoundException", fileName8);
+        jniThrowException(env, "java/io/FileNotFoundException", fileName8);
         env->ReleaseStringUTFChars(fileName, fileName8);
         return -1;
     }
@@ -168,7 +158,7 @@ static jobject returnParcelFileDescriptor(JNIEnv* env, Asset* a, jlongArray outO
     delete a;
 
     if (fd < 0) {
-        doThrow(env, "java/io/FileNotFoundException",
+        jniThrowException(env, "java/io/FileNotFoundException",
                 "This file can not be opened as a file descriptor; it is probably compressed");
         return NULL;
     }
@@ -203,8 +193,8 @@ static jobject android_content_AssetManager_openAssetFd(JNIEnv* env, jobject cla
 
     LOGV("openAssetFd in %p (Java object %p)\n", am, clazz);
 
-    if (fileName == NULL || am == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+    if (fileName == NULL) {
+        jniThrowException(env, "java/lang/NullPointerException", "fileName");
         return NULL;
     }
 
@@ -212,7 +202,7 @@ static jobject android_content_AssetManager_openAssetFd(JNIEnv* env, jobject cla
     Asset* a = am->open(fileName8, Asset::ACCESS_RANDOM);
 
     if (a == NULL) {
-        doThrow(env, "java/io/FileNotFoundException", fileName8);
+        jniThrowException(env, "java/io/FileNotFoundException", fileName8);
         env->ReleaseStringUTFChars(fileName, fileName8);
         return NULL;
     }
@@ -235,14 +225,14 @@ static jint android_content_AssetManager_openNonAssetNative(JNIEnv* env, jobject
 
     LOGV("openNonAssetNative in %p (Java object %p)\n", am, clazz);
 
-    if (fileName == NULL || am == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+    if (fileName == NULL) {
+        jniThrowException(env, "java/lang/NullPointerException", "fileName");
         return -1;
     }
 
     if (mode != Asset::ACCESS_UNKNOWN && mode != Asset::ACCESS_RANDOM
         && mode != Asset::ACCESS_STREAMING && mode != Asset::ACCESS_BUFFER) {
-        doThrow(env, "java/lang/IllegalArgumentException");
+        jniThrowException(env, "java/lang/IllegalArgumentException", "Bad access mode");
         return -1;
     }
 
@@ -252,7 +242,7 @@ static jint android_content_AssetManager_openNonAssetNative(JNIEnv* env, jobject
         : am->openNonAsset(fileName8, (Asset::AccessMode)mode);
 
     if (a == NULL) {
-        doThrow(env, "java/io/FileNotFoundException", fileName8);
+        jniThrowException(env, "java/io/FileNotFoundException", fileName8);
         env->ReleaseStringUTFChars(fileName, fileName8);
         return -1;
     }
@@ -275,8 +265,8 @@ static jobject android_content_AssetManager_openNonAssetFdNative(JNIEnv* env, jo
 
     LOGV("openNonAssetFd in %p (Java object %p)\n", am, clazz);
 
-    if (fileName == NULL || am == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+    if (fileName == NULL ) {
+        jniThrowException(env, "java/lang/NullPointerException", "fileName");
         return NULL;
     }
 
@@ -286,7 +276,7 @@ static jobject android_content_AssetManager_openNonAssetFdNative(JNIEnv* env, jo
         : am->openNonAsset(fileName8, Asset::ACCESS_RANDOM);
 
     if (a == NULL) {
-        doThrow(env, "java/io/FileNotFoundException", fileName8);
+        jniThrowException(env, "java/io/FileNotFoundException", fileName8);
         env->ReleaseStringUTFChars(fileName, fileName8);
         return NULL;
     }
@@ -305,8 +295,8 @@ static jobjectArray android_content_AssetManager_list(JNIEnv* env, jobject clazz
         return NULL;
     }
 
-    if (fileName == NULL || am == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+    if (fileName == NULL) {
+        jniThrowException(env, "java/lang/NullPointerException", "fileName");
         return NULL;
     }
 
@@ -317,7 +307,7 @@ static jobjectArray android_content_AssetManager_list(JNIEnv* env, jobject clazz
     env->ReleaseStringUTFChars(fileName, fileName8);
 
     if (dir == NULL) {
-        doThrow(env, "java/io/FileNotFoundException", fileName8);
+        jniThrowException(env, "java/io/FileNotFoundException", fileName8);
         return NULL;
     }
 
@@ -333,7 +323,6 @@ static jobjectArray android_content_AssetManager_list(JNIEnv* env, jobject clazz
     jobjectArray array = env->NewObjectArray(dir->getFileCount(),
                                                 cls, NULL);
     if (array == NULL) {
-        doThrow(env, "java/lang/OutOfMemoryError");
         delete dir;
         return NULL;
     }
@@ -342,11 +331,11 @@ static jobjectArray android_content_AssetManager_list(JNIEnv* env, jobject clazz
         const String8& name = dir->getFileName(i);
         jstring str = env->NewStringUTF(name.string());
         if (str == NULL) {
-            doThrow(env, "java/lang/OutOfMemoryError");
             delete dir;
             return NULL;
         }
         env->SetObjectArrayElement(array, i, str);
+        env->DeleteLocalRef(str);
     }
 
     delete dir;
@@ -362,7 +351,7 @@ static void android_content_AssetManager_destroyAsset(JNIEnv* env, jobject clazz
     //printf("Destroying Asset Stream: %p\n", a);
 
     if (a == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+        jniThrowException(env, "java/lang/NullPointerException", "asset");
         return;
     }
 
@@ -375,7 +364,7 @@ static jint android_content_AssetManager_readAssetChar(JNIEnv* env, jobject claz
     Asset* a = (Asset*)asset;
 
     if (a == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+        jniThrowException(env, "java/lang/NullPointerException", "asset");
         return -1;
     }
 
@@ -391,7 +380,7 @@ static jint android_content_AssetManager_readAsset(JNIEnv* env, jobject clazz,
     Asset* a = (Asset*)asset;
 
     if (a == NULL || bArray == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+        jniThrowException(env, "java/lang/NullPointerException", "asset");
         return -1;
     }
 
@@ -401,7 +390,7 @@ static jint android_content_AssetManager_readAsset(JNIEnv* env, jobject clazz,
 
     jsize bLen = env->GetArrayLength(bArray);
     if (off < 0 || off >= bLen || len < 0 || len > bLen || (off+len) > bLen) {
-        doThrow(env, "java/lang/IndexOutOfBoundsException");
+        jniThrowException(env, "java/lang/IndexOutOfBoundsException", "");
         return -1;
     }
 
@@ -412,7 +401,7 @@ static jint android_content_AssetManager_readAsset(JNIEnv* env, jobject clazz,
     if (res > 0) return res;
 
     if (res < 0) {
-        doThrow(env, "java/io/IOException");
+        jniThrowException(env, "java/io/IOException", "");
     }
     return -1;
 }
@@ -424,7 +413,7 @@ static jlong android_content_AssetManager_seekAsset(JNIEnv* env, jobject clazz,
     Asset* a = (Asset*)asset;
 
     if (a == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+        jniThrowException(env, "java/lang/NullPointerException", "asset");
         return -1;
     }
 
@@ -438,7 +427,7 @@ static jlong android_content_AssetManager_getAssetLength(JNIEnv* env, jobject cl
     Asset* a = (Asset*)asset;
 
     if (a == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+        jniThrowException(env, "java/lang/NullPointerException", "asset");
         return -1;
     }
 
@@ -451,7 +440,7 @@ static jlong android_content_AssetManager_getAssetRemainingLength(JNIEnv* env, j
     Asset* a = (Asset*)asset;
 
     if (a == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+        jniThrowException(env, "java/lang/NullPointerException", "asset");
         return -1;
     }
 
@@ -462,7 +451,7 @@ static jint android_content_AssetManager_addAssetPath(JNIEnv* env, jobject clazz
                                                        jstring path)
 {
     if (path == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+        jniThrowException(env, "java/lang/NullPointerException", "path");
         return JNI_FALSE;
     }
 
@@ -494,7 +483,7 @@ static void android_content_AssetManager_setLocale(JNIEnv* env, jobject clazz,
                                                 jstring locale)
 {
     if (locale == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+        jniThrowException(env, "java/lang/NullPointerException", "locale");
         return;
     }
 
@@ -529,7 +518,12 @@ static jobjectArray android_content_AssetManager_getLocales(JNIEnv* env, jobject
     }
 
     for (int i=0; i<N; i++) {
-        env->SetObjectArrayElement(result, i, env->NewStringUTF(locales[i].string()));
+        jstring str = env->NewStringUTF(locales[i].string());
+        if (str == NULL) {
+            return NULL;
+        }
+        env->SetObjectArrayElement(result, i, str);
+        env->DeleteLocalRef(str);
     }
 
     return result;
@@ -580,7 +574,7 @@ static jint android_content_AssetManager_getResourceIdentifier(JNIEnv* env, jobj
                                                             jstring defPackage)
 {
     if (name == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+        jniThrowException(env, "java/lang/NullPointerException", "name");
         return 0;
     }
 
@@ -824,14 +818,10 @@ static jstring android_content_AssetManager_getCookieName(JNIEnv* env, jobject c
     }
     String8 name(am->getAssetPath((void*)cookie));
     if (name.length() == 0) {
-        doThrow(env, "java/lang/IndexOutOfBoundsException");
+        jniThrowException(env, "java/lang/IndexOutOfBoundsException", "Empty cookie name");
         return NULL;
     }
     jstring str = env->NewStringUTF(name.string());
-    if (str == NULL) {
-        doThrow(env, "java/lang/OutOfMemoryError");
-        return NULL;
-    }
     return str;
 }
 
@@ -899,7 +889,7 @@ static void android_content_AssetManager_dumpTheme(JNIEnv* env, jobject clazz,
     const ResTable& res(theme->getResTable());
 
     if (tag == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+        jniThrowException(env, "java/lang/NullPointerException", "tag");
         return;
     }
 
@@ -927,8 +917,16 @@ static jboolean android_content_AssetManager_applyStyle(JNIEnv* env, jobject cla
                                                         jintArray outValues,
                                                         jintArray outIndices)
 {
-    if (themeToken == 0 || attrs == NULL || outValues == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+    if (themeToken == 0) {
+        jniThrowException(env, "java/lang/NullPointerException", "theme token");
+        return JNI_FALSE;
+    }
+    if (attrs == NULL) {
+        jniThrowException(env, "java/lang/NullPointerException", "attrs");
+        return JNI_FALSE;
+    }
+    if (outValues == NULL) {
+        jniThrowException(env, "java/lang/NullPointerException", "out values");
         return JNI_FALSE;
     }
 
@@ -944,13 +942,13 @@ static jboolean android_content_AssetManager_applyStyle(JNIEnv* env, jobject cla
     const jsize NI = env->GetArrayLength(attrs);
     const jsize NV = env->GetArrayLength(outValues);
     if (NV < (NI*STYLE_NUM_ENTRIES)) {
-        doThrow(env, "java/lang/IndexOutOfBoundsException");
+        jniThrowException(env, "java/lang/IndexOutOfBoundsException", "out values too small");
         return JNI_FALSE;
     }
 
     jint* src = (jint*)env->GetPrimitiveArrayCritical(attrs, 0);
     if (src == NULL) {
-        doThrow(env, "java/lang/OutOfMemoryError");
+        jniThrowException(env, "java/lang/OutOfMemoryError", "");
         return JNI_FALSE;
     }
 
@@ -958,7 +956,7 @@ static jboolean android_content_AssetManager_applyStyle(JNIEnv* env, jobject cla
     jint* dest = baseDest;
     if (dest == NULL) {
         env->ReleasePrimitiveArrayCritical(attrs, src, 0);
-        doThrow(env, "java/lang/OutOfMemoryError");
+        jniThrowException(env, "java/lang/OutOfMemoryError", "");
         return JNI_FALSE;
     }
 
@@ -1187,8 +1185,16 @@ static jboolean android_content_AssetManager_retrieveAttributes(JNIEnv* env, job
                                                         jintArray outValues,
                                                         jintArray outIndices)
 {
-    if (xmlParserToken == 0 || attrs == NULL || outValues == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+    if (xmlParserToken == 0) {
+        jniThrowException(env, "java/lang/NullPointerException", "xmlParserToken");
+        return JNI_FALSE;
+    }
+    if (attrs == NULL) {
+        jniThrowException(env, "java/lang/NullPointerException", "attrs");
+        return JNI_FALSE;
+    }
+    if (outValues == NULL) {
+        jniThrowException(env, "java/lang/NullPointerException", "out values");
         return JNI_FALSE;
     }
 
@@ -1204,13 +1210,13 @@ static jboolean android_content_AssetManager_retrieveAttributes(JNIEnv* env, job
     const jsize NI = env->GetArrayLength(attrs);
     const jsize NV = env->GetArrayLength(outValues);
     if (NV < (NI*STYLE_NUM_ENTRIES)) {
-        doThrow(env, "java/lang/IndexOutOfBoundsException");
+        jniThrowException(env, "java/lang/IndexOutOfBoundsException", "out values too small");
         return JNI_FALSE;
     }
 
     jint* src = (jint*)env->GetPrimitiveArrayCritical(attrs, 0);
     if (src == NULL) {
-        doThrow(env, "java/lang/OutOfMemoryError");
+        jniThrowException(env, "java/lang/OutOfMemoryError", "");
         return JNI_FALSE;
     }
 
@@ -1218,7 +1224,7 @@ static jboolean android_content_AssetManager_retrieveAttributes(JNIEnv* env, job
     jint* dest = baseDest;
     if (dest == NULL) {
         env->ReleasePrimitiveArrayCritical(attrs, src, 0);
-        doThrow(env, "java/lang/OutOfMemoryError");
+        jniThrowException(env, "java/lang/OutOfMemoryError", "");
         return JNI_FALSE;
     }
 
@@ -1341,7 +1347,7 @@ static jint android_content_AssetManager_retrieveArray(JNIEnv* env, jobject claz
                                                         jintArray outValues)
 {
     if (outValues == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+        jniThrowException(env, "java/lang/NullPointerException", "out values");
         return JNI_FALSE;
     }
 
@@ -1359,7 +1365,7 @@ static jint android_content_AssetManager_retrieveArray(JNIEnv* env, jobject claz
     jint* baseDest = (jint*)env->GetPrimitiveArrayCritical(outValues, 0);
     jint* dest = baseDest;
     if (dest == NULL) {
-        doThrow(env, "java/lang/OutOfMemoryError");
+        jniThrowException(env, "java/lang/OutOfMemoryError", "");
         return JNI_FALSE;
     }
 
@@ -1445,8 +1451,8 @@ static jint android_content_AssetManager_openXmlAssetNative(JNIEnv* env, jobject
 
     LOGV("openXmlAsset in %p (Java object %p)\n", am, clazz);
 
-    if (fileName == NULL || am == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+    if (fileName == NULL) {
+        jniThrowException(env, "java/lang/NullPointerException", "fileName");
         return 0;
     }
 
@@ -1456,7 +1462,7 @@ static jint android_content_AssetManager_openXmlAssetNative(JNIEnv* env, jobject
         : am->openNonAsset(fileName8, Asset::ACCESS_BUFFER);
 
     if (a == NULL) {
-        doThrow(env, "java/io/FileNotFoundException", fileName8);
+        jniThrowException(env, "java/io/FileNotFoundException", fileName8);
         env->ReleaseStringUTFChars(fileName, fileName8);
         return 0;
     }
@@ -1468,7 +1474,7 @@ static jint android_content_AssetManager_openXmlAssetNative(JNIEnv* env, jobject
     delete a;
 
     if (err != NO_ERROR) {
-        doThrow(env, "java/io/FileNotFoundException", "Corrupt XML binary file");
+        jniThrowException(env, "java/io/FileNotFoundException", "Corrupt XML binary file");
         return 0;
     }
 
@@ -1492,7 +1498,7 @@ static jintArray android_content_AssetManager_getArrayStringInfo(JNIEnv* env, jo
 
     jintArray array = env->NewIntArray(N * 2);
     if (array == NULL) {
-        doThrow(env, "java/lang/OutOfMemoryError");
+        jniThrowException(env, "java/lang/OutOfMemoryError", "");
         res.unlockBag(startOfBag);
         return NULL;
     }
@@ -1550,8 +1556,7 @@ static jobjectArray android_content_AssetManager_getArrayStringResource(JNIEnv* 
     }
 
     jobjectArray array = env->NewObjectArray(N, cls, NULL);
-    if (array == NULL) {
-        doThrow(env, "java/lang/OutOfMemoryError");
+    if (env->ExceptionCheck()) {
         res.unlockBag(startOfBag);
         return NULL;
     }
@@ -1579,15 +1584,22 @@ static jobjectArray android_content_AssetManager_getArrayStringResource(JNIEnv* 
             } else {
                 const char16_t* str16 = pool->stringAt(value.data, &strLen);
                 str = env->NewString(str16, strLen);
-                if (str == NULL) {
-                    doThrow(env, "java/lang/OutOfMemoryError");
-                    res.unlockBag(startOfBag);
-                    return NULL;
-                }
             }
-        }
 
-        env->SetObjectArrayElement(array, i, str);
+            // If one of our NewString{UTF} calls failed due to memory, an
+            // exception will be pending.
+            if (env->ExceptionCheck()) {
+                res.unlockBag(startOfBag);
+                return NULL;
+            }
+
+            env->SetObjectArrayElement(array, i, str);
+
+            // str is not NULL at that point, otherwise ExceptionCheck would have been true.
+            // If we have a large amount of strings in our array, we might
+            // overflow the local reference table of the VM.
+            env->DeleteLocalRef(str);
+        }
     }
     res.unlockBag(startOfBag);
     return array;
@@ -1610,7 +1622,7 @@ static jintArray android_content_AssetManager_getArrayIntResource(JNIEnv* env, j
 
     jintArray array = env->NewIntArray(N);
     if (array == NULL) {
-        doThrow(env, "java/lang/OutOfMemoryError");
+        jniThrowException(env, "java/lang/OutOfMemoryError", "");
         res.unlockBag(startOfBag);
         return NULL;
     }
@@ -1649,13 +1661,13 @@ static jint android_content_AssetManager_splitThemePackage(JNIEnv* env, jobject 
     LOGV("splitThemePackage in %p (Java object %p)\n", am, clazz);
 
     if (srcFileName == NULL || dstFileName == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+        jniThrowException(env, "java/lang/NullPointerException", srcFileName == NULL ? "srcFileName" : "dstFileName");
         return -2;
     }
 
     jsize size = env->GetArrayLength(drmProtectedAssetNames);
     if (size == 0) {
-        doThrow(env, "java/lang/IllegalArgumentException");
+        jniThrowException(env, "java/lang/IllegalArgumentException", "drmProtectedAssetNames");
         return -3;
     }
 
@@ -1720,7 +1732,7 @@ static void android_content_AssetManager_init(JNIEnv* env, jobject clazz)
 {
     AssetManager* am = new AssetManager();
     if (am == NULL) {
-        doThrow(env, "java/lang/OutOfMemoryError");
+        jniThrowException(env, "java/lang/OutOfMemoryError", "");
         return;
     }
 
@@ -1754,11 +1766,6 @@ static jobject android_content_AssetManager_getAssetAllocations(JNIEnv* env, job
     }
     
     jstring str = env->NewStringUTF(alloc.string());
-    if (str == NULL) {
-        doThrow(env, "java/lang/OutOfMemoryError");
-        return NULL;
-    }
-    
     return str;
 }
 
@@ -1803,7 +1810,7 @@ static jboolean android_content_AssetManager_removeAssetPath(JNIEnv* env, jobjec
             jstring packageName, jint cookie)
 {
     if (packageName == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+        jniThrowException(env, "java/lang/NullPointerException", "packageName");
         return JNI_FALSE;
     }
 
@@ -1823,7 +1830,7 @@ static jint android_content_AssetManager_updateResourcesWithAssetPath(
             JNIEnv* env, jobject clazz, jstring path)
 {
     if (path == NULL) {
-        doThrow(env, "java/lang/NullPointerException");
+        jniThrowException(env, "java/lang/NullPointerException", "path");
         return JNI_FALSE;
     }
 

@@ -78,4 +78,72 @@ public class BluetoothStressTest extends InstrumentationTestCase {
 
         mTestUtils.disable(adapter);
     }
+
+    public void testPair() {
+        int iterations = BluetoothTestRunner.sPairIterations;
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        BluetoothDevice device = adapter.getRemoteDevice(BluetoothTestRunner.sPairAddress);
+        mTestUtils.enable(adapter);
+
+        for (int i = 0; i < iterations; i++) {
+            mTestUtils.writeOutput("pair iteration " + (i + 1) + " of " + iterations);
+            mTestUtils.pair(adapter, device, BluetoothTestRunner.sPairPasskey,
+                    BluetoothTestRunner.sPairPin);
+            mTestUtils.unpair(adapter, device);
+        }
+        mTestUtils.disable(adapter);
+    }
+
+    public void testAcceptPair() {
+        int iterations = BluetoothTestRunner.sPairIterations;
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        BluetoothDevice device = adapter.getRemoteDevice(BluetoothTestRunner.sPairAddress);
+        mTestUtils.enable(adapter);
+
+        for (int i = 0; i < iterations; i++) {
+            mTestUtils.writeOutput("acceptPair iteration " + (i + 1) + " of " + iterations);
+            mTestUtils.acceptPair(adapter, device, BluetoothTestRunner.sPairPasskey,
+                    BluetoothTestRunner.sPairPin);
+            mTestUtils.unpair(adapter, device);
+        }
+        mTestUtils.disable(adapter);
+    }
+
+    public void testConnectA2dp() {
+        int iterations = BluetoothTestRunner.sConnectA2dpIterations;
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        BluetoothDevice device = adapter.getRemoteDevice(BluetoothTestRunner.sA2dpAddress);
+
+        mTestUtils.enable(adapter);
+        mTestUtils.pair(adapter, device, BluetoothTestRunner.sPairPasskey,
+                BluetoothTestRunner.sPairPin);
+
+        for (int i = 0; i < iterations; i++) {
+            mTestUtils.writeOutput("connectA2dp iteration " + (i + 1) + " of " + iterations);
+            mTestUtils.connectA2dp(adapter, device);
+            mTestUtils.disconnectA2dp(adapter, device);
+        }
+
+        // TODO: Unpair from device if device can accept pairing after unpairing
+        mTestUtils.disable(adapter);
+    }
+
+    public void testConnectHeadset() {
+        int iterations = BluetoothTestRunner.sConnectHeadsetIterations;
+        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+        BluetoothDevice device = adapter.getRemoteDevice(BluetoothTestRunner.sHeadsetAddress);
+
+        mTestUtils.enable(adapter);
+        mTestUtils.pair(adapter, device, BluetoothTestRunner.sPairPasskey,
+                BluetoothTestRunner.sPairPin);
+
+        for (int i = 0; i < iterations; i++) {
+            mTestUtils.writeOutput("connectHeadset iteration " + (i + 1) + " of " + iterations);
+            mTestUtils.connectHeadset(adapter, device);
+            mTestUtils.disconnectHeadset(adapter, device);
+        }
+
+        // TODO: Unpair from device if device can accept pairing after unpairing
+        mTestUtils.disable(adapter);
+    }
 }

@@ -62,6 +62,23 @@
          a reference to a Drawable resource containing the image definition. -->
     <attr name="icon" format="reference" />
 
+    <!-- A Drawable resource providing an extended graphical logo for its
+         associated item. Use with the application tag (to supply a default
+         logo for all application components), or with the activity, receiver,
+         service, or instrumentation tag (to supply a specific logo for that
+         component). It may also be used with the intent-filter tag to supply
+         a logo to show to the user when an activity is being selected based
+         on a particular Intent.
+
+         <p>The given logo will be used to display to the user a graphical
+         representation of its associated component; for example as the
+         header in the Action Bar. The primary differences between an icon
+         and a logo are that logos are often wider and more detailed, and are
+         used without an accompanying text caption. This must be a reference
+         to a Drawable resource containing the image definition.
+         @hide -->
+    <attr name="logo" format="reference" />
+
     <!-- Name of the activity to be launched to manage application's space on
          device. The specified activity gets automatically launched when the
          application's space needs to be managed and is usually invoked 
@@ -73,11 +90,17 @@
     <attr name="manageSpaceActivity" format="string" />
 
     <!-- Option to let applications specify that user data can/cannot be 
-         cleared. Some applications might not want to clear user data. Such
-         applications can explicitly set this value to false. This flag is
-         turned on by default unless explicitly set to false 
-         by applications. -->
+         cleared. This flag is turned on by default.
+         <em>This attribute is usable only by applications
+         included in the system image. Third-party apps cannot use it.</em> -->
     <attr name="allowClearUserData" format="boolean" />
+
+    <!-- Option to let applications specify that user data should
+         never be encrypted if an Encrypted File System solution
+         is enabled. Specifically, this is an "opt-out" feature, meaning
+         that, by default, user data will be encrypted if the EFS feature
+         is enabled. -->
+    <attr name="neverEncrypt" format="boolean" />
 
     <!-- Option to indicate this application is only for testing purposes.
          For example, it may expose functionality or data outside of itself
@@ -375,6 +398,11 @@
          participate in data synchronization. -->
     <attr name="syncable" format="boolean" />
     
+    <!-- Flag declaring this activity to be 'immersive'; immersive activities
+         should not be interrupted with other activities or notifications.
+         @hide -->
+    <attr name="immersive" format="boolean" />
+
     <!-- Specify the order in which content providers hosted by a process
          are instantiated when that process is created.  Not needed unless
          you have providers with dependencies between each other, to make
@@ -466,10 +494,10 @@
              orientation will changed based on how the user rotates the device -->
         <enum name="unspecified" value="-1" />
         <!-- Would like to have the screen in a landscape orientation: that
-             is, with the display wider than it is tall. -->
+             is, with the display wider than it is tall, ignoring sensor data. -->
         <enum name="landscape" value="0" />
         <!-- Would like to have the screen in a portrait orientation: that
-             is, with the display taller than it is wide. -->
+             is, with the display taller than it is wide, ignoring sensor data. -->
         <enum name="portrait" value="1" />
         <!-- Use the user's current preferred orientation of the handset. -->
         <enum name="user" value="2" />
@@ -482,6 +510,24 @@
         <!-- Always ignore orientation determined by orientation sensor:
              the display will not rotate when the user moves the device. -->
         <enum name="nosensor" value="5" />
+        <!-- Would like to have the screen in landscape orientation, but can
+             use the sensor to change which direction the screen is facing. -->
+        <enum name="sensorLandscape" value="6" />
+        <!-- Would like to have the screen in portrait orientation, but can
+             use the sensor to change which direction the screen is facing. -->
+        <enum name="sensorPortait" value="7" />
+        <!-- Would like to have the screen in landscape orientation, turned in
+             the opposite direction from normal landscape. -->
+        <enum name="reverseLandscape" value="8" />
+        <!-- Would like to have the screen in portrait orientation, turned in
+             the opposite direction from normal portrait. -->
+        <enum name="reversePortait" value="9" />
+        <!-- Orientation is determined by a physical orientation sensor:
+             the display will rotate based on how the user moves the device.
+             This allows any of the 4 possible rotations, regardless of what
+             the device will normally do (for example some devices won't
+             normally use 180 degree rotation). -->
+        <enum name="fullSensor" value="10" />
     </attr>
     
     <!-- Specify one or more configuration changes that the activity will
@@ -715,6 +761,18 @@
         <attr name="killAfterRestore" />
         <attr name="restoreNeedsApplication" />
         <attr name="restoreAnyVersion" />
+        <attr name="neverEncrypt" />
+        <!-- Declare that this applicationn can't participate in the normal
+             state save/restore mechanism.  Since it is not able to save and
+             restore its state on demand,
+             it can not participate in the normal activity lifecycle.  It will
+             not be killed while in the background; the user must explicitly
+             quit it.  Only one such app can be running at a time; if the user
+             tries to launch a second such app, they will be prompted
+             to quit the first before doing so.  While the
+             application is running, the user will be informed of this.
+             @hide -->
+        <attr name="cantSaveState" format="boolean" />
     </declare-styleable>
     
     <!-- The <code>permission</code> tag declares a security permission that can be
@@ -937,6 +995,8 @@
              screen, so that it retains the dimensions it was originally
              designed for. -->
         <attr name="largeScreens" format="boolean" />
+        <!-- Indicates whether the application supports extra large screen form-factors. -->
+        <attr name="xlargeScreens" format="boolean" />
         <!-- Indicates whether the application can resize itself to newer
              screen sizes.  This is mostly used to distinguish between old
              applications that may not be compatible with newly introduced
@@ -1363,6 +1423,39 @@
         <attr name="handleProfiling" />
         <attr name="functionalTest" />
     </declare-styleable>
+    
+    <!-- Attributes that can be supplied in an AndroidManifest.xml
+         <code>screen</code> tag, a child of <code>compatible-screens</code>,
+         which is itseld a child of the root
+         {@link #AndroidManifest manifest} tag. -->
+    <declare-styleable name="AndroidManifestCompatibleScreensScreen"
+                       parent="AndroidManifest.AndroidManifestCompatibleScreens">
+        <!-- Specifies a compatible screen size, as per the device
+             configuration screen size bins. -->
+        <attr name="screenSize">
+            <!-- A small screen configuration, at least 240x320db. -->
+            <enum name="small" value="200" />
+            <!-- A normal screen configuration, at least 320x480db. -->
+            <enum name="normal" value="300" />
+            <!-- A large screen configuration, at least 400x530db. -->
+            <enum name="large" value="400" />
+            <!-- An extra large screen configuration, at least 600x800db. -->
+            <enum name="xlarge" value="500" />
+        </attr>
+        <!-- Specifies a compatible screen density, as per the device
+             configuration screen density bins. -->
+        <attr name="screenDensity" format="integer">
+            <!-- A low density screen, approximately 120dpi. -->
+            <enum name="ldpi" value="120" />
+            <!-- A medium density screen, approximately 160dpi. -->
+            <enum name="mdpi" value="160" />
+            <!-- A high density screen, approximately 240dpi. -->
+            <enum name="hdpi" value="240" />
+            <!-- An extra high density screen, approximately 320dpi. -->
+            <enum name="xhdpi" value="320" />
+        </attr>
+    </declare-styleable>
+    
     
     <!-- Declaration of an {@link android.content.Intent} object in XML.  May
          also include zero or more {@link #IntentCategory <category> and

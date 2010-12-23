@@ -19,10 +19,10 @@ package android.app;
 import android.content.ComponentName;
 import android.content.ContentProviderNative;
 import android.content.IContentProvider;
+import android.content.IIntentReceiver;
+import android.content.IIntentSender;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.IIntentSender;
-import android.content.IIntentReceiver;
 import android.content.IntentSender;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.ConfigurationInfo;
@@ -31,14 +31,15 @@ import android.content.pm.ProviderInfo;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Debug;
-import android.os.RemoteException;
 import android.os.IBinder;
 import android.os.IInterface;
 import android.os.Parcel;
-import android.os.Parcelable;
 import android.os.ParcelFileDescriptor;
-import android.os.Bundle;
+import android.os.Parcelable;
+import android.os.RemoteException;
+import android.os.StrictMode;
 
 import java.util.List;
 
@@ -115,7 +116,6 @@ public interface IActivityManager extends IInterface {
     public void unbroadcastIntent(IApplicationThread caller, Intent intent) throws RemoteException;
     /* oneway */
     public void finishReceiver(IBinder who, int resultCode, String resultData, Bundle map, boolean abortBroadcast) throws RemoteException;
-    public void setPersistent(IBinder token, boolean isPersistent) throws RemoteException;
     public void attachApplication(IApplicationThread app) throws RemoteException;
     /* oneway */
     public void activityIdle(IBinder token, Configuration config) throws RemoteException;
@@ -247,8 +247,6 @@ public interface IActivityManager extends IInterface {
     
     public boolean killPids(int[] pids, String reason) throws RemoteException;
     
-    public void reportPss(IApplicationThread caller, int pss) throws RemoteException;
-    
     // Special low-level communication with activity manager.
     public void startRunning(String pkg, String cls, String action,
             String data) throws RemoteException;
@@ -256,7 +254,14 @@ public interface IActivityManager extends IInterface {
             ApplicationErrorReport.CrashInfo crashInfo) throws RemoteException;
     public boolean handleApplicationWtf(IBinder app, String tag,
             ApplicationErrorReport.CrashInfo crashInfo) throws RemoteException;
-    
+
+    // A StrictMode violation to be handled.  The violationMask is a
+    // subset of the original StrictMode policy bitmask, with only the
+    // bit violated and penalty bits to be executed by the
+    // ActivityManagerService remaining set.
+    public void handleApplicationStrictModeViolation(IBinder app, int violationMask,
+            StrictMode.ViolationInfo crashInfo) throws RemoteException;
+
     /*
      * This will deliver the specified signal to all the persistent processes. Currently only 
      * SIGUSR1 is delivered. All others are ignored.
@@ -303,6 +308,19 @@ public interface IActivityManager extends IInterface {
     
     public boolean isUserAMonkey() throws RemoteException;
     
+    public void finishHeavyWeightApp() throws RemoteException;
+
+    public void crashApplication(int uid, int initialPid, String packageName,
+            String message) throws RemoteException;
+
+    public String getProviderMimeType(Uri uri) throws RemoteException;
+    
+    public IBinder newUriPermissionOwner(String name) throws RemoteException;
+    public void grantUriPermissionFromOwner(IBinder owner, int fromUid, String targetPkg,
+            Uri uri, int mode) throws RemoteException;
+    public void revokeUriPermissionFromOwner(IBinder owner, Uri uri,
+            int mode) throws RemoteException;
+
     /*
      * Private non-Binder interfaces
      */
@@ -311,28 +329,19 @@ public interface IActivityManager extends IInterface {
     /** Information you can retrieve about a particular application. */
     public static class ContentProviderHolder implements Parcelable {
         public final ProviderInfo info;
-        public final String permissionFailure;
         public IContentProvider provider;
         public boolean noReleaseNeeded;
 
         public ContentProviderHolder(ProviderInfo _info) {
             info = _info;
-            permissionFailure = null;
         }
 
-        public ContentProviderHolder(ProviderInfo _info,
-                String _permissionFailure) {
-            info = _info;
-            permissionFailure = _permissionFailure;
-        }
-        
         public int describeContents() {
             return 0;
         }
 
         public void writeToParcel(Parcel dest, int flags) {
             info.writeToParcel(dest, 0);
-            dest.writeString(permissionFailure);
             if (provider != null) {
                 dest.writeStrongBinder(provider.asBinder());
             } else {
@@ -354,7 +363,6 @@ public interface IActivityManager extends IInterface {
 
         private ContentProviderHolder(Parcel source) {
             info = ProviderInfo.CREATOR.createFromParcel(source);
-            permissionFailure = source.readString();
             provider = ContentProviderNative.asInterface(
                 source.readStrongBinder());
             noReleaseNeeded = source.readInt() != 0;
@@ -435,7 +443,7 @@ public interface IActivityManager extends IInterface {
     int REPORT_THUMBNAIL_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+27;
     int GET_CONTENT_PROVIDER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+28;
     int PUBLISH_CONTENT_PROVIDERS_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+29;
-    int SET_PERSISTENT_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+30;
+    
     int FINISH_SUB_ACTIVITY_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+31;
     int GET_RUNNING_SERVICE_CONTROL_PANEL_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+32;
     int START_SERVICE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+33;
@@ -486,7 +494,7 @@ public interface IActivityManager extends IInterface {
     int FORCE_STOP_PACKAGE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+78;
     int KILL_PIDS_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+79;
     int GET_SERVICES_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+80;
-    int REPORT_PSS_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+81;
+
     int GET_RUNNING_APP_PROCESSES_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+82;
     int GET_DEVICE_CONFIGURATION_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+83;
     int PEEK_SERVICE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+84;
@@ -513,4 +521,14 @@ public interface IActivityManager extends IInterface {
     int WILL_ACTIVITY_BE_VISIBLE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+105;
     int START_ACTIVITY_WITH_CONFIG_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+106;
     int GET_RUNNING_EXTERNAL_APPLICATIONS_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+107;
+    int FINISH_HEAVY_WEIGHT_APP_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+108;
+    int HANDLE_APPLICATION_STRICT_MODE_VIOLATION_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+109;
+    int IS_IMMERSIVE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+110;
+    int SET_IMMERSIVE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+111;
+    int IS_TOP_ACTIVITY_IMMERSIVE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+112;
+    int CRASH_APPLICATION_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+113;
+    int GET_PROVIDER_MIME_TYPE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+114;
+    int NEW_URI_PERMISSION_OWNER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+115;
+    int GRANT_URI_PERMISSION_FROM_OWNER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+116;
+    int REVOKE_URI_PERMISSION_FROM_OWNER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+117;
 }

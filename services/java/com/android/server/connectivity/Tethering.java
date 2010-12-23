@@ -26,15 +26,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.hardware.Usb;
 import android.net.ConnectivityManager;
 import android.net.InterfaceConfiguration;
 import android.net.IConnectivityManager;
 import android.net.INetworkManagementEventObserver;
 import android.net.NetworkInfo;
 import android.net.NetworkUtils;
-import android.os.BatteryManager;
 import android.os.Binder;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
 import android.os.INetworkManagementService;
@@ -110,8 +111,15 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
     private boolean mUsbMassStorageOff;  // track the status of USB Mass Storage
     private boolean mUsbConnected;       // track the status of USB connection
 
+    // mUsbHandler message
+    static final int USB_STATE_CHANGE = 1;
+    static final int USB_DISCONNECTED = 0;
+    static final int USB_CONNECTED = 1;
+
+    // Time to delay before processing USB disconnect events
+    static final long USB_DISCONNECT_DELAY = 1000;
+
     public Tethering(Context context, Looper looper) {
-        Log.d(TAG, "Tethering starting");
         mContext = context;
         mLooper = looper;
 
@@ -135,7 +143,7 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
 
         mStateReceiver = new StateReceiver();
         IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_BATTERY_CHANGED);
+        filter.addAction(Usb.ACTION_USB_STATE);
         filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         filter.addAction(Intent.ACTION_BOOT_COMPLETED);
         mContext.registerReceiver(mStateReceiver, filter);
@@ -421,13 +429,25 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         }
     }
 
+    private Handler mUsbHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            mUsbConnected = (msg.arg1 == USB_CONNECTED);
+            updateUsbStatus();
+        }
+    };
+
     private class StateReceiver extends BroadcastReceiver {
         public void onReceive(Context content, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
-                mUsbConnected = (intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1)
-                        == BatteryManager.BATTERY_PLUGGED_USB);
-                Tethering.this.updateUsbStatus();
+            if (action.equals(Usb.ACTION_USB_STATE)) {
+                // process connect events immediately, but delay handling disconnects
+                // to debounce USB configuration changes
+                boolean connected = intent.getExtras().getBoolean(Usb.USB_CONNECTED);
+                Message msg = Message.obtain(mUsbHandler, USB_STATE_CHANGE,
+                        (connected ? USB_CONNECTED : USB_DISCONNECTED), 0);
+                mUsbHandler.removeMessages(USB_STATE_CHANGE);
+                mUsbHandler.sendMessageDelayed(msg, connected ? 0 : USB_DISCONNECT_DELAY);
             } else if (action.equals(Intent.ACTION_MEDIA_SHARED)) {
                 mUsbMassStorageOff = false;
                 updateUsbStatus();
@@ -436,7 +456,6 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                 mUsbMassStorageOff = true;
                 updateUsbStatus();
             } else if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
-                Log.d(TAG, "Tethering got CONNECTIVITY_ACTION");
                 mTetherMasterSM.sendMessage(TetherMasterSM.CMD_UPSTREAM_CHANGED);
             } else if (action.equals(Intent.ACTION_BOOT_COMPLETED)) {
                 mBooted = true;

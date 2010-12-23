@@ -112,7 +112,7 @@ static VideoFrame *extractVideoFrameWithCodecFlags(
     sp<MediaSource> decoder =
         OMXCodec::Create(
                 client->interface(), source->getFormat(), false, source,
-                NULL, flags);
+                NULL, flags | OMXCodec::kClientNeedsFramebuffer);
 
     if (decoder.get() == NULL) {
         LOGV("unable to instantiate video decoder.");
@@ -159,6 +159,20 @@ static VideoFrame *extractVideoFrameWithCodecFlags(
 
     LOGV("successfully decoded video frame.");
 
+    int32_t unreadable;
+    if (buffer->meta_data()->findInt32(kKeyIsUnreadable, &unreadable)
+            && unreadable != 0) {
+        LOGV("video frame is unreadable, decoder does not give us access "
+             "to the video data.");
+
+        buffer->release();
+        buffer = NULL;
+
+        decoder->stop();
+
+        return NULL;
+    }
+
     int64_t timeUs;
     CHECK(buffer->meta_data()->findInt64(kKeyTime, &timeUs));
     if (thumbNailTime >= 0) {
@@ -177,6 +191,11 @@ static VideoFrame *extractVideoFrameWithCodecFlags(
     CHECK(meta->findInt32(kKeyWidth, &width));
     CHECK(meta->findInt32(kKeyHeight, &height));
 
+    int32_t rotationAngle;
+    if (!trackMeta->findInt32(kKeyRotation, &rotationAngle)) {
+        rotationAngle = 0;  // By default, no rotation
+    }
+
     VideoFrame *frame = new VideoFrame;
     frame->mWidth = width;
     frame->mHeight = height;
@@ -184,6 +203,7 @@ static VideoFrame *extractVideoFrameWithCodecFlags(
     frame->mDisplayHeight = height;
     frame->mSize = width * height * 2;
     frame->mData = new uint8_t[frame->mSize];
+    frame->mRotationAngle = rotationAngle;
 
     int32_t srcFormat;
     CHECK(meta->findInt32(kKeyColorFormat, &srcFormat));
@@ -378,6 +398,24 @@ void StagefrightMetadataRetriever::parseMetaData() {
     // The duration value is a string representing the duration in ms.
     sprintf(tmp, "%lld", (maxDurationUs + 500) / 1000);
     mMetaData.add(METADATA_KEY_DURATION, String8(tmp));
+
+    if (numTracks == 1) {
+        const char *fileMIME;
+        CHECK(meta->findCString(kKeyMIMEType, &fileMIME));
+
+        if (!strcasecmp(fileMIME, "video/x-matroska")) {
+            sp<MetaData> trackMeta = mExtractor->getTrackMetaData(0);
+            const char *trackMIME;
+            CHECK(trackMeta->findCString(kKeyMIMEType, &trackMIME));
+
+            if (!strncasecmp("audio/", trackMIME, 6)) {
+                // The matroska file only contains a single audio track,
+                // rewrite its mime type.
+                mMetaData.add(
+                        METADATA_KEY_MIMETYPE, String8("audio/x-matroska"));
+            }
+        }
+    }
 }
 
 

@@ -22,8 +22,9 @@
 
 #include <binder/IBinder.h>
 
-#include <utils/SortedVector.h>
 #include <utils/RefBase.h>
+#include <utils/Singleton.h>
+#include <utils/SortedVector.h>
 #include <utils/threads.h>
 
 #include <ui/PixelFormat.h>
@@ -39,8 +40,26 @@ class Region;
 class SharedClient;
 class ISurfaceComposer;
 class DisplayInfo;
+class surface_flinger_cblk_t;
 
-class SurfaceComposerClient : virtual public RefBase
+// ---------------------------------------------------------------------------
+
+class ComposerService : public Singleton<ComposerService>
+{
+    // these are constants
+    sp<ISurfaceComposer> mComposerService;
+    sp<IMemoryHeap> mServerCblkMemory;
+    surface_flinger_cblk_t volatile* mServerCblk;
+    ComposerService();
+    friend class Singleton<ComposerService>;
+public:
+    static sp<ISurfaceComposer> getComposerService();
+    static surface_flinger_cblk_t const volatile * getControlBlock();
+};
+
+// ---------------------------------------------------------------------------
+
+class SurfaceComposerClient : public RefBase
 {
 public:    
                 SurfaceComposerClient();
@@ -52,10 +71,6 @@ public:
     // Return the connection of this client
     sp<IBinder> connection() const;
     
-    // Retrieve a client for an existing connection.
-    static sp<SurfaceComposerClient>
-                clientForConnection(const sp<IBinder>& conn);
-
     // Forcibly remove connection before all references have gone away.
     void        dispose();
 
@@ -123,13 +138,6 @@ public:
     status_t linkToComposerDeath(const sp<IBinder::DeathRecipient>& recipient,
             void* cookie = NULL, uint32_t flags = 0);
 
-private:
-    friend class Surface;
-    friend class SurfaceControl;
-    
-    SurfaceComposerClient(const sp<ISurfaceComposer>& sm, 
-            const sp<IBinder>& conn);
-
     status_t    hide(SurfaceID id);
     status_t    show(SurfaceID id, int32_t layer = -1);
     status_t    freeze(SurfaceID id);
@@ -142,32 +150,56 @@ private:
     status_t    setMatrix(SurfaceID id, float dsdx, float dtdx, float dsdy, float dtdy);
     status_t    setPosition(SurfaceID id, int32_t x, int32_t y);
     status_t    setSize(SurfaceID id, uint32_t w, uint32_t h);
-    
-    void        signalServer();
-
     status_t    destroySurface(SurfaceID sid);
 
-    void        _init(const sp<ISurfaceComposer>& sm,
-                    const sp<ISurfaceFlingerClient>& conn);
-
-    inline layer_state_t*   _get_state_l(SurfaceID id);
-    layer_state_t*          _lockLayerState(SurfaceID id);
-    inline void             _unlockLayerState();
+private:
+    virtual void onFirstRef();
+    inline layer_state_t*   get_state_l(SurfaceID id);
+    layer_state_t*          lockLayerState(SurfaceID id);
+    inline void             unlockLayerState();
 
     mutable     Mutex                               mLock;
-                layer_state_t*                      mPrebuiltLayerState;
                 SortedVector<layer_state_t>         mStates;
                 int32_t                             mTransactionOpen;
+                layer_state_t*                      mPrebuiltLayerState;
 
                 // these don't need to be protected because they never change
                 // after assignment
                 status_t                    mStatus;
-                SharedClient*               mControl;
-                sp<IMemoryHeap>             mControlMemory;
-                sp<ISurfaceFlingerClient>   mClient;
-                sp<ISurfaceComposer>        mSignalServer;
+                sp<ISurfaceComposerClient>  mClient;
 };
 
+// ---------------------------------------------------------------------------
+
+class ScreenshotClient
+{
+    sp<IMemoryHeap> mHeap;
+    uint32_t mWidth;
+    uint32_t mHeight;
+    PixelFormat mFormat;
+public:
+    ScreenshotClient();
+
+    // frees the previous screenshot and capture a new one
+    status_t update();
+    status_t update(uint32_t reqWidth, uint32_t reqHeight);
+
+    // release memory occupied by the screenshot
+    void release();
+
+    // pixels are valid until this object is freed or
+    // release() or update() is called
+    void const* getPixels() const;
+
+    uint32_t getWidth() const;
+    uint32_t getHeight() const;
+    PixelFormat getFormat() const;
+    uint32_t getStride() const;
+    // size of allocated memory in bytes
+    size_t getSize() const;
+};
+
+// ---------------------------------------------------------------------------
 }; // namespace android
 
 #endif // ANDROID_SF_SURFACE_COMPOSER_CLIENT_H

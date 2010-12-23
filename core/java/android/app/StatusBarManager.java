@@ -23,6 +23,8 @@ import android.os.RemoteException;
 import android.os.IBinder;
 import android.os.ServiceManager;
 
+import com.android.internal.statusbar.IStatusBarService;
+
 /**
  * Allows an app to control the status bar.
  *
@@ -58,12 +60,12 @@ public class StatusBarManager {
     public static final int DISABLE_NONE = 0x00000000;
 
     private Context mContext;
-    private IStatusBar mService;
+    private IStatusBarService mService;
     private IBinder mToken = new Binder();
 
     StatusBarManager(Context context) {
         mContext = context;
-        mService = IStatusBar.Stub.asInterface(
+        mService = IStatusBarService.Stub.asInterface(
                 ServiceManager.getService(Context.STATUS_BAR_SERVICE));
     }
 
@@ -85,7 +87,7 @@ public class StatusBarManager {
      */
     public void expand() {
         try {
-            mService.activate();
+            mService.expand();
         } catch (RemoteException ex) {
             // system process is dead anyway.
             throw new RuntimeException(ex);
@@ -97,46 +99,34 @@ public class StatusBarManager {
      */
     public void collapse() {
         try {
-            mService.deactivate();
-        } catch (RemoteException ex) {
-            // system process is dead anyway.
-            throw new RuntimeException(ex);
-        }
-    }
-    
-    /**
-     * Toggle the status bar.
-     */
-    public void toggle() {
-        try {
-            mService.toggle();
+            mService.collapse();
         } catch (RemoteException ex) {
             // system process is dead anyway.
             throw new RuntimeException(ex);
         }
     }
 
-    public IBinder addIcon(String slot, int iconId, int iconLevel) {
+    public void setIcon(String slot, int iconId, int iconLevel) {
         try {
-            return mService.addIcon(slot, mContext.getPackageName(), iconId, iconLevel);
+            mService.setIcon(slot, mContext.getPackageName(), iconId, iconLevel);
         } catch (RemoteException ex) {
             // system process is dead anyway.
             throw new RuntimeException(ex);
         }
     }
 
-    public void updateIcon(IBinder key, String slot, int iconId, int iconLevel) {
+    public void removeIcon(String slot) {
         try {
-            mService.updateIcon(key, slot, mContext.getPackageName(), iconId, iconLevel);
+            mService.removeIcon(slot);
         } catch (RemoteException ex) {
             // system process is dead anyway.
             throw new RuntimeException(ex);
         }
     }
 
-    public void removeIcon(IBinder key) {
+    public void setIconVisibility(String slot, boolean visible) {
         try {
-            mService.removeIcon(key);
+            mService.setIconVisibility(slot, visible);
         } catch (RemoteException ex) {
             // system process is dead anyway.
             throw new RuntimeException(ex);

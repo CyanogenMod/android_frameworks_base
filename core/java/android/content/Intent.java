@@ -1568,6 +1568,30 @@ public class Intent implements Parcelable, Cloneable {
     @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
     public static final String ACTION_DEVICE_STORAGE_OK = "android.intent.action.DEVICE_STORAGE_OK";
     /**
+     * Broadcast Action:  A sticky broadcast that indicates a memory full
+     * condition on the device. This is intended for activities that want
+     * to be able to fill the data partition completely, leaving only
+     * enough free space to prevent system-wide SQLite failures.
+     *
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system.
+     *
+     * {@hide}
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_DEVICE_STORAGE_FULL = "android.intent.action.DEVICE_STORAGE_FULL";
+    /**
+     * Broadcast Action:  Indicates memory full condition on the device
+     * no longer exists.
+     *
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system.
+     *
+     * {@hide}
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_DEVICE_STORAGE_NOT_FULL = "android.intent.action.DEVICE_STORAGE_NOT_FULL";
+    /**
      * Broadcast Action:  Indicates low memory condition notification acknowledged by user
      * and package management should be started.
      * This is triggered by the user from the ACTION_DEVICE_STORAGE_LOW
@@ -5266,7 +5290,19 @@ public class Intent implements Parcelable, Cloneable {
                 b.append(' ');
             }
             first = false;
-            b.append("dat=").append(mData);
+            b.append("dat=");
+            String scheme = mData.getScheme();
+            if (scheme != null) {
+                if (scheme.equalsIgnoreCase("tel")) {
+                    b.append("tel:xxx-xxx-xxxx");
+                } else if (scheme.equalsIgnoreCase("smsto")) {
+                    b.append("smsto:xxx-xxx-xxxx");
+                } else {
+                    b.append(mData);
+                }
+            } else {
+                b.append(mData);
+            }
         }
         if (mType != null) {
             if (!first) {

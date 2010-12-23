@@ -34,7 +34,7 @@ import java.util.Set;
 /**
  * TODO: Move this to
  * java/services/com/android/server/BluetoothEventLoop.java
- * and make the contructor package private again.
+ * and make the constructor package private again.
  *
  * @hide
  */
@@ -52,21 +52,13 @@ class BluetoothEventLoop {
     private final BluetoothAdapter mAdapter;
     private final Context mContext;
 
-    private static final int EVENT_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY = 1;
-    private static final int EVENT_RESTART_BLUETOOTH = 2;
-    private static final int EVENT_PAIRING_CONSENT_DELAYED_ACCEPT = 3;
-    private static final int EVENT_AGENT_CANCEL = 4;
+    private static final int EVENT_RESTART_BLUETOOTH = 1;
+    private static final int EVENT_PAIRING_CONSENT_DELAYED_ACCEPT = 2;
+    private static final int EVENT_AGENT_CANCEL = 3;
 
     private static final int CREATE_DEVICE_ALREADY_EXISTS = 1;
     private static final int CREATE_DEVICE_SUCCESS = 0;
     private static final int CREATE_DEVICE_FAILED = -1;
-
-    // The time (in millisecs) to delay the pairing attempt after the first
-    // auto pairing attempt fails. We use an exponential delay with
-    // INIT_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY as the initial value and
-    // MAX_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY as the max value.
-    private static final long INIT_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY = 3000;
-    private static final long MAX_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY = 12000;
 
     private static final String BLUETOOTH_ADMIN_PERM = android.Manifest.permission.BLUETOOTH_ADMIN;
     private static final String BLUETOOTH_PERM = android.Manifest.permission.BLUETOOTH;
@@ -76,13 +68,6 @@ class BluetoothEventLoop {
         public void handleMessage(Message msg) {
             String address = null;
             switch (msg.what) {
-            case EVENT_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY:
-                address = (String)msg.obj;
-                if (address != null) {
-                    mBluetoothService.createBond(address);
-                    return;
-                }
-                break;
             case EVENT_RESTART_BLUETOOTH:
                 mBluetoothService.restart();
                 break;
@@ -95,8 +80,7 @@ class BluetoothEventLoop {
             case EVENT_AGENT_CANCEL:
                 // Set the Bond State to BOND_NONE.
                 // We always have only 1 device in BONDING state.
-                String[] devices =
-                    mBluetoothService.getBondState().listInState(BluetoothDevice.BOND_BONDING);
+                String[] devices = mBluetoothService.listInState(BluetoothDevice.BOND_BONDING);
                 if (devices.length == 0) {
                     break;
                 } else if (devices.length > 1) {
@@ -104,7 +88,7 @@ class BluetoothEventLoop {
                     break;
                 }
                 address = devices[0];
-                mBluetoothService.getBondState().setBondState(address,
+                mBluetoothService.setBondState(address,
                         BluetoothDevice.BOND_NONE,
                         BluetoothDevice.UNBOND_REASON_REMOTE_AUTH_CANCELED);
                 break;
@@ -115,7 +99,7 @@ class BluetoothEventLoop {
     static { classInitNative(); }
     private static native void classInitNative();
 
-    /* pacakge */ BluetoothEventLoop(Context context, BluetoothAdapter adapter,
+    /* package */ BluetoothEventLoop(Context context, BluetoothAdapter adapter,
             BluetoothService bluetoothService) {
         mBluetoothService = bluetoothService;
         mContext = context;
@@ -209,55 +193,7 @@ class BluetoothEventLoop {
 
     private void onCreatePairedDeviceResult(String address, int result) {
         address = address.toUpperCase();
-        if (result == BluetoothDevice.BOND_SUCCESS) {
-            mBluetoothService.getBondState().setBondState(address, BluetoothDevice.BOND_BONDED);
-            if (mBluetoothService.getBondState().isAutoPairingAttemptsInProgress(address)) {
-                mBluetoothService.getBondState().clearPinAttempts(address);
-            }
-        } else if (result == BluetoothDevice.UNBOND_REASON_AUTH_FAILED &&
-                mBluetoothService.getBondState().getAttempt(address) == 1) {
-            mBluetoothService.getBondState().addAutoPairingFailure(address);
-            pairingAttempt(address, result);
-        } else if (result == BluetoothDevice.UNBOND_REASON_REMOTE_DEVICE_DOWN &&
-                mBluetoothService.getBondState().isAutoPairingAttemptsInProgress(address)) {
-            pairingAttempt(address, result);
-        } else {
-            mBluetoothService.getBondState().setBondState(address,
-                                                          BluetoothDevice.BOND_NONE, result);
-            if (mBluetoothService.getBondState().isAutoPairingAttemptsInProgress(address)) {
-                mBluetoothService.getBondState().clearPinAttempts(address);
-            }
-        }
-    }
-
-    private void pairingAttempt(String address, int result) {
-        // This happens when our initial guess of "0000" as the pass key
-        // fails. Try to create the bond again and display the pin dialog
-        // to the user. Use back-off while posting the delayed
-        // message. The initial value is
-        // INIT_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY and the max value is
-        // MAX_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY. If the max value is
-        // reached, display an error to the user.
-        int attempt = mBluetoothService.getBondState().getAttempt(address);
-        if (attempt * INIT_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY >
-                    MAX_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY) {
-            mBluetoothService.getBondState().clearPinAttempts(address);
-            mBluetoothService.getBondState().setBondState(address,
-                    BluetoothDevice.BOND_NONE, result);
-            return;
-        }
-
-        Message message = mHandler.obtainMessage(EVENT_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY);
-        message.obj = address;
-        boolean postResult =  mHandler.sendMessageDelayed(message,
-                                        attempt * INIT_AUTO_PAIRING_FAILURE_ATTEMPT_DELAY);
-        if (!postResult) {
-            mBluetoothService.getBondState().clearPinAttempts(address);
-            mBluetoothService.getBondState().setBondState(address,
-                    BluetoothDevice.BOND_NONE, result);
-            return;
-        }
-        mBluetoothService.getBondState().attempt(address);
+        mBluetoothService.onCreatePairedDeviceResult(address, result);
     }
 
     private void onDeviceCreated(String deviceObjectPath) {
@@ -275,8 +211,8 @@ class BluetoothEventLoop {
     private void onDeviceRemoved(String deviceObjectPath) {
         String address = mBluetoothService.getAddressFromObjectPath(deviceObjectPath);
         if (address != null) {
-            mBluetoothService.getBondState().setBondState(address.toUpperCase(),
-                    BluetoothDevice.BOND_NONE, BluetoothDevice.UNBOND_REASON_REMOVED);
+            mBluetoothService.setBondState(address.toUpperCase(), BluetoothDevice.BOND_NONE,
+                BluetoothDevice.UNBOND_REASON_REMOVED);
             mBluetoothService.setRemoteDeviceProperty(address, "UUIDs", null);
         }
     }
@@ -289,10 +225,10 @@ class BluetoothEventLoop {
         }
         String name = propValues[0];
         if (name.equals("Name")) {
+            mBluetoothService.setProperty(name, propValues[1]);
             Intent intent = new Intent(BluetoothAdapter.ACTION_LOCAL_NAME_CHANGED);
             intent.putExtra(BluetoothAdapter.EXTRA_LOCAL_NAME, propValues[1]);
             mContext.sendBroadcast(intent, BLUETOOTH_PERM);
-            mBluetoothService.setProperty(name, propValues[1]);
         } else if (name.equals("Pairable") || name.equals("Discoverable")) {
             String pairable = name.equals("Pairable") ? propValues[1] :
                 mBluetoothService.getPropertyInternal("Pairable");
@@ -303,6 +239,7 @@ class BluetoothEventLoop {
             if (pairable == null || discoverable == null)
                 return;
 
+            mBluetoothService.setProperty(name, propValues[1]);
             int mode = BluetoothService.bluezStringToScanMode(
                     pairable.equals("true"),
                     discoverable.equals("true"));
@@ -312,9 +249,9 @@ class BluetoothEventLoop {
                 intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY_BEFORE_BOOT);
                 mContext.sendBroadcast(intent, BLUETOOTH_PERM);
             }
-            mBluetoothService.setProperty(name, propValues[1]);
         } else if (name.equals("Discovering")) {
             Intent intent;
+            mBluetoothService.setProperty(name, propValues[1]);
             if (propValues[1].equals("true")) {
                 mBluetoothService.setIsDiscovering(true);
                 intent = new Intent(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
@@ -325,7 +262,6 @@ class BluetoothEventLoop {
                 intent = new Intent(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
             }
             mContext.sendBroadcast(intent, BLUETOOTH_PERM);
-            mBluetoothService.setProperty(name, propValues[1]);
         } else if (name.equals("Devices")) {
             String value = null;
             int len = Integer.valueOf(propValues[1]);
@@ -358,19 +294,20 @@ class BluetoothEventLoop {
         }
         BluetoothDevice device = mAdapter.getRemoteDevice(address);
         if (name.equals("Name")) {
+            mBluetoothService.setRemoteDeviceProperty(address, name, propValues[1]);
             Intent intent = new Intent(BluetoothDevice.ACTION_NAME_CHANGED);
             intent.putExtra(BluetoothDevice.EXTRA_DEVICE, device);
             intent.putExtra(BluetoothDevice.EXTRA_NAME, propValues[1]);
             mContext.sendBroadcast(intent, BLUETOOTH_PERM);
-            mBluetoothService.setRemoteDeviceProperty(address, name, propValues[1]);
         } else if (name.equals("Class")) {
+            mBluetoothService.setRemoteDeviceProperty(address, name, propValues[1]);
             Intent intent = new Intent(BluetoothDevice.ACTION_CLASS_CHANGED);
             intent.putExtra(BluetoothDevice.EXTRA_DEVICE, device);
             intent.putExtra(BluetoothDevice.EXTRA_CLASS,
                     new BluetoothClass(Integer.valueOf(propValues[1])));
             mContext.sendBroadcast(intent, BLUETOOTH_PERM);
-            mBluetoothService.setRemoteDeviceProperty(address, name, propValues[1]);
         } else if (name.equals("Connected")) {
+            mBluetoothService.setRemoteDeviceProperty(address, name, propValues[1]);
             Intent intent = null;
             if (propValues[1].equals("true")) {
                 intent = new Intent(BluetoothDevice.ACTION_ACL_CONNECTED);
@@ -384,7 +321,6 @@ class BluetoothEventLoop {
             }
             intent.putExtra(BluetoothDevice.EXTRA_DEVICE, device);
             mContext.sendBroadcast(intent, BLUETOOTH_PERM);
-            mBluetoothService.setRemoteDeviceProperty(address, name, propValues[1]);
         } else if (name.equals("UUIDs")) {
             String uuid = null;
             int len = Integer.valueOf(propValues[1]);
@@ -404,10 +340,14 @@ class BluetoothEventLoop {
             mBluetoothService.sendUuidIntent(address);
         } else if (name.equals("Paired")) {
             if (propValues[1].equals("true")) {
-                mBluetoothService.getBondState().setBondState(address, BluetoothDevice.BOND_BONDED);
+                // If locally initiated pairing, we will
+                // not go to BOND_BONDED state until we have received a
+                // successful return value in onCreatePairedDeviceResult
+                if (null == mBluetoothService.getPendingOutgoingBonding()) {
+                    mBluetoothService.setBondState(address, BluetoothDevice.BOND_BONDED);
+                }
             } else {
-                mBluetoothService.getBondState().setBondState(address,
-                        BluetoothDevice.BOND_NONE);
+                mBluetoothService.setBondState(address, BluetoothDevice.BOND_NONE);
                 mBluetoothService.setRemoteDeviceProperty(address, "Trusted", "false");
             }
         } else if (name.equals("Trusted")) {
@@ -437,8 +377,8 @@ class BluetoothEventLoop {
         // Also set it only when the state is not already Bonded, we can sometimes
         // get an authorization request from the remote end if it doesn't have the link key
         // while we still have it.
-        if (mBluetoothService.getBondState().getBondState(address) != BluetoothDevice.BOND_BONDED)
-            mBluetoothService.getBondState().setBondState(address, BluetoothDevice.BOND_BONDING);
+        if (mBluetoothService.getBondState(address) != BluetoothDevice.BOND_BONDED)
+            mBluetoothService.setBondState(address, BluetoothDevice.BOND_BONDING);
         return address;
     }
 
@@ -452,7 +392,7 @@ class BluetoothEventLoop {
          * so we may get this request many times. Also if we respond immediately,
          * the other end is unable to handle it. Delay sending the message.
          */
-        if (mBluetoothService.getBondState().getBondState(address) == BluetoothDevice.BOND_BONDED) {
+        if (mBluetoothService.getBondState(address) == BluetoothDevice.BOND_BONDED) {
             Message message = mHandler.obtainMessage(EVENT_PAIRING_CONSENT_DELAYED_ACCEPT);
             message.obj = address;
             mHandler.sendMessageDelayed(message, 1500);
@@ -497,7 +437,7 @@ class BluetoothEventLoop {
         if (address == null) return;
 
         String pendingOutgoingAddress =
-                mBluetoothService.getBondState().getPendingOutgoingBonding();
+                mBluetoothService.getPendingOutgoingBonding();
         if (address.equals(pendingOutgoingAddress)) {
             // we initiated the bonding
 
@@ -518,12 +458,7 @@ class BluetoothEventLoop {
             case BluetoothClass.Device.AUDIO_VIDEO_PORTABLE_AUDIO:
             case BluetoothClass.Device.AUDIO_VIDEO_CAR_AUDIO:
             case BluetoothClass.Device.AUDIO_VIDEO_HIFI_AUDIO:
-                if (!mBluetoothService.getBondState().hasAutoPairingFailed(address) &&
-                    !mBluetoothService.getBondState().isAutoPairingBlacklisted(address)) {
-                    mBluetoothService.getBondState().attempt(address);
-                    mBluetoothService.setPin(address, BluetoothDevice.convertPinToBytes("0000"));
-                    return;
-                }
+                if (mBluetoothService.attemptAutoPair(address)) return;
            }
         }
         Intent intent = new Intent(BluetoothDevice.ACTION_PAIRING_REQUEST);
@@ -542,6 +477,17 @@ class BluetoothEventLoop {
         intent.putExtra(BluetoothDevice.EXTRA_PASSKEY, passkey);
         intent.putExtra(BluetoothDevice.EXTRA_PAIRING_VARIANT,
                         BluetoothDevice.PAIRING_VARIANT_DISPLAY_PASSKEY);
+        mContext.sendBroadcast(intent, BLUETOOTH_ADMIN_PERM);
+    }
+
+    private void onRequestOobData(String objectPath , int nativeData) {
+        String address = checkPairingRequestAndGetAddress(objectPath, nativeData);
+        if (address == null) return;
+
+        Intent intent = new Intent(BluetoothDevice.ACTION_PAIRING_REQUEST);
+        intent.putExtra(BluetoothDevice.EXTRA_DEVICE, mAdapter.getRemoteDevice(address));
+        intent.putExtra(BluetoothDevice.EXTRA_PAIRING_VARIANT,
+                BluetoothDevice.PAIRING_VARIANT_OOB_CONSENT);
         mContext.sendBroadcast(intent, BLUETOOTH_ADMIN_PERM);
     }
 
@@ -566,6 +512,14 @@ class BluetoothEventLoop {
             authorized = a2dp.getSinkPriority(device) > BluetoothA2dp.PRIORITY_OFF;
             if (authorized) {
                 Log.i(TAG, "Allowing incoming A2DP / AVRCP connection from " + address);
+                // Some headsets try to connect AVCTP before AVDTP - against the recommendation
+                // If AVCTP connection fails, we get stuck in IncomingA2DP state in the state
+                // machine.  We don't handle AVCTP signals currently. We only send
+                // intents for AVDTP state changes. We need to handle both of them in
+                // some cases. For now, just don't move to incoming state in this case.
+                if (!BluetoothUuid.isAvrcpTarget(uuid)) {
+                    mBluetoothService.notifyIncomingA2dpConnection(address);
+                }
             } else {
                 Log.i(TAG, "Rejecting incoming A2DP / AVRCP connection from " + address);
             }
@@ -576,7 +530,21 @@ class BluetoothEventLoop {
         return authorized;
     }
 
-    boolean isOtherSinkInNonDisconnectingState(String address) {
+    private boolean onAgentOutOfBandDataAvailable(String objectPath) {
+        if (!mBluetoothService.isEnabled()) return false;
+
+        String address = mBluetoothService.getAddressFromObjectPath(objectPath);
+        if (address == null) return false;
+
+        if (mBluetoothService.getDeviceOutOfBandData(
+            mAdapter.getRemoteDevice(address)) != null) {
+            return true;
+        }
+        return false;
+
+    }
+
+    private boolean isOtherSinkInNonDisconnectingState(String address) {
         BluetoothA2dp a2dp = new BluetoothA2dp(mContext);
         Set<BluetoothDevice> devices = a2dp.getNonDisconnectedSinks();
         if (devices.size() == 0) return false;
@@ -629,7 +597,7 @@ class BluetoothEventLoop {
 
     private void onRestartRequired() {
         if (mBluetoothService.isEnabled()) {
-            Log.e(TAG, "*** A serious error occured (did bluetoothd crash?) - " +
+            Log.e(TAG, "*** A serious error occurred (did bluetoothd crash?) - " +
                        "restarting Bluetooth ***");
             mHandler.sendEmptyMessage(EVENT_RESTART_BLUETOOTH);
         }

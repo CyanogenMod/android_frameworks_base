@@ -64,7 +64,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
     // settings.
-    private static final int DATABASE_VERSION = 56;
+    private static final int DATABASE_VERSION = 57;
 
     private Context mContext;
 
@@ -713,6 +713,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
              }
             upgradeVersion = 56;
         }
+
+        if (upgradeVersion == 56) {
+            /*
+             * Add Bluetooth to list of toggleable radios in airplane mode
+             */
+            db.beginTransaction();
+            SQLiteStatement stmt = null;
+            try {
+                db.execSQL("DELETE FROM system WHERE name='"
+                        + Settings.System.AIRPLANE_MODE_TOGGLEABLE_RADIOS + "'");
+                stmt = db.compileStatement("INSERT OR IGNORE INTO system(name,value)"
+                        + " VALUES(?,?);");
+                loadStringSetting(stmt, Settings.System.AIRPLANE_MODE_TOGGLEABLE_RADIOS,
+                        R.string.airplane_mode_toggleable_radios);
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+                if (stmt != null) stmt.close();
+            }
+            upgradeVersion = 57;
+        }
         // *** Remember to update DATABASE_VERSION above!
 
         if (upgradeVersion != currentVersion) {
@@ -971,7 +992,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             int vibrate = 0;
             vibrate = AudioService.getValueForVibrateSetting(vibrate,
                     AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_ON);
-            vibrate = AudioService.getValueForVibrateSetting(vibrate,
+            vibrate |= AudioService.getValueForVibrateSetting(vibrate,
                     AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
             loadSetting(stmt, Settings.System.VIBRATE_ON, vibrate);
         } finally {

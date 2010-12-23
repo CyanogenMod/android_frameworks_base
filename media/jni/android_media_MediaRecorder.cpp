@@ -317,8 +317,17 @@ android_media_MediaRecorder_prepare(JNIEnv *env, jobject thiz)
 
     jobject surface = env->GetObjectField(thiz, fields.surface);
     if (surface != NULL) {
-        const sp<Surface>& native_surface = get_surface(env, surface);
-        LOGI("prepare: surface=%p (id=%d)", native_surface.get(), native_surface->ID());
+        const sp<Surface> native_surface = get_surface(env, surface);
+
+        // The application may misbehave and
+        // the preview surface becomes unavailable
+        if (native_surface.get() == 0) {
+            LOGE("Application lost the surface");
+            jniThrowException(env, "java/io/IOException", "invalid preview surface");
+            return;
+        }
+
+        LOGI("prepare: surface=%p (identity=%d)", native_surface.get(), native_surface->getIdentity());
         if (process_media_recorder_call(env, mr->setPreviewSurface(native_surface), "java/lang/RuntimeException", "setPreviewSurface failed.")) {
             return;
         }
@@ -403,7 +412,7 @@ android_media_MediaRecorder_native_init(JNIEnv *env)
         return;
     }
 
-    fields.surface_native = env->GetFieldID(surface, "mSurface", "I");
+    fields.surface_native = env->GetFieldID(surface, ANDROID_VIEW_SURFACE_JNI_ID, "I");
     if (fields.surface_native == NULL) {
         jniThrowException(env, "java/lang/RuntimeException", "Can't find Surface.mSurface");
         return;
@@ -428,7 +437,7 @@ android_media_MediaRecorder_native_setup(JNIEnv *env, jobject thiz, jobject weak
         return;
     }
     if (mr->initCheck() != NO_ERROR) {
-        jniThrowException(env, "java/lang/IOException", "Unable to initialize camera");
+        jniThrowException(env, "java/lang/RuntimeException", "Unable to initialize media recorder");
         return;
     }
 

@@ -37,6 +37,9 @@ import java.util.Calendar;
 /**
  * A view for selecting a month / year / day based on a calendar like layout.
  *
+ * <p>See the <a href="{@docRoot}resources/tutorials/views/hello-datepicker.html">Date Picker
+ * tutorial</a>.</p>
+ *
  * For a dialog using this view, see {@link android.app.DatePickerDialog}.
  */
 @Widget
@@ -111,9 +114,11 @@ public class DatePicker extends FrameLayout {
             for (int i = 0; i < months.length; i++) {
                 months[i] = String.valueOf(i + 1);
             }
+            mMonthPicker.setRange(1, 12);
+        } else {
+            mMonthPicker.setRange(1, 12, months);
         }
 
-        mMonthPicker.setRange(1, 12, months);
         mMonthPicker.setSpeed(200);
         mMonthPicker.setOnChangeListener(new OnChangedListener() {
             public void onChanged(NumberPicker picker, int oldVal, int newVal) {
@@ -328,6 +333,7 @@ public class DatePicker extends FrameLayout {
         mYear = ss.getYear();
         mMonth = ss.getMonth();
         mDay = ss.getDay();
+        updateSpinners();
     }
 
     /**

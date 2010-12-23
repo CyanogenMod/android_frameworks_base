@@ -16,9 +16,8 @@
 
 package com.android.server;
 
-import com.android.server.status.IconData;
-import com.android.server.status.NotificationData;
-import com.android.server.status.StatusBarService;
+import com.android.internal.statusbar.StatusBarNotification;
+import com.android.server.StatusBarManagerService;
 
 import android.app.ActivityManagerNative;
 import android.app.IActivityManager;
@@ -39,9 +38,11 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.database.ContentObserver;
+import android.hardware.Usb;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.BatteryManager;
+import android.os.Bundle;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -66,10 +67,13 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-class NotificationManagerService extends INotificationManager.Stub
+/** {@hide} */
+public class NotificationManagerService extends INotificationManager.Stub
 {
     private static final String TAG = "NotificationService";
     private static final boolean DBG = false;
+
+    private static final int MAX_PACKAGE_NOTIFICATIONS = 50;
 
     // message codes
     private static final int MESSAGE_TIMEOUT = 2;
@@ -86,7 +90,7 @@ class NotificationManagerService extends INotificationManager.Stub
     final IBinder mForegroundToken = new Binder();
 
     private WorkerHandler mHandler;
-    private StatusBarService mStatusBarService;
+    private StatusBarManagerService mStatusBar;
     private LightsService mLightsService;
     private LightsService.Light mBatteryLight;
     private LightsService.Light mNotificationLight;
@@ -108,10 +112,12 @@ class NotificationManagerService extends INotificationManager.Stub
     private boolean mScreenOn = true;
     private boolean mInCall = false;
     private boolean mNotificationPulseEnabled;
+    // This is true if we have received a new notification while the screen is off
+    // (that is, if mLedNotification was set while the screen was off)
+    // This is reset to false when the screen is turned on.
+    private boolean mPendingPulseNotification;
 
     // for adb connected notifications
-    private boolean mUsbConnected;
-    private boolean mAdbEnabled = false;
     private boolean mAdbNotificationShown = false;
     private Notification mAdbNotification;
 
@@ -163,16 +169,21 @@ class NotificationManagerService extends INotificationManager.Stub
         final String pkg;
         final String tag;
         final int id;
+        final int uid;
+        final int initialPid;
         ITransientNotification callback;
         int duration;
         final Notification notification;
         IBinder statusBarKey;
 
-        NotificationRecord(String pkg, String tag, int id, Notification notification)
+        NotificationRecord(String pkg, String tag, int id, int uid, int initialPid,
+                Notification notification)
         {
             this.pkg = pkg;
             this.tag = tag;
             this.id = id;
+            this.uid = uid;
+            this.initialPid = initialPid;
             this.notification = notification;
         }
 
@@ -238,8 +249,8 @@ class NotificationManagerService extends INotificationManager.Stub
         }
     }
 
-    private StatusBarService.NotificationCallbacks mNotificationCallbacks
-            = new StatusBarService.NotificationCallbacks() {
+    private StatusBarManagerService.NotificationCallbacks mNotificationCallbacks
+            = new StatusBarManagerService.NotificationCallbacks() {
 
         public void onSetDisabled(int status) {
             synchronized (mNotificationList) {
@@ -302,6 +313,21 @@ class NotificationManagerService extends INotificationManager.Stub
                 updateLightsLocked();
             }
         }
+
+        public void onNotificationError(String pkg, String tag, int id,
+                int uid, int initialPid, String message) {
+            Slog.d(TAG, "onNotification error pkg=" + pkg + " tag=" + tag + " id=" + id
+                    + "; will crashApplication(uid=" + uid + ", pid=" + initialPid + ")");
+            cancelNotification(pkg, tag, id, 0, 0);
+            long ident = Binder.clearCallingIdentity();
+            try {
+                ActivityManagerNative.getDefault().crashApplication(uid, initialPid, pkg,
+                        "Bad notification posted from package " + pkg
+                        + ": " + message);
+            } catch (RemoteException e) {
+            }
+            Binder.restoreCallingIdentity(ident);
+        }
     };
 
     private BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
@@ -326,12 +352,14 @@ class NotificationManagerService extends INotificationManager.Stub
                     mBatteryFull = batteryFull;
                     updateLights();
                 }
-            } else if (action.equals(Intent.ACTION_UMS_CONNECTED)) {
-                mUsbConnected = true;
-                updateAdbNotification();
-            } else if (action.equals(Intent.ACTION_UMS_DISCONNECTED)) {
-                mUsbConnected = false;
-                updateAdbNotification();
+            } else if (action.equals(Usb.ACTION_USB_STATE)) {
+                Bundle extras = intent.getExtras();
+                boolean usbConnected = extras.getBoolean(Usb.USB_CONNECTED);
+                boolean adbEnabled = (Usb.USB_FUNCTION_ENABLED.equals(
+                                    extras.getString(Usb.USB_FUNCTION_ADB)));
+                updateAdbNotification(usbConnected && adbEnabled);
+            } else if (action.equals(Usb.ACTION_USB_DISCONNECTED)) {
+                updateAdbNotification(false);
             } else if (action.equals(Intent.ACTION_PACKAGE_REMOVED)
                     || action.equals(Intent.ACTION_PACKAGE_RESTARTED)
                     || (queryRestart=action.equals(Intent.ACTION_QUERY_PACKAGE_RESTART))
@@ -377,8 +405,6 @@ class NotificationManagerService extends INotificationManager.Stub
 
         void observe() {
             ContentResolver resolver = mContext.getContentResolver();
-            resolver.registerContentObserver(Settings.Secure.getUriFor(
-                    Settings.Secure.ADB_ENABLED), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_LIGHT_PULSE), false, this);
             update();
@@ -390,12 +416,6 @@ class NotificationManagerService extends INotificationManager.Stub
 
         public void update() {
             ContentResolver resolver = mContext.getContentResolver();
-            boolean adbEnabled = Settings.Secure.getInt(resolver,
-                        Settings.Secure.ADB_ENABLED, 0) != 0;
-            if (mAdbEnabled != adbEnabled) {
-                mAdbEnabled = adbEnabled;
-                updateAdbNotification();
-            }
             boolean pulseEnabled = Settings.System.getInt(resolver,
                         Settings.System.NOTIFICATION_LIGHT_PULSE, 0) != 0;
             if (mNotificationPulseEnabled != pulseEnabled) {
@@ -405,7 +425,7 @@ class NotificationManagerService extends INotificationManager.Stub
         }
     }
 
-    NotificationManagerService(Context context, StatusBarService statusBar,
+    NotificationManagerService(Context context, StatusBarManagerService statusBar,
             LightsService lights)
     {
         super();
@@ -417,7 +437,7 @@ class NotificationManagerService extends INotificationManager.Stub
         mToastQueue = new ArrayList<ToastRecord>();
         mHandler = new WorkerHandler();
 
-        mStatusBarService = statusBar;
+        mStatusBar = statusBar;
         statusBar.setNotificationCallbacks(mNotificationCallbacks);
 
         mBatteryLight = lights.getLight(LightsService.LIGHT_ID_BATTERY);
@@ -444,8 +464,7 @@ class NotificationManagerService extends INotificationManager.Stub
         // register for battery changed notifications
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
-        filter.addAction(Intent.ACTION_UMS_CONNECTED);
-        filter.addAction(Intent.ACTION_UMS_DISCONNECTED);
+        filter.addAction(Usb.ACTION_USB_STATE);
         filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
@@ -653,10 +672,39 @@ class NotificationManagerService extends INotificationManager.Stub
         enqueueNotificationWithTag(pkg, null /* tag */, id, notification, idOut);
     }
 
-    public void enqueueNotificationWithTag(String pkg, String tag, int id,
-            Notification notification, int[] idOut)
+    public void enqueueNotificationWithTag(String pkg, String tag, int id, Notification notification,
+            int[] idOut)
+    {
+        enqueueNotificationInternal(pkg, Binder.getCallingUid(), Binder.getCallingPid(),
+                tag, id, notification, idOut);
+    }
+
+    // Not exposed via Binder; for system use only (otherwise malicious apps could spoof the
+    // uid/pid of another application)
+    public void enqueueNotificationInternal(String pkg, int callingUid, int callingPid,
+            String tag, int id, Notification notification, int[] idOut)
     {
         checkIncomingCall(pkg);
+
+        // Limit the number of notifications that any given package except the android
+        // package can enqueue.  Prevents DOS attacks and deals with leaks.
+        if (!"android".equals(pkg)) {
+            synchronized (mNotificationList) {
+                int count = 0;
+                final int N = mNotificationList.size();
+                for (int i=0; i<N; i++) {
+                    final NotificationRecord r = mNotificationList.get(i);
+                    if (r.pkg.equals(pkg)) {
+                        count++;
+                        if (count >= MAX_PACKAGE_NOTIFICATIONS) {
+                            Slog.e(TAG, "Package has already posted " + count
+                                    + " notifications.  Not showing more.  package=" + pkg);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
 
         // This conditional is a dirty hack to limit the logging done on
         //     behalf of the download manager without affecting other apps.
@@ -681,7 +729,8 @@ class NotificationManagerService extends INotificationManager.Stub
         }
 
         synchronized (mNotificationList) {
-            NotificationRecord r = new NotificationRecord(pkg, tag, id, notification);
+            NotificationRecord r = new NotificationRecord(pkg, tag, id,
+                    callingUid, callingPid, notification);
             NotificationRecord old = null;
 
             int index = indexOfNotificationLocked(pkg, tag, id);
@@ -705,36 +754,13 @@ class NotificationManagerService extends INotificationManager.Stub
             }
 
             if (notification.icon != 0) {
-                IconData icon = IconData.makeIcon(null, pkg, notification.icon,
-                                                    notification.iconLevel,
-                                                    notification.number);
-                CharSequence truncatedTicker = notification.tickerText;
-
-                // TODO: make this restriction do something smarter like never fill
-                // more than two screens.  "Why would anyone need more than 80 characters." :-/
-                final int maxTickerLen = 80;
-                if (truncatedTicker != null && truncatedTicker.length() > maxTickerLen) {
-                    truncatedTicker = truncatedTicker.subSequence(0, maxTickerLen);
-                }
-
-                NotificationData n = new NotificationData();
-                n.pkg = pkg;
-                n.tag = tag;
-                n.id = id;
-                n.when = notification.when;
-                n.tickerText = truncatedTicker;
-                n.ongoingEvent = (notification.flags & Notification.FLAG_ONGOING_EVENT) != 0;
-                if (!n.ongoingEvent && (notification.flags & Notification.FLAG_NO_CLEAR) == 0) {
-                    n.clearable = true;
-                }
-                n.contentView = notification.contentView;
-                n.contentIntent = notification.contentIntent;
-                n.deleteIntent = notification.deleteIntent;
+                StatusBarNotification n = new StatusBarNotification(pkg, id, tag,
+                        r.uid, r.initialPid, notification);
                 if (old != null && old.statusBarKey != null) {
                     r.statusBarKey = old.statusBarKey;
                     long identity = Binder.clearCallingIdentity();
                     try {
-                        mStatusBarService.updateIcon(r.statusBarKey, icon, n);
+                        mStatusBar.updateNotification(r.statusBarKey, n);
                     }
                     finally {
                         Binder.restoreCallingIdentity(identity);
@@ -742,21 +768,19 @@ class NotificationManagerService extends INotificationManager.Stub
                 } else {
                     long identity = Binder.clearCallingIdentity();
                     try {
-                        r.statusBarKey = mStatusBarService.addIcon(icon, n);
+                        r.statusBarKey = mStatusBar.addNotification(n);
                         mAttentionLight.pulse();
                     }
                     finally {
                         Binder.restoreCallingIdentity(identity);
                     }
                 }
-
                 sendAccessibilityEvent(notification, pkg);
-
             } else {
                 if (old != null && old.statusBarKey != null) {
                     long identity = Binder.clearCallingIdentity();
                     try {
-                        mStatusBarService.removeIcon(old.statusBarKey);
+                        mStatusBar.removeNotification(old.statusBarKey);
                     }
                     finally {
                         Binder.restoreCallingIdentity(identity);
@@ -864,7 +888,7 @@ class NotificationManagerService extends INotificationManager.Stub
         if (r.notification.icon != 0) {
             long identity = Binder.clearCallingIdentity();
             try {
-                mStatusBarService.removeIcon(r.statusBarKey);
+                mStatusBar.removeNotification(r.statusBarKey);
             }
             finally {
                 Binder.restoreCallingIdentity(identity);
@@ -1059,6 +1083,11 @@ class NotificationManagerService extends INotificationManager.Stub
             mBatteryLight.turnOff();
         }
 
+        // clear pending pulse notification if screen is on
+        if (mScreenOn || mLedNotification == null) {
+            mPendingPulseNotification = false;
+        }
+
         // handle notification lights
         if (mLedNotification == null) {
             // get next notification, if any
@@ -1066,11 +1095,14 @@ class NotificationManagerService extends INotificationManager.Stub
             if (n > 0) {
                 mLedNotification = mLights.get(n-1);
             }
+            if (mLedNotification != null && !mScreenOn) {
+                mPendingPulseNotification = true;
+            }
         }
 
         // we only flash if screen is off and persistent pulsing is enabled
         // and we are not currently in a call
-        if (mLedNotification == null || mScreenOn || mInCall) {
+        if (!mPendingPulseNotification || mScreenOn || mInCall) {
             mNotificationLight.turnOff();
         } else {
             int ledARGB = mLedNotification.notification.ledARGB;
@@ -1118,8 +1150,8 @@ class NotificationManagerService extends INotificationManager.Stub
     // This is here instead of StatusBarPolicy because it is an important
     // security feature that we don't want people customizing the platform
     // to accidentally lose.
-    private void updateAdbNotification() {
-        if (mAdbEnabled && mUsbConnected) {
+    private void updateAdbNotification(boolean adbEnabled) {
+        if (adbEnabled) {
             if ("0".equals(SystemProperties.get("persist.adb.notify"))) {
                 return;
             }

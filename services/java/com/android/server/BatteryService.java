@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.BatteryManager;
 import android.os.Binder;
+import android.os.FileUtils;
 import android.os.IBinder;
 import android.os.DropBoxManager;
 import android.os.RemoteException;
@@ -210,9 +211,6 @@ class BatteryService extends Binder {
         boolean logOutlier = false;
         long dischargeDuration = 0;
 
-        shutdownIfNoPower();
-        shutdownIfOverTemp();
-
         mBatteryLevelCritical = mBatteryLevel <= CRITICAL_BATTERY_LEVEL;
         if (mAcOnline) {
             mPlugType = BatteryManager.BATTERY_PLUGGED_AC;
@@ -221,6 +219,19 @@ class BatteryService extends Binder {
         } else {
             mPlugType = BATTERY_PLUGGED_NONE;
         }
+        
+        // Let the battery stats keep track of the current level.
+        try {
+            mBatteryStats.setBatteryState(mBatteryStatus, mBatteryHealth,
+                    mPlugType, mBatteryLevel, mBatteryTemperature,
+                    mBatteryVoltage);
+        } catch (RemoteException e) {
+            // Should never happen.
+        }
+        
+        shutdownIfNoPower();
+        shutdownIfOverTemp();
+
         if (mBatteryStatus != mLastBatteryStatus ||
                 mBatteryHealth != mLastBatteryHealth ||
                 mBatteryPresent != mLastBatteryPresent ||
@@ -262,16 +273,6 @@ class BatteryService extends Binder {
                     mBatteryTemperature != mLastBatteryTemperature) {
                 EventLog.writeEvent(EventLogTags.BATTERY_LEVEL,
                         mBatteryLevel, mBatteryVoltage, mBatteryTemperature);
-            }
-            if (mBatteryLevel != mLastBatteryLevel && mPlugType == BATTERY_PLUGGED_NONE) {
-                // If the battery level has changed and we are on battery, update the current level.
-                // This is used for discharge cycle tracking so this shouldn't be updated while the
-                // battery is charging.
-                try {
-                    mBatteryStats.recordCurrentLevel(mBatteryLevel);
-                } catch (RemoteException e) {
-                    // Should never happen.
-                }
             }
             if (mBatteryLevelCritical && !mLastBatteryLevelCritical &&
                     mPlugType == BATTERY_PLUGGED_NONE) {
@@ -342,11 +343,6 @@ class BatteryService extends Binder {
         Intent intent = new Intent(Intent.ACTION_BATTERY_CHANGED);
         intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY
                 | Intent.FLAG_RECEIVER_REPLACE_PENDING);
-        try {
-            mBatteryStats.setOnBattery(mPlugType == BATTERY_PLUGGED_NONE, mBatteryLevel);
-        } catch (RemoteException e) {
-            // Should never happen.
-        }
 
         int icon = getIcon(mBatteryLevel);
 
@@ -389,7 +385,7 @@ class BatteryService extends Binder {
             dumpFile = new File(DUMPSYS_DATA_PATH + BATTERY_STATS_SERVICE_NAME + ".dump");
             dumpStream = new FileOutputStream(dumpFile);
             batteryInfoService.dump(dumpStream.getFD(), DUMPSYS_ARGS);
-            dumpStream.getFD().sync();
+            FileUtils.sync(dumpStream);
 
             // add dump file to drop box
             db.addFile("BATTERY_DISCHARGE_INFO", dumpFile, DropBoxManager.IS_TEXT);

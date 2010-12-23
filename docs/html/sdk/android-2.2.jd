@@ -2,7 +2,6 @@ page.title=Android 2.2 Platform
 sdk.platform.version=2.2
 sdk.platform.apiLevel=8
 sdk.platform.majorMinor=minor
-sdk.platform.deployableDate=May 2010
 
 @jd:body
 
@@ -43,7 +42,7 @@ Differences Report &raquo;</a> </li>
 
 <p>Android {@sdkPlatformVersion} is a {@sdkPlatformMajorMinor} platform release including user
 features, developer features, API changes, and bug
-fixes. For  information on developer features and API changes, see the 
+fixes. For  information on developer features and API changes, see the
 <a href="#api">Framework API</a> section.</p>
 
 <p>For developers, the Android {@sdkPlatformVersion} platform is available as a
@@ -63,7 +62,7 @@ first.</p>
 
 <h2 id="features">Platform Highlights</h2>
 
-<p>For a list of new user features and platform highlights, see the <a 
+<p>For a list of new user features and platform highlights, see the <a
 href="http://developer.android.com/sdk/android-2.2-highlights.html">Android
 2.2 Platform Highlights</a> document.</p>
 
@@ -118,6 +117,30 @@ function toggleDiv(link) {
 <div class="toggleable opened">
   <a href="#" onclick="return toggleDiv(this)">
         <img src="{@docRoot}assets/images/triangle-opened.png" class="toggle-img" height="9px" width="9px" />
+        Android {@sdkPlatformVersion}, Revision 2</a> <em>(July 2010)</em></a>
+  <div class="toggleme">
+<dl>
+<dt>Dependencies:</dt>
+<dd>
+<p>Requires SDK Tools r6 or higher.</p>
+</dd>
+
+<dt>System Image:</dt>
+<dd>
+<ul>
+<li>Adds default Search Widget.</li>
+<li>Includes proper provisioning for the platform's Backup Manager. For more information about how to use the Backup Manager, see <a href="{@docRoot}guide/topics/data/backup.html">Data Backup</a>.</li>
+<li>Updates the Android 2.2 system image to FRF91.</li>
+</ul>
+</dd>
+
+</dl>
+ </div>
+</div>
+
+<div class="toggleable closed">
+  <a href="#" onclick="return toggleDiv(this)">
+        <img src="{@docRoot}assets/images/triangle-closed.png" class="toggle-img" height="9px" width="9px" />
         Android {@sdkPlatformVersion}, Revision 1</a> <em>(May 2010)</em></a>
   <div class="toggleme">
 <dl>
@@ -134,7 +157,6 @@ function toggleDiv(link) {
 </dl>
  </div>
 </div>
-
 
 <h2 id="api-level">API Level</h2>
 
@@ -294,8 +316,8 @@ href="{@docRoot}resources/samples/ApiDemos/src/com/example/android/apis/app/Devi
 
 <ul>
   <li> New <code>android:backupAgent</code> attribute of the
-<code>&lt;application&gt;</code> element. Specifies the component name of the 
-BackupAgent subclass provided by the application to handle backup/restore 
+<code>&lt;application&gt;</code> element. Specifies the component name of the
+BackupAgent subclass provided by the application to handle backup/restore
 operations, if any.</li>
   <li> New <code>android:restoreAnyVersion</code> attribute of the
 <code>&lt;application&gt;</code> element. Boolean value that indicates whether
@@ -413,6 +435,11 @@ descriptor).</p>
 
 <p>Localized UI strings match the locales that are accessible
 through Settings.</p>
+
+<p class="note"><strong>Note:</strong> Android supports more locales than are listed above. However,
+the entire collection of locale strings cannot fit on a single system image, so the above list is
+only what's included in the system image for the SDK. All of Android's supported locales are
+available in the <a href="http://source.android.com/">Android Open Source Project</a>.</p>
 
 <h2 id="skins">Emulator Skins</h2>
 

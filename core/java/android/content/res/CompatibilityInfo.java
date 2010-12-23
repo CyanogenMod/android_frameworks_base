@@ -99,7 +99,22 @@ public class CompatibilityInfo {
      */
     private static final int CONFIGURED_LARGE_SCREENS = 16; 
 
-    private static final int SCALING_EXPANDABLE_MASK = SCALING_REQUIRED | EXPANDABLE | LARGE_SCREENS;
+    /**
+     * A flag mask to indicates that the application supports xlarge screens.
+     * The flag is set to true if
+     * 1) Application declares it supports xlarge screens in manifest file using <supports-screens> or
+     * 2) The screen size is not xlarge
+     * {@see compatibilityFlag}
+     */
+    private static final int XLARGE_SCREENS = 32;
+    
+    /**
+     * A flag mask to tell if the application supports xlarge screens. This differs
+     * from XLARGE_SCREENS in that the application that does not support xlarge
+     * screens will be marked as supporting them if the current screen is not
+     * xlarge.
+     */
+    private static final int CONFIGURED_XLARGE_SCREENS = 64;
 
     /**
      * The effective screen density we have selected for this application.
@@ -121,11 +136,20 @@ public class CompatibilityInfo {
      */
     public final int appFlags;
     
+    /**
+     * Whether the application supports third-party theming.
+     */
+    public final boolean isThemeable;
+    
     public CompatibilityInfo(ApplicationInfo appInfo) {
+        isThemeable = appInfo.isThemeable;
         appFlags = appInfo.flags;
         
         if ((appInfo.flags & ApplicationInfo.FLAG_SUPPORTS_LARGE_SCREENS) != 0) {
             mCompatibilityFlags |= LARGE_SCREENS | CONFIGURED_LARGE_SCREENS;
+        }
+        if ((appInfo.flags & ApplicationInfo.FLAG_SUPPORTS_XLARGE_SCREENS) != 0) {
+            mCompatibilityFlags |= XLARGE_SCREENS | CONFIGURED_XLARGE_SCREENS;
         }
         if ((appInfo.flags & ApplicationInfo.FLAG_RESIZEABLE_FOR_SCREENS) != 0) {
             mCompatibilityFlags |= EXPANDABLE | CONFIGURED_EXPANDABLE;
@@ -145,23 +169,26 @@ public class CompatibilityInfo {
     }
 
     private CompatibilityInfo(int appFlags, int compFlags,
-            int dens, float scale, float invertedScale) {
+            int dens, float scale, float invertedScale, boolean isThemeable) {
         this.appFlags = appFlags;
         mCompatibilityFlags = compFlags;
         applicationDensity = dens;
         applicationScale = scale;
         applicationInvertedScale = invertedScale;
+        this.isThemeable = isThemeable;
     }
 
     private CompatibilityInfo() {
         this(ApplicationInfo.FLAG_SUPPORTS_SMALL_SCREENS
                 | ApplicationInfo.FLAG_SUPPORTS_NORMAL_SCREENS
                 | ApplicationInfo.FLAG_SUPPORTS_LARGE_SCREENS
+                | ApplicationInfo.FLAG_SUPPORTS_XLARGE_SCREENS
                 | ApplicationInfo.FLAG_RESIZEABLE_FOR_SCREENS,
                 EXPANDABLE | CONFIGURED_EXPANDABLE,
                 DisplayMetrics.DENSITY_DEVICE,
                 1.0f,
-                1.0f);
+                1.0f,
+                true);
     }
 
     /**
@@ -169,7 +196,7 @@ public class CompatibilityInfo {
      */
     public CompatibilityInfo copy() {
         CompatibilityInfo info = new CompatibilityInfo(appFlags, mCompatibilityFlags,
-                applicationDensity, applicationScale, applicationInvertedScale);
+                applicationDensity, applicationScale, applicationInvertedScale, isThemeable);
         return info;
     }
  
@@ -196,6 +223,17 @@ public class CompatibilityInfo {
     }
 
     /**
+     * Sets large screen bit in the compatibility flag.
+     */
+    public void setXLargeScreens(boolean expandable) {
+        if (expandable) {
+            mCompatibilityFlags |= CompatibilityInfo.XLARGE_SCREENS;
+        } else {
+            mCompatibilityFlags &= ~CompatibilityInfo.XLARGE_SCREENS;
+        }
+    }
+
+    /**
      * @return true if the application is configured to be expandable.
      */
     public boolean isConfiguredExpandable() {
@@ -207,6 +245,13 @@ public class CompatibilityInfo {
      */
     public boolean isConfiguredLargeScreens() {
         return (mCompatibilityFlags & CompatibilityInfo.CONFIGURED_LARGE_SCREENS) != 0;
+    }
+
+    /**
+     * @return true if the application is configured to be expandable.
+     */
+    public boolean isConfiguredXLargeScreens() {
+        return (mCompatibilityFlags & CompatibilityInfo.CONFIGURED_XLARGE_SCREENS) != 0;
     }
 
     /**

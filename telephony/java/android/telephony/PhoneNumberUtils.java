@@ -130,7 +130,7 @@ public class PhoneNumberUtils
         Uri uri = intent.getData();
         String scheme = uri.getScheme();
 
-        if (scheme.equals("tel")) {
+        if (scheme.equals("tel") || scheme.equals("sip")) {
             return uri.getSchemeSpecificPart();
         }
 
@@ -732,7 +732,8 @@ public class PhoneNumberUtils
             return "";
         }
 
-        if ((bytes[offset] & 0xff) == TOA_International) {
+        //Only TON field should be taken in consideration
+        if ((bytes[offset] & 0xf0) == (TOA_International & 0xf0)) {
             prependPlus = true;
         }
 
@@ -1645,6 +1646,22 @@ public class PhoneNumberUtils
             Log.e("isOneNanp: null dialStr passed in", dialStr);
         }
         return retVal;
+    }
+
+    /**
+     * Determines if the specified number is actually a URI
+     * (i.e. a SIP address) rather than a regular PSTN phone number,
+     * based on whether or not the number contains an "@" character.
+     *
+     * @hide
+     * @param number
+     * @return true if number contains @
+     */
+    public static boolean isUriNumber(String number) {
+        // Note we allow either "@" or "%40" to indicate a URI, in case
+        // the passed-in string is URI-escaped.  (Neither "@" nor "%40"
+        // will ever be found in a legal PSTN number.)
+        return number != null && (number.contains("@") || number.contains("%40"));
     }
 
     /**

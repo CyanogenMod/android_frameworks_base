@@ -51,6 +51,8 @@
     <protected-broadcast android:name="android.intent.action.ACTION_SHUTDOWN" />
     <protected-broadcast android:name="android.intent.action.DEVICE_STORAGE_LOW" />
     <protected-broadcast android:name="android.intent.action.DEVICE_STORAGE_OK" />
+    <protected-broadcast android:name="android.intent.action.DEVICE_STORAGE_FULL" />
+    <protected-broadcast android:name="android.intent.action.DEVICE_STORAGE_NOT_FULL" />
     <protected-broadcast android:name="android.intent.action.NEW_OUTGOING_CALL" />
     <protected-broadcast android:name="android.intent.action.REBOOT" />
     <protected-broadcast android:name="android.intent.action.DOCK_EVENT" />
@@ -80,6 +82,14 @@
     <protected-broadcast android:name="android.bluetooth.device.action.NAME_FAILED" />
     <protected-broadcast android:name="android.bluetooth.device.action.PAIRING_REQUEST" />
     <protected-broadcast android:name="android.bluetooth.device.action.PAIRING_CANCEL" />
+
+    <protected-broadcast android:name="android.hardware.action.USB_CONNECTED" />
+    <protected-broadcast android:name="android.hardware.action.USB_DISCONNECTED" />
+    <protected-broadcast android:name="android.hardware.action.USB_STATE" />
+
+    <protected-broadcast android:name="android.nfc.action.TAG_DISCOVERED" />
+    <protected-broadcast android:name="android.nfc.action.LLCP_LINK_STATE_CHANGED" />
+    <protected-broadcast android:name="android.nfc.action.TRANSACTION_DETECTED" />
 
     <!-- ====================================== -->
     <!-- Permissions for things that cost money -->
@@ -188,20 +198,6 @@
         android:label="@string/permlab_writeContacts"
         android:description="@string/permdesc_writeContacts" />
 
-    <!-- Allows an application to read the owner's data. -->
-    <permission android:name="android.permission.READ_OWNER_DATA"
-        android:permissionGroup="android.permission-group.PERSONAL_INFO"
-        android:protectionLevel="dangerous"
-        android:label="@string/permlab_readOwnerData"
-        android:description="@string/permdesc_readOwnerData" />
-
-    <!-- Allows an application to write (but not read) the owner's data. -->
-    <permission android:name="android.permission.WRITE_OWNER_DATA"
-        android:permissionGroup="android.permission-group.PERSONAL_INFO"
-        android:protectionLevel="dangerous"
-        android:label="@string/permlab_writeOwnerData"
-        android:description="@string/permdesc_writeOwnerData" />
-
     <!-- Allows an application to read the user's calendar data. -->
     <permission android:name="android.permission.READ_CALENDAR"
         android:permissionGroup="android.permission-group.PERSONAL_INFO"
@@ -250,6 +246,14 @@
         android:label="@string/permlab_writeHistoryBookmarks"
         android:description="@string/permdesc_writeHistoryBookmarks"
         android:protectionLevel="dangerous" />
+
+    <!-- Allows an application to broadcast an Intent to set an alarm for the
+         user. -->
+    <permission android:name="com.android.alarm.permission.SET_ALARM"
+        android:permissionGroup="android.permission-group.PERSONAL_INFO"
+        android:label="@string/permlab_setAlarm"
+        android:description="@string/permdesc_setAlarm"
+        android:protectionLevel="normal" />
 
     <!-- ======================================= -->
     <!-- Permissions for accessing location info -->
@@ -336,6 +340,20 @@
         android:protectionLevel="dangerous"
         android:description="@string/permdesc_bluetooth"
         android:label="@string/permlab_bluetooth" />
+
+    <!-- Allows applications to directly communicate over NFC -->
+    <permission android:name="android.permission.NFC"
+        android:permissionGroup="android.permission-group.NETWORK"
+        android:protectionLevel="dangerous"
+        android:description="@string/permdesc_nfc"
+        android:label="@string/permlab_nfc" />
+
+    <!-- Allows an application to use SIP service -->
+    <permission android:name="android.permission.USE_SIP"
+        android:permissionGroup="android.permission-group.NETWORK"
+        android:protectionLevel="dangerous"
+        android:description="@string/permdesc_use_sip"
+        android:label="@string/permlab_use_sip" />
 
     <!-- Allows applications to call into AccountAuthenticators. Only
     the system can get this permission. -->
@@ -437,6 +455,14 @@
         android:label="@string/permlab_flashlight"
         android:description="@string/permdesc_flashlight" />
 
+    <!-- Allows an application to access USB devices
+         @hide -->
+    <permission android:name="android.permission.ACCESS_USB"
+        android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
+        android:protectionLevel="signatureOrSystem"
+        android:label="@string/permlab_accessUsb"
+        android:description="@string/permdesc_accessUsb" />
+
     <!-- Allows access to hardware peripherals.  Intended only for hardware testing -->
     <permission android:name="android.permission.HARDWARE_TEST"
         android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
@@ -470,7 +496,7 @@
          Does not include placing calls. -->
     <permission android:name="android.permission.MODIFY_PHONE_STATE"
         android:permissionGroup="android.permission-group.PHONE_CALLS"
-        android:protectionLevel="dangerous"
+        android:protectionLevel="signatureOrSystem"
         android:label="@string/permlab_modifyPhoneState"
         android:description="@string/permdesc_modifyPhoneState" />
 
@@ -591,8 +617,8 @@
     <!-- Allows an application to retrieve state dump information from system
          services. -->
     <permission android:name="android.permission.DUMP"
-        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
-        android:protectionLevel="dangerous"
+        android:permissionGroup="android.permission-group.PERSONAL_INFO"
+        android:protectionLevel="signatureOrSystem"
         android:label="@string/permlab_dump"
         android:description="@string/permdesc_dump" />
 
@@ -614,7 +640,10 @@
         android:label="@string/permlab_setAnimationScale"
         android:description="@string/permdesc_setAnimationScale" />
 
-    <!-- Allow an application to make its activities persistent. -->
+    <!-- @deprecated This functionality will be removed in the future; please do
+         not use.
+
+         Allow an application to make its activities persistent. -->
     <permission android:name="android.permission.PERSISTENT_ACTIVITY"
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
         android:protectionLevel="dangerous"
@@ -756,7 +785,7 @@
     <!-- Allows applications to disable the keyguard -->
     <permission android:name="android.permission.DISABLE_KEYGUARD"
         android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
-        android:protectionLevel="normal"
+        android:protectionLevel="dangerous"
         android:description="@string/permdesc_disableKeyguard"
         android:label="@string/permlab_disableKeyguard" />
 
@@ -838,11 +867,10 @@
         android:description="@string/permdesc_clearAppCache" />
 
     <!-- Allows an application to read the low-level system log files.
-         These can contain slightly private information about what is
-         happening on the device, but should never contain the user's
-         private information. -->
+         Log entries can contain the user's private information,
+         which is why this permission is 'dangerous'. -->
     <permission android:name="android.permission.READ_LOGS"
-        android:permissionGroup="android.permission-group.SYSTEM_TOOLS"
+        android:permissionGroup="android.permission-group.PERSONAL_INFO"
         android:protectionLevel="dangerous"
         android:label="@string/permlab_readLogs"
         android:description="@string/permdesc_readLogs" />
@@ -909,6 +937,13 @@
         android:description="@string/permdesc_statusBar"
         android:protectionLevel="signatureOrSystem" />
 
+    <!-- Allows an application to be the status bar.  Currently used only by SystemUI.apk
+    @hide -->
+    <permission android:name="android.permission.STATUS_BAR_SERVICE"
+        android:label="@string/permlab_statusBarService"
+        android:description="@string/permdesc_statusBarService"
+        android:protectionLevel="signature" />
+
     <!-- Allows an application to force a BACK operation on whatever is the
          top activity. -->
     <permission android:name="android.permission.FORCE_BACK"
@@ -921,7 +956,7 @@
     <permission android:name="android.permission.UPDATE_DEVICE_STATS"
         android:label="@string/permlab_batteryStats"
         android:description="@string/permdesc_batteryStats"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signatureOrSystem" />
 
     <!-- Allows an application to open windows that are for use by parts
          of the system user interface.  Not for use by third party apps. -->
@@ -1252,6 +1287,15 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name="com.android.internal.app.HeavyWeightSwitcherActivity"
+                android:theme="@style/Theme.Dialog"
+                android:label="@string/heavy_weight_switcher_title"
+                android:finishOnCloseSystemDialogs="true"
+                android:excludeFromRecents="true">
+        </activity>
+        <activity android:name="com.android.internal.app.PlatLogoActivity"
+                android:theme="@style/Theme.NoTitleBar.Fullscreen">
+        </activity>
         <activity android:name="com.android.internal.app.DisableCarModeActivity"
                 android:theme="@style/Theme.NoDisplay"
                 android:excludeFromRecents="true">
@@ -1264,13 +1308,6 @@
                 <action android:name="android.intent.action.RINGTONE_PICKER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-        </activity>
-        <activity android:name="com.android.server.status.UsbStorageActivity"
-                android:excludeFromRecents="true">
-        </activity>
-        <activity android:name="com.android.internal.app.ExternalMediaFormatActivity"
-                android:theme="@style/Theme.Dialog.Alert"
-                android:excludeFromRecents="true">
         </activity>
 
         <activity android:name="android.accounts.ChooseAccountActivity"
@@ -1310,7 +1347,8 @@
         </receiver>
 
         <receiver android:name="com.android.server.MasterClearReceiver"
-            android:permission="android.permission.MASTER_CLEAR" >
+            android:permission="android.permission.MASTER_CLEAR"
+            android:priority="100" >
             <intent-filter>
                 <!-- For Checkin, Settings, etc.: action=MASTER_CLEAR -->
                 <action android:name="android.intent.action.MASTER_CLEAR" />
@@ -1332,8 +1370,11 @@
                 <data android:scheme="package" />
             </intent-filter>
         </receiver>
+
+        <service android:name="com.android.internal.os.storage.ExternalStorageFormatter"
+            android:permission="android.permission.MASTER_CLEAR"
+            android:exported="true" />
+
     </application>
 
 </manifest>
-
-

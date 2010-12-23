@@ -41,13 +41,14 @@ struct MediaRecorderBase {
     virtual status_t setOutputFile(const char *path) = 0;
     virtual status_t setOutputFile(int fd, int64_t offset, int64_t length) = 0;
     virtual status_t setParameters(const String8& params) = 0;
-    virtual status_t setListener(const sp<IMediaPlayerClient>& listener) = 0;
+    virtual status_t setListener(const sp<IMediaRecorderClient>& listener) = 0;
     virtual status_t prepare() = 0;
     virtual status_t start() = 0;
     virtual status_t stop() = 0;
     virtual status_t close() = 0;
     virtual status_t reset() = 0;
     virtual status_t getMaxAmplitude(int *max) = 0;
+    virtual status_t dump(int fd, const Vector<String16>& args) const = 0;
 
 private:
     MediaRecorderBase(const MediaRecorderBase &);

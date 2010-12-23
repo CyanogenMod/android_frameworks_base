@@ -47,6 +47,15 @@ public class PowerProfile {
     public static final String POWER_CPU_IDLE = "cpu.idle";
 
     /**
+     * Power consumption when CPU is awake (when a wake lock is held).  This
+     * should be 0 on devices that can go into full CPU power collapse even
+     * when a wake lock is held.  Otherwise, this is the power consumption in
+     * addition to POWERR_CPU_IDLE due to a wake lock being held but with no
+     * CPU activity.
+     */
+    public static final String POWER_CPU_AWAKE = "cpu.awake";
+
+    /**
      * Power consumption when CPU is in power collapse mode.
      */
     public static final String POWER_CPU_ACTIVE = "cpu.active";
@@ -125,6 +134,11 @@ public class PowerProfile {
     public static final String POWER_VIDEO = "dsp.video";
 
     public static final String POWER_CPU_SPEEDS = "cpu.speeds";
+
+    /**
+     * Battery capacity in milliAmpHour (mAh).
+     */
+    public static final String POWER_BATTERY_CAPACITY = "battery.capacity";
 
     static final HashMap<String, Object> sPowerMap = new HashMap<String, Object>();
 
@@ -243,6 +257,19 @@ public class PowerProfile {
         }
     }
 
+    /**
+     * Returns the battery capacity, if available, in milli Amp Hours. If not available,
+     * it returns zero.
+     * @return the battery capacity in mAh
+     */
+    public double getBatteryCapacity() {
+        return getAveragePower(POWER_BATTERY_CAPACITY);
+    }
+
+    /**
+     * Returns the number of speeds that the CPU can be run at.
+     * @return
+     */
     public int getNumSpeedSteps() {
         Object value = sPowerMap.get(POWER_CPU_SPEEDS);
         if (value != null && value instanceof Double[]) {

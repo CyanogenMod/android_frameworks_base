@@ -16,6 +16,7 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <sys/socket.h>
 
 #include <core/SkCanvas.h>
 #include <core/SkDevice.h>
@@ -24,6 +25,7 @@
 #include "GraphicsJNI.h"
 
 #include "jni.h"
+#include <nativehelper/JNIHelp.h>
 #include <android_runtime/AndroidRuntime.h>
 #include <utils/misc.h>
 
@@ -77,6 +79,7 @@ static void android_view_ViewRoot_showFPS(JNIEnv* env, jobject, jobject jcanvas,
 static void android_view_ViewRoot_abandonGlCaches(JNIEnv* env, jobject) {
     SkGLCanvas::AbandonAllTextures();
 }
+
 
 // ----------------------------------------------------------------------------
 

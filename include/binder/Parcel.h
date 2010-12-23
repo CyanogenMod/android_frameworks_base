@@ -26,11 +26,12 @@
 // ---------------------------------------------------------------------------
 namespace android {
 
+class Flattenable;
 class IBinder;
+class IPCThreadState;
 class ProcessState;
 class String8;
 class TextOutput;
-class Flattenable;
 
 struct flat_binder_object;  // defined in support_p/binder_module.h
 
@@ -56,9 +57,19 @@ public:
 
     bool                hasFileDescriptors() const;
 
+    // Writes the RPC header.
     status_t            writeInterfaceToken(const String16& interface);
-    bool                enforceInterface(const String16& interface) const;
-    bool                checkInterface(IBinder*) const;    
+
+    // Parses the RPC header, returning true if the interface name
+    // in the header matches the expected interface from the caller.
+    //
+    // Additionally, enforceInterface does part of the work of
+    // propagating the StrictMode policy mask, populating the current
+    // IPCThreadState, which as an optimization may optionally be
+    // passed in.
+    bool                enforceInterface(const String16& interface,
+                                         IPCThreadState* threadState = NULL) const;
+    bool                checkInterface(IBinder*) const;
 
     void                freeData();
 
@@ -100,6 +111,11 @@ public:
     
     status_t            writeObject(const flat_binder_object& val, bool nullMetaData);
 
+    // Like Parcel.java's writeNoException().  Just writes a zero int32.
+    // Currently the native implementation doesn't do any of the StrictMode
+    // stack gathering and serialization that the Java implementation does.
+    status_t            writeNoException();
+
     void                remove(size_t start, size_t amt);
     
     status_t            read(void* outData, size_t len) const;
@@ -122,7 +138,14 @@ public:
     sp<IBinder>         readStrongBinder() const;
     wp<IBinder>         readWeakBinder() const;
     status_t            read(Flattenable& val) const;
-    
+
+    // Like Parcel.java's readExceptionCode().  Reads the first int32
+    // off of a Parcel's header, returning 0 or the negative error
+    // code on exceptions, but also deals with skipping over rich
+    // response headers.  Callers should use this to read & parse the
+    // response headers rather than doing it by hand.
+    int32_t             readExceptionCode() const;
+
     // Retrieve native_handle from the parcel. This returns a copy of the
     // parcel's native_handle (the caller takes ownership). The caller
     // must free the native_handle with native_handle_close() and 

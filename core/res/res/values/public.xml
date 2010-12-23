@@ -869,8 +869,11 @@
   <public type="drawable" name="stat_sys_download" id="0x01080081" />
   <public type="drawable" name="stat_sys_download_done" id="0x01080082" />
   <public type="drawable" name="stat_sys_headset" id="0x01080083" />
+  <!-- @deprecated Replaced by a private asset in the phone app. -->
   <public type="drawable" name="stat_sys_phone_call" id="0x01080084" />
+  <!-- @deprecated Replaced by a private asset in the phone app. -->
   <public type="drawable" name="stat_sys_phone_call_forward" id="0x01080085" />
+  <!-- @deprecated Replaced by a private asset in the phone app. -->
   <public type="drawable" name="stat_sys_phone_call_on_hold" id="0x01080086" />
   <public type="drawable" name="stat_sys_speakerphone" id="0x01080087" />
   <public type="drawable" name="stat_sys_upload" id="0x01080088" />
@@ -1132,7 +1135,9 @@
   <public type="style" name="Widget.ProgressBar.Large.Inverse" id="0x0103005c" />
   <public type="style" name="Widget.ProgressBar.Small.Inverse" id="0x0103005d" />
 
+  <!-- @deprecated Replaced by a private asset in the phone app. -->
   <public type="drawable" name="stat_sys_vp_phone_call" id="0x010800a7" />
+  <!-- @deprecated Replaced by a private asset in the phone app. -->
   <public type="drawable" name="stat_sys_vp_phone_call_on_hold" id="0x010800a8" />
 
   <public type="anim" name="anticipate_interpolator" id="0x010a0007" />
@@ -1239,4 +1244,36 @@
     
   <public type="anim" name="cycle_interpolator" id="0x010a000c" />
 
+<!-- ===============================================================
+     Resources introduced in Gingerbread.
+     =============================================================== -->
+     
+  <public type="attr" name="logo" id="0x010102be" />
+  <public type="attr" name="xlargeScreens" id="0x010102bf" />
+  <public type="attr" name="immersive" id="0x010102c0" />
+  <public type="attr" name="overScrollMode" id="0x010102c1" />
+  <public type="attr" name="overScrollHeader" id="0x010102c2" />
+  <public type="attr" name="overScrollFooter" id="0x010102c3" />
+  <public type="attr" name="filterTouchesWhenObscured" id="0x010102c4" />
+  <public type="attr" name="textSelectHandleLeft" id="0x010102c5" />
+  <public type="attr" name="textSelectHandleRight" id="0x010102c6" />
+  <public type="attr" name="textSelectHandle" id="0x010102c7" />
+  <public type="attr" name="textSelectHandleWindowStyle" id="0x010102c8" />
+  <public type="attr" name="popupAnimationStyle" id="0x010102c9" />
+  <public type="attr" name="screenSize" id="0x010102ca" />
+  <public type="attr" name="screenDensity" id="0x010102cb" />
+
+  <!-- presence drawables for videochat or audiochat capable contacts -->
+  <public type="drawable" name="presence_video_away" id="0x010800ac" />
+  <public type="drawable" name="presence_video_busy" id="0x010800ad" />
+  <public type="drawable" name="presence_video_online" id="0x010800ae" />
+  <public type="drawable" name="presence_audio_away" id="0x010800af" />
+  <public type="drawable" name="presence_audio_busy" id="0x010800b0" />
+  <public type="drawable" name="presence_audio_online" id="0x010800b1" />
+
+  <public type="style" name="TextAppearance.StatusBar.Title" id="0x01030065" />
+  <public type="style" name="TextAppearance.StatusBar.Icon" id="0x01030066" />
+  <public type="style" name="TextAppearance.StatusBar.EventContent" id="0x01030067" />
+  <public type="style" name="TextAppearance.StatusBar.EventContent.Title" id="0x01030068" />
+  
 </resources>

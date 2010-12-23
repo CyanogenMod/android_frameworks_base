@@ -21,6 +21,7 @@ import android.app.PendingIntent;
 import android.widget.ArrayAdapter;
 import android.view.View;
 import android.widget.ListView;
+import android.content.Context;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.app.Notification;
@@ -43,6 +44,7 @@ public class NotificationTestList extends TestActivity
     Vibrator mVibrator = new Vibrator();
     Handler mHandler = new Handler();
 
+    long mActivityCreateTime = System.currentTimeMillis();
     long mChronometerBase = 0;
 
     @Override
@@ -60,7 +62,7 @@ public class NotificationTestList extends TestActivity
     private Test[] mTests = new Test[] {
         new Test("Off and sound") {
             public void run() {
-                PowerManager pm = (PowerManager)NotificationTestList.this.getSystemService("power");
+                PowerManager pm = (PowerManager)NotificationTestList.this.getSystemService(Context.POWER_SERVICE);
                 PowerManager.WakeLock wl = 
                             pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "sound");
                 wl.acquire();
@@ -121,18 +123,48 @@ public class NotificationTestList extends TestActivity
             }
         },
 
-        new Test("Bad resource #2") {
-            public void run()
-            {
-                Notification n = new Notification(NotificationTestList.this,
-                            R.drawable.ic_statusbar_missedcall,
-                            null, System.currentTimeMillis()-(1000*60*60*24),
-                            "(453) 123-2328",
-                            "", null);
-                n.contentView.setInt(1 /*bogus*/, "bogus method", 666);
-                mNM.notify(2, n);
+        new Test("Bad Icon #1 (when=create)") {
+            public void run() {
+                Notification n = new Notification(R.layout.chrono_notification /* not an icon */,
+                        null, mActivityCreateTime);
+                n.setLatestEventInfo(NotificationTestList.this, "Persistent #1",
+                            "This is the same notification!!!", makeIntent());
+                mNM.notify(1, n);
             }
         },
+
+        new Test("Bad Icon #1 (when=now)") {
+            public void run() {
+                Notification n = new Notification(R.layout.chrono_notification /* not an icon */,
+                        null, System.currentTimeMillis());
+                n.setLatestEventInfo(NotificationTestList.this, "Persistent #1",
+                            "This is the same notification!!!", makeIntent());
+                mNM.notify(1, n);
+            }
+        },
+
+        new Test("Bad resource #1 (when=create)") {
+            public void run() {
+                Notification n = new Notification(R.drawable.icon2,
+                        null, mActivityCreateTime);
+                n.setLatestEventInfo(NotificationTestList.this, "Persistent #1",
+                            "This is the same notification!!!", makeIntent());
+                n.contentView.setInt(1 /*bogus*/, "bogus method", 666);
+                mNM.notify(1, n);
+            }
+        },
+
+        new Test("Bad resource #1 (when=now)") {
+            public void run() {
+                Notification n = new Notification(R.drawable.icon2,
+                        null, System.currentTimeMillis());
+                n.setLatestEventInfo(NotificationTestList.this, "Persistent #1",
+                            "This is the same notification!!!", makeIntent());
+                n.contentView.setInt(1 /*bogus*/, "bogus method", 666);
+                mNM.notify(1, n);
+            }
+        },
+
 
         new Test("Bad resource #3") {
             public void run()
@@ -180,7 +212,7 @@ public class NotificationTestList extends TestActivity
                                 R.drawable.icon4,
                                 null, System.currentTimeMillis(), "Stress - Latest",
                                 "Notify me!!!", null);
-                        n.flags |= Notification.FLAG_ONGOING_EVENT;
+                        //n.flags |= Notification.FLAG_ONGOING_EVENT;
                         mNM.notify(1, n);
                     }
                 }
@@ -205,6 +237,8 @@ public class NotificationTestList extends TestActivity
                 Notification n = new Notification();
                 n.flags |= Notification.FLAG_SHOW_LIGHTS;
                 n.ledARGB = 0xff0000ff;
+                n.ledOnMS = 1;
+                n.ledOffMS = 0;
                 mNM.notify(1, n);
             }
         },
@@ -215,6 +249,8 @@ public class NotificationTestList extends TestActivity
                 Notification n = new Notification();
                 n.flags |= Notification.FLAG_SHOW_LIGHTS;
                 n.ledARGB = 0xffff0000;
+                n.ledOnMS = 1;
+                n.ledOffMS = 0;
                 mNM.notify(1, n);
             }
         },
@@ -225,6 +261,20 @@ public class NotificationTestList extends TestActivity
                 Notification n = new Notification();
                 n.flags |= Notification.FLAG_SHOW_LIGHTS;
                 n.ledARGB = 0xffffff00;
+                n.ledOnMS = 1;
+                n.ledOffMS = 0;
+                mNM.notify(1, n);
+            }
+        },
+
+        new Test("Lights off") {
+            public void run()
+            {
+                Notification n = new Notification();
+                n.flags |= Notification.FLAG_SHOW_LIGHTS;
+                n.ledARGB = 0x00000000;
+                n.ledOnMS = 0;
+                n.ledOffMS = 0;
                 mNM.notify(1, n);
             }
         },
@@ -234,7 +284,7 @@ public class NotificationTestList extends TestActivity
             {
                 Notification n = new Notification();
                 n.flags |= Notification.FLAG_SHOW_LIGHTS;
-                n.ledARGB = 0xffffff00;
+                n.ledARGB = 0xff0000ff;
                 n.ledOnMS = 1300;
                 n.ledOffMS = 1300;
                 mNM.notify(1, n);
@@ -246,7 +296,7 @@ public class NotificationTestList extends TestActivity
             {
                 Notification n = new Notification();
                 n.flags |= Notification.FLAG_SHOW_LIGHTS;
-                n.ledARGB = 0xffffff00;
+                n.ledARGB = 0xff0000ff;
                 n.ledOnMS = 300;
                 n.ledOffMS = 300;
                 mNM.notify(1, n);
@@ -392,7 +442,7 @@ public class NotificationTestList extends TestActivity
         new Test("Persistent #1") {
             public void run() {
                 Notification n = new Notification(R.drawable.icon1, "tick tick tick",
-                        System.currentTimeMillis());
+                        mActivityCreateTime);
                 n.setLatestEventInfo(NotificationTestList.this, "Persistent #1",
                             "This is a notification!!!", makeIntent());
                 mNM.notify(1, n);
@@ -449,6 +499,16 @@ public class NotificationTestList extends TestActivity
                             "Notify me!!!", makeIntent());
                 n.defaults = Notification.DEFAULT_VIBRATE;
                 mNM.notify(2, n);
+            }
+        },
+
+        new Test("Persistent #1 - different icon") {
+            public void run() {
+                Notification n = new Notification(R.drawable.icon2, null,
+                        mActivityCreateTime);
+                n.setLatestEventInfo(NotificationTestList.this, "Persistent #1",
+                            "This is the same notification!!!", makeIntent());
+                mNM.notify(1, n);
             }
         },
 
@@ -559,7 +619,7 @@ public class NotificationTestList extends TestActivity
             }
         },
 
-        new Test("Persistent with numbers 222") {
+        new Test("Persistent with numbers 22") {
             public void run() {
                 mNM.notify(1, notificationWithNumbers(22));
             }
@@ -577,11 +637,25 @@ public class NotificationTestList extends TestActivity
             }
         },
 
+        new Test("Ticker") {
+            public void run() {
+                Notification not = new Notification(
+                    R.drawable.app_gmail, 
+                    "New mail from joeo@example.com, on the topic of very long ticker texts",
+                    System.currentTimeMillis());
+                not.setLatestEventInfo(NotificationTestList.this,
+                    "A new message awaits",
+                    "The contents are very interesting and important",
+                    makeIntent());
+                mNM.notify(1, not);
+            }
+        },
+
         new Test("Crash") {
             public void run()
             {
                 PowerManager.WakeLock wl
-                        = ((PowerManager)NotificationTestList.this.getSystemService("power"))
+                        = ((PowerManager)NotificationTestList.this.getSystemService(Context.POWER_SERVICE))
                             .newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "crasher");
                 wl.acquire();
                 mHandler.postDelayed(new Runnable() {
@@ -604,9 +678,7 @@ public class NotificationTestList extends TestActivity
 
     private PendingIntent makeIntent() {
         Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.setComponent(new android.content.ComponentName(
-                    "com.android.contacts",
-                    "com.android.contacts.ContactsActivity"));
+        intent.addCategory(Intent.CATEGORY_HOME);
         return PendingIntent.getActivity(this, 0, intent, 0);
     }
 

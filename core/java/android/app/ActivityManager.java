@@ -287,24 +287,54 @@ public class ActivityManager {
      * @param maxNum The maximum number of entries to return in the list.  The
      * actual number returned may be smaller, depending on how many tasks the
      * user has started.
-     * 
+     *
+     * @param flags Optional flags
+     * @param receiver Optional receiver for delayed thumbnails
+     *
      * @return Returns a list of RunningTaskInfo records describing each of
      * the running tasks.
      * 
+     * Some thumbnails may not be available at the time of this call. The optional
+     * receiver may be used to receive those thumbnails.
+     *
      * @throws SecurityException Throws SecurityException if the caller does
      * not hold the {@link android.Manifest.permission#GET_TASKS} permission.
+     *
+     * @hide
      */
-    public List<RunningTaskInfo> getRunningTasks(int maxNum)
+    public List<RunningTaskInfo> getRunningTasks(int maxNum, int flags, IThumbnailReceiver receiver)
             throws SecurityException {
         try {
-            return (List<RunningTaskInfo>)ActivityManagerNative.getDefault()
-                    .getTasks(maxNum, 0, null);
+            return ActivityManagerNative.getDefault().getTasks(maxNum, flags, receiver);
         } catch (RemoteException e) {
             // System dead, we will be dead too soon!
             return null;
         }
     }
-    
+
+    /**
+     * Return a list of the tasks that are currently running, with
+     * the most recent being first and older ones after in order.  Note that
+     * "running" does not mean any of the task's code is currently loaded or
+     * activity -- the task may have been frozen by the system, so that it
+     * can be restarted in its previous state when next brought to the
+     * foreground.
+     *
+     * @param maxNum The maximum number of entries to return in the list.  The
+     * actual number returned may be smaller, depending on how many tasks the
+     * user has started.
+     *
+     * @return Returns a list of RunningTaskInfo records describing each of
+     * the running tasks.
+     *
+     * @throws SecurityException Throws SecurityException if the caller does
+     * not hold the {@link android.Manifest.permission#GET_TASKS} permission.
+     */
+    public List<RunningTaskInfo> getRunningTasks(int maxNum)
+            throws SecurityException {
+        return getRunningTasks(maxNum, 0, null);
+    }
+
     /**
      * Information you can retrieve about a particular Service that is
      * currently running in the system.
@@ -337,7 +367,8 @@ public class ActivityManager {
         
         /**
          * The time when the service was first made active, either by someone
-         * starting or binding to it.
+         * starting or binding to it.  This
+         * is in units of {@link android.os.SystemClock#elapsedRealtime()}.
          */
         public long activeSince;
         
@@ -359,7 +390,8 @@ public class ActivityManager {
         
         /**
          * The time when there was last activity in the service (either
-         * explicit requests to start it or clients binding to it).
+         * explicit requests to start it or clients binding to it).  This
+         * is in units of {@link android.os.SystemClock#uptimeMillis()}.
          */
         public long lastActivityTime;
         
@@ -719,7 +751,32 @@ public class ActivityManager {
          */
         public int uid;
         
+        /**
+         * All packages that have been loaded into the process.
+         */
         public String pkgList[];
+        
+        /**
+         * Constant for {@link #flags}: this is an app that is unable to
+         * correctly save its state when going to the background,
+         * so it can not be killed while in the background.
+         * @hide
+         */
+        public static final int FLAG_CANT_SAVE_STATE = 1<<0;
+        
+        /**
+         * Constant for {@link #flags}: this process is associated with a
+         * persistent system app.
+         * @hide
+         */
+        public static final int FLAG_PERSISTENT = 1<<1;
+
+        /**
+         * Flags of information.  May be any of
+         * {@link #FLAG_CANT_SAVE_STATE}.
+         * @hide
+         */
+        public int flags;
         
         /**
          * Constant for {@link #importance}: this process is running the
@@ -729,9 +786,25 @@ public class ActivityManager {
         
         /**
          * Constant for {@link #importance}: this process is running something
-         * that is considered to be actively visible to the user.
+         * that is actively visible to the user, though not in the immediate
+         * foreground.
          */
         public static final int IMPORTANCE_VISIBLE = 200;
+        
+        /**
+         * Constant for {@link #importance}: this process is running something
+         * that is considered to be actively perceptible to the user.  An
+         * example would be an application performing background music playback.
+         */
+        public static final int IMPORTANCE_PERCEPTIBLE = 130;
+        
+        /**
+         * Constant for {@link #importance}: this process is running an
+         * application that can not save its state, and thus can't be killed
+         * while in the background.
+         * @hide
+         */
+        public static final int IMPORTANCE_CANT_SAVE_STATE = 170;
         
         /**
          * Constant for {@link #importance}: this process is contains services
@@ -834,6 +907,7 @@ public class ActivityManager {
             dest.writeInt(pid);
             dest.writeInt(uid);
             dest.writeStringArray(pkgList);
+            dest.writeInt(this.flags);
             dest.writeInt(importance);
             dest.writeInt(lru);
             dest.writeInt(importanceReasonCode);
@@ -846,6 +920,7 @@ public class ActivityManager {
             pid = source.readInt();
             uid = source.readInt();
             pkgList = source.readStringArray();
+            flags = source.readInt();
             importance = source.readInt();
             lru = source.readInt();
             importanceReasonCode = source.readInt();

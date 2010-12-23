@@ -46,6 +46,7 @@ public:
           mRClassDir(NULL), mResourceIntermediatesDir(NULL), mManifestMinSdkVersion(NULL),
           mMinSdkVersion(NULL), mTargetSdkVersion(NULL), mMaxSdkVersion(NULL),
           mVersionCode(NULL), mVersionName(NULL), mCustomPackage(NULL),
+          mMaxResVersion(NULL), mDebugMode(false), mProduct(NULL),
           mArgc(0), mArgv(NULL)
         {}
     ~Bundle(void) {}
@@ -137,6 +138,12 @@ public:
     void setVersionName(const char* val) { mVersionName = val; }
     const char* getCustomPackage() const { return mCustomPackage; }
     void setCustomPackage(const char* val) { mCustomPackage = val; }
+    const char* getMaxResVersion() const { return mMaxResVersion; }
+    void setMaxResVersion(const char * val) { mMaxResVersion = val; }
+    bool getDebugMode() { return mDebugMode; }
+    void setDebugMode(bool val) { mDebugMode = val; }
+    const char* getProduct() const { return mProduct; }
+    void setProduct(const char * val) { mProduct = val; }
 
     /*
      * Set and get the file specification.
@@ -234,6 +241,9 @@ private:
     const char* mVersionCode;
     const char* mVersionName;
     const char* mCustomPackage;
+    const char* mMaxResVersion;
+    bool        mDebugMode;
+    const char* mProduct;
 
     /* file specification */
     int         mArgc;

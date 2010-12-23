@@ -28,6 +28,7 @@ import android.graphics.Picture;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.Region;
+import android.media.MediaFile;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
@@ -255,6 +256,13 @@ final class WebViewCore {
         return mSettings;
     }
 
+    /*
+     * Given mimeType, check whether it's supported in Android media framework.
+     * mimeType could be such as "audio/ogg" and "video/mp4".
+     */
+    /* package */ static boolean supportsMimeType(String mimeType) {
+        return MediaFile.getFileTypeForMimeType(mimeType) > 0;
+    }
     /**
      * Add an error message to the client's console.
      * @param message The message to add
@@ -1568,9 +1576,16 @@ final class WebViewCore {
                     + evt);
         }
         int keyCode = evt.getKeyCode();
-        if (!nativeKey(keyCode, evt.getUnicodeChar(),
-                evt.getRepeatCount(), evt.isShiftPressed(), evt.isAltPressed(),
-                evt.isSymPressed(),
+        int unicodeChar = evt.getUnicodeChar();
+
+        if (keyCode == KeyEvent.KEYCODE_UNKNOWN && evt.getCharacters() != null
+                && evt.getCharacters().length() > 0) {
+            // we should only receive individual complex characters
+            unicodeChar = evt.getCharacters().codePointAt(0);
+        }
+
+        if (!nativeKey(keyCode, unicodeChar, evt.getRepeatCount(), evt.isShiftPressed(),
+                evt.isAltPressed(), evt.isSymPressed(),
                 isDown) && keyCode != KeyEvent.KEYCODE_ENTER) {
             if (keyCode >= KeyEvent.KEYCODE_DPAD_UP
                     && keyCode <= KeyEvent.KEYCODE_DPAD_RIGHT) {

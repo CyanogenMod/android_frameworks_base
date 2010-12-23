@@ -424,6 +424,9 @@
         <attr name="quickContactBadgeStyleSmallWindowMedium" format="reference" />
         <!-- Default quickcontact badge style with large quickcontact window. -->
         <attr name="quickContactBadgeStyleSmallWindowLarge" format="reference" />
+        <!-- Reference to a style that will be used for the window containing a text
+             selection anchor. -->
+        <attr name="textSelectHandleWindowStyle" format="reference" />
 
         <!-- =================== -->
         <!-- Preference styles   -->
@@ -450,6 +453,21 @@
         <attr name="ringtonePreferenceStyle" format="reference" />
         <!-- The preference layout that has the child/tabbed effect. -->
         <attr name="preferenceLayoutChild" format="reference" />
+
+        <!-- ============================ -->
+        <!-- Text selection handle styles -->
+        <!-- ============================ -->
+        <eat-comment />
+
+        <!-- Reference to a drawable that will be used to display a text selection
+             anchor on the left side of a selection region. -->
+        <attr name="textSelectHandleLeft" format="reference" />
+        <!-- Reference to a drawable that will be used to display a text selection
+             anchor on the right side of a selection region. -->
+        <attr name="textSelectHandleRight" format="reference" />
+        <!-- Reference to a drawable that will be used to display a text selection
+             anchor for positioning the cursor within text. -->
+        <attr name="textSelectHandle" format="reference" />
 
     </declare-styleable>
 
@@ -916,6 +934,25 @@
         <enum name="KEYCODE_MEDIA_REWIND" value="89" />
         <enum name="KEYCODE_MEDIA_FAST_FORWARD" value="90" />
         <enum name="KEYCODE_MUTE" value="91" />
+        <enum name="KEYCODE_PAGE_UP" value="92" />
+        <enum name="KEYCODE_PAGE_DOWN" value="93" />
+        <enum name="KEYCODE_PICTSYMBOLS" value="94" />
+        <enum name="KEYCODE_SWITCH_CHARSET" value="95" />
+        <enum name="KEYCODE_BUTTON_A" value="96" />
+        <enum name="KEYCODE_BUTTON_B" value="97" />
+        <enum name="KEYCODE_BUTTON_C" value="98" />
+        <enum name="KEYCODE_BUTTON_X" value="99" />
+        <enum name="KEYCODE_BUTTON_Y" value="100" />
+        <enum name="KEYCODE_BUTTON_Z" value="101" />
+        <enum name="KEYCODE_BUTTON_L1" value="102" />
+        <enum name="KEYCODE_BUTTON_R1" value="103" />
+        <enum name="KEYCODE_BUTTON_L2" value="104" />
+        <enum name="KEYCODE_BUTTON_R2" value="105" />
+        <enum name="KEYCODE_BUTTON_THUMBL" value="106" />
+        <enum name="KEYCODE_BUTTON_THUMBR" value="107" />
+        <enum name="KEYCODE_BUTTON_START" value="108" />
+        <enum name="KEYCODE_BUTTON_SELECT" value="109" />
+        <enum name="KEYCODE_BUTTON_MODE" value="110" />
     </attr>
 
     <!-- ***************************************************************** -->
@@ -1255,6 +1292,12 @@
              be saved. -->
         <attr name="saveEnabled" format="boolean" />
 
+        <!-- Specifies whether to filter touches when the view's window is obscured by
+             another visible window.  When set to true, the view will not receive touches
+             whenever a toast, dialog or other window appears above the view's window.
+             Refer to the {@link android.view.View} security documentation for more details. -->
+        <attr name="filterTouchesWhenObscured" format="boolean" />
+
         <!-- Defines the quality of translucent drawing caches. This property is used
              only when the drawing cache is enabled and translucent. The default value is auto. -->
         <attr name="drawingCacheQuality">
@@ -1307,6 +1350,20 @@
              <code>public void sayHello(View v)</code> method of your context
              (typically, your Activity). -->
         <attr name="onClick" format="string" />
+
+        <!-- Defines over-scrolling behavior. This property is used only if the
+             View is scrollable. Over-scrolling is the ability for the user to
+             receive feedback when attempting to scroll beyond meaningful content. -->
+        <attr name="overScrollMode">
+            <!-- Always show over-scroll effects, even if the content fits entirely
+                 within the available space. -->
+            <enum name="always" value="0" />
+            <!-- Only show over-scroll effects if the content is large
+                 enough to meaningfully scroll. -->
+            <enum name="ifContentScrolls" value="1" />
+            <!-- Never show over-scroll effects. -->
+            <enum name="never" value="2" />
+        </attr>
     </declare-styleable>
 
     <!-- Attributes that can be used with a {@link android.view.ViewGroup} or any
@@ -1740,6 +1797,10 @@
         <!-- When set to false, the ListView will not draw the divider before each footer view.
              The default value is true. -->
         <attr name="footerDividersEnabled" format="boolean" />
+        <!-- Drawable to draw above list content. -->
+        <attr name="overScrollHeader" format="reference|color" />
+        <!-- Drawable to draw below list content. -->
+        <attr name="overScrollFooter" format="reference|color" />
     </declare-styleable>
     <declare-styleable name="MenuView">
         <!-- Default appearance of menu item text. -->
@@ -2110,6 +2171,16 @@
              EditorInfo.extras} field when the input
              method is connected. -->
         <attr name="editorExtras" format="reference" />
+
+        <!-- Reference to a drawable that will be used to display a text selection
+             anchor on the left side of a selection region. -->
+        <attr name="textSelectHandleLeft" />
+        <!-- Reference to a drawable that will be used to display a text selection
+             anchor on the right side of a selection region. -->
+        <attr name="textSelectHandleRight" />
+        <!-- Reference to a drawable that will be used to display a text selection
+             anchor for positioning the cursor within text. -->
+        <attr name="textSelectHandle" />
     </declare-styleable>
     <!-- An <code>input-extras</code> is a container for extra data to supply to
          an input method.  Contains
@@ -2169,6 +2240,7 @@
     </declare-styleable>
     <declare-styleable name="PopupWindow">
         <attr name="popupBackground" format="reference|color" />
+        <attr name="popupAnimationStyle" format="reference" />
     </declare-styleable>
     <declare-styleable name="ViewAnimator">
         <attr name="inAnimation" format="reference" />

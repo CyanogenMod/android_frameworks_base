@@ -87,7 +87,7 @@ AMRExtractor::AMRExtractor(const sp<DataSource> &source)
       mInitCheck(NO_INIT) {
     String8 mimeType;
     float confidence;
-    if (!SniffAMR(mDataSource, &mimeType, &confidence)) {
+    if (!SniffAMR(mDataSource, &mimeType, &confidence, NULL)) {
         return;
     }
 
@@ -212,7 +212,8 @@ status_t AMRSource::read(
     *out = NULL;
 
     int64_t seekTimeUs;
-    if (options && options->getSeekTo(&seekTimeUs)) {
+    ReadOptions::SeekMode mode;
+    if (options && options->getSeekTo(&seekTimeUs, &mode)) {
         int64_t seekFrame = seekTimeUs / 20000ll;  // 20ms per frame.
         mCurrentTimeUs = seekFrame * 20000ll;
         mOffset = seekFrame * mFrameSize + (mIsWide ? 9 : 6);
@@ -262,6 +263,7 @@ status_t AMRSource::read(
 
     buffer->set_range(0, frameSize);
     buffer->meta_data()->setInt64(kKeyTime, mCurrentTimeUs);
+    buffer->meta_data()->setInt32(kKeyIsSyncFrame, 1);
 
     mOffset += frameSize;
     mCurrentTimeUs += 20000;  // Each frame is 20ms
@@ -274,7 +276,8 @@ status_t AMRSource::read(
 ////////////////////////////////////////////////////////////////////////////////
 
 bool SniffAMR(
-        const sp<DataSource> &source, String8 *mimeType, float *confidence) {
+        const sp<DataSource> &source, String8 *mimeType, float *confidence,
+        sp<AMessage> *) {
     char header[9];
 
     if (source->readAt(0, header, sizeof(header)) != sizeof(header)) {

@@ -45,7 +45,6 @@ import android.provider.Telephony;
 import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.telephony.gsm.GsmCellLocation;
-import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.Log;
 
@@ -151,9 +150,9 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
     static final String APN_ID = "apn_id";
     private boolean canSetPreferApn = false;
 
-    // for tracking retrys on the default APN
+    // for tracking retries on the default APN
     private RetryManager mDefaultRetryManager;
-    // for tracking retrys on a secondary APN
+    // for tracking retries on a secondary APN
     private RetryManager mSecondaryRetryManager;
 
     BroadcastReceiver mIntentReceiver = new BroadcastReceiver ()
@@ -190,8 +189,8 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                         WifiManager.WIFI_STATE_UNKNOWN) == WifiManager.WIFI_STATE_ENABLED;
 
                 if (!enabled) {
-                    // when wifi got disabeled, the NETWORK_STATE_CHANGED_ACTION
-                    // quit and wont report disconnected til next enalbing.
+                    // when wifi got disabled, the NETWORK_STATE_CHANGED_ACTION
+                    // quit and won't report disconnected til next enabling.
                     mIsWifiConnected = false;
                 }
             }
@@ -452,7 +451,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                 waitingApns = buildWaitingApns();
                 if (waitingApns.isEmpty()) {
                     if (DBG) log("No APN found");
-                    notifyNoData(GsmDataConnection.FailCause.MISSING_UKNOWN_APN);
+                    notifyNoData(GsmDataConnection.FailCause.MISSING_UNKNOWN_APN);
                     return false;
                 } else {
                     log ("Create from allApns : " + apnListToString(allApns));
@@ -1130,7 +1129,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             if (isApnTypeActive(Phone.APN_TYPE_DEFAULT)) {
                 SystemProperties.set("gsm.defaultpdpcontext.active", "true");
                         if (canSetPreferApn && preferredApn == null) {
-                            Log.d(LOG_TAG, "PREFERED APN is null");
+                            Log.d(LOG_TAG, "PREFERRED APN is null");
                             preferredApn = mActiveApn;
                             setPreferredApn(preferredApn.id);
                         }
@@ -1158,10 +1157,8 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             // No try for permanent failure
             if (cause.isPermanentFail()) {
                 notifyNoData(cause);
-                if (!mRequestedApnType.equals(Phone.APN_TYPE_DEFAULT)) {
-                    phone.notifyDataConnection(Phone.REASON_APN_FAILED);
-                    onEnableApn(apnTypeToId(mRequestedApnType), DISABLED);
-                }
+                phone.notifyDataConnection(Phone.REASON_APN_FAILED);
+                onEnableApn(apnTypeToId(mRequestedApnType), DISABLED);
                 return;
             }
 
@@ -1280,7 +1277,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
         if (allApns.isEmpty()) {
             if (DBG) log("No APN found for carrier: " + operator);
             preferredApn = null;
-            notifyNoData(GsmDataConnection.FailCause.MISSING_UKNOWN_APN);
+            notifyNoData(GsmDataConnection.FailCause.MISSING_UNKNOWN_APN);
         } else {
             preferredApn = getPreferredApn();
             Log.d(LOG_TAG, "Get PreferredAPN");

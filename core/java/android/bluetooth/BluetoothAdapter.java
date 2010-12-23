@@ -26,8 +26,10 @@ import android.os.ParcelUuid;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
+import android.util.Pair;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -283,7 +285,7 @@ public final class BluetoothAdapter {
     private static final int ADDRESS_LENGTH = 17;
 
     /**
-     * Lazyily initialized singleton. Guaranteed final after first object
+     * Lazily initialized singleton. Guaranteed final after first object
      * constructed.
      */
     private static BluetoothAdapter sAdapter;
@@ -408,7 +410,7 @@ public final class BluetoothAdapter {
      * user action to turn off Bluetooth.
      * <p>This gracefully shuts down all Bluetooth connections, stops Bluetooth
      * system services, and powers down the underlying Bluetooth hardware.
-     * <p class="caution"><strong>Bluetooth should never be disbled without
+     * <p class="caution"><strong>Bluetooth should never be disabled without
      * direct user consent</strong>. The {@link #disable()} method is
      * provided only for applications that include a user interface for changing
      * system settings, such as a "power manager" app.</p>
@@ -463,17 +465,22 @@ public final class BluetoothAdapter {
     }
 
     /**
-     * Set the friendly Bluetooth name of the local Bluetoth adapter.
+     * Set the friendly Bluetooth name of the local Bluetooth adapter.
      * <p>This name is visible to remote Bluetooth devices.
-     * <p>Valid Bluetooth names are a maximum of 248 UTF-8 characters, however
-     * many remote devices can only display the first 40 characters, and some
-     * may be limited to just 20.
+     * <p>Valid Bluetooth names are a maximum of 248 bytes using UTF-8
+     * encoding, although many remote devices can only display the first
+     * 40 characters, and some may be limited to just 20.
+     * <p>If Bluetooth state is not {@link #STATE_ON}, this API
+     * will return false. After turning on Bluetooth,
+     * wait for {@link #ACTION_STATE_CHANGED} with {@link #STATE_ON}
+     * to get the updated value.
      * <p>Requires {@link android.Manifest.permission#BLUETOOTH_ADMIN}
      *
      * @param name a valid Bluetooth name
      * @return     true if the name was set, false otherwise
      */
     public boolean setName(String name) {
+        if (getState() != STATE_ON) return false;
         try {
             return mService.setName(name);
         } catch (RemoteException e) {Log.e(TAG, "", e);}
@@ -481,18 +488,23 @@ public final class BluetoothAdapter {
     }
 
     /**
-     * Get the current Bluetooth scan mode of the local Bluetooth adaper.
+     * Get the current Bluetooth scan mode of the local Bluetooth adapter.
      * <p>The Bluetooth scan mode determines if the local adapter is
      * connectable and/or discoverable from remote Bluetooth devices.
      * <p>Possible values are:
      * {@link #SCAN_MODE_NONE},
      * {@link #SCAN_MODE_CONNECTABLE},
      * {@link #SCAN_MODE_CONNECTABLE_DISCOVERABLE}.
+     * <p>If Bluetooth state is not {@link #STATE_ON}, this API
+     * will return {@link #SCAN_MODE_NONE}. After turning on Bluetooth,
+     * wait for {@link #ACTION_STATE_CHANGED} with {@link #STATE_ON}
+     * to get the updated value.
      * <p>Requires {@link android.Manifest.permission#BLUETOOTH}
      *
      * @return scan mode
      */
     public int getScanMode() {
+        if (getState() != STATE_ON) return SCAN_MODE_NONE;
         try {
             return mService.getScanMode();
         } catch (RemoteException e) {Log.e(TAG, "", e);}
@@ -511,6 +523,10 @@ public final class BluetoothAdapter {
      * {@link #SCAN_MODE_NONE},
      * {@link #SCAN_MODE_CONNECTABLE},
      * {@link #SCAN_MODE_CONNECTABLE_DISCOVERABLE}.
+     * <p>If Bluetooth state is not {@link #STATE_ON}, this API
+     * will return false. After turning on Bluetooth,
+     * wait for {@link #ACTION_STATE_CHANGED} with {@link #STATE_ON}
+     * to get the updated value.
      * <p>Requires {@link android.Manifest.permission#WRITE_SECURE_SETTINGS}
      * <p>Applications cannot set the scan mode. They should use
      * <code>startActivityForResult(
@@ -524,6 +540,7 @@ public final class BluetoothAdapter {
      * @hide
      */
     public boolean setScanMode(int mode, int duration) {
+        if (getState() != STATE_ON) return false;
         try {
             return mService.setScanMode(mode, duration);
         } catch (RemoteException e) {Log.e(TAG, "", e);}
@@ -532,11 +549,13 @@ public final class BluetoothAdapter {
 
     /** @hide */
     public boolean setScanMode(int mode) {
+        if (getState() != STATE_ON) return false;
         return setScanMode(mode, 120);
     }
 
     /** @hide */
     public int getDiscoverableTimeout() {
+        if (getState() != STATE_ON) return -1;
         try {
             return mService.getDiscoverableTimeout();
         } catch (RemoteException e) {Log.e(TAG, "", e);}
@@ -545,6 +564,7 @@ public final class BluetoothAdapter {
 
     /** @hide */
     public void setDiscoverableTimeout(int timeout) {
+        if (getState() != STATE_ON) return;
         try {
             mService.setDiscoverableTimeout(timeout);
         } catch (RemoteException e) {Log.e(TAG, "", e);}
@@ -572,11 +592,16 @@ public final class BluetoothAdapter {
      * <p>Device discovery will only find remote devices that are currently
      * <i>discoverable</i> (inquiry scan enabled). Many Bluetooth devices are
      * not discoverable by default, and need to be entered into a special mode.
+     * <p>If Bluetooth state is not {@link #STATE_ON}, this API
+     * will return false. After turning on Bluetooth,
+     * wait for {@link #ACTION_STATE_CHANGED} with {@link #STATE_ON}
+     * to get the updated value.
      * <p>Requires {@link android.Manifest.permission#BLUETOOTH_ADMIN}.
      *
      * @return true on success, false on error
      */
     public boolean startDiscovery() {
+        if (getState() != STATE_ON) return false;
         try {
             return mService.startDiscovery();
         } catch (RemoteException e) {Log.e(TAG, "", e);}
@@ -586,17 +611,22 @@ public final class BluetoothAdapter {
     /**
      * Cancel the current device discovery process.
      * <p>Requires {@link android.Manifest.permission#BLUETOOTH_ADMIN}.
-     * <p>Because discovery is a heavyweight precedure for the Bluetooth
+     * <p>Because discovery is a heavyweight procedure for the Bluetooth
      * adapter, this method should always be called before attempting to connect
      * to a remote device with {@link
      * android.bluetooth.BluetoothSocket#connect()}. Discovery is not managed by
      * the  Activity, but is run as a system service, so an application should
      * always call cancel discovery even if it did not directly request a
      * discovery, just to be sure.
+     * <p>If Bluetooth state is not {@link #STATE_ON}, this API
+     * will return false. After turning on Bluetooth,
+     * wait for {@link #ACTION_STATE_CHANGED} with {@link #STATE_ON}
+     * to get the updated value.
      *
      * @return true on success, false on error
      */
     public boolean cancelDiscovery() {
+        if (getState() != STATE_ON) return false;
         try {
             mService.cancelDiscovery();
         } catch (RemoteException e) {Log.e(TAG, "", e);}
@@ -614,11 +644,16 @@ public final class BluetoothAdapter {
      * <p>Applications can also register for {@link #ACTION_DISCOVERY_STARTED}
      * or {@link #ACTION_DISCOVERY_FINISHED} to be notified when discovery
      * starts or completes.
+     * <p>If Bluetooth state is not {@link #STATE_ON}, this API
+     * will return false. After turning on Bluetooth,
+     * wait for {@link #ACTION_STATE_CHANGED} with {@link #STATE_ON}
+     * to get the updated value.
      * <p>Requires {@link android.Manifest.permission#BLUETOOTH}.
      *
      * @return true if discovering
      */
     public boolean isDiscovering() {
+        if (getState() != STATE_ON) return false;
         try {
             return mService.isDiscovering();
         } catch (RemoteException e) {Log.e(TAG, "", e);}
@@ -628,11 +663,18 @@ public final class BluetoothAdapter {
     /**
      * Return the set of {@link BluetoothDevice} objects that are bonded
      * (paired) to the local adapter.
+     * <p>If Bluetooth state is not {@link #STATE_ON}, this API
+     * will return an empty set. After turning on Bluetooth,
+     * wait for {@link #ACTION_STATE_CHANGED} with {@link #STATE_ON}
+     * to get the updated value.
      * <p>Requires {@link android.Manifest.permission#BLUETOOTH}.
      *
      * @return unmodifiable set of {@link BluetoothDevice}, or null on error
      */
     public Set<BluetoothDevice> getBondedDevices() {
+        if (getState() != STATE_ON) {
+            return toDeviceSet(new String[0]);
+        }
         try {
             return toDeviceSet(mService.listBonds());
         } catch (RemoteException e) {Log.e(TAG, "", e);}
@@ -821,6 +863,37 @@ public final class BluetoothAdapter {
             socket.mSocket.throwErrnoNative(errno);
         }
         return socket;
+    }
+
+    /**
+     * Read the local Out of Band Pairing Data
+     * <p>Requires {@link android.Manifest.permission#BLUETOOTH}
+     *
+     * @return Pair<byte[], byte[]> of Hash and Randomizer
+     *
+     * @hide
+     */
+    public Pair<byte[], byte[]> readOutOfBandData() {
+        if (getState() != STATE_ON) return null;
+        try {
+            byte[] hash;
+            byte[] randomizer;
+
+            byte[] ret = mService.readOutOfBandData();
+
+            if (ret  == null || ret.length != 32) return null;
+
+            hash = Arrays.copyOfRange(ret, 0, 16);
+            randomizer = Arrays.copyOfRange(ret, 16, 32);
+
+            if (DBG) {
+                Log.d(TAG, "readOutOfBandData:" + Arrays.toString(hash) +
+                  ":" + Arrays.toString(randomizer));
+            }
+            return new Pair<byte[], byte[]>(hash, randomizer);
+
+        } catch (RemoteException e) {Log.e(TAG, "", e);}
+        return null;
     }
 
     private Set<BluetoothDevice> toDeviceSet(String[] addresses) {

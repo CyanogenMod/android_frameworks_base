@@ -30,10 +30,14 @@ namespace android {
 // The following keys map to int32_t data unless indicated otherwise.
 enum {
     kKeyMIMEType          = 'mime',  // cstring
-    kKeyWidth             = 'widt',
-    kKeyHeight            = 'heig',
-    kKeyChannelCount      = '#chn',
-    kKeySampleRate        = 'srte',
+    kKeyWidth             = 'widt',  // int32_t
+    kKeyHeight            = 'heig',  // int32_t
+    kKeyRotation          = 'rotA',  // int32_t (angle in degrees)
+    kKeyIFramesInterval   = 'ifiv',  // int32_t
+    kKeyStride            = 'strd',  // int32_t
+    kKeySliceHeight       = 'slht',  // int32_t
+    kKeyChannelCount      = '#chn',  // int32_t
+    kKeySampleRate        = 'srte',  // int32_t (also video frame rate)
     kKeyBitRate           = 'brte',  // int32_t (bps)
     kKeyESDS              = 'esds',  // raw data
     kKeyAVCC              = 'avcc',  // raw data
@@ -43,6 +47,10 @@ enum {
     kKeyIsSyncFrame       = 'sync',  // int32_t (bool)
     kKeyIsCodecConfig     = 'conf',  // int32_t (bool)
     kKeyTime              = 'time',  // int64_t (usecs)
+    kKeyNTPTime           = 'ntpT',  // uint64_t (ntp-timestamp)
+    kKeyTargetTime        = 'tarT',  // int64_t (usecs)
+    kKeyDriftTime         = 'dftT',  // int64_t (usecs)
+    kKeyAnchorTime        = 'ancT',  // int64_t (usecs)
     kKeyDuration          = 'dura',  // int64_t (usecs)
     kKeyColorFormat       = 'colf',
     kKeyPlatformPrivate   = 'priv',  // pointer
@@ -65,6 +73,34 @@ enum {
     kKeyDiscNumber        = 'dnum',  // cstring
     kKeyDate              = 'date',  // cstring
     kKeyWriter            = 'writ',  // cstring
+    kKeyTimeScale         = 'tmsl',  // int32_t
+
+    // video profile and level
+    kKeyVideoProfile      = 'vprf',  // int32_t
+    kKeyVideoLevel        = 'vlev',  // int32_t
+
+    // Set this key to enable authoring files in 64-bit offset
+    kKey64BitFileOffset   = 'fobt',  // int32_t (bool)
+    kKey2ByteNalLength    = '2NAL',  // int32_t (bool)
+
+    // Identify the file output format for authoring
+    // Please see <media/mediarecorder.h> for the supported
+    // file output formats.
+    kKeyFileType          = 'ftyp',  // int32_t
+
+    // Track authoring progress status
+    // kKeyTrackTimeStatus is used to track progress in elapsed time
+    kKeyTrackTimeStatus   = 'tktm',  // int64_t
+    kKeyRotationDegree    = 'rdge',  // int32_t (clockwise, in degree)
+
+    kKeyNotRealTime       = 'ntrt',  // bool (int32_t)
+
+    // Ogg files can be tagged to be automatically looping...
+    kKeyAutoLoop          = 'autL',  // bool (int32_t)
+
+    kKeyValidSamples      = 'valD',  // int32_t
+
+    kKeyIsUnreadable      = 'unre',  // bool (int32_t)
 };
 
 enum {

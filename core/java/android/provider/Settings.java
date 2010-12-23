@@ -355,6 +355,35 @@ public final class Settings {
             "android.settings.MANAGE_APPLICATIONS_SETTINGS";
 
     /**
+     * Activity Action: Show settings to manage all applications.
+     * <p>
+     * In some cases, a matching Activity may not exist, so ensure you
+     * safeguard against this.
+     * <p>
+     * Input: Nothing.
+     * <p>
+     * Output: Nothing.
+     */
+    @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
+    public static final String ACTION_MANAGE_ALL_APPLICATIONS_SETTINGS =
+            "android.settings.MANAGE_ALL_APPLICATIONS_SETTINGS";
+
+    /**
+     * Activity Action: Show screen of details about a particular application.
+     * <p>
+     * In some cases, a matching Activity may not exist, so ensure you
+     * safeguard against this.
+     * <p>
+     * Input: The Intent's data URI specifies the application package name
+     * to be shown, with the "package" scheme.  That is "package:com.my.app".
+     * <p>
+     * Output: Nothing.
+     */
+    @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
+    public static final String ACTION_APPLICATION_DETAILS_SETTINGS =
+            "android.settings.APPLICATION_DETAILS_SETTINGS";
+
+    /**
      * Activity Action: Show settings for system update functionality.
      * <p>
      * In some cases, a matching Activity may not exist, so ensure you
@@ -1679,6 +1708,41 @@ public final class Settings {
         public static final String UNLOCK_SOUND = "unlock_sound";
 
         /**
+         * Receive incoming SIP calls?
+         * 0 = no
+         * 1 = yes
+         * @hide
+         */
+        public static final String SIP_RECEIVE_CALLS = "sip_receive_calls";
+
+        /**
+         * Call Preference String.
+         * "SIP_ALWAYS" : Always use SIP with network access
+         * "SIP_ADDRESS_ONLY" : Only if destination is a SIP address
+         * "SIP_ASK_ME_EACH_TIME" : Always ask me each time
+         * @hide
+         */
+        public static final String SIP_CALL_OPTIONS = "sip_call_options";
+
+        /**
+         * One of the sip call options: Always use SIP with network access.
+         * @hide
+         */
+        public static final String SIP_ALWAYS = "SIP_ALWAYS";
+
+        /**
+         * One of the sip call options: Only if destination is a SIP address.
+         * @hide
+         */
+        public static final String SIP_ADDRESS_ONLY = "SIP_ADDRESS_ONLY";
+
+        /**
+         * One of the sip call options: Always ask me each time.
+         * @hide
+         */
+        public static final String SIP_ASK_ME_EACH_TIME = "SIP_ASK_ME_EACH_TIME";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          * @hide
@@ -1738,7 +1802,9 @@ public final class Settings {
             DOCK_SOUNDS_ENABLED,
             LOCKSCREEN_SOUNDS_ENABLED,
             SHOW_WEB_SUGGESTIONS,
-            NOTIFICATION_LIGHT_PULSE
+            NOTIFICATION_LIGHT_PULSE,
+            SIP_CALL_OPTIONS,
+            SIP_RECEIVE_CALLS,
         };
 
         // Settings moved to Settings.Secure
@@ -2909,31 +2975,31 @@ public final class Settings {
         public static final String WTF_IS_FATAL = "wtf_is_fatal";
 
         /**
-         * Maximum age of entries kept by {@link android.os.IDropBox}.
+         * Maximum age of entries kept by {@link com.android.internal.os.IDropBoxManagerService}.
          * @hide
          */
         public static final String DROPBOX_AGE_SECONDS =
                 "dropbox_age_seconds";
         /**
-         * Maximum number of entry files which {@link android.os.IDropBox} will keep around.
+         * Maximum number of entry files which {@link com.android.internal.os.IDropBoxManagerService} will keep around.
          * @hide
          */
         public static final String DROPBOX_MAX_FILES =
                 "dropbox_max_files";
         /**
-         * Maximum amount of disk space used by {@link android.os.IDropBox} no matter what.
+         * Maximum amount of disk space used by {@link com.android.internal.os.IDropBoxManagerService} no matter what.
          * @hide
          */
         public static final String DROPBOX_QUOTA_KB =
                 "dropbox_quota_kb";
         /**
-         * Percent of free disk (excluding reserve) which {@link android.os.IDropBox} will use.
+         * Percent of free disk (excluding reserve) which {@link com.android.internal.os.IDropBoxManagerService} will use.
          * @hide
          */
         public static final String DROPBOX_QUOTA_PERCENT =
                 "dropbox_quota_percent";
         /**
-         * Percent of total disk which {@link android.os.IDropBox} will never dip into.
+         * Percent of total disk which {@link com.android.internal.os.IDropBoxManagerService} will never dip into.
          * @hide
          */
         public static final String DROPBOX_RESERVE_PERCENT =
@@ -2991,6 +3057,15 @@ public final class Settings {
          */
         public static final String SYS_STORAGE_THRESHOLD_PERCENTAGE =
                 "sys_storage_threshold_percentage";
+
+        /**
+         * Minimum bytes of free storage on the device before the data
+         * partition is considered full. By default, 1 MB is reserved
+         * to avoid system-wide SQLite disk full exceptions.
+         * @hide
+         */
+        public static final String SYS_STORAGE_FULL_THRESHOLD_BYTES =
+                "sys_storage_full_threshold_bytes";
 
         /**
          * The interval in milliseconds after which Wi-Fi is considered idle.
@@ -3358,6 +3433,38 @@ public final class Settings {
         public static final String THROTTLE_MAX_NTP_CACHE_AGE_SEC =
                 "throttle_max_ntp_cache_age_sec";
 
+        /**
+         * The maximum size, in bytes, of a download that the download manager will transfer over
+         * a non-wifi connection.
+         * @hide
+         */
+        public static final String DOWNLOAD_MAX_BYTES_OVER_MOBILE =
+                "download_manager_max_bytes_over_mobile";
+
+        /**
+         * The recommended maximum size, in bytes, of a download that the download manager should
+         * transfer over a non-wifi connection. Over this size, the use will be warned, but will
+         * have the option to start the download over the mobile connection anyway.
+         * @hide
+         */
+        public static final String DOWNLOAD_RECOMMENDED_MAX_BYTES_OVER_MOBILE =
+                "download_manager_recommended_max_bytes_over_mobile";
+
+        /**
+         * ms during which to consume extra events related to Inet connection condition
+         * after a transtion to fully-connected
+         * @hide
+         */
+        public static final String INET_CONDITION_DEBOUNCE_UP_DELAY =
+                "inet_condition_debounce_up_delay";
+
+        /**
+         * ms during which to consume extra events related to Inet connection condtion
+         * after a transtion to partly-connected
+         * @hide
+         */
+        public static final String INET_CONDITION_DEBOUNCE_DOWN_DELAY =
+                "inet_condition_debounce_down_delay";
 
         /**
          * @hide
@@ -3397,13 +3504,7 @@ public final class Settings {
          */
         public static final boolean isLocationProviderEnabled(ContentResolver cr, String provider) {
             String allowedProviders = Settings.Secure.getString(cr, LOCATION_PROVIDERS_ALLOWED);
-            if (allowedProviders != null) {
-                return (allowedProviders.equals(provider) ||
-                        allowedProviders.contains("," + provider + ",") ||
-                        allowedProviders.startsWith(provider + ",") ||
-                        allowedProviders.endsWith("," + provider));
-            }
-            return false;
+            return TextUtils.delimitedStringContains(allowedProviders, ',', provider);
         }
 
         /**

@@ -27,11 +27,17 @@ namespace android {
 
 class MemoryDealer;
 struct OMXCodecObserver;
+struct CodecProfileLevel;
 
 struct OMXCodec : public MediaSource,
                   public MediaBufferObserver {
     enum CreationFlags {
-        kPreferSoftwareCodecs = 1,
+        kPreferSoftwareCodecs    = 1,
+        kIgnoreCodecSpecificData = 2,
+
+        // The client wants to access the output buffer's video
+        // data for example for thumbnail extraction.
+        kClientNeedsFramebuffer  = 4,
     };
     static sp<MediaSource> Create(
             const sp<IOMX> &omx,
@@ -51,6 +57,8 @@ struct OMXCodec : public MediaSource,
 
     virtual status_t read(
             MediaBuffer **buffer, const ReadOptions *options = NULL);
+
+    virtual status_t pause();
 
     void on_message(const omx_message &msg);
 
@@ -98,6 +106,10 @@ private:
         kDecoderLiesAboutNumberOfChannels     = 256,
         kInputBufferSizesAreBogus             = 512,
         kSupportsMultipleFramesPerInputBuffer = 1024,
+        kAvoidMemcopyInputRecordingFrames     = 2048,
+        kRequiresLargerEncoderOutputBuffer    = 4096,
+        kOutputBuffersAreUnreadable           = 8192,
+        kStoreMetaDataInInputVideoBuffers     = 16384,
     };
 
     struct BufferInfo {
@@ -137,11 +149,16 @@ private:
     bool mNoMoreOutputData;
     bool mOutputPortSettingsHaveChanged;
     int64_t mSeekTimeUs;
+    ReadOptions::SeekMode mSeekMode;
+    int64_t mTargetTimeUs;
+    int64_t mSkipTimeUs;
 
     MediaBuffer *mLeftOverBuffer;
 
     Mutex mLock;
     Condition mAsyncCompletion;
+
+    bool mPaused;
 
     // A list of indices into mPortStatus[kPortIndexOutput] filled with data.
     List<size_t> mFilledBuffers;
@@ -156,8 +173,8 @@ private:
 
     void setComponentRole();
 
-    void setAMRFormat(bool isWAMR);
-    void setAACFormat(int32_t numChannels, int32_t sampleRate);
+    void setAMRFormat(bool isWAMR, int32_t bitRate);
+    void setAACFormat(int32_t numChannels, int32_t sampleRate, int32_t bitRate);
 
     status_t setVideoPortFormatType(
             OMX_U32 portIndex,
@@ -165,10 +182,24 @@ private:
             OMX_COLOR_FORMATTYPE colorFormat);
 
     void setVideoInputFormat(
-            const char *mime, OMX_U32 width, OMX_U32 height);
+            const char *mime, const sp<MetaData>& meta);
 
-    status_t setupMPEG4EncoderParameters();
-    status_t setupAVCEncoderParameters();
+    status_t setupBitRate(int32_t bitRate);
+    status_t setupErrorCorrectionParameters();
+    status_t setupH263EncoderParameters(const sp<MetaData>& meta);
+    status_t setupMPEG4EncoderParameters(const sp<MetaData>& meta);
+    status_t setupAVCEncoderParameters(const sp<MetaData>& meta);
+    status_t findTargetColorFormat(
+            const sp<MetaData>& meta, OMX_COLOR_FORMATTYPE *colorFormat);
+
+    status_t isColorFormatSupported(
+            OMX_COLOR_FORMATTYPE colorFormat, int portIndex);
+
+    // If profile/level is set in the meta data, its value in the meta
+    // data will be used; otherwise, the default value will be used.
+    status_t getVideoProfileLevel(const sp<MetaData>& meta,
+            const CodecProfileLevel& defaultProfileLevel,
+            CodecProfileLevel& profileLevel);
 
     status_t setVideoOutputFormat(
             const char *mime, OMX_U32 width, OMX_U32 height);
@@ -223,9 +254,10 @@ private:
 
     void dumpPortStatus(OMX_U32 portIndex);
 
-    status_t configureCodec(const sp<MetaData> &meta);
+    status_t configureCodec(const sp<MetaData> &meta, uint32_t flags);
 
-    static uint32_t getComponentQuirks(const char *componentName);
+    static uint32_t getComponentQuirks(
+            const char *componentName, bool isEncoder);
 
     static void findMatchingCodecs(
             const char *mime,

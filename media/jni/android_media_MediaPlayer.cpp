@@ -292,7 +292,7 @@ static void setVideoSurface(const sp<MediaPlayer>& mp, JNIEnv *env, jobject thiz
     if (surface != NULL) {
         const sp<Surface> native_surface = get_surface(env, surface);
         LOGV("prepare: surface=%p (id=%d)",
-             native_surface.get(), native_surface->ID());
+             native_surface.get(), native_surface->getIdentity());
         mp->setVideoSurface(native_surface);
     }
 }
@@ -332,7 +332,7 @@ android_media_MediaPlayer_prepareAsync(JNIEnv *env, jobject thiz)
     if (surface != NULL) {
         const sp<Surface> native_surface = get_surface(env, surface);
         LOGV("prepareAsync: surface=%p (id=%d)",
-             native_surface.get(), native_surface->ID());
+             native_surface.get(), native_surface->getIdentity());
         mp->setVideoSurface(native_surface);
     }
     process_media_player_call( env, thiz, mp->prepareAsync(), "java/io/IOException", "Prepare Async failed." );
@@ -636,7 +636,7 @@ android_media_MediaPlayer_native_init(JNIEnv *env)
         return;
     }
 
-    fields.surface_native = env->GetFieldID(surface, "mSurface", "I");
+    fields.surface_native = env->GetFieldID(surface, ANDROID_VIEW_SURFACE_JNI_ID, "I");
     if (fields.surface_native == NULL) {
         jniThrowException(env, "java/lang/RuntimeException", "Can't find Surface.mSurface");
         return;
@@ -681,18 +681,6 @@ android_media_MediaPlayer_native_finalize(JNIEnv *env, jobject thiz)
 }
 
 static jint
-android_media_MediaPlayer_snoop(JNIEnv* env, jobject thiz, jobject data, jint kind) {
-    jshort* ar = (jshort*)env->GetPrimitiveArrayCritical((jarray)data, 0);
-    jsize len = env->GetArrayLength((jarray)data);
-    int ret = 0;
-    if (ar) {
-        ret = MediaPlayer::snoop(ar, len, kind);
-        env->ReleasePrimitiveArrayCritical((jarray)data, ar, 0);
-    }
-    return ret;
-}
-
-static jint
 android_media_MediaPlayer_native_suspend_resume(
         JNIEnv *env, jobject thiz, jboolean isSuspend) {
     LOGV("suspend_resume(%d)", isSuspend);
@@ -703,6 +691,49 @@ android_media_MediaPlayer_native_suspend_resume(
     }
 
     return isSuspend ? mp->suspend() : mp->resume();
+}
+
+static void android_media_MediaPlayer_set_audio_session_id(JNIEnv *env,  jobject thiz, jint sessionId) {
+    LOGV("set_session_id(): %d", sessionId);
+    sp<MediaPlayer> mp = getMediaPlayer(env, thiz);
+    if (mp == NULL ) {
+        jniThrowException(env, "java/lang/IllegalStateException", NULL);
+        return;
+    }
+    process_media_player_call( env, thiz, mp->setAudioSessionId(sessionId), NULL, NULL );
+}
+
+static jint android_media_MediaPlayer_get_audio_session_id(JNIEnv *env,  jobject thiz) {
+    LOGV("get_session_id()");
+    sp<MediaPlayer> mp = getMediaPlayer(env, thiz);
+    if (mp == NULL ) {
+        jniThrowException(env, "java/lang/IllegalStateException", NULL);
+        return 0;
+    }
+
+    return mp->getAudioSessionId();
+}
+
+static void
+android_media_MediaPlayer_setAuxEffectSendLevel(JNIEnv *env, jobject thiz, jfloat level)
+{
+    LOGV("setAuxEffectSendLevel: level %f", level);
+    sp<MediaPlayer> mp = getMediaPlayer(env, thiz);
+    if (mp == NULL ) {
+        jniThrowException(env, "java/lang/IllegalStateException", NULL);
+        return;
+    }
+    process_media_player_call( env, thiz, mp->setAuxEffectSendLevel(level), NULL, NULL );
+}
+
+static void android_media_MediaPlayer_attachAuxEffect(JNIEnv *env,  jobject thiz, jint effectId) {
+    LOGV("attachAuxEffect(): %d", effectId);
+    sp<MediaPlayer> mp = getMediaPlayer(env, thiz);
+    if (mp == NULL ) {
+        jniThrowException(env, "java/lang/IllegalStateException", NULL);
+        return;
+    }
+    process_media_player_call( env, thiz, mp->attachAuxEffect(effectId), NULL, NULL );
 }
 
 // ----------------------------------------------------------------------------
@@ -736,8 +767,11 @@ static JNINativeMethod gMethods[] = {
     {"native_init",         "()V",                              (void *)android_media_MediaPlayer_native_init},
     {"native_setup",        "(Ljava/lang/Object;)V",            (void *)android_media_MediaPlayer_native_setup},
     {"native_finalize",     "()V",                              (void *)android_media_MediaPlayer_native_finalize},
-    {"snoop",               "([SI)I",                           (void *)android_media_MediaPlayer_snoop},
     {"native_suspend_resume", "(Z)I",                           (void *)android_media_MediaPlayer_native_suspend_resume},
+    {"getAudioSessionId",   "()I",                              (void *)android_media_MediaPlayer_get_audio_session_id},
+    {"setAudioSessionId",   "(I)V",                             (void *)android_media_MediaPlayer_set_audio_session_id},
+    {"setAuxEffectSendLevel", "(F)V",                           (void *)android_media_MediaPlayer_setAuxEffectSendLevel},
+    {"attachAuxEffect",     "(I)V",                             (void *)android_media_MediaPlayer_attachAuxEffect},
 };
 
 static const char* const kClassPathName = "android/media/MediaPlayer";
@@ -754,10 +788,7 @@ extern int register_android_media_MediaRecorder(JNIEnv *env);
 extern int register_android_media_MediaScanner(JNIEnv *env);
 extern int register_android_media_ResampleInputStream(JNIEnv *env);
 extern int register_android_media_MediaProfiles(JNIEnv *env);
-
-#ifndef NO_OPENCORE
 extern int register_android_media_AmrInputStream(JNIEnv *env);
-#endif
 
 jint JNI_OnLoad(JavaVM* vm, void* reserved)
 {
@@ -790,12 +821,10 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved)
         goto bail;
     }
 
-#ifndef NO_OPENCORE
     if (register_android_media_AmrInputStream(env) < 0) {
         LOGE("ERROR: AmrInputStream native registration failed\n");
         goto bail;
     }
-#endif
 
     if (register_android_media_ResampleInputStream(env) < 0) {
         LOGE("ERROR: ResampleInputStream native registration failed\n");

@@ -14,13 +14,18 @@
  * limitations under the License.
  */
 
+#define LOG_TAG "Surface"
+
 #include <stdio.h>
 
 #include "android_util_Binder.h"
 
 #include <surfaceflinger/SurfaceComposerClient.h>
+#include <surfaceflinger/Surface.h>
 #include <ui/Region.h>
 #include <ui/Rect.h>
+
+#include <EGL/egl.h>
 
 #include <SkCanvas.h>
 #include <SkBitmap.h>
@@ -28,6 +33,7 @@
 
 #include "jni.h"
 #include <android_runtime/AndroidRuntime.h>
+#include <android_runtime/android_view_Surface.h>
 #include <utils/misc.h>
 
 
@@ -174,6 +180,11 @@ static sp<Surface> getSurface(JNIEnv* env, jobject clazz)
     return result;
 }
 
+sp<ANativeWindow> android_Surface_getNativeWindow(
+        JNIEnv* env, jobject clazz) {
+    return getSurface(env, clazz).get();
+}
+
 static void setSurface(JNIEnv* env, jobject clazz, const sp<Surface>& surface)
 {
     Surface* const p = (Surface*)env->GetIntField(clazz, so.surface);
@@ -225,8 +236,9 @@ static void Surface_initParcel(JNIEnv* env, jobject clazz, jobject argParcel)
         doThrow(env, "java/lang/NullPointerException", NULL);
         return;
     }
-    sp<Surface> rhs = new Surface(*parcel);
-    setSurface(env, clazz, rhs);
+
+    sp<Surface> sur(Surface::readFromParcel(*parcel));
+    setSurface(env, clazz, sur);
 }
 
 static jint Surface_getIdentity(JNIEnv* env, jobject clazz)
@@ -332,7 +344,7 @@ static jobject Surface_lockCanvas(JNIEnv* env, jobject clazz, jobject dirtyRect)
     
     SkRegion clipReg;
     if (dirtyRegion.isRect()) { // very common case
-        const Rect& b(dirtyRegion.getBounds());
+        const Rect b(dirtyRegion.getBounds());
         clipReg.setRect(b.left, b.top, b.right, b.bottom);
     } else {
         size_t count;
@@ -585,7 +597,7 @@ static void Surface_copyFrom(
      * a Surface and is necessary for returning the Surface reference to
      * the caller. At this point, we should only have a SurfaceControl.
      */
-    
+
     const sp<SurfaceControl>& surface = getSurfaceControl(env, clazz);
     const sp<SurfaceControl>& rhs = getSurfaceControl(env, other);
     if (!SurfaceControl::isSameSurface(surface, rhs)) {
@@ -604,13 +616,8 @@ static void Surface_readFromParcel(
         return;
     }
 
-    const sp<Surface>& control(getSurface(env, clazz));
-    sp<Surface> rhs = new Surface(*parcel);
-    if (!Surface::isSameSurface(control, rhs)) {
-        // we reassign the surface only if it's a different one
-        // otherwise we would loose our client-side state.
-        setSurface(env, clazz, rhs);
-    }
+    sp<Surface> sur(Surface::readFromParcel(*parcel));
+    setSurface(env, clazz, sur);
 }
 
 static void Surface_writeToParcel(
@@ -680,7 +687,7 @@ static JNINativeMethod gSurfaceMethods[] = {
 
 void nativeClassInit(JNIEnv* env, jclass clazz)
 {
-    so.surface = env->GetFieldID(clazz, "mSurface", "I");
+    so.surface = env->GetFieldID(clazz, ANDROID_VIEW_SURFACE_JNI_ID, "I");
     so.surfaceControl = env->GetFieldID(clazz, "mSurfaceControl", "I");
     so.saveCount = env->GetFieldID(clazz, "mSaveCount", "I");
     so.canvas    = env->GetFieldID(clazz, "mCanvas", "Landroid/graphics/Canvas;");
@@ -721,4 +728,3 @@ int register_android_view_Surface(JNIEnv* env)
 }
 
 };
-

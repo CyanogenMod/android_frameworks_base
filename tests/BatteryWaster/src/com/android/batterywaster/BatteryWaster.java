@@ -25,6 +25,7 @@ import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -38,8 +39,10 @@ public class BatteryWaster extends Activity {
     TextView mLog;
     DateFormat mDateFormat;
     IntentFilter mFilter;
-    PowerManager.WakeLock mWakeLock;
+    PowerManager.WakeLock mPartialWakeLock;
     SpinThread mThread;
+
+    boolean mWasting, mWaking;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +53,7 @@ public class BatteryWaster extends Activity {
         setContentView(R.layout.battery_waster);
 
         findViewById(R.id.checkbox).setOnClickListener(mClickListener);
+        findViewById(R.id.checkbox_wake).setOnClickListener(mWakeClickListener);
         mLog = (TextView)findViewById(R.id.log);
 
         mDateFormat = DateFormat.getInstance();
@@ -61,13 +65,29 @@ public class BatteryWaster extends Activity {
         mFilter.addAction(Intent.ACTION_POWER_CONNECTED);
 
         PowerManager pm = (PowerManager)getSystemService(POWER_SERVICE);
-        mWakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK, "BatteryWaster");
-        mWakeLock.setReferenceCounted(false);
+        mPartialWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "BatteryWaster");
+        mPartialWakeLock.setReferenceCounted(false);
     }
 
     @Override
-    public void onPause() {
+    public void onResume() {
+        super.onResume();
+        if (((CheckBox)findViewById(R.id.checkbox)).isChecked()) {
+            startRunning();
+        }
+        if (((CheckBox)findViewById(R.id.checkbox_wake)).isChecked()) {
+            mWaking = true;
+            updateWakeLock();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         stopRunning();
+        if (mPartialWakeLock.isHeld()) {
+            mPartialWakeLock.release();
+        }
     }
 
     View.OnClickListener mClickListener = new View.OnClickListener() {
@@ -81,23 +101,59 @@ public class BatteryWaster extends Activity {
         }
     };
 
+    View.OnClickListener mWakeClickListener = new View.OnClickListener() {
+        public void onClick(View v) {
+            CheckBox checkbox = (CheckBox)v;
+            if (checkbox.isChecked()) {
+                mWaking = true;
+                updateWakeLock();
+            } else {
+                mWaking = false;
+                updateWakeLock();
+            }
+        }
+    };
+
     void startRunning() {
-        log("Start");
-        registerReceiver(mReceiver, mFilter);
-        mWakeLock.acquire();
-        if (mThread == null) {
-            mThread = new SpinThread();
-            mThread.start();
+        if (!mWasting) {
+            log("Start");
+            registerReceiver(mReceiver, mFilter);
+            mWasting = true;
+            updateWakeLock();
+            if (mThread == null) {
+                mThread = new SpinThread();
+                mThread.start();
+            }
         }
     }
 
     void stopRunning() {
-        log("Stop");
-        unregisterReceiver(mReceiver);
-        mWakeLock.release();
-        if (mThread != null) {
-            mThread.quit();
-            mThread = null;
+        if (mWasting) {
+            log("Stop");
+            unregisterReceiver(mReceiver);
+            mWasting = false;
+            updateWakeLock();
+            if (mThread != null) {
+                mThread.quit();
+                mThread = null;
+            }
+        }
+    }
+
+    void updateWakeLock() {
+        if (mWasting) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        } else {
+            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        }
+        if (mWaking) {
+            if (!mPartialWakeLock.isHeld()) {
+                mPartialWakeLock.acquire();
+            }
+        } else {
+            if (mPartialWakeLock.isHeld()) {
+                mPartialWakeLock.release();
+            }
         }
     }
 

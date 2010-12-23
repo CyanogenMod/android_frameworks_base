@@ -71,6 +71,7 @@ class BrowserFrame extends Handler {
     // that if the UI thread posts any messages after the message
     // queue has been cleared,they are ignored.
     private boolean mBlockMessages = false;
+    private int mOrientation = -1;
 
     // Is this frame the main frame?
     private boolean mIsMainFrame;
@@ -473,7 +474,10 @@ class BrowserFrame extends Handler {
             }
 
             case ORIENTATION_CHANGED: {
-                nativeOrientationChanged(msg.arg1);
+                if (mOrientation != msg.arg1) {
+                    mOrientation = msg.arg1;
+                    nativeOrientationChanged(msg.arg1);
+                }
                 break;
             }
 
@@ -785,11 +789,7 @@ class BrowserFrame extends Handler {
      * @return The BrowserFrame object stored in the new WebView.
      */
     private BrowserFrame createWindow(boolean dialog, boolean userGesture) {
-        WebView w = mCallbackProxy.createWindow(dialog, userGesture);
-        if (w != null) {
-            return w.getWebViewCore().getBrowserFrame();
-        }
-        return null;
+        return mCallbackProxy.createWindow(dialog, userGesture);
     }
 
     /**

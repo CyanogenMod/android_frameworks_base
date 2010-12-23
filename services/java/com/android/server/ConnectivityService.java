@@ -48,6 +48,7 @@ import com.android.server.connectivity.Tethering;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -55,7 +56,7 @@ import java.util.List;
  */
 public class ConnectivityService extends IConnectivityManager.Stub {
 
-    private static final boolean DBG = true;
+    private static final boolean DBG = false;
     private static final String TAG = "ConnectivityService";
 
     // how long to wait before switching back to a radio's default network
@@ -89,11 +90,74 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private Context mContext;
     private int mNetworkPreference;
     private int mActiveDefaultNetwork = -1;
+    // 0 is full bad, 100 is full good
+    private int mDefaultInetCondition = 0;
+    private int mDefaultInetConditionPublished = 0;
+    private boolean mInetConditionChangeInFlight = false;
+    private int mDefaultConnectionSequence = 0;
 
     private int mNumDnsEntries;
 
     private boolean mTestMode;
     private static ConnectivityService sServiceInstance;
+
+    private static final int ENABLED  = 1;
+    private static final int DISABLED = 0;
+
+    // Share the event space with NetworkStateTracker (which can't see this
+    // internal class but sends us events).  If you change these, change
+    // NetworkStateTracker.java too.
+    private static final int MIN_NETWORK_STATE_TRACKER_EVENT = 1;
+    private static final int MAX_NETWORK_STATE_TRACKER_EVENT = 100;
+
+    /**
+     * used internally as a delayed event to make us switch back to the
+     * default network
+     */
+    private static final int EVENT_RESTORE_DEFAULT_NETWORK =
+            MAX_NETWORK_STATE_TRACKER_EVENT + 1;
+
+    /**
+     * used internally to change our mobile data enabled flag
+     */
+    private static final int EVENT_CHANGE_MOBILE_DATA_ENABLED =
+            MAX_NETWORK_STATE_TRACKER_EVENT + 2;
+
+    /**
+     * used internally to change our network preference setting
+     * arg1 = networkType to prefer
+     */
+    private static final int EVENT_SET_NETWORK_PREFERENCE =
+            MAX_NETWORK_STATE_TRACKER_EVENT + 3;
+
+    /**
+     * used internally to synchronize inet condition reports
+     * arg1 = networkType
+     * arg2 = condition (0 bad, 100 good)
+     */
+    private static final int EVENT_INET_CONDITION_CHANGE =
+            MAX_NETWORK_STATE_TRACKER_EVENT + 4;
+
+    /**
+     * used internally to mark the end of inet condition hold periods
+     * arg1 = networkType
+     */
+    private static final int EVENT_INET_CONDITION_HOLD_END =
+            MAX_NETWORK_STATE_TRACKER_EVENT + 5;
+
+    /**
+     * used internally to set the background data preference
+     * arg1 = TRUE for enabled, FALSE for disabled
+     */
+    private static final int EVENT_SET_BACKGROUND_DATA =
+            MAX_NETWORK_STATE_TRACKER_EVENT + 6;
+
+    /**
+     * used internally to set enable/disable cellular data
+     * arg1 = ENBALED or DISABLED
+     */
+    private static final int EVENT_SET_MOBILE_DATA =
+            MAX_NETWORK_STATE_TRACKER_EVENT + 7;
 
     private Handler mHandler;
 
@@ -103,6 +167,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
     private boolean mSystemReady;
     private Intent mInitialBroadcast;
+
+    // used in DBG mode to track inet condition reports
+    private static final int INET_CONDITION_LOG_MAX_SIZE = 15;
+    private ArrayList mInetLog;
 
     private static class NetworkAttributes {
         /**
@@ -324,6 +392,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                                   mTethering.getTetherableWifiRegexs().length != 0) &&
                                  mTethering.getUpstreamIfaceRegexs().length != 0);
 
+        if (DBG) {
+            mInetLog = new ArrayList();
+        }
     }
 
 
@@ -331,28 +402,34 @@ public class ConnectivityService extends IConnectivityManager.Stub {
      * Sets the preferred network.
      * @param preference the new preference
      */
-    public synchronized void setNetworkPreference(int preference) {
+    public void setNetworkPreference(int preference) {
         enforceChangePermission();
-        if (ConnectivityManager.isNetworkTypeValid(preference) &&
-                mNetAttributes[preference] != null &&
-                mNetAttributes[preference].isDefault()) {
-            if (mNetworkPreference != preference) {
-                persistNetworkPreference(preference);
-                mNetworkPreference = preference;
-                enforcePreference();
-            }
-        }
+
+        mHandler.sendMessage(mHandler.obtainMessage(EVENT_SET_NETWORK_PREFERENCE, preference, 0));
     }
 
     public int getNetworkPreference() {
         enforceAccessPermission();
-        return mNetworkPreference;
+        int preference;
+        synchronized(this) {
+            preference = mNetworkPreference;
+        }
+        return preference;
     }
 
-    private void persistNetworkPreference(int networkPreference) {
-        final ContentResolver cr = mContext.getContentResolver();
-        Settings.Secure.putInt(cr, Settings.Secure.NETWORK_PREFERENCE,
-                networkPreference);
+    private void handleSetNetworkPreference(int preference) {
+        if (ConnectivityManager.isNetworkTypeValid(preference) &&
+                mNetAttributes[preference] != null &&
+                mNetAttributes[preference].isDefault()) {
+            if (mNetworkPreference != preference) {
+                final ContentResolver cr = mContext.getContentResolver();
+                Settings.Secure.putInt(cr, Settings.Secure.NETWORK_PREFERENCE, preference);
+                synchronized(this) {
+                    mNetworkPreference = preference;
+                }
+                enforcePreference();
+            }
+        }
     }
 
     private int getPersistedNetworkPreference() {
@@ -573,8 +650,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                         mNetRequestersPids[usedNetworkType].add(currentPid);
                     }
                 }
-                mHandler.sendMessageDelayed(mHandler.obtainMessage(
-                        NetworkStateTracker.EVENT_RESTORE_DEFAULT_NETWORK,
+                mHandler.sendMessageDelayed(mHandler.obtainMessage(EVENT_RESTORE_DEFAULT_NETWORK,
                         f), getRestoreDefaultNetworkDelay());
 
 
@@ -582,7 +658,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                         !network.isTeardownRequested()) {
                     if (ni.isConnected() == true) {
                         // add the pid-specific dns
-                        handleDnsConfigurationChange();
+                        handleDnsConfigurationChange(networkType);
                         if (DBG) Slog.d(TAG, "special network already active");
                         return Phone.APN_ALREADY_ACTIVE;
                     }
@@ -600,8 +676,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 synchronized(this) {
                     mFeatureUsers.add(f);
                 }
-                mHandler.sendMessageDelayed(mHandler.obtainMessage(
-                        NetworkStateTracker.EVENT_RESTORE_DEFAULT_NETWORK,
+                mHandler.sendMessageDelayed(mHandler.obtainMessage(EVENT_RESTORE_DEFAULT_NETWORK,
                         f), getRestoreDefaultNetworkDelay());
 
                 return network.startUsingNetworkFeature(feature,
@@ -771,15 +846,18 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 android.Manifest.permission.CHANGE_BACKGROUND_DATA_SETTING,
                 "ConnectivityService");
 
-        if (getBackgroundDataSetting() == allowBackgroundDataUsage) return;
+        mHandler.sendMessage(mHandler.obtainMessage(EVENT_SET_BACKGROUND_DATA,
+                (allowBackgroundDataUsage ? ENABLED : DISABLED), 0));
+    }
 
-        Settings.Secure.putInt(mContext.getContentResolver(),
-                Settings.Secure.BACKGROUND_DATA,
-                allowBackgroundDataUsage ? 1 : 0);
-
-        Intent broadcast = new Intent(
-                ConnectivityManager.ACTION_BACKGROUND_DATA_SETTING_CHANGED);
-        mContext.sendBroadcast(broadcast);
+    private void handleSetBackgroundData(boolean enabled) {
+        if (enabled != getBackgroundDataSetting()) {
+            Settings.Secure.putInt(mContext.getContentResolver(),
+                    Settings.Secure.BACKGROUND_DATA, enabled ? 1 : 0);
+            Intent broadcast = new Intent(
+                    ConnectivityManager.ACTION_BACKGROUND_DATA_SETTING_CHANGED);
+            mContext.sendBroadcast(broadcast);
+        }
     }
 
     /**
@@ -796,10 +874,15 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     /**
      * @see ConnectivityManager#setMobileDataEnabled(boolean)
      */
-    public synchronized void setMobileDataEnabled(boolean enabled) {
+    public void setMobileDataEnabled(boolean enabled) {
         enforceChangePermission();
         if (DBG) Slog.d(TAG, "setMobileDataEnabled(" + enabled + ")");
 
+        mHandler.sendMessage(mHandler.obtainMessage(EVENT_SET_MOBILE_DATA,
+            (enabled ? ENABLED : DISABLED), 0));
+    }
+
+    private void handleSetMobileData(boolean enabled) {
         if (getMobileDataEnabled() == enabled) return;
 
         Settings.Secure.putInt(mContext.getContentResolver(),
@@ -807,7 +890,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
         if (enabled) {
             if (mNetTrackers[ConnectivityManager.TYPE_MOBILE] != null) {
-                if (DBG) Slog.d(TAG, "starting up " + mNetTrackers[ConnectivityManager.TYPE_MOBILE]);
+                if (DBG) {
+                    Slog.d(TAG, "starting up " + mNetTrackers[ConnectivityManager.TYPE_MOBILE]);
+                }
                 mNetTrackers[ConnectivityManager.TYPE_MOBILE].reconnect();
             }
         } else {
@@ -889,7 +974,6 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         }
 
         Intent intent = new Intent(ConnectivityManager.CONNECTIVITY_ACTION);
-        intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
         intent.putExtra(ConnectivityManager.EXTRA_NETWORK_INFO, info);
         if (info.isFailover()) {
             intent.putExtra(ConnectivityManager.EXTRA_IS_FAILOVER, true);
@@ -908,13 +992,21 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             newNet = tryFailover(prevNetType);
             if (newNet != null) {
                 NetworkInfo switchTo = newNet.getNetworkInfo();
+                if (!switchTo.isConnected()) {
+                    // if the other net is connected they've already reset this and perhaps even gotten
+                    // a positive report we don't want to overwrite, but if not we need to clear this now
+                    // to turn our cellular sig strength white
+                    mDefaultInetConditionPublished = 0;
+                }
                 intent.putExtra(ConnectivityManager.EXTRA_OTHER_NETWORK_INFO, switchTo);
             } else {
+                mDefaultInetConditionPublished = 0; // we're not connected anymore
                 intent.putExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, true);
             }
         }
+        intent.putExtra(ConnectivityManager.EXTRA_INET_CONDITION, mDefaultInetConditionPublished);
         // do this before we broadcast the change
-        handleConnectivityChange();
+        handleConnectivityChange(prevNetType);
 
         sendStickyBroadcast(intent);
         /*
@@ -946,10 +1038,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 if (mNetAttributes[checkType] == null) continue;
                 if (mNetAttributes[checkType].mRadio == ConnectivityManager.TYPE_MOBILE &&
                         noMobileData) {
-                    if (DBG) {
-                        Slog.d(TAG, "not failing over to mobile type " + checkType +
-                                " because Mobile Data Disabled");
-                    }
+                    Slog.e(TAG, "not failing over to mobile type " + checkType +
+                            " because Mobile Data Disabled");
                     continue;
                 }
                 if (mNetAttributes[checkType].isDefault()) {
@@ -997,6 +1087,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     newNet = null; // not officially avail..  try anyway, but
                                    // report no failover
                 }
+            } else {
+                Slog.e(TAG, "Network failover failing.");
             }
         }
 
@@ -1004,8 +1096,15 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     }
 
     private void sendConnectedBroadcast(NetworkInfo info) {
-        Intent intent = new Intent(ConnectivityManager.CONNECTIVITY_ACTION);
-        intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
+        sendGeneralBroadcast(info, ConnectivityManager.CONNECTIVITY_ACTION);
+    }
+
+    private void sendInetConditionBroadcast(NetworkInfo info) {
+        sendGeneralBroadcast(info, ConnectivityManager.INET_CONDITION_ACTION);
+    }
+
+    private void sendGeneralBroadcast(NetworkInfo info, String bcastType) {
+        Intent intent = new Intent(bcastType);
         intent.putExtra(ConnectivityManager.EXTRA_NETWORK_INFO, info);
         if (info.isFailover()) {
             intent.putExtra(ConnectivityManager.EXTRA_IS_FAILOVER, true);
@@ -1018,6 +1117,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             intent.putExtra(ConnectivityManager.EXTRA_EXTRA_INFO,
                     info.getExtraInfo());
         }
+        intent.putExtra(ConnectivityManager.EXTRA_INET_CONDITION, mDefaultInetConditionPublished);
         sendStickyBroadcast(intent);
     }
 
@@ -1031,19 +1131,15 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         String reason = info.getReason();
         String extraInfo = info.getExtraInfo();
 
-        if (DBG) {
-            String reasonText;
-            if (reason == null) {
-                reasonText = ".";
-            } else {
-                reasonText = " (" + reason + ").";
-            }
-            Slog.v(TAG, "Attempt to connect to " + info.getTypeName() +
-                    " failed" + reasonText);
+        String reasonText;
+        if (reason == null) {
+            reasonText = ".";
+        } else {
+            reasonText = " (" + reason + ").";
         }
+        Slog.e(TAG, "Attempt to connect to " + info.getTypeName() + " failed" + reasonText);
 
         Intent intent = new Intent(ConnectivityManager.CONNECTIVITY_ACTION);
-        intent.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING);
         intent.putExtra(ConnectivityManager.EXTRA_NETWORK_INFO, info);
         if (getActiveNetworkInfo() == null) {
             intent.putExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, true);
@@ -1064,15 +1160,20 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             newNet = tryFailover(info.getType());
             if (newNet != null) {
                 NetworkInfo switchTo = newNet.getNetworkInfo();
+                if (!switchTo.isConnected()) {
+                    // if the other net is connected they've already reset this and perhaps
+                    // even gotten a positive report we don't want to overwrite, but if not
+                    // we need to clear this now to turn our cellular sig strength white
+                    mDefaultInetConditionPublished = 0;
+                }
                 intent.putExtra(ConnectivityManager.EXTRA_OTHER_NETWORK_INFO, switchTo);
             } else {
+                mDefaultInetConditionPublished = 0;
                 intent.putExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, true);
             }
         }
 
-        // do this before we broadcast the change
-        handleConnectivityChange();
-
+        intent.putExtra(ConnectivityManager.EXTRA_INET_CONDITION, mDefaultInetConditionPublished);
         sendStickyBroadcast(intent);
         /*
          * If the failover network is already connected, then immediately send
@@ -1140,10 +1241,18 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 }
             }
             mActiveDefaultNetwork = type;
+            // this will cause us to come up initially as unconnected and switching
+            // to connected after our normal pause unless somebody reports us as reall
+            // disconnected
+            mDefaultInetConditionPublished = 0;
+            mDefaultConnectionSequence++;
+            mInetConditionChangeInFlight = false;
+            // Don't do this - if we never sign in stay, grey
+            //reportNetworkCondition(mActiveDefaultNetwork, 100);
         }
         thisNet.setTeardownRequested(false);
         thisNet.updateNetworkSettings();
-        handleConnectivityChange();
+        handleConnectivityChange(type);
         sendConnectedBroadcast(info);
     }
 
@@ -1170,38 +1279,29 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     }
 
     /**
-     * After any kind of change in the connectivity state of any network,
-     * make sure that anything that depends on the connectivity state of
-     * more than one network is set up correctly. We're mainly concerned
-     * with making sure that the list of DNS servers is set up  according
-     * to which networks are connected, and ensuring that the right routing
-     * table entries exist.
+     * After a change in the connectivity state of any network, We're mainly
+     * concerned with making sure that the list of DNS servers is setupup
+     * according to which networks are connected, and ensuring that the
+     * right routing table entries exist.
      */
-    private void handleConnectivityChange() {
+    private void handleConnectivityChange(int netType) {
         /*
          * If a non-default network is enabled, add the host routes that
-         * will allow it's DNS servers to be accessed.  Only
-         * If both mobile and wifi are enabled, add the host routes that
-         * will allow MMS traffic to pass on the mobile network. But
-         * remove the default route for the mobile network, so that there
-         * will be only one default route, to ensure that all traffic
-         * except MMS will travel via Wi-Fi.
+         * will allow it's DNS servers to be accessed.
          */
-        handleDnsConfigurationChange();
+        handleDnsConfigurationChange(netType);
 
-        for (int netType : mPriorityList) {
-            if (mNetTrackers[netType].getNetworkInfo().isConnected()) {
-                if (mNetAttributes[netType].isDefault()) {
-                    mNetTrackers[netType].addDefaultRoute();
-                } else {
-                    mNetTrackers[netType].addPrivateDnsRoutes();
-                }
+        if (mNetTrackers[netType].getNetworkInfo().isConnected()) {
+            if (mNetAttributes[netType].isDefault()) {
+                mNetTrackers[netType].addDefaultRoute();
             } else {
-                if (mNetAttributes[netType].isDefault()) {
-                    mNetTrackers[netType].removeDefaultRoute();
-                } else {
-                    mNetTrackers[netType].removePrivateDnsRoutes();
-                }
+                mNetTrackers[netType].addPrivateDnsRoutes();
+            }
+        } else {
+            if (mNetAttributes[netType].isDefault()) {
+                mNetTrackers[netType].removeDefaultRoute();
+            } else {
+                mNetTrackers[netType].removePrivateDnsRoutes();
             }
         }
     }
@@ -1272,41 +1372,36 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         SystemProperties.set("net.dnschange", "" + (n+1));
     }
 
-    private void handleDnsConfigurationChange() {
+    private void handleDnsConfigurationChange(int netType) {
         // add default net's dns entries
-        for (int x = mPriorityList.length-1; x>= 0; x--) {
-            int netType = mPriorityList[x];
-            NetworkStateTracker nt = mNetTrackers[netType];
-            if (nt != null && nt.getNetworkInfo().isConnected() &&
-                    !nt.isTeardownRequested()) {
-                String[] dnsList = nt.getNameServers();
-                if (mNetAttributes[netType].isDefault()) {
-                    int j = 1;
-                    for (String dns : dnsList) {
-                        if (dns != null && !TextUtils.equals(dns, "0.0.0.0")) {
-                            if (DBG) {
-                                Slog.d(TAG, "adding dns " + dns + " for " +
-                                        nt.getNetworkInfo().getTypeName());
-                            }
-                            SystemProperties.set("net.dns" + j++, dns);
+        NetworkStateTracker nt = mNetTrackers[netType];
+        if (nt != null && nt.getNetworkInfo().isConnected() && !nt.isTeardownRequested()) {
+            String[] dnsList = nt.getNameServers();
+            if (mNetAttributes[netType].isDefault()) {
+                int j = 1;
+                for (String dns : dnsList) {
+                    if (dns != null && !TextUtils.equals(dns, "0.0.0.0")) {
+                        if (DBG) {
+                            Slog.d(TAG, "adding dns " + dns + " for " +
+                                    nt.getNetworkInfo().getTypeName());
                         }
+                        SystemProperties.set("net.dns" + j++, dns);
                     }
-                    for (int k=j ; k<mNumDnsEntries; k++) {
-                        if (DBG) Slog.d(TAG, "erasing net.dns" + k);
-                        SystemProperties.set("net.dns" + k, "");
-                    }
-                    mNumDnsEntries = j;
-                } else {
-                    // set per-pid dns for attached secondary nets
-                    List pids = mNetRequestersPids[netType];
-                    for (int y=0; y< pids.size(); y++) {
-                        Integer pid = (Integer)pids.get(y);
-                        writePidDns(dnsList, pid.intValue());
-                    }
+                }
+                for (int k=j ; k<mNumDnsEntries; k++) {
+                    if (DBG) Slog.d(TAG, "erasing net.dns" + k);
+                    SystemProperties.set("net.dns" + k, "");
+                }
+                mNumDnsEntries = j;
+            } else {
+                // set per-pid dns for attached secondary nets
+                List pids = mNetRequestersPids[netType];
+                for (int y=0; y< pids.size(); y++) {
+                    Integer pid = (Integer)pids.get(y);
+                    writePidDns(dnsList, pid.intValue());
                 }
             }
         }
-
         bumpDns();
     }
 
@@ -1363,6 +1458,14 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         pw.println();
 
         mTethering.dump(fd, pw, args);
+
+        if (mInetLog != null) {
+            pw.println();
+            pw.println("Inet condition reports:");
+            for(int i = 0; i < mInetLog.size(); i++) {
+                pw.println(mInetLog.get(i));
+            }
+        }
     }
 
     // must be stateless - things change under us.
@@ -1437,9 +1540,12 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 case NetworkStateTracker.EVENT_NOTIFICATION_CHANGED:
                     handleNotificationChange(msg.arg1 == 1, msg.arg2,
                             (Notification) msg.obj);
+                    break;
 
                 case NetworkStateTracker.EVENT_CONFIGURATION_CHANGED:
-                    handleDnsConfigurationChange();
+                    info = (NetworkInfo) msg.obj;
+                    type = info.getType();
+                    handleDnsConfigurationChange(type);
                     break;
 
                 case NetworkStateTracker.EVENT_ROAMING_CHANGED:
@@ -1449,10 +1555,42 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 case NetworkStateTracker.EVENT_NETWORK_SUBTYPE_CHANGED:
                     // fill me in
                     break;
-                case NetworkStateTracker.EVENT_RESTORE_DEFAULT_NETWORK:
+                case EVENT_RESTORE_DEFAULT_NETWORK:
                     FeatureUser u = (FeatureUser)msg.obj;
                     u.expire();
                     break;
+                case EVENT_INET_CONDITION_CHANGE:
+                {
+                    int netType = msg.arg1;
+                    int condition = msg.arg2;
+                    handleInetConditionChange(netType, condition);
+                    break;
+                }
+                case EVENT_INET_CONDITION_HOLD_END:
+                {
+                    int netType = msg.arg1;
+                    int sequence = msg.arg2;
+                    handleInetConditionHoldEnd(netType, sequence);
+                    break;
+                }
+                case EVENT_SET_NETWORK_PREFERENCE:
+                {
+                    int preference = msg.arg1;
+                    handleSetNetworkPreference(preference);
+                    break;
+                }
+                case EVENT_SET_BACKGROUND_DATA:
+                {
+                    boolean enabled = (msg.arg1 == ENABLED);
+                    handleSetBackgroundData(enabled);
+                    break;
+                }
+                case EVENT_SET_MOBILE_DATA:
+                {
+                    boolean enabled = (msg.arg1 == ENABLED);
+                    handleSetMobileData(enabled);
+                    break;
+                }
             }
         }
     }
@@ -1535,5 +1673,93 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         boolean tetherEnabledInSettings = (Settings.Secure.getInt(mContext.getContentResolver(),
                 Settings.Secure.TETHER_SUPPORTED, defaultVal) != 0);
         return tetherEnabledInSettings && mTetheringConfigValid;
+    }
+
+    // 100 percent is full good, 0 is full bad.
+    public void reportInetCondition(int networkType, int percentage) {
+        if (DBG) Slog.d(TAG, "reportNetworkCondition(" + networkType + ", " + percentage + ")");
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.STATUS_BAR,
+                "ConnectivityService");
+
+        if (DBG) {
+            int pid = getCallingPid();
+            int uid = getCallingUid();
+            String s = pid + "(" + uid + ") reports inet is " +
+                (percentage > 50 ? "connected" : "disconnected") + " (" + percentage + ") on " +
+                "network Type " + networkType + " at " + GregorianCalendar.getInstance().getTime();
+            mInetLog.add(s);
+            while(mInetLog.size() > INET_CONDITION_LOG_MAX_SIZE) {
+                mInetLog.remove(0);
+            }
+        }
+        mHandler.sendMessage(mHandler.obtainMessage(
+            EVENT_INET_CONDITION_CHANGE, networkType, percentage));
+    }
+
+    private void handleInetConditionChange(int netType, int condition) {
+        if (DBG) {
+            Slog.d(TAG, "Inet connectivity change, net=" +
+                    netType + ", condition=" + condition +
+                    ",mActiveDefaultNetwork=" + mActiveDefaultNetwork);
+        }
+        if (mActiveDefaultNetwork == -1) {
+            if (DBG) Slog.d(TAG, "no active default network - aborting");
+            return;
+        }
+        if (mActiveDefaultNetwork != netType) {
+            if (DBG) Slog.d(TAG, "given net not default - aborting");
+            return;
+        }
+        mDefaultInetCondition = condition;
+        int delay;
+        if (mInetConditionChangeInFlight == false) {
+            if (DBG) Slog.d(TAG, "starting a change hold");
+            // setup a new hold to debounce this
+            if (mDefaultInetCondition > 50) {
+                delay = Settings.Secure.getInt(mContext.getContentResolver(),
+                        Settings.Secure.INET_CONDITION_DEBOUNCE_UP_DELAY, 500);
+            } else {
+                delay = Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.INET_CONDITION_DEBOUNCE_DOWN_DELAY, 3000);
+            }
+            mInetConditionChangeInFlight = true;
+            mHandler.sendMessageDelayed(mHandler.obtainMessage(EVENT_INET_CONDITION_HOLD_END,
+                    mActiveDefaultNetwork, mDefaultConnectionSequence), delay);
+        } else {
+            // we've set the new condition, when this hold ends that will get
+            // picked up
+            if (DBG) Slog.d(TAG, "currently in hold - not setting new end evt");
+        }
+    }
+
+    private void handleInetConditionHoldEnd(int netType, int sequence) {
+        if (DBG) {
+            Slog.d(TAG, "Inet hold end, net=" + netType +
+                    ", condition =" + mDefaultInetCondition +
+                    ", published condition =" + mDefaultInetConditionPublished);
+        }
+        mInetConditionChangeInFlight = false;
+
+        if (mActiveDefaultNetwork == -1) {
+            if (DBG) Slog.d(TAG, "no active default network - aborting");
+            return;
+        }
+        if (mDefaultConnectionSequence != sequence) {
+            if (DBG) Slog.d(TAG, "event hold for obsolete network - aborting");
+            return;
+        }
+        if (mDefaultInetConditionPublished == mDefaultInetCondition) {
+            if (DBG) Slog.d(TAG, "no change in condition - aborting");
+            return;
+        }
+        NetworkInfo networkInfo = mNetTrackers[mActiveDefaultNetwork].getNetworkInfo();
+        if (networkInfo.isConnected() == false) {
+            if (DBG) Slog.d(TAG, "default network not connected - aborting");
+            return;
+        }
+        mDefaultInetConditionPublished = mDefaultInetCondition;
+        sendInetConditionBroadcast(networkInfo);
+        return;
     }
 }

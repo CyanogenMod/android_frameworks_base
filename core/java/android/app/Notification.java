@@ -83,10 +83,10 @@ public class Notification implements Parcelable
     public int icon;
 
     /**
-     * The number of events that this notification represents.  For example, if this is the
-     * new mail notification, this would be the number of unread messages.  This number is
-     * be superimposed over the icon in the status bar.  If the number is 0 or negative, it
-     * is not shown in the status bar.
+     * The number of events that this notification represents.  For example, in a new mail
+     * notification, this could be the number of unread messages.  This number is superimposed over
+     * the icon in the status bar.  If the number is 0 or negative, it is not shown in the status
+     * bar.
      */
     public int number;
 
@@ -109,13 +109,24 @@ public class Notification implements Parcelable
     public PendingIntent deleteIntent;
 
     /**
+     * An intent to launch instead of posting the notification to the status bar.
+     * Only for use with extremely high-priority notifications demanding the user's
+     * <strong>immediate</strong> attention, such as an incoming phone call or
+     * alarm clock that the user has explicitly set to a particular time.
+     * If this facility is used for something else, please give the user an option
+     * to turn it off and use a normal notification, as this can be extremely
+     * disruptive.
+     */
+    public PendingIntent fullScreenIntent;
+
+    /**
      * Text to scroll across the screen when this item is added to
      * the status bar.
      */
     public CharSequence tickerText;
 
     /**
-     * The view that shows when this notification is shown in the expanded status bar.
+     * The view that will represent this notification in the expanded status bar.
      */
     public RemoteViews contentView;
 
@@ -339,6 +350,49 @@ public class Notification implements Parcelable
         ledOnMS = parcel.readInt();
         ledOffMS = parcel.readInt();
         iconLevel = parcel.readInt();
+
+        if (parcel.readInt() != 0) {
+            fullScreenIntent = PendingIntent.CREATOR.createFromParcel(parcel);
+        }
+    }
+
+    public Notification clone() {
+        Notification that = new Notification();
+
+        that.when = this.when;
+        that.icon = this.icon;
+        that.number = this.number;
+
+        // PendingIntents are global, so there's no reason (or way) to clone them.
+        that.contentIntent = this.contentIntent;
+        that.deleteIntent = this.deleteIntent;
+        that.fullScreenIntent = this.fullScreenIntent;
+
+        if (this.tickerText != null) {
+            that.tickerText = this.tickerText.toString();
+        }
+        if (this.contentView != null) {
+            that.contentView = this.contentView.clone();
+        }
+        that.iconLevel = that.iconLevel;
+        that.sound = this.sound; // android.net.Uri is immutable
+        that.audioStreamType = this.audioStreamType;
+
+        final long[] vibrate = this.vibrate;
+        if (vibrate != null) {
+            final int N = vibrate.length;
+            final long[] vib = that.vibrate = new long[N];
+            System.arraycopy(vibrate, 0, vib, 0, N);
+        }
+
+        that.ledARGB = this.ledARGB;
+        that.ledOnMS = this.ledOnMS;
+        that.ledOffMS = this.ledOffMS;
+        that.defaults = this.defaults;
+        
+        that.flags = this.flags;
+
+        return that;
     }
 
     public int describeContents() {
@@ -395,6 +449,13 @@ public class Notification implements Parcelable
         parcel.writeInt(ledOnMS);
         parcel.writeInt(ledOffMS);
         parcel.writeInt(iconLevel);
+
+        if (fullScreenIntent != null) {
+            parcel.writeInt(1);
+            fullScreenIntent.writeToParcel(parcel, 0);
+        } else {
+            parcel.writeInt(0);
+        }
     }
 
     /**
@@ -480,6 +541,8 @@ public class Notification implements Parcelable
         }
         sb.append(",defaults=0x");
         sb.append(Integer.toHexString(this.defaults));
+        sb.append(",flags=0x");
+        sb.append(Integer.toHexString(this.flags));
         sb.append(")");
         return sb.toString();
     }

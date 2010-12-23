@@ -14,18 +14,25 @@
  * limitations under the License.
  */
 
-//
-// Read-only access to Zip archives, with minimal heap allocation.
-//
-// This is similar to the more-complete ZipFile class, but no attempt
-// has been made to make them interchangeable.  This class operates under
-// a very different set of assumptions and constraints.
-//
+/*
+ * Read-only access to Zip archives, with minimal heap allocation.
+ *
+ * This is similar to the more-complete ZipFile class, but no attempt
+ * has been made to make them interchangeable.  This class operates under
+ * a very different set of assumptions and constraints.
+ *
+ * One such assumption is that if you're getting file descriptors for
+ * use with this class as a child of a fork() operation, you must be on
+ * a pread() to guarantee correct operation. This is because pread() can
+ * atomically read at a file offset without worrying about a lock around an
+ * lseek() + read() pair.
+ */
 #ifndef __LIBS_ZIPFILERO_H
 #define __LIBS_ZIPFILERO_H
 
-#include "Errors.h"
-#include "FileMap.h"
+#include <utils/Errors.h>
+#include <utils/FileMap.h>
+#include <utils/threads.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -54,19 +61,21 @@ typedef void* ZipEntryRO;
  * the record structure.  However, this requires a private mapping of
  * every page that the Central Directory touches.  Easier to tuck a copy
  * of the string length into the hash table entry.
+ *
+ * NOTE: If this is used on file descriptors inherited from a fork() operation,
+ * you must be on a platform that implements pread() to guarantee correctness
+ * on the shared file descriptors.
  */
 class ZipFileRO {
 public:
     ZipFileRO()
-        : mFd(-1), mFileMap(NULL), mHashTableSize(-1), mHashTable(NULL)
+        : mFd(-1), mFileName(NULL), mFileLength(-1),
+          mDirectoryMap(NULL),
+          mNumEntries(-1), mDirectoryOffset(-1),
+          mHashTableSize(-1), mHashTable(NULL)
         {}
-    ~ZipFileRO() {
-        free(mHashTable);
-        if (mFileMap)
-            mFileMap->release();
-        if (mFd >= 0)
-            close(mFd);
-    }
+
+    ~ZipFileRO();
 
     /*
      * Open an archive.
@@ -118,8 +127,8 @@ public:
      * Returns "false" if "entry" is bogus or if the data in the Zip file
      * appears to be bad.
      */
-    bool getEntryInfo(ZipEntryRO entry, int* pMethod, long* pUncompLen,
-        long* pCompLen, off_t* pOffset, long* pModWhen, long* pCrc32) const;
+    bool getEntryInfo(ZipEntryRO entry, int* pMethod, size_t* pUncompLen,
+        size_t* pCompLen, off_t* pOffset, long* pModWhen, long* pCrc32) const;
 
     /*
      * Create a new FileMap object that maps a subset of the archive.  For
@@ -155,13 +164,13 @@ public:
      * Utility function: uncompress deflated data, buffer to buffer.
      */
     static bool inflateBuffer(void* outBuf, const void* inBuf,
-        long uncompLen, long compLen);
+        size_t uncompLen, size_t compLen);
 
     /*
      * Utility function: uncompress deflated data, buffer to fd.
      */
     static bool inflateBuffer(int fd, const void* inBuf,
-        long uncompLen, long compLen);
+        size_t uncompLen, size_t compLen);
 
     /*
      * Some basic functions for raw data manipulation.  "LE" means
@@ -178,6 +187,9 @@ private:
     /* these are private and not defined */ 
     ZipFileRO(const ZipFileRO& src);
     ZipFileRO& operator=(const ZipFileRO& src);
+
+    /* locate and parse the central directory */
+    bool mapCentralDirectory(void);
 
     /* parse the archive, prepping internal structures */
     bool parseZipArchive(void);
@@ -203,11 +215,23 @@ private:
     /* open Zip archive */
     int         mFd;
 
+    /* Lock for handling the file descriptor (seeks, etc) */
+    mutable Mutex mFdLock;
+
+    /* zip file name */
+    char*       mFileName;
+
+    /* length of file */
+    size_t      mFileLength;
+
     /* mapped file */
-    FileMap*    mFileMap;
+    FileMap*    mDirectoryMap;
 
     /* number of entries in the Zip archive */
     int         mNumEntries;
+
+    /* CD directory offset in the Zip archive */
+    off_t       mDirectoryOffset;
 
     /*
      * We know how many entries are in the Zip archive, so we have a

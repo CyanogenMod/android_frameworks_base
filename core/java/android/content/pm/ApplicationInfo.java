@@ -175,7 +175,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * Value for {@link #flags}: true when the application's window can be
      * increased in size for larger screens.  Corresponds to
      * {@link android.R.styleable#AndroidManifestSupportsScreens_largeScreens
-     * android:smallScreens}.
+     * android:largeScreens}.
      */
     public static final int FLAG_SUPPORTS_LARGE_SCREENS = 1<<11;
     
@@ -263,20 +263,44 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
     public static final int FLAG_EXTERNAL_STORAGE = 1<<18;
 
     /**
+     * Value for {@link #flags}: true when the application's window can be
+     * increased in size for extra large screens.  Corresponds to
+     * {@link android.R.styleable#AndroidManifestSupportsScreens_xlargeScreens
+     * android:xlargeScreens}.
+     * @hide
+     */
+    public static final int FLAG_SUPPORTS_XLARGE_SCREENS = 1<<19;
+    
+    /**
+     * Value for {@link #flags}: this is true if the application has set
+     * its android:neverEncrypt to true, false otherwise. It is used to specify
+     * that this package specifically "opts-out" of a secured file system solution,
+     * and will always store its data in-the-clear.
+     *
+     * {@hide}
+     */
+    public static final int FLAG_NEVER_ENCRYPT = 1<<30;
+
+    /**
      * Value for {@link #flags}: Set to true if the application has been
      * installed using the forward lock option.
      *
      * {@hide}
      */
-    public static final int FLAG_FORWARD_LOCK = 1<<20;
+    public static final int FLAG_FORWARD_LOCK = 1<<29;
 
     /**
-     * Value for {@link #flags}: Set to true if the application is
-     * native-debuggable, i.e. embeds a gdbserver binary in its .apk
+     * Value for {@link #flags}: set to <code>true</code> if the application
+     * has reported that it is heavy-weight, and thus can not participate in
+     * the normal application lifecycle.
+     *
+     * <p>Comes from the
+     * {@link android.R.styleable#AndroidManifestApplication_cantSaveState android:cantSaveState}
+     * attribute of the &lt;application&gt; tag.
      *
      * {@hide}
      */
-    public static final int FLAG_NATIVE_DEBUGGABLE = 1<<21;
+    public static final int FLAG_CANT_SAVE_STATE = 1<<27;
 
     /**
      * Flags associated with the application.  Any combination of
@@ -286,7 +310,8 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * {@link #FLAG_ALLOW_CLEAR_USER_DATA}, {@link #FLAG_UPDATED_SYSTEM_APP},
      * {@link #FLAG_TEST_ONLY}, {@link #FLAG_SUPPORTS_SMALL_SCREENS},
      * {@link #FLAG_SUPPORTS_NORMAL_SCREENS},
-     * {@link #FLAG_SUPPORTS_LARGE_SCREENS}, {@link #FLAG_RESIZEABLE_FOR_SCREENS},
+     * {@link #FLAG_SUPPORTS_LARGE_SCREENS},
+     * {@link #FLAG_RESIZEABLE_FOR_SCREENS},
      * {@link #FLAG_SUPPORTS_SCREEN_DENSITIES}, {@link #FLAG_VM_SAFE_MODE}
      */
     public int flags = 0;
@@ -325,7 +350,12 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * data.
      */
     public String dataDir;
-    
+
+    /**
+     * Full path to the directory where native JNI libraries are stored.
+     */
+    public String nativeLibraryDir;
+
     /**
      * The kernel user-ID that has been assigned to this application;
      * currently this is not a unique ID (multiple applications can have
@@ -351,7 +381,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
 
     /**
      * Is given application theme agnostic, i.e. behaves properly when default theme is changed.
-     *  {@hide}
+     * {@hide}
      */
     public boolean isThemeable = true;
 
@@ -374,6 +404,12 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         return namespace != null && namespace.equalsIgnoreCase(PLUTO_SCHEMA);
     }
 
+    /**
+     * For convenient access to package's install location.
+     * @hide
+     */
+    public int installLocation = PackageInfo.INSTALL_LOCATION_UNSPECIFIED;
+    
     public void dump(Printer pw, String prefix) {
         super.dumpFront(pw, prefix);
         if (className != null) {
@@ -382,15 +418,21 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         if (permission != null) {
             pw.println(prefix + "permission=" + permission);
         }
-        pw.println(prefix + "uid=" + uid + " taskAffinity=" + taskAffinity);
-        if (theme != 0) {
-            pw.println(prefix + "theme=0x" + Integer.toHexString(theme));
-        }
-        pw.println(prefix + "flags=0x" + Integer.toHexString(flags)
-                + " processName=" + processName);
+        pw.println(prefix + "processName=" + processName);
+        pw.println(prefix + "taskAffinity=" + taskAffinity);
+        pw.println(prefix + "uid=" + uid + " flags=0x" + Integer.toHexString(flags)
+                + " theme=0x" + Integer.toHexString(theme));
         pw.println(prefix + "sourceDir=" + sourceDir);
-        pw.println(prefix + "publicSourceDir=" + publicSourceDir);
-        pw.println(prefix + "resourceDirs=" + resourceDirs);
+        if (sourceDir == null) {
+            if (publicSourceDir != null) {
+                pw.println(prefix + "publicSourceDir=" + publicSourceDir);
+            }
+        } else if (!sourceDir.equals(publicSourceDir)) {
+            pw.println(prefix + "publicSourceDir=" + publicSourceDir);
+        }
+        if (resourceDirs != null) {
+            pw.println(prefix + "resourceDirs=" + resourceDirs);
+        }
         pw.println(prefix + "dataDir=" + dataDir);
         if (sharedLibraryFiles != null) {
             pw.println(prefix + "sharedLibraryFiles=" + sharedLibraryFiles);
@@ -441,12 +483,14 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         flags = orig.flags;
         sourceDir = orig.sourceDir;
         publicSourceDir = orig.publicSourceDir;
+        nativeLibraryDir = orig.nativeLibraryDir;
         resourceDirs = orig.resourceDirs;
         sharedLibraryFiles = orig.sharedLibraryFiles;
         dataDir = orig.dataDir;
         uid = orig.uid;
         targetSdkVersion = orig.targetSdkVersion;
         enabled = orig.enabled;
+        installLocation = orig.installLocation;
         manageSpaceActivityName = orig.manageSpaceActivityName;
         descriptionRes = orig.descriptionRes;
         isThemeable = orig.isThemeable;
@@ -473,12 +517,14 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         dest.writeInt(flags);
         dest.writeString(sourceDir);
         dest.writeString(publicSourceDir);
+        dest.writeString(nativeLibraryDir);
         dest.writeStringArray(resourceDirs);
         dest.writeStringArray(sharedLibraryFiles);
         dest.writeString(dataDir);
         dest.writeInt(uid);
         dest.writeInt(targetSdkVersion);
         dest.writeInt(enabled ? 1 : 0);
+        dest.writeInt(installLocation);
         dest.writeString(manageSpaceActivityName);
         dest.writeString(backupAgentName);
         dest.writeInt(descriptionRes);
@@ -505,12 +551,14 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
         flags = source.readInt();
         sourceDir = source.readString();
         publicSourceDir = source.readString();
+        nativeLibraryDir = source.readString();
         resourceDirs = source.readStringArray();
         sharedLibraryFiles = source.readStringArray();
         dataDir = source.readString();
         uid = source.readInt();
         targetSdkVersion = source.readInt();
         enabled = source.readInt() != 0;
+        installLocation = source.readInt();
         manageSpaceActivityName = source.readString();
         backupAgentName = source.readString();
         descriptionRes = source.readInt();
@@ -546,7 +594,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
     public void disableCompatibilityMode() {
         flags |= (FLAG_SUPPORTS_LARGE_SCREENS | FLAG_SUPPORTS_NORMAL_SCREENS |
                 FLAG_SUPPORTS_SMALL_SCREENS | FLAG_RESIZEABLE_FOR_SCREENS |
-                FLAG_SUPPORTS_SCREEN_DENSITIES);
+                FLAG_SUPPORTS_SCREEN_DENSITIES | FLAG_SUPPORTS_XLARGE_SCREENS);
     }
     
     /**

@@ -245,6 +245,12 @@ void AssetManager::setConfiguration(const ResTable_config& config, const char* l
     }
 }
 
+void AssetManager::getConfiguration(ResTable_config* outConfig) const
+{
+    AutoMutex _l(mLock);
+    *outConfig = *mConfig;
+}
+
 /*
  * Open an asset.
  *
@@ -1254,7 +1260,7 @@ Asset* AssetManager::openAssetFromZipLocked(const ZipFileRO* pZipFile,
 
     // TODO: look for previously-created shared memory slice?
     int method;
-    long uncompressedLen;
+    size_t uncompressedLen;
 
     //printf("USING Zip '%s'\n", pEntry->getFileName());
 

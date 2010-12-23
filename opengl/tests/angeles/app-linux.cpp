@@ -63,7 +63,7 @@ using namespace android;
 int gAppAlive = 1;
 
 static const char sAppName[] =
-    "San Angeles Observation OpenGL ES version example (Linux)";
+        "San Angeles Observation OpenGL ES version example (Linux)";
 
 static int sWindowWidth = WINDOW_DEFAULT_WIDTH;
 static int sWindowHeight = WINDOW_DEFAULT_HEIGHT;
@@ -74,22 +74,22 @@ static EGLSurface sEglSurface = EGL_NO_SURFACE;
 const char *egl_strerror(unsigned err)
 {
     switch(err){
-    case EGL_SUCCESS: return "SUCCESS";
-    case EGL_NOT_INITIALIZED: return "NOT INITIALIZED";
-    case EGL_BAD_ACCESS: return "BAD ACCESS";
-    case EGL_BAD_ALLOC: return "BAD ALLOC";
-    case EGL_BAD_ATTRIBUTE: return "BAD_ATTRIBUTE";
-    case EGL_BAD_CONFIG: return "BAD CONFIG";
-    case EGL_BAD_CONTEXT: return "BAD CONTEXT";
-    case EGL_BAD_CURRENT_SURFACE: return "BAD CURRENT SURFACE";
-    case EGL_BAD_DISPLAY: return "BAD DISPLAY";
-    case EGL_BAD_MATCH: return "BAD MATCH";
-    case EGL_BAD_NATIVE_PIXMAP: return "BAD NATIVE PIXMAP";
-    case EGL_BAD_NATIVE_WINDOW: return "BAD NATIVE WINDOW";
-    case EGL_BAD_PARAMETER: return "BAD PARAMETER";
-    case EGL_BAD_SURFACE: return "BAD_SURFACE";
-//    case EGL_CONTEXT_LOST: return "CONTEXT LOST";
-    default: return "UNKNOWN";
+        case EGL_SUCCESS: return "SUCCESS";
+        case EGL_NOT_INITIALIZED: return "NOT INITIALIZED";
+        case EGL_BAD_ACCESS: return "BAD ACCESS";
+        case EGL_BAD_ALLOC: return "BAD ALLOC";
+        case EGL_BAD_ATTRIBUTE: return "BAD_ATTRIBUTE";
+        case EGL_BAD_CONFIG: return "BAD CONFIG";
+        case EGL_BAD_CONTEXT: return "BAD CONTEXT";
+        case EGL_BAD_CURRENT_SURFACE: return "BAD CURRENT SURFACE";
+        case EGL_BAD_DISPLAY: return "BAD DISPLAY";
+        case EGL_BAD_MATCH: return "BAD MATCH";
+        case EGL_BAD_NATIVE_PIXMAP: return "BAD NATIVE PIXMAP";
+        case EGL_BAD_NATIVE_WINDOW: return "BAD NATIVE WINDOW";
+        case EGL_BAD_PARAMETER: return "BAD PARAMETER";
+        case EGL_BAD_SURFACE: return "BAD_SURFACE";
+        //    case EGL_CONTEXT_LOST: return "CONTEXT LOST";
+        default: return "UNKNOWN";
     }
 }
 
@@ -118,51 +118,58 @@ static void checkEGLErrors()
         fprintf(stderr, "EGL Error: 0x%04x\n", (int)error);
 }
 
-static int initGraphics()
+static int initGraphics(unsigned samples)
 {
     EGLint configAttribs[] = {
-         EGL_DEPTH_SIZE, 16,
-         EGL_NONE
-     };
-     
-     EGLint majorVersion;
-     EGLint minorVersion;
-     EGLContext context;
-     EGLConfig config;
-     EGLSurface surface;
-     EGLint w, h;
-     EGLDisplay dpy;
+            EGL_DEPTH_SIZE, 16,
+            EGL_SAMPLE_BUFFERS, samples ? 1 : 0,
+                    EGL_SAMPLES, samples,
+                    EGL_NONE
+    };
 
-     EGLNativeWindowType window = android_createDisplaySurface();
-     
-     dpy = eglGetDisplay(EGL_DEFAULT_DISPLAY);
-     eglInitialize(dpy, &majorVersion, &minorVersion);
-          
-     status_t err = EGLUtils::selectConfigForNativeWindow(
-             dpy, configAttribs, window, &config);
-     if (err) {
-         fprintf(stderr, "couldn't find an EGLConfig matching the screen format\n");
-         return 0;
-     }
+    EGLint majorVersion;
+    EGLint minorVersion;
+    EGLContext context;
+    EGLConfig config;
+    EGLSurface surface;
+    EGLint w, h;
+    EGLDisplay dpy;
 
-     surface = eglCreateWindowSurface(dpy, config, window, NULL);
-     egl_error("eglCreateWindowSurface");
+    EGLNativeWindowType window = android_createDisplaySurface();
 
-     fprintf(stderr,"surface = %p\n", surface);
+    dpy = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+    eglInitialize(dpy, &majorVersion, &minorVersion);
 
-     context = eglCreateContext(dpy, config, NULL, NULL);
-     egl_error("eglCreateContext");
-     fprintf(stderr,"context = %p\n", context);
-     
-     eglMakeCurrent(dpy, surface, surface, context);   
-     egl_error("eglMakeCurrent");
+    status_t err = EGLUtils::selectConfigForNativeWindow(
+            dpy, configAttribs, window, &config);
+    if (err) {
+        fprintf(stderr, "couldn't find an EGLConfig matching the screen format\n");
+        return 0;
+    }
 
-     eglQuerySurface(dpy, surface, EGL_WIDTH, &sWindowWidth);
-     eglQuerySurface(dpy, surface, EGL_HEIGHT, &sWindowHeight);
+    surface = eglCreateWindowSurface(dpy, config, window, NULL);
+    egl_error("eglCreateWindowSurface");
+
+    fprintf(stderr,"surface = %p\n", surface);
+
+    context = eglCreateContext(dpy, config, NULL, NULL);
+    egl_error("eglCreateContext");
+    fprintf(stderr,"context = %p\n", context);
+
+    eglMakeCurrent(dpy, surface, surface, context);
+    egl_error("eglMakeCurrent");
+
+    eglQuerySurface(dpy, surface, EGL_WIDTH, &sWindowWidth);
+    eglQuerySurface(dpy, surface, EGL_HEIGHT, &sWindowHeight);
 
     sEglDisplay = dpy;
     sEglSurface = surface;
     sEglContext = context;
+
+    if (samples == 0) {
+        // GL_MULTISAMPLE is enabled by default
+        glDisable(GL_MULTISAMPLE);
+    }
 
     return EGL_TRUE;
 }
@@ -179,35 +186,47 @@ static void deinitGraphics()
 
 int main(int argc, char *argv[])
 {
-    // not referenced:
-    argc = argc;
-    argv = argv;
+    unsigned samples = 0;
+    printf("usage: %s [samples]\n", argv[0]);
+    if (argc == 2) {
+        samples = atoi( argv[1] );
+        printf("Multisample enabled: GL_SAMPLES = %u\n", samples);
+    }
 
-    if (!initGraphics())
+    if (!initGraphics(samples))
     {
         fprintf(stderr, "Graphics initialization failed.\n");
         return EXIT_FAILURE;
     }
 
     appInit();
-    
+
+    struct timeval timeTemp;
+    int frameCount = 0;
+    gettimeofday(&timeTemp, NULL);
+    double totalTime = timeTemp.tv_usec/1000000.0 + timeTemp.tv_sec;
+
     while (gAppAlive)
     {
         struct timeval timeNow;
 
-        if (gAppAlive)
-        {
-            gettimeofday(&timeNow, NULL);
-            appRender(timeNow.tv_sec * 1000 + timeNow.tv_usec / 1000,
-                      sWindowWidth, sWindowHeight);
-            checkGLErrors();
-            eglSwapBuffers(sEglDisplay, sEglSurface);
-            checkEGLErrors();
-        }
+        gettimeofday(&timeNow, NULL);
+        appRender(timeNow.tv_sec * 1000 + timeNow.tv_usec / 1000,
+                sWindowWidth, sWindowHeight);
+        checkGLErrors();
+        eglSwapBuffers(sEglDisplay, sEglSurface);
+        checkEGLErrors();
+        frameCount++;
     }
+
+    gettimeofday(&timeTemp, NULL);
 
     appDeinit();
     deinitGraphics();
+
+    totalTime = (timeTemp.tv_usec/1000000.0 + timeTemp.tv_sec) - totalTime;
+    printf("totalTime=%f s, frameCount=%d, %.2f fps\n",
+            totalTime, frameCount, frameCount/totalTime);
 
     return EXIT_SUCCESS;
 }

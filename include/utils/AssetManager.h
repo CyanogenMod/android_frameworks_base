@@ -30,6 +30,24 @@
 #include <utils/ZipFileRO.h>
 #include <utils/threads.h>
 
+/*
+ * Native-app access is via the opaque typedef struct AAssetManager in the C namespace.
+ */
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+struct AAssetManager { };
+
+#ifdef __cplusplus
+};
+#endif
+
+
+/*
+ * Now the proper C++ android-namespace definitions
+ */
+
 namespace android {
 
 class Asset;        // fwd decl for things that include Asset.h first
@@ -49,7 +67,7 @@ struct ResTable_config;
  * The asset hierarchy may be examined like a filesystem, using
  * AssetDir objects to peruse a single directory.
  */
-class AssetManager {
+class AssetManager : public AAssetManager {
 public:
     typedef enum CacheMode {
         CACHE_UNKNOWN = 0,
@@ -111,6 +129,8 @@ public:
      * Choose screen orientation for resources values returned.
      */
     void setConfiguration(const ResTable_config& config, const char* locale = NULL);
+
+    void getConfiguration(ResTable_config* outConfig) const;
 
     typedef Asset::AccessMode AccessMode;       // typing shortcut
 

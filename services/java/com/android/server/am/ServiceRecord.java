@@ -17,6 +17,7 @@
 package com.android.server.am;
 
 import com.android.internal.os.BatteryStatsImpl;
+import com.android.server.NotificationManagerService;
 
 import android.app.INotificationManager;
 import android.app.Notification;
@@ -30,10 +31,12 @@ import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.util.Slog;
+import android.util.TimeUtils;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -41,6 +44,12 @@ import java.util.List;
  * A running application service.
  */
 class ServiceRecord extends Binder {
+    // Maximum number of delivery attempts before giving up.
+    static final int MAX_DELIVERY_COUNT = 3;
+
+    // Maximum number of times it can fail during execution before giving up.
+    static final int MAX_DONE_EXECUTING_COUNT = 6;
+
     final ActivityManagerService ams;
     final BatteryStatsImpl.Uid.Pkg.Serv stats;
     final ComponentName name; // service component.
@@ -63,32 +72,9 @@ class ServiceRecord extends Binder {
     final HashMap<Intent.FilterComparison, IntentBindRecord> bindings
             = new HashMap<Intent.FilterComparison, IntentBindRecord>();
                             // All active bindings to the service.
-    final HashMap<IBinder, ConnectionRecord> connections
-            = new HashMap<IBinder, ConnectionRecord>();
+    final HashMap<IBinder, ArrayList<ConnectionRecord>> connections
+            = new HashMap<IBinder, ArrayList<ConnectionRecord>>();
                             // IBinder -> ConnectionRecord of all bound clients
-    
-    // Maximum number of delivery attempts before giving up.
-    static final int MAX_DELIVERY_COUNT = 3;
-    
-    // Maximum number of times it can fail during execution before giving up.
-    static final int MAX_DONE_EXECUTING_COUNT = 6;
-    
-    static class StartItem {
-        final int id;
-        final Intent intent;
-        long deliveredTime;
-        int deliveryCount;
-        int doneExecutingCount;
-        
-        StartItem(int _id, Intent _intent) {
-            id = _id;
-            intent = _intent;
-        }
-    }
-    final ArrayList<StartItem> deliveredStarts = new ArrayList<StartItem>();
-                            // start() arguments which been delivered.
-    final ArrayList<StartItem> pendingStarts = new ArrayList<StartItem>();
-                            // start() arguments that haven't yet been delivered.
 
     ProcessRecord app;      // where this service is running or null.
     boolean isForeground;   // is service currently in foreground mode?
@@ -110,22 +96,93 @@ class ServiceRecord extends Binder {
 
     String stringName;      // caching of toString
     
+    static class StartItem {
+        final ServiceRecord sr;
+        final int id;
+        final Intent intent;
+        final int targetPermissionUid;
+        long deliveredTime;
+        int deliveryCount;
+        int doneExecutingCount;
+        UriPermissionOwner uriPermissions;
+
+        String stringName;      // caching of toString
+
+        StartItem(ServiceRecord _sr, int _id, Intent _intent, int _targetPermissionUid) {
+            sr = _sr;
+            id = _id;
+            intent = _intent;
+            targetPermissionUid = _targetPermissionUid;
+        }
+
+        UriPermissionOwner getUriPermissionsLocked() {
+            if (uriPermissions == null) {
+                uriPermissions = new UriPermissionOwner(sr.ams, this);
+            }
+            return uriPermissions;
+        }
+
+        void removeUriPermissionsLocked() {
+            if (uriPermissions != null) {
+                uriPermissions.removeUriPermissionsLocked();
+                uriPermissions = null;
+            }
+        }
+
+        public String toString() {
+            if (stringName != null) {
+                return stringName;
+            }
+            StringBuilder sb = new StringBuilder(128);
+            sb.append("ServiceRecord{")
+                .append(Integer.toHexString(System.identityHashCode(sr)))
+                .append(' ').append(sr.shortName)
+                .append(" StartItem ")
+                .append(Integer.toHexString(System.identityHashCode(this)))
+                .append(" id=").append(id).append('}');
+            return stringName = sb.toString();
+        }
+    }
+
+    final ArrayList<StartItem> deliveredStarts = new ArrayList<StartItem>();
+                            // start() arguments which been delivered.
+    final ArrayList<StartItem> pendingStarts = new ArrayList<StartItem>();
+                            // start() arguments that haven't yet been delivered.
+
     void dumpStartList(PrintWriter pw, String prefix, List<StartItem> list, long now) {
         final int N = list.size();
         for (int i=0; i<N; i++) {
             StartItem si = list.get(i);
             pw.print(prefix); pw.print("#"); pw.print(i);
                     pw.print(" id="); pw.print(si.id);
-                    if (now != 0) pw.print(" dur="); pw.print(now-si.deliveredTime);
+                    if (now != 0) {
+                        pw.print(" dur=");
+                        TimeUtils.formatDuration(si.deliveredTime, now, pw);
+                    }
                     if (si.deliveryCount != 0) {
                         pw.print(" dc="); pw.print(si.deliveryCount);
                     }
                     if (si.doneExecutingCount != 0) {
                         pw.print(" dxc="); pw.print(si.doneExecutingCount);
                     }
-                    pw.print(" ");
+                    pw.println("");
+            pw.print(prefix); pw.print("  intent=");
                     if (si.intent != null) pw.println(si.intent.toString());
                     else pw.println("null");
+            if (si.targetPermissionUid >= 0) {
+                pw.print(prefix); pw.print("  targetPermissionUid=");
+                        pw.println(si.targetPermissionUid);
+            }
+            if (si.uriPermissions != null) {
+                if (si.uriPermissions.readUriPermissions != null) {
+                    pw.print(prefix); pw.print("  readUriPermissions=");
+                            pw.println(si.uriPermissions.readUriPermissions);
+                }
+                if (si.uriPermissions.writeUriPermissions != null) {
+                    pw.print(prefix); pw.print("  writeUriPermissions=");
+                            pw.println(si.uriPermissions.writeUriPermissions);
+                }
+            }
         }
     }
     
@@ -139,18 +196,26 @@ class ServiceRecord extends Binder {
             pw.print(prefix); pw.print("permission="); pw.println(permission);
         }
         long now = SystemClock.uptimeMillis();
-        pw.print(prefix); pw.print("baseDir="); pw.print(baseDir);
-                if (!resDir.equals(baseDir)) pw.print(" resDir="); pw.print(resDir);
-                pw.print(" dataDir="); pw.println(dataDir);
+        long nowReal = SystemClock.elapsedRealtime();
+        pw.print(prefix); pw.print("baseDir="); pw.println(baseDir);
+        if (!resDir.equals(baseDir)) pw.print(prefix); pw.print("resDir="); pw.println(resDir);
+        pw.print(prefix); pw.print("dataDir="); pw.println(dataDir);
         pw.print(prefix); pw.print("app="); pw.println(app);
         if (isForeground || foregroundId != 0) {
             pw.print(prefix); pw.print("isForeground="); pw.print(isForeground);
                     pw.print(" foregroundId="); pw.print(foregroundId);
                     pw.print(" foregroundNoti="); pw.println(foregroundNoti);
         }
-        pw.print(prefix); pw.print("lastActivity="); pw.print(lastActivity-now);
-                pw.print(" executingStart="); pw.print(executingStart-now);
-                pw.print(" restartTime="); pw.println(restartTime);
+        pw.print(prefix); pw.print("createTime=");
+                TimeUtils.formatDuration(createTime, nowReal, pw);
+                pw.print(" lastActivity=");
+                TimeUtils.formatDuration(lastActivity, now, pw);
+                pw.println("");
+        pw.print(prefix); pw.print(" executingStart=");
+                TimeUtils.formatDuration(executingStart, now, pw);
+                pw.print(" restartTime=");
+                TimeUtils.formatDuration(restartTime, now, pw);
+                pw.println("");
         if (startRequested || lastStartId != 0) {
             pw.print(prefix); pw.print("startRequested="); pw.print(startRequested);
                     pw.print(" stopIfKilled="); pw.print(stopIfKilled);
@@ -161,13 +226,15 @@ class ServiceRecord extends Binder {
                 || restartDelay != 0 || nextRestartTime != 0) {
             pw.print(prefix); pw.print("executeNesting="); pw.print(executeNesting);
                     pw.print(" restartCount="); pw.print(restartCount);
-                    pw.print(" restartDelay="); pw.print(restartDelay-now);
-                    pw.print(" nextRestartTime="); pw.print(nextRestartTime-now);
+                    pw.print(" restartDelay=");
+                    TimeUtils.formatDuration(restartDelay, now, pw);
+                    pw.print(" nextRestartTime=");
+                    TimeUtils.formatDuration(nextRestartTime, now, pw);
                     pw.print(" crashCount="); pw.println(crashCount);
         }
         if (deliveredStarts.size() > 0) {
             pw.print(prefix); pw.println("Delivered Starts:");
-            dumpStartList(pw, prefix, deliveredStarts, SystemClock.uptimeMillis());
+            dumpStartList(pw, prefix, deliveredStarts, now);
         }
         if (pendingStarts.size() > 0) {
             pw.print(prefix); pw.println("Pending Starts:");
@@ -186,10 +253,12 @@ class ServiceRecord extends Binder {
         }
         if (connections.size() > 0) {
             pw.print(prefix); pw.println("All Connections:");
-            Iterator<ConnectionRecord> it = connections.values().iterator();
+            Iterator<ArrayList<ConnectionRecord>> it = connections.values().iterator();
             while (it.hasNext()) {
-                ConnectionRecord c = it.next();
-                pw.print(prefix); pw.print("  "); pw.println(c);
+                ArrayList<ConnectionRecord> c = it.next();
+                for (int i=0; i<c.size(); i++) {
+                    pw.print(prefix); pw.print("  "); pw.println(c.get(i));
+                }
             }
         }
     }
@@ -212,7 +281,8 @@ class ServiceRecord extends Binder {
         dataDir = sInfo.applicationInfo.dataDir;
         exported = sInfo.exported;
         this.restarter = restarter;
-        createTime = lastActivity = SystemClock.uptimeMillis();
+        createTime = SystemClock.elapsedRealtime();
+        lastActivity = SystemClock.uptimeMillis();
     }
 
     public AppBindRecord retrieveAppBindingLocked(Intent intent,
@@ -252,6 +322,8 @@ class ServiceRecord extends Binder {
     }
     
     public void postNotification() {
+        final int appUid = appInfo.uid;
+        final int appPid = app.pid;
         if (foregroundId != 0 && foregroundNoti != null) {
             // Do asynchronous communication with notification manager to
             // avoid deadlocks.
@@ -260,22 +332,24 @@ class ServiceRecord extends Binder {
             final Notification localForegroundNoti = foregroundNoti;
             ams.mHandler.post(new Runnable() {
                 public void run() {
-                    INotificationManager inm = NotificationManager.getService();
-                    if (inm == null) {
+                    NotificationManagerService nm =
+                            (NotificationManagerService) NotificationManager.getService();
+                    if (nm == null) {
                         return;
                     }
                     try {
                         int[] outId = new int[1];
-                        inm.enqueueNotification(localPackageName, localForegroundId,
-                                localForegroundNoti, outId);
+                        nm.enqueueNotificationInternal(localPackageName, appUid, appPid,
+                                null, localForegroundId, localForegroundNoti, outId);
                     } catch (RuntimeException e) {
                         Slog.w(ActivityManagerService.TAG,
                                 "Error showing notification for service", e);
                         // If it gave us a garbage notification, it doesn't
                         // get to be foreground.
                         ams.setServiceForeground(name, ServiceRecord.this,
-                                localForegroundId, null, true);
-                    } catch (RemoteException e) {
+                                0, null, true);
+                        ams.crashApplication(appUid, appPid, localPackageName,
+                                "Bad notification for startForeground: " + e);
                     }
                 }
             });
@@ -306,6 +380,13 @@ class ServiceRecord extends Binder {
         }
     }
     
+    public void clearDeliveredStartsLocked() {
+        for (int i=deliveredStarts.size()-1; i>=0; i--) {
+            deliveredStarts.get(i).removeUriPermissionsLocked();
+        }
+        deliveredStarts.clear();
+    }
+
     public String toString() {
         if (stringName != null) {
             return stringName;

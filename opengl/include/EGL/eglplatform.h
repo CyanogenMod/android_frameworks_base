@@ -25,7 +25,7 @@
 */
 
 /* Platform-specific types and definitions for egl.h
- * $Revision: 7244 $ on $Date: 2009-01-20 17:06:59 -0800 (Tue, 20 Jan 2009) $
+ * $Revision: 9724 $ on $Date: 2009-12-02 02:05:33 -0800 (Wed, 02 Dec 2009) $
  *
  * Adopters may modify khrplatform.h and this file to suit their platform.
  * You are encouraged to submit all modifications to the Khronos group so that
@@ -50,8 +50,10 @@
 #define EGLAPI KHRONOS_APICALL
 #endif
 
+#ifndef EGLAPIENTRY
 #define EGLAPIENTRY  KHRONOS_APIENTRY
-#define EGLAPIENTRYP KHRONOS_APIENTRY*
+#endif
+#define EGLAPIENTRYP EGLAPIENTRY*
 
 /* The types NativeDisplayType, NativeWindowType, and NativePixmapType
  * are aliases of window-system-dependent types, such as X Display * or
@@ -76,7 +78,17 @@ typedef int   EGLNativeDisplayType;
 typedef void *EGLNativeWindowType;
 typedef void *EGLNativePixmapType;
 
-#elif defined(__unix__) && !defined(ANDROID)
+#elif defined(__ANDROID__) || defined(ANDROID)
+
+#include <android/native_window.h>
+
+struct egl_native_pixmap_t;
+
+typedef struct ANativeWindow*           EGLNativeWindowType;
+typedef struct egl_native_pixmap_t*     EGLNativePixmapType;
+typedef void*                           EGLNativeDisplayType;
+
+#elif defined(__unix__)
 
 /* X11 (tentative)  */
 #include <X11/Xlib.h>
@@ -85,16 +97,6 @@ typedef void *EGLNativePixmapType;
 typedef Display *EGLNativeDisplayType;
 typedef Pixmap   EGLNativePixmapType;
 typedef Window   EGLNativeWindowType;
-
-
-#elif defined(ANDROID)
-
-struct android_native_window_t;
-struct egl_native_pixmap_t;
-
-typedef struct android_native_window_t* EGLNativeWindowType;
-typedef struct egl_native_pixmap_t*     EGLNativePixmapType;
-typedef void*                           EGLNativeDisplayType;
 
 #else
 #error "Platform not recognized"

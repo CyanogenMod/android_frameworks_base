@@ -22,6 +22,7 @@ namespace android {
 
 extern const char *MEDIA_MIMETYPE_IMAGE_JPEG;
 
+extern const char *MEDIA_MIMETYPE_VIDEO_VPX;
 extern const char *MEDIA_MIMETYPE_VIDEO_AVC;
 extern const char *MEDIA_MIMETYPE_VIDEO_MPEG4;
 extern const char *MEDIA_MIMETYPE_VIDEO_H263;
@@ -33,11 +34,15 @@ extern const char *MEDIA_MIMETYPE_AUDIO_MPEG;
 extern const char *MEDIA_MIMETYPE_AUDIO_AAC;
 extern const char *MEDIA_MIMETYPE_AUDIO_QCELP;
 extern const char *MEDIA_MIMETYPE_AUDIO_VORBIS;
+extern const char *MEDIA_MIMETYPE_AUDIO_G711_ALAW;
+extern const char *MEDIA_MIMETYPE_AUDIO_G711_MLAW;
 extern const char *MEDIA_MIMETYPE_AUDIO_RAW;
 
 extern const char *MEDIA_MIMETYPE_CONTAINER_MPEG4;
 extern const char *MEDIA_MIMETYPE_CONTAINER_WAV;
 extern const char *MEDIA_MIMETYPE_CONTAINER_OGG;
+extern const char *MEDIA_MIMETYPE_CONTAINER_MATROSKA;
+extern const char *MEDIA_MIMETYPE_CONTAINER_MPEG2TS;
 
 }  // namespace android
 

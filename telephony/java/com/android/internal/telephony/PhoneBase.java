@@ -286,7 +286,7 @@ public abstract class PhoneBase extends Handler implements Phone {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = sp.edit();
         editor.putBoolean(DNS_SERVER_CHECK_DISABLED_KEY, b);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -505,6 +505,10 @@ public abstract class PhoneBase extends Handler implements Phone {
         mCM.unregisterForResendIncallMute(h);
     }
 
+    public void setEchoSuppressionEnabled(boolean enabled) {
+        // no need for regular phone
+    }
+
     /**
      * Subclasses of Phone probably want to replace this with a
      * version scoped to their packages
@@ -543,7 +547,7 @@ public abstract class PhoneBase extends Handler implements Phone {
     private void setPropertiesByCarrier() {
         String carrier = SystemProperties.get("ro.carrier");
 
-        if (null == carrier || 0 == carrier.length()) {
+        if (null == carrier || 0 == carrier.length() || "unknown".equals(carrier)) {
             return;
         }
 

@@ -555,11 +555,11 @@ which you could make use of library projects: </p>
 
 <ul>
 <li>If you are developing multiple related applications that use some of the
-same components, you move the redundant components out of their respective
+same components, you could move the redundant components out of their respective
 application projects and create a single, reuseable set of the same components
 in a library project. </li>
 <li>If you are creating an application that exists in both free and paid
-versions. You move the part of the application that is common to both versions
+versions, you could move the part of the application that is common to both versions
 into a library project. The two dependent projects, with their different package
 names, will reference the library project and provide only the difference
 between the two application versions.</li>
@@ -687,7 +687,7 @@ so that other applications can use it, you can do so by adding a the
 <p>A library project's manifest file must declare all of the shared components
 that it includes, just as would a standard Android application. For more
 information, see the documentation for <a
-href="{@docRoot}guide/manifest/manifest-intro.html">AndroidManifest.xml</a>.</p>
+href="{@docRoot}guide/topics/manifest/manifest-intro.html">AndroidManifest.xml</a>.</p>
 
 <p>For example, the <a
 href="{@docRoot}resources/samples/TicTacToeLib/AndroidManifest.html">TicTacToeLib</a>
@@ -799,7 +799,8 @@ like this: </p>
   ...
 &lt;/manifest&gt;</pre>
 
-<p>For more information about the manifest file, see the documentation for <a href="{@docRoot}guide/manifest/manifest-intro.html">AndroidManifest.xml</a>.</p>
+<p>For more information about the manifest file, see the documentation for <a
+href="{@docRoot}guide/topics/manifest/manifest-intro.html">AndroidManifest.xml</a>.</p>
 
 <h3 id="depAppBuild">Building a dependent application</h3>
 
@@ -837,10 +838,6 @@ across all projects). </p>
 is because the library project is compiled by the main project to use the
 correct resource IDs.</p>
 
-<p><strong>One library project cannot reference another</strong></p>
-
-<p>A library cannot depend on another library.</p>
-
 <p><strong>A library project can include a JAR library</strong></p>
 
 <p>You can develop a library project that itself includes a JAR library. When
@@ -856,13 +853,6 @@ Google APIs Add-On). Note also that both the library project and the dependent
 application must declare the external library their manifest files, in a <a
 href="{@docRoot}guide/topics/manifest/uses-library-element.html"><code>&lt;uses-library&gt;</code></a>
 element. </p>
-
-<p><strong>Library project cannot include AIDL files</strong></p>
-
-<p>The tools do not support the use of <a
-href="{@docRoot}guide/developing/tools/aidl.html">AIDL</a> files in a library project.
-Any AIDL files used by an application must be stored in the application project
-itself.</p>
 
 <p><strong>Library project cannot include raw assets</strong></p>
 

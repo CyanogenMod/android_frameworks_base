@@ -16,37 +16,36 @@
 
 package android.os.storage;
 
-import android.content.Context;
-import android.os.Binder;
-import android.os.Bundle;
-import android.os.Looper;
-import android.os.Parcelable;
-import android.os.ParcelFileDescriptor;
-import android.os.Process;
-import android.os.RemoteException;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
+import android.os.RemoteException;
 import android.os.ServiceManager;
-import android.os.storage.IMountService;
-import android.os.storage.IMountServiceListener;
 import android.util.Log;
+import android.util.Slog;
 import android.util.SparseArray;
 
-import java.io.FileDescriptor;
-import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * StorageManager is the interface to the systems storage service.
+ * StorageManager is the interface to the systems storage service. The storage
+ * manager handles storage-related items such as Opaque Binary Blobs (OBBs).
+ * <p>
+ * OBBs contain a filesystem that maybe be encrypted on disk and mounted
+ * on-demand from an application. OBBs are a good way of providing large amounts
+ * of binary assets without packaging them into APKs as they may be multiple
+ * gigabytes in size. However, due to their size, they're most likely stored in
+ * a shared storage pool accessible from all programs. The system does not
+ * guarantee the security of the OBB file itself: if any program modifies the
+ * OBB, there is no guarantee that a read from that OBB will produce the
+ * expected output.
+ * <p>
  * Get an instance of this class by calling
- * {@link android.content.Context#getSystemService(java.lang.String)} with an argument
- * of {@link android.content.Context#STORAGE_SERVICE}.
- *
- * @hide
- *
+ * {@link android.content.Context#getSystemService(java.lang.String)} with an
+ * argument of {@link android.content.Context#STORAGE_SERVICE}.
  */
 
 public class StorageManager
@@ -71,7 +70,12 @@ public class StorageManager
     /*
      * List of our listeners
      */
-    private ArrayList<ListenerDelegate> mListeners = new ArrayList<ListenerDelegate>();
+    private List<ListenerDelegate> mListeners = new ArrayList<ListenerDelegate>();
+
+    /*
+     * Next available nonce
+     */
+    final private AtomicInteger mNextNonce = new AtomicInteger(0);
 
     private class MountServiceBinderListener extends IMountServiceListener.Stub {
         public void onUsbMassStorageConnectionChanged(boolean available) {
@@ -90,12 +94,111 @@ public class StorageManager
     }
 
     /**
+     * Binder listener for OBB action results.
+     */
+    private final ObbActionListener mObbActionListener = new ObbActionListener();
+
+    private class ObbActionListener extends IObbActionListener.Stub {
+        private SparseArray<ObbListenerDelegate> mListeners = new SparseArray<ObbListenerDelegate>();
+
+        @Override
+        public void onObbResult(String filename, int nonce, int status) throws RemoteException {
+            final ObbListenerDelegate delegate;
+            synchronized (mListeners) {
+                delegate = mListeners.get(nonce);
+                if (delegate != null) {
+                    mListeners.remove(nonce);
+                }
+            }
+
+            if (delegate != null) {
+                delegate.sendObbStateChanged(filename, status);
+            }
+        }
+
+        public int addListener(OnObbStateChangeListener listener) {
+            final ObbListenerDelegate delegate = new ObbListenerDelegate(listener);
+
+            synchronized (mListeners) {
+                mListeners.put(delegate.nonce, delegate);
+            }
+
+            return delegate.nonce;
+        }
+    }
+
+    private int getNextNonce() {
+        return mNextNonce.getAndIncrement();
+    }
+
+    /**
+     * Private class containing sender and receiver code for StorageEvents.
+     */
+    private class ObbListenerDelegate {
+        private final WeakReference<OnObbStateChangeListener> mObbEventListenerRef;
+        private final Handler mHandler;
+
+        private final int nonce;
+
+        ObbListenerDelegate(OnObbStateChangeListener listener) {
+            nonce = getNextNonce();
+            mObbEventListenerRef = new WeakReference<OnObbStateChangeListener>(listener);
+            mHandler = new Handler(mTgtLooper) {
+                @Override
+                public void handleMessage(Message msg) {
+                    final OnObbStateChangeListener listener = getListener();
+                    if (listener == null) {
+                        return;
+                    }
+
+                    StorageEvent e = (StorageEvent) msg.obj;
+
+                    if (msg.what == StorageEvent.EVENT_OBB_STATE_CHANGED) {
+                        ObbStateChangedStorageEvent ev = (ObbStateChangedStorageEvent) e;
+                        listener.onObbStateChange(ev.path, ev.state);
+                    } else {
+                        Log.e(TAG, "Unsupported event " + msg.what);
+                    }
+                }
+            };
+        }
+
+        OnObbStateChangeListener getListener() {
+            if (mObbEventListenerRef == null) {
+                return null;
+            }
+            return mObbEventListenerRef.get();
+        }
+
+        void sendObbStateChanged(String path, int state) {
+            ObbStateChangedStorageEvent e = new ObbStateChangedStorageEvent(path, state);
+            mHandler.sendMessage(e.getMessage());
+        }
+    }
+
+    /**
+     * Message sent during an OBB status change event.
+     */
+    private class ObbStateChangedStorageEvent extends StorageEvent {
+        public final String path;
+
+        public final int state;
+
+        public ObbStateChangedStorageEvent(String path, int state) {
+            super(EVENT_OBB_STATE_CHANGED);
+            this.path = path;
+            this.state = state;
+        }
+    }
+
+    /**
      * Private base class for messages sent between the callback thread
      * and the target looper handler.
      */
     private class StorageEvent {
-        public static final int EVENT_UMS_CONNECTION_CHANGED = 1;
-        public static final int EVENT_STORAGE_STATE_CHANGED   = 2;
+        static final int EVENT_UMS_CONNECTION_CHANGED = 1;
+        static final int EVENT_STORAGE_STATE_CHANGED = 2;
+        static final int EVENT_OBB_STATE_CHANGED = 3;
 
         private Message mMessage;
 
@@ -209,6 +312,7 @@ public class StorageManager
      *
      * @param listener A {@link android.os.storage.StorageEventListener StorageEventListener} object.
      *
+     * @hide
      */
     public void registerListener(StorageEventListener listener) {
         if (listener == null) {
@@ -225,6 +329,7 @@ public class StorageManager
      *
      * @param listener A {@link android.os.storage.StorageEventListener StorageEventListener} object.
      *
+     * @hide
      */
     public void unregisterListener(StorageEventListener listener) {
         if (listener == null) {
@@ -245,6 +350,8 @@ public class StorageManager
 
     /**
      * Enables USB Mass Storage (UMS) on the device.
+     *
+     * @hide
      */
     public void enableUsbMassStorage() {
         try {
@@ -256,6 +363,8 @@ public class StorageManager
 
     /**
      * Disables USB Mass Storage (UMS) on the device.
+     *
+     * @hide
      */
     public void disableUsbMassStorage() {
         try {
@@ -268,6 +377,8 @@ public class StorageManager
     /**
      * Query if a USB Mass Storage (UMS) host is connected.
      * @return true if UMS host is connected.
+     *
+     * @hide
      */
     public boolean isUsbMassStorageConnected() {
         try {
@@ -281,6 +392,8 @@ public class StorageManager
     /**
      * Query if a USB Mass Storage (UMS) is enabled on the device.
      * @return true if UMS host is enabled.
+     *
+     * @hide
      */
     public boolean isUsbMassStorageEnabled() {
         try {
@@ -289,5 +402,129 @@ public class StorageManager
             Log.e(TAG, "Failed to get UMS enable state", rex);
         }
         return false;
+    }
+
+    /**
+     * Mount an Opaque Binary Blob (OBB) file. If a <code>key</code> is
+     * specified, it is supplied to the mounting process to be used in any
+     * encryption used in the OBB.
+     * <p>
+     * The OBB will remain mounted for as long as the StorageManager reference
+     * is held by the application. As soon as this reference is lost, the OBBs
+     * in use will be unmounted. The {@link OnObbStateChangeListener} registered
+     * with this call will receive the success or failure of this operation.
+     * <p>
+     * <em>Note:</em> you can only mount OBB files for which the OBB tag on the
+     * file matches a package ID that is owned by the calling program's UID.
+     * That is, shared UID applications can attempt to mount any other
+     * application's OBB that shares its UID.
+     * 
+     * @param filename the path to the OBB file
+     * @param key secret used to encrypt the OBB; may be <code>null</code> if no
+     *            encryption was used on the OBB.
+     * @param listener will receive the success or failure of the operation
+     * @return whether the mount call was successfully queued or not
+     */
+    public boolean mountObb(String filename, String key, OnObbStateChangeListener listener) {
+        if (filename == null) {
+            throw new IllegalArgumentException("filename cannot be null");
+        }
+
+        if (listener == null) {
+            throw new IllegalArgumentException("listener cannot be null");
+        }
+
+        try {
+            final int nonce = mObbActionListener.addListener(listener);
+            mMountService.mountObb(filename, key, mObbActionListener, nonce);
+            return true;
+        } catch (RemoteException e) {
+            Log.e(TAG, "Failed to mount OBB", e);
+        }
+
+        return false;
+    }
+
+    /**
+     * Unmount an Opaque Binary Blob (OBB) file asynchronously. If the
+     * <code>force</code> flag is true, it will kill any application needed to
+     * unmount the given OBB (even the calling application).
+     * <p>
+     * The {@link OnObbStateChangeListener} registered with this call will
+     * receive the success or failure of this operation.
+     * <p>
+     * <em>Note:</em> you can only mount OBB files for which the OBB tag on the
+     * file matches a package ID that is owned by the calling program's UID.
+     * That is, shared UID applications can obtain access to any other
+     * application's OBB that shares its UID.
+     * <p>
+     * 
+     * @param filename path to the OBB file
+     * @param force whether to kill any programs using this in order to unmount
+     *            it
+     * @param listener will receive the success or failure of the operation
+     * @return whether the unmount call was successfully queued or not
+     */
+    public boolean unmountObb(String filename, boolean force, OnObbStateChangeListener listener) {
+        if (filename == null) {
+            throw new IllegalArgumentException("filename cannot be null");
+        }
+
+        if (listener == null) {
+            throw new IllegalArgumentException("listener cannot be null");
+        }
+
+        try {
+            final int nonce = mObbActionListener.addListener(listener);
+            mMountService.unmountObb(filename, force, mObbActionListener, nonce);
+            return true;
+        } catch (RemoteException e) {
+            Log.e(TAG, "Failed to mount OBB", e);
+        }
+
+        return false;
+    }
+
+    /**
+     * Check whether an Opaque Binary Blob (OBB) is mounted or not.
+     * 
+     * @param filename path to OBB image
+     * @return true if OBB is mounted; false if not mounted or on error
+     */
+    public boolean isObbMounted(String filename) {
+        if (filename == null) {
+            throw new IllegalArgumentException("filename cannot be null");
+        }
+
+        try {
+            return mMountService.isObbMounted(filename);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Failed to check if OBB is mounted", e);
+        }
+
+        return false;
+    }
+
+    /**
+     * Check the mounted path of an Opaque Binary Blob (OBB) file. This will
+     * give you the path to where you can obtain access to the internals of the
+     * OBB.
+     * 
+     * @param filename path to OBB image
+     * @return absolute path to mounted OBB image data or <code>null</code> if
+     *         not mounted or exception encountered trying to read status
+     */
+    public String getMountedObbPath(String filename) {
+        if (filename == null) {
+            throw new IllegalArgumentException("filename cannot be null");
+        }
+
+        try {
+            return mMountService.getMountedObbPath(filename);
+        } catch (RemoteException e) {
+            Log.e(TAG, "Failed to find mounted path for OBB", e);
+        }
+
+        return null;
     }
 }

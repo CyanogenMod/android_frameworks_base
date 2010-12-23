@@ -22,6 +22,7 @@
 
 #include "include/ID3.h"
 
+#include <media/stagefright/foundation/AMessage.h>
 #include <media/stagefright/DataSource.h>
 #include <media/stagefright/MediaBuffer.h>
 #include <media/stagefright/MediaBufferGroup.h>
@@ -456,60 +457,78 @@ private:
     MP3Source &operator=(const MP3Source &);
 };
 
-MP3Extractor::MP3Extractor(const sp<DataSource> &source)
-    : mDataSource(source),
+MP3Extractor::MP3Extractor(
+        const sp<DataSource> &source, const sp<AMessage> &meta)
+    : mInitCheck(NO_INIT),
+      mDataSource(source),
       mFirstFramePos(-1),
       mFixedHeader(0),
       mByteNumber(0) {
     off_t pos = 0;
     uint32_t header;
-    bool success = Resync(mDataSource, 0, &pos, &header);
-    CHECK(success);
+    bool success;
 
-    if (success) {
-        mFirstFramePos = pos;
-        mFixedHeader = header;
+    int64_t meta_offset;
+    uint32_t meta_header;
+    if (meta != NULL
+            && meta->findInt64("offset", &meta_offset)
+            && meta->findInt32("header", (int32_t *)&meta_header)) {
+        // The sniffer has already done all the hard work for us, simply
+        // accept its judgement.
+        pos = (off_t)meta_offset;
+        header = meta_header;
 
-        size_t frame_size;
-        int sample_rate;
-        int num_channels;
-        int bitrate;
-        get_mp3_frame_size(
-                header, &frame_size, &sample_rate, &num_channels, &bitrate);
+        success = true;
+    } else {
+        success = Resync(mDataSource, 0, &pos, &header);
+    }
 
-        mMeta = new MetaData;
+    if (!success) {
+        // mInitCheck will remain NO_INIT
+        return;
+    }
 
-        mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_MPEG);
-        mMeta->setInt32(kKeySampleRate, sample_rate);
-        mMeta->setInt32(kKeyBitRate, bitrate * 1000);
-        mMeta->setInt32(kKeyChannelCount, num_channels);
+    mFirstFramePos = pos;
+    mFixedHeader = header;
 
-        int64_t duration;
-        parse_xing_header(
-                mDataSource, mFirstFramePos, NULL, &mByteNumber,
-                mTableOfContents, NULL, &duration);
-        if (duration > 0) {
-            mMeta->setInt64(kKeyDuration, duration);
-        } else {
-            off_t fileSize;
-            if (mDataSource->getSize(&fileSize) == OK) {
-                mMeta->setInt64(
-                        kKeyDuration,
-                        8000LL * (fileSize - mFirstFramePos) / bitrate);
-            }
+    size_t frame_size;
+    int sample_rate;
+    int num_channels;
+    int bitrate;
+    get_mp3_frame_size(
+            header, &frame_size, &sample_rate, &num_channels, &bitrate);
+
+    mMeta = new MetaData;
+
+    mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_MPEG);
+    mMeta->setInt32(kKeySampleRate, sample_rate);
+    mMeta->setInt32(kKeyBitRate, bitrate * 1000);
+    mMeta->setInt32(kKeyChannelCount, num_channels);
+
+    int64_t duration;
+    parse_xing_header(
+            mDataSource, mFirstFramePos, NULL, &mByteNumber,
+            mTableOfContents, NULL, &duration);
+    if (duration > 0) {
+        mMeta->setInt64(kKeyDuration, duration);
+    } else {
+        off_t fileSize;
+        if (mDataSource->getSize(&fileSize) == OK) {
+            mMeta->setInt64(
+                    kKeyDuration,
+                    8000LL * (fileSize - mFirstFramePos) / bitrate);
         }
     }
-}
 
-MP3Extractor::~MP3Extractor() {
+    mInitCheck = OK;
 }
 
 size_t MP3Extractor::countTracks() {
-    return (mFirstFramePos < 0) ? 0 : 1;
+    return mInitCheck != OK ? 0 : 1;
 }
 
 sp<MediaSource> MP3Extractor::getTrack(size_t index) {
-    if (mFirstFramePos < 0 || index != 0) {
+    if (mInitCheck != OK || index != 0) {
         return NULL;
     }
 
@@ -519,7 +538,7 @@ sp<MediaSource> MP3Extractor::getTrack(size_t index) {
 }
 
 sp<MetaData> MP3Extractor::getTrackMetaData(size_t index, uint32_t flags) {
-    if (mFirstFramePos < 0 || index != 0) {
+    if (mInitCheck != OK || index != 0) {
         return NULL;
     }
 
@@ -586,7 +605,8 @@ status_t MP3Source::read(
     *out = NULL;
 
     int64_t seekTimeUs;
-    if (options != NULL && options->getSeekTo(&seekTimeUs)) {
+    ReadOptions::SeekMode mode;
+    if (options != NULL && options->getSeekTo(&seekTimeUs, &mode)) {
         int32_t bitrate;
         if (!mMeta->findInt32(kKeyBitRate, &bitrate)) {
             // bitrate is in bits/sec.
@@ -634,6 +654,7 @@ status_t MP3Source::read(
     }
 
     size_t frame_size;
+    int bitrate;
     for (;;) {
         ssize_t n = mDataSource->readAt(mCurrentPos, buffer->data(), 4);
         if (n < 4) {
@@ -646,7 +667,7 @@ status_t MP3Source::read(
         uint32_t header = U32_AT((const uint8_t *)buffer->data());
 
         if ((header & kMask) == (mFixedHeader & kMask)
-            && get_mp3_frame_size(header, &frame_size)) {
+            && get_mp3_frame_size(header, &frame_size, NULL, NULL, &bitrate)) {
             break;
         }
 
@@ -681,9 +702,10 @@ status_t MP3Source::read(
     buffer->set_range(0, frame_size);
 
     buffer->meta_data()->setInt64(kKeyTime, mCurrentTimeUs);
+    buffer->meta_data()->setInt32(kKeyIsSyncFrame, 1);
 
     mCurrentPos += frame_size;
-    mCurrentTimeUs += 1152 * 1000000 / 44100;
+    mCurrentTimeUs += frame_size * 8000ll / bitrate;
 
     *out = buffer;
 
@@ -693,7 +715,7 @@ status_t MP3Source::read(
 sp<MetaData> MP3Extractor::getMetaData() {
     sp<MetaData> meta = new MetaData;
 
-    if (mFirstFramePos < 0) {
+    if (mInitCheck != OK) {
         return meta;
     }
 
@@ -756,15 +778,20 @@ sp<MetaData> MP3Extractor::getMetaData() {
 }
 
 bool SniffMP3(
-        const sp<DataSource> &source, String8 *mimeType, float *confidence) {
+        const sp<DataSource> &source, String8 *mimeType,
+        float *confidence, sp<AMessage> *meta) {
     off_t pos = 0;
     uint32_t header;
     if (!Resync(source, 0, &pos, &header)) {
         return false;
     }
 
+    *meta = new AMessage;
+    (*meta)->setInt64("offset", pos);
+    (*meta)->setInt32("header", header);
+
     *mimeType = MEDIA_MIMETYPE_AUDIO_MPEG;
-    *confidence = 0.3f;
+    *confidence = 0.2f;
 
     return true;
 }

@@ -18,12 +18,13 @@
 
 #define AWESOME_PLAYER_H_
 
+#include "NuHTTPDataSource.h"
 #include "TimedEventQueue.h"
 
 #include <media/MediaPlayerInterface.h>
 #include <media/stagefright/DataSource.h>
-#include <media/stagefright/HTTPDataSource.h>
 #include <media/stagefright/OMXClient.h>
+#include <media/stagefright/TimeSource.h>
 #include <utils/threads.h>
 
 namespace android {
@@ -33,8 +34,12 @@ struct DataSource;
 struct MediaBuffer;
 struct MediaExtractor;
 struct MediaSource;
-struct Prefetcher;
-struct TimeSource;
+struct NuCachedSource2;
+
+struct ALooper;
+struct ARTSPController;
+struct ARTPSession;
+struct UDPPusher;
 
 struct AwesomeRenderer : public RefBase {
     AwesomeRenderer() {}
@@ -87,6 +92,9 @@ struct AwesomePlayer {
     // This is a mask of MediaExtractor::Flags.
     uint32_t flags() const;
 
+    void postAudioEOS();
+    void postAudioSeekComplete();
+
 private:
     friend struct AwesomeEvent;
 
@@ -98,6 +106,10 @@ private:
         PREPARED            = 16,
         AT_EOS              = 32,
         PREPARE_CANCELLED   = 64,
+        CACHE_UNDERRUN      = 128,
+        AUDIO_AT_EOS        = 256,
+        VIDEO_AT_EOS        = 512,
+        AUTO_LOOPING        = 1024,
     };
 
     mutable Mutex mLock;
@@ -111,6 +123,7 @@ private:
     sp<ISurface> mISurface;
     sp<MediaPlayerBase::AudioSink> mAudioSink;
 
+    SystemTimeSource mSystemTimeSource;
     TimeSource *mTimeSource;
 
     String8 mUri;
@@ -139,6 +152,8 @@ private:
     bool mSeekNotificationSent;
     int64_t mSeekTimeUs;
 
+    int64_t mBitrate;  // total bitrate of the file (in bps) or -1 if unknown.
+
     bool mWatchForAudioSeekComplete;
     bool mWatchForAudioEOS;
 
@@ -166,8 +181,13 @@ private:
     MediaBuffer *mLastVideoBuffer;
     MediaBuffer *mVideoBuffer;
 
-    sp<Prefetcher> mPrefetcher;
-    sp<HTTPDataSource> mConnectingDataSource;
+    sp<NuHTTPDataSource> mConnectingDataSource;
+    sp<NuCachedSource2> mCachedSource;
+
+    sp<ALooper> mLooper;
+    sp<ARTSPController> mRTSPController;
+    sp<ARTPSession> mRTPSession;
+    sp<UDPPusher> mRTPPusher, mRTCPPusher;
 
     struct SuspensionState {
         String8 mUri;
@@ -202,8 +222,9 @@ private:
     status_t setDataSource_l(const sp<DataSource> &dataSource);
     status_t setDataSource_l(const sp<MediaExtractor> &extractor);
     void reset_l();
+    void partial_reset_l();
     status_t seekTo_l(int64_t timeUs);
-    status_t pause_l();
+    status_t pause_l(bool at_eos = false);
     void initRenderer_l();
     void seekAudioIfNecessary_l();
 
@@ -213,7 +234,7 @@ private:
     status_t initAudioDecoder();
 
     void setVideoSource(sp<MediaSource> source);
-    status_t initVideoDecoder();
+    status_t initVideoDecoder(uint32_t flags = 0);
 
     void onStreamDone();
 
@@ -224,10 +245,20 @@ private:
     void onCheckAudioStatus();
     void onPrepareAsyncEvent();
     void abortPrepare(status_t err);
+    void finishAsyncPrepare_l();
+
+    bool getCachedDuration_l(int64_t *durationUs, bool *eos);
 
     status_t finishSetDataSource_l();
 
     static bool ContinuePreparation(void *cookie);
+
+    static void OnRTSPSeekDoneWrapper(void *cookie);
+    void onRTSPSeekDone();
+
+    bool getBitrate(int64_t *bitrate);
+
+    void finishSeekIfNecessary(int64_t videoTimeUs);
 
     AwesomePlayer(const AwesomePlayer &);
     AwesomePlayer &operator=(const AwesomePlayer &);

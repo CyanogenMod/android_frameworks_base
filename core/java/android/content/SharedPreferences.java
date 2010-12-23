@@ -40,7 +40,9 @@ public interface SharedPreferences {
         /**
          * Called when a shared preference is changed, added, or removed. This
          * may be called even if a preference is set to its existing value.
-         * 
+         *
+         * <p>This callback will be run on your main thread.
+         *
          * @param sharedPreferences The {@link SharedPreferences} that received
          *            the change.
          * @param key The key of the preference that was changed, added, or
@@ -52,13 +54,13 @@ public interface SharedPreferences {
     /**
      * Interface used for modifying values in a {@link SharedPreferences}
      * object.  All changes you make in an editor are batched, and not copied
-     * back to the original {@link SharedPreferences} or persistent storage
-     * until you call {@link #commit}.
+     * back to the original {@link SharedPreferences} until you call {@link #commit}
+     * or {@link #apply}
      */
     public interface Editor {
         /**
          * Set a String value in the preferences editor, to be written back once
-         * {@link #commit} is called.
+         * {@link #commit} or {@link #apply} are called.
          * 
          * @param key The name of the preference to modify.
          * @param value The new value for the preference.
@@ -70,7 +72,7 @@ public interface SharedPreferences {
         
         /**
          * Set an int value in the preferences editor, to be written back once
-         * {@link #commit} is called.
+         * {@link #commit} or {@link #apply} are called.
          * 
          * @param key The name of the preference to modify.
          * @param value The new value for the preference.
@@ -82,7 +84,7 @@ public interface SharedPreferences {
         
         /**
          * Set a long value in the preferences editor, to be written back once
-         * {@link #commit} is called.
+         * {@link #commit} or {@link #apply} are called.
          * 
          * @param key The name of the preference to modify.
          * @param value The new value for the preference.
@@ -94,7 +96,7 @@ public interface SharedPreferences {
         
         /**
          * Set a float value in the preferences editor, to be written back once
-         * {@link #commit} is called.
+         * {@link #commit} or {@link #apply} are called.
          * 
          * @param key The name of the preference to modify.
          * @param value The new value for the preference.
@@ -106,7 +108,7 @@ public interface SharedPreferences {
         
         /**
          * Set a boolean value in the preferences editor, to be written back
-         * once {@link #commit} is called.
+         * once {@link #commit} or {@link #apply} are called.
          * 
          * @param key The name of the preference to modify.
          * @param value The new value for the preference.
@@ -151,14 +153,56 @@ public interface SharedPreferences {
          * {@link SharedPreferences} object it is editing.  This atomically
          * performs the requested modifications, replacing whatever is currently
          * in the SharedPreferences.
-         * 
+         *
          * <p>Note that when two editors are modifying preferences at the same
          * time, the last one to call commit wins.
-         * 
+         *
+         * <p>If you don't care about the return value and you're
+         * using this from your application's main thread, consider
+         * using {@link #apply} instead.
+         *
          * @return Returns true if the new values were successfully written
          * to persistent storage.
          */
         boolean commit();
+
+        /**
+         * Commit your preferences changes back from this Editor to the
+         * {@link SharedPreferences} object it is editing.  This atomically
+         * performs the requested modifications, replacing whatever is currently
+         * in the SharedPreferences.
+         *
+         * <p>Note that when two editors are modifying preferences at the same
+         * time, the last one to call apply wins.
+         *
+         * <p>Unlike {@link #commit}, which writes its preferences out
+         * to persistent storage synchronously, {@link #apply}
+         * commits its changes to the in-memory
+         * {@link SharedPreferences} immediately but starts an
+         * asynchronous commit to disk and you won't be notified of
+         * any failures.  If another editor on this
+         * {@link SharedPreferences} does a regular {@link #commit}
+         * while a {@link #apply} is still outstanding, the
+         * {@link #commit} will block until all async commits are
+         * completed as well as the commit itself.
+         *
+         * <p>As {@link SharedPreferences} instances are singletons within
+         * a process, it's safe to replace any instance of {@link #commit} with
+         * {@link #apply} if you were already ignoring the return value.
+         *
+         * <p>You don't need to worry about Android component
+         * lifecycles and their interaction with <code>apply()</code>
+         * writing to disk.  The framework makes sure in-flight disk
+         * writes from <code>apply()</code> complete before switching
+         * states.
+         *
+         * <p class='note'>The SharedPreferences.Editor interface
+         * isn't expected to be implemented directly.  However, if you
+         * previously did implement it and are now getting errors
+         * about missing <code>apply()</code>, you can simply call
+         * {@link #commit} from <code>apply()</code>.
+         */
+        void apply();
     }
 
     /**

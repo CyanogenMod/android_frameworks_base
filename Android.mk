@@ -24,7 +24,7 @@ LOCAL_PATH := $(call my-dir)
 # Instead, it depends on the R.stamp file, which lists the corresponding
 # R.java file as a prerequisite.
 # TODO: find a more appropriate way to do this.
-framework-res-source-path := APPS/framework-res_intermediates/src
+framework_res_source_path := APPS/framework-res_intermediates/src
 
 # the library
 # ============================================================
@@ -86,7 +86,6 @@ LOCAL_SRC_FILES += \
 	core/java/android/app/ISearchManager.aidl \
 	core/java/android/app/ISearchManagerCallback.aidl \
 	core/java/android/app/IServiceConnection.aidl \
-	core/java/android/app/IStatusBar.aidl \
 	core/java/android/app/IThumbnailReceiver.aidl \
 	core/java/android/app/ITransientNotification.aidl \
 	core/java/android/app/IUiModeManager.aidl \
@@ -114,15 +113,19 @@ LOCAL_SRC_FILES += \
 	core/java/android/content/pm/IPackageMoveObserver.aidl \
 	core/java/android/content/pm/IPackageStatsObserver.aidl \
 	core/java/android/database/IContentObserver.aidl \
-	core/java/android/hardware/ISensorService.aidl \
 	core/java/android/net/IConnectivityManager.aidl \
 	core/java/android/net/INetworkManagementEventObserver.aidl \
 	core/java/android/net/IThrottleManager.aidl \
+	core/java/android/nfc/ILlcpConnectionlessSocket.aidl \
+	core/java/android/nfc/ILlcpServiceSocket.aidl \
+	core/java/android/nfc/ILlcpSocket.aidl \
+	core/java/android/nfc/INdefTag.aidl \
+	core/java/android/nfc/INfcAdapter.aidl \
+	core/java/android/nfc/INfcTag.aidl \
+	core/java/android/nfc/IP2pInitiator.aidl \
+	core/java/android/nfc/IP2pTarget.aidl \
 	core/java/android/os/IHardwareService.aidl \
 	core/java/android/os/IMessenger.aidl \
-	core/java/android/os/storage/IMountService.aidl \
-	core/java/android/os/storage/IMountServiceListener.aidl \
-	core/java/android/os/storage/IMountShutdownObserver.aidl \
 	core/java/android/os/INetworkManagementService.aidl \
 	core/java/android/os/INetStatService.aidl \
 	core/java/android/os/IPermissionController.aidl \
@@ -155,6 +158,8 @@ LOCAL_SRC_FILES += \
 	core/java/com/android/internal/backup/IBackupTransport.aidl \
 	core/java/com/android/internal/os/IDropBoxManagerService.aidl \
 	core/java/com/android/internal/os/IResultReceiver.aidl \
+	core/java/com/android/internal/statusbar/IStatusBar.aidl \
+	core/java/com/android/internal/statusbar/IStatusBarService.aidl \
 	core/java/com/android/internal/view/IInputContext.aidl \
 	core/java/com/android/internal/view/IInputContextCallback.aidl \
 	core/java/com/android/internal/view/IInputMethod.aidl \
@@ -182,21 +187,28 @@ LOCAL_SRC_FILES += \
 	wifi/java/android/net/wifi/IWifiManager.aidl \
 	telephony/java/com/android/internal/telephony/IExtendedNetworkService.aidl \
 	vpn/java/android/net/vpn/IVpnService.aidl \
+	voip/java/android/net/sip/ISipSession.aidl \
+	voip/java/android/net/sip/ISipSessionListener.aidl \
+	voip/java/android/net/sip/ISipService.aidl
+#
 
 
 # FRAMEWORKS_BASE_JAVA_SRC_DIRS comes from build/core/pathmap.mk
 LOCAL_AIDL_INCLUDES += $(FRAMEWORKS_BASE_JAVA_SRC_DIRS)
 
 LOCAL_INTERMEDIATE_SOURCES := \
-			$(framework-res-source-path)/android/R.java \
-			$(framework-res-source-path)/android/Manifest.java \
-			$(framework-res-source-path)/com/android/internal/R.java
+			$(framework_res_source_path)/android/R.java \
+			$(framework_res_source_path)/android/Manifest.java \
+			$(framework_res_source_path)/com/android/internal/R.java
 
 LOCAL_NO_STANDARD_LIBRARIES := true
-LOCAL_JAVA_LIBRARIES := core ext
+LOCAL_JAVA_LIBRARIES := bouncycastle core core-junit ext
 
 LOCAL_MODULE := framework
 LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+
+LOCAL_NO_EMMA_INSTRUMENT := true
+LOCAL_NO_EMMA_COMPILE := true
 
 # List of classes and interfaces which should be loaded by the Zygote.
 LOCAL_JAVA_RESOURCE_FILES += $(LOCAL_PATH)/preloaded-classes
@@ -237,6 +249,10 @@ aidl_files := \
 	frameworks/base/core/java/android/content/res/Configuration.aidl \
 	frameworks/base/core/java/android/appwidget/AppWidgetProviderInfo.aidl \
 	frameworks/base/core/java/android/net/Uri.aidl \
+	frameworks/base/core/java/android/nfc/NdefMessage.aidl \
+	frameworks/base/core/java/android/nfc/NdefRecord.aidl \
+	frameworks/base/core/java/android/nfc/Tag.aidl \
+	frameworks/base/core/java/android/nfc/NdefTag.aidl \
 	frameworks/base/core/java/android/os/Bundle.aidl \
 	frameworks/base/core/java/android/os/DropBoxManager.aidl \
 	frameworks/base/core/java/android/os/ParcelFileDescriptor.aidl \
@@ -294,38 +310,18 @@ fwbase_dirs_to_document := \
 # as "final" in the official SDK APIs.
 fwbase_dirs_to_document += core/config/sdk
 
-# These are relative to dalvik/libcore
+# These are relative to libcore
 # Intentionally not included from libcore:
 #     icu openssl suncompat support
 libcore_to_document := \
-	annotation/src/main/java/java \
-	archive/src/main/java/java \
-	auth/src/main/java/javax \
-	awt-kernel/src/main/java/java \
-	concurrent/src/main/java \
-	crypto/src/main/java/javax \
 	dalvik/src/main/java/dalvik \
 	json/src/main/java \
 	junit/src/main/java \
-	logging/src/main/java/java \
 	luni/src/main/java/java \
-	luni-kernel/src/main/java/java \
-	math/src/main/java/java \
-	nio/src/main/java/java \
-	nio_char/src/main/java/java \
-	prefs/src/main/java/java \
-	regex/src/main/java/java \
-	security/src/main/java/java \
-	security/src/main/java/javax \
-	security-kernel/src/main/java/java \
-	sql/src/main/java/java \
-	sql/src/main/java/javax \
-	text/src/main/java/java \
-	x-net/src/main/java/javax \
-	xml/src/main/java/javax \
-	xml/src/main/java/org/xml/sax \
+	luni/src/main/java/javax \
+	luni/src/main/java/org/xml/sax \
+	luni/src/main/java/org/w3c \
 	xml/src/main/java/org/xmlpull/v1 \
-	xml/src/main/java/org/w3c
 
 non_base_dirs := \
 	../../external/apache-http/src/org/apache/http
@@ -334,7 +330,7 @@ non_base_dirs := \
 dirs_to_document := \
 	$(fwbase_dirs_to_document) \
 	$(non_base_dirs) \
-	$(addprefix ../../dalvik/libcore/, $(libcore_to_document))
+	$(addprefix ../../libcore/, $(libcore_to_document))
 
 html_dirs := \
 	$(FRAMEWORKS_BASE_SUBDIRS) \
@@ -345,24 +341,30 @@ framework_docs_LOCAL_SRC_FILES := \
 	$(call find-other-java-files, $(dirs_to_document)) \
 	$(call find-other-html-files, $(html_dirs))
 
+# This is used by ide.mk as the list of source files that are
+# always included.
+INTERNAL_SDK_SOURCE_DIRS := $(addprefix $(LOCAL_PATH)/,$(dirs_to_document))
+
 framework_docs_LOCAL_DROIDDOC_SOURCE_PATH := \
 	$(FRAMEWORKS_BASE_JAVA_SRC_DIRS)
 
 framework_docs_LOCAL_INTERMEDIATE_SOURCES := \
-			$(framework-res-source-path)/android/R.java \
-			$(framework-res-source-path)/android/Manifest.java \
-			$(framework-res-source-path)/com/android/internal/R.java
+			$(framework_res_source_path)/android/R.java \
+			$(framework_res_source_path)/android/Manifest.java \
+			$(framework_res_source_path)/com/android/internal/R.java
 
 framework_docs_LOCAL_JAVA_LIBRARIES := \
+			bouncycastle \
 			core \
 			ext \
 			framework \
 
 framework_docs_LOCAL_MODULE_CLASS := JAVA_LIBRARIES
-framework_docs_LOCAL_DROIDDOC_HTML_DIR := docs/html
+framework_docs_LOCAL_DROIDDOC_HTML_DIR := $(LOCAL_PATH)/docs/html $(OUT_DOCS)/gen
 # The since flag (-since N.xml API_LEVEL) is used to add API Level information
 # to the reference documentation. Must be in order of oldest to newest.
 framework_docs_LOCAL_DROIDDOC_OPTIONS := \
+    -knowntags ./frameworks/base/docs/knowntags.txt \
     -since ./frameworks/base/api/1.xml 1 \
     -since ./frameworks/base/api/2.xml 2 \
     -since ./frameworks/base/api/3.xml 3 \
@@ -371,10 +373,14 @@ framework_docs_LOCAL_DROIDDOC_OPTIONS := \
     -since ./frameworks/base/api/6.xml 6 \
     -since ./frameworks/base/api/7.xml 7 \
     -since ./frameworks/base/api/8.xml 8 \
-		-error 1 -error 2 -warning 3 -error 4 -error 6 -error 8 \
-		-overview $(LOCAL_PATH)/core/java/overview.html
+    -since ./frameworks/base/api/9.xml 9 \
+    -werror -hide 13 \
+    -overview $(LOCAL_PATH)/core/java/overview.html
 
-framework_docs_LOCAL_ADDITIONAL_JAVA_DIR:=$(call intermediates-dir-for,JAVA_LIBRARIES,framework)
+framework_docs_LOCAL_ADDITIONAL_JAVA_DIR:= $(call intermediates-dir-for,JAVA_LIBRARIES,framework)
+
+framework_docs_LOCAL_ADDITIONAL_DEPENDENCIES := \
+    frameworks/base/docs/knowntags.txt
 
 sample_dir := development/samples
 
@@ -396,6 +402,8 @@ web_docs_sample_code_flags := \
                             resources/samples/CubeLiveWallpaper "Live Wallpaper" \
 		-samplecode $(sample_dir)/Home \
 		            resources/samples/Home "Home" \
+		-samplecode $(sample_dir)/HeavyWeight \
+		            resources/samples/HeavyWeight "Heavy Weight App" \
 		-samplecode $(sample_dir)/JetBoy \
 		            resources/samples/JetBoy "JetBoy" \
 		-samplecode $(sample_dir)/LunarLander \
@@ -404,10 +412,12 @@ web_docs_sample_code_flags := \
 		            resources/samples/MultiResolution "Multiple Resolutions" \
 		-samplecode $(sample_dir)/NotePad \
 		            resources/samples/NotePad "Note Pad" \
-                -samplecode $(sample_dir)/SampleSyncAdapter \
-                            resources/samples/SampleSyncAdapter "Sample Sync Adapter" \
+		-samplecode $(sample_dir)/SampleSyncAdapter \
+		            resources/samples/SampleSyncAdapter "Sample Sync Adapter" \
 		-samplecode $(sample_dir)/SearchableDictionary \
 		            resources/samples/SearchableDictionary "Searchable Dictionary v2" \
+		-samplecode $(sample_dir)/SipDemo \
+		            resources/samples/SipDemo "SIP Demo" \
 		-samplecode $(sample_dir)/Snake \
 		            resources/samples/Snake "Snake" \
 		-samplecode $(sample_dir)/SoftKeyboard \
@@ -425,32 +435,21 @@ web_docs_sample_code_flags := \
 		-samplecode $(sample_dir)/WiktionarySimple \
 		            resources/samples/WiktionarySimple "Wiktionary (Simplified)" \
 		-samplecode $(sample_dir)/VoiceRecognitionService \
-		            resources/samples/VoiceRecognitionService "Voice Recognition Service"
+		            resources/samples/VoiceRecognitionService "Voice Recognition Service" \
+		-samplecode $(sample_dir)/NFCDemo \
+		            resources/samples/NFCDemo "NFC Demo"
 
 ## SDK version identifiers used in the published docs
   # major[.minor] version for current SDK. (full releases only)
 framework_docs_SDK_VERSION:=2.2
   # release version (ie "Release x")  (full releases only)
 framework_docs_SDK_REL_ID:=1
-  # name of current SDK directory (full releases only)
-framework_docs_SDK_CURRENT_DIR:=$(framework_docs_SDK_VERSION)_r$(framework_docs_SDK_REL_ID)
   # flag to build offline docs for a preview release
 framework_docs_SDK_PREVIEW:=0
 
-## Latest ADT version identifiers, for reference from published docs
-framework_docs_ADT_VERSION:=0.9.7
-framework_docs_ADT_DOWNLOAD:=ADT-0.9.7.zip
-framework_docs_ADT_BYTES:=8033750
-framework_docs_ADT_CHECKSUM:=de2431c8d4786d127ae5bfc95b4605df
-
 framework_docs_LOCAL_DROIDDOC_OPTIONS += \
 		-hdf sdk.version $(framework_docs_SDK_VERSION) \
-		-hdf sdk.rel.id $(framework_docs_SDK_REL_ID) \
-		-hdf sdk.current $(framework_docs_SDK_CURRENT_DIR) \
-		-hdf adt.zip.version $(framework_docs_ADT_VERSION) \
-		-hdf adt.zip.download $(framework_docs_ADT_DOWNLOAD) \
-		-hdf adt.zip.bytes $(framework_docs_ADT_BYTES) \
-		-hdf adt.zip.checksum $(framework_docs_ADT_CHECKSUM) 
+		-hdf sdk.rel.id $(framework_docs_SDK_REL_ID)
 
 # ====  the api stubs and current.xml ===========================
 include $(CLEAR_VARS)
@@ -462,6 +461,7 @@ LOCAL_MODULE_CLASS:=$(framework_docs_LOCAL_MODULE_CLASS)
 LOCAL_DROIDDOC_SOURCE_PATH:=$(framework_docs_LOCAL_DROIDDOC_SOURCE_PATH)
 LOCAL_DROIDDOC_HTML_DIR:=$(framework_docs_LOCAL_DROIDDOC_HTML_DIR)
 LOCAL_ADDITIONAL_JAVA_DIR:=$(framework_docs_LOCAL_ADDITIONAL_JAVA_DIR)
+LOCAL_ADDITIONAL_DEPENDENCIES:=$(framework_docs_LOCAL_ADDITIONAL_DEPENDENCIES)
 
 LOCAL_MODULE := api-stubs
 
@@ -480,6 +480,34 @@ $(full_target): $(framework_built)
 $(INTERNAL_PLATFORM_API_FILE): $(full_target)
 $(call dist-for-goals,sdk,$(INTERNAL_PLATFORM_API_FILE))
 
+# ====  check javadoc comments but don't generate docs ========
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES:=$(framework_docs_LOCAL_SRC_FILES)
+LOCAL_INTERMEDIATE_SOURCES:=$(framework_docs_LOCAL_INTERMEDIATE_SOURCES)
+LOCAL_JAVA_LIBRARIES:=$(framework_docs_LOCAL_JAVA_LIBRARIES)
+LOCAL_MODULE_CLASS:=$(framework_docs_LOCAL_MODULE_CLASS)
+LOCAL_DROIDDOC_SOURCE_PATH:=$(framework_docs_LOCAL_DROIDDOC_SOURCE_PATH)
+LOCAL_DROIDDOC_HTML_DIR:=$(framework_docs_LOCAL_DROIDDOC_HTML_DIR)
+LOCAL_ADDITIONAL_JAVA_DIR:=$(framework_docs_LOCAL_ADDITIONAL_JAVA_DIR)
+LOCAL_ADDITIONAL_DEPENDENCIES:=$(framework_docs_LOCAL_ADDITIONAL_DEPENDENCIES)
+
+LOCAL_MODULE := doc-comment-check
+
+LOCAL_DROIDDOC_OPTIONS:=\
+		$(framework_docs_LOCAL_DROIDDOC_OPTIONS) \
+		-parsecomments
+
+LOCAL_DROIDDOC_CUSTOM_TEMPLATE_DIR:=build/tools/droiddoc/templates-sdk
+LOCAL_DROIDDOC_CUSTOM_ASSET_DIR:=assets-sdk
+
+include $(BUILD_DROIDDOC)
+
+# $(gen), i.e. framework.aidl, is also needed while building against the current stub.
+$(full_target): $(framework_built) $(gen)
+
+droidcore: doc-comment-check-docs
+
 # ====  static html in the sdk ==================================
 include $(CLEAR_VARS)
 
@@ -490,6 +518,7 @@ LOCAL_MODULE_CLASS:=$(framework_docs_LOCAL_MODULE_CLASS)
 LOCAL_DROIDDOC_SOURCE_PATH:=$(framework_docs_LOCAL_DROIDDOC_SOURCE_PATH)
 LOCAL_DROIDDOC_HTML_DIR:=$(framework_docs_LOCAL_DROIDDOC_HTML_DIR)
 LOCAL_ADDITIONAL_JAVA_DIR:=$(framework_docs_LOCAL_ADDITIONAL_JAVA_DIR)
+LOCAL_ADDITIONAL_DEPENDENCIES:=$(framework_docs_LOCAL_ADDITIONAL_DEPENDENCIES)
 
 LOCAL_MODULE := offline-sdk
 
@@ -501,10 +530,10 @@ LOCAL_DROIDDOC_OPTIONS:=\
 		-proofread $(OUT_DOCS)/$(LOCAL_MODULE)-proofread.txt \
 		-todo $(OUT_DOCS)/$(LOCAL_MODULE)-docs-todo.html \
 		-sdkvalues $(OUT_DOCS) \
-		-hdf android.whichdoc offline 
+		-hdf android.whichdoc offline
 
 ifeq ($(framework_docs_SDK_PREVIEW),true)
-  LOCAL_DROIDDOC_OPTIONS += -hdf sdk.current preview 
+  LOCAL_DROIDDOC_OPTIONS += -hdf sdk.preview true
 endif
 
 LOCAL_DROIDDOC_CUSTOM_TEMPLATE_DIR:=build/tools/droiddoc/templates-sdk
@@ -533,6 +562,7 @@ LOCAL_MODULE_CLASS:=$(framework_docs_LOCAL_MODULE_CLASS)
 LOCAL_DROIDDOC_SOURCE_PATH:=$(framework_docs_LOCAL_DROIDDOC_SOURCE_PATH)
 LOCAL_DROIDDOC_HTML_DIR:=$(framework_docs_LOCAL_DROIDDOC_HTML_DIR)
 LOCAL_ADDITIONAL_JAVA_DIR:=$(framework_docs_LOCAL_ADDITIONAL_JAVA_DIR)
+LOCAL_ADDITIONAL_DEPENDENCIES:=$(framework_docs_LOCAL_ADDITIONAL_DEPENDENCIES)
 
 LOCAL_MODULE := online-sdk
 
@@ -548,8 +578,8 @@ LOCAL_DROIDDOC_CUSTOM_ASSET_DIR:=assets-sdk
 
 include $(BUILD_DROIDDOC)
 
-# explicitly specify that online-sdk depends on framework-res.
-$(full_target): framework-res-package-target
+# explicitly specify that online-sdk depends on framework-res and any generated docs
+$(full_target): framework-res-package-target $(ALL_GENERATED_DOCS)
 
 # ==== docs that have all of the stuff that's @hidden =======================
 include $(CLEAR_VARS)
@@ -561,6 +591,7 @@ LOCAL_MODULE_CLASS:=$(framework_docs_LOCAL_MODULE_CLASS)
 LOCAL_DROIDDOC_SOURCE_PATH:=$(framework_docs_LOCAL_DROIDDOC_SOURCE_PATH)
 LOCAL_DROIDDOC_HTML_DIR:=$(framework_docs_LOCAL_DROIDDOC_HTML_DIR)
 LOCAL_ADDITIONAL_JAVA_DIR:=$(call intermediates-dir-for,JAVA_LIBRARIES,framework)
+LOCAL_ADDITIONAL_DEPENDENCIES:=$(framework_docs_LOCAL_ADDITIONAL_DEPENDENCIES)
 
 LOCAL_MODULE := hidden
 LOCAL_DROIDDOC_OPTIONS:=\
@@ -577,6 +608,7 @@ include $(BUILD_DROIDDOC)
 # ============================================================
 
 ext_dirs := \
+	../../external/nist-sip/java \
 	../../external/apache-http/src \
 	../../external/tagsoup/src
 
@@ -589,8 +621,11 @@ LOCAL_SRC_FILES := $(ext_src_files)
 
 LOCAL_NO_STANDARD_LIBRARIES := true
 LOCAL_JAVA_LIBRARIES := core
-
+LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := ext
+
+LOCAL_NO_EMMA_INSTRUMENT := true
+LOCAL_NO_EMMA_COMPILE := true
 
 include $(BUILD_JAVA_LIBRARY)
 

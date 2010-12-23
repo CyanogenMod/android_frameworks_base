@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-ifeq ($(BUILD_WITH_FULL_STAGEFRIGHT),true)
 
 LOCAL_PATH:= $(call my-dir)
 
@@ -45,7 +44,7 @@ LOCAL_C_INCLUDES := \
     $(TOP)/external/skia/include/utils \
     $(TOP)/external/skia/include/effects \
     $(TOP)/frameworks/base/media/libstagefright \
-    $(TOP)/external/opencore/extern_libs_v2/khronos/openmax/include \
+    $(TOP)/frameworks/base/include/media/stagefright/openmax \
     $(TOP)/frameworks/base/include/ \
     $(TOP)/frameworks/base/
 
@@ -54,5 +53,3 @@ LOCAL_MODULE := jpeg_bench
 LOCAL_MODULE_TAGS := optional
 
 include $(BUILD_EXECUTABLE)
-
-endif

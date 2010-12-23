@@ -1,5 +1,5 @@
 /*
- ** Copyright 2008, HTC Inc.
+ ** Copyright 2008, The Android Open Source Project
  **
  ** Licensed under the Apache License, Version 2.0 (the "License");
  ** you may not use this file except in compliance with the License.
@@ -294,13 +294,11 @@ MediaRecorderClient::MediaRecorderClient(const sp<MediaPlayerService>& service, 
     LOGV("Client constructor");
     mPid = pid;
 
-#if BUILD_WITH_FULL_STAGEFRIGHT
     char value[PROPERTY_VALUE_MAX];
-    if (property_get("media.stagefright.enable-record", value, NULL)
-        && (!strcmp(value, "1") || !strcasecmp(value, "true"))) {
+    if (!property_get("media.stagefright.enable-record", value, NULL)
+        || !strcmp(value, "1") || !strcasecmp(value, "true")) {
         mRecorder = new StagefrightRecorder;
     } else
-#endif
 #ifndef NO_OPENCORE
     {
         mRecorder = new PVMediaRecorder();
@@ -320,7 +318,7 @@ MediaRecorderClient::~MediaRecorderClient()
     release();
 }
 
-status_t MediaRecorderClient::setListener(const sp<IMediaPlayerClient>& listener)
+status_t MediaRecorderClient::setListener(const sp<IMediaRecorderClient>& listener)
 {
     LOGV("setListener");
     Mutex::Autolock lock(mLock);
@@ -329,6 +327,13 @@ status_t MediaRecorderClient::setListener(const sp<IMediaPlayerClient>& listener
         return NO_INIT;
     }
     return mRecorder->setListener(listener);
+}
+
+status_t MediaRecorderClient::dump(int fd, const Vector<String16>& args) const {
+    if (mRecorder != NULL) {
+        return mRecorder->dump(fd, args);
+    }
+    return OK;
 }
 
 }; // namespace android

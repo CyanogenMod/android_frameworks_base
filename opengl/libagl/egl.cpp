@@ -158,7 +158,6 @@ struct egl_surface_t
     virtual     EGLint      getSwapBehavior() const;
     virtual     EGLBoolean  swapBuffers();
     virtual     EGLBoolean  setSwapRectangle(EGLint l, EGLint t, EGLint w, EGLint h);
-    virtual     EGLClientBuffer getRenderBuffer() const;
 protected:
     GGLSurface              depth;
 };
@@ -202,9 +201,6 @@ EGLBoolean egl_surface_t::setSwapRectangle(
 {
     return EGL_FALSE;
 }
-EGLClientBuffer egl_surface_t::getRenderBuffer() const {
-    return 0;
-}
 
 // ----------------------------------------------------------------------------
 
@@ -213,7 +209,7 @@ struct egl_window_surface_v2_t : public egl_surface_t
     egl_window_surface_v2_t(
             EGLDisplay dpy, EGLConfig config,
             int32_t depthFormat,
-            android_native_window_t* window);
+            ANativeWindow* window);
 
     ~egl_window_surface_v2_t();
 
@@ -230,12 +226,11 @@ struct egl_window_surface_v2_t : public egl_surface_t
     virtual     EGLint      getRefreshRate() const;
     virtual     EGLint      getSwapBehavior() const;
     virtual     EGLBoolean  setSwapRectangle(EGLint l, EGLint t, EGLint w, EGLint h);
-    virtual     EGLClientBuffer  getRenderBuffer() const;
     
 private:
     status_t lock(android_native_buffer_t* buf, int usage, void** vaddr);
     status_t unlock(android_native_buffer_t* buf);
-    android_native_window_t*   nativeWindow;
+    ANativeWindow*   nativeWindow;
     android_native_buffer_t*   buffer;
     android_native_buffer_t*   previousBuffer;
     gralloc_module_t const*    module;
@@ -355,7 +350,7 @@ private:
 egl_window_surface_v2_t::egl_window_surface_v2_t(EGLDisplay dpy,
         EGLConfig config,
         int32_t depthFormat,
-        android_native_window_t* window)
+        ANativeWindow* window)
     : egl_surface_t(dpy, config, depthFormat), 
     nativeWindow(window), buffer(0), previousBuffer(0), module(0),
     blitengine(0), bits(NULL)
@@ -576,41 +571,44 @@ EGLBoolean egl_window_surface_v2_t::swapBuffers()
     buffer = 0;
 
     // dequeue a new buffer
-    nativeWindow->dequeueBuffer(nativeWindow, &buffer);
-    
-    // TODO: lockBuffer should rather be executed when the very first
-    // direct rendering occurs.
-    nativeWindow->lockBuffer(nativeWindow, buffer);
-    
-    // reallocate the depth-buffer if needed
-    if ((width != buffer->width) || (height != buffer->height)) {
-        // TODO: we probably should reset the swap rect here
-        // if the window size has changed
-        width = buffer->width;
-        height = buffer->height;
-        if (depth.data) {
-            free(depth.data);
-            depth.width   = width;
-            depth.height  = height;
-            depth.stride  = buffer->stride;
-            depth.data    = (GGLubyte*)malloc(depth.stride*depth.height*2);
-            if (depth.data == 0) {
-                setError(EGL_BAD_ALLOC, EGL_FALSE);
-                return EGL_FALSE;
+    if (nativeWindow->dequeueBuffer(nativeWindow, &buffer) == NO_ERROR) {
+
+        // TODO: lockBuffer should rather be executed when the very first
+        // direct rendering occurs.
+        nativeWindow->lockBuffer(nativeWindow, buffer);
+
+        // reallocate the depth-buffer if needed
+        if ((width != buffer->width) || (height != buffer->height)) {
+            // TODO: we probably should reset the swap rect here
+            // if the window size has changed
+            width = buffer->width;
+            height = buffer->height;
+            if (depth.data) {
+                free(depth.data);
+                depth.width   = width;
+                depth.height  = height;
+                depth.stride  = buffer->stride;
+                depth.data    = (GGLubyte*)malloc(depth.stride*depth.height*2);
+                if (depth.data == 0) {
+                    setError(EGL_BAD_ALLOC, EGL_FALSE);
+                    return EGL_FALSE;
+                }
             }
         }
-    }
-    
-    // keep a reference on the buffer
-    buffer->common.incRef(&buffer->common);
 
-    // finally pin the buffer down
-    if (lock(buffer, GRALLOC_USAGE_SW_READ_OFTEN | 
-            GRALLOC_USAGE_SW_WRITE_OFTEN, &bits) != NO_ERROR) {
-        LOGE("eglSwapBuffers() failed to lock buffer %p (%ux%u)",
-                buffer, buffer->width, buffer->height);
-        return setError(EGL_BAD_ACCESS, EGL_FALSE);
-        // FIXME: we should make sure we're not accessing the buffer anymore
+        // keep a reference on the buffer
+        buffer->common.incRef(&buffer->common);
+
+        // finally pin the buffer down
+        if (lock(buffer, GRALLOC_USAGE_SW_READ_OFTEN |
+                GRALLOC_USAGE_SW_WRITE_OFTEN, &bits) != NO_ERROR) {
+            LOGE("eglSwapBuffers() failed to lock buffer %p (%ux%u)",
+                    buffer, buffer->width, buffer->height);
+            return setError(EGL_BAD_ACCESS, EGL_FALSE);
+            // FIXME: we should make sure we're not accessing the buffer anymore
+        }
+    } else {
+        return setError(EGL_BAD_CURRENT_SURFACE, EGL_FALSE);
     }
 
     return EGL_TRUE;
@@ -622,28 +620,6 @@ EGLBoolean egl_window_surface_v2_t::setSwapRectangle(
     dirtyRegion = Rect(l, t, l+w, t+h);
     return EGL_TRUE;
 }
-
-EGLClientBuffer egl_window_surface_v2_t::getRenderBuffer() const
-{
-    return buffer;
-}
-
-#ifdef LIBAGL_USE_GRALLOC_COPYBITS
-
-static bool supportedCopybitsDestinationFormat(int format) {
-    // Hardware supported
-    switch (format) {
-    case HAL_PIXEL_FORMAT_RGB_565:
-    case HAL_PIXEL_FORMAT_RGBA_8888:
-    case HAL_PIXEL_FORMAT_RGBX_8888:
-    case HAL_PIXEL_FORMAT_RGBA_4444:
-    case HAL_PIXEL_FORMAT_RGBA_5551:
-    case HAL_PIXEL_FORMAT_BGRA_8888:
-        return true;
-    }
-    return false;
-}
-#endif
 
 EGLBoolean egl_window_surface_v2_t::bindDrawSurface(ogles_context_t* gl)
 {
@@ -657,18 +633,6 @@ EGLBoolean egl_window_surface_v2_t::bindDrawSurface(ogles_context_t* gl)
     gl->rasterizer.procs.colorBuffer(gl, &buffer);
     if (depth.data != gl->rasterizer.state.buffers.depth.data)
         gl->rasterizer.procs.depthBuffer(gl, &depth);
-
-#ifdef LIBAGL_USE_GRALLOC_COPYBITS
-    gl->copybits.drawSurfaceBuffer = 0;
-    if (gl->copybits.blitEngine != NULL) {
-        if (supportedCopybitsDestinationFormat(buffer.format)) {
-            buffer_handle_t handle = this->buffer->handle;
-            if (handle != NULL) {
-                gl->copybits.drawSurfaceBuffer = this->buffer;
-            }
-        }
-    }
-#endif // LIBAGL_USE_GRALLOC_COPYBITS
 
     return EGL_TRUE;
 }
@@ -869,6 +833,9 @@ struct config_management_t {
     static bool mask(GLint reqValue, GLint confValue) {
         return (confValue & reqValue) == reqValue;
     }
+    static bool ignore(GLint reqValue, GLint confValue) {
+        return true;
+    }
 };
 
 // ----------------------------------------------------------------------------
@@ -876,14 +843,13 @@ struct config_management_t {
 #define VERSION_MAJOR 1
 #define VERSION_MINOR 2
 static char const * const gVendorString     = "Google Inc.";
-static char const * const gVersionString    = "1.2 Android Driver 1.1.0";
+static char const * const gVersionString    = "1.2 Android Driver 1.2.0";
 static char const * const gClientApiString  = "OpenGL ES";
 static char const * const gExtensionsString =
         "EGL_KHR_image_base "
         // "KHR_image_pixmap "
         "EGL_ANDROID_image_native_buffer "
         "EGL_ANDROID_swap_rectangle "
-        "EGL_ANDROID_get_render_buffer "
         ;
 
 // ----------------------------------------------------------------------------
@@ -936,8 +902,6 @@ static const extention_map_t gExtentionMap[] = {
             (__eglMustCastToProperFunctionPointerType)&eglDestroyImageKHR }, 
     { "eglSetSwapRectangleANDROID", 
             (__eglMustCastToProperFunctionPointerType)&eglSetSwapRectangleANDROID }, 
-    { "eglGetRenderBufferANDROID", 
-            (__eglMustCastToProperFunctionPointerType)&eglGetRenderBufferANDROID }, 
 };
 
 /*
@@ -986,6 +950,7 @@ static config_pair_t const config_0_attribute_list[] = {
         { EGL_RED_SIZE,         5 },
         { EGL_DEPTH_SIZE,       0 },
         { EGL_CONFIG_ID,        0 },
+        { EGL_NATIVE_VISUAL_ID, GGL_PIXEL_FORMAT_RGB_565 },
         { EGL_SURFACE_TYPE,     EGL_WINDOW_BIT|EGL_PBUFFER_BIT|EGL_PIXMAP_BIT },
 };
 
@@ -997,6 +962,7 @@ static config_pair_t const config_1_attribute_list[] = {
         { EGL_RED_SIZE,         5 },
         { EGL_DEPTH_SIZE,      16 },
         { EGL_CONFIG_ID,        1 },
+        { EGL_NATIVE_VISUAL_ID, GGL_PIXEL_FORMAT_RGB_565 },
         { EGL_SURFACE_TYPE,     EGL_WINDOW_BIT|EGL_PBUFFER_BIT|EGL_PIXMAP_BIT },
 };
 
@@ -1009,6 +975,7 @@ static config_pair_t const config_2_attribute_list[] = {
         { EGL_RED_SIZE,         8 },
         { EGL_DEPTH_SIZE,       0 },
         { EGL_CONFIG_ID,        6 },
+        { EGL_NATIVE_VISUAL_ID, GGL_PIXEL_FORMAT_RGBX_8888 },
         { EGL_SURFACE_TYPE,     EGL_WINDOW_BIT|EGL_PBUFFER_BIT|EGL_PIXMAP_BIT },
 };
 
@@ -1020,6 +987,7 @@ static config_pair_t const config_3_attribute_list[] = {
         { EGL_RED_SIZE,         8 },
         { EGL_DEPTH_SIZE,      16 },
         { EGL_CONFIG_ID,        7 },
+        { EGL_NATIVE_VISUAL_ID, GGL_PIXEL_FORMAT_RGBX_8888 },
         { EGL_SURFACE_TYPE,     EGL_WINDOW_BIT|EGL_PBUFFER_BIT|EGL_PIXMAP_BIT },
 };
 
@@ -1032,6 +1000,7 @@ static config_pair_t const config_4_attribute_list[] = {
         { EGL_RED_SIZE,         8 },
         { EGL_DEPTH_SIZE,       0 },
         { EGL_CONFIG_ID,        2 },
+        { EGL_NATIVE_VISUAL_ID, GGL_PIXEL_FORMAT_RGBA_8888 },
         { EGL_SURFACE_TYPE,     EGL_WINDOW_BIT|EGL_PBUFFER_BIT|EGL_PIXMAP_BIT },
 };
 
@@ -1043,6 +1012,7 @@ static config_pair_t const config_5_attribute_list[] = {
         { EGL_RED_SIZE,         8 },
         { EGL_DEPTH_SIZE,      16 },
         { EGL_CONFIG_ID,        3 },
+        { EGL_NATIVE_VISUAL_ID, GGL_PIXEL_FORMAT_RGBA_8888 },
         { EGL_SURFACE_TYPE,     EGL_WINDOW_BIT|EGL_PBUFFER_BIT|EGL_PIXMAP_BIT },
 };
 
@@ -1055,6 +1025,7 @@ static config_pair_t const config_6_attribute_list[] = {
         { EGL_RED_SIZE,         0 },
         { EGL_DEPTH_SIZE,       0 },
         { EGL_CONFIG_ID,        4 },
+        { EGL_NATIVE_VISUAL_ID, GGL_PIXEL_FORMAT_A_8 },
         { EGL_SURFACE_TYPE,     EGL_WINDOW_BIT|EGL_PBUFFER_BIT|EGL_PIXMAP_BIT },
 };
 
@@ -1066,6 +1037,7 @@ static config_pair_t const config_7_attribute_list[] = {
         { EGL_RED_SIZE,         0 },
         { EGL_DEPTH_SIZE,      16 },
         { EGL_CONFIG_ID,        5 },
+        { EGL_NATIVE_VISUAL_ID, GGL_PIXEL_FORMAT_A_8 },
         { EGL_SURFACE_TYPE,     EGL_WINDOW_BIT|EGL_PBUFFER_BIT|EGL_PIXMAP_BIT },
 };
 
@@ -1091,11 +1063,11 @@ static config_management_t const gConfigManagement[] = {
         { EGL_CONFIG_CAVEAT,              config_management_t::exact   },
         { EGL_CONFIG_ID,                  config_management_t::exact   },
         { EGL_LEVEL,                      config_management_t::exact   },
-        { EGL_MAX_PBUFFER_HEIGHT,         config_management_t::exact   },
-        { EGL_MAX_PBUFFER_PIXELS,         config_management_t::exact   },
-        { EGL_MAX_PBUFFER_WIDTH,          config_management_t::exact   },
+        { EGL_MAX_PBUFFER_HEIGHT,         config_management_t::ignore   },
+        { EGL_MAX_PBUFFER_PIXELS,         config_management_t::ignore   },
+        { EGL_MAX_PBUFFER_WIDTH,          config_management_t::ignore   },
         { EGL_NATIVE_RENDERABLE,          config_management_t::exact   },
-        { EGL_NATIVE_VISUAL_ID,           config_management_t::exact   },
+        { EGL_NATIVE_VISUAL_ID,           config_management_t::ignore   },
         { EGL_NATIVE_VISUAL_TYPE,         config_management_t::exact   },
         { EGL_SAMPLES,                    config_management_t::exact   },
         { EGL_SAMPLE_BUFFERS,             config_management_t::exact   },
@@ -1300,7 +1272,7 @@ static EGLSurface createWindowSurface(EGLDisplay dpy, EGLConfig config,
     if (!(surfaceType & EGL_WINDOW_BIT))
         return setError(EGL_BAD_MATCH, EGL_NO_SURFACE);
 
-    if (static_cast<android_native_window_t*>(window)->common.magic !=
+    if (static_cast<ANativeWindow*>(window)->common.magic !=
             ANDROID_NATIVE_WINDOW_MAGIC) {
         return setError(EGL_BAD_NATIVE_WINDOW, EGL_NO_SURFACE);
     }
@@ -1323,7 +1295,7 @@ static EGLSurface createWindowSurface(EGLDisplay dpy, EGLConfig config,
 
     egl_surface_t* surface;
     surface = new egl_window_surface_v2_t(dpy, config, depthFormat,
-            static_cast<android_native_window_t*>(window));
+            static_cast<ANativeWindow*>(window));
 
     if (!surface->initCheck()) {
         // there was a problem in the ctor, the error
@@ -1525,8 +1497,13 @@ EGLBoolean eglChooseConfig( EGLDisplay dpy, const EGLint *attrib_list,
     }
 
     if (ggl_unlikely(attrib_list==0)) {
-        *num_config = 0;
-        return EGL_TRUE;
+        /*
+         * A NULL attrib_list should be treated as though it was an empty
+         * one (terminated with EGL_NONE) as defined in
+         * section 3.4.1 "Querying Configurations" in the EGL specification.
+         */
+        static const EGLint dummy = EGL_NONE;
+        attrib_list = &dummy;
     }
 
     int numAttributes = 0;
@@ -2149,19 +2126,4 @@ EGLBoolean eglSetSwapRectangleANDROID(EGLDisplay dpy, EGLSurface draw,
     d->setSwapRectangle(left, top, width, height);
 
     return EGL_TRUE;
-}
-
-EGLClientBuffer eglGetRenderBufferANDROID(EGLDisplay dpy, EGLSurface draw)
-{
-    if (egl_display_t::is_valid(dpy) == EGL_FALSE)
-        return setError(EGL_BAD_DISPLAY, (EGLClientBuffer)0);
-
-    egl_surface_t* d = static_cast<egl_surface_t*>(draw);
-    if (!d->isValid())
-        return setError(EGL_BAD_SURFACE, (EGLClientBuffer)0);
-    if (d->dpy != dpy)
-        return setError(EGL_BAD_DISPLAY, (EGLClientBuffer)0);
-
-    // post the surface
-    return d->getRenderBuffer();
 }

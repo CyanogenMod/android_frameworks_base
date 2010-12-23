@@ -58,6 +58,12 @@ private:
     int64_t mAnchorTimeUs;
     int64_t mNumSamplesOutput;
     int64_t mPendingSeekTimeUs;
+    MediaSource::ReadOptions::SeekMode mPendingSeekMode;
+
+    int64_t mTargetTimeUs;
+
+    bool mSPSSeen;
+    bool mPPSSeen;
 
     void addCodecSpecificData(const uint8_t *data, size_t size);
 
@@ -75,6 +81,8 @@ private:
     int32_t bindFrame(int32_t index, uint8_t **yuv);
 
     void releaseFrames();
+
+    MediaBuffer *drainOutputBuffer();
 
     AVCDecoder(const AVCDecoder &);
     AVCDecoder &operator=(const AVCDecoder &);

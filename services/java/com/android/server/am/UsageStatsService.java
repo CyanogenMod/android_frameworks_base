@@ -23,6 +23,8 @@ import android.content.Context;
 import android.os.Binder;
 import android.os.IBinder;
 import com.android.internal.os.PkgUsageStats;
+
+import android.os.FileUtils;
 import android.os.Parcel;
 import android.os.Process;
 import android.os.ServiceManager;
@@ -44,6 +46,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * This service collects the statistics associated with usage
@@ -54,6 +59,7 @@ import java.util.TimeZone;
 public final class UsageStatsService extends IUsageStats.Stub {
     public static final String SERVICE_NAME = "usagestats";
     private static final boolean localLOGV = false;
+    private static final boolean REPORT_UNEXPECTED = false;
     private static final String TAG = "UsageStats";
     
     // Current on-disk Parcel version
@@ -88,11 +94,13 @@ public final class UsageStatsService extends IUsageStats.Stub {
     private boolean mIsResumed;
     private File mFile;
     private String mFileLeaf;
-    //private File mBackupFile;
-    private long mLastWriteElapsedTime;
     private File mDir;
-    private Calendar mCal;
-    private int mLastWriteDay;
+
+    private Calendar mCal; // guarded by itself
+
+    private final AtomicInteger mLastWriteDay = new AtomicInteger(-1);
+    private final AtomicLong mLastWriteElapsedTime = new AtomicLong(0);
+    private final AtomicBoolean mUnforcedDiskWriteRunning = new AtomicBoolean(false);
     
     static class TimeStats {
         int count;
@@ -241,31 +249,33 @@ public final class UsageStatsService extends IUsageStats.Stub {
         mFileLeaf = getCurrentDateStr(FILE_PREFIX);
         mFile = new File(mDir, mFileLeaf);
         readStatsFromFile();
-        mLastWriteElapsedTime = SystemClock.elapsedRealtime();
+        mLastWriteElapsedTime.set(SystemClock.elapsedRealtime());
         // mCal was set by getCurrentDateStr(), want to use that same time.
-        mLastWriteDay = mCal.get(Calendar.DAY_OF_YEAR);
+        mLastWriteDay.set(mCal.get(Calendar.DAY_OF_YEAR));
     }
 
     /*
      * Utility method to convert date into string.
      */
     private String getCurrentDateStr(String prefix) {
-        mCal.setTimeInMillis(System.currentTimeMillis());
         StringBuilder sb = new StringBuilder();
-        if (prefix != null) {
-            sb.append(prefix);
+        synchronized (mCal) {
+            mCal.setTimeInMillis(System.currentTimeMillis());
+            if (prefix != null) {
+                sb.append(prefix);
+            }
+            sb.append(mCal.get(Calendar.YEAR));
+            int mm = mCal.get(Calendar.MONTH) - Calendar.JANUARY +1;
+            if (mm < 10) {
+                sb.append("0");
+            }
+            sb.append(mm);
+            int dd = mCal.get(Calendar.DAY_OF_MONTH);
+            if (dd < 10) {
+                sb.append("0");
+            }
+            sb.append(dd);
         }
-        sb.append(mCal.get(Calendar.YEAR));
-        int mm = mCal.get(Calendar.MONTH) - Calendar.JANUARY +1;
-        if (mm < 10) {
-            sb.append("0");
-        }
-        sb.append(mm);
-        int dd = mCal.get(Calendar.DAY_OF_MONTH);
-        if (dd < 10) {
-            sb.append("0");
-        }
-        sb.append(dd);
         return sb.toString();
     }
     
@@ -360,23 +370,56 @@ public final class UsageStatsService extends IUsageStats.Stub {
             file.delete();
         }
     }
-    
-    private void writeStatsToFile(boolean force) {
-        synchronized (mFileLock) {
+
+    /**
+     * Conditionally start up a disk write if it's been awhile, or the
+     * day has rolled over.
+     *
+     * This is called indirectly from user-facing actions (when
+     * 'force' is false) so it tries to be quick, without writing to
+     * disk directly or acquiring heavy locks.
+     *
+     * @params force  do an unconditional, synchronous stats flush
+     *                to disk on the current thread.
+     */
+    private void writeStatsToFile(final boolean force) {
+        int curDay;
+        synchronized (mCal) {
             mCal.setTimeInMillis(System.currentTimeMillis());
-            final int curDay = mCal.get(Calendar.DAY_OF_YEAR);
-            // Determine if the day changed...  note that this will be wrong
-            // if the year has changed but we are in the same day of year...
-            // we can probably live with this.
-            final boolean dayChanged =  curDay != mLastWriteDay;
-            long currElapsedTime = SystemClock.elapsedRealtime();
-            if (!force) {
-                if (((currElapsedTime-mLastWriteElapsedTime) < FILE_WRITE_INTERVAL) &&
-                        (!dayChanged)) {
-                    // wait till the next update
-                    return;
-                }
+            curDay = mCal.get(Calendar.DAY_OF_YEAR);
+        }
+        final boolean dayChanged = curDay != mLastWriteDay.get();
+
+        // Determine if the day changed...  note that this will be wrong
+        // if the year has changed but we are in the same day of year...
+        // we can probably live with this.
+        final long currElapsedTime = SystemClock.elapsedRealtime();
+
+        // Fast common path, without taking the often-contentious
+        // mFileLock.
+        if (!force) {
+            if (!dayChanged &&
+                (currElapsedTime - mLastWriteElapsedTime.get()) < FILE_WRITE_INTERVAL) {
+                // wait till the next update
+                return;
             }
+            if (mUnforcedDiskWriteRunning.compareAndSet(false, true)) {
+                new Thread("UsageStatsService_DiskWriter") {
+                    public void run() {
+                        try {
+                            if (localLOGV) Slog.d(TAG, "Disk writer thread starting.");
+                            writeStatsToFile(true);
+                        } finally {
+                            mUnforcedDiskWriteRunning.set(false);
+                            if (localLOGV) Slog.d(TAG, "Disk writer thread ending.");
+                        }
+                    }
+                }.start();
+            }
+            return;
+        }
+
+        synchronized (mFileLock) {
             // Get the most recent file
             mFileLeaf = getCurrentDateStr(FILE_PREFIX);
             // Copy current file to back up
@@ -395,10 +438,10 @@ public final class UsageStatsService extends IUsageStats.Stub {
 
             try {
                 // Write mStats to file
-                writeStatsFLOCK();
-                mLastWriteElapsedTime = currElapsedTime;
+                writeStatsFLOCK(mFile);
+                mLastWriteElapsedTime.set(currElapsedTime);
                 if (dayChanged) {
-                    mLastWriteDay = curDay;
+                    mLastWriteDay.set(curDay);
                     // clear stats
                     synchronized (mStats) {
                         mStats.clear();
@@ -418,10 +461,11 @@ public final class UsageStatsService extends IUsageStats.Stub {
                 }
             }
         }
+        if (localLOGV) Slog.d(TAG, "Dumped usage stats.");
     }
 
-    private void writeStatsFLOCK() throws IOException {
-        FileOutputStream stream = new FileOutputStream(mFile);
+    private void writeStatsFLOCK(File file) throws IOException {
+        FileOutputStream stream = new FileOutputStream(file);
         try {
             Parcel out = Parcel.obtain();
             writeStatsToParcelFLOCK(out);
@@ -429,6 +473,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
             out.recycle();
             stream.flush();
         } finally {
+            FileUtils.sync(stream);
             stream.close();
         }
     }
@@ -452,7 +497,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
     }
     
     public void shutdown() {
-        Slog.w(TAG, "Writing usage stats before shutdown...");
+        Slog.i(TAG, "Writing usage stats before shutdown...");
         writeStatsToFile(true);
     }
     
@@ -479,7 +524,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
                 if (mLastResumedPkg != null) {
                     // We last resumed some other package...  just pause it now
                     // to recover.
-                    Slog.i(TAG, "Unexpected resume of " + pkgName
+                    if (REPORT_UNEXPECTED) Slog.i(TAG, "Unexpected resume of " + pkgName
                             + " while already resumed in " + mLastResumedPkg);
                     PkgUsageStatsExtended pus = mStats.get(mLastResumedPkg);
                     if (pus != null) {
@@ -518,7 +563,7 @@ public final class UsageStatsService extends IUsageStats.Stub {
                 return;
             }
             if (!mIsResumed) {
-                Slog.i(TAG, "Something wrong here, didn't expect "
+                if (REPORT_UNEXPECTED) Slog.i(TAG, "Something wrong here, didn't expect "
                         + pkgName + " to be paused");
                 return;
             }

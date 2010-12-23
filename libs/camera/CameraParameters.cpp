@@ -30,6 +30,8 @@ const char CameraParameters::KEY_PREVIEW_FORMAT[] = "preview-format";
 const char CameraParameters::KEY_SUPPORTED_PREVIEW_FORMATS[] = "preview-format-values";
 const char CameraParameters::KEY_PREVIEW_FRAME_RATE[] = "preview-frame-rate";
 const char CameraParameters::KEY_SUPPORTED_PREVIEW_FRAME_RATES[] = "preview-frame-rate-values";
+const char CameraParameters::KEY_PREVIEW_FPS_RANGE[] = "preview-fps-range";
+const char CameraParameters::KEY_SUPPORTED_PREVIEW_FPS_RANGE[] = "preview-fps-range-values";
 const char CameraParameters::KEY_PICTURE_SIZE[] = "picture-size";
 const char CameraParameters::KEY_SUPPORTED_PICTURE_SIZES[] = "picture-size-values";
 const char CameraParameters::KEY_PICTURE_FORMAT[] = "picture-format";
@@ -69,8 +71,11 @@ const char CameraParameters::KEY_MAX_ZOOM[] = "max-zoom";
 const char CameraParameters::KEY_ZOOM_RATIOS[] = "zoom-ratios";
 const char CameraParameters::KEY_ZOOM_SUPPORTED[] = "zoom-supported";
 const char CameraParameters::KEY_SMOOTH_ZOOM_SUPPORTED[] = "smooth-zoom-supported";
+const char CameraParameters::KEY_FOCUS_DISTANCES[] = "focus-distances";
+const char CameraParameters::KEY_VIDEO_FRAME_FORMAT[] = "video-frame-format";
 
 const char CameraParameters::TRUE[] = "true";
+const char CameraParameters::FOCUS_DISTANCE_INFINITY[] = "Infinity";
 
 // Values for white balance settings.
 const char CameraParameters::WHITE_BALANCE_AUTO[] = "auto";
@@ -137,6 +142,7 @@ const char CameraParameters::FOCUS_MODE_INFINITY[] = "infinity";
 const char CameraParameters::FOCUS_MODE_MACRO[] = "macro";
 const char CameraParameters::FOCUS_MODE_FIXED[] = "fixed";
 const char CameraParameters::FOCUS_MODE_EDOF[] = "edof";
+const char CameraParameters::FOCUS_MODE_CONTINUOUS_VIDEO[] = "continuous-video";
 
 CameraParameters::CameraParameters()
                 : mMap()
@@ -258,22 +264,55 @@ void CameraParameters::remove(const char *key)
     mMap.removeItem(String8(key));
 }
 
-static int parse_size(const char *str, int &width, int &height)
+// Parse string like "640x480" or "10000,20000"
+static int parse_pair(const char *str, int *first, int *second, char delim,
+                      char **endptr = NULL)
 {
-    // Find the width.
+    // Find the first integer.
     char *end;
     int w = (int)strtol(str, &end, 10);
-    // If an 'x' does not immediately follow, give up.
-    if (*end != 'x')
+    // If a delimeter does not immediately follow, give up.
+    if (*end != delim) {
+        LOGE("Cannot find delimeter (%c) in str=%s", delim, str);
         return -1;
+    }
 
-    // Find the height, immediately after the 'x'.
-    int h = (int)strtol(end+1, 0, 10);
+    // Find the second integer, immediately after the delimeter.
+    int h = (int)strtol(end+1, &end, 10);
 
-    width = w;
-    height = h;
+    *first = w;
+    *second = h;
+
+    if (endptr) {
+        *endptr = end;
+    }
 
     return 0;
+}
+
+static void parseSizesList(const char *sizesStr, Vector<Size> &sizes)
+{
+    if (sizesStr == 0) {
+        return;
+    }
+
+    char *sizeStartPtr = (char *)sizesStr;
+
+    while (true) {
+        int width, height;
+        int success = parse_pair(sizeStartPtr, &width, &height, 'x',
+                                 &sizeStartPtr);
+        if (success == -1 || (*sizeStartPtr != ',' && *sizeStartPtr != '\0')) {
+            LOGE("Picture sizes string \"%s\" contains invalid character.", sizesStr);
+            return;
+        }
+        sizes.push(Size(width, height));
+
+        if (*sizeStartPtr == '\0') {
+            return;
+        }
+        sizeStartPtr++;
+    }
 }
 
 void CameraParameters::setPreviewSize(int width, int height)
@@ -285,19 +324,17 @@ void CameraParameters::setPreviewSize(int width, int height)
 
 void CameraParameters::getPreviewSize(int *width, int *height) const
 {
-    *width = -1;
-    *height = -1;
-
+    *width = *height = -1;
     // Get the current string, if it doesn't exist, leave the -1x-1
     const char *p = get(KEY_PREVIEW_SIZE);
-    if (p == 0)
-        return;
+    if (p == 0)  return;
+    parse_pair(p, width, height, 'x');
+}
 
-    int w, h;
-    if (parse_size(p, w, h) == 0) {
-        *width = w;
-        *height = h;
-    }
+void CameraParameters::getSupportedPreviewSizes(Vector<Size> &sizes) const
+{
+    const char *previewSizesStr = get(KEY_SUPPORTED_PREVIEW_SIZES);
+    parseSizesList(previewSizesStr, sizes);
 }
 
 void CameraParameters::setPreviewFrameRate(int fps)
@@ -308,6 +345,14 @@ void CameraParameters::setPreviewFrameRate(int fps)
 int CameraParameters::getPreviewFrameRate() const
 {
     return getInt(KEY_PREVIEW_FRAME_RATE);
+}
+
+void CameraParameters::getPreviewFpsRange(int *min_fps, int *max_fps) const
+{
+    *min_fps = *max_fps = -1;
+    const char *p = get(KEY_PREVIEW_FPS_RANGE);
+    if (p == 0) return;
+    parse_pair(p, min_fps, max_fps, ',');
 }
 
 void CameraParameters::setPreviewFormat(const char *format)
@@ -329,19 +374,17 @@ void CameraParameters::setPictureSize(int width, int height)
 
 void CameraParameters::getPictureSize(int *width, int *height) const
 {
-    *width = -1;
-    *height = -1;
-
+    *width = *height = -1;
     // Get the current string, if it doesn't exist, leave the -1x-1
     const char *p = get(KEY_PICTURE_SIZE);
-    if (p == 0)
-        return;
+    if (p == 0) return;
+    parse_pair(p, width, height, 'x');
+}
 
-    int w, h;
-    if (parse_size(p, w, h) == 0) {
-        *width = w;
-        *height = h;
-    }
+void CameraParameters::getSupportedPictureSizes(Vector<Size> &sizes) const
+{
+    const char *pictureSizesStr = get(KEY_SUPPORTED_PICTURE_SIZES);
+    parseSizesList(pictureSizesStr, sizes);
 }
 
 void CameraParameters::setPictureFormat(const char *format)

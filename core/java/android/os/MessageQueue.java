@@ -16,13 +16,11 @@
 
 package android.os;
 
-import java.util.ArrayList;
-
 import android.util.AndroidRuntimeException;
 import android.util.Config;
 import android.util.Log;
 
-import com.android.internal.os.RuntimeInit;
+import java.util.ArrayList;
 
 /**
  * Low-level class holding the list of messages to be dispatched by a
@@ -34,10 +32,22 @@ import com.android.internal.os.RuntimeInit;
  */
 public class MessageQueue {
     Message mMessages;
-    private final ArrayList mIdleHandlers = new ArrayList();
-    private boolean mQuiting = false;
+    private final ArrayList<IdleHandler> mIdleHandlers = new ArrayList<IdleHandler>();
+    private IdleHandler[] mPendingIdleHandlers;
+    private boolean mQuiting;
     boolean mQuitAllowed = true;
+
+    // Indicates whether next() is blocked waiting in pollOnce() with a non-zero timeout.
+    private boolean mBlocked;
+
+    @SuppressWarnings("unused")
+    private int mPtr; // used by native code
     
+    private native void nativeInit();
+    private native void nativeDestroy();
+    private native void nativePollOnce(int ptr, int timeoutMillis);
+    private native void nativeWake(int ptr);
+
     /**
      * Callback interface for discovering when a thread is going to block
      * waiting for more messages.
@@ -84,86 +94,92 @@ public class MessageQueue {
             mIdleHandlers.remove(handler);
         }
     }
-
+    
     MessageQueue() {
+        nativeInit();
+    }
+    
+    @Override
+    protected void finalize() throws Throwable {
+        try {
+            nativeDestroy();
+        } finally {
+            super.finalize();
+        }
     }
 
     final Message next() {
-        boolean tryIdle = true;
+        int pendingIdleHandlerCount = -1; // -1 only during first iteration
+        int nextPollTimeoutMillis = 0;
 
-        while (true) {
-            long now;
-            Object[] idlers = null;
-    
-            // Try to retrieve the next message, returning if found.
-            synchronized (this) {
-                now = SystemClock.uptimeMillis();
-                Message msg = pullNextLocked(now);
-                if (msg != null) return msg;
-                if (tryIdle && mIdleHandlers.size() > 0) {
-                    idlers = mIdleHandlers.toArray();
-                }
+        for (;;) {
+            if (nextPollTimeoutMillis != 0) {
+                Binder.flushPendingCommands();
             }
-    
-            // There was no message so we are going to wait...  but first,
-            // if there are any idle handlers let them know.
-            boolean didIdle = false;
-            if (idlers != null) {
-                for (Object idler : idlers) {
-                    boolean keep = false;
-                    try {
-                        didIdle = true;
-                        keep = ((IdleHandler)idler).queueIdle();
-                    } catch (Throwable t) {
-                        Log.wtf("MessageQueue", "IdleHandler threw exception", t);
-                    }
-
-                    if (!keep) {
-                        synchronized (this) {
-                            mIdleHandlers.remove(idler);
-                        }
-                    }
-                }
-            }
-            
-            // While calling an idle handler, a new message could have been
-            // delivered...  so go back and look again for a pending message.
-            if (didIdle) {
-                tryIdle = false;
-                continue;
-            }
+            nativePollOnce(mPtr, nextPollTimeoutMillis);
 
             synchronized (this) {
-                // No messages, nobody to tell about it...  time to wait!
-                try {
-                    if (mMessages != null) {
-                        if (mMessages.when-now > 0) {
-                            Binder.flushPendingCommands();
-                            this.wait(mMessages.when-now);
-                        }
+                // Try to retrieve the next message.  Return if found.
+                final long now = SystemClock.uptimeMillis();
+                final Message msg = mMessages;
+                if (msg != null) {
+                    final long when = msg.when;
+                    if (now >= when) {
+                        mBlocked = false;
+                        mMessages = msg.next;
+                        msg.next = null;
+                        if (Config.LOGV) Log.v("MessageQueue", "Returning message: " + msg);
+                        return msg;
                     } else {
-                        Binder.flushPendingCommands();
-                        this.wait();
+                        nextPollTimeoutMillis = (int) Math.min(when - now, Integer.MAX_VALUE);
+                    }
+                } else {
+                    nextPollTimeoutMillis = -1;
+                }
+
+                // If first time, then get the number of idlers to run.
+                if (pendingIdleHandlerCount < 0) {
+                    pendingIdleHandlerCount = mIdleHandlers.size();
+                }
+                if (pendingIdleHandlerCount == 0) {
+                    // No idle handlers to run.  Loop and wait some more.
+                    mBlocked = true;
+                    continue;
+                }
+
+                if (mPendingIdleHandlers == null) {
+                    mPendingIdleHandlers = new IdleHandler[Math.max(pendingIdleHandlerCount, 4)];
+                }
+                mPendingIdleHandlers = mIdleHandlers.toArray(mPendingIdleHandlers);
+            }
+
+            // Run the idle handlers.
+            // We only ever reach this code block during the first iteration.
+            for (int i = 0; i < pendingIdleHandlerCount; i++) {
+                final IdleHandler idler = mPendingIdleHandlers[i];
+                mPendingIdleHandlers[i] = null; // release the reference to the handler
+
+                boolean keep = false;
+                try {
+                    keep = idler.queueIdle();
+                } catch (Throwable t) {
+                    Log.wtf("MessageQueue", "IdleHandler threw exception", t);
+                }
+
+                if (!keep) {
+                    synchronized (this) {
+                        mIdleHandlers.remove(idler);
                     }
                 }
-                catch (InterruptedException e) {
-                }
             }
-        }
-    }
 
-    final Message pullNextLocked(long now) {
-        Message msg = mMessages;
-        if (msg != null) {
-            if (now >= msg.when) {
-                mMessages = msg.next;
-                if (Config.LOGV) Log.v(
-                    "MessageQueue", "Returning message: " + msg);
-                return msg;
-            }
-        }
+            // Reset the idle handler count to 0 so we do not run them again.
+            pendingIdleHandlerCount = 0;
 
-        return null;
+            // While calling an idle handler, a new message could have been delivered
+            // so go back and look again for a pending message without waiting.
+            nextPollTimeoutMillis = 0;
+        }
     }
 
     final boolean enqueueMessage(Message msg, long when) {
@@ -174,6 +190,7 @@ public class MessageQueue {
         if (msg.target == null && !mQuitAllowed) {
             throw new RuntimeException("Main thread not allowed to quit");
         }
+        final boolean needWake;
         synchronized (this) {
             if (mQuiting) {
                 RuntimeException e = new RuntimeException(
@@ -190,7 +207,7 @@ public class MessageQueue {
             if (p == null || when == 0 || when < p.when) {
                 msg.next = p;
                 mMessages = msg;
-                this.notify();
+                needWake = mBlocked; // new head, might need to wake up
             } else {
                 Message prev = null;
                 while (p != null && p.when <= when) {
@@ -199,8 +216,11 @@ public class MessageQueue {
                 }
                 msg.next = prev.next;
                 prev.next = msg;
-                this.notify();
+                needWake = false; // still waiting on head, no need to wake up
             }
+        }
+        if (needWake) {
+            nativeWake(mPtr);
         }
         return true;
     }
@@ -317,11 +337,4 @@ public class MessageQueue {
         }
     }
     */
-
-    void poke()
-    {
-        synchronized (this) {
-            this.notify();
-        }
-    }
 }

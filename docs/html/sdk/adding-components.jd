@@ -6,7 +6,7 @@ page.title=Adding SDK Components
 <div id="qv">
 <h2>Quickview</h2>
 <ul>
-  <li>Use the Android SDK and AVD Manager to 
+  <li>Use the Android SDK and AVD Manager to
    set up your SDK and keep it up-to-date.</li>
 </ul>
 
@@ -22,11 +22,9 @@ page.title=Adding SDK Components
 </div>
 </div>
 
-<p>Adding and updating components in your Android SDK is fast and easy. To
-perform an update, use the <strong>Android SDK and AVD Manager</strong> to
-install or update the individual SDK components that you need. The Android SDK
-and AVD Manager tool is included in the <a href="index.html">Android SDK 
-download</a>.</p>
+<p>Adding and updating components in your Android SDK is fast and easy. To add or
+update the individual SDK components that you need, use the <em>Android SDK and AVD
+Manager</em> (included in the SDK Tools).</p>
 
 <p>It only takes a couple of clicks to install individual versions of the
 Android platform, new development tools, new documentation, and SDK add-ons. The
@@ -34,47 +32,26 @@ new SDK components are automatically installed into your existing SDK directory,
 so you don't need to update your development environment to specify a new SDK
 location.</p>
 
-<p>Because each version of the Android platform can be installed as an
-individual component of your SDK, you can customize your development environment
-to the Android platforms you are targetting. Testing your app on multiple
-versions of the platform is very important in order to successfully operate on
-as many devices as possible. Be sure to install each version of the Android
-platform with which your app is compatible, then test your apps on <a
-href="{@docRoot}guide/developing/tools/avd.html">AVDs</a> that run each
-platform.</p>
+<p>If you're setting up your Android SDK for the first time,
+see <a href="{@docRoot}sdk/installing.html#components">Installing the SDK</a> for information about
+what components to install.</p>
 
-<p>If you are just getting started and you are not sure what components to install,
-see <a href="installing.html#components">Adding Platforms and Other
-Components</a> for information. </p>
+<p class="note"><strong>Note:</strong> If you develop in Eclipse, you might also need
+to update your ADT plugin when you update your development tools. See the revisions listed in the
+<a href="{@docRoot}sdk/eclipse-adt.html">ADT Plugin for Eclipse</a> document.</p>
 
-<p>If you develop applications using Eclipse, you may also need to update your
-ADT plugin when you update your development tools, in order to compile against
-a new version of the platform. See the revisions listed in the <a
-href="{@docRoot}sdk/tools-notes.html">SDK Tools</a> document for ADT
-Plugin compatibility.</p>
-
-<div style="TEXT-ALIGN:left; width:600px;"> 
-<img src="{@docRoot}images/sdk_manager_packages.png" 
-style="padding-bottom:0;margin-bottom:0;" /> 
-<p class="caption" style="margin:0 0 1.5em 1em;padding:0 0 0
-1em;"><strong>Figure 1.</strong> The Android SDK and AVD Manager's 
-<strong>Available Packages</strong>
-panel, which shows the SDK components that are
+<img src="{@docRoot}images/sdk_manager_packages.png" alt="" />
+<p class="img-caption"><strong>Figure 1.</strong> The Android SDK and AVD Manager's
+<strong>Available Packages</strong> panel, which shows the SDK components that are
 available for you to download into your environment. </p>
-</div> 
+</div>
 
 <h2 id="launching">Launching the Android SDK and AVD Manager</h2>
 
-<p>The Android SDK and AVD Manager is the tool that you use to install and 
+<p>The Android SDK and AVD Manager is the tool that you use to install and
 upgrade SDK components in your development environment. </p>
 
-<p>You can access the tool in any of three ways:</p>
-<ul>
-<li>If you are developing in the Eclipse IDE with the ADT Plugin, you can access
-the tool directly from the Eclipse UI.</li>
-<li>On Windows only, you can launch he tool by double-clicking a script file.</li>
-<li>In all environments, you can access the tool from a command line.</li>
-</ul>
+<p>You can launch the Android SDK and AVD Manager in one of the following ways.</p>
 
 <h4>Launching from Eclipse/ADT</h4>
 
@@ -83,15 +60,15 @@ follow these steps to access the Android SDK and AVD Manager tool:</p>
 
 <ol>
 <li>Open Eclipse</li>
-<li>Select <strong>Window</strong> &gt; <strong>Android SDK and AVD 
+<li>Select <strong>Window</strong> &gt; <strong>Android SDK and AVD
 Manager</strong>.</li>
 </ol>
 
-<h4>Launching from the setup script (Windows only)</h4>
+<h4>Launching from the SDK Manager script (Windows only)</h4>
 
 <p>For Windows only, the SDK includes a script that invokes the Android SDK and
-AVD Manager. To launch the tool using the script, double-click "SDK
-Setup.exe" at the root of the the SDK directory.</p>
+AVD Manager. To launch the tool using the script, double-click {@code SDK
+Manager.exe} at the root of the the SDK directory.</p>
 
 <h4>Launching from a command line</h4>
 
@@ -100,39 +77,41 @@ and AVD Manager tool from the command line: </p>
 
 <ol>
 <li>Navigate to the <code>&lt;<em>sdk</em>&gt;/tools/</code> directory.</li>
-<li>Execute the {@code android} tool command with no options. 
+<li>Execute the {@code android} tool command with no options.
   <pre style="width:400px">$ android</pre></li>
 </ol>
 
 
 <h2 id="InstallingComponents">Installing SDK Components</h2>
 
-<p class="caution"><strong>Important:</strong> Before you install SDK components, 
-we recommend that you disable any antivirus programs that may be running on
-your computer.</p>
+<p class="caution"><strong>Caution:</strong> Before you install SDK components,
+we recommend that you disable any antivirus software that may be running on
+your computer. There are cases in which antivirus software on Windows is known to interfere with the
+installation process, so we suggest you disable your antivirus until installation is
+complete.</p>
 
 <p>Follow these steps to install new SDK components in your environment:</p>
 
 <ol>
   <li>Launch the Android SDK and AVD Manager as described in the section above.</li>
   <li>Select <strong>Available Packages</strong> in the left panel.
-  This will reveal all of the components that are currently available for download 
+  This will reveal all of the components that are currently available for download
   from the SDK repository.</li>
   <li>Select the component(s) you'd like to install and click <strong>Install
-  Selected</strong>. If you aren't sure which packages to select, read <a 
-  href="installing.html#which">Which components do I need?</a>.</li>
-  <li>Verify and accept the components you want and click <strong>Install
-  Accepted</strong>. The components will now be installed into your existing
-  Android SDK directories.</li>
+  Selected</strong>. (If you aren't sure which packages to select, read <a
+  href="installing.html#which">Recommended Components</a>.)</li>
+  <li>Verify and accept the components you want (ensure each one is selected with a green
+checkmark) and click <strong>Install</strong>. The components will now be installed into
+your existing Android SDK directories.</li>
 </ol>
 
-<p>New platforms are automatically saved into the 
-<code>&lt;<em>sdk</em>&gt;/platforms/</code> directory of your SDK;
-new add-ons are saved in the <code>&lt;<em>sdk</em>&gt;/add-ons/</code>
-directory; samples are saved in the 
-<code>&lt;<em>sdk</em>&gt;/samples/android-&lt;<em>level</em>&gt;/</code>; 
+<p>New platforms are automatically saved into the
+<code>&lt;sdk&gt;/platforms/</code> directory of your SDK;
+new add-ons are saved in the <code>&lt;sdk&gt;/add-ons/</code>
+directory; samples are saved in the
+<code>&lt;sdk&gt;/samples/android-&lt;level&gt;/</code>;
 and new documentation is saved in the existing
-<code>&lt;<em>sdk</em>&gt;/docs/</code> directory (old docs are replaced).</p>
+<code>&lt;sdk&gt;/docs/</code> directory (old docs are replaced).</p>
 
 
 <h2 id="UpdatingComponents">Updating SDK Components</h2>
@@ -171,27 +150,32 @@ the "Downloadable SDK Components" section at left.</p>
 
 <p>For example, there may be a dependency between the ADT Plugin for Eclipse and
 the SDK Tools component. When you install the SDK Tools
-component, you would then need to upgrade to the required version of ADT (if you
-are developing in Eclipse). In this case, you would find dependencies listed in
-"Revisions" section of the <a href="{@docRoot}sdk/eclipse-adt.html#notes">ADT
-Plugin Notes</a> and <a href="{@docRoot}sdk/tools-notes.html#notes">SDK Tools
-Notes</a> documents. </p>
+component, you should also upgrade to the required version of ADT (if you
+are developing in Eclipse). In this case,  the major version number for your ADT plugin should
+always match the revision number of your SDK Tools (for example, ADT 8.x requires SDK Tools r8).
+</p>
 
-<p>Additionally, the development tools will notify you with debug warnings
-if there is dependency that you need to address. </p>
+<p>Also make sure that, each time you install a new version of the Android platform, you have
+the latest version of the SDK Platform-tools component. The SDK Platform-tools contain
+tools that are backward compatible with all versions of the Android platform and are
+often updated to support new features in the latest version of the Android platform.</p>
+
+<p>The development tools will notify you with debug warnings if there is dependency that you need to
+address. The SDK and AVD Manager also enforces dependencies by requiring that you download any
+components that are needed by those you have selected.</p>
 
 
 <h2 id="AddingSites">Adding New Sites</h2>
 
-<p>By default, <strong>Available Packages</strong> only shows the default
-repository site, which offers platforms, SDK tools, documentation, the 
-Google APIs Add-on, and other components. You can add other sites that host 
+<p>By default, <strong>Available Packages</strong> displays components available from the
+<em>Android Repository</em> and <em>Third party Add-ons</em>. You can add other sites that host
 their own Android SDK add-ons, then download the SDK add-ons
-from those sites.</p>	
+from those sites.</p>
 
 <p>For example, a mobile carrier or device manufacturer might offer additional
 API libraries that are supported by their own Android-powered devices. In order
-to develop using their libraries, you must install their Android SDK add-on. </p>
+to develop using their libraries, you must install their Android SDK add-on, if it's not already
+available under <em>Third party Add-ons</em>. </p>
 
 <p>If a carrier or device manufacturer has hosted an SDK add-on repository file
 on their web site, follow these steps to add their site to the SDK and AVD
@@ -199,11 +183,12 @@ Manager:</p>
 
 <ol>
   <li>Select <strong>Available Packages</strong> in the left panel.</li>
-  <li>Click <strong>Add Site</strong> and enter the URL of the 
+  <li>Click <strong>Add Add-on Site</strong> and enter the URL of the
 {@code repository.xml} file. Click <strong>OK</strong>.</li>
 </ol>
-<p>Any SDK components available from the site will now be listed under
-<strong>Available Packages</strong>.</p>
+<p>Any SDK components available from the site will now be listed under a new item named
+<strong>User Add-ons</strong>.</p>
+
 
 <h2 id="troubleshooting">Troubleshooting</h2>
 

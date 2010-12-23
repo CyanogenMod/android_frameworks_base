@@ -11,16 +11,18 @@ home=true
                             </div><!-- end homeTitle -->
                             <div id="announcement-block">
                             <!-- total max width is 520px -->
-                                  <img src="{@docRoot}images/home/io-logo.png" alt="Google IO
-2010" width="200" height="41" style="padding:22px 12px;"/>
+                                  <img src="{@docRoot}images/home/market-intl.png" alt="Android
+Market" width="104" height="120" style="padding:10px 60px 5px" />
                                   <div id="announcement" style="width:295px">
-<p>Thanks to everyone who visited us at Google I/O in San Francisco! Stay tuned for
-videos and slides from the Android sessions, which will be posted at the Google I/O web site.</p><p><a
-href="http://code.google.com/events/io/2010/sessions.html#Android">Learn more &raquo;</a></p>
+<p>We're pleased to announce that paid apps are available in more locations of the world! Developers
+from 20 more locations can now sell paid apps on Android Market. Users in more locations will also
+soon be able to purchase apps.</p><p><a
+href="http://android-developers.blogspot.com/2010/09/more-countries-more-sellers-more-buyers.html">
+Learn more &raquo;</a></p>
                                 </div> <!-- end annoucement -->
                             </div> <!-- end annoucement-block -->
                         </div><!-- end topAnnouncement -->
-                        <div id="carouselMain" style="height:200px"> <!-- this height can be
+                        <div id="carouselMain" style="height:205px"> <!-- this height can be
                                                             adjusted based on the content height -->
                         </div>
                             <div class="clearer"></div>
@@ -127,14 +129,14 @@ href="{@docRoot}resources/dashboard/platform-versions.html">Learn more &raquo;</
     'sdk': {
       'layout':"imgLeft",
       'icon':"sdk-small.png",
-      'name':"Android 2.2",
-      'img':"froyo-android.png",
-      'title':"Get Android 2.2!",
-      'desc': "<p>The Android 2.2 platform is now available for the Android SDK, along with new "
-+ "tools, documentation, and a new NDK. "
-+ "For information about new features and APIs, read the "
-+ "<a href='{@docRoot}sdk/android-2.2.html'>version notes</a>.</p>"
-+ "<p>If you have an existing SDK, add Android 2.2 as an "
+      'name':"Android 2.3",
+      'img':"gingerdroid.png",
+      'title':"Android 2.3 is here!",
+      'desc': "<p>Android 2.3 is now available for the Android SDK. In addition, new "
++ "tools and documentation are available, plus a new NDK that offers more than ever. "
++ "For more information about what's in Android 2.3, read the "
++ "<a href='{@docRoot}sdk/android-2.3.html'>version notes</a>.</p>"
++ "<p>If you have an existing SDK, add Android 2.3 as an "
 + "<a href='{@docRoot}sdk/adding-components.html'>SDK "
 + "component</a>. If you're new to Android, install the "
 + "<a href='{@docRoot}sdk/index.html'>SDK starter package</a>."
@@ -163,12 +165,11 @@ href="{@docRoot}resources/dashboard/platform-versions.html">Learn more &raquo;</
       'img':"devphone-large.png",
       'title':"Android Dev Phones",
       'desc': "<p>Run and debug your Android applications directly on one of these "
- + "device. Modify and rebuild the Android operating system, and flash it onto "
- + "the phone. The Android Dev Phones are carrier independent, and available for "
- + "purchase by any developer registered with <a "
- + "href='http://market.android.com/publish'>Android Market</a>.</p><p><a "
- + "href='/guide/developing/device.html#dev-phone-1'>Learn more about the "
- + "Android Dev Phones &raquo;</a></p>"
+ + "devices. Modify and rebuild the Android operating system, and flash it onto "
+ + "the phone. The Android Dev Phones are carrier-independent, and available for "
+ + "purchase by developers through their Android Market publisher accounts.</p><p> "
+ + "<a href='http://market.android.com/publish'>Visit Android Market "
+ + "to learn more &raquo;</a></p>"
     },
 
     'mapskey': {

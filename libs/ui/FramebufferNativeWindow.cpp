@@ -29,6 +29,7 @@
 
 #include <ui/Rect.h>
 #include <ui/FramebufferNativeWindow.h>
+#include <ui/GraphicLog.h>
 
 #include <EGL/egl.h>
 
@@ -67,7 +68,7 @@ private:
  * This implements the (main) framebuffer management. This class is used
  * mostly by SurfaceFlinger, but also by command line GL application.
  * 
- * In fact this is an implementation of android_native_window_t on top of
+ * In fact this is an implementation of ANativeWindow on top of
  * the framebuffer.
  * 
  * Currently it is pretty simple, it manages only two buffers (the front and 
@@ -117,23 +118,23 @@ FramebufferNativeWindow::FramebufferNativeWindow()
         LOGE_IF(err, "fb buffer 1 allocation failed w=%d, h=%d, err=%s",
                 fbDev->width, fbDev->height, strerror(-err));
 
-        const_cast<uint32_t&>(android_native_window_t::flags) = fbDev->flags; 
-        const_cast<float&>(android_native_window_t::xdpi) = fbDev->xdpi;
-        const_cast<float&>(android_native_window_t::ydpi) = fbDev->ydpi;
-        const_cast<int&>(android_native_window_t::minSwapInterval) = 
+        const_cast<uint32_t&>(ANativeWindow::flags) = fbDev->flags; 
+        const_cast<float&>(ANativeWindow::xdpi) = fbDev->xdpi;
+        const_cast<float&>(ANativeWindow::ydpi) = fbDev->ydpi;
+        const_cast<int&>(ANativeWindow::minSwapInterval) = 
             fbDev->minSwapInterval;
-        const_cast<int&>(android_native_window_t::maxSwapInterval) = 
+        const_cast<int&>(ANativeWindow::maxSwapInterval) = 
             fbDev->maxSwapInterval;
     } else {
         LOGE("Couldn't get gralloc module");
     }
 
-    android_native_window_t::setSwapInterval = setSwapInterval;
-    android_native_window_t::dequeueBuffer = dequeueBuffer;
-    android_native_window_t::lockBuffer = lockBuffer;
-    android_native_window_t::queueBuffer = queueBuffer;
-    android_native_window_t::query = query;
-    android_native_window_t::perform = perform;
+    ANativeWindow::setSwapInterval = setSwapInterval;
+    ANativeWindow::dequeueBuffer = dequeueBuffer;
+    ANativeWindow::lockBuffer = lockBuffer;
+    ANativeWindow::queueBuffer = queueBuffer;
+    ANativeWindow::query = query;
+    ANativeWindow::perform = perform;
 }
 
 FramebufferNativeWindow::~FramebufferNativeWindow() 
@@ -168,18 +169,33 @@ status_t FramebufferNativeWindow::compositionComplete()
 }
 
 int FramebufferNativeWindow::setSwapInterval(
-        android_native_window_t* window, int interval) 
+        ANativeWindow* window, int interval) 
 {
     framebuffer_device_t* fb = getSelf(window)->fbDev;
     return fb->setSwapInterval(fb, interval);
 }
 
-int FramebufferNativeWindow::dequeueBuffer(android_native_window_t* window, 
+// only for debugging / logging
+int FramebufferNativeWindow::getCurrentBufferIndex() const
+{
+    Mutex::Autolock _l(mutex);
+    const int index = mCurrentBufferIndex;
+    return index;
+}
+
+int FramebufferNativeWindow::dequeueBuffer(ANativeWindow* window, 
         android_native_buffer_t** buffer)
 {
     FramebufferNativeWindow* self = getSelf(window);
     Mutex::Autolock _l(self->mutex);
     framebuffer_device_t* fb = self->fbDev;
+
+    int index = self->mBufferHead++;
+    if (self->mBufferHead >= self->mNumBuffers)
+        self->mBufferHead = 0;
+
+    GraphicLog& logger(GraphicLog::getInstance());
+    logger.log(GraphicLog::SF_FB_DEQUEUE_BEFORE, index);
 
     // wait for a free buffer
     while (!self->mNumFreeBuffers) {
@@ -187,44 +203,57 @@ int FramebufferNativeWindow::dequeueBuffer(android_native_window_t* window,
     }
     // get this buffer
     self->mNumFreeBuffers--;
-    int index = self->mBufferHead++;
-    if (self->mBufferHead >= self->mNumBuffers)
-        self->mBufferHead = 0;
+    self->mCurrentBufferIndex = index;
 
     *buffer = self->buffers[index].get();
 
+    logger.log(GraphicLog::SF_FB_DEQUEUE_AFTER, index);
     return 0;
 }
 
-int FramebufferNativeWindow::lockBuffer(android_native_window_t* window, 
+int FramebufferNativeWindow::lockBuffer(ANativeWindow* window, 
         android_native_buffer_t* buffer)
 {
     FramebufferNativeWindow* self = getSelf(window);
     Mutex::Autolock _l(self->mutex);
+
+    const int index = self->mCurrentBufferIndex;
+    GraphicLog& logger(GraphicLog::getInstance());
+    logger.log(GraphicLog::SF_FB_LOCK_BEFORE, index);
 
     // wait that the buffer we're locking is not front anymore
     while (self->front == buffer) {
         self->mCondition.wait(self->mutex);
     }
 
+    logger.log(GraphicLog::SF_FB_LOCK_AFTER, index);
+
     return NO_ERROR;
 }
 
-int FramebufferNativeWindow::queueBuffer(android_native_window_t* window, 
+int FramebufferNativeWindow::queueBuffer(ANativeWindow* window, 
         android_native_buffer_t* buffer)
 {
     FramebufferNativeWindow* self = getSelf(window);
     Mutex::Autolock _l(self->mutex);
     framebuffer_device_t* fb = self->fbDev;
     buffer_handle_t handle = static_cast<NativeBuffer*>(buffer)->handle;
+
+    const int index = self->mCurrentBufferIndex;
+    GraphicLog& logger(GraphicLog::getInstance());
+    logger.log(GraphicLog::SF_FB_POST_BEFORE, index);
+
     int res = fb->post(fb, handle);
+
+    logger.log(GraphicLog::SF_FB_POST_AFTER, index);
+
     self->front = static_cast<NativeBuffer*>(buffer);
     self->mNumFreeBuffers++;
     self->mCondition.broadcast();
     return res;
 }
 
-int FramebufferNativeWindow::query(android_native_window_t* window,
+int FramebufferNativeWindow::query(ANativeWindow* window,
         int what, int* value) 
 {
     FramebufferNativeWindow* self = getSelf(window);
@@ -245,7 +274,7 @@ int FramebufferNativeWindow::query(android_native_window_t* window,
     return BAD_VALUE;
 }
 
-int FramebufferNativeWindow::perform(android_native_window_t* window,
+int FramebufferNativeWindow::perform(ANativeWindow* window,
         int operation, ...)
 {
     switch (operation) {

@@ -102,6 +102,14 @@ public class ConnectivityManager
      * it with {@link android.content.Intent#getStringExtra(String)}.
      */
     public static final String EXTRA_EXTRA_INFO = "extraInfo";
+    /**
+     * The lookup key for an int that provides information about
+     * our connection to the internet at large.  0 indicates no connection,
+     * 100 indicates a great connection.  Retrieve it with
+     * {@link android.content.Intent@getIntExtra(String)}.
+     * {@hide}
+     */
+    public static final String EXTRA_INET_CONDITION = "inetCondition";
 
     /**
      * Broadcast Action: The setting for background data usage has changed
@@ -114,6 +122,17 @@ public class ConnectivityManager
     @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
     public static final String ACTION_BACKGROUND_DATA_SETTING_CHANGED =
             "android.net.conn.BACKGROUND_DATA_SETTING_CHANGED";
+
+
+    /**
+     * Broadcast Action: The network connection may not be good
+     * uses {@code ConnectivityManager.EXTRA_INET_CONDITION} and
+     * {@code ConnectivityManager.EXTRA_NETWORK_INFO} to specify
+     * the network and it's condition.
+     * @hide
+     */
+    public static final String INET_CONDITION_ACTION =
+            "android.net.conn.INET_CONDITION_ACTION";
 
     /**
      * Broadcast Action: A tetherable connection has come or gone
@@ -524,5 +543,17 @@ public class ConnectivityManager
         } catch (RemoteException e) {
             return TETHER_ERROR_SERVICE_UNAVAIL;
         }
-   }
+    }
+
+    /**
+     * @param networkType The type of network you want to report on
+     * @param percentage The quality of the connection 0 is bad, 100 is good
+     * {@hide}
+     */
+    public void reportInetCondition(int networkType, int percentage) {
+        try {
+            mService.reportInetCondition(networkType, percentage);
+        } catch (RemoteException e) {
+        }
+    }
 }

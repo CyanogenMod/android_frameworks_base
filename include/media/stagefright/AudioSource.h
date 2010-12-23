@@ -39,6 +39,9 @@ struct AudioSource : public MediaSource {
     virtual status_t stop();
     virtual sp<MetaData> getFormat();
 
+    // Returns the maximum amplitude since last call.
+    int16_t getMaxAmplitude();
+
     virtual status_t read(
             MediaBuffer **buffer, const ReadOptions *options = NULL);
 
@@ -46,12 +49,40 @@ protected:
     virtual ~AudioSource();
 
 private:
-    enum { kMaxBufferSize = 8192 };
+    enum {
+        kMaxBufferSize = 2048,
+
+        // After the initial mute, we raise the volume linearly
+        // over kAutoRampDurationUs.
+        kAutoRampDurationUs = 300000,
+
+        // This is the initial mute duration to suppress
+        // the video recording signal tone
+        kAutoRampStartUs = 700000,
+      };
 
     AudioRecord *mRecord;
     status_t mInitCheck;
     bool mStarted;
+
+    bool mCollectStats;
+    bool mTrackMaxAmplitude;
+    int64_t mStartTimeUs;
+    int16_t mMaxAmplitude;
+    int64_t mPrevSampleTimeUs;
+    int64_t mTotalLostFrames;
+    int64_t mPrevLostBytes;
+    int64_t mInitialReadTimeUs;
+
     MediaBufferGroup *mGroup;
+
+    void trackMaxAmplitude(int16_t *data, int nSamples);
+
+    // This is used to raise the volume from mute to the
+    // actual level linearly.
+    void rampVolume(
+        int32_t startFrame, int32_t rampDurationFrames,
+        uint8_t *data,   size_t bytes);
 
     AudioSource(const AudioSource &);
     AudioSource &operator=(const AudioSource &);

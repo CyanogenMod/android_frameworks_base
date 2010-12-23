@@ -4,6 +4,9 @@
 # Android Asset Packaging Tool
 #
 
+# This tool is prebuilt if we're doing an app-only build.
+ifeq ($(TARGET_BUILD_APPS),)
+
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
@@ -38,7 +41,7 @@ LOCAL_STATIC_LIBRARIES := \
 	libpng
 
 ifeq ($(HOST_OS),linux)
-LOCAL_LDLIBS += -lrt
+LOCAL_LDLIBS += -lrt -lpthread
 endif
 
 # Statically link libz for MinGW (Win SDK under Linux),
@@ -53,3 +56,4 @@ LOCAL_MODULE := aapt
 
 include $(BUILD_HOST_EXECUTABLE)
 
+endif # TARGET_BUILD_APPS

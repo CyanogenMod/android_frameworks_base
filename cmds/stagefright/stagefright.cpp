@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+//#define LOG_NDEBUG 0
+#define LOG_TAG "stagefright"
+#include <media/stagefright/foundation/ADebug.h>
+
 #include <sys/time.h>
 
 #include <stdlib.h>
@@ -25,19 +29,27 @@
 #include <binder/IServiceManager.h>
 #include <binder/ProcessState.h>
 #include <media/IMediaPlayerService.h>
+#include <media/stagefright/foundation/ALooper.h>
+#include "include/ARTSPController.h"
+#include "include/LiveSource.h"
+#include "include/NuCachedSource2.h"
 #include <media/stagefright/AudioPlayer.h>
-#include <media/stagefright/CachingDataSource.h>
-#include <media/stagefright/FileSource.h>
-#include <media/stagefright/HTTPDataSource.h>
+#include <media/stagefright/DataSource.h>
 #include <media/stagefright/JPEGSource.h>
-#include <media/stagefright/MediaDebug.h>
 #include <media/stagefright/MediaDefs.h>
+#include <media/stagefright/MediaErrors.h>
 #include <media/stagefright/MediaExtractor.h>
 #include <media/stagefright/MediaSource.h>
 #include <media/stagefright/MetaData.h>
 #include <media/stagefright/OMXClient.h>
 #include <media/stagefright/OMXCodec.h>
 #include <media/mediametadataretriever.h>
+
+#include <media/stagefright/foundation/hexdump.h>
+#include <media/stagefright/MPEG2TSWriter.h>
+#include <media/stagefright/MPEG4Writer.h>
+
+#include <fcntl.h>
 
 using namespace android;
 
@@ -46,6 +58,8 @@ static long gMaxNumFrames;  // 0 means decode all available.
 static long gReproduceBug;  // if not -1.
 static bool gPreferSoftwareCodec;
 static bool gPlaybackAudio;
+static bool gWriteMP4;
+static String8 gWriteMP4Filename;
 
 static int64_t getNowUs() {
     struct timeval tv;
@@ -54,7 +68,7 @@ static int64_t getNowUs() {
     return (int64_t)tv.tv_usec + tv.tv_sec * 1000000ll;
 }
 
-static void playSource(OMXClient *client, const sp<MediaSource> &source) {
+static void playSource(OMXClient *client, sp<MediaSource> &source) {
     sp<MetaData> meta = source->getFormat();
 
     const char *mime;
@@ -75,6 +89,8 @@ static void playSource(OMXClient *client, const sp<MediaSource> &source) {
         }
     }
 
+    source.clear();
+
     status_t err = rawSource->start();
 
     if (err != OK) {
@@ -85,6 +101,7 @@ static void playSource(OMXClient *client, const sp<MediaSource> &source) {
     if (gPlaybackAudio) {
         AudioPlayer *player = new AudioPlayer(NULL);
         player->setSource(rawSource);
+        rawSource.clear();
 
         player->start(true /* sourceAlreadyStarted */);
 
@@ -95,6 +112,8 @@ static void playSource(OMXClient *client, const sp<MediaSource> &source) {
 
         delete player;
         player = NULL;
+
+        return;
     } else if (gReproduceBug >= 3 && gReproduceBug <= 5) {
         int64_t durationUs;
         CHECK(meta->findInt64(kKeyDuration, &durationUs));
@@ -109,7 +128,7 @@ static void playSource(OMXClient *client, const sp<MediaSource> &source) {
 
             bool shouldSeek = false;
             if (err == INFO_FORMAT_CHANGED) {
-                CHECK_EQ(buffer, NULL);
+                CHECK(buffer == NULL);
 
                 printf("format changed.\n");
                 continue;
@@ -195,7 +214,7 @@ static void playSource(OMXClient *client, const sp<MediaSource> &source) {
             options.clearSeekTo();
 
             if (err != OK) {
-                CHECK_EQ(buffer, NULL);
+                CHECK(buffer == NULL);
 
                 if (err == INFO_FORMAT_CHANGED) {
                     printf("format changed.\n");
@@ -256,6 +275,183 @@ static void playSource(OMXClient *client, const sp<MediaSource> &source) {
     }
 }
 
+////////////////////////////////////////////////////////////////////////////////
+
+struct DetectSyncSource : public MediaSource {
+    DetectSyncSource(const sp<MediaSource> &source);
+
+    virtual status_t start(MetaData *params = NULL);
+    virtual status_t stop();
+    virtual sp<MetaData> getFormat();
+
+    virtual status_t read(
+            MediaBuffer **buffer, const ReadOptions *options);
+
+private:
+    enum StreamType {
+        AVC,
+        MPEG4,
+        H263,
+        OTHER,
+    };
+
+    sp<MediaSource> mSource;
+    StreamType mStreamType;
+
+    DISALLOW_EVIL_CONSTRUCTORS(DetectSyncSource);
+};
+
+DetectSyncSource::DetectSyncSource(const sp<MediaSource> &source)
+    : mSource(source),
+      mStreamType(OTHER) {
+    const char *mime;
+    CHECK(mSource->getFormat()->findCString(kKeyMIMEType, &mime));
+
+    if (!strcasecmp(mime, MEDIA_MIMETYPE_VIDEO_AVC)) {
+        mStreamType = AVC;
+    } else if (!strcasecmp(mime, MEDIA_MIMETYPE_VIDEO_MPEG4)) {
+        mStreamType = MPEG4;
+        CHECK(!"sync frame detection not implemented yet for MPEG4");
+    } else if (!strcasecmp(mime, MEDIA_MIMETYPE_VIDEO_H263)) {
+        mStreamType = H263;
+        CHECK(!"sync frame detection not implemented yet for H.263");
+    }
+}
+
+status_t DetectSyncSource::start(MetaData *params) {
+    return mSource->start(params);
+}
+
+status_t DetectSyncSource::stop() {
+    return mSource->stop();
+}
+
+sp<MetaData> DetectSyncSource::getFormat() {
+    return mSource->getFormat();
+}
+
+static bool isIDRFrame(MediaBuffer *buffer) {
+    const uint8_t *data =
+        (const uint8_t *)buffer->data() + buffer->range_offset();
+    size_t size = buffer->range_length();
+    for (size_t i = 0; i + 3 < size; ++i) {
+        if (!memcmp("\x00\x00\x01", &data[i], 3)) {
+            uint8_t nalType = data[i + 3] & 0x1f;
+            if (nalType == 5) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
+status_t DetectSyncSource::read(
+        MediaBuffer **buffer, const ReadOptions *options) {
+    status_t err = mSource->read(buffer, options);
+
+    if (err != OK) {
+        return err;
+    }
+
+    if (mStreamType == AVC && isIDRFrame(*buffer)) {
+        (*buffer)->meta_data()->setInt32(kKeyIsSyncFrame, true);
+    } else {
+        (*buffer)->meta_data()->setInt32(kKeyIsSyncFrame, true);
+    }
+
+    return OK;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+
+static void writeSourcesToMP4(
+        Vector<sp<MediaSource> > &sources, bool syncInfoPresent) {
+#if 0
+    sp<MPEG4Writer> writer =
+        new MPEG4Writer(gWriteMP4Filename.string());
+#else
+    sp<MPEG2TSWriter> writer =
+        new MPEG2TSWriter(gWriteMP4Filename.string());
+#endif
+
+    // at most one minute.
+    writer->setMaxFileDuration(60000000ll);
+
+    for (size_t i = 0; i < sources.size(); ++i) {
+        sp<MediaSource> source = sources.editItemAt(i);
+
+        CHECK_EQ(writer->addSource(
+                    syncInfoPresent ? source : new DetectSyncSource(source)),
+                (status_t)OK);
+    }
+
+    sp<MetaData> params = new MetaData;
+    params->setInt32(kKeyNotRealTime, true);
+    CHECK_EQ(writer->start(params.get()), (status_t)OK);
+
+    while (!writer->reachedEOS()) {
+        usleep(100000);
+    }
+    writer->stop();
+}
+
+static void performSeekTest(const sp<MediaSource> &source) {
+    CHECK_EQ((status_t)OK, source->start());
+
+    int64_t durationUs;
+    CHECK(source->getFormat()->findInt64(kKeyDuration, &durationUs));
+
+    for (int64_t seekTimeUs = 0; seekTimeUs <= durationUs;
+            seekTimeUs += 60000ll) {
+        MediaSource::ReadOptions options;
+        options.setSeekTo(
+                seekTimeUs, MediaSource::ReadOptions::SEEK_PREVIOUS_SYNC);
+
+        MediaBuffer *buffer;
+        status_t err;
+        for (;;) {
+            err = source->read(&buffer, &options);
+
+            options.clearSeekTo();
+
+            if (err == INFO_FORMAT_CHANGED) {
+                CHECK(buffer == NULL);
+                continue;
+            }
+
+            if (err != OK) {
+                CHECK(buffer == NULL);
+                break;
+            }
+
+            if (buffer->range_length() > 0) {
+                break;
+            }
+
+            CHECK(buffer != NULL);
+
+            buffer->release();
+            buffer = NULL;
+        }
+
+        if (err == OK) {
+            int64_t timeUs;
+            CHECK(buffer->meta_data()->findInt64(kKeyTime, &timeUs));
+
+            printf("%lld\t%lld\t%lld\n", seekTimeUs, timeUs, seekTimeUs - timeUs);
+
+            buffer->release();
+            buffer = NULL;
+        } else {
+            printf("ERROR\n");
+            break;
+        }
+    }
+
+    CHECK_EQ((status_t)OK, source->stop());
+}
+
 static void usage(const char *me) {
     fprintf(stderr, "usage: %s\n", me);
     fprintf(stderr, "       -h(elp)\n");
@@ -268,6 +464,8 @@ static void usage(const char *me) {
     fprintf(stderr, "       -t(humbnail) extract video thumbnail or album art\n");
     fprintf(stderr, "       -s(oftware) prefer software codec\n");
     fprintf(stderr, "       -o playback audio\n");
+    fprintf(stderr, "       -w(rite) filename (write to .mp4 file)\n");
+    fprintf(stderr, "       -k seek test\n");
 }
 
 int main(int argc, char **argv) {
@@ -277,14 +475,19 @@ int main(int argc, char **argv) {
     bool listComponents = false;
     bool dumpProfiles = false;
     bool extractThumbnail = false;
+    bool seekTest = false;
     gNumRepetitions = 1;
     gMaxNumFrames = 0;
     gReproduceBug = -1;
     gPreferSoftwareCodec = false;
     gPlaybackAudio = false;
+    gWriteMP4 = false;
+
+    sp<ALooper> looper;
+    sp<ARTSPController> rtspController;
 
     int res;
-    while ((res = getopt(argc, argv, "han:lm:b:ptso")) >= 0) {
+    while ((res = getopt(argc, argv, "han:lm:b:ptsow:k")) >= 0) {
         switch (res) {
             case 'a':
             {
@@ -320,6 +523,13 @@ int main(int argc, char **argv) {
                 break;
             }
 
+            case 'w':
+            {
+                gWriteMP4 = true;
+                gWriteMP4Filename.setTo(optarg);
+                break;
+            }
+
             case 'p':
             {
                 dumpProfiles = true;
@@ -341,6 +551,12 @@ int main(int argc, char **argv) {
             case 'o':
             {
                 gPlaybackAudio = true;
+                break;
+            }
+
+            case 'k':
+            {
+                seekTest = true;
                 break;
             }
 
@@ -379,10 +595,10 @@ int main(int argc, char **argv) {
         for (int k = 0; k < argc; ++k) {
             const char *filename = argv[k];
 
-            CHECK_EQ(retriever->setDataSource(filename), OK);
+            CHECK_EQ(retriever->setDataSource(filename), (status_t)OK);
             CHECK_EQ(retriever->setMode(
                         METADATA_MODE_FRAME_CAPTURE_AND_METADATA_RETRIEVAL),
-                     OK);
+                     (status_t)OK);
 
             sp<IMemory> mem = retriever->captureFrame();
 
@@ -428,7 +644,7 @@ int main(int argc, char **argv) {
             Vector<CodecCapabilities> results;
             CHECK_EQ(QueryCodecs(omx, kMimeTypes[k],
                                  true, // queryDecoders
-                                 &results), OK);
+                                 &results), (status_t)OK);
 
             for (size_t i = 0; i < results.size(); ++i) {
                 printf("  decoder '%s' supports ",
@@ -477,21 +693,16 @@ int main(int argc, char **argv) {
     status_t err = client.connect();
 
     for (int k = 0; k < argc; ++k) {
+        bool syncInfoPresent = true;
+
         const char *filename = argv[k];
 
-        sp<DataSource> dataSource;
-        if (!strncasecmp("http://", filename, 7)) {
-            dataSource = new HTTPDataSource(filename);
-            if (((HTTPDataSource *)dataSource.get())->connect() != OK) {
-                fprintf(stderr, "failed to connect to HTTP server.\n");
-                return -1;
-            }
-            dataSource = new CachingDataSource(dataSource, 32 * 1024, 20);
-        } else {
-            dataSource = new FileSource(filename);
-        }
+        sp<DataSource> dataSource = DataSource::CreateFromURI(filename);
 
-        if (dataSource == NULL) {
+        if (strncasecmp(filename, "sine:", 5)
+                && strncasecmp(filename, "rtsp://", 7)
+                && strncasecmp(filename, "httplive://", 11)
+                && dataSource == NULL) {
             fprintf(stderr, "Unable to create data source.\n");
             return 1;
         }
@@ -503,10 +714,14 @@ int main(int argc, char **argv) {
             isJPEG = true;
         }
 
+        Vector<sp<MediaSource> > mediaSources;
         sp<MediaSource> mediaSource;
 
         if (isJPEG) {
             mediaSource = new JPEGSource(dataSource);
+            if (gWriteMP4) {
+                mediaSources.push(mediaSource);
+            }
         } else if (!strncasecmp("sine:", filename, 5)) {
             char *end;
             long sampleRate = strtol(filename + 5, &end, 10);
@@ -515,54 +730,131 @@ int main(int argc, char **argv) {
                 sampleRate = 44100;
             }
             mediaSource = new SineSource(sampleRate, 1);
+            if (gWriteMP4) {
+                mediaSources.push(mediaSource);
+            }
         } else {
-            sp<MediaExtractor> extractor = MediaExtractor::Create(dataSource);
-            if (extractor == NULL) {
-                fprintf(stderr, "could not create extractor.\n");
-                return -1;
+            sp<MediaExtractor> extractor;
+
+            if (!strncasecmp("rtsp://", filename, 7)) {
+                if (looper == NULL) {
+                    looper = new ALooper;
+                    looper->start();
+                }
+
+                rtspController = new ARTSPController(looper);
+                status_t err = rtspController->connect(filename);
+                if (err != OK) {
+                    fprintf(stderr, "could not connect to rtsp server.\n");
+                    return -1;
+                }
+
+                extractor = rtspController.get();
+
+                syncInfoPresent = false;
+            } else if (!strncasecmp("httplive://", filename, 11)) {
+                String8 uri("http://");
+                uri.append(filename + 11);
+
+                dataSource = new LiveSource(uri.string());
+                dataSource = new NuCachedSource2(dataSource);
+
+                extractor =
+                    MediaExtractor::Create(
+                            dataSource, MEDIA_MIMETYPE_CONTAINER_MPEG2TS);
+
+                syncInfoPresent = false;
+            } else {
+                extractor = MediaExtractor::Create(dataSource);
+                if (extractor == NULL) {
+                    fprintf(stderr, "could not create extractor.\n");
+                    return -1;
+                }
             }
 
             size_t numTracks = extractor->countTracks();
 
-            sp<MetaData> meta;
-            size_t i;
-            for (i = 0; i < numTracks; ++i) {
-                meta = extractor->getTrackMetaData(
-                        i, MediaExtractor::kIncludeExtensiveMetaData);
+            if (gWriteMP4) {
+                bool haveAudio = false;
+                bool haveVideo = false;
+                for (size_t i = 0; i < numTracks; ++i) {
+                    sp<MediaSource> source = extractor->getTrack(i);
 
-                const char *mime;
-                meta->findCString(kKeyMIMEType, &mime);
+                    const char *mime;
+                    CHECK(source->getFormat()->findCString(
+                                kKeyMIMEType, &mime));
 
-                if (audioOnly && !strncasecmp(mime, "audio/", 6)) {
-                    break;
+                    bool useTrack = false;
+                    if (!haveAudio && !strncasecmp("audio/", mime, 6)) {
+                        haveAudio = true;
+                        useTrack = true;
+                    } else if (!haveVideo && !strncasecmp("video/", mime, 6)) {
+                        haveVideo = true;
+                        useTrack = true;
+                    }
+
+                    if (useTrack) {
+                        mediaSources.push(source);
+
+                        if (haveAudio && haveVideo) {
+                            break;
+                        }
+                    }
+                }
+            } else {
+                sp<MetaData> meta;
+                size_t i;
+                for (i = 0; i < numTracks; ++i) {
+                    meta = extractor->getTrackMetaData(
+                            i, MediaExtractor::kIncludeExtensiveMetaData);
+
+                    const char *mime;
+                    meta->findCString(kKeyMIMEType, &mime);
+
+                    if (audioOnly && !strncasecmp(mime, "audio/", 6)) {
+                        break;
+                    }
+
+                    if (!audioOnly && !strncasecmp(mime, "video/", 6)) {
+                        break;
+                    }
+
+                    meta = NULL;
                 }
 
-                if (!audioOnly && !strncasecmp(mime, "video/", 6)) {
-                    break;
+                if (meta == NULL) {
+                    fprintf(stderr,
+                            "No suitable %s track found. The '-a' option will "
+                            "target audio tracks only, the default is to target "
+                            "video tracks only.\n",
+                            audioOnly ? "audio" : "video");
+                    return -1;
                 }
 
-                meta = NULL;
-            }
+                int64_t thumbTimeUs;
+                if (meta->findInt64(kKeyThumbnailTime, &thumbTimeUs)) {
+                    printf("thumbnailTime: %lld us (%.2f secs)\n",
+                           thumbTimeUs, thumbTimeUs / 1E6);
+                }
 
-            if (meta == NULL) {
-                fprintf(stderr,
-                        "No suitable %s track found. The '-a' option will "
-                        "target audio tracks only, the default is to target "
-                        "video tracks only.\n",
-                        audioOnly ? "audio" : "video");
-                return -1;
+                mediaSource = extractor->getTrack(i);
             }
-
-            int64_t thumbTimeUs;
-            if (meta->findInt64(kKeyThumbnailTime, &thumbTimeUs)) {
-                printf("thumbnailTime: %lld us (%.2f secs)\n",
-                       thumbTimeUs, thumbTimeUs / 1E6);
-            }
-
-            mediaSource = extractor->getTrack(i);
         }
 
-        playSource(&client, mediaSource);
+        if (gWriteMP4) {
+            writeSourcesToMP4(mediaSources, syncInfoPresent);
+        } else if (seekTest) {
+            performSeekTest(mediaSource);
+        } else {
+            playSource(&client, mediaSource);
+        }
+
+        if (rtspController != NULL) {
+            rtspController->disconnect();
+            rtspController.clear();
+
+            sleep(3);
+        }
     }
 
     client.disconnect();

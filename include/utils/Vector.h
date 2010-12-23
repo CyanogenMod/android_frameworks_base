@@ -114,13 +114,19 @@ public:
             ssize_t         appendVector(const Vector<TYPE>& vector);
 
 
+    //! insert an array at a given index
+            ssize_t         insertArrayAt(const TYPE* array, size_t index, size_t length);
+
+    //! append an array at the end of this vector
+            ssize_t         appendArray(const TYPE* array, size_t length);
+
             /*! 
              * add/insert/replace items
              */
              
     //! insert one or several items initialized with their default constructor
     inline  ssize_t         insertAt(size_t index, size_t numItems = 1);
-    //! insert on onr several items initialized from a prototype item
+    //! insert one or several items initialized from a prototype item
             ssize_t         insertAt(const TYPE& prototype_item, size_t index, size_t numItems = 1);
     //! pop the top of the stack (removes the last element). No-op if the stack's empty
     inline  void            pop();
@@ -256,6 +262,16 @@ ssize_t Vector<TYPE>::insertVectorAt(const Vector<TYPE>& vector, size_t index) {
 template<class TYPE> inline
 ssize_t Vector<TYPE>::appendVector(const Vector<TYPE>& vector) {
     return VectorImpl::appendVector(reinterpret_cast<const VectorImpl&>(vector));
+}
+
+template<class TYPE> inline
+ssize_t Vector<TYPE>::insertArrayAt(const TYPE* array, size_t index, size_t length) {
+    return VectorImpl::insertArrayAt(array, index, length);
+}
+
+template<class TYPE> inline
+ssize_t Vector<TYPE>::appendArray(const TYPE* array, size_t length) {
+    return VectorImpl::appendArray(array, length);
 }
 
 template<class TYPE> inline

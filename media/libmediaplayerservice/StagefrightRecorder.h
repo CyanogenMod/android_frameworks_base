@@ -23,8 +23,11 @@
 
 namespace android {
 
+class Camera;
 struct MediaSource;
 struct MediaWriter;
+struct AudioSource;
+class MediaProfiles;
 
 struct StagefrightRecorder : public MediaRecorderBase {
     StagefrightRecorder();
@@ -43,33 +46,92 @@ struct StagefrightRecorder : public MediaRecorderBase {
     virtual status_t setOutputFile(const char *path);
     virtual status_t setOutputFile(int fd, int64_t offset, int64_t length);
     virtual status_t setParameters(const String8& params);
-    virtual status_t setListener(const sp<IMediaPlayerClient>& listener);
+    virtual status_t setListener(const sp<IMediaRecorderClient>& listener);
     virtual status_t prepare();
     virtual status_t start();
+    virtual status_t pause();
     virtual status_t stop();
     virtual status_t close();
     virtual status_t reset();
     virtual status_t getMaxAmplitude(int *max);
+    virtual status_t dump(int fd, const Vector<String16>& args) const;
 
 private:
-    sp<ICamera> mCamera;
+    enum CameraFlags {
+        FLAGS_SET_CAMERA = 1L << 0,
+        FLAGS_HOT_CAMERA = 1L << 1,
+    };
+
+    sp<Camera> mCamera;
     sp<ISurface> mPreviewSurface;
-    sp<IMediaPlayerClient> mListener;
+    sp<IMediaRecorderClient> mListener;
     sp<MediaWriter> mWriter;
+    sp<AudioSource> mAudioSourceNode;
 
     audio_source mAudioSource;
     video_source mVideoSource;
     output_format mOutputFormat;
     audio_encoder mAudioEncoder;
     video_encoder mVideoEncoder;
-    int mVideoWidth, mVideoHeight;
-    int mFrameRate;
+    bool mUse64BitFileOffset;
+    int32_t mVideoWidth, mVideoHeight;
+    int32_t mFrameRate;
+    int32_t mVideoBitRate;
+    int32_t mAudioBitRate;
+    int32_t mAudioChannels;
+    int32_t mSampleRate;
+    int32_t mInterleaveDurationUs;
+    int32_t mIFramesIntervalSec;
+    int32_t mCameraId;
+    int32_t mVideoEncoderProfile;
+    int32_t mVideoEncoderLevel;
+    int32_t mMovieTimeScale;
+    int32_t mVideoTimeScale;
+    int32_t mAudioTimeScale;
+    int64_t mMaxFileSizeBytes;
+    int64_t mMaxFileDurationUs;
+    int64_t mTrackEveryTimeDurationUs;
+    int32_t mRotationDegrees;  // Clockwise
+
     String8 mParams;
     int mOutputFd;
+    int32_t mFlags;
+
+    MediaProfiles *mEncoderProfiles;
 
     status_t startMPEG4Recording();
     status_t startAMRRecording();
-    sp<MediaSource> createAMRAudioSource();
+    status_t startAACRecording();
+    status_t startRTPRecording();
+    status_t startMPEG2TSRecording();
+    sp<MediaSource> createAudioSource();
+    status_t setupCameraSource();
+    status_t setupAudioEncoder(const sp<MediaWriter>& writer);
+    status_t setupVideoEncoder(sp<MediaSource> *source);
+
+    // Encoding parameter handling utilities
+    status_t setParameter(const String8 &key, const String8 &value);
+    status_t setParamAudioEncodingBitRate(int32_t bitRate);
+    status_t setParamAudioNumberOfChannels(int32_t channles);
+    status_t setParamAudioSamplingRate(int32_t sampleRate);
+    status_t setParamAudioTimeScale(int32_t timeScale);
+    status_t setParamVideoEncodingBitRate(int32_t bitRate);
+    status_t setParamVideoIFramesInterval(int32_t seconds);
+    status_t setParamVideoEncoderProfile(int32_t profile);
+    status_t setParamVideoEncoderLevel(int32_t level);
+    status_t setParamVideoCameraId(int32_t cameraId);
+    status_t setParamVideoTimeScale(int32_t timeScale);
+    status_t setParamVideoRotation(int32_t degrees);
+    status_t setParamTrackTimeStatus(int64_t timeDurationUs);
+    status_t setParamInterleaveDuration(int32_t durationUs);
+    status_t setParam64BitFileOffset(bool use64BitFileOffset);
+    status_t setParamMaxFileDurationUs(int64_t timeUs);
+    status_t setParamMaxFileSizeBytes(int64_t bytes);
+    status_t setParamMovieTimeScale(int32_t timeScale);
+    void clipVideoBitRate();
+    void clipVideoFrameRate();
+    void clipVideoFrameWidth();
+    void clipVideoFrameHeight();
 
     StagefrightRecorder(const StagefrightRecorder &);
     StagefrightRecorder &operator=(const StagefrightRecorder &);

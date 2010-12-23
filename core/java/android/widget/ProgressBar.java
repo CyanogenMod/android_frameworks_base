@@ -21,8 +21,9 @@ import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
 import android.graphics.Canvas;
-import android.graphics.Shader;
 import android.graphics.Rect;
+import android.graphics.Shader;
+import android.graphics.drawable.Animatable;
 import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ClipDrawable;
@@ -30,11 +31,14 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
-import android.graphics.drawable.Animatable;
 import android.graphics.drawable.shapes.RoundRectShape;
 import android.graphics.drawable.shapes.Shape;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.RemotableViewMethod;
 import android.view.View;
 import android.view.ViewDebug;
 import android.view.animation.AlphaAnimation;
@@ -44,9 +48,6 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.Transformation;
 import android.widget.RemoteViews.RemoteView;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.os.SystemClock;
 
 import com.android.internal.R;
 
@@ -336,7 +337,7 @@ public class ProgressBar extends View {
      *
      * @return true if the progress bar is in indeterminate mode
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "progress")
     public synchronized boolean isIndeterminate() {
         return mIndeterminate;
     }
@@ -609,7 +610,7 @@ public class ProgressBar extends View {
      * @see #setMax(int)
      * @see #getMax()
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "progress")
     public synchronized int getProgress() {
         return mIndeterminate ? 0 : mProgress;
     }
@@ -626,7 +627,7 @@ public class ProgressBar extends View {
      * @see #setMax(int)
      * @see #getMax()
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "progress")
     public synchronized int getSecondaryProgress() {
         return mIndeterminate ? 0 : mSecondaryProgress;
     }
@@ -640,7 +641,7 @@ public class ProgressBar extends View {
      * @see #getProgress()
      * @see #getSecondaryProgress()
      */
-    @ViewDebug.ExportedProperty
+    @ViewDebug.ExportedProperty(category = "progress")
     public synchronized int getMax() {
         return mMax;
     }
@@ -762,6 +763,7 @@ public class ProgressBar extends View {
     }
 
     @Override
+    @RemotableViewMethod
     public void setVisibility(int v) {
         if (getVisibility() != v) {
             super.setVisibility(v);
@@ -946,5 +948,21 @@ public class ProgressBar extends View {
         
         setProgress(ss.progress);
         setSecondaryProgress(ss.secondaryProgress);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (mIndeterminate) {
+            startAnimation();
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (mIndeterminate) {
+            stopAnimation();
+        }
     }
 }

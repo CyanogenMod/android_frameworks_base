@@ -68,6 +68,7 @@ public class RecoverySystem {
     private static File RECOVERY_DIR = new File("/cache/recovery");
     private static File COMMAND_FILE = new File(RECOVERY_DIR, "command");
     private static File LOG_FILE = new File(RECOVERY_DIR, "log");
+    private static String LAST_LOG_FILENAME = "last_log";
 
     // Length limits for reading files.
     private static int LOG_FILE_MAX_LENGTH = 64 * 1024;
@@ -307,8 +308,10 @@ public class RecoverySystem {
      * Requires the {@link android.Manifest.permission#REBOOT} permission.
      *
      * @param context      the Context to use
-     * @param packageFile  the update package to install.  Currently
-     * must be on the /cache or /data partitions.
+     * @param packageFile  the update package to install.  Must be on
+     * a partition mountable by recovery.  (The set of partitions
+     * known to recovery may vary from device to device.  Generally,
+     * /cache and /data are safe.)
      *
      * @throws IOException  if writing the recovery command file
      * fails, or if the reboot itself fails.
@@ -316,15 +319,6 @@ public class RecoverySystem {
     public static void installPackage(Context context, File packageFile)
         throws IOException {
         String filename = packageFile.getCanonicalPath();
-
-        if (filename.startsWith("/cache/")) {
-            filename = "CACHE:" + filename.substring(7);
-        } else if (filename.startsWith("/data/")) {
-            filename = "DATA:" + filename.substring(6);
-        } else {
-            throw new IllegalArgumentException(
-                "Must start with /cache or /data: " + filename);
-        }
         Log.w(TAG, "!!! REBOOTING TO INSTALL " + filename + " !!!");
         String arg = "--update_package=" + filename;
         bootCommand(context, arg);
@@ -345,6 +339,23 @@ public class RecoverySystem {
     public static void rebootWipeUserData(Context context)
         throws IOException {
         bootCommand(context, "--wipe_data");
+    }
+
+    /**
+     * Reboot into the recovery system to wipe the /data partition and toggle
+     * Encrypted File Systems on/off.
+     * @param extras to add to the RECOVERY_COMPLETED intent after rebooting.
+     * @throws IOException if something goes wrong.
+     *
+     * @hide
+     */
+    public static void rebootToggleEFS(Context context, boolean efsEnabled)
+        throws IOException {
+        if (efsEnabled) {
+            bootCommand(context, "--set_encrypted_filesystem=on");
+        } else {
+            bootCommand(context, "--set_encrypted_filesystem=off");
+        }
     }
 
     /**
@@ -389,9 +400,10 @@ public class RecoverySystem {
             Log.e(TAG, "Error reading recovery log", e);
         }
 
-        // Delete everything in RECOVERY_DIR
+        // Delete everything in RECOVERY_DIR except LAST_LOG_FILENAME
         String[] names = RECOVERY_DIR.list();
         for (int i = 0; names != null && i < names.length; i++) {
+            if (names[i].equals(LAST_LOG_FILENAME)) continue;
             File f = new File(RECOVERY_DIR, names[i]);
             if (!f.delete()) {
                 Log.e(TAG, "Can't delete: " + f);

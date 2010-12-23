@@ -19,11 +19,15 @@
 #include "include/MPEG4Extractor.h"
 #include "include/WAVExtractor.h"
 #include "include/OggExtractor.h"
+#include "include/MPEG2TSExtractor.h"
+#include "include/NuCachedSource2.h"
+#include "include/NuHTTPDataSource.h"
 
-#include <media/stagefright/CachingDataSource.h>
+#include "matroska/MatroskaExtractor.h"
+
+#include <media/stagefright/foundation/AMessage.h>
 #include <media/stagefright/DataSource.h>
 #include <media/stagefright/FileSource.h>
-#include <media/stagefright/HTTPDataSource.h>
 #include <media/stagefright/MediaErrors.h>
 #include <utils/String8.h>
 
@@ -53,19 +57,23 @@ status_t DataSource::getSize(off_t *size) {
 Mutex DataSource::gSnifferMutex;
 List<DataSource::SnifferFunc> DataSource::gSniffers;
 
-bool DataSource::sniff(String8 *mimeType, float *confidence) {
+bool DataSource::sniff(
+        String8 *mimeType, float *confidence, sp<AMessage> *meta) {
     *mimeType = "";
     *confidence = 0.0f;
+    meta->clear();
 
     Mutex::Autolock autoLock(gSnifferMutex);
     for (List<SnifferFunc>::iterator it = gSniffers.begin();
          it != gSniffers.end(); ++it) {
         String8 newMimeType;
         float newConfidence;
-        if ((*it)(this, &newMimeType, &newConfidence)) {
+        sp<AMessage> newMeta;
+        if ((*it)(this, &newMimeType, &newConfidence, &newMeta)) {
             if (newConfidence > *confidence) {
                 *mimeType = newMimeType;
                 *confidence = newConfidence;
+                *meta = newMeta;
             }
         }
     }
@@ -89,11 +97,13 @@ void DataSource::RegisterSniffer(SnifferFunc func) {
 
 // static
 void DataSource::RegisterDefaultSniffers() {
-    RegisterSniffer(SniffMP3);
     RegisterSniffer(SniffMPEG4);
-    RegisterSniffer(SniffAMR);
-    RegisterSniffer(SniffWAV);
+    RegisterSniffer(SniffMatroska);
     RegisterSniffer(SniffOgg);
+    RegisterSniffer(SniffWAV);
+    RegisterSniffer(SniffAMR);
+    RegisterSniffer(SniffMPEG2TS);
+    RegisterSniffer(SniffMP3);
 }
 
 // static
@@ -103,11 +113,11 @@ sp<DataSource> DataSource::CreateFromURI(
     if (!strncasecmp("file://", uri, 7)) {
         source = new FileSource(uri + 7);
     } else if (!strncasecmp("http://", uri, 7)) {
-        sp<HTTPDataSource> httpSource = new HTTPDataSource(uri, headers);
-        if (httpSource->connect() != OK) {
+        sp<NuHTTPDataSource> httpSource = new NuHTTPDataSource;
+        if (httpSource->connect(uri, headers) != OK) {
             return NULL;
         }
-        source = new CachingDataSource(httpSource, 64 * 1024, 10);
+        source = new NuCachedSource2(httpSource);
     } else {
         // Assume it's a filename.
         source = new FileSource(uri);

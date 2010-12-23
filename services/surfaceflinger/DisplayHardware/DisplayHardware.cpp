@@ -1,0 +1,350 @@
+/*
+ * Copyright (C) 2007 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <math.h>
+
+#include <cutils/properties.h>
+
+#include <utils/RefBase.h>
+#include <utils/Log.h>
+
+#include <ui/PixelFormat.h>
+#include <ui/FramebufferNativeWindow.h>
+#include <ui/EGLUtils.h>
+
+#include <GLES/gl.h>
+#include <EGL/egl.h>
+#include <EGL/eglext.h>
+
+#include <pixelflinger/pixelflinger.h>
+
+#include "DisplayHardware/DisplayHardware.h"
+
+#include <hardware/copybit.h>
+#include <hardware/overlay.h>
+#include <hardware/gralloc.h>
+
+#include "GLExtensions.h"
+
+using namespace android;
+
+
+static __attribute__((noinline))
+void checkGLErrors()
+{
+    do {
+        // there could be more than one error flag
+        GLenum error = glGetError();
+        if (error == GL_NO_ERROR)
+            break;
+        LOGE("GL error 0x%04x", int(error));
+    } while(true);
+}
+
+static __attribute__((noinline))
+void checkEGLErrors(const char* token)
+{
+    EGLint error = eglGetError();
+    if (error && error != EGL_SUCCESS) {
+        LOGE("%s: EGL error 0x%04x (%s)",
+                token, int(error), EGLUtils::strerror(error));
+    }
+}
+
+/*
+ * Initialize the display to the specified values.
+ *
+ */
+
+DisplayHardware::DisplayHardware(
+        const sp<SurfaceFlinger>& flinger,
+        uint32_t dpy)
+    : DisplayHardwareBase(flinger, dpy),
+      mFlags(0)
+{
+    init(dpy);
+}
+
+DisplayHardware::~DisplayHardware()
+{
+    fini();
+}
+
+float DisplayHardware::getDpiX() const          { return mDpiX; }
+float DisplayHardware::getDpiY() const          { return mDpiY; }
+float DisplayHardware::getDensity() const       { return mDensity; }
+float DisplayHardware::getRefreshRate() const   { return mRefreshRate; }
+int DisplayHardware::getWidth() const           { return mWidth; }
+int DisplayHardware::getHeight() const          { return mHeight; }
+PixelFormat DisplayHardware::getFormat() const  { return mFormat; }
+uint32_t DisplayHardware::getMaxTextureSize() const { return mMaxTextureSize; }
+uint32_t DisplayHardware::getMaxViewportDims() const { return mMaxViewportDims; }
+
+void DisplayHardware::init(uint32_t dpy)
+{
+    mNativeWindow = new FramebufferNativeWindow();
+    framebuffer_device_t const * fbDev = mNativeWindow->getDevice();
+    mDpiX = mNativeWindow->xdpi;
+    mDpiY = mNativeWindow->ydpi;
+    mRefreshRate = fbDev->fps;
+
+    mOverlayEngine = NULL;
+    hw_module_t const* module;
+    if (hw_get_module(OVERLAY_HARDWARE_MODULE_ID, &module) == 0) {
+        overlay_control_open(module, &mOverlayEngine);
+    }
+
+    EGLint w, h, dummy;
+    EGLint numConfigs=0;
+    EGLSurface surface;
+    EGLContext context;
+
+    // initialize EGL
+    EGLint attribs[] = {
+            EGL_SURFACE_TYPE,   EGL_WINDOW_BIT,
+            EGL_NONE,           0,
+            EGL_NONE
+    };
+
+    // debug: disable h/w rendering
+    char property[PROPERTY_VALUE_MAX];
+    if (property_get("debug.sf.hw", property, NULL) > 0) {
+        if (atoi(property) == 0) {
+            LOGW("H/W composition disabled");
+            attribs[2] = EGL_CONFIG_CAVEAT;
+            attribs[3] = EGL_SLOW_CONFIG;
+        }
+    }
+
+    // TODO: all the extensions below should be queried through
+    // eglGetProcAddress().
+
+    EGLDisplay display = eglGetDisplay(EGL_DEFAULT_DISPLAY);
+    eglInitialize(display, NULL, NULL);
+    eglGetConfigs(display, NULL, 0, &numConfigs);
+
+    EGLConfig config;
+    status_t err = EGLUtils::selectConfigForNativeWindow(
+            display, attribs, mNativeWindow.get(), &config);
+    LOGE_IF(err, "couldn't find an EGLConfig matching the screen format");
+    
+    EGLint r,g,b,a;
+    eglGetConfigAttrib(display, config, EGL_RED_SIZE,   &r);
+    eglGetConfigAttrib(display, config, EGL_GREEN_SIZE, &g);
+    eglGetConfigAttrib(display, config, EGL_BLUE_SIZE,  &b);
+    eglGetConfigAttrib(display, config, EGL_ALPHA_SIZE, &a);
+
+    if (mNativeWindow->isUpdateOnDemand()) {
+        mFlags |= PARTIAL_UPDATES;
+    }
+    
+    if (eglGetConfigAttrib(display, config, EGL_CONFIG_CAVEAT, &dummy) == EGL_TRUE) {
+        if (dummy == EGL_SLOW_CONFIG)
+            mFlags |= SLOW_CONFIG;
+    }
+
+    /*
+     * Create our main surface
+     */
+
+    surface = eglCreateWindowSurface(display, config, mNativeWindow.get(), NULL);
+    eglQuerySurface(display, surface, EGL_WIDTH,  &mWidth);
+    eglQuerySurface(display, surface, EGL_HEIGHT, &mHeight);
+
+    if (mFlags & PARTIAL_UPDATES) {
+        // if we have partial updates, we definitely don't need to
+        // preserve the backbuffer, which may be costly.
+        eglSurfaceAttrib(display, surface,
+                EGL_SWAP_BEHAVIOR, EGL_BUFFER_DESTROYED);
+    }
+
+    if (eglQuerySurface(display, surface, EGL_SWAP_BEHAVIOR, &dummy) == EGL_TRUE) {
+        if (dummy == EGL_BUFFER_PRESERVED) {
+            mFlags |= BUFFER_PRESERVED;
+        }
+    }
+    
+    /* Read density from build-specific ro.sf.lcd_density property
+     * except if it is overridden by qemu.sf.lcd_density.
+     */
+    if (property_get("qemu.sf.lcd_density", property, NULL) <= 0) {
+        if (property_get("ro.sf.lcd_density", property, NULL) <= 0) {
+            LOGW("ro.sf.lcd_density not defined, using 160 dpi by default.");
+            strcpy(property, "160");
+        }
+    } else {
+        /* for the emulator case, reset the dpi values too */
+        mDpiX = mDpiY = atoi(property);
+    }
+    mDensity = atoi(property) * (1.0f/160.0f);
+
+
+    /*
+     * Create our OpenGL ES context
+     */
+    
+
+    EGLint contextAttributes[] = {
+#ifdef EGL_IMG_context_priority
+#ifdef HAS_CONTEXT_PRIORITY
+#warning "using EGL_IMG_context_priority"
+        EGL_CONTEXT_PRIORITY_LEVEL_IMG, EGL_CONTEXT_PRIORITY_HIGH_IMG,
+#endif
+#endif
+        EGL_NONE, EGL_NONE
+    };
+    context = eglCreateContext(display, config, NULL, contextAttributes);
+
+    mDisplay = display;
+    mConfig  = config;
+    mSurface = surface;
+    mContext = context;
+    mFormat  = fbDev->format;
+    mPageFlipCount = 0;
+
+    /*
+     * Gather OpenGL ES extensions
+     */
+
+    eglMakeCurrent(display, surface, surface, context);
+
+    GLExtensions& extensions(GLExtensions::getInstance());
+    extensions.initWithGLStrings(
+            glGetString(GL_VENDOR),
+            glGetString(GL_RENDERER),
+            glGetString(GL_VERSION),
+            glGetString(GL_EXTENSIONS),
+            eglQueryString(display, EGL_VENDOR),
+            eglQueryString(display, EGL_VERSION),
+            eglQueryString(display, EGL_EXTENSIONS));
+
+    glGetIntegerv(GL_MAX_TEXTURE_SIZE, &mMaxTextureSize);
+    glGetIntegerv(GL_MAX_VIEWPORT_DIMS, &mMaxViewportDims);
+
+
+#ifdef EGL_ANDROID_swap_rectangle
+    if (extensions.hasExtension("EGL_ANDROID_swap_rectangle")) {
+        if (eglSetSwapRectangleANDROID(display, surface,
+                0, 0, mWidth, mHeight) == EGL_TRUE) {
+            // This could fail if this extension is not supported by this
+            // specific surface (of config)
+            mFlags |= SWAP_RECTANGLE;
+        }
+    }
+    // when we have the choice between PARTIAL_UPDATES and SWAP_RECTANGLE
+    // choose PARTIAL_UPDATES, which should be more efficient
+    if (mFlags & PARTIAL_UPDATES)
+        mFlags &= ~SWAP_RECTANGLE;
+#endif
+
+    LOGI("EGL informations:");
+    LOGI("# of configs : %d", numConfigs);
+    LOGI("vendor    : %s", extensions.getEglVendor());
+    LOGI("version   : %s", extensions.getEglVersion());
+    LOGI("extensions: %s", extensions.getEglExtension());
+    LOGI("Client API: %s", eglQueryString(display, EGL_CLIENT_APIS)?:"Not Supported");
+    LOGI("EGLSurface: %d-%d-%d-%d, config=%p", r, g, b, a, config);
+
+    LOGI("OpenGL informations:");
+    LOGI("vendor    : %s", extensions.getVendor());
+    LOGI("renderer  : %s", extensions.getRenderer());
+    LOGI("version   : %s", extensions.getVersion());
+    LOGI("extensions: %s", extensions.getExtension());
+    LOGI("GL_MAX_TEXTURE_SIZE = %d", mMaxTextureSize);
+    LOGI("GL_MAX_VIEWPORT_DIMS = %d", mMaxViewportDims);
+    LOGI("flags = %08x", mFlags);
+
+    // Unbind the context from this thread
+    eglMakeCurrent(display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+}
+
+/*
+ * Clean up.  Throw out our local state.
+ *
+ * (It's entirely possible we'll never get here, since this is meant
+ * for real hardware, which doesn't restart.)
+ */
+
+void DisplayHardware::fini()
+{
+    eglMakeCurrent(mDisplay, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
+    eglTerminate(mDisplay);
+    overlay_control_close(mOverlayEngine);
+}
+
+void DisplayHardware::releaseScreen() const
+{
+    DisplayHardwareBase::releaseScreen();
+}
+
+void DisplayHardware::acquireScreen() const
+{
+    DisplayHardwareBase::acquireScreen();
+}
+
+uint32_t DisplayHardware::getPageFlipCount() const {
+    return mPageFlipCount;
+}
+
+status_t DisplayHardware::compositionComplete() const {
+    return mNativeWindow->compositionComplete();
+}
+
+int DisplayHardware::getCurrentBufferIndex() const {
+    return mNativeWindow->getCurrentBufferIndex();
+}
+
+void DisplayHardware::flip(const Region& dirty) const
+{
+    checkGLErrors();
+
+    EGLDisplay dpy = mDisplay;
+    EGLSurface surface = mSurface;
+
+#ifdef EGL_ANDROID_swap_rectangle    
+    if (mFlags & SWAP_RECTANGLE) {
+        const Region newDirty(dirty.intersect(bounds()));
+        const Rect b(newDirty.getBounds());
+        eglSetSwapRectangleANDROID(dpy, surface,
+                b.left, b.top, b.width(), b.height());
+    } 
+#endif
+    
+    if (mFlags & PARTIAL_UPDATES) {
+        mNativeWindow->setUpdateRectangle(dirty.getBounds());
+    }
+    
+    mPageFlipCount++;
+    eglSwapBuffers(dpy, surface);
+    checkEGLErrors("eglSwapBuffers");
+
+    // for debugging
+    //glClearColor(1,0,0,0);
+    //glClear(GL_COLOR_BUFFER_BIT);
+}
+
+uint32_t DisplayHardware::getFlags() const
+{
+    return mFlags;
+}
+
+void DisplayHardware::makeCurrent() const
+{
+    eglMakeCurrent(mDisplay, mSurface, mSurface, mContext);
+}

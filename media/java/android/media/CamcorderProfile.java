@@ -16,6 +16,9 @@
 
 package android.media;
 
+import android.hardware.Camera;
+import android.hardware.Camera.CameraInfo;
+
 /**
  * The CamcorderProfile class is used to retrieve the
  * predefined camcorder profile settings for camcorder applications.
@@ -119,15 +122,35 @@ public class CamcorderProfile
     public int audioChannels;
 
     /**
-     * Returns the camcorder profile for the given quality level.
+     * Returns the camcorder profile for the first back-facing camera on the
+     * device at the given quality level. If the device has no back-facing
+     * camera, this returns null.
      * @param quality the target quality level for the camcorder profile
      */
     public static CamcorderProfile get(int quality) {
+        int numberOfCameras = Camera.getNumberOfCameras();
+        CameraInfo cameraInfo = new CameraInfo();
+        for (int i = 0; i < numberOfCameras; i++) {
+            Camera.getCameraInfo(i, cameraInfo);
+            if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
+                return get(i, quality);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns the camcorder profile for the given camera at the given
+     * quality level.
+     * @param cameraId the id for the camera
+     * @param quality the target quality level for the camcorder profile
+     */
+    public static CamcorderProfile get(int cameraId, int quality) {
         if (quality < QUALITY_LOW || quality > QUALITY_HIGH) {
             String errMessage = "Unsupported quality level: " + quality;
             throw new IllegalArgumentException(errMessage);
         }
-        return native_get_camcorder_profile(quality);
+        return native_get_camcorder_profile(cameraId, quality);
     }
 
     static {
@@ -165,5 +188,6 @@ public class CamcorderProfile
 
     // Methods implemented by JNI
     private static native final void native_init();
-    private static native final CamcorderProfile native_get_camcorder_profile(int quality);
+    private static native final CamcorderProfile native_get_camcorder_profile(
+            int cameraId, int quality);
 }

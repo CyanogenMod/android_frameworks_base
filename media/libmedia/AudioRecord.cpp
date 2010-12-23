@@ -41,11 +41,43 @@
 #define UNLIKELY( exp )     (__builtin_expect( (exp) != 0, false ))
 
 namespace android {
+// ---------------------------------------------------------------------------
+
+// static
+status_t AudioRecord::getMinFrameCount(
+        int* frameCount,
+        uint32_t sampleRate,
+        int format,
+        int channelCount)
+{
+    size_t size = 0;
+    if (AudioSystem::getInputBufferSize(sampleRate, format, channelCount, &size)
+            != NO_ERROR) {
+        LOGE("AudioSystem could not query the input buffer size.");
+        return NO_INIT;
+    }
+
+    if (size == 0) {
+        LOGE("Unsupported configuration: sampleRate %d, format %d, channelCount %d",
+            sampleRate, format, channelCount);
+        return BAD_VALUE;
+    }
+
+    // We double the size of input buffer for ping pong use of record buffer.
+    size <<= 1;
+
+    if (AudioSystem::isLinearPCM(format)) {
+        size /= channelCount * (format == AudioSystem::PCM_16_BIT ? 2 : 1);
+    }
+
+    *frameCount = size;
+    return NO_ERROR;
+}
 
 // ---------------------------------------------------------------------------
 
 AudioRecord::AudioRecord()
-    : mStatus(NO_INIT)
+    : mStatus(NO_INIT), mSessionId(0)
 {
 }
 
@@ -58,11 +90,12 @@ AudioRecord::AudioRecord(
         uint32_t flags,
         callback_t cbf,
         void* user,
-        int notificationFrames)
-    : mStatus(NO_INIT)
+        int notificationFrames,
+        int sessionId)
+    : mStatus(NO_INIT), mSessionId(0)
 {
     mStatus = set(inputSource, sampleRate, format, channels,
-            frameCount, flags, cbf, user, notificationFrames);
+            frameCount, flags, cbf, user, notificationFrames, sessionId);
 }
 
 AudioRecord::~AudioRecord()
@@ -91,7 +124,8 @@ status_t AudioRecord::set(
         callback_t cbf,
         void* user,
         int notificationFrames,
-        bool threadCanCallJava)
+        bool threadCanCallJava,
+        int sessionId)
 {
 
     LOGV("set(): sampleRate %d, channels %d, frameCount %d",sampleRate, channels, frameCount);
@@ -119,6 +153,7 @@ status_t AudioRecord::set(
     if (!AudioSystem::isInputChannel(channels)) {
         return BAD_VALUE;
     }
+
     int channelCount = AudioSystem::popCount(channels);
 
     audio_io_handle_t input = AudioSystem::getInput(inputSource,
@@ -129,29 +164,11 @@ status_t AudioRecord::set(
     }
 
     // validate framecount
-    size_t inputBuffSizeInBytes = -1;
-    if (AudioSystem::getInputBufferSize(sampleRate, format, channelCount, &inputBuffSizeInBytes)
-            != NO_ERROR) {
-        LOGE("AudioSystem could not query the input buffer size.");
-        return NO_INIT;
+    int minFrameCount = 0;
+    status_t status = getMinFrameCount(&minFrameCount, sampleRate, format, channelCount);
+    if (status != NO_ERROR) {
+        return status;
     }
-
-    if (inputBuffSizeInBytes == 0) {
-        LOGE("Recording parameters are not supported: sampleRate %d, channelCount %d, format %d",
-            sampleRate, channelCount, format);
-        return BAD_VALUE;
-    }
-
-    int frameSizeInBytes = channelCount * (format == AudioSystem::PCM_16_BIT ? 2 : 1);
-    if (AudioSystem::isLinearPCM(format)) {
-        frameSizeInBytes = channelCount * (format == AudioSystem::PCM_16_BIT ? sizeof(int16_t) : sizeof(int8_t));
-    } else {
-        frameSizeInBytes = sizeof(int8_t);
-    }
-
-
-    // We use 2* size of input buffer for ping pong use of record buffer.
-    int minFrameCount = 2 * inputBuffSizeInBytes / frameSizeInBytes;
     LOGV("AudioRecord::set() minFrameCount = %d", minFrameCount);
 
     if (frameCount == 0) {
@@ -164,10 +181,11 @@ status_t AudioRecord::set(
         notificationFrames = frameCount/2;
     }
 
-    // create the IAudioRecord
-    status_t status = openRecord(sampleRate, format, channelCount,
-                                 frameCount, flags, input);
+    mSessionId = sessionId;
 
+    // create the IAudioRecord
+    status = openRecord(sampleRate, format, channelCount,
+                        frameCount, flags, input);
     if (status != NO_ERROR) {
         return status;
     }
@@ -414,6 +432,7 @@ status_t AudioRecord::openRecord(
                                                        channelCount,
                                                        frameCount,
                                                        ((uint16_t)flags) << 16,
+                                                       &mSessionId,
                                                        &status);
     if (record == 0) {
         LOGE("AudioFlinger could not create record track, status: %d", status);
@@ -430,7 +449,7 @@ status_t AudioRecord::openRecord(
     mCblkMemory = cblk;
     mCblk = static_cast<audio_track_cblk_t*>(cblk->pointer());
     mCblk->buffers = (char*)mCblk + sizeof(audio_track_cblk_t);
-    mCblk->out = 0;
+    mCblk->flags &= ~CBLK_DIRECTION_MSK;
     mCblk->bufferTimeoutMs = MAX_RUN_TIMEOUT_MS;
     mCblk->waitTimeMs = 0;
     return NO_ERROR;
@@ -530,6 +549,11 @@ audio_io_handle_t AudioRecord::getInput()
                                 mFormat, mChannels,
                                 (AudioSystem::audio_in_acoustics)mFlags);
     return mInput;
+}
+
+int AudioRecord::getSessionId()
+{
+    return mSessionId;
 }
 
 // -------------------------------------------------------------------------
@@ -644,10 +668,10 @@ bool AudioRecord::processAudioBuffer(const sp<ClientRecordThread>& thread)
 
     // Manage overrun callback
     if (mActive && (mCblk->framesAvailable_l() == 0)) {
-        LOGV("Overrun user: %x, server: %x, flowControlFlag %d", mCblk->user, mCblk->server, mCblk->flowControlFlag);
-        if (mCblk->flowControlFlag == 0) {
+        LOGV("Overrun user: %x, server: %x, flags %04x", mCblk->user, mCblk->server, mCblk->flags);
+        if ((mCblk->flags & CBLK_UNDERRUN_MSK) == CBLK_UNDERRUN_OFF) {
             mCbf(EVENT_OVERRUN, mUserData, 0);
-            mCblk->flowControlFlag = 1;
+            mCblk->flags |= CBLK_UNDERRUN_ON;
         }
     }
 

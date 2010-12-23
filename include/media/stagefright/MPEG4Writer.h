@@ -36,9 +36,11 @@ public:
     MPEG4Writer(int fd);
 
     virtual status_t addSource(const sp<MediaSource> &source);
-    virtual status_t start();
+    virtual status_t start(MetaData *param = NULL);
+    virtual status_t stop();
+    virtual status_t pause();
     virtual bool reachedEOS();
-    virtual void stop();
+    virtual status_t dump(int fd, const Vector<String16>& args);
 
     void beginBox(const char *fourcc);
     void writeInt8(int8_t x);
@@ -49,6 +51,9 @@ public:
     void writeFourcc(const char *fourcc);
     void write(const void *data, size_t size);
     void endBox();
+    uint32_t interleaveDuration() const { return mInterleaveDurationUs; }
+    status_t setInterleaveDuration(uint32_t duration);
+    int32_t getTimeScale() const { return mTimeScale; }
 
 protected:
     virtual ~MPEG4Writer();
@@ -57,16 +62,99 @@ private:
     class Track;
 
     FILE *mFile;
+    bool mUse4ByteNalLength;
+    bool mUse32BitOffset;
+    bool mIsFileSizeLimitExplicitlyRequested;
+    bool mPaused;
+    bool mStarted;
     off_t mOffset;
     off_t mMdatOffset;
+    uint8_t *mMoovBoxBuffer;
+    off_t mMoovBoxBufferOffset;
+    bool  mWriteMoovBoxToMemory;
+    off_t mFreeBoxOffset;
+    bool mStreamableFile;
+    off_t mEstimatedMoovBoxSize;
+    uint32_t mInterleaveDurationUs;
+    int32_t mTimeScale;
+    int64_t mStartTimestampUs;
+
     Mutex mLock;
 
     List<Track *> mTracks;
 
     List<off_t> mBoxes;
 
-    off_t addSample(MediaBuffer *buffer);
-    off_t addLengthPrefixedSample(MediaBuffer *buffer);
+    void setStartTimestampUs(int64_t timeUs);
+    int64_t getStartTimestampUs();  // Not const
+    status_t startTracks(MetaData *params);
+    size_t numTracks();
+    int64_t estimateMoovBoxSize(int32_t bitRate);
+
+    struct Chunk {
+        Track               *mTrack;        // Owner
+        int64_t             mTimeStampUs;   // Timestamp of the 1st sample
+        List<MediaBuffer *> mSamples;       // Sample data
+
+        // Convenient constructor
+        Chunk(Track *track, int64_t timeUs, List<MediaBuffer *> samples)
+            : mTrack(track), mTimeStampUs(timeUs), mSamples(samples) {
+        }
+
+    };
+    struct ChunkInfo {
+        Track               *mTrack;        // Owner
+        List<Chunk>         mChunks;        // Remaining chunks to be written
+    };
+
+    bool            mIsFirstChunk;
+    volatile bool   mDone;                  // Writer thread is done?
+    pthread_t       mThread;                // Thread id for the writer
+    List<ChunkInfo> mChunkInfos;            // Chunk infos
+    Condition       mChunkReadyCondition;   // Signal that chunks are available
+
+    // Writer thread handling
+    status_t startWriterThread();
+    void stopWriterThread();
+    static void *ThreadWrapper(void *me);
+    void threadFunc();
+
+    // Buffer a single chunk to be written out later.
+    void bufferChunk(const Chunk& chunk);
+
+    // Write all buffered chunks from all tracks
+    void writeChunks();
+
+    // Write a chunk if there is one
+    status_t writeOneChunk();
+
+    // Write the first chunk from the given ChunkInfo.
+    void writeFirstChunk(ChunkInfo* info);
+
+    // Adjust other track media clock (presumably wall clock)
+    // based on audio track media clock with the drift time.
+    int64_t mDriftTimeUs;
+    void setDriftTimeUs(int64_t driftTimeUs);
+    int64_t getDriftTimeUs();
+
+    // Return whether the nal length is 4 bytes or 2 bytes
+    // Only makes sense for H.264/AVC
+    bool useNalLengthFour();
+
+    void lock();
+    void unlock();
+
+    // Acquire lock before calling these methods
+    off_t addSample_l(MediaBuffer *buffer);
+    off_t addLengthPrefixedSample_l(MediaBuffer *buffer);
+
+    inline size_t write(const void *ptr, size_t size, size_t nmemb, FILE* stream);
+    bool exceedsFileSizeLimit();
+    bool use32BitFileOffset() const;
+    bool exceedsFileDurationLimit();
+    bool isFileStreamable() const;
+    void trackProgressStatus(const Track* track, int64_t timeUs, status_t err = OK);
+    void writeCompositionMatrix(int32_t degrees);
 
     MPEG4Writer(const MPEG4Writer &);
     MPEG4Writer &operator=(const MPEG4Writer &);

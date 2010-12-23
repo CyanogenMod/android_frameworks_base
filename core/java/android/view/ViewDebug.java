@@ -255,6 +255,14 @@ public class ViewDebug {
          * @see #deepExport()
          */
         String prefix() default "";
+
+        /**
+         * Specifies the category the property falls into, such as measurement,
+         * layout, drawing, etc.
+         *
+         * @return the category as String
+         */
+        String category() default "";
     }
 
     /**
@@ -916,77 +924,106 @@ public class ViewDebug {
             out = new BufferedWriter(new OutputStreamWriter(clientStream), 32 * 1024);
 
             if (view != null) {
-                final long durationMeasure = profileViewOperation(view, new ViewOperation<Void>() {
-                    public Void[] pre() {
-                        forceLayout(view);
-                        return null;
-                    }
-
-                    private void forceLayout(View view) {
-                        view.forceLayout();
-                        if (view instanceof ViewGroup) {
-                            ViewGroup group = (ViewGroup) view;
-                            final int count = group.getChildCount();
-                            for (int i = 0; i < count; i++) {
-                                forceLayout(group.getChildAt(i));
-                            }
-                        }
-                    }
-
-                    public void run(Void... data) {
-                        view.measure(view.mOldWidthMeasureSpec, view.mOldHeightMeasureSpec);
-                    }
-
-                    public void post(Void... data) {
-                    }
-                });
-
-                final long durationLayout = profileViewOperation(view, new ViewOperation<Void>() {
-                    public Void[] pre() {
-                        return null;
-                    }
-
-                    public void run(Void... data) {
-                        view.layout(view.mLeft, view.mTop, view.mRight, view.mBottom);
-                    }
-
-                    public void post(Void... data) {
-                    }
-                });
-
-                final long durationDraw = profileViewOperation(view, new ViewOperation<Object>() {
-                    public Object[] pre() {
-                        final DisplayMetrics metrics = view.getResources().getDisplayMetrics();
-                        final Bitmap bitmap = Bitmap.createBitmap(metrics.widthPixels,
-                                metrics.heightPixels, Bitmap.Config.RGB_565);
-                        final Canvas canvas = new Canvas(bitmap);
-                        return new Object[] { bitmap, canvas };
-                    }
-
-                    public void run(Object... data) {
-                        view.draw((Canvas) data[1]);
-                    }
-
-                    public void post(Object... data) {
-                        ((Bitmap) data[0]).recycle();
-                    }
-                });
-
-                out.write(String.valueOf(durationMeasure));
-                out.write(' ');
-                out.write(String.valueOf(durationLayout));
-                out.write(' ');
-                out.write(String.valueOf(durationDraw));
-                out.newLine();
+                profileViewAndChildren(view, out);
             } else {
                 out.write("-1 -1 -1");
                 out.newLine();
             }
+            out.write("DONE.");
+            out.newLine();
         } catch (Exception e) {
             android.util.Log.w("View", "Problem profiling the view:", e);
         } finally {
             if (out != null) {
                 out.close();
+            }
+        }
+    }
+
+    private static void profileViewAndChildren(final View view, BufferedWriter out)
+            throws IOException {
+        profileViewAndChildren(view, out, true);
+    }
+
+    private static void profileViewAndChildren(final View view, BufferedWriter out, boolean root)
+            throws IOException {
+
+        long durationMeasure =
+                (root || (view.mPrivateFlags & View.MEASURED_DIMENSION_SET) != 0) ? profileViewOperation(
+                        view, new ViewOperation<Void>() {
+                            public Void[] pre() {
+                                forceLayout(view);
+                                return null;
+                            }
+
+                            private void forceLayout(View view) {
+                                view.forceLayout();
+                                if (view instanceof ViewGroup) {
+                                    ViewGroup group = (ViewGroup) view;
+                                    final int count = group.getChildCount();
+                                    for (int i = 0; i < count; i++) {
+                                        forceLayout(group.getChildAt(i));
+                                    }
+                                }
+                            }
+
+                            public void run(Void... data) {
+                                view.measure(view.mOldWidthMeasureSpec, view.mOldHeightMeasureSpec);
+                            }
+
+                            public void post(Void... data) {
+                            }
+                        })
+                        : 0;
+        long durationLayout =
+                (root || (view.mPrivateFlags & View.LAYOUT_REQUIRED) != 0) ? profileViewOperation(
+                        view, new ViewOperation<Void>() {
+                            public Void[] pre() {
+                                return null;
+                            }
+
+                            public void run(Void... data) {
+                                view.layout(view.mLeft, view.mTop, view.mRight, view.mBottom);
+                            }
+
+                            public void post(Void... data) {
+                            }
+                        }) : 0;
+        long durationDraw =
+                (root || !view.willNotDraw() || (view.mPrivateFlags & View.DRAWN) != 0) ? profileViewOperation(
+                        view,
+                        new ViewOperation<Object>() {
+                            public Object[] pre() {
+                                final DisplayMetrics metrics =
+                                        view.getResources().getDisplayMetrics();
+                                final Bitmap bitmap =
+                                        Bitmap.createBitmap(metrics.widthPixels,
+                                                metrics.heightPixels, Bitmap.Config.RGB_565);
+                                final Canvas canvas = new Canvas(bitmap);
+                                return new Object[] {
+                                        bitmap, canvas
+                                };
+                            }
+
+                            public void run(Object... data) {
+                                view.draw((Canvas) data[1]);
+                            }
+
+                            public void post(Object... data) {
+                                ((Bitmap) data[0]).recycle();
+                            }
+                        }) : 0;
+        out.write(String.valueOf(durationMeasure));
+        out.write(' ');
+        out.write(String.valueOf(durationLayout));
+        out.write(' ');
+        out.write(String.valueOf(durationDraw));
+        out.newLine();
+        if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            final int count = group.getChildCount();
+            for (int i = 0; i < count; i++) {
+                profileViewAndChildren(group.getChildAt(i), out, false);
             }
         }
     }
@@ -1016,7 +1053,10 @@ public class ViewDebug {
         });
 
         try {
-            latch.await(CAPTURE_TIMEOUT, TimeUnit.MILLISECONDS);
+            if (!latch.await(CAPTURE_TIMEOUT, TimeUnit.MILLISECONDS)) {
+                Log.w("View", "Could not complete the profiling of the view " + view);
+                return -1;
+            }
         } catch (InterruptedException e) {
             Log.w("View", "Could not complete the profiling of the view " + view);
             Thread.currentThread().interrupt();
@@ -1098,22 +1138,24 @@ public class ViewDebug {
 
         final View captureView = findView(root, parameter);
         Bitmap b = performViewCapture(captureView, false);
-       
-        if (b != null) {
-            BufferedOutputStream out = null;
-            try {
-                out = new BufferedOutputStream(clientStream, 32 * 1024);
-                b.compress(Bitmap.CompressFormat.PNG, 100, out);
-                out.flush();
-            } finally {
-                if (out != null) {
-                    out.close();
-                }
-                b.recycle();
-            }
-        } else {
+
+        if (b == null) {
             Log.w("View", "Failed to create capture bitmap!");
-            clientStream.close();
+            // Send an empty one so that it doesn't get stuck waiting for
+            // something.
+            b = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
+        }
+
+        BufferedOutputStream out = null;
+        try {
+            out = new BufferedOutputStream(clientStream, 32 * 1024);
+            b.compress(Bitmap.CompressFormat.PNG, 100, out);
+            out.flush();
+        } finally {
+            if (out != null) {
+                out.close();
+            }
+            b.recycle();
         }
     }
 
@@ -1337,9 +1379,12 @@ public class ViewDebug {
                 // TODO: This should happen on the UI thread
                 Object methodValue = method.invoke(view, (Object[]) null);
                 final Class<?> returnType = method.getReturnType();
+                final ExportedProperty property = sAnnotations.get(method);
+                String categoryPrefix =
+                        property.category().length() != 0 ? property.category() + ":" : "";
 
                 if (returnType == int.class) {
-                    final ExportedProperty property = sAnnotations.get(method);
+
                     if (property.resolveId() && context != null) {
                         final int id = (Integer) methodValue;
                         methodValue = resolveId(context, id);
@@ -1347,7 +1392,8 @@ public class ViewDebug {
                         final FlagToString[] flagsMapping = property.flagMapping();
                         if (flagsMapping.length > 0) {
                             final int intValue = (Integer) methodValue;
-                            final String valuePrefix = prefix + method.getName() + '_';
+                            final String valuePrefix =
+                                    categoryPrefix + prefix + method.getName() + '_';
                             exportUnrolledFlags(out, flagsMapping, intValue, valuePrefix);
                         }
 
@@ -1371,21 +1417,22 @@ public class ViewDebug {
                         }
                     }
                 } else if (returnType == int[].class) {
-                    final ExportedProperty property = sAnnotations.get(method);
                     final int[] array = (int[]) methodValue;
-                    final String valuePrefix = prefix + method.getName() + '_';
+                    final String valuePrefix = categoryPrefix + prefix + method.getName() + '_';
                     final String suffix = "()";
 
                     exportUnrolledArray(context, out, property, array, valuePrefix, suffix);
+
+                    // Probably want to return here, same as for fields.
+                    return;
                 } else if (!returnType.isPrimitive()) {
-                    final ExportedProperty property = sAnnotations.get(method);
                     if (property.deepExport()) {
                         dumpViewProperties(context, methodValue, out, prefix + property.prefix());
                         continue;
                     }
                 }
 
-                writeEntry(out, prefix, method.getName(), "()", methodValue);
+                writeEntry(out, categoryPrefix + prefix, method.getName(), "()", methodValue);
             } catch (IllegalAccessException e) {
             } catch (InvocationTargetException e) {
             }
@@ -1405,9 +1452,12 @@ public class ViewDebug {
             try {
                 Object fieldValue = null;
                 final Class<?> type = field.getType();
+                final ExportedProperty property = sAnnotations.get(field);
+                String categoryPrefix =
+                        property.category().length() != 0 ? property.category() + ":" : "";
 
                 if (type == int.class) {
-                    final ExportedProperty property = sAnnotations.get(field);
+
                     if (property.resolveId() && context != null) {
                         final int id = field.getInt(view);
                         fieldValue = resolveId(context, id);
@@ -1415,7 +1465,8 @@ public class ViewDebug {
                         final FlagToString[] flagsMapping = property.flagMapping();
                         if (flagsMapping.length > 0) {
                             final int intValue = field.getInt(view);
-                            final String valuePrefix = prefix + field.getName() + '_';
+                            final String valuePrefix =
+                                    categoryPrefix + prefix + field.getName() + '_';
                             exportUnrolledFlags(out, flagsMapping, intValue, valuePrefix);
                         }
 
@@ -1437,9 +1488,8 @@ public class ViewDebug {
                         }
                     }
                 } else if (type == int[].class) {
-                    final ExportedProperty property = sAnnotations.get(field);
                     final int[] array = (int[]) field.get(view);
-                    final String valuePrefix = prefix + field.getName() + '_';
+                    final String valuePrefix = categoryPrefix + prefix + field.getName() + '_';
                     final String suffix = "";
 
                     exportUnrolledArray(context, out, property, array, valuePrefix, suffix);
@@ -1447,10 +1497,9 @@ public class ViewDebug {
                     // We exit here!
                     return;
                 } else if (!type.isPrimitive()) {
-                    final ExportedProperty property = sAnnotations.get(field);
                     if (property.deepExport()) {
-                        dumpViewProperties(context, field.get(view), out,
-                                prefix + property.prefix());
+                        dumpViewProperties(context, field.get(view), out, prefix
+                                + property.prefix());
                         continue;
                     }
                 }
@@ -1459,7 +1508,7 @@ public class ViewDebug {
                     fieldValue = field.get(view);
                 }
 
-                writeEntry(out, prefix, field.getName(), "", fieldValue);
+                writeEntry(out, categoryPrefix + prefix, field.getName(), "", fieldValue);
             } catch (IllegalAccessException e) {
             }
         }

@@ -367,6 +367,26 @@ int64_t IPCThreadState::clearCallingIdentity()
     return token;
 }
 
+void IPCThreadState::setStrictModePolicy(int32_t policy)
+{
+    mStrictModePolicy = policy;
+}
+
+int32_t IPCThreadState::getStrictModePolicy() const
+{
+    return mStrictModePolicy;
+}
+
+void IPCThreadState::setLastTransactionBinderFlags(int32_t flags)
+{
+    mLastTransactionBinderFlags = flags;
+}
+
+int32_t IPCThreadState::getLastTransactionBinderFlags() const
+{
+    return mLastTransactionBinderFlags;
+}
+
 void IPCThreadState::restoreCallingIdentity(int64_t token)
 {
     mCallingUid = (int)(token>>32);
@@ -497,12 +517,26 @@ status_t IPCThreadState::transact(int32_t handle,
     }
     
     if ((flags & TF_ONE_WAY) == 0) {
+        #if 0
+        if (code == 4) { // relayout
+            LOGI(">>>>>> CALLING transaction 4");
+        } else {
+            LOGI(">>>>>> CALLING transaction %d", code);
+        }
+        #endif
         if (reply) {
             err = waitForResponse(reply);
         } else {
             Parcel fakeReply;
             err = waitForResponse(&fakeReply);
         }
+        #if 0
+        if (code == 4) { // relayout
+            LOGI("<<<<<< RETURNING transaction 4");
+        } else {
+            LOGI("<<<<<< RETURNING transaction %d", code);
+        }
+        #endif
         
         IF_LOG_TRANSACTIONS() {
             TextOutput::Bundle _b(alog);
@@ -588,7 +622,10 @@ status_t IPCThreadState::clearDeathNotification(int32_t handle, BpBinder* proxy)
 }
 
 IPCThreadState::IPCThreadState()
-    : mProcess(ProcessState::self()), mMyThreadId(androidGetTid())
+    : mProcess(ProcessState::self()),
+      mMyThreadId(androidGetTid()),
+      mStrictModePolicy(0),
+      mLastTransactionBinderFlags(0)
 {
     pthread_setspecific(gTLS, this);
     clearCaller();
@@ -972,11 +1009,11 @@ status_t IPCThreadState::executeCommand(int32_t cmd)
             }
             if (tr.target.ptr) {
                 sp<BBinder> b((BBinder*)tr.cookie);
-                const status_t error = b->transact(tr.code, buffer, &reply, 0);
+                const status_t error = b->transact(tr.code, buffer, &reply, tr.flags);
                 if (error < NO_ERROR) reply.setError(error);
-                
+
             } else {
-                const status_t error = the_context_object->transact(tr.code, buffer, &reply, 0);
+                const status_t error = the_context_object->transact(tr.code, buffer, &reply, tr.flags);
                 if (error < NO_ERROR) reply.setError(error);
             }
             

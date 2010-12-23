@@ -34,12 +34,14 @@ static struct {
     { AID_MEDIA, "media.player" },
     { AID_MEDIA, "media.camera" },
     { AID_MEDIA, "media.audio_policy" },
+    { AID_NFC,   "nfc" },
     { AID_RADIO, "radio.phone" },
     { AID_RADIO, "radio.sms" },
     { AID_RADIO, "radio.phonesubinfo" },
     { AID_RADIO, "radio.simphonebook" },
 /* TODO: remove after phone services are updated: */
     { AID_RADIO, "phone" },
+    { AID_RADIO, "sip" },
     { AID_RADIO, "isms" },
     { AID_RADIO, "iphonesubinfo" },
     { AID_RADIO, "simphonebook" },
@@ -193,6 +195,7 @@ int svcmgr_handler(struct binder_state *bs,
     uint16_t *s;
     unsigned len;
     void *ptr;
+    uint32_t strict_policy;
 
 //    LOGI("target=%p code=%d pid=%d uid=%d\n",
 //         txn->target, txn->code, txn->sender_pid, txn->sender_euid);
@@ -200,8 +203,12 @@ int svcmgr_handler(struct binder_state *bs,
     if (txn->target != svcmgr_handle)
         return -1;
 
+    // Equivalent to Parcel::enforceInterface(), reading the RPC
+    // header with the strict mode policy mask and the interface name.
+    // Note that we ignore the strict_policy and don't propagate it
+    // further (since we do no outbound RPCs anyway).
+    strict_policy = bio_get_uint32(msg);
     s = bio_get_string16(msg, &len);
-
     if ((len != (sizeof(svcmgr_id) / 2)) ||
         memcmp(svcmgr_id, s, sizeof(svcmgr_id))) {
         fprintf(stderr,"invalid id %s\n", str8(s));

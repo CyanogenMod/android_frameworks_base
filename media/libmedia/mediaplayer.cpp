@@ -55,6 +55,8 @@ MediaPlayer::MediaPlayer()
     mLeftVolume = mRightVolume = 1.0;
     mVideoWidth = mVideoHeight = 0;
     mLockThreadId = 0;
+    mAudioSessionId = AudioSystem::newAudioSessionId();
+    mSendLevel = 0;
 }
 
 MediaPlayer::~MediaPlayer()
@@ -137,7 +139,7 @@ status_t MediaPlayer::setDataSource(
         const sp<IMediaPlayerService>& service(getMediaPlayerService());
         if (service != 0) {
             sp<IMediaPlayer> player(
-                    service->create(getpid(), this, url, headers));
+                    service->create(getpid(), this, url, headers, mAudioSessionId));
             err = setDataSource(player);
         }
     }
@@ -150,7 +152,7 @@ status_t MediaPlayer::setDataSource(int fd, int64_t offset, int64_t length)
     status_t err = UNKNOWN_ERROR;
     const sp<IMediaPlayerService>& service(getMediaPlayerService());
     if (service != 0) {
-        sp<IMediaPlayer> player(service->create(getpid(), this, fd, offset, length));
+        sp<IMediaPlayer> player(service->create(getpid(), this, fd, offset, length, mAudioSessionId));
         err = setDataSource(player);
     }
     return err;
@@ -269,6 +271,7 @@ status_t MediaPlayer::start()
                     MEDIA_PLAYER_PLAYBACK_COMPLETE | MEDIA_PLAYER_PAUSED ) ) ) {
         mPlayer->setLooping(mLoop);
         mPlayer->setVolume(mLeftVolume, mRightVolume);
+        mPlayer->setAuxEffectSendLevel(mSendLevel);
         mCurrentState = MEDIA_PLAYER_STARTED;
         status_t ret = mPlayer->start();
         if (ret != NO_ERROR) {
@@ -501,6 +504,52 @@ status_t MediaPlayer::setVolume(float leftVolume, float rightVolume)
     return OK;
 }
 
+status_t MediaPlayer::setAudioSessionId(int sessionId)
+{
+    LOGV("MediaPlayer::setAudioSessionId(%d)", sessionId);
+    Mutex::Autolock _l(mLock);
+    if (!(mCurrentState & MEDIA_PLAYER_IDLE)) {
+        LOGE("setAudioSessionId called in state %d", mCurrentState);
+        return INVALID_OPERATION;
+    }
+    if (sessionId < 0) {
+        return BAD_VALUE;
+    }
+    mAudioSessionId = sessionId;
+    return NO_ERROR;
+}
+
+int MediaPlayer::getAudioSessionId()
+{
+    Mutex::Autolock _l(mLock);
+    return mAudioSessionId;
+}
+
+status_t MediaPlayer::setAuxEffectSendLevel(float level)
+{
+    LOGV("MediaPlayer::setAuxEffectSendLevel(%f)", level);
+    Mutex::Autolock _l(mLock);
+    mSendLevel = level;
+    if (mPlayer != 0) {
+        return mPlayer->setAuxEffectSendLevel(level);
+    }
+    return OK;
+}
+
+status_t MediaPlayer::attachAuxEffect(int effectId)
+{
+    LOGV("MediaPlayer::attachAuxEffect(%d)", effectId);
+    Mutex::Autolock _l(mLock);
+    if (mPlayer == 0 ||
+        (mCurrentState & MEDIA_PLAYER_IDLE) ||
+        (mCurrentState == MEDIA_PLAYER_STATE_ERROR )) {
+        LOGE("attachAuxEffect called in state %d", mCurrentState);
+        return INVALID_OPERATION;
+    }
+
+    return mPlayer->attachAuxEffect(effectId);
+}
+
 void MediaPlayer::notify(int msg, int ext1, int ext2)
 {
     LOGV("message received msg=%d, ext1=%d, ext2=%d", msg, ext1, ext2);
@@ -520,7 +569,8 @@ void MediaPlayer::notify(int msg, int ext1, int ext2)
         locked = true;
     }
 
-    if (mPlayer == 0) {
+    // Allows calls from JNI in idle state to notify errors
+    if (!(msg == MEDIA_ERROR && mCurrentState == MEDIA_PLAYER_IDLE) && mPlayer == 0) {
         LOGV("notify(%d, %d, %d) callback on disconnected mediaplayer", msg, ext1, ext2);
         if (locked) mLock.unlock();   // release the lock when done.
         return;
@@ -541,6 +591,9 @@ void MediaPlayer::notify(int msg, int ext1, int ext2)
         break;
     case MEDIA_PLAYBACK_COMPLETE:
         LOGV("playback complete");
+        if (mCurrentState == MEDIA_PLAYER_IDLE) {
+            LOGE("playback complete in idle state");
+        }
         if (!mLoop) {
             mCurrentState = MEDIA_PLAYER_PLAYBACK_COMPLETE;
         }
@@ -634,63 +687,6 @@ void MediaPlayer::died()
     }
     return p;
 
-}
-
-extern "C" {
-#define FLOATING_POINT 1
-#include "fftwrap.h"
-}
-
-static void *ffttable = NULL;
-
-// peeks at the audio data and fills 'data' with the requested kind
-// (currently kind=0 returns mono 16 bit PCM data, and kind=1 returns
-// 256 point FFT data). Return value is number of samples returned,
-// which may be 0.
-/*static*/ int MediaPlayer::snoop(short* data, int len, int kind) {
-
-    sp<IMemory> p;
-    const sp<IMediaPlayerService>& service = getMediaPlayerService();
-    if (service != 0) {
-        // Take a peek at the waveform. The returned data consists of 16 bit mono PCM data.
-        p = service->snoop();
-
-        if (p == NULL) {
-            return 0;
-        }
-
-        if (kind == 0) { // return waveform data
-            int plen = p->size();
-            len *= 2; // number of shorts -> number of bytes
-            short *src = (short*) p->pointer();
-            if (plen > len) {
-                plen = len;
-            }
-            memcpy(data, src, plen);
-            return plen / sizeof(short); // return number of samples
-        } else if (kind == 1) {
-            // TODO: use a more efficient FFT
-            // Right now this uses the speex library, which is compiled to do a float FFT
-            if (!ffttable) ffttable = spx_fft_init(512);
-            short *usrc = (short*) p->pointer();
-            float fsrc[512];
-            for (int i=0;i<512;i++)
-                fsrc[i] = usrc[i];
-            float fdst[512];
-            spx_fft_float(ffttable, fsrc, fdst);
-            if (len > 512) {
-                len = 512;
-            }
-            len /= 2; // only half the output data is valid
-            for (int i=0; i < len; i++)
-                data[i] = fdst[i];
-            return len;
-        }
-
-    } else {
-        LOGE("Unable to locate media service");
-    }
-    return 0;
 }
 
 }; // namespace android

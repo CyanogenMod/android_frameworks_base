@@ -66,6 +66,18 @@ public class PackageInfo implements Parcelable {
     public ApplicationInfo applicationInfo;
     
     /**
+     * The time at which the app was first installed.  Units are as
+     * per {@link System#currentTimeMillis()}.
+     */
+    public long firstInstallTime;
+
+    /**
+     * The time at which the app was last updated.  Units are as
+     * per {@link System#currentTimeMillis()}.
+     */
+    public long lastUpdateTime;
+
+    /**
      * All kernel group-IDs that have been assigned to this package.
      * This is only filled in if the flag {@link PackageManager#GET_GIDS} was set.
      */
@@ -268,6 +280,8 @@ public class PackageInfo implements Parcelable {
         } else {
             dest.writeInt(0);
         }
+        dest.writeLong(firstInstallTime);
+        dest.writeLong(lastUpdateTime);
         dest.writeIntArray(gids);
         dest.writeTypedArray(activities, parcelableFlags);
         dest.writeTypedArray(receivers, parcelableFlags);
@@ -309,6 +323,8 @@ public class PackageInfo implements Parcelable {
         if (hasApp != 0) {
             applicationInfo = ApplicationInfo.CREATOR.createFromParcel(source);
         }
+        firstInstallTime = source.readLong();
+        lastUpdateTime = source.readLong();
         gids = source.createIntArray();
         activities = source.createTypedArray(ActivityInfo.CREATOR);
         receivers = source.createTypedArray(ActivityInfo.CREATOR);

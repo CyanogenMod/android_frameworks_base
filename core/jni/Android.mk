@@ -28,6 +28,7 @@ LOCAL_SRC_FILES:= \
 	Time.cpp \
 	com_google_android_gles_jni_EGLImpl.cpp \
 	com_google_android_gles_jni_GLImpl.cpp.arm \
+	android_app_NativeActivity.cpp \
 	android_opengl_GLES10.cpp \
 	android_opengl_GLES10Ext.cpp \
 	android_opengl_GLES11.cpp \
@@ -44,12 +45,17 @@ LOCAL_SRC_FILES:= \
 	android_view_Display.cpp \
 	android_view_Surface.cpp \
 	android_view_ViewRoot.cpp \
+	android_view_InputChannel.cpp \
+	android_view_InputQueue.cpp \
+	android_view_KeyEvent.cpp \
+	android_view_MotionEvent.cpp \
 	android_text_AndroidCharacter.cpp \
 	android_text_AndroidBidi.cpp \
 	android_text_KeyCharacterMap.cpp \
 	android_os_Debug.cpp \
 	android_os_FileUtils.cpp \
 	android_os_MemoryFile.cpp \
+	android_os_MessageQueue.cpp \
 	android_os_ParcelFileDescriptor.cpp \
 	android_os_Power.cpp \
 	android_os_StatFs.cpp \
@@ -61,6 +67,8 @@ LOCAL_SRC_FILES:= \
 	android_net_TrafficStats.cpp \
 	android_net_wifi_Wifi.cpp \
 	android_nio_utils.cpp \
+	android_nfc_NdefMessage.cpp \
+	android_nfc_NdefRecord.cpp \
 	android_pim_EventRecurrence.cpp \
 	android_text_format_Time.cpp \
 	android_security_Md5MessageDigest.cpp \
@@ -72,6 +80,7 @@ LOCAL_SRC_FILES:= \
 	android_util_Process.cpp \
 	android_util_StringBlock.cpp \
 	android_util_XmlBlock.cpp \
+	android/graphics/AutoDecodeCancel.cpp \
 	android/graphics/Bitmap.cpp \
 	android/graphics/BitmapFactory.cpp \
 	android/graphics/Camera.cpp \
@@ -85,7 +94,6 @@ LOCAL_SRC_FILES:= \
 	android/graphics/MaskFilter.cpp \
 	android/graphics/Matrix.cpp \
 	android/graphics/Movie.cpp \
-	android/graphics/NIOBuffer.cpp \
 	android/graphics/NinePatch.cpp \
 	android/graphics/NinePatchImpl.cpp \
 	android/graphics/Paint.cpp \
@@ -99,6 +107,7 @@ LOCAL_SRC_FILES:= \
 	android/graphics/Region.cpp \
 	android/graphics/Shader.cpp \
 	android/graphics/Typeface.cpp \
+	android/graphics/Utils.cpp \
 	android/graphics/Xfermode.cpp \
 	android/graphics/YuvToJpegEncoder.cpp \
 	android_media_AudioRecord.cpp \
@@ -123,13 +132,14 @@ LOCAL_SRC_FILES:= \
 	android_server_Watchdog.cpp \
 	android_message_digest_sha1.cpp \
 	android_ddm_DdmHandleNativeHeap.cpp \
-	android_location_GpsLocationProvider.cpp \
 	com_android_internal_os_ZygoteInit.cpp \
 	com_android_internal_graphics_NativeUtils.cpp \
 	android_backup_BackupDataInput.cpp \
 	android_backup_BackupDataOutput.cpp \
 	android_backup_FileBackupHelperBase.cpp \
-	android_backup_BackupHelperDispatcher.cpp
+	android_backup_BackupHelperDispatcher.cpp \
+	android_content_res_ObbScanner.cpp \
+    android_content_res_Configuration.cpp
 
 LOCAL_C_INCLUDES += \
 	$(JNI_H_INCLUDE) \
@@ -162,6 +172,7 @@ LOCAL_SHARED_LIBRARIES := \
 	libbinder \
 	libnetutils \
 	libui \
+	libgui \
 	libsurfaceflinger_client \
 	libcamera_client \
 	libskiagl \
@@ -179,10 +190,10 @@ LOCAL_SHARED_LIBRARIES := \
 	libssl \
 	libicuuc \
 	libicui18n \
-	libicudata \
 	libmedia \
 	libwpa_client \
-	libjpeg
+	libjpeg \
+	libnfc_ndef
 
 ifeq ($(BOARD_HAVE_BLUETOOTH),true)
 LOCAL_C_INCLUDES += \

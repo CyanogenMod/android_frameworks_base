@@ -35,15 +35,29 @@
     <!-- devices with an autofocus camera and/or flash must include either
          android.hardware.camera.autofocus.xml or 
          android.hardware.camera.autofocus-flash.xml -->
+    <!-- devices with a front facing camera must include
+         android.hardware.camera.front.xml -->
     <!-- devices with WiFi must also include android.hardware.wifi.xml -->
-    <!-- devices with limited/gestural multitouch must also include
-         android.hardware.touchscreen.multitouch.xml -->
-    <!-- devices with full multitouch must also include
-         android.hardware.touchscreen.multitouch.distinct.xml -->
+    <!-- devices that support multitouch must include the most appropriate one
+         of these files:
+
+         If only partial (non-independent) pointers are supported:
+         android.hardware.touchscreen.multitouch.xml
+
+         If up to 4 independently tracked pointers are supported:
+         include android.hardware.touchscreen.multitouch.distinct.xml
+
+         If 5 or more independently tracked pointers are supported:
+         include android.hardware.touchscreen.multitouch.jazzhand.xml
+
+         ONLY ONE of the above should be included. -->
     <!-- devices with an ambient light sensor must also include
          android.hardware.sensor.light.xml -->
     <!-- devices with a proximity sensor must also include
          android.hardware.sensor.proximity.xml -->
     <!-- GSM phones must also include android.hardware.telephony.gsm.xml -->
     <!-- CDMA phones must also include android.hardware.telephony.cdma.xml -->
+    <!-- Devices that have low-latency audio stacks suitable for apps like
+         VoIP may include android.hardware.audio.low_latency.xml. ONLY apps
+         that meet the requirements specified in the CDD may include this. -->
 </permissions>

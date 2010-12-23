@@ -16,7 +16,7 @@
 
 #include "installd.h"
 
-int install(const char *pkgname, uid_t uid, gid_t gid)
+int install(const char *pkgname, int encrypted_fs_flag, uid_t uid, gid_t gid)
 {
     char pkgdir[PKG_PATH_MAX];
     char libdir[PKG_PATH_MAX];
@@ -24,14 +24,19 @@ int install(const char *pkgname, uid_t uid, gid_t gid)
     if ((uid < AID_SYSTEM) || (gid < AID_SYSTEM)) {
         LOGE("invalid uid/gid: %d %d\n", uid, gid);
         return -1;
-        
     }
 
-    if (create_pkg_path(pkgdir, PKG_DIR_PREFIX, pkgname, PKG_DIR_POSTFIX))
-        return -1;
-    if (create_pkg_path(libdir, PKG_LIB_PREFIX, pkgname, PKG_LIB_POSTFIX))
-        return -1;
-
+    if (encrypted_fs_flag == USE_UNENCRYPTED_FS) {
+        if (create_pkg_path(pkgdir, PKG_DIR_PREFIX, pkgname, PKG_DIR_POSTFIX))
+            return -1;
+        if (create_pkg_path(libdir, PKG_LIB_PREFIX, pkgname, PKG_LIB_POSTFIX))
+            return -1;
+    } else {
+        if (create_pkg_path(pkgdir, PKG_SEC_DIR_PREFIX, pkgname, PKG_DIR_POSTFIX))
+            return -1;
+        if (create_pkg_path(libdir, PKG_SEC_LIB_PREFIX, pkgname, PKG_LIB_POSTFIX))
+            return -1;
+    }
 
     if (mkdir(pkgdir, 0751) < 0) {
         LOGE("cannot create dir '%s': %s\n", pkgdir, strerror(errno));
@@ -56,27 +61,38 @@ int install(const char *pkgname, uid_t uid, gid_t gid)
     return 0;
 }
 
-int uninstall(const char *pkgname)
+int uninstall(const char *pkgname, int encrypted_fs_flag)
 {
     char pkgdir[PKG_PATH_MAX];
 
-    if (create_pkg_path(pkgdir, PKG_DIR_PREFIX, pkgname, PKG_DIR_POSTFIX))
-        return -1;
+    if (encrypted_fs_flag == USE_UNENCRYPTED_FS) {
+        if (create_pkg_path(pkgdir, PKG_DIR_PREFIX, pkgname, PKG_DIR_POSTFIX))
+            return -1;
+    } else {
+        if (create_pkg_path(pkgdir, PKG_SEC_DIR_PREFIX, pkgname, PKG_DIR_POSTFIX))
+            return -1;
+    }
 
         /* delete contents AND directory, no exceptions */
     return delete_dir_contents(pkgdir, 1, 0);
 }
 
-int renamepkg(const char *oldpkgname, const char *newpkgname)
+int renamepkg(const char *oldpkgname, const char *newpkgname, int encrypted_fs_flag)
 {
     char oldpkgdir[PKG_PATH_MAX];
     char newpkgdir[PKG_PATH_MAX];
 
-    if (create_pkg_path(oldpkgdir, PKG_DIR_PREFIX, oldpkgname, PKG_DIR_POSTFIX))
-        return -1;
-    if (create_pkg_path(newpkgdir, PKG_DIR_PREFIX, newpkgname, PKG_DIR_POSTFIX))
-        return -1;
-
+    if (encrypted_fs_flag == USE_UNENCRYPTED_FS) {
+        if (create_pkg_path(oldpkgdir, PKG_DIR_PREFIX, oldpkgname, PKG_DIR_POSTFIX))
+            return -1;
+        if (create_pkg_path(newpkgdir, PKG_DIR_PREFIX, newpkgname, PKG_DIR_POSTFIX))
+            return -1;
+    } else {
+        if (create_pkg_path(oldpkgdir, PKG_SEC_DIR_PREFIX, oldpkgname, PKG_DIR_POSTFIX))
+            return -1;
+        if (create_pkg_path(newpkgdir, PKG_SEC_DIR_PREFIX, newpkgname, PKG_DIR_POSTFIX))
+            return -1;
+    }
 
     if (rename(oldpkgdir, newpkgdir) < 0) {
         LOGE("cannot rename dir '%s' to '%s': %s\n", oldpkgdir, newpkgdir, strerror(errno));
@@ -85,35 +101,48 @@ int renamepkg(const char *oldpkgname, const char *newpkgname)
     return 0;
 }
 
-int delete_user_data(const char *pkgname)
+int delete_user_data(const char *pkgname, int encrypted_fs_flag)
 {
     char pkgdir[PKG_PATH_MAX];
 
-    if (create_pkg_path(pkgdir, PKG_DIR_PREFIX, pkgname, PKG_DIR_POSTFIX))
-        return -1;
+    if (encrypted_fs_flag == USE_UNENCRYPTED_FS) {
+        if (create_pkg_path(pkgdir, PKG_DIR_PREFIX, pkgname, PKG_DIR_POSTFIX))
+            return -1;
+    } else {
+        if (create_pkg_path(pkgdir, PKG_SEC_DIR_PREFIX, pkgname, PKG_DIR_POSTFIX))
+            return -1;
+    }
 
         /* delete contents, excluding "lib", but not the directory itself */
     return delete_dir_contents(pkgdir, 0, "lib");
 }
 
-int delete_cache(const char *pkgname)
+int delete_cache(const char *pkgname, int encrypted_fs_flag)
 {
     char cachedir[PKG_PATH_MAX];
 
-    if (create_pkg_path(cachedir, CACHE_DIR_PREFIX, pkgname, CACHE_DIR_POSTFIX))
-        return -1;
-
+    if (encrypted_fs_flag == USE_UNENCRYPTED_FS) {
+        if (create_pkg_path(cachedir, CACHE_DIR_PREFIX, pkgname, CACHE_DIR_POSTFIX))
+            return -1;
+    } else {
+        if (create_pkg_path(cachedir, CACHE_SEC_DIR_PREFIX, pkgname, CACHE_DIR_POSTFIX))
+            return -1;
+    }
 
         /* delete contents, not the directory, no exceptions */
     return delete_dir_contents(cachedir, 0, 0);
 }
 
-static int disk_free()
+/* TODO(oam): depending on use case (ecryptfs or dmcrypt)
+ * change implementation
+ */
+static int64_t disk_free()
 {
     struct statfs sfs;
     if (statfs(PKG_DIR_PREFIX, &sfs) == 0) {
         return sfs.f_bavail * sfs.f_bsize;
     } else {
+        LOGE("Couldn't statfs " PKG_DIR_PREFIX ": %s\n", strerror(errno));
         return -1;
     }
 }
@@ -125,23 +154,56 @@ static int disk_free()
  * also require that apps constantly modify file metadata even
  * when just reading from the cache, which is pretty awful.
  */
-int free_cache(int free_size)
+int free_cache(int64_t free_size)
 {
     const char *name;
     int dfd, subfd;
     DIR *d;
     struct dirent *de;
-    int avail;
+    int64_t avail;
 
     avail = disk_free();
     if (avail < 0) return -1;
 
-    LOGI("free_cache(%d) avail %d\n", free_size, avail);
+    LOGI("free_cache(%" PRId64 ") avail %" PRId64 "\n", free_size, avail);
     if (avail >= free_size) return 0;
 
+    /* First try encrypted dir */
+    d = opendir(PKG_SEC_DIR_PREFIX);
+    if (d == NULL) {
+        LOGE("cannot open %s: %s\n", PKG_SEC_DIR_PREFIX, strerror(errno));
+    } else {
+        dfd = dirfd(d);
+
+        while ((de = readdir(d))) {
+           if (de->d_type != DT_DIR) continue;
+           name = de->d_name;
+
+            /* always skip "." and ".." */
+            if (name[0] == '.') {
+                if (name[1] == 0) continue;
+                if ((name[1] == '.') && (name[2] == 0)) continue;
+            }
+
+            subfd = openat(dfd, name, O_RDONLY | O_DIRECTORY);
+            if (subfd < 0) continue;
+
+            delete_dir_contents_fd(subfd, "cache");
+            close(subfd);
+
+            avail = disk_free();
+            if (avail >= free_size) {
+                closedir(d);
+                return 0;
+            }
+        }
+        closedir(d);
+    }
+
+    /* Next try unencrypted dir... */
     d = opendir(PKG_DIR_PREFIX);
     if (d == NULL) {
-        LOGE("cannot open %s\n", PKG_DIR_PREFIX);
+        LOGE("cannot open %s: %s\n", PKG_DIR_PREFIX, strerror(errno));
         return -1;
     }
     dfd = dirfd(d);
@@ -217,6 +279,7 @@ int move_dex(const char *src, const char *dst)
 
     LOGI("move %s -> %s\n", src_dex, dst_dex);
     if (rename(src_dex, dst_dex) < 0) {
+        LOGE("Couldn't move %s: %s\n", src_dex, strerror(errno));
         return -1;
     } else {
         return 0;
@@ -232,6 +295,7 @@ int rm_dex(const char *path)
 
     LOGI("unlink %s\n", dex_path);
     if (unlink(dex_path) < 0) {
+        LOGE("Couldn't unlink %s: %s\n", dex_path, strerror(errno));
         return -1;
     } else {
         return 0;
@@ -263,10 +327,10 @@ int protect(char *pkgname, gid_t gid)
     return 0;
 }
 
-static int stat_size(struct stat *s)
+static int64_t stat_size(struct stat *s)
 {
-    int blksize = s->st_blksize;
-    int size = s->st_size;
+    int64_t blksize = s->st_blksize;
+    int64_t size = s->st_size;
 
     if (blksize) {
             /* round up to filesystem block size */
@@ -276,9 +340,9 @@ static int stat_size(struct stat *s)
     return size;
 }
 
-static int calculate_dir_size(int dfd)
+static int64_t calculate_dir_size(int dfd)
 {
-    int size = 0;
+    int64_t size = 0;
     struct stat s;
     DIR *d;
     struct dirent *de;
@@ -314,7 +378,7 @@ static int calculate_dir_size(int dfd)
 
 int get_size(const char *pkgname, const char *apkpath,
              const char *fwdlock_apkpath,
-             int *_codesize, int *_datasize, int *_cachesize)
+             int64_t *_codesize, int64_t *_datasize, int64_t *_cachesize, int encrypted_fs_flag)
 {
     DIR *d;
     int dfd;
@@ -322,9 +386,9 @@ int get_size(const char *pkgname, const char *apkpath,
     struct stat s;
     char path[PKG_PATH_MAX];
 
-    int codesize = 0;
-    int datasize = 0;
-    int cachesize = 0;
+    int64_t codesize = 0;
+    int64_t datasize = 0;
+    int64_t cachesize = 0;
 
         /* count the source apk as code -- but only if it's not
          * on the /system partition and its not on the sdcard.
@@ -349,8 +413,14 @@ int get_size(const char *pkgname, const char *apkpath,
         }
     }
 
-    if (create_pkg_path(path, PKG_DIR_PREFIX, pkgname, PKG_DIR_POSTFIX)) {
-        goto done;
+    if (encrypted_fs_flag == 0) {
+        if (create_pkg_path(path, PKG_DIR_PREFIX, pkgname, PKG_DIR_POSTFIX)) {
+            goto done;
+        }
+    } else {
+        if (create_pkg_path(path, PKG_SEC_DIR_PREFIX, pkgname, PKG_DIR_POSTFIX)) {
+            goto done;
+        }
     }
 
     d = opendir(path);
@@ -375,7 +445,7 @@ int get_size(const char *pkgname, const char *apkpath,
             }
             subfd = openat(dfd, name, O_RDONLY | O_DIRECTORY);
             if (subfd >= 0) {
-                int size = calculate_dir_size(subfd);
+                int64_t size = calculate_dir_size(subfd);
                 if (!strcmp(name,"lib")) {
                     codesize += size;
                 } else if(!strcmp(name,"cache")) {
@@ -865,4 +935,156 @@ int movefiles()
     closedir(d);
 done:
     return 0;
+}
+
+int linklib(const char* dataDir, const char* asecLibDir)
+{
+    char libdir[PKG_PATH_MAX];
+    struct stat s, libStat;
+    int rc = 0;
+
+    const size_t libdirLen = strlen(dataDir) + strlen(PKG_LIB_POSTFIX);
+    if (libdirLen >= PKG_PATH_MAX) {
+        LOGE("library dir len too large");
+        return -1;
+    }
+
+    if (snprintf(libdir, sizeof(libdir), "%s%s", dataDir, PKG_LIB_POSTFIX) != (ssize_t)libdirLen) {
+        LOGE("library dir not written successfully: %s\n", strerror(errno));
+        return -1;
+    }
+
+    if (stat(dataDir, &s) < 0) return -1;
+
+    if (chown(dataDir, 0, 0) < 0) {
+        LOGE("failed to chown '%s': %s\n", dataDir, strerror(errno));
+        return -1;
+    }
+
+    if (chmod(dataDir, 0700) < 0) {
+        LOGE("failed to chmod '%s': %s\n", dataDir, strerror(errno));
+        rc = -1;
+        goto out;
+    }
+
+    if (lstat(libdir, &libStat) < 0) {
+        LOGE("couldn't stat lib dir: %s\n", strerror(errno));
+        rc = -1;
+        goto out;
+    }
+
+    if (S_ISDIR(libStat.st_mode)) {
+        if (delete_dir_contents(libdir, 1, 0) < 0) {
+            rc = -1;
+            goto out;
+        }
+    } else if (S_ISLNK(libStat.st_mode)) {
+        if (unlink(libdir) < 0) {
+            rc = -1;
+            goto out;
+        }
+    }
+
+    if (symlink(asecLibDir, libdir) < 0) {
+        LOGE("couldn't symlink directory '%s' -> '%s': %s\n", libdir, asecLibDir, strerror(errno));
+        rc = -errno;
+        goto out;
+    }
+
+    if (lchown(libdir, AID_SYSTEM, AID_SYSTEM) < 0) {
+        LOGE("cannot chown dir '%s': %s\n", libdir, strerror(errno));
+        unlink(libdir);
+        rc = -errno;
+        goto out;
+    }
+
+out:
+    if (chmod(dataDir, s.st_mode) < 0) {
+        LOGE("failed to chmod '%s': %s\n", dataDir, strerror(errno));
+        return -errno;
+    }
+
+    if (chown(dataDir, s.st_uid, s.st_gid) < 0) {
+        LOGE("failed to chown '%s' : %s\n", dataDir, strerror(errno));
+        return -errno;
+    }
+
+    return rc;
+}
+
+int unlinklib(const char* dataDir)
+{
+    char libdir[PKG_PATH_MAX];
+    struct stat s, libStat;
+    int rc = 0;
+
+    const size_t libdirLen = strlen(dataDir) + strlen(PKG_LIB_POSTFIX);
+    if (libdirLen >= PKG_PATH_MAX) {
+        return -1;
+    }
+
+    if (snprintf(libdir, sizeof(libdir), "%s%s", dataDir, PKG_LIB_POSTFIX) != (ssize_t)libdirLen) {
+        LOGE("library dir not written successfully: %s\n", strerror(errno));
+        return -1;
+    }
+
+    if (stat(dataDir, &s) < 0) {
+        LOGE("couldn't state data dir");
+        return -1;
+    }
+
+    if (chown(dataDir, 0, 0) < 0) {
+        LOGE("failed to chown '%s': %s\n", dataDir, strerror(errno));
+        return -1;
+    }
+
+    if (chmod(dataDir, 0700) < 0) {
+        LOGE("failed to chmod '%s': %s\n", dataDir, strerror(errno));
+        rc = -1;
+        goto out;
+    }
+
+    if (lstat(libdir, &libStat) < 0) {
+        LOGE("couldn't stat lib dir: %s\n", strerror(errno));
+        rc = -1;
+        goto out;
+    }
+
+    if (S_ISDIR(libStat.st_mode)) {
+        if (delete_dir_contents(libdir, 1, 0) < 0) {
+            rc = -1;
+            goto out;
+        }
+    } else if (S_ISLNK(libStat.st_mode)) {
+        if (unlink(libdir) < 0) {
+            rc = -1;
+            goto out;
+        }
+    }
+
+    if (mkdir(libdir, 0755) < 0) {
+        LOGE("cannot create dir '%s': %s\n", libdir, strerror(errno));
+        rc = -errno;
+        goto out;
+    }
+
+    if (chown(libdir, AID_SYSTEM, AID_SYSTEM) < 0) {
+        LOGE("cannot chown dir '%s': %s\n", libdir, strerror(errno));
+        unlink(libdir);
+        rc = -errno;
+        goto out;
+    }
+
+out:
+    if (chmod(dataDir, s.st_mode) < 0) {
+        LOGE("failed to chmod '%s': %s\n", dataDir, strerror(errno));
+        return -1;
+    }
+
+    if (chown(dataDir, s.st_uid, s.st_gid) < 0) {
+        LOGE("failed to chown '%s' : %s\n", dataDir, strerror(errno));
+        return -1;
+    }
+
+    return rc;
 }

@@ -85,6 +85,8 @@ public class PopupWindow {
     private boolean mTouchable = true;
     private boolean mOutsideTouchable = false;
     private boolean mClippingEnabled = true;
+    private boolean mSplitTouchEnabled;
+    private boolean mLayoutInScreen;
 
     private OnTouchListener mTouchInterceptor;
     
@@ -107,6 +109,7 @@ public class PopupWindow {
     private Drawable mBelowAnchorBackgroundDrawable;
 
     private boolean mAboveAnchor;
+    private int mWindowLayoutType = WindowManager.LayoutParams.TYPE_APPLICATION_PANEL;
     
     private OnDismissListener mOnDismissListener;
     private boolean mIgnoreCheekPress = false;
@@ -165,6 +168,10 @@ public class PopupWindow {
                 attrs, com.android.internal.R.styleable.PopupWindow, defStyle, 0);
 
         mBackground = a.getDrawable(R.styleable.PopupWindow_popupBackground);
+
+        final int animStyle = a.getResourceId(R.styleable.PopupWindow_popupAnimationStyle, -1);
+        mAnimationStyle = animStyle == com.android.internal.R.style.Animation_PopupWindow ? -1 :
+                animStyle;
 
         // If this is a StateListDrawable, try to find and store the drawable to be
         // used when the drop-down is placed above its anchor view, and the one to be
@@ -564,6 +571,78 @@ public class PopupWindow {
     }
 
     /**
+     * <p>Indicates whether the popup window supports splitting touches.</p>
+     * 
+     * @return true if the touch splitting is enabled, false otherwise
+     * 
+     * @see #setSplitTouchEnabled(boolean)
+     * @hide
+     */
+    public boolean isSplitTouchEnabled() {
+        return mSplitTouchEnabled;
+    }
+
+    /**
+     * <p>Allows the popup window to split touches across other windows that also
+     * support split touch.  When this flag is not set, the first pointer
+     * that goes down determines the window to which all subsequent touches
+     * go until all pointers go up.  When this flag is set, each pointer
+     * (not necessarily the first) that goes down determines the window
+     * to which all subsequent touches of that pointer will go until that
+     * pointer goes up thereby enabling touches with multiple pointers
+     * to be split across multiple windows.</p>
+     *
+     * @param enabled true if the split touches should be enabled, false otherwise
+     * @see #isSplitTouchEnabled()
+     * @hide
+     */
+    public void setSplitTouchEnabled(boolean enabled) {
+        mSplitTouchEnabled = enabled;
+    }
+
+    /**
+     * <p>Indicates whether the popup window will be forced into using absolute screen coordinates
+     * for positioning.</p>
+     *
+     * @return true if the window will always be positioned in screen coordinates.
+     * @hide
+     */
+    public boolean isLayoutInScreenEnabled() {
+        return mLayoutInScreen;
+    }
+
+    /**
+     * <p>Allows the popup window to force the flag
+     * {@link WindowManager.LayoutParams#FLAG_LAYOUT_IN_SCREEN}, overriding default behavior.
+     * This will cause the popup to be positioned in absolute screen coordinates.</p>
+     *
+     * @param enabled true if the popup should always be positioned in screen coordinates
+     * @hide
+     */
+    public void setLayoutInScreenEnabled(boolean enabled) {
+        mLayoutInScreen = enabled;
+    }
+
+    /**
+     * Set the layout type for this window. Should be one of the TYPE constants defined in
+     * {@link WindowManager.LayoutParams}.
+     *
+     * @param layoutType Layout type for this window.
+     * @hide
+     */
+    public void setWindowLayoutType(int layoutType) {
+        mWindowLayoutType = layoutType;
+    }
+
+    /**
+     * @return The layout type for this window.
+     * @hide
+     */
+    public int getWindowLayoutType() {
+        return mWindowLayoutType;
+    }
+
+    /**
      * <p>Change the width and height measure specs that are given to the
      * window manager by the popup.  By default these are 0, meaning that
      * the current width or height is requested as an explicit size from
@@ -852,7 +931,7 @@ public class PopupWindow {
             p.format = PixelFormat.TRANSLUCENT;
         }
         p.flags = computeFlags(p.flags);
-        p.type = WindowManager.LayoutParams.TYPE_APPLICATION_PANEL;
+        p.type = mWindowLayoutType;
         p.token = token;
         p.softInputMode = mSoftInputMode;
         p.setTitle("PopupWindow:" + Integer.toHexString(hashCode()));
@@ -867,7 +946,8 @@ public class PopupWindow {
                 WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE |
                 WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH |
                 WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS |
-                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
+                WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM |
+                WindowManager.LayoutParams.FLAG_SPLIT_TOUCH);
         if(mIgnoreCheekPress) {
             curFlags |= WindowManager.LayoutParams.FLAG_IGNORE_CHEEK_PRESSES;
         }
@@ -887,6 +967,12 @@ public class PopupWindow {
         }
         if (!mClippingEnabled) {
             curFlags |= WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
+        }
+        if (mSplitTouchEnabled) {
+            curFlags |= WindowManager.LayoutParams.FLAG_SPLIT_TOUCH;
+        }
+        if (mLayoutInScreen) {
+            curFlags |= WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
         }
         return curFlags;
     }

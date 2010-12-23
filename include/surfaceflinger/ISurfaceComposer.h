@@ -27,7 +27,7 @@
 
 #include <ui/PixelFormat.h>
 
-#include <surfaceflinger/ISurfaceFlingerClient.h>
+#include <surfaceflinger/ISurfaceComposerClient.h>
 
 namespace android {
 // ----------------------------------------------------------------------------
@@ -77,6 +77,11 @@ public:
         eOrientationSwapMask    = 0x01
     };
     
+    enum {
+        eElectronBeamAnimationOn  = 0x01,
+        eElectronBeamAnimationOff = 0x10
+    };
+
     // flags for setOrientation
     enum {
         eOrientationAnimationDisable = 0x00000001
@@ -85,8 +90,11 @@ public:
     /* create connection with surface flinger, requires
      * ACCESS_SURFACE_FLINGER permission
      */
+    virtual sp<ISurfaceComposerClient> createConnection() = 0;
 
-    virtual sp<ISurfaceFlingerClient> createConnection() = 0;
+    /* create a client connection with surface flinger
+     */
+    virtual sp<ISurfaceComposerClient> createClientConnection() = 0;
 
     /* retrieve the control block */
     virtual sp<IMemoryHeap> getCblk() const = 0;
@@ -107,6 +115,17 @@ public:
      */
     virtual void bootFinished() = 0;
 
+    /* Capture the specified screen. requires READ_FRAME_BUFFER permission
+     * This function will fail if there is a secure window on screen.
+     */
+    virtual status_t captureScreen(DisplayID dpy,
+            sp<IMemoryHeap>* heap,
+            uint32_t* width, uint32_t* height, PixelFormat* format,
+            uint32_t reqWidth, uint32_t reqHeight) = 0;
+
+    virtual status_t turnElectronBeamOff(int32_t mode) = 0;
+    virtual status_t turnElectronBeamOn(int32_t mode) = 0;
+
     /* Signal surfaceflinger that there might be some work to do
      * This is an ASYNCHRONOUS call.
      */
@@ -123,13 +142,17 @@ public:
         // Java by ActivityManagerService.
         BOOT_FINISHED = IBinder::FIRST_CALL_TRANSACTION,
         CREATE_CONNECTION,
+        CREATE_CLIENT_CONNECTION,
         GET_CBLK,
         OPEN_GLOBAL_TRANSACTION,
         CLOSE_GLOBAL_TRANSACTION,
         SET_ORIENTATION,
         FREEZE_DISPLAY,
         UNFREEZE_DISPLAY,
-        SIGNAL
+        SIGNAL,
+        CAPTURE_SCREEN,
+        TURN_ELECTRON_BEAM_OFF,
+        TURN_ELECTRON_BEAM_ON
     };
 
     virtual status_t    onTransact( uint32_t code,

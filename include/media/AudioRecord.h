@@ -100,6 +100,19 @@ public:
 
     typedef void (*callback_t)(int event, void* user, void *info);
 
+    /* Returns the minimum frame count required for the successful creation of
+     * an AudioRecord object.
+     * Returned status (from utils/Errors.h) can be:
+     *  - NO_ERROR: successful operation
+     *  - NO_INIT: audio server or audio hardware not initialized
+     *  - BAD_VALUE: unsupported configuration
+     */
+
+     static status_t getMinFrameCount(int* frameCount,
+                                      uint32_t sampleRate,
+                                      int format,
+                                      int channelCount);
+
     /* Constructs an uninitialized AudioRecord. No connection with
      * AudioFlinger takes place.
      */
@@ -142,7 +155,8 @@ public:
                                     uint32_t flags      = 0,
                                     callback_t cbf = 0,
                                     void* user = 0,
-                                    int notificationFrames = 0);
+                                    int notificationFrames = 0,
+                                    int sessionId = 0);
 
 
     /* Terminates the AudioRecord and unregisters it from AudioFlinger.
@@ -168,7 +182,8 @@ public:
                             callback_t cbf = 0,
                             void* user = 0,
                             int notificationFrames = 0,
-                            bool threadCanCallJava = false);
+                            bool threadCanCallJava = false,
+                            int sessionId = 0);
 
 
     /* Result of constructing the AudioRecord. This must be checked
@@ -270,6 +285,16 @@ public:
      */
             audio_io_handle_t    getInput();
 
+    /* returns the audio session ID associated to this AudioRecord.
+     *
+     * Parameters:
+     *  none.
+     *
+     * Returned value:
+     *  AudioRecord session ID.
+     */
+            int    getSessionId();
+
     /* obtains a buffer of "frameCount" frames. The buffer must be
      * filled entirely. If the track is stopped, obtainBuffer() returns
      * STOPPED instead of NO_ERROR as long as there are buffers availlable,
@@ -356,6 +381,7 @@ private:
     uint32_t                mFlags;
     uint32_t                mChannels;
     audio_io_handle_t       mInput;
+    int                     mSessionId;
 };
 
 }; // namespace android

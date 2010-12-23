@@ -63,6 +63,9 @@
         <item>@drawable/scrollbar_handle_horizontal</item>
         <item>@drawable/scrollbar_handle_vertical</item>
         <item>@drawable/spinner_dropdown_background</item>
+        <item>@drawable/text_select_handle_left</item>
+        <item>@drawable/text_select_handle_middle</item>
+        <item>@drawable/text_select_handle_right</item>
         <item>@drawable/title_bar</item>
         <item>@drawable/title_bar_shadow</item>
         <!-- Visual lock screen -->
@@ -71,20 +74,6 @@
         <item>@drawable/indicator_code_lock_point_area_default</item>
         <item>@drawable/indicator_code_lock_point_area_green</item>
         <item>@drawable/indicator_code_lock_point_area_red</item>
-        <!-- SlidingTab drawables shared by InCallScreen and LockScreen -->
-        <item>@drawable/jog_tab_bar_left_end_confirm_gray</item>
-        <item>@drawable/jog_tab_bar_left_end_normal</item>
-        <item>@drawable/jog_tab_bar_left_end_pressed</item>
-        <item>@drawable/jog_tab_bar_right_end_confirm_gray</item>
-        <item>@drawable/jog_tab_bar_right_end_normal</item>
-        <item>@drawable/jog_tab_bar_right_end_pressed</item>
-        <item>@drawable/jog_tab_left_confirm_gray</item>
-        <item>@drawable/jog_tab_left_normal</item>
-        <item>@drawable/jog_tab_left_pressed</item>
-        <item>@drawable/jog_tab_right_confirm_gray</item>
-        <item>@drawable/jog_tab_right_normal</item>
-        <item>@drawable/jog_tab_right_pressed</item>
-        <item>@drawable/jog_tab_target_gray</item>
     </array>
 
     <!-- Do not translate. These are all of the color state list resources that should be
@@ -116,29 +105,5 @@
     <integer-array name="maps_starting_zoom">
         <item>3</item>
     </integer-array>
-
-    <!-- Do not translate. Defines the slots for the right-hand side icons.  That is to say, the
-         icons in the status bar that are not notifications. -->
-    <string-array name="status_bar_icon_order">
-        <item><xliff:g id="id">clock</xliff:g></item>
-        <item><xliff:g id="id">secure</xliff:g></item>
-        <item><xliff:g id="id">alarm_clock</xliff:g></item>
-        <item><xliff:g id="id">battery</xliff:g></item>
-        <item><xliff:g id="id">phone_signal</xliff:g></item>
-        <item><xliff:g id="id">phone_evdo_signal</xliff:g></item>
-        <item><xliff:g id="id">data_connection</xliff:g></item>
-        <item><xliff:g id="id">cdma_eri</xliff:g></item>
-        <item><xliff:g id="id">tty</xliff:g></item>
-        <item><xliff:g id="id">volume</xliff:g></item>
-        <item><xliff:g id="id">mute</xliff:g></item>
-        <item><xliff:g id="id">speakerphone</xliff:g></item>
-        <item><xliff:g id="id">wifi</xliff:g></item>
-        <item><xliff:g id="id">tty</xliff:g></item>
-        <item><xliff:g id="id">bluetooth</xliff:g></item>
-        <item><xliff:g id="id">gps</xliff:g></item>
-        <item><xliff:g id="id">sync_active</xliff:g></item>
-        <item><xliff:g id="id">sync_failing</xliff:g></item>
-        <item><xliff:g id="id">ime</xliff:g></item>
-    </string-array>
 
 </resources>

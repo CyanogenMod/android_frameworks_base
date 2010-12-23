@@ -76,7 +76,9 @@ struct MyVorbisExtractor {
     status_t seekToOffset(off_t offset);
     status_t readNextPacket(MediaBuffer **buffer);
 
-    void init();
+    status_t init();
+
+    sp<MetaData> getFileMetaData() { return mFileMeta; }
 
 private:
     struct Page {
@@ -91,7 +93,10 @@ private:
     sp<DataSource> mSource;
     off_t mOffset;
     Page mCurrentPage;
+    uint64_t mPrevGranulePosition;
     size_t mCurrentPageSize;
+    bool mFirstPacketInPage;
+    uint64_t mCurrentPageSamples;
     size_t mNextLaceIndex;
 
     off_t mFirstDataOffset;
@@ -100,12 +105,18 @@ private:
     vorbis_comment mVc;
 
     sp<MetaData> mMeta;
+    sp<MetaData> mFileMeta;
 
     ssize_t readPage(off_t offset, Page *page);
     status_t findNextPage(off_t startOffset, off_t *pageOffset);
 
-    void verifyHeader(
+    status_t verifyHeader(
             MediaBuffer *buffer, uint8_t type);
+
+    void parseFileMetaData();
+    void extractAlbumArt(const void *data, size_t size);
+
+    uint64_t findPrevGranulePosition(off_t pageOffset);
 
     MyVorbisExtractor(const MyVorbisExtractor &);
     MyVorbisExtractor &operator=(const MyVorbisExtractor &);
@@ -149,9 +160,10 @@ status_t OggSource::read(
     *out = NULL;
 
     int64_t seekTimeUs;
-    if (options && options->getSeekTo(&seekTimeUs)) {
+    ReadOptions::SeekMode mode;
+    if (options && options->getSeekTo(&seekTimeUs, &mode)) {
         off_t pos = seekTimeUs * mExtractor->mImpl->approxBitrate() / 8000000ll;
-        LOGI("seeking to offset %ld", pos);
+        LOGV("seeking to offset %ld", pos);
 
         if (mExtractor->mImpl->seekToOffset(pos) != OK) {
             return ERROR_END_OF_STREAM;
@@ -174,6 +186,8 @@ status_t OggSource::read(
     }
 #endif
 
+    packet->meta_data()->setInt32(kKeyIsSyncFrame, 1);
+
     *out = packet;
 
     return OK;
@@ -184,13 +198,21 @@ status_t OggSource::read(
 MyVorbisExtractor::MyVorbisExtractor(const sp<DataSource> &source)
     : mSource(source),
       mOffset(0),
+      mPrevGranulePosition(0),
       mCurrentPageSize(0),
+      mFirstPacketInPage(true),
+      mCurrentPageSamples(0),
       mNextLaceIndex(0),
       mFirstDataOffset(-1) {
     mCurrentPage.mNumSegments = 0;
+
+    vorbis_info_init(&mVi);
+    vorbis_comment_init(&mVc);
 }
 
 MyVorbisExtractor::~MyVorbisExtractor() {
+    vorbis_comment_clear(&mVc);
+    vorbis_info_clear(&mVi);
 }
 
 sp<MetaData> MyVorbisExtractor::getFormat() const {
@@ -224,6 +246,52 @@ status_t MyVorbisExtractor::findNextPage(
     }
 }
 
+// Given the offset of the "current" page, find the page immediately preceding
+// it (if any) and return its granule position.
+// To do this we back up from the "current" page's offset until we find any
+// page preceding it and then scan forward to just before the current page.
+uint64_t MyVorbisExtractor::findPrevGranulePosition(off_t pageOffset) {
+    off_t prevPageOffset = 0;
+    off_t prevGuess = pageOffset;
+    for (;;) {
+        if (prevGuess >= 5000) {
+            prevGuess -= 5000;
+        } else {
+            prevGuess = 0;
+        }
+
+        LOGV("backing up %ld bytes", pageOffset - prevGuess);
+
+        CHECK_EQ(findNextPage(prevGuess, &prevPageOffset), (status_t)OK);
+
+        if (prevPageOffset < pageOffset || prevGuess == 0) {
+            break;
+        }
+    }
+
+    if (prevPageOffset == pageOffset) {
+        // We did not find a page preceding this one.
+        return 0;
+    }
+
+    LOGV("prevPageOffset at %ld, pageOffset at %ld", prevPageOffset, pageOffset);
+
+    for (;;) {
+        Page prevPage;
+        ssize_t n = readPage(prevPageOffset, &prevPage);
+
+        if (n <= 0) {
+            return 0;
+        }
+
+        prevPageOffset += n;
+
+        if (prevPageOffset == pageOffset) {
+            return prevPage.mGranulePosition;
+        }
+    }
+}
+
 status_t MyVorbisExtractor::seekToOffset(off_t offset) {
     if (mFirstDataOffset >= 0 && offset < mFirstDataOffset) {
         // Once we know where the actual audio data starts (past the headers)
@@ -238,9 +306,16 @@ status_t MyVorbisExtractor::seekToOffset(off_t offset) {
         return err;
     }
 
+    // We found the page we wanted to seek to, but we'll also need
+    // the page preceding it to determine how many valid samples are on
+    // this page.
+    mPrevGranulePosition = findPrevGranulePosition(pageOffset);
+
     mOffset = pageOffset;
 
     mCurrentPageSize = 0;
+    mFirstPacketInPage = true;
+    mCurrentPageSamples = 0;
     mCurrentPage.mNumSegments = 0;
     mNextLaceIndex = 0;
 
@@ -253,7 +328,7 @@ ssize_t MyVorbisExtractor::readPage(off_t offset, Page *page) {
     uint8_t header[27];
     if (mSource->readAt(offset, header, sizeof(header))
             < (ssize_t)sizeof(header)) {
-        LOGE("failed to read %d bytes at offset 0x%08lx", sizeof(header), offset);
+        LOGV("failed to read %d bytes at offset 0x%08lx", sizeof(header), offset);
 
         return ERROR_IO;
     }
@@ -297,6 +372,7 @@ ssize_t MyVorbisExtractor::readPage(off_t offset, Page *page) {
         totalSize += page->mLace[i];
     }
 
+#if 0
     String8 tmp;
     for (size_t i = 0; i < page->mNumSegments; ++i) {
         char x[32];
@@ -306,6 +382,7 @@ ssize_t MyVorbisExtractor::readPage(off_t offset, Page *page) {
     }
 
     LOGV("%c %s", page->mFlags & 1 ? '+' : ' ', tmp.string());
+#endif
 
     return sizeof(header) + page->mNumSegments + totalSize;
 }
@@ -351,7 +428,13 @@ status_t MyVorbisExtractor::readNextPacket(MediaBuffer **out) {
                 // XXX Not only is this not technically the correct time for
                 // this packet, we also stamp every packet in this page
                 // with the same time. This needs fixing later.
-                timeUs = mCurrentPage.mGranulePosition * 1000000ll / mVi.rate;
+
+                if (mVi.rate) {
+                    // Rate may not have been initialized yet if we're currently
+                    // reading the configuration packets...
+                    // Fortunately, the timestamp doesn't matter for those.
+                    timeUs = mCurrentPage.mGranulePosition * 1000000ll / mVi.rate;
+                }
                 tmp->set_range(0, 0);
             }
             buffer = tmp;
@@ -362,7 +445,7 @@ status_t MyVorbisExtractor::readNextPacket(MediaBuffer **out) {
                     packetSize);
 
             if (n < (ssize_t)packetSize) {
-                LOGE("failed to read %d bytes at 0x%08lx", packetSize, dataOffset);
+                LOGV("failed to read %d bytes at 0x%08lx", packetSize, dataOffset);
                 return ERROR_IO;
             }
 
@@ -375,6 +458,12 @@ status_t MyVorbisExtractor::readNextPacket(MediaBuffer **out) {
 
                 if (timeUs >= 0) {
                     buffer->meta_data()->setInt64(kKeyTime, timeUs);
+                }
+
+                if (mFirstPacketInPage) {
+                    buffer->meta_data()->setInt32(
+                            kKeyValidSamples, mCurrentPageSamples);
+                    mFirstPacketInPage = false;
                 }
 
                 *out = buffer;
@@ -396,10 +485,16 @@ status_t MyVorbisExtractor::readNextPacket(MediaBuffer **out) {
                 buffer = NULL;
             }
 
-            LOGE("readPage returned %ld", n);
+            LOGV("readPage returned %ld", n);
 
             return n < 0 ? n : (status_t)ERROR_END_OF_STREAM;
         }
+
+        mCurrentPageSamples =
+            mCurrentPage.mGranulePosition - mPrevGranulePosition;
+        mFirstPacketInPage = true;
+
+        mPrevGranulePosition = mCurrentPage.mGranulePosition;
 
         mCurrentPageSize = n;
         mNextLaceIndex = 0;
@@ -413,6 +508,10 @@ status_t MyVorbisExtractor::readNextPacket(MediaBuffer **out) {
                     buffer->meta_data()->setInt64(kKeyTime, timeUs);
                 }
 
+                buffer->meta_data()->setInt32(
+                        kKeyValidSamples, mCurrentPageSamples);
+                mFirstPacketInPage = false;
+
                 *out = buffer;
 
                 return OK;
@@ -421,47 +520,60 @@ status_t MyVorbisExtractor::readNextPacket(MediaBuffer **out) {
     }
 }
 
-void MyVorbisExtractor::init() {
-    vorbis_info_init(&mVi);
-
-    vorbis_comment mVc;
-
+status_t MyVorbisExtractor::init() {
     mMeta = new MetaData;
     mMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_VORBIS);
 
     MediaBuffer *packet;
-    CHECK_EQ(readNextPacket(&packet), OK);
+    status_t err;
+    if ((err = readNextPacket(&packet)) != OK) {
+        return err;
+    }
     LOGV("read packet of size %d\n", packet->range_length());
-    verifyHeader(packet, 1);
+    err = verifyHeader(packet, 1);
     packet->release();
     packet = NULL;
+    if (err != OK) {
+        return err;
+    }
 
-    CHECK_EQ(readNextPacket(&packet), OK);
+    if ((err = readNextPacket(&packet)) != OK) {
+        return err;
+    }
     LOGV("read packet of size %d\n", packet->range_length());
-    verifyHeader(packet, 3);
+    err = verifyHeader(packet, 3);
     packet->release();
     packet = NULL;
+    if (err != OK) {
+        return err;
+    }
 
-    CHECK_EQ(readNextPacket(&packet), OK);
+    if ((err = readNextPacket(&packet)) != OK) {
+        return err;
+    }
     LOGV("read packet of size %d\n", packet->range_length());
-    verifyHeader(packet, 5);
+    err = verifyHeader(packet, 5);
     packet->release();
     packet = NULL;
+    if (err != OK) {
+        return err;
+    }
 
     mFirstDataOffset = mOffset + mCurrentPageSize;
+
+    return OK;
 }
 
-void MyVorbisExtractor::verifyHeader(
+status_t MyVorbisExtractor::verifyHeader(
         MediaBuffer *buffer, uint8_t type) {
     const uint8_t *data =
         (const uint8_t *)buffer->data() + buffer->range_offset();
 
     size_t size = buffer->range_length();
 
-    CHECK(size >= 7);
-
-    CHECK_EQ(data[0], type);
-    CHECK(!memcmp(&data[1], "vorbis", 6));
+    if (size < 7 || data[0] != type || memcmp(&data[1], "vorbis", 6)) {
+        return ERROR_MALFORMED;
+    }
 
     ogg_buffer buf;
     buf.data = (uint8_t *)data;
@@ -508,18 +620,26 @@ void MyVorbisExtractor::verifyHeader(
 
         case 3:
         {
-            CHECK_EQ(0, _vorbis_unpack_comment(&mVc, &bits));
+            if (0 != _vorbis_unpack_comment(&mVc, &bits)) {
+                return ERROR_MALFORMED;
+            }
+
+            parseFileMetaData();
             break;
         }
 
         case 5:
         {
-            CHECK_EQ(0, _vorbis_unpack_books(&mVi, &bits));
+            if (0 != _vorbis_unpack_books(&mVi, &bits)) {
+                return ERROR_MALFORMED;
+            }
 
             mMeta->setData(kKeyVorbisBooks, 0, data, size);
             break;
         }
     }
+
+    return OK;
 }
 
 uint64_t MyVorbisExtractor::approxBitrate() {
@@ -530,6 +650,196 @@ uint64_t MyVorbisExtractor::approxBitrate() {
     return (mVi.bitrate_lower + mVi.bitrate_upper) / 2;
 }
 
+void MyVorbisExtractor::parseFileMetaData() {
+    mFileMeta = new MetaData;
+    mFileMeta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_CONTAINER_OGG);
+
+    struct {
+        const char *const mTag;
+        uint32_t mKey;
+    } kMap[] = {
+        { "TITLE", kKeyTitle },
+        { "ARTIST", kKeyArtist },
+        { "ALBUM", kKeyAlbum },
+        { "COMPOSER", kKeyComposer },
+        { "GENRE", kKeyGenre },
+        { "AUTHOR", kKeyAuthor },
+        { "TRACKNUMBER", kKeyCDTrackNumber },
+        { "DISCNUMBER", kKeyDiscNumber },
+        { "DATE", kKeyDate },
+        { "LYRICIST", kKeyWriter },
+        { "METADATA_BLOCK_PICTURE", kKeyAlbumArt },
+        { "ANDROID_LOOP", kKeyAutoLoop },
+    };
+
+    for (int i = 0; i < mVc.comments; ++i) {
+        const char *comment = mVc.user_comments[i];
+
+        for (size_t j = 0; j < sizeof(kMap) / sizeof(kMap[0]); ++j) {
+            size_t tagLen = strlen(kMap[j].mTag);
+            if (!strncasecmp(kMap[j].mTag, comment, tagLen)
+                    && comment[tagLen] == '=') {
+                if (kMap[j].mKey == kKeyAlbumArt) {
+                    extractAlbumArt(
+                            &comment[tagLen + 1],
+                            mVc.comment_lengths[i] - tagLen - 1);
+                } else if (kMap[j].mKey == kKeyAutoLoop) {
+                    if (!strcasecmp(&comment[tagLen + 1], "true")) {
+                        mFileMeta->setInt32(kKeyAutoLoop, true);
+                    }
+                } else {
+                    mFileMeta->setCString(kMap[j].mKey, &comment[tagLen + 1]);
+                }
+            }
+        }
+    }
+
+#if 0
+    for (int i = 0; i < mVc.comments; ++i) {
+        LOGI("comment #%d: '%s'", i + 1, mVc.user_comments[i]);
+    }
+#endif
+}
+
+// The returned buffer should be free()d.
+static uint8_t *DecodeBase64(const char *s, size_t size, size_t *outSize) {
+    *outSize = 0;
+
+    if ((size % 4) != 0) {
+        return NULL;
+    }
+
+    size_t n = size;
+    size_t padding = 0;
+    if (n >= 1 && s[n - 1] == '=') {
+        padding = 1;
+
+        if (n >= 2 && s[n - 2] == '=') {
+            padding = 2;
+        }
+    }
+
+    size_t outLen = 3 * size / 4 - padding;
+
+    *outSize = outLen;
+
+    void *buffer = malloc(outLen);
+
+    uint8_t *out = (uint8_t *)buffer;
+    size_t j = 0;
+    uint32_t accum = 0;
+    for (size_t i = 0; i < n; ++i) {
+        char c = s[i];
+        unsigned value;
+        if (c >= 'A' && c <= 'Z') {
+            value = c - 'A';
+        } else if (c >= 'a' && c <= 'z') {
+            value = 26 + c - 'a';
+        } else if (c >= '0' && c <= '9') {
+            value = 52 + c - '0';
+        } else if (c == '+') {
+            value = 62;
+        } else if (c == '/') {
+            value = 63;
+        } else if (c != '=') {
+            return NULL;
+        } else {
+            if (i < n - padding) {
+                return NULL;
+            }
+
+            value = 0;
+        }
+
+        accum = (accum << 6) | value;
+
+        if (((i + 1) % 4) == 0) {
+            out[j++] = (accum >> 16);
+
+            if (j < outLen) { out[j++] = (accum >> 8) & 0xff; }
+            if (j < outLen) { out[j++] = accum & 0xff; }
+
+            accum = 0;
+        }
+    }
+
+    return (uint8_t *)buffer;
+}
+
+void MyVorbisExtractor::extractAlbumArt(const void *data, size_t size) {
+    LOGV("extractAlbumArt from '%s'", (const char *)data);
+
+    size_t flacSize;
+    uint8_t *flac = DecodeBase64((const char *)data, size, &flacSize);
+
+    if (flac == NULL) {
+        LOGE("malformed base64 encoded data.");
+        return;
+    }
+
+    LOGV("got flac of size %d", flacSize);
+
+    uint32_t picType;
+    uint32_t typeLen;
+    uint32_t descLen;
+    uint32_t dataLen;
+    char type[128];
+
+    if (flacSize < 8) {
+        goto exit;
+    }
+
+    picType = U32_AT(flac);
+
+    if (picType != 3) {
+        // This is not a front cover.
+        goto exit;
+    }
+
+    typeLen = U32_AT(&flac[4]);
+    if (typeLen + 1 > sizeof(type)) {
+        goto exit;
+    }
+
+    if (flacSize < 8 + typeLen) {
+        goto exit;
+    }
+
+    memcpy(type, &flac[8], typeLen);
+    type[typeLen] = '\0';
+
+    LOGV("picType = %d, type = '%s'", picType, type);
+
+    if (!strcmp(type, "-->")) {
+        // This is not inline cover art, but an external url instead.
+        goto exit;
+    }
+
+    descLen = U32_AT(&flac[8 + typeLen]);
+
+    if (flacSize < 32 + typeLen + descLen) {
+        goto exit;
+    }
+
+    dataLen = U32_AT(&flac[8 + typeLen + 4 + descLen + 16]);
+
+    if (flacSize < 32 + typeLen + descLen + dataLen) {
+        goto exit;
+    }
+
+    LOGV("got image data, %d trailing bytes",
+         flacSize - 32 - typeLen - descLen - dataLen);
+
+    mFileMeta->setData(
+            kKeyAlbumArt, 0, &flac[8 + typeLen + 4 + descLen + 20], dataLen);
+
+    mFileMeta->setCString(kKeyAlbumArtMIME, type);
+
+exit:
+    free(flac);
+    flac = NULL;
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 
 OggExtractor::OggExtractor(const sp<DataSource> &source)
@@ -537,10 +847,11 @@ OggExtractor::OggExtractor(const sp<DataSource> &source)
       mInitCheck(NO_INIT),
       mImpl(NULL) {
     mImpl = new MyVorbisExtractor(mDataSource);
-    CHECK_EQ(mImpl->seekToOffset(0), OK);
-    mImpl->init();
+    mInitCheck = mImpl->seekToOffset(0);
 
-    mInitCheck = OK;
+    if (mInitCheck == OK) {
+        mInitCheck = mImpl->init();
+    }
 }
 
 OggExtractor::~OggExtractor() {
@@ -570,19 +881,12 @@ sp<MetaData> OggExtractor::getTrackMetaData(
 }
 
 sp<MetaData> OggExtractor::getMetaData() {
-    sp<MetaData> meta = new MetaData;
-
-    if (mInitCheck != OK) {
-        return meta;
-    }
-
-    meta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_CONTAINER_OGG);
-
-    return meta;
+    return mImpl->getFileMetaData();
 }
 
 bool SniffOgg(
-        const sp<DataSource> &source, String8 *mimeType, float *confidence) {
+        const sp<DataSource> &source, String8 *mimeType, float *confidence,
+        sp<AMessage> *) {
     char tmp[4];
     if (source->readAt(0, tmp, 4) < 4 || memcmp(tmp, "OggS", 4)) {
         return false;

@@ -29,6 +29,7 @@ import com.android.internal.telephony.CommandsInterface;
 import com.android.internal.telephony.DataCallState;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.Phone;
+import com.android.internal.telephony.UUSInfo;
 import com.android.internal.telephony.gsm.CallFailCause;
 import com.android.internal.telephony.gsm.SmsBroadcastConfigInfo;
 import com.android.internal.telephony.gsm.SuppServiceNotification;
@@ -496,6 +497,23 @@ public final class SimulatedCommands extends BaseCommands
      *  retMsg.obj = AsyncResult ar
      *  ar.exception carries exception on failure
      *  ar.userObject contains the orignal value of result.obj
+     *  ar.result is null on success and failure
+     *
+     * CLIR_DEFAULT     == on "use subscription default value"
+     * CLIR_SUPPRESSION == on "CLIR suppression" (allow CLI presentation)
+     * CLIR_INVOCATION  == on "CLIR invocation" (restrict CLI presentation)
+     */
+    public void dial(String address, int clirMode, UUSInfo uusInfo, Message result) {
+        simulatedCallState.onDial(address);
+
+        resultSuccess(result, null);
+    }
+
+    /**
+     *  returned message
+     *  retMsg.obj = AsyncResult ar
+     *  ar.exception carries exception on failure
+     *  ar.userObject contains the orignal value of result.obj
      *  ar.result is String containing IMSI on success
      */
     public void getIMSI(Message result) {
@@ -826,7 +844,6 @@ public final class SimulatedCommands extends BaseCommands
         ret[11] = null;
         ret[12] = null;
         ret[13] = null;
-        ret[14] = null;
 
         resultSuccess(result, ret);
     }

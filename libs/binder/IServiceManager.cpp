@@ -129,19 +129,19 @@ public:
         : BpInterface<IServiceManager>(impl)
     {
     }
-        
+
     virtual sp<IBinder> getService(const String16& name) const
     {
         unsigned n;
         for (n = 0; n < 5; n++){
             sp<IBinder> svc = checkService(name);
             if (svc != NULL) return svc;
-            LOGI("Waiting for sevice %s...\n", String8(name).string());
+            LOGI("Waiting for service %s...\n", String8(name).string());
             sleep(1);
         }
         return NULL;
     }
-    
+
     virtual sp<IBinder> checkService( const String16& name) const
     {
         Parcel data, reply;
@@ -158,7 +158,7 @@ public:
         data.writeString16(name);
         data.writeStrongBinder(service);
         status_t err = remote()->transact(ADD_SERVICE_TRANSACTION, data, &reply);
-        return err == NO_ERROR ? reply.readInt32() : err;
+        return err == NO_ERROR ? reply.readExceptionCode() : err;
     }
 
     virtual Vector<String16> listServices()
@@ -226,4 +226,3 @@ status_t BnServiceManager::onTransact(
 }
 
 }; // namespace android
-

@@ -27,9 +27,13 @@
 #include <media/stagefright/MediaSource.h>
 #include <media/stagefright/MetaData.h>
 
+#include "include/AwesomePlayer.h"
+
 namespace android {
 
-AudioPlayer::AudioPlayer(const sp<MediaPlayerBase::AudioSink> &audioSink)
+AudioPlayer::AudioPlayer(
+        const sp<MediaPlayerBase::AudioSink> &audioSink,
+        AwesomePlayer *observer)
     : mAudioTrack(NULL),
       mInputBuffer(NULL),
       mSampleRate(0),
@@ -45,12 +49,13 @@ AudioPlayer::AudioPlayer(const sp<MediaPlayerBase::AudioSink> &audioSink)
       mIsFirstBuffer(false),
       mFirstBufferResult(OK),
       mFirstBuffer(NULL),
-      mAudioSink(audioSink) {
+      mAudioSink(audioSink),
+      mObserver(observer) {
 }
 
 AudioPlayer::~AudioPlayer() {
     if (mStarted) {
-        stop();
+        reset();
     }
 }
 
@@ -160,13 +165,21 @@ status_t AudioPlayer::start(bool sourceAlreadyStarted) {
     return OK;
 }
 
-void AudioPlayer::pause() {
+void AudioPlayer::pause(bool playPendingSamples) {
     CHECK(mStarted);
 
-    if (mAudioSink.get() != NULL) {
-        mAudioSink->pause();
+    if (playPendingSamples) {
+        if (mAudioSink.get() != NULL) {
+            mAudioSink->stop();
+        } else {
+            mAudioTrack->stop();
+        }
     } else {
-        mAudioTrack->stop();
+        if (mAudioSink.get() != NULL) {
+            mAudioSink->pause();
+        } else {
+            mAudioTrack->pause();
+        }
     }
 }
 
@@ -180,7 +193,7 @@ void AudioPlayer::resume() {
     }
 }
 
-void AudioPlayer::stop() {
+void AudioPlayer::reset() {
     CHECK(mStarted);
 
     if (mAudioSink.get() != NULL) {
@@ -301,6 +314,9 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
                 }
 
                 mSeeking = false;
+                if (mObserver) {
+                    mObserver->postAudioSeekComplete();
+                }
             }
         }
 
@@ -323,6 +339,10 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
             Mutex::Autolock autoLock(mLock);
 
             if (err != OK) {
+                if (mObserver && !mReachedEOS) {
+                    mObserver->postAudioEOS();
+                }
+
                 mReachedEOS = true;
                 mFinalStatus = err;
                 break;
@@ -410,6 +430,12 @@ status_t AudioPlayer::seekTo(int64_t time_us) {
     mSeeking = true;
     mReachedEOS = false;
     mSeekTimeUs = time_us;
+
+    if (mAudioSink != NULL) {
+        mAudioSink->flush();
+    } else {
+        mAudioTrack->flush();
+    }
 
     return OK;
 }

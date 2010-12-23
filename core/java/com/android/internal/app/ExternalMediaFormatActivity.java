@@ -16,6 +16,8 @@
 
 package com.android.internal.app;
 
+import com.android.internal.os.storage.ExternalStorageFormatter;
+
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -23,13 +25,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.storage.IMountService;
-import android.os.Message;
-import android.os.RemoteException;
-import android.os.ServiceManager;
-import android.os.Environment;
-import android.widget.Toast;
 import android.util.Log;
 
 /**
@@ -38,7 +33,7 @@ import android.util.Log;
  */
 public class ExternalMediaFormatActivity extends AlertActivity implements DialogInterface.OnClickListener {
 
-    private static final int POSITIVE_BUTTON = AlertDialog.BUTTON1;
+    private static final int POSITIVE_BUTTON = AlertDialog.BUTTON_POSITIVE;
 
     /** Used to detect when the media state changes, in case we need to call finish() */
     private BroadcastReceiver mStorageReceiver = new BroadcastReceiver() {
@@ -98,14 +93,9 @@ public class ExternalMediaFormatActivity extends AlertActivity implements Dialog
     public void onClick(DialogInterface dialog, int which) {
 
         if (which == POSITIVE_BUTTON) {
-            IMountService mountService = IMountService.Stub.asInterface(ServiceManager
-                .getService("mount"));
-            if (mountService != null) {
-                try {
-                    mountService.formatVolume(Environment.getExternalStorageDirectory().toString());
-                } catch (RemoteException e) {
-                }
-            }
+            Intent intent = new Intent(ExternalStorageFormatter.FORMAT_ONLY);
+            intent.setComponent(ExternalStorageFormatter.COMPONENT_NAME);
+            startService(intent);
         }
 
         // No matter what, finish the activity

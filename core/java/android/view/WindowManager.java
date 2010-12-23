@@ -163,7 +163,8 @@ public interface WindowManager extends ViewManager {
             @ViewDebug.IntToString(from = TYPE_KEYGUARD_DIALOG, to = "TYPE_KEYGUARD_DIALOG"),
             @ViewDebug.IntToString(from = TYPE_SYSTEM_ERROR, to = "TYPE_SYSTEM_ERROR"),
             @ViewDebug.IntToString(from = TYPE_INPUT_METHOD, to = "TYPE_INPUT_METHOD"),
-            @ViewDebug.IntToString(from = TYPE_INPUT_METHOD_DIALOG, to = "TYPE_INPUT_METHOD_DIALOG")
+            @ViewDebug.IntToString(from = TYPE_INPUT_METHOD_DIALOG, to = "TYPE_INPUT_METHOD_DIALOG"),
+            @ViewDebug.IntToString(from = TYPE_SECURE_SYSTEM_OVERLAY, to = "TYPE_SECURE_SYSTEM_OVERLAY")
         })
         public int type;
     
@@ -341,7 +342,19 @@ public interface WindowManager extends ViewManager {
          * Window type: panel that slides out from the status bar
          */
         public static final int TYPE_STATUS_BAR_PANEL   = FIRST_SYSTEM_WINDOW+14;
-        
+
+        /**
+         * Window type: secure system overlay windows, which need to be displayed
+         * on top of everything else.  These windows must not take input
+         * focus, or they will interfere with the keyguard.
+         *
+         * This is exactly like {@link #TYPE_SYSTEM_OVERLAY} except that only the
+         * system itself is allowed to create these overlays.  Applications cannot
+         * obtain permission to create secure system overlays.
+         * @hide
+         */
+        public static final int TYPE_SECURE_SYSTEM_OVERLAY = FIRST_SYSTEM_WINDOW+15;
+
         /**
          * End of types of system windows.
          */
@@ -580,9 +593,23 @@ public interface WindowManager extends ViewManager {
          * If the keyguard is currently active and is secure (requires an
          * unlock pattern) than the user will still need to confirm it before
          * seeing this window, unless {@link #FLAG_SHOW_WHEN_LOCKED} has
-         * also been set. */
+         * also been set.
+         */
         public static final int FLAG_DISMISS_KEYGUARD = 0x00400000;
         
+        /** Window flag: when set the window will accept for touch events
+         * outside of its bounds to be sent to other windows that also
+         * support split touch.  When this flag is not set, the first pointer
+         * that goes down determines the window to which all subsequent touches
+         * go until all pointers go up.  When this flag is set, each pointer
+         * (not necessarily the first) that goes down determines the window
+         * to which all subsequent touches of that pointer will go until that
+         * pointer goes up thereby enabling touches with multiple pointers
+         * to be split across multiple windows.
+         * 
+         * {@hide} */
+        public static final int FLAG_SPLIT_TOUCH = 0x00800000;
+
         /** Window flag: *sigh* The lock screen wants to continue running its
          * animation while it is fading.  A kind-of hack to allow this.  Maybe
          * in the future we just make this the default behavior.
@@ -685,7 +712,7 @@ public interface WindowManager extends ViewManager {
         /** Adjustment option for {@link #softInputMode}: set to allow the
          * window to be resized when an input
          * method is shown, so that its contents are not covered by the input
-         * method.  This can <em>not<em> be combined with
+         * method.  This can <em>not</em> be combined with
          * {@link #SOFT_INPUT_ADJUST_PAN}; if
          * neither of these are set, then the system will try to pick one or
          * the other depending on the contents of the window.
@@ -696,7 +723,7 @@ public interface WindowManager extends ViewManager {
          * pan when an input method is
          * shown, so it doesn't need to deal with resizing but just panned
          * by the framework to ensure the current input focus is visible.  This
-         * can <em>not<em> be combined with {@link #SOFT_INPUT_ADJUST_RESIZE}; if
+         * can <em>not</em> be combined with {@link #SOFT_INPUT_ADJUST_RESIZE}; if
          * neither of these are set, then the system will try to pick one or
          * the other depending on the contents of the window.
          */
