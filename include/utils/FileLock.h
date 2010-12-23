@@ -33,7 +33,7 @@ public:
      * Lock the file.  A balanced call to unlock is required even if the lock
      * fails.
      */
-    bool lock(int openFlags=O_RDONLY, mode_t fileCreateMode=0755) {
+    bool lock(int openFlags=O_RDWR, mode_t fileCreateMode=0755) {
         mRefCount++;
         if (mFd == -1) {
             return doLock(openFlags, fileCreateMode);

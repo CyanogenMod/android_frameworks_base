@@ -41,6 +41,19 @@ FileLock::FileLock(const char* fileName)
     assert(mFileName != NULL);
 }
 
+static struct flock fullfileLock(short lockType)
+{
+    struct flock lock;
+    memset(&lock, 0, sizeof(lock));
+
+    lock.l_type = lockType;
+    lock.l_whence = SEEK_SET;
+    lock.l_start = 0;
+    lock.l_len = 0;
+
+    return lock;
+}
+
 /*
  * Destructor.
  */
@@ -48,16 +61,17 @@ FileLock::~FileLock(void)
 {
     assert(mRefCount == 0);
 
-    if (mFileName != NULL) {
-        free(mFileName);
-    }
     if (mFd >= 0) {
-        if (flock(mFd, LOCK_UN) != 0) {
-            LOGE("flock(%s,LOCK_UN) failed: %s\n", mFileName, strerror(errno));
+        struct flock lock(fullfileLock(F_UNLCK));
+        if (fcntl(mFd, F_SETLK, &lock) == -1) {
+            LOGE("error releasing write lock on %s: %s\n", mFileName, strerror(errno));
         }
         if (close(mFd) != 0) {
             LOGE("close(%s) failed: %s\n", mFileName, strerror(errno));
         }
+    }
+    if (mFileName != NULL) {
+        free(mFileName);
     }
 }
 
@@ -68,10 +82,13 @@ bool FileLock::doLock(int openFlags, mode_t fileCreateMode)
         return false;
     }
 
-    if (flock(fd, LOCK_EX) != 0) {
-        LOGE("flock(%s,LOCK_EX) failed: %s\n", mFileName, strerror(errno));
-        close(fd);
-        return false;
+    struct flock lock(fullfileLock(F_WRLCK));
+    while (fcntl(fd, F_SETLKW, &lock) == -1) {
+        if (errno != EINTR) {
+            LOGE("error acquiring write lock on %s: %s\n", mFileName, strerror(errno));
+            close(fd);
+            return false;
+        }
     }
 
     mFd = fd;
