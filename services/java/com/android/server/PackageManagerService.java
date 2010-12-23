@@ -101,6 +101,9 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.RandomAccessFile;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -227,6 +230,8 @@ class PackageManagerService extends IPackageManager.Stub {
     final File mSystemAppDir;
     final File mAppInstallDir;
     final File mDalvikCacheDir;
+
+    final File mThemeResCacheDir;
 
     // Directory containing the private parts (e.g. code and non-resource assets) of forward-locked
     // apps.
@@ -811,6 +816,7 @@ class PackageManagerService extends IPackageManager.Stub {
 
             mFrameworkDir = new File(Environment.getRootDirectory(), "framework");
             mDalvikCacheDir = new File(dataDir, "dalvik-cache");
+            mThemeResCacheDir = new File(dataDir, "res-cache");
 
             if (mInstaller != null) {
                 boolean didDexOpt = false;
@@ -3837,6 +3843,12 @@ class PackageManagerService extends IPackageManager.Stub {
             TAG, "Removing package " + pkg.applicationInfo.packageName );
 
         synchronized (mPackages) {
+            if (pkg.mIsThemeApk) {
+                deleteThemeResourceCache(pkg.packageName);
+            } else {
+                deleteThemeResourceCacheForApp(pkg.packageName);
+            }
+
             clearPackagePreferredActivitiesLP(pkg.packageName);
 
             mPackages.remove(pkg.applicationInfo.packageName);
@@ -5873,6 +5885,10 @@ class PackageManagerService extends IPackageManager.Stub {
 
         // DBS -- this changed a lot, hope it works
         if (newPackage.mIsThemeApk) {
+            // Even though the package is still around, we'll delete the cache
+            // and have it regenerated on demand by the AssetManager.
+            deleteThemeResourceCache(newPackage.packageName);
+
             boolean isThemePackageDrmProtected = false;
             int N = newPackage.mThemeInfos.size();
             for (int i = 0; i < N; i++) {
@@ -5886,7 +5902,9 @@ class PackageManagerService extends IPackageManager.Stub {
                 splitThemePackage(newPackage.mPath);
             }
             */
-        } 
+        } else {
+            deleteThemeResourceCacheForApp(newPackage.packageName);
+        }
 
         synchronized (mPackages) {
             updatePermissionsLP(newPackage.packageName, newPackage,
@@ -5899,6 +5917,71 @@ class PackageManagerService extends IPackageManager.Stub {
             res.returnCode = PackageManager.INSTALL_SUCCEEDED;
             //to update install status
             mSettings.writeLP();
+        }
+    }
+
+    /*
+     * We currently synchronize with consumers of the theme redirections
+     * cache by taking a file lock that is shared by that
+     * implementation. This should ideally be replaced by centralizing
+     * access through a service component that can rely on a simple
+     * monitor lock to synchronize properly.
+     */
+    private FileLock lockThemeResourceDir(String themePackageName) throws IOException {
+        RandomAccessFile lockFile = new RandomAccessFile(new File(mThemeResCacheDir,
+                themePackageName + ".lck"), "rw");
+        return lockFile.getChannel().lock();
+    }
+
+    private void deleteThemeResourceCache(String packageName) {
+        Log.v(TAG, "deleteThemeResourceCache: packageName=" + packageName);
+        try {
+            FileLock lock = lockThemeResourceDir(packageName);
+            try {
+                File themeResDir = new File(mThemeResCacheDir, packageName);
+                File[] files = themeResDir.listFiles();
+                int n = files != null ? files.length : 0;
+                Log.v(TAG, n + " files from " + themeResDir);
+                for (int i = 0; i < n; i++) {
+                    File file = files[i];
+                    if (!file.delete()) {
+                        throw new IOException("Cannot delete " + file);
+                    }
+                }
+                if (themeResDir.exists() && !themeResDir.delete()) {
+                    throw new IOException("Cannot delete " + themeResDir);
+                }
+            } finally {
+                lock.release();
+            }
+        } catch (IOException e) {
+            Log.w(TAG, "Couldn't delete resource cache for theme package " + packageName +
+                    ":" + e.getMessage());
+        }
+    }
+
+    private void deleteThemeResourceCacheForApp(String appPackageName) {
+        Log.v(TAG, "deleteThemeResourceCacheForApp: appPackageName=" + appPackageName);
+
+        // Unfortunately we must loop through all installed themes to make sure
+        // we clear this package cache for each. Very lame.
+        List<PackageInfo> themes = getInstalledThemePackages();
+        for (PackageInfo theme: themes) {
+            try {
+                FileLock lock = lockThemeResourceDir(theme.packageName);
+                try {
+                    File resCache = new File(new File(mThemeResCacheDir, theme.packageName),
+                            appPackageName);
+                    if (resCache.exists() && !resCache.delete()) {
+                        throw new IOException("Cannot delete " + resCache);
+                    }
+                } finally {
+                    lock.release();
+                }
+            } catch (IOException e) {
+                Log.w(TAG, "Couldn't delete app resource cache for " + appPackageName +
+                        " from theme " + theme.packageName);
+            }
         }
     }
 
