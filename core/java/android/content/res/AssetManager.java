@@ -697,10 +697,10 @@ public final class AssetManager {
     public native final String getThemePackageName();
 
     /**
-     * Sets package name for current theme (null is allowed).
+     * Sets package name and highest level style id for current theme (null, 0 is allowed).
      * {@hide}
      */
-    public native final void setThemePackageName(String packageName);
+    public native final void setThemePackageInfo(String packageName, int styleId);
 
     /**
      * Get asset cookie for current theme (may return 0).

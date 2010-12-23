@@ -515,33 +515,15 @@ static bool writeRedirections(const char* redirPath, SharedBuffer* entriesByType
 // for testing.  This code should be generalized and follow a much better OO
 // structure.
 static SharedBuffer* generateFrameworkRedirections(SharedBuffer* entriesByTypeBuf, ResTable* rt,
-    const char* themePackageName, const char* redirPath)
+    const char* themePackageName, uint32_t styleId, const char* redirPath)
 {
-    REDIRECT_NOISY(LOGW("generateFrameworkRedirections: themePackageName=%s\n", themePackageName));
-
-    // HACK HACK HACK
-    if (strcmp(themePackageName, "com.tmobile.theme.Androidian") != 0) {
-        LOGW("EEP, UNEXPECTED PACKAGE!");
-        return entriesByTypeBuf;
-    }
+    REDIRECT_NOISY(LOGW("generateFrameworkRedirections: themePackageName=%s, styleId=0x%08x\n", themePackageName, styleId));
 
     rt->lock();
 
     // Load up a bag for the user-supplied theme.
-    String16 type("style");
-    String16 name("Androidian");
-    String16 package(themePackageName);
-    uint32_t ident = rt->identifierForName(name.string(), name.size(), type.string(), type.size(),
-        package.string(), package.size());
-    if (ident == 0) {
-        LOGW("unable to locate theme identifier %s:%s/%s\n", String8(package).string(),
-            String8(type).string(), String8(name).string());
-        rt->unlock();
-        return entriesByTypeBuf;
-    }
-
     const ResTable::bag_entry* themeEnt = NULL;
-    ssize_t N = rt->getBagLocked(ident, &themeEnt);
+    ssize_t N = rt->getBagLocked(styleId, &themeEnt);
     const ResTable::bag_entry* endThemeEnt = themeEnt + N;
 
     // ...and a bag for the framework default.
@@ -550,7 +532,7 @@ static SharedBuffer* generateFrameworkRedirections(SharedBuffer* entriesByTypeBu
     const ResTable::bag_entry* endFrameworkEnt = frameworkEnt + N;
 
     // The first entry should be for the theme itself.
-    entriesByTypeBuf = addToEntriesByTypeBuffer(entriesByTypeBuf, 0x01030005, ident);
+    entriesByTypeBuf = addToEntriesByTypeBuffer(entriesByTypeBuf, 0x01030005, styleId);
 
     // Now compare them and infer resource redirections for attributes that
     // remap to different styles.  This works by essentially lining up all the
@@ -560,7 +542,7 @@ static SharedBuffer* generateFrameworkRedirections(SharedBuffer* entriesByTypeBu
     // the one in the theme.  This lets us do things like automatically find
     // redirections for @android:style/Widget.Button by looking at how the
     // theme overrides the android:attr/buttonStyle attribute.
-    REDIRECT_NOISY(LOGW("delta between 0x01030005 and 0x%08x:\n", ident));
+    REDIRECT_NOISY(LOGW("delta between 0x01030005 and 0x%08x:\n", styleId));
     for (; frameworkEnt < endFrameworkEnt; frameworkEnt++) {
         if (frameworkEnt->map.value.dataType != Res_value::TYPE_REFERENCE) {
             continue;
@@ -723,8 +705,9 @@ SharedBuffer* AssetManager::generateRedirections(SharedBuffer* entriesByTypeBuf,
 }
 
 bool AssetManager::generateAndWriteRedirections(ResTable* rt,
-    const char* themePackageName, const char16_t* resPackageName,
-    const char* redirPath, bool isFramework) const
+    const char* themePackageName, uint32_t themeStyleId,
+    const char16_t* resPackageName, const char* redirPath,
+    bool isFramework) const
 {
     // FIXME: the const is a lie!!!
     AssetManager* am = (AssetManager*)this;
@@ -732,7 +715,8 @@ bool AssetManager::generateAndWriteRedirections(ResTable* rt,
     SharedBuffer* buf = NULL;
     if (isFramework) {
         // Special framework theme heuristic...
-        buf = generateFrameworkRedirections(buf, rt, themePackageName, redirPath);
+        buf = generateFrameworkRedirections(buf, rt, themePackageName,
+            themeStyleId, redirPath);
     }
     // Generate redirections from the package XML.
     buf = am->generateRedirections(buf, rt, themePackageName, resPackageName);
@@ -778,7 +762,8 @@ void AssetManager::loadRedirectionMappings(ResTable* rt) const
 
                 if (lstat(redirPath.string(), &statbuf) != 0) {
                     generateAndWriteRedirections(rt, mThemePackageName,
-                        resPackageName, redirPath.string(), false);
+                        mThemeStyleId, resPackageName, redirPath.string(),
+                        false);
                 }
 
                 rt->addRedirections(packageId, redirPath.string());
@@ -795,7 +780,7 @@ void AssetManager::loadRedirectionMappings(ResTable* rt) const
 
             if (lstat(frameworkRedirPath.string(), &statbuf) != 0) {
                 generateAndWriteRedirections(rt, mThemePackageName,
-                    String16("android").string(),
+                    mThemeStyleId, String16("android").string(),
                     frameworkRedirPath.string(), true);
             }
 
@@ -2205,17 +2190,20 @@ int AssetManager::ZipSet::getIndex(const String8& zip) const
 }
 
 /*
- * Set the currently applied theme package name.
+ * Set the currently applied theme package name and the high-level theme style
+ * identifier (the one to replace @android:style/Theme).  May be set to NULL, 0
+ * to indicate that this AssetManager does not have an added theme package.
  *
  * This information is used when constructing the ResTable's resource
  * redirection map.
  */
-void AssetManager::setThemePackageName(const char* packageName)
+void AssetManager::setThemePackageInfo(const char* packageName, uint32_t styleId)
 {
     if (mThemePackageName != NULL) {
         delete[] mThemePackageName;
     }
     mThemePackageName = strdupNew(packageName);
+    mThemeStyleId = styleId;
 }
 
 const char* AssetManager::getThemePackageName()

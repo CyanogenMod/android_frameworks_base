@@ -1767,8 +1767,8 @@ static jint android_content_AssetManager_getGlobalAssetManagerCount(JNIEnv* env,
     return AssetManager::getGlobalCount();
 }
 
-static void android_content_AssetManager_setThemePackageName(JNIEnv* env, jobject clazz,
-            jstring packageName)
+static void android_content_AssetManager_setThemePackageInfo(JNIEnv* env, jobject clazz,
+            jstring packageName, jint styleId)
 {
     AssetManager* am = assetManagerForJavaObject(env, clazz);
     if (am == NULL) {
@@ -1777,10 +1777,10 @@ static void android_content_AssetManager_setThemePackageName(JNIEnv* env, jobjec
 
     if (packageName != NULL) {
         const char* packageName8 = env->GetStringUTFChars(packageName, NULL);
-        am->setThemePackageName(packageName8);
+        am->setThemePackageInfo(packageName8, styleId);
         env->ReleaseStringUTFChars(packageName, packageName8);
     } else {
-        am->setThemePackageName(NULL);
+        am->setThemePackageInfo(NULL, styleId);
     }
 }
 
@@ -1966,8 +1966,8 @@ static JNINativeMethod gAssetManagerMethods[] = {
         (void*) android_content_AssetManager_splitThemePackage },
 
     // Dynamic theme package support.
-    { "setThemePackageName", "(Ljava/lang/String;)V",
-        (void*) android_content_AssetManager_setThemePackageName },
+    { "setThemePackageInfo", "(Ljava/lang/String;I)V",
+        (void*) android_content_AssetManager_setThemePackageInfo },
     { "getThemePackageName", "()Ljava/lang/String;",
         (void*) android_content_AssetManager_getThemePackageName },
     { "removeAssetPath", "(Ljava/lang/String;I)Z",

@@ -198,7 +198,7 @@ public:
      */
     void getLocales(Vector<String8>* locales) const;
 
-    void setThemePackageName(const char* packageName);
+    void setThemePackageInfo(const char* packageName, uint32_t styleId);
     const char* getThemePackageName();
 
     /*
@@ -222,7 +222,8 @@ private:
     SharedBuffer* generateRedirections(SharedBuffer* entriesByTypeBuf, ResTable* rt,
         const char* themePackageName, const char16_t* resPackageName);
     bool generateAndWriteRedirections(ResTable* rt, const char* themePackageName,
-        const char16_t* resPackageName, const char* redirPath, bool isFramework) const;
+        uint32_t themeStyleId, const char16_t* resPackageName, const char* redirPath,
+        bool isFramework) const;
     void loadRedirectionMappings(ResTable* rt) const;
     void updateResTableFromAssetPath(ResTable* rt, const asset_path& ap, void* cookie) const;
     Asset* openInPathLocked(const char* fileName, AccessMode mode,
@@ -344,6 +345,7 @@ private:
     // If non-null, represents the theme package from which to construct the
     // resource redirection map used by ResTable.
     char*           mThemePackageName;
+    uint32_t        mThemeStyleId;
 
     mutable ResTable* mResources;
     ResTable_config* mConfig;

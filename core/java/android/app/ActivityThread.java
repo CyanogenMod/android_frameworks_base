@@ -44,6 +44,7 @@ import android.content.pm.InstrumentationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ServiceInfo;
+import android.content.pm.ThemeInfo;
 import android.content.res.AssetManager;
 import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
@@ -235,9 +236,7 @@ public final class ActivityThread {
             }
 
             if (!TextUtils.isEmpty(config.customTheme.getThemePackageName())) {
-                if (!attachThemeAssets(assets, resDir, config.customTheme)) {
-                    Log.e(TAG, "Failed to attach theme " + config.customTheme + " to resource '" + resDir + "'");
-                }
+                attachThemeAssets(assets, config.customTheme, false);
             }
         }
 
@@ -266,20 +265,79 @@ public final class ActivityThread {
         }
     }
 
-    private boolean attachThemeAssets(AssetManager assets, String resDir, CustomTheme theme) {
-        PackageInfo pi = getPackageInfo(theme.getThemePackageName(), 0);
-        if (pi != null) {
-            String themeResDir = pi.getResDir();
-            int cookie = assets.addAssetPath(themeResDir);
+    /**
+     * Attach the necessary theme asset paths and meta information to convert an
+     * AssetManager to being globally "theme-aware".
+     *
+     * @param assets
+     * @param theme
+     * @param updating If true, this AssetManager has already been accessed and
+     *            special steps must be taken to update the underlying resource
+     *            table.
+     * @return true if the AssetManager is now theme-aware; false otherwise.
+     *         This can fail, for example, if the theme package has been been
+     *         removed and the theme manager has yet to revert formally back to
+     *         the framework default.
+     */
+    private boolean attachThemeAssets(AssetManager assets, CustomTheme theme, boolean updating) {
+        android.content.pm.PackageInfo pi = null;
+        try {
+            pi = getPackageManager().getPackageInfo(theme.getThemePackageName(), 0);
+        } catch (RemoteException e) {
+        }
+        if (pi != null && pi.applicationInfo != null && pi.themeInfos != null) {
+            /*
+             * It's important that this is called before
+             * updateResourcesWithAssetPath as it depends on the result of
+             * getThemePackageName to figure out what to do with the resource
+             * redirection table.
+             */
+            assets.setThemePackageInfo(theme.getThemePackageName(),
+                    findThemeResourceId(pi.themeInfos, theme));
+
+            String themeResDir = pi.applicationInfo.publicSourceDir;
+            int cookie;
+            if (updating) {
+                cookie = assets.updateResourcesWithAssetPath(themeResDir);
+            } else {
+                cookie = assets.addAssetPath(themeResDir);
+            }
             if (cookie != 0) {
-                assets.setThemePackageName(theme.getThemePackageName());
                 assets.setThemeCookie(cookie);
                 return true;
             } else {
-                Log.e(TAG, "Unable to add theme resdir=" + themeResDir);
+                Log.e(TAG, "Unable to " + (updating ? "update" : "add") + " theme assets at " +
+                        themeResDir);
+
+                /* Roll back the theme package info. */
+                assets.setThemePackageInfo(null, 0);
             }
         }
         return false;
+    }
+
+    /**
+     * Searches for the high-level theme resource id for the specific
+     * &lt;theme&gt; tag being applied.
+     * <p>
+     * An individual theme package can contain multiple &lt;theme&gt; tags, each
+     * representing a separate theme choice from the user's perspective, even
+     * though the most common case is for there to be only 1.
+     *
+     * @return The style resource id or 0 if no match was found.
+     */
+    private int findThemeResourceId(ThemeInfo[] themeInfos, CustomTheme theme) {
+        String needle = theme.getThemeId();
+        if (themeInfos != null && !TextUtils.isEmpty(needle)) {
+            int n = themeInfos.length;
+            for (int i = 0; i < n; i++) {
+                ThemeInfo info = themeInfos[i];
+                if (needle.equals(info.themeId)) {
+                    return info.styleResourceId;
+                }
+            }
+        }
+        return 0;
     }
 
     /**
@@ -4051,16 +4109,12 @@ public final class ActivityThread {
                         String oldThemePackage = am.getThemePackageName();
                         int themeCookie = am.getThemeCookie();
                         if (!TextUtils.isEmpty(oldThemePackage) && themeCookie != 0) {
-                            am.setThemePackageName(null);
+                            am.setThemePackageInfo(null, 0);
                             am.removeAssetPath(oldThemePackage, themeCookie);
                             am.setThemeCookie(0);
                         }
-                        String newThemePackage = config.customTheme.getThemePackageName();
-                        String resDir = getPackageResDir(newThemePackage);
-                        if (resDir != null) {
-                            am.setThemePackageName(newThemePackage);
-                            int newCookie = am.updateResourcesWithAssetPath(resDir);
-                            am.setThemeCookie(newCookie);
+                        if (!TextUtils.isEmpty(config.customTheme.getThemePackageName())) {
+                            attachThemeAssets(am, config.customTheme, true);
                         }
                     }
                 }
@@ -4079,19 +4133,6 @@ public final class ActivityThread {
         return changes;
     }
     
-    private String getPackageResDir(String packageName) {
-        android.content.pm.PackageInfo pi;
-        try {
-            pi = getPackageManager().getPackageInfo(packageName, 0);
-            if (pi == null || pi.applicationInfo == null)
-                return null;
-            return pi.applicationInfo.publicSourceDir;
-        } catch (RemoteException e) {
-            Log.e("ActivityThread", "Exception in getPackageResDir", e);
-        }
-        return null;
-    }
-
     final void handleConfigurationChanged(Configuration config) {
 
         ArrayList<ComponentCallbacks> callbacks = null;
