@@ -377,6 +377,8 @@ uint32_t OMXCodec::getComponentQuirks(
         }
     }
     if (!strncmp(componentName, "OMX.qcom.7x30.video.encoder.", 28)) {
+        quirks |= kRequiresFlushBeforeShutdown;
+        quirks |= kCanNotSetAVCParameters;
     }
     if (!strncmp(componentName, "OMX.qcom.video.decoder.", 23)) {
         quirks |= kRequiresAllocateBufferOnOutputPorts;
@@ -1294,7 +1296,9 @@ status_t OMXCodec::setupAVCEncoderParameters(const sp<MetaData>& meta) {
 
     err = mOMX->setParameter(
             mNode, OMX_IndexParamVideoAvc, &h264type, sizeof(h264type));
-    CHECK_EQ(err, OK);
+    if (!(mQuirks & kCanNotSetAVCParameters)) {
+        CHECK_EQ(err, OK);
+    }
 
     CHECK_EQ(setupBitRate(bitRate), OK);
 
@@ -1726,6 +1730,19 @@ void OMXCodec::on_message(const omx_message &msg) {
                     && mPortStatus[kPortIndexInput] != SHUTTING_DOWN) {
                 CHECK_EQ(mPortStatus[kPortIndexInput], ENABLED);
                 drainInputBuffer(&buffers->editItemAt(i));
+            } else if (mState == EXECUTING_TO_IDLE && mPortStatus[kPortIndexInput] == SHUTTING_DOWN) {
+                if (countBuffersWeOwn(mPortBuffers[kPortIndexInput]) == mPortBuffers[kPortIndexInput].size()
+                    && countBuffersWeOwn(mPortBuffers[kPortIndexOutput]) == mPortBuffers[kPortIndexOutput].size()) {
+                    CODEC_LOGV("Finished emptying both ports, now completing "
+                         "transition from EXECUTING to IDLE.");
+
+                    status_t err =
+                        mOMX->sendCommand(mNode, OMX_CommandStateSet, OMX_StateIdle);
+                    CHECK_EQ(err, OK);
+                } else {
+                    LOGV("own %d/%d input and %d/%d output", countBuffersWeOwn(mPortBuffers[kPortIndexInput]), mPortBuffers[kPortIndexInput].size(),
+                        countBuffersWeOwn(mPortBuffers[kPortIndexOutput]), mPortBuffers[kPortIndexOutput].size());
+                }
             }
             break;
         }
@@ -1857,6 +1874,19 @@ void OMXCodec::on_message(const omx_message &msg) {
 
                 mFilledBuffers.push_back(i);
                 mBufferFilled.signal();
+            } else if (mState == EXECUTING_TO_IDLE) {
+                if (countBuffersWeOwn(mPortBuffers[kPortIndexInput]) == mPortBuffers[kPortIndexInput].size()
+                    && countBuffersWeOwn(mPortBuffers[kPortIndexOutput]) == mPortBuffers[kPortIndexOutput].size()) {
+                    CODEC_LOGV("Finished flushing both ports, now completing "
+                         "transition from EXECUTING to IDLE.");
+
+                    status_t err =
+                        mOMX->sendCommand(mNode, OMX_CommandStateSet, OMX_StateIdle);
+                    CHECK_EQ(err, OK);
+                } else {
+                    LOGV("own %d/%d input and %d/%d output", countBuffersWeOwn(mPortBuffers[kPortIndexInput]), mPortBuffers[kPortIndexInput].size(),
+                        countBuffersWeOwn(mPortBuffers[kPortIndexOutput]), mPortBuffers[kPortIndexOutput].size());
+                }
             }
 
             break;
@@ -2043,23 +2073,23 @@ void OMXCodec::onCmdComplete(OMX_COMMANDTYPE cmd, OMX_U32 data) {
             CODEC_LOGV("FLUSH_DONE(%ld)", portIndex);
 
             CHECK_EQ(mPortStatus[portIndex], SHUTTING_DOWN);
-            mPortStatus[portIndex] = ENABLED;
 
-            CHECK_EQ(countBuffersWeOwn(mPortBuffers[portIndex]),
-                     mPortBuffers[portIndex].size());
+            mPortStatus[portIndex] = ENABLED;
 
             if (mState == RECONFIGURING) {
                 CHECK_EQ(portIndex, kPortIndexOutput);
 
                 disablePortAsync(portIndex);
             } else if (mState == EXECUTING_TO_IDLE) {
-                if (mPortStatus[kPortIndexInput] == ENABLED
-                    && mPortStatus[kPortIndexOutput] == ENABLED) {
+                mPortStatus[portIndex] = SHUTTING_DOWN;
+
+                CHECK_EQ(mPortStatus[kPortIndexInput], SHUTTING_DOWN);
+                CHECK_EQ(mPortStatus[kPortIndexOutput], SHUTTING_DOWN);
+
+                if (countBuffersWeOwn(mPortBuffers[kPortIndexInput]) == mPortBuffers[kPortIndexInput].size()
+                    && countBuffersWeOwn(mPortBuffers[kPortIndexOutput]) == mPortBuffers[kPortIndexOutput].size()) {
                     CODEC_LOGV("Finished flushing both ports, now completing "
                          "transition from EXECUTING to IDLE.");
-
-                    mPortStatus[kPortIndexInput] = SHUTTING_DOWN;
-                    mPortStatus[kPortIndexOutput] = SHUTTING_DOWN;
 
                     status_t err =
                         mOMX->sendCommand(mNode, OMX_CommandStateSet, OMX_StateIdle);
@@ -2978,9 +3008,14 @@ status_t OMXCodec::stop() {
                 mPortStatus[kPortIndexInput] = SHUTTING_DOWN;
                 mPortStatus[kPortIndexOutput] = SHUTTING_DOWN;
 
-                status_t err =
-                    mOMX->sendCommand(mNode, OMX_CommandStateSet, OMX_StateIdle);
-                CHECK_EQ(err, OK);
+                if (countBuffersWeOwn(mPortBuffers[kPortIndexInput]) != mPortBuffers[kPortIndexInput].size()
+                        || countBuffersWeOwn(mPortBuffers[kPortIndexOutput]) != mPortBuffers[kPortIndexOutput].size()) {
+                    CODEC_LOGV("waiting for buffers to empty/fill");
+                } else {
+                    status_t err =
+                        mOMX->sendCommand(mNode, OMX_CommandStateSet, OMX_StateIdle);
+                    CHECK_EQ(err, OK);
+                }
             }
 
             while (mState != LOADED && mState != ERROR) {
