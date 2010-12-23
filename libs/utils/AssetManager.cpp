@@ -752,9 +752,9 @@ void AssetManager::loadRedirectionMappings(ResTable* rt) const
         struct stat statbuf;
         String8 basePath(data);
         basePath.appendPath(kThemeResCacheDir);
-        createDirIfNecessary(basePath.string(), S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH, &statbuf);
+        createDirIfNecessary(basePath.string(), 0777, &statbuf);
         basePath.appendPath(mThemePackageName);
-        createDirIfNecessary(basePath.string(), S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH, &statbuf);
+        createDirIfNecessary(basePath.string(), 0777, &statbuf);
 
         String8 themeDirLockPath(basePath);
         themeDirLockPath.append(".lck");
