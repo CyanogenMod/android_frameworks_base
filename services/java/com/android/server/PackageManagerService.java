@@ -3654,21 +3654,19 @@ class PackageManagerService extends IPackageManager.Stub {
 
             installedNativeLibraries = true;
 
+            // Always extract the shared library
             String sharedLibraryFilePath = sharedLibraryDir.getPath() +
                 File.separator + libFileName;
             File sharedLibraryFile = new File(sharedLibraryFilePath);
-            if (! sharedLibraryFile.exists() ||
-                sharedLibraryFile.length() != entry.getSize() ||
-                sharedLibraryFile.lastModified() != entry.getTime()) {
-                if (Config.LOGD) {
-                    Log.d(TAG, "Caching shared lib " + entry.getName());
-                }
-                if (mInstaller == null) {
-                    sharedLibraryDir.mkdir();
-                }
-                cacheNativeBinaryLI(pkg, zipFile, entry, sharedLibraryDir,
-                        sharedLibraryFile);
+
+            if (Config.LOGD) {
+                Log.d(TAG, "Caching shared lib " + entry.getName());
             }
+            if (mInstaller == null) {
+                sharedLibraryDir.mkdir();
+            }
+            cacheNativeBinaryLI(pkg, zipFile, entry, sharedLibraryDir,
+                    sharedLibraryFile);
         }
         if (!hasNativeLibraries)
             return PACKAGE_INSTALL_NATIVE_NO_LIBRARIES;
@@ -3710,18 +3708,16 @@ class PackageManagerService extends IPackageManager.Stub {
             String installGdbServerPath = installGdbServerDir.getPath() +
                 "/" + GDBSERVER;
             File installGdbServerFile = new File(installGdbServerPath);
-            if (! installGdbServerFile.exists() ||
-                installGdbServerFile.length() != entry.getSize() ||
-                installGdbServerFile.lastModified() != entry.getTime()) {
-                if (Config.LOGD) {
-                    Log.d(TAG, "Caching gdbserver " + entry.getName());
-                }
-                if (mInstaller == null) {
-                    installGdbServerDir.mkdir();
-                }
-                cacheNativeBinaryLI(pkg, zipFile, entry, installGdbServerDir,
-                        installGdbServerFile);
+
+            if (Config.LOGD) {
+                Log.d(TAG, "Caching gdbserver " + entry.getName());
             }
+            if (mInstaller == null) {
+                installGdbServerDir.mkdir();
+            }
+            cacheNativeBinaryLI(pkg, zipFile, entry, installGdbServerDir,
+                    installGdbServerFile);
+
             return PACKAGE_INSTALL_NATIVE_FOUND_LIBRARIES;
         }
         return PACKAGE_INSTALL_NATIVE_NO_LIBRARIES;
@@ -3735,6 +3731,16 @@ class PackageManagerService extends IPackageManager.Stub {
     // one if ro.product.cpu.abi2 is defined.
     //
     private int cachePackageSharedLibsLI(PackageParser.Package pkg, File scanFile) {
+        // Remove all native binaries from a directory. This is used when upgrading
+        // a package: in case the new .apk doesn't contain a native binary that was
+        // in the old one (and thus installed), we need to remove it from
+        // /data/data/<appname>/lib
+        //
+        // The simplest way to do that is to remove all files in this directory,
+        // since it is owned by "system", applications are not supposed to write
+        // anything there.
+        removeNativeBinariesLI(pkg);
+
         String cpuAbi = Build.CPU_ABI;
         try {
             int result = cachePackageSharedLibsForAbiLI(pkg, scanFile, cpuAbi);
@@ -6439,11 +6445,10 @@ class PackageManagerService extends IPackageManager.Stub {
                 File dataDir = new File(pkg.applicationInfo.dataDir);
                 dataDir.delete();
             }
+            schedulePackageCleaning(packageName);
         }
         synchronized (mPackages) {
             if (deletedPs != null) {
-                schedulePackageCleaning(packageName);
-                
                 if ((flags&PackageManager.DONT_DELETE_DATA) == 0) {
                     if (outInfo != null) {
                         outInfo.removedUid = mSettings.removePackageLP(packageName);
