@@ -543,7 +543,7 @@ status_t CameraService::Client::setPreviewDisplay(const sp<ISurface>& surface) {
     mOverlayRef = 0;
     // If preview has been already started, set overlay or register preview
     // buffers now.
-    if (mHardware->previewEnabled() || mUseOverlay) {
+    if (mHardware->previewEnabled()) {
         if (mUseOverlay) {
 #ifdef USE_OVERLAY_FORMAT_YCbCr_420_SP
             if (mSurface != NULL) {
