@@ -37,6 +37,10 @@
 
 #include "CameraService.h"
 
+#ifdef USE_OVERLAY_FORMAT_YCbCr_420_SP
+#include "gralloc_priv.h"
+#endif
+
 namespace android {
 
 // ----------------------------------------------------------------------------
