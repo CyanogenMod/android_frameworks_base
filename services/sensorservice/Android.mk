@@ -12,6 +12,10 @@ LOCAL_SRC_FILES:= \
 
 LOCAL_CFLAGS:= -DLOG_TAG=\"SensorService\"
 
+ifeq ($(TARGET_USES_OLD_LIBSENSORS_HAL),true)
+    LOCAL_CFLAGS += -DENABLE_SENSORS_COMPAT
+endif
+
 # need "-lrt" on Linux simulator to pick up clock_gettime
 ifeq ($(TARGET_SIMULATOR),true)
 	ifeq ($(HOST_OS),linux)
