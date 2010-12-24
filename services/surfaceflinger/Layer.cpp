@@ -141,6 +141,14 @@ status_t Layer::ditch()
 status_t Layer::setBuffers( uint32_t w, uint32_t h,
                             PixelFormat format, uint32_t flags)
 {
+#ifdef NO_RGBX_8888
+    bool disableBlending = false;
+    if (format == PIXEL_FORMAT_RGBX_8888) {
+        disableBlending = true;
+        format = PIXEL_FORMAT_RGBA_8888;
+    }
+#endif
+
     // this surfaces pixel format
     PixelFormatInfo info;
     status_t err = getPixelFormatInfo(format, &info);
@@ -170,7 +178,7 @@ status_t Layer::setBuffers( uint32_t w, uint32_t h,
     mReqHeight = h;
 
     mSecure = (flags & ISurfaceComposer::eSecure) ? true : false;
-    mNeedsBlending = (info.h_alpha - info.l_alpha) > 0;
+    mNeedsBlending = (info.h_alpha - info.l_alpha) > 0 && !disableBlending;
 
     // we use the red index
     int displayRedSize = displayInfo.getSize(PixelFormatInfo::INDEX_RED);
