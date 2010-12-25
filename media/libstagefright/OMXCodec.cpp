@@ -385,6 +385,7 @@ uint32_t OMXCodec::getComponentQuirks(
         quirks |= kDefersOutputBufferAllocation;
     }
     if (!strncmp(componentName, "OMX.qcom.7x30.video.decoder.", 28)) {
+        quirks |= kRequiresFlushBeforeShutdown;
         quirks |= kRequiresAllocateBufferOnInputPorts;
         quirks |= kRequiresAllocateBufferOnOutputPorts;
         quirks |= kDefersOutputBufferAllocation;
@@ -3008,14 +3009,9 @@ status_t OMXCodec::stop() {
                 mPortStatus[kPortIndexInput] = SHUTTING_DOWN;
                 mPortStatus[kPortIndexOutput] = SHUTTING_DOWN;
 
-                if (countBuffersWeOwn(mPortBuffers[kPortIndexInput]) != mPortBuffers[kPortIndexInput].size()
-                        || countBuffersWeOwn(mPortBuffers[kPortIndexOutput]) != mPortBuffers[kPortIndexOutput].size()) {
-                    CODEC_LOGV("waiting for buffers to empty/fill");
-                } else {
-                    status_t err =
-                        mOMX->sendCommand(mNode, OMX_CommandStateSet, OMX_StateIdle);
-                    CHECK_EQ(err, OK);
-                }
+                status_t err =
+                    mOMX->sendCommand(mNode, OMX_CommandStateSet, OMX_StateIdle);
+                CHECK_EQ(err, OK);
             }
 
             while (mState != LOADED && mState != ERROR) {
