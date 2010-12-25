@@ -988,7 +988,7 @@ void OMXCodec::setVideoInputFormat(
 
     video_def->nFrameWidth = width;
     video_def->nFrameHeight = height;
-    video_def->xFramerate = 0;      // No need for output port
+    video_def->xFramerate = (frameRate << 16);      // Value is used on output port for rate control
     video_def->nBitrate = bitRate;  // Q16 format
     video_def->eCompressionFormat = compressionFormat;
     video_def->eColorFormat = OMX_COLOR_FormatUnused;
