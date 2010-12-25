@@ -1140,10 +1140,24 @@ static jboolean android_content_AssetManager_applyStyle(JNIEnv* env, jobject cla
         if (resid != 0) {
             uint32_t redirect = res.lookupRedirectionMap(resid);
             if (redirect != 0) {
-                REDIRECT_NOISY(LOGW("deep REDIRECT FROM resid=0x%08x TO redirect=0x%08x\n", resid, redirect));
-                block = res.getResource(redirect, &value, false, &typeSetFlags, &config);
-                block = res.resolveReference(&value, block, &redirect);
-                resid = redirect;
+                REDIRECT_NOISY(LOGW("deep REDIRECT 0x%08x => 0x%08x\n", resid, redirect));
+                ssize_t newBlock = res.getResource(redirect, &value, true, &typeSetFlags, &config);
+                if (newBlock >= 0) {
+                    newBlock = res.resolveReference(&value, newBlock, &redirect, &typeSetFlags, &config);
+#if THROW_ON_BAD_ID
+                    if (newBlock == BAD_INDEX) {
+                        jniThrowException(env, "java/lang/IllegalStateException", "Bad resource!");
+                        return JNI_FALSE;
+                    }
+#endif
+                    if (newBlock >= 0) {
+                        block = newBlock;
+                        resid = redirect;
+                    }
+                }
+                if (resid != redirect) {
+                    LOGW("deep redirect failure from 0x%08x => 0x%08x, defStyleAttr=0x%08x, defStyleRes=0x%08x, style=0x%08x\n", resid, redirect, defStyleAttr, defStyleRes, style);
+                }
             }
         }
 
@@ -1410,10 +1424,24 @@ static jint android_content_AssetManager_retrieveArray(JNIEnv* env, jobject claz
         if (resid != 0) {
             uint32_t redirect = res.lookupRedirectionMap(resid);
             if (redirect != 0) {
-                REDIRECT_NOISY(LOGW("array REDIRECT FROM resid=0x%08x TO redirect=0x%08x\n", resid, redirect));
-                block = res.getResource(redirect, &value, false, &typeSetFlags, &config);
-                block = res.resolveReference(&value, block, &redirect);
-                resid = redirect;
+                REDIRECT_NOISY(LOGW("array REDIRECT 0x%08x => 0x%08x\n", resid, redirect));
+                ssize_t newBlock = res.getResource(redirect, &value, true, &typeSetFlags, &config);
+                if (newBlock >= 0) {
+                    newBlock = res.resolveReference(&value, newBlock, &redirect, &typeSetFlags, &config);
+#if THROW_ON_BAD_ID
+                    if (newBlock == BAD_INDEX) {
+                        jniThrowException(env, "java/lang/IllegalStateException", "Bad resource!");
+                        return JNI_FALSE;
+                    }
+#endif
+                    if (newBlock >= 0) {
+                        block = newBlock;
+                        resid = redirect;
+                    }
+                }
+                if (resid != redirect) {
+                    LOGW("array redirect failure from 0x%08x => 0x%08x, array id=0x%08x", resid, redirect, id);
+                }
             }
         }
 
