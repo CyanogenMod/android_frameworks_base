@@ -19,7 +19,10 @@
 
 #include <stdio.h>
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <pthread.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 #include <binder/IPCThreadState.h>
 #include <binder/IServiceManager.h>
@@ -1292,11 +1295,14 @@ void CameraService::Client::copyFrameAndPostCopiedFrame(
 }
 
 int CameraService::Client::getOrientation(int degrees, bool mirror) {
+#ifndef BOARD_USE_FROYO_LIBCAMERA
     if (!mirror) {
+#endif
         if (degrees == 0) return 0;
         else if (degrees == 90) return HAL_TRANSFORM_ROT_90;
         else if (degrees == 180) return HAL_TRANSFORM_ROT_180;
         else if (degrees == 270) return HAL_TRANSFORM_ROT_270;
+#ifndef BOARD_USE_FROYO_LIBCAMERA
     } else {  // Do mirror (horizontal flip)
         if (degrees == 0) {           // FLIP_H and ROT_0
             return HAL_TRANSFORM_FLIP_H;
@@ -1308,6 +1314,7 @@ int CameraService::Client::getOrientation(int degrees, bool mirror) {
             return HAL_TRANSFORM_FLIP_V | HAL_TRANSFORM_ROT_90;
         }
     }
+#endif
     LOGE("Invalid setDisplayOrientation degrees=%d", degrees);
     return -1;
 }
@@ -1388,16 +1395,42 @@ status_t CameraService::dump(int fd, const Vector<String16>& args) {
 }
 
 #ifdef BOARD_USE_FROYO_LIBCAMERA
-static CameraInfo sCameraInfo[] = {
+static const CameraInfo sCameraInfo[] = {
     {
         CAMERA_FACING_BACK,
         90,  /* orientation */
+    },
+    {
+        CAMERA_FACING_FRONT,
+        270, /* orientation */
     }
 };
 
+#define HTC_SWITCH_CAMERA_FILE_PATH "/sys/android_camera2/htcwc"
+
+static int getNumberOfCameras() {
+    if (access(HTC_SWITCH_CAMERA_FILE_PATH, W_OK) == 0) {
+        return 2;
+    }
+    /* FIXME: Support non-HTC front camera */
+    return 1;
+}
+
+static void htcCameraSwitch(int cameraId)
+{
+    char buffer[16];
+    int fd;
+
+    snprintf(buffer, sizeof(buffer), "%d", cameraId);
+
+    fd = open(HTC_SWITCH_CAMERA_FILE_PATH, O_WRONLY);
+    write(fd, buffer, strlen(buffer));
+    close(fd);
+}
+
 extern "C" int HAL_getNumberOfCameras()
 {
-    return sizeof(sCameraInfo) / sizeof(sCameraInfo[0]);
+    return getNumberOfCameras();
 }
 
 extern "C" void HAL_getCameraInfo(int cameraId, struct CameraInfo* cameraInfo)
@@ -1410,6 +1443,8 @@ extern "C" sp<CameraHardwareInterface> openCameraHardware(int cameraId);
 extern "C" sp<CameraHardwareInterface> HAL_openCameraHardware(int cameraId)
 {
     LOGV("openCameraHardware: call createInstance");
+    if (getNumberOfCameras() == 2)
+       htcCameraSwitch(cameraId);
     return openCameraHardware(cameraId);
 }
 #endif
