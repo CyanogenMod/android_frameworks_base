@@ -32,6 +32,10 @@ ifeq ($(strip $(BOARD_USES_GENERIC_AUDIO)),true)
   LOCAL_CFLAGS += -DGENERIC_AUDIO
 endif
 
+ifeq ($(BOARD_HAVE_FM_RADIO),true)
+  LOCAL_CFLAGS += -DHAVE_FM_RADIO
+endif
+
 LOCAL_MODULE:= libaudiointerface
 
 ifeq ($(BOARD_HAVE_BLUETOOTH),true)
@@ -64,6 +68,10 @@ LOCAL_MODULE:= libaudiopolicybase
 
 ifeq ($(BOARD_HAVE_BLUETOOTH),true)
   LOCAL_CFLAGS += -DWITH_A2DP
+endif
+
+ifeq ($(BOARD_HAVE_FM_RADIO),true)
+  LOCAL_CFLAGS += -DHAVE_FM_RADIO
 endif
 
 ifeq ($(AUDIO_POLICY_TEST),true)
@@ -112,6 +120,10 @@ endif
 
 ifeq ($(AUDIO_POLICY_TEST),true)
   LOCAL_CFLAGS += -DAUDIO_POLICY_TEST
+endif
+
+ifeq ($(BOARD_HAVE_FM_RADIO),true)
+  LOCAL_CFLAGS += -DHAVE_FM_RADIO
 endif
 
 ifeq ($(TARGET_SIMULATOR),true)
