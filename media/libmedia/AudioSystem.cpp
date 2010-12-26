@@ -370,6 +370,15 @@ int AudioSystem::newAudioSessionId() {
     return af->newAudioSessionId();
 }
 
+#ifdef HAVE_FM_RADIO
+status_t AudioSystem::setFmVolume(float value)
+{
+    const sp<IAudioFlinger>& af = AudioSystem::get_audio_flinger();
+    if (af == 0) return PERMISSION_DENIED;
+    return af->setFmVolume(value);
+}
+#endif
+
 // ---------------------------------------------------------------------------
 
 void AudioSystem::AudioFlingerClient::binderDied(const wp<IBinder>& who) {
@@ -746,6 +755,18 @@ bool AudioSystem::isInputDevice(audio_devices device)
     }
 }
 
+#ifdef HAVE_FM_RADIO
+bool AudioSystem::isFmDevice(audio_devices device)
+{
+    if ((popCount(device) == 1 ) &&
+        ((device & ~AudioSystem::DEVICE_OUT_FM) == 0)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+#endif
+
 bool AudioSystem::isA2dpDevice(audio_devices device)
 {
     if ((popCount(device) == 1 ) &&
@@ -834,6 +855,10 @@ const char *AudioParameter::keySamplingRate = "sampling_rate";
 const char *AudioParameter::keyFormat = "format";
 const char *AudioParameter::keyChannels = "channels";
 const char *AudioParameter::keyFrameCount = "frame_count";
+#ifdef HAVE_FM_RADIO
+const char *AudioParameter::keyFmOn = "fm_on";
+const char *AudioParameter::keyFmOff = "fm_off";
+#endif
 
 AudioParameter::AudioParameter(const String8& keyValuePairs)
 {

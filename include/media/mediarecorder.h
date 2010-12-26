@@ -44,8 +44,13 @@ enum audio_source {
     AUDIO_SOURCE_VOICE_CALL = 4,
     AUDIO_SOURCE_CAMCORDER = 5,
     AUDIO_SOURCE_VOICE_RECOGNITION = 6,
+#ifdef HAVE_FM_RADIO
+    AUDIO_SOURCE_FM_RX = 7,
+    AUDIO_SOURCE_FM_RX_A2DP = 8,
+    AUDIO_SOURCE_MAX = AUDIO_SOURCE_FM_RX_A2DP,
+#else
     AUDIO_SOURCE_MAX = AUDIO_SOURCE_VOICE_RECOGNITION,
-
+#endif
     AUDIO_SOURCE_LIST_END  // must be last - used to validate audio source type
 };
 
