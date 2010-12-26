@@ -622,6 +622,13 @@ status_t AudioPolicyService::setVoiceVolume(float volume, int delayMs)
     return mAudioCommandThread->voiceVolumeCommand(volume, delayMs);
 }
 
+#ifdef HAVE_FM_RADIO
+status_t AudioPolicyService::setFmVolume(float volume, int delayMs)
+{
+    return mAudioCommandThread->fmVolumeCommand(volume, delayMs);
+}
+#endif
+
 // -----------  AudioPolicyService::AudioCommandThread implementation ----------
 
 AudioPolicyService::AudioCommandThread::AudioCommandThread(String8 name)
@@ -722,6 +729,18 @@ bool AudioPolicyService::AudioCommandThread::threadLoop()
                     }
                     delete data;
                     }break;
+#ifdef HAVE_FM_RADIO
+                case SET_FM_VOLUME: {
+                    FmVolumeData *data = (FmVolumeData *)command->mParam;
+                    LOGV("AudioCommandThread() processing set fm volume volume %f", data->mVolume);
+                    command->mStatus = AudioSystem::setFmVolume(data->mVolume);
+                    if (command->mWaitStatus) {
+                        command->mCond.signal();
+                        mWaitWorkCV.wait(mLock);
+                    }
+                    delete data;
+                    }break;
+#endif
                 default:
                     LOGW("AudioCommandThread() unknown command %d", command->mCommand);
                 }
@@ -893,6 +912,34 @@ status_t AudioPolicyService::AudioCommandThread::voiceVolumeCommand(float volume
     return status;
 }
 
+#ifdef HAVE_FM_RADIO
+status_t AudioPolicyService::AudioCommandThread::fmVolumeCommand(float volume, int delayMs)
+{
+    status_t status = NO_ERROR;
+
+    AudioCommand *command = new AudioCommand();
+    command->mCommand = SET_FM_VOLUME;
+    FmVolumeData *data = new FmVolumeData();
+    data->mVolume = volume;
+    command->mParam = data;
+    if (delayMs == 0) {
+        command->mWaitStatus = true;
+    } else {
+        command->mWaitStatus = false;
+    }
+    Mutex::Autolock _l(mLock);
+    insertCommand_l(command, delayMs);
+    LOGV("AudioCommandThread() adding set fm volume volume %f", volume);
+    mWaitWorkCV.signal();
+    if (command->mWaitStatus) {
+        command->mCond.wait(mLock);
+        status =  command->mStatus;
+        mWaitWorkCV.signal();
+    }
+    return status;
+}
+#endif
+
 // insertCommand_l() must be called with mLock held
 void AudioPolicyService::AudioCommandThread::insertCommand_l(AudioCommand *command, int delayMs)
 {
@@ -955,6 +1002,11 @@ void AudioPolicyService::AudioCommandThread::insertCommand_l(AudioCommand *comma
                     data->mIO, data->mStream);
             removedCommands.add(command2);
         } break;
+#ifdef HAVE_FM_RADIO
+        case SET_FM_VOLUME: {
+            removedCommands.add(command2);
+        } break;
+#endif
         case START_TONE:
         case STOP_TONE:
         default:

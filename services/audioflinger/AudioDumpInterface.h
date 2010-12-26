@@ -153,7 +153,10 @@ public:
     virtual    void        closeInputStream(AudioStreamIn* in);
 
     virtual status_t    dump(int fd, const Vector<String16>& args) { return mFinalInterface->dumpState(fd, args); }
-
+#ifdef HAVE_FM_RADIO
+    virtual status_t    setFmVolume(float volume)
+                            {return mFinalInterface->setFmVolume(volume);}
+#endif
             String8     fileName() const { return mFileName; }
 protected:
 

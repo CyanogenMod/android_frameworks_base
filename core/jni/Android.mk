@@ -141,6 +141,11 @@ LOCAL_SRC_FILES:= \
 	android_content_res_ObbScanner.cpp \
     android_content_res_Configuration.cpp
 
+ifeq ($(BOARD_HAVE_FM_RADIO),true)
+	LOCAL_SRC_FILES += android_hardware_fm.cpp
+	LOCAL_CFLAGS += -DHAVE_FM_RADIO
+endif
+
 LOCAL_C_INCLUDES += \
 	$(JNI_H_INCLUDE) \
 	$(LOCAL_PATH)/android/graphics \
