@@ -98,6 +98,22 @@ AudioRecord::AudioRecord(
             frameCount, flags, cbf, user, notificationFrames, sessionId);
 }
 
+AudioRecord::AudioRecord(
+        int inputSource,
+        uint32_t sampleRate,
+        int format,
+        uint32_t channels,
+        int frameCount,
+        uint32_t flags,
+        callback_t cbf,
+        void* user,
+        int notificationFrames)
+    : mStatus(NO_INIT), mSessionId(0)
+{
+    mStatus = set(inputSource, sampleRate, format, channels,
+            frameCount, flags, cbf, user, notificationFrames, 0);
+}
+
 AudioRecord::~AudioRecord()
 {
     if (mStatus == NO_ERROR) {

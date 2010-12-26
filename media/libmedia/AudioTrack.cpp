@@ -101,6 +101,23 @@ AudioTrack::AudioTrack(
         uint32_t sampleRate,
         int format,
         int channels,
+        int frameCount,
+        uint32_t flags,
+        callback_t cbf,
+        void* user,
+        int notificationFrames)
+    : mStatus(NO_INIT)
+{
+    mStatus = set(streamType, sampleRate, format, channels,
+            frameCount, flags, cbf, user, notificationFrames,
+            0, false, 0);
+}
+
+AudioTrack::AudioTrack(
+        int streamType,
+        uint32_t sampleRate,
+        int format,
+        int channels,
         const sp<IMemory>& sharedBuffer,
         uint32_t flags,
         callback_t cbf,
