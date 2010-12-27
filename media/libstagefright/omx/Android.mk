@@ -50,6 +50,11 @@ ifneq ($(TARGET_SIMULATOR),true)
 LOCAL_SHARED_LIBRARIES += libdl
 endif
 
+ifeq ($(BOARD_CAMERA_USE_GETBUFFERINFO),true)
+        LOCAL_CFLAGS += -DUSE_GETBUFFERINFO
+        LOCAL_C_INCLUDES += $(TOP)/hardware/qcom/media/mm-core/omxcore/inc
+endif
+
 LOCAL_MODULE:= libstagefright_omx
 
 include $(BUILD_SHARED_LIBRARY)

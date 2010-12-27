@@ -369,4 +369,11 @@ void CameraSource::dataCallbackTimestamp(int64_t timestampUs,
     mFrameAvailableCondition.signal();
 }
 
+#ifdef USE_GETBUFFERINFO
+status_t CameraSource::getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize)
+{
+    return mCamera->getBufferInfo(Frame, alignedSize);
+}
+#endif
+
 }  // namespace android
