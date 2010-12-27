@@ -47,6 +47,10 @@ public:
 
     virtual void signalBufferReturned(MediaBuffer* buffer);
 
+#ifdef USE_GETBUFFERINFO
+    virtual status_t getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize);
+#endif
+
 private:
     friend class CameraSourceListener;
 

@@ -77,4 +77,11 @@ int64_t MediaSource::ReadOptions::getLateBy() const {
     return mLatenessUs;
 }
 
+#ifdef USE_GETBUFFERINFO
+status_t MediaSource::getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize) {
+    //do nothing, since it is virtual, need dummy implementation
+    return OK;
+}
+#endif
+
 }  // namespace android
