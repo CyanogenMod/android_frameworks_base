@@ -44,6 +44,7 @@ class UsbObserver extends UEventObserver {
     private static final String USB_FUNCTIONS_MATCH = "DEVPATH=/devices/virtual/usb_composite/";
     private static final String USB_CONFIGURATION_PATH = "/sys/class/switch/usb_configuration/state";
     private static final String USB_COMPOSITE_CLASS_PATH = "/sys/class/usb_composite";
+    private static final String USB_CONFIGURATION_MATCH_LEGACY = "DEVPATH=/devices/virtual/switch/usb_mass_storage";
 
     private static final int MSG_UPDATE = 0;
 
@@ -66,6 +67,7 @@ class UsbObserver extends UEventObserver {
 
         startObserving(USB_CONFIGURATION_MATCH);
         startObserving(USB_FUNCTIONS_MATCH);
+        startObserving(USB_CONFIGURATION_MATCH_LEGACY);
     }
 
     @Override
@@ -89,6 +91,20 @@ class UsbObserver extends UEventObserver {
                     }
                 } catch (NumberFormatException e) {
                     Slog.e(TAG, "Could not parse switch state from event " + event);
+                    int newConfig = 0;
+                    if (switchState.equals("offline")) {
+                        newConfig = 0;
+                    } else if (switchState.equals("online")) {
+                        newConfig = 1;
+                    }
+                    if (newConfig != mUsbConfig) {
+                        mPreviousUsbConfig = mUsbConfig;
+                        mUsbConfig = newConfig;
+                        // trigger an Intent broadcast
+                        if (mSystemReady) {
+                            update();
+                        }
+                    }
                 }
             } else {
                 String function = event.get("FUNCTION");
