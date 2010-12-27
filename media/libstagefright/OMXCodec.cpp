@@ -3641,8 +3641,20 @@ void OMXCodec::initOutputFormat(const sp<MetaData> &inputFormat) {
 #ifdef USE_QCOM_OMX_FIX
                 //Update the Stride and Slice Height
                 //Allows creation of Renderer with correct height and width
-                mOutputFormat->setInt32(kKeyWidth, video_def->nStride);
-                mOutputFormat->setInt32(kKeyHeight, video_def->nSliceHeight);
+                if( mIsEncoder ){
+                    int32_t width, height;
+                    bool success = inputFormat->findInt32( kKeyWidth, &width ) &&
+                        inputFormat->findInt32( kKeyHeight, &height);
+                    CHECK( success );
+                    mOutputFormat->setInt32(kKeyWidth, width );
+                    mOutputFormat->setInt32(kKeyHeight, height );
+                }
+                else {
+                    LOGV("video_def->nStride = %d, video_def->nSliceHeight = %d", video_def->nStride,
+                            video_def->nSliceHeight );
+                    mOutputFormat->setInt32(kKeyWidth, video_def->nStride);
+                    mOutputFormat->setInt32(kKeyHeight, video_def->nSliceHeight);
+                }
 #else
                 //Some hardware expects the old behavior
                 mOutputFormat->setInt32(kKeyWidth, video_def->nFrameWidth);
