@@ -425,8 +425,11 @@ public class WebSettings {
     public boolean getNavDump() {
         return mNavDump;
     }
-    
-    //Wysie    
+
+    /**
+     * Hides the onscreen zoom controls
+     * @hide
+     */
     public void showZoomControls(boolean value) {
         mWebView.showZoomControls(value);
     }
