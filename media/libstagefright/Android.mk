@@ -104,6 +104,11 @@ ifneq ($(filter qsd8k msm7k msm7625 msm7x30, $(TARGET_BOARD_PLATFORM)),)
         LOCAL_CFLAGS += -DUSE_QCOM_OMX_FIX
 endif
 
+ifeq ($(BOARD_CAMERA_USE_GETBUFFERINFO),true)
+        LOCAL_CFLAGS += -DUSE_GETBUFFERINFO
+        LOCAL_C_INCLUDES += $(TOP)/hardware/qcom/media/mm-core/omxcore/inc
+endif
+
 ifeq ($(TARGET_OS)-$(TARGET_SIMULATOR),linux-true)
         LOCAL_LDLIBS += -lpthread
 endif

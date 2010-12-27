@@ -22,6 +22,9 @@
 #include "OMXMaster.h"
 
 #include <OMX_Component.h>
+#ifdef USE_GETBUFFERINFO
+#include <OMX_QCOMExtns.h>
+#endif
 
 #include <binder/IMemory.h>
 #include <media/stagefright/MediaDebug.h>
@@ -249,9 +252,22 @@ status_t OMXNodeInstance::useBuffer(
 
     OMX_BUFFERHEADERTYPE *header;
 
+#ifdef USE_GETBUFFERINFO
+    OMX_QCOM_PLATFORM_PRIVATE_PMEM_INFO pmem_info;
+    ssize_t offset;
+    size_t size;
+    sp<IMemoryHeap> heap = params->getMemory(&offset, &size);
+    pmem_info.pmem_fd = heap->getHeapID();
+    pmem_info.offset = offset;
+
+    OMX_ERRORTYPE err = OMX_UseBuffer(
+            mHandle, &header, portIndex, &pmem_info,
+            params->size(), static_cast<OMX_U8 *>(params->pointer()));
+#else
     OMX_ERRORTYPE err = OMX_UseBuffer(
             mHandle, &header, portIndex, buffer_meta,
             params->size(), static_cast<OMX_U8 *>(params->pointer()));
+#endif
 
     if (err != OMX_ErrorNone) {
         LOGE("OMX_UseBuffer failed with error %d (0x%08x)", err, err);
@@ -263,6 +279,10 @@ status_t OMXNodeInstance::useBuffer(
 
         return UNKNOWN_ERROR;
     }
+
+#ifdef USE_GETBUFFERINFO
+    header->pAppPrivate = buffer_meta;
+#endif
 
     CHECK_EQ(header->pAppPrivate, buffer_meta);
 
