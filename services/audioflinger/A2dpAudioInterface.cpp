@@ -205,6 +205,13 @@ status_t A2dpAudioInterface::setVoiceVolume(float v)
     return mHardwareInterface->setVoiceVolume(v);
 }
 
+#ifdef HAVE_FM_RADIO
+status_t A2dpAudioInterface::setFmVolume(float v)
+{
+    return mHardwareInterface->setFmVolume(v);
+}
+#endif
+
 status_t A2dpAudioInterface::setMasterVolume(float v)
 {
     return mHardwareInterface->setMasterVolume(v);

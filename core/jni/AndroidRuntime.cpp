@@ -88,6 +88,10 @@ extern int register_android_message_digest_sha1(JNIEnv *env);
 
 extern int register_android_util_FloatMath(JNIEnv* env);
 
+#ifdef HAVE_FM_RADIO
+extern int register_android_hardware_fm_fmradio(JNIEnv* env);
+#endif
+
 namespace android {
 
 /*
@@ -1258,6 +1262,9 @@ static const RegJNIRec gRegJNI[] = {
     REG_JNI(register_android_os_MemoryFile),
     REG_JNI(register_com_android_internal_os_ZygoteInit),
     REG_JNI(register_android_hardware_Camera),
+#ifdef HAVE_FM_RADIO
+    REG_JNI(register_android_hardware_fm_fmradio),
+#endif
     REG_JNI(register_android_hardware_SensorManager),
     REG_JNI(register_android_media_AudioRecord),
     REG_JNI(register_android_media_AudioSystem),
