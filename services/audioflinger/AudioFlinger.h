@@ -1184,7 +1184,7 @@ private:
 
 
                 DefaultKeyedVector< int, sp<PlaybackThread> >  mPlaybackThreads;
-                PlaybackThread::stream_type_t       mStreamTypes[AudioSystem::NUM_STREAM_TYPES + 1];
+                PlaybackThread::stream_type_t       mStreamTypes[AudioSystem::NUM_STREAM_TYPES];
                 float                               mMasterVolume;
                 bool                                mMasterMute;
 
