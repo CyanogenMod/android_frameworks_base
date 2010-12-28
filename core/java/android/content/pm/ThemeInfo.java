@@ -274,7 +274,7 @@ public final class ThemeInfo extends BaseThemeInfo {
                         break;
 
                     case STYLE_INDEX:
-                        styleResourceId = attrs.getAttributeResourceValue(i, -1);
+                        styleResourceId = attrs.getAttributeResourceValue(i, 0);
                         break;
 
                     case PREVIEW_INDEX:
@@ -291,11 +291,11 @@ public final class ThemeInfo extends BaseThemeInfo {
 
     /*
      * Flatten this object in to a Parcel.
-     * 
+     *
      * @param dest The Parcel in which the object should be written.
      * @param flags Additional flags about how the object should be written.
      * May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
-     * 
+     *
      * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
      */
     public void writeToParcel(Parcel dest, int flags) {

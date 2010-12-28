@@ -530,12 +530,12 @@ static SharedBuffer* generateFrameworkRedirections(SharedBuffer* entriesByTypeBu
     // Load up a bag for the user-supplied theme.
     const ResTable::bag_entry* themeEnt = NULL;
     ssize_t N = rt->getBagLocked(styleId, &themeEnt);
-    const ResTable::bag_entry* endThemeEnt = themeEnt + N;
+    const ResTable::bag_entry* endThemeEnt = themeEnt + (N >= 0 ? N : 0);
 
     // ...and a bag for the framework default.
     const ResTable::bag_entry* frameworkEnt = NULL;
     N = rt->getBagLocked(0x01030005, &frameworkEnt);
-    const ResTable::bag_entry* endFrameworkEnt = frameworkEnt + N;
+    const ResTable::bag_entry* endFrameworkEnt = frameworkEnt + (N >= 0 ? N : 0);
 
     // The first entry should be for the theme itself.
     entriesByTypeBuf = addToEntriesByTypeBuffer(entriesByTypeBuf, 0x01030005, styleId);
@@ -719,7 +719,7 @@ bool AssetManager::generateAndWriteRedirections(ResTable* rt,
     AssetManager* am = (AssetManager*)this;
 
     SharedBuffer* buf = NULL;
-    if (isFramework) {
+    if (isFramework && themeStyleId != 0) {
         // Special framework theme heuristic...
         buf = generateFrameworkRedirections(buf, rt, themePackageName,
             themeStyleId, redirPath);
