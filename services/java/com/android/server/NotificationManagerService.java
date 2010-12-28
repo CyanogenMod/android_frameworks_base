@@ -100,6 +100,8 @@ public class NotificationManagerService extends INotificationManager.Stub
     private int mDefaultNotificationLedOn;
     private int mDefaultNotificationLedOff;
 
+    private boolean mAmberGreenLight;
+
     private NotificationRecord mSoundNotification;
     private NotificationPlayer mSound;
     private boolean mSystemReady;
@@ -116,6 +118,11 @@ public class NotificationManagerService extends INotificationManager.Stub
     // (that is, if mLedNotification was set while the screen was off)
     // This is reset to false when the screen is turned on.
     private boolean mPendingPulseNotification;
+
+    private boolean mNotificationBlinkEnabled;
+    private boolean mNotificationAlwaysOnEnabled;
+    private boolean mNotificationChargingEnabled;
+    private boolean mGreenLightOn = false;
 
     // for adb connected notifications
     private boolean mAdbNotificationShown = false;
@@ -336,7 +343,7 @@ public class NotificationManagerService extends INotificationManager.Stub
             String action = intent.getAction();
 
             boolean queryRestart = false;
-            
+
             if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
                 boolean batteryCharging = (intent.getIntExtra("plugged", 0) != 0);
                 int level = intent.getIntExtra("level", -1);
@@ -350,7 +357,11 @@ public class NotificationManagerService extends INotificationManager.Stub
                     mBatteryCharging = batteryCharging;
                     mBatteryLow = batteryLow;
                     mBatteryFull = batteryFull;
-                    updateLights();
+                    if (mAmberGreenLight) {
+                        updateAmberLight();
+                    } else {
+                        updateRGBLights();
+                    }
                 }
             } else if (action.equals(Usb.ACTION_USB_STATE)) {
                 Bundle extras = intent.getExtras();
@@ -387,13 +398,31 @@ public class NotificationManagerService extends INotificationManager.Stub
                 }
             } else if (action.equals(Intent.ACTION_SCREEN_ON)) {
                 mScreenOn = true;
-                updateNotificationPulse();
+                if (mAmberGreenLight) {
+                    if (!mNotificationAlwaysOnEnabled) {
+                        updateGreenLight();
+                    }
+                } else {
+                    updateNotificationPulse();
+                }
             } else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
                 mScreenOn = false;
-                updateNotificationPulse();
+                if (mAmberGreenLight) {
+                    if (!mNotificationAlwaysOnEnabled) {
+                        updateGreenLight();
+                    }
+                } else {
+                    updateNotificationPulse();
+                }
             } else if (action.equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
                 mInCall = (intent.getStringExtra(TelephonyManager.EXTRA_STATE).equals(TelephonyManager.EXTRA_STATE_OFFHOOK));
-                updateNotificationPulse();
+                if (mAmberGreenLight) {
+                    if (mInCall) {
+                        updateGreenLight();
+                    }
+                } else {
+                    updateNotificationPulse();
+                }
             }
         }
     };
@@ -407,6 +436,12 @@ public class NotificationManagerService extends INotificationManager.Stub
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.NOTIFICATION_LIGHT_PULSE), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_LIGHT_BLINK), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_LIGHT_ALWAYS_ON), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.NOTIFICATION_LIGHT_CHARGING), false, this);
             update();
         }
 
@@ -421,6 +456,24 @@ public class NotificationManagerService extends INotificationManager.Stub
             if (mNotificationPulseEnabled != pulseEnabled) {
                 mNotificationPulseEnabled = pulseEnabled;
                 updateNotificationPulse();
+            }
+            boolean blinkEnabled = Settings.System.getInt(resolver,
+                    Settings.System.NOTIFICATION_LIGHT_BLINK, 0) != 0;
+            if (mNotificationBlinkEnabled != blinkEnabled) {
+                mNotificationBlinkEnabled = blinkEnabled;
+                updateGreenLight();
+            }
+            boolean alwaysOnEnabled = Settings.System.getInt(resolver,
+                    Settings.System.NOTIFICATION_LIGHT_ALWAYS_ON, 0) != 0;
+            if (mNotificationAlwaysOnEnabled != alwaysOnEnabled) {
+                mNotificationAlwaysOnEnabled = alwaysOnEnabled;
+                updateGreenLight();
+            }
+            boolean chargingEnabled = Settings.System.getInt(resolver,
+                    Settings.System.NOTIFICATION_LIGHT_CHARGING, 0) != 0;
+            if (mNotificationChargingEnabled != chargingEnabled) {
+                mNotificationChargingEnabled = chargingEnabled;
+                updateAmberLight();
             }
         }
     }
@@ -451,7 +504,8 @@ public class NotificationManagerService extends INotificationManager.Stub
                 com.android.internal.R.integer.config_defaultNotificationLedOn);
         mDefaultNotificationLedOff = resources.getInteger(
                 com.android.internal.R.integer.config_defaultNotificationLedOff);
-
+        mAmberGreenLight = resources.getBoolean(
+                com.android.internal.R.bool.config_amber_green_light);
         // Don't start allowing notifications until the setup wizard has run once.
         // After that, including subsequent boots, init with notifications turned on.
         // This works on the first boot because the setup wizard will toggle this
@@ -1055,15 +1109,28 @@ public class NotificationManagerService extends INotificationManager.Stub
         }
     }
 
-    private void updateLights() {
-        synchronized (mNotificationList) {
-            updateLightsLocked();
+    // lock on mNotificationList
+    private void updateLightsLocked() {
+        if (mAmberGreenLight) {
+            updateGreenLightLocked();
+        } else {
+            updateRGBLightsLocked();
         }
     }
 
-    // lock on mNotificationList
-    private void updateLightsLocked()
-    {
+    private void updateRGBLights() {
+        synchronized (mNotificationList) {
+            updateRGBLightsLocked();
+        }
+    }
+
+    private void updateGreenLight() {
+        synchronized (mNotificationList) {
+            updateGreenLightLocked();
+        }
+    }
+
+    private void updateRGBLightsLocked() {
         // Battery low always shows, other states only show if charging.
         if (mBatteryLow) {
             if (mBatteryCharging) {
@@ -1122,6 +1189,57 @@ public class NotificationManagerService extends INotificationManager.Stub
                 mNotificationLight.pulse(ledARGB, ledOnMS);
             }
         }
+    }
+
+    private void updateGreenLightLocked() {
+        // handle notification light
+        if (mLedNotification == null) {
+            // get next notification, if any
+            int n = mLights.size();
+            if (n > 0) {
+                mLedNotification = mLights.get(n - 1);
+            }
+        }
+
+        boolean greenOn = mGreenLightOn;
+        //final boolean inQuietHours = inQuietHours();
+
+        // disable light if screen is on and "always show" is off
+        if (mLedNotification == null || mInCall //|| inQuietHours
+                || (mScreenOn && !mNotificationAlwaysOnEnabled)) {
+            mNotificationLight.turnOff();
+            mGreenLightOn = false;
+        } else {
+            if (mNotificationBlinkEnabled) {
+                mNotificationLight.setFlashing(0xFF00FF00,
+                        LightsService.LIGHT_FLASH_HARDWARE, 0, 0);
+
+            } else {
+                mNotificationLight.setColor(0xFF00FF00);
+            }
+            mGreenLightOn = true;
+        }
+
+        if (greenOn != mGreenLightOn) {
+            updateAmberLight();
+        }
+    }
+
+    private void updateAmberLight() {
+        // disable LED if green LED is already on
+        if (!mGreenLightOn && !mInCall) {
+            //final boolean inQuietHours = inQuietHours();
+
+            // enable amber only if low battery and not charging or charging
+            // and notification enabled
+            //if (!inQuietHours && ((mBatteryLow && !mBatteryCharging) ||
+            if ((mBatteryLow && !mBatteryCharging) ||
+                    (mBatteryCharging && mNotificationChargingEnabled && !mBatteryFull)) {
+                mBatteryLight.setColor(0xFFFFFF00);
+                return;
+            }
+        }
+        mBatteryLight.turnOff();
     }
 
     // lock on mNotificationList
