@@ -119,96 +119,129 @@ static uint32_t possibleEncodings(const char* s)
     return result;
 }
 
-void MediaScannerClient::convertValues(uint32_t encoding)
+void MediaScannerClient::convertValues(void)
 {
-    const char* enc = NULL;
-    switch (encoding) {
-        case kEncodingShiftJIS:
-            enc = "shift-jis";
-            break;
-        case kEncodingGBK:
-            enc = "gbk";
-            break;
-        case kEncodingBig5:
-            enc = "Big5";
-            break;
-        case kEncodingEUCKR:
-            enc = "EUC-KR";
-            break;
-    }
+    uint32_t encodings;
+    uint32_t currEncoding;
+    uint32_t lastEncoding = kEncodingNone;
 
-    if (enc) {
-        UErrorCode status = U_ZERO_ERROR;
+    UConverter *utf8Conv = NULL;
+    UConverter *conv = NULL;
 
-        UConverter *conv = ucnv_open(enc, &status);
-        if (U_FAILURE(status)) {
-            LOGE("could not create UConverter for %s\n", enc);
-            return;
-        }
-        UConverter *utf8Conv = ucnv_open("UTF-8", &status);
-        if (U_FAILURE(status)) {
-            LOGE("could not create UConverter for UTF-8\n");
-            ucnv_close(conv);
-            return;
+    UErrorCode status = U_ZERO_ERROR;
+
+    // for each value string, find proper encoding then convert it to UTF-8
+    for (int i = 0; i < mNames->size(); i++) {
+        encodings = possibleEncodings(mValues->getEntry(i));
+        if (encodings == kEncodingNone)
+            continue;
+
+        if (encodings & mLocaleEncoding) {
+            // if locale encoding matches, use it.
+            currEncoding = mLocaleEncoding;
+        } else {
+            // one more change for only one native encoding exists.
+            currEncoding = encodings;
         }
 
-        // for each value string, convert from native encoding to UTF-8
-        for (int i = 0; i < mNames->size(); i++) {
-            // first we need to untangle the utf8 and convert it back to the original bytes
-            // since we are reducing the length of the string, we can do this in place
-            uint8_t* src = (uint8_t *)mValues->getEntry(i);
-            int len = strlen((char *)src);
-            uint8_t* dest = src;
+        if (currEncoding != lastEncoding) {
+            const char* enc = NULL;
 
-            uint8_t uch;
-            while ((uch = *src++)) {
-                if (uch & 0x80)
-                    *dest++ = ((uch << 6) & 0xC0) | (*src++ & 0x3F);
-                else
-                    *dest++ = uch;
+            switch (currEncoding) {
+                case kEncodingShiftJIS:
+                    enc = "shift-jis";
+                    break;
+                case kEncodingGBK:
+                    enc = "gbk";
+                    break;
+                case kEncodingBig5:
+                    enc = "Big5";
+                    break;
+                case kEncodingEUCKR:
+                    enc = "EUC-KR";
+                    break;
             }
-            *dest = 0;
 
-            // now convert from native encoding to UTF-8
-            const char* source = mValues->getEntry(i);
-            int targetLength = len * 3 + 1;
-            char* buffer = new char[targetLength];
-            if (!buffer)
-                break;
-            char* target = buffer;
+            if (!enc) {
+                LOGE("failed to find native encoding for 0x%x", currEncoding);
+                continue;
+            }
 
-            ucnv_convertEx(utf8Conv, conv, &target, target + targetLength,
-                    &source, (const char *)dest, NULL, NULL, NULL, NULL, TRUE, TRUE, &status);
+            if (conv)
+                ucnv_close(conv);
+
+            conv = ucnv_open(enc, &status);
             if (U_FAILURE(status)) {
-                LOGE("ucnv_convertEx failed: %d\n", status);
-                mValues->setEntry(i, "???");
-            } else {
-                // zero terminate
-                *target = 0;
-                mValues->setEntry(i, buffer);
+                LOGE("could not create UConverter for %s\n", enc);
+                break;
             }
 
-            delete[] buffer;
+            if (!utf8Conv) {
+                utf8Conv = ucnv_open("UTF-8", &status);
+                if (U_FAILURE(status)) {
+                    LOGE("could not create UConverter for UTF-8\n");
+                    break;
+                }
+            }
+
+            lastEncoding == currEncoding;
         }
 
-        ucnv_close(conv);
-        ucnv_close(utf8Conv);
+        if (!conv || !utf8Conv) {
+            LOGE("this is not possible.\n");
+            return;
+        }
+
+        // first we need to untangle the utf8 and convert it back to the original bytes
+        // since we are reducing the length of the string, we can do this in place
+        uint8_t* src = (uint8_t *)mValues->getEntry(i);
+        int len = strlen((char *)src);
+        uint8_t* dest = src;
+
+        uint8_t uch;
+        while ((uch = *src++)) {
+            if (uch & 0x80)
+                *dest++ = ((uch << 6) & 0xC0) | (*src++ & 0x3F);
+            else
+                *dest++ = uch;
+        }
+        *dest = 0;
+
+        // now convert from native encoding to UTF-8
+        const char* source = mValues->getEntry(i);
+        int targetLength = len * 3 + 1;
+        char* buffer = new char[targetLength];
+        if (!buffer)
+            break;
+        char* target = buffer;
+
+        ucnv_convertEx(utf8Conv, conv, &target, target + targetLength,
+                &source, (const char *)dest, NULL, NULL, NULL, NULL, TRUE, TRUE, &status);
+        if (U_FAILURE(status)) {
+            LOGE("ucnv_convertEx failed: %d\n", status);
+            mValues->setEntry(i, "???");
+        } else {
+            // zero terminate
+            *target = 0;
+            mValues->setEntry(i, buffer);
+        }
+
+        delete[] buffer;
     }
+
+    if (conv)
+        ucnv_close(conv);
+    if (utf8Conv)
+        ucnv_close(utf8Conv);
 }
 
 void MediaScannerClient::endFile()
 {
     if (mLocaleEncoding != kEncodingNone) {
         int size = mNames->size();
-        uint32_t encoding = kEncodingAll;
 
-        // compute a bit mask containing all possible encodings
-        for (int i = 0; i < mNames->size(); i++)
-            encoding &= possibleEncodings(mValues->getEntry(i));
-
-        // if the locale encoding matches, then assume we have a native encoding.
-        if (encoding & mLocaleEncoding)
-            convertValues(mLocaleEncoding);
+        // guess proper native encoding and convert it to UTF-8
+        convertValues();
 
         // finally, push all name/value pairs to the client
         for (int i = 0; i < mNames->size(); i++) {

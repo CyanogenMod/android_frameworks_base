@@ -79,7 +79,7 @@ public:
     virtual bool addNoMediaFolder(const char* path) = 0;
 
 protected:
-    void convertValues(uint32_t encoding);
+    void convertValues(void);
 
 protected:
     // cached name and value strings, for native encoding support.
