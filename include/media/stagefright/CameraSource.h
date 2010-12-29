@@ -63,6 +63,9 @@ private:
     List<sp<IMemory> > mFramesReceived;
     List<sp<IMemory> > mFramesBeingEncoded;
     List<int64_t> mFrameTimes;
+#if defined(OMAP_ENHANCEMENT) && (TARGET_OMAP4)
+    List<uint32_t> mFrameOffset;
+#endif
 
     int64_t mStartTimeUs;
     int64_t mFirstFrameTimeUs;
@@ -77,8 +80,14 @@ private:
 
     CameraSource(const sp<Camera> &camera);
 
+#ifdef OMAP_ENHANCEMENT
+    void dataCallbackTimestamp(
+            int64_t timestampUs, int32_t msgType, const sp<IMemory> &data,
+            uint32_t offset=0, uint32_t stride=0);
+#else
     void dataCallbackTimestamp(
             int64_t timestampUs, int32_t msgType, const sp<IMemory> &data);
+#endif
 
     void releaseQueuedFrames();
     void releaseOneRecordingFrame(const sp<IMemory>& frame);
