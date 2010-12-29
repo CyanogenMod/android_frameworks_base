@@ -33,6 +33,10 @@ import java.io.IOException;
 import java.lang.IllegalStateException;
 import java.lang.Thread;
 import java.util.LinkedList;
+import android.content.Intent;
+/* TI FM UI port -start */
+import android.os.SystemProperties;
+/* TI FM UI port -stop */
 
 /**
  * @hide
@@ -210,6 +214,18 @@ public class NotificationPlayer implements OnCompletionListener {
     }
 
     public void onCompletion(MediaPlayer mp) {
+
+        /* TI FM UI port -start */
+        if (SystemProperties.OMAP_ENHANCEMENT) {
+               String FM_UNMUTE_CMD = "com.ti.server.fmunmutecmd";
+               Log.v(mTag,"sending unmute to fm");
+               /* Tell the FM playback service to resume,as the notification playback is over*/
+               // TODO: these constants need to be published somewhere in the framework.
+               Intent fmunmute = new Intent(FM_UNMUTE_CMD);
+               mCompletionThread.mCmd.context.sendBroadcast(fmunmute);
+        }
+        /* TI FM UI port -stop */
+
         if (mAudioManager != null) {
             mAudioManager.abandonAudioFocus(null);
         }

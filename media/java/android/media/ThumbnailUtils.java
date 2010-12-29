@@ -33,6 +33,7 @@ import android.provider.BaseColumns;
 import android.provider.MediaStore.Images;
 import android.provider.MediaStore.Images.Thumbnails;
 import android.util.Log;
+import android.os.SystemProperties;
 
 import java.io.FileInputStream;
 import java.io.FileDescriptor;
@@ -98,7 +99,9 @@ public class ThumbnailUtils {
         SizedThumbnailBitmap sizedThumbnailBitmap = new SizedThumbnailBitmap();
         Bitmap bitmap = null;
         MediaFileType fileType = MediaFile.getFileType(filePath);
-        if (fileType != null && fileType.fileType == MediaFile.FILE_TYPE_JPEG) {
+        if (fileType != null && ((fileType.fileType == MediaFile.FILE_TYPE_JPEG) ||
+                                 ((SystemProperties.OMAP_ENHANCEMENT) && (fileType.fileType == MediaFile.FILE_TYPE_JPS)) ||
+                                 ((SystemProperties.OMAP_ENHANCEMENT)&& (fileType.fileType == MediaFile.FILE_TYPE_MPO)))){
             createThumbnailFromEXIF(filePath, targetSize, maxPixels, sizedThumbnailBitmap);
             bitmap = sizedThumbnailBitmap.mBitmap;
         }
