@@ -26,7 +26,15 @@
 #include <camera/CameraHardwareInterface.h>
 
 /* This needs to be increased if we can have more cameras */
+#ifdef OMAP_ENHANCEMENT
+#define MAX_CAMERAS 3
+#else
 #define MAX_CAMERAS 2
+#endif
+
+#ifdef OMAP_ENHANCEMENT
+#define OVERLAY_FORMAT_BUFFER_SIZE  40
+#endif
 
 namespace android {
 
@@ -146,7 +154,12 @@ private:
         // these are static callback functions
         static void             notifyCallback(int32_t msgType, int32_t ext1, int32_t ext2, void* user);
         static void             dataCallback(int32_t msgType, const sp<IMemory>& dataPtr, void* user);
+#ifdef OMAP_ENHANCEMENT
+        static      void        dataCallbackTimestamp(nsecs_t timestamp, int32_t msgType,
+                                        const sp<IMemory>& dataPtr, void* user, uint32_t offset=0, uint32_t stride=0);
+#else
         static void             dataCallbackTimestamp(nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr, void* user);
+#endif
         // convert client from cookie
         static sp<Client>       getClientFromCookie(void* user);
         // handlers for messages
@@ -158,10 +171,22 @@ private:
         void                    handlePreviewData(const sp<IMemory>& mem);
         void                    handlePostview(const sp<IMemory>& mem);
         void                    handleRawPicture(const sp<IMemory>& mem);
+
+#ifdef OMAP_ENHANCEMENT
+
+        void                    handleBurstPicture(const sp<IMemory>& mem);
+
+#endif
+
         void                    handleCompressedPicture(const sp<IMemory>& mem);
         void                    handleGenericNotify(int32_t msgType, int32_t ext1, int32_t ext2);
         void                    handleGenericData(int32_t msgType, const sp<IMemory>& dataPtr);
+#ifdef OMAP_ENHANCEMENT
+        void                    handleGenericDataTimestamp(nsecs_t timestamp, int32_t msgType,
+                                        const sp<IMemory>& dataPtr, uint32_t offset=0, uint32_t stride=0);
+#else
         void                    handleGenericDataTimestamp(nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr);
+#endif
 
         void                    copyFrameAndPostCopiedFrame(
                                     const sp<ICameraClient>& client,
@@ -214,6 +239,12 @@ private:
         // This function keeps trying to grab mLock, or give up if the message
         // is found to be disabled. It returns true if mLock is grabbed.
         bool                    lockIfMessageWanted(int32_t msgType);
+
+#ifdef OMAP_ENHANCEMENT
+        char                     mOverlayFormat[OVERLAY_FORMAT_BUFFER_SIZE];
+        bool                     mS3DOverlay;
+#endif
+
     };
 };
 

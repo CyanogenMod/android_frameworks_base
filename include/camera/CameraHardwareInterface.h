@@ -46,12 +46,19 @@ typedef void (*notify_callback)(int32_t msgType,
 typedef void (*data_callback)(int32_t msgType,
                               const sp<IMemory>& dataPtr,
                               void* user);
-
+#ifdef OMAP_ENHANCEMENT
+typedef void (*data_callback_timestamp)(nsecs_t timestamp,
+                                        int32_t msgType,
+                                        const sp<IMemory>& dataPtr,
+                                        void* user,
+                                        uint32_t offset,
+                                        uint32_t stride);
+#else
 typedef void (*data_callback_timestamp)(nsecs_t timestamp,
                                         int32_t msgType,
                                         const sp<IMemory>& dataPtr,
                                         void* user);
-
+#endif
 /**
  * CameraHardwareInterface.h defines the interface to the
  * camera hardware abstraction layer, used for setting and getting

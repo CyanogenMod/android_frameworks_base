@@ -78,6 +78,13 @@ enum {
     CAMERA_MSG_POSTVIEW_FRAME   = 0x040,
     CAMERA_MSG_RAW_IMAGE        = 0x080,
     CAMERA_MSG_COMPRESSED_IMAGE = 0x100,
+
+#ifdef OMAP_ENHANCEMENT
+
+    CAMERA_MSG_BURST_IMAGE      = 0x200,
+
+#endif
+
     CAMERA_MSG_ALL_MSGS         = 0x1FF
 };
 
@@ -146,7 +153,12 @@ class CameraListener: virtual public RefBase
 public:
     virtual void notify(int32_t msgType, int32_t ext1, int32_t ext2) = 0;
     virtual void postData(int32_t msgType, const sp<IMemory>& dataPtr) = 0;
+#ifdef OMAP_ENHANCEMENT
+    virtual void postDataTimestamp(nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr,
+                    uint32_t offset=0, uint32_t stride=0) = 0;
+#else
     virtual void postDataTimestamp(nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr) = 0;
+#endif
 };
 
 class Camera : public BnCameraClient, public IBinder::DeathRecipient
@@ -232,7 +244,12 @@ public:
     // ICameraClient interface
     virtual void        notifyCallback(int32_t msgType, int32_t ext, int32_t ext2);
     virtual void        dataCallback(int32_t msgType, const sp<IMemory>& dataPtr);
+#ifdef OMAP_ENHANCEMENT
+    virtual void        dataCallbackTimestamp(nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr,
+                                uint32_t offset=0, uint32_t stride=0);
+#else
     virtual void        dataCallbackTimestamp(nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr);
+#endif
 
     sp<ICamera>         remote();
 

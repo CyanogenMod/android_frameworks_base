@@ -53,8 +53,13 @@ private:
 
     enum {
         kPageSize            = 65536,
+#ifndef OMAP_ENHANCEMENT
         kHighWaterThreshold  = 5 * 1024 * 1024,
         kLowWaterThreshold   = 512 * 1024,
+#else
+        kHighWaterThreshold  = 13 * 1024 * 1024,
+        kLowWaterThreshold   = 14 * 512 * 1024,
+#endif
 
         // Read data after a 15 sec timeout whether we're actively
         // fetching or not.

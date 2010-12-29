@@ -388,7 +388,12 @@ void Camera::dataCallback(int32_t msgType, const sp<IMemory>& dataPtr)
 }
 
 // callback from camera service when timestamped frame is ready
+#ifdef OMAP_ENHANCEMENT
+void Camera::dataCallbackTimestamp(nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr,
+        uint32_t offset, uint32_t stride)
+#else
 void Camera::dataCallbackTimestamp(nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr)
+#endif
 {
     sp<CameraListener> listener;
     {
@@ -396,7 +401,11 @@ void Camera::dataCallbackTimestamp(nsecs_t timestamp, int32_t msgType, const sp<
         listener = mListener;
     }
     if (listener != NULL) {
+#ifdef OMAP_ENHANCEMENT
+        listener->postDataTimestamp(timestamp, msgType, dataPtr, offset, stride);
+#else
         listener->postDataTimestamp(timestamp, msgType, dataPtr);
+#endif
     } else {
         LOGW("No listener was set. Drop a recording frame.");
         releaseRecordingFrame(dataPtr);

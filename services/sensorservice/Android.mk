@@ -28,8 +28,11 @@ ifneq ($(TARGET_PROXIMITY_SENSOR_LIMIT),)
     LOCAL_CFLAGS += -DPROXIMITY_LIES=$(TARGET_PROXIMITY_SENSOR_LIMIT)
 endif
 
-ifneq ($(filter p990 p999, $(TARGET_BOOTLOADER_BOARD_NAME)),)
+ifneq ($(filter p990 p999 p970, $(TARGET_BOOTLOADER_BOARD_NAME)),)
     LOCAL_CFLAGS += -DUSE_LGE_ALS_DUMMY
+    ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),p970)
+        LOCAL_CFLAGS += -DUSE_LGE_ALS_OMAP3
+    endif
 endif
 
 # need "-lrt" on Linux simulator to pick up clock_gettime
