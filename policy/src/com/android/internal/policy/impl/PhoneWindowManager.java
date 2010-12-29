@@ -285,6 +285,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // Behavior of ENDCALL Button.  (See Settings.System.END_BUTTON_BEHAVIOR.)
     int mEndcallBehavior;
 
+    // Behavior of trackball wake
+    boolean mTrackballWakeScreen;
+
+    Long mTrackballHitTime;
+
+    static final long NEXT_DURATION = 400;
+
     // Behavior of POWER button while in-call and screen on.
     // (See Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR.)
     int mIncallPowerBehavior;
@@ -321,6 +328,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.Secure.DEFAULT_INPUT_METHOD), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     "fancy_rotation_anim"), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.TRACKBALL_WAKE_SCREEN), false, this);
             updateSettings();
         }
 
@@ -614,6 +623,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR_DEFAULT);
             mFancyRotationAnimation = Settings.System.getInt(resolver,
                     "fancy_rotation_anim", 0) != 0 ? 0x80 : 0;
+            mTrackballWakeScreen = (Settings.System.getInt(resolver,
+                    Settings.System.TRACKBALL_WAKE_SCREEN, 0) == 1);
             int accelerometerDefault = Settings.System.getInt(resolver,
                     Settings.System.ACCELEROMETER_ROTATION, DEFAULT_ACCELEROMETER_ROTATION);
             if (mAccelerometerDefault != accelerometerDefault) {
@@ -1767,9 +1778,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             performHapticFeedbackLw(null, HapticFeedbackConstants.VIRTUAL_KEY, false);
         }
 
+        boolean isTrackballDown;
+        try {
+            isTrackballDown = mWindowManager.getTrackballScancodeState(BTN_MOUSE) > 0;
+        } catch (RemoteException e) {
+            isTrackballDown = false;
+        }
+        
         final boolean isWakeKey = (policyFlags
-                & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED)) != 0;
-
+                & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED)) != 0
+                || (isTrackballDown && mTrackballWakeScreen);
+        
         // If the key is injected, pretend that the screen is on and don't let the
         // device go to sleep.  This feature is mainly used for testing purposes.
         final boolean isInjected = (policyFlags & WindowManagerPolicy.FLAG_INJECTED) != 0;
@@ -1787,7 +1806,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         if (false) {
             Log.d(TAG, "interceptKeyTq keycode=" + keyCode
-                  + " screenIsOn=" + isScreenOn + " keyguardActive=" + keyguardActive);
+                  + " screenIsOn=" + isScreenOn + " keyguardActive=" + keyguardActive + " isWakeKey=" + isWakeKey);
         }
 
         if (keyguardActive) {
@@ -1797,7 +1816,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             } else {
                 // otherwise, don't pass it to the user
                 result &= ~ACTION_PASS_TO_USER;
-
+                
                 if (isWakeKey && down) {
 
                     // tell the mediator about a wake key, it may decide to
@@ -1814,6 +1833,28 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             handleVolumeKey(AudioManager.STREAM_MUSIC, keyCode);
                         }
                     }
+                } else if (isTrackballDown && isMusicActive()) {
+                    long time = SystemClock.elapsedRealtime();
+                    if (mTrackballHitTime == null) {
+                        mTrackballHitTime = time;
+                    } else {
+                        long timeBetweenHits;
+                        if (time > mTrackballHitTime) {
+                            timeBetweenHits = time - mTrackballHitTime;
+                        } else {
+                            timeBetweenHits = time + (Long.MAX_VALUE - mTrackballHitTime);
+                        }
+                        if (timeBetweenHits < NEXT_DURATION) {
+                            Intent i = new Intent("com.android.music.musicservicecommand");
+                            i.putExtra("command", "next");
+                            i.putExtra("trackball", true);
+
+                            mContext.sendBroadcast(i);
+                        }
+
+                        mTrackballHitTime = null;
+                    }
+
                 }
             }
         } else if (!isScreenOn) {
