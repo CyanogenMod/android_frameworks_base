@@ -52,6 +52,9 @@ public:
     virtual void setAudioSink(const sp<AudioSink> &audioSink);
     virtual status_t suspend();
     virtual status_t resume();
+#ifdef OMAP_ENHANCEMENT
+    virtual status_t requestVideoCloneMode(bool enable);
+#endif
 
     virtual status_t getMetadata(
             const media::Metadata::Filter& ids, Parcel *records);

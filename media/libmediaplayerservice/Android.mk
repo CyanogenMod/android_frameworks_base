@@ -71,6 +71,14 @@ ifeq ($(strip $(BOARD_USES_HW_MEDIAPLUGINS)),true)
     LOCAL_CFLAGS += -DUSE_BOARD_MEDIAPLUGIN
 endif
 
+ifeq ($(OMAP_ENHANCEMENT),true)
+
+LOCAL_C_INCLUDES += $(TOP)/hardware/ti/omap3/liboverlay
+
+LOCAL_SHARED_LIBRARIES += libui
+
+endif
+
 LOCAL_MODULE:= libmediaplayerservice
 
 include $(BUILD_SHARED_LIBRARY)

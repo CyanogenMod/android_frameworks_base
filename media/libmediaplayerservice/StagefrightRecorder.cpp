@@ -725,9 +725,24 @@ sp<MediaSource> StagefrightRecorder::createAudioSource() {
     OMXClient client;
     CHECK_EQ(client.connect(), OK);
 
-    sp<MediaSource> audioEncoder =
+    sp<MediaSource> audioEncoder;
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP3)
+#define MAX_RESOLUTION 414720
+    if ((mAudioEncoder == AUDIO_ENCODER_AAC) &&
+        (mVideoWidth*mVideoHeight > MAX_RESOLUTION)) {
+        audioEncoder =
+            OMXCodec::Create(client.interface(), encMeta,
+                             true /* createEncoder */, audioSource,
+                             "OMX.ITTIAM.AAC.encode");
+
+    } else {
+#endif
+    audioEncoder =
         OMXCodec::Create(client.interface(), encMeta,
                          true /* createEncoder */, audioSource);
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP3)
+    }
+#endif
     mAudioSourceNode = audioSource;
 
     return audioEncoder;
@@ -1045,6 +1060,18 @@ status_t StagefrightRecorder::setupVideoEncoder(sp<MediaSource> *source) {
     CHECK(meta->findInt32(kKeyStride, &stride));
     CHECK(meta->findInt32(kKeySliceHeight, &sliceHeight));
     CHECK(meta->findInt32(kKeyColorFormat, &colorFormat));
+#if defined (OMAP_ENHANCEMENT) && defined (TARGET_OMAP4)
+    int32_t paddedWidth, paddedHeight, seiEncodingType, mS3DCamera;
+    const char *frameLayoutStr;
+    CHECK(meta->findInt32(kKeyPaddedWidth, &paddedWidth));
+    CHECK(meta->findInt32(kKeyPaddedHeight, &paddedHeight));
+    CHECK(meta->findInt32(kKeyS3dSupported, &mS3DCamera));
+    if(mS3DCamera)
+    {
+        CHECK(meta->findInt32(kKeySEIEncodingType, &seiEncodingType));
+        CHECK(meta->findCString(kKeyFrameLayout, &frameLayoutStr));
+    }
+#endif
 
     enc_meta->setInt32(kKeyWidth, width);
     enc_meta->setInt32(kKeyHeight, height);
@@ -1052,6 +1079,17 @@ status_t StagefrightRecorder::setupVideoEncoder(sp<MediaSource> *source) {
     enc_meta->setInt32(kKeyStride, stride);
     enc_meta->setInt32(kKeySliceHeight, sliceHeight);
     enc_meta->setInt32(kKeyColorFormat, colorFormat);
+#if defined (OMAP_ENHANCEMENT) && defined (TARGET_OMAP4)
+    enc_meta->setInt32(kKeyPaddedWidth, paddedWidth);
+    enc_meta->setInt32(kKeyPaddedHeight, paddedHeight);
+    enc_meta->setInt32(kKeyS3dSupported, mS3DCamera);
+    if(mS3DCamera)
+    {
+        enc_meta->setInt32(kKeySEIEncodingType, seiEncodingType);
+        enc_meta->setCString(kKeyFrameLayout, frameLayoutStr);
+    }
+#endif
+
     if (mVideoTimeScale > 0) {
         enc_meta->setInt32(kKeyTimeScale, mVideoTimeScale);
     }
