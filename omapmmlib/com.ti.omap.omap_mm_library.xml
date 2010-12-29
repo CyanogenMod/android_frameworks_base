@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<permissions>
+    <library name="com.ti.omap.omap_mm_library"
+            file="/system/framework/com.ti.omap.omap_mm_library.jar"/>
+</permissions>
