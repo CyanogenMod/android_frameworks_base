@@ -62,13 +62,22 @@ public:
     }
 
     // generic data callback from camera service to app with image data
+#ifdef OMAP_ENHANCEMENT
+    void dataCallbackTimestamp(nsecs_t timestamp, int32_t msgType, const sp<IMemory>& imageData,
+            uint32_t offset, uint32_t stride)
+#else
     void dataCallbackTimestamp(nsecs_t timestamp, int32_t msgType, const sp<IMemory>& imageData)
+#endif
     {
         LOGV("dataCallback");
         Parcel data, reply;
         data.writeInterfaceToken(ICameraClient::getInterfaceDescriptor());
         data.writeInt64(timestamp);
         data.writeInt32(msgType);
+#ifdef OMAP_ENHANCEMENT
+        data.writeInt32(offset);
+        data.writeInt32(stride);
+#endif
         data.writeStrongBinder(imageData->asBinder());
         remote()->transact(DATA_CALLBACK_TIMESTAMP, data, &reply, IBinder::FLAG_ONEWAY);
     }
@@ -104,8 +113,16 @@ status_t BnCameraClient::onTransact(
             CHECK_INTERFACE(ICameraClient, data, reply);
             nsecs_t timestamp = data.readInt64();
             int32_t msgType = data.readInt32();
+#ifdef OMAP_ENHANCEMENT
+            int32_t offset = data.readInt32();
+            int32_t stride = data.readInt32();
+#endif
             sp<IMemory> imageData = interface_cast<IMemory>(data.readStrongBinder());
+#ifdef OMAP_ENHANCEMENT
+            dataCallbackTimestamp(timestamp, msgType, imageData, offset, stride);
+#else
             dataCallbackTimestamp(timestamp, msgType, imageData);
+#endif
             return NO_ERROR;
         } break;
         default:

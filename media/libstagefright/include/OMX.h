@@ -88,6 +88,12 @@ public:
             node_id node, OMX_INDEXTYPE index,
             const void *params, size_t size);
 
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    virtual status_t useBuffer(
+            node_id node, OMX_U32 port_index, const sp<IMemory> &params,
+            buffer_id *buffer, size_t size);
+#endif
+
     virtual status_t useBuffer(
             node_id node, OMX_U32 port_index, const sp<IMemory> &params,
             buffer_id *buffer);
@@ -123,6 +129,16 @@ public:
             size_t encodedWidth, size_t encodedHeight,
             size_t displayWidth, size_t displayHeight,
             int32_t rotationDegrees);
+#ifdef OMAP_ENHANCEMENT
+    virtual sp<IOMXRenderer> createRenderer(
+            const sp<ISurface> &surface,
+            const char *componentName,
+            OMX_COLOR_FORMATTYPE colorFormat,
+            size_t encodedWidth, size_t encodedHeight,
+            size_t displayWidth, size_t displayHeight,
+            int32_t rotationDegrees,
+            int isS3D, int numOfOpBuffers);
+#endif
 
     virtual void binderDied(const wp<IBinder> &the_late_who);
 

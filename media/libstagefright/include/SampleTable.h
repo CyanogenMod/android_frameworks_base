@@ -46,6 +46,10 @@ public:
 
     status_t setTimeToSampleParams(off_t data_offset, size_t data_size);
 
+#ifdef OMAP_ENHANCEMENT
+    status_t setTimeToSampleParamsCtts(off_t data_offset, size_t data_size);
+#endif
+
     status_t setSyncSampleParams(off_t data_offset, size_t data_size);
 
     ////////////////////////////////////////////////////////////////////////////
@@ -76,7 +80,9 @@ public:
             uint32_t flags);
 
     status_t findThumbnailSample(uint32_t *sample_index);
-
+#ifdef OMAP_ENHANCEMENT
+	int32_t *mTimeToSampleCtts;
+#endif
 protected:
     ~SampleTable();
 
@@ -124,6 +130,12 @@ private:
 
     SampleTable(const SampleTable &);
     SampleTable &operator=(const SampleTable &);
+
+#ifdef OMAP_ENHANCEMENT
+    uint32_t mTimeToSampleCountCtts;
+    int32_t *mCttsSampleBuffer;
+#endif
+
 };
 
 }  // namespace android
