@@ -55,6 +55,8 @@ status_t ESDS::getCodecSpecificInfo(const void **data, size_t *size) const {
     if (mInitCheck != OK) {
         return mInitCheck;
     }
+    if(!mDecoderSpecificLength)
+        return ERROR_MALFORMED;
 
     *data = &mData[mDecoderSpecificOffset];
     *size = mDecoderSpecificLength;

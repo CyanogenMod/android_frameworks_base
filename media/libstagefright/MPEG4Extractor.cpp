@@ -896,8 +896,29 @@ status_t MPEG4Extractor::parseChunk(off_t *offset, int depth) {
                 return ERROR_MALFORMED;
             }
 
-            mLastTrack->meta->setData(
+            if (mPath.size() >= 2
+                    && mPath[mPath.size() - 2] == FOURCC('m', 'p', '4', 'v')) {
+
+                status_t err = updateVideoTrackInfoFromESDS_MPEG4Video(
+                        &buffer[4], chunk_data_size - 4);
+                if (err != OK) {
+                    return err;
+                }
+            }
+
+            const char *mime;
+            CHECK(mLastTrack->meta->findCString(kKeyMIMEType, &mime));
+            //Do not set ESDS to meta data if mime type is reset to H.263
+            if(!strcmp(mime,MEDIA_MIMETYPE_VIDEO_H263)) {
+                //update the offset since mimetype is H.263
+                *offset += chunk_size;
+                break;
+
+            }
+            else {
+                mLastTrack->meta->setData(
                     kKeyESDS, kTypeESDS, &buffer[4], chunk_data_size - 4);
+            }
 
             if (mPath.size() >= 2
                     && mPath[mPath.size() - 2] == FOURCC('m', 'p', '4', 'a')) {
@@ -1871,5 +1892,23 @@ bool SniffMPEG4(
     return false;
 }
 
+status_t MPEG4Extractor::updateVideoTrackInfoFromESDS_MPEG4Video(
+        const void *esds_data, size_t esds_size) {
+    ESDS esds(esds_data, esds_size);
+    const uint8_t *csd;
+    size_t csd_size;
+    if (esds.getCodecSpecificInfo(
+                (const void **)&csd, &csd_size) != OK) {
+        return ERROR_MALFORMED;
+    }
+
+    uint32_t offset = (csd_size) - 4;
+    if (csd != NULL && csd[offset] == 0x00 && csd[offset+1] == 0x00 &&
+        csd[offset+2] == 0x01 && csd[offset+3] < 0x20) {
+        LOGW("Reset Mime type from mp4v to H.263");
+        mLastTrack->meta->setCString(kKeyMIMEType, FourCC2MIME( FOURCC('s', '2', '6', '3')));
+    }
+    return OK;
+}
 }  // namespace android
 
