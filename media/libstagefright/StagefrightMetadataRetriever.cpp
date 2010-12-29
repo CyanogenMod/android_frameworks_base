@@ -28,7 +28,15 @@
 #include <media/stagefright/MetaData.h>
 #include <media/stagefright/OMXCodec.h>
 
+#if defined (TARGET_OMAP4) && defined (OMAP_ENHANCEMENT)
+#include <OMX_TI_IVCommon.h>
+#endif
+
 namespace android {
+
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+extern void updateMetaData(sp<MetaData> meta_track);
+#endif
 
 StagefrightMetadataRetriever::StagefrightMetadataRetriever()
     : mParsedMetaData(false),
@@ -49,7 +57,11 @@ StagefrightMetadataRetriever::~StagefrightMetadataRetriever() {
 }
 
 status_t StagefrightMetadataRetriever::setDataSource(const char *uri) {
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    LOGD("setDataSource(%s)", uri);
+#else
     LOGV("setDataSource(%s)", uri);
+#endif
 
     mParsedMetaData = false;
     mMetaData.clear();
@@ -112,6 +124,24 @@ static VideoFrame *extractVideoFrameWithCodecFlags(
         uint32_t flags,
         int64_t frameTimeUs,
         int seekMode) {
+
+#ifdef OMAP_ENHANCEMENT
+    flags |= OMXCodec::kPreferThumbnailMode;
+#ifdef TARGET_OMAP4
+
+    int32_t isInterlaced = false;
+
+    //Call config parser to update profile,level,interlaced,reference frame data
+    updateMetaData(trackMeta);
+
+    trackMeta->findInt32(kKeyVideoInterlaced, &isInterlaced);
+
+    if(isInterlaced)
+    {
+      flags |= OMXCodec::kPreferInterlacedOutputContent;
+    }
+#endif
+#endif
     sp<MediaSource> decoder =
         OMXCodec::Create(
                 client->interface(), source->getFormat(), false, source,
@@ -157,7 +187,18 @@ static VideoFrame *extractVideoFrameWithCodecFlags(
             buffer->release();
             buffer = NULL;
         }
+
         err = decoder->read(&buffer, &options);
+#ifdef OMAP_ENHANCEMENT
+        if(err == INFO_FORMAT_CHANGED)
+        {
+            int32_t w1,h1;
+            decoder->getFormat()->findInt32(kKeyWidth, &w1);
+            decoder->getFormat()->findInt32(kKeyHeight, &h1);
+            LOGD("Got portreconfig event. New WxH %dx%d. wait 5mS for port to be enabled",w1,h1);
+            usleep(5000); //sleep 5mS for port disable-enable to complete
+        }
+#endif
         options.clearSeekTo();
     } while (err == INFO_FORMAT_CHANGED
              || (buffer != NULL && buffer->range_length() == 0));
@@ -211,6 +252,77 @@ static VideoFrame *extractVideoFrameWithCodecFlags(
     }
 
     VideoFrame *frame = new VideoFrame;
+
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    int32_t srcFormat;
+    CHECK(meta->findInt32(kKeyColorFormat, &srcFormat));
+
+    int32_t format;
+    const char *component;
+
+    //cache the display width and height
+    int32_t displayWidth, displayHeight;
+    displayWidth = width;
+    displayHeight = height;
+
+    //update width & height with the buffer width&height
+    if(!(meta->findInt32(kKeyPaddedWidth, &width))) {
+        CHECK(meta->findInt32(kKeyWidth, &width));
+    }
+    if(!(meta->findInt32(kKeyPaddedHeight, &height))) {
+        CHECK(meta->findInt32(kKeyHeight, &height));
+    }
+    LOGD("VideoFrame WxH %dx%d", displayWidth, displayHeight);
+
+    if(((OMX_COLOR_FORMATTYPE)srcFormat == OMX_COLOR_FormatYUV420PackedSemiPlanar) ||
+       ((OMX_COLOR_FORMATTYPE)srcFormat == OMX_TI_COLOR_FormatYUV420PackedSemiPlanar_Sequential_TopBottom)){
+        frame->mWidth = displayWidth;
+        frame->mHeight = displayHeight;
+        frame->mDisplayWidth = displayWidth;
+        frame->mDisplayHeight = displayHeight;
+        frame->mSize = displayWidth * displayHeight * 2;
+        frame->mData = new uint8_t[frame->mSize];
+    frame->mRotationAngle = rotationAngle;
+    }else {
+        frame->mWidth = width;
+        frame->mHeight = height;
+        frame->mDisplayWidth = width;
+        frame->mDisplayHeight = height;
+        frame->mSize = width * height * 2;
+        frame->mData = new uint8_t[frame->mSize];
+    frame->mRotationAngle = rotationAngle;
+    }
+
+    if(((OMX_COLOR_FORMATTYPE)srcFormat == OMX_COLOR_FormatYUV420PackedSemiPlanar) ||
+       ((OMX_COLOR_FORMATTYPE)srcFormat == OMX_TI_COLOR_FormatYUV420PackedSemiPlanar_Sequential_TopBottom)){
+
+        ColorConverter converter(
+                (OMX_COLOR_FORMATTYPE)srcFormat, OMX_COLOR_Format16bitRGB565);
+
+        CHECK(converter.isValid());
+
+        converter.convert(
+                width, height,
+                (const uint8_t *)buffer->data() + buffer->range_offset(),
+                0, //1D buffer in 1.16 Ducati rls. If 2D buffer -> 4096 stride should be used
+                frame->mData, displayWidth * 2,
+                displayWidth,displayHeight,buffer->range_offset(),isInterlaced);
+    }
+    else{
+
+        ColorConverter converter(
+                (OMX_COLOR_FORMATTYPE)srcFormat, OMX_COLOR_Format16bitRGB565);
+
+        CHECK(converter.isValid());
+
+        converter.convert(
+                width, height,
+                (const uint8_t *)buffer->data() + buffer->range_offset(),
+                0,
+                frame->mData, width * 2);
+    }
+
+#else
     frame->mWidth = width;
     frame->mHeight = height;
     frame->mDisplayWidth = width;
@@ -231,6 +343,7 @@ static VideoFrame *extractVideoFrameWithCodecFlags(
             (const uint8_t *)buffer->data() + buffer->range_offset(),
             0,
             frame->mData, width * 2);
+#endif
 
     buffer->release();
     buffer = NULL;
@@ -283,6 +396,18 @@ VideoFrame *StagefrightMetadataRetriever::getFrameAtTime(
                 &mClient, trackMeta, source, OMXCodec::kPreferSoftwareCodecs,
                 timeUs, option);
 
+#ifdef OMAP_ENHANCEMENT
+    /*In case the first attempt have failed try a second time*/
+    if (frame == NULL) {
+        LOGD("Software decoder failed to extract thumbnail, "
+             "trying hardware decoder with first frame in clip.");
+        /*Set the flag kSelectFirstSample in order to force decoding frame 0*/
+        trackMeta = mExtractor->getTrackMetaData(
+            i, MediaExtractor::kSelectFirstSample | MediaExtractor::kIncludeExtensiveMetaData);
+        /*Get the frame docoded*/
+        frame = extractVideoFrameWithCodecFlags(&mClient, trackMeta, source, 0, timeUs, option);
+    }
+#else
     if (frame == NULL) {
         LOGV("Software decoder failed to extract thumbnail, "
              "trying hardware decoder.");
@@ -290,6 +415,7 @@ VideoFrame *StagefrightMetadataRetriever::getFrameAtTime(
         frame = extractVideoFrameWithCodecFlags(&mClient, trackMeta, source, 0,
                         timeUs, option);
     }
+#endif
 
     return frame;
 }

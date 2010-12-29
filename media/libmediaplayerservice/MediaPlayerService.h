@@ -36,6 +36,9 @@ class IMediaRecorder;
 class IMediaMetadataRetriever;
 class IOMX;
 class MediaRecorderClient;
+#ifdef OMAP_ENHANCEMENT
+class IOverlayRenderer;
+#endif
 
 #define CALLBACK_ANTAGONIZER 0
 #if CALLBACK_ANTAGONIZER
@@ -194,7 +197,9 @@ public:
     virtual sp<IMemory>         decode(const char* url, uint32_t *pSampleRate, int* pNumChannels, int* pFormat);
     virtual sp<IMemory>         decode(int fd, int64_t offset, int64_t length, uint32_t *pSampleRate, int* pNumChannels, int* pFormat);
     virtual sp<IOMX>            getOMX();
-
+#ifdef OMAP_ENHANCEMENT
+    virtual sp<IOverlayRenderer>  getOverlayRenderer();
+#endif
     virtual status_t            dump(int fd, const Vector<String16>& args);
 
             void                removeClient(wp<Client> client);
@@ -228,6 +233,9 @@ private:
         virtual status_t        resume();
         virtual status_t        setAuxEffectSendLevel(float level);
         virtual status_t        attachAuxEffect(int effectId);
+#ifdef OMAP_ENHANCEMENT
+        virtual status_t        requestVideoCloneMode(bool enable);
+#endif
 
         sp<MediaPlayerBase>     createPlayer(player_type playerType);
 
@@ -305,6 +313,9 @@ private:
                 SortedVector< wp<MediaRecorderClient> > mMediaRecorderClients;
                 int32_t                     mNextConnId;
                 sp<IOMX>                    mOMX;
+#ifdef OMAP_ENHANCEMENT
+                sp<IOverlayRenderer> mOverlayRenderer;
+#endif
 };
 
 // ----------------------------------------------------------------------------
