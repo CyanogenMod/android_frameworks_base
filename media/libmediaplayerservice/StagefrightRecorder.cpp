@@ -725,9 +725,24 @@ sp<MediaSource> StagefrightRecorder::createAudioSource() {
     OMXClient client;
     CHECK_EQ(client.connect(), OK);
 
-    sp<MediaSource> audioEncoder =
+    sp<MediaSource> audioEncoder;
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP3)
+#define MAX_RESOLUTION 414720
+    if ((mAudioEncoder == AUDIO_ENCODER_AAC) &&
+        (mVideoWidth*mVideoHeight > MAX_RESOLUTION)) {
+        audioEncoder =
+            OMXCodec::Create(client.interface(), encMeta,
+                             true /* createEncoder */, audioSource,
+                             "OMX.ITTIAM.AAC.encode");
+
+    } else {
+#endif
+    audioEncoder =
         OMXCodec::Create(client.interface(), encMeta,
                          true /* createEncoder */, audioSource);
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP3)
+    }
+#endif
     mAudioSourceNode = audioSource;
 
     return audioEncoder;
@@ -1045,6 +1060,18 @@ status_t StagefrightRecorder::setupVideoEncoder(sp<MediaSource> *source) {
     CHECK(meta->findInt32(kKeyStride, &stride));
     CHECK(meta->findInt32(kKeySliceHeight, &sliceHeight));
     CHECK(meta->findInt32(kKeyColorFormat, &colorFormat));
+#if defined (OMAP_ENHANCEMENT) && defined (TARGET_OMAP4)
+    int32_t paddedWidth, paddedHeight, seiEncodingType, mS3DCamera;
+    const char *frameLayoutStr;
+    CHECK(meta->findInt32(kKeyPaddedWidth, &paddedWidth));
+    CHECK(meta->findInt32(kKeyPaddedHeight, &paddedHeight));
+    CHECK(meta->findInt32(kKeyS3dSupported, &mS3DCamera));
+    if(mS3DCamera)
+    {
+        CHECK(meta->findInt32(kKeySEIEncodingType, &seiEncodingType));
+        CHECK(meta->findCString(kKeyFrameLayout, &frameLayoutStr));
+    }
+#endif
 
     enc_meta->setInt32(kKeyWidth, width);
     enc_meta->setInt32(kKeyHeight, height);
@@ -1052,6 +1079,17 @@ status_t StagefrightRecorder::setupVideoEncoder(sp<MediaSource> *source) {
     enc_meta->setInt32(kKeyStride, stride);
     enc_meta->setInt32(kKeySliceHeight, sliceHeight);
     enc_meta->setInt32(kKeyColorFormat, colorFormat);
+#if defined (OMAP_ENHANCEMENT) && defined (TARGET_OMAP4)
+    enc_meta->setInt32(kKeyPaddedWidth, paddedWidth);
+    enc_meta->setInt32(kKeyPaddedHeight, paddedHeight);
+    enc_meta->setInt32(kKeyS3dSupported, mS3DCamera);
+    if(mS3DCamera)
+    {
+        enc_meta->setInt32(kKeySEIEncodingType, seiEncodingType);
+        enc_meta->setCString(kKeyFrameLayout, frameLayoutStr);
+    }
+#endif
+
     if (mVideoTimeScale > 0) {
         enc_meta->setInt32(kKeyTimeScale, mVideoTimeScale);
     }
@@ -1103,12 +1141,14 @@ status_t StagefrightRecorder::startMPEG4Recording() {
     status_t err = OK;
     sp<MediaWriter> writer = new MPEG4Writer(dup(mOutputFd));
 
+#if !defined(OMAP_ENHANCEMENT)
     // Add audio source first if it exists
     if (mAudioSource != AUDIO_SOURCE_LIST_END) {
         err = setupAudioEncoder(writer);
         if (err != OK) return err;
         totalBitRate += mAudioBitRate;
     }
+#endif
     if (mVideoSource == VIDEO_SOURCE_DEFAULT
             || mVideoSource == VIDEO_SOURCE_CAMERA) {
         sp<MediaSource> encoder;
@@ -1117,6 +1157,16 @@ status_t StagefrightRecorder::startMPEG4Recording() {
         writer->addSource(encoder);
         totalBitRate += mVideoBitRate;
     }
+#if defined(OMAP_ENHANCEMENT)
+    // Starting Audio after video to fix AV-Sync issue. The AV-Sync issue here refers to lip-sync not achieved in recorded video.
+    // This is due to the audio track thread blocking the video thread for approx half a second which results in audio recorded
+    // half a second earlier than video. This when played back results in audio/video out of sync.
+    if (mAudioSource != AUDIO_SOURCE_LIST_END) {
+        err = setupAudioEncoder(writer);
+        if (err != OK) return err;
+        totalBitRate += mAudioBitRate;
+    }
+#endif
 
     if (mInterleaveDurationUs > 0) {
         reinterpret_cast<MPEG4Writer *>(writer.get())->

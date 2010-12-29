@@ -35,9 +35,19 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.MediaController.MediaPlayerControl;
+import android.content.BroadcastReceiver;
+import android.content.IntentFilter;
+import android.os.SystemProperties;
 
 import java.io.IOException;
 import java.util.Map;
+
+/* TI custom package */
+import com.ti.omap.omap_mm_library.OmapMMLibrary;
+
+/* TI FM UI port -start */
+import android.os.SystemProperties;
+/* TI FM UI port -stop */
 
 /**
  * Displays a video file.  The VideoView class
@@ -48,6 +58,10 @@ import java.util.Map;
  */
 public class VideoView extends SurfaceView implements MediaPlayerControl {
     private String TAG = "VideoView";
+
+    private OmapMMLibrary mOmapMMHandle = null;
+    private IntentFilter mHdmiIntent = null;
+
     // settable by the client
     private Uri         mUri;
     private Map<String, String> mHeaders;
@@ -64,6 +78,12 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     private static final int STATE_SUSPEND            = 6;
     private static final int STATE_RESUME             = 7;
     private static final int STATE_SUSPEND_UNSUPPORTED = 8;
+
+    // All possible Display Types on OMAP4.
+    private static final int DISPLAY_TYPE_LCD_PRIMARY   = 0x0000;
+    private static final int DISPLAY_TYPE_LCD_SECONDARY = 0x0001;
+    private static final int DISPLAY_TYPE_HDMI_TV       = 0x0002;
+    private static final int DISPLAY_TYPE_PICO_DLP      = 0x0003;
 
     // mCurrentState is a VideoView object's current state.
     // mTargetState is the state that a method caller intends to reach.
@@ -90,6 +110,10 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     private boolean     mCanSeekBack;
     private boolean     mCanSeekForward;
     private int         mStateWhenSuspended;  //state before calling suspend()
+
+    private static final String ACTION_HDMI_PLUG = "android.intent.action.HDMI_PLUG";
+    // Broadcast receiver for device connections intent broadcasts
+    private final BroadcastReceiver mReceiver = new VideoPlaybackBroadcastReceiver();
 
     public VideoView(Context context) {
         super(context);
@@ -167,6 +191,14 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         requestFocus();
         mCurrentState = STATE_IDLE;
         mTargetState  = STATE_IDLE;
+
+        if(SystemProperties.OMAP_ENHANCEMENT) {
+            mOmapMMHandle = new OmapMMLibrary();
+            //if the OmapMMHandle is non-null, initialise jni
+            if (mOmapMMHandle != null) {
+                mOmapMMHandle.native_init();
+            }
+        }
     }
 
     public void setVideoPath(String path) {
@@ -197,6 +229,19 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             mCurrentState = STATE_IDLE;
             mTargetState  = STATE_IDLE;
         }
+
+        // Unregister for device HDMI-Hotplug intent broadcasts.
+        if(SystemProperties.OMAP_ENHANCEMENT) {
+            //unregister and delete the memory for hdmi intent
+            if (mHdmiIntent != null) {
+                mContext.unregisterReceiver(mReceiver);
+                mHdmiIntent = null;
+            }
+            //delete the omapMMHandle memory
+            if (mOmapMMHandle != null) {
+                mOmapMMHandle = null;
+            }
+        }
     }
 
     private void openVideo() {
@@ -209,7 +254,14 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
         Intent i = new Intent("com.android.music.musicservicecommand");
         i.putExtra("command", "pause");
         mContext.sendBroadcast(i);
-
+        /* TI FM UI port -start */
+        if (SystemProperties.OMAP_ENHANCEMENT) {
+             // Tell the FM playback service to pause,as the video playback will start.
+             // TODO: these constants need to be published somewhere in the framework.
+             Intent fm = new Intent("com.ti.server.fmpausecmd");
+             mContext.sendBroadcast(fm);
+        }
+        /* TI FM UI port -stop */
         // we shouldn't clear the target state, because somebody might have
         // called start() previously
         release(false);
@@ -231,6 +283,10 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             // target state that was there before.
             mCurrentState = STATE_PREPARING;
             attachMediaController();
+            if(SystemProperties.OMAP_ENHANCEMENT) {
+                mOmapMMHandle.setVideoSurface(mSurfaceHolder);
+                mOmapMMHandle.setMediaPlayer(mMediaPlayer);
+            }
         } catch (IOException ex) {
             Log.w(TAG, "Unable to open content: " + mUri, ex);
             mCurrentState = STATE_ERROR;
@@ -278,7 +334,16 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     MediaPlayer.OnPreparedListener mPreparedListener = new MediaPlayer.OnPreparedListener() {
         public void onPrepared(MediaPlayer mp) {
             mCurrentState = STATE_PREPARED;
-
+            /**
+            * Register for device HDMI-Hotplug intent broadcasts.
+            * the registration is delayed till the Media player is prepared.
+            * This is required to avoid the scenario where the event is disptached
+            * even before Overlay source is created.
+            */
+            if(SystemProperties.OMAP_ENHANCEMENT) {
+                mHdmiIntent = new IntentFilter(ACTION_HDMI_PLUG);
+                mContext.registerReceiver(mReceiver, mHdmiIntent);
+            }
             // Get the capabilities of the player for this stream
             Metadata data = mp.getMetadata(MediaPlayer.METADATA_ALL,
                                       MediaPlayer.BYPASS_METADATA_FILTER);
@@ -477,6 +542,9 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             if (mMediaPlayer != null && mCurrentState == STATE_SUSPEND
                    && mTargetState == STATE_RESUME) {
                 mMediaPlayer.setDisplay(mSurfaceHolder);
+                if(SystemProperties.OMAP_ENHANCEMENT) {
+                    mOmapMMHandle.setVideoSurface(mSurfaceHolder);
+                 }
                 resume();
             } else {
                 openVideo();
@@ -606,6 +674,12 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
             if (mMediaPlayer.resume()) {
                 mCurrentState = mStateWhenSuspended;
                 mTargetState = mStateWhenSuspended;
+                if(SystemProperties.OMAP_ENHANCEMENT) {
+                    Intent hdmiIntent =  mContext.registerReceiver(null,
+                                          new IntentFilter(ACTION_HDMI_PLUG));
+                    mReceiver.onReceive(mContext, hdmiIntent);
+                }
+
             } else {
                 Log.w(TAG, "Unable to resume video");
             }
@@ -674,4 +748,31 @@ public class VideoView extends SurfaceView implements MediaPlayerControl {
     public boolean canSeekForward() {
         return mCanSeekForward;
     }
+
+    /**
+     * Receiver for HDMI-Hotplug intent broadcasts
+     */
+    private class VideoPlaybackBroadcastReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent == null) {
+                Log.e(TAG, "VideoPlaybackBroadcastReceiver intent is NULL!");
+                return;
+            }
+            String action = intent.getAction();
+
+            if (SystemProperties.OMAP_ENHANCEMENT && action.equals(ACTION_HDMI_PLUG)) {
+                int state = intent.getIntExtra("state", 0);
+
+                if(state==1) {
+                    Log.d(TAG, "VideoPlaybackBroadcastReceiver.onReceive() : Switching to HDMI_TV)");
+                    mOmapMMHandle.setDisplayId(DISPLAY_TYPE_HDMI_TV);
+                } else {
+                    Log.d(TAG, "VideoPlaybackBroadcastReceiver.onReceive() : Switching to LCD-Primary");
+                    mOmapMMHandle.setDisplayId(DISPLAY_TYPE_LCD_PRIMARY);
+                }
+            }
+        }
+    }
+
 }

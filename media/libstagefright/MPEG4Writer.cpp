@@ -211,6 +211,19 @@ private:
 
     Track(const Track &);
     Track &operator=(const Track &);
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    bool misOutofOrderTimestamps;
+    struct TSTableEntry {
+        TSTableEntry(uint32_t count, uint64_t timestampUs)
+            : sampleCount(count), sampleTimestampUs(timestampUs) {}
+        uint32_t sampleCount;
+        uint64_t sampleTimestampUs;
+    };
+
+    List<TSTableEntry> mPresentationTimeStamp;
+    List<TSTableEntry> mDecodeTimeStamp;
+    void sortPresentationTimestamp(List<TSTableEntry> &DecodingTS);
+#endif
 };
 
 MPEG4Writer::MPEG4Writer(const char *filename)
@@ -987,6 +1000,40 @@ void MPEG4Writer::Track::addOneSttsTableEntry(
     mSttsTableEntries.push_back(sttsEntry);
     ++mNumSttsTableEntries;
 }
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+void MPEG4Writer::Track::sortPresentationTimestamp(List<TSTableEntry> &DecodingTS)
+{
+    int i, j, flag = 1;    // set flag to 1 to start first pass
+    TSTableEntry temp(0,0);             // holding variable
+    size_t numLength = DecodingTS.size();
+    List<TSTableEntry>::iterator it = DecodingTS.begin();
+    List<TSTableEntry>::iterator ittemp1;
+    List<TSTableEntry>::iterator ittemp2;
+    //Initalize the variable to zero
+    //Out of order flag should be set for Bframe
+    //scenario. If this is set the ctts structure
+    //preparation is mandatory.
+    misOutofOrderTimestamps = 0;
+    it = DecodingTS.begin();
+    for(i = 1; (i <= numLength) && flag; i++) {
+        ittemp1 = it;
+        flag = 0;
+        for (j = 0; j < (numLength -1); j++) {
+            ittemp2 = ittemp1;
+            ittemp1 ++;
+            if (ittemp1->sampleTimestampUs < ittemp2->sampleTimestampUs){
+                temp = *ittemp2;             // swap elements
+                *ittemp2 = *ittemp1;
+                *ittemp1 = temp;
+                flag = 1;               // indicates that a swap occurred.
+                //This means that we have out of order
+                //timestamps and bframes are present
+                misOutofOrderTimestamps = 1;
+            }
+        }
+    }
+}
+#endif
 
 void MPEG4Writer::Track::addChunkOffset(off_t offset) {
     ++mNumStcoTableEntries;
@@ -1766,6 +1813,83 @@ status_t MPEG4Writer::Track::threadEntry() {
             mGotAllCodecSpecificData = true;
             continue;
         }
+#if defined(OMAP_ENHANCEMENT) && !defined(TARGET_OMAP4)
+        else if (mIsAvc && count < 3) {
+            size_t size = buffer->range_length();
+
+            switch (count) {
+                case 1:
+                {
+                    CHECK_EQ(mCodecSpecificData, NULL);
+                    mCodecSpecificData = malloc(size + 8);
+                    uint8_t *header = (uint8_t *)mCodecSpecificData;
+                    header[0] = 1;
+                    header[1] = 0x42;  // profile
+                    header[2] = 0x80;
+                    header[3] = 0x1e;  // level
+                    header[4] = 0xfc | 3;
+                    header[5] = 0xe0 | 1;
+                    header[6] = size >> 8;
+                    header[7] = size & 0xff;
+                    memcpy(&header[8],
+                            (const uint8_t *)buffer->data() + buffer->range_offset(),
+                            size);
+
+                    mCodecSpecificDataSize = size + 8;
+                    break;
+                }
+
+                case 2:
+                {
+                    size_t offset = mCodecSpecificDataSize;
+                    mCodecSpecificDataSize += size + 3;
+                    mCodecSpecificData = realloc(mCodecSpecificData, mCodecSpecificDataSize);
+                    uint8_t *header = (uint8_t *)mCodecSpecificData;
+                    header[offset] = 1;
+                    header[offset + 1] = size >> 8;
+                    header[offset + 2] = size & 0xff;
+                    memcpy(&header[offset + 3],
+                            (const uint8_t *)buffer->data() + buffer->range_offset(),
+                            size);
+                    break;
+                }
+            }
+
+            buffer->release();
+            buffer = NULL;
+
+            continue;
+
+        } else if (mCodecSpecificData == NULL && mIsMPEG4) {
+            const uint8_t *data =
+                (const uint8_t *)buffer->data() + buffer->range_offset();
+
+            const size_t size = buffer->range_length();
+
+            size_t offset = 0;
+            while (offset + 3 < size) {
+                if (data[offset] == 0x00 && data[offset + 1] == 0x00
+                    && data[offset + 2] == 0x01 && data[offset + 3] == 0xb6) {
+                    break;
+                }
+
+                ++offset;
+            }
+
+            // CHECK(offset + 3 < size);
+            if (offset + 3 >= size) {
+                // XXX assume the entire first chunk of data is the codec specific
+                // data.
+                offset = size;
+            }
+
+            mCodecSpecificDataSize = offset;
+            mCodecSpecificData = malloc(offset);
+            memcpy(mCodecSpecificData, data, offset);
+
+            buffer->set_range(buffer->range_offset() + offset, size - offset);
+        }
+#endif
 
         // Make a deep copy of the MediaBuffer and Metadata and release
         // the original as soon as we can
@@ -1863,6 +1987,7 @@ status_t MPEG4Writer::Track::threadEntry() {
 
         CHECK(timestampUs >= 0);
         if (mNumSamples > 1) {
+#if !defined(OMAP_ENHANCEMENT) && !defined(TARGET_OMAP4)
             if (timestampUs <= lastTimestampUs) {
                 LOGW("Frame arrives too late!");
                 // Don't drop the late frame, since dropping a frame may cause
@@ -1876,6 +2001,7 @@ status_t MPEG4Writer::Track::threadEntry() {
                     timestampUs = lastTimestampUs + (1000000LL + (mTimeScale >> 1)) / mTimeScale;
                 }
             }
+#endif
         }
 
         LOGV("%s media time stamp: %lld and previous paused duration %lld",
@@ -1897,7 +2023,18 @@ status_t MPEG4Writer::Track::threadEntry() {
                      (lastTimestampUs * mTimeScale + 500000LL) / 1000000LL);
 
             if (currDurationTicks != lastDurationTicks) {
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+            if(!mIsAudio) {
+                //Collect timestamps
+                TSTableEntry sample(sampleCount,lastTimestampUs);
+                mPresentationTimeStamp.push_back(sample);
+                mDecodeTimeStamp.push_back(sample);
+            } else {
                 addOneSttsTableEntry(sampleCount, lastDurationUs);
+            }
+#else
+                addOneSttsTableEntry(sampleCount, lastDurationUs);
+#endif
                 sampleCount = 1;
             } else {
                 ++sampleCount;
@@ -1980,7 +2117,19 @@ status_t MPEG4Writer::Track::threadEntry() {
     } else {
         ++sampleCount;  // Count for the last sample
     }
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    if(!mIsAudio) {
+        //Collect timestamps
+        TSTableEntry sample(sampleCount,lastTimestampUs);
+        mPresentationTimeStamp.push_back(sample);
+        mDecodeTimeStamp.push_back(sample);
+    } else {
+        addOneSttsTableEntry(sampleCount, lastDurationUs);
+    }
+#else
     addOneSttsTableEntry(sampleCount, lastDurationUs);
+#endif
+
     mTrackDurationUs += lastDurationUs;
     mReachedEOS = true;
     LOGI("Received total/0-length (%d/%d) buffers and encoded %d frames. - %s",
@@ -2413,6 +2562,36 @@ void MPEG4Writer::Track::writeTrackHeader(
           mOwner->endBox();  // stsd
 
           mOwner->beginBox("stts");
+
+ #if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+            if(!mIsAudio) { // ctts is valid only for video
+
+                //Make sure that the Stts value is sorted and
+                //is in increasing order. As per standard stts
+                //cannot be negative so unless we sort the out
+                //of order timestamp the duration encoding will
+                //not be positive.
+                // stts[n] = dts[n+1] - dts[n]
+                sortPresentationTimestamp(mDecodeTimeStamp);
+
+                //Need to add First frame time stamp as zero
+                //for the Iframe encoding
+                TSTableEntry temp (1,0);
+                mDecodeTimeStamp.push_front(temp);
+
+                //Update the duration in stts stucture.
+                List<TSTableEntry>::iterator itcur = mDecodeTimeStamp.begin();
+                List<TSTableEntry>::iterator itnext = itcur;
+                itnext ++;
+                for (uint32_t i = 1; i < (mDecodeTimeStamp.size()); i++) {
+                    addOneSttsTableEntry(itnext->sampleCount, itnext->sampleTimestampUs - itcur->sampleTimestampUs);
+                    itnext ++;
+                    itcur ++;
+                }
+
+            }
+ #endif
+
             mOwner->writeInt32(0);  // version=0, flags=0
             mOwner->writeInt32(mNumSttsTableEntries);
             int64_t prevTimestampUs = 0;
@@ -2431,6 +2610,32 @@ void MPEG4Writer::Track::writeTrackHeader(
             }
           mOwner->endBox();  // stts
 
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+        if(!mIsAudio && misOutofOrderTimestamps) {
+            LOGE("Out of order detected!");
+            mOwner->beginBox("ctts");
+            mOwner->writeInt32(0);  // version=0, flags=0
+            mOwner->writeInt32(mDecodeTimeStamp.size());
+
+            // Write first sample for Iframe as zero
+            mOwner->writeInt32(1);
+            mOwner->writeInt32(0);
+
+            // Encode the offset of ctts as difference between presentation timestamp
+            // and decoding timestamp.
+            List<TSTableEntry>::iterator itpresentation = mPresentationTimeStamp.begin();
+            List<TSTableEntry>::iterator itdecoding     = mDecodeTimeStamp.begin();
+            for (size_t i = 0; i < mPresentationTimeStamp.size(); ++i) {
+                mOwner->writeInt32(itdecoding->sampleCount);
+                int32_t dur =  ((itpresentation->sampleTimestampUs * mTimeScale + 500000LL) / 1000000LL -
+                             (itdecoding->sampleTimestampUs * mTimeScale + 500000LL) / 1000000LL);
+                itpresentation ++;
+                itdecoding ++;
+                mOwner->writeInt32(dur);
+            }
+          mOwner->endBox();  // ctts
+        }
+#endif
           if (!mIsAudio) {
             mOwner->beginBox("stss");
               mOwner->writeInt32(0);  // version=0, flags=0

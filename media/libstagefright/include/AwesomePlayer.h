@@ -17,6 +17,12 @@
 #ifndef AWESOME_PLAYER_H_
 
 #define AWESOME_PLAYER_H_
+#ifdef OMAP_ENHANCEMENT
+#include <utils/Vector.h>
+#if defined(TARGET_OMAP4)
+#include "TISEIMessagesParser.h"
+#endif
+#endif
 
 #include "NuHTTPDataSource.h"
 #include "TimedEventQueue.h"
@@ -46,6 +52,13 @@ struct AwesomeRenderer : public RefBase {
 
     virtual status_t initCheck() const = 0;
     virtual void render(MediaBuffer *buffer) = 0;
+#ifdef OMAP_ENHANCEMENT
+    virtual Vector< sp<IMemory> > getBuffers() = 0;
+    virtual bool setCallback(release_rendered_buffer_callback cb, void *cookie) {return false;}
+    virtual void set_s3d_frame_layout(uint32_t s3d_mode, uint32_t s3d_fmt, uint32_t s3d_order, uint32_t s3d_subsampling){};
+    virtual void resizeRenderer(void* resize_params) = 0;
+    virtual void requestRendererClone(bool enable) = 0;
+#endif
 
 private:
     AwesomeRenderer(const AwesomeRenderer &);
@@ -89,13 +102,18 @@ struct AwesomePlayer {
 
     status_t suspend();
     status_t resume();
+#ifdef OMAP_ENHANCEMENT
+    status_t requestVideoCloneMode(bool enable);
+#endif
 
     // This is a mask of MediaExtractor::Flags.
     uint32_t flags() const;
 
     void postAudioEOS();
     void postAudioSeekComplete();
-
+#ifdef OMAP_ENHANCEMENT
+    void releaseRenderedBuffer(const sp<IMemory>& mem);
+#endif
 private:
     friend struct AwesomeEvent;
 
@@ -112,6 +130,22 @@ private:
         VIDEO_AT_EOS        = 512,
         AUTO_LOOPING        = 1024,
     };
+
+#ifdef OMAP_ENHANCEMENT
+    enum {
+        HOLD_TO_RESUME      = 128,
+        MAX_RESOLUTION      = 414720, // 864x480(WVGA) - 720x576(D1-PAL)
+    };
+    enum {
+         VID_MODE_NORMAL = 0,
+         VID_MODE_CLONE = 1
+      };
+
+    int mVideoMode;
+#if defined(TARGET_OMAP4)
+    S3D_params mS3Dparams;
+#endif
+#endif
 
     mutable Mutex mLock;
     Mutex mMiscStateLock;
@@ -179,7 +213,15 @@ private:
     void postCheckAudioStatusEvent_l();
     status_t play_l();
 
+#ifdef OMAP_ENHANCEMENT
+    Vector<MediaBuffer*> mBuffersWithRenderer;
+    bool mBufferReleaseCallbackSet;
+    bool mIsFirstVideoBuffer;
+    status_t mFirstVideoBufferResult;
+    MediaBuffer *mFirstVideoBuffer;
+#else
     MediaBuffer *mLastVideoBuffer;
+#endif
     MediaBuffer *mVideoBuffer;
 
     sp<NuHTTPDataSource> mConnectingDataSource;
@@ -215,6 +257,12 @@ private:
             }
         }
     } *mSuspensionState;
+
+#if defined(TARGET_OMAP4) && defined(OMAP_ENHANCEMENT)
+    bool configSEI2004Infos(OMX_OTHER_EXTRADATATYPE *extraData);
+    bool configSEI2010Infos(OMX_OTHER_EXTRADATATYPE *extraData);
+    void updateS3DRenderer();
+#endif
 
     status_t setDataSource_l(
             const char *uri,
@@ -263,6 +311,10 @@ private:
 
     AwesomePlayer(const AwesomePlayer &);
     AwesomePlayer &operator=(const AwesomePlayer &);
+#ifdef OMAP_ENHANCEMENT
+    const char* mExtractorType;
+    sp<MediaExtractor> mExtractor;
+#endif
 };
 
 }  // namespace android
