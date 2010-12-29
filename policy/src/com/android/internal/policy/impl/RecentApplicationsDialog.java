@@ -30,6 +30,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -46,10 +47,12 @@ public class RecentApplicationsDialog extends Dialog implements OnClickListener 
 
     static private StatusBarManager sStatusBar;
 
-    private static final int NUM_BUTTONS = 8;
-    private static final int MAX_RECENT_TASKS = NUM_BUTTONS * 2;    // allow for some discards
+    private static int NUM_BUTTONS = 8;
+    private static int MAX_RECENT_TASKS = NUM_BUTTONS * 2; // allow for some discards
+    private static int currRecentAppsNum;
 
-    final TextView[] mIcons = new TextView[NUM_BUTTONS];
+    TextView[] mIcons;
+    View mTitle;
     View mNoAppsText;
     IntentFilter mBroadcastIntentFilter = new IntentFilter(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
 
@@ -57,9 +60,6 @@ public class RecentApplicationsDialog extends Dialog implements OnClickListener 
 
     public RecentApplicationsDialog(Context context) {
         super(context, com.android.internal.R.style.Theme_Dialog_RecentApplications);
-
-        final Resources resources = context.getResources();
-        mIconSize = (int) resources.getDimension(android.R.dimen.app_icon_size);
     }
 
     /**
@@ -84,28 +84,6 @@ public class RecentApplicationsDialog extends Dialog implements OnClickListener 
         window.setFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
                 WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
         window.setTitle("Recents");
-
-        setContentView(com.android.internal.R.layout.recent_apps_dialog);
-
-        final WindowManager.LayoutParams params = window.getAttributes();
-        params.width = WindowManager.LayoutParams.MATCH_PARENT;
-        params.height = WindowManager.LayoutParams.MATCH_PARENT;
-        window.setAttributes(params);
-        window.setFlags(0, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-
-        mIcons[0] = (TextView)findViewById(com.android.internal.R.id.button0);
-        mIcons[1] = (TextView)findViewById(com.android.internal.R.id.button1);
-        mIcons[2] = (TextView)findViewById(com.android.internal.R.id.button2);
-        mIcons[3] = (TextView)findViewById(com.android.internal.R.id.button3);
-        mIcons[4] = (TextView)findViewById(com.android.internal.R.id.button4);
-        mIcons[5] = (TextView)findViewById(com.android.internal.R.id.button5);
-        mIcons[6] = (TextView)findViewById(com.android.internal.R.id.button6);
-        mIcons[7] = (TextView)findViewById(com.android.internal.R.id.button7);
-        mNoAppsText = findViewById(com.android.internal.R.id.no_applications_message);
-
-        for (TextView b: mIcons) {
-            b.setOnClickListener(this);
-        }
     }
 
     /**
@@ -137,7 +115,9 @@ public class RecentApplicationsDialog extends Dialog implements OnClickListener 
     @Override
     public void onStart() {
         super.onStart();
+        updateConfig();
         reloadButtons();
+        showHideRecentTitle();
         if (sStatusBar != null) {
             sStatusBar.disable(StatusBarManager.DISABLE_EXPAND);
         }
@@ -168,7 +148,117 @@ public class RecentApplicationsDialog extends Dialog implements OnClickListener 
      }
 
     /**
-     * Reload the 6 buttons with recent activities
+     * Updates the number of recent applications to show
+     */
+    private void updateConfig() {
+        final Context context = getContext();
+        NUM_BUTTONS = Settings.System.getInt(context.getContentResolver(),
+                Settings.System.RECENT_APPS_NUMBER, NUM_BUTTONS);
+
+        final Resources resources = context.getResources();
+        mIconSize = (int) resources.getDimension(android.R.dimen.app_icon_size);
+
+        if (currRecentAppsNum == NUM_BUTTONS) // No change
+            return;
+
+        if (NUM_BUTTONS != 8 && NUM_BUTTONS != 12 && NUM_BUTTONS != 15)
+            NUM_BUTTONS = 8; // Load 8 by default
+
+        MAX_RECENT_TASKS = NUM_BUTTONS * 2;
+        currRecentAppsNum = NUM_BUTTONS;
+
+        mIcons = new TextView[NUM_BUTTONS];
+
+        if (NUM_BUTTONS == 15) {
+            loadFifteenRecentAppsConfig();
+        } else if (NUM_BUTTONS == 12) {
+            loadTwelveRecentAppsConfig();
+        } else {
+            loadEightRecentAppsConfig();
+        }
+
+        mNoAppsText = findViewById(com.android.internal.R.id.no_applications_message);
+
+        for (TextView b : mIcons) {
+            b.setOnClickListener(this);
+        }
+    }
+
+    private void showHideRecentTitle() {
+        mTitle = findViewById(com.android.internal.R.id.recent_title);
+
+        if (Settings.System.getInt(getContext().getContentResolver(),
+                Settings.System.RECENT_APPS_SHOW_TITLE, 1) != 0) {
+            mTitle.setVisibility(View.VISIBLE);
+        } else {
+            mTitle.setVisibility(View.GONE);
+        }
+    }
+
+    private void setWindowParams() {
+        Window window = getWindow();
+        final WindowManager.LayoutParams params = window.getAttributes();
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        window.setAttributes(params);
+        window.setFlags(0, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    }
+
+    private void loadEightRecentAppsConfig() {
+        setContentView(com.android.internal.R.layout.recent_apps_dialog);
+        setWindowParams();
+
+        mIcons[0] = (TextView) findViewById(com.android.internal.R.id.button0);
+        mIcons[1] = (TextView) findViewById(com.android.internal.R.id.button1);
+        mIcons[2] = (TextView) findViewById(com.android.internal.R.id.button2);
+        mIcons[3] = (TextView) findViewById(com.android.internal.R.id.button3);
+        mIcons[4] = (TextView) findViewById(com.android.internal.R.id.button4);
+        mIcons[5] = (TextView) findViewById(com.android.internal.R.id.button5);
+        mIcons[6] = (TextView) findViewById(com.android.internal.R.id.button6);
+        mIcons[7] = (TextView) findViewById(com.android.internal.R.id.button7);
+    }
+
+    private void loadTwelveRecentAppsConfig() {
+        setContentView(com.android.internal.R.layout.recent_apps_dialog_12);
+        setWindowParams();
+
+        mIcons[0] = (TextView) findViewById(com.android.internal.R.id.button0);
+        mIcons[1] = (TextView) findViewById(com.android.internal.R.id.button1);
+        mIcons[2] = (TextView) findViewById(com.android.internal.R.id.button2);
+        mIcons[3] = (TextView) findViewById(com.android.internal.R.id.button3);
+        mIcons[4] = (TextView) findViewById(com.android.internal.R.id.button4);
+        mIcons[5] = (TextView) findViewById(com.android.internal.R.id.button5);
+        mIcons[6] = (TextView) findViewById(com.android.internal.R.id.button6);
+        mIcons[7] = (TextView) findViewById(com.android.internal.R.id.button7);
+        mIcons[8] = (TextView) findViewById(com.android.internal.R.id.button8);
+        mIcons[9] = (TextView) findViewById(com.android.internal.R.id.button9);
+        mIcons[10] = (TextView) findViewById(com.android.internal.R.id.button10);
+        mIcons[11] = (TextView) findViewById(com.android.internal.R.id.button11);
+    }
+
+    private void loadFifteenRecentAppsConfig() {
+        setContentView(com.android.internal.R.layout.recent_apps_dialog_15);
+        setWindowParams();
+
+        mIcons[0] = (TextView) findViewById(com.android.internal.R.id.button0);
+        mIcons[1] = (TextView) findViewById(com.android.internal.R.id.button1);
+        mIcons[2] = (TextView) findViewById(com.android.internal.R.id.button2);
+        mIcons[3] = (TextView) findViewById(com.android.internal.R.id.button3);
+        mIcons[4] = (TextView) findViewById(com.android.internal.R.id.button4);
+        mIcons[5] = (TextView) findViewById(com.android.internal.R.id.button5);
+        mIcons[6] = (TextView) findViewById(com.android.internal.R.id.button6);
+        mIcons[7] = (TextView) findViewById(com.android.internal.R.id.button7);
+        mIcons[8] = (TextView) findViewById(com.android.internal.R.id.button8);
+        mIcons[9] = (TextView) findViewById(com.android.internal.R.id.button9);
+        mIcons[10] = (TextView) findViewById(com.android.internal.R.id.button10);
+        mIcons[11] = (TextView) findViewById(com.android.internal.R.id.button11);
+        mIcons[12] = (TextView) findViewById(com.android.internal.R.id.button12);
+        mIcons[13] = (TextView) findViewById(com.android.internal.R.id.button13);
+        mIcons[14] = (TextView) findViewById(com.android.internal.R.id.button14);
+    }
+
+    /**
+     * Reload the 8/12/15 buttons with recent activities
      */
     private void reloadButtons() {
 
