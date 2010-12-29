@@ -69,6 +69,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private TextView mEmergencyCallText;
     private Button mEmergencyCallButton;
 
+    private TextView mCustomMsg;
+
     // current configuration state of keyboard and display
     private int mKeyboardHidden;
     private int mCreationOrientation;
@@ -203,6 +205,15 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mDate = (TextView) findViewById(R.id.date);
         mStatus1 = (TextView) findViewById(R.id.status1);
         mStatus2 = (TextView) findViewById(R.id.status2);
+
+        mCustomMsg = (TextView) findViewById(R.id.customMsg);
+
+        if (mLockPatternUtils.isShowCustomMsg()) {
+            mCustomMsg.setVisibility(View.VISIBLE);
+            mCustomMsg.setText(mLockPatternUtils.getCustomMsg());
+        } else {
+            mCustomMsg.setVisibility(View.GONE);
+        }
 
         mScreenLocked = (TextView) findViewById(R.id.screenLocked);
         mSelector = (SlidingTab) findViewById(R.id.tab_selector);
