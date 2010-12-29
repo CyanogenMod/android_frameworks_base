@@ -120,6 +120,15 @@ public class AudioService extends IAudioService.Stub {
     private int mMode;
     private Object mSettingsLock = new Object();
     private boolean mMediaServerOk;
+    /*
+     * OMAP4 specific intents that the AudioService
+     * will register to recieve
+     */
+    private static final String ACTION_FM_PLUG = "android.intent.action.FM_PLUG";
+    private static final String ACTION_FMTX_PLUG = "android.intent.action.FMTX_PLUG";
+    private static final String POWER_MODE = "omap.audio.power";
+    private static final String MAIN_MIC_CHOICE = "omap.audio.mic.main";
+    private static final String SUB_MIC_CHOICE = "omap.audio.mic.sub";
 
     private SoundPool mSoundPool;
     private Object mSoundEffectsLock = new Object();
@@ -305,6 +314,14 @@ public class AudioService extends IAudioService.Stub {
         // Register for device connection intent broadcasts.
         IntentFilter intentFilter =
                 new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+        if (SystemProperties.OMAP_ENHANCEMENT) {
+            intentFilter.addAction(ACTION_FM_PLUG);
+            intentFilter.addAction(ACTION_FMTX_PLUG);
+            intentFilter.addAction(POWER_MODE);
+            intentFilter.addAction(MAIN_MIC_CHOICE);
+            intentFilter.addAction(SUB_MIC_CHOICE);
+        }
+
         intentFilter.addAction(BluetoothA2dp.ACTION_SINK_STATE_CHANGED);
         intentFilter.addAction(BluetoothHeadset.ACTION_STATE_CHANGED);
         intentFilter.addAction(Intent.ACTION_DOCK_EVENT);
@@ -1980,6 +1997,80 @@ public class AudioService extends IAudioService.Stub {
                             mContext.sendStickyBroadcast(newIntent);
                         }
                     }
+                }
+           } else if (SystemProperties.OMAP_ENHANCEMENT && action.equals(ACTION_FM_PLUG)) {
+               int state = intent.getIntExtra("state",0);
+
+               boolean isConnected = mConnectedDevices.containsKey(AudioSystem.DEVICE_IN_FM_ANALOG );
+               if (state == 0 && isConnected) {
+                      Log.v(TAG,"calling FM Rx Analog  Off");
+                      AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_IN_FM_ANALOG ,
+                               AudioSystem.DEVICE_STATE_UNAVAILABLE,"");
+                      mConnectedDevices.remove(AudioSystem.DEVICE_IN_FM_ANALOG );
+               } else if (state == 1 && !isConnected)  {
+                      Log.v(TAG,"calling FM Rx Analog On");
+                      AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_IN_FM_ANALOG ,
+                                AudioSystem.DEVICE_STATE_AVAILABLE,"");
+                      mConnectedDevices.put( new Integer(AudioSystem.DEVICE_IN_FM_ANALOG ), "");
+               }
+           } else if (SystemProperties.OMAP_ENHANCEMENT && action.equals(ACTION_FMTX_PLUG)) {
+               int state = intent.getIntExtra("state",0);
+
+               boolean isConnected = mConnectedDevices.containsKey(AudioSystem.DEVICE_OUT_FM_TRANSMIT );
+               if (state == 0 && isConnected) {
+                      Log.e(TAG,"calling FM Transmit Off");
+                      AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM_TRANSMIT ,
+                               AudioSystem.DEVICE_STATE_UNAVAILABLE,"");
+                      mConnectedDevices.remove(AudioSystem.DEVICE_OUT_FM_TRANSMIT );
+               } else if (state == 1 && !isConnected)  {
+                      Log.e(TAG,"calling FM Transmit On");
+                      AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_FM_TRANSMIT ,
+                                AudioSystem.DEVICE_STATE_AVAILABLE,"");
+                      mConnectedDevices.put( new Integer(AudioSystem.DEVICE_OUT_FM_TRANSMIT ), "");
+               }
+            } else if (SystemProperties.OMAP_ENHANCEMENT && action.equals(POWER_MODE)) {
+                Intent noisyIntent = new Intent(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+                mContext.sendBroadcast(noisyIntent);
+                boolean isConnected = mConnectedDevices.containsKey(AudioSystem.DEVICE_OUT_WIRED_HEADSET) |
+                                      mConnectedDevices.containsKey(AudioSystem.DEVICE_OUT_WIRED_HEADPHONE);
+                if (intent.getBooleanExtra("LP", false) && isConnected) {
+                    // enable low power mode
+                    AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_LOW_POWER ,
+                                                         AudioSystem.DEVICE_STATE_AVAILABLE,"");
+                    mConnectedDevices.put(new Integer(AudioSystem.DEVICE_OUT_LOW_POWER), "");
+                    Log.e(TAG,"Action: power mode is now LP, re-routing");
+                }
+                else {
+                    Log.e(TAG,"Action: power mode is now HQ, re-routing");
+                    AudioSystem.setDeviceConnectionState(AudioSystem.DEVICE_OUT_LOW_POWER ,
+                                                         AudioSystem.DEVICE_STATE_UNAVAILABLE,"");
+                    mConnectedDevices.remove(AudioSystem.DEVICE_OUT_LOW_POWER);
+                }
+            } else if (SystemProperties.OMAP_ENHANCEMENT && action.equals(MAIN_MIC_CHOICE)) {
+                /*
+                 * mic choice is not configurable by intent yet, this is here for future use.
+                 * eventually, the mic choice will be set from applications using this intent
+                 * and we will update the logic to be flexible for mics other than DMIC0.
+                 */
+                Intent noisyIntent = new Intent(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+                mContext.sendBroadcast(noisyIntent);
+                if (intent.getBooleanExtra("DMic0L", true)) {
+                     Log.e(TAG,"MAIN MIC - DMIC0L selected");
+                } else if (intent.getBooleanExtra("AMic0", true)) {
+                    Log.e(TAG,"MAIN MIC - AMIC selected");
+                } else {
+                    Log.e(TAG,"MAIN MIC - invalid selection, only [DMIC0L,AMIC0] supported");
+                }
+            } else if (SystemProperties.OMAP_ENHANCEMENT && action.equals(SUB_MIC_CHOICE)) {
+                // mic choice is not configurable by intent yet, this is here for future use
+                Intent noisyIntent = new Intent(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+                mContext.sendBroadcast(noisyIntent);
+                if (intent.getBooleanExtra("DMic0R", true)) {
+                    Log.e(TAG,"SUB MIC - DMIC0R selected");
+                } else if (intent.getBooleanExtra("AMic1", true)) {
+                    Log.e(TAG,"SUB MIC - AMIC selected");
+                } else {
+                    Log.e(TAG,"SUB MIC - invalid selection, only [DMIC0R,AMIC] supported");
                 }
             }
         }

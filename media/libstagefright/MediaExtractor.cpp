@@ -34,6 +34,10 @@
 #include <media/stagefright/MetaData.h>
 #include <utils/String8.h>
 
+#ifdef OMAP_ENHANCEMENT
+#include "include/ASFExtractor.h"
+#endif
+
 namespace android {
 
 sp<MetaData> MediaExtractor::getMetaData() {
@@ -80,6 +84,16 @@ sp<MediaExtractor> MediaExtractor::Create(
     } else if (!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_MPEG2TS)) {
         return new MPEG2TSExtractor(source);
     }
+#ifdef OMAP_ENHANCEMENT
+    else if(!strcasecmp(mime, MEDIA_MIMETYPE_CONTAINER_ASF)) {
+        if(isASFParserAvailable()) {
+            return new ASFExtractor(source);
+        }
+        else {
+            return NULL;
+        }
+    }
+#endif
 
     return NULL;
 }

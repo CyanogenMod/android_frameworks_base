@@ -227,6 +227,9 @@ public:
     void destroyLayer(LayerBase const* layer);
 
     sp<Layer> getLayer(const sp<ISurface>& sur) const;
+#ifdef OMAP_ENHANCEMENT
+    PixelFormat getFormat() const;
+#endif
 
 private:
     friend class Client;

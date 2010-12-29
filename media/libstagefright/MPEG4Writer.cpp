@@ -41,6 +41,10 @@ namespace android {
 static const int64_t kMax32BitFileSize = 0x007fffffffLL;
 static const uint8_t kNalUnitTypeSeqParamSet = 0x07;
 static const uint8_t kNalUnitTypePicParamSet = 0x08;
+#if defined (OMAP_ENHANCEMENT) && defined (TARGET_OMAP4)
+static const uint8_t kNalUnitTypeH264Sei = 0x06;
+static const uint8_t kNalUnitTypeH264IFrame = 0x5;
+#endif
 
 // Using longer adjustment period to suppress fluctuations in
 // the audio encoding paths
@@ -211,6 +215,19 @@ private:
 
     Track(const Track &);
     Track &operator=(const Track &);
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    bool misOutofOrderTimestamps;
+    struct TSTableEntry {
+        TSTableEntry(uint32_t count, uint64_t timestampUs)
+            : sampleCount(count), sampleTimestampUs(timestampUs) {}
+        uint32_t sampleCount;
+        uint64_t sampleTimestampUs;
+    };
+
+    List<TSTableEntry> mPresentationTimeStamp;
+    List<TSTableEntry> mDecodeTimeStamp;
+    void sortPresentationTimestamp(List<TSTableEntry> &DecodingTS);
+#endif
 };
 
 MPEG4Writer::MPEG4Writer(const char *filename)
@@ -714,6 +731,44 @@ static void StripStartcode(MediaBuffer *buffer) {
         return;
     }
 
+#if defined (OMAP_ENHANCEMENT) && defined (TARGET_OMAP3)
+    uint8_t *data =
+        (uint8_t *)buffer->data() + buffer->range_offset();
+    size_t size = buffer->range_length();
+    uint8_t *tmp = data;
+    uint8_t *foundStartData = data;
+    size_t bytesLeft = size;
+    size_t nal_size;
+    bool foundStartCode = false;
+
+    while (bytesLeft > 4) {
+        if (!memcmp("\x00\x00\x00\x01", tmp, 4)) {
+            if (tmp - foundStartData) {
+                if (foundStartCode == true) {
+                    nal_size = tmp - foundStartData - 4;
+                    foundStartData[0] = nal_size >> 24;
+                    foundStartData[1] = (nal_size >> 16) & 0xFF;
+                    foundStartData[2] = (nal_size >> 8) & 0xFF;
+                    foundStartData[3] = nal_size & 0xFF;
+                }
+                foundStartData = tmp;
+            }
+            foundStartCode = true;
+            tmp += 4;
+            bytesLeft -= 4;
+        } else {
+            bytesLeft--;
+            tmp++;
+        }
+    }
+    if (foundStartCode == true) {
+        nal_size = data + size - foundStartData - 4;
+        foundStartData[0] = nal_size >> 24;
+        foundStartData[1] = (nal_size >> 16) & 0xFF;
+        foundStartData[2] = (nal_size >> 8) & 0xFF;
+        foundStartData[3] = nal_size & 0xFF;
+    }
+#else
     const uint8_t *ptr =
         (const uint8_t *)buffer->data() + buffer->range_offset();
 
@@ -721,6 +776,7 @@ static void StripStartcode(MediaBuffer *buffer) {
         buffer->set_range(
                 buffer->range_offset() + 4, buffer->range_length() - 4);
     }
+#endif
 }
 
 off_t MPEG4Writer::addLengthPrefixedSample_l(MediaBuffer *buffer) {
@@ -987,6 +1043,40 @@ void MPEG4Writer::Track::addOneSttsTableEntry(
     mSttsTableEntries.push_back(sttsEntry);
     ++mNumSttsTableEntries;
 }
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+void MPEG4Writer::Track::sortPresentationTimestamp(List<TSTableEntry> &DecodingTS)
+{
+    int i, j, flag = 1;    // set flag to 1 to start first pass
+    TSTableEntry temp(0,0);             // holding variable
+    size_t numLength = DecodingTS.size();
+    List<TSTableEntry>::iterator it = DecodingTS.begin();
+    List<TSTableEntry>::iterator ittemp1;
+    List<TSTableEntry>::iterator ittemp2;
+    //Initalize the variable to zero
+    //Out of order flag should be set for Bframe
+    //scenario. If this is set the ctts structure
+    //preparation is mandatory.
+    misOutofOrderTimestamps = 0;
+    it = DecodingTS.begin();
+    for(i = 1; (i <= numLength) && flag; i++) {
+        ittemp1 = it;
+        flag = 0;
+        for (j = 0; j < (numLength -1); j++) {
+            ittemp2 = ittemp1;
+            ittemp1 ++;
+            if (ittemp1->sampleTimestampUs < ittemp2->sampleTimestampUs){
+                temp = *ittemp2;             // swap elements
+                *ittemp2 = *ittemp1;
+                *ittemp1 = temp;
+                flag = 1;               // indicates that a swap occurred.
+                //This means that we have out of order
+                //timestamps and bframes are present
+                misOutofOrderTimestamps = 1;
+            }
+        }
+    }
+}
+#endif
 
 void MPEG4Writer::Track::addChunkOffset(off_t offset) {
     ++mNumStcoTableEntries;
@@ -1103,9 +1193,13 @@ void MPEG4Writer::writeFirstChunk(ChunkInfo* info) {
     for (List<MediaBuffer *>::iterator it = chunkIt->mSamples.begin();
          it != chunkIt->mSamples.end(); ++it) {
 
+#if defined (OMAP_ENHANCEMENT) && defined (TARGET_OMAP3)
+        off_t offset = addSample_l(*it);
+#else
         off_t offset = info->mTrack->isAvc()
                             ? addLengthPrefixedSample_l(*it)
                             : addSample_l(*it);
+#endif
         if (it == chunkIt->mSamples.begin()) {
             info->mTrack->addChunkOffset(offset);
         }
@@ -1338,6 +1432,48 @@ static const uint8_t *findNextStartCode(
     return &data[length - bytesLeft];
 }
 
+#if defined (OMAP_ENHANCEMENT) && defined (TARGET_OMAP4)
+static const uint16_t getLengthNalUnit(
+        const uint8_t *data, size_t length) {
+
+    LOGV("getLengthNalUnit: %p %d", data, length);
+
+    size_t bytesLeft = length;
+    uint16_t NalUnitLength = 0;
+    while (bytesLeft > 4  &&
+            memcmp("\x00\x00\x00\x01", &data[length - bytesLeft], 4)) {
+        --bytesLeft;
+        NalUnitLength++;
+    }
+    return (NalUnitLength + 4);
+}
+
+static void StripSpsPps(MediaBuffer *buffer) {
+   const uint8_t *ptr = (const uint8_t *)buffer->data() + buffer->range_offset();
+   const uint8_t *nextStartCode = ptr;
+   size_t bytesLeft = buffer->range_length();
+   uint8_t type = 0;
+   uint16_t nalLength = 0;
+
+    while (bytesLeft > 4 && !memcmp("\x00\x00\x00\x01", ptr, 4)) {
+        getNalUnitType(*(ptr + 4), &type);
+        if (type == kNalUnitTypeH264IFrame) {
+            LOGV("Got the sync frame. Break out.");
+            break;
+        }
+        // Strip SPS, PPS or SEI info if any
+        else if (type == kNalUnitTypeSeqParamSet || type == kNalUnitTypePicParamSet ) {
+            nalLength = getLengthNalUnit(ptr+4,bytesLeft-4);
+            LOGV("Stripping Nal Type 0x%x, Nal-Length %d",type,nalLength);
+            buffer->set_range(buffer->range_offset() + nalLength, buffer->range_length() - nalLength);
+        }
+        nextStartCode = findNextStartCode(ptr+4,bytesLeft-4);
+        bytesLeft -= nextStartCode - ptr;
+        ptr = nextStartCode;
+    }
+}
+#endif
+
 const uint8_t *MPEG4Writer::Track::parseParamSet(
         const uint8_t *data, size_t length, int type, size_t *paramSetLen) {
 
@@ -1474,8 +1610,13 @@ status_t MPEG4Writer::Track::parseAVCCodecSpecificData(
     {
         // Check on the profiles
         // These profiles requires additional parameter set extensions
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+
+        if (mProfileIdc == 110 || mProfileIdc == 122 || mProfileIdc == 144) {
+#else
         if (mProfileIdc == 100 || mProfileIdc == 110 ||
             mProfileIdc == 122 || mProfileIdc == 144) {
+#endif
             LOGE("Sorry, no support for profile_idc: %d!", mProfileIdc);
             return BAD_VALUE;
         }
@@ -1710,6 +1851,10 @@ status_t MPEG4Writer::Track::threadEntry() {
     uint32_t previousSampleSize = 0;  // Size of the previous sample
     int64_t previousPausedDurationUs = 0;
     int64_t timestampUs;
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP3)
+    uint8_t *copy_spspps;
+    int32_t copy_spspps_size = 0;
+#endif
 
     if (mIsAudio) {
         prctl(PR_SET_NAME, (unsigned long)"AudioTrackEncoding", 0, 0, 0);
@@ -1766,20 +1911,112 @@ status_t MPEG4Writer::Track::threadEntry() {
             mGotAllCodecSpecificData = true;
             continue;
         }
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP3)
+        else if (mIsAvc && count < 3) {
+            size_t size = buffer->range_length();
+            size_t start_code_size = 0;
+
+            CHECK(!mGotAllCodecSpecificData);
+
+            start_code_size = memcmp("\x00\x00\x00\x01",
+                    (uint8_t *)buffer->data(), 4) ? 4 : 0;
+
+            switch (count) {
+                case 1:
+                {
+                    copy_spspps = (uint8_t *)malloc(size + start_code_size);
+                    copy_spspps_size = size + start_code_size;
+                    if (start_code_size)
+                        memcpy(copy_spspps,
+                                "\x00\x00\x00\x01", start_code_size);
+                    memcpy((uint8_t *)copy_spspps + start_code_size,
+                            (const uint8_t *)buffer->data()
+                                + buffer->range_offset(),
+                            size);
+                    break;
+                }
+
+                case 2:
+                {
+                    size_t offset = copy_spspps_size;
+                    copy_spspps_size += (size + start_code_size);
+                    copy_spspps = (uint8_t *)realloc(copy_spspps, copy_spspps_size);
+                    if (start_code_size)
+                        memcpy(&copy_spspps[offset],
+                                "\x00\x00\x00\x01", start_code_size);
+                    memcpy(&copy_spspps[offset + start_code_size],
+                            (const uint8_t *)buffer->data()
+                                + buffer->range_offset(),
+                            size);
+                    status_t err = makeAVCCodecSpecificData(
+                            copy_spspps, copy_spspps_size);
+                    CHECK_EQ(OK, err);
+                    free(copy_spspps);
+                    copy_spspps = NULL;
+                    mGotAllCodecSpecificData = true;
+                    break;
+                }
+            }
+
+            buffer->release();
+            buffer = NULL;
+
+            continue;
+
+        } else if (mCodecSpecificData == NULL && mIsMPEG4) {
+            CHECK(!mGotAllCodecSpecificData);
+            mCodecSpecificDataSize = buffer->range_length();
+            mCodecSpecificData = malloc(mCodecSpecificDataSize);
+            memcpy(mCodecSpecificData,
+                    (const uint8_t *)buffer->data()
+                        + buffer->range_offset(),
+                   buffer->range_length());
+            buffer->release();
+            buffer = NULL;
+
+            mGotAllCodecSpecificData = true;
+            continue;
+        }
+#endif
 
         // Make a deep copy of the MediaBuffer and Metadata and release
         // the original as soon as we can
+#if defined (OMAP_ENHANCEMENT) && defined (TARGET_OMAP3)
+        MediaBuffer *copy;
+        size_t start_code_size = 0;
+
+        if (mIsAvc) {
+            start_code_size = memcmp("\x00\x00\x00\x01",
+                    (uint8_t *)buffer->data(), 4) ? 4 : 0;
+        }
+        copy = new MediaBuffer(buffer->range_length() + start_code_size);
+        if (start_code_size)
+            memcpy(copy->data(), "\x00\x00\x00\x01", start_code_size);
+        memcpy((uint8_t *)copy->data() + start_code_size,
+                (uint8_t *)buffer->data() + buffer->range_offset(),
+                buffer->range_length());
+        copy->set_range(0, buffer->range_length() + start_code_size);
+#else
         MediaBuffer *copy = new MediaBuffer(buffer->range_length());
         memcpy(copy->data(), (uint8_t *)buffer->data() + buffer->range_offset(),
                 buffer->range_length());
         copy->set_range(0, buffer->range_length());
+#endif
         meta_data = new MetaData(*buffer->meta_data().get());
         buffer->release();
         buffer = NULL;
 
+#if defined (OMAP_ENHANCEMENT) && defined (TARGET_OMAP4)
+        int32_t isSync1 = 0;
+        meta_data->findInt32(kKeyIsSyncFrame, &isSync1);
+
+        if (mIsAvc && isSync1) StripSpsPps(copy);
+#endif
+
         if (mIsAvc) StripStartcode(copy);
 
         size_t sampleSize = copy->range_length();
+#if !defined (OMAP_ENHANCEMENT) || !defined (TARGET_OMAP3)
         if (mIsAvc) {
             if (mOwner->useNalLengthFour()) {
                 sampleSize += 4;
@@ -1787,6 +2024,7 @@ status_t MPEG4Writer::Track::threadEntry() {
                 sampleSize += 2;
             }
         }
+#endif
 
         // Max file size or duration handling
         mMdatSizeBytes += sampleSize;
@@ -1863,6 +2101,7 @@ status_t MPEG4Writer::Track::threadEntry() {
 
         CHECK(timestampUs >= 0);
         if (mNumSamples > 1) {
+#if !defined(OMAP_ENHANCEMENT) && !defined(TARGET_OMAP4)
             if (timestampUs <= lastTimestampUs) {
                 LOGW("Frame arrives too late!");
                 // Don't drop the late frame, since dropping a frame may cause
@@ -1876,6 +2115,7 @@ status_t MPEG4Writer::Track::threadEntry() {
                     timestampUs = lastTimestampUs + (1000000LL + (mTimeScale >> 1)) / mTimeScale;
                 }
             }
+#endif
         }
 
         LOGV("%s media time stamp: %lld and previous paused duration %lld",
@@ -1897,7 +2137,18 @@ status_t MPEG4Writer::Track::threadEntry() {
                      (lastTimestampUs * mTimeScale + 500000LL) / 1000000LL);
 
             if (currDurationTicks != lastDurationTicks) {
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+            if(!mIsAudio) {
+                //Collect timestamps
+                TSTableEntry sample(sampleCount,lastTimestampUs);
+                mPresentationTimeStamp.push_back(sample);
+                mDecodeTimeStamp.push_back(sample);
+            } else {
                 addOneSttsTableEntry(sampleCount, lastDurationUs);
+            }
+#else
+                addOneSttsTableEntry(sampleCount, lastDurationUs);
+#endif
                 sampleCount = 1;
             } else {
                 ++sampleCount;
@@ -1924,8 +2175,12 @@ status_t MPEG4Writer::Track::threadEntry() {
             trackProgressStatus(timestampUs);
         }
         if (mOwner->numTracks() == 1) {
+#if defined (OMAP_ENHANCEMENT) && defined (TARGET_OMAP3)
+            off_t offset = mOwner->addSample_l(copy);
+#else
             off_t offset = mIsAvc? mOwner->addLengthPrefixedSample_l(copy)
                                  : mOwner->addSample_l(copy);
+#endif
             if (mChunkOffsets.empty()) {
                 addChunkOffset(offset);
             }
@@ -1980,7 +2235,19 @@ status_t MPEG4Writer::Track::threadEntry() {
     } else {
         ++sampleCount;  // Count for the last sample
     }
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    if(!mIsAudio) {
+        //Collect timestamps
+        TSTableEntry sample(sampleCount,lastTimestampUs);
+        mPresentationTimeStamp.push_back(sample);
+        mDecodeTimeStamp.push_back(sample);
+    } else {
+        addOneSttsTableEntry(sampleCount, lastDurationUs);
+    }
+#else
     addOneSttsTableEntry(sampleCount, lastDurationUs);
+#endif
+
     mTrackDurationUs += lastDurationUs;
     mReachedEOS = true;
     LOGI("Received total/0-length (%d/%d) buffers and encoded %d frames. - %s",
@@ -2413,6 +2680,37 @@ void MPEG4Writer::Track::writeTrackHeader(
           mOwner->endBox();  // stsd
 
           mOwner->beginBox("stts");
+
+ #if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+            if(!mIsAudio) { // ctts is valid only for video
+
+                //Make sure that the Stts value is sorted and
+                //is in increasing order. As per standard stts
+                //cannot be negative so unless we sort the out
+                //of order timestamp the duration encoding will
+                //not be positive.
+                // stts[n] = dts[n+1] - dts[n]
+                sortPresentationTimestamp(mDecodeTimeStamp);
+
+                //Need to add First frame time stamp as zero
+                //for the Iframe encoding
+                TSTableEntry temp (1,0);
+                mDecodeTimeStamp.push_front(temp);
+
+                //Update the duration in stts stucture.
+                uint32_t countDecodeTSList = mDecodeTimeStamp.size();
+                List<TSTableEntry>::iterator itcur = mDecodeTimeStamp.begin();
+                List<TSTableEntry>::iterator itnext = itcur;
+                itnext ++;
+                for (uint32_t i = 1; i < countDecodeTSList; i++) {
+                    addOneSttsTableEntry(itnext->sampleCount, (itnext->sampleTimestampUs - itcur->sampleTimestampUs) / itnext->sampleCount);
+                    itnext ++;
+                    itcur ++;
+                }
+
+            }
+ #endif
+
             mOwner->writeInt32(0);  // version=0, flags=0
             mOwner->writeInt32(mNumSttsTableEntries);
             int64_t prevTimestampUs = 0;
@@ -2431,6 +2729,33 @@ void MPEG4Writer::Track::writeTrackHeader(
             }
           mOwner->endBox();  // stts
 
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+        if(!mIsAudio && misOutofOrderTimestamps) {
+            LOGE("Out of order detected!");
+            mOwner->beginBox("ctts");
+            mOwner->writeInt32(0);  // version=0, flags=0
+            mOwner->writeInt32(mDecodeTimeStamp.size());
+
+            // Write first sample for Iframe as zero
+            mOwner->writeInt32(1);
+            mOwner->writeInt32(0);
+
+            // Encode the offset of ctts as difference between presentation timestamp
+            // and decoding timestamp.
+            size_t countPresentationTSList = mPresentationTimeStamp.size();
+            List<TSTableEntry>::iterator itpresentation = mPresentationTimeStamp.begin();
+            List<TSTableEntry>::iterator itdecoding     = mDecodeTimeStamp.begin();
+            for (size_t i = 0; i < countPresentationTSList; ++i) {
+                mOwner->writeInt32(itdecoding->sampleCount);
+                int32_t dur =  ((itpresentation->sampleTimestampUs * mTimeScale + 500000LL) / 1000000LL -
+                             (itdecoding->sampleTimestampUs * mTimeScale + 500000LL) / 1000000LL);
+                itpresentation ++;
+                itdecoding ++;
+                mOwner->writeInt32(dur);
+            }
+          mOwner->endBox();  // ctts
+        }
+#endif
           if (!mIsAudio) {
             mOwner->beginBox("stss");
               mOwner->writeInt32(0);  // version=0, flags=0

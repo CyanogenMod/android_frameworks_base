@@ -30,6 +30,9 @@ framework_res_source_path := APPS/framework-res_intermediates/src
 # ============================================================
 include $(CLEAR_VARS)
 
+FRAMEWORKS_BASE_SUBDIRS += \
+        $(addsuffix /java, omapmmlib )
+
 # FRAMEWORKS_BASE_SUBDIRS comes from build/core/pathmap.mk
 LOCAL_SRC_FILES := $(call find-other-java-files,$(FRAMEWORKS_BASE_SUBDIRS))
 
