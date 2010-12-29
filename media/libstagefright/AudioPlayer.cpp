@@ -26,7 +26,9 @@
 #include <media/stagefright/MediaErrors.h>
 #include <media/stagefright/MediaSource.h>
 #include <media/stagefright/MetaData.h>
-
+#ifdef OMAP_ENHANCEMENT
+#include <media/stagefright/MediaErrors.h>
+#endif
 #include "include/AwesomePlayer.h"
 
 namespace android {
@@ -67,6 +69,11 @@ void AudioPlayer::setSource(const sp<MediaSource> &source) {
 status_t AudioPlayer::start(bool sourceAlreadyStarted) {
     CHECK(!mStarted);
     CHECK(mSource != NULL);
+
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    mRealTimeInterpolation = GetSystemTimeuSec();
+#endif
+
 
     status_t err;
     if (!sourceAlreadyStarted) {
@@ -182,9 +189,23 @@ void AudioPlayer::pause(bool playPendingSamples) {
         }
     }
 }
+#ifdef OMAP_ENHANCEMENT
+void AudioPlayer::flush() {
+    CHECK(mStarted);
 
+    if (mAudioSink.get() != NULL) {
+        mAudioSink->flush();
+    } else {
+        mAudioTrack->flush();
+    }
+}
+#endif
 void AudioPlayer::resume() {
     CHECK(mStarted);
+
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    mRealTimeInterpolation = GetSystemTimeuSec();
+#endif
 
     if (mAudioSink.get() != NULL) {
         mAudioSink->start();
@@ -387,12 +408,61 @@ size_t AudioPlayer::fillBuffer(void *data, size_t size) {
     Mutex::Autolock autoLock(mLock);
     mNumFramesPlayed += size_done / mFrameSize;
 
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    //Reset the interpolation time
+    mRealTimeInterpolation = GetSystemTimeuSec();
+#endif
     return size_done;
 }
 
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+//Function to get the system time
+int64_t AudioPlayer::GetSystemTimeuSec(){
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return ((int64_t)tv.tv_sec * 1000000 + tv.tv_usec);
+}
+#endif
+
 int64_t AudioPlayer::getRealTimeUs() {
     Mutex::Autolock autoLock(mLock);
+
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    int64_t realtime = getRealTimeUsLocked();
+
+    //We need to interpolate the time to reolution of 1msec
+    //to get precise posting of buffers
+    int64_t deltaFromPosting = 0;
+
+    //Take care of first time read in case no frame has returned
+    if(mRealTimeInterpolation ==0){
+        LOGV("reset %lld",mRealTimeInterpolation);
+        mRealTimeInterpolation = GetSystemTimeuSec();
+        deltaFromPosting = 0;
+    }
+    else{
+        //Fetch the delta time from the last time we got the audio
+        //frame completion. We are only intereseted in delata
+        LOGV("mRealTimeInterpolation %lld = %lld - %lld",
+          ((int64_t)GetSystemTimeuSec()) - mRealTimeInterpolation,
+          ((int64_t)GetSystemTimeuSec()), mRealTimeInterpolation);
+
+        deltaFromPosting =  GetSystemTimeuSec() - mRealTimeInterpolation;
+    }
+
+    //if audio hangs we should drop frames. We will wait worst case of
+    //1 Sec
+    if((deltaFromPosting > 1000000) || (deltaFromPosting < 0) ) {
+        LOGE("To late ... there is a hang %lld",deltaFromPosting);
+        return realtime;
+    }
+
+    LOGV("IPT %lld",deltaFromPosting/1000);
+    return realtime + deltaFromPosting;
+#else
     return getRealTimeUsLocked();
+#endif
+
 }
 
 int64_t AudioPlayer::getRealTimeUsLocked() const {

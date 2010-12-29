@@ -50,7 +50,9 @@
 #include <media/stagefright/foundation/ALooper.h>
 
 namespace android {
-
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+extern void updateMetaData(sp<MetaData> meta_track);
+#endif
 static int64_t kLowWaterMarkUs = 2000000ll;  // 2secs
 static int64_t kHighWaterMarkUs = 10000000ll;  // 10secs
 static const size_t kLowWaterMarkBytes = 40000;
@@ -95,6 +97,28 @@ struct AwesomeRemoteRenderer : public AwesomeRenderer {
         }
     }
 
+#ifdef OMAP_ENHANCEMENT
+    virtual Vector< sp<IMemory> > getBuffers(){
+        return mTarget->getBuffers();
+    }
+
+    virtual bool setCallback(release_rendered_buffer_callback cb, void *cookie) {
+        return mTarget->setCallback(cb, cookie);
+    }
+
+    virtual void set_s3d_frame_layout(uint32_t s3d_mode, uint32_t s3d_fmt, uint32_t s3d_order, uint32_t s3d_subsampling) {
+         mTarget->set_s3d_frame_layout(s3d_mode, s3d_fmt, s3d_order, s3d_subsampling);
+    }
+
+    virtual void resizeRenderer(void* resize_params) {
+        mTarget->resizeRenderer(resize_params);
+    }
+
+    virtual void requestRendererClone(bool enable) {
+        mTarget->requestRendererClone(enable);
+    }
+#endif
+
 private:
     sp<IOMXRenderer> mTarget;
 
@@ -132,6 +156,18 @@ struct AwesomeLocalRenderer : public AwesomeRenderer {
     void render(const void *data, size_t size) {
         mTarget->render(data, size, NULL);
     }
+
+#ifdef OMAP_ENHANCEMENT
+    virtual Vector< sp<IMemory> > getBuffers(){
+        return mTarget->getBuffers();
+    }
+    virtual void resizeRenderer(void* resize_params) {
+        mTarget->resizeRenderer(resize_params);
+    }
+    virtual void requestRendererClone(bool enable) {
+        mTarget->requestRendererClone(enable);
+    }
+#endif
 
 protected:
     virtual ~AwesomeLocalRenderer() {
@@ -238,6 +274,13 @@ status_t AwesomeLocalRenderer::init(
     return ((SoftwareRenderer *)mTarget)->initCheck();
 }
 
+#ifdef OMAP_ENHANCEMENT
+static void releaseRenderedBufferCallback(const sp<IMemory>& mem, void *cookie){
+    AwesomePlayer *ap = static_cast<AwesomePlayer *>(cookie);
+    ap->releaseRenderedBuffer(mem);
+}
+#endif
+
 AwesomePlayer::AwesomePlayer()
     : mQueueStarted(false),
       mTimeSource(NULL),
@@ -245,7 +288,14 @@ AwesomePlayer::AwesomePlayer()
       mAudioPlayer(NULL),
       mFlags(0),
       mExtractorFlags(0),
+#ifdef OMAP_ENHANCEMENT
+      mBufferReleaseCallbackSet(false),
+      mIsFirstVideoBuffer(false),
+      mFirstVideoBufferResult(OK),
+      mFirstVideoBuffer(NULL),
+#else
       mLastVideoBuffer(NULL),
+#endif
       mVideoBuffer(NULL),
       mSuspensionState(NULL) {
     CHECK_EQ(mClient.connect(), OK);
@@ -263,6 +313,15 @@ AwesomePlayer::AwesomePlayer()
             this, &AwesomePlayer::onCheckAudioStatus);
 
     mAudioStatusEventPending = false;
+
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    mS3Dparams.active = S3D_MODE_OFF;
+    mS3Dparams.mode = S3D_MODE_OFF;
+    mS3Dparams.fmt = S3D_FORMAT_NONE;
+    mS3Dparams.order = S3D_ORDER_LF;
+    mS3Dparams.subsampling = S3D_SS_NONE;
+    mVideoMode = VID_MODE_NORMAL;
+#endif
 
     reset();
 }
@@ -304,6 +363,9 @@ status_t AwesomePlayer::setDataSource(
 
 status_t AwesomePlayer::setDataSource_l(
         const char *uri, const KeyedVector<String8, String8> *headers) {
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    LOGD("setDataSource_l(%s)", uri);
+#endif
     reset_l();
 
     mUri = uri;
@@ -381,7 +443,13 @@ status_t AwesomePlayer::setDataSource_l(const sp<MediaExtractor> &extractor) {
         CHECK(meta->findCString(kKeyMIMEType, &mime));
 
         if (!haveVideo && !strncasecmp(mime, "video/", 6)) {
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+           sp<MediaSource> mysource = extractor->getTrack(i);
+           mysource->parseSEIMessages(mS3Dparams);
+           setVideoSource(mysource);
+#else
             setVideoSource(extractor->getTrack(i));
+#endif
             haveVideo = true;
         } else if (!haveAudio && !strncasecmp(mime, "audio/", 6)) {
             setAudioSource(extractor->getTrack(i));
@@ -439,6 +507,10 @@ void AwesomePlayer::reset_l() {
     mAudioTrack.clear();
     mVideoTrack.clear();
 
+#ifdef OMAP_ENHANCEMENT
+    mVideoMode = VID_MODE_NORMAL;
+#endif
+
     // Shutdown audio first, so that the respone to the reset request
     // appears to happen instantaneously as far as the user is concerned
     // If we did this later, audio would continue playing while we
@@ -459,10 +531,30 @@ void AwesomePlayer::reset_l() {
 
     mVideoRenderer.clear();
 
+#ifdef OMAP_ENHANCEMENT
+    if (mBuffersWithRenderer.size()) {
+        unsigned int i;
+        unsigned int sz = mBuffersWithRenderer.size();
+
+        for(i = 0; i < sz; i++){
+            mBuffersWithRenderer[i]->release();
+        }
+
+        for(i = 0; i < sz; i++){
+            mBuffersWithRenderer.pop();
+        }
+    }
+    // release reference in case it exists
+    if (mFirstVideoBuffer != NULL) {
+        mFirstVideoBuffer->release();
+        mFirstVideoBuffer = NULL;
+    }
+#else
     if (mLastVideoBuffer) {
         mLastVideoBuffer->release();
         mLastVideoBuffer = NULL;
     }
+#endif
 
     if (mVideoBuffer) {
         mVideoBuffer->release();
@@ -759,6 +851,32 @@ status_t AwesomePlayer::play_l() {
     mFlags |= PLAYING;
     mFlags |= FIRST_FRAME;
 
+#ifdef OMAP_ENHANCEMENT
+    if(mVideoSource != NULL) {
+        CHECK(mFirstVideoBuffer == NULL);
+        mFirstVideoBufferResult = mVideoSource->read(&mFirstVideoBuffer);
+        if (mFirstVideoBufferResult == INFO_FORMAT_CHANGED) {
+            LOGV("First INFO_FORMAT_CHANGED!!!");
+            LOGV("VideoSource signalled format change.");
+            if (mVideoRenderer != NULL) {
+                mVideoRendererIsPreview = false;
+                initRenderer_l();
+#ifdef OMAP_ENHANCEMENT
+            if (mVideoRenderer != NULL) {
+                // Share overlay buffers with video decoder.
+                mVideoSource->setBuffers(mVideoRenderer->getBuffers(), true);
+            }
+#endif
+            }
+            CHECK(mFirstVideoBuffer == NULL);
+            mFirstVideoBufferResult = OK;
+            mIsFirstVideoBuffer = false;
+        } 
+       else {
+            mIsFirstVideoBuffer = true;
+        }
+}
+#endif
     bool deferredAudioSeek = false;
 
     if (mAudioSource != NULL) {
@@ -777,7 +895,12 @@ status_t AwesomePlayer::play_l() {
                     mAudioPlayer = NULL;
 
                     mFlags &= ~(PLAYING | FIRST_FRAME);
-
+#ifdef OMAP_ENHANCEMENT
+                    if (mFirstVideoBuffer) {
+                        mFirstVideoBuffer->release();
+                        mFirstVideoBuffer = NULL;
+                    }
+#endif
                     return err;
                 }
 
@@ -789,7 +912,25 @@ status_t AwesomePlayer::play_l() {
                 mWatchForAudioEOS = true;
             }
         } else {
+#ifdef OMAP_ENHANCEMENT
+            if (!mSeeking || mVideoSource == NULL) {
+               // Resume when video is not present or when
+               // not seeking and flush the sink so buffer from
+                //previous position is not heard
+                if(mSeeking){
+                    if(mAudioSink.get() != NULL){
+                        mAudioSink->flush();
+                    }
+                }
+                mAudioPlayer->resume();
+            } else {
+                // when seeking it is too early to resume
+                // as audio has not seek yet
+                mFlags |= HOLD_TO_RESUME;
+            }
+#else
             mAudioPlayer->resume();
+#endif
         }
     }
 
@@ -831,7 +972,29 @@ status_t AwesomePlayer::initRenderer_l() {
     CHECK(meta->findCString(kKeyDecoderComponent, &component));
     CHECK(meta->findInt32(kKeyWidth, &decodedWidth));
     CHECK(meta->findInt32(kKeyHeight, &decodedHeight));
+#ifdef OMAP_ENHANCEMENT
+    LOGD(" initRenderer_l %dx%d",decodedWidth,decodedHeight );
+    if (mVideoRenderer != NULL) {
+        //we cant destroy overlay based renderer here,as the overlay has 2 handles 
+        //(1) from media server process (the current process)
+        //(2) from surface flinger process.
+        // Hence, we have to resize the renderer for new dimensions than dstroying and  
+        // re-creating
+        //
+        uint32_t outputBufferCnt = -1;
+        outputBufferCnt = mVideoSource->getNumofOutputBuffers();
+        LOGD("Codec Recommended outputBuffer count after portreconfig %d",outputBufferCnt);
+        render_resize_params resize_params;
+        resize_params.decoded_width = decodedWidth;
+        resize_params.decoded_height = decodedHeight;
+        resize_params.buffercount = outputBufferCnt;
+        resize_params.display_width = mVideoWidth;
+        resize_params.display_height = mVideoHeight;
 
+        mVideoRenderer->resizeRenderer((void*)(&resize_params));
+        return 0;
+    } 
+#endif
     int32_t rotationDegrees;
     if (!mVideoTrack->getFormat()->findInt32(
                 kKeyRotation, &rotationDegrees)) {
@@ -839,6 +1002,11 @@ status_t AwesomePlayer::initRenderer_l() {
     }
 
     mVideoRenderer.clear();
+
+#if defined( OMAP_ENHANCEMENT) && !defined(TARGET_OMAP4)
+    // Initializing S3D flag, to be passed by higher layer
+    int isS3D =0;
+#endif
 
     // Must ensure that mVideoRenderer's destructor is actually executed
     // before creating a new one.
@@ -849,19 +1017,46 @@ status_t AwesomePlayer::initRenderer_l() {
         // therefore they require a remote IOMXRenderer that knows how
         // to display them.
 
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+        //initialize the codec recommended buffers to -1
+        int32_t outputBufferCnt = -1;
+        outputBufferCnt = mVideoSource->getNumofOutputBuffers();
+        LOGD("Codec Recommended outputBuffer count %d",outputBufferCnt);
+#elif defined(OMAP_ENHANCEMENT)
+	int32_t outputBufferCnt = -1;
+#endif
+
         sp<IOMXRenderer> native =
             mClient.interface()->createRenderer(
                     mISurface, component,
                     (OMX_COLOR_FORMATTYPE)format,
                     decodedWidth, decodedHeight,
                     mVideoWidth, mVideoHeight,
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+                    rotationDegrees, mS3Dparams.active, outputBufferCnt);
+#elif defined(OMAP_ENHANCEMENT)
+                    rotationDegrees, isS3D, outputBufferCnt);
+#else
                     rotationDegrees);
+#endif
 
         if (native == NULL) {
             return NO_INIT;
         }
 
         mVideoRenderer = new AwesomeRemoteRenderer(native);
+
+#ifdef OMAP_ENHANCEMENT
+            if (!strncmp("OMX.TI", component, 6)) {
+#if defined(TARGET_OMAP4)
+                if(mS3Dparams.active)
+                    mVideoRenderer->set_s3d_frame_layout(mS3Dparams.mode ,mS3Dparams.fmt ,mS3Dparams.order, mS3Dparams.subsampling);
+#endif
+                mBufferReleaseCallbackSet = mVideoRenderer->setCallback(releaseRenderedBufferCallback, this);
+                mVideoRenderer->setCallback(releaseRenderedBufferCallback, this);  
+            }
+#endif
+
     } else {
         // Other decoders are instantiated locally and as a consequence
         // allocate their buffers in local address space.
@@ -1054,10 +1249,37 @@ status_t AwesomePlayer::initAudioDecoder() {
     if (!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_RAW)) {
         mAudioSource = mAudioTrack;
     } else {
+#ifdef OMAP_ENHANCEMENT
+        if (mVideoWidth*mVideoHeight > MAX_RESOLUTION) {
+         // video is launched first, so these capablities are known
+         // audio can be selected accordingly
+         // TODO: extend this to a method that can include more
+         // capabilities to evaluate
+
+#ifdef TARGET_OMAP4
+            //for OMAP4 720p,1080p videos, lets stick to OMX.PV audio codecs
+            mAudioSource = OMXCodec::Create(
+                    mClient.interface(), mAudioTrack->getFormat(),
+                    false, // createEncoder
+                    mAudioTrack);
+#else
+            mAudioSource = OMXCodec::Create(
+                    mClient.interface(), mAudioTrack->getFormat(),
+                    false, // createEncoder
+                    mAudioTrack, "OMX.ITTIAM.AAC.decode");
+#endif
+        } else {
+            mAudioSource = OMXCodec::Create(
+                    mClient.interface(), mAudioTrack->getFormat(),
+                    false, // createEncoder
+                    mAudioTrack);
+        }
+#else
         mAudioSource = OMXCodec::Create(
                 mClient.interface(), mAudioTrack->getFormat(),
                 false, // createEncoder
                 mAudioTrack);
+#endif
     }
 
     if (mAudioSource != NULL) {
@@ -1092,11 +1314,27 @@ void AwesomePlayer::setVideoSource(sp<MediaSource> source) {
 }
 
 status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+
+    //Call config parser to update profile,level,interlaced,reference frame data
+    updateMetaData(mVideoTrack->getFormat());
+
+    int32_t isInterlaced = false;
+    mVideoTrack->getFormat()->findInt32(kKeyVideoInterlaced, &isInterlaced);
+
+    mVideoSource = OMXCodec::Create(
+            mClient.interface(), mVideoTrack->getFormat(),
+            false, // createEncoder
+            mVideoTrack,
+            NULL,
+            (flags | isInterlaced)?OMXCodec::kPreferInterlacedOutputContent:0);
+#else
     mVideoSource = OMXCodec::Create(
             mClient.interface(), mVideoTrack->getFormat(),
             false, // createEncoder
             mVideoTrack,
             NULL, flags);
+#endif
 
     if (mVideoSource != NULL) {
         int64_t durationUs;
@@ -1110,12 +1348,15 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
         CHECK(mVideoTrack->getFormat()->findInt32(kKeyWidth, &mVideoWidth));
         CHECK(mVideoTrack->getFormat()->findInt32(kKeyHeight, &mVideoHeight));
 
+#ifndef OMAP_ENHANCEMENT
         status_t err = mVideoSource->start();
 
         if (err != OK) {
             mVideoSource.clear();
             return err;
         }
+#endif
+
     }
 
     return mVideoSource != NULL ? OK : UNKNOWN_ERROR;
@@ -1157,11 +1398,29 @@ void AwesomePlayer::onVideoEvent() {
     mVideoEventPending = false;
 
     if (mSeeking) {
+#ifdef OMAP_ENHANCEMENT
+        if (mBuffersWithRenderer.size()) {
+            unsigned int i;
+            unsigned int sz = mBuffersWithRenderer.size();
+
+            for(i = 0; i < sz; i++){
+                mBuffersWithRenderer[i]->release();
+            }
+
+            for(i = 0; i < sz; i++){
+                mBuffersWithRenderer.pop();
+            }
+        }
+        if (mFirstVideoBuffer) {
+            mFirstVideoBuffer->release();
+            mFirstVideoBuffer = NULL;
+        }
+#else
         if (mLastVideoBuffer) {
             mLastVideoBuffer->release();
             mLastVideoBuffer = NULL;
         }
-
+#endif
         if (mVideoBuffer) {
             mVideoBuffer->release();
             mVideoBuffer = NULL;
@@ -1187,12 +1446,33 @@ void AwesomePlayer::onVideoEvent() {
         MediaSource::ReadOptions options;
         if (mSeeking) {
             LOGV("seeking to %lld us (%.2f secs)", mSeekTimeUs, mSeekTimeUs / 1E6);
-
+#ifdef OMAP_ENHANCEMENT
+            if (mIsFirstVideoBuffer) {
+                if (mFirstVideoBuffer != NULL) {
+                    mFirstVideoBuffer->release();
+                    mFirstVideoBuffer = NULL;
+                }
+                mIsFirstVideoBuffer = false;
+            }
+#endif
             options.setSeekTo(
                     mSeekTimeUs, MediaSource::ReadOptions::SEEK_CLOSEST_SYNC);
         }
         for (;;) {
+#ifdef OMAP_ENHANCEMENT
+            status_t err;
+            if (mIsFirstVideoBuffer) {
+                mVideoBuffer = mFirstVideoBuffer;
+                mFirstVideoBuffer = NULL;
+                err = mFirstVideoBufferResult;
+
+                mIsFirstVideoBuffer = false;
+            } else {
+                err = mVideoSource->read(&mVideoBuffer, &options);
+            }
+#else
             status_t err = mVideoSource->read(&mVideoBuffer, &options);
+#endif
             options.clearSeekTo();
 
             if (err != OK) {
@@ -1204,6 +1484,13 @@ void AwesomePlayer::onVideoEvent() {
                     if (mVideoRenderer != NULL) {
                         mVideoRendererIsPreview = false;
                         err = initRenderer_l();
+
+#ifdef OMAP_ENHANCEMENT
+                        if (mVideoRenderer != NULL) {
+                            // Share overlay buffers with video decoder.
+                            mVideoSource->setBuffers(mVideoRenderer->getBuffers(), true);
+                        }
+#endif
 
                         if (err == OK) {
                             continue;
@@ -1280,22 +1567,50 @@ void AwesomePlayer::onVideoEvent() {
         // and we'll play incoming video as fast as we get it.
         latenessUs = 0;
     }
+#ifdef OMAP_ENHANCEMENT
+    LOGV("%s::%d: (latenessUs= %lld) = ((nowUs= %lld) - (timeUs=%lld))", __FUNCTION__, __LINE__, latenessUs, nowUs, timeUs);
 
+    if (latenessUs > 50000) {
+        // We're more than 50ms late.
+
+        /* Trace to detect frame drops */
+        LOGV("Frame dropped - lateness (%lld - %lld = %lld uS)",nowUs,timeUs,latenessUs);
+
+#else
     if (latenessUs > 40000) {
         // We're more than 40ms late.
+#endif
         LOGV("we're late by %lld us (%.2f secs)", latenessUs, latenessUs / 1E6);
 
         mVideoBuffer->release();
         mVideoBuffer = NULL;
-
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+        postVideoEvent_l(0);
+#else
         postVideoEvent_l();
+#endif
         return;
     }
-
+#if defined(OMAP_ENHANCEMENT) && !defined(TARGET_OMAP4)
+    if (latenessUs < -100000) {
+        // We're more than 100ms early.
+        LOGV("%s::%d: Frame is early than 100ms: %lld", __FUNCTION__, __LINE__, latenessUs);
+        LOGV("%s::%d: postVideoEvent_l(10000)", __FUNCTION__, __LINE__);
+#else
     if (latenessUs < -10000) {
         // We're more than 10ms early.
+#endif
 
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+        //There is no need to poll for 10 msec
+        //This going to increase the MHz on ARM. Try to come back
+        //when we need to exactly post. Need to do a mod for 100 msec
+        //so that while seeking the video frame doesnt wait for lateness
+        //which can be a huge delay. This will result like a hang
+        postVideoEvent_l((latenessUs * -1) % 100000);
+#else
         postVideoEvent_l(10000);
+#endif
         return;
     }
 
@@ -1311,20 +1626,42 @@ void AwesomePlayer::onVideoEvent() {
             postStreamDoneEvent_l(err);
             return;
         }
+#ifdef OMAP_ENHANCEMENT
+        if (mVideoRenderer != NULL) {
+            // Share overlay buffers with video decoder.
+            mVideoSource->setBuffers(mVideoRenderer->getBuffers(), true);
+        }
+#endif
     }
 
     if (mVideoRenderer != NULL) {
         mVideoRenderer->render(mVideoBuffer);
     }
 
+#ifdef OMAP_ENHANCEMENT
+    if ((!mBufferReleaseCallbackSet)  && (mBuffersWithRenderer.size())){
+        mBuffersWithRenderer[0]->release();
+        mBuffersWithRenderer.pop();
+    }
+    mBuffersWithRenderer.push(mVideoBuffer);
+#else
     if (mLastVideoBuffer) {
         mLastVideoBuffer->release();
         mLastVideoBuffer = NULL;
     }
     mLastVideoBuffer = mVideoBuffer;
-    mVideoBuffer = NULL;
+#endif
 
+    mVideoBuffer = NULL;
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    // No need to trigger the poll after 10 msec which is default value
+    // This is causing a jerk in AV sync. We can trigger a 0 msec and accurate
+    // wait which will allow more ARM sleep time
+    postVideoEvent_l(0);
+#else
     postVideoEvent_l();
+#endif
+
 }
 
 void AwesomePlayer::postVideoEvent_l(int64_t delayUs) {
@@ -1708,7 +2045,24 @@ void AwesomePlayer::onPrepareAsyncEvent() {
 
     if (mVideoTrack != NULL && mVideoSource == NULL) {
         status_t err = initVideoDecoder();
+#ifdef OMAP_ENHANCEMENT
+            if (err == OK){
+                if (mVideoRendererIsPreview || mVideoRenderer == NULL) {
+                    mVideoRendererIsPreview = false;
+                    initRenderer_l();
+                    if (mVideoRenderer != NULL) {
+                        // Share overlay buffers with video decoder.
+                        mVideoSource->setBuffers(mVideoRenderer->getBuffers(), false);
+                    }
+                }
 
+                err = mVideoSource->start();
+                if (err != OK) {
+                    mVideoSource.clear();
+                    //Subsequent error handling will take of returning.
+                }
+            }
+#endif
         if (err != OK) {
             abortPrepare(err);
             return;
@@ -1769,7 +2123,11 @@ status_t AwesomePlayer::suspend() {
     Mutex::Autolock autoLock(mLock);
 
     if (mSuspensionState != NULL) {
+#ifdef OMAP_ENHANCEMENT
+        if (mBuffersWithRenderer.size() == 0) {
+#else
         if (mLastVideoBuffer == NULL) {
+#endif
             //go into here if video is suspended again
             //after resuming without being played between
             //them
@@ -1804,9 +2162,17 @@ status_t AwesomePlayer::suspend() {
     state->mFlags = mFlags & (PLAYING | AUTO_LOOPING | LOOPING | AT_EOS);
     getPosition(&state->mPositionUs);
 
+#ifdef OMAP_ENHANCEMENT
+#ifdef TARGET_OMAP4
+    if(0) {   //FIXME: This caching of last frame crashes in L27x. Not used anyway, but check why.
+#else
+    if (mBuffersWithRenderer.size()) {
+#endif
+        size_t size = mBuffersWithRenderer[0]->range_length();
+#else
     if (mLastVideoBuffer) {
         size_t size = mLastVideoBuffer->range_length();
-
+#endif
         if (size) {
             int32_t unreadable;
             if (!mLastVideoBuffer->meta_data()->findInt32(
@@ -1814,10 +2180,17 @@ status_t AwesomePlayer::suspend() {
                     || unreadable == 0) {
                 state->mLastVideoFrameSize = size;
                 state->mLastVideoFrame = malloc(size);
-                memcpy(state->mLastVideoFrame,
-                       (const uint8_t *)mLastVideoBuffer->data()
-                            + mLastVideoBuffer->range_offset(),
-                       size);
+#ifdef OMAP_ENHANCEMENT
+            memcpy(state->mLastVideoFrame,
+                   (const uint8_t *)mBuffersWithRenderer[0]->data()
+                        + mBuffersWithRenderer[0]->range_offset(),
+                   size);
+#else
+            memcpy(state->mLastVideoFrame,
+                   (const uint8_t *)mLastVideoBuffer->data()
+                        + mLastVideoBuffer->range_offset(),
+                   size);
+#endif
 
                 state->mVideoWidth = mVideoWidth;
                 state->mVideoHeight = mVideoHeight;
@@ -1913,6 +2286,46 @@ void AwesomePlayer::postAudioEOS() {
 void AwesomePlayer::postAudioSeekComplete() {
     postCheckAudioStatusEvent_l();
 }
+#ifdef OMAP_ENHANCEMENT
+void AwesomePlayer::releaseRenderedBuffer(const sp<IMemory>& mem){
+
+    bool buffer_released = false;
+    unsigned int i = 0;
+
+    for(i = 0; i < mBuffersWithRenderer.size(); i++){
+        if (mBuffersWithRenderer[i]->data() == mem->pointer()){
+            mBuffersWithRenderer[i]->release();
+            mBuffersWithRenderer.removeAt(i);
+            buffer_released = true;
+            break;
+        }
+    }
+
+    if (buffer_released == false)
+        LOGD("Something wrong... Overlay returned wrong buffer address(%p). This message is harmless if you just did a seek.", mem->pointer());
+}
+
+
+status_t AwesomePlayer::requestVideoCloneMode(bool enable) {
+    if (enable)
+    {
+        if ((mVideoMode != VID_MODE_CLONE) && (mVideoRenderer != NULL)) {
+            mVideoMode = VID_MODE_CLONE;
+            mVideoRenderer->requestRendererClone(enable);
+        }
+    }
+    else
+    {
+        if ((mVideoMode != VID_MODE_NORMAL) && (mVideoRenderer != NULL)) {
+            mVideoMode = VID_MODE_NORMAL;
+            mVideoRenderer->requestRendererClone(enable);
+        }
+    }
+    LOGD("CloneMode[%d]", mVideoMode);
+    return OK;
+}
+
+#endif
 
 }  // namespace android
 
