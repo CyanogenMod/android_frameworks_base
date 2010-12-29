@@ -46,7 +46,10 @@ enum {
     SUSPEND,
     RESUME,
     SET_AUX_EFFECT_SEND_LEVEL,
-    ATTACH_AUX_EFFECT
+    ATTACH_AUX_EFFECT,
+#ifdef OMAP_ENHANCEMENT
+    REQUEST_CLONE_MODE
+#endif
 };
 
 class BpMediaPlayer: public BpInterface<IMediaPlayer>
@@ -241,6 +244,17 @@ public:
         remote()->transact(ATTACH_AUX_EFFECT, data, &reply);
         return reply.readInt32();
     }
+
+#ifdef OMAP_ENHANCEMENT
+    status_t requestVideoCloneMode(bool enable) {
+        Parcel data, reply;
+        data.writeInterfaceToken(IMediaPlayer::getInterfaceDescriptor());
+        data.writeInt32((int)enable);
+        remote()->transact(REQUEST_CLONE_MODE, data, &reply);
+        return reply.readInt32();
+    }
+
+#endif
 };
 
 IMPLEMENT_META_INTERFACE(MediaPlayer, "android.media.IMediaPlayer");
@@ -369,6 +383,13 @@ status_t BnMediaPlayer::onTransact(
             reply->writeInt32(attachAuxEffect(data.readInt32()));
             return NO_ERROR;
         } break;
+#ifdef OMAP_ENHANCEMENT
+        case REQUEST_CLONE_MODE: {
+            CHECK_INTERFACE(IMediaPlayer, data, reply);
+            reply->writeInt32(requestVideoCloneMode(data.readInt32()));
+            return NO_ERROR;
+        } break;
+#endif
         default:
             return BBinder::onTransact(code, data, reply, flags);
     }

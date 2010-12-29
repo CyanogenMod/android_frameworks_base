@@ -38,7 +38,39 @@
 #include <media/stagefright/Utils.h>
 #include <utils/String8.h>
 
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+#include "include/TISEIMessagesParser.h"
+#endif
+
 namespace android {
+
+#ifdef OMAP_ENHANCEMENT
+#define POS_ESDS_CANT_BE_FOUND(chunk_size) (chunk_size - 3)
+/*Array containing the pointers to known types. This should be read only*/
+    static const struct Mpeg4FileType{
+        const char *const type;
+        const uint8_t size;
+    } knownFileTypes[] = {
+    {"ftyp3gp", 7},
+    {"ftypmp42", 8},
+    {"ftyp3gr6", 8},
+    {"ftyp3gs6", 8},
+    {"ftyp3ge6", 8},
+    {"ftyp3gg6", 8},
+    {"ftypisom", 8},
+    {"ftypM4V ", 8},
+    {"ftypM4A ", 8},
+    {"ftypf4v ", 8},
+    {"ftypkddi", 8},
+    {"ftypM4VP", 8},
+    {"ftypqt", 6},
+    {"ftypmmp4", 8},
+    {"ftypmp41", 8},
+    {"ftypMSNV", 8}
+    };
+/*Indicates the number of known types and it should be linked to variable knownFileTypes*/
+#define NUMBER_OF_KNOWN_FILE_TYPES (sizeof(knownFileTypes)/sizeof(struct Mpeg4FileType))
+#endif
 
 class MPEG4Source : public MediaSource {
 public:
@@ -48,6 +80,9 @@ public:
                 int32_t timeScale,
                 const sp<SampleTable> &sampleTable);
 
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    virtual void parseSEIMessages(S3D_params &mS3Dparams);
+#endif
     virtual status_t start(MetaData *params = NULL);
     virtual status_t stop();
 
@@ -70,7 +105,9 @@ private:
 
     bool mIsAVC;
     size_t mNALLengthSize;
-
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    size_t SEINALLength;
+#endif
     bool mStarted;
 
     MediaBufferGroup *mGroup;
@@ -249,6 +286,10 @@ static const char *FourCC2MIME(uint32_t fourcc) {
         case FOURCC('s', '2', '6', '3'):
             return MEDIA_MIMETYPE_VIDEO_H263;
 
+#ifdef OMAP_ENHANCEMENT
+        case FOURCC('H', '2', '6', '3'):
+            return MEDIA_MIMETYPE_VIDEO_H263;
+#endif
         case FOURCC('a', 'v', 'c', '1'):
             return MEDIA_MIMETYPE_VIDEO_AVC;
 
@@ -323,7 +364,31 @@ sp<MetaData> MPEG4Extractor::getTrackMetaData(
     if (track == NULL) {
         return NULL;
     }
-
+#ifdef OMAP_ENHANCEMENT
+    if (flags & kIncludeExtensiveMetaData){
+        track->includes_expensive_metadata = true;
+        const char *mime;
+        CHECK(track->meta->findCString(kKeyMIMEType, &mime));
+        if (!strncasecmp("video/", mime, 6)) {
+            uint32_t sampleIndex=0;
+            uint32_t sampleTime;
+            if (flags & kSelectFirstSample || track->sampleTable->findThumbnailSample(&sampleIndex) != OK){
+                /*It will be forced the frame zero which is supposed to
+                 *be an I frame every time.
+                 * */
+                LOGD("Forced first sample\n");
+                sampleIndex=0;
+            }
+            if (track->sampleTable->getMetaDataForSample(
+                        sampleIndex, NULL /* offset */, NULL /* size */,
+                        &sampleTime) == OK) {
+                track->meta->setInt64(
+                        kKeyThumbnailTime,
+                        ((int64_t)sampleTime * 1000000) / track->timescale);
+            }
+        }
+    }
+#else
     if ((flags & kIncludeExtensiveMetaData)
             && !track->includes_expensive_metadata) {
         track->includes_expensive_metadata = true;
@@ -343,7 +408,7 @@ sp<MetaData> MPEG4Extractor::getTrackMetaData(
             }
         }
     }
-
+#endif
     return track->meta;
 }
 
@@ -360,6 +425,36 @@ status_t MPEG4Extractor::readMetaData() {
     if (mHaveMetadata) {
         if (mHasVideo) {
             mFileMetaData->setCString(kKeyMIMEType, "video/mp4");
+#ifdef OMAP_ENHANCEMENT
+            Track *tempTrack = mFirstTrack;
+            int count = 0;
+            const char *mime;
+            while (tempTrack) {
+				CHECK(tempTrack->meta->findCString(kKeyMIMEType, &mime));
+
+				if (!strncasecmp("video/", mime, 6)) {
+
+					size_t totalframes;
+					int64_t duration;
+					int32_t dur32,fps;
+
+					fps = 0;
+                                        totalframes = tempTrack->sampleTable->countSamples();
+					tempTrack->meta->findInt64(kKeyDuration, &duration);
+
+					dur32 =  (int32_t) (duration / 1000000);
+                                        if(dur32 <=0){
+                                            //dur32 will be zero for clips < 1 second.
+                                            dur32 = 1;
+                                        }
+                                        fps = totalframes/dur32;
+                                        LOGV("totalframes %d duration %lld dur32 %d fps %d",totalframes,duration,dur32,fps);
+					tempTrack->meta->setInt32(kKeyVideoFPS,fps);
+				}
+				tempTrack= tempTrack->next;
+            }
+#endif
+
         } else {
             mFileMetaData->setCString(kKeyMIMEType, "audio/mp4");
         }
@@ -415,6 +510,12 @@ static void convertTimeToDate(int64_t time_1904, String8 *s) {
 
 status_t MPEG4Extractor::parseChunk(off_t *offset, int depth) {
     uint32_t hdr[2];
+#ifdef  OMAP_ENHANCEMENT
+    // A copy of the unmodified offset; needed to skip unrecognized
+    // atoms (unrecognized by this logic means that its name isn't
+    // recognized in the switch below)
+    off_t originalOffset=*offset;
+#endif
     if (mDataSource->readAt(*offset, hdr, 8) < 8) {
         return ERROR_IO;
     }
@@ -480,7 +581,28 @@ status_t MPEG4Extractor::parseChunk(off_t *offset, int depth) {
 
         return OK;
     }
+#ifdef OMAP_ENHANCEMENT
+    {
+        union {
+            uint32_t chunk;
+            uint8_t t[4];
+        }chnk;
+        chnk.chunk=chunk_type;
+        LOGV("Chunk: %c%c%c%c\n", chnk.t[3],chnk.t[2],chnk.t[1],chnk.t[0]);
+    }
 
+    // If the size of the atom is zero, then this is an empty atom that
+    //  needs to be skipped; the way to skip it is by making its size 4,
+    //  so the next time the instruction *offset += chunk_size happen
+    //  the atom be skipped and it doesn't cause the parser enter in
+    //  aninfinite loop.
+    //  (*offset would be pointing to the same place again and again if
+    //  chunk_size is zero)
+
+    if (!chunk_size){
+        chunk_size=4;
+    }
+#endif
     switch(chunk_type) {
         case FOURCC('m', 'o', 'o', 'v'):
         case FOURCC('t', 'r', 'a', 'k'):
@@ -693,6 +815,153 @@ status_t MPEG4Extractor::parseChunk(off_t *offset, int depth) {
         case FOURCC('m', 'p', '4', 'a'):
         case FOURCC('s', 'a', 'm', 'r'):
         case FOURCC('s', 'a', 'w', 'b'):
+#ifdef OMAP_ENHANCEMENT
+        {
+            // This pointer will hold the address of a buffer with the
+            // data content inside the mp4a, samr or sawb atoms.
+
+            uint8_t *buffer;
+
+            // Allocate buffer content
+
+            if (!(buffer = (uint8_t *)malloc(chunk_size))){
+                LOGD("Error allocating memory\n");
+                *offset += chunk_size;
+                return ERROR_OUT_OF_MEM;
+            }
+            // Fill out the buffer with the data
+
+            if (mDataSource->readAt(
+                        data_offset, buffer, chunk_size) < (ssize_t) chunk_size) {
+                free(buffer);
+                return ERROR_IO;
+            }
+            uint16_t data_ref_index = 0;
+            uint16_t num_channels = 0;
+            uint16_t sample_size = 0;
+            uint32_t sample_rate = 0;
+            if (chunk_size >= 25){
+                data_ref_index = U16_AT(&buffer[6]);
+                num_channels = U16_AT(&buffer[16]);
+
+                sample_size = U16_AT(&buffer[18]);
+                sample_rate = U32_AT(&buffer[24]) >> 16;
+            }
+
+            if (!strcasecmp(MEDIA_MIMETYPE_AUDIO_AMR_NB,
+                            FourCC2MIME(chunk_type))) {
+                // AMR NB audio is always mono, 8kHz
+                num_channels = 1;
+                sample_rate = 8000;
+            } else if (!strcasecmp(MEDIA_MIMETYPE_AUDIO_AMR_WB,
+                               FourCC2MIME(chunk_type))) {
+                // AMR WB audio is always mono, 16kHz
+                num_channels = 1;
+                sample_rate = 16000;
+            }
+
+            LOGV("*** coding='%s' %d channels, size %d, rate %d\n",
+                   chunk, num_channels, sample_size, sample_rate);
+
+            mLastTrack->meta->setCString(kKeyMIMEType, FourCC2MIME(chunk_type));
+            mLastTrack->meta->setInt32(kKeyChannelCount, num_channels);
+            mLastTrack->meta->setInt32(kKeySampleRate, sample_rate);
+
+            // The following section of code is like a parser that
+            // replaces the complete processing of the atoms mp4a, samr,
+            // and sawb.
+            // For each case, ideally there should be different parsers,
+            // but all should yield to the position of the esds atom.
+            // A search for a string is implemented (something like
+            // strstr but for chains that can have '\0' chars in the
+            // stream)
+            // In fact the code below is a modification of strstr
+
+
+            //s will store the position of the esds atom
+            uint8_t * s = (uint8_t *)buffer;
+            {
+                char c, sc;
+                // This is a modification of strstr; since
+                // '\0' is allowed, the stop logic will work
+                // by knowing the size of the array (instead of looking
+                // for '/0')
+
+                unsigned int count = 0;
+                // This is the tag that needs to be found.
+
+                const char * find = "esds";
+                c = *find++;
+                do {
+                    do {
+                        sc = *s++;
+                        count++;
+                    } while (sc != c && count < POS_ESDS_CANT_BE_FOUND(chunk_size));
+                } while ((memcmp(s, find, 3)) && count < POS_ESDS_CANT_BE_FOUND(chunk_size));
+                s--;
+            }
+
+            // The stop offset indicates the place where the current
+            // atom should end.
+
+            off_t stop_offset = *offset + chunk_size;
+            // Check if the parsing succeeded or not. If it didn't,
+            // there is still chance to properly play the file so no
+            // error will be reported, yet.
+
+            if (s==buffer + POS_ESDS_CANT_BE_FOUND(chunk_size)
+                || !(s-buffer)){
+                LOGD("esds not found continue parsing next atoms\n");
+                *offset = stop_offset;
+                free(buffer);
+                break;
+            }
+
+            // esds atom was found. Set the offset to the place where
+            // the atom was found, and rewind 4 bytes in order to seek
+            // from the place the atom's size is found.
+
+            *offset = data_offset + (s - buffer) - 4;
+
+            // Information found or not found, there is no need for
+            // the buffer anymore.
+
+            free(buffer);
+
+            // Parse esds atom
+
+            while (*offset < stop_offset) {
+                status_t err = parseChunk(offset, depth + 1);
+                if (err != OK) {
+                    // If the esds atom couldn't be parsed, then try to
+                    // continue parsing the other atoms and use the
+                    // default values.
+
+                    LOGD("Malformed\n");
+                    LOGD("Error while parsing audio metadata, should use default settings\n");
+                }
+            }
+
+            // This error will not be forgiven since this indicates
+            // the esds parser jumped above the size of the atom and
+            // attempted to read more information than what was
+            // contained in esds. (Case when the parser reads all the
+            // info and expects to find more, but it can't)
+            // However, if the offset is smaller, then the esds parser
+            // wasn't able to complete its parsing, this could be due
+            // to the fact it couldn't recognize a pattern in the esds
+            // atom; This indicates that some information could have
+            // been extracted from the esds, but not all and this parser
+            // will attempt to continue launching the application with
+            // the collected information (which may not be complete).
+
+            if (*offset > stop_offset) {
+                return ERROR_MALFORMED;
+            }
+
+            break;
+        }
+#else
         {
             uint8_t buffer[8 + 20];
             if (chunk_data_size < (ssize_t)sizeof(buffer)) {
@@ -746,9 +1015,12 @@ status_t MPEG4Extractor::parseChunk(off_t *offset, int depth) {
             }
             break;
         }
-
+#endif
         case FOURCC('m', 'p', '4', 'v'):
         case FOURCC('s', '2', '6', '3'):
+#ifdef OMAP_ENHANCEMENT
+        case FOURCC('H', '2', '6', '3'):
+#endif
         case FOURCC('a', 'v', 'c', '1'):
         {
             mHasVideo = true;
@@ -847,6 +1119,21 @@ status_t MPEG4Extractor::parseChunk(off_t *offset, int depth) {
             break;
         }
 
+#ifdef OMAP_ENHANCEMENT
+        case FOURCC('c', 't', 't', 's'):
+        {
+            status_t err =
+                mLastTrack->sampleTable->setTimeToSampleParamsCtts(
+                        data_offset, chunk_data_size);
+
+            if (err != OK) {
+                return err;
+            }
+
+            *offset += chunk_size;
+            break;
+        }
+#endif
         case FOURCC('s', 't', 't', 's'):
         {
             status_t err =
@@ -910,6 +1197,11 @@ status_t MPEG4Extractor::parseChunk(off_t *offset, int depth) {
                         &buffer[4], chunk_data_size - 4);
 
                 if (err != OK) {
+#ifdef OMAP_ENHANCEMENT
+                    LOGD("Error retrieving audio metadata, attempt to "
+                    "continue by skipping the atom\n");
+                    *offset += chunk_size;
+#endif
                     return err;
                 }
             }
@@ -1020,9 +1312,29 @@ status_t MPEG4Extractor::parseChunk(off_t *offset, int depth) {
             break;
         }
 
+#ifdef OMAP_ENHANCEMENT
+        case FOURCC('d', 'a', 'm', 'r'):
+        {
+             // validate chunk size of damr ATOM
+             if((chunk_data_size > 9)||(chunk_data_size < 0)){
+                 LOGV(" Chunk data size is INVALID ");
+                 return ERROR_MALFORMED;
+             }
+
+             *offset += chunk_size;
+             break;
+        }
+#endif
+
         default:
         {
+#ifdef OMAP_ENHANCEMENT
+            // Skip this unknown atom
+
+            *offset = originalOffset + chunk_size;
+#else
             *offset += chunk_size;
+#endif
             break;
         }
     }
@@ -1417,6 +1729,9 @@ MPEG4Source::MPEG4Source(
       mCurrentSampleIndex(0),
       mIsAVC(false),
       mNALLengthSize(0),
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+      SEINALLength(0),
+#endif
       mStarted(false),
       mGroup(NULL),
       mBuffer(NULL),
@@ -1449,6 +1764,88 @@ MPEG4Source::~MPEG4Source() {
         stop();
     }
 }
+
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+void MPEG4Source::parseSEIMessages(S3D_params &mS3Dparams) {
+    status_t stats=0;
+
+    if (mIsAVC) {
+        int32_t max_size;
+        CHECK(mFormat->findInt32(kKeyMaxInputSize, &max_size));
+
+        int nalType, nalRefIdc;
+        status_t res;
+        size_t srcOffset = 0, size;
+
+        MediaBuffer *out = NULL;
+        uint8_t *myData;
+
+        status_t err = this->start();
+        if (err != OK)
+            goto EXIT;
+
+        err = read(&out);
+        if (err != OK)
+            goto EXIT;
+
+        myData = (uint8_t *)out->data();
+        // Getting the size read
+        size = out->size();
+        while (srcOffset < (size-4)) {
+            if((myData[srcOffset] == 0) &&
+                (myData[srcOffset+1] == 0) &&
+                (myData[srcOffset+2] == 0) &&
+                (myData[srcOffset+3] == 1))
+            {
+                srcOffset +=mNALLengthSize;
+                res = AVCGetNALType(&myData[srcOffset], (size-(srcOffset +mNALLengthSize)),&nalType, &nalRefIdc);
+                if (res)
+                {
+                    LOGE("FAILED Cannot determine nal type");
+                    goto EXIT;
+                }
+
+                switch (nalType)
+                {
+                    case AVC_NALTYPE_SEI:
+                    {
+                        LOGV("Calling DecodeSEI() \n");
+                        res = sei_rbsp(&myData[srcOffset], SEINALLength, mS3Dparams);//(size-(srcOffset +mNALLengthSize))
+                        if(res)
+                        {
+                            LOGE("FAILED parsing SEI messages \n");
+                            goto EXIT;
+                        }
+                        break;
+                    }
+                    default:
+                    {
+                        LOGV("Default value for NALType %d \n", nalType);
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                srcOffset++;
+                if (srcOffset + mNALLengthSize>= size)
+                {
+                    LOGV("No more NAL Unit \n");
+                    goto EXIT;
+                }
+            }
+        }
+
+        EXIT:
+        if(out != NULL)
+        {
+            out->release();
+            out = NULL;myData=NULL;
+        }
+       this->stop();
+    }
+}
+#endif
 
 status_t MPEG4Source::start(MetaData *params) {
     Mutex::Autolock autoLock(mLock);
@@ -1530,7 +1927,9 @@ status_t MPEG4Source::read(
 
     CHECK(mStarted);
 
+#if !defined(TARGET_OMAP4)
     *out = NULL;
+#endif
 
     int64_t targetSampleTimeUs = -1;
 
@@ -1618,7 +2017,11 @@ status_t MPEG4Source::read(
     uint32_t dts;
     bool isSyncSample;
     bool newBuffer = false;
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    if (mBuffer == NULL || (*out && !mWantsNALFragments)) {
+#else
     if (mBuffer == NULL) {
+#endif
         newBuffer = true;
 
         status_t err =
@@ -1629,7 +2032,15 @@ status_t MPEG4Source::read(
             return err;
         }
 
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+        if (NULL == *out || mWantsNALFragments) {
+            err = mGroup->acquire_buffer(&mBuffer);
+        } else {
+            mBuffer = *out;
+        }
+#else
         err = mGroup->acquire_buffer(&mBuffer);
+#endif
 
         if (err != OK) {
             CHECK(mBuffer == NULL);
@@ -1712,7 +2123,53 @@ status_t MPEG4Source::read(
     } else {
         // Whole NAL units are returned but each fragment is prefixed by
         // the start code (0x00 00 00 01).
+#ifdef OMAP_ENHANCEMENT
+        uint8_t *dstData = (uint8_t *)mBuffer->data();
+        size_t srcOffset = 0;
+        size_t dstOffset = 0;
 
+        while (srcOffset < size) {
+            CHECK(srcOffset + mNALLengthSize <= size);
+            ssize_t num_bytes_read = mDataSource->readAt(offset+srcOffset, mSrcBuffer, mNALLengthSize);
+            if (num_bytes_read < (ssize_t)mNALLengthSize) {
+                mBuffer->release();
+                mBuffer = NULL;
+                return ERROR_IO;
+            }
+            size_t nalLength = parseNALSize(&mSrcBuffer[0]);
+            srcOffset += mNALLengthSize;
+            if (srcOffset + nalLength > size) {
+                mBuffer->release();
+                mBuffer = NULL;
+                return ERROR_MALFORMED;
+            }
+
+            if (nalLength == 0) {
+                continue;
+            }
+
+            CHECK(dstOffset + 4 <= mBuffer->size());
+
+            dstData[dstOffset++] = 0;
+            dstData[dstOffset++] = 0;
+            dstData[dstOffset++] = 0;
+            dstData[dstOffset++] = 1;
+            num_bytes_read = mDataSource->readAt(offset+srcOffset, &dstData[dstOffset], nalLength);
+            if (num_bytes_read < (ssize_t)nalLength) {
+                 mBuffer->release();
+                 mBuffer = NULL;
+                 return ERROR_IO;
+            }
+#if defined(TARGET_OMAP4)
+            // Getting NAL length for SEI messages Gilles
+            if(dstData[dstOffset] == AVC_NALTYPE_SEI)
+                SEINALLength = nalLength;
+#endif
+            srcOffset += nalLength;
+            dstOffset += nalLength;
+        }
+        CHECK_EQ(srcOffset, size);
+#else
         ssize_t num_bytes_read =
             mDataSource->readAt(offset, mSrcBuffer, size);
 
@@ -1754,10 +2211,16 @@ status_t MPEG4Source::read(
             dstOffset += nalLength;
         }
         CHECK_EQ(srcOffset, size);
+#endif
 
         CHECK(mBuffer != NULL);
         mBuffer->set_range(0, dstOffset);
         mBuffer->meta_data()->clear();
+#ifdef OMAP_ENHANCEMENT
+        if(mSampleTable->mTimeToSampleCtts)
+            dts = dts + mSampleTable->mTimeToSampleCtts[mCurrentSampleIndex];
+#endif
+
         mBuffer->meta_data()->setInt64(
                 kKeyTime, ((int64_t)dts * 1000000) / mTimescale);
 
@@ -1866,7 +2329,206 @@ static bool BetterSniffMPEG4(
 
     return true;
 }
+#ifdef OMAP_ENHANCEMENT
 
+bool positionFileAtAtom (const sp<DataSource> &source, uint32_t &offsetToNextAtom, const char *patern, off_t fileSize, uint32_t &atomSize) {
+    /*Fail safe counter*/
+    uint32_t failSafe = 0;
+    /*Stores the return value from comparations*/
+    int memCompRetVal;
+    /*Stores the analyzed atom's name and size*/
+    struct {
+        union {
+            uint32_t size;
+            uint8_t sizeArray[4];
+        } atomSize;
+        uint8_t  atomName[4];
+    } atomNameAndSize;
+
+    /*Check parameters*/
+
+    /*Init Atom Size to null*/
+    atomNameAndSize.atomSize.size = 0;
+
+    do {
+        /*increment the fail safe counter*/
+        failSafe++;
+
+        /*Jump to the next atom and read its type*/
+
+        /*Compute offset where the atom is stored*/
+        offsetToNextAtom += atomNameAndSize.atomSize.size;
+
+        /*Check the size is within the file size. Currently this is limited to a file of 2GB*/
+        if (fileSize > 0 && offsetToNextAtom > (unsigned)fileSize) {
+            /*Bad offset*/
+            return false;
+        }
+
+
+        /*Read the cached info*/
+        if (source->readAt(offsetToNextAtom, &atomNameAndSize, sizeof(atomNameAndSize)) < (signed)sizeof(atomNameAndSize)) {
+            /*Couldnt read the atom's type and size*/
+            LOGD("Couldnt find next atom");
+            return false;
+        }
+
+        /*The size is in big endian, so it is necesary to convert the value so it can be used*/
+        /*Swap the framing bytes*/
+        atomNameAndSize.atomSize.sizeArray[0] ^= atomNameAndSize.atomSize.sizeArray[3];
+        atomNameAndSize.atomSize.sizeArray[3] ^= atomNameAndSize.atomSize.sizeArray[0];
+        atomNameAndSize.atomSize.sizeArray[0] ^= atomNameAndSize.atomSize.sizeArray[3];
+        /*Swap the middle bytes*/
+        atomNameAndSize.atomSize.sizeArray[1] ^= atomNameAndSize.atomSize.sizeArray[2];
+        atomNameAndSize.atomSize.sizeArray[2] ^= atomNameAndSize.atomSize.sizeArray[1];
+        atomNameAndSize.atomSize.sizeArray[1] ^= atomNameAndSize.atomSize.sizeArray[2];
+
+        LOGD("Atom found: %c%c%c%c with size = %x\n", atomNameAndSize.atomName[0], atomNameAndSize.atomName[1], atomNameAndSize.atomName[2], atomNameAndSize.atomName[3], atomNameAndSize.atomSize.size);
+    } while ((memCompRetVal = memcmp(atomNameAndSize.atomName, patern, 4))  && atomNameAndSize.atomSize.size && atomNameAndSize.atomSize.size > 8 && failSafe < 10);
+
+
+    /*Check if the atom was found or that the iterations ended due to an error*/
+    if (memCompRetVal) {
+        /*Didn't find it return with no success*/
+        return false;
+    }
+
+    /*If this point is reach the atom was found*/
+    atomSize = atomNameAndSize.atomSize.size;
+    return true;
+}
+
+bool SniffMPEG4(const sp<DataSource> &source, String8 *mimeType, float *confidence, sp<AMessage> *) {
+
+    /*Stores the ftyp type*/
+    uint8_t header[8];
+    /*Stores the return value from comparations*/
+    int memCompRetVal;
+
+    /*Read the header*/
+    if (source->readAt(4, header, sizeof(header)) < (signed)sizeof(header)) {
+        /*Couldnt read ftyp's atom's type*/
+        LOGD("Couldnt read ftyps atom type");
+        return false;
+    }
+
+    /*Look for known type headers*/
+    memCompRetVal = true;
+
+    for (int i = 0; i < NUMBER_OF_KNOWN_FILE_TYPES; i++) {
+        if (!(memCompRetVal = memcmp(header, knownFileTypes[i].type, knownFileTypes[i].size))) {
+            /*header has been found*/
+            break;
+        }
+    }
+
+    /*Exit if the pattern wasn't found*/
+    if (memCompRetVal) {
+        /*Couldn't find the pattern*/
+        return false;
+    }
+
+    /*header has been found set the confidence to .1*/
+    *confidence=0.1f;
+    *mimeType = MEDIA_MIMETYPE_CONTAINER_MPEG4;
+
+    /*See if the confidence can be increased
+     *since the header was found the result will be true in any case
+     *the only thing that would change is the confidence.*/
+
+    /*The file type matched one in the known list, look for the track indicating a video handler*/
+    {
+
+        /*Stores the file size this is a signed value compared to the unsigned value used to store the atom's sizes*/
+        off_t fileSize;
+        /*Stores the computed offset to the new atom*/
+        uint32_t offsetToSeek;
+        /*Stores the atom's size*/
+        uint32_t atomSize;
+        /*fail safe counter*/
+        uint8_t failCounter;
+        /*Handler type*/
+        uint8_t handler[4];
+        /*Location of the first track atom*/
+        uint32_t trakOffset;
+        /*Stores the atom's track size*/
+        uint32_t trakSize;
+
+        /*Initialize the file size variable*/
+        if (source->getSize(&fileSize)) {
+            /*couldn't get the file size nor increase confidence*/
+            return true;
+        }
+
+        /*Look for the moov atom from the begining of the file*/
+        offsetToSeek = 0;
+
+        if (!positionFileAtAtom(source, offsetToSeek, "moov", fileSize, atomSize)) {
+            /*Couldn't find moov atom, return true as header was found*/
+            return true;
+        }
+
+        /*Once the moov atom has been found inspect each of the trak atoms looking for the vide handler*/
+        failCounter = 0;
+        /*Skip the header of the moov atom*/
+        offsetToSeek += 8;
+
+        do {
+            failCounter++;
+
+            if (!positionFileAtAtom(source, offsetToSeek, "trak", fileSize, atomSize)) {
+                /*Couldn't find trak atom, return true as the header was found*/
+                return true;
+            }
+
+            /*Store the position of the track atom and its size for future references*/
+            trakOffset = offsetToSeek;
+            trakSize = atomSize;
+
+            /*Look for the mdia atom inside the trak atom*/
+            /*Skip the header of the atom*/
+            offsetToSeek += 8;
+
+            if (!positionFileAtAtom(source, offsetToSeek, "mdia", fileSize, atomSize)) {
+                /*Couldn't find mdia atom, return true as header was found*/
+                return true;
+            }
+
+            /*Look for the hdlr atom inside the mdia atom*/
+            /*Skip the header of the atom*/
+            offsetToSeek += 8;
+
+            if (!positionFileAtAtom(source, offsetToSeek, "hdlr", fileSize, atomSize)) {
+                /*Couldn't find hdlr atom, return true as header was found*/
+                return true;
+            }
+
+            /*Read the handler*/
+            /*Adjust the offset to skip the null information*/
+            offsetToSeek += 0x10;
+
+            if (source->readAt(offsetToSeek, &handler, sizeof(handler)) < sizeof(handler)) {
+                /*Couldnt read the atom's type and size*/
+                LOGD("Couldnt read the handler");
+                return true;
+            }
+
+            /*Adjust the offset to look for the next trak atom*/
+            offsetToSeek = trakOffset + trakSize;
+        } while (memCompRetVal = memcmp(handler, "vide", 4) && failCounter < 10);
+
+        /*If the vide handler wasn't found exit*/
+        if (memCompRetVal) {
+            return true;
+        }
+
+        /*Vide handler was found!!!*/
+        *confidence = 0.4;
+
+        return true;
+    }
+}
+#else
 bool SniffMPEG4(
         const sp<DataSource> &source, String8 *mimeType, float *confidence,
         sp<AMessage> *) {
@@ -1881,6 +2543,6 @@ bool SniffMPEG4(
 
     return false;
 }
-
+#endif
 }  // namespace android
 
