@@ -8,6 +8,10 @@ LOCAL_SRC_FILES:=                     \
 LOCAL_C_INCLUDES := \
         $(TOP)/frameworks/base/include/media/stagefright/openmax
 
+ifeq ($(TARGET_BOARD_PLATFORM),omap4)
+LOCAL_C_INCLUDES += hardware/ti/omx/ducati/domx/system/omx_core/inc
+endif
+
 LOCAL_SHARED_LIBRARIES :=       \
         libbinder               \
         libmedia                \
@@ -16,6 +20,10 @@ LOCAL_SHARED_LIBRARIES :=       \
         libcutils				\
         libsurfaceflinger_client\
         libcamera_client
+
+ifeq ($(TARGET_BOARD_PLATFORM),omap4)
+LOCAL_CFLAGS += -DTARGET_OMAP4 -DARM_4K_PAGE_SIZE=4096
+endif
 
 LOCAL_MODULE:= libstagefright_color_conversion
 

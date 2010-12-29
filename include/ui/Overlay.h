@@ -88,6 +88,9 @@ public:
 
     status_t setCrop(uint32_t x, uint32_t y, uint32_t w, uint32_t h) ;
 
+#ifdef OMAP_ENHANCEMENT
+    status_t set_s3d_params(int32_t s3d_mode, uint32_t s3d_fmt, uint32_t s3d_order, uint32_t s3d_subsampling);
+#endif
     status_t getCrop(uint32_t* x, uint32_t* y, uint32_t* w, uint32_t* h) ;
 
     /* set the buffer attributes */

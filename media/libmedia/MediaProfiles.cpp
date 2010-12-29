@@ -52,6 +52,10 @@ const MediaProfiles::NameToTagMap MediaProfiles::sFileFormatMap[] = {
 
 const MediaProfiles::NameToTagMap MediaProfiles::sVideoDecoderNameMap[] = {
     {"wmv", VIDEO_DECODER_WMV}
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    , {"vp6", VIDEO_DECODER_VP6}
+    , {"vp7", VIDEO_DECODER_VP7}
+#endif
 };
 
 const MediaProfiles::NameToTagMap MediaProfiles::sAudioDecoderNameMap[] = {

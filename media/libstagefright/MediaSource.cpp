@@ -37,8 +37,21 @@ void MediaSource::ReadOptions::reset() {
 
 void MediaSource::ReadOptions::setSeekTo(int64_t time_us, SeekMode mode) {
     mOptions |= kSeekTo_Option;
+#ifdef OMAP_ENHANCEMENT
+    //Incase the app layer tries to seek to negative offset,
+    //resetting the value to Zero.
+    if (time_us < 0)
+    {
+        time_us = 0;
+    }
+#endif
     mSeekTimeUs = time_us;
     mSeekMode = mode;
+}
+
+extern "C" void _ZN7android11MediaSource11ReadOptions9setSeekToExNS1_8SeekModeE(int64_t time_us, void *mode);
+extern "C" void _ZN7android11MediaSource11ReadOptions9setSeekToEx(int64_t time_us) {
+    _ZN7android11MediaSource11ReadOptions9setSeekToExNS1_8SeekModeE(time_us, NULL);
 }
 
 void MediaSource::ReadOptions::clearSeekTo() {
