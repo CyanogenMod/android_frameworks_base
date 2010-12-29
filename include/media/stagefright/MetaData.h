@@ -79,6 +79,11 @@ enum {
     // video profile and level
     kKeyVideoProfile      = 'vprf',  // int32_t
     kKeyVideoLevel        = 'vlev',  // int32_t
+#ifdef OMAP_ENHANCEMENT
+    kKeyNumRefFrames      = 'vnrf',  // int32_t
+    kKeyVideoFPS          = 'vfps',  // int32_t
+    kKeyVideoInterlaced   = 'vint',  // int32_t (bool)
+#endif
 
     // Set this key to enable authoring files in 64-bit offset
     kKey64BitFileOffset   = 'fobt',  // int32_t (bool)
