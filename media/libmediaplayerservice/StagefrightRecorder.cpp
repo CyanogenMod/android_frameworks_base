@@ -678,19 +678,6 @@ status_t StagefrightRecorder::start() {
 }
 
 sp<MediaSource> StagefrightRecorder::createAudioSource() {
-    sp<AudioSource> audioSource =
-        new AudioSource(
-                mAudioSource,
-                mSampleRate,
-                mAudioChannels);
-
-    status_t err = audioSource->initCheck();
-
-    if (err != OK) {
-        LOGE("audio source is not initialized");
-        return NULL;
-    }
-
     sp<MetaData> encMeta = new MetaData;
     const char *mime;
     switch (mAudioEncoder) {
@@ -710,6 +697,22 @@ sp<MediaSource> StagefrightRecorder::createAudioSource() {
     }
     encMeta->setCString(kKeyMIMEType, mime);
 
+    mSampleRate = mEncoderProfiles->getAudioEncoderParamByName(
+                   "enc.aud.hz.min", mAudioEncoder);
+
+    sp<AudioSource> audioSource =
+        new AudioSource(
+                mAudioSource,
+                mSampleRate,
+                mAudioChannels);
+
+    status_t err = audioSource->initCheck();
+
+    if (err != OK) {
+        LOGE("audio source is not initialized");
+        return NULL;
+    }
+
     int32_t maxInputSize;
     CHECK(audioSource->getFormat()->findInt32(
                 kKeyMaxInputSize, &maxInputSize));
@@ -725,9 +728,24 @@ sp<MediaSource> StagefrightRecorder::createAudioSource() {
     OMXClient client;
     CHECK_EQ(client.connect(), OK);
 
-    sp<MediaSource> audioEncoder =
+    sp<MediaSource> audioEncoder;
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP3)
+#define MAX_RESOLUTION 414720
+    if ((mAudioEncoder == AUDIO_ENCODER_AAC) &&
+        (mVideoWidth*mVideoHeight > MAX_RESOLUTION)) {
+        audioEncoder =
+            OMXCodec::Create(client.interface(), encMeta,
+                             true /* createEncoder */, audioSource,
+                             "OMX.ITTIAM.AAC.encode");
+
+    } else {
+#endif
+    audioEncoder =
         OMXCodec::Create(client.interface(), encMeta,
                          true /* createEncoder */, audioSource);
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP3)
+    }
+#endif
     mAudioSourceNode = audioSource;
 
     return audioEncoder;
@@ -901,12 +919,63 @@ void StagefrightRecorder::clipVideoFrameRate() {
     }
 }
 
+/* Needs to be check max-bitrate in here to make sure that encoding with right parameters */
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP3)
+
+#define ARRAY_SIZE(array) (sizeof array / sizeof array[0])
+
+typedef struct {
+    size_t level;
+    size_t maxBitRate;
+    size_t maxFrameSizeinMbs;
+    size_t maxMbsPerSecond;
+} omap3_dsp_h264_supported;
+
+/* Below table synced with inside codec's */
+const omap3_dsp_h264_supported _h264_supported[] = {
+                            {10, 64000, 99, 1485},
+                            {11, 192000, 396, 3000},
+                            {12, 384000, 396, 6000},
+                            {20, 2000000, 396, 11880},
+                            {21, 4000000, 792, 19800},
+                            {22, 4000000, 1620, 20250},
+                            {30, 10000000, 1620, 40500}};
+
+static int _get_maxrate_in_mbs(int width, int height, int fps) {
+    int mps = (width / 16) * (height / 16) * fps; /* Max macroblocks per second */
+    int i;
+    int maxrate = -1;
+
+    for (i = 0; i < ARRAY_SIZE(_h264_supported); i++) {
+        if (mps < _h264_supported[i].maxMbsPerSecond) {
+            maxrate = _h264_supported[i].maxBitRate;
+            break;
+        }
+    }
+
+    // not found, set max.
+    if (maxrate == -1) maxrate = _h264_supported[ARRAY_SIZE(_h264_supported)-1].maxBitRate;
+
+    return maxrate;
+}
+#endif /* defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP3) */
+
 void StagefrightRecorder::clipVideoBitRate() {
     LOGV("clipVideoBitRate: encoder %d", mVideoEncoder);
-    int minBitRate = mEncoderProfiles->getVideoEncoderParamByName(
-                        "enc.vid.bps.min", mVideoEncoder);
-    int maxBitRate = mEncoderProfiles->getVideoEncoderParamByName(
-                        "enc.vid.bps.max", mVideoEncoder);
+    int minBitRate;
+    int maxBitRate;
+
+    minBitRate = mEncoderProfiles->getVideoEncoderParamByName(
+        "enc.vid.bps.min", mVideoEncoder);
+
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP3)
+    if (mVideoEncoder == 2) /* H.264 */
+        maxBitRate = _get_maxrate_in_mbs(mVideoWidth, mVideoHeight, mFrameRate);
+    else
+#endif
+        maxBitRate = mEncoderProfiles->getVideoEncoderParamByName(
+            "enc.vid.bps.max", mVideoEncoder);
+
     if (mVideoBitRate < minBitRate) {
         LOGW("Intended video encoding bit rate (%d bps) is too small"
              " and will be set to (%d bps)", mVideoBitRate, minBitRate);
@@ -1045,6 +1114,18 @@ status_t StagefrightRecorder::setupVideoEncoder(sp<MediaSource> *source) {
     CHECK(meta->findInt32(kKeyStride, &stride));
     CHECK(meta->findInt32(kKeySliceHeight, &sliceHeight));
     CHECK(meta->findInt32(kKeyColorFormat, &colorFormat));
+#if defined (OMAP_ENHANCEMENT) && defined (TARGET_OMAP4)
+    int32_t paddedWidth, paddedHeight, seiEncodingType, mS3DCamera;
+    const char *frameLayoutStr;
+    CHECK(meta->findInt32(kKeyPaddedWidth, &paddedWidth));
+    CHECK(meta->findInt32(kKeyPaddedHeight, &paddedHeight));
+    CHECK(meta->findInt32(kKeyS3dSupported, &mS3DCamera));
+    if(mS3DCamera)
+    {
+        CHECK(meta->findInt32(kKeySEIEncodingType, &seiEncodingType));
+        CHECK(meta->findCString(kKeyFrameLayout, &frameLayoutStr));
+    }
+#endif
 
     enc_meta->setInt32(kKeyWidth, width);
     enc_meta->setInt32(kKeyHeight, height);
@@ -1052,6 +1133,17 @@ status_t StagefrightRecorder::setupVideoEncoder(sp<MediaSource> *source) {
     enc_meta->setInt32(kKeyStride, stride);
     enc_meta->setInt32(kKeySliceHeight, sliceHeight);
     enc_meta->setInt32(kKeyColorFormat, colorFormat);
+#if defined (OMAP_ENHANCEMENT) && defined (TARGET_OMAP4)
+    enc_meta->setInt32(kKeyPaddedWidth, paddedWidth);
+    enc_meta->setInt32(kKeyPaddedHeight, paddedHeight);
+    enc_meta->setInt32(kKeyS3dSupported, mS3DCamera);
+    if(mS3DCamera)
+    {
+        enc_meta->setInt32(kKeySEIEncodingType, seiEncodingType);
+        enc_meta->setCString(kKeyFrameLayout, frameLayoutStr);
+    }
+#endif
+
     if (mVideoTimeScale > 0) {
         enc_meta->setInt32(kKeyTimeScale, mVideoTimeScale);
     }
@@ -1103,12 +1195,14 @@ status_t StagefrightRecorder::startMPEG4Recording() {
     status_t err = OK;
     sp<MediaWriter> writer = new MPEG4Writer(dup(mOutputFd));
 
+#if !defined(OMAP_ENHANCEMENT)
     // Add audio source first if it exists
     if (mAudioSource != AUDIO_SOURCE_LIST_END) {
         err = setupAudioEncoder(writer);
         if (err != OK) return err;
         totalBitRate += mAudioBitRate;
     }
+#endif
     if (mVideoSource == VIDEO_SOURCE_DEFAULT
             || mVideoSource == VIDEO_SOURCE_CAMERA) {
         sp<MediaSource> encoder;
@@ -1117,6 +1211,16 @@ status_t StagefrightRecorder::startMPEG4Recording() {
         writer->addSource(encoder);
         totalBitRate += mVideoBitRate;
     }
+#if defined(OMAP_ENHANCEMENT)
+    // Starting Audio after video to fix AV-Sync issue. The AV-Sync issue here refers to lip-sync not achieved in recorded video.
+    // This is due to the audio track thread blocking the video thread for approx half a second which results in audio recorded
+    // half a second earlier than video. This when played back results in audio/video out of sync.
+    if (mAudioSource != AUDIO_SOURCE_LIST_END) {
+        err = setupAudioEncoder(writer);
+        if (err != OK) return err;
+        totalBitRate += mAudioBitRate;
+    }
+#endif
 
     if (mInterleaveDurationUs > 0) {
         reinterpret_cast<MPEG4Writer *>(writer.get())->

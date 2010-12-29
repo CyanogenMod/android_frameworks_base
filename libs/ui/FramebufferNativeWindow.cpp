@@ -63,7 +63,6 @@ private:
     ~NativeBuffer() { }; // this class cannot be overloaded
 };
 
-
 /*
  * This implements the (main) framebuffer management. This class is used
  * mostly by SurfaceFlinger, but also by command line GL application.
@@ -71,18 +70,22 @@ private:
  * In fact this is an implementation of ANativeWindow on top of
  * the framebuffer.
  * 
- * Currently it is pretty simple, it manages only two buffers (the front and 
- * back buffer).
- * 
+ * This implementation is able to manage any number of buffers,
+ * defined by NUM_FRAME_BUFFERS (currently set to 2: front
+ * and back buffer)
+ *
  */
 
-FramebufferNativeWindow::FramebufferNativeWindow() 
+FramebufferNativeWindow::FramebufferNativeWindow()
     : BASE(), fbDev(0), grDev(0), mUpdateOnDemand(false)
 {
     hw_module_t const* module;
     if (hw_get_module(GRALLOC_HARDWARE_MODULE_ID, &module) == 0) {
         int stride;
         int err;
+#ifdef OMAP_ENHANCEMENT
+        int i;
+#endif
         err = framebuffer_open(module, &fbDev);
         LOGE_IF(err, "couldn't open framebuffer HAL (%s)", strerror(-err));
         
@@ -96,9 +99,36 @@ FramebufferNativeWindow::FramebufferNativeWindow()
         mUpdateOnDemand = (fbDev->setUpdateRect != 0);
         
         // initialize the buffer FIFO
+#ifdef OMAP_ENHANCEMENT
+        mNumBuffers = NUM_FRAME_BUFFERS;
+        mNumFreeBuffers = NUM_FRAME_BUFFERS;
+#else
         mNumBuffers = 2;
         mNumFreeBuffers = 2;
+#endif
         mBufferHead = mNumBuffers-1;
+#ifdef OMAP_ENHANCEMENT
+        for(i = 0; i < NUM_FRAME_BUFFERS; i++){
+            buffers[i] = new NativeBuffer(
+                    fbDev->width, fbDev->height, fbDev->format, GRALLOC_USAGE_HW_FB);
+        }
+
+        for(i = 0; i < NUM_FRAME_BUFFERS; i++){
+            err = grDev->alloc(grDev,
+                    fbDev->width, fbDev->height, fbDev->format,
+                    GRALLOC_USAGE_HW_FB, &buffers[i]->handle, &buffers[i]->stride);
+
+            LOGE_IF(err, "fb buffer %d allocation failed w=%d, h=%d, err=%s",
+                    i, fbDev->width, fbDev->height, strerror(-err));
+
+            if(err){
+                mNumBuffers = i;
+                mNumFreeBuffers = i;
+                mBufferHead = mNumBuffers-1;
+                break;
+            }
+       }
+#else
         buffers[0] = new NativeBuffer(
                 fbDev->width, fbDev->height, fbDev->format, GRALLOC_USAGE_HW_FB);
         buffers[1] = new NativeBuffer(
@@ -117,7 +147,7 @@ FramebufferNativeWindow::FramebufferNativeWindow()
 
         LOGE_IF(err, "fb buffer 1 allocation failed w=%d, h=%d, err=%s",
                 fbDev->width, fbDev->height, strerror(-err));
-
+#endif
         const_cast<uint32_t&>(ANativeWindow::flags) = fbDev->flags; 
         const_cast<float&>(ANativeWindow::xdpi) = fbDev->xdpi;
         const_cast<float&>(ANativeWindow::ydpi) = fbDev->ydpi;
@@ -136,10 +166,99 @@ FramebufferNativeWindow::FramebufferNativeWindow()
     ANativeWindow::cancelBuffer = NULL;
     ANativeWindow::query = query;
     ANativeWindow::perform = perform;
+    ANativeWindow::cancelBuffer = 0;
+#ifdef OMAP_ENHANCEMENT
+    LOGE("%d buffers flip-chain implementation enabled\n", mNumBuffers);
+#endif
 }
+
+#ifdef OMAP_ENHANCEMENT
+FramebufferNativeWindow::FramebufferNativeWindow(uint32_t idx)
+    : BASE(), fbDev(0), grDev(0), mUpdateOnDemand(false)
+{
+    hw_module_t const* module;
+
+    if (hw_get_module(GRALLOC_HARDWARE_MODULE_ID, &module) == 0) {
+        int stride;
+        int err;
+        int i;
+        const size_t SIZE = 16;
+        char fbname[SIZE];
+        snprintf(fbname, SIZE, "fb%u", idx);
+
+        err = framebuffer_open_by_name(module, &fbDev, fbname);
+        LOGE_IF(err, "couldn't open framebuffer HAL (%s)", strerror(-err));
+
+        err = gralloc_open(module, &grDev);
+        LOGE_IF(err, "couldn't open gralloc HAL (%s)", strerror(-err));
+
+        // bail out if we can't initialize the modules
+        if (!fbDev || !grDev)
+            return;
+
+        mUpdateOnDemand = (fbDev->setUpdateRect != 0);
+
+        // initialize the buffer FIFO
+        mNumBuffers = NUM_FRAME_BUFFERS;
+        mNumFreeBuffers = NUM_FRAME_BUFFERS;
+        mBufferHead = mNumBuffers-1;
+
+        for(i = 0; i < NUM_FRAME_BUFFERS; i++){
+            buffers[i] = new NativeBuffer(
+                    fbDev->width, fbDev->height, fbDev->format, GRALLOC_USAGE_HW_FB << idx);
+        }
+
+        for(i = 0; i < NUM_FRAME_BUFFERS; i++){
+            err = grDev->alloc(grDev,
+                    fbDev->width, fbDev->height, fbDev->format,
+                    GRALLOC_USAGE_HW_FB << idx, &buffers[i]->handle, &buffers[i]->stride);
+
+            LOGE_IF(err, "fb buffer %d allocation failed w=%d, h=%d, err=%s",
+                    i, fbDev->width, fbDev->height, strerror(-err));
+
+            if(err){
+                mNumBuffers = i;
+                mNumFreeBuffers = i;
+                mBufferHead = mNumBuffers-1;
+                break;
+            }
+       }
+
+        const_cast<uint32_t&>(ANativeWindow::flags) = fbDev->flags;
+        const_cast<float&>(ANativeWindow::xdpi) = fbDev->xdpi;
+        const_cast<float&>(ANativeWindow::ydpi) = fbDev->ydpi;
+        const_cast<int&>(ANativeWindow::minSwapInterval) =
+            fbDev->minSwapInterval;
+        const_cast<int&>(ANativeWindow::maxSwapInterval) =
+            fbDev->maxSwapInterval;
+    } else {
+        LOGE("Couldn't get gralloc module");
+    }
+
+    ANativeWindow::setSwapInterval = setSwapInterval;
+    ANativeWindow::dequeueBuffer = dequeueBuffer;
+    ANativeWindow::lockBuffer = lockBuffer;
+    ANativeWindow::queueBuffer = queueBuffer;
+    ANativeWindow::query = query;
+    ANativeWindow::perform = perform;
+
+    LOGE("%d buffers flip-chain implementation enabled\n", mNumBuffers);
+}
+#endif
 
 FramebufferNativeWindow::~FramebufferNativeWindow() 
 {
+#ifdef OMAP_ENHANCEMENT
+    int i;
+
+   if (grDev){
+        for (i = 0; i < mNumBuffers; i++){
+            if (buffers[i] != NULL)
+                grDev->free(grDev, buffers[i]->handle);
+        }
+        gralloc_close(grDev);
+    }
+#else
     if (grDev) {
         if (buffers[0] != NULL)
             grDev->free(grDev, buffers[0]->handle);
@@ -147,7 +266,7 @@ FramebufferNativeWindow::~FramebufferNativeWindow()
             grDev->free(grDev, buffers[1]->handle);
         gralloc_close(grDev);
     }
-
+#endif
     if (fbDev) {
         framebuffer_close(fbDev);
     }
@@ -294,6 +413,20 @@ int FramebufferNativeWindow::perform(ANativeWindow* window,
 // ----------------------------------------------------------------------------
 
 using namespace android;
+
+#ifdef OMAP_ENHANCEMENT
+EGLNativeWindowType android_createDisplaySurfaceOnFB(uint32_t fb_idx)
+{
+    FramebufferNativeWindow* w;
+    w = new FramebufferNativeWindow(fb_idx);
+    if (w->getDevice() == NULL) {
+        // get a ref so it can be destroyed when we exit this block
+        sp<FramebufferNativeWindow> ref(w);
+        return NULL;
+    }
+    return (EGLNativeWindowType)w;
+}
+#endif
 
 EGLNativeWindowType android_createDisplaySurface(void)
 {

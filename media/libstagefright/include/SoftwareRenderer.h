@@ -42,6 +42,11 @@ public:
 
     virtual void render(
             const void *data, size_t size, void *platformPrivate);
+#ifdef OMAP_ENHANCEMENT
+    virtual Vector< sp<IMemory> > getBuffers();
+    virtual void resizeRenderer(void* resize_params) {}
+    virtual void requestRendererClone(bool enable) {}
+#endif
 
 private:
     status_t mInitCheck;
