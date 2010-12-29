@@ -1155,9 +1155,14 @@ void CameraService::Client::dataCallback(int32_t msgType,
             break;
     }
 }
-
+#ifdef OMAP_ENHANCEMENT
+void CameraService::Client::dataCallbackTimestamp(nsecs_t timestamp, int32_t msgType,
+        const sp<IMemory>& dataPtr, void* user, uint32_t offset, uint32_t stride)
+#else
 void CameraService::Client::dataCallbackTimestamp(nsecs_t timestamp,
-        int32_t msgType, const sp<IMemory>& dataPtr, void* user) {
+        int32_t msgType, const sp<IMemory>& dataPtr, void* user)
+#endif
+{
     LOG2("dataCallbackTimestamp(%d)", msgType);
 
     sp<Client> client = getClientFromCookie(user);
@@ -1169,8 +1174,11 @@ void CameraService::Client::dataCallbackTimestamp(nsecs_t timestamp,
         client->handleGenericNotify(CAMERA_MSG_ERROR, UNKNOWN_ERROR, 0);
         return;
     }
-
+#ifdef OMAP_ENHANCEMENT
+    client->handleGenericDataTimestamp(timestamp, msgType, dataPtr, offset, stride);
+#else
     client->handleGenericDataTimestamp(timestamp, msgType, dataPtr);
+#endif
 }
 
 // snapshot taken callback
@@ -1347,13 +1355,22 @@ void CameraService::Client::handleGenericData(int32_t msgType,
         c->dataCallback(msgType, dataPtr);
     }
 }
-
+#ifdef OMAP_ENHANCEMENT
 void CameraService::Client::handleGenericDataTimestamp(nsecs_t timestamp,
-    int32_t msgType, const sp<IMemory>& dataPtr) {
+    int32_t msgType, const sp<IMemory>& dataPtr, uint32_t offset, uint32_t stride)
+#else
+void CameraService::Client::handleGenericDataTimestamp(nsecs_t timestamp,
+    int32_t msgType, const sp<IMemory>& dataPtr)
+#endif
+{
     sp<ICameraClient> c = mCameraClient;
     mLock.unlock();
     if (c != 0) {
+#ifdef OMAP_ENHANCEMENT
+        c->dataCallbackTimestamp(timestamp, msgType, dataPtr, offset, stride);
+#else
         c->dataCallbackTimestamp(timestamp, msgType, dataPtr);
+#endif
     }
 }
 

@@ -49,6 +49,12 @@ struct OMXNodeInstance {
     status_t getConfig(OMX_INDEXTYPE index, void *params, size_t size);
     status_t setConfig(OMX_INDEXTYPE index, const void *params, size_t size);
 
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    status_t useBuffer(
+            OMX_U32 portIndex, const sp<IMemory> &params,
+            OMX::buffer_id *buffer, size_t size);
+#endif
+
     status_t useBuffer(
             OMX_U32 portIndex, const sp<IMemory> &params,
             OMX::buffer_id *buffer);
