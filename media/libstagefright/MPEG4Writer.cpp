@@ -1766,6 +1766,83 @@ status_t MPEG4Writer::Track::threadEntry() {
             mGotAllCodecSpecificData = true;
             continue;
         }
+#if defined(OMAP_ENHANCEMENT) && !defined(TARGET_OMAP4)
+        else if (mIsAvc && count < 3) {
+            size_t size = buffer->range_length();
+
+            switch (count) {
+                case 1:
+                {
+                    CHECK_EQ(mCodecSpecificData, NULL);
+                    mCodecSpecificData = malloc(size + 8);
+                    uint8_t *header = (uint8_t *)mCodecSpecificData;
+                    header[0] = 1;
+                    header[1] = 0x42;  // profile
+                    header[2] = 0x80;
+                    header[3] = 0x1e;  // level
+                    header[4] = 0xfc | 3;
+                    header[5] = 0xe0 | 1;
+                    header[6] = size >> 8;
+                    header[7] = size & 0xff;
+                    memcpy(&header[8],
+                            (const uint8_t *)buffer->data() + buffer->range_offset(),
+                            size);
+
+                    mCodecSpecificDataSize = size + 8;
+                    break;
+                }
+
+                case 2:
+                {
+                    size_t offset = mCodecSpecificDataSize;
+                    mCodecSpecificDataSize += size + 3;
+                    mCodecSpecificData = realloc(mCodecSpecificData, mCodecSpecificDataSize);
+                    uint8_t *header = (uint8_t *)mCodecSpecificData;
+                    header[offset] = 1;
+                    header[offset + 1] = size >> 8;
+                    header[offset + 2] = size & 0xff;
+                    memcpy(&header[offset + 3],
+                            (const uint8_t *)buffer->data() + buffer->range_offset(),
+                            size);
+                    break;
+                }
+            }
+
+            buffer->release();
+            buffer = NULL;
+
+            continue;
+
+        } else if (mCodecSpecificData == NULL && mIsMPEG4) {
+            const uint8_t *data =
+                (const uint8_t *)buffer->data() + buffer->range_offset();
+
+            const size_t size = buffer->range_length();
+
+            size_t offset = 0;
+            while (offset + 3 < size) {
+                if (data[offset] == 0x00 && data[offset + 1] == 0x00
+                    && data[offset + 2] == 0x01 && data[offset + 3] == 0xb6) {
+                    break;
+                }
+
+                ++offset;
+            }
+
+            // CHECK(offset + 3 < size);
+            if (offset + 3 >= size) {
+                // XXX assume the entire first chunk of data is the codec specific
+                // data.
+                offset = size;
+            }
+
+            mCodecSpecificDataSize = offset;
+            mCodecSpecificData = malloc(offset);
+            memcpy(mCodecSpecificData, data, offset);
+
+            buffer->set_range(buffer->range_offset() + offset, size - offset);
+        }
+#endif
 
         // Make a deep copy of the MediaBuffer and Metadata and release
         // the original as soon as we can

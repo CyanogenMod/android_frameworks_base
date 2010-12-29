@@ -1045,6 +1045,11 @@ status_t StagefrightRecorder::setupVideoEncoder(sp<MediaSource> *source) {
     CHECK(meta->findInt32(kKeyStride, &stride));
     CHECK(meta->findInt32(kKeySliceHeight, &sliceHeight));
     CHECK(meta->findInt32(kKeyColorFormat, &colorFormat));
+#if defined (OMAP_ENHANCEMENT) && defined (TARGET_OMAP4)
+    int32_t paddedWidth, paddedHeight;
+    CHECK(meta->findInt32(kKeyPaddedWidth, &paddedWidth));
+    CHECK(meta->findInt32(kKeyPaddedHeight, &paddedHeight));
+#endif
 
     enc_meta->setInt32(kKeyWidth, width);
     enc_meta->setInt32(kKeyHeight, height);
@@ -1052,6 +1057,11 @@ status_t StagefrightRecorder::setupVideoEncoder(sp<MediaSource> *source) {
     enc_meta->setInt32(kKeyStride, stride);
     enc_meta->setInt32(kKeySliceHeight, sliceHeight);
     enc_meta->setInt32(kKeyColorFormat, colorFormat);
+#if defined (OMAP_ENHANCEMENT) && defined (TARGET_OMAP4)
+    enc_meta->setInt32(kKeyPaddedWidth, paddedWidth);
+    enc_meta->setInt32(kKeyPaddedHeight, paddedHeight);
+#endif
+
     if (mVideoTimeScale > 0) {
         enc_meta->setInt32(kKeyTimeScale, mVideoTimeScale);
     }

@@ -19,11 +19,49 @@
 #define UTILS_H_
 
 #include <stdint.h>
+#ifdef OMAP_ENHANCEMENT
+#include <media/stagefright/openmax/OMX_Types.h>
+#include <media/stagefright/openmax/OMX_Index.h>
+#endif
 
 namespace android {
 
 #define FOURCC(c1, c2, c3, c4) \
     (c1 << 24 | c2 << 16 | c3 << 8 | c4)
+#ifdef OMAP_ENHANCEMENT
+#ifndef MAKEFOURCC_WMC
+#define MAKEFOURCC_WMC(ch0, ch1, ch2, ch3) \
+        ((OMX_U32)(OMX_U8)(ch0) | ((OMX_U32)(OMX_U8)(ch1) << 8) |   \
+        ((OMX_U32)(OMX_U8)(ch2) << 16) | ((OMX_U32)(OMX_U8)(ch3) << 24 ))
+
+#define mmioFOURCC_WMC(ch0, ch1, ch2, ch3)  MAKEFOURCC_WMC(ch0, ch1, ch2, ch3)
+#endif
+
+#define FOURCC_WMV3     mmioFOURCC_WMC('W','M','V','3')
+#define FOURCC_WMV2     mmioFOURCC_WMC('W','M','V','2')
+#define FOURCC_WMV1     mmioFOURCC_WMC('W','M','V','1')
+#define FOURCC_WMVA     mmioFOURCC_WMC('W','M','V','A')
+#define FOURCC_WVC1     mmioFOURCC_WMC('W','V','C','1')
+
+#define VIDDEC_WMV_ELEMSTREAM                           0
+#define VIDDEC_WMV_RCVSTREAM                            1
+
+typedef enum VIDDEC_CUSTOM_PARAM_INDEX
+{
+    VideoDecodeCustomParamProcessMode = (OMX_IndexVendorStartUnused + 1),
+    VideoDecodeCustomParamH264BitStreamFormat,
+    VideoDecodeCustomParamWMVProfile,
+    VideoDecodeCustomParamWMVFileType,
+    VideoDecodeCustomParamParserEnabled,
+
+} VIDDEC_CUSTOM_PARAM_INDEX;
+
+typedef struct OMX_PARAM_WMVFILETYPE {
+    OMX_U32 nSize;
+    OMX_VERSIONTYPE nVersion;
+    OMX_U32 nWmvFileType;
+} OMX_PARAM_WMVFILETYPE;
+#endif
 
 uint16_t U16_AT(const uint8_t *ptr);
 uint32_t U32_AT(const uint8_t *ptr);
