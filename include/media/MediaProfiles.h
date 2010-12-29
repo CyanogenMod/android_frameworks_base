@@ -32,6 +32,10 @@ enum camcorder_quality {
 
 enum video_decoder {
     VIDEO_DECODER_WMV,
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    VIDEO_DECODER_VP6,
+    VIDEO_DECODER_VP7,
+#endif
 };
 
 enum audio_decoder {

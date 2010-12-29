@@ -40,6 +40,9 @@ enum {
     // Not technically an error.
     INFO_FORMAT_CHANGED    = MEDIA_ERROR_BASE - 12,
     INFO_DISCONTINUITY     = MEDIA_ERROR_BASE - 13,
+#ifdef OMAP_ENHANCEMENT
+    ERROR_OUT_OF_MEM       = MEDIA_ERROR_BASE - 14
+#endif
 };
 
 }  // namespace android

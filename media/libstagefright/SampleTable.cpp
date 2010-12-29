@@ -57,6 +57,11 @@ SampleTable::SampleTable(const sp<DataSource> &source)
       mNumSyncSamples(0),
       mSyncSamples(NULL),
       mLastSyncSampleIndex(0),
+#ifdef OMAP_ENHANCEMENT
+      mTimeToSampleCountCtts(0),
+      mCttsSampleBuffer(NULL),
+      mTimeToSampleCtts(NULL),
+#endif
       mSampleToChunkEntries(NULL) {
     mSampleIterator = new SampleIterator(this);
 }
@@ -73,6 +78,15 @@ SampleTable::~SampleTable() {
 
     delete mSampleIterator;
     mSampleIterator = NULL;
+
+#ifdef OMAP_ENHANCEMENT
+    delete[] mTimeToSampleCtts;
+    mTimeToSampleCtts = NULL;
+
+    delete[] mCttsSampleBuffer;
+    mCttsSampleBuffer = NULL;
+#endif
+
 }
 
 status_t SampleTable::setChunkOffsetParams(
@@ -226,6 +240,52 @@ status_t SampleTable::setSampleSizeParams(
 
     return OK;
 }
+
+#ifdef OMAP_ENHANCEMENT
+status_t SampleTable::setTimeToSampleParamsCtts(
+        off_t data_offset, size_t data_size) {
+    if (mTimeToSampleCtts != NULL || data_size < 8) {
+        return ERROR_MALFORMED;
+    }
+    uint8_t header[8];
+    uint32_t count_ctts,k=0;
+    if (mDataSource->readAt(
+                data_offset, header, sizeof(header)) < (ssize_t)sizeof(header)) {
+        return ERROR_IO;
+    }
+
+    if (U32_AT(header) != 0) {
+        // Expected version = 0, flags = 0.
+        return ERROR_MALFORMED;
+    }
+
+    mTimeToSampleCountCtts = U32_AT(&header[4]);
+
+    //find out the actual number of samples
+    mCttsSampleBuffer = new int32_t[mTimeToSampleCountCtts * 2];
+    size_t size = sizeof(int32_t) * mTimeToSampleCountCtts * 2;
+    if (mDataSource->readAt(
+                data_offset + 8, mCttsSampleBuffer, size) < (ssize_t)size) {
+        return ERROR_IO;
+    }
+
+    uint32_t countsamples = 0;
+    for(uint32_t i=0 ; i < mTimeToSampleCountCtts * 2; i+=2)
+        countsamples += ntohl(mCttsSampleBuffer[i]);
+
+    mTimeToSampleCtts = new int32_t[countsamples];
+
+    for (uint32_t i = 0; i < mTimeToSampleCountCtts * 2; i++) {
+        count_ctts = ntohl(mCttsSampleBuffer[i++]);
+        for(uint32_t j = 0;j < count_ctts ;j++){
+           mTimeToSampleCtts[k] = ntohl(mCttsSampleBuffer[i]);
+           LOGV("for loop ctts samples %d %d %d",mTimeToSampleCountCtts,mTimeToSampleCtts[k],k);
+           k++;
+        }
+    }
+    return OK;
+}
+#endif
 
 status_t SampleTable::setTimeToSampleParams(
         off_t data_offset, size_t data_size) {
@@ -421,7 +481,16 @@ status_t SampleTable::findSyncSampleNear(
     }
 
     --left;
+#ifdef OMAP_ENHANCEMENT
+    /*This variable will be initialized to 1, so in case the stss table
+     *has 0 elements it will take by default frame 0. Frame 0 is supposed
+     * to be an I frame every time. When stss is zero mNumSyncSamples
+     * will be zero too, so the while loop will be skipped.
+     * */
+    uint32_t x=1;
+#else
     uint32_t x;
+#endif
     if (mDataSource->readAt(
                 mSyncSampleOffset + 8 + left * 4, &x, 4) != 4) {
         return ERROR_IO;

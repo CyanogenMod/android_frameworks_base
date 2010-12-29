@@ -33,10 +33,18 @@ struct ColorConverter {
 
     bool isValid() const;
 
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    void convert(
+            size_t width, size_t height,
+            const void *srcBits, size_t srcSkip,
+            void *dstBits, size_t dstSkip,
+            size_t displaywidth=0, size_t displayheight=0,size_t offset=0,bool interlaced=false);
+#else
     void convert(
             size_t width, size_t height,
             const void *srcBits, size_t srcSkip,
             void *dstBits, size_t dstSkip);
+#endif
 
 private:
     OMX_COLOR_FORMATTYPE mSrcFormat, mDstFormat;
@@ -82,6 +90,14 @@ private:
         uint8_t **dstPtr, const uint8_t *blockY,
         const uint8_t *blockUV, size_t blockWidth,
         size_t blockHeight, size_t dstSkip);
+
+#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+    void convertYUV420PackedSemiPlanar(
+            size_t width, size_t height,
+            size_t displaywidth, size_t displayheight, size_t offset,
+            const void *srcBits, size_t srcSkip,
+            void *dstBits, size_t dstSkip, bool interlaced);
+#endif
 
     ColorConverter(const ColorConverter &);
     ColorConverter &operator=(const ColorConverter &);

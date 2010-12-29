@@ -108,4 +108,12 @@ void SoftwareRenderer::render(
     mIndex = 1 - mIndex;
 }
 
+#ifdef OMAP_ENHANCEMENT
+Vector< sp<IMemory> > SoftwareRenderer::getBuffers(){
+    // Not Implemented
+    Vector< sp<IMemory> > mDummy;
+    return mDummy;
+}
+#endif
+
 }  // namespace android
