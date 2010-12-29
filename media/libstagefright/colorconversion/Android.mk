@@ -17,6 +17,10 @@ LOCAL_SHARED_LIBRARIES :=       \
         libsurfaceflinger_client\
         libcamera_client
 
+ifeq ($(TARGET_BOARD_PLATFORM),omap4)
+LOCAL_CFLAGS += -DTARGET_OMAP4 -DARM_4K_PAGE_SIZE=4096
+endif
+
 LOCAL_MODULE:= libstagefright_color_conversion
 
 include $(BUILD_SHARED_LIBRARY)

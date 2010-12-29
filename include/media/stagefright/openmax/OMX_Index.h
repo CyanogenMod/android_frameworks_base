@@ -56,7 +56,11 @@ extern "C" {
  *  header to compile without errors.  The includes below are required
  *  for this header file to compile successfully 
  */
+#ifdef OMAP_ENHANCEMENT
+#include <media/stagefright/openmax/OMX_Types.h>
+#else
 #include <OMX_Types.h>
+#endif
 
 
 /** The OMX_INDEXTYPE enumeration is used to select a structure when either

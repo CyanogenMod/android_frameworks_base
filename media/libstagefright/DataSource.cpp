@@ -31,6 +31,10 @@
 #include <media/stagefright/MediaErrors.h>
 #include <utils/String8.h>
 
+#if defined(OMAP_ENHANCEMENT)
+#include "include/ASFExtractor.h"
+#endif
+
 namespace android {
 
 bool DataSource::getUInt16(off_t offset, uint16_t *x) {
@@ -104,6 +108,11 @@ void DataSource::RegisterDefaultSniffers() {
     RegisterSniffer(SniffAMR);
     RegisterSniffer(SniffMPEG2TS);
     RegisterSniffer(SniffMP3);
+#ifdef OMAP_ENHANCEMENT
+    if(isASFParserAvailable()){
+        RegisterSniffer(SniffASF);
+    }
+#endif
 }
 
 // static

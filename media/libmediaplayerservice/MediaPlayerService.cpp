@@ -62,6 +62,9 @@
 #include "StagefrightPlayer.h"
 
 #include <OMX.h>
+#ifdef OMAP_ENHANCEMENT
+#include <media/OverlayRenderer.h>
+#endif
 
 #ifdef USE_BOARD_MEDIAPLUGIN
 #define NO_OPENCORE 1
@@ -203,6 +206,11 @@ extmap FILE_EXTS [] =  {
         {".rtttl", SONIVOX_PLAYER},
         {".rtx", SONIVOX_PLAYER},
         {".ota", SONIVOX_PLAYER},
+#ifdef OMAP_ENHANCEMENT
+        {".wma", STAGEFRIGHT_PLAYER},
+        {".wmv", STAGEFRIGHT_PLAYER},
+        {".asf", STAGEFRIGHT_PLAYER},
+#else
 #ifdef USE_BOARD_MEDIAPLUGIN
         {".ogg", STAGEFRIGHT_PLAYER},
 #endif
@@ -210,6 +218,7 @@ extmap FILE_EXTS [] =  {
         {".wma", PV_PLAYER},
         {".wmv", PV_PLAYER},
         {".asf", PV_PLAYER},
+#endif
 #endif
         {".flac", FLAC_PLAYER},
 };
@@ -304,6 +313,18 @@ sp<IOMX> MediaPlayerService::getOMX() {
 
     return mOMX;
 }
+
+#ifdef OMAP_ENHANCEMENT
+sp<IOverlayRenderer> MediaPlayerService::getOverlayRenderer() {
+    Mutex::Autolock autoLock(mLock);
+
+    if (mOverlayRenderer.get() == NULL) {
+        mOverlayRenderer = new OverlayRenderer;
+    }
+
+    return mOverlayRenderer;
+}
+#endif
 
 status_t MediaPlayerService::AudioCache::dump(int fd, const Vector<String16>& args) const
 {
@@ -705,6 +726,13 @@ player_type getPlayerType(int fd, int64_t offset, int64_t length)
     if (ident == 0x5367674f) // 'OggS'
         return STAGEFRIGHT_PLAYER;
 
+#ifdef OMAP_ENHANCEMENT
+    if (ident == 0x75b22630) {
+        LOGV("The magic number for .asf files, i.e. wmv and wma content");
+        LOGV("These will be supported through stagefright.");
+        return STAGEFRIGHT_PLAYER;
+    }
+#else
 #ifndef NO_OPENCORE
     if (ident == 0x75b22630) {
         // The magic number for .asf files, i.e. wmv and wma content.
@@ -713,9 +741,9 @@ player_type getPlayerType(int fd, int64_t offset, int64_t length)
     }
 #endif
 
+#endif
     if (ident == 0x43614c66) // 'fLaC'
         return FLAC_PLAYER;
-
     // Some kind of MIDI?
     EAS_DATA_HANDLE easdata;
     if (EAS_Init(&easdata) == EAS_SUCCESS) {
@@ -1006,6 +1034,16 @@ status_t MediaPlayerService::Client::resume() {
 
     return p->resume();
 }
+
+#ifdef OMAP_ENHANCEMENT
+status_t MediaPlayerService::Client::requestVideoCloneMode(bool enable) {
+    sp<MediaPlayerBase> p = getPlayer();
+    if (p == 0) return UNKNOWN_ERROR;
+
+    return p->requestVideoCloneMode(enable);
+}
+
+#endif
 
 status_t MediaPlayerService::Client::prepareAsync()
 {

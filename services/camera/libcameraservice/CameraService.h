@@ -142,7 +142,12 @@ private:
         // these are static callback functions
         static void             notifyCallback(int32_t msgType, int32_t ext1, int32_t ext2, void* user);
         static void             dataCallback(int32_t msgType, const sp<IMemory>& dataPtr, void* user);
+#ifdef OMAP_ENHANCEMENT
+        static      void        dataCallbackTimestamp(nsecs_t timestamp, int32_t msgType,
+                                        const sp<IMemory>& dataPtr, void* user, uint32_t offset=0, uint32_t stride=0);
+#else
         static void             dataCallbackTimestamp(nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr, void* user);
+#endif
         // convert client from cookie
         static sp<Client>       getClientFromCookie(void* user);
         // handlers for messages
@@ -157,7 +162,12 @@ private:
         void                    handleCompressedPicture(const sp<IMemory>& mem);
         void                    handleGenericNotify(int32_t msgType, int32_t ext1, int32_t ext2);
         void                    handleGenericData(int32_t msgType, const sp<IMemory>& dataPtr);
+#ifdef OMAP_ENHANCEMENT
+        void                    handleGenericDataTimestamp(nsecs_t timestamp, int32_t msgType,
+                                        const sp<IMemory>& dataPtr, uint32_t offset=0, uint32_t stride=0);
+#else
         void                    handleGenericDataTimestamp(nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr);
+#endif
 
         void                    copyFrameAndPostCopiedFrame(
                                     const sp<ICameraClient>& client,

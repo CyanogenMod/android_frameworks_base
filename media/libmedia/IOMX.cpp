@@ -29,9 +29,15 @@ enum {
     EMPTY_BUFFER,
     GET_EXTENSION_INDEX,
     CREATE_RENDERER,
+#ifdef OMAP_ENHANCEMENT
+    CREATE_RENDERER_S3D,
+#endif
     OBSERVER_ON_MSG,
     RENDERER_RENDER,
-    REGISTER_BUFFERS
+    REGISTER_BUFFERS,
+#ifdef OMAP_ENHANCEMENT
+    GET_BUFFERS,
+#endif
 };
 
 sp<IOMXRenderer> IOMX::createRenderer(
@@ -47,6 +53,20 @@ sp<IOMXRenderer> IOMX::createRenderer(
             displayWidth, displayHeight,
             rotationDegrees);
 }
+
+#ifdef OMAP_ENHANCEMENT
+sp<IOMXRenderer> IOMX::createRenderer(
+        const sp<Surface> &surface,
+        const char *componentName,
+        OMX_COLOR_FORMATTYPE colorFormat,
+        size_t encodedWidth, size_t encodedHeight,
+        size_t displayWidth, size_t displayHeight, int32_t rotate, int isS3D, int numOfOpBuffers) {
+    return createRenderer(
+            surface->getISurface(),
+            componentName, colorFormat, encodedWidth, encodedHeight,
+            displayWidth, displayHeight, rotate, isS3D, numOfOpBuffers);
+}
+#endif
 
 sp<IOMXRenderer> IOMX::createRendererFromJavaSurface(
         JNIEnv *env, jobject javaSurface,
@@ -372,6 +392,33 @@ public:
 
         return interface_cast<IOMXRenderer>(reply.readStrongBinder());
     }
+
+#ifdef OMAP_ENHANCEMENT
+    virtual sp<IOMXRenderer> createRenderer(
+            const sp<ISurface> &surface,
+            const char *componentName,
+            OMX_COLOR_FORMATTYPE colorFormat,
+            size_t encodedWidth, size_t encodedHeight,
+            size_t displayWidth, size_t displayHeight, int32_t rotationDegrees, int isS3D, int numOfOpBuffers) {
+        Parcel data, reply;
+        data.writeInterfaceToken(IOMX::getInterfaceDescriptor());
+        data.writeStrongBinder(surface->asBinder());
+        data.writeCString(componentName);
+        data.writeInt32(colorFormat);
+        data.writeInt32(encodedWidth);
+        data.writeInt32(encodedHeight);
+        data.writeInt32(displayWidth);
+        data.writeInt32(displayHeight);
+        data.writeInt32(rotationDegrees);
+	data.writeInt32(isS3D);
+        data.writeInt32(numOfOpBuffers);
+
+        remote()->transact(CREATE_RENDERER_S3D, data, &reply);
+
+        return interface_cast<IOMXRenderer>(reply.readStrongBinder());
+    }
+#endif
+
 };
 
 IMPLEMENT_META_INTERFACE(OMX, "android.hardware.IOMX");
@@ -702,6 +749,37 @@ status_t BnOMX::onTransact(
             return OK;
         }
 
+#ifdef OMAP_ENHANCEMENT
+	case CREATE_RENDERER_S3D:
+        {
+            CHECK_INTERFACE(IOMX, data, reply);
+
+            sp<ISurface> isurface =
+                interface_cast<ISurface>(data.readStrongBinder());
+
+            const char *componentName = data.readCString();
+
+            OMX_COLOR_FORMATTYPE colorFormat =
+                static_cast<OMX_COLOR_FORMATTYPE>(data.readInt32());
+
+            size_t encodedWidth = (size_t)data.readInt32();
+            size_t encodedHeight = (size_t)data.readInt32();
+            size_t displayWidth = (size_t)data.readInt32();
+            size_t displayHeight = (size_t)data.readInt32();
+            int32_t rotationDegrees = data.readInt32();
+            size_t isS3D = (size_t)data.readInt32();
+            int numOfOpBuffers = (int)data.readInt32();
+
+            sp<IOMXRenderer> renderer =
+                createRenderer(isurface, componentName, colorFormat,
+                               encodedWidth, encodedHeight,
+                               displayWidth, displayHeight, rotationDegrees, isS3D, numOfOpBuffers);
+            reply->writeStrongBinder(renderer->asBinder());
+
+            return OK;
+        }
+#endif
+
         default:
             return BBinder::onTransact(code, data, reply, flags);
     }
@@ -748,6 +826,7 @@ status_t BnOMXObserver::onTransact(
 
             return NO_ERROR;
         }
+#ifndef OMAP_ENHANCEMENT
         case REGISTER_BUFFERS:
         {
             CHECK_INTERFACE(IOMXObserver, data, reply);
@@ -755,6 +834,7 @@ status_t BnOMXObserver::onTransact(
                interface_cast<IMemoryHeap>(data.readStrongBinder());
             registerBuffers(mem);
         }
+#endif
 
         default:
             return BBinder::onTransact(code, data, reply, flags);
@@ -778,6 +858,30 @@ public:
         // so that the caller knows when to recycle the buffer.
         remote()->transact(RENDERER_RENDER, data, &reply);
     }
+
+#ifdef OMAP_ENHANCEMENT
+    virtual Vector< sp<IMemory> > getBuffers(){
+        int n = 0;
+        Vector< sp<IMemory> > mMem;
+        Parcel data, reply;
+        data.writeInterfaceToken(IOMXRenderer::getInterfaceDescriptor());
+
+        status_t err = remote()->transact(GET_BUFFERS, data, &reply);
+        n = reply.readInt32();
+        for (int i=0;i < n; i++) {
+            sp<IMemory> mem = interface_cast<IMemory>(reply.readStrongBinder());
+            mMem.add(mem);
+        }
+        return mMem;
+    }
+
+    virtual bool setCallback(release_rendered_buffer_callback cb, void *cookie) {return false;}
+
+    virtual void set_s3d_frame_layout(uint32_t s3d_mode, uint32_t s3d_fmt, uint32_t s3d_order, uint32_t s3d_subsampling) {}
+    virtual void resizeRenderer(void* resize_params) {}
+    virtual void requestRendererClone(bool enable) {}
+#endif
+
 };
 
 IMPLEMENT_META_INTERFACE(OMXRenderer, "android.hardware.IOMXRenderer");
@@ -796,6 +900,20 @@ status_t BnOMXRenderer::onTransact(
             return NO_ERROR;
         }
 
+#ifdef OMAP_ENHANCEMENT
+        case GET_BUFFERS:
+        {
+            LOGV("<<<<< onTransact GET_BUFFERS");
+            CHECK_INTERFACE(IOMXRenderer, data, reply);
+            Vector< sp<IMemory> > mMem = getBuffers();
+            const size_t N = mMem.size();
+            reply->writeInt32(N);
+            for (size_t i=0; i<N; i++) {
+                reply->writeStrongBinder(mMem[i]->asBinder());
+            }
+            return NO_ERROR;
+        }
+#endif
         default:
             return BBinder::onTransact(code, data, reply, flags);
     }
