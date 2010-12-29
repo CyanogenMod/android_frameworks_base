@@ -58,7 +58,6 @@ extern "C" {
  */
 #include <OMX_Types.h>
 
-
 /** The OMX_INDEXTYPE enumeration is used to select a structure when either
  *  getting or setting parameters and/or configuration data.  Each entry in 
  *  this enumeration maps to an OMX specified structure.  When the 
