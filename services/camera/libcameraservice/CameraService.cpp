@@ -99,6 +99,22 @@ static void htcCameraSwitch(int cameraId)
 }
 #endif
 
+#ifdef OMAP3_FW3A_LIBCAMERA
+static void setOmapISPReserve(int state)
+{
+    char buffer[16];
+    int fd;
+
+    if (access("/sys/devices/platform/omap3isp/isp_reserve", W_OK) == 0) {
+        snprintf(buffer, sizeof(buffer), "%d", state);
+
+        fd = open("/sys/devices/platform/omap3isp/isp_reserve", O_WRONLY);
+        write(fd, buffer, strlen(buffer));
+        close(fd);
+    }
+}
+#endif
+
 // ----------------------------------------------------------------------------
 
 // This is ugly and only safe if we never re-create the CameraService, but
@@ -208,12 +224,25 @@ sp<ICamera> CameraService::connect(
 #if defined(BOARD_USE_FROYO_LIBCAMERA) || defined(BOARD_HAVE_HTC_FFC)
     htcCameraSwitch(cameraId);
 #endif
-
     sp<CameraHardwareInterface> hardware = HAL_openCameraHardware(cameraId);
     if (hardware == NULL) {
         LOGE("Fail to open camera hardware (id=%d)", cameraId);
         return NULL;
     }
+
+#if defined(OMAP3_FW3A_LIBCAMERA) && defined(OMAP3_SECONDARY_CAMERA)
+    {
+        CameraParameters params(hardware->getParameters());
+        params.set("video-input", cameraId);
+        /* FFC doesn't export its own parameter list... :( */
+        if (cameraId) {
+            params.set("picture-size-values", "1600x1200,1280x960,1280x720,640x480,512x384,320x240"); 
+            params.set("focus-mode-values", "fixed");
+        }
+        hardware->setParameters(params);
+    }
+#endif
+
 
 #if defined(BOARD_USE_REVERSE_FFC)
     if (cameraId == 1) {
@@ -388,7 +417,9 @@ void CameraService::playSound(sound_kind kind) {
         int index;
         AudioSystem::getStreamVolumeIndex(AudioSystem::ENFORCED_AUDIBLE, &index);
         if (index != 0) {
+#ifndef OMAP_ENHANCEMENT
             player->seekTo(0);
+#endif
             player->start();
         }
     }
@@ -426,6 +457,13 @@ CameraService::Client::Client(const sp<CameraService>& cameraService,
                       CAMERA_MSG_FOCUS);
         mOverlayW = 0;
         mOverlayH = 0;
+
+#ifdef OMAP_ENHANCEMENT
+	mS3DOverlay = false;
+#endif
+#ifdef OMAP3_FW3A_LIBCAMERA
+        setOmapISPReserve(1);
+#endif
 
         // Callback is disabled by default
         mPreviewCallbackFlag = FRAME_CALLBACK_FLAG_NOOP;
@@ -576,6 +614,9 @@ void CameraService::Client::disconnect() {
     mHardware->cancelPicture();
     // Release the hardware resources.
     mHardware->release();
+#ifdef OMAP3_FW3A_LIBCAMERA
+    setOmapISPReserve(0);
+#endif
     // Release the held overlay resources.
     if (mUseOverlay) {
 #if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) || defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
@@ -677,6 +718,12 @@ status_t CameraService::Client::registerPreviewBuffers() {
 
 status_t CameraService::Client::setOverlay() {
     int w, h;
+#ifdef OMAP_ENHANCEMENT
+    uint32_t overlayFormat;
+    bool isS3d = false;
+
+#endif
+
     CameraParameters params(mHardware->getParameters());
     params.getPreviewSize(&w, &h);
 
@@ -689,7 +736,46 @@ status_t CameraService::Client::setOverlay() {
     }
 #endif
 
-    if (w != mOverlayW || h != mOverlayH || mOrientationChanged) {
+#ifdef OMAP_ENHANCEMENT
+
+    ///Query the current preview pixel format from Camera HAL to create the overlay
+    ///in that particular format
+    const char *prevFormat = params.getPreviewFormat();
+#if defined(TARGET_OMAP3)
+    LOGD("Camera service Selected OVERLAY_FORMAT_CbYCrY_422_I");
+    overlayFormat = OVERLAY_FORMAT_CbYCrY_422_I;
+#else
+    if(strcmp(prevFormat, CameraParameters::PIXEL_FORMAT_YUV422I)==0)
+    {
+        LOGD("Camera service Selected OVERLAY_FORMAT_CbYCrY_422_I");
+        overlayFormat = OVERLAY_FORMAT_CbYCrY_422_I;
+    }
+    else if(strcmp(prevFormat, CameraParameters::PIXEL_FORMAT_YUV420SP)==0)
+    {
+        LOGD("Camera service Selected OVERLAY_FORMAT_YCbCr_420_SP");
+        overlayFormat = OVERLAY_FORMAT_YCbCr_420_SP;
+    }
+    else if(strcmp(prevFormat, CameraParameters::PIXEL_FORMAT_RGB565)==0)
+    {
+        LOGD("Camera service Selected OVERLAY_FORMAT_RGB_565");
+        overlayFormat = OVERLAY_FORMAT_RGB_565;
+    }
+    else
+    {
+        overlayFormat = OVERLAY_FORMAT_DEFAULT;
+    }
+#endif
+
+    if(params.get("s3d-supported")!= NULL && CameraParameters::TRUE != NULL)
+        isS3d = strcmp(params.get("s3d-supported"), CameraParameters::TRUE) == 0;
+#endif
+
+    if (w != mOverlayW || h != mOverlayH || mOrientationChanged
+#ifdef OMAP_ENHANCEMENT
+        || ((mOverlayFormat!=NULL) && (strcmp(prevFormat, mOverlayFormat)!=0))
+        || (mS3DOverlay != isS3d)
+#endif
+    ) {
         // Force the destruction of any previous overlay
         sp<Overlay> dummy;
         mHardware->setOverlay(dummy);
@@ -700,6 +786,9 @@ status_t CameraService::Client::setOverlay() {
         }
 #endif
         mOrientationChanged = false;
+#ifdef OMAP_ENHANCEMENT
+        mS3DOverlay = isS3d;
+#endif
     }
 
     status_t result = NO_ERROR;
@@ -714,6 +803,10 @@ status_t CameraService::Client::setOverlay() {
             // wait in the createOverlay call if the previous overlay is in the
             // process of being destroyed.
             for (int retry = 0; retry < 50; ++retry) {
+#ifdef OMAP_ENHANCEMENT
+                mOverlayRef = mSurface->createOverlay(w, h, overlayFormat,
+                                      mOrientation, isS3d);
+#else
                 mOverlayRef = mSurface->createOverlay(w, h,
 #if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP)
                                                       HAL_PIXEL_FORMAT_YCbCr_420_SP,
@@ -723,6 +816,7 @@ status_t CameraService::Client::setOverlay() {
                                                       OVERLAY_FORMAT_DEFAULT,
 #endif
                                                       mOrientation);
+#endif
                 if (mOverlayRef != 0) break;
                 LOGW("Overlay create failed - retrying");
                 usleep(20000);
@@ -746,6 +840,10 @@ status_t CameraService::Client::setOverlay() {
 
     mOverlayW = w;
     mOverlayH = h;
+
+#ifdef OMAP_ENHANCEMENT
+    strncpy(mOverlayFormat, prevFormat, OVERLAY_FORMAT_BUFFER_SIZE);
+#endif
 
     return result;
 }
@@ -811,6 +909,20 @@ status_t CameraService::Client::startCameraMode(camera_mode mode) {
 status_t CameraService::Client::startPreviewMode() {
     LOG1("startPreviewMode");
     status_t result = NO_ERROR;
+
+#ifdef OMAP_ENHANCEMENT
+
+    //According to framework documentation, preview should be
+    //restarted after each capture. This will make sure
+    //that image capture related messages get disabled if
+    //not done already in their respective handlers.
+    disableMsgType(CAMERA_MSG_SHUTTER |
+                  CAMERA_MSG_POSTVIEW_FRAME |
+                  CAMERA_MSG_RAW_IMAGE |
+                  CAMERA_MSG_COMPRESSED_IMAGE |
+                  CAMERA_MSG_BURST_IMAGE);
+
+#endif
 
     // if preview has been enabled, nothing needs to be done
     if (mHardware->previewEnabled()) {
@@ -889,7 +1001,23 @@ void CameraService::Client::stopPreview() {
     LOG1("stopPreview (pid %d)", getCallingPid());
     Mutex::Autolock lock(mLock);
     if (checkPidAndHardware() != NO_ERROR) return;
+#ifdef OMAP_ENHANCEMENT
 
+    //According to framework documentation, preview needs
+    //to be started for image capture. This will make sure
+    //that image capture related messages get disabled if
+    //not done already in their respective handlers.
+    //If these messages come when in the midddle of
+    //stopping preview. We will deadlock the system in
+    //lockIfMessageWanted()
+
+    disableMsgType(CAMERA_MSG_SHUTTER |
+                  CAMERA_MSG_POSTVIEW_FRAME |
+                  CAMERA_MSG_RAW_IMAGE |
+                  CAMERA_MSG_COMPRESSED_IMAGE |
+                  CAMERA_MSG_BURST_IMAGE);
+
+#endif
     disableMsgType(CAMERA_MSG_PREVIEW_FRAME);
     mHardware->stopPreview();
 
@@ -972,6 +1100,9 @@ status_t CameraService::Client::takePicture() {
     enableMsgType(CAMERA_MSG_SHUTTER |
                   CAMERA_MSG_POSTVIEW_FRAME |
                   CAMERA_MSG_RAW_IMAGE |
+#ifdef OMAP_ENHANCEMENT
+                  CAMERA_MSG_BURST_IMAGE |
+#endif
                   CAMERA_MSG_COMPRESSED_IMAGE);
 
     return mHardware->takePicture();
@@ -1088,6 +1219,14 @@ bool CameraService::Client::lockIfMessageWanted(int32_t msgType) {
             LOG1("lockIfMessageWanted(%d): enter sleep", msgType);
         }
         usleep(CHECK_MESSAGE_INTERVAL * 1000);
+#if (defined(TARGET_OMAP3) && defined(OMAP_ENHANCEMENT))
+        // Return true after 100ms. We don't want to enter in an infinite loop.
+        if (sleepCount == 10) {
+            LOGE("lockIfMessageWanted(%d): timed out in %d ms",
+                msgType, sleepCount * CHECK_MESSAGE_INTERVAL);
+            return true;
+        }
+#endif
     }
     LOGW("lockIfMessageWanted(%d): dropped unwanted message", msgType);
     return false;
@@ -1177,6 +1316,10 @@ void CameraService::Client::dataCallback(int32_t msgType,
     if (dataPtr == 0) {
         LOGE("Null data returned in data callback");
         client->handleGenericNotify(CAMERA_MSG_ERROR, UNKNOWN_ERROR, 0);
+#if (defined(TARGET_OMAP3) && defined(OMAP_ENHANCEMENT))
+        //Handle the NULL data returned in RawCallback from lower layers in OMAP3
+        client->handleGenericData(msgType, NULL);
+#endif
         return;
     }
 
@@ -1193,14 +1336,28 @@ void CameraService::Client::dataCallback(int32_t msgType,
         case CAMERA_MSG_COMPRESSED_IMAGE:
             client->handleCompressedPicture(dataPtr);
             break;
+
+#ifdef OMAP_ENHANCEMENT
+
+        case CAMERA_MSG_BURST_IMAGE:
+            client->handleBurstPicture(dataPtr);
+            break;
+
+#endif
+
         default:
             client->handleGenericData(msgType, dataPtr);
             break;
     }
 }
-
+#ifdef OMAP_ENHANCEMENT
+void CameraService::Client::dataCallbackTimestamp(nsecs_t timestamp, int32_t msgType,
+        const sp<IMemory>& dataPtr, void* user, uint32_t offset, uint32_t stride)
+#else
 void CameraService::Client::dataCallbackTimestamp(nsecs_t timestamp,
-        int32_t msgType, const sp<IMemory>& dataPtr, void* user) {
+        int32_t msgType, const sp<IMemory>& dataPtr, void* user)
+#endif
+{
     LOG2("dataCallbackTimestamp(%d)", msgType);
 
     sp<Client> client = getClientFromCookie(user);
@@ -1212,8 +1369,11 @@ void CameraService::Client::dataCallbackTimestamp(nsecs_t timestamp,
         client->handleGenericNotify(CAMERA_MSG_ERROR, UNKNOWN_ERROR, 0);
         return;
     }
-
+#ifdef OMAP_ENHANCEMENT
+    client->handleGenericDataTimestamp(timestamp, msgType, dataPtr, offset, stride);
+#else
     client->handleGenericDataTimestamp(timestamp, msgType, dataPtr);
+#endif
 }
 
 // snapshot taken callback
@@ -1372,6 +1532,22 @@ void CameraService::Client::handleCompressedPicture(const sp<IMemory>& mem) {
     }
 }
 
+#ifdef OMAP_ENHANCEMENT
+
+// burst callback
+void CameraService::Client::handleBurstPicture(const sp<IMemory>& mem) {
+    //Don't disable this message type yet. In this mode takePicture() will
+    //get called only once. When burst finishes this message will get automatically
+    //disabled in the respective call for restarting the preview.
+
+    sp<ICameraClient> c = mCameraClient;
+    mLock.unlock();
+    if (c != 0) {
+        c->dataCallback(CAMERA_MSG_COMPRESSED_IMAGE, mem);
+    }
+}
+
+#endif
 
 void CameraService::Client::handleGenericNotify(int32_t msgType,
     int32_t ext1, int32_t ext2) {
@@ -1390,13 +1566,22 @@ void CameraService::Client::handleGenericData(int32_t msgType,
         c->dataCallback(msgType, dataPtr);
     }
 }
-
+#ifdef OMAP_ENHANCEMENT
 void CameraService::Client::handleGenericDataTimestamp(nsecs_t timestamp,
-    int32_t msgType, const sp<IMemory>& dataPtr) {
+    int32_t msgType, const sp<IMemory>& dataPtr, uint32_t offset, uint32_t stride)
+#else
+void CameraService::Client::handleGenericDataTimestamp(nsecs_t timestamp,
+    int32_t msgType, const sp<IMemory>& dataPtr)
+#endif
+{
     sp<ICameraClient> c = mCameraClient;
     mLock.unlock();
     if (c != 0) {
+#ifdef OMAP_ENHANCEMENT
+        c->dataCallbackTimestamp(timestamp, msgType, dataPtr, offset, stride);
+#else
         c->dataCallbackTimestamp(timestamp, msgType, dataPtr);
+#endif
     }
 }
 
@@ -1568,5 +1753,31 @@ extern "C" sp<CameraHardwareInterface> HAL_openCameraHardware(int cameraId)
     return openCameraHardware(cameraId);
 }
 #endif
+#ifdef OMAP3_FW3A_LIBCAMERA
+static const CameraInfo sCameraInfo[] = {
+    {
+        CAMERA_FACING_BACK,
+        90,  /* orientation */
+    },
+#ifdef OMAP3_SECONDARY_CAMERA
+    {
+        CAMERA_FACING_FRONT,
+        270, /* orientation */
+    }
+#endif
+};
+static int getNumberOfCameras() {
+    return sizeof(sCameraInfo) / sizeof(sCameraInfo[0]);
+}
 
+extern "C" int HAL_getNumberOfCameras()
+{
+    return getNumberOfCameras();
+}
+
+extern "C" void HAL_getCameraInfo(int cameraId, struct CameraInfo* cameraInfo)
+{
+    memcpy(cameraInfo, &sCameraInfo[cameraId], sizeof(CameraInfo));
+}
+#endif
 }; // namespace android

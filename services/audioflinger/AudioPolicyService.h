@@ -123,6 +123,9 @@ public:
                                      audio_io_handle_t output,
                                      int delayMs = 0);
     virtual status_t setStreamOutput(AudioSystem::stream_type stream, audio_io_handle_t output);
+#ifdef OMAP_ENHANCEMENT
+    virtual status_t setFMRxActive(bool state);
+#endif
     virtual void setParameters(audio_io_handle_t ioHandle,
                                const String8& keyValuePairs,
                                int delayMs = 0);
@@ -135,10 +138,6 @@ public:
                                      audio_io_handle_t dstOutput);
 #ifdef HAVE_FM_RADIO
     virtual status_t setFmVolume(float volume, int delayMs = 0);
-#endif
-
-#ifdef OMAP_ENHANCEMENT
-    virtual status_t    setFMRxActive(bool status);
 #endif
 
 private:

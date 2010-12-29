@@ -297,6 +297,13 @@ public:
     virtual void unregisterBuffers();
     virtual sp<OverlayRef> createOverlay(
             uint32_t w, uint32_t h, int32_t format, int32_t orientation);
+#ifdef OMAP_ENHANCEMENT
+    virtual sp<OverlayRef> createOverlay(
+            uint32_t w, uint32_t h, int32_t format, int32_t orientation, int isS3D);
+    virtual void setDisplayId(int dpy);
+    virtual int requestOverlayClone(bool enable);
+#endif
+
     virtual sp<GraphicBuffer> requestBuffer(int bufferIdx, int usage);
     virtual status_t setBufferCount(int bufferCount);
 
@@ -371,6 +378,26 @@ sp<OverlayRef> MSurface::createOverlay(uint32_t w, uint32_t h, int32_t format,
     ASSERT(0);
     return NULL;
 }
+
+#ifdef OMAP_ENHANCEMENT
+sp<OverlayRef> MSurface::createOverlay(uint32_t w, uint32_t h, int32_t format,
+        int32_t orientation, int isS3D) {
+    // We don't expect this to be called in current hardware.
+    ASSERT(0);
+    sp<OverlayRef> dummy;
+    return dummy;
+}
+
+void MSurface::setDisplayId(int dpy)
+{
+return;
+}
+
+int MSurface::requestOverlayClone(bool enable)
+{
+return -1;
+}
+#endif
 
 //
 //  Utilities to use the Holder service

@@ -91,7 +91,12 @@ public:
      */
     virtual     status_t    setStreamVolume(int stream, float value, int output) = 0;
     virtual     status_t    setStreamMute(int stream, bool muted) = 0;
-
+#ifdef OMAP_ENHANCEMENT
+    /* This will tell playback thread that FM Rx is active
+     * and device will not go to standby
+     */
+    virtual     status_t    setFMRxActive(bool state)=0;
+#endif
     virtual     float       streamVolume(int stream, int output) const = 0;
     virtual     bool        streamMute(int stream) const = 0;
 

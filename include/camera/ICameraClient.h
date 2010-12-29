@@ -32,7 +32,12 @@ public:
 
     virtual void            notifyCallback(int32_t msgType, int32_t ext1, int32_t ext2) = 0;
     virtual void            dataCallback(int32_t msgType, const sp<IMemory>& data) = 0;
+#ifdef OMAP_ENHANCEMENT
+    virtual void            dataCallbackTimestamp(nsecs_t timestamp, int32_t msgType, const sp<IMemory>& data,
+                                    uint32_t offset=0, uint32_t stride=0) = 0;
+#else
     virtual void            dataCallbackTimestamp(nsecs_t timestamp, int32_t msgType, const sp<IMemory>& data) = 0;
+#endif
 };
 
 // ----------------------------------------------------------------------------
