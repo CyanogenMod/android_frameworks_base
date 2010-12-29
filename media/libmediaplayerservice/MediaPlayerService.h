@@ -228,6 +228,9 @@ private:
         virtual status_t        resume();
         virtual status_t        setAuxEffectSendLevel(float level);
         virtual status_t        attachAuxEffect(int effectId);
+#ifdef OMAP_ENHANCEMENT
+        virtual status_t        requestVideoCloneMode(bool enable);
+#endif
 
         sp<MediaPlayerBase>     createPlayer(player_type playerType);
 

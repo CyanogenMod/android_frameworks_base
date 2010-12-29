@@ -1007,6 +1007,16 @@ status_t MediaPlayerService::Client::resume() {
     return p->resume();
 }
 
+#ifdef OMAP_ENHANCEMENT
+status_t MediaPlayerService::Client::requestVideoCloneMode(bool enable) {
+    sp<MediaPlayerBase> p = getPlayer();
+    if (p == 0) return UNKNOWN_ERROR;
+
+    return p->requestVideoCloneMode(enable);
+}
+
+#endif
+
 status_t MediaPlayerService::Client::prepareAsync()
 {
     LOGV("[%d] prepareAsync", mConnId);

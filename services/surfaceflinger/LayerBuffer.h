@@ -49,6 +49,10 @@ class LayerBuffer : public LayerBaseClient
         virtual void unregisterBuffers();
         virtual void destroy() { }
         SurfaceFlinger* getFlinger() const { return mLayer.mFlinger.get(); }
+#ifdef OMAP_ENHANCEMENT
+        virtual void setDisplayId(int dpy);
+        virtual int requestOverlayClone(bool enable);
+#endif
     protected:
         LayerBuffer& mLayer;
     };
@@ -75,7 +79,13 @@ public:
     void unregisterBuffers();
     sp<OverlayRef> createOverlay(uint32_t w, uint32_t h, int32_t format,
             int32_t orientation);
-    
+#ifdef OMAP_ENHANCEMENT
+    sp<OverlayRef> createOverlay(uint32_t w, uint32_t h, int32_t format,
+            int32_t orientation, int isS3D);
+
+    void setDisplayId(int displayId);
+    int requestOverlayClone(bool enable);
+#endif
     sp<Source> getSource() const;
     sp<Source> clearSource();
     void setNeedsBlending(bool blending);
@@ -151,6 +161,14 @@ private:
         OverlaySource(LayerBuffer& layer,
                 sp<OverlayRef>* overlayRef, 
                 uint32_t w, uint32_t h, int32_t format, int32_t orientation);
+
+#ifdef OMAP_ENHANCEMENT
+        OverlaySource(LayerBuffer& layer,
+                sp<OverlayRef>* overlayRef,
+                uint32_t w, uint32_t h, int32_t format, int32_t orientation, int isS3D);
+        virtual void setDisplayId(int dpy);
+        int requestOverlayClone(bool enable);
+#endif
         virtual ~OverlaySource();
         virtual void onDraw(const Region& clip) const;
         virtual void onTransaction(uint32_t flags);
@@ -203,6 +221,13 @@ private:
         
         virtual sp<OverlayRef> createOverlay(
                 uint32_t w, uint32_t h, int32_t format, int32_t orientation);
+
+#ifdef OMAP_ENHANCEMENT
+        virtual sp<OverlayRef> createOverlay(
+                uint32_t w, uint32_t h, int32_t format, int32_t orientation, int isS3D);
+        virtual void setDisplayId(int displayId);
+        virtual int requestOverlayClone(bool enable);
+#endif
     private:
         sp<LayerBuffer> getOwner() const {
             return static_cast<LayerBuffer*>(Surface::getOwner().get());
