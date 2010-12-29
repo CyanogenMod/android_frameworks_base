@@ -41,6 +41,11 @@ void MediaSource::ReadOptions::setSeekTo(int64_t time_us, SeekMode mode) {
     mSeekMode = mode;
 }
 
+extern "C" void _ZN7android11MediaSource11ReadOptions9setSeekToExNS1_8SeekModeE(int64_t time_us, void *mode);
+extern "C" void _ZN7android11MediaSource11ReadOptions9setSeekToEx(int64_t time_us) {
+    _ZN7android11MediaSource11ReadOptions9setSeekToExNS1_8SeekModeE(time_us, NULL);
+}
+
 void MediaSource::ReadOptions::clearSeekTo() {
     mOptions &= ~kSeekTo_Option;
     mSeekTimeUs = 0;
