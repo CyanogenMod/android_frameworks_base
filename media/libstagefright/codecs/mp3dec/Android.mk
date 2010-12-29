@@ -48,6 +48,11 @@ LOCAL_C_INCLUDES := \
         $(LOCAL_PATH)/src \
         $(LOCAL_PATH)/include
 
+ifeq ($(OMAP_ENHANCEMENT),true)
+    LOCAL_C_INCLUDES += hardware/ti/omx/ducati/domx/system/omx_core/inc/
+endif
+
+
 LOCAL_CFLAGS := \
         -DOSCL_UNUSED_ARG=
 

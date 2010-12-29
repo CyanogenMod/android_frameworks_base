@@ -2763,6 +2763,10 @@ public class Camera {
                 /* Support NV cams */
                 KEY_ISO_MODE = "nv-picture-iso";
                 str = get(KEY_ISO_MODE + SUPPORTED_VALUES_SUFFIX);
+            } else if (str == null && get("iso-mode-values") != null) {
+                /* Support OMAP cams */
+                KEY_ISO_MODE = "iso-mode";
+                str = get(KEY_ISO_MODE + SUPPORTED_VALUES_SUFFIX);
             }
             return split(str);
         }

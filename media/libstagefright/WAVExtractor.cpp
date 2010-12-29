@@ -316,9 +316,16 @@ status_t WAVSource::read(
     *out = NULL;
 
     int64_t seekTimeUs;
+#ifdef OMAP_ENHANCEMENT
+    size_t bytesPerSample = mBitsPerSample >> 3;
+#endif
     ReadOptions::SeekMode mode;
     if (options != NULL && options->getSeekTo(&seekTimeUs, &mode)) {
+#ifdef OMAP_ENHANCEMENT
+        int64_t pos = (seekTimeUs * mSampleRate) / 1000000 * mNumChannels * bytesPerSample;
+#else
         int64_t pos = (seekTimeUs * mSampleRate) / 1000000 * mNumChannels * 2;
+#endif
         if (pos > mSize) {
             pos = mSize;
         }
@@ -353,7 +360,11 @@ status_t WAVSource::read(
         return ERROR_END_OF_STREAM;
     }
 
+#ifdef OMAP_ENHANCEMENT
+    int64_t offsetPos = n;
+#else
     mCurrentPos += n;
+#endif
 
     buffer->set_range(0, n);
 
@@ -398,13 +409,18 @@ status_t WAVSource::read(
         }
     }
 
+
+#ifndef OMAP_ENHANCEMENT
     size_t bytesPerSample = mBitsPerSample >> 3;
+#endif
 
     buffer->meta_data()->setInt64(
             kKeyTime,
             1000000LL * (mCurrentPos - mOffset)
                 / (mNumChannels * bytesPerSample) / mSampleRate);
-
+#ifdef OMAP_ENHANCEMENT
+    mCurrentPos += offsetPos;
+#endif
     buffer->meta_data()->setInt32(kKeyIsSyncFrame, 1);
 
     *out = buffer;

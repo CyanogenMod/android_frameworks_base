@@ -50,7 +50,11 @@ public:
     ~JNICameraContext() { release(); }
     virtual void notify(int32_t msgType, int32_t ext1, int32_t ext2);
     virtual void postData(int32_t msgType, const sp<IMemory>& dataPtr);
+#ifdef OMAP_ENHANCEMENT
+    virtual void postDataTimestamp(nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr, uint32_t offset=0, uint32_t stride=0);
+#else
     virtual void postDataTimestamp(nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr);
+#endif
     void addCallbackBuffer(JNIEnv *env, jbyteArray cbb);
     void setCallbackMode(JNIEnv *env, bool installed, bool manualMode);
     sp<Camera> getCamera() { Mutex::Autolock _l(mLock); return mCamera; }
@@ -227,8 +231,12 @@ void JNICameraContext::postData(int32_t msgType, const sp<IMemory>& dataPtr)
         break;
     }
 }
-
+#ifdef OMAP_ENHANCEMENT
+void JNICameraContext::postDataTimestamp(nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr,
+        uint32_t offset, uint32_t stride)
+#else
 void JNICameraContext::postDataTimestamp(nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr)
+#endif
 {
     // TODO: plumb up to Java. For now, just drop the timestamp
     postData(msgType, dataPtr);

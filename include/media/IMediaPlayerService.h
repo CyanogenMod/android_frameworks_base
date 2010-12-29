@@ -32,6 +32,9 @@ namespace android {
 
 class IMediaRecorder;
 class IOMX;
+#ifdef OMAP_ENHANCEMENT
+class IOverlayRenderer;
+#endif
 
 class IMediaPlayerService: public IInterface
 {
@@ -48,6 +51,9 @@ public:
     virtual sp<IMemory>         decode(const char* url, uint32_t *pSampleRate, int* pNumChannels, int* pFormat) = 0;
     virtual sp<IMemory>         decode(int fd, int64_t offset, int64_t length, uint32_t *pSampleRate, int* pNumChannels, int* pFormat) = 0;
     virtual sp<IOMX>            getOMX() = 0;
+#ifdef OMAP_ENHANCEMENT
+    virtual sp<IOverlayRenderer>  getOverlayRenderer()=0;
+#endif
 };
 
 // ----------------------------------------------------------------------------
