@@ -149,6 +149,11 @@ typedef enum OMX_COLOR_FORMATTYPE {
     OMX_COLOR_Format24BitABGR6666,
     OMX_COLOR_FormatKhronosExtensions = 0x6F000000, /**< Reserved region for introducing Khronos Standard Extensions */ 
     OMX_COLOR_FormatVendorStartUnused = 0x7F000000, /**< Reserved region for introducing Vendor Extensions */
+#ifdef OMAP_ENHANCEMENT
+    //Interlaced format as per defined by TI OMX component
+    OMX_TI_COLOR_FormatYUV420PackedSemiPlanarInterlaced = OMX_COLOR_FormatVendorStartUnused + 1,
+    OMX_TI_COLOR_FormatYUV420PackedSemiPlanar_Sequential_TopBottom = OMX_TI_COLOR_FormatYUV420PackedSemiPlanarInterlaced,
+#endif
     OMX_COLOR_FormatMax = 0x7FFFFFFF
 } OMX_COLOR_FORMATTYPE;
 

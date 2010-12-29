@@ -123,6 +123,14 @@ public:
             size_t encodedWidth, size_t encodedHeight,
             size_t displayWidth, size_t displayHeight,
             int32_t rotationDegrees);
+    virtual sp<IOMXRenderer> createRenderer(
+            const sp<ISurface> &surface,
+            const char *componentName,
+            OMX_COLOR_FORMATTYPE colorFormat,
+            size_t encodedWidth, size_t encodedHeight,
+            size_t displayWidth, size_t displayHeight,
+            int32_t rotationDegrees,
+            int isS3D, int numOfOpBuffers);
 
     virtual void binderDied(const wp<IBinder> &the_late_who);
 
