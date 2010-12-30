@@ -195,7 +195,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     
     // Vibrator pattern for haptic feedback during boot when safe mode is enabled.
     long[] mSafeModeEnabledVibePattern;
-
+    
+    // Vibrator pattern for haptic feedback on KEY_UP
+    long[] mVirtualKeyUpVibePattern;
+    
     /** If true, hitting shift & menu will broadcast Intent.ACTION_BUG_REPORT */
     boolean mEnableShiftMenuBugReports = false;
     
@@ -597,16 +600,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Intent.EXTRA_DOCK_STATE_UNDOCKED);
         }
         mVibrator = new Vibrator();
-        mLongPressVibePattern = getLongIntArray(mContext.getResources(),
-                com.android.internal.R.array.config_longPressVibePattern);
-        mVirtualKeyVibePattern = getLongIntArray(mContext.getResources(),
-                com.android.internal.R.array.config_virtualKeyVibePattern);
-        mKeyboardTapVibePattern = getLongIntArray(mContext.getResources(),
-                com.android.internal.R.array.config_keyboardTapVibePattern);
+        mLongPressVibePattern = loadHaptic(HapticFeedbackConstants.LONG_PRESS);
+        mVirtualKeyVibePattern = loadHaptic(HapticFeedbackConstants.VIRTUAL_KEY);
+        mKeyboardTapVibePattern = loadHaptic(HapticFeedbackConstants.KEYBOARD_TAP);
         mSafeModeDisabledVibePattern = getLongIntArray(mContext.getResources(),
                 com.android.internal.R.array.config_safeModeDisabledVibePattern);
         mSafeModeEnabledVibePattern = getLongIntArray(mContext.getResources(),
                 com.android.internal.R.array.config_safeModeEnabledVibePattern);
+        mVirtualKeyUpVibePattern = loadHaptic(HapticFeedbackConstants.VIRTUAL_RELEASED);
     }
 
     public void updateSettings() {
@@ -1776,6 +1777,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         if (down && (policyFlags & WindowManagerPolicy.FLAG_VIRTUAL) != 0) {
             performHapticFeedbackLw(null, HapticFeedbackConstants.VIRTUAL_KEY, false);
+        } else if ((policyFlags & WindowManagerPolicy.FLAG_VIRTUAL) != 0) {
+            performHapticFeedbackLw(null, HapticFeedbackConstants.VIRTUAL_RELEASED, false);
         }
 
         boolean isTrackballDown;
@@ -2472,6 +2475,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case HapticFeedbackConstants.SAFE_MODE_ENABLED:
                 pattern = mSafeModeEnabledVibePattern;
                 break;
+            case HapticFeedbackConstants.VIRTUAL_RELEASED:
+                final boolean upDisabled = Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.HAPTIC_FEEDBACK_UP_ENABLED, 0) == 0;
+                if (upDisabled != true) {
+                    pattern = mVirtualKeyUpVibePattern;
+                    break;
+                } else {
+                    return false;
+                }
+                
             default:
                 return false;
         }
@@ -2496,4 +2509,148 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         // disable key repeat when screen is off
         return mScreenOn;
     }
+    
+    /*
+     * mtwebster - Added functions for allowing adjustable haptic feedback in
+     * certain global areas of phone
+     */
+    long[] hapLoaded; // the end result we want saved haptic value from settings.system
+    long[] hapDefault; // pull default haptic value from xml (probably from device overlay)
+    String hapString; // pull saved value from system.settings
+    String hapTypeString;
+    String hapDefTypeString;
+    boolean hapDone = false;
+
+    private long[] loadHaptic(int hapType) {
+        switch (hapType) {
+            case HapticFeedbackConstants.VIRTUAL_KEY:
+                hapDone = false;
+                hapTypeString = Settings.System.HAPTIC_DOWN_ARRAY;
+                hapDefTypeString = Settings.System.HAPTIC_DOWN_ARRAY_DEFAULT;
+                Log.i(TAG, "names for haptic settings for haptic down array: " + hapTypeString
+                        + " default: " + hapDefTypeString);
+                hapString = Settings.System.getString(mContext.getContentResolver(),
+                        Settings.System.HAPTIC_DOWN_ARRAY);
+                hapDefault = getLongIntArray(mContext.getResources(),
+                        com.android.internal.R.array.config_virtualKeyVibePattern);
+                Log.i(TAG, "pulled string: " + hapString + " default: "
+                        + longArrayToString(hapDefault));
+                if (hapString != null) {
+                    hapLoaded = stringToLongArray(hapString);
+                    hapDone = true;
+                    Log.i(TAG, "haptic done for down array!");
+                }
+                break;
+            case HapticFeedbackConstants.VIRTUAL_RELEASED:
+                hapDone = false;
+                hapTypeString = Settings.System.HAPTIC_UP_ARRAY;
+                hapDefTypeString = Settings.System.HAPTIC_UP_ARRAY_DEFAULT;
+                Log.i(TAG, "names for haptic settings for haptic up array: " + hapTypeString
+                        + " default: " + hapDefTypeString);
+                hapString = Settings.System.getString(mContext.getContentResolver(),
+                        Settings.System.HAPTIC_UP_ARRAY);
+                hapDefault = getLongIntArray(mContext.getResources(),
+                        com.android.internal.R.array.config_virtualKeyUpPattern);
+                Log.i(TAG, "pulled string: " + hapString + " default: "
+                        + longArrayToString(hapDefault));
+                if (hapString != null) {
+                    hapLoaded = stringToLongArray(hapString);
+                    hapDone = true;
+                    Log.i(TAG, "haptic done for up array!");
+                }
+                break;
+            case HapticFeedbackConstants.LONG_PRESS:
+                hapDone = false;
+                hapTypeString = Settings.System.HAPTIC_LONG_ARRAY;
+                hapDefTypeString = Settings.System.HAPTIC_LONG_ARRAY_DEFAULT;
+                Log.i(TAG, "names for haptic settings for haptic long array: " + hapTypeString
+                        + " default: " + hapDefTypeString);
+                hapString = Settings.System.getString(mContext.getContentResolver(),
+                        Settings.System.HAPTIC_LONG_ARRAY);
+                hapDefault = getLongIntArray(mContext.getResources(),
+                        com.android.internal.R.array.config_longPressVibePattern);
+                Log.i(TAG, "pulled string: " + hapString + " default: "
+                        + longArrayToString(hapDefault));
+                if (hapString != null) {
+                    hapLoaded = stringToLongArray(hapString);
+                    hapDone = true;
+                    Log.i(TAG, "haptic done for long array!");
+                }
+                break;
+            case HapticFeedbackConstants.KEYBOARD_TAP:
+                hapDone = false;
+                hapTypeString = Settings.System.HAPTIC_TAP_ARRAY;
+                hapDefTypeString = Settings.System.HAPTIC_TAP_ARRAY_DEFAULT;
+                Log.i(TAG, "names for haptic settings for haptic tap array: " + hapTypeString
+                        + " default: " + hapDefTypeString);
+                hapString = Settings.System.getString(mContext.getContentResolver(),
+                        Settings.System.HAPTIC_TAP_ARRAY);
+                hapDefault = getLongIntArray(mContext.getResources(),
+                        com.android.internal.R.array.config_keyboardTapVibePattern);
+                Log.i(TAG, "pulled string: " + hapString + " default: "
+                        + longArrayToString(hapDefault));
+                if (hapString != null) {
+                    hapLoaded = stringToLongArray(hapString);
+                    hapDone = true;
+                    Log.i(TAG, "haptic done for tap array!");
+                }
+                break;
+            default:
+                hapString = null;
+                hapDefault = null;
+        }
+        if (hapDone != true) {
+            hapString = longArrayToString(hapDefault);
+            saveHapticToSettings(hapTypeString, hapDefTypeString, hapString);
+            hapLoaded = hapDefault;
+            hapDone = true;
+        }
+        Settings.System.putString(mContext.getContentResolver(), hapDefTypeString,
+                longArrayToString(hapDefault));
+        return hapLoaded;
+    }
+
+    /**
+     * saveHapticToSettings should only be run on first boot of system - it
+     * saves the config.xml values to system settings, in both 'current'
+     * settings and 'default' settings - so the user can always go back to stock
+     * it also turns off the 2 additional haptic settings by default
+     * 
+     * @hide
+     */
+    private void saveHapticToSettings(String hapType, String hapDefType, String defString) {
+        Log.i(TAG, "Had to load default haptic settings for: " + hapType + " saving " + defString
+                + "to settings");
+        Settings.System.putString(mContext.getContentResolver(), hapType, defString);
+    }
+
+    private long[] stringToLongArray(String inpString) {
+        if (inpString == null) {
+            long[] returnLong = new long[1];
+            returnLong[0] = 0;
+            return returnLong;
+        }
+        String[] splitStr = inpString.split(",");
+        int los = splitStr.length;
+        long[] returnLong = new long[los];
+        int i;
+        for (i = 0; i < los; i++) {
+            returnLong[i] = Long.parseLong(splitStr[i].trim());
+        }
+        return returnLong;
+    }
+
+    private String longArrayToString(long[] inpLong) {
+        int lol = inpLong.length;
+        String workString = "";
+        int i;
+        for (i = 0; i < lol; i++) {
+            if (i > 0) {
+                workString = workString + ",";
+            }
+            workString = workString + String.valueOf(inpLong[i]);
+        }
+        return workString;
+    }
+
 }

@@ -2672,6 +2672,9 @@ public final class ViewRoot extends Handler implements ViewParent,
             switch (effectId) {
                 case SoundEffectConstants.CLICK:
                     audioManager.playSoundEffect(AudioManager.FX_KEY_CLICK);
+                    if (audioManager.queryHapticsAllEnabled()){
+                        performHapticFeedback(HapticFeedbackConstants.VIRTUAL_RELEASED, false);
+                        };
                     return;
                 case SoundEffectConstants.NAVIGATION_DOWN:
                     audioManager.playSoundEffect(AudioManager.FX_FOCUS_NAVIGATION_DOWN);

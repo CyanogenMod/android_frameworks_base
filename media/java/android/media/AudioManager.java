@@ -1216,6 +1216,13 @@ public class AudioManager {
         return Settings.System.getInt(mContext.getContentResolver(), Settings.System.SOUND_EFFECTS_ENABLED, 0) != 0;
     }
 
+    /**
+     * See if haptic feedback is enabled for screen touches of objects (called by ViewRoot)
+     * @hide
+     */
+    public boolean queryHapticsAllEnabled() {
+        return Settings.System.getInt(mContext.getContentResolver(), Settings.System.HAPTIC_FEEDBACK_ALL_ENABLED, 0) != 0;
+    }
 
     /**
      *  Load Sound effects.
