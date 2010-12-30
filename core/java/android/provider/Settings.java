@@ -3908,6 +3908,13 @@ public final class Settings {
          */
         public static final String ALLOW_MOVE_ALL_APPS_EXTERNAL =
                 "allow_move_all_apps_external";
+
+        /**
+         * Whether to allow killing of the foreground process by long-pressing
+         * the device's BACK button.
+         * @hide
+         */
+        public static final String KILL_APP_LONGPRESS_BACK = "kill_app_on_longpress_back";
         
         /**
          * @hide
