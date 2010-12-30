@@ -586,6 +586,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mContext.startActivity(i);
             } catch (URISyntaxException e) {
 
+            } catch (ActivityNotFoundException e) {
+
             }
         }
     }
