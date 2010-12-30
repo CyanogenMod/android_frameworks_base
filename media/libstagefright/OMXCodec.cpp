@@ -567,6 +567,7 @@ status_t OMXCodec::configureCodec(const sp<MetaData> &meta, uint32_t flags) {
         uint32_t type;
         const void *data;
         size_t size;
+
         if (meta->findData(kKeyESDS, &type, &data, &size)) {
             ESDS esds((const char *)data, size);
             CHECK_EQ(esds.InitCheck(), OK);
@@ -2040,7 +2041,15 @@ void OMXCodec::onEvent(OMX_EVENTTYPE event, OMX_U32 data1, OMX_U32 data2) {
         case OMX_EventPortSettingsChanged:
         {
             if(mState == EXECUTING)
-              onPortSettingsChanged(data1);
+                CODEC_LOGV("OMX_EventPortSettingsChanged(port=%ld, data2=0x%08lx)",
+                       data1, data2);
+
+                if (data2 == 0 || data2 == OMX_IndexParamPortDefinition) {
+                    onPortSettingsChanged(data1);
+                } else if (data1 == kPortIndexOutput
+                        && data2 == OMX_IndexConfigCommonOutputCrop) {
+                    // todo: handle crop rect
+                }
             else
               LOGE("Ignore PortSettingsChanged event \n");
             break;
