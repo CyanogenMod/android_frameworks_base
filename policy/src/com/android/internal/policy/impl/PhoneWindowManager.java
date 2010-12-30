@@ -233,7 +233,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     int mPointerLocationMode = 0;
     PointerLocationView mPointerLocationView = null;
     InputChannel mPointerLocationInputChannel;
-    
+    Long mTrackballHitTime;
+    boolean mVolumeUpPressed;
+    boolean mVolumeDownPressed;
+    static final long NEXT_DURATION = 400;
+
+
     private final InputHandler mPointerLocationInputHandler = new BaseInputHandler() {
         @Override
         public void handleMotion(MotionEvent event, Runnable finishedCallback) {
@@ -290,10 +295,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     // Behavior of trackball wake
     boolean mTrackballWakeScreen;
-
-    Long mTrackballHitTime;
-
-    static final long NEXT_DURATION = 400;
 
     // Behavior of POWER button while in-call and screen on.
     // (See Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR.)
@@ -516,6 +517,52 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
     };
+
+    /**
+     * When a volumeup-key longpress expires, skip songs based on key press
+     */
+    Runnable mVolumeUpLongPress = new Runnable() {
+        public void run() {
+            /*
+             * Eat the longpress so it won't dismiss the recent apps dialog when
+             * the user lets go of the volume key
+             */
+            mVolumeUpPressed = false;
+
+            // Shamelessly copied from Kmobs LockScreen controls, works for Pandora, etc...
+            sendMediaButtonEvent(KeyEvent.KEYCODE_MEDIA_NEXT);
+        };
+    };
+
+    /**
+     * When a volumedown-key longpress expires, skip songs based on key press
+     */
+    Runnable mVolumeDownLongPress = new Runnable() {
+        public void run() {
+            /*
+             * Eat the longpress so it won't dismiss the recent apps dialog when
+             * the user lets go of the volume key
+             */
+            mVolumeDownPressed = false;
+
+            // Shamelessly copied from Kmobs LockScreen controls, works for Pandora, etc...
+            sendMediaButtonEvent(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+        };
+    };
+
+    private void sendMediaButtonEvent(int code) {
+        long eventtime = SystemClock.uptimeMillis();
+
+        Intent downIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
+        KeyEvent downEvent = new KeyEvent(eventtime, eventtime, KeyEvent.ACTION_DOWN, code, 0);
+        downIntent.putExtra(Intent.EXTRA_KEY_EVENT, downEvent);
+        mContext.sendOrderedBroadcast(downIntent, null);
+
+        Intent upIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
+        KeyEvent upEvent = new KeyEvent(eventtime, eventtime, KeyEvent.ACTION_UP, code, 0);
+        upIntent.putExtra(Intent.EXTRA_KEY_EVENT, upEvent);
+        mContext.sendOrderedBroadcast(upIntent, null);
+    }
 
     /**
      * Create (if necessary) and launch the recent apps dialog
@@ -1755,11 +1802,43 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mBroadcastWakeLock.release();
         }
     }
-    
+
+    void handleVolumeKeyDown(int keycode) {
+        // when keyguard is showing and screen off, we need
+        // to handle the volume key for calls and music here
+        if (isInCall()) {
+            handleVolumeKey(AudioManager.STREAM_VOICE_CALL, keycode);
+        }
+        // Take an initial hit time so we can decide for skip or volume adjust
+        else if (isMusicActive()) {
+            if (keycode == KeyEvent.KEYCODE_VOLUME_UP) {
+                mVolumeUpPressed = true;
+                mHandler.postDelayed(mVolumeUpLongPress, ViewConfiguration.getLongPressTimeout());
+            }
+            else {
+                mVolumeDownPressed = true;
+                mHandler.postDelayed(mVolumeDownLongPress, ViewConfiguration.getLongPressTimeout());
+            }
+        }
+    }
+
+    void handleVolumeKeyUp(int keycode) {
+        if (isMusicActive()) {
+            if (keycode == KeyEvent.KEYCODE_VOLUME_UP)
+                mHandler.removeCallbacks(mVolumeUpLongPress);
+            else
+                mHandler.removeCallbacks(mVolumeDownLongPress);
+
+            // Normal volume change - not consumed be long press already
+            if (mVolumeUpPressed || mVolumeDownPressed)
+                handleVolumeKey(AudioManager.STREAM_MUSIC, keycode);
+        }
+    }
+
     static boolean isMediaKey(int code) {
-        if (code == KeyEvent.KEYCODE_HEADSETHOOK || 
+        if (code == KeyEvent.KEYCODE_HEADSETHOOK ||
                 code == KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE ||
-                code == KeyEvent.KEYCODE_MEDIA_STOP || 
+                code == KeyEvent.KEYCODE_MEDIA_STOP ||
                 code == KeyEvent.KEYCODE_MEDIA_NEXT ||
                 code == KeyEvent.KEYCODE_MEDIA_PREVIOUS || 
                 code == KeyEvent.KEYCODE_MEDIA_REWIND ||
@@ -1828,12 +1907,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     if (!mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(keyCode)
                             && (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
                                 || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
-                        // when keyguard is showing and screen off, we need
-                        // to handle the volume key for calls and  music here
-                        if (isInCall()) {
-                            handleVolumeKey(AudioManager.STREAM_VOICE_CALL, keyCode);
-                        } else if (isMusicActive()) {
-                            handleVolumeKey(AudioManager.STREAM_MUSIC, keyCode);
+                        handleVolumeKeyDown(keyCode);
+                    } else if (isWakeKey && !down) {
+                        if (!mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(keyCode)
+                                && (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
+                                        || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
+                            handleVolumeKeyUp(keyCode);
                         }
                     }
                 } else if (isTrackballDown && isMusicActive()) {
@@ -1853,11 +1932,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             i.putExtra("trackball", true);
 
                             mContext.sendBroadcast(i);
+                            // Force another double-tap for next skip
+                            mTrackballHitTime = null;
+                        } else {
+                        // Base double-tap off last hit.
+                            mTrackballHitTime = time;
                         }
-
-                        mTrackballHitTime = null;
                     }
-
                 }
             }
         } else if (!isScreenOn) {
