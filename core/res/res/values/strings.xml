@@ -2360,4 +2360,6 @@
     <!-- Text for message for an unknown external media state [CHAR LIMIT=NONE] -->
     <string name="media_unknown_state">External media in unknown state.</string>
 
+    <!--Application killed toast -->
+    <string name="app_killed_message">Application killed</string>
 </resources>

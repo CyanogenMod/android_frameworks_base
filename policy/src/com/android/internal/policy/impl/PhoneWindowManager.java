@@ -16,6 +16,8 @@
 
 package com.android.internal.policy.impl;
 
+import com.android.internal.R;
+
 import android.app.Activity;
 import android.app.ActivityManager.RunningAppProcessInfo;
 import android.app.ActivityManagerNative;
@@ -110,6 +112,7 @@ import android.view.WindowManagerImpl;
 import android.view.WindowManagerPolicy;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
 import android.media.IAudioService;
 import android.media.AudioManager;
 
@@ -529,6 +532,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 return;
             }
             try {
+                performHapticFeedbackLw(null, HapticFeedbackConstants.LONG_PRESS, false);
                 IActivityManager mgr = ActivityManagerNative.getDefault();
                 List<RunningAppProcessInfo> apps = mgr.getRunningAppProcesses();
                 for (RunningAppProcessInfo appInfo : apps) {
@@ -538,6 +542,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     if (uid >= Process.FIRST_APPLICATION_UID && uid <= Process.LAST_APPLICATION_UID
                             && appInfo.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
                         // Kill the entire pid
+                        Toast.makeText(mContext, R.string.app_killed_message, Toast.LENGTH_SHORT).show();
                         Process.killProcess(appInfo.pid);
                         break;
                     }
