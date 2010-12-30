@@ -386,9 +386,9 @@ public class NotificationManagerService extends INotificationManager.Stub
                 boolean batteryLow = (level >= 0 && level <= Power.LOW_BATTERY_THRESHOLD);
                 int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
                 boolean batteryFull = (status == BatteryManager.BATTERY_STATUS_FULL || level >= 90);
-		int percentage = intent.getIntExtra("scale", 100);
+                int percentage = intent.getIntExtra("scale", 100);
 
-		mBatteryLevel = level*100/percentage;
+                mBatteryLevel = level*100/percentage;
                 if (batteryCharging != mBatteryCharging ||
                         batteryLow != mBatteryLow ||
                         batteryFull != mBatteryFull) {
@@ -441,7 +441,7 @@ public class NotificationManagerService extends INotificationManager.Stub
                         updateGreenLight();
                     }
                 } else {
-		            int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_SCREEN_ON, 0);
+                    int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(), Settings.System.TRACKBALL_SCREEN_ON, 0);
                     if (mPulseScreen == 0) { //Why bother if we are going to pulse anyways?
                         updateNotificationPulse();
                     }
@@ -982,17 +982,17 @@ public class NotificationManagerService extends INotificationManager.Stub
             if (mLedNotification == old) {
                 mLedNotification = null;
             }
-	    //updatePackageList(pkg);
+            //updatePackageList(pkg);
             //Slog.i(TAG, "notification.lights="
             //        + ((old.notification.lights.flags & Notification.FLAG_SHOW_LIGHTS) != 0));
-	    //if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0) {
-            if(checkLight(notification, pkg)) {
-	        mLights.add(r);
+            //if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0) {
+            if (checkLight(notification, pkg)) {
+                mLights.add(r);
                 updateLightsLocked();
             } else {
-		if (old != null) {
-			if(checkLight(old.notification, old.pkg))
-				updateLightsLocked();
+                if (old != null) {
+                    if(checkLight(old.notification, old.pkg))
+                        updateLightsLocked();
                 }
             }
         }
@@ -1015,16 +1015,16 @@ public class NotificationManagerService extends INotificationManager.Stub
     }
 
     private boolean checkLight(Notification notification, String pkg) {
-	String[] mPackage = findPackage(pkg);
-	boolean flashLight = true;
-	if(((notification.flags & Notification.FLAG_ONGOING_EVENT) != 0)
-	|| ((notification.flags & Notification.FLAG_FOREGROUND_SERVICE) != 0) ) {
-        	flashLight = false;
+        String[] mPackage = findPackage(pkg);
+        boolean flashLight = true;
+        if(((notification.flags & Notification.FLAG_ONGOING_EVENT) != 0)
+                || ((notification.flags & Notification.FLAG_FOREGROUND_SERVICE) != 0) ) {
+            flashLight = false;
         } else if(mPackage != null) {
-		if(mPackage[1].equals("none"))
-			flashLight = false;
+            if(mPackage[1].equals("none"))
+                flashLight = false;
         }
-	return flashLight;
+        return flashLight;
    }
 
 
@@ -1218,13 +1218,13 @@ public class NotificationManagerService extends INotificationManager.Stub
             updateLightsLocked();
         }
     }
-    
+
     private void updateLights() {
         synchronized (mNotificationList) {
             updateLightsLocked();
         }
     }
-    
+
     private void updateRGBLights() {
         synchronized (mNotificationList) {
             updateRGBLightsLocked();
@@ -1389,8 +1389,7 @@ public class NotificationManagerService extends INotificationManager.Stub
     }
 
     // lock on mNotificationList
-    private void updateLightsLocked()
-    {
+    private void updateLightsLocked() {
         if (mAmberGreenLight) {
             updateGreenLightLocked();
         } else {
@@ -1545,10 +1544,10 @@ public class NotificationManagerService extends INotificationManager.Stub
         }
 
         boolean greenOn = mGreenLightOn;
-        //final boolean inQuietHours = inQuietHours();
+        final boolean inQuietHours = inQuietHours();
 
         // disable light if screen is on and "always show" is off
-        if (mLedNotification == null || mInCall //|| inQuietHours
+        if (mLedNotification == null || mInCall || inQuietHours
                 || (mScreenOn && !mNotificationAlwaysOnEnabled)) {
             mNotificationLight.turnOff();
             mGreenLightOn = false;
