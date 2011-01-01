@@ -16,6 +16,7 @@
 
 package android.database;
 
+import android.net.Uri;
 import android.os.Handler;
 
 /**
@@ -34,13 +35,23 @@ public abstract class ContentObserver {
     private final class NotificationRunnable implements Runnable {
 
         private boolean mSelf;
+        private Uri mUri = null;
 
         public NotificationRunnable(boolean self) {
             mSelf = self;
         }
 
+        public NotificationRunnable(Uri uri, boolean self) {
+            mSelf = self;
+            mUri = uri;
+        }
+
         public void run() {
-            ContentObserver.this.onChange(mSelf);
+            if (mUri != null) {
+                ContentObserver.this.onChangeUri(mUri, mSelf);
+            } else {
+                ContentObserver.this.onChange(mSelf);
+            }
         }
     }
 
@@ -63,6 +74,13 @@ public abstract class ContentObserver {
             ContentObserver contentObserver = mContentObserver;
             if (contentObserver != null) {
                 contentObserver.dispatchChange(selfChange);
+            }
+        }
+
+        public void onChangeUri(Uri uri, boolean selfChange) {
+            ContentObserver contentObserver = mContentObserver;
+            if (contentObserver != null) {
+                contentObserver.dispatchChange(uri, selfChange);
             }
         }
 
@@ -128,6 +146,9 @@ public abstract class ContentObserver {
      */
     public void onChange(boolean selfChange) {}
 
+    /** @hide */
+    public void onChangeUri(Uri uri, boolean selfChange) {}
+
     public final void dispatchChange(boolean selfChange) {
         if (mHandler == null) {
             onChange(selfChange);
@@ -135,4 +156,14 @@ public abstract class ContentObserver {
             mHandler.post(new NotificationRunnable(selfChange));
         }
     }
+
+    /** @hide */
+    public final void dispatchChange(Uri uri, boolean selfChange) {
+        if (mHandler == null) {
+            onChangeUri(uri, selfChange);
+        } else {
+            mHandler.post(new NotificationRunnable(uri, selfChange));
+        }
+    }
+
 }

@@ -24,45 +24,194 @@
     android:descendantFocusability="afterDescendants"
     >
 
-    <LinearLayout
+    <LinearLayout android:id="@+id/exp_view_lin_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:paddingTop="3dp"
         android:paddingBottom="5dp"
         android:paddingRight="3dp"
         android:background="@drawable/title_bar_portrait"
         >
-        <com.android.systemui.statusbar.CarrierLabel
-            android:layout_width="0dp"
+        <!-- Begin Power Widget -->
+        <LinearLayout android:id="@+id/exp_power_stat"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginTop="1dp"
-            android:layout_marginLeft="5dp"
-            android:layout_gravity="center_vertical"
-            android:paddingBottom="1dp"
-            android:paddingLeft="4dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="#ffdfdfdf"
-            />
-        <TextView android:id="@+id/clear_all_button"
-            android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+        >
+            <LinearLayout android:id="@+id/exp_power_stat_1"
+                    android:layout_width="0dip"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:visibility="gone"
+                    android:background="@drawable/stat_power_bg"
+            >
+                <ImageView android:id="@+id/exp_power_image_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:layout_weight="1"
+                        android:scaleType="center"
+                        />
+                <ImageView android:id="@+id/exp_power_indic_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/exp_power_stat_2"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                android:background="@drawable/stat_power_bg"
+            >
+                <ImageView android:id="@+id/exp_power_image_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:layout_weight="1"
+                        android:scaleType="center"
+                        />
+                <ImageView android:id="@+id/exp_power_indic_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/exp_power_stat_3"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                android:background="@drawable/stat_power_bg"
+            >
+                <ImageView android:id="@+id/exp_power_image_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:layout_weight="1"
+                        android:scaleType="center"
+                        />
+                <ImageView android:id="@+id/exp_power_indic_3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/exp_power_stat_4"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                    android:background="@drawable/stat_power_bg"
+           >
+                <ImageView android:id="@+id/exp_power_image_4"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:layout_weight="1"
+                        android:scaleType="center"
+                        />
+                <ImageView android:id="@+id/exp_power_indic_4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/exp_power_stat_5"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                android:background="@drawable/stat_power_bg"
+            >
+                <ImageView android:id="@+id/exp_power_image_5"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:layout_weight="1"
+                        android:scaleType="center"
+                        />
+                <ImageView android:id="@+id/exp_power_indic_5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        />
+            </LinearLayout>
+            <LinearLayout android:id="@+id/exp_power_stat_6"
+                android:layout_width="0dip"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="gone"
+                android:background="@drawable/stat_power_bg"
+            >
+                <ImageView android:id="@+id/exp_power_image_6"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dip"
+                        android:layout_weight="1"
+                        android:scaleType="center"
+                        />
+                <ImageView android:id="@+id/exp_power_indic_6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scaleType="fitXY"
+                        />
+            </LinearLayout>
+        </LinearLayout>
+        <!-- End Power Widget -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="1dp"
-            android:textSize="14sp"
-            android:textColor="#ff000000"
-            android:text="@string/status_bar_clear_all_button"
-            style="?android:attr/buttonStyle"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:background="@android:drawable/btn_default_small"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+        >
+            <com.android.systemui.statusbar.CarrierLabel
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginTop="1dp"
+                android:layout_marginLeft="5dp"
+                android:layout_gravity="center_vertical"
+                android:paddingBottom="1dp"
+                android:paddingLeft="4dp"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textColor="#ffdfdfdf"
+                />
+            <TextView android:id="@+id/clear_all_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="1dp"
+                android:textSize="14sp"
+                android:textColor="#ff000000"
+                android:text="@string/status_bar_clear_all_button"
+                style="?android:attr/buttonStyle"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:background="@android:drawable/btn_default_small"
             />
+        </LinearLayout>
     </LinearLayout>
 
     <FrameLayout
-        android:layout_width="match_parent" 
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         >
