@@ -305,7 +305,7 @@ sp<SurfaceControl> SurfaceComposerClient::createSurface(
         sp<ISurface> surface = mClient->createSurface(&data, pid, name,
                 display, w, h, format, flags);
         if (surface != 0) {
-            result = new SurfaceControl(this, surface, data, w, h, format, flags);
+            result = new SurfaceControl(this, surface, data, w, h, data.format, flags);
         }
     }
     return result;
