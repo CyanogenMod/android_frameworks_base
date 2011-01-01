@@ -1968,16 +1968,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             performHapticFeedbackLw(null, HapticFeedbackConstants.VIRTUAL_RELEASED, false);
         }
 
-        boolean isTrackballDown;
-        try {
-            isTrackballDown = mWindowManager.getTrackballScancodeState(BTN_MOUSE) > 0;
-        } catch (RemoteException e) {
-            isTrackballDown = false;
+        boolean isBtnMouse = (keyCode == BTN_MOUSE);
+        if (isBtnMouse) {
+            // BTN_MOUSE is handled as Motion event only.
+            result &= ~ACTION_PASS_TO_USER;
         }
-        
+
         final boolean isWakeKey = (policyFlags
                 & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED)) != 0
-                || (isTrackballDown && mTrackballWakeScreen);
+                || (isBtnMouse && mTrackballWakeScreen);
         
         // If the key is injected, pretend that the screen is on and don't let the
         // device go to sleep.  This feature is mainly used for testing purposes.
@@ -2008,22 +2007,23 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 result &= ~ACTION_PASS_TO_USER;
                 
                 if (isWakeKey && down) {
-
                     // tell the mediator about a wake key, it may decide to
                     // turn on the screen depending on whether the key is
                     // appropriate.
-                    if (!mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(keyCode)
-                            && (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
-                                || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
-                        handleVolumeKeyDown(keyCode);
+                    if (!mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(keyCode)) {
+                        if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
+                            || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
+                            handleVolumeKeyDown(keyCode);
+                        }
                     }
-                } else if (isWakeKey && !down) {
-                    if (!mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(keyCode)
-                            && (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
-                                    || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
+                } else if (!down) {
+                    if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
+                        || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
                         handleVolumeKeyUp(keyCode);
                     }
-                } else if (isTrackballDown && isMusicActive()) {
+                }
+
+                if (isBtnMouse && down && isMusicActive()) {
                     long time = SystemClock.elapsedRealtime();
                     if (mTrackballHitTime == null) {
                         mTrackballHitTime = time;
