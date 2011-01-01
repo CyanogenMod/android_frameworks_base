@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.android.systemui.statusbar.policy;
+package com.android.systemui.statusbar;
 
 import android.app.StatusBarManager;
 import android.app.AlertDialog;
