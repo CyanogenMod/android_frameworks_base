@@ -1167,6 +1167,12 @@ sp<ISurface> SurfaceFlinger::createSurface(const sp<Client>& client, int pid,
             params->width = w;
             params->height = h;
             params->format = format;
+
+#ifdef NO_RGBX_8888
+            if (params->format == PIXEL_FORMAT_RGBX_8888)
+                params->format = PIXEL_FORMAT_RGBA_8888;
+#endif
+
             if (normalLayer != 0) {
                 Mutex::Autolock _l(mStateLock);
                 mLayerMap.add(surfaceHandle->asBinder(), normalLayer);
