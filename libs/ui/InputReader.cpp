@@ -897,6 +897,9 @@ void KeyboardInputMapper::process(const RawEvent* rawEvent) {
         if (isKeyboardOrGamepadKey(scanCode)) {
             processKey(rawEvent->when, rawEvent->value != 0, rawEvent->keyCode, scanCode,
                     rawEvent->flags);
+        } else if (scanCode == BTN_MOUSE) {
+            processKey(rawEvent->when, rawEvent->value != 0, BTN_MOUSE, scanCode,
+                    rawEvent->flags);
         }
         break;
     }
