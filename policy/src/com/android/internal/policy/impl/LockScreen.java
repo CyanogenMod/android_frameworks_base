@@ -339,9 +339,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mForwardIcon.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mCallback.pokeWakelock();
-                Intent intent;
-                intent = new Intent("com.android.music.musicservicecommand.next");
-                getContext().sendBroadcast(intent);
+                sendMediaButtonEvent(KeyEvent.KEYCODE_MEDIA_NEXT);
             }
         });
 
