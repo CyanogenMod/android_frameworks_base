@@ -56,6 +56,7 @@ public class CamcorderProfile
      */
     public static final int QUALITY_LOW  = 0;
     public static final int QUALITY_HIGH = 1;
+    public static final int QUALITY_HD   = 2;
 
     /**
      * Default recording duration in seconds before the session is terminated.
@@ -146,7 +147,7 @@ public class CamcorderProfile
      * @param quality the target quality level for the camcorder profile
      */
     public static CamcorderProfile get(int cameraId, int quality) {
-        if (quality < QUALITY_LOW || quality > QUALITY_HIGH) {
+        if (quality < QUALITY_LOW || quality > QUALITY_HD) {
             String errMessage = "Unsupported quality level: " + quality;
             throw new IllegalArgumentException(errMessage);
         }
