@@ -9923,6 +9923,7 @@ public final class ActivityManagerService extends ActivityManagerNative
             }
 
             ProcessRecord proc = mBackupTarget.app;
+            mBackupTarget.app = null;
             mBackupTarget = null;
             mBackupAppName = null;
 
