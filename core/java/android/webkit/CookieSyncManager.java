@@ -192,6 +192,9 @@ public final class CookieSyncManager extends WebSyncManager {
         }
     }
 
+    /*
+    * @hide
+    */
     public void clearRamCache(long fromTime){
         ArrayList<Cookie> cookieList = CookieManager.getInstance()
                 .getUpdatedCookiesSince(fromTime);
