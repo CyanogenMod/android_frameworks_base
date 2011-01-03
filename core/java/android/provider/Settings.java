@@ -2273,6 +2273,12 @@ public final class Settings {
         /** @hide */
         public static final String EXPANDED_FLASH_MODE = "expanded_flash_mode";
 
+        /** @hide */
+        public static final String ELECTRON_BEAM_ANIMATION_ON = "electron_beam_animation_on";
+
+        /** @hide */
+        public static final String ELECTRON_BEAM_ANIMATION_OFF = "electron_beam_animation_off";
+
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
