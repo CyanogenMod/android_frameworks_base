@@ -1648,8 +1648,10 @@ status_t SurfaceFlinger::electronBeamOffAnimationImplLocked()
 {
     status_t result = PERMISSION_DENIED;
 
+#ifndef HAS_LIMITED_EGL
     if (!GLExtensions::getInstance().haveFramebufferObject())
         return INVALID_OPERATION;
+#endif
 
     // get screen geometry
     const DisplayHardware& hw(graphicPlane(0).displayHardware());
@@ -1791,9 +1793,10 @@ status_t SurfaceFlinger::electronBeamOnAnimationImplLocked()
 {
     status_t result = PERMISSION_DENIED;
 
+#ifndef HAS_LIMITED_EGL
     if (!GLExtensions::getInstance().haveFramebufferObject())
         return INVALID_OPERATION;
-
+#endif
 
     // get screen geometry
     const DisplayHardware& hw(graphicPlane(0).displayHardware());
