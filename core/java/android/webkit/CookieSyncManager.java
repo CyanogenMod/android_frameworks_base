@@ -192,7 +192,9 @@ public final class CookieSyncManager extends WebSyncManager {
         }
     }
 
-    /*
+   /**
+    * Used by Incognito mode
+    *
     * @hide
     */
     public void clearRamCache(long fromTime){
