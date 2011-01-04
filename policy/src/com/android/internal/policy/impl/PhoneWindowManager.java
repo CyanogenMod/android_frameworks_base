@@ -2016,12 +2016,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             && (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
                                 || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
                         handleVolumeKeyDown(keyCode);
-                    } else if (isWakeKey && !down) {
-                        if (!mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(keyCode)
-                                && (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
-                                        || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
-                            handleVolumeKeyUp(keyCode);
-                        }
+                    }
+                } else if (isWakeKey && !down) {
+                    if (!mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(keyCode)
+                            && (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
+                                    || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
+                        handleVolumeKeyUp(keyCode);
                     }
                 } else if (isTrackballDown && isMusicActive()) {
                     long time = SystemClock.elapsedRealtime();
