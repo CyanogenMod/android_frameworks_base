@@ -1981,6 +1981,10 @@ void OMXCodec::onEvent(OMX_EVENTTYPE event, OMX_U32 data1, OMX_U32 data2) {
 
         case OMX_EventError:
         {
+            if (data1 && (OMX_S32)data1 == OMX_ErrorSameState) {
+                /* Don't raise fatal errors for samestate changes */
+                break;
+            }
             CODEC_LOGE("ERROR(0x%08lx, %ld)", data1, data2);
 
             setState(ERROR);
