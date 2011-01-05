@@ -29,6 +29,9 @@ endif
 ifeq ($(TARGET_BOARD_PLATFORM), s5pc110)
 	LOCAL_CFLAGS += -DHAS_CONTEXT_PRIORITY
 endif
+ifeq ($(BOARD_HAS_LIMITED_EGL), true)
+	LOCAL_CFLAGS += -DHAS_LIMITED_EGL
+endif
 
 
 # need "-lrt" on Linux simulator to pick up clock_gettime
