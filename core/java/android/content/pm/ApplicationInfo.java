@@ -383,7 +383,7 @@ public class ApplicationInfo extends PackageItemInfo implements Parcelable {
      * Is given application theme agnostic, i.e. behaves properly when default theme is changed.
      * {@hide}
      */
-    public boolean isThemeable = true;
+    public boolean isThemeable = false;
 
     private static final String PLUTO_SCHEMA = "http://www.w3.org/2001/pluto.html";
 

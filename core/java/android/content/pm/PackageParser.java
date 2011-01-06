@@ -1124,6 +1124,7 @@ public class PackageParser {
             } else if (tagName.equals("theme")) {
                 // this is a theme apk.
                 pkg.mIsThemeApk = true;
+                pkg.applicationInfo.isThemeable = false;
                 pkg.mThemeInfos.add(new ThemeInfo(parser, res, attrs));
             } else if (RIGID_PARSER) {
                 outError[0] = "Bad element under <manifest>: "
@@ -1476,7 +1477,7 @@ public class PackageParser {
         return a;
     }
 
-    private void parseAndApplyPlutoAttributes(XmlPullParser parser, AttributeSet attrs,
+    private void parseApplicationThemeAttributes(XmlPullParser parser, AttributeSet attrs,
             ApplicationInfo appInfo) {
         for (int i = 0; i < attrs.getAttributeCount(); i++) {
             if (!ApplicationInfo.isPlutoNamespace(parser.getAttributeNamespace(i))) {
@@ -1490,7 +1491,7 @@ public class PackageParser {
         }
     }
 
-    private void parseAndApplyPlutoAttributes(XmlPullParser parser, AttributeSet attrs,
+    private void parseActivityThemeAttributes(XmlPullParser parser, AttributeSet attrs,
             ActivityInfo ai) {
         for (int i = 0; i < attrs.getAttributeCount(); i++) {
             if (!ApplicationInfo.isPlutoNamespace(parser.getAttributeNamespace(i))) {
@@ -1509,7 +1510,9 @@ public class PackageParser {
         final ApplicationInfo ai = owner.applicationInfo;
         final String pkgName = owner.applicationInfo.packageName;
 
-        parseAndApplyPlutoAttributes(parser, attrs, ai);
+        // assume that this package is themeable unless explicitly set to false.
+        ai.isThemeable = true;
+        parseApplicationThemeAttributes(parser, attrs, ai);
 
         TypedArray sa = res.obtainAttributes(attrs,
                 com.android.internal.R.styleable.AndroidManifestApplication);
@@ -1981,7 +1984,7 @@ public class PackageParser {
             return null;
         }
 
-        parseAndApplyPlutoAttributes(parser, attrs, a.info);
+        parseActivityThemeAttributes(parser, attrs, a.info);
 
         int outerDepth = parser.getDepth();
         int type;
