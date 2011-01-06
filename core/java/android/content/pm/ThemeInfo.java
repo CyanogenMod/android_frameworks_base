@@ -34,121 +34,39 @@ import android.content.res.Resources;
  * Below is an example of theme tag
  *    <theme
  *        pluto:name="Pluto Default"
- *        pluto:thumbnail="media/images/app_thumbnail.png"
- *        pluto:preview="media/images/preview.png"
+ *        pluto:preview="@drawable/preview"
  *        pluto:author="John Doe"
  *        pluto:ringtoneFileName="media/audio/ringtone.mp3"
  *        pluto:notificationRingtoneFileName="media/audio/locked/notification.mp3"
  *        pluto:copyright="T-Mobile, 2009"
  *        pluto:wallpaperImage="media/images/wallpaper.jpg"
- *        pluto:favesBackground="media/images/locked/background.jpg"
- *        pluto:soundpackName="<package_name>/<sound_pack_name>"
  *    />
  *
  * @hide
  */
 public final class ThemeInfo extends BaseThemeInfo {
+    private enum AttributeIndex {
+        THEME_PACKAGE_INDEX,
+        PREVIEW_INDEX,
+        AUTHOR_INDEX,
+        THEME_INDEX,
+        THEME_STYLE_NAME_INDEX,
+        THUMBNAIL_INDEX,
+        RINGTONE_FILE_NAME_INDEX,
+        NOTIFICATION_RINGTONE_FILE_NAME_INDEX,
+        WALLPAPER_IMAGE_INDEX,
+        COPYRIGHT_INDEX,
+        RINGTONE_NAME_INDEX,
+        NOTIFICATION_RINGTONE_NAME_INDEX,
+        STYLE_INDEX;
 
-    /**
-     * {@link #name}
-     *
-     */
-    private static final int THEME_PACKAGE_INDEX = 0;
-
-    /**
-     * {@link #thumbnail}
-     *
-     */
-    private static final int THUMBNAIL_INDEX = 1;
-
-    /**
-     * {@link #preview}
-     *
-     */
-    private static final int PREVIEW_INDEX = 2;
-
-    /**
-     * {@link #author}
-     *
-     */
-    private static final int AUTHOR_INDEX = 3;
-
-    /**
-     * {@link #themeId}
-     *
-     */
-    private static final int THEME_INDEX = 4;
-
-    /**
-     * {@link #themeStyleName}
-     *
-     */
-    private static final int THEME_STYLE_NAME_INDEX = 5;
-
-    /**
-     * {@link #ringtoneName}
-     *
-     */
-    private static final int RINGTONE_FILE_NAME_INDEX = 6;
-
-    /**
-     * {@link #notificationRingtoneName}
-     *
-     */
-    private static final int NOTIFICATION_RINGTONE_FILE_NAME_INDEX = 7;
-
-    /**
-     * {@link #favesImageName}
-     *
-     */
-    private static final int FAVES_IMAGE_NAME_INDEX = 8;
-
-    /**
-     * {@link #favesAppImageName}
-     *
-     */
-    private static final int FAVES_APP_IMAGE_NAME_INDEX = 9;
-
-    /**
-     * {@link #wallpaperImageName}
-     *
-     */
-    private static final int WALLPAPER_IMAGE_NAME_INDEX = 10;
-
-    /**
-     * {@link #copyright}
-     *
-     */
-    private static final int COPYRIGHT_INDEX = 11;
-
-    /**
-     * {@link #ringtoneName}
-     *
-     */
-    private static final int RINGTONE_NAME_INDEX = 12;
-
-    /**
-     * {@link #notificationRingtoneName}
-     *
-     */
-    private static final int NOTIFICATION_RINGTONE_NAME_INDEX = 13;
-
-    /**
-     * {@link #soundPackName}
-     *
-     */
-    private static final int SOUNDPACK_NAME_INDEX = 14;
-
-    /**
-     * {@link #styleResourceId}
-     *
-     */
-    private static final int STYLE_INDEX = 15;
-
+        public static AttributeIndex get(int ordinal) {
+            return values()[ordinal];
+        }
+    };
 
     private static final String [] compulsoryAttributes = new String [] {
         "name",
-        "thumbnail",
         "preview",
         "author",
         "themeId",
@@ -156,36 +74,35 @@ public final class ThemeInfo extends BaseThemeInfo {
     };
 
     private static final String [] optionalAttributes = new String [] {
+        "thumbnail",
         "ringtoneFileName",
         "notificationRingtoneFileName",
-        "favesBackground",
-        "favesAppsBackground",
         "wallpaperImage",
         "copyright",
         "ringtoneName",
         "notificationRingtoneName",
-        "soundpackName",
         "styleId",
     };
 
-    private static Map<String, Integer> attributesLookupTable;
+    private static final Map<String, AttributeIndex> sAttributesLookupTable;
 
     static {
-        attributesLookupTable = new HashMap<String, Integer>();
+        sAttributesLookupTable = new HashMap<String, AttributeIndex>();
         for (int i = 0; i < compulsoryAttributes.length; i++) {
-            attributesLookupTable.put(compulsoryAttributes[i], i);
+            sAttributesLookupTable.put(compulsoryAttributes[i], AttributeIndex.get(i));
         }
 
         for (int i = 0; i < optionalAttributes.length; i++) {
-            attributesLookupTable.put(optionalAttributes[i], compulsoryAttributes.length + i);
+            sAttributesLookupTable.put(optionalAttributes[i],
+                    AttributeIndex.get(compulsoryAttributes.length + i));
         }
     }
 
     public ThemeInfo(XmlPullParser parser, Resources res, AttributeSet attrs) throws XmlPullParserException {
         super();
 
-        type = InfoObjectType.TYPE_THEME;
-        Map<String, Integer> tempMap = new HashMap<String, Integer>(attributesLookupTable);
+        Map<String, AttributeIndex> tempMap =
+                new HashMap<String, AttributeIndex>(sAttributesLookupTable);
         int numberOfCompulsoryAttributes = 0;
         for (int i = 0; i < attrs.getAttributeCount(); i++) {
             if (!ApplicationInfo.isPlutoNamespace(parser.getAttributeNamespace(i))) {
@@ -193,10 +110,10 @@ public final class ThemeInfo extends BaseThemeInfo {
             }
             String key = attrs.getAttributeName(i);
             if (tempMap.containsKey(key)) {
-                int index = tempMap.get(key);
+                AttributeIndex index = tempMap.get(key);
                 tempMap.remove(key);
 
-                if (index < compulsoryAttributes.length) {
+                if (index.ordinal() < compulsoryAttributes.length) {
                     numberOfCompulsoryAttributes++;
                 }
                 switch (index) {
@@ -207,7 +124,7 @@ public final class ThemeInfo extends BaseThemeInfo {
 
                     case THUMBNAIL_INDEX:
                         // theme thumbprint
-                        thumbnail = attrs.getAttributeValue(i);
+                        thumbnailResourceId = attrs.getAttributeResourceValue(i, 0);
                         break;
 
                     case AUTHOR_INDEX:
@@ -236,22 +153,9 @@ public final class ThemeInfo extends BaseThemeInfo {
                         changeDrmFlagIfNeeded(notificationRingtoneFileName);
                         break;
 
-                    case FAVES_IMAGE_NAME_INDEX:
-                        // faves background
-                        favesImageName = attrs.getAttributeValue(i);
-                        changeDrmFlagIfNeeded(favesImageName);
-                        break;
-
-                    case FAVES_APP_IMAGE_NAME_INDEX:
-                        // favesAppBackground attribute
-                        favesAppImageName = attrs.getAttributeValue(i);
-                        changeDrmFlagIfNeeded(favesAppImageName);
-                        break;
-
-                    case WALLPAPER_IMAGE_NAME_INDEX:
+                    case WALLPAPER_IMAGE_INDEX:
                         // wallpaperImage attribute
-                        wallpaperImageName = attrs.getAttributeValue(i);
-                        changeDrmFlagIfNeeded(wallpaperImageName);
+                        wallpaperResourceId = attrs.getAttributeResourceValue(i, 0);
                         break;
 
                     case COPYRIGHT_INDEX:
@@ -269,17 +173,13 @@ public final class ThemeInfo extends BaseThemeInfo {
                         notificationRingtoneName = attrs.getAttributeValue(i);
                         break;
 
-                    case SOUNDPACK_NAME_INDEX:
-                        soundPackName = attrs.getAttributeValue(i);
-                        break;
-
                     case STYLE_INDEX:
                         styleResourceId = attrs.getAttributeResourceValue(i, 0);
                         break;
 
                     case PREVIEW_INDEX:
                         // theme thumbprint
-                        preview = attrs.getAttributeValue(i);
+                        previewResourceId = attrs.getAttributeResourceValue(i, 0);
                         break;
                 }
             }
@@ -287,19 +187,6 @@ public final class ThemeInfo extends BaseThemeInfo {
         if (numberOfCompulsoryAttributes < compulsoryAttributes.length) {
             throw new XmlPullParserException("Not all compulsory attributes are specified in <theme>");
         }
-    }
-
-    /*
-     * Flatten this object in to a Parcel.
-     *
-     * @param dest The Parcel in which the object should be written.
-     * @param flags Additional flags about how the object should be written.
-     * May be 0 or {@link #PARCELABLE_WRITE_RETURN_VALUE}.
-     *
-     * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
-     */
-    public void writeToParcel(Parcel dest, int flags) {
-        super.writeToParcel(dest, flags);
     }
 
     public static final Parcelable.Creator<ThemeInfo> CREATOR
@@ -316,5 +203,4 @@ public final class ThemeInfo extends BaseThemeInfo {
     private ThemeInfo(Parcel source) {
         super(source);
     }
-
 }

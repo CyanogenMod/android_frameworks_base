@@ -28,33 +28,11 @@ import android.content.res.Resources;
 public class BaseThemeInfo implements Parcelable {
 
     /**
-     * The name of the wallpaper image file.
-     * Specifies a relative path in assets subfolder.
-     * If the parent's name is "locked" - DRM protected.
+     * Wallpaper drawable.
      *
      * @see wallpaperImage attribute
      */
-    public String wallpaperImageName;
-
-    /**
-     * The name of the favorites background image file.
-     * Specifies a relative path in assets subfolder.
-     * If the parent's name is "locked" - DRM protected.
-     *
-     * @see favesBackground attribute
-     *
-     */
-    public String favesImageName;
-
-    /**
-     * The name of the favorite apps background image file.
-     * Specifies a relative path in assets subfolder.
-     * If the parent's name is "locked" - DRM protected.
-     *
-     * @see favesAppBackground attribute
-     *
-     */
-    public String favesAppImageName;
+    public int wallpaperResourceId;
 
     /**
      * The resource id of theme thumbnail.
@@ -63,7 +41,7 @@ public class BaseThemeInfo implements Parcelable {
      * @see thumbnail attribute
      *
      */
-    public String thumbnail;
+    public int thumbnailResourceId;
 
     /**
      * The theme id, which does not change when the theme is modified.
@@ -159,26 +137,11 @@ public class BaseThemeInfo implements Parcelable {
     public String themeStyleName;
 
     /**
-     * The filename of the preview image.
-     * Specifies a theme preview image resource as a path into the assets
-     * subfolder.
+     * Preview image drawable.
      *
      * @see preview attribute
      */
-    public String preview;
-
-    /**
-     * {@hide}
-     */
-    public enum InfoObjectType {
-        TYPE_THEME,
-        TYPE_SOUNDPACK, /** Currently not supported. */
-    }
-
-    /**
-     * {@hide}
-     */
-    public InfoObjectType type;
+    public int previewResourceId;
 
     /**
      * The name of a sound pack.
@@ -214,11 +177,8 @@ public class BaseThemeInfo implements Parcelable {
      * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
      */
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(objectTypeToInt(type));
-        dest.writeString(wallpaperImageName);
-        dest.writeString(favesImageName);
-        dest.writeString(favesAppImageName);
-        dest.writeString(thumbnail);
+        dest.writeInt(wallpaperResourceId);
+        dest.writeInt(thumbnailResourceId);
         dest.writeString(themeId);
         dest.writeInt(styleResourceId);
         dest.writeString(name);
@@ -231,7 +191,7 @@ public class BaseThemeInfo implements Parcelable {
         dest.writeInt(isDrmProtected? 1 : 0);
         dest.writeString(soundPackName);
         dest.writeString(themeStyleName);
-        dest.writeString(preview);
+        dest.writeInt(previewResourceId);
     }
 
     /** @hide */
@@ -259,11 +219,8 @@ public class BaseThemeInfo implements Parcelable {
     }
 
     protected BaseThemeInfo(Parcel source) {
-        type = intToInfoObjectType(source.readInt());
-        wallpaperImageName = source.readString();
-        favesImageName = source.readString();
-        favesAppImageName = source.readString();
-        thumbnail = source.readString();
+        wallpaperResourceId = source.readInt();
+        thumbnailResourceId = source.readInt();
         themeId = source.readString();
         styleResourceId = source.readInt();
         name = source.readString();
@@ -276,7 +233,7 @@ public class BaseThemeInfo implements Parcelable {
         isDrmProtected = (source.readInt() != 0);
         soundPackName = source.readString();
         themeStyleName = source.readString();
-        preview = source.readString();
+        previewResourceId = source.readInt();
     }
 
     protected void changeDrmFlagIfNeeded(String resourcePath) {
@@ -284,33 +241,4 @@ public class BaseThemeInfo implements Parcelable {
             isDrmProtected = true;
         }
     }
-
-    private int objectTypeToInt(InfoObjectType type) {
-        switch (type) {
-            case TYPE_THEME:
-                return 0;
-
-            case TYPE_SOUNDPACK:
-                return 1;
-
-            default:
-                Log.e("BaseThemeInfo", "unknown type " + type.toString());
-                return 0;
-        }
-    }
-
-    private InfoObjectType intToInfoObjectType(int value) {
-        switch (value) {
-            case 0:
-                return InfoObjectType.TYPE_THEME;
-
-            case 1:
-                return InfoObjectType.TYPE_SOUNDPACK;
-
-            default:
-                Log.e("BaseThemeInfo", "unknown value " + value);
-                return InfoObjectType.TYPE_THEME;
-        }
-    }
-
 }
