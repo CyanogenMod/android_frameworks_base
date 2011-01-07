@@ -152,16 +152,6 @@ public:
                                     int notificationFrames = 0,
                                     int sessionId = 0);
 
-                        AudioTrack( int streamType,
-                                    uint32_t sampleRate  = 0,
-                                    int format           = 0,
-                                    int channels         = 0,
-                                    int frameCount       = 0,
-                                    uint32_t flags       = 0,
-                                    callback_t cbf       = 0,
-                                    void* user           = 0,
-                                    int notificationFrames = 0);
-
     /* Creates an audio track and registers it with AudioFlinger. With this constructor,
      * The PCM data to be rendered by AudioTrack is passed in a shared memory buffer
      * identified by the argument sharedBuffer. This prototype is for static buffer playback.
