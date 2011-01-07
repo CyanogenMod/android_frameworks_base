@@ -2069,6 +2069,9 @@ public final class ActivityManagerService extends ActivityManagerNative
             mMainStack.startActivityUncheckedLocked(pal.r, pal.sourceRecord,
                     pal.grantedUriPermissions, pal.grantedMode, pal.onlyIfNeeded,
                     doResume && i == (N-1));
+            pal.r = null;
+            pal.sourceRecord = null;
+
         }
         mPendingActivityLaunches.clear();
     }
@@ -2568,6 +2571,7 @@ public final class ActivityManagerService extends ActivityManagerNative
                     mMainStack.mHistory.remove(i);
 
                     r.inHistory = false;
+                    r.resultTo = null;
                     mWindowManager.removeAppToken(r);
                     if (VALIDATE_TOKENS) {
                         mWindowManager.validateAppTokens(mMainStack.mHistory);
@@ -9094,6 +9098,10 @@ public final class ActivityManagerService extends ActivityManagerNative
         } else {
             if (DEBUG_SERVICE) Slog.v(
                 TAG, "Removed service that is not running: " + r);
+        }
+
+        if (r.connections.size() > 0) {
+            r.connections.clear();
         }
 
         if (r.bindings.size() > 0) {
