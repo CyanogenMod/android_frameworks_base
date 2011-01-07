@@ -158,15 +158,6 @@ public:
                                     int notificationFrames = 0,
                                     int sessionId = 0);
 
-                        AudioRecord(int inputSource,
-                                    uint32_t sampleRate = 0,
-                                    int format          = 0,
-                                    uint32_t channels = AudioSystem::CHANNEL_IN_MONO,
-                                    int frameCount      = 0,
-                                    uint32_t flags      = 0,
-                                    callback_t cbf = 0,
-                                    void* user = 0,
-                                    int notificationFrames = 0);
 
     /* Terminates the AudioRecord and unregisters it from AudioFlinger.
      * Also destroys all resources assotiated with the AudioRecord.
