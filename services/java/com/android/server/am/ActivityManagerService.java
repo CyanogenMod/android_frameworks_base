@@ -11373,16 +11373,10 @@ public final class ActivityManagerService extends ActivityManagerNative
                                      !values.locale.equals(mConfiguration.locale),
                                      values.userSetLocale);
                 }
-                
-//                if(values.themeResource != 0){
-//                    saveThemeResourceLocked(values.themeResource, (values.themeResource != mConfiguration.themeResource));
-//                }
 
                 if (values.customTheme != null) {
                     saveThemeResourceLocked(values.customTheme,
-                            (!values.customTheme.equals(mConfiguration.customTheme)));
-                } else if (mConfiguration.customTheme != null) {
-                    saveThemeResourceLocked(null, true);
+                            !values.customTheme.equals(mConfiguration.customTheme));
                 }
 
                 mConfigurationSeq++;
@@ -11471,27 +11465,10 @@ public final class ActivityManagerService extends ActivityManagerNative
         }
     }
 
-    private void saveThemeResourceLocked(CustomTheme customTheme, boolean isDiff){
+    private void saveThemeResourceLocked(CustomTheme t, boolean isDiff){
         if(isDiff){
-            String themeId;
-            String themePackage;
-            String resourcePath;
-            boolean hasParent;
-            boolean forceUpdate;
-
-            if (customTheme != null) {
-                themeId = customTheme.getThemeId();
-                themePackage = customTheme.getThemePackageName();
-            } else {
-                themeId = null;
-                themePackage = "";
-                resourcePath = null;
-                hasParent = false;
-                forceUpdate = false;
-            }
-
-            SystemProperties.set(Configuration.THEME_ID_PERSISTENCE_PROPERTY, themeId);
-            SystemProperties.set(Configuration.THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, themePackage);  
+            SystemProperties.set(Configuration.THEME_ID_PERSISTENCE_PROPERTY, t.getThemeId());
+            SystemProperties.set(Configuration.THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, t.getThemePackageName());  
         }
     }
 

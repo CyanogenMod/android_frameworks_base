@@ -51,7 +51,7 @@ public class AppsLaunchFailureReceiver extends BroadcastReceiver {
             if (mFailuresCount <= FAILURES_THRESHOLD) {
                 mFailuresCount++;
                 if (mFailuresCount == FAILURES_THRESHOLD) {
-                    CustomTheme defaultTheme = CustomTheme.getDefault();
+                    CustomTheme defaultTheme = CustomTheme.getSystemTheme();
                     ActivityManager am = (ActivityManager)context.getSystemService(Context.ACTIVITY_SERVICE);
                     Configuration currentConfig = am.getConfiguration();
                     currentConfig.customTheme = new CustomTheme(

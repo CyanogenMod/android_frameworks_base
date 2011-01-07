@@ -1204,7 +1204,7 @@ public final class ActivityThread {
         Configuration config = getConfiguration();
         if (compInfo.isThemeable && config != null) {
             if (config.customTheme == null) {
-                config.customTheme = CustomTheme.getDefault();
+                config.customTheme = CustomTheme.getBootTheme();
             }
 
             if (!TextUtils.isEmpty(config.customTheme.getThemePackageName())) {

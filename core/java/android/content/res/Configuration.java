@@ -266,8 +266,6 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         seq = o.seq;
         if (o.customTheme != null) {
             customTheme = (CustomTheme) o.customTheme.clone();
-        } else {
-            customTheme = CustomTheme.getDefault();
         }
     }
     
@@ -327,14 +325,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         screenLayout = SCREENLAYOUT_SIZE_UNDEFINED;
         uiMode = UI_MODE_TYPE_UNDEFINED;
         seq = 0;
-
-        String themeResource = SystemProperties.get(THEME_ID_PERSISTENCE_PROPERTY, null);
-        String themePackageName = SystemProperties.get(THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, null);
-        if (themeResource != null && themePackageName != null) {
-            customTheme = new CustomTheme(themeResource, themePackageName);
-        } else {
-            customTheme = CustomTheme.getDefault();
-        }
+        customTheme = null;
     }
 
     /** {@hide} */
@@ -431,12 +422,13 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         if (delta.seq != 0) {
             seq = delta.seq;
         }
-        
-        if (!CustomTheme.nullSafeEquals(delta.customTheme, customTheme)) {
+
+        if (delta.customTheme != null
+                && (customTheme == null || !customTheme.equals(delta.customTheme))) {
             changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
-            customTheme = (delta != null ? (CustomTheme)delta.customTheme.clone() :
-                CustomTheme.getDefault());
+            customTheme = (CustomTheme)delta.customTheme.clone();
         }
+
         return changed;
     }
 
@@ -516,7 +508,8 @@ public final class Configuration implements Parcelable, Comparable<Configuration
                 && uiMode != delta.uiMode) {
             changed |= ActivityInfo.CONFIG_UI_MODE;
         }
-        if (!CustomTheme.nullSafeEquals(delta.customTheme, customTheme)) {
+        if (delta.customTheme != null &&
+                (customTheme == null || !customTheme.equals(delta.customTheme))) {
             changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
         }
         
@@ -695,10 +688,17 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         n = this.screenLayout - that.screenLayout;
         if (n != 0) return n;
         n = this.uiMode - that.uiMode;
-        //if (n != 0) return n;
-        n = this.customTheme.getThemeId().compareTo(that.customTheme.getThemeId());
         if (n != 0) return n;
-        n = this.customTheme.getThemePackageName().compareTo(that.customTheme.getThemePackageName());
+        if (this.customTheme == null) {
+            if (that.customTheme != null) return 1;
+        } else if (that.customTheme == null) {
+            return -1;
+        } else {
+            n = this.customTheme.getThemeId().compareTo(that.customTheme.getThemeId());
+            if (n != 0) return n;
+            n = this.customTheme.getThemePackageName().compareTo(that.customTheme.getThemePackageName());
+            if (n != 0) return n;
+        }
 
         return n;
     }
@@ -724,6 +724,6 @@ public final class Configuration implements Parcelable, Comparable<Configuration
                 + this.keyboard + this.keyboardHidden + this.hardKeyboardHidden
                 + this.navigation + this.navigationHidden
                 + this.orientation + this.screenLayout + this.uiMode
-                + this.customTheme.hashCode();
+                + (this.customTheme != null ? this.customTheme.hashCode() : 0);
     }
 }
