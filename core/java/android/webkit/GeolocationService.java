@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (c) 2011, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -165,6 +166,12 @@ final class GeolocationService implements LocationListener {
         } catch(SecurityException e) {
             Log.e(TAG, "Caught security exception registering for location updates from system. " +
                 "This should only happen in DumpRenderTree.");
+        } catch(IllegalArgumentException e) {
+            Log.e(TAG, "Caught IllegalArugument Exception: Either provider or listener is null");
+            e.printStackTrace();
+        } catch (RuntimeException e) {
+            Log.e(TAG, "Caught RuntimeException");
+            e.printStackTrace();
         }
     }
 
