@@ -514,7 +514,7 @@ public class OverScroller {
         private int mOver;
 
         // Duration in milliseconds to go back from edge to edge. Springback is half of it.
-        private static final int OVERSCROLL_SPRINGBACK_DURATION = 200;
+        private static final int OVERSCROLL_SPRINGBACK_DURATION = 350;
 
         // Oscillation period
         private static final float TIME_COEF =
