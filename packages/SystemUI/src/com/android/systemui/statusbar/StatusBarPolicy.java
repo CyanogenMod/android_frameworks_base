@@ -387,6 +387,10 @@ public class StatusBarPolicy {
                     action.equals(AudioManager.VIBRATE_SETTING_CHANGED_ACTION)) {
                 updateVolume();
             }
+            else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
+                int state = intent.getIntExtra("state", 0);
+                mService.setIconVisibility("headset", (state == 1));
+            }
             else if (action.equals(TelephonyIntents.ACTION_SIM_STATE_CHANGED)) {
                 updateSimState(intent);
             }
@@ -478,6 +482,10 @@ public class StatusBarPolicy {
         mService.setIconVisibility("volume", false);
         updateVolume();
 
+        // headset
+        mService.setIcon("headset", com.android.internal.R.drawable.stat_sys_headset, 0);
+        mService.setIconVisibility("headset", false);
+
         IntentFilter filter = new IntentFilter();
 
         // Register for Intent broadcasts for...
@@ -487,6 +495,7 @@ public class StatusBarPolicy {
         filter.addAction(Intent.ACTION_POWER_CONNECTED);
         filter.addAction(Intent.ACTION_ALARM_CHANGED);
         filter.addAction(Intent.ACTION_SYNC_STATE_CHANGED);
+        filter.addAction(Intent.ACTION_HEADSET_PLUG);
         filter.addAction(AudioManager.RINGER_MODE_CHANGED_ACTION);
         filter.addAction(AudioManager.VIBRATE_SETTING_CHANGED_ACTION);
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
