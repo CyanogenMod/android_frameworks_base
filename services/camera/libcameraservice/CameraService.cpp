@@ -1295,9 +1295,7 @@ void CameraService::Client::copyFrameAndPostCopiedFrame(
 }
 
 int CameraService::Client::getOrientation(int degrees, bool mirror) {
-#ifndef BOARD_USE_FROYO_LIBCAMERA
     if (!mirror) {
-#endif
         if (degrees == 0) return 0;
         else if (degrees == 90) return HAL_TRANSFORM_ROT_90;
         else if (degrees == 180) return HAL_TRANSFORM_ROT_180;
@@ -1313,6 +1311,13 @@ int CameraService::Client::getOrientation(int degrees, bool mirror) {
         } else if (degrees == 270) {  // FLIP_H and ROT_270
             return HAL_TRANSFORM_FLIP_V | HAL_TRANSFORM_ROT_90;
         }
+    }
+#else
+    } else {
+        if (degrees == 0) return HAL_TRANSFORM_ROT_180;
+        else if (degrees == 90) return HAL_TRANSFORM_ROT_270;
+        else if (degrees == 180) return 0;
+        else if (degrees == 270) return HAL_TRANSFORM_ROT_90;
     }
 #endif
     LOGE("Invalid setDisplayOrientation degrees=%d", degrees);
@@ -1402,7 +1407,7 @@ static const CameraInfo sCameraInfo[] = {
     },
     {
         CAMERA_FACING_FRONT,
-        270, /* orientation */
+        90,  /* orientation */
     }
 };
 
