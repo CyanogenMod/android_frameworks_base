@@ -1,4 +1,4 @@
-/*
+*
  * Copyright (C) 2008 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -236,6 +236,17 @@ public class Camera {
             }
         }
         return null;
+    }
+
+    /**
+     * Creates a new Camera object to access a particular hardware device by name.
+     *
+     * This was introduced by HTC and is here for compatability.
+     * @hide
+     */
+    public static Camera open(String cameraName) {
+        int cameraId = "secondary".equals(cameraName) ? 1 : 0;
+        return open(cameraId);
     }
 
     Camera(int cameraId) {
