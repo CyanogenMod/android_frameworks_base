@@ -238,6 +238,17 @@ public class Camera {
         return null;
     }
 
+    /**
+     * Creates a new Camera object to access a particular hardware device by name.
+     *
+     * This was introduced by HTC and is here for compatability.
+     * @hide
+     */
+    public static Camera open(String cameraName) {
+        int cameraId = "secondary".equals(cameraName) ? 1 : 0;
+        return open(cameraId);
+    }
+
     Camera(int cameraId) {
         mShutterCallback = null;
         mRawImageCallback = null;
