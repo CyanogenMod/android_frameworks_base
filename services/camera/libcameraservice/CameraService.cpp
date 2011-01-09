@@ -1295,14 +1295,11 @@ void CameraService::Client::copyFrameAndPostCopiedFrame(
 }
 
 int CameraService::Client::getOrientation(int degrees, bool mirror) {
-#ifndef BOARD_USE_FROYO_LIBCAMERA
     if (!mirror) {
-#endif
         if (degrees == 0) return 0;
         else if (degrees == 90) return HAL_TRANSFORM_ROT_90;
         else if (degrees == 180) return HAL_TRANSFORM_ROT_180;
         else if (degrees == 270) return HAL_TRANSFORM_ROT_270;
-#ifndef BOARD_USE_FROYO_LIBCAMERA
     } else {  // Do mirror (horizontal flip)
         if (degrees == 0) {           // FLIP_H and ROT_0
             return HAL_TRANSFORM_FLIP_H;
@@ -1314,7 +1311,6 @@ int CameraService::Client::getOrientation(int degrees, bool mirror) {
             return HAL_TRANSFORM_FLIP_V | HAL_TRANSFORM_ROT_90;
         }
     }
-#endif
     LOGE("Invalid setDisplayOrientation degrees=%d", degrees);
     return -1;
 }
@@ -1443,8 +1439,21 @@ extern "C" sp<CameraHardwareInterface> openCameraHardware(int cameraId);
 extern "C" sp<CameraHardwareInterface> HAL_openCameraHardware(int cameraId)
 {
     LOGV("openCameraHardware: call createInstance");
-    if (getNumberOfCameras() == 2)
-       htcCameraSwitch(cameraId);
+    if (getNumberOfCameras() == 2) {
+        htcCameraSwitch(cameraId);
+#ifdef BOARD_USE_REVERSE_FFC
+        if (cameraId == 1) {
+            /* Change default parameters for the front camera */
+            sp<CameraHardwareInterface> hardware = openCameraHardware(cameraId);
+            if (hardware != NULL) {
+                CameraParameters params(hardware->getParameters());
+                params.set("front-camera-mode", "reverse"); // default is "mirror"
+                hardware->setParameters(params);
+            }
+            return hardware;
+        }
+#endif
+    }
     return openCameraHardware(cameraId);
 }
 #endif
