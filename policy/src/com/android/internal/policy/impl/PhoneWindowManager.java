@@ -240,7 +240,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     int mPointerLocationMode = 0;
     PointerLocationView mPointerLocationView = null;
     InputChannel mPointerLocationInputChannel;
-    Long mTrackballHitTime;
     boolean mVolumeUpPressed;
     boolean mVolumeDownPressed;
     static final long NEXT_DURATION = 400;
@@ -1955,7 +1954,27 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
         return false;    
     }
- 
+
+    @Override
+    public int interceptGenericBeforeQueueing(long when, int policyFlags) {
+        int result = ACTION_PASS_TO_USER;
+        result |= ACTION_POKE_USER_ACTIVITY;
+        result &= ~ACTION_PASS_TO_USER;
+        boolean isTrackballDown;
+        try {
+            isTrackballDown = mWindowManager.getTrackballScancodeState(BTN_MOUSE) > 0;
+        } catch (RemoteException e) {
+            isTrackballDown = false;
+        }
+
+        final boolean keyguardActive = (isScreenOn() ? mKeyguardMediator.isShowingAndNotHidden()
+                : mKeyguardMediator.isShowing());
+        if (isTrackballDown && keyguardActive && mTrackballWakeScreen) {
+            mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(BTN_MOUSE);
+        }
+        return result;
+    }
+
     /** {@inheritDoc} */
     @Override
     public int interceptKeyBeforeQueueing(long whenNanos, int keyCode, boolean down,
@@ -1968,16 +1987,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             performHapticFeedbackLw(null, HapticFeedbackConstants.VIRTUAL_RELEASED, false);
         }
 
-        boolean isBtnMouse = (keyCode == BTN_MOUSE);
-        if (isBtnMouse) {
-            // BTN_MOUSE is handled as Motion event only.
-            result &= ~ACTION_PASS_TO_USER;
-        }
-
         final boolean isWakeKey = (policyFlags
-                & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED)) != 0
-                || (isBtnMouse && mTrackballWakeScreen);
-        
+                & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED)) != 0;
+
         // If the key is injected, pretend that the screen is on and don't let the
         // device go to sleep.  This feature is mainly used for testing purposes.
         final boolean isInjected = (policyFlags & WindowManagerPolicy.FLAG_INJECTED) != 0;
@@ -2020,32 +2032,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
                         || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
                         handleVolumeKeyUp(keyCode);
-                    }
-                }
-
-                if (isBtnMouse && down && isMusicActive()) {
-                    long time = SystemClock.elapsedRealtime();
-                    if (mTrackballHitTime == null) {
-                        mTrackballHitTime = time;
-                    } else {
-                        long timeBetweenHits;
-                        if (time > mTrackballHitTime) {
-                            timeBetweenHits = time - mTrackballHitTime;
-                        } else {
-                            timeBetweenHits = time + (Long.MAX_VALUE - mTrackballHitTime);
-                        }
-                        if (timeBetweenHits < NEXT_DURATION) {
-                            Intent i = new Intent("com.android.music.musicservicecommand");
-                            i.putExtra("command", "next");
-                            i.putExtra("trackball", true);
-
-                            mContext.sendBroadcast(i);
-                            // Force another double-tap for next skip
-                            mTrackballHitTime = null;
-                        } else {
-                        // Base double-tap off last hit.
-                            mTrackballHitTime = time;
-                        }
                     }
                 }
             }
