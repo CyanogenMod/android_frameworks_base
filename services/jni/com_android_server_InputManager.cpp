@@ -52,6 +52,7 @@ static struct {
     jmethodID notifyANR;
     jmethodID interceptKeyBeforeQueueing;
     jmethodID interceptKeyBeforeDispatching;
+    jmethodID interceptGenericBeforeQueueing;
     jmethodID checkInjectEventsPermission;
     jmethodID filterTouchEvents;
     jmethodID filterJumpyTouchEvents;
@@ -907,6 +908,11 @@ void NativeInputManager::interceptGenericBeforeQueueing(nsecs_t when, uint32_t& 
                 policyFlags |= POLICY_FLAG_BRIGHT_HERE;
             }
         }
+        else {
+        	JNIEnv* env = jniEnv();
+        	jint wmActions = env->CallIntMethod(mCallbacksObj,
+        		gCallbacksClassInfo.interceptGenericBeforeQueueing,when, policyFlags);
+        }
     } else {
         policyFlags |= POLICY_FLAG_PASS_TO_USER;
     }
@@ -1341,6 +1347,9 @@ int register_android_server_InputManager(JNIEnv* env) {
 
     GET_METHOD_ID(gCallbacksClassInfo.interceptKeyBeforeDispatching, gCallbacksClassInfo.clazz,
             "interceptKeyBeforeDispatching", "(Landroid/view/InputChannel;IIIIII)Z");
+            
+    GET_METHOD_ID(gCallbacksClassInfo.interceptGenericBeforeQueueing, gCallbacksClassInfo.clazz,
+			"interceptGenericBeforeQueueing", "(JI)I");
 
     GET_METHOD_ID(gCallbacksClassInfo.checkInjectEventsPermission, gCallbacksClassInfo.clazz,
             "checkInjectEventsPermission", "(II)Z");

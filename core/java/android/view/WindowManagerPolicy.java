@@ -1,4 +1,4 @@
-/*
+cr/*
  * Copyright (C) 2006 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -535,6 +535,8 @@ public interface WindowManagerPolicy {
      * Create and return an animation to re-display a force hidden window.
      */
     public Animation createForceHideEnterAnimation();
+    
+    public int interceptGenericBeforeQueueing(long when, int policyFlags);
     
     /**
      * Called from the input reader thread before a key is enqueued.

@@ -1956,6 +1956,26 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         return false;    
     }
  
+	@Override 
+	public int interceptGenericBeforeQueueing(long when, int policyFlags) {
+		int result = ACTION_PASS_TO_USER;
+		result |= ACTION_POKE_USER_ACTIVITY;
+                result &= ~ACTION_PASS_TO_USER;
+		boolean isTrackballDown;
+        try {
+            isTrackballDown = mWindowManager.getTrackballScancodeState(BTN_MOUSE) > 0;
+        } catch (RemoteException e) {
+            isTrackballDown = false;
+        }
+
+		final boolean keyguardActive = (isScreenOn() ?
+                                        mKeyguardMediator.isShowingAndNotHidden() :
+                                        mKeyguardMediator.isShowing());
+		if (isTrackballDown && keyguardActive && mTrackballWakeScreen)
+			mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(BTN_MOUSE);
+		return result;
+}
+
     /** {@inheritDoc} */
     @Override
     public int interceptKeyBeforeQueueing(long whenNanos, int keyCode, boolean down,
@@ -1968,15 +1988,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             performHapticFeedbackLw(null, HapticFeedbackConstants.VIRTUAL_RELEASED, false);
         }
 
-        boolean isBtnMouse = (keyCode == BTN_MOUSE);
+        /*boolean isBtnMouse = (keyCode == BTN_MOUSE);
         if (isBtnMouse) {
             // BTN_MOUSE is handled as Motion event only.
             result &= ~ACTION_PASS_TO_USER;
-        }
+        }*/
 
         final boolean isWakeKey = (policyFlags
                 & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED)) != 0
-                || (isBtnMouse && mTrackballWakeScreen);
+       //         || (isBtnMouse && mTrackballWakeScreen);
         
         // If the key is injected, pretend that the screen is on and don't let the
         // device go to sleep.  This feature is mainly used for testing purposes.

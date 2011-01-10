@@ -379,6 +379,12 @@ public class InputManager {
         }
         
         @SuppressWarnings("unused")
+		public int interceptGenericBeforeQueueing(long whenNanos, int policyFlags) {
+			return mWindowManagerService.mInputMonitor.interceptGenericBeforeQueueing(
+				whenNanos, policyFlags);
+		}
+
+        @SuppressWarnings("unused")
         public int interceptKeyBeforeQueueing(long whenNanos, int keyCode, boolean down,
                 int policyFlags, boolean isScreenOn) {
             return mWindowManagerService.mInputMonitor.interceptKeyBeforeQueueing(

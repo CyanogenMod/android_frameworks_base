@@ -5248,6 +5248,10 @@ public class WindowManagerService extends IWindowManager.Stub
             mPolicy.notifyLidSwitchChanged(whenNanos, lidOpen);
         }
         
+        public int interceptGenericBeforeQueueing(long when, int policyFlags) {
+			return mPolicy.interceptGenericBeforeQueueing(when, policyFlags);
+		}
+        
         /* Provides an opportunity for the window manager policy to intercept early key
          * processing as soon as the key has been read from the device. */
         public int interceptKeyBeforeQueueing(long whenNanos, int keyCode, boolean down,
