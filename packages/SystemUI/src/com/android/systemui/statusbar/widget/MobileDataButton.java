@@ -15,6 +15,9 @@ public class MobileDataButton extends PowerButton {
 
     static boolean stateChangeRequest = false;
 
+    private static boolean stateToggled = false;
+    private static boolean stateEnabled = false;
+
     public static boolean getDataRomingEnabled(Context context) {
         return Settings.Secure
                 .getInt(context.getContentResolver(), Settings.Secure.DATA_ROAMING, 0) > 0;
@@ -28,7 +31,18 @@ public class MobileDataButton extends PowerButton {
     private static boolean getDataState(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getMobileDataEnabled();
+
+        // If the state has been actively toggled use the internal state.
+        // This is done to avoid a race condition on the DataState's change
+        // after a call to toggleState.
+        if (stateToggled) {
+            // if the internal state equals the manager's state, reset the toggled flag
+            stateToggled = !(cm.getMobileDataEnabled() == stateEnabled);
+        } else {
+            stateEnabled = cm.getMobileDataEnabled();
+        }
+
+        return stateEnabled;
     }
 
     /**
@@ -45,6 +59,9 @@ public class MobileDataButton extends PowerButton {
         } else {
             cm.setMobileDataEnabled(true);
         }
+        // the new state is the opposite of the previous state
+        stateEnabled = !enabled;
+        stateToggled = true;
     }
 
     @Override
