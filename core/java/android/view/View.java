@@ -1594,11 +1594,17 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      */
     protected ViewParent mParent;
 
-    /* @hide */
+    /**
+     * @hide
+     */
     public static final int OVER_SCROLL_SETTING_EDGEGLOW = 1;
-    /* @hide */
+    /**
+     * @hide
+     */
     public static final int OVER_SCROLL_SETTING_BOUNCEGLOW = 2;
-    /* @hide */
+    /**
+     * @hide
+     */
     public static final int OVER_SCROLL_SETTING_BOUNCE = 3;
 
     /**
