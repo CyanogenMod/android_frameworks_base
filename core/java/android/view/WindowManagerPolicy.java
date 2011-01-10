@@ -535,7 +535,16 @@ public interface WindowManagerPolicy {
      * Create and return an animation to re-display a force hidden window.
      */
     public Animation createForceHideEnterAnimation();
-    
+
+    /**
+     * Intercepts events when screen is off.
+     *
+     * @param when
+     * @param policyFlags
+     * @return
+     */
+    public int interceptGenericBeforeQueueing(long when, int policyFlags);
+
     /**
      * Called from the input reader thread before a key is enqueued.
      *
