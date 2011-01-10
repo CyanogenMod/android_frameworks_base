@@ -28,6 +28,11 @@ public class MobileDataButton extends PowerButton {
     private static boolean getDataState(Context context) {
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
+        try {
+            /* Make sure any state changes propogate */
+            Thread.sleep(100);
+        } catch (java.lang.InterruptedException ie) {
+        }
         return cm.getMobileDataEnabled();
     }
 
