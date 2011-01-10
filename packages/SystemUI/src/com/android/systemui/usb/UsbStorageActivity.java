@@ -117,9 +117,6 @@ public class UsbStorageActivity extends Activity
         setProgressBarIndeterminateVisibility(true);
 
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
-        if (Environment.isExternalStorageRemovable()) {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
-        }
 
         setTitle(getString(com.android.internal.R.string.usb_storage_activity_title));
 
