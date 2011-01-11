@@ -1046,8 +1046,8 @@ public class Camera {
         private static final String KEY_WHITE_BALANCE = "whitebalance";
         private static final String KEY_EFFECT = "effect";
         private static final String KEY_TOUCH_AF_AEC = "touch-af-aec";
-        private static final String KEY_TOUCH_INDEX_AEC = "touch-index-aec";
-        private static final String KEY_TOUCH_INDEX_AF = "touch-index-af";
+        private /*static final*/ String KEY_TOUCH_INDEX_AEC = "touch-index-aec";
+        private /*static final*/ String KEY_TOUCH_INDEX_AF = "touch-index-af";
         private static final String KEY_ANTIBANDING = "antibanding";
         private static final String KEY_SCENE_MODE = "scene-mode";
         private static final String KEY_FLASH_MODE = "flash-mode";
@@ -2085,6 +2085,12 @@ public class Camera {
          */
         public List<String> getSupportedTouchAfAec() {
             String str = get(KEY_TOUCH_AF_AEC + SUPPORTED_VALUES_SUFFIX);
+            /* Ugly hack, to support ttf on HTC camera blobs */
+            if (str == null && get("taking-picture-zoom") != null) {
+                KEY_TOUCH_INDEX_AEC = "touch-aec";
+                KEY_TOUCH_INDEX_AF = "touch-focus";
+                str="touch-on,touch-off";
+            }
             return split(str);
         }
 
