@@ -133,13 +133,17 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Disattiva wireless"</string>
     <string name="screen_lock" msgid="799094655496098153">"Blocco schermo"</string>
     <string name="power_off" msgid="4266614107412865048">"Spegni"</string>
+    <string name="reboot_system">Riavvia</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Spegnimento..."</string>
+    <string name="reboot_progress">Riavvio in corso\u2026</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"Il telefono verrà spento."</string>
+    <string name="reboot_confirm">Il telefono verrà riavviato.</string>
     <string name="recent_tasks_title" msgid="3691764623638127888">"Recenti"</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"Nessuna applicazione recente."</string>
     <string name="global_actions" msgid="2406416831541615258">"Opzioni telefono"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Blocco schermo"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Spegni"</string>
+    <string name="global_action_reboot">Riavvia</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Modalità silenziosa"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Audio non attivo"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Audio attivo"</string>
@@ -580,6 +584,10 @@
     <string name="lockscreen_unlock_label" msgid="737440483220667054">"Sblocca"</string>
     <string name="lockscreen_sound_on_label" msgid="9068877576513425970">"Audio attivato"</string>
     <string name="lockscreen_sound_off_label" msgid="996822825154319026">"Audio disattivato"</string>
+    <!-- Displayed on lock screen's extra left tab - phone -->
+    <string name="lockscreen_phone_label">Telefono</string>
+    <!-- Displayed on lock screen's extra right tab - messaging -->
+    <string name="lockscreen_messaging_label">Messaggi</string>
     <string name="password_keyboard_label_symbol_key" msgid="992280756256536042">"?123"</string>
     <string name="password_keyboard_label_alpha_key" msgid="8001096175167485649">"ABC"</string>
     <string name="password_keyboard_label_alt_key" msgid="1284820942620288678">"ALT"</string>
@@ -904,4 +912,6 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"L\'archivio USB è attualmente utilizzato da un computer."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"La scheda SD è attualmente utilizzata da un computer."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Stato dei supporti esterni sconosciuto."</string>
+    <!--Application killed toast -->
+    <string name="app_killed_message">Applicazione terminata</string>
 </resources>
