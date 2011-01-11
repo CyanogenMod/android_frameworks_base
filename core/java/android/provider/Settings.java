@@ -1557,6 +1557,14 @@ public final class Settings {
         public static final String VIBRATE_IN_SILENT = "vibrate_in_silent";
 
         /**
+         * Whether volume button should also set complete silence after
+         * vibration. Also controls the lockscreen slides behavior.
+         *
+         * @hide
+         */
+        public static final String VOLUME_CONTROL_SILENT = "volume_contol_silent";
+
+        /**
          * The mapping of stream type (integer) to its setting.
          */
         public static final String[] VOLUME_SETTINGS = {
@@ -2329,6 +2337,7 @@ public final class Settings {
             VOLUME_NOTIFICATION + APPEND_FOR_LAST_AUDIBLE,
             VOLUME_BLUETOOTH_SCO + APPEND_FOR_LAST_AUDIBLE,
             VIBRATE_IN_SILENT,
+            VOLUME_CONTROL_SILENT,
             TEXT_AUTO_REPLACE,
             TEXT_AUTO_CAPS,
             TEXT_AUTO_PUNCTUATE,
