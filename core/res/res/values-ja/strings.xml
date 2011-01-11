@@ -905,4 +905,11 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"USBストレージは現在パソコンで使用中です。"</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"SDカードは現在パソコンで使用中です。"</string>
     <string name="media_unknown_state" msgid="729192782197290385">"外部メディアの状態は不明です。"</string>
+    <!-- CM extra -->
+    <string name="reboot_system">"再起動する"</string>
+    <string name="reboot_progress">"再起動中..."</string>
+    <string name="reboot_confirm">"携帯電話を再起動します。"</string>
+    <string name="lockscreen_phone_label">"電話"</string>
+    <string name="lockscreen_messaging_label">"メッセージ"</string>
+    <string name="app_killed_message">"アプリケーションを終了しました"</string>
 </resources>
