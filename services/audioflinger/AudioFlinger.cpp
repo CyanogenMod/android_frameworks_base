@@ -3887,7 +3887,7 @@ AudioFlinger::RecordThread::RecordThread(const sp<AudioFlinger>& audioFlinger, A
     ThreadBase(audioFlinger, id),
     mInput(input), mResampler(0), mRsmpOutBuffer(0), mRsmpInBuffer(0)
 {
-    mReqChannelCount = AudioSystem::popCount(channels);
+    mReqChannelCount = AudioSystem::popCount((channels) & (AudioSystem::CHANNEL_IN_STEREO | AudioSystem::CHANNEL_IN_MONO));
     mReqSampleRate = sampleRate;
     readInputParameters();
 }
