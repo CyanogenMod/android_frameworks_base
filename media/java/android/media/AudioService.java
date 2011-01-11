@@ -1136,6 +1136,10 @@ public class AudioService extends IAudioService.Stub {
      * indices on the stream states.
      */
     private boolean checkForRingerModeChange(int oldIndex, int direction) {
+        boolean mVolumeControlSilent = Settings.System.getInt(mContentResolver,
+                Settings.System.VOLUME_CONTROL_SILENT, 0) != 0;
+        boolean vibrateInSilent = System.getInt(mContentResolver,
+                System.VIBRATE_IN_SILENT, 1) == 1;
         boolean adjustVolumeIndex = true;
         int newRingerMode = mRingerMode;
 
@@ -1143,19 +1147,35 @@ public class AudioService extends IAudioService.Stub {
             // audible mode, at the bottom of the scale
             if (direction == AudioManager.ADJUST_LOWER
                     && (oldIndex + 5) / 10 == 1) {
-                // "silent mode", but which one?
-                newRingerMode = System.getInt(mContentResolver, System.VIBRATE_IN_SILENT, 1) == 1
-                    ? AudioManager.RINGER_MODE_VIBRATE
-                    : AudioManager.RINGER_MODE_SILENT;
+                if (vibrateInSilent) {
+                    newRingerMode = AudioManager.RINGER_MODE_VIBRATE;
+                } else {
+                    newRingerMode = AudioManager.RINGER_MODE_SILENT;
+                }
             }
-        } else {
+        } else if (mRingerMode == AudioManager.RINGER_MODE_VIBRATE) {
             if (direction == AudioManager.ADJUST_RAISE) {
-                // exiting silent mode
                 newRingerMode = AudioManager.RINGER_MODE_NORMAL;
+            } else if (direction == AudioManager.ADJUST_LOWER
+                    && mVolumeControlSilent) {
+                newRingerMode = AudioManager.RINGER_MODE_SILENT;
             } else {
                 // prevent last audible index to reach 0
                 adjustVolumeIndex = false;
             }
+        } else if (mRingerMode == AudioManager.RINGER_MODE_SILENT) {
+            if (direction == AudioManager.ADJUST_RAISE) {
+                if (vibrateInSilent) {
+                    newRingerMode = AudioManager.RINGER_MODE_VIBRATE;
+                } else {
+                    newRingerMode = AudioManager.RINGER_MODE_NORMAL;
+                }
+            } else {
+                adjustVolumeIndex = false;
+            }
+        } else {
+            // is this fallback needed?
+            newRingerMode = AudioManager.RINGER_MODE_NORMAL;
         }
 
         if (newRingerMode != mRingerMode) {
