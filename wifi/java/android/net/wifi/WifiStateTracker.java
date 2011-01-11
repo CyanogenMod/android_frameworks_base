@@ -1672,6 +1672,24 @@ public class WifiStateTracker extends NetworkStateTracker {
     }
 
     /**
+     * Load the Hotspot driver and firmware
+     *
+     * @return {@code true} if the operation succeeds, {@code false} otherwise
+     */
+    public synchronized boolean loadHotspotDriver() {
+        return WifiNative.loadHotspotDriver();
+    }
+
+    /**
+     * Unload the Hotspot driver and firmware
+     *
+     * @return {@code true} if the operation succeeds, {@code false} otherwise
+     */
+    public synchronized boolean unloadHotspotDriver() {
+        return WifiNative.unloadHotspotDriver();
+    }
+
+    /**
      * Check the supplicant config and
      * start the supplicant daemon
      *

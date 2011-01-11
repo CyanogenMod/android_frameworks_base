@@ -24,6 +24,7 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.net.NetworkUtils;
 import android.net.InterfaceConfiguration;
 import android.net.INetworkManagementEventObserver;
 import android.net.wifi.WifiConfiguration;
@@ -605,9 +606,15 @@ class NetworkManagementService extends INetworkManagementService.Stub {
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.CHANGE_WIFI_STATE, "NetworkManagementService");
         try {
-            mConnector.doCommand(String.format("softap stop " + wlanIface));
-            mConnector.doCommand(String.format("softap fwreload " + wlanIface + " AP"));
-            mConnector.doCommand(String.format("softap start " + wlanIface));
+            if(SystemProperties.OMAP_ENHANCEMENT) {
+                mConnector.doCommand(String.format("softap start " + softapIface));
+                mConnector.doCommand(String.format("softap startap " + softapIface));
+                NetworkUtils.enableInterface(softapIface);
+            } else {
+                mConnector.doCommand(String.format("softap stop " + wlanIface));
+                mConnector.doCommand(String.format("softap fwreload " + wlanIface + " AP"));
+                mConnector.doCommand(String.format("softap start " + wlanIface));
+            }
             if (wifiConfig == null) {
                 mConnector.doCommand(String.format("softap set " + wlanIface + " " + softapIface));
             } else {
@@ -629,7 +636,8 @@ class NetworkManagementService extends INetworkManagementService.Stub {
                                            convertQuotedString(wifiConfig.preSharedKey));
                 mConnector.doCommand(str);
             }
-            mConnector.doCommand(String.format("softap startap"));
+            if(!SystemProperties.OMAP_ENHANCEMENT)
+                mConnector.doCommand(String.format("softap startap"));
         } catch (NativeDaemonConnectorException e) {
             throw new IllegalStateException("Error communicating to native daemon to start softap", e);
         }

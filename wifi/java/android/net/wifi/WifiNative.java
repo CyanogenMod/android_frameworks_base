@@ -44,6 +44,10 @@ public class WifiNative {
     
     public native static boolean unloadDriver();
 
+    public native static boolean loadHotspotDriver();
+
+    public native static boolean unloadHotspotDriver();
+
     public native static boolean startSupplicant();
     
     public native static boolean stopSupplicant();
