@@ -2663,7 +2663,7 @@ public class Camera {
 
         /**
          * Sets the smart-contrast feature
-         * @param boolean
+         * @param enabled SMART_CONTRAST desired status.
          */
         public void setSmartContrastEnabled(boolean enabled) {
             set(KEY_SMART_CONTRAST, enabled ? "on" : "off");
