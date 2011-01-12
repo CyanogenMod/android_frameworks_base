@@ -204,6 +204,7 @@ public:
             int32_t action, int32_t& flags, int32_t keyCode, int32_t scanCode,
             uint32_t& policyFlags);
     virtual void interceptGenericBeforeQueueing(nsecs_t when, uint32_t& policyFlags);
+    virtual void interceptNavigationButtonBeforeQueueing(nsecs_t when, uint32_t& policyFlags, bool down);
     virtual bool interceptKeyBeforeDispatching(const sp<InputChannel>& inputChannel,
             const KeyEvent* keyEvent, uint32_t policyFlags);
     virtual void pokeUserActivity(nsecs_t eventTime, int32_t eventType);
@@ -909,6 +910,21 @@ void NativeInputManager::interceptGenericBeforeQueueing(nsecs_t when, uint32_t& 
         }
     } else {
         policyFlags |= POLICY_FLAG_PASS_TO_USER;
+    }
+}
+
+void NativeInputManager::interceptNavigationButtonBeforeQueueing(nsecs_t when, uint32_t& policyFlags, bool down) {
+    // Policy:
+    // - Ignore untrusted events and pass them along.
+    // - Allow the window manager to handle the down event if the screen is off
+    //   to permit using the navigation button as a wake key
+    if ((policyFlags & POLICY_FLAG_TRUSTED) && !(policyFlags & POLICY_FLAG_INJECTED)
+                && down && !this->isScreenOn()) {
+        JNIEnv* env = jniEnv();
+        env->CallIntMethod(mCallbacksObj,
+            gCallbacksClassInfo.interceptKeyBeforeQueueing,
+            when, BTN_MOUSE, down, policyFlags, this->isScreenOn());
+        checkAndClearExceptionFromCallback(env, "interceptKeyBeforeQueueing");
     }
 }
 

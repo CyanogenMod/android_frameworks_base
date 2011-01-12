@@ -59,6 +59,9 @@ private:
             uint32_t& policyFlags) {
     }
 
+    virtual void interceptNavigationButtonBeforeQueueing(nsecs_t when, uint32_t& policyFlags, bool down) {
+    }
+
     virtual void interceptGenericBeforeQueueing(nsecs_t when, uint32_t& policyFlags) {
     }
 

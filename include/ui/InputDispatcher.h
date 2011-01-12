@@ -300,6 +300,10 @@ public:
      */
     virtual void interceptGenericBeforeQueueing(nsecs_t when, uint32_t& policyFlags) = 0;
 
+    /* Intercepts a navigation button press before queueing it
+     */
+    virtual void interceptNavigationButtonBeforeQueueing(nsecs_t when, uint32_t& policyFlags, bool down) = 0;
+
     /* Allows the policy a chance to intercept a key before dispatching. */
     virtual bool interceptKeyBeforeDispatching(const sp<InputChannel>& inputChannel,
             const KeyEvent* keyEvent, uint32_t policyFlags) = 0;
