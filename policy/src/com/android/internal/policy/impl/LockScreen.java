@@ -93,7 +93,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private boolean mWasMusicActive = am.isMusicActive();
     private boolean mIsMusicActive = false;
     private GestureLibrary mLibrary;
-    
+
     private TextView mCustomMsg;
 
     // current configuration state of keyboard and display
@@ -507,10 +507,16 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         if (whichHandle == SlidingTab.OnTriggerListener.LEFT_HANDLE) {
             mCallback.goToUnlockScreen();
         } else if (whichHandle == SlidingTab.OnTriggerListener.RIGHT_HANDLE) {
-            // toggle silent mode
-            mSilentMode = !mSilentMode;
+            // tri state silent<->vibrate<->ring if silent mode is enabled, otherwise toggle silent mode
+            final boolean mVolumeControlSilent = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.VOLUME_CONTROL_SILENT, 0) != 0;
+            mSilentMode = mVolumeControlSilent
+                ? ((mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) || !mSilentMode)
+                : !mSilentMode;
             if (mSilentMode) {
-                final boolean vibe = (Settings.System.getInt(
+                final boolean vibe = mVolumeControlSilent
+                ? (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_VIBRATE)
+                : (Settings.System.getInt(
                     getContext().getContentResolver(),
                     Settings.System.VIBRATE_IN_SILENT, 1) == 1);
 
@@ -1025,7 +1031,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     public void onPhoneStateChanged(String newState) {
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
     }
-    
+
     public void toggleSilentMode() {
         mSilentMode = !mSilentMode;
         if (mSilentMode) {
