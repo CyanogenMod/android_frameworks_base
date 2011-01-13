@@ -144,17 +144,21 @@ class UsbObserver extends UEventObserver {
 
         try {
             File[] files = new File(USB_COMPOSITE_CLASS_PATH).listFiles();
-            for (int i = 0; i < files.length; i++) {
-                File file = new File(files[i], "enable");
-                FileReader reader = new FileReader(file);
-                int len = reader.read(buffer, 0, 1024);
-                int value = Integer.valueOf((new String(buffer, 0, len)).trim());
-                String functionName = files[i].getName();
-                if (value == 1) {
-                    mEnabledFunctions.add(functionName);
-                } else {
-                    mDisabledFunctions.add(functionName);
+            if(files != null) {
+                for (int i = 0; i < files.length; i++) {
+                    File file = new File(files[i], "enable");
+                    FileReader reader = new FileReader(file);
+                    int len = reader.read(buffer, 0, 1024);
+                    int value = Integer.valueOf((new String(buffer, 0, len)).trim());
+                    String functionName = files[i].getName();
+                    if (value == 1) {
+                        mEnabledFunctions.add(functionName);
+                    } else {
+                        mDisabledFunctions.add(functionName);
+                    }
                 }
+            } else {
+                Slog.w(TAG, "This kernel has not created USB composite class support");
             }
         } catch (FileNotFoundException e) {
             Slog.w(TAG, "This kernel does not have USB composite class support");
