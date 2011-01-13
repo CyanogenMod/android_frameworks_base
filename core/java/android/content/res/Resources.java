@@ -71,10 +71,10 @@ public class Resources {
 
     /*package*/ final TypedValue mTmpValue = new TypedValue();
 
-    // These are protected by the mTmpValue lock.
-    private final LongSparseArray<WeakReference<Drawable.ConstantState> > mDrawableCache
+    // These are protected by the (static) mSync lock.
+    private static final LongSparseArray<WeakReference<Drawable.ConstantState> > mDrawableCache
             = new LongSparseArray<WeakReference<Drawable.ConstantState> >();
-    private final SparseArray<WeakReference<ColorStateList> > mColorStateListCache
+    private static final SparseArray<WeakReference<ColorStateList> > mColorStateListCache
             = new SparseArray<WeakReference<ColorStateList> >();
     private boolean mPreloading;
 
@@ -1286,8 +1286,8 @@ public class Resources {
      */
     public void updateConfiguration(Configuration config,
             DisplayMetrics metrics) {
+        int configChanges = 0xfffffff;
         synchronized (mTmpValue) {
-            int configChanges = 0xfffffff;
             if (config != null) {
                 configChanges = mConfiguration.updateFrom(config);
             }
@@ -1330,6 +1330,8 @@ public class Resources {
                     (int)(mMetrics.density*160), mConfiguration.keyboard,
                     keyboardHidden, mConfiguration.navigation, width, height,
                     mConfiguration.screenLayout, mConfiguration.uiMode, sSdkVersion);
+        }
+        synchronized (mSync) {
             int N = mDrawableCache.size();
             if (DEBUG_CONFIG) {
                 Log.d(TAG, "Cleaning up drawables config changes: 0x"
@@ -1361,8 +1363,6 @@ public class Resources {
             }
             mColorStateListCache.clear();
             flushLayoutCache();
-        }
-        synchronized (mSync) {
             if (mPluralRule != null) {
                 mPluralRule = PluralRules.ruleForLocale(config.locale);
             }
@@ -1758,7 +1758,7 @@ public class Resources {
                 if (mPreloading) {
                     sPreloadedDrawables.put(key, cs);
                 } else {
-                    synchronized (mTmpValue) {
+                    synchronized (mSync) {
                         //Log.i(TAG, "Saving cached drawable @ #" +
                         //        Long.toHexString(key)
                         //        + " in " + this + ": " + cs);
@@ -1772,7 +1772,7 @@ public class Resources {
     }
 
     private Drawable getCachedDrawable(long key) {
-        synchronized (mTmpValue) {
+        synchronized (mSync) {
             WeakReference<Drawable.ConstantState> wr = mDrawableCache.get(key);
             if (wr != null) {   // we have the key
                 Drawable.ConstantState entry = wr.get();
@@ -1860,7 +1860,7 @@ public class Resources {
             if (mPreloading) {
                 mPreloadedColorStateLists.put(key, csl);
             } else {
-                synchronized (mTmpValue) {
+                synchronized (mSync) {
                     //Log.i(TAG, "Saving cached color state list @ #" +
                     //        Long.toHexString(key)
                     //        + " in " + this + ": " + csl);
@@ -1874,7 +1874,7 @@ public class Resources {
     }
 
     private ColorStateList getCachedColorStateList(int key) {
-        synchronized (mTmpValue) {
+        synchronized (mSync) {
             WeakReference<ColorStateList> wr = mColorStateListCache.get(key);
             if (wr != null) {   // we have the key
                 ColorStateList entry = wr.get();
