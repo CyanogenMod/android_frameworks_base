@@ -253,12 +253,21 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private ConnectivityService(Context context) {
         if (DBG) Slog.v(TAG, "ConnectivityService starting up");
 
-        // setup our unique device name
-        String id = Settings.Secure.getString(context.getContentResolver(),
-                Settings.Secure.ANDROID_ID);
-        if (id != null && id.length() > 0) {
-            String name = new String("android_").concat(id);
-            SystemProperties.set("net.hostname", name);
+        // try to get our custom device name
+        String hostname = Settings.Secure.getString(context.getContentResolver(),
+                Settings.Secure.DEVICE_HOSTNAME);
+        if (hostname != null && hostname.length() > 0) {
+            SystemProperties.set("net.hostname", hostname);
+            Slog.i(TAG, "hostname has been set: " + hostname);
+        } else {
+            // otherwise setup our unique device name
+            String id = Settings.Secure.getString(context.getContentResolver(),
+                    Settings.Secure.ANDROID_ID);
+            if (id != null && id.length() > 0) {
+                String name = new String("android-").concat(id);
+                SystemProperties.set("net.hostname", name);
+                Slog.i(TAG, "hostname has been set: " + name);
+            }
         }
 
         mContext = context;
@@ -510,7 +519,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
         // HACK! - return a stub NetworkInfo object to make bad apps happy.
         if (ConnectivityManager.TYPE_WIMAX == networkType) {
-            return NetworkInfo.getEmptyWimaxNetworkInfo(); 
+            return NetworkInfo.getEmptyWimaxNetworkInfo();
         }
 
         if (ConnectivityManager.isNetworkTypeValid(networkType)) {
