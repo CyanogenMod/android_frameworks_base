@@ -110,6 +110,12 @@ LOCAL_SHARED_LIBRARIES := \
 	libcutils \
 	libdl
 
+ifeq ($(HAVE_QC_TIME_SERVICES),true)
+LOCAL_CFLAGS += -DHAVE_QC_TIME_SERVICES=1
+LOCAL_C_INCLUDES += $(TARGET_OUT_HEADERS)/time-services
+LOCAL_SHARED_LIBRARIES += libtime_genoff
+endif
+
 LOCAL_MODULE:= libutils
 include $(BUILD_SHARED_LIBRARY)
 
