@@ -508,9 +508,13 @@ class PowerManagerService extends IPowerManager.Stub
                 setScreenOffTimeoutsLocked();
 
                 mElectronBeamAnimationOn = Settings.System.getInt(mContext.getContentResolver(),
-                                                          ELECTRON_BEAM_ANIMATION_ON, 0) == 1;
+                            ELECTRON_BEAM_ANIMATION_ON,
+                            mContext.getResources().getBoolean(
+                                    com.android.internal.R.bool.config_enableScreenOnAnimation) ? 1 : 0) == 1;
                 mElectronBeamAnimationOff = Settings.System.getInt(mContext.getContentResolver(),
-                                                          ELECTRON_BEAM_ANIMATION_OFF, 1) == 1;
+                            ELECTRON_BEAM_ANIMATION_OFF,
+                            mContext.getResources().getBoolean(
+                                    com.android.internal.R.bool.config_enableScreenOffAnimation) ? 1 : 0) == 1;
 
                 final float windowScale = getFloat(WINDOW_ANIMATION_SCALE, 1.0f);
                 final float transitionScale = getFloat(TRANSITION_ANIMATION_SCALE, 1.0f);
@@ -2112,7 +2116,11 @@ class PowerManagerService extends IPowerManager.Stub
         }
 
         public void run() {
-            if (mAnimateScreenLights) {
+            if (mAnimateScreenLights ||
+                    (!mAnimateScreenLights && Settings.System.getInt(mContext.getContentResolver(),
+                            ELECTRON_BEAM_ANIMATION_OFF,
+                            mContext.getResources().getBoolean(
+                                    com.android.internal.R.bool.config_enableScreenOffAnimation) ? 1 : 0) == 0)) {
                 synchronized (mLocks) {
                     long now = SystemClock.uptimeMillis();
                     boolean more = mScreenBrightness.stepLocked();
