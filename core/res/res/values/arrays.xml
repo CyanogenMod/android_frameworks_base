@@ -74,6 +74,9 @@
         <item>@drawable/indicator_code_lock_point_area_default</item>
         <item>@drawable/indicator_code_lock_point_area_green</item>
         <item>@drawable/indicator_code_lock_point_area_red</item>
+        <!-- overscroll -->
+        <item>@drawable/overscroll_glow</item>
+        <item>@drawable/overscroll_edge</item>
     </array>
 
     <!-- Do not translate. These are all of the color state list resources that should be
