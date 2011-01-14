@@ -186,7 +186,7 @@ status_t AudioRecord::set(
         return BAD_VALUE;
     }
 
-    int channelCount = AudioSystem::popCount(channels);
+    int channelCount = AudioSystem::popCount((channels) & (AudioSystem::CHANNEL_IN_STEREO | AudioSystem::CHANNEL_IN_MONO));
 
     audio_io_handle_t input = AudioSystem::getInput(inputSource,
                                     sampleRate, format, channels, (AudioSystem::audio_in_acoustics)flags);
