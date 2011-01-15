@@ -138,7 +138,7 @@ status_t AACEncoder::start(MetaData *params) {
     }
 
     mBufferGroup = new MediaBufferGroup;
-    mBufferGroup->add_buffer(new MediaBuffer(2048));
+    mBufferGroup->add_buffer(new MediaBuffer(4096));
 
     CHECK_EQ(OK, initCheck());
 
@@ -236,7 +236,7 @@ status_t AACEncoder::read(
                 break;
             }
 
-            size_t align = mInputBuffer->range_length() % sizeof(int16_t);
+            size_t align = mInputBuffer->range_length() % (sizeof(int16_t) * mChannels);
             CHECK_EQ(align, 0);
 
             int64_t timeUs;
@@ -251,7 +251,7 @@ status_t AACEncoder::read(
             readFromSource = false;
         }
         size_t copy =
-            (kNumSamplesPerFrame - mNumInputSamples) * sizeof(int16_t);
+            (kNumSamplesPerFrame - mNumInputSamples) * sizeof(int16_t) * mChannels;
 
         if (copy > mInputBuffer->range_length()) {
             copy = mInputBuffer->range_length();
@@ -270,7 +270,7 @@ status_t AACEncoder::read(
             mInputBuffer->release();
             mInputBuffer = NULL;
         }
-        mNumInputSamples += copy / sizeof(int16_t);
+        mNumInputSamples += copy / (sizeof(int16_t) * mChannels);
         if (mNumInputSamples >= kNumSamplesPerFrame) {
             mNumInputSamples %= kNumSamplesPerFrame;
             break;
@@ -280,7 +280,7 @@ status_t AACEncoder::read(
     VO_CODECBUFFER inputData;
     memset(&inputData, 0, sizeof(inputData));
     inputData.Buffer = (unsigned char*) mInputFrame;
-    inputData.Length = kNumSamplesPerFrame * sizeof(int16_t);
+    inputData.Length = kNumSamplesPerFrame * sizeof(int16_t) * mChannels;
     CHECK(VO_ERR_NONE == mApiHandle->SetInputData(mEncoderHandle,&inputData));
 
     VO_CODECBUFFER outputData;

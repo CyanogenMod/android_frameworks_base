@@ -48,7 +48,7 @@ AudioSource::AudioSource(
     mRecord = new AudioRecord(
                 inputSource, sampleRate, AudioSystem::PCM_16_BIT,
                 channels > 1? AudioSystem::CHANNEL_IN_STEREO: AudioSystem::CHANNEL_IN_MONO,
-                4 * kMaxBufferSize / sizeof(int16_t), /* Enable ping-pong buffers */
+                4 * kMaxBufferSize / (sizeof(int16_t) * channels), /* Enable ping-pong buffers */
                 flags);
 
     mInitCheck = mRecord->initCheck();

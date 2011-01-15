@@ -50,7 +50,7 @@ protected:
 
 private:
     enum {
-        kMaxBufferSize = 2048,
+        kMaxBufferSize = 4096,
 
         // After the initial mute, we raise the volume linearly
         // over kAutoRampDurationUs.
