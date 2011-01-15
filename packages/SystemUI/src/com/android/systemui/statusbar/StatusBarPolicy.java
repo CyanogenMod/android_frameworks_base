@@ -1139,7 +1139,7 @@ public class StatusBarPolicy {
 
         if (action.equals(LocationManager.GPS_FIX_CHANGE_ACTION) && enabled) {
             // GPS is getting fixes
-            mService.setIcon("gps", com.android.internal.R.drawable.stat_sys_gps_on, 0);
+            mService.setIcon("gps", R.drawable.stat_sys_gps_fixed, 0);
             mService.setIconVisibility("gps", true);
         } else if (action.equals(LocationManager.GPS_ENABLED_CHANGE_ACTION) && !enabled) {
             // GPS is off
