@@ -2896,6 +2896,7 @@ public final class Settings {
 
         /**
          * The host name for this device.
+         * @hide
          */
         public static final String DEVICE_HOSTNAME = "device_hostname";
 
