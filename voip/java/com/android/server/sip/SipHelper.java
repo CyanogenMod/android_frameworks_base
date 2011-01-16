@@ -225,7 +225,7 @@ class SipHelper {
                 requestType, callIdHeader, cSeqHeader, fromHeader,
                 toHeader, viaHeaders, maxForwards);
         Header userAgentHeader = mHeaderFactory.createHeader("User-Agent",
-                "SIPAUA/0.1.001");
+                userProfile.getUserAgent());
         request.addHeader(userAgentHeader);
         return request;
     }
@@ -259,6 +259,11 @@ class SipHelper {
             Request request = mMessageFactory.createRequest(requestURI,
                     Request.INVITE, callIdHeader, cSeqHeader, fromHeader,
                     toHeader, viaHeaders, maxForwards);
+
+
+            Header userAgentHeader = mHeaderFactory.createHeader("User-Agent",
+                    caller.getUserAgent());
+            request.addHeader(userAgentHeader);
 
             request.addHeader(createContactHeader(caller));
             request.setContent(sessionDescription,
