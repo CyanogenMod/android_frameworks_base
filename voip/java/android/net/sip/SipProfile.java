@@ -46,6 +46,7 @@ public class SipProfile implements Parcelable, Serializable, Cloneable {
     private String mDomain;
     private String mProtocol = ListeningPoint.UDP;
     private String mProfileName;
+    private String mUserAgent;
     private boolean mSendKeepAlive = false;
     private boolean mAutoRegistration = true;
     private transient int mCallingUid = 0;
@@ -70,6 +71,7 @@ public class SipProfile implements Parcelable, Serializable, Cloneable {
         private SipURI mUri;
         private String mDisplayName;
         private String mProxyAddress;
+        private String mUserAgent;
 
         {
             try {
@@ -95,6 +97,7 @@ public class SipProfile implements Parcelable, Serializable, Cloneable {
             mUri.setUserPassword(profile.getPassword());
             mDisplayName = profile.getDisplayName();
             mProxyAddress = profile.getProxyAddress();
+            mUserAgent = profile.getUserAgent();
         }
 
         /**
@@ -249,6 +252,18 @@ public class SipProfile implements Parcelable, Serializable, Cloneable {
         }
 
         /**
+         * Sets the user-agent header for SIP calls
+         *
+         * @param userAgent the string that'll be placed in the headers
+         * @return this builder object
+         * @hide
+         */
+        public Builder setUserAgent(String userAgent) {
+            mUserAgent = userAgent;
+            return this;
+        }
+
+        /**
          * Builds and returns the SIP profile object.
          *
          * @return the profile object created
@@ -264,6 +279,11 @@ public class SipProfile implements Parcelable, Serializable, Cloneable {
                     SipURI uri = (SipURI)
                             mAddressFactory.createURI(fix(mProxyAddress));
                     mProfile.mProxyAddress = uri.getHost();
+                }
+                if (!TextUtils.isEmpty(mUserAgent)) {
+                    mProfile.mUserAgent = mUserAgent;
+                } else {
+                    mProfile.mUserAgent = "SIPAUA/0.1.001";
                 }
             } catch (ParseException e) {
                 // must not occur
@@ -283,6 +303,7 @@ public class SipProfile implements Parcelable, Serializable, Cloneable {
         mDomain = in.readString();
         mProtocol = in.readString();
         mProfileName = in.readString();
+        mUserAgent = in.readString();
         mSendKeepAlive = (in.readInt() == 0) ? false : true;
         mAutoRegistration = (in.readInt() == 0) ? false : true;
         mCallingUid = in.readInt();
@@ -296,6 +317,7 @@ public class SipProfile implements Parcelable, Serializable, Cloneable {
         out.writeString(mDomain);
         out.writeString(mProtocol);
         out.writeString(mProfileName);
+        out.writeString(mUserAgent);
         out.writeInt(mSendKeepAlive ? 1 : 0);
         out.writeInt(mAutoRegistration ? 1 : 0);
         out.writeInt(mCallingUid);
@@ -424,6 +446,16 @@ public class SipProfile implements Parcelable, Serializable, Cloneable {
      */
     public boolean getAutoRegistration() {
         return mAutoRegistration;
+    }
+
+    /**
+     * Gets the user-agent to apply to requests
+     *
+     * @return the UA string
+     * @hide
+     */
+    public String getUserAgent() {
+        return mUserAgent;
     }
 
     /**
