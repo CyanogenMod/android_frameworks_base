@@ -1724,33 +1724,25 @@ public final class Settings {
          * disabled by the application.
          */
         public static final String ACCELEROMETER_ROTATION = "accelerometer_rotation";
-
-         /**
-         * Control weather 180 degree rotation should be included if
-         * ACCELEROMETER_ROTATION is enabled. If 0 no 180 degree rotation will be
-         * executed, if 1 the 180 degree rotation is executed when ACCELEROMETER_ROTATION is true.
-         * @hide
-         */
-        public static final String ACCELEROMETER_ROTATE_180 = "accelerometer_rotate_180";
-
+        
         /**
          * Specifies the number of recent apps to show (8, 12, 16)
          * @hide
          */
         public static final String RECENT_APPS_NUMBER = "recent_apps_number";
-
+        
         /**
          * Specifies the number of recent apps to show (8, 12, 16)
          * @hide
          */
         public static final String RECENT_APPS_SHOW_TITLE = "recent_apps_show_title";
-
+        
         /**
          * Specifies whether or not to use a custom app instead of the recent applications dialog
          * @hide
          */
         public static final String USE_CUSTOM_APP = "use_custom_app";
-
+        
         /**
          * Stores the uri of the custom application to use
          * @hide
@@ -1885,7 +1877,7 @@ public final class Settings {
          * @hide
          */
         public static final String HAPTIC_UP_ARRAY = "haptic_up_array";
-
+        
         /**
          * Value for long presses - same format as _DOWN_ARRAY
          * @hide
@@ -2220,7 +2212,7 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_ALWAYS_MUSIC_CONTROLS = "lockscreen_always_music_controls";
-
+        
         /**
          * Whether to listen for gestures on the lockscreen
          * @hide
@@ -2354,7 +2346,6 @@ public final class Settings {
             TIME_12_24,
             DATE_FORMAT,
             ACCELEROMETER_ROTATION,
-            ACCELEROMETER_ROTATE_180,
             DTMF_TONE_WHEN_DIALING,
             DTMF_TONE_TYPE_WHEN_DIALING,
             EMERGENCY_TONE,
@@ -4119,7 +4110,7 @@ public final class Settings {
          * @hide
          */
         public static final String KILL_APP_LONGPRESS_BACK = "kill_app_on_longpress_back";
-
+        
         /**
          * Whether to disable the lockscreen unlock tab
          * @hide
