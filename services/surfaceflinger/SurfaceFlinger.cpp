@@ -2425,6 +2425,11 @@ void GraphicPlane::setDisplayHardware(DisplayHardware *hw)
         case 90:
             displayOrientation = ISurfaceComposer::eOrientation90;
             break;
+#ifdef HAS_FLIPPED_SCREEN
+	case 180:
+	    displayOrientation = ISurfaceComposer::eOrientation180;
+	    break;
+#endif
         case 270:
             displayOrientation = ISurfaceComposer::eOrientation270;
             break;
