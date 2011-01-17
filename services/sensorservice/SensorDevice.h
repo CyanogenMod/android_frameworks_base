@@ -38,8 +38,8 @@ class SensorDevice : public Singleton<SensorDevice> {
     struct sensors_poll_device_t* mSensorDevice;
     struct sensors_data_device_t* mSensorDataDevice;
     struct sensors_control_device_t* mSensorControlDevice;
-    bool mOldSensorsCompatMode;
     int32_t mOldSensorsEnabled;
+    bool mOldSensorsCompatMode;
     native_handle_t *mOldSensorsDataChannel;
     struct sensors_module_t* mSensorModule;
     Mutex mLock; // protect mActivationCount[].rates

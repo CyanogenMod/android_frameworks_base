@@ -110,26 +110,21 @@ SensorDevice::SensorDevice()
             SENSORS_HARDWARE_MODULE_ID, strerror(-err));
 
     if (mSensorModule) {
-        err = sensors_open(&mSensorModule->common, &mSensorDevice);
-
 #ifdef ENABLE_SENSORS_COMPAT
-        if (err) {
-            if (!sensors_control_open(&mSensorModule->common, &mSensorControlDevice)) {
-                if (sensors_data_open(&mSensorModule->common, &mSensorDataDevice)) {
-                    LOGE_IF(err, "couldn't open device for module %s (%s)",
-                            SENSORS_HARDWARE_MODULE_ID, strerror(-err));
-                } else {
-                    LOGD("Opened sensors in backwards compat mode");
-                    mOldSensorsCompatMode = true;
-                }
-            } else {
-                LOGE_IF(err, "couldn't open device for module %s (%s)",
+        if (!sensors_control_open(&mSensorModule->common, &mSensorControlDevice)) {
+            if (sensors_data_open(&mSensorModule->common, &mSensorDataDevice)) {
+                LOGE("couldn't open data device in backwards-compat mode for module %s (%s)",
                         SENSORS_HARDWARE_MODULE_ID, strerror(-err));
+            } else {
+                LOGD("Opened sensors in backwards compat mode");
+                mOldSensorsCompatMode = true;
             }
         } else {
-            mOldSensorsCompatMode = false;
+            LOGE("couldn't open control device in backwards-compat mode for module %s (%s)",
+                    SENSORS_HARDWARE_MODULE_ID, strerror(-err));
         }
 #else
+        err = sensors_open(&mSensorModule->common, &mSensorDevice);
         LOGE_IF(err, "couldn't open device for module %s (%s)",
                 SENSORS_HARDWARE_MODULE_ID, strerror(-err));
 #endif
@@ -243,7 +238,7 @@ status_t SensorDevice::activate(void* ident, int handle, int enabled)
         if (mOldSensorsCompatMode) {
             if (enabled)
                 mOldSensorsEnabled++;
-            else
+            else if (mOldSensorsEnabled > 0)
                 mOldSensorsEnabled--;
             LOGV("Activation for %d (%d)",handle,enabled);
             if (enabled) {
