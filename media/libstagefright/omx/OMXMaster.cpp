@@ -88,7 +88,7 @@ void OMXMaster::addPlugin(OMXPluginBase *plugin) {
         mPluginByComponentName.add(name8, plugin);
     }
 
-#if !defined( TARGET_OMAP3)
+#if !defined( TARGET_OMAP3) && !defined( TARGET_MSM7K)
     CHECK_EQ(err, OMX_ErrorNoMore);
 #endif
 }
