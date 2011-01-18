@@ -22,6 +22,7 @@ import gov.nist.javax.sip.header.SIPHeaderNames;
 import gov.nist.javax.sip.header.ProxyAuthenticate;
 import gov.nist.javax.sip.header.WWWAuthenticate;
 import gov.nist.javax.sip.message.SIPMessage;
+import gov.nist.javax.sip.message.SIPResponse;
 
 import android.net.sip.ISipSession;
 import android.net.sip.ISipSessionListener;
@@ -66,6 +67,7 @@ import javax.sip.TransactionUnavailableException;
 import javax.sip.address.Address;
 import javax.sip.address.SipURI;
 import javax.sip.header.CSeqHeader;
+import javax.sip.header.ContactHeader;
 import javax.sip.header.ExpiresHeader;
 import javax.sip.header.FromHeader;
 import javax.sip.header.MinExpiresHeader;
@@ -774,6 +776,22 @@ class SipSessionGroup implements SipListener {
             ExpiresHeader expiresHeader = (ExpiresHeader)
                     response.getHeader(ExpiresHeader.NAME);
             if (expiresHeader != null) expires = expiresHeader.getExpires();
+            try {
+                final Address profileAddress =
+                        mSipHelper.createContactAddress(mLocalProfile);
+
+                for (ContactHeader contactHeader
+                        : ((SIPResponse) response).getContactHeaders()) {
+                    if (contactHeader.getAddress().equals(profileAddress)) {
+                        expires = contactHeader.getExpires();
+                        break;
+                    }
+                }
+            } catch (ParseException e) {
+                // Should not happen, but ignore it if it does.
+            } catch (SipException e) {
+                // Should not happen, but ignore it if it does.
+            }
             expiresHeader = (ExpiresHeader)
                     response.getHeader(MinExpiresHeader.NAME);
             if (expiresHeader != null) {
