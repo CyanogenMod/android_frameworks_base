@@ -41,7 +41,7 @@ import android.util.Log;
  */
 public class VpnManager {
     // Action for broadcasting a connectivity state.
-    private static final String ACTION_VPN_CONNECTIVITY = "vpn.connectivity";
+    public static final String ACTION_VPN_CONNECTIVITY = "vpn.connectivity";
     /** Key to the profile name of a connectivity broadcast event. */
     public static final String BROADCAST_PROFILE_NAME = "profile_name";
     /** Key to the connectivity state of a connectivity broadcast event. */

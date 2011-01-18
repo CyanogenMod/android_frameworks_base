@@ -32,6 +32,7 @@ import android.net.sip.SipManager;
 import android.net.sip.SipProfile;
 import android.net.sip.SipSession;
 import android.net.sip.SipSessionAdapter;
+import android.net.vpn.VpnManager;
 import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.Bundle;
@@ -94,6 +95,7 @@ public final class SipService extends ISipService.Stub {
             new HashMap<String, ISipSession>();
 
     private ConnectivityReceiver mConnectivityReceiver;
+    private VpnConnectivityReceiver mVpnConnectivityReceiver;
     private boolean mWifiEnabled;
     private SipWakeLock mMyWakeLock;
 
@@ -113,8 +115,11 @@ public final class SipService extends ISipService.Stub {
         if (DEBUG) Log.d(TAG, " service started!");
         mContext = context;
         mConnectivityReceiver = new ConnectivityReceiver();
+        mVpnConnectivityReceiver = new VpnConnectivityReceiver();
         context.registerReceiver(mConnectivityReceiver,
                 new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        context.registerReceiver(mVpnConnectivityReceiver,
+                new IntentFilter(VpnManager.ACTION_VPN_CONNECTIVITY));
         context.registerReceiver(mWifiStateReceiver,
                 new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
         mMyWakeLock = new SipWakeLock((PowerManager)
@@ -1108,6 +1113,92 @@ public final class SipService extends ISipService.Stub {
         }
     }
 
+    private class VpnConnectivityReceiver extends BroadcastReceiver {
+        private Timer mTimer = new Timer();
+        private MyTimerTask mTask;
+
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            // Run the handler in MyExecutor to be protected by wake lock
+            getExecutor().execute(new Runnable() {
+                public void run() {
+                    onReceiveInternal(context, intent);
+                }
+            });
+        }
+
+        private void onReceiveInternal(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(VpnManager.ACTION_VPN_CONNECTIVITY)) {
+                if (DEBUG) Log.d(TAG, "VpnListener got a CONNECTIVITY_ACTION");
+                onChanged("vpn", true);
+            } else {
+                if (DEBUG) Log.d(TAG, "VpnListener got a non CONNECTIVITY_ACTION intent " + action.toString());
+            }
+        }
+
+        private NetworkInfo getActiveNetworkInfo() {
+            ConnectivityManager cm = (ConnectivityManager)
+                    mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+            return cm.getActiveNetworkInfo();
+        }
+
+        private void onChanged(String type, boolean connected) {
+            synchronized (SipService.this) {
+                // Give the VPN tunnel some time to stabilize
+                if (connected) {
+                    if (mTask != null) mTask.cancel();
+                    mTask = new MyTimerTask(type, connected);
+                    mTimer.schedule(mTask, 2 * 1000L);
+                    // hold wakup lock so that we can finish changes before the
+                    // device goes to sleep
+                    mMyWakeLock.acquire(mTask);
+                } else {
+                    if ((mTask != null) && mTask.mNetworkType.equals(type)) {
+                        mTask.cancel();
+                        mMyWakeLock.release(mTask);
+                    }
+                    onConnectivityChanged(type, false);
+                }
+            }
+        }
+
+        private class MyTimerTask extends TimerTask {
+            private boolean mConnected;
+            private String mNetworkType;
+
+            public MyTimerTask(String type, boolean connected) {
+                mNetworkType = type;
+                mConnected = connected;
+            }
+
+            // timeout handler
+            @Override
+            public void run() {
+                // delegate to mExecutor
+                getExecutor().execute(new Runnable() {
+                    public void run() {
+                        realRun();
+                    }
+                });
+            }
+
+            private void realRun() {
+                synchronized (SipService.this) {
+                    if (mTask != this) {
+                        Log.w(TAG, "  unexpected task: " + mNetworkType
+                                + (mConnected ? " CONNECTED" : "DISCONNECTED"));
+                        return;
+                    }
+                    mTask = null;
+                    if (DEBUG) Log.d(TAG, " deliver change for " + mNetworkType
+                            + (mConnected ? " CONNECTED" : "DISCONNECTED"));
+                    onConnectivityChanged(mNetworkType, mConnected);
+                    mMyWakeLock.release(this);
+                }
+            }
+        }
+    }
     /**
      * Timer that can schedule events to occur even when the device is in sleep.
      * Only used internally in this package.
