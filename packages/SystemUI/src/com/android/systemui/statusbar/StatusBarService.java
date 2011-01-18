@@ -370,6 +370,12 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         WindowManagerImpl.getDefault().addView(view, lp);
 
         setupPowerWidget();
+
+        boolean powerWidget = Settings.System.getInt(getContentResolver(),
+                Settings.System.EXPANDED_VIEW_WIDGET, 1) == 1;
+        if (!powerWidget) {
+            mExpandedView.findViewById(R.id.exp_power_stat).setVisibility(View.GONE);
+        }
     }
 
     public void addIcon(String slot, int index, int viewIndex, StatusBarIcon icon) {
