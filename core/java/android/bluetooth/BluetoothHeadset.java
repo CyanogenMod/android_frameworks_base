@@ -203,6 +203,27 @@ public final class BluetoothHeadset {
     }
 
     /**
+     * Get the current state of the Bluetooth Headset service.
+     * COMPATIBILITY FUNCTION FOR NUANCE'S VSUITE.
+     * REMOVE ONCE NO LONGER NEEDED.
+     * @return One of the STATE_ return codes, or STATE_ERROR if this proxy
+     *         object is currently not connected to the Headset service.
+     * @hide
+     */
+    public int getState() {
+        if (DBG) log("getState()");
+        if (mService != null) {
+            try {
+                return mService.getState(mService.getCurrentHeadset());
+            } catch (RemoteException e) {Log.e(TAG, e.toString());}
+        } else {
+            Log.w(TAG, "Proxy not attached to service");
+            if (DBG) Log.d(TAG, Log.getStackTraceString(new Throwable()));
+        }
+        return BluetoothHeadset.STATE_ERROR;
+    }
+
+    /**
      * Get the BluetoothDevice for the current headset.
      * @return current headset, or null if not in connected or connecting
      *         state, or if this proxy object is not connected to the Headset
