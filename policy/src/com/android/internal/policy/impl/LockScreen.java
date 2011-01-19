@@ -135,11 +135,11 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private boolean mLockAlwaysMusic = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_ALWAYS_MUSIC_CONTROLS, 0) == 1);
 
-    private boolean mLockPhoneMessagingTab = (Settings.System.getInt(mContext.getContentResolver(),
-            Settings.System.LOCKSCREEN_PHONE_MESSAGING_TAB, 0) == 1);
+    private boolean mCustomAppToggle = (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_CUSTOM_APP_TOGGLE, 0) == 1);
 
-    private String mMessagingTabApp = (Settings.System.getString(mContext.getContentResolver(),
-            Settings.System.LOCKSCREEN_MESSAGING_TAB_APP));
+    private String mCustomAppActivity = (Settings.System.getString(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_CUSTOM_APP_ACTIVITY));
 
     private int mLockscreenStyle = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_STYLE_PREF, 1));
@@ -357,6 +357,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mSilentMode = isSilentMode();
 
         mRotarySelector.setLeftHandleResource(R.drawable.ic_jog_dial_unlock);
+        mRotarySelector.setMidHandleResource(R.drawable.ic_jog_dial_custom);
+        mRotarySelector.enableCustomAppDimple(mCustomAppToggle);
 
         mTabSelector.setLeftTabResources(
                 R.drawable.ic_jog_dial_unlock,
@@ -374,7 +376,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                     R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_left_generic,
                     R.drawable.jog_tab_left_generic);
 
-            mSelector2.setRightTabResources(R.drawable.ic_jog_dial_messaging,
+            mSelector2.setRightTabResources(R.drawable.ic_jog_dial_custom,
                     R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_right_generic,
                     R.drawable.jog_tab_right_generic);
 
@@ -386,9 +388,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                         getContext().startActivity(callIntent);
                         mCallback.goToUnlockScreen();
                     } else if (whichHandle == SlidingTab.OnTriggerListener.RIGHT_HANDLE) {
-                        if (mMessagingTabApp != null) {
+                        if (mCustomAppActivity != null) {
                             try {
-                                Intent i = Intent.parseUri(mMessagingTabApp, 0);
+                                Intent i = Intent.parseUri(mCustomAppActivity, 0);
                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                                         | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
                                 mContext.startActivity(i);
@@ -510,26 +512,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         if (whichHandle == SlidingTab.OnTriggerListener.LEFT_HANDLE) {
             mCallback.goToUnlockScreen();
         } else if (whichHandle == SlidingTab.OnTriggerListener.RIGHT_HANDLE) {
-            // tri state silent<->vibrate<->ring if silent mode is enabled, otherwise toggle silent mode
-            final boolean mVolumeControlSilent = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.VOLUME_CONTROL_SILENT, 0) != 0;
-            mSilentMode = mVolumeControlSilent
-                ? ((mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) || !mSilentMode)
-                : !mSilentMode;
-            if (mSilentMode) {
-                final boolean vibe = mVolumeControlSilent
-                ? (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_VIBRATE)
-                : (Settings.System.getInt(
-                    getContext().getContentResolver(),
-                    Settings.System.VIBRATE_IN_SILENT, 1) == 1);
-
-                mAudioManager.setRingerMode(vibe
-                    ? AudioManager.RINGER_MODE_VIBRATE
-                    : AudioManager.RINGER_MODE_SILENT);
-            } else {
-                mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-            }
-
+            toggleSilentMode();
             updateRightTabResources();
 
             String message = mSilentMode ?
@@ -552,6 +535,18 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     public void onDialTrigger(View v, int whichHandle) {
         if (whichHandle == RotarySelector.OnDialTriggerListener.LEFT_HANDLE) {
             mCallback.goToUnlockScreen();
+        } else if (whichHandle == RotarySelector.OnDialTriggerListener.MID_HANDLE) {
+            if (mCustomAppActivity != null) {
+                try {
+                    Intent i = Intent.parseUri(mCustomAppActivity, 0);
+                    i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                    mContext.startActivity(i);
+                    mCallback.goToUnlockScreen();
+                } catch (URISyntaxException e) {
+                } catch (ActivityNotFoundException e) {
+                }
+            }
         } else if (whichHandle == RotarySelector.OnDialTriggerListener.RIGHT_HANDLE) {
             // toggle silent mode
             toggleSilentMode();
@@ -791,6 +786,10 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         // The emergency call button no longer appears on this screen.
         if (DBG) Log.d(TAG, "updateLayout: status=" + status);
 
+        mCustomAppToggle = (Settings.System.getInt(mContext.getContentResolver(),
+                                Settings.System.LOCKSCREEN_CUSTOM_APP_TOGGLE, 0) == 1);
+        mRotarySelector.enableCustomAppDimple(mCustomAppToggle);
+
         mEmergencyCallButton.setVisibility(View.GONE); // in almost all cases
 
         switch (status) {
@@ -816,7 +815,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                     mRotarySelector.setVisibility(View.GONE);
                     mTabSelector.setVisibility(View.VISIBLE);
                     if (mSelector2 != null) {
-                        if (mLockPhoneMessagingTab) {
+                        if (mCustomAppToggle) {
                             mSelector2.setVisibility(View.VISIBLE);
                         } else {
                             mSelector2.setVisibility(View.GONE);
@@ -846,7 +845,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                     mRotarySelector.setVisibility(View.GONE);
                     mTabSelector.setVisibility(View.VISIBLE);
                     if (mSelector2 != null) {
-                        if (mLockPhoneMessagingTab) {
+                        if (mCustomAppToggle) {
                             mSelector2.setVisibility(View.VISIBLE);
                         } else {
                             mSelector2.setVisibility(View.GONE);
@@ -872,7 +871,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                     mRotarySelector.setVisibility(View.GONE);
                     mTabSelector.setVisibility(View.VISIBLE);
                     if (mSelector2 != null) {
-                        if (mLockPhoneMessagingTab) {
+                        if (mCustomAppToggle) {
                             mSelector2.setVisibility(View.VISIBLE);
                         } else {
                             mSelector2.setVisibility(View.GONE);
@@ -919,7 +918,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                     mRotarySelector.setVisibility(View.GONE);
                     mTabSelector.setVisibility(View.VISIBLE);
                     if (mSelector2 != null) {
-                        if (mLockPhoneMessagingTab) {
+                        if (mCustomAppToggle) {
                             mSelector2.setVisibility(View.VISIBLE);
                         } else {
                             mSelector2.setVisibility(View.GONE);
@@ -1042,17 +1041,26 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
     }
 
-    public void toggleSilentMode() {
-        mSilentMode = !mSilentMode;
-        if (mSilentMode) {
-            final boolean vibe = (Settings.System.getInt(getContext().getContentResolver(),
+    private void toggleSilentMode() {
+            // tri state silent<->vibrate<->ring if silent mode is enabled, otherwise toggle silent mode
+            final boolean mVolumeControlSilent = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.VOLUME_CONTROL_SILENT, 0) != 0;
+            mSilentMode = mVolumeControlSilent
+                ? ((mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) || !mSilentMode)
+                : !mSilentMode;
+            if (mSilentMode) {
+                final boolean vibe = mVolumeControlSilent
+                ? (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_VIBRATE)
+                : (Settings.System.getInt(
+                    getContext().getContentResolver(),
                     Settings.System.VIBRATE_IN_SILENT, 1) == 1);
 
-            mAudioManager.setRingerMode(vibe ? AudioManager.RINGER_MODE_VIBRATE
+                mAudioManager.setRingerMode(vibe
+                    ? AudioManager.RINGER_MODE_VIBRATE
                     : AudioManager.RINGER_MODE_SILENT);
-        } else {
-            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-        }
+            } else {
+                mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+            }
     }
 
     @Override
