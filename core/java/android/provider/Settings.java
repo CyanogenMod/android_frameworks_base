@@ -2102,16 +2102,16 @@ public final class Settings {
             "lockscreen_quick_unlock_control";
 
         /**
-         * Whether to use the custom Phone and Messaging SlidingTab
+         * Whether to use the custom app on both slider style and rotary style
          * @hide
          */
-        public static final String LOCKSCREEN_PHONE_MESSAGING_TAB = "lockscreen_phone_messaging_tab";
+        public static final String LOCKSCREEN_CUSTOM_APP_TOGGLE = "lockscreen_custom_app_toggle";
 
         /**
-         * App to launch with the custom messaging tab
+         * App to launch with custom app toggle enabled
          * @hide
          */
-        public static final String LOCKSCREEN_MESSAGING_TAB_APP = "lockscreen_messaging_tab_app";
+        public static final String LOCKSCREEN_CUSTOM_APP_ACTIVITY = "lockscreen_custom_app_activity";
 
         /**
          * Sets the lockscreen style
