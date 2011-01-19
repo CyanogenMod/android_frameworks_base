@@ -528,7 +528,9 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * @return Return true if the resource needs to be loaded, else false.
      */
     public static boolean needNewResources(int configChanges, int interestingChanges) {
-        return (configChanges & (interestingChanges|ActivityInfo.CONFIG_FONT_SCALE)) != 0;
+        return (configChanges & (interestingChanges |
+                ActivityInfo.CONFIG_FONT_SCALE |
+                ActivityInfo.CONFIG_THEME_RESOURCE)) != 0;
     }
     
     /**
