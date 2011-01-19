@@ -800,6 +800,7 @@ public final class CdmaDataConnectionTracker extends DataConnectionTracker {
         if (state == State.CONNECTED) {
             if (!mCdmaPhone.mSST.isConcurrentVoiceAndData()) {
                 startNetStatPoll();
+                cleanUpConnection(true, Phone.REASON_VOICE_CALL_ENDED);
                 phone.notifyDataConnection(Phone.REASON_VOICE_CALL_ENDED);
             } else {
                 // clean slate after call end.
