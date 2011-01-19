@@ -58,7 +58,7 @@ public final class ShutdownThread extends Thread {
     private static Object sIsStartedGuard = new Object();
     private static boolean sIsStarted = false;
 
-    private boolean mReboot;
+    private static boolean mReboot;
     private static String mRebootReason;
 
     // Provides shutdown assurance in case the system_server is killed
