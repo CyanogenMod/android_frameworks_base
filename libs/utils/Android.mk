@@ -25,10 +25,10 @@ commonSources:= \
 	CallStack.cpp \
 	Debug.cpp \
 	FileMap.cpp \
-	FileLock.cpp \
 	Flattenable.cpp \
 	ObbFile.cpp \
 	Pool.cpp \
+	PackageRedirectionMap.cpp \
 	RefBase.cpp \
 	ResourceTypes.cpp \
 	SharedBuffer.cpp \

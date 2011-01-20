@@ -24,6 +24,7 @@
 #include <utils/Asset.h>
 #include <utils/ByteOrder.h>
 #include <utils/Errors.h>
+#include <utils/PackageRedirectionMap.h>
 #include <utils/String16.h>
 #include <utils/Vector.h>
 
@@ -1741,7 +1742,7 @@ public:
                  bool copyData=false);
     status_t add(ResTable* src);
 
-    status_t addRedirections(int package, const char* dataPath);
+    void addRedirections(PackageRedirectionMap* resMap);
     void clearRedirections();
 
     status_t getError() const;
@@ -2031,43 +2032,10 @@ private:
     // package array.
     uint8_t                     mPackageMap[256];
 
-    // Represents the resource lookup table for a specific package.
-    class PackageResMap {
-    public:
-        ~PackageResMap();
-
-        int package;
-
-        // Do the heavy lifting to read from a specific package resource map
-        // file.
-        static PackageResMap* createFromCache(int package, const char* cachePath);
-
-        // Returns 0 if the lookup finds no mapping.
-        uint32_t lookup(int type, int entry);
-
-        // Inserts a SharedBuffer array into the res map structure.
-        void insert(int type, const uint32_t* entries);
-
-    private:
-        PackageResMap();
-
-        bool parseMap(const unsigned char* basePtr,
-            const unsigned char* endPtr);
-
-        uint32_t* parseMapType(const unsigned char* basePtr,
-            const unsigned char* endPtr);
-
-        // Sparse array representing all entries, organized into two layers:
-        // first by type, then by entry id.  The result of each lookup will be
-        // a qualified resource ID in the theme package scope.  Underneath is a
-        // SharedBuffer on both layers which indicates the size.
-        uint32_t** mEntriesByType;
-    };
-
     // Resource redirection mapping provided by the applied theme (if there is
-    // any).  Resources requested which are found in this map will be
+    // one).  Resources requested which are found in this map will be
     // automatically redirected to the appropriate themed value.
-    Vector<PackageResMap*>       mRedirectionMap;
+    Vector<PackageRedirectionMap*> mRedirectionMap;
 };
 
 }   // namespace android

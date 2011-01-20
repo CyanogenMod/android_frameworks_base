@@ -33,15 +33,12 @@
 #include <utils/Log.h>
 #include <utils/Timers.h>
 #include <utils/threads.h>
-#include <utils/FileLock.h>
 
 #include <dirent.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <errno.h>
 #include <assert.h>
-
-#define REDIRECT_NOISY(x) //x
 
 using namespace android;
 
@@ -77,7 +74,6 @@ int32_t AssetManager::getGlobalCount()
 
 AssetManager::AssetManager(CacheMode cacheMode)
     : mLocale(NULL), mVendor(NULL),
-	  mThemePackageName(NULL),
       mResources(NULL), mConfig(new ResTable_config),
       mCacheMode(cacheMode), mCacheValid(false)
 {
@@ -97,10 +93,6 @@ AssetManager::~AssetManager(void)
     // don't have a String class yet, so make sure we clean up
     delete[] mLocale;
     delete[] mVendor;
-
-	if (mThemePackageName != NULL) {
-		delete[] mThemePackageName;
-	}
 }
 
 bool AssetManager::addAssetPath(const String8& path, void** cookie)
@@ -438,365 +430,6 @@ static SharedBuffer* addToEntriesByTypeBuffer(SharedBuffer* buf, uint32_t from, 
     return buf;
 }
 
-// TODO: Terrible, terrible I/O error handling here!
-static bool writeRedirections(const char* redirPath, SharedBuffer* entriesByTypeBuf)
-{
-    REDIRECT_NOISY(LOGW("writing %s\n", redirPath));
-
-    FILE* fp = fopen(redirPath, "w");
-    if (!fp) {
-        LOGE("fopen(%s,r) failed: %s\n", redirPath, strerror(errno));
-        return false;
-    }
-
-    uint16_t version = 1;
-    fwrite(&version, sizeof(version), 1, fp);
-
-    uint16_t totalTypes = 0;
-    size_t typeSize = (entriesByTypeBuf != NULL) ? entriesByTypeBuf->size() / sizeof(uint32_t*) : 0;
-    uint32_t** entriesByType = (uint32_t**)entriesByTypeBuf->data();
-    for (size_t i=0; i<typeSize; i++) {
-        uint32_t* entries = entriesByType[i];
-        if (entries != NULL) {
-            totalTypes++;
-        }
-    }
-
-    REDIRECT_NOISY(LOGW("writing %d total types\n", (int)totalTypes));
-    fwrite(&totalTypes, sizeof(totalTypes), 1, fp);
-
-    // Start offset for the first type table.
-    uint32_t typeSectionOffset = 4 + (9 * totalTypes);
-
-    for (size_t i=0; i<typeSize; i++) {
-        uint32_t* entries = entriesByType[i];
-        if (entries != NULL) {
-            uint8_t type = i;
-            fwrite(&type, sizeof(type), 1, fp);
-            size_t entrySize = SharedBuffer::bufferFromData(entries)->size() / sizeof(uint32_t);
-            size_t numEntries = 0;
-            for (size_t j=0; j<entrySize; j++) {
-                if (entries[j] != 0) {
-                    numEntries++;
-                }
-            }
-            REDIRECT_NOISY(LOGW("%d entries for type %d\n", (int)numEntries, (int)type));
-            fwrite(&typeSectionOffset, sizeof(typeSectionOffset), 1, fp);
-            uint32_t typeSectionLength = numEntries * 6;
-            fwrite(&typeSectionLength, sizeof(typeSectionLength), 1, fp);
-            typeSectionOffset += typeSectionLength;
-        }
-    }
-
-    for (size_t i=0; i<typeSize; i++) {
-        uint32_t* entries = entriesByType[i];
-        if (entries != NULL) {
-            REDIRECT_NOISY(LOGW("writing for type %d...\n", i));
-            size_t entrySize = SharedBuffer::bufferFromData(entries)->size() / sizeof(uint32_t);
-            for (size_t j=0; j<entrySize; j++) {
-                uint32_t resID = entries[j];
-                if (resID != 0) {
-                    uint16_t entryIndex = j;
-                    REDIRECT_NOISY(LOGW("writing 0x%04x => 0x%08x\n", entryIndex, resID));
-                    fwrite(&entryIndex, sizeof(entryIndex), 1, fp);
-                    fwrite(&resID, sizeof(resID), 1, fp);
-                }
-            }
-            SharedBuffer::bufferFromData(entries)->release();
-        }
-    }
-
-    if (entriesByTypeBuf != NULL) {
-        entriesByTypeBuf->release();
-    }
-
-    fclose(fp);
-
-    REDIRECT_NOISY(LOGW("written...\n"));
-
-    return true;
-}
-
-// Crude, lame brute force way to generate the initial framework redirections
-// for testing.  This code should be generalized and follow a much better OO
-// structure.
-static SharedBuffer* generateFrameworkRedirections(SharedBuffer* entriesByTypeBuf, ResTable* rt,
-    const char* themePackageName, uint32_t styleId, const char* redirPath)
-{
-    REDIRECT_NOISY(LOGW("generateFrameworkRedirections: themePackageName=%s, styleId=0x%08x\n", themePackageName, styleId));
-
-    rt->lock();
-
-    // Load up a bag for the user-supplied theme.
-    const ResTable::bag_entry* themeEnt = NULL;
-    ssize_t N = rt->getBagLocked(styleId, &themeEnt);
-    const ResTable::bag_entry* endThemeEnt = themeEnt + (N >= 0 ? N : 0);
-
-    // ...and a bag for the framework default.
-    const ResTable::bag_entry* frameworkEnt = NULL;
-    N = rt->getBagLocked(0x01030005, &frameworkEnt);
-    const ResTable::bag_entry* endFrameworkEnt = frameworkEnt + (N >= 0 ? N : 0);
-
-    // The first entry should be for the theme itself.
-    entriesByTypeBuf = addToEntriesByTypeBuffer(entriesByTypeBuf, 0x01030005, styleId);
-
-    // Now compare them and infer resource redirections for attributes that
-    // remap to different styles.  This works by essentially lining up all the
-    // sorted attributes from each theme and detected TYPE_REFERENCE entries
-    // that point to different resources.  When we find such a mismatch, we'll
-    // create a resource redirection from the original framework resource ID to
-    // the one in the theme.  This lets us do things like automatically find
-    // redirections for @android:style/Widget.Button by looking at how the
-    // theme overrides the android:attr/buttonStyle attribute.
-    REDIRECT_NOISY(LOGW("delta between 0x01030005 and 0x%08x:\n", styleId));
-    for (; frameworkEnt < endFrameworkEnt; frameworkEnt++) {
-        if (frameworkEnt->map.value.dataType != Res_value::TYPE_REFERENCE) {
-            continue;
-        }
-
-        uint32_t curIdent = frameworkEnt->map.name.ident;
-
-        // Walk along the theme entry looking for a match.
-        while (themeEnt < endThemeEnt && curIdent > themeEnt->map.name.ident) {
-            themeEnt++;
-        }
-        // Match found, compare the references.
-        if (themeEnt < endThemeEnt && curIdent == themeEnt->map.name.ident) {
-            if (themeEnt->map.value.data != frameworkEnt->map.value.data) {
-                entriesByTypeBuf = addToEntriesByTypeBuffer(entriesByTypeBuf,
-                    frameworkEnt->map.value.data, themeEnt->map.value.data);
-                REDIRECT_NOISY(LOGW("   generated mapping from 0x%08x => 0x%08x (by attr 0x%08x)\n", frameworkEnt->map.value.data,
-                    themeEnt->map.value.data, curIdent));
-            }
-            themeEnt++;
-        }
-
-        // Exhausted the theme, bail early.
-        if (themeEnt >= endThemeEnt) {
-            break;
-        }
-    }
-
-    rt->unlock();
-
-    return entriesByTypeBuf;
-}
-
-static SharedBuffer* parseRedirections(SharedBuffer* buf, ResTable* rt,
-    ResXMLTree& xml, String16& themePackage, String16& resPackage)
-{
-    ResXMLTree::event_code_t eventType = xml.getEventType();
-    REDIRECT_NOISY(LOGW("initial eventType=%d\n", (int)eventType));
-    size_t len;
-    while (eventType != ResXMLTree::END_DOCUMENT) {
-        if (eventType == ResXMLTree::START_TAG) {
-            String8 outerTag(xml.getElementName(&len));
-            if (outerTag == "resource-redirections") {
-                REDIRECT_NOISY(LOGW("got resource-redirections tag\n"));
-                xml.next();
-                while ((eventType = xml.getEventType()) != ResXMLTree::END_TAG) {
-                    if (eventType == ResXMLTree::START_TAG) {
-                        String8 itemTag(xml.getElementName(&len));
-                        if (itemTag == "item") {
-                            REDIRECT_NOISY(LOGW("got item tag\n"));
-                            ssize_t nameIdx = xml.indexOfAttribute(NULL, "name");
-                            size_t fromLen;
-                            const char16_t* fromName = NULL;
-                            size_t toLen;
-                            const char16_t* toName = NULL;
-                            if (nameIdx >= 0) {
-                                fromName = xml.getAttributeStringValue(nameIdx, &fromLen);
-                                REDIRECT_NOISY(LOGW("  got from %s\n", String8(fromName).string()));
-                            }
-                            if (xml.next() == ResXMLTree::TEXT) {
-                                toName = xml.getText(&toLen);
-                                REDIRECT_NOISY(LOGW("  got to %s\n", String8(toName).string()));
-                                xml.next();
-                            }
-                            if (toName != NULL && fromName != NULL) {
-                                // fromName should look "drawable/foo", so we'll
-                                // let identifierForName parse that part of it, but
-                                // make sure to provide the background ourselves.
-                                // TODO: we should check that the package isn't
-                                // already in the string and error out if it is...
-                                uint32_t fromIdent = rt->identifierForName(fromName, fromLen, NULL, 0,
-                                    resPackage.string(), resPackage.size());
-                                if (fromIdent == 0) {
-                                    LOGW("Failed to locate identifier for resource %s:%s\n",
-                                        String8(fromName, fromLen).string(), String8(resPackage).string());
-                                } else {
-                                    uint32_t toIdent = rt->identifierForName(toName, toLen, NULL, 0,
-                                        themePackage.string(), themePackage.size());
-                                    if (toIdent == 0) {
-                                        LOGW("Failed to locate identifier for resource %s:%s\n",
-                                            String8(toName, toLen).string(), String8(themePackage).string());
-                                    } else {
-                                        REDIRECT_NOISY(LOGW("adding fromIdent=0x%08x to toIdent=0x%08x\n", fromIdent, toIdent));
-                                        buf = addToEntriesByTypeBuffer(buf, fromIdent, toIdent);
-                                    }
-                                }
-                            }
-                        } else {
-                            REDIRECT_NOISY(LOGW("unexpected tag %s\n", itemTag.string()));
-                        }
-                    } else if (eventType == ResXMLTree::END_DOCUMENT) {
-                        return buf;
-                    }
-                    xml.next();
-                }
-            }
-        }
-
-        eventType = xml.next();
-    }
-
-    return buf;
-}
-
-// Generate redirections from XML meta data.  This code should be moved into
-// the Java space at some point, generated by a special service.
-SharedBuffer* AssetManager::generateRedirections(SharedBuffer* entriesByTypeBuf,
-    ResTable* rt, const char* themePackageName,
-    const char16_t* resPackageName)
-{
-    REDIRECT_NOISY(LOGW("generateRedirections: themePackageName=%s; resPackageName=%s\n",
-        themePackageName, String8(resPackageName).string()));
-
-    String16 type("xml");
-    String16 name(resPackageName);
-    name.replaceAll('.', '_');
-    String16 package(themePackageName);
-    uint32_t xmlIdent = rt->identifierForName(name.string(), name.size(), type.string(), type.size(),
-        package.string(), package.size());
-    REDIRECT_NOISY(LOGW("xmlIdent=0x%08x from %s:%s/%s\n", xmlIdent,
-        String8(package).string(), String8(type).string(), String8(name).string()));
-    if (xmlIdent != 0) {
-        // All this junk is being simulated from the Java side implementation.
-        // This is very clumsy and poorly thought through/tested.  This code
-        // will eventually be merged into the Java layer.
-        Res_value value;
-        ssize_t block = rt->getResource(xmlIdent, &value);
-        block = rt->resolveReference(&value, block, &xmlIdent);
-        if (block < 0 || value.dataType != Res_value::TYPE_STRING) {
-            LOGE("Bad redirection XML resource #0x%08x\n", xmlIdent);
-        } else {
-            size_t len;
-            const char16_t* str = rt->valueToString(&value, block, NULL, &len);
-            void* cookie = rt->getTableCookie(block);
-            const size_t whichAssetPath = ((size_t)cookie)-1;
-            Asset* asset = openNonAssetInPathLocked(
-                String8(str).string(), Asset::ACCESS_BUFFER,
-                mAssetPaths.itemAt(whichAssetPath));
-            if (asset == NULL || asset == kExcludedAsset) {
-                LOGE("XML resource %s not found in package\n", String8(str).string());
-            } else {
-                ResXMLTree xml;
-                status_t err = xml.setTo(asset->getBuffer(true), asset->getLength());
-
-                xml.restart();
-
-                String16 resPackage(resPackageName);
-                entriesByTypeBuf = parseRedirections(entriesByTypeBuf, rt, xml,
-                    package, resPackage);
-
-                xml.uninit();
-
-                asset->close();
-                delete asset;
-            }
-        }
-    }
-
-    return entriesByTypeBuf;
-}
-
-bool AssetManager::generateAndWriteRedirections(ResTable* rt,
-    const char* themePackageName, uint32_t themeStyleId,
-    const char16_t* resPackageName, const char* redirPath,
-    bool isFramework) const
-{
-    // FIXME: the const is a lie!!!
-    AssetManager* am = (AssetManager*)this;
-
-    SharedBuffer* buf = NULL;
-    if (isFramework && themeStyleId != 0) {
-        // Special framework theme heuristic...
-        buf = generateFrameworkRedirections(buf, rt, themePackageName,
-            themeStyleId, redirPath);
-    }
-    // Generate redirections from the package XML.
-    buf = am->generateRedirections(buf, rt, themePackageName, resPackageName);
-
-    return writeRedirections(redirPath, buf);
-}
-
-void AssetManager::loadRedirectionMappings(ResTable* rt) const
-{
-    rt->clearRedirections();
-
-    if (mThemePackageName != NULL) {
-        const char* data = getenv("ANDROID_DATA");
-        LOG_ALWAYS_FATAL_IF(data == NULL, "ANDROID_DATA not set");
-
-        // Create the basic directory structure on demand.
-        struct stat statbuf;
-        String8 basePath(data);
-        basePath.appendPath(kThemeResCacheDir);
-        createDirIfNecessary(basePath.string(), 0777, &statbuf);
-        basePath.appendPath(mThemePackageName);
-        createDirIfNecessary(basePath.string(), 0777, &statbuf);
-
-        String8 themeDirLockPath(basePath);
-        themeDirLockPath.append(".lck");
-
-        FileLock* themeDirLock = new FileLock(themeDirLockPath.string());
-        themeDirLock->lock();
-
-        // Load (generating if necessary) the cache files for each installed
-        // package in this ResTable, excluding the framework's "android"
-        // package.
-        bool hasFramework = false;
-        const size_t N = rt->getBasePackageCount();
-        for (size_t i=0; i<N; i++) {
-            uint32_t packageId = rt->getBasePackageId(i);
-
-            // No need to regenerate the 0x01 framework resources.
-            if (packageId == 0x7f) {
-                String8 redirPath(basePath);
-                const char16_t* resPackageName = rt->getBasePackageName(i);
-                redirPath.appendPath(String8(resPackageName));
-
-                if (lstat(redirPath.string(), &statbuf) != 0) {
-                    generateAndWriteRedirections(rt, mThemePackageName,
-                        mThemeStyleId, resPackageName, redirPath.string(),
-                        false);
-                }
-
-                rt->addRedirections(packageId, redirPath.string());
-            } else if (packageId == 0x01) {
-                hasFramework = true;
-            }
-        }
-
-        // Handle the "android" package space as a special case using some
-        // fancy heuristics.
-        if (hasFramework) {
-            String8 frameworkRedirPath(basePath);
-            frameworkRedirPath.appendPath("android");
-
-            if (lstat(frameworkRedirPath.string(), &statbuf) != 0) {
-                generateAndWriteRedirections(rt, mThemePackageName,
-                    mThemeStyleId, String16("android").string(),
-                    frameworkRedirPath.string(), true);
-            }
-
-            rt->addRedirections(0x01, frameworkRedirPath.string());
-        }
-
-        themeDirLock->unlock();
-    }
-}
-
 const ResTable* AssetManager::getResTable(bool required) const
 {
     ResTable* rt = mResources;
@@ -827,7 +460,6 @@ const ResTable* AssetManager::getResTable(bool required) const
             const asset_path& ap = mAssetPaths.itemAt(i);
             updateResTableFromAssetPath(rt, ap, (void*)(i+1));
         }
-        loadRedirectionMappings(rt);
     }
 
     if (required && !rt) LOGW("Unable to find resources file resources.arsc");
@@ -2195,28 +1827,6 @@ int AssetManager::ZipSet::getIndex(const String8& zip) const
     return mZipPath.size()-1;
 }
 
-/*
- * Set the currently applied theme package name and the high-level theme style
- * identifier (the one to replace @android:style/Theme).  May be set to NULL, 0
- * to indicate that this AssetManager does not have an added theme package.
- *
- * This information is used when constructing the ResTable's resource
- * redirection map.
- */
-void AssetManager::setThemePackageInfo(const char* packageName, uint32_t styleId)
-{
-    if (mThemePackageName != NULL) {
-        delete[] mThemePackageName;
-    }
-    mThemePackageName = strdupNew(packageName);
-    mThemeStyleId = styleId;
-}
-
-const char* AssetManager::getThemePackageName()
-{
-    return mThemePackageName;
-}
-
 bool AssetManager::updateWithAssetPath(const String8& path, void** cookie)
 {
     bool res = addAssetPath(path, cookie);
@@ -2225,7 +1835,6 @@ bool AssetManager::updateWithAssetPath(const String8& path, void** cookie)
         AutoMutex _l(mLock);
         const asset_path& ap = mAssetPaths.itemAt((size_t)*cookie - 1);
         updateResTableFromAssetPath(rt, ap, *cookie);
-        loadRedirectionMappings(rt);
     }
     return res;
 }
@@ -2240,7 +1849,6 @@ bool AssetManager::removeAssetPath(const String8 &packageName, void* cookie)
         return false;
     }
 
-    rt->clearRedirections();
     rt->removeAssetsByCookie(packageName, (void *)cookie);
 
     return true;
@@ -2254,4 +1862,18 @@ void AssetManager::dumpRes()
         return;
     }
     rt->dump();
+}
+
+void AssetManager::addRedirections(PackageRedirectionMap* resMap)
+{
+    getResources();
+    ResTable* rt = mResources;
+    rt->addRedirections(resMap);
+}
+
+void AssetManager::clearRedirections()
+{
+    getResources();
+    ResTable* rt = mResources;
+    rt->clearRedirections();
 }

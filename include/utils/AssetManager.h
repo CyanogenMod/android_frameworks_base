@@ -23,6 +23,7 @@
 
 #include <utils/Asset.h>
 #include <utils/AssetDir.h>
+#include <utils/PackageRedirectionMap.h>
 #include <utils/KeyedVector.h>
 #include <utils/String8.h>
 #include <utils/Vector.h>
@@ -218,9 +219,6 @@ public:
      */
     void getLocales(Vector<String8>* locales) const;
 
-    void setThemePackageInfo(const char* packageName, uint32_t styleId);
-    const char* getThemePackageName();
-
     /*
      * Remove existing source for assets.
      *
@@ -231,6 +229,8 @@ public:
     bool removeAssetPath(const String8 &packageName, void *cookie);
     bool updateWithAssetPath(const String8& path, void** cookie);
     void dumpRes();
+    void addRedirections(PackageRedirectionMap* resMap);
+    void clearRedirections();
 
 private:
     struct asset_path
@@ -239,12 +239,6 @@ private:
         FileType type;
     };
 
-    SharedBuffer* generateRedirections(SharedBuffer* entriesByTypeBuf, ResTable* rt,
-        const char* themePackageName, const char16_t* resPackageName);
-    bool generateAndWriteRedirections(ResTable* rt, const char* themePackageName,
-        uint32_t themeStyleId, const char16_t* resPackageName, const char* redirPath,
-        bool isFramework) const;
-    void loadRedirectionMappings(ResTable* rt) const;
     void updateResTableFromAssetPath(ResTable* rt, const asset_path& ap, void* cookie) const;
     Asset* openInPathLocked(const char* fileName, AccessMode mode,
         const asset_path& path);
@@ -361,11 +355,6 @@ private:
     Vector<asset_path> mAssetPaths;
     char*           mLocale;
     char*           mVendor;
-
-    // If non-null, represents the theme package from which to construct the
-    // resource redirection map used by ResTable.
-    char*           mThemePackageName;
-    uint32_t        mThemeStyleId;
 
     mutable ResTable* mResources;
     ResTable_config* mConfig;

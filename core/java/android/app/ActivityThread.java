@@ -17,6 +17,7 @@
 
 package android.app;
 
+import com.android.internal.app.IAssetRedirectionManager;
 import com.android.internal.os.BinderInternal;
 import com.android.internal.os.RuntimeInit;
 import com.android.internal.os.SamplingProfilerIntegration;
@@ -41,11 +42,11 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ServiceInfo;
-import android.content.pm.ThemeInfo;
 import android.content.res.AssetManager;
 import android.content.res.CompatibilityInfo;
 import android.content.res.Configuration;
 import android.content.res.CustomTheme;
+import android.content.res.PackageRedirectionMap;
 import android.content.res.Resources;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDebug;
@@ -138,6 +139,7 @@ public final class ActivityThread {
     static ContextImpl mSystemContext = null;
 
     static IPackageManager sPackageManager;
+    static IAssetRedirectionManager sAssetRedirectionManager;
 
     final ApplicationThread mAppThread = new ApplicationThread();
     final Looper mLooper = Looper.myLooper();
@@ -1145,6 +1147,18 @@ public final class ActivityThread {
         return sPackageManager;
     }
 
+    // NOTE: this method can return null if the SystemServer is still
+    // initializing (for example, of another SystemServer component is accessing
+    // a resources object)
+    public static IAssetRedirectionManager getAssetRedirectionManager() {
+        if (sAssetRedirectionManager != null) {
+            return sAssetRedirectionManager;
+        }
+        IBinder b = ServiceManager.getService("assetredirection");
+        sAssetRedirectionManager = IAssetRedirectionManager.Stub.asInterface(b);
+        return sAssetRedirectionManager;
+    }
+
     DisplayMetrics getDisplayMetricsLocked(boolean forceUpdate) {
         if (mDisplayMetrics != null && !forceUpdate) {
             return mDisplayMetrics;
@@ -1236,7 +1250,18 @@ public final class ActivityThread {
             return r;
         }
     }
-    
+
+    private void detachThemeAssets(AssetManager assets) {
+        String themePackageName = assets.getThemePackageName();
+        int themeCookie = assets.getThemeCookie();
+        if (!TextUtils.isEmpty(themePackageName) && themeCookie != 0) {
+            assets.removeAssetPath(themePackageName, themeCookie);
+            assets.setThemePackageName(null);
+            assets.setThemeCookie(0);
+            assets.clearRedirections();
+        }
+    }
+
     /**
      * Attach the necessary theme asset paths and meta information to convert an
      * AssetManager to being globally "theme-aware".
@@ -1252,21 +1277,16 @@ public final class ActivityThread {
      *         the framework default.
      */
     private boolean attachThemeAssets(AssetManager assets, CustomTheme theme, boolean updating) {
+        IAssetRedirectionManager rm = getAssetRedirectionManager();
+        if (rm == null) {
+            return false;
+        }
         PackageInfo pi = null;
         try {
             pi = getPackageManager().getPackageInfo(theme.getThemePackageName(), 0);
         } catch (RemoteException e) {
         }
         if (pi != null && pi.applicationInfo != null && pi.themeInfos != null) {
-            /*
-             * It's important that this is called before
-             * updateResourcesWithAssetPath as it depends on the result of
-             * getThemePackageName to figure out what to do with the resource
-             * redirection table.
-             */
-            assets.setThemePackageInfo(theme.getThemePackageName(),
-                    findThemeResourceId(pi.themeInfos, theme));
-
             String themeResDir = pi.applicationInfo.publicSourceDir;
             int cookie;
             if (updating) {
@@ -1275,41 +1295,44 @@ public final class ActivityThread {
                 cookie = assets.addAssetPath(themeResDir);
             }
             if (cookie != 0) {
+                String themePackageName = theme.getThemePackageName();
+                String themeId = theme.getThemeId();
+                int N = assets.getBasePackageCount();
+                for (int i = 0; i < N; i++) {
+                    String packageName = assets.getBasePackageName(i);
+                    int packageId = assets.getBasePackageId(i);
+
+                    /*
+                     * For now, we only consider redirections coming from the
+                     * framework or regular android packages. This excludes
+                     * themes and other specialty APKs we are not aware of.
+                     */
+                    if (packageId != 0x01 && packageId != 0x7f) {
+                        continue;
+                    }
+
+                    try {
+                        PackageRedirectionMap map = rm.getPackageRedirectionMap(themePackageName, themeId,
+                                packageName);
+                        if (map != null) {
+                            assets.addRedirections(map);
+                        }
+                    } catch (RemoteException e) {
+                        Log.e(TAG, "Failure accessing package redirection map, removing theme support.");
+                        assets.removeAssetPath(themePackageName, cookie);
+                        return false;
+                    }
+                }
+
+                assets.setThemePackageName(theme.getThemePackageName());
                 assets.setThemeCookie(cookie);
                 return true;
             } else {
                 Log.e(TAG, "Unable to " + (updating ? "update" : "add") + " theme assets at " +
                         themeResDir);
-
-                /* Roll back the theme package info. */
-                assets.setThemePackageInfo(null, 0);
             }
         }
         return false;
-    }
-
-    /**
-     * Searches for the high-level theme resource id for the specific
-     * &lt;theme&gt; tag being applied.
-     * <p>
-     * An individual theme package can contain multiple &lt;theme&gt; tags, each
-     * representing a separate theme choice from the user's perspective, even
-     * though the most common case is for there to be only 1.
-     *
-     * @return The style resource id or 0 if no match was found.
-     */
-    private int findThemeResourceId(ThemeInfo[] themeInfos, CustomTheme theme) {
-        String needle = theme.getThemeId();
-        if (themeInfos != null && !TextUtils.isEmpty(needle)) {
-            int n = themeInfos.length;
-            for (int i = 0; i < n; i++) {
-                ThemeInfo info = themeInfos[i];
-                if (needle.equals(info.themeId)) {
-                    return info.styleResourceId;
-                }
-            }
-        }
-        return 0;
     }
 
     /**
@@ -3060,20 +3083,8 @@ public final class ActivityThread {
                 boolean themeChanged = (changes & ActivityInfo.CONFIG_THEME_RESOURCE) != 0;
                 if (themeChanged) {
                     AssetManager am = r.getAssets();
-                    /*
-                     * Dynamically modify the AssetManager object to
-                     * replace the old asset path with the new one. This
-                     * is made possibly by native layer changes made by
-                     * T-Mobile.
-                     */
                     if (am.hasThemeSupport()) {
-                        String oldThemePackage = am.getThemePackageName();
-                        int themeCookie = am.getThemeCookie();
-                        if (!TextUtils.isEmpty(oldThemePackage) && themeCookie != 0) {
-                            am.setThemePackageInfo(null, 0);
-                            am.removeAssetPath(oldThemePackage, themeCookie);
-                            am.setThemeCookie(0);
-                        }
+                        detachThemeAssets(am);
                         if (!TextUtils.isEmpty(config.customTheme.getThemePackageName())) {
                             attachThemeAssets(am, config.customTheme, true);
                         }

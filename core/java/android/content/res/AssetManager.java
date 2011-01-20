@@ -20,6 +20,7 @@ package android.content.res;
 import android.os.ParcelFileDescriptor;
 import android.util.Config;
 import android.util.Log;
+import android.util.SparseArray;
 import android.util.TypedValue;
 
 import java.io.FileNotFoundException;
@@ -83,7 +84,15 @@ public final class AssetManager {
     private String mAppName;
 
     private boolean mThemeSupport;
+    private String mThemePackageName;
     private int mThemeCookie;
+
+    /**
+     * Organize all added redirection maps using Java strong references to keep
+     * the native layer cleanup simple (that is, finalize() in Java will be
+     * responsible for delete in C++).
+     */
+    private SparseArray<PackageRedirectionMap> mRedirections;
 
     /**
      * Create a new AssetManager containing only the basic system assets.
@@ -692,16 +701,30 @@ public final class AssetManager {
     }
 
     /**
+     * Apply a heuristic to match-up all attributes from the source style with
+     * attributes in the destination style. For each match, an entry in the
+     * package redirection map will be inserted.
+     *
+     * {@hide}
+     */
+    public native final boolean generateStyleRedirections(int resMapNative, int sourceStyle,
+            int destStyle);
+
+    /**
      * Get package name of current theme (may return null).
      * {@hide}
      */
-    public native final String getThemePackageName();
+    public String getThemePackageName() {
+        return mThemePackageName;
+    }
 
     /**
      * Sets package name and highest level style id for current theme (null, 0 is allowed).
      * {@hide}
      */
-    public native final void setThemePackageInfo(String packageName, int styleId);
+    public void setThemePackageName(String packageName) {
+        mThemePackageName = packageName;
+    }
 
     /**
      * Get asset cookie for current theme (may return 0).
@@ -717,6 +740,30 @@ public final class AssetManager {
      */
     public void setThemeCookie(int cookie) {
         mThemeCookie = cookie;
+    }
+
+    /**
+     * Add a redirection map to the asset manager. All future resource lookups
+     * will consult this map.
+     * {@hide}
+     */
+    public void addRedirections(PackageRedirectionMap map) {
+        if (mRedirections == null) {
+            mRedirections = new SparseArray<PackageRedirectionMap>(2);
+        }
+        mRedirections.append(map.getPackageId(), map);
+        addRedirectionsNative(map.getNativePointer());
+    }
+
+    /**
+     * Clear redirection map for the asset manager.
+     * {@hide}
+     */
+    public void clearRedirections() {
+        if (mRedirections != null) {
+            mRedirections.clear();
+        }
+        clearRedirectionsNative();
     }
 
     /**
@@ -836,6 +883,24 @@ public final class AssetManager {
     /*package*/ native final int[] getArrayIntResource(int arrayRes);
 
     private native final int splitThemePackage(String srcFileName, String dstFileName, String [] drmProtectedAssetNames);
+
+    /**
+     * {@hide}
+     */
+    public native final int getBasePackageCount();
+
+    /**
+     * {@hide}
+     */
+    public native final String getBasePackageName(int index);
+
+    /**
+     * {@hide}
+     */
+    public native final int getBasePackageId(int index);
+
+    private native final void addRedirectionsNative(int redirectionMapNativePointer);
+    private native final void clearRedirectionsNative();
 
     private native final void init();
     private native final void destroy();

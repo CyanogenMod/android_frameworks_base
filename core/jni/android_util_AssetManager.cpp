@@ -33,6 +33,7 @@
 #include <utils/Asset.h>
 #include <utils/AssetManager.h>
 #include <utils/ResourceTypes.h>
+#include <utils/PackageRedirectionMap.h>
 #include <utils/ZipFile.h>
 
 #include <stdio.h>
@@ -1802,36 +1803,128 @@ static jint android_content_AssetManager_getGlobalAssetManagerCount(JNIEnv* env,
     return AssetManager::getGlobalCount();
 }
 
-static void android_content_AssetManager_setThemePackageInfo(JNIEnv* env, jobject clazz,
-            jstring packageName, jint styleId)
+static jint android_content_AssetManager_getBasePackageCount(JNIEnv* env, jobject clazz)
+{
+    AssetManager* am = assetManagerForJavaObject(env, clazz);
+    if (am == NULL) {
+        return JNI_FALSE;
+    }
+
+    return am->getResources().getBasePackageCount();
+}
+
+static jstring android_content_AssetManager_getBasePackageName(JNIEnv* env, jobject clazz, jint index)
+{
+    AssetManager* am = assetManagerForJavaObject(env, clazz);
+    if (am == NULL) {
+        return JNI_FALSE;
+    }
+
+    String16 packageName(am->getResources().getBasePackageName(index));
+    return env->NewString((const jchar*)packageName.string(), packageName.size());
+}
+
+static jint android_content_AssetManager_getBasePackageId(JNIEnv* env, jobject clazz, jint index)
+{
+    AssetManager* am = assetManagerForJavaObject(env, clazz);
+    if (am == NULL) {
+        return JNI_FALSE;
+    }
+
+    return am->getResources().getBasePackageId(index);
+}
+
+static void android_content_AssetManager_addRedirectionsNative(JNIEnv* env, jobject clazz,
+            PackageRedirectionMap* resMap)
 {
     AssetManager* am = assetManagerForJavaObject(env, clazz);
     if (am == NULL) {
         return;
     }
 
-    if (packageName != NULL) {
-        const char* packageName8 = env->GetStringUTFChars(packageName, NULL);
-        am->setThemePackageInfo(packageName8, styleId);
-        env->ReleaseStringUTFChars(packageName, packageName8);
-    } else {
-        am->setThemePackageInfo(NULL, styleId);
-    }
+    am->addRedirections(resMap);
 }
 
-static jstring android_content_AssetManager_getThemePackageName(JNIEnv* env, jobject clazz)
+static void android_content_AssetManager_clearRedirectionsNative(JNIEnv* env, jobject clazz)
 {
     AssetManager* am = assetManagerForJavaObject(env, clazz);
     if (am == NULL) {
-        return NULL;
+        return;
     }
 
-    const char* packageName = am->getThemePackageName();
-    if (packageName == NULL) {
-        return NULL;
+    am->clearRedirections();
+}
+
+static jboolean android_content_AssetManager_generateStyleRedirections(JNIEnv* env, jobject clazz,
+        PackageRedirectionMap* resMap, jint sourceStyle, jint destStyle)
+{
+    AssetManager* am = assetManagerForJavaObject(env, clazz);
+    if (am == NULL) {
+        return JNI_FALSE;
     }
 
-    return env->NewStringUTF(packageName);
+    const ResTable& res(am->getResources());
+
+    res.lock();
+
+    // Load up a bag for the user-supplied theme.
+    const ResTable::bag_entry* themeEnt = NULL;
+    ssize_t N = res.getBagLocked(destStyle, &themeEnt);
+    const ResTable::bag_entry* endThemeEnt = themeEnt + (N >= 0 ? N : 0);
+
+    // ...and a bag for the framework default.
+    const ResTable::bag_entry* frameworkEnt = NULL;
+    N = res.getBagLocked(sourceStyle, &frameworkEnt);
+    const ResTable::bag_entry* endFrameworkEnt = frameworkEnt + (N >= 0 ? N : 0);
+
+    // Add the source => dest style redirection first.
+    jboolean ret = JNI_FALSE;
+    if (themeEnt < endThemeEnt && frameworkEnt < endFrameworkEnt) {
+        resMap->addRedirection(sourceStyle, destStyle);
+        ret = JNI_TRUE;
+    }
+
+    // Now compare them and infer resource redirections for attributes that
+    // remap to different styles.  This works by essentially lining up all the
+    // sorted attributes from each theme and detected TYPE_REFERENCE entries
+    // that point to different resources.  When we find such a mismatch, we'll
+    // create a resource redirection from the original framework resource ID to
+    // the one in the theme.  This lets us do things like automatically find
+    // redirections for @android:style/Widget.Button by looking at how the
+    // theme overrides the android:attr/buttonStyle attribute.
+    REDIRECT_NOISY(LOGW("delta between 0x%08x and 0x%08x:\n", sourceStyle, destStyle));
+    for (; frameworkEnt < endFrameworkEnt; frameworkEnt++) {
+        if (frameworkEnt->map.value.dataType != Res_value::TYPE_REFERENCE) {
+            continue;
+        }
+
+        uint32_t curIdent = frameworkEnt->map.name.ident;
+
+        // Walk along the theme entry looking for a match.
+        while (themeEnt < endThemeEnt && curIdent > themeEnt->map.name.ident) {
+            themeEnt++;
+        }
+        // Match found, compare the references.
+        if (themeEnt < endThemeEnt && curIdent == themeEnt->map.name.ident) {
+            if (themeEnt->map.value.data != frameworkEnt->map.value.data) {
+                uint32_t fromIdent = frameworkEnt->map.value.data;
+                uint32_t toIdent = themeEnt->map.value.data;
+                REDIRECT_NOISY(LOGW("   generated mapping from 0x%08x => 0x%08x (by attr 0x%08x)\n",
+                        fromIdent, toIdent, curIdent));
+                resMap->addRedirection(fromIdent, toIdent);
+            }
+            themeEnt++;
+        }
+
+        // Exhausted the theme, bail early.
+        if (themeEnt >= endThemeEnt) {
+            break;
+        }
+    }
+
+    res.unlock();
+
+    return ret;
 }
 
 static jboolean android_content_AssetManager_removeAssetPath(JNIEnv* env, jobject clazz,
@@ -2001,16 +2094,24 @@ static JNINativeMethod gAssetManagerMethods[] = {
         (void*) android_content_AssetManager_splitThemePackage },
 
     // Dynamic theme package support.
-    { "setThemePackageInfo", "(Ljava/lang/String;I)V",
-        (void*) android_content_AssetManager_setThemePackageInfo },
-    { "getThemePackageName", "()Ljava/lang/String;",
-        (void*) android_content_AssetManager_getThemePackageName },
     { "removeAssetPath", "(Ljava/lang/String;I)Z",
         (void*) android_content_AssetManager_removeAssetPath },
     { "updateResourcesWithAssetPath",   "(Ljava/lang/String;)I",
         (void*) android_content_AssetManager_updateResourcesWithAssetPath },
     { "dumpResources", "()V",
         (void*) android_content_AssetManager_dumpRes },
+    { "getBasePackageCount", "()I",
+        (void*) android_content_AssetManager_getBasePackageCount },
+    { "getBasePackageName", "(I)Ljava/lang/String;",
+        (void*) android_content_AssetManager_getBasePackageName },
+    { "getBasePackageId", "(I)I",
+        (void*) android_content_AssetManager_getBasePackageId },
+    { "addRedirectionsNative", "(I)V",
+        (void*) android_content_AssetManager_addRedirectionsNative },
+    { "clearRedirectionsNative", "()V",
+        (void*) android_content_AssetManager_clearRedirectionsNative },
+    { "generateStyleRedirections", "(III)Z",
+        (void*) android_content_AssetManager_generateStyleRedirections },
 };
 
 int register_android_content_AssetManager(JNIEnv* env)

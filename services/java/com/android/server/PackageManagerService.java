@@ -17,6 +17,7 @@
 
 package com.android.server;
 
+import com.android.internal.app.IAssetRedirectionManager;
 import com.android.internal.app.IMediaContainerService;
 import com.android.internal.app.ResolverActivity;
 import com.android.internal.content.NativeLibraryHelper;
@@ -103,9 +104,6 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
-import java.io.RandomAccessFile;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -351,6 +349,8 @@ class PackageManagerService extends IPackageManager.Stub {
     final ResolveInfo mResolveInfo = new ResolveInfo();
     ComponentName mResolveComponentName;
     PackageParser.Package mPlatformPackage;
+    
+    IAssetRedirectionManager mAssetRedirectionManager;
 
     // Set of pending broadcasts for aggregating enable/disable of components.
     final HashMap<String, ArrayList<String>> mPendingBroadcasts
@@ -3682,16 +3682,38 @@ class PackageManagerService extends IPackageManager.Stub {
         }
     }
 
+    // NOTE: this method can return null if the SystemServer is still
+    // initializing
+    public IAssetRedirectionManager getAssetRedirectionManager() {
+        if (mAssetRedirectionManager != null) {
+            return mAssetRedirectionManager;
+        }
+        IBinder b = ServiceManager.getService("assetredirection");
+        mAssetRedirectionManager = IAssetRedirectionManager.Stub.asInterface(b);
+        return mAssetRedirectionManager;
+    }
+
+    private void cleanAssetRedirections(PackageParser.Package pkg) {
+        IAssetRedirectionManager rm = getAssetRedirectionManager();
+        if (rm == null) {
+            return;
+        }
+        try {
+            if (pkg.mIsThemeApk) {
+                rm.clearRedirectionMapsByTheme(pkg.packageName, null);
+            } else {
+                rm.clearPackageRedirectionMap(pkg.packageName);
+            }
+        } catch (RemoteException e) {
+        }
+    }
+
     void removePackageLI(PackageParser.Package pkg, boolean chatty) {
         if (chatty && Config.LOGD) Log.d(
             TAG, "Removing package " + pkg.applicationInfo.packageName );
 
         synchronized (mPackages) {
-            if (pkg.mIsThemeApk) {
-                deleteThemeResourceCache(pkg.packageName);
-            } else {
-                deleteThemeResourceCacheForApp(pkg.packageName);
-            }
+            cleanAssetRedirections(pkg);
 
             clearPackagePreferredActivitiesLP(pkg.packageName);
 
@@ -5848,12 +5870,10 @@ class PackageManagerService extends IPackageManager.Stub {
             Log.d(TAG, "New package installed in " + newPackage.mPath);
         }
 
-        // DBS -- this changed a lot, hope it works
-        if (newPackage.mIsThemeApk) {
-            // Even though the package is still around, we'll delete the cache
-            // and have it regenerated on demand by the AssetManager.
-            deleteThemeResourceCache(newPackage.packageName);
+        cleanAssetRedirections(newPackage);
 
+        if (newPackage.mIsThemeApk) {
+            /* DBS-TODO
             boolean isThemePackageDrmProtected = false;
             int N = newPackage.mThemeInfos.size();
             for (int i = 0; i < N; i++) {
@@ -5862,13 +5882,10 @@ class PackageManagerService extends IPackageManager.Stub {
                     break;
                 }
             }
-            /* DBS-TODO
             if (isThemePackageDrmProtected) {
                 splitThemePackage(newPackage.mPath);
             }
             */
-        } else {
-            deleteThemeResourceCacheForApp(newPackage.packageName);
         }
 
         synchronized (mPackages) {
@@ -5882,71 +5899,6 @@ class PackageManagerService extends IPackageManager.Stub {
             res.returnCode = PackageManager.INSTALL_SUCCEEDED;
             //to update install status
             mSettings.writeLP();
-        }
-    }
-
-    /*
-     * We currently synchronize with consumers of the theme redirections
-     * cache by taking a file lock that is shared by that
-     * implementation. This should ideally be replaced by centralizing
-     * access through a service component that can rely on a simple
-     * monitor lock to synchronize properly.
-     */
-    private FileLock lockThemeResourceDir(String themePackageName) throws IOException {
-        RandomAccessFile lockFile = new RandomAccessFile(new File(mThemeResCacheDir,
-                themePackageName + ".lck"), "rw");
-        return lockFile.getChannel().lock();
-    }
-
-    private void deleteThemeResourceCache(String packageName) {
-        Log.v(TAG, "deleteThemeResourceCache: packageName=" + packageName);
-        try {
-            FileLock lock = lockThemeResourceDir(packageName);
-            try {
-                File themeResDir = new File(mThemeResCacheDir, packageName);
-                File[] files = themeResDir.listFiles();
-                int n = files != null ? files.length : 0;
-                Log.v(TAG, n + " files from " + themeResDir);
-                for (int i = 0; i < n; i++) {
-                    File file = files[i];
-                    if (!file.delete()) {
-                        throw new IOException("Cannot delete " + file);
-                    }
-                }
-                if (themeResDir.exists() && !themeResDir.delete()) {
-                    throw new IOException("Cannot delete " + themeResDir);
-                }
-            } finally {
-                lock.release();
-            }
-        } catch (IOException e) {
-            Log.w(TAG, "Couldn't delete resource cache for theme package " + packageName +
-                    ":" + e.getMessage());
-        }
-    }
-
-    private void deleteThemeResourceCacheForApp(String appPackageName) {
-        Log.v(TAG, "deleteThemeResourceCacheForApp: appPackageName=" + appPackageName);
-
-        // Unfortunately we must loop through all installed themes to make sure
-        // we clear this package cache for each. Very lame.
-        List<PackageInfo> themes = getInstalledThemePackages();
-        for (PackageInfo theme: themes) {
-            try {
-                FileLock lock = lockThemeResourceDir(theme.packageName);
-                try {
-                    File resCache = new File(new File(mThemeResCacheDir, theme.packageName),
-                            appPackageName);
-                    if (resCache.exists() && !resCache.delete()) {
-                        throw new IOException("Cannot delete " + resCache);
-                    }
-                } finally {
-                    lock.release();
-                }
-            } catch (IOException e) {
-                Log.w(TAG, "Couldn't delete app resource cache for " + appPackageName +
-                        " from theme " + theme.packageName);
-            }
         }
     }
 
