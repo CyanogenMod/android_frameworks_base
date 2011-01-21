@@ -452,7 +452,6 @@ class ServerThread extends Thread {
             } catch (Throwable e) {
                 Slog.e(TAG, "Failure starting DiskStats Service", e);
             }
-
         }
 
         // make sure the ADB_ENABLED setting value matches the secure property value
