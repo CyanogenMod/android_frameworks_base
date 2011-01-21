@@ -693,6 +693,7 @@ extends Layout
                  if (cur ==
                     Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC)
                     chInfo[j] = Character.DIRECTIONALITY_ARABIC_NUMBER;
+		else chInfo[j] = Character.DIRECTIONALITY_LEFT_TO_RIGHT;
             }
         }
 
@@ -781,7 +782,7 @@ extends Layout
                 cur = d;
 
             if (d == Character.DIRECTIONALITY_EUROPEAN_NUMBER)
-                chInfo[j] = cur;
+                chInfo[j] = Character.DIRECTIONALITY_LEFT_TO_RIGHT;
         }
 
         // dump(chdirs, n, "W7");
@@ -794,9 +795,10 @@ extends Layout
             if (d == Character.DIRECTIONALITY_LEFT_TO_RIGHT ||
                 d == Character.DIRECTIONALITY_RIGHT_TO_LEFT) {
                 cur = d;
-            } else if (d == Character.DIRECTIONALITY_EUROPEAN_NUMBER ||
-                       d == Character.DIRECTIONALITY_ARABIC_NUMBER) {
+            } else if (d == Character.DIRECTIONALITY_EUROPEAN_NUMBER) {
                 cur = Character.DIRECTIONALITY_RIGHT_TO_LEFT;
+            } else if (d == Character.DIRECTIONALITY_ARABIC_NUMBER) {
+                cur = Character.DIRECTIONALITY_LEFT_TO_RIGHT;
             } else {
                 byte dd = SOR;
                 int k;
@@ -808,8 +810,10 @@ extends Layout
                         dd == Character.DIRECTIONALITY_RIGHT_TO_LEFT) {
                         break;
                     }
-                    if (dd == Character.DIRECTIONALITY_EUROPEAN_NUMBER ||
-                        dd == Character.DIRECTIONALITY_ARABIC_NUMBER) {
+                    if (dd == Character.DIRECTIONALITY_EUROPEAN_NUMBER) {
+                        dd = Character.DIRECTIONALITY_LEFT_TO_RIGHT;
+                        break;
+                    } else if (dd == Character.DIRECTIONALITY_ARABIC_NUMBER) {
                         dd = Character.DIRECTIONALITY_RIGHT_TO_LEFT;
                         break;
                     }
@@ -1264,7 +1268,7 @@ extends Layout
     }
 
     public int getParagraphDirection(int line) {
-        return mLines[mColumns * line + DIR] >> DIR_SHIFT;
+        return mLineDirections[line] == DIRS_ALL_LEFT_TO_RIGHT? DIR_LEFT_TO_RIGHT : DIR_RIGHT_TO_LEFT;
     }
 
     public boolean getLineContainsTab(int line) {
