@@ -1299,7 +1299,18 @@ public class Paint {
         if ((index | count) < 0 || index + count > text.length) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        native_getTextPath(mNativePaint, text, index, count, x, y, path.ni());
+        boolean hasBidi=Canvas.bidiTest(text,index,count);
+        if (hasBidi) {
+            char[] bidiText;
+            bidiText=Canvas.bidiProcess(text,index,count);
+            String reshapedText=ArabicReshape.reshape(new String(bidiText));
+            /* The reshaping may make the string smaller */
+            native_getTextPath(mNativePaint, reshapedText.toCharArray(), 0,
+                                count - ((count-reshapedText.length())>0 ? (count-reshapedText.length()) : 0),
+                                x, y, path.ni());
+        } else {
+            native_getTextPath(mNativePaint, text, index, count, x, y, path.ni());
+        }
     }
 
     /**
@@ -1320,7 +1331,17 @@ public class Paint {
         if ((start | end | (end - start) | (text.length() - end)) < 0) {
             throw new IndexOutOfBoundsException();
         }
-        native_getTextPath(mNativePaint, text, start, end, x, y, path.ni());
+        boolean hasBidi=Canvas.bidiTest(text,start,start+end);
+        if (hasBidi) {
+            char[] bidiText;
+            bidiText=Canvas.bidiProcess(text.toCharArray(),start,start+end);
+            String reshapedText=ArabicReshape.reshape(new String(bidiText));
+            /* The reshaping may make the string smaller */
+            native_getTextPath(mNativePaint, reshapedText, 0, end-start - ((end-start - reshapedText.length())>0 ? (end-start - reshapedText.length()) : 0),
+                                x, y, path.ni());
+        } else {
+            native_getTextPath(mNativePaint, text, start, end, x, y, path.ni());
+        }
     }
     
     /**
