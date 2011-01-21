@@ -1482,6 +1482,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 WindowState wb = localmWindows.get(foundI-1);
                 if (wb.mBaseLayer < maxLayer &&
                         wb.mAttachedWindow != foundW &&
+                        wb.mAttachedWindow != foundW.mAttachedWindow &&
                         (wb.mAttrs.type != TYPE_APPLICATION_STARTING ||
                                 wb.mToken != foundW.mToken)) {
                     // This window is not related to the previous one in any
@@ -7601,7 +7602,8 @@ public class WindowManagerService extends IWindowManager.Stub
                 WindowState win = allAppWindows.get(i);
                 if (win == startingWindow || win.mAppFreezing
                         || win.mViewVisibility != View.VISIBLE
-                        || win.mAttrs.type == TYPE_APPLICATION_STARTING) {
+                        || win.mAttrs.type == TYPE_APPLICATION_STARTING
+                        || win.mDestroying) {
                     continue;
                 }
                 if (DEBUG_VISIBILITY) {

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -124,4 +125,49 @@ public class SystemProperties
         }
         native_set(key, val);
     }
+
+    /**
+     * Get the value for the given key.
+     * @return def string if the key isn't found
+     */
+    public static String getLongString(String key, String def) {
+        if (key.length() + 1 > PROP_NAME_MAX) {
+            throw new IllegalArgumentException("key.length > " + PROP_NAME_MAX);
+        }
+        int chunks = getInt(key + '0', 0);
+        if (chunks == 0) {
+            return def;
+        }
+        StringBuffer sb = new StringBuffer();
+        for (int i = 1; i <= chunks; i++) {
+            sb.append(native_get(key + Integer.toString(i)));
+        }
+        return sb.toString();
+    }
+
+    /**
+     * Set the value for the given key.
+     * @throws IllegalArgumentException if the key exceeds 32 characters
+     */
+    public static void setLongString(String key, String val) {
+        if (key.length() + 1 > PROP_NAME_MAX) {
+            throw new IllegalArgumentException("key.length > " + PROP_NAME_MAX);
+        }
+        int chunks = 0;
+        if (val != null && val.length() > 0) {
+            chunks = 1 + val.length() / (PROP_VALUE_MAX + 1);
+        }
+        native_set(key + '0', Integer.toString(chunks));
+        if (chunks > 0) {
+            for (int i = 1, start = 0; i <= chunks; i++) {
+                int end = start + PROP_VALUE_MAX;
+                if (end > val.length()) {
+                    end = val.length();
+                }
+                native_set(key + Integer.toString(i), val.substring(start, end));
+                start = end;
+            }
+        }
+    }
+
 }

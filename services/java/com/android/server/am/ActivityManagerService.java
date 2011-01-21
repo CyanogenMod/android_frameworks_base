@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006-2008 The Android Open Source Project
+ * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,6 +75,7 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.content.res.CustomTheme;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Binder;
@@ -124,6 +126,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+
+import dalvik.system.Zygote;
+
 import java.lang.IllegalStateException;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -11392,6 +11397,11 @@ public final class ActivityManagerService extends ActivityManagerNative
                                      values.userSetLocale);
                 }
 
+                if (values.customTheme != null) {
+                    saveThemeResourceLocked(values.customTheme,
+                            !values.customTheme.equals(mConfiguration.customTheme));
+                }
+
                 mConfigurationSeq++;
                 if (mConfigurationSeq <= 0) {
                     mConfigurationSeq = 1;
@@ -11475,6 +11485,13 @@ public final class ActivityManagerService extends ActivityManagerNative
             SystemProperties.set("persist.sys.language", l.getLanguage());
             SystemProperties.set("persist.sys.country", l.getCountry());
             SystemProperties.set("persist.sys.localevar", l.getVariant());
+        }
+    }
+
+    private void saveThemeResourceLocked(CustomTheme t, boolean isDiff){
+        if(isDiff){
+            SystemProperties.set(Configuration.THEME_ID_PERSISTENCE_PROPERTY, t.getThemeId());
+            SystemProperties.set(Configuration.THEME_PACKAGE_NAME_PERSISTENCE_PROPERTY, t.getThemePackageName());  
         }
     }
 

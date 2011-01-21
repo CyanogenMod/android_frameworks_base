@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -194,7 +195,67 @@ public class PackageInfo implements Parcelable {
      */
     public int installLocation = INSTALL_LOCATION_INTERNAL_ONLY;
     
+    // Is Theme Apk
+    /**
+     * {@hide}
+     */
+    public boolean isThemeApk = false;
+
+    // ThemeInfo
+    /**
+     * {@hide}
+     */
+    public ThemeInfo [] themeInfos;
+
     public PackageInfo() {
+    }
+
+    /*
+     * Is Theme Apk is DRM protected (contains DRM-protected resources)
+     *
+     */
+    private boolean drmProtectedThemeApk = false;
+
+    /**
+     * @hide
+     *
+     * @return Is Theme Apk is DRM protected (contains DRM-protected resources)
+     */
+    public boolean isDrmProtectedThemeApk() {
+        return drmProtectedThemeApk;
+    }
+
+    /**
+     * @hide
+     *
+     * @param value if Theme Apk is DRM protected (contains DRM-protected resources)
+     */
+    public void setDrmProtectedThemeApk(boolean value) {
+        drmProtectedThemeApk = value;
+    }
+
+    /*
+     * If isThemeApk and isDrmProtectedThemeApk are true - path to hidden locked zip file
+     *
+     */
+    private String lockedZipFilePath;
+
+    /**
+     * @hide
+     *
+     * @return path for hidden locked zip file
+     */
+    public String getLockedZipFilePath() {
+        return lockedZipFilePath;
+    }
+
+    /**
+     * @hide
+     *
+     * @param value path for hidden locked zip file
+     */
+    public void setLockedZipFilePath(String value) {
+        lockedZipFilePath = value;
     }
 
     public String toString() {
@@ -233,6 +294,12 @@ public class PackageInfo implements Parcelable {
         dest.writeTypedArray(configPreferences, parcelableFlags);
         dest.writeTypedArray(reqFeatures, parcelableFlags);
         dest.writeInt(installLocation);
+
+        /* Theme-specific. */
+        dest.writeInt((isThemeApk)? 1 : 0);
+        dest.writeInt((drmProtectedThemeApk)? 1 : 0);
+        dest.writeTypedArray(themeInfos, parcelableFlags);
+        dest.writeString(lockedZipFilePath);
     }
 
     public static final Parcelable.Creator<PackageInfo> CREATOR
@@ -270,5 +337,11 @@ public class PackageInfo implements Parcelable {
         configPreferences = source.createTypedArray(ConfigurationInfo.CREATOR);
         reqFeatures = source.createTypedArray(FeatureInfo.CREATOR);
         installLocation = source.readInt();
+
+        /* Theme-specific. */
+        isThemeApk = (source.readInt() != 0);
+        drmProtectedThemeApk = (source.readInt() != 0);
+        themeInfos = source.createTypedArray(ThemeInfo.CREATOR);
+        lockedZipFilePath = source.readString();
     }
 }
