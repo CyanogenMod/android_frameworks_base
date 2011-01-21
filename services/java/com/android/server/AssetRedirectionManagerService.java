@@ -184,6 +184,21 @@ public class AssetRedirectionManagerService extends IAssetRedirectionManager.Stu
         return 0;
     }
 
+    private static Resources getUnredirectedResourcesForPackage(Context context, String packageName) {
+        AssetManager assets = new AssetManager();
+
+        if (!packageName.equals("android")) {
+            PackageInfo pi = getPackageInfo(context, packageName);
+            if (pi == null || pi.applicationInfo == null ||
+                    assets.addAssetPath(pi.applicationInfo.publicSourceDir) == 0) {
+                Log.w(TAG, "Unable to get resources for package " + packageName);
+                return null;
+            }
+        }
+
+        return new Resources(assets, null, null);
+    }
+
     @Override
     protected void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         synchronized (mRedirections) {
@@ -212,23 +227,29 @@ public class AssetRedirectionManagerService extends IAssetRedirectionManager.Stu
             pw.println("Theme asset redirections:");
             String lastPackageName = null;
             String lastId = null;
+            Resources themeRes = null;
             for (RedirectionKey key: filteredKeySet) {
                 if (lastPackageName == null || !lastPackageName.equals(key.themePackageName)) {
                     pw.println("* Theme package " + key.themePackageName + ":");
                     lastPackageName = key.themePackageName;
+                    themeRes = getUnredirectedResourcesForPackage(mContext, key.themePackageName);
                 }
                 if (lastId == null || !lastId.equals(key.themeId)) {
                     pw.println("  theme id #" + key.themeId + ":");
                     lastId = key.themeId;
                 }
                 pw.println("    " + key.targetPackageName + ":");
+                Resources targetRes = getUnredirectedResourcesForPackage(mContext, key.targetPackageName);
                 PackageRedirectionMap resMap = mRedirections.get(key);
                 int[] fromIdents = resMap.getRedirectionKeys();
                 int N = fromIdents.length;
                 for (int i = 0; i < N; i++) {
                     int fromIdent = fromIdents[i];
-                    pw.println(String.format("      0x%08x => 0x%08x", fromIdent,
-                            resMap.lookupRedirection(fromIdent)));
+                    int toIdent = resMap.lookupRedirection(fromIdent);
+                    String fromName = targetRes != null ? targetRes.getResourceName(fromIdent) : null;
+                    String toName = themeRes != null ? themeRes.getResourceName(toIdent) : null;
+                    pw.println(String.format("      %s (0x%08x) => %s (0x%08x)", fromName, fromIdent,
+                            toName, toIdent));
                 }
             }
         }
