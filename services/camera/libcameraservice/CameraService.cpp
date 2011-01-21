@@ -65,10 +65,18 @@ struct camera_size_type {
     int height;
 };
 
-static const camera_size_type preview_sizes[] = {
-    { 1280, 720 }, // 720P
-    { 768, 432 },
+struct camera_resize_table_entry {
+    camera_size_type old_size;
+    camera_size_type new_size;
 };
+
+static const camera_resize_table_entry preview_resize_table[] = {
+    { // entry for 720P
+        { 1280, 720 }, // old_size
+        { 768, 432 }, // new_size
+    }
+};
+static const int preview_resize_table_len = sizeof(preview_resize_table)/sizeof(preview_resize_table[0]);
 
 static int getCallingPid() {
     return IPCThreadState::self()->getCallingPid();
@@ -572,11 +580,14 @@ status_t CameraService::Client::registerPreviewBuffers() {
     CameraParameters params(mHardware->getParameters());
     params.getPreviewSize(&w, &h);
 
-    //for 720p recording , preview can be 800X448
-    if(w ==  preview_sizes[0].width && h== preview_sizes[0].height){
-        LOGD("registerpreviewbufs :changing dimensions to 768X432 for 720p recording.");
-        w = preview_sizes[1].width;
-        h = preview_sizes[1].height;
+    for(int i = 0; i < preview_resize_table_len; i++) {
+        if(w ==  preview_resize_table[i].old_size.width && h== preview_resize_table[i].old_size.height){
+            LOGD("registerpreviewbufs :changing dimensions to %dx%d for recording.",
+                    preview_resize_table[i].new_size.width, preview_resize_table[i].new_size.height);
+            w = preview_resize_table[i].new_size.width;
+            h = preview_resize_table[i].new_size.height;
+            break;
+        }
     }
 
     // FIXME: don't use a hardcoded format here.
@@ -598,11 +609,14 @@ status_t CameraService::Client::setOverlay() {
     CameraParameters params(mHardware->getParameters());
     params.getPreviewSize(&w, &h);
 
-    //for 720p recording , preview can be 800X448
-    if(w == preview_sizes[0].width && h==preview_sizes[0].height){
-        LOGD("Changing overlay dimensions to 768X432 for 720p recording.");
-        w = preview_sizes[1].width;
-        h = preview_sizes[1].height;
+    for(int i = 0; i < preview_resize_table_len; i++) {
+        if(w ==  preview_resize_table[i].old_size.width && h== preview_resize_table[i].old_size.height){
+            LOGD("registerpreviewbufs :changing dimensions to %dx%d for recording.",
+                    preview_resize_table[i].new_size.width, preview_resize_table[i].new_size.height);
+            w = preview_resize_table[i].new_size.width;
+            h = preview_resize_table[i].new_size.height;
+            break;
+        }
     }
 
     if (w != mOverlayW || h != mOverlayH || mOrientationChanged) {
