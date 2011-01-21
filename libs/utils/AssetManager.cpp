@@ -1843,6 +1843,13 @@ bool AssetManager::removeAssetPath(const String8 &packageName, void* cookie)
 {
     AutoMutex _l(mLock);
 
+    const size_t which = ((size_t)cookie)-1;
+    if (which >= mAssetPaths.size()) {
+        return false;
+    }
+
+    mAssetPaths.removeAt(which);
+
     ResTable* rt = mResources;
     if (rt == NULL) {
         LOGV("ResTable must not be NULL");
