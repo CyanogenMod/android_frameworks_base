@@ -348,7 +348,7 @@ public class ShapeDrawable extends Drawable {
     
     @Override
     public ConstantState getConstantState() {
-        mShapeState.mChangingConfigurations = getChangingConfigurations();
+        mShapeState.mChangingConfigurations = super.getChangingConfigurations();
         return mShapeState;
     }
 

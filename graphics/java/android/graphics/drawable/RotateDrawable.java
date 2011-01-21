@@ -189,7 +189,7 @@ public class RotateDrawable extends Drawable implements Drawable.Callback {
     @Override
     public ConstantState getConstantState() {
         if (mState.canConstantState()) {
-            mState.mChangingConfigurations = getChangingConfigurations();
+            mState.mChangingConfigurations = super.getChangingConfigurations();
             return mState;
         }
         return null;

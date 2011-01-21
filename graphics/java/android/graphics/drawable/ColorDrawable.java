@@ -124,7 +124,7 @@ public class ColorDrawable extends Drawable {
 
     @Override
     public ConstantState getConstantState() {
-        mState.mChangingConfigurations = getChangingConfigurations();
+        mState.mChangingConfigurations = super.getChangingConfigurations();
         return mState;
     }
 

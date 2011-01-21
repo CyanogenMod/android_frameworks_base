@@ -1359,6 +1359,7 @@ public class Resources {
                     }
                 }
             }
+            mDrawableCache.clear();
             mColorStateListCache.clear();
             flushLayoutCache();
         }
