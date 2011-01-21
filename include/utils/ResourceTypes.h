@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2005 The Android Open Source Project
+ * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +24,7 @@
 #include <utils/Asset.h>
 #include <utils/ByteOrder.h>
 #include <utils/Errors.h>
+#include <utils/PackageRedirectionMap.h>
 #include <utils/String16.h>
 #include <utils/Vector.h>
 
@@ -1740,6 +1742,9 @@ public:
                  bool copyData=false);
     status_t add(ResTable* src);
 
+    void addRedirections(PackageRedirectionMap* resMap);
+    void clearRedirections();
+
     status_t getError() const;
 
     void uninit();
@@ -1784,6 +1789,8 @@ public:
                              uint32_t* outLastRef = NULL,
                              uint32_t* inoutTypeSpecFlags = NULL,
                              ResTable_config* outConfig = NULL) const;
+
+    uint32_t lookupRedirectionMap(uint32_t resID) const;
 
     enum {
         TMP_BUFFER_SIZE = 16
@@ -1981,9 +1988,12 @@ public:
 
     void getLocales(Vector<String8>* locales) const;
 
+    void removeAssetsByCookie(const String8 &packageName, void* cookie);
+
 #ifndef HAVE_ANDROID_OS
     void print(bool inclValues) const;
 #endif
+    void dump() const;
 
 private:
     struct Header;
@@ -2005,7 +2015,7 @@ private:
         const ResTable_package* const pkg, const Header* const header);
 
     void print_value(const Package* pkg, const Res_value& value) const;
-    
+
     mutable Mutex               mLock;
 
     status_t                    mError;
@@ -2021,6 +2031,11 @@ private:
     // Mapping from resource package IDs to indices into the internal
     // package array.
     uint8_t                     mPackageMap[256];
+
+    // Resource redirection mapping provided by the applied theme (if there is
+    // one).  Resources requested which are found in this map will be
+    // automatically redirected to the appropriate themed value.
+    Vector<PackageRedirectionMap*> mRedirectionMap;
 };
 
 }   // namespace android

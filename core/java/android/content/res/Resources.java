@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@ import android.graphics.Movie;
 import android.graphics.PorterDuff.Mode;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable.ConstantState;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemProperties;
@@ -67,6 +69,8 @@ public class Resources {
             = new LongSparseArray<Drawable.ConstantState>();
     private static final SparseArray<ColorStateList> mPreloadedColorStateLists
             = new SparseArray<ColorStateList>();
+    private static final LongSparseArray<Drawable.ConstantState> sPreloadedColorDrawables
+            = new LongSparseArray<Drawable.ConstantState>();
     private static boolean mPreloaded;
 
     /*package*/ final TypedValue mTmpValue = new TypedValue();
@@ -76,6 +80,8 @@ public class Resources {
             = new LongSparseArray<WeakReference<Drawable.ConstantState> >();
     private final SparseArray<WeakReference<ColorStateList> > mColorStateListCache
             = new SparseArray<WeakReference<ColorStateList> >();
+    private final LongSparseArray<WeakReference<Drawable.ConstantState> > mColorDrawableCache
+            = new LongSparseArray<WeakReference<Drawable.ConstantState> >();
     private boolean mPreloading;
 
     /*package*/ TypedArray mCachedStyledAttributes = null;
@@ -1330,42 +1336,64 @@ public class Resources {
                     (int)(mMetrics.density*160), mConfiguration.keyboard,
                     keyboardHidden, mConfiguration.navigation, width, height,
                     mConfiguration.screenLayout, mConfiguration.uiMode, sSdkVersion);
-            int N = mDrawableCache.size();
-            if (DEBUG_CONFIG) {
-                Log.d(TAG, "Cleaning up drawables config changes: 0x"
-                        + Integer.toHexString(configChanges));
-            }
-            for (int i=0; i<N; i++) {
-                WeakReference<Drawable.ConstantState> ref = mDrawableCache.valueAt(i);
-                if (ref != null) {
-                    Drawable.ConstantState cs = ref.get();
-                    if (cs != null) {
-                        if (Configuration.needNewResources(
-                                configChanges, cs.getChangingConfigurations())) {
-                            if (DEBUG_CONFIG) {
-                                Log.d(TAG, "FLUSHING #0x"
-                                        + Long.toHexString(mDrawableCache.keyAt(i))
-                                        + " / " + cs + " with changes: 0x"
-                                        + Integer.toHexString(cs.getChangingConfigurations()));
-                            }
-                            mDrawableCache.setValueAt(i, null);
-                        } else if (DEBUG_CONFIG) {
-                            Log.d(TAG, "(Keeping #0x"
-                                    + Long.toHexString(mDrawableCache.keyAt(i))
-                                    + " / " + cs + " with changes: 0x"
-                                    + Integer.toHexString(cs.getChangingConfigurations())
-                                    + ")");
-                        }
-                    }
-                }
-            }
-            mDrawableCache.clear();
+
+            drawableCacheClear(mDrawableCache, configChanges);
+            drawableCacheClear(mColorDrawableCache, configChanges);
+
             mColorStateListCache.clear();
+
+
             flushLayoutCache();
         }
         synchronized (mSync) {
             if (mPluralRule != null) {
                 mPluralRule = PluralRules.ruleForLocale(config.locale);
+            }
+        }
+    }
+
+    private void drawableCacheClear(
+            LongSparseArray<WeakReference<ConstantState>> cache,
+            int configChanges) {
+        /*
+         * Quick test to find out if the config change that occurred should
+         * trigger a full cache wipe.
+         */
+        if (Configuration.needNewResources(configChanges, 0)) {
+            if (DEBUG_CONFIG) {
+                Log.d(TAG, "Clear drawable cache from config changes: 0x"
+                        + Integer.toHexString(configChanges));
+            }
+            cache.clear();
+            return;
+        }
+        int N = cache.size();
+        if (DEBUG_CONFIG) {
+            Log.d(TAG, "Cleaning up drawables config changes: 0x"
+                    + Integer.toHexString(configChanges));
+        }
+        for (int i=0; i<N; i++) {
+            WeakReference<Drawable.ConstantState> ref = cache.valueAt(i);
+            if (ref != null) {
+                Drawable.ConstantState cs = ref.get();
+                if (cs != null) {
+                    if (Configuration.needNewResources(
+                            configChanges, cs.getChangingConfigurations())) {
+                        if (DEBUG_CONFIG) {
+                            Log.d(TAG, "FLUSHING #0x"
+                                    + Long.toHexString(mDrawableCache.keyAt(i))
+                                    + " / " + cs + " with changes: 0x"
+                                    + Integer.toHexString(cs.getChangingConfigurations()));
+                        }
+                        cache.setValueAt(i, null);
+                    } else if (DEBUG_CONFIG) {
+                        Log.d(TAG, "(Keeping #0x"
+                                + Long.toHexString(cache.keyAt(i))
+                                + " / " + cs + " with changes: 0x"
+                                + Integer.toHexString(cs.getChangingConfigurations())
+                                + ")");
+                    }
+                }
             }
         }
     }
@@ -1679,7 +1707,16 @@ public class Resources {
             flushLayoutCache();
         }
     }
-    
+
+    /**
+     * {@hide}
+     */
+    public final void updateStringCache() {
+        synchronized (mTmpValue) {
+            mAssets.recreateStringBlocks();
+        }
+    }
+
     /*package*/ Drawable loadDrawable(TypedValue value, int id)
             throws NotFoundException {
 
@@ -1692,13 +1729,18 @@ public class Resources {
         }
 
         final long key = (((long) value.assetCookie) << 32) | value.data;
-        Drawable dr = getCachedDrawable(key);
+        boolean isColorDrawable = false;
+        if (value.type >= TypedValue.TYPE_FIRST_COLOR_INT &&
+                value.type <= TypedValue.TYPE_LAST_COLOR_INT) {
+            isColorDrawable = true;
+        }
+        Drawable dr = getCachedDrawable(isColorDrawable ? mColorDrawableCache : mDrawableCache, key);
 
         if (dr != null) {
             return dr;
         }
 
-        Drawable.ConstantState cs = sPreloadedDrawables.get(key);
+        Drawable.ConstantState cs = isColorDrawable ? sPreloadedColorDrawables.get(key) : sPreloadedDrawables.get(key);
         if (cs != null) {
             dr = cs.newDrawable(this);
         } else {
@@ -1757,13 +1799,21 @@ public class Resources {
             cs = dr.getConstantState();
             if (cs != null) {
                 if (mPreloading) {
-                    sPreloadedDrawables.put(key, cs);
+                    if (isColorDrawable) {
+                        sPreloadedColorDrawables.put(key, cs);
+                    } else {
+                        sPreloadedDrawables.put(key, cs);
+                    }
                 } else {
                     synchronized (mTmpValue) {
                         //Log.i(TAG, "Saving cached drawable @ #" +
                         //        Long.toHexString(key)
                         //        + " in " + this + ": " + cs);
-                        mDrawableCache.put(key, new WeakReference<Drawable.ConstantState>(cs));
+                        if (isColorDrawable) {
+                            mColorDrawableCache.put(key, new WeakReference<Drawable.ConstantState>(cs));
+                        } else {
+                            mDrawableCache.put(key, new WeakReference<Drawable.ConstantState>(cs));
+                        }
                     }
                 }
             }
@@ -1772,19 +1822,21 @@ public class Resources {
         return dr;
     }
 
-    private Drawable getCachedDrawable(long key) {
+    private Drawable getCachedDrawable(
+            LongSparseArray<WeakReference<ConstantState>> drawableCache,
+            long key) {
         synchronized (mTmpValue) {
-            WeakReference<Drawable.ConstantState> wr = mDrawableCache.get(key);
+            WeakReference<Drawable.ConstantState> wr = drawableCache.get(key);
             if (wr != null) {   // we have the key
                 Drawable.ConstantState entry = wr.get();
                 if (entry != null) {
                     //Log.i(TAG, "Returning cached drawable @ #" +
                     //        Long.toHexString(key)
                     //        + " in " + this + ": " + entry);
-                    return entry.newDrawable(this);
+                    return entry.newDrawable();
                 }
                 else {  // our entry has been purged
-                    mDrawableCache.delete(key);
+                    drawableCache.delete(key);
                 }
             }
         }
