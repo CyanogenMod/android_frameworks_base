@@ -53,6 +53,10 @@ pid_t gettid() { return syscall(__NR_gettid);}
 #undef __KERNEL__
 #endif
 
+#ifdef USE_BOARD_MEDIAPLUGIN
+#include <hardware_legacy/MediaPlayerHardwareInterface.h>
+#endif
+
 namespace android {
 
 extern player_type getPlayerType(const char* url);
@@ -116,6 +120,12 @@ static sp<MediaMetadataRetrieverBase> createRetriever(player_type playerType)
             LOGV("create midi metadata retriever");
             p = new MidiMetadataRetriever();
             break;
+#ifdef USE_BOARD_MEDIAPLUGIN
+        case BOARD_HW_PLAYER:
+            LOGV("create BoardHW metadata retriever");
+            p = createMetadataRetrieverHardware();
+            break;
+#endif
         default:
             // TODO:
             // support for TEST_PLAYER
