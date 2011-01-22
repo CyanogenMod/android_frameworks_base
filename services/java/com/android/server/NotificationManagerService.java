@@ -24,8 +24,12 @@ import android.app.IActivityManager;
 import android.app.INotificationManager;
 import android.app.ITransientNotification;
 import android.app.Notification;
+import android.app.NotificationGroup;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Profile;
+import android.app.ProfileGroup;
+import android.app.ProfileManager;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -927,6 +931,13 @@ public class NotificationManagerService extends INotificationManager.Stub
                     }
                 }
             }
+            
+            final ProfileManager profileManager = (ProfileManager) mContext
+            .getSystemService(Context.PROFILE_SERVICE);
+            
+            Profile currentProfile = profileManager.getActiveProfile();
+            ProfileGroup group = profileManager.getActiveProfileGroup(pkg);
+            notification = currentProfile.processNotification(group.getName(), notification);
 
             // If we're not supposed to beep, vibrate, etc. then don't.
             if (((mDisabledNotifications & StatusBarManager.DISABLE_NOTIFICATION_ALERTS) == 0)

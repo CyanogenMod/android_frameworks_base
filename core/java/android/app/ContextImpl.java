@@ -192,6 +192,7 @@ class ContextImpl extends Context {
     private Resources.Theme mTheme = null;
     private PackageManager mPackageManager;
     private NotificationManager mNotificationManager = null;
+    private ProfileManager mProfileManager = null;
     private ActivityManager mActivityManager = null;
     private WallpaperManager mWallpaperManager = null;
     private Context mReceiverRestrictedContext = null;
@@ -963,6 +964,8 @@ class ContextImpl extends Context {
             return getWimaxController();
         } else if (NOTIFICATION_SERVICE.equals(name)) {
             return getNotificationManager();
+        } else if (PROFILE_SERVICE.equals(name)) {
+            return getProfileManager();
         } else if (KEYGUARD_SERVICE.equals(name)) {
             return new KeyguardManager();
         } else if (ACCESSIBILITY_SERVICE.equals(name)) {
@@ -1124,6 +1127,16 @@ class ContextImpl extends Context {
             }
         }
         return mNotificationManager;
+    }
+
+    private ProfileManager getProfileManager() {
+        synchronized (mSync) {
+            if (mProfileManager == null) {
+                mProfileManager = new ProfileManager(getOuterContext(),
+                        mMainThread.getHandler());
+            }
+        }
+        return mProfileManager;
     }
 
     private WallpaperManager getWallpaperManager() {
