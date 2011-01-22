@@ -520,7 +520,9 @@ class MountService extends IMountService.Stub
 
         if (Environment.MEDIA_UNMOUNTED.equals(state)) {
             // Tell the package manager the media is gone.
-            mPms.updateExternalMediaStatus(false, false);
+            if (isExternalStorage(path)) {
+                mPms.updateExternalMediaStatus(false, false);
+            }
 
             /*
              * Some OBBs might have been unmounted when this volume was
@@ -531,7 +533,9 @@ class MountService extends IMountService.Stub
                     path));
         } else if (Environment.MEDIA_MOUNTED.equals(state)) {
             // Tell the package manager the media is available for use.
-            mPms.updateExternalMediaStatus(true, false);
+            if (isExternalStorage(path)) {
+                mPms.updateExternalMediaStatus(true, false);
+            }
         }
 
         String oldState = currentState;
@@ -904,7 +908,9 @@ class MountService extends IMountService.Stub
         Runtime.getRuntime().gc();
 
         // Redundant probably. But no harm in updating state again.
-        mPms.updateExternalMediaStatus(false, false);
+        if (isExternalStorage(path)) {
+            mPms.updateExternalMediaStatus(false, false);
+        }
         try {
             mConnector.doCommand(String.format(
                     "volume unmount %s%s", path, (force ? " force" : "")));
@@ -1191,6 +1197,10 @@ class MountService extends IMountService.Stub
         return doGetShareMethodAvailable("ums");
     }
 
+    private boolean isExternalStorage(String path) {
+        return Environment.getExternalStorageDirectory().getPath().equals(path);
+    }
+
     private ArrayList<String> getShareableVolumes() {
         // build.prop will specify additional volumes to mount in the
         // ro.additionalmounts property.
@@ -1225,7 +1235,11 @@ class MountService extends IMountService.Stub
                 // Override for isUsbMassStorageEnabled()
                 setUmsEnabling(enable);
                 UmsEnableCallBack umscb = new UmsEnableCallBack(path, method, true);
-                mHandler.sendMessage(mHandler.obtainMessage(H_UNMOUNT_PM_UPDATE, umscb));
+                if (isExternalStorage(path)) {
+                    mHandler.sendMessage(mHandler.obtainMessage(H_UNMOUNT_PM_UPDATE, umscb));
+                } else {
+                    umscb.handleFinished();
+                }
                 // Clear override
                 setUmsEnabling(false);
             }
@@ -1291,7 +1305,11 @@ class MountService extends IMountService.Stub
             return;
         }
         UnmountCallBack ucb = new UnmountCallBack(path, force);
-        mHandler.sendMessage(mHandler.obtainMessage(H_UNMOUNT_PM_UPDATE, ucb));
+        if (isExternalStorage(path)) {
+            mHandler.sendMessage(mHandler.obtainMessage(H_UNMOUNT_PM_UPDATE, ucb));
+        } else {
+            ucb.handleFinished();
+        }
     }
 
     public int formatVolume(String path) {
