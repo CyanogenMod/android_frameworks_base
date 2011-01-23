@@ -30,6 +30,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothHeadset;
 import android.content.pm.PackageManager;
 import android.database.ContentObserver;
+import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 import android.media.MediaPlayer.OnErrorListener;
 import android.os.Binder;
@@ -2393,5 +2394,15 @@ public class AudioService extends IAudioService.Stub {
         dumpRCStack(pw);
     }
 
-
+    /**
+     * @hide
+     */
+    public void broadcastMediaPlaybackState(int state) {
+        // send broadcast
+        if (ActivityManagerNative.isSystemReady()) {
+            Intent broadcast = new Intent(MediaPlayer.MEDIA_PLAYBACK_STATE_CHANGED_ACTION);
+            broadcast.putExtra(MediaPlayer.EXTRA_MEDIA_PLAYBACK_STATE, state);
+            mContext.sendBroadcast(broadcast);
+        }
+    }
 }

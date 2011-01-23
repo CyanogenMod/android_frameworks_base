@@ -25,6 +25,8 @@
 #include <utils/KeyedVector.h>
 #include <utils/String8.h>
 
+#define MEDIA_PLAYBACK_STATE_CHANGED_MAGIC 1908511252
+
 namespace android {
 
 class Surface;
@@ -38,6 +40,13 @@ enum media_event_type {
     MEDIA_SET_VIDEO_SIZE    = 5,
     MEDIA_ERROR             = 100,
     MEDIA_INFO              = 200,
+};
+
+enum media_state_event_type {
+    MEDIA_PLAYBACK_STATE_UNKNOWN   = 0,
+    MEDIA_PLAYBACK_STATE_STARTED   = 1,
+    MEDIA_PLAYBACK_STATE_PAUSED    = 2,
+    MEDIA_PLAYBACK_STATE_COMPLETED = 3,
 };
 
 // Generic error codes for the media player framework.  Errors are fatal, the

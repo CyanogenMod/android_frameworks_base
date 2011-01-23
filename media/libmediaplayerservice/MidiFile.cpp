@@ -511,6 +511,10 @@ int MidiFile::render() {
             //LOGV("MidiFile::render - starting audio");
             mAudioSink->start();
             audioStarted = true;
+
+            LOGV("MidiFile::render - started");
+            sendEvent(MEDIA_NOP, MEDIA_PLAYBACK_STATE_CHANGED_MAGIC,
+                    MEDIA_PLAYBACK_STATE_STARTED);
         }
 
         // still playing?
@@ -522,6 +526,8 @@ int MidiFile::render() {
             {
                 LOGV("MidiFile::render - stopped");
                 sendEvent(MEDIA_PLAYBACK_COMPLETE);
+                sendEvent(MEDIA_NOP, MEDIA_PLAYBACK_STATE_CHANGED_MAGIC,
+                        MEDIA_PLAYBACK_STATE_COMPLETED);
                 break;
             }
             case EAS_STATE_ERROR:
@@ -532,6 +538,8 @@ int MidiFile::render() {
             }
             case EAS_STATE_PAUSED:
                 LOGV("MidiFile::render - paused");
+                sendEvent(MEDIA_NOP, MEDIA_PLAYBACK_STATE_CHANGED_MAGIC,
+                        MEDIA_PLAYBACK_STATE_PAUSED);
                 break;
             default:
                 break;

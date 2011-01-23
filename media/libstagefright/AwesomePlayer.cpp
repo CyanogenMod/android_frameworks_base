@@ -715,6 +715,8 @@ void AwesomePlayer::onStreamDone() {
     } else {
         LOGV("MEDIA_PLAYBACK_COMPLETE");
         notifyListener_l(MEDIA_PLAYBACK_COMPLETE);
+        notifyListener_l(MEDIA_NOP, MEDIA_PLAYBACK_STATE_CHANGED_MAGIC,
+                MEDIA_PLAYBACK_STATE_COMPLETED);
 
         pause_l(true /* at eos */);
 
@@ -801,6 +803,9 @@ status_t AwesomePlayer::play_l() {
         seekTo_l(0);
     }
 
+    notifyListener_l(MEDIA_NOP, MEDIA_PLAYBACK_STATE_CHANGED_MAGIC,
+            MEDIA_PLAYBACK_STATE_STARTED);
+
     return OK;
 }
 
@@ -880,6 +885,9 @@ status_t AwesomePlayer::pause_l(bool at_eos) {
     }
 
     mFlags &= ~PLAYING;
+
+    notifyListener_l(MEDIA_NOP, MEDIA_PLAYBACK_STATE_CHANGED_MAGIC,
+            MEDIA_PLAYBACK_STATE_PAUSED);
 
     return OK;
 }

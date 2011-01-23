@@ -21,11 +21,14 @@ import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
 import android.os.PowerManager;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -34,6 +37,9 @@ import android.media.AudioManager;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.lang.ref.WeakReference;
@@ -1357,7 +1363,19 @@ public class MediaPlayer
                 return;
 
             case MEDIA_NOP: // interface test message - ignore
-                break;
+                if(msg.arg1 == MEDIA_PLAYBACK_STATE_CHANGED_MAGIC) {
+                    int playback_state = msg.arg2;
+                    switch(playback_state) {
+                        // only actually report the change if it's valid
+                        case MEDIA_PLAYBACK_STATE_STARTED:
+                        case MEDIA_PLAYBACK_STATE_PAUSED:
+                        case MEDIA_PLAYBACK_STATE_COMPLETED:
+                            reportPlaybackStateChanged(playback_state);
+                            break;
+                    }
+                    // we don't want to spit the error log below
+                    return;
+                }
 
             default:
                 Log.e(TAG, "Unknown message type " + msg.what);
@@ -1665,4 +1683,60 @@ public class MediaPlayer
 
     private OnInfoListener mOnInfoListener;
 
+    /**
+     * @hide
+     */
+    public static final String MEDIA_PLAYBACK_STATE_CHANGED_ACTION = "android.media.MEDIA_PLAYBACK_STATE_CHANGED";
+
+    /**
+     * @hide
+     */
+    public static final String EXTRA_MEDIA_PLAYBACK_STATE = "action.media.EXTRA_MEDIA_PLAYBACK_STATE";
+
+    /**
+     * The following values need to be kept updated with mediaplayer.h
+     */
+
+    // magic number that indicates we have a playback state change when native posts a noop
+    private static final int MEDIA_PLAYBACK_STATE_CHANGED_MAGIC = 1908511252;
+    /**
+     * @hide
+     */
+    public static final int MEDIA_PLAYBACK_STATE_UNKNOWN = 0;
+    /**
+     * @hide
+     */
+    public static final int MEDIA_PLAYBACK_STATE_STARTED = 1;
+    /**
+     * @hide
+     */
+    public static final int MEDIA_PLAYBACK_STATE_PAUSED = 2;
+    /**
+     * @hide
+     */
+    public static final int MEDIA_PLAYBACK_STATE_COMPLETED = 3;
+
+    private static IAudioService sAudioService = null;
+
+    private static IAudioService getAudioService()
+    {
+        if (sAudioService != null) {
+            return sAudioService;
+        }
+        IBinder b = ServiceManager.getService(Context.AUDIO_SERVICE);
+        sAudioService = IAudioService.Stub.asInterface(b);
+        return sAudioService;
+    }
+
+    private void reportPlaybackStateChanged(int what) {
+        Log.v(TAG, "Broadcasting media playback state change (" + what + ")");
+        try {
+            IAudioService service = getAudioService();
+            if(service != null) {
+                service.broadcastMediaPlaybackState(what);
+            }
+        } catch(RemoteException e) {
+            Log.e(TAG, "Error broadcasting media playback state change", e);
+        }
+    }
 }
