@@ -175,7 +175,7 @@ public class AudioManager {
         11, // STREAM_MUSIC
         6,  // STREAM_ALARM
         5,  // STREAM_NOTIFICATION
-        7,  // STREAM_BLUETOOTH_SCO
+        11,  // STREAM_BLUETOOTH_SCO
         7,  // STREAM_SYSTEM_ENFORCED
         11, // STREAM_DTMF
         11,  // STREAM_TTS
