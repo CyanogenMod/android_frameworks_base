@@ -1,5 +1,5 @@
 
-package com.android.systemui.statusbar.widget;
+package com.android.systemui.statusbar.powerwidget;
 
 import android.content.Context;
 import android.content.Intent;
