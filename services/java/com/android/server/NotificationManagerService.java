@@ -26,6 +26,8 @@ import android.app.ITransientNotification;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.Profile;
+import android.app.ProfileManager;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -926,6 +928,15 @@ public class NotificationManagerService extends INotificationManager.Stub
                         Binder.restoreCallingIdentity(identity);
                     }
                 }
+            }
+            
+            final ProfileManager profileManager = (ProfileManager) mContext
+            .getSystemService(Context.PROFILE_SERVICE);
+            
+            Profile currentProfile = profileManager.getActiveProfile();
+            
+            if(currentProfile != null){
+                notification = currentProfile.processNotification(pkg, notification);
             }
 
             // If we're not supposed to beep, vibrate, etc. then don't.
