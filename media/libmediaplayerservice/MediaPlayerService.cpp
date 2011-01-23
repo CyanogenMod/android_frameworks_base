@@ -1724,6 +1724,12 @@ void MediaPlayerService::AudioCache::notify(void* cookie, int msg, int ext1, int
     case MEDIA_PREPARED:
         LOGV("prepared");
         break;
+    case MEDIA_PLAYBACK_STARTED:
+        LOGV("playback started");
+        break;
+    case MEDIA_PLAYBACK_PAUSED:
+        LOGV("playback paused");
+        break;
     case MEDIA_PLAYBACK_COMPLETE:
         LOGV("playback complete");
         break;

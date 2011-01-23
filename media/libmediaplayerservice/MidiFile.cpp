@@ -511,6 +511,9 @@ int MidiFile::render() {
             //LOGV("MidiFile::render - starting audio");
             mAudioSink->start();
             audioStarted = true;
+
+            LOGV("MidiFile::render - started");
+            sendEvent(MEDIA_PLAYBACK_STARTED);
         }
 
         // still playing?
@@ -532,6 +535,7 @@ int MidiFile::render() {
             }
             case EAS_STATE_PAUSED:
                 LOGV("MidiFile::render - paused");
+                sendEvent(MEDIA_PLAYBACK_PAUSED);
                 break;
             default:
                 break;

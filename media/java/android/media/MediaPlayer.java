@@ -21,11 +21,14 @@ import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.net.Uri;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Parcel;
 import android.os.ParcelFileDescriptor;
 import android.os.PowerManager;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
@@ -34,6 +37,9 @@ import android.media.AudioManager;
 
 import java.io.FileDescriptor;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.lang.ref.WeakReference;
@@ -1289,6 +1295,9 @@ public class MediaPlayer
     private static final int MEDIA_SET_VIDEO_SIZE = 5;
     private static final int MEDIA_ERROR = 100;
     private static final int MEDIA_INFO = 200;
+    // added for playback detecting
+    private static final int MEDIA_PLAYBACK_STARTED = 9001;
+    private static final int MEDIA_PLAYBACK_PAUSED = 9002;
 
     private class EventHandler extends Handler
     {
@@ -1315,6 +1324,10 @@ public class MediaPlayer
                 if (mOnCompletionListener != null)
                     mOnCompletionListener.onCompletion(mMediaPlayer);
                 stayAwake(false);
+
+            case MEDIA_PLAYBACK_STARTED:
+            case MEDIA_PLAYBACK_PAUSED:
+                reportPlaybackStateChanged(msg.what);
                 return;
 
             case MEDIA_BUFFERING_UPDATE:
@@ -1665,4 +1678,62 @@ public class MediaPlayer
 
     private OnInfoListener mOnInfoListener;
 
+    /**
+     * @hide
+     */
+    public static final String MEDIA_PLAYBACK_STATE_CHANGED_ACTION = "android.media.MEDIA_PLAYBACK_STATE_CHANGED";
+
+    /**
+     * @hide
+     */
+    public static final String EXTRA_MEDIA_PLAYBACK_STATE = "action.media.EXTRA_MEDIA_PLAYBACK_STATE";
+
+    /**
+     * @hide
+     */
+    public static final int MEDIA_PLAYBACK_STATE_STARTED = 0;
+
+    /**
+     * @hide
+     */
+    public static final int MEDIA_PLAYBACK_STATE_PAUSED = 1;
+
+    /**
+     * @hide
+     */
+    public static final int MEDIA_PLAYBACK_STATE_COMPLETE = 2;
+
+    private static IAudioService sAudioService = null;
+
+    private static IAudioService getAudioService()
+    {
+        if (sAudioService != null) {
+            return sAudioService;
+        }
+        IBinder b = ServiceManager.getService(Context.AUDIO_SERVICE);
+        sAudioService = IAudioService.Stub.asInterface(b);
+        return sAudioService;
+    }
+
+    private void reportPlaybackStateChanged(int what) {
+        Log.v(TAG, "Broadcasting media playback state change (" + what + ")");
+        try {
+            IAudioService service = getAudioService();
+            if(service != null) {
+                switch(what) {
+                    case MEDIA_PLAYBACK_STARTED:
+                        service.broadcastMediaPlaybackState(MEDIA_PLAYBACK_STATE_STARTED);
+                        return;
+                    case MEDIA_PLAYBACK_PAUSED:
+                        service.broadcastMediaPlaybackState(MEDIA_PLAYBACK_STATE_PAUSED);
+                        return;
+                    case MEDIA_PLAYBACK_COMPLETE:
+                        service.broadcastMediaPlaybackState(MEDIA_PLAYBACK_STATE_COMPLETE);
+                        return;
+                }
+            }
+        } catch(RemoteException e) {
+            Log.e(TAG, "Error broadcasting media playback state change", e);
+        }
+    }
 }

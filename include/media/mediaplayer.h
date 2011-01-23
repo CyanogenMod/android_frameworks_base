@@ -38,6 +38,8 @@ enum media_event_type {
     MEDIA_SET_VIDEO_SIZE    = 5,
     MEDIA_ERROR             = 100,
     MEDIA_INFO              = 200,
+    MEDIA_PLAYBACK_STARTED  = 9001,
+    MEDIA_PLAYBACK_PAUSED   = 9002,
 };
 
 // Generic error codes for the media player framework.  Errors are fatal, the

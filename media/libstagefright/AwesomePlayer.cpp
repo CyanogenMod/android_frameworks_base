@@ -801,6 +801,8 @@ status_t AwesomePlayer::play_l() {
         seekTo_l(0);
     }
 
+    notifyListener_l(MEDIA_PLAYBACK_STARTED);
+
     return OK;
 }
 
@@ -880,6 +882,8 @@ status_t AwesomePlayer::pause_l(bool at_eos) {
     }
 
     mFlags &= ~PLAYING;
+
+    notifyListener_l(MEDIA_PLAYBACK_PAUSED);
 
     return OK;
 }
