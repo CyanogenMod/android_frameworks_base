@@ -1664,5 +1664,4 @@ public class MediaPlayer
     }
 
     private OnInfoListener mOnInfoListener;
-
 }

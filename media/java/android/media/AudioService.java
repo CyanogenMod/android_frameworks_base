@@ -2392,6 +2392,4 @@ public class AudioService extends IAudioService.Stub {
         dumpFocusStack(pw);
         dumpRCStack(pw);
     }
-
-
 }
