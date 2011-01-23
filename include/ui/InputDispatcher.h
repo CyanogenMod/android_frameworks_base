@@ -302,7 +302,8 @@ public:
 
     /* Intercepts a navigation button press before queueing it
      */
-    virtual void interceptNavigationButtonBeforeQueueing(nsecs_t when, uint32_t& policyFlags, bool down) = 0;
+    virtual void interceptNavigationButtonBeforeQueueing(nsecs_t when, int32_t deviceId,
+            int32_t action, int32_t& flags, uint32_t& policyFlags) = 0;
 
     /* Allows the policy a chance to intercept a key before dispatching. */
     virtual bool interceptKeyBeforeDispatching(const sp<InputChannel>& inputChannel,
