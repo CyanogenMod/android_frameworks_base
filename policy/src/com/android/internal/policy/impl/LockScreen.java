@@ -665,7 +665,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     }
 
     private void refreshMusicStatus() {
-        if ((mWasMusicActive || mIsMusicActive || mLockAlwaysMusic) && (mLockMusicControls)) {
+        if ((mWasMusicActive || mIsMusicActive || mLockAlwaysMusic
+            || mAudioManager.isWiredHeadsetOn() || mAudioManager.isBluetoothA2dpOn()) && (mLockMusicControls)) {
             if (am.isMusicActive()) {
                 mPauseIcon.setVisibility(View.VISIBLE);
                 mPlayIcon.setVisibility(View.GONE);
