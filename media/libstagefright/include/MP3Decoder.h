@@ -53,13 +53,16 @@ private:
     void *mDecoderBuf;
     int64_t mAnchorTimeUs;
     int64_t mNumFramesOutput;
+    uint32_t mFixedHeader;
 
     MediaBuffer *mInputBuffer;
+    MediaBuffer *mPartialBuffer;
 
     void init();
 
     MP3Decoder(const MP3Decoder &);
     MP3Decoder &operator=(const MP3Decoder &);
+    status_t updatePartialFrame();
 };
 
 }  // namespace android
