@@ -143,6 +143,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     private boolean mUseRotaryLockscreen = (mLockscreenStyle == 2);
 
+    // private boolean mHeadsetAvailable = (mAudioManager.isWiredHeadsetOn() || mAudioManager.isBluetoothA2dpOn());
+
     private double mGestureSensitivity;
     private boolean mGestureTrail;
     private boolean mGestureActive;
@@ -665,7 +667,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     }
 
     private void refreshMusicStatus() {
-        if ((mWasMusicActive || mIsMusicActive || mLockAlwaysMusic) && (mLockMusicControls)) {
+        if ((mWasMusicActive || mIsMusicActive || mLockAlwaysMusic
+            || mAudioManager.isWiredHeadsetOn() || mAudioManager.isBluetoothA2dpOn()) && (mLockMusicControls)) {
             if (am.isMusicActive()) {
                 mPauseIcon.setVisibility(View.VISIBLE);
                 mPlayIcon.setVisibility(View.GONE);
