@@ -2216,13 +2216,19 @@ public final class Settings {
         public static final String LOCKSCREEN_ALWAYS_BATTERY = "lockscreen_always_battery";
 
         /**
-         * Whether to use custom notification bar
+         * Whether to use lockscreen music controls
          * @hide
          */
         public static final String LOCKSCREEN_MUSIC_CONTROLS = "lockscreen_music_controls";
 
         /**
-         * Whether to use custom notification bar
+         * Whether to use lockscreen music controls with headset connected
+         * @hide
+         */
+        public static final String LOCKSCREEN_MUSIC_CONTROLS_HEADSET = "lockscreen_music_controls_headset";
+
+        /**
+         * Whether to use always use lockscreen music controls
          * @hide
          */
         public static final String LOCKSCREEN_ALWAYS_MUSIC_CONTROLS = "lockscreen_always_music_controls";

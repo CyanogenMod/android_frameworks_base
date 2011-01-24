@@ -132,6 +132,11 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private boolean mLockMusicControls = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_MUSIC_CONTROLS, 1) == 1);
 
+    private int mLockMusicHeadset = (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_MUSIC_CONTROLS_HEADSET, 0));
+    private boolean useLockMusicHeadsetWired = ((mLockMusicHeadset == 1) || (mLockMusicHeadset == 3));
+    private boolean useLockMusicHeadsetBT = ((mLockMusicHeadset == 2) || (mLockMusicHeadset == 3));
+
     private boolean mLockAlwaysMusic = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_ALWAYS_MUSIC_CONTROLS, 0) == 1);
 
@@ -675,7 +680,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     }
 
     private void refreshMusicStatus() {
-        if ((mWasMusicActive || mIsMusicActive || mLockAlwaysMusic) && (mLockMusicControls)) {
+        if ((mWasMusicActive || mIsMusicActive || mLockAlwaysMusic
+            || (mAudioManager.isWiredHeadsetOn() && useLockMusicHeadsetWired)
+            || (mAudioManager.isBluetoothA2dpOn() && useLockMusicHeadsetBT)) && (mLockMusicControls)) {
             if (am.isMusicActive()) {
                 mPauseIcon.setVisibility(View.VISIBLE);
                 mPlayIcon.setVisibility(View.GONE);
