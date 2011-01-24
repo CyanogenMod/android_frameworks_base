@@ -6,6 +6,7 @@ import java.util.Map;
 
 import android.app.IProfileManager;
 import android.app.Profile;
+import android.content.Context;
 import android.os.RemoteException;
 
 public class ProfileManagerService extends IProfileManager.Stub {
@@ -18,6 +19,9 @@ public class ProfileManagerService extends IProfileManager.Stub {
     private Map<String, Profile> profiles = new HashMap<String, Profile>();
 
     private Profile activeProfile;
+
+    public ProfileManagerService(Context context) {
+    }
 
     // TODO Could do with returning true/false to convert to exception
     // TODO Exceptions not supported in aidl.

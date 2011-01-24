@@ -1,4 +1,4 @@
-/* //device/java/android/android/app/INotificationManager.aidl
+/* //device/java/android/android/app/IProfileManager.aidl
 **
 ** Copyright 2007, The Android Open Source Project
 **

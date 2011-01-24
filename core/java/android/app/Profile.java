@@ -31,7 +31,15 @@ public class Profile implements Parcelable {
     private Profile(Parcel in) {
         readFromParcel(in);
     }
-
+    
+    public void addNotificationGroup(NotificationGroup group){
+        notificationGroups.put(group.getName(), group);
+    }
+    
+    public void removeNotificationGroup(String name){
+        notificationGroups.remove(name);
+    }
+    
     @Override
     public int describeContents() {
         return 0;
@@ -42,13 +50,14 @@ public class Profile implements Parcelable {
         dest.writeString(name);
         dest.writeParcelableArray(
                 notificationGroups.values().toArray(
-                        new NotificationGroup[notificationGroups.size()]), flags);
+                        new Parcelable[notificationGroups.size()]), flags);
     }
 
     public void readFromParcel(Parcel in) {
         name = in.readString();
-        for (NotificationGroup group : (NotificationGroup[]) in.readParcelableArray(null)) {
-            notificationGroups.put(group.getName(), group);
+        for (Parcelable group : in.readParcelableArray(null)) {
+            NotificationGroup grp = (NotificationGroup)group;
+            notificationGroups.put(grp.getName(), grp);
         }
     }
 

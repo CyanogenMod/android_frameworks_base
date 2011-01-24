@@ -20,7 +20,7 @@ public class ProfileManager
         {
             return sService;
         }
-        IBinder b = ServiceManager.getService("notification");
+        IBinder b = ServiceManager.getService(Context.PROFILE_SERVICE);
         sService = IProfileManager.Stub.asInterface(b);
         return sService;
     }
