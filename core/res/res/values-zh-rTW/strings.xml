@@ -904,4 +904,12 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"電腦目前正在使用 USB 儲存裝置。"</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"電腦目前正在使用 SD 卡。"</string>
     <string name="media_unknown_state" msgid="729192782197290385">"外部媒體狀態不明。"</string>
+
+    <string name="reboot_system">重新啟動手機</string>
+    <string name="reboot_progress">重新開機中...</string>
+    <string name="reboot_confirm">手機即將重新啟動。</string>
+    <string name="global_action_reboot">重新開機</string>
+    <string name="lockscreen_phone_label">電話</string>
+    <string name="lockscreen_messaging_label">簡訊</string>
+    <string name="app_killed_message">應用程式已被結束</string>
 </resources>
