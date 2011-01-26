@@ -34,6 +34,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.CustomTheme;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
@@ -105,6 +106,10 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     int mPixelFormat;
     H mHandler = new H();
     Object mQueueLock = new Object();
+
+    // last theme that was applied in order to detect theme change (as opposed
+    // to some other configuration change).
+    CustomTheme mCurrentTheme;
 
     // icons
     LinearLayout mIcons;
@@ -1458,12 +1463,78 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     void updateResources() {
         Resources res = getResources();
 
+        // detect theme change.
+        boolean themeChanged = false;
+        CustomTheme newTheme = res.getConfiguration().customTheme;
+        if (newTheme != null &&
+                (mCurrentTheme == null || !mCurrentTheme.equals(newTheme))) {
+            mCurrentTheme = (CustomTheme)newTheme.clone();
+            themeChanged = true;
+        }
+
         mClearButton.setText(getText(R.string.status_bar_clear_all_button));
         mOngoingTitle.setText(getText(R.string.status_bar_ongoing_events_title));
         mLatestTitle.setText(getText(R.string.status_bar_latest_events_title));
         mNoNotificationsTitle.setText(getText(R.string.status_bar_no_notifications_title));
 
         mEdgeBorder = res.getDimensionPixelSize(R.dimen.status_bar_edge_ignore);
+
+        /*
+         * HACK: Attempt to re-apply views that could have changed from a theme.
+         * This will be replaced with a better solution reinflating the
+         * necessary views.
+         */
+        if (themeChanged) {
+            // XXX: If this changes in the XML, it must also change here.
+            mStatusBarView.setBackgroundDrawable(res.getDrawable(R.drawable.statusbar_background));
+            mDateView.setBackgroundDrawable(res.getDrawable(R.drawable.statusbar_background));
+            ((ImageView)mCloseView.getChildAt(0)).setImageDrawable(res.getDrawable(R.drawable.status_bar_close_on));
+            mExpandedView.findViewById(R.id.exp_view_lin_layout).setBackgroundDrawable(res.getDrawable(R.drawable.title_bar_portrait));
+            mClearButton.setBackgroundDrawable(res.getDrawable(android.R.drawable.btn_default_small));
+
+            // Update icons.
+            ArrayList<ViewGroup> iconViewGroups = new ArrayList<ViewGroup>();
+            iconViewGroups.add(mStatusIcons);
+            iconViewGroups.add(mNotificationIcons);
+
+            for (ViewGroup iconViewGroup: iconViewGroups) {
+                int nIcons = iconViewGroup.getChildCount();
+                for (int i = 0; i < nIcons; i++) {
+                    StatusBarIconView iconView = (StatusBarIconView)iconViewGroup.getChildAt(i);
+                    iconView.updateResources();
+                }
+            }
+
+            // Re-apply notifications.
+            ArrayList<NotificationData> notifGroups = new ArrayList<NotificationData>();
+            notifGroups.add(mOngoing);
+            notifGroups.add(mLatest);
+            ArrayList<ViewGroup> notifViewGroups = new ArrayList<ViewGroup>();
+            notifViewGroups.add(mOngoingItems);
+            notifViewGroups.add(mLatestItems);
+
+            int nNotifGroups = notifGroups.size();
+            for (int i = 0; i < nNotifGroups; i++) {
+                NotificationData notifGroup = notifGroups.get(i);
+                ViewGroup notifViewGroup = notifViewGroups.get(i);
+                int nViews = notifViewGroup.getChildCount();
+                if (nViews != notifGroup.size()) {
+                    throw new IllegalStateException("unexpected mismatch between number of notification views and items");
+                }
+                for (int j = 0; j < nViews; j++) {
+                    ViewGroup container = (ViewGroup)notifViewGroup.getChildAt(j);
+                    NotificationData.Entry entry = notifGroup.getEntryAt(j);
+                    updateNotification(entry.key, entry.notification);
+
+                    // XXX: If this changes in XML, it must also change here.
+                    container.findViewById(R.id.separator).setBackgroundDrawable(res.getDrawable(R.drawable.divider_horizontal_light_opaque));
+                    container.findViewById(R.id.content).setBackgroundDrawable(res.getDrawable(android.R.drawable.status_bar_item_background));
+                }
+            }
+
+            // Recalculate the position of the sliding windows and the titles.
+            updateExpandedViewPos(EXPANDED_LEAVE_ALONE);
+        }
 
         if (false) Slog.v(TAG, "updateResources");
     }

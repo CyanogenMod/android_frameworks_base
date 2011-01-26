@@ -68,6 +68,30 @@ public class StatusBarIconView extends AnimatedImageView {
     }
 
     /**
+     * Refresh resources that might have changed due to a configuration change.
+     */
+    public void updateResources() {
+        StatusBarIcon icon = mIcon;
+        if (icon != null) {
+            Drawable drawable = getIcon(icon);
+            if (drawable != null) {
+                setImageDrawable(drawable);
+            }
+
+            if (icon.number > 0) {
+                mNumberBackground = getContext().getResources().getDrawable(
+                        R.drawable.ic_notification_overlay);
+                placeNumber();
+            } else {
+                mNumberBackground = null;
+                mNumberText = null;
+            }
+
+            invalidate();
+        }
+    }
+
+    /**
      * Returns whether the set succeeded.
      */
     public boolean set(StatusBarIcon icon) {
