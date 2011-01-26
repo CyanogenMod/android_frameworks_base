@@ -52,4 +52,9 @@ public class ProfileManagerService extends IProfileManager.Stub {
         return activeProfile;
     }
 
+    @Override
+    public void removeProfile(Profile profile) throws RemoteException {
+        profiles.remove(profile.getName());
+    }
+
 }

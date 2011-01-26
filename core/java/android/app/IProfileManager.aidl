@@ -25,6 +25,7 @@ interface IProfileManager
     void setActiveProfile(in String profileName);
     Profile getActiveProfile();
     void updateProfile(in Profile profile);
+    void removeProfile(in Profile profile);
     Profile getProfile(String profileName);
     Profile[] getProfiles();
  }

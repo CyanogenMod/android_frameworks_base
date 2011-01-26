@@ -52,6 +52,13 @@ public class ProfileManager
         }
     }
 
+    public void removeProfile(Profile profile){
+        try {
+            getService().removeProfile(profile);
+        } catch (RemoteException e) {
+        }
+    }
+
     public Profile getProfile(String profileName){
         try {
             return getService().getProfile(profileName);
