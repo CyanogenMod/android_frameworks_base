@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * Copyright (c) 2011, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +21,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.HashMap;
 import java.util.Map.Entry;
 
 import android.content.ContentValues;
@@ -30,6 +33,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteStatement;
+import android.os.SystemProperties;
 import android.util.Log;
 import android.webkit.CookieManager.Cookie;
 import android.webkit.CacheManager.CacheResult;
@@ -51,10 +55,11 @@ public class WebViewDatabase {
     // 7 -> 8 Move cache to its own db
     // 8 -> 9 Store both scheme and host when storing passwords
     // 9 -> 10 Update httpauth table UNIQUE
-    private static final int CACHE_DATABASE_VERSION = 4;
+    private static final int CACHE_DATABASE_VERSION = 5;
     // 1 -> 2 Add expires String
     // 2 -> 3 Add content-disposition
     // 3 -> 4 Add crossdomain (For x-permitted-cross-domain-policies header)
+    // 4 -> 5 Add last-acces-time, access-counter, weight
 
     private static WebViewDatabase mInstance = null;
 
@@ -129,6 +134,12 @@ public class WebViewDatabase {
 
     private static final String CACHE_CROSSDOMAIN_COL = "crossdomain";
 
+    private static final String CACHE_LASTACCESSTIME_COL = "lastaccesstime";
+
+    private static final String CACHE_ACCESSCOUNTER_COL = "accesscounter";
+
+    private static final String CACHE_WEIGHT_COL = "weight";
+
     // column id strings for "password" table
     private static final String PASSWORD_HOST_COL = "host";
 
@@ -170,8 +181,103 @@ public class WebViewDatabase {
     private static int mCacheContentLengthColIndex;
     private static int mCacheContentDispositionColIndex;
     private static int mCacheCrossDomainColIndex;
+    private static int mCacheLastAccessTimeIndex;
+    private static int mCacheAccessCounterIndex;
+    private static int mCacheWeightIndex;
 
     private static int mCacheTransactionRefcount;
+
+    private static final int CACHE_STAT_ID_OTHER = 0;
+    private static final int CACHE_STAT_ID_HTML = 1;
+    private static final int CACHE_STAT_ID_CSS = 2;
+    private static final int CACHE_STAT_ID_JS = 3;
+    private static final int CACHE_STAT_ID_IMAGE = 4;
+
+    private static final String CACHE_ORDER_BY_DEF = CACHE_EXPIRES_COL;
+    private static String CACHE_ORDER_BY = CACHE_ORDER_BY_DEF;
+
+    private static final int CACHE_EVICT_EXPIRED_DEF = 0;
+    private static final long CACHE_PRIO_ADVANCE_STEP_DEF = 0;
+    private static final long CACHE_WEIGHT_ADVANCE_STEP_DEF = 0;
+
+    private static int CACHE_EVICT_EXPIRED = CACHE_EVICT_EXPIRED_DEF;
+    private static long CACHE_ADVANCE_STEP_PRIO = CACHE_PRIO_ADVANCE_STEP_DEF;
+    private static long CACHE_ADVANCE_STEP_WEIGHT = CACHE_WEIGHT_ADVANCE_STEP_DEF;
+
+    private static class CacheAccessStat {
+        long mLastAccessTime = 0;
+        int mCacheAccessCounter = 0;
+        int mCacheItemPriority = 0;
+        long mContentLength = 0;
+        long mWeight = 0;
+
+        public CacheAccessStat(CacheResult c) {
+            mCacheAccessCounter = c.accessCounter;
+            mCacheItemPriority = getCacheItemPriority(c.getMimeType());
+            mContentLength = c.getContentLength();
+            hit();
+        }
+
+        public void hit() {
+            mCacheAccessCounter++;
+            mLastAccessTime = System.currentTimeMillis();
+            mWeight = mLastAccessTime + CACHE_ADVANCE_STEP_PRIO * mCacheItemPriority;
+            mWeight += CACHE_ADVANCE_STEP_WEIGHT * normalize(mContentLength/mCacheAccessCounter);
+        }
+
+        int getCacheStatId(String mimeType) {
+            if (mimeType.contains("image")) {
+                return CACHE_STAT_ID_IMAGE;
+            }
+            if (mimeType.contains("javascript") || mimeType.contains("js")) {
+                return CACHE_STAT_ID_JS;
+            }
+            if (mimeType.contains("css")) {
+                return CACHE_STAT_ID_CSS;
+            }
+            if (mimeType.contains("html")) {
+                return CACHE_STAT_ID_HTML;
+            }
+            return CACHE_STAT_ID_OTHER;
+        }
+
+        /**
+         * Get resource priority
+         */
+        int getCacheItemPriority(String mimeType) {
+            int id = getCacheStatId(mimeType);
+            switch (id) {
+                case CACHE_STAT_ID_CSS:
+                case CACHE_STAT_ID_HTML:
+                    return 2;
+                case CACHE_STAT_ID_JS:
+                    return 1;
+                case CACHE_STAT_ID_IMAGE:
+                    return 0;
+            }
+            return -1;
+        }
+
+        int normalize(long i) {
+            int normalized = 0;
+
+            if ((i & (i - 1)) != 0) {
+                normalized += 1;
+            }
+            for (int index = 16; index >= 2; index = index/2 ) {
+                if ((i >> index) != 0) {
+                    normalized += index; i >>= index;
+            }
+            }
+            if ((i >> 1) != 0) {
+                normalized += 1;
+            }
+            return (32 - normalized);
+        }
+    }
+
+    private final Object mCacheStatLock = new Object();
+    private static HashMap<String, CacheAccessStat> mCacheStat = new HashMap<String, CacheAccessStat>();
 
     private WebViewDatabase() {
         // Singleton only, use getInstance()
@@ -180,6 +286,12 @@ public class WebViewDatabase {
     public static synchronized WebViewDatabase getInstance(Context context) {
         if (mInstance == null) {
             mInstance = new WebViewDatabase();
+
+            CACHE_EVICT_EXPIRED = SystemProperties.getInt("nw.cache.evictexpired", CACHE_EVICT_EXPIRED_DEF);
+            CACHE_ADVANCE_STEP_PRIO = SystemProperties.getLong("nw.cache.prioadvstep", CACHE_PRIO_ADVANCE_STEP_DEF);
+            CACHE_ADVANCE_STEP_WEIGHT = SystemProperties.getLong("nw.cache.weightadvstep", CACHE_WEIGHT_ADVANCE_STEP_DEF);
+            CACHE_ORDER_BY = SystemProperties.get("nw.cache.orderby", CACHE_ORDER_BY_DEF);
+
             try {
                 mDatabase = context
                         .openOrCreateDatabase(DATABASE_FILE, 0, null);
@@ -275,6 +387,12 @@ public class WebViewDatabase {
                         .getColumnIndex(CACHE_CONTENTDISPOSITION_COL);
                 mCacheCrossDomainColIndex = mCacheInserter
                         .getColumnIndex(CACHE_CROSSDOMAIN_COL);
+                mCacheLastAccessTimeIndex = mCacheInserter
+                        .getColumnIndex(CACHE_LASTACCESSTIME_COL);
+                mCacheAccessCounterIndex = mCacheInserter
+                        .getColumnIndex(CACHE_ACCESSCOUNTER_COL);
+                mCacheWeightIndex = mCacheInserter
+                        .getColumnIndex(CACHE_WEIGHT_COL);
             }
         }
 
@@ -385,6 +503,9 @@ public class WebViewDatabase {
                     + CACHE_LOCATION_COL + " TEXT, " + CACHE_CONTENTLENGTH_COL
                     + " INTEGER, " + CACHE_CONTENTDISPOSITION_COL + " TEXT, "
                     + CACHE_CROSSDOMAIN_COL + " TEXT,"
+                    + CACHE_LASTACCESSTIME_COL + " INTEGER,"
+                    + CACHE_ACCESSCOUNTER_COL + " INTEGER,"
+                    + CACHE_WEIGHT_COL + " INTEGER,"
                     + " UNIQUE (" + CACHE_URL_COL + ") ON CONFLICT REPLACE);");
             mCacheDatabase.execSQL("CREATE INDEX cacheUrlIndex ON cache ("
                     + CACHE_URL_COL + ")");
@@ -618,6 +739,45 @@ public class WebViewDatabase {
     }
 
     /**
+     * Update cache statistics
+     */
+    CacheAccessStat updateCacheStat(String url, CacheResult c) {
+        if (c.expires != 0) {
+            CacheAccessStat cacheStat;
+            synchronized (mCacheStatLock) {
+                cacheStat = mCacheStat.get(url);
+                if (cacheStat == null) {
+                    cacheStat = new CacheAccessStat(c);
+                    mCacheStat.put( url , cacheStat);
+                } else {
+                    cacheStat.hit();
+                }
+            }
+            return cacheStat;
+        }
+        return null;
+    }
+
+    /**
+     * Flush cache statistics
+     */
+    void flushCacheStat() {
+        synchronized (mCacheStatLock) {
+        if (!mCacheStat.isEmpty()) {
+                long start = System.currentTimeMillis();
+                for (Map.Entry<String, CacheAccessStat> entry : mCacheStat.entrySet()) {
+                    mCacheDatabase.execSQL("UPDATE cache SET " +
+                            CACHE_LASTACCESSTIME_COL + "=" + entry.getValue().mLastAccessTime + "," +
+                            CACHE_ACCESSCOUNTER_COL + "=" + entry.getValue().mCacheAccessCounter + "," +
+                            CACHE_WEIGHT_COL + "=" + entry.getValue().mWeight + " WHERE url = ?",
+                            new String[] { entry.getKey() } );
+                }
+                mCacheStat.clear();
+            }
+        }
+    }
+
+    /**
      * Get a cache item.
      * 
      * @param url The url
@@ -631,7 +791,7 @@ public class WebViewDatabase {
         Cursor cursor = null;
         final String query = "SELECT filepath, lastmodify, etag, expires, "
                 + "expiresstring, mimetype, encoding, httpstatus, location, contentlength, "
-                + "contentdisposition, crossdomain FROM cache WHERE url = ?";
+                + "contentdisposition, crossdomain, accesscounter FROM cache WHERE url = ?";
         try {
             cursor = mCacheDatabase.rawQuery(query, new String[] { url });
             if (cursor.moveToFirst()) {
@@ -648,6 +808,8 @@ public class WebViewDatabase {
                 ret.contentLength = cursor.getLong(9);
                 ret.contentdisposition = cursor.getString(10);
                 ret.crossDomain = cursor.getString(11);
+                ret.accessCounter = cursor.getInt(12);
+                updateCacheStat(url, ret);
                 return ret;
             }
         } catch (IllegalStateException e) {
@@ -667,8 +829,10 @@ public class WebViewDatabase {
         if (url == null || mCacheDatabase == null) {
             return;
         }
-
         mCacheDatabase.execSQL("DELETE FROM cache WHERE url = ?", new String[] { url });
+        synchronized (mCacheStatLock) {
+            mCacheStat.remove(url);
+        }
     }
 
     /**
@@ -697,6 +861,18 @@ public class WebViewDatabase {
         mCacheInserter.bind(mCacheContentDispositionColIndex,
                 c.contentdisposition);
         mCacheInserter.bind(mCacheCrossDomainColIndex, c.crossDomain);
+
+        CacheAccessStat cacheStat = updateCacheStat(url, c);
+        if (cacheStat == null) {
+            mCacheInserter.bind(mCacheLastAccessTimeIndex, System.currentTimeMillis());
+            mCacheInserter.bind(mCacheAccessCounterIndex, c.accessCounter+1);
+            mCacheInserter.bind(mCacheWeightIndex, 0);
+        }
+        else {
+            mCacheInserter.bind(mCacheLastAccessTimeIndex, cacheStat.mLastAccessTime);
+            mCacheInserter.bind(mCacheAccessCounterIndex, cacheStat.mCacheAccessCounter);
+            mCacheInserter.bind(mCacheWeightIndex, cacheStat.mWeight);
+        }
         mCacheInserter.execute();
     }
 
@@ -709,6 +885,9 @@ public class WebViewDatabase {
         }
 
         mCacheDatabase.delete("cache", null, null);
+        synchronized (mCacheStatLock) {
+            mCacheStat.clear();
+        }
     }
 
     boolean hasCache() {
@@ -753,7 +932,13 @@ public class WebViewDatabase {
     List<String> trimCache(long amount) {
         ArrayList<String> pathList = new ArrayList<String>(100);
         Cursor cursor = null;
-        final String query = "SELECT contentlength, filepath FROM cache ORDER BY expires ASC";
+        flushCacheStat();
+        if (CACHE_EVICT_EXPIRED!=0) {
+            mCacheDatabase.execSQL("UPDATE cache SET " + CACHE_WEIGHT_COL + "=" + CACHE_LASTACCESSTIME_COL +
+                " WHERE " + CACHE_EXPIRES_COL + "<=" + System.currentTimeMillis() +
+                " AND " + CACHE_EXPIRES_COL + "!=0");
+        }
+        final String query = "SELECT contentlength, filepath FROM cache ORDER BY " + CACHE_ORDER_BY + " ASC";
         try {
             cursor = mCacheDatabase.rawQuery(query, null);
             if (cursor.moveToFirst()) {

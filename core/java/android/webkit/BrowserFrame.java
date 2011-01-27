@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
- * Copyright (c) 2010, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2011, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import android.net.WebAddress;
 import android.net.http.SslCertificate;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemProperties;
 import android.provider.OpenableColumns;
 import android.util.Log;
 import android.util.TypedValue;
@@ -195,7 +196,7 @@ class BrowserFrame extends Handler {
             ActivityManager am = (ActivityManager) context
                     .getSystemService(Context.ACTIVITY_SERVICE);
             if (am.getMemoryClass() > 16) {
-                sJavaBridge.setCacheSize(8 * 1024 * 1024);
+                sJavaBridge.setCacheSize(SystemProperties.getInt("webkit.cache.size", 8 * 1024 * 1024));
             } else {
                 sJavaBridge.setCacheSize(4 * 1024 * 1024);
             }

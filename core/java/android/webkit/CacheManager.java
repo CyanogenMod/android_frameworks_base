@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * Copyright (c) 2011, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +21,7 @@ import android.content.Context;
 import android.net.http.AndroidHttpClient;
 import android.net.http.Headers;
 import android.os.FileUtils;
+import android.os.SystemProperties;
 import android.util.Log;
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,11 +59,14 @@ public final class CacheManager {
     private static final String MAX_AGE = "max-age";
     private static final String MANIFEST_MIME = "text/cache-manifest";
 
-    private static long CACHE_THRESHOLD = 6 * 1024 * 1024;
-    private static long CACHE_TRIM_AMOUNT = 2 * 1024 * 1024;
+    private static final long CACHE_THRESHOLD_DEF = 6 * 1024 * 1024;
+    private static final long CACHE_TRIM_AMOUNT_DEF = 2 * 1024 * 1024;
+
+    private static long CACHE_THRESHOLD = CACHE_THRESHOLD_DEF;
+    private static long CACHE_TRIM_AMOUNT = CACHE_TRIM_AMOUNT_DEF;
 
     // Limit the maximum cache file size to half of the normal capacity
-    static long CACHE_MAX_SIZE = (CACHE_THRESHOLD - CACHE_TRIM_AMOUNT) / 2;
+    static long CACHE_MAX_SIZE = (CACHE_THRESHOLD_DEF - CACHE_TRIM_AMOUNT_DEF) / 2;
 
     private static boolean mDisabled;
 
@@ -100,6 +105,7 @@ public final class CacheManager {
         String encoding;
         String contentdisposition;
         String crossDomain;
+        int accessCounter;
 
         // these fields are NOT saved to the database
         InputStream inStream;
@@ -181,6 +187,10 @@ public final class CacheManager {
             removeAllCacheFiles();
             mClearCacheOnInit = false;
         }
+
+        CACHE_THRESHOLD = SystemProperties.getLong("nw.cache.threshold", CACHE_THRESHOLD_DEF);
+        CACHE_TRIM_AMOUNT = SystemProperties.getLong("nw.cache.trimamount", CACHE_TRIM_AMOUNT_DEF);
+        CACHE_MAX_SIZE = (CACHE_THRESHOLD - CACHE_TRIM_AMOUNT) / 2;
     }
     
     /**
@@ -545,6 +555,7 @@ public final class CacheManager {
     }
 
     static void trimCacheIfNeeded() {
+        mDataBase.flushCacheStat();
         if (mDataBase.getCacheTotalSize() > CACHE_THRESHOLD) {
             List<String> pathList = mDataBase.trimCache(CACHE_TRIM_AMOUNT);
             int size = pathList.size();
