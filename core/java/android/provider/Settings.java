@@ -2310,6 +2310,17 @@ public final class Settings {
          */
         public static final String OVERSCROLL_WEIGHT = "overscroll_weight";
 
+        /**
+         * Whether or not volume button music controls should be enabled to seek media tracks
+         * @hide
+         */
+        public static final String VOLBTN_MUSIC_CONTROLS = "volbtn_music_controls";
+
+        /**
+         * Whether or not camera button music controls should be enabled to play/pause media tracks
+         * @hide
+         */
+        public static final String CAMBTN_MUSIC_CONTROLS = "cambtn_music_controls";
 
         /**
          * Whether the phone goggles mode is enabled or not.

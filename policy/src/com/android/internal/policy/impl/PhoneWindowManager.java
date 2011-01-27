@@ -242,6 +242,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     InputChannel mPointerLocationInputChannel;
     boolean mVolumeUpPressed;
     boolean mVolumeDownPressed;
+    boolean mCameraKeyPressable = false;
     static final long NEXT_DURATION = 400;
 
 
@@ -302,6 +303,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // Behavior of trackball wake
     boolean mTrackballWakeScreen;
 
+    // Behavior of volbtn music controls
+    boolean mVolBtnMusicControls;
+    // Behavior of cambtn music controls
+    boolean mCamBtnMusicControls;
+
     // Behavior of POWER button while in-call and screen on.
     // (See Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR.)
     int mIncallPowerBehavior;
@@ -340,6 +346,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     "fancy_rotation_anim"), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.TRACKBALL_WAKE_SCREEN), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.VOLBTN_MUSIC_CONTROLS), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.CAMBTN_MUSIC_CONTROLS), false, this);
             updateSettings();
         }
 
@@ -585,6 +595,16 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         };
     };
 
+    /**
+     * When a camera-key longpress expires, toggle play/pause based on key press
+     */
+    Runnable mCameraLongPress = new Runnable() {
+        public void run() {
+            // Shamelessly copied from Kmobs LockScreen controls, works for Pandora, etc...
+            sendMediaButtonEvent(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+        };
+    };
+
     private void sendMediaButtonEvent(int code) {
         long eventtime = SystemClock.uptimeMillis();
 
@@ -710,6 +730,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     "fancy_rotation_anim", 0) != 0 ? 0x80 : 0;
             mTrackballWakeScreen = (Settings.System.getInt(resolver,
                     Settings.System.TRACKBALL_WAKE_SCREEN, 0) == 1);
+            mVolBtnMusicControls = (Settings.System.getInt(resolver,
+                    Settings.System.VOLBTN_MUSIC_CONTROLS, 1) == 1);
+            mCamBtnMusicControls = (Settings.System.getInt(resolver,
+                    Settings.System.CAMBTN_MUSIC_CONTROLS, 0) == 1);
             int accelerometerDefault = Settings.System.getInt(resolver,
                     Settings.System.ACCELEROMETER_ROTATION, DEFAULT_ACCELEROMETER_ROTATION);
             if (mAccelerometerDefault != accelerometerDefault) {
@@ -1916,13 +1940,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
         // Take an initial hit time so we can decide for skip or volume adjust
         else if (isMusicActive()) {
+            Runnable btnHandler;
+
             if (keycode == KeyEvent.KEYCODE_VOLUME_UP) {
                 mVolumeUpPressed = true;
-                mHandler.postDelayed(mVolumeUpLongPress, ViewConfiguration.getLongPressTimeout());
+                btnHandler = mVolumeUpLongPress;
             }
             else {
                 mVolumeDownPressed = true;
-                mHandler.postDelayed(mVolumeDownLongPress, ViewConfiguration.getLongPressTimeout());
+                btnHandler = mVolumeDownLongPress;
+            }
+
+            if (mVolBtnMusicControls) {
+                mHandler.postDelayed(btnHandler, ViewConfiguration.getLongPressTimeout());
             }
         }
     }
@@ -1938,6 +1968,23 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (mVolumeUpPressed || mVolumeDownPressed)
                 handleVolumeKey(AudioManager.STREAM_MUSIC, keycode);
         }
+    }
+
+    void handleCameraKeyDown() {
+        if (mCamBtnMusicControls) {
+            // if the camera key is not pressable, see if music is active
+            if (!mCameraKeyPressable) {
+                mCameraKeyPressable = isMusicActive();
+            }
+
+            if (mCameraKeyPressable) {
+                mHandler.postDelayed(mCameraLongPress, ViewConfiguration.getLongPressTimeout());
+            }
+        }
+    }
+
+    void handleCameraKeyUp() {
+        mHandler.removeCallbacks(mCameraLongPress);
     }
 
     static boolean isMediaKey(int code) {
@@ -2011,6 +2058,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
                         || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
                         handleVolumeKeyUp(keyCode);
+                    }
+                } else if (keyCode == KeyEvent.KEYCODE_CAMERA) {
+                    if (down) {
+                        handleCameraKeyDown();
+                    } else {
+                        handleCameraKeyUp();
                     }
                 }
             }
@@ -2245,6 +2298,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mKeyguardMediator.onScreenTurnedOn();
         synchronized (mLock) {
             mScreenOn = true;
+            // since the screen turned on, assume we don't enable play-pause again
+            // unless they turn it off and music is still playing.  this is done to
+            // prevent the camera button from starting playback if playback wasn't
+            // originally running
+            mCameraKeyPressable = false;
             updateOrientationListenerLp();
             updateLockScreenTimeout();
         }
