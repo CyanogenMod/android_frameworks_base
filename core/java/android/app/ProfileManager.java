@@ -45,9 +45,9 @@ public class ProfileManager
         return null;
     }
 
-    public void updateProfile(Profile profile){
+    public void addProfile(Profile profile){
         try {
-            getService().updateProfile(profile);
+            getService().addProfile(profile);
         } catch (RemoteException e) {
         }
     }
@@ -74,5 +74,36 @@ public class ProfileManager
         }
         return null;
     }
+    
+    public NotificationGroup[] getNotificationGroups(){
+        try {
+            return getService().getNotificationGroups();
+        } catch (RemoteException e) {
+        }
+        return null;
+    }
+    
+    public void addNotificationGroup(NotificationGroup group){
+        try {
+            getService().addNotificationGroup(group);
+        } catch (RemoteException e) {
+        }
+    }
+    
+    public void removeNotificationGroup(NotificationGroup group){
+        try {
+            getService().removeNotificationGroup(group);
+        } catch (RemoteException e) {
+        }
+    }
+    
+    public NotificationGroup getNotificationGroupForPackage(String pkg){
+        try {
+            return getService().getNotificationGroupForPackage(pkg);
+        } catch (RemoteException e) {
+        }
+        return null;
+    }
+    
 
 }

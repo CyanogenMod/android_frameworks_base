@@ -18,15 +18,21 @@
 package android.app;
 
 import android.app.Profile;
+import android.app.NotificationGroup;
 
 /** {@hide} */
 interface IProfileManager
 {
     void setActiveProfile(in String profileName);
     Profile getActiveProfile();
-    void updateProfile(in Profile profile);
+    void addProfile(in Profile profile);
     void removeProfile(in Profile profile);
     Profile getProfile(String profileName);
     Profile[] getProfiles();
+    
+    NotificationGroup[] getNotificationGroups();
+    void addNotificationGroup(in NotificationGroup group);
+    void removeNotificationGroup(in NotificationGroup group);
+    NotificationGroup getNotificationGroupForPackage(in String pkg);
  }
 

@@ -24,6 +24,7 @@ import android.app.IActivityManager;
 import android.app.INotificationManager;
 import android.app.ITransientNotification;
 import android.app.Notification;
+import android.app.NotificationGroup;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Profile;
@@ -934,9 +935,9 @@ public class NotificationManagerService extends INotificationManager.Stub
             .getSystemService(Context.PROFILE_SERVICE);
             
             Profile currentProfile = profileManager.getActiveProfile();
-            
-            if(currentProfile != null){
-                notification = currentProfile.processNotification(pkg, notification);
+            NotificationGroup group = profileManager.getNotificationGroupForPackage(pkg);
+            if(currentProfile != null && group != null){
+                notification = currentProfile.processNotification(group.getName(), notification);
             }
 
             // If we're not supposed to beep, vibrate, etc. then don't.

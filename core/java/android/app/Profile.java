@@ -11,7 +11,7 @@ public class Profile implements Parcelable {
 
     private String name;
 
-    private Map<String, NotificationGroup> notificationGroups = new HashMap<String, NotificationGroup>();
+    private Map<String, ProfileGroup> profileGroups = new HashMap<String, ProfileGroup>();
 
     public static final Parcelable.Creator<Profile> CREATOR = new Parcelable.Creator<Profile>() {
         public Profile createFromParcel(Parcel in) {
@@ -32,12 +32,16 @@ public class Profile implements Parcelable {
         readFromParcel(in);
     }
     
-    public void addNotificationGroup(NotificationGroup group){
-        notificationGroups.put(group.getName(), group);
+    public void addProfleGroup(ProfileGroup group){
+        profileGroups.put(group.getName(), group);
     }
     
-    public void removeNotificationGroup(String name){
-        notificationGroups.remove(name);
+    public void removeProfileGroup(String name){
+        profileGroups.remove(name);
+    }
+    
+    public ProfileGroup[] getProfileGroups(){
+        return profileGroups.values().toArray(new ProfileGroup[profileGroups.size()]);
     }
     
     @Override
@@ -49,15 +53,15 @@ public class Profile implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeParcelableArray(
-                notificationGroups.values().toArray(
-                        new Parcelable[notificationGroups.size()]), flags);
+                profileGroups.values().toArray(
+                        new Parcelable[profileGroups.size()]), flags);
     }
 
     public void readFromParcel(Parcel in) {
         name = in.readString();
         for (Parcelable group : in.readParcelableArray(null)) {
-            NotificationGroup grp = (NotificationGroup)group;
-            notificationGroups.put(grp.getName(), grp);
+            ProfileGroup grp = (ProfileGroup)group;
+            profileGroups.put(grp.getName(), grp);
         }
     }
 
@@ -65,12 +69,9 @@ public class Profile implements Parcelable {
         return name;
     }
 
-    public Notification processNotification(String pkg, Notification notification) {
-        for (NotificationGroup group : notificationGroups.values()) {
-            if (group.hasPackage(pkg)) {
-                notification = group.processNotification(notification);
-            }
-        }
+    public Notification processNotification(String groupName, Notification notification) {
+        ProfileGroup profileGroupSettings = profileGroups.get(groupName);
+        notification = profileGroupSettings.processNotification(notification);
         return notification;
     }
 
