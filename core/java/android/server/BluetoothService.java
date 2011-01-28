@@ -1447,6 +1447,7 @@ public class BluetoothService extends IBluetooth.Stub {
         if (propVal != null) {
             propVal.put(name, value);
             mDeviceProperties.put(address, propVal);
+            Log.d(TAG, "setRemoteDeviceProperty addr = " + address + " name = " + name + " value = " + value);
         } else {
             Log.e(TAG, "setRemoteDeviceProperty for a device not in cache:" + address);
         }

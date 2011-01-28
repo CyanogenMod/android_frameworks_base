@@ -737,6 +737,7 @@ static jboolean isEventLoopRunningNative(JNIEnv *env, jobject object) {
 
 #ifdef HAVE_BLUETOOTH
 extern DBusHandlerResult a2dp_event_filter(DBusMessage *msg, JNIEnv *env);
+extern DBusHandlerResult hid_event_filter(DBusMessage *msg, JNIEnv *env);
 
 // Called by dbus during WaitForAndDispatchEventNative()
 static DBusHandlerResult event_filter(DBusConnection *conn, DBusMessage *msg,
@@ -861,9 +862,21 @@ static DBusHandlerResult event_filter(DBusConnection *conn, DBusMessage *msg,
                             method_onDeviceDisconnectRequested,
                             env->NewStringUTF(remote_device_path));
         goto success;
+    } else if (dbus_message_is_signal(msg,
+                                      "org.bluez.Input",
+                                      "PropertyChanged")) {
+        LOGD("Input device receive propertychnaged!!!");
     }
+    if (a2dp_event_filter(msg, env) == DBUS_HANDLER_RESULT_HANDLED) {
+        ret = DBUS_HANDLER_RESULT_HANDLED;
+    } else if (hid_event_filter(msg, env) == DBUS_HANDLER_RESULT_HANDLED) {
+       ret =  DBUS_HANDLER_RESULT_HANDLED;
+    } else {
+       ret = DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+     }
 
-    ret = a2dp_event_filter(msg, env);
+
+    //ret = a2dp_event_filter(msg, env);
     env->PopLocalFrame(NULL);
     return ret;
 
