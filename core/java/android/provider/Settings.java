@@ -2210,6 +2210,12 @@ public final class Settings {
         public static final String QUIET_HOURS_DIM = "quiet_hours_dim";
 
         /**
+         * Whether to always show battery status
+         * @hide
+         */
+        public static final String LOCKSCREEN_ALWAYS_BATTERY = "lockscreen_always_battery";
+
+        /**
          * Whether to use custom notification bar
          * @hide
          */
