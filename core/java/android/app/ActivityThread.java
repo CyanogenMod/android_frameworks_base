@@ -1097,12 +1097,14 @@ public final class ActivityThread {
     private final static class ResourcesKey {
         final private String mResDir;
         final private float mScale;
+        final private boolean mIsThemeable;
         final private int mHash;
 
-        ResourcesKey(String resDir, float scale) {
+        ResourcesKey(String resDir, float scale, boolean isThemeable) {
             mResDir = resDir;
             mScale = scale;
-            mHash = mResDir.hashCode() << 2 + (int) (mScale * 2);
+            mIsThemeable = isThemeable;
+            mHash = mResDir.hashCode() << 3 + ((mIsThemeable ? 1 : 0) << 2) + (int) (mScale * 2);
         }
 
         @Override
@@ -1116,7 +1118,8 @@ public final class ActivityThread {
                 return false;
             }
             ResourcesKey peer = (ResourcesKey) obj;
-            return mResDir.equals(peer.mResDir) && mScale == peer.mScale;
+            return mResDir.equals(peer.mResDir) && mScale == peer.mScale &&
+                    mIsThemeable == peer.mIsThemeable;
         }
     }
 
@@ -1183,7 +1186,7 @@ public final class ActivityThread {
      * null.
      */
     Resources getTopLevelResources(String resDir, CompatibilityInfo compInfo) {
-        ResourcesKey key = new ResourcesKey(resDir, compInfo.applicationScale);
+        ResourcesKey key = new ResourcesKey(resDir, compInfo.applicationScale, compInfo.isThemeable);
         Resources r;
         synchronized (mPackages) {
             // Resources is app scale dependent.
