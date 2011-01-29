@@ -28,6 +28,7 @@ public class StatusBarIcon implements Parcelable {
     public int iconLevel;
     public boolean visible = true;
     public int number;
+    public boolean hasBackground = true;
 
     private StatusBarIcon() {
     }
@@ -38,11 +39,27 @@ public class StatusBarIcon implements Parcelable {
         this.iconLevel = iconLevel;
     }
 
+    public StatusBarIcon(String iconPackage, int iconId, int iconLevel, boolean hasBackground) {
+        this.iconPackage = iconPackage;
+        this.iconId = iconId;
+        this.iconLevel = iconLevel;
+        this.hasBackground = hasBackground;
+    }
+
     public StatusBarIcon(String iconPackage, int iconId, int iconLevel, int number) {
         this.iconPackage = iconPackage;
         this.iconId = iconId;
         this.iconLevel = iconLevel;
         this.number = number;
+    }
+
+    public StatusBarIcon(String iconPackage, int iconId, int iconLevel,
+            int number, boolean hasBackground) {
+        this.iconPackage = iconPackage;
+        this.iconId = iconId;
+        this.iconLevel = iconLevel;
+        this.number = number;
+        this.hasBackground = hasBackground;
     }
 
     public String toString() {
@@ -52,9 +69,11 @@ public class StatusBarIcon implements Parcelable {
     }
 
     public StatusBarIcon clone() {
-        StatusBarIcon that = new StatusBarIcon(this.iconPackage, this.iconId, this.iconLevel);
+        StatusBarIcon that = new StatusBarIcon(this.iconPackage, this.iconId,
+                this.iconLevel, this.hasBackground);
         that.visible = this.visible;
         that.number = this.number;
+        that.hasBackground = this.hasBackground;
         return that;
     }
 
@@ -71,6 +90,7 @@ public class StatusBarIcon implements Parcelable {
         this.iconLevel = in.readInt();
         this.visible = in.readInt() != 0;
         this.number = in.readInt();
+        this.hasBackground = in.readInt() != 0;
     }
 
     public void writeToParcel(Parcel out, int flags) {
@@ -79,6 +99,7 @@ public class StatusBarIcon implements Parcelable {
         out.writeInt(this.iconLevel);
         out.writeInt(this.visible ? 1 : 0);
         out.writeInt(this.number);
+        out.writeInt(this.hasBackground ? 1 : 0);
     }
 
     public int describeContents() {

@@ -184,7 +184,25 @@ public class StatusBarManagerService extends IStatusBarService.Stub
             StatusBarIcon icon = new StatusBarIcon(iconPackage, iconId, iconLevel);
             //Slog.d(TAG, "setIcon slot=" + slot + " index=" + index + " icon=" + icon);
             mIcons.setIcon(index, icon);
+            if (mBar != null) {
+                try {
+                    mBar.setIcon(index, icon);
+                } catch (RemoteException ex) {
+                }
+            }
+        }
+    }
 
+    public void setStatusBarIcon(String slot, StatusBarIcon icon) {
+        enforceStatusBar();
+
+        synchronized (mIcons) {
+            int index = mIcons.getSlotIndex(slot);
+            if (index < 0) {
+                throw new SecurityException("invalid status bar icon slot: " + slot);
+            }
+            //Slog.d(TAG, "setIcon slot=" + slot + " index=" + index + " icon=" + icon);
+            mIcons.setIcon(index, icon);
             if (mBar != null) {
                 try {
                     mBar.setIcon(index, icon);

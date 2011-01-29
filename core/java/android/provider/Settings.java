@@ -1752,6 +1752,12 @@ public final class Settings {
         public static final String USE_CUSTOM_APP = "use_custom_app";
 
         /**
+         * Whether to show the battery level percentage overlayed on the icon.
+          * @hide
+          */
+        public static final String BATTERY_PERCENTAGE_STATUS_ICON = "battery_percentage_status_icon";
+
+        /**
          * Stores the uri of the custom application to use
          * @hide
          */

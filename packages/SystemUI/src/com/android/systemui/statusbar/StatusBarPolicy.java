@@ -30,6 +30,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.TypedArray;
+import android.database.ContentObserver;
 import android.graphics.PixelFormat;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
@@ -43,6 +44,7 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Binder;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.storage.StorageManager;
@@ -58,6 +60,7 @@ import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.util.Log;
 import android.util.Slog;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +71,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.internal.app.IBatteryStats;
+import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.TelephonyIntents;
 import com.android.internal.telephony.cdma.EriInfo;
@@ -104,6 +108,8 @@ public class StatusBarPolicy {
     private StorageManager mStorageManager;
 
     // battery
+    private IBinder mBatteryIcon;
+    private StatusBarIcon mBatteryData;
     private boolean mBatteryFirst = true;
     private boolean mBatteryPlugged;
     private int mBatteryLevel;
@@ -419,9 +425,22 @@ public class StatusBarPolicy {
         mStorageManager = (StorageManager) context.getSystemService(Context.STORAGE_SERVICE);
         mStorageManager.registerListener(
                 new com.android.systemui.usb.StorageNotification(context));
-
         // battery
-        mService.setIcon("battery", com.android.internal.R.drawable.stat_sys_battery_unknown, 0);
+        mBatteryData = new StatusBarIcon(null,
+                com.android.internal.R.drawable.stat_sys_battery_unknown, 0, 0, false);
+        mService.setStatusBarIcon("battery", mBatteryData);
+
+        ContentObserver coBattery = new ContentObserver(null) {
+            @Override
+            public void onChange(boolean selfChange) {
+                updateBattery(null);
+            }
+        };
+
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(Settings.System.BATTERY_PERCENTAGE_STATUS_ICON),
+                false,
+                coBattery);
 
         // phone_signal
         mPhone = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
@@ -542,12 +561,33 @@ public class StatusBarPolicy {
     }
 
     private final void updateBattery(Intent intent) {
-        final int id = intent.getIntExtra("icon-small", 0);
-        int level = intent.getIntExtra("level", 0);
-        mService.setIcon("battery", id, level);
+        boolean plugged;
+        int level;
+        StatusBarIcon mUpdateBatteryData = new StatusBarIcon(null, 
+                com.android.internal.R.drawable.stat_sys_battery_unknown, 0, 0,false);
+        if(intent != null) {
+            mUpdateBatteryData.iconId = intent.getIntExtra("icon-small", 0);
+            mUpdateBatteryData.iconLevel = intent.getIntExtra("level", 0);
 
-        boolean plugged = intent.getIntExtra("plugged", 0) != 0;
-        level = intent.getIntExtra("level", -1);
+            plugged = intent.getIntExtra("plugged", 0) != 0;
+            level = intent.getIntExtra("level", -1);
+        } else {
+            mUpdateBatteryData.iconLevel = mBatteryLevel;
+            mUpdateBatteryData.iconId = mBatteryData.iconId;
+            plugged = mBatteryPlugged;
+            level = mBatteryLevel;
+        }
+
+        //show battery percentage if not plugged in and status is enabled
+        if (plugged || level >= 100 ||
+                Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.BATTERY_PERCENTAGE_STATUS_ICON, 0) == 0) {
+            mUpdateBatteryData.number = 0;
+        } else {
+            mUpdateBatteryData.number = level;
+        }
+        mService.setStatusBarIcon("battery", mUpdateBatteryData);
+        mBatteryData = mUpdateBatteryData;
         if (false) {
             Slog.d(TAG, "updateBattery level=" + level
                     + " plugged=" + plugged
@@ -561,9 +601,17 @@ public class StatusBarPolicy {
         mBatteryPlugged = plugged;
         mBatteryLevel = level;
 
+        if (mBatteryLevelTextView != null) {
+            mBatteryLevelTextView.setText(String.valueOf(level));
+        } else {
+            View v = View.inflate(mContext, R.layout.battery_low, null);
+            mBatteryLevelTextView=(TextView)v.findViewById(R.id.level_percent);
+            mBatteryLevelTextView.setText(String.valueOf(level));
+        }
         if (mBatteryFirst) {
             mBatteryFirst = false;
         }
+
         /*
          * No longer showing the battery view because it draws attention away
          * from the USB storage notification. We could still show it when
