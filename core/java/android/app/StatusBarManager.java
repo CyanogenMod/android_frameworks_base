@@ -24,6 +24,7 @@ import android.os.IBinder;
 import android.os.ServiceManager;
 
 import com.android.internal.statusbar.IStatusBarService;
+import com.android.internal.statusbar.StatusBarIcon;
 
 /**
  * Allows an app to control the status bar.
@@ -109,6 +110,15 @@ public class StatusBarManager {
     public void setIcon(String slot, int iconId, int iconLevel) {
         try {
             mService.setIcon(slot, mContext.getPackageName(), iconId, iconLevel);
+        } catch (RemoteException ex) {
+            // system process is dead anyway.
+            throw new RuntimeException(ex);
+        }
+    }
+    
+    public void setStatusBarIcon(String slot, StatusBarIcon icon) {
+        try {
+            mService.setStatusBarIcon(slot, icon);
         } catch (RemoteException ex) {
             // system process is dead anyway.
             throw new RuntimeException(ex);

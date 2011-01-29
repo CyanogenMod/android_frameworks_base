@@ -77,10 +77,14 @@ public class StatusBarIconView extends AnimatedImageView {
             if (drawable != null) {
                 setImageDrawable(drawable);
             }
-
             if (icon.number > 0) {
-                mNumberBackground = getContext().getResources().getDrawable(
-                        R.drawable.ic_notification_overlay);
+                if(mIcon.hasBackground) {
+                    mNumberBackground = getContext().getResources().getDrawable(
+                            R.drawable.ic_notification_overlay);
+                } else {
+                    mNumberBackground = getContext().getResources().getDrawable(
+                            R.drawable.ic_notification_no_overlay);
+                }
                 placeNumber();
             } else {
                 mNumberBackground = null;
@@ -119,8 +123,13 @@ public class StatusBarIconView extends AnimatedImageView {
         if (!numberEquals) {
             if (icon.number > 0) {
                 if (mNumberBackground == null) {
-                    mNumberBackground = getContext().getResources().getDrawable(
-                            R.drawable.ic_notification_overlay);
+                    if(mIcon.hasBackground) {
+                        mNumberBackground = getContext().getResources().getDrawable(
+                                R.drawable.ic_notification_overlay);
+                    } else {
+                        mNumberBackground = getContext().getResources().getDrawable(
+                                R.drawable.ic_notification_no_overlay);
+                    }
                 }
                 placeNumber();
             } else {
@@ -189,10 +198,14 @@ public class StatusBarIconView extends AnimatedImageView {
 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
+        
         if (mNumberBackground != null) {
+            float numberX = mNumberX;
             mNumberBackground.draw(canvas);
-            canvas.drawText(mNumberText, mNumberX, mNumberY, mNumberPain);
+            if(!mIcon.hasBackground) {
+                numberX *= 0.83F;
+            }
+            canvas.drawText(mNumberText, numberX, mNumberY, mNumberPain);
         }
     }
 
@@ -221,6 +234,6 @@ public class StatusBarIconView extends AnimatedImageView {
             dh = mNumberBackground.getMinimumWidth();
         }
         mNumberY = h-r.bottom-((dh-r.top-th-r.bottom)/2);
-        mNumberBackground.setBounds(w-dw, h-dh, w, h);
+            mNumberBackground.setBounds(w-dw, h-dh, w, h);
     }
 }
