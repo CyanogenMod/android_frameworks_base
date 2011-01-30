@@ -904,4 +904,15 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"Nośnik USB jest obecnie używany przez komputer."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"Karta SD jest obecnie używana przez komputer."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Nośnik zewnętrzny jest w nieznanym stanie."</string>
+    
+    <!--Application killed toast -->
+    <string name="app_killed_message">Aplikacja zatrzymana</string>
+
+    <!-- Phone goggles -->
+    <string name="phone_goggles_problem_count">Równanie #%1$d: </string>
+    <string name="phone_goggles_description">Rozwiąż %1$d następujące równania matematyczne w mniej niż %2$d sekund, by wykonać połączenie lub wysłać wiadomość.</string>
+    <plurals name="phone_goggles_countdown">
+        <item quantity="one">Pozostała %d sekunda</item>
+        <item quantity="other">Pozostało %d sekund</item>
+    </plurals>
 </resources>
