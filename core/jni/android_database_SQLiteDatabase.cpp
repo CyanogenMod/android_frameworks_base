@@ -126,19 +126,17 @@ static void dbopen(JNIEnv* env, jobject object, jstring pathString, jint flags)
     // Configure databases to run in WAL mode.
     err = sqlite3_exec(handle,"PRAGMA journal_mode = WAL;",
                        NULL, NULL,&zErrMsg);
-    if (SQLITE_OK != err) {
+    if (SQLITE_OK == err) {
+        // Set autocheckpoint = 100 pages
+        err = sqlite3_wal_autocheckpoint(handle,
+                                         100);
+        if (SQLITE_OK != err) {
+            LOGE("sqlite3_exec to set WAL autocheckpoint failed\n");
+            throw_sqlite3_exception(env, handle);
+            goto done;
+        }
+    } else {
        LOGE("sqlite3_exec to set journal_mode = WAL failed\n");
-       throw_sqlite3_exception(env, handle);
-       goto done;
-    }
-
-    // Set autocheckpoint = 100 pages
-    err = sqlite3_wal_autocheckpoint(handle,
-                                     100);
-    if (SQLITE_OK != err) {
-       LOGE("sqlite3_exec to set WAL autocheckpoint failed\n");
-       throw_sqlite3_exception(env, handle);
-       goto done;
     }
 
     // The soft heap limit prevents the page cache allocations from growing
