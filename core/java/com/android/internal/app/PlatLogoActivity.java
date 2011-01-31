@@ -29,10 +29,20 @@ public class PlatLogoActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        mToast = Toast.makeText(this, "Zombie art by Jack Larson", Toast.LENGTH_SHORT);
+        final String text;
+        final int resource;
+        if (getIntent().getBooleanExtra("special", false)) {
+            text = "Brought to you by your friends at TeamDouche";
+            resource = com.android.internal.R.drawable.tdyacht;
+        } else {
+            text = "Zombie art by Jack Larson";
+            resource = com.android.internal.R.drawable.platlogo;
+        }
+        
+        mToast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
 
         ImageView content = new ImageView(this);
-        content.setImageResource(com.android.internal.R.drawable.platlogo);
+        content.setImageResource(resource);
         content.setScaleType(ImageView.ScaleType.FIT_CENTER);
         
         setContentView(content);
