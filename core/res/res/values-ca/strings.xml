@@ -284,10 +284,6 @@
   <string name="permdesc_readContacts">Permet que una aplicació llegeixi les dades de contacte (adreça) emmagatzemades al telèfon. Aplicacions malicioses podrien utilitzar això per a enviar les teves dades a altres persones.</string>
   <string name="permlab_writeContacts">escriure les dades de contacte</string>
   <string name="permdesc_writeContacts">Permet que una aplicació modifiqui les teves dades de contacte (adreça). Aplicacions malicioses poden usar això per a esborrar o modificar les dades de contacte.</string>
-  <string name="permlab_writeOwnerData">escriure dades del propietari</string>
-  <string name="permdesc_writeOwnerData">Permet que una aplicació modifiqui les dades del propietari del telèfon. Aplicacions malicioses poden usar això per a esborrar o modificar aquestes dades.</string>
-  <string name="permlab_readOwnerData">llegir les dades del propietari</string>
-  <string name="permdesc_readOwnerData">Permet que una aplicació llegeixi les dades del propietari del telèfon. Aplicacions malicioses poden usar això per llegir aquestes dades.</string>
   <string name="permlab_readCalendar">llegir els esdeveniments del calendari</string>
   <string name="permdesc_readCalendar">Permet que una aplicació llegeixi els esdeveniments del calendari emmagatzemats al telèfon. Aplicacions malicioses podrien utilitzar això per a enviar els esdeveniments del calendari a altres persones.</string>
   <string name="permlab_writeCalendar">afegeix o modifica esdeveniments del calendari i enviar-los per correu</string>
@@ -529,16 +525,6 @@
   <string name="password_keyboard_label_alt_key">ALT</string>
   <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
   <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
-  <string name="status_bar_clear_all_button">Neteja</string>
-  <string name="status_bar_no_notifications_title">No hi ha cap notificació</string>
-  <string name="status_bar_ongoing_events_title">En curs</string>
-  <string name="status_bar_latest_events_title">Notificacions</string>
-  <string name="battery_status_text_percent_format"><xliff:g id="number" example="50">%d</xliff:g><xliff:g id="percent" example="%">%%</xliff:g></string>
-  <string name="battery_status_charging">Carregant…</string>
-  <string name="battery_low_title">Sisplau, connecta el carregador</string>
-  <string name="battery_low_subtitle">La bateria està baixa:</string>
-  <string name="battery_low_percent_format">Resta el <xliff:g id="number">%d%%</xliff:g> o menys.</string>
-  <string name="battery_low_why">Ús de la bateria</string>
   <string name="factorytest_failed">Ha fallat la prova de fàbrica</string>
   <string name="factorytest_not_system">L\'acció FACTORY_TEST només és compatible amb els paquets instal·lats a /system/app.</string>
   <string name="factorytest_no_action">No s\'ha trobat un paquet que proporcioni l\'acció FACTORY_TEST.</string>
@@ -590,9 +576,6 @@
   <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
   <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
   <string name="selectText">Selecciona el text</string>
-  <string name="stopSelectingText">No seleccionis més text</string>
-  <string name="cutAll">Retalla-ho tot</string>
-  <string name="copyAll">Copia-ho tot</string>
   <string name="inputMethod">Mètode d\'entrada</string>
   <string name="addToDictionary">Afegeix \"<xliff:g id="word" example="rickroll">%s</xliff:g>\" al diccionari</string>
   <string name="editTextMenuTitle">Edita el text</string>
@@ -728,7 +711,6 @@
   <string name="throttle_warning_notification_message">Toca per a obtenir més informació sobre l\'ús de dades mòbils</string>
   <string name="throttled_notification_title">S\'ha superat el límit de dades mòbils</string>
   <string name="throttled_notification_message">Toca per a obtenir més informació sobre l\'ús de dades mòbils</string>
-  <string name="toast_reboot_recommend">Precaució: us recomanem reiniciar després d\'acabar la personalització!</string>
   <string name="app_killed_message">Aplicació matada</string>
   <plurals name="num_seconds_ago">
       <item quantity="one">Fa 1 segon</item>
