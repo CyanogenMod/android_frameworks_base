@@ -1124,7 +1124,6 @@ public class PackageParser {
             } else if (tagName.equals("theme")) {
                 // this is a theme apk.
                 pkg.mIsThemeApk = true;
-                pkg.applicationInfo.isThemeable = false;
                 pkg.mThemeInfos.add(new ThemeInfo(parser, res, attrs));
             } else if (RIGID_PARSER) {
                 outError[0] = "Bad element under <manifest>: "
@@ -1197,6 +1196,9 @@ public class PackageParser {
                 && pkg.applicationInfo.targetSdkVersion
                         >= android.os.Build.VERSION_CODES.DONUT)) {
             pkg.applicationInfo.flags |= ApplicationInfo.FLAG_SUPPORTS_SCREEN_DENSITIES;
+        }
+        if (pkg.mIsThemeApk) {
+            pkg.applicationInfo.isThemeable = false;
         }
 
         return pkg;
