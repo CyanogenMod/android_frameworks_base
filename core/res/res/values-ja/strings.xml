@@ -912,4 +912,13 @@
     <string name="lockscreen_phone_label">"電話"</string>
     <string name="lockscreen_messaging_label">"メッセージ"</string>
     <string name="app_killed_message">"アプリケーションを終了しました"</string>
+    <string name="lockscreen_discharging">放電中 (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
+    <!-- Phone goggles -->
+    <string name="phone_goggles_problem_count">問題 #%1$d: </string>
+    <string name="phone_goggles_description">次の %1$d 個の数学の問題を %2$d 秒以内に問けばコミュニケーションを開始できます。</string>
+    <plurals name="phone_goggles_countdown">
+        <item quantity="one">残り %d 秒</item>
+        <item quantity="other">残り %d 秒</item>
+    </plurals>
+
 </resources>
