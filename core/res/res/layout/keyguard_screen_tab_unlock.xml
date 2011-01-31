@@ -253,5 +253,18 @@
             android:background="@color/transparent"
             android:visibility="gone"
             />
+        <TextView
+            android:id="@+id/musicNowPlaying"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:lines="1"
+            android:scrollHorizontally="true"
+            android:ellipsize="marquee"
+            android:paddingTop="10dip"
+            android:gravity="bottom"
+            android:layout_alignWithParentIfMissing="true"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            />
     </RelativeLayout>
 </android.gesture.GestureOverlayView>
