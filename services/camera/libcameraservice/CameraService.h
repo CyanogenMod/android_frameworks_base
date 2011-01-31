@@ -69,7 +69,7 @@ public:
         SOUND_RECORDING = 1,
         NUM_SOUNDS
     };
-
+    void                loadSoundAsync();
     void                loadSound();
     void                playSound(sound_kind kind);
     void                releaseSound();
