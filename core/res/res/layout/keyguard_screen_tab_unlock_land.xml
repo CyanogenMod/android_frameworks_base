@@ -167,8 +167,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="15dip"
-        android:padding="10px"
+        android:layout_marginBottom="6dip"
         android:background="@color/transparent"
         android:visibility="gone"
         />
@@ -179,8 +178,7 @@
         android:src="@drawable/ic_media_pause"
         android:layout_centerInParent="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="15dip"
-        android:padding="10px"
+        android:layout_marginBottom="6dip"
         android:background="@color/transparent"
         android:visibility="gone"
         />
@@ -190,9 +188,8 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_media_previous"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="15dip"
+        android:layout_marginBottom="6dip"
         android:layout_marginRight="20dip"
-        android:padding="10px"
         android:layout_toLeftOf="@+id/musicControlPause"
         android:background="@color/transparent"
         android:visibility="gone"
@@ -203,12 +200,24 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_media_next"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="15dip"
+        android:layout_marginBottom="6dip"
         android:layout_marginLeft="20dip"
-        android:padding="10px"
         android:layout_toRightOf="@+id/musicControlPause"
         android:background="@color/transparent"
         android:visibility="gone"
+        />
+    <TextView
+        android:id="@+id/musicNowPlaying"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:lines="1"
+        android:scrollHorizontally="true"
+        android:ellipsize="marquee"
+        android:paddingTop="40dip"
+        android:gravity="bottom"
+        android:layout_alignWithParentIfMissing="true"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         />
 
     </RelativeLayout>
