@@ -904,4 +904,8 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"Сейчас USB-накопитель используется компьютером."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"Сейчас SD-карта используется компьютером."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Неизвестно состояние внешнего носителя."</string>
+    <string name="global_action_reboot">Перезагрузить</string>
+    <string name="reboot_system">Перезагрузить</string>
+    <string name="reboot_progress">Перезагрузка...</string>
+    <string name="reboot_confirm">Телефон будет перезагружен.</string>
 </resources>
