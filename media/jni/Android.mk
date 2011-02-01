@@ -42,6 +42,10 @@ LOCAL_LDLIBS := -lpthread
 
 LOCAL_MODULE:= libmedia_jni
 
+ifeq ($(strip $(BOARD_USES_HW_MEDIARECORDER)),true)
+    LOCAL_CFLAGS += -DUSE_BOARD_MEDIARECORDER
+endif
+
 include $(BUILD_SHARED_LIBRARY)
 
 # build libsoundpool.so
