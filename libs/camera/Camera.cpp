@@ -132,6 +132,10 @@ sp<Camera> Camera::connect(int cameraId)
     return c;
 }
 
+extern "C" sp<Camera> _ZN7android6Camera7connectEv () {
+    return Camera::connect(0);
+}
+
 void Camera::disconnect()
 {
     LOGV("disconnect");
