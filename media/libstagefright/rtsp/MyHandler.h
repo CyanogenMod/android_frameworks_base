@@ -922,7 +922,7 @@ struct MyHandler : public AHandler {
         CHECK(GetAttribute(range.c_str(), "npt", &val));
         float npt1, npt2;
 
-        if (val == "now-") {
+        if (val == "now-" || val == "0-") {
             // This is a live stream and therefore not seekable.
             return;
         } else {
