@@ -109,7 +109,10 @@ void ARTPSource::timeUpdate(uint32_t rtpTime, uint64_t ntpTime) {
             uint32_t rtpTime;
             CHECK(meta->findInt32("rtp-time", (int32_t *)&rtpTime));
 
-            meta->setInt64("ntp-time", RTP2NTP(rtpTime));
+            if (RTP2NTP(rtpTime) <= ntpTime)
+                meta->setInt64("ntp-time", RTP2NTP(rtpTime));
+            else
+                meta->setInt64("ntp-time", ntpTime);
         }
     }
 }
