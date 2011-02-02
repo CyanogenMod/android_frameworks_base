@@ -270,6 +270,8 @@ public abstract class WindowOrientationListener {
         private static final float ACCELERATING_LOWPASS_ALPHA =
             computeLowpassAlpha(ACCELERATING_TIME_CONSTANT_MS);
 
+        private boolean mAllow180Rotation = false;
+
         private WindowOrientationListener mOrientationListener;
         private int mRotation = ROTATION_0; // Current orientation state
         private float mTiltAngle = 0; // low-pass filtered
@@ -292,7 +294,7 @@ public abstract class WindowOrientationListener {
         }
 
         void setAllow180Rotation(boolean allowed) {
-            // deprecated since ACCELEROMETER_ROTATE_180 in Settings is added
+            mAllow180Rotation = allowed;
         }
 
         int getCurrentRotation(int lastRotation) {
@@ -305,8 +307,9 @@ public abstract class WindowOrientationListener {
 
         private void calculateNewRotation(float orientation, float tiltAngle) {
             if (localLOGV) Log.i(TAG, orientation + ", " + tiltAngle + ", " + mRotation);
-            boolean allow180Rotation = (Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.ACCELEROMETER_ROTATE_180, 0) != 0);
+            final boolean allow180Rotation = mAllow180Rotation ||
+                    (Settings.System.getInt(mContext.getContentResolver(),
+                                            Settings.System.ACCELEROMETER_ROTATE_180, 0) != 0);
             int thresholdRanges[][] = allow180Rotation
                     ? THRESHOLDS_WITH_180[mRotation] : THRESHOLDS[mRotation];
             int row = -1;
