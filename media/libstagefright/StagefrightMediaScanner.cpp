@@ -115,7 +115,7 @@ static void flac_metadata(const FLAC__StreamDecoder *decoder, const FLAC__Stream
     MediaScannerClient *client = (MediaScannerClient *)client_data;
 
     if (metadata->type == FLAC__METADATA_TYPE_STREAMINFO) {
-        FLAC__uint64 duration = metadata->data.stream_info.total_samples / metadata->data.stream_info.sample_rate;
+        FLAC__uint64 duration = 1000 * metadata->data.stream_info.total_samples / metadata->data.stream_info.sample_rate;
         if (duration > 0) {
             char buffer[20];
             sprintf(buffer, "%lld", duration);
