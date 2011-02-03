@@ -7152,7 +7152,8 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
     }
 
     private boolean canSelectText() {
-        return textCanBeSelected() && mText.length() != 0;
+        return textCanBeSelected() && mText.length() != 0 &&
+               mSelectionModifierCursorController != null;
     }
 
     private boolean textCanBeSelected() {
