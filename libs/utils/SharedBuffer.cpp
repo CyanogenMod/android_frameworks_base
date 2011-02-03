@@ -101,7 +101,7 @@ int32_t SharedBuffer::release(uint32_t flags) const
 {
     int32_t prev = 1;
     if (onlyOwner() || ((prev = android_atomic_dec(&mRefs)) == 1)) {
-        mRefs = 0;
+        android_atomic_write(0, &mRefs);
         if ((flags & eKeepStorage) == 0) {
             free(const_cast<SharedBuffer*>(this));
         }
