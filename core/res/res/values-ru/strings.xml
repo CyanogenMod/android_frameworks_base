@@ -904,4 +904,19 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"Сейчас USB-накопитель используется компьютером."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"Сейчас SD-карта используется компьютером."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Неизвестно состояние внешнего носителя."</string>
+ 
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">Перезагрузить</string>
+
+    <!-- Displayed on lock screen's extra left tab - phone -->
+    <string name="lockscreen_phone_label">Телефон</string>
+    <!-- Displayed on lock screen's extra right tab - messaging -->
+    <string name="lockscreen_messaging_label">Сообщение</string>
+
+   <!-- Phone goggles -->
+    <string name="phone_goggles_problem_count">Задача #%1$d: </string>
+    <string name="phone_goggles_description">Решите %1$d математические задачи не менее чем за %2$d, что бы совершить исходящее соединение.</string>
+    <plurals name="phone_goggles_countdown">
+        <item quantity="one">%d сек. осталось</item>
+        <item quantity="other">%d сек. осталось</item>
 </resources>
