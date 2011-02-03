@@ -249,6 +249,8 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
     private static String mArtist = null;
     private static String mTrack = null;
     private static Boolean mPlaying = null;
+    private static long mSongId = 0;
+    private static long mAlbumId = 0;
 
     public KeyguardViewMediator(Context context, PhoneWindowManager callback,
             LocalPowerManager powerManager) {
@@ -1181,6 +1183,8 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
             mArtist = intent.getStringExtra("artist");
             mTrack = intent.getStringExtra("track");
             mPlaying = intent.getBooleanExtra("playing", false);
+            mSongId = intent.getLongExtra("songid", 0);
+            mAlbumId = intent.getLongExtra("albumid", 0);
             intent = new Intent("internal.policy.impl.updateSongStatus");
             context.sendBroadcast(intent);
         }
@@ -1191,6 +1195,14 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
         } else {
             return "";
         }
+    }
+
+    public static long SongId() {
+        return mSongId;
+    }
+
+    public static long AlbumId() {
+        return mAlbumId;
     }
 }
 
