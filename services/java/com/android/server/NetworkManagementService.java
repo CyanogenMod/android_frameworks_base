@@ -792,4 +792,11 @@ class NetworkManagementService extends INetworkManagementService.Stub {
     public int getInterfaceTxThrottle(String iface) {
         return getInterfaceThrottle(iface, false);
     }
+
+    /**
+     * @hide
+     */
+    public void setWiMaxCoExistence(boolean bool) {
+        // stub
+    }
 }

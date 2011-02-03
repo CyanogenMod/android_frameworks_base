@@ -209,18 +209,21 @@ public class ConnectivityManager
      * default connections.
      */
     public static final int TYPE_WIMAX       = 6;
-    /** {@hide} TODO: Need to adjust this for WiMAX. */
-    public static final int MAX_RADIO_TYPE   = TYPE_WIFI;
-    /** {@hide} TODO: Need to adjust this for WiMAX. */
-    public static final int MAX_NETWORK_TYPE = TYPE_MOBILE_HIPRI;
+    public static final int TYPE_MOBILE_WIMAX = 6; 
+
+    /** {@hide} */
+    public static final int MAX_RADIO_TYPE   = TYPE_WIMAX;
+
+    /** {@hide} */
+    public static final int MAX_NETWORK_TYPE = TYPE_WIMAX;
 
     public static final int DEFAULT_NETWORK_PREFERENCE = TYPE_WIFI;
 
     private IConnectivityManager mService;
 
     static public boolean isNetworkTypeValid(int networkType) {
-	// HACK! Accept TYPE_WIMAX even though we don't support it yet
-        return TYPE_WIMAX == networkType || (networkType >= 0 && networkType <= MAX_NETWORK_TYPE);
+
+        return (networkType >= 0 && networkType <= MAX_NETWORK_TYPE);
     }
 
     public void setNetworkPreference(int preference) {

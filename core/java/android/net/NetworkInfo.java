@@ -108,6 +108,7 @@ public class NetworkInfo implements Parcelable {
     private String mExtraInfo;
     private boolean mIsFailover;
     private boolean mIsRoaming;
+    private String mInterfaceName;
     /**
      * Indicates whether network connectivity is possible:
      */
@@ -133,6 +134,20 @@ public class NetworkInfo implements Parcelable {
         mState = State.UNKNOWN;
         mIsAvailable = false; // until we're told otherwise, assume unavailable
         mIsRoaming = false;
+    }
+
+    /**
+     * @hide
+     */
+    public void setInterface(String paramString) {
+        this.mInterfaceName = paramString;
+    }
+
+    /**
+     * @hide
+     */
+    public String getInterface() {
+        return this.mInterfaceName;
     }
 
     /**
@@ -314,6 +329,7 @@ public class NetworkInfo implements Parcelable {
         builder.append("type: ").append(getTypeName()).append("[").append(getSubtypeName()).
                 append("], state: ").append(mState).append("/").append(mDetailedState).
                 append(", reason: ").append(mReason == null ? "(unspecified)" : mReason).
+                append(", interface: ").append(mInterfaceName == null ? "(unspecified)" : mInterfaceName).
                 append(", extra: ").append(mExtraInfo == null ? "(none)" : mExtraInfo).
                 append(", roaming: ").append(mIsRoaming).
                 append(", failover: ").append(mIsFailover).
@@ -345,6 +361,7 @@ public class NetworkInfo implements Parcelable {
         dest.writeInt(mIsRoaming ? 1 : 0);
         dest.writeString(mReason);
         dest.writeString(mExtraInfo);
+        dest.writeString(mInterfaceName);
     }
 
     /**
@@ -366,6 +383,7 @@ public class NetworkInfo implements Parcelable {
                 netInfo.mIsRoaming = in.readInt() != 0;
                 netInfo.mReason = in.readString();
                 netInfo.mExtraInfo = in.readString();
+                netInfo.mInterfaceName = in.readString();
                 return netInfo;
             }
 
@@ -373,13 +391,5 @@ public class NetworkInfo implements Parcelable {
                 return new NetworkInfo[size];
             }
         };
-
-    /**
-     * HACK! Get an empty NetworkInfo object for WIMAX stub
-     * @hide
-     */
-    public static final NetworkInfo getEmptyWimaxNetworkInfo() {
-        return new NetworkInfo(ConnectivityManager.TYPE_WIMAX, 0, "", "");
-    }
     
 }

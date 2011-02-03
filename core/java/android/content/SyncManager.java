@@ -159,6 +159,8 @@ public class SyncManager implements OnAccountsUpdateListener {
 
     private final SyncAdaptersCache mSyncAdapters;
 
+    private boolean mWimaxConnected = false;
+
     private BroadcastReceiver mStorageIntentReceiver =
             new BroadcastReceiver() {
                 public void onReceive(Context context, Intent intent) {
@@ -260,12 +262,22 @@ public class SyncManager implements OnAccountsUpdateListener {
             // since we still have a WiFi connection.
             switch (state) {
                 case CONNECTED:
+                    if (networkInfo.getType() == ConnectivityManager.TYPE_WIMAX) {
+                        mWimaxConnected = true;
+                    }
                     mDataConnectionIsConnected = true;
                     break;
                 case DISCONNECTED:
-                    if (intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
+                    if (networkInfo.getType() == ConnectivityManager.TYPE_WIMAX) {
+                        mWimaxConnected = false;
+                    }
+                    if (!mWimaxConnected && intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)) {
+                        Log.v(TAG,"SyncManager::mConnectivityIntentReceiver.onReceive() "
+                            + "- DISCONNECTED and no connectivity");
                         mDataConnectionIsConnected = false;
                     } else {
+                        Log.v(TAG, "SyncManager::mConnectivityIntentReceiver.onReceive() "
+                            + "- DISCONNECTED but there is connectivity");
                         mDataConnectionIsConnected = true;
                     }
                     break;

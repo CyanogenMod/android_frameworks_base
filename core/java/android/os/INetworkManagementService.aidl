@@ -35,6 +35,8 @@ interface INetworkManagementService
      */
     void registerObserver(INetworkManagementEventObserver obs);
 
+    void setWiMaxCoExistence(boolean paramBoolean);
+
     /**
      * Unregister an observer from receiving events.
      */

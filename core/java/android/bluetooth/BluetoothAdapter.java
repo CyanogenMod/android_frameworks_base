@@ -945,4 +945,13 @@ public final class BluetoothAdapter {
         }
         return true;
     }
+
+    /**
+     * For compatibility with proprietary code
+     *
+     * @hide
+     */
+    public boolean setAFH(boolean paramBoolean, byte paramByte1, byte paramByte2) {
+        return true;
+    }
 }
