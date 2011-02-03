@@ -27,9 +27,12 @@ import com.android.internal.widget.SlidingTab.OnTriggerListener;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.text.format.DateFormat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -46,6 +49,7 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.media.AudioManager;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.provider.Settings;
@@ -53,6 +57,9 @@ import android.provider.Settings;
 import java.util.ArrayList;
 import java.util.Date;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 
 /**
@@ -67,6 +74,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private static final boolean DBG = false;
     private static final String TAG = "LockScreen";
     private static final String ENABLE_MENU_KEY_FILE = "/data/local/enable_menu_key";
+    private static final Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
 
     private Status mStatus = Status.Normal;
 
@@ -89,6 +97,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private ImageButton mPauseIcon;
     private ImageButton mRewindIcon;
     private ImageButton mForwardIcon;
+    private ImageButton mAlbumArt;
     private AudioManager am = (AudioManager)getContext().getSystemService(Context.AUDIO_SERVICE);
     private boolean mWasMusicActive = am.isMusicActive();
     private boolean mIsMusicActive = false;
@@ -135,11 +144,15 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     private int mLockMusicHeadset = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_MUSIC_CONTROLS_HEADSET, 0));
+
     private boolean useLockMusicHeadsetWired = ((mLockMusicHeadset == 1) || (mLockMusicHeadset == 3));
     private boolean useLockMusicHeadsetBT = ((mLockMusicHeadset == 2) || (mLockMusicHeadset == 3));
 
     private boolean mLockAlwaysMusic = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_ALWAYS_MUSIC_CONTROLS, 0) == 1);
+
+    // Make this an option should there be demand
+    private boolean mNowPlayingScreen = true;
 
     private boolean mCustomAppToggle = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_CUSTOM_APP_TOGGLE, 0) == 1);
@@ -256,8 +269,10 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         if (DBG) Log.v(TAG, "Creation orientation = " + mCreationOrientation);
         if (mCreationOrientation != Configuration.ORIENTATION_LANDSCAPE) {
             inflater.inflate(R.layout.keyguard_screen_tab_unlock, this, true);
+            mNowPlayingScreen = true;
         } else {
             inflater.inflate(R.layout.keyguard_screen_tab_unlock_land, this, true);
+            mNowPlayingScreen = false;
         }
 
         mCarrier = (TextView) findViewById(R.id.carrier);
@@ -284,6 +299,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mPauseIcon = (ImageButton) findViewById(R.id.musicControlPause);
         mRewindIcon = (ImageButton) findViewById(R.id.musicControlPrevious);
         mForwardIcon = (ImageButton) findViewById(R.id.musicControlNext);
+        mAlbumArt = (ImageButton) findViewById(R.id.albumArt);
         mNowPlaying = (TextView) findViewById(R.id.musicNowPlaying);
         mNowPlaying.setSelected(true); // set focus to TextView to allow scrolling
         mNowPlaying.setTextColor(0xffffffff);
@@ -352,6 +368,16 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             public void onClick(View v) {
                 mCallback.pokeWakelock();
                 sendMediaButtonEvent(KeyEvent.KEYCODE_MEDIA_NEXT);
+            }
+        });
+
+        mAlbumArt.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent musicIntent = new Intent(Intent.ACTION_VIEW);
+                musicIntent.setClassName("com.android.music","com.android.music.MediaPlaybackActivity");
+                musicIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                getContext().startActivity(musicIntent);
+                mCallback.goToUnlockScreen();
             }
         });
 
@@ -700,12 +726,20 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         }
     }
     private void refreshPlayingTitle() {
-        if (am.isMusicActive()) {
-            mNowPlaying.setText(KeyguardViewMediator.NowPlaying());
+        String nowPlaying = KeyguardViewMediator.NowPlaying();
+        if (am.isMusicActive() && !nowPlaying.equals("") && mLockMusicControls && mNowPlayingScreen) {
+            mNowPlaying.setText(nowPlaying);
             mNowPlaying.setVisibility(View.VISIBLE);
+            // Set album art
+            Uri uri = getArtworkUri(getContext(), KeyguardViewMediator.SongId(), KeyguardViewMediator.AlbumId());
+            if (uri != null) {
+                mAlbumArt.setImageURI(uri);
+                mAlbumArt.setVisibility(View.VISIBLE);
+            }
         } else {
             mNowPlaying.setVisibility(View.GONE);
-            mNowPlaying.setText("");
+            mAlbumArt.setVisibility(View.GONE);
+            mNowPlaying.setText(nowPlaying);
         }
     }
 
@@ -1116,5 +1150,65 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         } else {
             mCallback.pokeWakelock(); // reset timeout - give them another chance to gesture
         }
+    }
+// shameless kang of music widgets
+    public static Uri getArtworkUri(Context context, long song_id, long album_id) {
+
+        if (album_id < 0) {
+            // This is something that is not in the database, so get the album art directly
+            // from the file.
+            if (song_id >= 0) {
+                return getArtworkUriFromFile(context, song_id, -1);
+            }
+            return null;
+        }
+
+        ContentResolver res = context.getContentResolver();
+        Uri uri = ContentUris.withAppendedId(sArtworkUri, album_id);
+        if (uri != null) {
+            InputStream in = null;
+            try {
+                in = res.openInputStream(uri);
+                return uri;
+            } catch (FileNotFoundException ex) {
+                // The album art thumbnail does not actually exist. Maybe the user deleted it, or
+                // maybe it never existed to begin with.
+                return getArtworkUriFromFile(context, song_id, album_id);
+            } finally {
+                try {
+                    if (in != null) {
+                        in.close();
+                    }
+                } catch (IOException ex) {
+                }
+            }
+        }
+        return null;
+    }
+
+    private static Uri getArtworkUriFromFile(Context context, long songid, long albumid) {
+
+        if (albumid < 0 && songid < 0) {
+            return null;
+        }
+
+        try {
+            if (albumid < 0) {
+                Uri uri = Uri.parse("content://media/external/audio/media/" + songid + "/albumart");
+                ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "r");
+                if (pfd != null) {
+                    return uri;
+                }
+            } else {
+                Uri uri = ContentUris.withAppendedId(sArtworkUri, albumid);
+                ParcelFileDescriptor pfd = context.getContentResolver().openFileDescriptor(uri, "r");
+                if (pfd != null) {
+                    return uri;
+                }
+            }
+        } catch (FileNotFoundException ex) {
+            //
+        }
+        return null;
     }
 }
