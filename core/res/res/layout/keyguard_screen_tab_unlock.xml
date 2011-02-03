@@ -160,6 +160,20 @@
             android:drawablePadding="4dip"
             />
 
+        <!-- album art -->
+        <ImageButton android:id="@+id/albumArt"
+            android:layout_width="125dip"
+            android:layout_height="125dip"
+            android:layout_below="@+id/musicNowPlaying"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="45dip"
+            android:adjustViewBounds="true"
+            android:background="@color/transparent"
+            android:scaleType="fitCenter"
+            android:padding = "3px"
+            android:visibility="gone"
+            />
+
         <com.android.internal.widget.SlidingTab
             android:id="@+id/tab_selector2"
             android:orientation="horizontal"
