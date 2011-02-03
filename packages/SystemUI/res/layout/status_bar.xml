@@ -58,29 +58,29 @@
             android:gravity="center_vertical|left"
             />
 
-		<!-- The following are button layouts for tablet style statusbar buttons
-	 		Visibility is handled in config.xml by setting config_statusbar_buttons = "true"
-	 		Size of buttons is set at stock statusbar size of 25dip realistically this may 
-			be too small for tablets, but it can easily be changed in device overlay along
-			with the size of the statusbar in dimens.xml.  -->
-	   		<ImageButton android:id="@+id/status_home"
-				android:layout_width="25dip"
-            	android:layout_height="match_parent"
-            	android:background="@drawable/ic_statusbar_home"
-				android:visibility="gone"/>
+        <!-- The following are button layouts for tablet style statusbar buttons
+             Visibility is handled in config.xml by setting config_statusbar_buttons = "true"
+             Size of buttons is set at stock statusbar size of 25dip realistically this may 
+             be too small for tablets, but it can easily be changed in device overlay along
+             with the size of the statusbar in dimens.xml.  -->
+        <ImageButton android:id="@+id/status_home"
+            android:layout_width="25dip"
+            android:layout_height="match_parent"
+            android:background="@drawable/ic_statusbar_home"
+            android:visibility="gone"/>
 
-   			<ImageButton android:id="@+id/status_menu"
-            	android:layout_width="25dip"
-       	    	android:layout_height="match_parent"
-  	    		android:background="@drawable/ic_statusbar_menu"
-				android:visibility="gone"/> 
+        <ImageButton android:id="@+id/status_menu"
+            android:layout_width="25dip"
+            android:layout_height="match_parent"
+            android:background="@drawable/ic_statusbar_menu"
+            android:visibility="gone"/> 
 
-			<ImageButton android:id="@+id/status_back"
-           		android:layout_width="25dip"
-            	android:layout_height="match_parent"
-            	android:background="@drawable/ic_statusbar_back"
-				android:paddingRight="6dip"
-				android:visibility="gone"/>
+        <ImageButton android:id="@+id/status_back"
+            android:layout_width="25dip"
+            android:layout_height="match_parent"
+            android:background="@drawable/ic_statusbar_back"
+            android:paddingRight="6dip"
+            android:visibility="gone"/>
     
     </LinearLayout>
         
