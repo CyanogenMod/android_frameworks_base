@@ -919,4 +919,5 @@
     <plurals name="phone_goggles_countdown">
         <item quantity="one">%d сек. осталось</item>
         <item quantity="other">%d сек. осталось</item>
+   </plurals>
 </resources>
