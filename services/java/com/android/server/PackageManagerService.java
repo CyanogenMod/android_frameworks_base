@@ -249,8 +249,6 @@ class PackageManagerService extends IPackageManager.Stub {
     final File mAppInstallDir;
     final File mDalvikCacheDir;
 
-    final File mThemeResCacheDir;
-
     // Directory containing the private parts (e.g. code and non-resource assets) of forward-locked
     // apps.
     final File mDrmAppPrivateInstallDir;
@@ -835,7 +833,6 @@ class PackageManagerService extends IPackageManager.Stub {
 
             mFrameworkDir = new File(Environment.getRootDirectory(), "framework");
             mDalvikCacheDir = new File(dataDir, "dalvik-cache");
-            mThemeResCacheDir = new File(dataDir, "res-cache");
 
             if (mInstaller != null) {
                 boolean didDexOpt = false;
