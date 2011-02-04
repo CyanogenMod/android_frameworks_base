@@ -17,7 +17,14 @@
 ** limitations under the License.
 */
 -->
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- Defines the shutdown options shown in the reboot dialog. -->
+    <array name="shutdown_reboot_options">
+        <item>Käynnistä uudelleen</item>
+        <item>Recovery</item>
+        <item>Bootloader</item>
+    </array>
 
     <!-- Do not translate. -->
     <integer-array name="maps_starting_lat_lng">

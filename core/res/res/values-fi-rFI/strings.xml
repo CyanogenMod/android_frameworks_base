@@ -1,0 +1,2361 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Suffix added to a number to signify size in bytes. -->
+    <string name="byteShort">B</string>
+    <!-- Suffix added to a number to signify size in kilobytes. -->
+    <string name="kilobyteShort">KB</string>
+    <!-- Suffix added to a number to signify size in megabytes. -->
+    <string name="megabyteShort">MB</string>
+    <!-- Suffix added to a number to signify size in gigabytes. -->
+    <string name="gigabyteShort">GB</string>
+    <!-- Suffix added to a number to signify size in terabytes. -->
+    <string name="terabyteShort">TB</string>
+    <!-- Suffix added to a number to signify size in petabytes. -->
+    <string name="petabyteShort">PB</string>
+    <!-- Format string used to add a suffix like "KB" or "MB" to a number
+         to display a size in kilobytes, megabytes, or other size units.
+         Some languages (like French) will want to add a space between
+         the placeholders. -->
+    <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+
+    <!-- Used in Contacts for a field that has no label and in Note Pad
+         for a note with no name. -->
+    <string name="untitled">&lt;nimetön&gt;</string>
+
+    <!-- Used to replace a range of characters in text that is too wide
+         for the space allocated to it. -->
+    <string name="ellipsis">\u2026</string>
+
+    <!-- How to display the lack of a phone number -->
+    <string name="emptyPhoneNumber">(Ei puhelinnumeroa)</string>
+
+    <!-- How to display the lack of a name -->
+    <string name="unknownName">(Tuntematon)</string>
+
+    <!-- What the UI should display for "voice mail" unless overridden by the SIM-->
+    <string name="defaultVoiceMailAlphaTag">Vastaaja</string>
+
+    <!-- What the UI should display for "Msisdn" unless overridden by the SIM-->
+    <string name="defaultMsisdnAlphaTag">MSISDN1</string>
+
+    <!-- For GsmMmiCode.java --> <skip />
+    <!-- Displayed when the user dialed an MMI code whose function
+         could not be performed. This will be displayed in a toast. -->
+    <string name="mmiError">Yhteysongelma tai väärä MMI-koodi.</string>
+    <!-- Displayed when the user dialed an MMI code whose function
+         could not be performed because FDN is enabled. This will be displayed in a toast. -->
+    <string name="mmiFdnError">Toiminto on rajoitettu vain sallittuihin numeroihin.</string>
+
+    <!-- Displayed when a phone feature such as call barring was activated. -->
+    <string name="serviceEnabled">Palvelu päällä.</string>
+    <!-- Displayed in front of the list of a set of service classes
+         (voice, data, fax, etc.) that were enabled. -->
+    <string name="serviceEnabledFor">Palvelu päällä:</string>
+    <!-- Displayed when a phone feature such as call forwarding was deactivated. -->
+    <string name="serviceDisabled">Palvelu pois päältä.</string>
+    <!-- Displayed when a phone property such as a SIM password was registered. -->
+    <string name="serviceRegistered">Rekisteröinti onnistui.</string>
+    <!-- Displayed when a phone property such as a SIM password was erased. -->
+    <string name="serviceErased">Tyhjennys onnistui.</string>
+    <!-- Displayed when a SIM password was entered incorrectly. -->
+    <string name="passwordIncorrect">Väärä salasana.</string>
+    <!-- Displayed when a phone feature triggered by an MMI code is complete. -->
+    <string name="mmiComplete">MMI valmis.</string>
+    <!-- Displayed when a SIM PIN password is entered incorrectly. -->
+    <string name="badPin">Vanha PIN-koodi väärin.</string>
+    <!-- Displayed when a SIM PUK password is entered incorrectly. -->
+    <string name="badPuk">PUK-koodi väärin.</string>
+    <!-- Displayed when SIM PIN passwords are entered inconsistently. -->
+    <string name="mismatchPin">PIN-koodit eivät täsmää.</string>
+    <!-- Displayed when a SIM PIN password is too long or too short. -->
+    <string name="invalidPin">Kirjoita PIN-koodi, joka on 4-8 merkkiä pitkä.</string>
+    <!-- Displayed to prompt the user to type the PUK password to unlock
+         the SIM card. -->
+    <string name="needPuk">SIM-korttisi on PUK-lukittu. Syötä PUK-koodi.</string>
+    <string name="needPuk2">Syötä PUK2-koodi.</string>
+
+    <!-- Displayed as the title for a success/failure report enabling/disabling caller ID. -->
+    <string name="ClipMmi">Saapuvan soittajan ID</string>
+    <!-- Displayed as the title for a success/failure report enabling/disabling caller ID. -->
+    <string name="ClirMmi">Lähtevän soittajan ID</string>
+    <!-- Displayed as the title for a success/failure report enabling/disabling call forwarding. -->
+    <string name="CfMmi">Soitonsiirto</string>
+    <!-- Displayed as the title for a success/failure report enabling/disabling call waiting. -->
+    <string name="CwMmi">Puhelu pidossa</string>
+    <!-- Displayed as the title for a success/failure report enabling/disabling call barring. -->
+    <string name="BaMmi">Puheluesto</string>
+    <!-- Displayed as the title for a success/failure report changing the SIM password. -->
+    <string name="PwdMmi">Salasanan vaihto</string>
+    <!-- Displayed as the title for a success/failure report changing the SIM PIN. -->
+    <string name="PinMmi">PIN change</string>
+    <string name="CnipMmi">Calling number present</string>
+    <string name="CnirMmi">Calling number restricted</string>
+    <string name="ThreeWCMmi">Three way calling</string>
+    <string name="RuacMmi">Rejection of undesired annoying calls</string>
+    <string name="CndMmi">Calling number delivery</string>
+    <string name="DndMmi">Do not disturb</string>
+
+    <!-- Displayed to confirm to the user that caller ID will be restricted on the next call as usual. -->
+    <string name="CLIRDefaultOnNextCallOn">Caller ID defaults to restricted. Next call: Restricted</string>
+    <!-- Displayed to confirm to the user that caller ID will be not restricted on the next call even though it usually is. -->
+    <string name="CLIRDefaultOnNextCallOff">Caller ID defaults to restricted. Next call: Not restricted</string>
+    <!-- Displayed to confirm to the user that caller ID will not be restricted on the next call but usually is. -->
+    <string name="CLIRDefaultOffNextCallOn">Caller ID defaults to not restricted. Next call: Restricted</string>
+    <!-- Displayed to confirm to the user that caller ID will not be restricted on the next call or in general. -->
+    <string name="CLIRDefaultOffNextCallOff">Caller ID defaults to not restricted. Next call: Not restricted</string>
+
+
+    <!-- Displayed to tell the user that caller ID is not provisioned for their SIM. -->
+    <string name="serviceNotProvisioned">Service not provisioned.</string>
+    <!-- Displayed to tell the user that they cannot change the caller ID setting. -->
+    <string name="CLIRPermanent">The caller ID setting cannot be changed.</string>
+
+    <!-- Notification title to tell the user that restricted state is changed by access control. -->
+    <string name="RestrictedChangedTitle">Restricted access changed</string>
+    <!-- Displayed to tell the user that data service is blocked by access control. -->
+    <string name="RestrictedOnData">Data-palvelu estetty.</string>
+    <!-- Displayed to tell the user that emergency service is blocked by access control. -->
+    <string name="RestrictedOnEmergency">Hätäpuhelu estetty.</string>
+    <!-- Displayed to tell the user that normal service is blocked by access control. -->
+    <string name="RestrictedOnNormal">Vastaaja estetty.</string>
+    <!-- Displayed to tell the user that all emergency and normal voice services are blocked by access control. -->
+    <string name="RestrictedOnAllVoice">Kaikki äänipalvelut estetty.</string>
+    <!-- Displayed to tell the user that sms service is blocked by access control. -->
+    <string name="RestrictedOnSms">SMS-palvelu estetty.</string>
+    <!-- Displayed to tell the user that voice/data service is blocked by access control. -->
+    <string name="RestrictedOnVoiceData">Ääni- ja datapalvelut estetty.</string>
+    <!-- Displayed to tell the user that voice and sms service are blocked by access control. -->
+    <string name="RestrictedOnVoiceSms">Ääni- ja SMS-palvelut estetty.</string>
+    <!-- Displayed to tell the user that all service is blocked by access control. -->
+    <string name="RestrictedOnAll">Kaikki ääni-, data- ja SMS-palvelut estetty.</string>
+
+    <!-- Mappings between TS 27.007 +CFCC/+CLCK "service classes" and human-readable strings--> <skip />
+    <!-- Example: Service was enabled for: Voice, Data -->
+    <string name="serviceClassVoice">Ääni</string>
+    <!-- Example: Service was enabled for: Voice, Data -->
+    <string name="serviceClassData">Data</string>
+    <!-- Example: Service was enabled for: Voice, FAX -->
+    <string name="serviceClassFAX">Faksi</string>
+    <!-- Example: Service was enabled for: Voice, SMS -->
+    <string name="serviceClassSMS">SMS</string>
+    <!-- Meaning: asynchronous data.  Example: Service was enabled for: Voice, Async -->
+    <string name="serviceClassDataAsync">Async</string>
+    <!-- Meaning: synchronous data.  Example: Service was enabled for: Voice, Async -->
+    <string name="serviceClassDataSync">Sync</string>
+    <!-- Meaning: packet data.  Example: Service was enabled for: Voice, Packet -->
+    <string name="serviceClassPacket">Paketti</string>
+    <!-- Meaning: unknown.  Example: Service was enabled for: Voice, PAD -->
+    <string name="serviceClassPAD">PAD</string>
+
+    <!-- CDMA Roaming Indicator Strings (non ERI)--> <skip />
+    <!-- Default roaming indicator text -->
+    <string name="roamingText0">Roaming-ilmoitus päällä</string>
+    <string name="roamingText1">Roaming-ilmoitus pois päältä</string>
+    <string name="roamingText2">Roaming-ilmoitus vilkkuu</string>
+    <string name="roamingText3">Out of Neighborhood</string>
+    <string name="roamingText4">Out of Building</string>
+    <string name="roamingText5">Roaming - Preferred System</string>
+    <string name="roamingText6">Roaming - Available System</string>
+    <string name="roamingText7">Roaming - Alliance Partner</string>
+    <string name="roamingText8">Roaming - Premium Partner</string>
+    <string name="roamingText9">Roaming - Full Service Functionality</string>
+    <string name="roamingText10">Roaming - Partial Service Functionality</string>
+    <string name="roamingText11">Roaming Banner On</string>
+    <string name="roamingText12">Roaming Banner Off</string>
+    <string name="roamingTextSearching">Searching for Service</string>
+
+
+    <!--
+        {0} is one of "bearerServiceCode*"
+        {1} is dialing number
+        {2} is time in seconds
+
+        cfTemplateRegistered and cfTemplateRegisteredTime mean that a phone number
+        has been set but forwarding is not on.
+    --> <skip />
+    <!-- Displayed when the call forwarding query was not able to be forwarded. -->
+    <string name="cfTemplateNotForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: Not forwarded</string>
+    <!-- Displayed when the call forwarding query was forwarded. -->
+    <string name="cfTemplateForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g></string>
+    <!-- Displayed when the call forwarding query will be forwarded after some time. -->
+    <string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> after <xliff:g id="time_delay">{2}</xliff:g> seconds</string>
+    <!-- Displayed when the call forwarding query was set but forwarding is not enabled. -->
+    <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>: Not forwarded</string>
+    <!-- Displayed when the call forwarding query was set but forwarding is not enabled. -->
+    <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: Not forwarded</string>
+
+    <!-- android.net.http Error strings --> <skip />
+    <!-- Displayed when a feature code (non-phone number) is dialed and completes successfully. -->
+    <string name="fcComplete">Feature code complete.</string>
+    <!-- Displayed when a feature code (non-phone number) is dialed and completes unsuccessfully. -->
+    <string name="fcError">Connection problem or invalid feature code.</string>
+    <!-- android.net.http Error strings --> <skip />
+    <!-- Displayed when a web request was successful. -->
+    <string name="httpErrorOk">OK</string>
+    <!-- Displayed when a web request failed because we don't know the exact reason. -->
+    <string name="httpError">The Web page contains an error.</string>
+    <!-- Displayed when a web request failed because the URL could not be found. -->
+    <string name="httpErrorLookup">The URL could not be found.</string>
+    <!-- Displayed when a web request failed because the site's authentication scheme is not supported by us. -->
+    <string name="httpErrorUnsupportedAuthScheme">The site authentication scheme is not supported.</string>
+    <!-- Displayed when a web request failed because the authentication failed. -->
+    <string name="httpErrorAuth">Authentication was unsuccessful.</string>
+    <!-- Displayed when a web request failed because the authentication with the proxy failed. -->
+    <string name="httpErrorProxyAuth">Authentication via the proxy server was unsuccessful.</string>
+    <!-- Displayed when a web request failed because there was a connection error. -->
+    <string name="httpErrorConnect">The connection to the server was unsuccessful.</string>
+    <!-- Displayed when a web request failed because there was an input or output error. -->
+    <string name="httpErrorIO">The server failed to communicate. Try again later.</string>
+    <!-- Displayed when a web request failed because the request timed out -->
+    <string name="httpErrorTimeout">The connection to the server timed out.</string>
+    <!-- Displayed when a web request failed because the site tried to redirect us one too many times -->
+    <string name="httpErrorRedirectLoop">The page contains too many server redirects.</string>
+    <!-- Displayed when a web request failed because the protocol of the server is not supported. -->
+    <string name="httpErrorUnsupportedScheme">The protocol is not supported.</string>
+    <!-- Displayed when a web request failed because the a secure connection couldn't be made to the server.-->
+    <string name="httpErrorFailedSslHandshake">A secure connection could not be established.</string>
+    <!-- Displayed when a web request failed because the URL isn't in a valid form. -->
+    <string name="httpErrorBadUrl">The page could not be opened because the URL is invalid.</string>
+    <!-- Displayed when a request failed because we failed to open the file. -->
+    <string name="httpErrorFile">The file could not be accessed.</string>
+    <!-- Displayed when a request failed because the file wasn't found. -->
+    <string name="httpErrorFileNotFound">The requested file was not found.</string>
+    <!-- Displayed when a request failed because there are too many requests right now. -->
+    <string name="httpErrorTooManyRequests">Too many requests are being processed. Try again later.</string>
+
+    <!-- Account notifications --> <skip />
+    <!-- A notification is shown when the AccountManager is unable to
+    supply an auth token without prompting the user to re-enter the
+    password.  This is the text that will scroll through the
+    notification bar (will be seen by the user as he uses another application). -->
+    <string name="notification_title">Sign-in error for <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
+
+    <!-- Sync notifications --> <skip />
+    <!-- A notification is shown when there is a sync error.  This is the text that will scroll through the notification bar (will be seen by the user as he uses another application). -->
+    <string name="contentServiceSync">Sync</string>
+    <!-- A notification is shown when there is a sync error.  This is the title of the notification.  It will be seen in the pull-down notification tray. -->
+    <string name="contentServiceSyncNotificationTitle">Sync</string>
+    <!-- A notification is shown when there is a sync error.  This is the message of the notification.  It describes the error, in this case is there were too many deletes. The argument is the type of content, for example Gmail or Calendar. It will be seen in the pull-down notification tray. -->
+    <string name="contentServiceTooManyDeletesNotificationDesc">Too many <xliff:g id="content_type">%s</xliff:g> deletes.</string>
+
+    <!-- If MMS discovers there isn't much space left on the device, it will show a toast with this message. -->
+    <string name="low_memory">Phone storage is full! Delete some files to free space.</string>
+
+
+    <!-- Display name for any time a piece of data refers to the owner of the phone. For example, this could be used in place of the phone's phone number. -->
+    <string name="me">Minä</string>
+
+    <!-- Power Dialog --> <skip />
+    <!-- Title for the Phone Options dialog to lock the screen, turn off the phone etc. -->
+    <string name="power_dialog">Puhelin-asetukset</string>
+    <!-- Button to turn on silent mode, within the Phone Options dialog -->
+    <string name="silent_mode">Äänetön</string>
+    <!-- Button to turn on the radio, within the Phone Options dialog -->
+    <string name="turn_on_radio">Turn on wireless</string>
+    <!-- Button to turn off the radio, within the Phone Options dialog -->
+    <string name="turn_off_radio">Turn off wireless</string>
+    <!-- Button to lock the screen, within the Phone Options dialog -->
+    <string name="screen_lock">Näyttölukitus</string>
+    <!-- Button to turn off the phone, within the Phone Options dialog -->
+    <string name="power_off">Virta pois</string>
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system">Käynnistä uudelleen</string>
+
+    <!-- Shutdown Progress Dialog. This is shown if the user chooses to power off the phone. -->
+    <string name="shutdown_progress">Sammutetaan\u2026</string>
+
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">Käynnistetään uudelleen\u2026</string>
+
+    <!-- Shutdown Confirmation Dialog.  When the user chooses to power off the phone, there will be a confirmation dialog.  This is the message. -->
+    <string name="shutdown_confirm">Puhelin sammutetaan.</string>
+
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
+    <string name="reboot_confirm">Puhelin käynnistetään uudestaan.</string>
+
+    <!-- Recent Tasks dialog: title -->
+    <string name="recent_tasks_title">Viimeiset</string>
+    <!-- Recent Tasks dialog: message when there are no recent applications -->
+    <string name="no_recent_tasks">Ei viimeisiä sovelluksia.</string>
+
+    <!-- Title of the Global Actions Dialog -->
+    <string name="global_actions">Puhelin-asetukset</string>
+
+    <!-- label for item that locks the phone in the phone options dialog -->
+    <string name="global_action_lock">Näyttölukitus</string>
+
+    <!-- label for item that turns off power in phone options dialog -->
+    <string name="global_action_power_off">Virta pois</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">Käynnistä uudelleen</string>
+
+    <!-- label for item that enables silent mode in phone options dialog -->
+    <string name="global_action_toggle_silent_mode">Äänetön</string>
+
+    <!-- status message in phone options dialog for when silent mode is enabled -->
+    <string name="global_action_silent_mode_on_status">Äänet ovat pois päältä</string>
+
+    <!-- status message in phone options dialog for when silent mode is disabled -->
+    <string name="global_action_silent_mode_off_status">Äänet ovat päällä</string>
+
+    <!-- label for item that toggles airplane mode -->
+    <string name="global_actions_toggle_airplane_mode">Lentokone-tila</string>
+
+    <!-- status message in phone options dialog for when airplane mode is on -->
+    <string name="global_actions_airplane_mode_on_status">Lentokone-tila on päällä</string>
+
+    <!-- status message in phone options dialog for when airplane mode is off -->
+    <string name="global_actions_airplane_mode_off_status">Lentokone-tila on pois päältä</string>
+
+    <!-- Displayed to the user to tell them that they have started up the phone in "safe mode" -->
+    <string name="safeMode">Turvallisuus-tila</string>
+
+    <!-- Label for the Android system components when they are shown to the user. -->
+    <string name="android_system_label">Android-järjestelmä</string>
+
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_costMoney">Palvelut, jotka ovat maksullisia</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_costMoney">Salli sovelluksen käyttää palveluja, jotka ovat maksullisia.</string>
+
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_messages">Viestit</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_messages">Lukea ja kirjoittaa SMS, sähköposti ja muita viestejäsi.</string>
+
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_personalInfo">Henkilökohtaiset tiedot</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_personalInfo">Pääsy henkilöiden yhteystietoihin ja kalenteriin.</string>
+
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_location">Sijainti</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_location">Fyysisen sijainnin tarkkailu</string>
+
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_network">Verkko</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_network">Salli pääsy erilaisiin verkkoihin.</string>
+
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_accounts">Tilit</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_accounts">Pääsy eri tileihin.</string>
+
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_hardwareControls">Laitteisto</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_hardwareControls">Pääsy laitteistoon, esim. kamera.</string>
+
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_phoneCalls">Puhelut</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_phoneCalls">Puheluiden tallennus, prosessointi ja tarkkailu.</string>
+
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_systemTools">Järjestelmätyökalut</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_systemTools">Alemman tason pääsy järjestelmään ja sen hallintaan.</string>
+
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_developmentTools">Kehitystyökalut</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_developmentTools">Sovelluskehittäjien tarvitsemia ominaisuuksia.</string>
+
+    <!-- Title of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgrouplab_storage">Muisti</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this.   [CHAR LIMIT=30] -->
+    <string name="permgroupdesc_storage" product="nosdcard">Pääsy USB-levyasemaan.</string>
+    <!-- Description of a category of application permissions, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permgroupdesc_storage" product="default">Pääsy muistikorttiin.</string>
+
+    <!--  Permissions -->
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_statusBar">disable or modify status bar</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_statusBar">Allows application to disable
+        the status bar or add and remove system icons.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_statusBarService">status bar</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_statusBarService">Allows the application to be the status bar.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_expandStatusBar">expand/collapse status bar</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_expandStatusBar">Allows application to
+        expand or collapse the status bar.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_processOutgoingCalls">intercept outgoing calls</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_processOutgoingCalls">Allows application to
+        process outgoing calls and change the number to be dialed.  Malicious
+        applications may monitor, redirect, or prevent outgoing calls.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_receiveSms">receive SMS</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveSms">Allows application to receive
+      and process SMS messages. Malicious applications may monitor
+      your messages or delete them without showing them to you.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_receiveMms">receive MMS</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveMms">Allows application to receive
+      and process MMS messages. Malicious applications may monitor
+      your messages or delete them without showing them to you.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_sendSms">send SMS messages</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_sendSms">Allows application to send SMS
+      messages. Malicious applications may cost you money by sending
+      messages without your confirmation.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_readSms">read SMS or MMS</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_readSms">Allows application to read
+      SMS messages stored on your phone or SIM card. Malicious applications
+      may read your confidential messages.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_writeSms">edit SMS or MMS</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_writeSms">Allows application to write
+      to SMS messages stored on your phone or SIM card. Malicious applications
+      may delete your messages.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_receiveWapPush">receive WAP</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveWapPush">Allows application to receive
+      and process WAP messages. Malicious applications may monitor
+      your messages or delete them without showing them to you.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_getTasks">retrieve running applications</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_getTasks">Allows application to retrieve
+        information about currently and recently running tasks. May allow
+        malicious applications to discover private information about other applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_reorderTasks">reorder running applications</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_reorderTasks">Allows an application to move
+        tasks to the foreground and background. Malicious applications can force
+        themselves to the front without your control.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_setDebugApp">enable application debugging</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_setDebugApp">Allows an application to turn
+        on debugging for another application. Malicious applications can use this
+        to kill other applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_changeConfiguration">change your UI settings</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_changeConfiguration">Allows an application to
+        change the current configuration, such as the locale or overall font
+        size.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_enableCarMode">enable car mode</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_enableCarMode">Allows an application to
+        enable the car mode.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_killBackgroundProcesses">kill background processes</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_killBackgroundProcesses">Allows an application to
+        kill background processes of other applications, even if memory
+        isn\'t low.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_forceStopPackages">force stop other applications</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_forceStopPackages">Allows an application to
+        forcibly stop other applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_forceBack">force application to close</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_forceBack">Allows an application to force any
+        activity that is in the foreground to close and go back.
+        Should never be needed for normal applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_dump">retrieve system internal state</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_dump">Allows application to retrieve
+        internal state of the system. Malicious applications may retrieve
+        a wide variety of private and secure information that they should
+        never normally need.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_shutdown">partial shutdown</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_shutdown">Puts the activity manager into a shutdown
+        state.  Does not perform a complete shutdown.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_stopAppSwitches">prevent app switches</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_stopAppSwitches">Prevents the user from switching to
+        another application.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_runSetActivityWatcher">monitor and control all application launching</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_runSetActivityWatcher">Allows an application to
+        monitor and control how the system launches activities.
+        Malicious applications may completely compromise the system. This
+        permission is only needed for development, never for normal
+        phone usage.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_broadcastPackageRemoved">send package removed broadcast</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_broadcastPackageRemoved">Allows an application to
+        broadcast a notification that an application package has been removed.
+        Malicious applications may use this to kill any other running
+        application.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_broadcastSmsReceived">send SMS-received broadcast</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_broadcastSmsReceived">Allows an application to
+        broadcast a notification that an SMS message has been received.
+        Malicious applications may use this to forge incoming SMS messages.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_broadcastWapPush">send WAP-PUSH-received broadcast</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_broadcastWapPush">Allows an application to
+        broadcast a notification that a WAP PUSH message has been received.
+        Malicious applications may use this to forge MMS message receipt or to
+        silently replace the content of any web page with malicious variants.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_setProcessLimit">limit number of running processes</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_setProcessLimit">Allows an application
+        to control the maximum number of processes that will run. Never
+        needed for normal applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_setAlwaysFinish">make all background applications close</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_setAlwaysFinish">Allows an application
+        to control whether activities are always finished as soon as they
+        go to the background. Never needed for normal applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_batteryStats">modify battery statistics</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_batteryStats">Allows the modification of
+        collected battery statistics. Not for use by normal applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_backup">control system backup and restore</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_backup">Allows the application to control the system\'s backup and restore mechanism.  Not for use by normal applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_internalSystemWindow">display unauthorized windows</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_internalSystemWindow">Allows the creation of
+        windows that are intended to be used by the internal system
+        user interface. Not for use by normal applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_systemAlertWindow">display system-level alerts</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_systemAlertWindow">Allows an application to
+        show system alert windows. Malicious applications can take over the
+        entire screen of the phone.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_setAnimationScale">modify global animation speed</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_setAnimationScale">Allows an application to change
+        the global animation speed (faster or slower animations) at any time.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_manageAppTokens">manage application tokens</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_manageAppTokens">Allows applications to
+        create and manage their own tokens, bypassing their normal
+        Z-ordering. Should never be needed for normal applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_injectEvents">press keys and control buttons</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_injectEvents">Allows an application to deliver
+        its own input events (key presses, etc.) to other applications. Malicious
+        applications can use this to take over the phone.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_readInputState">record what you type and actions you take</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_readInputState">Allows applications to watch the
+        keys you press even when interacting with another application (such
+        as entering a password). Should never be needed for normal applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindInputMethod">bind to an input method</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindInputMethod">Allows the holder to bind to the top-level
+        interface of an input method. Should never be needed for normal applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindWallpaper">bind to a wallpaper</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindWallpaper">Allows the holder to bind to the top-level
+        interface of a wallpaper. Should never be needed for normal applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindDeviceAdmin">interact with a device admin</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindDeviceAdmin">Allows the holder to send intents to
+        a device administrator. Should never be needed for normal applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_setOrientation">change screen orientation</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_setOrientation">Allows an application to change
+        the rotation of the screen at any time. Should never be needed for
+        normal applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_signalPersistentProcesses">send Linux signals to applications</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_signalPersistentProcesses">Allows application to request that the
+        supplied signal be sent to all persistent processes.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_persistentActivity">make application always run</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_persistentActivity">Allows an application to make
+        parts of itself persistent, so the system can\'t use it for other
+        applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_deletePackages">delete applications</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_deletePackages">Allows an application to delete
+        Android packages. Malicious applications can use this to delete important applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_clearAppUserData">delete other applications\' data</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_clearAppUserData">Allows an application to clear user data.</string>
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_deleteCacheFiles">delete other applications\' caches</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_deleteCacheFiles">Allows an application to delete
+        cache files.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_getPackageSize">measure application storage space</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_getPackageSize">Allows an application to retrieve
+        its code, data, and cache sizes</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_installPackages">directly install applications</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_installPackages">Allows an application to install new or updated
+        Android packages. Malicious applications can use this to add new applications with arbitrarily
+        powerful permissions.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_clearAppCache">delete all application cache data</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_clearAppCache">Allows an application to free phone storage
+        by deleting files in application cache directory. Access is very
+        restricted usually to system process.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_movePackage">Move application resources</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_movePackage">Allows an application to move application resources from internal to external media and vice versa.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_readLogs">read sensitive log data</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_readLogs">Allows an application to read from the
+        system\'s various log files.  This allows it to discover general
+        information about what you are doing with the phone, potentially
+        including personal or private information.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_diagnostic">read/write to resources owned by diag</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_diagnostic">Allows an application to read and write to
+    any resource owned by the diag group; for example, files in /dev. This could
+    potentially affect system stability and security. This should be ONLY be used
+    for hardware-specific diagnostics by the manufacturer or operator.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_changeComponentState">enable or disable application components</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_changeComponentState">Allows an application to change whether a
+        component of another application is enabled or not. Malicious applications can use this
+        to disable important phone capabilities. Care must be used with permission, as it is
+        possible to get application components into an unusable, inconsistent, or unstable state.
+    </string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_setPreferredApplications">set preferred applications</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_setPreferredApplications">Allows an application to
+        modify your preferred applications. This can allow malicious applications
+        to silently change the applications that are run, spoofing your
+        existing applications to collect private data from you.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_writeSettings">modify global system settings</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_writeSettings">Allows an application to modify the
+        system\'s settings data. Malicious applications can corrupt your system\'s
+        configuration.</string>
+
+    <string name="permlab_writeSecureSettings">modify secure system settings</string>
+    <string name="permdesc_writeSecureSettings">Allows an application to modify the
+        system\'s secure settings data. Not for use by normal applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_writeGservices">modify the Google services map</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_writeGservices">Allows an application to modify the
+        Google services map.  Not for use by normal applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_receiveBootCompleted">automatically start at boot</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveBootCompleted">Allows an application to
+        have itself started as soon as the system has finished booting.
+        This can make it take longer to start the phone and allow the
+        application to slow down the overall phone by always running.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_broadcastSticky">send sticky broadcast</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_broadcastSticky">Allows an application to send
+        sticky broadcasts, which remain after the broadcast ends.
+        Malicious applications can make the phone slow or unstable by causing it
+        to use too much memory.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_readContacts">read contact data</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_readContacts">Allows an application to read all
+        of the contact (address) data stored on your phone. Malicious applications
+        can use this to send your data to other people.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_writeContacts">write contact data</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_writeContacts">Allows an application to modify the
+        contact (address) data stored on your phone. Malicious
+        applications can use this to erase or modify your contact data.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_readCalendar">read calendar events</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_readCalendar">Allows an application to read all
+        of the calendar events stored on your phone. Malicious applications
+        can use this to send your calendar events to other people.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_writeCalendar">add or modify calendar events and send email to guests</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_writeCalendar">Allows an application to add or change the 
+        events on your calendar, which may send email to guests. Malicious applications can use this 
+        to erase or modify your calendar events or to send email to guests.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accessMockLocation">mock location sources for testing</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_accessMockLocation">Create mock location sources for testing.
+        Malicious applications can use this to override the location and/or status returned by real
+        location sources such as GPS or Network providers.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accessLocationExtraCommands">access extra location provider commands</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_accessLocationExtraCommands">Access extra location provider commands.
+        Malicious applications could use this to interfere with the operation of the GPS
+        or other location sources.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_installLocationProvider">permission to install a location provider</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_installLocationProvider">Create mock location sources for testing.
+        Malicious applications can use this to override the location and/or status returned by real
+        location sources such as GPS or Network providers or monitor and report your location to an external source.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accessFineLocation">fine (GPS) location</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_accessFineLocation">Access fine location sources such as the
+        Global Positioning System on the phone, where available.
+        Malicious applications can use this to determine where you are, and may
+        consume additional battery power.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accessCoarseLocation">coarse (network-based) location</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_accessCoarseLocation">Access coarse location sources such as the cellular
+        network database to determine an approximate phone location, where available. Malicious
+        applications can use this to determine approximately where you are.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accessSurfaceFlinger">access SurfaceFlinger</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_accessSurfaceFlinger">Allows application to use
+        SurfaceFlinger low-level features.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_readFrameBuffer">read frame buffer</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_readFrameBuffer">Allows application to
+        read the content of the frame buffer.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_modifyAudioSettings">change your audio settings</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_modifyAudioSettings">Allows application to modify
+        global audio settings such as volume and routing.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_recordAudio">record audio</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_recordAudio">Allows application to access
+        the audio record path.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_camera">take pictures and videos</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_camera">Allows application to take pictures and videos
+        with the camera. This allows the application at any time to collect
+        images the camera is seeing.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_brick">permanently disable phone</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_brick">Allows the application to
+        disable the entire phone permanently. This is very dangerous.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_reboot">force phone reboot</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_reboot">Allows the application to
+        force the phone to reboot.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_mount_unmount_filesystems">mount and unmount filesystems</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_mount_unmount_filesystems">Allows the application to mount and
+        unmount filesystems for removable storage.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_mount_format_filesystems">format external storage</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_mount_format_filesystems">Allows the application to format removable storage.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_asec_access">get information on internal storage</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_asec_access">Allows the application to get information on internal storage.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_asec_create">create internal storage</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_asec_create">Allows the application to create internal storage.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_asec_destroy">destroy internal storage</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_asec_destroy">Allows the application to destroy internal storage.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_asec_mount_unmount">mount / unmount internal storage</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_asec_mount_unmount">Allows the application to mount / unmount internal storage.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_asec_rename">rename internal storage</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_asec_rename">Allows the application to rename internal storage.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_vibrate">control vibrator</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_vibrate">Allows the application to control
+        the vibrator.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_flashlight">control flashlight</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_flashlight">Allows the application to control
+        the flashlight.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accessUsb">access USB devices</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_accessUsb">Allows the application to access USB devices.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_hardware_test">test hardware</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_hardware_test">Allows the application to control
+        various peripherals for the purpose of hardware testing.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_callPhone">directly call phone numbers</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_callPhone">Allows the application to call
+        phone numbers without your intervention. Malicious applications may
+        cause unexpected calls on your phone bill. Note that this does not
+        allow the application to call emergency numbers.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_callPrivileged">directly call any phone numbers</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_callPrivileged">Allows the application to call
+        any phone number, including emergency numbers, without your intervention.
+        Malicious applications may place unnecessary and illegal calls to emergency
+        services.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_performCdmaProvisioning">directly start CDMA phone setup</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_performCdmaProvisioning">Allows the application to start CDMA provisioning.
+        Malicious applications may unnecessarily start CDMA provisioning</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_locationUpdates">control location update notifications</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_locationUpdates">Allows enabling/disabling location
+        update notifications from the radio.  Not for use by normal applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_checkinProperties">access checkin properties</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_checkinProperties">Allows read/write access to
+        properties uploaded by the checkin service.  Not for use by normal
+        applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bindGadget">choose widgets</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bindGadget">Allows the application to tell the system
+        which widgets can be used by which application.  With this permission,
+        applications can give access to personal data to other applications.
+        Not for use by normal applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_modifyPhoneState">modify phone state</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_modifyPhoneState">Allows the application to control the
+        phone features of the device. An application with this permission can switch
+        networks, turn the phone radio on and off and the like without ever notifying
+        you.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_readPhoneState">read phone state and identity</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_readPhoneState">Allows the application to access the phone
+        features of the device.  An application with this permission can determine the phone
+        number and serial number of this phone, whether a call is active, the number that call
+        is connected to and the like.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_wakeLock">prevent phone from sleeping</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_wakeLock">Allows an application to prevent
+        the phone from going to sleep.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_devicePower">power phone on or off</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_devicePower">Allows the application to turn the
+        phone on or off.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_factoryTest">run in factory test mode</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_factoryTest">Run as a low-level manufacturer test,
+        allowing complete access to the phone hardware. Only available
+        when a phone is running in manufacturer test mode.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_setWallpaper">set wallpaper</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_setWallpaper">Allows the application
+        to set the system wallpaper.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_setWallpaperHints">set wallpaper size hints</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_setWallpaperHints">Allows the application
+        to set the system wallpaper size hints.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_masterClear">reset system to factory defaults</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_masterClear">Allows an application to completely
+        reset the system to its factory settings, erasing all data,
+        configuration, and installed applications.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_setTime">set time</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_setTime">Allows an application to change
+        the phone\'s clock time.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_setTimeZone">set time zone</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_setTimeZone">Allows an application to change
+        the phone\'s time zone.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accountManagerService">act as the AccountManagerService</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_accountManagerService">Allows an
+    application to make calls to AccountAuthenticators</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_getAccounts">discover known accounts</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_getAccounts">Allows an application to get
+      the list of accounts known by the phone.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_authenticateAccounts">act as an account authenticator</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_authenticateAccounts">Allows an application
+    to use the account authenticator capabilities of the
+    AccountManager, including creating accounts and getting and
+    setting their passwords.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_manageAccounts">manage the accounts list</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_manageAccounts">Allows an application to
+    perform operations like adding, and removing accounts and deleting
+    their password.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_useCredentials">use the authentication
+    credentials of an account</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_useCredentials">Allows an application to
+    request authentication tokens.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accessNetworkState">view network state</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_accessNetworkState">Allows an application to view
+      the state of all networks.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_createNetworkSockets">full Internet access</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_createNetworkSockets">Allows an application to
+      create network sockets.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_writeApnSettings">write Access Point Name settings</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_writeApnSettings">Allows an application to modify the APN
+        settings, such as Proxy and Port of any APN.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_changeNetworkState">change network connectivity</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_changeNetworkState">Allows an application to change
+      the state of network connectivity.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_changeTetherState">Change tethered connectivity</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the applicaiton to do this. -->
+    <string name="permdesc_changeTetherState">Allows an application to change
+      the state of tethered network connectivity.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_changeBackgroundDataSetting">change background data usage setting</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_changeBackgroundDataSetting">Allows an application to change
+      the background data usage setting.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accessWifiState">view Wi-Fi state</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_accessWifiState">Allows an application to view
+      the information about the state of Wi-Fi.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_changeWifiState">change Wi-Fi state</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_changeWifiState">Allows an application to connect
+      to and disconnect from Wi-Fi access points, and to make changes to
+      configured Wi-Fi networks.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_changeWifiMulticastState">allow Wi-Fi Multicast
+      reception</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_changeWifiMulticastState">Allows an application to
+      receive packets not directly addressed to your device.  This can be
+      useful when discovering services offered near by.  It uses more power
+      than the non-multicast mode.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bluetoothAdmin">bluetooth administration</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bluetoothAdmin">Allows an application to configure
+      the local Bluetooth phone, and to discover and pair with remote
+      devices.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_bluetooth">create Bluetooth connections</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_bluetooth">Allows an application to view
+      configuration of the local Bluetooth phone, and to make and accept
+      connections with paired devices.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_nfc">control Near Field Communication</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_nfc">Allows an application to communicate
+      with Near Field Communication (NFC) tags, cards, and readers.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_disableKeyguard">disable keylock</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_disableKeyguard">Allows an application to disable
+      the keylock and any associated password security. A legitimate example of
+      this is the phone disabling the keylock when receiving an incoming phone call,
+      then re-enabling the keylock when the call is finished.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_readSyncSettings">read sync settings</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_readSyncSettings">Allows an application to read the sync settings,
+        such as whether sync is enabled for Contacts.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_writeSyncSettings">write sync settings</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_writeSyncSettings">Allows an application to modify the sync
+        settings, such as whether sync is enabled for Contacts.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_readSyncStats">read sync statistics</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_readSyncStats">Allows an application to read the sync stats; e.g., the
+        history of syncs that have occurred.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_subscribedFeedsRead">read subscribed feeds</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_subscribedFeedsRead">Allows an application to get details about the currently synced feeds.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_subscribedFeedsWrite">write subscribed feeds</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_subscribedFeedsWrite">Allows an application to modify
+      your currently synced feeds. This could allow a malicious application to
+      change your synced feeds.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_readDictionary">read user defined dictionary</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_readDictionary">Allows an application to read any private
+      words, names and phrases that the user may have stored in the user dictionary.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_writeDictionary">write to user defined dictionary</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_writeDictionary">Allows an application to write new words into the
+      user dictionary.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. [CHAR LIMIT=30] -->
+    <string name="permlab_sdcardWrite" product="nosdcard">modify/delete USB storage contents</string>
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_sdcardWrite" product="default">modify/delete SD card contents</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. [CHAR LIMIT=30] -->
+    <string name="permdesc_sdcardWrite" product="nosdcard">Allows an application to write to the USB storage.</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_sdcardWrite" product="default">Allows an application to write to the SD card.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_cache_filesystem">access the cache filesystem</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_cache_filesystem">Allows an application to read and write the cache filesystem.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_use_sip">make/receive Internet calls</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_use_sip">Allows an application to use the SIP service to make/receive Internet calls.</string>
+
+    <!-- Policy administration -->
+
+    <!-- Title of policy access to limiting the user's password choices -->
+    <string name="policylab_limitPassword">Aseta salasanasäännöt</string>
+    <!-- Description of policy access to limiting the user's password choices -->
+    <string name="policydesc_limitPassword">Määritä salasanan pituutta ja merkkejä koskevat säännöt</string>
+    <!-- Title of policy access to watch user login attempts -->
+    <string name="policylab_watchLogin">Tarkkaile näyttölukituksen avaamisyrityksiä.</string>
+    <!-- Description of policy access to watch user login attempts -->
+    <string name="policydesc_watchLogin">Tarkkaile väärien salasanojen määrää ja lukitse tai tyhjennä puhelimen muisti, jos liian monta yritystä menee 	väärin</string>
+    <!-- Title of policy access to reset user's password -->
+    <string name="policylab_resetPassword">Vaihda näyttölukituksen salasana.</string>
+    <!-- Description of policy access to reset user's password -->
+    <string name="policydesc_resetPassword">Vaihda näyttölukituksen salasana.</string>
+    <!-- Title of policy access to force lock the device -->
+    <string name="policylab_forceLock">Lukitse näyttö</string>
+    <!-- Description of policy access to limiting the user's password choices -->
+    <string name="policydesc_forceLock">Määritä milloin ja miten näyttö lukittuu</string>
+    <!-- Title of policy access to wipe the user's data -->
+    <string name="policylab_wipeData">Tyhjennä muisti</string>
+    <!-- Description of policy access to wipe the user's data -->
+    <string name="policydesc_wipeData">Tyhjennä puhelimen muisti varoittamatta, suorittamalla tehdasasetusten palautus.</string>
+
+    <!-- The order of these is important, don't reorder without changing Contacts.java --> <skip />
+    <!-- Phone number types from android.provider.Contacts. This could be used when adding a new phone number for a contact, for example. -->
+    <string-array name="phoneTypes">
+        <item>Koti</item>
+        <item>Matkapuhelin</item>
+        <item>Työ</item>
+        <item>Työ faksi</item>
+        <item>Koti faksi</item>
+        <item>Hakulaite</item>
+        <item>Muu</item>
+        <item>Määritä</item>
+    </string-array>
+
+    <!-- The order of these is important, don't reorder without changing Contacts.java --> <skip />
+    <!-- Email address types from android.provider.Contacts. This could be used when adding a new e-mail address for a contact, for example. -->
+    <string-array name="emailAddressTypes">
+        <item>Koti</item>
+        <item>Työ</item>
+        <item>Muu</item>
+        <item>Määritä</item>
+    </string-array>
+
+    <!-- The order of these is important, don't reorder without changing Contacts.java --> <skip />
+    <!-- Postal address types from android.provider.Contacts. This could be used when adding a new address for a contact, for example. -->
+    <string-array name="postalAddressTypes">
+        <item>Koti</item>
+        <item>Työ</item>
+        <item>Muu</item>
+        <item>Määritä</item>
+    </string-array>
+
+    <!-- The order of these is important, don't reorder without changing Contacts.java --> <skip />
+    <!-- Instant Messenger ID types from android.provider.Contacts. This could be used when adding a new IM for a contact, for example. -->
+    <string-array name="imAddressTypes">
+        <item>Koti</item>
+        <item>Työ</item>
+        <item>Muu</item>
+        <item>Määritä</item>
+    </string-array>
+
+    <!-- The order of these is important, don't reorder without changing Contacts.java --> <skip />
+    <!-- Organization types from android.provider.Contacts. This could be used when adding a new organization for a contact, for example. -->
+    <string-array name="organizationTypes">
+        <item>Työ</item>
+        <item>Muu</item>
+        <item>Määritä</item>
+    </string-array>
+
+    <!-- The order of these is important, don't reorder without changing Contacts.java --> <skip />
+    <!-- Instant Message protocols/providers from android.provider.Contacts -->
+    <string-array name="imProtocols">
+        <item>AIM</item>
+        <item>Windows Live</item>
+        <item>Yahoo</item>
+        <item>Skype</item>
+        <item>QQ</item>
+        <item>Google Talk</item>
+        <item>ICQ</item>
+        <item>Jabber</item>
+    </string-array>
+
+    <!-- Custom phone number type -->
+    <string name="phoneTypeCustom">Määritä</string>
+    <!-- Home phone number type -->
+    <string name="phoneTypeHome">Koti</string>
+    <!-- Mobile phone number type -->
+    <string name="phoneTypeMobile">Matkapuhelin</string>
+    <!-- Work phone number type -->
+    <string name="phoneTypeWork">Työ</string>
+    <!-- Work fax phone number type -->
+    <string name="phoneTypeFaxWork">Työ faksi</string>
+    <!-- Home fax phone number type -->
+    <string name="phoneTypeFaxHome">Koti faksi</string>
+    <!-- Pager phone number type -->
+    <string name="phoneTypePager">Hakulaite</string>
+    <!-- Other phone number type -->
+    <string name="phoneTypeOther">Muu</string>
+    <!-- Callback phone number type -->
+    <string name="phoneTypeCallback">Callback</string>
+    <!-- Car phone number type -->
+    <string name="phoneTypeCar">Auto</string>
+    <!-- Company main phone number type -->
+    <string name="phoneTypeCompanyMain">Yritys</string>
+    <!-- ISDN phone number type -->
+    <string name="phoneTypeIsdn">ISDN</string>
+    <!-- Main phone number type -->
+    <string name="phoneTypeMain">Main</string>
+    <!-- Other fax phone number type -->
+    <string name="phoneTypeOtherFax">Muu faksi</string>
+    <!-- Radio phone number type -->
+    <string name="phoneTypeRadio">Radio</string>
+    <!-- Telex phone number type -->
+    <string name="phoneTypeTelex">Teleksi</string>
+    <!-- TTY TDD phone number type -->
+    <string name="phoneTypeTtyTdd">TTY TDD</string>
+    <!-- Work mobile phone number type -->
+    <string name="phoneTypeWorkMobile">Matkapuhelin(työ)</string>
+    <!-- Work pager phone number type -->
+    <string name="phoneTypeWorkPager">Hakulaite(työ)</string>
+    <!-- Assistant phone number type -->
+    <string name="phoneTypeAssistant">Assistentti</string>
+    <!-- MMS phone number type -->
+    <string name="phoneTypeMms">MMS</string>
+
+    <!-- Label for a birthday event -->
+    <string name="eventTypeBirthday">Syntymäppäivä</string>
+    <!-- Label for an anniversary event -->
+    <string name="eventTypeAnniversary">Vuosipäivä</string>
+    <!-- Label for other events -->
+    <string name="eventTypeOther">Tapahtuma</string>
+
+    <!-- Custom email type -->
+    <string name="emailTypeCustom">Määritä</string>
+    <!-- Home email type -->
+    <string name="emailTypeHome">Koti</string>
+    <!-- Work email type -->
+    <string name="emailTypeWork">Työ</string>
+    <!-- Other email type -->
+    <string name="emailTypeOther">Muu</string>
+    <!-- Mobile email type -->
+    <string name="emailTypeMobile">Matkapuhelin</string>
+
+    <!-- Custom postal address type -->
+    <string name="postalTypeCustom">Määritä</string>
+    <!-- Home postal address type -->
+    <string name="postalTypeHome">Koti</string>
+    <!-- Work postal address type -->
+    <string name="postalTypeWork">Työ</string>
+    <!-- Other postal address type -->
+    <string name="postalTypeOther">Muu</string>
+
+    <!-- Custom IM address type -->
+    <string name="imTypeCustom">Määritä</string>
+    <!-- Home IM address type -->
+    <string name="imTypeHome">Koti</string>
+    <!-- Work IM address type -->
+    <string name="imTypeWork">Työ</string>
+    <!-- Other IM address type -->
+    <string name="imTypeOther">Muu</string>
+
+    <!-- Custom IM protocol type -->
+    <string name="imProtocolCustom">Määritä</string>
+    <!-- AIM IM protocol type -->
+    <string name="imProtocolAim">AIM</string>
+    <!-- MSN IM protocol type -->
+    <string name="imProtocolMsn">Windows Live</string>
+    <!-- Yahoo IM protocol type -->
+    <string name="imProtocolYahoo">Yahoo</string>
+    <!-- Skype IM protocol type -->
+    <string name="imProtocolSkype">Skype</string>
+    <!-- QQ IM protocol type -->
+    <string name="imProtocolQq">QQ</string>
+    <!-- Google Talk IM protocol type -->
+    <string name="imProtocolGoogleTalk">Google Talk</string>
+    <!-- ICQ IM protocol type -->
+    <string name="imProtocolIcq">ICQ</string>
+    <!-- Jabber IM protocol type -->
+    <string name="imProtocolJabber">Jabber</string>
+    <!-- NetMeeting IM protocol type -->
+    <string name="imProtocolNetMeeting">NetMeeting</string>
+
+    <!-- Work organization type -->
+    <string name="orgTypeWork">Työ</string>
+    <!-- Other organization type -->
+    <string name="orgTypeOther">Muu</string>
+    <!-- Custom organization type -->
+    <string name="orgTypeCustom">Määritä</string>
+
+    <!-- Custom SIP address type -->
+    <string name="sipAddressTypeCustom">Määritä</string>
+    <!-- Home SIP address type -->
+    <string name="sipAddressTypeHome">Home</string>
+    <!-- Work SIP address type -->
+    <string name="sipAddressTypeWork">Työ</string>
+    <!-- Other SIP address type -->
+    <string name="sipAddressTypeOther">Muu</string>
+
+    <!-- Attbution of a contact status update, when the time of update is unknown -->
+    <string name="contact_status_update_attribution">via <xliff:g id="source" example="Google Talk">%1$s</xliff:g></string>
+
+    <!-- Attbution of a contact status update, when the time of update is known -->
+    <string name="contact_status_update_attribution_with_date"><xliff:g id="date" example="3 hours ago">%1$s</xliff:g> via <xliff:g id="source" example="Google Talk">%2$s</xliff:g></string>
+
+    <!-- Instructions telling the user to enter their SIM PIN to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+    <string name="keyguard_password_enter_pin_code">Syötä PIN-koodi</string>
+
+    <!-- Instructions telling the user to enter their PIN password to unlock the keyguard.
+         Displayed in one line in a large font.  -->
+    <string name="keyguard_password_enter_password_code">Syötä salasana</string>
+
+    <!-- Instructions telling the user that they entered the wrong pin while trying
+         to unlock the keyguard.  Displayed in one line in a large font.  -->
+    <string name="keyguard_password_wrong_pin_code">Väärä PIN-koodi!</string>
+
+    <!-- Instructions telling the user how to unlock the phone. -->
+    <string name="keyguard_label_text">Avataksesi, valitse Menu sitten 0.</string>
+
+    <!-- This can be used in any application wanting to disable the text "Emergency number" -->
+    <string name="emergency_call_dialog_number_for_display">Hätänumero</string>
+
+    <!--
+       *** touch based lock / unlock ***
+                                          --> <skip />
+
+    <!-- On the keyguard screen, it shows the carrier the phone is connected to.  This is displayed if the phone is not connected to a carrier.-->
+    <string name="lockscreen_carrier_default">(Ei palveluntarjoajaa)</string>
+
+    <!-- Shown in the lock screen to tell the user that the screen is locked. -->
+    <string name="lockscreen_screen_locked">Näyttö lukittu.</string>
+
+    <!-- when pattern lock is enabled, tell them about the emergency dial -->
+    <string name="lockscreen_instructions_when_pattern_enabled">Valitse Menu avataksesi tai valitse hätäpuhelu.</string>
+
+    <!-- On the keyguard screen, when pattern lock is disabled, only tell them to press menu to unlock.  This is shown in small font at the bottom. -->
+    <string name="lockscreen_instructions_when_pattern_disabled">Valitse Menu avataksesi.</string>
+
+    <!-- On the unlock pattern screen, shown at the top of the unlock screen to tell the user what to do. Below this text is the place for theu ser to draw the pattern. -->
+    <string name="lockscreen_pattern_instructions">Piirrä kuvio avataksesi</string>
+    <!-- Button at the bottom of the unlock screen to make an emergency call. -->
+    <string name="lockscreen_emergency_call">Hätäpuhelu</string>
+    <!-- Button at the bottom of the unlock screen that lets the user return to a call -->
+    <string name="lockscreen_return_to_call">Palaa puheluun</string>
+    <!-- Shown to confirm that the user entered their lock pattern correctly. -->
+    <string name="lockscreen_pattern_correct">Oikein!</string>
+    <!-- On the unlock pattern screen, shown when the user enters the wrong lock pattern and must try again. -->
+    <string name="lockscreen_pattern_wrong">Yritä uudelleen</string>
+
+    <!-- When the lock screen is showing and the phone plugged in, and the battery
+         is not fully charged, show the current charge %.  -->
+    <string name="lockscreen_plugged_in">Ladataan (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
+    <string name="lockscreen_discharging">Puretaan latausta (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
+    <!-- When the lock screen is showing, the phone is plugged in and the battery is fully
+         charged, say that it is charged. -->
+    <string name="lockscreen_charged">Ladattu.</string>
+    <!-- A short representation of charging information, e.g "34%" -->
+    <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+
+    <!-- When the lock screen is showing and the battery is low, warn user to plug
+         in the phone soon. -->
+    <string name="lockscreen_low_battery">Liitä laturi (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
+
+    <!-- Shown in the lock screen when there is no SIM card. -->
+    <string name="lockscreen_missing_sim_message_short">Ei SIM-korttia.</string>
+    <!-- Shown in the lock screen when there is no SIM card. -->
+    <string name="lockscreen_missing_sim_message">Puhelimessa ei ole SIM-korttia.</string>
+    <!-- Shown in the lock screen to ask the user to insert a SIM card. -->
+    <string name="lockscreen_missing_sim_instructions">Aseta SIM-kortti.</string>
+
+    <!-- Shown in the lock screen when there is emergency calls only mode. -->
+    <string name="emergency_calls_only" msgid="2485604591272668370">Vain hätäpuhelut</string>
+
+    <!-- When the user inserts a sim card from an unsupported network, it becomes network
+         locked -->
+    <string name="lockscreen_network_locked_message">Verkko lukittu</string>
+
+
+    <!-- When the user enters a wrong sim pin too many times, it becomes
+         PUK locked (Pin Unlock Kode) -->
+    <string name="lockscreen_sim_puk_locked_message">SIM-kortti on PUK-lukittu.</string>
+    <!-- Shown in the lock screen when the SIM has become PUK locked and the user must call customer care to unlock it. -->
+    <string name="lockscreen_sim_puk_locked_instructions">Tarkista ohjekirja tai ota yhteyttä asiakastukeen.</string>
+
+    <!-- Shown in the lock screen to tell the user that their SIM is locked and they must unlock it. -->
+    <string name="lockscreen_sim_locked_message">SIM-kortti lukittu.</string>
+
+    <!-- For the unlock screen, When the user enters a sim unlock code, it takes a little while to check
+         whether it is valid, and to unlock the sim if it is valid.  we display a
+         progress dialog in the meantime.  this is the emssage. -->
+    <string name="lockscreen_sim_unlock_progress_dialog_message">Avataan SIM-kortin lukitusta\u2026</string>
+
+    <!-- For the unlock screen, Information message shown in dialog when user has too many failed attempts -->
+    <string name="lockscreen_too_many_failed_attempts_dialog_message">
+        Kuvio mennyt väärin <xliff:g id="number">%d</xliff:g> kertaa.
+        \n\nYritä uudelleen <xliff:g id="number">%d</xliff:g> sekunnin päästä.
+    </string>
+
+    <!-- For the unlock screen, Information message shown in dialog when user is almost at the limit
+         where they will be locked out and may have to enter an alternate username/password to unlock the phone -->
+    <string name="lockscreen_failed_attempts_almost_glogin">
+        Kuvio mennyt väärin <xliff:g id="number">%d</xliff:g> KErtaa.
+       <xliff:g id="number">%d</xliff:g> yrityksen jälkeen,
+       sinua pyydetään avaamaan puhelin käyttäen Google-tunnuksia.\n\n
+       Yritä uudelleen <xliff:g id="number">%d</xliff:g> sekunnin päästä.
+    </string>
+
+    <!-- On the unlock screen, countdown message shown while user is waiting to try again after too many
+         failed attempts -->
+    <string name="lockscreen_too_many_failed_attempts_countdown">Yritä uudelleen <xliff:g id="number">%d</xliff:g> sekunnin päästä.</string>
+
+    <!-- On the unlock screen, message shown on button that appears once it's apparent the user may have forgotten
+         their lock gesture -->
+    <string name="lockscreen_forgot_pattern_button_text">Unohtuiko kuvio?</string>
+
+    <!-- Title of the unlock screen that uses your Google login and password when the user hit
+         the 'forgot pattern' button.-->
+    <string name="lockscreen_glogin_forgot_pattern">Tilin avaaminen</string>
+    <!-- Title of the unlock screen that uses your Google login and password when the user attempted
+         too many patterns and we are forcing them to use their account instead. -->
+    <string name="lockscreen_glogin_too_many_attempts">Liian monta yritystä!</string>
+    <!-- In the unlock screen, message telling the user that they need to use their Google login and password to unlock the phone -->
+    <string name="lockscreen_glogin_instructions">Avataksesi puhelimen, käytä Google-tunnuksia</string>
+    <!-- Hint caption for the username field when unlocking the phone using login and password -->
+    <string name="lockscreen_glogin_username_hint">Käyttäjänimi (sähköposti)</string>
+    <!-- Hint caption for the password field when unlocking the phone using login and password -->
+    <string name="lockscreen_glogin_password_hint">Salasana</string>
+    <!-- Button to try to unlock the phone using username and password -->
+    <string name="lockscreen_glogin_submit_button">Kirjaudu</string>
+    <!-- Displayed to the user when unlocking the phone with a username and password fails. -->
+    <string name="lockscreen_glogin_invalid_input">Väärä käyttäjänimi tai salasana</string>
+
+    <!-- Displayed in a progress dialog while a username and password are being checked. -->
+    <string name="lockscreen_glogin_checking_password">Tarkistetaan...</string>
+    <!-- Displayed on lock screen's left tab - unlock -->
+    <string name="lockscreen_unlock_label">Avaa</string>
+    <!-- Displayed on lock screen's right tab - turn sound on -->
+    <string name="lockscreen_sound_on_label">Äänet päällä</string>
+    <!-- Displayed on lock screen's right tab - turn sound off -->
+    <string name="lockscreen_sound_off_label">Äänet pois päältä</string>
+
+    <!-- Displayed on lock screen's extra left tab - phone -->
+    <string name="lockscreen_phone_label">Puhelin</string>
+    <!-- Displayed on lock screen's extra right tab - messaging -->
+    <string name="lockscreen_messaging_label">Viestit</string>
+
+    <!-- Password keyboard strings. Used by LockScreen and Settings --><skip />
+    <!-- Label for "switch to symbols" key.  Must be short to fit on key! -->
+    <string name="password_keyboard_label_symbol_key">\?123</string>
+    <!-- Label for "switch to alphabetic" key.  Must be short to fit on key! -->
+    <string name="password_keyboard_label_alpha_key">ABC</string>
+    <!-- Label for ALT modifier key.  Must be short to fit on key! -->
+    <string name="password_keyboard_label_alt_key">Vaihto</string>
+
+    <!-- A format string for 12-hour time of day, just the hour, not the minute, with lower-case "am" or "pm" (example: "3pm"). -->
+    <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+
+    <!-- A format string for 12-hour time of day, just the hour, not the minute, with capital "AM" or "PM" (example: "3PM"). -->
+    <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
+
+    <!-- Title of the alert when something went wrong in the factory test. -->
+    <string name="factorytest_failed">Factory test failed</string>
+    <!-- Error message displayed when a non-system application tries to start a factory test. -->
+    <string name="factorytest_not_system">The FACTORY_TEST action
+        is only supported for packages installed in /system/app.</string>
+    <!-- Error message displayed when the factory test could not be started. -->
+    <string name="factorytest_no_action">No package was found that provides the
+        FACTORY_TEST action.</string>
+    <!-- Button to restart the device after the factory test. -->
+    <string name="factorytest_reboot">Käynnistä uudelleen</string>
+
+    <!-- Do not translate.  WebView User Agent string -->
+    <string name="web_user_agent" translatable="false"><xliff:g id="x">Mozilla/5.0 (Linux; U; Android %s)
+        AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1</xliff:g></string>
+
+    <!-- Title for a JavaScript dialog. "The page at <url of current page> says:" -->
+    <string name="js_dialog_title">Sivusto osoitteessa \'<xliff:g id="title">%s</xliff:g>\' sanoo:</string>
+    <!-- Default title for a javascript dialog -->
+    <string name="js_dialog_title_default">JavaScript</string>
+    <!-- Message in a javascript dialog asking if the user wishes to leave the
+             current page -->
+    <string name="js_dialog_before_unload">Siirry pois sivustolta?\n\n<xliff:g id="message">%s</xliff:g>\n\nValitse OK jatkaaksesi, tai Peruuta pysyäksesi sivulla.</string>
+
+    <!-- Title of the WebView save password dialog.  If the user enters a password in a form on a website, a dialog will come up asking if they want to save the password. -->
+    <string name="save_password_label">Hyväksy</string>
+
+    <!-- Toast for double-tap -->
+    <string name="double_tap_toast">Vinkki: näpäytä kahdesti tarkentaaksesi.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+    <string name="permlab_readHistoryBookmarks">lukea Selaimen historiaa ja kirjenmerkkejä</string>
+    <!-- Description of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+    <string name="permdesc_readHistoryBookmarks">Sallii sovelluksen lukea kaikki osoitteet, joissa Selain on käynyt sekä kaikki kirjanmerkit.</string>
+    <!-- Title of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+    <string name="permlab_writeHistoryBookmarks">kirjoittaa Selaimen historiaa ja kirjenmerkkejä</string>
+    <!-- Description of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+    <string name="permdesc_writeHistoryBookmarks">Sallii sovelluksen muokata Selainen historiaa ja kirjanmerkkejä. Ilkeät sovellukset voivat käyttää tätä selaimen tietojen muokkaamiseen.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+    <string name="permlab_setAlarm">asettaa hälytyksiä herätyskelloon</string>
+    <!-- Description of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+    <string name="permdesc_setAlarm">Sallii sovelluksen asettaa hälytyksiä herätyskelloon. Jotkin herätyskello-sovellukset eivät käytä ko. ominaisuutta.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+    <string name="permlab_writeGeolocationPermissions">muokata Selaimen sijaintitietoja</string>
+    <!-- Description of an application permission, listed so the user can choose whether
+        they want to allow the application to do this. -->
+    <string name="permdesc_writeGeolocationPermissions">Sallii sovelluksen muokata Selaimen sijaintitietoja.</string>
+
+    <!-- If the user enters a password in a form on a website, a dialog will come up asking if they want to save the password. Text in the save password dialog, asking if the browser should remember a password. -->
+    <string name="save_password_message">Haluatko Selaimen muistavan salasanan?</string>
+    <!-- If the user enters a password in a form on a website, a dialog will come up asking if they want to save the password. Button in the save password dialog, saying not to remember this password. -->
+    <string name="save_password_notnow">Ei nyt</string>
+    <!-- If the user enters a password in a form on a website, a dialog will come up asking if they want to save the password. Button in the save password dialog, saying to remember this password. -->
+    <string name="save_password_remember">Muista</string>
+    <!-- Button in the save password dialog, saying never to remember this password. This should be short. Should be "Never for this site". But it is too long, use "Never" instead -->
+    <string name="save_password_never">Ei koskaan</string>
+
+    <!-- Displayed to the user when they do not have permission to open a particular web page. -->
+    <string name="open_permission_deny">Ei lupaa avata sivua.</string>
+
+    <!-- Displayed to the user to confirm that they have copied text from a web page to the clipboard. -->
+    <string name="text_copied">Teksti kopioitu leikepöydälle.</string>
+
+    <!-- Menu item displayed at the end of a menu to allow users to see another page worth of menu items. This is shown on any app's menu as long as the app has too many items in the menu.-->
+    <string name="more_item_label">Lisää</string>
+    <!-- Prepended to the shortcut for a menu item to indicate that the user should hold the MENU button together with the shortcut to invoke the item. For example, if the shortcut to open a new tab in browser is MENU and B together, then this would be prepended to the letter "B" -->
+    <string name="prepend_shortcut_label">Menu+</string>
+    <!-- Displayed in place of the regular shortcut letter when a menu item has Menu+space for the shortcut. -->
+    <string name="menu_space_shortcut_label">välilyönti</string>
+    <!-- Displayed in place of the regular shortcut letter when a menu item has Menu+enter for the shortcut. -->
+    <string name="menu_enter_shortcut_label">enter</string>
+    <!-- Displayed in place of the regular shortcut letter when a menu item has Menu+delete for the shortcut. -->
+    <string name="menu_delete_shortcut_label">poista</string>
+
+    <!-- Strings used for search bar --><skip />
+
+    <!-- This is the default button label in the system-wide search UI.
+         It is also used by the home screen's search "widget". It should be short -->
+    <string name="search_go">Hae</string>
+
+    <!-- String used to display the date. This is the string to say something happened 1 month ago. -->
+    <string name="oneMonthDurationPast">Kuukausi sitten</string>
+    <!-- String used to display the date. This is the string to say something happened more than 1 month ago. -->
+    <string name="beforeOneMonthDurationPast">Aiemmin kuin kuukausi sitten</string>
+
+    <!-- This is used to express that something occurred some number of seconds in the past (e.g., 5 seconds ago). -->
+    <plurals name="num_seconds_ago">
+        <item quantity="one">Sekunti sitten</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> sekuntia sitten</item>
+    </plurals>
+
+    <!-- This is used to express that something occurred some number of minutes in the past (e.g., 5 minutes ago). -->
+    <plurals name="num_minutes_ago">
+        <item quantity="one">Minuutti sitten</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> minuuttia sitten</item>
+    </plurals>
+
+    <!-- This is used to express that something occurred some number of hours in the past (e.g., 5 hours ago). -->
+    <plurals name="num_hours_ago">
+        <item quantity="one">Tunti sitten</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> tuntia sitten</item>
+    </plurals>
+
+    <!-- This is used to express that something occurred within the last X days (e.g., Last 7 days). -->
+    <plurals name="last_num_days">
+        <item quantity="other">Viimeiset <xliff:g id="count">%d</xliff:g> päivää</item>
+    </plurals>
+
+    <!-- This is used to express that something has occurred within the last month -->
+    <string name="last_month">Viime kuukausi</string>
+
+    <!-- This is used to express that something happened longer ago than the previous options -->
+    <string name="older">Vanhemmat</string>
+
+    <!-- This is used to express that something occurred some number of days in the past (e.g., 5 days ago). -->
+    <plurals name="num_days_ago">
+        <item quantity="one">eilen</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> päivää sitten</item>
+    </plurals>
+
+    <!-- This is used to express that something will occur some number of seconds in the future (e.g., in 5 seconds). -->
+    <plurals name="in_num_seconds">
+        <item quantity="one">sekunnissa</item>
+        <item quantity="other"> <xliff:g id="count">%d</xliff:g> sekunnissa</item>
+    </plurals>
+
+    <!-- This is used to express that something will occur some number of minutes in the future (e.g., in 5 minutes). -->
+    <plurals name="in_num_minutes">
+        <item quantity="one">minuutissa</item>
+        <item quantity="other"> <xliff:g id="count">%d</xliff:g> minuutissa</item>
+    </plurals>
+
+    <!-- This is used to express that something will occur some number of hours in the future (e.g., in 5 hours). -->
+    <plurals name="in_num_hours">
+        <item quantity="one">tunnissa</item>
+        <item quantity="other"> <xliff:g id="count">%d</xliff:g> tunnissa</item>
+    </plurals>
+
+    <!-- This is used to express that something will occur some number of days in the future (e.g., in 5 days). -->
+    <plurals name="in_num_days">
+        <item quantity="one">huomenna</item>
+        <item quantity="other"> <xliff:g id="count">%d</xliff:g> vuorokaudessa</item>
+    </plurals>
+
+    <!-- This is used to express that something occurred some number of abbreviated seconds in the past (e.g., 5 secs ago). -->
+    <plurals name="abbrev_num_seconds_ago">
+        <item quantity="one">sekunti sitten</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> sekuntia sitten</item>
+    </plurals>
+
+    <!-- This is used to express that something occurred some number of abbreviated minutes in the past (e.g., 5 mins ago). -->
+    <plurals name="abbrev_num_minutes_ago">
+        <item quantity="one">minuutti sitten</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> minuuttia sitten</item>
+    </plurals>
+
+    <!-- This is used to express that something occurred some number of abbreviated hours in the past (e.g., 5 hrs ago). -->
+    <plurals name="abbrev_num_hours_ago">
+        <item quantity="one">tunti sitten</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> tuntia sitten</item>
+    </plurals>
+
+    <!-- This is used to express that something occurred some number of abbreviated days in the past (e.g., 5 days ago). -->
+    <plurals name="abbrev_num_days_ago">
+        <item quantity="one">eilen</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> päivää sitten</item>
+    </plurals>
+
+    <!-- This is used to express that something will occur some number of abbreviated seconds in the future (e.g., in 5 secs). -->
+    <plurals name="abbrev_in_num_seconds">
+        <item quantity="one">sekunnissa</item>
+        <item quantity="other"> <xliff:g id="count">%d</xliff:g> sekunnissa</item>
+    </plurals>
+
+    <!-- This is used to express that something will occur some number of abbreviated minutes in the future (e.g., in 5 mins). -->
+    <plurals name="abbrev_in_num_minutes">
+        <item quantity="one">minuutissa</item>
+        <item quantity="other"> <xliff:g id="count">%d</xliff:g> minuutissa</item>
+    </plurals>
+
+    <!-- This is used to express that something will occur some number of abbreviated hours in the future (e.g., in 5 hrs). -->
+    <plurals name="abbrev_in_num_hours">
+        <item quantity="one">tunnissa</item>
+        <item quantity="other"> <xliff:g id="count">%d</xliff:g> tunnissa</item>
+    </plurals>
+
+    <!-- This is used to express that something will occur some number of abbreviated days in the future (e.g., in 5 days). -->
+    <plurals name="abbrev_in_num_days">
+        <item quantity="one">huomenna</item>
+        <item quantity="other"> <xliff:g id="count">%d</xliff:g> päivässä</item>
+    </plurals>
+
+    <!-- String used to display the date. Preposition for date display ("on May 29") -->
+    <string name="preposition_for_date"><xliff:g id="date" example="May 29">%s</xliff:g>ssa</string>
+    <!-- String used to display the date. Preposition for time display ("at 2:33am") -->
+    <string name="preposition_for_time"><xliff:g id="time" example="2:33 am">%s</xliff:g></string>
+    <!-- String used to display the date. Preposition for year display ("in 2008") -->
+    <string name="preposition_for_year"><xliff:g id="year" example="2003">%s</xliff:g></string>
+
+    <!-- Appened to express the value is this unit of time: singular day -->
+    <string name="day">päivä</string>
+    <!-- Appened to express the value is this unit of time: plural days -->
+    <string name="days">päivää</string>
+    <!-- Appened to express the value is this unit of time: singular hour -->
+    <string name="hour">tunti</string>
+    <!-- Appened to express the value is this unit of time: plural hours -->
+    <string name="hours">tuntia</string>
+    <!-- Appened to express the value is this unit of time: singular minute -->
+    <string name="minute">minuutti</string>
+    <!-- Appened to express the value is this unit of time: plural minutes -->
+    <string name="minutes">minuuttia</string>
+    <!-- Appened to express the value is this unit of time. -->
+    <string name="second">sekunti</string>
+    <!-- Appened to express the value is this unit of time. -->
+    <string name="seconds">sekuntia</string>
+    <!-- Appened to express the value is this unit of time. -->
+    <string name="week">viikko</string>
+    <!-- Appened to express the value is this unit of time. -->
+    <string name="weeks">viikkoa</string>
+    <!-- Appened to express the value is this unit of time. -->
+    <string name="year">vuosi</string>
+    <!-- Appened to express the value is this unit of time. -->
+    <string name="years">vuotta</string>
+
+
+    <!-- Title for error alert when a video cannot be played.  it can be used by any app. -->
+    <string name="VideoView_error_title">Ei voida toistaa videota</string>
+    <!-- Text for error alert when a video container is not valid for progressive download/playback. -->
+    <string name="VideoView_error_text_invalid_progressive_playback">Tämä video ei ole validi toistettavaksi tässä laitteessa.</string>
+    <!-- Text for error alert when a video cannot be played. it can be used by any app. -->
+    <string name="VideoView_error_text_unknown">Videota ei voida toistaa.</string>
+    <!-- Button to close error alert when a video cannot be played -->
+    <string name="VideoView_error_button">OK</string>
+
+
+
+
+    <!-- Format indicating a relative expression and time.
+         Example: "4 hours ago, 11:00 am" -->
+    <string name="relative_time">"<xliff:g id="date" example="4 hours ago">%1$s</xliff:g>, <xliff:g id="time" example="11:00 am">%2$s</xliff:g>"</string>
+
+
+    <!-- Quoted name for 12pm, lowercase -->
+    <string name="noon">"noon"</string>
+    <!-- Quoted name for 12pm, uppercase first letter -->
+    <string name="Noon">"Noon"</string>
+    <!-- Quoted name for 12am, lowercase -->
+    <string name="midnight">"midnight"</string>
+    <!-- Quoted name for 12am, uppercase first letter -->
+    <string name="Midnight">"Midnight"</string>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- Format string for durations like "01:23" (1 minute, 23 seconds) -->
+    <string name="elapsed_time_short_format_mm_ss"><xliff:g id="minutes" example="1">%1$02d</xliff:g>:<xliff:g id="seconds" example="23">%2$02d</xliff:g></string>
+
+    <!-- Format string for times like "1:43:33" (1 hour, 43 minutes, 33 seconds) -->
+    <string name="elapsed_time_short_format_h_mm_ss"><xliff:g id="hours" example="1">%1$d</xliff:g>:<xliff:g id="minutes" example="43">%2$02d</xliff:g>:<xliff:g id="seconds" example="33">%3$02d</xliff:g></string>
+
+    <!-- Item on EditText context menu. This action is used to select all text in the edit field. -->
+    <string name="selectAll">Valitse kaikki</string>
+
+    <!-- Item on EditText context menu. This action is used to start selecting text in the edit field. [CHAR LIMIT=20] -->
+    <string name="selectText">Valitse sana</string>
+
+    <!-- Item on EditText context menu.  This action is used to cut selected the text into the clipboard.  -->
+    <string name="cut">Leikkaa</string>
+
+    <!-- Item on EditText context menu. This action is used to cut selected the text into the clipboard. -->
+    <string name="copy">Kopioi</string>
+
+    <!-- Item on EditText context menu. This action is used t o paste from the clipboard into the eidt field -->
+    <string name="paste">Liitä</string>
+
+    <!-- Item on EditText context menu. This action is used to copy a URL from the edit field into the clipboard. -->
+    <string name="copyUrl">Kopioi URL</string>
+
+    <!-- EditText context menu -->
+    <string name="inputMethod">Syöttötapa</string>
+
+    <!-- Item on EditText context menu, used to add a word to the
+         input method dictionary. -->
+    <string name="addToDictionary">"Lisää \"<xliff:g id="word" example="rickroll">%s</xliff:g>\" sanakirjaan</string>
+
+    <!-- Title for EditText context menu -->
+    <string name="editTextMenuTitle">Muokka tekstiä</string>
+
+    <!-- If the device is getting low on internal storage, a notification is shown to the user.  This is the title of that notification. -->
+    <string name="low_internal_storage_view_title">Muisti vähissä</string>
+    <!-- If the device is getting low on internal storage, a notification is shown to the user.  This is the message of that notification. -->
+    <string name="low_internal_storage_view_text">Puhelimen muisti on vähissä.</string>
+
+    <!-- Preference framework strings. -->
+    <string name="ok">OK</string>
+    <!-- Preference framework strings. -->
+    <string name="cancel">Peruuta</string>
+    <!-- Preference framework strings. -->
+    <string name="yes">OK</string>
+    <!-- Preference framework strings. -->
+    <string name="no">Peruuta</string>
+    <!-- This is the generic "attention" string to be used in attention dialogs.  Typically
+         combined with setIcon(android.R.drawable.ic_dialog_alert) -->
+    <string name="dialog_alert_title">Huomautus</string>
+
+    <!-- Default text for a button that can be toggled on and off. -->
+    <string name="capital_on">Päälle</string>
+    <!-- Default text for a button that can be toggled on and off. -->
+    <string name="capital_off">Pois</string>
+
+    <!-- Title of intent resolver dialog when selecting an application to run. -->
+    <string name="whichApplication">Complete action using</string>
+    <!-- Option to always use the selected application resolution in the future. See the "Complete action using" dialog title-->
+    <string name="alwaysUse">Use by default for this action.</string>
+    <!-- Text displayed when the user selects the check box for setting default application.  See the "Use by default for this action" check box. -->
+    <string name="clearDefaultHintMsg">Clear default in Home Settings &gt; Applications &gt; Manage applications.</string>
+    <!-- Default title for the activity chooser, when one is not given. Android allows multiple activities to perform an action.  for example, there may be many ringtone pickers installed.  A dialog is shown to the user allowing him to pick which activity should be used.  This is the title. -->
+    <string name="chooseActivity">Select an action</string>
+    <!-- Text to display when there are no activities found to display in the
+         activity chooser. See the "Select an action" title. -->
+    <string name="noApplications">No applications can perform this action.</string>
+    <!-- Title of the alert when an application has crashed. -->
+    <string name="aerr_title">Sorry!</string>
+    <!-- Text of the alert that is displayed when an application has crashed. -->
+    <string name="aerr_application">The application <xliff:g id="application">%1$s</xliff:g>
+        (process <xliff:g id="process">%2$s</xliff:g>) has stopped unexpectedly. Please try again.</string>
+    <!-- Text of the alert that is displayed when an application has crashed. -->
+    <string name="aerr_process">The process <xliff:g id="process">%1$s</xliff:g> has
+        stopped unexpectedly. Please try again.</string>
+    <!-- Title of the alert when an application is not responding. -->
+    <string name="anr_title">Sorry!</string>
+    <!-- Text of the alert that is displayed when an application is not responding. -->
+    <string name="anr_activity_application">Activity <xliff:g id="activity">%1$s</xliff:g> (in application <xliff:g id="application">%2$s</xliff:g>) is not responding.</string>
+    <!-- Text of the alert that is displayed when an application is not responding. -->
+    <string name="anr_activity_process">Activity <xliff:g id="activity">%1$s</xliff:g> (in process <xliff:g id="process">%2$s</xliff:g>) is not responding.</string>
+    <!-- Text of the alert that is displayed when an application is not responding. -->
+    <string name="anr_application_process">Application <xliff:g id="application">%1$s</xliff:g> (in process <xliff:g id="process">%2$s</xliff:g>) is not responding.</string>
+    <!-- Text of the alert that is displayed when an application is not responding. -->
+    <string name="anr_process">Process <xliff:g id="process">%1$s</xliff:g> is not responding.</string>
+    <!-- Button allowing the user to close an application that is not responding. This will kill the application. -->
+    <string name="force_close">Force close</string>
+    <!-- Button allowing the user to send a bug report for application which has encountered an error. -->
+    <string name="report">Report</string>
+    <!-- Button allowing the user to choose to wait for an application that is not responding to become responsive again. -->
+    <string name="wait">Wait</string>
+    <!-- [CHAR LIMIT=25] Title of the alert when application launches on top of another. -->
+    <string name="launch_warning_title">Application redirected</string>
+    <!-- [CHAR LIMIT=50] Title of the alert when application launches on top of another. -->
+    <string name="launch_warning_replace"><xliff:g id="app_name">%1$s</xliff:g> is now running.</string>
+    <!-- [CHAR LIMIT=50] Title of the alert when application launches on top of another. -->
+    <string name="launch_warning_original"><xliff:g id="app_name">%1$s</xliff:g> was originally launched.</string>
+
+    <!-- Text of the alert that is displayed when an application has violated StrictMode. -->
+    <string name="smv_application">The application <xliff:g id="application">%1$s</xliff:g>
+        (process <xliff:g id="process">%2$s</xliff:g>) has violated its self-enforced StrictMode policy.</string>
+    <!-- Text of the alert that is displayed when an application has violated StrictMode. -->
+    <string name="smv_process">The process <xliff:g id="process">%1$s</xliff:g> has
+      has violated its self-enforced StrictMode policy.</string>
+
+    <!-- Notification text to tell the user that a heavy-weight application is running. -->
+    <string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g> running</string>
+    
+    <!-- Notification details to tell the user that a heavy-weight application is running. -->
+    <string name="heavy_weight_notification_detail">Select to switch to application</string>
+    
+    <!-- Title of dialog prompting whether user wants to switch between heavy-weight apps. -->
+    <string name="heavy_weight_switcher_title">Switch applications?</string>
+    
+    <!-- Descriptive text for switching to a new heavy-weight application. -->
+    <string name="heavy_weight_switcher_text">Another application is already running
+    that must be stopped before you can start a new one.</string>
+    
+    <string name="old_app_action">Return to <xliff:g id="old_app">%1$s</xliff:g></string>
+    <string name="old_app_description">Don\'t start the new application.</string>
+    
+    <string name="new_app_action">Start <xliff:g id="old_app">%1$s</xliff:g></string>
+    <string name="new_app_description">Stop the old application without saving.</string>
+    
+    <!-- Displayed in the title of the chooser for things to do with text that
+         is to be sent to another application. For example, I can send
+         text through SMS or IM.  A dialog with those choices would be shown,
+         and this would be the title. -->
+    <string name="sendText">Select an action for text</string>
+
+    <!-- Title of the dialog where the user is adjusting the phone ringer volume -->
+    <string name="volume_ringtone">Soittoäänen voimakkuus</string>
+    <!-- Title of the dialog where the user is adjusting the music volume -->
+    <string name="volume_music">Musiikin äänenvoimakkuus</string>
+    <!-- Hint shown in the volume toast to inform the user that the media audio is playing through Bluetooth. -->
+    <string name="volume_music_hint_playing_through_bluetooth">Toistetaan bluetoothin kautta</string>
+    <!-- Hint shown in the volume toast to inform the user that the current ringtone is the silent ringtone. -->
+    <string name="volume_music_hint_silent_ringtone_selected">Äänetön soittoääni valittu</string>
+    <!-- Title of the dialog where the user is adjusting the phone call volume -->
+    <string name="volume_call">Puheluäänen voimakkuus</string>
+    <!-- Title of the dialog where the user is adjusting the phone call volume when connected on bluetooth-->
+    <string name="volume_bluetooth_call">Bluetooth-puhelun äänenvoimakkuus</string>
+    <!-- Title of the dialog where the user is adjusting the audio volume for alarms -->
+    <string name="volume_alarm">Hälytysäänen äänenvoimakkuus</string>
+    <!-- Title of the dialog where the user is adjusting the audio volume for notifications -->
+    <string name="volume_notification">Ilmoituksien äänenvoimakkuus</string>
+    <!-- Title of the dialog where the user is adjusting the general audio volume -->
+    <string name="volume_unknown">Äänenvoimakkuus</string>
+
+    <!-- Ringtone picker strings --> <skip />
+    <!-- Choice in the ringtone picker.  If chosen, the default ringtone will be used. -->
+    <string name="ringtone_default">Oletussoittoääni</string>
+    <!-- Choice in the ringtone picker.  If chosen, the default ringtone will be used. This fills in the actual ringtone's title into the message. -->
+    <string name="ringtone_default_with_actual">Oletussoittoääni (<xliff:g id="actual_ringtone">%1$s</xliff:g>)</string>
+    <!-- Choice in the ringtone picker.  If chosen, there will be silence instead of a ringtone played. -->
+    <string name="ringtone_silent">Äänetön</string>
+    <!-- The title of the ringtone picker dialog. -->
+    <string name="ringtone_picker_title">Soittoäänet</string>
+    <!-- If there is ever a ringtone set for some setting, but that ringtone can no longer be resolved, t his is shown instead.  For example, if the ringtone was on a SD card and it had been removed, this woudl be shown for ringtones on that SD card. -->
+    <string name="ringtone_unknown">Tuntematon soittoääni</string>
+
+    <!-- A notification is shown when there are open wireless networks nearby.  This is the notification's title. -->
+    <plurals name="wifi_available">
+        <item quantity="one">Langaton verkko käytettävissä</item>
+        <item quantity="other">Langattomia verkkoja käytettävissä</item>
+    </plurals>
+    <!-- A notification is shown when there are open wireless networks nearby.  This is the notification's message. -->
+    <plurals name="wifi_available_detailed">
+        <item quantity="one">Langaton verkko käytettävissä</item>
+        <item quantity="other">Langattomia verkkoja käytettävissä</item>
+    </plurals>
+    <!-- Do not translate. Default access point SSID used for tethering -->
+    <string name="wifi_tether_configure_ssid_default" translatable="false">AndroidAP</string>
+
+    <!-- Name of the dialog that lets the user choose an accented character to insert -->
+    <string name="select_character">Lisää merkki</string>
+
+    <!-- SMS per-application rate control Dialog --> <skip />
+    <!-- See SMS_DIALOG.  This is shown if the current application's name cannot be figuerd out. -->
+    <string name="sms_control_default_app_name">Tuntematon sovellus</string>
+    <!-- SMS_DIALOG: An SMS dialog is shown if an application tries to send too many SMSes.  This is the title of that dialog. -->
+    <string name="sms_control_title">Läheteään SMS-viestejä</string>
+    <!-- See SMS_DIALOG.  This is the message shown in that dialog. -->
+    <string name="sms_control_message">Lähetetään useita SMS-viestejä. Valitse OK jatkaaksesi tai Peruuta lopettaaksesi.</string>
+    <!-- See SMS_DIALOG.  This is a button choice to allow sending the SMSes. -->
+    <string name="sms_control_yes">OK</string>
+    <!-- See SMS_DIALOG.  This is a button choice to disallow sending the SMSes.. -->
+    <string name="sms_control_no">Peruuta</string>
+
+    <!-- Name of the button in the date/time picker to accept the date/time change -->
+    <string name="date_time_set">Aseta</string>
+
+    <!-- Security Permissions strings-->
+    <!-- The default permission group for any permissions that have not explicitly set a group. -->
+    <string name="default_permission_group">Oletus</string>
+    <!-- Do not translate. -->
+    <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
+    <!-- Shown for an application when it doesn't require any permission grants. -->
+    <string name="no_permissions">Ei vaadittuja lupia</string>
+    <!-- When installing an application, the less-dangerous permissions are hidden.  If the user showed those, this is the text to hide them again.  -->
+    <string name="perms_hide"><b>Piilota</b></string>
+    <!-- When installing an application, the less-dangerous permissions are hidden.  This is the text to show those. -->
+    <string name="perms_show_all"><b>Näytä kaikki</b></string>
+
+    <!-- USB storage dialog strings -->
+    <!-- This is the title for the activity's window. -->
+    <string name="usb_storage_activity_title">USB-levyasema</string>
+
+    <!-- See USB_STORAGE.  USB_STORAGE_DIALOG:  After the user selects the notification, a dialog is shown asking if he wants to mount.  This is the title. -->
+    <string name="usb_storage_title">USB liitetty</string>
+    <!-- See USB_STORAGE.    This is the message. [CHAR LIMIT=NONE] -->
+    <string name="usb_storage_message" product="nosdcard">Olet liittänyt puhelimesi tietokoneesi USB-liittimellä. Paina alhaalla olevaa painiketta, jos haluat siirtää tiedostoja tietokoneen ja puhelimen muistikortin välillä.</string>
+    <!-- See USB_STORAGE.    This is the message. -->
+    <string name="usb_storage_message" product="default">Olet liittänyt puhelimesi tietokoneesi USB-liittimellä. Paina alhaalla olevaa painiketta, jos haluat siirtää tiedostoja tietokoneen ja puhelimen muistikortin välillä.</string>
+    <!-- See USB_STORAGE.    This is the button text to mount the phone on the computer. -->
+    <string name="usb_storage_button_mount">USB-levyasema päälle</string>
+    <!-- See USB_STORAGE_DIALOG.  If there was an error mounting, this is the text. [CHAR LIMIT=NONE] -->
+    <string name="usb_storage_error_message" product="nosdcard">Ongelma käytettäessä muistikorttia USB-levyaseman kanssa.</string>
+    <!-- See USB_STORAGE_DIALOG.  If there was an error mounting, this is the text. -->
+    <string name="usb_storage_error_message" product="default">Ongelma käytettäessä muistikorttia USB-levyaseman kanssa.</string>
+    <!-- USB_STORAGE: When the user connects the phone to a computer via USB, we show a notification asking if he wants to share files across.  This is the title -->
+    <string name="usb_storage_notification_title">USB liitetty</string>
+    <!-- See USB_STORAGE. This is the message. -->
+    <string name="usb_storage_notification_message">Valitse siirtääksesi tiedostoja.</string>
+
+    <!-- USB_STORAGE_STOP: While USB storage is enabled, we show a notification dialog asking if he wants to stop. This is the title -->
+    <string name="usb_storage_stop_notification_title">USB-levyasema pois päältä</string>
+    <!-- See USB_STORAGE. This is the message. -->
+    <string name="usb_storage_stop_notification_message">Valitse asettaaksesi USB-levyaseman pois päältä.</string>
+
+    <!-- USB storage stop dialog strings -->
+    <!-- This is the label for the activity, and should never be visible to the user. -->
+    <!-- See USB_STORAGE_STOP.  USB_STORAGE_STOP_DIALOG:  After the user selects the notification, a dialog is shown asking if he wants to stop usb storage.  This is the title. -->
+    <string name="usb_storage_stop_title">USB storage in use</string>
+    <!-- See USB_STORAGE_STOP.    This is the message. [CHAR LIMIT=NONE] -->
+    <string name="usb_storage_stop_message" product="nosdcard">Before turning off USB storage, make sure you have unmounted (\u201cejected\u201d) your Android\u2018s USB storage from your computer.</string>
+    <!-- See USB_STORAGE_STOP.    This is the message. -->
+    <string name="usb_storage_stop_message" product="default">Before turning off USB storage, make sure you have unmounted (\u201cejected\u201d) your Android\u2018s SD card from your computer.</string>
+    <!-- See USB_STORAGE_STOP.    This is the button text to stop usb storage. -->
+    <string name="usb_storage_stop_button_mount">Turn off USB storage</string>
+    <!-- See USB_STORAGE_STOP_DIALOG.  If there was an error stopping, this is the text. -->
+    <string name="usb_storage_stop_error_message">There was a problem turning off USB storage. Check to make sure you have unmounted the USB host, then try again.</string>
+
+    <!-- USB_STORAGE_KILL_STORAGE_USERS dialog  -->
+    <string name="dlg_confirm_kill_storage_users_title">Turn on USB storage</string>
+    <!-- USB_STORAGE_KILL_STORAGE_USERS dialog message text -->
+    <string name="dlg_confirm_kill_storage_users_text">If you turn on USB storage, some applications you are using will stop and may be unavailable until you turn off USB storage.</string>
+    <!-- USB_STORAGE_ERROR dialog  dialog-->
+    <string name="dlg_error_title">USB operation failed</string>
+    <!-- USB_STORAGE_ERROR dialog  ok button-->
+    <string name="dlg_ok">OK</string>
+
+    <!-- External media format dialog strings -->
+    <!-- This is the label for the activity, and should never be visible to the user. -->
+    <!-- See EXTMEDIA_FORMAT.  EXTMEDIA_FORMAT_DIALOG:  After the user selects the notification, a dialog is shown asking if he wants to format the SD card.  This is the title. [CHAR LIMIT=20] -->
+    <string name="extmedia_format_title" product="nosdcard">Format USB storage</string>
+    <!-- See EXTMEDIA_FORMAT.  EXTMEDIA_FORMAT_DIALOG:  After the user selects the notification, a dialog is shown asking if he wants to format the SD card.  This is the title. -->
+    <string name="extmedia_format_title" product="default">Format SD card</string>
+    <!-- See EXTMEDIA_FORMAT.   This is the message. [CHAR LIMIT=NONE] -->
+    <string name="extmedia_format_message" product="nosdcard">Format USB storage, erasing all files stored there?  Action cannot be reversed!</string>
+    <!-- See EXTMEDIA_FORMAT.   This is the message. -->
+    <string name="extmedia_format_message" product="default">Are you sure you want to format the SD card? All data on your card will be lost.</string>
+    <!-- See EXTMEDIA_FORMAT.    This is the button text to format the sd card. -->
+    <string name="extmedia_format_button_format">Format</string>
+
+    <!-- Title of notification shown when ADB is actively connected to the phone. -->
+    <string name="adb_active_notification_title">USB debugging connected</string>
+    <!-- Message of notification shown when ADB is actively connected to the phone. -->
+    <string name="adb_active_notification_message">Select to disable USB debugging.</string>
+
+    <!-- Used to replace %s in urls retreived from the signin server with locales.  For Some        -->
+    <!-- devices we don't support all the locales we ship to and need to replace the '%s' with a    -->
+    <!-- locale string based on mcc values.  By default (0-length string) we don't replace the %s   -->
+    <!-- at all and later replace it with a locale string based on the users chosen locale          -->
+    <!-- DO NOT TRANSLATE -->
+    <string name="locale_replacement">""</string>
+
+    <!-- Title of the pop-up dialog in which the user switches input method components. -->
+    <string name="select_input_method">Valitse syöttötapa</string>
+
+    <string name="fast_scroll_alphabet">\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="fast_scroll_numeric_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+
+    <string name="candidates_style"><u>candidates</u></string>
+
+    <!-- External media notification strings -->
+    <!-- Shown when external media is being checked [CHAR LIMIT=30] -->
+    <string name="ext_media_checking_notification_title" product="nosdcard">Valmistellaan USB-muistia</string>
+    <!-- Shown when external media is being checked -->
+    <string name="ext_media_checking_notification_title" product="default">Valmistellaan muistikorttia</string>
+    <string name="ext_media_checking_notification_message">Tarkistetaan virheitä.</string>
+
+    <!-- Shown when external media is blank (or unsupported filesystem) [CHAR LIMIT=30] -->
+    <string name="ext_media_nofs_notification_title" product="nosdcard">Tyhjä USB-muistia</string>
+    <!-- Shown when external media is blank (or unsupported filesystem) -->
+    <string name="ext_media_nofs_notification_title" product="default">Tyhjä muistikorttia</string>
+    <!-- Shown when USB storage cannot be read.  [CHAR LIMIT=NONE] -->
+    <string name="ext_media_nofs_notification_message" product="nosdcard">USB-muisti on tyhjä tai käyttää ei-tuettua tiedostojärjestelmää.</string>
+    <string name="ext_media_nofs_notification_message" product="default">Muistikortti on tyhjä tai käyttää ei-tuettua tiedostojärjestelmää.</string>
+
+    <!-- Shown when external media is unmountable (corrupt)) [CHAR LIMIT=30] -->
+    <string name="ext_media_unmountable_notification_title" product="nosdcard">Vioittunut USB-muisti</string>
+    <!-- Shown when external media is unmountable (corrupt)) -->
+    <string name="ext_media_unmountable_notification_title" product="default">Vioittunut muistikortti</string>
+    <!-- Shown when USB storage cannot be read.  [CHAR LIMIT=NONE] -->
+    <string name="ext_media_unmountable_notification_message" product="nosdcard">USB-muisti vioittunut.</string>
+    <string name="ext_media_unmountable_notification_message" product="default">Muistikortti vioittunut.</string>
+
+    <!-- Shown when external media is unsafely removed [CHAR LIMIT=30] -->
+    <string name="ext_media_badremoval_notification_title" product="nosdcard">USB-muisti poistettiin</string>
+    <!-- Shown when external media is unsafely removed -->
+    <string name="ext_media_badremoval_notification_title" product="default">Muistikortti poistettiin</string>
+    <!-- Shown when external media is unsafely removed.  [CHAR LIMIT=NONE] -->
+    <string name="ext_media_badremoval_notification_message" product="nosdcard">Irrota USB-muisti ennen poistamista välttääksesi tietojen katoamisen.</string>
+    <string name="ext_media_badremoval_notification_message" product="default">Irrota muistikortti ennen poistamista välttääksesi tietojen katoamisen.</string>
+
+    <!-- Shown when external media has been safely removed [CHAR LIMIT=30] -->
+    <string name="ext_media_safe_unmount_notification_title" product="nosdcard">USB-muisti voidaan poistaa</string>
+    <!-- Shown when external media has been safely removed -->
+    <string name="ext_media_safe_unmount_notification_title" product="default">Muistikortti voidaan poistaa</string>
+    <!-- Shown when external media has been safely removed.  [CHAR LIMIT=NONE] -->
+    <string name="ext_media_safe_unmount_notification_message" product="nosdcard">Voit nyt poistaa USB-muistin turvallisesti.</string>
+    <string name="ext_media_safe_unmount_notification_message" product="default">Voit nyt poistaa muistikortin turvallisesti.</string>
+
+    <!-- Shown when external media is missing [CHAR LIMIT=30] -->
+    <string name="ext_media_nomedia_notification_title" product="nosdcard">USB-muisti poistettiin</string>
+    <!-- Shown when external media is missing -->
+    <string name="ext_media_nomedia_notification_title" product="default">Muistikortti poistettiin</string>
+    <!-- Shown when external media is missing.  [CHAR LIMIT=NONE] -->
+    <string name="ext_media_nomedia_notification_message" product="nosdcard">USB-muisti poistettiin. Aseta uusi.</string>
+    <string name="ext_media_nomedia_notification_message" product="default">Muistikortti poistettiin. Aseta uusi.</string>
+
+    <!-- Shown in LauncherActivity when the requested target Intent didn't return any matching Activities, leaving the list empty. -->
+    <string name="activity_list_empty">No matching activities found</string>
+
+    <!-- permission attributes related to package usage statistics -->
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_pkgUsageStats">update component usage statistics</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_pkgUsageStats">Allows the modification of collected component usage statistics. Not for use by normal applications.</string>
+
+    <!-- permission attributes related to default container service -->
+    <!-- Title of an application permission that lets an application use default container service. -->
+    <string name="permlab_copyProtectedData">Allows to invoke default container service to copy content. Not for use by normal applications.</string>
+    <!-- Description of an application permission,  used to invoke default container service to copy content. -->
+    <string name="permdesc_copyProtectedData">Allows to invoke default container service to copy content. Not for use by normal applications.</string>
+
+    <!-- Shown in the tutorial for tap twice for zoom control. -->
+    <string name="tutorial_double_tap_to_zoom_message_short">Näpäytä kahdesti tarkentaaksesi</string>
+
+
+    <!-- Shown in gadget hosts (e.g. the home screen) when there was an error inflating
+    the gadget. -->
+    <string name="gadget_host_error_inflating">Error inflating widget</string>
+
+    <!-- Long label for a button on a full-screen input method for the "Go" action. -->
+    <string name="ime_action_go">Siirry</string>
+
+    <!-- Long label for a button on a full-screen input method for the "Search" action. -->
+    <string name="ime_action_search">Etsi</string>
+
+    <!-- Long label for a button on a full-screen input method for the "Send" action. -->
+    <string name="ime_action_send">Lähetä</string>
+
+    <!-- Long label for a button on a full-screen input method for the "Next" action. -->
+    <string name="ime_action_next">Seuraava</string>
+
+    <!-- Long label for a button on a full-screen input method for the "Done" action. -->
+    <string name="ime_action_done">Valmis</string>
+
+    <!-- Long label for a button on a full-screen input method for an unknown action. -->
+    <string name="ime_action_default">Suorita</string>
+
+    <!-- Strings for search suggestions. These are going here because they are referenced by both
+         ContactsProvider and GoogleContactsProvider -->
+    <skip />
+
+
+    <!-- This string appears (on two lines) when you type a number into contacts search, to let you dial the phone number you typed.  The first line will be in bigger type than the second. -->
+    <string name="dial_number_using">Soita numeroon\nkäyttäen <xliff:g id="number" example="555">%s</xliff:g></string>
+
+    <!-- This string appears (on two lines) when you type a number into contacts search, to let you create a contact whose phone number is the number you typed.  The first line will be in bigger type than the second. -->
+    <string name="create_contact_using">Luo henkilö\nkäyttäen <xliff:g id="number" example="555">%s</xliff:g></string>
+
+    <!-- This string array should be overridden by the manufacture to present a list of carrier-id,locale,wifi-channel sets.  This is used at startup to set system defaults by checking the system property ro.carrier for the carrier-id and searching through this array -->
+    <!-- An Array of [[Carrier-ID]                     -->
+    <!--              [default-locale]                 -->
+    <!--              [default-wifi-allowed-channels]] -->
+    <string-array translatable="false" name="carrier_properties">
+    </string-array>
+
+    <!-- Title for the selected state of a CompoundButton. -->
+    <string name="accessibility_compound_button_selected">tarkistettu</string>
+
+    <!-- Title for the unselected state of a CompoundButton. -->
+    <string name="accessibility_compound_button_unselected">ei tarkistettu</string>
+
+    <string name="grant_credentials_permission_message_header">Seuraavat sovellukset vaativat luvan käyttää tiliäsi, nyt ja tulevaisuudessa.</string>
+    <string name="grant_credentials_permission_message_footer">Haluatko sallia pyynnön?</string>
+    <string name="grant_permissions_header_text">Lupapyyntö</string>
+    <string name="allow">Salli</string>
+    <string name="deny">Estä</string>
+    <string name="permission_request_notification_title">Lupapyyntö esitetty</string>
+    <string name="permission_request_notification_with_subtitle">Lupapyyntö esitetty\ntilille <xliff:g id="account" example="foo@gmail.com">%s</xliff:g></string>
+
+    <!-- Label to show for a service that is running because it is an input method. -->
+    <string name="input_method_binding_label">Syöttötapa</string>
+    <!-- Label to show for a service that is running because it is a sync adapter. -->
+    <string name="sync_binding_label">Sync</string>
+    <!-- Label to show for a service that is running because it is an accessibility module. -->
+    <string name="accessibility_binding_label">Saavutettavuus</string>
+    <!-- Label to show for a service that is running because it is a wallpaper. -->
+    <string name="wallpaper_binding_label">Taustakuva</string>
+    <!-- Dialog title for user to select a different wallpaper from service list -->
+    <string name="chooser_wallpaper">Vaihda taustakuva</string>
+
+    <!-- Do Not Translate: Alternate eri.xml -->
+    <string name="alternate_eri_file">/data/eri.xml</string>
+
+    <string name="pptp_vpn_description">Point-to-Point Tunneling Protocol</string>
+    <string name="l2tp_vpn_description">Layer 2 Tunneling Protocol</string>
+    <string name="l2tp_ipsec_psk_vpn_description">Pre-shared key based L2TP/IPSec VPN</string>
+    <string name="l2tp_ipsec_crt_vpn_description">Certificate based L2TP/IPSec VPN</string>
+    <string name="openvpn_vpn_description">OpenVPN SSL VPN</string>
+
+    <!-- Localized strings for WebView -->
+    <!-- Label for button in a WebView that will open a chooser to choose a file to upload -->
+    <string name="upload_file">Valitse tiedosto</string>
+    <!-- Label for <input type="reset"> button in html -->
+    <string name="reset">Nollaa</string>
+    <!-- Label for <input type="submit"> button in html -->
+    <string name="submit">Lähetä</string>
+
+    <!-- String describing the Star/Favorite checkbox
+
+         Used by AccessibilityService to announce the purpose of the view.
+    -->
+    <string name="description_star">suosikki</string>
+
+    <!-- Strings for car mode notification -->
+    <!-- Shown when car mode is enabled -->
+    <string name="car_mode_disable_notification_title">Auto-tila asetettu</string>
+    <string name="car_mode_disable_notification_message">Valitse poistuaksesi auto-tilasta.</string>
+
+    <!-- Strings for tethered notification -->
+    <!-- Shown when the device is tethered -->
+    <string name="tethered_notification_title">Tetheröinti tai hotspot päällä</string>
+    <string name="tethered_notification_message">Valitse muokataksesi</string>
+
+    <!-- Strings for throttling notification -->
+    <!-- Shown when the user is in danger of being throttled -->
+    <string name="throttle_warning_notification_title">High mobile data use</string>
+    <string name="throttle_warning_notification_message">Touch to learn more about mobile data use</string>
+
+    <!-- Strings for throttling notification -->
+    <!-- Shown when the users bandwidth is reduced because of excessive data use -->
+    <string name="throttled_notification_title">Mobile data limit exceeded</string>
+    <string name="throttled_notification_message">Touch to learn more about mobile data use</string>
+
+    <!-- Strings for ExternalStorageFormatter service. -->
+    <!-- Text for progress dialog while unmounting USB storage volume [CHAR LIMIT=NONE] -->
+    <string name="progress_unmounting" product="nosdcard">Irroitetaan USB-muistia...</string>
+    <!-- Text for progress dialog while unmounting SD card [CHAR LIMIT=NONE] -->
+    <string name="progress_unmounting" product="default">Irroitetaan muistikorttia...</string>
+    <!-- Text for progress dialog while erasing USB storage volume [CHAR LIMIT=NONE] -->
+    <string name="progress_erasing" product="nosdcard">Tyhjennetään USB-muistia...</string>
+    <!-- Text for progress dialog while erasing SD card [CHAR LIMIT=NONE] -->
+    <string name="progress_erasing" product="default">Tyhjennetään muistikorttia...</string>
+    <!-- Text for message to user that an error happened when formatting USB storage [CHAR LIMIT=NONE] -->
+    <string name="format_error" product="nosdcard">USB-muistin tyhjentäminen epäonnistui.</string>
+    <!-- Text for message to user that an error happened when formatting SD card [CHAR LIMIT=NONE] -->
+    <string name="format_error" product="default">Muistikortin tyhjentäminen epäonnistui.</string>
+    <!-- Text for message to user that SD card has been removed while in use [CHAR LIMIT=NONE] -->
+    <string name="media_bad_removal">Muistikortti poistettiin ilman että sitä irroitettiin.</string>
+    <!-- Text for message to user USB storage is currently being checked [CHAR LIMIT=NONE] -->
+    <string name="media_checking" product="nosdcard">USB-muistia tarkistetaan.</string>
+    <!-- Text for message to user SD card is currently being checked [CHAR LIMIT=NONE] -->
+    <string name="media_checking" product="default">Muistikorttia tarkistetaan.</string>
+    <!-- Text for message to user SD card has been removed [CHAR LIMIT=NONE] -->
+    <string name="media_removed">Muistikortti poistettiin.</string>
+    <!-- Text for message to user USB storage is currently mounted on a computer [CHAR LIMIT=NONE] -->
+    <string name="media_shared" product="nosdcard">USB-muisti on tietokoneen käytössä.</string>
+    <!-- Text for message to user SD card is currently mounted on a computer [CHAR LIMIT=NONE] -->
+    <string name="media_shared" product="default">Muistikortti on tietokoneen käytössä.</string>
+    <!-- Text for message for an unknown external media state [CHAR LIMIT=NONE] -->
+    <string name="media_unknown_state">Ulkoinen media on tuntemattomassa tilassa.</string>
+
+    <!--Application killed toast -->
+    <string name="app_killed_message">Sovellus lopetettu</string>
+
+    <!-- Phone goggles -->
+    <string name="phone_goggles_problem_count">Problem #%1$d: </string>
+    <string name="phone_goggles_description">Solve the %1$d following maths problems in less than %2$d seconds in order to perform your communication.</string>
+    <plurals name="phone_goggles_countdown">
+        <item quantity="one">%d second left</item>
+        <item quantity="other">%d seconds left</item>
+    </plurals>
+</resources>
