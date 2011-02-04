@@ -1275,8 +1275,7 @@
                  android:allowClearUserData="false"
                  android:backupAgent="com.android.server.SystemBackupAgent"
                  android:killAfterRestore="false"
-                 android:icon="@drawable/ic_launcher_android"
-                 pluto:isThemeable="true">
+                 android:icon="@drawable/ic_launcher_android">
         <activity android:name="com.android.internal.app.ChooserActivity"
                 android:theme="@style/Theme.Dialog.Alert"
                 android:finishOnCloseSystemDialogs="true"
