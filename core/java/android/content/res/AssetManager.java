@@ -674,12 +674,6 @@ public final class AssetManager {
     public native final int updateResourcesWithAssetPath(String path);
 
     /**
-     * Debug method to dump resource information.
-     * {@hide}
-     */
-    public native final void dumpResources();
-
-    /**
      * Sets a flag indicating that this AssetManager should have themes
      * attached, according to the initial request to create it by the
      * ApplicationContext.

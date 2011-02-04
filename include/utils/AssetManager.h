@@ -228,7 +228,6 @@ public:
      */
     bool removeAssetPath(const String8 &packageName, void *cookie);
     bool updateWithAssetPath(const String8& path, void** cookie);
-    void dumpRes();
     void addRedirections(PackageRedirectionMap* resMap);
     void clearRedirections();
 

@@ -1808,16 +1808,6 @@ bool AssetManager::removeAssetPath(const String8 &packageName, void* cookie)
     return true;
 }
 
-void AssetManager::dumpRes()
-{
-    ResTable* rt = mResources;
-    if (rt == NULL) {
-        fprintf(stderr, "ResTable must not be NULL");
-        return;
-    }
-    rt->dump();
-}
-
 void AssetManager::addRedirections(PackageRedirectionMap* resMap)
 {
     getResources();

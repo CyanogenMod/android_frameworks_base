@@ -1970,15 +1970,6 @@ static jint android_content_AssetManager_updateResourcesWithAssetPath(
     return (res) ? (jint)cookie : 0;
 }
 
-static void android_content_AssetManager_dumpRes(JNIEnv* env, jobject clazz)
-{
-    AssetManager* am = assetManagerForJavaObject(env, clazz);
-    if (am == NULL) {
-        return;
-    }
-    am->dumpRes();
-}
-
 // ----------------------------------------------------------------------------
 
 /*
@@ -2098,8 +2089,6 @@ static JNINativeMethod gAssetManagerMethods[] = {
         (void*) android_content_AssetManager_removeAssetPath },
     { "updateResourcesWithAssetPath",   "(Ljava/lang/String;)I",
         (void*) android_content_AssetManager_updateResourcesWithAssetPath },
-    { "dumpResources", "()V",
-        (void*) android_content_AssetManager_dumpRes },
     { "getBasePackageCount", "()I",
         (void*) android_content_AssetManager_getBasePackageCount },
     { "getBasePackageName", "(I)Ljava/lang/String;",

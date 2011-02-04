@@ -1993,7 +1993,6 @@ public:
 #ifndef HAVE_ANDROID_OS
     void print(bool inclValues) const;
 #endif
-    void dump() const;
 
 private:
     struct Header;
