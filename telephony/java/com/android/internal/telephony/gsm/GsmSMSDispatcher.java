@@ -22,6 +22,7 @@ import android.app.PendingIntent.CanceledException;
 import android.content.Intent;
 import android.os.AsyncResult;
 import android.os.Message;
+import android.provider.Telephony.Sms;
 import android.provider.Telephony.Sms.Intents;
 import android.telephony.ServiceState;
 import android.util.Config;
@@ -60,13 +61,17 @@ final class GsmSMSDispatcher extends SMSDispatcher {
         String pduString = (String) ar.result;
         SmsMessage sms = SmsMessage.newFromCDS(pduString);
 
+        int tpStatus = sms.getStatus();
+
         if (sms != null) {
             int messageRef = sms.messageRef;
             for (int i = 0, count = deliveryPendingList.size(); i < count; i++) {
                 SmsTracker tracker = deliveryPendingList.get(i);
                 if (tracker.mMessageRef == messageRef) {
                     // Found it.  Remove from list and broadcast.
-                    deliveryPendingList.remove(i);
+                    if(tpStatus >= Sms.STATUS_FAILED || tpStatus < Sms.STATUS_PENDING ) {
+                       deliveryPendingList.remove(i);
+                    }
                     PendingIntent intent = tracker.mDeliveryIntent;
                     Intent fillIn = new Intent();
                     fillIn.putExtra("pdu", IccUtils.hexStringToBytes(pduString));
@@ -175,6 +180,8 @@ final class GsmSMSDispatcher extends SMSDispatcher {
         int msgCount = parts.size();
         int encoding = android.telephony.SmsMessage.ENCODING_UNKNOWN;
 
+        mRemainingMessages = msgCount;
+
         for (int i = 0; i < msgCount; i++) {
             TextEncodingDetails details = SmsMessage.calculateLength(parts.get(i), false);
             if (encoding != details.codeUnitSize
@@ -263,6 +270,8 @@ final class GsmSMSDispatcher extends SMSDispatcher {
         int refNumber = getNextConcatenatedRef() & 0x00FF;
         int msgCount = parts.size();
         int encoding = android.telephony.SmsMessage.ENCODING_UNKNOWN;
+
+        mRemainingMessages = msgCount;
 
         for (int i = 0; i < msgCount; i++) {
             TextEncodingDetails details = SmsMessage.calculateLength(parts.get(i), false);
