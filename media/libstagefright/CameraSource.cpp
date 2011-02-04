@@ -149,8 +149,15 @@ CameraSource::CameraSource(const sp<Camera> &camera)
     }
 
     const char *colorFormatStr = params.get(CameraParameters::KEY_VIDEO_FRAME_FORMAT);
-    if (colorFormatStr == NULL)
+    if (colorFormatStr == NULL) {
+#ifdef USE_YUV422I_DEFAULT_COLORFORMAT
+        // on some devices (such as sholes), the camera doesn't properly report what
+        // color format it needs, so we need to force it as a default
+        colorFormatStr = CameraParameters::PIXEL_FORMAT_YUV422I;
+#else
         colorFormatStr = CameraParameters::PIXEL_FORMAT_YUV420SP;
+#endif
+    }
 
     int32_t colorFormat = getColorFormat(colorFormatStr);
 
