@@ -292,14 +292,13 @@ class ContextImpl extends Context {
     public void setTheme(int resid) {
         mThemeResource = resid;
     }
-
+    
     @Override
     public Resources.Theme getTheme() {
         if (mTheme == null) {
             if (mThemeResource == 0) {
                 mThemeResource = com.android.internal.R.style.Theme;
             }
-
             mTheme = mResources.newTheme();
             mTheme.applyStyle(mThemeResource, true);
         }

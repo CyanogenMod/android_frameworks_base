@@ -344,7 +344,7 @@ public class ActivityInfo extends ComponentInfo
      * the mode from the theme will be used.
      */
     public int softInputMode;
-
+    
     public ActivityInfo() {
     }
 

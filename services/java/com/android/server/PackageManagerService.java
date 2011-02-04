@@ -349,7 +349,7 @@ class PackageManagerService extends IPackageManager.Stub {
     final ResolveInfo mResolveInfo = new ResolveInfo();
     ComponentName mResolveComponentName;
     PackageParser.Package mPlatformPackage;
-    
+
     IAssetRedirectionManager mAssetRedirectionManager;
 
     // Set of pending broadcasts for aggregating enable/disable of components.
@@ -2369,7 +2369,7 @@ class PackageManagerService extends IPackageManager.Stub {
         }
         return finalList;
     }
-    
+
     public List<PackageInfo> getInstalledThemePackages() {
         // Returns a list of theme APKs.
         ArrayList<PackageInfo> finalList = new ArrayList<PackageInfo>();

@@ -2015,7 +2015,7 @@ private:
         const ResTable_package* const pkg, const Header* const header);
 
     void print_value(const Package* pkg, const Res_value& value) const;
-
+    
     mutable Mutex               mLock;
 
     status_t                    mError;

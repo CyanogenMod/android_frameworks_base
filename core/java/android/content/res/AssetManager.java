@@ -659,8 +659,8 @@ public final class AssetManager {
 
     /**
      * Delete a set of assets from the asset manager. Not for use by
-     * applications. Returns true if succeeded or false on failure. {@hide
-     * }
+     * applications. Returns true if succeeded or false on failure.
+     * {@hide}
      */
     public native final boolean removeAssetPath(String packageName, int cookie);
 

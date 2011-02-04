@@ -53,7 +53,7 @@ public class Ringtone {
         DrmStore.Audio.DATA,
         DrmStore.Audio.TITLE
     };
-    
+
     private MediaPlayer mAudio;
 
     private Uri mUri;
@@ -111,7 +111,7 @@ public class Ringtone {
         if (mTitle != null) return mTitle;
         return mTitle = getTitle(context, mUri, true);
     }
-    
+
     private static String stringForQuery(Cursor cursor) {
         if (cursor != null) {
             try {

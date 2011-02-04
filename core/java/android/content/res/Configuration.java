@@ -179,7 +179,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
     public static final int ORIENTATION_PORTRAIT = 1;
     public static final int ORIENTATION_LANDSCAPE = 2;
     public static final int ORIENTATION_SQUARE = 3;
-   
+
     /**
      * @hide
      */
@@ -422,7 +422,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         if (delta.seq != 0) {
             seq = delta.seq;
         }
-
+        
         if (delta.customTheme != null
                 && (customTheme == null || !customTheme.equals(delta.customTheme))) {
             changed |= ActivityInfo.CONFIG_THEME_RESOURCE;

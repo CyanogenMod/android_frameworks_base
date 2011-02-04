@@ -120,7 +120,7 @@ public class LinearLayout extends ViewGroup {
     public LinearLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
-    
+
     /** @hide pending api review */
     public LinearLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
