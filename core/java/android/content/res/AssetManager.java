@@ -659,8 +659,8 @@ public final class AssetManager {
 
     /**
      * Delete a set of assets from the asset manager. Not for use by
-     * applications. Returns true if succeeded or false on failure. {@hide
-     * }
+     * applications. Returns true if succeeded or false on failure.
+     * {@hide}
      */
     public native final boolean removeAssetPath(String packageName, int cookie);
 
@@ -672,12 +672,6 @@ public final class AssetManager {
      * {@hide}
      */
     public native final int updateResourcesWithAssetPath(String path);
-
-    /**
-     * Debug method to dump resource information.
-     * {@hide}
-     */
-    public native final void dumpResources();
 
     /**
      * Sets a flag indicating that this AssetManager should have themes

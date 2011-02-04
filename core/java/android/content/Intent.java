@@ -2069,7 +2069,7 @@ public class Intent implements Parcelable, Cloneable {
 
     /**
      * Used to indicate that a theme package has been installed or un-installed.
-     * 
+     *
      * @hide
      */
     public static final String CATEGORY_THEME_PACKAGE_INSTALLED_STATE_CHANGE =

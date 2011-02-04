@@ -17,6 +17,7 @@
 package android.content.res;
 
 import android.os.SystemProperties;
+import android.text.TextUtils;
 
 /**
  * @hide
@@ -73,12 +74,14 @@ public final class CustomTheme implements Cloneable {
     @Override
     public final String toString() {
         StringBuilder result = new StringBuilder();
-        result.append(mThemeId);
-        result.append("_");
-        if (mThemePackageName != null && mThemePackageName.length() > 0){
+        if (!TextUtils.isEmpty(mThemePackageName) && !TextUtils.isEmpty(mThemeId)) {
             result.append(mThemePackageName);
+            result.append('(');
+            result.append(mThemeId);
+            result.append(')');
+        } else {
+            result.append("system");
         }
-
         return result.toString();
     }
 

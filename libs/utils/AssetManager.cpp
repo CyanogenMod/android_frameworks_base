@@ -35,8 +35,6 @@
 #include <utils/threads.h>
 
 #include <dirent.h>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <errno.h>
 #include <assert.h>
 
@@ -53,8 +51,6 @@ static const char* kAppZipName = NULL; //"classes.jar";
 static const char* kSystemAssets = "framework/framework-res.apk";
 
 static const char* kExcludeExtension = ".EXCLUDE";
-
-static const char* kThemeResCacheDir = "res-cache/";
 
 static Asset* const kExcludedAsset = (Asset*) 0xd000000d;
 
@@ -127,7 +123,7 @@ bool AssetManager::addAssetPath(const String8& path, void** cookie)
             return true;
         }
     }
-
+    
     LOGV("In %p Asset %s path: %s", this,
          ap.type == kFileTypeDirectory ? "dir" : "zip", ap.path.string());
 
@@ -190,7 +186,7 @@ void AssetManager::setLocaleLocked(const char* locale)
         delete[] mLocale;
     }
     mLocale = strdupNew(locale);
-
+    
     updateResourceParamsLocked();
 }
 
@@ -379,55 +375,6 @@ FileType AssetManager::getFileType(const char* fileName)
         return kFileTypeNonexistent;
     else
         return kFileTypeRegular;
-}
-
-static void createDirIfNecessary(const char* path, mode_t mode, struct stat *statbuf)
-{
-    if (lstat(path, statbuf) != 0) {
-        if (mkdir(path, mode) != 0) {
-            LOGE("mkdir(%s,%04o) failed: %s\n", path, (int)mode, strerror(errno));
-        }
-    }
-}
-
-static SharedBuffer* addToEntriesByTypeBuffer(SharedBuffer* buf, uint32_t from, uint32_t to)
-{
-    size_t currentSize = (buf != NULL) ? buf->size() : 0;
-
-    int type = Res_GETTYPE(from)+1;
-    int entry = Res_GETENTRY(from);
-
-    size_t typeSize = (type+1) * sizeof(uint32_t*);
-    unsigned int requestSize = roundUpPower2(typeSize);
-    if (typeSize > currentSize) {
-        unsigned int requestSize = roundUpPower2(typeSize);
-        if (buf == NULL) {
-            buf = SharedBuffer::alloc(requestSize);
-        } else {
-            buf = buf->editResize(requestSize);
-        }
-        memset((unsigned char*)buf->data()+currentSize, 0, requestSize-currentSize);
-    }
-
-    uint32_t** entriesByType = (uint32_t**)buf->data();
-    uint32_t* entries = entriesByType[type];
-    SharedBuffer* entriesBuf = (entries != NULL) ? SharedBuffer::bufferFromData(entries) : NULL;
-    currentSize = (entriesBuf != NULL) ? entriesBuf->size() : 0;
-    size_t entrySize = (entry+1) * sizeof(uint32_t);
-    if (entrySize > currentSize) {
-        unsigned int requestSize = roundUpPower2(entrySize);
-        if (entriesBuf == NULL) {
-            entriesBuf = SharedBuffer::alloc(requestSize);
-        } else {
-            entriesBuf = entriesBuf->editResize(requestSize);
-        }
-        memset((unsigned char*)entriesBuf->data()+currentSize, 0, requestSize-currentSize);
-        entriesByType[type] = (uint32_t*)entriesBuf->data();
-    }
-    entries = (uint32_t*)entriesBuf->data();
-    entries[entry] = to;
-
-    return buf;
 }
 
 const ResTable* AssetManager::getResTable(bool required) const
@@ -685,7 +632,7 @@ Asset* AssetManager::openInLocaleVendorLocked(const char* fileName, AccessMode m
             /* look at the filesystem on disk */
             String8 path(createPathNameLocked(ap, locale, vendor));
             path.appendPath(fileName);
-
+    
             String8 excludeName(path);
             excludeName.append(kExcludeExtension);
             if (::getFileType(excludeName.string()) != kFileTypeNonexistent) {
@@ -693,28 +640,28 @@ Asset* AssetManager::openInLocaleVendorLocked(const char* fileName, AccessMode m
                 //printf("+++ excluding '%s'\n", (const char*) excludeName);
                 return kExcludedAsset;
             }
-
+    
             pAsset = openAssetFromFileLocked(path, mode);
-
+    
             if (pAsset == NULL) {
                 /* try again, this time with ".gz" */
                 path.append(".gz");
                 pAsset = openAssetFromFileLocked(path, mode);
             }
-
+    
             if (pAsset != NULL)
                 pAsset->setAssetSource(path);
         } else {
             /* find in cache */
             String8 path(createPathNameLocked(ap, locale, vendor));
             path.appendPath(fileName);
-
+    
             AssetDir::FileInfo tmpInfo;
             bool found = false;
-
+    
             String8 excludeName(path);
             excludeName.append(kExcludeExtension);
-
+    
             if (mCache.indexOf(excludeName) != NAME_NOT_FOUND) {
                 /* go no farther */
                 //printf("+++ Excluding '%s'\n", (const char*) excludeName);
@@ -1533,7 +1480,7 @@ bool AssetManager::fncScanAndMergeDirLocked(
 
     // XXX This is broken -- the filename cache needs to hold the base
     // asset path separately from its filename.
-
+    
     partialPath = createPathNameLocked(ap, locale, vendor);
     if (dirName[0] != '\0') {
         partialPath.appendPath(dirName);
@@ -1859,16 +1806,6 @@ bool AssetManager::removeAssetPath(const String8 &packageName, void* cookie)
     rt->removeAssetsByCookie(packageName, (void *)cookie);
 
     return true;
-}
-
-void AssetManager::dumpRes()
-{
-    ResTable* rt = mResources;
-    if (rt == NULL) {
-        fprintf(stderr, "ResTable must not be NULL");
-        return;
-    }
-    rt->dump();
 }
 
 void AssetManager::addRedirections(PackageRedirectionMap* resMap)

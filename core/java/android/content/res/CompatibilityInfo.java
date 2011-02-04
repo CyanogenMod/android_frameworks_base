@@ -140,7 +140,7 @@ public class CompatibilityInfo {
      * Whether the application supports third-party theming.
      */
     public final boolean isThemeable;
-    
+
     public CompatibilityInfo(ApplicationInfo appInfo) {
         isThemeable = appInfo.isThemeable;
         appFlags = appInfo.flags;

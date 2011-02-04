@@ -198,7 +198,7 @@ public class RingtoneManager {
         "\"" + MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/\" || " + MediaStore.Audio.Media._ID,
         MediaStore.Audio.Media.TITLE_KEY
     };
-
+    
     /**
      * The column index (in the cursor returned by {@link #getCursor()} for the
      * row ID.
@@ -408,11 +408,11 @@ public class RingtoneManager {
         
         return getUriFromCursor(cursor);
     }
-
+    
     private static Uri getUriFromCursor(Cursor cursor) {
         return Uri.parse(cursor.getString(URI_COLUMN_INDEX));
     }
-
+    
     /**
      * Gets the position of a {@link Uri} within this {@link RingtoneManager}.
      * 

@@ -1211,13 +1211,13 @@ public final class ActivityThread {
         //    Slog.w(TAG, "Throwing away out-of-date resources!!!! "
         //            + r + " " + resDir);
         //}
-        
+
         AssetManager assets = new AssetManager();
         assets.setThemeSupport(compInfo.isThemeable);
         if (assets.addAssetPath(resDir) == 0) {
             return null;
         }
-        
+
         /* Attach theme information to the resulting AssetManager when appropriate. */
         Configuration config = getConfiguration();
         if (compInfo.isThemeable && config != null) {
