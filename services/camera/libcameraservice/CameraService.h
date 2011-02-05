@@ -146,7 +146,11 @@ private:
         // convert client from cookie
         static sp<Client>       getClientFromCookie(void* user);
         // handlers for messages
+#ifdef BOARD_USE_CAF_LIBCAMERA
+        void                    handleShutter(image_rect_type *size,  bool playShutterSoundOnly);
+#else
         void                    handleShutter(image_rect_type *size);
+#endif
         void                    handlePreviewData(const sp<IMemory>& mem);
         void                    handlePostview(const sp<IMemory>& mem);
         void                    handleRawPicture(const sp<IMemory>& mem);
