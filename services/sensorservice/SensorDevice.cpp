@@ -202,12 +202,10 @@ ssize_t SensorDevice::poll(sensors_event_t* buffer, size_t count) {
             buffer[pollsDone].timestamp = oldBuffer.time;
             buffer[pollsDone].sensor = result;
             buffer[pollsDone].type = oldBuffer.sensor;
-            buffer[pollsDone].acceleration = oldBuffer.acceleration;
-            buffer[pollsDone].magnetic = oldBuffer.magnetic;
-            buffer[pollsDone].orientation = oldBuffer.orientation;
+            /* This part is a union. Regardless of the sensor type,
+             * we only need to copy a sensors_vec_t and a float */
+            buffer[pollsDone].acceleration = oldBuffer.vector;
             buffer[pollsDone].temperature = oldBuffer.temperature;
-            buffer[pollsDone].distance = oldBuffer.distance;
-            buffer[pollsDone].light = oldBuffer.light;
             LOGV("Adding results for sensor %d", buffer[pollsDone].sensor);
             pollsDone++;
         }
