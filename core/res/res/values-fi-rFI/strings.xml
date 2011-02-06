@@ -1603,10 +1603,6 @@
     <!-- Button to restart the device after the factory test. -->
     <string name="factorytest_reboot">Käynnistä uudelleen</string>
 
-    <!-- Do not translate.  WebView User Agent string -->
-    <string name="web_user_agent" translatable="false"><xliff:g id="x">Mozilla/5.0 (Linux; U; Android %s)
-        AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1</xliff:g></string>
-
     <!-- Title for a JavaScript dialog. "The page at <url of current page> says:" -->
     <string name="js_dialog_title">Sivusto osoitteessa \'<xliff:g id="title">%s</xliff:g>\' sanoo:</string>
     <!-- Default title for a javascript dialog -->
@@ -2032,9 +2028,6 @@
         <item quantity="one">Langaton verkko käytettävissä</item>
         <item quantity="other">Langattomia verkkoja käytettävissä</item>
     </plurals>
-    <!-- Do not translate. Default access point SSID used for tethering -->
-    <string name="wifi_tether_configure_ssid_default" translatable="false">AndroidAP</string>
-
     <!-- Name of the dialog that lets the user choose an accented character to insert -->
     <string name="select_character">Lisää merkki</string>
 
@@ -2056,8 +2049,6 @@
     <!-- Security Permissions strings-->
     <!-- The default permission group for any permissions that have not explicitly set a group. -->
     <string name="default_permission_group">Oletus</string>
-    <!-- Do not translate. -->
-    <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
     <!-- Shown for an application when it doesn't require any permission grants. -->
     <string name="no_permissions">Ei vaadittuja lupia</string>
     <!-- When installing an application, the less-dangerous permissions are hidden.  If the user showed those, this is the text to hide them again.  -->
@@ -2135,9 +2126,7 @@
     <!-- devices we don't support all the locales we ship to and need to replace the '%s' with a    -->
     <!-- locale string based on mcc values.  By default (0-length string) we don't replace the %s   -->
     <!-- at all and later replace it with a locale string based on the users chosen locale          -->
-    <!-- DO NOT TRANSLATE -->
-    <string name="locale_replacement">""</string>
-
+    
     <!-- Title of the pop-up dialog in which the user switches input method components. -->
     <string name="select_input_method">Valitse syöttötapa</string>
 
@@ -2249,9 +2238,7 @@
     <!-- An Array of [[Carrier-ID]                     -->
     <!--              [default-locale]                 -->
     <!--              [default-wifi-allowed-channels]] -->
-    <string-array translatable="false" name="carrier_properties">
-    </string-array>
-
+   
     <!-- Title for the selected state of a CompoundButton. -->
     <string name="accessibility_compound_button_selected">tarkistettu</string>
 
@@ -2277,9 +2264,7 @@
     <!-- Dialog title for user to select a different wallpaper from service list -->
     <string name="chooser_wallpaper">Vaihda taustakuva</string>
 
-    <!-- Do Not Translate: Alternate eri.xml -->
-    <string name="alternate_eri_file">/data/eri.xml</string>
-
+   
     <string name="pptp_vpn_description">Point-to-Point Tunneling Protocol</string>
     <string name="l2tp_vpn_description">Layer 2 Tunneling Protocol</string>
     <string name="l2tp_ipsec_psk_vpn_description">Pre-shared key based L2TP/IPSec VPN</string>

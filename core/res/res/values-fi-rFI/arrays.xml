@@ -26,14 +26,4 @@
         <item>Bootloader</item>
     </array>
 
-    <!-- Do not translate. -->
-    <integer-array name="maps_starting_lat_lng">
-        <item>60169653</item>
-        <item>24939480</item>
-    </integer-array>
-    <!-- Do not translate. -->
-    <integer-array name="maps_starting_zoom">
-        <item>4</item>
-    </integer-array>
-
 </resources>
