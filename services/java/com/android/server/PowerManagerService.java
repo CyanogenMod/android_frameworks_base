@@ -645,6 +645,8 @@ class PowerManagerService extends IPowerManager.Stub
                 com.android.internal.R.bool.config_unplugTurnsOnScreen);
 
         // read settings for auto-brightness
+        mFlashlightAffectsLightSensor = resources.getBoolean(
+                com.android.internal.R.bool.config_flashlight_affects_lightsensor);
         mUseSoftwareAutoBrightness = resources.getBoolean(
                 com.android.internal.R.bool.config_automatic_brightness_available);
         if (mUseSoftwareAutoBrightness) {
