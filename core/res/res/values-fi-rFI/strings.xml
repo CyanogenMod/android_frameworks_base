@@ -1,0 +1,850 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/strings.xml
+**
+** Copyright 2006, The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="byteShort">B</string>
+    <string name="kilobyteShort">KB</string>
+    <string name="megabyteShort">MB</string>
+    <string name="gigabyteShort">GB</string>
+    <string name="terabyteShort">TB</string>
+    <string name="petabyteShort">PB</string>
+    <string name="fileSizeSuffix"><xliff:g id="number" example="123">%1$s</xliff:g><xliff:g id="unit" example="KB">%2$s</xliff:g></string>
+
+    <string name="untitled">&lt;nimetön&gt;</string>
+
+    <string name="ellipsis">\u2026</string>
+
+    <string name="emptyPhoneNumber">(Ei puhelinnumeroa)</string>
+
+    <string name="unknownName">(Tuntematon)</string>
+
+    <string name="defaultVoiceMailAlphaTag">Vastaaja</string>
+
+    <string name="defaultMsisdnAlphaTag">MSISDN1</string>
+
+    <string name="mmiError">Yhteysongelma tai väärä MMI-koodi.</string>
+    <string name="mmiFdnError">Toiminto on rajoitettu vain sallittuihin numeroihin.</string>
+
+    <string name="serviceEnabled">Palvelu päällä.</string>
+    <string name="serviceEnabledFor">Palvelu päällä:</string>
+    <string name="serviceDisabled">Palvelu pois päältä.</string>
+    <string name="serviceRegistered">Rekisteröinti onnistui.</string>
+    <string name="serviceErased">Tyhjennys onnistui.</string>
+    <string name="passwordIncorrect">Väärä salasana.</string>
+    <string name="mmiComplete">MMI valmis.</string>
+    <string name="badPin">Vanha PIN-koodi väärin.</string>
+    <string name="badPuk">PUK-koodi väärin.</string>
+    <string name="mismatchPin">PIN-koodit eivät täsmää.</string>
+    <string name="invalidPin">Kirjoita PIN-koodi, joka on 4-8 merkkiä pitkä.</string>
+    <string name="needPuk">SIM-korttisi on PUK-lukittu. Syötä PUK-koodi.</string>
+    <string name="needPuk2">Syötä PUK2-koodi.</string>
+
+    <string name="ClipMmi">Saapuvan soittajan ID</string>
+    <string name="ClirMmi">Lähtevän soittajan ID</string>
+    <string name="CfMmi">Soitonsiirto</string>
+    <string name="CwMmi">Puhelu pidossa</string>
+    <string name="BaMmi">Puheluesto</string>
+    <string name="PwdMmi">Salasanan vaihto</string>
+    <string name="PinMmi">PIN-koodin vaihto</string>
+    <string name="CnipMmi">Soittava numero hetkellä</string>
+    <string name="CnirMmi">Soittava numero rajoitettu</string>
+    <string name="ThreeWCMmi">Kolmitie-puhelu</string>
+    <string name="RuacMmi">Ei-haluttujen puheluiden esto</string>
+    <string name="CndMmi">Soittavan numeron näyttäminen</string>
+    <string name="DndMmi">Ei saa häiritä</string>
+
+    <string name="CLIRDefaultOnNextCallOn">Rajoitettavat soittajan ID-oletukset. Seuraava puhelu: rajoitettu</string>
+    <string name="CLIRDefaultOnNextCallOff">Rajoitettavat soittajan ID-oletukset. Seuraava puhelu: ei rajoitettu</string>
+    <string name="CLIRDefaultOffNextCallOn">Ei-rajoitettavat soittajan ID-oletukset. Seuraava puhelu: rajoitettu</string>
+    <string name="CLIRDefaultOffNextCallOff">Ei-rajoitettavat soittajan ID-oletukset. Seuraava puhelu: ei rajoitettu</string>
+
+    <string name="serviceNotProvisioned">Palvelu ei ole käytössä.</string>
+    <string name="CLIRPermanent">Soittajan ID-asetuksia ei voida muuttaa.</string>
+
+    <string name="RestrictedChangedTitle">Rajoitettua pääsyä muutettu</string>
+    <string name="RestrictedOnData">Data-palvelu estetty.</string>
+    <string name="RestrictedOnEmergency">Hätäpuhelu estetty.</string>
+    <string name="RestrictedOnNormal">Vastaaja estetty.</string>
+    <string name="RestrictedOnAllVoice">Kaikki äänipalvelut estetty.</string>
+    <string name="RestrictedOnSms">SMS-palvelu estetty.</string>
+    <string name="RestrictedOnVoiceData">Ääni- ja datapalvelut estetty.</string>
+    <string name="RestrictedOnVoiceSms">Ääni- ja SMS-palvelut estetty.</string>
+    <string name="RestrictedOnAll">Kaikki ääni-, data- ja SMS-palvelut estetty.</string>
+
+    <string name="serviceClassVoice">Ääni</string>
+    <string name="serviceClassData">Data</string>
+    <string name="serviceClassFAX">Faksi</string>
+    <string name="serviceClassSMS">SMS</string>
+    <string name="serviceClassDataAsync">Async</string>
+    <string name="serviceClassDataSync">Sync</string>
+    <string name="serviceClassPacket">Paketti</string>
+    <string name="serviceClassPAD">PAD</string>
+
+    <string name="roamingText0">Roaming-ilmoitus päällä</string>
+    <string name="roamingText1">Roaming-ilmoitus pois päältä</string>
+    <string name="roamingText2">Roaming-ilmoitus vilkkuu</string>
+    <string name="roamingText3">Poissa naapurustosta</string>
+    <string name="roamingText4">Poissa rakennuksesta</string>
+    <string name="roamingText5">Roaming - Suosittu järjestelmä</string>
+    <string name="roamingText6">Roaming - Mahdollinen järjestelmä</string>
+    <string name="roamingText7">Roaming - Alliance Partner</string>
+    <string name="roamingText8">Roaming - Premium Partner</string>
+    <string name="roamingText9">Roaming - Täyden palvelun toiminnallisuus</string>
+    <string name="roamingText10">Roaming - Osittainen palvelun toiminnallisuus</string>
+    <string name="roamingText11">Roaming otsake päällä</string>
+    <string name="roamingText12">Roaming otsake pois päältä</string>
+    <string name="roamingTextSearching">Etsitään palveluja</string>
+
+    <string name="cfTemplateNotForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: Ei siirretty</string>
+    <string name="cfTemplateForwarded"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g></string>
+    <string name="cfTemplateForwardedTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: <xliff:g id="dialing_number">{1}</xliff:g> jälkeen <xliff:g id="time_delay">{2}</xliff:g> sekuntia</string>
+    <string name="cfTemplateRegistered"><xliff:g id="bearer_service_code">{0}</xliff:g>: Ei siirretty</string>
+    <string name="cfTemplateRegisteredTime"><xliff:g id="bearer_service_code">{0}</xliff:g>: Ei siirretty</string>
+
+    <string name="fcComplete">Feature code valmis.</string>
+    <string name="fcError">Yhteysongelma tai viallinen feature code.</string>
+    <string name="httpErrorOk">OK</string>
+    <string name="httpError">Web-sivulla on virhe.</string>
+    <string name="httpErrorLookup">Osoitetta ei löyty.</string>
+    <string name="httpErrorUnsupportedAuthScheme">Autentikointikaava ei ole tuettu.</string>
+    <string name="httpErrorAuth">Autentikointi epäonnistui.</string>
+    <string name="httpErrorProxyAuth">Autentikointi välityspalvelimen kautta epäonnistui.</string>
+    <string name="httpErrorConnect">Yhteys palvelimeen epäonnistui.</string>
+    <string name="httpErrorIO">Palvelin ei vastaa. Yritä myöhemmin uudelleen</string>
+    <string name="httpErrorTimeout">Yhteys palvelimeen aikakatkaistiin.</string>
+    <string name="httpErrorRedirectLoop">Sivu sisältää liian monta palvelinuudellenohjausta.</string>
+    <string name="httpErrorUnsupportedScheme">Protokolla ei ole tuettu.</string>
+    <string name="httpErrorFailedSslHandshake">Turvallista yhteyttä ei voitu muodostaa.</string>
+    <string name="httpErrorBadUrl">Sivua ei voitu avata koska osoite on viallinen.</string>
+    <string name="httpErrorFile">Tiedostoon ei ole pääsyä.</string>
+    <string name="httpErrorFileNotFound">Haettua tiedostoa ei löytynyt.</string>
+    <string name="httpErrorTooManyRequests">Liian monta pyyntöä. Yritä myöhemmin uudelleen.</string>
+
+    <string name="notification_title">Kirjautumisvirhe <xliff:g id="account" example="foo@gmail.com">%1$s</xliff:g></string>
+
+    <string name="contentServiceSync">Synkronointi</string>
+    <string name="contentServiceSyncNotificationTitle">Synkronointi</string>
+    <string name="contentServiceTooManyDeletesNotificationDesc">Liian monta <xliff:g id="content_type">%s</xliff:g> poistoa.</string>
+
+    <string name="low_memory">Puhelimen muisti on täynnä! Poista tiedostoja vapauttaaksesi tilaa.</string>
+
+    <string name="me">Minä</string>
+
+    <string name="power_dialog">Puhelin-asetukset</string>
+    <string name="silent_mode">Äänetön</string>
+    <string name="turn_on_radio">Wlan päälle</string>
+    <string name="turn_off_radio">Wlan pois päältä</string>
+    <string name="screen_lock">Näyttölukitus</string>
+    <string name="power_off">Virta pois</string>
+    <string name="reboot_system">Käynnistä uudelleen</string>
+
+    <string name="shutdown_progress">Sammutetaan\u2026</string>
+
+    <string name="reboot_progress">Käynnistetään uudelleen\u2026</string>
+
+    <string name="shutdown_confirm">Puhelin sammutetaan.</string>
+
+    <string name="reboot_confirm">Puhelin käynnistetään uudestaan.</string>
+
+    <string name="recent_tasks_title">Viimeiset</string>
+    <string name="no_recent_tasks">Ei viimeisiä sovelluksia.</string>
+
+    <string name="global_actions">Puhelin-asetukset</string>
+
+    <string name="global_action_lock">Näyttölukitus</string>
+
+    <string name="global_action_power_off">Virta pois</string>
+
+    <string name="global_action_reboot">Käynnistä uudelleen</string>
+
+    <string name="global_action_toggle_silent_mode">Äänetön</string>
+
+    <string name="global_action_silent_mode_on_status">Äänet ovat pois päältä</string>
+
+    <string name="global_action_silent_mode_off_status">Äänet ovat päällä</string>
+
+    <string name="global_actions_toggle_airplane_mode">Lentokone-tila</string>
+
+    <string name="global_actions_airplane_mode_on_status">Lentokone-tila on päällä</string>
+
+    <string name="global_actions_airplane_mode_off_status">Lentokone-tila on pois päältä</string>
+
+    <string name="safeMode">Turvallisuus-tila</string>
+
+    <string name="android_system_label">Android-järjestelmä</string>
+
+    <string name="permgrouplab_costMoney">Palvelut, jotka ovat maksullisia</string>
+    <string name="permgroupdesc_costMoney">Salli sovelluksen käyttää palveluja, jotka ovat maksullisia.</string>
+
+    <string name="permgrouplab_messages">Viestit</string>
+    <string name="permgroupdesc_messages">Lukea ja kirjoittaa SMS, sähköposti ja muita viestejäsi.</string>
+
+    <string name="permgrouplab_personalInfo">Henkilökohtaiset tiedot</string>
+    <string name="permgroupdesc_personalInfo">Pääsy henkilöiden yhteystietoihin ja kalenteriin.</string>
+
+    <string name="permgrouplab_location">Sijainti</string>
+    <string name="permgroupdesc_location">Fyysisen sijainnin tarkkailu</string>
+
+    <string name="permgrouplab_network">Verkko</string>
+    <string name="permgroupdesc_network">Salli pääsy erilaisiin verkkoihin.</string>
+
+    <string name="permgrouplab_accounts">Tilit</string>
+    <string name="permgroupdesc_accounts">Pääsy eri tileihin.</string>
+
+    <string name="permgrouplab_hardwareControls">Laitteisto</string>
+    <string name="permgroupdesc_hardwareControls">Pääsy laitteistoon, esim. kamera.</string>
+
+    <string name="permgrouplab_phoneCalls">Puhelut</string>
+    <string name="permgroupdesc_phoneCalls">Puheluiden tallennus, prosessointi ja tarkkailu.</string>
+
+    <string name="permgrouplab_systemTools">Järjestelmätyökalut</string>
+    <string name="permgroupdesc_systemTools">Alemman tason pääsy järjestelmään ja sen hallintaan.</string>
+
+    <string name="permgrouplab_developmentTools">Kehitystyökalut</string>
+    <string name="permgroupdesc_developmentTools">Sovelluskehittäjien tarvitsemia ominaisuuksia.</string>
+
+    <string name="permgrouplab_storage">Muisti</string>
+    <string name="permgroupdesc_storage" product="nosdcard">Pääsy USB-levyasemaan.</string>
+    <string name="permgroupdesc_storage" product="default">Pääsy muistikorttiin.</string>
+
+    <string name="policylab_limitPassword">Aseta salasanasäännöt</string>
+    <string name="policydesc_limitPassword">Määritä salasanan pituutta ja merkkejä koskevat säännöt</string>
+    <string name="policylab_watchLogin">Tarkkaile näyttölukituksen avaamisyrityksiä.</string>
+    <string name="policydesc_watchLogin">Tarkkaile väärien salasanojen määrää ja lukitse tai tyhjennä puhelimen muisti, jos liian monta yritystä menee 	väärin</string>
+    <string name="policylab_resetPassword">Vaihda näyttölukituksen salasana.</string>
+    <string name="policydesc_resetPassword">Vaihda näyttölukituksen salasana.</string>
+    <string name="policylab_forceLock">Lukitse näyttö</string>
+    <string name="policydesc_forceLock">Määritä milloin ja miten näyttö lukittuu</string>
+    <string name="policylab_wipeData">Tyhjennä muisti</string>
+    <string name="policydesc_wipeData">Tyhjennä puhelimen muisti varoittamatta, suorittamalla tehdasasetusten palautus.</string>
+
+    <string-array name="phoneTypes">
+        <item>Koti</item>
+        <item>Matkapuhelin</item>
+        <item>Työ</item>
+        <item>Työ faksi</item>
+        <item>Koti faksi</item>
+        <item>Hakulaite</item>
+        <item>Muu</item>
+        <item>Määritä</item>
+    </string-array>
+
+    <string-array name="emailAddressTypes">
+        <item>Koti</item>
+        <item>Työ</item>
+        <item>Muu</item>
+        <item>Määritä</item>
+    </string-array>
+
+    <string-array name="postalAddressTypes">
+        <item>Koti</item>
+        <item>Työ</item>
+        <item>Muu</item>
+        <item>Määritä</item>
+    </string-array>
+
+    <string-array name="imAddressTypes">
+        <item>Koti</item>
+        <item>Työ</item>
+        <item>Muu</item>
+        <item>Määritä</item>
+    </string-array>
+
+    <string-array name="organizationTypes">
+        <item>Työ</item>
+        <item>Muu</item>
+        <item>Määritä</item>
+    </string-array>
+
+    <string-array name="imProtocols">
+        <item>AIM</item>
+        <item>Windows Live</item>
+        <item>Yahoo</item>
+        <item>Skype</item>
+        <item>QQ</item>
+        <item>Google Talk</item>
+        <item>ICQ</item>
+        <item>Jabber</item>
+    </string-array>
+
+    <string name="phoneTypeCustom">Määritä</string>
+    <string name="phoneTypeHome">Koti</string>
+    <string name="phoneTypeMobile">Matkapuhelin</string>
+    <string name="phoneTypeWork">Työ</string>
+    <string name="phoneTypeFaxWork">Faksi (työ)</string>
+    <string name="phoneTypeFaxHome">Faksi (koti)</string>
+    <string name="phoneTypePager">Hakulaite</string>
+    <string name="phoneTypeOther">Muu</string>
+    <string name="phoneTypeCallback">Callback</string>
+    <string name="phoneTypeCar">Auto</string>
+    <string name="phoneTypeCompanyMain">Yritys</string>
+    <string name="phoneTypeIsdn">ISDN</string>
+    <string name="phoneTypeMain">Main</string>
+    <string name="phoneTypeOtherFax">Faksi (muu)</string>
+    <string name="phoneTypeRadio">Radio</string>
+    <string name="phoneTypeTelex">Teleksi</string>
+    <string name="phoneTypeTtyTdd">TTY TDD</string>
+    <string name="phoneTypeWorkMobile">Matkapuhelin (työ)</string>
+    <string name="phoneTypeWorkPager">Hakulaite (työ)</string>
+    <string name="phoneTypeAssistant">Assistentti</string>
+    <string name="phoneTypeMms">MMS</string>
+
+    <string name="eventTypeBirthday">Syntymäpäivä</string>
+    <string name="eventTypeAnniversary">Vuosipäivä</string>
+    <string name="eventTypeOther">Tapahtuma</string>
+
+    <string name="emailTypeCustom">Määritä</string>
+    <string name="emailTypeHome">Koti</string>
+    <string name="emailTypeWork">Työ</string>
+    <string name="emailTypeOther">Muu</string>
+    <string name="emailTypeMobile">Matkapuhelin</string>
+
+    <string name="postalTypeCustom">Määritä</string>
+    <string name="postalTypeHome">Koti</string>
+    <string name="postalTypeWork">Työ</string>
+    <string name="postalTypeOther">Muu</string>
+
+    <string name="imTypeCustom">Määritä</string>
+    <string name="imTypeHome">Koti</string>
+    <string name="imTypeWork">Työ</string>
+    <string name="imTypeOther">Muu</string>
+
+    <string name="imProtocolCustom">Määritä</string>
+    <string name="imProtocolAim">AIM</string>
+    <string name="imProtocolMsn">Windows Live</string>
+    <string name="imProtocolYahoo">Yahoo</string>
+    <string name="imProtocolSkype">Skype</string>
+    <string name="imProtocolQq">QQ</string>
+    <string name="imProtocolGoogleTalk">Google Talk</string>
+    <string name="imProtocolIcq">ICQ</string>
+    <string name="imProtocolJabber">Jabber</string>
+    <string name="imProtocolNetMeeting">NetMeeting</string>
+
+    <string name="orgTypeWork">Työ</string>
+    <string name="orgTypeOther">Muu</string>
+    <string name="orgTypeCustom">Määritä</string>
+
+    <string name="sipAddressTypeCustom">Määritä</string>
+    <string name="sipAddressTypeHome">Home</string>
+    <string name="sipAddressTypeWork">Työ</string>
+    <string name="sipAddressTypeOther">Muu</string>
+
+    <string name="contact_status_update_attribution">via <xliff:g id="source" example="Google Talk">%1$s</xliff:g></string>
+
+    <string name="contact_status_update_attribution_with_date"><xliff:g id="date" example="3 hours ago">%1$s</xliff:g> via <xliff:g id="source" example="Google Talk">%2$s</xliff:g></string>
+
+    <string name="keyguard_password_enter_pin_code">Syötä PIN-koodi</string>
+
+    <string name="keyguard_password_enter_password_code">Syötä salasana</string>
+
+    <string name="keyguard_password_wrong_pin_code">Väärä PIN-koodi!</string>
+
+    <string name="keyguard_label_text">Avataksesi, valitse Menu sitten 0.</string>
+
+    <string name="emergency_call_dialog_number_for_display">Hätänumero</string>
+
+    <string name="lockscreen_carrier_default">(Ei palveluntarjoajaa)</string>
+
+    <string name="lockscreen_screen_locked">Näyttö lukittu.</string>
+
+    <string name="lockscreen_instructions_when_pattern_enabled">Valitse Menu avataksesi tai valitse hätäpuhelu.</string>
+
+    <string name="lockscreen_instructions_when_pattern_disabled">Valitse Menu avataksesi.</string>
+
+    <string name="lockscreen_pattern_instructions">Piirrä kuvio avataksesi</string>
+    <string name="lockscreen_emergency_call">Hätäpuhelu</string>
+    <string name="lockscreen_return_to_call">Palaa puheluun</string>
+    <string name="lockscreen_pattern_correct">Oikein!</string>
+    <string name="lockscreen_pattern_wrong">Yritä uudelleen</string>
+
+    <string name="lockscreen_plugged_in">Ladataan (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
+    <string name="lockscreen_discharging">Puretaan latausta (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
+    <string name="lockscreen_charged">Ladattu.</string>
+    <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
+
+    <string name="lockscreen_low_battery">Liitä laturi (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
+
+    <string name="lockscreen_missing_sim_message_short">Ei SIM-korttia.</string>
+    <string name="lockscreen_missing_sim_message">Puhelimessa ei ole SIM-korttia.</string>
+    <string name="lockscreen_missing_sim_instructions">Aseta SIM-kortti.</string>
+
+    <string name="emergency_calls_only" msgid="2485604591272668370">Vain hätäpuhelut</string>
+
+    <string name="lockscreen_network_locked_message">Verkko lukittu</string>
+
+    <string name="lockscreen_sim_puk_locked_message">SIM-kortti on PUK-lukittu.</string>
+    <string name="lockscreen_sim_puk_locked_instructions">Tarkista ohjekirja tai ota yhteyttä asiakastukeen.</string>
+
+    <string name="lockscreen_sim_locked_message">SIM-kortti lukittu.</string>
+
+    <string name="lockscreen_sim_unlock_progress_dialog_message">Avataan SIM-kortin lukitusta\u2026</string>
+
+    <string name="lockscreen_too_many_failed_attempts_dialog_message">
+        Kuvio mennyt väärin <xliff:g id="number">%d</xliff:g> kertaa.
+        \n\nYritä uudelleen <xliff:g id="number">%d</xliff:g> sekunnin päästä.
+    </string>
+
+    <string name="lockscreen_failed_attempts_almost_glogin">
+        Kuvio mennyt väärin <xliff:g id="number">%d</xliff:g> Kertaa.
+       <xliff:g id="number">%d</xliff:g> yrityksen jälkeen,
+       sinua pyydetään avaamaan puhelin käyttäen Google-tunnuksia.\n\n
+       Yritä uudelleen <xliff:g id="number">%d</xliff:g> sekunnin päästä.
+    </string>
+
+    <string name="lockscreen_too_many_failed_attempts_countdown">Yritä uudelleen <xliff:g id="number">%d</xliff:g> sekunnin päästä.</string>
+
+    <string name="lockscreen_forgot_pattern_button_text">Unohtuiko kuvio?</string>
+
+    <string name="lockscreen_glogin_forgot_pattern">Tilin avaaminen</string>
+    <string name="lockscreen_glogin_too_many_attempts">Liian monta yritystä!</string>
+    <string name="lockscreen_glogin_instructions">Avataksesi puhelimen, käytä Google-tunnuksia</string>
+    <string name="lockscreen_glogin_username_hint">Käyttäjänimi (sähköposti)</string>
+    <string name="lockscreen_glogin_password_hint">Salasana</string>
+    <string name="lockscreen_glogin_submit_button">Kirjaudu</string>
+    <string name="lockscreen_glogin_invalid_input">Väärä käyttäjänimi tai salasana</string>
+
+    <string name="lockscreen_glogin_checking_password">Tarkistetaan...</string>
+    <string name="lockscreen_unlock_label">Avaa</string>
+    <string name="lockscreen_sound_on_label">Äänet päällä</string>
+    <string name="lockscreen_sound_off_label">Äänet pois päältä</string>
+
+    <string name="lockscreen_phone_label">Puhelin</string>
+    <string name="lockscreen_messaging_label">Viestit</string>
+
+    <string name="password_keyboard_label_symbol_key">\?123</string>
+    <string name="password_keyboard_label_alpha_key">ABC</string>
+    <string name="password_keyboard_label_alt_key">Vaihto</string>
+
+    <string name="hour_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="pm">%P</xliff:g>"</string>
+
+    <string name="hour_cap_ampm">"<xliff:g id="hour" example="3">%-l</xliff:g><xliff:g id="ampm" example="PM">%p</xliff:g>"</string>
+
+    <string name="factorytest_failed">Tehdastesti epäonnistui</string>
+    <string name="factorytest_not_system">FACTORY_TEST-toiminto on tuettu vain /system/app/ sijaintiin asennettuihin pakkauksiin.</string>
+    <string name="factorytest_no_action">Yhtään FACTORY_TEST-toimintoa tukevaa pakkausta ei löytynyt.</string>
+    <string name="factorytest_reboot">Käynnistä uudelleen</string>
+
+    <string name="js_dialog_title">Sivusto osoitteessa \'<xliff:g id="title">%s</xliff:g>\' sanoo:</string>
+    <string name="js_dialog_title_default">JavaScript</string>
+    <string name="js_dialog_before_unload">Siirry pois sivustolta?\n\n<xliff:g id="message">%s</xliff:g>\n\nValitse OK jatkaaksesi, tai Peruuta pysyäksesi sivulla.</string>
+
+    <string name="save_password_label">Hyväksy</string>
+
+    <string name="double_tap_toast">Vinkki: näpäytä kahdesti tarkentaaksesi.</string>
+
+    <string name="permlab_readHistoryBookmarks">lukea Selaimen historiaa ja kirjenmerkkejä</string>
+    <string name="permdesc_readHistoryBookmarks">Sallii sovelluksen lukea kaikki osoitteet, joissa Selain on käynyt sekä kaikki kirjanmerkit.</string>
+    <string name="permlab_writeHistoryBookmarks">kirjoittaa Selaimen historiaa ja kirjenmerkkejä</string>
+	<string name="permdesc_writeHistoryBookmarks">Sallii sovelluksen muokata Selainen historiaa ja kirjanmerkkejä. Ilkeät sovellukset voivat käyttää tätä selaimen tietojen muokkaamiseen.</string>
+
+    <string name="permlab_setAlarm">asettaa hälytyksiä herätyskelloon</string>
+    <string name="permdesc_setAlarm">Sallii sovelluksen asettaa hälytyksiä herätyskelloon. Jotkin herätyskello-sovellukset eivät käytä ko. ominaisuutta.</string>
+
+    <string name="permlab_writeGeolocationPermissions">muokata Selaimen sijaintitietoja</string>
+    <string name="permdesc_writeGeolocationPermissions">Sallii sovelluksen muokata Selaimen sijaintitietoja.</string>
+
+    <string name="save_password_message">Haluatko Selaimen muistavan salasanan?</string>
+    <string name="save_password_notnow">Ei nyt</string>
+    <string name="save_password_remember">Muista</string>
+    <string name="save_password_never">Ei koskaan</string>
+
+    <string name="open_permission_deny">Ei lupaa avata sivua.</string>
+
+    <string name="text_copied">Teksti kopioitu leikepöydälle.</string>
+
+    <string name="more_item_label">Lisää</string>
+    <string name="prepend_shortcut_label">Menu+</string>
+    <string name="menu_space_shortcut_label">välilyönti</string>
+    <string name="menu_enter_shortcut_label">enter</string>
+    <string name="menu_delete_shortcut_label">poista</string>
+
+    <string name="search_go">Hae</string>
+
+    <string name="oneMonthDurationPast">Kuukausi sitten</string>
+    <string name="beforeOneMonthDurationPast">Aiemmin kuin kuukausi sitten</string>
+
+    <plurals name="num_seconds_ago">
+        <item quantity="one">Sekunti sitten</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> sekuntia sitten</item>
+    </plurals>
+
+    <plurals name="num_minutes_ago">
+        <item quantity="one">Minuutti sitten</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> minuuttia sitten</item>
+    </plurals>
+
+    <plurals name="num_hours_ago">
+        <item quantity="one">Tunti sitten</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> tuntia sitten</item>
+    </plurals>
+
+    <plurals name="last_num_days">
+        <item quantity="other">Viimeiset <xliff:g id="count">%d</xliff:g> päivää</item>
+    </plurals>
+
+    <string name="last_month">Viime kuukausi</string>
+
+    <string name="older">Vanhemmat</string>
+
+    <plurals name="num_days_ago">
+        <item quantity="one">eilen</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> päivää sitten</item>
+    </plurals>
+
+    <plurals name="in_num_seconds">
+        <item quantity="one">sekunnissa</item>
+        <item quantity="other"> <xliff:g id="count">%d</xliff:g> sekunnissa</item>
+    </plurals>
+
+    <plurals name="in_num_minutes">
+        <item quantity="one">minuutissa</item>
+        <item quantity="other"> <xliff:g id="count">%d</xliff:g> minuutissa</item>
+    </plurals>
+
+    <plurals name="in_num_hours">
+        <item quantity="one">tunnissa</item>
+        <item quantity="other"> <xliff:g id="count">%d</xliff:g> tunnissa</item>
+    </plurals>
+
+    <plurals name="in_num_days">
+        <item quantity="one">huomenna</item>
+        <item quantity="other"> <xliff:g id="count">%d</xliff:g> vuorokaudessa</item>
+    </plurals>
+
+    <plurals name="abbrev_num_seconds_ago">
+        <item quantity="one">sekunti sitten</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> sekuntia sitten</item>
+    </plurals>
+
+    <plurals name="abbrev_num_minutes_ago">
+        <item quantity="one">minuutti sitten</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> minuuttia sitten</item>
+    </plurals>
+
+    <plurals name="abbrev_num_hours_ago">
+        <item quantity="one">tunti sitten</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> tuntia sitten</item>
+    </plurals>
+
+    <plurals name="abbrev_num_days_ago">
+        <item quantity="one">eilen</item>
+        <item quantity="other"><xliff:g id="count">%d</xliff:g> päivää sitten</item>
+    </plurals>
+
+    <plurals name="abbrev_in_num_seconds">
+        <item quantity="one">sekunnissa</item>
+        <item quantity="other"> <xliff:g id="count">%d</xliff:g> sekunnissa</item>
+    </plurals>
+
+    <plurals name="abbrev_in_num_minutes">
+        <item quantity="one">minuutissa</item>
+        <item quantity="other"> <xliff:g id="count">%d</xliff:g> minuutissa</item>
+    </plurals>
+
+    <plurals name="abbrev_in_num_hours">
+        <item quantity="one">tunnissa</item>
+        <item quantity="other"> <xliff:g id="count">%d</xliff:g> tunnissa</item>
+    </plurals>
+
+    <plurals name="abbrev_in_num_days">
+        <item quantity="one">huomenna</item>
+        <item quantity="other"> <xliff:g id="count">%d</xliff:g> päivässä</item>
+    </plurals>
+
+    <string name="preposition_for_date"><xliff:g id="date" example="May 29">%s</xliff:g>ssa</string>
+    <string name="preposition_for_time"><xliff:g id="time" example="2:33 am">%s</xliff:g></string>
+    <string name="preposition_for_year"><xliff:g id="year" example="2003">%s</xliff:g></string>
+
+    <string name="day">päivä</string>
+    <string name="days">päivää</string>
+    <string name="hour">tunti</string>
+    <string name="hours">tuntia</string>
+    <string name="minute">minuutti</string>
+    <string name="minutes">minuuttia</string>
+    <string name="second">sekunti</string>
+    <string name="seconds">sekuntia</string>
+    <string name="week">viikko</string>
+    <string name="weeks">viikkoa</string>
+    <string name="year">vuosi</string>
+    <string name="years">vuotta</string>
+
+    <string name="VideoView_error_title">Ei voida toistaa videota</string>
+    <string name="VideoView_error_text_invalid_progressive_playback">Tämä video ei ole validi toistettavaksi tässä laitteessa.</string>
+    <string name="VideoView_error_text_unknown">Videota ei voida toistaa.</string>
+    <string name="VideoView_error_button">OK</string>
+
+    <string name="selectAll">Valitse kaikki</string>
+
+    <string name="selectText">Valitse sana</string>
+
+    <string name="cut">Leikkaa</string>
+
+    <string name="copy">Kopioi</string>
+
+    <string name="paste">Liitä</string>
+
+    <string name="copyUrl">Kopioi URL</string>
+
+    <string name="inputMethod">Syöttötapa</string>
+
+    <string name="addToDictionary">"Lisää \"<xliff:g id="word" example="rickroll">%s</xliff:g>\" sanakirjaan</string>
+
+    <string name="editTextMenuTitle">Muokka tekstiä</string>
+
+    <string name="low_internal_storage_view_title">Muisti vähissä</string>
+    <string name="low_internal_storage_view_text">Puhelimen muisti on vähissä.</string>
+
+    <string name="ok">OK</string>
+    <string name="cancel">Peruuta</string>
+    <string name="yes">OK</string>
+    <string name="no">Peruuta</string>
+    <string name="dialog_alert_title">Huomautus</string>
+
+    <string name="capital_on">Päälle</string>
+    <string name="capital_off">Pois</string>
+
+    <string name="whichApplication">Valitse käytettävä sovellus</string>
+    <string name="alwaysUse">Käytä oletuksena tätä toimintoa varten.</string>
+    <string name="clearDefaultHintMsg">Tyhjennä oletus Koti-asetuksista &gt; Sovelluksista &gt; Hallitse sovelluksia.</string>
+    <string name="chooseActivity">Valitse toiminto</string>
+    <string name="noApplications">Mikään sovelluksista ei voi suorittaa toimintoa.</string>
+    <string name="aerr_title">Pahoittelut!</string>
+    <string name="aerr_application">Sovellus <xliff:g id="application">%1$s</xliff:g>
+        (process <xliff:g id="process">%2$s</xliff:g>) pysähtyi odottamattomasti. Yritä uudelleen.</string>
+    <string name="aerr_process">Prosessi <xliff:g id="process">%1$s</xliff:g> pysähtyi odottamattomasti. Yritä uudelleen.</string>
+    <string name="anr_title">Pahoittelut!</string>
+    <string name="anr_activity_application">Toiminto <xliff:g id="activity">%1$s</xliff:g> (sovelluksessa <xliff:g id="application">%2$s</xliff:g>) ei vastaa.</string>
+    <string name="anr_activity_process">Toiminto <xliff:g id="activity">%1$s</xliff:g> (prosessissa <xliff:g id="process">%2$s</xliff:g>) ei vastaa.</string>
+    <string name="anr_application_process">Sovellus <xliff:g id="application">%1$s</xliff:g> (prosessissa <xliff:g id="process">%2$s</xliff:g>) ei vastaa.</string>
+    <string name="anr_process">Prosessi <xliff:g id="process">%1$s</xliff:g> ei vastaa.</string>
+    <string name="force_close">Pakota lopetus</string>
+    <string name="report">Raportoi</string>
+    <string name="wait">Odota</string>
+    <string name="launch_warning_title">Sovellus ohjautui</string>
+    <string name="launch_warning_replace"><xliff:g id="app_name">%1$s</xliff:g> on käynnissä.</string>
+    <string name="launch_warning_original"><xliff:g id="app_name">%1$s</xliff:g> alunperin käynnistettiin.</string>
+
+    <string name="smv_application">Sovellus <xliff:g id="application">%1$s</xliff:g>
+        (prosessi <xliff:g id="process">%2$s</xliff:g>) rikkoi sen omaa StrictMode-menettelyä.</string>
+    <string name="smv_process">Prosessi <xliff:g id="process">%1$s</xliff:g> rikkoi sen omaa StrictMode-menettelyä.</string>
+
+    <string name="heavy_weight_notification"><xliff:g id="app">%1$s</xliff:g> käynnissä</string>
+
+    <string name="heavy_weight_notification_detail">Valitse vaihtaaksesi sovellukseen</string>
+
+    <string name="heavy_weight_switcher_title">Vaihda sovellusta?</string>
+
+    <string name="heavy_weight_switcher_text">Toinen sovellus on jo käynnissä ja täytyy lopettaa ennen kuin voit käynnistää uuden.</string>
+
+    <string name="old_app_action">Palaa <xliff:g id="old_app">%1$s</xliff:g></string>
+    <string name="old_app_description">Älä käynnistä uutta sovellusta.</string>
+
+    <string name="new_app_action">Käynnistä <xliff:g id="old_app">%1$s</xliff:g></string>
+    <string name="new_app_description">Lopeta vanha sovellus tallentamatta.</string>
+
+    <string name="sendText">Valitse toiminto tekstille</string>
+
+    <string name="volume_ringtone">Soittoäänen voimakkuus</string>
+    <string name="volume_music">Musiikin äänenvoimakkuus</string>
+    <string name="volume_music_hint_playing_through_bluetooth">Toistetaan bluetoothin kautta</string>
+    <string name="volume_music_hint_silent_ringtone_selected">Äänetön soittoääni valittu</string>
+    <string name="volume_call">Puheluäänen voimakkuus</string>
+    <string name="volume_bluetooth_call">Bluetooth-puhelun äänenvoimakkuus</string>
+    <string name="volume_alarm">Hälytysäänen äänenvoimakkuus</string>
+    <string name="volume_notification">Ilmoituksien äänenvoimakkuus</string>
+    <string name="volume_unknown">Äänenvoimakkuus</string>
+
+    <string name="ringtone_default">Oletussoittoääni</string>
+    <string name="ringtone_default_with_actual">Oletussoittoääni (<xliff:g id="actual_ringtone">%1$s</xliff:g>)</string>
+    <string name="ringtone_silent">Äänetön</string>
+    <string name="ringtone_picker_title">Soittoäänet</string>
+    <string name="ringtone_unknown">Tuntematon soittoääni</string>
+
+    <plurals name="wifi_available">
+        <item quantity="one">Langaton verkko käytettävissä</item>
+        <item quantity="other">Langattomia verkkoja käytettävissä</item>
+    </plurals>
+    <plurals name="wifi_available_detailed">
+        <item quantity="one">Langaton verkko käytettävissä</item>
+        <item quantity="other">Langattomia verkkoja käytettävissä</item>
+    </plurals>
+    <string name="select_character">Lisää merkki</string>
+
+    <string name="sms_control_default_app_name">Tuntematon sovellus</string>
+    <string name="sms_control_title">Läheteään SMS-viestejä</string>
+    <string name="sms_control_message">Lähetetään useita SMS-viestejä. Valitse OK jatkaaksesi tai Peruuta lopettaaksesi.</string>
+    <string name="sms_control_yes">OK</string>
+    <string name="sms_control_no">Peruuta</string>
+
+    <string name="date_time_set">Aseta</string>
+
+    <string name="default_permission_group">Oletus</string>
+    <string name="no_permissions">Ei vaadittuja lupia</string>
+    <string name="perms_hide"><b>Piilota</b></string>
+    <string name="perms_show_all"><b>Näytä kaikki</b></string>
+
+    <string name="usb_storage_activity_title">USB-levyasema</string>
+
+    <string name="usb_storage_title">USB liitetty</string>
+    <string name="usb_storage_message" product="nosdcard">Olet liittänyt puhelimesi tietokoneesi USB-liittimellä. Paina alhaalla olevaa painiketta, jos haluat siirtää tiedostoja tietokoneen ja puhelimen muistikortin välillä.</string>
+    <string name="usb_storage_message" product="default">Olet liittänyt puhelimesi tietokoneesi USB-liittimellä. Paina alhaalla olevaa painiketta, jos haluat siirtää tiedostoja tietokoneen ja puhelimen muistikortin välillä.</string>
+    <string name="usb_storage_button_mount">USB-levyasema päälle</string>
+    <string name="usb_storage_error_message" product="nosdcard">Ongelma käytettäessä muistikorttia USB-levyaseman kanssa.</string>
+    <string name="usb_storage_error_message" product="default">Ongelma käytettäessä muistikorttia USB-levyaseman kanssa.</string>
+    <string name="usb_storage_notification_title">USB liitetty</string>
+    <string name="usb_storage_notification_message">Valitse siirtääksesi tiedostoja.</string>
+
+    <string name="usb_storage_stop_notification_title">USB-levyasema pois päältä</string>
+    <string name="usb_storage_stop_notification_message">Valitse asettaaksesi USB-levyaseman pois päältä.</string>
+
+    <string name="usb_storage_stop_title">USB-levyasema käytössä</string>
+    <string name="usb_storage_stop_message" product="nosdcard">Ennen levyaseman sammuttamista, muista irrottaa (eject) USB-levyasema tietokoneesta.</string>
+    <string name="usb_storage_stop_message" product="default">Ennen levyaseman sammuttamista, muista irrottaa (eject) muistikortti tietokoneesta.</string>
+    <string name="usb_storage_stop_button_mount">Aseta USB-levyasema pois päältä</string>
+    <string name="usb_storage_stop_error_message">USB-levyaseman sammuttamisessa ilmeni ongelma. Varmista, että olet irrottanut (eject) USB-isännän. Yritä uudelleen.</string>
+
+    <string name="dlg_confirm_kill_storage_users_title">Aseta USB-levyasema päälle</string>
+    <string name="dlg_confirm_kill_storage_users_text">Jos asetat USB-levyaseman päälle, jotkin sovellukset voivat sulkeutua ja olla poissa käytöstä kunnes otat USB-levyaseman pois päältä.</string>
+    <string name="dlg_error_title">USB-operaatio epäonnistui</string>
+    <string name="dlg_ok">OK</string>
+
+    <string name="extmedia_format_title" product="nosdcard">Formatoi USB-muisti</string>
+    <string name="extmedia_format_title" product="default">Formatoi muistikortti</string>
+    <string name="extmedia_format_message" product="nosdcard">Alusta USB-muisti poistaen kaikki sen sisältämät tiedosto? Toimintoa ei voida peruttaa jälkeenpäin!</string>
+    <string name="extmedia_format_message" product="default">Oletko varma, että haluat formatoida muistikortin? Kaikki tieto poistetaan.</string>
+    <string name="extmedia_format_button_format">Formatoi</string>
+
+    <string name="adb_active_notification_title">USB-virheenkorjaus liitetty</string>
+    <string name="adb_active_notification_message">Valitse sulkeaksesi USB-virheenkorjauksen.</string>
+
+    <string name="select_input_method">Valitse syöttötapa</string>
+
+    <string name="fast_scroll_alphabet">\u0020ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+    <string name="fast_scroll_numeric_alphabet">\u00200123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+
+    <string name="candidates_style"><u>ehdokkaat</u></string>
+
+	<string name="ext_media_checking_notification_title" product="nosdcard">Valmistellaan USB-muistia</string>
+    <string name="ext_media_checking_notification_title" product="default">Valmistellaan muistikorttia</string>
+    <string name="ext_media_checking_notification_message">Tarkistetaan virheitä.</string>
+
+    <string name="ext_media_nofs_notification_title" product="nosdcard">Tyhjä USB-muistia</string>
+    <string name="ext_media_nofs_notification_title" product="default">Tyhjä muistikorttia</string>
+    <string name="ext_media_nofs_notification_message" product="nosdcard">USB-muisti on tyhjä tai käyttää ei-tuettua tiedostojärjestelmää.</string>
+    <string name="ext_media_nofs_notification_message" product="default">Muistikortti on tyhjä tai käyttää ei-tuettua tiedostojärjestelmää.</string>
+
+    <string name="ext_media_unmountable_notification_title" product="nosdcard">Vioittunut USB-muisti</string>
+    <string name="ext_media_unmountable_notification_title" product="default">Vioittunut muistikortti</string>
+    <string name="ext_media_unmountable_notification_message" product="nosdcard">USB-muisti vioittunut.</string>
+    <string name="ext_media_unmountable_notification_message" product="default">Muistikortti vioittunut.</string>
+
+    <string name="ext_media_badremoval_notification_title" product="nosdcard">USB-muisti poistettiin</string>
+    <string name="ext_media_badremoval_notification_title" product="default">Muistikortti poistettiin</string>
+    <string name="ext_media_badremoval_notification_message" product="nosdcard">Irrota USB-muisti ennen poistamista välttääksesi tietojen katoamisen.</string>
+    <string name="ext_media_badremoval_notification_message" product="default">Irrota muistikortti ennen poistamista välttääksesi tietojen katoamisen.</string>
+
+    <string name="ext_media_safe_unmount_notification_title" product="nosdcard">USB-muisti voidaan poistaa</string>
+    <string name="ext_media_safe_unmount_notification_title" product="default">Muistikortti voidaan poistaa</string>
+    <string name="ext_media_safe_unmount_notification_message" product="nosdcard">Voit nyt poistaa USB-muistin turvallisesti.</string>
+    <string name="ext_media_safe_unmount_notification_message" product="default">Voit nyt poistaa muistikortin turvallisesti.</string>
+
+    <string name="ext_media_nomedia_notification_title" product="nosdcard">USB-muisti poistettiin</string>
+    <string name="ext_media_nomedia_notification_title" product="default">Muistikortti poistettiin</string>
+    <string name="ext_media_nomedia_notification_message" product="nosdcard">USB-muisti poistettiin. Aseta uusi.</string>
+    <string name="ext_media_nomedia_notification_message" product="default">Muistikortti poistettiin. Aseta uusi.</string>
+
+    <string name="activity_list_empty">Vastaavia toimintoja ei löytynyt</string>
+
+	<string name="permlab_pkgUsageStats">päivitä komponenttien käyttötilastot</string>
+    <string name="permdesc_pkgUsageStats">Sallii komponenttien käyttötilastojen muokkaamisen. Ei tavallisten sovellusten käyttöön.</string>
+
+    <string name="permlab_copyProtectedData">Sallii oletussisältöpalvelun kopioida sisältöä. Ei tavallisten sovellusten käyttöön.</string>
+    <string name="permdesc_copyProtectedData">Sallii oletussisältöpalvelun kopioida sisältöä. Ei tavallisten sovellusten käyttöön.</string>
+
+    <string name="tutorial_double_tap_to_zoom_message_short">Näpäytä kahdesti tarkentaaksesi</string>
+    <string name="ime_action_go">Siirry</string>
+    <string name="ime_action_search">Etsi</string>
+    <string name="ime_action_send">Lähetä</string>
+    <string name="ime_action_next">Seuraava</string>
+    <string name="ime_action_done">Valmis</string>
+    <string name="ime_action_default">Suorita</string>
+
+    <string name="dial_number_using">Soita numeroon\nkäyttäen <xliff:g id="number" example="555">%s</xliff:g></string>
+
+    <string name="create_contact_using">Luo henkilö\nkäyttäen <xliff:g id="number" example="555">%s</xliff:g></string>
+
+    <string name="accessibility_compound_button_selected">tarkistettu</string>
+
+    <string name="accessibility_compound_button_unselected">ei tarkistettu</string>
+
+    <string name="grant_credentials_permission_message_header">Seuraavat sovellukset vaativat luvan käyttää tiliäsi, nyt ja tulevaisuudessa.</string>
+    <string name="grant_credentials_permission_message_footer">Haluatko sallia pyynnön?</string>
+    <string name="grant_permissions_header_text">Lupapyyntö</string>
+    <string name="allow">Salli</string>
+    <string name="deny">Estä</string>
+    <string name="permission_request_notification_title">Lupapyyntö esitetty</string>
+    <string name="permission_request_notification_with_subtitle">Lupapyyntö esitetty\ntilille <xliff:g id="account" example="foo@gmail.com">%s</xliff:g></string>
+
+    <string name="input_method_binding_label">Syöttötapa</string>
+    <string name="sync_binding_label">Sync</string>
+    <string name="accessibility_binding_label">Saavutettavuus</string>
+    <string name="wallpaper_binding_label">Taustakuva</string>
+    <string name="chooser_wallpaper">Vaihda taustakuva</string>
+
+    <string name="upload_file">Valitse tiedosto</string>
+    <string name="reset">Nollaa</string>
+    <string name="submit">Lähetä</string>
+
+    <string name="description_star">suosikki</string>
+
+    <string name="car_mode_disable_notification_title">Auto-tila asetettu</string>
+    <string name="car_mode_disable_notification_message">Valitse poistuaksesi auto-tilasta.</string>
+
+    <string name="tethered_notification_title">Tetheröinti tai hotspot päällä</string>
+    <string name="tethered_notification_message">Valitse muokataksesi</string>
+
+    <string name="throttle_warning_notification_title">Korkea mobiilidatan käyttö</string>
+    <string name="throttle_warning_notification_message">Valitse oppiaksesi lisää mobiilidatan käytöstä</string>
+
+    <string name="throttled_notification_title">Mobiilidatan käyttöraja ylitetty</string>
+    <string name="throttled_notification_message">Valitse oppiaksesi lisää mobiilidatan käytöstä</string>
+
+	<string name="progress_unmounting" product="nosdcard">Irroitetaan USB-muistia...</string>
+    <string name="progress_unmounting" product="default">Irroitetaan muistikorttia...</string>
+    <string name="progress_erasing" product="nosdcard">Tyhjennetään USB-muistia...</string>
+    <string name="progress_erasing" product="default">Tyhjennetään muistikorttia...</string>
+    <string name="format_error" product="nosdcard">USB-muistin tyhjentäminen epäonnistui.</string>
+    <string name="format_error" product="default">Muistikortin tyhjentäminen epäonnistui.</string>
+    <string name="media_bad_removal">Muistikortti poistettiin ilman että sitä irroitettiin.</string>
+    <string name="media_checking" product="nosdcard">USB-muistia tarkistetaan.</string>
+    <string name="media_checking" product="default">Muistikorttia tarkistetaan.</string>
+    <string name="media_removed">Muistikortti poistettiin.</string>
+    <string name="media_shared" product="nosdcard">USB-muisti on tietokoneen käytössä.</string>
+    <string name="media_shared" product="default">Muistikortti on tietokoneen käytössä.</string>
+    <string name="media_unknown_state">Ulkoinen media on tuntemattomassa tilassa.</string>
+
+    <string name="app_killed_message">Sovellus lopetettu</string>
+
+    <string name="phone_goggles_problem_count">Tehtävä #%1$d: </string>
+    <string name="phone_goggles_description">Ratkaise %1$d seuraavista matematiikkatehtävistä alle %2$d sekunnissa, jotta voit jatkaa kommunikointia.</string>
+    <plurals name="phone_goggles_countdown">
+        <item quantity="one">%d sekunti jäljellä</item>
+        <item quantity="other">%d sekuntia jäljellä</item>
+    </plurals>
+</resources>
