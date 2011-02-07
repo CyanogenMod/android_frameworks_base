@@ -82,6 +82,8 @@ public class RotarySelector extends View {
     private int mEventStartY;
     // controls display of custom app dimple
     private boolean mCustomAppDimple=false;
+    // controls hiding of directional arrows
+    private boolean mHideArrows=false;
 
     // state of the animation used to bring the handle back to its start position when
     // the user lets go before triggering an action
@@ -345,45 +347,47 @@ public class RotarySelector extends View {
         mBgMatrix.setTranslate(0, - (float)(mRotaryOffsetY + bgTop));
 
         // Draw the correct arrow(s) depending on the current state:
-        mArrowMatrix.reset();
-        switch (mGrabbedState) {
-            case NOTHING_GRABBED:
-                //mArrowShortLeftAndRight;
-                break;
-            case LEFT_HANDLE_GRABBED:
-                mArrowMatrix.setTranslate(0, 0);
-                if (!isHoriz()) {
-                    mArrowMatrix.preRotate(-90, 0, 0);
-                    mArrowMatrix.postTranslate(0, height);
-                }
-                canvas.drawBitmap(mArrowLongLeft, mArrowMatrix, mPaint);
-                break;
-            case MID_HANDLE_GRABBED:
-                mArrowMatrix.setTranslate(0, 0);
-                if (!isHoriz()) {
-                    mArrowMatrix.preRotate(-90, 0, 0);
-                }
-                // draw left down arrow
-                mArrowMatrix.postTranslate(halfdimple, 0);
-                canvas.drawBitmap(mArrowDown, mArrowMatrix, mPaint);
-                // draw right down arrow
-                mArrowMatrix.postTranslate(mRightHandleX-mLeftHandleX, 0);
-                canvas.drawBitmap(mArrowDown, mArrowMatrix, mPaint);
-                // draw mid down arrow
-                mArrowMatrix.postTranslate(mMidHandleX-mRightHandleX, -(mDimpleWidth/4));
-                canvas.drawBitmap(mArrowDown, mArrowMatrix, mPaint);
-                break;
-            case RIGHT_HANDLE_GRABBED:
-                mArrowMatrix.setTranslate(0, 0);
-                if (!isHoriz()) {
-                    mArrowMatrix.preRotate(-90, 0, 0);
-                    // since bg width is > height of screen in landscape mode...
-                    mArrowMatrix.postTranslate(0, height + (mBackgroundWidth - height));
-                }
-                canvas.drawBitmap(mArrowLongRight, mArrowMatrix, mPaint);
-                break;
-            default:
-                throw new IllegalStateException("invalid mGrabbedState: " + mGrabbedState);
+        if (!mHideArrows) {
+            mArrowMatrix.reset();
+            switch (mGrabbedState) {
+                case NOTHING_GRABBED:
+                    //mArrowShortLeftAndRight;
+                    break;
+                case LEFT_HANDLE_GRABBED:
+                    mArrowMatrix.setTranslate(0, 0);
+                    if (!isHoriz()) {
+                        mArrowMatrix.preRotate(-90, 0, 0);
+                        mArrowMatrix.postTranslate(0, height);
+                    }
+                    canvas.drawBitmap(mArrowLongLeft, mArrowMatrix, mPaint);
+                    break;
+                case MID_HANDLE_GRABBED:
+                    mArrowMatrix.setTranslate(0, 0);
+                    if (!isHoriz()) {
+                        mArrowMatrix.preRotate(-90, 0, 0);
+                    }
+                    // draw left down arrow
+                    mArrowMatrix.postTranslate(halfdimple, 0);
+                    canvas.drawBitmap(mArrowDown, mArrowMatrix, mPaint);
+                    // draw right down arrow
+                    mArrowMatrix.postTranslate(mRightHandleX-mLeftHandleX, 0);
+                    canvas.drawBitmap(mArrowDown, mArrowMatrix, mPaint);
+                    // draw mid down arrow
+                    mArrowMatrix.postTranslate(mMidHandleX-mRightHandleX, -(mDimpleWidth/4));
+                    canvas.drawBitmap(mArrowDown, mArrowMatrix, mPaint);
+                    break;
+                case RIGHT_HANDLE_GRABBED:
+                    mArrowMatrix.setTranslate(0, 0);
+                    if (!isHoriz()) {
+                        mArrowMatrix.preRotate(-90, 0, 0);
+                        // since bg width is > height of screen in landscape mode...
+                        mArrowMatrix.postTranslate(0, height + (mBackgroundWidth - height));
+                    }
+                    canvas.drawBitmap(mArrowLongRight, mArrowMatrix, mPaint);
+                    break;
+                default:
+                    throw new IllegalStateException("invalid mGrabbedState: " + mGrabbedState);
+            }
         }
 
         if (VISUAL_DEBUG) {
@@ -877,6 +881,13 @@ public class RotarySelector extends View {
      */
     public void enableCustomAppDimple(boolean newState){
         mCustomAppDimple=newState;
+    }
+
+    /**
+     * Sets weather or not to display the directional arrows
+     */
+    public void hideArrows(boolean newState){
+        mHideArrows=newState;
     }
 
 

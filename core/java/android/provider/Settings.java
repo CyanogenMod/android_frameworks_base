@@ -2114,6 +2114,26 @@ public final class Settings {
         public static final String LOCKSCREEN_CUSTOM_APP_ACTIVITY = "lockscreen_custom_app_activity";
 
         /**
+         * 1: Show custom app icon (currently cm logo) as with new patch
+         * 2: Show messaging app icon as in old lockscreen
+         * possibly more in the future (if more png files are drawn)
+         * @hide
+         */
+        public static final String LOCKSCREEN_CUSTOM_ICON_STYLE = "lockscreen_custom_icon_style";
+
+        /**
+         * When enabled, rotary lockscreen switches app starter and unlock, so you can drag down to unlock
+         * @hide
+         */
+        public static final String LOCKSCREEN_ROTARY_UNLOCK_DOWN = "lockscreen_rotary_unlock_down";
+
+        /**
+         * When enabled, directional hint arrows are supressed
+         * @hide
+         */
+        public static final String LOCKSCREEN_ROTARY_HIDE_ARROWS = "lockscreen_rotary_hide_arrows";
+
+        /**
          * Sets the lockscreen style
          * @hide
          */

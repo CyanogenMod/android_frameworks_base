@@ -163,6 +163,15 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private int mLockscreenStyle = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_STYLE_PREF, 1));
 
+    private int mCustomIconStyle = Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_CUSTOM_ICON_STYLE, 1);
+
+    private boolean mRotaryUnlockDown = (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_ROTARY_UNLOCK_DOWN, 0) == 1);
+
+    private boolean mRotaryHideArrows = (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_ROTARY_HIDE_ARROWS, 0) == 1);
+
     private boolean mUseRotaryLockscreen = (mLockscreenStyle == 2);
 
     private double mGestureSensitivity;
@@ -391,9 +400,18 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mAudioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
         mSilentMode = isSilentMode();
 
-        mRotarySelector.setLeftHandleResource(R.drawable.ic_jog_dial_unlock);
-        mRotarySelector.setMidHandleResource(R.drawable.ic_jog_dial_custom);
+
+        //Rotary setup
+        if(!mRotaryUnlockDown){
+            mRotarySelector.setLeftHandleResource(R.drawable.ic_jog_dial_unlock);
+            mRotarySelector.setMidHandleResource((mCustomIconStyle == 1) ? R.drawable.ic_jog_dial_custom : R.drawable.ic_jog_dial_messaging);
+        }else{
+            mRotarySelector.setLeftHandleResource((mCustomIconStyle == 1) ? R.drawable.ic_jog_dial_custom : R.drawable.ic_jog_dial_messaging);
+            mRotarySelector.setMidHandleResource(R.drawable.ic_jog_dial_unlock);
+        }
         mRotarySelector.enableCustomAppDimple(mCustomAppToggle);
+        if(mRotaryHideArrows)
+            mRotarySelector.hideArrows(true);
 
         mTabSelector.setLeftTabResources(
                 R.drawable.ic_jog_dial_unlock,
@@ -411,7 +429,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                     R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_left_generic,
                     R.drawable.jog_tab_left_generic);
 
-            mSelector2.setRightTabResources(R.drawable.ic_jog_dial_custom,
+            mSelector2.setRightTabResources((mCustomIconStyle == 1) ? R.drawable.ic_jog_dial_custom 
+                         : R.drawable.ic_jog_dial_messaging,
                     R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_right_generic,
                     R.drawable.jog_tab_right_generic);
 
@@ -569,9 +588,25 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     /** {@inheritDoc} */
     public void onDialTrigger(View v, int whichHandle) {
-        if (whichHandle == RotarySelector.OnDialTriggerListener.LEFT_HANDLE) {
+        boolean mUnlockTrigger=false;
+        boolean mCustomAppTrigger=false;
+
+        if(whichHandle == RotarySelector.OnDialTriggerListener.LEFT_HANDLE){
+            if(mRotaryUnlockDown)
+                mCustomAppTrigger=true;
+            else
+                mUnlockTrigger=true;
+        }
+        if(whichHandle == RotarySelector.OnDialTriggerListener.MID_HANDLE){
+            if(mRotaryUnlockDown)
+                mUnlockTrigger=true;
+            else
+                mCustomAppTrigger=true;
+        }
+
+        if (mUnlockTrigger) {
             mCallback.goToUnlockScreen();
-        } else if (whichHandle == RotarySelector.OnDialTriggerListener.MID_HANDLE) {
+        } else if (mCustomAppTrigger) {
             if (mCustomAppActivity != null) {
                 try {
                     Intent i = Intent.parseUri(mCustomAppActivity, 0);
