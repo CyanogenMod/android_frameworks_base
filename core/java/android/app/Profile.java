@@ -44,6 +44,10 @@ public class Profile implements Parcelable {
         return profileGroups.values().toArray(new ProfileGroup[profileGroups.size()]);
     }
     
+    public ProfileGroup getProfileGroup(String name){
+        return profileGroups.get(name);
+    }
+    
     @Override
     public int describeContents() {
         return 0;

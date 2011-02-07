@@ -1,8 +1,4 @@
-
 package com.android.server;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import android.app.IProfileManager;
 import android.app.NotificationGroup;
@@ -10,12 +6,14 @@ import android.app.Profile;
 import android.app.ProfileGroup;
 import android.content.Context;
 import android.os.RemoteException;
-import android.util.Log;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ProfileManagerService extends IProfileManager.Stub {
 
-    // TODO: Maybe persistence could be added to this class. Currently the client
-    // app will persist.
+    // TODO: Maybe persistence could be added to this class. Currently the
+    // client app will persist.
 
     private static final String TAG = "ProfileService";
 
@@ -39,13 +37,22 @@ public class ProfileManagerService extends IProfileManager.Stub {
 
     @Override
     public void addProfile(Profile profile) throws RemoteException {
-        profiles.put(profile.getName(), profile);
         // If this is genuinely a new profile, populate it with the groups.
-        if(!profiles.containsKey(profile.getName()) || profile.getProfileGroups().length < groups.size()){
-            for(NotificationGroup group : groups.values()){
+        // Log.i("PROF",
+        // "Adding profile : " + profile.getName() + " profilegroups : "
+        // + profile.getProfileGroups().length + " groups : " + groups.size());
+        if (!profiles.containsKey(profile.getName())
+                || profile.getProfileGroups().length < groups.size()) {
+            for (NotificationGroup group : groups.values()) {
+                // Log.i("PROF", "Adding : " + profile.getName() + " : " +
+                // group.getName());
                 profile.addProfleGroup(new ProfileGroup(group.getName()));
             }
         }
+        profiles.put(profile.getName(), profile);
+        // Log.i("PROF",
+        // "Added profile : " + profile.getName() + " profilegroups : "
+        // + profile.getProfileGroups().length + " groups : " + groups.size());
     }
 
     @Override
@@ -79,7 +86,8 @@ public class ProfileManagerService extends IProfileManager.Stub {
             // If the above is true, then the ProfileGroup shouldn't exist in
             // the profile, so there is no risk of replacing it.
             for (Profile profile : profiles.values()) {
-                Log.i("PROF", "Adding : " + profile.getName() + " : "  + group.getName());
+                // Log.i("PROF", "Adding : " + profile.getName() + " : " +
+                // group.getName());
                 profile.addProfleGroup(new ProfileGroup(group.getName()));
             }
         }
@@ -98,7 +106,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
     @Override
     public NotificationGroup getNotificationGroupForPackage(String pkg) throws RemoteException {
         for (NotificationGroup group : groups.values()) {
-            if (group.hasPackage(pkg)){
+            if (group.hasPackage(pkg)) {
                 return group;
             }
         }
