@@ -38,21 +38,13 @@ public class ProfileManagerService extends IProfileManager.Stub {
     @Override
     public void addProfile(Profile profile) throws RemoteException {
         // If this is genuinely a new profile, populate it with the groups.
-        // Log.i("PROF",
-        // "Adding profile : " + profile.getName() + " profilegroups : "
-        // + profile.getProfileGroups().length + " groups : " + groups.size());
         if (!profiles.containsKey(profile.getName())
                 || profile.getProfileGroups().length < groups.size()) {
             for (NotificationGroup group : groups.values()) {
-                // Log.i("PROF", "Adding : " + profile.getName() + " : " +
-                // group.getName());
                 profile.addProfleGroup(new ProfileGroup(group.getName()));
             }
         }
         profiles.put(profile.getName(), profile);
-        // Log.i("PROF",
-        // "Added profile : " + profile.getName() + " profilegroups : "
-        // + profile.getProfileGroups().length + " groups : " + groups.size());
     }
 
     @Override
@@ -86,8 +78,6 @@ public class ProfileManagerService extends IProfileManager.Stub {
             // If the above is true, then the ProfileGroup shouldn't exist in
             // the profile, so there is no risk of replacing it.
             for (Profile profile : profiles.values()) {
-                // Log.i("PROF", "Adding : " + profile.getName() + " : " +
-                // group.getName());
                 profile.addProfleGroup(new ProfileGroup(group.getName()));
             }
         }
