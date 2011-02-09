@@ -36,6 +36,9 @@ ifeq ($(BOARD_HAS_LIMITED_EGL), true)
 	LOCAL_CFLAGS += -DHAS_LIMITED_EGL
 endif
 
+ifeq ($(AVOID_DRAW_TEXTURE_EXTENSION), true)
+    LOCAL_CFLAGS += -DAVOID_DRAW_TEXTURE
+endif
 
 # need "-lrt" on Linux simulator to pick up clock_gettime
 ifeq ($(TARGET_SIMULATOR),true)
