@@ -227,20 +227,39 @@ void LayerBlur::onDraw(const Region& clip) const
         glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-        glMatrixMode(GL_TEXTURE);
-        glLoadIdentity();
-        glScalef(mWidthScale, mHeightScale, 1);
-        glTranslatef(-x, mYOffset - y, 0);
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-        glVertexPointer(2, GL_FLOAT, 0, mVertices);
-        glTexCoordPointer(2, GL_FLOAT, 0, mVertices);
-        while (it != end) {
-            const Rect& r = *it++;
-            const GLint sy = fbHeight - (r.top + r.height());
-            glScissor(r.left, sy, r.width(), r.height());
-            glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+#ifdef AVOID_DRAW_TEXTURE
+        if(UNLIKELY(transformed()))
+#endif
+        {
+            glMatrixMode(GL_TEXTURE);
+            glLoadIdentity();
+            glScalef(mWidthScale, mHeightScale, 1);
+            glTranslatef(-x, mYOffset - y, 0);
+            glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+            glVertexPointer(2, GL_FLOAT, 0, mVertices);
+            glTexCoordPointer(2, GL_FLOAT, 0, mVertices);
+            while (it != end) {
+                const Rect& r = *it++;
+                const GLint sy = fbHeight - (r.top + r.height());
+                glScissor(r.left, sy, r.width(), r.height());
+                glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+            }
+            glDisableClientState(GL_TEXTURE_COORD_ARRAY);
         }
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+#ifdef AVOID_DRAW_TEXTURE
+        else{
+            Rect r;
+            GLint crop[4] = { 0, 0, w, h };
+            glTexParameteriv(GL_TEXTURE_2D, GL_TEXTURE_CROP_RECT_OES, crop);
+            y = fbHeight - (y + h);
+            while (it != end) {
+                const Rect& r = *it++;
+                const GLint sy = fbHeight - (r.top + r.height());
+                glScissor(r.left, sy, r.width(), r.height());
+                glDrawTexiOES(x, y, 0, w, h);
+            }
+        }
+#endif
         glLoadIdentity();
         glMatrixMode(GL_MODELVIEW);
     }
