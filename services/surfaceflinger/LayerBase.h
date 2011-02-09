@@ -190,6 +190,13 @@ public:
         return (!(mFlags & DisplayHardware::SLOW_CONFIG)) && mNeedsFiltering;
     }
 
+#ifdef AVOID_DRAW_TEXTURE
+    /**
+     * transformed -- true is this surface needs a to be transformed
+     */
+    virtual bool transformed() const    { return mTransformed; }
+#endif
+
     /**
      * isSecure - true if this surface is secure, that is if it prevents
      * screenshots or VNC servers.
@@ -263,7 +270,9 @@ protected:
 
                 // atomic
     volatile    int32_t         mInvalidate;
-                
+#ifdef AVOID_DRAW_TEXTURE
+                bool            mTransformed;
+#endif
 
 protected:
     virtual ~LayerBase();
