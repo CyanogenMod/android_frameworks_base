@@ -194,7 +194,6 @@ ssize_t SensorDevice::poll(sensors_event_t* buffer, size_t count) {
                 continue;
             }
             if ( oldBuffer.sensor <= 0 ||
-                 oldBuffer.sensor > SENSOR_TYPE_ROTATION_VECTOR ||
                  !oldBuffer.time) {
                 LOGV("Useless output at round %u from %d",pollsDone,oldBuffer.sensor);
                 count--;
