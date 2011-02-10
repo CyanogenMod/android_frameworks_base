@@ -174,6 +174,10 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     private boolean mUseRotaryLockscreen = (mLockscreenStyle == 2);
 
+    private boolean mUseRotaryRevLockscreen = (mLockscreenStyle == 3);
+
+    private boolean mUseLenseSquareLockscreen = (mLockscreenStyle == 4);
+
     private double mGestureSensitivity;
     private boolean mGestureTrail;
     private boolean mGestureActive;
@@ -410,6 +414,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             mRotarySelector.setMidHandleResource(R.drawable.ic_jog_dial_unlock);
         }
         mRotarySelector.enableCustomAppDimple(mCustomAppToggle);
+        mRotarySelector.setRevamped(mUseRotaryRevLockscreen);
+        mRotarySelector.setLenseSquare(mUseRotaryRevLockscreen);
         if(mRotaryHideArrows)
             mRotarySelector.hideArrows(true);
 
@@ -899,8 +905,10 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
                 // layout
                 mScreenLocked.setVisibility(View.VISIBLE);
-                if (mUseRotaryLockscreen) {
+                if (mUseRotaryLockscreen || mUseRotaryRevLockscreen || mUseLenseSquareLockscreen) {
                     mRotarySelector.setVisibility(View.VISIBLE);
+                    mRotarySelector.setRevamped(mUseRotaryRevLockscreen);
+                    mRotarySelector.setLenseSquare(mUseLenseSquareLockscreen);
                     mTabSelector.setVisibility(View.GONE);
                     if (mSelector2 != null) {
                         mSelector2.setVisibility(View.GONE);
@@ -929,8 +937,10 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
                 // layout
                 mScreenLocked.setVisibility(View.VISIBLE);
-                if (mUseRotaryLockscreen) {
+                if (mUseRotaryLockscreen || mUseRotaryRevLockscreen || mUseLenseSquareLockscreen) {
                     mRotarySelector.setVisibility(View.VISIBLE);
+                    mRotarySelector.setRevamped(mUseRotaryRevLockscreen);
+                    mRotarySelector.setLenseSquare(mUseLenseSquareLockscreen);
                     mTabSelector.setVisibility(View.GONE);
                     if (mSelector2 != null) {
                         mSelector2.setVisibility(View.GONE);
@@ -955,8 +965,10 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
                 // layout
                 mScreenLocked.setVisibility(View.VISIBLE);
-                if (mUseRotaryLockscreen) {
+                if (mUseRotaryLockscreen || mUseRotaryRevLockscreen || mUseLenseSquareLockscreen) {
                     mRotarySelector.setVisibility(View.VISIBLE);
+                    mRotarySelector.setRevamped(mUseRotaryRevLockscreen);
+                    mRotarySelector.setLenseSquare(mUseLenseSquareLockscreen);
                     mTabSelector.setVisibility(View.GONE);
                     if (mSelector2 != null) {
                         mSelector2.setVisibility(View.GONE);
@@ -1002,8 +1014,10 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
                 // layout
                 mScreenLocked.setVisibility(View.INVISIBLE);
-                if (mUseRotaryLockscreen) {
+                if (mUseRotaryLockscreen || mUseRotaryRevLockscreen || mUseLenseSquareLockscreen) {
                     mRotarySelector.setVisibility(View.VISIBLE);
+                    mRotarySelector.setRevamped(mUseRotaryRevLockscreen);
+                    mRotarySelector.setLenseSquare(mUseLenseSquareLockscreen);
                     mTabSelector.setVisibility(View.GONE);
                     if (mSelector2 != null) {
                         mSelector2.setVisibility(View.GONE);
