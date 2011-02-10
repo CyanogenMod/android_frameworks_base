@@ -84,6 +84,8 @@ public class RotarySelector extends View {
     private boolean mCustomAppDimple=false;
     // controls hiding of directional arrows
     private boolean mHideArrows=false;
+    // are we in lense mode?
+    private boolean mLenseMode=false;
 
     // state of the animation used to bring the handle back to its start position when
     // the user lets go before triggering an action
@@ -346,6 +348,10 @@ public class RotarySelector extends View {
         canvas.drawBitmap(mBackground, mBgMatrix, mPaint);
         mBgMatrix.setTranslate(0, - (float)(mRotaryOffsetY + bgTop));
 
+        // for lense mode, we are done here
+        if(mLenseMode)
+            return;
+
         // Draw the correct arrow(s) depending on the current state:
         if (!mHideArrows) {
             mArrowMatrix.reset();
@@ -584,6 +590,12 @@ public class RotarySelector extends View {
                     reset();
                     invalidate();
                 }
+                if (mLenseMode){
+                    setGrabbedState(MID_HANDLE_GRABBED);
+                    invalidate();
+                    vibrate(VIBRATE_SHORT);
+                    break;
+                }
                 if (eventX < mLeftHandleX + hitWindow) {
                     mRotaryOffsetX = eventX - mLeftHandleX;
                     setGrabbedState(LEFT_HANDLE_GRABBED);
@@ -625,14 +637,18 @@ public class RotarySelector extends View {
                                 mDimplesOfFling * mDimpleSpacing,
                                 velocity);
                     }
-                } else if (mGrabbedState == MID_HANDLE_GRABBED && mCustomAppDimple) {
+                } else if (mGrabbedState == MID_HANDLE_GRABBED && (mCustomAppDimple || mLenseMode)) {
                     mRotaryOffsetY = eventY - mEventStartY;
                     if (mRotaryOffsetY < 0) mRotaryOffsetY=0;
                     invalidate();
 
                     if (mRotaryOffsetY >= mDimpleWidth * 2 && !mTriggered) {
                         mTriggered = true;
-                        dispatchTriggerEvent(OnDialTriggerListener.MID_HANDLE);
+                        // lense mode is handled as "middle dimple" for up/down movement, yet we need to emit left handle for unlock
+                        if(mLenseMode)
+                            dispatchTriggerEvent(OnDialTriggerListener.LEFT_HANDLE);
+                        else
+                            dispatchTriggerEvent(OnDialTriggerListener.MID_HANDLE);
                         // set up "flow up" animation
                         startAnimationUp(eventY - mEventStartY, 0, SNAP_BACK_ANIMATION_DURATION_MILLIS);
                     }
@@ -665,7 +681,7 @@ public class RotarySelector extends View {
                         && Math.abs(eventX - mLeftHandleX) > 5) {
                     // set up "snap back" animation
                     startAnimation(eventX - mLeftHandleX, 0, SNAP_BACK_ANIMATION_DURATION_MILLIS);
-                } else if (mGrabbedState == MID_HANDLE_GRABBED && mCustomAppDimple
+                } else if (mGrabbedState == MID_HANDLE_GRABBED && (mCustomAppDimple || mLenseMode)
                         && eventY - mEventStartY > 5) {
                     // set up "flow up" animation
                     startAnimationUp(eventY - mEventStartY, 0, SNAP_BACK_ANIMATION_DURATION_MILLIS);
@@ -890,6 +906,27 @@ public class RotarySelector extends View {
         mHideArrows=newState;
     }
 
+    /**
+     * Sets up the rotary revamped style - called from LockScreen.java
+     */
+    public void setRevamped(boolean newState){
+        if(newState){
+            if(mCustomAppDimple)
+                mBackground = getBitmapFor(R.drawable.jog_dial_bg_rev_down);
+            else
+                mBackground = getBitmapFor(R.drawable.jog_dial_bg_rev);
+            mDimple = getBitmapFor(R.drawable.jog_dial_dimple_rev);
+            mDimpleDim = getBitmapFor(R.drawable.jog_dial_dimple_dim_rev);
+        }
+    }
+
+    public void setLenseSquare(boolean newState){
+        mLenseMode=false;
+        if(newState){
+            mLenseMode=true;
+            mBackground = getBitmapFor(R.drawable.lense_square_bg);
+        }
+    }
 
     // Debugging / testing code
 
