@@ -41,6 +41,8 @@ class SensorDevice : public Singleton<SensorDevice> {
     int32_t mOldSensorsEnabled;
     bool mOldSensorsCompatMode;
     native_handle_t *mOldSensorsDataChannel;
+    sensor_t const* mOldSensorsList;
+    int mOldSensorsCount;
     struct sensors_module_t* mSensorModule;
     Mutex mLock; // protect mActivationCount[].rates
     // fixed-size array after construction

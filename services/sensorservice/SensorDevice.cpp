@@ -138,6 +138,8 @@ SensorDevice::SensorDevice()
             for (size_t i=0 ; i<size_t(count) ; i++) {
                 mActivationCount.add(list[i].handle, model);
                 if (mOldSensorsCompatMode) {
+                    mOldSensorsList = list;
+                    mOldSensorsCount = count;
                     mSensorDataDevice->data_open(mSensorDataDevice,
                             mSensorControlDevice->open_data_source(mSensorControlDevice));
                     mSensorControlDevice->activate(mSensorControlDevice, list[i].handle, 0);
@@ -190,20 +192,30 @@ ssize_t SensorDevice::poll(sensors_event_t* buffer, size_t count) {
         while (pollsDone < (size_t)mOldSensorsEnabled && pollsDone < count) {
             sensors_data_t oldBuffer;
             long result =  mSensorDataDevice->poll(mSensorDataDevice, &oldBuffer);
+            int sensorType = -1;
+ 
             if (result == 0x7FFFFFFF) {
                 continue;
+            } else {
+                /* the old data_poll is supposed to return a handle,
+                 * which has to be mapped to the type. */
+                for (size_t i=0 ; i<size_t(mOldSensorsCount) && sensorType < 0 ; i++) {
+                    if (mOldSensorsList[i].handle == result) {
+                        sensorType = mOldSensorsList[i].type;
+                        LOGV("mapped sensor type to %d",sensorType);
+                    }
+                }
             }
-            if ( oldBuffer.sensor <= 0 ||
-                 oldBuffer.sensor > SENSOR_TYPE_ROTATION_VECTOR ||
-                 !oldBuffer.time) {
-                LOGV("Useless output at round %u from %d",pollsDone,oldBuffer.sensor);
+            if ( sensorType <= 0 ||
+                 sensorType > SENSOR_TYPE_ROTATION_VECTOR) {
+                LOGV("Useless output at round %u from %d",pollsDone, oldBuffer.sensor);
                 count--;
                 continue;
             }
             buffer[pollsDone].version = sizeof(struct sensors_event_t);
             buffer[pollsDone].timestamp = oldBuffer.time;
+            buffer[pollsDone].type = sensorType;
             buffer[pollsDone].sensor = result;
-            buffer[pollsDone].type = oldBuffer.sensor;
             /* This part is a union. Regardless of the sensor type,
              * we only need to copy a sensors_vec_t and a float */
             buffer[pollsDone].acceleration = oldBuffer.vector;
