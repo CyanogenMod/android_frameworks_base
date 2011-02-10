@@ -762,19 +762,20 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     }
     private void refreshPlayingTitle() {
         String nowPlaying = KeyguardViewMediator.NowPlaying();
+        mNowPlaying.setText(nowPlaying);
         if (am.isMusicActive() && !nowPlaying.equals("") && mLockMusicControls && mNowPlayingScreen) {
-            mNowPlaying.setText(nowPlaying);
             mNowPlaying.setVisibility(View.VISIBLE);
             // Set album art
             Uri uri = getArtworkUri(getContext(), KeyguardViewMediator.SongId(), KeyguardViewMediator.AlbumId());
             if (uri != null) {
                 mAlbumArt.setImageURI(uri);
                 mAlbumArt.setVisibility(View.VISIBLE);
+            } else {
+                mAlbumArt.setVisibility(View.GONE);
             }
         } else {
             mNowPlaying.setVisibility(View.GONE);
             mAlbumArt.setVisibility(View.GONE);
-            mNowPlaying.setText(nowPlaying);
         }
     }
 
