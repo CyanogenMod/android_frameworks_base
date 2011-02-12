@@ -221,6 +221,17 @@ ssize_t SensorDevice::poll(sensors_event_t* buffer, size_t count) {
             buffer[pollsDone].acceleration = oldBuffer.vector;
             buffer[pollsDone].temperature = oldBuffer.temperature;
             LOGV("Adding results for sensor %d", buffer[pollsDone].sensor);
+#ifdef FOXCONN_SENSORS
+            /* Fix ridiculous API breakages from FIH. */
+            /* These idiots are returning -1 for FAR, and 1 for NEAR */
+            if (sensorType == SENSOR_TYPE_PROXIMITY) {
+                if (buffer[pollsDone].distance > 0) {
+                    buffer[pollsDone].distance = 0;
+                } else {
+                    buffer[pollsDone].distance = 1;
+                }
+            }
+#endif
             pollsDone++;
         }
         return pollsDone;
