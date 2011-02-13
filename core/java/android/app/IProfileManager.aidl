@@ -29,6 +29,7 @@ interface IProfileManager
     void removeProfile(in Profile profile);
     Profile getProfile(String profileName);
     Profile[] getProfiles();
+    void persist();
     
     NotificationGroup[] getNotificationGroups();
     void addNotificationGroup(in NotificationGroup group);

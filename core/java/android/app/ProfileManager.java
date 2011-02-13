@@ -33,6 +33,7 @@ public class ProfileManager
     public void setActiveProfile(String profileName) {
         try {
             getService().setActiveProfile(profileName);
+            getService().persist();
         } catch (RemoteException e) {
         }
     }
@@ -48,6 +49,7 @@ public class ProfileManager
     public void addProfile(Profile profile){
         try {
             getService().addProfile(profile);
+            getService().persist();
         } catch (RemoteException e) {
         }
     }
@@ -86,6 +88,7 @@ public class ProfileManager
     public void addNotificationGroup(NotificationGroup group){
         try {
             getService().addNotificationGroup(group);
+            getService().persist();
         } catch (RemoteException e) {
         }
     }

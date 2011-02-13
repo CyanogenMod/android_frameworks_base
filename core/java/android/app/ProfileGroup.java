@@ -1,26 +1,27 @@
 
 package android.app;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
+
+import java.io.IOException;
 
 public class ProfileGroup implements Parcelable {
 
-    private String name;
+    private String mName;
 
-    private Uri soundOverride;
+    private Uri mSoundOverride = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
-    private Mode soundMode = Mode.DEFAULT;
+    private Mode mSoundMode = Mode.DEFAULT;
 
-    private Mode vibrateMode = Mode.DEFAULT;
+    private Mode mVibrateMode = Mode.DEFAULT;
 
-    private Mode lightsMode = Mode.DEFAULT;
+    private Mode mLightsMode = Mode.DEFAULT;
 
     public static final Parcelable.Creator<ProfileGroup> CREATOR = new Parcelable.Creator<ProfileGroup>() {
         public ProfileGroup createFromParcel(Parcel in) {
@@ -34,7 +35,7 @@ public class ProfileGroup implements Parcelable {
     };
 
     public ProfileGroup(String name) {
-        this.name = name;
+        this.mName = name;
     }
 
     private ProfileGroup(Parcel in) {
@@ -42,55 +43,55 @@ public class ProfileGroup implements Parcelable {
     }
 
     public String getName() {
-        return name;
+        return mName;
     }
 
     public void setSoundOverride(Uri sound) {
-        this.soundOverride = sound;
+        this.mSoundOverride = sound;
     }
 
     public Uri getSoundOverride() {
-        return soundOverride;
+        return mSoundOverride;
     }
 
     public void setSoundMode(Mode soundMode) {
-        this.soundMode = soundMode;
+        this.mSoundMode = soundMode;
     }
 
     public Mode getSoundMode() {
-        return soundMode;
+        return mSoundMode;
     }
 
     public void setVibrateMode(Mode vibrateMode) {
-        this.vibrateMode = vibrateMode;
+        this.mVibrateMode = vibrateMode;
     }
 
     public Mode getVibrateMode() {
-        return vibrateMode;
+        return mVibrateMode;
     }
 
     public void setLightsMode(Mode lightsMode) {
-        this.lightsMode = lightsMode;
+        this.mLightsMode = lightsMode;
     }
 
     public Mode getLightsMode() {
-        return lightsMode;
+        return mLightsMode;
     }
 
     // TODO : add support for LEDs / screen etc.
 
     /* package */Notification processNotification(Notification notification) {
 
-        switch (soundMode) {
+        switch (mSoundMode) {
             case OVERRIDE:
-                notification.sound = soundOverride;
+                notification.sound = mSoundOverride;
                 break;
             case SUPPRESS:
                 silenceNotification(notification);
                 break;
             case DEFAULT:
         }
-        switch (vibrateMode) {
+        switch (mVibrateMode) {
             case OVERRIDE:
                 notification.defaults |= Notification.DEFAULT_VIBRATE;
                 break;
@@ -99,7 +100,7 @@ public class ProfileGroup implements Parcelable {
                 break;
             case DEFAULT:
         }
-        switch (lightsMode) {
+        switch (mLightsMode) {
             case OVERRIDE:
                 notification.defaults |= Notification.DEFAULT_LIGHTS;
                 break;
@@ -133,25 +134,62 @@ public class ProfileGroup implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(name);
-        dest.writeParcelable(soundOverride, flags);
+        dest.writeString(mName);
+        dest.writeParcelable(mSoundOverride, flags);
 
-        dest.writeString(soundMode.name());
-        dest.writeString(vibrateMode.name());
-        dest.writeString(lightsMode.name());
+        dest.writeString(mSoundMode.name());
+        dest.writeString(mVibrateMode.name());
+        dest.writeString(mLightsMode.name());
     }
 
     public void readFromParcel(Parcel in) {
-        name = in.readString();
-        soundOverride = in.readParcelable(null);
+        mName = in.readString();
+        mSoundOverride = in.readParcelable(null);
 
-        soundMode = Mode.valueOf(Mode.class, in.readString());
-        vibrateMode = Mode.valueOf(Mode.class, in.readString());
-        lightsMode = Mode.valueOf(Mode.class, in.readString());
+        mSoundMode = Mode.valueOf(Mode.class, in.readString());
+        mVibrateMode = Mode.valueOf(Mode.class, in.readString());
+        mLightsMode = Mode.valueOf(Mode.class, in.readString());
     }
 
     public enum Mode {
         SUPPRESS, DEFAULT, OVERRIDE;
+    }
+
+    public String getXmlString() {
+        StringBuilder builder = new StringBuilder();
+        getXmlString(builder);
+        return builder.toString();
+    }
+
+    public void getXmlString(StringBuilder builder) {
+        builder.append("<profileGroup name=\"" + getName() + "\">\n");
+        builder.append("<sound>" + mSoundOverride.toString() + "</sound>\n");
+        builder.append("<soundMode>" + mSoundMode + "</soundMode>\n");
+        builder.append("<vibrateMode>" + mVibrateMode + "</vibrateMode>\n");
+        builder.append("<lightsMode>" + mLightsMode + "</lightsMode>\n");
+        builder.append("</profileGroup>\n");
+    }
+
+    public static ProfileGroup fromXml(XmlPullParser xpp) throws XmlPullParserException,
+            IOException {
+        ProfileGroup profileGroup = new ProfileGroup(xpp.getAttributeValue(null, "name"));
+        int event = xpp.next();
+        while (event != XmlPullParser.END_TAG || !xpp.getName().equals("profileGroup")) {
+            if (event == XmlPullParser.START_TAG) {
+                String name = xpp.getName();
+                if (name.equals("sound")) {
+                    profileGroup.setSoundOverride(Uri.parse(xpp.nextText()));
+                } else if (name.equals("soundMode")) {
+                    profileGroup.setSoundMode(Mode.valueOf(xpp.nextText()));
+                } else if (name.equals("vibrateMode")) {
+                    profileGroup.setVibrateMode(Mode.valueOf(xpp.nextText()));
+                } else if (name.equals("lightsMode")) {
+                    profileGroup.setLightsMode(Mode.valueOf(xpp.nextText()));
+                }
+            }
+            event = xpp.next();
+        }
+        return profileGroup;
     }
 
 }
