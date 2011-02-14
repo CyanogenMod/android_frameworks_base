@@ -75,9 +75,9 @@ interface IAudioService {
     int requestAudioFocus(int mainStreamType, int durationHint, IBinder cb, IAudioFocusDispatcher l,
             String clientId);
 
-    int abandonAudioFocus(IAudioFocusDispatcher l, String clientId);
-    
-    void unregisterAudioFocusClient(String clientId);
+    int abandonAudioFocus(IAudioFocusDispatcher l, String clientId, IBinder cb);
+
+    void unregisterAudioFocusClient(String clientId, IBinder cb);
 
     void registerMediaButtonEventReceiver(in ComponentName eventReceiver);
 
