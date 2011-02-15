@@ -342,9 +342,7 @@ public class RotarySelector extends View {
         }
 
         // Background:
-        mBgMatrix.setTranslate(0, (float)(mRotaryOffsetY + bgTop));
         canvas.drawBitmap(mBackground, mBgMatrix, mPaint);
-        mBgMatrix.setTranslate(0, - (float)(mRotaryOffsetY + bgTop));
 
         // Draw the correct arrow(s) depending on the current state:
         if (!mHideArrows) {
