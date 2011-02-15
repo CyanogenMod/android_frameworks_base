@@ -1284,5 +1284,6 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mAlbumArt.setVisibility(visibility);
         mStatus1.setVisibility(visibility);
         mStatus2.setVisibility(visibility);
+        mNowPlayingScreen=(visibility == View.VISIBLE);
     }
 }
