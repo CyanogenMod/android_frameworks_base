@@ -46,7 +46,7 @@ public:
           mRClassDir(NULL), mResourceIntermediatesDir(NULL), mManifestMinSdkVersion(NULL),
           mMinSdkVersion(NULL), mTargetSdkVersion(NULL), mMaxSdkVersion(NULL),
           mVersionCode(NULL), mVersionName(NULL), mCustomPackage(NULL),
-          mMaxResVersion(NULL), mDebugMode(false), mProduct(NULL),
+          mMaxResVersion(NULL), mDebugMode(false), mNonConstantId(false), mProduct(NULL),
           mArgc(0), mArgv(NULL)
         {}
     ~Bundle(void) {}
@@ -142,6 +142,8 @@ public:
     void setMaxResVersion(const char * val) { mMaxResVersion = val; }
     bool getDebugMode() { return mDebugMode; }
     void setDebugMode(bool val) { mDebugMode = val; }
+    bool getNonConstantId() { return mNonConstantId; }
+    void setNonConstantId(bool val) { mNonConstantId = val; }
     const char* getProduct() const { return mProduct; }
     void setProduct(const char * val) { mProduct = val; }
 
@@ -243,6 +245,7 @@ private:
     const char* mCustomPackage;
     const char* mMaxResVersion;
     bool        mDebugMode;
+    bool        mNonConstantId;
     const char* mProduct;
 
     /* file specification */
