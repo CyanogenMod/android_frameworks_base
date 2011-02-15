@@ -789,6 +789,9 @@ public class Process {
     
     /** @hide */
     public static final native int[] getPids(String path, int[] lastArray);
+
+    /** @hide */
+    public static final native int getPpid();
     
     /** @hide */
     public static final int PROC_TERM_MASK = 0xff;
