@@ -2266,6 +2266,18 @@ public final class Settings {
         public static final String LOCKSCREEN_MUSIC_CONTROLS = "lockscreen_music_controls";
 
         /**
+         * Whether to show currently playing song title and artist
+         * @hide
+         */
+        public static final String LOCKSCREEN_NOW_PLAYING = "lockscreen_now_playing";
+
+        /**
+         * Whether to show currently playing song album art
+         * @hide
+         */
+        public static final String LOCKSCREEN_ALBUM_ART = "lockscreen_album_art";
+
+        /**
          * Whether to use lockscreen music controls with headset connected
          * @hide
          */
