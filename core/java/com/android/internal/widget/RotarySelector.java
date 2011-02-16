@@ -103,6 +103,9 @@ public class RotarySelector extends View {
     private boolean mLenseMode=false;
     // are we in rotary revamped mode?
     private boolean mRevampedMode=false;
+    // time format from system settings - contains 12 or 24
+    private int mTime12_24 = 12;
+
 
     // state of the animation used to bring the handle back to its start position when
     // the user lets go before triggering an action
@@ -442,7 +445,11 @@ public class RotarySelector extends View {
                 Time mTime = new Time();
                 mTime.setToNow();
 
-                String mTimeString=mTime.format("%R");
+                String mTimeString;
+                if(mTime12_24==24)
+                    mTimeString=mTime.format("%R");
+                else
+                    mTimeString=mTime.format("%l:%M %P");
                 String mDate=(String) DateFormat.format(mDateFormatString, new Date());
 
                 canvas.translate(0, 0);
@@ -1058,6 +1065,13 @@ public class RotarySelector extends View {
             mLenseMode=true;
             mBackground = getBitmapFor(R.drawable.lense_square_bg);
         }
+    }
+
+    /**
+     *  Sets the time format for propper display in lense style - called from LockScreen.java
+     */
+    public void setTimeFormat(int time12_24){
+        mTime12_24=time12_24;
     }
 
     // Debugging / testing code
