@@ -299,6 +299,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
         mTime = (TextView) findViewById(R.id.timeDisplay);
         mAmPm = (TextView) findViewById(R.id.am_pm);
+        if(mTime12_24 == 24)
+            mAmPm.setVisibility(View.GONE);
         mDate = (TextView) findViewById(R.id.date);
         mStatus1 = (TextView) findViewById(R.id.status1);
         mStatus2 = (TextView) findViewById(R.id.status2);
