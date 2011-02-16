@@ -129,6 +129,10 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private String mDateFormatString;
     private boolean mEnableMenuKeyInLockScreen;
 
+    // time format from system settings - contains 12 or 24
+    private int mTime12_24 = (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.TIME_12_24, 12));
+
     private boolean mTrackballUnlockScreen = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.TRACKBALL_UNLOCK_SCREEN, 0) == 1);
 
@@ -1284,6 +1288,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mAlbumArt.setVisibility(visibility);
         mStatus1.setVisibility(visibility);
         mStatus2.setVisibility(visibility);
+
         mNowPlayingScreen=(visibility == View.VISIBLE);
+        if(mTime12_24 == 24)
+            mAmPm.setVisibility(View.GONE);
     }
 }
