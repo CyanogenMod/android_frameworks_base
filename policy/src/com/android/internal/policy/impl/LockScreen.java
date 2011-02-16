@@ -145,6 +145,12 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private boolean mLockMusicControls = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_MUSIC_CONTROLS, 1) == 1);
 
+    private boolean mNowPlayingToggle = (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_NOW_PLAYING, 1) == 1);
+
+    private boolean mAlbumArtToggle = (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_ALBUM_ART, 1) == 1);
+
     private int mLockMusicHeadset = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_MUSIC_CONTROLS_HEADSET, 0));
 
@@ -153,9 +159,6 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     private boolean mLockAlwaysMusic = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_ALWAYS_MUSIC_CONTROLS, 0) == 1);
-
-    // Make this an option should there be demand
-    private boolean mNowPlayingScreen = true;
 
     private boolean mCustomAppToggle = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_CUSTOM_APP_TOGGLE, 0) == 1);
@@ -286,10 +289,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         if (DBG) Log.v(TAG, "Creation orientation = " + mCreationOrientation);
         if (mCreationOrientation != Configuration.ORIENTATION_LANDSCAPE) {
             inflater.inflate(R.layout.keyguard_screen_tab_unlock, this, true);
-            mNowPlayingScreen = true;
         } else {
             inflater.inflate(R.layout.keyguard_screen_tab_unlock_land, this, true);
-            mNowPlayingScreen = false;
         }
 
         mCarrier = (TextView) findViewById(R.id.carrier);
@@ -782,19 +783,20 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private void refreshPlayingTitle() {
         String nowPlaying = KeyguardViewMediator.NowPlaying();
         mNowPlaying.setText(nowPlaying);
-        if (am.isMusicActive() && !nowPlaying.equals("") && mLockMusicControls && mNowPlayingScreen) {
-            mNowPlaying.setVisibility(View.VISIBLE);
+        mNowPlaying.setVisibility(View.GONE);
+        mAlbumArt.setVisibility(View.GONE);
+
+        if (am.isMusicActive() && !nowPlaying.equals("") && mLockMusicControls
+                && mCreationOrientation == Configuration.ORIENTATION_PORTRAIT) {
+            if (mNowPlayingToggle)
+                mNowPlaying.setVisibility(View.VISIBLE);
             // Set album art
-            Uri uri = getArtworkUri(getContext(), KeyguardViewMediator.SongId(), KeyguardViewMediator.AlbumId());
-            if (uri != null) {
+            Uri uri = getArtworkUri(getContext(), KeyguardViewMediator.SongId(),
+                    KeyguardViewMediator.AlbumId());
+            if (uri != null && mAlbumArtToggle) {
                 mAlbumArt.setImageURI(uri);
                 mAlbumArt.setVisibility(View.VISIBLE);
-            } else {
-                mAlbumArt.setVisibility(View.GONE);
             }
-        } else {
-            mNowPlaying.setVisibility(View.GONE);
-            mAlbumArt.setVisibility(View.GONE);
         }
     }
 
@@ -1290,8 +1292,18 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mStatus1.setVisibility(visibility);
         mStatus2.setVisibility(visibility);
 
-        mNowPlayingScreen=(visibility == View.VISIBLE);
-        if(mTime12_24 == 24)
+        if (mTime12_24 == 24)
             mAmPm.setVisibility(View.GONE);
+
+        mNowPlayingToggle = false;
+        mAlbumArtToggle = false;
+        if (visibility == View.VISIBLE
+                && (Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.LOCKSCREEN_NOW_PLAYING, 1) == 1))
+            mNowPlayingToggle = true;
+        if (visibility == View.VISIBLE
+                && (Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.LOCKSCREEN_ALBUM_ART, 1) == 1))
+            mAlbumArtToggle = true;
     }
 }
