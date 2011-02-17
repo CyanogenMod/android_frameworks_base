@@ -24,6 +24,8 @@
     <bool name="config_hspa_data_distinguishable">false</bool>
     <!-- Control whether status bar should have statusbar buttons (home,menu and back) available for tablet devices -->
     <bool name="config_statusbar_buttons">false</bool>
+    <!-- Control whether the status bar buttons should have the home button hidden -->
+    <bool name="config_statusbar_hide_home">false</bool>
 
 </resources>
 

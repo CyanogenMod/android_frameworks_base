@@ -33,6 +33,7 @@ import android.os.ServiceManager;
 import android.view.IWindowManager;
 import android.view.KeyEvent;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.util.Slog;
 import com.android.systemui.R;
 
@@ -53,6 +54,7 @@ public class StatusBarView extends FrameLayout {
     ImageButton mStatusBarBackButton;
     ImageButton mStatusBarMenuButton;
     boolean mStatusBarButtons;
+    boolean mStatusBarHideHome;
     
     public StatusBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -73,6 +75,8 @@ public class StatusBarView extends FrameLayout {
         try {
             mStatusBarButtons = mContext.getResources().getBoolean(
                     R.bool.config_statusbar_buttons);
+            mStatusBarHideHome = mContext.getResources().getBoolean(
+                    R.bool.config_statusbar_hide_home);
         } catch (Exception e) {
                   mStatusBarButtons = false;
         }
@@ -81,20 +85,22 @@ public class StatusBarView extends FrameLayout {
          * All this is skipped if config_statusbar_buttons is false or missing in config.xml
          * If true then add statusbar buttons and set listeners and intents
          */
-        if (mStatusBarButtons){
+        if (mStatusBarButtons) {
             mStatusBarHomeButton = (ImageButton)findViewById(R.id.status_home);
-            mStatusBarHomeButton.setVisibility(0);
-            mStatusBarHomeButton.setOnClickListener(
-                new ImageButton.OnClickListener() {
-                    public void onClick(View v) {
-                        Slog.i(TAG, "Home clicked");
-                        Intent setIntent = new Intent(Intent.ACTION_MAIN);
-                        setIntent.addCategory(Intent.CATEGORY_HOME);
-                        setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        StatusBarView.this.getContext().startActivity(setIntent);
+            if(!mStatusBarHideHome) {
+                mStatusBarHomeButton.setVisibility(0);
+                mStatusBarHomeButton.setOnClickListener(
+                    new ImageButton.OnClickListener() {
+                        public void onClick(View v) {
+                            Slog.i(TAG, "Home clicked");
+                            Intent setIntent = new Intent(Intent.ACTION_MAIN);
+                            setIntent.addCategory(Intent.CATEGORY_HOME);
+                            setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            StatusBarView.this.getContext().startActivity(setIntent);
+                        }
                     }
-                }
-            );
+                );
+            }
             mStatusBarMenuButton = (ImageButton)findViewById(R.id.status_menu);
             mStatusBarMenuButton.setVisibility(0);
             mStatusBarMenuButton.setOnClickListener(
@@ -115,6 +121,14 @@ public class StatusBarView extends FrameLayout {
                     }
                 }
             );
+            if (mStatusBarHideHome) {
+                final float scale = getContext().getResources().getDisplayMetrics().density;
+                int size = (int) scale * 45;
+                LinearLayout.LayoutParams biggerButtons = new LinearLayout.LayoutParams(size,
+                    LinearLayout.LayoutParams.MATCH_PARENT);
+                mStatusBarMenuButton.setLayoutParams(biggerButtons);
+                mStatusBarBackButton.setLayoutParams(biggerButtons);
+            }
         }
     }
 
