@@ -230,7 +230,8 @@ public class StatusBarView extends FrameLayout {
     }
 
     private boolean isEventInButton(final ImageButton button, final MotionEvent event) {
-        return button.getLeft() <= event.getRawX()
+        return mStatusBarButtons && button != null
+            && button.getLeft() <= event.getRawX()
             && button.getRight() >= event.getRawX()
             && button.getTop() <= event.getRawY()
             && button.getBottom() >= event.getRawY();
