@@ -67,6 +67,11 @@ enum output_format {
     /* H.264/AAC data encapsulated in MPEG2/TS */
     OUTPUT_FORMAT_MPEG2TS = 8,
 
+#ifdef QCOM_HARDWARE
+    OUTPUT_FORMAT_QCP = 9, // QCP file format
+    OUTPUT_FORMAT_THREE_GPP2 = 10, /*3GPP2*/
+#endif
+
     OUTPUT_FORMAT_LIST_END // must be last - used to validate format type
 };
 
@@ -77,6 +82,10 @@ enum audio_encoder {
     AUDIO_ENCODER_AAC = 3,
     AUDIO_ENCODER_AAC_PLUS = 4,
     AUDIO_ENCODER_EAAC_PLUS = 5,
+#ifdef QCOM_HARDWARE
+    AUDIO_ENCODER_EVRC = 6,
+    AUDIO_ENCODER_QCELP = 7,
+#endif
 
     AUDIO_ENCODER_LIST_END // must be the last - used to validate the audio encoder type
 };
