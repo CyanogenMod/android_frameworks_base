@@ -190,6 +190,11 @@ private:
 
     StagefrightRecorder(const StagefrightRecorder &);
     StagefrightRecorder &operator=(const StagefrightRecorder &);
+
+#ifdef QCOM_HARDWARE
+    /* extension */
+    status_t startExtendedRecording();
+#endif
 };
 
 }  // namespace android
