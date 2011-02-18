@@ -75,6 +75,7 @@ LOCAL_SRC_FILES:=                         \
 
 ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
         LOCAL_SRC_FILES += ExtendedExtractor.cpp
+        LOCAL_SRC_FILES += ExtendedWriter.cpp
 endif
 
 LOCAL_C_INCLUDES:= \
@@ -176,6 +177,7 @@ LOCAL_CFLAGS += -Wno-multichar
 ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
         LOCAL_C_INCLUDES += $(TOP)/hardware/msm7k/libgralloc-qsd8k
         LOCAL_C_INCLUDES += $(TOP)/hardware/qcom/media/mm-core/omxcore/inc
+        LOCAL_C_INCLUDES += $(TOP)/system/core/include
         LOCAL_CFLAGS += -DQCOM_HARDWARE
 endif
 

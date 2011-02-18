@@ -953,11 +953,11 @@ status_t OMXCodec::configureCodec(const sp<MetaData> &meta) {
             || !strcmp(value, "msm7625_surf") || !strcmp(value, "msm7625_ffa"))
         {
             LOGE("OMX_QCOM_FramePacking_OnlyOneCompleteFrame not supported by component err: %d", err);
-        }
-        else
+        } else {
             if(err!=OK){
                return err;
             }
+        }
 #endif
     } else if (!strcasecmp(MEDIA_MIMETYPE_AUDIO_G711_ALAW, mMIME)
             || !strcasecmp(MEDIA_MIMETYPE_AUDIO_G711_MLAW, mMIME)) {
@@ -2591,7 +2591,9 @@ int64_t OMXCodec::retrieveDecodingTimeUs(bool isCodecSpecific) {
     CHECK(mIsEncoder);
 
     if (mDecodingTimeList.empty()) {
+#ifndef QCOM_HARDWARE
         CHECK(mSignalledEOS || mNoMoreOutputData);
+#endif
         // No corresponding input frame available.
         // This could happen when EOS is reached.
         return 0;
@@ -3890,6 +3892,9 @@ void OMXCodec::setRawAudioFormat(
     OMX_PARAM_PORTDEFINITIONTYPE def;
     InitOMXParams(&def);
     def.nPortIndex = portIndex;
+#ifdef QCOM_HARDWARE
+    def.format.audio.cMIMEType = NULL;
+#endif
     status_t err = mOMX->getParameter(
             mNode, OMX_IndexParamPortDefinition, &def, sizeof(def));
     CHECK_EQ(err, (status_t)OK);
@@ -5481,8 +5486,6 @@ void OMXCodec::setEVRCFormat(int32_t numChannels, int32_t sampleRate, int32_t bi
 }
 
 void OMXCodec::setQCELPFormat(int32_t numChannels, int32_t sampleRate, int32_t bitRate) {
-
-
     if (mIsEncoder) {
         CHECK(numChannels == 1);
         //////////////// input port ////////////////////
