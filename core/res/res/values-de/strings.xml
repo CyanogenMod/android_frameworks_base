@@ -784,7 +784,7 @@
     <string name="ringtone_default" msgid="3789758980357696936">"Standard-Klingelton"</string>
     <string name="ringtone_default_with_actual" msgid="8129563480895990372">"Standard-Klingelton (<xliff:g id="ACTUAL_RINGTONE">%1$s</xliff:g>)"</string>
     <string name="ringtone_silent" msgid="4440324407807468713">"Lautlos"</string>
-    <string name="ringtone_picker_title" msgid="3515143939175119094">"Klingeltöne"</string>
+    <string name="ringtone_picker_title" msgid="3515143939175119094">"Ton auswählen"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"Unbekannter Klingelton"</string>
   <plurals name="wifi_available">
     <item quantity="one" msgid="6654123987418168693">"WLAN-Netzwerk verfügbar"</item>
