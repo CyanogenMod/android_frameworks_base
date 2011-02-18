@@ -312,7 +312,7 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
                   mStatus1.setText(getContext().getString(R.string.lockscreen_plugged_in, mBatteryLevel));
               }
             } else {
-                mStatus1.setText(getContext().getString(R.string.lockscreen_low_battery));
+                mStatus1.setText(getContext().getString(R.string.lockscreen_low_battery, mBatteryLevel));
             }
             mStatus1.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_lock_idle_charging, 0, 0, 0);
 
