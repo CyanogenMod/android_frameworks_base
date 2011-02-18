@@ -10851,9 +10851,13 @@ package android.media {
 
   public final class MediaRecorder.AudioEncoder {
     field public static final int AAC = 3; // 0x3
+    field public static final int AAC_PLUS = 4; // 0x4
     field public static final int AMR_NB = 1; // 0x1
     field public static final int AMR_WB = 2; // 0x2
     field public static final int DEFAULT = 0; // 0x0
+    field public static final int EAAC_PLUS = 5; // 0x5
+    field public static final int EVRC = 6; // 0x6
+    field public static final int QCELP = 7; // 0x7
   }
 
   public final class MediaRecorder.AudioSource {
@@ -10880,8 +10884,10 @@ package android.media {
     field public static final int AMR_WB = 4; // 0x4
     field public static final int DEFAULT = 0; // 0x0
     field public static final int MPEG_4 = 2; // 0x2
+    field public static final int QCP = 9; // 0x9
     field public static final int RAW_AMR = 3; // 0x3
     field public static final int THREE_GPP = 1; // 0x1
+    field public static final int THREE_GPP2 = 10; // 0xa
   }
 
   public final class MediaRecorder.VideoEncoder {
