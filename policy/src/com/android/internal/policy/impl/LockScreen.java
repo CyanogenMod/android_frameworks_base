@@ -430,9 +430,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         //hide most items when we are in potrait lense mode
         mLensePortrait=(mUseLenseSquareLockscreen && mCreationOrientation != Configuration.ORIENTATION_LANDSCAPE);
         if (mLensePortrait)
-            setLenseWidgetsVisibility(View.GONE);
-        else
-            setLenseWidgetsVisibility(View.VISIBLE);
+            setLenseWidgetsVisibility(View.INVISIBLE);
 
         mTabSelector.setLeftTabResources(
                 R.drawable.ic_jog_dial_unlock,
@@ -831,7 +829,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     private void updateStatusLines() {
         if (!mStatus.showStatusLines()
-                || (mCharging == null && mNextAlarm == null)) {
+                || (mCharging == null && mNextAlarm == null) || mLensePortrait) {
             mStatus1.setVisibility(View.INVISIBLE);
             mStatus2.setVisibility(View.INVISIBLE);
         } else if (mCharging != null && mNextAlarm == null) {
@@ -1289,11 +1287,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mCarrier.setVisibility(visibility);
         mNowPlaying.setVisibility(visibility);
         mAlbumArt.setVisibility(visibility);
-        mStatus1.setVisibility(visibility);
-        mStatus2.setVisibility(visibility);
 
         if (mTime12_24 == 24)
-            mAmPm.setVisibility(View.GONE);
+            mAmPm.setVisibility(View.INVISIBLE);
 
         mNowPlayingToggle = false;
         mAlbumArtToggle = false;
