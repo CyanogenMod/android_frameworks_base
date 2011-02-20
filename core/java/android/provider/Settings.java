@@ -2324,6 +2324,12 @@ public final class Settings {
         public static final String TRACKBALL_UNLOCK_SCREEN = "trackball_unlock_screen";
 
         /**
+         * Whether to wake the screen with the volume keys. The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String VOLUME_WAKE_SCREEN = "volume_wake_screen";
+
+        /**
          * Whether to use the custom quick unlock screen control
          * @hide
          */
