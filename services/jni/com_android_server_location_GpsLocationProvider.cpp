@@ -324,8 +324,10 @@ static jboolean android_location_GpsLocationProvider_init(JNIEnv* env, jobject o
 static void android_location_GpsLocationProvider_cleanup(JNIEnv* env, jobject obj)
 {
     const GpsInterface* interface = GetGpsInterface(env, obj);
-    if (interface)
+    if (interface) {
         interface->cleanup();
+        sGpsInterface = NULL;
+    }
 }
 
 static jboolean android_location_GpsLocationProvider_set_position_mode(JNIEnv* env, jobject obj,
