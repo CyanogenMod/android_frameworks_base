@@ -245,7 +245,7 @@ public class RotarySelector extends View {
             mDensityScaleFactor=(float)(160.0 / densityDpi);
 	// setup for 1024x600 tablets like Toshiba Folio
         if(densityDpi == 160 && r.getDisplayMetrics().widthPixels == 1024)
-            mDensityScaleFactor=(float)1.9;
+            mDensityScaleFactor=(float)(r.getDisplayMetrics().heightPixels / 2 / densityDpi);
 
         if (DBG) log("- Density: " + mDensity);
 
