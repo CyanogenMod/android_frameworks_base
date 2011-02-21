@@ -58,6 +58,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.lang.reflect.Method;
+
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.TelephonyIntents;
@@ -1255,7 +1257,16 @@ public class StatusBarPolicy {
 
             mService.setIcon("wimax", iconId, 0);
         } else if (action.equals(WimaxConstants.RSSI_CHANGED_ACTION)) {
-            int newSignalLevel = intent.getIntExtra(WimaxConstants.EXTRA_NEW_RSSI_LEVEL, -200);
+            int rssi = intent.getIntExtra(WimaxConstants.EXTRA_NEW_RSSI_LEVEL, -200);
+            int newSignalLevel = 0;
+            try {
+                Method calculateSignalLevel = Class.forName("com.htc.net.wimax.WimaxController")
+                    .getMethod("calculateSignalLevel", int.class, int.class);
+                newSignalLevel = (Integer) calculateSignalLevel.invoke(null, rssi, 4);
+            } catch (Exception e) {
+                Slog.e(TAG, "Unable to get WiMAX signal level!", e);
+            }
+
             int iconId;
 
             if (newSignalLevel > 3) {
