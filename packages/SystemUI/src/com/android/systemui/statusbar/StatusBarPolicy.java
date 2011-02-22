@@ -58,8 +58,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.lang.reflect.Method;
-
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.telephony.IccCard;
 import com.android.internal.telephony.TelephonyIntents;
@@ -68,6 +66,7 @@ import com.android.internal.telephony.cdma.TtyIntent;
 import com.android.server.am.BatteryStatsService;
 import com.android.systemui.R;
 import com.android.wimax.WimaxConstants;
+import com.android.wimax.WimaxSettingsHelper;
 
 /**
  * This class contains all of the policy about which icons are installed in the status
@@ -352,6 +351,7 @@ public class StatusBarPolicy {
 
     private int mLastWimaxSignalLevel = -1;
     private boolean mIsWimaxConnected = false;
+    private WimaxSettingsHelper mWimaxSettingsHelper;
 
     // state of inet connection - 0 not connected, 100 connected
     private int mInetCondition = 0;
@@ -532,6 +532,9 @@ public class StatusBarPolicy {
         // headset
         mService.setIcon("headset", com.android.internal.R.drawable.stat_sys_headset, 0);
         mService.setIconVisibility("headset", false);
+
+        // wimax
+        mWimaxSettingsHelper = new WimaxSettingsHelper(context);
 
         IntentFilter filter = new IntentFilter();
 
@@ -1258,14 +1261,7 @@ public class StatusBarPolicy {
             mService.setIcon("wimax", iconId, 0);
         } else if (action.equals(WimaxConstants.RSSI_CHANGED_ACTION)) {
             int rssi = intent.getIntExtra(WimaxConstants.EXTRA_NEW_RSSI_LEVEL, -200);
-            int newSignalLevel = 0;
-            try {
-                Method calculateSignalLevel = Class.forName("com.htc.net.wimax.WimaxController")
-                    .getMethod("calculateSignalLevel", int.class, int.class);
-                newSignalLevel = (Integer) calculateSignalLevel.invoke(null, rssi, 4);
-            } catch (Exception e) {
-                Slog.e(TAG, "Unable to get WiMAX signal level!", e);
-            }
+            int newSignalLevel = mWimaxSettingsHelper.calculateSignalLevel(rssi, 4);
 
             int iconId;
 
