@@ -1,5 +1,7 @@
 package com.android.wimax;
 
+import android.content.Context;
+
 /* @hide */
 public class WimaxConstants {
 
@@ -26,6 +28,12 @@ public class WimaxConstants {
     public static final String RSSI_CHANGED_ACTION = "com.htc.net.wimax.RSSI_CHANGED";
     
     public static final String EXTRA_NETWORK_INFO = "networkInfo";
-    
+
     public static final String EXTRA_NEW_RSSI_LEVEL = "newRssiLevel";
+
+    public static final String EXTRA_NEW_STATE = "newState";
+
+    public static boolean isWimaxSupported(Context context) {
+        return context.getSystemService(Context.WIFI_SERVICE) != null;
+    }
 }
