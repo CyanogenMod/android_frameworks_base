@@ -2107,6 +2107,26 @@ public final class Settings {
         public static final String LOCK_MMS_IN_MEMORY = "lock_mms_in_memory";
 
         /**
+         * Whether to show the CM battery percentage implementation instead
+         * of the stock battery icon
+         * 0: don't show / show stock icon instead
+         * 1: show cm battery / dont show stock icon
+         * default: 0
+         * @hide
+         */
+        public static final String STATUS_BAR_CM_BATTERY = "status_bar_cm_battery";
+
+        /**
+         * Whether to show the clock in status bar
+         * of the stock battery icon
+         * 0: don't show the clock
+         * 1: show the clock
+         * default: 1
+         * @hide
+         */
+        public static final String STATUS_BAR_CLOCK = "status_bar_clock";
+
+        /**
          * Whether to wake the screen with the trackball. The value is boolean (1 or 0).
          * @hide
          */
