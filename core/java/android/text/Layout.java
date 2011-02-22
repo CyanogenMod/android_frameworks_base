@@ -38,6 +38,8 @@ import android.view.KeyEvent;
  * For text that will not change, use a {@link StaticLayout}.
  */
 public abstract class Layout {
+    /** Delta used for floating point equality checks. */
+    private static final float FP_EQUALITY_DELTA = 1e-8f;
     private static final boolean DEBUG = false;
     private static final ParagraphStyle[] NO_PARA_SPANS =
         ArrayUtils.emptyArray(ParagraphStyle.class);
@@ -1153,7 +1155,7 @@ public abstract class Layout {
         if (h2 < 0.5f)
             h2 = 0.5f;
 
-        if (h1 == h2) {
+        if (Math.abs(h1 - h2) < FP_EQUALITY_DELTA) {
             dest.moveTo(h1, top);
             dest.lineTo(h1, bottom);
         } else {
