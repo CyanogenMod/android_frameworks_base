@@ -116,6 +116,14 @@ public final class AccessibilityManager {
         }
     }
 
+    protected void finalize() throws Throwable {
+       try {
+           mService.removeClient(mClient);
+       } finally {
+           super.finalize();
+       }
+    }
+
     /**
      * Returns if the {@link AccessibilityManager} is enabled.
      *

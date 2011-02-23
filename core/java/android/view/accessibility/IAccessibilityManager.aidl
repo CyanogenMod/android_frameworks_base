@@ -31,6 +31,8 @@ interface IAccessibilityManager {
 
     void addClient(IAccessibilityManagerClient client);
 
+    void removeClient(IAccessibilityManagerClient client);
+
     boolean sendAccessibilityEvent(in AccessibilityEvent uiEvent);
 
     List<ServiceInfo> getAccessibilityServiceList();

@@ -92,6 +92,9 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub
     final List<IAccessibilityManagerClient> mClients =
         new ArrayList<IAccessibilityManagerClient>();
 
+    private final ArrayList<ClientDeathHandler> mClientDeathHandlers =
+        new ArrayList<ClientDeathHandler>();
+
     final Map<ComponentName, Service> mComponentNameToServiceMap =
         new HashMap<ComponentName, Service>();
 
@@ -125,6 +128,21 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub
             }
         }
     };
+
+    private class ClientDeathHandler implements IBinder.DeathRecipient {
+        final IAccessibilityManagerClient mClient;
+
+        ClientDeathHandler(IAccessibilityManagerClient client) {
+           mClient = client;
+        }
+
+        public void binderDied() {
+           synchronized (mLock) {
+             mClients.remove(mClient);
+             mClientDeathHandlers.remove(this);
+           }
+        }
+    }
 
     /**
      * Creates a new instance.
@@ -274,8 +292,29 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub
             try {
                 client.setEnabled(mIsEnabled);
                 mClients.add(client);
+                ClientDeathHandler cdh = new ClientDeathHandler(client);
+                mClientDeathHandlers.add(cdh);
+                client.asBinder().linkToDeath(cdh, 0);
             } catch (RemoteException re) {
                 Slog.w(LOG_TAG, "Dead AccessibilityManagerClient: " + client, re);
+            }
+        }
+    }
+
+    public void removeClient(IAccessibilityManagerClient client) {
+        synchronized (mLock) {
+            if (mClients.remove(client)) {
+
+                int size = mClientDeathHandlers.size();
+
+                for (int i = 0; i < size; i++) {
+                     final ClientDeathHandler cdh = mClientDeathHandlers.get(i);
+                     if (cdh.mClient == client) {
+                         mClientDeathHandlers.remove(i);
+                         client.asBinder().unlinkToDeath(cdh, 0);
+                         break;
+                     }
+                }
             }
         }
     }
