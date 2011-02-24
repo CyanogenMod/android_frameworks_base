@@ -271,7 +271,8 @@ public class RotarySelector extends View {
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity() * 2;
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
 
-        mMarginBottom = (int)(60 * mDensity * mDensityScaleFactor);
+        int marginBottomDIP = context.getResources().getInteger(R.integer.config_rotaryMarginBottomDIP);
+        mMarginBottom = (int)(marginBottomDIP * mDensity * mDensityScaleFactor);
 
         mLensePaint.setColor(Color.BLACK);
         mLensePaint.setStyle(Paint.Style.FILL_AND_STROKE);
