@@ -447,6 +447,7 @@ public class StatusBarPolicy {
         mService = (StatusBarManager)context.getSystemService(Context.STATUS_BAR_SERVICE);
         mSignalStrength = new SignalStrength();
         mBatteryStats = BatteryStatsService.getService();
+        mWimaxSettingsHelper = new WimaxSettingsHelper(context);
 
         // settings observer for cm-battery change
         SettingsObserver settingsObserver = new SettingsObserver(mHandler);
@@ -485,9 +486,11 @@ public class StatusBarPolicy {
         // wifi will get updated by the sticky intents
 
         // wimax
-        mService.setIcon("wimax", sWimaxSignalImages[0][0], 0);
-        mService.setIconVisibility("wimax", false);
-        // wimax will get updated by the sticky intents
+        if (mWimaxSettingsHelper.isWimaxSupported()) {
+            mService.setIcon("wimax", sWimaxSignalImages[0][0], 0);
+            mService.setIconVisibility("wimax", false);
+            // wimax will get updated by the sticky intents
+        }
 
         // TTY status
         mService.setIcon("tty",  R.drawable.stat_sys_tty_mode, 0);
@@ -532,9 +535,6 @@ public class StatusBarPolicy {
         // headset
         mService.setIcon("headset", com.android.internal.R.drawable.stat_sys_headset, 0);
         mService.setIconVisibility("headset", false);
-
-        // wimax
-        mWimaxSettingsHelper = new WimaxSettingsHelper(context);
 
         IntentFilter filter = new IntentFilter();
 
