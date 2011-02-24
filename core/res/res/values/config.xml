@@ -388,4 +388,7 @@
     <!-- Enable the screen-off animation -->
     <bool name="config_enableScreenOffAnimation">true</bool>
 
+    <!-- Configure rotary bottom margin -->
+    <integer name="config_rotaryMarginBottomDIP">60</integer>
+
 </resources>
