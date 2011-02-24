@@ -49,6 +49,6 @@ public class WimaxConstants {
     public static final String EXTRA_NEW_STATE = "newState";
 
     public static boolean isWimaxSupported(Context context) {
-        return context.getSystemService(Context.WIFI_SERVICE) != null;
+        return context.getSystemService(Context.WIMAX_SERVICE) != null;
     }
 }
