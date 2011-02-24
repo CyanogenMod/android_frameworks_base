@@ -387,4 +387,7 @@
     <!-- Enable the screen-off animation -->
     <bool name="config_enableScreenOffAnimation">true</bool>
 
+    <!-- Configure Top Rotary Possition -->
+    <integer name="config_RotaryPossition">60</integer>
+
 </resources>

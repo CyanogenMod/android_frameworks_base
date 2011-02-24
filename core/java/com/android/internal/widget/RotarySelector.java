@@ -244,7 +244,10 @@ public class RotarySelector extends View {
         if(densityDpi < 160 && densityDpi >120)
             mDensityScaleFactor=(float)(160.0 / densityDpi);
 
+        int iPosition = context.getResources().getInteger(R.integer.config_RotaryPossition);
+
         if (DBG) log("- Density: " + mDensity);
+        if (DBG) log("- Position: " + iPosition);
 
         // Assets (all are BitmapDrawables).
         mBackground = getBitmapFor(R.drawable.jog_dial_bg);
@@ -271,7 +274,7 @@ public class RotarySelector extends View {
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity() * 2;
         mMaximumVelocity = configuration.getScaledMaximumFlingVelocity();
 
-        mMarginBottom = (int)(60 * mDensity * mDensityScaleFactor);
+        mMarginBottom = (int)(iPosition * mDensity * mDensityScaleFactor);
 
         mLensePaint.setColor(Color.BLACK);
         mLensePaint.setStyle(Paint.Style.FILL_AND_STROKE);
