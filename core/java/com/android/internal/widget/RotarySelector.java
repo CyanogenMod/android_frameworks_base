@@ -245,6 +245,7 @@ public class RotarySelector extends View {
             mDensityScaleFactor=(float)(160.0 / densityDpi);
 
         if (DBG) log("- Density: " + mDensity);
+        if (DBG) log("- Position: " + iPosition);
 
         // Assets (all are BitmapDrawables).
         mBackground = getBitmapFor(R.drawable.jog_dial_bg);
