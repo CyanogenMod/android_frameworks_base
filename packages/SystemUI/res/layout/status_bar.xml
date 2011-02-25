@@ -83,12 +83,14 @@
             android:layout_width="25dip"
             android:layout_height="match_parent"
             android:background="@drawable/ic_statusbar_home"
+            android:scaleType="center"
             android:visibility="gone"/>
 
         <ImageButton android:id="@+id/status_menu"
             android:layout_width="25dip"
             android:layout_height="match_parent"
             android:background="@drawable/ic_statusbar_menu"
+            android:scaleType="center"
             android:visibility="gone"/>
 
         <ImageButton android:id="@+id/status_back"
@@ -96,6 +98,7 @@
             android:layout_height="match_parent"
             android:background="@drawable/ic_statusbar_back"
             android:paddingRight="6dip"
+            android:scaleType="center"
             android:visibility="gone"/>
 
     </LinearLayout>
