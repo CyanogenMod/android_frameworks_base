@@ -45,6 +45,9 @@ public class Power
     public static native void acquireWakeLock(int lock, String id);
     public static native void releaseWakeLock(String id);
 
+    public static native void acquireCpuWakeLock();
+    public static native void releaseCpuWakeLock();
+
     /**
      * Brightness value for fully off
      */

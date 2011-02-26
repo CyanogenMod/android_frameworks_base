@@ -64,6 +64,19 @@ releaseWakeLock(JNIEnv *env, jobject clazz, jstring idObj)
 
 }
 
+static void
+acquireCpuWakeLock(JNIEnv *env, jobject clazz)
+{
+    acquire_cpu_max_lock();
+}
+
+static void
+releaseCpuWakeLock(JNIEnv *env, jobject clazz)
+{
+    release_cpu_max_lock();
+}
+
+
 static int
 setLastUserActivityTimeout(JNIEnv *env, jobject clazz, jlong timeMS)
 {
@@ -102,6 +115,8 @@ static void android_os_Power_reboot(JNIEnv *env, jobject clazz, jstring reason)
 static JNINativeMethod method_table[] = {
     { "acquireWakeLock", "(ILjava/lang/String;)V", (void*)acquireWakeLock },
     { "releaseWakeLock", "(Ljava/lang/String;)V", (void*)releaseWakeLock },
+    { "acquireCpuWakeLock", "()V", (void*)acquireCpuWakeLock },
+    { "releaseCpuWakeLock", "()V", (void*)releaseCpuWakeLock },
     { "setLastUserActivityTimeout", "(J)I", (void*)setLastUserActivityTimeout },
     { "setScreenState", "(Z)I", (void*)setScreenState },
     { "shutdown", "()V", (void*)android_os_Power_shutdown },

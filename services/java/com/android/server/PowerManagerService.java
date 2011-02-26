@@ -98,7 +98,8 @@ class PowerManagerService extends IPowerManager.Stub
                                         | PowerManager.SCREEN_DIM_WAKE_LOCK
                                         | PowerManager.SCREEN_BRIGHT_WAKE_LOCK
                                         | PowerManager.FULL_WAKE_LOCK
-                                        | PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK;
+                                        | PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK
+                                        | PowerManager.CPU_MAX_WAKE_LOCK;
 
     //                       time since last state:               time since last event:
     // The short keylight delay comes from secure settings; this is the default.
@@ -175,6 +176,7 @@ class PowerManagerService extends IPowerManager.Stub
     private final int[] mBroadcastQueue = new int[] { -1, -1, -1 };
     private final int[] mBroadcastWhy = new int[3];
     private int mPartialCount = 0;
+    private int mCpuMaxCount = 0;
     private int mPowerState;
     // mScreenOffReason can be WindowManagerPolicy.OFF_BECAUSE_OF_USER,
     // WindowManagerPolicy.OFF_BECAUSE_OF_TIMEOUT or WindowManagerPolicy.OFF_BECAUSE_OF_PROX_SENSOR
@@ -876,6 +878,7 @@ class PowerManagerService extends IPowerManager.Stub
                     break;
                 case PowerManager.PARTIAL_WAKE_LOCK:
                 case PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK:
+                case PowerManager.CPU_MAX_WAKE_LOCK:
                     break;
                 default:
                     // just log and bail.  we're in the server, so don't
@@ -952,6 +955,11 @@ class PowerManagerService extends IPowerManager.Stub
                 }
             }
             Power.acquireWakeLock(Power.PARTIAL_WAKE_LOCK,PARTIAL_NAME);
+        }
+        else if ((flags & LOCK_MASK) == PowerManager.CPU_MAX_WAKE_LOCK) {
+            mCpuMaxCount++;
+            if(mCpuMaxCount == 1)
+                Power.acquireCpuWakeLock();
         }
 
         if (diffsource) {
@@ -1037,6 +1045,11 @@ class PowerManagerService extends IPowerManager.Stub
                 if (LOG_PARTIAL_WL) EventLog.writeEvent(EventLogTags.POWER_PARTIAL_WAKE_STATE, 0, wl.tag);
                 Power.releaseWakeLock(PARTIAL_NAME);
             }
+        }
+        else if ((wl.flags & LOCK_MASK) == PowerManager.CPU_MAX_WAKE_LOCK) {
+            mCpuMaxCount--;
+            if (mCpuMaxCount == 0)
+                Power.releaseCpuWakeLock();
         }
         // Unlink the lock from the binder.
         wl.binder.unlinkToDeath(wl, 0);
@@ -1140,6 +1153,8 @@ class PowerManagerService extends IPowerManager.Stub
                 return "PARTIAL_WAKE_LOCK             ";
             case PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK:
                 return "PROXIMITY_SCREEN_OFF_WAKE_LOCK";
+            case PowerManager.CPU_MAX_WAKE_LOCK:
+                return "CPU_MAX_WAKE_LOCK";
             default:
                 return "???                           ";
         }
@@ -3155,7 +3170,8 @@ class PowerManagerService extends IPowerManager.Stub
     public int getSupportedWakeLockFlags() {
         int result = PowerManager.PARTIAL_WAKE_LOCK
                    | PowerManager.FULL_WAKE_LOCK
-                   | PowerManager.SCREEN_DIM_WAKE_LOCK;
+                   | PowerManager.SCREEN_DIM_WAKE_LOCK
+                   | PowerManager.CPU_MAX_WAKE_LOCK;
 
         if (mProximitySensor != null) {
             result |= PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK;
