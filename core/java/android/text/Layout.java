@@ -1106,8 +1106,7 @@ public abstract class Layout {
             while (Character.getDirectionality(c) == Character.DIRECTIONALITY_NONSPACING_MARK) {
                 offset--;
 
-                if (offset == 0)
-                    break;
+                if (offset == 0) break;
 
                 decomposed = Normalizer.normalize(text.subSequence(offset, offset + 1),
                                                     Normalizer.Form.NFKD);
