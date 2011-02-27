@@ -303,6 +303,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // Behavior of trackball wake
     boolean mTrackballWakeScreen;
 
+    // Behavior of menu wake
+    boolean mMenuWakeScreen;
+
     // Behavior of volbtn music controls
     boolean mVolBtnMusicControls;
     // Behavior of cambtn music controls
@@ -346,6 +349,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     "fancy_rotation_anim"), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.TRACKBALL_WAKE_SCREEN), false, this);
+	    resolver.registerContentObserver(Settings.System.getUriFor(
+	            Settings.System.MENU_WAKE_SCREEN), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.VOLBTN_MUSIC_CONTROLS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -730,6 +735,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     "fancy_rotation_anim", 0) != 0 ? 0x80 : 0;
             mTrackballWakeScreen = (Settings.System.getInt(resolver,
                     Settings.System.TRACKBALL_WAKE_SCREEN, 0) == 1);
+	    mMenuWakeScreen = (Settings.System.getInt(resolver,
+		    Settings.System.MENU_WAKE_SCREEN, 0) == 1);
             mVolBtnMusicControls = (Settings.System.getInt(resolver,
                     Settings.System.VOLBTN_MUSIC_CONTROLS, 1) == 1);
             mCamBtnMusicControls = (Settings.System.getInt(resolver,
@@ -2014,7 +2021,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         final boolean isWakeKey = (policyFlags
                 & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED)) != 0
-                || ((keyCode == BTN_MOUSE) && mTrackballWakeScreen);
+                || ((keyCode == BTN_MOUSE) && mTrackballWakeScreen
+		|| (keyCode == KeyEvent.KEYCODE_MENU) && mMenuWakeScreen);
         
         // If the key is injected, pretend that the screen is on and don't let the
         // device go to sleep.  This feature is mainly used for testing purposes.
