@@ -44,6 +44,9 @@
          for the space allocated to it. -->
     <string name="ellipsis">\u2026</string>
 
+    <!-- Details about personal hand status regarding cm71 feature "borrowing" -->
+    <string name="personal_hand_status">,,|,,</string>
+
     <!-- How to display the lack of a phone number -->
     <string name="emptyPhoneNumber">(No phone number)</string>
 
