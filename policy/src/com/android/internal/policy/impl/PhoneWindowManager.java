@@ -303,6 +303,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // Behavior of trackball wake
     boolean mTrackballWakeScreen;
 
+    // Behavior of menu wake
+    boolean mMenuWakeScreen;
+
     // Behavior of volbtn music controls
     boolean mVolBtnMusicControls;
     // Behavior of cambtn music controls
@@ -346,6 +349,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     "fancy_rotation_anim"), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.TRACKBALL_WAKE_SCREEN), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.MENU_WAKE_SCREEN), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.VOLBTN_MUSIC_CONTROLS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -730,6 +735,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     "fancy_rotation_anim", 0) != 0 ? 0x80 : 0;
             mTrackballWakeScreen = (Settings.System.getInt(resolver,
                     Settings.System.TRACKBALL_WAKE_SCREEN, 0) == 1);
+            mMenuWakeScreen = (Settings.System.getInt(resolver,
+                    Settings.System.MENU_WAKE_SCREEN, 0) == 1);
             mVolBtnMusicControls = (Settings.System.getInt(resolver,
                     Settings.System.VOLBTN_MUSIC_CONTROLS, 1) == 1);
             mCamBtnMusicControls = (Settings.System.getInt(resolver,
@@ -2012,10 +2019,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             performHapticFeedbackLw(null, HapticFeedbackConstants.VIRTUAL_RELEASED, false);
         }
 
-        final boolean isWakeKey = (policyFlags
-                & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED)) != 0
-                || ((keyCode == BTN_MOUSE) && mTrackballWakeScreen);
-        
+        final boolean isTrackballWakeKey = (policyFlags
+            & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED)) != 0
+            || ((keyCode == BTN_MOUSE) && mTrackballWakeScreen);
+
+        final boolean isMenuWakeKey = (policyFlags
+            & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED)) != 0
+            || ((keyCode == KeyEvent.KEYCODE_MENU) && mMenuWakeScreen);
+
         // If the key is injected, pretend that the screen is on and don't let the
         // device go to sleep.  This feature is mainly used for testing purposes.
         final boolean isInjected = (policyFlags & WindowManagerPolicy.FLAG_INJECTED) != 0;
@@ -2033,7 +2044,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         if (false) {
             Log.d(TAG, "interceptKeyTq keycode=" + keyCode
-                  + " screenIsOn=" + isScreenOn + " keyguardActive=" + keyguardActive + " isWakeKey=" + isWakeKey);
+                + " screenIsOn=" + isScreenOn + " keyguardActive=" + keyguardActive + " isTrackballWakeKey=" + isTrackballWakeKey
+                + " isMenuWakeKey = " + isMenuWakeKey);
         }
 
         if (keyguardActive) {
@@ -2044,7 +2056,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // otherwise, don't pass it to the user
                 result &= ~ACTION_PASS_TO_USER;
                 
-                if (isWakeKey && down) {
+                if (isTrackballWakeKey && down) {
                     // tell the mediator about a wake key, it may decide to
                     // turn on the screen depending on whether the key is
                     // appropriate.
@@ -2054,7 +2066,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             handleVolumeKeyDown(keyCode);
                         }
                     }
-                } else if (!down) {
+		} else if (isMenuWakeKey && down) {
+                    // tell the mediator about a wake key, it may decide to
+                    // turn on the screen depending on whether the key is
+                    // appropriate.
+                    if (!mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(keyCode)) {
+                        if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
+                            || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
+                            handleVolumeKeyDown(keyCode);
+                        }
+		    }
+		} else if (!down) {
                     if ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN
                         || keyCode == KeyEvent.KEYCODE_VOLUME_UP)) {
                         handleVolumeKeyUp(keyCode);
@@ -2078,7 +2100,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 result &= ~ACTION_PASS_TO_USER;
                 handleVolumeKey(AudioManager.STREAM_VOICE_CALL, keyCode);
             }
-            if (isWakeKey) {
+            if (isTrackballWakeKey || isMenuWakeKey) {
                 // a wake key has a sole purpose of waking the device; don't pass
                 // it to the user
                 result |= ACTION_POKE_USER_ACTIVITY;
