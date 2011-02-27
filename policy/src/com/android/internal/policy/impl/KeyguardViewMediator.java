@@ -117,6 +117,10 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
     private static final int SET_HIDDEN = 12;
     private static final int KEYGUARD_TIMEOUT = 13;
 
+    //fix bug 2749
+    mMenuWakeScreen = (Settings.System.getInt(resolver,
+            Settings.System.MENU_WAKE_SCREEN, 0) == 1);
+
     /**
      * The default amount of time we stay awake (used for all key input)
      */
@@ -803,6 +807,9 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
             case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
             case KeyEvent.KEYCODE_CAMERA:
                 return false;
+            case KeyEvent.KEYCODE_MENU:
+                if(!mMenuWakeScreen)
+                    return false;
         }
         return true;
     }
