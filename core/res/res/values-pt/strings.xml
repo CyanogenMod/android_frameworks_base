@@ -399,6 +399,14 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Permite que um aplicativo se conecte e desconecte dos pontos de acesso Wi-Fi e faça alterações nas redes Wi-Fi configuradas."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"permitir recebimento de multicast Wi-Fi"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Permite que um aplicativo receba pacotes não endereçados diretamente para o seu aparelho. Isso pode ser útil ao detectar os serviços oferecidos nas proximidades. Ele consome mais energia do que o modo não-multicast."</string>
+
+    <string name="permlab_accessWimaxState">visualizar status do WiMax</string>
+    <string name="permdesc_accessWimaxState">Permitir uma aplicação visualizar
+      a informação sobre o estado do WiMax.</string>
+    <string name="permlab_changeWimaxState">trocar status do WiMax</string>
+    <string name="permdesc_changeWimaxState">Permitir uma aplicação conectar
+      e disconectar de redes WiMax.</string>
+
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"administração de Bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" msgid="7256289774667054555">"Permite que um aplicativo configure o telefone Bluetooth local, descubra e pareie com dispositivos remotos."</string>
     <string name="permlab_bluetooth" msgid="8361038707857018732">"criar conexões Bluetooth"</string>
@@ -904,4 +912,11 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"O armazenamento USB está em uso por um computador no momento."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"O cartão SD está em uso por um computador no momento."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Mídia externa em estado desconhecido."</string>
+    <string name="app_killed_message">Application killed</string>
+    <string name="phone_goggles_problem_count">Problema #%1$d: </string>
+    <string name="phone_goggles_description">Resolva o %1$d resolvendo problemas matemáticos em menos de %2$d segundos para poder realizar a sua comunicação.</string>
+    <plurals name="phone_goggles_countdown">
+        <item quantity="one">%d segundos restando</item>
+        <item quantity="other">%d segundos restando</item>
+    </plurals>
 </resources>
