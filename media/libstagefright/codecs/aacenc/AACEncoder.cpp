@@ -293,7 +293,7 @@ status_t AACEncoder::read(
     outputData.Length = buffer->size();
     ret = mApiHandle->GetOutputData(mEncoderHandle, &outputData, &outputInfo);
     CHECK(ret == VO_ERR_NONE || ret == VO_ERR_INPUT_BUFFER_SMALL);
-    CHECK(outputData.Length != 0);
+    //CHECK(outputData.Length != 0);
     buffer->set_range(0, outputData.Length);
 
     int64_t mediaTimeUs =
