@@ -1008,10 +1008,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         Slog.d(TAG, "Connectivityervice::handleDisconnect() - disconnecting netType(" + prevNetType + ")");
         mNetTrackers[prevNetType].setTeardownRequested(false);
 
-	    if (prevNetType == ConnectivityManager.TYPE_WIMAX || prevNetType == ConnectivityManager.TYPE_WIFI) {
+        if (prevNetType == ConnectivityManager.TYPE_WIMAX || prevNetType == ConnectivityManager.TYPE_WIFI) {
             mWimaxConnected = false;
 
-            if (mNetTrackers[ConnectivityManager.TYPE_MOBILE] != null) {
+            if (mNetTrackers[ConnectivityManager.TYPE_MOBILE] != null && getMobileDataEnabled()) {
                 if (DBG) {
                     Slog.d(TAG, "starting up " + mNetTrackers[ConnectivityManager.TYPE_MOBILE]);
                 }
@@ -1027,7 +1027,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     Slog.d(TAG, "Unable to perform WiMAX rescan!");
                 }
             }
-	    }
+        }
 
         /*
          * If the disconnected network is not the active one, then don't report
