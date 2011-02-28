@@ -231,6 +231,8 @@ public class RotarySelector extends View {
         mDensity = r.getDisplayMetrics().density;
         int densityDpi;
         densityDpi = r.getDisplayMetrics().densityDpi;
+        int screenWidth;
+        screenWidth = r.getDisplayMetrics().widthPixels;
 
         /*
          * this hack assumes people change build.prop for increasing
@@ -264,6 +266,11 @@ public class RotarySelector extends View {
 
         mBackgroundWidth = mBackground.getWidth();
         mBackgroundHeight = mBackground.getHeight();
+
+        // Increase scale for larger displays (i.e: tablets)
+        if (screenWidth > mBackgroundWidth) {
+             mDensityScaleFactor=mDensityScaleFactor * ((float)screenWidth/ mBackgroundWidth);
+
         mOuterRadius = (int) (mDensity * mDensityScaleFactor * OUTER_ROTARY_RADIUS_DIP);
         mInnerRadius = (int) ((OUTER_ROTARY_RADIUS_DIP - ROTARY_STROKE_WIDTH_DIP) * mDensity * mDensityScaleFactor);
 
