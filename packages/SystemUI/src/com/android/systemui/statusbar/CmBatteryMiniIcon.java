@@ -49,10 +49,11 @@ public class CmBatteryMiniIcon extends ImageView {
     static final int BATTERY_MINI_ICON_MARGIN_RIGHT_DIP = 6;
 
     // duration of each frame in charging animation in millis
-    static final int ANIM_FRAME_DURATION = (1000 / 3);
+    // halfed the update rate (*2), since only each 20% (2 frames) we got a different battery icon
+    static final int ANIM_FRAME_DURATION = (1000 / 3) * 2;
 
     // duration of each fake-timer call to update animation in millis
-    static final int ANIM_TIMER_DURATION = (1000 / 4);
+    static final int ANIM_TIMER_DURATION = (1000 / 4) * 2;
 
     // contains the current bat level, values: 0-100
     private int mBatteryLevel = 0;
@@ -84,6 +85,8 @@ public class CmBatteryMiniIcon extends ImageView {
     private Handler mHandler;
 
     private float mDensity;
+
+    private transient Bitmap[] mMiniIconCache;
 
     // tracks changes to settings, so status bar is auto updated the moment the
     // setting is toggled
@@ -138,6 +141,7 @@ public class CmBatteryMiniIcon extends ImageView {
         mMatrix.setTranslate(0, 0);
         mMatrix.postScale(mWidthPx, 1);
 
+        updateIconCache();
         updateSettings();
     }
 
@@ -212,9 +216,10 @@ public class CmBatteryMiniIcon extends ImageView {
             long now = SystemClock.uptimeMillis();
 
             while (now - mLastMillis > ANIM_FRAME_DURATION) {
-                mCurrentFrame = mCurrentFrame + 1;
+                // adding 2, since only each 20% a new status is shown
+                mCurrentFrame = mCurrentFrame + 2;
                 // count to eleven, so fully charged icon also got two frames
-                if (mCurrentFrame > 11)
+                if (mCurrentFrame > 10)
                     mCurrentFrame = 0;
                 mLastMillis = mLastMillis + ANIM_FRAME_DURATION;
             }
@@ -224,13 +229,9 @@ public class CmBatteryMiniIcon extends ImageView {
             mCurrentFrame = 10;
         }
 
-        // get the original battery image
         int frame = (mBatteryPlugged ? mCurrentFrame : mBatteryLevel / 10);
-        Bitmap bmBat = getBitmapFor(getBatResourceID(frame));
-        // cut one slice of pixels from battery image
-        Bitmap bmMiniBat = Bitmap.createBitmap(bmBat, 4, 0, 1, bmBat.getHeight());
 
-        canvas.drawBitmap(bmMiniBat, mMatrix, mPaint);
+        canvas.drawBitmap(mMiniIconCache[frame], mMatrix, mPaint);
     }
 
     private int getBatResourceID(int level) {
@@ -280,5 +281,18 @@ public class CmBatteryMiniIcon extends ImageView {
             setVisibility(View.VISIBLE);
         else
             setVisibility(View.GONE);
+    }
+
+    // should be toggled to private (or inlined at constructor), once StatusBarService.updateResources properly handles theme change
+    public void updateIconCache() {
+        // set up the icon cache - garbage collector handles old pointer
+        mMiniIconCache=new Bitmap[11];
+
+        for(int i=0; i<=10; i++){
+            // get the original battery image
+            Bitmap bmBat = getBitmapFor(getBatResourceID(i));
+            // cut one slice of pixels from battery image
+            mMiniIconCache[i] = Bitmap.createBitmap(bmBat, 4, 0, 1, bmBat.getHeight());
+        }
     }
 }
