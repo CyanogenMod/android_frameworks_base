@@ -1945,6 +1945,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     void handleVolumeKeyDown(int keycode) {
         // when keyguard is showing and screen off, we need
         // to handle the volume key for calls and music here
+	// FIXME FIXME FIXME
+	/*
         if (isInCall()) {
             handleVolumeKey(AudioManager.STREAM_VOICE_CALL, keycode);
         }
@@ -1965,6 +1967,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mHandler.postDelayed(btnHandler, ViewConfiguration.getLongPressTimeout());
             }
         }
+	*/
     }
 
     void handleVolumeKeyUp(int keycode) {
@@ -2016,7 +2019,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         if (false) {
             Log.d(TAG, "interceptKeyTq keycode=" + keyCode
-                  + " screenIsOn=" + isScreenOn + " keyguardActive=" + keyguardActive + " isWakeKey=" + isWakeKey);
+                  + " screenIsOn=" + isScreenOn + " keyguardActive=" + keyguardActive);
         }
 
         if (down && (policyFlags & WindowManagerPolicy.FLAG_VIRTUAL) != 0) {
