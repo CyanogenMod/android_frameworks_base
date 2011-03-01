@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * Copyright (C) 2011, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +67,7 @@ public class RequestQueue implements RequestFeeder {
     private BroadcastReceiver mProxyChangeReceiver;
 
     /* default simultaneous connection count */
-    private static final int CONNECTION_COUNT = 4;
+    private static final int CONNECTION_COUNT = SystemProperties.getInt("http.threads", 4);
 
     /**
      * This class maintains active connection threads
