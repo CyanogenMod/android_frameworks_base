@@ -122,6 +122,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     // top bar
     TextView mNoNotificationsTitle;
     TextView mClearButton;
+    CmBatteryMiniIcon mCmBatteryMiniIcon;
     // drag bar
     CloseDragHandle mCloseView;
     // ongoing
@@ -284,6 +285,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         mIcons = (LinearLayout)sb.findViewById(R.id.icons);
         mTickerView = sb.findViewById(R.id.ticker);
         mDateView = (DateView)sb.findViewById(R.id.date);
+        mCmBatteryMiniIcon = (CmBatteryMiniIcon)sb.findViewById(R.id.CmBatteryMiniIcon);
 
         mExpandedDialog = new ExpandedDialog(context);
         mExpandedView = expanded;
@@ -1519,6 +1521,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
             ((ImageView)mCloseView.getChildAt(0)).setImageDrawable(res.getDrawable(R.drawable.status_bar_close_on));
             mExpandedView.findViewById(R.id.exp_view_lin_layout).setBackgroundDrawable(res.getDrawable(R.drawable.title_bar_portrait));
             mClearButton.setBackgroundDrawable(res.getDrawable(android.R.drawable.btn_default_small));
+            mCmBatteryMiniIcon.updateIconCache();
 
             // Update icons.
             ArrayList<ViewGroup> iconViewGroups = new ArrayList<ViewGroup>();
