@@ -204,9 +204,7 @@ status_t StagefrightMediaScanner::processFile(
         return HandleFLAC(path, &client);
     }
 
-    if (mRetriever->setDataSource(path) == OK
-            && mRetriever->setMode(
-                METADATA_MODE_METADATA_RETRIEVAL_ONLY) == OK) {
+    if (mRetriever->setDataSource(path) == OK) {
         const char *value;
         if ((value = mRetriever->extractMetadata(
                         METADATA_KEY_MIMETYPE)) != NULL) {
@@ -229,6 +227,7 @@ status_t StagefrightMediaScanner::processFile(
             { "year", METADATA_KEY_YEAR },
             { "duration", METADATA_KEY_DURATION },
             { "writer", METADATA_KEY_WRITER },
+            { "compilation", METADATA_KEY_COMPILATION },
         };
         static const size_t kNumEntries = sizeof(kKeyMap) / sizeof(kKeyMap[0]);
 
@@ -254,9 +253,7 @@ char *StagefrightMediaScanner::extractAlbumArt(int fd) {
     }
     lseek(fd, 0, SEEK_SET);
 
-    if (mRetriever->setDataSource(fd, 0, size) == OK
-            && mRetriever->setMode(
-                METADATA_MODE_FRAME_CAPTURE_ONLY) == OK) {
+    if (mRetriever->setDataSource(fd, 0, size) == OK) {
         sp<IMemory> mem = mRetriever->extractAlbumArt();
 
         if (mem != NULL) {

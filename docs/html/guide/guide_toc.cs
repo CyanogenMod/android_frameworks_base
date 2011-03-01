@@ -243,6 +243,13 @@
       <li><a href="<?cs var:toroot?>guide/topics/wireless/bluetooth.html">
             <span class="en">Bluetooth</span>
           </a></li>
+      <li><a href="<?cs var:toroot?>guide/topics/nfc/index.html">
+            <span class="en">Near Field Communication</span></a>
+            <span class="new">new!</span></li>
+       <li><a href="<?cs var:toroot?>guide/topics/network/sip.html">
+            <span class="en">Session Initiation Protocol</span></a>
+            <span class="new">new!</span>
+          </li>
       <li class="toggle-list">
         <div><a href="<?cs var:toroot?>guide/topics/search/index.html">
             <span class="en">Search</span>
@@ -256,7 +263,7 @@
       </li>
       <li><a href="<?cs var:toroot?>guide/topics/admin/device-admin.html">
             <span class="en">Device Administration</span>
-         </a> <span class="new">new!</span>
+         </a>
       </li>
       <li class="toggle-list">
            <div>
@@ -295,6 +302,50 @@
       </li>
     </ul>
   </li>
+
+  <li>
+    <h2>
+      <span class="en">Android Market Topics</span>
+    </h2>
+    <ul>
+      <li><a href="<?cs var:toroot ?>guide/publishing/licensing.html">
+          <span class="en">Application Licensing</span></a>
+      </li>
+      <li class="toggle-list">
+        <div><a href="<?cs var:toroot?>guide/market/billing/index.html">
+            <span class="en">In-app Billing</span></a>
+          <span class="new">new!</span>
+        </div>
+        <ul>
+          <li><a href="<?cs var:toroot?>guide/market/billing/billing_about.html">
+              <span class="en">About this Release</span></a>
+          </li>
+          <li><a href="<?cs var:toroot?>guide/market/billing/billing_overview.html">
+              <span class="en">In-app Billing Overview</span></a>
+          </li>
+          <li><a href="<?cs var:toroot?>guide/market/billing/billing_integrate.html">
+              <span class="en">Implementing In-app Billing</span></a>
+          </li>
+          <li><a href="<?cs var:toroot?>guide/market/billing/billing_best_practices.html">
+              <span class="en">Security and Design</span></a>
+          </li>
+          <li><a href="<?cs var:toroot?>guide/market/billing/billing_testing.html">
+              <span class="en">Testing In-app Billing</span></a>
+          </li>
+          <li><a href="<?cs var:toroot?>guide/market/billing/billing_admin.html">
+              <span class="en">Administering In-app Billing</span></a>
+          </li>
+          <li><a href="<?cs var:toroot?>guide/market/billing/billing_reference.html">
+              <span class="en">In-app Billing Reference</span></a>
+          </li>
+        </ul>
+      </li>
+      <li><a href="<?cs var:toroot ?>guide/appendix/market-filters.html">
+          <span class="en">Market Filters</span></a>
+      </li>
+    </ul>
+  </li>
+
 
   <li>
     <h2><span class="en">Developing</span>
@@ -403,7 +454,7 @@
                     </li>
                   </ul>
               </li>
-              <li><a href="<?cs var:toroot ?>guide/developing/tools/proguard.html">Proguard</a></li>
+              <li><a href="<?cs var:toroot ?>guide/developing/tools/proguard.html">ProGuard</a> <span class="new">new!</span></li>
               <li><a href="<?cs var:toroot ?>guide/developing/tools/adb.html#sqlite">sqlite3</a></li>
               <li><a href="<?cs var:toroot ?>guide/developing/tools/traceview.html" >Traceview</a></li>
               <li><a href="<?cs var:toroot ?>guide/developing/tools/zipalign.html" >zipalign</a></li>
@@ -443,9 +494,6 @@
             <span class="zh-CN" style="display:none">应用程序版本控制</span>
             <span class="zh-TW" style="display:none">應用程式版本設定</span>
           </a></li>
-      <li><a href="<?cs var:toroot ?>guide/publishing/licensing.html">
-            <span class="en">Licensing Your Applications</span>
-          </a> <span class="new">new!</span></li>
       <li><a href="<?cs var:toroot ?>guide/publishing/preparing.html">
             <span class="en">Preparing to Publish</span>
             <span class="de" style="display:none">Vorbereitung auf die Veröffentlichung</span>
@@ -484,9 +532,31 @@
                <span class="en">UI Guidelines</span>
              </a></div>
         <ul>
-          <li><a href="<?cs var:toroot ?>guide/practices/ui_guidelines/icon_design.html">
-                <span class="en">Icon Design</span>
-              </a></li>
+          <li class="toggle-list">
+            <div><a href="<?cs var:toroot ?>guide/practices/ui_guidelines/icon_design.html">
+                   <span class="en">Icon Design</span>
+                 </a></div>
+            <ul>
+              <li><a href="<?cs var:toroot ?>guide/practices/ui_guidelines/icon_design_launcher.html">
+                    <span class="en">Launcher Icons</span>
+                  </a></li>
+              <li><a href="<?cs var:toroot ?>guide/practices/ui_guidelines/icon_design_menu.html">
+                    <span class="en">Menu Icons</span>
+                  </a></li>
+              <li><a href="<?cs var:toroot ?>guide/practices/ui_guidelines/icon_design_status_bar.html">
+                    <span class="en">Status Bar Icons</span>
+                  </a></li>
+              <li><a href="<?cs var:toroot ?>guide/practices/ui_guidelines/icon_design_tab.html">
+                    <span class="en">Tab Icons</span>
+                  </a></li>
+              <li><a href="<?cs var:toroot ?>guide/practices/ui_guidelines/icon_design_dialog.html">
+                    <span class="en">Dialog Icons</span>
+                  </a></li>
+              <li><a href="<?cs var:toroot ?>guide/practices/ui_guidelines/icon_design_list.html">
+                    <span class="en">List View Icons</span>
+                  </a></li>
+            </ul>
+          </li>
           <li><a href="<?cs var:toroot ?>guide/practices/ui_guidelines/widget_design.html">
                 <span class="en">App Widget Design</span>
               </a></li>
@@ -548,9 +618,6 @@
       <li><a href="<?cs var:toroot ?>guide/appendix/api-levels.html">
             <span class="en">Android API Levels</span>
           </a></li>
-      <li><a href="<?cs var:toroot ?>guide/appendix/market-filters.html">
-            <span class="en">Market Filters</span>
-           </a></li>
       <li><a href="<?cs var:toroot ?>guide/appendix/install-location.html">
             <span class="en">App Install Location</span>
           </a></li>

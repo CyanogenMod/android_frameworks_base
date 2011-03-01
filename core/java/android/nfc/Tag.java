@@ -16,106 +16,177 @@
 
 package android.nfc;
 
+import android.content.Context;
+import android.nfc.tech.IsoDep;
+import android.nfc.tech.MifareClassic;
+import android.nfc.tech.MifareUltralight;
+import android.nfc.tech.Ndef;
+import android.nfc.tech.NdefFormatable;
+import android.nfc.tech.NfcA;
+import android.nfc.tech.NfcB;
+import android.nfc.tech.NfcF;
+import android.nfc.tech.NfcV;
+import android.nfc.tech.TagTechnology;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Arrays;
+
 /**
- * Represents a (generic) discovered tag.
+ * Represents an NFC tag that has been discovered.
  * <p>
- * A tag is a passive NFC element, such as NFC Forum Tag's, Mifare class Tags,
- * Sony Felica Tags.
+ * {@link Tag} is an immutable object that represents the state of a NFC tag at
+ * the time of discovery. It can be used as a handle to {@link TagTechnology} classes
+ * to perform advanced operations, or directly queried for its ID via {@link #getId} and the
+ * set of technologies it contains via {@link #getTechList}. Arrays passed to and
+ * returned by this class are <em>not</em> cloned, so be careful not to modify them.
  * <p>
- * Tag's have a type and usually have a UID.
+ * A new tag object is created every time a tag is discovered (comes into range), even
+ * if it is the same physical tag. If a tag is removed and then returned into range, then
+ * only the most recent tag object can be successfully used to create a {@link TagTechnology}.
+ *
+ * <h3>Tag Dispatch</h3>
+ * When a tag is discovered, a {@link Tag} object is created and passed to a
+ * single activity via the {@link NfcAdapter#EXTRA_TAG} extra in an
+ * {@link android.content.Intent} via {@link Context#startActivity}. A four stage dispatch is used
+ * to select the
+ * most appropriate activity to handle the tag. The Android OS executes each stage in order,
+ * and completes dispatch as soon as a single matching activity is found. If there are multiple
+ * matching activities found at any one stage then the Android activity chooser dialog is shown
+ * to allow the user to select the activity to receive the tag.
+ *
+ * <p>The Tag dispatch mechanism was designed to give a high probability of dispatching
+ * a tag to the correct activity without showing the user an activity chooser dialog.
+ * This is important for NFC interactions because they are very transient -- if a user has to
+ * move the Android device to choose an application then the connection will likely be broken.
+ *
+ * <h4>1. Foreground activity dispatch</h4>
+ * A foreground activity that has called
+ * {@link NfcAdapter#enableForegroundDispatch NfcAdapter.enableForegroundDispatch()} is
+ * given priority. See the documentation on
+ * {@link NfcAdapter#enableForegroundDispatch NfcAdapter.enableForegroundDispatch()} for
+ * its usage.
+ * <h4>2. NDEF data dispatch</h4>
+ * If the tag contains NDEF data the system inspects the first {@link NdefRecord} in the first
+ * {@link NdefMessage}. If the record is a URI, SmartPoster, or MIME data
+ * {@link Context#startActivity} is called with {@link NfcAdapter#ACTION_NDEF_DISCOVERED}. For URI
+ * and SmartPoster records the URI is put into the intent's data field. For MIME records the MIME
+ * type is put in the intent's type field. This allows activities to register to be launched only
+ * when data they know how to handle is present on a tag. This is the preferred method of handling
+ * data on a tag since NDEF data can be stored on many types of tags and doesn't depend on a
+ * specific tag technology. 
+ * See {@link NfcAdapter#ACTION_NDEF_DISCOVERED} for more detail. If the tag does not contain
+ * NDEF data, or if no activity is registered
+ * for {@link NfcAdapter#ACTION_NDEF_DISCOVERED} with a matching data URI or MIME type then dispatch
+ * moves to stage 3.
+ * <h4>3. Tag Technology dispatch</h4>
+ * {@link Context#startActivity} is called with {@link NfcAdapter#ACTION_TECH_DISCOVERED} to
+ * dispatch the tag to an activity that can handle the technologies present on the tag.
+ * Technologies are defined as sub-classes of {@link TagTechnology}, see the package
+ * {@link android.nfc.tech}. The Android OS looks for an activity that can handle one or
+ * more technologies in the tag. See {@link NfcAdapter#ACTION_TECH_DISCOVERED} for more detail.
+ * <h4>4. Fall-back dispatch</h4>
+ * If no activity has been matched then {@link Context#startActivity} is called with
+ * {@link NfcAdapter#ACTION_TAG_DISCOVERED}. This is intended as a fall-back mechanism.
+ * See {@link NfcAdapter#ACTION_TAG_DISCOVERED}.
+ *
+ * <h3>NFC Tag Background</h3>
+ * An NFC tag is a passive NFC device, powered by the NFC field of this Android device while
+ * it is in range. Tag's can come in many forms, such as stickers, cards, key fobs, or
+ * even embedded in a more sophisticated device.
  * <p>
- * {@link Tag} objects are passed to applications via the {@link NfcAdapter#EXTRA_TAG} extra
- * in {@link NfcAdapter#ACTION_TAG_DISCOVERED} intents. A {@link Tag} object is immutable
- * and represents the state of the tag at the time of discovery. It can be
- * directly queried for its UID and Type, or used to create a {@link RawTagConnection}
- * (with {@link NfcAdapter#createRawTagConnection createRawTagConnection()}).
+ * Tags can have a wide range of capabilities. Simple tags just offer read/write semantics,
+ * and contain some one time
+ * programmable areas to make read-only. More complex tags offer math operations
+ * and per-sector access control and authentication. The most sophisticated tags
+ * contain operating environments allowing complex interactions with the
+ * code executing on the tag. Use {@link TagTechnology} classes to access a broad
+ * range of capabilities available in NFC tags.
  * <p>
- * A {@link Tag} can  be used to create a {@link RawTagConnection} only while the tag is in
- * range. If it is removed and then returned to range, then the most recent
- * {@link Tag} object (in {@link NfcAdapter#ACTION_TAG_DISCOVERED}) should be used to create a
- * {@link RawTagConnection}.
- * <p>This is an immutable data class. All properties are set at Tag discovery
- * time and calls on this class will retrieve those read-only properties, and
- * not cause any further RF activity or block. Note however that arrays passed to and
- * returned by this class are *not* cloned, so be careful not to modify them.
- * @hide
  */
-public class Tag implements Parcelable {
-    /**
-     * ISO 14443-3A technology.
-     * <p>
-     * Includes Topaz (which is -3A compatible)
-     */
-    public static final String TARGET_ISO_14443_3A = "iso14443_3a";
-
-    /**
-     * ISO 14443-3B technology.
-     */
-    public static final String TARGET_ISO_14443_3B = "iso14443_3b";
-
-    /**
-     * ISO 14443-4 technology.
-     */
-    public static final String TARGET_ISO_14443_4 = "iso14443_4";
-
-    /**
-     * ISO 15693 technology, commonly known as RFID.
-     */
-    public static final String TARGET_ISO_15693 = "iso15693";
-
-    /**
-     * JIS X-6319-4 technology, commonly known as Felica.
-     */
-    public static final String TARGET_JIS_X_6319_4 = "jis_x_6319_4";
-
-    /**
-     * Any other technology.
-     */
-    public static final String TARGET_OTHER = "other";
-
-    /*package*/ final boolean mIsNdef;
+public final class Tag implements Parcelable {
     /*package*/ final byte[] mId;
-    /*package*/ final String[] mRawTargets;
-    /*package*/ final byte[] mPollBytes;
-    /*package*/ final byte[] mActivationBytes;
+    /*package*/ final int[] mTechList;
+    /*package*/ final String[] mTechStringList;
+    /*package*/ final Bundle[] mTechExtras;
     /*package*/ final int mServiceHandle;  // for use by NFC service, 0 indicates a mock
+    /*package*/ final INfcTag mTagService;
+
+    /*package*/ int mConnectedTechnology;
 
     /**
      * Hidden constructor to be used by NFC service and internal classes.
      * @hide
      */
-    public Tag(byte[] id, boolean isNdef, String[] rawTargets, byte[] pollBytes,
-            byte[] activationBytes, int serviceHandle) {
-        if (rawTargets == null) {
+    public Tag(byte[] id, int[] techList, Bundle[] techListExtras, int serviceHandle,
+            INfcTag tagService) {
+        if (techList == null) {
             throw new IllegalArgumentException("rawTargets cannot be null");
         }
-        mIsNdef = isNdef;
         mId = id;
-        mRawTargets = rawTargets;
-        mPollBytes = pollBytes;
-        mActivationBytes = activationBytes;
+        mTechList = Arrays.copyOf(techList, techList.length);
+        mTechStringList = generateTechStringList(techList);
+        // Ensure mTechExtras is as long as mTechList
+        mTechExtras = Arrays.copyOf(techListExtras, techList.length);
         mServiceHandle = serviceHandle;
+        mTagService = tagService;
+
+        mConnectedTechnology = -1;
     }
 
     /**
      * Construct a mock Tag.
-     * <p>This is an application constructed tag, so NfcAdapter methods on this
-     * Tag such as {@link NfcAdapter#createRawTagConnection} will fail with
-     * {@link IllegalArgumentException} since it does not represent a physical Tag.
+     * <p>This is an application constructed tag, so NfcAdapter methods on this Tag may fail
+     * with {@link IllegalArgumentException} since it does not represent a physical Tag.
      * <p>This constructor might be useful for mock testing.
      * @param id The tag identifier, can be null
-     * @param rawTargets must not be null
-     * @param pollBytes can be null
-     * @param activationBytes can be null
+     * @param techList must not be null
      * @return freshly constructed tag
+     * @hide
      */
-    public static Tag createMockTag(byte[] id, String[] rawTargets, byte[] pollBytes,
-            byte[] activationBytes) {
+    public static Tag createMockTag(byte[] id, int[] techList, Bundle[] techListExtras) {
         // set serviceHandle to 0 to indicate mock tag
-        return new Tag(id, false, rawTargets, pollBytes, activationBytes, 0);
+        return new Tag(id, techList, techListExtras, 0, null);
+    }
+
+    private String[] generateTechStringList(int[] techList) {
+        final int size = techList.length;
+        String[] strings = new String[size];
+        for (int i = 0; i < size; i++) {
+            switch (techList[i]) {
+                case TagTechnology.ISO_DEP:
+                    strings[i] = IsoDep.class.getName();
+                    break;
+                case TagTechnology.MIFARE_CLASSIC:
+                    strings[i] = MifareClassic.class.getName();
+                    break;
+                case TagTechnology.MIFARE_ULTRALIGHT:
+                    strings[i] = MifareUltralight.class.getName();
+                    break;
+                case TagTechnology.NDEF:
+                    strings[i] = Ndef.class.getName();
+                    break;
+                case TagTechnology.NDEF_FORMATABLE:
+                    strings[i] = NdefFormatable.class.getName();
+                    break;
+                case TagTechnology.NFC_A:
+                    strings[i] = NfcA.class.getName();
+                    break;
+                case TagTechnology.NFC_B:
+                    strings[i] = NfcB.class.getName();
+                    break;
+                case TagTechnology.NFC_F:
+                    strings[i] = NfcF.class.getName();
+                    break;
+                case TagTechnology.NFC_V:
+                    strings[i] = NfcV.class.getName();
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown tech type " + techList[i]);
+            }
+        }
+        return strings;
     }
 
     /**
@@ -127,71 +198,81 @@ public class Tag implements Parcelable {
     }
 
     /**
-     * Return the available targets that this NFC adapter can use to create
-     * a RawTagConnection.
-     *
-     * @return raw targets, will not be null
-     */
-    public String[] getRawTargets() {
-        return mRawTargets;
-    }
-
-    /**
      * Get the Tag Identifier (if it has one).
-     * <p>Tag ID is usually a serial number for the tag.
-     *
-     * @return ID, or null if it does not exist
+     * <p>The tag identifier is a low level serial number, used for anti-collision
+     * and identification.
+     * <p> Most tags have a stable unique identifier
+     * (UID), but some tags will generate a random ID every time they are discovered
+     * (RID), and there are some tags with no ID at all (the byte array will be zero-sized).
+     * <p> The size and format of an ID is specific to the RF technology used by the tag.
+     * <p> This function retrieves the ID as determined at discovery time, and does not
+     * perform any further RF communication or block.
+     * @return ID as byte array, never null
      */
     public byte[] getId() {
         return mId;
     }
 
     /**
-     * Get the low-level bytes returned by this Tag at poll-time.
-     * <p>These can be used to help with advanced identification of a Tag.
-     * <p>The meaning of these bytes depends on the Tag technology.
-     * <p>ISO14443-3A: ATQA/SENS_RES
-     * <p>ISO14443-3B: Application data (4 bytes) and Protocol Info (3 bytes) from ATQB/SENSB_RES
-     * <p>JIS_X_6319_4: PAD0 (2 byte), PAD1 (2 byte), MRTI(2 byte), PAD2 (1 byte), RC (2 byte)
-     * <p>ISO15693: response flags (1 byte), DSFID (1 byte)
-     * from SENSF_RES
-     *
-     * @return poll bytes, or null if they do not exist for this Tag technology
-     * @hide
+     * Get the technologies available in this tag, as fully qualified class names.
+     * <p>
+     * A technology is an implementation of the {@link TagTechnology} interface,
+     * and can be instantiated by calling the static <code>get(Tag)</code>
+     * method on the implementation with this Tag. The {@link TagTechnology}
+     * object can then be used to perform advanced, technology-specific operations on a tag.
+     * <p>
+     * Android defines a mandatory set of technologies that must be correctly
+     * enumerated by all Android NFC devices, and an optional
+     * set of proprietary technologies.
+     * See {@link TagTechnology} for more details.
+     * <p>
+     * The ordering of the returned array is undefined and should not be relied upon.
+     * @return an array of fully-qualified {@link TagTechnology} class-names.
      */
-    public byte[] getPollBytes() {
-        return mPollBytes;
+    public String[] getTechList() {
+        return mTechStringList;
+    }
+
+    /** @hide */
+    public boolean hasTech(int techType) {
+        for (int tech : mTechList) {
+            if (tech == techType) return true;
+        }
+        return false;
+    }
+
+    /** @hide */
+    public Bundle getTechExtras(int tech) {
+        int pos = -1;
+        for (int idx = 0; idx < mTechList.length; idx++) {
+          if (mTechList[idx] == tech) {
+              pos = idx;
+              break;
+          }
+        }
+        if (pos < 0) {
+            return null;
+        }
+
+        return mTechExtras[pos];
+    }
+
+    /** @hide */
+    public INfcTag getTagService() {
+        return mTagService;
     }
 
     /**
-     * Get the low-level bytes returned by this Tag at activation-time.
-     * <p>These can be used to help with advanced identification of a Tag.
-     * <p>The meaning of these bytes depends on the Tag technology.
-     * <p>ISO14443-3A: SAK/SEL_RES
-     * <p>ISO14443-3B: null
-     * <p>ISO14443-3A & ISO14443-4: SAK/SEL_RES, historical bytes from ATS  <TODO: confirm>
-     * <p>ISO14443-3B & ISO14443-4: ATTRIB response
-     * <p>JIS_X_6319_4: null
-     * <p>ISO15693: response flags (1 byte), DSFID (1 byte): null
-     * @return activation bytes, or null if they do not exist for this Tag technology
-     * @hide
+     * Human-readable description of the tag, for debugging.
      */
-    public byte[] getActivationBytes() {
-        return mActivationBytes;
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("TAG ")
             .append("uid = ")
             .append(mId)
-            .append(" poll ")
-            .append(mPollBytes)
-            .append(" activation ")
-            .append(mActivationBytes)
-            .append(" Raw [");
-        for (String s : mRawTargets) {
-            sb.append(s)
+            .append(" Tech [");
+        for (int i : mTechList) {
+            sb.append(i)
             .append(", ");
         }
         return sb.toString();
@@ -221,37 +302,79 @@ public class Tag implements Parcelable {
         return 0;
     }
 
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mIsNdef ? 1 : 0);
+        // Null mTagService means this is a mock tag
+        int isMock = (mTagService == null)?1:0;
+
         writeBytesWithNull(dest, mId);
-        dest.writeInt(mRawTargets.length);
-        dest.writeStringArray(mRawTargets);
-        writeBytesWithNull(dest, mPollBytes);
-        writeBytesWithNull(dest, mActivationBytes);
+        dest.writeInt(mTechList.length);
+        dest.writeIntArray(mTechList);
+        dest.writeTypedArray(mTechExtras, 0);
         dest.writeInt(mServiceHandle);
+        dest.writeInt(isMock);
+        if (isMock == 0) {
+            dest.writeStrongBinder(mTagService.asBinder());
+        }
     }
 
     public static final Parcelable.Creator<Tag> CREATOR =
             new Parcelable.Creator<Tag>() {
+        @Override
         public Tag createFromParcel(Parcel in) {
-            boolean isNdef = (in.readInt() == 1);
-            if (isNdef) {
-                throw new IllegalArgumentException("Creating Tag from NdefTag parcel");
-            }
+            INfcTag tagService;
+
             // Tag fields
             byte[] id = Tag.readBytesWithNull(in);
-            String[] rawTargets = new String[in.readInt()];
-            in.readStringArray(rawTargets);
-            byte[] pollBytes = Tag.readBytesWithNull(in);
-            byte[] activationBytes = Tag.readBytesWithNull(in);
+            int[] techList = new int[in.readInt()];
+            in.readIntArray(techList);
+            Bundle[] techExtras = in.createTypedArray(Bundle.CREATOR);
             int serviceHandle = in.readInt();
+            int isMock = in.readInt();
+            if (isMock == 0) {
+                tagService = INfcTag.Stub.asInterface(in.readStrongBinder());
+            }
+            else {
+                tagService = null;
+            }
 
-            return new Tag(id, isNdef, rawTargets, pollBytes, activationBytes, serviceHandle);
+            return new Tag(id, techList, techExtras, serviceHandle, tagService);
         }
+
+        @Override
         public Tag[] newArray(int size) {
             return new Tag[size];
         }
     };
+
+    /**
+     * For internal use only.
+     *
+     * @hide
+     */
+    public synchronized void setConnectedTechnology(int technology) {
+        if (mConnectedTechnology == -1) {
+            mConnectedTechnology = technology;
+        } else {
+            throw new IllegalStateException("Close other technology first!");
+        }
+    }
+
+    /**
+     * For internal use only.
+     *
+     * @hide
+     */
+    public int getConnectedTechnology() {
+        return mConnectedTechnology;
+    }
+
+    /**
+     * For internal use only.
+     *
+     * @hide
+     */
+    public void setTechnologyDisconnected() {
+        mConnectedTechnology = -1;
+    }
 }

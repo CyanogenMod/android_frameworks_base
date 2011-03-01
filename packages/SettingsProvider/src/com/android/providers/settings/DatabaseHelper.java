@@ -1096,6 +1096,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     
             loadBooleanSetting(stmt, Settings.System.VIBRATE_IN_SILENT,
                     R.bool.def_vibrate_in_silent);
+
+            // Set notification volume to follow ringer volume by default
+            loadBooleanSetting(stmt, Settings.System.NOTIFICATIONS_USE_RING_VOLUME,
+                    R.bool.def_notifications_use_ring_volume);
+
         } finally {
             if (stmt != null) stmt.close();
         }

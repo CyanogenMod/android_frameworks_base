@@ -108,7 +108,7 @@ public final class SipService extends ISipService.Stub {
         if (SipManager.isApiSupported(context)) {
             ServiceManager.addService("sip", new SipService(context));
             context.sendBroadcast(new Intent(SipManager.ACTION_SIP_SERVICE_UP));
-            if (DEBUG) Log.i(TAG, "SIP service started");
+            if (DEBUG) Log.d(TAG, "SIP service started");
         }
     }
 
@@ -117,12 +117,6 @@ public final class SipService extends ISipService.Stub {
         mContext = context;
         mConnectivityReceiver = new ConnectivityReceiver();
         mVpnConnectivityReceiver = new VpnConnectivityReceiver();
-        context.registerReceiver(mConnectivityReceiver,
-                new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-        context.registerReceiver(mVpnConnectivityReceiver,
-                new IntentFilter(VpnManager.ACTION_VPN_CONNECTIVITY));
-        context.registerReceiver(mWifiStateReceiver,
-                new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
         mMyWakeLock = new SipWakeLock((PowerManager)
                 context.getSystemService(Context.POWER_SERVICE));
 
@@ -130,7 +124,7 @@ public final class SipService extends ISipService.Stub {
         mWifiOnly = SipManager.isSipWifiOnly(context);
     }
 
-    BroadcastReceiver mWifiStateReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mWifiStateReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -141,7 +135,7 @@ public final class SipService extends ISipService.Stub {
                     switch (state) {
                         case WifiManager.WIFI_STATE_ENABLED:
                             mWifiEnabled = true;
-                            if (anyOpened()) grabWifiLock();
+                            if (anyOpenedToReceiveCalls()) grabWifiLock();
                             break;
                         case WifiManager.WIFI_STATE_DISABLED:
                             mWifiEnabled = false;
@@ -152,6 +146,22 @@ public final class SipService extends ISipService.Stub {
             }
         }
     };
+
+    private void registerReceivers() {
+        mContext.registerReceiver(mConnectivityReceiver,
+                new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        mContext.registerReceiver(mWifiStateReceiver,
+                new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION));
+        mContext.registerReceiver(mVpnConnectivityReceiver,
+                new IntentFilter(VpnManager.ACTION_VPN_CONNECTIVITY));
+        if (DEBUG) Log.d(TAG, " +++ register receivers");
+    }
+
+    private void unregisterReceivers() {
+        mContext.unregisterReceiver(mConnectivityReceiver);
+        mContext.unregisterReceiver(mWifiStateReceiver);
+        if (DEBUG) Log.d(TAG, " --- unregister receivers");
+    }
 
     private MyExecutor getExecutor() {
         // create mExecutor lazily
@@ -172,12 +182,14 @@ public final class SipService extends ISipService.Stub {
         return profiles.toArray(new SipProfile[profiles.size()]);
     }
 
-    public void open(SipProfile localProfile) {
+    public synchronized void open(SipProfile localProfile) {
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.USE_SIP, null);
         localProfile.setCallingUid(Binder.getCallingUid());
         try {
+            boolean addingFirstProfile = mSipGroups.isEmpty();
             createGroup(localProfile);
+            if (addingFirstProfile && !mSipGroups.isEmpty()) registerReceivers();
         } catch (SipException e) {
             Log.e(TAG, "openToMakeCalls()", e);
             // TODO: how to send the exception back
@@ -198,8 +210,10 @@ public final class SipService extends ISipService.Stub {
         if (DEBUG) Log.d(TAG, "open3: " + localProfile.getUriString() + ": "
                 + incomingCallPendingIntent + ": " + listener);
         try {
+            boolean addingFirstProfile = mSipGroups.isEmpty();
             SipSessionGroupExt group = createGroup(localProfile,
                     incomingCallPendingIntent, listener);
+            if (addingFirstProfile && !mSipGroups.isEmpty()) registerReceivers();
             if (localProfile.getAutoRegistration()) {
                 group.openToReceiveCalls();
                 if (mWifiEnabled) grabWifiLock();
@@ -237,10 +251,11 @@ public final class SipService extends ISipService.Stub {
         notifyProfileRemoved(group.getLocalProfile());
         group.close();
 
-        if (!anyOpened()) {
+        if (!anyOpenedToReceiveCalls()) {
             releaseWifiLock();
             mMyWakeLock.reset(); // in case there's leak
         }
+        if (mSipGroups.isEmpty()) unregisterReceivers();
     }
 
     public synchronized boolean isOpened(String localProfileUri) {
@@ -249,7 +264,7 @@ public final class SipService extends ISipService.Stub {
         SipSessionGroupExt group = mSipGroups.get(localProfileUri);
         if (group == null) return false;
         if (isCallerCreatorOrRadio(group)) {
-            return group.isOpened();
+            return true;
         } else {
             Log.w(TAG, "only creator or radio can query on the profile");
             return false;
@@ -364,9 +379,9 @@ public final class SipService extends ISipService.Stub {
         mContext.sendBroadcast(intent);
     }
 
-    private boolean anyOpened() {
+    private boolean anyOpenedToReceiveCalls() {
         for (SipSessionGroupExt group : mSipGroups.values()) {
-            if (group.isOpened()) return true;
+            if (group.isOpenedToReceiveCalls()) return true;
         }
         return false;
     }
@@ -485,7 +500,7 @@ public final class SipService extends ISipService.Stub {
     private class SipSessionGroupExt extends SipSessionAdapter {
         private SipSessionGroup mSipGroup;
         private PendingIntent mIncomingCallPendingIntent;
-        private boolean mOpened;
+        private boolean mOpenedToReceiveCalls;
 
         private AutoRegistrationProcess mAutoRegistration =
                 new AutoRegistrationProcess();
@@ -547,7 +562,7 @@ public final class SipService extends ISipService.Stub {
         }
 
         public void openToReceiveCalls() throws SipException {
-            mOpened = true;
+            mOpenedToReceiveCalls = true;
             if (mConnected) {
                 mSipGroup.openToReceiveCalls(this);
                 mAutoRegistration.start(mSipGroup);
@@ -561,9 +576,9 @@ public final class SipService extends ISipService.Stub {
             mSipGroup.onConnectivityChanged();
             if (connected) {
                 resetGroup(mLocalIp);
-                if (mOpened) openToReceiveCalls();
+                if (mOpenedToReceiveCalls) openToReceiveCalls();
             } else {
-                // close mSipGroup but remember mOpened
+                // close mSipGroup but remember mOpenedToReceiveCalls
                 if (DEBUG) Log.d(TAG, "  close auto reg temporarily: "
                         + getUri() + ": " + mIncomingCallPendingIntent);
                 mSipGroup.close();
@@ -588,7 +603,7 @@ public final class SipService extends ISipService.Stub {
         }
 
         public void close() {
-            mOpened = false;
+            mOpenedToReceiveCalls = false;
             mSipGroup.close();
             mAutoRegistration.stop();
             if (DEBUG) Log.d(TAG, "   close: " + getUri() + ": "
@@ -635,8 +650,8 @@ public final class SipService extends ISipService.Stub {
                     + SipErrorCode.toString(errorCode) + ": " + message);
         }
 
-        public boolean isOpened() {
-            return mOpened;
+        public boolean isOpenedToReceiveCalls() {
+            return mOpenedToReceiveCalls;
         }
 
         public boolean isRegistered() {
@@ -1061,7 +1076,10 @@ public final class SipService extends ISipService.Stub {
                 // we want to skip the interim ones) but deliver bad news
                 // immediately
                 if (connected) {
-                    if (mTask != null) mTask.cancel();
+                    if (mTask != null) {
+                        mTask.cancel();
+                        mMyWakeLock.release(mTask);
+                    }
                     mTask = new MyTimerTask(type, connected);
                     mTimer.schedule(mTask, 2 * 1000L);
                     // hold wakup lock so that we can finish changes before the
@@ -1102,6 +1120,7 @@ public final class SipService extends ISipService.Stub {
                     if (mTask != this) {
                         Log.w(TAG, "  unexpected task: " + mNetworkType
                                 + (mConnected ? " CONNECTED" : "DISCONNECTED"));
+                        mMyWakeLock.release(this);
                         return;
                     }
                     mTask = null;

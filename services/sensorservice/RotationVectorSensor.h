@@ -34,20 +34,18 @@ class RotationVectorSensor : public SensorInterface {
     SensorDevice& mSensorDevice;
     Sensor mAcc;
     Sensor mMag;
-    bool mEnabled;
     float mMagData[3];
     double mAccTime;
     double mMagTime;
     SecondOrderLowPassFilter mALowPass;
-    BiquadFilter mAX, mAY, mAZ;
+    CascadedBiquadFilter mAX, mAY, mAZ;
     SecondOrderLowPassFilter mMLowPass;
-    BiquadFilter mMX, mMY, mMZ;
+    CascadedBiquadFilter mMX, mMY, mMZ;
 
 public:
     RotationVectorSensor(sensor_t const* list, size_t count);
     virtual bool process(sensors_event_t* outEvent,
             const sensors_event_t& event);
-    virtual bool isEnabled() const;
     virtual status_t activate(void* ident, bool enabled);
     virtual status_t setDelay(void* ident, int handle, int64_t ns);
     virtual Sensor getSensor() const;

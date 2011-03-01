@@ -211,9 +211,17 @@ public class ConnectivityManager
     public static final int TYPE_WIMAX       = 6;
     public static final int TYPE_MOBILE_WIMAX = 6; 
 
+    /**
+     * Bluetooth data connection.
+     * @hide
+     */
+    public static final int TYPE_BLUETOOTH   = 7;
+    /** {@hide} */
+    public static final int TYPE_DUMMY       = 8;
+    /** {@hide} */
+    public static final int TYPE_ETHERNET    = 9;
     /** {@hide} */
     public static final int MAX_RADIO_TYPE   = TYPE_WIMAX;
-
     /** {@hide} */
     public static final int MAX_NETWORK_TYPE = TYPE_WIMAX;
 

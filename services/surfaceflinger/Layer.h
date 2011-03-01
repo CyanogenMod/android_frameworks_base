@@ -73,7 +73,6 @@ public:
     virtual uint32_t doTransaction(uint32_t transactionFlags);
     virtual void lockPageFlip(bool& recomputeVisibleRegions);
     virtual void unlockPageFlip(const Transform& planeTransform, Region& outDirtyRegion);
-    virtual void finishPageFlip();
     virtual bool needsBlending() const      { return mNeedsBlending; }
     virtual bool needsDithering() const     { return mNeedsDithering; }
     virtual bool needsFiltering() const;
@@ -81,6 +80,12 @@ public:
     virtual sp<Surface> createSurface() const;
     virtual status_t ditch();
     virtual void onRemoved();
+    virtual bool setBypass(bool enable);
+
+    void updateBuffersOrientation();
+
+    inline sp<GraphicBuffer> getBypassBuffer() const {
+        return mBufferManager.getActiveBuffer(); }
 
     // only for debugging
     inline sp<GraphicBuffer> getBuffer(int i) const {
@@ -230,7 +235,9 @@ private:
     uint32_t mReqWidth;
     uint32_t mReqHeight;
     uint32_t mReqFormat;
+    bool mNeedsScaling;
     bool mFixedSize;
+    bool mBypassState;
 };
 
 // ---------------------------------------------------------------------------

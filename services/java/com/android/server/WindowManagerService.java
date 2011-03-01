@@ -5029,13 +5029,13 @@ public class WindowManagerService extends IWindowManager.Stub
                     mScreenLayout = Configuration.SCREENLAYOUT_SIZE_LARGE;
                 } else {
                     mScreenLayout = Configuration.SCREENLAYOUT_SIZE_NORMAL;
-
-                    // If this screen is wider than normal HVGA, or taller
-                    // than FWVGA, then for old apps we want to run in size
-                    // compatibility mode.
-                    if (shortSize > 321 || longSize > 570) {
-                        mScreenLayout |= Configuration.SCREENLAYOUT_COMPAT_NEEDED;
-                    }
+                }
+                
+                // If this screen is wider than normal HVGA, or taller
+                // than FWVGA, then for old apps we want to run in size
+                // compatibility mode.
+                if (shortSize > 321 || longSize > 570) {
+                    mScreenLayout |= Configuration.SCREENLAYOUT_COMPAT_NEEDED;
                 }
 
                 // Is this a long screen?
@@ -5250,20 +5250,20 @@ public class WindowManagerService extends IWindowManager.Stub
         
         /* Provides an opportunity for the window manager policy to intercept early key
          * processing as soon as the key has been read from the device. */
-        public int interceptKeyBeforeQueueing(long whenNanos, int keyCode, boolean down,
-                int policyFlags, boolean isScreenOn) {
-            return mPolicy.interceptKeyBeforeQueueing(whenNanos,
-                    keyCode, down, policyFlags, isScreenOn);
+        public int interceptKeyBeforeQueueing(long whenNanos, int action, int flags,
+                int keyCode, int scanCode, int policyFlags, boolean isScreenOn) {
+            return mPolicy.interceptKeyBeforeQueueing(whenNanos, action, flags,
+                    keyCode, scanCode, policyFlags, isScreenOn);
         }
         
         /* Provides an opportunity for the window manager policy to process a key before
          * ordinary dispatch. */
         public boolean interceptKeyBeforeDispatching(InputChannel focus,
-                int action, int flags, int keyCode, int metaState, int repeatCount,
+                int action, int flags, int keyCode, int scanCode, int metaState, int repeatCount,
                 int policyFlags) {
             WindowState windowState = getWindowStateForInputChannel(focus);
             return mPolicy.interceptKeyBeforeDispatching(windowState, action, flags,
-                    keyCode, metaState, repeatCount, policyFlags);
+                    keyCode, scanCode, metaState, repeatCount, policyFlags);
         }
         
         /* Called when the current input focus changes.

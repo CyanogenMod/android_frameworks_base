@@ -147,6 +147,11 @@ public class MobileDataStateTracker extends NetworkStateTracker {
         ConnectivityManager mConnectivityManager;
         public void onReceive(Context context, Intent intent) {
             synchronized(this) {
+                // update state and roaming before we set the state - only state changes are
+                // noticed
+                TelephonyManager tm = TelephonyManager.getDefault();
+                setRoamingStatus(tm.isNetworkRoaming());
+                setSubtype(tm.getNetworkType(), tm.getNetworkTypeName());
                 if (intent.getAction().equals(TelephonyIntents.
                         ACTION_ANY_DATA_CONNECTION_STATE_CHANGED)) {
                     Phone.DataState state = getMobileDataState(intent);
@@ -252,9 +257,6 @@ public class MobileDataStateTracker extends NetworkStateTracker {
                             reason == null ? "" : "(" + reason + ")");
                     setDetailedState(DetailedState.FAILED, reason, apnName);
                 }
-                TelephonyManager tm = TelephonyManager.getDefault();
-                setRoamingStatus(tm.isNetworkRoaming());
-                setSubtype(tm.getNetworkType(), tm.getNetworkTypeName());
             }
         }
     }

@@ -225,14 +225,10 @@ uint32_t LayerBase::doTransaction(uint32_t flags)
         flags |= eVisibleRegion;
         this->contentDirty = true;
 
-        mNeedsFiltering = false;
-        if (!(mFlags & DisplayHardware::SLOW_CONFIG)) {
-            // we may use linear filtering, if the matrix scales us
-            const uint8_t type = temp.transform.getType();
-            if (!temp.transform.preserveRects() || (type >= Transform::SCALE)) {
-                mNeedsFiltering = true;
-            }
-        }
+        // we may use linear filtering, if the matrix scales us
+        const uint8_t type = temp.transform.getType();
+        mNeedsFiltering = (!temp.transform.preserveRects() ||
+                (type >= Transform::SCALE));
     }
 
     // Commit the transaction
@@ -284,10 +280,6 @@ void LayerBase::unlockPageFlip(
     if ((android_atomic_and(~1, &mInvalidate)&1) == 1) {
         outDirtyRegion.orSelf(visibleRegionScreen);
     }
-}
-
-void LayerBase::finishPageFlip()
-{
 }
 
 void LayerBase::invalidate()
@@ -578,6 +570,12 @@ void LayerBase::dump(String8& result, char* buffer, size_t SIZE) const
     result.append(buffer);
 }
 
+void LayerBase::shortDump(String8& result, char* scratch, size_t size) const
+{
+    LayerBase::dump(result, scratch, size);
+}
+
+
 // ---------------------------------------------------------------------------
 
 int32_t LayerBaseClient::sIdentity = 1;
@@ -627,6 +625,12 @@ void LayerBaseClient::dump(String8& result, char* buffer, size_t SIZE) const
             client.get(), getIdentity());
 
     result.append(buffer);
+}
+
+
+void LayerBaseClient::shortDump(String8& result, char* scratch, size_t size) const
+{
+    LayerBaseClient::dump(result, scratch, size);
 }
 
 // ---------------------------------------------------------------------------

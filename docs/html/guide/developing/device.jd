@@ -13,8 +13,8 @@ page.title=Developing on a Device
   </ol>
   <h2>See also</h2>
   <ol>
-    <li><a
-    href="{@docRoot}sdk/win-usb.html">USB Driver for Windows</a></li>
+    <li><a href="{@docRoot}sdk/win-usb.html">Google USB Driver</a></li>
+    <li><a href="{@docRoot}sdk/oem-usb.html">OEM USB Drivers</a></li>
     <li><a
 href="{@docRoot}guide/developing/eclipse-adt.html">Developing in Eclipse, with ADT</a></li>
     <li><a
@@ -38,10 +38,11 @@ you don't yet have a device, check with the service providers in your area to de
 Android-powered devices are available.</p>
 
 <p>If you want a SIM-unlocked phone, then you might consider either an Android Dev Phone or the
-Google Nexus One. Both are SIM-unlocked so that you can use them on any GSM network using a SIM
+Google Nexus S. These are SIM-unlocked so that you can use them on any GSM network using a SIM
 card. The Android Dev Phones also feature an unlocked bootloader so you can install custom system
-images (great for developing and installing custom versions of the Android platform). To purchase a
-Nexus One, visit <a href="http://www.google.com/phone">google.com/phone</a>. To purchase an Android
+images (great for developing and installing custom versions of the Android platform). To find a
+a place you can purchase the Nexus S, visit <a
+href="http://www.google.com/phone/detail/nexus-s">google.com/phone</a>. To purchase an Android
 Dev Phone, see the <a href="http://market.android.com/publish">Android Market</a> site
 (requires a developer account).</p>
 
@@ -72,8 +73,10 @@ would on the emulator. Before you can start, there are just a few things to do:<
   <li>Setup your system to detect your device.
     <ul>
       <li>If you're developing on Windows, you need to install a USB driver
-      for adb. See the <a href="{@docRoot}sdk/win-usb.html">Windows USB
-      Driver</a> documentation.</li>
+      for adb. If you're using an Android Developer Phone (ADP), Nexus One, or Nexus S,
+      see the <a href="{@docRoot}sdk/win-usb.html">Google Windows USB
+      Driver</a>. Otherwise, you can find a link to the appropriate OEM driver in the
+  <a href="{@docRoot}sdk/oem-usb.html">OEM USB Drivers</a> document.</li>
       <li>If you're developing on Mac OS X, it just works. Skip this step.</li>
       <li>If you're developing on Ubuntu Linux, you need to add a rules file
 that contains a USB configuration for each type of device you want to use for
@@ -104,7 +107,8 @@ href="#VendorIds">USB Vendor IDs</a>, below.
 </ol>
 
 <p>You can verify that your device is connected by executing <code>adb devices</code> from your 
-SDK {@code tools/} directory. If connected, you'll see the device name listed as a "device."</p>
+SDK {@code platform-tools/} directory. If connected, you'll see the device name listed as a
+"device."</p>
 
 <p>If using Eclipse, run or debug as usual. You will be presented
 with a <b>Device Chooser</b> dialog that lists the available emulator(s) and connected device(s).

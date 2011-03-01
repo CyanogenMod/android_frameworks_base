@@ -61,6 +61,10 @@
 #define AID_GRAPHICS 1003
 #endif
 
+#ifdef USE_COMPOSITION_BYPASS
+#warning "using COMPOSITION_BYPASS"
+#endif
+
 #define DISPLAY_COUNT       1
 
 namespace android {
@@ -391,8 +395,15 @@ bool SurfaceFlinger::threadLoop()
 
     const DisplayHardware& hw(graphicPlane(0).displayHardware());
     if (LIKELY(hw.canDraw() && !isFrozen())) {
-        // repaint the framebuffer (if needed)
 
+#ifdef USE_COMPOSITION_BYPASS
+        if (handleBypassLayer()) {
+            unlockClients();
+            return true;
+        }
+#endif
+
+        // repaint the framebuffer (if needed)
         const int index = hw.getCurrentBufferIndex();
         GraphicLog& logger(GraphicLog::getInstance());
 
@@ -403,20 +414,30 @@ bool SurfaceFlinger::threadLoop()
         logger.log(GraphicLog::SF_COMPOSITION_COMPLETE, index);
         hw.compositionComplete();
 
-        // release the clients before we flip ('cause flip might block)
-        logger.log(GraphicLog::SF_UNLOCK_CLIENTS, index);
-        unlockClients();
-
         logger.log(GraphicLog::SF_SWAP_BUFFERS, index);
         postFramebuffer();
 
         logger.log(GraphicLog::SF_REPAINT_DONE, index);
     } else {
         // pretend we did the post
-        unlockClients();
+        hw.compositionComplete();
         usleep(16667); // 60 fps period
     }
     return true;
+}
+
+bool SurfaceFlinger::handleBypassLayer()
+{
+    sp<Layer> bypassLayer(mBypassLayer.promote());
+    if (bypassLayer != 0) {
+        sp<GraphicBuffer> buffer(bypassLayer->getBypassBuffer());
+        if (buffer!=0 && (buffer->usage & GRALLOC_USAGE_HW_FB)) {
+            const DisplayHardware& hw(graphicPlane(0).displayHardware());
+            hw.postBypassBuffer(buffer->handle);
+            return true;
+        }
+    }
+    return false;
 }
 
 void SurfaceFlinger::postFramebuffer()
@@ -714,6 +735,32 @@ void SurfaceFlinger::commitTransaction()
     mTransactionCV.broadcast();
 }
 
+void SurfaceFlinger::setBypassLayer(const sp<LayerBase>& layer)
+{
+    // if this layer is already the bypass layer, do nothing
+    sp<Layer> cur(mBypassLayer.promote());
+    if (mBypassLayer == layer) {
+        if (cur != NULL) {
+            cur->updateBuffersOrientation();
+        }
+        return;
+    }
+
+    // clear the current bypass layer
+    mBypassLayer.clear();
+    if (cur != 0) {
+        cur->setBypass(false);
+        cur.clear();
+    }
+
+    // set new bypass layer
+    if (layer != 0) {
+        if (layer->setBypass(true)) {
+            mBypassLayer = static_cast<Layer*>(layer.get());
+        }
+    }
+}
+
 void SurfaceFlinger::handlePageFlip()
 {
     bool visibleRegions = mVisibleRegionsDirty;
@@ -738,6 +785,21 @@ void SurfaceFlinger::handlePageFlip()
                 if (!currentLayers[i]->visibleRegionScreen.isEmpty())
                     mVisibleLayersSortedByZ.add(currentLayers[i]);
             }
+
+#ifdef USE_COMPOSITION_BYPASS
+            sp<LayerBase> bypassLayer;
+            const size_t numVisibleLayers = mVisibleLayersSortedByZ.size();
+            if (numVisibleLayers == 1) {
+                const sp<LayerBase>& candidate(mVisibleLayersSortedByZ[0]);
+                const Region& visibleRegion(candidate->visibleRegionScreen);
+                const Region reminder(screenRegion.subtract(visibleRegion));
+                if (reminder.isEmpty()) {
+                    // fullscreen candidate!
+                    bypassLayer = candidate;
+                }
+            }
+            setBypassLayer(bypassLayer);
+#endif
 
             mWormholeRegion = screenRegion.subtract(opaqueRegion);
             mVisibleRegionsDirty = false;
@@ -843,17 +905,6 @@ void SurfaceFlinger::composeSurfaces(const Region& dirty)
         if (!clip.isEmpty()) {
             layer->draw(clip);
         }
-    }
-}
-
-void SurfaceFlinger::unlockClients()
-{
-    const LayerVector& drawingLayers(mDrawingState.layersSortedByZ);
-    const size_t count = drawingLayers.size();
-    sp<LayerBase> const* const layers = drawingLayers.array();
-    for (size_t i=0 ; i<count ; ++i) {
-        const sp<LayerBase>& layer = layers[i];
-        layer->finishPageFlip();
     }
 }
 
@@ -1033,8 +1084,12 @@ status_t SurfaceFlinger::removeLayer_l(const sp<LayerBase>& layerBase)
 
 status_t SurfaceFlinger::purgatorizeLayer_l(const sp<LayerBase>& layerBase)
 {
-    // remove the layer from the main list (through a transaction).
+    // First add the layer to the purgatory list, which makes sure it won't
+    // go away, then remove it from the main list (through a transaction).
     ssize_t err = removeLayer_l(layerBase);
+    if (err >= 0) {
+        mLayerPurgatory.add(layerBase);
+    }
 
     layerBase->onRemoved();
 
@@ -1302,6 +1357,19 @@ status_t SurfaceFlinger::destroySurface(const sp<LayerBaseClient>& layer)
              * to use the purgatory.
              */
             status_t err = flinger->removeLayer_l(l);
+            if (err == NAME_NOT_FOUND) {
+                // The surface wasn't in the current list, which means it was
+                // removed already, which means it is in the purgatory,
+                // and need to be removed from there.
+                // This needs to happen from the main thread since its dtor
+                // must run from there (b/c of OpenGL ES). Additionally, we
+                // can't really acquire our internal lock from
+                // destroySurface() -- see postMessage() below.
+                ssize_t idx = flinger->mLayerPurgatory.remove(l);
+                LOGE_IF(idx < 0,
+                        "layer=%p is not in the purgatory list", l.get());
+            }
+
             LOGE_IF(err<0 && err != NAME_NOT_FOUND,
                     "error removing layer=%p (%s)", l.get(), strerror(-err));
             return true;
@@ -1417,8 +1485,13 @@ status_t SurfaceFlinger::dump(int fd, const Vector<String16>& args)
             result.append(buffer);
         }
 
+        /*
+         * Dump the visible layer list
+         */
         const LayerVector& currentLayers = mCurrentState.layersSortedByZ;
         const size_t count = currentLayers.size();
+        snprintf(buffer, SIZE, "Visible layers (count = %d)\n", count);
+        result.append(buffer);
         for (size_t i=0 ; i<count ; i++) {
             const sp<LayerBase>& layer(currentLayers[i]);
             layer->dump(result, buffer, SIZE);
@@ -1428,12 +1501,30 @@ status_t SurfaceFlinger::dump(int fd, const Vector<String16>& args)
             layer->visibleRegionScreen.dump(result, "visibleRegionScreen");
         }
 
+        /*
+         * Dump the layers in the purgatory
+         */
+
+        const size_t purgatorySize =  mLayerPurgatory.size();
+        snprintf(buffer, SIZE, "Purgatory state (%d entries)\n", purgatorySize);
+        result.append(buffer);
+        for (size_t i=0 ; i<purgatorySize ; i++) {
+            const sp<LayerBase>& layer(mLayerPurgatory.itemAt(i));
+            layer->shortDump(result, buffer, SIZE);
+        }
+
+        /*
+         * Dump SurfaceFlinger global state
+         */
+
+        snprintf(buffer, SIZE, "SurfaceFlinger global state\n");
+        result.append(buffer);
         mWormholeRegion.dump(result, "WormholeRegion");
         const DisplayHardware& hw(graphicPlane(0).displayHardware());
         snprintf(buffer, SIZE,
-                "  display frozen: %s, freezeCount=%d, orientation=%d, canDraw=%d\n",
+                "  display frozen: %s, freezeCount=%d, orientation=%d, bypass=%p, canDraw=%d\n",
                 mFreezeDisplay?"yes":"no", mFreezeCount,
-                mCurrentState.orientation, hw.canDraw());
+                mCurrentState.orientation, mBypassLayer.unsafe_get(), hw.canDraw());
         result.append(buffer);
         snprintf(buffer, SIZE,
                 "  last eglSwapBuffers() time: %f us\n"
@@ -1453,6 +1544,9 @@ status_t SurfaceFlinger::dump(int fd, const Vector<String16>& args)
             result.append(buffer);
         }
 
+        /*
+         * Dump gralloc state
+         */
         const GraphicBufferAllocator& alloc(GraphicBufferAllocator::get());
         alloc.dump(result);
 
@@ -2083,6 +2177,7 @@ status_t SurfaceFlinger::captureScreenImplLocked(DisplayID dpy,
 
         // invert everything, b/c glReadPixel() below will invert the FB
         glViewport(0, 0, sw, sh);
+        glScissor(0, 0, sw, sh);
         glMatrixMode(GL_PROJECTION);
         glPushMatrix();
         glLoadIdentity();
@@ -2092,6 +2187,7 @@ status_t SurfaceFlinger::captureScreenImplLocked(DisplayID dpy,
         // redraw the screen entirely...
         glClearColor(0,0,0,1);
         glClear(GL_COLOR_BUFFER_BIT);
+
         const Vector< sp<LayerBase> >& layers(mVisibleLayersSortedByZ);
         const size_t count = layers.size();
         for (size_t i=0 ; i<count ; ++i) {
@@ -2126,7 +2222,6 @@ status_t SurfaceFlinger::captureScreenImplLocked(DisplayID dpy,
                 result = NO_MEMORY;
             }
         }
-
         glEnable(GL_SCISSOR_TEST);
         glViewport(0, 0, hw_w, hw_h);
         glMatrixMode(GL_PROJECTION);
@@ -2142,6 +2237,9 @@ status_t SurfaceFlinger::captureScreenImplLocked(DisplayID dpy,
     glBindFramebufferOES(GL_FRAMEBUFFER_OES, 0);
     glDeleteRenderbuffersOES(1, &tname);
     glDeleteFramebuffersOES(1, &name);
+
+    hw.compositionComplete();
+
     return result;
 }
 

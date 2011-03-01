@@ -63,7 +63,7 @@ void GraphicBufferAllocator::dump(String8& result) const
     const size_t c = list.size();
     for (size_t i=0 ; i<c ; i++) {
         const alloc_rec_t& rec(list.valueAt(i));
-        snprintf(buffer, SIZE, "%10p: %7.2f KiB | %4u (%4u) x %4u | %2d | 0x%08x\n",
+        snprintf(buffer, SIZE, "%10p: %7.2f KiB | %4u (%4u) x %4u | %8X | 0x%08x\n",
             list.keyAt(i), rec.size/1024.0f, 
             rec.w, rec.s, rec.h, rec.format, rec.usage);
         result.append(buffer);
@@ -71,6 +71,13 @@ void GraphicBufferAllocator::dump(String8& result) const
     }
     snprintf(buffer, SIZE, "Total allocated: %.2f KB\n", total/1024.0f);
     result.append(buffer);
+}
+
+void GraphicBufferAllocator::dumpToSystemLog()
+{
+    String8 s;
+    GraphicBufferAllocator::getInstance().dump(s);
+    LOGD("%s", s.string());
 }
 
 status_t GraphicBufferAllocator::alloc(uint32_t w, uint32_t h, PixelFormat format,
@@ -104,10 +111,6 @@ status_t GraphicBufferAllocator::alloc(uint32_t w, uint32_t h, PixelFormat forma
         rec.usage = usage;
         rec.size = h * stride[0] * bytesPerPixel(format);
         list.add(*handle, rec);
-    } else {
-        String8 s;
-        dump(s);
-        LOGD("%s", s.string());
     }
 
     return err;

@@ -75,6 +75,7 @@ public final class BluetoothDeviceProfileState extends HierarchicalStateMachine 
     public static final int CONNECT_OTHER_PROFILES = 103;
 
     private static final int AUTO_CONNECT_DELAY = 6000; // 6 secs
+    private static final int CONNECT_OTHER_PROFILES_DELAY = 4000; // 4 secs
 
     private BondedDevice mBondedDevice = new BondedDevice();
     private OutgoingHandsfree mOutgoingHandsfree = new OutgoingHandsfree();
@@ -129,10 +130,6 @@ public final class BluetoothDeviceProfileState extends HierarchicalStateMachine 
                     newState == BluetoothA2dp.STATE_DISCONNECTED) {
                     sendMessage(TRANSITION_TO_STABLE);
                 }
-            } else if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
-                Message msg = new Message();
-                msg.what = AUTO_CONNECT_PROFILES;
-                sendMessageDelayed(msg, AUTO_CONNECT_DELAY);
             } else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
                 // This is technically not needed, but we can get stuck sometimes.
                 // For example, if incoming A2DP fails, we are not informed by Bluez
@@ -769,23 +766,26 @@ public final class BluetoothDeviceProfileState extends HierarchicalStateMachine 
             case CONNECT_HFP_INCOMING:
                 // Connect A2DP if there is no incoming connection
                 // If the priority is OFF - don't auto connect.
-                // If the priority is AUTO_CONNECT, auto connect code takes care.
-                if (mA2dpService.getSinkPriority(mDevice) == BluetoothA2dp.PRIORITY_ON) {
+                if (mA2dpService.getSinkPriority(mDevice) == BluetoothA2dp.PRIORITY_ON ||
+                        mA2dpService.getSinkPriority(mDevice) ==
+                            BluetoothA2dp.PRIORITY_AUTO_CONNECT) {
                     Message msg = new Message();
                     msg.what = CONNECT_OTHER_PROFILES;
                     msg.arg1 = CONNECT_A2DP_OUTGOING;
-                    sendMessageDelayed(msg, AUTO_CONNECT_DELAY);
+                    sendMessageDelayed(msg, CONNECT_OTHER_PROFILES_DELAY);
                 }
                 break;
             case CONNECT_A2DP_INCOMING:
                 // This is again against spec. HFP incoming connections should be made
                 // before A2DP, so we should not hit this case. But many devices
                 // don't follow this.
-                if (mHeadsetService.getPriority(mDevice) == BluetoothHeadset.PRIORITY_ON) {
+                if (mHeadsetService.getPriority(mDevice) == BluetoothHeadset.PRIORITY_ON
+                        || mHeadsetService.getPriority(mDevice) ==
+                            BluetoothHeadset.PRIORITY_AUTO_CONNECT) {
                     Message msg = new Message();
                     msg.what = CONNECT_OTHER_PROFILES;
                     msg.arg1 = CONNECT_HFP_OUTGOING;
-                    sendMessageDelayed(msg, AUTO_CONNECT_DELAY);
+                    sendMessageDelayed(msg, CONNECT_OTHER_PROFILES_DELAY);
                 }
                 break;
             default:

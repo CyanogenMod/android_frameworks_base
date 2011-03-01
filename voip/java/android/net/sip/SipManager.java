@@ -133,7 +133,7 @@ public class SipManager {
     }
 
     /**
-     * Returns true if the system supports SIP-based VoIP.
+     * Returns true if the system supports SIP-based VOIP API.
      */
     public static boolean isVoipSupported(Context context) {
         return context.getPackageManager().hasSystemFeature(
@@ -305,19 +305,20 @@ public class SipManager {
      * @param timeout the timeout value in seconds. Default value (defined by
      *        SIP protocol) is used if {@code timeout} is zero or negative.
      * @return a {@link SipAudioCall} object
-     * @throws SipException if calling the SIP service results in an error
+     * @throws SipException if calling the SIP service results in an error or
+     *      VOIP API is not supported by the device
      * @see SipAudioCall.Listener#onError
+     * @see #isVoipSupported
      */
     public SipAudioCall makeAudioCall(SipProfile localProfile,
             SipProfile peerProfile, SipAudioCall.Listener listener, int timeout)
             throws SipException {
+        if (!isVoipSupported(mContext)) {
+            throw new SipException("VOIP API is not supported");
+        }
         SipAudioCall call = new SipAudioCall(mContext, localProfile);
         call.setListener(listener);
         SipSession s = createSipSession(localProfile, null);
-        if (s == null) {
-            throw new SipException(
-                    "Failed to create SipSession; network available?");
-        }
         call.makeCall(peerProfile, s, timeout);
         return call;
     }
@@ -336,12 +337,17 @@ public class SipManager {
      * @param timeout the timeout value in seconds. Default value (defined by
      *        SIP protocol) is used if {@code timeout} is zero or negative.
      * @return a {@link SipAudioCall} object
-     * @throws SipException if calling the SIP service results in an error
+     * @throws SipException if calling the SIP service results in an error or
+     *      VOIP API is not supported by the device
      * @see SipAudioCall.Listener#onError
+     * @see #isVoipSupported
      */
     public SipAudioCall makeAudioCall(String localProfileUri,
             String peerProfileUri, SipAudioCall.Listener listener, int timeout)
             throws SipException {
+        if (!isVoipSupported(mContext)) {
+            throw new SipException("VOIP API is not supported");
+        }
         try {
             return makeAudioCall(
                     new SipProfile.Builder(localProfileUri).build(),
@@ -366,7 +372,9 @@ public class SipManager {
      */
     public SipAudioCall takeAudioCall(Intent incomingCallIntent,
             SipAudioCall.Listener listener) throws SipException {
-        if (incomingCallIntent == null) return null;
+        if (incomingCallIntent == null) {
+            throw new SipException("Cannot retrieve session with null intent");
+        }
 
         String callId = getCallId(incomingCallIntent);
         if (callId == null) {
@@ -381,7 +389,9 @@ public class SipManager {
 
         try {
             ISipSession session = mSipService.getPendingSession(callId);
-            if (session == null) return null;
+            if (session == null) {
+                throw new SipException("No pending session for the call");
+            }
             SipAudioCall call = new SipAudioCall(
                     mContext, session.getLocalProfile());
             call.attachCall(new SipSession(session), offerSd);
@@ -526,6 +536,10 @@ public class SipManager {
             SipSession.Listener listener) throws SipException {
         try {
             ISipSession s = mSipService.createSession(localProfile, null);
+            if (s == null) {
+                throw new SipException(
+                        "Failed to create SipSession; network unavailable?");
+            }
             return new SipSession(s, listener);
         } catch (RemoteException e) {
             throw new SipException("createSipSession()", e);
@@ -541,7 +555,7 @@ public class SipManager {
         try {
             return mSipService.getListOfProfiles();
         } catch (RemoteException e) {
-            return null;
+            return new SipProfile[0];
         }
     }
 

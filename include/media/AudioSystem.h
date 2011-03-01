@@ -159,6 +159,7 @@ public:
         MODE_NORMAL = 0,
         MODE_RINGTONE,
         MODE_IN_CALL,
+        MODE_IN_COMMUNICATION,
         NUM_MODES  // not a valid entry, denotes end-of-list
     };
 
@@ -493,7 +494,7 @@ public:
     AudioParameter(const String8& keyValuePairs);
     virtual ~AudioParameter();
 
-    // reserved parameter keys for changeing standard parameters with setParameters() function.
+    // reserved parameter keys for changing standard parameters with setParameters() function.
     // Using these keys is mandatory for AudioFlinger to properly monitor audio output/input
     // configuration changes and act accordingly.
     //  keyRouting: to change audio routing, value is an int in AudioSystem::audio_devices
@@ -501,6 +502,8 @@ public:
     //  keyFormat: to change audio format, value is an int in AudioSystem::audio_format
     //  keyChannels: to change audio channel configuration, value is an int in AudioSystem::audio_channels
     //  keyFrameCount: to change audio output frame count, value is an int
+    //  keyInputSource: to change audio input source, value is an int in audio_source
+    //     (defined in media/mediarecorder.h)
     static const char *keyRouting;
     static const char *keySamplingRate;
     static const char *keyFormat;
@@ -510,6 +513,7 @@ public:
     static const char *keyFmOn;
     static const char *keyFmOff;
 #endif
+    static const char *keyInputSource;
 
     String8 toString();
 

@@ -32,12 +32,16 @@ android.graphics.drawable.LayerDrawable}.</dd>
     for different states (for example, to use a different image when a button is pressed).
     Creates a {@link android.graphics.drawable.StateListDrawable}.</dd>
   <dt><a href="#LevelList">Level List</a></dt>
-    <dd>An XML file that defines a Drawable that manages a number of alternate Drawables, each
+    <dd>An XML file that defines a drawable that manages a number of alternate Drawables, each
 assigned a maximum numerical value. Creates a {@link
 android.graphics.drawable.LevelListDrawable}.</dd>
   <dt><a href="#Transition">Transition Drawable</a></dt>
-    <dd>An XML file that defines a Drawable that can cross-fade between two drawable resources.
+    <dd>An XML file that defines a drawable that can cross-fade between two drawable resources.
 Creates a {@link android.graphics.drawable.TransitionDrawable}.</dd>
+  <dt><a href="#Inset">Inset Drawable</a></dt>
+    <dd>An XML file that defines a drawable that insets another drawable by a specified distance.
+This is useful when a View needs a background drawble that is smaller than the View's actual
+bounds.</dd>
   <dt><a href="#Clip">Clip Drawable</a></dt>
     <dd>An XML file that defines a drawable that clips another Drawable based on this Drawable's
 current level value. Creates a {@link android.graphics.drawable.ClipDrawable}.</dd>
@@ -381,7 +385,7 @@ In XML: <code>@[<em>package</em>:]drawable/<em>filename</em></code>
 <dd>
 <pre class="stx">
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
-&lt;<a href="#bitmap-element">nine-patch</a>
+&lt;<a href="#ninepatch-element">nine-patch</a>
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:src="@[package:]drawable/<em>drawable_resource</em>"
     android:dither=["true" | "false"] /&gt;
@@ -394,8 +398,8 @@ In XML: <code>@[<em>package</em>:]drawable/<em>filename</em></code>
 <dd>
 <dl class="tag-list">
 
-  <dt id="layerlist-element"><code>&lt;bitmap&gt;</code></dt>
-    <dd>Defines the bitmap source and its properties.
+  <dt id="ninepatch-element"><code>&lt;nine-patch&gt;</code></dt>
+    <dd>Defines the Nine-Patch source and its properties.
       <p class="caps">attributes:</p>
       <dl class="atn-list">
         <dt><code>xmlns:android</code></dt>
@@ -470,7 +474,7 @@ In XML: <code>@[<em>package</em>:]drawable/<em>filename</em></code>
         android:right="<em>dimension</em>"
         android:bottom="<em>dimension</em>"
         android:left="<em>dimension</em>" /&gt;
-&lt;/selector>
+&lt;/layer-list>
 </pre>
 </dd>
 
@@ -893,7 +897,7 @@ In XML: <code>@[<em>package</em>:]drawable/<em>filename</em></code>
 <dd>
 <pre class="stx">
 &lt;?xml version="1.0" encoding="utf-8"?>
-&lt;<a href="#transition-element">layer-list</a>
+&lt;<a href="#transition-element">transition</a>
 xmlns:android="http://schemas.android.com/apk/res/android" &gt;
     &lt;<a href="#transition-item-element">item</a>
         android:drawable="@[package:]drawable/<em>drawable_resource</em>"
@@ -902,7 +906,7 @@ xmlns:android="http://schemas.android.com/apk/res/android" &gt;
         android:right="<em>dimension</em>"
         android:bottom="<em>dimension</em>"
         android:left="<em>dimension</em>" /&gt;
-&lt;/selector>
+&lt;/transition>
 </pre>
 </dd>
 
@@ -922,8 +926,8 @@ xmlns:android="http://schemas.android.com/apk/res/android" &gt;
       </dl>
     </dd>
   <dt id="transition-item-element"><code>&lt;item&gt;</code></dt>
-    <dd>Defines a drawable to place in the layer drawable, in a position defined by its attributes.
-Must be a child of a <code>&lt;selector&gt;</code> element. Accepts child {@code &lt;bitmap&gt;}
+    <dd>Defines a drawable to use as part of the drawable transition.
+Must be a child of a <code>&lt;transition&gt;</code> element. Accepts child {@code &lt;bitmap&gt;}
 elements.
       <p class="caps">attributes:</p>
       <dl class="atn-list">
@@ -959,7 +963,7 @@ View.findViewById()} or {@link android.app.Activity#findViewById(int) Activity.f
 &lt;transition xmlns:android="http://schemas.android.com/apk/res/android"&gt;
     &lt;item android:drawable="@drawable/on" /&gt;
     &lt;item android:drawable="@drawable/off" /&gt;
-&lt;/layer-list&gt;
+&lt;/transition&gt;
 </pre>
 
 <p>This layout XML applies the drawable to a View:</p>
@@ -994,13 +998,10 @@ drawable.startTransition(500);
 
 
 
-
-
-
 <h2 id="Inset">Inset Drawable</h2>
 
-<p>A drawable defined in XML that insets another drawable by a specified distance. This is used when
-a View needs a background that is smaller than the View's actual bounds.</p>
+<p>A drawable defined in XML that insets another drawable by a specified distance. This is useful
+when a View needs a background that is smaller than the View's actual bounds.</p>
 
 <dl class="xml">
 
@@ -1225,11 +1226,11 @@ the right edge, a right gravity clips the left edge, and neither clips both edge
 <dd>XML file saved at <code>res/drawable/clip.xml</code>:
 <pre>
 &lt;?xml version="1.0" encoding="utf-8"?>
-&lt;shape xmlns:android="http://schemas.android.com/apk/res/android"
+&lt;clip xmlns:android="http://schemas.android.com/apk/res/android"
     android:drawable="@drawable/android"
     android:clipOrientation="horizontal"
     android:gravity="left" /&gt;
-&lt;/shape>
+&lt;/clip>
 </pre>
     <p>The following layout XML applies the clip drawable to a View:</p>
 <pre>
@@ -1613,7 +1614,7 @@ href="more-resources.html#Dimension">dimension resource</a>.</dd>
 href="more-resources.html#Dimension">dimension resource</a>.</dd>
       </dl>
     </dd>
-  <dt id="solid-element"><code>&lt;size&gt;</code></dt>
+  <dt id="size-element"><code>&lt;size&gt;</code></dt>
     <dd>The size of the shape.
       <p class="caps">attributes:</p>
       <dl class="atn-list">

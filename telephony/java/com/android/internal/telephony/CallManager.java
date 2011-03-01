@@ -380,12 +380,17 @@ public final class CallManager {
                 break;
             case OFFHOOK:
                 Phone fgPhone = getFgPhone();
-                // Enable IN_CALL mode while foreground call is in DIALING,
-                // ALERTING, ACTIVE and DISCONNECTING state and not from sipPhone
+                // While foreground call is in DIALING,
+                // ALERTING, ACTIVE and DISCONNECTING state
                 if (getActiveFgCallState() != Call.State.IDLE
-                        && getActiveFgCallState() != Call.State.DISCONNECTED
-                        && !(fgPhone instanceof SipPhone)) {
-                    mode = AudioManager.MODE_IN_CALL;
+                        && getActiveFgCallState() != Call.State.DISCONNECTED) {
+                    if (fgPhone instanceof SipPhone) {
+                        // enable IN_COMMUNICATION audio mode for sipPhone
+                        mode = AudioManager.MODE_IN_COMMUNICATION;
+                    } else {
+                        // enable IN_CALL audio mode for telephony
+                        mode = AudioManager.MODE_IN_CALL;
+                    }
                 }
                 break;
         }
@@ -695,6 +700,10 @@ public final class CallManager {
             Log.d(LOG_TAG, this.toString());
         }
 
+        if (!canDial(phone)) {
+            throw new CallStateException("cannot dial in current state");
+        }
+
         if ( hasActiveFgCall() ) {
             Phone activePhone = getActiveFgCall().getPhone();
             boolean hasBgCall = !(activePhone.getBackgroundCall().isIdle());
@@ -746,6 +755,32 @@ public final class CallManager {
             phone.clearDisconnected();
         }
     }
+
+    /**
+     * Phone can make a call only if ALL of the following are true:
+     *        - Phone is not powered off
+     *        - There's no incoming or waiting call
+     *        - There's available call slot in either foreground or background
+     *        - The foreground call is ACTIVE or IDLE or DISCONNECTED.
+     *          (We mainly need to make sure it *isn't* DIALING or ALERTING.)
+     * @param phone
+     * @return true if the phone can make a new call
+     */
+    private boolean canDial(Phone phone) {
+        int serviceState = phone.getServiceState().getState();
+        boolean hasRingingCall = hasActiveRingingCall();
+        boolean hasActiveCall = hasActiveFgCall();
+        boolean hasHoldingCall = hasActiveBgCall();
+        boolean allLinesTaken = hasActiveCall && hasHoldingCall;
+        Call.State fgCallState = getActiveFgCallState();
+
+        return (serviceState != ServiceState.STATE_POWER_OFF
+                && !hasRingingCall
+                && !allLinesTaken
+                && ((fgCallState == Call.State.ACTIVE)
+                    || (fgCallState == Call.State.IDLE)
+                    || (fgCallState == Call.State.DISCONNECTED)));
+            }
 
     /**
      * Whether or not the phone can do explicit call transfer in the current
@@ -860,6 +895,8 @@ public final class CallManager {
     public boolean getMute() {
         if (hasActiveFgCall()) {
             return getActiveFgCall().getPhone().getMute();
+        } else if (hasActiveBgCall()) {
+            return getFirstActiveBgCall().getPhone().getMute();
         }
         return false;
     }

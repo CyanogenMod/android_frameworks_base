@@ -198,22 +198,26 @@ class BackupManagerService extends IBackupManager.Stub {
         public long token;
         public PackageInfo pkgInfo;
         public int pmToken; // in post-install restore, the PM's token for this transaction
+        public boolean needFullBackup;
 
         RestoreParams(IBackupTransport _transport, IRestoreObserver _obs,
-                long _token, PackageInfo _pkg, int _pmToken) {
+                long _token, PackageInfo _pkg, int _pmToken, boolean _needFullBackup) {
             transport = _transport;
             observer = _obs;
             token = _token;
             pkgInfo = _pkg;
             pmToken = _pmToken;
+            needFullBackup = _needFullBackup;
         }
 
-        RestoreParams(IBackupTransport _transport, IRestoreObserver _obs, long _token) {
+        RestoreParams(IBackupTransport _transport, IRestoreObserver _obs, long _token,
+                boolean _needFullBackup) {
             transport = _transport;
             observer = _obs;
             token = _token;
             pkgInfo = null;
             pmToken = 0;
+            needFullBackup = _needFullBackup;
         }
     }
 
@@ -323,7 +327,8 @@ class BackupManagerService extends IBackupManager.Stub {
                 RestoreParams params = (RestoreParams)msg.obj;
                 Slog.d(TAG, "MSG_RUN_RESTORE observer=" + params.observer);
                 (new PerformRestoreTask(params.transport, params.observer,
-                        params.token, params.pkgInfo, params.pmToken)).run();
+                        params.token, params.pkgInfo, params.pmToken,
+                        params.needFullBackup)).run();
                 break;
             }
 
@@ -1559,6 +1564,7 @@ class BackupManagerService extends IBackupManager.Stub {
         private PackageInfo mTargetPackage;
         private File mStateDir;
         private int mPmToken;
+        private boolean mNeedFullBackup;
 
         class RestoreRequest {
             public PackageInfo app;
@@ -1571,12 +1577,14 @@ class BackupManagerService extends IBackupManager.Stub {
         }
 
         PerformRestoreTask(IBackupTransport transport, IRestoreObserver observer,
-                long restoreSetToken, PackageInfo targetPackage, int pmToken) {
+                long restoreSetToken, PackageInfo targetPackage, int pmToken,
+                boolean needFullBackup) {
             mTransport = transport;
             mObserver = observer;
             mToken = restoreSetToken;
             mTargetPackage = targetPackage;
             mPmToken = pmToken;
+            mNeedFullBackup = needFullBackup;
 
             try {
                 mStateDir = new File(mBaseStateDir, transport.transportDirName());
@@ -1654,7 +1662,8 @@ class BackupManagerService extends IBackupManager.Stub {
                 // Pull the Package Manager metadata from the restore set first
                 pmAgent = new PackageManagerBackupAgent(
                         mPackageManager, agentPackages);
-                processOneRestore(omPackage, 0, IBackupAgent.Stub.asInterface(pmAgent.onBind()));
+                processOneRestore(omPackage, 0, IBackupAgent.Stub.asInterface(pmAgent.onBind()),
+                        mNeedFullBackup);
 
                 // Verify that the backup set includes metadata.  If not, we can't do
                 // signature/version verification etc, so we simply do not proceed with
@@ -1751,7 +1760,8 @@ class BackupManagerService extends IBackupManager.Stub {
 
                     // And then finally run the restore on this agent
                     try {
-                        processOneRestore(packageInfo, metaInfo.versionCode, agent);
+                        processOneRestore(packageInfo, metaInfo.versionCode, agent,
+                                mNeedFullBackup);
                         ++count;
                     } finally {
                         // unbind and tidy up even on timeout or failure, just in case
@@ -1821,7 +1831,8 @@ class BackupManagerService extends IBackupManager.Stub {
         }
 
         // Do the guts of a restore of one application, using mTransport.getRestoreData().
-        void processOneRestore(PackageInfo app, int appVersionCode, IBackupAgent agent) {
+        void processOneRestore(PackageInfo app, int appVersionCode, IBackupAgent agent,
+                boolean needFullBackup) {
             // !!! TODO: actually run the restore through mTransport
             final String packageName = app.packageName;
 
@@ -1900,6 +1911,14 @@ class BackupManagerService extends IBackupManager.Stub {
                 try { if (newState != null) newState.close(); } catch (IOException e) {}
                 backupData = newState = null;
                 mCurrentOperations.delete(token);
+
+                // If we know a priori that we'll need to perform a full post-restore backup
+                // pass, clear the new state file data.  This means we're discarding work that
+                // was just done by the app's agent, but this way the agent doesn't need to
+                // take any special action based on global device state.
+                if (needFullBackup) {
+                    newStateName.delete();
+                }
             }
         }
     }
@@ -2385,7 +2404,7 @@ class BackupManagerService extends IBackupManager.Stub {
             mWakelock.acquire();
             Message msg = mBackupHandler.obtainMessage(MSG_RUN_RESTORE);
             msg.obj = new RestoreParams(getTransport(mCurrentTransport), null,
-                    restoreSet, pkg, token);
+                    restoreSet, pkg, token, true);
             mBackupHandler.sendMessage(msg);
         } else {
             // Auto-restore disabled or no way to attempt a restore; just tell the Package
@@ -2398,15 +2417,45 @@ class BackupManagerService extends IBackupManager.Stub {
     }
 
     // Hand off a restore session
-    public IRestoreSession beginRestoreSession(String transport) {
-        mContext.enforceCallingOrSelfPermission(android.Manifest.permission.BACKUP, "beginRestoreSession");
+    public IRestoreSession beginRestoreSession(String packageName, String transport) {
+        if (DEBUG) Slog.v(TAG, "beginRestoreSession: pkg=" + packageName
+                + " transport=" + transport);
+
+        boolean needPermission = true;
+        if (transport == null) {
+            transport = mCurrentTransport;
+
+            if (packageName != null) {
+                PackageInfo app = null;
+                try {
+                    app = mPackageManager.getPackageInfo(packageName, 0);
+                } catch (NameNotFoundException nnf) {
+                    Slog.w(TAG, "Asked to restore nonexistent pkg " + packageName);
+                    throw new IllegalArgumentException("Package " + packageName + " not found");
+                }
+
+                if (app.applicationInfo.uid == Binder.getCallingUid()) {
+                    // So: using the current active transport, and the caller has asked
+                    // that its own package will be restored.  In this narrow use case
+                    // we do not require the caller to hold the permission.
+                    needPermission = false;
+                }
+            }
+        }
+
+        if (needPermission) {
+            mContext.enforceCallingOrSelfPermission(android.Manifest.permission.BACKUP,
+                    "beginRestoreSession");
+        } else {
+            if (DEBUG) Slog.d(TAG, "restoring self on current transport; no permission needed");
+        }
 
         synchronized(this) {
             if (mActiveRestoreSession != null) {
                 Slog.d(TAG, "Restore session requested but one already active");
                 return null;
             }
-            mActiveRestoreSession = new ActiveRestoreSession(transport);
+            mActiveRestoreSession = new ActiveRestoreSession(packageName, transport);
         }
         return mActiveRestoreSession;
     }
@@ -2426,10 +2475,12 @@ class BackupManagerService extends IBackupManager.Stub {
     class ActiveRestoreSession extends IRestoreSession.Stub {
         private static final String TAG = "RestoreSession";
 
+        private String mPackageName;
         private IBackupTransport mRestoreTransport = null;
         RestoreSet[] mRestoreSets = null;
 
-        ActiveRestoreSession(String transport) {
+        ActiveRestoreSession(String packageName, String transport) {
+            mPackageName = packageName;
             mRestoreTransport = getTransport(transport);
         }
 
@@ -2465,11 +2516,16 @@ class BackupManagerService extends IBackupManager.Stub {
             mContext.enforceCallingOrSelfPermission(android.Manifest.permission.BACKUP,
                     "performRestore");
 
-            if (DEBUG) Slog.d(TAG, "performRestore token=" + Long.toHexString(token)
+            if (DEBUG) Slog.d(TAG, "restoreAll token=" + Long.toHexString(token)
                     + " observer=" + observer);
 
             if (mRestoreTransport == null || mRestoreSets == null) {
-                Slog.e(TAG, "Ignoring performRestore() with no restore set");
+                Slog.e(TAG, "Ignoring restoreAll() with no restore set");
+                return -1;
+            }
+
+            if (mPackageName != null) {
+                Slog.e(TAG, "Ignoring restoreAll() on single-package session");
                 return -1;
             }
 
@@ -2479,7 +2535,7 @@ class BackupManagerService extends IBackupManager.Stub {
                         long oldId = Binder.clearCallingIdentity();
                         mWakelock.acquire();
                         Message msg = mBackupHandler.obtainMessage(MSG_RUN_RESTORE);
-                        msg.obj = new RestoreParams(mRestoreTransport, observer, token);
+                        msg.obj = new RestoreParams(mRestoreTransport, observer, token, true);
                         mBackupHandler.sendMessage(msg);
                         Binder.restoreCallingIdentity(oldId);
                         return 0;
@@ -2493,6 +2549,14 @@ class BackupManagerService extends IBackupManager.Stub {
 
         public synchronized int restorePackage(String packageName, IRestoreObserver observer) {
             if (DEBUG) Slog.v(TAG, "restorePackage pkg=" + packageName + " obs=" + observer);
+
+            if (mPackageName != null) {
+                if (! mPackageName.equals(packageName)) {
+                    Slog.e(TAG, "Ignoring attempt to restore pkg=" + packageName
+                            + " on session for package " + mPackageName);
+                    return -1;
+                }
+            }
 
             PackageInfo app = null;
             try {
@@ -2528,6 +2592,7 @@ class BackupManagerService extends IBackupManager.Stub {
             // the app has never been backed up from this device -- there's nothing
             // to do but return failure.
             if (token == 0) {
+                if (DEBUG) Slog.w(TAG, "No data available for this package; not restoring");
                 return -1;
             }
 
@@ -2535,16 +2600,13 @@ class BackupManagerService extends IBackupManager.Stub {
             long oldId = Binder.clearCallingIdentity();
             mWakelock.acquire();
             Message msg = mBackupHandler.obtainMessage(MSG_RUN_RESTORE);
-            msg.obj = new RestoreParams(mRestoreTransport, observer, token, app, 0);
+            msg.obj = new RestoreParams(mRestoreTransport, observer, token, app, 0, false);
             mBackupHandler.sendMessage(msg);
             Binder.restoreCallingIdentity(oldId);
             return 0;
         }
 
         public synchronized void endRestoreSession() {
-            mContext.enforceCallingOrSelfPermission(android.Manifest.permission.BACKUP,
-                    "endRestoreSession");
-
             if (DEBUG) Slog.d(TAG, "endRestoreSession");
 
             synchronized (this) {

@@ -87,7 +87,6 @@
     <protected-broadcast android:name="android.hardware.action.USB_DISCONNECTED" />
     <protected-broadcast android:name="android.hardware.action.USB_STATE" />
 
-    <protected-broadcast android:name="android.nfc.action.TAG_DISCOVERED" />
     <protected-broadcast android:name="android.nfc.action.LLCP_LINK_STATE_CHANGED" />
     <protected-broadcast android:name="android.nfc.action.TRANSACTION_DETECTED" />
 
@@ -1093,7 +1092,7 @@
     <permission android:name="android.permission.CHANGE_COMPONENT_ENABLED_STATE"
         android:label="@string/permlab_changeComponentState"
         android:description="@string/permdesc_changeComponentState"
-        android:protectionLevel="signature" />
+        android:protectionLevel="signatureOrSystem" />
 
     <!-- Allows an application to use SurfaceFlinger's low level features -->
     <permission android:name="android.permission.ACCESS_SURFACE_FLINGER"

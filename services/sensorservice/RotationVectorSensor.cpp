@@ -34,10 +34,9 @@ static inline T clamp(T v) {
 
 RotationVectorSensor::RotationVectorSensor(sensor_t const* list, size_t count)
     : mSensorDevice(SensorDevice::getInstance()),
-      mEnabled(false),
-      mALowPass(M_SQRT1_2, 5.0f),
+      mALowPass(M_SQRT1_2, 1.5f),
       mAX(mALowPass), mAY(mALowPass), mAZ(mALowPass),
-      mMLowPass(M_SQRT1_2, 2.5f),
+      mMLowPass(M_SQRT1_2, 1.5f),
       mMX(mMLowPass), mMY(mMLowPass), mMZ(mMLowPass)
 {
     for (size_t i=0 ; i<count ; i++) {
@@ -114,15 +113,18 @@ bool RotationVectorSensor::process(sensors_event_t* outEvent,
         float qx = sqrtf( clamp( Hx - My - Az + 1) * 0.25f );
         float qy = sqrtf( clamp(-Hx + My - Az + 1) * 0.25f );
         float qz = sqrtf( clamp(-Hx - My + Az + 1) * 0.25f );
-        const float n = 1.0f / (qw*qw + qx*qx + qy*qy + qz*qz);
-        qx = copysignf(qx, Ay - Mz) * n;
-        qy = copysignf(qy, Hz - Ax) * n;
-        qz = copysignf(qz, Mx - Hy) * n;
+        qx = copysignf(qx, Ay - Mz);
+        qy = copysignf(qy, Hz - Ax);
+        qz = copysignf(qz, Mx - Hy);
+
+        // this quaternion is guaranteed to be normalized, by construction
+        // of the rotation matrix.
 
         *outEvent = event;
         outEvent->data[0] = qx;
         outEvent->data[1] = qy;
         outEvent->data[2] = qz;
+        outEvent->data[3] = qw;
         outEvent->sensor = '_rov';
         outEvent->type = SENSOR_TYPE_ROTATION_VECTOR;
         return true;
@@ -130,19 +132,12 @@ bool RotationVectorSensor::process(sensors_event_t* outEvent,
     return false;
 }
 
-bool RotationVectorSensor::isEnabled() const {
-    return mEnabled;
-}
-
 status_t RotationVectorSensor::activate(void* ident, bool enabled) {
-    if (mEnabled != enabled) {
-        mSensorDevice.activate(this, mAcc.getHandle(), enabled);
-        mSensorDevice.activate(this, mMag.getHandle(), enabled);
-        mEnabled = enabled;
-        if (enabled) {
-            mMagTime = 0;
-            mAccTime = 0;
-        }
+    mSensorDevice.activate(this, mAcc.getHandle(), enabled);
+    mSensorDevice.activate(this, mMag.getHandle(), enabled);
+    if (enabled) {
+        mMagTime = 0;
+        mAccTime = 0;
     }
     return NO_ERROR;
 }

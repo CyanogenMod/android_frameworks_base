@@ -49,6 +49,7 @@ import android.util.Log;
 import android.media.AudioManager;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
+import android.os.BatteryManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.provider.Settings;
@@ -77,9 +78,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     private Status mStatus = Status.Normal;
 
-    private final LockPatternUtils mLockPatternUtils;
-    private final KeyguardUpdateMonitor mUpdateMonitor;
-    private final KeyguardScreenCallback mCallback;
+    private LockPatternUtils mLockPatternUtils;
+    private KeyguardUpdateMonitor mUpdateMonitor;
+    private KeyguardScreenCallback mCallback;
 
     private TextView mCarrier;
     private SlidingTab mTabSelector;
@@ -405,8 +406,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         setFocusableInTouchMode(true);
         setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
 
-        updateMonitor.registerInfoCallback(this);
-        updateMonitor.registerSimStateCallback(this);
+        mUpdateMonitor.registerInfoCallback(this);
+        mUpdateMonitor.registerSimStateCallback(this);
 
         mAudioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
         mSilentMode = isSilentMode();
@@ -662,7 +663,12 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             mTabSelector.setRightHintText(mSilentMode ? R.string.lockscreen_sound_on_label
                     : R.string.lockscreen_sound_off_label);
         }
-        mCallback.pokeWakelock();
+        // Don't poke the wake lock when returning to a state where the handle is
+        // not grabbed since that can happen when the system (instead of the user)
+        // cancels the grab.
+        if (grabbedState != SlidingTab.OnTriggerListener.NO_HANDLE) {
+            mCallback.pokeWakelock();
+        }
     }
 
     /**
@@ -738,7 +744,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         if (mPluggedIn) {
             mChargingIcon =
                 getContext().getResources().getDrawable(R.drawable.ic_lock_idle_charging);
-            if (mBatteryLevel >= 100) {
+            if (mUpdateMonitor.isDeviceCharged()) {
                 mCharging = getContext().getString(R.string.lockscreen_charged);
             } else {
                 mCharging = getContext().getString(R.string.lockscreen_plugged_in, mBatteryLevel);
@@ -1147,7 +1153,10 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     /** {@inheritDoc} */
     public void cleanUp() {
-        mUpdateMonitor.removeCallback(this);
+        mUpdateMonitor.removeCallback(this); // this must be first
+        mLockPatternUtils = null;
+        mUpdateMonitor = null;
+        mCallback = null;
     }
 
     /** {@inheritDoc} */

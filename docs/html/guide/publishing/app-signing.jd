@@ -259,7 +259,7 @@ looks like this:</p>
 <p>In Eclipse/ADT, you will see a similar error in the Android console.</p>
 
 <p>To fix this problem, simply delete the <code>debug.keystore</code> file. 
-The default storage location for AVDs is in <code>~/.android/avd</code> on OS X and Linux, 
+The default storage location for AVDs is in <code>~/.android/</code> on OS X and Linux, 
 in <code>C:\Documents and Settings\<user>\.android\</code> on Windows XP, and in
 <code>C:\Users\<user>\.android\</code> on Windows Vista.</p>
 
@@ -563,7 +563,7 @@ and align, as discussed above. Once the wizard has compiled and signed your pack
 it will also perfom package alignment with {@code zipalign}.
 Because the Export Wizard uses both Keytool and Jarsigner, you should
 ensure that they are accessible on your computer, as described above
-in the <a href=#setup">Basic Setup for Signing</a>.</p>
+in the <a href="#setup">Basic Setup for Signing</a>.</p>
 
 <p>To create a signed and aligned .apk in Eclipse:</p>
 
