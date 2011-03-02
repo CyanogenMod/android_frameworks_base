@@ -553,6 +553,7 @@
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Правильно!"</string>
     <string name="lockscreen_pattern_wrong" msgid="4817583279053112312">"Повторите попытку"</string>
     <string name="lockscreen_plugged_in" msgid="613343852842944435">"Идет зарядка (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
+    <string name="lockscreen_discharging">Батарея: <xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
     <string name="lockscreen_charged" msgid="4938930459620989972">"Заряжена."</string>
     <string name="lockscreen_battery_short" msgid="3617549178603354656">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Подключите зарядное устройство."</string>
@@ -904,13 +905,14 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"Сейчас USB-накопитель используется компьютером."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"Сейчас SD-карта используется компьютером."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Неизвестно состояние внешнего носителя."</string>
- 
+
     <!-- label for item that reboots the phone in phone options dialog -->
     <string name="global_action_reboot">Перезагрузить</string>
+    <string name="reboot_system">Перезагрузить</string>
+    <string name="reboot_progress">Перезагрузка...</string>
+    <string name="reboot_confirm">Телефон будет перезагружен.</string>
 
-    <!-- Displayed on lock screen's extra left tab - phone -->
     <string name="lockscreen_phone_label">Телефон</string>
-    <!-- Displayed on lock screen's extra right tab - messaging -->
     <string name="lockscreen_messaging_label">Сообщение</string>
 
    <!-- Phone goggles -->
@@ -919,5 +921,6 @@
     <plurals name="phone_goggles_countdown">
         <item quantity="one">%d сек. осталось</item>
         <item quantity="other">%d сек. осталось</item>
-   </plurals>
+    </plurals>
+
 </resources>
