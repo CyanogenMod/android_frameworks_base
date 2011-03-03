@@ -241,8 +241,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     int mPointerLocationMode = 0;
     PointerLocationView mPointerLocationView = null;
     InputChannel mPointerLocationInputChannel;
-    boolean mVolumeUpPressed;
-    boolean mVolumeDownPressed;
     boolean mCameraKeyPressable = false;
     static final long NEXT_DURATION = 400;
 
@@ -308,6 +306,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mVolBtnMusicControls;
     // Behavior of cambtn music controls
     boolean mCamBtnMusicControls;
+    // keeps track about max volume state
+    boolean mIsMaxVolume;
 
     // Behavior of POWER button while in-call and screen on.
     // (See Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR.)
@@ -588,11 +588,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
      */
     Runnable mVolumeUpLongPress = new Runnable() {
         public void run() {
-            /*
-             * Eat the longpress so it won't dismiss the recent apps dialog when
-             * the user lets go of the volume key
-             */
-            mVolumeUpPressed = false;
+            // we got one tick of volume change for the long press
+            // cancel this by adjusting volume to the other direction
+            // except we were on max volume before
+            if(!mIsMaxVolume)
+                handleVolumeKey(AudioManager.STREAM_MUSIC, KeyEvent.KEYCODE_VOLUME_DOWN);
 
             // Shamelessly copied from Kmobs LockScreen controls, works for Pandora, etc...
             sendMediaButtonEvent(KeyEvent.KEYCODE_MEDIA_NEXT);
@@ -604,11 +604,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
      */
     Runnable mVolumeDownLongPress = new Runnable() {
         public void run() {
-            /*
-             * Eat the longpress so it won't dismiss the recent apps dialog when
-             * the user lets go of the volume key
-             */
-            mVolumeDownPressed = false;
+            // we got one tick of volume change for the long press
+            // cancel this by adjusting volume to the other direction
+            handleVolumeKey(AudioManager.STREAM_MUSIC, KeyEvent.KEYCODE_VOLUME_UP);
 
             // Shamelessly copied from Kmobs LockScreen controls, works for Pandora, etc...
             sendMediaButtonEvent(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
@@ -1930,6 +1928,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // during the call, but we do it as a precaution for the rare possibility
             // that the music stops right before we call this
             mBroadcastWakeLock.acquire();
+
+            //check if we are at max volume for long press volume up to skip track
+            mIsMaxVolume=false;
+            if(audioService.getStreamVolume(stream) == audioService.getStreamMaxVolume(stream))
+                mIsMaxVolume=true;
+
             audioService.adjustStreamVolume(stream,
                 keycode == KeyEvent.KEYCODE_VOLUME_UP
                             ? AudioManager.ADJUST_RAISE
@@ -1942,45 +1946,20 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
     }
 
-    void handleVolumeKeyDown(int keycode) {
-        // when keyguard is showing and screen off, we need
-        // to handle the volume key for calls and music here
-	// FIXME FIXME FIXME
-	/*
-        if (isInCall()) {
-            handleVolumeKey(AudioManager.STREAM_VOICE_CALL, keycode);
-        }
-        // Take an initial hit time so we can decide for skip or volume adjust
-        else if (isMusicActive()) {
-            Runnable btnHandler;
+    void handleVolumeLongPress(int keycode) {
+        Runnable btnHandler;
 
-            if (keycode == KeyEvent.KEYCODE_VOLUME_UP) {
-                mVolumeUpPressed = true;
-                btnHandler = mVolumeUpLongPress;
-            }
-            else {
-                mVolumeDownPressed = true;
-                btnHandler = mVolumeDownLongPress;
-            }
+        if (keycode == KeyEvent.KEYCODE_VOLUME_UP)
+            btnHandler = mVolumeUpLongPress;
+        else
+            btnHandler = mVolumeDownLongPress;
 
-            if (mVolBtnMusicControls) {
-                mHandler.postDelayed(btnHandler, ViewConfiguration.getLongPressTimeout());
-            }
-        }
-	*/
+        mHandler.postDelayed(btnHandler, ViewConfiguration.getLongPressTimeout());
     }
 
-    void handleVolumeKeyUp(int keycode) {
-        if (isMusicActive()) {
-            if (keycode == KeyEvent.KEYCODE_VOLUME_UP)
-                mHandler.removeCallbacks(mVolumeUpLongPress);
-            else
-                mHandler.removeCallbacks(mVolumeDownLongPress);
-
-            // Normal volume change - not consumed be long press already
-            if (mVolumeUpPressed || mVolumeDownPressed)
-                handleVolumeKey(AudioManager.STREAM_MUSIC, keycode);
-        }
+    void handleVolumeLongPressAbort() {
+            mHandler.removeCallbacks(mVolumeUpLongPress);
+            mHandler.removeCallbacks(mVolumeDownLongPress);
     }
 
     void handleCameraKeyDown() {
@@ -2064,6 +2043,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP: {
+                if(mVolBtnMusicControls && !down)
+                    handleVolumeLongPressAbort();
                 if (down) {
                     ITelephony telephonyService = getTelephonyService();
                     if (telephonyService != null) {
@@ -2100,6 +2081,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     }
 
                     if (isMusicActive() && (result & ACTION_PASS_TO_USER) == 0) {
+                        // Care for long-press actions to skip tracks
+                        if(mVolBtnMusicControls)
+                            handleVolumeLongPress(keyCode);
                         // If music is playing but we decided not to pass the key to the
                         // application, handle the volume change here.
                         handleVolumeKey(AudioManager.STREAM_MUSIC, keyCode);
