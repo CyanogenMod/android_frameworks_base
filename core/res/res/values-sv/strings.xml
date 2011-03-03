@@ -133,13 +133,17 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Inaktivera trådlöst"</string>
     <string name="screen_lock" msgid="799094655496098153">"Skärmlås"</string>
     <string name="power_off" msgid="4266614107412865048">"Stäng av"</string>
+    <string name="reboot_system">Starta om telefon</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Avslutar…"</string>
+    <string name="reboot_progress">Startar om\u2026</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"Din telefon stängs av."</string>
+    <string name="reboot_confirm">Din telefon startas om.</string>
     <string name="recent_tasks_title" msgid="3691764623638127888">"Senaste"</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"Inga nya program."</string>
     <string name="global_actions" msgid="2406416831541615258">"Telefonalternativ"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Skärmlås"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Stäng av"</string>
+    <string name="global_action_reboot">Starta om</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Tyst läge"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Ljudet är AV"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Ljudet är PÅ"</string>
@@ -397,6 +401,10 @@
     <string name="permdesc_accessWifiState" msgid="485796529139236346">"Tillåter att ett program visar information om statusen för Wi-Fi."</string>
     <string name="permlab_changeWifiState" msgid="7280632711057112137">"byta Wi-Fi-status"</string>
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Tillåter att ett program ansluter till och kopplar från Wi-Fi-åtkomstpunkter och gör ändringar i konfigurerade Wi-Fi-nätverk."</string>
+    <string name="permlab_accessWimaxState">visa WiMax-status</string>
+    <string name="permdesc_accessWimaxState">Tillåter att ett program visar information om statusen för WiMax.</string>
+    <string name="permlab_changeWimaxState">ändra WiMax-status</string>
+    <string name="permdesc_changeWimaxState">Tillåter att ett program ansluter till och kopplar från WiMax-nätverk.</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"tillåt Wi-Fi multicast-mottagning"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Tillåter att ett program tar emot paket som inte är adresserade direkt till din enhet. Detta är användbart om du vill upptäcka tillgängliga tjänster i närheten. Det drar mer batteri än om telefonen inte är i multicast-läge."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"administrera bluetooth"</string>
@@ -553,6 +561,7 @@
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Korrekt!"</string>
     <string name="lockscreen_pattern_wrong" msgid="4817583279053112312">"Försök igen"</string>
     <string name="lockscreen_plugged_in" msgid="613343852842944435">"Laddar (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
+    <string name="lockscreen_discharging">Batteri (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
     <string name="lockscreen_charged" msgid="4938930459620989972">"Laddad."</string>
     <string name="lockscreen_battery_short" msgid="3617549178603354656">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Anslut din laddare."</string>
@@ -580,6 +589,8 @@
     <string name="lockscreen_unlock_label" msgid="737440483220667054">"Lås upp"</string>
     <string name="lockscreen_sound_on_label" msgid="9068877576513425970">"Ljud på"</string>
     <string name="lockscreen_sound_off_label" msgid="996822825154319026">"Ljud av"</string>
+    <string name="lockscreen_phone_label">Telefon</string>
+    <string name="lockscreen_messaging_label">SMS</string>
     <string name="password_keyboard_label_symbol_key" msgid="992280756256536042">"?123"</string>
     <string name="password_keyboard_label_alpha_key" msgid="8001096175167485649">"ABC"</string>
     <string name="password_keyboard_label_alt_key" msgid="1284820942620288678">"ALT"</string>
@@ -904,4 +915,14 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"USB-lagringsenheten används av en dator."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"SD-kortet används för närvarande av en dator."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Externa media i okänt tillstånd."</string>
+
+    <!--Application killed toast -->
+    <string name="app_killed_message">Applikation avslutad</string>
+
+    <!-- Phone goggles -->
+    <string name="phone_goggles_description">Lös följande %1$d matematiska problem på mindre än %2$d sekunder för att kunna utföra din kommunikation.</string>
+    <plurals name="phone_goggles_countdown">
+        <item quantity="one">%d sekund kvar</item>
+        <item quantity="other">%d sekunder kvar</item>
+    </plurals>
 </resources>
