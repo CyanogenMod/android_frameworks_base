@@ -101,8 +101,6 @@ static void dbopen(JNIEnv* env, jobject object, jstring pathString, jint flags)
     sqlite3_stmt * statement = NULL;
     char const * path8 = env->GetStringUTFChars(pathString, NULL);
     int sqliteFlags;
-    // Error code handling for SQLite exec
-    char* zErrMsg = NULL;
 
     // register the logging func on sqlite. needs to be done BEFORE any sqlite3 func is called.
     registerLoggingFunc(path8);
@@ -121,22 +119,6 @@ static void dbopen(JNIEnv* env, jobject object, jstring pathString, jint flags)
         LOGE("sqlite3_open_v2(\"%s\", &handle, %d, NULL) failed\n", path8, sqliteFlags);
         throw_sqlite3_exception(env, handle);
         goto done;
-    }
-
-    // Configure databases to run in WAL mode.
-    err = sqlite3_exec(handle,"PRAGMA journal_mode = WAL;",
-                       NULL, NULL,&zErrMsg);
-    if (SQLITE_OK == err) {
-        // Set autocheckpoint = 100 pages
-        err = sqlite3_wal_autocheckpoint(handle,
-                                         100);
-        if (SQLITE_OK != err) {
-            LOGE("sqlite3_exec to set WAL autocheckpoint failed\n");
-            throw_sqlite3_exception(env, handle);
-            goto done;
-        }
-    } else {
-       LOGE("sqlite3_exec to set journal_mode = WAL failed\n");
     }
 
     // The soft heap limit prevents the page cache allocations from growing
