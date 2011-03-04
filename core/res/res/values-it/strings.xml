@@ -35,6 +35,10 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"Problema di connessione o codice MMI non valido."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"Operazione limitata solo ai numeri di selezione fissa."</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">Altro</string>
+
     <string name="serviceEnabled" msgid="8147278346414714315">"Il servizio è stato attivato."</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"Il servizio è stato attivato per:"</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"Il servizio è stato disattivato."</string>
@@ -144,6 +148,7 @@
     <string name="global_action_lock" msgid="2844945191792119712">"Blocco schermo"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Spegni"</string>
     <string name="global_action_reboot">Riavvia</string>
+    <string name="global_action_choose_profile">Scegli profilo</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Modalità silenziosa"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Audio non attivo"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Audio attivo"</string>
