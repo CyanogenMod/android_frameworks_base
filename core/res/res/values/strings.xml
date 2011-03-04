@@ -2093,7 +2093,7 @@
     <!-- The default permission group for any permissions that have not explicitly set a group. -->
     <string name="default_permission_group">Default</string>
     <!-- Do not translate. -->
-    <string name="permissions_format"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
+    <string name="permissions_format" translatable="false"><xliff:g id="perm_line1">%1$s</xliff:g>, <xliff:g id="perm_line2">%2$s</xliff:g></string>
     <!-- Shown for an application when it doesn't require any permission grants. -->
     <string name="no_permissions">No permissions required</string>
     <!-- When installing an application, the less-dangerous permissions are hidden.  If the user showed those, this is the text to hide them again.  -->
@@ -2172,7 +2172,7 @@
     <!-- locale string based on mcc values.  By default (0-length string) we don't replace the %s   -->
     <!-- at all and later replace it with a locale string based on the users chosen locale          -->
     <!-- DO NOT TRANSLATE -->
-    <string name="locale_replacement">""</string>
+    <string name="locale_replacement" translatable="false">""</string>
 
     <!-- Title of the pop-up dialog in which the user switches input method components. -->
     <string name="select_input_method">Select input method</string>
@@ -2314,7 +2314,7 @@
     <string name="chooser_wallpaper">Change wallpaper</string>
 
     <!-- Do Not Translate: Alternate eri.xml -->
-    <string name="alternate_eri_file">/data/eri.xml</string>
+    <string name="alternate_eri_file" translatable="false">/data/eri.xml</string>
 
     <string name="pptp_vpn_description">Point-to-Point Tunneling Protocol</string>
     <string name="l2tp_vpn_description">Layer 2 Tunneling Protocol</string>
