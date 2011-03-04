@@ -65,6 +65,9 @@
          could not be performed because FDN is enabled. This will be displayed in a toast. -->
     <string name="mmiFdnError" msgid="5224398216385316471">"僅限對固定撥號號碼執行此作業。"</string>
 
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">其他</string>
+
     <!-- Displayed when a phone feature such as call barring was activated. -->
     <string name="serviceEnabled" msgid="8147278346414714315">"服務已啟用。"</string>
     <!-- Displayed in front of the list of a set of service classes
@@ -308,6 +311,9 @@
 
     <!-- label for item that reboots the phone in phone options dialog -->
     <string name="global_action_reboot">重新開機</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_choose_profile">選擇設定檔</string>
 
     <!-- label for item that enables silent mode in phone options dialog -->
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"靜音模式"</string>
@@ -958,6 +964,16 @@
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"允許接收 Wi-Fi 多點傳播封包"</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"允許應用程式接收並非指定傳送給您裝置的封包，這在您發現附近有服務可使用時很有用，但消耗的電力比非多點傳播模式還要多。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accessWimaxState">查看 WiMax 狀態</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_accessWimaxState">允許應用程式檢視 WiMax 狀態資訊。</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_changeWimaxState">變更 WiMax 狀態</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_changeWimaxState">允許應用程式與 WiMax 網路連線或中斷連線。</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"藍牙管理"</string>
