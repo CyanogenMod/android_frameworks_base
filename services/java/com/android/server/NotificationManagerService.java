@@ -932,12 +932,16 @@ public class NotificationManagerService extends INotificationManager.Stub
                 }
             }
 
-            final ProfileManager profileManager = (ProfileManager) mContext
-            .getSystemService(Context.PROFILE_SERVICE);
+            try{
+                final ProfileManager profileManager = (ProfileManager) mContext
+                .getSystemService(Context.PROFILE_SERVICE);
 
-            Profile currentProfile = profileManager.getActiveProfile();
-            ProfileGroup group = profileManager.getActiveProfileGroup(pkg);
-            notification = currentProfile.processNotification(group.getName(), notification);
+                Profile currentProfile = profileManager.getActiveProfile();
+                ProfileGroup group = profileManager.getActiveProfileGroup(pkg);
+                notification = currentProfile.processNotification(group.getName(), notification);
+            }catch(Throwable th){
+                Log.e(TAG, "An error occurred profiling the notification.", th);
+            }
 
             // If we're not supposed to beep, vibrate, etc. then don't.
             if (((mDisabledNotifications & StatusBarManager.DISABLE_NOTIFICATION_ALERTS) == 0)
