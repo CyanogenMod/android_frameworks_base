@@ -145,7 +145,11 @@ LOCAL_SRC_FILES:= \
     android_content_res_Configuration.cpp
 
 ifeq ($(BOARD_HAVE_FM_RADIO),true)
-	LOCAL_SRC_FILES += android_hardware_fm.cpp
+ifeq ($(BOARD_WLAN_DEVICE),wl1271)
+	LOCAL_SRC_FILES += android_hardware_fm_wl1271.cpp
+else
+	LOCAL_SRC_FILES += android_hardware_fm_bcm4325.cpp
+endif
 endif
 
 ifeq ($(BOARD_HAVE_SQN_WIMAX),true)
