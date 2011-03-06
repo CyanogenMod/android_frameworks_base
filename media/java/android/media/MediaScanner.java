@@ -388,7 +388,7 @@ public class MediaScanner
     private class MyMediaScannerClient implements MediaScannerClient {
 
         private String mArtist;
-        private String mAlbumArtist;    // use this if mArtist is missing
+        private String mAlbumArtist;
         private String mAlbum;
         private String mTitle;
         private String mComposer;
@@ -641,7 +641,7 @@ public class MediaScanner
                 map.put(Audio.Media.ARTIST, (mArtist != null && mArtist.length() > 0) ?
                         mArtist : MediaStore.UNKNOWN_STRING);
                 map.put(Audio.Media.ALBUM_ARTIST, (mAlbumArtist != null &&
-                        mAlbumArtist.length() > 0) ? mAlbumArtist : null);
+                        mAlbumArtist.length() > 0) ? mAlbumArtist : MediaStore.UNKNOWN_STRING);
                 map.put(Audio.Media.ALBUM, (mAlbum != null && mAlbum.length() > 0) ?
                         mAlbum : MediaStore.UNKNOWN_STRING);
                 map.put(Audio.Media.COMPOSER, mComposer);
@@ -678,6 +678,11 @@ public class MediaScanner
              // use album artist if artist is missing
             if (mArtist == null || mArtist.length() == 0) {
                 mArtist = mAlbumArtist;
+            }
+
+             // use artist if album artist is missing
+            if (mAlbumArtist == null || mAlbumArtist.length() == 0) {
+                mAlbumArtist = mArtist;
             }
 
             ContentValues values = toValues();

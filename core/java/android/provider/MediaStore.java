@@ -64,9 +64,11 @@ public final class MediaStore {
      * Activity Action: Perform a search for media.
      * Contains at least the {@link android.app.SearchManager#QUERY} extra.
      * May also contain any combination of the following extras:
-     * EXTRA_MEDIA_ARTIST, EXTRA_MEDIA_ALBUM, EXTRA_MEDIA_TITLE, EXTRA_MEDIA_FOCUS
+     * EXTRA_MEDIA_ARTIST, EXTRA_MEDIA_ALBUM_ARTIST, EXTRA_MEDIA_ALBUM,
+     * EXTRA_MEDIA_TITLE, EXTRA_MEDIA_FOCUS
      *
      * @see android.provider.MediaStore#EXTRA_MEDIA_ARTIST
+     * @see android.provider.MediaStore#EXTRA_MEDIA_ALBUM_ARTIST
      * @see android.provider.MediaStore#EXTRA_MEDIA_ALBUM
      * @see android.provider.MediaStore#EXTRA_MEDIA_TITLE
      * @see android.provider.MediaStore#EXTRA_MEDIA_FOCUS
@@ -94,6 +96,10 @@ public final class MediaStore {
      * The name of the Intent-extra used to define the artist
      */
     public static final String EXTRA_MEDIA_ARTIST = "android.intent.extra.artist";
+    /**
+     * The name of the Intent-extra used to define the album artist
+     */
+    public static final String EXTRA_MEDIA_ALBUM_ARTIST = "android.intent.extra.albumartist";
     /**
      * The name of the Intent-extra used to define the album
      */
@@ -893,11 +899,30 @@ public final class MediaStore {
             public static final String ARTIST = "artist";
 
             /**
+             * A non human readable key calculated from the ARTIST, used for
+             * searching, sorting and grouping
+             * <P>Type: TEXT</P>
+             */
+            public static final String ARTIST_KEY = "artist_key";
+
+            /**
+             * The id of the artist credited for the album that contains the audio file
+             * <P>Type: INTEGER (long)</P>
+             */
+            public static final String ALBUM_ARTIST_ID = "album_artist_id";
+
+            /**
              * The artist credited for the album that contains the audio file
              * <P>Type: TEXT</P>
-             * @hide
              */
             public static final String ALBUM_ARTIST = "album_artist";
+
+            /**
+             * A non human readable key calculated from the ALBUM_ARTIST, used for
+             * searching, sorting and grouping
+             * <P>Type: TEXT</P>
+             */
+            public static final String ALBUM_ARTIST_KEY = "album_artist_key";
 
             /**
              * Whether the song is part of a compilation
@@ -905,13 +930,6 @@ public final class MediaStore {
              * @hide
              */
             public static final String COMPILATION = "compilation";
-
-            /**
-             * A non human readable key calculated from the ARTIST, used for
-             * searching, sorting and grouping
-             * <P>Type: TEXT</P>
-             */
-            public static final String ARTIST_KEY = "artist_key";
 
             /**
              * The composer of the audio file, if any
@@ -1439,6 +1457,91 @@ public final class MediaStore {
         }
 
         /**
+         * Columns representing an album artist
+         */
+        public interface AlbumartistColumns {
+            /**
+             * The artist credited for the album that contains the audio file
+             * <P>Type: TEXT</P>
+             */
+            public static final String ALBUM_ARTIST = "album_artist";
+
+            /**
+             * A non human readable key calculated from the ALBUM_ARTIST, used for
+             * searching, sorting and grouping
+             * <P>Type: TEXT</P>
+             */
+            public static final String ALBUM_ARTIST_KEY = "album_artist_key";
+
+            /**
+             * The number of albums in the database for this artist
+             */
+            public static final String NUMBER_OF_ALBUMS = "number_of_albums";
+
+            /**
+             * The number of albums in the database for this artist
+             */
+            public static final String NUMBER_OF_TRACKS = "number_of_tracks";
+        }
+
+        /**
+         * Contains album artists for audio files
+         */
+        public static final class Albumartists implements BaseColumns, AlbumartistColumns {
+            /**
+             * Get the content:// style URI for the album artists table on the
+             * given volume.
+             *
+             * @param volumeName the name of the volume to get the URI for
+             * @return the URI to the audio album artists table on the given volume
+             */
+            public static Uri getContentUri(String volumeName) {
+                return Uri.parse(CONTENT_AUTHORITY_SLASH + volumeName +
+                        "/audio/albumartists");
+            }
+
+            /**
+             * The content:// style URI for the internal storage.
+             */
+            public static final Uri INTERNAL_CONTENT_URI =
+                    getContentUri("internal");
+
+            /**
+             * The content:// style URI for the "primary" external storage
+             * volume.
+             */
+            public static final Uri EXTERNAL_CONTENT_URI =
+                    getContentUri("external");
+
+            /**
+             * The MIME type for this table.
+             */
+            public static final String CONTENT_TYPE = "vnd.android.cursor.dir/albumartists";
+
+            /**
+             * The MIME type for entries in this table.
+             */
+            public static final String ENTRY_CONTENT_TYPE = "vnd.android.cursor.item/albumartist";
+
+            /**
+             * The default sort order for this table
+             */
+            public static final String DEFAULT_SORT_ORDER = ALBUM_ARTIST_KEY;
+
+            /**
+             * Sub-directory of each album artist containing all albums on which
+             * they are credited.
+             */
+            public static final class Albums implements AlbumColumns {
+                public static final Uri getContentUri(String volumeName,
+                        long albumArtistId) {
+                    return Uri.parse(CONTENT_AUTHORITY_SLASH + volumeName
+                            + "/audio/albumartists/" + albumArtistId + "/albums");
+                }
+            }
+        }
+
+        /**
          * Columns representing an album
          */
         public interface AlbumColumns {
@@ -1462,6 +1565,12 @@ public final class MediaStore {
             public static final String ARTIST = "artist";
 
             /**
+             * The album artist credited on this album
+             * <P>Type: TEXT</P>
+             */
+            public static final String ALBUM_ARTIST = "album_artist";
+
+            /**
              * The number of songs on this album
              * <P>Type: INTEGER</P>
              */
@@ -1474,6 +1583,14 @@ public final class MediaStore {
              * <P>Type: INTEGER</P>
              */
             public static final String NUMBER_OF_SONGS_FOR_ARTIST = "numsongs_by_artist";
+
+            /**
+             * This column is available when getting album info via album artist,
+             * and indicates the number of songs on the album credited to the given
+             * album artist.
+             * <P>Type: INTEGER</P>
+             */
+            public static final String NUMBER_OF_SONGS_FOR_ALBUM_ARTIST = "numsongs_by_album_artist";
 
             /**
              * The year in which the earliest songs
