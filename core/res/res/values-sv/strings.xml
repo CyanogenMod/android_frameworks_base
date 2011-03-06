@@ -35,6 +35,7 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"Anslutningsproblem eller ogiltig MMI-kod."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"Endast fasta nummer kan användas."</string>
+    <string name="wildcardProfile">Övrig</string>
     <string name="serviceEnabled" msgid="8147278346414714315">"Tjänsten har aktiverats."</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"Tjänsten har aktiverats för:"</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"Tjänsten har inaktiverats."</string>
@@ -144,6 +145,7 @@
     <string name="global_action_lock" msgid="2844945191792119712">"Skärmlås"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Stäng av"</string>
     <string name="global_action_reboot">Starta om</string>
+    <string name="global_action_choose_profile">Välj profil</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Tyst läge"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Ljudet är AV"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Ljudet är PÅ"</string>
@@ -890,6 +892,7 @@
     <string name="l2tp_vpn_description" msgid="3750692169378923304">"Layer 2 Tunneling Protocol"</string>
     <string name="l2tp_ipsec_psk_vpn_description" msgid="3945043564008303239">"I förväg delad L2TP/IPSec VPN-nyckel"</string>
     <string name="l2tp_ipsec_crt_vpn_description" msgid="5382714073103653577">"Certifikatsbaserad L2TP/IPSec VPN"</string>
+    <string name="openvpn_vpn_description">OpenVPN SSL VPN</string>
     <string name="upload_file" msgid="2897957172366730416">"Välj fil"</string>
     <string name="reset" msgid="2448168080964209908">"Återställ"</string>
     <string name="submit" msgid="1602335572089911941">"Skicka"</string>
@@ -920,6 +923,7 @@
     <string name="app_killed_message">Applikation avslutad</string>
 
     <!-- Phone goggles -->
+    <string name="phone_goggles_problem_count">Problem #%1$d: </string>
     <string name="phone_goggles_description">Lös följande %1$d matematiska problem på mindre än %2$d sekunder för att kunna utföra din kommunikation.</string>
     <plurals name="phone_goggles_countdown">
         <item quantity="one">%d sekund kvar</item>
