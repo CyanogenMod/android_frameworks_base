@@ -442,6 +442,9 @@ public class StatusBarPolicy {
         }
     }
 
+    // phone_signal visibility
+    private boolean mPhoneSignalHidden;
+
     public StatusBarPolicy(Context context) {
         mContext = context;
         mService = (StatusBarManager)context.getSystemService(Context.STATUS_BAR_SERVICE);
@@ -466,6 +469,19 @@ public class StatusBarPolicy {
         mPhone = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
         mPhoneSignalIconId = R.drawable.stat_sys_signal_null;
         mService.setIcon("phone_signal", mPhoneSignalIconId, 0);
+
+        // load config to determine if phone should be hidden
+        try {
+            mPhoneSignalHidden = mContext.getResources().getBoolean(
+                R.bool.config_statusbar_hide_phone_signal);
+        } catch (Exception e) {
+            mPhoneSignalHidden = false;
+        }
+
+        // hide phone_signal icon if hidden
+        if (mPhoneSignalHidden) {
+            mService.setIconVisibility("phone_signal", false);
+        }
 
         // register for phone state notifications.
         ((TelephonyManager)mContext.getSystemService(Context.TELEPHONY_SERVICE))
@@ -940,6 +956,10 @@ public class StatusBarPolicy {
                 mPhoneSignalIconId = R.drawable.stat_sys_signal_null;
             }
             mService.setIcon("phone_signal", mPhoneSignalIconId, 0);
+            // set phone_signal visibility false if hidden
+            if (mPhoneSignalHidden) {
+                mService.setIconVisibility("phone_signal", false);
+            }
             return;
         }
 
