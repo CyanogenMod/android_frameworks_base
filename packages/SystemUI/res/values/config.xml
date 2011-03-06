@@ -26,6 +26,7 @@
     <bool name="config_statusbar_buttons">false</bool>
     <!-- Control whether the status bar buttons should have the home button hidden -->
     <bool name="config_statusbar_hide_home">false</bool>
-
+    <!-- Control whether the phone signal should be hidden for devices without a radio -->
+    <bool name="config_statusbar_hide_phone_signal">false</bool>
 </resources>
 
