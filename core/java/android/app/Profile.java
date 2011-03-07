@@ -19,6 +19,8 @@ package android.app;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.content.Context;
+import android.content.res.XmlResourceParser;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
@@ -143,14 +145,35 @@ public class Profile implements Parcelable {
         builder.append("</profile>\n");
     }
 
+    public static String getAttrResString(XmlPullParser xpp, Context context) {
+        String attr = null;
+        if (xpp instanceof XmlResourceParser && context != null) {
+            XmlResourceParser xrp = (XmlResourceParser) xpp;
+            int resId = xrp.getAttributeResourceValue(null, "name", 0);
+            if (resId != 0) {
+                attr = context.getResources().getString(resId);
+            } else {
+                attr = xrp.getAttributeValue(null, "name");
+            }
+        } else {
+            attr = xpp.getAttributeValue(null, "name");
+        }
+        return attr;
+    }
+
     public static Profile fromXml(XmlPullParser xpp) throws XmlPullParserException, IOException {
-        Profile profile = new Profile(xpp.getAttributeValue(null, "name"));
+        return fromXml(xpp, null);
+    }
+
+    public static Profile fromXml(XmlPullParser xpp, Context context) throws XmlPullParserException, IOException {
+        String attr = getAttrResString(xpp, context);
+        Profile profile = new Profile(attr);
         int event = xpp.next();
         while (event != XmlPullParser.END_TAG) {
             if (event == XmlPullParser.START_TAG) {
                 String name = xpp.getName();
                 if (name.equals("profileGroup")) {
-                    ProfileGroup pg = ProfileGroup.fromXml(xpp);
+                    ProfileGroup pg = ProfileGroup.fromXml(xpp, context);
                     profile.addProfileGroup(pg);
                 }
             }

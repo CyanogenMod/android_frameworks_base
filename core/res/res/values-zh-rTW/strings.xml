@@ -65,6 +65,20 @@
          could not be performed because FDN is enabled. This will be displayed in a toast. -->
     <string name="mmiFdnError" msgid="5224398216385316471">"僅限對固定撥號號碼執行此作業。"</string>
 
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">預設</string>
+    <string name="profileNameWork">工作</string>
+    <string name="profileNameHome">家中</string>
+    <string name="profileNameSilent">靜音</string>
+    <string name="profileNameNight">深夜</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">電話</string>
+    <string name="profileGroupCalendar">日曆</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">電子郵件</string>
+    <string name="profileGroupSMS">簡訊</string>
+
     <!-- Name of wildcard profile. -->
     <string name="wildcardProfile">其他</string>
 
