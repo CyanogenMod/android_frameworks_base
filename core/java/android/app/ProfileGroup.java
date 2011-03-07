@@ -19,6 +19,7 @@ package android.app;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
+import android.content.Context;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Parcel;
@@ -229,9 +230,14 @@ public class ProfileGroup implements Parcelable {
 
     public static ProfileGroup fromXml(XmlPullParser xpp) throws XmlPullParserException,
             IOException {
+        return fromXml(xpp, null);
+    }
+    public static ProfileGroup fromXml(XmlPullParser xpp, Context context) throws XmlPullParserException,
+            IOException {
         String defaultGroup = xpp.getAttributeValue(null, "default");
         defaultGroup = defaultGroup == null ? "false" : defaultGroup;
-        ProfileGroup profileGroup = new ProfileGroup(xpp.getAttributeValue(null, "name"), defaultGroup.equals("true"));
+        String attr = Profile.getAttrResString(xpp, context);
+        ProfileGroup profileGroup = new ProfileGroup(attr, defaultGroup.equals("true"));
         int event = xpp.next();
         while (event != XmlPullParser.END_TAG || !xpp.getName().equals("profileGroup")) {
             if (event == XmlPullParser.START_TAG) {
