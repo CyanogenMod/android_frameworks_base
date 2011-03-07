@@ -36,6 +36,20 @@
     <string name="mmiError" msgid="5154499457739052907">"Verbindungsproblem oder ungültiger MMI-Code."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"Der Vorgang ist nur für Ihre zugelassenen Rufnummern möglich."</string>
 
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">Normal</string>
+    <string name="profileNameWork">Arbeit</string>
+    <string name="profileNameHome">Zu Hause</string>
+    <string name="profileNameSilent">Lautlos</string>
+    <string name="profileNameNight">Nacht</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">Telefon</string>
+    <string name="profileGroupCalendar">Kalender</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+
     <string name="wildcardProfile">Anderes</string>
 
     <string name="serviceEnabled" msgid="8147278346414714315">"Dienst wurde aktiviert."</string>
