@@ -159,6 +159,11 @@ public class ProfileManagerService extends IProfileManager.Stub {
 
     private void loadXml(XmlPullParser xpp) throws XmlPullParserException, IOException,
             RemoteException {
+        loadXml(xpp, null);
+    }
+
+    private void loadXml(XmlPullParser xpp, Context context) throws XmlPullParserException, IOException,
+            RemoteException {
         int event = xpp.next();
         String active = null;
         while (event != XmlPullParser.END_TAG || !"profiles".equals(xpp.getName())) {
@@ -168,14 +173,14 @@ public class ProfileManagerService extends IProfileManager.Stub {
                     active = xpp.nextText();
                     Log.d(TAG, "Found active: " + active);
                 } else if (name.equals("profile")) {
-                    Profile prof = Profile.fromXml(xpp);
+                    Profile prof = Profile.fromXml(xpp, context);
                     addProfile(prof);
                     // Failsafe if no active found
                     if (active == null) {
                         active = prof.getName();
                     }
                 } else if (name.equals("notificationGroup")) {
-                    NotificationGroup ng = NotificationGroup.fromXml(xpp);
+                    NotificationGroup ng = NotificationGroup.fromXml(xpp, context);
                     addNotificationGroup(ng);
                 }
             }
@@ -188,7 +193,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
         XmlResourceParser xml = mContext.getResources().getXml(
                 com.android.internal.R.xml.profile_default);
         try {
-            loadXml(xml);
+            loadXml(xml, mContext);
             persist();
         } finally {
             xml.close();
