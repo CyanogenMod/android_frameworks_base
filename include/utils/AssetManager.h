@@ -93,7 +93,7 @@ public:
      * then on success, *cookie is set to the value corresponding to the
      * newly-added asset source.
      */
-    bool addAssetPath(const String8& path, void** cookie);
+    bool addAssetPath(const String8& path, void** cookie, bool asSkin=false);
 
     /*                                                                       
      * Convenience for adding the standard system assets.  Uses the
@@ -226,8 +226,8 @@ public:
      *
      * Returns "true" on success, "false" on failure.
      */
-    bool removeAssetPath(const String8 &packageName, void *cookie);
-    bool updateWithAssetPath(const String8& path, void** cookie);
+    bool detachThemePath(const String8& packageName, void *cookie);
+    bool attachThemePath(const String8& path, void** cookie);
     void addRedirections(PackageRedirectionMap* resMap);
     void clearRedirections();
 
@@ -236,6 +236,7 @@ private:
     {
         String8 path;
         FileType type;
+        bool asSkin;
     };
 
     void updateResTableFromAssetPath(ResTable* rt, const asset_path& ap, void* cookie) const;

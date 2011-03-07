@@ -1927,7 +1927,7 @@ static jboolean android_content_AssetManager_generateStyleRedirections(JNIEnv* e
     return ret;
 }
 
-static jboolean android_content_AssetManager_removeAssetPath(JNIEnv* env, jobject clazz,
+static jboolean android_content_AssetManager_detachThemePath(JNIEnv* env, jobject clazz,
             jstring packageName, jint cookie)
 {
     if (packageName == NULL) {
@@ -1941,13 +1941,13 @@ static jboolean android_content_AssetManager_removeAssetPath(JNIEnv* env, jobjec
     }
 
     const char* name8 = env->GetStringUTFChars(packageName, NULL);
-    bool res = am->removeAssetPath(String8(name8), (void *)cookie);
+    bool res = am->detachThemePath(String8(name8), (void *)cookie);
     env->ReleaseStringUTFChars(packageName, name8);
 
     return res;
 }
 
-static jint android_content_AssetManager_updateResourcesWithAssetPath(
+static jint android_content_AssetManager_attachThemePath(
             JNIEnv* env, jobject clazz, jstring path)
 {
     if (path == NULL) {
@@ -1963,7 +1963,7 @@ static jint android_content_AssetManager_updateResourcesWithAssetPath(
     const char* path8 = env->GetStringUTFChars(path, NULL);
 
     void* cookie;
-    bool res = am->updateWithAssetPath(String8(path8), &cookie);
+    bool res = am->attachThemePath(String8(path8), &cookie);
 
     env->ReleaseStringUTFChars(path, path8);
 
@@ -2085,10 +2085,10 @@ static JNINativeMethod gAssetManagerMethods[] = {
         (void*) android_content_AssetManager_splitThemePackage },
 
     // Dynamic theme package support.
-    { "removeAssetPath", "(Ljava/lang/String;I)Z",
-        (void*) android_content_AssetManager_removeAssetPath },
-    { "updateResourcesWithAssetPath",   "(Ljava/lang/String;)I",
-        (void*) android_content_AssetManager_updateResourcesWithAssetPath },
+    { "detachThemePath", "(Ljava/lang/String;I)Z",
+        (void*) android_content_AssetManager_detachThemePath },
+    { "attachThemePath",   "(Ljava/lang/String;)I",
+        (void*) android_content_AssetManager_attachThemePath },
     { "getBasePackageCount", "()I",
         (void*) android_content_AssetManager_getBasePackageCount },
     { "getBasePackageName", "(I)Ljava/lang/String;",

@@ -658,20 +658,21 @@ public final class AssetManager {
     }
 
     /**
-     * Delete a set of assets from the asset manager. Not for use by
+     * Delete a set of theme assets from the asset manager. Not for use by
      * applications. Returns true if succeeded or false on failure.
-     * {@hide}
+     *
+     * @hide
      */
-    public native final boolean removeAssetPath(String packageName, int cookie);
+    public native final boolean detachThemePath(String packageName, int cookie);
 
     /**
-     * Add an additional set of assets to the asset manager.  This can be
-     * either a directory or ZIP file. Force updating of ResTable object.
-     * Not for use by applications.
-     * Returnsthe cookie of the added asset, or 0 on failure.
-     * {@hide}
+     * Attach a set of theme assets to the asset manager. If necessary, this
+     * method will forcefully update the internal ResTable data structure.
+     *
+     * @return Cookie of the added asset or 0 on failure.
+     * @hide
      */
-    public native final int updateResourcesWithAssetPath(String path);
+    public native final int attachThemePath(String path);
 
     /**
      * Sets a flag indicating that this AssetManager should have themes
