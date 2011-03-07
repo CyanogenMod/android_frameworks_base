@@ -919,4 +919,13 @@
         <item quantity="one">%d segundos restando</item>
         <item quantity="other">%d segundos restando</item>
     </plurals>
+    <string name="lockscreen_phone_label">Telefone</string>
+    <string name="lockscreen_messaging_label">Mensagem</string>
+    <string name="lockscreen_discharging">Descarregando (%d%%)</string>
+    <string name="global_action_reboot">Reiniciar</string>
+    <string name="global_action_choose_profile">Escolher perfil</string>
+    <string name="reboot_system">Reiniciar telefone</string>
+    <string name="reboot_progress">Reiniciando\u2026</string>
+    <string name="reboot_confirm">Seu telefone irá reiniciar.</string>
+    <string name="wildcardProfile">Outro</string>
 </resources>
