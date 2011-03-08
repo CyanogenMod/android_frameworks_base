@@ -654,7 +654,20 @@ extends Layout
             }
         }
 
-        final byte SOR = dir == DIR_LEFT_TO_RIGHT ?
+        int rchar = 0;
+        int lchar = 0;
+        for (int j = 0; j < n; j++) {
+            int d = chInfo[j];
+
+            if (d == Character.DIRECTIONALITY_LEFT_TO_RIGHT) {
+                lchar++;
+            }
+            if (d == Character.DIRECTIONALITY_RIGHT_TO_LEFT) {
+                rchar++;
+            }
+        }
+
+        final byte SOR = rchar < lchar?
                 Character.DIRECTIONALITY_LEFT_TO_RIGHT :
                 Character.DIRECTIONALITY_RIGHT_TO_LEFT;
 
