@@ -1584,6 +1584,13 @@ public final class Settings {
         public static final String VOLUME_CONTROL_SILENT = "volume_contol_silent";
 
         /**
+         * Whether notifications should vibrate during phone calls or not.
+         *
+         * @hide
+         */
+        public static final String VIBRATE_IN_CALL = "vibrate-in-call";
+
+        /**
          * The mapping of stream type (integer) to its setting.
          */
         public static final String[] VOLUME_SETTINGS = {
