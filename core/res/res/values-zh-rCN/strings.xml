@@ -35,6 +35,7 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"出现连接问题或 MMI 码无效。"</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"只能对固定拨号号码执行此类操作。"</string>
+    <string name="wildcardProfile">其它</string>
     <string name="serviceEnabled" msgid="8147278346414714315">"已启用服务。"</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"已针对以下内容启用了服务："</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"已停用服务。"</string>
@@ -143,6 +144,7 @@
     <string name="global_action_lock" msgid="2844945191792119712">"屏幕锁定"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"关机"</string>
     <string name="global_action_reboot">重启</string>
+    <string name="global_action_choose_profile">选择配置文件</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"静音模式"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"声音已关闭"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"声音已开启"</string>
@@ -402,6 +404,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"允许应用程序连接到 Wi-Fi 接入点以及与 Wi-Fi 接入点断开连接，并对配置的 Wi-Fi 网络进行更改。"</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"允许接收 Wi-Fi 多播"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"允许应用程序接收并非直接向您的设备发送的数据包。这样在查找附近提供的服务时很有用。这种操作所耗电量大于非多播模式。"</string>
+    <string name="permlab_accessWimaxState">查看 WiMax 状态</string>
+    <string name="permdesc_accessWimaxState">允许应用程序查看 WiMax 的状态信息。</string>
+    <string name="permlab_changeWimaxState">更改 WiMax 状态</string>
+    <string name="permdesc_changeWimaxState">允许应用程序与 WiMax 网络连接或中断。</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"蓝牙管理"</string>
     <string name="permdesc_bluetoothAdmin" msgid="7256289774667054555">"允许应用程序配置本地蓝牙手机，以及发现远程设备并与其配对。"</string>
     <string name="permlab_bluetooth" msgid="8361038707857018732">"创建蓝牙连接"</string>
