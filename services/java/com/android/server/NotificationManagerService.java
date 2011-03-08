@@ -986,7 +986,13 @@ public class NotificationManagerService extends INotificationManager.Stub
                 // vibrate
                 final boolean useDefaultVibrate =
                     (notification.defaults & Notification.DEFAULT_VIBRATE) != 0;
+
+                TelephonyManager telephonyManager =
+                    (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+                final boolean inCall =
+                    (telephonyManager.getCallState() != TelephonyManager.CALL_STATE_IDLE);
                 if (!(inQuietHours && mQuietHoursStill)
+                        && !inCall
                         && (useDefaultVibrate || notification.vibrate != null)
                         && audioManager.shouldVibrate(AudioManager.VIBRATE_TYPE_NOTIFICATION)) {
                     mVibrateNotification = r;
