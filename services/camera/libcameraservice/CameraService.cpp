@@ -578,7 +578,6 @@ status_t CameraService::Client::registerPreviewBuffers() {
         w = preview_sizes[1].width;
         h = preview_sizes[1].height;
     }
-
     // FIXME: don't use a hardcoded format here.
     ISurface::BufferHeap buffers(w, h, w, h,
                                  HAL_PIXEL_FORMAT_YCrCb_420_SP,
@@ -1412,10 +1411,18 @@ status_t CameraService::dump(int fd, const Vector<String16>& args) {
 }
 
 #ifdef BOARD_USE_FROYO_LIBCAMERA
+
+#ifndef FIRST_CAMERA_FACING
+#define FIRST_CAMERA_FACING CAMERA_FACING_BACK
+#endif
+#ifndef FIRST_CAMERA_ORIENTATION
+#define FIRST_CAMERA_ORIENTATION 90
+#endif
+
 static const CameraInfo sCameraInfo[] = {
     {
-        CAMERA_FACING_BACK,
-        90,  /* orientation */
+        FIRST_CAMERA_FACING,
+        FIRST_CAMERA_ORIENTATION,  /* orientation */
     },
     {
         CAMERA_FACING_FRONT,
