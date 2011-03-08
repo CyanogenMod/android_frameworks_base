@@ -29,4 +29,9 @@
         <item>3</item>
     </integer-array>
 
+    <array name="shutdown_reboot_options">
+        <item>Reiniciar</item>
+        <item>Recuperação</item>
+        <item>Bootloader</item>
+    </array>
 </resources>
