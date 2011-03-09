@@ -508,7 +508,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 if (mLibrary.load()) {
                     gestures.addOnGesturePerformedListener(this);
                     for (String name : mLibrary.getGestureEntries()) {
-                        if ("UNLOCK___UNLOCK".equals(name)) {
+                        String[] payload = name.split("___", 2);
+                        if ("UNLOCK".equals(payload[1])) {
                             GestureCanUnlock = true;
                             break;
                         }
