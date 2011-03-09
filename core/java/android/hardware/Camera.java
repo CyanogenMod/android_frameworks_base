@@ -2976,10 +2976,11 @@ public class Camera {
         private ArrayList<Coordinate> splitCoordinate(String str) {
             if (str == null) return null;
 
-            StringTokenizer tokenizer = new StringTokenizer(str, ",");
+            TextUtils.StringSplitter splitter = new TextUtils.SimpleStringSplitter(',');
+            splitter.setString(str);
             ArrayList<Coordinate> coordinateList = new ArrayList<Coordinate>();
-            while (tokenizer.hasMoreElements()) {
-                Coordinate c = strToCoordinate(tokenizer.nextToken());
+            for (String s : splitter) {
+                Coordinate c = strToCoordinate(s);
                 if (c != null) coordinateList.add(c);
             }
             if (coordinateList.size() == 0) return null;
