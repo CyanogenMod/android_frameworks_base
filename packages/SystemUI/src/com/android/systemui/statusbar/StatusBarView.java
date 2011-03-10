@@ -137,7 +137,13 @@ public class StatusBarView extends FrameLayout {
         super.onAttachedToWindow();
         mService.onBarViewAttached();
     }
-    
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mService.onBarViewDetached();
+    }
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);

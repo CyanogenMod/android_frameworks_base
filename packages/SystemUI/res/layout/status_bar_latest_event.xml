@@ -14,7 +14,7 @@
             >
     </com.android.systemui.statusbar.LatestItemView>
 
-    <View android:id="@+id/separator"
+    <View
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/divider_horizontal_light_opaque"

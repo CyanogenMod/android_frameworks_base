@@ -49,7 +49,7 @@ import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.provider.Settings;
 import android.text.TextUtils;
-import android.util.Log;
+import android.util.Pair;
 import android.util.Slog;
 import android.view.Display;
 import android.view.Gravity;
@@ -95,6 +95,14 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 
     CommandQueue mCommandQueue;
     IStatusBarService mBarService;
+
+    /**
+     * Shallow container for {@link #mStatusBarView} which is added to the
+     * window manager impl as the actual status bar root view. This is done so
+     * that the original status_bar layout can be reinflated into this container
+     * on skin change.
+     */
+    FrameLayout mStatusBarContainer;
 
     int mIconSize;
     Display mDisplay;
@@ -200,7 +208,18 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     public void onCreate() {
         // First set up our views and stuff.
         mDisplay = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        CustomTheme currentTheme = getResources().getConfiguration().customTheme;
+        if (currentTheme != null) {
+            mCurrentTheme = (CustomTheme)currentTheme.clone();
+        }
         makeStatusBarView(this);
+
+        // receive broadcasts
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
+        filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+        filter.addAction(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(mBroadcastReceiver, filter);
 
         // Connect in to the status bar manager service
         StatusBarIconList iconList = new StatusBarIconList();
@@ -233,11 +252,14 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
                 addNotification(notificationKeys.get(i), notifications.get(i));
             }
         } else {
-            Log.wtf(TAG, "Notification list length mismatch: keys=" + N
+            Slog.e(TAG, "Notification list length mismatch: keys=" + N
                     + " notifications=" + notifications.size());
         }
 
         // Put up the view
+        FrameLayout container = new FrameLayout(this);
+        container.addView(mStatusBarView);
+        mStatusBarContainer = container;
         addStatusBarView();
 
         // Lastly, call to the icon policy to install/update all the icons.
@@ -330,20 +352,13 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         // set the inital view visibility
         setAreThereNotifications();
         mDateView.setVisibility(View.INVISIBLE);
-
-        // receive broadcasts
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
-        filter.addAction(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-        filter.addAction(Intent.ACTION_SCREEN_OFF);
-        context.registerReceiver(mBroadcastReceiver, filter);
     }
 
     protected void addStatusBarView() {
         Resources res = getResources();
         final int height= res.getDimensionPixelSize(com.android.internal.R.dimen.status_bar_height);
 
-        final StatusBarView view = mStatusBarView;
+        final View view = mStatusBarContainer;
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 height,
@@ -1254,6 +1269,10 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         WindowManagerImpl.getDefault().addView(mTrackingView, lp);
     }
 
+    void onBarViewDetached() {
+        WindowManagerImpl.getDefault().removeView(mTrackingView);
+    }
+
     void onTrackingViewAttached() {
         WindowManager.LayoutParams lp;
         int pixelFormat;
@@ -1288,6 +1307,9 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         mExpandedDialog.getWindow().setBackgroundDrawable(null);
         mExpandedDialog.show();
         FrameLayout hack = (FrameLayout)mExpandedView.getParent();
+    }
+
+    void onTrackingViewDetached() {
     }
 
     void setDateViewVisibility(boolean visible, int anim) {
@@ -1483,6 +1505,57 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         }
     };
 
+    private static void copyNotifications(ArrayList<Pair<IBinder, StatusBarNotification>> dest,
+            NotificationData source) {
+        int N = source.size();
+        for (int i = 0; i < N; i++) {
+            NotificationData.Entry entry = source.getEntryAt(i);
+            dest.add(Pair.create(entry.key, entry.notification));
+        }
+    }
+
+    private void recreateStatusBar() {
+        mStatusBarContainer.removeAllViews();
+
+        // extract icons from the soon-to-be recreated viewgroup.
+        int nIcons = mStatusIcons.getChildCount();
+        ArrayList<StatusBarIcon> icons = new ArrayList<StatusBarIcon>(nIcons);
+        ArrayList<String> iconSlots = new ArrayList<String>(nIcons);
+        for (int i = 0; i < nIcons; i++) {
+            StatusBarIconView iconView = (StatusBarIconView)mStatusIcons.getChildAt(i);
+            icons.add(iconView.getStatusBarIcon());
+            iconSlots.add(iconView.getStatusBarSlot());
+        }
+
+        // extract notifications.
+        int nNotifs = mOngoing.size() + mLatest.size();
+        ArrayList<Pair<IBinder, StatusBarNotification>> notifications =
+                new ArrayList<Pair<IBinder, StatusBarNotification>>(nNotifs);
+        copyNotifications(notifications, mOngoing);
+        copyNotifications(notifications, mLatest);
+        mOngoing.clear();
+        mLatest.clear();
+
+        makeStatusBarView(this);
+
+        // recreate StatusBarIconViews.
+        for (int i = 0; i < nIcons; i++) {
+            StatusBarIcon icon = icons.get(i);
+            String slot = iconSlots.get(i);
+            addIcon(slot, i, i, icon);
+        }
+
+        // recreate notifications.
+        for (int i = 0; i < nNotifs; i++) {
+            Pair<IBinder, StatusBarNotification> notifData = notifications.get(i);
+            addNotificationViews(notifData.first, notifData.second);
+        }
+
+        setAreThereNotifications();
+        mStatusBarContainer.addView(mStatusBarView);
+        updateExpandedViewPos(EXPANDED_LEAVE_ALONE);
+    }
+
     /**
      * Reload some of our resources when the configuration changes.
      *
@@ -1494,78 +1567,20 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         Resources res = getResources();
 
         // detect theme change.
-        boolean themeChanged = false;
         CustomTheme newTheme = res.getConfiguration().customTheme;
         if (newTheme != null &&
                 (mCurrentTheme == null || !mCurrentTheme.equals(newTheme))) {
             mCurrentTheme = (CustomTheme)newTheme.clone();
-            themeChanged = true;
-        }
-
-        mClearButton.setText(getText(R.string.status_bar_clear_all_button));
-        mOngoingTitle.setText(getText(R.string.status_bar_ongoing_events_title));
-        mLatestTitle.setText(getText(R.string.status_bar_latest_events_title));
-        mNoNotificationsTitle.setText(getText(R.string.status_bar_no_notifications_title));
-
-        mEdgeBorder = res.getDimensionPixelSize(R.dimen.status_bar_edge_ignore);
-
-        /*
-         * HACK: Attempt to re-apply views that could have changed from a theme.
-         * This will be replaced with a better solution reinflating the
-         * necessary views.
-         */
-        if (themeChanged) {
-            // XXX: If this changes in the XML, it must also change here.
-            mStatusBarView.setBackgroundDrawable(res.getDrawable(R.drawable.statusbar_background));
-            mDateView.setBackgroundDrawable(res.getDrawable(R.drawable.statusbar_background));
-            ((ImageView)mCloseView.getChildAt(0)).setImageDrawable(res.getDrawable(R.drawable.status_bar_close_on));
-            mExpandedView.findViewById(R.id.exp_view_lin_layout).setBackgroundDrawable(res.getDrawable(R.drawable.title_bar_portrait));
-            mClearButton.setBackgroundDrawable(res.getDrawable(android.R.drawable.btn_default_small));
             mCmBatteryMiniIcon.updateIconCache();
             mCmBatteryMiniIcon.updateMatrix();
+            recreateStatusBar();
+        } else {
+            mClearButton.setText(getText(R.string.status_bar_clear_all_button));
+            mOngoingTitle.setText(getText(R.string.status_bar_ongoing_events_title));
+            mLatestTitle.setText(getText(R.string.status_bar_latest_events_title));
+            mNoNotificationsTitle.setText(getText(R.string.status_bar_no_notifications_title));
 
-            // Update icons.
-            ArrayList<ViewGroup> iconViewGroups = new ArrayList<ViewGroup>();
-            iconViewGroups.add(mStatusIcons);
-            iconViewGroups.add(mNotificationIcons);
-
-            for (ViewGroup iconViewGroup: iconViewGroups) {
-                int nIcons = iconViewGroup.getChildCount();
-                for (int i = 0; i < nIcons; i++) {
-                    StatusBarIconView iconView = (StatusBarIconView)iconViewGroup.getChildAt(i);
-                    iconView.updateResources();
-                }
-            }
-
-            // Re-apply notifications.
-            ArrayList<NotificationData> notifGroups = new ArrayList<NotificationData>();
-            notifGroups.add(mOngoing);
-            notifGroups.add(mLatest);
-            ArrayList<ViewGroup> notifViewGroups = new ArrayList<ViewGroup>();
-            notifViewGroups.add(mOngoingItems);
-            notifViewGroups.add(mLatestItems);
-
-            int nNotifGroups = notifGroups.size();
-            for (int i = 0; i < nNotifGroups; i++) {
-                NotificationData notifGroup = notifGroups.get(i);
-                ViewGroup notifViewGroup = notifViewGroups.get(i);
-                int nViews = notifViewGroup.getChildCount();
-                if (nViews != notifGroup.size()) {
-                    throw new IllegalStateException("unexpected mismatch between number of notification views and items");
-                }
-                for (int j = 0; j < nViews; j++) {
-                    ViewGroup container = (ViewGroup)notifViewGroup.getChildAt(j);
-                    NotificationData.Entry entry = notifGroup.getEntryAt(j);
-                    updateNotification(entry.key, entry.notification);
-
-                    // XXX: If this changes in XML, it must also change here.
-                    container.findViewById(R.id.separator).setBackgroundDrawable(res.getDrawable(R.drawable.divider_horizontal_light_opaque));
-                    container.findViewById(R.id.content).setBackgroundDrawable(res.getDrawable(android.R.drawable.status_bar_item_background));
-                }
-            }
-
-            // Recalculate the position of the sliding windows and the titles.
-            updateExpandedViewPos(EXPANDED_LEAVE_ALONE);
+            mEdgeBorder = res.getDimensionPixelSize(R.dimen.status_bar_edge_ignore);
         }
 
         if (false) Slog.v(TAG, "updateResources");
