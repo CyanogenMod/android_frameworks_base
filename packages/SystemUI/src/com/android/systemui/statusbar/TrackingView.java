@@ -60,4 +60,10 @@ public class TrackingView extends LinearLayout {
         super.onAttachedToWindow();
         mService.onTrackingViewAttached();
     }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        mService.onTrackingViewDetached();
+    }
 }
