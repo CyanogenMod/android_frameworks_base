@@ -928,4 +928,14 @@
     <string name="reboot_progress">Reiniciando\u2026</string>
     <string name="reboot_confirm">Seu telefone irá reiniciar.</string>
     <string name="wildcardProfile">Outro</string>
+    <string name="profileNameDefault">Padrão</string>
+    <string name="profileNameWork">Trabalho</string>
+    <string name="profileNameHome">Casa</string>
+    <string name="profileNameSilent">Silencioso</string>
+    <string name="profileNameNight">Noite</string>
+    <string name="profileGroupPhone">Telefone</string>
+    <string name="profileGroupCalendar">Calendário</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
 </resources>
