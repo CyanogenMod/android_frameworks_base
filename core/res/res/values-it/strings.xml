@@ -36,6 +36,20 @@
     <string name="mmiError" msgid="5154499457739052907">"Problema di connessione o codice MMI non valido."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"Operazione limitata solo ai numeri di selezione fissa."</string>
 
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">Default</string>
+    <string name="profileNameWork">Lavoro</string>
+    <string name="profileNameHome">Casa</string>
+    <string name="profileNameSilent">Silenzioso</string>
+    <string name="profileNameNight">Notte</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">Telefono</string>
+    <string name="profileGroupCalendar">Calendario</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+
     <!-- Name of wildcard profile. -->
     <string name="wildcardProfile">Altro</string>
 
