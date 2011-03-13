@@ -174,8 +174,6 @@ public class RotarySelector extends View {
     /**
      * Dimensions of arc in background drawable.
      */
-    static final int OUTER_ROTARY_RADIUS_DIP = 390;
-    static final int ROTARY_STROKE_WIDTH_DIP = 83;
     static final int SNAP_BACK_ANIMATION_DURATION_MILLIS = 300;
     static final int SPIN_ANIMATION_DURATION_MILLIS = 800;
     static final int LENSE_DATE_SIZE_DIP = 18;
@@ -185,6 +183,8 @@ public class RotarySelector extends View {
     private int mDimpleWidth;
     private int mBackgroundWidth;
     private int mBackgroundHeight;
+    private final int mRotaryOuterRadiusDIP;
+    private final int mRotaryStrokeWidthDIP;
     private final int mOuterRadius;
     private final int mInnerRadius;
     private int mDimpleSpacing;
@@ -239,7 +239,7 @@ public class RotarySelector extends View {
          * phones. keep in mind changing build.prop and density
          * isnt officially supported, but this should do for most cases
          */
-        if(densityDpi < 240 && densityDpi >160)
+        if(densityDpi < 240 && densityDpi >180)
             mDensityScaleFactor=(float)(240.0 / densityDpi);
         if(densityDpi < 160 && densityDpi >120)
             mDensityScaleFactor=(float)(160.0 / densityDpi);
@@ -264,8 +264,11 @@ public class RotarySelector extends View {
 
         mBackgroundWidth = mBackground.getWidth();
         mBackgroundHeight = mBackground.getHeight();
-        mOuterRadius = (int) (mDensity * mDensityScaleFactor * OUTER_ROTARY_RADIUS_DIP);
-        mInnerRadius = (int) ((OUTER_ROTARY_RADIUS_DIP - ROTARY_STROKE_WIDTH_DIP) * mDensity * mDensityScaleFactor);
+
+        mRotaryOuterRadiusDIP = context.getResources().getInteger(R.integer.config_rotaryOuterRadiusDIP);
+        mRotaryStrokeWidthDIP = context.getResources().getInteger(R.integer.config_rotaryStrokeWidthDIP);
+        mOuterRadius = (int) (mDensity * mDensityScaleFactor * mRotaryOuterRadiusDIP);
+        mInnerRadius = (int) ((mRotaryOuterRadiusDIP - mRotaryStrokeWidthDIP) * mDensity * mDensityScaleFactor);
 
         final ViewConfiguration configuration = ViewConfiguration.get(mContext);
         mMinimumVelocity = configuration.getScaledMinimumFlingVelocity() * 2;
@@ -511,7 +514,7 @@ public class RotarySelector extends View {
 
         if (VISUAL_DEBUG) {
             // draw circle bounding arc drawable: good sanity check we're doing the math correctly
-            float or = OUTER_ROTARY_RADIUS_DIP * mDensity;
+            float or = mRotaryOuterRadiusDIP * mDensity;
             final int vOffset = mBackgroundWidth - height;
             final int midX = isHoriz() ? width / 2 : mBackgroundWidth / 2 - vOffset;
             if (isHoriz()) {
