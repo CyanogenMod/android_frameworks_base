@@ -808,7 +808,7 @@
     <string name="usb_storage_stop_message" product="default" msgid="3613713396426604104">"Before turning off USB storage, make sure that you have unmounted (“ejected”) your Android‘s SD card from your computer."</string>
     <string name="usb_storage_stop_button_mount" msgid="7060218034900696029">"Turn off USB storage"</string>
     <string name="usb_storage_stop_error_message" msgid="143881914840412108">"We\'ve encountered a problem turning off USB storage. Check to ensure that you have unmounted the USB host, then try again."</string>
-    <string name="dlg_confirm_kill_storage_users_title" msgid="963039033470478697">"Turn off USB storage"</string>
+    <string name="dlg_confirm_kill_storage_users_title" msgid="963039033470478697">"Turn on USB storage"</string>
     <string name="dlg_confirm_kill_storage_users_text" msgid="3202838234780505886">"If you turn on USB storage, some applications that you are using will stop and may be unavailable until you turn off USB storage."</string>
     <string name="dlg_error_title" msgid="8048999973837339174">"USB operation failed"</string>
     <string name="dlg_ok" msgid="7376953167039865701">"OK"</string>
