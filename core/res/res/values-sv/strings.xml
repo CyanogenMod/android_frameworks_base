@@ -35,6 +35,16 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"Anslutningsproblem eller ogiltig MMI-kod."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"Endast fasta nummer kan användas."</string>
+    <string name="profileNameDefault">Standard</string>
+    <string name="profileNameWork">Arbete</string>
+    <string name="profileNameHome">Hemma</string>
+    <string name="profileNameSilent">Tyst</string>
+    <string name="profileNameNight">Natt</string>
+    <string name="profileGroupPhone">Telefon</string>
+    <string name="profileGroupCalendar">Kalender</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">E-post</string>
+    <string name="profileGroupSMS">SMS</string>
     <string name="wildcardProfile">Övrig</string>
     <string name="serviceEnabled" msgid="8147278346414714315">"Tjänsten har aktiverats."</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"Tjänsten har aktiverats för:"</string>
