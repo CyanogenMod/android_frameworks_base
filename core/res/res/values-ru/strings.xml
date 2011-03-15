@@ -923,4 +923,24 @@
         <item quantity="other">%d сек. осталось</item>
     </plurals>
 
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_choose_profile">Профиль</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">Стандартный</string>
+    <string name="profileNameWork">Работа</string>
+    <string name="profileNameHome">Дом</string>
+    <string name="profileNameSilent">Без звука</string>
+    <string name="profileNameNight">Ночь</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">Телефон</string>
+    <string name="profileGroupCalendar">Календарь</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Почта</string>
+    <string name="profileGroupSMS">SMS</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">Другой</string>
+
 </resources>
