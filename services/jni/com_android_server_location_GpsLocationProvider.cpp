@@ -288,7 +288,6 @@ static void android_location_GpsLocationProvider_cleanup(JNIEnv* env, jobject ob
 {
     if (sGpsInterface) {
         sGpsInterface->cleanup();
-        sGpsInterface = NULL;
     }
 }
 
