@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<!--
 /* //device/apps/common/assets/res/any/strings.xml
 **
 ** Copyright 2006, The Android Open Source Project
@@ -35,6 +35,17 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"Se ha producido un problema de conexión o el código MMI no es válido."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"La operación solo es válida para números de marcación fija."</string>
+    <string name="profileNameDefault">Defecto</string>
+    <string name="profileNameWork">Trabajo</string>
+    <string name="profileNameHome">Casa</string>
+    <string name="profileNameSilent">Silencio</string>
+    <string name="profileNameNight">Noche</string>
+    <string name="profileGroupPhone">Telefono</string>
+    <string name="profileGroupCalendar">Calendario</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Otro</string>
     <string name="serviceEnabled" msgid="8147278346414714315">"El servicio se ha habilitado."</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"Se ha habilitado el servicio para:"</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"El servicio se ha inhabilitado."</string>
@@ -140,6 +151,8 @@
     <string name="global_actions" msgid="2406416831541615258">"Opciones del teléfono"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Bloqueo de pantalla"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Apagar"</string>
+    <string name="global_action_reboot">Reiniciar</string>
+    <string name="global_action_choose_profile">Cambiar Perfil</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Modo silencio"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"El sonido está desactivado. Activar."</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"El sonido está activado. Desactivar."</string>
@@ -904,4 +917,11 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"Un equipo está utilizando actualmente el almacenamiento USB."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"Un equipo está utilizando actualmente la tarjeta SD."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Estado de medio externo desconocido"</string>
+    <string name="app_killed_message">Finalizada la Aplicación</string>
+    <string name="phone_goggles_problem_count">Problema #%1$d: </string>
+    <string name="phone_goggles_description">Resuelva el %1$d a raíz de problemas matemáticos en menos de %2$d segundos para poder realizar su comunicación.</string>
+    <plurals name="phone_goggles_countdown">
+        <item quantity="one">falta %d segundo</item>
+        <item quantity="other">faltan %d segundos</item>
+    </plurals>
 </resources>
