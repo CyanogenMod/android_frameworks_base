@@ -1412,10 +1412,18 @@ status_t CameraService::dump(int fd, const Vector<String16>& args) {
 }
 
 #ifdef BOARD_USE_FROYO_LIBCAMERA
+
+#ifndef FIRST_CAMERA_FACING
+#define FIRST_CAMERA_FACING CAMERA_FACING_BACK
+#endif
+#ifndef FIRST_CAMERA_ORIENTATION
+#define FIRST_CAMERA_ORIENTATION 90
+#endif
+
 static const CameraInfo sCameraInfo[] = {
     {
-        CAMERA_FACING_BACK,
-        90,  /* orientation */
+        FIRST_CAMERA_FACING,
+        FIRST_CAMERA_ORIENTATION,  /* orientation */
     },
     {
         CAMERA_FACING_FRONT,
