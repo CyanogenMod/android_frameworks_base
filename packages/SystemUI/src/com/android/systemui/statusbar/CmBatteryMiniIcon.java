@@ -49,11 +49,10 @@ public class CmBatteryMiniIcon extends ImageView {
     static final int BATTERY_MINI_ICON_MARGIN_RIGHT_DIP = 6;
 
     // duration of each frame in charging animation in millis
-    // halfed the update rate (*2), since only each 20% (2 frames) we got a different battery icon
-    static final int ANIM_FRAME_DURATION = (1000 / 3) * 2;
+    static final int ANIM_FRAME_DURATION = (1000 / 3);
 
     // duration of each fake-timer call to update animation in millis
-    static final int ANIM_TIMER_DURATION = (1000 / 4) * 2;
+    static final int ANIM_TIMER_DURATION = (1000 / 6);
 
     // contains the current bat level, values: 0-100
     private int mBatteryLevel = 0;
@@ -137,10 +136,6 @@ public class CmBatteryMiniIcon extends ImageView {
         mWidthPx = (int) (BATTERY_MINI_ICON_WIDTH_DIP * mDensity);
         mMarginRightPx = (int) (BATTERY_MINI_ICON_MARGIN_RIGHT_DIP * mDensity);
 
-        // set up the scaling matrix, so one-pixel-width becomes desired width
-        mMatrix.setTranslate(0, 0);
-        mMatrix.postScale(mWidthPx, 1);
-
         updateIconCache();
         updateSettings();
     }
@@ -195,6 +190,7 @@ public class CmBatteryMiniIcon extends ImageView {
         final int height = MeasureSpec.getSize(heightMeasureSpec);
 
         setMeasuredDimension(mWidthPx + mMarginRightPx, height);
+        updateMatrix();
     }
 
     @Override
@@ -211,17 +207,15 @@ public class CmBatteryMiniIcon extends ImageView {
             if (mLastMillis == 0) {
                 // just got plugged - setup animation
                 mLastMillis = SystemClock.uptimeMillis();
-                mCurrentFrame = 0;
+                mCurrentFrame = 1;
             }
             long now = SystemClock.uptimeMillis();
 
             while (now - mLastMillis > ANIM_FRAME_DURATION) {
-                // adding 2, since only each 20% a new status is shown
-                mCurrentFrame = mCurrentFrame + 2;
-                // count to eleven, so fully charged icon also got two frames
+                mCurrentFrame++;
                 if (mCurrentFrame > 10)
-                    mCurrentFrame = 0;
-                mLastMillis = mLastMillis + ANIM_FRAME_DURATION;
+                    mCurrentFrame = 1;
+                mLastMillis += ANIM_FRAME_DURATION;
             }
         } else {
             // reset the animation for next charger connection
@@ -237,20 +231,26 @@ public class CmBatteryMiniIcon extends ImageView {
     private int getBatResourceID(int level) {
         switch (level) {
             case 0:
+                // cannot use the 0% battery icon, since its completly different
+                return R.drawable.stat_sys_battery_5;
             case 1:
                 return R.drawable.stat_sys_battery_10;
             case 2:
-            case 3:
                 return R.drawable.stat_sys_battery_20;
+            case 3:
+                return R.drawable.stat_sys_battery_30;
             case 4:
-            case 5:
                 return R.drawable.stat_sys_battery_40;
+            case 5:
+                return R.drawable.stat_sys_battery_50;
             case 6:
-            case 7:
                 return R.drawable.stat_sys_battery_60;
+            case 7:
+                return R.drawable.stat_sys_battery_70;
             case 8:
-            case 9:
                 return R.drawable.stat_sys_battery_80;
+            case 9:
+                return R.drawable.stat_sys_battery_90;
             case 10:
             default:
                 return R.drawable.stat_sys_battery_100;
@@ -294,5 +294,14 @@ public class CmBatteryMiniIcon extends ImageView {
             // cut one slice of pixels from battery image
             mMiniIconCache[i] = Bitmap.createBitmap(bmBat, 4, 0, 1, bmBat.getHeight());
         }
+    }
+
+    // set up the scaling matrix, so the width is scaled and the height is fixed if non-default-height in theme (i.e. honeybread)
+    // should be toggled to private (or inlined at constructor), once StatusBarService.updateResources properly handles theme change
+    public void updateMatrix() {
+        mMatrix.reset();
+        mMatrix.setTranslate(0, 0);
+        float scaleFactor=getHeight()/(float)(mMiniIconCache[0].getHeight());
+        mMatrix.postScale(mWidthPx, scaleFactor);
     }
 }
