@@ -1206,8 +1206,7 @@ public abstract class Context {
      *  <dd> A {@link android.net.wifi.WifiManager WifiManager} for management of
      * Wi-Fi connectivity.
      * <dt> {@link #WIMAX_SERVICE} ("wimax")
-     *  <dd> A {@link android.net.wimax.WimaxManager WimaxManager} for management of
-     * Wimax connectivity.
+     *  <dd> A WimaxManager for management of Wimax connectivity.
      * <dt> {@link #INPUT_METHOD_SERVICE} ("input_method")
      * <dd> An {@link android.view.inputmethod.InputMethodManager InputMethodManager}
      * for management of input methods.
@@ -1255,7 +1254,6 @@ public abstract class Context {
      * @see #WIFI_SERVICE
      * @see android.net.wifi.WifiManager
      * @see #WIMAX_SERVICE
-     * @see android.net.wimax.WimaxManager
      * @see #AUDIO_SERVICE
      * @see android.media.AudioManager
      * @see #TELEPHONY_SERVICE
@@ -1474,8 +1472,8 @@ public abstract class Context {
     public static final String WIFI_SERVICE = "wifi";
 
     /**
-     * Use with {@link #getSystemService} to retrieve a {@link
-     * android.net.wimax.WimaxManager} for handling management of
+     * Use with {@link #getSystemService} to retrieve a WimaxManager
+     * for handling management of
      * Wimax access.
      *
      * @see #getSystemService
