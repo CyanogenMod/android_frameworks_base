@@ -244,6 +244,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mCameraKeyPressable = false;
     static final long NEXT_DURATION = 400;
 
+    boolean VolUpKeyDown = false;
+    boolean VolDownKeyDown = false;
+
 
     private final InputHandler mPointerLocationInputHandler = new BaseInputHandler() {
         @Override
@@ -304,6 +307,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     // Behavior of volbtn music controls
     boolean mVolBtnMusicControls;
+    // Behavior of volume pause control
+    boolean mVolPauseControl;
     // Behavior of cambtn music controls
     boolean mCamBtnMusicControls;
     // keeps track of long press state
@@ -349,6 +354,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.TRACKBALL_WAKE_SCREEN), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.VOLBTN_MUSIC_CONTROLS), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.VOLPAUSE_CONTROL), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.CAMBTN_MUSIC_CONTROLS), false, this);
             updateSettings();
@@ -746,6 +753,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.TRACKBALL_WAKE_SCREEN, 0) == 1);
             mVolBtnMusicControls = (Settings.System.getInt(resolver,
                     Settings.System.VOLBTN_MUSIC_CONTROLS, 1) == 1);
+            mVolPauseControl = (Settings.System.getInt(resolver,
+                    Settings.System.VOLPAUSE_CONTROL, 1) == 1);
             mCamBtnMusicControls = (Settings.System.getInt(resolver,
                     Settings.System.CAMBTN_MUSIC_CONTROLS, 0) == 1);
             int accelerometerDefault = Settings.System.getInt(resolver,
@@ -2037,7 +2046,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 if(mVolBtnMusicControls && !down)
                 {
                     handleVolumeLongPressAbort();
-
+                    if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+                        VolDownKeyDown = false;
+                    if(keyCode == KeyEvent.KEYCODE_VOLUME_UP)
+                        VolUpKeyDown = false;
                     // delay handling volume events if mVolBtnMusicControls is desired
                     if (!mIsLongPress  && (result & ACTION_PASS_TO_USER) == 0)
                         handleVolumeKey(AudioManager.STREAM_MUSIC, keyCode);
@@ -2074,6 +2086,29 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             }
                         } catch (RemoteException ex) {
                             Log.w(TAG, "ITelephony threw RemoteException", ex);
+                        }
+                    }
+
+                    if (mVolPauseControl && ((result & ACTION_PASS_TO_USER) == 0)) {
+                        if(down) {
+                            if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+                                VolDownKeyDown = true;
+                                if(VolUpKeyDown) {
+                                    sendMediaButtonEvent(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+                                    handleVolumeLongPressAbort();
+                                    VolUpKeyDown = false;
+                                    VolDownKeyDown = false;
+                                }
+                            }
+                            if(keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+                                VolUpKeyDown = true;
+                                if(VolDownKeyDown) {
+                                    sendMediaButtonEvent(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+                                    handleVolumeLongPressAbort();
+                                    VolUpKeyDown = false;
+                                    VolDownKeyDown = false;
+                                }
+                            }
                         }
                     }
 
