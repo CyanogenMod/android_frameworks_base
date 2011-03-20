@@ -243,6 +243,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     InputChannel mPointerLocationInputChannel;
     boolean mCameraKeyPressable = false;
     static final long NEXT_DURATION = 400;
+    
+    boolean VolUpKeyDown = false;
+    boolean VolDownKeyDown = false;
 
 
     private final InputHandler mPointerLocationInputHandler = new BaseInputHandler() {
@@ -2037,7 +2040,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 if(mVolBtnMusicControls && !down)
                 {
                     handleVolumeLongPressAbort();
-
+                    if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)
+                    	VolDownKeyDown = false;
+                    if(keyCode == KeyEvent.KEYCODE_VOLUME_UP)
+                    	VolUpKeyDown = false;
                     // delay handling volume events if mVolBtnMusicControls is desired
                     if (!mIsLongPress  && (result & ACTION_PASS_TO_USER) == 0)
                         handleVolumeKey(AudioManager.STREAM_MUSIC, keyCode);
@@ -2074,6 +2080,29 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             }
                         } catch (RemoteException ex) {
                             Log.w(TAG, "ITelephony threw RemoteException", ex);
+                        }
+                    }
+                    
+                    if ((result & ACTION_PASS_TO_USER) == 0) {
+                        if(down) {
+                            if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+                                VolDownKeyDown = true;
+                                if(VolUpKeyDown) {
+                                    sendMediaButtonEvent(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+                                    handleVolumeLongPressAbort();
+                                    VolUpKeyDown = false;
+                                    VolDownKeyDown = false;
+                                }
+                            }
+                            if(keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+                                VolUpKeyDown = true;
+                                if(VolDownKeyDown) {
+                                    sendMediaButtonEvent(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
+                                    handleVolumeLongPressAbort();
+                                    VolUpKeyDown = false;
+                                    VolDownKeyDown = false;
+                                }
+                            }
                         }
                     }
 

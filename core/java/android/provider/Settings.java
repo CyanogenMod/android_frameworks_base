@@ -2416,6 +2416,12 @@ public final class Settings {
          * @hide
          */
         public static final String VOLBTN_MUSIC_CONTROLS = "volbtn_music_controls";
+        
+        /**
+         * Whether or not volume button play/pause control should be enabled to togle play/pause
+         * @hide
+         */
+        public static final String VOLPAUSE_CONTROL = "volpause_control";
 
         /**
          * Whether or not camera button music controls should be enabled to play/pause media tracks
