@@ -137,7 +137,7 @@ public class CamcorderProfile
                 return get(i, quality);
             }
         }
-        return null;
+        return (numberOfCameras==1)?get(0, quality):null;
     }
 
     /**
