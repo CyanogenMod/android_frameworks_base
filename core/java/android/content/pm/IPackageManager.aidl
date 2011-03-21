@@ -325,4 +325,9 @@ interface IPackageManager {
 
     boolean setInstallLocation(int loc);
     int getInstallLocation();
+
+    String[] getRevokedPermissions(String packageName);
+
+    void setRevokedPermissions(String packageName, in String[] perms);
+
 }
