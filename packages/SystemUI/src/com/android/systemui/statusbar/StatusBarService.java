@@ -1522,6 +1522,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
             mExpandedView.findViewById(R.id.exp_view_lin_layout).setBackgroundDrawable(res.getDrawable(R.drawable.title_bar_portrait));
             mClearButton.setBackgroundDrawable(res.getDrawable(android.R.drawable.btn_default_small));
             mCmBatteryMiniIcon.updateIconCache();
+            mCmBatteryMiniIcon.updateMatrix();
 
             // Update icons.
             ArrayList<ViewGroup> iconViewGroups = new ArrayList<ViewGroup>();
