@@ -398,6 +398,12 @@
     <!-- Configure rotary bottom margin -->
     <integer name="config_rotaryMarginBottomDIP">60</integer>
 
+    <!-- Configure rotary outer radius -->
+    <integer name="config_rotaryOuterRadiusDIP">390</integer>
+
+    <!-- Configure rotary stroke width -->
+    <integer name="config_rotaryStrokeWidthDIP">83</integer>
+
     <!-- Do not translate. Defines the slots is Two Digit Number for dialing normally not USSD -->
     <string-array name="config_twoDigitNumberPattern">
     </string-array>
