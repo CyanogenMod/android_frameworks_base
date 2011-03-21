@@ -144,8 +144,11 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Desactivar función inalámbrica"</string>
     <string name="screen_lock" msgid="799094655496098153">"Bloqueo de pantalla"</string>
     <string name="power_off" msgid="4266614107412865048">"Apagar"</string>
+        <string name="reboot_system">Reiniciar teléfono</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Apagando..."</string>
+        <string name="reboot_progress">Reiniciando...</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"El teléfono se apagará."</string>
+        <string name="reboot_confirm">El teléfono se reiniciará.</string>
     <string name="recent_tasks_title" msgid="3691764623638127888">"Reciente"</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"No hay aplicaciones recientes"</string>
     <string name="global_actions" msgid="2406416831541615258">"Opciones del teléfono"</string>
@@ -412,6 +415,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Permite que una aplicación se conecte a puntos de acceso Wi-Fi y se desconecte de ellos, y realice modificaciones en las redes Wi-Fi configuradas."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"permitir recepción multidifusión Wi-Fi"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Permite que una aplicación reciba paquetes no dirigidos directamente a tu dispositivo. Esta función puede resultar útil para descubrir servicios cercanos. Utiliza más energía que el modo de no multidifusión."</string>
+    <string name="permlab_accessWimaxState">Ver estado de WiMax</string>
+    <string name="permdesc_accessWimaxState">Permite a una aplicación ver la información sobre el estado de WiMax.</string>
+    <string name="permlab_changeWimaxState">Cambiar estado de WiMax</string>
+    <string name="permdesc_changeWimaxState">Permite a una aplicación conectarse y desconectarse de las redes WiMax.</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"administración de Bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" msgid="7256289774667054555">"Permite que una aplicación configure el teléfono Bluetooth local, y vea dispositivos remotos y sincronice el teléfono con ellos."</string>
     <string name="permlab_bluetooth" msgid="8361038707857018732">"crear conexiones de Bluetooth"</string>
@@ -566,7 +573,8 @@
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Correcto"</string>
     <string name="lockscreen_pattern_wrong" msgid="4817583279053112312">"Inténtalo de nuevo"</string>
     <string name="lockscreen_plugged_in" msgid="613343852842944435">"Cargando (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
-    <string name="lockscreen_charged" msgid="4938930459620989972">"Cargado"</string>
+    <string name="lockscreen_discharging">Batería (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
+        <string name="lockscreen_charged" msgid="4938930459620989972">"Cargado"</string>
     <string name="lockscreen_battery_short" msgid="3617549178603354656">"<xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Conecta el cargador"</string>
     <string name="lockscreen_missing_sim_message_short" msgid="7381499217732227295">"Falta la tarjeta SIM"</string>
@@ -593,6 +601,8 @@
     <string name="lockscreen_unlock_label" msgid="737440483220667054">"Desbloquear"</string>
     <string name="lockscreen_sound_on_label" msgid="9068877576513425970">"Activar sonido"</string>
     <string name="lockscreen_sound_off_label" msgid="996822825154319026">"Desactivar sonido"</string>
+    <string name="lockscreen_phone_label">Teléfono</string>
+    <string name="lockscreen_messaging_label">Mensajería</string>
     <string name="password_keyboard_label_symbol_key" msgid="992280756256536042">"?123"</string>
     <string name="password_keyboard_label_alpha_key" msgid="8001096175167485649">"ABC"</string>
     <string name="password_keyboard_label_alt_key" msgid="1284820942620288678">"ALT"</string>
@@ -892,7 +902,8 @@
     <string name="l2tp_vpn_description" msgid="3750692169378923304">"Protocolo de túnel de nivel 2"</string>
     <string name="l2tp_ipsec_psk_vpn_description" msgid="3945043564008303239">"Red privada virtual L2TP/IPSec basada en clave compartida previamente"</string>
     <string name="l2tp_ipsec_crt_vpn_description" msgid="5382714073103653577">"Red privada virtual L2TP/IPSec basada en certificado"</string>
-    <string name="upload_file" msgid="2897957172366730416">"Seleccionar archivo"</string>
+    <string name="openvpn_vpn_description">OpenVPN SSL VPN</string>
+        <string name="upload_file" msgid="2897957172366730416">"Seleccionar archivo"</string>
     <string name="reset" msgid="2448168080964209908">"Restablecer"</string>
     <string name="submit" msgid="1602335572089911941">"Enviar"</string>
     <string name="description_star" msgid="2654319874908576133">"favoritos"</string>
@@ -917,7 +928,7 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"Un equipo está utilizando actualmente el almacenamiento USB."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"Un equipo está utilizando actualmente la tarjeta SD."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Estado de medio externo desconocido"</string>
-    <string name="app_killed_message">Finalizada la Aplicación</string>
+    <string name="app_killed_message">Aplicación Finalizada</string>
     <string name="phone_goggles_problem_count">Problema #%1$d: </string>
     <string name="phone_goggles_description">Resuelva el %1$d a raíz de problemas matemáticos en menos de %2$d segundos para poder realizar su comunicación.</string>
     <plurals name="phone_goggles_countdown">
