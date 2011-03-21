@@ -207,14 +207,14 @@ public class CmBatteryMiniIcon extends ImageView {
             if (mLastMillis == 0) {
                 // just got plugged - setup animation
                 mLastMillis = SystemClock.uptimeMillis();
-                mCurrentFrame = 1;
+                mCurrentFrame = mBatteryLevel / 10;
             }
             long now = SystemClock.uptimeMillis();
 
             while (now - mLastMillis > ANIM_FRAME_DURATION) {
                 mCurrentFrame++;
                 if (mCurrentFrame > 10)
-                    mCurrentFrame = 1;
+                    mCurrentFrame = mBatteryLevel / 10;
                 mLastMillis += ANIM_FRAME_DURATION;
             }
         } else {
