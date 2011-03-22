@@ -31,6 +31,7 @@ enum {
     CREATE_RENDERER,
     OBSERVER_ON_MSG,
     RENDERER_RENDER,
+    REGISTER_BUFFERS
 };
 
 sp<IOMXRenderer> IOMX::createRenderer(
@@ -721,6 +722,13 @@ public:
 
         remote()->transact(OBSERVER_ON_MSG, data, &reply, IBinder::FLAG_ONEWAY);
     }
+
+    virtual void registerBuffers(const sp<IMemoryHeap> &mem) {
+        Parcel data, reply;
+        data.writeInterfaceToken(IOMXObserver::getInterfaceDescriptor());
+        data.writeStrongBinder(mem->asBinder());
+        remote()->transact(REGISTER_BUFFERS, data, &reply);
+    }
 };
 
 IMPLEMENT_META_INTERFACE(OMXObserver, "android.hardware.IOMXObserver");
@@ -739,6 +747,13 @@ status_t BnOMXObserver::onTransact(
             onMessage(msg);
 
             return NO_ERROR;
+        }
+        case REGISTER_BUFFERS:
+        {
+            CHECK_INTERFACE(IOMXObserver, data, reply);
+            sp<IMemoryHeap> mem =
+               interface_cast<IMemoryHeap>(data.readStrongBinder());
+            registerBuffers(mem);
         }
 
         default:
