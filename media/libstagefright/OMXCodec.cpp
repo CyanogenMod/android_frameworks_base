@@ -387,7 +387,7 @@ uint32_t OMXCodec::getComponentQuirks(
     }
     if (!strncmp(componentName, "OMX.qcom.7x30.video.encoder.", 28)) {
         quirks |= kAvoidMemcopyInputRecordingFrames;
-        quirks |= kRequiresFlushBeforeShutdown;
+    //    quirks |= kRequiresFlushBeforeShutdown;
         quirks |= kCanNotSetVideoParameters;
     }
     if (!strncmp(componentName, "OMX.qcom.video.decoder.", 23)) {
@@ -395,7 +395,7 @@ uint32_t OMXCodec::getComponentQuirks(
         quirks |= kDefersOutputBufferAllocation;
     }
     if (!strncmp(componentName, "OMX.qcom.7x30.video.decoder.", 28)) {
-        quirks |= kRequiresFlushBeforeShutdown;
+    //    quirks |= kRequiresFlushBeforeShutdown;
         quirks |= kRequiresAllocateBufferOnInputPorts;
         quirks |= kRequiresAllocateBufferOnOutputPorts;
         quirks |= kDefersOutputBufferAllocation;
