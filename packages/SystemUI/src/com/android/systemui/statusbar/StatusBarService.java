@@ -20,6 +20,7 @@ import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.statusbar.StatusBarIcon;
 import com.android.internal.statusbar.StatusBarIconList;
 import com.android.internal.statusbar.StatusBarNotification;
+import com.android.systemui.statusbar.CmBatteryMiniIcon.SettingsObserver;
 import com.android.systemui.statusbar.powerwidget.PowerWidget;
 import com.android.systemui.R;
 
@@ -30,12 +31,14 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.app.StatusBarManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.CustomTheme;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -85,8 +88,9 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     public static final String ACTION_STATUSBAR_START
             = "com.android.internal.policy.statusbar.START";
 
-    static final int EXPANDED_LEAVE_ALONE = -10000;
-    static final int EXPANDED_FULL_OPEN = -10001;
+    // values changed onCreate if its a bottomBar
+    static int EXPANDED_LEAVE_ALONE = -10000;
+    static int EXPANDED_FULL_OPEN = -10001;
 
     private static final int MSG_ANIMATE = 1000;
     private static final int MSG_ANIMATE_REVEAL = 1001;
@@ -184,6 +188,45 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     // for disabling the status bar
     int mDisabled = 0;
 
+    // weather or not to show status bar on bottom
+    boolean mBottomBar;
+    boolean mButtonsLeft;
+    boolean mDeadZone;
+    Context mContext;
+
+    // tracks changes to settings, so status bar is moved to top/bottom
+    // as soon as cmparts setting is changed
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.STATUS_BAR_BOTTOM), false, this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.SOFT_BUTTONS_LEFT), false, this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.STATUS_BAR_DEAD_ZONE), false, this);
+            onChange(true);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            ContentResolver resolver = mContext.getContentResolver();
+
+            // find a sane way to get the default behavior, in case cmparts wasnt started yet.
+            mBottomBar = (Settings.System.getInt(resolver,
+                    Settings.System.STATUS_BAR_BOTTOM, 0) == 1);
+            mButtonsLeft = (Settings.System.getInt(resolver,
+                    Settings.System.SOFT_BUTTONS_LEFT, 0) == 1);
+            mDeadZone = (Settings.System.getInt(resolver,
+                    Settings.System.STATUS_BAR_DEAD_ZONE, 0) == 1);
+            updateLayout();
+        }
+    }
+
     private class ExpandedDialog extends Dialog {
         ExpandedDialog(Context context) {
             super(context, com.android.internal.R.style.Theme_Light_NoTitleBar);
@@ -213,6 +256,12 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
             mCurrentTheme = (CustomTheme)currentTheme.clone();
         }
         makeStatusBarView(this);
+
+        // reset vars for bottom bar
+        if(mBottomBar){
+            EXPANDED_LEAVE_ALONE *= -1;
+            EXPANDED_FULL_OPEN *= -1;
+        }
 
         // receive broadcasts
         IntentFilter filter = new IntentFilter();
@@ -264,6 +313,10 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 
         // Lastly, call to the icon policy to install/update all the icons.
         mIconPolicy = new StatusBarPolicy(this);
+
+        // set up settings observer
+        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
+        settingsObserver.observe();
     }
 
     @Override
@@ -347,11 +400,36 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         mCloseView = (CloseDragHandle)mTrackingView.findViewById(R.id.close);
         mCloseView.mService = this;
 
+        updateLayout();
+        mContext=context;
+
         mEdgeBorder = res.getDimensionPixelSize(R.dimen.status_bar_edge_ignore);
 
         // set the inital view visibility
         setAreThereNotifications();
         mDateView.setVisibility(View.INVISIBLE);
+    }
+
+    private void updateLayout() {
+        if(mTrackingView==null || mCloseView==null || mExpandedView==null)
+            return;
+
+        // handle trackingview
+        mTrackingView.removeView(mCloseView);
+        mTrackingView.addView(mCloseView, mBottomBar ? 0 : 1);
+
+        // handle expanded view reording for bottom bar
+        LinearLayout powerAndCarrier=(LinearLayout)mExpandedView.findViewById(R.id.power_and_carrier);
+        PowerWidget power=(PowerWidget)mExpandedView.findViewById(R.id.exp_power_stat);
+        //FrameLayout notifications=(FrameLayout)mExpandedView.findViewById(R.id.notifications);
+
+        // remove involved views
+        powerAndCarrier.removeView(power);
+        mExpandedView.removeView(powerAndCarrier);
+
+        // readd in right order
+        mExpandedView.addView(powerAndCarrier, mBottomBar ? 1 : 0);
+        powerAndCarrier.addView(power, mBottomBar ? 1 : 0);
     }
 
     protected void addStatusBarView() {
@@ -775,7 +853,10 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         if (mAnimating) {
             y = (int)mAnimY;
         } else {
-            y = mDisplay.getHeight()-1;
+            if(mBottomBar)
+                y = 0;
+            else
+                y = mDisplay.getHeight()-1;
         }
         // Let the fling think that we're open so it goes in the right direction
         // and doesn't try to re-open the windowshade.
@@ -835,16 +916,20 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
             if (SPEW) Slog.d(TAG, "doAnimation before mAnimY=" + mAnimY);
             incrementAnim();
             if (SPEW) Slog.d(TAG, "doAnimation after  mAnimY=" + mAnimY);
-            if (mAnimY >= mDisplay.getHeight()-1) {
+            if ((!mBottomBar && mAnimY >= mDisplay.getHeight()-1) || (mBottomBar && mAnimY <= 0)) {
                 if (SPEW) Slog.d(TAG, "Animation completed to expanded state.");
                 mAnimating = false;
                 updateExpandedViewPos(EXPANDED_FULL_OPEN);
                 performExpand();
             }
-            else if (mAnimY < mStatusBarView.getHeight()) {
+            else if ((!mBottomBar && mAnimY < mStatusBarView.getHeight())
+                    || (mBottomBar && mAnimY > (mDisplay.getHeight()-mStatusBarView.getHeight()))) {
                 if (SPEW) Slog.d(TAG, "Animation completed to collapsed state.");
                 mAnimating = false;
-                updateExpandedViewPos(0);
+                if(mBottomBar)
+                    updateExpandedViewPos(mDisplay.getHeight());
+                else
+                    updateExpandedViewPos(0);
                 performCollapse();
             }
             else {
@@ -867,7 +952,10 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         final float y = mAnimY;
         final float v = mAnimVel;                                   // px/s
         final float a = mAnimAccel;                                 // px/s/s
-        mAnimY = y + (v*t) + (0.5f*a*t*t);                          // px
+        if(mBottomBar)
+            mAnimY = y - (v*t) - (0.5f*a*t*t);                          // px
+        else
+            mAnimY = y + (v*t) + (0.5f*a*t*t);                          // px
         mAnimVel = v + (a*t);                                       // px/s
         mAnimLastTime = now;                                        // ms
         //Slog.d(TAG, "y=" + y + " v=" + v + " a=" + a + " t=" + t + " mAnimY=" + mAnimY
@@ -875,10 +963,14 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     }
 
     void doRevealAnimation() {
-        final int h = mCloseView.getHeight() + mStatusBarView.getHeight();
-        if (mAnimatingReveal && mAnimating && mAnimY < h) {
+        int h = mCloseView.getHeight() + mStatusBarView.getHeight();
+
+        if(mBottomBar)
+            h = mDisplay.getHeight() - mStatusBarView.getHeight();
+        if (mAnimatingReveal && mAnimating &&
+                ((mBottomBar && mAnimY > h) || (!mBottomBar && mAnimY < h))) {
             incrementAnim();
-            if (mAnimY >= h) {
+            if ((mBottomBar && mAnimY <= h) || (!mBottomBar && mAnimY >=h)) {
                 mAnimY = h;
                 updateExpandedViewPos((int)mAnimY);
             } else {
@@ -896,7 +988,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         if (opening) {
             mAnimAccel = 2000.0f;
             mAnimVel = 200;
-            mAnimY = mStatusBarView.getHeight();
+            mAnimY = mBottomBar ? mDisplay.getHeight() : mStatusBarView.getHeight();
             updateExpandedViewPos((int)mAnimY);
             mAnimating = true;
             mAnimatingReveal = true;
@@ -929,13 +1021,13 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         //Slog.d(TAG, "starting with mAnimY=" + mAnimY + " mAnimVel=" + mAnimVel);
 
         if (mExpanded) {
-            if (!always && (
-                    vel > 200.0f
-                    || (y > (mDisplayHeight-25) && vel > -200.0f))) {
+            if (!always &&
+                    ((mBottomBar && (vel < -200.0f || (y < 25 && vel < 200.0f))) ||
+                    (!mBottomBar && (vel >  200.0f || (y > (mDisplayHeight-25) && vel > -200.0f))))) {
                 // We are expanded, but they didn't move sufficiently to cause
                 // us to retract.  Animate back to the expanded position.
                 mAnimAccel = 2000.0f;
-                if (vel < 0) {
+                if ((mBottomBar && vel > 0) || (!mBottomBar && vel < 0)) {
                     mAnimVel = 0;
                 }
             }
@@ -947,13 +1039,13 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
                 }
             }
         } else {
-            if (always || (
-                    vel > 200.0f
-                    || (y > (mDisplayHeight/2) && vel > -200.0f))) {
+            if (always
+                    || ( mBottomBar && (vel < -200.0f || (y < (mDisplayHeight/2) && vel <  200.0f)))
+                    || (!mBottomBar && (vel >  200.0f || (y > (mDisplayHeight/2) && vel > -200.0f)))) {
                 // We are collapsed, and they moved enough to allow us to
                 // expand.  Animate in the notifications.
                 mAnimAccel = 2000.0f;
-                if (vel < 0) {
+                if ((mBottomBar && vel < 0) || (!mBottomBar && vel > 0)) {
                     mAnimVel = 0;
                 }
             }
@@ -999,34 +1091,46 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
             final int y = (int)event.getRawY();
 
             if (!mExpanded) {
-                mViewDelta = statusBarSize - y;
+                mViewDelta = mBottomBar ? mDisplay.getHeight() - y : statusBarSize - y;
             } else {
                 mTrackingView.getLocationOnScreen(mAbsPos);
-                mViewDelta = mAbsPos[1] + mTrackingView.getHeight() - y;
+                mViewDelta = mAbsPos[1] + (mBottomBar ? 0 : mTrackingView.getHeight()) - y;
             }
-            if ((!mExpanded && y < hitSize) ||
-                    (mExpanded && y > (mDisplay.getHeight()-hitSize))) {
+            if ((!mBottomBar && ((!mExpanded && y < hitSize) || ( mExpanded && y > (mDisplay.getHeight()-hitSize)))) ||
+                 (mBottomBar && (( mExpanded && y < hitSize) || (!mExpanded && y > (mDisplay.getHeight()-hitSize))))) {
 
                 // We drop events at the edge of the screen to make the windowshade come
                 // down by accident less, especially when pushing open a device with a keyboard
                 // that rotates (like g1 and droid)
                 int x = (int)event.getRawX();
+
                 final int edgeBorder = mEdgeBorder;
-                if (x >= edgeBorder && x < mDisplay.getWidth() - edgeBorder) {
+                int edgeLeft = mButtonsLeft ? mStatusBarView.getSoftButtonsWidth() : 0;
+                int edgeRight = mButtonsLeft ? 0 : mStatusBarView.getSoftButtonsWidth();
+
+                final int w = mDisplay.getWidth();
+                final int deadLeft = w / 2 - w / 4;  // left side of the dead zone
+                final int deadRight = w / 2 + w / 4; // right side of the dead zone
+
+                if ((x >= edgeBorder + edgeLeft && x < w - edgeBorder - edgeRight)
+                        && (!mDeadZone || mDeadZone && (x < deadLeft || x > deadRight))) {
                     prepareTracking(y, !mExpanded);// opening if we're not already fully visible
                     mVelocityTracker.addMovement(event);
                 }
             }
         } else if (mTracking) {
             mVelocityTracker.addMovement(event);
-            final int minY = statusBarSize + mCloseView.getHeight();
+            int minY = statusBarSize + mCloseView.getHeight();
+            if (mBottomBar)
+                minY = mDisplay.getHeight() - statusBarSize - mCloseView.getHeight();
             if (event.getAction() == MotionEvent.ACTION_MOVE) {
                 int y = (int)event.getRawY();
-                if (mAnimatingReveal && y < minY) {
+                if ((!mBottomBar && mAnimatingReveal && y < minY) ||
+                        (mBottomBar && mAnimatingReveal && y > minY)) {
                     // nothing
                 } else  {
                     mAnimatingReveal = false;
-                    updateExpandedViewPos(y + mViewDelta);
+                    updateExpandedViewPos(y + (mBottomBar ? -mViewDelta : mViewDelta));
                 }
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 mVelocityTracker.computeCurrentVelocity(1000);
@@ -1286,7 +1390,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         lp.width = ViewGroup.LayoutParams.MATCH_PARENT;
         lp.height = getExpandedHeight();
         lp.x = 0;
-        mTrackingPosition = lp.y = -disph; // sufficiently large negative
+        mTrackingPosition = lp.y = mBottomBar ? disph : -disph; // sufficiently large positive
         lp.type = WindowManager.LayoutParams.TYPE_STATUS_BAR_PANEL;
         lp.flags = WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
                 | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
@@ -1335,21 +1439,21 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
                     + " mTrackingPosition=" + mTrackingPosition);
         }
 
-        int h = mStatusBarView.getHeight();
+        int h = mBottomBar ? 0 : mStatusBarView.getHeight();
         int disph = mDisplay.getHeight();
 
         // If the expanded view is not visible, make sure they're still off screen.
         // Maybe the view was resized.
         if (!mExpandedVisible) {
             if (mTrackingView != null) {
-                mTrackingPosition = -disph;
+                mTrackingPosition = mBottomBar ? disph : -disph;
                 if (mTrackingParams != null) {
                     mTrackingParams.y = mTrackingPosition;
                     WindowManagerImpl.getDefault().updateViewLayout(mTrackingView, mTrackingParams);
                 }
             }
             if (mExpandedParams != null) {
-                mExpandedParams.y = -disph;
+                mExpandedParams.y = mBottomBar ? disph : -disph;
                 mExpandedDialog.getWindow().setAttributes(mExpandedParams);
             }
             return;
@@ -1364,13 +1468,16 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
             pos = mTrackingPosition;
         }
         else {
-            if (expandedPosition <= disph) {
+            if ((mBottomBar && expandedPosition >= 0) || (!mBottomBar && expandedPosition <= disph)) {
                 pos = expandedPosition;
             } else {
                 pos = disph;
             }
-            pos -= disph-h;
+            pos -= mBottomBar ? mCloseView.getHeight() : disph-h;
         }
+        if(mBottomBar && pos < 0)
+            pos=0;
+
         mTrackingPosition = mTrackingParams.y = pos;
         mTrackingParams.height = disph-h;
         WindowManagerImpl.getDefault().updateViewLayout(mTrackingView, mTrackingParams);
@@ -1383,22 +1490,28 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
             final int contentsBottom = mPositionTmp[1] + mExpandedContents.getHeight();
 
             if (expandedPosition != EXPANDED_LEAVE_ALONE) {
-                mExpandedParams.y = pos + mTrackingView.getHeight()
+                if(mBottomBar)
+                    mExpandedParams.y = pos + mCloseView.getHeight();
+                else
+                    mExpandedParams.y = pos + mTrackingView.getHeight()
                         - (mTrackingParams.height-closePos) - contentsBottom;
-                int max = h;
+                int max = mBottomBar ? mDisplay.getHeight() : h;
                 if (mExpandedParams.y > max) {
                     mExpandedParams.y = max;
                 }
-                int min = mTrackingPosition;
+                int min = mBottomBar ? mCloseView.getHeight() : mTrackingPosition;
                 if (mExpandedParams.y < min) {
                     mExpandedParams.y = min;
+                    if(mBottomBar)
+                        mTrackingParams.y = 0;
                 }
 
-                boolean visible = (mTrackingPosition + mTrackingView.getHeight()) > h;
+                boolean visible = mBottomBar ? mTrackingPosition < mDisplay.getHeight()
+                        : (mTrackingPosition + mTrackingView.getHeight()) > h;
                 if (!visible) {
                     // if the contents aren't visible, move the expanded view way off screen
                     // because the window itself extends below the content view.
-                    mExpandedParams.y = -disph;
+                    mExpandedParams.y = mBottomBar ? disph : -disph;
                 }
                 mExpandedDialog.getWindow().setAttributes(mExpandedParams);
 
@@ -1410,6 +1523,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         if (SPEW) {
             Slog.d(TAG, "updateExpandedViewPos after  expandedPosition=" + expandedPosition
                     + " mTrackingParams.y=" + mTrackingParams.y
+                    + " mTrackingView.getHeight=" + mTrackingView.getHeight()
                     + " mTrackingPosition=" + mTrackingPosition
                     + " mExpandedParams.y=" + mExpandedParams.y
                     + " mExpandedParams.height=" + mExpandedParams.height);

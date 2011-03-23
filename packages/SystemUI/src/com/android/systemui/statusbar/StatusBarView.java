@@ -16,8 +16,11 @@
 
 package com.android.systemui.statusbar;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.SystemClock;
 import android.util.AttributeSet;
@@ -28,20 +31,24 @@ import android.view.ViewParent;
 import android.widget.FrameLayout;
 
 import android.content.Intent;
+import android.database.ContentObserver;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.provider.Settings;
 import android.view.IWindowManager;
 import android.view.KeyEvent;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.util.Slog;
 import com.android.systemui.R;
+import com.android.systemui.statusbar.StatusBarService.SettingsObserver;
 
 public class StatusBarView extends FrameLayout {
     private static final String TAG = "StatusBarView";
 
     static final int DIM_ANIM_TIME = 400;
-    
+
     StatusBarService mService;
     boolean mTracking;
     int mStartX, mStartY;
@@ -53,9 +60,56 @@ public class StatusBarView extends FrameLayout {
     ImageButton mStatusBarHomeButton;
     ImageButton mStatusBarBackButton;
     ImageButton mStatusBarMenuButton;
+    ImageButton mStatusBarQuickNaButton;
     boolean mStatusBarButtons;
-    boolean mStatusBarHideHome;
-    
+    boolean mSoftButtonsLeft;
+    boolean mSoftButtonsShowHome;
+    boolean mSoftButtonsShowMenu;
+    boolean mSoftButtonsShowBack;
+    boolean mSoftButtonsShowQuickNa;
+    ViewGroup mIcons;
+
+    Handler mHandler;
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.SOFT_BUTTONS_LEFT), false, this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.SOFT_BUTTON_SHOW_HOME), false, this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.SOFT_BUTTON_SHOW_MENU), false, this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.SOFT_BUTTON_SHOW_BACK), false, this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.SOFT_BUTTON_SHOW_QUICK_NA), false, this);
+            onChange(true);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            ContentResolver resolver = mContext.getContentResolver();
+
+            // find a sane way to get the default behavior, in case cmparts wasnt started yet.
+            mSoftButtonsLeft = (Settings.System.getInt(resolver,
+                    Settings.System.SOFT_BUTTONS_LEFT, 1) == 1);
+            mSoftButtonsShowHome = (Settings.System.getInt(resolver,
+                    Settings.System.SOFT_BUTTON_SHOW_HOME, 1) == 1);
+            mSoftButtonsShowMenu = (Settings.System.getInt(resolver,
+                    Settings.System.SOFT_BUTTON_SHOW_MENU, 1) == 1);
+            mSoftButtonsShowBack = (Settings.System.getInt(resolver,
+                    Settings.System.SOFT_BUTTON_SHOW_BACK, 1) == 1);
+            mSoftButtonsShowQuickNa = (Settings.System.getInt(resolver,
+                    Settings.System.SOFT_BUTTON_SHOW_QUICK_NA, 1) == 1);
+            updateSoftButtons();
+        }
+    }
+
     public StatusBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -63,6 +117,7 @@ public class StatusBarView extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        mIcons = (ViewGroup)findViewById(R.id.icons);
         mNotificationIcons = (ViewGroup)findViewById(R.id.notificationIcons);
         mStatusIcons = (ViewGroup)findViewById(R.id.statusIcons);
         mDate = findViewById(R.id.date);
@@ -75,8 +130,6 @@ public class StatusBarView extends FrameLayout {
         try {
             mStatusBarButtons = mContext.getResources().getBoolean(
                     R.bool.config_statusbar_buttons);
-            mStatusBarHideHome = mContext.getResources().getBoolean(
-                    R.bool.config_statusbar_hide_home);
         } catch (Exception e) {
                   mStatusBarButtons = false;
         }
@@ -87,22 +140,18 @@ public class StatusBarView extends FrameLayout {
          */
         if (mStatusBarButtons) {
             mStatusBarHomeButton = (ImageButton)findViewById(R.id.status_home);
-            if(!mStatusBarHideHome) {
-                mStatusBarHomeButton.setVisibility(0);
-                mStatusBarHomeButton.setOnClickListener(
-                    new ImageButton.OnClickListener() {
-                        public void onClick(View v) {
-                            Slog.i(TAG, "Home clicked");
-                            Intent setIntent = new Intent(Intent.ACTION_MAIN);
-                            setIntent.addCategory(Intent.CATEGORY_HOME);
-                            setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            StatusBarView.this.getContext().startActivity(setIntent);
-                        }
+            mStatusBarHomeButton.setOnClickListener(
+                new ImageButton.OnClickListener() {
+                    public void onClick(View v) {
+                        Slog.i(TAG, "Home clicked");
+                        Intent setIntent = new Intent(Intent.ACTION_MAIN);
+                        setIntent.addCategory(Intent.CATEGORY_HOME);
+                        setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        StatusBarView.this.getContext().startActivity(setIntent);
                     }
-                );
-            }
+                }
+            );
             mStatusBarMenuButton = (ImageButton)findViewById(R.id.status_menu);
-            mStatusBarMenuButton.setVisibility(0);
             mStatusBarMenuButton.setOnClickListener(
                 new ImageButton.OnClickListener() {
                     public void onClick(View v) {
@@ -112,7 +161,6 @@ public class StatusBarView extends FrameLayout {
                 }
             );
             mStatusBarBackButton = (ImageButton)findViewById(R.id.status_back);
-            mStatusBarBackButton.setVisibility(0);
             mStatusBarBackButton.setOnClickListener(
                 new ImageButton.OnClickListener() {
                     public void onClick(View v) {
@@ -121,14 +169,27 @@ public class StatusBarView extends FrameLayout {
                     }
                 }
             );
-            if (mStatusBarHideHome) {
-                final float scale = getContext().getResources().getDisplayMetrics().density;
-                int size = (int) scale * 45;
-                LinearLayout.LayoutParams biggerButtons = new LinearLayout.LayoutParams(size,
-                    LinearLayout.LayoutParams.MATCH_PARENT);
-                mStatusBarMenuButton.setLayoutParams(biggerButtons);
-                mStatusBarBackButton.setLayoutParams(biggerButtons);
-            }
+            mStatusBarQuickNaButton = (ImageButton)findViewById(R.id.status_quick_na);
+            mStatusBarQuickNaButton.setOnClickListener(
+                new ImageButton.OnClickListener() {
+                    public void onClick(View v) {
+                        if(mService.mExpanded){
+                            mService.performCollapse();
+                            mStatusBarQuickNaButton.setBackgroundResource(R.drawable.ic_statusbar_na_open);
+                        }else {
+                            mService.performExpand();
+                            mService.mDateView.setVisibility(View.INVISIBLE);
+                            mStatusBarQuickNaButton.setBackgroundResource(R.drawable.ic_statusbar_na_close);
+                        }
+                        Slog.i(TAG, "Quick Notification Area clicked");
+                    }
+                }
+            );
+
+            // set up settings observer
+            mHandler=new Handler();
+            SettingsObserver settingsObserver = new SettingsObserver(mHandler);
+            settingsObserver.observe();
         }
     }
 
@@ -224,11 +285,15 @@ public class StatusBarView extends FrameLayout {
             return true;
         }
         if(isEventInButton(mStatusBarBackButton, event)) {
-            mStatusBarHomeButton.onTouchEvent(event);
+            mStatusBarBackButton.onTouchEvent(event);
             return true;
         }
         if(isEventInButton(mStatusBarMenuButton, event)) {
-            mStatusBarHomeButton.onTouchEvent(event);
+            mStatusBarMenuButton.onTouchEvent(event);
+            return true;
+        }
+        if(isEventInButton(mStatusBarMenuButton, event)) {
+            mStatusBarQuickNaButton.onTouchEvent(event);
             return true;
         }
 
@@ -242,7 +307,8 @@ public class StatusBarView extends FrameLayout {
     public boolean onInterceptTouchEvent(MotionEvent event) {
         if(isEventInButton(mStatusBarHomeButton, event)
             || isEventInButton(mStatusBarBackButton, event)
-            || isEventInButton(mStatusBarMenuButton, event)) {
+            || isEventInButton(mStatusBarMenuButton, event)
+            || isEventInButton(mStatusBarQuickNaButton, event)) {
                 return super.onInterceptTouchEvent(event);
             }
         return mService.interceptTouchEvent(event)
@@ -291,5 +357,52 @@ public class StatusBarView extends FrameLayout {
                Slog.w(TAG, "Error injecting key event", ex);
            }
         }
+    }
+
+    private void updateSoftButtons() {
+        mIcons.removeView(mStatusBarHomeButton);
+        mIcons.removeView(mStatusBarMenuButton);
+        mIcons.removeView(mStatusBarBackButton);
+        mIcons.removeView(mStatusBarQuickNaButton);
+
+        if(!mStatusBarButtons)
+            return;
+
+        if(mSoftButtonsLeft){
+            if(mSoftButtonsShowQuickNa)
+                mIcons.addView(mStatusBarQuickNaButton, 0);
+            if(mSoftButtonsShowBack)
+                mIcons.addView(mStatusBarBackButton, 0);
+            if(mSoftButtonsShowMenu)
+                mIcons.addView(mStatusBarMenuButton, 0);
+            if(mSoftButtonsShowHome)
+                mIcons.addView(mStatusBarHomeButton, 0);
+        }else {
+            if(mSoftButtonsShowHome)
+                mIcons.addView(mStatusBarHomeButton, mIcons.getChildCount());
+            if(mSoftButtonsShowMenu)
+                mIcons.addView(mStatusBarMenuButton, mIcons.getChildCount());
+            if(mSoftButtonsShowBack)
+                mIcons.addView(mStatusBarBackButton, mIcons.getChildCount());
+            if(mSoftButtonsShowQuickNa)
+                mIcons.addView(mStatusBarQuickNaButton, mIcons.getChildCount());
+        }
+    }
+
+    public int getSoftButtonsWidth() {
+        if(!mStatusBarButtons)
+            return 0;
+
+        int ret=0;
+        if(mSoftButtonsShowHome)
+            ret+=mStatusBarHomeButton.getWidth();
+        if(mSoftButtonsShowMenu)
+            ret+=mStatusBarMenuButton.getWidth();
+        if(mSoftButtonsShowBack)
+            ret+=mStatusBarBackButton.getWidth();
+        if(mSoftButtonsShowQuickNa)
+            ret+=mStatusBarQuickNaButton.getWidth();
+
+        return ret;
     }
 }
