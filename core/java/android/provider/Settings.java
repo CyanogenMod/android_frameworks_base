@@ -2146,6 +2146,15 @@ public final class Settings {
         public static final String STATUS_BAR_CLOCK = "status_bar_clock";
 
         /**
+         * Whether to display the status bar on top or bottom
+         * 0: show status bar on top (default for most devices)
+         * 1: show status bar on bottom
+         * default: 0 - can be overridden via CMParts config.xml for some devices
+         * @hide
+         */
+        public static final String STATUS_BAR_BOTTOM = "status_bar_bottom";
+
+        /**
          * Whether to wake the screen with the trackball. The value is boolean (1 or 0).
          * @hide
          */
