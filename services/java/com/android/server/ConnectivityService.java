@@ -1005,7 +1005,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private void handleDisconnect(NetworkInfo info) {
 
         int prevNetType = info.getType();
-        Slog.d(TAG, "Connectivityervice::handleDisconnect() - disconnecting netType(" + prevNetType + ")");
+        Slog.d(TAG, "ConnectivityService::handleDisconnect() - disconnecting netType(" + prevNetType + ")");
         mNetTrackers[prevNetType].setTeardownRequested(false);
 
         if (prevNetType == ConnectivityManager.TYPE_WIMAX || prevNetType == ConnectivityManager.TYPE_WIFI) {
@@ -1036,7 +1036,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
          * in accordance with network preference policies.
          */
         if (!mNetAttributes[prevNetType].isDefault()) {
-            Slog.d(TAG, "Connectivityervice::handleDisconnect() - netType(" + prevNetType + ") is not default");
+            Slog.d(TAG, "ConnectivityService::handleDisconnect() - netType(" + prevNetType + ") is not default");
             List pids = mNetRequestersPids[prevNetType];
             for (int i = 0; i<pids.size(); i++) {
                 Integer pid = (Integer)pids.get(i);
@@ -1050,18 +1050,18 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         Intent intent = new Intent(ConnectivityManager.CONNECTIVITY_ACTION);
         intent.putExtra(ConnectivityManager.EXTRA_NETWORK_INFO, info);
         if (info.isFailover()) {
-            Slog.d(TAG, "Connectivityervice::handleDisconnect() - netType("
+            Slog.d(TAG, "ConnectivityService::handleDisconnect() - netType("
                 + prevNetType + ") is fail over");
             intent.putExtra(ConnectivityManager.EXTRA_IS_FAILOVER, true);
             info.setFailover(false);
         }
         if (info.getReason() != null) {
-            Slog.d(TAG, "Connectivityervice::handleDisconnect() - netType("
+            Slog.d(TAG, "ConnectivityService::handleDisconnect() - netType("
                 + prevNetType + ") reason: " + info.getReason());
             intent.putExtra(ConnectivityManager.EXTRA_REASON, info.getReason());
         }
         if (info.getExtraInfo() != null) {
-            Slog.d(TAG, "Connectivityervice::handleDisconnect() - netType("
+            Slog.d(TAG, "ConnectivityService::handleDisconnect() - netType("
                 + prevNetType + ") extra info: " + info.getExtraInfo());
             intent.putExtra(ConnectivityManager.EXTRA_EXTRA_INFO,
                     info.getExtraInfo());
@@ -1069,22 +1069,22 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
         NetworkStateTracker newNet = null;
         if (mNetAttributes[prevNetType].isDefault()) {
-            Slog.d(TAG, "Connectivityervice::handleDisconnect() - netType("
+            Slog.d(TAG, "ConnectivityService::handleDisconnect() - netType("
                 + prevNetType + ") attempting failover");
 	    /*if (prevNetType == ConnectivityManager.TYPE_WIMAX) {
-            System.out.println("Connectivityervice::handleDisconnect() - netType("
+            System.out.println("ConnectivityService::handleDisconnect() - netType("
                 + prevNetType + ") attempting to up 3g...");
 		    // hack to get rmnet0 back up
     		setMobileDataEnabled(false);
-            System.out.println("Connectivityervice::handleDisconnect() - netType(" 
+            System.out.println("ConnectivityService::handleDisconnect() - netType(" 
                 + prevNetType + ") data disabled...");
 	    	setMobileDataEnabled(true);
-            System.out.println("Connectivityervice::handleDisconnect() - netType(" 
+            System.out.println("ConnectivityService::handleDisconnect() - netType(" 
                 + prevNetType + ") data enabled...");
 	    } else*/
     		newNet = tryFailover(prevNetType);
             if (newNet != null) {
-            Slog.d(TAG, "Connectivityervice::handleDisconnect() - netType(" + prevNetType + ") failed over");
+            Slog.d(TAG, "ConnectivityService::handleDisconnect() - netType(" + prevNetType + ") failed over");
                 NetworkInfo switchTo = newNet.getNetworkInfo();
                 if (!switchTo.isConnected()) {
                     // if the other net is connected they've already reset this and perhaps even gotten
