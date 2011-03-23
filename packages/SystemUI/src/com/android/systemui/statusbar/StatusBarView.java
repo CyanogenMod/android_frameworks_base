@@ -16,8 +16,11 @@
 
 package com.android.systemui.statusbar;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.os.SystemClock;
 import android.util.AttributeSet;
@@ -28,8 +31,11 @@ import android.view.ViewParent;
 import android.widget.FrameLayout;
 
 import android.content.Intent;
+import android.database.ContentObserver;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.provider.Settings;
 import android.view.IWindowManager;
 import android.view.KeyEvent;
 import android.widget.ImageButton;
@@ -41,7 +47,7 @@ public class StatusBarView extends FrameLayout {
     private static final String TAG = "StatusBarView";
 
     static final int DIM_ANIM_TIME = 400;
-    
+
     StatusBarService mService;
     boolean mTracking;
     int mStartX, mStartY;
@@ -49,13 +55,72 @@ public class StatusBarView extends FrameLayout {
     ViewGroup mStatusIcons;
     View mDate;
     FixedSizeDrawable mBackground;
-    //set up statusbar buttons
-    ImageButton mStatusBarHomeButton;
-    ImageButton mStatusBarBackButton;
-    ImageButton mStatusBarMenuButton;
-    boolean mStatusBarButtons;
-    boolean mStatusBarHideHome;
-    
+    //set up statusbar buttons - quiet a lot for that awesome design!
+    ViewGroup mSoftButtons;
+    ImageButton mHomeButton;
+    ImageButton mBackButton;
+    ImageButton mMenuButton;
+    ImageButton mQuickNaButton;
+    ImageButton mEdgeLeft;
+    ImageButton mEdgeRight;
+    ImageButton mSeperator1;
+    ImageButton mSeperator2;
+    ImageButton mSeperator3;
+    boolean mShowSoftButtons;  // toggled by config.xml
+    boolean mIsBottom;   // this and below booleans toggled by system settings from cmparts
+    boolean mIsLeft;
+    boolean mShowHome;
+    boolean mShowMenu;
+    boolean mShowBack;
+    boolean mShowQuickNa;
+    ViewGroup mIcons;
+
+    Handler mHandler;
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.STATUS_BAR_BOTTOM), false, this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.SOFT_BUTTONS_LEFT), false, this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.SOFT_BUTTON_SHOW_HOME), false, this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.SOFT_BUTTON_SHOW_MENU), false, this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.SOFT_BUTTON_SHOW_BACK), false, this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.SOFT_BUTTON_SHOW_QUICK_NA), false, this);
+            onChange(true);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            ContentResolver resolver = mContext.getContentResolver();
+
+            // find a sane way to get the default behavior, in case cmparts wasnt started yet.
+            mIsBottom = (Settings.System.getInt(resolver,
+                    Settings.System.STATUS_BAR_BOTTOM, 1) == 1);
+            mIsLeft = (Settings.System.getInt(resolver,
+                    Settings.System.SOFT_BUTTONS_LEFT, 1) == 1);
+            mShowHome = (Settings.System.getInt(resolver,
+                    Settings.System.SOFT_BUTTON_SHOW_HOME, 1) == 1);
+            mShowMenu = (Settings.System.getInt(resolver,
+                    Settings.System.SOFT_BUTTON_SHOW_MENU, 1) == 1);
+            mShowBack = (Settings.System.getInt(resolver,
+                    Settings.System.SOFT_BUTTON_SHOW_BACK, 1) == 1);
+            mShowQuickNa = (Settings.System.getInt(resolver,
+                    Settings.System.SOFT_BUTTON_SHOW_QUICK_NA, 1) == 1);
+            updateSoftButtons();
+            updateQuickNaImage();
+        }
+    }
+
     public StatusBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -63,6 +128,7 @@ public class StatusBarView extends FrameLayout {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
+        mIcons = (ViewGroup)findViewById(R.id.icons);
         mNotificationIcons = (ViewGroup)findViewById(R.id.notificationIcons);
         mStatusIcons = (ViewGroup)findViewById(R.id.statusIcons);
         mDate = findViewById(R.id.date);
@@ -73,37 +139,31 @@ public class StatusBarView extends FrameLayout {
 
         // load config to determine if we want statusbar buttons
         try {
-            mStatusBarButtons = mContext.getResources().getBoolean(
+            mShowSoftButtons = mContext.getResources().getBoolean(
                     R.bool.config_statusbar_buttons);
-            mStatusBarHideHome = mContext.getResources().getBoolean(
-                    R.bool.config_statusbar_hide_home);
         } catch (Exception e) {
-                  mStatusBarButtons = false;
+                  mShowSoftButtons = false;
         }
 
         /**
          * All this is skipped if config_statusbar_buttons is false or missing in config.xml
          * If true then add statusbar buttons and set listeners and intents
          */
-        if (mStatusBarButtons) {
-            mStatusBarHomeButton = (ImageButton)findViewById(R.id.status_home);
-            if(!mStatusBarHideHome) {
-                mStatusBarHomeButton.setVisibility(0);
-                mStatusBarHomeButton.setOnClickListener(
-                    new ImageButton.OnClickListener() {
-                        public void onClick(View v) {
-                            Slog.i(TAG, "Home clicked");
-                            Intent setIntent = new Intent(Intent.ACTION_MAIN);
-                            setIntent.addCategory(Intent.CATEGORY_HOME);
-                            setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            StatusBarView.this.getContext().startActivity(setIntent);
-                        }
+        if (mShowSoftButtons) {
+            mHomeButton = (ImageButton)findViewById(R.id.status_home);
+            mHomeButton.setOnClickListener(
+                new ImageButton.OnClickListener() {
+                    public void onClick(View v) {
+                        Slog.i(TAG, "Home clicked");
+                        Intent setIntent = new Intent(Intent.ACTION_MAIN);
+                        setIntent.addCategory(Intent.CATEGORY_HOME);
+                        setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        StatusBarView.this.getContext().startActivity(setIntent);
                     }
-                );
-            }
-            mStatusBarMenuButton = (ImageButton)findViewById(R.id.status_menu);
-            mStatusBarMenuButton.setVisibility(0);
-            mStatusBarMenuButton.setOnClickListener(
+                }
+            );
+            mMenuButton = (ImageButton)findViewById(R.id.status_menu);
+            mMenuButton.setOnClickListener(
                 new ImageButton.OnClickListener() {
                     public void onClick(View v) {
                         Slog.i(TAG, "Menu clicked");
@@ -111,9 +171,8 @@ public class StatusBarView extends FrameLayout {
                     }
                 }
             );
-            mStatusBarBackButton = (ImageButton)findViewById(R.id.status_back);
-            mStatusBarBackButton.setVisibility(0);
-            mStatusBarBackButton.setOnClickListener(
+            mBackButton = (ImageButton)findViewById(R.id.status_back);
+            mBackButton.setOnClickListener(
                 new ImageButton.OnClickListener() {
                     public void onClick(View v) {
                         Slog.i(TAG, "Back clicked");
@@ -121,21 +180,50 @@ public class StatusBarView extends FrameLayout {
                     }
                 }
             );
-            if (mStatusBarHideHome) {
-                final float scale = getContext().getResources().getDisplayMetrics().density;
-                int size = (int) scale * 45;
-                LinearLayout.LayoutParams biggerButtons = new LinearLayout.LayoutParams(size,
-                    LinearLayout.LayoutParams.MATCH_PARENT);
-                mStatusBarMenuButton.setLayoutParams(biggerButtons);
-                mStatusBarBackButton.setLayoutParams(biggerButtons);
-            }
+            mQuickNaButton = (ImageButton)findViewById(R.id.status_quick_na);
+            mQuickNaButton.setOnClickListener(
+                new ImageButton.OnClickListener() {
+                    public void onClick(View v) {
+                        if(mService.mExpanded){
+                            mService.animateCollapse(); // with regards to flawed sources. doesnt work without animating call. blame google (:
+                            mService.performCollapse();
+                        }else {
+                            mService.performExpand();
+                        }
+                        Slog.i(TAG, "Quick Notification Area clicked");
+                    }
+                }
+            );
+            mSoftButtons = (ViewGroup)findViewById(R.id.buttons);
+            mEdgeLeft = (ImageButton)findViewById(R.id.status_edge_left);
+            mEdgeRight = (ImageButton)findViewById(R.id.status_edge_right);
+            mSeperator1 = (ImageButton)findViewById(R.id.status_sep1);
+            mSeperator2 = (ImageButton)findViewById(R.id.status_sep2);
+            mSeperator3 = (ImageButton)findViewById(R.id.status_sep3);
+
+            // set up settings observer
+            mHandler=new Handler();
+            SettingsObserver settingsObserver = new SettingsObserver(mHandler);
+            settingsObserver.observe();
         }
+    }
+
+    public void updateQuickNaImage(){
+        if(getParent()==null)
+            return;
+
+        int resCollapsed=mIsBottom ? R.drawable.ic_statusbar_na_up_bottom : R.drawable.ic_statusbar_na_down_top;
+        int resExpanded=mIsBottom ? R.drawable.ic_statusbar_na_down_bottom : R.drawable.ic_statusbar_na_up_top;
+        int resUse=mService.mExpanded ? resExpanded : resCollapsed;
+
+        mQuickNaButton.setBackgroundResource(resUse);
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         mService.onBarViewAttached();
+        updateQuickNaImage();
     }
 
     @Override
@@ -219,16 +307,20 @@ public class StatusBarView extends FrameLayout {
     @Override
     public boolean onTouchEvent(final MotionEvent event) {
 
-        if(isEventInButton(mStatusBarHomeButton, event)) {
-            mStatusBarHomeButton.onTouchEvent(event);
+        if(isEventInButton(mHomeButton, event)) {
+            mHomeButton.onTouchEvent(event);
             return true;
         }
-        if(isEventInButton(mStatusBarBackButton, event)) {
-            mStatusBarHomeButton.onTouchEvent(event);
+        if(isEventInButton(mBackButton, event)) {
+            mBackButton.onTouchEvent(event);
             return true;
         }
-        if(isEventInButton(mStatusBarMenuButton, event)) {
-            mStatusBarHomeButton.onTouchEvent(event);
+        if(isEventInButton(mMenuButton, event)) {
+            mMenuButton.onTouchEvent(event);
+            return true;
+        }
+        if(isEventInButton(mMenuButton, event)) {
+            mQuickNaButton.onTouchEvent(event);
             return true;
         }
 
@@ -240,9 +332,10 @@ public class StatusBarView extends FrameLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        if(isEventInButton(mStatusBarHomeButton, event)
-            || isEventInButton(mStatusBarBackButton, event)
-            || isEventInButton(mStatusBarMenuButton, event)) {
+        if(isEventInButton(mHomeButton, event)
+            || isEventInButton(mBackButton, event)
+            || isEventInButton(mMenuButton, event)
+            || isEventInButton(mQuickNaButton, event)) {
                 return super.onInterceptTouchEvent(event);
             }
         return mService.interceptTouchEvent(event)
@@ -250,7 +343,7 @@ public class StatusBarView extends FrameLayout {
     }
 
     private boolean isEventInButton(final ImageButton button, final MotionEvent event) {
-        return mStatusBarButtons && button != null
+        return mShowSoftButtons && button != null
             && button.getLeft() <= event.getRawX()
             && button.getRight() >= event.getRawX()
             && button.getTop() <= event.getRawY()
@@ -291,5 +384,94 @@ public class StatusBarView extends FrameLayout {
                Slog.w(TAG, "Error injecting key event", ex);
            }
         }
+    }
+
+    private void updateSoftButtons() {
+        mIcons.removeView(mSoftButtons);
+        mIcons.addView(mSoftButtons, mIsLeft ? 0 : mIcons.getChildCount());
+
+        // toggle visibility of edges
+        mEdgeLeft.setVisibility(mIsLeft ? View.GONE : View.VISIBLE);
+        mEdgeRight.setVisibility(mIsLeft ? View.VISIBLE : View.GONE);
+
+        // toggle visibility of buttons - at first, toggle all visible
+        mHomeButton.setVisibility(View.VISIBLE);
+        mSeperator1.setVisibility(View.VISIBLE);
+        mMenuButton.setVisibility(View.VISIBLE);
+        mSeperator2.setVisibility(View.VISIBLE);
+        mBackButton.setVisibility(View.VISIBLE);
+        mSeperator3.setVisibility(View.VISIBLE);
+        mQuickNaButton.setVisibility(View.VISIBLE);
+
+        // now toggle off unneeded stuff
+        if(!mShowHome){
+            mHomeButton.setVisibility(View.GONE);
+            mSeperator1.setVisibility(View.GONE);
+        }
+        if(!mShowMenu){
+            mMenuButton.setVisibility(View.GONE);
+            mSeperator2.setVisibility(View.GONE);
+        }
+        if(!mShowBack){
+            mBackButton.setVisibility(View.GONE);
+            mSeperator3.setVisibility(View.GONE);
+        }
+        if(!mShowQuickNa)
+            mQuickNaButton.setVisibility(View.GONE);
+
+        // adjust seperators
+        if(!mShowQuickNa)
+            mSeperator3.setVisibility(View.GONE);
+        if(!mShowQuickNa && !mShowBack)
+            mSeperator2.setVisibility(View.GONE);
+        if(!mShowQuickNa && !mShowBack && !mShowMenu)
+            mSeperator1.setVisibility(View.GONE);
+        // nothing displayed at all
+        if(!mShowQuickNa && !mShowBack && !mShowMenu && !mShowHome){
+            mEdgeLeft.setVisibility(View.GONE);
+            mEdgeRight.setVisibility(View.GONE);
+        }
+
+        // replace resources depending on top or bottom bar
+        if(mIsBottom){
+            mEdgeLeft.setBackgroundResource(R.drawable.ic_statusbar_edge_right_bottom);
+            mHomeButton.setBackgroundResource(R.drawable.ic_statusbar_home_bottom);
+            mSeperator1.setBackgroundResource(R.drawable.ic_statusbar_sep_bottom);
+            mMenuButton.setBackgroundResource(R.drawable.ic_statusbar_menu_bottom);
+            mSeperator2.setBackgroundResource(R.drawable.ic_statusbar_sep_bottom);
+            mBackButton.setBackgroundResource(R.drawable.ic_statusbar_back_bottom);
+            mSeperator3.setBackgroundResource(R.drawable.ic_statusbar_sep_bottom);
+            mQuickNaButton.setBackgroundResource(R.drawable.ic_statusbar_na_up_bottom);
+            mEdgeRight.setBackgroundResource(R.drawable.ic_statusbar_edge_left_bottom);
+        }else{
+            mEdgeLeft.setBackgroundResource(R.drawable.ic_statusbar_edge_right_top);
+            mHomeButton.setBackgroundResource(R.drawable.ic_statusbar_home_top);
+            mSeperator1.setBackgroundResource(R.drawable.ic_statusbar_sep_top);
+            mMenuButton.setBackgroundResource(R.drawable.ic_statusbar_menu_top);
+            mSeperator2.setBackgroundResource(R.drawable.ic_statusbar_sep_top);
+            mBackButton.setBackgroundResource(R.drawable.ic_statusbar_back_top);
+            mSeperator3.setBackgroundResource(R.drawable.ic_statusbar_sep_top);
+            mQuickNaButton.setBackgroundResource(R.drawable.ic_statusbar_na_up_top);
+            mEdgeRight.setBackgroundResource(R.drawable.ic_statusbar_edge_left_top);
+        }
+    }
+
+    public int getSoftButtonsWidth() {
+        if(!mShowSoftButtons)
+            return 0;
+
+        int ret=0;
+        if(mShowHome)
+            ret+=mHomeButton.getWidth();
+        if(mShowMenu)
+            ret+=mMenuButton.getWidth()+mSeperator1.getWidth();
+        if(mShowBack)
+            ret+=mBackButton.getWidth()+mSeperator2.getWidth();
+        if(mShowQuickNa)
+            ret+=mQuickNaButton.getWidth()+mSeperator3.getWidth();
+        if(ret>0)
+            ret+=mEdgeLeft.getWidth();
+
+        return ret;
     }
 }

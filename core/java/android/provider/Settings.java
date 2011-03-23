@@ -2146,6 +2146,104 @@ public final class Settings {
         public static final String STATUS_BAR_CLOCK = "status_bar_clock";
 
         /**
+         * Whether to display the status bar on top or bottom
+         * 0: show status bar on top (default for most devices)
+         * 1: show status bar on bottom
+         * default: 0 - can be overridden via CMParts config.xml for some devices
+         * @hide
+         */
+        public static final String STATUS_BAR_BOTTOM = "status_bar_bottom";
+
+        /**
+         * Whether to add a dead zone to the middle of the status bar
+         * 0: no dead zone
+         * 1: enable dead zone
+         * default: 0
+         * @hide
+         */
+        public static final String STATUS_BAR_DEAD_ZONE = "status_bar_dead_zone";
+
+        /**
+         * 4 options which decide, which soft-buttons to show.
+         * @hide
+         */
+        public static final String SOFT_BUTTON_SHOW_HOME = "soft_button_show_home";
+        public static final String SOFT_BUTTON_SHOW_MENU = "soft_button_show_menu";
+        public static final String SOFT_BUTTON_SHOW_BACK = "soft_button_show_back";
+        public static final String SOFT_BUTTON_SHOW_QUICK_NA = "soft_button_show_quick_na";
+
+        /**
+         * Whether to display the soft buttons on left side
+         * 0: shows them default right
+         * 1: shows them left (overlaps with date display when dragging notification area open)
+         * default: 0 - can be overridden via CMParts config.xml for some devices
+         * @hide
+         */
+        public static final String SOFT_BUTTONS_LEFT = "soft_buttons_left";
+
+        /**
+         * Whether to display extended option (home/menu/back) in power menu
+         * 0: dont extend (default for most devices)
+         * 1: extend
+         * default: 0 - can be overridden via CMParts config.xml for some devices
+         * @hide
+         */
+        public static final String EXTEND_PM = "extend_pm";
+
+        /**
+         * 3 options which decide, which contents extended power menu should include
+         * @hide
+         */
+        public static final String EXTEND_PM_SHOW_HOME = "extend_pm_show_home";
+        public static final String EXTEND_PM_SHOW_MENU = "extend_pm_show_menu";
+        public static final String EXTEND_PM_SHOW_BACK = "extend_pm_show_back";
+
+        /**
+         * Reverses the volume button behavior
+         * 0: press = volume, long-press = user action
+         * 1: press = user action, long-press = volume
+         * default: 0
+         * @hide
+         */
+        public static final String REVERSE_VOLUME_BEHAVIOR = "reverse_volume_behavior";
+
+        /**
+         * Action to be executed on long-press-volume-plus while screen on
+         * 0: none / default action
+         * >0: action defined in arrays.xml of CMParts
+         * default: 0
+         * @hide
+         */
+        public static final String LONG_VOLP_ACTION = "long_volp_action";
+
+        /**
+         * Action to be executed on long-press-volume-minus while screen on
+         * 0: none / default action
+         * >0: action defined in arrays.xml of CMParts
+         * default: 0
+         * @hide
+         */
+        public static final String LONG_VOLM_ACTION = "long_volm_action";
+
+        /**
+         * Action to be executed on pressing both volume bottons while screen on
+         * 0: none / default action
+         * >0: action defined in arrays.xml of CMParts
+         * default: 0
+         * @hide
+         */
+        public static final String VOL_BOTH_ACTION = "vol_both_action";
+
+        /**
+         * Action to be executed on long-press both volume bottons while screen on
+         * 0: none / default action
+         * >0: action defined in arrays.xml of CMParts
+         * default: 0
+         * @hide
+         */
+        public static final String LONG_VOL_BOTH_ACTION = "long_vol_both_action";
+
+        /**
          * Whether to wake the screen with the trackball. The value is boolean (1 or 0).
          * @hide
          */
