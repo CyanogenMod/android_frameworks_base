@@ -63,7 +63,7 @@ public class Policy implements IPolicy {
         return new PhoneLayoutInflater(context);
     }
 
-    public PhoneWindowManager makeNewWindowManager() {
-        return new PhoneWindowManager();
+    public CmPhoneWindowManager makeNewWindowManager() {
+        return new CmPhoneWindowManager();
     }
 }
