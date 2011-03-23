@@ -2146,6 +2146,42 @@ public final class Settings {
         public static final String STATUS_BAR_CLOCK = "status_bar_clock";
 
         /**
+         * Whether to display the status bar on top or bottom
+         * 0: show status bar on top (default for most devices)
+         * 1: show status bar on bottom
+         * default: 0 - can be overridden via CMParts config.xml for some devices
+         * @hide
+         */
+        public static final String STATUS_BAR_BOTTOM = "status_bar_bottom";
+
+        /**
+         * Whether to display extended option (home/menu/back) in power menu
+         * 0: dont extend (default for most devices)
+         * 1: extend
+         * default: 0 - can be overridden via CMParts config.xml for some devices
+         * @hide
+         */
+        public static final String EXTEND_PM = "extend_pm";
+
+        /**
+         * Action to be executed on long-press-volume-plus while screen on
+         * 0: none / default action
+         * >0: action defined in arrays.xml of CMParts
+         * default: 0
+         * @hide
+         */
+        public static final String LONG_VOLP_ACTION = "long_volp_action";
+
+        /**
+         * Action to be executed on long-press-volume-minus while screen on
+         * 0: none / default action
+         * >0: action defined in arrays.xml of CMParts
+         * default: 0
+         * @hide
+         */
+        public static final String LONG_VOLM_ACTION = "long_volm_action";
+
+        /**
          * Whether to wake the screen with the trackball. The value is boolean (1 or 0).
          * @hide
          */
