@@ -20,7 +20,7 @@
 -->
 
 <!--    android:background="@drawable/status_bar_closed_default_background" -->
-<com.android.systemui.statusbar.StatusBarView
+<com.android.systemui.statusbar.CmStatusBarView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -77,31 +77,81 @@
             />
 
         <!-- The following are button layouts for tablet style statusbar buttons
-             Visibility is handled in config.xml by setting config_statusbar_buttons = "true"
-             Size of buttons is set at stock statusbar size of 25dip realistically this may
-             be too small for tablets, but it can easily be changed in device overlay along
-             with the size of the statusbar in dimens.xml.  -->
-        <ImageButton android:id="@+id/status_home"
-            android:layout_width="25dip"
-            android:layout_height="match_parent"
-            android:background="@drawable/ic_statusbar_home"
-            android:visibility="gone"/>
+             Visibility is handled in config.xml by setting config_statusbar_buttons = "true" -->
+	    <LinearLayout android:id="@+id/buttons"
+	        android:layout_width="wrap_content"
+	        android:layout_height="match_parent"
+	        android:orientation="horizontal">
+	        <ImageButton android:id="@+id/status_edge_left"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/ic_statusbar_edge_right_bottom" />
 
-        <ImageButton android:id="@+id/status_menu"
-            android:layout_width="25dip"
-            android:layout_height="match_parent"
-            android:background="@drawable/ic_statusbar_menu"
-            android:visibility="gone"/>
+	        <ImageButton android:id="@+id/status_home"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/ic_statusbar_home_bottom" />
 
-        <ImageButton android:id="@+id/status_back"
-            android:layout_width="25dip"
-            android:layout_height="match_parent"
-            android:background="@drawable/ic_statusbar_back"
-            android:paddingRight="6dip"
-            android:visibility="gone"/>
+	        <ImageButton android:id="@+id/status_sep1"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/ic_statusbar_sep_bottom" />
 
+	        <ImageButton android:id="@+id/status_menu"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/ic_statusbar_menu_bottom" />
+
+	        <ImageButton android:id="@+id/status_sep2"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/ic_statusbar_sep_bottom" />
+
+	        <ImageButton android:id="@+id/status_back"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/ic_statusbar_back_bottom" />
+
+	        <ImageButton android:id="@+id/status_sep3"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/ic_statusbar_sep_bottom" />
+
+            <ImageButton android:id="@+id/status_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_statusbar_search_bottom" />
+
+            <ImageButton android:id="@+id/status_sep4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/ic_statusbar_sep_bottom" />
+
+	        <ImageButton android:id="@+id/status_quick_na"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:background="@drawable/ic_statusbar_na_up_bottom" />
+
+            <ImageButton android:id="@+id/status_sep5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:background="@drawable/ic_statusbar_sep_bottom" />
+
+            <ImageButton android:id="@+id/status_hide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:background="@drawable/ic_statusbar_hide_bottom" />
+
+	        <ImageButton android:id="@+id/status_edge_right"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:visibility="gone"
+	            android:background="@drawable/ic_statusbar_edge_left_bottom" />
+        </LinearLayout>
     </LinearLayout>
-        
+
     <LinearLayout android:id="@+id/ticker"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -153,4 +203,4 @@
         android:paddingRight="6px"
         android:background="@drawable/statusbar_background"
         />
-</com.android.systemui.statusbar.StatusBarView>
+</com.android.systemui.statusbar.CmStatusBarView>

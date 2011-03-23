@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * Patched by Sven Dawitz; Copyright (C) 2011 CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +41,7 @@ import android.os.PowerManager;
 import android.os.RemoteException;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.provider.CmSystem;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.util.Config;
@@ -214,7 +216,7 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
 
     private int mWakelockSequence;
 
-    private PhoneWindowManager mCallback;
+    private CmPhoneWindowManager mCallback;
 
     /**
      * If the user has disabled the keyguard, then requests to exit, this is
@@ -277,7 +279,7 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
         mAlarmManager = (AlarmManager) context
                 .getSystemService(Context.ALARM_SERVICE);
 
-        mCallback = callback;
+        mCallback = (CmPhoneWindowManager)callback;
 
         mUpdateMonitor = new KeyguardUpdateMonitor(context);
 
@@ -560,6 +562,12 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
      */
     private void doKeyguard() {
         synchronized (this) {
+            // override lockscreen if selected in tablet tweaks
+            int defValue=(CmSystem.getDefaultBool(mContext, CmSystem.CM_DEFAULT_DISABLE_LOCKSCREEN) ? 1 : 0);
+            boolean disableLockscreen=(Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.LOCKSCREEN_DISABLED, defValue) == 1);
+            if(disableLockscreen)
+                return;
             // if another app is disabling us, don't show
             if (!mExternallyEnabled) {
                 if (DEBUG) Log.d(TAG, "doKeyguard: not showing because externally disabled");
@@ -1008,7 +1016,7 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
                 Log.d(TAG, "playSounds: whichSound = " + whichSound + "; soundPath was null");
             }
         }
-    }        
+    }
 
     /**
      * Handle message sent by {@link #showLocked}.

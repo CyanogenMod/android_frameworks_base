@@ -2,6 +2,7 @@
 <!--
 /*
 ** Copyright 2009, The Android Open Source Project
+** Patched by Sven Dawitz; Copyright (C) 2011 CyanogenMod Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License"); 
 ** you may not use this file except in compliance with the License. 
@@ -410,4 +411,90 @@
     <!-- Do not translate. Defines the slots is Two Digit Number for dialing normally not USSD -->
     <string-array name="config_twoDigitNumberPattern">
     </string-array>
+
+    <!-- ************************************************
+         *                                              *
+         *    GLOBAL DEFAULT VALUES FOR CM SETTINGS     *
+         *                                              *
+         ************************************************
+
+         if you wanna change a behavior for your device,
+         just copy that value to your overlay file and
+         set it as you like -->
+
+    <!-- these values should be default for all phone devices! -->
+
+    <!-- toggles weather device is tablet or phone. right now,
+    tablets are know to have soft buttons, but phones have harware
+    buttons. this might change in the future - especially when the
+    honeycomb modifications become available for phones -->
+    <bool name="cm_default_is_tablet">false</bool>
+
+    <!-- toggles weather device uses soft buttons or got hardware
+    buttons. as the time of writing for android 2.3.3. all soft button
+    enabled devices are tablets, all disabled are phones. -->
+    <bool name="cm_default_has_soft_buttons">false</bool>
+
+    <!-- if true, status bar is shown on bottom by default -->
+    <bool name="cm_default_bottom_status_bar">false</bool>
+    <!-- if true, dead zone is activated, which disables pull
+    out of the status bar on the middle area - i.e. for people
+    who start drag-out events accidently while trying to hit
+    the space key -->
+    <bool name="cm_default_use_dead_zone">false</bool>
+    <!-- if true, soft buttons shown on left, false show them on
+    right side of status bar -->
+    <bool name="cm_default_soft_buttons_left">true</bool>
+
+    <!-- toggle which buttons to show if soft buttons enabled
+    quickna: opens notification area with the press of one button
+    instead of swiping the long way up/down on big tablets -->
+    <bool name="cm_default_show_soft_home">true</bool>
+    <bool name="cm_default_show_soft_menu">true</bool>
+    <bool name="cm_default_show_soft_back">true</bool>
+    <bool name="cm_default_show_soft_search">false</bool>
+    <bool name="cm_default_show_soft_quick_na">true</bool>
+
+    <!-- disables display of lockscreen both on boot as on
+    power button press to wake devices. usful for devices you
+    dont carry in pockets -->
+    <bool name="cm_default_disable_lockscreen">false</bool>
+    <!--  option only available for devices with soft buttons.
+    when enabled, fullscreen apps show the status bar. status
+    bar then gets an adition hide button to switch to real
+    fullscreen  -->
+    <bool name="cm_default_disable_fullscreen">false</bool>
+
+    <!-- toggles which button to use to unhide the status bar
+    to show soft buttons again (see last comment). this is an
+    index. to know, which index matches which button, see
+    arrays.xml of CMParts. at the bottom of this file, menu
+    entries like "menu, back, home" are mapped to indexes -->
+    <integer name="cm_default_unhide_button_index">0</integer>
+
+    <!-- when enabled, the power menu (shown when long-pressing
+    power... includes reboot and power off) is extended by
+    some more options which reflect the soft keys. ignored if soft
+    keys are disabled -->
+    <bool name="cm_default_extend_power_menu">false</bool>
+
+    <!--  toggles which buttons to show on extended power menu.
+    ignored if power menu disabled -->
+    <bool name="cm_default_power_menu_home">true</bool>
+    <bool name="cm_default_power_menu_menu">true</bool>
+    <bool name="cm_default_power_menu_back">true</bool>
+
+    <!--  toggles behavior of volume buttons. default (false) triggers
+    volume change when pressing, user action when long-pressing. enabling
+    (true) this option reverses this behavior -->
+    <bool name="cm_default_reverse_volume_behavior">false</bool>
+    <!-- defines the action of the volume buttons. for volume up,
+    volume down, both press and both long-press. this is an
+    index. to know, which index matches which button, see
+    arrays.xml of CMParts. at the bottom of that file, menu
+    entries like "menu, back, home" are mapped to indexes -->
+    <integer name="cm_default_remapped_long_vol_up_index">0</integer>
+    <integer name="cm_default_remapped_long_vol_down_index">0</integer>
+    <integer name="cm_default_remapped_both_vol_index">0</integer>
+    <integer name="cm_default_remapped_long_both_vol_index">0</integer>
 </resources>

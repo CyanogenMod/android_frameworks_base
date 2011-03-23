@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
+ * Patched by Sven Dawitz; Copyright (C) 2011 CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,13 +50,7 @@ public class StatusBarView extends FrameLayout {
     ViewGroup mStatusIcons;
     View mDate;
     FixedSizeDrawable mBackground;
-    //set up statusbar buttons
-    ImageButton mStatusBarHomeButton;
-    ImageButton mStatusBarBackButton;
-    ImageButton mStatusBarMenuButton;
-    boolean mStatusBarButtons;
-    boolean mStatusBarHideHome;
-    
+
     public StatusBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -70,66 +65,6 @@ public class StatusBarView extends FrameLayout {
         mBackground = new FixedSizeDrawable(mDate.getBackground());
         mBackground.setFixedBounds(0, 0, 0, 0);
         mDate.setBackgroundDrawable(mBackground);
-
-        // load config to determine if we want statusbar buttons
-        try {
-            mStatusBarButtons = mContext.getResources().getBoolean(
-                    R.bool.config_statusbar_buttons);
-            mStatusBarHideHome = mContext.getResources().getBoolean(
-                    R.bool.config_statusbar_hide_home);
-        } catch (Exception e) {
-                  mStatusBarButtons = false;
-        }
-
-        /**
-         * All this is skipped if config_statusbar_buttons is false or missing in config.xml
-         * If true then add statusbar buttons and set listeners and intents
-         */
-        if (mStatusBarButtons) {
-            mStatusBarHomeButton = (ImageButton)findViewById(R.id.status_home);
-            if(!mStatusBarHideHome) {
-                mStatusBarHomeButton.setVisibility(0);
-                mStatusBarHomeButton.setOnClickListener(
-                    new ImageButton.OnClickListener() {
-                        public void onClick(View v) {
-                            Slog.i(TAG, "Home clicked");
-                            Intent setIntent = new Intent(Intent.ACTION_MAIN);
-                            setIntent.addCategory(Intent.CATEGORY_HOME);
-                            setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            StatusBarView.this.getContext().startActivity(setIntent);
-                        }
-                    }
-                );
-            }
-            mStatusBarMenuButton = (ImageButton)findViewById(R.id.status_menu);
-            mStatusBarMenuButton.setVisibility(0);
-            mStatusBarMenuButton.setOnClickListener(
-                new ImageButton.OnClickListener() {
-                    public void onClick(View v) {
-                        Slog.i(TAG, "Menu clicked");
-                        StatusBarView.this.simulateKeypress(KeyEvent.KEYCODE_MENU);
-                    }
-                }
-            );
-            mStatusBarBackButton = (ImageButton)findViewById(R.id.status_back);
-            mStatusBarBackButton.setVisibility(0);
-            mStatusBarBackButton.setOnClickListener(
-                new ImageButton.OnClickListener() {
-                    public void onClick(View v) {
-                        Slog.i(TAG, "Back clicked");
-                        StatusBarView.this.simulateKeypress(KeyEvent.KEYCODE_BACK);
-                    }
-                }
-            );
-            if (mStatusBarHideHome) {
-                final float scale = getContext().getResources().getDisplayMetrics().density;
-                int size = (int) scale * 45;
-                LinearLayout.LayoutParams biggerButtons = new LinearLayout.LayoutParams(size,
-                    LinearLayout.LayoutParams.MATCH_PARENT);
-                mStatusBarMenuButton.setLayoutParams(biggerButtons);
-                mStatusBarBackButton.setLayoutParams(biggerButtons);
-            }
-        }
     }
 
     @Override
@@ -218,78 +153,22 @@ public class StatusBarView extends FrameLayout {
      */
     @Override
     public boolean onTouchEvent(final MotionEvent event) {
-
-        if(isEventInButton(mStatusBarHomeButton, event)) {
-            mStatusBarHomeButton.onTouchEvent(event);
-            return true;
-        }
-        if(isEventInButton(mStatusBarBackButton, event)) {
-            mStatusBarHomeButton.onTouchEvent(event);
-            return true;
-        }
-        if(isEventInButton(mStatusBarMenuButton, event)) {
-            mStatusBarHomeButton.onTouchEvent(event);
-            return true;
-        }
-
         if (event.getAction() != MotionEvent.ACTION_DOWN) {
             mService.interceptTouchEvent(event);
         }
         return true;
     }
 
+    public boolean onInterceptTouchEvent(MotionEvent event, boolean skipService){
+        if(skipService)
+            return super.onInterceptTouchEvent(event);
+
+        return mService.interceptTouchEvent(event)
+                    ? true : super.onInterceptTouchEvent(event);
+    }
+
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        if(isEventInButton(mStatusBarHomeButton, event)
-            || isEventInButton(mStatusBarBackButton, event)
-            || isEventInButton(mStatusBarMenuButton, event)) {
-                return super.onInterceptTouchEvent(event);
-            }
-        return mService.interceptTouchEvent(event)
-            ? true : super.onInterceptTouchEvent(event);
-    }
-
-    private boolean isEventInButton(final ImageButton button, final MotionEvent event) {
-        return mStatusBarButtons && button != null
-            && button.getLeft() <= event.getRawX()
-            && button.getRight() >= event.getRawX()
-            && button.getTop() <= event.getRawY()
-            && button.getBottom() >= event.getRawY();
-        }
-    /**
-     * Runnable to hold simulate a keypress.
-     *
-     * This is executed in a separate Thread to avoid blocking
-     */
-    private void simulateKeypress(final int keyCode) {
-        new Thread( new KeyEventInjector( keyCode ) ).start();
-    }
-
-    private class KeyEventInjector implements Runnable {
-        private int keyCode;
-
-        KeyEventInjector(final int keyCode) {
-            this.keyCode = keyCode;
-        }
-
-        public void run() {
-            try {
-                if(! (IWindowManager.Stub
-                    .asInterface(ServiceManager.getService("window")))
-                         .injectKeyEvent(
-                              new KeyEvent(KeyEvent.ACTION_DOWN, keyCode), true) ) {
-                                   Slog.w(TAG, "Key down event not injected");
-                                   return;
-                              }
-                if(! (IWindowManager.Stub
-                    .asInterface(ServiceManager.getService("window")))
-                         .injectKeyEvent(
-                             new KeyEvent(KeyEvent.ACTION_UP, keyCode), true) ) {
-                                  Slog.w(TAG, "Key up event not injected");
-                             }
-           } catch(RemoteException ex) {
-               Slog.w(TAG, "Error injecting key event", ex);
-           }
-        }
+        return onInterceptTouchEvent(event, false);
     }
 }
