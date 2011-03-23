@@ -40,7 +40,7 @@ import com.android.systemui.R;
 
 public abstract class Ticker {
     private static final int TICKER_SEGMENT_DELAY = 3000;
-    
+
     private Context mContext;
     private Handler mHandler = new Handler();
     private ArrayList<Segment> mSegments = new ArrayList();
@@ -141,7 +141,7 @@ public abstract class Ticker {
         }
     };
 
-    Ticker(Context context, StatusBarView sb) {
+    Ticker(Context context, CmStatusBarView sb) {
         mContext = context;
         mTickerView = sb.findViewById(R.id.ticker);
 
@@ -198,15 +198,15 @@ public abstract class Ticker {
         if (initialCount == 0 && mSegments.size() > 0) {
             Segment seg = mSegments.get(0);
             seg.first = false;
-            
+
             mIconSwitcher.setAnimateFirstView(false);
             mIconSwitcher.reset();
             mIconSwitcher.setImageDrawable(seg.icon);
-            
+
             mTextSwitcher.setAnimateFirstView(false);
             mTextSwitcher.reset();
             mTextSwitcher.setText(seg.getText());
-            
+
             tickerStarting();
             scheduleAdvance();
         }

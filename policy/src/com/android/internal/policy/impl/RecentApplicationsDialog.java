@@ -279,7 +279,7 @@ public class RecentApplicationsDialog extends Dialog implements OnClickListener 
         final List<ActivityManager.RecentTaskInfo> recentTasks =
                 am.getRecentTasks(MAX_RECENT_TASKS, ActivityManager.RECENT_IGNORE_UNAVAILABLE);
 
-        ActivityInfo homeInfo = 
+        ActivityInfo homeInfo =
             new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_HOME)
                     .resolveActivityInfo(pm, 0);
 
@@ -352,8 +352,8 @@ public class RecentApplicationsDialog extends Dialog implements OnClickListener 
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (Intent.ACTION_CLOSE_SYSTEM_DIALOGS.equals(action)) {
-                String reason = intent.getStringExtra(PhoneWindowManager.SYSTEM_DIALOG_REASON_KEY);
-                if (! PhoneWindowManager.SYSTEM_DIALOG_REASON_RECENT_APPS.equals(reason)) {
+                String reason = intent.getStringExtra(CmPhoneWindowManager.SYSTEM_DIALOG_REASON_KEY);
+                if (! CmPhoneWindowManager.SYSTEM_DIALOG_REASON_RECENT_APPS.equals(reason)) {
                     dismiss();
                 }
             }
