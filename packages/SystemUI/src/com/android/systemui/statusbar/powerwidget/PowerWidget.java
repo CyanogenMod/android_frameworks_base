@@ -133,6 +133,7 @@ public class PowerWidget extends FrameLayout {
             hsv.setFadingEdgeLength(mContext.getResources().getDisplayMetrics().widthPixels / LAYOUT_SCROLL_BUTTON_THRESHOLD);
             hsv.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
             hsv.setOverScrollMode(View.OVER_SCROLL_NEVER);
+            hsv.setHorizontalScrollBarEnabled(false);
             // set the padding on the linear layout to the size of our scrollbar, so we don't have them overlap
             ll.setPadding(ll.getPaddingLeft(), ll.getPaddingTop(), ll.getPaddingRight(), hsv.getVerticalScrollbarWidth());
             hsv.addView(ll, WIDGET_LAYOUT_PARAMS);
