@@ -49,6 +49,9 @@ endif
 ifeq ($(BOARD_NO_RGBX_8888),true)
 	LOCAL_CFLAGS += -DNO_RGBX_8888
 endif
+ifeq ($(BOARD_USE_OLD_EGL_CONFIG),true)
+	LOCAL_CFLAGS += -DNO_RGBX_8888
+endif
 
 include $(BUILD_SHARED_LIBRARY)
 
