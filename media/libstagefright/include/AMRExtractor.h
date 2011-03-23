@@ -19,11 +19,22 @@
 #define AMR_EXTRACTOR_H_
 
 #include <media/stagefright/MediaExtractor.h>
-
+#include <utils/List.h>
 namespace android {
 
 struct AMessage;
 class String8;
+struct AMRFrameTableEntry {
+
+   AMRFrameTableEntry(uint32_t numframes, uint32_t framesize, uint32_t framerate)
+      : mNumFrames(numframes),
+      mFrameSize(framesize),
+      mFrameRate(framerate) {}
+
+   uint64_t mNumFrames;
+   uint32_t mFrameSize;
+   uint32_t mFrameRate;
+};
 
 class AMRExtractor : public MediaExtractor {
 public:
@@ -44,7 +55,8 @@ private:
     status_t mInitCheck;
     size_t mFrameSize;
     bool mIsWide;
-
+    uint64_t mTotalFrames;
+    List<AMRFrameTableEntry> mAMRFrameTableEntries;
     AMRExtractor(const AMRExtractor &);
     AMRExtractor &operator=(const AMRExtractor &);
 };
