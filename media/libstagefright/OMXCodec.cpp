@@ -1493,8 +1493,8 @@ OMXCodec::OMXCodec(
       mSeekMode(ReadOptions::SEEK_CLOSEST_SYNC),
       mTargetTimeUs(-1),
       mSkipTimeUs(-1),
-      mPaused(false),
       mLeftOverBuffer(NULL),
+      mPaused(false),
       mPmemInfo(NULL){
     mPortStatus[kPortIndexInput] = ENABLED;
     mPortStatus[kPortIndexOutput] = ENABLED;
