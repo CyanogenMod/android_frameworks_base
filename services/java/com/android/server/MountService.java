@@ -1216,15 +1216,6 @@ class MountService extends IMountService.Stub
                 }
             }
         }
-        additionalVolumesProperty = SystemProperties.get("ro.removablemounts");
-        if (null != additionalVolumesProperty) {
-            String[] additionalVolumes = additionalVolumesProperty.split(";");
-            for (String additionalVolume: additionalVolumes) {
-                if (!"".equals(additionalVolume)) {
-                    volumesToMount.add(additionalVolume);
-                }
-            }
-        }
         return volumesToMount;
     }
 
