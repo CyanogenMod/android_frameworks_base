@@ -53,8 +53,7 @@
                 android:layout_gravity="center_vertical"
                 android:paddingBottom="1dp"
                 android:paddingLeft="4dp"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="@color/carrier_label_text_color"
+                android:textAppearance="@style/TextAppearance.StatusBar.CarrierLabel"
                 />
             <TextView android:id="@+id/clear_all_button"
                 android:layout_width="wrap_content"
