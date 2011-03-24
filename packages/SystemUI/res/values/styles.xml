@@ -25,4 +25,10 @@
     <style name="TextAppearance.StatusBar.IntruderAlert"
         parent="@android:style/TextAppearance.StatusBar">
     </style>
+
+    <style name="TextAppearance.StatusBar.CarrierLabel"
+        parent="@android:style/TextAppearance.Large">
+        <item name="android:textColor">@color/carrier_label_text_color</item>
+    </style>
+
 </resources>
