@@ -45,6 +45,8 @@ class HeadsetObserver extends UEventObserver {
     private static final int BIT_HEADSET_NO_MIC = (1 << 1);
     private static final int SUPPORTED_HEADSETS = (BIT_HEADSET|BIT_HEADSET_NO_MIC);
     private static final int HEADSETS_WITH_MIC = BIT_HEADSET;
+    private static final int I2C_CONNECTED = 2048;
+    private static final int I2C_ROUTED = 6144;
 
     private int mHeadsetState;
     private int mPrevHeadsetState;
@@ -100,43 +102,47 @@ class HeadsetObserver extends UEventObserver {
     }
 
     private synchronized final void update(String newName, int newState) {
-        // Retain only relevant bits
-        int headsetState = newState & SUPPORTED_HEADSETS;
-        int newOrOld = headsetState | mHeadsetState;
-        int delay = 0;
-        // reject all suspect transitions: only accept state changes from:
-        // - a: 0 heaset to 1 headset
-        // - b: 1 headset to 0 headset
-        if (mHeadsetState == headsetState || ((newOrOld & (newOrOld - 1)) != 0)) {
-            return;
-        }
-
-        mHeadsetName = newName;
-        mPrevHeadsetState = mHeadsetState;
-        mHeadsetState = headsetState;
-
-        if (headsetState == 0) {
-            Intent intent = new Intent(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
-            mContext.sendBroadcast(intent);
-            // It can take hundreds of ms flush the audio pipeline after
-            // apps pause audio playback, but audio route changes are
-            // immediate, so delay the route change by 1000ms.
-            // This could be improved once the audio sub-system provides an
-            // interface to clear the audio pipeline.
-            delay = 1000;
-        } else {
-            // Insert the same delay for headset connection so that the connection event is not
-            // broadcast before the disconnection event in case of fast removal/insertion
-            if (mHandler.hasMessages(0)) {
-                delay = 1000;
+        if (newState != I2C_ROUTED && newState != I2C_CONNECTED) {
+            // Retain only relevant bits
+            int headsetState = newState & SUPPORTED_HEADSETS;
+            int newOrOld = headsetState | mHeadsetState;
+            int delay = 0;
+            // reject all suspect transitions: only accept state changes from:
+            // - a: 0 heaset to 1 headset
+            // - b: 1 headset to 0 headset
+            if (mHeadsetState == headsetState || ((newOrOld & (newOrOld - 1)) != 0)) {
+                return;
             }
+
+            mHeadsetName = newName;
+            mPrevHeadsetState = mHeadsetState;
+            mHeadsetState = headsetState;
+
+            if (headsetState == 0) {
+                Intent intent = new Intent(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+                mContext.sendBroadcast(intent);
+                // It can take hundreds of ms flush the audio pipeline after
+                // apps pause audio playback, but audio route changes are
+                // immediate, so delay the route change by 1000ms.
+                // This could be improved once the audio sub-system provides an
+                // interface to clear the audio pipeline.
+                delay = 1000;
+            } else {
+                // Insert the same delay for headset connection so that the connection event is not
+                // broadcast before the disconnection event in case of fast removal/insertion
+                if (mHandler.hasMessages(0)) {
+                    delay = 1000;
+                }
+            }
+            mWakeLock.acquire();
+            mHandler.sendMessageDelayed(mHandler.obtainMessage(0,
+                                                               mHeadsetState,
+                                                               mPrevHeadsetState,
+                                                               mHeadsetName),
+                                        delay);
+        } else {
+            sendIntent(0, newState, 0, "");
         }
-        mWakeLock.acquire();
-        mHandler.sendMessageDelayed(mHandler.obtainMessage(0,
-                                                           mHeadsetState,
-                                                           mPrevHeadsetState,
-                                                           mHeadsetName),
-                                    delay);
     }
 
     private synchronized final void sendIntents(int headsetState, int prevHeadsetState, String headsetName) {
@@ -150,25 +156,38 @@ class HeadsetObserver extends UEventObserver {
     }
 
     private final void sendIntent(int headset, int headsetState, int prevHeadsetState, String headsetName) {
-        if ((headsetState & headset) != (prevHeadsetState & headset)) {
-            //  Pack up the values and broadcast them to everyone
-            Intent intent = new Intent(Intent.ACTION_HEADSET_PLUG);
+        if (headsetState != I2C_ROUTED && headsetState != I2C_CONNECTED) {
+            if ((headsetState & headset) != (prevHeadsetState & headset)) {
+                //  Pack up the values and broadcast them to everyone
+                Intent intent = new Intent(Intent.ACTION_HEADSET_PLUG);
+                intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
+                int state = 0;
+                int microphone = 0;
+
+                if ((headset & HEADSETS_WITH_MIC) != 0) {
+                    microphone = 1;
+                }
+                if ((headsetState & headset) != 0) {
+                    state = 1;
+                }
+                intent.putExtra("state", state);
+                intent.putExtra("name", headsetName);
+                intent.putExtra("microphone", microphone);
+
+                if (LOG) Slog.v(TAG, "Intent.ACTION_HEADSET_PLUG: state: "+state+" name: "+headsetName+" mic: "+microphone);
+                // TODO: Should we require a permission?
+                ActivityManagerNative.broadcastStickyIntent(intent, null);
+            }
+        } else {
+            Intent intent = new Intent("com.teamwin");
             intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
             int state = 0;
-            int microphone = 0;
-
-            if ((headset & HEADSETS_WITH_MIC) != 0) {
-                microphone = 1;
-            }
-            if ((headsetState & headset) != 0) {
+            
+            if (headsetState == I2C_ROUTED) {
                 state = 1;
             }
-            intent.putExtra("state", state);
-            intent.putExtra("name", headsetName);
-            intent.putExtra("microphone", microphone);
 
-            if (LOG) Slog.v(TAG, "Intent.ACTION_HEADSET_PLUG: state: "+state+" name: "+headsetName+" mic: "+microphone);
-            // TODO: Should we require a permission?
+            intent.putExtra("state", state);
             ActivityManagerNative.broadcastStickyIntent(intent, null);
         }
     }
