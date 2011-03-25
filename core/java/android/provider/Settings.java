@@ -2358,7 +2358,7 @@ public final class Settings {
          * @hide
          */
         public static final String EXPANDED_VIEW_WIDGET = "expanded_view_widget";
-
+        
         /**
          * Whether to hide the notification screen after clicking on a widget
          * button
@@ -2366,6 +2366,14 @@ public final class Settings {
          * @hide
          */
         public static final String EXPANDED_HIDE_ONCHANGE = "expanded_hide_onchange";
+        
+        /**
+         * Whether to hide the scrollbar when scrollable
+         * (more than six widgets)
+         *
+         * @hide
+         */
+        public static final String EXPANDED_HIDE_SCROLLBAR = "expanded_hide_scrollbar";
 
         /**
          * Notification Indicator Color

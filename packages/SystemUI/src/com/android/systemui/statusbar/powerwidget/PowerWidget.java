@@ -68,6 +68,7 @@ public class PowerWidget extends FrameLayout {
     private LayoutInflater mInflater;
     private WidgetBroadcastReceiver mBroadcastReceiver = null;
     private WidgetSettingsObserver mObserver = null;
+    private HorizontalScrollView mScrollView = null;
 
     public PowerWidget(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -128,15 +129,15 @@ public class PowerWidget extends FrameLayout {
         // we determine if we're using a horizontal scroll view based on a threshold of button counts
         if(buttonCount > LAYOUT_SCROLL_BUTTON_THRESHOLD) {
             // we need our horizontal scroll view to wrap the linear layout
-            HorizontalScrollView hsv = new HorizontalScrollView(mContext);
+            mScrollView = new HorizontalScrollView(mContext);
             // make the fading edge the size of a button (makes it more noticible that we can scroll
-            hsv.setFadingEdgeLength(mContext.getResources().getDisplayMetrics().widthPixels / LAYOUT_SCROLL_BUTTON_THRESHOLD);
-            hsv.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
-            hsv.setOverScrollMode(View.OVER_SCROLL_NEVER);
+            mScrollView.setFadingEdgeLength(mContext.getResources().getDisplayMetrics().widthPixels / LAYOUT_SCROLL_BUTTON_THRESHOLD);
+            mScrollView.setScrollBarStyle(View.SCROLLBARS_INSIDE_INSET);
+            mScrollView.setOverScrollMode(View.OVER_SCROLL_NEVER);
             // set the padding on the linear layout to the size of our scrollbar, so we don't have them overlap
-            ll.setPadding(ll.getPaddingLeft(), ll.getPaddingTop(), ll.getPaddingRight(), hsv.getVerticalScrollbarWidth());
-            hsv.addView(ll, WIDGET_LAYOUT_PARAMS);
-            addView(hsv, WIDGET_LAYOUT_PARAMS);
+            ll.setPadding(ll.getPaddingLeft(), ll.getPaddingTop(), ll.getPaddingRight(), mScrollView.getVerticalScrollbarWidth());
+            mScrollView.addView(ll, WIDGET_LAYOUT_PARAMS);
+            addView(mScrollView, WIDGET_LAYOUT_PARAMS);
         } else {
             // not needed, just add the linear layout
             addView(ll, WIDGET_LAYOUT_PARAMS);
@@ -194,6 +195,13 @@ public class PowerWidget extends FrameLayout {
             setVisibility(View.VISIBLE);
         }
     }
+    
+    private void updateScrollbar() {
+        if (mScrollView == null) return;
+        boolean hideScrollBar = Settings.System.getInt(mContext.getContentResolver(),
+                                             Settings.System.EXPANDED_HIDE_SCROLLBAR, 1) == 1;
+        mScrollView.setHorizontalScrollBarEnabled(!hideScrollBar);
+    }
 
     // our own broadcast receiver :D
     private class WidgetBroadcastReceiver extends BroadcastReceiver {
@@ -201,6 +209,7 @@ public class PowerWidget extends FrameLayout {
             if(intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
                 setupWidget();
                 updateVisibility();
+                updateScrollbar();
             } else if(intent.getAction().equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
                 updateButtonLayoutWidth();
                 setupWidget();
@@ -226,6 +235,11 @@ public class PowerWidget extends FrameLayout {
             // watch for display widget
             resolver.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.EXPANDED_VIEW_WIDGET),
+                            false, this);
+            
+            // watch for scrollbar hiding
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.EXPANDED_HIDE_SCROLLBAR),
                             false, this);
 
             // watch for changes in buttons
@@ -261,6 +275,8 @@ public class PowerWidget extends FrameLayout {
             // now check if we change visibility
             } else if(uri.equals(Settings.System.getUriFor(Settings.System.EXPANDED_VIEW_WIDGET))) {
                 updateVisibility();
+            } else if(uri.equals(Settings.System.getUriFor(Settings.System.EXPANDED_HIDE_SCROLLBAR))) {
+                updateScrollbar();
             }
 
             // do whatever the individual buttons must
