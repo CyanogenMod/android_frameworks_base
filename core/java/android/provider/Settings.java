@@ -2368,6 +2368,14 @@ public final class Settings {
         public static final String EXPANDED_HIDE_ONCHANGE = "expanded_hide_onchange";
 
         /**
+         * Whether to hide the scrollbar when scrollable
+         * (more than six widgets)
+         *
+         * @hide
+         */
+        public static final String EXPANDED_HIDE_SCROLLBAR = "expanded_hide_scrollbar";
+
+        /**
          * Notification Indicator Color
          *
          * @hide
