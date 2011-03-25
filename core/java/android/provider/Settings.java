@@ -2146,6 +2146,13 @@ public final class Settings {
         public static final String STATUS_BAR_CLOCK = "status_bar_clock";
 
         /**
+         * Whether to hide carrier label
+         *
+         * @hide
+         */
+        public static final String STATUS_BAR_HIDE_CARRIER = "status_bar_hide_carrier";
+
+        /**
          * Whether to wake the screen with the trackball. The value is boolean (1 or 0).
          * @hide
          */
@@ -2366,6 +2373,14 @@ public final class Settings {
          * @hide
          */
         public static final String EXPANDED_HIDE_ONCHANGE = "expanded_hide_onchange";
+
+        /**
+         * Whether to hide the scrollbar when scrollable
+         * (more than six widgets)
+         *
+         * @hide
+         */
+        public static final String EXPANDED_HIDE_SCROLLBAR = "expanded_hide_scrollbar";
 
         /**
          * Notification Indicator Color
