@@ -49,7 +49,7 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
     private final DatePicker mDatePicker;
     private final OnDateSetListener mCallBack;
     private final Calendar mCalendar;
-    private final java.text.DateFormat mTitleDateFormat;
+    private final String mTitleDateFormat;
     private final String[] mWeekDays;
 
     private int mInitialYear;
@@ -110,8 +110,8 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
         DateFormatSymbols symbols = new DateFormatSymbols();
         mWeekDays = symbols.getShortWeekdays();
         
-        mTitleDateFormat = java.text.DateFormat.
-                                getDateInstance(java.text.DateFormat.FULL);
+        mTitleDateFormat = context.getString(com.android.internal.R.string.abbrev_wday_month_day_year);
+
         mCalendar = Calendar.getInstance();
         updateTitle(mInitialYear, mInitialMonth, mInitialDay);
         
@@ -164,7 +164,7 @@ public class DatePickerDialog extends AlertDialog implements OnClickListener,
         mCalendar.set(Calendar.YEAR, year);
         mCalendar.set(Calendar.MONTH, month);
         mCalendar.set(Calendar.DAY_OF_MONTH, day);
-        setTitle(mTitleDateFormat.format(mCalendar.getTime()));
+        setTitle(DateFormat.format(mTitleDateFormat, mCalendar.getTime()));
     }
     
     @Override
