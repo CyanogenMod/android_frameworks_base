@@ -286,9 +286,13 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         Resources res = context.getResources();
 
         mIconSize = res.getDimensionPixelSize(com.android.internal.R.dimen.status_bar_icon_size);
-
-        ExpandedView expanded = (ExpandedView)View.inflate(context,
-                R.layout.status_bar_expanded, null);
+        
+        boolean hideCarrier = Settings.System.getInt(getContentResolver(),
+                                                       Settings.System.STATUS_BAR_HIDE_CARRIER, 0) == 1;
+        ExpandedView expanded = hideCarrier ? (ExpandedView)View.inflate(context,
+                                                R.layout.status_bar_expanded_no_carrier, null) : 
+                                                (ExpandedView)View.inflate(context,
+                                                R.layout.status_bar_expanded, null);
         expanded.mService = this;
 
         StatusBarView sb = (StatusBarView)View.inflate(context, R.layout.status_bar, null);
