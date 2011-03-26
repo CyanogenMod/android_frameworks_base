@@ -2146,6 +2146,13 @@ public final class Settings {
         public static final String STATUS_BAR_CLOCK = "status_bar_clock";
 
         /**
+         * Whether to hide carrier label in notification dropdown
+         *
+         * @hide
+         */
+        public static final String STATUS_BAR_HIDE_CARRIER = "status_bar_hide_carrier";
+
+        /**
          * Whether to wake the screen with the trackball. The value is boolean (1 or 0).
          * @hide
          */
