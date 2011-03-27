@@ -34,6 +34,11 @@ public class MediaPlayPauseButton extends MediaKeyEventButton {
         update();
     }
 
+    @Override
+    protected boolean handleLongClick() {
+        return false;
+    }
+
     private boolean isMusicActive() {
         if(mCurrentState == MEDIA_STATE_UNKNOWN) {
             mCurrentState = MEDIA_STATE_INACTIVE;

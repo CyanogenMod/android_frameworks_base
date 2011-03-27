@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.view.Gravity;
 import android.widget.Toast;
@@ -57,6 +58,12 @@ public class LockScreenButton extends PowerButton {
         // we're handling this, so just update our buttons now
         // this is UGLY, do it better later >.>
         update();
+    }
+
+    @Override
+    protected boolean handleLongClick() {
+        // we may want to add a setting to this later, for now just abort
+        return false;
     }
 
     private KeyguardLock getLock(Context context) {
