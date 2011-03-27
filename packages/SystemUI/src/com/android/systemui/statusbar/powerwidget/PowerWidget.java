@@ -173,6 +173,10 @@ public class PowerWidget extends FrameLayout {
         PowerButton.setGlobalOnClickListener(listener);
     }
 
+    public void setGlobalButtonOnLongClickListener(View.OnLongClickListener listener) {
+        PowerButton.setGlobalOnLongClickListener(listener);
+    }
+
     private void setupBroadcastReceiver() {
         if(mBroadcastReceiver == null) {
             mBroadcastReceiver = new WidgetBroadcastReceiver();
