@@ -62,10 +62,8 @@ public class LockScreenButton extends PowerButton {
 
     @Override
     protected boolean handleLongClick() {
-        // we may want to launch something here later
-        // for now, let's just use toggleState()
-        toggleState();
-        return true;
+        // we may want to launch something like this later, for now just abort
+        return false;
     }
 
     private KeyguardLock getLock(Context context) {

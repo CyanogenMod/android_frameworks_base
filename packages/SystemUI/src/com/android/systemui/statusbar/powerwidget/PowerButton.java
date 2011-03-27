@@ -210,7 +210,7 @@ public abstract class PowerButton {
                 }
             }
 
-            if(GLOBAL_ON_LONG_CLICK_LISTENER != null) {
+            if(result && GLOBAL_ON_LONG_CLICK_LISTENER != null) {
                 GLOBAL_ON_LONG_CLICK_LISTENER.onLongClick(v);
             }
             return result;

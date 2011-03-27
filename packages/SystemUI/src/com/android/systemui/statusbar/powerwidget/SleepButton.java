@@ -27,9 +27,7 @@ public class SleepButton extends PowerButton {
 
     @Override
     protected boolean handleLongClick() {
-        // we may want to launch something here later
-        // for now, let's just use toggleState()
-        toggleState();
-        return true;
+        // we may want to add a setting to this later, for now just abort
+        return false;
     }
 }
