@@ -42,6 +42,17 @@ public class FlashlightButton extends PowerButton {
     }
 
     @Override
+    protected boolean handleLongClick() {
+        // it may be better to make an Intent action for the Torch
+        // we may want to look at that option later
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setClassName("net.cactii.flash2", "net.cactii.flash2.MainActivity");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mView.getContext().startActivity(intent);
+        return true;
+    }
+
+    @Override
     protected List<Uri> getObservedUris() {
         return OBSERVED_URIS;
     }

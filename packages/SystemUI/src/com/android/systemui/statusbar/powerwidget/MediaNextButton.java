@@ -18,4 +18,9 @@ public class MediaNextButton extends MediaKeyEventButton {
     protected void toggleState() {
         sendMediaKeyEvent(KeyEvent.KEYCODE_MEDIA_NEXT);
     }
+
+    @Override
+    protected boolean handleLongClick() {
+        return false;
+    }
 }

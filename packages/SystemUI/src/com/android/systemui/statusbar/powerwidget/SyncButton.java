@@ -4,6 +4,7 @@ import com.android.systemui.R;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncStatusObserver;
 import android.net.ConnectivityManager;
 import android.util.Log;
@@ -78,6 +79,15 @@ public class SyncButton extends PowerButton {
         if (backgroundData && sync) {
             ContentResolver.setMasterSyncAutomatically(false);
         }
+    }
+
+    @Override
+    protected boolean handleLongClick() {
+        Intent intent = new Intent("android.settings.SYNC_SETTINGS");
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mView.getContext().startActivity(intent);
+        return true;
     }
 
     private static boolean getBackgroundDataState(Context context) {
