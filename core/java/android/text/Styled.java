@@ -83,19 +83,6 @@ public class Styled
 		}
 
         if (replacement == null) {
-            CharSequence tmp;
-            int tmpstart, tmpend;
-
-            if (runIsRtl) {
-                tmp = TextUtils.getReverse(text, start, end);
-                tmpstart = 0;
-                // XXX: assumes getReverse doesn't change the length of the text
-                tmpend = end - start;
-            } else {
-                tmp = text;
-                tmpstart = start;
-                tmpend = end;
-            }
 
             if (fmi != null) {
                 workPaint.getFontMetricsInt(fmi);
@@ -109,7 +96,7 @@ public class Styled
                     workPaint.setStyle(Paint.Style.FILL);
 
                     if (!haveWidth) {
-                        ret = workPaint.measureText(tmp, tmpstart, tmpend);
+                        ret = workPaint.measureText(text, start, end);
                         haveWidth = true;
                     }
 
@@ -123,27 +110,28 @@ public class Styled
                 }
 
                 if (dir == Layout.DIR_RIGHT_TO_LEFT) {
+
                     if (!haveWidth) {
-                        ret = workPaint.measureText(tmp, tmpstart, tmpend);
+                        ret = workPaint.measureText(text, start, end);
                         haveWidth = true;
                     }
 
-                    canvas.drawText(tmp, tmpstart, tmpend,
-                                    x - ret, y + workPaint.baselineShift, workPaint,false);
+                    canvas.drawText(text, start, end,
+                            x - ret, y + workPaint.baselineShift, workPaint);
                 } else {
                     if (needWidth) {
                         if (!haveWidth) {
-                            ret = workPaint.measureText(tmp, tmpstart, tmpend);
+                            ret = workPaint.measureText(text, start, end);
                             haveWidth = true;
                         }
                     }
 
-                    canvas.drawText(tmp, tmpstart, tmpend,
-                                    x, y + workPaint.baselineShift, workPaint,false);
+                    canvas.drawText(text, start, end,
+                        x, y + workPaint.baselineShift, workPaint);
                 }
             } else {
                 if (needWidth && !haveWidth) {
-                    ret = workPaint.measureText(tmp, tmpstart, tmpend);
+                    ret = workPaint.measureText(text, start, end);
                     haveWidth = true;
                 }
             }
@@ -253,23 +241,20 @@ public class Styled
             float ret = 0;
 
             if (runIsRtl) {
-                CharSequence tmp = TextUtils.getReverse(text, start, end);
-                // XXX: this assumes getReverse doesn't tweak the length of
-                // the text
-                int tmpend = end - start;
 
                 if (canvas != null || needWidth)
-                    ret = paint.measureText(tmp, 0, tmpend);
+                    ret = paint.measureText(text, start, end);
 
                 if (canvas != null)
-                    canvas.drawText(tmp, 0, tmpend,
-                                    x - ret, y, paint,false);
+					canvas.drawText(text, start, end,
+	                            x - ret, y, paint);
+
             } else {
                 if (needWidth)
                     ret = paint.measureText(text, start, end);
 
                 if (canvas != null)
-                    canvas.drawText(text, start, end, x, y, paint,false);
+					canvas.drawText(text, start, end, x, y, paint);
             }
 
             if (fmi != null) {
@@ -278,7 +263,7 @@ public class Styled
 
             return ret * dir;   // Layout.DIR_RIGHT_TO_LEFT == -1
         }
-        
+
         float ox = x;
         int minAscent = 0, maxDescent = 0, minTop = 0, maxBottom = 0;
 
