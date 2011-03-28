@@ -55,7 +55,7 @@ public class RotarySelector extends View {
     public static final int VERTICAL = 1;
 
     private static final String LOG_TAG = "RotarySelector";
-    private static final boolean DBG = false;
+    private static final boolean DBG = true;
     private static final boolean VISUAL_DEBUG = false;
 
     // Listener for onDialTrigger() callbacks.
@@ -456,11 +456,14 @@ public class RotarySelector extends View {
                     mTimeString=mTime.format("%l:%M %P");
                 String mDate=(String) DateFormat.format(mDateFormatString, new Date());
 
+                //Dirty way to fix LDPI - check if density
+                //is 120 add an offset if yes.
+                int ldpiOffset = getResources().getDisplayMetrics().densityDpi == 120 ? 34 : 0;
                 canvas.translate(0, 0);
                 mLensePaint.setTextSize(LENSE_TIME_SIZE_DIP * mDensity * mDensityScaleFactor);
-                canvas.drawText(mTimeString, mBackgroundWidth / 2 * mDensityScaleFactor, mRotaryOffsetY + mMarginBottom + LENSE_TIME_SIZE_DIP * mDensity, mLensePaint);
+                canvas.drawText(mTimeString, mBackgroundWidth / 2 * mDensityScaleFactor, ldpiOffset + mRotaryOffsetY + mMarginBottom + LENSE_TIME_SIZE_DIP * mDensity, mLensePaint);
                 mLensePaint.setTextSize(LENSE_DATE_SIZE_DIP * mDensity * mDensityScaleFactor);
-                canvas.drawText(mDate, mBackgroundWidth / 2 * mDensityScaleFactor, mRotaryOffsetY + mMarginBottom + LENSE_DATE_SIZE_DIP * mDensity * 3, mLensePaint);
+                canvas.drawText(mDate, mBackgroundWidth / 2 * mDensityScaleFactor, ldpiOffset + mRotaryOffsetY + mMarginBottom + LENSE_DATE_SIZE_DIP * mDensity * 3, mLensePaint);
             }
             return;
         }
