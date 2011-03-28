@@ -16,11 +16,11 @@
 
 package android.graphics;
 
-import android.graphics.utils.ArabicReshape;
 import android.text.TextUtils;
 import android.text.SpannableString;
 import android.text.SpannedString;
 import android.text.GraphicsOperations;
+import android.util.Log;
 
 /**
  * The Paint class holds the style and color information about how to draw
@@ -999,10 +999,13 @@ public class Paint {
      * @return      The width of the text
      */
     public float measureText(char[] text, int index, int count) {
-        if (!mHasCompatScaling) return native_measureText(text, index, count);
+    	
+    	char[] text2 = TextUtils.processBidi(text, index, index+count);
+    	
+        if (!mHasCompatScaling) return native_measureText(text2, index, count);
         final float oldSize = getTextSize();
         setTextSize(oldSize*mCompatScaling);
-        float w = native_measureText(text, index, count);
+        float w = native_measureText(text2, index, count);
         setTextSize(oldSize);
         return w*mInvCompatScaling;
     }
@@ -1018,10 +1021,13 @@ public class Paint {
      * @return      The width of the text
      */
     public float measureText(String text, int start, int end) {
-        if (!mHasCompatScaling) return native_measureText(text, start, end);
+    	
+    	String text2 = TextUtils.processBidi(text, start, end);
+    	
+    	if (!mHasCompatScaling) return native_measureText(text2, start, end);
         final float oldSize = getTextSize();
         setTextSize(oldSize*mCompatScaling);
-        float w = native_measureText(text, start, end);
+        float w = native_measureText(text2, start, end);
         setTextSize(oldSize);
         return w*mInvCompatScaling;
     }
@@ -1035,7 +1041,14 @@ public class Paint {
      * @return      The width of the text
      */
     public float measureText(String text) {
-        if (!mHasCompatScaling) return native_measureText(text);
+    	
+    	//doing being here ruins alignment
+    	String text2 = TextUtils.processBidi(text);
+    	
+    	//Log.e("MeasureTextA", "len=" + text.length());
+    	//Log.e("MeasureTextB", "len=" + text2.length());
+    	
+        if (!mHasCompatScaling) return native_measureText(text2);
         final float oldSize = getTextSize();
         setTextSize(oldSize*mCompatScaling);
         float w = native_measureText(text);
@@ -1091,12 +1104,15 @@ public class Paint {
      */
     public int breakText(char[] text, int index, int count,
                                 float maxWidth, float[] measuredWidth) {
+    	
+    	char[] text2 = TextUtils.processBidi(text);
+    	
         if (!mHasCompatScaling) {
-            return native_breakText(text, index, count, maxWidth, measuredWidth);
+            return native_breakText(text2, index, count, maxWidth, measuredWidth);
         }
         final float oldSize = getTextSize();
         setTextSize(oldSize*mCompatScaling);
-        int res = native_breakText(text, index, count, maxWidth*mCompatScaling,
+        int res = native_breakText(text2, index, count, maxWidth*mCompatScaling,
                 measuredWidth);
         setTextSize(oldSize);
         if (measuredWidth != null) measuredWidth[0] *= mInvCompatScaling;
@@ -1163,12 +1179,15 @@ public class Paint {
      */
     public int breakText(String text, boolean measureForwards,
                                 float maxWidth, float[] measuredWidth) {
+    	
+    	String text2 = TextUtils.processBidi(text);
+    	
         if (!mHasCompatScaling) {
-            return native_breakText(text, measureForwards, maxWidth, measuredWidth);
+            return native_breakText(text2, measureForwards, maxWidth, measuredWidth);
         }
         final float oldSize = getTextSize();
         setTextSize(oldSize*mCompatScaling);
-        int res = native_breakText(text, measureForwards, maxWidth*mCompatScaling,
+        int res = native_breakText(text2, measureForwards, maxWidth*mCompatScaling,
                 measuredWidth);
         setTextSize(oldSize);
         if (measuredWidth != null) measuredWidth[0] *= mInvCompatScaling;
@@ -1195,12 +1214,14 @@ public class Paint {
             throw new ArrayIndexOutOfBoundsException();
         }
         
+        char[] text2 = TextUtils.processBidi(text, index, index+count);
+        
         if (!mHasCompatScaling) {
-            return native_getTextWidths(mNativePaint, text, index, count, widths);
+            return native_getTextWidths(mNativePaint, text2, index, count, widths);
         }
         final float oldSize = getTextSize();
         setTextSize(oldSize*mCompatScaling);
-        int res = native_getTextWidths(mNativePaint, text, index, count, widths);
+        int res = native_getTextWidths(mNativePaint, text2, index, count, widths);
         setTextSize(oldSize);
         for (int i=0; i<res; i++) {
             widths[i] *= mInvCompatScaling;
@@ -1250,6 +1271,7 @@ public class Paint {
      * @return       the number of unichars in the specified text.
      */
     public int getTextWidths(String text, int start, int end, float[] widths) {
+    	
         if ((start | end | (end - start) | (text.length() - end)) < 0) {
             throw new IndexOutOfBoundsException();
         }
@@ -1257,12 +1279,14 @@ public class Paint {
             throw new ArrayIndexOutOfBoundsException();
         }
         
+        String text2 = TextUtils.processBidi(text, start, end);
+        
         if (!mHasCompatScaling) {
-            return native_getTextWidths(mNativePaint, text, start, end, widths);
+            return native_getTextWidths(mNativePaint, text2, start, end, widths);
         }
         final float oldSize = getTextSize();
         setTextSize(oldSize*mCompatScaling);
-        int res = native_getTextWidths(mNativePaint, text, start, end, widths);
+        int res = native_getTextWidths(mNativePaint, text2, start, end, widths);
         setTextSize(oldSize);
         for (int i=0; i<res; i++) {
             widths[i] *= mInvCompatScaling;
@@ -1279,6 +1303,7 @@ public class Paint {
      * @return       the number of unichars in the specified text.
      */
     public int getTextWidths(String text, float[] widths) {
+    	
         return getTextWidths(text, 0, text.length(), widths);
     }
 
@@ -1300,18 +1325,10 @@ public class Paint {
         if ((index | count) < 0 || index + count > text.length) {
             throw new ArrayIndexOutOfBoundsException();
         }
-        boolean hasBidi=Canvas.bidiTest(text,index,count);
-        if (hasBidi) {
-            char[] bidiText;
-            bidiText=Canvas.bidiProcess(text,index,count);
-            String reshapedText=ArabicReshape.reshape(new String(bidiText));
-            /* The reshaping may make the string smaller */
-            native_getTextPath(mNativePaint, reshapedText.toCharArray(), 0,
-                                count - ((count-reshapedText.length())>0 ? (count-reshapedText.length()) : 0),
-                                x, y, path.ni());
-        } else {
-            native_getTextPath(mNativePaint, text, index, count, x, y, path.ni());
-        }
+        
+        char[] text2 = TextUtils.processBidi(text, index, index+count);
+        
+        native_getTextPath(mNativePaint, text2, index, count, x, y, path.ni());
     }
 
     /**
@@ -1332,19 +1349,12 @@ public class Paint {
         if ((start | end | (end - start) | (text.length() - end)) < 0) {
             throw new IndexOutOfBoundsException();
         }
-        boolean hasBidi=Canvas.bidiTest(text,start,start+end);
-        if (hasBidi) {
-            char[] bidiText;
-            bidiText=Canvas.bidiProcess(text.toCharArray(),start,start+end);
-            String reshapedText=ArabicReshape.reshape(new String(bidiText));
-            /* The reshaping may make the string smaller */
-            native_getTextPath(mNativePaint, reshapedText, 0, end-start - ((end-start - reshapedText.length())>0 ? (end-start - reshapedText.length()) : 0),
-                                x, y, path.ni());
-        } else {
-            native_getTextPath(mNativePaint, text, start, end, x, y, path.ni());
-        }
+        
+        String text2 = TextUtils.processBidi(text, start, end);
+        
+        native_getTextPath(mNativePaint, text2, start, end, x, y, path.ni());
     }
-    
+
     /**
      * Return in bounds (allocated by the caller) the smallest rectangle that
      * encloses all of the characters, with an implied origin at (0,0).
@@ -1362,7 +1372,10 @@ public class Paint {
         if (bounds == null) {
             throw new NullPointerException("need bounds Rect");
         }
-        nativeGetStringBounds(mNativePaint, text, start, end, bounds);
+        
+        String text2 = TextUtils.processBidi(text, start, end);
+        
+        nativeGetStringBounds(mNativePaint, text2, start, end, bounds);
     }
     
     /**
@@ -1382,7 +1395,10 @@ public class Paint {
         if (bounds == null) {
             throw new NullPointerException("need bounds Rect");
         }
-        nativeGetCharArrayBounds(mNativePaint, text, index, count, bounds);
+        
+        char[] text2 = TextUtils.processBidi(text, index, index+count);
+        
+        nativeGetCharArrayBounds(mNativePaint, text2, index, count, bounds);
     }
     
     protected void finalize() throws Throwable {
