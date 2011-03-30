@@ -30,6 +30,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+/** @hide */
 public class NotificationGroup implements Parcelable {
 
     private String mName;
