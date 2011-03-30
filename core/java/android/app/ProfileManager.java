@@ -64,6 +64,7 @@ public class ProfileManager
         return null;
     }
 
+    /** @hide */
     public void addProfile(Profile profile){
         try {
             getService().addProfile(profile);
@@ -72,6 +73,7 @@ public class ProfileManager
         }
     }
 
+    /** @hide */
     public void removeProfile(Profile profile){
         try {
             getService().removeProfile(profile);
@@ -79,6 +81,7 @@ public class ProfileManager
         }
     }
 
+    /** @hide */
     public Profile getProfile(String profileName){
         try {
             return getService().getProfile(profileName);
@@ -87,6 +90,21 @@ public class ProfileManager
         return null;
     }
 
+    public String[] getProfileNames(){
+        try {
+            Profile[] profiles = getService().getProfiles();
+            String[] names = new String[profiles.length];
+            int i=0;
+            for(Profile profile : profiles){
+                names[i++] = profile.getName();
+            }
+            return names;
+        } catch (RemoteException e) {
+        }
+        return null;
+    }
+
+    /** @hide */
     public Profile[] getProfiles(){
         try {
             return getService().getProfiles();
@@ -95,6 +113,7 @@ public class ProfileManager
         return null;
     }
 
+    /** @hide */
     public NotificationGroup[] getNotificationGroups(){
         try {
             return getService().getNotificationGroups();
@@ -103,6 +122,7 @@ public class ProfileManager
         return null;
     }
 
+    /** @hide */
     public void addNotificationGroup(NotificationGroup group){
         try {
             getService().addNotificationGroup(group);
@@ -111,6 +131,7 @@ public class ProfileManager
         }
     }
 
+    /** @hide */
     public void removeNotificationGroup(NotificationGroup group){
         try {
             getService().removeNotificationGroup(group);
@@ -118,6 +139,7 @@ public class ProfileManager
         }
     }
 
+    /** @hide */
     public NotificationGroup getNotificationGroupForPackage(String pkg){
         try {
             return getService().getNotificationGroupForPackage(pkg);
@@ -126,6 +148,7 @@ public class ProfileManager
         return null;
     }
 
+    /** @hide */
     public NotificationGroup getNotificationGroup(String name){
         try {
             return getService().getNotificationGroup(name);
@@ -134,6 +157,7 @@ public class ProfileManager
         return null;
     }
 
+    /** @hide */
     public ProfileGroup getActiveProfileGroup(String packageName) {
         NotificationGroup notificationGroup = getNotificationGroupForPackage(packageName);
         if(notificationGroup == null){

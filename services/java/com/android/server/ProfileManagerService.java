@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/** {@hide} */
 public class ProfileManagerService extends IProfileManager.Stub {
 
     private static final String PROFILE_FILENAME = "/data/system/profiles.xml";
