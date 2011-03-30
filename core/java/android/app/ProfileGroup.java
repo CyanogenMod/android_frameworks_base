@@ -46,6 +46,7 @@ public class ProfileGroup implements Parcelable {
 
     private boolean mDefaultGroup = false;
 
+    /** @hide */
     public static final Parcelable.Creator<ProfileGroup> CREATOR = new Parcelable.Creator<ProfileGroup>() {
         public ProfileGroup createFromParcel(Parcel in) {
             return new ProfileGroup(in);
@@ -57,15 +58,18 @@ public class ProfileGroup implements Parcelable {
         }
     };
 
+    /** @hide */
     public ProfileGroup(String name) {
         this(name, false);
     }
 
+    /** @hide */
     ProfileGroup(String name, boolean defaultGroup) {
         mName = name;
         mDefaultGroup = defaultGroup;
     }
 
+    /** @hide */
     private ProfileGroup(Parcel in) {
         readFromParcel(in);
     }
@@ -78,6 +82,7 @@ public class ProfileGroup implements Parcelable {
         return mDefaultGroup;
     }
 
+    /** @hide */
     public void setSoundOverride(Uri sound) {
         this.mSoundOverride = sound;
     }
@@ -86,6 +91,7 @@ public class ProfileGroup implements Parcelable {
         return mSoundOverride;
     }
 
+    /** @hide */
     public void setRingerOverride(Uri ringer) {
         this.mRingerOverride = ringer;
     }
@@ -94,6 +100,7 @@ public class ProfileGroup implements Parcelable {
         return mRingerOverride;
     }
 
+    /** @hide */
     public void setSoundMode(Mode soundMode) {
         this.mSoundMode = soundMode;
     }
@@ -102,6 +109,7 @@ public class ProfileGroup implements Parcelable {
         return mSoundMode;
     }
 
+    /** @hide */
     public void setRingerMode(Mode ringerMode) {
         this.mRingerMode = ringerMode;
     }
@@ -110,6 +118,7 @@ public class ProfileGroup implements Parcelable {
         return mRingerMode;
     }
 
+    /** @hide */
     public void setVibrateMode(Mode vibrateMode) {
         this.mVibrateMode = vibrateMode;
     }
@@ -118,6 +127,7 @@ public class ProfileGroup implements Parcelable {
         return mVibrateMode;
     }
 
+    /** @hide */
     public void setLightsMode(Mode lightsMode) {
         this.mLightsMode = lightsMode;
     }
@@ -128,7 +138,8 @@ public class ProfileGroup implements Parcelable {
 
     // TODO : add support for LEDs / screen etc.
 
-    /* package */Notification processNotification(Notification notification) {
+    /** @hide */
+    Notification processNotification(Notification notification) {
 
         switch (mSoundMode) {
             case OVERRIDE:
@@ -175,11 +186,13 @@ public class ProfileGroup implements Parcelable {
         notification.flags &= (~Notification.FLAG_SHOW_LIGHTS);
     }
 
+    /** @hide */
     @Override
     public int describeContents() {
         return 0;
     }
 
+    /** @hide */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mName);
@@ -193,6 +206,7 @@ public class ProfileGroup implements Parcelable {
         dest.writeString(mLightsMode.name());
     }
 
+    /** @hide */
     public void readFromParcel(Parcel in) {
         mName = in.readString();
         mDefaultGroup = (Boolean)in.readValue(null);
@@ -209,12 +223,14 @@ public class ProfileGroup implements Parcelable {
         SUPPRESS, DEFAULT, OVERRIDE;
     }
 
+    /** @hide */
     public String getXmlString() {
         StringBuilder builder = new StringBuilder();
         getXmlString(builder);
         return builder.toString();
     }
 
+    /** @hide */
     public void getXmlString(StringBuilder builder) {
         builder.append("<profileGroup name=\"" + TextUtils.htmlEncode(getName()) + "\" default=\""
                 + isDefaultGroup() + "\">\n");
@@ -228,10 +244,13 @@ public class ProfileGroup implements Parcelable {
         builder.append("</profileGroup>\n");
     }
 
+    /** @hide */
     public static ProfileGroup fromXml(XmlPullParser xpp) throws XmlPullParserException,
             IOException {
         return fromXml(xpp, null);
     }
+
+    /** @hide */
     public static ProfileGroup fromXml(XmlPullParser xpp, Context context) throws XmlPullParserException,
             IOException {
         String defaultGroup = xpp.getAttributeValue(null, "default");
