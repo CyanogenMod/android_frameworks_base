@@ -426,6 +426,8 @@ public class StatusBarPolicy {
 
     private boolean mShowCmBattery;
 
+    private boolean mShowPhoneSignal;
+
     class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
@@ -435,6 +437,8 @@ public class StatusBarPolicy {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_CM_BATTERY), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.STATUS_BAR_PHONE_SIGNAL), false, this);
         }
 
         @Override public void onChange(boolean selfChange) {
@@ -469,6 +473,8 @@ public class StatusBarPolicy {
         mPhone = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
         mPhoneSignalIconId = R.drawable.stat_sys_signal_null;
         mService.setIcon("phone_signal", mPhoneSignalIconId, 0);
+
+        mService.setIconVisibility("phone_signal", !mShowPhoneSignal);
 
         // load config to determine if phone should be hidden
         try {
@@ -956,6 +962,7 @@ public class StatusBarPolicy {
                 mPhoneSignalIconId = R.drawable.stat_sys_signal_null;
             }
             mService.setIcon("phone_signal", mPhoneSignalIconId, 0);
+            mService.setIconVisibility("phone_signal", !mShowPhoneSignal);
             // set phone_signal visibility false if hidden
             if (mPhoneSignalHidden) {
                 mService.setIconVisibility("phone_signal", false);
@@ -1404,5 +1411,8 @@ public class StatusBarPolicy {
         mShowCmBattery = (Settings.System.getInt(resolver,
                 Settings.System.STATUS_BAR_CM_BATTERY, 0) == 1);
         mService.setIconVisibility("battery", !mShowCmBattery);
+        mShowPhoneSignal = (Settings.System.getInt(resolver,
+                Settings.System.STATUS_BAR_PHONE_SIGNAL, 0) == 1);
+        mService.setIconVisibility("phone_signal", !mShowPhoneSignal);
     }
 }

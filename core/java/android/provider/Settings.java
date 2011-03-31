@@ -2146,6 +2146,15 @@ public final class Settings {
         public static final String STATUS_BAR_CLOCK = "status_bar_clock";
 
         /**
+         * Whether to show the phone signal in status bar
+         * 0: don't show the phone signal
+         * 1: show the phone signal
+         * default: 1
+         * @hide
+         */
+        public static final String STATUS_BAR_PHONE_SIGNAL = "status_bar_phone_signal";
+
+        /**
          * Whether to wake the screen with the trackball. The value is boolean (1 or 0).
          * @hide
          */
