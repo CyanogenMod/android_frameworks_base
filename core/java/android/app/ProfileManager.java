@@ -21,6 +21,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.util.Log;
 
 public class ProfileManager
 {
@@ -54,6 +55,7 @@ public class ProfileManager
             getService().setActiveProfile(profileName);
             getService().persist();
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
     }
 
@@ -61,6 +63,7 @@ public class ProfileManager
         try {
             return getService().getActiveProfile();
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
         return null;
     }
@@ -71,6 +74,7 @@ public class ProfileManager
             getService().addProfile(profile);
             getService().persist();
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
     }
 
@@ -79,6 +83,7 @@ public class ProfileManager
         try {
             getService().removeProfile(profile);
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
     }
 
@@ -86,6 +91,7 @@ public class ProfileManager
         try {
             return getService().getProfile(profileName);
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
         return null;
     }
@@ -100,6 +106,7 @@ public class ProfileManager
             }
             return names;
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
         return null;
     }
@@ -108,6 +115,7 @@ public class ProfileManager
         try {
             return getService().getProfiles();
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
         return null;
     }
@@ -117,6 +125,7 @@ public class ProfileManager
         try {
             return getService().getNotificationGroups();
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
         return null;
     }
@@ -127,6 +136,7 @@ public class ProfileManager
             getService().addNotificationGroup(group);
             getService().persist();
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
     }
 
@@ -135,6 +145,7 @@ public class ProfileManager
         try {
             getService().removeNotificationGroup(group);
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
     }
 
@@ -143,6 +154,7 @@ public class ProfileManager
         try {
             return getService().getNotificationGroupForPackage(pkg);
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
         return null;
     }
@@ -152,6 +164,7 @@ public class ProfileManager
         try {
             return getService().getNotificationGroup(name);
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
         return null;
     }
@@ -160,7 +173,9 @@ public class ProfileManager
     public ProfileGroup getActiveProfileGroup(String packageName) {
         NotificationGroup notificationGroup = getNotificationGroupForPackage(packageName);
         if(notificationGroup == null){
-            return getActiveProfile().getDefaultGroup();
+            ProfileGroup defaultGroup = getActiveProfile().getDefaultGroup();
+            Log.v(TAG, "No active group, returning default: " + (defaultGroup == null ? "null" : defaultGroup.getName()));
+            return defaultGroup;
         }
         String notificationGroupName = notificationGroup.getName();
         return getActiveProfile().getProfileGroup(notificationGroupName);
