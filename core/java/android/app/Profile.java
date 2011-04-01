@@ -114,6 +114,9 @@ public class Profile implements Parcelable {
         for (Parcelable group : in.readParcelableArray(null)) {
             ProfileGroup grp = (ProfileGroup) group;
             profileGroups.put(grp.getName(), grp);
+            if(grp.isDefaultGroup()){
+                mDefaultGroup = grp;
+            }
         }
     }
 
