@@ -964,7 +964,9 @@ public class NotificationManagerService extends INotificationManager.Stub
                 .getSystemService(Context.PROFILE_SERVICE);
 
                 Profile currentProfile = profileManager.getActiveProfile();
+                Log.v(TAG, "Active profile: " + currentProfile.getName());
                 ProfileGroup group = profileManager.getActiveProfileGroup(pkg);
+                Log.v(TAG, "Pkg: " + pkg + " group: " + group.getName());
                 notification = currentProfile.processNotification(group.getName(), notification);
             }catch(Throwable th){
                 Log.e(TAG, "An error occurred profiling the notification.", th);
