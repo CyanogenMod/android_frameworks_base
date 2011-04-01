@@ -1218,7 +1218,7 @@ void TrackballInputMapper::sync(nsecs_t when) {
     int32_t pointerId = 0;
     getDispatcher()->notifyMotion(when, getDeviceId(), AINPUT_SOURCE_TRACKBALL, 0,
             motionEventAction, 0, metaState, AMOTION_EVENT_EDGE_FLAG_NONE,
-            1, &pointerId, &pointerCoords, mXPrecision, mYPrecision, downTime);
+            1, & pointerId, & pointerCoords, mXPrecision, mYPrecision, downTime);
 
     mAccumulator.clear();
 }
@@ -2324,7 +2324,7 @@ void TouchInputMapper::dispatchTouches(nsecs_t when, uint32_t policyFlags) {
             }
 
             pointerCount += 1;
-            dispatchTouch(when, policyFlags, &mCurrentTouch,
+            dispatchTouch(when, policyFlags, & mCurrentTouch,
                     activeIdBits, downId, pointerCount, motionEventAction);
         }
     }
@@ -3394,7 +3394,7 @@ void MouseInputMapper::sync(nsecs_t when) {
     int32_t pointerId = 0;
     getDispatcher()->notifyMotion(when, getDeviceId(), AINPUT_SOURCE_MOUSE, 0,
             motionEventAction, 0, metaState, AMOTION_EVENT_EDGE_FLAG_NONE,
-            1, &pointerId, &pointerCoords, 1, 1, downTime);
+            1, & pointerId, & pointerCoords, 1, 1, downTime);
     mAccumulator.clear();
 }
 
