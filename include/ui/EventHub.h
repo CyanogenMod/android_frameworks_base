@@ -119,6 +119,9 @@ enum {
 
     /* The input device has switches. */
     INPUT_DEVICE_CLASS_SWITCH        = 0x00000080,
+
+    /* The input device is a mouse. */
+    INPUT_DEVICE_CLASS_MOUSE         = 0x00000100,
 };
 
 /*

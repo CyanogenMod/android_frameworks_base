@@ -731,17 +731,19 @@ bool InputDispatcher::dispatchMotionLocked(
         return true;
     }
 
-    bool isPointerEvent = entry->source & AINPUT_SOURCE_CLASS_POINTER;
+    bool isTouchEvent = ! ((entry->source & AINPUT_SOURCE_TOUCHSCREEN) ^ AINPUT_SOURCE_TOUCHSCREEN);
+    bool isMouseEvent = ! ((entry->source & AINPUT_SOURCE_MOUSE) ^ AINPUT_SOURCE_MOUSE);
+    bool isDownEvent = (entry->action & AMOTION_EVENT_ACTION_MASK) == AMOTION_EVENT_ACTION_DOWN;
 
     // Identify targets.
     if (! mCurrentInputTargetsValid) {
         int32_t injectionResult;
-        if (isPointerEvent) {
-            // Pointer event.  (eg. touchscreen)
+        if (isTouchEvent || (isMouseEvent && (isDownEvent || mTouchState.down))) {
+            // Touch-like event.  (eg. touchscreen or mouse drag-n-drop )
             injectionResult = findTouchedWindowTargetsLocked(currentTime,
                     entry, nextWakeupTime);
         } else {
-            // Non touch event.  (eg. trackball)
+            // Non touch event.  (eg. trackball or mouse simple move)
             injectionResult = findFocusedWindowTargetsLocked(currentTime,
                     entry, nextWakeupTime);
         }
