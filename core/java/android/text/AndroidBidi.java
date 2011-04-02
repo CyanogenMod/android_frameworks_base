@@ -44,5 +44,27 @@ package android.text;
         return result;
     }
 
+    /**
+     * @author: Eyad Aboulouz
+     * Bidi text reordering and reshaping by by calling native reorderReshapeBidiText function
+     * @param chs
+     * @param reshapedChs
+     * @param off
+     * @param len
+     * @return int
+     */
+    public static int reorderAndReshapeBidiText(char[] chs, char[] outputChs, int off, int len) {
+
+        if (chs == null)
+            throw new NullPointerException();
+
+        if (off < 0 || len < 0 || off + len > chs.length)
+            throw new IndexOutOfBoundsException();
+
+        return reorderReshapeBidiText(chs, outputChs, off, len);
+    }
+
     private native static int runBidi(int dir, char[] chs, byte[] chInfo, int n, boolean haveInfo);
+
+    private native static int reorderReshapeBidiText(char[] chs, char[] outputChs, int off, int len);
 }
