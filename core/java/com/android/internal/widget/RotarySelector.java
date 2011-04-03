@@ -456,11 +456,14 @@ public class RotarySelector extends View {
                     mTimeString=mTime.format("%l:%M %P");
                 String mDate=(String) DateFormat.format(mDateFormatString, new Date());
 
+                //Add offset specified in config file
+                int customTimeOffset = getContext().getResources().getInteger(R.integer.config_lenseTimeLabelOffsetDIP);
+
                 canvas.translate(0, 0);
                 mLensePaint.setTextSize(LENSE_TIME_SIZE_DIP * mDensity * mDensityScaleFactor);
-                canvas.drawText(mTimeString, mBackgroundWidth / 2 * mDensityScaleFactor, mRotaryOffsetY + mMarginBottom + LENSE_TIME_SIZE_DIP * mDensity, mLensePaint);
+                canvas.drawText(mTimeString, mBackgroundWidth / 2 * mDensityScaleFactor, mRotaryOffsetY + mMarginBottom + LENSE_TIME_SIZE_DIP * mDensity + customTimeOffset, mLensePaint);
                 mLensePaint.setTextSize(LENSE_DATE_SIZE_DIP * mDensity * mDensityScaleFactor);
-                canvas.drawText(mDate, mBackgroundWidth / 2 * mDensityScaleFactor, mRotaryOffsetY + mMarginBottom + LENSE_DATE_SIZE_DIP * mDensity * 3, mLensePaint);
+                canvas.drawText(mDate, mBackgroundWidth / 2 * mDensityScaleFactor, mRotaryOffsetY + mMarginBottom + LENSE_DATE_SIZE_DIP * mDensity * 3 + customTimeOffset, mLensePaint);
             }
             return;
         }
