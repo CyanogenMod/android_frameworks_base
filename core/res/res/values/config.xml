@@ -404,6 +404,9 @@
     <!-- Configure rotary stroke width -->
     <integer name="config_rotaryStrokeWidthDIP">83</integer>
 
+    <!-- Configure lense unlock time label offset -->
+    <integer name="config_lenseTimeLabelOffsetDIP">0</integer>
+
     <!-- Do not translate. Defines the slots is Two Digit Number for dialing normally not USSD -->
     <string-array name="config_twoDigitNumberPattern">
     </string-array>
