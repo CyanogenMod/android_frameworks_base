@@ -601,16 +601,24 @@ public class AudioManager {
      * @see #getVibrateSetting(int)
      */
     public boolean shouldVibrate(int vibrateType) {
-        ProfileGroup profileGroup = mProfileManager.getActiveProfileGroup(mContext.getPackageName());
-        if(profileGroup != null){
-            switch(profileGroup.getVibrateMode()){
-                case OVERRIDE :
-                    return true;
-                case SUPPRESS :
-                    return false;
-                case DEFAULT :
-                    // Drop through
+        String packageName = mContext.getPackageName();
+        // Don't apply profiles for "android" context, as these could
+        // come from the NotificationManager, and originate from a real package.
+        if(!packageName.equals("android")){
+            ProfileGroup profileGroup = mProfileManager.getActiveProfileGroup(packageName);
+            if(profileGroup != null){
+                Log.v(TAG, "shouldVibrate, group: " + profileGroup.getName() + " mode: " + profileGroup.getVibrateMode());
+                switch(profileGroup.getVibrateMode()){
+                    case OVERRIDE :
+                        return true;
+                    case SUPPRESS :
+                        return false;
+                    case DEFAULT :
+                        // Drop through
+                }
             }
+        }else{
+            Log.v(TAG, "Not applying override for 'android' package");
         }
         IAudioService service = getService();
         try {
