@@ -1692,7 +1692,7 @@ public class TextUtils {
                (c >= 0xFB1D && c <= 0xFB4F) ||
                (c >= 0x0600 && c <= 0x07BF) ||
                (c >= 0xFB50 && c <= 0xFDFF) ||
-               (c >= 0xFE70 && c <= 0xFEFF)    ;
+               (c >= 0xFE70 && c <= 0xFEFE)    ;
     }
 
     /**
