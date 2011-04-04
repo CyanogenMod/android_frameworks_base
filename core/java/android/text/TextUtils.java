@@ -43,10 +43,14 @@ import android.text.style.TextAppearanceSpan;
 import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.util.Printer;
 
 import com.android.internal.util.ArrayUtils;
 
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.util.regex.Pattern;
 import java.util.Iterator;
 
@@ -1679,6 +1683,117 @@ public class TextUtils {
             }
         }
         return false;
+    }
+
+
+    public static boolean isRTLCharacter(char c) {
+        //range of RTL characters per unicode specification
+        return (c >= 0x0590 && c <= 0x05FF) ||
+               (c >= 0xFB1D && c <= 0xFB4F) ||
+               (c >= 0x0600 && c <= 0x07BF) ||
+               (c >= 0xFB50 && c <= 0xFDFF) ||
+               (c >= 0xFE70 && c <= 0xFEFF)    ;
+    }
+
+    /**
+     * function to check if text range has RTL characters.
+     */
+    public static boolean hasRTLCharacters(final char[] text, int start, int end) {
+        if (text == null)
+            return false;
+
+        //go through all characters
+        for (int i=start; i<end; i++) {
+            if (isRTLCharacter(text[i]))
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * function to check if text range has RTL characters.
+     */
+    public static boolean hasRTLCharacters(CharSequence text, int start, int end) {
+        if (text == null)
+            return false;
+
+        //go through all characters
+        for (int i=start; i<end; i++) {
+            if (isRTLCharacter(text.charAt(i)))
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * function to process bidi on the given text
+     * @param src
+     * @return String
+     */
+    public static String processBidi (final String src) {
+        return (TextUtils.processBidi(src, 0, src.length()));
+    }
+
+    /**
+     * function to process bidi the given text
+     * @param src
+     * @return char[]
+     */
+    public static char[] processBidi (final char[] src) {
+
+        return (TextUtils.processBidi(src, 0, src.length));
+    }
+
+    /**
+     * function to process bidi on the given text
+     * @param src
+     * @param begin
+     * @param end
+     * @return String
+     */
+    public static String processBidi (final String src, int start, int end) {
+
+        char[] chars2 = TextUtils.processBidi(src.toCharArray(), start, end);
+
+        return (new String(chars2));
+    }
+
+    /**
+     * @author: Eyad Aboulouz
+     * function to process bidi on the given text
+     * @param src
+     * @param start
+     * @param end
+     * @return char[]
+     */
+    public static char[] processBidi (final char[] src, int start, int end) {
+
+        if (src == null)
+            return (src);
+
+        //if there are no right-to-left characters
+        if (!hasRTLCharacters(src,start,end))
+            return (src);
+
+        try {
+            char[] outputTxt = new char[end-start];
+            char[] ret = src.clone();
+
+            int outputSize = AndroidBidi.reorderAndReshapeBidiText(ret, outputTxt, start, end-start);
+
+            if (outputSize != (end-start))
+                throw new Exception ("Error Processing Bidi Reordering And Reshaping");
+
+            System.arraycopy(outputTxt, 0, ret, start, end-start);
+
+            return (ret);
+
+        } catch (Exception e) {
+
+            return (src);
+        }
     }
 
     private static Object sLock = new Object();
