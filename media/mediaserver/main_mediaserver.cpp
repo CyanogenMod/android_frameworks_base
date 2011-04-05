@@ -33,14 +33,34 @@
 
 using namespace android;
 
+int waitBeforeAdding( const String16& serviceName ) {
+    sp<IServiceManager> sm = defaultServiceManager();
+    for ( int i = 0 ; i < 5; i++ ) {
+        if ( sm->checkService ( serviceName ) != NULL ) {
+            sleep(1);
+        }
+        else {
+            //good to go;
+            return 0;
+        }
+    }
+    LOGE("waitBeforeAdding (%s) timed out",
+         String8(serviceName.string()).string());
+    return -1;
+}
+
 int main(int argc, char** argv)
 {
     sp<ProcessState> proc(ProcessState::self());
     sp<IServiceManager> sm = defaultServiceManager();
     LOGI("ServiceManager: %p", sm.get());
+    waitBeforeAdding( String16("media.audio_flinger") );
     AudioFlinger::instantiate();
+    waitBeforeAdding( String16("media.player") );
     MediaPlayerService::instantiate();
+    waitBeforeAdding( String16("media.camera") );
     CameraService::instantiate();
+    waitBeforeAdding( String16("media.audio_policy") );
     AudioPolicyService::instantiate();
     ProcessState::self()->startThreadPool();
     IPCThreadState::self()->joinThreadPool();
