@@ -130,6 +130,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     // top bar
     TextView mNoNotificationsTitle;
     TextView mClearButton;
+    ViewGroup mClearButtonParent;
     CmBatteryMiniIcon mCmBatteryMiniIcon;
     // drag bar
     CloseDragHandle mCloseView;
@@ -279,6 +280,8 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         return null;
     }
 
+    private boolean compactCarrier = false;
+
     // ================================================================================
     // Constructing the view
     // ================================================================================
@@ -287,8 +290,12 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
 
         mIconSize = res.getDimensionPixelSize(com.android.internal.R.dimen.status_bar_icon_size);
 
-        ExpandedView expanded = (ExpandedView)View.inflate(context,
-                R.layout.status_bar_expanded, null);
+        compactCarrier = Settings.System.getInt(getContentResolver(),
+                                                       Settings.System.STATUS_BAR_COMPACT_CARRIER, 0) == 1;
+        ExpandedView expanded = compactCarrier ? (ExpandedView)View.inflate(context,
+                                                R.layout.status_bar_expanded_compact_carrier, null) : 
+                                                (ExpandedView)View.inflate(context,
+                                                R.layout.status_bar_expanded, null);
         expanded.mService = this;
 
         StatusBarView sb = (StatusBarView)View.inflate(context, R.layout.status_bar, null);
@@ -319,6 +326,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         mNoNotificationsTitle = (TextView)expanded.findViewById(R.id.noNotificationsTitle);
         mClearButton = (TextView)expanded.findViewById(R.id.clear_all_button);
         mClearButton.setOnClickListener(mClearButtonListener);
+        mClearButtonParent = (ViewGroup)mClearButton.getParent();
         mScrollView = (ScrollView)expanded.findViewById(R.id.scroll);
         mNotificationLinearLayout = expanded.findViewById(R.id.notificationLinearLayout);
 
@@ -639,6 +647,8 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         return entry.notification;
     }
 
+    private boolean isClearButtonAdded = false;
+
     private void setAreThereNotifications() {
         boolean ongoing = mOngoing.hasVisibleItems();
         boolean latest = mLatest.hasVisibleItems();
@@ -646,8 +656,16 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         // (no ongoing notifications are clearable)
         if (mLatest.hasClearableItems()) {
             mClearButton.setVisibility(View.VISIBLE);
+            if (compactCarrier && !isClearButtonAdded) {
+                mClearButtonParent.addView(mClearButton);
+                isClearButtonAdded = true;
+            }
         } else {
             mClearButton.setVisibility(View.INVISIBLE);
+            if (compactCarrier) {
+                mClearButtonParent.removeView(mClearButton);
+                isClearButtonAdded = false;
+            }
         }
 
         mOngoingTitle.setVisibility(ongoing ? View.VISIBLE : View.GONE);
