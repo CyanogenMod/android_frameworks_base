@@ -2146,6 +2146,13 @@ public final class Settings {
         public static final String STATUS_BAR_CLOCK = "status_bar_clock";
 
         /**
+         * Whether to use compact carrier label layout
+         *
+         * @hide
+         */
+        public static final String STATUS_BAR_COMPACT_CARRIER = "status_bar_compact_carrier";
+
+        /**
          * Whether to wake the screen with the trackball. The value is boolean (1 or 0).
          * @hide
          */
@@ -2366,6 +2373,13 @@ public final class Settings {
          * @hide
          */
         public static final String EXPANDED_HIDE_ONCHANGE = "expanded_hide_onchange";
+
+        /**
+         * Hide scroll bar in power widget
+         *
+         * @hide
+         */
+        public static final String EXPANDED_HIDE_SCROLLBAR = "expanded_hide_scrollbar";
 
         /**
          * Notification Indicator Color
