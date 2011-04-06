@@ -22,6 +22,10 @@
         <item name="android:textColor">@drawable/notification_header_text_color</item>
     </style>
 
+    <style name="TextAppearance.Status.Bar.CarrierLabel" parent="@android:style/TextAppearance.Large">
+        <item name="android:textColor">@color/carrier_label_text_color</item>
+    </style>
+
     <style name="TextAppearance.StatusBar.IntruderAlert"
         parent="@android:style/TextAppearance.StatusBar">
     </style>
