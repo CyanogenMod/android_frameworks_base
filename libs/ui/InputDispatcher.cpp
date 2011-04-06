@@ -594,6 +594,8 @@ InputDispatcher::KeyEntry* InputDispatcher::synthesizeKeyRepeatLocked(
 
     if (entry->repeatCount == 1) {
         entry->flags |= AKEY_EVENT_FLAG_LONG_PRESS;
+    } else {
+        entry->flags &= ~AKEY_EVENT_FLAG_LONG_PRESS;
     }
 
     mKeyRepeatState.nextRepeatTime = currentTime + keyRepeatDelay;
