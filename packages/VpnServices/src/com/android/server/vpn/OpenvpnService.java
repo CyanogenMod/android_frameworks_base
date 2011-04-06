@@ -94,7 +94,7 @@ class OpenvpnService extends VpnService<OpenvpnProfile> {
             args.add(USE_INLINE);
             args.add(USE_KEYSTORE + Credentials.USER_PRIVATE_KEY + p.getCertName());
         }
-        args.add("--persist-tun");
+        //args.add("--persist-tun");
         args.add("--persist-key");
         args.add("--management");
         args.add("/dev/socket/" + socketName);
