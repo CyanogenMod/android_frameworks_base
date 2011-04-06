@@ -1433,10 +1433,19 @@ static const CameraInfo sCameraInfo[] = {
 
 #define HTC_SWITCH_CAMERA_FILE_PATH "/sys/android_camera2/htcwc"
 
+#define FFC_VENDOR_HTC 0x1
+#define FFC_VENDOR_LGE 0x2
+int mFrontCameraType = 0;
+
 static int getNumberOfCameras() {
     if (access(HTC_SWITCH_CAMERA_FILE_PATH, W_OK) == 0) {
+        mFrontCameraType = FFC_VENDOR_HTC;
         return 2;
     }
+#ifdef BOARD_HAS_LGE_FFC
+    mFrontCameraType = FFC_VENDOR_LGE;
+    return 2;
+#endif
     /* FIXME: Support non-HTC front camera */
     return 1;
 }
@@ -1469,7 +1478,17 @@ extern "C" sp<CameraHardwareInterface> HAL_openCameraHardware(int cameraId)
 {
     LOGV("openCameraHardware: call createInstance");
     if (getNumberOfCameras() == 2) {
-        htcCameraSwitch(cameraId);
+        if (mFrontCameraType == FFC_VENDOR_HTC) {
+            htcCameraSwitch(cameraId);
+        } else if (mFrontCameraType == FFC_VENDOR_LGE) {
+            sp<CameraHardwareInterface> hardware = openCameraHardware(cameraId);
+            if (hardware != NULL) {
+                CameraParameters params(hardware->getParameters());
+                params.set("camera-sensor", cameraId);
+                hardware->setParameters(params);
+            }
+            return hardware;
+        }
 #ifdef BOARD_USE_REVERSE_FFC
         if (cameraId == 1) {
             /* Change default parameters for the front camera */
