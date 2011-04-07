@@ -91,7 +91,7 @@ public class Styled
                 if (TextUtils.hasRTLCharacters(text,start,end))
                     tmp = text.subSequence(start,end);
                 else // otherwise we need to reverse it here:
-                    tmp = TextUtils.getReverse(text, start, end);
+                    tmp = TextUtils.getMirror(text, start, end);
 
                 tmpstart = 0;
                 // XXX: assumes getReverse doesn't change the length of the text
@@ -263,7 +263,8 @@ public class Styled
                 if (TextUtils.hasRTLCharacters(text,start,end))
                     tmp = text.subSequence(start,end);
                 else // otherwise we need to reverse it here:
-                    tmp = TextUtils.getReverse(text, start, end);
+                    tmp = TextUtils.getMirror(text, start, end);
+
                 // XXX: this assumes getReverse doesn't tweak the length of
                 // the text
                 int tmpend = end - start;
