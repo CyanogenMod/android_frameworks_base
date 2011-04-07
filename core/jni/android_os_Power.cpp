@@ -91,6 +91,10 @@ static void android_os_Power_reboot(JNIEnv *env, jobject clazz, jstring reason)
         reboot(RB_AUTOBOOT);
     } else {
         const char *chars = env->GetStringUTFChars(reason, NULL);
+#ifdef RECOVERY_PRE_COMMAND
+	if (!strncmp(chars,"recovery",8))
+		system( RECOVERY_PRE_COMMAND );
+#endif
         __reboot(LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2,
                  LINUX_REBOOT_CMD_RESTART2, (char*) chars);
         env->ReleaseStringUTFChars(reason, chars);  // In case it fails.
