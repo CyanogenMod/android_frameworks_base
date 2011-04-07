@@ -740,8 +740,7 @@ extends Layout
             // add condition if the separator is a space
             else if (isSpace && prev != SOR &&
                             (   next == Character.DIRECTIONALITY_EUROPEAN_NUMBER
-                             || next == Character.DIRECTIONALITY_ARABIC_NUMBER
-                             || next == Character.DIRECTIONALITY_OTHER_NEUTRALS) ) {
+                             || next == Character.DIRECTIONALITY_ARABIC_NUMBER  ) ) {
                 chInfo[j] = SOR;
                 for (int k=j+1; k < n; ++k) {
                     if (chInfo[k] == Character.DIRECTIONALITY_LEFT_TO_RIGHT) {
@@ -827,8 +826,6 @@ extends Layout
             } else if (d == Character.DIRECTIONALITY_EUROPEAN_NUMBER ||
                        d == Character.DIRECTIONALITY_ARABIC_NUMBER) {
                 cur = Character.DIRECTIONALITY_LEFT_TO_RIGHT;
-            } else if (d == Character.DIRECTIONALITY_OTHER_NEUTRALS) {
-               chInfo[j] = cur = SOR;
             } else {
                 byte dd = SOR;
                 int k;
@@ -837,8 +834,7 @@ extends Layout
                     dd = chInfo[k];
 
                     if (dd == Character.DIRECTIONALITY_LEFT_TO_RIGHT ||
-                        dd == Character.DIRECTIONALITY_RIGHT_TO_LEFT ||
-                        dd == Character.DIRECTIONALITY_OTHER_NEUTRALS) {
+                        dd == Character.DIRECTIONALITY_RIGHT_TO_LEFT) {
                         break;
                     }
                     if (dd == Character.DIRECTIONALITY_EUROPEAN_NUMBER ||
