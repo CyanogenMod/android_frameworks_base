@@ -8197,8 +8197,8 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
                             if (distanceSquared < slopSquared) {
                                 startTextSelectionMode();
                                 // Hacky: onTapUpEvent will open a context menu with cut/copy
-                                // Prevent this by hiding handles which will be revived instead.
-                                hide();
+                                // Prevent this by eating the event.
+                                mEatTouchRelease = true;
                             }
                         }
                         mPreviousTapPositionX = x;
