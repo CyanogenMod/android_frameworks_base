@@ -8187,20 +8187,23 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
                         mMinTouchOffset = mMaxTouchOffset = getOffset(x, y);
 
                         // Double tap detection
-                        long duration = SystemClock.uptimeMillis() - mPreviousTapUpTime;
-                        if (duration <= ViewConfiguration.getDoubleTapTimeout()) {
-                            final int deltaX = x - mPreviousTapPositionX;
-                            final int deltaY = y - mPreviousTapPositionY;
-                            final int distanceSquared = deltaX * deltaX + deltaY * deltaY;
-                            final int doubleTapSlop = ViewConfiguration.get(getContext()).getScaledDoubleTapSlop();
-                            final int slopSquared = doubleTapSlop * doubleTapSlop;
-                            if (distanceSquared < slopSquared) {
-                                startTextSelectionMode();
-                                // Hacky: onTapUpEvent will open a context menu with cut/copy
-                                // Prevent this by hiding handles which will be revived instead.
-                                hide();
+                        if (mPreviousTapUpTime != 0) {
+                            long duration = SystemClock.uptimeMillis() - mPreviousTapUpTime;
+                            if (duration <= ViewConfiguration.getDoubleTapTimeout()) {
+                                final int deltaX = x - mPreviousTapPositionX;
+                                final int deltaY = y - mPreviousTapPositionY;
+                                final int distanceSquared = deltaX * deltaX + deltaY * deltaY;
+                                final int doubleTapSlop = ViewConfiguration.get(getContext()).getScaledDoubleTapSlop();
+                                final int slopSquared = doubleTapSlop * doubleTapSlop;
+                                if (distanceSquared < slopSquared) {
+                                    startTextSelectionMode();
+                                    // Hacky: onTapUpEvent will open a context menu with cut/copy
+                                    // Prevent this by eating the event.
+                                    mEatTouchRelease = true;
+                                }
                             }
                         }
+
                         mPreviousTapPositionX = x;
                         mPreviousTapPositionY = y;
 
@@ -8217,7 +8220,13 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        mPreviousTapUpTime = SystemClock.uptimeMillis();
+                        // If this was a double-tap event, don't consider
+                        // the next touch event to be a double-tap.
+                        if (mEatTouchRelease) {
+                            mPreviousTapUpTime = 0;
+                        } else {
+                            mPreviousTapUpTime = SystemClock.uptimeMillis();
+                        }
                         break;
                 }
             }
