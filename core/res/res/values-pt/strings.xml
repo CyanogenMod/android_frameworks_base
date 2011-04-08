@@ -938,4 +938,5 @@
     <string name="profileGroupGmail">Gmail</string>
     <string name="profileGroupEmail">Email</string>
     <string name="profileGroupSMS">SMS</string>
+    <string name="global_action_back">Voltar</string>
 </resources>
