@@ -561,7 +561,8 @@
     <string name="lockscreen_return_to_call" msgid="5244259785500040021">"返回通话"</string>
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"正确！"</string>
     <string name="lockscreen_pattern_wrong" msgid="4817583279053112312">"很抱歉，请重试"</string>
-    <string name="lockscreen_plugged_in" msgid="613343852842944435">"正在充电 (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
+    <string name="lockscreen_plugged_in" msgid="613343852842944435">"正在充电 （<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>）"</string>
+    <string name="lockscreen_discharging">电池电量 （<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>）</string>
     <string name="lockscreen_charged" msgid="4938930459620989972">"已充满。"</string>
     <string name="lockscreen_battery_short" msgid="3617549178603354656">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"连接您的充电器。"</string>
@@ -589,6 +590,8 @@
     <string name="lockscreen_unlock_label" msgid="737440483220667054">"解锁"</string>
     <string name="lockscreen_sound_on_label" msgid="9068877576513425970">"打开声音"</string>
     <string name="lockscreen_sound_off_label" msgid="996822825154319026">"关闭声音"</string>
+    <string name="lockscreen_phone_label">电话</string>
+    <string name="lockscreen_messaging_label">短信</string>
     <string name="password_keyboard_label_symbol_key" msgid="992280756256536042">"?123"</string>
     <string name="password_keyboard_label_alpha_key" msgid="8001096175167485649">"ABC"</string>
     <string name="password_keyboard_label_alt_key" msgid="1284820942620288678">"ALT"</string>
