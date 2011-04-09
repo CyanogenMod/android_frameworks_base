@@ -4,16 +4,16 @@
 **
 ** Copyright 2007, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 -->
@@ -40,7 +40,7 @@
         android:background="@drawable/search_plate_global" >
 
         <!-- This is actually used for the badge icon *or* the badge label (or neither) -->
-        <TextView 
+        <TextView
             android:id="@+id/search_badge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-            
+
             <ImageView
                 android:id="@+id/search_app_icon"
                 android:layout_height="36dip"
@@ -83,9 +83,9 @@
                 android:dropDownVerticalOffset="-9dip"
                 android:popupBackground="@android:drawable/search_dropdown_background"
             />
-                
+
             <!-- This button can switch between text and icon "modes" -->
-            <Button 
+            <Button
                 android:id="@+id/search_go_btn"
                 android:background="@drawable/btn_search_dialog"
                 android:layout_width="wrap_content"
@@ -104,7 +104,7 @@
                 android:src="@android:drawable/ic_btn_speak_now"
             />
         </LinearLayout>
-        
+
     </LinearLayout>
 
 </view>

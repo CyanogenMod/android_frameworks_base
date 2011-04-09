@@ -34,15 +34,15 @@
         <Button android:id="@+id/off"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/power_off" />    
-            
+            android:text="@string/power_off" />
+
         <Button android:id="@+id/silent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-            
+
         <Button android:id="@+id/radio_power"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-        
+
     </LinearLayout>
 </FrameLayout>

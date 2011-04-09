@@ -19,7 +19,7 @@
         android:drawable="@drawable/btn_default_normal" />
     <item android:state_window_focused="false" android:state_enabled="false"
         android:drawable="@drawable/btn_default_normal_disable" />
-    <item android:state_pressed="true" 
+    <item android:state_pressed="true"
         android:drawable="@drawable/btn_default_pressed" />
     <item android:state_focused="true" android:state_enabled="true"
         android:drawable="@drawable/btn_default_selected" />

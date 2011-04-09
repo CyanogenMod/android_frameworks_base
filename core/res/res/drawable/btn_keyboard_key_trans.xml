@@ -24,5 +24,5 @@
 
     <item android:state_pressed="false" android:state_focused="false"
           android:drawable="@drawable/btn_keyboard_key_trans_normal" />
-          
+
 </selector>

@@ -38,7 +38,7 @@
             android:layout_weight="1"
             android:visibility="gone">
         </FrameLayout>
-        
+
         <FrameLayout android:id="@android:id/candidatesArea"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
         </FrameLayout>
 
     </LinearLayout>
-            
+
     <FrameLayout android:id="@android:id/inputArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -16,7 +16,7 @@
 
 <!-- StateListDrawable used for buttons in the in-call onscreen touch UI. -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_pressed="true" 
+    <item android:state_pressed="true"
         android:drawable="@drawable/jog_tab_left_pressed" />
 
     <item android:state_enabled="true"
@@ -24,5 +24,5 @@
 
     <item android:state_active="true"
         android:drawable="@drawable/jog_tab_left_confirm_green" />
-        
+
 </selector>

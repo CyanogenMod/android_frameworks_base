@@ -23,7 +23,7 @@
 
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
-    
+
     <instrumentation
         android:name="android.test.InstrumentationTestRunner"
         android:targetPackage="com.android.frameworks.policy.tests"

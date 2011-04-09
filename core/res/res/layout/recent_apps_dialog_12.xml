@@ -97,7 +97,7 @@
             android:id="@+id/button7" />
 
     </LinearLayout>
-    
+
     <LinearLayout
         android:layout_width="320dp"
         android:layout_height="wrap_content"

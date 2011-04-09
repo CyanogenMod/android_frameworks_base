@@ -33,7 +33,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         />
-    
+
     <!-- minute -->
     <NumberPicker
         android:id="@+id/minute"
@@ -43,7 +43,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         />
-    
+
     <!-- AM / PM -->
     <Button
         android:id="@+id/amPm"

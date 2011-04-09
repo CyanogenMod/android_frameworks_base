@@ -19,7 +19,7 @@
           android:drawable="@drawable/btn_radio_on" />
     <item android:state_checked="false" android:state_window_focused="false"
           android:drawable="@drawable/btn_radio_off" />
-          
+
     <item android:state_checked="true" android:state_pressed="true"
           android:drawable="@drawable/btn_radio_on_pressed" />
     <item android:state_checked="false" android:state_pressed="true"

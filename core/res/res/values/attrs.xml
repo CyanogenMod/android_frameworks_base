@@ -14,8 +14,8 @@
      limitations under the License.
 -->
 
-<!-- Formatting note: terminate all comments with a period, to avoid breaking 
-     the documentation output. To suppress comment lines from the documentation 
+<!-- Formatting note: terminate all comments with a period, to avoid breaking
+     the documentation output. To suppress comment lines from the documentation
      output, insert an eat-comment element after the comment lines.
 -->
 
@@ -226,7 +226,7 @@
         <!-- Flag indicating whether this is a translucent window. -->
         <attr name="windowIsTranslucent" format="boolean" />
         <!-- Flag indicating that this window's background should be the
-        	 user's current wallpaper. -->
+                 user's current wallpaper. -->
         <attr name="windowShowWallpaper" format="boolean" />
         <!-- This Drawable is overlaid over the foreground of the Window's content area, usually
              to place a shadow below the title.  -->
@@ -1023,7 +1023,7 @@
         <attr name="windowShowAnimation" format="reference" />
         <!-- The animation used when a window is going from VISIBLE to INVISIBLE. -->
         <attr name="windowHideAnimation" format="reference" />
-        
+
         <!--  When opening a new activity, this is the animation that is
               run on the next activity (which is entering the screen). -->
         <attr name="activityOpenEnterAnimation" format="reference" />
@@ -1064,7 +1064,7 @@
               animation that is run on the top activity of the current task
               (which is exiting the screen). -->
         <attr name="taskToBackExitAnimation" format="reference" />
-        
+
         <!--  When opening a new activity that shows the wallpaper, while
               currently not showing the wallpaper, this is the animation that
               is run on the new wallpaper activity (which is entering the screen). -->
@@ -1081,7 +1081,7 @@
               currently showing the wallpaper, this is the animation that
               is run on the old wallpaper activity (which is exiting the screen). -->
         <attr name="wallpaperCloseExitAnimation" format="reference" />
-        
+
         <!--  When opening a new activity that is on top of the wallpaper
               when the current activity is also on top of the wallpaper,
               this is the animation that is run on the new activity
@@ -2222,7 +2222,7 @@
         <attr name="dropDownAnchor" format="reference" />
         <!-- Specifies the basic width of the dropdown. Its value may
              be a dimension (such as "12dip") for a constant width,
-             fill_parent or match_parent to match the width of the 
+             fill_parent or match_parent to match the width of the
              screen, or wrap_content to match the width of
              the anchored view. -->
         <attr name="dropDownWidth" format="dimension">
@@ -3574,7 +3574,7 @@
     <!-- AppWidget package class attributes -->
     <!-- =============================== -->
     <eat-comment />
-    
+
     <!-- Use <code>appwidget-provider</code> as the root tag of the XML resource that
          describes an AppWidget provider.  See {@link android.appwidget android.appwidget}
          package for more info.
@@ -3597,7 +3597,7 @@
     <!-- App package class attributes -->
     <!-- =============================== -->
     <eat-comment />
-    
+
     <!-- Use <code>device-admin</code> as the root tag of the XML resource that
          describes a
          {@link android.app.admin.DeviceAdminReceiver}, which is
@@ -3637,7 +3637,7 @@
     <!-- Accounts package class attributes -->
     <!-- =============================== -->
     <eat-comment />
-    
+
     <!-- Use <code>account-authenticator</code> as the root tag of the XML resource that
          describes an account authenticator.
      -->
@@ -3658,7 +3658,7 @@
     <!-- Accounts package class attributes -->
     <!-- =============================== -->
     <eat-comment />
-    
+
     <!-- Use <code>account-authenticator</code> as the root tag of the XML resource that
          describes an account authenticator.
      -->
@@ -3674,7 +3674,7 @@
     <!-- Contacts meta-data attributes -->
     <!-- =============================== -->
     <eat-comment />
-    
+
     <!-- TODO: remove this deprecated styleable. -->
     <eat-comment />
     <declare-styleable name="Icon">

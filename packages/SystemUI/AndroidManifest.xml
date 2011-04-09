@@ -11,7 +11,7 @@
         android:allowClearUserData="false"
         android:label="@string/app_label"
         android:icon="@drawable/ic_launcher_settings">
-                 
+
         <service
             android:name=".statusbar.StatusBarService"
             android:exported="false"

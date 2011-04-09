@@ -135,7 +135,7 @@
                 android:drawablePadding="4dip"
                 />
         </LinearLayout>
-        
+
         <TextView
             android:id="@+id/customMsg"
             android:layout_width="wrap_content"

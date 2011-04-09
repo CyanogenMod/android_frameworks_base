@@ -4,9 +4,9 @@
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
-  
+
           http://www.apache.org/licenses/LICENSE-2.0
-  
+
      Unless required by applicable law or agreed to in writing, software
      distributed under the License is distributed on an "AS IS" BASIS,
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -15,13 +15,13 @@
 -->
 
 <!-- Layout for a visually child-like Preference in a PreferenceActivity. -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="?android:attr/listPreferredItemHeight"
     android:gravity="center_vertical"
     android:paddingRight="?android:attr/scrollbarSize">
-    
+
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
         android:layout_marginTop="6dip"
         android:layout_marginBottom="6dip"
         android:layout_weight="1">
-    
+
         <TextView android:id="@+android:id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,7 +38,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:ellipsize="marquee"
             android:fadingEdge="horizontal" />
-            
+
         <TextView android:id="@+android:id/summary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
             android:textColor="?android:attr/textColorSecondary" />
 
     </RelativeLayout>
-    
+
     <!-- Preference should place its actual preference widget here. -->
     <LinearLayout android:id="@+android:id/widget_frame"
         android:layout_width="wrap_content"

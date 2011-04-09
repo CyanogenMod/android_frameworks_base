@@ -1,4 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" 
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 package="com.android.soundpooltest">
     <application>
         <activity  android:name="SoundPoolTest" android:label="Sound Pool Test">

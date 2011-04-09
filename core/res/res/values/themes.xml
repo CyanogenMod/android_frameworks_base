@@ -4,9 +4,9 @@
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
      You may obtain a copy of the License at
-  
+
           http://www.apache.org/licenses/LICENSE-2.0
-  
+
      Unless required by applicable law or agreed to in writing, software
      distributed under the License is distributed on an "AS IS" BASIS,
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,7 +17,7 @@
 <resources>
     <!-- The default system theme. This is the theme used for activities
          that have not explicitly set their own theme.
-         
+
          <p>You can count on this being a dark
          background with light text on top, but should try to make no
          other assumptions about its appearance. In particular, the text
@@ -26,7 +26,7 @@
          of it a dark color.
     -->
     <style name="Theme">
-    
+
         <item name="colorForeground">@android:color/bright_foreground_dark</item>
         <item name="colorForegroundInverse">@android:color/bright_foreground_dark_inverse</item>
         <item name="colorBackground">@android:color/background_dark</item>
@@ -62,11 +62,11 @@
         <item name="textAppearanceSmallInverse">@android:style/TextAppearance.Small.Inverse</item>
         <item name="textAppearanceSearchResultTitle">@android:style/TextAppearance.SearchResult.Title</item>
         <item name="textAppearanceSearchResultSubtitle">@android:style/TextAppearance.SearchResult.Subtitle</item>
-        
+
         <item name="textAppearanceButton">@android:style/TextAppearance.Widget.Button</item>
-        
+
         <item name="candidatesTextStyleSpans">@android:string/candidates_style</item>
-        
+
         <item name="textCheckMark">@android:drawable/indicator_check_mark_dark</item>
         <item name="textCheckMarkInverse">@android:drawable/indicator_check_mark_light</item>
 
@@ -83,10 +83,10 @@
         <!-- @hide -->
         <item name="searchResultListItemHeight">58dip</item>
         <item name="listDivider">@drawable/divider_horizontal_dark</item>
-        <item name="listSeparatorTextViewStyle">@android:style/Widget.TextView.ListSeparator</item>   
-        
-		<item name="listChoiceIndicatorSingle">@android:drawable/btn_radio</item>
-    	<item name="listChoiceIndicatorMultiple">@android:drawable/btn_check</item>    
+        <item name="listSeparatorTextViewStyle">@android:style/Widget.TextView.ListSeparator</item>
+
+                <item name="listChoiceIndicatorSingle">@android:drawable/btn_radio</item>
+        <item name="listChoiceIndicatorMultiple">@android:drawable/btn_check</item>
 
         <item name="expandableListPreferredItemPaddingLeft">40dip</item>
         <item name="expandableListPreferredChildPaddingLeft">
@@ -101,7 +101,7 @@
 
         <!-- Gallery attributes -->
         <item name="galleryItemBackground">@android:drawable/gallery_item_background</item>
-        
+
         <!-- Window attributes -->
         <item name="windowBackground">@android:drawable/screen_background_dark</item>
         <item name="windowFrame">@null</item>
@@ -118,7 +118,7 @@
 
         <!-- Dialog attributes -->
         <item name="alertDialogStyle">@android:style/AlertDialog</item>
-        
+
         <!-- Panel attributes -->
         <item name="panelBackground">@android:drawable/menu_background</item>
         <item name="panelFullBackground">@android:drawable/menu_background_fill_parent_width</item>
@@ -129,7 +129,7 @@
 
         <!-- Scrollbar attributes -->
         <item name="scrollbarFadeDuration">250</item>
-        <item name="scrollbarDefaultDelayBeforeFade">300</item> 
+        <item name="scrollbarDefaultDelayBeforeFade">300</item>
         <item name="scrollbarSize">10dip</item>
         <item name="scrollbarThumbHorizontal">@android:drawable/scrollbar_handle_horizontal</item>
         <item name="scrollbarThumbVertical">@android:drawable/scrollbar_handle_vertical</item>
@@ -144,7 +144,7 @@
 
         <!-- Widget styles -->
         <item name="absListViewStyle">@android:style/Widget.AbsListView</item>
-        <item name="autoCompleteTextViewStyle">@android:style/Widget.AutoCompleteTextView</item>        
+        <item name="autoCompleteTextViewStyle">@android:style/Widget.AutoCompleteTextView</item>
         <item name="checkboxStyle">@android:style/Widget.CompoundButton.CheckBox</item>
         <item name="dropDownListViewStyle">@android:style/Widget.ListView.DropDown</item>
         <item name="editTextStyle">@android:style/Widget.EditText</item>
@@ -164,8 +164,8 @@
         <item name="progressBarStyleSmallTitle">@android:style/Widget.ProgressBar.Small.Title</item>
         <item name="progressBarStyleLarge">@android:style/Widget.ProgressBar.Large</item>
         <item name="progressBarStyleInverse">@android:style/Widget.ProgressBar.Inverse</item>
-		<item name="progressBarStyleSmallInverse">@android:style/Widget.ProgressBar.Small.Inverse</item>
-	    <item name="progressBarStyleLargeInverse">@android:style/Widget.ProgressBar.Large.Inverse</item> 
+                <item name="progressBarStyleSmallInverse">@android:style/Widget.ProgressBar.Small.Inverse</item>
+            <item name="progressBarStyleLargeInverse">@android:style/Widget.ProgressBar.Large.Inverse</item>
         <item name="seekBarStyle">@android:style/Widget.SeekBar</item>
         <item name="ratingBarStyle">@android:style/Widget.RatingBar</item>
         <item name="ratingBarStyleIndicator">@android:style/Widget.RatingBar.Indicator</item>
@@ -190,7 +190,7 @@
         <item name="quickContactBadgeStyleSmallWindowSmall">@android:style/Widget.QuickContactBadgeSmall.WindowSmall</item>
         <item name="quickContactBadgeStyleSmallWindowMedium">@android:style/Widget.QuickContactBadgeSmall.WindowMedium</item>
         <item name="quickContactBadgeStyleSmallWindowLarge">@android:style/Widget.QuickContactBadgeSmall.WindowLarge</item>
-        
+
         <!-- Preference styles -->
         <item name="preferenceScreenStyle">@android:style/Preference.PreferenceScreen</item>
         <item name="preferenceCategoryStyle">@android:style/Preference.Category</item>
@@ -206,19 +206,19 @@
         <!-- Search widget styles -->
         <item name="searchWidgetCorpusItemBackground">@android:color/search_widget_corpus_item_background</item>
     </style>
-    
+
     <!-- Variant of the default (dark) theme with no title bar -->
     <style name="Theme.NoTitleBar">
         <item name="android:windowNoTitle">true</item>
     </style>
-    
+
     <!-- Variant of the default (dark) theme that has no title bar and
          fills the entire screen -->
     <style name="Theme.NoTitleBar.Fullscreen">
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
-    
+
     <!-- Theme for a light background with dark text on top.  Set your activity
          to this theme if you would like such an appearance.  As with the
          default theme, you should try to assume little more than that the
@@ -243,9 +243,9 @@
         <item name="textColorSecondaryInverseNoDisable">@android:color/secondary_text_dark_nodisable</item>
         <item name="textColorHint">@android:color/hint_foreground_light</item>
         <item name="textColorHintInverse">@android:color/hint_foreground_dark</item>
-        
+
         <item name="popupWindowStyle">@android:style/Widget.PopupWindow</item>
-        
+
         <item name="textCheckMark">@android:drawable/indicator_check_mark_light</item>
         <item name="textCheckMarkInverse">@android:drawable/indicator_check_mark_dark</item>
 
@@ -254,15 +254,15 @@
         <item name="listViewStyle">@android:style/Widget.ListView.White</item>
         <item name="listDivider">@drawable/divider_horizontal_bright</item>
         <item name="listSeparatorTextViewStyle">@android:style/Widget.TextView.ListSeparator.White</item>
-        
+
         <item name="progressBarStyle">@android:style/Widget.ProgressBar.Inverse</item>
-		<item name="progressBarStyleSmall">@android:style/Widget.ProgressBar.Small.Inverse</item>
-		<item name="progressBarStyleLarge">@android:style/Widget.ProgressBar.Large.Inverse</item>
-		<item name="progressBarStyleInverse">@android:style/Widget.ProgressBar</item>
-		<item name="progressBarStyleSmallInverse">@android:style/Widget.ProgressBar.Small</item>
-		<item name="progressBarStyleLargeInverse">@android:style/Widget.ProgressBar.Large</item> 
+                <item name="progressBarStyleSmall">@android:style/Widget.ProgressBar.Small.Inverse</item>
+                <item name="progressBarStyleLarge">@android:style/Widget.ProgressBar.Large.Inverse</item>
+                <item name="progressBarStyleInverse">@android:style/Widget.ProgressBar</item>
+                <item name="progressBarStyleSmallInverse">@android:style/Widget.ProgressBar.Small</item>
+                <item name="progressBarStyleLargeInverse">@android:style/Widget.ProgressBar.Large</item>
     </style>
-    
+
     <!-- Variant of the light theme with no title bar -->
     <style name="Theme.Light.NoTitleBar">
         <item name="android:windowNoTitle">true</item>
@@ -274,7 +274,7 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
-    
+
     <!-- Special variation on the default theme that ensures the background is
          completely black.  This is useful for things like image viewers and
          media players.   If you want the normal (dark background) theme
@@ -283,7 +283,7 @@
         <item name="android:windowBackground">@android:color/black</item>
         <item name="android:colorBackground">@android:color/black</item>
     </style>
-    
+
     <!-- Variant of the black theme with no title bar -->
     <style name="Theme.Black.NoTitleBar">
         <item name="android:windowNoTitle">true</item>
@@ -295,9 +295,9 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
-    
+
     <!-- Default theme for windows that want to have the user's selected
-    	 wallpaper appear behind them.  -->
+         wallpaper appear behind them.  -->
     <style name="Theme.Wallpaper">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
@@ -338,12 +338,12 @@
          shown on top of the real wallpaper -->
     <style name="ActiveWallpaperSettings">
     </style>
-    
+
     <!-- Style to apply on top of a wallpaper settings theme when it is being
          shown on top of the real wallpaper -->
     <style name="PreviewWallpaperSettings">
     </style>
-    
+
     <!-- Default theme for translucent activities, that is windows that allow you
          to see through them to the windows behind.  This sets up the translucent
          flag and appropriate animations for your windows.  -->
@@ -368,7 +368,7 @@
     <style name="Theme.Translucent.NoTitleBar.Fullscreen">
         <item name="android:windowFullscreen">true</item>
     </style>
-    
+
     <!-- Default theme for activities that don't actually display a UI; that
          is, they finish themselves before being resumed.  -->
     <style name="Theme.NoDisplay">
@@ -395,7 +395,7 @@
         <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
 
         <item name="android:colorBackgroundCacheHint">@null</item>
-        
+
         <item name="textAppearance">@android:style/TextAppearance</item>
         <item name="textAppearanceInverse">@android:style/TextAppearance.Inverse</item>
 
@@ -432,7 +432,7 @@
         <item name="windowIsFloating">true</item>
         <item name="windowContentOverlay">@null</item>
     </style>
-    
+
     <!-- Default dark theme for panel windows.  This removes all extraneous
          window decorations, so you basically have an empty rectangle in which
          to place your content.  It makes the window floating, with a transparent
@@ -478,9 +478,9 @@
 
     <!-- Theme for the search input bar. -->
     <style name="Theme.SearchBar" parent="Theme.Panel">
-        <item name="windowContentOverlay">@null</item>        
+        <item name="windowContentOverlay">@null</item>
     </style>
-    
+
     <!-- Theme for the search input bar when doing global search. The only
          difference from non-global search is that we do not dim the background. -->
     <style name="Theme.GlobalSearchBar" parent="Theme.Panel">
@@ -519,7 +519,7 @@
         <item name="windowContentOverlay">@null</item>
         <item name="textAppearance">@style/TextAppearance.Theme.Dialog.AppError</item>
     </style>
-    
+
     <!-- Special theme for the recent apps dialog, to allow customization
          with overlays. -->
     <style name="Theme.Dialog.RecentApplications">
@@ -535,5 +535,5 @@
         <item name="android:windowAnimationStyle">@android:style/Animation.Toast</item>
         <item name="android:backgroundDimEnabled">false</item>
     </style>
-    
+
 </resources>

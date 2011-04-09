@@ -226,7 +226,7 @@
     <string name="policylab_limitPassword">Aseta salasanasäännöt</string>
     <string name="policydesc_limitPassword">Määritä salasanan pituutta ja merkkejä koskevat säännöt</string>
     <string name="policylab_watchLogin">Tarkkaile näyttölukituksen avaamisyrityksiä.</string>
-    <string name="policydesc_watchLogin">Tarkkaile väärien salasanojen määrää ja lukitse tai tyhjennä puhelimen muisti, jos liian monta yritystä menee 	väärin</string>
+    <string name="policydesc_watchLogin">Tarkkaile väärien salasanojen määrää ja lukitse tai tyhjennä puhelimen muisti, jos liian monta yritystä menee  väärin</string>
     <string name="policylab_resetPassword">Vaihda näyttölukituksen salasana.</string>
     <string name="policydesc_resetPassword">Vaihda näyttölukituksen salasana.</string>
     <string name="policylab_forceLock">Lukitse näyttö</string>
@@ -451,7 +451,7 @@
     <string name="permlab_readHistoryBookmarks">lukea Selaimen historiaa ja kirjenmerkkejä</string>
     <string name="permdesc_readHistoryBookmarks">Sallii sovelluksen lukea kaikki osoitteet, joissa Selain on käynyt sekä kaikki kirjanmerkit.</string>
     <string name="permlab_writeHistoryBookmarks">kirjoittaa Selaimen historiaa ja kirjenmerkkejä</string>
-	<string name="permdesc_writeHistoryBookmarks">Sallii sovelluksen muokata Selainen historiaa ja kirjanmerkkejä. Ilkeät sovellukset voivat käyttää tätä selaimen tietojen muokkaamiseen.</string>
+        <string name="permdesc_writeHistoryBookmarks">Sallii sovelluksen muokata Selainen historiaa ja kirjanmerkkejä. Ilkeät sovellukset voivat käyttää tätä selaimen tietojen muokkaamiseen.</string>
 
     <string name="permlab_setAlarm">asettaa hälytyksiä herätyskelloon</string>
     <string name="permdesc_setAlarm">Sallii sovelluksen asettaa hälytyksiä herätyskelloon. Jotkin herätyskello-sovellukset eivät käytä ko. ominaisuutta.</string>
@@ -740,7 +740,7 @@
 
     <string name="candidates_style"><u>ehdokkaat</u></string>
 
-	<string name="ext_media_checking_notification_title" product="nosdcard">Valmistellaan USB-muistia</string>
+        <string name="ext_media_checking_notification_title" product="nosdcard">Valmistellaan USB-muistia</string>
     <string name="ext_media_checking_notification_title" product="default">Valmistellaan muistikorttia</string>
     <string name="ext_media_checking_notification_message">Tarkistetaan virheitä.</string>
 
@@ -771,7 +771,7 @@
 
     <string name="activity_list_empty">Vastaavia toimintoja ei löytynyt</string>
 
-	<string name="permlab_pkgUsageStats">päivitä komponenttien käyttötilastot</string>
+        <string name="permlab_pkgUsageStats">päivitä komponenttien käyttötilastot</string>
     <string name="permdesc_pkgUsageStats">Sallii komponenttien käyttötilastojen muokkaamisen. Ei tavallisten sovellusten käyttöön.</string>
 
     <string name="permlab_copyProtectedData">Sallii oletussisältöpalvelun kopioida sisältöä. Ei tavallisten sovellusten käyttöön.</string>
@@ -825,7 +825,7 @@
     <string name="throttled_notification_title">Mobiilidatan käyttöraja ylitetty</string>
     <string name="throttled_notification_message">Valitse oppiaksesi lisää mobiilidatan käytöstä</string>
 
-	<string name="progress_unmounting" product="nosdcard">Irroitetaan USB-muistia...</string>
+        <string name="progress_unmounting" product="nosdcard">Irroitetaan USB-muistia...</string>
     <string name="progress_unmounting" product="default">Irroitetaan muistikorttia...</string>
     <string name="progress_erasing" product="nosdcard">Tyhjennetään USB-muistia...</string>
     <string name="progress_erasing" product="default">Tyhjennetään muistikorttia...</string>

@@ -19,7 +19,7 @@
 
 <!-- use empty string to specify no proxy or port -->
 
-<!-- If you edit this version, also edit the version in the partner-supplied 
+<!-- If you edit this version, also edit the version in the partner-supplied
     apns-conf.xml configuration file -->
 <apns version="6">
 

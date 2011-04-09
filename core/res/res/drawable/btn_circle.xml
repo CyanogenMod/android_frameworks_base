@@ -21,7 +21,7 @@
         android:drawable="@drawable/btn_circle_disable" />
     <item android:state_pressed="true" android:state_enabled="false"
         android:drawable="@drawable/btn_circle_disable" />
-    <item android:state_pressed="true" 
+    <item android:state_pressed="true"
         android:drawable="@drawable/btn_circle_pressed" />
     <item android:state_focused="true" android:state_enabled="true"
         android:drawable="@drawable/btn_circle_selected" />

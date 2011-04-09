@@ -27,12 +27,12 @@
         android:layout_height="0px"
         android:layout_weight="1"
         android:layout_above="@+id/emergencyCall">
-        <RelativeLayout 
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
                 >
-        
-            <TextView 
+
+            <TextView
                 android:id="@+id/topHeader"
                 android:layout_width="match_parent"
                 android:layout_height="64dip"
@@ -43,7 +43,7 @@
                 android:drawableLeft="@drawable/ic_lock_idle_lock"
                 android:drawablePadding="5dip"
                 />
-        
+
             <!-- spacer below header -->
             <View
                 android:id="@+id/spacerTop"
@@ -51,7 +51,7 @@
                 android:layout_height="1dip"
                 android:layout_below="@id/topHeader"
                 android:background="@drawable/divider_horizontal_dark"/>
-        
+
             <TextView
                 android:id="@+id/instructions"
                 android:layout_width="match_parent"
@@ -62,7 +62,7 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:text="@android:string/lockscreen_glogin_instructions"
                 />
-        
+
             <EditText
                 android:id="@+id/login"
                 android:layout_width="match_parent"
@@ -74,7 +74,7 @@
                 android:hint="@android:string/lockscreen_glogin_username_hint"
                 android:inputType="textEmailAddress"
                 />
-        
+
             <EditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
@@ -88,7 +88,7 @@
                 android:nextFocusRight="@+id/ok"
                 android:nextFocusDown="@+id/ok"
                 />
-        
+
             <!-- ok below password, aligned to right of screen -->
             <Button
                 android:id="@+id/ok"
@@ -100,10 +100,10 @@
                 android:layout_alignParentRight="true"
                 android:text="@android:string/lockscreen_glogin_submit_button"
                 />
-        
+
         </RelativeLayout>
     </ScrollView>
-    
+
     <!-- spacer above emergency call -->
     <View
         android:layout_width="match_parent"
