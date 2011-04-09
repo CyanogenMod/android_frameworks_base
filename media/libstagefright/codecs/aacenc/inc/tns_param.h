@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		tns_param.h
+        File:           tns_param.h
 
-	Content:	TNS parameters
+        Content:        TNS parameters
 
 *******************************************************************************/
 
@@ -44,7 +44,7 @@ typedef struct{
 }TNS_INFO_TAB;
 
 
-void GetTnsParam(TNS_CONFIG_TABULATED *tnsConfigTab, 
+void GetTnsParam(TNS_CONFIG_TABULATED *tnsConfigTab,
                  Word32 bitRate, Word16 channels, Word16 blockType);
 
 void GetTnsMaxBands(Word32 samplingRate, Word16 blockType, Word16* tnsMaxSfb);

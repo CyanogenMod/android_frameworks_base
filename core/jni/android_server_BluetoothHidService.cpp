@@ -135,10 +135,10 @@ static jboolean connectHidDeviceNative(JNIEnv *env, jobject object, jstring path
         strncpy(c_path_copy, c_path, path_sz);
 
         bool ret =
-            dbus_func_args_async(env, nat->conn, -1, onConnectHidDeviceResult, 
-				(void *)c_path_copy, nat,
-				c_path, "org.bluez.Input",
-				"Connect", DBUS_TYPE_INVALID);
+            dbus_func_args_async(env, nat->conn, -1, onConnectHidDeviceResult,
+                                (void *)c_path_copy, nat,
+                                c_path, "org.bluez.Input",
+                                "Connect", DBUS_TYPE_INVALID);
 
         env->ReleaseStringUTFChars(path, c_path);
         if (!ret) {

@@ -86,7 +86,7 @@ extern "C"
         register int32 tt = tmp;
         register int32 uu = tmp2;
 
-        asm volatile("rsbs	%1, %3, %4, asr #1\n\t"
+        asm volatile("rsbs      %1, %3, %4, asr #1\n\t"
                      "rsbmi %1, %1, #0\n\t"
                      "add  %0, %2, %1"
              : "=&r"(out),

@@ -88,7 +88,7 @@ public:
     {
         //LOGI("NEW weakref_impl %p for RefBase %p", this, base);
     }
-    
+
     ~weakref_impl()
     {
         LOG_ALWAYS_FATAL_IF(!mRetain && mStrongRefs != NULL, "Strong references remain!");
@@ -122,7 +122,7 @@ public:
     }
 
     void trackMe(bool track, bool retain)
-    { 
+    {
         mTrackEnabled = track;
         mRetain = retain;
     }
@@ -133,7 +133,7 @@ public:
 
         {
             AutoMutex _l(const_cast<weakref_impl*>(this)->mMutex);
-    
+
             char buf[128];
             sprintf(buf, "Strong references on RefBase %p (weakref_type %p):\n", mBase, this);
             text.append(buf);
@@ -181,7 +181,7 @@ private:
 #if DEBUG_REFS_CALLSTACK_ENABLED
             ref->stack.update(2);
 #endif
-            
+
             ref->next = *refs;
             *refs = ref;
         }
@@ -191,7 +191,7 @@ private:
     {
         if (mTrackEnabled) {
             AutoMutex _l(mMutex);
-            
+
             ref_entry* ref = *refs;
             while (ref != NULL) {
                 if (ref->id == id) {
@@ -199,11 +199,11 @@ private:
                     delete ref;
                     return;
                 }
-                
+
                 refs = &ref->next;
                 ref = *refs;
             }
-            
+
             LOG_ALWAYS_FATAL("RefBase: removing id %p on RefBase %p (weakref_type %p) that doesn't exist!",
                              id, mBase, this);
         }
@@ -214,7 +214,7 @@ private:
         char buf[128];
         while (refs) {
             char inc = refs->ref >= 0 ? '+' : '-';
-            sprintf(buf, "\t%c ID %p (ref %d):\n", 
+            sprintf(buf, "\t%c ID %p (ref %d):\n",
                     inc, refs->id, refs->ref);
             out->append(buf);
 #if DEBUG_REFS_CALLSTACK_ENABLED
@@ -283,7 +283,7 @@ void RefBase::incStrong(const void* id) const
     weakref_impl* const refs = mRefs;
     refs->addWeakRef(id);
     refs->incWeak(id);
-    
+
     refs->addStrongRef(id);
     const int32_t c = android_atomic_inc(&refs->mStrong);
     LOG_ASSERT(c > 0, "incStrong() called on %p after last strong ref", refs);
@@ -322,7 +322,7 @@ void RefBase::forceIncStrong(const void* id) const
     weakref_impl* const refs = mRefs;
     refs->addWeakRef(id);
     refs->incWeak(id);
-    
+
     refs->addStrongRef(id);
     const int32_t c = android_atomic_inc(&refs->mStrong);
     LOG_ASSERT(c >= 0, "forceIncStrong called on %p after ref count underflow",
@@ -367,7 +367,7 @@ void RefBase::weakref_type::decWeak(const void* id)
     const int32_t c = android_atomic_dec(&impl->mWeak);
     LOG_ASSERT(c >= 1, "decWeak called on %p too many times", this);
     if (c != 1) return;
-    
+
     if ((impl->mFlags&OBJECT_LIFETIME_WEAK) != OBJECT_LIFETIME_WEAK) {
         if (impl->mStrong == INITIAL_STRONG_VALUE)
             delete impl->mBase;
@@ -386,9 +386,9 @@ void RefBase::weakref_type::decWeak(const void* id)
 bool RefBase::weakref_type::attemptIncStrong(const void* id)
 {
     incWeak(id);
-    
+
     weakref_impl* const impl = static_cast<weakref_impl*>(this);
-    
+
     int32_t curCount = impl->mStrong;
     LOG_ASSERT(curCount >= 0, "attemptIncStrong called on %p after underflow",
                this);
@@ -398,7 +398,7 @@ bool RefBase::weakref_type::attemptIncStrong(const void* id)
         }
         curCount = impl->mStrong;
     }
-    
+
     if (curCount <= 0 || curCount == INITIAL_STRONG_VALUE) {
         bool allow;
         if (curCount == INITIAL_STRONG_VALUE) {
@@ -431,7 +431,7 @@ bool RefBase::weakref_type::attemptIncStrong(const void* id)
             impl->mBase->onLastStrongRef(id);
         }
     }
-    
+
     impl->addWeakRef(id);
     impl->addStrongRef(id);
 
@@ -443,14 +443,14 @@ bool RefBase::weakref_type::attemptIncStrong(const void* id)
         android_atomic_add(-INITIAL_STRONG_VALUE, &impl->mStrong);
         impl->mBase->onFirstRef();
     }
-    
+
     return true;
 }
 
 bool RefBase::weakref_type::attemptIncWeak(const void* id)
 {
     weakref_impl* const impl = static_cast<weakref_impl*>(this);
-    
+
     int32_t curCount = impl->mWeak;
     LOG_ASSERT(curCount >= 0, "attemptIncWeak called on %p after underflow",
                this);
@@ -530,5 +530,5 @@ bool RefBase::onIncStrongAttempted(uint32_t flags, const void* id)
 void RefBase::onLastWeakRef(const void* /*id*/)
 {
 }
-        
+
 }; // namespace android

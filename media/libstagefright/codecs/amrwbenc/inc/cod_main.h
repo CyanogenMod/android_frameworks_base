@@ -18,7 +18,7 @@
 /*--------------------------------------------------------------------------*
  *                         COD_MAIN.H                                       *
  *--------------------------------------------------------------------------*
- *       Static memory in the encoder				            *
+ *       Static memory in the encoder                                       *
  *--------------------------------------------------------------------------*/
 #ifndef __COD_MAIN_H__
 #define __COD_MAIN_H__
@@ -79,21 +79,21 @@ typedef struct
     Word16 vad_hist;
     Word16 gain_alpha;
     /*  TX_State structure  */
-	Word16 sid_update_counter;
+        Word16 sid_update_counter;
     Word16 sid_handover_debt;
     Word16 prev_ft;
-	Word16 allow_dtx;
-	/*some input/output buffer parameters */
-	unsigned char       *inputStream;
-	int			        inputSize;
-	VOAMRWBMODE  		mode;
-	VOAMRWBFRAMETYPE	frameType;
-	unsigned short      *outputStream;
-	int			        outputSize;
-	FrameStream         *stream;
-	VO_MEM_OPERATOR     *pvoMemop;
-	VO_MEM_OPERATOR     voMemoprator;
-	VO_PTR              hCheck;
+        Word16 allow_dtx;
+        /*some input/output buffer parameters */
+        unsigned char       *inputStream;
+        int                             inputSize;
+        VOAMRWBMODE             mode;
+        VOAMRWBFRAMETYPE        frameType;
+        unsigned short      *outputStream;
+        int                             outputSize;
+        FrameStream         *stream;
+        VO_MEM_OPERATOR     *pvoMemop;
+        VO_MEM_OPERATOR     voMemoprator;
+        VO_PTR              hCheck;
 } Coder_State;
 
 typedef void* HAMRENC;

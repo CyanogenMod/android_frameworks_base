@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		cmnMemory.c
+        File:           cmnMemory.c
 
-	Content:	sample code for memory operator implementation
+        Content:        sample code for memory operator implementation
 
 *******************************************************************************/
 #include "cmnMemory.h"
@@ -26,48 +26,48 @@
 #include <string.h>
 #endif
 
-//VO_MEM_OPERATOR		g_memOP;
+//VO_MEM_OPERATOR               g_memOP;
 
 VO_U32 cmnMemAlloc (VO_S32 uID,  VO_MEM_INFO * pMemInfo)
 {
-	if (!pMemInfo)
-		return VO_ERR_INVALID_ARG;
+        if (!pMemInfo)
+                return VO_ERR_INVALID_ARG;
 
-	pMemInfo->VBuffer = malloc (pMemInfo->Size);
-	return 0;
+        pMemInfo->VBuffer = malloc (pMemInfo->Size);
+        return 0;
 }
 
 VO_U32 cmnMemFree (VO_S32 uID, VO_PTR pMem)
 {
-	free (pMem);
-	return 0;
+        free (pMem);
+        return 0;
 }
 
-VO_U32	cmnMemSet (VO_S32 uID, VO_PTR pBuff, VO_U8 uValue, VO_U32 uSize)
+VO_U32  cmnMemSet (VO_S32 uID, VO_PTR pBuff, VO_U8 uValue, VO_U32 uSize)
 {
-	memset (pBuff, uValue, uSize);
-	return 0;
+        memset (pBuff, uValue, uSize);
+        return 0;
 }
 
-VO_U32	cmnMemCopy (VO_S32 uID, VO_PTR pDest, VO_PTR pSource, VO_U32 uSize)
+VO_U32  cmnMemCopy (VO_S32 uID, VO_PTR pDest, VO_PTR pSource, VO_U32 uSize)
 {
-	memcpy (pDest, pSource, uSize);
-	return 0;
+        memcpy (pDest, pSource, uSize);
+        return 0;
 }
 
-VO_U32	cmnMemCheck (VO_S32 uID, VO_PTR pBuffer, VO_U32 uSize)
+VO_U32  cmnMemCheck (VO_S32 uID, VO_PTR pBuffer, VO_U32 uSize)
 {
-	return 0;
+        return 0;
 }
 
 VO_S32 cmnMemCompare (VO_S32 uID, VO_PTR pBuffer1, VO_PTR pBuffer2, VO_U32 uSize)
 {
-	return memcmp(pBuffer1, pBuffer2, uSize);
+        return memcmp(pBuffer1, pBuffer2, uSize);
 }
 
-VO_U32	cmnMemMove (VO_S32 uID, VO_PTR pDest, VO_PTR pSource, VO_U32 uSize)
+VO_U32  cmnMemMove (VO_S32 uID, VO_PTR pDest, VO_PTR pSource, VO_U32 uSize)
 {
-	memmove (pDest, pSource, uSize);
-	return 0;
+        memmove (pDest, pSource, uSize);
+        return 0;
 }
 

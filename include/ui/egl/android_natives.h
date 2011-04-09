@@ -57,7 +57,7 @@ typedef struct android_native_base_t
 {
     /* a magic value defined by the actual EGL native type */
     int magic;
-    
+
     /* the sizeof() of the actual EGL native type */
     int version;
 
@@ -107,7 +107,7 @@ enum {
     NATIVE_WINDOW_TRANSFORM_ROT_270 = HAL_TRANSFORM_ROT_270,
 };
 
-struct ANativeWindow 
+struct ANativeWindow
 {
 #ifdef __cplusplus
     ANativeWindow()
@@ -127,12 +127,12 @@ struct ANativeWindow
         common.decRef(const_cast<android_native_base_t*>(&common));
     }
 #endif
-    
+
     struct android_native_base_t common;
 
     /* flags describing some attributes of this surface or its updater */
     const uint32_t flags;
-    
+
     /* min swap interval supported by this updated */
     const int   minSwapInterval;
 
@@ -145,21 +145,21 @@ struct ANativeWindow
 
     /* Some storage reserved for the OEM's driver. */
     intptr_t    oem[4];
-        
+
 
     /*
      * Set the swap interval for this surface.
-     * 
+     *
      * Returns 0 on success or -errno on error.
      */
     int     (*setSwapInterval)(struct ANativeWindow* window,
                 int interval);
-    
+
     /*
      * hook called by EGL to acquire a buffer. After this call, the buffer
      * is not locked, so its content cannot be modified.
      * this call may block if no buffers are available.
-     * 
+     *
      * Returns 0 on success or -errno on error.
      */
     int     (*dequeueBuffer)(struct ANativeWindow* window,
@@ -167,19 +167,19 @@ struct ANativeWindow
 
     /*
      * hook called by EGL to lock a buffer. This MUST be called before modifying
-     * the content of a buffer. The buffer must have been acquired with 
+     * the content of a buffer. The buffer must have been acquired with
      * dequeueBuffer first.
-     * 
+     *
      * Returns 0 on success or -errno on error.
      */
     int     (*lockBuffer)(struct ANativeWindow* window,
                 struct android_native_buffer_t* buffer);
    /*
-    * hook called by EGL when modifications to the render buffer are done. 
+    * hook called by EGL when modifications to the render buffer are done.
     * This unlocks and post the buffer.
-    * 
+    *
     * Buffers MUST be queued in the same order than they were dequeued.
-    * 
+    *
     * Returns 0 on success or -errno on error.
     */
     int     (*queueBuffer)(struct ANativeWindow* window,
@@ -187,20 +187,20 @@ struct ANativeWindow
 
     /*
      * hook used to retrieve information about the native window.
-     * 
+     *
      * Returns 0 on success or -errno on error.
      */
     int     (*query)(struct ANativeWindow* window,
                 int what, int* value);
-    
+
     /*
      * hook used to perform various operations on the surface.
      * (*perform)() is a generic mechanism to add functionality to
      * ANativeWindow while keeping backward binary compatibility.
-     * 
+     *
      * This hook should not be called directly, instead use the helper functions
      * defined below.
-     * 
+     *
      *  (*perform)() returns -ENOENT if the 'what' parameter is not supported
      *  by the surface's implementation.
      *
@@ -212,12 +212,12 @@ struct ANativeWindow
      *     NATIVE_WINDOW_SET_BUFFER_COUNT
      *     NATIVE_WINDOW_SET_BUFFERS_GEOMETRY
      *     NATIVE_WINDOW_SET_BUFFERS_TRANSFORM
-     *  
+     *
      */
-    
+
     int     (*perform)(struct ANativeWindow* window,
                 int operation, ... );
-    
+
     /*
      * hook used to cancel a buffer that has been dequeued.
      * No synchronization is performed between dequeue() and cancel(), so

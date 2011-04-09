@@ -62,14 +62,14 @@ FileMap::~FileMap(void)
     if (mFileName != NULL) {
         free(mFileName);
     }
-#ifdef HAVE_POSIX_FILEMAP    
+#ifdef HAVE_POSIX_FILEMAP
     if (munmap(mBasePtr, mBaseLength) != 0) {
         LOGD("munmap(%p, %d) failed\n", mBasePtr, (int) mBaseLength);
     }
 #endif
 #ifdef HAVE_WIN32_FILEMAP
     if ( UnmapViewOfFile(mBasePtr) == 0) {
-        LOGD("UnmapViewOfFile(%p) failed, error = %ld\n", mBasePtr, 
+        LOGD("UnmapViewOfFile(%p) failed, error = %ld\n", mBasePtr,
               GetLastError() );
     }
     CloseHandle(mFileMapping);
@@ -95,13 +95,13 @@ bool FileMap::create(const char* origFileName, int fd, off_t offset, size_t leng
 
     if (mPageSize == -1) {
         SYSTEM_INFO  si;
-        
+
         GetSystemInfo( &si );
         mPageSize = si.dwAllocationGranularity;
     }
 
     DWORD  protect = readOnly ? PAGE_READONLY : PAGE_READWRITE;
-    
+
     mFileHandle  = (HANDLE) _get_osfhandle(fd);
     mFileMapping = CreateFileMapping( mFileHandle, NULL, protect, 0, 0, NULL);
     if (mFileMapping == NULL) {
@@ -109,12 +109,12 @@ bool FileMap::create(const char* origFileName, int fd, off_t offset, size_t leng
               mFileHandle, protect, GetLastError() );
         return false;
     }
-    
+
     adjust    = offset % mPageSize;
     adjOffset = offset - adjust;
     adjLength = length + adjust;
-    
-    mBasePtr = MapViewOfFile( mFileMapping, 
+
+    mBasePtr = MapViewOfFile( mFileMapping,
                               readOnly ? FILE_MAP_READ : FILE_MAP_ALL_ACCESS,
                               0,
                               (DWORD)(adjOffset),
@@ -165,13 +165,13 @@ try_again:
 
     ptr = mmap(NULL, adjLength, prot, flags, fd, adjOffset);
     if (ptr == MAP_FAILED) {
-    	// Cygwin does not seem to like file mapping files from an offset.
-    	// So if we fail, try again with offset zero
-    	if (adjOffset > 0) {
-    		adjust = offset;
-    		goto try_again;
-    	}
-    
+        // Cygwin does not seem to like file mapping files from an offset.
+        // So if we fail, try again with offset zero
+        if (adjOffset > 0) {
+                adjust = offset;
+                goto try_again;
+        }
+
         LOGE("mmap(%ld,%ld) failed: %s\n",
             (long) adjOffset, (long) adjLength, strerror(errno));
         return false;
@@ -217,6 +217,6 @@ int FileMap::advise(MapAdvice advice)
         LOGW("madvise(%d) failed: %s\n", sysAdvice, strerror(errno));
     return cc;
 #else
-	return -1;
+        return -1;
 #endif // HAVE_MADVISE
 }

@@ -35,7 +35,7 @@ public:
     LibUtilsIPCtStatics()
     {
     }
-    
+
     ~LibUtilsIPCtStatics()
     {
         IPCThreadState::shutdown();

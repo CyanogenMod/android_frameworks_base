@@ -76,7 +76,7 @@ public:
         eOrientation270         = 3,
         eOrientationSwapMask    = 0x01
     };
-    
+
     enum {
         eElectronBeamAnimationOn  = 0x01,
         eElectronBeamAnimationOff = 0x10

@@ -835,7 +835,7 @@ static status_t set_volume_fm(uint32_t volume)
 
 status_t AudioFlinger::setFmVolume(float value)
 {
-	status_t ret;
+        status_t ret;
 
     // check calling permissions
     if (!settingsAllowed()) {

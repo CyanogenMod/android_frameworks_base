@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		aac_rom.h
+        File:           aac_rom.h
 
-	Content:	constant tables 
+        Content:        constant tables 
 
 *******************************************************************************/
 

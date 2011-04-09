@@ -60,13 +60,13 @@ public:
     }
     static bool isSameSurface(
             const sp<SurfaceControl>& lhs, const sp<SurfaceControl>& rhs);
-        
+
     uint32_t    getFlags() const { return mFlags; }
     uint32_t    getIdentity() const { return mIdentity; }
 
     // release surface data from java
     void        clear();
-    
+
     status_t    setLayer(int32_t layer);
     status_t    setPosition(int32_t x, int32_t y);
     status_t    setSize(uint32_t w, uint32_t h);
@@ -90,7 +90,7 @@ private:
     SurfaceControl& operator = (SurfaceControl& rhs);
     SurfaceControl(const SurfaceControl& rhs);
 
-    
+
     friend class SurfaceComposerClient;
 
     // camera and camcorder need access to the ISurface binder interface for preview
@@ -101,7 +101,7 @@ private:
     // for testing
     friend class Test;
     const sp<ISurface>& getISurface() const { return mSurface; }
-    
+
 
     friend class Surface;
 
@@ -115,7 +115,7 @@ private:
 
     status_t validate() const;
     void destroy();
-    
+
     sp<SurfaceComposerClient>   mClient;
     sp<ISurface>                mSurface;
     SurfaceID                   mToken;
@@ -125,13 +125,13 @@ private:
     PixelFormat                 mFormat;
     uint32_t                    mFlags;
     mutable Mutex               mLock;
-    
+
     mutable sp<Surface>         mSurfaceData;
 };
-    
+
 // ---------------------------------------------------------------------------
 
-class Surface 
+class Surface
     : public EGLNativeBase<ANativeWindow, Surface, RefBase>
 {
 public:
@@ -219,7 +219,7 @@ private:
     int  dispatch_set_buffer_count(va_list args);
     int  dispatch_set_buffers_geometry(va_list args);
     int  dispatch_set_buffers_transform(va_list args);
-    
+
     void setUsage(uint32_t reqUsage);
     int  connect(int api);
     int  disconnect(int api);
@@ -243,7 +243,7 @@ private:
     int getBufferIndex(const sp<GraphicBuffer>& buffer) const;
 
     int getConnectedApi() const;
-    
+
     bool needNewBuffer(int bufIdx,
             uint32_t *pWidth, uint32_t *pHeight,
             uint32_t *pFormat, uint32_t *pUsage) const;
@@ -284,7 +284,7 @@ private:
     Rect                        mNextBufferCrop;
     uint32_t                    mNextBufferTransform;
     BufferInfo                  mBufferInfo;
-    
+
     // protected by mSurfaceLock. These are also used from lock/unlock
     // but in that case, they must be called form the same thread.
     mutable Region              mDirtyRegion;

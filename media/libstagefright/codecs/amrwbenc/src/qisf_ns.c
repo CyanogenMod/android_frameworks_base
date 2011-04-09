@@ -33,30 +33,30 @@
 *------------------------------------------------------------------*/
 
 void Qisf_ns(
-		Word16 * isf1,                        /* input : ISF in the frequency domain (0..0.5) */
-		Word16 * isf_q,                       /* output: quantized ISF                        */
-		Word16 * indice                       /* output: quantization indices                 */
-	    )
+                Word16 * isf1,                        /* input : ISF in the frequency domain (0..0.5) */
+                Word16 * isf_q,                       /* output: quantized ISF                        */
+                Word16 * indice                       /* output: quantization indices                 */
+            )
 {
-	Word16 i;
-	Word32 tmp;
+        Word16 i;
+        Word32 tmp;
 
-	for (i = 0; i < ORDER; i++)
-	{
-		isf_q[i] = sub(isf1[i], mean_isf_noise[i]);     
-	}
+        for (i = 0; i < ORDER; i++)
+        {
+                isf_q[i] = sub(isf1[i], mean_isf_noise[i]);     
+        }
 
-	indice[0] = Sub_VQ(&isf_q[0], dico1_isf_noise, 2, SIZE_BK_NOISE1, &tmp);    
-	indice[1] = Sub_VQ(&isf_q[2], dico2_isf_noise, 3, SIZE_BK_NOISE2, &tmp);    
-	indice[2] = Sub_VQ(&isf_q[5], dico3_isf_noise, 3, SIZE_BK_NOISE3, &tmp);    
-	indice[3] = Sub_VQ(&isf_q[8], dico4_isf_noise, 4, SIZE_BK_NOISE4, &tmp);    
-	indice[4] = Sub_VQ(&isf_q[12], dico5_isf_noise, 4, SIZE_BK_NOISE5, &tmp);   
+        indice[0] = Sub_VQ(&isf_q[0], dico1_isf_noise, 2, SIZE_BK_NOISE1, &tmp);    
+        indice[1] = Sub_VQ(&isf_q[2], dico2_isf_noise, 3, SIZE_BK_NOISE2, &tmp);    
+        indice[2] = Sub_VQ(&isf_q[5], dico3_isf_noise, 3, SIZE_BK_NOISE3, &tmp);    
+        indice[3] = Sub_VQ(&isf_q[8], dico4_isf_noise, 4, SIZE_BK_NOISE4, &tmp);    
+        indice[4] = Sub_VQ(&isf_q[12], dico5_isf_noise, 4, SIZE_BK_NOISE5, &tmp);   
 
-	/* decoding the ISFs */
+        /* decoding the ISFs */
 
-	Disf_ns(indice, isf_q);
+        Disf_ns(indice, isf_q);
 
-	return;
+        return;
 }
 
 /********************************************************************
@@ -70,41 +70,41 @@ void Qisf_ns(
 *********************************************************************/
 
 void Disf_ns(
-		Word16 * indice,                      /* input:  quantization indices                  */
-		Word16 * isf_q                        /* input : ISF in the frequency domain (0..0.5)  */
-	    )
+                Word16 * indice,                      /* input:  quantization indices                  */
+                Word16 * isf_q                        /* input : ISF in the frequency domain (0..0.5)  */
+            )
 {
-	Word16 i;
+        Word16 i;
 
-	for (i = 0; i < 2; i++)
-	{
-		isf_q[i] = dico1_isf_noise[indice[0] * 2 + i];  
-	}
-	for (i = 0; i < 3; i++)
-	{
-		isf_q[i + 2] = dico2_isf_noise[indice[1] * 3 + i];      
-	}
-	for (i = 0; i < 3; i++)
-	{
-		isf_q[i + 5] = dico3_isf_noise[indice[2] * 3 + i];      
-	}
-	for (i = 0; i < 4; i++)
-	{
-		isf_q[i + 8] = dico4_isf_noise[indice[3] * 4 + i];      
-	}
-	for (i = 0; i < 4; i++)
-	{
-		isf_q[i + 12] = dico5_isf_noise[indice[4] * 4 + i];     
-	}
+        for (i = 0; i < 2; i++)
+        {
+                isf_q[i] = dico1_isf_noise[indice[0] * 2 + i];  
+        }
+        for (i = 0; i < 3; i++)
+        {
+                isf_q[i + 2] = dico2_isf_noise[indice[1] * 3 + i];      
+        }
+        for (i = 0; i < 3; i++)
+        {
+                isf_q[i + 5] = dico3_isf_noise[indice[2] * 3 + i];      
+        }
+        for (i = 0; i < 4; i++)
+        {
+                isf_q[i + 8] = dico4_isf_noise[indice[3] * 4 + i];      
+        }
+        for (i = 0; i < 4; i++)
+        {
+                isf_q[i + 12] = dico5_isf_noise[indice[4] * 4 + i];     
+        }
 
-	for (i = 0; i < ORDER; i++)
-	{
-		isf_q[i] = add(isf_q[i], mean_isf_noise[i]);   
-	}
+        for (i = 0; i < ORDER; i++)
+        {
+                isf_q[i] = add(isf_q[i], mean_isf_noise[i]);   
+        }
 
-	Reorder_isf(isf_q, ISF_GAP, ORDER);
+        Reorder_isf(isf_q, ISF_GAP, ORDER);
 
-	return;
+        return;
 }
 
 

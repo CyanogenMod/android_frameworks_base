@@ -29,7 +29,7 @@ namespace android {
 
 // ---------------------------------------------------------------------------
 
-void MessageList::insert(const sp<MessageBase>& node) 
+void MessageList::insert(const sp<MessageBase>& node)
 {
     LIST::iterator cur(mList.begin());
     LIST::iterator end(mList.end());
@@ -43,7 +43,7 @@ void MessageList::insert(const sp<MessageBase>& node)
     mList.insert(++end, node);
 }
 
-void MessageList::remove(MessageList::LIST::iterator pos) 
+void MessageList::remove(MessageList::LIST::iterator pos)
 {
     mList.erase(pos);
 }
@@ -76,7 +76,7 @@ sp<MessageBase> MessageQueue::waitMessage(nsecs_t timeout)
             if (cur != mMessages.end()) {
                 result = *cur;
             }
-            
+
             if (result != 0) {
                 if (result->when <= now) {
                     // there is a message to deliver
@@ -126,7 +126,7 @@ sp<MessageBase> MessageQueue::waitMessage(nsecs_t timeout)
                 IPCThreadState::self()->flushCommands();
                 mCondition.wait(mLock);
             }
-        } 
+        }
         // here we're not holding the lock anymore
 
         if (result == 0)
@@ -139,7 +139,7 @@ sp<MessageBase> MessageQueue::waitMessage(nsecs_t timeout)
             result->notify();
             result = 0;
         }
-        
+
     } while (again);
 
     return result;
@@ -164,7 +164,7 @@ status_t MessageQueue::queueMessage(
     Mutex::Autolock _l(mLock);
     message->when = systemTime() + relTime;
     mMessages.insert(message);
-    
+
     //LOGD("MessageQueue::queueMessage time = %lld ms", message->when);
     //dumpLocked(message);
 

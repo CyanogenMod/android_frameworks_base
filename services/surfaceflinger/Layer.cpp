@@ -169,7 +169,7 @@ status_t Layer::setBuffers( uint32_t w, uint32_t h,
     PixelFormatInfo displayInfo;
     getPixelFormatInfo(hw.getFormat(), &displayInfo);
     const uint32_t hwFlags = hw.getFlags();
-    
+
     mFormat = format;
     mWidth  = w;
     mHeight = h;
@@ -551,7 +551,7 @@ uint32_t Layer::doTransaction(uint32_t flags)
             mFreezeLock.clear();
         }
     }
-        
+
     return LayerBase::doTransaction(flags);
 }
 

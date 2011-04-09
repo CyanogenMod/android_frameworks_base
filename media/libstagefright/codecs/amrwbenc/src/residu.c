@@ -26,41 +26,41 @@
 #include "basic_op.h"
 
 void Residu(
-		Word16 a[],                           /* (i) Q12 : prediction coefficients                     */
-		Word16 x[],                           /* (i)     : speech (values x[-m..-1] are needed         */
-		Word16 y[],                           /* (o) x2  : residual signal                             */
-		Word16 lg                             /* (i)     : size of filtering                           */
-		)
+                Word16 a[],                           /* (i) Q12 : prediction coefficients                     */
+                Word16 x[],                           /* (i)     : speech (values x[-m..-1] are needed         */
+                Word16 y[],                           /* (o) x2  : residual signal                             */
+                Word16 lg                             /* (i)     : size of filtering                           */
+                )
 {
-	Word16 i,*p1, *p2;
-	Word32 s;
-	for (i = 0; i < lg; i++)
-	{
-		p1 = a;
-		p2 = &x[i];
-		s  = vo_mult32((*p1++), (*p2--));
-		s += vo_mult32((*p1++), (*p2--));
-		s += vo_mult32((*p1++), (*p2--));
-		s += vo_mult32((*p1++), (*p2--));
-		s += vo_mult32((*p1++), (*p2--));
-		s += vo_mult32((*p1++), (*p2--));
-		s += vo_mult32((*p1++), (*p2--));
-		s += vo_mult32((*p1++), (*p2--));
-		s += vo_mult32((*p1++), (*p2--));
-		s += vo_mult32((*p1++), (*p2--));
-		s += vo_mult32((*p1++), (*p2--));
-		s += vo_mult32((*p1++), (*p2--));
-		s += vo_mult32((*p1++), (*p2--));
-		s += vo_mult32((*p1++), (*p2--));
-		s += vo_mult32((*p1++), (*p2--));
-		s += vo_mult32((*p1++), (*p2--));
-		s += vo_mult32((*p1), (*p2));
+        Word16 i,*p1, *p2;
+        Word32 s;
+        for (i = 0; i < lg; i++)
+        {
+                p1 = a;
+                p2 = &x[i];
+                s  = vo_mult32((*p1++), (*p2--));
+                s += vo_mult32((*p1++), (*p2--));
+                s += vo_mult32((*p1++), (*p2--));
+                s += vo_mult32((*p1++), (*p2--));
+                s += vo_mult32((*p1++), (*p2--));
+                s += vo_mult32((*p1++), (*p2--));
+                s += vo_mult32((*p1++), (*p2--));
+                s += vo_mult32((*p1++), (*p2--));
+                s += vo_mult32((*p1++), (*p2--));
+                s += vo_mult32((*p1++), (*p2--));
+                s += vo_mult32((*p1++), (*p2--));
+                s += vo_mult32((*p1++), (*p2--));
+                s += vo_mult32((*p1++), (*p2--));
+                s += vo_mult32((*p1++), (*p2--));
+                s += vo_mult32((*p1++), (*p2--));
+                s += vo_mult32((*p1++), (*p2--));
+                s += vo_mult32((*p1), (*p2));
 
-		s = L_shl2(s, 5); 
-		y[i] = extract_h(L_add(s, 0x8000));
-	}
+                s = L_shl2(s, 5); 
+                y[i] = extract_h(L_add(s, 0x8000));
+        }
 
-	return;
+        return;
 }
 
 

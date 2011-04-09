@@ -16,7 +16,7 @@
 
 //
 // Sortable array of strings.  STL-ish, but STL-free.
-//  
+//
 #ifndef _LIBS_UTILS_STRING_ARRAY_H
 #define _LIBS_UTILS_STRING_ARRAY_H
 
@@ -47,12 +47,12 @@ public:
     // Sort the array.
     //
     void sort(int (*compare)(const void*, const void*));
-    
+
     //
     // Pass this to the sort routine to do an ascending alphabetical sort.
     //
     static int cmpAscendingAlpha(const void* pstr1, const void* pstr2);
-    
+
     //
     // Get the #of items in the array.
     //

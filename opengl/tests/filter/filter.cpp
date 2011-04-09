@@ -18,7 +18,7 @@ int main(int argc, char** argv)
         printf("usage: %s <0-6> [pbuffer]\n", argv[0]);
         return 0;
     }
-    
+
     const int test = atoi(argv[1]);
     int usePbuffer = argc==3 && !strcmp(argv[2], "pbuffer");
     EGLint s_configAttribs[] = {
@@ -28,7 +28,7 @@ int main(int argc, char** argv)
          EGL_BLUE_SIZE,      5,
          EGL_NONE
      };
-     
+
      EGLint numConfigs = -1;
      EGLint majorVersion;
      EGLint minorVersion;
@@ -36,14 +36,14 @@ int main(int argc, char** argv)
      EGLContext context;
      EGLSurface surface;
      EGLint w, h;
-     
+
      EGLDisplay dpy;
 
      EGLNativeWindowType window = 0;
      if (!usePbuffer) {
          window = android_createDisplaySurface();
      }
-     
+
      dpy = eglGetDisplay(EGL_DEFAULT_DISPLAY);
      eglInitialize(dpy, &majorVersion, &minorVersion);
      if (!usePbuffer) {
@@ -60,7 +60,7 @@ int main(int argc, char** argv)
          }
      }
      context = eglCreateContext(dpy, config, NULL, NULL);
-     eglMakeCurrent(dpy, surface, surface, context);   
+     eglMakeCurrent(dpy, surface, surface, context);
      eglQuerySurface(dpy, surface, EGL_WIDTH, &w);
      eglQuerySurface(dpy, surface, EGL_HEIGHT, &h);
      GLint dim = w<h ? w : h;
@@ -83,32 +83,32 @@ int main(int argc, char** argv)
      glColor4f(1,1,1,1);
 
      // packing is always 4
-     uint8_t t8[]  = { 
-             0x00, 0x55, 0x00, 0x55, 
+     uint8_t t8[]  = {
+             0x00, 0x55, 0x00, 0x55,
              0xAA, 0xFF, 0xAA, 0xFF,
-             0x00, 0x55, 0x00, 0x55, 
+             0x00, 0x55, 0x00, 0x55,
              0xAA, 0xFF, 0xAA, 0xFF  };
 
-     uint16_t t16[]  = { 
-             0x0000, 0x5555, 0x0000, 0x5555, 
+     uint16_t t16[]  = {
+             0x0000, 0x5555, 0x0000, 0x5555,
              0xAAAA, 0xFFFF, 0xAAAA, 0xFFFF,
-             0x0000, 0x5555, 0x0000, 0x5555, 
+             0x0000, 0x5555, 0x0000, 0x5555,
              0xAAAA, 0xFFFF, 0xAAAA, 0xFFFF  };
 
-     uint16_t t5551[]  = { 
-             0x0000, 0xFFFF, 0x0000, 0xFFFF, 
+     uint16_t t5551[]  = {
+             0x0000, 0xFFFF, 0x0000, 0xFFFF,
              0xFFFF, 0x0000, 0xFFFF, 0x0000,
-             0x0000, 0xFFFF, 0x0000, 0xFFFF, 
+             0x0000, 0xFFFF, 0x0000, 0xFFFF,
              0xFFFF, 0x0000, 0xFFFF, 0x0000  };
 
-     uint32_t t32[]  = { 
-             0xFF000000, 0xFF0000FF, 0xFF00FF00, 0xFFFF0000, 
-             0xFF00FF00, 0xFFFF0000, 0xFF000000, 0xFF0000FF, 
-             0xFF00FFFF, 0xFF00FF00, 0x00FF00FF, 0xFFFFFF00, 
+     uint32_t t32[]  = {
+             0xFF000000, 0xFF0000FF, 0xFF00FF00, 0xFFFF0000,
+             0xFF00FF00, 0xFFFF0000, 0xFF000000, 0xFF0000FF,
+             0xFF00FFFF, 0xFF00FF00, 0x00FF00FF, 0xFFFFFF00,
              0xFF000000, 0xFFFF00FF, 0xFF00FFFF, 0xFFFFFFFF
      };
 
-     switch(test) 
+     switch(test)
      {
      case 1:
          glTexImage2D(GL_TEXTURE_2D, 0, GL_LUMINANCE,
@@ -137,7 +137,7 @@ int main(int argc, char** argv)
      }
 
      //glDrawTexiOES(0, 0, 0, dim, dim);
-     
+
      const GLfloat vertices[4][2] = {
              { 0,    0   },
              { 0,    dim },
@@ -151,15 +151,15 @@ int main(int argc, char** argv)
              { 1,  1 },
              { 1,  0 }
      };
-     
+
      if (!usePbuffer) {
          eglSwapBuffers(dpy, surface);
      }
-     
+
      glMatrixMode(GL_MODELVIEW);
      glScissor(0,dim,dim,h-dim);
      glDisable(GL_SCISSOR_TEST);
-     
+
      for (int y=0 ; y<dim ; y++) {
          //glDisable(GL_SCISSOR_TEST);
          glClear(GL_COLOR_BUFFER_BIT);

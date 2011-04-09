@@ -102,7 +102,7 @@ void* Overlay::getBufferAddress(overlay_buffer_t buffer)
     return mOverlayData->getBufferAddress(mOverlayData, buffer);
 }
 
-void Overlay::destroy() {  
+void Overlay::destroy() {
 
     // Must delete the objects in reverse creation order, thus the
     //  data side must be closed first and then the destroy send to
@@ -156,11 +156,11 @@ int32_t Overlay::getHeightStride() const {
 }
 // ----------------------------------------------------------------------------
 
-OverlayRef::OverlayRef() 
+OverlayRef::OverlayRef()
  : mOverlayHandle(0),
     mWidth(0), mHeight(0), mFormat(0), mWidthStride(0), mHeightStride(0),
     mOwnHandle(true)
-{    
+{
 }
 
 OverlayRef::OverlayRef(overlay_handle_t handle, const sp<IOverlay>& channel,

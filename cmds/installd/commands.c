@@ -1,16 +1,16 @@
 /*
 ** Copyright 2008, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -496,9 +496,9 @@ int create_cache_path(char path[PKG_PATH_MAX], const char *src)
         }
     }
 
-    dstlen = srclen + strlen(cache_path) + 
+    dstlen = srclen + strlen(cache_path) +
         strlen(DALVIK_CACHE_POSTFIX) + 1;
-    
+
     if (dstlen > PKG_PATH_MAX) {
         return -1;
     }
@@ -507,7 +507,7 @@ int create_cache_path(char path[PKG_PATH_MAX], const char *src)
             cache_path,
             src + 1, /* skip the leading / */
             DALVIK_CACHE_POSTFIX);
-    
+
     for(tmp = path + strlen(cache_path); *tmp; tmp++) {
         if (*tmp == '/') {
             *tmp = '@';
@@ -655,7 +655,7 @@ int dexopt(const char *apk_path, uid_t uid, int is_public)
     ut.actime = apk_stat.st_atime;
     ut.modtime = apk_stat.st_mtime;
     utime(dex_path, &ut);
-    
+
     close(odex_fd);
     close(zip_fd);
     return 0;
@@ -679,7 +679,7 @@ int create_move_path(char path[PKG_PATH_MAX],
     if ((strlen(prefix) + strlen(pkgname) + strlen(leaf) + 1) >= PKG_PATH_MAX) {
         return -1;
     }
-    
+
     sprintf(path, "%s%s/%s", prefix, pkgname, leaf);
     return 0;
 }
@@ -714,12 +714,12 @@ int movefileordir(char* srcpath, char* dstpath, int dstbasepos,
 
     int srcend = strlen(srcpath);
     int dstend = strlen(dstpath);
-    
+
     if (lstat(srcpath, statbuf) < 0) {
         LOGW("Unable to stat %s: %s\n", srcpath, strerror(errno));
         return 1;
     }
-    
+
     if ((statbuf->st_mode&S_IFDIR) == 0) {
         mkinnerdirs(dstpath, dstbasepos, S_IRWXU|S_IRWXG|S_IXOTH,
                 dstuid, dstgid, statbuf);
@@ -745,7 +745,7 @@ int movefileordir(char* srcpath, char* dstpath, int dstbasepos,
     }
 
     res = 0;
-    
+
     while ((de = readdir(d))) {
         const char *name = de->d_name;
             /* always skip "." and ".." */
@@ -753,32 +753,32 @@ int movefileordir(char* srcpath, char* dstpath, int dstbasepos,
             if (name[1] == 0) continue;
             if ((name[1] == '.') && (name[2] == 0)) continue;
         }
-        
+
         if ((srcend+strlen(name)) >= (PKG_PATH_MAX-2)) {
             LOGW("Source path too long; skipping: %s/%s\n", srcpath, name);
             continue;
         }
-        
+
         if ((dstend+strlen(name)) >= (PKG_PATH_MAX-2)) {
             LOGW("Destination path too long; skipping: %s/%s\n", dstpath, name);
             continue;
         }
-        
+
         srcpath[srcend] = dstpath[dstend] = '/';
         strcpy(srcpath+srcend+1, name);
         strcpy(dstpath+dstend+1, name);
-        
+
         if (movefileordir(srcpath, dstpath, dstbasepos, dstuid, dstgid, statbuf) != 0) {
             res = 1;
         }
-        
+
         // Note: we will be leaving empty directories behind in srcpath,
         // but that is okay, the package manager will be erasing all of the
         // data associated with .apks that disappear.
-        
+
         srcpath[srcend] = dstpath[dstend] = 0;
     }
-    
+
     closedir(d);
     return res;
 }
@@ -820,7 +820,7 @@ int movefiles()
                         UPDATE_COMMANDS_DIR_PREFIX, name);
                 continue;
             }
-            
+
             bufp = 0;
             bufe = 0;
             buf[PKG_PATH_MAX] = 0;

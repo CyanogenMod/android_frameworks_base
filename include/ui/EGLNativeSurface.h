@@ -33,12 +33,12 @@ template <class TYPE>
 class EGLNativeSurface : public egl_native_window_t, public LightRefBase<TYPE>
 {
 public:
-    EGLNativeSurface() { 
-        memset(egl_native_window_t::reserved, 0, 
+    EGLNativeSurface() {
+        memset(egl_native_window_t::reserved, 0,
                 sizeof(egl_native_window_t::reserved));
-        memset(egl_native_window_t::reserved_proc, 0, 
+        memset(egl_native_window_t::reserved_proc, 0,
                 sizeof(egl_native_window_t::reserved_proc));
-        memset(egl_native_window_t::oem, 0, 
+        memset(egl_native_window_t::oem, 0,
                 sizeof(egl_native_window_t::oem));
     }
 protected:

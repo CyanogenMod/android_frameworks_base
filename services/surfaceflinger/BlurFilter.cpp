@@ -1,17 +1,17 @@
-/* 
+/*
 **
 ** Copyright 2006, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -69,7 +69,7 @@ template <int FACTOR = 0>
 struct BlurColor565
 {
     typedef uint16_t type;
-    int r, g, b;    
+    int r, g, b;
     inline BlurColor565() { }
     inline BlurColor565(uint16_t v) {
         r = v >> 11;
@@ -96,7 +96,7 @@ struct BlurColor565
         G >>= shift;
         B >>= shift;
         return (R<<11) | (G<<5) | B;
-    }    
+    }
     inline BlurColor565& operator += (const BlurColor565& rhs) {
         r += rhs.r;
         g += rhs.g;
@@ -115,7 +115,7 @@ template <int FACTOR = 0>
 struct BlurColor888X
 {
     typedef uint32_t type;
-    int r, g, b;    
+    int r, g, b;
     inline BlurColor888X() { }
     inline BlurColor888X(uint32_t v) {
         v = BLUR_RGBA_TO_HOST(v);
@@ -140,7 +140,7 @@ struct BlurColor888X
         G >>= shift;
         B >>= shift;
         return BLUR_HOST_TO_RGBA((0xFF<<24) | (B<<16) | (G<<8) | R);
-    }    
+    }
     inline BlurColor888X& operator += (const BlurColor888X& rhs) {
         r += rhs.r;
         g += rhs.g;
@@ -158,7 +158,7 @@ struct BlurColor888X
 struct BlurGray565
 {
     typedef uint16_t type;
-    int l;    
+    int l;
     inline BlurGray565() { }
     inline BlurGray565(uint16_t v) {
         int r = v >> 11;
@@ -188,7 +188,7 @@ struct BlurGray565
 struct BlurGray8888
 {
     typedef uint32_t type;
-    int l, a;    
+    int l, a;
     inline BlurGray8888() { }
     inline BlurGray8888(uint32_t v) {
         v = BLUR_RGBA_TO_HOST(v);
@@ -197,7 +197,7 @@ struct BlurGray8888
         int b = (v >> 16) & 0xFF;
         a = v >> 24;
         l = r + g + g + b;
-    }    
+    }
     inline void clear() { l=a=0; }
     inline uint32_t to(int shift, int last, int dither) const {
         int L = l;
@@ -297,7 +297,7 @@ static status_t blurFilter(
                 current += *in;
                 in++;
             } while (--count);
-            
+
             count = kernelHalfSize;
             do {
                 current += *in;
@@ -343,7 +343,7 @@ static status_t blurFilter(
         // The subsequent passes are always done in-place.
         src = dst;
     }
-    
+
     free(temporary_buffer);
 
     return NO_ERROR;

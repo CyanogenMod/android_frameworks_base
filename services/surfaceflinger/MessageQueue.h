@@ -33,7 +33,7 @@ namespace android {
 
 class MessageBase;
 
-class MessageList 
+class MessageList
 {
     List< sp<MessageBase> > mList;
     typedef List< sp<MessageBase> > LIST;
@@ -49,24 +49,24 @@ public:
 
 // ============================================================================
 
-class MessageBase : 
+class MessageBase :
     public LightRefBase<MessageBase>
 {
 public:
     nsecs_t     when;
     uint32_t    what;
-    int32_t     arg0;    
+    int32_t     arg0;
 
     MessageBase() : when(0), what(0), arg0(0) { }
     MessageBase(uint32_t what, int32_t arg0=0)
         : when(0), what(what), arg0(arg0) { }
-    
+
     // return true if message has a handler
     virtual bool handler() { return false; }
 
     // waits for the handler to be processed
     void wait() const { barrier.wait(); }
-    
+
     // releases all waiters. this is done automatically if
     // handler returns true
     void notify() const { barrier.open(); }
@@ -99,19 +99,19 @@ public:
     };
 
     sp<MessageBase> waitMessage(nsecs_t timeout = -1);
-    
+
     status_t postMessage(const sp<MessageBase>& message,
             nsecs_t reltime=0, uint32_t flags = 0);
 
     status_t invalidate();
-    
+
     void dump(const sp<MessageBase>& message);
 
 private:
     status_t queueMessage(const sp<MessageBase>& message,
             nsecs_t reltime, uint32_t flags);
     void dumpLocked(const sp<MessageBase>& message);
-    
+
     Mutex           mLock;
     Condition       mCondition;
     MessageList     mMessages;

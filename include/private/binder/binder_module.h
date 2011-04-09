@@ -30,7 +30,7 @@ namespace android {
 
 #else
 
-/* Some parts of the simulator need fake versions of this 
+/* Some parts of the simulator need fake versions of this
  * stuff in order to compile.  Really this should go away
  * entirely...
  */
@@ -69,13 +69,13 @@ struct binder_transaction_data {
     } target;
     void *cookie;
     unsigned int code;
-    
+
     unsigned int flags;
     pid_t sender_pid;
     uid_t sender_euid;
     size_t data_size;
     size_t offsets_size;
-    
+
     union {
         struct {
             const void *buffer;

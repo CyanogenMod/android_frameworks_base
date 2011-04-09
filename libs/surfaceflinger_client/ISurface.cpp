@@ -33,17 +33,17 @@ namespace android {
 
 // ----------------------------------------------------------------------
 
-ISurface::BufferHeap::BufferHeap() 
+ISurface::BufferHeap::BufferHeap()
     : w(0), h(0), hor_stride(0), ver_stride(0), format(0),
-    transform(0), flags(0) 
-{     
+    transform(0), flags(0)
+{
 }
 
 ISurface::BufferHeap::BufferHeap(uint32_t w, uint32_t h,
         int32_t hor_stride, int32_t ver_stride,
         PixelFormat format, const sp<IMemoryHeap>& heap)
     : w(w), h(h), hor_stride(hor_stride), ver_stride(ver_stride),
-      format(format), transform(0), flags(0), heap(heap) 
+      format(format), transform(0), flags(0), heap(heap)
 {
 }
 
@@ -52,13 +52,13 @@ ISurface::BufferHeap::BufferHeap(uint32_t w, uint32_t h,
         PixelFormat format, uint32_t transform, uint32_t flags,
         const sp<IMemoryHeap>& heap)
         : w(w), h(h), hor_stride(hor_stride), ver_stride(ver_stride),
-          format(format), transform(transform), flags(flags), heap(heap) 
+          format(format), transform(transform), flags(flags), heap(heap)
 {
 }
 
 
-ISurface::BufferHeap::~BufferHeap() 
-{     
+ISurface::BufferHeap::~BufferHeap()
+{
 }
 
 // ----------------------------------------------------------------------

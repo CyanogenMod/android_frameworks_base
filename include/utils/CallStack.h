@@ -38,16 +38,16 @@ public:
     ~CallStack();
 
     CallStack& operator = (const CallStack& rhs);
-    
+
     bool operator == (const CallStack& rhs) const;
     bool operator != (const CallStack& rhs) const;
     bool operator < (const CallStack& rhs) const;
     bool operator >= (const CallStack& rhs) const;
     bool operator > (const CallStack& rhs) const;
     bool operator <= (const CallStack& rhs) const;
-    
+
     const void* operator [] (int index) const;
-    
+
     void clear();
 
     void update(int32_t ignoreDepth=0, int32_t maxDepth=MAX_DEPTH);
@@ -57,7 +57,7 @@ public:
 
     // Return a string (possibly very long) containing the complete stack trace
     String8 toString(const char* prefix = 0) const;
-    
+
     size_t size() const { return mCount; }
 
 private:

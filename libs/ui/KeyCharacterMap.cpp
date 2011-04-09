@@ -202,7 +202,7 @@ KeyCharacterMap::try_file(const char* filename)
     off_t filesize;
     Header header;
     int err;
-    
+
     fd = open(filename, O_RDONLY);
     if (fd == -1) {
         LOGW("Can't open keycharmap file");

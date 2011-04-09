@@ -11,7 +11,7 @@ class EffectEqualizer : public Effect {
     int64_t mGain;
     Biquad mFilterL[4], mFilterR[4];
 
-    void setBand(int32_t idx, float dB);   
+    void setBand(int32_t idx, float dB);
     void refreshBands();
 
     public:

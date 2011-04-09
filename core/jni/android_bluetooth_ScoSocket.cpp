@@ -302,9 +302,9 @@ static void destroyNative(JNIEnv* env, jobject object) {
     LOGV(__FUNCTION__);
 #ifdef HAVE_BLUETOOTH
     native_data_t *nat = get_native_data(env, object);
-    
+
     closeNative(env, object);
-    
+
     pthread_mutex_lock(&nat->mutex);
     if (nat->thread_data != NULL) {
         nat->thread_data->nat = NULL;

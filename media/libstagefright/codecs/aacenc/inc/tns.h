@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		tns.h
+        File:           tns.h
 
-	Content:	TNS structures
+        Content:        TNS structures
 
 *******************************************************************************/
 

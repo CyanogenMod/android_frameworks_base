@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		basicop2.c
+        File:           basicop2.c
 
-	Content:	Basic arithmetic operators. 
+        Content:        Basic arithmetic operators. 
 
 *******************************************************************************/
 

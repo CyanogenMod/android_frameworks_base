@@ -65,15 +65,15 @@ static OMX_ERRORTYPE SendCommandWrapper(
 }
 
 static OMX_ERRORTYPE GetParameterWrapper(
-        OMX_IN  OMX_HANDLETYPE hComponent, 
-        OMX_IN  OMX_INDEXTYPE nParamIndex,  
+        OMX_IN  OMX_HANDLETYPE hComponent,
+        OMX_IN  OMX_INDEXTYPE nParamIndex,
         OMX_INOUT OMX_PTR pComponentParameterStructure) {
     return getBase(hComponent)->getParameter(
             nParamIndex, pComponentParameterStructure);
 }
 
 static OMX_ERRORTYPE SetParameterWrapper(
-        OMX_IN  OMX_HANDLETYPE hComponent, 
+        OMX_IN  OMX_HANDLETYPE hComponent,
         OMX_IN  OMX_INDEXTYPE nIndex,
         OMX_IN  OMX_PTR pComponentParameterStructure) {
     return getBase(hComponent)->getParameter(
@@ -82,14 +82,14 @@ static OMX_ERRORTYPE SetParameterWrapper(
 
 static OMX_ERRORTYPE GetConfigWrapper(
         OMX_IN  OMX_HANDLETYPE hComponent,
-        OMX_IN  OMX_INDEXTYPE nIndex, 
+        OMX_IN  OMX_INDEXTYPE nIndex,
         OMX_INOUT OMX_PTR pComponentConfigStructure) {
     return getBase(hComponent)->getConfig(nIndex, pComponentConfigStructure);
 }
 
 static OMX_ERRORTYPE SetConfigWrapper(
         OMX_IN  OMX_HANDLETYPE hComponent,
-        OMX_IN  OMX_INDEXTYPE nIndex, 
+        OMX_IN  OMX_INDEXTYPE nIndex,
         OMX_IN  OMX_PTR pComponentConfigStructure) {
     return getBase(hComponent)->setConfig(nIndex, pComponentConfigStructure);
 }

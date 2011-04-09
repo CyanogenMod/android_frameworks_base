@@ -348,7 +348,7 @@ XMLNode::to_string(const XMLNamespaceMap& nspaces, const string& indent) const
         }
         case ELEMENT: {
             string result = open_tag_to_string(nspaces, indent, PRETTY);
-            
+
             if (m_children.size() > 0) {
                 result += contents_to_string(nspaces, indent + MORE_INDENT);
 
@@ -599,7 +599,7 @@ XMLHandler::ParseFile(const string& filename, XMLHandler* handler)
     XML_ParserFree(parser);
 
     close(fd);
-    
+
     return true;
 }
 
@@ -624,7 +624,7 @@ XMLHandler::ParseString(const string& filename, const string& text, XMLHandler* 
     }
 
     XML_ParserFree(parser);
-    
+
     return true;
 }
 

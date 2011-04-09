@@ -101,16 +101,16 @@ static jlong android_os_ParcelFileDescriptor_getStatSize(JNIEnv* env,
         jniThrowException(env, "java/lang/IllegalArgumentException", "bad file descriptor");
         return -1;
     }
-    
+
     struct stat st;
     if (fstat(fd, &st) != 0) {
         return -1;
     }
-    
+
     if (S_ISREG(st.st_mode) || S_ISLNK(st.st_mode)) {
         return st.st_size;
     }
-    
+
     return -1;
 }
 
@@ -122,7 +122,7 @@ static jlong android_os_ParcelFileDescriptor_seekTo(JNIEnv* env,
         jniThrowException(env, "java/lang/IllegalArgumentException", "bad file descriptor");
         return -1;
     }
-    
+
     return lseek(fd, pos, SEEK_SET);
 }
 
@@ -162,7 +162,7 @@ int register_android_os_ParcelFileDescriptor(JNIEnv* env)
     gFileDescriptorOffsets.mDescriptor = env->GetFieldID(clazz, "descriptor", "I");
     LOG_FATAL_IF(gFileDescriptorOffsets.mDescriptor == NULL,
                  "Unable to find descriptor field in java.io.FileDescriptor");
-    
+
     clazz = env->FindClass(kParcelFileDescriptorPathName);
     LOG_FATAL_IF(clazz == NULL, "Unable to find class android.os.ParcelFileDescriptor");
     gParcelFileDescriptorOffsets.mClass = (jclass) env->NewGlobalRef(clazz);

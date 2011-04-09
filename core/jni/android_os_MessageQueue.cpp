@@ -151,7 +151,7 @@ int register_android_os_MessageQueue(JNIEnv* env) {
 
     GET_FIELD_ID(gMessageQueueClassInfo.mPtr, gMessageQueueClassInfo.clazz,
             "mPtr", "I");
-    
+
     return 0;
 }
 

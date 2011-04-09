@@ -285,9 +285,9 @@ public:
             status_t    getLoop(uint32_t *loopStart, uint32_t *loopEnd, int *loopCount);
 
 
-    /* Sets marker position. When playback reaches the number of frames specified, a callback with event 
-     * type EVENT_MARKER is called. Calling setMarkerPosition with marker == 0 cancels marker notification 
-     * callback. 
+    /* Sets marker position. When playback reaches the number of frames specified, a callback with event
+     * type EVENT_MARKER is called. Calling setMarkerPosition with marker == 0 cancels marker notification
+     * callback.
      * If the AudioTrack has been opened with no callback function associated, the operation will fail.
      *
      * Parameters:
@@ -302,10 +302,10 @@ public:
             status_t    getMarkerPosition(uint32_t *marker);
 
 
-    /* Sets position update period. Every time the number of frames specified has been played, 
-     * a callback with event type EVENT_NEW_POS is called. 
-     * Calling setPositionUpdatePeriod with updatePeriod == 0 cancels new position notification 
-     * callback. 
+    /* Sets position update period. Every time the number of frames specified has been played,
+     * a callback with event type EVENT_NEW_POS is called.
+     * Calling setPositionUpdatePeriod with updatePeriod == 0 cancels new position notification
+     * callback.
      * If the AudioTrack has been opened with no callback function associated, the operation will fail.
      *
      * Parameters:
@@ -321,10 +321,10 @@ public:
 
 
     /* Sets playback head position within AudioTrack buffer. The new position is specified
-     * in number of frames. 
+     * in number of frames.
      * This method must be called with the AudioTrack in paused or stopped state.
-     * Note that the actual position set is <position> modulo the AudioTrack buffer size in frames. 
-     * Therefore using this method makes sense only when playing a "static" audio buffer 
+     * Note that the actual position set is <position> modulo the AudioTrack buffer size in frames.
+     * Therefore using this method makes sense only when playing a "static" audio buffer
      * as opposed to streaming.
      * The getPosition() method on the other hand returns the total number of frames played since
      * playback start.
@@ -336,12 +336,12 @@ public:
      * Returned status (from utils/Errors.h) can be:
      *  - NO_ERROR: successful operation
      *  - INVALID_OPERATION: the AudioTrack is not stopped.
-     *  - BAD_VALUE: The specified position is beyond the number of frames present in AudioTrack buffer 
+     *  - BAD_VALUE: The specified position is beyond the number of frames present in AudioTrack buffer
      */
             status_t    setPosition(uint32_t position);
             status_t    getPosition(uint32_t *position);
 
-    /* Forces AudioTrack buffer full condition. When playing a static buffer, this method avoids 
+    /* Forces AudioTrack buffer full condition. When playing a static buffer, this method avoids
      * rewriting the buffer before restarting playback after a stop.
      * This method must be called with the AudioTrack in paused or stopped state.
      *

@@ -410,15 +410,15 @@ OMX_ERRORTYPE OMX::OnFillBufferDone(
 
     if(pPlatfromList) {
       for(size_t i=0; i<pPlatfromList->nEntries; i++) {
-	if(pPlatfromList->entryList->type == PLATFORM_PRIVATE_PMEM)
-	  {
-	    pPlatformEntry = (PLATFORM_PRIVATE_ENTRY *)pPlatfromList->entryList;
-	    pPMEMInfo = (PLATFORM_PRIVATE_PMEM_INFO *)pPlatformEntry->entry;
-	    if(pPMEMInfo) {
-	      offset = pPMEMInfo->offset;
-	    }
-	    break;
-	  }
+        if(pPlatfromList->entryList->type == PLATFORM_PRIVATE_PMEM)
+          {
+            pPlatformEntry = (PLATFORM_PRIVATE_ENTRY *)pPlatfromList->entryList;
+            pPMEMInfo = (PLATFORM_PRIVATE_PMEM_INFO *)pPlatformEntry->entry;
+            if(pPMEMInfo) {
+              offset = pPMEMInfo->offset;
+            }
+            break;
+          }
       }
     }
     msg.u.extended_buffer_data.pmem_offset = offset;

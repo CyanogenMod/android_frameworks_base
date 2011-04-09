@@ -18,7 +18,7 @@
 /*--------------------------------------------------------------------------*
  *                         ACELP.H                                          *
  *--------------------------------------------------------------------------*
- *       Function			 			             *
+ *       Function                                                            *
  *--------------------------------------------------------------------------*/
 #ifndef __ACELP_H__
 #define __ACELP_H__
@@ -33,68 +33,68 @@
 Word16 median5(Word16 x[]);
 
 void Autocorr(
-		Word16 x[],                           /* (i)    : Input signal                      */
-		Word16 m,                             /* (i)    : LPC order                         */
-		Word16 r_h[],                         /* (o)    : Autocorrelations  (msb)           */
-		Word16 r_l[]                          /* (o)    : Autocorrelations  (lsb)           */
-	     );
+                Word16 x[],                           /* (i)    : Input signal                      */
+                Word16 m,                             /* (i)    : LPC order                         */
+                Word16 r_h[],                         /* (o)    : Autocorrelations  (msb)           */
+                Word16 r_l[]                          /* (o)    : Autocorrelations  (lsb)           */
+             );
 
 void Lag_window(
-		Word16 r_h[],                         /* (i/o)   : Autocorrelations  (msb)          */
-		Word16 r_l[]                          /* (i/o)   : Autocorrelations  (lsb)          */
-	       );
+                Word16 r_h[],                         /* (i/o)   : Autocorrelations  (msb)          */
+                Word16 r_l[]                          /* (i/o)   : Autocorrelations  (lsb)          */
+               );
 
 void Init_Levinson(
-		Word16 * mem                          /* output  :static memory (18 words) */
-		);
+                Word16 * mem                          /* output  :static memory (18 words) */
+                );
 
 void Levinson(
-		Word16 Rh[],                          /* (i)     : Rh[M+1] Vector of autocorrelations (msb) */
-		Word16 Rl[],                          /* (i)     : Rl[M+1] Vector of autocorrelations (lsb) */
-		Word16 A[],                           /* (o) Q12 : A[M]    LPC coefficients  (m = 16)       */
-		Word16 rc[],                          /* (o) Q15 : rc[M]   Reflection coefficients.         */
-		Word16 * mem                          /* (i/o)   :static memory (18 words)                  */
-	     );
+                Word16 Rh[],                          /* (i)     : Rh[M+1] Vector of autocorrelations (msb) */
+                Word16 Rl[],                          /* (i)     : Rl[M+1] Vector of autocorrelations (lsb) */
+                Word16 A[],                           /* (o) Q12 : A[M]    LPC coefficients  (m = 16)       */
+                Word16 rc[],                          /* (o) Q15 : rc[M]   Reflection coefficients.         */
+                Word16 * mem                          /* (i/o)   :static memory (18 words)                  */
+             );
 
 void Az_isp(
-		Word16 a[],                           /* (i) Q12 : predictor coefficients                 */
-		Word16 isp[],                         /* (o) Q15 : Immittance spectral pairs              */
-		Word16 old_isp[]                      /* (i)     : old isp[] (in case not found M roots)  */
-	   );
+                Word16 a[],                           /* (i) Q12 : predictor coefficients                 */
+                Word16 isp[],                         /* (o) Q15 : Immittance spectral pairs              */
+                Word16 old_isp[]                      /* (i)     : old isp[] (in case not found M roots)  */
+           );
 
 void Isp_Az(
-		Word16 isp[],                         /* (i) Q15 : Immittance spectral pairs            */
-		Word16 a[],                           /* (o) Q12 : predictor coefficients (order = M)   */
-		Word16 m,
-		Word16 adaptive_scaling               /* (i) 0   : adaptive scaling disabled */
-		/*     1   : adaptive scaling enabled  */
-	   );
+                Word16 isp[],                         /* (i) Q15 : Immittance spectral pairs            */
+                Word16 a[],                           /* (o) Q12 : predictor coefficients (order = M)   */
+                Word16 m,
+                Word16 adaptive_scaling               /* (i) 0   : adaptive scaling disabled */
+                /*     1   : adaptive scaling enabled  */
+           );
 
 void Isp_isf(
-		Word16 isp[],                         /* (i) Q15 : isp[m] (range: -1<=val<1)                */
-		Word16 isf[],                         /* (o) Q15 : isf[m] normalized (range: 0.0<=val<=0.5) */
-		Word16 m                              /* (i)     : LPC order                                */
-	    );
+                Word16 isp[],                         /* (i) Q15 : isp[m] (range: -1<=val<1)                */
+                Word16 isf[],                         /* (o) Q15 : isf[m] normalized (range: 0.0<=val<=0.5) */
+                Word16 m                              /* (i)     : LPC order                                */
+            );
 
 void Isf_isp(
-		Word16 isf[],                         /* (i) Q15 : isf[m] normalized (range: 0.0<=val<=0.5) */
-		Word16 isp[],                         /* (o) Q15 : isp[m] (range: -1<=val<1)                */
-		Word16 m                              /* (i)     : LPC order                                */
-	    );
+                Word16 isf[],                         /* (i) Q15 : isf[m] normalized (range: 0.0<=val<=0.5) */
+                Word16 isp[],                         /* (o) Q15 : isp[m] (range: -1<=val<1)                */
+                Word16 m                              /* (i)     : LPC order                                */
+            );
 
 void Int_isp(
-		Word16 isp_old[],                     /* input : isps from past frame              */
-		Word16 isp_new[],                     /* input : isps from present frame           */
-		Word16 frac[],                        /* input : fraction for 3 first subfr (Q15)  */
-		Word16 Az[]                           /* output: LP coefficients in 4 subframes    */
-	    );
+                Word16 isp_old[],                     /* input : isps from past frame              */
+                Word16 isp_new[],                     /* input : isps from present frame           */
+                Word16 frac[],                        /* input : fraction for 3 first subfr (Q15)  */
+                Word16 Az[]                           /* output: LP coefficients in 4 subframes    */
+            );
 
 void Weight_a(
-		Word16 a[],                           /* (i) Q12 : a[m+1]  LPC coefficients             */
-		Word16 ap[],                          /* (o) Q12 : Spectral expanded LPC coefficients   */
-		Word16 gamma,                         /* (i) Q15 : Spectral expansion factor.           */
-		Word16 m                              /* (i)     : LPC order.                           */
-	     );
+                Word16 a[],                           /* (i) Q12 : a[m+1]  LPC coefficients             */
+                Word16 ap[],                          /* (o) Q12 : Spectral expanded LPC coefficients   */
+                Word16 gamma,                         /* (i) Q15 : Spectral expansion factor.           */
+                Word16 m                              /* (i)     : LPC order.                           */
+             );
 
 
 /*-----------------------------------------------------------------*
@@ -102,214 +102,214 @@ void Weight_a(
  *-----------------------------------------------------------------*/
 
 void Qpisf_2s_46b(
-		Word16 * isf1,                        /* (i) Q15 : ISF in the frequency domain (0..0.5) */
-		Word16 * isf_q,                       /* (o) Q15 : quantized ISF               (0..0.5) */
-		Word16 * past_isfq,                   /* (io)Q15 : past ISF quantizer                   */
-		Word16 * indice,                      /* (o)     : quantization indices                 */
-		Word16 nb_surv                        /* (i)     : number of survivor (1, 2, 3 or 4)    */
-		);
+                Word16 * isf1,                        /* (i) Q15 : ISF in the frequency domain (0..0.5) */
+                Word16 * isf_q,                       /* (o) Q15 : quantized ISF               (0..0.5) */
+                Word16 * past_isfq,                   /* (io)Q15 : past ISF quantizer                   */
+                Word16 * indice,                      /* (o)     : quantization indices                 */
+                Word16 nb_surv                        /* (i)     : number of survivor (1, 2, 3 or 4)    */
+                );
 
 void Qpisf_2s_36b(
-		Word16 * isf1,                        /* (i) Q15 : ISF in the frequency domain (0..0.5) */
-		Word16 * isf_q,                       /* (o) Q15 : quantized ISF               (0..0.5) */
-		Word16 * past_isfq,                   /* (io)Q15 : past ISF quantizer                   */
-		Word16 * indice,                      /* (o)     : quantization indices                 */
-		Word16 nb_surv                        /* (i)     : number of survivor (1, 2, 3 or 4)    */
-		);
+                Word16 * isf1,                        /* (i) Q15 : ISF in the frequency domain (0..0.5) */
+                Word16 * isf_q,                       /* (o) Q15 : quantized ISF               (0..0.5) */
+                Word16 * past_isfq,                   /* (io)Q15 : past ISF quantizer                   */
+                Word16 * indice,                      /* (o)     : quantization indices                 */
+                Word16 nb_surv                        /* (i)     : number of survivor (1, 2, 3 or 4)    */
+                );
 
 void Dpisf_2s_46b(
-		Word16 * indice,                      /* input:  quantization indices                       */
-		Word16 * isf_q,                       /* output: quantized ISF in frequency domain (0..0.5) */
-		Word16 * past_isfq,                   /* i/0   : past ISF quantizer                    */
-		Word16 * isfold,                      /* input : past quantized ISF                    */
-		Word16 * isf_buf,                     /* input : isf buffer                                                        */
-		Word16 bfi,                           /* input : Bad frame indicator                   */
-		Word16 enc_dec
-		);
+                Word16 * indice,                      /* input:  quantization indices                       */
+                Word16 * isf_q,                       /* output: quantized ISF in frequency domain (0..0.5) */
+                Word16 * past_isfq,                   /* i/0   : past ISF quantizer                    */
+                Word16 * isfold,                      /* input : past quantized ISF                    */
+                Word16 * isf_buf,                     /* input : isf buffer                                                        */
+                Word16 bfi,                           /* input : Bad frame indicator                   */
+                Word16 enc_dec
+                );
 
 void Dpisf_2s_36b(
-		Word16 * indice,                      /* input:  quantization indices                       */
-		Word16 * isf_q,                       /* output: quantized ISF in frequency domain (0..0.5) */
-		Word16 * past_isfq,                   /* i/0   : past ISF quantizer                    */
-		Word16 * isfold,                      /* input : past quantized ISF                    */
-		Word16 * isf_buf,                     /* input : isf buffer                                                        */
-		Word16 bfi,                           /* input : Bad frame indicator                   */
-		Word16 enc_dec
-		);
+                Word16 * indice,                      /* input:  quantization indices                       */
+                Word16 * isf_q,                       /* output: quantized ISF in frequency domain (0..0.5) */
+                Word16 * past_isfq,                   /* i/0   : past ISF quantizer                    */
+                Word16 * isfold,                      /* input : past quantized ISF                    */
+                Word16 * isf_buf,                     /* input : isf buffer                                                        */
+                Word16 bfi,                           /* input : Bad frame indicator                   */
+                Word16 enc_dec
+                );
 
 void Qisf_ns(
-		Word16 * isf1,                        /* input : ISF in the frequency domain (0..0.5) */
-		Word16 * isf_q,                       /* output: quantized ISF                        */
-		Word16 * indice                       /* output: quantization indices                 */
-	    );
+                Word16 * isf1,                        /* input : ISF in the frequency domain (0..0.5) */
+                Word16 * isf_q,                       /* output: quantized ISF                        */
+                Word16 * indice                       /* output: quantization indices                 */
+            );
 
 void Disf_ns(
-		Word16 * indice,                      /* input:  quantization indices                  */
-		Word16 * isf_q                        /* input : ISF in the frequency domain (0..0.5)  */
-	    );
+                Word16 * indice,                      /* input:  quantization indices                  */
+                Word16 * isf_q                        /* input : ISF in the frequency domain (0..0.5)  */
+            );
 
 Word16 Sub_VQ(                             /* output: return quantization index     */
-		Word16 * x,                           /* input : ISF residual vector           */
-		Word16 * dico,                        /* input : quantization codebook         */
-		Word16 dim,                           /* input : dimention of vector           */
-		Word16 dico_size,                     /* input : size of quantization codebook */
-		Word32 * distance                     /* output: error of quantization         */
-	     );
+                Word16 * x,                           /* input : ISF residual vector           */
+                Word16 * dico,                        /* input : quantization codebook         */
+                Word16 dim,                           /* input : dimention of vector           */
+                Word16 dico_size,                     /* input : size of quantization codebook */
+                Word32 * distance                     /* output: error of quantization         */
+             );
 
 void Reorder_isf(
-		Word16 * isf,                         /* (i/o) Q15: ISF in the frequency domain (0..0.5) */
-		Word16 min_dist,                      /* (i) Q15  : minimum distance to keep             */
-		Word16 n                              /* (i)      : number of ISF                        */
-		);
+                Word16 * isf,                         /* (i/o) Q15: ISF in the frequency domain (0..0.5) */
+                Word16 min_dist,                      /* (i) Q15  : minimum distance to keep             */
+                Word16 n                              /* (i)      : number of ISF                        */
+                );
 
 /*-----------------------------------------------------------------*
  *                       filter prototypes                         *
  *-----------------------------------------------------------------*/
 
 void Init_Decim_12k8(
-		Word16 mem[]                          /* output: memory (2*NB_COEF_DOWN) set to zeros */
-		);
+                Word16 mem[]                          /* output: memory (2*NB_COEF_DOWN) set to zeros */
+                );
 void Decim_12k8(
-		Word16 sig16k[],                      /* input:  signal to downsampling  */
-		Word16 lg,                            /* input:  length of input         */
-		Word16 sig12k8[],                     /* output: decimated signal        */
-		Word16 mem[]                          /* in/out: memory (2*NB_COEF_DOWN) */
-	       );
+                Word16 sig16k[],                      /* input:  signal to downsampling  */
+                Word16 lg,                            /* input:  length of input         */
+                Word16 sig12k8[],                     /* output: decimated signal        */
+                Word16 mem[]                          /* in/out: memory (2*NB_COEF_DOWN) */
+               );
 
 void Init_HP50_12k8(Word16 mem[]);
 void HP50_12k8(
-		Word16 signal[],                      /* input/output signal */
-		Word16 lg,                            /* lenght of signal    */
-		Word16 mem[]                          /* filter memory [6]   */
-	      );
+                Word16 signal[],                      /* input/output signal */
+                Word16 lg,                            /* lenght of signal    */
+                Word16 mem[]                          /* filter memory [6]   */
+              );
 void Init_HP400_12k8(Word16 mem[]);
 void HP400_12k8(
-		Word16 signal[],                      /* input/output signal */
-		Word16 lg,                            /* lenght of signal    */
-		Word16 mem[]                          /* filter memory [6]   */
-	       );
+                Word16 signal[],                      /* input/output signal */
+                Word16 lg,                            /* lenght of signal    */
+                Word16 mem[]                          /* filter memory [6]   */
+               );
 
 void Init_Filt_6k_7k(Word16 mem[]);
 void Filt_6k_7k(
-		Word16 signal[],                      /* input:  signal                  */
-		Word16 lg,                            /* input:  length of input         */
-		Word16 mem[]                          /* in/out: memory (size=30)        */
-	       );
+                Word16 signal[],                      /* input:  signal                  */
+                Word16 lg,                            /* input:  length of input         */
+                Word16 mem[]                          /* in/out: memory (size=30)        */
+               );
 void Filt_6k_7k_asm(
-		Word16 signal[],                      /* input:  signal                  */
-		Word16 lg,                            /* input:  length of input         */
-		Word16 mem[]                          /* in/out: memory (size=30)        */
-	       );
+                Word16 signal[],                      /* input:  signal                  */
+                Word16 lg,                            /* input:  length of input         */
+                Word16 mem[]                          /* in/out: memory (size=30)        */
+               );
 
 void LP_Decim2(
-		Word16 x[],                           /* in/out: signal to process         */
-		Word16 l,                             /* input : size of filtering         */
-		Word16 mem[]                          /* in/out: memory (size=3)           */
-	      );
+                Word16 x[],                           /* in/out: signal to process         */
+                Word16 l,                             /* input : size of filtering         */
+                Word16 mem[]                          /* in/out: memory (size=3)           */
+              );
 
 void Preemph(
-		Word16 x[],                           /* (i/o)   : input signal overwritten by the output */
-		Word16 mu,                            /* (i) Q15 : preemphasis coefficient                */
-		Word16 lg,                            /* (i)     : lenght of filtering                    */
-		Word16 * mem                          /* (i/o)   : memory (x[-1])                         */
-	    );
+                Word16 x[],                           /* (i/o)   : input signal overwritten by the output */
+                Word16 mu,                            /* (i) Q15 : preemphasis coefficient                */
+                Word16 lg,                            /* (i)     : lenght of filtering                    */
+                Word16 * mem                          /* (i/o)   : memory (x[-1])                         */
+            );
 void Preemph2(
-		Word16 x[],                           /* (i/o)   : input signal overwritten by the output */
-		Word16 mu,                            /* (i) Q15 : preemphasis coefficient                */
-		Word16 lg,                            /* (i)     : lenght of filtering                    */
-		Word16 * mem                          /* (i/o)   : memory (x[-1])                         */
-	     );
+                Word16 x[],                           /* (i/o)   : input signal overwritten by the output */
+                Word16 mu,                            /* (i) Q15 : preemphasis coefficient                */
+                Word16 lg,                            /* (i)     : lenght of filtering                    */
+                Word16 * mem                          /* (i/o)   : memory (x[-1])                         */
+             );
 void Deemph(
-		Word16 x[],                           /* (i/o)   : input signal overwritten by the output */
-		Word16 mu,                            /* (i) Q15 : deemphasis factor                      */
-		Word16 L,                             /* (i)     : vector size                            */
-		Word16 * mem                          /* (i/o)   : memory (y[-1])                         */
-	   );
+                Word16 x[],                           /* (i/o)   : input signal overwritten by the output */
+                Word16 mu,                            /* (i) Q15 : deemphasis factor                      */
+                Word16 L,                             /* (i)     : vector size                            */
+                Word16 * mem                          /* (i/o)   : memory (y[-1])                         */
+           );
 void Deemph2(
-		Word16 x[],                           /* (i/o)   : input signal overwritten by the output */
-		Word16 mu,                            /* (i) Q15 : deemphasis factor                      */
-		Word16 L,                             /* (i)     : vector size                            */
-		Word16 * mem                          /* (i/o)   : memory (y[-1])                         */
-	    );
+                Word16 x[],                           /* (i/o)   : input signal overwritten by the output */
+                Word16 mu,                            /* (i) Q15 : deemphasis factor                      */
+                Word16 L,                             /* (i)     : vector size                            */
+                Word16 * mem                          /* (i/o)   : memory (y[-1])                         */
+            );
 void Deemph_32(
-		Word16 x_hi[],                        /* (i)     : input signal (bit31..16) */
-		Word16 x_lo[],                        /* (i)     : input signal (bit15..4)  */
-		Word16 y[],                           /* (o)     : output signal (x16)      */
-		Word16 mu,                            /* (i) Q15 : deemphasis factor        */
-		Word16 L,                             /* (i)     : vector size              */
-		Word16 * mem                          /* (i/o)   : memory (y[-1])           */
-	      );
+                Word16 x_hi[],                        /* (i)     : input signal (bit31..16) */
+                Word16 x_lo[],                        /* (i)     : input signal (bit15..4)  */
+                Word16 y[],                           /* (o)     : output signal (x16)      */
+                Word16 mu,                            /* (i) Q15 : deemphasis factor        */
+                Word16 L,                             /* (i)     : vector size              */
+                Word16 * mem                          /* (i/o)   : memory (y[-1])           */
+              );
 
 void Deemph_32_asm(
-		Word16 x_hi[],                        /* (i)     : input signal (bit31..16) */
-		Word16 x_lo[],                        /* (i)     : input signal (bit15..4)  */
-		Word16 y[],                           /* (o)     : output signal (x16)      */
-		Word16 * mem                          /* (i/o)   : memory (y[-1])           */
-	      );
+                Word16 x_hi[],                        /* (i)     : input signal (bit31..16) */
+                Word16 x_lo[],                        /* (i)     : input signal (bit15..4)  */
+                Word16 y[],                           /* (o)     : output signal (x16)      */
+                Word16 * mem                          /* (i/o)   : memory (y[-1])           */
+              );
 
 void Convolve(
-		Word16 x[],                           /* (i)     : input vector                              */
-		Word16 h[],                           /* (i) Q15    : impulse response                       */
-		Word16 y[],                           /* (o) 12 bits: output vector                          */
-		Word16 L                              /* (i)     : vector size                               */
-	     );
+                Word16 x[],                           /* (i)     : input vector                              */
+                Word16 h[],                           /* (i) Q15    : impulse response                       */
+                Word16 y[],                           /* (o) 12 bits: output vector                          */
+                Word16 L                              /* (i)     : vector size                               */
+             );
 
 void Convolve_asm(
-		Word16 x[],                           /* (i)     : input vector                              */
-		Word16 h[],                           /* (i) Q15    : impulse response                       */
-		Word16 y[],                           /* (o) 12 bits: output vector                          */
-		Word16 L                              /* (i)     : vector size                               */
-	     );
+                Word16 x[],                           /* (i)     : input vector                              */
+                Word16 h[],                           /* (i) Q15    : impulse response                       */
+                Word16 y[],                           /* (o) 12 bits: output vector                          */
+                Word16 L                              /* (i)     : vector size                               */
+             );
 
 void Residu(
-		Word16 a[],                           /* (i) Q12 : prediction coefficients                     */
-		Word16 x[],                           /* (i)     : speech (values x[-m..-1] are needed         */
-		Word16 y[],                           /* (o)     : residual signal                             */
-		Word16 lg                             /* (i)     : size of filtering                           */
-		);
+                Word16 a[],                           /* (i) Q12 : prediction coefficients                     */
+                Word16 x[],                           /* (i)     : speech (values x[-m..-1] are needed         */
+                Word16 y[],                           /* (o)     : residual signal                             */
+                Word16 lg                             /* (i)     : size of filtering                           */
+                );
 
 void Residu_opt(
-		Word16 a[],                           /* (i) Q12 : prediction coefficients                     */
-		Word16 x[],                           /* (i)     : speech (values x[-m..-1] are needed         */
-		Word16 y[],                           /* (o)     : residual signal                             */
-		Word16 lg                             /* (i)     : size of filtering                           */
-		);
+                Word16 a[],                           /* (i) Q12 : prediction coefficients                     */
+                Word16 x[],                           /* (i)     : speech (values x[-m..-1] are needed         */
+                Word16 y[],                           /* (o)     : residual signal                             */
+                Word16 lg                             /* (i)     : size of filtering                           */
+                );
 
 void Syn_filt(
-	Word16 a[],                           /* (i) Q12 : a[m+1] prediction coefficients           */
-	Word16 x[],                           /* (i)     : input signal                             */
-	Word16 y[],                           /* (o)     : output signal                            */
-	Word16 lg,                            /* (i)     : size of filtering                        */
-	Word16 mem[],                         /* (i/o)   : memory associated with this filtering.   */
-	Word16 update                         /* (i)     : 0=no update, 1=update of memory.         */
-	);
+        Word16 a[],                           /* (i) Q12 : a[m+1] prediction coefficients           */
+        Word16 x[],                           /* (i)     : input signal                             */
+        Word16 y[],                           /* (o)     : output signal                            */
+        Word16 lg,                            /* (i)     : size of filtering                        */
+        Word16 mem[],                         /* (i/o)   : memory associated with this filtering.   */
+        Word16 update                         /* (i)     : 0=no update, 1=update of memory.         */
+        );
 
 void Syn_filt_asm(
-	Word16 a[],                           /* (i) Q12 : a[m+1] prediction coefficients           */
-	Word16 x[],                           /* (i)     : input signal                             */
-	Word16 y[],                           /* (o)     : output signal                            */
-	Word16 mem[]                          /* (i/o)   : memory associated with this filtering.   */
-	);
+        Word16 a[],                           /* (i) Q12 : a[m+1] prediction coefficients           */
+        Word16 x[],                           /* (i)     : input signal                             */
+        Word16 y[],                           /* (o)     : output signal                            */
+        Word16 mem[]                          /* (i/o)   : memory associated with this filtering.   */
+        );
 
 void Syn_filt_32(
-	Word16 a[],                           /* (i) Q12 : a[m+1] prediction coefficients */
-	Word16 m,                             /* (i)     : order of LP filter             */
-	Word16 exc[],                         /* (i) Qnew: excitation (exc[i] >> Qnew)    */
-	Word16 Qnew,                          /* (i)     : exc scaling = 0(min) to 8(max) */
-	Word16 sig_hi[],                      /* (o) /16 : synthesis high                 */
-	Word16 sig_lo[],                      /* (o) /16 : synthesis low                  */
-	Word16 lg                             /* (i)     : size of filtering              */
-	);
+        Word16 a[],                           /* (i) Q12 : a[m+1] prediction coefficients */
+        Word16 m,                             /* (i)     : order of LP filter             */
+        Word16 exc[],                         /* (i) Qnew: excitation (exc[i] >> Qnew)    */
+        Word16 Qnew,                          /* (i)     : exc scaling = 0(min) to 8(max) */
+        Word16 sig_hi[],                      /* (o) /16 : synthesis high                 */
+        Word16 sig_lo[],                      /* (o) /16 : synthesis low                  */
+        Word16 lg                             /* (i)     : size of filtering              */
+        );
 
 void Syn_filt_32_asm(
-	Word16 a[],                           /* (i) Q12 : a[m+1] prediction coefficients */
-	Word16 m,                             /* (i)     : order of LP filter             */
-	Word16 exc[],                         /* (i) Qnew: excitation (exc[i] >> Qnew)    */
-	Word16 Qnew,                          /* (i)     : exc scaling = 0(min) to 8(max) */
-	Word16 sig_hi[],                      /* (o) /16 : synthesis high                 */
-	Word16 sig_lo[],                      /* (o) /16 : synthesis low                  */
-	Word16 lg                             /* (i)     : size of filtering              */
-	);
+        Word16 a[],                           /* (i) Q12 : a[m+1] prediction coefficients */
+        Word16 m,                             /* (i)     : order of LP filter             */
+        Word16 exc[],                         /* (i) Qnew: excitation (exc[i] >> Qnew)    */
+        Word16 Qnew,                          /* (i)     : exc scaling = 0(min) to 8(max) */
+        Word16 sig_hi[],                      /* (o) /16 : synthesis high                 */
+        Word16 sig_lo[],                      /* (o) /16 : synthesis low                  */
+        Word16 lg                             /* (i)     : size of filtering              */
+        );
 /*-----------------------------------------------------------------*
  *                       pitch prototypes                          *
  *-----------------------------------------------------------------*/
@@ -443,12 +443,12 @@ void ACELP_4t64_fx(
      Word16 nbbits,                        /* (i) : 20, 36, 44, 52, 64, 72 or 88 bits                */
      Word16 ser_size,                      /* (i) : bit rate                                         */
      Word16 _index[]                       /* (o) : index (20): 5+5+5+5 = 20 bits.                   */
-					   /* (o) : index (36): 9+9+9+9 = 36 bits.                   */
-					   /* (o) : index (44): 13+9+13+9 = 44 bits.                 */
-					   /* (o) : index (52): 13+13+13+13 = 52 bits.               */
-					   /* (o) : index (64): 2+2+2+2+14+14+14+14 = 64 bits.       */
-					   /* (o) : index (72): 10+2+10+2+10+14+10+14 = 72 bits.     */
-					   /* (o) : index (88): 11+11+11+11+11+11+11+11 = 88 bits.   */
+                                           /* (o) : index (36): 9+9+9+9 = 36 bits.                   */
+                                           /* (o) : index (44): 13+9+13+9 = 44 bits.                 */
+                                           /* (o) : index (52): 13+13+13+13 = 52 bits.               */
+                                           /* (o) : index (64): 2+2+2+2+14+14+14+14 = 64 bits.       */
+                                           /* (o) : index (72): 10+2+10+2+10+14+10+14 = 72 bits.     */
+                                           /* (o) : index (88): 11+11+11+11+11+11+11+11 = 88 bits.   */
 );
 
 void Pit_shrp(

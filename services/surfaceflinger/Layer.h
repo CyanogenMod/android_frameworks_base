@@ -55,7 +55,7 @@ public:
     virtual const char* getTypeId() const { return "Layer"; }
 
     // the this layer's size and format
-    status_t setBuffers(uint32_t w, uint32_t h, 
+    status_t setBuffers(uint32_t w, uint32_t h,
             PixelFormat format, uint32_t flags=0);
 
     // associate a UserClient to this Layer

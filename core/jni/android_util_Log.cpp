@@ -2,16 +2,16 @@
 **
 ** Copyright 2006, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -41,7 +41,7 @@ struct levels_t {
 };
 static levels_t levels;
 
-static int toLevel(const char* value) 
+static int toLevel(const char* value)
 {
     switch (value[0]) {
         case 'V': return levels.verbose;
@@ -67,9 +67,9 @@ static jboolean android_util_Log_isLoggable(JNIEnv* env, jobject clazz, jstring 
     if (tag == NULL) {
         return false;
     }
-    
+
     jboolean result = false;
-    
+
     const char* chars = env->GetStringUTFChars(tag, NULL);
 
     if ((strlen(chars)+sizeof(LOG_NAMESPACE)) > PROPERTY_KEY_MAX) {
@@ -87,7 +87,7 @@ static jboolean android_util_Log_isLoggable(JNIEnv* env, jobject clazz, jstring 
         strncpy(key, LOG_NAMESPACE, sizeof(LOG_NAMESPACE)-1);
         strcpy(key + sizeof(LOG_NAMESPACE) - 1, chars);
     }
-    
+
     env->ReleaseStringUTFChars(tag, chars);
 
     len = property_get(key, buf, "");
@@ -156,14 +156,14 @@ int register_android_util_Log(JNIEnv* env)
         LOGE("Can't find android/util/Log");
         return -1;
     }
-    
+
     levels.verbose = env->GetStaticIntField(clazz, env->GetStaticFieldID(clazz, "VERBOSE", "I"));
     levels.debug = env->GetStaticIntField(clazz, env->GetStaticFieldID(clazz, "DEBUG", "I"));
     levels.info = env->GetStaticIntField(clazz, env->GetStaticFieldID(clazz, "INFO", "I"));
     levels.warn = env->GetStaticIntField(clazz, env->GetStaticFieldID(clazz, "WARN", "I"));
     levels.error = env->GetStaticIntField(clazz, env->GetStaticFieldID(clazz, "ERROR", "I"));
     levels.assert = env->GetStaticIntField(clazz, env->GetStaticFieldID(clazz, "ASSERT", "I"));
-                
+
     return AndroidRuntime::registerNativeMethods(env, "android/util/Log", gMethods, NELEM(gMethods));
 }
 

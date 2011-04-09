@@ -52,7 +52,7 @@ SharedBuffer* SharedBuffer::edit() const
         memcpy(sb->data(), data(), size());
         release();
     }
-    return sb;    
+    return sb;
 }
 
 SharedBuffer* SharedBuffer::editResize(size_t newSize) const
@@ -72,7 +72,7 @@ SharedBuffer* SharedBuffer::editResize(size_t newSize) const
         memcpy(sb->data(), data(), newSize < mySize ? newSize : mySize);
         release();
     }
-    return sb;    
+    return sb;
 }
 
 SharedBuffer* SharedBuffer::attemptEdit() const

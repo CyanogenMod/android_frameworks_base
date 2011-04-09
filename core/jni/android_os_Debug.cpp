@@ -46,11 +46,11 @@ struct stats_t {
     int dalvikPss;
     int dalvikPrivateDirty;
     int dalvikSharedDirty;
-    
+
     int nativePss;
     int nativePrivateDirty;
     int nativeSharedDirty;
-    
+
     int otherPss;
     int otherPrivateDirty;
     int otherSharedDirty;
@@ -80,7 +80,7 @@ static jlong android_os_Debug_getNativeHeapAllocatedSize(JNIEnv *env, jobject cl
 
 static jlong android_os_Debug_getNativeHeapFreeSize(JNIEnv *env, jobject clazz)
 {
-#ifdef HAVE_MALLOC_H    
+#ifdef HAVE_MALLOC_H
     struct mallinfo info = mallinfo();
     return (jlong) info.fordblks;
 #else
@@ -128,7 +128,7 @@ static void read_mapinfo(FILE *fp, stats_t* stats)
         } else if (strstr(line, "/mspace/dalvik-heap")) {
             isDalvikHeap = 1;
         } else if (strstr(line, "/dalvik-heap-bitmap/")) {
-            isDalvikHeap = 1;    
+            isDalvikHeap = 1;
         } else if (strstr(line, "/data/dalvik-cache/")) {
             isDalvikHeap = 1;
         } else if (strstr(line, "/tmp/sqlite-heap")) {
@@ -137,7 +137,7 @@ static void read_mapinfo(FILE *fp, stats_t* stats)
 
         //LOGI("native=%d dalvik=%d sqlite=%d: %s\n", isNativeHeap, isDalvikHeap,
         //    isSqliteHeap, line);
-            
+
         while (true) {
             if (fgets(line, 1024, fp) == 0) {
                 done = true;
@@ -191,7 +191,7 @@ static void load_maps(int pid, stats_t* stats)
 {
     char tmp[128];
     FILE *fp;
-    
+
     sprintf(tmp, "/proc/%d/smaps", pid);
     fp = fopen(tmp, "r");
     if (fp == 0) return;
@@ -205,17 +205,17 @@ static void android_os_Debug_getDirtyPagesPid(JNIEnv *env, jobject clazz,
 {
     stats_t stats;
     memset(&stats, 0, sizeof(stats_t));
-    
+
     load_maps(pid, &stats);
 
     env->SetIntField(object, dalvikPss_field, stats.dalvikPss);
     env->SetIntField(object, dalvikPrivateDirty_field, stats.dalvikPrivateDirty);
     env->SetIntField(object, dalvikSharedDirty_field, stats.dalvikSharedDirty);
-    
+
     env->SetIntField(object, nativePss_field, stats.nativePss);
     env->SetIntField(object, nativePrivateDirty_field, stats.nativePrivateDirty);
     env->SetIntField(object, nativeSharedDirty_field, stats.nativeSharedDirty);
-    
+
     env->SetIntField(object, otherPss_field, stats.otherPss);
     env->SetIntField(object, otherPrivateDirty_field, stats.otherPrivateDirty);
     env->SetIntField(object, otherSharedDirty_field, stats.otherSharedDirty);
@@ -237,7 +237,7 @@ static jint read_binder_stat(const char* stat)
 
     char compare[128];
     int len = snprintf(compare, 128, "proc %d", getpid());
-    
+
     // loop until we have the block that represents this process
     do {
         if (fgets(line, 1024, fp) == 0) {
@@ -245,15 +245,15 @@ static jint read_binder_stat(const char* stat)
         }
     } while (strncmp(compare, line, len));
 
-    // now that we have this process, read until we find the stat that we are looking for 
+    // now that we have this process, read until we find the stat that we are looking for
     len = snprintf(compare, 128, "  %s: ", stat);
-    
+
     do {
         if (fgets(line, 1024, fp) == 0) {
             return -1;
         }
     } while (strncmp(compare, line, len));
-    
+
     // we have the line, now increment the line ptr to the value
     char* ptr = line + len;
     return atoi(ptr);
@@ -304,7 +304,7 @@ static JNINativeMethod gMethods[] = {
 int register_android_os_Debug(JNIEnv *env)
 {
     jclass clazz = env->FindClass("android/os/Debug$MemoryInfo");
-    
+
     dalvikPss_field = env->GetFieldID(clazz, "dalvikPss", "I");
     dalvikPrivateDirty_field = env->GetFieldID(clazz, "dalvikPrivateDirty", "I");
     dalvikSharedDirty_field = env->GetFieldID(clazz, "dalvikSharedDirty", "I");
@@ -312,11 +312,11 @@ int register_android_os_Debug(JNIEnv *env)
     nativePss_field = env->GetFieldID(clazz, "nativePss", "I");
     nativePrivateDirty_field = env->GetFieldID(clazz, "nativePrivateDirty", "I");
     nativeSharedDirty_field = env->GetFieldID(clazz, "nativeSharedDirty", "I");
-    
+
     otherPss_field = env->GetFieldID(clazz, "otherPss", "I");
     otherPrivateDirty_field = env->GetFieldID(clazz, "otherPrivateDirty", "I");
     otherSharedDirty_field = env->GetFieldID(clazz, "otherSharedDirty", "I");
-    
+
     return jniRegisterNativeMethods(env, "android/os/Debug", gMethods, NELEM(gMethods));
 }
 

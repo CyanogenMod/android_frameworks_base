@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		psy_configuration.c
+        File:           psy_configuration.c
 
-	Content:	Psychoaccoustic configuration functions
+        Content:        Psychoaccoustic configuration functions
 
 *******************************************************************************/
 
@@ -28,11 +28,11 @@
 
 
 
-#define BARC_SCALE	100 /* integer barc values are scaled with 100 */
-#define LOG2_1000	301 /* log2*1000 */
-#define PI2_1000	1571 /* pi/2*1000*/
-#define ATAN_COEF1	3560 /* 1000/0.280872f*/
-#define ATAN_COEF2	281 /* 1000*0.280872f*/
+#define BARC_SCALE      100 /* integer barc values are scaled with 100 */
+#define LOG2_1000       301 /* log2*1000 */
+#define PI2_1000        1571 /* pi/2*1000*/
+#define ATAN_COEF1      3560 /* 1000/0.280872f*/
+#define ATAN_COEF2      281 /* 1000*0.280872f*/
 
 
 typedef struct{
@@ -59,8 +59,8 @@ static const Word16 maskHighSprEnLongLowBr = 15; /* in 1dB/bark */
 static const Word16 maskLowSprEnShort = 20;      /* in 1dB/bark */
 static const Word16 maskHighSprEnShort = 15;     /* in 1dB/bark */
 static const Word16 c_minRemainingThresholdFactor = 0x0148;    /* 0.01 *(1 << 15)*/
-static const Word32 c_maxsnr = 0x66666666;		 /* upper limit is -1 dB */
-static const Word32 c_minsnr = 0x00624dd3;		 /* lower limit is -25 dB */
+static const Word32 c_maxsnr = 0x66666666;               /* upper limit is -1 dB */
+static const Word32 c_minsnr = 0x00624dd3;               /* lower limit is -25 dB */
 
 static const Word32 c_maxClipEnergyLong = 0x77359400;  /* 2.0e9f*/
 static const Word32 c_maxClipEnergyShort = 0x01dcd650; /* 2.0e9f/(AACENC_TRANS_FAC*AACENC_TRANS_FAC)*/
@@ -88,17 +88,17 @@ Word32 GetSRIndex(Word32 sampleRate)
 *
 * function name: atan_1000
 * description:  calculates 1000*atan(x/1000)
-*               based on atan approx for x > 0				
-*				atan(x) = x/((float)1.0f+(float)0.280872f*x*x)  if x < 1
-*						= pi/2 - x/((float)0.280872f +x*x)	    if x >= 1
+*               based on atan approx for x > 0
+*                               atan(x) = x/((float)1.0f+(float)0.280872f*x*x)  if x < 1
+*                                               = pi/2 - x/((float)0.280872f +x*x)          if x >= 1
 * return:       1000*atan(x/1000)
 *
 **********************************************************************************/
-static Word16 atan_1000(Word32 val) 
+static Word16 atan_1000(Word32 val)
 {
   Word32 y;
 
-   
+
   if(L_sub(val, 1000) < 0) {
     y = extract_l(((1000 * val) / (1000 + ((val * val) / ATAN_COEF1))));
   }
@@ -126,9 +126,9 @@ static Word16 BarcLineValue(Word16 noOfLines, Word16 fftLine, Word32 samplingFre
   /* center frequency of fft line */
   center_freq = (fftLine * samplingFreq) / (noOfLines << 1);
   temp =  atan_1000((center_freq << 2) / (3*10));
-  bvalFFTLine = 
+  bvalFFTLine =
     (26600 * atan_1000((center_freq*76) / 100) + 7*temp*temp) / (2*1000*1000 / BARC_SCALE);
-  
+
   return saturate(bvalFFTLine);
 }
 
@@ -148,17 +148,17 @@ static void initThrQuiet(Word16  numPb,
   for(i=0; i<numPb; i++) {
     Word16 bv1, bv2;
 
-     
+
     if (i>0)
       bv1 = (pbBarcVal[i] + pbBarcVal[i-1]) >> 1;
     else
       bv1 = pbBarcVal[i] >> 1;
 
-     
+
     if (i < (numPb - 1))
       bv2 = (pbBarcVal[i] + pbBarcVal[i+1]) >> 1;
     else {
-      bv2 = pbBarcVal[i];                                        
+      bv2 = pbBarcVal[i];
     }
 
     bv1 = min((bv1 / BARC_SCALE), max_bark);
@@ -166,9 +166,9 @@ static void initThrQuiet(Word16  numPb,
 
     barcThrQuiet = min(BARC_THR_QUIET[bv1], BARC_THR_QUIET[bv2]);
 
-    
+
     /*
-      we calculate 
+      we calculate
       pow(10.0f,(float)(barcThrQuiet - ABS_LEV)*0.1)*(float)ABS_LOW*(pbOffset[i+1] - pbOffset[i]);
     */
 
@@ -196,47 +196,47 @@ static void initSpreading(Word16  numPb,
   Word16 i;
   Word16 maskLowSprEn, maskHighSprEn;
 
-   
+
   if (sub(blockType, SHORT_WINDOW) != 0) {
-    maskLowSprEn = maskLowSprEnLong;                                     
-       
+    maskLowSprEn = maskLowSprEnLong;
+
     if (bitrate > 22000)
       maskHighSprEn = maskHighSprEnLong;
     else
       maskHighSprEn = maskHighSprEnLongLowBr;
   }
   else {
-    maskLowSprEn = maskLowSprEnShort;            
-    maskHighSprEn = maskHighSprEnShort;          
+    maskLowSprEn = maskLowSprEnShort;
+    maskHighSprEn = maskHighSprEnShort;
   }
 
   for(i=0; i<numPb; i++) {
-     
+
     if (i > 0) {
       Word32 dbVal;
       Word16 dbark = pbBarcValue[i] - pbBarcValue[i-1];
 
       /*
-        we calulate pow(10.0f, -0.1*dbVal/BARC_SCALE) 
+        we calulate pow(10.0f, -0.1*dbVal/BARC_SCALE)
       */
       dbVal = (maskHigh * dbark);
       pbMaskHiFactor[i] = round16(pow2_xy(L_negate(dbVal), (Word32)LOG2_1000));             /* 0.301 log10(2) */
-       
+
       dbVal = (maskLow * dbark);
-      pbMaskLoFactor[i-1] = round16(pow2_xy(L_negate(dbVal),(Word32)LOG2_1000)); 
-       
-      
+      pbMaskLoFactor[i-1] = round16(pow2_xy(L_negate(dbVal),(Word32)LOG2_1000));
+
+
       dbVal = (maskHighSprEn * dbark);
-      pbMaskHiFactorSprEn[i] =  round16(pow2_xy(L_negate(dbVal),(Word32)LOG2_1000)); 
+      pbMaskHiFactorSprEn[i] =  round16(pow2_xy(L_negate(dbVal),(Word32)LOG2_1000));
       dbVal = (maskLowSprEn * dbark);
       pbMaskLoFactorSprEn[i-1] = round16(pow2_xy(L_negate(dbVal),(Word32)LOG2_1000));
     }
     else {
-      pbMaskHiFactor[i] = 0;                     
-      pbMaskLoFactor[numPb-1] = 0;               
+      pbMaskHiFactor[i] = 0;
+      pbMaskLoFactor[numPb-1] = 0;
 
-      pbMaskHiFactorSprEn[i] = 0;                
-      pbMaskLoFactorSprEn[numPb-1] = 0;          
+      pbMaskHiFactorSprEn[i] = 0;
+      pbMaskLoFactorSprEn[numPb-1] = 0;
     }
   }
 
@@ -258,12 +258,12 @@ static void initBarcValues(Word16  numPb,
   Word16 i;
   Word16 pbBval0, pbBval1;
 
-  pbBval0 = 0;                                       
+  pbBval0 = 0;
 
   for(i=0; i<numPb; i++){
     pbBval1 = BarcLineValue(numLines, pbOffset[i+1], samplingFrequency);
     pbBval[i] = (pbBval0 + pbBval1) >> 1;
-    pbBval0 = pbBval1;                              
+    pbBval0 = pbBval1;
   }
 }
 
@@ -272,7 +272,7 @@ static void initBarcValues(Word16  numPb,
 *
 * function name: initMinSnr
 * description:  calculate min snr parameter
-*				minSnr(n) = 1/(2^sfbPemin(n)/w(n) - 1.5)
+*                               minSnr(n) = 1/(2^sfbPemin(n)/w(n) - 1.5)
 *
 *****************************************************************************/
 static void initMinSnr(const Word32  bitrate,
@@ -295,38 +295,38 @@ static void initMinSnr(const Word32  bitrate,
 
   pePerWindow = bits2pe(extract_l((bitrate * numLines) / samplerate));
 
-  pbVal0 = 0;                                                    
+  pbVal0 = 0;
 
   for (sfb=0; sfb<sfbActive; sfb++) {
 
     pbVal1 = (pbBarcVal[sfb] << 1) - pbVal0;
     barcWidth = pbVal1 - pbVal0;
-    pbVal0 = pbVal1;                                             
+    pbVal0 = pbVal1;
 
     /* allow at least 2.4% of pe for each active barc */
-	pePart = ((pePerWindow * 24) * (max_bark * barcWidth)) /
+        pePart = ((pePerWindow * 24) * (max_bark * barcWidth)) /
         (pbBarcVal[sfbActive-1] * (sfbOffset[sfb+1] - sfbOffset[sfb]));
-   
-      
-    pePart = min(pePart, 8400); 
+
+
+    pePart = min(pePart, 8400);
     pePart = max(pePart, 1400);
 
     /* minSnr(n) = 1/(2^sfbPemin(n)/w(n) - 1.5)*/
-	/* we add an offset of 2^16 to the pow functions */
-	/* 0xc000 = 1.5*(1 << 15)*/
-      
+        /* we add an offset of 2^16 to the pow functions */
+        /* 0xc000 = 1.5*(1 << 15)*/
+
     snr = pow2_xy((pePart - 16*1000),1000) - 0x0000c000;
-      
+
     if(snr > 0x00008000)
-	{
-		shift = norm_l(snr);
-		snr = Div_32(0x00008000 << shift, snr << shift);  
-	}
-	else
-	{
-		snr = 0x7fffffff;
-	}
-      
+        {
+                shift = norm_l(snr);
+                snr = Div_32(0x00008000 << shift, snr << shift);
+        }
+        else
+        {
+                snr = 0x7fffffff;
+        }
+
     /* upper limit is -1 dB */
     snr = min(snr, c_maxsnr);
     /* lower limit is -25 dB */
@@ -391,19 +391,19 @@ Word16 InitPsyConfigurationLong(Word32 bitrate,
   /*
     init ratio
   */
-  psyConf->ratio = c_ratio;      
+  psyConf->ratio = c_ratio;
 
-  psyConf->maxAllowedIncreaseFactor = 2;              
-  psyConf->minRemainingThresholdFactor = c_minRemainingThresholdFactor;    /* 0.01 *(1 << 15)*/  
+  psyConf->maxAllowedIncreaseFactor = 2;
+  psyConf->minRemainingThresholdFactor = c_minRemainingThresholdFactor;    /* 0.01 *(1 << 15)*/
 
-  psyConf->clipEnergy = c_maxClipEnergyLong;                   
+  psyConf->clipEnergy = c_maxClipEnergyLong;
   psyConf->lowpassLine = extract_l((bandwidth<<1) * FRAME_LEN_LONG / samplerate);
 
   for (sfb = 0; sfb < psyConf->sfbCnt; sfb++) {
     if (sub(psyConf->sfbOffset[sfb], psyConf->lowpassLine) >= 0)
       break;
   }
-  psyConf->sfbActive = sfb;                 
+  psyConf->sfbActive = sfb;
 
   /*
     calculate minSnr
@@ -473,21 +473,21 @@ Word16 InitPsyConfigurationShort(Word32 bitrate,
   /*
     init ratio
   */
-  psyConf->ratio = c_ratio;                                                      
+  psyConf->ratio = c_ratio;
 
-  psyConf->maxAllowedIncreaseFactor = 2;                                         
-  psyConf->minRemainingThresholdFactor = c_minRemainingThresholdFactor;                            	 
+  psyConf->maxAllowedIncreaseFactor = 2;
+  psyConf->minRemainingThresholdFactor = c_minRemainingThresholdFactor;
 
-  psyConf->clipEnergy = c_maxClipEnergyShort;                                    
+  psyConf->clipEnergy = c_maxClipEnergyShort;
 
   psyConf->lowpassLine = extract_l(((bandwidth << 1) * FRAME_LEN_SHORT) / samplerate);
- 
+
   for (sfb = 0; sfb < psyConf->sfbCnt; sfb++) {
-     
+
     if (psyConf->sfbOffset[sfb] >= psyConf->lowpassLine)
       break;
   }
-  psyConf->sfbActive = sfb;                                                      
+  psyConf->sfbActive = sfb;
 
   /*
     calculate minSnr

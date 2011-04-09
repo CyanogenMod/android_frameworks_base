@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		mem_align.h
+        File:           mem_align.h
 
-	Content:	Memory alloc alignments functions
+        Content:        Memory alloc alignments functions
 
 *******************************************************************************/
 
@@ -29,7 +29,7 @@
 extern void *mem_malloc(VO_MEM_OPERATOR *pMemop, unsigned int size, unsigned char alignment, unsigned int CodecID);
 extern void mem_free(VO_MEM_OPERATOR *pMemop, void *mem_ptr, unsigned int CodecID);
 
-#endif	/* __VO_MEM_ALIGN_H__ */
+#endif  /* __VO_MEM_ALIGN_H__ */
 
 
 

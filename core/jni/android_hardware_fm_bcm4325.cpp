@@ -254,7 +254,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_closeFdNative
     (JNIEnv * env, jobject thiz, jint fd)
 {
     LOGD("Radio close\n");
-    
+
     if (hci_w(BCM4325_I2C_FM_RDS_SYSTEM,BCM4325_FM_RDS_SYSTEM_OFF) < 0){
         return FM_JNI_FAILURE;
     }

@@ -45,7 +45,7 @@
 namespace android {
 
 static void textureToCopyBitImage(
-        const GGLSurface* surface, int32_t opFormat, 
+        const GGLSurface* surface, int32_t opFormat,
         android_native_buffer_t* buffer, copybit_image_t* img)
 {
     img->w      = surface->stride;
@@ -56,14 +56,14 @@ static void textureToCopyBitImage(
 }
 
 struct clipRectRegion : public copybit_region_t {
-    clipRectRegion(ogles_context_t* c) 
+    clipRectRegion(ogles_context_t* c)
     {
         scissor_t const* scissor = &c->rasterizer.state.scissor;
         r.l = scissor->left;
         r.t = scissor->top;
         r.r = scissor->right;
         r.b = scissor->bottom;
-        next = iterate; 
+        next = iterate;
     }
 private:
     static int iterate(copybit_region_t const * self, copybit_rect_t* rect) {
@@ -116,9 +116,9 @@ static inline int fixedToByte(GGLfixed val) {
 
 static bool checkContext(ogles_context_t* c) {
 
-	// By convention copybitQuickCheckContext() has already returned true.
-	// avoid checking the same information again.
-	
+        // By convention copybitQuickCheckContext() has already returned true.
+        // avoid checking the same information again.
+
     if (c->copybits.blitEngine == NULL) {
         LOGD_IF(DEBUG_COPYBIT, "no copybit hal");
         return false;
@@ -184,7 +184,7 @@ static bool copybit(GLint x, GLint y,
     // copybit doesn't say anything about filtering, so we can't
     // discriminate. On msm7k, copybit will always filter.
     // the code below handles min/mag filters, we keep it as a reference.
-    
+
 #ifdef MIN_MAG_FILTER
     int32_t texelArea = gglMulx(dtdy, dsdx);
     if (texelArea < FIXED_ONE && textureObject->mag_filter != GL_LINEAR) {
@@ -198,7 +198,7 @@ static bool copybit(GLint x, GLint y,
         return false;
     }
 #endif
-    
+
     const uint32_t enables = c->rasterizer.state.enables;
     int planeAlpha = 255;
     bool alphaPlaneWorkaround = false;
@@ -475,12 +475,12 @@ bool drawTriangleFanWithCopybit_impl(ogles_context_t* c, GLint first, GLsizei co
 
     // we detect if we're dealing with a rectangle, by comparing the
     // rectangles {v0,v2} and {v1,v3} which should be identical.
-    
+
     // NOTE: we should check that the rectangle is window aligned, however
     // if we do that, the optimization won't be taken in a lot of cases.
     // Since this code is intended to be used with SurfaceFlinger only,
     // so it's okay...
-    
+
     const vec4_t& v0 = c->vc.vBuffer[0].window;
     const vec4_t& v1 = c->vc.vBuffer[1].window;
     const vec4_t& v2 = c->vc.vBuffer[2].window;
@@ -498,7 +498,7 @@ bool drawTriangleFanWithCopybit_impl(ogles_context_t* c, GLint first, GLsizei co
     // fetch and transform texture coordinates
     // NOTE: maybe it would be better to have a "compileElementsAll" method
     // that would ensure all vertex data are fetched and transformed
-    const transform_t& tr = c->transforms.texture[0].transform; 
+    const transform_t& tr = c->transforms.texture[0].transform;
     for (size_t i=0 ; i<4 ; i++) {
         const GLubyte* tp = c->arrays.texture[0].element(i);
         vertex_t* const v = &c->vc.vBuffer[i];
@@ -506,7 +506,7 @@ bool drawTriangleFanWithCopybit_impl(ogles_context_t* c, GLint first, GLsizei co
         // FIXME: we should bail if q!=1
         c->arrays.tex_transform[0](&tr, &v->texture[0], &v->texture[0]);
     }
-    
+
     const vec4_t& t0 = c->vc.vBuffer[0].texture[0];
     const vec4_t& t1 = c->vc.vBuffer[1].texture[0];
     const vec4_t& t2 = c->vc.vBuffer[2].texture[0];
@@ -528,9 +528,9 @@ bool drawTriangleFanWithCopybit_impl(ogles_context_t* c, GLint first, GLsizei co
         return false;
     }
 
-    // at this point, we know we are dealing with a rectangle, so we 
+    // at this point, we know we are dealing with a rectangle, so we
     // only need to consider 3 vertices for computing the jacobians
-    
+
     const int dx01 = v1.x - v0.x;
     const int dx02 = v2.x - v0.x;
     const int dy01 = v1.y - v0.y;

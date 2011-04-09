@@ -27,7 +27,7 @@ struct EventRecurrence
 public:
                 EventRecurrence();
                 ~EventRecurrence();
-    
+
     status_t    parse(const String16&);
 
 
@@ -50,7 +50,7 @@ public:
         FR = 0x00200000,
         SA = 0x00400000
     };
-    
+
     freq_t    freq;
     String16  until;
     int       count;
@@ -63,7 +63,7 @@ public:
     int       byhourCount;
     int*      byday;
     int*      bydayNum;
-    int       bydayCount;   
+    int       bydayCount;
     int*      bymonthday;
     int       bymonthdayCount;
     int*      byyearday;

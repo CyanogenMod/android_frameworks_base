@@ -81,9 +81,9 @@ public:
     uint32_t getPageFlipCount() const;
     EGLDisplay getEGLDisplay() const { return mDisplay; }
     overlay_control_device_t* getOverlayEngine() const { return mOverlayEngine; }
-    
+
     status_t compositionComplete() const;
-    
+
     Rect bounds() const {
         return Rect(mWidth, mHeight);
     }
@@ -110,7 +110,7 @@ private:
     mutable uint32_t mPageFlipCount;
     GLint           mMaxViewportDims;
     GLint           mMaxTextureSize;
-    
+
     sp<FramebufferNativeWindow> mNativeWindow;
     overlay_control_device_t* mOverlayEngine;
 };

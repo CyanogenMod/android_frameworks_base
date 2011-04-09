@@ -44,7 +44,7 @@ static SkTypeface* Typeface_create(JNIEnv* env, jobject, jstring name,
 static SkTypeface* Typeface_createFromTypeface(JNIEnv* env, jobject, SkTypeface* family, int style) {
     return SkTypeface::CreateFromTypeface(family, (SkTypeface::Style)style);
 }
- 
+
 static void Typeface_unref(JNIEnv* env, jobject obj, SkTypeface* face) {
     SkSafeUnref(face);
 }
@@ -64,49 +64,49 @@ public:
     {
         delete fAsset;
     }
-    
+
     virtual const void* getMemoryBase()
     {
         return fMemoryBase;
     }
 
-	virtual bool rewind()
+        virtual bool rewind()
     {
         off_t pos = fAsset->seek(0, SEEK_SET);
         return pos != (off_t)-1;
     }
-    
-	virtual size_t read(void* buffer, size_t size)
+
+        virtual size_t read(void* buffer, size_t size)
     {
         ssize_t amount;
-        
+
         if (NULL == buffer)
         {
             if (0 == size)  // caller is asking us for our total length
                 return fAsset->getLength();
-            
+
             // asset->seek returns new total offset
             // we want to return amount that was skipped
-            
+
             off_t oldOffset = fAsset->seek(0, SEEK_CUR);
             if (-1 == oldOffset)
                 return 0;
             off_t newOffset = fAsset->seek(size, SEEK_CUR);
             if (-1 == newOffset)
                 return 0;
-            
+
             amount = newOffset - oldOffset;
         }
         else
         {
             amount = fAsset->read(buffer, size);
         }
-        
+
         if (amount < 0)
             amount = 0;
         return amount;
     }
-    
+
 private:
     Asset*      fAsset;
     const void* fMemoryBase;
@@ -115,21 +115,21 @@ private:
 static SkTypeface* Typeface_createFromAsset(JNIEnv* env, jobject,
                                             jobject jassetMgr,
                                             jstring jpath) {
-    
+
     NPE_CHECK_RETURN_ZERO(env, jassetMgr);
     NPE_CHECK_RETURN_ZERO(env, jpath);
-    
+
     AssetManager* mgr = assetManagerForJavaObject(env, jassetMgr);
     if (NULL == mgr) {
         return NULL;
     }
-    
+
     AutoJavaStringToUTF8    str(env, jpath);
     Asset* asset = mgr->open(str.c_str(), Asset::ACCESS_BUFFER);
     if (NULL == asset) {
         return NULL;
     }
-    
+
     return SkTypeface::CreateFromStream(new AssetStream(asset, true));
 }
 

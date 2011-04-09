@@ -56,7 +56,7 @@ _Unwind_Reason_Code trace_function(_Unwind_Context *context, void *arg)
             if (state->ignore) {
                 state->ignore--;
             } else {
-                state->addrs[0] = ip; 
+                state->addrs[0] = ip;
                 state->addrs++;
                 state->count--;
             }
@@ -78,7 +78,7 @@ int backtrace(const void** addrs, size_t ignore, size_t size)
 
 /*****************************************************************************/
 
-static 
+static
 const char *lookup_symbol(const void* addr, void **offset, char* name, size_t bufSize)
 {
 #if HAVE_DLADDR
@@ -91,7 +91,7 @@ const char *lookup_symbol(const void* addr, void **offset, char* name, size_t bu
     return NULL;
 }
 
-static 
+static
 int32_t linux_gcc_demangler(const char *mangled_name, char *unmangled_name, size_t buffersize)
 {
     size_t out_len = 0;
@@ -124,13 +124,13 @@ class MapInfo {
         mapinfo* mi = getMapInfoList();
         while(mi) {
             if ((pc >= mi->start) && (pc < mi->end)) {
-                if (start) 
+                if (start)
                     *start = mi->start;
                 return mi->name;
             }
             mi = mi->next;
         }
-        if (start) 
+        if (start)
             *start = 0;
         return def;
     }
@@ -187,9 +187,9 @@ public:
             milist = next;
         }
     }
-    
+
     static const char *mapAddressToName(const void* pc, const char* def,
-            void const** start) 
+            void const** start)
     {
         uint64_t s;
         char const* name = sMapInfo.map_to_name(uint64_t(uintptr_t(pc)), def, &s);
@@ -308,10 +308,10 @@ String8 CallStack::toStringSingleLevel(const char* prefix, int32_t level) const
         res.append(tmp1);
         res.append(name);
         res.append(tmp2);
-    } else { 
+    } else {
         void const* start = 0;
         name = MapInfo::mapAddressToName(ip, "<unknown>", &start);
-        snprintf(tmp, 256, "pc %08lx  %s", 
+        snprintf(tmp, 256, "pc %08lx  %s",
                 long(uintptr_t(ip)-uintptr_t(start)), name);
         res.append(tmp);
     }
@@ -323,7 +323,7 @@ String8 CallStack::toStringSingleLevel(const char* prefix, int32_t level) const
 // Dump a stack trace to the log
 void CallStack::dump(const char* prefix) const
 {
-    /* 
+    /*
      * Sending a single long log may be truncated since the stack levels can
      * get very deep. So we request function names of each frame individually.
      */

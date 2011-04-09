@@ -33,17 +33,17 @@ namespace android {
 
 /*
  * These classes manage a stack of buffers in shared memory.
- * 
+ *
  * SharedClient: represents a client with several stacks
  * SharedBufferStack: represents a stack of buffers
- * SharedBufferClient: manipulates the SharedBufferStack from the client side 
- * SharedBufferServer: manipulates the SharedBufferStack from the server side 
+ * SharedBufferClient: manipulates the SharedBufferStack from the client side
+ * SharedBufferServer: manipulates the SharedBufferStack from the server side
  *
  * Buffers can be dequeued until there are none available, they can be locked
- * unless they are in use by the server, which is only the case for the last 
+ * unless they are in use by the server, which is only the case for the last
  * dequeue-able buffer. When these various conditions are not met, the caller
  * waits until the condition is met.
- * 
+ *
  */
 
 // ----------------------------------------------------------------------------
@@ -84,14 +84,14 @@ public:
         uint32_t    count;
         SmallRect   rects[NUM_RECT_MAX];
     };
-    
+
     struct BufferData {
         FlatRegion dirtyRegion;
         SmallRect  crop;
         uint8_t transform;
         uint8_t reserved[3];
     };
-    
+
     SharedBufferStack();
     void init(int32_t identity);
     status_t setDirtyRegion(int buffer, const Region& reg);
@@ -164,7 +164,7 @@ protected:
 
     struct ConditionBase {
         SharedBufferStack& stack;
-        inline ConditionBase(SharedBufferBase* sbc) 
+        inline ConditionBase(SharedBufferBase* sbc)
             : stack(*sbc->mSharedStack) { }
         virtual ~ConditionBase() { };
         virtual bool operator()() const = 0;
@@ -174,7 +174,7 @@ protected:
 
     struct UpdateBase {
         SharedBufferStack& stack;
-        inline UpdateBase(SharedBufferBase* sbb) 
+        inline UpdateBase(SharedBufferBase* sbb)
             : stack(*sbb->mSharedStack) { }
     };
     template <typename T>
@@ -186,7 +186,7 @@ status_t SharedBufferBase::updateCondition(T update) {
     SharedClient& client( *mSharedClient );
     Mutex::Autolock _l(client.lock);
     ssize_t result = update();
-    client.cv.broadcast();    
+    client.cv.broadcast();
     return result;
 }
 
@@ -200,7 +200,7 @@ public:
 
     ssize_t dequeue();
     status_t undoDequeue(int buf);
-    
+
     status_t lock(int buf);
     status_t cancel(int buf);
     status_t queue(int buf);
@@ -286,7 +286,7 @@ public:
     status_t resize(int newNumBuffers);
 
     SharedBufferStack::Statistics getStats() const;
-    
+
 
 private:
     friend class LightRefBase<SharedBufferServer>;

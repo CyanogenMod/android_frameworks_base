@@ -227,7 +227,7 @@ __inline int32 sad_mb_offset1(uint8 *ref, uint8 *blk, int lx, int dmin)
     x4 = x5 = 0;
     x8 = 16; //<<===========*******
 
-__asm__ volatile("MVN	%0, #0xFF0000": "=r"(x6));
+__asm__ volatile("MVN   %0, #0xFF0000": "=r"(x6));
 
 #if (NUMBER==3)
 LOOP_SAD3:

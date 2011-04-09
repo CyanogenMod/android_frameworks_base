@@ -76,7 +76,7 @@ int str16eq(uint16_t *a, const char *b)
 int svc_can_register(unsigned uid, uint16_t *name)
 {
     unsigned n;
-    
+
     if ((uid == 0) || (uid == AID_SYSTEM))
         return 1;
 
@@ -87,7 +87,7 @@ int svc_can_register(unsigned uid, uint16_t *name)
     return 0;
 }
 
-struct svcinfo 
+struct svcinfo
 {
     struct svcinfo *next;
     void *ptr;
@@ -118,14 +118,14 @@ void svcinfo_death(struct binder_state *bs, void *ptr)
     if (si->ptr) {
         binder_release(bs, si->ptr);
         si->ptr = 0;
-    }   
+    }
 }
 
-uint16_t svcmgr_id[] = { 
+uint16_t svcmgr_id[] = {
     'a','n','d','r','o','i','d','.','o','s','.',
-    'I','S','e','r','v','i','c','e','M','a','n','a','g','e','r' 
+    'I','S','e','r','v','i','c','e','M','a','n','a','g','e','r'
 };
-  
+
 
 void *do_find_service(struct binder_state *bs, uint16_t *s, unsigned len)
 {

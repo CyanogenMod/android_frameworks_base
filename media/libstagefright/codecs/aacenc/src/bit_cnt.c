@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		bit_cnt.c
+        File:           bit_cnt.c
 
-	Content:	Huffman Bitcounter & coder functions
+        Content:        Huffman Bitcounter & coder functions
 
 *******************************************************************************/
 
@@ -26,14 +26,14 @@
 #define HI_LTAB(a) (a>>8)
 #define LO_LTAB(a) (a & 0xff)
 
-#define EXPAND(a)  ((((Word32)(a&0xff00)) << 8)|(Word32)(a&0xff)) 
+#define EXPAND(a)  ((((Word32)(a&0xff00)) << 8)|(Word32)(a&0xff))
 
 
 /*****************************************************************************
 *
 * function name: count1_2_3_4_5_6_7_8_9_10_11
-* description:  counts tables 1-11 
-* returns:      
+* description:  counts tables 1-11
+* returns:
 * input:        quantized spectrum
 * output:       bitCount for tables 1-11
 *
@@ -46,51 +46,51 @@ static void count1_2_3_4_5_6_7_8_9_10_11(const Word16 *values,
   Word32 t0,t1,t2,t3,i;
   Word32 bc1_2,bc3_4,bc5_6,bc7_8,bc9_10;
   Word16 bc11,sc;
-  
-  bc1_2=0;                               
-  bc3_4=0;                               
-  bc5_6=0;                               
-  bc7_8=0;                               
-  bc9_10=0;                              
-  bc11=0;                                
-  sc=0;                                  
+
+  bc1_2=0;
+  bc3_4=0;
+  bc5_6=0;
+  bc7_8=0;
+  bc9_10=0;
+  bc11=0;
+  sc=0;
 
   for(i=0;i<width;i+=4){
-    
-    t0= values[i+0];                     
-    t1= values[i+1];                     
-    t2= values[i+2];                     
-    t3= values[i+3];                     
-  
+
+    t0= values[i+0];
+    t1= values[i+1];
+    t2= values[i+2];
+    t3= values[i+3];
+
     /* 1,2 */
 
-    bc1_2 = bc1_2 + EXPAND(huff_ltab1_2[t0+1][t1+1][t2+1][t3+1]);              
+    bc1_2 = bc1_2 + EXPAND(huff_ltab1_2[t0+1][t1+1][t2+1][t3+1]);
 
     /* 5,6 */
-    bc5_6 = bc5_6 + EXPAND(huff_ltab5_6[t0+4][t1+4]);                          
-    bc5_6 = bc5_6 + EXPAND(huff_ltab5_6[t2+4][t3+4]);                          
+    bc5_6 = bc5_6 + EXPAND(huff_ltab5_6[t0+4][t1+4]);
+    bc5_6 = bc5_6 + EXPAND(huff_ltab5_6[t2+4][t3+4]);
 
     t0=ABS(t0);
     t1=ABS(t1);
     t2=ABS(t2);
     t3=ABS(t3);
 
-    
-    bc3_4 = bc3_4 + EXPAND(huff_ltab3_4[t0][t1][t2][t3]);                      
-    
-    bc7_8 = bc7_8 + EXPAND(huff_ltab7_8[t0][t1]);                              
-    bc7_8 = bc7_8 + EXPAND(huff_ltab7_8[t2][t3]);                              
-    
-    bc9_10 = bc9_10 + EXPAND(huff_ltab9_10[t0][t1]);                           
-    bc9_10 = bc9_10 + EXPAND(huff_ltab9_10[t2][t3]);                           
-    
+
+    bc3_4 = bc3_4 + EXPAND(huff_ltab3_4[t0][t1][t2][t3]);
+
+    bc7_8 = bc7_8 + EXPAND(huff_ltab7_8[t0][t1]);
+    bc7_8 = bc7_8 + EXPAND(huff_ltab7_8[t2][t3]);
+
+    bc9_10 = bc9_10 + EXPAND(huff_ltab9_10[t0][t1]);
+    bc9_10 = bc9_10 + EXPAND(huff_ltab9_10[t2][t3]);
+
     bc11 = bc11 + huff_ltab11[t0][t1];
     bc11 = bc11 + huff_ltab11[t2][t3];
-   
-           
+
+
     sc = sc + (t0>0) + (t1>0) + (t2>0) + (t3>0);
   }
-  
+
   bitCount[1]=extract_h(bc1_2);
   bitCount[2]=extract_l(bc1_2);
   bitCount[3]=extract_h(bc3_4) + sc;
@@ -108,8 +108,8 @@ static void count1_2_3_4_5_6_7_8_9_10_11(const Word16 *values,
 /*****************************************************************************
 *
 * function name: count3_4_5_6_7_8_9_10_11
-* description:  counts tables 3-11 
-* returns:      
+* description:  counts tables 3-11
+* returns:
 * input:        quantized spectrum
 * output:       bitCount for tables 3-11
 *
@@ -122,26 +122,26 @@ static void count3_4_5_6_7_8_9_10_11(const Word16 *values,
   Word32 t0,t1,t2,t3, i;
   Word32 bc3_4,bc5_6,bc7_8,bc9_10;
   Word16 bc11,sc;
-    
-  bc3_4=0;                               
-  bc5_6=0;                               
-  bc7_8=0;                               
-  bc9_10=0;                              
-  bc11=0;                                
-  sc=0;                                  
+
+  bc3_4=0;
+  bc5_6=0;
+  bc7_8=0;
+  bc9_10=0;
+  bc11=0;
+  sc=0;
 
   for(i=0;i<width;i+=4){
 
-    t0= values[i+0];                     
-    t1= values[i+1];                     
-    t2= values[i+2];                     
-    t3= values[i+3];                     
-    
+    t0= values[i+0];
+    t1= values[i+1];
+    t2= values[i+2];
+    t3= values[i+3];
+
     /*
       5,6
     */
-    bc5_6 = bc5_6 + EXPAND(huff_ltab5_6[t0+4][t1+4]);                          
-    bc5_6 = bc5_6 + EXPAND(huff_ltab5_6[t2+4][t3+4]);                          
+    bc5_6 = bc5_6 + EXPAND(huff_ltab5_6[t0+4][t1+4]);
+    bc5_6 = bc5_6 + EXPAND(huff_ltab5_6[t2+4][t3+4]);
 
     t0=ABS(t0);
     t1=ABS(t1);
@@ -149,23 +149,23 @@ static void count3_4_5_6_7_8_9_10_11(const Word16 *values,
     t3=ABS(t3);
 
 
-    bc3_4 = bc3_4 + EXPAND(huff_ltab3_4[t0][t1][t2][t3]);                      
-                                                                                                                
-    bc7_8 = bc7_8 + EXPAND(huff_ltab7_8[t0][t1]);                              
-    bc7_8 = bc7_8 + EXPAND(huff_ltab7_8[t2][t3]);                              
-    
-    bc9_10 = bc9_10 + EXPAND(huff_ltab9_10[t0][t1]);                           
-    bc9_10 = bc9_10 + EXPAND(huff_ltab9_10[t2][t3]);                           
-                                                                                                                
+    bc3_4 = bc3_4 + EXPAND(huff_ltab3_4[t0][t1][t2][t3]);
+
+    bc7_8 = bc7_8 + EXPAND(huff_ltab7_8[t0][t1]);
+    bc7_8 = bc7_8 + EXPAND(huff_ltab7_8[t2][t3]);
+
+    bc9_10 = bc9_10 + EXPAND(huff_ltab9_10[t0][t1]);
+    bc9_10 = bc9_10 + EXPAND(huff_ltab9_10[t2][t3]);
+
     bc11 = bc11 + huff_ltab11[t0][t1];
     bc11 = bc11 + huff_ltab11[t2][t3];
 
-           
-    sc = sc + (t0>0) + (t1>0) + (t2>0) + (t3>0);   
+
+    sc = sc + (t0>0) + (t1>0) + (t2>0) + (t3>0);
   }
-  
-  bitCount[1]=INVALID_BITCOUNT;                          
-  bitCount[2]=INVALID_BITCOUNT;                          
+
+  bitCount[1]=INVALID_BITCOUNT;
+  bitCount[2]=INVALID_BITCOUNT;
   bitCount[3]=extract_h(bc3_4) + sc;
   bitCount[4]=extract_l(bc3_4) + sc;
   bitCount[5]=extract_h(bc5_6);
@@ -175,7 +175,7 @@ static void count3_4_5_6_7_8_9_10_11(const Word16 *values,
   bitCount[9]=extract_h(bc9_10) + sc;
   bitCount[10]=extract_l(bc9_10) + sc;
   bitCount[11]=bc11 + sc;
-  
+
 }
 
 
@@ -183,8 +183,8 @@ static void count3_4_5_6_7_8_9_10_11(const Word16 *values,
 /*****************************************************************************
 *
 * function name: count5_6_7_8_9_10_11
-* description:  counts tables 5-11 
-* returns:      
+* description:  counts tables 5-11
+* returns:
 * input:        quantized spectrum
 * output:       bitCount for tables 5-11
 *
@@ -198,33 +198,33 @@ static void count5_6_7_8_9_10_11(const Word16 *values,
   Word32 bc5_6,bc7_8,bc9_10;
   Word16 bc11,sc;
 
-  bc5_6=0;                               
-  bc7_8=0;                               
-  bc9_10=0;                              
-  bc11=0;                                
-  sc=0;                                  
+  bc5_6=0;
+  bc7_8=0;
+  bc9_10=0;
+  bc11=0;
+  sc=0;
 
   for(i=0;i<width;i+=2){
 
-    t0 = values[i+0];                    
-    t1 = values[i+1];                    
+    t0 = values[i+0];
+    t1 = values[i+1];
 
-    bc5_6 = bc5_6 + EXPAND(huff_ltab5_6[t0+4][t1+4]);                  
+    bc5_6 = bc5_6 + EXPAND(huff_ltab5_6[t0+4][t1+4]);
 
     t0=ABS(t0);
     t1=ABS(t1);
-     
-    bc7_8 = bc7_8 + EXPAND(huff_ltab7_8[t0][t1]);                      
-    bc9_10 = bc9_10 + EXPAND(huff_ltab9_10[t0][t1]);                   
+
+    bc7_8 = bc7_8 + EXPAND(huff_ltab7_8[t0][t1]);
+    bc9_10 = bc9_10 + EXPAND(huff_ltab9_10[t0][t1]);
     bc11 = bc11 + huff_ltab11[t0][t1];
-    
-       
+
+
     sc = sc + (t0>0) + (t1>0);
   }
-  bitCount[1]=INVALID_BITCOUNT;                          
-  bitCount[2]=INVALID_BITCOUNT;                          
-  bitCount[3]=INVALID_BITCOUNT;                          
-  bitCount[4]=INVALID_BITCOUNT;                          
+  bitCount[1]=INVALID_BITCOUNT;
+  bitCount[2]=INVALID_BITCOUNT;
+  bitCount[3]=INVALID_BITCOUNT;
+  bitCount[4]=INVALID_BITCOUNT;
   bitCount[5]=extract_h(bc5_6);
   bitCount[6]=extract_l(bc5_6);
   bitCount[7]=extract_h(bc7_8) + sc;
@@ -232,15 +232,15 @@ static void count5_6_7_8_9_10_11(const Word16 *values,
   bitCount[9]=extract_h(bc9_10) + sc;
   bitCount[10]=extract_l(bc9_10) + sc;
   bitCount[11]=bc11 + sc;
-  
+
 }
 
 
 /*****************************************************************************
 *
 * function name: count7_8_9_10_11
-* description:  counts tables 7-11 
-* returns:      
+* description:  counts tables 7-11
+* returns:
 * input:        quantized spectrum
 * output:       bitCount for tables 7-11
 *
@@ -253,43 +253,43 @@ static void count7_8_9_10_11(const Word16 *values,
   Word32 t0,t1, i;
   Word32 bc7_8,bc9_10;
   Word16 bc11,sc;
-    
-  bc7_8=0;                       
-  bc9_10=0;                      
-  bc11=0;                        
-  sc=0;                          
+
+  bc7_8=0;
+  bc9_10=0;
+  bc11=0;
+  sc=0;
 
   for(i=0;i<width;i+=2){
 
     t0=ABS(values[i+0]);
     t1=ABS(values[i+1]);
 
-    bc7_8 = bc7_8 + EXPAND(huff_ltab7_8[t0][t1]);                      
-    bc9_10 = bc9_10 + EXPAND(huff_ltab9_10[t0][t1]);                   
+    bc7_8 = bc7_8 + EXPAND(huff_ltab7_8[t0][t1]);
+    bc9_10 = bc9_10 + EXPAND(huff_ltab9_10[t0][t1]);
     bc11 = bc11 + huff_ltab11[t0][t1];
-   
-       
+
+
     sc = sc + (t0>0) + (t1>0);
   }
-  bitCount[1]=INVALID_BITCOUNT;                  
-  bitCount[2]=INVALID_BITCOUNT;                  
-  bitCount[3]=INVALID_BITCOUNT;                  
-  bitCount[4]=INVALID_BITCOUNT;                  
-  bitCount[5]=INVALID_BITCOUNT;                  
-  bitCount[6]=INVALID_BITCOUNT;                  
+  bitCount[1]=INVALID_BITCOUNT;
+  bitCount[2]=INVALID_BITCOUNT;
+  bitCount[3]=INVALID_BITCOUNT;
+  bitCount[4]=INVALID_BITCOUNT;
+  bitCount[5]=INVALID_BITCOUNT;
+  bitCount[6]=INVALID_BITCOUNT;
   bitCount[7]=extract_h(bc7_8) + sc;
   bitCount[8]=extract_l(bc7_8) + sc;
   bitCount[9]=extract_h(bc9_10) + sc;
   bitCount[10]=extract_l(bc9_10) + sc;
   bitCount[11]=bc11 + sc;
-  
+
 }
 
 /*****************************************************************************
 *
 * function name: count9_10_11
-* description:  counts tables 9-11 
-* returns:      
+* description:  counts tables 9-11
+* returns:
 * input:        quantized spectrum
 * output:       bitCount for tables 9-11
 *
@@ -332,12 +332,12 @@ static void count9_10_11(const Word16 *values,
   bitCount[11]=bc11 + sc;
   
 }
- 
+
 /*****************************************************************************
 *
 * function name: count11
-* description:  counts table 11 
-* returns:      
+* description:  counts table 11
+* returns:
 * input:        quantized spectrum
 * output:       bitCount for table 11
 *
@@ -376,8 +376,8 @@ static void count9_10_11(const Word16 *values,
 /*****************************************************************************
 *
 * function name: countEsc
-* description:  counts table 11 (with Esc) 
-* returns:      
+* description:  counts table 11 (with Esc)
+* returns:
 * input:        quantized spectrum
 * output:       bitCount for tables 11 (with Esc)
 *
@@ -463,7 +463,7 @@ static COUNT_FUNCTION countFuncTable[CODE_BOOK_ESC_LAV+1] =
 /*****************************************************************************
 *
 * function name: bitCount
-* description:  count bits 
+* description:  count bits
 *
 *****************************************************************************/
 Word16 bitCount(const Word16 *values,
@@ -474,7 +474,7 @@ Word16 bitCount(const Word16 *values,
   /*
     check if we can use codebook 0
   */
-     
+
   if(maxVal == 0)
     bitCount[0] = 0;
   else
@@ -489,7 +489,7 @@ Word16 bitCount(const Word16 *values,
 /*****************************************************************************
 *
 * function name: codeValues
-* description:  write huffum bits 
+* description:  write huffum bits
 *
 *****************************************************************************/
 Word16 codeValues(Word16 *values, Word16 width, Word16 codeBook, HANDLE_BIT_BUF hBitstream)
@@ -871,15 +871,15 @@ Word16 bitCountScalefactorDelta(Word16 delta)
 
 Word16 codeScalefactorDelta(Word16 delta, HANDLE_BIT_BUF hBitstream)
 {
-  Word32 codeWord; 
+  Word32 codeWord;
   Word16 codeLength;
-  
-   
+
+
   if(delta > CODE_BOOK_SCF_LAV || delta < -CODE_BOOK_SCF_LAV)
     return(1);
-  
-  codeWord   = huff_ctabscf[delta + CODE_BOOK_SCF_LAV];            
-  codeLength = huff_ltabscf[delta + CODE_BOOK_SCF_LAV];            
+
+  codeWord   = huff_ctabscf[delta + CODE_BOOK_SCF_LAV];
+  codeLength = huff_ltabscf[delta + CODE_BOOK_SCF_LAV];
   WriteBits(hBitstream,codeWord,codeLength);
   return(0);
 }

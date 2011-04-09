@@ -143,7 +143,7 @@ void DisplayHardware::init(uint32_t dpy)
     status_t err = EGLUtils::selectConfigForNativeWindow(
             display, attribs, mNativeWindow.get(), &config);
     LOGE_IF(err, "couldn't find an EGLConfig matching the screen format");
-    
+
     EGLint r,g,b,a;
     eglGetConfigAttrib(display, config, EGL_RED_SIZE,   &r);
     eglGetConfigAttrib(display, config, EGL_GREEN_SIZE, &g);
@@ -153,7 +153,7 @@ void DisplayHardware::init(uint32_t dpy)
     if (mNativeWindow->isUpdateOnDemand()) {
         mFlags |= PARTIAL_UPDATES;
     }
-    
+
     if (eglGetConfigAttrib(display, config, EGL_CONFIG_CAVEAT, &dummy) == EGL_TRUE) {
         if (dummy == EGL_SLOW_CONFIG)
             mFlags |= SLOW_CONFIG;
@@ -179,7 +179,7 @@ void DisplayHardware::init(uint32_t dpy)
             mFlags |= BUFFER_PRESERVED;
         }
     }
-    
+
     /* Read density from build-specific ro.sf.lcd_density property
      * except if it is overridden by qemu.sf.lcd_density.
      */
@@ -198,7 +198,7 @@ void DisplayHardware::init(uint32_t dpy)
     /*
      * Create our OpenGL ES context
      */
-    
+
 
     EGLint contextAttributes[] = {
 #ifdef EGL_IMG_context_priority
@@ -317,19 +317,19 @@ void DisplayHardware::flip(const Region& dirty) const
     EGLDisplay dpy = mDisplay;
     EGLSurface surface = mSurface;
 
-#ifdef EGL_ANDROID_swap_rectangle    
+#ifdef EGL_ANDROID_swap_rectangle
     if (mFlags & SWAP_RECTANGLE) {
         const Region newDirty(dirty.intersect(bounds()));
         const Rect b(newDirty.getBounds());
         eglSetSwapRectangleANDROID(dpy, surface,
                 b.left, b.top, b.width(), b.height());
-    } 
+    }
 #endif
-    
+
     if (mFlags & PARTIAL_UPDATES) {
         mNativeWindow->setUpdateRectangle(dirty.getBounds());
     }
-    
+
     mPageFlipCount++;
     eglSwapBuffers(dpy, surface);
     checkEGLErrors("eglSwapBuffers");

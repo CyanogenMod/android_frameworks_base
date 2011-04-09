@@ -306,18 +306,18 @@ static jboolean android_net_wifi_stopDriverCommand(JNIEnv* env, jobject clazz)
 static jboolean android_net_wifi_startPacketFiltering(JNIEnv* env, jobject clazz)
 {
     return doBooleanCommand("DRIVER RXFILTER-ADD 0", "OK")
-	&& doBooleanCommand("DRIVER RXFILTER-ADD 1", "OK")
-	&& doBooleanCommand("DRIVER RXFILTER-ADD 3", "OK")
-	&& doBooleanCommand("DRIVER RXFILTER-START", "OK");
+        && doBooleanCommand("DRIVER RXFILTER-ADD 1", "OK")
+        && doBooleanCommand("DRIVER RXFILTER-ADD 3", "OK")
+        && doBooleanCommand("DRIVER RXFILTER-START", "OK");
 }
 
 static jboolean android_net_wifi_stopPacketFiltering(JNIEnv* env, jobject clazz)
 {
     jboolean result = doBooleanCommand("DRIVER RXFILTER-STOP", "OK");
     if (result) {
-	(void)doBooleanCommand("DRIVER RXFILTER-REMOVE 3", "OK");
-	(void)doBooleanCommand("DRIVER RXFILTER-REMOVE 1", "OK");
-	(void)doBooleanCommand("DRIVER RXFILTER-REMOVE 0", "OK");
+        (void)doBooleanCommand("DRIVER RXFILTER-REMOVE 3", "OK");
+        (void)doBooleanCommand("DRIVER RXFILTER-REMOVE 1", "OK");
+        (void)doBooleanCommand("DRIVER RXFILTER-REMOVE 0", "OK");
     }
 
     return result;
@@ -577,9 +577,9 @@ static JNINativeMethod gWifiMethods[] = {
     { "setNumAllowedChannelsCommand", "(I)Z", (void*) android_net_wifi_setNumAllowedChannelsCommand },
     { "getNumAllowedChannelsCommand", "()I", (void*) android_net_wifi_getNumAllowedChannelsCommand },
     { "setBluetoothCoexistenceModeCommand", "(I)Z",
-    		(void*) android_net_wifi_setBluetoothCoexistenceModeCommand },
+                (void*) android_net_wifi_setBluetoothCoexistenceModeCommand },
     { "setBluetoothCoexistenceScanModeCommand", "(Z)Z",
-    		(void*) android_net_wifi_setBluetoothCoexistenceScanModeCommand },
+                (void*) android_net_wifi_setBluetoothCoexistenceScanModeCommand },
     { "getRssiCommand", "()I", (void*) android_net_wifi_getRssiCommand },
     { "getRssiApproxCommand", "()I",
             (void*) android_net_wifi_getRssiApproxCommand},

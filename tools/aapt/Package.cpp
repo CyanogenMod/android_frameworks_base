@@ -114,7 +114,7 @@ status_t writeAPK(Bundle* bundle, const sp<AaptAssets>& assets,
     if (bundle->getVerbose()) {
         printf("Generated %d file%s\n", count, (count==1) ? "" : "s");
     }
-    
+
     count = processJarFiles(bundle, zip);
     if (count < 0) {
         fprintf(stderr, "ERROR: unable to process jar files while packaging '%s'\n",
@@ -122,10 +122,10 @@ status_t writeAPK(Bundle* bundle, const sp<AaptAssets>& assets,
         result = count;
         goto bail;
     }
-    
+
     if (bundle->getVerbose())
         printf("Included %d file%s from jar/zip files.\n", count, (count==1) ? "" : "s");
-    
+
     result = NO_ERROR;
 
     /*
@@ -309,13 +309,13 @@ bool processFile(Bundle* bundle, ZipFile* zip,
                 if (fileModWhen == (time_t) -1) { // file existence tested earlier,
                     return false;                 //  not expecting an error here
                 }
-    
+
                 if (fileModWhen > entry->getModWhen()) {
                     // mark as deleted so add() will succeed
                     if (bundle->getVerbose()) {
                         printf("      (removing old '%s')\n", storageName.string());
                     }
-    
+
                     zip->remove(entry);
                 } else {
                     // version in archive is newer
@@ -364,7 +364,7 @@ bool processFile(Bundle* bundle, ZipFile* zip,
             fprintf(stderr, "      Unable to add '%s': file already in archive (try '-u'?)\n",
                     file->getPrintableSource().string());
         } else {
-            fprintf(stderr, "      Unable to add '%s': Zip add failed\n", 
+            fprintf(stderr, "      Unable to add '%s': Zip add failed\n",
                     file->getPrintableSource().string());
         }
         return false;

@@ -1,17 +1,17 @@
-/* 
+/*
 **
 ** Copyright 2009, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -45,14 +45,14 @@ public:
         USAGE_SW_READ_RARELY    = GRALLOC_USAGE_SW_READ_RARELY,
         USAGE_SW_READ_OFTEN     = GRALLOC_USAGE_SW_READ_OFTEN,
         USAGE_SW_READ_MASK      = GRALLOC_USAGE_SW_READ_MASK,
-        
+
         USAGE_SW_WRITE_NEVER    = GRALLOC_USAGE_SW_WRITE_NEVER,
         USAGE_SW_WRITE_RARELY   = GRALLOC_USAGE_SW_WRITE_RARELY,
         USAGE_SW_WRITE_OFTEN    = GRALLOC_USAGE_SW_WRITE_OFTEN,
         USAGE_SW_WRITE_MASK     = GRALLOC_USAGE_SW_WRITE_MASK,
-        
+
         USAGE_SOFTWARE_MASK     = USAGE_SW_READ_MASK|USAGE_SW_WRITE_MASK,
-        
+
         USAGE_HW_TEXTURE        = GRALLOC_USAGE_HW_TEXTURE,
         USAGE_HW_RENDER         = GRALLOC_USAGE_HW_RENDER,
         USAGE_HW_2D             = GRALLOC_USAGE_HW_2D,
@@ -60,7 +60,7 @@ public:
     };
 
     static inline GraphicBufferAllocator& get() { return getInstance(); }
-    
+
 
     status_t alloc(uint32_t w, uint32_t h, PixelFormat format, int usage,
             buffer_handle_t* handle, int32_t* stride);
@@ -79,14 +79,14 @@ private:
         uint32_t usage;
         size_t size;
     };
-    
+
     static Mutex sLock;
     static KeyedVector<buffer_handle_t, alloc_rec_t> sAllocList;
-    
+
     friend class Singleton<GraphicBufferAllocator>;
     GraphicBufferAllocator();
     ~GraphicBufferAllocator();
-    
+
     alloc_device_t  *mAllocDev;
 };
 

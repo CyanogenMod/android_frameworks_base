@@ -19,10 +19,10 @@ public:
         SkASSERT(fCapacity > 0);
         fBytesRead  = 0;
     }
-    
-	virtual bool rewind() {
+
+        virtual bool rewind() {
         JNIEnv* env = fEnv;
-        
+
         fBytesRead = 0;
 
         env->CallVoidMethod(fJavaInputStream, gInputStream_resetMethodID);
@@ -34,7 +34,7 @@ public:
         }
         return true;
     }
-    
+
     size_t doRead(void* buffer, size_t size) {
         JNIEnv* env = fEnv;
         size_t bytesRead = 0;
@@ -43,7 +43,7 @@ public:
             size_t requested = size;
             if (requested > fCapacity)
                 requested = fCapacity;
-            
+
             jint n = env->CallIntMethod(fJavaInputStream,
                                         gInputStream_readMethodID, fJavaByteArray, 0, requested);
             if (env->ExceptionCheck()) {
@@ -52,11 +52,11 @@ public:
                 SkDebugf("---- read threw an exception\n");
                 return 0;
             }
-            
+
             if (n < 0) { // n == 0 should not be possible, see InputStream read() specifications.
                 break;  // eof
             }
-            
+
             env->GetByteArrayRegion(fJavaByteArray, 0, n,
                                     reinterpret_cast<jbyte*>(buffer));
             if (env->ExceptionCheck()) {
@@ -65,16 +65,16 @@ public:
                 SkDebugf("---- read:GetByteArrayRegion threw an exception\n");
                 return 0;
             }
-            
+
             buffer = (void*)((char*)buffer + n);
             bytesRead += n;
             size -= n;
             fBytesRead += n;
         } while (size != 0);
-        
+
         return bytesRead;
     }
-    
+
     size_t doSkip(size_t size) {
         JNIEnv* env = fEnv;
 
@@ -92,7 +92,7 @@ public:
 
         return (size_t)skipped;
     }
-    
+
     size_t doSize() {
         JNIEnv* env = fEnv;
         jint avail = env->CallIntMethod(fJavaInputStream,
@@ -105,8 +105,8 @@ public:
         }
         return avail;
     }
-    
-	virtual size_t read(void* buffer, size_t size) {
+
+        virtual size_t read(void* buffer, size_t size) {
         JNIEnv* env = fEnv;
         if (NULL == buffer) {
             if (0 == size) {
@@ -134,7 +134,7 @@ public:
         }
         return this->doRead(buffer, size);
     }
-    
+
 private:
     JNIEnv*     fEnv;
     jobject     fJavaInputStream;   // the caller owns this object
@@ -191,11 +191,11 @@ public:
         : fEnv(env), fJavaOutputStream(stream), fJavaByteArray(storage) {
         fCapacity = env->GetArrayLength(storage);
     }
-    
-	virtual bool write(const void* buffer, size_t size) {
+
+        virtual bool write(const void* buffer, size_t size) {
         JNIEnv* env = fEnv;
         jbyteArray storage = fJavaByteArray;
-        
+
         while (size > 0) {
             size_t requested = size;
             if (requested > fCapacity) {
@@ -210,7 +210,7 @@ public:
                 SkDebugf("--- write:SetByteArrayElements threw an exception\n");
                 return false;
             }
-            
+
             fEnv->CallVoidMethod(fJavaOutputStream, gOutputStream_writeMethodID,
                                  storage, 0, requested);
             if (env->ExceptionCheck()) {
@@ -219,17 +219,17 @@ public:
                 SkDebugf("------- write threw an exception\n");
                 return false;
             }
-            
+
             buffer = (void*)((char*)buffer + requested);
             size -= requested;
         }
         return true;
     }
-    
+
     virtual void flush() {
         fEnv->CallVoidMethod(fJavaOutputStream, gOutputStream_flushMethodID);
     }
-    
+
 private:
     JNIEnv*     fEnv;
     jobject     fJavaOutputStream;  // the caller owns this object

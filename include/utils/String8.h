@@ -145,21 +145,21 @@ public:
                                 String8(const String8& o);
     explicit                    String8(const char* o);
     explicit                    String8(const char* o, size_t numChars);
-    
+
     explicit                    String8(const String16& o);
     explicit                    String8(const char16_t* o);
     explicit                    String8(const char16_t* o, size_t numChars);
     explicit                    String8(const char32_t* o);
     explicit                    String8(const char32_t* o, size_t numChars);
                                 ~String8();
-    
+
     inline  const char*         string() const;
     inline  size_t              size() const;
     inline  size_t              length() const;
     inline  size_t              bytes() const;
-    
+
     inline  const SharedBuffer* sharedBuffer() const;
-    
+
             void                setTo(const String8& other);
             status_t            setTo(const char* other);
             status_t            setTo(const char* other, size_t numChars);
@@ -183,10 +183,10 @@ public:
 
     inline  String8&            operator=(const String8& other);
     inline  String8&            operator=(const char* other);
-    
+
     inline  String8&            operator+=(const String8& other);
     inline  String8             operator+(const String8& other) const;
-    
+
     inline  String8&            operator+=(const char* other);
     inline  String8             operator+(const char* other) const;
 
@@ -198,20 +198,20 @@ public:
     inline  bool                operator!=(const String8& other) const;
     inline  bool                operator>=(const String8& other) const;
     inline  bool                operator>(const String8& other) const;
-    
+
     inline  bool                operator<(const char* other) const;
     inline  bool                operator<=(const char* other) const;
     inline  bool                operator==(const char* other) const;
     inline  bool                operator!=(const char* other) const;
     inline  bool                operator>=(const char* other) const;
     inline  bool                operator>(const char* other) const;
-    
+
     inline                      operator const char*() const;
-    
+
             char*               lockBuffer(size_t size);
             void                unlockBuffer();
             status_t            unlockBuffer(size_t size);
-            
+
             // return the index of the first byte of other in this at or after
             // start, or -1 if not found
             ssize_t             find(const char* other, size_t start = 0) const;

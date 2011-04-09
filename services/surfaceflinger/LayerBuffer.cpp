@@ -129,7 +129,7 @@ void LayerBuffer::unlockPageFlip(const Transform& planeTransform,
     sp<Source> source(getSource());
     if (source != 0)
         source->onVisibilityResolved(planeTransform);
-    LayerBase::unlockPageFlip(planeTransform, outDirtyRegion);    
+    LayerBase::unlockPageFlip(planeTransform, outDirtyRegion);
 }
 
 void LayerBuffer::validateVisibility(const Transform& globalTransform)
@@ -180,7 +180,7 @@ status_t LayerBuffer::registerBuffers(const ISurface::BufferHeap& buffers)
         mSource = source;
     }
     return result;
-}    
+}
 
 /**
  * This creates an "overlay" source for this surface
@@ -309,9 +309,9 @@ LayerBuffer::Buffer::~Buffer()
 
 LayerBuffer::Source::Source(LayerBuffer& layer)
     : mLayer(layer)
-{    
+{
 }
-LayerBuffer::Source::~Source() {    
+LayerBuffer::Source::~Source() {
 }
 void LayerBuffer::Source::onDraw(const Region& clip) const {
 }
@@ -346,7 +346,7 @@ LayerBuffer::BufferSource::BufferSource(LayerBuffer& layer,
         mStatus = err;
         return;
     }
-    
+
     PixelFormatInfo info;
     err = getPixelFormatInfo(buffers.format, &info);
     if (err != NO_ERROR) {
@@ -358,20 +358,20 @@ LayerBuffer::BufferSource::BufferSource(LayerBuffer& layer,
 
     if (buffers.hor_stride<0 || buffers.ver_stride<0) {
         LOGE("LayerBuffer::BufferSource: invalid parameters "
-             "(w=%d, h=%d, xs=%d, ys=%d)", 
+             "(w=%d, h=%d, xs=%d, ys=%d)",
              buffers.w, buffers.h, buffers.hor_stride, buffers.ver_stride);
         mStatus = BAD_VALUE;
         return;
     }
 
     mBufferHeap = buffers;
-    mLayer.setNeedsBlending((info.h_alpha - info.l_alpha) > 0);    
+    mLayer.setNeedsBlending((info.h_alpha - info.l_alpha) > 0);
     mBufferSize = info.getScanlineSize(buffers.hor_stride)*buffers.ver_stride;
     mLayer.forceVisibilityTransaction();
 }
 
 LayerBuffer::BufferSource::~BufferSource()
-{    
+{
     class MessageDestroyTexture : public MessageBase {
         SurfaceFlinger* flinger;
         GLuint name;
@@ -397,7 +397,7 @@ LayerBuffer::BufferSource::~BufferSource()
 }
 
 void LayerBuffer::BufferSource::postBuffer(ssize_t offset)
-{    
+{
     ISurface::BufferHeap buffers;
     { // scope for the lock
         Mutex::Autolock _l(mBufferSourceLock);
@@ -443,7 +443,7 @@ void LayerBuffer::BufferSource::setBuffer(const sp<LayerBuffer::Buffer>& buffer)
     mBuffer = buffer;
 }
 
-void LayerBuffer::BufferSource::onDraw(const Region& clip) const 
+void LayerBuffer::BufferSource::onDraw(const Region& clip) const
 {
     sp<Buffer> ourBuffer(getBuffer());
     if (UNLIKELY(ourBuffer == 0))  {
@@ -584,7 +584,7 @@ void LayerBuffer::BufferSource::clearTempBufferImage() const
 // ---------------------------------------------------------------------------
 
 LayerBuffer::OverlaySource::OverlaySource(LayerBuffer& layer,
-        sp<OverlayRef>* overlayRef, 
+        sp<OverlayRef>* overlayRef,
         uint32_t w, uint32_t h, int32_t format, int32_t orientation)
     : Source(layer), mVisibilityChanged(false),
     mOverlay(0), mOverlayHandle(0), mOverlayDevice(0), mOrientation(orientation)
@@ -603,19 +603,19 @@ LayerBuffer::OverlaySource::OverlaySource(LayerBuffer& layer,
     }
 
     // enable dithering...
-    overlay_dev->setParameter(overlay_dev, overlay, 
+    overlay_dev->setParameter(overlay_dev, overlay,
             OVERLAY_DITHER, OVERLAY_ENABLE);
 
     mOverlay = overlay;
     mWidth = overlay->w;
     mHeight = overlay->h;
-    mFormat = overlay->format; 
+    mFormat = overlay->format;
     mWidthStride = overlay->w_stride;
     mHeightStride = overlay->h_stride;
     mInitialized = false;
 
     mOverlayHandle = overlay->getHandleRef(overlay);
-    
+
     sp<OverlayChannel> channel = new OverlayChannel( &layer );
 
     *overlayRef = new OverlayRef(mOverlayHandle, channel,
@@ -668,7 +668,7 @@ void LayerBuffer::OverlaySource::onVisibilityResolved(
             int y = bounds.top;
             int w = bounds.width();
             int h = bounds.height();
-            
+
             // we need a lock here to protect "destroy"
             Mutex::Autolock _l(mOverlaySourceLock);
             if (mOverlay) {

@@ -77,14 +77,14 @@ static inline int days_this_month(int year, int month)
     }
 }
 
-void 
+void
 Time::switchTimezone(const char* timezone)
 {
     time_t seconds = mktime_tz(&(this->t), this->timezone);
     localtime_tz(&seconds, &(this->t), timezone);
 }
 
-String8 
+String8
 Time::format(const char *format, const struct strftime_locale *locale) const
 {
     char buf[257];
@@ -135,11 +135,11 @@ Time::format2445(short* buf, bool hasTime) const
       n = t.tm_hour;
       buf[9] = next_char(&n, 10);
       buf[10] = tochar(n);
-      
+
       n = t.tm_min;
       buf[11] = next_char(&n, 10);
       buf[12] = tochar(n);
-      
+
       n = t.tm_sec;
       buf[13] = next_char(&n, 10);
       buf[14] = tochar(n);
@@ -150,7 +150,7 @@ Time::format2445(short* buf, bool hasTime) const
     }
 }
 
-String8 
+String8
 Time::toString() const
 {
     String8 str;
@@ -160,7 +160,7 @@ Time::toString() const
     #else
         long tm_gmtoff = 0;
     #endif
-    sprintf(s, "%04d%02d%02dT%02d%02d%02d%s(%d,%d,%ld,%d,%d)", 
+    sprintf(s, "%04d%02d%02dT%02d%02d%02d%s(%d,%d,%ld,%d,%d)",
             t.tm_year+1900, t.tm_mon+1, t.tm_mday, t.tm_hour, t.tm_min,
             t.tm_sec, timezone, t.tm_wday, t.tm_yday, tm_gmtoff, t.tm_isdst,
             (int)(((Time*)this)->toMillis(false /* use isDst */)/1000));
@@ -168,7 +168,7 @@ Time::toString() const
     return str;
 }
 
-void 
+void
 Time::setToNow()
 {
     time_t seconds;
@@ -176,7 +176,7 @@ Time::setToNow()
     localtime_tz(&seconds, &(this->t), this->timezone);
 }
 
-int64_t 
+int64_t
 Time::toMillis(bool ignoreDst)
 {
     if (ignoreDst) {
@@ -188,7 +188,7 @@ Time::toMillis(bool ignoreDst)
     return r * 1000;
 }
 
-void 
+void
 Time::set(int64_t millis)
 {
     time_t seconds = millis / 1000;

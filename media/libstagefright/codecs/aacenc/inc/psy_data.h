@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		psy_data.h
+        File:           psy_data.h
 
-	Content:	Psychoacoustic data and structures
+        Content:        Psychoacoustic data and structures
 
 *******************************************************************************/
 

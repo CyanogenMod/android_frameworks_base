@@ -83,7 +83,7 @@ static void movie_draw(JNIEnv* env, jobject movie, jobject canvas,
 }
 
 static jobject movie_decodeStream(JNIEnv* env, jobject clazz, jobject istream) {
-                              
+
     NPE_CHECK_RETURN_ZERO(env, istream);
 
     // what is the lifetime of the array? Can the skstream hold onto it?
@@ -101,7 +101,7 @@ static jobject movie_decodeStream(JNIEnv* env, jobject clazz, jobject istream) {
 static jobject movie_decodeByteArray(JNIEnv* env, jobject clazz,
                                      jbyteArray byteArray,
                                      int offset, int length) {
-                              
+
     NPE_CHECK_RETURN_ZERO(env, byteArray);
 
     int totalLength = env->GetArrayLength(byteArray);
@@ -143,7 +143,7 @@ int register_android_graphics_Movie(JNIEnv* env)
     gMovie_class = env->FindClass(kClassPathName);
     RETURN_ERR_IF_NULL(gMovie_class);
     gMovie_class = (jclass)env->NewGlobalRef(gMovie_class);
-    
+
     gMovie_constructorMethodID = env->GetMethodID(gMovie_class, "<init>", "(I)V");
     RETURN_ERR_IF_NULL(gMovie_constructorMethodID);
 

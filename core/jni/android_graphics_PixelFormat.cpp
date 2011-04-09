@@ -89,7 +89,7 @@ static void nativeClassInit(JNIEnv* env, jclass clazz);
 static JNINativeMethod gMethods[] = {
     {   "nativeClassInit", "()V",
         (void*)nativeClassInit },
-	{   "getPixelFormatInfo", "(ILandroid/graphics/PixelFormat;)V",
+        {   "getPixelFormatInfo", "(ILandroid/graphics/PixelFormat;)V",
         (void*)android_graphics_getPixelFormatInfo
     }
 };
@@ -97,7 +97,7 @@ static JNINativeMethod gMethods[] = {
 void nativeClassInit(JNIEnv* env, jclass clazz)
 {
     offsets.bytesPerPixel = env->GetFieldID(clazz, "bytesPerPixel", "I");
-    offsets.bitsPerPixel  = env->GetFieldID(clazz, "bitsPerPixel", "I");    
+    offsets.bitsPerPixel  = env->GetFieldID(clazz, "bitsPerPixel", "I");
 }
 
 int register_android_graphics_PixelFormat(JNIEnv* env)

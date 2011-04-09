@@ -136,15 +136,15 @@ static void SurfaceSession_kill(JNIEnv* env, jobject clazz)
 
 static sp<SurfaceControl> getSurfaceControl(JNIEnv* env, jobject clazz)
 {
-    SurfaceControl* const p = 
+    SurfaceControl* const p =
         (SurfaceControl*)env->GetIntField(clazz, so.surfaceControl);
     return sp<SurfaceControl>(p);
 }
 
-static void setSurfaceControl(JNIEnv* env, jobject clazz, 
+static void setSurfaceControl(JNIEnv* env, jobject clazz,
         const sp<SurfaceControl>& surface)
 {
-    SurfaceControl* const p = 
+    SurfaceControl* const p =
         (SurfaceControl*)env->GetIntField(clazz, so.surfaceControl);
     if (surface.get()) {
         surface->incStrong(clazz);
@@ -162,12 +162,12 @@ static sp<Surface> getSurface(JNIEnv* env, jobject clazz)
         /*
          * if this method is called from the WindowManager's process, it means
          * the client is is not remote, and therefore is allowed to have
-         * a Surface (data), so we create it here. 
+         * a Surface (data), so we create it here.
          * If we don't have a SurfaceControl, it means we're in a different
          * process.
          */
-        
-        SurfaceControl* const control = 
+
+        SurfaceControl* const control =
             (SurfaceControl*)env->GetIntField(clazz, so.surfaceControl);
         if (control) {
             result = control->getSurface();
@@ -200,7 +200,7 @@ static void setSurface(JNIEnv* env, jobject clazz, const sp<Surface>& surface)
 // ----------------------------------------------------------------------------
 
 static void Surface_init(
-        JNIEnv* env, jobject clazz, 
+        JNIEnv* env, jobject clazz,
         jobject session,
         jint pid, jstring jname, jint dpy, jint w, jint h, jint format, jint flags)
 {
@@ -208,7 +208,7 @@ static void Surface_init(
         doThrow(env, "java/lang/NullPointerException");
         return;
     }
-    
+
     SurfaceComposerClient* client =
             (SurfaceComposerClient*)env->GetIntField(session, sso.client);
 
@@ -307,7 +307,7 @@ static jobject Surface_lockCanvas(JNIEnv* env, jobject clazz, jobject dirtyRect)
         dirty.right = env->GetIntField(dirtyRect, ro.r);
         dirty.bottom= env->GetIntField(dirtyRect, ro.b);
         if (!dirty.isEmpty()) {
-            dirtyRegion.set(dirty);    
+            dirtyRegion.set(dirty);
         }
     } else {
         dirtyRegion.set(Rect(0x3FFF,0x3FFF));
@@ -341,7 +341,7 @@ static jobject Surface_lockCanvas(JNIEnv* env, jobject clazz, jobject dirtyRect)
         bitmap.setPixels(NULL);
     }
     nativeCanvas->setBitmapDevice(bitmap);
-    
+
     SkRegion clipReg;
     if (dirtyRegion.isRect()) { // very common case
         const Rect b(dirtyRegion.getBounds());
@@ -356,7 +356,7 @@ static jobject Surface_lockCanvas(JNIEnv* env, jobject clazz, jobject dirtyRect)
     }
 
     nativeCanvas->clipRegion(clipReg);
-    
+
     int saveCount = nativeCanvas->save();
     env->SetIntField(clazz, so.saveCount, saveCount);
 
@@ -367,7 +367,7 @@ static jobject Surface_lockCanvas(JNIEnv* env, jobject clazz, jobject dirtyRect)
         env->SetIntField(dirtyRect, ro.r, bounds.right);
         env->SetIntField(dirtyRect, ro.b, bounds.bottom);
     }
-    
+
     return canvas;
 }
 
@@ -379,7 +379,7 @@ static void Surface_unlockCanvasAndPost(
         doThrow(env, "java/lang/IllegalArgumentException", NULL);
         return;
     }
-    
+
     const sp<Surface>& surface(getSurface(env, clazz));
     if (!Surface::isValid(surface))
         return;
@@ -530,7 +530,7 @@ static void Surface_setTransparentRegion(
     const sp<SurfaceControl>& surface(getSurfaceControl(env, clazz));
     if (surface == 0) return;
     SkRegion* nativeRegion = (SkRegion*)env->GetIntField(argRegion, no.native_region);
-    
+
     const SkIRect& b(nativeRegion->getBounds());
     Region reg(Rect(b.fLeft, b.fTop, b.fRight, b.fBottom));
     if (nativeRegion->isComplex()) {
@@ -541,7 +541,7 @@ static void Surface_setTransparentRegion(
             it.next();
         }
     }
-    
+
     status_t err = surface->setTransparentRegionHint(reg);
     if (err<0 && err!=NO_INIT)
         doThrow(env, "java/lang/IllegalArgumentException", NULL);

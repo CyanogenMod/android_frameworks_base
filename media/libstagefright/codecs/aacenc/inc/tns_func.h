@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		tns_func.h
+        File:           tns_func.h
 
-	Content:	TNS functions
+        Content:        TNS functions
 
 *******************************************************************************/
 

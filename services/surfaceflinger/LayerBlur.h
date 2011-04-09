@@ -30,7 +30,7 @@ namespace android {
 
 class LayerBlur : public LayerBaseClient
 {
-public:    
+public:
                 LayerBlur(SurfaceFlinger* flinger, DisplayID display,
                         const sp<Client>& client);
         virtual ~LayerBlur();

@@ -71,23 +71,23 @@ int32_t ANativeWindow_lock(ANativeWindow* window, ANativeWindow_Buffer* outBuffe
         dirtyRegion.set(*(Rect*)inOutDirtyBounds);
         dirtyParam = &dirtyRegion;
     }
-    
+
     Surface::SurfaceInfo info;
     status_t res = static_cast<Surface*>(window)->lock(&info, dirtyParam);
     if (res != OK) {
         return -1;
     }
-    
+
     outBuffer->width = (int32_t)info.w;
     outBuffer->height = (int32_t)info.h;
     outBuffer->stride = (int32_t)info.s;
     outBuffer->format = (int32_t)info.format;
     outBuffer->bits = info.bits;
-    
+
     if (inOutDirtyBounds != NULL) {
         *inOutDirtyBounds = dirtyRegion.getBounds();
     }
-    
+
     return 0;
 }
 

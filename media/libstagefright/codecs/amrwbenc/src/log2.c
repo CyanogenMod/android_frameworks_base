@@ -54,33 +54,33 @@
 *************************************************************************/
 
 void Log2_norm (
-		Word32 L_x,         /* (i) : input value (normalized)                    */
-		Word16 exp,         /* (i) : norm_l (L_x)                                */
-		Word16 *exponent,   /* (o) : Integer part of Log2.   (range: 0<=val<=30) */
-		Word16 *fraction    /* (o) : Fractional part of Log2. (range: 0<=val<1)  */
-	       )
+                Word32 L_x,         /* (i) : input value (normalized)                    */
+                Word16 exp,         /* (i) : norm_l (L_x)                                */
+                Word16 *exponent,   /* (o) : Integer part of Log2.   (range: 0<=val<=30) */
+                Word16 *fraction    /* (o) : Fractional part of Log2. (range: 0<=val<1)  */
+               )
 {
-	Word16 i, a, tmp;
-	Word32 L_y;
-	if (L_x <= (Word32) 0)
-	{
-		*exponent = 0; 
-		*fraction = 0; 
-		return;
-	}
-	*exponent = (30 - exp); 
-	L_x = (L_x >> 9);
-	i = extract_h (L_x);                /* Extract b25-b31 */
-	L_x = (L_x >> 1);
-	a = (Word16)(L_x);                /* Extract b10-b24 of fraction */
-	a = (Word16)(a & (Word16)0x7fff);
-	i -= 32;
-	L_y = L_deposit_h (table[i]);       /* table[i] << 16        */
-	tmp = vo_sub(table[i], table[i + 1]); /* table[i] - table[i+1] */
-	L_y = vo_L_msu (L_y, tmp, a);          /* L_y -= tmp*a*2        */
-	*fraction = extract_h (L_y); 
+        Word16 i, a, tmp;
+        Word32 L_y;
+        if (L_x <= (Word32) 0)
+        {
+                *exponent = 0; 
+                *fraction = 0; 
+                return;
+        }
+        *exponent = (30 - exp); 
+        L_x = (L_x >> 9);
+        i = extract_h (L_x);                /* Extract b25-b31 */
+        L_x = (L_x >> 1);
+        a = (Word16)(L_x);                /* Extract b10-b24 of fraction */
+        a = (Word16)(a & (Word16)0x7fff);
+        i -= 32;
+        L_y = L_deposit_h (table[i]);       /* table[i] << 16        */
+        tmp = vo_sub(table[i], table[i + 1]); /* table[i] - table[i+1] */
+        L_y = vo_L_msu (L_y, tmp, a);          /* L_y -= tmp*a*2        */
+        *fraction = extract_h (L_y); 
 
-	return;
+        return;
 }
 
 /*************************************************************************
@@ -96,15 +96,15 @@ void Log2_norm (
 *************************************************************************/
 
 void Log2 (
-		Word32 L_x,         /* (i) : input value                                 */
-		Word16 *exponent,   /* (o) : Integer part of Log2.   (range: 0<=val<=30) */
-		Word16 *fraction    /* (o) : Fractional part of Log2. (range: 0<=val<1) */
-	  )
+                Word32 L_x,         /* (i) : input value                                 */
+                Word16 *exponent,   /* (o) : Integer part of Log2.   (range: 0<=val<=30) */
+                Word16 *fraction    /* (o) : Fractional part of Log2. (range: 0<=val<1) */
+          )
 {
-	Word16 exp;
+        Word16 exp;
 
-	exp = norm_l(L_x);
-	Log2_norm ((L_x << exp), exp, exponent, fraction);
+        exp = norm_l(L_x);
+        Log2_norm ((L_x << exp), exp, exponent, fraction);
 }
 
 

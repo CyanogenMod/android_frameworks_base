@@ -2,16 +2,16 @@
 **
 ** Copyright 2006, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -49,7 +49,7 @@ static int directionality_map[U_CHAR_DIRECTION_COUNT] = {
 };
 
 namespace android {
-    
+
 static void getDirectionalities(JNIEnv* env, jobject obj, jcharArray srcArray, jbyteArray destArray, int count)
 {
     jchar* src = env->GetCharArrayElements(srcArray, NULL);
@@ -87,7 +87,7 @@ static void getDirectionalities(JNIEnv* env, jobject obj, jcharArray srcArray, j
                 dest[i] = directionality_map[dir];
         }
     }
-    
+
 DIRECTION_END:
     env->ReleaseCharArrayElements(srcArray, src, JNI_ABORT);
     env->ReleaseByteArrayElements(destArray, dest, JNI_ABORT);
@@ -177,24 +177,24 @@ static jboolean mirror(JNIEnv* env, jobject obj, jcharArray charArray, int start
 
 MIRROR_END:
     env->ReleaseCharArrayElements(charArray, data, JNI_ABORT);
-	return ret;
+        return ret;
 }
 
 static jchar getMirror(JNIEnv* env, jobject obj, jchar c)
-{   
+{
     return u_charMirror(c);
 }
 
 static JNINativeMethod gMethods[] = {
-	{ "getDirectionalities", "([C[BI)V",
+        { "getDirectionalities", "([C[BI)V",
         (void*) getDirectionalities },
-	{ "getEastAsianWidth", "(C)I",
+        { "getEastAsianWidth", "(C)I",
         (void*) getEastAsianWidth },
-	{ "getEastAsianWidths", "([CII[B)V",
+        { "getEastAsianWidths", "([CII[B)V",
         (void*) getEastAsianWidths },
-	{ "mirror", "([CII)Z",
+        { "mirror", "([CII)Z",
         (void*) mirror },
-	{ "getMirror", "(C)C",
+        { "getMirror", "(C)C",
         (void*) getMirror }
 };
 
@@ -202,7 +202,7 @@ int register_android_text_AndroidCharacter(JNIEnv* env)
 {
     jclass clazz = env->FindClass("android/text/AndroidCharacter");
     LOG_ASSERT(clazz, "Cannot find android/text/AndroidCharacter");
-    
+
     return AndroidRuntime::registerNativeMethods(env, "android/text/AndroidCharacter",
             gMethods, NELEM(gMethods));
 }

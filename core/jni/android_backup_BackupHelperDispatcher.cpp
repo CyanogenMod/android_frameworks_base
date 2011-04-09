@@ -166,7 +166,7 @@ allocateHeader_native(JNIEnv* env, jobject clazz, jobject headerObj, jobject fdO
     pos = lseek(fd, 0, SEEK_CUR);
 
     lseek(fd, headerSize, SEEK_CUR);
-    
+
     return pos;
 }
 
@@ -241,7 +241,7 @@ int register_android_backup_BackupHelperDispatcher(JNIEnv* env)
     s_descriptorField = env->GetFieldID(clazz, "descriptor", "I");
     LOG_FATAL_IF(s_descriptorField == NULL,
             "Unable to find descriptor field in java.io.FileDescriptor");
-    
+
     clazz = env->FindClass("android/app/backup/BackupHelperDispatcher$Header");
     LOG_FATAL_IF(clazz == NULL,
             "Unable to find class android.app.backup.BackupHelperDispatcher.Header");
@@ -251,7 +251,7 @@ int register_android_backup_BackupHelperDispatcher(JNIEnv* env)
     s_keyPrefixField = env->GetFieldID(clazz, "keyPrefix", "Ljava/lang/String;");
     LOG_FATAL_IF(s_keyPrefixField == NULL,
             "Unable to find keyPrefix field in android.app.backup.BackupHelperDispatcher.Header");
-    
+
     return AndroidRuntime::registerNativeMethods(env, "android/app/backup/BackupHelperDispatcher",
             g_methods, NELEM(g_methods));
 }

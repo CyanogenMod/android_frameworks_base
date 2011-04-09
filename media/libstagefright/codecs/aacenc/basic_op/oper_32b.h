@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		oper_32b.h
+        File:           oper_32b.h
 
-	Content:	Double precision operations
+        Content:        Double precision operations
 
 *******************************************************************************/
 
@@ -60,13 +60,13 @@ __inline Word32 L_mpy_ls(Word32 L_var2, Word16 var1)
 __inline Word32 L_mpy_wx(Word32 L_var2, Word16 var1)
 {
 #if ARMV5TE_L_MPY_LS
-	Word32 result; 
-	asm volatile( 
-		"SMULWB  %[result], %[L_var2], %[var1] \n" 
-		:[result]"+r"(result)
-		:[L_var2]"r"(L_var2), [var1]"r"(var1)
-		); 
-	return result;
+        Word32 result; 
+        asm volatile( 
+                "SMULWB  %[result], %[L_var2], %[var1] \n" 
+                :[result]"+r"(result)
+                :[L_var2]"r"(L_var2), [var1]"r"(var1)
+                ); 
+        return result;
 #else
     unsigned short swLow1;
     Word16 swHigh1;

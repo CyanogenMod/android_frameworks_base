@@ -83,13 +83,13 @@ String8 LayerBase::getName() const {
 }
 
 const GraphicPlane& LayerBase::graphicPlane(int dpy) const
-{ 
+{
     return mFlinger->graphicPlane(dpy);
 }
 
 GraphicPlane& LayerBase::graphicPlane(int dpy)
 {
-    return mFlinger->graphicPlane(dpy); 
+    return mFlinger->graphicPlane(dpy);
 }
 
 void LayerBase::initStates(uint32_t w, uint32_t h, uint32_t flags)
@@ -193,7 +193,7 @@ bool LayerBase::setFlags(uint8_t flags, uint8_t mask) {
 Rect LayerBase::visibleBounds() const
 {
     return mTransformedBounds;
-}      
+}
 
 void LayerBase::setVisibleRegion(const Region& visibleRegion) {
     // always called from main thread
@@ -244,9 +244,9 @@ void LayerBase::validateVisibility(const Transform& planeTransform)
     const Layer::State& s(drawingState());
     const Transform tr(planeTransform * s.transform);
     const bool transformed = tr.transformed();
-   
+
     uint32_t w = s.w;
-    uint32_t h = s.h;    
+    uint32_t h = s.h;
     tr.transform(mVertices[0], 0, 0);
     tr.transform(mVertices[1], 0, h);
     tr.transform(mVertices[2], w, h);
@@ -304,14 +304,14 @@ void LayerBase::drawRegion(const Region& reg) const
         const DisplayHardware& hw(graphicPlane(0).displayHardware());
         const int32_t fbWidth  = hw.getWidth();
         const int32_t fbHeight = hw.getHeight();
-        const GLshort vertices[][2] = { { 0, 0 }, { fbWidth, 0 }, 
+        const GLshort vertices[][2] = { { 0, 0 }, { fbWidth, 0 },
                 { fbWidth, fbHeight }, { 0, fbHeight }  };
         glVertexPointer(2, GL_SHORT, 0, vertices);
         while (it != end) {
             const Rect& r = *it++;
             const GLint sy = fbHeight - (r.top + r.height());
             glScissor(r.left, sy, r.width(), r.height());
-            glDrawArrays(GL_TRIANGLE_FAN, 0, 4); 
+            glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
         }
     }
 }
@@ -351,7 +351,7 @@ void LayerBase::clearWithOpenGL(const Region& clip, GLclampf red,
         const Rect& r = *it++;
         const GLint sy = fbHeight - (r.top + r.height());
         glScissor(r.left, sy, r.width(), r.height());
-        glDrawArrays(GL_TRIANGLE_FAN, 0, 4); 
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
     }
 }
 
@@ -373,10 +373,10 @@ void LayerBase::drawWithOpenGL(const Region& clip, const Texture& texture) const
     const DisplayHardware& hw(graphicPlane(0).displayHardware());
     const uint32_t fbHeight = hw.getHeight();
     const State& s(drawingState());
-    
+
     // bind our texture
     TextureManager::activateTexture(texture, needsFiltering());
-    uint32_t width  = texture.width; 
+    uint32_t width  = texture.width;
     uint32_t height = texture.height;
 
     GLenum src = mPremultipliedAlpha ? GL_ONE : GL_SRC_ALPHA;
@@ -644,15 +644,15 @@ void LayerBaseClient::shortDump(String8& result, char* scratch, size_t size) con
 LayerBaseClient::Surface::Surface(
         const sp<SurfaceFlinger>& flinger,
         int identity,
-        const sp<LayerBaseClient>& owner) 
+        const sp<LayerBaseClient>& owner)
     : mFlinger(flinger), mIdentity(identity), mOwner(owner)
 {
 }
 
-LayerBaseClient::Surface::~Surface() 
+LayerBaseClient::Surface::~Surface()
 {
     /*
-     * This is a good place to clean-up all client resources 
+     * This is a good place to clean-up all client resources
      */
 
     // destroy client resources
@@ -691,7 +691,7 @@ status_t LayerBaseClient::Surface::onTransact(
 sp<GraphicBuffer> LayerBaseClient::Surface::requestBuffer(int bufferIdx,
         uint32_t w, uint32_t h, uint32_t format, uint32_t usage)
 {
-    return NULL; 
+    return NULL;
 }
 
 status_t LayerBaseClient::Surface::setBufferCount(int bufferCount)
@@ -700,16 +700,16 @@ status_t LayerBaseClient::Surface::setBufferCount(int bufferCount)
 }
 
 status_t LayerBaseClient::Surface::registerBuffers(
-        const ISurface::BufferHeap& buffers) 
-{ 
-    return INVALID_OPERATION; 
+        const ISurface::BufferHeap& buffers)
+{
+    return INVALID_OPERATION;
 }
 
-void LayerBaseClient::Surface::postBuffer(ssize_t offset) 
+void LayerBaseClient::Surface::postBuffer(ssize_t offset)
 {
 }
 
-void LayerBaseClient::Surface::unregisterBuffers() 
+void LayerBaseClient::Surface::unregisterBuffers()
 {
 }
 

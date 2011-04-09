@@ -78,7 +78,7 @@ delete_trans_units()
                     str.versionString.c_str());
         }
     }
- 
+
     return 0;
 }
 
@@ -111,7 +111,7 @@ filter_trans_units()
                     str.versionString.c_str());
         }
     }
- 
+
     return 0;
 }
 
@@ -197,7 +197,7 @@ static int
 pseudolocalize_test()
 {
     int err = 0;
-    
+
     err |= test_one_pseudo(false, "");
     //err |= test_one_pseudo(true, "");
 

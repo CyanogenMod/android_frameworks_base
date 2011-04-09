@@ -1062,7 +1062,7 @@ static int int_register_android_os_BinderProxy(JNIEnv* env)
     clazz = env->FindClass("java/lang/Error");
     LOG_FATAL_IF(clazz == NULL, "Unable to find class java.lang.Error");
     gErrorOffsets.mClass = (jclass) env->NewGlobalRef(clazz);
-    
+
     clazz = env->FindClass(kBinderProxyPathName);
     LOG_FATAL_IF(clazz == NULL, "Unable to find class android.os.BinderProxy");
 

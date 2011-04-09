@@ -10,7 +10,7 @@ const char *const NS_MAP[] = {
 
 const XMLNamespaceMap NO_NAMESPACES(NS_MAP);
 
-char const*const EXPECTED_EXACT = 
+char const*const EXPECTED_EXACT =
        "<ASDF>\n"
         "    <a id=\"system\" old-cl=\"1\" new-cl=\"43019\">\n"
         "        <app dir=\"apps/common\" />\n"

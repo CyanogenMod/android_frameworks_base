@@ -196,7 +196,7 @@ check_filename(const char* filename, const char* package, buffer_type* name)
     p = strchr(name->data, '.');
     len = p ? p-name->data : strlen(name->data);
     expected.append(name->data, len);
-    
+
     expected += ".aidl";
 
     len = fn.length();
@@ -429,7 +429,7 @@ check_method(const char* filename, method_type* m)
             err = 1;
             goto next;
         }
-        
+
         if (!t->CanBeMarshalled()) {
             fprintf(stderr, "%s:%d parameter %d: '%s %s' can't be marshalled.\n",
                         filename, m->type.type.lineno, index,
@@ -483,7 +483,7 @@ check_method(const char* filename, method_type* m)
                     filename, m->name.lineno, index, arg->name.data);
             err = 1;
         }
-        
+
 next:
         index++;
         arg = arg->next;
@@ -633,7 +633,7 @@ generate_outputFileName(const Options& options, const document_item_type* items)
         }
 
         result += package;
-        
+
         // add the filename by replacing the .aidl extension to .java
         const char* p = strchr(type->name.data, '.');
         len = p ? p-type->name.data : strlen(type->name.data);
@@ -704,7 +704,7 @@ parse_preprocessed_file(const string& filename)
         //printf("%s:%d:...%s...%s...%s...\n", filename.c_str(), lineno,
         //        type, packagename, classname);
         document_item_type* doc;
-        
+
         if (0 == strcmp("parcelable", type)) {
             parcelable_type* parcl = (parcelable_type*)malloc(
                     sizeof(parcelable_type));
@@ -866,7 +866,7 @@ compile_aidl(const Options& options)
             options.outputBaseFolder.length() > 0) {
         outputFileName = generate_outputFileName(options, mainDoc);
     }
-    
+
     // make sure the folders of the output file all exists
     check_outputFileName(outputFileName);
 
@@ -914,13 +914,13 @@ preprocess_aidl(const Options& options)
     }
 
     // write preprocessed file
-    int fd = open( options.outputFileName.c_str(), 
+    int fd = open( options.outputFileName.c_str(),
                    O_RDWR|O_CREAT|O_TRUNC|O_BINARY,
 #ifdef HAVE_MS_C_RUNTIME
                    _S_IREAD|_S_IWRITE);
-#else    
+#else
                    S_IRUSR|S_IWUSR|S_IRGRP);
-#endif            
+#endif
     if (fd == -1) {
         fprintf(stderr, "aidl: could not open file for write: %s\n",
                 options.outputFileName.c_str());

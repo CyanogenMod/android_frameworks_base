@@ -2,16 +2,16 @@
 **
 ** Copyright 2006, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -37,12 +37,12 @@ public:
         return SkColorFilter::CreateModeFilter(srcColor,
                                            SkPorterDuff::ToXfermodeMode(mode));
     }
- 
+
     static SkColorFilter* CreateLightingFilter(JNIEnv* env, jobject,
                                                jint mul, jint add) {
         return SkColorFilter::CreateLightingFilter(mul, add);
     }
-    
+
     static SkColorFilter* CreateColorMatrixFilter(JNIEnv* env, jobject,
                                                   jfloatArray jarray) {
         AutoJavaFloatArray autoArray(env, jarray, 20);
@@ -58,7 +58,7 @@ public:
         return new SkColorMatrixFilter(src);
 #endif
     }
- 
+
 };
 
 static JNINativeMethod colorfilter_methods[] = {
@@ -88,12 +88,12 @@ static JNINativeMethod colormatrix_methods[] = {
 
 int register_android_graphics_ColorFilter(JNIEnv* env) {
     int result;
-    
+
     REG(env, "android/graphics/ColorFilter", colorfilter_methods);
     REG(env, "android/graphics/PorterDuffColorFilter", porterduff_methods);
     REG(env, "android/graphics/LightingColorFilter", lighting_methods);
     REG(env, "android/graphics/ColorMatrixColorFilter", colormatrix_methods);
-    
+
     return 0;
 }
 

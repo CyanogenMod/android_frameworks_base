@@ -140,7 +140,7 @@ static jboolean com_htc_net_wimax_terminateProcess(JNIEnv* env, jobject clazz, j
    /* char buffer[100];
    sprintf (buffer, "com_htc_net_wimax_terminateProcess() - rval = %d\n", rval);
    LOGI(buffer); */
-   
+
    return (jboolean)(rval == 0);
 }
 

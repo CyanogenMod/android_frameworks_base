@@ -49,7 +49,7 @@ bool KeyEvent::hasDefaultAction(int32_t keyCode) {
         case AKEYCODE_MUTE:
             return true;
     }
-    
+
     return false;
 }
 
@@ -81,7 +81,7 @@ bool KeyEvent::isSystemKey(int32_t keyCode) {
         case AKEYCODE_SEARCH:
             return true;
     }
-    
+
     return false;
 }
 

@@ -91,7 +91,7 @@ read_settings(const string& filename, map<string,Settings>* result, const string
             reject.file = rootDir;
             reject.file += '/';
             reject.file += f;
-            
+
             reject.name = rejectNode->GetAttribute("", "name", "");
             if (reject.name == "") {
                 rejectNode->Position().Error("<reject> needs a name attribute.");
@@ -321,7 +321,7 @@ do_export(const string& settingsFile, const string& rootDir, const string& outDi
 
             // parse the files into a ValuesFile
             // pull out the strings and add them to the XLIFFFile
-            
+
             // current file
             print_file_status(++fileProgress, totalFileCount);
             ValuesFile* currentFile = get_values_file(resFile, english, CURRENT_VERSION,
@@ -617,7 +617,7 @@ main(int argc, const char** argv)
     }
 
     int index = 1;
-    
+
     if (0 == strcmp("export", argv[index])) {
         string settingsFile;
         string rootDir;

@@ -40,9 +40,9 @@ namespace android {
 
 // ---------------------------------------------------------------------------
 
-MemoryHeapBase::MemoryHeapBase() 
+MemoryHeapBase::MemoryHeapBase()
     : mFD(-1), mSize(0), mBase(MAP_FAILED),
-      mDevice(NULL), mNeedUnmap(false) 
+      mDevice(NULL), mNeedUnmap(false)
 {
 }
 

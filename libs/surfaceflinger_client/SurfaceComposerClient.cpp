@@ -351,7 +351,7 @@ status_t SurfaceComposerClient::unfreezeDisplay(DisplayID dpy, uint32_t flags)
     return sm->unfreezeDisplay(dpy, flags);
 }
 
-int SurfaceComposerClient::setOrientation(DisplayID dpy, 
+int SurfaceComposerClient::setOrientation(DisplayID dpy,
         int orientation, uint32_t flags)
 {
     sp<ISurfaceComposer> sm(getComposerService());

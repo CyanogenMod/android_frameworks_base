@@ -88,7 +88,7 @@ const char* const kClassPathName = "android/view/ViewRoot";
 static JNINativeMethod gMethods[] = {
     {   "nativeShowFPS", "(Landroid/graphics/Canvas;I)V",
                                         (void*)android_view_ViewRoot_showFPS },
-    {   "nativeAbandonGlCaches", "()V", 
+    {   "nativeAbandonGlCaches", "()V",
                                 (void*)android_view_ViewRoot_abandonGlCaches }
 };
 

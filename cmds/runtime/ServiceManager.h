@@ -16,14 +16,14 @@ class BServiceManager : public BnServiceManager
 {
 public:
                                 BServiceManager();
-    
+
     virtual sp<IBinder>         getService( const String16& name) const;
     virtual sp<IBinder>         checkService( const String16& name) const;
     virtual status_t            addService( const String16& name,
                                             const sp<IBinder>& service);
     virtual Vector<String16>    listServices();
 
-    
+
 private:
     mutable Mutex               mLock;
     mutable Condition           mChanged;

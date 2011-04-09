@@ -26,7 +26,7 @@
 
 namespace android {
 
-class SurfaceFlinger; 
+class SurfaceFlinger;
 
 class DisplayHardwareBase
 {
@@ -61,7 +61,7 @@ private:
         virtual status_t initCheck() const = 0;
     };
 
-    class DisplayEventThread : public DisplayEventThreadBase 
+    class DisplayEventThread : public DisplayEventThreadBase
     {
         mutable Barrier mBarrier;
     public:
@@ -73,7 +73,7 @@ private:
         virtual status_t initCheck() const;
     };
 
-    class ConsoleManagerThread : public DisplayEventThreadBase 
+    class ConsoleManagerThread : public DisplayEventThreadBase
     {
         int consoleFd;
         int vt_num;

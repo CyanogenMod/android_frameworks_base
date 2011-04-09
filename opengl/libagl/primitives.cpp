@@ -2,16 +2,16 @@
 **
 ** Copyright 2006, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -218,7 +218,7 @@ void ogles_validate_primitives(ogles_context_t* c)
     index |= c->lighting.enable ? 0x2 : 0;
     index |= enables & GGL_ENABLE_FOG ? 0x4 : 0;
     c->lighting.lightTriangle = lightPrimitive[index];
-    
+
     // set up the primitive renderers
     if (ggl_likely(c->arrays.vertex.enable)) {
         c->prims.renderPoint    = primitive_point;
@@ -269,13 +269,13 @@ void compute_iterators_t::initLerp(vertex_t const* v0, uint32_t enables)
         d = gglRecipQNormalized(area, &q);
 
         // Then compute the minimum left-shift to not overflow the muls
-        // below. 
+        // below.
         s = 32 - gglClz(abs(m_dy02)|abs(m_dy10)|abs(m_dx01)|abs(m_dx20));
 
         // We'll keep 16-bits of precision for deltas/area. So we need
         // to shift everything left an extra 15 bits.
         s += 15;
-        
+
         // make sure all final shifts are not > 32, because gglMulx
         // can't handle it.
         if (s < q) s = q;
@@ -320,7 +320,7 @@ int compute_iterators_t::iteratorsScale(GGLfixed* it,
     const int s = m_area_scale;
     int32_t dcdx = gglMulAddx(dc01, m_dy02, gglMulx(dc02, m_dy10, s), s);
     int32_t dcdy = gglMulAddx(dc02, m_dx01, gglMulx(dc01, m_dx20, s), s);
-    int32_t c = c0 - (gglMulAddx(dcdx, m_x0, 
+    int32_t c = c0 - (gglMulAddx(dcdx, m_x0,
             gglMulx(dcdy, m_y0, TRI_FRACTION_BITS), TRI_FRACTION_BITS));
     it[0] = c;
     it[1] = dcdx;
@@ -392,11 +392,11 @@ void fetch_texcoord_impl(ogles_context_t* c,
 {
     vertex_t* const vtx[3] = { v0, v1, v2 };
     array_t const * const texcoordArray = c->arrays.texture;
-    
+
     for (int i=0 ; i<GGL_TEXTURE_UNIT_COUNT ; i++) {
         if (!(c->rasterizer.state.texture[i].enable))
             continue;
-        
+
         for (int j=0 ; j<3 ; j++) {
             vertex_t* const v = vtx[j];
             if (v->flags & vertex_t::TT)
@@ -413,7 +413,7 @@ void fetch_texcoord_impl(ogles_context_t* c,
 
             // transform texture coordinates...
             coords.Q = 0x10000;
-            const transform_t& tr = c->transforms.texture[i].transform; 
+            const transform_t& tr = c->transforms.texture[i].transform;
             if (ggl_unlikely(tr.ops)) {
                 c->arrays.tex_transform[i](&tr, &coords, &coords);
             }
@@ -476,14 +476,14 @@ void primitive_point(ogles_context_t* c, vertex_t* v)
     }
 
     // XXX: we don't need to do that each-time
-    // if color array and lighting not enabled 
+    // if color array and lighting not enabled
     c->rasterizer.procs.color4xv(c, v->color.v);
 
     // XXX: look into ES point-sprite extension
     if (enables & GGL_ENABLE_TMUS) {
         fetch_texcoord(c, v,v,v);
         for (int i=0 ; i<GGL_TEXTURE_UNIT_COUNT ; i++) {
-            if (!c->rasterizer.state.texture[i].enable) 
+            if (!c->rasterizer.state.texture[i].enable)
                 continue;
             int32_t itt[8];
             itt[1] = itt[2] = itt[4] = itt[5] = 0;
@@ -501,7 +501,7 @@ void primitive_point(ogles_context_t* c, vertex_t* v)
             c->rasterizer.procs.texCoordGradScale8xv(c, i, itt);
         }
     }
-    
+
     if (enables & GGL_ENABLE_DEPTH_TEST) {
         int32_t itz[3];
         itz[0] = clampZ(v->window.z) * 0x00010001;
@@ -548,7 +548,7 @@ void primitive_line(ogles_context_t* c, vertex_t* v0, vertex_t* v1)
     const uint32_t enables = c->rasterizer.state.enables;
     const uint32_t mask =   GGL_ENABLE_TMUS |
                             GGL_ENABLE_SMOOTH |
-                            GGL_ENABLE_W | 
+                            GGL_ENABLE_W |
                             GGL_ENABLE_FOG |
                             GGL_ENABLE_DEPTH_TEST;
 
@@ -618,7 +618,7 @@ void triangle(ogles_context_t* c,
     const uint32_t enables = c->rasterizer.state.enables;
     const uint32_t mask =   GGL_ENABLE_TMUS |
                             GGL_ENABLE_SMOOTH |
-                            GGL_ENABLE_W | 
+                            GGL_ENABLE_W |
                             GGL_ENABLE_FOG |
                             GGL_ENABLE_DEPTH_TEST;
 
@@ -668,19 +668,19 @@ void lerp_triangle(ogles_context_t* c,
                 int64_t itz64[3];
                 lerp.iterators0032(itz64, v0z, v1z, v2z);
                 int64_t maxDepthSlope = max(itz64[1], itz64[2]);
-                itz[0] = uint32_t(itz64[0]) 
+                itz[0] = uint32_t(itz64[0])
                         + uint32_t((maxDepthSlope*factor)>>16) + units;
                 itz[1] = uint32_t(itz64[1]);
                 itz[2] = uint32_t(itz64[2]);
             } else {
                 lerp.iterators0032(itz, v0z, v1z, v2z);
-                itz[0] += units; 
+                itz[0] += units;
             }
         } else {
             lerp.iterators0032(itz, v0z, v1z, v2z);
         }
         c->rasterizer.procs.zGrad3xv(c, itz);
-    }    
+    }
 
     if (ggl_unlikely(enables & GGL_ENABLE_FOG)) {
         GLfixed itf[3];
@@ -719,7 +719,7 @@ void lerp_texcoords(ogles_context_t* c,
     int32_t itt[8] __attribute__((aligned(16)));
     for (int i=0 ; i<GGL_TEXTURE_UNIT_COUNT ; i++) {
         const texture_t& tmu = c->rasterizer.state.texture[i];
-        if (!tmu.enable) 
+        if (!tmu.enable)
             continue;
 
         // compute the jacobians using block floating-point
@@ -769,14 +769,14 @@ void lerp_texcoords_w(ogles_context_t* c,
     int32_t w2 = v2->window.w;
     int wscale = 32 - gglClz(w0|w1|w2);
 
-    // compute the jacobian using block floating-point    
+    // compute the jacobian using block floating-point
     int sc = lerp.iteratorsScale(itw, w0, w1, w2);
     sc +=  wscale - 16;
     c->rasterizer.procs.wGrad3xv(c, itw);
 
     for (int i=0 ; i<GGL_TEXTURE_UNIT_COUNT ; i++) {
         const texture_t& tmu = c->rasterizer.state.texture[i];
-        if (!tmu.enable) 
+        if (!tmu.enable)
             continue;
 
         // compute the jacobians using block floating-point
@@ -838,14 +838,14 @@ static inline
 GLfixed frustumPlaneDist(int plane, const vec4_t& s)
 {
     const GLfixed d = s.v[ plane >> 1 ];
-    return  ((plane & 1) ? (s.w - d) : (s.w + d)); 
+    return  ((plane & 1) ? (s.w - d) : (s.w + d));
 }
 
 static inline
 int32_t clipDivide(GLfixed a, GLfixed b) {
     // returns a 4.28 fixed-point
     return gglMulDivi(1LU<<28, a, b);
-} 
+}
 
 void clip_triangle(ogles_context_t* c,
         vertex_t* v0, vertex_t* v1, vertex_t* v2)
@@ -856,7 +856,7 @@ void clip_triangle(ogles_context_t* c,
     const int MAX_CLIPPING_PLANES = 6 + OGLES_MAX_CLIP_PLANES;
     const int MAX_VERTICES = 3;
 
-    // Temporary buffer to hold the new vertices. Each plane can add up to 
+    // Temporary buffer to hold the new vertices. Each plane can add up to
     // two new vertices (because the polygon is convex).
     // We need one extra element, to handle an overflow case when
     // the polygon degenerates into something non convex.
@@ -866,13 +866,13 @@ void clip_triangle(ogles_context_t* c,
     // original list of vertices (polygon to clip, in fact this
     // function works with an arbitrary polygon).
     vertex_t* in[3] = { v0, v1, v2 };
-    
+
     // output lists (we need 2, which we use back and forth)
     // (maximum outpout list's size is MAX_CLIPPING_PLANES + MAX_VERTICES)
     // 2 more elements for overflow when non convex polygons.
     vertex_t* out[2][MAX_CLIPPING_PLANES + MAX_VERTICES + 2];
     unsigned int outi = 0;
-    
+
     // current input list
     vertex_t** ivl = in;
 
@@ -884,13 +884,13 @@ void clip_triangle(ogles_context_t* c,
     // clipping, except for the computation of the distance (vertex, plane)
     // and the fact that we need to compute the eye-coordinates of each
     // new vertex we create.
-    
+
     if (ggl_unlikely(all_cc & vertex_t::USER_CLIP_ALL))
     {
         unsigned int plane = 0;
         uint32_t cc = (all_cc & vertex_t::USER_CLIP_ALL) >> 8;
         do {
-            if (cc & 1) {        
+            if (cc & 1) {
                 // pointers to our output list (head and current)
                 vertex_t** const ovl = &out[outi][0];
                 vertex_t** output = ovl;
@@ -901,7 +901,7 @@ void clip_triangle(ogles_context_t* c,
                 const vec4_t& equation = c->clipPlanes.plane[plane].equation;
                 GLfixed sd = dot4(equation.v, s->eye.v);
                 // clip each vertex against this plane...
-                for (unsigned int i=0 ; i<ic ; i++) {            
+                for (unsigned int i=0 ; i<ic ; i++) {
                     vertex_t* p = ivl[i];
                     const GLfixed pd = dot4(equation.v, p->eye.v);
                     if (sd >= 0) {
@@ -956,7 +956,7 @@ void clip_triangle(ogles_context_t* c,
         unsigned int plane = 0;
         uint32_t cc = all_cc & vertex_t::FRUSTUM_CLIP_ALL;
         do {
-            if (cc & 1) {        
+            if (cc & 1) {
                 // pointers to our output list (head and current)
                 vertex_t** const ovl = &out[outi][0];
                 vertex_t** output = ovl;
@@ -966,7 +966,7 @@ void clip_triangle(ogles_context_t* c,
                 vertex_t* s = ivl[ic-1];
                 GLfixed sd = frustumPlaneDist(plane, s->clip);
                 // clip each vertex against this plane...
-                for (unsigned int i=0 ; i<ic ; i++) {            
+                for (unsigned int i=0 ; i<ic ; i++) {
                     vertex_t* p = ivl[i];
                     const GLfixed pd = frustumPlaneDist(plane, p->clip);
                     if (sd >= 0) {
@@ -1014,7 +1014,7 @@ void clip_triangle(ogles_context_t* c,
             plane++;
         } while (cc);
     }
-    
+
     // finally we can render our triangles...
     p0 = ivl[0];
     p1 = ivl[1];

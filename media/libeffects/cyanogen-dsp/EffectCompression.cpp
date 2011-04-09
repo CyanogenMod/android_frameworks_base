@@ -30,52 +30,52 @@ EffectCompression::EffectCompression()
     : mCompressionRatio(2.0)
 {
     for (int i = 0; i < 2; i ++) {
-	mCurrentLevel[i] = 0;
-	mUserVolumes[i] = 1 << 24;
+        mCurrentLevel[i] = 0;
+        mUserVolumes[i] = 1 << 24;
     }
 }
 
 int32_t EffectCompression::command(uint32_t cmdCode, uint32_t cmdSize, void* pCmdData, uint32_t* replySize, void* pReplyData)
 {
     if (cmdCode == EFFECT_CMD_CONFIGURE) {
-	int32_t *replyData = (int32_t *) pReplyData;
-	int32_t ret = Effect::configure(pCmdData);
-	if (ret != 0) {
-	    *replyData = ret;
-	    return 0;
-	}
+        int32_t *replyData = (int32_t *) pReplyData;
+        int32_t ret = Effect::configure(pCmdData);
+        if (ret != 0) {
+            *replyData = ret;
+            return 0;
+        }
 
-	mWeighter.setBandPass(1700, mSamplingRate, sqrtf(2)/2);
+        mWeighter.setBandPass(1700, mSamplingRate, sqrtf(2)/2);
 
-	*replyData = 0;
-	return 0;
-    }	
+        *replyData = 0;
+        return 0;
+    }
 
     if (cmdCode == EFFECT_CMD_SET_VOLUME) {
-	LOGI("Setting volumes");
-	int32_t ret = Effect::configure(pCmdData);
-	if (ret != 0) {
-	    return ret;
-	}
-    
-	if (pReplyData != NULL) {
-	    int32_t *userVols = (int *) pCmdData;
-	    for (uint32_t i = 0; i < cmdSize / 4; i ++) {
-		 mUserVolumes[i] = userVols[i];
-	    }
+        LOGI("Setting volumes");
+        int32_t ret = Effect::configure(pCmdData);
+        if (ret != 0) {
+            return ret;
+        }
 
-	    int32_t *myVols = (int *) pReplyData;
-	    for (uint32_t i = 0; i < *replySize / 4; i ++) {
-		myVols[i] = 1 << 24; /* Unity gain */
-	    }
+        if (pReplyData != NULL) {
+            int32_t *userVols = (int *) pCmdData;
+            for (uint32_t i = 0; i < cmdSize / 4; i ++) {
+                 mUserVolumes[i] = userVols[i];
+            }
+
+            int32_t *myVols = (int *) pReplyData;
+            for (uint32_t i = 0; i < *replySize / 4; i ++) {
+                myVols[i] = 1 << 24; /* Unity gain */
+            }
         } else {
-	    /* We don't control volume. */
-	    for (int i = 0; i < 2; i ++) {
-		mUserVolumes[i] = 1 << 24;
-	    }
-	}
+            /* We don't control volume. */
+            for (int i = 0; i < 2; i ++) {
+                mUserVolumes[i] = 1 << 24;
+            }
+        }
 
-	return 0;
+        return 0;
     }
 
     return Effect::command(cmdCode, cmdSize, pCmdData, replySize, pReplyData);
@@ -87,10 +87,10 @@ uint64_t EffectCompression::estimateOneChannelLevel(audio_buffer_t *in, int32_t 
     mWeighter.reset();
     uint64_t power = 0;
     for (uint32_t i = 0; i < in->frameCount; i ++) {
-	int32_t tmp = read(in, offset);
-	offset += interleave;
+        int32_t tmp = read(in, offset);
+        offset += interleave;
         int64_t out = mWeighter.process(tmp);
-	/* 2^24 * 2^24 = 48 */
+        /* 2^24 * 2^24 = 48 */
         power += out * out;
     }
 
@@ -122,7 +122,7 @@ int32_t EffectCompression::process_effect(audio_buffer_t *in, audio_buffer_t *ou
 
     /* turn back to multiplier */
     float correctionDb = desiredLevelDb - signalPowerDb;
-    
+
     /* Reduce extreme boost by a smooth ramp.
      * New range -50 .. 0 dB */
     correctionDb -= powf(correctionDb/100, 2.0f) * (100.0f / 2.0f);
@@ -132,36 +132,36 @@ int32_t EffectCompression::process_effect(audio_buffer_t *in, audio_buffer_t *ou
 
     /* Now we have correction factor and user-desired sound level. */
     for (uint32_t i = 0; i < mChannels; i ++) {
-	/* channel map hack: we support only stereo,
-	 * so we don't have to deal with full complexity for now.
-	 * 8.24 */
-	int32_t desiredLevel = mUserVolumes[i] * correctionFactor >> 24;
+        /* channel map hack: we support only stereo,
+         * so we don't have to deal with full complexity for now.
+         * 8.24 */
+        int32_t desiredLevel = mUserVolumes[i] * correctionFactor >> 24;
 
-	int32_t volAdj = mCurrentLevel[i] - desiredLevel;
-	
-	/* I want volume adjustments to occur in about 0.1 seconds. 
-	 * However, if the input buffer would happen to be longer than
-	 * this, I'll just make sure that I am done with the adjustment
-	 * by the end of it. */
-	int adjLen = mSamplingRate / 10;
-	/* Note: this adjustment should probably be piecewise linear
-	 * approximation of an exponential to keep perceptibly linear
-	 * correction rate. */
-	volAdj /= max(adjLen, in->frameCount);
+        int32_t volAdj = mCurrentLevel[i] - desiredLevel;
 
-	/* Additionally, I want volume to increase only very slowly.
-	 * This biases us against pumping effects and also tends to spare
-	 * our ears when some very loud sound begins suddenly. */
-	if (volAdj > 0) {
-	    volAdj /= 8;
-	}
+        /* I want volume adjustments to occur in about 0.1 seconds.
+         * However, if the input buffer would happen to be longer than
+         * this, I'll just make sure that I am done with the adjustment
+         * by the end of it. */
+        int adjLen = mSamplingRate / 10;
+        /* Note: this adjustment should probably be piecewise linear
+         * approximation of an exponential to keep perceptibly linear
+         * correction rate. */
+        volAdj /= max(adjLen, in->frameCount);
 
-	for (uint32_t j = 0; j < in->frameCount; j ++) {
-	     int32_t value = read(in, j * mChannels + i);
-	     value = int64_t(value) * mCurrentLevel[i] >> 24;
-	     write(out, j * mChannels + i, value);
-	     mCurrentLevel[i] += volAdj;
-	}
+        /* Additionally, I want volume to increase only very slowly.
+         * This biases us against pumping effects and also tends to spare
+         * our ears when some very loud sound begins suddenly. */
+        if (volAdj > 0) {
+            volAdj /= 8;
+        }
+
+        for (uint32_t j = 0; j < in->frameCount; j ++) {
+             int32_t value = read(in, j * mChannels + i);
+             value = int64_t(value) * mCurrentLevel[i] >> 24;
+             write(out, j * mChannels + i, value);
+             mCurrentLevel[i] += volAdj;
+        }
     }
 
     return 0;

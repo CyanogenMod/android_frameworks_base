@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		psy_main.h
+        File:           psy_main.h
 
-	Content:	Psychoacoustic major function block
+        Content:        Psychoacoustic major function block
 
 *******************************************************************************/
 
@@ -36,7 +36,7 @@ typedef struct  {
   PSY_DATA                psyData[MAX_CHANNELS]; /* Word16 size: MAX_CHANNELS*1669*/
   TNS_DATA                tnsData[MAX_CHANNELS]; /* Word16 size: MAX_CHANNELS*235 */
   Word32*                 pScratchTns;
-  Word16				  sampleRateIdx;
+  Word16                                  sampleRateIdx;
 }PSY_KERNEL; /* Word16 size: 2587 / 4491 */
 
 
@@ -54,9 +54,9 @@ Word16 psyMainInit( PSY_KERNEL *hPsy,
                     Word16 bandwidth);
 
 
-Word16 psyMain(Word16                   nChannels,   /*!< total number of channels */              
+Word16 psyMain(Word16                   nChannels,   /*!< total number of channels */
                ELEMENT_INFO             *elemInfo,
-               Word16                   *timeSignal, /*!< interleaved time signal */ 
+               Word16                   *timeSignal, /*!< interleaved time signal */
                PSY_DATA                 psyData[MAX_CHANNELS],
                TNS_DATA                 tnsData[MAX_CHANNELS],
                PSY_CONFIGURATION_LONG*  psyConfLong,
@@ -64,6 +64,6 @@ Word16 psyMain(Word16                   nChannels,   /*!< total number of channe
                PSY_OUT_CHANNEL          psyOutChannel[MAX_CHANNELS],
                PSY_OUT_ELEMENT          *psyOutElement,
                Word32                   *pScratchTns,
-			   Word32					sampleRate);
+                           Word32                                       sampleRate);
 
 #endif /* _PSYMAIN_H */

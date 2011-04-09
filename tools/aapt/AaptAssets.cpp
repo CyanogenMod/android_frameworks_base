@@ -870,32 +870,32 @@ bool AaptGroupEntry::getDensityName(const char* name,
         if (out) out->density = ResTable_config::DENSITY_DEFAULT;
         return true;
     }
-    
+
     if (strcmp(name, "nodpi") == 0) {
         if (out) out->density = ResTable_config::DENSITY_NONE;
         return true;
     }
-    
+
     if (strcmp(name, "ldpi") == 0) {
         if (out) out->density = ResTable_config::DENSITY_LOW;
         return true;
     }
-    
+
     if (strcmp(name, "mdpi") == 0) {
         if (out) out->density = ResTable_config::DENSITY_MEDIUM;
         return true;
     }
-    
+
     if (strcmp(name, "hdpi") == 0) {
         if (out) out->density = ResTable_config::DENSITY_HIGH;
         return true;
     }
-    
+
     if (strcmp(name, "xhdpi") == 0) {
         if (out) out->density = ResTable_config::DENSITY_MEDIUM*2;
         return true;
     }
-    
+
     char* c = (char*)name;
     while (*c >= '0' && *c <= '9') {
         c++;
@@ -1146,7 +1146,7 @@ ResTable_config AaptGroupEntry::toParams() const
     getNavigationName(navigation.string(), &params);
     getScreenSizeName(screenSize.string(), &params);
     getVersionName(version.string(), &params);
-    
+
     // Fix up version number based on specified parameters.
     int minSdk = 0;
     if ((params.uiMode&ResTable_config::MASK_UI_MODE_TYPE)
@@ -1161,11 +1161,11 @@ ResTable_config AaptGroupEntry::toParams() const
             || params.density != ResTable_config::DENSITY_DEFAULT) {
         minSdk = SDK_DONUT;
     }
-    
+
     if (minSdk > params.sdkVersion) {
         params.sdkVersion = minSdk;
     }
-    
+
     return params;
 }
 
@@ -1264,7 +1264,7 @@ status_t AaptGroup::addFile(const sp<AaptFile>& file)
 
 void AaptGroup::removeFile(size_t index)
 {
-	mFiles.removeItemsAt(index);
+        mFiles.removeItemsAt(index);
 }
 
 void AaptGroup::print() const
@@ -1349,34 +1349,34 @@ void AaptDir::removeDir(const String8& name)
 
 status_t AaptDir::renameFile(const sp<AaptFile>& file, const String8& newName)
 {
-	sp<AaptGroup> origGroup;
+        sp<AaptGroup> origGroup;
 
-	// Find and remove the given file with shear, brute force!
-	const size_t NG = mFiles.size();
-	size_t i;
-	for (i=0; origGroup == NULL && i<NG; i++) {
-		sp<AaptGroup> g = mFiles.valueAt(i);
-		const size_t NF = g->getFiles().size();
-		for (size_t j=0; j<NF; j++) {
-			if (g->getFiles().valueAt(j) == file) {
-				origGroup = g;
-				g->removeFile(j);
-				if (NF == 1) {
-					mFiles.removeItemsAt(i);
-				}
-				break;
-			}
-		}
-	}
+        // Find and remove the given file with shear, brute force!
+        const size_t NG = mFiles.size();
+        size_t i;
+        for (i=0; origGroup == NULL && i<NG; i++) {
+                sp<AaptGroup> g = mFiles.valueAt(i);
+                const size_t NF = g->getFiles().size();
+                for (size_t j=0; j<NF; j++) {
+                        if (g->getFiles().valueAt(j) == file) {
+                                origGroup = g;
+                                g->removeFile(j);
+                                if (NF == 1) {
+                                        mFiles.removeItemsAt(i);
+                                }
+                                break;
+                        }
+                }
+        }
 
-	//printf("Renaming %s to %s\n", file->getPath().getPathName(), newName.string());
+        //printf("Renaming %s to %s\n", file->getPath().getPathName(), newName.string());
 
-	// Place the file under its new name.
-	if (origGroup != NULL) {
-		return addLeafFile(newName, file);
-	}
+        // Place the file under its new name.
+        if (origGroup != NULL) {
+                return addLeafFile(newName, file);
+        }
 
-	return NO_ERROR;
+        return NO_ERROR;
 }
 
 status_t AaptDir::addLeafFile(const String8& leafName, const sp<AaptFile>& file)
@@ -1725,7 +1725,7 @@ ssize_t AaptAssets::slurpFromArgs(Bundle* bundle)
                 return UNKNOWN_ERROR;
             }
         }
-        
+
     }
     /*
      * Now do any additional raw files.

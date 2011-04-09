@@ -78,7 +78,7 @@ status_t SineSource::read(
     double x = mPhase * k;
     for (size_t i = 0; i < numFramesPerBuffer; ++i) {
         int16_t amplitude = (int16_t)(32767.0 * sin(x));
-        
+
         *ptr++ = amplitude;
         if (mNumChannels == 2) {
             *ptr++ = amplitude;

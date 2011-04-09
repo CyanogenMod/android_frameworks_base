@@ -16,7 +16,7 @@ enum {
 struct StringResource
 {
     StringResource();
-    StringResource(const SourcePos& pos, const string& file, const Configuration& config, 
+    StringResource(const SourcePos& pos, const string& file, const Configuration& config,
                     const string& id, int index, XMLNode* value,
                     int version, const string& versionString, const string& comment = "");
     StringResource(const StringResource& that);

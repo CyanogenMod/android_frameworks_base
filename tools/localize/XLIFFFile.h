@@ -82,7 +82,7 @@ private:
 
     XLIFFFile();
     StringResource* find_string_res(TransUnit& g, const StringResource& str);
-    
+
     Configuration m_sourceConfig;
     Configuration m_targetConfig;
 

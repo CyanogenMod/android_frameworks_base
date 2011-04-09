@@ -29,7 +29,7 @@ namespace android {
 
 class IOverlay : public IInterface
 {
-public: 
+public:
     DECLARE_META_INTERFACE(Overlay);
 
     virtual void destroy() = 0; // one-way

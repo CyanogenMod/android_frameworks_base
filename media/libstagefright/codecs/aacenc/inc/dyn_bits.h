@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		dyn_bits.h
+        File:           dyn_bits.h
 
-	Content:	Noiseless coder module structure and functions
+        Content:        Noiseless coder module structure and functions
 
 *******************************************************************************/
 

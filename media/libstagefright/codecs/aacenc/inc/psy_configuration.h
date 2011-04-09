@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		psy_configuration.h
+        File:           psy_configuration.h
 
-	Content:	Psychoaccoustic configuration structure and functions
+        Content:        Psychoaccoustic configuration structure and functions
 
 *******************************************************************************/
 

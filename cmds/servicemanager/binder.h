@@ -49,7 +49,7 @@ struct binder_io
 struct binder_death {
     void (*func)(struct binder_state *bs, void *ptr);
     void *ptr;
-};    
+};
 
 /* the one magic object */
 #define BINDER_SERVICE_MANAGER ((void*) 0)

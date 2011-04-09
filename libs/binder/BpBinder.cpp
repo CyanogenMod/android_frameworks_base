@@ -119,11 +119,11 @@ const String16& BpBinder::getInterfaceDescriptor() const
                 mDescriptorCache = res;
         }
     }
-    
+
     // we're returning a reference to a non-static object here. Usually this
-    // is not something smart to do, however, with binder objects it is 
+    // is not something smart to do, however, with binder objects it is
     // (usually) safe because they are reference-counted.
-    
+
     return mDescriptorCache;
 }
 

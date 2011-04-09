@@ -11,7 +11,7 @@ public:
         SkASSERT(layer);
         SkASSERT(paint);
         layer->addLayer(*paint, SkFloatToScalar(dx), SkFloatToScalar(dy));
-    } 
+    }
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////

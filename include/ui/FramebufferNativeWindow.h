@@ -41,26 +41,26 @@ class NativeBuffer;
 
 // ---------------------------------------------------------------------------
 
-class FramebufferNativeWindow 
+class FramebufferNativeWindow
     : public EGLNativeBase<
-        ANativeWindow, 
-        FramebufferNativeWindow, 
+        ANativeWindow,
+        FramebufferNativeWindow,
         LightRefBase<FramebufferNativeWindow> >
 {
 public:
-    FramebufferNativeWindow(); 
+    FramebufferNativeWindow();
 
-    framebuffer_device_t const * getDevice() const { return fbDev; } 
+    framebuffer_device_t const * getDevice() const { return fbDev; }
 
     bool isUpdateOnDemand() const { return mUpdateOnDemand; }
     status_t setUpdateRectangle(const Rect& updateRect);
     status_t compositionComplete();
-    
+
     // for debugging only
     int getCurrentBufferIndex() const;
 
 private:
-    friend class LightRefBase<FramebufferNativeWindow>;    
+    friend class LightRefBase<FramebufferNativeWindow>;
     ~FramebufferNativeWindow(); // this class cannot be overloaded
     static int setSwapInterval(ANativeWindow* window, int interval);
     static int dequeueBuffer(ANativeWindow* window, android_native_buffer_t** buffer);
@@ -68,13 +68,13 @@ private:
     static int queueBuffer(ANativeWindow* window, android_native_buffer_t* buffer);
     static int query(ANativeWindow* window, int what, int* value);
     static int perform(ANativeWindow* window, int operation, ...);
-    
+
     framebuffer_device_t* fbDev;
     alloc_device_t* grDev;
 
     sp<NativeBuffer> buffers[2];
     sp<NativeBuffer> front;
-    
+
     mutable Mutex mutex;
     Condition mCondition;
     int32_t mNumBuffers;
@@ -83,7 +83,7 @@ private:
     int32_t mCurrentBufferIndex;
     bool mUpdateOnDemand;
 };
-    
+
 // ---------------------------------------------------------------------------
 }; // namespace android
 // ---------------------------------------------------------------------------

@@ -103,7 +103,7 @@ static JNINativeMethod gMethods[] = {
             (void*)nativeClassInit },
     {   "getDisplayCount", "()I",
             (void*)android_view_Display_getDisplayCount },
-	{   "init", "(I)V",
+        {   "init", "(I)V",
             (void*)android_view_Display_init },
     {   "getWidth", "()I",
             (void*)android_view_Display_getWidth },

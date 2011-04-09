@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		oper_32b.c
+        File:           oper_32b.c
 
-	Content:	  This file contains operations in double precision.
+        Content:          This file contains operations in double precision.
  
 *******************************************************************************/
 
@@ -190,10 +190,10 @@ Word32 Div_32 (Word32 L_num, Word32 denom)
 
     L_32 = L_sub ((Word32) 0x7fffffffL, L_32);
 
-	L_32 = L_mpy_ls (L_32, approx);
+        L_32 = L_mpy_ls (L_32, approx);
     /* L_num * (1/L_denom) */
 
-	L_32 = MULHIGH(L_32, L_num);
+        L_32 = MULHIGH(L_32, L_num);
     L_32 = L_shl (L_32, 3);
 
     return (L_32);
@@ -244,26 +244,26 @@ Word32 rsqrt(Word32 value,     /*!< Operand to square root (0.0 ... 1) */
              Word32 accuracy)  /*!< Number of valid bits that will be calculated */
 {
     Word32 root = 0;
-	Word32 scale;
+        Word32 scale;
 
-	if(value < 0)
-		return 0;
+        if(value < 0)
+                return 0;
 
-	scale = norm_l(value);
-	if(scale & 1) scale--;
+        scale = norm_l(value);
+        if(scale & 1) scale--;
 
-	value <<= scale;
+        value <<= scale;
 
-	step( 0); step( 2); step( 4); step( 6);
+        step( 0); step( 2); step( 4); step( 6);
     step( 8); step(10); step(12); step(14);
     step(16); step(18); step(20); step(22);
     step(24); step(26); step(28); step(30);
 
     scale >>= 1;
-	if (root < value)
+        if (root < value)
         ++root;
 
-	root >>= scale;
+        root >>= scale;
     return root* 46334;
 }
 

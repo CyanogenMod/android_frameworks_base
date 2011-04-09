@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		adj_thr_data.h
+        File:           adj_thr_data.h
 
-	Content:	Threshold compensation parameter 
+        Content:        Threshold compensation parameter 
 
 *******************************************************************************/
 

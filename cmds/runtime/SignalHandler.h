@@ -27,11 +27,11 @@ public:
      * this, a waitpid() will be done when the child exits to remove
      * it from the zombie state.  You can also optionally specify a
      * handler to be called when the child exits.
-     * 
+     *
      * If there is already a handler for this child process, it is
      * replaced by this new handler.  In this case the old handler's
      * function is not called.
-     * 
+     *
      * @param childPid Process ID of child to watch.
      * @param childTag User-defined tag for this child.  Must be
      *                 greater than zero.
@@ -40,7 +40,7 @@ public:
      *                separate signal handling thread, or
      *                immediately if the child has already exited.
      * @param userData Propageted as-is to handler.
-     * 
+     *
      * @return status_t NO_ERROR if all is well.
      */
     static status_t             setChildHandler(pid_t childPid,
@@ -52,7 +52,7 @@ public:
      * Kill all of the child processes for which we have a waiting
      * handler, whose tag is the given value.  If tag is 0, all
      * children are killed.
-     * 
+     *
      * @param tag
      */
     static void                 killAllChildren(int tag = 0);

@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		config.h
+        File:           config.h
 
-	Content:	aac encoder parameter
+        Content:        aac encoder parameter
 
 *******************************************************************************/
 
@@ -29,8 +29,8 @@
 #define AACENC_TRANS_FAC    8      /*! encoder short long ratio */
 
 
-#define MAXBITS_COEF		6144
-#define MINBITS_COEF		744
+#define MAXBITS_COEF            6144
+#define MINBITS_COEF            744
 
 
 #endif

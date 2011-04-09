@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		line_pe.h
+        File:           line_pe.h
 
-	Content:	Perceptual entropie module structure and functions
+        Content:        Perceptual entropie module structure and functions
 
 *******************************************************************************/
 
@@ -24,8 +24,8 @@
 #define __LINE_PE_H
 
 
-#include "psy_const.h" 
-#include "interface.h" 
+#include "psy_const.h"
+#include "interface.h"
 
 
 typedef struct {
@@ -72,4 +72,4 @@ void calcSfbPe(PE_DATA *peData,
 
 
 
-#endif 
+#endif

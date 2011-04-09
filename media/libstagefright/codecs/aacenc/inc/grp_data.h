@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		grp_data.h
+        File:           grp_data.h
 
-	Content:	Short block grouping function
+        Content:        Short block grouping function
 
 *******************************************************************************/
 

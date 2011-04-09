@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		bitenc.h
+        File:           bitenc.h
 
-	Content:	Bitstream encoder structure and functions
+        Content:        Bitstream encoder structure and functions
 
 *******************************************************************************/
 
@@ -26,7 +26,7 @@
 #include "qc_data.h"
 #include "tns.h"
 #include "channel_map.h"
-#include "interface.h"  
+#include "interface.h"
 
 struct BITSTREAMENCODER_INIT
 {
@@ -44,7 +44,7 @@ Word16 WriteBitstream (HANDLE_BIT_BUF hBitstream,
                        PSY_OUT *psyOut,
                        Word16 *globUsedBits,
                        const UWord8 *ancBytes,
-					   Word16 samplerate
+                                           Word16 samplerate
                        );
 
 #endif /* _BITENC_H */

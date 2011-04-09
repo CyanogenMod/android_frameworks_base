@@ -43,8 +43,8 @@ using namespace android;
     long uncompressedLen, long compressedLen)
 {
     bool result = false;
-	const unsigned long kReadBufSize = 32768;
-	unsigned char* readBuf = NULL;
+        const unsigned long kReadBufSize = 32768;
+        unsigned char* readBuf = NULL;
     z_stream zstream;
     int zerr;
     unsigned long compRemaining;
@@ -52,15 +52,15 @@ using namespace android;
     assert(uncompressedLen >= 0);
     assert(compressedLen >= 0);
 
-	readBuf = new unsigned char[kReadBufSize];
-	if (readBuf == NULL)
+        readBuf = new unsigned char[kReadBufSize];
+        if (readBuf == NULL)
         goto bail;
     compRemaining = compressedLen;
 
     /*
      * Initialize the zlib stream.
      */
-	memset(&zstream, 0, sizeof(zstream));
+        memset(&zstream, 0, sizeof(zstream));
     zstream.zalloc = Z_NULL;
     zstream.zfree = Z_NULL;
     zstream.opaque = Z_NULL;
@@ -70,10 +70,10 @@ using namespace android;
     zstream.avail_out = uncompressedLen;
     zstream.data_type = Z_UNKNOWN;
 
-	/*
-	 * Use the undocumented "negative window bits" feature to tell zlib
-	 * that there's no zlib header waiting for it.
-	 */
+        /*
+         * Use the undocumented "negative window bits" feature to tell zlib
+         * that there's no zlib header waiting for it.
+         */
     zerr = inflateInit2(&zstream, -MAX_WBITS);
     if (zerr != Z_OK) {
         if (zerr == Z_VERSION_ERROR) {
@@ -118,7 +118,7 @@ using namespace android;
             goto z_bail;
         }
 
-		/* output buffer holds all, so no need to write the output */
+                /* output buffer holds all, so no need to write the output */
     } while (zerr == Z_OK);
 
     assert(zerr == Z_STREAM_END);       /* other errors should've been caught */
@@ -136,7 +136,7 @@ z_bail:
     inflateEnd(&zstream);        /* free up any allocated structures */
 
 bail:
-	delete[] readBuf;
+        delete[] readBuf;
     return result;
 }
 
@@ -155,8 +155,8 @@ bail:
     long uncompressedLen, long compressedLen)
 {
     bool result = false;
-	const unsigned long kReadBufSize = 32768;
-	unsigned char* readBuf = NULL;
+        const unsigned long kReadBufSize = 32768;
+        unsigned char* readBuf = NULL;
     z_stream zstream;
     int zerr;
     unsigned long compRemaining;
@@ -164,15 +164,15 @@ bail:
     assert(uncompressedLen >= 0);
     assert(compressedLen >= 0);
 
-	readBuf = new unsigned char[kReadBufSize];
-	if (readBuf == NULL)
+        readBuf = new unsigned char[kReadBufSize];
+        if (readBuf == NULL)
         goto bail;
     compRemaining = compressedLen;
 
     /*
      * Initialize the zlib stream.
      */
-	memset(&zstream, 0, sizeof(zstream));
+        memset(&zstream, 0, sizeof(zstream));
     zstream.zalloc = Z_NULL;
     zstream.zfree = Z_NULL;
     zstream.opaque = Z_NULL;
@@ -182,10 +182,10 @@ bail:
     zstream.avail_out = uncompressedLen;
     zstream.data_type = Z_UNKNOWN;
 
-	/*
-	 * Use the undocumented "negative window bits" feature to tell zlib
-	 * that there's no zlib header waiting for it.
-	 */
+        /*
+         * Use the undocumented "negative window bits" feature to tell zlib
+         * that there's no zlib header waiting for it.
+         */
     zerr = inflateInit2(&zstream, -MAX_WBITS);
     if (zerr != Z_OK) {
         if (zerr == Z_VERSION_ERROR) {
@@ -230,7 +230,7 @@ bail:
             goto z_bail;
         }
 
-		/* output buffer holds all, so no need to write the output */
+                /* output buffer holds all, so no need to write the output */
     } while (zerr == Z_OK);
 
     assert(zerr == Z_STREAM_END);       /* other errors should've been caught */
@@ -248,7 +248,7 @@ z_bail:
     inflateEnd(&zstream);        /* free up any allocated structures */
 
 bail:
-	delete[] readBuf;
+        delete[] readBuf;
     return result;
 }
 

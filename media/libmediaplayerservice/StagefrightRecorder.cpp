@@ -631,7 +631,7 @@ status_t StagefrightRecorder::setListener(const sp<IMediaRecorderClient> &listen
 status_t StagefrightRecorder::setCameraParameters(const String8 &params) {
 
     CameraParameters cp(params);
-   
+
     int64_t token = IPCThreadState::self()->clearCallingIdentity();
     mCamera->setParameters( cp.flatten( ) );
     IPCThreadState::self()->restoreCallingIdentity(token);

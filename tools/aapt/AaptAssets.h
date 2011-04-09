@@ -86,7 +86,7 @@ public:
     bool initFromDirName(const char* dir, String8* resType);
 
     static status_t parseNamePart(const String8& part, int* axis, uint32_t* value);
-    
+
     static bool getMccName(const char* name, ResTable_config* out = NULL);
     static bool getMncName(const char* name, ResTable_config* out = NULL);
     static bool getLocaleName(const char* name, ResTable_config* out = NULL);
@@ -323,23 +323,23 @@ public:
         stringVal = o.stringVal;
         return *this;
     }
-    
+
     const String8 name;
-    
+
     SourcePos sourcePos;
     bool isPublic;
-    
+
     String16 comment;
     String16 typeComment;
-    
+
     enum {
         TYPE_UNKNOWN = 0,
         TYPE_INT32,
         TYPE_STRING
     };
-    
+
     int typeCode;
-    
+
     // Value.  May be one of these.
     int32_t int32Val;
     String8 stringVal;
@@ -410,12 +410,12 @@ public:
             sym.typeComment.append(comment);
         }
     }
-    
+
     sp<AaptSymbols> addNestedSymbol(const String8& name, const SourcePos& pos) {
         if (!check_valid_symbol_name(name, pos, "nested symbol")) {
             return NULL;
         }
-        
+
         sp<AaptSymbols> sym = mNestedSymbols.valueFor(name);
         if (sym == NULL) {
             sym = new AaptSymbols();
@@ -501,7 +501,7 @@ public:
                      const String8& resType);
 
     void addGroupEntry(const AaptGroupEntry& entry) { mGroupEntries.add(entry); }
-    
+
     ssize_t slurpFromArgs(Bundle* bundle);
 
     virtual ssize_t slurpFullTree(Bundle* bundle,
@@ -518,7 +518,7 @@ public:
 
     String8 getSymbolsPrivatePackage() const { return mSymbolsPrivatePackage; }
     void setSymbolsPrivatePackage(const String8& pkg) { mSymbolsPrivatePackage = pkg; }
-    
+
     status_t buildIncludedResources(Bundle* bundle);
     status_t addIncludedResources(const sp<AaptFile>& file);
     const ResTable& getIncludedResources() const;
@@ -530,9 +530,9 @@ public:
 
     inline sp<AaptAssets> getOverlay() { return mOverlay; }
     inline void setOverlay(sp<AaptAssets>& overlay) { mOverlay = overlay; }
-    
+
     inline KeyedVector<String8, sp<ResourceTypeSet> >* getResources() { return mRes; }
-    inline void 
+    inline void
         setResources(KeyedVector<String8, sp<ResourceTypeSet> >* res) { delete mRes; mRes = res; }
 
 private:

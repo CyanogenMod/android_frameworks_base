@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		psy_const.h
+        File:           psy_const.h
 
-	Content:	Global psychoacoustic constants structures
+        Content:        Global psychoacoustic constants structures
 
 *******************************************************************************/
 
@@ -67,14 +67,14 @@ enum
 #define MAX_GROUPED_SFB (MAX_NO_OF_GROUPS*MAX_SFB_SHORT > MAX_SFB_LONG ? \
                          MAX_NO_OF_GROUPS*MAX_SFB_SHORT : MAX_SFB_LONG)
 
-#define BLOCK_SWITCHING_OFFSET		   (1*1024+3*128+64+128)
+#define BLOCK_SWITCHING_OFFSET             (1*1024+3*128+64+128)
 #define BLOCK_SWITCHING_DATA_SIZE          FRAME_LEN_LONG
-										    
+
 #define TRANSFORM_OFFSET_LONG    0
 #define TRANSFORM_OFFSET_SHORT   448
 
 #define LOG_NORM_PCM          -15
 
-#define NUM_SAMPLE_RATES	12
+#define NUM_SAMPLE_RATES        12
 
 #endif /* _PSYCONST_H */

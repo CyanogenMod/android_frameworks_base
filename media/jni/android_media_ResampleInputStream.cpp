@@ -90,18 +90,18 @@ static void android_media_ResampleInputStream_fir21(JNIEnv *env, jclass clazz,
          jbyteArray jIn,  jint jInOffset,
          jbyteArray jOut, jint jOutOffset,
          jint jNpoints) {
-    
+
     // safety first!
     if (nFir21 + jNpoints * 2 > BUF_SIZE) {
         throwException(env, "java/lang/IllegalArgumentException",
                 "FIR+data too long %d", nFir21 + jNpoints);
         return;
     }
-    
+
     // get input data
     short in[BUF_SIZE];
     env->GetByteArrayRegion(jIn, jInOffset, (jNpoints * 2 + nFir21 - 1) * 2, (jbyte*)in);
-    
+
     // compute filter
     short out[BUF_SIZE];
     for (int i = 0; i < jNpoints; i++) {

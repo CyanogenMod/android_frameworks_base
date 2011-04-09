@@ -29,7 +29,7 @@ namespace android {
 
 /*****************************************************************************/
 
-struct sw_gralloc_handle_t : public native_handle 
+struct sw_gralloc_handle_t : public native_handle
 {
     // file-descriptors
     int     fd;
@@ -59,7 +59,7 @@ struct sw_gralloc_handle_t : public native_handle
         const sw_gralloc_handle_t* hnd = (const sw_gralloc_handle_t*)h;
         if (!h || h->version != sizeof(native_handle) ||
                 h->numInts != sNumInts || h->numFds != sNumFds ||
-                hnd->magic != sMagic) 
+                hnd->magic != sMagic)
         {
             return -EINVAL;
         }

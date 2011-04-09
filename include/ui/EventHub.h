@@ -198,9 +198,9 @@ public:
     status_t errorCheck() const;
 
     virtual uint32_t getDeviceClasses(int32_t deviceId) const;
-    
+
     virtual String8 getDeviceName(int32_t deviceId) const;
-    
+
     virtual status_t getAbsoluteAxisInfo(int32_t deviceId, int axis,
             RawAbsoluteAxisInfo* outAxisInfo) const;
 
@@ -222,7 +222,7 @@ public:
 
 protected:
     virtual ~EventHub();
-    
+
 private:
     bool openPlatformInput(void);
 
@@ -243,14 +243,14 @@ private:
         String8         keylayoutFilename;
         int             fd;
         device_t*       next;
-        
+
         device_t(int32_t _id, const char* _path, const char* name);
         ~device_t();
     };
 
     device_t* getDeviceLocked(int32_t deviceId) const;
     bool hasKeycodeLocked(device_t* device, int keycode) const;
-    
+
     int32_t getScanCodeStateLocked(device_t* device, int32_t scanCode) const;
     int32_t getKeyCodeStateLocked(device_t* device, int32_t keyCode) const;
     int32_t getSwitchStateLocked(device_t* device, int32_t sw) const;
@@ -259,20 +259,20 @@ private:
 
     // Protect all internal state.
     mutable Mutex   mLock;
-    
+
     bool            mHaveFirstKeyboard;
     int32_t         mFirstKeyboardId; // the API is that the built-in keyboard is id 0, so map it
-    
+
     struct device_ent {
         device_t* device;
         uint32_t seq;
     };
     device_ent      *mDevicesById;
     int             mNumDevicesById;
-    
+
     device_t        *mOpeningDevices;
     device_t        *mClosingDevices;
-    
+
     device_t        **mDevices;
     struct pollfd   *mFDs;
     int             mFDCount;

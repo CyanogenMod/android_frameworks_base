@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		channel_map.h
+        File:           channel_map.h
 
-	Content:	channel mapping functions
+        Content:        channel mapping functions
 
 *******************************************************************************/
 

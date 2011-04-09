@@ -20,7 +20,7 @@
 
 /* rate control variables */
 #define RC_MAX_QUANT 51
-#define RC_MIN_QUANT 0   //cap to 10 to prevent rate fluctuation    
+#define RC_MIN_QUANT 0   //cap to 10 to prevent rate fluctuation
 
 #define MAD_MIN 1 /* handle the case of devision by zero in RC */
 

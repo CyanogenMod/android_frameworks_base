@@ -36,7 +36,7 @@ class LayerDim : public LayerBaseClient
     static EGLImageKHR sImage;
     static int32_t sWidth;
     static int32_t sHeight;
-public:    
+public:
                 LayerDim(SurfaceFlinger* flinger, DisplayID display,
                         const sp<Client>& client);
         virtual ~LayerDim();

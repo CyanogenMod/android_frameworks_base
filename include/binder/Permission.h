@@ -47,10 +47,10 @@ public:
 
     // checks the current binder call's caller has access to this permission
     bool checkCalling() const;
-    
+
     // checks the specified pid/uid has access to this permission
     bool check(pid_t pid, uid_t uid) const;
-    
+
 protected:
     virtual bool doCheckPermission(pid_t pid, uid_t uid) const;
 

@@ -52,17 +52,17 @@ static inline uint16_t android_swap_short(uint16_t v)
 
 #if BYTE_ORDER == DEVICE_BYTE_ORDER
 
-#define	dtohl(x)	(x)
-#define	dtohs(x)	(x)
-#define	htodl(x)	(x)
-#define	htods(x)	(x)
+#define dtohl(x)        (x)
+#define dtohs(x)        (x)
+#define htodl(x)        (x)
+#define htods(x)        (x)
 
 #else
 
-#define	dtohl(x)	(android_swap_long(x))
-#define	dtohs(x)	(android_swap_short(x))
-#define	htodl(x)	(android_swap_long(x))
-#define	htods(x)	(android_swap_short(x))
+#define dtohl(x)        (android_swap_long(x))
+#define dtohs(x)        (android_swap_short(x))
+#define htodl(x)        (android_swap_long(x))
+#define htods(x)        (android_swap_short(x))
 
 #endif
 

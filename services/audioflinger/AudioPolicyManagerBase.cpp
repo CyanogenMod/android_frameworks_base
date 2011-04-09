@@ -1961,7 +1961,7 @@ status_t AudioPolicyManagerBase::checkAndSetVolume(int stream, int index, audio_
     // We actually change the volume if:
     // - the float value returned by computeVolume() changed
     // - the force flag is set
-    if (volume != mOutputs.valueFor(output)->mCurVolume[stream] || 
+    if (volume != mOutputs.valueFor(output)->mCurVolume[stream] ||
 #ifdef HAVE_FM_RADIO
             (stream == AudioSystem::FM) ||
 #endif

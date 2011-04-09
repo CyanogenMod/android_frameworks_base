@@ -60,7 +60,7 @@ static const struct special_dir SKIP_PATHS[] = {
 };
 
 /* This is just copied from the shell's built-in wipe command. */
-static int wipe (const char *path) 
+static int wipe (const char *path)
 {
     DIR *dir;
     struct dirent *de;
@@ -98,7 +98,7 @@ static int wipe (const char *path)
 
         strcpy(filenameOffset, de->d_name);
         bool noBackup = false;
-        
+
         /* See if this is a path we should skip. */
         for (i = 0; SKIP_PATHS[i].path; i++) {
             if (strcmp(SKIP_PATHS[i].path, nameBuffer) == 0) {
@@ -112,7 +112,7 @@ static int wipe (const char *path)
                 break;
             }
         }
-        
+
         if (!noBackup && SKIP_PATHS[i].path != NULL) {
             // This is a SPECIAL_NO_TOUCH directory.
             continue;
@@ -121,7 +121,7 @@ static int wipe (const char *path)
         ret = lstat (nameBuffer, &statBuffer);
 
         if (ret != 0) {
-            fprintf(stderr, "warning -- stat() error on '%s': %s\n", 
+            fprintf(stderr, "warning -- stat() error on '%s': %s\n",
                     nameBuffer, strerror(errno));
             continue;
         }
@@ -136,11 +136,11 @@ static int wipe (const char *path)
                 closedir(dir);
                 return 0;
             }
-            
+
             if (!noBackup) {
                 ret = rmdir(newpath);
                 if (ret != 0) {
-                    fprintf(stderr, "warning -- rmdir() error on '%s': %s\n", 
+                    fprintf(stderr, "warning -- rmdir() error on '%s': %s\n",
                         newpath, strerror(errno));
                 }
             }
@@ -154,14 +154,14 @@ static int wipe (const char *path)
             ret = unlink(nameBuffer);
 
             if (ret != 0) {
-                fprintf(stderr, "warning -- unlink() error on '%s': %s\n", 
+                fprintf(stderr, "warning -- unlink() error on '%s': %s\n",
                     nameBuffer, strerror(errno));
             }
         }
     }
 
     closedir(dir);
-    
+
     return 1;
 }
 
@@ -172,18 +172,18 @@ static int write_int32(FILE* fh, int32_t val)
         fprintf(stderr, "unable to write int32 (%d bytes): %s\n", res, strerror(errno));
         return 0;
     }
-    
+
     return 1;
 }
 
 static int write_int64(FILE* fh, int64_t val)
 {
-    int res = fwrite(&val, 1, sizeof(val), fh); 
+    int res = fwrite(&val, 1, sizeof(val), fh);
     if (res != sizeof(val)) {
         fprintf(stderr, "unable to write int64 (%d bytes): %s\n", res, strerror(errno));
         return 0;
     }
-    
+
     return 1;
 }
 
@@ -191,9 +191,9 @@ static int copy_file(FILE* dest, FILE* src, off_t size, const char* destName,
         const char* srcName)
 {
     errno = 0;
-    
+
     off_t origSize = size;
-    
+
     while (size > 0) {
         int amt = size > (off_t)sizeof(copyBuffer) ? sizeof(copyBuffer) : (int)size;
         int readLen = fread(copyBuffer, 1, amt, src);
@@ -207,7 +207,7 @@ static int copy_file(FILE* dest, FILE* src, off_t size, const char* destName,
             }
             return 0;
         }
-        int writeLen = fwrite(copyBuffer, 1, readLen, dest); 
+        int writeLen = fwrite(copyBuffer, 1, readLen, dest);
         if (writeLen != readLen) {
             if (destName != NULL) {
                 fprintf(stderr, "unable to write file (%d of %d bytes) '%s': '%s'\n",
@@ -236,14 +236,14 @@ static int write_header(FILE* fh, int type, const char* path, const struct stat*
         fprintf(stderr, "unable to write: %s\n", strerror(errno));
         return 0;
     }
-    
+
     if (!write_int32(fh, st->st_uid)) return 0;
     if (!write_int32(fh, st->st_gid)) return 0;
     if (!write_int32(fh, st->st_mode)) return 0;
     if (!write_int64(fh, ((int64_t)st->st_atime)*1000*1000*1000)) return 0;
     if (!write_int64(fh, ((int64_t)st->st_mtime)*1000*1000*1000)) return 0;
     if (!write_int64(fh, ((int64_t)st->st_ctime)*1000*1000*1000)) return 0;
-    
+
     return 1;
 }
 
@@ -255,7 +255,7 @@ static int backup_dir(FILE* fh, const char* srcPath)
     int srcLen = strlen(srcPath);
     int result = 1;
     int i;
-    
+
     dir = opendir(srcPath);
 
     if (dir == NULL) {
@@ -263,7 +263,7 @@ static int backup_dir(FILE* fh, const char* srcPath)
                     srcPath, strerror(errno));
         return 0;
     }
-    
+
     for (;;) {
         de = readdir(dir);
 
@@ -301,7 +301,7 @@ static int backup_dir(FILE* fh, const char* srcPath)
         int ret = lstat(fullPath, &statBuffer);
 
         if (ret != 0) {
-            fprintf(stderr, "stat() error on '%s': %s\n", 
+            fprintf(stderr, "stat() error on '%s': %s\n",
                     fullPath, strerror(errno));
             result = 0;
             goto done;
@@ -309,7 +309,7 @@ static int backup_dir(FILE* fh, const char* srcPath)
 
         if(S_ISDIR(statBuffer.st_mode)) {
             printf("Saving dir %s...\n", fullPath);
-            
+
             if (write_header(fh, TYPE_DIR, fullPath, &statBuffer) == 0) {
                 result = 0;
                 goto done;
@@ -320,18 +320,18 @@ static int backup_dir(FILE* fh, const char* srcPath)
             }
         } else if (S_ISREG(statBuffer.st_mode)) {
             printf("Saving file %s...\n", fullPath);
-            
+
             if (write_header(fh, TYPE_FILE, fullPath, &statBuffer) == 0) {
                 result = 0;
                 goto done;
             }
-            
+
             off_t size = statBuffer.st_size;
             if (!write_int64(fh, size)) {
                 result = 0;
                 goto done;
             }
-            
+
             FILE* src = fopen(fullPath, "r");
             if (src == NULL) {
                 fprintf(stderr, "unable to open source file '%s': %s\n",
@@ -339,7 +339,7 @@ static int backup_dir(FILE* fh, const char* srcPath)
                 result = 0;
                 goto done;
             }
-            
+
             int copyres = copy_file(fh, src, size, NULL, fullPath);
             fclose(src);
             if (!copyres) {
@@ -353,32 +353,32 @@ done:
     if (fullPath != NULL) {
         free(fullPath);
     }
-    
+
     closedir(dir);
-    
+
     return result;
 }
 
 static int backup_data(const char* destPath)
 {
     int res = -1;
-    
+
     FILE* fh = fopen(destPath, "w");
     if (fh == NULL) {
         fprintf(stderr, "unable to open destination '%s': %s\n",
                 destPath, strerror(errno));
         return -1;
     }
-    
+
     printf("Backing up /data to %s...\n", destPath);
 
     if (!write_int32(fh, FILE_VERSION)) goto done;
     if (!write_int32(fh, opt_backupAll)) goto done;
     if (!backup_dir(fh, "/data")) goto done;
     if (!write_int32(fh, 0)) goto done;
-    
+
     res = 0;
-    
+
 done:
     if (fflush(fh) != 0) {
         fprintf(stderr, "error flushing destination '%s': %s\n",
@@ -395,7 +395,7 @@ done:
     fclose(fh);
     sync();
 
-donedone:    
+donedone:
     return res;
 }
 
@@ -406,7 +406,7 @@ static int32_t read_int32(FILE* fh, int32_t defVal)
         fprintf(stderr, "unable to read: %s\n", strerror(errno));
         return defVal;
     }
-    
+
     return val;
 }
 
@@ -417,7 +417,7 @@ static int64_t read_int64(FILE* fh, int64_t defVal)
         fprintf(stderr, "unable to read: %s\n", strerror(errno));
         return defVal;
     }
-    
+
     return val;
 }
 
@@ -427,12 +427,12 @@ static int read_header(FILE* fh, int* type, char** path, struct stat* st)
     if (*type == TYPE_END) {
         return 1;
     }
-    
+
     if (*type < 0) {
         fprintf(stderr, "bad token %d in restore file\n", *type);
         return 0;
     }
-    
+
     int32_t pathLen = read_int32(fh, -1);
     if (pathLen <= 0) {
         fprintf(stderr, "bad path length %d in restore file\n", pathLen);
@@ -446,7 +446,7 @@ static int read_header(FILE* fh, int* type, char** path, struct stat* st)
     }
     readPath[pathLen] = 0;
     *path = readPath;
-    
+
     st->st_uid = read_int32(fh, -1);
     if (st->st_uid == (uid_t)-1) {
         fprintf(stderr, "bad uid in restore file at '%s'\n", readPath);
@@ -480,35 +480,35 @@ static int read_header(FILE* fh, int* type, char** path, struct stat* st)
         return 0;
     }
     st->st_ctime = (time_t)(ltime/1000/1000/1000);
-    
+
     st->st_mode &= (S_IRWXU|S_IRWXG|S_IRWXO);
-    
+
     return 1;
 }
 
 static int restore_data(const char* srcPath)
 {
     int res = -1;
-    
+
     FILE* fh = fopen(srcPath, "r");
     if (fh == NULL) {
         fprintf(stderr, "Unable to open source '%s': %s\n",
                 srcPath, strerror(errno));
         return -1;
     }
-    
+
     inputFileVersion = read_int32(fh, 0);
     if (inputFileVersion < FILE_VERSION_1 || inputFileVersion > FILE_VERSION) {
         fprintf(stderr, "Restore file has bad version: 0x%x\n", inputFileVersion);
         goto done;
     }
-    
+
     if (inputFileVersion >= FILE_VERSION_2) {
         opt_backupAll = read_int32(fh, 0);
     } else {
         opt_backupAll = 0;
     }
-    
+
     printf("Wiping contents of /data...\n");
     if (!wipe("/data")) {
         goto done;
@@ -525,14 +525,14 @@ static int restore_data(const char* srcPath)
         if (type == 0) {
             break;
         }
-        
+
         const char* typeName = "?";
-        
+
         if (type == TYPE_DIR) {
             typeName = "dir";
-            
+
             printf("Restoring dir %s...\n", path);
-            
+
             if (mkdir(path, statBuffer.st_mode) != 0) {
                 if (errno != EEXIST) {
                     fprintf(stderr, "unable to create directory '%s': %s\n",
@@ -541,7 +541,7 @@ static int restore_data(const char* srcPath)
                     goto done;
                 }
             }
-            
+
         } else if (type == TYPE_FILE) {
             typeName = "file";
             off_t size = read_int64(fh, -1);
@@ -550,9 +550,9 @@ static int restore_data(const char* srcPath)
                 free(path);
                 goto done;
             }
-            
+
             printf("Restoring file %s...\n", path);
-            
+
             FILE* dest = fopen(path, "w");
             if (dest == NULL) {
                 fprintf(stderr, "unable to open destination file '%s': %s\n",
@@ -560,35 +560,35 @@ static int restore_data(const char* srcPath)
                 free(path);
                 goto done;
             }
-            
+
             int copyres = copy_file(dest, fh, size, path, NULL);
             fclose(dest);
             if (!copyres) {
                 free(path);
                 goto done;
             }
-        
+
         } else {
             fprintf(stderr, "unknown node type %d\n", type);
             goto done;
         }
-        
+
         // Do this even for directories, since the dir may have already existed
-        // so we need to make sure it gets the correct mode.    
+        // so we need to make sure it gets the correct mode.
         if (chmod(path, statBuffer.st_mode&(S_IRWXU|S_IRWXG|S_IRWXO)) != 0) {
             fprintf(stderr, "unable to chmod destination %s '%s' to 0x%x: %s\n",
                 typeName, path, statBuffer.st_mode, strerror(errno));
             free(path);
             goto done;
         }
-        
+
         if (chown(path, statBuffer.st_uid, statBuffer.st_gid) != 0) {
             fprintf(stderr, "unable to chown destination %s '%s' to uid %d / gid %d: %s\n",
                 typeName, path, (int)statBuffer.st_uid, (int)statBuffer.st_gid, strerror(errno));
             free(path);
             goto done;
         }
-        
+
         struct utimbuf timbuf;
         timbuf.actime = statBuffer.st_atime;
         timbuf.modtime = statBuffer.st_mtime;
@@ -598,16 +598,16 @@ static int restore_data(const char* srcPath)
             free(path);
             goto done;
         }
-        
-        
+
+
         free(path);
     }
-    
+
     res = 0;
-        
-done:    
+
+done:
     fclose(fh);
-    
+
     return res;
 }
 
@@ -641,7 +641,7 @@ int main (int argc, char **argv)
         fprintf(stderr, "error -- %s must run as root\n", argv[0]);
         exit(-1);
     }
-    
+
     if (argc < 2) {
         fprintf(stderr, "No command specified.\n");
         android::show_help(argv[0]);
@@ -660,9 +660,9 @@ int main (int argc, char **argv)
     }
 
     android::opt_backupAll = 0;
-                
+
     optind = 2;
-    
+
     for (;;) {
         int ret;
 
@@ -691,7 +691,7 @@ int main (int argc, char **argv)
     }
 
     const char* backupFile = "/sdcard/backup.dat";
-    
+
     if (argc > optind) {
         backupFile = argv[optind];
         optind++;
@@ -701,12 +701,12 @@ int main (int argc, char **argv)
             exit(-1);
         }
     }
-    
+
     printf("Stopping system...\n");
     property_set("ctl.stop", "runtime");
     property_set("ctl.stop", "zygote");
     sleep(1);
-    
+
     int res;
     if (restore) {
         res = android::restore_data(backupFile);
@@ -723,7 +723,7 @@ int main (int argc, char **argv)
             printf("Restarting system...\n");
         }
     }
-    
+
     property_set("ctl.start", "zygote");
     property_set("ctl.start", "runtime");
 }

@@ -14,16 +14,16 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		sf_estim.h
+        File:           sf_estim.h
 
-	Content:	Scale factor estimation functions
+        Content:        Scale factor estimation functions
 
 *******************************************************************************/
 
 #ifndef __SF_ESTIM_H__
 #define __SF_ESTIM_H__
 /*
-   Scale factor estimation 
+   Scale factor estimation
  */
 #include "psy_const.h"
 #include "interface.h"

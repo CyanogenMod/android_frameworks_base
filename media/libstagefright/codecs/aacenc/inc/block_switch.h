@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		block_switch.h
+        File:           block_switch.h
 
-	Content:	Block switching structure and functions
+        Content:        Block switching structure and functions
 
 *******************************************************************************/
 
@@ -60,7 +60,7 @@ Word16 InitBlockSwitching(BLOCK_SWITCHING_CONTROL *blockSwitchingControl,
 
 Word16 BlockSwitching(BLOCK_SWITCHING_CONTROL *blockSwitchingControl,
                       Word16 *timeSignal,
-					  Word32  sampleRate,
+                                          Word32  sampleRate,
                       Word16 chIncrement);
 
 Word16 SyncBlockSwitching(BLOCK_SWITCHING_CONTROL *blockSwitchingControlLeft,

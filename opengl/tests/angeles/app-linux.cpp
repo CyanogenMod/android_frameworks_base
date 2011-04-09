@@ -97,7 +97,7 @@ void egl_error(const char *name)
 {
     unsigned err = eglGetError();
     if(err != EGL_SUCCESS) {
-        fprintf(stderr,"%s(): egl error 0x%x (%s)\n", 
+        fprintf(stderr,"%s(): egl error 0x%x (%s)\n",
                 name, err, egl_strerror(err));
     }
 }

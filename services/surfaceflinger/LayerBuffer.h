@@ -75,7 +75,7 @@ public:
     void unregisterBuffers();
     sp<OverlayRef> createOverlay(uint32_t w, uint32_t h, int32_t format,
             int32_t orientation);
-    
+
     sp<Source> getSource() const;
     sp<Source> clearSource();
     void setNeedsBlending(bool blending);
@@ -145,11 +145,11 @@ private:
         mutable NativeBuffer            mTempBuffer;
         mutable TextureManager          mTextureManager;
     };
-    
+
     class OverlaySource : public Source {
     public:
         OverlaySource(LayerBuffer& layer,
-                sp<OverlayRef>* overlayRef, 
+                sp<OverlayRef>* overlayRef,
                 uint32_t w, uint32_t h, int32_t format, int32_t orientation);
         virtual ~OverlaySource();
         virtual void onDraw(const Region& clip) const;
@@ -172,11 +172,11 @@ private:
                 : mLayer(layer) {
             }
         };
-        
+
         friend class OverlayChannel;
         bool mVisibilityChanged;
 
-        overlay_t* mOverlay;        
+        overlay_t* mOverlay;
         overlay_handle_t mOverlayHandle;
         overlay_control_device_t* mOverlayDevice;
         uint32_t mWidth;
@@ -200,7 +200,7 @@ private:
         virtual status_t registerBuffers(const ISurface::BufferHeap& buffers);
         virtual void postBuffer(ssize_t offset);
         virtual void unregisterBuffers();
-        
+
         virtual sp<OverlayRef> createOverlay(
                 uint32_t w, uint32_t h, int32_t format, int32_t orientation);
     private:

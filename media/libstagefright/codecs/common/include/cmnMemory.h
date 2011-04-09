@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		cmnMemory.h
+        File:           cmnMemory.h
 
-	Content:	memory operator implementation header file
+        Content:        memory operator implementation header file
 
 *******************************************************************************/
 
@@ -29,7 +29,7 @@ extern "C" {
 
 #include <voMem.h>
 
-//extern VO_MEM_OPERATOR	g_memOP;
+//extern VO_MEM_OPERATOR        g_memOP;
 
 /**
  * Allocate memory
@@ -37,7 +37,7 @@ extern "C" {
  * \param uSize [in] size of memory
  * \return value is the allocated memory address. NULL is failed.
  */
-VO_U32	cmnMemAlloc (VO_S32 uID,  VO_MEM_INFO * pMemInfo);
+VO_U32  cmnMemAlloc (VO_S32 uID,  VO_MEM_INFO * pMemInfo);
 
 /**
  * Free up memory
@@ -45,7 +45,7 @@ VO_U32	cmnMemAlloc (VO_S32 uID,  VO_MEM_INFO * pMemInfo);
  * \param pMem [in] address of memory
  * \return value 0, if succeeded.
  */
-VO_U32	cmnMemFree (VO_S32 uID, VO_PTR pBuffer);
+VO_U32  cmnMemFree (VO_S32 uID, VO_PTR pBuffer);
 
 /**
  * memory set function
@@ -55,7 +55,7 @@ VO_U32	cmnMemFree (VO_S32 uID, VO_PTR pBuffer);
  * \param uSize [in] the size to be set
  * \return value 0, if succeeded.
  */
-VO_U32	cmnMemSet (VO_S32 uID, VO_PTR pBuff, VO_U8 uValue, VO_U32 uSize);
+VO_U32  cmnMemSet (VO_S32 uID, VO_PTR pBuff, VO_U8 uValue, VO_U32 uSize);
 
 /**
  * memory copy function
@@ -65,7 +65,7 @@ VO_U32	cmnMemSet (VO_S32 uID, VO_PTR pBuff, VO_U8 uValue, VO_U32 uSize);
  * \param uSize [in] the size to be copied
  * \return value 0, if succeeded.
  */
-VO_U32	cmnMemCopy (VO_S32 uID, VO_PTR pDest, VO_PTR pSource, VO_U32 uSize);
+VO_U32  cmnMemCopy (VO_S32 uID, VO_PTR pDest, VO_PTR pSource, VO_U32 uSize);
 
 /**
  * memory check function
@@ -74,7 +74,7 @@ VO_U32	cmnMemCopy (VO_S32 uID, VO_PTR pDest, VO_PTR pSource, VO_U32 uSize);
  * \param uSize [in] the size to be checked
  * \return value 0, if succeeded.
  */
-VO_U32	cmnMemCheck (VO_S32 uID, VO_PTR pBuffer, VO_U32 uSize);
+VO_U32  cmnMemCheck (VO_S32 uID, VO_PTR pBuffer, VO_U32 uSize);
 
 /**
  * memory compare function
@@ -84,7 +84,7 @@ VO_U32	cmnMemCheck (VO_S32 uID, VO_PTR pBuffer, VO_U32 uSize);
  * \param uSize [in] the size to be compared
  * \return value: same as standard C run-time memcmp() function.
  */
-VO_S32	cmnMemCompare (VO_S32 uID, VO_PTR pBuffer1, VO_PTR pBuffer2, VO_U32 uSize);
+VO_S32  cmnMemCompare (VO_S32 uID, VO_PTR pBuffer1, VO_PTR pBuffer2, VO_U32 uSize);
 
 /**
  * memory move function
@@ -94,7 +94,7 @@ VO_S32	cmnMemCompare (VO_S32 uID, VO_PTR pBuffer1, VO_PTR pBuffer2, VO_U32 uSize
  * \param uSize [in] the size to be moved
  * \return value 0, if succeeded.
  */
-VO_U32	cmnMemMove (VO_S32 uID, VO_PTR pDest, VO_PTR pSource, VO_U32 uSize);
+VO_U32  cmnMemMove (VO_S32 uID, VO_PTR pDest, VO_PTR pSource, VO_U32 uSize);
 
 
 #ifdef __cplusplus

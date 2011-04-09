@@ -182,7 +182,7 @@ public:
     inline int32_t getDeviceId() const { return mDeviceId; }
 
     inline int32_t getSource() const { return mSource; }
-    
+
 protected:
     void initialize(int32_t deviceId, int32_t source);
     void initialize(const InputEvent& from);
@@ -224,7 +224,7 @@ public:
     // Return true if this event represents a system key.
     static bool isSystemKey(int32_t keyCode);
     bool isSystemKey() const;
-    
+
     void initialize(
             int32_t deviceId,
             int32_t source,

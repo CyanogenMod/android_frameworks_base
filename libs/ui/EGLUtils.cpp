@@ -114,7 +114,7 @@ status_t EGLUtils::selectConfigForPixelFormat(
     }
 
     free(configs);
-    
+
     if (i<n) {
         *outConfig = config;
         return NO_ERROR;
@@ -131,10 +131,10 @@ status_t EGLUtils::selectConfigForNativeWindow(
 {
     int err;
     int format;
-    
+
     if (!window)
         return BAD_VALUE;
-    
+
     if ((err = window->query(window, NATIVE_WINDOW_FORMAT, &format)) < 0) {
         return err;
     }

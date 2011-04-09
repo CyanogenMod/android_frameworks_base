@@ -2,16 +2,16 @@
 **
 ** Copyright 2006, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -100,7 +100,7 @@ void ogles_init_light(ogles_context_t* c)
     c->fog.invEndMinusStart = 0x10000;
 
     invalidate_lighting(c);
-       
+
     c->rasterizer.procs.shadeModel(c, GL_SMOOTH);
     c->lighting.shadeModel = GL_SMOOTH;
 }
@@ -252,13 +252,13 @@ static inline void validate_light(ogles_context_t* c)
             vmul3(l.implicitAmbient.v,  material.ambient.v,  l.ambient.v);
             vmul3(l.implicitDiffuse.v,  material.diffuse.v,  l.diffuse.v);
             vmul3(l.implicitSpecular.v, material.specular.v, l.specular.v);
-            
+
             // this is just a flag to tell if we have a specular component
             l.implicitSpecular.v[3] =
                     l.implicitSpecular.r |
                     l.implicitSpecular.g |
                     l.implicitSpecular.b;
-            
+
             l.rConstAttenuation = (l.attenuation[1] | l.attenuation[2])==0;
             if (l.rConstAttenuation)
                 l.rConstAttenuation = gglRecipFast(l.attenuation[0]);
@@ -266,7 +266,7 @@ static inline void validate_light(ogles_context_t* c)
         // emission and ambient for the whole scene
         vmla3(  c->lighting.implicitSceneEmissionAndAmbient.v,
                 c->lighting.lightModel.ambient.v,
-                material.ambient.v, 
+                material.ambient.v,
                 material.emission.v);
         c->lighting.implicitSceneEmissionAndAmbient.a = material.diffuse.a;
     }
@@ -333,7 +333,7 @@ void lightVertexMaterial(ogles_context_t* c, vertex_t* v)
     // emission and ambient for the whole scene
     vmla3(  c->lighting.implicitSceneEmissionAndAmbient.v,
             c->lighting.lightModel.ambient.v,
-            material.ambient.v, 
+            material.ambient.v,
             material.emission.v);
     c->lighting.implicitSceneEmissionAndAmbient.a = material.diffuse.a;
 
@@ -361,7 +361,7 @@ void lightVertex(ogles_context_t* c, vertex_t* v)
 #endif
 
         // TODO: right now we handle GL_RESCALE_NORMALS as if it were
-        // GL_NORMALIZE. We could optimize this by  scaling mvui 
+        // GL_NORMALIZE. We could optimize this by  scaling mvui
         // appropriately instead.
         if (c->transforms.rescaleNormals)
             vnorm3(n.v, n.v);
@@ -373,7 +373,7 @@ void lightVertex(ogles_context_t* c, vertex_t* v)
             const int i = 31 - gglClz(en);
             en &= ~(1<<i);
             const light_t& l = c->lighting.lights[i];
-            
+
             vec4_t d, t;
             GLfixed s;
             GLfixed sqDist = 0x10000;
@@ -475,7 +475,7 @@ static void lightx(GLenum i, GLenum pname, GLfixed param, ogles_context_t* c)
             return;
         }
         light.spotCutoff = param;
-        light.spotCutoffCosine = 
+        light.spotCutoffCosine =
                 gglFloatToFixed(cosinef((M_PI/(180.0f*65536.0f))*param));
         break;
     case GL_CONSTANT_ATTENUATION:

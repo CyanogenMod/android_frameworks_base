@@ -9,19 +9,19 @@ public:
     static float FloorF(JNIEnv* env, jobject clazz, float x) {
         return floorf(x);
     }
-    
+
     static float CeilF(JNIEnv* env, jobject clazz, float x) {
         return ceilf(x);
     }
-    
+
     static float SinF(JNIEnv* env, jobject clazz, float x) {
         return sinf(x);
     }
-    
+
     static float CosF(JNIEnv* env, jobject clazz, float x) {
         return cosf(x);
     }
-    
+
     static float SqrtF(JNIEnv* env, jobject clazz, float x) {
         return sqrtf(x);
     }

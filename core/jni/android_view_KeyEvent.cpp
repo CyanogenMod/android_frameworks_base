@@ -109,7 +109,7 @@ static const JNINativeMethod g_methods[] = {
 
 int register_android_view_KeyEvent(JNIEnv* env) {
     FIND_CLASS(gKeyEventClassInfo.clazz, "android/view/KeyEvent");
-        
+
     GET_METHOD_ID(gKeyEventClassInfo.ctor, gKeyEventClassInfo.clazz,
             "<init>", "(JJIIIIIIII)V");
 

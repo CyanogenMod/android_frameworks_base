@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		qc_data.h
+        File:           qc_data.h
 
-	Content:	Quantizing & coding structures
+        Content:        Quantizing & coding structures
 
 *******************************************************************************/
 
@@ -89,7 +89,7 @@ typedef struct
 
 typedef struct
 {
-  Word16		  adtsUsed;
+  Word16                  adtsUsed;
   Word16          staticBitsUsed; /* for verification purposes */
   Word16          dynBitsUsed;    /* for verification purposes */
   Word16          pe;

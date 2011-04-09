@@ -45,10 +45,10 @@ inline bool copybitQuickCheckContext(ogles_context_t* c) {
 inline bool drawTexiOESWithCopybit(GLint x, GLint y, GLint z,
         GLint w, GLint h, ogles_context_t* c) {
     if (!copybitQuickCheckContext(c)) {
-    	return false;
-   	}
-   	
-   	return drawTexiOESWithCopybit_impl(x, y, z, w, h, c);
+        return false;
+        }
+
+        return drawTexiOESWithCopybit_impl(x, y, z, w, h, c);
 }
 
 /*
@@ -63,7 +63,7 @@ inline bool drawTriangleFanWithCopybit(ogles_context_t* c, GLint first,
 
     if ((count!=4) || first || !copybitQuickCheckContext(c))
         return false;
-    
+
     return drawTriangleFanWithCopybit_impl(c, first, count);
 }
 

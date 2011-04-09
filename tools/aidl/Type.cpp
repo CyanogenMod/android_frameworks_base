@@ -325,7 +325,7 @@ BooleanType::BooleanType()
 void
 BooleanType::WriteToParcel(StatementBlock* addTo, Variable* v, Variable* parcel, int flags)
 {
-    addTo->Add(new MethodCall(parcel, "writeInt", 1, 
+    addTo->Add(new MethodCall(parcel, "writeInt", 1,
                 new Ternary(v, new LiteralExpression("1"),
                     new LiteralExpression("0"))));
 }
@@ -373,7 +373,7 @@ CharType::CharType()
 void
 CharType::WriteToParcel(StatementBlock* addTo, Variable* v, Variable* parcel, int flags)
 {
-    addTo->Add(new MethodCall(parcel, "writeInt", 1, 
+    addTo->Add(new MethodCall(parcel, "writeInt", 1,
                     new Cast(INT_TYPE, v)));
 }
 
@@ -724,7 +724,7 @@ MapType::ReadFromParcel(StatementBlock* addTo, Variable* v,
                     Variable* parcel)
 {
     Variable *cl = new Variable(CLASSLOADER_TYPE, "cl");
-    addTo->Add(new VariableDeclaration(cl, 
+    addTo->Add(new VariableDeclaration(cl,
         new LiteralExpression("this.getClass().getClassLoader()"),
         CLASSLOADER_TYPE));
     addTo->Add(new MethodCall(parcel, "readMap", 2, v, cl));
@@ -754,7 +754,7 @@ void
 ListType::CreateFromParcel(StatementBlock* addTo, Variable* v, Variable* parcel)
 {
     Variable *cl = new Variable(CLASSLOADER_TYPE, "cl");
-    addTo->Add(new VariableDeclaration(cl, 
+    addTo->Add(new VariableDeclaration(cl,
         new LiteralExpression("this.getClass().getClassLoader()"),
         CLASSLOADER_TYPE));
     addTo->Add(new Assignment(v, new MethodCall(parcel, "readArrayList", 1, cl)));
@@ -765,7 +765,7 @@ ListType::ReadFromParcel(StatementBlock* addTo, Variable* v,
                     Variable* parcel)
 {
     Variable *cl = new Variable(CLASSLOADER_TYPE, "cl");
-    addTo->Add(new VariableDeclaration(cl, 
+    addTo->Add(new VariableDeclaration(cl,
         new LiteralExpression("this.getClass().getClassLoader()"),
         CLASSLOADER_TYPE));
     addTo->Add(new MethodCall(parcel, "readList", 2, v, cl));
@@ -899,7 +899,7 @@ void
 InterfaceType::WriteToParcel(StatementBlock* addTo, Variable* v, Variable* parcel, int flags)
 {
     // parcel.writeStrongBinder(v != null ? v.asBinder() : null);
-    addTo->Add(new MethodCall(parcel, "writeStrongBinder", 1, 
+    addTo->Add(new MethodCall(parcel, "writeStrongBinder", 1,
                 new Ternary(
                     new Comparison(v, "!=", NULL_VALUE),
                     new MethodCall(v, "asBinder"),

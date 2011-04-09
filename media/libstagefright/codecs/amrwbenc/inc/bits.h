@@ -18,7 +18,7 @@
 /*--------------------------------------------------------------------------*
 *                         BITS.H                                           *
 *--------------------------------------------------------------------------*
-*       Number of bits for different modes			           *
+*       Number of bits for different modes                                 *
 *--------------------------------------------------------------------------*/
 
 #ifndef __BITS_H__
@@ -52,16 +52,16 @@
 #define RX_FRAME_TYPE (Word16)0x6b20
 
 static const Word16 nb_of_bits[NUM_OF_MODES] = {
-	NBBITS_7k,
-	NBBITS_9k,
-	NBBITS_12k,
-	NBBITS_14k,
-	NBBITS_16k,
-	NBBITS_18k,
-	NBBITS_20k,
-	NBBITS_23k,
-	NBBITS_24k,
-	NBBITS_SID
+        NBBITS_7k,
+        NBBITS_9k,
+        NBBITS_12k,
+        NBBITS_14k,
+        NBBITS_16k,
+        NBBITS_18k,
+        NBBITS_20k,
+        NBBITS_23k,
+        NBBITS_24k,
+        NBBITS_SID
 };
 
 /*typedef struct
@@ -74,18 +74,18 @@ Word16 prev_ft;
 
 //typedef struct
 //{
-//	Word16 prev_ft;
-//	Word16 prev_mode;
+//      Word16 prev_ft;
+//      Word16 prev_mode;
 //} RX_State;
 
 int PackBits(Word16 prms[], Word16 coding_mode, Word16 mode, Coder_State *st);
 
 
 void Parm_serial(
-		Word16 value,                         /* input : parameter value */
-		Word16 no_of_bits,                    /* input : number of bits  */
-		Word16 ** prms
-		);
+                Word16 value,                         /* input : parameter value */
+                Word16 no_of_bits,                    /* input : number of bits  */
+                Word16 ** prms
+                );
 
 
 #endif  //__BITS_H__

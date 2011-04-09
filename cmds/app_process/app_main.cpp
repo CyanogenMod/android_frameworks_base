@@ -1,8 +1,8 @@
 /*
  * Main entry of app process.
- * 
+ *
  * Starts the interpreted runtime, then starts up the application.
- * 
+ *
  */
 
 #define LOG_TAG "appproc"
@@ -31,7 +31,7 @@ status_t app_init(const char* className, int argc, const char* const argv[])
 
     AndroidRuntime* jr = AndroidRuntime::getRuntime();
     jr->callMain(className, argc, argv);
-    
+
     LOGV("Exiting app_init()!\n");
     return NO_ERROR;
 }
@@ -67,7 +67,7 @@ public:
             LOGV("App process: starting thread pool.\n");
             proc->startThreadPool();
         }
-        
+
         app_init(mClassName, mArgC, mArgV);
 
         if (ProcessState::self()->supportsProcesses()) {
@@ -81,7 +81,7 @@ public:
         if (proc->supportsProcesses()) {
             LOGV("App process: starting thread pool.\n");
             proc->startThreadPool();
-        }       
+        }
     }
 
     virtual void onExit(int code)
@@ -96,7 +96,7 @@ public:
         AndroidRuntime::onExit(code);
     }
 
-    
+
     const char* mParentDir;
     const char* mClassName;
     int mArgC;
@@ -120,7 +120,7 @@ int main(int argc, const char* const argv[])
     // These are global variables in ProcessState.cpp
     mArgC = argc;
     mArgV = argv;
-    
+
     mArgLen = 0;
     for (int i=0; i<argc; i++) {
         mArgLen += strlen(argv[i]) + 1;
@@ -139,7 +139,7 @@ int main(int argc, const char* const argv[])
     argv++;
 
     // Everything up to '--' or first non '-' arg goes to the vm
-    
+
     int i = runtime.addVmArguments(argc, argv);
 
     // Next arg is parent directory
@@ -151,7 +151,7 @@ int main(int argc, const char* const argv[])
     if (i < argc) {
         arg = argv[i++];
         if (0 == strcmp("--zygote", arg)) {
-            bool startSystemServer = (i < argc) ? 
+            bool startSystemServer = (i < argc) ?
                     strcmp(argv[i], "--start-system-server") == 0 : false;
             setArgv0(argv0, "zygote");
             set_process_name("zygote");

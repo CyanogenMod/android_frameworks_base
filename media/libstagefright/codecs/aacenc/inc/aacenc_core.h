@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		aacenc_core.h
+        File:           aacenc_core.h
 
-	Content:	aac encoder interface functions
+        Content:        aac encoder interface functions
 
 *******************************************************************************/
 
@@ -42,12 +42,12 @@ typedef  struct {
   Word16   nChannelsIn;           /* number of channels on input (1,2) */
   Word16   nChannelsOut;          /* number of channels on output (1,2) */
   Word16   bandWidth;             /* targeted audio bandwidth in Hz */
-  Word16   adtsUsed;			  /* whether write adts header */
+  Word16   adtsUsed;                      /* whether write adts header */
 } AACENC_CONFIG;
 
 
 typedef struct {
-	
+        
   AACENC_CONFIG config;     /* Word16 size: 8 */
 
   ELEMENT_INFO elInfo;      /* Word16 size: 4 */
@@ -61,17 +61,17 @@ typedef struct {
   struct BITSTREAMENCODER_INIT bseInit; /* Word16 size: 6 */
   struct BIT_BUF  bitStream;            /* Word16 size: 8 */
   HANDLE_BIT_BUF  hBitStream;
-  int			  initOK;
+  int                     initOK;
 
-  short			*intbuf;
-  short			*encbuf;
-  short			*inbuf;
-  int			enclen;
-  int			inlen;
-  int			intlen;
-  int			uselength;
+  short                 *intbuf;
+  short                 *encbuf;
+  short                 *inbuf;
+  int                   enclen;
+  int                   inlen;
+  int                   intlen;
+  int                   uselength;
 
-  void			*hCheck;
+  void                  *hCheck;
   VO_MEM_OPERATOR *voMemop;
   VO_MEM_OPERATOR voMemoprator;
 
@@ -94,10 +94,10 @@ returns:     AACENC_OK if success
 
 ---------------------------------------------------------------------------*/
 
-Word16  AacEncOpen (AAC_ENCODER				*hAacEnc,       /* pointer to an encoder handle, initialized on return */
+Word16  AacEncOpen (AAC_ENCODER                         *hAacEnc,       /* pointer to an encoder handle, initialized on return */
                     const  AACENC_CONFIG     config);        /* pre-initialized config struct */
 
-Word16 AacEncEncode(AAC_ENCODER		   *hAacEnc,
+Word16 AacEncEncode(AAC_ENCODER            *hAacEnc,
                     Word16             *timeSignal,
                     const UWord8       *ancBytes,      /*!< pointer to ancillary data bytes */
                     Word16             *numAncBytes,   /*!< number of ancillary Data Bytes, send as fill element  */

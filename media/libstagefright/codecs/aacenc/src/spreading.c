@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		spreading.c
+        File:           spreading.c
 
-	Content:	Spreading of energy function
+        Content:        Spreading of energy function
 
 *******************************************************************************/
 
@@ -28,8 +28,8 @@
 *
 * function name: SpreadingMax
 * description:  spreading the energy
-*				 higher frequencies thr(n) = max(thr(n), sh(n)*thr(n-1))
-*				 lower frequencies  thr(n) = max(thr(n), sl(n)*thr(n+1))
+*                                higher frequencies thr(n) = max(thr(n), sh(n)*thr(n-1))
+*                                lower frequencies  thr(n) = max(thr(n), sl(n)*thr(n+1))
 *
 **********************************************************************************/
 void SpreadingMax(const Word16 pbCnt,

@@ -147,7 +147,7 @@ void LayerDim::onDraw(const Region& clip) const
             const Rect& r = *it++;
             const GLint sy = fbHeight - (r.top + r.height());
             glScissor(r.left, sy, r.width(), r.height());
-            glDrawArrays(GL_TRIANGLE_FAN, 0, 4); 
+            glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
         }
     }
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);

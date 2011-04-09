@@ -84,7 +84,7 @@ string &string::operator+=(char c) {
 void string::erase(size_t from, size_t length) {
     String8 s(mString.string(), from);
     s.append(mString.string() + from + length);
-    
+
     mString = s;
 }
 

@@ -22,7 +22,7 @@ int main(int argc, char** argv)
 
     // create a client to surfaceflinger
     sp<SurfaceComposerClient> client = new SurfaceComposerClient();
-    
+
     // create pushbuffer surface
     sp<SurfaceControl> surfaceControl = client->createSurface(
             getpid(), 0, 160, 240, PIXEL_FORMAT_RGB_565);

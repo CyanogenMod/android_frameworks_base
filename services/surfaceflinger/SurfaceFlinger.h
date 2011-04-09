@@ -144,7 +144,7 @@ public:
         DisplayHardware&        editDisplayHardware();
         const Transform&        transform() const;
         EGLDisplay              getEGLDisplay() const;
-        
+
 private:
                                 GraphicPlane(const GraphicPlane&);
         GraphicPlane            operator = (const GraphicPlane&);
@@ -301,7 +301,7 @@ private:
             void        handleConsoleEvents();
             void        handleTransaction(uint32_t transactionFlags);
             void        handleTransactionLocked(
-                            uint32_t transactionFlags, 
+                            uint32_t transactionFlags,
                             Vector< sp<LayerBase> >& ditchedLayers);
 
             void        computeVisibleRegions(
@@ -351,15 +351,15 @@ private:
             }
             inline void decFreezeCount() { if (mFreezeCount > 0) mFreezeCount--; }
             inline bool hasFreezeRequest() const { return mFreezeDisplay; }
-            inline bool isFrozen() const { 
+            inline bool isFrozen() const {
                 return (mFreezeDisplay || mFreezeCount>0) && mBootFinished;
             }
 
-            
+
             void        debugFlashRegions();
             void        debugShowFPS() const;
             void        drawWormhole() const;
-           
+
 
     mutable     MessageQueue    mEventQueue;
 
@@ -393,7 +393,7 @@ private:
                 Permission                  mAccessSurfaceFlinger;
                 Permission                  mReadFramebuffer;
                 Permission                  mDump;
-                
+
                 // Can only accessed from the main thread, these members
                 // don't need synchronization
                 Region                      mDirtyRegion;
@@ -414,9 +414,9 @@ private:
                 int                         mDebugRegion;
                 int                         mDebugBackground;
                 int                         mRenderEffect;
-		int			    mRenderColorR;
-		int			    mRenderColorG;
-		int			    mRenderColorB;
+                int                         mRenderColorR;
+                int                         mRenderColorG;
+                int                         mRenderColorB;
                 volatile nsecs_t            mDebugInSwapBuffers;
                 nsecs_t                     mLastSwapBufferTime;
                 volatile nsecs_t            mDebugInTransaction;

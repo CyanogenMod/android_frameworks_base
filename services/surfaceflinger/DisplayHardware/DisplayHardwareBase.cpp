@@ -149,7 +149,7 @@ pid_t DisplayHardwareBase::ConsoleManagerThread::sSignalCatcherPid = 0;
 DisplayHardwareBase::ConsoleManagerThread::ConsoleManagerThread(
         const sp<SurfaceFlinger>& flinger)
     : DisplayEventThreadBase(flinger), consoleFd(-1)
-{   
+{
     sSignalCatcherPid = 0;
 
     // create a new console
@@ -167,7 +167,7 @@ DisplayHardwareBase::ConsoleManagerThread::ConsoleManagerThread(
         LOGE("ioctl(%d, KDSETMODE, ...) failed, res %d (%s)",
                 fd, res, strerror(errno));
     }
-    
+
     // get the current console
     struct vt_stat vs;
     res = ioctl(fd, VT_GETSTATE, &vs);
@@ -252,7 +252,7 @@ DisplayHardwareBase::ConsoleManagerThread::ConsoleManagerThread(
 }
 
 DisplayHardwareBase::ConsoleManagerThread::~ConsoleManagerThread()
-{   
+{
     if (this->consoleFd >= 0) {
         int fd = this->consoleFd;
         int prev_vt_num = this->prev_vt_num;
@@ -264,7 +264,7 @@ DisplayHardwareBase::ConsoleManagerThread::~ConsoleManagerThread()
         do {
             res = ioctl(fd, VT_WAITACTIVE, (void*)prev_vt_num);
         } while(res < 0 && errno == EINTR);
-        close(fd);    
+        close(fd);
         char const * const ttydev = "/dev/tty0";
         fd = open(ttydev, O_RDWR | O_SYNC);
         ioctl(fd, VT_DISALLOCATE, 0);
@@ -276,7 +276,7 @@ status_t DisplayHardwareBase::ConsoleManagerThread::readyToRun()
 {
     if (this->consoleFd >= 0) {
         sSignalCatcherPid = gettid();
-        
+
         sigset_t mask;
         sigemptyset(&mask);
         sigaddset(&mask, vm.relsig);
@@ -343,10 +343,10 @@ bool DisplayHardwareBase::ConsoleManagerThread::threadLoop()
     } else if (sig == vm.acqsig) {
         sp<SurfaceFlinger> flinger = mFlinger.promote();
         //LOGD("Screen about to return, flinger = %p", flinger.get());
-        if (flinger != 0) 
+        if (flinger != 0)
             flinger->screenAcquired(0);
     }
-    
+
     return true;
 }
 
@@ -358,7 +358,7 @@ status_t DisplayHardwareBase::ConsoleManagerThread::initCheck() const
 // ----------------------------------------------------------------------------
 
 DisplayHardwareBase::DisplayHardwareBase(const sp<SurfaceFlinger>& flinger,
-        uint32_t displayIndex) 
+        uint32_t displayIndex)
     : mCanDraw(true), mScreenAcquired(true)
 {
     mDisplayEventThread = new DisplayEventThread(flinger);

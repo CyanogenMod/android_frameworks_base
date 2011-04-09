@@ -234,7 +234,7 @@ const Region Region::operation(const Region& rhs, int dx, int dy, int op) const 
 
 // This is our region rasterizer, which merges rects and spans together
 // to obtain an optimal region.
-class Region::rasterizer : public region_operator<Rect>::region_rasterizer 
+class Region::rasterizer : public region_operator<Rect>::region_rasterizer
 {
     Rect& bounds;
     Vector<Rect>& storage;
@@ -243,7 +243,7 @@ class Region::rasterizer : public region_operator<Rect>::region_rasterizer
     Vector<Rect> span;
     Rect* cur;
 public:
-    rasterizer(Region& reg) 
+    rasterizer(Region& reg)
         : bounds(reg.mBounds), storage(reg.mStorage), head(), tail(), cur() {
         bounds.top = bounds.bottom = 0;
         bounds.left   = INT_MAX;
@@ -266,9 +266,9 @@ public:
             bounds.right = 0;
         }
     }
-    
+
     virtual void operator()(const Rect& rect) {
-        //LOGD(">>> %3d, %3d, %3d, %3d", 
+        //LOGD(">>> %3d, %3d, %3d, %3d",
         //        rect.left, rect.top, rect.right, rect.bottom);
         if (span.size()) {
             if (cur->top != rect.top) {
@@ -282,9 +282,9 @@ public:
         cur = span.editArray() + (span.size() - 1);
     }
 private:
-    template<typename T> 
+    template<typename T>
     static inline T min(T rhs, T lhs) { return rhs < lhs ? rhs : lhs; }
-    template<typename T> 
+    template<typename T>
     static inline T max(T rhs, T lhs) { return rhs > lhs ? rhs : lhs; }
     void flushSpan() {
         bool merge = false;
@@ -353,7 +353,7 @@ bool Region::validate(const Region& reg, const char* name)
         result = false;
         LOGE("%s: invalid bounds [%d,%d,%d,%d] vs. [%d,%d,%d,%d]", name,
                 b.left, b.top, b.right, b.bottom,
-                reg.getBounds().left, reg.getBounds().top, 
+                reg.getBounds().left, reg.getBounds().top,
                 reg.getBounds().right, reg.getBounds().bottom);
     }
     if (result == false) {
@@ -390,7 +390,7 @@ void Region::boolean_operation(int op, Region& dst,
     SkRegion sk_lhs;
     SkRegion sk_rhs;
     SkRegion sk_dst;
-    
+
     for (size_t i=0 ; i<lhs_count ; i++)
         sk_lhs.op(
                 lhs_rects[i].left   + dx,
@@ -398,7 +398,7 @@ void Region::boolean_operation(int op, Region& dst,
                 lhs_rects[i].right  + dx,
                 lhs_rects[i].bottom + dy,
                 SkRegion::kUnion_Op);
-    
+
     for (size_t i=0 ; i<rhs_count ; i++)
         sk_rhs.op(
                 rhs_rects[i].left   + dx,
@@ -406,7 +406,7 @@ void Region::boolean_operation(int op, Region& dst,
                 rhs_rects[i].right  + dx,
                 rhs_rects[i].bottom + dy,
                 SkRegion::kUnion_Op);
- 
+
     const char* name = "---";
     SkRegion::Op sk_op;
     switch (op) {
@@ -418,7 +418,7 @@ void Region::boolean_operation(int op, Region& dst,
 
     if (sk_dst.isEmpty() && dst.isEmpty())
         return;
-    
+
     bool same = true;
     Region::const_iterator head = dst.begin();
     Region::const_iterator const tail = dst.end();
@@ -426,9 +426,9 @@ void Region::boolean_operation(int op, Region& dst,
     while (!it.done()) {
         if (head != tail) {
             if (
-                    head->left != it.rect().fLeft ||     
-                    head->top != it.rect().fTop ||     
-                    head->right != it.rect().fRight ||     
+                    head->left != it.rect().fLeft ||
+                    head->top != it.rect().fTop ||
+                    head->right != it.rect().fRight ||
                     head->bottom != it.rect().fBottom
             ) {
                 same = false;
@@ -441,11 +441,11 @@ void Region::boolean_operation(int op, Region& dst,
         head++;
         it.next();
     }
-    
+
     if (head != tail) {
         same = false;
     }
-    
+
     if(!same) {
         LOGD("---\nregion boolean %s failed", name);
         lhs.dump("lhs");
@@ -547,7 +547,7 @@ ssize_t Region::write(void* buffer, size_t size) const
 
 ssize_t Region::read(const void* buffer)
 {
-    int32_t const* const p = static_cast<int32_t const*>(buffer); 
+    int32_t const* const p = static_cast<int32_t const*>(buffer);
     const size_t count = *p;
     memcpy(&mBounds, p+1, sizeof(Rect));
     mStorage.clear();
@@ -565,14 +565,14 @@ ssize_t Region::writeEmpty(void* buffer, size_t size)
 {
     const size_t sizeNeeded = sizeof(int32_t) + sizeof(Rect);
     if (sizeNeeded > size) return NO_MEMORY;
-    int32_t* const p = static_cast<int32_t*>(buffer); 
+    int32_t* const p = static_cast<int32_t*>(buffer);
     memset(p, 0, sizeNeeded);
     return ssize_t(sizeNeeded);
 }
 
 bool Region::isEmpty(void* buffer)
 {
-    int32_t const* const p = static_cast<int32_t const*>(buffer); 
+    int32_t const* const p = static_cast<int32_t const*>(buffer);
     Rect const* const b = reinterpret_cast<Rect const *>(p+1);
     return b->isEmpty();
 }

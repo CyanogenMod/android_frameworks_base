@@ -54,7 +54,7 @@ protected:
     {
     public:
         IO(const uint8_t *, bool use64);
-    
+
         float loadF() {
             mPos = (mPos + 3) & (~3);
             float tmp = reinterpret_cast<const float *>(&mData[mPos])[0];

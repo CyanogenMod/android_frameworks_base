@@ -37,7 +37,7 @@ int main(int argc, char** argv)
          EGL_DEPTH_SIZE, 0,
          EGL_NONE
      };
-     
+
      EGLint majorVersion;
      EGLint minorVersion;
      EGLContext context;
@@ -47,10 +47,10 @@ int main(int argc, char** argv)
      EGLDisplay dpy;
 
      EGLNativeWindowType window = android_createDisplaySurface();
-     
+
      dpy = eglGetDisplay(EGL_DEFAULT_DISPLAY);
      eglInitialize(dpy, &majorVersion, &minorVersion);
-          
+
      status_t err = EGLUtils::selectConfigForNativeWindow(
              dpy, configAttribs, window, &config);
      if (err) {
@@ -60,7 +60,7 @@ int main(int argc, char** argv)
 
      surface = eglCreateWindowSurface(dpy, config, window, NULL);
      context = eglCreateContext(dpy, config, NULL, NULL);
-     eglMakeCurrent(dpy, surface, surface, context);   
+     eglMakeCurrent(dpy, surface, surface, context);
      eglQuerySurface(dpy, surface, EGL_WIDTH, &w);
      eglQuerySurface(dpy, surface, EGL_HEIGHT, &h);
      GLint dim = w<h ? w : h;
@@ -79,7 +79,7 @@ int main(int argc, char** argv)
 
      char* texels = (char*)malloc(512*512*2);
      memset(texels,0xFF,512*512*2);
-     
+
      glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
              512, 512, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5, texels);
 
@@ -98,7 +98,7 @@ int main(int argc, char** argv)
      free(texels);
 
      setpriority(PRIO_PROCESS, 0, -20);
-     
+
      printf("512x512 unmodified texture, 512x512 blit:\n");
      glClear(GL_COLOR_BUFFER_BIT);
      for (i=0 ; i<4 ; i++) {
@@ -112,7 +112,7 @@ int main(int argc, char** argv)
          fflush(stdout);
          eglSwapBuffers(dpy, surface);
      }
-     
+
      printf("512x512 unmodified texture, 1x1 blit:\n");
      glClear(GL_COLOR_BUFFER_BIT);
      for (i=0 ; i<4 ; i++) {
@@ -126,7 +126,7 @@ int main(int argc, char** argv)
          fflush(stdout);
          eglSwapBuffers(dpy, surface);
      }
-     
+
      printf("512x512 unmodified texture, 512x512 blit (x2):\n");
      glClear(GL_COLOR_BUFFER_BIT);
      for (i=0 ; i<4 ; i++) {
@@ -157,7 +157,7 @@ int main(int argc, char** argv)
          eglSwapBuffers(dpy, surface);
      }
 
-     
+
      printf("512x512 (1x1 texel MODIFIED texture), 512x512 blit:\n");
      glClear(GL_COLOR_BUFFER_BIT);
      for (i=0 ; i<4 ; i++) {

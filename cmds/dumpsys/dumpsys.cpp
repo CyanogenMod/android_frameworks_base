@@ -31,7 +31,7 @@ int main(int argc, char* const argv[])
     sp<IServiceManager> sm = defaultServiceManager();
     fflush(stdout);
     if (sm == NULL) {
-		LOGE("Unable to get default service manager!");
+                LOGE("Unable to get default service manager!");
         aerr << "dumpsys: Unable to get default service manager!" << endl;
         return 20;
     }
@@ -54,7 +54,7 @@ int main(int argc, char* const argv[])
     if (N > 1) {
         // first print a list of the current services
         aout << "Currently running services:" << endl;
-    
+
         for (size_t i=0; i<N; i++) {
             sp<IBinder> service = sm->checkService(services[i]);
             if (service != NULL) {

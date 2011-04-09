@@ -1,16 +1,16 @@
-/* 
+/*
  ** Copyright 2007, The Android Open Source Project
  **
- ** Licensed under the Apache License, Version 2.0 (the "License"); 
- ** you may not use this file except in compliance with the License. 
- ** You may obtain a copy of the License at 
+ ** Licensed under the Apache License, Version 2.0 (the "License");
+ ** you may not use this file except in compliance with the License.
+ ** You may obtain a copy of the License at
  **
- **     http://www.apache.org/licenses/LICENSE-2.0 
+ **     http://www.apache.org/licenses/LICENSE-2.0
  **
- ** Unless required by applicable law or agreed to in writing, software 
- ** distributed under the License is distributed on an "AS IS" BASIS, 
- ** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- ** See the License for the specific language governing permissions and 
+ ** Unless required by applicable law or agreed to in writing, software
+ ** distributed under the License is distributed on an "AS IS" BASIS,
+ ** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ ** See the License for the specific language governing permissions and
  ** limitations under the License.
  */
 
@@ -86,7 +86,7 @@ using namespace android;
     #define CALL_GL_API(_api, ...)                                       \
         gl_hooks_t::gl_t const * const _c = &getGlThreadSpecific()->gl;  \
         _c->_api(__VA_ARGS__)
-    
+
     #define CALL_GL_API_RETURN(_api, ...)                                \
         gl_hooks_t::gl_t const * const _c = &getGlThreadSpecific()->gl;  \
         return _c->_api(__VA_ARGS__)
@@ -115,14 +115,14 @@ extern "C" void __glEGLImageTargetRenderbufferStorageOES(GLenum target, GLeglIma
 
 void glEGLImageTargetTexture2DOES(GLenum target, GLeglImageOES image)
 {
-    GLeglImageOES implImage = 
+    GLeglImageOES implImage =
         (GLeglImageOES)egl_get_image_for_current_context((EGLImageKHR)image);
     __glEGLImageTargetTexture2DOES(target, implImage);
 }
 
 void glEGLImageTargetRenderbufferStorageOES(GLenum target, GLeglImageOES image)
 {
-    GLeglImageOES implImage = 
+    GLeglImageOES implImage =
         (GLeglImageOES)egl_get_image_for_current_context((EGLImageKHR)image);
     __glEGLImageTargetRenderbufferStorageOES(target, implImage);
 }

@@ -331,7 +331,7 @@ postprocess_byday(int count, int* byday, int** bydayNum)
     for (int i=0; i<count; i++) {
         uint32_t v = byday[i];
         int16_t num = v & 0x0000ffff;
-        byday[i] = v & 0xffff0000;  
+        byday[i] = v & 0xffff0000;
         // will sign extend:
         bdn[i] = num;
     }
@@ -350,7 +350,7 @@ EventRecurrence::parse(const String16& str)
 
     int lhsIndex = NONE_LHS;
     int index;
-    
+
     size_t start = 0;
     for (size_t i=0; i<len; i++) {
         char16_t c = work[i];
@@ -416,7 +416,7 @@ EventRecurrence::parse(const String16& str)
                                 PARSE_INT_LIST_CHECKED(byhour, 0, 23, true)
                                 break;
                             case BYDAY:
-                                if (bydayCount != 0 || NO_ERROR != 
+                                if (bydayCount != 0 || NO_ERROR !=
                                         parse_int_list(s, slen, &bydayCount,
                                               &byday, -53, 53, false,
                                               parse_byday)) {

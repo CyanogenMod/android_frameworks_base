@@ -396,7 +396,7 @@ status_t String8::appendFormat(const char* fmt, ...)
 status_t String8::real_append(const char* other, size_t otherLen)
 {
     const size_t myLen = bytes();
-    
+
     SharedBuffer* buf = SharedBuffer::bufferFromData(mString)
         ->editResize(myLen+otherLen+1);
     if (buf) {

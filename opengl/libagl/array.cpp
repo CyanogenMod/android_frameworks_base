@@ -1441,11 +1441,11 @@ void glDrawElements(
         ogles_lock_textures(c);
 
     drawElementsPrims[mode](c, count, indices);
-    
+
     if (enables & GGL_ENABLE_TMUS)
         ogles_unlock_textures(c);
 
-    
+
 #if VC_CACHE_STATISTICS
     c->vc.total = count;
     c->vc.dump_stats(mode);

@@ -147,7 +147,7 @@ status_t ESDS::parseESDescriptor(size_t offset, size_t size) {
         offset += 2;
         size -= 2;
     }
-    
+
     if (offset >= size) {
         return ERROR_MALFORMED;
     }

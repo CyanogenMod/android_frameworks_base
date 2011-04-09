@@ -9,7 +9,7 @@ static void *map_memory(const char *fn, unsigned base, unsigned size)
 {
     int fd;
     void *ptr;
-    
+
     fd = open(fn, O_RDWR | O_SYNC);
     if(fd < 0) {
         perror("cannot open %s for mapping");
@@ -19,11 +19,11 @@ static void *map_memory(const char *fn, unsigned base, unsigned size)
     ptr = mmap(0, size, PROT_READ | PROT_WRITE,
                MAP_SHARED, fd, base);
     close(fd);
-    
+
     if(ptr == MAP_FAILED) {
         fprintf(stderr,"cannot map %s (@%08x,%08x)\n", fn, base, size);
     }
-    return ptr;    
+    return ptr;
 }
 
 

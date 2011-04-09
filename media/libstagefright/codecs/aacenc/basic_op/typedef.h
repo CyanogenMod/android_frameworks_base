@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		typedef.h
+        File:           typedef.h
 
-	Content:	type defined for defferent paltform
+        Content:        type defined for defferent paltform
 
 *******************************************************************************/
 
@@ -30,7 +30,7 @@
 /*
  * this is the original code from the ETSI file typedef.h
  */
-   
+
 #if defined(__BORLANDC__) || defined(__WATCOMC__) || defined(_MSC_VER) || defined(__ZTC__)
 typedef signed char Word8;
 typedef short Word16;

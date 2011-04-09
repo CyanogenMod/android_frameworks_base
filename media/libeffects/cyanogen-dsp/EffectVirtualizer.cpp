@@ -22,11 +22,11 @@
 #include "EffectVirtualizer.h"
 
 typedef struct {
-	int32_t status;
-	uint32_t psize;
-	uint32_t vsize;
-	int32_t cmd;
-	int16_t data;
+        int32_t status;
+        uint32_t psize;
+        uint32_t vsize;
+        int32_t cmd;
+        int16_t data;
 } reply1x4_1x2_t;
 
 EffectVirtualizer::EffectVirtualizer()
@@ -38,73 +38,73 @@ EffectVirtualizer::EffectVirtualizer()
 int32_t EffectVirtualizer::command(uint32_t cmdCode, uint32_t cmdSize, void* pCmdData, uint32_t* replySize, void* pReplyData)
 {
     if (cmdCode == EFFECT_CMD_CONFIGURE) {
-	int32_t ret = Effect::configure(pCmdData);
-	if (ret != 0) {
-	    int32_t *replyData = (int32_t *) pReplyData;
-	    *replyData = ret;
-	    return 0;
-	}
+        int32_t ret = Effect::configure(pCmdData);
+        if (ret != 0) {
+            int32_t *replyData = (int32_t *) pReplyData;
+            *replyData = ret;
+            return 0;
+        }
 
-	mReverbDelayL.setParameters(mSamplingRate, 0.030f);
-	mReverbDelayR.setParameters(mSamplingRate, 0.030f);
-	/* the -3 dB point is around 650 Hz, giving about 300 us to work with */
-	mLocalizationL.setHighShelf(800.0f, mSamplingRate, -11.0f, 0.72f);
-	mLocalizationR.setHighShelf(800.0f, mSamplingRate, -11.0f, 0.72f);
-	/* Rockbox has a 0.3 ms delay line (13 samples at 44100 Hz), but
-	 * I think it makes the whole effect sound pretty bad so I skipped it! */
+        mReverbDelayL.setParameters(mSamplingRate, 0.030f);
+        mReverbDelayR.setParameters(mSamplingRate, 0.030f);
+        /* the -3 dB point is around 650 Hz, giving about 300 us to work with */
+        mLocalizationL.setHighShelf(800.0f, mSamplingRate, -11.0f, 0.72f);
+        mLocalizationR.setHighShelf(800.0f, mSamplingRate, -11.0f, 0.72f);
+        /* Rockbox has a 0.3 ms delay line (13 samples at 44100 Hz), but
+         * I think it makes the whole effect sound pretty bad so I skipped it! */
 
-	mDelayDataL = 0;
-	mDelayDataR = 0;
+        mDelayDataL = 0;
+        mDelayDataR = 0;
 
-	int32_t *replyData = (int32_t *) pReplyData;
-	*replyData = 0;
-	return 0;
+        int32_t *replyData = (int32_t *) pReplyData;
+        *replyData = 0;
+        return 0;
     }
 
     if (cmdCode == EFFECT_CMD_GET_PARAM) {
-	effect_param_t *cep = (effect_param_t *) pCmdData;
+        effect_param_t *cep = (effect_param_t *) pCmdData;
         if (cep->psize == 4) {
-	    int32_t cmd = ((int32_t *) cep)[3];
-	    if (cmd == VIRTUALIZER_PARAM_STRENGTH_SUPPORTED) {
-		reply1x4_1x2_t *replyData = (reply1x4_1x2_t *) pReplyData;
-		replyData->status = 0;
-		replyData->vsize = 2;
-		replyData->data = 1;
-		*replySize = sizeof(reply1x4_1x2_t);
-		return 0;
-	    }
-	    if (cmd == VIRTUALIZER_PARAM_STRENGTH) {
-		reply1x4_1x2_t *replyData = (reply1x4_1x2_t *) pReplyData;
-		replyData->status = 0;
-		replyData->vsize = 2;
-		replyData->data = mStrength;
-		*replySize = sizeof(reply1x4_1x2_t);
-		return 0;
-	    }
+            int32_t cmd = ((int32_t *) cep)[3];
+            if (cmd == VIRTUALIZER_PARAM_STRENGTH_SUPPORTED) {
+                reply1x4_1x2_t *replyData = (reply1x4_1x2_t *) pReplyData;
+                replyData->status = 0;
+                replyData->vsize = 2;
+                replyData->data = 1;
+                *replySize = sizeof(reply1x4_1x2_t);
+                return 0;
+            }
+            if (cmd == VIRTUALIZER_PARAM_STRENGTH) {
+                reply1x4_1x2_t *replyData = (reply1x4_1x2_t *) pReplyData;
+                replyData->status = 0;
+                replyData->vsize = 2;
+                replyData->data = mStrength;
+                *replySize = sizeof(reply1x4_1x2_t);
+                return 0;
+            }
         }
 
-	effect_param_t *replyData = (effect_param_t *) pReplyData;
-	replyData->status = -EINVAL;
-	replyData->vsize = 0;
-	*replySize = sizeof(effect_param_t);
-	return 0;
+        effect_param_t *replyData = (effect_param_t *) pReplyData;
+        replyData->status = -EINVAL;
+        replyData->vsize = 0;
+        *replySize = sizeof(effect_param_t);
+        return 0;
     }
 
     if (cmdCode == EFFECT_CMD_SET_PARAM) {
-	effect_param_t *cep = (effect_param_t *) pCmdData;
-	if (cep->psize == 4) {
-	    int32_t cmd = ((int32_t *) cep)[3];
-	    if (cmd == VIRTUALIZER_PARAM_STRENGTH) {
-		mStrength = ((int16_t *) cep)[8];
-		refreshStrength();
-		int32_t *replyData = (int32_t *) pReplyData;
-		*replyData = 0;
-		return 0;
-	    }
-	}
-	int32_t *replyData = (int32_t *) pReplyData;
-	*replyData = -EINVAL;
-	return 0;
+        effect_param_t *cep = (effect_param_t *) pCmdData;
+        if (cep->psize == 4) {
+            int32_t cmd = ((int32_t *) cep)[3];
+            if (cmd == VIRTUALIZER_PARAM_STRENGTH) {
+                mStrength = ((int16_t *) cep)[8];
+                refreshStrength();
+                int32_t *replyData = (int32_t *) pReplyData;
+                *replyData = 0;
+                return 0;
+            }
+        }
+        int32_t *replyData = (int32_t *) pReplyData;
+        *replyData = -EINVAL;
+        return 0;
     }
 
     return Effect::command(cmdCode, cmdSize, pCmdData, replySize, pReplyData);
@@ -128,7 +128,7 @@ int32_t EffectVirtualizer::process_effect(audio_buffer_t* in, audio_buffer_t* ou
         int32_t dryR = read(in, i * 2 + 1);
         int32_t dataL = dryL;
         int32_t dataR = dryR;
-        
+
         if (mDeep) {
             /* Note: a pinking filter here would be good. */
             dataL += mDelayDataR;
@@ -170,7 +170,7 @@ int32_t EffectVirtualizer::process_effect(audio_buffer_t* in, audio_buffer_t* ou
         /* Apply localization filter. */
         int32_t localizedL = mLocalizationL.process(directL);
         int32_t localizedR = mLocalizationR.process(directR);
-        
+
         /* Mix difference between channels. dataX = directX + center. */
         write(out, i * 2, dataL + localizedR);
         write(out, i * 2 + 1, dataR + localizedL);

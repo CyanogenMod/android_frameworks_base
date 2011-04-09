@@ -224,7 +224,7 @@ int init_gl_surface(void)
         printf("eglGetDisplay failed\n");
         return 0;
     }
-    
+
     if ( eglInitialize(eglDisplay, NULL, NULL) != EGL_TRUE )
     {
         printf("eglInitialize failed\n");
@@ -257,7 +257,7 @@ int init_gl_surface(void)
         printf("eglMakeCurrent failed\n");
         return 0;
     }
-    
+
     int w, h;
 
     eglQuerySurface(eglDisplay, eglSurface, EGL_WIDTH, &w);
@@ -265,7 +265,7 @@ int init_gl_surface(void)
     eglQuerySurface(eglDisplay, eglSurface, EGL_HEIGHT, &h);
     checkEglError("eglQuerySurface");
     GLint dim = w < h ? w : h;
-    
+
     fprintf(stderr, "Window dimensions: %d x %d\n", w, h);
 
     printGLString("Version", GL_VERSION);

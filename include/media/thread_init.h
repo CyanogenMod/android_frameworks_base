@@ -21,4 +21,4 @@ bool InitializeForThread();
 void UninitializeForThread();
 
 #endif /* THREAD_INIT_H*/
-	
+

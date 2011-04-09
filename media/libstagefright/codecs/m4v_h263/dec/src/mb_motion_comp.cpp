@@ -150,7 +150,7 @@ void  MBMotionComp(
     int xpred, ypred;
     int xsum;
     int round1;
-#ifdef PV_POSTPROC_ON // 2/14/2001      
+#ifdef PV_POSTPROC_ON // 2/14/2001
     /* Total number of pixels in the VOL */
     int32 size = (int32) video->nTotalMB << 8;
     uint8 *pp_dec_y, *pp_dec_u;
@@ -557,7 +557,7 @@ void  SkippedMBMotionComp(
     PIXEL *cv_comp, *cv_prev;
     int width, width_uv;
     int32 offset;
-#ifdef PV_POSTPROC_ON // 2/14/2001      
+#ifdef PV_POSTPROC_ON // 2/14/2001
     int imv;
     int32 size = (int32) video->nTotalMB << 8;
     uint8 *pp_dec_y, *pp_dec_u;

@@ -30,7 +30,7 @@
 
 
 namespace android {
-    
+
 class AndroidRuntime
 {
 public:
@@ -54,7 +54,7 @@ public:
     status_t callMain(const char* className, int argc, const char* const argv[]);
 
     /**
-     * Find a class, with the input either of the form 
+     * Find a class, with the input either of the form
      * "package/class" or "package.class".
      */
     static jclass findClass(JNIEnv* env, const char* className);
@@ -65,7 +65,7 @@ public:
     void start();       // start in android.util.RuntimeInit
 
     static AndroidRuntime* getRuntime();
-    
+
     /**
      * This gets called after the JavaVM has initialized.  Override it
      * with the system's native entry point.
@@ -110,7 +110,7 @@ private:
      * Thread creation helpers.
      */
     static int javaCreateThreadEtc(
-                                android_thread_func_t entryFunction, 
+                                android_thread_func_t entryFunction,
                                 void* userData,
                                 const char* threadName,
                                 int32_t threadPriority,

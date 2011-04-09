@@ -20,7 +20,7 @@ namespace android {
 
 // ---------------------------------------------------------------------------
 
-IInterface::IInterface() 
+IInterface::IInterface()
     : RefBase() {
 }
 

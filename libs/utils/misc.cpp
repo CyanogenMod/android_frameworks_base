@@ -139,12 +139,12 @@ FileType getFileType(const char* fileName)
             return kFileTypeBlockDev;
         else if (S_ISFIFO(sb.st_mode))
             return kFileTypeFifo;
-#ifdef HAVE_SYMLINKS            
+#ifdef HAVE_SYMLINKS
         else if (S_ISLNK(sb.st_mode))
             return kFileTypeSymlink;
         else if (S_ISSOCK(sb.st_mode))
             return kFileTypeSocket;
-#endif            
+#endif
         else
             return kFileTypeUnknown;
     }

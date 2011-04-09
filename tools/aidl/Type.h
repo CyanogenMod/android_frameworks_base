@@ -17,7 +17,7 @@ public:
         INTERFACE,
         GENERATED
     };
-    
+
     // WriteToParcel flags
     enum {
         PARCELABLE_WRITE_RETURN_VALUE = 0x0001
@@ -38,7 +38,7 @@ public:
     inline int      DeclLine() const            { return m_declLine; }
     inline bool     CanBeMarshalled() const     { return m_canWriteToParcel; }
     inline bool     CanBeOutParameter() const   { return m_canBeOut; }
-    
+
     virtual string  ImportType() const;
     virtual string  CreatorName() const;
     virtual string  InstantiableName() const;
@@ -340,12 +340,12 @@ public:
                             const string& declFile, int declLine);
 
     bool            OneWay() const;
-    
+
     virtual void    WriteToParcel(StatementBlock* addTo, Variable* v,
                                     Variable* parcel, int flags);
     virtual void    CreateFromParcel(StatementBlock* addTo, Variable* v,
                                     Variable* parcel);
-                                    
+
 private:
     bool m_oneway;
 };
@@ -414,7 +414,7 @@ public:
     // lookup a specific class name
     Type*   Find(const string& name) const;
     Type*   Find(const char* package, const char* name) const;
-    
+
     // try to search by either a full name or a partial name
     Type*   Search(const string& name);
 

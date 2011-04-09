@@ -157,7 +157,7 @@ int JetPlayer::release()
         mAudioBuffer = NULL;
     }
     mEasData = NULL;
-    
+
     return EAS_SUCCESS;
 }
 
@@ -178,7 +178,7 @@ int JetPlayer::render() {
     LOGV("JetPlayer::render(): entering");
 
     // allocate render buffer
-    mAudioBuffer = 
+    mAudioBuffer =
         new EAS_PCM[pLibConfig->mixBufferSize * pLibConfig->numChannels * MIX_NUM_BUFFERS];
     if (!mAudioBuffer) {
         LOGE("JetPlayer::render(): mAudioBuffer allocate failed");
@@ -194,7 +194,7 @@ int JetPlayer::render() {
     }
 
    while (1) {
-    
+
         mMutex.lock(); // [[[[[[[[ LOCK ---------------------------------------
 
         if (mEasData == NULL) {
@@ -202,20 +202,20 @@ int JetPlayer::render() {
             LOGV("JetPlayer::render(): NULL EAS data, exiting render.");
             goto threadExit;
         }
-            
+
         // nothing to render, wait for client thread to wake us up
         while (!mRender)
         {
             LOGV("JetPlayer::render(): signal wait");
-            if (audioStarted) { 
-                mAudioTrack->pause(); 
+            if (audioStarted) {
+                mAudioTrack->pause();
                 // we have to restart the playback once we start rendering again
                 audioStarted = false;
             }
             mCondition.wait(mMutex);
             LOGV("JetPlayer::render(): signal rx'd");
         }
-        
+
         // render midi data into the input buffer
         int num_output = 0;
         EAS_PCM* p = mAudioBuffer;
@@ -226,7 +226,7 @@ int JetPlayer::render() {
             }
             p += count * pLibConfig->numChannels;
             num_output += count * pLibConfig->numChannels * sizeof(EAS_PCM);
-            
+
              // send events that were generated (if any) to the event callback
             fireEventsFromJetQueue();
         }
@@ -371,7 +371,7 @@ int JetPlayer::loadFromFile(const char* path)
 int JetPlayer::loadFromFD(const int fd, const long long offset, const long long length)
 {
     LOGV("JetPlayer::loadFromFD(): fd=%d offset=%lld length=%lld", fd, offset, length);
-    
+
     Mutex::Autolock lock(mMutex);
 
     mEasJetFileLoc = (EAS_FILE_LOCATOR) malloc(sizeof(EAS_FILE));
@@ -379,7 +379,7 @@ int JetPlayer::loadFromFD(const int fd, const long long offset, const long long 
     mEasJetFileLoc->offset = offset;
     mEasJetFileLoc->length = length;
     mEasJetFileLoc->path = NULL;
-    
+
     EAS_RESULT result = JET_OpenFile(mEasData, mEasJetFileLoc);
     if(result != EAS_SUCCESS)
         mState = EAS_STATE_ERROR;
@@ -410,7 +410,7 @@ int JetPlayer::play()
 
     JET_Status(mEasData, &mJetStatus);
     this->dumpJetStatus(&mJetStatus);
-    
+
     fireUpdateOnStatusChange();
 
     // wake up render thread

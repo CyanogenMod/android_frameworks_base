@@ -198,7 +198,7 @@ ssize_t SensorDevice::poll(sensors_event_t* buffer, size_t count) {
             sensors_data_t oldBuffer;
             long result =  mSensorDataDevice->poll(mSensorDataDevice, &oldBuffer);
             int sensorType = -1;
- 
+
             if (result == 0x7FFFFFFF) {
                 continue;
             } else {
@@ -240,9 +240,9 @@ ssize_t SensorDevice::poll(sensors_event_t* buffer, size_t count) {
                     buffer[pollsDone].distance = 1;
                 }
 #endif
-		return pollsDone+1;
+                return pollsDone+1;
             } else if (sensorType == SENSOR_TYPE_LIGHT) {
-		return pollsDone+1;
+                return pollsDone+1;
             }
             pollsDone++;
         }
@@ -343,11 +343,11 @@ status_t SensorDevice::setDelay(void* ident, int handle, int64_t ns)
             }
         }
     }
-	if (mOldSensorsCompatMode) {
-		return mSensorControlDevice->set_delay(mSensorControlDevice, (ns/(1000*1000)));
-	} else {
-		return mSensorDevice->setDelay(mSensorDevice, handle, ns);
-	}
+        if (mOldSensorsCompatMode) {
+                return mSensorControlDevice->set_delay(mSensorControlDevice, (ns/(1000*1000)));
+        } else {
+                return mSensorDevice->setDelay(mSensorDevice, handle, ns);
+        }
 }
 
 // ---------------------------------------------------------------------------

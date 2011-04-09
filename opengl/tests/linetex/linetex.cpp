@@ -2,16 +2,16 @@
 **
 ** Copyright 2006, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -37,7 +37,7 @@ int main(int argc, char** argv)
          EGL_DEPTH_SIZE, 0,
          EGL_NONE
      };
-     
+
      EGLint majorVersion;
      EGLint minorVersion;
      EGLContext context;
@@ -47,10 +47,10 @@ int main(int argc, char** argv)
      EGLDisplay dpy;
 
      EGLNativeWindowType window = android_createDisplaySurface();
-     
+
      dpy = eglGetDisplay(EGL_DEFAULT_DISPLAY);
      eglInitialize(dpy, &majorVersion, &minorVersion);
-          
+
      status_t err = EGLUtils::selectConfigForNativeWindow(
              dpy, configAttribs, window, &config);
      if (err) {
@@ -60,12 +60,12 @@ int main(int argc, char** argv)
 
      surface = eglCreateWindowSurface(dpy, config, window, NULL);
      context = eglCreateContext(dpy, config, NULL, NULL);
-     eglMakeCurrent(dpy, surface, surface, context);   
+     eglMakeCurrent(dpy, surface, surface, context);
      eglQuerySurface(dpy, surface, EGL_WIDTH, &w);
      eglQuerySurface(dpy, surface, EGL_HEIGHT, &h);
-     
+
      printf("w=%d, h=%d\n", w, h);
-     
+
      glBindTexture(GL_TEXTURE_2D, 0);
      glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
      glTexParameterx(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -111,6 +111,6 @@ int main(int argc, char** argv)
      usleep(5*1000000);
 
      eglTerminate(dpy);
-     
+
      return 0;
 }

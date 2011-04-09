@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		spreading.h
+        File:           spreading.h
 
-	Content:	Spreading of energy functions
+        Content:        Spreading of energy functions
 
 *******************************************************************************/
 

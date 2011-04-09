@@ -88,7 +88,7 @@ status_t MediaRecorderClient::setVideoSource(int vs)
         return PERMISSION_DENIED;
     }
     Mutex::Autolock lock(mLock);
-    if (mRecorder == NULL)	{
+    if (mRecorder == NULL)      {
         LOGE("recorder is not initialized");
         return NO_INIT;
     }

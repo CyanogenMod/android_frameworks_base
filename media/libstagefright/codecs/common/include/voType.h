@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		voType.h
+        File:           voType.h
 
-	Content:	data type definition
+        Content:        data type definition
 
 *******************************************************************************/
 #ifndef __voType_H__
@@ -27,11 +27,11 @@ extern "C" {
 #endif /* __cplusplus */
 
 #ifdef _WIN32
-#	define VO_API __cdecl
-#	define VO_CBI __stdcall
+#       define VO_API __cdecl
+#       define VO_CBI __stdcall
 #else
-#	define VO_API
-#	define VO_CBI
+#       define VO_API
+#       define VO_CBI
 #endif //_WIN32
 
 /** VO_IN is used to identify inputs to an VO function.  This designation
@@ -56,7 +56,7 @@ extern "C" {
 #define VO_INOUT
 #endif
 
-#define VO_MAX_ENUM_VALUE	0X7FFFFFFF
+#define VO_MAX_ENUM_VALUE       0X7FFFFFFF
 
 /** VO_VOID */
 typedef void VO_VOID;
@@ -121,7 +121,7 @@ typedef signed long long VO_S64;
 typedef enum VO_BOOL {
     VO_FALSE = 0,
     VO_TRUE = !VO_FALSE,
-	VO_BOOL_MAX = VO_MAX_ENUM_VALUE
+        VO_BOOL_MAX = VO_MAX_ENUM_VALUE
 } VO_BOOL;
 
 /** The VO_PTR type is intended to be used to pass pointers between the VO
@@ -177,9 +177,9 @@ typedef char VO_TCHAR;
  * Input stream format, Frame or Stream..
  */
 typedef enum {
-    VO_INPUT_FRAME	= 1,	/*!< Input contains completely frame(s) data. */
-    VO_INPUT_STREAM,		/*!< Input is stream data. */
-	VO_INPUT_STREAM_MAX = VO_MAX_ENUM_VALUE
+    VO_INPUT_FRAME      = 1,    /*!< Input contains completely frame(s) data. */
+    VO_INPUT_STREAM,            /*!< Input is stream data. */
+        VO_INPUT_STREAM_MAX = VO_MAX_ENUM_VALUE
 } VO_INPUT_TYPE;
 
 
@@ -187,9 +187,9 @@ typedef enum {
  * General data buffer, used as input or output.
  */
 typedef struct {
-	VO_PBYTE	Buffer;		/*!< Buffer pointer */
-	VO_U32		Length;		/*!< Buffer size in byte */
-	VO_S64		Time;		/*!< The time of the buffer */
+        VO_PBYTE        Buffer;         /*!< Buffer pointer */
+        VO_U32          Length;         /*!< Buffer size in byte */
+        VO_S64          Time;           /*!< The time of the buffer */
 } VO_CODECBUFFER;
 
 
@@ -197,9 +197,9 @@ typedef struct {
  * The init memdata flag.
  */
 typedef enum{
-	VO_IMF_USERMEMOPERATOR		=0,	/*!< memData is  the pointer of memoperator function*/
-	VO_IMF_PREALLOCATEDBUFFER	=1,	/*!< memData is  preallocated memory*/
-	VO_IMF_MAX = VO_MAX_ENUM_VALUE
+        VO_IMF_USERMEMOPERATOR          =0,     /*!< memData is  the pointer of memoperator function*/
+        VO_IMF_PREALLOCATEDBUFFER       =1,     /*!< memData is  preallocated memory*/
+        VO_IMF_MAX = VO_MAX_ENUM_VALUE
 }VO_INIT_MEM_FlAG;
 
 
@@ -207,10 +207,10 @@ typedef enum{
  * The init memory structure..
  */
 typedef struct{
-	VO_INIT_MEM_FlAG			memflag;	/*!<memory flag  */
-	VO_PTR						memData;	/*!<a pointer to VO_MEM_OPERATOR or a preallocated buffer  */
-	VO_U32						reserved1;	/*!<reserved  */
-	VO_U32						reserved2;	/*!<reserved */
+        VO_INIT_MEM_FlAG                        memflag;        /*!<memory flag  */
+        VO_PTR                                          memData;        /*!<a pointer to VO_MEM_OPERATOR or a preallocated buffer  */
+        VO_U32                                          reserved1;      /*!<reserved  */
+        VO_U32                                          reserved2;      /*!<reserved */
 }VO_CODEC_INIT_USERDATA;
 
 

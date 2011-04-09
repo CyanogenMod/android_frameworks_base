@@ -25,7 +25,7 @@ static void Color_RGBToHSV(JNIEnv* env, jobject, int red, int green, int blue, j
         values[i] = SkScalarToFloat(hsv[i]);
     }
 }
- 
+
 static int Color_HSVToColor(JNIEnv* env, jobject, int alpha, jfloatArray hsvArray)
 {
     AutoJavaFloatArray  autoHSV(env, hsvArray, 3);
@@ -35,7 +35,7 @@ static int Color_HSVToColor(JNIEnv* env, jobject, int alpha, jfloatArray hsvArra
     for (int i = 0; i < 3; i++) {
         hsv[i] = SkFloatToScalar(values[i]);
     }
-    
+
     return SkHSVToColor(alpha, hsv);
 }
 
@@ -50,7 +50,7 @@ static bool Shader_getLocalMatrix(JNIEnv* env, jobject, const SkShader* shader, 
 {
     return shader ? shader->getLocalMatrix(matrix) : false;
 }
- 
+
 static void Shader_setLocalMatrix(JNIEnv* env, jobject, SkShader* shader, const SkMatrix* matrix)
 {
     if (shader) {
@@ -74,7 +74,7 @@ static SkShader* BitmapShader_constructor(JNIEnv* env, jobject, const SkBitmap* 
     ThrowIAE_IfNull(env, s);
     return s;
 }
-    
+
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 static SkShader* LinearGradient_create1(JNIEnv* env, jobject,
@@ -90,7 +90,7 @@ static SkShader* LinearGradient_create1(JNIEnv* env, jobject,
 
     SkAutoSTMalloc<8, SkScalar> storage(posArray ? count : 0);
     SkScalar*                   pos = NULL;
-    
+
     if (posArray) {
         AutoJavaFloatArray autoPos(env, posArray, count);
         const float* posValues = autoPos.ptr();
@@ -140,7 +140,7 @@ static SkShader* RadialGradient_create1(JNIEnv* env, jobject,
 
     SkAutoSTMalloc<8, SkScalar> storage(posArray ? count : 0);
     SkScalar*                   pos = NULL;
-    
+
     if (posArray) {
         AutoJavaFloatArray autoPos(env, posArray, count);
         const float* posValues = autoPos.ptr();
@@ -185,10 +185,10 @@ static SkShader* SweepGradient_create1(JNIEnv* env, jobject, float x, float y,
 {
     size_t      count = env->GetArrayLength(jcolors);
     const jint* colors = env->GetIntArrayElements(jcolors, NULL);
-    
+
     SkAutoSTMalloc<8, SkScalar> storage(jpositions ? count : 0);
     SkScalar*                   pos = NULL;
-    
+
     if (NULL != jpositions) {
         AutoJavaFloatArray autoPos(env, jpositions, count);
         const float* posValues = autoPos.ptr();
@@ -283,7 +283,7 @@ int register_android_graphics_Shader(JNIEnv* env);
 int register_android_graphics_Shader(JNIEnv* env)
 {
     int result;
-    
+
     REG(env, "android/graphics/Color", gColorMethods);
     REG(env, "android/graphics/Shader", gShaderMethods);
     REG(env, "android/graphics/BitmapShader", gBitmapShaderMethods);
@@ -291,7 +291,7 @@ int register_android_graphics_Shader(JNIEnv* env)
     REG(env, "android/graphics/RadialGradient", gRadialGradientMethods);
     REG(env, "android/graphics/SweepGradient", gSweepGradientMethods);
     REG(env, "android/graphics/ComposeShader", gComposeShaderMethods);
-    
+
     return result;
 }
 

@@ -709,7 +709,7 @@ status_t ZipFile::copyPartialFpToFp(FILE* dstFp, FILE* srcFp, long length,
 
     while (length) {
         long readSize;
-        
+
         readSize = sizeof(tmpBuf);
         if (readSize > length)
             readSize = length;

@@ -71,7 +71,7 @@ uint32_t LayerBlur::doTransaction(uint32_t flags)
         flags |= eVisibleRegion;
         this->contentDirty = true;
     }
-    return LayerBase::doTransaction(flags);    
+    return LayerBase::doTransaction(flags);
 }
 
 void LayerBlur::unlockPageFlip(const Transform& planeTransform, Region& outDirtyRegion)
@@ -80,7 +80,7 @@ void LayerBlur::unlockPageFlip(const Transform& planeTransform, Region& outDirty
     // the screen is composited.
     if (UNLIKELY(!visibleRegionScreen.isEmpty())) {
         // if anything visible below us is invalidated, the cache becomes dirty
-        if (!mCacheDirty && 
+        if (!mCacheDirty &&
                 !visibleRegionScreen.intersect(outDirtyRegion).isEmpty()) {
             mCacheDirty = true;
         }
@@ -180,7 +180,7 @@ void LayerBlur::onDraw(const Region& clip) const
             bl.height = h;
             bl.stride = s;
             bl.format = mBlurFormat;
-            bl.data = (GGLubyte*)pixels;            
+            bl.data = (GGLubyte*)pixels;
             blurFilter(&bl, 8, 2);
 
             if (GLExtensions::getInstance().haveNpot()) {
@@ -196,7 +196,7 @@ void LayerBlur::onDraw(const Region& clip) const
                 if (th < GLuint(h)) th <<= 1;
                 glTexImage2D(GL_TEXTURE_2D, 0, mReadFormat, tw, th, 0,
                         mReadFormat, mReadType, NULL);
-                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h, 
+                glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, w, h,
                         mReadFormat, mReadType, pixels);
                 mWidthScale  = 1.0f / tw;
                 mHeightScale =-1.0f / th;

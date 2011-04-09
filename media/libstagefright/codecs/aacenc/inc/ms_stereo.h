@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		ms_stereo.h
+        File:           ms_stereo.h
 
-	Content:	Declaration MS stereo processing structure and functions
+        Content:        Declaration MS stereo processing structure and functions
 
 *******************************************************************************/
 

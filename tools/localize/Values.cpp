@@ -4,7 +4,7 @@
 
 
 // =====================================================================================
-StringResource::StringResource(const SourcePos& p, const string& f, const Configuration& c, 
+StringResource::StringResource(const SourcePos& p, const string& f, const Configuration& c,
                     const string& i, int ix, XMLNode* v, const int ve, const string& vs,
                     const string& cmnt)
     :pos(p),

@@ -124,7 +124,7 @@ jstring getMimeTypeString(JNIEnv* env, SkImageDecoder::Format format) {
         { SkImageDecoder::kPNG_Format,  "image/png" },
         { SkImageDecoder::kWBMP_Format, "image/vnd.wap.wbmp" }
     };
-    
+
     const char* cstr = NULL;
     for (size_t i = 0; i < SK_ARRAY_COUNT(gMimeTypes); i++) {
         if (gMimeTypes[i].fFormat == format) {
@@ -185,7 +185,7 @@ static jobject doDecode(JNIEnv* env, SkStream* stream, jobject padding,
                         (allowPurgeable && optionsPurgeable(env, options));
     bool reportSizeToVM = optionsReportSizeToVM(env, options);
     bool preferQualityOverSpeed = false;
-    
+
     if (NULL != options) {
         sampleSize = env->GetIntField(options, gOptions_sampleSizeFieldID);
         if (env->GetBooleanField(options, gOptions_justBoundsFieldID)) {
@@ -195,7 +195,7 @@ static jobject doDecode(JNIEnv* env, SkStream* stream, jobject padding,
         env->SetIntField(options, gOptions_widthFieldID, -1);
         env->SetIntField(options, gOptions_heightFieldID, -1);
         env->SetObjectField(options, gOptions_mimeFieldID, 0);
-        
+
         jobject jconfig = env->GetObjectField(options, gOptions_configFieldID);
         prefConfig = GraphicsJNI::getNativeBitmapConfig(env, jconfig);
         doDither = env->GetBooleanField(options, gOptions_ditherFieldID);
@@ -207,7 +207,7 @@ static jobject doDecode(JNIEnv* env, SkStream* stream, jobject padding,
     if (NULL == decoder) {
         return nullObjectReturn("SkImageDecoder::Factory returned null");
     }
-    
+
     decoder->setSampleSize(sampleSize);
     decoder->setDitherImage(doDither);
     decoder->setPreferQualityOverSpeed(preferQualityOverSpeed);
@@ -460,7 +460,7 @@ static jbyteArray nativeScaleNinePatch(JNIEnv* env, jobject, jbyteArray chunkObj
         }
 
         for (int i = 0; i < chunk->numYDivs; i++) {
-            chunk->yDivs[i] = int(chunk->yDivs[i] * scale + 0.5f);            
+            chunk->yDivs[i] = int(chunk->yDivs[i] * scale + 0.5f);
             if (i > 0 && chunk->yDivs[i] == chunk->yDivs[i - 1]) {
                 chunk->yDivs[i]++;
             }

@@ -2,16 +2,16 @@
 **
 ** Copyright 2007, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -102,7 +102,7 @@ static uint32_t swap(uint32_t x) {
     int b1 = (x >> 16) & 0xff;
     int b2 = (x >>  8) & 0xff;
     int b3 = (x      ) & 0xff;
-    
+
     return (uint32_t)((b3 << 24) | (b2 << 16) | (b1 << 8) | b0);
 }
 #endif
@@ -133,11 +133,11 @@ init_tables()
  * GL_COMPRESSED_RGBA_S3TC_DXT1_EXT.
  */
 bool
-DXT1HasAlpha(const GLvoid *data, int width, int height) {    
+DXT1HasAlpha(const GLvoid *data, int width, int height) {
 #if TIMING
     struct timeval start_t, end_t;
     struct timezone tz;
-    
+
     gettimeofday(&start_t, &tz);
 #endif
 
@@ -150,19 +150,19 @@ DXT1HasAlpha(const GLvoid *data, int width, int height) {
     uint32_t const *d32 = (uint32_t *)data;
     for (int b = 0; b < numblocks; b++) {
         uint32_t colors = *d32++;
-        
+
 #if __BYTE_ORDER == __BIG_ENDIAN
         colors = swap(colors);
 #endif
-        
+
         uint16_t color0 = colors & 0xffff;
         uint16_t color1 = colors >> 16;
-        
+
         if (color0 < color1) {
             // There's no need to endian-swap within 'bits'
             // since we don't care which pixel is the transparent one
             uint32_t bits = *d32++;
-            
+
             // Detect if any (odd, even) pair of bits are '11'
             //      bits: b31 b30 b29 ... b3 b2 b1 b0
             // bits >> 1: b31 b31 b30 ... b4 b3 b2 b1
@@ -177,16 +177,16 @@ DXT1HasAlpha(const GLvoid *data, int width, int height) {
             ++d32;
         }
     }
-    
+
  done:
 #if TIMING
     gettimeofday(&end_t, &tz);
     long usec = (end_t.tv_sec - start_t.tv_sec)*1000000 +
         (end_t.tv_usec - start_t.tv_usec);
-    
+
     printf("Scanned w=%d h=%d in %ld usec\n", width, height, usec);
 #endif
-    
+
     return hasAlpha;
 }
 
@@ -194,36 +194,36 @@ static void
 decodeDXT1(const GLvoid *data, int width, int height,
            void *surface, int stride,
            bool hasAlpha)
-    
+
 {
     init_tables();
-    
+
     uint32_t const *d32 = (uint32_t *)data;
-    
+
     // Color table for the current block
     uint16_t c[4];
     c[0] = c[1] = c[2] = c[3] = 0;
-    
+
     // Specified colors from the previous block
     uint16_t prev_color0 = 0x0000;
     uint16_t prev_color1 = 0x0000;
-    
+
     uint16_t* rowPtr = (uint16_t*)surface;
     for (int base_y = 0; base_y < height; base_y += 4, rowPtr += 4*stride) {
         uint16_t *blockPtr = rowPtr;
         for (int base_x = 0; base_x < width; base_x += 4, blockPtr += 4) {
             uint32_t colors = *d32++;
             uint32_t bits = *d32++;
-            
+
 #if __BYTE_ORDER == __BIG_ENDIAN
             colors = swap(colors);
             bits = swap(bits);
 #endif
-            
+
             // Raw colors
             uint16_t color0 = colors & 0xffff;
             uint16_t color1 = colors >> 16;
-            
+
             // If the new block has the same base colors as the
             // previous one, we don't need to recompute the color
             // table c[]
@@ -231,15 +231,15 @@ decodeDXT1(const GLvoid *data, int width, int height,
                 // Store raw colors for comparison with next block
                 prev_color0 = color0;
                 prev_color1 = color1;
-                
+
                 int r0 =   red(color0);
                 int g0 = green(color0);
                 int b0 =  blue(color0);
 
                 int r1 =   red(color1);
                 int g1 = green(color1);
-                int b1 =  blue(color1);                
-                
+                int b1 =  blue(color1);
+
                 if (hasAlpha) {
                     c[0] = (r0 << 11) | ((g0 >> 1) << 6) | (b0 << 1) | 0x1;
                     c[1] = (r1 << 11) | ((g1 >> 1) << 6) | (b1 << 1) | 0x1;
@@ -247,19 +247,19 @@ decodeDXT1(const GLvoid *data, int width, int height,
                     c[0] = color0;
                     c[1] = color1;
                 }
-                
+
                 int r2, g2, b2, r3, g3, b3, a3;
-                
+
                 int bbits = bits >> 1;
                 bool has2 = ((bbits & ~bits) & 0x55555555) != 0;
                 bool has3 = ((bbits &  bits) & 0x55555555) != 0;
-                
+
                 if (has2 || has3) {
                     if (color0 > color1) {
                         r2 = avg23(r0, r1);
                         g2 = avg23(g0, g1);
                         b2 = avg23(b0, b1);
-                        
+
                         r3 = avg23(r1, r0);
                         g3 = avg23(g1, g0);
                         b3 = avg23(b1, b0);
@@ -268,7 +268,7 @@ decodeDXT1(const GLvoid *data, int width, int height,
                         r2 = (r0 + r1) >> 1;
                         g2 = (g0 + g1) >> 1;
                         b2 = (b0 + b1) >> 1;
-                        
+
                         r3 = g3 = b3 = a3 = 0;
                     }
                     if (hasAlpha) {
@@ -282,26 +282,26 @@ decodeDXT1(const GLvoid *data, int width, int height,
                     }
                 }
             }
-            
+
             uint16_t* blockRowPtr = blockPtr;
             for (int y = 0; y < 4; y++, blockRowPtr += stride) {
                 // Don't process rows past the botom
                 if (base_y + y >= height) {
                     break;
                 }
-                
+
                 int w = min(width - base_x, 4);
                 for (int x = 0; x < w; x++) {
                     int code = bits & 0x3;
                     bits >>= 2;
-                    
+
                     blockRowPtr[x] = c[code];
                 }
             }
         }
     }
 }
-    
+
 // Output data as internalformat=GL_RGBA, type=GL_UNSIGNED_BYTE
 static void
 decodeDXT3(const GLvoid *data, int width, int height,
@@ -309,9 +309,9 @@ decodeDXT3(const GLvoid *data, int width, int height,
 
 {
     init_tables();
-    
+
     uint32_t const *d32 = (uint32_t *)data;
-    
+
     // Specified colors from the previous block
     uint16_t prev_color0 = 0x0000;
     uint16_t prev_color1 = 0x0000;
@@ -324,7 +324,7 @@ decodeDXT3(const GLvoid *data, int width, int height,
     for (int base_y = 0; base_y < height; base_y += 4, rowPtr += 4*stride) {
         uint32_t *blockPtr = rowPtr;
         for (int base_x = 0; base_x < width; base_x += 4, blockPtr += 4) {
-            
+
 #if __BYTE_ORDER == __BIG_ENDIAN
             uint32_t alphahi = *d32++;
             uint32_t alphalo = *d32++;
@@ -337,12 +337,12 @@ decodeDXT3(const GLvoid *data, int width, int height,
 
             uint32_t colors = *d32++;
             uint32_t bits = *d32++;
-            
+
 #if __BYTE_ORDER == __BIG_ENDIAN
             colors = swap(colors);
             bits = swap(bits);
 #endif
-            
+
             uint64_t alpha = ((uint64_t)alphahi << 32) | alphalo;
 
             // Raw colors
@@ -356,24 +356,24 @@ decodeDXT3(const GLvoid *data, int width, int height,
                 // Store raw colors for comparison with next block
                 prev_color0 = color0;
                 prev_color1 = color1;
-                
+
                 int bbits = bits >> 1;
                 bool has2 = ((bbits & ~bits) & 0x55555555) != 0;
                 bool has3 = ((bbits &  bits) & 0x55555555) != 0;
-                
+
                 if (has2 || has3) {
                     int r0 =   red(color0);
                     int g0 = green(color0);
                     int b0 =  blue(color0);
-                    
+
                     int r1 =   red(color1);
                     int g1 = green(color1);
                     int b1 =  blue(color1);
-                    
+
                     int r2 = avg23(r0, r1);
                     int g2 = avg23(g0, g1);
                     int b2 = avg23(b0, b1);
-                    
+
                     int r3 = avg23(r1, r0);
                     int g3 = avg23(g1, g0);
                     int b3 = avg23(b1, b0);
@@ -395,7 +395,7 @@ decodeDXT3(const GLvoid *data, int width, int height,
                 if (base_y + y >= height) {
                     break;
                 }
-                
+
                 int w = min(width - base_x, 4);
                 for (int x = 0; x < w; x++) {
                     int a = alpha & 0xf;
@@ -418,9 +418,9 @@ decodeDXT5(const GLvoid *data, int width, int height,
 
 {
     init_tables();
-    
+
     uint32_t const *d32 = (uint32_t *)data;
-    
+
     // Specified alphas from the previous block
     uint8_t prev_alpha0 = 0x00;
     uint8_t prev_alpha1 = 0x00;
@@ -448,7 +448,7 @@ decodeDXT5(const GLvoid *data, int width, int height,
     for (int base_y = 0; base_y < height; base_y += 4, rowPtr += 4*stride) {
         uint32_t *blockPtr = rowPtr;
         for (int base_x = 0; base_x < width; base_x += 4, blockPtr += 4) {
-            
+
 #if __BYTE_ORDER == __BIG_ENDIAN
             uint32_t alphahi = *d32++;
             uint32_t alphalo = *d32++;
@@ -461,12 +461,12 @@ decodeDXT5(const GLvoid *data, int width, int height,
 
             uint32_t colors = *d32++;
             uint32_t bits = *d32++;
-            
+
 #if __BYTE_ORDER == __BIG_ENDIANx
             colors = swap(colors);
             bits = swap(bits);
 #endif
-            
+
             uint64_t alpha = ((uint64_t)alphahi << 32) | alphalo;
             uint64_t alpha0 = alpha & 0xff;
             alpha >>= 8;
@@ -476,7 +476,7 @@ decodeDXT5(const GLvoid *data, int width, int height,
             if (alpha0 != prev_alpha0 || alpha1 != prev_alpha1) {
                 prev_alpha0 = alpha0;
                 prev_alpha1 = alpha1;
-                
+
                 a[0] = alpha0;
                 a[1] = alpha1;
                 int a01 = alpha0 + alpha1 - 1;
@@ -513,24 +513,24 @@ decodeDXT5(const GLvoid *data, int width, int height,
                 // Store raw colors for comparison with next block
                 prev_color0 = color0;
                 prev_color1 = color1;
-                
+
                 int bbits = bits >> 1;
                 bool has2 = ((bbits & ~bits) & 0x55555555) != 0;
                 bool has3 = ((bbits &  bits) & 0x55555555) != 0;
-                
+
                 if (has2 || has3) {
                     int r0 =   red(color0);
                     int g0 = green(color0);
                     int b0 =  blue(color0);
-                    
+
                     int r1 =   red(color1);
                     int g1 = green(color1);
                     int b1 =  blue(color1);
-                
+
                     int r2 = avg23(r0, r1);
                     int g2 = avg23(g0, g1);
                     int b2 = avg23(b0, b1);
-                    
+
                     int r3 = avg23(r1, r0);
                     int g3 = avg23(g1, g0);
                     int b3 = avg23(b1, b0);
@@ -543,7 +543,7 @@ decodeDXT5(const GLvoid *data, int width, int height,
                     // Convert to 8 bits
                     c[0] = rgb565To888(color0);
                     c[1] = rgb565To888(color1);
-                }                
+                }
             }
 
             uint32_t* blockRowPtr = blockPtr;
@@ -552,7 +552,7 @@ decodeDXT5(const GLvoid *data, int width, int height,
                 if (base_y + y >= height) {
                     break;
                 }
-                
+
                 int w = min(width - base_x, 4);
                 for (int x = 0; x < w; x++) {
                     int acode = alpha & 0x7;
@@ -567,7 +567,7 @@ decodeDXT5(const GLvoid *data, int width, int height,
         }
     }
 }
-   
+
 /*
  * Decode a DXT-compressed texture into memory.  DXT textures consist of
  * a series of 4x4 pixel blocks in left-to-right, top-down order.
@@ -602,7 +602,7 @@ decodeDXT(const GLvoid *data, int width, int height,
 #if TIMING
     struct timeval start_t, end_t;
     struct timezone tz;
-    
+
     gettimeofday(&start_t, &tz);
 #endif
 
@@ -610,25 +610,25 @@ decodeDXT(const GLvoid *data, int width, int height,
     case GL_COMPRESSED_RGB_S3TC_DXT1_EXT:
         decodeDXT1(data, width, height, surface, stride, false);
         break;
-        
+
     case GL_COMPRESSED_RGBA_S3TC_DXT1_EXT:
         decodeDXT1(data, width, height, surface, stride, true);
         break;
-        
+
     case GL_COMPRESSED_RGBA_S3TC_DXT3_EXT:
         decodeDXT3(data, width, height, surface, stride);
         break;
-        
+
     case GL_COMPRESSED_RGBA_S3TC_DXT5_EXT:
         decodeDXT5(data, width, height, surface, stride);
         break;
     }
-    
+
 #if TIMING
     gettimeofday(&end_t, &tz);
     long usec = (end_t.tv_sec - start_t.tv_sec)*1000000 +
         (end_t.tv_usec - start_t.tv_usec);
-    
+
     printf("Loaded w=%d h=%d in %ld usec\n", width, height, usec);
 #endif
 }

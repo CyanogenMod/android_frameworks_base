@@ -80,7 +80,7 @@ status_t GraphicBufferMapper::unregisterBuffer(buffer_handle_t handle)
     return err;
 }
 
-status_t GraphicBufferMapper::lock(buffer_handle_t handle, 
+status_t GraphicBufferMapper::lock(buffer_handle_t handle,
         int usage, const Rect& bounds, void** vaddr)
 {
     status_t err;
@@ -137,18 +137,18 @@ status_t sw_gralloc_handle_t::alloc(uint32_t w, uint32_t h, int format,
     size_t size = bpr * h;
     size_t stride = bpr / bpp;
     size = (size + (PAGE_SIZE-1)) & ~(PAGE_SIZE-1);
-    
+
     int fd = ashmem_create_region("sw-gralloc-buffer", size);
     if (fd < 0) {
         LOGE("ashmem_create_region(size=%d) failed (%s)",
                 size, strerror(-errno));
         return -errno;
     }
-    
+
     int prot = PROT_READ;
     if (usage & GRALLOC_USAGE_SW_WRITE_MASK)
         prot |= PROT_WRITE;
-    
+
     if (ashmem_set_prot_region(fd, prot) < 0) {
         LOGE("ashmem_set_prot_region(fd=%d, prot=%x) failed (%s)",
                 fd, prot, strerror(-errno));
@@ -170,8 +170,8 @@ status_t sw_gralloc_handle_t::alloc(uint32_t w, uint32_t h, int format,
     hnd->base = intptr_t(base);
     hnd->prot = prot;
     *pStride = stride;
-    *pHandle = hnd; 
-    
+    *pHandle = hnd;
+
     return NO_ERROR;
 }
 
@@ -183,7 +183,7 @@ status_t sw_gralloc_handle_t::free(sw_gralloc_handle_t* hnd)
     if (hnd->fd >= 0) {
         close(hnd->fd);
     }
-    delete hnd;    
+    delete hnd;
     return NO_ERROR;
 }
 

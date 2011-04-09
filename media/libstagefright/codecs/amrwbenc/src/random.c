@@ -26,8 +26,8 @@
 
 Word16 Random(Word16 * seed)
 {
-	/* static Word16 seed = 21845; */
-	*seed = (Word16)(L_add((L_mult(*seed, 31821) >> 1), 13849L));
-	return (*seed);
+        /* static Word16 seed = 21845; */
+        *seed = (Word16)(L_add((L_mult(*seed, 31821) >> 1), 13849L));
+        return (*seed);
 }
 

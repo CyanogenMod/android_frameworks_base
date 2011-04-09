@@ -25,34 +25,34 @@
 
 void voAWB_InitFrameBuffer(FrameStream *stream)
 {
-	stream->set_ptr = NULL;
-	stream->frame_ptr_bk = stream->frame_ptr;
-	stream->set_len = 0;
-	stream->framebuffer_len = 0;
-	stream->frame_storelen = 0;	
+        stream->set_ptr = NULL;
+        stream->frame_ptr_bk = stream->frame_ptr;
+        stream->set_len = 0;
+        stream->framebuffer_len = 0;
+        stream->frame_storelen = 0;     
 }
 
 void voAWB_UpdateFrameBuffer(
-		FrameStream *stream, 
-		VO_MEM_OPERATOR *pMemOP
-		)
+                FrameStream *stream, 
+                VO_MEM_OPERATOR *pMemOP
+                )
 {
-	int  len;
-	len  = MIN(Frame_Maxsize - stream->frame_storelen, stream->set_len);
-	pMemOP->Copy(VO_INDEX_ENC_AMRWB, stream->frame_ptr_bk + stream->frame_storelen , stream->set_ptr, len);
-	stream->set_len -= len;
-	stream->set_ptr += len;
-	stream->framebuffer_len = stream->frame_storelen + len;
-	stream->frame_ptr = stream->frame_ptr_bk;
-	stream->used_len += len;
+        int  len;
+        len  = MIN(Frame_Maxsize - stream->frame_storelen, stream->set_len);
+        pMemOP->Copy(VO_INDEX_ENC_AMRWB, stream->frame_ptr_bk + stream->frame_storelen , stream->set_ptr, len);
+        stream->set_len -= len;
+        stream->set_ptr += len;
+        stream->framebuffer_len = stream->frame_storelen + len;
+        stream->frame_ptr = stream->frame_ptr_bk;
+        stream->used_len += len;
 }
 
 void voAWB_FlushFrameBuffer(FrameStream *stream)
 {
-	stream->set_ptr = NULL;
-	stream->frame_ptr_bk = stream->frame_ptr;
-	stream->set_len = 0;
-	stream->framebuffer_len = 0;
-	stream->frame_storelen = 0;	
+        stream->set_ptr = NULL;
+        stream->frame_ptr_bk = stream->frame_ptr;
+        stream->set_len = 0;
+        stream->framebuffer_len = 0;
+        stream->frame_storelen = 0;     
 }
 

@@ -346,7 +346,7 @@ extern "C"
     */
     OSCL_IMPORT_REF UChar* PVGetOverrunBuffer(VideoEncControls *encCtrl);
 
-#ifndef NO_SLICE_ENCODE   /* This set of APIs are not working. This functionality has been partially 
+#ifndef NO_SLICE_ENCODE   /* This set of APIs are not working. This functionality has been partially
     replaced by the introduction of overrun buffer. */
 
     /* slice-based coding */

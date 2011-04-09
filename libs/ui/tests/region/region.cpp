@@ -35,7 +35,7 @@ int main()
 
     reg4.dump("reg4");
     reg5.dump("reg5");
-    
+
     reg0.dump("reg0");
     reg1.dump("reg1");
 
@@ -63,7 +63,7 @@ int main()
     reg0.dump("reg0");
     reg1.dump("reg1");
     reg2.dump("reg2");
-    
+
     return 0;
 }
 

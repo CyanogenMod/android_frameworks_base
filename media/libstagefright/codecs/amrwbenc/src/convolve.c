@@ -17,8 +17,8 @@
 /***********************************************************************
        File: convolve.c
 
-	   Description:Perform the convolution between two vectors x[] and h[]
-	               and write the result in the vector y[]
+           Description:Perform the convolution between two vectors x[] and h[]
+                       and write the result in the vector y[]
 
 ************************************************************************/
 
@@ -26,83 +26,83 @@
 #include "basic_op.h"
 
 void Convolve (
-		Word16 x[],        /* (i)     : input vector                           */
-		Word16 h[],        /* (i)     : impulse response                       */
-		Word16 y[],        /* (o)     : output vector                          */
-		Word16 L           /* (i)     : vector size                            */
-	      )
+                Word16 x[],        /* (i)     : input vector                           */
+                Word16 h[],        /* (i)     : impulse response                       */
+                Word16 y[],        /* (o)     : output vector                          */
+                Word16 L           /* (i)     : vector size                            */
+              )
 {
-	Word32  i, n;
-	Word16 *tmpH,*tmpX;
-	Word32 s;
-	for (n = 0; n < 64;)
-	{
-		tmpH = h+n;
-		tmpX = x;
-		i=n+1;
-		s = vo_mult32((*tmpX++), (*tmpH--));i--;
-		while(i>0)
-		{
-			s += vo_mult32((*tmpX++), (*tmpH--));
-			s += vo_mult32((*tmpX++), (*tmpH--));
-			s += vo_mult32((*tmpX++), (*tmpH--));
-			s += vo_mult32((*tmpX++), (*tmpH--));
-			i -= 4;
-		}
-		y[n] = ((s<<1) + 0x8000)>>16;   
-		n++;
+        Word32  i, n;
+        Word16 *tmpH,*tmpX;
+        Word32 s;
+        for (n = 0; n < 64;)
+        {
+                tmpH = h+n;
+                tmpX = x;
+                i=n+1;
+                s = vo_mult32((*tmpX++), (*tmpH--));i--;
+                while(i>0)
+                {
+                        s += vo_mult32((*tmpX++), (*tmpH--));
+                        s += vo_mult32((*tmpX++), (*tmpH--));
+                        s += vo_mult32((*tmpX++), (*tmpH--));
+                        s += vo_mult32((*tmpX++), (*tmpH--));
+                        i -= 4;
+                }
+                y[n] = ((s<<1) + 0x8000)>>16;   
+                n++;
 
-		tmpH = h+n;
-		tmpX = x;
-		i=n+1;
-		s =  vo_mult32((*tmpX++), (*tmpH--));i--;
-		s += vo_mult32((*tmpX++), (*tmpH--));i--;
+                tmpH = h+n;
+                tmpX = x;
+                i=n+1;
+                s =  vo_mult32((*tmpX++), (*tmpH--));i--;
+                s += vo_mult32((*tmpX++), (*tmpH--));i--;
 
-		while(i>0)
-		{
-			s += vo_mult32((*tmpX++), (*tmpH--));
-			s += vo_mult32((*tmpX++), (*tmpH--));
-			s += vo_mult32((*tmpX++), (*tmpH--));
-			s += vo_mult32((*tmpX++), (*tmpH--));
-			i -= 4;
-		}
-		y[n] = ((s<<1) + 0x8000)>>16;    
-		n++;
+                while(i>0)
+                {
+                        s += vo_mult32((*tmpX++), (*tmpH--));
+                        s += vo_mult32((*tmpX++), (*tmpH--));
+                        s += vo_mult32((*tmpX++), (*tmpH--));
+                        s += vo_mult32((*tmpX++), (*tmpH--));
+                        i -= 4;
+                }
+                y[n] = ((s<<1) + 0x8000)>>16;    
+                n++;
 
-		tmpH = h+n;
-		tmpX = x;
-		i=n+1;
-		s =  vo_mult32((*tmpX++), (*tmpH--));i--;
-		s += vo_mult32((*tmpX++), (*tmpH--));i--;
-		s += vo_mult32((*tmpX++), (*tmpH--));i--;
+                tmpH = h+n;
+                tmpX = x;
+                i=n+1;
+                s =  vo_mult32((*tmpX++), (*tmpH--));i--;
+                s += vo_mult32((*tmpX++), (*tmpH--));i--;
+                s += vo_mult32((*tmpX++), (*tmpH--));i--;
 
-		while(i>0)
-		{
-			s += vo_mult32((*tmpX++), (*tmpH--));
-			s += vo_mult32((*tmpX++), (*tmpH--));
-			s += vo_mult32((*tmpX++), (*tmpH--));
-			s += vo_mult32((*tmpX++), (*tmpH--));
-			i -= 4;
-		}
-		y[n] = ((s<<1) + 0x8000)>>16;   
-		n++;
+                while(i>0)
+                {
+                        s += vo_mult32((*tmpX++), (*tmpH--));
+                        s += vo_mult32((*tmpX++), (*tmpH--));
+                        s += vo_mult32((*tmpX++), (*tmpH--));
+                        s += vo_mult32((*tmpX++), (*tmpH--));
+                        i -= 4;
+                }
+                y[n] = ((s<<1) + 0x8000)>>16;   
+                n++;
 
-		s = 0;
-		tmpH = h+n;
-		tmpX = x;
-		i=n+1;
-		while(i>0)
-		{
-			s += vo_mult32((*tmpX++), (*tmpH--));
-			s += vo_mult32((*tmpX++), (*tmpH--));
-			s += vo_mult32((*tmpX++), (*tmpH--));
-			s += vo_mult32((*tmpX++), (*tmpH--));
-			i -= 4;
-		}
-		y[n] = ((s<<1) + 0x8000)>>16;   
-		n++;        
-	}
-	return;
+                s = 0;
+                tmpH = h+n;
+                tmpX = x;
+                i=n+1;
+                while(i>0)
+                {
+                        s += vo_mult32((*tmpX++), (*tmpH--));
+                        s += vo_mult32((*tmpX++), (*tmpH--));
+                        s += vo_mult32((*tmpX++), (*tmpH--));
+                        s += vo_mult32((*tmpX++), (*tmpH--));
+                        i -= 4;
+                }
+                y[n] = ((s<<1) + 0x8000)>>16;   
+                n++;        
+        }
+        return;
 }
 
 

@@ -221,14 +221,14 @@ KeyLayoutMap::findScancodes(int32_t keycode, Vector<int32_t>* outScancodes) cons
     if (m_status != NO_ERROR) {
         return m_status;
     }
-    
+
     const size_t N = m_keys.size();
     for (size_t i=0; i<N; i++) {
         if (m_keys.valueAt(i).keycode == keycode) {
             outScancodes->add(m_keys.keyAt(i));
         }
     }
-    
+
     return NO_ERROR;
 }
 

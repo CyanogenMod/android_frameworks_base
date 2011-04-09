@@ -48,8 +48,8 @@ namespace android {
 // ----------------------------------------------------------------------
 
 static status_t copyBlt(
-        const sp<GraphicBuffer>& dst, 
-        const sp<GraphicBuffer>& src, 
+        const sp<GraphicBuffer>& dst,
+        const sp<GraphicBuffer>& src,
         const Region& reg)
 {
     // src and dst with, height and format must be identical. no verification
@@ -88,13 +88,13 @@ static status_t copyBlt(
             } while (--h > 0);
         }
     }
-    
+
     if (src_bits)
         src->unlock();
-    
+
     if (dst_bits)
         dst->unlock();
-    
+
     return err;
 }
 
@@ -103,7 +103,7 @@ static status_t copyBlt(
 // ============================================================================
 
 SurfaceControl::SurfaceControl(
-        const sp<SurfaceComposerClient>& client, 
+        const sp<SurfaceComposerClient>& client,
         const sp<ISurface>& surface,
         const ISurfaceComposerClient::surface_data_t& data,
         uint32_t w, uint32_t h, PixelFormat format, uint32_t flags)
@@ -113,7 +113,7 @@ SurfaceControl::SurfaceControl(
       mFlags(flags)
 {
 }
-        
+
 SurfaceControl::~SurfaceControl()
 {
     destroy();
@@ -132,7 +132,7 @@ void SurfaceControl::destroy()
     IPCThreadState::self()->flushCommands();
 }
 
-void SurfaceControl::clear() 
+void SurfaceControl::clear()
 {
     // here, the window manager tells us explicitly that we should destroy
     // the surface's resource. Soon after this call, it will also release
@@ -144,7 +144,7 @@ void SurfaceControl::clear()
 }
 
 bool SurfaceControl::isSameSurface(
-        const sp<SurfaceControl>& lhs, const sp<SurfaceControl>& rhs) 
+        const sp<SurfaceControl>& lhs, const sp<SurfaceControl>& rhs)
 {
     if (lhs == 0 || rhs == 0)
         return false;
@@ -227,7 +227,7 @@ status_t SurfaceControl::setFreezeTint(uint32_t tint) {
 status_t SurfaceControl::validate() const
 {
     if (mToken<0 || mClient==0) {
-        LOGE("invalid token (%d, identity=%u) or client (%p)", 
+        LOGE("invalid token (%d, identity=%u) or client (%p)",
                 mToken, mIdentity, mClient.get());
         return NO_INIT;
     }
@@ -512,7 +512,7 @@ int Surface::setSwapInterval(ANativeWindow* window, int interval) {
     return 0;
 }
 
-int Surface::dequeueBuffer(ANativeWindow* window, 
+int Surface::dequeueBuffer(ANativeWindow* window,
         android_native_buffer_t** buffer) {
     Surface* self = getSelf(window);
     return self->dequeueBuffer(buffer);
@@ -524,25 +524,25 @@ int Surface::cancelBuffer(ANativeWindow* window,
     return self->cancelBuffer(buffer);
 }
 
-int Surface::lockBuffer(ANativeWindow* window, 
+int Surface::lockBuffer(ANativeWindow* window,
         android_native_buffer_t* buffer) {
     Surface* self = getSelf(window);
     return self->lockBuffer(buffer);
 }
 
-int Surface::queueBuffer(ANativeWindow* window, 
+int Surface::queueBuffer(ANativeWindow* window,
         android_native_buffer_t* buffer) {
     Surface* self = getSelf(window);
     return self->queueBuffer(buffer);
 }
 
-int Surface::query(ANativeWindow* window, 
+int Surface::query(ANativeWindow* window,
         int what, int* value) {
     Surface* self = getSelf(window);
     return self->query(what, value);
 }
 
-int Surface::perform(ANativeWindow* window, 
+int Surface::perform(ANativeWindow* window,
         int operation, ...) {
     va_list args;
     va_start(args, operation);
@@ -679,7 +679,7 @@ int Surface::queueBuffer(android_native_buffer_t* buffer)
     if (mSwapRectangle.isValid()) {
         mDirtyRegion.set(mSwapRectangle);
     }
-    
+
     int32_t bufIdx = getBufferIndex(GraphicBuffer::getSelf(buffer));
 
     GraphicLog::getInstance().log(GraphicLog::SF_APP_QUEUE, mIdentity, bufIdx);
@@ -902,7 +902,7 @@ status_t Surface::lock(SurfaceInfo* info, bool blocking) {
     return Surface::lock(info, NULL, blocking);
 }
 
-status_t Surface::lock(SurfaceInfo* other, Region* dirtyIn, bool blocking) 
+status_t Surface::lock(SurfaceInfo* other, Region* dirtyIn, bool blocking)
 {
     if (getConnectedApi()) {
         LOGE("Surface::lock(%p) failed. Already connected to another API",
@@ -922,7 +922,7 @@ status_t Surface::lock(SurfaceInfo* other, Region* dirtyIn, bool blocking)
     }
 
     /* Here we're holding mApiLock */
-    
+
     if (mLockedBuffer != 0) {
         LOGE("Surface::lock failed, already locked");
         mApiLock.unlock();
@@ -979,8 +979,8 @@ status_t Surface::lock(SurfaceInfo* other, Region* dirtyIn, bool blocking)
             status_t res = backBuffer->lock(
                     GRALLOC_USAGE_SW_READ_OFTEN | GRALLOC_USAGE_SW_WRITE_OFTEN,
                     newDirtyRegion.bounds(), &vaddr);
-            
-            LOGW_IF(res, "failed locking buffer (handle = %p)", 
+
+            LOGW_IF(res, "failed locking buffer (handle = %p)",
                     backBuffer->handle);
 
             mLockedBuffer = backBuffer;
@@ -995,8 +995,8 @@ status_t Surface::lock(SurfaceInfo* other, Region* dirtyIn, bool blocking)
     mApiLock.unlock();
     return err;
 }
-    
-status_t Surface::unlockAndPost() 
+
+status_t Surface::unlockAndPost()
 {
     if (mLockedBuffer == 0) {
         LOGE("Surface::unlockAndPost failed, no locked buffer");
@@ -1005,7 +1005,7 @@ status_t Surface::unlockAndPost()
 
     status_t err = mLockedBuffer->unlock();
     LOGE_IF(err, "failed unlocking buffer (%p)", mLockedBuffer->handle);
-    
+
     err = queueBuffer(mLockedBuffer.get());
     LOGE_IF(err, "queueBuffer (idx=%d) failed (%s)",
             getBufferIndex(mLockedBuffer), strerror(-err));
@@ -1045,7 +1045,7 @@ status_t Surface::getBufferLocked(int index,
             "ISurface::getBuffer(%d, %08x) returned NULL",
             index, usage);
     if (buffer != 0) { // this should never happen by construction
-        LOGE_IF(buffer->handle == NULL, 
+        LOGE_IF(buffer->handle == NULL,
                 "Surface (identity=%d) requestBuffer(%d, %u, %u, %u, %08x) "
                 "returned a buffer with a null handle",
                 mIdentity, index, w, h, format, usage);
@@ -1063,7 +1063,7 @@ status_t Surface::getBufferLocked(int index,
             err = err<0 ? err : status_t(NO_MEMORY);
         }
     }
-    return err; 
+    return err;
 }
 
 // ----------------------------------------------------------------------------

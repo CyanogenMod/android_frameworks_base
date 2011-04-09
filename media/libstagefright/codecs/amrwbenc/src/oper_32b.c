@@ -56,9 +56,9 @@
 
 __inline void VO_L_Extract (Word32 L_32, Word16 *hi, Word16 *lo)
 {
-	*hi = (Word16)(L_32 >> 16);
-	*lo = (Word16)((L_32 & 0xffff) >> 1);
-	return;
+        *hi = (Word16)(L_32 >> 16);
+        *lo = (Word16)((L_32 & 0xffff) >> 1);
+        return;
 }
 
 /*****************************************************************************
@@ -84,11 +84,11 @@ __inline void VO_L_Extract (Word32 L_32, Word16 *hi, Word16 *lo)
 
 Word32 L_Comp (Word16 hi, Word16 lo)
 {
-	Word32 L_32;
+        Word32 L_32;
 
-	L_32 = L_deposit_h (hi);
+        L_32 = L_deposit_h (hi);
 
-	return (L_mac (L_32, lo, 1));       /* = hi<<16 + lo<<1 */
+        return (L_mac (L_32, lo, 1));       /* = hi<<16 + lo<<1 */
 }
 
 /*****************************************************************************
@@ -113,13 +113,13 @@ Word32 L_Comp (Word16 hi, Word16 lo)
 
 __inline Word32  Mpy_32 (Word16 hi1, Word16 lo1, Word16 hi2, Word16 lo2)
 {
-	Word32 L_32;
-	L_32 = (hi1 * hi2);
-	L_32 += (hi1 * lo2) >> 15;
-	L_32 += (lo1 * hi2) >> 15;
-	L_32 <<= 1;
+        Word32 L_32;
+        L_32 = (hi1 * hi2);
+        L_32 += (hi1 * lo2) >> 15;
+        L_32 += (lo1 * hi2) >> 15;
+        L_32 <<= 1;
 
-	return (L_32);
+        return (L_32);
 }
 
 /*****************************************************************************
@@ -142,12 +142,12 @@ __inline Word32  Mpy_32 (Word16 hi1, Word16 lo1, Word16 hi2, Word16 lo2)
 
 __inline Word32 Mpy_32_16 (Word16 hi, Word16 lo, Word16 n)
 {
-	Word32 L_32;
+        Word32 L_32;
 
-	L_32 = (hi * n)<<1;
-	L_32 += (((lo * n)>>15)<<1);
+        L_32 = (hi * n)<<1;
+        L_32 += (((lo * n)>>15)<<1);
 
-	return (L_32);
+        return (L_32);
 }
 
 /*****************************************************************************
@@ -194,30 +194,30 @@ __inline Word32 Mpy_32_16 (Word16 hi, Word16 lo, Word16 n)
 
 Word32 Div_32 (Word32 L_num, Word16 denom_hi, Word16 denom_lo)
 {
-	Word16 approx, hi, lo, n_hi, n_lo;
-	Word32 L_32;
+        Word16 approx, hi, lo, n_hi, n_lo;
+        Word32 L_32;
 
-	/* First approximation: 1 / L_denom = 1/denom_hi */
+        /* First approximation: 1 / L_denom = 1/denom_hi */
 
-	approx = div_s ((Word16) 0x3fff, denom_hi);
+        approx = div_s ((Word16) 0x3fff, denom_hi);
 
-	/* 1/L_denom = approx * (2.0 - L_denom * approx) */
+        /* 1/L_denom = approx * (2.0 - L_denom * approx) */
 
-	L_32 = Mpy_32_16 (denom_hi, denom_lo, approx);
+        L_32 = Mpy_32_16 (denom_hi, denom_lo, approx);
 
-	L_32 = L_sub ((Word32) 0x7fffffffL, L_32);
-	hi = L_32 >> 16;
-	lo = (L_32 & 0xffff) >> 1;
+        L_32 = L_sub ((Word32) 0x7fffffffL, L_32);
+        hi = L_32 >> 16;
+        lo = (L_32 & 0xffff) >> 1;
 
-	L_32 = Mpy_32_16 (hi, lo, approx);
+        L_32 = Mpy_32_16 (hi, lo, approx);
 
-	/* L_num * (1/L_denom) */
-	hi = L_32 >> 16;
-	lo = (L_32 & 0xffff) >> 1;
-	VO_L_Extract (L_num, &n_hi, &n_lo);
-	L_32 = Mpy_32 (n_hi, n_lo, hi, lo);
-	L_32 = L_shl2(L_32, 2);
+        /* L_num * (1/L_denom) */
+        hi = L_32 >> 16;
+        lo = (L_32 & 0xffff) >> 1;
+        VO_L_Extract (L_num, &n_hi, &n_lo);
+        L_32 = Mpy_32 (n_hi, n_lo, hi, lo);
+        L_32 = L_shl2(L_32, 2);
 
-	return (L_32);
+        return (L_32);
 }
 

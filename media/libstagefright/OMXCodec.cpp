@@ -1366,15 +1366,15 @@ status_t OMXCodec::setVideoOutputFormat(
 #if 1
         if (!strncmp(mComponentName, "OMX.qcom.7x30",13)) {
             OMX_U32 index;
-	    
+
             for(index = 0 ;; index++){
               format.nIndex = index;
-	      if(mOMX->getParameter(
-			    mNode, OMX_IndexParamVideoPortFormat,
-			    &format, sizeof(format)) != OK) {
-		if(format.nIndex) format.nIndex--;
-		break;
-	      }
+              if(mOMX->getParameter(
+                            mNode, OMX_IndexParamVideoPortFormat,
+                            &format, sizeof(format)) != OK) {
+                if(format.nIndex) format.nIndex--;
+                break;
+              }
             }
             if(mOMXLivesLocally)
               format.nIndex = 0;
@@ -1926,8 +1926,8 @@ void OMXCodec::on_message(const omx_message &msg) {
                             "Codec lied about its buffer size requirements, "
                             "sending a buffer larger than the originally "
                             "advertised size in FILL_BUFFER_DONE!");
-		}
-                
+                }
+
                 if(!mOMXLivesLocally && mPmemInfo != NULL && buffer != NULL) {
                     OMX_U8* base = (OMX_U8*)mPmemInfo->getBase();
                     OMX_U8* data = base + msg.u.extended_buffer_data.pmem_offset;

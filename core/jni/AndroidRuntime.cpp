@@ -2,16 +2,16 @@
 **
 ** Copyright 2006, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -217,7 +217,7 @@ static jint com_android_internal_os_RuntimeInit_getQwertyKeyboard(JNIEnv* env, j
     if (value != NULL && strcmp(value, "true") == 0) {
         return 1;
     }
-    
+
     return 0;
 }
 
@@ -232,7 +232,7 @@ static JNINativeMethod gMethods[] = {
     { "isComputerOn", "()I",
         (void*) com_android_internal_os_RuntimeInit_isComputerOn },
     { "turnComputerOn", "()V",
-        (void*) com_android_internal_os_RuntimeInit_turnComputerOn },    
+        (void*) com_android_internal_os_RuntimeInit_turnComputerOn },
     { "getQwertyKeyboard", "()I",
         (void*) com_android_internal_os_RuntimeInit_getQwertyKeyboard },
 };
@@ -473,7 +473,7 @@ static void runtime_vfprintf(FILE* fp, const char* format, va_list ap)
 int AndroidRuntime::addVmArguments(int argc, const char* const argv[])
 {
     int i;
-    
+
     for (i = 0; i<argc; i++) {
         if (argv[i][0] != '-') {
             return i;
@@ -907,14 +907,14 @@ void AndroidRuntime::start(const char* className, const bool startSystemServer)
 
     blockSigpipe();
 
-    /* 
-     * 'startSystemServer == true' means runtime is obslete and not run from 
+    /*
+     * 'startSystemServer == true' means runtime is obslete and not run from
      * init.rc anymore, so we print out the boot start event here.
      */
     if (startSystemServer) {
         /* track our progress through the boot sequence */
         const int LOG_BOOT_PROGRESS_START = 3000;
-        LOG_EVENT_LONG(LOG_BOOT_PROGRESS_START, 
+        LOG_EVENT_LONG(LOG_BOOT_PROGRESS_START,
                        ns2ms(systemTime(SYSTEM_TIME_MONOTONIC)));
     }
 
@@ -960,7 +960,7 @@ void AndroidRuntime::start(const char* className, const bool startSystemServer)
     classNameStr = env->NewStringUTF(className);
     assert(classNameStr != NULL);
     env->SetObjectArrayElement(strArray, 0, classNameStr);
-    startSystemServerStr = env->NewStringUTF(startSystemServer ? 
+    startSystemServerStr = env->NewStringUTF(startSystemServer ?
                                                  "true" : "false");
     env->SetObjectArrayElement(strArray, 1, startSystemServerStr);
 
@@ -1112,7 +1112,7 @@ static int javaDetachThread(void)
  * into the VM before it really starts executing.
  */
 /*static*/ int AndroidRuntime::javaCreateThreadEtc(
-                                android_thread_func_t entryFunction, 
+                                android_thread_func_t entryFunction,
                                 void* userData,
                                 const char* threadName,
                                 int32_t threadPriority,
@@ -1305,7 +1305,7 @@ static const RegJNIRec gRegJNI[] = {
     REG_JNI(register_android_backup_BackupDataOutput),
     REG_JNI(register_android_backup_FileBackupHelperBase),
     REG_JNI(register_android_backup_BackupHelperDispatcher),
-    
+
     REG_JNI(register_android_app_NativeActivity),
     REG_JNI(register_android_view_InputChannel),
     REG_JNI(register_android_view_InputQueue),

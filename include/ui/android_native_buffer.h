@@ -28,7 +28,7 @@ extern "C" {
 typedef struct android_native_buffer_t
 {
 #ifdef __cplusplus
-    android_native_buffer_t() { 
+    android_native_buffer_t() {
         common.magic = ANDROID_NATIVE_BUFFER_MAGIC;
         common.version = sizeof(android_native_buffer_t);
         memset(common.reserved, 0, sizeof(common.reserved));

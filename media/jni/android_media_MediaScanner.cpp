@@ -71,12 +71,12 @@ public:
                                                      "(Ljava/lang/String;)V");
         }
     }
-    
+
     virtual ~MyMediaScannerClient()
     {
         mEnv->DeleteGlobalRef(mClient);
     }
-    
+
     // returns true if it succeeded, false if an exception occured in the Java code
     virtual bool scanFile(const char* path, long long lastModified, long long fileSize)
     {
@@ -131,8 +131,8 @@ public:
 private:
     JNIEnv *mEnv;
     jobject mClient;
-    jmethodID mScanFileMethodID; 
-    jmethodID mHandleStringTagMethodID; 
+    jmethodID mScanFileMethodID;
+    jmethodID mHandleStringTagMethodID;
     jmethodID mSetMimeTypeMethodID;
     jmethodID mAddNoMediaFolderMethodID;
 };
@@ -158,7 +158,7 @@ android_media_MediaScanner_processDirectory(JNIEnv *env, jobject thiz, jstring p
         jniThrowException(env, "java/lang/IllegalArgumentException", NULL);
         return;
     }
-    
+
     const char *pathStr = env->GetStringUTFChars(path, NULL);
     if (pathStr == NULL) {  // Out of memory
         jniThrowException(env, "java/lang/RuntimeException", "Out of memory");
@@ -186,7 +186,7 @@ android_media_MediaScanner_processFile(JNIEnv *env, jobject thiz, jstring path, 
         jniThrowException(env, "java/lang/IllegalArgumentException", NULL);
         return;
     }
-    
+
     const char *pathStr = env->GetStringUTFChars(path, NULL);
     if (pathStr == NULL) {  // Out of memory
         jniThrowException(env, "java/lang/RuntimeException", "Out of memory");
@@ -242,14 +242,14 @@ android_media_MediaScanner_extractAlbumArt(JNIEnv *env, jobject thiz, jobject fi
         return NULL;
     }
     long len = *((long*)data);
-    
+
     jbyteArray array = env->NewByteArray(len);
     if (array != NULL) {
         jbyte* bytes = env->GetByteArrayElements(array, NULL);
         memcpy(bytes, data + 4, len);
         env->ReleaseByteArrayElements(array, bytes, 0);
     }
-    
+
 done:
     free(data);
     // if NewByteArray() returned NULL, an out-of-memory
@@ -309,9 +309,9 @@ android_media_MediaScanner_native_finalize(JNIEnv *env, jobject thiz)
 // ----------------------------------------------------------------------------
 
 static JNINativeMethod gMethods[] = {
-    {"processDirectory",  "(Ljava/lang/String;Ljava/lang/String;Landroid/media/MediaScannerClient;)V",    
+    {"processDirectory",  "(Ljava/lang/String;Ljava/lang/String;Landroid/media/MediaScannerClient;)V",
                                                         (void *)android_media_MediaScanner_processDirectory},
-    {"processFile",       "(Ljava/lang/String;Ljava/lang/String;Landroid/media/MediaScannerClient;)V",    
+    {"processFile",       "(Ljava/lang/String;Ljava/lang/String;Landroid/media/MediaScannerClient;)V",
                                                         (void *)android_media_MediaScanner_processFile},
     {"setLocale",         "(Ljava/lang/String;)V",      (void *)android_media_MediaScanner_setLocale},
     {"extractAlbumArt",   "(Ljava/io/FileDescriptor;)[B",     (void *)android_media_MediaScanner_extractAlbumArt},

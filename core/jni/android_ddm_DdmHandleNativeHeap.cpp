@@ -2,16 +2,16 @@
 **
 ** Copyright 2006, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -30,9 +30,9 @@
 #include <sys/stat.h>
 
 #if defined(__arm__)
-extern "C" void get_malloc_leak_info(uint8_t** info, size_t* overallSize, 
+extern "C" void get_malloc_leak_info(uint8_t** info, size_t* overallSize,
         size_t* infoSize, size_t* totalMemory, size_t* backtraceSize);
-        
+
 extern "C" void free_malloc_leak_info(uint8_t* info);
 #endif
 
@@ -72,7 +72,7 @@ static jbyteArray getLeakInfo(JNIEnv *env, jobject clazz)
     if (ret == 0) {
         mapsFile = (uint8_t*)malloc(MAPS_FILE_SIZE);
         int fd = open(path, O_RDONLY);
-    
+
         if (mapsFile != NULL && fd != -1) {
             int amount = 0;
             do {
@@ -80,19 +80,19 @@ static jbyteArray getLeakInfo(JNIEnv *env, jobject clazz)
                 amount = read(fd, ptr, MAPS_FILE_SIZE);
                 if (amount <= 0) {
                     if (errno != EINTR)
-                        break; 
+                        break;
                     else
                         continue;
                 }
                 header.mapSize += amount;
             } while (header.mapSize < MAPS_FILE_SIZE);
-            
+
             LOGD("**** read %d bytes from '%s'", (int) header.mapSize, path);
         }
     }
 
     uint8_t* allocBytes;
-    get_malloc_leak_info(&allocBytes, &header.allocSize, &header.allocInfoSize, 
+    get_malloc_leak_info(&allocBytes, &header.allocSize, &header.allocInfoSize,
             &header.totalMemory, &header.backtraceSize);
 
     jbyte* bytes = NULL;
@@ -105,17 +105,17 @@ static jbyteArray getLeakInfo(JNIEnv *env, jobject clazz)
     bytes = env->GetByteArrayElements(array, NULL);
     ptr = bytes;
 
-//    LOGD("*** mapSize: %d allocSize: %d allocInfoSize: %d totalMemory: %d", 
+//    LOGD("*** mapSize: %d allocSize: %d allocInfoSize: %d totalMemory: %d",
 //            header.mapSize, header.allocSize, header.allocInfoSize, header.totalMemory);
 
     memcpy(ptr, &header, sizeof(header));
     ptr += sizeof(header);
-    
+
     if (header.mapSize > 0 && mapsFile != NULL) {
         memcpy(ptr, mapsFile, header.mapSize);
         ptr += header.mapSize;
     }
-    
+
     memcpy(ptr, allocBytes, header.allocSize);
     env->ReleaseByteArrayElements(array, bytes, 0);
 

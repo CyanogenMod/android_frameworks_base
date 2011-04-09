@@ -37,7 +37,7 @@ public:
         }
         return *instance;
     }
-    
+
 protected:
     ~Singleton() { };
     Singleton() { };

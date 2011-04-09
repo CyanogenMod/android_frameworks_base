@@ -207,7 +207,7 @@ utf8_to_utf32(const uint8_t *src, size_t length)
         default:
             return 0xffff;
     }
-    
+
     //printf("Char at %p: len=%d, utf-16=%p\n", src, length, (void*)result);
 }
 
@@ -273,11 +273,11 @@ void terminate_string16()
 static char16_t* allocFromUTF8(const char* in, size_t len)
 {
     if (len == 0) return getEmptyString();
-    
+
     size_t chars = 0;
     const char* end = in+len;
     const char* p = in;
-    
+
     while (p < end) {
         chars++;
         int utf8len = utf8_char_len(*p);
@@ -285,22 +285,22 @@ static char16_t* allocFromUTF8(const char* in, size_t len)
         if (codepoint > 0xFFFF) chars++; // this will be a surrogate pair in utf16
         p += utf8len;
     }
-    
+
     size_t bufSize = (chars+1)*sizeof(char16_t);
     SharedBuffer* buf = SharedBuffer::alloc(bufSize);
     if (buf) {
         p = in;
         char16_t* str = (char16_t*)buf->data();
-        
+
         utf8_to_utf16((const uint8_t*)p, len, str, bufSize);
 
         //printf("Created UTF-16 string from UTF-8 \"%s\":", in);
         //printHexData(1, str, buf->size(), 16, 1);
         //printf("\n");
-        
+
         return str;
     }
-    
+
     return getEmptyString();
 }
 
@@ -334,7 +334,7 @@ String16::String16(const char16_t* o)
         mString = str;
         return;
     }
-    
+
     mString = getEmptyString();
 }
 
@@ -349,7 +349,7 @@ String16::String16(const char16_t* o, size_t len)
         mString = str;
         return;
     }
-    
+
     mString = getEmptyString();
 }
 
@@ -430,7 +430,7 @@ status_t String16::append(const String16& other)
     } else if (otherLen == 0) {
         return NO_ERROR;
     }
-    
+
     SharedBuffer* buf = SharedBuffer::bufferFromData(mString)
         ->editResize((myLen+otherLen+1)*sizeof(char16_t));
     if (buf) {
@@ -451,7 +451,7 @@ status_t String16::append(const char16_t* chrs, size_t otherLen)
     } else if (otherLen == 0) {
         return NO_ERROR;
     }
-    
+
     SharedBuffer* buf = SharedBuffer::bufferFromData(mString)
         ->editResize((myLen+otherLen+1)*sizeof(char16_t));
     if (buf) {

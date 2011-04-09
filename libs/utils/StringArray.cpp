@@ -16,7 +16,7 @@
 
 //
 // Sortable array of strings.  STL-ish, but STL-free.
-//  
+//
 
 #include <stdlib.h>
 #include <string.h>

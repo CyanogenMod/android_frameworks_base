@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		pre_echo_control.h
+        File:           pre_echo_control.h
 
-	Content:	Pre echo control functions
+        Content:        Pre echo control functions
 
 *******************************************************************************/
 

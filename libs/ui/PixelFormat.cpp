@@ -85,7 +85,7 @@ status_t getPixelFormatInfo(PixelFormat format, PixelFormatInfo* info)
 
     #define COMPONENT(name) \
         case GGL_##name: info->components = PixelFormatInfo::name; break;
-    
+
     switch (i->components) {
         COMPONENT(ALPHA)
         COMPONENT(RGB)
@@ -95,9 +95,9 @@ status_t getPixelFormatInfo(PixelFormat format, PixelFormatInfo* info)
         default:
             return BAD_INDEX;
     }
-    
+
     #undef COMPONENT
-    
+
     info->format = format;
     info->bytesPerPixel = i->size;
     info->bitsPerPixel  = i->bitsPerPixel;

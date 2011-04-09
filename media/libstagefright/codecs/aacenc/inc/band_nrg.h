@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		band_nrg.h
+        File:           band_nrg.h
 
-	Content:	Band/Line energy calculations functions
+        Content:        Band/Line energy calculations functions
 
 *******************************************************************************/
 

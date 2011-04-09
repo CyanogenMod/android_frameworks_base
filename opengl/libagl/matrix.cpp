@@ -2,16 +2,16 @@
 **
 ** Copyright 2006, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -40,7 +40,7 @@ static const GLfloat gIdentityf[16] = { 1,0,0,0,
                                         0,0,1,0,
                                         0,0,0,1 };
 
-static const matrixx_t gIdentityx = { 
+static const matrixx_t gIdentityx = {
             {   0x10000,0,0,0,
                 0,0x10000,0,0,
                 0,0,0x10000,0,
@@ -72,7 +72,7 @@ void ogles_init_matrix(ogles_context_t* c)
 
     c->transforms.current = &c->transforms.modelview;
     c->transforms.matrixMode = GL_MODELVIEW;
-    c->transforms.dirty =   transform_state_t::VIEWPORT | 
+    c->transforms.dirty =   transform_state_t::VIEWPORT |
                             transform_state_t::MVUI |
                             transform_state_t::MVIT |
                             transform_state_t::MVP;
@@ -199,7 +199,7 @@ void transform_t::picker()
     point2 = point2__generic;
     point3 = point3__generic;
     point4 = point4__generic;
-    
+
     // find out if this is a 2D projection
     if (!(notZero(m[3]) | notZero(m[7]) | notZero(m[11]) | notOne(m[15]))) {
         flags |= FLAGS_2D_PROJECTION;
@@ -222,7 +222,7 @@ void transform_t::dump(const char* what)
         LOGD("[%08x %08x %08x %08x] [%f %f %f %f]\n",
             m[I(0,i)], m[I(1,i)], m[I(2,i)], m[I(3,i)],
             fixedToFloat(m[I(0,i)]),
-            fixedToFloat(m[I(1,i)]), 
+            fixedToFloat(m[I(1,i)]),
             fixedToFloat(m[I(2,i)]),
             fixedToFloat(m[I(3,i)]));
 }
@@ -369,7 +369,7 @@ void matrixf_t::rotate(GLfloat a, GLfloat x, GLfloat y, GLfloat z)
         const GLfloat zx = z * x;
         const GLfloat xs = x * s;
         const GLfloat ys = y * s;
-        const GLfloat zs = z * s;		
+        const GLfloat zs = z * s;
         r[ 0] = x*x*nc +  c;    r[ 4] =  xy*nc - zs;    r[ 8] =  zx*nc + ys;
         r[ 1] =  xy*nc + zs;    r[ 5] = y*y*nc +  c;    r[ 9] =  yz*nc - xs;
         r[ 2] =  zx*nc - ys;    r[ 6] =  yz*nc + xs;    r[10] = z*z*nc +  c;
@@ -404,7 +404,7 @@ void matrix_stack_t::loadIdentity() {
 }
 
 void matrix_stack_t::load(const GLfixed* rhs)
-{   
+{
     memcpy(transform.matrix.m, rhs, sizeof(transform.matrix.m));
     stack[depth].load(rhs);
     ops[depth] = OP_ALL;    // TODO: we should look at the matrix
@@ -417,7 +417,7 @@ void matrix_stack_t::load(const GLfloat* rhs)
 }
 
 void matrix_stack_t::multiply(const matrixf_t& rhs)
-{    
+{
     stack[depth].multiply(rhs);
     ops[depth] = OP_ALL;    // TODO: we should look at the matrix
 }
@@ -524,7 +524,7 @@ void transform_state_t::update_mvp()
     }
 }
 
-static inline 
+static inline
 GLfloat det22(GLfloat a, GLfloat b, GLfloat c, GLfloat d) {
     return a*d - b*c;
 }
@@ -540,10 +540,10 @@ void invert(GLfloat* inverse, const GLfloat* src)
     double t;
     int i, j, k, swap;
     GLfloat tmp[4][4];
-    
+
     memcpy(inverse, gIdentityf, sizeof(gIdentityf));
     memcpy(tmp, src, sizeof(GLfloat)*16);
-    
+
     for (i = 0; i < 4; i++) {
         // look for largest element in column
         swap = i;
@@ -552,20 +552,20 @@ void invert(GLfloat* inverse, const GLfloat* src)
                 swap = j;
             }
         }
-        
+
         if (swap != i) {
             /* swap rows. */
             for (k = 0; k < 4; k++) {
                 t = tmp[i][k];
                 tmp[i][k] = tmp[swap][k];
                 tmp[swap][k] = t;
-                
+
                 t = inverse[i*4+k];
                 inverse[i*4+k] = inverse[swap*4+k];
                 inverse[swap*4+k] = t;
             }
         }
-        
+
         t = 1.0f / tmp[i][i];
         for (k = 0; k < 4; k++) {
             tmp[i][k] *= t;
@@ -600,7 +600,7 @@ void transform_state_t::update_mvui()
 {
     GLfloat r[16];
     const GLfloat* const mv = modelview.top().elements();
-    
+
     /*
     When evaluating the lighting equation in eye-space, normals
     are transformed by the upper 3x3 modelview inverse-transpose.
@@ -643,7 +643,7 @@ int ogles_surfaceport(ogles_context_t* c, GLint x, GLint y)
     c->viewport.surfaceport.x = x;
     c->viewport.surfaceport.y = y;
 
-    ogles_viewport(c, 
+    ogles_viewport(c,
             c->viewport.x,
             c->viewport.y,
             c->viewport.w,
@@ -658,7 +658,7 @@ int ogles_surfaceport(ogles_context_t* c, GLint x, GLint y)
     return 0;
 }
 
-void ogles_scissor(ogles_context_t* c, 
+void ogles_scissor(ogles_context_t* c,
         GLint x, GLint y, GLsizei w, GLsizei h)
 {
     if ((w|h) < 0) {
@@ -669,7 +669,7 @@ void ogles_scissor(ogles_context_t* c,
     c->viewport.scissor.y = y;
     c->viewport.scissor.w = w;
     c->viewport.scissor.h = h;
-    
+
     x += c->viewport.surfaceport.x;
     y += c->viewport.surfaceport.y;
 
@@ -725,7 +725,7 @@ void point2__generic(transform_t const* mx, vec4_t* lhs, vec4_t const* rhs) {
     const GLfixed* const m = mx->matrix.m;
     const GLfixed rx = rhs->x;
     const GLfixed ry = rhs->y;
-    lhs->x = mla2a(rx, m[ 0], ry, m[ 4], m[12]); 
+    lhs->x = mla2a(rx, m[ 0], ry, m[ 4], m[12]);
     lhs->y = mla2a(rx, m[ 1], ry, m[ 5], m[13]);
     lhs->z = mla2a(rx, m[ 2], ry, m[ 6], m[14]);
     lhs->w = mla2a(rx, m[ 3], ry, m[ 7], m[15]);
@@ -736,7 +736,7 @@ void point3__generic(transform_t const* mx, vec4_t* lhs, vec4_t const* rhs) {
     const GLfixed rx = rhs->x;
     const GLfixed ry = rhs->y;
     const GLfixed rz = rhs->z;
-    lhs->x = mla3a(rx, m[ 0], ry, m[ 4], rz, m[ 8], m[12]); 
+    lhs->x = mla3a(rx, m[ 0], ry, m[ 4], rz, m[ 8], m[12]);
     lhs->y = mla3a(rx, m[ 1], ry, m[ 5], rz, m[ 9], m[13]);
     lhs->z = mla3a(rx, m[ 2], ry, m[ 6], rz, m[10], m[14]);
     lhs->w = mla3a(rx, m[ 3], ry, m[ 7], rz, m[11], m[15]);
@@ -748,7 +748,7 @@ void point4__generic(transform_t const* mx, vec4_t* lhs, vec4_t const* rhs) {
     const GLfixed ry = rhs->y;
     const GLfixed rz = rhs->z;
     const GLfixed rw = rhs->w;
-    lhs->x = mla4(rx, m[ 0], ry, m[ 4], rz, m[ 8], rw, m[12]); 
+    lhs->x = mla4(rx, m[ 0], ry, m[ 4], rz, m[ 8], rw, m[12]);
     lhs->y = mla4(rx, m[ 1], ry, m[ 5], rz, m[ 9], rw, m[13]);
     lhs->z = mla4(rx, m[ 2], ry, m[ 6], rz, m[10], rw, m[14]);
     lhs->w = mla4(rx, m[ 3], ry, m[ 7], rz, m[11], rw, m[15]);
@@ -808,7 +808,7 @@ void point4__nop(transform_t const*, vec4_t* lhs, vec4_t const* rhs) {
 
 
 static void frustumf(
-            GLfloat left, GLfloat right, 
+            GLfloat left, GLfloat right,
             GLfloat bottom, GLfloat top,
             GLfloat zNear, GLfloat zFar,
             ogles_context_t* c)
@@ -849,8 +849,8 @@ static void frustumf(
     c->transforms.invalidate();
 }
 
-static void orthof( 
-        GLfloat left, GLfloat right, 
+static void orthof(
+        GLfloat left, GLfloat right,
         GLfloat bottom, GLfloat top,
         GLfloat zNear, GLfloat zFar,
         ogles_context_t* c)
@@ -992,7 +992,7 @@ void glPushMatrix()
 }
 
 void glFrustumf(
-        GLfloat left, GLfloat right, 
+        GLfloat left, GLfloat right,
         GLfloat bottom, GLfloat top,
         GLfloat zNear, GLfloat zFar)
 {
@@ -1000,7 +1000,7 @@ void glFrustumf(
     frustumf(left, right, bottom, top, zNear, zFar, c);
 }
 
-void glFrustumx( 
+void glFrustumx(
         GLfixed left, GLfixed right,
         GLfixed bottom, GLfixed top,
         GLfixed zNear, GLfixed zFar)
@@ -1012,8 +1012,8 @@ void glFrustumx(
               c);
 }
 
-void glOrthof( 
-        GLfloat left, GLfloat right, 
+void glOrthof(
+        GLfloat left, GLfloat right,
         GLfloat bottom, GLfloat top,
         GLfloat zNear, GLfloat zFar)
 {
@@ -1043,7 +1043,7 @@ void glRotatef(GLfloat a, GLfloat x, GLfloat y, GLfloat z)
 void glRotatex(GLfixed a, GLfixed x, GLfixed y, GLfixed z)
 {
     ogles_context_t* c = ogles_context_t::get();
-    c->transforms.current->rotate( 
+    c->transforms.current->rotate(
             fixedToFloat(a), fixedToFloat(x),
             fixedToFloat(y), fixedToFloat(z));
     c->transforms.invalidate();

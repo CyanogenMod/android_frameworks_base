@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		typedefs.h
+        File:           typedefs.h
 
-	Content:	type defined or const defined
+        Content:        type defined or const defined
 
 *******************************************************************************/
 
@@ -55,7 +55,7 @@
 #define INT_BITS   32
 /*
 ********************************************************************************
-*                         DEFINITION OF CONSTANTS 
+*                         DEFINITION OF CONSTANTS
 ********************************************************************************
 */
 /*
@@ -100,18 +100,18 @@ typedef unsigned __int64 UWord64;
 
 #ifdef ARM_INASM
 #ifdef ARMV5_INASM
-#define ARMV5E_INASM	1
+#define ARMV5E_INASM    1
 #endif
-#define ARMV4_INASM		1
+#define ARMV4_INASM             1
 #endif
 
 #if ARMV4_INASM
-	#define ARMV5TE_SAT           1
+        #define ARMV5TE_SAT           1
     #define ARMV5TE_ADD           1
     #define ARMV5TE_SUB           1
-	#define ARMV5TE_SHL           1
+        #define ARMV5TE_SHL           1
     #define ARMV5TE_SHR           1
-	#define ARMV5TE_L_SHL         1
+        #define ARMV5TE_L_SHL         1
     #define ARMV5TE_L_SHR         1
 #endif//ARMV4
 #if ARMV5E_INASM
@@ -128,7 +128,7 @@ typedef unsigned __int64 UWord64;
     
     #define ARMV5TE_NORM_S        1
     #define ARMV5TE_NORM_L        1
-	#define ARMV5TE_L_MPY_LS	  1
+        #define ARMV5TE_L_MPY_LS          1
 #endif
 
 //basic operation functions optimization flags
@@ -157,23 +157,23 @@ typedef unsigned __int64 UWord64;
 #define MSU_R_IS_INLINE                 1   //define msu_r as inline function
 #define L_SHR_R_IS_INLINE               1   //define L_shr_r as inline function
 
-#define PREFIX				voAACEnc
-#define LINK0(x, y, z)		LINK1(x,y,z)
-#define LINK1(x,y,z)		x##y##z
-#define ADD_PREFIX(func)	LINK0(PREFIX, _, func)
+#define PREFIX                          voAACEnc
+#define LINK0(x, y, z)          LINK1(x,y,z)
+#define LINK1(x,y,z)            x##y##z
+#define ADD_PREFIX(func)        LINK0(PREFIX, _, func)
 
-#define  L_Extract		ADD_PREFIX(L_Extract)
-#define  L_Comp			ADD_PREFIX(L_Comp)
-#define  Mpy_32			ADD_PREFIX(Mpy_32)
-#define  Mpy_32_16		ADD_PREFIX(Mpy_32_16)
-#define  Div_32			ADD_PREFIX(Div_32)
-#define  iLog4			ADD_PREFIX(iLog4)
-#define  rsqrt			ADD_PREFIX(rsqrt)
-#define  pow2_xy		ADD_PREFIX(pow2_xy)
-#define  L_mpy_ls		ADD_PREFIX(L_mpy_ls)
-#define  L_mpy_wx		ADD_PREFIX(L_mpy_wx)
+#define  L_Extract              ADD_PREFIX(L_Extract)
+#define  L_Comp                 ADD_PREFIX(L_Comp)
+#define  Mpy_32                 ADD_PREFIX(Mpy_32)
+#define  Mpy_32_16              ADD_PREFIX(Mpy_32_16)
+#define  Div_32                 ADD_PREFIX(Div_32)
+#define  iLog4                  ADD_PREFIX(iLog4)
+#define  rsqrt                  ADD_PREFIX(rsqrt)
+#define  pow2_xy                ADD_PREFIX(pow2_xy)
+#define  L_mpy_ls               ADD_PREFIX(L_mpy_ls)
+#define  L_mpy_wx               ADD_PREFIX(L_mpy_wx)
 
-#define mem_malloc		ADD_PREFIX(mem_malloc)
-#define mem_free		ADD_PREFIX(mem_free)
+#define mem_malloc              ADD_PREFIX(mem_malloc)
+#define mem_free                ADD_PREFIX(mem_free)
 
 #endif

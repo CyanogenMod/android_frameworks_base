@@ -1,10 +1,10 @@
 /*
  * Main entry of system server process.
- * 
+ *
  * Calls the standard system initialization function, and then
  * puts the main thread into the thread pool so it can handle
  * incoming transactions.
- * 
+ *
  */
 
 #define LOG_TAG "sysproc"
@@ -34,7 +34,7 @@ static void blockSignals()
 {
     sigset_t mask;
     int cc;
-    
+
     sigemptyset(&mask);
     sigaddset(&mask, SIGQUIT);
     sigaddset(&mask, SIGUSR1);
@@ -47,7 +47,7 @@ int main(int argc, const char* const argv[])
     LOGI("System server is starting with pid=%d.\n", getpid());
 
     blockSignals();
-    
+
     // You can trust me, honestly!
     LOGW("*** Current priority: %d\n", getpriority(PRIO_PROCESS, 0));
     setpriority(PRIO_PROCESS, 0, -1);
@@ -57,5 +57,5 @@ int main(int argc, const char* const argv[])
     //setuid(UID_SYSTEM);
     #endif
 
-    system_init();    
+    system_init();
 }

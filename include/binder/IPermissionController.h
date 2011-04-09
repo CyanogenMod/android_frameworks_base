@@ -31,7 +31,7 @@ public:
 
     virtual bool                checkPermission(const String16& permission,
                                                 int32_t pid, int32_t uid) = 0;
-    
+
     enum {
         CHECK_PERMISSION_TRANSACTION = IBinder::FIRST_CALL_TRANSACTION
     };

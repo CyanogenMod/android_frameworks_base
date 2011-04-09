@@ -329,7 +329,7 @@ int binder_call(struct binder_state *bs,
     bwr.write_size = sizeof(writebuf);
     bwr.write_consumed = 0;
     bwr.write_buffer = (unsigned) &writebuf;
-    
+
     hexdump(msg->data0, msg->data - msg->data0);
     for (;;) {
         bwr.read_size = sizeof(readbuf);
@@ -363,7 +363,7 @@ void binder_loop(struct binder_state *bs, binder_handler func)
     bwr.write_size = 0;
     bwr.write_consumed = 0;
     bwr.write_buffer = 0;
-    
+
     readbuf[0] = BC_ENTER_LOOPER;
     binder_write(bs, readbuf, sizeof(unsigned));
 
@@ -451,7 +451,7 @@ static struct binder_object *bio_alloc_obj(struct binder_io *bio)
     struct binder_object *obj;
 
     obj = bio_alloc(bio, sizeof(*obj));
-    
+
     if (obj && bio->offs_avail) {
         bio->offs_avail--;
         *bio->offs++ = ((char*) obj) - ((char*) bio->data0);

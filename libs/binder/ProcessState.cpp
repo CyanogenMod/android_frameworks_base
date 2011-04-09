@@ -49,7 +49,7 @@ static bool gSingleProcess = false;
 // ---------------------------------------------------------------------------
 
 namespace android {
- 
+
 // Global variables
 int                 mArgC;
 const char* const*  mArgV;
@@ -62,21 +62,21 @@ public:
         : mIsMain(isMain)
     {
     }
-    
+
 protected:
     virtual bool threadLoop()
     {
         IPCThreadState::self()->joinThreadPool(mIsMain);
         return false;
     }
-    
+
     const bool mIsMain;
 };
 
 sp<ProcessState> ProcessState::self()
 {
     if (gProcess != NULL) return gProcess;
-    
+
     AutoMutex _l(gProcessMutex);
     if (gProcess == NULL) gProcess = new ProcessState;
     return gProcess;
@@ -114,9 +114,9 @@ sp<IBinder> ProcessState::getContextObject(const String16& name, const sp<IBinde
     sp<IBinder> object(
         mContexts.indexOfKey(name) >= 0 ? mContexts.valueFor(name) : NULL);
     mLock.unlock();
-    
+
     //printf("Getting context object %s for %p\n", String8(name).string(), caller.get());
-    
+
     if (object != NULL) return object;
 
     // Don't attempt to retrieve contexts if we manage them
@@ -125,7 +125,7 @@ sp<IBinder> ProcessState::getContextObject(const String16& name, const sp<IBinde
             String8(name).string());
         return NULL;
     }
-    
+
     IPCThreadState* ipc = IPCThreadState::self();
     {
         Parcel data, reply;
@@ -137,9 +137,9 @@ sp<IBinder> ProcessState::getContextObject(const String16& name, const sp<IBinde
             object = reply.readStrongBinder();
         }
     }
-    
+
     ipc->flushCommands();
-    
+
     if (object != NULL) setContextObject(object, name);
     return object;
 }
@@ -219,7 +219,7 @@ sp<IBinder> ProcessState::getStrongProxyForHandle(int32_t handle)
         // in getWeakProxyForHandle() for more info about this.
         IBinder* b = e->binder;
         if (b == NULL || !e->refs->attemptIncWeak(this)) {
-            b = new BpBinder(handle); 
+            b = new BpBinder(handle);
             e->binder = b;
             if (b) e->refs = b->getWeakRefs();
             result = b;
@@ -243,7 +243,7 @@ wp<IBinder> ProcessState::getWeakProxyForHandle(int32_t handle)
 
     handle_entry* e = lookupHandleLocked(handle);
 
-    if (e != NULL) {        
+    if (e != NULL) {
         // We need to create a new BpBinder if there isn't currently one, OR we
         // are unable to acquire a weak reference on this current one.  The
         // attemptIncWeak() is safe because we know the BpBinder destructor will always
@@ -269,7 +269,7 @@ wp<IBinder> ProcessState::getWeakProxyForHandle(int32_t handle)
 void ProcessState::expungeHandle(int32_t handle, IBinder* binder)
 {
     AutoMutex _l(mLock);
-    
+
     handle_entry* e = lookupHandleLocked(handle);
 
     // This handle may have already been replaced with a new BpBinder
@@ -353,7 +353,7 @@ static int open_driver()
             LOGE("Binder ioctl to set max threads failed: %s", strerror(errno));
         }
 #endif
-        
+
     } else {
         LOGW("Opening '/dev/binder' failed: %s\n", strerror(errno));
     }
@@ -394,5 +394,5 @@ ProcessState::ProcessState()
 ProcessState::~ProcessState()
 {
 }
-        
+
 }; // namespace android

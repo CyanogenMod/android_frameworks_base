@@ -293,17 +293,17 @@ status_t EventHub::scancodeToKeycode(int32_t deviceId, int scancode,
 {
     AutoMutex _l(mLock);
     device_t* device = getDeviceLocked(deviceId);
-    
+
     if (device != NULL && device->layoutMap != NULL) {
         status_t err = device->layoutMap->map(scancode, outKeycode, outFlags);
         if (err == NO_ERROR) {
             return NO_ERROR;
         }
     }
-    
+
     if (mHaveFirstKeyboard) {
         device = getDeviceLocked(mFirstKeyboardId);
-        
+
         if (device != NULL && device->layoutMap != NULL) {
             status_t err = device->layoutMap->map(scancode, outKeycode, outFlags);
             if (err == NO_ERROR) {
@@ -311,7 +311,7 @@ status_t EventHub::scancodeToKeycode(int32_t deviceId, int scancode,
             }
         }
     }
-    
+
     *outKeycode = 0;
     *outFlags = 0;
     return NAME_NOT_FOUND;
@@ -681,7 +681,7 @@ int EventHub::openDevice(const char *deviceName) {
     mFDs[mFDCount].revents = 0;
 
     // Figure out the kinds of events the device reports.
-    
+
     uint8_t key_bitmask[sizeof_bit_array(KEY_MAX + 1)];
     memset(key_bitmask, 0, sizeof(key_bitmask));
 
@@ -711,7 +711,7 @@ int EventHub::openDevice(const char *deviceName) {
             }
         }
     }
-    
+
     // See if this is a trackball (or mouse).
     if (test_bit(BTN_MOUSE, key_bitmask)) {
         uint8_t rel_bitmask[sizeof_bit_array(REL_MAX + 1)];
@@ -810,7 +810,7 @@ int EventHub::openDevice(const char *deviceName) {
         if (hasKeycodeLocked(device, AKEYCODE_Q)) {
             device->classes |= INPUT_DEVICE_CLASS_ALPHAKEY;
         }
-        
+
         // See if this device has a DPAD.
         if (hasKeycodeLocked(device, AKEYCODE_DPAD_UP) &&
                 hasKeycodeLocked(device, AKEYCODE_DPAD_DOWN) &&
@@ -819,7 +819,7 @@ int EventHub::openDevice(const char *deviceName) {
                 hasKeycodeLocked(device, AKEYCODE_DPAD_CENTER)) {
             device->classes |= INPUT_DEVICE_CLASS_DPAD;
         }
-        
+
         // See if this device has a gamepad.
         for (size_t i = 0; i < sizeof(GAMEPAD_KEYCODES)/sizeof(GAMEPAD_KEYCODES[0]); i++) {
             if (hasKeycodeLocked(device, GAMEPAD_KEYCODES[i])) {
@@ -842,7 +842,7 @@ int EventHub::openDevice(const char *deviceName) {
 
     LOGI("New device: path=%s name=%s id=0x%x (of 0x%x) index=%d fd=%d classes=0x%x\n",
          deviceName, name, device->id, mNumDevicesById, mFDCount, fd, device->classes);
-         
+
     LOGV("Adding device %s %p at %d, id = %d, classes = 0x%x\n",
          deviceName, device, mFDCount, devid, device->classes);
 
@@ -860,7 +860,7 @@ bool EventHub::hasKeycodeLocked(device_t* device, int keycode) const
     if (device->keyBitmask == NULL || device->layoutMap == NULL) {
         return false;
     }
-    
+
     Vector<int32_t> scanCodes;
     device->layoutMap->findScancodes(keycode, &scanCodes);
     const size_t N = scanCodes.size();
@@ -870,7 +870,7 @@ bool EventHub::hasKeycodeLocked(device_t* device, int keycode) const
             return true;
         }
     }
-    
+
     return false;
 }
 
@@ -882,15 +882,15 @@ int EventHub::closeDevice(const char *deviceName) {
         if(strcmp(mDevices[i]->path.string(), deviceName) == 0) {
             //LOGD("remove device %d: %s\n", i, deviceName);
             device_t* device = mDevices[i];
-            
+
             LOGI("Removed device: path=%s name=%s id=0x%x (of 0x%x) index=%d fd=%d classes=0x%x\n",
                  device->path.string(), device->name.string(), device->id,
                  mNumDevicesById, mFDCount, mFDs[i].fd, device->classes);
-         
+
             // Clear this device's entry.
             int index = (device->id&ID_MASK);
             mDevicesById[index].device = NULL;
-            
+
             // Close the file descriptor and compact the fd array.
             close(mFDs[i].fd);
             int count = mFDCount - i - 1;
@@ -905,7 +905,7 @@ int EventHub::closeDevice(const char *deviceName) {
                 }
             }
 #endif
-            
+
             device->next = mClosingDevices;
             mClosingDevices = device;
 

@@ -47,7 +47,7 @@ find_import_file(const char* given)
             0 == _access(f.c_str(), 4) ) { /* mode 4=readable */
 #else
         if (0 == access(f.c_str(), R_OK)) {
-#endif        
+#endif
             return strdup(f.c_str());
         }
     }

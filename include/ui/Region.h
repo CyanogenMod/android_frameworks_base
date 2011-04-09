@@ -40,7 +40,7 @@ public:
     explicit            Region(const Rect& rhs);
     explicit            Region(const void* buffer);
                         ~Region();
-                        
+
         Region& operator = (const Region& rhs);
 
     inline  bool        isEmpty() const     { return mBounds.isEmpty();  }
@@ -51,11 +51,11 @@ public:
 
             // the region becomes its bounds
             Region&     makeBoundsSelf();
-    
+
             void        clear();
             void        set(const Rect& r);
             void        set(uint32_t w, uint32_t h);
-        
+
             Region&     orSelf(const Rect& rhs);
             Region&     andSelf(const Rect& rhs);
             Region&     subtractSelf(const Rect& rhs);
@@ -98,20 +98,20 @@ public:
     inline  Region&     operator -= (const Region& rhs);
     inline  Region&     operator += (const Point& pt);
 
-    
+
     /* various ways to access the rectangle list */
-    
+
     typedef Rect const* const_iterator;
-    
+
             const_iterator begin() const;
             const_iterator end() const;
 
     /* no user serviceable parts here... */
-            
+
             size_t      getRects(Vector<Rect>& rectList) const;
             Rect const* getArray(size_t* count) const;
 
-            
+
             // add a rectangle to the internal list. This rectangle must
             // be sorted in Y and X and must not make the region invalid.
             void        addRectUnchecked(int l, int t, int r, int b);
@@ -129,7 +129,7 @@ public:
 private:
     class rasterizer;
     friend class rasterizer;
-    
+
     Region& operationSelf(const Rect& r, int op);
     Region& operationSelf(const Region& r, int op);
     Region& operationSelf(const Region& r, int dx, int dy, int op);
@@ -151,7 +151,7 @@ private:
     static void translate(Region& dst, const Region& reg, int dx, int dy);
 
     static bool validate(const Region& reg, const char* name);
-    
+
     Rect            mBounds;
     Vector<Rect>    mStorage;
 };

@@ -32,7 +32,7 @@ public:
         initialize_string8();
         initialize_string16();
     }
-    
+
     ~LibUtilsFirstStatics()
     {
         terminate_string16();

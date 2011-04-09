@@ -37,24 +37,24 @@ int32_t Effect::configure(void* pCmdData) {
     buffer_config_t out = cfg->outputCfg;
 
     if (in.mask & EFFECT_CONFIG_SMP_RATE) {
-	mSamplingRate = in.samplingRate;
+        mSamplingRate = in.samplingRate;
     }
     if (in.mask & EFFECT_CONFIG_CHANNELS) {
-	/* We can only deal with stereo. */
-	if (in.channels != (CHANNEL_FRONT_LEFT | CHANNEL_FRONT_RIGHT)) {
-	    LOGE("Invalid channel setup: %x", in.channels);
-	    return -EINVAL;
-	}
-	mChannels = 2;
+        /* We can only deal with stereo. */
+        if (in.channels != (CHANNEL_FRONT_LEFT | CHANNEL_FRONT_RIGHT)) {
+            LOGE("Invalid channel setup: %x", in.channels);
+            return -EINVAL;
+        }
+        mChannels = 2;
     }
     if (in.mask & EFFECT_CONFIG_FORMAT) {
-	mFormatIn = (audio_format_e) in.format;
+        mFormatIn = (audio_format_e) in.format;
     }
     if (out.mask & EFFECT_CONFIG_FORMAT) {
-	mFormatOut = (audio_format_e) in.format;
+        mFormatOut = (audio_format_e) in.format;
     }
     if (out.mask & EFFECT_CONFIG_ACC_MODE) {
-	mAccessMode = (effect_buffer_access_e) out.accessMode;
+        mAccessMode = (effect_buffer_access_e) out.accessMode;
     }
 
     return 0;
@@ -65,44 +65,44 @@ int32_t Effect::command(uint32_t cmdCode, uint32_t cmdSize, void *pCmdData, uint
     switch (cmdCode) {
     case EFFECT_CMD_ENABLE:
     case EFFECT_CMD_DISABLE: {
-	enable = cmdCode == EFFECT_CMD_ENABLE;
-	int32_t *replyData = (int32_t *) pReplyData;
-	*replyData = 0;
-	break;
+        enable = cmdCode == EFFECT_CMD_ENABLE;
+        int32_t *replyData = (int32_t *) pReplyData;
+        *replyData = 0;
+        break;
     }
 
     case EFFECT_CMD_INIT:
     case EFFECT_CMD_CONFIGURE:
     case EFFECT_CMD_SET_PARAM:
     case EFFECT_CMD_SET_PARAM_COMMIT: {
-	int32_t *replyData = (int32_t *) pReplyData;
-	*replyData = 0;
-	break;
+        int32_t *replyData = (int32_t *) pReplyData;
+        *replyData = 0;
+        break;
     }
 
     case EFFECT_CMD_RESET:
     case EFFECT_CMD_SET_PARAM_DEFERRED:
     case EFFECT_CMD_SET_DEVICE:
     case EFFECT_CMD_SET_AUDIO_MODE:
-	break;
+        break;
 
     case EFFECT_CMD_GET_PARAM: {
-	effect_param_t *rep = (effect_param_t *) pReplyData;
-	rep->status = -EINVAL;
-	rep->psize = 0;
-	rep->vsize = 0;
-	*replySize = 12;
-	break;
+        effect_param_t *rep = (effect_param_t *) pReplyData;
+        rep->status = -EINVAL;
+        rep->psize = 0;
+        rep->vsize = 0;
+        *replySize = 12;
+        break;
     }
 
     case EFFECT_CMD_SET_VOLUME:
-	if (pReplyData != NULL) {
-	    int32_t *replyData = (int32_t *) pReplyData;
-	    for (uint32_t i = 0; i < *replySize / 4; i ++) {
-		replyData[i] = 1 << 24;
-	    }
-	}
-	break;
+        if (pReplyData != NULL) {
+            int32_t *replyData = (int32_t *) pReplyData;
+            for (uint32_t i = 0; i < *replySize / 4; i ++) {
+                replyData[i] = 1 << 24;
+            }
+        }
+        break;
     }
 
     return 0;
@@ -112,13 +112,13 @@ int32_t Effect::process(audio_buffer_t *in, audio_buffer_t *out)
 {
     if (! enable) {
         for (uint32_t i = 0; i < in->frameCount; i ++) {
-	    int32_t tmpL = read(in, i * 2);
-	    int32_t tmpR = read(in, i * 2 + 1);
-	    write(out, i * 2, tmpL);
-	    write(out, i * 2 + 1, tmpR);
-	}
+            int32_t tmpL = read(in, i * 2);
+            int32_t tmpR = read(in, i * 2 + 1);
+            write(out, i * 2, tmpL);
+            write(out, i * 2 + 1, tmpR);
+        }
         return 0;
     } else {
-	return process_effect(in, out);
+        return process_effect(in, out);
     }
 }

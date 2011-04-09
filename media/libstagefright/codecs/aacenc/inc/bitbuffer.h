@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		bitbuffer.h
+        File:           bitbuffer.h
 
-	Content:	Bit Buffer Management structure and functions
+        Content:        Bit Buffer Management structure and functions
 
 *******************************************************************************/
 

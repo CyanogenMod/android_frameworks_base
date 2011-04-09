@@ -526,7 +526,7 @@ XLIFFFile::ToXMLNode() const
                 transUnitNode->EditChildren().push_back(
                                     create_string_node(transUnit.source, "source"));
             }
-            
+
             // <target>
             if (transUnit.target.id != "") {
                 transUnitNode->EditChildren().push_back(
@@ -552,20 +552,20 @@ XLIFFFile::ToXMLNode() const
                             XMLNode::NewText(GENERATED_POS, transUnit.rejectComment,
                                              XMLNode::PRETTY));
                 }
-                
+
                 // <source>
                 if (transUnit.altSource.id != "") {
                     altTransNode->EditChildren().push_back(
                                         create_string_node(transUnit.altSource, "source"));
                 }
-                
+
                 // <target>
                 if (transUnit.altTarget.id != "") {
                     altTransNode->EditChildren().push_back(
                                         create_string_node(transUnit.altTarget, "target"));
                 }
             }
-            
+
         }
     }
 

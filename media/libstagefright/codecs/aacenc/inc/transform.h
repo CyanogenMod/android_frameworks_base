@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		transform.h
+        File:           transform.h
 
-	Content:	MDCT Transform functions
+        Content:        MDCT Transform functions
 
 *******************************************************************************/
 
@@ -24,7 +24,7 @@
 #define __TRANSFORM_H__
 
 #include "typedef.h"
-                  
+
 void Transform_Real(Word16 *mdctDelayBuffer,
                     Word16 *timeSignal,
                     Word16 chIncrement,     /*! channel increment */

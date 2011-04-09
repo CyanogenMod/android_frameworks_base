@@ -2,16 +2,16 @@
 **
 ** Copyright 2006, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -44,7 +44,7 @@ uint32_t Tokenizer::acquire()
         _insertTokenAt(0,0);
         return 0;
     }
-    
+
     // just extend the first run
     const run_t& run = mRanges[0];
     uint32_t token = run.first + run.length;
@@ -145,7 +145,7 @@ ssize_t Tokenizer::_insertTokenAt(uint32_t token, size_t index)
             return index;
         }
     }
-    
+
     if (index < c) {
         // do we need to merge with the next run?
         run_t& n = mRanges.editItemAt(index);

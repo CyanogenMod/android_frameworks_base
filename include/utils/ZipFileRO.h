@@ -184,7 +184,7 @@ public:
     }
 
 private:
-    /* these are private and not defined */ 
+    /* these are private and not defined */
     ZipFileRO(const ZipFileRO& src);
     ZipFileRO& operator=(const ZipFileRO& src);
 

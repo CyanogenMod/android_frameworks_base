@@ -168,7 +168,7 @@ uint32_t SharedBufferStack::getTransform(int buffer) const
 
 SharedBufferBase::SharedBufferBase(SharedClient* sharedClient,
         int surface, int32_t identity)
-    : mSharedClient(sharedClient), 
+    : mSharedClient(sharedClient),
       mSharedStack(sharedClient->surfaces + surface),
       mIdentity(identity)
 {
@@ -196,7 +196,7 @@ String8 SharedBufferBase::dump(char const* prefix) const
     char buffer[SIZE];
     String8 result;
     SharedBufferStack& stack( *mSharedStack );
-    snprintf(buffer, SIZE, 
+    snprintf(buffer, SIZE,
             "%s[ head=%2d, available=%2d, queued=%2d ] "
             "reallocMask=%08x, identity=%d, status=%d",
             prefix, stack.head, stack.available, stack.queued,
@@ -247,14 +247,14 @@ status_t SharedBufferBase::waitForCondition(const ConditionBase& condition)
 // ============================================================================
 
 SharedBufferClient::DequeueCondition::DequeueCondition(
-        SharedBufferClient* sbc) : ConditionBase(sbc)  { 
+        SharedBufferClient* sbc) : ConditionBase(sbc)  {
 }
 bool SharedBufferClient::DequeueCondition::operator()() const {
     return stack.available > 0;
 }
 
 SharedBufferClient::LockCondition::LockCondition(
-        SharedBufferClient* sbc, int buf) : ConditionBase(sbc), buf(buf) { 
+        SharedBufferClient* sbc, int buf) : ConditionBase(sbc), buf(buf) {
 }
 bool SharedBufferClient::LockCondition::operator()() const {
     // NOTE: if stack.head is messed up, we could crash the client
@@ -266,7 +266,7 @@ bool SharedBufferClient::LockCondition::operator()() const {
 // ----------------------------------------------------------------------------
 
 SharedBufferClient::QueueUpdate::QueueUpdate(SharedBufferBase* sbb)
-    : UpdateBase(sbb) {    
+    : UpdateBase(sbb) {
 }
 ssize_t SharedBufferClient::QueueUpdate::operator()() {
     android_atomic_inc(&stack.queued);
@@ -302,7 +302,7 @@ ssize_t SharedBufferServer::RetireUpdate::operator()() {
     if (uint32_t(head) >= SharedBufferStack::NUM_BUFFER_MAX)
         return BAD_VALUE;
 
-    // Decrement the number of queued buffers 
+    // Decrement the number of queued buffers
     int32_t queued;
     do {
         queued = stack.queued;
@@ -310,7 +310,7 @@ ssize_t SharedBufferServer::RetireUpdate::operator()() {
             return NOT_ENOUGH_DATA;
         }
     } while (android_atomic_cmpxchg(queued, queued-1, &stack.queued));
-    
+
     // lock the buffer before advancing head, which automatically unlocks
     // the buffer we preventively locked upon entering this function
 
@@ -382,7 +382,7 @@ ssize_t SharedBufferClient::dequeue()
     LOGD_IF(DEBUG_ATOMICS, "dequeued=%d, tail++=%d, %s",
             dequeued, tail, dump("").string());
 
-    mDequeueTime[dequeued] = dequeueTime; 
+    mDequeueTime[dequeued] = dequeueTime;
 
     return dequeued;
 }

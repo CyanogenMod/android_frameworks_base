@@ -61,7 +61,7 @@ public:
 
 class SurfaceComposerClient : public RefBase
 {
-public:    
+public:
                 SurfaceComposerClient();
     virtual     ~SurfaceComposerClient();
 
@@ -70,7 +70,7 @@ public:
 
     // Return the connection of this client
     sp<IBinder> connection() const;
-    
+
     // Forcibly remove connection before all references have gone away.
     void        dispose();
 
@@ -104,7 +104,7 @@ public:
     // several surfaces can be updated in one transaction, all changes are
     // committed at once when the transaction is closed.
     // CloseTransaction() usually requires an IPC with the server.
-    
+
     //! Open a composer transaction
     status_t    openTransaction();
 
@@ -113,13 +113,13 @@ public:
 
     //! Open a composer transaction on all active SurfaceComposerClients.
     static void openGlobalTransaction();
-        
+
     //! Close a composer transaction on all active SurfaceComposerClients.
     static void closeGlobalTransaction();
-    
+
     //! Freeze the specified display but not transactions.
     static status_t freezeDisplay(DisplayID dpy, uint32_t flags = 0);
-        
+
     //! Resume updates on the specified display.
     static status_t unfreezeDisplay(DisplayID dpy, uint32_t flags = 0);
 

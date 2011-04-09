@@ -26,7 +26,7 @@ public:
                uint16_t num_channels, uint32_t sampling_rate)
         : mFile(fopen(filename, "wb")),
           mTotalBytes(0) {
-        fwrite("RIFFxxxxWAVEfmt \x10\x00\x00\x00\x01\x00", 1, 22, mFile); 
+        fwrite("RIFFxxxxWAVEfmt \x10\x00\x00\x00\x01\x00", 1, 22, mFile);
         write_u16(num_channels);
         write_u32(sampling_rate);
         write_u32(sampling_rate * num_channels * 2);

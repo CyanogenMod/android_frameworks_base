@@ -2,16 +2,16 @@
 **
 ** Copyright 2006, The Android Open Source Project
 **
-** Licensed under the Apache License, Version 2.0 (the "License"); 
-** you may not use this file except in compliance with the License. 
-** You may obtain a copy of the License at 
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
 **
-**     http://www.apache.org/licenses/LICENSE-2.0 
+**     http://www.apache.org/licenses/LICENSE-2.0
 **
-** Unless required by applicable law or agreed to in writing, software 
-** distributed under the License is distributed on an "AS IS" BASIS, 
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
-** See the License for the specific language governing permissions and 
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
 
@@ -125,7 +125,7 @@ static jint android_content_XmlBlock_nativeNext(JNIEnv* env, jobject clazz,
                 goto bad;
         }
     } while (true);
-    
+
 bad:
     doThrow(env, "org/xmlpull/v1/XmlPullParserException",
             "Corrupt XML binary file");
@@ -139,7 +139,7 @@ static jint android_content_XmlBlock_nativeGetNamespace(JNIEnv* env, jobject cla
     if (st == NULL) {
         return -1;
     }
-    
+
     return (jint)st->getElementNamespaceID();
 }
 
@@ -197,7 +197,7 @@ static jint android_content_XmlBlock_nativeGetAttributeNamespace(JNIEnv* env, jo
         doThrow(env, "java/lang/NullPointerException");
         return 0;
     }
-    
+
     return (jint)st->getAttributeNamespaceID(idx);
 }
 
@@ -277,7 +277,7 @@ static jint android_content_XmlBlock_nativeGetAttributeIndex(JNIEnv* env, jobjec
         ns16 = env->GetStringChars(ns, NULL);
         nsLen = env->GetStringLength(ns);
     }
-    
+
     const char16_t* name16 = env->GetStringChars(name, NULL);
     jsize nameLen = env->GetStringLength(name);
 
@@ -312,7 +312,7 @@ static jint android_content_XmlBlock_nativeGetClassAttribute(JNIEnv* env, jobjec
         doThrow(env, "java/lang/NullPointerException");
         return 0;
     }
-    
+
     ssize_t idx = st->indexOfClass();
     return idx >= 0 ? (jint)st->getAttributeValueStringID(idx) : -1;
 }
@@ -336,7 +336,7 @@ static jint android_content_XmlBlock_nativeGetStyleAttribute(JNIEnv* env, jobjec
         return 0;
     }
 
-    return value.dataType == value.TYPE_REFERENCE 
+    return value.dataType == value.TYPE_REFERENCE
         || value.dataType == value.TYPE_ATTRIBUTE
         ? value.data : 0;
 }

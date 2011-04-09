@@ -71,7 +71,7 @@ sp<ABuffer> decodeBase64(const AString &s) {
         if (((i + 1) % 4) == 0) {
             out[j++] = (accum >> 16);
 
-            if (j < outLen) { out[j++] = (accum >> 8) & 0xff; } 
+            if (j < outLen) { out[j++] = (accum >> 8) & 0xff; }
             if (j < outLen) { out[j++] = accum & 0xff; }
 
             accum = 0;

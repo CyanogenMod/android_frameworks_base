@@ -178,7 +178,7 @@ egl_surface_t::~egl_surface_t()
 }
 bool egl_surface_t::isValid() const {
     LOGE_IF(magic != MAGIC, "invalid EGLSurface (%p)", this);
-    return magic == MAGIC; 
+    return magic == MAGIC;
 }
 
 EGLBoolean egl_surface_t::swapBuffers() {
@@ -226,7 +226,7 @@ struct egl_window_surface_v2_t : public egl_surface_t
     virtual     EGLint      getRefreshRate() const;
     virtual     EGLint      getSwapBehavior() const;
     virtual     EGLBoolean  setSwapRectangle(EGLint l, EGLint t, EGLint w, EGLint h);
-    
+
 private:
     status_t lock(android_native_buffer_t* buf, int usage, void** vaddr);
     status_t unlock(android_native_buffer_t* buf);
@@ -239,7 +239,7 @@ private:
     int height;
     void* bits;
     GGLFormat const* pixelFormatTable;
-    
+
     struct Rect {
         inline Rect() { };
         inline Rect(int32_t w, int32_t h)
@@ -257,10 +257,10 @@ private:
             return (left>=right || top>=bottom);
         }
         void dump(char const* what) {
-            LOGD("%s { %5d, %5d, w=%5d, h=%5d }", 
+            LOGD("%s { %5d, %5d, w=%5d, h=%5d }",
                     what, left, top, right-left, bottom-top);
         }
-        
+
         int32_t left;
         int32_t top;
         int32_t right;
@@ -319,7 +319,7 @@ private:
         Rect storage[4];
         ssize_t count;
     };
-    
+
     struct region_iterator : public copybit_region_t {
         region_iterator(const Region& region)
             : b(region.begin()), e(region.end()) {
@@ -351,7 +351,7 @@ egl_window_surface_v2_t::egl_window_surface_v2_t(EGLDisplay dpy,
         EGLConfig config,
         int32_t depthFormat,
         ANativeWindow* window)
-    : egl_surface_t(dpy, config, depthFormat), 
+    : egl_surface_t(dpy, config, depthFormat),
     nativeWindow(window), buffer(0), previousBuffer(0), module(0),
     blitengine(0), bits(NULL)
 {
@@ -364,7 +364,7 @@ egl_window_surface_v2_t::egl_window_surface_v2_t(EGLDisplay dpy,
     }
 
     pixelFormatTable = gglGetPixelFormatTable();
-    
+
     // keep a reference on the window
     nativeWindow->common.incRef(&nativeWindow->common);
     nativeWindow->query(nativeWindow, NATIVE_WINDOW_WIDTH, &width);
@@ -376,7 +376,7 @@ egl_window_surface_v2_t::~egl_window_surface_v2_t() {
         buffer->common.decRef(&buffer->common);
     }
     if (previousBuffer) {
-        previousBuffer->common.decRef(&previousBuffer->common); 
+        previousBuffer->common.decRef(&previousBuffer->common);
     }
     nativeWindow->common.decRef(&nativeWindow->common);
     if (blitengine) {
@@ -384,10 +384,10 @@ egl_window_surface_v2_t::~egl_window_surface_v2_t() {
     }
 }
 
-EGLBoolean egl_window_surface_v2_t::connect() 
+EGLBoolean egl_window_surface_v2_t::connect()
 {
     // we're intending to do software rendering
-    native_window_set_usage(nativeWindow, 
+    native_window_set_usage(nativeWindow,
             GRALLOC_USAGE_SW_READ_OFTEN | GRALLOC_USAGE_SW_WRITE_OFTEN);
 
     // dequeue a buffer
@@ -414,7 +414,7 @@ EGLBoolean egl_window_surface_v2_t::connect()
     // Lock the buffer
     nativeWindow->lockBuffer(nativeWindow, buffer);
     // pin the buffer down
-    if (lock(buffer, GRALLOC_USAGE_SW_READ_OFTEN | 
+    if (lock(buffer, GRALLOC_USAGE_SW_READ_OFTEN |
             GRALLOC_USAGE_SW_WRITE_OFTEN, &bits) != NO_ERROR) {
         LOGE("connect() failed to lock buffer %p (%ux%u)",
                 buffer, buffer->width, buffer->height);
@@ -424,7 +424,7 @@ EGLBoolean egl_window_surface_v2_t::connect()
     return EGL_TRUE;
 }
 
-void egl_window_surface_v2_t::disconnect() 
+void egl_window_surface_v2_t::disconnect()
 {
     if (buffer && bits) {
         bits = NULL;
@@ -437,7 +437,7 @@ void egl_window_surface_v2_t::disconnect()
         buffer = 0;
     }
     if (previousBuffer) {
-        previousBuffer->common.decRef(&previousBuffer->common); 
+        previousBuffer->common.decRef(&previousBuffer->common);
         previousBuffer = 0;
     }
 }
@@ -475,7 +475,7 @@ void egl_window_surface_v2_t::copyBlt(
 {
     // FIXME: use copybit if possible
     // NOTE: dst and src must be the same format
-    
+
     status_t err = NO_ERROR;
     copybit_device_t* const copybit = blitengine;
     if (copybit)  {
@@ -490,7 +490,7 @@ void egl_window_surface_v2_t::copyBlt(
         dimg.h = dst->height;
         dimg.format = dst->format;
         dimg.handle = const_cast<native_handle_t*>(dst->handle);
-        
+
         copybit->set_parameter(copybit, COPYBIT_TRANSFORM, 0);
         copybit->set_parameter(copybit, COPYBIT_PLANE_ALPHA, 255);
         copybit->set_parameter(copybit, COPYBIT_DITHER, COPYBIT_DISABLE);
@@ -504,7 +504,7 @@ void egl_window_surface_v2_t::copyBlt(
     if (!copybit || err) {
         Region::const_iterator cur = clip.begin();
         Region::const_iterator end = clip.end();
-        
+
         const size_t bpp = pixelFormatTable[src->format].size;
         const size_t dbpr = dst->stride * bpp;
         const size_t sbpr = src->stride * bpp;
@@ -538,10 +538,10 @@ EGLBoolean egl_window_surface_v2_t::swapBuffers()
     if (!buffer) {
         return setError(EGL_BAD_ACCESS, EGL_FALSE);
     }
-    
+
     /*
      * Handle eglSetSwapRectangleANDROID()
-     * We copyback from the front buffer 
+     * We copyback from the front buffer
      */
     if (!dirtyRegion.isEmpty()) {
         dirtyRegion.andSelf(Rect(buffer->width, buffer->height));
@@ -549,7 +549,7 @@ EGLBoolean egl_window_surface_v2_t::swapBuffers()
             const Region copyBack(Region::subtract(oldDirtyRegion, dirtyRegion));
             if (!copyBack.isEmpty()) {
                 void* prevBits;
-                if (lock(previousBuffer, 
+                if (lock(previousBuffer,
                         GRALLOC_USAGE_SW_READ_OFTEN, &prevBits) == NO_ERROR) {
                     // copy from previousBuffer to buffer
                     copyBlt(buffer, bits, previousBuffer, prevBits, copyBack);
@@ -561,10 +561,10 @@ EGLBoolean egl_window_surface_v2_t::swapBuffers()
     }
 
     if (previousBuffer) {
-        previousBuffer->common.decRef(&previousBuffer->common); 
+        previousBuffer->common.decRef(&previousBuffer->common);
         previousBuffer = 0;
     }
-    
+
     unlock(buffer);
     previousBuffer = buffer;
     nativeWindow->queueBuffer(nativeWindow, buffer);
@@ -686,20 +686,20 @@ EGLint egl_window_surface_v2_t::getVerticalResolution() const {
 EGLint egl_window_surface_v2_t::getRefreshRate() const {
     return (60 * EGL_DISPLAY_SCALING); // FIXME
 }
-EGLint egl_window_surface_v2_t::getSwapBehavior() const 
+EGLint egl_window_surface_v2_t::getSwapBehavior() const
 {
     /*
      * EGL_BUFFER_PRESERVED means that eglSwapBuffers() completely preserves
      * the content of the swapped buffer.
-     * 
+     *
      * EGL_BUFFER_DESTROYED means that the content of the buffer is lost.
-     * 
+     *
      * However when ANDROID_swap_retcangle is supported, EGL_BUFFER_DESTROYED
      * only applies to the area specified by eglSetSwapRectangleANDROID(), that
      * is, everything outside of this area is preserved.
-     * 
+     *
      * This implementation of EGL assumes the later case.
-     * 
+     *
      */
 
     return EGL_BUFFER_DESTROYED;
@@ -716,7 +716,7 @@ struct egl_pixmap_surface_t : public egl_surface_t
 
     virtual ~egl_pixmap_surface_t() { }
 
-    virtual     bool        initCheck() const { return !depth.format || depth.data!=0; } 
+    virtual     bool        initCheck() const { return !depth.format || depth.data!=0; }
     virtual     EGLBoolean  bindDrawSurface(ogles_context_t* gl);
     virtual     EGLBoolean  bindReadSurface(ogles_context_t* gl);
     virtual     EGLint      getWidth() const    { return nativePixmap.width;  }
@@ -925,12 +925,12 @@ static const extention_map_t gExtentionMap[] = {
             (__eglMustCastToProperFunctionPointerType)&glDeleteBuffers },
     { "glGenBuffers",
             (__eglMustCastToProperFunctionPointerType)&glGenBuffers },
-    { "eglCreateImageKHR",  
-            (__eglMustCastToProperFunctionPointerType)&eglCreateImageKHR }, 
-    { "eglDestroyImageKHR", 
-            (__eglMustCastToProperFunctionPointerType)&eglDestroyImageKHR }, 
-    { "eglSetSwapRectangleANDROID", 
-            (__eglMustCastToProperFunctionPointerType)&eglSetSwapRectangleANDROID }, 
+    { "eglCreateImageKHR",
+            (__eglMustCastToProperFunctionPointerType)&eglCreateImageKHR },
+    { "eglDestroyImageKHR",
+            (__eglMustCastToProperFunctionPointerType)&eglDestroyImageKHR },
+    { "eglSetSwapRectangleANDROID",
+            (__eglMustCastToProperFunctionPointerType)&eglSetSwapRectangleANDROID },
 };
 
 /*
@@ -1305,7 +1305,7 @@ static EGLSurface createWindowSurface(EGLDisplay dpy, EGLConfig config,
             ANDROID_NATIVE_WINDOW_MAGIC) {
         return setError(EGL_BAD_NATIVE_WINDOW, EGL_NO_SURFACE);
     }
-        
+
     EGLint configID;
     if (getConfigAttrib(dpy, config, EGL_CONFIG_ID, &configID) == EGL_FALSE)
         return EGL_FALSE;
@@ -1350,11 +1350,11 @@ static EGLSurface createPixmapSurface(EGLDisplay dpy, EGLConfig config,
     if (!(surfaceType & EGL_PIXMAP_BIT))
         return setError(EGL_BAD_MATCH, EGL_NO_SURFACE);
 
-    if (static_cast<egl_native_pixmap_t*>(pixmap)->version != 
+    if (static_cast<egl_native_pixmap_t*>(pixmap)->version !=
             sizeof(egl_native_pixmap_t)) {
         return setError(EGL_BAD_NATIVE_PIXMAP, EGL_NO_SURFACE);
     }
-    
+
     EGLint configID;
     if (getConfigAttrib(dpy, config, EGL_CONFIG_ID, &configID) == EGL_FALSE)
         return EGL_FALSE;
@@ -1520,7 +1520,7 @@ EGLBoolean eglChooseConfig( EGLDisplay dpy, const EGLint *attrib_list,
 {
     if (egl_display_t::is_valid(dpy) == EGL_FALSE)
         return setError(EGL_BAD_DISPLAY, EGL_FALSE);
-    
+
     if (ggl_unlikely(num_config==0)) {
         return setError(EGL_BAD_PARAMETER, EGL_FALSE);
     }
@@ -1792,15 +1792,15 @@ EGLBoolean eglMakeCurrent(  EGLDisplay dpy, EGLSurface draw,
             egl_context_t* c = egl_context_t::context(ctx);
             egl_surface_t* d = (egl_surface_t*)draw;
             egl_surface_t* r = (egl_surface_t*)read;
-            
+
             if (c->draw) {
                 egl_surface_t* s = reinterpret_cast<egl_surface_t*>(c->draw);
                 s->disconnect();
             }
             if (c->read) {
-                // FIXME: unlock/disconnect the read surface too 
+                // FIXME: unlock/disconnect the read surface too
             }
-            
+
             c->draw = draw;
             c->read = read;
 
@@ -1824,7 +1824,7 @@ EGLBoolean eglMakeCurrent(  EGLDisplay dpy, EGLSurface draw,
                 d->bindDrawSurface(gl);
             }
             if (r) {
-                // FIXME: lock/connect the read surface too 
+                // FIXME: lock/connect the read surface too
                 r->ctx = ctx;
                 r->bindReadSurface(gl);
             }
@@ -1843,7 +1843,7 @@ EGLBoolean eglMakeCurrent(  EGLDisplay dpy, EGLSurface draw,
                 if (r) {
                     c->read = 0;
                     r->ctx = EGL_NO_CONTEXT;
-                    // FIXME: unlock/disconnect the read surface too 
+                    // FIXME: unlock/disconnect the read surface too
                 }
             }
         }

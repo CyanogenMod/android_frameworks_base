@@ -612,8 +612,8 @@ static void drawModels(float zScale)
  * Mesa 3D Graphics library. http://www.mesa3d.org
  */
 static void gluLookAt(GLfloat eyex, GLfloat eyey, GLfloat eyez,
-	              GLfloat centerx, GLfloat centery, GLfloat centerz,
-	              GLfloat upx, GLfloat upy, GLfloat upz)
+                      GLfloat centerx, GLfloat centery, GLfloat centerz,
+                      GLfloat upx, GLfloat upy, GLfloat upz)
 {
     GLfloat m[16];
     GLfloat x[3], y[3], z[3];
@@ -626,7 +626,7 @@ static void gluLookAt(GLfloat eyex, GLfloat eyey, GLfloat eyez,
     z[1] = eyey - centery;
     z[2] = eyez - centerz;
     mag = (float)sqrt(z[0] * z[0] + z[1] * z[1] + z[2] * z[2]);
-    if (mag) {			/* mpichler, 19950515 */
+    if (mag) {                  /* mpichler, 19950515 */
         z[0] /= mag;
         z[1] /= mag;
         z[2] /= mag;

@@ -7,7 +7,7 @@ class EffectCompression : public Effect {
     private:
     int32_t mUserVolumes[32];
     float mCompressionRatio;
-    
+
     int32_t mCurrentLevel[2];
     Biquad mWeighter;
 

@@ -45,17 +45,17 @@
 ********************************************************************************
 */
 void Log2 (
-		Word32 L_x,        /* (i) : input value                                 */
-		Word16 *exponent,  /* (o) : Integer part of Log2.   (range: 0<=val<=30) */
-		Word16 *fraction   /* (o) : Fractional part of Log2. (range: 0<=val<1)*/
-	  );
+                Word32 L_x,        /* (i) : input value                                 */
+                Word16 *exponent,  /* (o) : Integer part of Log2.   (range: 0<=val<=30) */
+                Word16 *fraction   /* (o) : Fractional part of Log2. (range: 0<=val<1)*/
+          );
 
 void Log2_norm (
-		Word32 L_x,         /* (i) : input value (normalized)                    */
-		Word16 exp,         /* (i) : norm_l (L_x)                                */
-		Word16 *exponent,   /* (o) : Integer part of Log2.   (range: 0<=val<=30) */
-		Word16 *fraction    /* (o) : Fractional part of Log2. (range: 0<=val<1)  */
-	       );
+                Word32 L_x,         /* (i) : input value (normalized)                    */
+                Word16 exp,         /* (i) : norm_l (L_x)                                */
+                Word16 *exponent,   /* (o) : Integer part of Log2.   (range: 0<=val<=30) */
+                Word16 *fraction    /* (o) : Fractional part of Log2. (range: 0<=val<1)  */
+               );
 
 #endif  //__LOG2_H__
 

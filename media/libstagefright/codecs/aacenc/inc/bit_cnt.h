@@ -14,9 +14,9 @@
  ** limitations under the License.
  */
 /*******************************************************************************
-	File:		bit_cnt.h
+        File:           bit_cnt.h
 
-	Content:	Huffman Bitcounter & coder structure and functions
+        Content:        Huffman Bitcounter & coder structure and functions
 
 *******************************************************************************/
 

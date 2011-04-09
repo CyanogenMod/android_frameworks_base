@@ -119,7 +119,7 @@ extern "C"
       Purpose:  Informs the routine of the maximum block size used.
       Explanation:  This is needed since the TwinVQ long window
             is different from the AAC long window.  */
-#define LTP_MAX_BLOCK_LEN_LONG BLOCK_LEN_LONG //(2 * BLOCK_LEN_LONG) 
+#define LTP_MAX_BLOCK_LEN_LONG BLOCK_LEN_LONG //(2 * BLOCK_LEN_LONG)
 
     /*
       Macro:    LT_BLEN

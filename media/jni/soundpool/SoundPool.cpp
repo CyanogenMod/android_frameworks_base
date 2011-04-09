@@ -559,7 +559,7 @@ void SoundChannel::play(const sp<Sample>& sample, int nextChannelID, float leftV
     // mToggle toggles each time a track is started on a given channel.
     // The toggle is concatenated with the SoundChannel address and passed to AudioTrack
     // as callback user data. This enables the detection of callbacks received from the old
-    // audio track while the new one is being started and avoids processing them with 
+    // audio track while the new one is being started and avoids processing them with
     // wrong audio audio buffer size  (mAudioBufferSize)
     unsigned long toggle = mToggle ^ 1;
     void *userData = (void *)((unsigned long)this | toggle);
@@ -641,7 +641,7 @@ void SoundChannel::callback(int event, void* user, void *info)
 {
     unsigned long toggle = (unsigned long)user & 1;
     SoundChannel* channel = static_cast<SoundChannel*>((void *)((unsigned long)user & ~1));
-    
+
     if (channel->mToggle != toggle) {
         LOGV("callback with wrong toggle");
         return;

@@ -340,7 +340,7 @@ SadMBOffset1:
 
     __inline int32 SUB_SAD(int32 sad, int32 tmp, int32 tmp2)
     {
-__asm__ volatile("rsbs	%1, %1, %2\n\trsbmi %1, %1, #0\n\tadd	%0, %0, %1": "=r"(sad): "r"(tmp), "r"(tmp2));
+__asm__ volatile("rsbs  %1, %1, %2\n\trsbmi %1, %1, #0\n\tadd   %0, %0, %1": "=r"(sad): "r"(tmp), "r"(tmp2));
         return sad;
     }
 
@@ -348,7 +348,7 @@ __asm__ volatile("rsbs	%1, %1, %2\n\trsbmi %1, %1, #0\n\tadd	%0, %0, %1": "=r"(s
     {
         int32 x7;
 
-__asm__ volatile("EOR	%1, %2, %0\n\tSUBS  %0, %2, %0\n\tEOR	%1, %1, %0\n\tAND  %1, %3, %1, lsr #1\n\tORRCC	%1, %1, #0x80000000\n\tRSB  %1, %1, %1, lsl #8\n\tADD  %0, %0, %1, asr #7\n\tEOR  %0, %0, %1, asr #7": "=r"(src1), "=&r"(x7): "r"(src2), "r"(mask));
+__asm__ volatile("EOR   %1, %2, %0\n\tSUBS  %0, %2, %0\n\tEOR   %1, %1, %0\n\tAND  %1, %3, %1, lsr #1\n\tORRCC  %1, %1, #0x80000000\n\tRSB  %1, %1, %1, lsl #8\n\tADD  %0, %0, %1, asr #7\n\tEOR  %0, %0, %1, asr #7": "=r"(src1), "=&r"(x7): "r"(src2), "r"(mask));
 
         return src1;
     }
@@ -357,7 +357,7 @@ __asm__ volatile("EOR	%1, %2, %0\n\tSUBS  %0, %2, %0\n\tEOR	%1, %1, %0\n\tAND  %
     {
         int32 x7;
 
-__asm__ volatile("EOR	%1, %2, %0\n\tADDS  %0, %2, %0\n\tEOR  %1, %1, %0\n\tANDS  %1, %3, %1, rrx\n\tRSB  %1, %1, %1, lsl #8\n\tSUB	%0, %0, %1, asr #7\n\tEOR   %0, %0, %1, asr #7": "=r"(src1), "=&r"(x7): "r"(src2), "r"(mask));
+__asm__ volatile("EOR   %1, %2, %0\n\tADDS  %0, %2, %0\n\tEOR  %1, %1, %0\n\tANDS  %1, %3, %1, rrx\n\tRSB  %1, %1, %1, lsl #8\n\tSUB    %0, %0, %1, asr #7\n\tEOR   %0, %0, %1, asr #7": "=r"(src1), "=&r"(x7): "r"(src2), "r"(mask));
 
         return src1;
     }
@@ -404,7 +404,7 @@ __asm__ volatile("EOR	%1, %2, %0\n\tADDS  %0, %2, %0\n\tEOR  %1, %1, %0\n\tANDS 
 
         x8 = 16;
 ///
-__asm__ volatile("MVN	%0, #0xFF00": "=r"(x6));
+__asm__ volatile("MVN   %0, #0xFF00": "=r"(x6));
 
 LOOP_SAD0:
         /****** process 8 pixels ******/
@@ -428,10 +428,10 @@ LOOP_SAD0:
 
         /****** process 8 pixels ******/
         x11 = *((int32*)(ref + 4));
-__asm__ volatile("LDR	%0, [%1], %2": "=&r"(x10), "=r"(ref): "r"(lx));
+__asm__ volatile("LDR   %0, [%1], %2": "=&r"(x10), "=r"(ref): "r"(lx));
         //x10 = *((int32*)ref); ref+=lx;
         x14 = *((int32*)(blk + 4));
-__asm__ volatile("LDR	%0, [%1], #16": "=&r"(x12), "=r"(blk));
+__asm__ volatile("LDR   %0, [%1], #16": "=&r"(x12), "=r"(blk));
 
         /* process x11 & x14 */
         x11 = sad_4pixel(x11, x14, x9);

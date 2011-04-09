@@ -35,9 +35,9 @@ mkdirs(const char* last)
             dest.appendPath(part);
 #ifdef HAVE_MS_C_RUNTIME
             err = _mkdir(dest.string());
-#else                    
+#else
             err = mkdir(dest.string(), S_IRUSR|S_IWUSR|S_IXUSR|S_IRGRP|S_IXGRP);
-#endif                    
+#endif
             if (err != 0) {
                 return err;
             }
@@ -124,7 +124,7 @@ get_local_values_file(const string& filename, const Configuration& configuration
     char buf[2049];
     int fd;
     ssize_t amt;
-    
+
     fd = open(filename.c_str(), O_RDONLY);
     if (fd == -1) {
         fprintf(stderr, "unable to open file: %s\n", filename.c_str());
@@ -136,11 +136,11 @@ get_local_values_file(const string& filename, const Configuration& configuration
     }
 
     close(fd);
-    
+
     if (text == "") {
         return NULL;
     }
-        
+
     ValuesFile* result = ValuesFile::ParseString(filename, text, configuration, version,
                                                     versionString);
     if (result == NULL) {

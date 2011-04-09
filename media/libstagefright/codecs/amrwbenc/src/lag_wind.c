@@ -17,8 +17,8 @@
 /***********************************************************************
 *      File: lag_wind.c                                                *
 *                                                                      *
-*	   Description: Lag_windows on autocorrelations                *
-*	                r[i] *= lag_wind[i]                            *
+*          Description: Lag_windows on autocorrelations                *
+*                       r[i] *= lag_wind[i]                            *
 *                                                                      *
 ************************************************************************/
 
@@ -29,20 +29,20 @@
 
 
 void Lag_window(
-		Word16 r_h[],                         /* (i/o)   : Autocorrelations  (msb)          */
-		Word16 r_l[]                          /* (i/o)   : Autocorrelations  (lsb)          */
-	       )
+                Word16 r_h[],                         /* (i/o)   : Autocorrelations  (msb)          */
+                Word16 r_l[]                          /* (i/o)   : Autocorrelations  (lsb)          */
+               )
 {
-	Word32 i;
-	Word32 x;
+        Word32 i;
+        Word32 x;
 
-	for (i = 1; i <= M; i++)
-	{
-		x = Mpy_32(r_h[i], r_l[i], volag_h[i - 1], volag_l[i - 1]);
-		r_h[i] = x >> 16;
-		r_l[i] = (x & 0xffff)>>1;
-	}
-	return;
+        for (i = 1; i <= M; i++)
+        {
+                x = Mpy_32(r_h[i], r_l[i], volag_h[i - 1], volag_l[i - 1]);
+                r_h[i] = x >> 16;
+                r_l[i] = (x & 0xffff)>>1;
+        }
+        return;
 }
 
 

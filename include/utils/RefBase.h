@@ -61,7 +61,7 @@ class RefBase
 public:
             void            incStrong(const void* id) const;
             void            decStrong(const void* id) const;
-    
+
             void            forceIncStrong(const void* id) const;
 
             //! DEBUGGING ONLY: Get current strong ref count.
@@ -71,12 +71,12 @@ public:
     {
     public:
         RefBase*            refBase() const;
-        
+
         void                incWeak(const void* id);
         void                decWeak(const void* id);
-        
+
         bool                attemptIncStrong(const void* id);
-        
+
         //! This is only safe if you have set OBJECT_LIFETIME_FOREVER.
         bool                attemptIncWeak(const void* id);
 
@@ -90,14 +90,14 @@ public:
         // enable -- enable/disable tracking
         // retain -- when tracking is enable, if true, then we save a stack trace
         //           for each reference and dereference; when retain == false, we
-        //           match up references and dereferences and keep only the 
+        //           match up references and dereferences and keep only the
         //           outstanding ones.
-        
+
         void                trackMe(bool enable, bool retain);
     };
-    
+
             weakref_type*   createWeak(const void* id) const;
-            
+
             weakref_type*   getWeakRefs() const;
 
             //! DEBUGGING ONLY: Print references held on object.
@@ -105,27 +105,27 @@ public:
 
             //! DEBUGGING ONLY: Enable tracking of object.
     inline  void            trackMe(bool enable, bool retain)
-    { 
-        getWeakRefs()->trackMe(enable, retain); 
+    {
+        getWeakRefs()->trackMe(enable, retain);
     }
 
 protected:
                             RefBase();
     virtual                 ~RefBase();
-    
+
     //! Flags for extendObjectLifetime()
     enum {
         OBJECT_LIFETIME_WEAK    = 0x0001,
         OBJECT_LIFETIME_FOREVER = 0x0003
     };
-    
+
             void            extendObjectLifetime(int32_t mode);
-            
+
     //! Flags for onIncStrongAttempted()
     enum {
         FIRST_INC_STRONG = 0x0001
     };
-    
+
     virtual void            onFirstRef();
     virtual void            onLastStrongRef(const void* id);
     virtual bool            onIncStrongAttempted(uint32_t flags, const void* id);
@@ -134,10 +134,10 @@ protected:
 private:
     friend class weakref_type;
     class weakref_impl;
-    
+
                             RefBase(const RefBase& o);
             RefBase&        operator=(const RefBase& o);
-            
+
         weakref_impl* const mRefs;
 };
 
@@ -160,10 +160,10 @@ public:
     inline int32_t getStrongCount() const {
         return mCount;
     }
-    
+
 protected:
     inline ~LightRefBase() { }
-    
+
 private:
     mutable volatile int32_t mCount;
 };
@@ -175,7 +175,7 @@ class sp
 {
 public:
     typedef typename RefBase::weakref_type weakref_type;
-    
+
     inline sp() : m_ptr(0) { }
 
     sp(T* other);
@@ -184,22 +184,22 @@ public:
     template<typename U> sp(const sp<U>& other);
 
     ~sp();
-    
+
     // Assignment
 
     sp& operator = (T* other);
     sp& operator = (const sp<T>& other);
-    
+
     template<typename U> sp& operator = (const sp<U>& other);
     template<typename U> sp& operator = (U* other);
-    
+
     //! Special optimization for use by ProcessState (and nobody else).
     void force_set(T* other);
-    
+
     // Reset
-    
+
     void clear();
-    
+
     // Accessors
 
     inline  T&      operator* () const  { return *m_ptr; }
@@ -207,7 +207,7 @@ public:
     inline  T*      get() const         { return m_ptr; }
 
     // Operators
-        
+
     COMPARE(==)
     COMPARE(!=)
     COMPARE(>)
@@ -215,13 +215,13 @@ public:
     COMPARE(<=)
     COMPARE(>=)
 
-private:    
+private:
     template<typename Y> friend class sp;
     template<typename Y> friend class wp;
 
     // Optimization for wp::promote().
     sp(T* p, weakref_type* refs);
-    
+
     T*              m_ptr;
 };
 
@@ -235,7 +235,7 @@ class wp
 {
 public:
     typedef typename RefBase::weakref_type weakref_type;
-    
+
     inline wp() : m_ptr(0) { }
 
     wp(T* other);
@@ -246,35 +246,35 @@ public:
     template<typename U> wp(const wp<U>& other);
 
     ~wp();
-    
+
     // Assignment
 
     wp& operator = (T* other);
     wp& operator = (const wp<T>& other);
     wp& operator = (const sp<T>& other);
-    
+
     template<typename U> wp& operator = (U* other);
     template<typename U> wp& operator = (const wp<U>& other);
     template<typename U> wp& operator = (const sp<U>& other);
-    
+
     void set_object_and_refs(T* other, weakref_type* refs);
 
     // promotion to sp
-    
+
     sp<T> promote() const;
 
     // Reset
-    
+
     void clear();
 
     // Accessors
-    
+
     inline  weakref_type* get_refs() const { return m_refs; }
-    
+
     inline  T* unsafe_get() const { return m_ptr; }
 
     // Operators
-        
+
     COMPARE(==)
     COMPARE(!=)
     COMPARE(>)
@@ -368,7 +368,7 @@ sp<T>& sp<T>::operator = (U* other)
     return *this;
 }
 
-template<typename T>    
+template<typename T>
 void sp<T>::force_set(T* other)
 {
     other->forceIncStrong(this);

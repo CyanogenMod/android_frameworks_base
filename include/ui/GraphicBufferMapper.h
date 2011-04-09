@@ -41,12 +41,12 @@ public:
     status_t registerBuffer(buffer_handle_t handle);
 
     status_t unregisterBuffer(buffer_handle_t handle);
-    
+
     status_t lock(buffer_handle_t handle,
             int usage, const Rect& bounds, void** vaddr);
 
     status_t unlock(buffer_handle_t handle);
-    
+
     // dumps information about the mapping of this handle
     void dump(buffer_handle_t handle);
 

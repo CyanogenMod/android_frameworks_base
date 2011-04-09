@@ -287,7 +287,7 @@ static void android_media_MediaMetadataRetriever_release(JNIEnv *env, jobject th
 static void android_media_MediaMetadataRetriever_native_finalize(JNIEnv *env, jobject thiz)
 {
     LOGV("native_finalize");
-    
+
     // No lock is needed, since android_media_MediaMetadataRetriever_release() is protected
     android_media_MediaMetadataRetriever_release(env, thiz);
 }
