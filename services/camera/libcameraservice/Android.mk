@@ -64,7 +64,7 @@ endif
 ifeq ($(USE_CAMERA_STUB), true)
 LOCAL_STATIC_LIBRARIES += libcamerastub
 else
-LOCAL_SHARED_LIBRARIES += libcamera 
+LOCAL_SHARED_LIBRARIES += libcamera
 endif
 
 ifeq ($(BOARD_USE_FROYO_LIBCAMERA), true)

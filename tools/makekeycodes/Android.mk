@@ -4,7 +4,7 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
-	makekeycodes.cpp
+        makekeycodes.cpp
 
 LOCAL_MODULE := makekeycodes
 

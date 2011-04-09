@@ -45,7 +45,7 @@ LOCAL_SRC_FILES:=                         \
         string.cpp
 
 LOCAL_C_INCLUDES:= \
-	$(JNI_H_INCLUDE) \
+        $(JNI_H_INCLUDE) \
         $(TOP)/frameworks/base/include/media/stagefright/openmax \
         $(TOP)/external/tremolo \
         $(TOP)/external/flac/include \
@@ -107,7 +107,7 @@ ifneq ($(filter qsd8k msm7k msm7625 msm7x30, $(TARGET_BOARD_PLATFORM)),)
 endif
 
 ifeq ($(BOARD_USE_YUV422I_DEFAULT_COLORFORMAT),true)
-	LOCAL_CFLAGS += -DUSE_YUV422I_DEFAULT_COLORFORMAT
+        LOCAL_CFLAGS += -DUSE_YUV422I_DEFAULT_COLORFORMAT
 endif
 
 ifeq ($(BOARD_CAMERA_USE_GETBUFFERINFO),true)

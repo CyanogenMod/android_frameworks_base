@@ -9,7 +9,7 @@ ifeq ($(HAVE_2_3_DSP), 1)
 LOCAL_ARM_MODE := arm
 
 LOCAL_SRC_FILES:= \
-	Bundle/EffectBundle.cpp
+        Bundle/EffectBundle.cpp
 
 LOCAL_MODULE:= libbundlewrapper
 
@@ -30,9 +30,9 @@ endif
 
 
 LOCAL_C_INCLUDES += \
-	$(LOCAL_PATH)/Bundle \
-	$(LOCAL_PATH)/../lib/Common/lib/ \
-	$(LOCAL_PATH)/../lib/Bundle/lib/
+        $(LOCAL_PATH)/Bundle \
+        $(LOCAL_PATH)/../lib/Common/lib/ \
+        $(LOCAL_PATH)/../lib/Bundle/lib/
 
 
 include $(BUILD_SHARED_LIBRARY)

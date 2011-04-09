@@ -20,17 +20,17 @@ LOCAL_SHARED_LIBRARIES := \
         libskia \
         libutils \
         libui \
-        libsurfaceflinger_client 
+        libsurfaceflinger_client
 
 LOCAL_STATIC_LIBRARIES :=
 
 rs_generated_include_dir := $(call intermediates-dir-for,SHARED_LIBRARIES,libRS,,)
 
 LOCAL_C_INCLUDES += \
-	$(JNI_H_INCLUDE) \
-	$(LOCAL_PATH)/../../libs/rs \
-	$(rs_generated_include_dir) \
-	$(call include-path-for, corecg graphics)
+        $(JNI_H_INCLUDE) \
+        $(LOCAL_PATH)/../../libs/rs \
+        $(rs_generated_include_dir) \
+        $(call include-path-for, corecg graphics)
 
 LOCAL_CFLAGS +=
 

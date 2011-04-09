@@ -15,22 +15,22 @@ LOCAL_PRELINK_MODULE := false
 LOCAL_ARM_MODE := arm
 
 LOCAL_SRC_FILES := \
-	cyanogen-dsp.cpp \
-	Biquad.cpp \
-	Delay.cpp \
-	Effect.cpp \
-	EffectBassBoost.cpp \
-	EffectCompression.cpp \
-	EffectEqualizer.cpp \
-	EffectVirtualizer.cpp \
+        cyanogen-dsp.cpp \
+        Biquad.cpp \
+        Delay.cpp \
+        Effect.cpp \
+        EffectBassBoost.cpp \
+        EffectCompression.cpp \
+        EffectEqualizer.cpp \
+        EffectVirtualizer.cpp \
 # terminator
 
 LOCAL_C_INCLUDES += \
-	frameworks/base/include \
+        frameworks/base/include \
 # terminator
 
 LOCAL_SHARED_LIBRARIES := \
-	libcutils
+        libcutils
 
 include $(BUILD_SHARED_LIBRARY)
 

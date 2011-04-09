@@ -2,12 +2,12 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:= \
-	surface.cpp
+        surface.cpp
 
 LOCAL_SHARED_LIBRARIES := \
-	libcutils \
-	libutils \
-	libbinder \
+        libcutils \
+        libutils \
+        libbinder \
     libui \
     libsurfaceflinger_client
 

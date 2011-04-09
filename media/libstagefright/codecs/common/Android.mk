@@ -12,7 +12,7 @@ LOCAL_ARM_MODE := arm
 LOCAL_STATIC_LIBRARIES :=
 
 LOCAL_C_INCLUDES := \
-	$(LOCAL_PATH)/include
+        $(LOCAL_PATH)/include
 
 LOCAL_CFLAGS := $(VO_CFLAGS)
 

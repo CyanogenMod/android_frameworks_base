@@ -6,10 +6,10 @@ LOCAL_MODULE_TAGS := tests
 
 # Include all test java files.
 LOCAL_SRC_FILES := \
-	$(call all-java-files-under, src) \
-	$(call all-Iaidl-files-under, src) \
-	$(call all-java-files-under, DisabledTestApp/src) \
-	$(call all-java-files-under, EnabledTestApp/src)
+        $(call all-java-files-under, src) \
+        $(call all-Iaidl-files-under, src) \
+        $(call all-java-files-under, DisabledTestApp/src) \
+        $(call all-java-files-under, EnabledTestApp/src)
 
 LOCAL_DX_FLAGS := --core-library
 LOCAL_STATIC_JAVA_LIBRARIES := core-tests-supportlib android-common frameworks-core-util-lib

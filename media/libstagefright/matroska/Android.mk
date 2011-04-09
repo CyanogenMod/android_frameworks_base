@@ -6,7 +6,7 @@ LOCAL_SRC_FILES:=                 \
         mkvparser.cpp             \
 
 LOCAL_C_INCLUDES:= \
-	$(JNI_H_INCLUDE) \
+        $(JNI_H_INCLUDE) \
         $(TOP)/frameworks/base/include/media/stagefright/openmax \
 
 LOCAL_CFLAGS += -Wno-multichar

@@ -1,4 +1,4 @@
-# 
+#
 # Copyright 2006 The Android Open Source Project
 #
 # Android Asset Packaging Tool
@@ -31,8 +31,8 @@ LOCAL_STATIC_LIBRARIES := \
     libexpat \
     libhost \
     libutils \
-	libcutils
-    
+        libcutils
+
 ifeq ($(HOST_OS),linux)
 LOCAL_LDLIBS += -lrt -lpthread
 endif

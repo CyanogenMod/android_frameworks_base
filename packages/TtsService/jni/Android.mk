@@ -2,17 +2,17 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:= \
-	android_tts_SynthProxy.cpp
+        android_tts_SynthProxy.cpp
 
 LOCAL_C_INCLUDES += \
-	$(JNI_H_INCLUDE)
+        $(JNI_H_INCLUDE)
 
 LOCAL_SHARED_LIBRARIES := \
-	libandroid_runtime \
-	libnativehelper \
-	libmedia \
-	libutils \
-	libcutils
+        libandroid_runtime \
+        libnativehelper \
+        libmedia \
+        libutils \
+        libcutils
 
 ifeq ($(TARGET_SIMULATOR),true)
  LOCAL_LDLIBS += -ldl

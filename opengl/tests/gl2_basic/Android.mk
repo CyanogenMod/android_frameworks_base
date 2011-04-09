@@ -2,10 +2,10 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:= \
-	gl2_basic.cpp
+        gl2_basic.cpp
 
 LOCAL_SHARED_LIBRARIES := \
-	libcutils \
+        libcutils \
     libEGL \
     libGLESv2 \
     libui

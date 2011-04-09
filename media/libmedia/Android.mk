@@ -35,7 +35,7 @@ LOCAL_SRC_FILES:= \
     fixedfft.cpp.arm
 
 LOCAL_SHARED_LIBRARIES := \
-	libui libcutils libutils libbinder libsonivox libicuuc libexpat libsurfaceflinger_client libcamera_client
+        libui libcutils libutils libbinder libsonivox libicuuc libexpat libsurfaceflinger_client libcamera_client
 
 LOCAL_MODULE:= libmedia
 

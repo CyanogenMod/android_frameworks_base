@@ -13,7 +13,7 @@ LOCAL_SHARED_LIBRARIES :=       \
         libmedia                \
         libutils                \
         libui                   \
-        libcutils				\
+        libcutils                               \
         libsurfaceflinger_client\
         libcamera_client
 

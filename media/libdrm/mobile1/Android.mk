@@ -2,7 +2,7 @@ LOCAL_PATH := $(call my-dir)
 
 # ---------------------------------------
 # First project
-# 
+#
 # Build DRM1 core library
 #
 # Output: libdrm1.so
@@ -52,7 +52,7 @@ include $(BUILD_SHARED_LIBRARY)
 
 # ---------------------------------------
 # Second project
-# 
+#
 # Build DRM1 Java Native Interface(JNI) library
 #
 # Output: libdrm1_jni.so
@@ -69,7 +69,7 @@ LOCAL_C_INCLUDES :=         \
     $(LOCAL_PATH)/include/parser \
     $(JNI_H_INCLUDE)    \
     $(call include-path-for, system-core)/cutils
-	
+
 
 LOCAL_SHARED_LIBRARIES := libdrm1 \
     libutils                      \

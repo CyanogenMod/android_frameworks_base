@@ -28,10 +28,10 @@ ifeq ($(VOMT), exe)
 TARGET=$(VOTARGET)
 endif
 
-CFLAGS=$(VOCFLAGS) $(addprefix -I, $(VOSRCDIR)) 
-CPPFLAGS=$(VOCPPFLAGS) $(addprefix -I, $(VOSRCDIR)) 
+CFLAGS=$(VOCFLAGS) $(addprefix -I, $(VOSRCDIR))
+CPPFLAGS=$(VOCPPFLAGS) $(addprefix -I, $(VOSRCDIR))
 ifneq ($(VOTT), pc)
-ASFLAGS=$(VOASFLAGS) $(addprefix -I, $(VOSRCDIR)) 
+ASFLAGS=$(VOASFLAGS) $(addprefix -I, $(VOSRCDIR))
 endif
 
 LDFLAGS:=$(VOLDFLAGS)
@@ -65,42 +65,42 @@ mkdirs: $(OBJDIR)
 endif
 
 $(OBJDIR):
-	@if test ! -d $@; then \
-		mkdir -p $@; \
-	fi;
+        @if test ! -d $@; then \
+                mkdir -p $@; \
+        fi;
 
 ifeq ($(VOMT), lib)
 $(BLTDIRS):
-	@if test ! -d $@; then \
-		mkdir -p $@; \
-	fi;
+        @if test ! -d $@; then \
+                mkdir -p $@; \
+        fi;
 $(BLTDIRD):
-	@if test ! -d $@; then \
-		mkdir -p $@; \
-	fi;
+        @if test ! -d $@; then \
+                mkdir -p $@; \
+        fi;
 endif
 
 
 ifeq ($(VOMT), lib)
 $(LIB_STATIC):$(OBJS)
-	$(AR) cr $@ $(OBJDIR)/*.o $(VOSTCLIBS)
-	$(RANLIB) $@
+        $(AR) cr $@ $(OBJDIR)/*.o $(VOSTCLIBS)
+        $(RANLIB) $@
 ifneq ($(VODBG), yes)
-	#$(STRIP) $@
+        #$(STRIP) $@
 endif
 
 $(LIB_DYNAMIC):$(OBJS)
-	$(GG) $(LDFLAGS) -o $@ $(OBJDIR)/*.o -Wl,--whole-archive $(VOSTCLIBS) -Wl,--no-whole-archive $(VOTLDEPS) 
+        $(GG) $(LDFLAGS) -o $@ $(OBJDIR)/*.o -Wl,--whole-archive $(VOSTCLIBS) -Wl,--no-whole-archive $(VOTLDEPS)
 ifneq ($(VODBG), yes)
-		$(STRIP) $@
+                $(STRIP) $@
 endif
 
 else
 
 $(TARGET):$(OBJS)
-	$(GG) $(LDFLAGS) -o $@ $(OBJDIR)/*.o -Wl,--whole-archive $(VOSTCLIBS) -Wl,--no-whole-archive $(VOTEDEPS)
+        $(GG) $(LDFLAGS) -o $@ $(OBJDIR)/*.o -Wl,--whole-archive $(VOSTCLIBS) -Wl,--no-whole-archive $(VOTEDEPS)
 ifneq ($(VODBG), yes)
-	$(STRIP) $@
+        $(STRIP) $@
 endif
 
 endif
@@ -108,26 +108,26 @@ endif
 
 .SUFFIXES: .c .cpp .s .o
 .c.o:
-	$(VERBOSE) $(CC) $(CFLAGS) -o $(OBJDIR)/$@ -c $<
+        $(VERBOSE) $(CC) $(CFLAGS) -o $(OBJDIR)/$@ -c $<
 #%.c:$(OBJDIR)/%.o
-#	$(VERBOSE) $(CC) $(CFLAGS) -o $@ -c $<
+#       $(VERBOSE) $(CC) $(CFLAGS) -o $@ -c $<
 .cpp.o:
-	$(VERBOSE) $(GG) $(CPPFLAGS) -o $(OBJDIR)/$@ -c $<
+        $(VERBOSE) $(GG) $(CPPFLAGS) -o $(OBJDIR)/$@ -c $<
 ifneq ($(VOTT), pc)
 .s.o:
-	$(VERBOSE) $(AS) $(ASFLAGS) -o $(OBJDIR)/$@ $<
+        $(VERBOSE) $(AS) $(ASFLAGS) -o $(OBJDIR)/$@ $<
 endif
 
 
 .PHONY: clean devel
 clean:
 ifeq ($(VOMT), lib)
-	-rm -fr $(OBJDIR) .*.sw* $(VOTARGET).*
+        -rm -fr $(OBJDIR) .*.sw* $(VOTARGET).*
 else
-	-rm -fr $(OBJDIR) .*.sw* $(VOTARGET)
+        -rm -fr $(OBJDIR) .*.sw* $(VOTARGET)
 endif
 
 devel:
-	cp -a $(LIB_STATIC) $(BLTDIRS)
-	cp -a $(LIB_DYNAMIC) $(BLTDIRD)
+        cp -a $(LIB_STATIC) $(BLTDIRS)
+        cp -a $(LIB_DYNAMIC) $(BLTDIRD)
 

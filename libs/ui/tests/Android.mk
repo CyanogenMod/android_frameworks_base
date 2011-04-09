@@ -12,19 +12,19 @@ test_src_files := \
     InputPublisherAndConsumer_test.cpp
 
 shared_libraries := \
-	libcutils \
-	libutils \
-	libEGL \
-	libbinder \
-	libpixelflinger \
-	libhardware \
-	libhardware_legacy \
-	libui \
-	libstlport
+        libcutils \
+        libutils \
+        libEGL \
+        libbinder \
+        libpixelflinger \
+        libhardware \
+        libhardware_legacy \
+        libui \
+        libstlport
 
 static_libraries := \
-	libgtest \
-	libgtest_main
+        libgtest \
+        libgtest_main
 
 c_includes := \
     bionic \

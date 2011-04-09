@@ -38,9 +38,9 @@ LOCAL_SRC_FILES:= \
   gl_code.cpp
 
 LOCAL_SHARED_LIBRARIES := \
-	libutils \
-	libEGL \
-	libGLESv1_CM
+        libutils \
+        libEGL \
+        libGLESv1_CM
 
 LOCAL_MODULE := libgljni
 

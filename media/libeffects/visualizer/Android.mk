@@ -4,12 +4,12 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:= \
-	EffectVisualizer.cpp
+        EffectVisualizer.cpp
 
 LOCAL_CFLAGS+= -O2
 
 LOCAL_SHARED_LIBRARIES := \
-	libcutils
+        libcutils
 
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/soundfx
 LOCAL_MODULE:= libvisualizer
@@ -23,7 +23,7 @@ LOCAL_SHARED_LIBRARIES += libdl
 endif
 
 LOCAL_C_INCLUDES := \
-	$(call include-path-for, graphics corecg)
+        $(call include-path-for, graphics corecg)
 
 LOCAL_PRELINK_MODULE := false
 

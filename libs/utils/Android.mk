@@ -18,37 +18,37 @@ LOCAL_PATH:= $(call my-dir)
 # and once for the device.
 
 commonSources:= \
-	Asset.cpp \
-	AssetDir.cpp \
-	AssetManager.cpp \
-	BufferedTextOutput.cpp \
-	CallStack.cpp \
-	Debug.cpp \
-	FileMap.cpp \
-	Flattenable.cpp \
-	ObbFile.cpp \
-	Pool.cpp \
-	PackageRedirectionMap.cpp \
-	RefBase.cpp \
-	ResourceTypes.cpp \
-	SharedBuffer.cpp \
-	Static.cpp \
-	StopWatch.cpp \
-	StreamingZipInflater.cpp \
-	String8.cpp \
-	String16.cpp \
-	StringArray.cpp \
-	SystemClock.cpp \
-	TextOutput.cpp \
-	Threads.cpp \
-	Timers.cpp \
-	VectorImpl.cpp \
-	ZipFileCRO.cpp \
-	ZipFileRO.cpp \
-	ZipUtils.cpp \
-	../../tools/aapt/ZipFile.cpp \
-	../../tools/aapt/ZipEntry.cpp \
-	misc.cpp
+        Asset.cpp \
+        AssetDir.cpp \
+        AssetManager.cpp \
+        BufferedTextOutput.cpp \
+        CallStack.cpp \
+        Debug.cpp \
+        FileMap.cpp \
+        Flattenable.cpp \
+        ObbFile.cpp \
+        Pool.cpp \
+        PackageRedirectionMap.cpp \
+        RefBase.cpp \
+        ResourceTypes.cpp \
+        SharedBuffer.cpp \
+        Static.cpp \
+        StopWatch.cpp \
+        StreamingZipInflater.cpp \
+        String8.cpp \
+        String16.cpp \
+        StringArray.cpp \
+        SystemClock.cpp \
+        TextOutput.cpp \
+        Threads.cpp \
+        Timers.cpp \
+        VectorImpl.cpp \
+        ZipFileCRO.cpp \
+        ZipFileRO.cpp \
+        ZipUtils.cpp \
+        ../../tools/aapt/ZipFile.cpp \
+        ../../tools/aapt/ZipEntry.cpp \
+        misc.cpp
 
 
 # For the host
@@ -86,25 +86,25 @@ include $(CLEAR_VARS)
 
 # we have the common sources, plus some device-specific stuff
 LOCAL_SRC_FILES:= \
-	$(commonSources) \
-	BackupData.cpp \
-	BackupHelpers.cpp \
-	Looper.cpp
+        $(commonSources) \
+        BackupData.cpp \
+        BackupHelpers.cpp \
+        Looper.cpp
 
 ifeq ($(TARGET_OS),linux)
 LOCAL_LDLIBS += -lrt -ldl
 endif
 
 LOCAL_C_INCLUDES += \
-		external/zlib \
-		external/icu4c/common
+                external/zlib \
+                external/icu4c/common
 
 LOCAL_LDLIBS += -lpthread
 
 LOCAL_SHARED_LIBRARIES := \
-	libz \
-	liblog \
-	libcutils
+        libz \
+        liblog \
+        libcutils
 
 ifneq ($(TARGET_SIMULATOR),true)
 ifeq ($(TARGET_OS)-$(TARGET_ARCH),linux-x86)

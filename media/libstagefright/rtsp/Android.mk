@@ -20,8 +20,8 @@ LOCAL_SRC_FILES:=       \
         UDPPusher.cpp               \
 
 LOCAL_C_INCLUDES:= \
-	$(JNI_H_INCLUDE) \
-	$(TOP)/frameworks/base/include/media/stagefright/openmax \
+        $(JNI_H_INCLUDE) \
+        $(TOP)/frameworks/base/include/media/stagefright/openmax \
         $(TOP)/frameworks/base/media/libstagefright/include \
         $(TOP)/external/openssl/include
 
@@ -41,15 +41,15 @@ LOCAL_SRC_FILES:=         \
         rtp_test.cpp
 
 LOCAL_SHARED_LIBRARIES := \
-	libstagefright liblog libutils libbinder libstagefright_foundation
+        libstagefright liblog libutils libbinder libstagefright_foundation
 
 LOCAL_STATIC_LIBRARIES := \
         libstagefright_rtsp
 
 LOCAL_C_INCLUDES:= \
-	$(JNI_H_INCLUDE) \
-	frameworks/base/media/libstagefright \
-	$(TOP)/frameworks/base/include/media/stagefright/openmax
+        $(JNI_H_INCLUDE) \
+        frameworks/base/media/libstagefright \
+        $(TOP)/frameworks/base/include/media/stagefright/openmax
 
 LOCAL_CFLAGS += -Wno-multichar
 

@@ -1,4 +1,4 @@
-# 
+#
 # Copyright 2006 The Android Open Source Project
 #
 # Android Asset Packaging Tool
@@ -11,15 +11,15 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
-	AaptAssets.cpp \
-	Command.cpp \
-	Main.cpp \
-	Package.cpp \
-	StringPool.cpp \
-	XMLNode.cpp \
-	ResourceTable.cpp \
-	Images.cpp \
-	Resource.cpp \
+        AaptAssets.cpp \
+        Command.cpp \
+        Main.cpp \
+        Package.cpp \
+        StringPool.cpp \
+        XMLNode.cpp \
+        ResourceTable.cpp \
+        Images.cpp \
+        Resource.cpp \
     SourcePos.cpp \
     ZipEntry.cpp \
     ZipFile.cpp
@@ -32,13 +32,13 @@ LOCAL_C_INCLUDES += external/libpng
 LOCAL_C_INCLUDES += external/zlib
 LOCAL_C_INCLUDES += build/libs/host/include
 
-#LOCAL_WHOLE_STATIC_LIBRARIES := 
+#LOCAL_WHOLE_STATIC_LIBRARIES :=
 LOCAL_STATIC_LIBRARIES := \
-	libhost \
-	libutils \
-	libcutils \
-	libexpat \
-	libpng
+        libhost \
+        libutils \
+        libcutils \
+        libexpat \
+        libpng
 
 ifeq ($(HOST_OS),linux)
 LOCAL_LDLIBS += -lrt -lpthread

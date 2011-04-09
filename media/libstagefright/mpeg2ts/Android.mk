@@ -9,8 +9,8 @@ LOCAL_SRC_FILES:=                 \
         MPEG2TSExtractor.cpp      \
 
 LOCAL_C_INCLUDES:= \
-	$(JNI_H_INCLUDE) \
-	$(TOP)/frameworks/base/include/media/stagefright/openmax \
+        $(JNI_H_INCLUDE) \
+        $(TOP)/frameworks/base/include/media/stagefright/openmax \
         $(TOP)/frameworks/base/media/libstagefright
 
 LOCAL_MODULE:= libstagefright_mpeg2ts

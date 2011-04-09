@@ -19,7 +19,7 @@ endif
 LOCAL_C_INCLUDES += $(JNI_H_INCLUDE)
 
 LOCAL_SRC_FILES:=                     \
-	OMX.cpp                       \
+        OMX.cpp                       \
         OMXComponentBase.cpp          \
         OMXNodeInstance.cpp           \
         OMXMaster.cpp

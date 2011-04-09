@@ -2,10 +2,10 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:= \
-	configdump.cpp
+        configdump.cpp
 
 LOCAL_SHARED_LIBRARIES := \
-	libcutils \
+        libcutils \
     libEGL \
     libGLESv1_CM
 

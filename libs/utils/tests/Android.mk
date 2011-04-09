@@ -6,20 +6,20 @@ ifneq ($(TARGET_SIMULATOR),true)
 
 # Build the unit tests.
 test_src_files := \
-	ObbFile_test.cpp \
-	Looper_test.cpp \
-	String8_test.cpp
+        ObbFile_test.cpp \
+        Looper_test.cpp \
+        String8_test.cpp
 
 shared_libraries := \
-	libz \
-	liblog \
-	libcutils \
-	libutils \
-	libstlport
+        libz \
+        liblog \
+        libcutils \
+        libutils \
+        libstlport
 
 static_libraries := \
-	libgtest \
-	libgtest_main
+        libgtest \
+        libgtest_main
 
 c_includes := \
     external/zlib \

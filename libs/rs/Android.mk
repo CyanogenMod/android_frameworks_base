@@ -44,7 +44,7 @@ $(GEN) : PRIVATE_PATH := $(LOCAL_PATH)
 $(GEN) : PRIVATE_CUSTOM_TOOL = $(RSG_GENERATOR) $< $@ <$(PRIVATE_PATH)/rs.spec
 $(GEN) : $(RSG_GENERATOR) $(LOCAL_PATH)/rs.spec
 $(GEN): $(intermediates)/%.h : $(LOCAL_PATH)/%.h.rsg
-	$(transform-generated-source)
+        $(transform-generated-source)
 
 # used in jni/Android.mk
 rs_generated_source += $(GEN)
@@ -61,7 +61,7 @@ $(GEN) : PRIVATE_PATH := $(LOCAL_PATH)
 $(GEN) : PRIVATE_CUSTOM_TOOL = $(RSG_GENERATOR) $< $@ <$(PRIVATE_PATH)/rs.spec
 $(GEN) : $(RSG_GENERATOR) $(LOCAL_PATH)/rs.spec
 $(GEN): $(intermediates)/%.cpp : $(LOCAL_PATH)/%.cpp.rsg
-	$(transform-generated-source)
+        $(transform-generated-source)
 
 # used in jni/Android.mk
 rs_generated_source += $(GEN)
@@ -74,36 +74,36 @@ LOCAL_GENERATED_SOURCES += $(GEN)
 ifneq ($(TARGET_SIMULATOR),true)
 
 LOCAL_SRC_FILES:= \
-	rsAdapter.cpp \
-	rsAllocation.cpp \
-	rsComponent.cpp \
-	rsContext.cpp \
-	rsDevice.cpp \
-	rsElement.cpp \
+        rsAdapter.cpp \
+        rsAllocation.cpp \
+        rsComponent.cpp \
+        rsContext.cpp \
+        rsDevice.cpp \
+        rsElement.cpp \
         rsFileA3D.cpp \
-	rsLight.cpp \
-	rsLocklessFifo.cpp \
-	rsObjectBase.cpp \
-	rsMatrix.cpp \
+        rsLight.cpp \
+        rsLocklessFifo.cpp \
+        rsObjectBase.cpp \
+        rsMatrix.cpp \
         rsMesh.cpp \
-	rsNoise.cpp \
-	rsProgram.cpp \
-	rsProgramFragment.cpp \
-	rsProgramFragmentStore.cpp \
-	rsProgramRaster.cpp \
-	rsProgramVertex.cpp \
-	rsSampler.cpp \
-	rsScript.cpp \
-	rsScriptC.cpp \
-	rsScriptC_Lib.cpp \
+        rsNoise.cpp \
+        rsProgram.cpp \
+        rsProgramFragment.cpp \
+        rsProgramFragmentStore.cpp \
+        rsProgramRaster.cpp \
+        rsProgramVertex.cpp \
+        rsSampler.cpp \
+        rsScript.cpp \
+        rsScriptC.cpp \
+        rsScriptC_Lib.cpp \
         rsShaderCache.cpp \
-	rsSimpleMesh.cpp \
-	rsThreadIO.cpp \
-	rsType.cpp \
-	rsVertexArray.cpp
+        rsSimpleMesh.cpp \
+        rsThreadIO.cpp \
+        rsType.cpp \
+        rsVertexArray.cpp
 
 ifeq ($(TARGET_BOARD_PLATFORM), s5pc110)
-	LOCAL_CFLAGS += -DHAS_CONTEXT_PRIORITY
+        LOCAL_CFLAGS += -DHAS_CONTEXT_PRIORITY
 endif
 
 LOCAL_SHARED_LIBRARIES += libcutils libutils libEGL libGLESv1_CM libGLESv2 libui libacc

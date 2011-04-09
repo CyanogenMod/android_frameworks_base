@@ -2,11 +2,11 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:= \
-	resize.cpp
+        resize.cpp
 
 LOCAL_SHARED_LIBRARIES := \
-	libcutils \
-	libutils \
+        libcutils \
+        libutils \
     libui \
     libsurfaceflinger_client
 

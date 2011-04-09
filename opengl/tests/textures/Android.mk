@@ -2,10 +2,10 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:= \
-	textures.cpp
+        textures.cpp
 
 LOCAL_SHARED_LIBRARIES := \
-	libcutils \
+        libcutils \
     libEGL \
     libGLESv1_CM \
     libui

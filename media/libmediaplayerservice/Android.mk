@@ -21,29 +21,29 @@ ifeq ($(TARGET_OS)-$(TARGET_SIMULATOR),linux-true)
 LOCAL_LDLIBS += -ldl -lpthread
 endif
 
-LOCAL_SHARED_LIBRARIES :=     		\
-	libcutils             			\
-	libutils              			\
-	libbinder             			\
+LOCAL_SHARED_LIBRARIES :=               \
+        libcutils                               \
+        libutils                                \
+        libbinder                               \
         libFLAC                                 \
-	libvorbisidec         			\
-	libsonivox            			\
-	libmedia              			\
-	libcamera_client      			\
-	libandroid_runtime    			\
-	libstagefright        			\
-	libstagefright_omx    			\
-	libstagefright_color_conversion         \
-	libstagefright_foundation               \
-	libsurfaceflinger_client
+        libvorbisidec                           \
+        libsonivox                              \
+        libmedia                                \
+        libcamera_client                        \
+        libandroid_runtime                      \
+        libstagefright                          \
+        libstagefright_omx                      \
+        libstagefright_color_conversion         \
+        libstagefright_foundation               \
+        libsurfaceflinger_client
 
 LOCAL_STATIC_LIBRARIES := \
         libstagefright_rtsp
 
 ifneq ($(BUILD_WITHOUT_PV),true)
 LOCAL_SHARED_LIBRARIES += \
-	libopencore_player    \
-	libopencore_author
+        libopencore_player    \
+        libopencore_author
 else
 LOCAL_CFLAGS += -DNO_OPENCORE
 endif
@@ -53,11 +53,11 @@ LOCAL_SHARED_LIBRARIES += libdl
 endif
 
 LOCAL_C_INCLUDES :=                                                 \
-	$(JNI_H_INCLUDE)                                                \
-	$(call include-path-for, graphics corecg)                       \
-	$(TOP)/frameworks/base/include/media/stagefright/openmax \
-	$(TOP)/frameworks/base/media/libstagefright/include             \
-	$(TOP)/frameworks/base/media/libstagefright/rtsp                \
+        $(JNI_H_INCLUDE)                                                \
+        $(call include-path-for, graphics corecg)                       \
+        $(TOP)/frameworks/base/include/media/stagefright/openmax \
+        $(TOP)/frameworks/base/media/libstagefright/include             \
+        $(TOP)/frameworks/base/media/libstagefright/rtsp                \
         $(TOP)/external/flac/include                                    \
         $(TOP)/external/tremolo/Tremolo
 

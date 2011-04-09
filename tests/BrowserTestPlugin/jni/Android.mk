@@ -28,19 +28,19 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
-	main.cpp \
-	PluginObject.cpp \
-	event/EventPlugin.cpp \
+        main.cpp \
+        PluginObject.cpp \
+        event/EventPlugin.cpp \
 
 LOCAL_C_INCLUDES += \
-	$(LOCAL_PATH) \
-	$(LOCAL_PATH)/event \
-	external/webkit/WebCore/bridge \
-	external/webkit/WebCore/plugins \
-	external/webkit/WebCore/platform/android/JavaVM \
-	external/webkit/WebKit/android/plugins
+        $(LOCAL_PATH) \
+        $(LOCAL_PATH)/event \
+        external/webkit/WebCore/bridge \
+        external/webkit/WebCore/plugins \
+        external/webkit/WebCore/platform/android/JavaVM \
+        external/webkit/WebKit/android/plugins
 
-LOCAL_CFLAGS += -fvisibility=hidden 
+LOCAL_CFLAGS += -fvisibility=hidden
 LOCAL_PRELINK_MODULE := false
 
 LOCAL_MODULE := libtestplugin

@@ -7,20 +7,20 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:= \
-	egl.cpp                     \
-	state.cpp		            \
-	texture.cpp		            \
+        egl.cpp                     \
+        state.cpp                           \
+        texture.cpp                         \
     Tokenizer.cpp               \
     TokenManager.cpp            \
     TextureObjectManager.cpp    \
     BufferObjectManager.cpp     \
-	array.cpp.arm		        \
-	fp.cpp.arm		            \
-	light.cpp.arm		        \
-	matrix.cpp.arm		        \
-	mipmap.cpp.arm		        \
-	primitives.cpp.arm	        \
-	vertex.cpp.arm
+        array.cpp.arm                   \
+        fp.cpp.arm                          \
+        light.cpp.arm                   \
+        matrix.cpp.arm                  \
+        mipmap.cpp.arm                  \
+        primitives.cpp.arm              \
+        vertex.cpp.arm
 
 LOCAL_CFLAGS += -DLOG_TAG=\"libagl\"
 LOCAL_CFLAGS += -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
@@ -30,8 +30,8 @@ LOCAL_SHARED_LIBRARIES := libcutils libhardware libutils libpixelflinger libETC1
 LOCAL_LDLIBS := -lpthread -ldl
 
 ifeq ($(TARGET_ARCH),arm)
-	LOCAL_SRC_FILES += fixed_asm.S iterators.S
-	LOCAL_CFLAGS += -fstrict-aliasing
+        LOCAL_SRC_FILES += fixed_asm.S iterators.S
+        LOCAL_CFLAGS += -fstrict-aliasing
 endif
 
 ifeq ($(ARCH_ARM_HAVE_TLS_REGISTER),true)

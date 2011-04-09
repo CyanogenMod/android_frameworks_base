@@ -6,11 +6,11 @@ LOCAL_PATH:= $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES:= 	       \
-	EGL/egl.cpp 	       \
-	EGL/getProcAddress.cpp.arm \
-	EGL/hooks.cpp 	       \
-	EGL/Loader.cpp 	       \
+LOCAL_SRC_FILES:=              \
+        EGL/egl.cpp            \
+        EGL/getProcAddress.cpp.arm \
+        EGL/hooks.cpp          \
+        EGL/Loader.cpp         \
 #
 
 LOCAL_SHARED_LIBRARIES += libcutils libutils
@@ -74,8 +74,8 @@ endif
 
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES:= 		\
-	GLES_CM/gl.cpp.arm 	\
+LOCAL_SRC_FILES:=               \
+        GLES_CM/gl.cpp.arm      \
 #
 
 LOCAL_SHARED_LIBRARIES += libcutils libEGL
@@ -116,8 +116,8 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES:= 		\
-	GLES2/gl2.cpp.arm 	\
+LOCAL_SRC_FILES:=               \
+        GLES2/gl2.cpp.arm       \
 #
 
 LOCAL_SHARED_LIBRARIES += libcutils libEGL
@@ -157,8 +157,8 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES:= 		\
-	ETC1/etc1.cpp 	\
+LOCAL_SRC_FILES:=               \
+        ETC1/etc1.cpp   \
 #
 
 LOCAL_LDLIBS := -lpthread -ldl
@@ -172,8 +172,8 @@ include $(BUILD_HOST_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES:= 		\
-	ETC1/etc1.cpp 	\
+LOCAL_SRC_FILES:=               \
+        ETC1/etc1.cpp   \
 #
 
 LOCAL_LDLIBS := -lpthread -ldl

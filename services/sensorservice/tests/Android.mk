@@ -2,10 +2,10 @@ LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:= \
-	sensorservicetest.cpp
+        sensorservicetest.cpp
 
 LOCAL_SHARED_LIBRARIES := \
-	libcutils libutils libui libgui
+        libcutils libutils libui libgui
 
 LOCAL_MODULE:= test-sensorservice
 
