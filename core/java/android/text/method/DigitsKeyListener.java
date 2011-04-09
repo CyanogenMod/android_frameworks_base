@@ -120,7 +120,7 @@ public class DigitsKeyListener extends NumberKeyListener
         }
         return contentType;
     }
-    
+
     @Override
     public CharSequence filter(CharSequence source, int start, int end,
                                Spanned dest, int dstart, int dend) {

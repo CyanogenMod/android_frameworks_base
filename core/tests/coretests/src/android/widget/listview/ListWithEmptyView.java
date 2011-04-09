@@ -30,7 +30,7 @@ import android.widget.ArrayAdapter;
 /**
  * Tests using an empty view with a list */
 public class ListWithEmptyView extends ListActivity {
-    
+
     private class CarefulAdapter<T> extends ArrayAdapter<T> {
 
         public CarefulAdapter(Context context, int textViewResourceId) {
@@ -45,19 +45,19 @@ public class ListWithEmptyView extends ListActivity {
             }
             return super.getItemId(position);
         }
-       
-        
+
+
     }
-    
+
     public static final int MENU_ADD = Menu.FIRST + 1;
     public static final int MENU_REMOVE = Menu.FIRST + 2;
-    
+
     private CarefulAdapter<String> mAdapter;
-    
+
     private int mNextItem = 0;
-    
+
     private View mEmptyView;
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,11 +65,11 @@ public class ListWithEmptyView extends ListActivity {
                 android.R.layout.simple_list_item_1);
         setContentView(R.layout.list_with_empty_view);
         setListAdapter(mAdapter);
-        
+
         mEmptyView = findViewById(R.id.empty);
         getListView().setEmptyView(mEmptyView);
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -79,7 +79,7 @@ public class ListWithEmptyView extends ListActivity {
                 .setIcon(android.R.drawable.ic_menu_delete);
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -100,5 +100,5 @@ public class ListWithEmptyView extends ListActivity {
     public View getEmptyView() {
         return mEmptyView;
     }
-   
+
 }

@@ -48,7 +48,7 @@ public class MathTest extends TestCase {
             Assert.assertEquals(message, expected, actual, delta);
         }
     }
-    
+
     /**
      * @tests java.lang.Math#abs(double)
      */
@@ -143,7 +143,7 @@ public class MathTest extends TestCase {
         assertTrue("Returned incorrect arc tangent: " + answer, answer <= 1.0
                 && answer >= 9.9999999999999983E-1);
     }
-    
+
      /**
      * @tests java.lang.Math#cbrt(double)
      */
@@ -231,7 +231,7 @@ public class MathTest extends TestCase {
                 Double.POSITIVE_INFINITY, Math.cosh(Double.MAX_VALUE), 0D);
         assertEquals("Should return 1.0", 1.0, Math.cosh(Double.MIN_VALUE), 0D);
     }
-    
+
     /**
      * @tests java.lang.Math#exp(double)
      */
@@ -244,7 +244,7 @@ public class MathTest extends TestCase {
         assertTrue("Incorrect answer returned for larger power", Math.log(Math
                 .abs(Math.exp(5.5D)) - 5.5D) < 10.0D);
     }
-    
+
     /**
      * @tests java.lang.Math#expm1(double)
      */
@@ -287,7 +287,7 @@ public class MathTest extends TestCase {
         assertEquals("Incorrect floor for double",
                              -79, Math.floor(-78.89), 0);
     }
-    
+
     /**
      * @tests java.lang.Math#hypot(double, double)
      */
@@ -311,11 +311,11 @@ public class MathTest extends TestCase {
                         Double.NEGATIVE_INFINITY), 0D);
         assertEquals("Should return POSITIVE_INFINITY",
                 Double.POSITIVE_INFINITY, Math.hypot(Double.NEGATIVE_INFINITY,
-                        Double.POSITIVE_INFINITY), 0D);        
+                        Double.POSITIVE_INFINITY), 0D);
         assertTrue("Should be NaN", Double.isNaN(Math.hypot(Double.NaN,
                 2342301.89843)));
         assertTrue("Should be NaN", Double.isNaN(Math.hypot(-345.2680,
-                Double.NaN)));        
+                Double.NaN)));
 
         assertEquals("Should return 2396424.905416697", 2396424.905416697, Math
                 .hypot(12322.12, -2396393.2258), 0D);
@@ -353,7 +353,7 @@ public class MathTest extends TestCase {
                     .abs(d * 0.00000001));
         }
     }
-    
+
     /**
      * @tests java.lang.Math#log10(double)
      */
@@ -368,7 +368,7 @@ public class MathTest extends TestCase {
         assertEquals(Double.NEGATIVE_INFINITY, Math.log10(0.0));
         assertEquals(Double.NEGATIVE_INFINITY, Math.log10(+0.0));
         assertEquals(Double.NEGATIVE_INFINITY, Math.log10(-0.0));
-        
+
         assertEquals(3.0, Math.log10(1000.0));
         assertEquals(14.0, Math.log10(Math.pow(10, 14)));
         assertEquals(3.7389561269540406, Math.log10(5482.2158));
@@ -377,7 +377,7 @@ public class MathTest extends TestCase {
         assertEquals(308.25471555991675, Math.log10(Double.MAX_VALUE));
         assertEquals(-323.3062153431158, Math.log10(Double.MIN_VALUE));
     }
-    
+
     /**
      * @tests java.lang.Math#log1p(double)
      */
@@ -566,7 +566,7 @@ public class MathTest extends TestCase {
         // Test for method int java.lang.Math.round(float)
         assertEquals("Incorrect rounding of a float", -91, Math.round(-90.89f));
     }
-    
+
     /**
      * @tests java.lang.Math#signum(double)
      */
@@ -629,7 +629,7 @@ public class MathTest extends TestCase {
         assertEquals("Incorrect answer", 0.0, Math.sin(0), 0D);
         assertEquals("Incorrect answer", 0.8414709848078965, Math.sin(1), 0D);
     }
-    
+
     /**
      * @tests java.lang.Math#sinh(double)
      */
@@ -663,7 +663,7 @@ public class MathTest extends TestCase {
         assertEquals("Should return 4.9E-324", 4.9E-324, Math
                 .sinh(Double.MIN_VALUE), 0D);
     }
-    
+
     /**
      * @tests java.lang.Math#sqrt(double)
      */
@@ -712,7 +712,7 @@ public class MathTest extends TestCase {
         assertEquals("Should return 4.9E-324", 4.9E-324, Math
                 .tanh(Double.MIN_VALUE), 0D);
     }
-    
+
     /**
      * @tests java.lang.Math#random()
      */
@@ -754,7 +754,7 @@ public class MathTest extends TestCase {
                     converted >= d * 0.99999999 && converted <= d * 1.00000001);
         }
     }
-    
+
     /**
      * @tests java.lang.Math#ulp(double)
      */

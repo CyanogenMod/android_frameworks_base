@@ -66,10 +66,10 @@ public class RequestRectangleVisibleTest extends ActivityInstrumentationTestCase
         mClickToScrollToBlobLowerBlob = (Button) a.findViewById(R.id.scrollToRectFromBottom2);
         mClickToScrollFromBelow = (Button) a.findViewById(R.id.scrollToRectFromBottom);
 
-        
+
     }
 
-    
+
     @MediumTest
     public void testPreconditions() {
         assertNotNull(mScrollView);

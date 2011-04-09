@@ -46,8 +46,8 @@ public class FileUtils
     public static final int S_IROTH = 00004;
     public static final int S_IWOTH = 00002;
     public static final int S_IXOTH = 00001;
-    
-    
+
+
     /**
      * File status information. This class maps directly to the POSIX stat structure.
      * @hide
@@ -67,13 +67,13 @@ public class FileUtils
         public long mtime;
         public long ctime;
     }
-    
+
     /**
-     * Get the status for the given path. This is equivalent to the POSIX stat(2) system call. 
+     * Get the status for the given path. This is equivalent to the POSIX stat(2) system call.
      * @param path The path of the file to be stat'd.
      * @param status Optional argument to fill in. It will only fill in the status if the file
-     * exists. 
-     * @return true if the file exists and false if it does not exist. If you do not have 
+     * exists.
+     * @return true if the file exists and false if it does not exist. If you do not have
      * permission to stat the file, then this method will return false.
      */
     public static native boolean getFileStatus(String path, FileStatus status);
@@ -85,7 +85,7 @@ public class FileUtils
 
     public static native int getPermissions(String file, int[] outPermissions);
 
-    /** returns the FAT file system volume ID for the volume mounted 
+    /** returns the FAT file system volume ID for the volume mounted
      * at the given mount point, or -1 for failure
      * @param mount point for FAT volume
      * @return volume ID or -1
@@ -123,7 +123,7 @@ public class FileUtils
         }
         return result;
     }
-    
+
     /**
      * Copy data from a source stream to destFile.
      * Return true if succeed, return false if failed.

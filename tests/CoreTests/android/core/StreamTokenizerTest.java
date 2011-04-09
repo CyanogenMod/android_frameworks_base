@@ -27,7 +27,7 @@ import android.test.suitebuilder.annotation.MediumTest;
  * Tests for the StreamTokenizer
  */
 public class StreamTokenizerTest extends TestCase {
-    
+
     @MediumTest
     public void testStreamTokenizer() throws Exception {
         String str = "Testing 12345 \n alpha \r\n omega";

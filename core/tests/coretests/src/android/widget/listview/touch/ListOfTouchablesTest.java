@@ -51,36 +51,36 @@ public class ListOfTouchablesTest extends ActivityInstrumentationTestCase<ListOf
         assertNotNull(mActivity);
         assertNotNull(mListView);
     }
-    
+
     // TODO: needs to be adjusted to pass on non-HVGA displays
     // @LargeTest
     public void testShortScroll() {
         View firstChild = mListView.getChildAt(0);
         View lastChild = mListView.getChildAt(mListView.getChildCount() - 1);
-        
+
         int firstTop = firstChild.getTop();
-        
+
         TouchUtils.dragViewBy(this, lastChild, Gravity.TOP | Gravity.LEFT,
                 0, -(ViewConfiguration.getTouchSlop() + 1 + 10));
-        
+
         View newFirstChild = mListView.getChildAt(0);
-        
+
         assertEquals("View scrolled too early", firstTop, newFirstChild.getTop() + 10);
         assertEquals("Wrong view in first position", 0, newFirstChild.getId());
     }
-    
+
     // TODO: needs to be adjusted to pass on non-HVGA displays
     // @LargeTest
     public void testLongScroll() {
         View lastChild = mListView.getChildAt(mListView.getChildCount() - 1);
-        
+
         int lastTop = lastChild.getTop();
-        
-        int distance = TouchUtils.dragViewToY(this, lastChild, 
+
+        int distance = TouchUtils.dragViewToY(this, lastChild,
                 Gravity.TOP | Gravity.LEFT, mListView.getTop());
-        
-        assertEquals("View scrolled to wrong position", 
+
+        assertEquals("View scrolled to wrong position",
                 lastTop - (distance - ViewConfiguration.getTouchSlop() - 1), lastChild.getTop());
-    } 
+    }
 
 }

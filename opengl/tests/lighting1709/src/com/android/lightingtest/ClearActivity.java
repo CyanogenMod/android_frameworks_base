@@ -104,7 +104,7 @@ class ClearRenderer implements GLSurfaceView.Renderer {
                      0.0f, -1.5f, 0.0f,
                      5.0f, -1.5f, 0.0f,
                 };
-        
+
         final float v[] = new float[9];
         ByteBuffer vbb = ByteBuffer.allocateDirect(v.length*4);
         vbb.order(ByteOrder.nativeOrder());
@@ -117,13 +117,13 @@ class ClearRenderer implements GLSurfaceView.Renderer {
         gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_SPECULAR, lightOff, 0);
         gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_POSITION, lightPosSpot, 0);
         gl.glEnable(GL10.GL_LIGHT0);
-        
+
         gl.glEnable(GL10.GL_LIGHTING);
 
 
         gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
         gl.glNormal3f(0, 0, 1);
-        
+
 
         // draw first 3 triangles, without using transforms
         for (int i=0 ; i<3 ; i++) {
@@ -139,7 +139,7 @@ class ClearRenderer implements GLSurfaceView.Renderer {
             gl.glVertexPointer(3, GL10.GL_FLOAT, 0, vb);
             gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 3);
         }
-        
+
         // draw the 2nd batch this time with transforms
         v[0] = -1; v[1] =-1; v[2] = -10;
         v[3] =  0; v[4] = 1; v[5] = -10;
@@ -163,12 +163,12 @@ class ClearRenderer implements GLSurfaceView.Renderer {
         gl.glPushMatrix();
         gl.glTranslatef(pos[6], pos[7], pos[8]);
         gl.glDrawArrays(GL10.GL_TRIANGLE_STRIP, 0, 3);
-        gl.glPopMatrix();      
+        gl.glPopMatrix();
     }
 
     public int[] getConfigSpec() {
         int[] configSpec = { EGL10.EGL_DEPTH_SIZE, 16, EGL10.EGL_NONE };
-        return configSpec;      
+        return configSpec;
     }
 }
 

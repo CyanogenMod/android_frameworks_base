@@ -28,14 +28,14 @@ import android.graphics.Paint;
 public abstract class Shape implements Cloneable {
     private float mWidth;
     private float mHeight;
-    
+
     /**
      * Returns the width of the Shape.
      */
     public final float getWidth() {
         return mWidth;
     }
-    
+
     /**
      * Returns the height of the Shape.
      */
@@ -47,17 +47,17 @@ public abstract class Shape implements Cloneable {
     /**
      * Draw this shape into the provided Canvas, with the provided Paint.
      * Before calling this, you must call {@link #resize(float,float)}.
-     * 
+     *
      * @param canvas the Canvas within which this shape should be drawn
      * @param paint  the Paint object that defines this shape's characteristics
      */
     public abstract void draw(Canvas canvas, Paint paint);
-    
+
 
     /**
      * Resizes the dimensions of this shape.
      * Must be called before {@link #draw(Canvas,Paint)}.
-     * 
+     *
      * @param width the width of the shape (in pixels)
      * @param height the height of the shape (in pixels)
      */
@@ -74,20 +74,20 @@ public abstract class Shape implements Cloneable {
             onResize(width, height);
         }
     }
-    
+
     /**
      * Checks whether the Shape is opaque.
      * Default impl returns true. Override if your subclass can be opaque.
-     * 
-     * @return true if any part of the drawable is <em>not</em> opaque. 
+     *
+     * @return true if any part of the drawable is <em>not</em> opaque.
      */
     public boolean hasAlpha() {
         return true;
     }
-    
+
     /**
      * Callback method called when {@link #resize(float,float)} is executed.
-     * 
+     *
      * @param width the new width of the Shape
      * @param height the new height of the Shape
      */

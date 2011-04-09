@@ -55,7 +55,7 @@ public class ListWithNoFadingEdgeTest extends ActivityInstrumentationTestCase<Li
             assertEquals("selected position", i, mListView.getSelectedItemPosition());
             sendKeys(KeyEvent.KEYCODE_DPAD_DOWN);
         }
-        assertEquals("selected position", numItems - 1, mListView.getSelectedItemPosition());            
+        assertEquals("selected position", numItems - 1, mListView.getSelectedItemPosition());
     }
 
     @LargeTest

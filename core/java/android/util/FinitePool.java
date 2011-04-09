@@ -69,7 +69,7 @@ class FinitePool<T extends Poolable<T>> implements Pool<T> {
 
         if (element != null) {
             element.setNextPoolable(null);
-            mManager.onAcquired(element);            
+            mManager.onAcquired(element);
         }
 
         return element;

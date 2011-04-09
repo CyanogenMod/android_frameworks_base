@@ -31,10 +31,10 @@ import android.text.method.TextKeyListener;
 import android.view.KeyEvent;
 
 /**
- * A base class that manages text layout in visual elements on 
- * the screen. 
- * <p>For text that will be edited, use a {@link DynamicLayout}, 
- * which will be updated as the text changes.  
+ * A base class that manages text layout in visual elements on
+ * the screen.
+ * <p>For text that will be edited, use a {@link DynamicLayout},
+ * which will be updated as the text changes.
  * For text that will not change, use a {@link StaticLayout}.
  */
 public abstract class Layout {
@@ -68,7 +68,7 @@ public abstract class Layout {
                                         TextPaint paint) {
         return getDesiredWidth(source, 0, source.length(), paint);
     }
-    
+
     /**
      * Return how wide a layout must be in order to display the
      * specified text slice with one line per paragraph.
@@ -187,13 +187,13 @@ public abstract class Layout {
         if (dbottom < bottom) {
             bottom = dbottom;
         }
-        
-        int first = getLineForVertical(top); 
+
+        int first = getLineForVertical(top);
         int last = getLineForVertical(bottom);
-        
+
         int previousLineBottom = getLineTop(first);
         int previousLineEnd = getLineStart(first);
-        
+
         TextPaint paint = mPaint;
         CharSequence buf = mText;
         int width = mWidth;
@@ -240,7 +240,7 @@ public abstract class Layout {
             previousLineBottom = getLineTop(first);
             previousLineEnd = getLineStart(first);
             spans = NO_PARA_SPANS;
-        } 
+        }
 
         // There can be a highlight even without spans if we are drawing
         // a non-spanned transformation of a spanned editing buffer.
@@ -257,7 +257,7 @@ public abstract class Layout {
         }
 
         Alignment align = mAlignment;
-        
+
         // Next draw the lines, one at a time.
         // the baseline is the top of the following line minus the current
         // line's descent.
@@ -273,7 +273,7 @@ public abstract class Layout {
             int lbaseline = lbottom - getLineDescent(i);
 
             boolean isFirstParaLine = false;
-            if (spannedText) { 
+            if (spannedText) {
                 if (start == 0 || buf.charAt(start - 1) == '\n') {
                     isFirstParaLine = true;
                 }
@@ -284,7 +284,7 @@ public abstract class Layout {
                     spanend = sp.nextSpanTransition(start, textLength,
                                                     ParagraphStyle.class);
                     spans = sp.getSpans(start, spanend, ParagraphStyle.class);
-                    
+
                     align = mAlignment;
                     for (int n = spans.length-1; n >= 0; n--) {
                         if (spans[n] instanceof AlignmentSpan) {
@@ -294,7 +294,7 @@ public abstract class Layout {
                     }
                 }
             }
-            
+
             int dir = getParagraphDirection(i);
             int left = 0;
             int right = mWidth;
@@ -311,7 +311,7 @@ public abstract class Layout {
                        //     margin.drawLeadingMargin(c, paint, right, dir, ltop,
                          //                            lbaseline, lbottom, buf,
                           //                           start, end, isFirstParaLine, this);
-                          //      
+                          //
                          //   right -= margin.getLeadingMargin(isFirstParaLine);
                         //} else {
                             margin.drawLeadingMargin(c, paint, left, dir, ltop,
@@ -418,7 +418,7 @@ public abstract class Layout {
 
         mWidth = wid;
     }
-    
+
     /**
      * Return the total height of this layout.
      */
@@ -451,7 +451,7 @@ public abstract class Layout {
      * Return the number of lines of text in this layout.
      */
     public abstract int getLineCount();
-    
+
     /**
      * Return the baseline for the specified line (0&hellip;getLineCount() - 1)
      * If bounds is not null, return the top, left, right, bottom extents
@@ -680,7 +680,7 @@ public abstract class Layout {
             end = getLineEnd(line);
         } else {
             end = getLineVisibleEnd(line);
-        } 
+        }
         boolean tab = getLineContainsTab(line);
 
         if (tabs == null && tab && mText instanceof Spanned) {
@@ -796,7 +796,7 @@ public abstract class Layout {
 
                 if (dist < bestdist) {
                     bestdist = dist;
-                    best = low;   
+                    best = low;
                 }
             }
 
@@ -827,14 +827,14 @@ public abstract class Layout {
         return getLineStart(line + 1);
     }
 
-    /** 
+    /**
      * Return the text offset after the last visible character (so whitespace
      * is not counted) on the specified line.
      */
     public int getLineVisibleEnd(int line) {
         return getLineVisibleEnd(line, getLineStart(line), getLineStart(line+1));
     }
-    
+
     private int getLineVisibleEnd(int line, int start, int end) {
         if (DEBUG) {
             Assert.assertTrue(getLineStart(line) == start && getLineStart(line+1) == end);
@@ -1261,7 +1261,7 @@ public abstract class Layout {
 
             addSelection(startline, start, getLineEnd(startline),
                          top, getLineBottom(startline), dest);
-            
+
             if (getParagraphDirection(startline) == DIR_RIGHT_TO_LEFT)
                 dest.addRect(getLineLeft(startline), top,
                               0, getLineBottom(startline), Path.Direction.CW);
@@ -1440,7 +1440,7 @@ public abstract class Layout {
                             Styled.measureText(paint, workPaint, text,
                                                start + j, start + j + 1,
                                                null);
-                                        
+
                             float bitmapHeight = bm.getHeight();
                             float textHeight = -workPaint.ascent();
                             float scale = textHeight / bitmapHeight;
@@ -1621,7 +1621,7 @@ public abstract class Layout {
                                            Paint.FontMetricsInt fm,
                                            boolean hasTabs, Object[] tabs) {
         char[] buf = null;
-  
+
         if (hasTabs) {
             buf = TextUtils.obtain(end - start);
             TextUtils.getChars(text, start, end, buf, 0);
@@ -1874,7 +1874,7 @@ public abstract class Layout {
         public int length() {
             return mText.length();
         }
-    
+
         public CharSequence subSequence(int start, int end) {
             char[] s = new char[end - start];
             getChars(start, end, s, 0);
@@ -1940,7 +1940,7 @@ public abstract class Layout {
 
     public static final int DIR_LEFT_TO_RIGHT = 1;
     public static final int DIR_RIGHT_TO_LEFT = -1;
-    
+
     /* package */ static final int DIR_REQUEST_LTR = 1;
     /* package */ static final int DIR_REQUEST_RTL = -1;
     /* package */ static final int DIR_REQUEST_DEFAULT_LTR = 2;

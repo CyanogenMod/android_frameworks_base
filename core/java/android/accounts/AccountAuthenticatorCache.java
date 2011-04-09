@@ -66,7 +66,7 @@ import java.io.IOException;
             if (TextUtils.isEmpty(accountType)) {
                 return null;
             }
-            return new AuthenticatorDescription(accountType, packageName, labelId, iconId, 
+            return new AuthenticatorDescription(accountType, packageName, labelId, iconId,
                     smallIconId, prefId);
         } finally {
             sa.recycle();

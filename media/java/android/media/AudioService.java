@@ -1918,7 +1918,7 @@ public class AudioService extends IAudioService.Stub {
                 int state = intent.getIntExtra("state", 0);
                 int microphone = intent.getIntExtra("microphone", 0);
                 String name = intent.getStringExtra("name");
-                
+
                 if (name != null && !name.equalsIgnoreCase("1")) {
                     if (microphone != 0) {
                         boolean isConnected = mConnectedDevices.containsKey(AudioSystem.DEVICE_OUT_WIRED_HEADSET);

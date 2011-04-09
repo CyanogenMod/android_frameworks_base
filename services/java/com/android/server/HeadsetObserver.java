@@ -182,7 +182,7 @@ class HeadsetObserver extends UEventObserver {
             Intent intent = new Intent("com.teamwin");
             intent.addFlags(Intent.FLAG_RECEIVER_REGISTERED_ONLY);
             int state = 0;
-            
+
             if (headsetState == I2C_ROUTED) {
                 state = 1;
             }

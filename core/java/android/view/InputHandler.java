@@ -30,7 +30,7 @@ public interface InputHandler {
      * @param finishedCallback The callback to invoke when event processing is finished.
      */
     public void handleKey(KeyEvent event, Runnable finishedCallback);
-    
+
     /**
      * Handle a motion event.
      * It is the responsibility of the callee to ensure that the finished callback is

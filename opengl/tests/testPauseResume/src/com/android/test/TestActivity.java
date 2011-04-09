@@ -45,8 +45,8 @@ public class TestActivity extends Activity {
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         mView = new TestView(getApplication());
-	    mView.setFocusableInTouchMode(true);
-	    setContentView(mView);
+            mView.setFocusableInTouchMode(true);
+            setContentView(mView);
         mView.postDelayed(mRunnable, PAUSE_DELAY);
     }
 

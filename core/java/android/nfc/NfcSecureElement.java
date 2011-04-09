@@ -62,7 +62,7 @@ public final class NfcSecureElement {
         } else if (seType.equals("UICC")) {
             return 0;
         } else {
-        	throw new IOException("Wrong Secure Element type");
+                throw new IOException("Wrong Secure Element type");
         }
     }
 
@@ -75,7 +75,7 @@ public final class NfcSecureElement {
             byte[] response = mService.exchangeAPDU(handle, data);
             // Handle potential errors
             if (response == null) {
-            	throw new IOException("Exchange APDU failed");
+                throw new IOException("Exchange APDU failed");
             }
             return response;
         } catch (RemoteException e) {
@@ -90,7 +90,7 @@ public final class NfcSecureElement {
             int status = mService.closeSecureElementConnection(handle);
             // Handle potential errors
             if (ErrorCodes.isError(status)) {
-            	throw new IOException("Error during the conection close");
+                throw new IOException("Error during the conection close");
             };
         } catch (RemoteException e) {
             Log.e(TAG, "RemoteException in closeSecureElement(): ", e);

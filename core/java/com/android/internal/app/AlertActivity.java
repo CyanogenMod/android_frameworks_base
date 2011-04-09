@@ -23,7 +23,7 @@ import android.view.KeyEvent;
 
 /**
  * An activity that follows the visual style of an AlertDialog.
- * 
+ *
  * @see #mAlert
  * @see #mAlertParams
  * @see #setupAlert()
@@ -32,22 +32,22 @@ public abstract class AlertActivity extends Activity implements DialogInterface 
 
     /**
      * The model for the alert.
-     * 
+     *
      * @see #mAlertParams
      */
     protected AlertController mAlert;
-    
+
     /**
      * The parameters for the alert.
      */
     protected AlertController.AlertParams mAlertParams;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         mAlert = new AlertController(this, this, getWindow());
-        mAlertParams = new AlertController.AlertParams(this);        
+        mAlertParams = new AlertController.AlertParams(this);
     }
 
     public void cancel() {
@@ -65,7 +65,7 @@ public abstract class AlertActivity extends Activity implements DialogInterface 
     /**
      * Sets up the alert, including applying the parameters to the alert model,
      * and installing the alert's content.
-     * 
+     *
      * @see #mAlert
      * @see #mAlertParams
      */
@@ -73,7 +73,7 @@ public abstract class AlertActivity extends Activity implements DialogInterface 
         mAlertParams.apply(mAlert);
         mAlert.installContent();
     }
-    
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (mAlert.onKeyDown(keyCode, event)) return true;
@@ -85,6 +85,6 @@ public abstract class AlertActivity extends Activity implements DialogInterface 
         if (mAlert.onKeyUp(keyCode, event)) return true;
         return super.onKeyUp(keyCode, event);
     }
-    
-    
+
+
 }

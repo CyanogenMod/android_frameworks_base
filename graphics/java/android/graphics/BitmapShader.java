@@ -36,6 +36,6 @@ public class BitmapShader extends Shader {
 
     private static native int nativeCreate(int native_bitmap,
                                            int shaderTileModeX,
-                                           int shaderTileModeY);    
+                                           int shaderTileModeY);
 }
 

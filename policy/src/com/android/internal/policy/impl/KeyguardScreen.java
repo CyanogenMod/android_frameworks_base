@@ -27,7 +27,7 @@ public interface KeyguardScreen {
      * keyboard to be displayed.
      */
     boolean needsInput();
-    
+
     /**
      * This screen is no longer in front of the user.
      */

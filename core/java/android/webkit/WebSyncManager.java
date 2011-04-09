@@ -125,7 +125,7 @@ abstract class WebSyncManager implements Runnable {
      */
     public void startSync() {
         if (DebugFlags.WEB_SYNC_MANAGER) {
-            Log.v(LOGTAG, "***  WebSyncManager startSync ***, Ref count:" + 
+            Log.v(LOGTAG, "***  WebSyncManager startSync ***, Ref count:" +
                     mStartSyncRefCount);
         }
         if (mHandler == null) {
@@ -143,7 +143,7 @@ abstract class WebSyncManager implements Runnable {
      */
     public void stopSync() {
         if (DebugFlags.WEB_SYNC_MANAGER) {
-            Log.v(LOGTAG, "*** WebSyncManager stopSync ***, Ref count:" + 
+            Log.v(LOGTAG, "*** WebSyncManager stopSync ***, Ref count:" +
                     mStartSyncRefCount);
         }
         if (mHandler == null) {

@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * Low-level class holding the list of messages to be dispatched by a
  * {@link Looper}.  Messages are not added directly to a MessageQueue,
  * but rather through {@link Handler} objects associated with the Looper.
- * 
+ *
  * <p>You can retrieve the MessageQueue for the current thread with
  * {@link Looper#myQueue() Looper.myQueue()}.
  */
@@ -42,7 +42,7 @@ public class MessageQueue {
 
     @SuppressWarnings("unused")
     private int mPtr; // used by native code
-    
+
     private native void nativeInit();
     private native void nativeDestroy();
     private native void nativePollOnce(int ptr, int timeoutMillis);
@@ -68,9 +68,9 @@ public class MessageQueue {
      * removed automatically for you by returning false from
      * {@link IdleHandler#queueIdle IdleHandler.queueIdle()} when it is
      * invoked, or explicitly removing it with {@link #removeIdleHandler}.
-     * 
+     *
      * <p>This method is safe to call from any thread.
-     * 
+     *
      * @param handler The IdleHandler to be added.
      */
     public final void addIdleHandler(IdleHandler handler) {
@@ -86,7 +86,7 @@ public class MessageQueue {
      * Remove an {@link IdleHandler} from the queue that was previously added
      * with {@link #addIdleHandler}.  If the given object is not currently
      * in the idle list, nothing is done.
-     * 
+     *
      * @param handler The IdleHandler to be removed.
      */
     public final void removeIdleHandler(IdleHandler handler) {
@@ -94,11 +94,11 @@ public class MessageQueue {
             mIdleHandlers.remove(handler);
         }
     }
-    
+
     MessageQueue() {
         nativeInit();
     }
-    
+
     @Override
     protected void finalize() throws Throwable {
         try {
@@ -258,7 +258,7 @@ public class MessageQueue {
                 }
                 p = n;
             }
-            
+
             return found;
         }
     }

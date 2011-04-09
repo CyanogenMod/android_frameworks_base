@@ -173,7 +173,7 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub
                     manageServicesLocked();
                 }
             }
-            
+
             @Override
             public boolean onHandleForceStop(Intent intent, String[] packages,
                     int uid, boolean doit) {
@@ -210,7 +210,7 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub
                     return false;
                 }
             }
-            
+
             @Override
             public void onReceive(Context context, Intent intent) {
                 if (intent.getAction() == Intent.ACTION_BOOT_COMPLETED) {
@@ -228,10 +228,10 @@ public class AccessibilityManagerService extends IAccessibilityManager.Stub
 
                         manageServicesLocked();
                     }
-                    
+
                     return;
                 }
-                
+
                 super.onReceive(context, intent);
             }
         };

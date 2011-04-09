@@ -102,14 +102,14 @@ public class WebHistoryItem implements Cloneable {
 
     /**
      * Return the original url of this history item. This was the requested
-     * url, the final url may be different as there might have been 
+     * url, the final url may be different as there might have been
      * redirects while loading the site.
      * @return The original url of this history item.
      */
     public String getOriginalUrl() {
         return mOriginalUrl;
     }
-    
+
     /**
      * Return the document title of this history item.
      * @return The document title of this history item.
@@ -208,7 +208,7 @@ public class WebHistoryItem implements Cloneable {
     private native void inflate(int nativeFrame, byte[] data);
 
     /* Called by jni when the item is updated */
-    private void update(String url, String originalUrl, String title, 
+    private void update(String url, String originalUrl, String title,
             Bitmap favicon, byte[] data) {
         mUrl = url;
         mOriginalUrl = originalUrl;

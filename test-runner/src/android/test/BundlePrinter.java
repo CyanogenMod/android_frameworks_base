@@ -29,7 +29,7 @@ import junit.textui.ResultPrinter;
 
 /**
  * Subclass of ResultPrinter that adds test case results to a bundle.
- * 
+ *
  * {@hide} - This class is deprecated, and will be going away.  Please don't use it.
  */
 public class BundlePrinter extends ResultPrinter {
@@ -37,12 +37,12 @@ public class BundlePrinter extends ResultPrinter {
     private Bundle mResults;
     private boolean mFailure;
     private boolean mError;
-    
+
     public BundlePrinter(PrintStream writer, Bundle result) {
         super(writer);
         mResults = result;
     }
-    
+
     @Override
     public void addError(Test test, Throwable t) {
         mResults.putString(getComboName(test), BaseTestRunner.getFilteredTrace(t));
@@ -71,9 +71,9 @@ public class BundlePrinter extends ResultPrinter {
         mError = false;
         super.startTest(test);
     }
-    
+
     private String getComboName(Test test) {
         return test.getClass().getName() + ":" + ((TestCase) test).getName();
     }
-    
+
 }

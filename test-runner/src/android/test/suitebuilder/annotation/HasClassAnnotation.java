@@ -24,7 +24,7 @@ import com.android.internal.util.Predicate;
 /**
  * A predicate that checks to see if a {@link android.test.suitebuilder.TestMethod} has a specific annotation on the
  * containing class. Consider using the public {@link HasAnnotation} class instead of this class.
- * 
+ *
  * {@hide} Not needed for 1.0 SDK.
  */
 class HasClassAnnotation implements Predicate<TestMethod> {

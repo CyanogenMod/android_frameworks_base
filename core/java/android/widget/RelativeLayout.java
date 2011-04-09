@@ -159,7 +159,7 @@ public class RelativeLayout extends ViewGroup {
     private int mIgnoreGravity;
 
     private SortedSet<View> mTopToBottomLeftToRightSet = null;
-    
+
     private boolean mDirtyHierarchy;
     private View[] mSortedHorizontalChildren = new View[0];
     private View[] mSortedVerticalChildren = new View[0];
@@ -291,7 +291,7 @@ public class RelativeLayout extends ViewGroup {
             for (View view : mSortedHorizontalChildren) {
                 DependencyGraph.printViewId(getResources(), view);
             }
-        }        
+        }
     }
 
     // TODO: we need to find another way to implement RelativeLayout
@@ -376,7 +376,7 @@ public class RelativeLayout extends ViewGroup {
             View child = views[i];
             if (child.getVisibility() != GONE) {
                 LayoutParams params = (LayoutParams) child.getLayoutParams();
-                
+
                 applyVerticalSizeRules(params, myHeight);
                 measureChild(child, params, myWidth, myHeight);
                 if (positionChildVertical(child, params, myHeight, isWrapContentHeight)) {

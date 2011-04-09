@@ -30,7 +30,7 @@ import android.view.accessibility.AccessibilityEvent;
 
 /**
  * An extension to TextView that supports the {@link android.widget.Checkable} interface.
- * This is useful when used in a {@link android.widget.ListView ListView} where the it's 
+ * This is useful when used in a {@link android.widget.ListView ListView} where the it's
  * {@link android.widget.ListView#setChoiceMode(int) setChoiceMode} has been set to
  * something other than {@link android.widget.ListView#CHOICE_MODE_NONE CHOICE_MODE_NONE}.
  *
@@ -96,7 +96,7 @@ public class CheckedTextView extends TextView implements Checkable {
     /**
      * Set the checkmark to a given Drawable, identified by its resourece id. This will be drawn
      * when {@link #isChecked()} is true.
-     * 
+     *
      * @param resid The Drawable to use for the checkmark.
      */
     public void setCheckMarkDrawable(int resid) {
@@ -128,7 +128,7 @@ public class CheckedTextView extends TextView implements Checkable {
             d.setVisible(getVisibility() == VISIBLE, false);
             d.setState(CHECKED_STATE_SET);
             setMinHeight(d.getIntrinsicHeight());
-            
+
             mCheckMarkWidth = d.getIntrinsicWidth();
             mPaddingRight = mCheckMarkWidth + mBasePaddingRight;
             d.setState(getDrawableState());
@@ -138,7 +138,7 @@ public class CheckedTextView extends TextView implements Checkable {
         mCheckMarkDrawable = d;
         requestLayout();
     }
-    
+
     @Override
     public void setPadding(int left, int top, int right, int bottom) {
         super.setPadding(left, top, right, bottom);
@@ -164,17 +164,17 @@ public class CheckedTextView extends TextView implements Checkable {
                     y = (getHeight() - height) / 2;
                     break;
             }
-            
+
             int right = getWidth();
             checkMarkDrawable.setBounds(
-                    right - mCheckMarkWidth - mBasePaddingRight, 
-                    y, 
-                    right - mBasePaddingRight, 
+                    right - mCheckMarkWidth - mBasePaddingRight,
+                    y,
+                    right - mBasePaddingRight,
                     y + height);
             checkMarkDrawable.draw(canvas);
         }
     }
-    
+
     @Override
     protected int[] onCreateDrawableState(int extraSpace) {
         final int[] drawableState = super.onCreateDrawableState(extraSpace + 1);
@@ -187,13 +187,13 @@ public class CheckedTextView extends TextView implements Checkable {
     @Override
     protected void drawableStateChanged() {
         super.drawableStateChanged();
-        
+
         if (mCheckMarkDrawable != null) {
             int[] myDrawableState = getDrawableState();
-            
+
             // Set the state of the Drawable
             mCheckMarkDrawable.setState(myDrawableState);
-            
+
             invalidate();
         }
     }

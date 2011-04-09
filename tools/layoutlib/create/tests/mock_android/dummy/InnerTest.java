@@ -43,11 +43,11 @@ public class InnerTest {
     private static class MyStaticInnerClass {
 
     }
-    
+
     private static class DerivingClass extends InnerTest {
-        
+
     }
-    
+
     // enums are a kind of inner static class
     public enum MyIntEnum {
         VALUE0(0),
@@ -59,13 +59,13 @@ public class InnerTest {
         }
         final int myInt;
     }
-    
+
     public static class MyGenerics1<T, U, V, W> {
         public MyGenerics1() {
             int a = 1;
         }
     }
-    
+
     public <X> void genericMethod1(X a, X[] a) {
     }
 

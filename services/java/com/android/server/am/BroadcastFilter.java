@@ -33,27 +33,27 @@ class BroadcastFilter extends IntentFilter {
         receiverList = _receiverList;
         requiredPermission = _requiredPermission;
     }
-    
+
     public void dump(PrintWriter pw, String prefix) {
         dumpInReceiverList(pw, new PrintWriterPrinter(pw), prefix);
         receiverList.dumpLocal(pw, prefix);
     }
-    
+
     public void dumpBrief(PrintWriter pw, String prefix) {
         dumpBroadcastFilterState(pw, prefix);
     }
-    
+
     public void dumpInReceiverList(PrintWriter pw, Printer pr, String prefix) {
         super.dump(pr, prefix);
         dumpBroadcastFilterState(pw, prefix);
     }
-    
+
     void dumpBroadcastFilterState(PrintWriter pw, String prefix) {
         if (requiredPermission != null) {
             pw.print(prefix); pw.print("requiredPermission="); pw.println(requiredPermission);
         }
     }
-    
+
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("BroadcastFilter{");

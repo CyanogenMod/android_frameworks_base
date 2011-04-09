@@ -19,7 +19,7 @@ package android.test;
 import java.lang.reflect.Field;
 
 /**
- * 
+ *
  * The InstrumentationUtils class has all the utility functions needed for
  * instrumentation tests.
  *
@@ -29,7 +29,7 @@ public class InstrumentationUtils {
     /**
      * An utility function that returns the menu identifier for a particular
      * menu item.
-     * 
+     *
      * @param cls Class object of the class that handles the menu ite,.
      * @param identifier Menu identifier.
      * @return The integer corresponding to the menu item.
@@ -37,7 +37,7 @@ public class InstrumentationUtils {
     public static int getMenuIdentifier(Class cls, String identifier) {
         int id = -1;
         try {
-            Integer field = (Integer)cls.getDeclaredField(identifier).get(cls);   
+            Integer field = (Integer)cls.getDeclaredField(identifier).get(cls);
             id = field.intValue();
         } catch (NoSuchFieldException e) {
             e.printStackTrace();

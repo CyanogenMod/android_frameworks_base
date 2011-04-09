@@ -276,7 +276,7 @@ public class BoringLayout extends Layout implements TextUtils.EllipsizeCallback 
             if (fm == null) {
                 fm = new Metrics();
             }
-    
+
             int wid;
 
             synchronized (sTemp) {
@@ -389,7 +389,7 @@ public class BoringLayout extends Layout implements TextUtils.EllipsizeCallback 
 
     public static class Metrics extends Paint.FontMetricsInt {
         public int width;
-        
+
         @Override public String toString() {
             return super.toString() + " width=" + width;
         }

@@ -28,24 +28,24 @@ public class PhoneLayoutInflater extends LayoutInflater {
         "android.widget.",
         "android.webkit."
     };
-    
+
     /**
      * Instead of instantiating directly, you should retrieve an instance
      * through {@link Context#getSystemService}
-     * 
+     *
      * @param context The Context in which in which to find resources and other
      *                application-specific things.
-     * 
+     *
      * @see Context#getSystemService
      */
     public PhoneLayoutInflater(Context context) {
         super(context);
     }
-    
+
     protected PhoneLayoutInflater(LayoutInflater original, Context newContext) {
         super(original, newContext);
     }
-    
+
     /** Override onCreateView to instantiate names that correspond to the
         widgets known to the Widget factory. If we don't find a match,
         call through to our super class.
@@ -65,7 +65,7 @@ public class PhoneLayoutInflater extends LayoutInflater {
 
         return super.onCreateView(name, attrs);
     }
-    
+
     public LayoutInflater cloneInContext(Context newContext) {
         return new PhoneLayoutInflater(this, newContext);
     }

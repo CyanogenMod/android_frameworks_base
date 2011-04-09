@@ -153,11 +153,11 @@ public abstract class KeyguardViewBase extends FrameLayout {
                             mTelephonyManager.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
                         return true;  // suppress key event
                     }
-                case KeyEvent.KEYCODE_HEADSETHOOK: 
-                case KeyEvent.KEYCODE_MEDIA_STOP: 
-                case KeyEvent.KEYCODE_MEDIA_NEXT: 
-                case KeyEvent.KEYCODE_MEDIA_PREVIOUS: 
-                case KeyEvent.KEYCODE_MEDIA_REWIND: 
+                case KeyEvent.KEYCODE_HEADSETHOOK:
+                case KeyEvent.KEYCODE_MEDIA_STOP:
+                case KeyEvent.KEYCODE_MEDIA_NEXT:
+                case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+                case KeyEvent.KEYCODE_MEDIA_REWIND:
                 case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD: {
                     Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
                     intent.putExtra(Intent.EXTRA_KEY_EVENT, event);
@@ -189,12 +189,12 @@ public abstract class KeyguardViewBase extends FrameLayout {
         } else if (event.getAction() == KeyEvent.ACTION_UP) {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_MUTE:
-                case KeyEvent.KEYCODE_HEADSETHOOK: 
-                case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE: 
-                case KeyEvent.KEYCODE_MEDIA_STOP: 
-                case KeyEvent.KEYCODE_MEDIA_NEXT: 
-                case KeyEvent.KEYCODE_MEDIA_PREVIOUS: 
-                case KeyEvent.KEYCODE_MEDIA_REWIND: 
+                case KeyEvent.KEYCODE_HEADSETHOOK:
+                case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
+                case KeyEvent.KEYCODE_MEDIA_STOP:
+                case KeyEvent.KEYCODE_MEDIA_NEXT:
+                case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+                case KeyEvent.KEYCODE_MEDIA_REWIND:
                 case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD: {
                     Intent intent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
                     intent.putExtra(Intent.EXTRA_KEY_EVENT, event);

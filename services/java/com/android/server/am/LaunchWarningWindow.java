@@ -17,7 +17,7 @@ public class LaunchWarningWindow extends Dialog {
         getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                 | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-        
+
         setContentView(R.layout.launch_warning);
         setTitle(context.getText(R.string.launch_warning_title));
         getWindow().setFeatureDrawableResource(Window.FEATURE_LEFT_ICON,

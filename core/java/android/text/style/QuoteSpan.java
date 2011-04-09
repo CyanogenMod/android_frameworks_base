@@ -33,7 +33,7 @@ public class QuoteSpan implements LeadingMarginSpan, ParcelableSpan {
         super();
         mColor = 0xff0000ff;
     }
-    
+
     public QuoteSpan(int color) {
         super();
         mColor = color;
@@ -42,11 +42,11 @@ public class QuoteSpan implements LeadingMarginSpan, ParcelableSpan {
     public QuoteSpan(Parcel src) {
         mColor = src.readInt();
     }
-    
+
     public int getSpanTypeId() {
         return TextUtils.QUOTE_SPAN;
     }
-    
+
     public int describeContents() {
         return 0;
     }
@@ -58,7 +58,7 @@ public class QuoteSpan implements LeadingMarginSpan, ParcelableSpan {
     public int getColor() {
         return mColor;
     }
-    
+
     public int getLeadingMargin(boolean first) {
         return STRIPE_WIDTH + GAP_WIDTH;
     }

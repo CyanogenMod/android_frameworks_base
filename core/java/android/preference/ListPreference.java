@@ -31,7 +31,7 @@ import android.util.AttributeSet;
  * <p>
  * This preference will store a string into the SharedPreferences. This string will be the value
  * from the {@link #setEntryValues(CharSequence[])} array.
- * 
+ *
  * @attr ref android.R.styleable#ListPreference_entries
  * @attr ref android.R.styleable#ListPreference_entryValues
  */
@@ -40,17 +40,17 @@ public class ListPreference extends DialogPreference {
     private CharSequence[] mEntryValues;
     private String mValue;
     private int mClickedDialogEntryIndex;
-    
+
     public ListPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
-        
+
         TypedArray a = context.obtainStyledAttributes(attrs,
                 com.android.internal.R.styleable.ListPreference, 0, 0);
         mEntries = a.getTextArray(com.android.internal.R.styleable.ListPreference_entries);
         mEntryValues = a.getTextArray(com.android.internal.R.styleable.ListPreference_entryValues);
         a.recycle();
     }
-    
+
     public ListPreference(Context context) {
         this(context, null);
     }
@@ -61,14 +61,14 @@ public class ListPreference extends DialogPreference {
      * <p>
      * Each entry must have a corresponding index in
      * {@link #setEntryValues(CharSequence[])}.
-     * 
+     *
      * @param entries The entries.
      * @see #setEntryValues(CharSequence[])
      */
     public void setEntries(CharSequence[] entries) {
         mEntries = entries;
     }
-    
+
     /**
      * @see #setEntries(CharSequence[])
      * @param entriesResId The entries array as a resource.
@@ -76,21 +76,21 @@ public class ListPreference extends DialogPreference {
     public void setEntries(int entriesResId) {
         setEntries(getContext().getResources().getTextArray(entriesResId));
     }
-    
+
     /**
      * The list of entries to be shown in the list in subsequent dialogs.
-     * 
+     *
      * @return The list as an array.
      */
     public CharSequence[] getEntries() {
         return mEntries;
     }
-    
+
     /**
      * The array to find the value to save for a preference when an entry from
      * entries is selected. If a user clicks on the second item in entries, the
      * second item in this array will be saved to the preference.
-     * 
+     *
      * @param entryValues The array to be used as values to save for the preference.
      */
     public void setEntryValues(CharSequence[] entryValues) {
@@ -104,10 +104,10 @@ public class ListPreference extends DialogPreference {
     public void setEntryValues(int entryValuesResId) {
         setEntryValues(getContext().getResources().getTextArray(entryValuesResId));
     }
-    
+
     /**
      * Returns the array of values to be saved for the preference.
-     * 
+     *
      * @return The array of values.
      */
     public CharSequence[] getEntryValues() {
@@ -117,18 +117,18 @@ public class ListPreference extends DialogPreference {
     /**
      * Sets the value of the key. This should be one of the entries in
      * {@link #getEntryValues()}.
-     * 
+     *
      * @param value The value to set for the key.
      */
     public void setValue(String value) {
         mValue = value;
-        
+
         persistString(value);
     }
 
     /**
      * Sets the value to the given index from the entry values.
-     * 
+     *
      * @param index The index of the value to set.
      */
     public void setValueIndex(int index) {
@@ -136,30 +136,30 @@ public class ListPreference extends DialogPreference {
             setValue(mEntryValues[index].toString());
         }
     }
-    
+
     /**
      * Returns the value of the key. This should be one of the entries in
      * {@link #getEntryValues()}.
-     * 
+     *
      * @return The value of the key.
      */
     public String getValue() {
-        return mValue; 
+        return mValue;
     }
-    
+
     /**
      * Returns the entry corresponding to the current value.
-     * 
+     *
      * @return The entry corresponding to the current value, or null.
      */
     public CharSequence getEntry() {
         int index = getValueIndex();
         return index >= 0 && mEntries != null ? mEntries[index] : null;
     }
-    
+
     /**
      * Returns the index of the given value (in the entry values array).
-     * 
+     *
      * @param value The value whose index should be returned.
      * @return The index of the value, or -1 if not found.
      */
@@ -173,22 +173,22 @@ public class ListPreference extends DialogPreference {
         }
         return -1;
     }
-    
+
     private int getValueIndex() {
         return findIndexOfValue(mValue);
     }
-    
+
     @Override
     protected void onPrepareDialogBuilder(Builder builder) {
         super.onPrepareDialogBuilder(builder);
-        
+
         if (mEntries == null || mEntryValues == null) {
             throw new IllegalStateException(
                     "ListPreference requires an entries array and an entryValues array.");
         }
 
         mClickedDialogEntryIndex = getValueIndex();
-        builder.setSingleChoiceItems(mEntries, mClickedDialogEntryIndex, 
+        builder.setSingleChoiceItems(mEntries, mClickedDialogEntryIndex,
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         mClickedDialogEntryIndex = which;
@@ -201,7 +201,7 @@ public class ListPreference extends DialogPreference {
                         dialog.dismiss();
                     }
         });
-        
+
         /*
          * The typical interaction for list-based dialogs is to have
          * click-on-an-item dismiss the dialog instead of the user having to
@@ -213,7 +213,7 @@ public class ListPreference extends DialogPreference {
     @Override
     protected void onDialogClosed(boolean positiveResult) {
         super.onDialogClosed(positiveResult);
-        
+
         if (positiveResult && mClickedDialogEntryIndex >= 0 && mEntryValues != null) {
             String value = mEntryValues[mClickedDialogEntryIndex].toString();
             if (callChangeListener(value)) {
@@ -231,7 +231,7 @@ public class ListPreference extends DialogPreference {
     protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
         setValue(restoreValue ? getPersistedString(mValue) : (String) defaultValue);
     }
-    
+
     @Override
     protected Parcelable onSaveInstanceState() {
         final Parcelable superState = super.onSaveInstanceState();
@@ -239,7 +239,7 @@ public class ListPreference extends DialogPreference {
             // No need to save instance state since it's persistent
             return superState;
         }
-        
+
         final SavedState myState = new SavedState(superState);
         myState.value = getValue();
         return myState;
@@ -252,15 +252,15 @@ public class ListPreference extends DialogPreference {
             super.onRestoreInstanceState(state);
             return;
         }
-         
+
         SavedState myState = (SavedState) state;
         super.onRestoreInstanceState(myState.getSuperState());
         setValue(myState.value);
     }
-    
+
     private static class SavedState extends BaseSavedState {
         String value;
-        
+
         public SavedState(Parcel source) {
             super(source);
             value = source.readString();
@@ -287,5 +287,5 @@ public class ListPreference extends DialogPreference {
             }
         };
     }
-    
+
 }

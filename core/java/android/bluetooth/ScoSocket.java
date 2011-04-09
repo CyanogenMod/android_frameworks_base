@@ -29,7 +29,7 @@ import android.util.Log;
  * Simple SCO Socket.
  * Currently in Android, there is no support for sending data over a SCO
  * socket - this is managed by the hardware link to the Bluetooth Chip. This
- * class is instead intended for management of the SCO socket lifetime, 
+ * class is instead intended for management of the SCO socket lifetime,
  * and is tailored for use with the headset / handsfree profiles.
  * @hide
  */

@@ -43,7 +43,7 @@ public class DialerKeyListener extends NumberKeyListener
     public int getInputType() {
         return InputType.TYPE_CLASS_PHONE;
     }
-    
+
     /**
      * Overrides the superclass's lookup method to prefer the number field
      * from the KeyEvent.

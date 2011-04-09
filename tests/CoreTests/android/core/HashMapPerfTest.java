@@ -85,7 +85,7 @@ public class HashMapPerfTest extends TestCase {
         // android.os.Debug.stopMethodTracing();
 
         // This should be an assertion instead
-        
+
 //        System.out.println("time (" + NUM_ELTS +
 //                ", elts, " + ITERS +
 //                " iters) = " + (finish - start));

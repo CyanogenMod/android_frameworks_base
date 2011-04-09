@@ -25,7 +25,7 @@ public class Display
      */
     public static final int DEFAULT_DISPLAY = 0;
 
-    
+
     /**
      * Use {@link android.view.WindowManager#getDefaultDisplay()
      * WindowManager.getDefaultDisplay()} to create a Display object.
@@ -44,7 +44,7 @@ public class Display
         mDisplay = display;
         init(display);
     }
-    
+
     /**
      * Returns the index of this display.  This is currently undefined; do
      * not use.
@@ -58,7 +58,7 @@ public class Display
      * currently undefined; do not use.
      */
     native static int getDisplayCount();
-    
+
     /**
      * Returns the raw width of the display, in pixels.  Note that this
      * should <em>not</em> generally be used for computing layouts, since
@@ -68,7 +68,7 @@ public class Display
      * adjusted for you based on the current rotation of the display.
      */
     native public int getWidth();
-    
+
     /**
      * Returns the raw height of the display, in pixels.  Note that this
      * should <em>not</em> generally be used for computing layouts, since
@@ -99,7 +99,7 @@ public class Display
     public int getRotation() {
         return getOrientation();
     }
-    
+
     /**
      * @deprecated use {@link #getRotation}
      * @return orientation of this display.
@@ -113,17 +113,17 @@ public class Display
     public int getPixelFormat() {
         return mPixelFormat;
     }
-    
+
     /**
      * Return the refresh rate of this display in frames per second.
      */
     public float getRefreshRate() {
         return mRefreshRate;
     }
-    
+
     /**
      * Initialize a DisplayMetrics object from this display's data.
-     * 
+     *
      * @param outMetrics
      */
     public void getMetrics(DisplayMetrics outMetrics) {
@@ -141,7 +141,7 @@ public class Display
      * field offsets.
      */
     native private static void nativeClassInit();
-    
+
     private native void init(int display);
 
     private int         mDisplay;
@@ -151,7 +151,7 @@ public class Display
     private float       mDensity;
     private float       mDpiX;
     private float       mDpiY;
-    
+
     private static final Object mStaticInit = new Object();
     private static boolean mInitialized = false;
 

@@ -26,7 +26,7 @@ import android.test.InstrumentationTestSuite;
 
 /**
  * Instrumentation Test Runner for all MediaPlayer tests.
- * 
+ *
  * Running all tests:
  *
  * adb shell am instrument \

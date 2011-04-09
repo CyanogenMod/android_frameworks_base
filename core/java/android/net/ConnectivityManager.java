@@ -209,7 +209,7 @@ public class ConnectivityManager
      * default connections.
      */
     public static final int TYPE_WIMAX       = 6;
-    public static final int TYPE_MOBILE_WIMAX = 6; 
+    public static final int TYPE_MOBILE_WIMAX = 6;
 
     /**
      * Bluetooth data connection.
@@ -355,14 +355,14 @@ public class ConnectivityManager
      * <p>
      * All applications that have background services that use the network
      * should listen to {@link #ACTION_BACKGROUND_DATA_SETTING_CHANGED}.
-     * 
+     *
      * @return Whether background data usage is allowed.
      */
     public boolean getBackgroundDataSetting() {
         try {
             return mService.getBackgroundDataSetting();
         } catch (RemoteException e) {
-            // Err on the side of safety 
+            // Err on the side of safety
             return false;
         }
     }

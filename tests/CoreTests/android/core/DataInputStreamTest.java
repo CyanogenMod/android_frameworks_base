@@ -81,7 +81,7 @@ public class DataInputStreamTest extends TestCase {
         } finally {
             f.close();
         }
-        
+
         ByteArrayInputStream ga = new ByteArrayInputStream(e.toByteArray());
         DataInputStream g = new DataInputStream(ga);
 

@@ -73,7 +73,7 @@ public abstract class ImfBaseTestCase<T extends Activity> extends Instrumentatio
                     Context.KEYGUARD_SERVICE);
         keyguardManager.newKeyguardLock("imftest").disableKeyguard();
     }
-    
+
     // Utility test methods
     public void verifyEditTextAdjustment(final View editText, int rootViewHeight) {
 

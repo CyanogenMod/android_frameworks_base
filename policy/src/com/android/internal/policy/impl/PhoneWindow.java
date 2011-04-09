@@ -111,9 +111,9 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
 
     SurfaceHolder.Callback2 mTakeSurfaceCallback;
     BaseSurfaceHolder mSurfaceHolder;
-    
+
     InputQueue.Callback mTakeInputQueueCallback;
-    
+
     private boolean mIsFloating;
 
     private LayoutInflater mLayoutInflater;
@@ -165,7 +165,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
     private long mVolumeKeyUpTime;
 
     private KeyguardManager mKeyguardManager = null;
-    
+
     private SearchManager mSearchManager = null;
 
     private TelephonyManager mTelephonyManager = null;
@@ -256,11 +256,11 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
     public void takeSurface(SurfaceHolder.Callback2 callback) {
         mTakeSurfaceCallback = callback;
     }
-    
+
     public void takeInputQueue(InputQueue.Callback callback) {
         mTakeInputQueueCallback = callback;
     }
-    
+
     @Override
     public boolean isFloating() {
         return mIsFloating;
@@ -482,7 +482,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
 
         lp.gravity = st.gravity;
         lp.windowAnimations = st.windowAnimations;
-        
+
         wm.addView(st.decorView, lp);
         // Log.v(TAG, "Adding main menu to window manager.");
     }
@@ -558,12 +558,12 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
      */
     public final boolean onKeyDownPanel(int featureId, KeyEvent event) {
         final int keyCode = event.getKeyCode();
-        
+
         if (event.getRepeatCount() == 0) {
             // The panel key was pushed, so set the chording key
             mPanelChordingKey = keyCode;
             mPanelMayLongPress = false;
-            
+
             PanelFeatureState st = getPanelState(featureId, true);
             if (!st.isOpen) {
                 if (getContext().getResources().getConfiguration().keyboard
@@ -572,7 +572,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                 }
                 return preparePanel(st, event);
             }
-            
+
         } else if (mPanelMayLongPress && mPanelChordingKey == keyCode
                 && (event.getFlags()&KeyEvent.FLAG_LONG_PRESS) != 0) {
             // We have had a long press while in a state where this
@@ -585,7 +585,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                 mDecor.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
             }
-            
+
         }
 
         return false;
@@ -605,7 +605,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             if (event.isCanceled()) {
                 return;
             }
-            
+
             boolean playSoundEffect = false;
             PanelFeatureState st = getPanelState(featureId, true);
             if (st.isOpen || st.isHandled) {
@@ -1146,7 +1146,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                 mDecor != null ? mDecor.getKeyDispatcherState() : null;
         //Log.i(TAG, "Key down: repeat=" + event.getRepeatCount()
         //        + " flags=0x" + Integer.toHexString(event.getFlags()));
-        
+
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_DOWN: {
@@ -1266,7 +1266,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                     }
 
                     // default behavior
-                    Configuration config = getContext().getResources().getConfiguration(); 
+                    Configuration config = getContext().getResources().getConfiguration();
                     if (config.keyboard == Configuration.KEYBOARD_NOKEYS
                             || config.hardKeyboardHidden
                                     == Configuration.HARDKEYBOARDHIDDEN_YES) {
@@ -1304,7 +1304,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         }
         return mKeyguardManager;
     }
-    
+
     /**
      * @return A handle to the search manager.
      */
@@ -1329,7 +1329,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         }
         //Log.i(TAG, "Key up: repeat=" + event.getRepeatCount()
         //        + " flags=0x" + Integer.toHexString(event.getFlags()));
-        
+
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_DOWN: {
@@ -1810,7 +1810,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             if (!AccessibilityManager.getInstance(mContext).isEnabled()) {
                 return;
             }
- 
+
             // if we are showing a feature that should be announced and one child
             // make this child the event source since this is the feature itself
             // otherwise the callback will take over and announce its client
@@ -2028,7 +2028,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         @Override
         protected void onAttachedToWindow() {
             super.onAttachedToWindow();
-            
+
             final Callback cb = getCallback();
             if (cb != null && mFeatureId < 0) {
                 cb.onAttachedToWindow();
@@ -2049,13 +2049,13 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         @Override
         protected void onDetachedFromWindow() {
             super.onDetachedFromWindow();
-            
+
             final Callback cb = getCallback();
             if (cb != null && mFeatureId < 0) {
                 cb.onDetachedFromWindow();
             }
         }
-        
+
         @Override
         public void onCloseSystemDialogs(String reason) {
             if (mFeatureId >= 0) {
@@ -2066,19 +2066,19 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         public android.view.SurfaceHolder.Callback2 willYouTakeTheSurface() {
             return mFeatureId < 0 ? mTakeSurfaceCallback : null;
         }
-        
+
         public InputQueue.Callback willYouTakeTheInputQueue() {
             return mFeatureId < 0 ? mTakeInputQueueCallback : null;
         }
-        
+
         public void setSurfaceType(int type) {
             PhoneWindow.this.setType(type);
         }
-        
+
         public void setSurfaceFormat(int format) {
             PhoneWindow.this.setFormat(format);
         }
-        
+
         public void setSurfaceKeepScreenOn(boolean keepOn) {
             if (keepOn) PhoneWindow.this.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             else PhoneWindow.this.clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
@@ -2652,9 +2652,9 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         boolean refreshDecorView;
 
         boolean wasLastOpen;
-        
+
         boolean wasLastExpanded;
-        
+
         /**
          * Contains the state of the menu when told to freeze.
          */

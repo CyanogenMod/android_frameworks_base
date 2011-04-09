@@ -29,7 +29,7 @@ import android.util.AttributeSet;
  *
  * <p>See the <a href="{@docRoot}resources/tutorials/views/hello-formstuff.html">Form Stuff
  * tutorial</a>.</p>
- * 
+ *
  * @attr ref android.R.styleable#ToggleButton_textOn
  * @attr ref android.R.styleable#ToggleButton_textOff
  * @attr ref android.R.styleable#ToggleButton_disabledAlpha
@@ -37,15 +37,15 @@ import android.util.AttributeSet;
 public class ToggleButton extends CompoundButton {
     private CharSequence mTextOn;
     private CharSequence mTextOff;
-    
+
     private Drawable mIndicatorDrawable;
 
     private static final int NO_ALPHA = 0xFF;
     private float mDisabledAlpha;
-    
+
     public ToggleButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        
+
         TypedArray a =
             context.obtainStyledAttributes(
                     attrs, com.android.internal.R.styleable.ToggleButton, defStyle, 0);
@@ -67,7 +67,7 @@ public class ToggleButton extends CompoundButton {
     @Override
     public void setChecked(boolean checked) {
         super.setChecked(checked);
-        
+
         syncTextState();
     }
 
@@ -82,7 +82,7 @@ public class ToggleButton extends CompoundButton {
 
     /**
      * Returns the text for when the button is in the checked state.
-     * 
+     *
      * @return The text.
      */
     public CharSequence getTextOn() {
@@ -91,7 +91,7 @@ public class ToggleButton extends CompoundButton {
 
     /**
      * Sets the text for when the button is in the checked state.
-     *  
+     *
      * @param textOn The text.
      */
     public void setTextOn(CharSequence textOn) {
@@ -100,7 +100,7 @@ public class ToggleButton extends CompoundButton {
 
     /**
      * Returns the text for when the button is not in the checked state.
-     * 
+     *
      * @return The text.
      */
     public CharSequence getTextOff() {
@@ -109,7 +109,7 @@ public class ToggleButton extends CompoundButton {
 
     /**
      * Sets the text for when the button is not in the checked state.
-     * 
+     *
      * @param textOff The text.
      */
     public void setTextOff(CharSequence textOff) {
@@ -119,14 +119,14 @@ public class ToggleButton extends CompoundButton {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        
+
         updateReferenceToIndicatorDrawable(getBackground());
     }
 
     @Override
     public void setBackgroundDrawable(Drawable d) {
         super.setBackgroundDrawable(d);
-        
+
         updateReferenceToIndicatorDrawable(d);
     }
 
@@ -137,14 +137,14 @@ public class ToggleButton extends CompoundButton {
                     layerDrawable.findDrawableByLayerId(com.android.internal.R.id.toggle);
         }
     }
-    
+
     @Override
     protected void drawableStateChanged() {
         super.drawableStateChanged();
-        
+
         if (mIndicatorDrawable != null) {
             mIndicatorDrawable.setAlpha(isEnabled() ? NO_ALPHA : (int) (NO_ALPHA * mDisabledAlpha));
         }
     }
-    
+
 }

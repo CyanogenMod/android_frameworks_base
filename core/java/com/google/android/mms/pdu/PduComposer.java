@@ -973,8 +973,8 @@ public class PduComposer {
             // content-location
             byte[] contentLocation = part.getContentLocation();
             if (null != contentLocation) {
-            	appendOctet(PduPart.P_CONTENT_LOCATION);
-            	appendTextString(contentLocation);
+                appendOctet(PduPart.P_CONTENT_LOCATION);
+                appendTextString(contentLocation);
             }
 
             // content

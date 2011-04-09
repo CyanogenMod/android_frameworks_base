@@ -20,22 +20,22 @@ package android.graphics;
 /**
  * The NinePatch class permits drawing a bitmap in nine sections.
  * The four corners are unscaled; the four edges are scaled in one axis,
- * and the middle is scaled in both axes. Normally, the middle is 
+ * and the middle is scaled in both axes. Normally, the middle is
  * transparent so that the patch can provide a selection about a rectangle.
- * Essentially, it allows the creation of custom graphics that will scale the 
+ * Essentially, it allows the creation of custom graphics that will scale the
  * way that you define, when content added within the image exceeds the normal
- * bounds of the graphic. For a thorough explanation of a NinePatch image, 
- * read the discussion in the 
+ * bounds of the graphic. For a thorough explanation of a NinePatch image,
+ * read the discussion in the
  * <a href="{@docRoot}guide/topics/graphics/2d-graphics.html#nine-patch">2D
  * Graphics</a> document.
  * <p>
- * The <a href="{@docRoot}guide/developing/tools/draw9patch.html">Draw 9-Patch</a> 
+ * The <a href="{@docRoot}guide/developing/tools/draw9patch.html">Draw 9-Patch</a>
  * tool offers an extremely handy way to create your NinePatch images,
  * using a WYSIWYG graphics editor.
  * </p>
  */
 public class NinePatch {
-    /** 
+    /**
      * Create a drawable projection from a bitmap to nine patches.
      *
      * @param bitmap    The bitmap describing the patches.
@@ -66,8 +66,8 @@ public class NinePatch {
     public void setPaint(Paint p) {
         mPaint = p;
     }
-    
-    /** 
+
+    /**
      * Draw a bitmap of nine patches.
      *
      * @param canvas    A container for the current matrix and clip used to draw the bitmap.
@@ -79,8 +79,8 @@ public class NinePatch {
                    mPaint != null ? mPaint.mNativePaint : 0,
                    canvas.mDensity, mBitmap.mDensity);
     }
-    
-    /** 
+
+    /**
      * Draw a bitmap of nine patches.
      *
      * @param canvas    A container for the current matrix and clip used to draw the bitmap.
@@ -93,7 +93,7 @@ public class NinePatch {
                 canvas.mDensity, mBitmap.mDensity);
     }
 
-    /** 
+    /**
      * Draw a bitmap of nine patches.
      *
      * @param canvas    A container for the current matrix and clip used to draw the bitmap.
@@ -113,7 +113,7 @@ public class NinePatch {
     public int getDensity() {
         return mBitmap.mDensity;
     }
-    
+
     public int getWidth() {
         return mBitmap.getWidth();
     }
@@ -130,7 +130,7 @@ public class NinePatch {
         int r = nativeGetTransparentRegion(mBitmap.ni(), mChunk, location);
         return r != 0 ? new Region(r) : null;
     }
-    
+
     public native static boolean isNinePatchChunk(byte[] chunk);
 
     private final Bitmap mBitmap;

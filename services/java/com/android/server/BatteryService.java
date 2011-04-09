@@ -219,7 +219,7 @@ class BatteryService extends Binder {
         } else {
             mPlugType = BATTERY_PLUGGED_NONE;
         }
-        
+
         // Let the battery stats keep track of the current level.
         try {
             mBatteryStats.setBatteryState(mBatteryStatus, mBatteryHealth,
@@ -228,7 +228,7 @@ class BatteryService extends Binder {
         } catch (RemoteException e) {
             // Should never happen.
         }
-        
+
         shutdownIfNoPower();
         shutdownIfOverTemp();
 

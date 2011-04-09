@@ -97,7 +97,7 @@ public class NetworkInfo implements Parcelable {
         stateMap.put(DetailedState.DISCONNECTED, State.DISCONNECTED);
         stateMap.put(DetailedState.FAILED, State.DISCONNECTED);
     }
-    
+
     private int mNetworkType;
     private int mSubtype;
     private String mTypeName;
@@ -391,5 +391,5 @@ public class NetworkInfo implements Parcelable {
                 return new NetworkInfo[size];
             }
         };
-    
+
 }

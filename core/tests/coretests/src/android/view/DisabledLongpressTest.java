@@ -34,7 +34,7 @@ import android.view.View.OnLongClickListener;
 public class DisabledLongpressTest extends ActivityInstrumentationTestCase<Longpress> {
     private View mSimpleView;
     private boolean mLongClicked;
-    
+
     public DisabledLongpressTest() {
         super("com.android.frameworks.coretests", Longpress.class);
     }
@@ -75,7 +75,7 @@ public class DisabledLongpressTest extends ActivityInstrumentationTestCase<Longp
         mSimpleView.requestFocus();
         getInstrumentation().waitForIdleSync();
         KeyUtils.longClick(this);
-        
+
         getInstrumentation().waitForIdleSync();
         assertFalse(mLongClicked);
     }

@@ -60,7 +60,7 @@ import android.util.EventLog;
  *        EVENT_GET_LAST_FAIL_DONE,
  *        EVENT_DEACTIVATE_DONE.
  *     }
- *   ++ # mInactiveState 
+ *   ++ # mInactiveState
  *        e(doNotifications)
  *        x(clearNotifications) {
  *            EVENT_RESET { notifiyDisconnectCompleted }.

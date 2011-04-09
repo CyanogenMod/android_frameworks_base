@@ -32,7 +32,7 @@ public class CursorWrapper implements Cursor {
     public CursorWrapper(Cursor cursor) {
         mCursor = cursor;
     }
-    
+
     /**
      * @hide
      * @deprecated
@@ -42,9 +42,9 @@ public class CursorWrapper implements Cursor {
     }
 
     public void close() {
-        mCursor.close(); 
+        mCursor.close();
     }
- 
+
     public boolean isClosed() {
         return mCursor.isClosed();
     }
@@ -134,7 +134,7 @@ public class CursorWrapper implements Cursor {
     public String getString(int columnIndex) {
         return mCursor.getString(columnIndex);
     }
-    
+
     public void copyStringToBuffer(int columnIndex, CharArrayBuffer buffer) {
         mCursor.copyStringToBuffer(columnIndex, buffer);
     }
@@ -142,7 +142,7 @@ public class CursorWrapper implements Cursor {
     public byte[] getBlob(int columnIndex) {
         return mCursor.getBlob(columnIndex);
     }
-    
+
     public boolean getWantsAllOnMoveCalls() {
         return mCursor.getWantsAllOnMoveCalls();
     }
@@ -200,11 +200,11 @@ public class CursorWrapper implements Cursor {
     }
 
     public void registerContentObserver(ContentObserver observer) {
-        mCursor.registerContentObserver(observer);   
+        mCursor.registerContentObserver(observer);
     }
 
     public void registerDataSetObserver(DataSetObserver observer) {
-        mCursor.registerDataSetObserver(observer);   
+        mCursor.registerDataSetObserver(observer);
     }
 
     public boolean requery() {
@@ -216,7 +216,7 @@ public class CursorWrapper implements Cursor {
     }
 
     public void setNotificationUri(ContentResolver cr, Uri uri) {
-        mCursor.setNotificationUri(cr, uri);        
+        mCursor.setNotificationUri(cr, uri);
     }
 
     /**
@@ -228,7 +228,7 @@ public class CursorWrapper implements Cursor {
     }
 
     public void unregisterContentObserver(ContentObserver observer) {
-        mCursor.unregisterContentObserver(observer);        
+        mCursor.unregisterContentObserver(observer);
     }
 
     public void unregisterDataSetObserver(DataSetObserver observer) {
@@ -298,8 +298,8 @@ public class CursorWrapper implements Cursor {
     public boolean updateToNull(int columnIndex) {
         return mCursor.updateToNull(columnIndex);
     }
-    
+
     private Cursor mCursor;
-    
+
 }
 

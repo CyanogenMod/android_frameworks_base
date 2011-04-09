@@ -128,8 +128,8 @@ public class Browser {
      *  @param title    Title for the bookmark. Can be null or empty string.
      *  @param url      Url for the bookmark. Can be null or empty string.
      */
-    public static final void saveBookmark(Context c, 
-                                          String title, 
+    public static final void saveBookmark(Context c,
+                                          String title,
                                           String url) {
         Intent i = new Intent(Intent.ACTION_INSERT, Browser.BOOKMARKS_URI);
         i.putExtra("title", title);
@@ -186,10 +186,10 @@ public class Browser {
      *  Requires {@link android.Manifest.permission#READ_HISTORY_BOOKMARKS}
      *  @param cr   The ContentResolver used to access the database.
      */
-    public static final Cursor getAllBookmarks(ContentResolver cr) throws 
+    public static final Cursor getAllBookmarks(ContentResolver cr) throws
             IllegalStateException {
         return cr.query(BOOKMARKS_URI,
-                new String[] { BookmarkColumns.URL }, 
+                new String[] { BookmarkColumns.URL },
                 "bookmark = 1", null, null);
     }
 
@@ -422,10 +422,10 @@ public class Browser {
         try {
             c = cr.query(
                 BOOKMARKS_URI,
-                new String [] { BookmarkColumns._ID, 
+                new String [] { BookmarkColumns._ID,
                                 BookmarkColumns.BOOKMARK,
                                 BookmarkColumns.VISITS },
-                "bookmark = 0 OR visits > 0", 
+                "bookmark = 0 OR visits > 0",
                 null,
                 null
                 );
@@ -547,7 +547,7 @@ public class Browser {
      * @param cr    The ContentResolver used to access the database.
      * @param url   url to remove.
      */
-    public static final void deleteFromHistory(ContentResolver cr, 
+    public static final void deleteFromHistory(ContentResolver cr,
                                                String url) {
         StringBuilder sb = new StringBuilder(BookmarkColumns.URL + " = ");
         DatabaseUtils.appendEscapedSQLString(sb, url);
@@ -601,7 +601,7 @@ public class Browser {
             Log.e(LOGTAG, "clearSearches", e);
         }
     }
-    
+
     /**
      *  Request all icons from the database.  This call must either be called
      *  in the main thread or have had Looper.prepare() invoked in the calling
@@ -610,7 +610,7 @@ public class Browser {
      *  @param  cr The ContentResolver used to access the database.
      *  @param  where Clause to be used to limit the query from the database.
      *          Must be an allowable string to be passed into a database query.
-     *  @param  listener IconListener that gets the icons once they are 
+     *  @param  listener IconListener that gets the icons once they are
      *          retrieved.
      */
     public static final void requestAllIcons(ContentResolver cr, String where,

@@ -27,7 +27,7 @@ import android.util.AttributeSet;
  * Mock version of the SurfaceView.
  * Only non override public methods from the real SurfaceView have been added in there.
  * Methods that take an unknown class as parameter or as return object, have been removed for now.
- * 
+ *
  * TODO: generate automatically.
  *
  */
@@ -36,7 +36,7 @@ public class SurfaceView extends MockView {
     public SurfaceView(Context context) {
         this(context, null);
     }
-    
+
     public SurfaceView(Context context, AttributeSet attrs) {
         this(context, attrs , 0);
     }
@@ -44,13 +44,13 @@ public class SurfaceView extends MockView {
     public SurfaceView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
-    
+
     public SurfaceHolder getHolder() {
         return mSurfaceHolder;
     }
 
     private SurfaceHolder mSurfaceHolder = new SurfaceHolder() {
-        
+
         public boolean isCreating() {
             return false;
         }
@@ -60,7 +60,7 @@ public class SurfaceView extends MockView {
 
         public void removeCallback(Callback callback) {
         }
-        
+
         public void setFixedSize(int width, int height) {
         }
 
@@ -75,7 +75,7 @@ public class SurfaceView extends MockView {
 
         public void setKeepScreenOn(boolean screenOn) {
         }
-        
+
         public Canvas lockCanvas() {
             return null;
         }

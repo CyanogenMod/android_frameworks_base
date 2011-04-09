@@ -19,7 +19,7 @@ package com.android.mediaframeworktest.unit;
 import android.media.MediaPlayer;
 
 /**
- * All MediaPlayer method unit test subclass must implement this interface. 
+ * All MediaPlayer method unit test subclass must implement this interface.
  */
 interface MediaPlayerMethodUnderTest {
     public void checkStateErrors(MediaPlayerStateErrors stateErrors);

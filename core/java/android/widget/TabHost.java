@@ -520,7 +520,7 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
                 tabIndicator.setBackgroundResource(R.drawable.tab_indicator_v4);
                 tv.setTextColor(context.getResources().getColorStateList(R.color.tab_indicator_text_v4));
             }
-            
+
             return tabIndicator;
         }
     }
@@ -557,7 +557,7 @@ mTabHost.addTab(TAB_TAG_1, "Hello, world!", "Tab 1");
                 tabIndicator.setBackgroundResource(R.drawable.tab_indicator_v4);
                 tv.setTextColor(context.getResources().getColorStateList(R.color.tab_indicator_text_v4));
             }
-            
+
             return tabIndicator;
         }
     }

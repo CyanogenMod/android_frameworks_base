@@ -44,9 +44,9 @@ import java.io.File;
 import java.io.FileDescriptor;
 import java.net.InetAddress;
 
- 
+
 public class MediaFrameworkTest extends Activity {
-    
+
     //public static Surface video_sf;
     public static SurfaceView mSurfaceView;
     private MediaController mMediaController;
@@ -54,15 +54,15 @@ public class MediaFrameworkTest extends Activity {
     private MediaPlayer mpmidi;
     private MediaPlayer mpmp3;
     private String testfilepath = "/sdcard/awb.awb";
-    
+
     public static AssetFileDescriptor midiafd;
     public static AssetFileDescriptor mp3afd;
-    
-    
+
+
     public MediaFrameworkTest() {
     }
 
-    
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
@@ -71,14 +71,14 @@ public class MediaFrameworkTest extends Activity {
         mSurfaceView = (SurfaceView)findViewById(R.id.surface_view);
         ViewGroup.LayoutParams lp = mSurfaceView.getLayoutParams();
         mSurfaceView.getHolder().setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-        
+
         //Get the midi fd
         midiafd = this.getResources().openRawResourceFd(R.raw.testmidi);
-        
+
         //Get the mp3 fd
         mp3afd = this.getResources().openRawResourceFd(R.raw.testmp3);
     }
-    
+
     public void startPlayback(String filename){
       String mimetype = "audio/mpeg";
       Uri path = Uri.parse(filename);
@@ -86,7 +86,7 @@ public class MediaFrameworkTest extends Activity {
       intent.setDataAndType(path, mimetype);
       startActivity(intent);
     }
-    
+
     @Override public boolean onKeyDown(int keyCode, KeyEvent event) {
       switch (keyCode) {
           case KeyEvent.KEYCODE_0:
@@ -99,50 +99,50 @@ public class MediaFrameworkTest extends Activity {
               mp.start();
             }catch (Exception e){}
               break;
-          
-          //start the music player intent with the test URL from PV    
+
+          //start the music player intent with the test URL from PV
           case KeyEvent.KEYCODE_1:
             startPlayback(MediaNames.STREAM_MP3_1);
             break;
-          
+
           case KeyEvent.KEYCODE_2:
             startPlayback(MediaNames.STREAM_MP3_2);
             break;
-          
+
           case KeyEvent.KEYCODE_3:
             startPlayback(MediaNames.STREAM_MP3_3);
             break;
-          
+
           case KeyEvent.KEYCODE_4:
             startPlayback(MediaNames.STREAM_MP3_4);
             break;
-          
+
           case KeyEvent.KEYCODE_5:
             startPlayback(MediaNames.STREAM_MP3_5);
             break;
-          
+
           case KeyEvent.KEYCODE_6:
             startPlayback(MediaNames.STREAM_MP3_6);
             break;
-          
+
           case KeyEvent.KEYCODE_7:
             startPlayback(MediaNames.STREAM_MP3_7);
             break;
-          
+
           case KeyEvent.KEYCODE_8:
             startPlayback(MediaNames.STREAM_MP3_8);
             break;
-          
+
           case KeyEvent.KEYCODE_9:
             startPlayback(MediaNames.STREAM_MP3_9);
             break;
-          
-              
-              
+
+
+
       }
       return super.onKeyDown(keyCode, event);
-     
-  }  
+
+  }
 
   public static boolean checkStreamingServer() throws Exception {
       InetAddress address = InetAddress.getByAddress(MediaNames.STREAM_SERVER);

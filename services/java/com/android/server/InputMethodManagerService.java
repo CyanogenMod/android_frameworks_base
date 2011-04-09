@@ -335,7 +335,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
     }
 
     class MyPackageMonitor extends PackageMonitor {
-        
+
         @Override
         public boolean onHandleForceStop(Intent intent, String[] packages, int uid, boolean doit) {
             synchronized (mMethodMap) {
@@ -351,7 +351,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                                     if (!doit) {
                                         return true;
                                     }
-                                    
+
                                     Settings.Secure.putString(mContext.getContentResolver(),
                                             Settings.Secure.DEFAULT_INPUT_METHOD, "");
                                     chooseNewDefaultIMELocked();
@@ -393,7 +393,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                 boolean changed = false;
 
                 if (curIm != null) {
-                    int change = isPackageDisappearing(curIm.getPackageName()); 
+                    int change = isPackageDisappearing(curIm.getPackageName());
                     if (change == PACKAGE_TEMPORARY_CHANGE
                             || change == PACKAGE_PERMANENT_CHANGE) {
                         ServiceInfo si = null;
@@ -418,7 +418,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                         }
                     }
                 }
-                
+
                 if (curIm == null) {
                     // We currently don't have a default input method... is
                     // one now available?
@@ -889,7 +889,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     MSG_UNBIND_METHOD, mCurSeq, mCurClient.client));
         }
     }
-    
+
     private void finishSession(SessionState sessionState) {
         if (sessionState != null && sessionState.session != null) {
             try {
@@ -1514,7 +1514,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
         if (immis == null) {
             return;
         }
-        
+
         synchronized (mMethodMap) {
             hideInputMethodMenuLocked();
 
@@ -1542,13 +1542,13 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     break;
                 }
             }
-    
+
             AlertDialog.OnClickListener adocl = new AlertDialog.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     hideInputMethodMenu();
                 }
             };
-    
+
             TypedArray a = context.obtainStyledAttributes(null,
                     com.android.internal.R.styleable.DialogPreference,
                     com.android.internal.R.attr.alertDialogStyle, 0);
@@ -1562,7 +1562,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                     .setIcon(a.getDrawable(
                             com.android.internal.R.styleable.DialogPreference_dialogTitle));
             a.recycle();
-    
+
             mDialogBuilder.setSingleChoiceItems(mItems, checkedItem,
                     new AlertDialog.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
@@ -1616,7 +1616,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
                         "Requires permission "
                         + android.Manifest.permission.WRITE_SECURE_SETTINGS);
             }
-            
+
             long ident = Binder.clearCallingIdentity();
             try {
                 return setInputMethodEnabledLocked(id, enabled);
@@ -1625,7 +1625,7 @@ public class InputMethodManagerService extends IInputMethodManager.Stub
             }
         }
     }
-    
+
     boolean setInputMethodEnabledLocked(String id, boolean enabled) {
         // Make sure this is a valid input method.
         InputMethodInfo imm = mMethodMap.get(id);

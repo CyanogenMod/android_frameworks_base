@@ -462,7 +462,7 @@ class ServerThread extends Thread {
             } catch (Throwable e) {
                 Slog.e(TAG, "Failure starting Recognition Service", e);
             }
-            
+
             try {
                 Slog.i(TAG, "DiskStats Service");
                 ServiceManager.addService("diskstats", new DiskStatsService(context));
@@ -662,7 +662,7 @@ public class SystemServer
         // The system server has to run all of the time, so it needs to be
         // as efficient as possible with its memory usage.
         VMRuntime.getRuntime().setTargetHeapUtilization(0.8f);
-        
+
         System.loadLibrary("android_servers");
         init1(args);
     }

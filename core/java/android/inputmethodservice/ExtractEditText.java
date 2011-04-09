@@ -28,7 +28,7 @@ import android.widget.EditText;
 public class ExtractEditText extends EditText {
     private InputMethodService mIME;
     private int mSettingExtractedText;
-    
+
     public ExtractEditText(Context context) {
         super(context, null);
     }
@@ -40,11 +40,11 @@ public class ExtractEditText extends EditText {
     public ExtractEditText(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
-    
+
     void setIME(InputMethodService ime) {
         mIME = ime;
     }
-    
+
     /**
      * Start making changes that will not be reported to the client.  That
      * is, {@link #onSelectionChanged(int, int)} will not result in sending
@@ -53,7 +53,7 @@ public class ExtractEditText extends EditText {
     public void startInternalChanges() {
         mSettingExtractedText += 1;
     }
-    
+
     /**
      * Finish making changes that will not be reported to the client.  That
      * is, {@link #onSelectionChanged(int, int)} will not result in sending
@@ -62,7 +62,7 @@ public class ExtractEditText extends EditText {
     public void finishInternalChanges() {
         mSettingExtractedText -= 1;
     }
-    
+
     /**
      * Implement just to keep track of when we are setting text from the
      * client (vs. seeing changes in ourself from the user).
@@ -75,7 +75,7 @@ public class ExtractEditText extends EditText {
             mSettingExtractedText--;
         }
     }
-    
+
     /**
      * Report to the underlying text editor about selection changes.
      */
@@ -84,7 +84,7 @@ public class ExtractEditText extends EditText {
             mIME.onExtractedSelectionChanged(selStart, selEnd);
         }
     }
-    
+
     /**
      * Redirect clicks to the IME for handling there.  First allows any
      * on click handler to run, though.
@@ -96,7 +96,7 @@ public class ExtractEditText extends EditText {
         }
         return false;
     }
-    
+
     @Override public boolean onTextContextMenuItem(int id) {
         // Horrible hack: select word option has to be handled by original view to work.
         if (mIME != null && id != android.R.id.startSelectingText) {
@@ -106,7 +106,7 @@ public class ExtractEditText extends EditText {
         }
         return super.onTextContextMenuItem(id);
     }
-    
+
     /**
      * We are always considered to be an input method target.
      */
@@ -114,14 +114,14 @@ public class ExtractEditText extends EditText {
     public boolean isInputMethodTarget() {
         return true;
     }
-    
+
     /**
      * Return true if the edit text is currently showing a scroll bar.
      */
     public boolean hasVerticalScrollBar() {
         return computeVerticalScrollRange() > computeVerticalScrollExtent();
     }
-    
+
     /**
      * Pretend like the window this view is in always has focus, so its
      * highlight and cursor will be displayed.

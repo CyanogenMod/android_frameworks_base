@@ -26,7 +26,7 @@ public class Pools {
     public static <T extends Poolable<T>> Pool<T> simplePool(PoolableManager<T> manager) {
         return new FinitePool<T>(manager);
     }
-    
+
     public static <T extends Poolable<T>> Pool<T> finitePool(PoolableManager<T> manager, int limit) {
         return new FinitePool<T>(manager, limit);
     }

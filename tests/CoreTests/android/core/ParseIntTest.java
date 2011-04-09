@@ -23,7 +23,7 @@ import android.test.suitebuilder.annotation.SmallTest;
  * Tests for functionality of class Integer to parse integers.
  */
 public class ParseIntTest extends TestCase {
-    
+
     @SmallTest
     public void testParseInt() throws Exception {
         assertEquals(0, Integer.parseInt("0", 10));

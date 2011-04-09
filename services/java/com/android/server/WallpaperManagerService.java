@@ -84,7 +84,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
      * restarting it vs. just reverting to the static wallpaper.
      */
     static final long MIN_WALLPAPER_CRASH_TIME = 10000;
-    
+
     static final File WALLPAPER_DIR = new File(
             "/data/data/com.android.settings/files");
     static final String WALLPAPER = "wallpaper";
@@ -124,40 +124,40 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
                     }
                 }
             };
-    
+
     final Context mContext;
     final IWindowManager mIWindowManager;
     final MyPackageMonitor mMonitor;
 
     int mWidth = -1;
     int mHeight = -1;
-    
+
     /**
      * Resource name if using a picture from the wallpaper gallery
      */
     String mName = "";
-    
+
     /**
      * The component name of the currently set live wallpaper.
      */
     ComponentName mWallpaperComponent;
-    
+
     /**
      * The component name of the wallpaper that should be set next.
      */
     ComponentName mNextWallpaperComponent;
-    
+
     /**
      * Name of the component used to display bitmap wallpapers from either the gallery or
      * built-in wallpapers.
      */
-    ComponentName mImageWallpaperComponent = new ComponentName("android", 
+    ComponentName mImageWallpaperComponent = new ComponentName("android",
             ImageWallpaper.class.getName());
-    
+
     WallpaperConnection mWallpaperConnection;
     long mLastDiedTime;
     boolean mWallpaperUpdating;
-    
+
     class WallpaperConnection extends IWallpaperConnection.Stub
             implements ServiceConnection {
         final WallpaperInfo mInfo;
@@ -168,7 +168,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
         public WallpaperConnection(WallpaperInfo info) {
             mInfo = info;
         }
-        
+
         public void onServiceConnected(ComponentName name, IBinder service) {
             synchronized (mLock) {
                 if (mWallpaperConnection == this) {
@@ -198,11 +198,11 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
                 }
             }
         }
-        
+
         public void attachEngine(IWallpaperEngine engine) {
             mEngine = engine;
         }
-        
+
         public ParcelFileDescriptor setWallpaper(String name) {
             synchronized (mLock) {
                 if (mWallpaperConnection == this) {
@@ -212,7 +212,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
             }
         }
     }
-    
+
     class MyPackageMonitor extends PackageMonitor {
         @Override
         public void onPackageUpdateFinished(String packageName, int uid) {
@@ -246,7 +246,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
         public void onSomePackagesChanged() {
             doPackagesChanged(true);
         }
-        
+
         boolean doPackagesChanged(boolean doit) {
             boolean changed = false;
             synchronized (mLock) {
@@ -291,7 +291,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
             return changed;
         }
     }
-    
+
     public WallpaperManagerService(Context context) {
         if (DEBUG) Slog.v(TAG, "WallpaperService startup");
         mContext = context;
@@ -303,13 +303,13 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
         loadSettingsLocked();
         mWallpaperObserver.startWatching();
     }
-    
+
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
         mWallpaperObserver.stopWatching();
     }
-    
+
     public void systemReady() {
         if (DEBUG) Slog.v(TAG, "systemReady");
         synchronized (mLock) {
@@ -326,7 +326,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
             }
         }
     }
-    
+
     public void clearWallpaper() {
         if (DEBUG) Slog.v(TAG, "clearWallpaper");
         synchronized (mLock) {
@@ -421,10 +421,10 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
             return null;
         }
     }
-    
+
     public ParcelFileDescriptor setWallpaper(String name) {
         if (DEBUG) Slog.v(TAG, "setWallpaper");
-        
+
         checkPermission(android.Manifest.permission.SET_WALLPAPER);
         synchronized (mLock) {
             final long ident = Binder.clearCallingIdentity();
@@ -467,10 +467,10 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
             }
         }
     }
-    
+
     void bindWallpaperComponentLocked(ComponentName componentName) {
         if (DEBUG) Slog.v(TAG, "bindWallpaperComponentLocked: componentName=" + componentName);
-        
+
         // Has the component changed?
         if (mWallpaperConnection != null) {
             if (mWallpaperComponent == null) {
@@ -485,10 +485,10 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
                 return;
             }
         }
-        
+
         try {
             if (componentName == null) {
-                String defaultComponent = 
+                String defaultComponent =
                     mContext.getString(com.android.internal.R.string.default_wallpaper_component);
                 if (defaultComponent != null) {
                     // See if there is a default wallpaper component specified
@@ -510,9 +510,9 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
                         + android.Manifest.permission.BIND_WALLPAPER
                         + ": " + componentName);
             }
-            
+
             WallpaperInfo wi = null;
-            
+
             Intent intent = new Intent(WallpaperService.SERVICE_INTERFACE);
             if (componentName != null && !componentName.equals(mImageWallpaperComponent)) {
                 // Make sure the selected service is actually a wallpaper service.
@@ -537,7 +537,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
                             + componentName);
                 }
             }
-            
+
             // Bind the service!
             if (DEBUG) Slog.v(TAG, "Binding to:" + componentName);
             WallpaperConnection newConn = new WallpaperConnection(wi);
@@ -554,7 +554,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
                 throw new IllegalArgumentException("Unable to bind service: "
                         + componentName);
             }
-            
+
             clearWallpaperComponentLocked();
             mWallpaperComponent = componentName;
             mWallpaperConnection = newConn;
@@ -565,12 +565,12 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
                         WindowManager.LayoutParams.TYPE_WALLPAPER);
             } catch (RemoteException e) {
             }
-            
+
         } catch (PackageManager.NameNotFoundException e) {
             throw new IllegalArgumentException("Unknown component " + componentName);
         }
     }
-    
+
     void clearWallpaperComponentLocked() {
         mWallpaperComponent = null;
         if (mWallpaperConnection != null) {
@@ -592,7 +592,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
             mWallpaperConnection = null;
         }
     }
-    
+
     void attachServiceLocked(WallpaperConnection conn) {
         try {
             conn.mService.attach(conn, conn.mToken,
@@ -605,7 +605,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
             }
         }
     }
-    
+
     private void notifyCallbacksLocked() {
         final int n = mCallbacks.beginBroadcast();
         for (int i = 0; i < n; i++) {
@@ -670,7 +670,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
 
     private void loadSettingsLocked() {
         if (DEBUG) Slog.v(TAG, "loadSettingsLocked");
-        
+
         JournaledFile journal = makeJournaledFile();
         FileInputStream stream = null;
         File file = journal.chooseForRead();
@@ -693,7 +693,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
                         mNextWallpaperComponent = comp != null
                                 ? ComponentName.unflattenFromString(comp)
                                 : null;
-                          
+
                         if (DEBUG) {
                             Slog.v(TAG, "mWidth:" + mWidth);
                             Slog.v(TAG, "mHeight:" + mHeight);
@@ -737,7 +737,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
         boolean success = false;
         synchronized (mLock) {
             loadSettingsLocked();
-            if (mNextWallpaperComponent != null && 
+            if (mNextWallpaperComponent != null &&
                     !mNextWallpaperComponent.equals(mImageWallpaperComponent)) {
                 try {
                     bindWallpaperComponentLocked(mNextWallpaperComponent);
@@ -849,12 +849,12 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
         }
         return false;
     }
-    
+
     @Override
     protected void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
         if (mContext.checkCallingOrSelfPermission(android.Manifest.permission.DUMP)
                 != PackageManager.PERMISSION_GRANTED) {
-            
+
             pw.println("Permission Denial: can't dump wallpaper service from from pid="
                     + Binder.getCallingPid()
                     + ", uid=" + Binder.getCallingUid());

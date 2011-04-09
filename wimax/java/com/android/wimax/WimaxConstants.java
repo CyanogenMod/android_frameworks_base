@@ -39,9 +39,9 @@ public class WimaxConstants {
     public static final String NETWORK_STATE_CHANGED_ACTION = "com.htc.net.wimax.STATE_CHANGE";
 
     public static final String SCAN_RESULTS_AVAILABLE_ACTION = "com.htc.net.wimax.SCAN_RESULTS_AVAILABLE";
-    
+
     public static final String RSSI_CHANGED_ACTION = "com.htc.net.wimax.RSSI_CHANGED";
-    
+
     public static final String EXTRA_NETWORK_INFO = "networkInfo";
 
     public static final String EXTRA_NEW_RSSI_LEVEL = "newRssiLevel";

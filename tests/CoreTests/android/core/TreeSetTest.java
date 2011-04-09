@@ -48,9 +48,9 @@ public class TreeSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance for the java.util.TreeSet method Add(Object arg 0)
-     * 
+     *
      */
 
     @SuppressWarnings("unchecked")
@@ -71,9 +71,9 @@ public class TreeSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance for the java.util.TreeSet method - first()
-     * 
+     *
      */
 
     public void testTreeSetFirst() {
@@ -93,9 +93,9 @@ public class TreeSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance for the java.util.TreeSet method - last()
-     * 
+     *
      */
 
     public void testTreeSetLast() {
@@ -115,9 +115,9 @@ public class TreeSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance of the java.util.TreeSet method- contains(Object arg0)
-     * 
+     *
      */
 
     public void testTreeSetContains() {
@@ -138,9 +138,9 @@ public class TreeSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance for the java.util.TreeSet method - size()
-     * 
+     *
      */
 
     public void testTreeSetSize() {
@@ -160,9 +160,9 @@ public class TreeSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance for the java.util.TreeSet method - iterator()
-     * 
+     *
      */
 
     public void testTreeSetIterator() {
@@ -182,9 +182,9 @@ public class TreeSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance for the java.util.TreeSet method - comparator()
-     * 
+     *
      */
 
     public void testTreeSetComparator() {
@@ -204,9 +204,9 @@ public class TreeSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance for the java.util.TreeSet method - clone()
-     * 
+     *
      */
 
     public void testTreeSetClone() {
@@ -227,9 +227,9 @@ public class TreeSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance of the java.util.TreeSet method - remove(Object arg0)
-     * 
+     *
      */
 
     @SuppressWarnings("unchecked")
@@ -250,9 +250,9 @@ public class TreeSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance of the java.util.TreeSet method- headSet(Integer arg0)
-     * 
+     *
      */
 
     public void testTreeSetHeadSet() {
@@ -274,9 +274,9 @@ public class TreeSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance of subSet(Integer arg0, Integer arg1) - TreeSet
-     * 
+     *
      */
 
     public void testTreeSetSubSet() {
@@ -301,9 +301,9 @@ public class TreeSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance of tailSet(Integer arg0) - TreeSet
-     * 
+     *
      */
 
     public void testTreeSetTailSet() {
@@ -325,9 +325,9 @@ public class TreeSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance for the java.util.TreeSet method - isEmpty()
-     * 
+     *
      */
 
     public void testTreeSetIsEmpty() {

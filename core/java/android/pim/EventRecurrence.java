@@ -38,7 +38,7 @@ public class EventRecurrence
     {
         wkst = MO;
     }
-    
+
     /**
      * Parse an iCalendar/RFC2445 recur type according to Section 4.3.10.
      */
@@ -47,7 +47,7 @@ public class EventRecurrence
     public void setStartDate(Time date) {
         startDate = date;
     }
-    
+
     public static final int SECONDLY = 1;
     public static final int MINUTELY = 2;
     public static final int HOURLY = 3;
@@ -79,7 +79,7 @@ public class EventRecurrence
     public int       byhourCount;
     public int[]     byday;
     public int[]     bydayNum;
-    public int       bydayCount;   
+    public int       bydayCount;
     public int[]     bymonthday;
     public int       bymonthdayCount;
     public int[]     byyearday;
@@ -118,7 +118,7 @@ public class EventRecurrence
                 throw new RuntimeException("bad day of week: " + day);
         }
     }
-    
+
     public static int timeDay2Day(int day)
     {
         switch (day)
@@ -191,14 +191,14 @@ public class EventRecurrence
                 throw new RuntimeException("bad day of week: " + day);
         }
     }
-    
+
     /**
      * Converts one of the internal day constants (SU, MO, etc.) to the
      * two-letter string representing that constant.
-     * 
+     *
      * @throws IllegalArgumentException Thrown if the day argument is not one of
      * the defined day constants.
-     * 
+     *
      * @param day one the internal constants SU, MO, etc.
      * @return the two-letter string for the day ("SU", "MO", etc.)
      */
@@ -283,7 +283,7 @@ public class EventRecurrence
             s.append(";UNTIL=");
             s.append(until);
         }
-        
+
         if (this.count != 0) {
             s.append(";COUNT=");
             s.append(this.count);
@@ -323,36 +323,36 @@ public class EventRecurrence
 
         return s.toString();
     }
-    
+
     public boolean repeatsOnEveryWeekDay() {
         if (this.freq != WEEKLY) {
-            return false; 
+            return false;
         }
-        
+
         int count = this.bydayCount;
         if (count != 5) {
             return false;
         }
-        
+
         for (int i = 0 ; i < count ; i++) {
             int day = byday[i];
             if (day == SU || day == SA) {
                 return false;
             }
         }
-        
+
         return true;
     }
-    
+
     public boolean repeatsMonthlyOnDayCount() {
         if (this.freq != MONTHLY) {
             return false;
         }
-        
+
         if (bydayCount != 1 || bymonthdayCount != 0) {
             return false;
         }
-        
+
         return true;
     }
 }

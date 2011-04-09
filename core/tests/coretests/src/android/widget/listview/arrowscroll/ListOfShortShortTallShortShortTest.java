@@ -106,7 +106,7 @@ public class ListOfShortShortTallShortShortTest extends ActivityInstrumentationT
         assertTrue("selected item bottom should be below list bottom",
                 mListView.getSelectedView().getBottom() > mListUtil.getListBottom());
         assertEquals("should only be 1 child of list (2 should have been scrolled off and removed",
-                1, mListView.getChildCount());        
+                1, mListView.getChildCount());
     }
 
     @MediumTest
@@ -132,5 +132,5 @@ public class ListOfShortShortTallShortShortTest extends ActivityInstrumentationT
                 mListView.getChildAt(0).getTop() <= mListUtil.getListTop());
     }
 
-    
+
 }

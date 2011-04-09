@@ -56,12 +56,12 @@ public class TestRecorder implements TestRunner.Listener, TestListener {
                         FileUtils.S_IRUSR | FileUtils.S_IWUSR |
                                 FileUtils.S_IRGRP | FileUtils.S_IWGRP |
                                 FileUtils.S_IROTH | FileUtils.S_IWOTH, -1, -1);
-    
+
                 if (code != 0) {
                     Log.w("TestRecorder",
                             "Set permissions for " + file.getPath() + " returned = " + code);
                 }
-    
+
                 try {
                     sDb.execSQL("CREATE TABLE IF NOT EXISTS tests (_id INT PRIMARY KEY," +
                             "name TEXT," +

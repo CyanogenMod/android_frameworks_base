@@ -196,7 +196,7 @@ public class StrictMathTest extends TestCase {
     @SuppressWarnings("boxing")
     @SmallTest
     public void testCosh_D() {
-        // Test for special situations        
+        // Test for special situations
         assertTrue("Should return NaN", Double.isNaN(StrictMath
                 .cosh(Double.NaN)));
         assertEquals("Should return POSITIVE_INFINITY",
@@ -244,7 +244,7 @@ public class StrictMathTest extends TestCase {
     @SuppressWarnings("boxing")
     @SmallTest
     public void testExpm1D() {
-        //Test for special cases        
+        //Test for special cases
         assertTrue("Should return NaN", Double.isNaN(StrictMath.expm1(Double.NaN)));
         assertEquals("Should return POSITIVE_INFINITY",
                 Double.POSITIVE_INFINITY, StrictMath.expm1(Double.POSITIVE_INFINITY));
@@ -360,7 +360,7 @@ public class StrictMathTest extends TestCase {
     @SuppressWarnings("boxing")
     @SmallTest
     public void testLog10D() {
-        // Test for special cases        
+        // Test for special cases
         assertTrue("Should return NaN", Double.isNaN(StrictMath
                 .log10(Double.NaN)));
         assertTrue("Should return NaN", Double.isNaN(StrictMath

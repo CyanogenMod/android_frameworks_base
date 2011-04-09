@@ -24,7 +24,7 @@ public class CharSequences {
     /**
      * Adapts {@link CharSequence} to an array of ASCII (7-bits per character)
      * bytes.
-     * 
+     *
      * @param bytes ASCII bytes
      */
     public static CharSequence forAsciiBytes(final byte[] bytes) {
@@ -106,10 +106,10 @@ public class CharSequences {
         }
         return true;
     }
-    
+
     /**
      * Compares two character sequences with API like {@link Comparable#compareTo}.
-     * 
+     *
      * @param me The CharSequence that receives the compareTo call.
      * @param another The other CharSequence.
      * @return See {@link Comparable#compareTo}.

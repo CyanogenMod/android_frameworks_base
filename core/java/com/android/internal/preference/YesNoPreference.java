@@ -31,7 +31,7 @@ import android.util.AttributeSet;
  */
 public class YesNoPreference extends DialogPreference {
     private boolean mWasPositiveResult;
-    
+
     public YesNoPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
@@ -39,7 +39,7 @@ public class YesNoPreference extends DialogPreference {
     public YesNoPreference(Context context, AttributeSet attrs) {
         this(context, attrs, com.android.internal.R.attr.yesNoPreferenceStyle);
     }
-    
+
     public YesNoPreference(Context context) {
         this(context, null);
     }
@@ -56,26 +56,26 @@ public class YesNoPreference extends DialogPreference {
     /**
      * Sets the value of this preference, and saves it to the persistent store
      * if required.
-     * 
+     *
      * @param value The value of the preference.
      */
     public void setValue(boolean value) {
         mWasPositiveResult = value;
-        
+
         persistBoolean(value);
-        
+
         notifyDependencyChange(!value);
     }
-    
+
     /**
      * Gets the value of this preference.
-     * 
+     *
      * @return The value of the preference.
      */
     public boolean getValue() {
         return mWasPositiveResult;
     }
-    
+
     @Override
     protected Object onGetDefaultValue(TypedArray a, int index) {
         return a.getBoolean(index, false);
@@ -91,7 +91,7 @@ public class YesNoPreference extends DialogPreference {
     public boolean shouldDisableDependents() {
         return !mWasPositiveResult || super.shouldDisableDependents();
     }
-    
+
     @Override
     protected Parcelable onSaveInstanceState() {
         final Parcelable superState = super.onSaveInstanceState();
@@ -99,7 +99,7 @@ public class YesNoPreference extends DialogPreference {
             // No need to save instance state since it's persistent
             return superState;
         }
-        
+
         final SavedState myState = new SavedState(superState);
         myState.wasPositiveResult = getValue();
         return myState;
@@ -112,15 +112,15 @@ public class YesNoPreference extends DialogPreference {
             super.onRestoreInstanceState(state);
             return;
         }
-         
+
         SavedState myState = (SavedState) state;
         super.onRestoreInstanceState(myState.getSuperState());
         setValue(myState.wasPositiveResult);
     }
-    
+
     private static class SavedState extends BaseSavedState {
         boolean wasPositiveResult;
-        
+
         public SavedState(Parcel source) {
             super(source);
             wasPositiveResult = source.readInt() == 1;
@@ -147,5 +147,5 @@ public class YesNoPreference extends DialogPreference {
             }
         };
     }
-    
+
 }

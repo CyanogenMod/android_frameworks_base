@@ -132,7 +132,7 @@ public class TrackerService extends Service {
                     mTrackerData.writeEntry("init", String.format(
                             "start listening to %s : %d ms; %f meters",
                             providerName, minUpdateTime, minDistance));
-                }    
+                }
                 LocationTrackingListener listener =
                     new LocationTrackingListener();
                 lm.requestLocationUpdates(providerName, minUpdateTime,
@@ -250,8 +250,8 @@ public class TrackerService extends Service {
         // stop cell state listener
         if (mTelephonyManager != null) {
             mTelephonyManager.listen(mPhoneStateListener, 0);
-        }    
-        
+        }
+
         // stop network/wifi listener
         if (mNetwork != null) {
             unregisterReceiver(mNetwork);
@@ -318,7 +318,7 @@ public class TrackerService extends Service {
 
         /**
          * Writes update to tracking file
-         * 
+         *
          * @param provider - name of enabled provider
          */
         public void onProviderEnabled(String provider) {
@@ -328,8 +328,8 @@ public class TrackerService extends Service {
         }
 
         /**
-         * Writes update to tracking file 
-         * 
+         * Writes update to tracking file
+         *
          * @param provider - name of provider whose status changed
          * @param status - new status
          * @param extras - optional set of extra status messages

@@ -31,7 +31,7 @@ public interface SpanWatcher extends NoCopySpan {
      * This method is called to notify you that the specified object
      * has been detached from the specified range of the text.
      */
-    public void onSpanRemoved(Spannable text, Object what, int start, int end); 
+    public void onSpanRemoved(Spannable text, Object what, int start, int end);
     /**
      * This method is called to notify you that the specified object
      * has been relocated from the range <code>ostart&hellip;oend</code>

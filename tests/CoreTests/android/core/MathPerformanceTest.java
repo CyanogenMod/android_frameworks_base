@@ -20,9 +20,9 @@ import android.test.PerformanceTestBase;
 import android.test.PerformanceTestCase;
 
 /**
- * 
+ *
  * Implements basic performance test functionality for java.lang.Math
- * 
+ *
  */
 
 public class MathPerformanceTest extends PerformanceTestBase {
@@ -263,7 +263,7 @@ public class MathPerformanceTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      */
 
     public void testMathPow() {

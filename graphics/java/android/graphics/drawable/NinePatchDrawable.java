@@ -30,7 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * 
+ *
  * A resizeable bitmap, with stretchable areas that you define. This type of image
  * is defined in a .png file with a special format, described in <a link="../../../resources.html#ninepatch">
  * Resources</a>.
@@ -50,7 +50,7 @@ public class NinePatchDrawable extends Drawable {
     // These are scaled to match the target density.
     private int mBitmapWidth;
     private int mBitmapHeight;
-    
+
     NinePatchDrawable() {
     }
 
@@ -63,7 +63,7 @@ public class NinePatchDrawable extends Drawable {
     public NinePatchDrawable(Bitmap bitmap, byte[] chunk, Rect padding, String srcName) {
         this(new NinePatchState(new NinePatch(bitmap, chunk, srcName), padding), null);
     }
-    
+
     /**
      * Create drawable from raw nine-patch data, setting initial target density
      * based on the display metrics of the resources.
@@ -73,7 +73,7 @@ public class NinePatchDrawable extends Drawable {
         this(new NinePatchState(new NinePatch(bitmap, chunk, srcName), padding), res);
         mNinePatchState.mTargetDensity = mTargetDensity;
     }
-    
+
     /**
      * Create drawable from existing nine-patch, not dealing with density.
      * @deprecated Use {@link #NinePatchDrawable(Resources, NinePatch)}
@@ -177,7 +177,7 @@ public class NinePatchDrawable extends Drawable {
             }
         }
     }
-    
+
     // overrides
 
     @Override
@@ -194,7 +194,7 @@ public class NinePatchDrawable extends Drawable {
     public int getChangingConfigurations() {
         return super.getChangingConfigurations() | mNinePatchState.mChangingConfigurations;
     }
-    
+
     @Override
     public boolean getPadding(Rect padding) {
         padding.set(mPadding);
@@ -205,7 +205,7 @@ public class NinePatchDrawable extends Drawable {
     public void setAlpha(int alpha) {
         getPaint().setAlpha(alpha);
     }
-    
+
     @Override
     public void setColorFilter(ColorFilter cf) {
         getPaint().setColorFilter(cf);
@@ -246,7 +246,7 @@ public class NinePatchDrawable extends Drawable {
         }
         options.inScreenDensity = DisplayMetrics.DENSITY_DEVICE;
 
-        final Rect padding = new Rect();        
+        final Rect padding = new Rect();
         Bitmap bitmap = null;
 
         try {
@@ -324,7 +324,7 @@ public class NinePatchDrawable extends Drawable {
     public Region getTransparentRegion() {
         return mNinePatch.getTransparentRegion(getBounds());
     }
-    
+
     @Override
     public ConstantState getConstantState() {
         mNinePatchState.mChangingConfigurations = getChangingConfigurations();
@@ -371,12 +371,12 @@ public class NinePatchDrawable extends Drawable {
         public Drawable newDrawable() {
             return new NinePatchDrawable(this, null);
         }
-        
+
         @Override
         public Drawable newDrawable(Resources res) {
             return new NinePatchDrawable(this, res);
         }
-        
+
         @Override
         public int getChangingConfigurations() {
             return mChangingConfigurations;

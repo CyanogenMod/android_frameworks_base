@@ -38,7 +38,7 @@ public class DatagramTest extends TestCase {
      */
 
     class Reflector extends Thread {
-        // Helper class for reflecting incoming datagrams. 
+        // Helper class for reflecting incoming datagrams.
         DatagramSocket socket;
 
         boolean alive = true;

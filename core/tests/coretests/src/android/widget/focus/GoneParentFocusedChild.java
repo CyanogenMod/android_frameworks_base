@@ -27,7 +27,7 @@ import android.widget.LinearLayout;
 /**
  * An activity that helps test the scenario where a parent is
  * GONE and one of its children has focus; the activity should get
- * the key event.  see bug 945150. 
+ * the key event.  see bug 945150.
  */
 public class GoneParentFocusedChild extends Activity {
     private LinearLayout mGoneGroup;

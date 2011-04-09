@@ -35,10 +35,10 @@ public class ZoomButton extends ImageButton implements OnLongClickListener {
             }
         }
     };
-    
+
     private long mZoomSpeed = 1000;
     private boolean mIsInLongpress;
-    
+
     public ZoomButton(Context context) {
         this(context, null);
     }
@@ -46,7 +46,7 @@ public class ZoomButton extends ImageButton implements OnLongClickListener {
     public ZoomButton(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
-    
+
     public ZoomButton(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mHandler = new Handler();
@@ -61,7 +61,7 @@ public class ZoomButton extends ImageButton implements OnLongClickListener {
         }
         return super.onTouchEvent(event);
     }
-        
+
     public void setZoomSpeed(long speed) {
         mZoomSpeed = speed;
     }
@@ -71,17 +71,17 @@ public class ZoomButton extends ImageButton implements OnLongClickListener {
         mHandler.post(mRunnable);
         return true;
     }
-        
+
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
         mIsInLongpress = false;
         return super.onKeyUp(keyCode, event);
     }
-    
+
     @Override
     public void setEnabled(boolean enabled) {
         if (!enabled) {
-            
+
             /* If we're being disabled reset the state back to unpressed
              * as disabled views don't get events and therefore we won't
              * get the up event to reset the state.
@@ -90,7 +90,7 @@ public class ZoomButton extends ImageButton implements OnLongClickListener {
         }
         super.setEnabled(enabled);
     }
-    
+
     @Override
     public boolean dispatchUnhandledMove(View focused, int direction) {
         clearFocus();

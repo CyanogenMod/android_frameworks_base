@@ -23,15 +23,15 @@ import android.widget.TextView;
 
 /**
  * Base class for mocked views.
- * 
+ *
  * TODO: implement onDraw and draw a rectangle in a random color with the name of the class
  * (or better the id of the view).
  */
 public class MockView extends TextView {
-    
+
     public MockView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        
+
         setText(this.getClass().getSimpleName());
         setTextColor(0xFF000000);
     }

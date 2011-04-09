@@ -23,7 +23,7 @@ import java.util.ListIterator;
 
 /**
  * This class contains performance tests for methods in java.util.LinkedList
- * 
+ *
  */
 @SuppressWarnings("unchecked")
 public class LinkedListTest extends PerformanceTestBase {

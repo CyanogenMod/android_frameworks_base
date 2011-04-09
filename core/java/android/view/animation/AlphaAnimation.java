@@ -31,26 +31,26 @@ public class AlphaAnimation extends Animation {
     private float mToAlpha;
 
     /**
-     * Constructor used when an AlphaAnimation is loaded from a resource. 
-     * 
+     * Constructor used when an AlphaAnimation is loaded from a resource.
+     *
      * @param context Application context to use
      * @param attrs Attribute set from which to read values
      */
     public AlphaAnimation(Context context, AttributeSet attrs) {
         super(context, attrs);
-        
+
         TypedArray a =
             context.obtainStyledAttributes(attrs, com.android.internal.R.styleable.AlphaAnimation);
-        
+
         mFromAlpha = a.getFloat(com.android.internal.R.styleable.AlphaAnimation_fromAlpha, 1.0f);
         mToAlpha = a.getFloat(com.android.internal.R.styleable.AlphaAnimation_toAlpha, 1.0f);
-        
+
         a.recycle();
     }
-    
+
     /**
      * Constructor to use when building an AlphaAnimation from code
-     * 
+     *
      * @param fromAlpha Starting alpha value for the animation, where 1.0 means
      *        fully opaque and 0.0 means fully transparent.
      * @param toAlpha Ending alpha value for the animation.
@@ -59,7 +59,7 @@ public class AlphaAnimation extends Animation {
         mFromAlpha = fromAlpha;
         mToAlpha = toAlpha;
     }
-    
+
     /**
      * Changes the alpha property of the supplied {@link Transformation}
      */

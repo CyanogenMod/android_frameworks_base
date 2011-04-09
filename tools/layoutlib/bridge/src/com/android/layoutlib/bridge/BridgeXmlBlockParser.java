@@ -56,7 +56,7 @@ public class BridgeXmlBlockParser implements XmlResourceParser {
         mPlatformFile = platformFile;
         mAttrib = new BridgeXmlPullAttributes(parser, context, mPlatformFile);
     }
-    
+
     public boolean isPlatformFile() {
         return mPlatformFile;
     }
@@ -68,10 +68,10 @@ public class BridgeXmlBlockParser implements XmlResourceParser {
 
         return null;
     }
-    
-    
+
+
     // ------- XmlResourceParser implementation
-    
+
     public void setFeature(String name, boolean state)
             throws XmlPullParserException {
         if (FEATURE_PROCESS_NAMESPACES.equals(name) && state) {
@@ -301,7 +301,7 @@ public class BridgeXmlBlockParser implements XmlResourceParser {
 
     // AttributeSet implementation
 
-    
+
     public void close() {
         // pass
     }

@@ -96,7 +96,7 @@ public class ViewDebug {
      * Enables or disables motion events tracing. Any invoker of
      * {@link #trace(View, MotionEvent, MotionEventTraceType)} should first check
      * that this value is set to true as not to affect performance.
-     * 
+     *
      * @hide
      */
     public static final boolean TRACE_MOTION_EVENTS = false;
@@ -153,9 +153,9 @@ public class ViewDebug {
     public static boolean consistencyCheckEnabled = false;
 
     static {
-        if (Config.DEBUG) {        
-	        Debug.setFieldsOn(ViewDebug.class, true);
-	    }
+        if (Config.DEBUG) {
+                Debug.setFieldsOn(ViewDebug.class, true);
+            }
     }
 
     /**
@@ -406,7 +406,7 @@ public class ViewDebug {
 
     /**
      * Defines the type of motion events trace to output to the motion events traces file.
-     * 
+     *
      * @hide
      */
     public enum MotionEventTraceType {
@@ -720,7 +720,7 @@ public class ViewDebug {
      * @param view the view to trace
      * @param event the event of the trace
      * @param type the type of the trace
-     * 
+     *
      * @hide
      */
     public static void trace(View view, MotionEvent event, MotionEventTraceType type) {
@@ -762,8 +762,8 @@ public class ViewDebug {
      *
      * @see #stopMotionEventTracing()
      * @see #trace(View, MotionEvent, android.view.ViewDebug.MotionEventTraceType)
-     * 
-     * @hide 
+     *
+     * @hide
      */
     public static void startMotionEventTracing(String prefix, View view) {
         //noinspection PointlessBooleanExpression,ConstantConditions
@@ -803,9 +803,9 @@ public class ViewDebug {
      *
      * This method will return immediately if TRACE_HIERARCHY is false.
      *
-     * @see #startMotionEventTracing(String, View) 
-     * @see #trace(View, MotionEvent, android.view.ViewDebug.MotionEventTraceType) 
-     * 
+     * @see #startMotionEventTracing(String, View)
+     * @see #trace(View, MotionEvent, android.view.ViewDebug.MotionEventTraceType)
+     *
      * @hide
      */
     public static void stopMotionEventTracing() {
@@ -1076,12 +1076,12 @@ public class ViewDebug {
             } catch (RemoteException e) {
                 // Ignore
             }
-    
+
             clientStream.writeInt(outRect.width());
             clientStream.writeInt(outRect.height());
-    
+
             captureViewLayer(root, clientStream, true);
-            
+
             clientStream.write(2);
         } finally {
             clientStream.close();
@@ -1099,19 +1099,19 @@ public class ViewDebug {
             if (id != View.NO_ID) {
                 name = resolveId(view.getContext(), id).toString();
             }
-    
+
             clientStream.write(1);
             clientStream.writeUTF(name);
             clientStream.writeByte(localVisible ? 1 : 0);
-    
+
             int[] position = new int[2];
             // XXX: Should happen on the UI thread
             view.getLocationInWindow(position);
-    
+
             clientStream.writeInt(position[0]);
             clientStream.writeInt(position[1]);
             clientStream.flush();
-    
+
             Bitmap b = performViewCapture(view, true);
             if (b != null) {
                 ByteArrayOutputStream arrayOut = new ByteArrayOutputStream(b.getWidth() *
@@ -1190,7 +1190,7 @@ public class ViewDebug {
                 Thread.currentThread().interrupt();
             }
         }
-        
+
         return null;
     }
 

@@ -65,7 +65,7 @@ public class AsmGenerator {
 
     /**
      * Creates a new generator that can generate the output JAR with the stubbed classes.
-     * 
+     *
      * @param log Output logger.
      * @param osDestJar The path of the destination JAR to create.
      * @param injectClasses The list of class from layoutlib_create to inject in layoutlib.
@@ -100,7 +100,7 @@ public class AsmGenerator {
             mRenameClasses.put(oldFqcn, newFqcn);
             mClassesNotRenamed.add(oldFqcn);
         }
-        
+
         // create the map of renamed class -> return type of method to delete.
         mDeleteReturns = new HashMap<String, Set<String>>();
         if (deleteReturns != null) {
@@ -112,17 +112,17 @@ public class AsmGenerator {
                     if (returnTypes != null) {
                         mDeleteReturns.put(renamedClass, returnTypes);
                     }
-                    
+
                     renamedClass = null;
                     continue;
                 }
-    
+
                 // if the renamed class is null, this is the beginning of a section
                 if (renamedClass == null) {
                     renamedClass = binaryToInternalClassName(className);
                     continue;
                 }
-    
+
                 // just a standard return type, we add it to the list.
                 if (returnTypes == null) {
                     returnTypes = new HashSet<String>();
@@ -131,7 +131,7 @@ public class AsmGenerator {
             }
         }
     }
-    
+
     /**
      * Returns the list of classes that have not been renamed yet.
      * <p/>
@@ -163,12 +163,12 @@ public class AsmGenerator {
     public void setDeps(Map<String, ClassReader> deps) {
         mDeps = deps;
     }
-    
+
     /** Gets the map of classes to output as-is, except if they have native methods */
     public Map<String, ClassReader> getKeep() {
         return mKeep;
     }
-    
+
     /** Gets the map of dependencies that must be completely stubbed */
     public Map<String, ClassReader> getDeps() {
         return mDeps;
@@ -177,7 +177,7 @@ public class AsmGenerator {
     /** Generates the final JAR */
     public void generate() throws FileNotFoundException, IOException {
         TreeMap<String, byte[]> all = new TreeMap<String, byte[]>();
-        
+
         for (Class<?> clazz : mInjectClasses) {
             String name = classToEntryPath(clazz);
             InputStream is = ClassLoader.getSystemResourceAsStream(name);
@@ -186,7 +186,7 @@ public class AsmGenerator {
             name = classNameToEntryPath(transformName(cr.getClassName()));
             all.put(name, b);
         }
-        
+
         for (Entry<String, ClassReader> entry : mDeps.entrySet()) {
             ClassReader cr = entry.getValue();
             byte[] b = transform(cr, true /* stubNativesOnly */);
@@ -211,8 +211,8 @@ public class AsmGenerator {
 
     /**
      * Writes the JAR file.
-     * 
-     * @param outStream The file output stream were to write the JAR. 
+     *
+     * @param outStream The file output stream were to write the JAR.
      * @param all The map of all classes to output.
      * @throws IOException if an I/O error has occurred
      */
@@ -236,7 +236,7 @@ public class AsmGenerator {
     String classNameToEntryPath(String className) {
         return className.replaceAll("\\.", "/").concat(".class");
     }
-    
+
     /**
      * Utility method to get the JAR entry path from a Class name.
      * e.g. it returns someting like "com/foo/OuterClass$InnerClass1$InnerClass2.class"
@@ -248,22 +248,22 @@ public class AsmGenerator {
             name = "$" + clazz.getSimpleName() + name;
             clazz = parent;
         }
-        return classNameToEntryPath(clazz.getCanonicalName() + name);        
+        return classNameToEntryPath(clazz.getCanonicalName() + name);
     }
 
     /**
      * Transforms a class.
      * <p/>
      * There are 3 kind of transformations:
-     * 
+     *
      * 1- For "mock" dependencies classes, we want to remove all code from methods and replace
      * by a stub. Native methods must be implemented with this stub too. Abstract methods are
      * left intact. Modified classes must be overridable (non-private, non-final).
      * Native methods must be made non-final, non-private.
-     * 
+     *
      * 2- For "keep" classes, we want to rewrite all native methods as indicated above.
      * If a class has native methods, it must also be made non-private, non-final.
-     * 
+     *
      * Note that unfortunately static methods cannot be changed to non-static (since static and
      * non-static are invoked differently.)
      */
@@ -271,7 +271,7 @@ public class AsmGenerator {
 
         boolean hasNativeMethods = hasNativeMethods(cr);
         String className = cr.getClassName();
-        
+
         String newName = transformName(className);
         // transformName returns its input argument if there's no need to rename the class
         if (newName != className) {
@@ -288,13 +288,13 @@ public class AsmGenerator {
         // Rewrite the new class from scratch, without reusing the constant pool from the
         // original class reader.
         ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS);
-        
+
         ClassVisitor rv = cw;
         if (newName != className) {
             rv = new RenameClassAdapter(cw, className, newName);
         }
-        
-        TransformClassAdapter cv = new TransformClassAdapter(mLog, mStubMethods, 
+
+        TransformClassAdapter cv = new TransformClassAdapter(mLog, mStubMethods,
                 mDeleteReturns.get(className),
                 newName, rv,
                 stubNativesOnly, stubNativesOnly || hasNativeMethods);
@@ -323,7 +323,7 @@ public class AsmGenerator {
                 return newName + className.substring(pos);
             }
         }
-        
+
         return className;
     }
 

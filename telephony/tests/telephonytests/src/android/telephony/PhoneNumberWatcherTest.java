@@ -38,7 +38,7 @@ public class PhoneNumberWatcherTest extends TestCase {
         tw.afterTextChanged(number);
         assertEquals("855-512-12", number.toString());
     }
-    
+
     @SmallTest
     public void testHyphenDeletion() throws Exception {
         SpannableStringBuilder number = new SpannableStringBuilder();
@@ -50,16 +50,16 @@ public class PhoneNumberWatcherTest extends TestCase {
         tw.beforeTextChanged(number, 3, 1, 0);
         number.delete(3, 4);
         tw.afterTextChanged(number);
-        // Make sure that it deleted the character before the hyphen 
+        // Make sure that it deleted the character before the hyphen
         assertEquals("551-212", number.toString());
-        
+
         // Make sure it deals with left edge boundary case
         number.insert(0, "-");
         Selection.setSelection(number, 1);
         tw.beforeTextChanged(number, 0, 1, 0);
         number.delete(0, 1);
         tw.afterTextChanged(number);
-        // Make sure that it deleted the character before the hyphen 
+        // Make sure that it deleted the character before the hyphen
         assertEquals("551-212", number.toString());
     }
 }

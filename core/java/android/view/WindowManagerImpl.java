@@ -37,17 +37,17 @@ final class WindowLeaked extends AndroidRuntimeException {
  * parameters are defined for control over how windows are displayed.
  * It also implemens the WindowManager interface, allowing you to control the
  * displays attached to the device.
- * 
+ *
  * <p>Applications will not normally use WindowManager directly, instead relying
  * on the higher-level facilities in {@link android.app.Activity} and
  * {@link android.app.Dialog}.
- * 
+ *
  * <p>Even for low-level window manager access, it is almost never correct to use
  * this class.  For example, {@link android.app.Activity#getWindowManager}
  * provides a ViewManager for adding windows that are associated with that
  * activity -- the window manager will not normally allow you to add arbitrary
  * windows that are not associated with an activity.
- * 
+ *
  * @hide
  */
 public class WindowManagerImpl implements WindowManager {
@@ -61,10 +61,10 @@ public class WindowManagerImpl implements WindowManager {
      * so the client must call drawingFinished() when done
      */
     public static final int RELAYOUT_FIRST_TIME = 0x2;
-    
+
     public static final int ADD_FLAG_APP_VISIBLE = 0x2;
     public static final int ADD_FLAG_IN_TOUCH_MODE = RELAYOUT_IN_TOUCH_MODE;
-    
+
     public static final int ADD_OKAY = 0;
     public static final int ADD_BAD_APP_TOKEN = -1;
     public static final int ADD_BAD_SUBWINDOW_TOKEN = -2;
@@ -79,7 +79,7 @@ public class WindowManagerImpl implements WindowManager {
     {
         return mWindowManager;
     }
-    
+
     public void addView(View view)
     {
         addView(view, new WindowManager.LayoutParams(
@@ -90,12 +90,12 @@ public class WindowManagerImpl implements WindowManager {
     {
         addView(view, params, false);
     }
-    
+
     public void addViewNesting(View view, ViewGroup.LayoutParams params)
     {
         addView(view, params, false);
     }
-    
+
     private void addView(View view, ViewGroup.LayoutParams params, boolean nest)
     {
         if (Config.LOGV) Log.v("WindowManager", "addView view=" + view);
@@ -107,10 +107,10 @@ public class WindowManagerImpl implements WindowManager {
 
         final WindowManager.LayoutParams wparams
                 = (WindowManager.LayoutParams)params;
-        
+
         ViewRoot root;
         View panelParentView = null;
-        
+
         synchronized (this) {
             // Here's an odd/questionable case: if someone tries to add a
             // view multiple times, then we simply bump up a nesting count
@@ -132,7 +132,7 @@ public class WindowManagerImpl implements WindowManager {
                 root.setLayoutParams(wparams, true);
                 return;
             }
-            
+
             // If this is a panel window, then find the window it is being
             // attached to for future reference.
             if (wparams.type >= WindowManager.LayoutParams.FIRST_SUB_WINDOW &&
@@ -144,12 +144,12 @@ public class WindowManagerImpl implements WindowManager {
                     }
                 }
             }
-            
+
             root = new ViewRoot(view.getContext());
             root.mAddNesting = 1;
 
             view.setLayoutParams(wparams);
-            
+
             if (mViews == null) {
                 index = 1;
                 mViews = new View[1];
@@ -184,7 +184,7 @@ public class WindowManagerImpl implements WindowManager {
 
         final WindowManager.LayoutParams wparams
                 = (WindowManager.LayoutParams)params;
-        
+
         view.setLayoutParams(wparams);
 
         synchronized (this) {
@@ -202,7 +202,7 @@ public class WindowManagerImpl implements WindowManager {
             if (curView == view) {
                 return;
             }
-            
+
             throw new IllegalStateException("Calling with view " + view
                     + " but the ViewRoot is attached to " + curView);
         }
@@ -213,23 +213,23 @@ public class WindowManagerImpl implements WindowManager {
             int index = findViewLocked(view, true);
             ViewRoot root = mRoots[index];
             View curView = root.getView();
-            
+
             root.mAddNesting = 0;
             root.die(true);
             finishRemoveViewLocked(curView, index);
             if (curView == view) {
                 return;
             }
-            
+
             throw new IllegalStateException("Calling with view " + view
                     + " but the ViewRoot is attached to " + curView);
         }
     }
-    
+
     View removeViewLocked(int index) {
         ViewRoot root = mRoots[index];
         View view = root.getView();
-        
+
         // Don't really remove until we have matched all calls to add().
         root.mAddNesting--;
         if (root.mAddNesting > 0) {
@@ -244,7 +244,7 @@ public class WindowManagerImpl implements WindowManager {
         finishRemoveViewLocked(view, index);
         return view;
     }
-    
+
     void finishRemoveViewLocked(View view, int index) {
         final int count = mViews.length;
 
@@ -252,11 +252,11 @@ public class WindowManagerImpl implements WindowManager {
         View[] tmpViews = new View[count-1];
         removeItem(tmpViews, mViews, index);
         mViews = tmpViews;
-        
+
         ViewRoot[] tmpRoots = new ViewRoot[count-1];
         removeItem(tmpRoots, mRoots, index);
         mRoots = tmpRoots;
-        
+
         WindowManager.LayoutParams[] tmpParams
                 = new WindowManager.LayoutParams[count-1];
         removeItem(tmpParams, mParams, index);
@@ -271,7 +271,7 @@ public class WindowManagerImpl implements WindowManager {
         synchronized (this) {
             if (mViews == null)
                 return;
-            
+
             int count = mViews.length;
             //Log.i("foo", "Closing all windows of " + token);
             for (int i=0; i<count; i++) {
@@ -280,7 +280,7 @@ public class WindowManagerImpl implements WindowManager {
                 if (token == null || mParams[i].token == token) {
                     ViewRoot root = mRoots[i];
                     root.mAddNesting = 1;
-                    
+
                     //Log.i("foo", "Force closing " + root);
                     if (who != null) {
                         WindowLeaked leak = new WindowLeaked(
@@ -289,7 +289,7 @@ public class WindowManagerImpl implements WindowManager {
                         leak.setStackTrace(root.getLocation().getStackTrace());
                         Log.e("WindowManager", leak.getMessage(), leak);
                     }
-                    
+
                     removeViewLocked(i);
                     i--;
                     count--;
@@ -297,31 +297,31 @@ public class WindowManagerImpl implements WindowManager {
             }
         }
     }
-    
+
     public WindowManager.LayoutParams getRootViewLayoutParameter(View view) {
         ViewParent vp = view.getParent();
         while (vp != null && !(vp instanceof ViewRoot)) {
             vp = vp.getParent();
         }
-        
+
         if (vp == null) return null;
-        
+
         ViewRoot vr = (ViewRoot)vp;
-        
+
         int N = mRoots.length;
         for (int i = 0; i < N; ++i) {
             if (mRoots[i] == vr) {
                 return mParams[i];
             }
         }
-        
+
         return null;
     }
-    
+
     public void closeAll() {
         closeAll(null, null, null);
     }
-    
+
     public Display getDefaultDisplay() {
         return new Display(Display.DEFAULT_DISPLAY);
     }

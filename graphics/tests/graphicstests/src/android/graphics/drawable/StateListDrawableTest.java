@@ -65,7 +65,7 @@ public class StateListDrawableTest extends TestCase {
         assertTrue(mockFocusedDrawable.wasDrawn);
     }
 
- 
+
     protected void setUp() throws Exception {
         super.setUp();
         slDrawable = new StateListDrawable();

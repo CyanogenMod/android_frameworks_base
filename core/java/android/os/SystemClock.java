@@ -118,7 +118,7 @@ public final class SystemClock {
             }
             duration = start + ms - uptimeMillis();
         } while (duration > 0);
-        
+
         if (interrupted) {
             // Important: we don't want to quietly eat an interrupt() event,
             // so we make sure to re-interrupt the thread so that the next
@@ -126,7 +126,7 @@ public final class SystemClock {
             Thread.currentThread().interrupt();
         }
     }
-    
+
     /**
      * Sets the current wall time, in milliseconds.  Requires the calling
      * process to have appropriate permissions.
@@ -150,10 +150,10 @@ public final class SystemClock {
      * @return elapsed milliseconds since boot.
      */
     native public static long elapsedRealtime();
-    
+
     /**
      * Returns milliseconds running in the current thread.
-     * 
+     *
      * @return elapsed milliseconds in the thread
      */
     public static native long currentThreadTimeMillis();

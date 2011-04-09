@@ -186,14 +186,14 @@ public class ZipFileTest extends TestCase {
          * be read after this point.
          */
         zipFile.close();
-        
+
         Exception error = null;
         try {
             stream1.read(buf);
         } catch (Exception ex) {
             error = ex;
         }
-        
+
         assertNotNull("ZipFile shouldn't allow reading of closed files.", error);
     }
 }

@@ -247,7 +247,7 @@ public final class CookieManager {
      * {@link WebView} is created or outside of {@link WebView} context, the
      * caller needs to call {@link CookieSyncManager#createInstance(Context)}
      * first.
-     * 
+     *
      * @return CookieManager
      */
     public static synchronized CookieManager getInstance() {
@@ -315,14 +315,14 @@ public final class CookieManager {
         if (hostAndPath == null) {
             return;
         }
-        
+
         // For default path, when setting a cookie, the spec says:
         //Path:   Defaults to the path of the request URL that generated the
         // Set-Cookie response, up to, but not including, the
         // right-most /.
         if (hostAndPath[1].length() > 1) {
             int index = hostAndPath[1].lastIndexOf(PATH_DELIM);
-            hostAndPath[1] = hostAndPath[1].substring(0, 
+            hostAndPath[1] = hostAndPath[1].substring(0,
                     index > 0 ? index : index + 1);
         }
 
@@ -429,7 +429,7 @@ public final class CookieManager {
         if (!mAcceptCookie || uri == null) {
             return null;
         }
-   
+
         String[] hostAndPath = getHostAndPath(uri);
         if (hostAndPath == null) {
             return null;
@@ -558,7 +558,7 @@ public final class CookieManager {
                         Iterator<Cookie> iter = list.iterator();
                         while (iter.hasNext()) {
                             Cookie cookie = iter.next();
-                            // expires == -1 means no expires defined. Otherwise 
+                            // expires == -1 means no expires defined. Otherwise
                             // negative means far future
                             if (cookie.expires > 0 && cookie.expires < now) {
                                 iter.remove();
@@ -929,7 +929,7 @@ public final class CookieManager {
                     }
                     String value =
                             cookieString.substring(equalIndex + 1, index);
-                    
+
                     // Strip quotes if they exist
                     if (value.length() > 2 && value.charAt(0) == QUOTATION) {
                         int endQuote = value.indexOf(QUOTATION, 1);

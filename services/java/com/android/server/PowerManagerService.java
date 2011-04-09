@@ -302,7 +302,7 @@ class PowerManagerService extends IPowerManager.Stub
     private static final boolean mSpew = false;
     private static final boolean mDebugProximitySensor = (false || mSpew);
     private static final boolean mDebugLightSensor = (false || mSpew);
-    
+
     private native void nativeInit();
     private native void nativeSetPowerState(boolean screenOn, boolean screenBright);
     private native void nativeStartSurfaceFlingerAnimation(int mode);
@@ -590,7 +590,7 @@ class PowerManagerService extends IPowerManager.Stub
                 }
             }
         }
-        
+
         mInitComplete = false;
         mHandlerThread = new HandlerThread("PowerManagerService") {
             @Override
@@ -610,7 +610,7 @@ class PowerManagerService extends IPowerManager.Stub
                 }
             }
         }
-        
+
         nativeInit();
         synchronized (mLocks) {
             updateNativePowerStateLocked();
@@ -1830,11 +1830,11 @@ class PowerManagerService extends IPowerManager.Stub
                     }
                 }
             }
-            
+
             updateNativePowerStateLocked();
         }
     }
-    
+
     private void updateNativePowerStateLocked() {
         nativeSetPowerState(
                 (mPowerState & SCREEN_ON_BIT) != 0,
@@ -2671,7 +2671,7 @@ class PowerManagerService extends IPowerManager.Stub
                 synchronized (this) {
                     ShutdownThread.reboot(mContext, finalReason, false);
                 }
-                
+
             }
         };
         // ShutdownThread must run on a looper capable of displaying the UI.
@@ -3290,12 +3290,12 @@ class PowerManagerService extends IPowerManager.Stub
 
     public void setKeyboardLight(boolean on, int key) {
         if (key == 1) {
-            if (on) 
+            if (on)
                 mCapsLight.setColor(0x00ffffff);
             else
                 mCapsLight.turnOff();
         } else if (key == 2) {
-            if (on) 
+            if (on)
                 mFnLight.setColor(0x00ffffff);
             else
                 mFnLight.turnOff();

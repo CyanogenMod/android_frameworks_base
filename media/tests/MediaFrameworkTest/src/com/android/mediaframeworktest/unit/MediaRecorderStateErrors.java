@@ -27,7 +27,7 @@ class MediaRecorderStateErrors {
         RECORDING,
         ERROR,
     }
-    
+
     // Error occurs in the states below?
     public boolean errorInInitialState = false;
     public boolean errorInInitialStateAfterReset = false;

@@ -35,7 +35,7 @@ public class TypefaceTest extends TestCase {
         Typeface.create(Typeface.SERIF, 3),
         Typeface.create(Typeface.MONOSPACE, 0)
     };
-    
+
     @SmallTest
     public void testBasic() throws Exception {
         assertTrue("basic", Typeface.DEFAULT != null);
@@ -44,7 +44,7 @@ public class TypefaceTest extends TestCase {
         assertTrue("basic", Typeface.SERIF != null);
         assertTrue("basic", Typeface.MONOSPACE != null);
     }
-    
+
     @SmallTest
     public void testUnique() throws Exception {
         final int n = mFaces.length;

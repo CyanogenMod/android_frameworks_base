@@ -37,7 +37,7 @@ import android.util.Log;
  * Class for managing the relationship between the {@link WebView} and installed
  * plugins in the system. You can find this class through
  * {@link PluginManager#getInstance}.
- * 
+ *
  * @hide pending API solidification
  */
 public class PluginManager {
@@ -100,7 +100,7 @@ public class PluginManager {
      * Signal the WebCore thread to refresh its list of plugins. Use this if the
      * directory contents of one of the plugin directories has been modified and
      * needs its changes reflecting. May cause plugin load and/or unload.
-     * 
+     *
      * @param reloadOpenPages Set to true to reload all open pages.
      */
     public void refreshPlugins(boolean reloadOpenPages) {

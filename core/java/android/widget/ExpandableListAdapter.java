@@ -39,14 +39,14 @@ public interface ExpandableListAdapter {
 
     /**
      * Gets the number of groups.
-     * 
+     *
      * @return the number of groups
      */
     int getGroupCount();
 
     /**
      * Gets the number of children in a specified group.
-     * 
+     *
      * @param groupPosition the position of the group for which the children
      *            count should be returned
      * @return the children count in the specified group
@@ -55,15 +55,15 @@ public interface ExpandableListAdapter {
 
     /**
      * Gets the data associated with the given group.
-     * 
+     *
      * @param groupPosition the position of the group
      * @return the data child for the specified group
      */
     Object getGroup(int groupPosition);
-    
+
     /**
      * Gets the data associated with the given child within the given group.
-     * 
+     *
      * @param groupPosition the position of the group that the child resides in
      * @param childPosition the position of the child with respect to other
      *            children in the group
@@ -76,7 +76,7 @@ public interface ExpandableListAdapter {
      * unique across groups. The combined ID (see
      * {@link #getCombinedGroupId(long)}) must be unique across ALL items
      * (groups and all children).
-     * 
+     *
      * @param groupPosition the position of the group for which the ID is wanted
      * @return the ID associated with the group
      */
@@ -87,7 +87,7 @@ public interface ExpandableListAdapter {
      * unique across all children within the group. The combined ID (see
      * {@link #getCombinedChildId(long, long)}) must be unique across ALL items
      * (groups and all children).
-     * 
+     *
      * @param groupPosition the position of the group that contains the child
      * @param childPosition the position of the child within the group for which
      *            the ID is wanted
@@ -98,7 +98,7 @@ public interface ExpandableListAdapter {
     /**
      * Indicates whether the child and group IDs are stable across changes to the
      * underlying data.
-     * 
+     *
      * @return whether or not the same ID always refers to the same object
      * @see Adapter#hasStableIds()
      */
@@ -108,7 +108,7 @@ public interface ExpandableListAdapter {
      * Gets a View that displays the given group. This View is only for the
      * group--the Views for the group's children will be fetched using
      * {@link #getChildView(int, int, boolean, View, ViewGroup)}.
-     * 
+     *
      * @param groupPosition the position of the group for which the View is
      *            returned
      * @param isExpanded whether the group is expanded or collapsed
@@ -127,7 +127,7 @@ public interface ExpandableListAdapter {
     /**
      * Gets a View that displays the data for the given child within the given
      * group.
-     * 
+     *
      * @param groupPosition the position of the group that contains the child
      * @param childPosition the position of the child (for which the View is
      *            returned) within the group
@@ -147,7 +147,7 @@ public interface ExpandableListAdapter {
 
     /**
      * Whether the child at the specified position is selectable.
-     * 
+     *
      * @param groupPosition the position of the group that contains the child
      * @param childPosition the position of the child within the group
      * @return whether the child is selectable.
@@ -158,7 +158,7 @@ public interface ExpandableListAdapter {
      * @see ListAdapter#areAllItemsEnabled()
      */
     boolean areAllItemsEnabled();
-    
+
     /**
      * @see ListAdapter#isEmpty()
      */
@@ -166,18 +166,18 @@ public interface ExpandableListAdapter {
 
     /**
      * Called when a group is expanded.
-     * 
+     *
      * @param groupPosition The group being expanded.
      */
     void onGroupExpanded(int groupPosition);
-    
+
     /**
      * Called when a group is collapsed.
-     * 
+     *
      * @param groupPosition The group being collapsed.
      */
     void onGroupCollapsed(int groupPosition);
-    
+
     /**
      * Gets an ID for a child that is unique across any item (either group or
      * child) that is in this list. Expandable lists require each item (group or
@@ -185,7 +185,7 @@ public interface ExpandableListAdapter {
      * This method is responsible for returning that unique ID given a child's
      * ID and its group's ID. Furthermore, if {@link #hasStableIds()} is true, the
      * returned ID must be stable as well.
-     * 
+     *
      * @param groupId The ID of the group that contains this child.
      * @param childId The ID of the child.
      * @return The unique (and possibly stable) ID of the child across all
@@ -200,7 +200,7 @@ public interface ExpandableListAdapter {
      * This method is responsible for returning that unique ID given a group's
      * ID. Furthermore, if {@link #hasStableIds()} is true, the returned ID must be
      * stable as well.
-     * 
+     *
      * @param groupId The ID of the group
      * @return The unique (and possibly stable) ID of the group across all
      *         groups and children in this list.

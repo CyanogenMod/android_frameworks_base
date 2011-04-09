@@ -19,26 +19,26 @@ package com.android.server;
 
 /**
  * A specialized list of window information objects backed by an array.
- * 
+ *
  * This class is part of an InputManager optimization to avoid allocating objects and arrays
  * unnecessarily.  Internally, it keeps an array full of demand-allocated objects that it
  * recycles each time the list is cleared.  The used portion of the array is padded with a null.
- * 
+ *
  * The contents of the list are intended to be Z-ordered from top to bottom.
- * 
+ *
  * @hide
  */
 public final class InputWindowList {
     private InputWindow[] mArray;
     private int mCount;
-    
+
     /**
      * Creates an empty list.
      */
     public InputWindowList() {
         mArray = new InputWindow[8];
     }
-    
+
     /**
      * Clears the list.
      */
@@ -46,7 +46,7 @@ public final class InputWindowList {
         if (mCount == 0) {
             return;
         }
-        
+
         int count = mCount;
         mCount = 0;
         mArray[count] = mArray[0];
@@ -56,7 +56,7 @@ public final class InputWindowList {
         }
         mArray[0] = null;
     }
-    
+
     /**
      * Adds an uninitialized input window object to the list and returns it.
      */
@@ -66,19 +66,19 @@ public final class InputWindowList {
             mArray = new InputWindow[oldArray.length * 2];
             System.arraycopy(oldArray, 0, mArray, 0, mCount);
         }
-        
+
         // Grab object from tail (after used section) if available.
         InputWindow item = mArray[mCount + 1];
         if (item == null) {
             item = new InputWindow();
         }
-        
+
         mArray[mCount] = item;
         mCount += 1;
         mArray[mCount] = null;
         return item;
     }
-    
+
     /**
      * Gets the input window objects as a null-terminated array.
      * @return The input window array.

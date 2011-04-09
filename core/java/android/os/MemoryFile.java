@@ -28,7 +28,7 @@ import java.io.OutputStream;
  * MemoryFile is a wrapper for the Linux ashmem driver.
  * MemoryFiles are backed by shared memory, which can be optionally
  * set to be purgeable.
- * Purgeable files may have their contents reclaimed by the kernel 
+ * Purgeable files may have their contents reclaimed by the kernel
  * in low memory conditions (only if allowPurging is set to true).
  * After a file is purged, attempts to read or write the file will
  * cause an IOException to be thrown.
@@ -154,7 +154,7 @@ public class MemoryFile
             close();
         }
     }
-   
+
     /**
      * Returns the length of the memory file.
      *
@@ -221,7 +221,7 @@ public class MemoryFile
      * @return number of bytes read.
      * @throws IOException if the memory file has been purged or deactivated.
      */
-    public int readBytes(byte[] buffer, int srcOffset, int destOffset, int count) 
+    public int readBytes(byte[] buffer, int srcOffset, int destOffset, int count)
             throws IOException {
         if (isDeactivated()) {
             throw new IOException("Can't read from deactivated memory file.");

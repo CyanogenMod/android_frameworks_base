@@ -31,7 +31,7 @@ import java.util.LinkedList;
  * Backs up an application's entire /data/data/&lt;package&gt;/... file system.  This
  * class is used by the desktop full backup mechanism and is not intended for direct
  * use by applications.
- * 
+ *
  * {@hide}
  */
 

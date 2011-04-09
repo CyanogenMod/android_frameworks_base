@@ -32,8 +32,8 @@ import android.graphics.Movie;
 import java.io.InputStream;
 
 /**
- * A mock {@link android.content.res.Resources} class.  All methods are non-functional and throw 
- * {@link java.lang.UnsupportedOperationException}. Override it to provide the operations that you 
+ * A mock {@link android.content.res.Resources} class.  All methods are non-functional and throw
+ * {@link java.lang.UnsupportedOperationException}. Override it to provide the operations that you
  * need.
  */
 public class MockResources extends Resources {

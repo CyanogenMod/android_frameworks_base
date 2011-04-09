@@ -32,7 +32,7 @@ public class AndroidConfig {
      */
     public AndroidConfig() {
         super();
-        
+
         try {
             Logger rootLogger = Logger.getLogger("");
             rootLogger.addHandler(new AndroidHandler());
@@ -43,5 +43,5 @@ public class AndroidConfig {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-    }    
+    }
 }

@@ -37,7 +37,7 @@ class TaskRecord {
                             // the FLAG_ACTIVITY_RESET_TASK_IF_NEEDED flag.
 
     String stringName;      // caching of toString() result.
-    
+
     TaskRecord(int _taskId, ActivityInfo info, Intent _intent,
             boolean _clearOnBackground) {
         taskId = _taskId;
@@ -49,14 +49,14 @@ class TaskRecord {
     void touchActiveTime() {
         lastActiveTime = android.os.SystemClock.elapsedRealtime();
     }
-    
+
     long getInactiveDuration() {
         return android.os.SystemClock.elapsedRealtime() - lastActiveTime;
     }
-    
+
     void setIntent(Intent _intent, ActivityInfo info) {
         stringName = null;
-        
+
         if (info.targetActivity == null) {
             intent = _intent;
             realActivity = _intent != null ? _intent.getComponent() : null;
@@ -76,7 +76,7 @@ class TaskRecord {
                 origActivity = new ComponentName(info.packageName, info.name);
             }
         }
-        
+
         if (intent != null &&
                 (intent.getFlags()&Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED) != 0) {
             // Once we are set to an Intent with this flag, we count this
@@ -84,7 +84,7 @@ class TaskRecord {
             rootWasReset = true;
         }
     }
-    
+
     void dump(PrintWriter pw, String prefix) {
         if (clearOnBackground || numActivities != 0 || rootWasReset) {
             pw.print(prefix); pw.print("clearOnBackground="); pw.print(clearOnBackground);

@@ -36,11 +36,11 @@ public class URLSpan extends ClickableSpan implements ParcelableSpan {
     public URLSpan(Parcel src) {
         mURL = src.readString();
     }
-    
+
     public int getSpanTypeId() {
         return TextUtils.URL_SPAN;
     }
-    
+
     public int describeContents() {
         return 0;
     }

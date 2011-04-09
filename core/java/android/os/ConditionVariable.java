@@ -43,7 +43,7 @@ public class ConditionVariable
 
     /**
      * Create the ConditionVariable with the given state.
-     * 
+     *
      * <p>
      * Pass true for opened and false for closed.
      */

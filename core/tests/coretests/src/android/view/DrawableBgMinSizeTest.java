@@ -38,16 +38,16 @@ import android.widget.TextView;
 public class DrawableBgMinSizeTest extends
         ActivityInstrumentationTestCase<DrawableBgMinSize> {
     private Button mChangeBackgroundsButton;
-    
+
     private Drawable mBackgroundDrawable;
     private Drawable mBigBackgroundDrawable;
-    
+
     private TextView mTextView;
     private LinearLayout mLinearLayout;
     private RelativeLayout mRelativeLayout;
     private FrameLayout mFrameLayout;
     private AbsoluteLayout mAbsoluteLayout;
-    
+
     public DrawableBgMinSizeTest() {
         super("com.android.frameworks.coretests", DrawableBgMinSize.class);
     }
@@ -79,7 +79,7 @@ public class DrawableBgMinSizeTest extends
         assertNotNull(mFrameLayout);
         assertNotNull(mAbsoluteLayout);
     }
-    
+
     public void doMinimumSizeTest(View view) throws Exception {
         assertTrue(view.getClass().getSimpleName() + " should respect the background Drawable's minimum width",
                 view.getWidth() >= mBackgroundDrawable.getMinimumWidth());
@@ -91,27 +91,27 @@ public class DrawableBgMinSizeTest extends
     public void testTextViewMinimumSize() throws Exception {
         doMinimumSizeTest(mTextView);
     }
-    
+
     @MediumTest
     public void testLinearLayoutMinimumSize() throws Exception {
         doMinimumSizeTest(mLinearLayout);
     }
-    
+
     @MediumTest
     public void testRelativeLayoutMinimumSize() throws Exception {
         doMinimumSizeTest(mRelativeLayout);
     }
-    
+
     @MediumTest
     public void testAbsoluteLayoutMinimumSize() throws Exception {
         doMinimumSizeTest(mAbsoluteLayout);
     }
-    
+
     @MediumTest
     public void testFrameLayoutMinimumSize() throws Exception {
         doMinimumSizeTest(mFrameLayout);
     }
-    
+
     public void doDiffBgMinimumSizeTest(final View view) throws Exception {
         // Change to the bigger backgrounds
         TouchUtils.tapView(this, mChangeBackgroundsButton);
@@ -128,25 +128,25 @@ public class DrawableBgMinSizeTest extends
     public void testTextViewDiffBgMinimumSize() throws Exception {
         doDiffBgMinimumSizeTest(mTextView);
     }
-    
+
     @MediumTest
     public void testLinearLayoutDiffBgMinimumSize() throws Exception {
         doDiffBgMinimumSizeTest(mLinearLayout);
     }
-    
+
     @MediumTest
     public void testRelativeLayoutDiffBgMinimumSize() throws Exception {
         doDiffBgMinimumSizeTest(mRelativeLayout);
     }
-    
+
     @MediumTest
     public void testAbsoluteLayoutDiffBgMinimumSize() throws Exception {
         doDiffBgMinimumSizeTest(mAbsoluteLayout);
     }
-    
+
     @MediumTest
     public void testFrameLayoutDiffBgMinimumSize() throws Exception {
         doDiffBgMinimumSizeTest(mFrameLayout);
     }
-    
+
 }

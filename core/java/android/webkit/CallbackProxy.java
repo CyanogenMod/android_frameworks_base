@@ -274,7 +274,7 @@ class CallbackProxy extends Handler {
                     mWebViewClient.onPageFinished(mWebView, finishedUrl);
                 }
                 break;
-                
+
             case RECEIVED_ICON:
                 if (mWebChromeClient != null) {
                     mWebChromeClient.onReceivedIcon(mWebView, (Bitmap) msg.obj);
@@ -341,7 +341,7 @@ class CallbackProxy extends Handler {
 
             case SSL_ERROR:
                 if (mWebViewClient != null) {
-                    HashMap<String, Object> map = 
+                    HashMap<String, Object> map =
                         (HashMap<String, Object>) msg.obj;
                     mWebViewClient.onReceivedSslError(mWebView,
                             (SslErrorHandler) map.get("handler"),
@@ -528,14 +528,14 @@ class CallbackProxy extends Handler {
                         new AlertDialog.Builder(mContext)
                                 .setTitle(getJsDialogTitle(url))
                                 .setMessage(message)
-                                .setPositiveButton(R.string.ok, 
+                                .setPositiveButton(R.string.ok,
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(
                                                     DialogInterface dialog,
                                                     int which) {
                                                 res.confirm();
                                             }})
-                                .setNegativeButton(R.string.cancel, 
+                                .setNegativeButton(R.string.cancel,
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(
                                                     DialogInterface dialog,
@@ -852,7 +852,7 @@ class CallbackProxy extends Handler {
         if (PERF_PROBE) {
             // un-comment this if PERF_PROBE is true
 //            Looper.myQueue().setWaitCallback(null);
-            Log.d("WebCore", "WebCore thread used " + 
+            Log.d("WebCore", "WebCore thread used " +
                     (SystemClock.currentThreadTimeMillis() - mWebCoreThreadTime)
                     + " ms and idled " + mWebCoreIdleTime + " ms");
             Network.getInstance(mContext).stopTiming();
@@ -882,7 +882,7 @@ class CallbackProxy extends Handler {
         sendMessage(msg);
     }
 
-    public void onFormResubmission(Message dontResend, 
+    public void onFormResubmission(Message dontResend,
             Message resend) {
         // Do an unsynchronized quick check to avoid posting if no callback has
         // been set.

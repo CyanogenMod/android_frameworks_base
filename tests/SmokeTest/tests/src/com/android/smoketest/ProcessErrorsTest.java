@@ -31,15 +31,15 @@ import java.util.List;
  * encountered after initial startup.
  */
 public class ProcessErrorsTest extends AndroidTestCase {
-    
+
     private final String TAG = "ProcessErrorsTest";
-    
+
     protected ActivityManager mActivityManager;
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        mActivityManager = (ActivityManager) 
+        mActivityManager = (ActivityManager)
                 getContext().getSystemService(Context.ACTIVITY_SERVICE);
     }
 
@@ -48,26 +48,26 @@ public class ProcessErrorsTest extends AndroidTestCase {
     }
 
     public void testNoProcessErrors() throws Exception {
-        List<ActivityManager.ProcessErrorStateInfo> errList;        
+        List<ActivityManager.ProcessErrorStateInfo> errList;
         errList = mActivityManager.getProcessesInErrorState();
-        
+
         // note: this contains information about each process that is currently in an error
-        // condition.  if the list is empty (null) then "we're good".  
-        
+        // condition.  if the list is empty (null) then "we're good".
+
         // if the list is non-empty, then it's useful to report the contents of the list
         // we'll put a copy in the log, and we'll report it back to the framework via the assert.
         final String reportMsg = reportListContents(errList);
         if (reportMsg != null) {
             Log.w(TAG, reportMsg);
         }
-        
+
         // report a non-empty list back to the test framework
         assertNull(reportMsg, errList);
     }
-    
+
     /**
      * This helper function will dump the actual error reports.
-     * 
+     *
      * @param errList The error report containing one or more error records.
      * @return Returns a string containing all of the errors.
      */
@@ -99,5 +99,5 @@ public class ProcessErrorsTest extends AndroidTestCase {
         }
         return builder.toString();
     }
-    
+
 }

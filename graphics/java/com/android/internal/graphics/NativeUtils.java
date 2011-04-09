@@ -29,7 +29,7 @@ public final class NativeUtils {
 
     /**
      * Scroll a rectangular portion of a canvas.
-     * 
+     *
      * @param canvas the canvas to manipulate
      * @param src the source rectangle
      * @param dx horizontal offset

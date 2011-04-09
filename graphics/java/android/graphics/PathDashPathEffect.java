@@ -22,7 +22,7 @@ public class PathDashPathEffect extends PathEffect {
         TRANSLATE(0),   //!< translate the shape to each position
         ROTATE(1),      //!< rotate the shape about its center
         MORPH(2);       //!< transform each point, and turn lines into curves
-        
+
         Style(int value) {
             native_style = value;
         }
@@ -44,7 +44,7 @@ public class PathDashPathEffect extends PathEffect {
         native_instance = nativeCreate(shape.ni(), advance, phase,
                                        style.native_style);
     }
-    
+
     private static native int nativeCreate(int native_path, float advance,
                                            float phase, int native_style);
 }

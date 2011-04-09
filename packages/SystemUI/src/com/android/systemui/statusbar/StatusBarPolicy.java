@@ -346,7 +346,7 @@ public class StatusBarPolicy {
               R.drawable.stat_sys_wimax_signal_3_fully,
               R.drawable.stat_sys_wimax_signal_4_fully }
         };
-    private static final int sWimaxTemporarilyNotConnectedImage = 
+    private static final int sWimaxTemporarilyNotConnectedImage =
             R.drawable.stat_sys_wimax_signal_0;
 
     private int mLastWimaxSignalLevel = -1;
@@ -1240,8 +1240,8 @@ public class StatusBarPolicy {
         final String action = intent.getAction();
         if (action.equals(WimaxConstants.WIMAX_ENABLED_CHANGED_ACTION)) {
 
-	    int wimaxStatus = intent.getIntExtra(WimaxConstants.CURRENT_WIMAX_ENABLED_STATE,
-	            WimaxConstants.WIMAX_ENABLED_STATE_UNKNOWN);
+            int wimaxStatus = intent.getIntExtra(WimaxConstants.CURRENT_WIMAX_ENABLED_STATE,
+                    WimaxConstants.WIMAX_ENABLED_STATE_UNKNOWN);
             final boolean enabled = (wimaxStatus == WimaxConstants.WIMAX_ENABLED_STATE_ENABLED);
 
             if (!enabled) {

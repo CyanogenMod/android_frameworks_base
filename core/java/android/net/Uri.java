@@ -2236,7 +2236,7 @@ public abstract class Uri implements Parcelable, Comparable<Uri> {
      *
      * @param baseUri Uri to append path segment to
      * @param pathSegment encoded path segment to append
-     * @return a new Uri based on baseUri with the given segment appended to 
+     * @return a new Uri based on baseUri with the given segment appended to
      *  the path
      * @throws NullPointerException if baseUri is null
      */

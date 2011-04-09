@@ -52,8 +52,8 @@ public interface IApplicationThread extends IInterface {
     void scheduleSendResult(IBinder token, List<ResultInfo> results) throws RemoteException;
     void scheduleLaunchActivity(Intent intent, IBinder token, int ident,
             ActivityInfo info, Bundle state, List<ResultInfo> pendingResults,
-    		List<Intent> pendingNewIntents, boolean notResumed, boolean isForward)
-    		throws RemoteException;
+                List<Intent> pendingNewIntents, boolean notResumed, boolean isForward)
+                throws RemoteException;
     void scheduleRelaunchActivity(IBinder token, List<ResultInfo> pendingResults,
             List<Intent> pendingNewIntents, int configChanges,
             boolean notResumed, Configuration config) throws RemoteException;
@@ -79,7 +79,7 @@ public interface IApplicationThread extends IInterface {
     static final int DEBUG_ON = 1;
     static final int DEBUG_WAIT = 2;
     void bindApplication(String packageName, ApplicationInfo info, List<ProviderInfo> providers,
-            ComponentName testName, String profileName, Bundle testArguments, 
+            ComponentName testName, String profileName, Bundle testArguments,
             IInstrumentationWatcher testWatcher, int debugMode, boolean restrictedBackupMode,
             Configuration config, Map<String, IBinder> services) throws RemoteException;
     void scheduleExit() throws RemoteException;
@@ -103,7 +103,7 @@ public interface IApplicationThread extends IInterface {
     static final int EXTERNAL_STORAGE_UNAVAILABLE = 1;
     void dispatchPackageBroadcast(int cmd, String[] packages) throws RemoteException;
     void scheduleCrash(String msg) throws RemoteException;
-    
+
     String descriptor = "android.app.IApplicationThread";
 
     int SCHEDULE_PAUSE_ACTIVITY_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION;

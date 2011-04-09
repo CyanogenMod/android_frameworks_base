@@ -29,9 +29,9 @@ import android.util.Slog;
  */
 public final class InputChannel implements Parcelable {
     private static final String TAG = "InputChannel";
-    
+
     private static final boolean DEBUG = false;
-    
+
     public static final Parcelable.Creator<InputChannel> CREATOR
             = new Parcelable.Creator<InputChannel>() {
         public InputChannel createFromParcel(Parcel source) {
@@ -39,24 +39,24 @@ public final class InputChannel implements Parcelable {
             result.readFromParcel(source);
             return result;
         }
-        
+
         public InputChannel[] newArray(int size) {
             return new InputChannel[size];
         }
     };
-    
+
     @SuppressWarnings("unused")
     private int mPtr; // used by native code
-    
+
     private boolean mDisposeAfterWriteToParcel;
-    
+
     private static native InputChannel[] nativeOpenInputChannelPair(String name);
-    
+
     private native void nativeDispose(boolean finalized);
     private native void nativeTransferTo(InputChannel other);
     private native void nativeReadFromParcel(Parcel parcel);
     private native void nativeWriteToParcel(Parcel parcel);
-    
+
     private native String nativeGetName();
 
     /**
@@ -66,7 +66,7 @@ public final class InputChannel implements Parcelable {
      */
     public InputChannel() {
     }
-    
+
     @Override
     protected void finalize() throws Throwable {
         try {
@@ -75,7 +75,7 @@ public final class InputChannel implements Parcelable {
             super.finalize();
         }
     }
-    
+
     /**
      * Creates a new input channel pair.  One channel should be provided to the input
      * dispatcher and the other to the application's input queue.
@@ -92,7 +92,7 @@ public final class InputChannel implements Parcelable {
         }
         return nativeOpenInputChannelPair(name);
     }
-    
+
     /**
      * Gets the name of the input channel.
      * @return The input channel name.
@@ -110,7 +110,7 @@ public final class InputChannel implements Parcelable {
     public void dispose() {
         nativeDispose(false);
     }
-    
+
     /**
      * Transfers ownership of the internal state of the input channel to another
      * instance and invalidates this instance.  This is used to pass an input channel
@@ -121,7 +121,7 @@ public final class InputChannel implements Parcelable {
         if (outParameter == null) {
             throw new IllegalArgumentException("outParameter must not be null");
         }
-        
+
         nativeTransferTo(outParameter);
         outParameter.mDisposeAfterWriteToParcel = true;
     }
@@ -129,27 +129,27 @@ public final class InputChannel implements Parcelable {
     public int describeContents() {
         return Parcelable.CONTENTS_FILE_DESCRIPTOR;
     }
-    
+
     public void readFromParcel(Parcel in) {
         if (in == null) {
             throw new IllegalArgumentException("in must not be null");
         }
-        
+
         nativeReadFromParcel(in);
     }
-    
+
     public void writeToParcel(Parcel out, int flags) {
         if (out == null) {
             throw new IllegalArgumentException("out must not be null");
         }
-        
+
         nativeWriteToParcel(out);
-        
+
         if (mDisposeAfterWriteToParcel) {
             dispose();
         }
     }
-    
+
     @Override
     public String toString() {
         return getName();

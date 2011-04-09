@@ -40,10 +40,10 @@ public class SurfaceSession {
     protected void finalize() throws Throwable {
         destroy();
     }
-    
+
     private native void init();
     private native void destroy();
-    
+
     private int mClient;
 }
 

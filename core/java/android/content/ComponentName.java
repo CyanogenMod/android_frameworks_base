@@ -28,7 +28,7 @@ import java.lang.Comparable;
  * pieces of information, encapsulated here, are required to identify
  * a component: the package (a String) it exists in, and the class (a String)
  * name inside of that package.
- * 
+ *
  */
 public final class ComponentName implements Parcelable, Cloneable, Comparable<ComponentName> {
     private final String mPackage;
@@ -36,7 +36,7 @@ public final class ComponentName implements Parcelable, Cloneable, Comparable<Co
 
     /**
      * Create a new component identifier.
-     * 
+     *
      * @param pkg The name of the package that the component exists in.  Can
      * not be null.
      * @param cls The name of the class inside of <var>pkg</var> that
@@ -51,7 +51,7 @@ public final class ComponentName implements Parcelable, Cloneable, Comparable<Co
 
     /**
      * Create a new component identifier from a Context and class name.
-     * 
+     *
      * @param pkg A Context for the package implementing the component,
      * from which the actual package name will be retrieved.
      * @param cls The name of the class inside of <var>pkg</var> that
@@ -65,7 +65,7 @@ public final class ComponentName implements Parcelable, Cloneable, Comparable<Co
 
     /**
      * Create a new component identifier from a Context and Class object.
-     * 
+     *
      * @param pkg A Context for the package implementing the component, from
      * which the actual package name will be retrieved.
      * @param cls The Class object of the desired component, from which the
@@ -86,14 +86,14 @@ public final class ComponentName implements Parcelable, Cloneable, Comparable<Co
     public String getPackageName() {
         return mPackage;
     }
-    
+
     /**
      * Return the class name of this component.
      */
     public String getClassName() {
         return mClass;
     }
-    
+
     /**
      * Return the class name, either fully qualified or in a shortened form
      * (with a leading '.') if it is a suffix of the package.
@@ -108,38 +108,38 @@ public final class ComponentName implements Parcelable, Cloneable, Comparable<Co
         }
         return mClass;
     }
-    
+
     /**
      * Return a String that unambiguously describes both the package and
      * class names contained in the ComponentName.  You can later recover
      * the ComponentName from this string through
      * {@link #unflattenFromString(String)}.
-     * 
+     *
      * @return Returns a new String holding the package and class names.  This
      * is represented as the package name, concatenated with a '/' and then the
      * class name.
-     * 
+     *
      * @see #unflattenFromString(String)
      */
     public String flattenToString() {
         return mPackage + "/" + mClass;
     }
-    
+
     /**
      * The same as {@link #flattenToString()}, but abbreviates the class
      * name if it is a suffix of the package.  The result can still be used
      * with {@link #unflattenFromString(String)}.
-     * 
+     *
      * @return Returns a new String holding the package and class names.  This
      * is represented as the package name, concatenated with a '/' and then the
      * class name.
-     * 
+     *
      * @see #unflattenFromString(String)
      */
     public String flattenToShortString() {
         return mPackage + "/" + getShortClassName();
     }
-    
+
     /**
      * Recover a ComponentName from a String that was previously created with
      * {@link #flattenToString()}.  It splits the string at the first '/',
@@ -149,11 +149,11 @@ public final class ComponentName implements Parcelable, Cloneable, Comparable<Co
      * followed by a '.' then the final class name will be the concatenation
      * of the package name with the string following the '/'.  Thus
      * "com.foo/.Blah" becomes package="com.foo" class="com.foo.Blah".
-     * 
+     *
      * @param str The String that was returned by flattenToString().
      * @return Returns a new ComponentName containing the package and class
      * names that were encoded in <var>str</var>
-     * 
+     *
      * @see #flattenToString()
      */
     public static ComponentName unflattenFromString(String str) {
@@ -168,7 +168,7 @@ public final class ComponentName implements Parcelable, Cloneable, Comparable<Co
         }
         return new ComponentName(pkg, cls);
     }
-    
+
     /**
      * Return string representation of this class without the class's name
      * as a prefix.
@@ -210,7 +210,7 @@ public final class ComponentName implements Parcelable, Cloneable, Comparable<Co
         }
         return this.mClass.compareTo(that.mClass);
     }
-    
+
     public int describeContents() {
         return 0;
     }
@@ -223,10 +223,10 @@ public final class ComponentName implements Parcelable, Cloneable, Comparable<Co
     /**
      * Write a ComponentName to a Parcel, handling null pointers.  Must be
      * read with {@link #readFromParcel(Parcel)}.
-     * 
+     *
      * @param c The ComponentName to be written.
      * @param out The Parcel in which the ComponentName will be placed.
-     * 
+     *
      * @see #readFromParcel(Parcel)
      */
     public static void writeToParcel(ComponentName c, Parcel out) {
@@ -236,23 +236,23 @@ public final class ComponentName implements Parcelable, Cloneable, Comparable<Co
             out.writeString(null);
         }
     }
-    
+
     /**
      * Read a ComponentName from a Parcel that was previously written
      * with {@link #writeToParcel(ComponentName, Parcel)}, returning either
      * a null or new object as appropriate.
-     * 
+     *
      * @param in The Parcel from which to read the ComponentName
      * @return Returns a new ComponentName matching the previously written
      * object, or null if a null had been written.
-     * 
+     *
      * @see #writeToParcel(ComponentName, Parcel)
      */
     public static ComponentName readFromParcel(Parcel in) {
         String pkg = in.readString();
         return pkg != null ? new ComponentName(pkg, in) : null;
     }
-    
+
     public static final Parcelable.Creator<ComponentName> CREATOR
             = new Parcelable.Creator<ComponentName>() {
         public ComponentName createFromParcel(Parcel in) {
@@ -270,7 +270,7 @@ public final class ComponentName implements Parcelable, Cloneable, Comparable<Co
      * must not use this with data written by
      * {@link #writeToParcel(ComponentName, Parcel)} since it is not possible
      * to handle a null ComponentObject here.
-     * 
+     *
      * @param in The Parcel containing the previously written ComponentName,
      * positioned at the location in the buffer where it was written.
      */

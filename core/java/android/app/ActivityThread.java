@@ -663,7 +663,7 @@ public final class ActivityThread {
         public void scheduleCrash(String msg) {
             queueOrSendMessage(H.SCHEDULE_CRASH, msg);
         }
-        
+
         @Override
         protected void dump(FileDescriptor fd, PrintWriter pw, String[] args) {
             long nativeMax = Debug.getNativeHeapSize() / 1024;
@@ -1241,7 +1241,7 @@ public final class ActivityThread {
                     + r.getConfiguration() + " appScale="
                     + r.getCompatibilityInfo().applicationScale);
         }
-        
+
         synchronized (mPackages) {
             WeakReference<Resources> wr = mActiveResources.get(key);
             Resources existing = wr != null ? wr.get() : null;
@@ -1251,7 +1251,7 @@ public final class ActivityThread {
                 r.getAssets().close();
                 return existing;
             }
-            
+
             // XXX need to remove entries when weak references go away
             mActiveResources.put(key, new WeakReference<Resources>(r));
             return r;
@@ -1510,7 +1510,7 @@ public final class ActivityThread {
             dalvik.system.VMRuntime.getRuntime().startJitCompilation();
         }
     }
-    
+
     void scheduleGcIdler() {
         if (!mGcIdlerScheduled) {
             mGcIdlerScheduled = true;
@@ -2413,7 +2413,7 @@ public final class ActivityThread {
 
             // Make sure any pending writes are now committed.
             QueuedWork.waitToFinish();
-            
+
             // Tell the activity manager we have paused.
             try {
                 ActivityManagerNative.getDefault().activityPaused(token, state);
@@ -2863,7 +2863,7 @@ public final class ActivityThread {
         if (DEBUG_CONFIGURATION) Slog.v(TAG, "Relaunching activity "
                 + tmp.token + " with configChanges=0x"
                 + Integer.toHexString(configChanges));
-        
+
         // First: make sure we have the most recent configuration and most
         // recent version of the activity, or skip it if some previous call
         // had taken a more recent version.
@@ -2905,10 +2905,10 @@ public final class ActivityThread {
                 }
             }
         }
-        
+
         if (DEBUG_CONFIGURATION) Slog.v(TAG, "Relaunching activity "
                 + tmp.token + ": changedConfig=" + changedConfig);
-        
+
         // If there was a pending configuration change, execute it first.
         if (changedConfig != null) {
             handleConfigurationChanged(changedConfig);
@@ -3104,7 +3104,7 @@ public final class ActivityThread {
 
         ContextImpl.ApplicationPackageManager.configurationChanged();
         //Slog.i(TAG, "Configuration changed in " + currentPackageName());
-        
+
         Iterator<WeakReference<Resources>> it =
             mActiveResources.values().iterator();
         //Iterator<Map.Entry<String, WeakReference<Resources>>> it =
@@ -3136,10 +3136,10 @@ public final class ActivityThread {
                 it.remove();
             }
         }
-        
+
         return changes;
     }
-    
+
     final void handleConfigurationChanged(Configuration config) {
 
         ArrayList<ComponentCallbacks> callbacks = null;
@@ -3157,12 +3157,12 @@ public final class ActivityThread {
             if (config == null) {
                 return;
             }
-            
+
             if (DEBUG_CONFIGURATION) Slog.v(TAG, "Handle configuration changed: "
                     + config);
-        
+
             diff = applyConfigurationToResourcesLocked(config);
-            
+
             if (!mConfiguration.isOtherSeqNewer(config)) {
                 return;
             }
@@ -3200,7 +3200,7 @@ public final class ActivityThread {
 
         if (DEBUG_CONFIGURATION) Slog.v(TAG, "Handle activity config changed: "
                 + r.activityInfo.name);
-        
+
         performConfigurationChanged(r.activity, mConfiguration);
     }
 
@@ -3248,7 +3248,7 @@ public final class ActivityThread {
         ContextImpl.ApplicationPackageManager.handlePackageBroadcast(cmd, packages,
                 hasPkgInfo);
     }
-        
+
     final void handleLowMemory() {
         ArrayList<ComponentCallbacks> callbacks
                 = new ArrayList<ComponentCallbacks>();
@@ -3593,7 +3593,7 @@ public final class ActivityThread {
                 name = removeProviderLocked(provider);
             }
         }
-        
+
         if (name != null) {
             try {
                 if(localLOGV) Slog.v(TAG, "removeProvider::Invoking " +
@@ -3605,7 +3605,7 @@ public final class ActivityThread {
             } //end catch
         }
     }
-    
+
     public final String removeProviderLocked(IContentProvider provider) {
         if (provider == null) {
             return null;
@@ -3613,7 +3613,7 @@ public final class ActivityThread {
         IBinder providerBinder = provider.asBinder();
 
         String name = null;
-        
+
         // remove the provider from mProviderMap
         Iterator<ProviderClientRecord> iter = mProviderMap.values().iterator();
         while (iter.hasNext()) {
@@ -3636,7 +3636,7 @@ public final class ActivityThread {
                 }
             } //end if myBinder
         }  //end while iter
-        
+
         return name;
     }
 
@@ -3776,7 +3776,7 @@ public final class ActivityThread {
                         "Unable to instantiate Application():" + e.toString(), e);
             }
         }
-        
+
         ViewRoot.addConfigCallback(new ComponentCallbacks() {
             public void onConfigurationChanged(Configuration newConfig) {
                 synchronized (mPackages) {
@@ -3789,7 +3789,7 @@ public final class ActivityThread {
                         if (mPendingConfiguration == null ||
                                 mPendingConfiguration.isOtherSeqNewer(newConfig)) {
                             mPendingConfiguration = newConfig;
-                            
+
                             queueOrSendMessage(H.CONFIGURATION_CHANGED, newConfig);
                         }
                     }

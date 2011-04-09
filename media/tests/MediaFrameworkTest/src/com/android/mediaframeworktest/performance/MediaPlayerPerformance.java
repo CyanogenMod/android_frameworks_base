@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2008 The Android Open Source Project
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -49,7 +49,7 @@ import com.android.mediaframeworktest.MediaProfileReader;
 import android.hardware.Camera.PreviewCallback;
 
 /**
- * Junit / Instrumentation - performance measurement for media player and 
+ * Junit / Instrumentation - performance measurement for media player and
  * recorder
  */
 public class MediaPlayerPerformance extends ActivityInstrumentationTestCase<MediaFrameworkTest> {
@@ -91,7 +91,7 @@ public class MediaPlayerPerformance extends ActivityInstrumentationTestCase<Medi
 
     public void createDB() {
         mDB = SQLiteDatabase.openOrCreateDatabase("/sdcard/perf.db", null);
-        mDB.execSQL("CREATE TABLE IF NOT EXISTS perfdata (_id INTEGER PRIMARY KEY," + 
+        mDB.execSQL("CREATE TABLE IF NOT EXISTS perfdata (_id INTEGER PRIMARY KEY," +
                 "file TEXT," + "setdatatime LONG," + "preparetime LONG," +
                 "playtime LONG" + ");");
         //clean the table before adding new data
@@ -137,7 +137,7 @@ public class MediaPlayerPerformance extends ActivityInstrumentationTestCase<Medi
             mDB.execSQL("INSERT INTO perfdata (file, setdatatime, preparetime," +
                     " playtime) VALUES (" + '"' + testFile[k] + '"' + ',' +
                     setDataSourceDuration + ',' + prepareDuration +
-            		',' + startDuration + ");");
+                        ',' + startDuration + ");");
             Log.v(TAG, "File name " + testFile[k]);
             mp.stop();
             mp.release();

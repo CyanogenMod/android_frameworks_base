@@ -29,13 +29,13 @@ import android.util.Log;
 public class Surface implements Parcelable {
     private static final String LOG_TAG = "Surface";
     private static final boolean DEBUG_RELEASE = false;
-    
+
     /* flags used in constructor (keep in sync with ISurfaceComposer.h) */
 
     /** Surface is created hidden */
     public static final int HIDDEN              = 0x00000004;
 
-    /** The surface is to be used by hardware accelerators or DMA engines 
+    /** The surface is to be used by hardware accelerators or DMA engines
      * @deprecated this is ignored, this value is set automatically when needed.
      */
     @Deprecated
@@ -43,7 +43,7 @@ public class Surface implements Parcelable {
 
     /** Implies "HARDWARE", the surface is to be used by the GPU
      * additionally the backbuffer is never preserved for these
-     * surfaces. 
+     * surfaces.
      * @deprecated this is ignored, this value is set automatically when needed.
      */
     @Deprecated
@@ -55,30 +55,30 @@ public class Surface implements Parcelable {
      * be disabled, but other measures can take place, for instance the
      * surface might not be hardware accelerated. */
     public static final int SECURE              = 0x00000080;
-    
-    /** Creates a surface where color components are interpreted as 
+
+    /** Creates a surface where color components are interpreted as
      *  "non pre-multiplied" by their alpha channel. Of course this flag is
      *  meaningless for surfaces without an alpha channel. By default
      *  surfaces are pre-multiplied, which means that each color component is
      *  already multiplied by its alpha value. In this case the blending
      *  equation used is:
-     *  
+     *
      *    DEST = SRC + DEST * (1-SRC_ALPHA)
-     *    
+     *
      *  By contrast, non pre-multiplied surfaces use the following equation:
-     *  
+     *
      *    DEST = SRC * SRC_ALPHA * DEST * (1-SRC_ALPHA)
-     *    
+     *
      *  pre-multiplied surfaces must always be used if transparent pixels are
      *  composited on top of each-other into the surface. A pre-multiplied
      *  surface can never lower the value of the alpha component of a given
      *  pixel.
-     *  
+     *
      *  In some rare situations, a non pre-multiplied surface is preferable.
-     *  
+     *
      */
     public static final int NON_PREMULTIPLIED   = 0x00000100;
-    
+
     /**
      * Creates a surface without a rendering buffer. Instead, the content
      * of the surface must be pushed by an external entity. This is type
@@ -86,10 +86,10 @@ public class Surface implements Parcelable {
      * play back.
      */
     public static final int PUSH_BUFFERS        = 0x00000200;
-    
+
     /** Creates a normal surface. This is the default */
     public static final int FX_SURFACE_NORMAL   = 0x00000000;
-    
+
     /** Creates a Blur surface. Everything behind this surface is blurred
      * by some amount. The quality and refresh speed of the blur effect
      * is not settable or guaranteed.
@@ -97,9 +97,9 @@ public class Surface implements Parcelable {
      * a backing store.
      */
     public static final int FX_SURFACE_BLUR     = 0x00010000;
-    
+
     /** Creates a Dim surface. Everything behind this surface is dimmed
-     * by the amount specified in setAlpha(). 
+     * by the amount specified in setAlpha().
      * It is an error to lock a Dim surface, since it doesn't have
      * a backing store.
      */
@@ -109,11 +109,11 @@ public class Surface implements Parcelable {
     public static final int FX_SURFACE_MASK     = 0x000F0000;
 
     /* flags used with setFlags() (keep in sync with ISurfaceComposer.h) */
-    
+
     /** Hide the surface. Equivalent to calling hide() */
     public static final int SURFACE_HIDDEN    = 0x01;
-    
-    /** Freeze the surface. Equivalent to calling freeze() */ 
+
+    /** Freeze the surface. Equivalent to calling freeze() */
     public static final int SURFACE_FROZEN     = 0x02;
 
     /**
@@ -132,10 +132,10 @@ public class Surface implements Parcelable {
     public static final int ROTATION_90      = 1;
     public static final int ROTATION_180     = 2;
     public static final int ROTATION_270     = 3;
-    
-    /** 
-     * Disable the orientation animation 
-     * {@hide} 
+
+    /**
+     * Disable the orientation animation
+     * {@hide}
      */
     public static final int FLAGS_ORIENTATION_ANIMATION_DISABLE = 0x000000001;
 
@@ -178,7 +178,7 @@ public class Surface implements Parcelable {
     native private static void nativeClassInit();
     static { nativeClassInit(); }
 
-    
+
     /**
      * create a surface
      * {@hide}
@@ -265,7 +265,7 @@ public class Surface implements Parcelable {
         public void getMatrix(Matrix m) {
             super.getMatrix(m);
             if (mOrigMatrix == null) {
-                mOrigMatrix = new Matrix(); 
+                mOrigMatrix = new Matrix();
             }
             mOrigMatrix.set(m);
         }
@@ -282,28 +282,28 @@ public class Surface implements Parcelable {
             mCompatibleMatrix.setScale(appScale, appScale);
         }
     }
-    
+
     /**
      * Copy another surface to this one.  This surface now holds a reference
      * to the same data as the original surface, and is -not- the owner.
      * {@hide}
      */
     public native   void copyFrom(Surface o);
-    
+
     /**
      * Does this object hold a valid surface?  Returns true if it holds
      * a physical surface, so lockCanvas() will succeed.  Otherwise
      * returns false.
      */
     public native   boolean isValid();
-    
+
     /** Free all server-side state associated with this surface and
      * release this object's reference. {@hide} */
     public native void destroy();
-    
+
     /** Release the local reference to the server-side surface. @hide */
     public native void release();
-    
+
     /** draw into a surface */
     public Canvas lockCanvas(Rect dirty) throws OutOfResourcesException, IllegalArgumentException
     {
@@ -319,12 +319,12 @@ public class Surface implements Parcelable {
     /** unlock the surface and asks a page flip */
     public native   void unlockCanvasAndPost(Canvas canvas);
 
-    /** 
+    /**
      * unlock the surface. the screen won't be updated until
      * post() or postAll() is called
      */
     public native   void unlockCanvas(Canvas canvas);
-    
+
     /** start/end a transaction {@hide} */
     public static native   void openTransaction();
     /** {@hide} */
@@ -363,7 +363,7 @@ public class Surface implements Parcelable {
     public static void setOrientation(int display, int orientation) {
         setOrientation(display, orientation, 0);
     }
-    
+
     /**
      * set surface parameters.
      * needs to be inside open/closeTransaction block
@@ -394,14 +394,14 @@ public class Surface implements Parcelable {
     private Surface(Parcel source) throws OutOfResourcesException {
         init(source);
     }
-    
+
     public int describeContents() {
         return 0;
     }
 
     public native   void readFromParcel(Parcel source);
     public native   void writeToParcel(Parcel dest, int flags);
-    
+
     public static final Parcelable.Creator<Surface> CREATOR
             = new Parcelable.Creator<Surface>()
     {
@@ -424,16 +424,16 @@ public class Surface implements Parcelable {
     protected void finalize() throws Throwable {
         if (mNativeSurface != 0 || mSurfaceControl != 0) {
             if (DEBUG_RELEASE) {
-                Log.w(LOG_TAG, "Surface.finalize() has work. You should have called release() (" 
+                Log.w(LOG_TAG, "Surface.finalize() has work. You should have called release() ("
                         + mNativeSurface + ", " + mSurfaceControl + ")", mCreationStack);
             } else {
-                Log.w(LOG_TAG, "Surface.finalize() has work. You should have called release() (" 
+                Log.w(LOG_TAG, "Surface.finalize() has work. You should have called release() ("
                         + mNativeSurface + ", " + mSurfaceControl + ")");
             }
         }
         release();
     }
-    
+
     private native void init(SurfaceSession s,
             int pid, String name, int display, int w, int h, int format, int flags)
             throws OutOfResourcesException;

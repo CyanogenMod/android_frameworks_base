@@ -177,7 +177,7 @@ public abstract class Drawable {
      *         stored bounds of this drawable.
      *
      * @see #copyBounds()
-     * @see #copyBounds(android.graphics.Rect) 
+     * @see #copyBounds(android.graphics.Rect)
      */
     public final Rect getBounds() {
         if (mBounds == ZERO_BOUNDS_RECT) {
@@ -684,7 +684,7 @@ public abstract class Drawable {
             Rects only to drop them on the floor.
         */
         Rect pad = new Rect();
-        
+
         // Special stuff for compatibility mode: if the target density is not
         // the same as the display density, but the resource -is- the same as
         // the display density, then don't scale it down to the target density.
@@ -764,7 +764,7 @@ public abstract class Drawable {
         } else if (name.equals("rotate")) {
             drawable = new RotateDrawable();
         } else if (name.equals("animated-rotate")) {
-            drawable = new AnimatedRotateDrawable();            
+            drawable = new AnimatedRotateDrawable();
         } else if (name.equals("animation-list")) {
             drawable = new AnimationDrawable();
         } else if (name.equals("inset")) {

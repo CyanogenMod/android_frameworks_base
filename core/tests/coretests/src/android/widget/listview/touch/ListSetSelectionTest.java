@@ -49,25 +49,25 @@ public class ListSetSelectionTest extends ActivityInstrumentationTestCase<ListSi
         assertNotNull(mActivity);
         assertNotNull(mListView);
     }
-    
+
     @LargeTest
     public void testSetSelection() {
         TouchUtils.dragQuarterScreenDown(this);
         TouchUtils.dragQuarterScreenUp(this);
-        
+
         // Nothing should be selected
-        assertEquals("Selection still available after touch", -1, 
+        assertEquals("Selection still available after touch", -1,
                 mListView.getSelectedItemPosition());
-        
+
         final int targetPosition = mListView.getAdapter().getCount() / 2;
-        
+
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
                 mListView.setSelection(targetPosition);
             }
         });
         getInstrumentation().waitForIdleSync();
-        
+
         boolean found = false;
         int childCount = mListView.getChildCount();
         for (int i=0; i<childCount; i++) {
@@ -79,25 +79,25 @@ public class ListSetSelectionTest extends ActivityInstrumentationTestCase<ListSi
         }
         assertTrue("Selected item not visible in list", found);
     }
- 
+
     @LargeTest
     public void testSetSelectionFromTop() {
         TouchUtils.dragQuarterScreenDown(this);
         TouchUtils.dragQuarterScreenUp(this);
-        
+
         // Nothing should be selected
-        assertEquals("Selection still available after touch", -1, 
+        assertEquals("Selection still available after touch", -1,
                 mListView.getSelectedItemPosition());
-        
+
         final int targetPosition = mListView.getAdapter().getCount() / 2;
-        
+
         mActivity.runOnUiThread(new Runnable() {
             public void run() {
                 mListView.setSelectionFromTop(targetPosition, 100);
             }
         });
         getInstrumentation().waitForIdleSync();
-        
+
         View target = null;
         boolean found = false;
         int childCount = mListView.getChildCount();
@@ -110,9 +110,9 @@ public class ListSetSelectionTest extends ActivityInstrumentationTestCase<ListSi
             }
         }
         assertTrue("Selected item not visible in list", found);
-        
+
         if (target != null) {
-            assertEquals("Selection not at correct location", 100 + mListView.getPaddingTop(), 
+            assertEquals("Selection not at correct location", 100 + mListView.getPaddingTop(),
                     target.getTop());
         }
     }

@@ -107,7 +107,7 @@ import com.android.internal.util.XmlUtils;
  * <em>Note that authority matching here is <b>case sensitive</b>, unlike
  * formal RFC host names!</em>  You should thus always use lower case letters
  * for your authority.
- * 
+ *
  * <p><strong>Data Path</strong> matches if any of the given values match the
  * Intent's data path <em>and</em> both a scheme and authority in the filter
  * has matched against the Intent, <em>or</em> no paths were supplied in the
@@ -663,7 +663,7 @@ public class IntentFilter implements Parcelable {
          * Determine whether this AuthorityEntry matches the given data Uri.
          * <em>Note that this comparison is case-sensitive, unlike formal
          * RFC host names.  You thus should always normalize to lower-case.</em>
-         * 
+         *
          * @param data The Uri to match.
          * @return Returns either {@link IntentFilter#NO_MATCH_DATA},
          * {@link IntentFilter#MATCH_CATEGORY_PORT}, or

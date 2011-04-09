@@ -39,7 +39,7 @@ import android.view.ViewGroup;
 public class KeyUtils {
     /**
      * Simulates tapping the menu key.
-     * 
+     *
      * @param test The test case that is being run.
      */
     public static void tapMenuKey(ActivityInstrumentationTestCase test) {
@@ -51,7 +51,7 @@ public class KeyUtils {
 
     /**
      * Simulates chording the menu key.
-     * 
+     *
      * @param test The test case that is being run.
      * @param shortcutKey The shortcut key to tap while chording the menu key.
      */
@@ -62,7 +62,7 @@ public class KeyUtils {
         final KeyCharacterMap keyCharMap = KeyCharacterMap.load(pushMenuKey.getDeviceId());
         final KeyEvent shortcutKeyEvent = keyCharMap.getEvents(new char[] { shortcutKey })[0];
         final int shortcutKeyCode = shortcutKeyEvent.getKeyCode();
-        
+
         inst.sendKeySync(pushMenuKey);
         inst.sendKeySync(new KeyEvent(KeyEvent.ACTION_DOWN, shortcutKeyCode));
         inst.sendKeySync(new KeyEvent(KeyEvent.ACTION_UP, shortcutKeyCode));
@@ -71,8 +71,8 @@ public class KeyUtils {
 
     /**
      * Simulates a long click via the keyboard.
-     * 
-     * @param test The test case that is being run. 
+     *
+     * @param test The test case that is being run.
      */
     public static void longClick(ActivityInstrumentationTestCase test) {
         final Instrumentation inst = test.getInstrumentation();

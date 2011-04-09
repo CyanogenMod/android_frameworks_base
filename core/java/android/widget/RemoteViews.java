@@ -53,15 +53,15 @@ import java.util.ArrayList;
  * the content of the inflated hierarchy.
  */
 public class RemoteViews implements Parcelable, Filter {
-    
+
     private static final String LOG_TAG = "RemoteViews";
-    
+
     /**
-     * The package name of the package containing the layout 
+     * The package name of the package containing the layout
      * resource. (Added to the parcel)
      */
     private String mPackage;
-    
+
     /**
      * The resource ID of the layout file. (Added to the parcel)
      */
@@ -72,8 +72,8 @@ public class RemoteViews implements Parcelable, Filter {
      * inflated
      */
     private ArrayList<Action> mActions;
-    
-    
+
+
     /**
      * This annotation indicates that a subclass of View is alllowed to be used
      * with the {@link RemoteViews} mechanism.
@@ -95,9 +95,9 @@ public class RemoteViews implements Parcelable, Filter {
             super(message);
         }
     }
-    
+
     /**
-     * Base class for all actions that can be performed on an 
+     * Base class for all actions that can be performed on an
      * inflated view.
      *
      *  SUBCLASSES MUST BE IMMUTABLE SO CLONE WORKS!!!!!
@@ -120,18 +120,18 @@ public class RemoteViews implements Parcelable, Filter {
             this.viewId = id;
             this.pendingIntent = pendingIntent;
         }
-        
+
         public SetOnClickPendingIntent(Parcel parcel) {
             viewId = parcel.readInt();
             pendingIntent = PendingIntent.readPendingIntentOrNullFromParcel(parcel);
         }
-        
+
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeInt(TAG);
             dest.writeInt(viewId);
             pendingIntent.writeToParcel(dest, 0 /* no flags */);
         }
-        
+
         @Override
         public void apply(View root) {
             final View target = root.findViewById(viewId);
@@ -167,7 +167,7 @@ public class RemoteViews implements Parcelable, Filter {
                 target.setOnClickListener(listener);
             }
         }
-        
+
         int viewId;
         PendingIntent pendingIntent;
 
@@ -196,7 +196,7 @@ public class RemoteViews implements Parcelable, Filter {
             this.filterMode = mode;
             this.level = level;
         }
-        
+
         public SetDrawableParameters(Parcel parcel) {
             viewId = parcel.readInt();
             targetBackground = parcel.readInt() != 0;
@@ -210,7 +210,7 @@ public class RemoteViews implements Parcelable, Filter {
             }
             level = parcel.readInt();
         }
-        
+
         public void writeToParcel(Parcel dest, int flags) {
             dest.writeInt(TAG);
             dest.writeInt(viewId);
@@ -225,14 +225,14 @@ public class RemoteViews implements Parcelable, Filter {
             }
             dest.writeInt(level);
         }
-        
+
         @Override
         public void apply(View root) {
             final View target = root.findViewById(viewId);
             if (target == null) {
                 return;
             }
-            
+
             // Pick the correct drawable to modify for this view
             Drawable targetDrawable = null;
             if (targetBackground) {
@@ -241,7 +241,7 @@ public class RemoteViews implements Parcelable, Filter {
                 ImageView imageView = (ImageView) target;
                 targetDrawable = imageView.getDrawable();
             }
-            
+
             if (targetDrawable != null) {
                 // Perform modifications only if values are set correctly
                 if (alpha != -1) {
@@ -255,7 +255,7 @@ public class RemoteViews implements Parcelable, Filter {
                 }
             }
         }
-        
+
         int viewId;
         boolean targetBackground;
         int alpha;
@@ -265,7 +265,7 @@ public class RemoteViews implements Parcelable, Filter {
 
         public final static int TAG = 3;
     }
-    
+
     /**
      * Base class for the reflection actions.
      */
@@ -391,7 +391,7 @@ public class RemoteViews implements Parcelable, Filter {
                     out.writeString((String)this.value);
                     break;
                 case CHAR_SEQUENCE:
-                    TextUtils.writeToParcel((CharSequence)this.value, out, flags);   
+                    TextUtils.writeToParcel((CharSequence)this.value, out, flags);
                     break;
                 case URI:
                     ((Uri)this.value).writeToParcel(out, flags);
@@ -527,7 +527,7 @@ public class RemoteViews implements Parcelable, Filter {
     /**
      * Create a new RemoteViews object that will display the views contained
      * in the specified layout file.
-     * 
+     *
      * @param packageName Name of the package that contains the layout resource
      * @param layoutId The id of the layout resource
      */
@@ -538,7 +538,7 @@ public class RemoteViews implements Parcelable, Filter {
 
     /**
      * Reads a RemoteViews object from a parcel.
-     * 
+     *
      * @param parcel
      */
     public RemoteViews(Parcel parcel) {
@@ -587,7 +587,7 @@ public class RemoteViews implements Parcelable, Filter {
 
     /**
      * Add an action to be executed on the remote side when apply is called.
-     * 
+     *
      * @param a The action to add
      */
     private void addAction(Action a) {
@@ -623,37 +623,37 @@ public class RemoteViews implements Parcelable, Filter {
 
     /**
      * Equivalent to calling View.setVisibility
-     * 
+     *
      * @param viewId The id of the view whose visibility should change
      * @param visibility The new visibility for the view
      */
     public void setViewVisibility(int viewId, int visibility) {
         setInt(viewId, "setVisibility", visibility);
     }
-    
+
     /**
      * Equivalent to calling TextView.setText
-     * 
+     *
      * @param viewId The id of the view whose text should change
      * @param text The new text for the view
      */
     public void setTextViewText(int viewId, CharSequence text) {
         setCharSequence(viewId, "setText", text);
     }
-    
+
     /**
      * Equivalent to calling ImageView.setImageResource
-     * 
+     *
      * @param viewId The id of the view whose drawable should change
      * @param srcId The new resource id for the drawable
      */
-    public void setImageViewResource(int viewId, int srcId) {   
+    public void setImageViewResource(int viewId, int srcId) {
         setInt(viewId, "setImageResource", srcId);
     }
 
     /**
      * Equivalent to calling ImageView.setImageURI
-     * 
+     *
      * @param viewId The id of the view whose drawable should change
      * @param uri The Uri for the image
      */
@@ -663,7 +663,7 @@ public class RemoteViews implements Parcelable, Filter {
 
     /**
      * Equivalent to calling ImageView.setImageBitmap
-     * 
+     *
      * @param viewId The id of the view whose drawable should change
      * @param bitmap The new Bitmap for the drawable
      */
@@ -676,7 +676,7 @@ public class RemoteViews implements Parcelable, Filter {
      * {@link Chronometer#setFormat Chronometer.setFormat},
      * and {@link Chronometer#start Chronometer.start()} or
      * {@link Chronometer#stop Chronometer.stop()}.
-     * 
+     *
      * @param viewId The id of the view whose text should change
      * @param base The time at which the timer would have read 0:00.  This
      *             time should be based off of
@@ -690,21 +690,21 @@ public class RemoteViews implements Parcelable, Filter {
         setString(viewId, "setFormat", format);
         setBoolean(viewId, "setStarted", started);
     }
-    
+
     /**
      * Equivalent to calling {@link ProgressBar#setMax ProgressBar.setMax},
      * {@link ProgressBar#setProgress ProgressBar.setProgress}, and
      * {@link ProgressBar#setIndeterminate ProgressBar.setIndeterminate}
      *
      * If indeterminate is true, then the values for max and progress are ignored.
-     * 
+     *
      * @param viewId The id of the view whose text should change
      * @param max The 100% value for the progress bar
      * @param progress The current value of the progress bar.
-     * @param indeterminate True if the progress bar is indeterminate, 
+     * @param indeterminate True if the progress bar is indeterminate,
      *                false if not.
      */
-    public void setProgressBar(int viewId, int max, int progress, 
+    public void setProgressBar(int viewId, int max, int progress,
             boolean indeterminate) {
         setBoolean(viewId, "setIndeterminate", indeterminate);
         if (!indeterminate) {
@@ -712,12 +712,12 @@ public class RemoteViews implements Parcelable, Filter {
             setInt(viewId, "setProgress", progress);
         }
     }
-    
+
     /**
      * Equivalent to calling
      * {@link android.view.View#setOnClickListener(android.view.View.OnClickListener)}
      * to launch the provided {@link PendingIntent}.
-     * 
+     *
      * @param viewId The id of the view that will trigger the {@link PendingIntent} when clicked
      * @param pendingIntent The {@link PendingIntent} to send when user clicks
      */
@@ -733,7 +733,7 @@ public class RemoteViews implements Parcelable, Filter {
      * view.
      * <p>
      * You can omit specific calls by marking their values with null or -1.
-     * 
+     *
      * @param viewId The id of the view that contains the target
      *            {@link Drawable}
      * @param targetBackground If true, apply these parameters to the
@@ -759,7 +759,7 @@ public class RemoteViews implements Parcelable, Filter {
 
     /**
      * Equivalent to calling {@link android.widget.TextView#setTextColor(int)}.
-     * 
+     *
      * @param viewId The id of the view whose text should change
      * @param color Sets the text color for all the states (normal, selected,
      *            focused) to be this color.
@@ -917,9 +917,9 @@ public class RemoteViews implements Parcelable, Filter {
     /**
      * Inflates the view hierarchy represented by this object and applies
      * all of the actions.
-     * 
+     *
      * <p><strong>Caller beware: this may throw</strong>
-     * 
+     *
      * @param context Default context to use
      * @param parent Parent that the resulting view hierarchy will be attached to. This method
      * does <strong>not</strong> attach the hierarchy. The caller should do so when appropriate.
@@ -942,12 +942,12 @@ public class RemoteViews implements Parcelable, Filter {
 
         return result;
     }
-    
+
     /**
      * Applies all of the actions to the provided view.
      *
      * <p><strong>Caller beware: this may throw</strong>
-     * 
+     *
      * @param v The view to apply the actions to.  This should be the result of
      * the {@link #apply(Context,ViewGroup)} call.
      */
@@ -986,13 +986,13 @@ public class RemoteViews implements Parcelable, Filter {
 
     /* (non-Javadoc)
      * Used to restrict the views which can be inflated
-     * 
+     *
      * @see android.view.LayoutInflater.Filter#onLoadClass(java.lang.Class)
      */
     public boolean onLoadClass(Class clazz) {
         return clazz.isAnnotationPresent(RemoteView.class);
     }
-    
+
     public int describeContents() {
         return 0;
     }

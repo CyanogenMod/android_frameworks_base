@@ -130,7 +130,7 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
     private boolean mDropDownAlwaysVisible = false;
 
     private boolean mDropDownDismissedOnCompletion = true;
-    
+
     private boolean mForceIgnoreOutsideTouch = false;
 
     private int mLastKeyCode = KeyEvent.KEYCODE_UNKNOWN;
@@ -177,14 +177,14 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
                 a.getDimension(R.styleable.AutoCompleteTextView_dropDownVerticalOffset, 0.0f);
         mDropDownHorizontalOffset = (int)
                 a.getDimension(R.styleable.AutoCompleteTextView_dropDownHorizontalOffset, 0.0f);
-        
+
         // Get the anchor's id now, but the view won't be ready, so wait to actually get the
         // view and store it in mDropDownAnchorView lazily in getDropDownAnchorView later.
         // Defaults to NO_ID, in which case the getDropDownAnchorView method will simply return
         // this TextView, as a default anchoring point.
         mDropDownAnchorId = a.getResourceId(R.styleable.AutoCompleteTextView_dropDownAnchor,
                 View.NO_ID);
-        
+
         // For dropdown width, the developer can specify a specific width, or MATCH_PARENT
         // (for full screen width) or WRAP_CONTENT (to match the width of the anchored view).
         mDropDownWidth = a.getLayoutDimension(R.styleable.AutoCompleteTextView_dropDownWidth,
@@ -209,7 +209,7 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
         setFocusable(true);
 
         addTextChangedListener(new MyWatcher());
-        
+
         mPassThroughClickListener = new PassThroughClickListener();
         super.setOnClickListener(mPassThroughClickListener);
     }
@@ -242,27 +242,27 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
     public void setCompletionHint(CharSequence hint) {
         mHintText = hint;
     }
-    
+
     /**
      * <p>Returns the current width for the auto-complete drop down list. This can
      * be a fixed width, or {@link ViewGroup.LayoutParams#MATCH_PARENT} to fill the screen, or
      * {@link ViewGroup.LayoutParams#WRAP_CONTENT} to fit the width of its anchor view.</p>
-     * 
+     *
      * @return the width for the drop down list
-     * 
+     *
      * @attr ref android.R.styleable#AutoCompleteTextView_dropDownWidth
      */
     public int getDropDownWidth() {
         return mDropDownWidth;
     }
-    
+
     /**
      * <p>Sets the current width for the auto-complete drop down list. This can
      * be a fixed width, or {@link ViewGroup.LayoutParams#MATCH_PARENT} to fill the screen, or
      * {@link ViewGroup.LayoutParams#WRAP_CONTENT} to fit the width of its anchor view.</p>
-     * 
+     *
      * @param width the width to use
-     * 
+     *
      * @attr ref android.R.styleable#AutoCompleteTextView_dropDownWidth
      */
     public void setDropDownWidth(int width) {
@@ -296,95 +296,95 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
     public void setDropDownHeight(int height) {
         mDropDownHeight = height;
     }
-    
+
     /**
      * <p>Returns the id for the view that the auto-complete drop down list is anchored to.</p>
-     *  
+     *
      * @return the view's id, or {@link View#NO_ID} if none specified
-     * 
+     *
      * @attr ref android.R.styleable#AutoCompleteTextView_dropDownAnchor
      */
     public int getDropDownAnchor() {
         return mDropDownAnchorId;
     }
-    
+
     /**
      * <p>Sets the view to which the auto-complete drop down list should anchor. The view
      * corresponding to this id will not be loaded until the next time it is needed to avoid
      * loading a view which is not yet instantiated.</p>
-     * 
+     *
      * @param id the id to anchor the drop down list view to
-     * 
-     * @attr ref android.R.styleable#AutoCompleteTextView_dropDownAnchor 
+     *
+     * @attr ref android.R.styleable#AutoCompleteTextView_dropDownAnchor
      */
     public void setDropDownAnchor(int id) {
         mDropDownAnchorId = id;
         mDropDownAnchorView = null;
     }
-    
+
     /**
      * <p>Gets the background of the auto-complete drop-down list.</p>
-     * 
+     *
      * @return the background drawable
-     * 
+     *
      * @attr ref android.R.styleable#PopupWindow_popupBackground
      */
     public Drawable getDropDownBackground() {
         return mPopup.getBackground();
     }
-    
+
     /**
      * <p>Sets the background of the auto-complete drop-down list.</p>
-     * 
+     *
      * @param d the drawable to set as the background
-     * 
+     *
      * @attr ref android.R.styleable#PopupWindow_popupBackground
      */
     public void setDropDownBackgroundDrawable(Drawable d) {
         mPopup.setBackgroundDrawable(d);
     }
-    
+
     /**
      * <p>Sets the background of the auto-complete drop-down list.</p>
-     * 
+     *
      * @param id the id of the drawable to set as the background
-     * 
+     *
      * @attr ref android.R.styleable#PopupWindow_popupBackground
      */
     public void setDropDownBackgroundResource(int id) {
         mPopup.setBackgroundDrawable(getResources().getDrawable(id));
     }
-    
+
     /**
      * <p>Sets the vertical offset used for the auto-complete drop-down list.</p>
-     * 
+     *
      * @param offset the vertical offset
      */
     public void setDropDownVerticalOffset(int offset) {
         mDropDownVerticalOffset = offset;
     }
-    
+
     /**
      * <p>Gets the vertical offset used for the auto-complete drop-down list.</p>
-     * 
+     *
      * @return the vertical offset
      */
     public int getDropDownVerticalOffset() {
         return mDropDownVerticalOffset;
     }
-    
+
     /**
      * <p>Sets the horizontal offset used for the auto-complete drop-down list.</p>
-     * 
+     *
      * @param offset the horizontal offset
      */
     public void setDropDownHorizontalOffset(int offset) {
         mDropDownHorizontalOffset = offset;
     }
-    
+
     /**
      * <p>Gets the horizontal offset used for the auto-complete drop-down list.</p>
-     * 
+     *
      * @return the horizontal offset
      */
     public int getDropDownHorizontalOffset() {
@@ -444,10 +444,10 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
     public void setDropDownAlwaysVisible(boolean dropDownAlwaysVisible) {
         mDropDownAlwaysVisible = dropDownAlwaysVisible;
     }
-   
+
     /**
      * Checks whether the drop-down is dismissed when a suggestion is clicked.
-     * 
+     *
      * @hide Pending API council approval
      */
     public boolean isDropDownDismissedOnCompletion() {
@@ -455,17 +455,17 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
     }
 
     /**
-     * Sets whether the drop-down is dismissed when a suggestion is clicked. This is 
+     * Sets whether the drop-down is dismissed when a suggestion is clicked. This is
      * true by default.
-     * 
+     *
      * @param dropDownDismissedOnCompletion Whether to dismiss the drop-down.
-     * 
+     *
      * @hide Pending API council approval
      */
     public void setDropDownDismissedOnCompletion(boolean dropDownDismissedOnCompletion) {
         mDropDownDismissedOnCompletion = dropDownDismissedOnCompletion;
     }
- 
+
     /**
      * <p>Returns the number of characters the user must type before the drop
      * down list is shown.</p>
@@ -578,13 +578,13 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
     /**
      * <p>Changes the list of data used for auto completion. The provided list
      * must be a filterable list adapter.</p>
-     * 
+     *
      * <p>The caller is still responsible for managing any resources used by the adapter.
      * Notably, when the AutoCompleteTextView is closed or released, the adapter is not notified.
      * A common case is the use of {@link android.widget.CursorAdapter}, which
      * contains a {@link android.database.Cursor} that must be closed.  This can be done
-     * automatically (see 
-     * {@link android.app.Activity#startManagingCursor(android.database.Cursor) 
+     * automatically (see
+     * {@link android.app.Activity#startManagingCursor(android.database.Cursor)
      * startManagingCursor()}),
      * or by manually closing the cursor when the AutoCompleteTextView is dismissed.</p>
      *
@@ -672,7 +672,7 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
                 final boolean below = !mPopup.isAboveAnchor();
 
                 final ListAdapter adapter = mAdapter;
-                
+
                 boolean allEnabled;
                 int firstItem = Integer.MAX_VALUE;
                 int lastItem = Integer.MIN_VALUE;
@@ -682,9 +682,9 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
                     firstItem = allEnabled ? 0 :
                             mDropDownList.lookForSelectablePosition(0, true);
                     lastItem = allEnabled ? adapter.getCount() - 1 :
-                            mDropDownList.lookForSelectablePosition(adapter.getCount() - 1, false);                    
+                            mDropDownList.lookForSelectablePosition(adapter.getCount() - 1, false);
                 }
-                
+
                 if ((below && keyCode == KeyEvent.KEYCODE_DPAD_UP && curIndex <= firstItem) ||
                         (!below && keyCode == KeyEvent.KEYCODE_DPAD_DOWN && curIndex >= lastItem)) {
                     // When the selection is at the top, we block the key
@@ -838,9 +838,9 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
     protected CharSequence convertSelectionToString(Object selectedItem) {
         return mFilter.convertResultToString(selectedItem);
     }
-    
+
     /**
-     * <p>Clear the list selection.  This may only be temporary, as user input will often bring 
+     * <p>Clear the list selection.  This may only be temporary, as user input will often bring
      * it back.
      */
     public void clearListSelection() {
@@ -852,10 +852,10 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
             list.requestLayout();
         }
     }
-    
+
     /**
      * Set the position of the dropdown view selection.
-     * 
+     *
      * @param position The position to move the selector to.
      */
     public void setListSelection(int position) {
@@ -867,13 +867,13 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
     }
 
     /**
-     * Get the position of the dropdown view selection, if there is one.  Returns 
+     * Get the position of the dropdown view selection, if there is one.  Returns
      * {@link ListView#INVALID_POSITION ListView.INVALID_POSITION} if there is no dropdown or if
      * there is no selection.
-     * 
-     * @return the position of the current selection, if there is one, or 
+     *
+     * @return the position of the current selection, if there is one, or
      * {@link ListView#INVALID_POSITION ListView.INVALID_POSITION} if not.
-     * 
+     *
      * @see ListView#getSelectedItemPosition()
      */
     public int getListSelection() {
@@ -939,7 +939,7 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
 
             mBlockCompletion = true;
             replaceText(convertSelectionToString(selectedItem));
-            mBlockCompletion = false;            
+            mBlockCompletion = false;
 
             if (mItemClickListener != null) {
                 final DropDownListView list = mDropDownList;
@@ -957,7 +957,7 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
             dismissDropDown();
         }
     }
-    
+
     /**
      * Identifies whether the view is currently performing a text completion, so subclasses
      * can decide whether to respond to text changed events.
@@ -971,7 +971,7 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
      *
      * @param filter If <code>false</code>, no filtering will be performed
      *        as a result of this call.
-     * 
+     *
      * @hide Pending API council approval.
      */
     public void setText(CharSequence text, boolean filter) {
@@ -1092,7 +1092,7 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
 
         return result;
     }
-    
+
     /**
      * <p>Used for lazy instantiation of the anchor view from the id we have. If the value of
      * the id is NO_ID or we can't find a view for the given id, we return this TextView as
@@ -1113,7 +1113,7 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
     public void showDropDownAfterLayout() {
         post(mShowDropDownRunnable);
     }
-    
+
     /**
      * Ensures that the drop down is not obscuring the IME.
      * @param visible whether the ime should be in front. If false, the ime is pushed to
@@ -1202,7 +1202,7 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
 
             mPopup.setWindowLayoutMode(widthSpec, heightSpec);
             mPopup.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
-            
+
             // use outside touchable to dismiss drop down when touching outside of it, so
             // only set this if the dropdown is not always visible
             mPopup.setOutsideTouchable(!mForceIgnoreOutsideTouch && !mDropDownAlwaysVisible);
@@ -1214,12 +1214,12 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
             post(mHideSelector);
         }
     }
-    
+
     /**
      * Forces outside touches to be ignored. Normally if {@link #isDropDownAlwaysVisible()} is
      * false, we allow outside touch to dismiss the dropdown. If this is set to true, then we
      * ignore outside touch even when the drop down is not set to always visible.
-     * 
+     *
      * @hide used only by SearchDialog
      */
     public void setForceIgnoreOutsideTouch(boolean forceIgnoreOutsideTouch) {
@@ -1253,7 +1253,7 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
                                 convertSelectionToString(item));
                     }
                 }
-                
+
                 if (realCount != count) {
                     CompletionInfo[] tmp = new CompletionInfo[realCount];
                     System.arraycopy(completions, 0, tmp, 0, realCount);
@@ -1468,7 +1468,7 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
             return false;
         }
     }
-    
+
     private class PopupScrollListener implements ListView.OnScrollListener {
         public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
                 int totalItemCount) {
@@ -1589,7 +1589,7 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
         public boolean hasFocus() {
             return true;
         }
-        
+
         protected int[] onCreateDrawableState(int extraSpace) {
             int[] res = super.onCreateDrawableState(extraSpace);
             //noinspection ConstantIfStatement
@@ -1635,7 +1635,7 @@ public class AutoCompleteTextView extends EditText implements Filter.FilterListe
          */
         CharSequence fixText(CharSequence invalidText);
     }
-    
+
     /**
      * Allows us a private hook into the on click event without preventing users from setting
      * their own click listener.

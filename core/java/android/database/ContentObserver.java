@@ -140,7 +140,7 @@ public abstract class ContentObserver {
     /**
      * This method is called when a change occurs to the cursor that
      * is being observed.
-     *  
+     *
      * @param selfChange true if the update was caused by a call to <code>commit</code> on the
      *  cursor that is being observed.
      */

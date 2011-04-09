@@ -34,7 +34,7 @@ public class ComponentInfo extends PackageItemInfo {
      * part of.
      */
     public ApplicationInfo applicationInfo;
-    
+
     /**
      * The name of the process this component should run in.
      * From the "android:process" attribute or, if not set, the same
@@ -48,7 +48,7 @@ public class ComponentInfo extends PackageItemInfo {
      * attribute or, if not set, 0.
      */
     public int descriptionRes;
-    
+
     /**
      * Indicates whether or not this component may be instantiated.  Note that this value can be
      * overriden by the one in its parent {@link ApplicationInfo}.
@@ -62,7 +62,7 @@ public class ComponentInfo extends PackageItemInfo {
      * &lt;provider&gt; tag.
      */
     public boolean exported = false;
-    
+
     public ComponentInfo() {
     }
 
@@ -98,18 +98,18 @@ public class ComponentInfo extends PackageItemInfo {
         }
         return name;
     }
-    
+
     /**
      * Return the icon resource identifier to use for this component.  If
      * the component defines an icon, that is used; else, the application
      * icon is used.
-     * 
+     *
      * @return The icon associated with this component.
      */
     public final int getIconResource() {
         return icon != 0 ? icon : applicationInfo.icon;
     }
-    
+
     protected void dumpFront(Printer pw, String prefix) {
         super.dumpFront(pw, prefix);
         pw.println(prefix + "enabled=" + enabled + " exported=" + exported
@@ -118,7 +118,7 @@ public class ComponentInfo extends PackageItemInfo {
             pw.println(prefix + "description=" + descriptionRes);
         }
     }
-    
+
     protected void dumpBack(Printer pw, String prefix) {
         if (applicationInfo != null) {
             pw.println(prefix + "ApplicationInfo:");
@@ -128,7 +128,7 @@ public class ComponentInfo extends PackageItemInfo {
         }
         super.dumpBack(pw, prefix);
     }
-    
+
     public void writeToParcel(Parcel dest, int parcelableFlags) {
         super.writeToParcel(dest, parcelableFlags);
         applicationInfo.writeToParcel(dest, parcelableFlags);
@@ -137,7 +137,7 @@ public class ComponentInfo extends PackageItemInfo {
         dest.writeInt(enabled ? 1 : 0);
         dest.writeInt(exported ? 1 : 0);
     }
-    
+
     protected ComponentInfo(Parcel source) {
         super(source);
         applicationInfo = ApplicationInfo.CREATOR.createFromParcel(source);
@@ -146,14 +146,14 @@ public class ComponentInfo extends PackageItemInfo {
         enabled = (source.readInt() != 0);
         exported = (source.readInt() != 0);
     }
-    
+
     /**
      * @hide
      */
     @Override protected Drawable loadDefaultIcon(PackageManager pm) {
         return applicationInfo.loadIcon(pm);
     }
-    
+
     /**
      * @hide
      */
@@ -161,7 +161,7 @@ public class ComponentInfo extends PackageItemInfo {
     protected Drawable loadDefaultLogo(PackageManager pm) {
         return applicationInfo.loadLogo(pm);
     }
-    
+
     /**
      * @hide
      */

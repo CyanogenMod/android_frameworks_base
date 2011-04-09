@@ -55,7 +55,7 @@ public final class DateView extends TextView {
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
     }
-    
+
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
@@ -72,7 +72,7 @@ public final class DateView extends TextView {
         Date now = new Date();
         Resources res = Resources.getSystem();
         setText(DateFormat.format(res.getString(com.android.internal.R.string.abbrev_wday_month_day_year),now));
-        
+
     }
 
     void setUpdates(boolean update) {

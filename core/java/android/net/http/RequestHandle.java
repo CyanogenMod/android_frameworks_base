@@ -33,7 +33,7 @@ import java.util.Random;
 /**
  * RequestHandle: handles a request session that may include multiple
  * redirects, HTTP authentication requests, etc.
- * 
+ *
  * {@hide}
  */
 public class RequestHandle {

@@ -45,7 +45,7 @@ public class ServiceInfo extends ComponentInfo
         super.dumpFront(pw, prefix);
         pw.println(prefix + "permission=" + permission);
     }
-    
+
     public String toString() {
         return "ServiceInfo{"
             + Integer.toHexString(System.identityHashCode(this))

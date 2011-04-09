@@ -24,16 +24,16 @@ import java.io.PrintWriter;
  */
 public class PrintWriterPrinter implements Printer {
     private final PrintWriter mPW;
-    
+
     /**
      * Create a new Printer that sends to a PrintWriter object.
-     * 
+     *
      * @param pw The PrintWriter where you would like output to go.
      */
     public PrintWriterPrinter(PrintWriter pw) {
         mPW = pw;
     }
-    
+
     public void println(String x) {
         mPW.println(x);
     }

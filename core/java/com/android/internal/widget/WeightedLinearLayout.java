@@ -39,13 +39,13 @@ public class WeightedLinearLayout extends LinearLayout {
 
     public WeightedLinearLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
-        
-        TypedArray a = 
+
+        TypedArray a =
             context.obtainStyledAttributes(attrs, styleable.WeightedLinearLayout);
 
         mMajorWeight = a.getFloat(styleable.WeightedLinearLayout_majorWeight, 0.0f);
         mMinorWeight = a.getFloat(styleable.WeightedLinearLayout_minorWeight, 0.0f);
-        
+
         a.recycle();
     }
 
@@ -78,7 +78,7 @@ public class WeightedLinearLayout extends LinearLayout {
         // TODO: Support height?
 
         if (measure) {
-            super.onMeasure(widthMeasureSpec, heightMeasureSpec);            
+            super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         }
     }
 }

@@ -290,9 +290,9 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
                 mCallback.goToUnlockScreen();
             }
         }
-        
+
     }
-    
+
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();

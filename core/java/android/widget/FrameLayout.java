@@ -75,11 +75,11 @@ public class FrameLayout extends ViewGroup {
     protected boolean mForegroundInPadding = true;
 
     boolean mForegroundBoundsChanged = false;
-    
+
     public FrameLayout(Context context) {
         super(context);
     }
-    
+
     public FrameLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -97,7 +97,7 @@ public class FrameLayout extends ViewGroup {
         if (d != null) {
             setForeground(d);
         }
-        
+
         if (a.getBoolean(com.android.internal.R.styleable.FrameLayout_measureAllChildren, false)) {
             setMeasureAllChildren(true);
         }
@@ -182,9 +182,9 @@ public class FrameLayout extends ViewGroup {
      * views in the frame layout.  Any padding in the Drawable will be taken
      * into account by ensuring that the children are inset to be placed
      * inside of the padding area.
-     * 
+     *
      * @param drawable The Drawable to be drawn on top of the children.
-     * 
+     *
      * @attr ref android.R.styleable#FrameLayout_foreground
      */
     public void setForeground(Drawable drawable) {
@@ -271,7 +271,7 @@ public class FrameLayout extends ViewGroup {
         setMeasuredDimension(resolveSize(maxWidth, widthMeasureSpec),
                 resolveSize(maxHeight, heightMeasureSpec));
     }
- 
+
     /**
      * {@inheritDoc}
      */
@@ -286,7 +286,7 @@ public class FrameLayout extends ViewGroup {
         final int parentBottom = bottom - top - mPaddingBottom - mForegroundPaddingBottom;
 
         mForegroundBoundsChanged = true;
-        
+
         for (int i = 0; i < count; i++) {
             final View child = getChildAt(i);
             if (child.getVisibility() != GONE) {
@@ -377,7 +377,7 @@ public class FrameLayout extends ViewGroup {
                         foreground.getIntrinsicHeight(), selfBounds, overlayBounds);
                 foreground.setBounds(overlayBounds);
             }
-            
+
             foreground.draw(canvas);
         }
     }
@@ -395,21 +395,21 @@ public class FrameLayout extends ViewGroup {
     }
 
     /**
-     * Determines whether to measure all children or just those in 
+     * Determines whether to measure all children or just those in
      * the VISIBLE or INVISIBLE state when measuring. Defaults to false.
      * @param measureAll true to consider children marked GONE, false otherwise.
      * Default value is false.
-     * 
+     *
      * @attr ref android.R.styleable#FrameLayout_measureAllChildren
      */
     @android.view.RemotableViewMethod
     public void setMeasureAllChildren(boolean measureAll) {
         mMeasureAllChildren = measureAll;
     }
-    
+
     /**
-     * Determines whether to measure all children or just those in 
-     * the VISIBLE or INVISIBLE state when measuring. 
+     * Determines whether to measure all children or just those in
+     * the VISIBLE or INVISIBLE state when measuring.
      */
     public boolean getConsiderGoneChildrenWhenMeasuring() {
         return mMeasureAllChildren;
@@ -420,7 +420,7 @@ public class FrameLayout extends ViewGroup {
      */
     @Override
     public LayoutParams generateLayoutParams(AttributeSet attrs) {
-        return new FrameLayout.LayoutParams(getContext(), attrs);        
+        return new FrameLayout.LayoutParams(getContext(), attrs);
     }
 
     /**

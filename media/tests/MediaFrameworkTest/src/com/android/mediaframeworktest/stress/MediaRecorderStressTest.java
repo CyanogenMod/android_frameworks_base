@@ -39,15 +39,15 @@ import com.android.mediaframeworktest.MediaRecorderStressTestRunner;
 
 /**
  * Junit / Instrumentation test case for the media player api
- 
- */  
-public class MediaRecorderStressTest extends ActivityInstrumentationTestCase2<MediaFrameworkTest> {    
-    
-  
+
+ */
+public class MediaRecorderStressTest extends ActivityInstrumentationTestCase2<MediaFrameworkTest> {
+
+
     private String TAG = "MediaRecorderStressTest";
     private MediaRecorder mRecorder;
     private Camera mCamera;
-   
+
     private static final int NUMBER_OF_CAMERA_STRESS_LOOPS = 100;
     private static final int NUMBER_OF_RECORDER_STRESS_LOOPS = 100;
     private static final int NUMBER_OF_RECORDERANDPLAY_STRESS_LOOPS = 50;

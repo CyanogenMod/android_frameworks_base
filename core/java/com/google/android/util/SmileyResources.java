@@ -28,7 +28,7 @@ public class SmileyResources implements AbstractMessageParser.Resources {
     private HashMap<String, Integer> mSmileyToRes = new HashMap<String, Integer>();
 
     /**
-     * 
+     *
      * @param smilies Smiley text, e.g. ":)", "8-)"
      * @param smileyResIds Resource IDs associated with the smileys.
      */
@@ -40,10 +40,10 @@ public class SmileyResources implements AbstractMessageParser.Resources {
     }
 
     /**
-     * Looks up the resource id of a given smiley. 
+     * Looks up the resource id of a given smiley.
      * @param smiley The smiley to look up.
      * @return the resource id of the specified smiley, or -1 if no resource
-     *         id is associated with it.  
+     *         id is associated with it.
      */
     public int getSmileyRes(String smiley) {
         Integer i = mSmileyToRes.get(smiley);

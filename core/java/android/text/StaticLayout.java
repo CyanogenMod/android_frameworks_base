@@ -62,7 +62,7 @@ extends Layout
                         boolean includepad,
                         TextUtils.TruncateAt ellipsize, int ellipsizedWidth) {
         super((ellipsize == null)
-                ? source 
+                ? source
                 : (source instanceof Spanned)
                     ? new SpannedEllipsizer(source)
                     : new Ellipsizer(source),
@@ -72,7 +72,7 @@ extends Layout
          * This is annoying, but we can't refer to the layout until
          * superclass construction is finished, and the superclass
          * constructor wants the reference to the display text.
-         * 
+         *
          * This will break if the superclass constructor ever actually
          * cares about the content instead of just holding the reference.
          */
@@ -196,7 +196,7 @@ extends Layout
                             // starts in this layout, before the
                             // current paragraph
 
-                            choosehtv[i] = getLineTop(getLineForOffset(o)); 
+                            choosehtv[i] = getLineTop(getLineForOffset(o));
                         } else {
                             // starts in this paragraph
 
@@ -328,7 +328,7 @@ extends Layout
                         adjustTextWidths(widths, sub, i, next, actualNum);
                     System.arraycopy(widths, 0, widths,
                                      end - start + (i - start), next - i);
-                                     
+
                     paint.getFontMetricsInt(fm);
                 } else {
                     mWorkPaint.baselineShift = 0;
@@ -425,7 +425,7 @@ extends Layout
                         /*
                          * From the Unicode Line Breaking Algorithm:
                          * (at least approximately)
-                         *  
+                         *
                          * .,:; are class IS: breakpoints
                          *      except when adjacent to digits
                          * /    is class SY: a breakpoint
@@ -624,14 +624,14 @@ extends Layout
      * Runs the unicode bidi algorithm on the first n chars in chs, returning
      * the char dirs in chInfo and the base line direction of the first
      * paragraph.
-     * 
+     *
      * XXX change result from dirs to levels
-     *  
+     *
      * @param dir the direction flag, either DIR_REQUEST_LTR,
      * DIR_REQUEST_RTL, DIR_REQUEST_DEFAULT_LTR, or DIR_REQUEST_DEFAULT_RTL.
      * @param chs the text to examine
-     * @param chInfo on input, if hasInfo is true, override and other flags 
-     * representing out-of-band embedding information. On output, the generated 
+     * @param chInfo on input, if hasInfo is true, override and other flags
+     * representing out-of-band embedding information. On output, the generated
      * dirs of the text.
      * @param n the length of the text/information in chs and chInfo
      * @param hasInfo true if chInfo has input information, otherwise the
@@ -639,9 +639,9 @@ extends Layout
      * @return the resolved direction level of the first paragraph, either
      * DIR_LEFT_TO_RIGHT or DIR_RIGHT_TO_LEFT.
      */
-    /* package */ static int bidi(int dir, char[] chs, byte[] chInfo, int n, 
+    /* package */ static int bidi(int dir, char[] chs, byte[] chInfo, int n,
             boolean hasInfo) {
-        
+
         AndroidCharacter.getDirectionalities(chs, chInfo, n);
 
         /*
@@ -872,7 +872,7 @@ extends Layout
                 chInfo[j] = SOR;
             }
         }
-        
+
         // Deal specifically with special operators (like '+',etc.) ahead of numbers/english inside RTL paragraphs
         for (int j = 0; j < n; j++) {
             switch(chs[j]) {
@@ -1305,11 +1305,11 @@ extends Layout
     }
 
     public int getLineTop(int line) {
-        return mLines[mColumns * line + TOP];    
+        return mLines[mColumns * line + TOP];
     }
 
     public int getLineDescent(int line) {
-        return mLines[mColumns * line + DESCENT];   
+        return mLines[mColumns * line + DESCENT];
     }
 
     public int getLineStart(int line) {

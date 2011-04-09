@@ -103,7 +103,7 @@ public class HashtableTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      */
 
     public void testHashtableEntrySet() {
@@ -332,10 +332,10 @@ public class HashtableTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * clone() returns a Hashtable .. It should return Object as per the
      * specification.
-     * 
+     *
      */
 
     public void testHashtableClone() {

@@ -28,7 +28,7 @@ public abstract class BaseInputHandler implements InputHandler {
     public void handleKey(KeyEvent event, Runnable finishedCallback) {
         finishedCallback.run();
     }
-    
+
     public void handleMotion(MotionEvent event, Runnable finishedCallback) {
         finishedCallback.run();
     }

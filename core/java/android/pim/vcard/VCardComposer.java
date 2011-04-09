@@ -609,7 +609,7 @@ public class VCardComposer {
                     .appendOrganizations(contentValuesListMap.get(Organization.CONTENT_ITEM_TYPE))
                     .appendWebsites(contentValuesListMap.get(Website.CONTENT_ITEM_TYPE));
             if ((mVCardType & VCardConfig.FLAG_REFRAIN_IMAGE_EXPORT) == 0) {
-                builder.appendPhotos(contentValuesListMap.get(Photo.CONTENT_ITEM_TYPE));            
+                builder.appendPhotos(contentValuesListMap.get(Photo.CONTENT_ITEM_TYPE));
             }
             builder.appendNotes(contentValuesListMap.get(Note.CONTENT_ITEM_TYPE))
                     .appendEvents(contentValuesListMap.get(Event.CONTENT_ITEM_TYPE))

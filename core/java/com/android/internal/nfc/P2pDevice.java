@@ -43,23 +43,23 @@ public abstract class P2pDevice {
      * Target handle, used by native calls.
      */
     protected int mHandle;
-	
+
     /**
      * Flag set when the object is closed and thus not usable any more.
      */
-	protected boolean isClosed = false;
+        protected boolean isClosed = false;
 
     /**
      * Prevent default constructor to be public.
      */
-	protected P2pDevice() {
-	}
+        protected P2pDevice() {
+        }
 
-	/**
+        /**
      * Returns the remote NFC-IP1 General Bytes.
-     * 
+     *
      * @return remote general bytes
-	 * @throws IOException 
+         * @throws IOException
      */
     public byte[] getGeneralBytes() throws IOException {
         // Should not be called directly (use subclasses overridden method instead)
@@ -69,7 +69,7 @@ public abstract class P2pDevice {
     /**
      * Returns target type. The value returned can be one of the TYPE_*
      * constants.
-     * 
+     *
      * @return target type.
      */
     public int getMode() {

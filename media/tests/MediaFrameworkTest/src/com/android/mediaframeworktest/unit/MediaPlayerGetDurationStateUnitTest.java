@@ -32,7 +32,7 @@ public class MediaPlayerGetDurationStateUnitTest extends AndroidTestCase impleme
      *    {Prepared, Started, Paused, Stopped, PlaybackCompleted}.
      * 2. It is invalid to call getDuration() in the following states:
      *    {Idle, Initialized, Error}
-     *    
+     *
      * @param stateErrors the MediaPlayerStateErrors to check against.
      */
     public void checkStateErrors(MediaPlayerStateErrors stateErrors) {
@@ -44,14 +44,14 @@ public class MediaPlayerGetDurationStateUnitTest extends AndroidTestCase impleme
         assertTrue(!stateErrors.errorInPausedState);
         assertTrue(!stateErrors.errorInStoppedState);
         assertTrue(!stateErrors.errorInPlaybackCompletedState);
-        
+
         // Invalid states.
         assertTrue(!stateErrors.errorInIdleState);  // onError() won't be called
         assertTrue(stateErrors.errorInInitializedState);
         assertTrue(stateErrors.errorInErrorState);
         assertTrue(stateErrors.errorInIdleStateAfterReset);
     }
-    
+
     public void invokeMethodUnderTest(MediaPlayer player) {
         player.getDuration();
     }

@@ -67,7 +67,7 @@ public class ContentQueryMapTest extends AndroidTestCase {
                 // Get the current state of the CQM. This forces a requery and means that the
                 // call to getValues() below won't do a requery().
                 cqm.getRows();
-                
+
                 // The cache won't notice changes until the loop runs.
                 Settings.System.putString(r, "test", "New Value");
                 ContentValues v = cqm.getValues("test");

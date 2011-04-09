@@ -100,7 +100,7 @@ public class Transformation {
         mMatrix.set(t.getMatrix());
         mTransformationType = t.getTransformationType();
     }
-    
+
     /**
      * Apply this Transformation to an existing Transformation, e.g. apply
      * a scale effect to something that has already been rotated.
@@ -110,7 +110,7 @@ public class Transformation {
         mAlpha *= t.getAlpha();
         mMatrix.preConcat(t.getMatrix());
     }
-    
+
     /**
      * @return The 3x3 Matrix representing the trnasformation to apply to the
      * coordinates of the object being animated
@@ -118,7 +118,7 @@ public class Transformation {
     public Matrix getMatrix() {
         return mMatrix;
     }
-    
+
     /**
      * Sets the degree of transparency
      * @param alpha 1.0 means fully opaqe and 0.0 means fully transparent
@@ -133,7 +133,7 @@ public class Transformation {
     public float getAlpha() {
         return mAlpha;
     }
-    
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(64);
@@ -141,7 +141,7 @@ public class Transformation {
         toShortString(sb);
         return sb.toString();
     }
-    
+
     /**
      * Return a string representation of the transformation in a compact form.
      */
@@ -150,7 +150,7 @@ public class Transformation {
         toShortString(sb);
         return sb.toString();
     }
-    
+
     /**
      * @hide
      */
@@ -159,7 +159,7 @@ public class Transformation {
         sb.append(" matrix="); mMatrix.toShortString(sb);
         sb.append('}');
     }
-    
+
     /**
      * Print short string, to optimize dumping.
      * @hide

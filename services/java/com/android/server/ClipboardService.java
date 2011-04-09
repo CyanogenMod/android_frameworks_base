@@ -36,7 +36,7 @@ public class ClipboardService extends IClipboard.Stub {
             if (text == null) {
                 text = "";
             }
-    
+
             mClipboard = text;
         }
     }

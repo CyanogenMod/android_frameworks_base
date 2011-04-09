@@ -40,8 +40,8 @@ import java.util.List;
  * </p>
  */
 public class VNodeBuilder implements VCardInterpreter {
-    static private String LOG_TAG = "VNodeBuilder"; 
-    
+    static private String LOG_TAG = "VNodeBuilder";
+
     public List<VNode> vNodeList = new ArrayList<VNode>();
     private int mNodeListPos = 0;
     private VNode mCurrentVNode;
@@ -57,9 +57,9 @@ public class VNodeBuilder implements VCardInterpreter {
      * The charset with which byte array is encoded to String.
      */
     private String mTargetCharset;
-    
+
     private boolean mStrictLineBreakParsing;
-    
+
     public VNodeBuilder() {
         this(VCardConfig.DEFAULT_IMPORT_CHARSET, false);
     }
@@ -125,7 +125,7 @@ public class VNodeBuilder implements VCardInterpreter {
     public void endProperty() {
         mCurrentVNode.propList.add(mCurrentPropNode);
     }
-    
+
     public void propertyName(String name) {
         mCurrentPropNode.propName = name;
     }
@@ -133,7 +133,7 @@ public class VNodeBuilder implements VCardInterpreter {
     public void propertyGroup(String group) {
         mCurrentPropNode.propGroupSet.add(group);
     }
-    
+
     public void propertyParamType(String type) {
         mCurrentParamType = type;
     }
@@ -172,7 +172,7 @@ public class VNodeBuilder implements VCardInterpreter {
             return null;
         }
     }
-    
+
     private String handleOneValue(String value, String targetCharset, String encoding) {
         if (encoding != null) {
             encoding = encoding.toUpperCase();
@@ -188,7 +188,7 @@ public class VNodeBuilder implements VCardInterpreter {
         }
         return encodeString(value, targetCharset);
     }
-    
+
     public void propertyValues(List<String> values) {
         if (values == null || values.size() == 0) {
             mCurrentPropNode.propValue_bytes = null;
@@ -197,16 +197,16 @@ public class VNodeBuilder implements VCardInterpreter {
             mCurrentPropNode.propValue = "";
             return;
         }
-        
+
         ContentValues paramMap = mCurrentPropNode.paramMap;
-        
-        String targetCharset = CharsetUtils.nameForDefaultVendor(paramMap.getAsString("CHARSET")); 
-        String encoding = paramMap.getAsString("ENCODING"); 
-        
+
+        String targetCharset = CharsetUtils.nameForDefaultVendor(paramMap.getAsString("CHARSET"));
+        String encoding = paramMap.getAsString("ENCODING");
+
         if (targetCharset == null || targetCharset.length() == 0) {
             targetCharset = mTargetCharset;
         }
-        
+
         for (String value : values) {
             mCurrentPropNode.propValue_vector.add(
                     handleOneValue(value, targetCharset, encoding));
@@ -233,7 +233,7 @@ public class VNodeBuilder implements VCardInterpreter {
             return "";
         }
     }
-    
+
     public String getResult(){
         throw new RuntimeException("Not supported");
     }

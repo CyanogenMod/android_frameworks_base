@@ -17,7 +17,7 @@
 package com.android.internal.policy.impl;
 
 /**
- * The callback used by the keyguard view to tell the {@link KeyguardViewMediator} 
+ * The callback used by the keyguard view to tell the {@link KeyguardViewMediator}
  * various things.
  */
 public interface KeyguardViewCallback {

@@ -30,7 +30,7 @@ import android.view.View;
  * Mock version of the WebView.
  * Only non override public methods from the real WebView have been added in there.
  * Methods that take an unknown class as parameter or as return object, have been removed for now.
- * 
+ *
  * TODO: generate automatically.
  *
  */
@@ -62,9 +62,9 @@ public class WebView extends MockView {
     public WebView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
-    
+
     // START FAKE PUBLIC METHODS
-    
+
     public void setHorizontalScrollbarOverlay(boolean overlay) {
     }
 
@@ -147,14 +147,14 @@ public class WebView extends MockView {
     public boolean pageUp(boolean top) {
         return false;
     }
-    
+
     public boolean pageDown(boolean bottom) {
         return false;
     }
 
     public void clearView() {
     }
-    
+
     public Picture capturePicture() {
         return null;
     }
@@ -190,7 +190,7 @@ public class WebView extends MockView {
     public int getProgress() {
         return 0;
     }
-    
+
     public int getContentHeight() {
         return 0;
     }

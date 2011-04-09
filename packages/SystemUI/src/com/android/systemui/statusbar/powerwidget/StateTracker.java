@@ -65,7 +65,7 @@ public abstract class StateTracker {
 
     /**
      * Sets the value that we're now in. To be called from onActualStateChange.
-     * 
+     *
      * @param newState one of STATE_DISABLED, STATE_ENABLED, STATE_TURNING_ON,
      *            STATE_TURNING_OFF, STATE_UNKNOWN
      */
@@ -115,7 +115,7 @@ public abstract class StateTracker {
 
     /**
      * Returns simplified 3-state value from underlying 5-state.
-     * 
+     *
      * @param context
      * @return STATE_ENABLED, STATE_DISABLED, or STATE_INTERMEDIATE
      */
@@ -141,7 +141,7 @@ public abstract class StateTracker {
 
     /**
      * Gets underlying actual state.
-     * 
+     *
      * @param context
      * @return STATE_ENABLED, STATE_DISABLED, STATE_ENABLING, STATE_DISABLING,
      *         or or STATE_UNKNOWN.

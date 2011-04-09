@@ -28,12 +28,12 @@ import android.graphics.RectF;
  */
 public class RectShape extends Shape {
     private RectF mRect = new RectF();
-    
+
     /**
      * RectShape constructor.
      */
     public RectShape() {}
-    
+
     @Override
     public void draw(Canvas canvas, Paint paint) {
         canvas.drawRect(mRect, paint);
@@ -43,7 +43,7 @@ public class RectShape extends Shape {
     protected void onResize(float width, float height) {
         mRect.set(0, 0, width, height);
     }
-    
+
     /**
      * Returns the RectF that defines this rectangle's bounds.
      */

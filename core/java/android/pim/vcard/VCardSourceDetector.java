@@ -45,13 +45,13 @@ public class VCardSourceDetector implements VCardInterpreter {
     private static Set<String> APPLE_SIGNS = new HashSet<String>(Arrays.asList(
             "X-PHONETIC-FIRST-NAME", "X-PHONETIC-MIDDLE-NAME", "X-PHONETIC-LAST-NAME",
             "X-ABADR", "X-ABUID"));
-    
+
     private static Set<String> JAPANESE_MOBILE_PHONE_SIGNS = new HashSet<String>(Arrays.asList(
             "X-GNO", "X-GN", "X-REDUCTION"));
-    
+
     private static Set<String> WINDOWS_MOBILE_PHONE_SIGNS = new HashSet<String>(Arrays.asList(
             "X-MICROSOFT-ASST_TEL", "X-MICROSOFT-ASSISTANT", "X-MICROSOFT-OFFICELOC"));
-    
+
     // Note: these signes appears before the signs of the other type (e.g. "X-GN").
     // In other words, Japanese FOMA mobile phones are detected as FOMA, not JAPANESE_MOBILE_PHONES.
     private static Set<String> FOMA_SIGNS = new HashSet<String>(Arrays.asList(
@@ -70,7 +70,7 @@ public class VCardSourceDetector implements VCardInterpreter {
     private static final int PARSE_TYPE_APPLE = 1;
     // For Japanese mobile phones, which are usually using Shift_JIS as a charset.
     private static final int PARSE_TYPE_MOBILE_PHONE_JP = 2;
-    // For some of mobile phones released from DoCoMo, which use nested vCard. 
+    // For some of mobile phones released from DoCoMo, which use nested vCard.
     private static final int PARSE_TYPE_DOCOMO_TORELATE_NEST = 3;
     // For Japanese Windows Mobel phones. It's version is supposed to be 6.5.
     private static final int PARSE_TYPE_WINDOWS_MOBILE_V65_JP = 4;
@@ -83,21 +83,21 @@ public class VCardSourceDetector implements VCardInterpreter {
     // Some mobile phones (like FOMA) tells us the charset of the data.
     private boolean mNeedToParseCharset;
     private String mSpecifiedCharset;
-    
+
     public void start() {
     }
-    
+
     public void end() {
     }
 
     public void startEntry() {
-    }    
+    }
 
     public void startProperty() {
         mNeedToParseCharset = false;
         mNeedToParseVersion = false;
     }
-    
+
     public void endProperty() {
     }
 
@@ -106,7 +106,7 @@ public class VCardSourceDetector implements VCardInterpreter {
 
     public void propertyGroup(String group) {
     }
-    
+
     public void propertyName(String name) {
         if (name.equalsIgnoreCase(VCardConstants.PROPERTY_VERSION)) {
             mNeedToParseVersion = true;

@@ -54,7 +54,7 @@ extends Spanned
 
         /**
          * Returns the standard Spannable Factory.
-         */ 
+         */
         public static Spannable.Factory getInstance() {
             return sInstance;
         }

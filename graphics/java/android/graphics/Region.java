@@ -80,7 +80,7 @@ public class Region implements Parcelable {
     public boolean set(Rect r) {
         return nativeSetRect(mNativeRegion, r.left, r.top, r.right, r.bottom);
     }
-    
+
     /** Set the region to the specified rectangle
     */
     public boolean set(int left, int top, int right, int bottom) {
@@ -101,12 +101,12 @@ public class Region implements Parcelable {
      * Return true if this region is empty
      */
     public native boolean isEmpty();
-    
+
     /**
      * Return true if the region contains a single rectangle
      */
     public native boolean isRect();
-    
+
     /**
      * Return true if the region contains more than one rectangle
      */
@@ -121,7 +121,7 @@ public class Region implements Parcelable {
         nativeGetBounds(mNativeRegion, r);
         return r;
     }
-    
+
     /**
      * Set the Rect to the bounds of the region. If the region is empty, the
      * Rect will be set to [0, 0, 0, 0]
@@ -150,7 +150,7 @@ public class Region implements Parcelable {
     public boolean getBoundaryPath(Path path) {
         return nativeGetBoundaryPath(mNativeRegion, path.ni());
     }
-        
+
     /**
      * Return true if the region contains the specified point
      */
@@ -213,7 +213,7 @@ public class Region implements Parcelable {
 
     /**
      * Scale the region by the given scale amount. This re-constructs new region by
-     * scaling the rects that this region consists of. New rectis are computed by scaling 
+     * scaling the rects that this region consists of. New rectis are computed by scaling
      * coordinates by float, then rounded by roundf() function to integers. This may results
      * in less internal rects if 0 < scale < 1. Zero and Negative scale result in
      * an empty region. If this region is empty, do nothing.
@@ -280,7 +280,7 @@ public class Region implements Parcelable {
     }
 
     //////////////////////////////////////////////////////////////////////////
-    
+
     public static final Parcelable.Creator<Region> CREATOR
         = new Parcelable.Creator<Region>() {
             /**
@@ -299,7 +299,7 @@ public class Region implements Parcelable {
                 return new Region[size];
             }
     };
-    
+
     public int describeContents() {
         return 0;
     }
@@ -327,7 +327,7 @@ public class Region implements Parcelable {
     protected void finalize() throws Throwable {
         nativeDestructor(mNativeRegion);
     }
-    
+
     /*package*/ Region(int ni) {
         if (ni == 0) {
             throw new RuntimeException();

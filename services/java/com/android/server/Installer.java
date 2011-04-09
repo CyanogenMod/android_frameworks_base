@@ -30,12 +30,12 @@ import java.net.Socket;
 
 class Installer {
     private static final String TAG = "Installer";
-	InputStream mIn;
-	OutputStream mOut;
-	LocalSocket mSocket;
+        InputStream mIn;
+        OutputStream mOut;
+        LocalSocket mSocket;
 
-	byte buf[] = new byte[1024];
-	int buflen = 0;
+        byte buf[] = new byte[1024];
+        int buflen = 0;
 
     private boolean connect() {
         if (mSocket != null) {
@@ -59,78 +59,78 @@ class Installer {
         return true;
     }
 
-	private void disconnect() {
+        private void disconnect() {
         Slog.i(TAG,"disconnecting...");
-		try {
-			if (mSocket != null) mSocket.close();
-		} catch (IOException ex) { }
-		try {
-			if (mIn != null) mIn.close();
-		} catch (IOException ex) { }
-		try {
-			if (mOut != null) mOut.close();
-		} catch (IOException ex) { }
-		mSocket = null;
-		mIn = null;
-		mOut = null;
-	}
+                try {
+                        if (mSocket != null) mSocket.close();
+                } catch (IOException ex) { }
+                try {
+                        if (mIn != null) mIn.close();
+                } catch (IOException ex) { }
+                try {
+                        if (mOut != null) mOut.close();
+                } catch (IOException ex) { }
+                mSocket = null;
+                mIn = null;
+                mOut = null;
+        }
 
-	private boolean readBytes(byte buffer[], int len) {
-		int off = 0, count;
+        private boolean readBytes(byte buffer[], int len) {
+                int off = 0, count;
         if (len < 0) return false;
-		while (off != len) {
-			try {
-				count = mIn.read(buffer, off, len - off);
-				if (count <= 0) {
+                while (off != len) {
+                        try {
+                                count = mIn.read(buffer, off, len - off);
+                                if (count <= 0) {
                     Slog.e(TAG, "read error " + count);
                     break;
                 }
-				off += count;
-			} catch (IOException ex) {
+                                off += count;
+                        } catch (IOException ex) {
                 Slog.e(TAG,"read exception");
-				break;
-			}
-		}
+                                break;
+                        }
+                }
 //        Slog.i(TAG, "read "+len+" bytes");
-		if (off == len) return true;
-		disconnect();
-		return false;
-	}
+                if (off == len) return true;
+                disconnect();
+                return false;
+        }
 
-	private boolean readReply() {
-		int len;
-		buflen = 0;
-		if (!readBytes(buf, 2)) return false;
-		len = (((int) buf[0]) & 0xff) | ((((int) buf[1]) & 0xff) << 8);
-		if ((len < 1) || (len > 1024)) {
+        private boolean readReply() {
+                int len;
+                buflen = 0;
+                if (!readBytes(buf, 2)) return false;
+                len = (((int) buf[0]) & 0xff) | ((((int) buf[1]) & 0xff) << 8);
+                if ((len < 1) || (len > 1024)) {
             Slog.e(TAG,"invalid reply length ("+len+")");
-			disconnect();
-			return false;
-		}
-		if (!readBytes(buf, len)) return false;
-		buflen = len;
-		return true;
-	}
+                        disconnect();
+                        return false;
+                }
+                if (!readBytes(buf, len)) return false;
+                buflen = len;
+                return true;
+        }
 
-	private boolean writeCommand(String _cmd) {
-		byte[] cmd = _cmd.getBytes();
-		int len = cmd.length;
-		if ((len < 1) || (len > 1024)) return false;
-		buf[0] = (byte) (len & 0xff);
-		buf[1] = (byte) ((len >> 8) & 0xff);
-		try {
-			mOut.write(buf, 0, 2);
-			mOut.write(cmd, 0, len);
-		} catch (IOException ex) {
+        private boolean writeCommand(String _cmd) {
+                byte[] cmd = _cmd.getBytes();
+                int len = cmd.length;
+                if ((len < 1) || (len > 1024)) return false;
+                buf[0] = (byte) (len & 0xff);
+                buf[1] = (byte) ((len >> 8) & 0xff);
+                try {
+                        mOut.write(buf, 0, 2);
+                        mOut.write(cmd, 0, len);
+                } catch (IOException ex) {
             Slog.e(TAG,"write error");
-			disconnect();
-			return false;
-		}
-		return true;
-	}
-		
-	private synchronized String transaction(String cmd) {
-		if (!connect()) {
+                        disconnect();
+                        return false;
+                }
+                return true;
+        }
+
+        private synchronized String transaction(String cmd) {
+                if (!connect()) {
             Slog.e(TAG, "connection failed");
             return "-1";
         }
@@ -147,24 +147,24 @@ class Installer {
             }
         }
 //        Slog.i(TAG,"send: '"+cmd+"'");
-		if (readReply()) {
+                if (readReply()) {
             String s = new String(buf, 0, buflen);
 //            Slog.i(TAG,"recv: '"+s+"'");
-			return s;
-		} else {
+                        return s;
+                } else {
 //            Slog.i(TAG,"fail");
-			return "-1";
-		}
-	}
+                        return "-1";
+                }
+        }
 
-	private int execute(String cmd) {
-		String res = transaction(cmd);
-		try {
-			return Integer.parseInt(res);
-		} catch (NumberFormatException ex) {
-			return -1;
-		}
-	}
+        private int execute(String cmd) {
+                String res = transaction(cmd);
+                try {
+                        return Integer.parseInt(res);
+                } catch (NumberFormatException ex) {
+                        return -1;
+                }
+        }
 
     public int install(String name, boolean useEncryptedFilesystem, int uid, int gid) {
         StringBuilder builder = new StringBuilder("install");
@@ -249,7 +249,7 @@ class Installer {
         }
         return execute(builder.toString());
     }
-    
+
     public int clearUserData(String name, boolean useEncryptedFilesystem) {
         StringBuilder builder = new StringBuilder("rmuserdata");
         builder.append(' ');
@@ -262,7 +262,7 @@ class Installer {
         }
         return execute(builder.toString());
     }
-    
+
     public boolean ping() {
         if (execute("ping") < 0) {
             return false;
@@ -270,7 +270,7 @@ class Installer {
             return true;
         }
     }
-    
+
     public int freeCache(long freeStorageSize) {
         StringBuilder builder = new StringBuilder("freecache");
         builder.append(' ');
@@ -291,7 +291,7 @@ class Installer {
         builder.append(gid);
         return execute(builder.toString());
     }
-    
+
     public int getSizeInfo(String pkgName, String apkPath,
             String fwdLockApkPath, PackageStats pStats, boolean useEncryptedFilesystem) {
         StringBuilder builder = new StringBuilder("getsize");
@@ -322,7 +322,7 @@ class Installer {
         } catch (NumberFormatException e) {
             return -1;
         }
-    }    
+    }
 
     public int moveFiles() {
         return execute("movefiles");

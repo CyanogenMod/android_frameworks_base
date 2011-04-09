@@ -302,7 +302,7 @@ public final class Bundle implements Parcelable, Cloneable {
     public boolean hasFileDescriptors() {
         if (!mFdsKnown) {
             boolean fdFound = false;    // keep going until we find one or run out of data
-            
+
             if (mParcelledData != null) {
                 if (mParcelledData.hasFileDescriptors()) {
                     fdFound = true;
@@ -361,7 +361,7 @@ public final class Bundle implements Parcelable, Cloneable {
         }
         return mHasFds;
     }
-    
+
     /**
      * Inserts a Boolean value into the mapping of this Bundle, replacing
      * any existing value for the given key.  Either key or value may be null.
@@ -1532,7 +1532,7 @@ public final class Bundle implements Parcelable, Cloneable {
         }
         return mask;
     }
-    
+
     /**
      * Writes the Bundle contents to a Parcel, typically in order for
      * it to be passed through an IBinder connection.
@@ -1590,7 +1590,7 @@ public final class Bundle implements Parcelable, Cloneable {
         p.setDataPosition(0);
         p.appendFrom(parcel, offset, length);
         p.setDataPosition(0);
-        
+
         mParcelledData = p;
         mHasFds = p.hasFileDescriptors();
         mFdsKnown = true;

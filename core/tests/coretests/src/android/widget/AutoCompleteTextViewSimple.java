@@ -25,13 +25,13 @@ import android.view.View;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 
-public class AutoCompleteTextViewSimple extends Activity 
+public class AutoCompleteTextViewSimple extends Activity
         implements OnItemClickListener, OnItemSelectedListener {
 
     private final String LOG_TAG = "AutoCompleteTextViewSimple";
-    
+
     private AutoCompleteTextView mTextView;
-    
+
     /** These are cleared by resetItemListeners(), and set by the callback listeners */
     public boolean mItemClickCalled;
     public int mItemClickPosition;
@@ -48,12 +48,12 @@ public class AutoCompleteTextViewSimple extends Activity
         // setup layout & views
         setContentView(R.layout.autocompletetextview_simple);
         mTextView = (AutoCompleteTextView) findViewById(R.id.autocompletetextview1);
-        
+
         // configure callbacks used for monitoring
         mTextView.setOnItemClickListener(this);
         mTextView.setOnItemSelectedListener(this);
         resetItemListeners();
-        
+
         setStringAdapter(5, "a");
     }
 
@@ -73,16 +73,16 @@ public class AutoCompleteTextViewSimple extends Activity
         for (int i = 0; i < numSuggestions; ++i) {
             strings[i] = prefix + String.valueOf(i);
         }
-        
+
         // install it with an adapter
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, strings);
         mTextView.setAdapter(adapter);
     }
-    
+
     /**
      * For monitoring OnItemClickListener & OnItemSelectedListener
-     * 
+     *
      * An alternative here would be to provide a set of pass-through callbacks
      */
     public void resetItemListeners() {
@@ -92,7 +92,7 @@ public class AutoCompleteTextViewSimple extends Activity
         mItemSelectedPosition = -1;
         mNothingSelectedCalled = false;
     }
-    
+
     /**
      * Implements OnItemClickListener
      */
@@ -102,7 +102,7 @@ public class AutoCompleteTextViewSimple extends Activity
         mItemClickPosition = position;
     }
 
-    /** 
+    /**
      * Implements OnItemSelectedListener
      */
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -111,7 +111,7 @@ public class AutoCompleteTextViewSimple extends Activity
         mItemSelectedPosition = position;
     }
 
-    /** 
+    /**
      * Implements OnItemSelectedListener
      */
     public void onNothingSelected(AdapterView<?> parent) {

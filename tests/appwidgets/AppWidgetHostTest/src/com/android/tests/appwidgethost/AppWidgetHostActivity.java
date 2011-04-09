@@ -41,7 +41,7 @@ public class AppWidgetHostActivity extends Activity
     static final int HOST_ID = 1234;
 
     static final String PENDING_APPWIDGET_ID = "pending_appwidget";
-    
+
     AppWidgetManager mAppWidgetManager;
     AppWidgetContainerView mAppWidgetContainer;
 

@@ -48,25 +48,25 @@ public class ListManagedCursorTest extends ActivityInstrumentationTestCase<ListM
     public void testPreconditions() {
         assertNotNull(mActivity);
         assertNotNull(mListView);
-        
+
         assertEquals(0, mListView.getFirstVisiblePosition());
     }
-    
+
     /**
      * Scroll the list using arrows, launch new activity, hit back, make sure we're still scrolled.
      */
     @LargeTest
     public void testKeyScrolling() {
         Instrumentation inst = getInstrumentation();
-        
+
         int firstVisiblePosition = arrowScroll(inst);
-        
+
         inst.sendCharacterSync(KeyEvent.KEYCODE_BACK);
         inst.waitForIdleSync();
-        
-        assertTrue("List changed to touch mode", !mListView.isInTouchMode()); 
-        assertTrue("List did not preserve scroll position", 
-                firstVisiblePosition == mListView.getFirstVisiblePosition()); 
+
+        assertTrue("List changed to touch mode", !mListView.isInTouchMode());
+        assertTrue("List did not preserve scroll position",
+                firstVisiblePosition == mListView.getFirstVisiblePosition());
     }
 
     /**
@@ -75,17 +75,17 @@ public class ListManagedCursorTest extends ActivityInstrumentationTestCase<ListM
     @LargeTest
     public void testTouchScrolling() {
         Instrumentation inst = getInstrumentation();
-        
+
        int firstVisiblePosition = touchScroll(inst);
-        
+
         inst.sendCharacterSync(KeyEvent.KEYCODE_BACK);
         inst.waitForIdleSync();
-        
-        assertTrue("List not in touch mode", mListView.isInTouchMode()); 
-        assertTrue("List did not preserve scroll position", 
-                firstVisiblePosition == mListView.getFirstVisiblePosition()); 
+
+        assertTrue("List not in touch mode", mListView.isInTouchMode());
+        assertTrue("List did not preserve scroll position",
+                firstVisiblePosition == mListView.getFirstVisiblePosition());
     }
-    
+
     /**
      * Scroll the list using arrows, launch new activity, change to touch mode, hit back, make sure
      * we're still scrolled.
@@ -93,16 +93,16 @@ public class ListManagedCursorTest extends ActivityInstrumentationTestCase<ListM
     @LargeTest
     public void testKeyScrollingToTouchMode() {
         Instrumentation inst = getInstrumentation();
-        
+
         int firstVisiblePosition = arrowScroll(inst);
-        
+
         TouchUtils.dragQuarterScreenUp(this);
         inst.sendCharacterSync(KeyEvent.KEYCODE_BACK);
         inst.waitForIdleSync();
-        
-        assertTrue("List did not change to touch mode", mListView.isInTouchMode()); 
-        assertTrue("List did not preserve scroll position", 
-                firstVisiblePosition == mListView.getFirstVisiblePosition()); 
+
+        assertTrue("List did not change to touch mode", mListView.isInTouchMode());
+        assertTrue("List did not preserve scroll position",
+                firstVisiblePosition == mListView.getFirstVisiblePosition());
     }
 
 
@@ -127,7 +127,7 @@ public class ListManagedCursorTest extends ActivityInstrumentationTestCase<ListM
         assertTrue("List did not preserve scroll position", firstVisiblePosition == mListView
                 .getFirstVisiblePosition());
     }
-    
+
     public int arrowScroll(Instrumentation inst) {
         int count = mListView.getChildCount();
 

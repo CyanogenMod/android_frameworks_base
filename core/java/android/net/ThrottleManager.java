@@ -109,7 +109,7 @@ public class ThrottleManager
     // @hide
     public static final int PERIOD_SECOND = 11;
 
-    
+
 
     /**
      * returns a long of the ms from the epoch to the time the current cycle ends for the

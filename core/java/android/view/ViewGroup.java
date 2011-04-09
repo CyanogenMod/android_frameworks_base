@@ -151,7 +151,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
     /**
      * When set, the drawing method will call {@link #getChildDrawingOrder(int, int)}
      * to get the index of the child to draw for that iteration.
-     * 
+     *
      * @hide
      */
     protected static final int FLAG_USE_CHILD_DRAWING_ORDER = 0x400;
@@ -681,7 +681,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
             }
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -733,7 +733,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
             children[i].dispatchConfigurationChanged(newConfig);
         }
     }
-    
+
     /**
      * {@inheritDoc}
      */
@@ -1083,10 +1083,10 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
         }
         return false;
     }
-    
+
     /**
      * {@inheritDoc}
-     * 
+     *
      * @hide
      */
     @Override
@@ -1098,10 +1098,10 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
             children[i].dispatchStartTemporaryDetach();
         }
     }
-    
+
     /**
      * {@inheritDoc}
-     * 
+     *
      * @hide
      */
     @Override
@@ -1299,7 +1299,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
         if (skipChildren) {
             for (int i = 0; i < count; i++) {
                 getChildAt(i).setVisibility(visibilities[i]);
-            }        
+            }
         }
 
         return b;
@@ -1429,7 +1429,7 @@ public abstract class ViewGroup extends View implements ViewParent, ViewManager 
      *
      * @param i The current iteration.
      * @return The index of the child to draw this iteration.
-     * 
+     *
      * @see #setChildrenDrawingOrderEnabled(boolean)
      * @see #isChildrenDrawingOrderEnabled()
      */

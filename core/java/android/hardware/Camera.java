@@ -1086,7 +1086,7 @@ public class Camera {
         private static final String KEY_MAX_BRIGHTNESS = "brightness-max";
         private static final String KEY_DEFAULT_BRIGHTNESS = "brightness-def";
         private static final String KEY_SMART_CONTRAST = "smart-contrast";
-        
+
         // Parameter key suffix for supported values.
         private static final String SUPPORTED_VALUES_SUFFIX = "-values";
 
@@ -1137,7 +1137,7 @@ public class Camera {
         public static final String ISO_400 = "400";
         public static final String ISO_800 = "800";
         public static final String ISO_1250 = "1250";
-        
+
         //Values for Lens Shading
 
         public static final String LENSSHADE_ENABLE = "enable";
@@ -1884,7 +1884,7 @@ public class Camera {
          *
          * <p>The reference code is as follows.
          *
-	 * <pre>
+         * <pre>
          * public void public void onOrientationChanged(int orientation) {
          *     if (orientation == ORIENTATION_UNKNOWN) return;
          *     android.hardware.Camera.CameraInfo info =
@@ -1899,7 +1899,7 @@ public class Camera {
          *     }
          *     mParameters.setRotation(rotation);
          * }
-	 * </pre>
+         * </pre>
          *
          * @param rotation The rotation angle in degrees relative to the
          *                 orientation of the camera. Rotation can only be 0,
@@ -2175,7 +2175,7 @@ public class Camera {
 
         /**
          * Get default sharpness level
-         * 
+         *
          * @return default sharpness level
          */
         public int getDefaultSharpness() {
@@ -2215,7 +2215,7 @@ public class Camera {
 
         /**
          * Get default contrast level
-         * 
+         *
          * @return default contrast level
          */
         public int getDefaultContrast() {
@@ -2255,7 +2255,7 @@ public class Camera {
 
         /**
          * Get default saturation level
-         * 
+         *
          * @return default saturation level
          */
         public int getDefaultSaturation() {
@@ -2295,7 +2295,7 @@ public class Camera {
 
         /**
          * Get default brightness level
-         * 
+         *
          * @return default brightness level
          */
         public int getDefaultBrightness() {
@@ -2828,7 +2828,7 @@ public class Camera {
         public void setSmartContrastEnabled(boolean enabled) {
             set(KEY_SMART_CONTRAST, enabled ? "on" : "off");
         }
-        
+
         /**
          * Gets the value of smart-contrast
          *
@@ -2837,7 +2837,7 @@ public class Camera {
         public boolean isSmartContrastEnabled() {
             return "on".equals(get(KEY_SMART_CONTRAST));
         }
-        
+
         // Splits a comma delimited string to an ArrayList of String.
         // Return null if the passing string is null or the size is 0.
         private ArrayList<String> split(String str) {

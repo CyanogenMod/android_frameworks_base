@@ -71,7 +71,7 @@ import java.io.IOException;
             out.attribute(null, "authority", item.authority);
             out.attribute(null, "accountType", item.accountType);
         }
-    
+
         public SyncAdapterType createFromXml(XmlPullParser parser)
                 throws IOException, XmlPullParserException {
             final String authority = parser.getAttributeValue(null, "authority");

@@ -37,7 +37,7 @@ public class Log {
         String s = String.format(format, args);
         outPrintln(s);
     }
-    
+
     public void error(String format, Object... args) {
         String s = String.format(format, args);
         errPrintln(s);
@@ -50,15 +50,15 @@ public class Log {
         pw.flush();
         error(format + "\n" + sw.toString(), args);
     }
-    
+
     /** for unit testing */
     protected void errPrintln(String msg) {
         System.err.println(msg);
     }
-    
+
     /** for unit testing */
     protected void outPrintln(String msg) {
         System.out.println(msg);
     }
-    
+
 }

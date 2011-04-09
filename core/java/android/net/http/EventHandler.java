@@ -23,7 +23,7 @@ package android.net.http;
  * then multiple data() then endData().  handleSslErrorRequest(), if
  * there is an SSL certificate error. error() can occur anywhere
  * in the transaction.
- * 
+ *
  * {@hide}
  */
 

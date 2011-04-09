@@ -32,7 +32,7 @@ public class TestPhoneNotifier implements PhoneNotifier {
 
     public void notifyCellLocation(Phone sender) {
     }
-    
+
     public void notifySignalStrength(Phone sender) {
     }
 

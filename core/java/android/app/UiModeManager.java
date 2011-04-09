@@ -27,7 +27,7 @@ import android.util.Log;
  * allow applications to control UI modes of the device.
  * It provides functionality to disable the car mode and it gives access to the
  * night mode settings.
- * 
+ *
  * <p>These facilities are built on top of the underlying
  * {@link android.content.Intent#ACTION_DOCK_EVENT} broadcasts that are sent when the user
  * physical places the device into and out of a dock.  When that happens,
@@ -36,7 +36,7 @@ import android.util.Log;
  * starts the corresponding mode activity if appropriate.  See the
  * broadcasts {@link #ACTION_ENTER_CAR_MODE} and
  * {@link #ACTION_ENTER_DESK_MODE} for more information.
- * 
+ *
  * <p>In addition, the user may manually switch the system to car mode without
  * physically being in a dock.  While in car mode -- whether by manual action
  * from the user or being physically placed in a dock -- a notification is
@@ -64,14 +64,14 @@ public class UiModeManager {
      * of the broadcast to {@link Activity#RESULT_CANCELED}.
      */
     public static String ACTION_ENTER_CAR_MODE = "android.app.action.ENTER_CAR_MODE";
-    
+
     /**
      * Broadcast sent when the device's UI has switch away from car mode back
      * to normal mode.  Typically used by a car mode app, to dismiss itself
      * when the user exits car mode.
      */
     public static String ACTION_EXIT_CAR_MODE = "android.app.action.EXIT_CAR_MODE";
-    
+
     /**
      * Broadcast sent when the device's UI has switched to desk mode,
      * by being placed in a desk dock.  After
@@ -85,24 +85,24 @@ public class UiModeManager {
      * of the broadcast to {@link Activity#RESULT_CANCELED}.
      */
     public static String ACTION_ENTER_DESK_MODE = "android.app.action.ENTER_DESK_MODE";
-    
+
     /**
      * Broadcast sent when the device's UI has switched away from desk mode back
      * to normal mode.  Typically used by a desk mode app, to dismiss itself
      * when the user exits desk mode.
      */
     public static String ACTION_EXIT_DESK_MODE = "android.app.action.EXIT_DESK_MODE";
-    
+
     /** Constant for {@link #setNightMode(int)} and {@link #getNightMode()}:
      * automatically switch night mode on and off based on the time.
      */
     public static final int MODE_NIGHT_AUTO = Configuration.UI_MODE_NIGHT_UNDEFINED >> 4;
-    
+
     /** Constant for {@link #setNightMode(int)} and {@link #getNightMode()}:
      * never run in night mode.
      */
     public static final int MODE_NIGHT_NO = Configuration.UI_MODE_NIGHT_NO >> 4;
-    
+
     /** Constant for {@link #setNightMode(int)} and {@link #getNightMode()}:
      * always run in night mode.
      */
@@ -123,7 +123,7 @@ public class UiModeManager {
      * will switch to the car home activity even if we are already in car mode.
      */
     public static final int ENABLE_CAR_MODE_GO_CAR_HOME = 0x0001;
-    
+
     /**
      * Force device into car mode, like it had been placed in the car dock.
      * This will cause the device to switch to the car home UI as part of
@@ -148,7 +148,7 @@ public class UiModeManager {
      * being in car mode).
      */
     public static final int DISABLE_CAR_MODE_GO_HOME = 0x0001;
-    
+
     /**
      * Turn off special mode if currently in car mode.
      * @param flags May be 0 or {@link #DISABLE_CAR_MODE_GO_HOME}.

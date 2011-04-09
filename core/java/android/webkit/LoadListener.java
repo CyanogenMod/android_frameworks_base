@@ -487,7 +487,7 @@ class LoadListener extends Handler implements EventHandler {
         if ((mStatusCode == HTTP_OK ||
                 mStatusCode == HTTP_FOUND ||
                 mStatusCode == HTTP_MOVED_PERMANENTLY ||
-                mStatusCode == HTTP_TEMPORARY_REDIRECT) && 
+                mStatusCode == HTTP_TEMPORARY_REDIRECT) &&
                 mNativeLoader != 0) {
             // for POST request, only cache the result if there is an identifier
             // associated with it. postUrl() or form submission should set the
@@ -671,10 +671,10 @@ class LoadListener extends Handler implements EventHandler {
             case HTTP_TEMPORARY_REDIRECT:
                 // 301, 302, 303, and 307 - redirect
                 if (mStatusCode == HTTP_TEMPORARY_REDIRECT) {
-                    if (mRequestHandle != null && 
+                    if (mRequestHandle != null &&
                                 mRequestHandle.getMethod().equals("POST")) {
                         sendMessageInternal(obtainMessage(
-                                MSG_LOCATION_CHANGED_REQUEST));  
+                                MSG_LOCATION_CHANGED_REQUEST));
                     } else if (mMethod != null && mMethod.equals("POST")) {
                         sendMessageInternal(obtainMessage(
                                 MSG_LOCATION_CHANGED_REQUEST));
@@ -689,7 +689,7 @@ class LoadListener extends Handler implements EventHandler {
             case HTTP_AUTH:
             case HTTP_PROXY_AUTH:
                 // According to rfc2616, the response for HTTP_AUTH must include
-                // WWW-Authenticate header field and the response for 
+                // WWW-Authenticate header field and the response for
                 // HTTP_PROXY_AUTH must include Proxy-Authenticate header field.
                 if (mAuthHeader != null &&
                         (Network.getInstance(mContext).isValidProxySet() ||
@@ -943,7 +943,7 @@ class LoadListener extends Handler implements EventHandler {
      * @param headers
      * @param postData
      */
-    void setRequestData(String method, Map<String, String> headers, 
+    void setRequestData(String method, Map<String, String> headers,
             byte[] postData) {
         mMethod = method;
         mRequestHeaders = headers;
@@ -1018,9 +1018,9 @@ class LoadListener extends Handler implements EventHandler {
                 WebViewWorker.MSG_REMOVE_CACHE, this).sendToTarget();
 
         // Inform the client that they should download a file
-        mBrowserFrame.getCallbackProxy().onDownloadStart(url(), 
+        mBrowserFrame.getCallbackProxy().onDownloadStart(url(),
                 mBrowserFrame.getUserAgentString(),
-                mHeaders.getContentDisposition(), 
+                mHeaders.getContentDisposition(),
                 mMimeType, mContentLength);
 
         // Cancel the download. We need to stop the http load.
@@ -1029,7 +1029,7 @@ class LoadListener extends Handler implements EventHandler {
         // when this function returns.
         cancel();
     }
-    
+
     /*
      * This function is called from native WebCore code to
      * find out if the given URL is in the cache, and if it can
@@ -1040,7 +1040,7 @@ class LoadListener extends Handler implements EventHandler {
         boolean inCache =
                 CacheManager.getCacheFile(url, identifier, null) != null;
         if (DebugFlags.LOAD_LISTENER) {
-            Log.v(LOGTAG, "willLoadFromCache: " + url + " in cache: " + 
+            Log.v(LOGTAG, "willLoadFromCache: " + url + " in cache: " +
                     inCache);
         }
         return inCache;
@@ -1120,9 +1120,9 @@ class LoadListener extends Handler implements EventHandler {
      * @return native response pointer
      */
     private int createNativeResponse() {
-        // If WebCore sends if-modified-since, mCacheLoader is null. If 
+        // If WebCore sends if-modified-since, mCacheLoader is null. If
         // CacheManager sends it, mCacheLoader is not null. In this case, if the
-        // server responds with a 304, then we treat it like it was a 200 code 
+        // server responds with a 304, then we treat it like it was a 200 code
         // and proceed with loading the file from the cache.
         int statusCode = (mStatusCode == HTTP_NOT_MODIFIED &&
                 mCacheLoader != null) ? HTTP_OK : mStatusCode;
@@ -1665,9 +1665,9 @@ class LoadListener extends Handler implements EventHandler {
             throw new AssertionError();
         }
         // Note: this can be called twice if it is a synchronous network load,
-        // and there is a cache, but it needs to go to network to validate. If 
-        // validation succeed, the CacheLoader is used so this is first called 
-        // from http thread. Then it is called again from WebViewCore thread 
+        // and there is a cache, but it needs to go to network to validate. If
+        // validation succeed, the CacheLoader is used so this is first called
+        // from http thread. Then it is called again from WebViewCore thread
         // after the load is completed. So make sure the queue is cleared but
         // don't set it to null.
         while (!mMessageQueue.isEmpty()) {

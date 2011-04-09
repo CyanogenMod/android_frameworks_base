@@ -302,7 +302,7 @@ class SuggestionsAdapter extends ResourceCursorAdapter {
             } else {
                 text2 = getStringOrNull(cursor, mText2Col);
             }
-            
+
             // If no second line of text is indicated, allow the first line of text
             // to be up to two lines if it wants to be.
             if (TextUtils.isEmpty(text2)) {

@@ -72,7 +72,7 @@ public class AppWidgetHostView extends FrameLayout {
     long mFadeStartTime = -1;
     Bitmap mOld;
     Paint mOldPaint = new Paint();
-    
+
     /**
      * Create a host view.  Uses default fade animations.
      */
@@ -83,7 +83,7 @@ public class AppWidgetHostView extends FrameLayout {
     /**
      * Create a host view. Uses specified animations when pushing
      * {@link #updateAppWidget(RemoteViews)}.
-     * 
+     *
      * @param animationIn Resource ID of in animation to use
      * @param animationOut Resource ID of out animation to use
      */
@@ -92,7 +92,7 @@ public class AppWidgetHostView extends FrameLayout {
         super(context);
         mContext = context;
     }
-    
+
     /**
      * Set the AppWidget that will be displayed by this view.
      */
@@ -104,7 +104,7 @@ public class AppWidgetHostView extends FrameLayout {
     public int getAppWidgetId() {
         return mAppWidgetId;
     }
-    
+
     public AppWidgetProviderInfo getAppWidgetInfo() {
         return mInfo;
     }
@@ -165,7 +165,7 @@ public class AppWidgetHostView extends FrameLayout {
         boolean recycled = false;
         View content = null;
         Exception exception = null;
-        
+
         // Capture the old view into a bitmap so we can do the crossfade.
         if (CROSSFADE) {
             if (mFadeStartTime < 0) {
@@ -184,7 +184,7 @@ public class AppWidgetHostView extends FrameLayout {
                 }
             }
         }
-        
+
         if (remoteViews == null) {
             if (mViewMode == VIEW_MODE_DEFAULT) {
                 // We've already done this -- nothing to do.
@@ -211,7 +211,7 @@ public class AppWidgetHostView extends FrameLayout {
                     exception = e;
                 }
             }
-            
+
             // Try normal RemoteView inflation
             if (content == null) {
                 try {
@@ -225,7 +225,7 @@ public class AppWidgetHostView extends FrameLayout {
             mLayoutId = layoutId;
             mViewMode = VIEW_MODE_CONTENT;
         }
-        
+
         if (content == null) {
             if (mViewMode == VIEW_MODE_ERROR) {
                 // We've already done this -- nothing to do.
@@ -235,7 +235,7 @@ public class AppWidgetHostView extends FrameLayout {
             content = getErrorView();
             mViewMode = VIEW_MODE_ERROR;
         }
-        
+
         if (!recycled) {
             prepareView(content);
             addView(content);
@@ -312,7 +312,7 @@ public class AppWidgetHostView extends FrameLayout {
             return super.drawChild(canvas, child, drawingTime);
         }
     }
-    
+
     /**
      * Prepare the given view to be shown. This might include adjusting
      * {@link FrameLayout.LayoutParams} before inserting.
@@ -328,7 +328,7 @@ public class AppWidgetHostView extends FrameLayout {
         requested.gravity = Gravity.CENTER;
         view.setLayoutParams(requested);
     }
-    
+
     /**
      * Inflate and return the default layout requested by AppWidget provider.
      */
@@ -338,7 +338,7 @@ public class AppWidgetHostView extends FrameLayout {
         }
         View defaultView = null;
         Exception exception = null;
-        
+
         try {
             if (mInfo != null) {
                 Context theirContext = mContext.createPackageContext(
@@ -357,19 +357,19 @@ public class AppWidgetHostView extends FrameLayout {
         } catch (RuntimeException e) {
             exception = e;
         }
-        
+
         if (exception != null) {
             Log.w(TAG, "Error inflating AppWidget " + mInfo + ": " + exception.toString());
         }
-        
+
         if (defaultView == null) {
             if (LOGD) Log.d(TAG, "getDefaultView couldn't find any view, so inflating error");
             defaultView = getErrorView();
         }
-        
+
         return defaultView;
     }
-    
+
     /**
      * Inflate and return a view that represents an error state.
      */

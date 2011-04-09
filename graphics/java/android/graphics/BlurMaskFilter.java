@@ -29,13 +29,13 @@ public class BlurMaskFilter extends MaskFilter {
         SOLID(1),   //!< include the original mask, blur outside
         OUTER(2),   //!< just blur outside the original border
         INNER(3);   //!< just blur inside the original border
-        
+
         Blur(int value) {
             native_int = value;
         }
         final int native_int;
     }
-    
+
     /**
      * Create a blur maskfilter.
      *

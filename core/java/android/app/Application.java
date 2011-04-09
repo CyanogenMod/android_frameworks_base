@@ -27,7 +27,7 @@ import android.content.res.Configuration;
  * AndroidManifest.xml's &lt;application&gt; tag, which will cause that class
  * to be instantiated for you when the process for your application/package is
  * created.
- * 
+ *
  * <p class="note">There is normally no need to subclass Application.  In
  * most situation, static singletons can provide the same functionality in a
  * more modular way.  If your singleton needs a global context (for example
@@ -37,7 +37,7 @@ import android.content.res.Configuration;
  * when first constructing the singleton.</p>
  */
 public class Application extends ContextWrapper implements ComponentCallbacks {
-    
+
     public Application() {
         super(null);
     }
@@ -61,15 +61,15 @@ public class Application extends ContextWrapper implements ComponentCallbacks {
      */
     public void onTerminate() {
     }
-    
+
     public void onConfigurationChanged(Configuration newConfig) {
     }
-    
+
     public void onLowMemory() {
     }
-    
+
     // ------------------ Internal API ------------------
-    
+
     /**
      * @hide
      */

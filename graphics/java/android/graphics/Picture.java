@@ -46,7 +46,7 @@ public class Picture {
     public Picture(Picture src) {
         this(nativeConstructor(src != null ? src.mNativePicture : 0));
     }
-    
+
     /**
      * To record a picture, call beginRecording() and then draw into the Canvas
      * that is returned. Nothing we appear on screen, but all of the draw
@@ -59,7 +59,7 @@ public class Picture {
         mRecordingCanvas = new RecordingCanvas(this, ni);
         return mRecordingCanvas;
     }
-    
+
     /**
      * Call endRecording when the picture is built. After this call, the picture
      * may be drawn, but the canvas that was returned by beginRecording must not
@@ -84,12 +84,12 @@ public class Picture {
      * does not reflect (per se) the content of the picture.
      */
     public native int getHeight();
-    
+
     /**
      * Draw this picture on the canvas. The picture may have the side effect
      * of changing the matrix and clip of the canvas.
-     * 
-     * @param canvas  The picture is drawn to this canvas 
+     *
+     * @param canvas  The picture is drawn to this canvas
      */
     public void draw(Canvas canvas) {
         if (mRecordingCanvas != null) {
@@ -125,11 +125,11 @@ public class Picture {
     protected void finalize() throws Throwable {
         nativeDestructor(mNativePicture);
     }
-    
+
     /*package*/ final int ni() {
         return mNativePicture;
     }
-    
+
     private Picture(int nativePicture) {
         if (nativePicture == 0) {
             throw new RuntimeException();
@@ -148,7 +148,7 @@ public class Picture {
     private static native boolean nativeWriteToStream(int nativePicture,
                                            OutputStream stream, byte[] storage);
     private static native void nativeDestructor(int nativePicture);
-    
+
     private static class RecordingCanvas extends Canvas {
         private final Picture mPicture;
 
@@ -156,7 +156,7 @@ public class Picture {
             super(nativeCanvas);
             mPicture = pict;
         }
-        
+
         @Override
         public void setBitmap(Bitmap bitmap) {
             throw new RuntimeException(

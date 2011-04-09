@@ -26,7 +26,7 @@ abstract class Learner {
 
     /**
      * Add an instance to the learner
-     * 
+     *
      * @param instance
      */
     void addInstance(Instance instance) {
@@ -35,7 +35,7 @@ abstract class Learner {
 
     /**
      * Retrieve all the instances
-     * 
+     *
      * @return instances
      */
     ArrayList<Instance> getInstances() {
@@ -44,7 +44,7 @@ abstract class Learner {
 
     /**
      * Remove an instance based on its id
-     * 
+     *
      * @param id
      */
     void removeInstance(long id) {
@@ -61,7 +61,7 @@ abstract class Learner {
 
     /**
      * Remove all the instances of a category
-     * 
+     *
      * @param name the category name
      */
     void removeInstances(String name) {

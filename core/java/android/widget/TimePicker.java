@@ -51,7 +51,7 @@ import java.util.Calendar;
  */
 @Widget
 public class TimePicker extends FrameLayout {
-    
+
     /**
      * A no-op callback used in the constructor to avoid null checks
      * later in the code.
@@ -60,7 +60,7 @@ public class TimePicker extends FrameLayout {
         public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
         }
     };
-    
+
     // state
     private int mCurrentHour = 0; // 0-23
     private int mCurrentMinute = 0; // 0-59
@@ -73,7 +73,7 @@ public class TimePicker extends FrameLayout {
     private final Button mAmPmButton;
     private final String mAmText;
     private final String mPmText;
-    
+
     // callbacks
     private OnTimeChangedListener mOnTimeChangedListener;
 
@@ -93,7 +93,7 @@ public class TimePicker extends FrameLayout {
     public TimePicker(Context context) {
         this(context, null);
     }
-    
+
     public TimePicker(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -149,13 +149,13 @@ public class TimePicker extends FrameLayout {
         // initialize to current time
         Calendar cal = Calendar.getInstance();
         setOnTimeChangedListener(NO_OP_CHANGE_LISTENER);
-        
+
         // by default we're not in 24 hour mode
         setCurrentHour(cal.get(Calendar.HOUR_OF_DAY));
         setCurrentMinute(cal.get(Calendar.MINUTE));
-        
+
         mIsAm = (mCurrentHour < 12);
-        
+
         /* Get the localized am/pm strings and use them in the spinner */
         DateFormatSymbols dfs = new DateFormatSymbols();
         String[] dfsAmPm = dfs.getAmPmStrings();
@@ -166,13 +166,13 @@ public class TimePicker extends FrameLayout {
             public void onClick(View v) {
                 requestFocus();
                 if (mIsAm) {
-                    
+
                     // Currently AM switching to PM
                     if (mCurrentHour < 12) {
                         mCurrentHour += 12;
-                    }                
+                    }
                 } else {
-                    
+
                     // Currently PM switching to AM
                     if (mCurrentHour >= 12) {
                         mCurrentHour -= 12;
@@ -183,12 +183,12 @@ public class TimePicker extends FrameLayout {
                 onTimeChanged();
             }
         });
-        
+
         if (!isEnabled()) {
             setEnabled(false);
         }
     }
-    
+
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
@@ -210,7 +210,7 @@ public class TimePicker extends FrameLayout {
             mHour = hour;
             mMinute = minute;
         }
-        
+
         private SavedState(Parcel in) {
             super(in);
             mHour = in.readInt();
@@ -299,7 +299,7 @@ public class TimePicker extends FrameLayout {
     public boolean is24HourView() {
         return mIs24HourView;
     }
-    
+
     /**
      * @return The current minute.
      */
@@ -317,7 +317,7 @@ public class TimePicker extends FrameLayout {
 
     @Override
     public int getBaseline() {
-        return mHourPicker.getBaseline(); 
+        return mHourPicker.getBaseline();
     }
 
     /**

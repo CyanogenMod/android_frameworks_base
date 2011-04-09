@@ -41,7 +41,7 @@ public interface HeterogeneousExpandableList {
      * Get the type of group View that will be created by
      * {@link android.widget.ExpandableListAdapter#getGroupView(int, boolean, View, ViewGroup)}
      * . for the specified group item.
-     * 
+     *
      * @param groupPosition the position of the group for which the type should be returned.
      * @return An integer representing the type of group View. Two group views should share the same
      *         type if one can be converted to the other in
@@ -57,7 +57,7 @@ public interface HeterogeneousExpandableList {
      * Get the type of child View that will be created by
      * {@link android.widget.ExpandableListAdapter#getChildView(int, int, boolean, View, ViewGroup)}
      * for the specified child item.
-     * 
+     *
      * @param groupPosition the position of the group that the child resides in
      * @param childPosition the position of the child with respect to other children in the group
      * @return An integer representing the type of child View. Two child views should share the same
@@ -80,7 +80,7 @@ public interface HeterogeneousExpandableList {
      * return 1.
      * </p>
      * This method will only be called when the adapter is set on the {@link AdapterView}.
-     * 
+     *
      * @return The number of types of group Views that will be created by this adapter.
      * @see #getChildTypeCount()
      * @see #getGroupType(int)
@@ -97,7 +97,7 @@ public interface HeterogeneousExpandableList {
      * all child items, this method should return 1.
      * </p>
      * This method will only be called when the adapter is set on the {@link AdapterView}.
-     * 
+     *
      * @return The total number of types of child Views that will be created by this adapter.
      * @see #getGroupTypeCount()
      * @see #getChildType(int, int)

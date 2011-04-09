@@ -104,7 +104,7 @@ public class EditStyledText extends EditText {
     public static final int HINT_MSG_SELECT_END = 3;
     public static final int HINT_MSG_PUSH_COMPETE = 4;
 
-    
+
     /**
      * The help message strings.
      */
@@ -159,7 +159,7 @@ public class EditStyledText extends EditText {
 
     /**
      * Set Builder for AlertDialog.
-     * 
+     *
      * @param builder
      *            Builder for opening Alert Dialog.
      */
@@ -169,7 +169,7 @@ public class EditStyledText extends EditText {
 
     /**
      * Set Parameters for ColorAlertDialog.
-     * 
+     *
      * @param colortitle
      *            Title for Alert Dialog.
      * @param colornames
@@ -184,7 +184,7 @@ public class EditStyledText extends EditText {
 
     /**
      * Set Parameters for SizeAlertDialog.
-     * 
+     *
      * @param sizetitle
      *            Title for Alert Dialog.
      * @param sizenames
@@ -309,7 +309,7 @@ public class EditStyledText extends EditText {
 
     /**
      * InsertImage to TextView by using URI
-     * 
+     *
      * @param uri
      *            URI of the iamge inserted to TextView.
      */
@@ -319,7 +319,7 @@ public class EditStyledText extends EditText {
 
     /**
      * InsertImage to TextView by using resource ID
-     * 
+     *
      * @param resId
      *            Resource ID of the iamge inserted to TextView.
      */
@@ -336,7 +336,7 @@ public class EditStyledText extends EditText {
     }
     /**
      * Set Size of the Item.
-     * 
+     *
      * @param size
      *            The size of the Item.
      */
@@ -346,7 +346,7 @@ public class EditStyledText extends EditText {
 
     /**
      * Set Color of the Item.
-     * 
+     *
      * @param color
      *            The color of the Item.
      */
@@ -356,7 +356,7 @@ public class EditStyledText extends EditText {
 
     /**
      * Set Alignment of the Item.
-     * 
+     *
      * @param color
      *            The color of the Item.
      */
@@ -366,7 +366,7 @@ public class EditStyledText extends EditText {
 
     /**
      * Set Background color of View.
-     * 
+     *
      * @param color
      *            The background color of view.
      */
@@ -378,7 +378,7 @@ public class EditStyledText extends EditText {
 
     /**
      * Set html to EditStyledText.
-     * 
+     *
      * @param html
      *            The html to be set.
      */
@@ -387,7 +387,7 @@ public class EditStyledText extends EditText {
     }
     /**
      * Check whether editing is started or not.
-     * 
+     *
      * @return Whether editing is started or not.
      */
     public boolean isEditting() {
@@ -396,7 +396,7 @@ public class EditStyledText extends EditText {
 
     /**
      * Check whether styled text or not.
-     * 
+     *
      * @return Whether styled text or not.
      */
     public boolean isStyledText() {
@@ -404,7 +404,7 @@ public class EditStyledText extends EditText {
     }
     /**
      * Check whether SoftKey is Blocked or not.
-     * 
+     *
      * @return whether SoftKey is Blocked or not.
      */
     public boolean isSoftKeyBlocked() {
@@ -413,7 +413,7 @@ public class EditStyledText extends EditText {
 
     /**
      * Get the mode of the action.
-     * 
+     *
      * @return The mode of the action.
      */
     public int getEditMode() {
@@ -422,7 +422,7 @@ public class EditStyledText extends EditText {
 
     /**
      * Get the state of the selection.
-     * 
+     *
      * @return The state of the selection.
      */
     public int getSelectState() {
@@ -444,7 +444,7 @@ public class EditStyledText extends EditText {
 
     /**
      * Get the state of the selection.
-     * 
+     *
      * @return The state of the selection.
      */
     public String getHtml() {
@@ -453,7 +453,7 @@ public class EditStyledText extends EditText {
 
     /**
      * Get the state of the selection.
-     * 
+     *
      * @param uris
      *            The array of used uris.
      * @return The state of the selection.
@@ -465,7 +465,7 @@ public class EditStyledText extends EditText {
 
     /**
      * Get Background color of View.
-     * 
+     *
      * @return The background color of View.
      */
     public int getBackgroundColor() {
@@ -474,7 +474,7 @@ public class EditStyledText extends EditText {
 
     /**
      * Get Foreground color of View.
-     * 
+     *
      * @return The background color of View.
      */
     public int getForeGroundColor(int pos) {
@@ -543,7 +543,7 @@ public class EditStyledText extends EditText {
 
     /**
      * Notify hint messages what action is expected to calling class.
-     * 
+     *
      * @param msgId
      *            Id of the hint message.
      */
@@ -555,7 +555,7 @@ public class EditStyledText extends EditText {
 
     /**
      * Notify the event that the mode and state are changed.
-     * 
+     *
      * @param mode
      *            Mode of the editing action.
      * @param state

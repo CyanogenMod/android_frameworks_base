@@ -103,7 +103,7 @@ public final class BluetoothAudioGateway {
                             if (waitForHandsfreeConnectNative(SELECT_WAIT_TIMEOUT) == false) {
                                 if (mTimeoutRemainingMs > 0) {
                                     try {
-                                        Log.i(TAG, "select thread timed out, but " + 
+                                        Log.i(TAG, "select thread timed out, but " +
                                               mTimeoutRemainingMs + "ms of waiting remain.");
                                         Thread.sleep(mTimeoutRemainingMs);
                                     } catch (InterruptedException e) {
@@ -114,14 +114,14 @@ public final class BluetoothAudioGateway {
                             }
                             else {
                                 Log.i(TAG, "connect notification!");
-                                /* A device connected (most likely just one, but 
-                                   it is possible for two separate devices, one 
+                                /* A device connected (most likely just one, but
+                                   it is possible for two separate devices, one
                                    a headset and one a handsfree, to connect
-                                   simultaneously. 
+                                   simultaneously.
                                 */
                                 if (mConnectingHeadsetRfcommChannel >= 0) {
-                                    Log.i(TAG, "Incoming connection from headset " + 
-                                          mConnectingHeadsetAddress + " on channel " + 
+                                    Log.i(TAG, "Incoming connection from headset " +
+                                          mConnectingHeadsetAddress + " on channel " +
                                           mConnectingHeadsetRfcommChannel);
                                     Message msg = Message.obtain(mCallback);
                                     msg.what = MSG_INCOMING_HEADSET_CONNECTION;
@@ -133,8 +133,8 @@ public final class BluetoothAudioGateway {
                                     msg.sendToTarget();
                                 }
                                 if (mConnectingHandsfreeRfcommChannel >= 0) {
-                                    Log.i(TAG, "Incoming connection from handsfree " + 
-                                          mConnectingHandsfreeAddress + " on channel " + 
+                                    Log.i(TAG, "Incoming connection from handsfree " +
+                                          mConnectingHandsfreeAddress + " on channel " +
                                           mConnectingHandsfreeRfcommChannel);
                                     Message msg = Message.obtain();
                                     msg.setTarget(mCallback);

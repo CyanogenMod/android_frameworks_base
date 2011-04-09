@@ -1561,15 +1561,15 @@ public class SensorManager
      * <p>
      * All three angles above are in <b>radians</b> and <b>positive</b> in the
      * <b>counter-clockwise</b> direction.
-     * 
+     *
      * @param R
      *        rotation matrix see {@link #getRotationMatrix}.
-     * 
+     *
      * @param values
      *        an array of 3 floats to hold the result.
-     * 
+     *
      * @return The array values passed as argument.
-     * 
+     *
      * @see #getRotationMatrix(float[], float[], float[], float[])
      * @see GeomagneticField
      */

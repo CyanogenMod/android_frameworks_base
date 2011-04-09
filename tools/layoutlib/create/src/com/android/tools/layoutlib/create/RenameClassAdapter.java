@@ -32,13 +32,13 @@ import org.objectweb.asm.signature.SignatureWriter;
  * This class visitor renames a class from a given old name to a given new name.
  * The class visitor will also rename all inner classes and references in the methods.
  * <p/>
- * 
+ *
  * For inner classes, this handles only the case where the outer class name changes.
- * The inner class name should remain the same. 
+ * The inner class name should remain the same.
  */
 public class RenameClassAdapter extends ClassAdapter {
 
-    
+
     private final String mOldName;
     private final String mNewName;
     private String mOldBase;
@@ -53,7 +53,7 @@ public class RenameClassAdapter extends ClassAdapter {
         super(cv);
         mOldBase = mOldName = oldName;
         mNewBase = mNewName = newName;
-        
+
         int pos = mOldName.indexOf('$');
         if (pos > 0) {
             mOldBase = mOldName.substring(0, pos);
@@ -62,7 +62,7 @@ public class RenameClassAdapter extends ClassAdapter {
         if (pos > 0) {
             mNewBase = mNewName.substring(0, pos);
         }
-        
+
         assert (mOldBase == null && mNewBase == null) || (mOldBase != null && mNewBase != null);
     }
 
@@ -78,7 +78,7 @@ public class RenameClassAdapter extends ClassAdapter {
 
         return renameType(Type.getType(desc));
     }
-    
+
     /**
      * Renames an object type, e.g. "Lcom.package.MyClass;" or an array type that has an
      * object element, e.g. "[Lcom.package.MyClass;"
@@ -150,7 +150,7 @@ public class RenameClassAdapter extends ClassAdapter {
         if (mOldBase != mOldName && type.equals(mOldBase)) {
             return mNewBase;
         }
-    
+
         int pos = type.indexOf('$');
         if (pos == mOldBase.length() && type.startsWith(mOldBase)) {
             return mNewBase + type.substring(pos);
@@ -183,7 +183,7 @@ public class RenameClassAdapter extends ClassAdapter {
             sb.append(name);
         }
         sb.append(')');
-        
+
         Type ret = Type.getReturnType(desc);
         String name = renameType(ret);
         sb.append(name);
@@ -191,9 +191,9 @@ public class RenameClassAdapter extends ClassAdapter {
         return sb.toString();
     }
 
-    
+
     /**
-     * Renames the ClassSignature handled by ClassVisitor.visit 
+     * Renames the ClassSignature handled by ClassVisitor.visit
      * or the MethodTypeSignature handled by ClassVisitor.visitMethod.
      */
     String renameTypeSignature(String sig) {
@@ -207,7 +207,7 @@ public class RenameClassAdapter extends ClassAdapter {
         return sig;
     }
 
-    
+
     /**
      * Renames the FieldTypeSignature handled by ClassVisitor.visitField
      * or MethodVisitor.visitLocalVariable.
@@ -223,17 +223,17 @@ public class RenameClassAdapter extends ClassAdapter {
         return sig;
     }
 
-    
+
     //----------------------------------
     // Methods from the ClassAdapter
-    
+
     @Override
     public void visit(int version, int access, String name, String signature,
             String superName, String[] interfaces) {
         name = renameInternalType(name);
         superName = renameInternalType(superName);
         signature = renameTypeSignature(signature);
-        
+
         super.visit(version, access, name, signature, superName, interfaces);
     }
 
@@ -259,7 +259,7 @@ public class RenameClassAdapter extends ClassAdapter {
         desc = renameTypeDesc(desc);
         return super.visitAnnotation(desc, visible);
     }
-    
+
     @Override
     public FieldVisitor visitField(int access, String name, String desc,
             String signature, Object value) {
@@ -267,8 +267,8 @@ public class RenameClassAdapter extends ClassAdapter {
         signature = renameFieldSignature(signature);
         return super.visitField(access, name, desc, signature, value);
     }
-    
-    
+
+
     //----------------------------------
 
     /**
@@ -288,7 +288,7 @@ public class RenameClassAdapter extends ClassAdapter {
         @Override
         public AnnotationVisitor visitAnnotation(String desc, boolean visible) {
             desc = renameTypeDesc(desc);
-            
+
             return super.visitAnnotation(desc, visible);
         }
 
@@ -302,7 +302,7 @@ public class RenameClassAdapter extends ClassAdapter {
         @Override
         public void visitTypeInsn(int opcode, String type) {
             type = renameInternalType(type);
-            
+
             super.visitTypeInsn(opcode, type);
         }
 
@@ -321,7 +321,7 @@ public class RenameClassAdapter extends ClassAdapter {
 
             super.visitMethodInsn(opcode, owner, name, desc);
         }
-        
+
         @Override
         public void visitLdcInsn(Object cst) {
             // If cst is a Type, this means the code is trying to pull the .class constant
@@ -335,14 +335,14 @@ public class RenameClassAdapter extends ClassAdapter {
         @Override
         public void visitMultiANewArrayInsn(String desc, int dims) {
             desc = renameTypeDesc(desc);
-         
+
             super.visitMultiANewArrayInsn(desc, dims);
         }
 
         @Override
         public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
             type = renameInternalType(type);
-            
+
             super.visitTryCatchBlock(start, end, handler, type);
         }
 
@@ -351,14 +351,14 @@ public class RenameClassAdapter extends ClassAdapter {
                 Label start, Label end, int index) {
             desc = renameTypeDesc(desc);
             signature = renameFieldSignature(signature);
-            
+
             super.visitLocalVariable(name, desc, signature, start, end, index);
         }
 
     }
 
     //----------------------------------
-    
+
     public class RenameSignatureAdapter implements SignatureVisitor {
 
         private final SignatureVisitor mSv;
@@ -441,6 +441,6 @@ public class RenameClassAdapter extends ClassAdapter {
         public void visitTypeVariable(String name) {
             mSv.visitTypeVariable(name);
         }
-        
+
     }
 }

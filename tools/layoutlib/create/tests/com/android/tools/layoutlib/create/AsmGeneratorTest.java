@@ -46,7 +46,7 @@ public class AsmGeneratorTest {
     public void setUp() throws Exception {
         mLog = new LogTest.MockLog();
         URL url = this.getClass().getClassLoader().getResource("data/mock_android.jar");
-        
+
         mOsJarPath = new ArrayList<String>();
         mOsJarPath.add(url.getFile());
 
@@ -65,7 +65,7 @@ public class AsmGeneratorTest {
 
     @Test
     public void testClassRenaming() throws IOException, LogAbortException {
-        
+
         AsmGenerator agen = new AsmGenerator(mLog, mOsDestJar,
             null, // classes to inject in the final JAR
             null,  // methods to force override
@@ -83,7 +83,7 @@ public class AsmGeneratorTest {
                 });
         aa.analyze();
         agen.generate();
-        
+
         Set<String> notRenamed = agen.getClassesNotRenamed();
         assertArrayEquals(new String[] { "not/an/actual/ClassName" }, notRenamed.toArray());
     }

@@ -303,8 +303,8 @@ public class WebViewDatabase {
                 }
             }
 
-            // mDatabase should not be null, 
-            // the only case is RequestAPI test has problem to create db 
+            // mDatabase should not be null,
+            // the only case is RequestAPI test has problem to create db
             if (mDatabase != null && mDatabase.getVersion() != DATABASE_VERSION) {
                 mDatabase.beginTransaction();
                 try {
@@ -332,8 +332,8 @@ public class WebViewDatabase {
                 }
             }
 
-            // mCacheDatabase should not be null, 
-            // the only case is RequestAPI test has problem to create db 
+            // mCacheDatabase should not be null,
+            // the only case is RequestAPI test has problem to create db
             if (mCacheDatabase != null
                     && mCacheDatabase.getVersion() != CACHE_DATABASE_VERSION) {
                 mCacheDatabase.beginTransaction();
@@ -344,8 +344,8 @@ public class WebViewDatabase {
                 } finally {
                     mCacheDatabase.endTransaction();
                 }
-                // Erase the files from the file system in the 
-                // case that the database was updated and the 
+                // Erase the files from the file system in the
+                // case that the database was updated and the
                 // there were existing cache content
                 CacheManager.removeAllCacheFiles();
             }
@@ -779,7 +779,7 @@ public class WebViewDatabase {
 
     /**
      * Get a cache item.
-     * 
+     *
      * @param url The url
      * @return CacheResult The CacheManager.CacheResult
      */
@@ -822,7 +822,7 @@ public class WebViewDatabase {
 
     /**
      * Remove a cache item.
-     * 
+     *
      * @param url The url
      */
     void removeCache(String url) {
@@ -1081,7 +1081,7 @@ public class WebViewDatabase {
     }
 
     /**
-     * Find out if there are any passwords saved. 
+     * Find out if there are any passwords saved.
      *
      * @return TRUE if there is passwords saved
      */
@@ -1182,7 +1182,7 @@ public class WebViewDatabase {
     }
 
     /**
-     *  Find out if there are any HTTP authentication passwords saved.   
+     *  Find out if there are any HTTP authentication passwords saved.
      *
      * @return TRUE if there are passwords saved
      */

@@ -18,7 +18,7 @@ package android.util;
 
 /**
  * Reimplements _Original_FloatMath with the standard libraries.
- * 
+ *
  * Math routines similar to those found in {@link java.lang.Math}. Performs
  * computations on {@code float} values directly without incurring the overhead
  * of conversions to and from {@code double}.

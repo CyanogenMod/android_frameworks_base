@@ -482,7 +482,7 @@ final class LoadedApk {
                 }
             }
         }
-        
+
         return app;
     }
 
@@ -677,11 +677,11 @@ final class LoadedApk {
                     Slog.i(ActivityThread.TAG, "  mRegistered=" + mRegistered
                             + " mCurOrdered=" + mCurOrdered);
                 }
-                
+
                 IActivityManager mgr = ActivityManagerNative.getDefault();
                 Intent intent = mCurIntent;
                 mCurIntent = null;
-                
+
                 if (receiver == null) {
                     if (mRegistered && mCurOrdered) {
                         try {

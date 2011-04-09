@@ -52,7 +52,7 @@ class IInputMethodWrapper extends IInputMethod.Stub
         implements HandlerCaller.Callback {
     private static final String TAG = "InputMethodWrapper";
     private static final boolean DEBUG = false;
-    
+
     private static final int DO_DUMP = 1;
     private static final int DO_ATTACH_TOKEN = 10;
     private static final int DO_SET_INPUT_CONTEXT = 20;
@@ -64,15 +64,15 @@ class IInputMethodWrapper extends IInputMethod.Stub
     private static final int DO_REVOKE_SESSION = 50;
     private static final int DO_SHOW_SOFT_INPUT = 60;
     private static final int DO_HIDE_SOFT_INPUT = 70;
-   
+
     final WeakReference<AbstractInputMethodService> mTarget;
     final HandlerCaller mCaller;
     final WeakReference<InputMethod> mInputMethod;
-    
+
     static class Notifier {
         boolean notified;
     }
-    
+
     // NOTE: we should have a cache of these.
     static class InputMethodSessionCallbackWrapper implements InputMethod.SessionCallback {
         final Context mContext;
@@ -94,7 +94,7 @@ class IInputMethodWrapper extends IInputMethod.Stub
             }
         }
     }
-    
+
     public IInputMethodWrapper(AbstractInputMethodService context,
             InputMethod inputMethod) {
         mTarget = new WeakReference<AbstractInputMethodService>(context);
@@ -132,7 +132,7 @@ class IInputMethodWrapper extends IInputMethod.Stub
                 }
                 return;
             }
-            
+
             case DO_ATTACH_TOKEN: {
                 inputMethod.attachToken((IBinder)msg.obj);
                 return;
@@ -181,7 +181,7 @@ class IInputMethodWrapper extends IInputMethod.Stub
         }
         Log.w(TAG, "Unhandled message code: " + msg.what);
     }
-    
+
     @Override protected void dump(FileDescriptor fd, PrintWriter fout, String[] args) {
         AbstractInputMethodService target = mTarget.get();
         if (target == null) {
@@ -189,7 +189,7 @@ class IInputMethodWrapper extends IInputMethod.Stub
         }
         if (target.checkCallingOrSelfPermission(android.Manifest.permission.DUMP)
                 != PackageManager.PERMISSION_GRANTED) {
-            
+
             fout.println("Permission Denial: can't dump InputMethodManager from from pid="
                     + Binder.getCallingPid()
                     + ", uid=" + Binder.getCallingUid());
@@ -211,7 +211,7 @@ class IInputMethodWrapper extends IInputMethod.Stub
     public void attachToken(IBinder token) {
         mCaller.executeOrSendMessage(mCaller.obtainMessageO(DO_ATTACH_TOKEN, token));
     }
-    
+
     public void bindInput(InputBinding binding) {
         InputConnection ic = new InputConnectionWrapper(
                 IInputContext.Stub.asInterface(binding.getConnectionToken()));
@@ -247,7 +247,7 @@ class IInputMethodWrapper extends IInputMethod.Stub
             Log.w(TAG, "Incoming session not of correct type: " + session, e);
         }
     }
-    
+
     public void revokeSession(IInputMethodSession session) {
         try {
             InputMethodSession ls = ((IInputMethodSessionWrapper)
@@ -257,12 +257,12 @@ class IInputMethodWrapper extends IInputMethod.Stub
             Log.w(TAG, "Incoming session not of correct type: " + session, e);
         }
     }
-    
+
     public void showSoftInput(int flags, ResultReceiver resultReceiver) {
         mCaller.executeOrSendMessage(mCaller.obtainMessageIO(DO_SHOW_SOFT_INPUT,
                 flags, resultReceiver));
     }
-    
+
     public void hideSoftInput(int flags, ResultReceiver resultReceiver) {
         mCaller.executeOrSendMessage(mCaller.obtainMessageIO(DO_HIDE_SOFT_INPUT,
                 flags, resultReceiver));

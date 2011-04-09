@@ -165,7 +165,7 @@ public class TestBrowserActivityTest extends InstrumentationTestCase {
 
         assertEquals("TestSuite", mTestBrowserActivity.getTitle().toString());
     }
-    
+
     private TestSuite createTestSuite(List<String> testCaseNames) {
         return createTestSuite(testCaseNames.toArray(new String[testCaseNames.size()]));
     }

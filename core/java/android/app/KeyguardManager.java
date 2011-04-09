@@ -25,7 +25,7 @@ import android.view.IWindowManager;
 import android.view.IOnKeyguardExitResult;
 
 /**
- * Class that can be used to lock and unlock the keyboard. Get an instance of this 
+ * Class that can be used to lock and unlock the keyboard. Get an instance of this
  * class by calling {@link android.content.Context#getSystemService(java.lang.String)}
  * with argument {@link android.content.Context#KEYGUARD_SERVICE}. The
  * Actual class to control the keyboard locking is
@@ -53,7 +53,7 @@ public class KeyguardManager {
          *
          * A good place to call this is from {@link android.app.Activity#onResume()}
          *
-         * Note: This call has no effect while any {@link android.app.admin.DevicePolicyManager} 
+         * Note: This call has no effect while any {@link android.app.admin.DevicePolicyManager}
          * is enabled that requires a password.
          *
          * @see #reenableKeyguard()
@@ -104,7 +104,7 @@ public class KeyguardManager {
 
     /**
      * Enables you to lock or unlock the keyboard. Get an instance of this class by
-     * calling {@link android.content.Context#getSystemService(java.lang.String) Context.getSystemService()}. 
+     * calling {@link android.content.Context#getSystemService(java.lang.String) Context.getSystemService()}.
      * This class is wrapped by {@link android.app.KeyguardManager KeyguardManager}.
      * @param tag A tag that informally identifies who you are (for debugging who
      *   is disabling he keyguard).

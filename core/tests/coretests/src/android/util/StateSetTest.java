@@ -24,7 +24,7 @@ import android.test.suitebuilder.annotation.SmallTest;
  */
 
 public class StateSetTest extends TestCase {
-    
+
     @SmallTest
     public void testStateSetPositiveMatches() throws Exception {
          int[] stateSpec = new int[2];

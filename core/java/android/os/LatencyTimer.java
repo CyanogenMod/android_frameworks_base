@@ -22,7 +22,7 @@ import java.util.HashMap;
 
 /**
  * A class to help with measuring latency in your code.
- * 
+ *
  * Suggested usage:
  * 1) Instanciate a LatencyTimer as a class field.
  *      private [static] LatencyTimer mLt = new LatencyTimer(100, 1000);

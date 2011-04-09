@@ -21,7 +21,7 @@ import android.widget.EditText;
 
 
 public abstract class ManyEditTextActivityBaseTestCase<T extends Activity> extends ImfBaseTestCase<T> {
-  
+
     public ManyEditTextActivityBaseTestCase(Class<T> activityClass){
         super(activityClass);
     }

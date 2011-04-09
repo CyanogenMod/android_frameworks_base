@@ -50,7 +50,7 @@ public class ExternalMediaFormatActivity extends AlertActivity implements Dialog
             }
         }
     };
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +83,7 @@ public class ExternalMediaFormatActivity extends AlertActivity implements Dialog
     @Override
     protected void onPause() {
         super.onPause();
-        
+
         unregisterReceiver(mStorageReceiver);
     }
 

@@ -159,7 +159,7 @@ public class VisibilityTest extends ActivityInstrumentationTestCase<Visibility> 
 
     @MediumTest
     public void testInvisibleToGone() throws Exception {
-        sendKeys("DPAD_RIGHT");        
+        sendKeys("DPAD_RIGHT");
         assertTrue(mInvisible.hasFocus());
 
         int oldTop = mVictim.getTop();

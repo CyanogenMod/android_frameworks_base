@@ -25,7 +25,7 @@ import android.view.KeyEvent;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class StartInTouchWithViewInFocusTest extends 
+public class StartInTouchWithViewInFocusTest extends
         ActivityInstrumentationTestCase2<LLEditTextThenButton> {
 
     private EditText mEditText;
@@ -61,7 +61,7 @@ public class StartInTouchWithViewInFocusTest extends
     public void DISABLE_testNonDirectionalKeyExitsTouchMode() {
         assertNotInTouchModeAfterKey(this, KeyEvent.KEYCODE_A, mEditText);
         assertFalse("should have left touch mode", mEditText.isInTouchMode());
-        assertTrue("edit text should still have focus", mEditText.isFocused());        
+        assertTrue("edit text should still have focus", mEditText.isFocused());
     }
 
 }

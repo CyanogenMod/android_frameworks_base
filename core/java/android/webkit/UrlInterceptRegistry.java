@@ -45,7 +45,7 @@ public final class UrlInterceptRegistry {
 
     /**
      * set the flag to control whether url intercept is enabled or disabled
-     * 
+     *
      * @param disabled true to disable the cache
      *
      * @deprecated This class was intended to be used by Gears. Since Gears was
@@ -58,7 +58,7 @@ public final class UrlInterceptRegistry {
 
     /**
      * get the state of the url intercept, enabled or disabled
-     * 
+     *
      * @return return if it is disabled
      *
      * @deprecated This class was intended to be used by Gears. Since Gears was

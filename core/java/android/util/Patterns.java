@@ -159,7 +159,7 @@ public class Patterns {
      * might be phone numbers in arbitrary text, not for validating whether
      * something is in fact a phone number.  It will miss many things that
      * are legitimate phone numbers.
-     * 
+     *
      * <p> The pattern matches the following:
      * <ul>
      * <li>Optionally, a + sign followed immediately by one or more digits. Spaces, dots, or dashes
@@ -172,7 +172,7 @@ public class Patterns {
         = Pattern.compile(                                  // sdd = space, dot, or dash
                 "(\\+[0-9]+[\\- \\.]*)?"                    // +<digits><sdd>*
                 + "(\\([0-9]+\\)[\\- \\.]*)?"               // (<digits>)<sdd>*
-                + "([0-9][0-9\\- \\.][0-9\\- \\.]+[0-9])"); // <digit><digit|sdd>+<digit> 
+                + "([0-9][0-9\\- \\.][0-9\\- \\.]+[0-9])"); // <digit><digit|sdd>+<digit>
 
     /**
      *  Convenience method to take all of the non-null matching groups in a

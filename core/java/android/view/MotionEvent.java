@@ -95,25 +95,25 @@ import android.os.SystemClock;
 public final class MotionEvent extends InputEvent implements Parcelable {
     private static final long MS_PER_NS = 1000000;
     private static final boolean TRACK_RECYCLED_LOCATION = false;
-    
+
     /**
      * Bit mask of the parts of the action code that are the action itself.
      */
     public static final int ACTION_MASK             = 0xff;
-    
+
     /**
      * Constant for {@link #getAction}: A pressed gesture has started, the
      * motion contains the initial starting location.
      */
     public static final int ACTION_DOWN             = 0;
-    
+
     /**
      * Constant for {@link #getAction}: A pressed gesture has finished, the
      * motion contains the final release location as well as any intermediate
      * points since the last down or move event.
      */
     public static final int ACTION_UP               = 1;
-    
+
     /**
      * Constant for {@link #getAction}: A change has happened during a
      * press gesture (between {@link #ACTION_DOWN} and {@link #ACTION_UP}).
@@ -121,14 +121,14 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * points since the last down or move event.
      */
     public static final int ACTION_MOVE             = 2;
-    
+
     /**
      * Constant for {@link #getAction}: The current gesture has been aborted.
      * You will not receive any more points in it.  You should treat this as
      * an up event, but not perform any action that you normally would.
      */
     public static final int ACTION_CANCEL           = 3;
-    
+
     /**
      * Constant for {@link #getAction}: A movement has happened outside of the
      * normal bounds of the UI element.  This does not provide a full gesture,
@@ -141,13 +141,13 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * {@link #ACTION_POINTER_ID_MASK} indicate which pointer changed.
      */
     public static final int ACTION_POINTER_DOWN     = 5;
-    
+
     /**
      * A non-primary pointer has gone up.  The bits in
      * {@link #ACTION_POINTER_ID_MASK} indicate which pointer changed.
      */
     public static final int ACTION_POINTER_UP       = 6;
-    
+
     /**
      * Bits in the action code that represent a pointer index, used with
      * {@link #ACTION_POINTER_DOWN} and {@link #ACTION_POINTER_UP}.  Shifting
@@ -157,69 +157,69 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * data with {@link #getX(int)} etc.
      */
     public static final int ACTION_POINTER_INDEX_MASK  = 0xff00;
-    
+
     /**
      * Bit shift for the action bits holding the pointer index as
      * defined by {@link #ACTION_POINTER_INDEX_MASK}.
      */
     public static final int ACTION_POINTER_INDEX_SHIFT = 8;
-    
+
     /**
      * @deprecated Use {@link #ACTION_POINTER_INDEX_MASK} to retrieve the
      * data index associated with {@link #ACTION_POINTER_DOWN}.
      */
     @Deprecated
     public static final int ACTION_POINTER_1_DOWN   = ACTION_POINTER_DOWN | 0x0000;
-    
+
     /**
      * @deprecated Use {@link #ACTION_POINTER_INDEX_MASK} to retrieve the
      * data index associated with {@link #ACTION_POINTER_DOWN}.
      */
     @Deprecated
     public static final int ACTION_POINTER_2_DOWN   = ACTION_POINTER_DOWN | 0x0100;
-    
+
     /**
      * @deprecated Use {@link #ACTION_POINTER_INDEX_MASK} to retrieve the
      * data index associated with {@link #ACTION_POINTER_DOWN}.
      */
     @Deprecated
     public static final int ACTION_POINTER_3_DOWN   = ACTION_POINTER_DOWN | 0x0200;
-    
+
     /**
      * @deprecated Use {@link #ACTION_POINTER_INDEX_MASK} to retrieve the
      * data index associated with {@link #ACTION_POINTER_UP}.
      */
     @Deprecated
     public static final int ACTION_POINTER_1_UP     = ACTION_POINTER_UP | 0x0000;
-    
+
     /**
      * @deprecated Use {@link #ACTION_POINTER_INDEX_MASK} to retrieve the
      * data index associated with {@link #ACTION_POINTER_UP}.
      */
     @Deprecated
     public static final int ACTION_POINTER_2_UP     = ACTION_POINTER_UP | 0x0100;
-    
+
     /**
      * @deprecated Use {@link #ACTION_POINTER_INDEX_MASK} to retrieve the
      * data index associated with {@link #ACTION_POINTER_UP}.
      */
     @Deprecated
     public static final int ACTION_POINTER_3_UP     = ACTION_POINTER_UP | 0x0200;
-    
+
     /**
      * @deprecated Renamed to {@link #ACTION_POINTER_INDEX_MASK} to match
      * the actual data contained in these bits.
      */
     @Deprecated
     public static final int ACTION_POINTER_ID_MASK  = 0xff00;
-    
+
     /**
      * @deprecated Renamed to {@link #ACTION_POINTER_INDEX_SHIFT} to match
      * the actual data contained in these bits.
      */
     @Deprecated
     public static final int ACTION_POINTER_ID_SHIFT = 8;
-    
+
     /**
      * This flag indicates that the window that received this motion event is partly
      * or wholly obscured by another visible window above it.  This flag is set to true
@@ -256,22 +256,22 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * Offset for the sample's X coordinate.
      */
     static private final int SAMPLE_X = 0;
-    
+
     /*
      * Offset for the sample's Y coordinate.
      */
     static private final int SAMPLE_Y = 1;
-    
+
     /*
      * Offset for the sample's pressure.
      */
     static private final int SAMPLE_PRESSURE = 2;
-    
+
     /*
      * Offset for the sample's size
      */
     static private final int SAMPLE_SIZE = 3;
-    
+
     /*
      * Offset for the sample's touch major axis length.
      */
@@ -281,7 +281,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * Offset for the sample's touch minor axis length.
      */
     static private final int SAMPLE_TOUCH_MINOR = 5;
-    
+
     /*
      * Offset for the sample's tool major axis length.
      */
@@ -291,7 +291,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * Offset for the sample's tool minor axis length.
      */
     static private final int SAMPLE_TOOL_MINOR = 7;
-    
+
     /*
      * Offset for the sample's orientation.
      */
@@ -301,18 +301,18 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * Number of data items for each sample.
      */
     static private final int NUM_SAMPLE_DATA = 9;
-    
+
     /*
      * Minimum number of pointers for which to reserve space when allocating new
      * motion events.  This is explicitly not a bound on the maximum number of pointers.
      */
     static private final int BASE_AVAIL_POINTERS = 5;
-    
+
     /*
      * Minimum number of samples for which to reserve space when allocating new motion events.
      */
     static private final int BASE_AVAIL_SAMPLES = 8;
-    
+
     static private final int MAX_RECYCLED = 10;
     static private Object gRecyclerLock = new Object();
     static private int gRecyclerUsed = 0;
@@ -327,20 +327,20 @@ public final class MotionEvent extends InputEvent implements Parcelable {
     private int mEdgeFlags;
     private int mMetaState;
     private int mFlags;
-    
+
     private int mNumPointers;
     private int mNumSamples;
-    
+
     private int mLastDataSampleIndex;
     private int mLastEventTimeNanoSampleIndex;
-    
+
     // Array of mNumPointers size of identifiers for each pointer of data.
     private int[] mPointerIdentifiers;
-    
+
     // Array of (mNumSamples * mNumPointers * NUM_SAMPLE_DATA) size of event data.
     // Samples are ordered from oldest to newest.
     private float[] mDataSamples;
-    
+
     // Array of mNumSamples size of event time stamps in nanoseconds.
     // Samples are ordered from oldest to newest.
     private long[] mEventTimeNanoSamples;
@@ -374,30 +374,30 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         ev.mRecycledLocation = null;
         ev.mRecycled = false;
         ev.mNext = null;
-        
+
         if (ev.mPointerIdentifiers.length < pointerCount) {
             ev.mPointerIdentifiers = new int[pointerCount];
         }
-        
+
         if (ev.mEventTimeNanoSamples.length < sampleCount) {
             ev.mEventTimeNanoSamples = new long[sampleCount];
         }
-        
+
         final int neededDataSamplesLength = pointerCount * sampleCount * NUM_SAMPLE_DATA;
         if (ev.mDataSamples.length < neededDataSamplesLength) {
             ev.mDataSamples = new float[neededDataSamplesLength];
         }
-        
+
         return ev;
     }
-    
+
     /**
      * Create a new MotionEvent, filling in all of the basic values that
      * define the motion.
-     * 
-     * @param downTime The time (in ms) when the user originally pressed down to start 
+     *
+     * @param downTime The time (in ms) when the user originally pressed down to start
      * a stream of position events.  This must be obtained from {@link SystemClock#uptimeMillis()}.
-     * @param eventTime The the time (in ms) when this specific event was generated.  This 
+     * @param eventTime The the time (in ms) when this specific event was generated.  This
      * must be obtained from {@link SystemClock#uptimeMillis()}.
      * @param action The kind of action being performed -- one of either
      * {@link #ACTION_DOWN}, {@link #ACTION_MOVE}, {@link #ACTION_UP}, or
@@ -435,22 +435,22 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         ev.mYOffset = 0;
         ev.mXPrecision = xPrecision;
         ev.mYPrecision = yPrecision;
-        
+
         ev.mNumPointers = pointers;
         ev.mNumSamples = 1;
-        
+
         ev.mLastDataSampleIndex = 0;
         ev.mLastEventTimeNanoSampleIndex = 0;
-        
+
         System.arraycopy(pointerIds, 0, ev.mPointerIdentifiers, 0, pointers);
-        
+
         ev.mEventTimeNanoSamples[0] = eventTime * MS_PER_NS;
-        
+
         ev.setPointerCoordsAtSampleIndex(0, pointerCoords);
-        
+
         return ev;
     }
-    
+
     /**
      * Create a new MotionEvent, filling in all of the basic values that
      * define the motion.
@@ -497,17 +497,17 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         ev.mYOffset = 0;
         ev.mXPrecision = xPrecision;
         ev.mYPrecision = yPrecision;
-        
+
         ev.mNumPointers = 1;
         ev.mNumSamples = 1;
-        
+
         ev.mLastDataSampleIndex = 0;
         ev.mLastEventTimeNanoSampleIndex = 0;
-        
+
         ev.mPointerIdentifiers[0] = 0;
-        
+
         ev.mEventTimeNanoSamples[0] = eventTime * MS_PER_NS;
-        
+
         ev.setPointerCoordsAtSampleIndex(0, x, y, pressure, size);
         return ev;
     }
@@ -543,7 +543,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * numbers are arbitrary and you shouldn't depend on the values.
      * @param edgeFlags A bitfield indicating which edges, if any, were touched by this
      * MotionEvent.
-     * 
+     *
      * @deprecated Use {@link #obtain(long, long, int, float, float, float, float, int, float, float, int, int)}
      * instead.
      */
@@ -596,14 +596,14 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         ev.mYPrecision = o.mYPrecision;
         int numPointers = ev.mNumPointers = o.mNumPointers;
         int numSamples = ev.mNumSamples = o.mNumSamples;
-        
+
         ev.mLastDataSampleIndex = o.mLastDataSampleIndex;
         ev.mLastEventTimeNanoSampleIndex = o.mLastEventTimeNanoSampleIndex;
-        
+
         System.arraycopy(o.mPointerIdentifiers, 0, ev.mPointerIdentifiers, 0, numPointers);
-        
+
         System.arraycopy(o.mEventTimeNanoSamples, 0, ev.mEventTimeNanoSamples, 0, numSamples);
-        
+
         System.arraycopy(o.mDataSamples, 0, ev.mDataSamples, 0,
                 numPointers * numSamples * NUM_SAMPLE_DATA);
         return ev;
@@ -626,17 +626,17 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         ev.mYOffset = o.mYOffset;
         ev.mXPrecision = o.mXPrecision;
         ev.mYPrecision = o.mYPrecision;
-        
+
         int numPointers = ev.mNumPointers = o.mNumPointers;
         ev.mNumSamples = 1;
-        
+
         ev.mLastDataSampleIndex = 0;
         ev.mLastEventTimeNanoSampleIndex = 0;
-        
+
         System.arraycopy(o.mPointerIdentifiers, 0, ev.mPointerIdentifiers, 0, numPointers);
-        
+
         ev.mEventTimeNanoSamples[0] = o.mEventTimeNanoSamples[o.mLastEventTimeNanoSampleIndex];
-        
+
         System.arraycopy(o.mDataSamples, o.mLastDataSampleIndex, ev.mDataSamples, 0,
                 numPointers * NUM_SAMPLE_DATA);
         return ev;
@@ -670,7 +670,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
             }
         }
     }
-    
+
     /**
      * Scales down the coordination of this event by the given scale.
      *
@@ -681,7 +681,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         mYOffset *= scale;
         mXPrecision *= scale;
         mYPrecision *= scale;
-        
+
         float[] history = mDataSamples;
         final int length = mNumPointers * mNumSamples * NUM_SAMPLE_DATA;
         for (int i = 0; i < length; i += NUM_SAMPLE_DATA) {
@@ -796,7 +796,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
     public final float getSize() {
         return mDataSamples[mLastDataSampleIndex + SAMPLE_SIZE];
     }
-    
+
     /**
      * {@link #getTouchMajor(int)} for the first pointer index (may be an
      * arbitrary pointer identifier).
@@ -812,7 +812,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
     public final float getTouchMinor() {
         return mDataSamples[mLastDataSampleIndex + SAMPLE_TOUCH_MINOR];
     }
-    
+
     /**
      * {@link #getToolMajor(int)} for the first pointer index (may be an
      * arbitrary pointer identifier).
@@ -828,7 +828,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
     public final float getToolMinor() {
         return mDataSamples[mLastDataSampleIndex + SAMPLE_TOOL_MINOR];
     }
-    
+
     /**
      * {@link #getOrientation(int)} for the first pointer index (may be an
      * arbitrary pointer identifier).
@@ -844,7 +844,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
     public final int getPointerCount() {
         return mNumPointers;
     }
-    
+
     /**
      * Return the pointer identifier associated with a particular pointer
      * data index is this event.  The identifier tells you the actual pointer
@@ -856,10 +856,10 @@ public final class MotionEvent extends InputEvent implements Parcelable {
     public final int getPointerId(int pointerIndex) {
         return mPointerIdentifiers[pointerIndex];
     }
-    
+
     /**
      * Given a pointer identifier, find the index of its data in the event.
-     * 
+     *
      * @param pointerId The identifier of the pointer to be found.
      * @return Returns either the index of the pointer (for use with
      * {@link #getX(int)} et al.), or -1 if there is no data available for
@@ -875,13 +875,13 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         }
         return -1;
     }
-    
+
     /**
      * Returns the X coordinate of this event for the given pointer
      * <em>index</em> (use {@link #getPointerId(int)} to find the pointer
      * identifier for this index).
-     * Whole numbers are pixels; the 
-     * value may have a fraction for input devices that are sub-pixel precise. 
+     * Whole numbers are pixels; the
+     * value may have a fraction for input devices that are sub-pixel precise.
      * @param pointerIndex Raw index of pointer to retrieve.  Value may be from 0
      * (the first pointer that is down) to {@link #getPointerCount()}-1.
      */
@@ -936,7 +936,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         return mDataSamples[mLastDataSampleIndex
                             + pointerIndex * NUM_SAMPLE_DATA + SAMPLE_SIZE];
     }
-    
+
     /**
      * Returns the length of the major axis of an ellipse that describes the touch
      * area at the point of contact for the given pointer
@@ -949,7 +949,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         return mDataSamples[mLastDataSampleIndex
                             + pointerIndex * NUM_SAMPLE_DATA + SAMPLE_TOUCH_MAJOR];
     }
-    
+
     /**
      * Returns the length of the minor axis of an ellipse that describes the touch
      * area at the point of contact for the given pointer
@@ -962,7 +962,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         return mDataSamples[mLastDataSampleIndex
                             + pointerIndex * NUM_SAMPLE_DATA + SAMPLE_TOUCH_MINOR];
     }
-    
+
     /**
      * Returns the length of the major axis of an ellipse that describes the size of
      * the approaching tool for the given pointer
@@ -977,7 +977,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         return mDataSamples[mLastDataSampleIndex
                             + pointerIndex * NUM_SAMPLE_DATA + SAMPLE_TOOL_MAJOR];
     }
-    
+
     /**
      * Returns the length of the minor axis of an ellipse that describes the size of
      * the approaching tool for the given pointer
@@ -992,7 +992,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         return mDataSamples[mLastDataSampleIndex
                             + pointerIndex * NUM_SAMPLE_DATA + SAMPLE_TOOL_MINOR];
     }
-    
+
     /**
      * Returns the orientation of the touch area and tool area in radians clockwise from vertical
      * for the given pointer <em>index</em> (use {@link #getPointerId(int)} to find the pointer
@@ -1010,11 +1010,11 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         return mDataSamples[mLastDataSampleIndex
                             + pointerIndex * NUM_SAMPLE_DATA + SAMPLE_ORIENTATION];
     }
-    
+
     /**
      * Populates a {@link PointerCoords} object with pointer coordinate data for
      * the specified pointer index.
-     * 
+     *
      * @param pointerIndex Raw index of pointer to retrieve.  Value may be from 0
      * (the first pointer that is down) to {@link #getPointerCount()}-1.
      * @param outPointerCoords The pointer coordinate object to populate.
@@ -1047,7 +1047,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
     public final float getRawX() {
         return mDataSamples[mLastDataSampleIndex + SAMPLE_X];
     }
-    
+
     /**
      * Returns the original raw Y coordinate of this event.  For touch
      * events on the screen, this is the original location of the event
@@ -1151,7 +1151,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
     public final float getHistoricalTouchMinor(int pos) {
         return mDataSamples[pos * mNumPointers * NUM_SAMPLE_DATA + SAMPLE_TOUCH_MINOR];
     }
-    
+
     /**
      * {@link #getHistoricalToolMajor(int)} for the first pointer index (may be an
      * arbitrary pointer identifier).
@@ -1167,7 +1167,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
     public final float getHistoricalToolMinor(int pos) {
         return mDataSamples[pos * mNumPointers * NUM_SAMPLE_DATA + SAMPLE_TOOL_MINOR];
     }
-    
+
     /**
      * {@link #getHistoricalOrientation(int)} for the first pointer index (may be an
      * arbitrary pointer identifier).
@@ -1175,7 +1175,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
     public final float getHistoricalOrientation(int pos) {
         return mDataSamples[pos * mNumPointers * NUM_SAMPLE_DATA + SAMPLE_ORIENTATION];
     }
-    
+
     /**
      * Returns a historical X coordinate, as per {@link #getX(int)}, that
      * occurred between this event and the previous event for the given pointer.
@@ -1221,7 +1221,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * (the first pointer that is down) to {@link #getPointerCount()}-1.
      * @param pos Which historical value to return; must be less than
      * {@link #getHistorySize}
-     * 
+     *
      * @see #getHistorySize
      * @see #getPressure
      */
@@ -1239,7 +1239,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * (the first pointer that is down) to {@link #getPointerCount()}-1.
      * @param pos Which historical value to return; must be less than
      * {@link #getHistorySize}
-     * 
+     *
      * @see #getHistorySize
      * @see #getSize
      */
@@ -1247,7 +1247,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         return mDataSamples[(pos * mNumPointers + pointerIndex)
                             * NUM_SAMPLE_DATA + SAMPLE_SIZE];
     }
-    
+
     /**
      * Returns a historical touch major axis coordinate, as per {@link #getTouchMajor(int)}, that
      * occurred between this event and the previous event for the given pointer.
@@ -1257,7 +1257,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * (the first pointer that is down) to {@link #getPointerCount()}-1.
      * @param pos Which historical value to return; must be less than
      * {@link #getHistorySize}
-     * 
+     *
      * @see #getHistorySize
      * @see #getTouchMajor
      */
@@ -1275,7 +1275,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * (the first pointer that is down) to {@link #getPointerCount()}-1.
      * @param pos Which historical value to return; must be less than
      * {@link #getHistorySize}
-     * 
+     *
      * @see #getHistorySize
      * @see #getTouchMinor
      */
@@ -1293,7 +1293,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * (the first pointer that is down) to {@link #getPointerCount()}-1.
      * @param pos Which historical value to return; must be less than
      * {@link #getHistorySize}
-     * 
+     *
      * @see #getHistorySize
      * @see #getToolMajor
      */
@@ -1311,7 +1311,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * (the first pointer that is down) to {@link #getPointerCount()}-1.
      * @param pos Which historical value to return; must be less than
      * {@link #getHistorySize}
-     * 
+     *
      * @see #getHistorySize
      * @see #getToolMinor
      */
@@ -1329,7 +1329,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * (the first pointer that is down) to {@link #getPointerCount()}-1.
      * @param pos Which historical value to return; must be less than
      * {@link #getHistorySize}
-     * 
+     *
      * @see #getHistorySize
      * @see #getOrientation
      */
@@ -1343,13 +1343,13 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * as per {@link #getPointerCoords}, that occurred between this event and the previous
      * event for the given pointer.
      * Only applies to ACTION_MOVE events.
-     * 
+     *
      * @param pointerIndex Raw index of pointer to retrieve.  Value may be from 0
      * (the first pointer that is down) to {@link #getPointerCount()}-1.
      * @param pos Which historical value to return; must be less than
      * {@link #getHistorySize}
      * @param outPointerCoords The pointer coordinate object to populate.
-     * 
+     *
      * @see #getHistorySize
      * @see #getPointerCoords
      */
@@ -1358,7 +1358,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         final int sampleIndex = (pos * mNumPointers + pointerIndex) * NUM_SAMPLE_DATA;
         getPointerCoordsAtSampleIndex(sampleIndex, outPointerCoords);
     }
-    
+
     /**
      * Returns a bitfield indicating which edges, if any, were touched by this
      * MotionEvent. For touch events, clients can use this to determine if the
@@ -1414,7 +1414,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         mXOffset = x - dataSamples[lastDataSampleIndex + SAMPLE_X];
         mYOffset = y - dataSamples[lastDataSampleIndex + SAMPLE_Y];
     }
-    
+
     private final void getPointerCoordsAtSampleIndex(int sampleIndex,
             PointerCoords outPointerCoords) {
         final float[] dataSamples = mDataSamples;
@@ -1428,7 +1428,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         outPointerCoords.toolMinor = dataSamples[sampleIndex + SAMPLE_TOOL_MINOR];
         outPointerCoords.orientation = dataSamples[sampleIndex + SAMPLE_ORIENTATION];
     }
-    
+
     private final void setPointerCoordsAtSampleIndex(int sampleIndex,
             PointerCoords[] pointerCoords) {
         final int numPointers = mNumPointers;
@@ -1437,7 +1437,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
             sampleIndex += NUM_SAMPLE_DATA;
         }
     }
-    
+
     private final void setPointerCoordsAtSampleIndex(int sampleIndex,
             PointerCoords pointerCoords) {
         final float[] dataSamples = mDataSamples;
@@ -1451,7 +1451,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         dataSamples[sampleIndex + SAMPLE_TOOL_MINOR] = pointerCoords.toolMinor;
         dataSamples[sampleIndex + SAMPLE_ORIENTATION] = pointerCoords.orientation;
     }
-    
+
     private final void setPointerCoordsAtSampleIndex(int sampleIndex,
             float x, float y, float pressure, float size) {
         final float[] dataSamples = mDataSamples;
@@ -1465,14 +1465,14 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         dataSamples[sampleIndex + SAMPLE_TOOL_MINOR] = size;
         dataSamples[sampleIndex + SAMPLE_ORIENTATION] = 0;
     }
-    
+
     private final void incrementNumSamplesAndReserveStorage(int dataSampleStride) {
         if (mNumSamples == mEventTimeNanoSamples.length) {
             long[] newEventTimeNanoSamples = new long[mNumSamples + BASE_AVAIL_SAMPLES];
             System.arraycopy(mEventTimeNanoSamples, 0, newEventTimeNanoSamples, 0, mNumSamples);
             mEventTimeNanoSamples = newEventTimeNanoSamples;
         }
-        
+
         int nextDataSampleIndex = mLastDataSampleIndex + dataSampleStride;
         if (nextDataSampleIndex + dataSampleStride > mDataSamples.length) {
             float[] newDataSamples = new float[nextDataSampleIndex
@@ -1480,7 +1480,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
             System.arraycopy(mDataSamples, 0, newDataSamples, 0, nextDataSampleIndex);
             mDataSamples = newDataSamples;
         }
-        
+
         mLastEventTimeNanoSampleIndex = mNumSamples;
         mLastDataSampleIndex = nextDataSampleIndex;
         mNumSamples += 1;
@@ -1490,7 +1490,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * Add a new movement to the batch of movements in this event.  The event's
      * current location, position and size is updated to the new values.
      * The current values in the event are added to a list of historical values.
-     * 
+     *
      * Only applies to {@link #ACTION_MOVE} events.
      *
      * @param eventTime The time stamp (in ms) for this data.
@@ -1503,10 +1503,10 @@ public final class MotionEvent extends InputEvent implements Parcelable {
     public final void addBatch(long eventTime, float x, float y,
             float pressure, float size, int metaState) {
         incrementNumSamplesAndReserveStorage(NUM_SAMPLE_DATA);
-        
+
         mEventTimeNanoSamples[mLastEventTimeNanoSampleIndex] = eventTime * MS_PER_NS;
         setPointerCoordsAtSampleIndex(mLastDataSampleIndex, x, y, pressure, size);
-        
+
         mMetaState |= metaState;
     }
 
@@ -1514,7 +1514,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
      * Add a new movement to the batch of movements in this event.  The event's
      * current location, position and size is updated to the new values.
      * The current values in the event are added to a list of historical values.
-     * 
+     *
      * Only applies to {@link #ACTION_MOVE} events.
      *
      * @param eventTime The time stamp (in ms) for this data.
@@ -1524,10 +1524,10 @@ public final class MotionEvent extends InputEvent implements Parcelable {
     public final void addBatch(long eventTime, PointerCoords[] pointerCoords, int metaState) {
         final int dataSampleStride = mNumPointers * NUM_SAMPLE_DATA;
         incrementNumSamplesAndReserveStorage(dataSampleStride);
-        
+
         mEventTimeNanoSamples[mLastEventTimeNanoSampleIndex] = eventTime * MS_PER_NS;
         setPointerCoordsAtSampleIndex(mLastDataSampleIndex, pointerCoords);
-        
+
         mMetaState |= metaState;
     }
 
@@ -1555,13 +1555,13 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         final int NP = in.readInt();
         final int NS = in.readInt();
         final int NI = NP * NS * NUM_SAMPLE_DATA;
-        
+
         MotionEvent ev = obtain(NP, NS);
         ev.mNumPointers = NP;
         ev.mNumSamples = NS;
-        
+
         ev.readBaseFromParcel(in);
-        
+
         ev.mDownTimeNano = in.readLong();
         ev.mAction = in.readInt();
         ev.mXOffset = in.readFloat();
@@ -1571,12 +1571,12 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         ev.mEdgeFlags = in.readInt();
         ev.mMetaState = in.readInt();
         ev.mFlags = in.readInt();
-        
+
         final int[] pointerIdentifiers = ev.mPointerIdentifiers;
         for (int i = 0; i < NP; i++) {
             pointerIdentifiers[i] = in.readInt();
         }
-        
+
         final long[] eventTimeNanoSamples = ev.mEventTimeNanoSamples;
         for (int i = 0; i < NS; i++) {
             eventTimeNanoSamples[i] = in.readLong();
@@ -1586,24 +1586,24 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         for (int i = 0; i < NI; i++) {
             dataSamples[i] = in.readFloat();
         }
-        
+
         ev.mLastEventTimeNanoSampleIndex = NS - 1;
         ev.mLastDataSampleIndex = (NS - 1) * NP * NUM_SAMPLE_DATA;
         return ev;
     }
-    
+
     public void writeToParcel(Parcel out, int flags) {
         out.writeInt(PARCEL_TOKEN_MOTION_EVENT);
-        
+
         final int NP = mNumPointers;
         final int NS = mNumSamples;
         final int NI = NP * NS * NUM_SAMPLE_DATA;
-        
+
         out.writeInt(NP);
         out.writeInt(NS);
-        
+
         writeBaseToParcel(out);
-        
+
         out.writeLong(mDownTimeNano);
         out.writeInt(mAction);
         out.writeFloat(mXOffset);
@@ -1613,12 +1613,12 @@ public final class MotionEvent extends InputEvent implements Parcelable {
         out.writeInt(mEdgeFlags);
         out.writeInt(mMetaState);
         out.writeInt(mFlags);
-        
+
         final int[] pointerIdentifiers = mPointerIdentifiers;
         for (int i = 0; i < NP; i++) {
             out.writeInt(pointerIdentifiers[i]);
         }
-        
+
         final long[] eventTimeNanoSamples = mEventTimeNanoSamples;
         for (int i = 0; i < NS; i++) {
             out.writeLong(eventTimeNanoSamples[i]);
@@ -1629,13 +1629,13 @@ public final class MotionEvent extends InputEvent implements Parcelable {
             out.writeFloat(dataSamples[i]);
         }
     }
-    
+
     /**
      * Transfer object for pointer coordinates.
-     * 
+     *
      * Objects of this type can be used to manufacture new {@link MotionEvent} objects
      * and to query pointer coordinate information in bulk.
-     * 
+     *
      * Refer to {@link InputDevice} for information about how different kinds of
      * input devices and sources represent pointer coordinates.
      */
@@ -1647,7 +1647,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
          * or something else.
          */
         public float x;
-        
+
         /**
          * The Y coordinate of the pointer movement.
          * The interpretation varies by input source and may represent the position of
@@ -1655,7 +1655,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
          * or something else.
          */
         public float y;
-        
+
         /**
          * A scaled value that describes the pressure applied to the pointer.
          * The pressure generally ranges from 0 (no pressure at all) to 1 (normal pressure),
@@ -1663,7 +1663,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
          * the input device.
          */
         public float pressure;
-        
+
         /**
          * A scaled value of the approximate size of the pointer touch area.
          * This represents some approximation of the area of the screen being
@@ -1673,19 +1673,19 @@ public final class MotionEvent extends InputEvent implements Parcelable {
          * determine fat touch events.
          */
         public float size;
-        
+
         /**
          * The length of the major axis of an ellipse that describes the touch area at
          * the point of contact.
          */
         public float touchMajor;
-        
+
         /**
          * The length of the minor axis of an ellipse that describes the touch area at
          * the point of contact.
          */
         public float touchMinor;
-        
+
         /**
          * The length of the major axis of an ellipse that describes the size of
          * the approaching tool.
@@ -1693,7 +1693,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
          * touching the device independent of its actual touch area at the point of contact.
          */
         public float toolMajor;
-        
+
         /**
          * The length of the minor axis of an ellipse that describes the size of
          * the approaching tool.
@@ -1701,7 +1701,7 @@ public final class MotionEvent extends InputEvent implements Parcelable {
          * touching the device independent of its actual touch area at the point of contact.
          */
         public float toolMinor;
-        
+
         /**
          * The orientation of the touch area and tool area in radians clockwise from vertical.
          * An angle of 0 degrees indicates that the major axis of contact is oriented
@@ -1712,22 +1712,22 @@ public final class MotionEvent extends InputEvent implements Parcelable {
          * (finger pointing fully right).
          */
         public float orientation;
-        
+
         /*
         private static final float PI_4 = (float) (Math.PI / 4);
-        
+
         public float getTouchWidth() {
             return Math.abs(orientation) > PI_4 ? touchMajor : touchMinor;
         }
-        
+
         public float getTouchHeight() {
             return Math.abs(orientation) > PI_4 ? touchMinor : touchMajor;
         }
-        
+
         public float getToolWidth() {
             return Math.abs(orientation) > PI_4 ? toolMajor : toolMinor;
         }
-        
+
         public float getToolHeight() {
             return Math.abs(orientation) > PI_4 ? toolMinor : toolMajor;
         }

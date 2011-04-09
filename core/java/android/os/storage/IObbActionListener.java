@@ -25,7 +25,7 @@ import android.os.RemoteException;
 /**
  * Callback class for receiving events from MountService about Opaque Binary
  * Blobs (OBBs).
- * 
+ *
  * @hide - Applications should use StorageManager to interact with OBBs.
  */
 public interface IObbActionListener extends IInterface {
@@ -98,7 +98,7 @@ public interface IObbActionListener extends IInterface {
 
             /**
              * Return from an OBB action result.
-             * 
+             *
              * @param filename the path to the OBB the operation was performed
              *            on
              * @param returnCode status of the operation
@@ -127,7 +127,7 @@ public interface IObbActionListener extends IInterface {
 
     /**
      * Return from an OBB action result.
-     * 
+     *
      * @param filename the path to the OBB the operation was performed on
      * @param nonce identifier that is meaningful to the receiver
      * @param status status code as defined in {@link OnObbStateChangeListener}

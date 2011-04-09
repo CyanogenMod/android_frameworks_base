@@ -32,7 +32,7 @@ class ConnectionRecord {
     final int clientLabel;          // String resource labeling this client.
     final PendingIntent clientIntent; // How to launch the client.
     String stringName;              // Caching of toString.
-    
+
     void dump(PrintWriter pw, String prefix) {
         pw.println(prefix + "binding=" + binding);
         if (activity != null) {
@@ -41,7 +41,7 @@ class ConnectionRecord {
         pw.println(prefix + "conn=" + conn.asBinder()
                 + " flags=0x" + Integer.toHexString(flags));
     }
-    
+
     ConnectionRecord(AppBindRecord _binding, ActivityRecord _activity,
                IServiceConnection _conn, int _flags,
                int _clientLabel, PendingIntent _clientIntent) {

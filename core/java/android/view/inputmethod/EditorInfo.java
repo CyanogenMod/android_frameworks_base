@@ -32,7 +32,7 @@ public class EditorInfo implements InputType, Parcelable {
     /**
      * The content type of the text box, whose bits are defined by
      * {@link InputType}.
-     * 
+     *
      * @see InputType
      * @see #TYPE_MASK_CLASS
      * @see #TYPE_MASK_VARIATION
@@ -47,52 +47,52 @@ public class EditorInfo implements InputType, Parcelable {
      * to provide alternative mechanisms for providing that command.
      */
     public static final int IME_MASK_ACTION = 0x000000ff;
-    
+
     /**
      * Bits of {@link #IME_MASK_ACTION}: no specific action has been
      * associated with this editor, let the editor come up with its own if
      * it can.
      */
     public static final int IME_ACTION_UNSPECIFIED = 0x00000000;
-    
+
     /**
      * Bits of {@link #IME_MASK_ACTION}: there is no available action.
      */
     public static final int IME_ACTION_NONE = 0x00000001;
-    
+
     /**
      * Bits of {@link #IME_MASK_ACTION}: the action key performs a "go"
      * operation to take the user to the target of the text they typed.
      * Typically used, for example, when entering a URL.
      */
     public static final int IME_ACTION_GO = 0x00000002;
-    
+
     /**
      * Bits of {@link #IME_MASK_ACTION}: the action key performs a "search"
      * operation, taking the user to the results of searching for the text
      * the have typed (in whatever context is appropriate).
      */
     public static final int IME_ACTION_SEARCH = 0x00000003;
-    
+
     /**
      * Bits of {@link #IME_MASK_ACTION}: the action key performs a "send"
      * operation, delivering the text to its target.  This is typically used
      * when composing a message.
      */
     public static final int IME_ACTION_SEND = 0x00000004;
-    
+
     /**
      * Bits of {@link #IME_MASK_ACTION}: the action key performs a "next"
      * operation, taking the user to the next field that will accept text.
      */
     public static final int IME_ACTION_NEXT = 0x00000005;
-    
+
     /**
      * Bits of {@link #IME_MASK_ACTION}: the action key performs a "done"
      * operation, typically meaning the IME will be closed.
      */
     public static final int IME_ACTION_DONE = 0x00000006;
-    
+
     /**
      * Flag of {@link #imeOptions}: used to specify that the IME does not need
      * to show its extracted text UI.  For input methods that may be fullscreen,
@@ -105,7 +105,7 @@ public class EditorInfo implements InputType, Parcelable {
      * not needed.
      */
     public static final int IME_FLAG_NO_EXTRACT_UI = 0x10000000;
-    
+
     /**
      * Flag of {@link #imeOptions}: used in conjunction with
      * {@link #IME_MASK_ACTION}, this indicates that the action should not
@@ -113,10 +113,10 @@ public class EditorInfo implements InputType, Parcelable {
      * Note that by setting this flag, there can be cases where the action
      * is simply never available to the user.  Setting this generally means
      * that you think showing text being edited is more important than the
-     * action you have supplied. 
+     * action you have supplied.
      */
     public static final int IME_FLAG_NO_ACCESSORY_ACTION = 0x20000000;
-    
+
     /**
      * Flag of {@link #imeOptions}: used in conjunction with
      * {@link #IME_MASK_ACTION}, this indicates that the action should not
@@ -140,13 +140,13 @@ public class EditorInfo implements InputType, Parcelable {
      * Generic unspecified type for {@link #imeOptions}.
      */
     public static final int IME_NULL = 0x00000000;
-    
+
     /**
      * Extended type information for the editor, to help the IME better
      * integrate with it.
      */
     public int imeOptions = IME_NULL;
-    
+
     /**
      * A string supplying additional information options that are
      * private to a particular IME implementation.  The string must be
@@ -159,14 +159,14 @@ public class EditorInfo implements InputType, Parcelable {
      * attribute of a TextView.
      */
     public String privateImeOptions = null;
-    
+
     /**
      * In some cases an IME may be able to display an arbitrary label for
      * a command the user can perform, which you can specify here.  You can
      * not count on this being used.
      */
     public CharSequence actionLabel = null;
-    
+
     /**
      * If {@link #actionLabel} has been given, this is the id for that command
      * when the user presses its button that is delivered back with
@@ -174,19 +174,19 @@ public class EditorInfo implements InputType, Parcelable {
      * InputConnection.performEditorAction()}.
      */
     public int actionId = 0;
-    
+
     /**
      * The text offset of the start of the selection at the time editing
      * began; -1 if not known.
      */
     public int initialSelStart = -1;
-    
+
     /**
      * The text offset of the end of the selection at the time editing
      * began; -1 if not known.
      */
     public int initialSelEnd = -1;
-    
+
     /**
      * The capitalization mode of the first character being edited in the
      * text.  Values may be any combination of
@@ -197,23 +197,23 @@ public class EditorInfo implements InputType, Parcelable {
      * caps mode.
      */
     public int initialCapsMode = 0;
-    
+
     /**
      * The "hint" text of the text view, typically shown in-line when the
      * text is empty to tell the user what to enter.
      */
     public CharSequence hintText;
-    
+
     /**
      * A label to show to the user describing the text they are writing.
      */
     public CharSequence label;
-    
+
     /**
      * Name of the package that owns this editor.
      */
     public String packageName;
-    
+
     /**
      * Identifier for the editor's field.  This is optional, and may be
      * 0.  By default it is filled in with the result of
@@ -221,14 +221,14 @@ public class EditorInfo implements InputType, Parcelable {
      * is being edited.
      */
     public int fieldId;
-    
+
     /**
      * Additional name for the editor's field.  This can supply additional
      * name information for the field.  By default it is null.  The actual
      * contents have no meaning.
      */
     public String fieldName;
-    
+
     /**
      * Any extra data to supply to the input method.  This is for extended
      * communication with specific input methods; the name fields in the
@@ -238,7 +238,7 @@ public class EditorInfo implements InputType, Parcelable {
      * attribute of a TextView.
      */
     public Bundle extras;
-    
+
     /**
      * Write debug output of this object.
      */
@@ -259,10 +259,10 @@ public class EditorInfo implements InputType, Parcelable {
                 + " fieldName=" + fieldName);
         pw.println(prefix + "extras=" + extras);
     }
-    
+
     /**
      * Used to package this object into a {@link Parcel}.
-     * 
+     *
      * @param dest The {@link Parcel} to be written.
      * @param flags The flags used for parceling.
      */

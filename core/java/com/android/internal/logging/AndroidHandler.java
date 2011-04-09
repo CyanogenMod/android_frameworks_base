@@ -33,7 +33,7 @@ import java.util.logging.Logger;
  * implementation is rather straightforward. The name of the logger serves as
  * the log tag. Only the log levels need to be converted appropriately. For
  * this purpose, the following mapping is being used:
- * 
+ *
  * <table>
  *   <tr>
  *     <th>logger level</th>

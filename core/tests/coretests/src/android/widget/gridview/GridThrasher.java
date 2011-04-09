@@ -41,7 +41,7 @@ public class GridThrasher extends Activity implements AdapterView.OnItemSelected
     ThrashListAdapter mAdapter;
     Random mRandomizer = new Random();
     TextView mText;
-    
+
     Runnable mThrash = new Runnable() {
         public void run() {
             mAdapter.bumpVersion();
@@ -51,12 +51,12 @@ public class GridThrasher extends Activity implements AdapterView.OnItemSelected
 
     private class ThrashListAdapter extends BaseAdapter {
         private LayoutInflater mInflater;
-        
+
         /**
          * Our data, part 1.
          */
         private String[] mTitles = new String[100];
-        
+
         /**
          * Our data, part 2.
          */
@@ -66,7 +66,7 @@ public class GridThrasher extends Activity implements AdapterView.OnItemSelected
             mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             mTitles = new String[100];
             mVersion = new int[100];
-            
+
             int i;
             for (i=0; i<100; i++) {
                 mTitles[i] = "[" + i + "]";
@@ -98,30 +98,30 @@ public class GridThrasher extends Activity implements AdapterView.OnItemSelected
             return view;
         }
 
-        
+
         public void bumpVersion() {
             int position = mRandomizer.nextInt(getCount());
             mVersion[position]++;
             notifyDataSetChanged();
         }
-             
+
 
     }
-    
+
     @Override
-    public void onCreate(Bundle icicle) 
+    public void onCreate(Bundle icicle)
     {
         super.onCreate(icicle);
-        
+
         setContentView(R.layout.grid_thrasher);
-        
+
         mText = (TextView) findViewById(R.id.text);
         mAdapter = new ThrashListAdapter(this);
         GridView g = (GridView) findViewById(R.id.grid);
         g.setAdapter(mAdapter);
-        
+
         mHandler.postDelayed(mThrash, 5000);
-        
+
         g.setOnItemSelectedListener(this);
     }
 

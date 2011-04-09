@@ -66,7 +66,7 @@ public class AppWidgetHost {
         public UpdateHandler(Looper looper) {
             super(looper);
         }
-        
+
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case HANDLE_UPDATE: {
@@ -80,7 +80,7 @@ public class AppWidgetHost {
             }
         }
     }
-    
+
     Handler mHandler;
 
     int mHostId;
@@ -106,7 +106,7 @@ public class AppWidgetHost {
     public void startListening() {
         int[] updatedIds;
         ArrayList<RemoteViews> updatedViews = new ArrayList<RemoteViews>();
-        
+
         try {
             if (mPackageName == null) {
                 mPackageName = mContext.getPackageName();
@@ -154,7 +154,7 @@ public class AppWidgetHost {
     }
 
     /**
-     * Stop listening to changes for this AppWidget.  
+     * Stop listening to changes for this AppWidget.
      */
     public void deleteAppWidgetId(int appWidgetId) {
         synchronized (mViews) {
@@ -227,7 +227,7 @@ public class AppWidgetHost {
             AppWidgetProviderInfo appWidget) {
         return new AppWidgetHostView(context);
     }
-    
+
     /**
      * Called when the AppWidget provider for a AppWidget has been upgraded to a new apk.
      */

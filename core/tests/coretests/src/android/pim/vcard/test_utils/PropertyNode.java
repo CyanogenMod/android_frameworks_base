@@ -53,7 +53,7 @@ public class PropertyNode {
      * Note that currently PropertyNode class does not support multiple param-values
      * defined in vCard 3.0 (See also RFC 2426). multiple-values are stored as
      * one String value like "A,B", not ["A", "B"]...
-     * TODO: fix this. 
+     * TODO: fix this.
      */
     public ContentValues paramMap;
 
@@ -62,7 +62,7 @@ public class PropertyNode {
 
     /** Store group values. Used only in VCard. */
     public Set<String> propGroupSet;
-    
+
     public PropertyNode() {
         propName = "";
         propValue = "";
@@ -71,7 +71,7 @@ public class PropertyNode {
         paramMap_TYPE = new HashSet<String>();
         propGroupSet = new HashSet<String>();
     }
-    
+
     public PropertyNode(
             String propName, String propValue, List<String> propValue_vector,
             byte[] propValue_bytes, ContentValues paramMap, Set<String> paramMap_TYPE,
@@ -108,7 +108,7 @@ public class PropertyNode {
             this.propGroupSet = new HashSet<String>();
         }
     }
-    
+
     @Override
     public int hashCode() {
         // vCard may contain more than one same line in one entry, while HashSet or any other
@@ -123,9 +123,9 @@ public class PropertyNode {
         if (!(obj instanceof PropertyNode)) {
             return false;
         }
-        
+
         PropertyNode node = (PropertyNode)obj;
-        
+
         if (propName == null || !propName.equals(node.propName)) {
             return false;
         } else if (!paramMap_TYPE.equals(node.paramMap_TYPE)) {
@@ -152,7 +152,7 @@ public class PropertyNode {
                     node.propValue_vector.size() == 1);
         }
     }
-    
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();

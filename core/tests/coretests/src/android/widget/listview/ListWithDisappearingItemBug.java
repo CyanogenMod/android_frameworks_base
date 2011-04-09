@@ -42,20 +42,20 @@ public class ListWithDisappearingItemBug extends ListActivity {
         super.onCreate(savedInstanceState);
 
         Toast.makeText(this, "Make sure you rotate screen to see bug", Toast.LENGTH_LONG).show();
-        
+
         // Get a cursor with all people
         Cursor c = getContentResolver().query(People.CONTENT_URI, null, null, null, null);
         startManagingCursor(c);
 
-        ListAdapter adapter = new SimpleCursorAdapter(this, 
+        ListAdapter adapter = new SimpleCursorAdapter(this,
                 // Use a template that displays a text view
-                R.layout.list_with_disappearing_item_bug_item, 
+                R.layout.list_with_disappearing_item_bug_item,
                 // Give the cursor to the list adatper
-                c, 
+                c,
                 // Map the NAME column in the people database to...
                 new String[] {People.NAME} ,
                 // The "text1" view defined in the XML template
-                new int[] {R.id.text1}); 
+                new int[] {R.id.text1});
         setListAdapter(adapter);
 
         AnimationSet set = new AnimationSet(true);
@@ -73,7 +73,7 @@ public class ListWithDisappearingItemBug extends ListActivity {
 
         LayoutAnimationController controller =
                 new LayoutAnimationController(set, 0.5f);
-        ListView listView = getListView();        
+        ListView listView = getListView();
         listView.setLayoutAnimation(controller);
     }
 

@@ -24,7 +24,7 @@ import android.location.LocationProvider;
  * A DummyLocationProvider may be queried to determine the properties
  * of the provider whcih it shadows, but does not actually provide location
  * data.
- * 
+ *
  * {@hide}
  */
 public class DummyLocationProvider extends LocationProvider {

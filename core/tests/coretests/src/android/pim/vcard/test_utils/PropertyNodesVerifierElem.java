@@ -105,7 +105,7 @@ public class PropertyNodesVerifierElem {
         return addExpectedNodeWithOrder(propName, null, propValueList, null, paramMap,
                 paramMap_TYPE, null);
     }
-    
+
     public PropertyNodesVerifierElem addExpectedNodeWithOrder(String propName, String propValue,
             ContentValues paramMap, TypeSet paramMap_TYPE) {
         return addExpectedNodeWithOrder(propName, propValue, null, null,

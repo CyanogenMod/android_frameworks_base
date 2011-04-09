@@ -24,7 +24,7 @@ import android.test.suitebuilder.annotation.Suppress;
 /**
  * Unit test class to test the set of valid and invalid states that
  * MediaRecorder.stop() method can be called.
- */          
+ */
 public class MediaRecorderStopStateUnitTest extends AndroidTestCase implements MediaRecorderMethodUnderTest {
     private MediaRecorderStateUnitTestTemplate mTestTemplate = new MediaRecorderStateUnitTestTemplate();
 
@@ -33,13 +33,13 @@ public class MediaRecorderStopStateUnitTest extends AndroidTestCase implements M
      *    {Recording}.
      * 2. It is invalid to call stop() in the following states:
      *    {Initial, Initialized, DataSourceConfigured, Prepared, Error}
-     *    
+     *
      * @param stateErrors the MediaRecorderStateErrors to check against.
      */
     public void checkStateErrors(MediaRecorderStateErrors stateErrors) {
         // Valid states.
         assertTrue(!stateErrors.errorInRecordingState);
-        
+
         // Invalid states.
         assertTrue(stateErrors.errorInInitialState);
         assertTrue(stateErrors.errorInInitialStateAfterReset);
@@ -58,7 +58,7 @@ public class MediaRecorderStopStateUnitTest extends AndroidTestCase implements M
     public void testStop() {
         mTestTemplate.runTestOnMethod(this);
     }
-    
+
     @Override
     public String toString() {
         return "stop()";

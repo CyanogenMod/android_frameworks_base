@@ -106,7 +106,7 @@ class ActivityRecord extends IApplicationToken.Stub {
     boolean frozenBeforeDestroy;// has been frozen but not yet destroyed.
 
     String stringName;      // for caching of toString().
-    
+
     void dump(PrintWriter pw, String prefix) {
         pw.print(prefix); pw.print("packageName="); pw.print(packageName);
                 pw.print(" processName="); pw.println(processName);
@@ -254,10 +254,10 @@ class ActivityRecord extends IApplicationToken.Stub {
             if (intent != null && (aInfo.flags & ActivityInfo.FLAG_EXCLUDE_FROM_RECENTS) != 0) {
                 intent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
             }
-            
+
             packageName = aInfo.applicationInfo.packageName;
             launchMode = aInfo.launchMode;
-            
+
             AttributeCache.Entry ent = AttributeCache.instance().get(packageName,
                     theme != 0 ? theme : android.R.style.Theme,
                     com.android.internal.R.styleable.Window);
@@ -265,7 +265,7 @@ class ActivityRecord extends IApplicationToken.Stub {
                     com.android.internal.R.styleable.Window_windowIsFloating, false)
                     && !ent.array.getBoolean(
                     com.android.internal.R.styleable.Window_windowIsTranslucent, false);
-            
+
             if (!_componentSpecified || _launchedFromUid == Process.myUid()
                     || _launchedFromUid == 0) {
                 // If we know the system has determined the component, then
@@ -314,7 +314,7 @@ class ActivityRecord extends IApplicationToken.Stub {
             int requestCode, int resultCode,
             Intent resultData) {
         ActivityResult r = new ActivityResult(from, resultWho,
-        		requestCode, resultCode, resultData);
+                        requestCode, resultCode, resultData);
         if (results == null) {
             results = new ArrayList();
         }
@@ -345,7 +345,7 @@ class ActivityRecord extends IApplicationToken.Stub {
         }
         newIntents.add(intent);
     }
-    
+
     /**
      * Deliver a new Intent to an existing activity, so that its onNewIntent()
      * method will be called at the proper time.
@@ -405,20 +405,20 @@ class ActivityRecord extends IApplicationToken.Stub {
         // so it is best to leave as-is.
         return app == null || (!app.crashing && !app.notResponding);
     }
-    
+
     public void startFreezingScreenLocked(ProcessRecord app, int configChanges) {
         if (mayFreezeScreenLocked(app)) {
             service.mWindowManager.startAppFreezingScreen(this, configChanges);
         }
     }
-    
+
     public void stopFreezingScreenLocked(boolean force) {
         if (force || frozenBeforeDestroy) {
             frozenBeforeDestroy = false;
             service.mWindowManager.stopAppFreezingScreen(this, force);
         }
     }
-    
+
     public void windowsVisible() {
         synchronized(service) {
             if (launchTime != 0) {
@@ -493,7 +493,7 @@ class ActivityRecord extends IApplicationToken.Stub {
                 ActivityManagerService.TAG, "windowsGone(): " + this);
         nowVisible = false;
     }
-    
+
     private ActivityRecord getWaitingHistoryRecordLocked() {
         // First find the real culprit...  if we are waiting
         // for another app to start, then we have paused dispatching
@@ -510,7 +510,7 @@ class ActivityRecord extends IApplicationToken.Stub {
                 r = this;
             }
         }
-        
+
         return r;
     }
 
@@ -523,14 +523,14 @@ class ActivityRecord extends IApplicationToken.Stub {
                 if (r.app.debugging) {
                     return false;
                 }
-                
+
                 if (service.mDidDexOpt) {
                     // Give more time since we were dexopting.
                     service.mDidDexOpt = false;
                     return false;
                 }
-                
-                if (r.app.instrumentationClass == null) { 
+
+                if (r.app.instrumentationClass == null) {
                     anrApp = r.app;
                 } else {
                     Bundle info = new Bundle();
@@ -541,15 +541,15 @@ class ActivityRecord extends IApplicationToken.Stub {
                 }
             }
         }
-        
+
         if (anrApp != null) {
             service.appNotResponding(anrApp, r, this,
                     "keyDispatchingTimedOut");
         }
-        
+
         return true;
     }
-    
+
     /** Returns the key dispatching timeout for this application token. */
     public long getKeyDispatchingTimeout() {
         synchronized(service) {
@@ -558,7 +558,7 @@ class ActivityRecord extends IApplicationToken.Stub {
                     || r.app.instrumentationClass == null) {
                 return ActivityManagerService.KEY_DISPATCHING_TIMEOUT;
             }
-            
+
             return ActivityManagerService.INSTRUMENTATION_KEY_DISPATCHING_TIMEOUT;
         }
     }
@@ -568,10 +568,10 @@ class ActivityRecord extends IApplicationToken.Stub {
      * currently pausing, or is resumed.
      */
     public boolean isInterestingToUserLocked() {
-        return visible || nowVisible || state == ActivityState.PAUSING || 
+        return visible || nowVisible || state == ActivityState.PAUSING ||
                 state == ActivityState.RESUMED;
      }
-    
+
     public String toString() {
         if (stringName != null) {
             return stringName;

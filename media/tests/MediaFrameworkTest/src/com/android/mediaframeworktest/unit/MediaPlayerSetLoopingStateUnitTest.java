@@ -23,17 +23,17 @@ import android.test.suitebuilder.annotation.LargeTest;
 /**
  * Unit test class to test the set of valid and invalid states that
  * MediaPlayer.setLooping() method can be called.
- */          
+ */
 public class MediaPlayerSetLoopingStateUnitTest extends AndroidTestCase implements MediaPlayerMethodUnderTest {
     private MediaPlayerStateUnitTestTemplate mTestTemplate = new MediaPlayerStateUnitTestTemplate();
     private boolean looping = false;
-    
+
     /**
      * 1. It is valid to call setLooping() in the following states:
      *    {Idle, Initialized, Stopped, Prepared, Started, Paused, PlaybackComplted}.
      * 2. It is invalid to call setLooping() in the following states:
      *    {Error}
-     *    
+     *
      * @param stateErrors the MediaPlayerStateErrors to check against.
      */
     public void checkStateErrors(MediaPlayerStateErrors stateErrors) {
@@ -48,7 +48,7 @@ public class MediaPlayerSetLoopingStateUnitTest extends AndroidTestCase implemen
         assertTrue(!stateErrors.errorInInitializedState);
         assertTrue(!stateErrors.errorInStoppedState);
         assertTrue(!stateErrors.errorInIdleState);
-        
+
         // Invalid states.
         assertTrue(stateErrors.errorInErrorState);
     }

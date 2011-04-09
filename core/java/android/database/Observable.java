@@ -66,13 +66,13 @@ public abstract class Observable<T> {
             mObservers.remove(index);
         }
     }
-    
+
     /**
      * Remove all registered observer
      */
     public void unregisterAll() {
         synchronized(mObservers) {
             mObservers.clear();
-        }        
+        }
     }
 }

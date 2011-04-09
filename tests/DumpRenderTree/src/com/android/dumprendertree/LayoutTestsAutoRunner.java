@@ -25,7 +25,7 @@ import junit.framework.TestSuite;
 
 /**
  * Instrumentation Test Runner for all DumpRenderTree tests.
- * 
+ *
  * Running all tests:
  *
  * adb shell am instrument \
@@ -57,7 +57,7 @@ public class LayoutTestsAutoRunner extends InstrumentationTestRunner {
                 e.printStackTrace();
             }
         }
-        
+
         String delay_str = (String) icicle.get("delay");
         if(delay_str != null) {
             try {
@@ -83,7 +83,7 @@ public class LayoutTestsAutoRunner extends InstrumentationTestRunner {
 
         super.onCreate(icicle);
     }
-    
+
     public String mTestPath;
     public String mSaveImagePath;
     public int mTimeoutInMillis;

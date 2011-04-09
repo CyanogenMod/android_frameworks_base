@@ -35,7 +35,7 @@ public class Policy {
             = "frameworks/base/preloaded-classes";
 
     /**
-     * Long running services. These are restricted in their contribution to the 
+     * Long running services. These are restricted in their contribution to the
      * preloader because their launch time is less critical.
      */
     // TODO: Generate this automatically from package manager.

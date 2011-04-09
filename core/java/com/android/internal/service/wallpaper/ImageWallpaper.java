@@ -105,7 +105,7 @@ public class ImageWallpaper extends WallpaperService {
         public void onVisibilityChanged(boolean visible) {
             drawFrame();
         }
-        
+
         @Override
         public void onTouchEvent(MotionEvent event) {
             super.onTouchEvent(event);
@@ -135,7 +135,7 @@ public class ImageWallpaper extends WallpaperService {
         public void onSurfaceDestroyed(SurfaceHolder holder) {
             super.onSurfaceDestroyed(holder);
         }
-        
+
         void drawFrame() {
             SurfaceHolder sh = getSurfaceHolder();
             Canvas c = sh.lockCanvas();

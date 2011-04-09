@@ -33,7 +33,7 @@ import com.android.frameworks.coretests.R;
  * Tests views with popupWindows becoming invisible
  */
 public class PreDrawListener extends Activity implements OnClickListener {
-    
+
     private MyLinearLayout mFrame;
 
 
@@ -41,7 +41,7 @@ public class PreDrawListener extends Activity implements OnClickListener {
             ViewTreeObserver.OnPreDrawListener {
 
         public boolean mCancelNextDraw;
-        
+
         public MyLinearLayout(Context context, AttributeSet attrs) {
             super(context, attrs);
         }
@@ -55,7 +55,7 @@ public class PreDrawListener extends Activity implements OnClickListener {
             super.onAttachedToWindow();
             getViewTreeObserver().addOnPreDrawListener(this);
         }
-        
+
         public boolean onPreDraw() {
             if (mCancelNextDraw) {
                 Button b = new Button(this.getContext());
@@ -67,7 +67,7 @@ public class PreDrawListener extends Activity implements OnClickListener {
             }
             return true;
         }
-        
+
     }
 
     @Override

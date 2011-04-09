@@ -41,7 +41,7 @@ import javax.net.ssl.X509TrustManager;
 
 /**
  * Class responsible for all server certificate validation functionality
- * 
+ *
  * {@hide}
  */
 class CertificateChainValidator {

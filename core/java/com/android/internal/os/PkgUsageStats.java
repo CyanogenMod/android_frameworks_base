@@ -28,7 +28,7 @@ public class PkgUsageStats implements Parcelable {
     public String packageName;
     public int launchCount;
     public long usageTime;
-    
+
     public static final Parcelable.Creator<PkgUsageStats> CREATOR
     = new Parcelable.Creator<PkgUsageStats>() {
         public PkgUsageStats createFromParcel(Parcel in) {
@@ -39,25 +39,25 @@ public class PkgUsageStats implements Parcelable {
             return new PkgUsageStats[size];
         }
     };
-    
+
     public String toString() {
         return "PkgUsageStats{"
         + Integer.toHexString(System.identityHashCode(this))
         + " " + packageName + "}";
     }
-    
+
     public PkgUsageStats(String pkgName, int count, long time) {
         packageName = pkgName;
         launchCount = count;
         usageTime = time;
     }
-    
+
     public PkgUsageStats(Parcel source) {
         packageName = source.readString();
         launchCount = source.readInt();
         usageTime = source.readLong();
     }
-    
+
     public PkgUsageStats(PkgUsageStats pStats) {
         packageName = pStats.packageName;
         launchCount = pStats.launchCount;

@@ -32,7 +32,7 @@ import android.util.AttributeSet;
  * A container for multiple
  * {@link Preference} objects. It is a base class for  Preference objects that are
  * parents, such as {@link PreferenceCategory} and {@link PreferenceScreen}.
- * 
+ *
  * @attr ref android.R.styleable#PreferenceGroup_orderingFromXml
  */
 public abstract class PreferenceGroup extends Preference implements GenericInflater.Parent<Preference> {
@@ -48,7 +48,7 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
     private int mCurrentPreferenceOrder = 0;
 
     private boolean mAttachedToActivity = false;
-    
+
     public PreferenceGroup(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
@@ -72,7 +72,7 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
      * <p>
      * If this is called after preferences are added, they will not be
      * re-ordered in the order they were added, hence call this method early on.
-     * 
+     *
      * @param orderingAsAdded Whether to order according to the order added.
      * @see Preference#setOrder(int)
      */
@@ -82,7 +82,7 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
 
     /**
      * Whether this group is ordering preferences in the order they are added.
-     * 
+     *
      * @return Whether this group orders based on the order the children are added.
      * @see #setOrderingAsAdded(boolean)
      */
@@ -107,7 +107,7 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
 
     /**
      * Returns the {@link Preference} at a particular index.
-     * 
+     *
      * @param index The index of the {@link Preference} to retrieve.
      * @return The {@link Preference}.
      */
@@ -118,7 +118,7 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
     /**
      * Adds a {@link Preference} at the correct position based on the
      * preference's order.
-     * 
+     *
      * @param preference The preference to add.
      * @return Whether the preference is now in this group.
      */
@@ -127,7 +127,7 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
             // Exists
             return true;
         }
-        
+
         if (preference.getOrder() == Preference.DEFAULT_ORDER) {
             if (mOrderingAsAdded) {
                 preference.setOrder(mCurrentPreferenceOrder++);
@@ -154,11 +154,11 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
         }
 
         preference.onAttachedToHierarchy(getPreferenceManager());
-        
+
         if (mAttachedToActivity) {
             preference.onAttachedToActivity();
         }
-        
+
         notifyHierarchyChanged();
 
         return true;
@@ -166,7 +166,7 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
 
     /**
      * Removes a {@link Preference} from this group.
-     * 
+     *
      * @param preference The preference to remove.
      * @return Whether the preference was found and removed.
      */
@@ -182,7 +182,7 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
             return mPreferenceList.remove(preference);
         }
     }
-    
+
     /**
      * Removes all {@link Preference Preferences} from this group.
      */
@@ -195,10 +195,10 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
         }
         notifyHierarchyChanged();
     }
-    
+
     /**
      * Prepares a {@link Preference} to be added to the group.
-     * 
+     *
      * @param preference The preference to add.
      * @return Whether to allow adding the preference (true), or not (false).
      */
@@ -206,7 +206,7 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
         if (!super.isEnabled()) {
             preference.setEnabled(false);
         }
-        
+
         return true;
     }
 
@@ -219,7 +219,7 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
      * <p>
      * This will recursively search for the preference into children that are
      * also {@link PreferenceGroup PreferenceGroups}.
-     * 
+     *
      * @param key The key of the preference to retrieve.
      * @return The {@link Preference} with the key, or null.
      */
@@ -235,7 +235,7 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
             if (curKey != null && curKey.equals(key)) {
                 return preference;
             }
-            
+
             if (preference instanceof PreferenceGroup) {
                 final Preference returnedPreference = ((PreferenceGroup)preference)
                         .findPreference(key);
@@ -251,14 +251,14 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
     /**
      * Whether this preference group should be shown on the same screen as its
      * contained preferences.
-     * 
+     *
      * @return True if the contained preferences should be shown on the same
      *         screen as this preference.
      */
     protected boolean isOnSameScreenAsChildren() {
         return true;
     }
-    
+
     @Override
     protected void onAttachedToActivity() {
         super.onAttachedToActivity();
@@ -266,7 +266,7 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
         // Mark as attached so if a preference is later added to this group, we
         // can tell it we are already attached
         mAttachedToActivity = true;
-        
+
         // Dispatch to all contained preferences
         final int preferenceCount = getPreferenceCount();
         for (int i = 0; i < preferenceCount; i++) {
@@ -277,7 +277,7 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
     @Override
     protected void onPrepareForRemoval() {
         super.onPrepareForRemoval();
-        
+
         // We won't be attached to the activity anymore
         mAttachedToActivity = false;
     }
@@ -285,14 +285,14 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        
+
         // Dispatch to all contained preferences
         final int preferenceCount = getPreferenceCount();
         for (int i = 0; i < preferenceCount; i++) {
             getPreference(i).setEnabled(enabled);
         }
     }
-    
+
     void sortPreferences() {
         synchronized (this) {
             Collections.sort(mPreferenceList);
@@ -309,7 +309,7 @@ public abstract class PreferenceGroup extends Preference implements GenericInfla
             getPreference(i).dispatchSaveInstanceState(container);
         }
     }
-    
+
     @Override
     protected void dispatchRestoreInstanceState(Bundle container) {
         super.dispatchRestoreInstanceState(container);

@@ -107,7 +107,7 @@ public class WebSettings {
      * Use with {@link #setCacheMode}.
      */
     public static final int LOAD_NO_CACHE = 2;
-    
+
     /**
      * Don't use the network, load from cache only.
      * Use with {@link #setCacheMode}.
@@ -298,13 +298,13 @@ public class WebSettings {
             "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_5_7; en-us)"
             + " AppleWebKit/530.17 (KHTML, like Gecko) Version/4.0"
             + " Safari/530.17";
-    private static final String IPHONE_USERAGENT = 
+    private static final String IPHONE_USERAGENT =
             "Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; en-us)"
             + " AppleWebKit/528.18 (KHTML, like Gecko) Version/4.0"
             + " Mobile/7A341 Safari/528.16";
     private static Locale sLocale;
     private static Object sLockForLocaleSettings;
-    
+
     /**
      * Package constructor to prevent clients from creating a new settings
      * instance.
@@ -363,7 +363,7 @@ public class WebSettings {
 
         return buffer.toString();
     }
-    
+
     /**
      * Looks at sLocale and mContext and returns current UserAgent String.
      * @return Current UserAgent String.
@@ -381,7 +381,7 @@ public class WebSettings {
         } else {
             // default to "1.0"
             buffer.append("1.0");
-        }  
+        }
         buffer.append("; ");
         final String language = locale.getLanguage();
         if (language != null) {
@@ -412,7 +412,7 @@ public class WebSettings {
                 com.android.internal.R.string.web_user_agent).toString();
         return String.format(base, buffer);
     }
-    
+
     /**
      * Enables dumping the pages navigation cache to a text file.
      */
@@ -457,14 +457,14 @@ public class WebSettings {
         mBuiltInZoomControls = enabled;
         mWebView.updateMultiTouchSupport(mContext);
     }
-    
+
     /**
      * Returns true if the zoom mechanism built into WebView is being used.
      */
     public boolean getBuiltInZoomControls() {
         return mBuiltInZoomControls;
     }
-    
+
     /**
      * Enable or disable file access within WebView. File access is enabled by
      * default.
@@ -1011,8 +1011,8 @@ public class WebSettings {
 
     private void verifyNetworkAccess() {
         if (!mBlockNetworkLoads) {
-            if (mContext.checkPermission("android.permission.INTERNET", 
-                    android.os.Process.myPid(), android.os.Process.myUid()) != 
+            if (mContext.checkPermission("android.permission.INTERNET",
+                    android.os.Process.myPid(), android.os.Process.myUid()) !=
                         PackageManager.PERMISSION_GRANTED) {
                 throw new SecurityException
                         ("Permission denied - " +
@@ -1295,7 +1295,7 @@ public class WebSettings {
     public synchronized void setUserAgentString(String ua) {
         if (ua == null || ua.length() == 0) {
             synchronized(sLockForLocaleSettings) {
-                Locale currentLocale = Locale.getDefault(); 
+                Locale currentLocale = Locale.getDefault();
                 if (!sLocale.equals(currentLocale)) {
                     sLocale = currentLocale;
                     mAcceptLanguage = getCurrentAcceptLanguage();
@@ -1350,11 +1350,11 @@ public class WebSettings {
         }
         return mAcceptLanguage;
     }
-    
+
     /**
      * Tell the WebView whether it needs to set a node to have focus when
      * {@link WebView#requestFocus(int, android.graphics.Rect)} is called.
-     * 
+     *
      * @param flag
      */
     public void setNeedInitialFocus(boolean flag) {
@@ -1381,7 +1381,7 @@ public class WebSettings {
                     EventHandler.PRIORITY));
         }
     }
-    
+
     /**
      * Override the way the cache is used. The way the cache is used is based
      * on the navigation option. For a normal page load, the cache is checked
@@ -1395,7 +1395,7 @@ public class WebSettings {
             mOverrideCacheMode = mode;
         }
     }
-    
+
     /**
      * Return the current setting for overriding the cache mode. For a full
      * description, see the {@link #setCacheMode(int)} function.
@@ -1403,7 +1403,7 @@ public class WebSettings {
     public int getCacheMode() {
         return mOverrideCacheMode;
     }
-    
+
     /**
      * If set, webkit alternately shrinks and expands images viewed outside
      * of an HTML page to fit the screen. This conflicts with attempts by

@@ -28,11 +28,11 @@ import android.view.MotionEvent;
 
 public class BaseIWindow extends IWindow.Stub {
     private IWindowSession mSession;
-    
+
     public void setSession(IWindowSession session) {
         mSession = session;
     }
-    
+
     public void resized(int w, int h, Rect coveredInsets,
             Rect visibleInsets, boolean reportDraw, Configuration newConfig) {
         if (reportDraw) {
@@ -54,10 +54,10 @@ public class BaseIWindow extends IWindow.Stub {
 
     public void executeCommand(String command, String parameters, ParcelFileDescriptor out) {
     }
-    
+
     public void closeSystemDialogs(String reason) {
     }
-    
+
     public void dispatchWallpaperOffsets(float x, float y, float xStep, float yStep, boolean sync) {
         if (sync) {
             try {
@@ -66,7 +66,7 @@ public class BaseIWindow extends IWindow.Stub {
             }
         }
     }
-    
+
     public void dispatchWallpaperCommand(String action, int x, int y,
             int z, Bundle extras, boolean sync) {
         if (sync) {

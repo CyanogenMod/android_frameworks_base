@@ -61,23 +61,23 @@ public class InsetDrawable extends Drawable implements Drawable.Callback
     public InsetDrawable(Drawable drawable, int insetLeft, int insetTop,
                          int insetRight, int insetBottom) {
         this(null, null);
-        
+
         mInsetState.mDrawable = drawable;
         mInsetState.mInsetLeft = insetLeft;
         mInsetState.mInsetTop = insetTop;
         mInsetState.mInsetRight = insetRight;
         mInsetState.mInsetBottom = insetBottom;
-        
+
         if (drawable != null) {
             drawable.setCallback(this);
         }
     }
-    
+
     @Override public void inflate(Resources r, XmlPullParser parser,
                                   AttributeSet attrs)
     throws XmlPullParserException, IOException {
         int type;
-        
+
         TypedArray a = r.obtainAttributes(attrs,
                 com.android.internal.R.styleable.InsetDrawable);
 
@@ -161,7 +161,7 @@ public class InsetDrawable extends Drawable implements Drawable.Callback
                 | mInsetState.mChangingConfigurations
                 | mInsetState.mDrawable.getChangingConfigurations();
     }
-    
+
     @Override
     public boolean getPadding(Rect padding) {
         boolean pad = mInsetState.mDrawable.getPadding(padding);
@@ -171,7 +171,7 @@ public class InsetDrawable extends Drawable implements Drawable.Callback
         padding.top += mInsetState.mInsetTop;
         padding.bottom += mInsetState.mInsetBottom;
 
-        if (pad || (mInsetState.mInsetLeft | mInsetState.mInsetRight | 
+        if (pad || (mInsetState.mInsetLeft | mInsetState.mInsetRight |
                     mInsetState.mInsetTop | mInsetState.mInsetBottom) != 0) {
             return true;
         } else {
@@ -189,17 +189,17 @@ public class InsetDrawable extends Drawable implements Drawable.Callback
     public void setAlpha(int alpha) {
         mInsetState.mDrawable.setAlpha(alpha);
     }
-    
+
     @Override
     public void setColorFilter(ColorFilter cf) {
         mInsetState.mDrawable.setColorFilter(cf);
     }
-    
+
     @Override
     public int getOpacity() {
         return mInsetState.mDrawable.getOpacity();
     }
-    
+
     @Override
     public boolean isStateful() {
         return mInsetState.mDrawable.isStateful();
@@ -211,7 +211,7 @@ public class InsetDrawable extends Drawable implements Drawable.Callback
         onBoundsChange(getBounds());
         return changed;
     }
-    
+
     @Override
     protected void onBoundsChange(Rect bounds) {
         final Rect r = mTmpRect;
@@ -285,12 +285,12 @@ public class InsetDrawable extends Drawable implements Drawable.Callback
         public Drawable newDrawable() {
             return new InsetDrawable(this, null);
         }
-        
+
         @Override
         public Drawable newDrawable(Resources res) {
             return new InsetDrawable(this, res);
         }
-        
+
         @Override
         public int getChangingConfigurations() {
             return mChangingConfigurations;

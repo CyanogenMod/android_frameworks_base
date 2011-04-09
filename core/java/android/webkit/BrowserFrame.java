@@ -283,7 +283,7 @@ class BrowserFrame extends Handler {
     /**
      * Load the content as if it was loaded by the provided base URL. The
      * historyUrl is used as the history entry for the load data.
-     * 
+     *
      * @param baseUrl Base URL used to resolve relative paths in the content
      * @param data Content to render in the browser
      * @param mimeType Mimetype of the data being passed in
@@ -299,7 +299,7 @@ class BrowserFrame extends Handler {
         if (data == null) {
             data = "";
         }
-        
+
         // Setup defaults for missing values. These defaults where taken from
         // WebKit's WebFrame.mm
         if (baseUrl == null || baseUrl.length() == 0) {
@@ -381,7 +381,7 @@ class BrowserFrame extends Handler {
             if (isMainFrame) {
                 // Call onPageStarted for main frames.
                 mCallbackProxy.onPageStarted(url, favicon);
-                // as didFirstLayout() is only called for the main frame, reset 
+                // as didFirstLayout() is only called for the main frame, reset
                 // mFirstLayoutDone only for the main frames
                 mFirstLayoutDone = false;
                 mCommitted = false;
@@ -692,7 +692,7 @@ class BrowserFrame extends Handler {
                     String[] ret = getUsernamePassword();
                     // Has the user entered a username/password pair and is
                     // there some POST data
-                    if (ret != null && postData != null && 
+                    if (ret != null && postData != null &&
                             ret[0].length() > 0 && ret[1].length() > 0) {
                         // Check to see if the username & password appear in
                         // the post data (there could be another form on the
@@ -707,7 +707,7 @@ class BrowserFrame extends Handler {
                                 // save password
                                 if (saved[0] != null) {
                                     // non-null username implies that user has
-                                    // chosen to save password, so update the 
+                                    // chosen to save password, so update the
                                     // recorded password
                                     mDatabase.setUsernamePassword(
                                             schemePlusHost, ret[0], ret[1]);
@@ -715,7 +715,7 @@ class BrowserFrame extends Handler {
                             } else {
                                 // CallbackProxy will handle creating the resume
                                 // message
-                                mCallbackProxy.onSavePassword(schemePlusHost, ret[0], 
+                                mCallbackProxy.onSavePassword(schemePlusHost, ret[0],
                                         ret[1], null);
                             }
                         }
@@ -723,7 +723,7 @@ class BrowserFrame extends Handler {
                 } catch (ParseException ex) {
                     // if it is bad uri, don't save its password
                 }
-                
+
             }
         }
 
@@ -748,7 +748,7 @@ class BrowserFrame extends Handler {
 
         if (LoadListener.getNativeLoaderCount() > MAX_OUTSTANDING_REQUESTS) {
             // send an error message, so that loadListener can be deleted
-            // after this is returned. This is important as LoadListener's 
+            // after this is returned. This is important as LoadListener's
             // nativeError will remove the request from its DocLoader's request
             // list. But the set up is not done until this method is returned.
             loadListener.error(
@@ -763,7 +763,7 @@ class BrowserFrame extends Handler {
         // Set the load mode to the mode used for the current page.
         // If WebKit wants validation, go to network directly.
         loader.setCacheMode(headers.containsKey("If-Modified-Since")
-                || headers.containsKey("If-None-Match") ? 
+                || headers.containsKey("If-None-Match") ?
                         WebSettings.LOAD_NO_CACHE : cacheMode);
         // Set referrer to current URL?
         if (!loader.executeLoad()) {
@@ -786,7 +786,7 @@ class BrowserFrame extends Handler {
             sendMessageDelayed(obtainMessage(FRAME_COMPLETED), 100);
         }
         // FIXME: Need to figure out a better way to switch out of the history
-        // drawing mode. Maybe we can somehow compare the history picture with 
+        // drawing mode. Maybe we can somehow compare the history picture with
         // the current picture, and switch when it contains more content.
         if (mFirstLayoutDone && newProgress > TRANSITION_SWITCH_THRESHOLD) {
             mCallbackProxy.switchOutDrawHistory();
@@ -962,7 +962,7 @@ class BrowserFrame extends Handler {
      * stringByEvaluatingJavaScriptFromString will execute the
      * JS passed in in the context of this browser frame.
      * @param script A javascript string to execute
-     * 
+     *
      * @return string result of execution or null
      */
     public native String stringByEvaluatingJavaScriptFromString(String script);

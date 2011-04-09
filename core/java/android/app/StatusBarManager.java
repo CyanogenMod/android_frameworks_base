@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
- 
+
 package android.app;
 
 import android.content.Context;
@@ -81,7 +81,7 @@ public class StatusBarManager {
             throw new RuntimeException(ex);
         }
     }
-    
+
     /**
      * Expand the status bar.
      */
@@ -93,7 +93,7 @@ public class StatusBarManager {
             throw new RuntimeException(ex);
         }
     }
-    
+
     /**
      * Collapse the status bar.
      */

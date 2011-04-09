@@ -29,7 +29,7 @@ import android.view.inputmethod.InputConnection;
 public class InputConnectionWrapper implements InputConnection {
     private static final int MAX_WAIT_TIME_MILLIS = 2000;
     private final IInputContext mIInputContext;
-    
+
     static class InputContextCallback extends IInputContextCallback.Stub {
         private static final String TAG = "InputConnectionWrapper.ICC";
         public int mSeq;
@@ -39,12 +39,12 @@ public class InputConnectionWrapper implements InputConnection {
         public CharSequence mSelectedText;
         public ExtractedText mExtractedText;
         public int mCursorCapsMode;
-        
+
         // A 'pool' of one InputContextCallback.  Each ICW request will attempt to gain
         // exclusive access to this object.
         private static InputContextCallback sInstance = new InputContextCallback();
         private static int sSequenceNumber = 1;
-        
+
         /**
          * Returns an InputContextCallback object that is guaranteed not to be in use by
          * any other thread.  The returned object's 'have value' flag is cleared and its expected
@@ -58,19 +58,19 @@ public class InputConnectionWrapper implements InputConnection {
                 if (sInstance != null) {
                     callback = sInstance;
                     sInstance = null;
-                    
+
                     // Reset the callback
                     callback.mHaveValue = false;
                 } else {
                     callback = new InputContextCallback();
                 }
-                
+
                 // Set the sequence number
                 callback.mSeq = sSequenceNumber++;
                 return callback;
             }
         }
-        
+
         /**
          * Makes the given InputContextCallback available for use in the future.
          */
@@ -86,7 +86,7 @@ public class InputConnectionWrapper implements InputConnection {
                 }
             }
         }
-        
+
         public void setTextBeforeCursor(CharSequence textBeforeCursor, int seq) {
             synchronized (this) {
                 if (seq == mSeq) {
@@ -129,8 +129,8 @@ public class InputConnectionWrapper implements InputConnection {
         public void setCursorCapsMode(int capsMode, int seq) {
             synchronized (this) {
                 if (seq == mSeq) {
-                    mCursorCapsMode = capsMode; 
-                    mHaveValue = true;  
+                    mCursorCapsMode = capsMode;
+                    mHaveValue = true;
                     notifyAll();
                 } else {
                     Log.i(TAG, "Got out-of-sequence callback " + seq + " (expected " + mSeq
@@ -151,10 +151,10 @@ public class InputConnectionWrapper implements InputConnection {
                 }
             }
         }
-        
+
         /**
          * Waits for a result for up to {@link #MAX_WAIT_TIME_MILLIS} milliseconds.
-         * 
+         *
          * <p>The caller must be synchronized on this callback object.
          */
         void waitForResultLocked() {
@@ -196,7 +196,7 @@ public class InputConnectionWrapper implements InputConnection {
         }
         return value;
     }
-    
+
     public CharSequence getTextBeforeCursor(int length, int flags) {
         CharSequence value = null;
         try {
@@ -214,7 +214,7 @@ public class InputConnectionWrapper implements InputConnection {
         }
         return value;
     }
-    
+
     public CharSequence getSelectedText(int flags) {
         CharSequence value = null;
         try {
@@ -250,7 +250,7 @@ public class InputConnectionWrapper implements InputConnection {
         }
         return value;
     }
-    
+
     public ExtractedText getExtractedText(ExtractedTextRequest request, int flags) {
         ExtractedText value = null;
         try {
@@ -268,7 +268,7 @@ public class InputConnectionWrapper implements InputConnection {
         }
         return value;
     }
-    
+
     public boolean commitText(CharSequence text, int newCursorPosition) {
         try {
             mIInputContext.commitText(text, newCursorPosition);
@@ -295,7 +295,7 @@ public class InputConnectionWrapper implements InputConnection {
             return false;
         }
     }
-    
+
     public boolean performEditorAction(int actionCode) {
         try {
             mIInputContext.performEditorAction(actionCode);
@@ -304,7 +304,7 @@ public class InputConnectionWrapper implements InputConnection {
             return false;
         }
     }
-    
+
     public boolean performContextMenuAction(int id) {
         try {
             mIInputContext.performContextMenuAction(id);
@@ -349,7 +349,7 @@ public class InputConnectionWrapper implements InputConnection {
             return false;
         }
     }
-    
+
     public boolean endBatchEdit() {
         try {
             mIInputContext.endBatchEdit();
@@ -358,7 +358,7 @@ public class InputConnectionWrapper implements InputConnection {
             return false;
         }
     }
-    
+
     public boolean sendKeyEvent(KeyEvent event) {
         try {
             mIInputContext.sendKeyEvent(event);
@@ -376,7 +376,7 @@ public class InputConnectionWrapper implements InputConnection {
             return false;
         }
     }
-    
+
     public boolean deleteSurroundingText(int leftLength, int rightLength) {
         try {
             mIInputContext.deleteSurroundingText(leftLength, rightLength);

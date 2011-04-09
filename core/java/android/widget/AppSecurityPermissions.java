@@ -49,7 +49,7 @@ import java.util.Set;
  * extended information consisting of all groups and permissions.
  * To use this view define a LinearLayout or any ViewGroup and add this
  * view by instantiating AppSecurityPermissions and invoking getPermissionsView.
- * 
+ *
  * {@hide}
  */
 public class AppSecurityPermissions  implements View.OnClickListener {
@@ -86,13 +86,13 @@ public class AppSecurityPermissions  implements View.OnClickListener {
     private LinearLayout mDangerousList;
     private HashMap<String, CharSequence> mGroupLabelCache;
     private View mNoPermsView;
-    
+
     public AppSecurityPermissions(Context context, List<PermissionInfo> permList) {
         mContext = context;
         mPm = mContext.getPackageManager();
         mPermsList = permList;
     }
-    
+
     public AppSecurityPermissions(Context context, String packageName) {
         mContext = context;
         mPm = mContext.getPackageManager();
@@ -113,7 +113,7 @@ public class AppSecurityPermissions  implements View.OnClickListener {
             mPermsList.add(tmpInfo);
         }
     }
-    
+
     public AppSecurityPermissions(Context context, PackageParser.Package pkg) {
         mContext = context;
         mPm = mContext.getPackageManager();
@@ -145,7 +145,7 @@ public class AppSecurityPermissions  implements View.OnClickListener {
             mPermsList.add(tmpInfo);
         }
     }
-    
+
     /**
      * Utility to retrieve a view displaying a single permission.
      */
@@ -158,7 +158,7 @@ public class AppSecurityPermissions  implements View.OnClickListener {
         return getPermissionItemView(context, inflater, grpName,
                 description, dangerous, icon);
     }
-    
+
     private void getAllUsedPermissions(int sharedUid, Set<PermissionInfo> permSet) {
         String sharedPkgList[] = mPm.getPackagesForUid(sharedUid);
         if(sharedPkgList == null || (sharedPkgList.length == 0)) {
@@ -168,8 +168,8 @@ public class AppSecurityPermissions  implements View.OnClickListener {
             getPermissionsForPackage(sharedPkg, permSet);
         }
     }
-    
-    private void getPermissionsForPackage(String packageName, 
+
+    private void getPermissionsForPackage(String packageName,
             Set<PermissionInfo> permSet) {
         PackageInfo pkgInfo;
         try {
@@ -182,7 +182,7 @@ public class AppSecurityPermissions  implements View.OnClickListener {
             extractPerms(pkgInfo.requestedPermissions, permSet);
         }
     }
-    
+
     private void extractPerms(String strList[], Set<PermissionInfo> permSet) {
         if((strList == null) || (strList.length == 0)) {
             return;
@@ -198,13 +198,13 @@ public class AppSecurityPermissions  implements View.OnClickListener {
             }
         }
     }
-    
+
     public int getPermissionCount() {
         return mPermsList.size();
     }
 
     public View getPermissionsView() {
-        
+
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mPermsView = (LinearLayout) mInflater.inflate(R.layout.app_perms_summary, null);
         mShowMore = mPermsView.findViewById(R.id.show_more);
@@ -227,7 +227,7 @@ public class AppSecurityPermissions  implements View.OnClickListener {
         mDangerousIcon = mContext.getResources().getDrawable(R.drawable.ic_bullet_key_permission);
         mShowMaxIcon = mContext.getResources().getDrawable(R.drawable.expander_ic_maximized);
         mShowMinIcon = mContext.getResources().getDrawable(R.drawable.expander_ic_minimized);
-        
+
         // Set permissions view
         setPermissions(mPermsList);
         return mPermsView;
@@ -373,7 +373,7 @@ public class AppSecurityPermissions  implements View.OnClickListener {
             break;
         }
     }
-    
+
     private boolean isDisplayablePermission(PermissionInfo pInfo) {
         if(pInfo.protectionLevel == PermissionInfo.PROTECTION_DANGEROUS ||
                 pInfo.protectionLevel == PermissionInfo.PROTECTION_NORMAL) {
@@ -381,7 +381,7 @@ public class AppSecurityPermissions  implements View.OnClickListener {
         }
         return false;
     }
-    
+
     /*
      * Utility method that aggregates all permission descriptions categorized by group
      * Say group1 has perm11, perm12, perm13, the group description will be
@@ -415,7 +415,7 @@ public class AppSecurityPermissions  implements View.OnClickListener {
             }
         }
     }
-    
+
     private static class PermissionInfoComparator implements Comparator<PermissionInfo> {
         private PackageManager mPm;
         private final Collator sCollator = Collator.getInstance();
@@ -428,27 +428,27 @@ public class AppSecurityPermissions  implements View.OnClickListener {
             return sCollator.compare(sa, sb);
         }
     }
-    
+
     private void setPermissions(List<PermissionInfo> permList) {
         mGroupLabelCache = new HashMap<String, CharSequence>();
         //add the default label so that uncategorized permissions can go here
         mGroupLabelCache.put(mDefaultGrpName, mDefaultGrpLabel);
-        
+
         // Map containing group names and a list of permissions under that group
         // categorized as dangerous
         mDangerousMap = new HashMap<String, String>();
         // Map containing group names and a list of permissions under that group
         // categorized as normal
         mNormalMap = new HashMap<String, String>();
-        
-        // Additional structures needed to ensure that permissions are unique under 
+
+        // Additional structures needed to ensure that permissions are unique under
         // each group
-        Map<String, List<PermissionInfo>> dangerousMap = 
+        Map<String, List<PermissionInfo>> dangerousMap =
             new HashMap<String,  List<PermissionInfo>>();
-        Map<String, List<PermissionInfo> > normalMap = 
+        Map<String, List<PermissionInfo> > normalMap =
             new HashMap<String,  List<PermissionInfo>>();
         PermissionInfoComparator permComparator = new PermissionInfoComparator(mPm);
-        
+
         if (permList != null) {
             // First pass to group permissions
             for (PermissionInfo pInfo : permList) {

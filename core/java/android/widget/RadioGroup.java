@@ -38,14 +38,14 @@ import android.view.ViewGroup;
  * in the XML layout file.</p>
  *
  * <p><strong>XML Attributes</strong></p>
- * <p>See {@link android.R.styleable#RadioGroup RadioGroup Attributes}, 
+ * <p>See {@link android.R.styleable#RadioGroup RadioGroup Attributes},
  * {@link android.R.styleable#LinearLayout LinearLayout Attributes},
  * {@link android.R.styleable#ViewGroup ViewGroup Attributes},
  * {@link android.R.styleable#View View Attributes}</p>
  * <p>Also see
  * {@link android.widget.LinearLayout.LayoutParams LinearLayout.LayoutParams}
  * for layout attributes.</p>
- * 
+ *
  * @see RadioButton
  *
  */
@@ -301,7 +301,7 @@ public class RadioGroup extends LinearLayout {
             } else {
                 width = WRAP_CONTENT;
             }
-            
+
             if (a.hasValue(heightAttr)) {
                 height = a.getLayoutDimension(heightAttr, "layout_height");
             } else {

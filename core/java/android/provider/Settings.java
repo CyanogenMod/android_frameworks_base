@@ -2351,7 +2351,7 @@ public final class Settings {
           */
          public static final String TRACKBALL_NOTIFICATION_PULSE_ORDER = "trackball_pulse_in_order";
 
-	/**
+        /**
           * Beldn Notification Colors.  The value is boolean (1 or 0).
           * @hide
           */

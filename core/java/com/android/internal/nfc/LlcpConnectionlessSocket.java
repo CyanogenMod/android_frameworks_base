@@ -47,7 +47,7 @@ public class LlcpConnectionlessSocket {
      * @param handle The handle returned by the NFC service and used to identify
      *            the socket in subsequent calls.
      */
-	LlcpConnectionlessSocket(ILlcpConnectionlessSocket service, int handle) {
+        LlcpConnectionlessSocket(ILlcpConnectionlessSocket service, int handle) {
         this.mService = service;
         this.mHandle = handle;
     }
@@ -60,15 +60,15 @@ public class LlcpConnectionlessSocket {
      * @throws IOException if the LLCP link has been lost or deactivated.
      */
     public void sendTo(LlcpPacket packet) throws IOException {
-		try {
-			int result = mService.sendTo(mHandle, packet);
-			// Handle potential errors
-			if (ErrorCodes.isError(result)) {
-				throw new IOException();
-			}
-		} catch (RemoteException e) {
-			Log.e(TAG, "RemoteException in sendTo(): ", e);
-		}
+                try {
+                        int result = mService.sendTo(mHandle, packet);
+                        // Handle potential errors
+                        if (ErrorCodes.isError(result)) {
+                                throw new IOException();
+                        }
+                } catch (RemoteException e) {
+                        Log.e(TAG, "RemoteException in sendTo(): ", e);
+                }
     }
 
     /**
@@ -79,17 +79,17 @@ public class LlcpConnectionlessSocket {
      * @see LlcpPacket
      */
     public LlcpPacket receiveFrom() throws IOException {
-		try {
-			LlcpPacket packet = mService.receiveFrom(mHandle);
-			if (packet != null) {
-				return packet;
-			}else{
-				// Handle potential errors
-				throw new IOException();
-			}
-		} catch (RemoteException e) {
-			Log.e(TAG, "RemoteException in receiveFrom(): ", e);
-		}
+                try {
+                        LlcpPacket packet = mService.receiveFrom(mHandle);
+                        if (packet != null) {
+                                return packet;
+                        }else{
+                                // Handle potential errors
+                                throw new IOException();
+                        }
+                } catch (RemoteException e) {
+                        Log.e(TAG, "RemoteException in receiveFrom(): ", e);
+                }
         return null;
     }
 
@@ -97,11 +97,11 @@ public class LlcpConnectionlessSocket {
      * Close the created Connectionless socket.
      */
     public void close() {
-		try {
-			mService.close(mHandle);
-		} catch (RemoteException e) {
-			Log.e(TAG, "RemoteException in close(): ", e);
-		}
+                try {
+                        mService.close(mHandle);
+                } catch (RemoteException e) {
+                        Log.e(TAG, "RemoteException in close(): ", e);
+                }
     }
 
     /**
@@ -110,15 +110,15 @@ public class LlcpConnectionlessSocket {
      * @return sap
      */
     public int getSap() {
-    	int sap = 0;
+        int sap = 0;
 
-    	try {
-			sap = mService.getSap(mHandle);
+        try {
+                        sap = mService.getSap(mHandle);
 
-		} catch (RemoteException e) {
+                } catch (RemoteException e) {
 
-			e.printStackTrace();
-		}
-    	return sap;
+                        e.printStackTrace();
+                }
+        return sap;
     }
 }

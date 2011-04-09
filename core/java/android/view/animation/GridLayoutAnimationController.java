@@ -43,7 +43,7 @@ import java.util.Random;
  *
  * @see LayoutAnimationController
  * @see android.widget.GridView
- * 
+ *
  * @attr ref android.R.styleable#GridLayoutAnimation_columnDelay
  * @attr ref android.R.styleable#GridLayoutAnimation_rowDelay
  * @attr ref android.R.styleable#GridLayoutAnimation_direction
@@ -206,7 +206,7 @@ public class GridLayoutAnimationController extends LayoutAnimationController {
      *
      * @see #getRowDelay()
      * @see #getColumnDelay()
-     * @see #setColumnDelay(float) 
+     * @see #setColumnDelay(float)
      */
     public void setRowDelay(float rowDelay) {
         mRowDelay = rowDelay;

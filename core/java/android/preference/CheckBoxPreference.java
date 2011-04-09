@@ -34,7 +34,7 @@ import android.widget.TextView;
  * functionality.
  * <p>
  * This preference will store a boolean into the SharedPreferences.
- * 
+ *
  * @attr ref android.R.styleable#CheckBoxPreference_summaryOff
  * @attr ref android.R.styleable#CheckBoxPreference_summaryOn
  * @attr ref android.R.styleable#CheckBoxPreference_disableDependentsState
@@ -43,17 +43,17 @@ public class CheckBoxPreference extends Preference {
 
     private CharSequence mSummaryOn;
     private CharSequence mSummaryOff;
-    
+
     private boolean mChecked;
     private boolean mSendAccessibilityEventViewClickedType;
 
     private AccessibilityManager mAccessibilityManager;
-    
+
     private boolean mDisableDependentsState;
-    
+
     public CheckBoxPreference(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        
+
         TypedArray a = context.obtainStyledAttributes(attrs,
                 com.android.internal.R.styleable.CheckBoxPreference, defStyle, 0);
         mSummaryOn = a.getString(com.android.internal.R.styleable.CheckBoxPreference_summaryOn);
@@ -114,7 +114,7 @@ public class CheckBoxPreference extends Preference {
                     useDefaultSummary = false;
                 }
             }
-            
+
             int newVisibility = View.GONE;
             if (!useDefaultSummary) {
                 // Someone has written to it
@@ -125,13 +125,13 @@ public class CheckBoxPreference extends Preference {
             }
         }
     }
-    
+
     @Override
     protected void onClick() {
         super.onClick();
-        
+
         boolean newValue = !isChecked();
-        
+
         // in onBindView() an AccessibilityEventViewClickedType is sent to announce the change
         // not sending
         mSendAccessibilityEventViewClickedType = true;
@@ -139,13 +139,13 @@ public class CheckBoxPreference extends Preference {
         if (!callChangeListener(newValue)) {
             return;
         }
-        
+
         setChecked(newValue);
     }
 
     /**
      * Sets the checked state and saves it to the {@link SharedPreferences}.
-     * 
+     *
      * @param checked The checked state.
      */
     public void setChecked(boolean checked) {
@@ -159,13 +159,13 @@ public class CheckBoxPreference extends Preference {
 
     /**
      * Returns the checked state.
-     * 
+     *
      * @return The checked state.
      */
     public boolean isChecked() {
         return mChecked;
     }
-    
+
     @Override
     public boolean shouldDisableDependents() {
         boolean shouldDisable = mDisableDependentsState ? mChecked : !mChecked;
@@ -174,7 +174,7 @@ public class CheckBoxPreference extends Preference {
 
     /**
      * Sets the summary to be shown when checked.
-     * 
+     *
      * @param summary The summary to be shown when checked.
      */
     public void setSummaryOn(CharSequence summary) {
@@ -191,7 +191,7 @@ public class CheckBoxPreference extends Preference {
     public void setSummaryOn(int summaryResId) {
         setSummaryOn(getContext().getString(summaryResId));
     }
-    
+
     /**
      * Returns the summary to be shown when checked.
      * @return The summary.
@@ -199,10 +199,10 @@ public class CheckBoxPreference extends Preference {
     public CharSequence getSummaryOn() {
         return mSummaryOn;
     }
-    
+
     /**
      * Sets the summary to be shown when unchecked.
-     * 
+     *
      * @param summary The summary to be shown when unchecked.
      */
     public void setSummaryOff(CharSequence summary) {
@@ -219,7 +219,7 @@ public class CheckBoxPreference extends Preference {
     public void setSummaryOff(int summaryResId) {
         setSummaryOff(getContext().getString(summaryResId));
     }
-    
+
     /**
      * Returns the summary to be shown when unchecked.
      * @return The summary.
@@ -231,7 +231,7 @@ public class CheckBoxPreference extends Preference {
     /**
      * Returns whether dependents are disabled when this preference is on ({@code true})
      * or when this preference is off ({@code false}).
-     * 
+     *
      * @return Whether dependents are disabled when this preference is on ({@code true})
      *         or when this preference is off ({@code false}).
      */
@@ -242,7 +242,7 @@ public class CheckBoxPreference extends Preference {
     /**
      * Sets whether dependents are disabled when this preference is on ({@code true})
      * or when this preference is off ({@code false}).
-     * 
+     *
      * @param disableDependentsState The preference state that should disable dependents.
      */
     public void setDisableDependentsState(boolean disableDependentsState) {
@@ -267,7 +267,7 @@ public class CheckBoxPreference extends Preference {
             // No need to save instance state since it's persistent
             return superState;
         }
-        
+
         final SavedState myState = new SavedState(superState);
         myState.checked = isChecked();
         return myState;
@@ -280,15 +280,15 @@ public class CheckBoxPreference extends Preference {
             super.onRestoreInstanceState(state);
             return;
         }
-         
+
         SavedState myState = (SavedState) state;
         super.onRestoreInstanceState(myState.getSuperState());
         setChecked(myState.checked);
     }
-    
+
     private static class SavedState extends BaseSavedState {
         boolean checked;
-        
+
         public SavedState(Parcel source) {
             super(source);
             checked = source.readInt() == 1;
@@ -315,5 +315,5 @@ public class CheckBoxPreference extends Preference {
             }
         };
     }
-    
+
 }

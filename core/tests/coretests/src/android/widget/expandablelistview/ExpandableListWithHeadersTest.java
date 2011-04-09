@@ -27,7 +27,7 @@ public class ExpandableListWithHeadersTest extends
         ActivityInstrumentationTestCase2<ExpandableListWithHeaders> {
     private ExpandableListView mExpandableListView;
     private ListUtil mListUtil;
-    
+
     public ExpandableListWithHeadersTest() {
         super(ExpandableListWithHeaders.class);
     }
@@ -35,16 +35,16 @@ public class ExpandableListWithHeadersTest extends
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-        
+
         mExpandableListView = getActivity().getExpandableListView();
         mListUtil = new ListUtil(mExpandableListView, getInstrumentation());
     }
-    
+
     @MediumTest
     public void testPreconditions() {
         assertNotNull(mExpandableListView);
     }
-    
+
     @MediumTest
     public void testExpandOnFirstPosition() {
         // Should be a header, and hence the first group should NOT have expanded

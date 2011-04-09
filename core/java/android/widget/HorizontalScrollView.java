@@ -123,7 +123,7 @@ public class HorizontalScrollView extends FrameLayout {
     private int mTouchSlop;
     private int mMinimumVelocity;
     private int mMaximumVelocity;
-    
+
     private int mOverscrollDistance;
     private int mOverflingDistance;
 
@@ -132,13 +132,13 @@ public class HorizontalScrollView extends FrameLayout {
      * drags/flings if multiple pointers are used.
      */
     private int mActivePointerId = INVALID_POINTER;
-    
+
     /**
      * Sentinel value for no current active pointer.
      * Used by {@link #mActivePointerId}.
      */
     private static final int INVALID_POINTER = -1;
-    
+
     public HorizontalScrollView(Context context) {
         this(context, null);
     }
@@ -315,13 +315,13 @@ public class HorizontalScrollView extends FrameLayout {
             int width = getMeasuredWidth();
             if (child.getMeasuredWidth() < width) {
                 final FrameLayout.LayoutParams lp = (LayoutParams) child.getLayoutParams();
-    
+
                 int childHeightMeasureSpec = getChildMeasureSpec(heightMeasureSpec, mPaddingTop
                         + mPaddingBottom, lp.height);
                 width -= mPaddingLeft;
                 width -= mPaddingRight;
                 int childWidthMeasureSpec = MeasureSpec.makeMeasureSpec(width, MeasureSpec.EXACTLY);
-    
+
                 child.measure(childWidthMeasureSpec, childHeightMeasureSpec);
             }
         }
@@ -393,7 +393,7 @@ public class HorizontalScrollView extends FrameLayout {
         }
         return false;
     }
-    
+
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         /*
@@ -450,7 +450,7 @@ public class HorizontalScrollView extends FrameLayout {
                     mIsBeingDragged = false;
                     break;
                 }
-                
+
                 /*
                  * Remember location of down touch.
                  * ACTION_DOWN always refers to pointer index 0.
@@ -584,7 +584,7 @@ public class HorizontalScrollView extends FrameLayout {
                             }
                         }
                     }
-                    
+
                     mActivePointerId = INVALID_POINTER;
                     mIsBeingDragged = false;
 
@@ -621,7 +621,7 @@ public class HorizontalScrollView extends FrameLayout {
         }
         return true;
     }
-    
+
     private void onSecondaryPointerUp(MotionEvent ev) {
         final int pointerIndex = (ev.getAction() & MotionEvent.ACTION_POINTER_INDEX_MASK) >>
                 MotionEvent.ACTION_POINTER_INDEX_SHIFT;
@@ -638,7 +638,7 @@ public class HorizontalScrollView extends FrameLayout {
             }
         }
     }
-    
+
     @Override
     protected void onOverScrolled(int scrollX, int scrollY,
             boolean clampedX, boolean clampedY) {
@@ -920,7 +920,7 @@ public class HorizontalScrollView extends FrameLayout {
             if (direction == View.FOCUS_LEFT && getScrollX() < scrollDelta) {
                 scrollDelta = getScrollX();
             } else if (direction == View.FOCUS_RIGHT && getChildCount() > 0) {
-                
+
                 int daRight = getChildAt(0).getRight();
 
                 int screenRight = getScrollX() + getWidth();
@@ -1036,7 +1036,7 @@ public class HorizontalScrollView extends FrameLayout {
         if (count == 0) {
             return contentWidth;
         }
-        
+
         int scrollRange = getChildAt(0).getRight();
         final int scrollX = mScrollX;
         final int overscrollRight = Math.max(0, scrollRange - contentWidth);
@@ -1048,7 +1048,7 @@ public class HorizontalScrollView extends FrameLayout {
 
         return scrollRange;
     }
-    
+
     @Override
     protected int computeHorizontalScrollOffset() {
         return Math.max(0, super.computeHorizontalScrollOffset());
@@ -1355,25 +1355,25 @@ public class HorizontalScrollView extends FrameLayout {
         if (getChildCount() > 0) {
             int width = getWidth() - mPaddingRight - mPaddingLeft;
             int right = getChildAt(0).getWidth();
-    
-            mScroller.fling(mScrollX, mScrollY, velocityX, 0, 0, 
+
+            mScroller.fling(mScrollX, mScrollY, velocityX, 0, 0,
                     Math.max(0, right - width), 0, 0, width/2, 0);
-    
+
             final boolean movingRight = velocityX > 0;
-    
+
             View newFocused = findFocusableViewInMyBounds(movingRight,
                     mScroller.getFinalX(), findFocus());
-    
+
             if (newFocused == null) {
                 newFocused = this;
             }
-    
+
             if (newFocused != findFocus()
                     && newFocused.requestFocus(movingRight ? View.FOCUS_RIGHT : View.FOCUS_LEFT)) {
                 mScrollViewMovedFocus = true;
                 mScrollViewMovedFocus = false;
             }
-    
+
             invalidate();
         }
     }

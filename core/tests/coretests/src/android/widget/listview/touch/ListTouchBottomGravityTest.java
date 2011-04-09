@@ -25,7 +25,7 @@ import android.widget.ListView;
 import android.widget.listview.ListBottomGravity;
 
 /**
- * Touch tests for a list where all of the items fit on the screen, and the list 
+ * Touch tests for a list where all of the items fit on the screen, and the list
  * stacks from the bottom.
  */
 public class ListTouchBottomGravityTest extends ActivityInstrumentationTestCase<ListBottomGravity> {
@@ -48,46 +48,46 @@ public class ListTouchBottomGravityTest extends ActivityInstrumentationTestCase<
     public void testPreconditions() {
         assertNotNull(mActivity);
         assertNotNull(mListView);
-        
+
         // First item should be selected
         assertEquals(mListView.getAdapter().getCount() - 1, mListView.getSelectedItemPosition());
     }
-    
+
     @MediumTest
     public void testPullDown() {
         View firstChild = mListView.getChildAt(0);
-        
+
         TouchUtils.dragViewToBottom(this, firstChild);
-        
+
         View lastChild = mListView.getChildAt(mListView.getChildCount() - 1);
-        
+
         // Nothing should be selected
-        assertEquals("Selection still available after touch", -1, 
+        assertEquals("Selection still available after touch", -1,
                 mListView.getSelectedItemPosition());
-        
+
         assertEquals("List is not scrolled to the bottom", mListView.getAdapter().getCount() - 1,
                 lastChild.getId());
 
-        assertEquals("Last item is not touching the bottom edge", 
+        assertEquals("Last item is not touching the bottom edge",
                 mListView.getHeight() - mListView.getListPaddingBottom(), lastChild.getBottom());
     }
-    
+
     @MediumTest
     public void testPushUp() {
         View lastChild = mListView.getChildAt(mListView.getChildCount() - 1);
-        
+
         TouchUtils.dragViewToTop(this, lastChild);
 
         lastChild = mListView.getChildAt(mListView.getChildCount() - 1);
-        
+
         // Nothing should be selected
-        assertEquals("Selection still available after touch", -1, 
+        assertEquals("Selection still available after touch", -1,
                 mListView.getSelectedItemPosition());
-        
+
         assertEquals("List is not scrolled to the bottom", mListView.getAdapter().getCount() - 1,
                 lastChild.getId());
 
-        assertEquals("Last item is not touching the bottom edge",  
+        assertEquals("Last item is not touching the bottom edge",
                 mListView.getHeight() - mListView.getListPaddingBottom(), lastChild.getBottom());
     }
 

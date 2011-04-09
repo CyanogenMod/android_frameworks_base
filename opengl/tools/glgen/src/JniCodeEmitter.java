@@ -302,7 +302,7 @@ public class JniCodeEmitter {
         }
         return false;
     }
-    
+
     String isRequiresFunc(CFunc cfunc) {
         String[] checks = mChecker.getChecks(cfunc.getName());
         int index = 1;
@@ -329,7 +329,7 @@ public class JniCodeEmitter {
         }
         return null;
     }
-    
+
     void emitNativeBoundsChecks(CFunc cfunc, String cname, PrintStream out,
             boolean isBuffer, boolean emitExceptionCheck, String offset, String remaining, String iii) {
 
@@ -828,7 +828,7 @@ public class JniCodeEmitter {
             out.println();
             return;
         }
-        
+
         String requiresExtension = isRequiresFunc(cfunc);
         if (requiresExtension != null) {
             out.println(indent +

@@ -18,7 +18,7 @@ package android.test.suitebuilder;
 
 /**
  * A suite builder that finds instrumentation tests.
- * 
+ *
  * {@hide} Not needed for 1.0 SDK.
  */
 public class InstrumentationTestSuiteBuilder extends TestSuiteBuilder {

@@ -46,7 +46,7 @@ import android.view.WindowManagerImpl;
  * <p>
  * The easiest way to use this class is to call one of the static methods that constructs
  * everything you need and returns a new Toast object.
- */ 
+ */
 public class Toast {
     static final String TAG = "Toast";
     static final boolean localLOGV = false;
@@ -65,7 +65,7 @@ public class Toast {
      */
     public static final int LENGTH_LONG = 1;
 
-    final Handler mHandler = new Handler();    
+    final Handler mHandler = new Handler();
     final Context mContext;
     final TN mTN;
     int mDuration;
@@ -89,7 +89,7 @@ public class Toast {
         mY = context.getResources().getDimensionPixelSize(
                 com.android.internal.R.dimen.toast_y_offset);
     }
-    
+
     /**
      * Show the view for the specified duration.
      */
@@ -120,7 +120,7 @@ public class Toast {
         mTN.hide();
         // TODO this still needs to cancel the inflight notification if any
     }
-    
+
     /**
      * Set the view to show.
      * @see #getView
@@ -153,7 +153,7 @@ public class Toast {
     public int getDuration() {
         return mDuration;
     }
-    
+
     /**
      * Set the margins of the view.
      *
@@ -209,14 +209,14 @@ public class Toast {
     public int getXOffset() {
         return mX;
     }
-    
+
     /**
      * Return the Y offset in pixels to apply to the gravity's location.
      */
     public int getYOffset() {
         return mY;
     }
-    
+
     /**
      * Make a standard toast that just contains a text view.
      *
@@ -235,7 +235,7 @@ public class Toast {
         View v = inflate.inflate(com.android.internal.R.layout.transient_notification, null);
         TextView tv = (TextView)v.findViewById(com.android.internal.R.id.message);
         tv.setText(text);
-        
+
         result.mNextView = v;
         result.mDuration = duration;
 
@@ -265,7 +265,7 @@ public class Toast {
     public void setText(int resId) {
         setText(mContext.getText(resId));
     }
-    
+
     /**
      * Update the text in a Toast that was previously created using one of the makeText() methods.
      * @param s The new text for the Toast.
@@ -310,7 +310,7 @@ public class Toast {
         };
 
         private final WindowManager.LayoutParams mParams = new WindowManager.LayoutParams();
-        
+
         WindowManagerImpl mWM;
 
         TN() {

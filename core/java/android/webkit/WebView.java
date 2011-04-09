@@ -300,7 +300,7 @@ import junit.framework.Assert;
  * property to {@code device-dpi}. This stops Android from performing scaling in your web page and
  * allows you to make the necessary adjustments for each density via CSS and JavaScript.</p>
  *
- * 
+ *
  */
 @Widget
 public class WebView extends AbsoluteLayout
@@ -814,7 +814,7 @@ public class WebView extends AbsoluteLayout
     public static final String SCHEME_GEO = "geo:0,0?q=";
 
     private int mBackgroundColor = Color.WHITE;
-    
+
     //Wysie
     private boolean showZoomControls = true;
 
@@ -988,7 +988,7 @@ public class WebView extends AbsoluteLayout
 
         updateMultiTouchSupport(context);
     }
-    
+
     //Wysie
     void showZoomControls(boolean value) {
         showZoomControls = value;

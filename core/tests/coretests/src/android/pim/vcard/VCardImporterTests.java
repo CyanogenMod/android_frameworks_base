@@ -461,7 +461,7 @@ public class VCardImporterTests extends VCardTestsBase {
                 .addExpectedNodeWithOrder("N", ";A;B\\;C\\;;D;:E;\\\\;",
                         Arrays.asList("", "A;B\\", "C\\;", "D", ":E", "\\\\", ""))
                 .addExpectedNodeWithOrder("FN", "A;B\\C\\;D:E\\\\");
-        
+
     }
 
     /**

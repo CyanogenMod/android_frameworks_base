@@ -90,7 +90,7 @@ public class SettingsHelper {
 
     private void setGpsLocation(String value) {
         final String GPS = LocationManager.GPS_PROVIDER;
-        boolean enabled = 
+        boolean enabled =
                 GPS.equals(value) ||
                 value.startsWith(GPS + ",") ||
                 value.endsWith("," + GPS) ||

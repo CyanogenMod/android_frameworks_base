@@ -17,7 +17,7 @@
 package android.core;
 
 /**
- * 
+ *
  */
 public class JavaPerformanceTests {
 

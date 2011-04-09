@@ -52,14 +52,14 @@ public class BaselineButtonsTest extends ActivityInstrumentationTestCase<Baselin
 
     @MediumTest
     public void testPreconditions() {
-        assertNotNull(mCurrentTime);    
-        assertNotNull(mTotalTime);  
-        assertNotNull(mPrev);  
-        assertNotNull(mNext);  
-        assertNotNull(mPause);  
-        assertNotNull(mLayout);  
+        assertNotNull(mCurrentTime);
+        assertNotNull(mTotalTime);
+        assertNotNull(mPrev);
+        assertNotNull(mNext);
+        assertNotNull(mPause);
+        assertNotNull(mLayout);
     }
-    
+
     @MediumTest
     public void testLayout() {
         int pauseHeight =  Math.max(mPause.getDrawable().getIntrinsicHeight()
@@ -71,11 +71,11 @@ public class BaselineButtonsTest extends ActivityInstrumentationTestCase<Baselin
         int nextHeight = Math.max(mNext.getDrawable().getIntrinsicHeight() + mNext.getPaddingTop()
                 + mNext.getPaddingBottom(),
                 mNext.getBackground().getMinimumHeight());
-        assertEquals("Layout incorrect height", pauseHeight, mLayout.getHeight()); 
-        assertEquals("Pause incorrect height", pauseHeight, mPause.getHeight()); 
-        assertEquals("Prev incorrect height", prevHeight, mPrev.getHeight()); 
-        assertEquals("Next incorrect height", nextHeight, mNext.getHeight()); 
-        assertEquals("Pause wrong top", 0, mPause.getTop()); 
+        assertEquals("Layout incorrect height", pauseHeight, mLayout.getHeight());
+        assertEquals("Pause incorrect height", pauseHeight, mPause.getHeight());
+        assertEquals("Prev incorrect height", prevHeight, mPrev.getHeight());
+        assertEquals("Next incorrect height", nextHeight, mNext.getHeight());
+        assertEquals("Pause wrong top", 0, mPause.getTop());
         assertEquals("Prev wrong top", (pauseHeight - prevHeight) / 2, mPrev.getTop());
         assertEquals("Next wrong top", (pauseHeight - nextHeight) / 2, mNext.getTop());
         assertEquals("CurrentTime wrong bottom",  pauseHeight, mCurrentTime.getBottom());

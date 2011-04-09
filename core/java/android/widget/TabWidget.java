@@ -43,7 +43,7 @@ import android.view.View.OnFocusChangeListener;
  *
  * <p>See the <a href="{@docRoot}resources/tutorials/views/hello-tabwidget.html">Tab Layout
  * tutorial</a>.</p>
- * 
+ *
  * @attr ref android.R.styleable#TabWidget_divider
  * @attr ref android.R.styleable#TabWidget_tabStripEnabled
  * @attr ref android.R.styleable#TabWidget_tabStripLeft
@@ -113,7 +113,7 @@ public class TabWidget extends LinearLayout implements OnFocusChangeListener {
 
         final Context context = mContext;
         final Resources resources = context.getResources();
-        
+
         if (context.getApplicationInfo().targetSdkVersion <= Build.VERSION_CODES.DONUT) {
             // Donut apps get old color scheme
             if (mLeftStrip == null) {
@@ -193,7 +193,7 @@ public class TabWidget extends LinearLayout implements OnFocusChangeListener {
         requestLayout();
         invalidate();
     }
-    
+
     /**
      * Sets the drawable to use as the left part of the strip below the
      * tab indicators.
@@ -238,7 +238,7 @@ public class TabWidget extends LinearLayout implements OnFocusChangeListener {
         requestLayout();
         invalidate();
     }
-    
+
     /**
      * Controls whether the bottom strips on the tab indicators are drawn or
      * not.  The default is to draw them.  If the user specifies a custom

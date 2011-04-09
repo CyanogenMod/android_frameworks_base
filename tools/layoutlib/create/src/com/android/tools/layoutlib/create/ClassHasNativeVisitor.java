@@ -27,9 +27,9 @@ import org.objectweb.asm.Opcodes;
  * Indicates if a class contains any native methods.
  */
 public class ClassHasNativeVisitor implements ClassVisitor {
-    
+
     private boolean mHasNativeMethods = false;
-    
+
     public boolean hasNativeMethods() {
         return mHasNativeMethods;
     }

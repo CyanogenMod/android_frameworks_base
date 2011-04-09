@@ -91,7 +91,7 @@ public class Location implements Parcelable {
         pw.println(prefix + "mHasAccuracy=" + mHasAccuracy + " mAccuracy=" + mAccuracy);
         pw.println(prefix + "mExtras=" + mExtras);
     }
-    
+
     /**
      * Constructs a new Location.  By default, time, latitude,
      * longitude, and numSatellites are 0; hasAltitude, hasSpeed, and

@@ -167,7 +167,7 @@ public class Touch {
                     ny = Math.min(ny, layout.getHeight() - (widget.getHeight() -
                                                             padding));
                     ny = Math.max(ny, 0);
-        
+
                     int oldX = widget.getScrollX();
                     int oldY = widget.getScrollY();
 
@@ -191,12 +191,12 @@ public class Touch {
         DragState[] ds = buffer.getSpans(0, buffer.length(), DragState.class);
         return ds.length > 0 ? ds[0].mScrollX : -1;
     }
-    
+
     public static int getInitialScrollY(TextView widget, Spannable buffer) {
         DragState[] ds = buffer.getSpans(0, buffer.length(), DragState.class);
         return ds.length > 0 ? ds[0].mScrollY : -1;
     }
-    
+
     private static class DragState implements NoCopySpan {
         public float mX;
         public float mY;

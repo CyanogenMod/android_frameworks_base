@@ -40,15 +40,15 @@ public class RegionIterator {
         }
         return nativeNext(mNativeIter, r);
     }
-    
+
     protected void finalize() throws Throwable {
         nativeDestructor(mNativeIter);
     }
-    
+
     private static native int nativeConstructor(int native_region);
     private static native void nativeDestructor(int native_iter);
     private static native boolean nativeNext(int native_iter, Rect r);
-    
+
     private final int mNativeIter;
 }
 

@@ -39,7 +39,7 @@ import java.util.Comparator;
  *
  * <p>See the android.test package documentation (click the more... link)
  * for a full description
- * 
+ *
  * {@hide} Not needed for SDK
  */
 public abstract class TestListActivity extends ListActivity {
@@ -71,7 +71,7 @@ public abstract class TestListActivity extends ListActivity {
         public final int compare(String a, String b) {
             String s1 = makeCompareName(a);
             String s2 = makeCompareName(b);
-            
+
             return s1.compareToIgnoreCase(s2);
         }
     };
@@ -145,13 +145,13 @@ public abstract class TestListActivity extends ListActivity {
                 cursor,
                 new String[] {"name"},
                 new int[] {com.android.internal.R.id.text1});
-        
+
         setListAdapter(adapter);
     }
 
     private void addTestRows(MatrixCursor cursor) {
         int id = 0;
-        cursor.newRow().add("Run All").add(id++);       
+        cursor.newRow().add("Run All").add(id++);
         for (String test : mTests) {
             String title = TestRunner.getTitle(test);
             String prefix = TestRunner.isTestSuite(this, test)
@@ -186,7 +186,7 @@ public abstract class TestListActivity extends ListActivity {
         } else if (item == mProfilingItem) {
             mMode = TestRunner.PROFILING;
         }
-        
+
         return true;
     }
 
@@ -243,11 +243,11 @@ public abstract class TestListActivity extends ListActivity {
 
     private String makeCompareName(String s) {
         int index = s.lastIndexOf('.');
-        
+
         if (index == -1) {
             return s;
         }
-        
+
         return s.substring(index + 1);
     }
 }

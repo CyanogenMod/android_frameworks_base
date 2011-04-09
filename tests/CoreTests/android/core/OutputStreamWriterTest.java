@@ -26,7 +26,7 @@ import android.test.suitebuilder.annotation.SmallTest;
  * Tests basic functionality of an OutputStreamWriter.
  */
 public class OutputStreamWriterTest extends TestCase {
-    
+
     @SmallTest
     public void testOutputStreamWriter() throws Exception {
         String str = "AbCdEfGhIjKlMnOpQrStUvWxYz";

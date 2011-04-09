@@ -27,7 +27,7 @@ import android.view.View;
 
 import java.io.IOException;
 
-/** 
+/**
  * A Drawable that manages an array of other Drawables. These are drawn in array
  * order, so the element with the largest index will be drawn on top.
  * <p>
@@ -86,7 +86,7 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
 
         ensurePadding();
     }
-    
+
     LayerDrawable() {
         this((LayerState) null, null);
     }
@@ -184,7 +184,7 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
         }
 
         mLayerState.mChildrenChangingConfigurations |= layer.getChangingConfigurations();
-        
+
         ChildDrawable childDrawable = new ChildDrawable();
         st.mChildren[i] = childDrawable;
         childDrawable.mId = id;
@@ -206,26 +206,26 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
      */
     public Drawable findDrawableByLayerId(int id) {
         final ChildDrawable[] layers = mLayerState.mChildren;
-        
+
         for (int i = mLayerState.mNum - 1; i >= 0; i--) {
             if (layers[i].mId == id) {
                 return layers[i].mDrawable;
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Sets the ID of a layer.
-     * 
-     * @param index The index of the layer which will received the ID. 
+     *
+     * @param index The index of the layer which will received the ID.
      * @param id The ID to assign to the layer.
      */
     public void setId(int index, int id) {
         mLayerState.mChildren[index].mId = id;
     }
-    
+
     /**
      * Returns the number of layers contained within this.
      * @return The number of layers.
@@ -250,15 +250,15 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
      *
      * @param index The index of the layer.
      *
-     * @return The id of the layer or {@link android.view.View#NO_ID} if the layer has no id. 
+     * @return The id of the layer or {@link android.view.View#NO_ID} if the layer has no id.
      */
     public int getId(int index) {
         return mLayerState.mChildren[index].mId;
     }
-    
+
     /**
      * Sets (or replaces) the {@link Drawable} for the layer with the given id.
-     * 
+     *
      * @param id The layer ID to search for.
      * @param drawable The replacement {@link Drawable}.
      * @return Whether the {@link Drawable} was replaced (could return false if
@@ -266,17 +266,17 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
      */
     public boolean setDrawableByLayerId(int id, Drawable drawable) {
         final ChildDrawable[] layers = mLayerState.mChildren;
-        
+
         for (int i = mLayerState.mNum - 1; i >= 0; i--) {
             if (layers[i].mId == id) {
                 layers[i].mDrawable = drawable;
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     /** Specify modifiers to the bounds for the drawable[index].
         left += l
         top += t;
@@ -328,7 +328,7 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
                 | mLayerState.mChangingConfigurations
                 | mLayerState.mChildrenChangingConfigurations;
     }
-    
+
     @Override
     public boolean getPadding(Rect padding) {
         // Arbitrarily get the padding from the first image.
@@ -378,7 +378,7 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
             array[i].mDrawable.setAlpha(alpha);
         }
     }
-    
+
     @Override
     public void setColorFilter(ColorFilter cf) {
         final ChildDrawable[] array = mLayerState.mChildren;
@@ -387,7 +387,7 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
             array[i].mDrawable.setColorFilter(cf);
         }
     }
-    
+
     @Override
     public int getOpacity() {
         return mLayerState.getOpacity();
@@ -397,7 +397,7 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
     public boolean isStateful() {
         return mLayerState.isStateful();
     }
-    
+
     @Override
     protected boolean onStateChange(int[] state) {
         final ChildDrawable[] array = mLayerState.mChildren;
@@ -418,7 +418,7 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
         }
         return changed;
     }
-    
+
     @Override
     protected boolean onLevelChange(int level) {
         final ChildDrawable[] array = mLayerState.mChildren;
@@ -554,7 +554,7 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
 
         int mChangingConfigurations;
         int mChildrenChangingConfigurations;
-        
+
         private boolean mHaveOpacity = false;
         private int mOpacity;
 
@@ -574,7 +574,7 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
 
                 mChangingConfigurations = orig.mChangingConfigurations;
                 mChildrenChangingConfigurations = orig.mChildrenChangingConfigurations;
-                
+
                 for (int i = 0; i < N; i++) {
                     final ChildDrawable r = mChildren[i] = new ChildDrawable();
                     final ChildDrawable or = origChildDrawable[i];
@@ -606,12 +606,12 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
         public Drawable newDrawable() {
             return new LayerDrawable(this, null);
         }
-        
+
         @Override
         public Drawable newDrawable(Resources res) {
             return new LayerDrawable(this, res);
         }
-        
+
         @Override
         public int getChangingConfigurations() {
             return mChangingConfigurations;
@@ -631,12 +631,12 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
             mHaveOpacity = true;
             return op;
         }
-        
+
         public final boolean isStateful() {
             if (mHaveStateful) {
                 return mStateful;
             }
-            
+
             boolean stateful = false;
             final int N = mNum;
             for (int i = 0; i < N; i++) {
@@ -645,7 +645,7 @@ public class LayerDrawable extends Drawable implements Drawable.Callback {
                     break;
                 }
             }
-            
+
             mStateful = stateful;
             mHaveStateful = true;
             return stateful;

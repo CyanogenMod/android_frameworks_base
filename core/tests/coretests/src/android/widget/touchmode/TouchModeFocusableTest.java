@@ -81,7 +81,7 @@ public class TouchModeFocusableTest extends ActivityInstrumentationTestCase<LLEd
 
         assertTrue("button should have focus",
                 mButton.isFocused());
-        
+
         assertInTouchModeAfterClick(this, mButton);
         assertTrue("should be in touch mode", mButton.isInTouchMode());
         assertNull("nothing should have focus", getActivity().getCurrentFocus());

@@ -25,7 +25,7 @@ import android.os.Bundle;
  */
 class ActivityResult extends ResultInfo {
     final ActivityRecord mFrom;
-    
+
     public ActivityResult(ActivityRecord from, String resultWho,
             int requestCode, int resultCode, Intent data) {
         super(resultWho, requestCode, resultCode, data);

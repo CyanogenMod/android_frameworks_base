@@ -109,19 +109,19 @@ public class LightsService {
 
         public void pulse(int color, int onMS) {
             synchronized (this) {
-		if (mColor == 0 && !mFlashing) {
+                if (mColor == 0 && !mFlashing) {
                     setLightLocked(color, LIGHT_FLASH_HARDWARE, onMS, 1000, BRIGHTNESS_MODE_USER);
                     mH.sendMessageDelayed(Message.obtain(mH, 1, this), onMS);
                 }
             }
         }
 
-	public void notificationPulse(int color, int onMs, int offMs) {
-		synchronized (this) {
-			setLightLocked(color, LIGHT_FLASH_TIMED, onMs, 1000, BRIGHTNESS_MODE_USER);
-                	mH.sendMessageDelayed(Message.obtain(mH, 1, this), onMs);
-		}
-	}
+        public void notificationPulse(int color, int onMs, int offMs) {
+                synchronized (this) {
+                        setLightLocked(color, LIGHT_FLASH_TIMED, onMs, 1000, BRIGHTNESS_MODE_USER);
+                        mH.sendMessageDelayed(Message.obtain(mH, 1, this), onMs);
+                }
+        }
 
         public void turnOff() {
             synchronized (this) {
@@ -136,13 +136,13 @@ public class LightsService {
         }
 
         private void setLightLocked(int color, int mode, int onMS, int offMS, int brightnessMode) {
-		if (color != mColor || mode != mMode || onMS != mOnMS || offMS != mOffMS) {
-                	mColor = color;
-                	mMode = mode;
-                	mOnMS = onMS;
-                	mOffMS = offMS;
-                	setLight_native(mNativePointer, mId, color, mode, onMS, offMS, brightnessMode);
-            	}
+                if (color != mColor || mode != mMode || onMS != mOnMS || offMS != mOffMS) {
+                        mColor = color;
+                        mMode = mode;
+                        mOnMS = onMS;
+                        mOffMS = offMS;
+                        setLight_native(mNativePointer, mId, color, mode, onMS, offMS, brightnessMode);
+                }
         }
 
         private int mId;

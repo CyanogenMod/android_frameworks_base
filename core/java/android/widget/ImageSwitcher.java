@@ -30,7 +30,7 @@ public class ImageSwitcher extends ViewSwitcher
     {
         super(context);
     }
-    
+
     public ImageSwitcher(Context context, AttributeSet attrs) {
         super(context, attrs);
     }

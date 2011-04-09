@@ -134,7 +134,7 @@ public class RecentApplicationsBackground extends LinearLayout {
         super.onDetachedFromWindow();
         mBackground.setCallback(null);
     }
-    
+
     private void getChildBounds(Rect r) {
         r.left = r.top = Integer.MAX_VALUE;
         r.bottom = r.right = Integer.MIN_VALUE;

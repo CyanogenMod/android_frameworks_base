@@ -610,7 +610,7 @@ class MountService extends IMountService.Stub
                     Slog.w(TAG, "Failed to get share availability");
                 }
                 /*
-                 * Now that we've done our initialization, release 
+                 * Now that we've done our initialization, release
                  * the hounds!
                  */
                 mReady = true;
@@ -1262,7 +1262,7 @@ class MountService extends IMountService.Stub
         waitForReady();
         return doGetVolumeShared(Environment.getExternalStorageDirectory().getPath(), "ums");
     }
-    
+
     /**
      * @return state of the volume at the specified mount point
      */
@@ -1430,7 +1430,7 @@ class MountService extends IMountService.Stub
 
         return rc;
     }
-   
+
     public int mountSecureContainer(String id, String key, int ownerUid) {
         validatePermission(android.Manifest.permission.ASEC_MOUNT_UNMOUNT);
         waitForReady();
@@ -1518,7 +1518,7 @@ class MountService extends IMountService.Stub
 
         synchronized (mAsecMountSet) {
             /*
-             * Because a mounted container has active internal state which cannot be 
+             * Because a mounted container has active internal state which cannot be
              * changed while active, we must ensure both ids are not currently mounted.
              */
             if (mAsecMountSet.contains(oldId) || mAsecMountSet.contains(newId)) {

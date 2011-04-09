@@ -32,7 +32,7 @@ public class MediaRecorderSetOutputFileStateUnitTest extends AndroidTestCase imp
      *    {DataSourceConfigured, Initial, Initialized, Prepared, Recording, Error}.
      * 2. It is invalid to call setOutputFile() in the following states:
      *    {}
-     *    
+     *
      * @param stateErrors the MediaRecorderStateErrors to check against.
      */
     public void checkStateErrors(MediaRecorderStateErrors stateErrors) {
@@ -55,7 +55,7 @@ public class MediaRecorderSetOutputFileStateUnitTest extends AndroidTestCase imp
     public void testSetOutputFile() {
         mTestTemplate.runTestOnMethod(this);
     }
-    
+
     @Override
     public String toString() {
         return "setOutputFile()";

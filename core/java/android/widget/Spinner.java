@@ -35,12 +35,12 @@ import android.view.ViewGroup;
  *
  * <p>See the <a href="{@docRoot}resources/tutorials/views/hello-spinner.html">Spinner
  * tutorial</a>.</p>
- * 
+ *
  * @attr ref android.R.styleable#Spinner_prompt
  */
 @Widget
 public class Spinner extends AbsSpinner implements OnClickListener {
-    
+
     private CharSequence mPrompt;
     private AlertDialog mPopup;
 
@@ -57,7 +57,7 @@ public class Spinner extends AbsSpinner implements OnClickListener {
 
         TypedArray a = context.obtainStyledAttributes(attrs,
                 com.android.internal.R.styleable.Spinner, defStyle, 0);
-        
+
         mPrompt = a.getString(com.android.internal.R.styleable.Spinner_prompt);
 
         a.recycle();
@@ -84,7 +84,7 @@ public class Spinner extends AbsSpinner implements OnClickListener {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        
+
         if (mPopup != null && mPopup.isShowing()) {
             mPopup.dismiss();
             mPopup = null;
@@ -232,7 +232,7 @@ public class Spinner extends AbsSpinner implements OnClickListener {
 
         // Position vertically based on gravity setting
         int childTop = mSpinnerPadding.top
-                + ((mMeasuredHeight - mSpinnerPadding.bottom - 
+                + ((mMeasuredHeight - mSpinnerPadding.bottom -
                         mSpinnerPadding.top - child.getMeasuredHeight()) / 2);
         int childBottom = childTop + child.getMeasuredHeight();
 
@@ -246,11 +246,11 @@ public class Spinner extends AbsSpinner implements OnClickListener {
     @Override
     public boolean performClick() {
         boolean handled = super.performClick();
-        
+
         if (!handled) {
             handled = true;
             Context context = getContext();
-            
+
             final DropDownAdapter adapter = new DropDownAdapter(getAdapter());
 
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -262,7 +262,7 @@ public class Spinner extends AbsSpinner implements OnClickListener {
 
         return handled;
     }
-    
+
     public void onClick(DialogInterface dialog, int which) {
         setSelection(which);
         dialog.dismiss();
@@ -291,7 +291,7 @@ public class Spinner extends AbsSpinner implements OnClickListener {
     public CharSequence getPrompt() {
         return mPrompt;
     }
-    
+
     /**
      * <p>Wrapper class for an Adapter. Transforms the embedded Adapter instance
      * into a ListAdapter.</p>
@@ -351,7 +351,7 @@ public class Spinner extends AbsSpinner implements OnClickListener {
 
         /**
          * If the wrapped SpinnerAdapter is also a ListAdapter, delegate this call.
-         * Otherwise, return true. 
+         * Otherwise, return true.
          */
         public boolean areAllItemsEnabled() {
             final ListAdapter adapter = mListAdapter;
@@ -382,7 +382,7 @@ public class Spinner extends AbsSpinner implements OnClickListener {
         public int getViewTypeCount() {
             return 1;
         }
-        
+
         public boolean isEmpty() {
             return getCount() == 0;
         }

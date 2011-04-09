@@ -39,7 +39,7 @@ public class Camera {
     }
 
     public native float dotWithNormal(float dx, float dy, float dz);
-    
+
     protected void finalize() throws Throwable {
         nativeDestructor();
     }
@@ -48,7 +48,7 @@ public class Camera {
     private native void nativeDestructor();
     private native void nativeGetMatrix(int native_matrix);
     private native void nativeApplyToCanvas(int native_canvas);
-    
+
     int native_instance;
 }
 

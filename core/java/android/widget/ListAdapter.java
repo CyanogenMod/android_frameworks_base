@@ -28,7 +28,7 @@ public interface ListAdapter extends Adapter {
     /**
      * Are all items in this ListAdapter enabled?
      * If yes it means all items are selectable and clickable.
-     * 
+     *
      * @return True if all items are enabled
      */
     public boolean areAllItemsEnabled();
@@ -36,7 +36,7 @@ public interface ListAdapter extends Adapter {
     /**
      * Returns true if the item at the specified position is not a separator.
      * (A separator is a non-selectable, non-clickable item).
-     * 
+     *
      * The result is unspecified if position is invalid. An {@link ArrayIndexOutOfBoundsException}
      * should be thrown in that case for fast failure.
      *

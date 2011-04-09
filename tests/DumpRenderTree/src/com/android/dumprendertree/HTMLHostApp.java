@@ -18,9 +18,9 @@ package com.android.dumprendertree;
 
 import android.app.Application;
 
-public class HTMLHostApp extends Application { 
+public class HTMLHostApp extends Application {
 
-	public HTMLHostApp() {
+        public HTMLHostApp() {
     }
 
     public void onCreate() {
@@ -28,6 +28,6 @@ public class HTMLHostApp extends Application {
 
     public void onTerminate() {
     }
-	
+
 }
 

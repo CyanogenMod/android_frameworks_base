@@ -48,7 +48,7 @@ public class VCardEntryConstructor implements VCardInterpreter {
     private VCardEntry.Property mCurrentProperty = new VCardEntry.Property();
     private VCardEntry mCurrentVCardEntry;
     private String mParamType;
-    
+
     // The charset using which {@link VCardInterpreter} parses the text.
     // Each String is first decoded into binary stream with this charset, and encoded back
     // to "target charset", which may be explicitly specified by the vCard with "CHARSET"
@@ -58,7 +58,7 @@ public class VCardEntryConstructor implements VCardInterpreter {
     private final boolean mStrictLineBreaking;
     private final int mVCardType;
     private final Account mAccount;
-    
+
     // For measuring performance.
     private long mTimePushIntoContentResolver;
 
@@ -145,7 +145,7 @@ public class VCardEntryConstructor implements VCardInterpreter {
     public void endProperty() {
         mCurrentVCardEntry.addProperty(mCurrentProperty);
     }
-    
+
     @Override
     public void propertyName(String name) {
         mCurrentProperty.setPropertyName(name);
@@ -197,10 +197,10 @@ public class VCardEntryConstructor implements VCardInterpreter {
             Log.w(LOG_TAG, "Unknown encoding. Fall back to default.");
         }
 
-        // Just translate the charset of a given String from inputCharset to a system one. 
+        // Just translate the charset of a given String from inputCharset to a system one.
         return VCardUtils.convertStringCharset(value, sourceCharset, targetCharset);
     }
-    
+
     public void propertyValues(List<String> values) {
         if (values == null || values.isEmpty()) {
             return;
@@ -228,7 +228,7 @@ public class VCardEntryConstructor implements VCardInterpreter {
      * @hide
      */
     public void showPerformanceInfo() {
-        Log.d(LOG_TAG, "time for insert ContactStruct to database: " + 
+        Log.d(LOG_TAG, "time for insert ContactStruct to database: " +
                 mTimePushIntoContentResolver + " ms");
     }
 }

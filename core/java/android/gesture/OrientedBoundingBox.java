@@ -28,7 +28,7 @@ public class OrientedBoundingBox {
     public final float width;
     public final float height;
 
-    public final float orientation; 
+    public final float orientation;
 
     public final float centerX;
     public final float centerY;

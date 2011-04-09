@@ -27,15 +27,15 @@ public class TableMaskFilter extends MaskFilter {
         }
         native_instance = nativeNewTable(table);
     }
-    
+
     private TableMaskFilter(int ni) {
         native_instance = ni;
     }
-    
+
     public static TableMaskFilter CreateClipTable(int min, int max) {
         return new TableMaskFilter(nativeNewClip(min, max));
     }
-    
+
     public static TableMaskFilter CreateGammaTable(float gamma) {
         return new TableMaskFilter(nativeNewGamma(gamma));
     }

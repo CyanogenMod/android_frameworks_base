@@ -31,14 +31,14 @@ import java.lang.reflect.Modifier;
  * remote procedure call mechanism defined by {@link IBinder}.
  * This class is an implementation of IBinder that provides
  * the standard support creating a local implementation of such an object.
- * 
+ *
  * <p>Most developers will not implement this class directly, instead using the
  * <a href="{@docRoot}guide/developing/tools/aidl.html">aidl</a> tool to describe the desired
  * interface, having it generate the appropriate Binder subclass.  You can,
  * however, derive directly from Binder to implement your own custom RPC
  * protocol or simply instantiate a raw Binder object directly to use as a
  * token that can be shared across processes.
- * 
+ *
  * @see IBinder
  */
 public class Binder implements IBinder {
@@ -53,7 +53,7 @@ public class Binder implements IBinder {
     private int mObject;
     private IInterface mOwner;
     private String mDescriptor;
-    
+
     /**
      * Return the ID of the process that sent you the current transaction
      * that is being processed.  This pid can be used with higher-level
@@ -62,7 +62,7 @@ public class Binder implements IBinder {
      * then its own pid is returned.
      */
     public static final native int getCallingPid();
-    
+
     /**
      * Return the ID of the user assigned to the process that sent you the
      * current transaction that is being processed.  This uid can be used with
@@ -71,7 +71,7 @@ public class Binder implements IBinder {
      * incoming transaction, then its own uid is returned.
      */
     public static final native int getCallingUid();
-    
+
     /**
      * Reset the identity of the incoming IPC on the current thread.  This can
      * be useful if, while handling an incoming call, you will be calling
@@ -134,13 +134,13 @@ public class Binder implements IBinder {
      * it needs to.
      */
     public static final native void flushPendingCommands();
-    
+
     /**
      * Add the calling thread to the IPC thread pool.  This function does
      * not return until the current process is exiting.
      */
     public static final native void joinThreadPool();
-    
+
     /**
      * Default constructor initializes the object.
      */
@@ -156,7 +156,7 @@ public class Binder implements IBinder {
             }
         }
     }
-    
+
     /**
      * Convenience method for associating a specific interface with the Binder.
      * After calling, queryLocalInterface() will be implemented for you
@@ -167,7 +167,7 @@ public class Binder implements IBinder {
         mOwner = owner;
         mDescriptor = descriptor;
     }
-    
+
     /**
      * Default implementation returns an empty interface name.
      */
@@ -192,7 +192,7 @@ public class Binder implements IBinder {
     public boolean isBinderAlive() {
         return true;
     }
-    
+
     /**
      * Use information supplied to attachInterface() to return the
      * associated IInterface if it matches the requested
@@ -204,7 +204,7 @@ public class Binder implements IBinder {
         }
         return null;
     }
-    
+
     /**
      * Default implementation is a stub that returns false.  You will want
      * to override this to do the appropriate unmarshalling of transactions.
@@ -254,10 +254,10 @@ public class Binder implements IBinder {
             pw.flush();
         }
     }
-    
+
     /**
      * Print the object's state into the given stream.
-     * 
+     *
      * @param fd The raw file descriptor that the dump is being sent to.
      * @param fout The file to which you should dump your state.  This will be
      * closed for you after you return.
@@ -282,7 +282,7 @@ public class Binder implements IBinder {
         }
         return r;
     }
-    
+
     /**
      * Local implementation is a no-op.
      */
@@ -295,7 +295,7 @@ public class Binder implements IBinder {
     public boolean unlinkToDeath(DeathRecipient recipient, int flags) {
         return true;
     }
-    
+
     protected void finalize() throws Throwable {
         try {
             destroy();
@@ -303,7 +303,7 @@ public class Binder implements IBinder {
             super.finalize();
         }
     }
-    
+
     private native final void init();
     private native final void destroy();
 
@@ -338,11 +338,11 @@ public class Binder implements IBinder {
 final class BinderProxy implements IBinder {
     public native boolean pingBinder();
     public native boolean isBinderAlive();
-    
+
     public IInterface queryLocalInterface(String descriptor) {
         return null;
     }
-    
+
     public native String getInterfaceDescriptor() throws RemoteException;
     public native boolean transact(int code, Parcel data, Parcel reply,
             int flags) throws RemoteException;
@@ -363,11 +363,11 @@ final class BinderProxy implements IBinder {
             reply.recycle();
         }
     }
-    
+
     BinderProxy() {
         mSelf = new WeakReference(this);
     }
-    
+
     @Override
     protected void finalize() throws Throwable {
         try {
@@ -376,9 +376,9 @@ final class BinderProxy implements IBinder {
             super.finalize();
         }
     }
-    
+
     private native final void destroy();
-    
+
     private static final void sendDeathNotice(DeathRecipient recipient) {
         if (Config.LOGV) Log.v("JavaBinder", "sendDeathNotice to " + recipient);
         try {
@@ -389,7 +389,7 @@ final class BinderProxy implements IBinder {
                     exc);
         }
     }
-    
+
     final private WeakReference mSelf;
     private int mObject;
 }

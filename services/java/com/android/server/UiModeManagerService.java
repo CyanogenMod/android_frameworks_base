@@ -114,7 +114,7 @@ class UiModeManagerService extends IUiModeManager.Stub {
                 | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
         return intent;
     }
-    
+
     // The broadcast receiver which receives the result of the ordered broadcast sent when
     // the dock state changes. The original ordered broadcast is sent with an initial result
     // code of RESULT_OK. If any of the registered broadcast receivers changes this value, e.g.,
@@ -128,7 +128,7 @@ class UiModeManagerService extends IUiModeManager.Stub {
 
             final int  enableFlags = intent.getIntExtra("enableFlags", 0);
             final int  disableFlags = intent.getIntExtra("disableFlags", 0);
-            
+
             synchronized (mLock) {
                 // Launch a dock activity
                 String category = null;
@@ -151,12 +151,12 @@ class UiModeManagerService extends IUiModeManager.Stub {
                         category = Intent.CATEGORY_HOME;
                     }
                 }
-                
+
                 if (category != null) {
                     // This is the new activity that will serve as home while
                     // we are in care mode.
                     Intent homeIntent = buildHomeIntent(category);
-                    
+
                     // Now we are going to be careful about switching the
                     // configuration and starting the activity -- we need to
                     // do this in a specific order under control of the
@@ -335,7 +335,7 @@ class UiModeManagerService extends IUiModeManager.Stub {
                 com.android.internal.R.integer.config_carDockKeepsScreenOn) == 1);
         mDeskModeKeepsScreenOn = (context.getResources().getInteger(
                 com.android.internal.R.integer.config_deskDockKeepsScreenOn) == 1);
-        
+
         mNightMode = Settings.Secure.getInt(mContext.getContentResolver(),
                 Settings.Secure.UI_NIGHT_MODE, UiModeManager.MODE_NIGHT_AUTO);
     }
@@ -445,8 +445,8 @@ class UiModeManagerService extends IUiModeManager.Stub {
         }
 
         if (LOG) {
-            Slog.d(TAG, 
-                "updateConfigurationLocked: mDockState=" + mDockState 
+            Slog.d(TAG,
+                "updateConfigurationLocked: mDockState=" + mDockState
                 + "; mCarMode=" + mCarModeEnabled
                 + "; mNightMode=" + mNightMode
                 + "; uiMode=" + uiMode);
@@ -609,7 +609,7 @@ class UiModeManagerService extends IUiModeManager.Stub {
         boolean mNetworkListenerEnabled;
         boolean mDidFirstInit;
         long mLastNetworkRegisterTime = -MIN_LOCATION_UPDATE_MS;
-        
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -634,12 +634,12 @@ class UiModeManagerService extends IUiModeManager.Stub {
                         // since we last requested an update.
                         return;
                     }
-                    
+
                     // Unregister the current location monitor, so we can
                     // register a new one for it to get an immediate update.
                     mNetworkListenerEnabled = false;
                     mLocationManager.removeUpdates(mEmptyLocationListener);
-                    
+
                     // Fall through to re-register listener.
                 case MSG_ENABLE_LOCATION_UPDATES:
                     // enable network provider to receive at least location updates for a given

@@ -22,7 +22,7 @@ import android.database.Cursor;
  * This class can be used by external clients of CursorAdapter and
  * CursorTreeAdapter to define how the content of the adapter should be
  * filtered.
- * 
+ *
  * @see #runQuery(CharSequence)
  */
 public interface FilterQueryProvider {

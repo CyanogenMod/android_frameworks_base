@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
- 
+
 package com.android.internal.app;
 
 import android.app.ActivityManagerNative;
@@ -53,11 +53,11 @@ public final class ShutdownThread extends Thread {
 
     // length of vibration before shutting down
     private static final int SHUTDOWN_VIBRATE_MS = 500;
-    
+
     // state tracking
     private static Object sIsStartedGuard = new Object();
     private static boolean sIsStarted = false;
-    
+
     private static boolean mReboot;
     private static String mRebootReason;
 
@@ -66,7 +66,7 @@ public final class ShutdownThread extends Thread {
 
     // static instance of this thread
     private static final ShutdownThread sInstance = new ShutdownThread();
-    
+
     private final Object mActionDoneSync = new Object();
     private boolean mActionDone;
     private Context mContext;
@@ -74,10 +74,10 @@ public final class ShutdownThread extends Thread {
     private PowerManager.WakeLock mCpuWakeLock;
     private PowerManager.WakeLock mScreenWakeLock;
     private Handler mHandler;
-    
+
     private ShutdownThread() {
     }
- 
+
     /**
      * Request a clean shutdown, waiting for subsystems to clean up their
      * state etc.  Must be called from a Looper thread in which its UI
@@ -265,12 +265,12 @@ public final class ShutdownThread extends Thread {
         }
 
         Log.i(TAG, "Sending shutdown broadcast...");
-        
+
         // First send the high-level shut down broadcast.
         mActionDone = false;
         mContext.sendOrderedBroadcast(new Intent(Intent.ACTION_SHUTDOWN), null,
                 br, mHandler, 0, null, null);
-        
+
         final long endTime = SystemClock.elapsedRealtime() + MAX_BROADCAST_TIME;
         synchronized (mActionDoneSync) {
             while (!mActionDone) {
@@ -285,9 +285,9 @@ public final class ShutdownThread extends Thread {
                 }
             }
         }
-        
+
         Log.i(TAG, "Shutting down activity manager...");
-        
+
         final IActivityManager am =
             ActivityManagerNative.asInterface(ServiceManager.checkService("activity"));
         if (am != null) {
@@ -296,7 +296,7 @@ public final class ShutdownThread extends Thread {
             } catch (RemoteException e) {
             }
         }
-        
+
         final ITelephony phone =
                 ITelephony.Stub.asInterface(ServiceManager.checkService("phone"));
         final IBluetooth bluetooth =
@@ -306,7 +306,7 @@ public final class ShutdownThread extends Thread {
         final IMountService mount =
                 IMountService.Stub.asInterface(
                         ServiceManager.checkService("mount"));
-        
+
         try {
             bluetoothOff = bluetooth == null ||
                            bluetooth.getBluetoothState() == BluetoothAdapter.STATE_OFF;
@@ -331,7 +331,7 @@ public final class ShutdownThread extends Thread {
         }
 
         Log.i(TAG, "Waiting for Bluetooth and Radio...");
-        
+
         // Wait a max of 32 seconds for clean shutdown
         for (int i = 0; i < MAX_NUM_PHONE_STATE_READS; i++) {
             if (!bluetoothOff) {

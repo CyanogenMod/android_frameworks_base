@@ -41,7 +41,7 @@ import java.util.Stack;
  * <br/>
  * Delete, it must be in order of uri, select, and arg:
  * <pre>
- * &lt;del uri="content://contacts/people" select="name=? and addr=?" 
+ * &lt;del uri="content://contacts/people" select="name=? and addr=?"
  *  arg1 = "foo feebe" arg2 ="Tx"/></pre>
  * <br/>
  *  Use first row's uri to insert into another table,
@@ -55,7 +55,7 @@ import java.util.Stack;
  *  &lt;/row>
  *  &lt;row postfix="phones">
  *    &lt;col column="cell" value="512-514-6535"/>
- *  &lt;/row>  
+ *  &lt;/row>
  * &lt;/row></pre>
  * <br/>
  *  Insert multiple rows in to same table and same attributes:
@@ -70,7 +70,7 @@ import java.util.Stack;
  * &lt;/row></pre>
  *
  * @hide
- */ 
+ */
 public class DefaultDataHandler implements ContentInsertHandler {
     private final static String ROW = "row";
     private final static String COL = "col";
@@ -78,24 +78,24 @@ public class DefaultDataHandler implements ContentInsertHandler {
     private final static String POSTFIX = "postfix";
     private final static String DEL = "del";
     private final static String SELECT = "select";
-    private final static String ARG = "arg";   
-   
+    private final static String ARG = "arg";
+
     private Stack<Uri> mUris = new Stack<Uri>();
     private ContentValues mValues;
-    private ContentResolver mContentResolver;   
-    
+    private ContentResolver mContentResolver;
+
     public void insert(ContentResolver contentResolver, InputStream in)
             throws IOException, SAXException {
         mContentResolver = contentResolver;
         Xml.parse(in, Xml.Encoding.UTF_8, this);
     }
-    
+
     public void insert(ContentResolver contentResolver, String in)
         throws SAXException {
         mContentResolver = contentResolver;
         Xml.parse(in, this);
     }
-    
+
     private void parseRow(Attributes atts) throws SAXException {
         String uriStr = atts.getValue(URI_STR);
         Uri uri;
@@ -104,9 +104,9 @@ public class DefaultDataHandler implements ContentInsertHandler {
             uri = Uri.parse(uriStr);
             if (uri == null) {
                 throw new SAXException("attribute " +
-                        atts.getValue(URI_STR) + " parsing failure"); 
+                        atts.getValue(URI_STR) + " parsing failure");
             }
-            
+
         } else if (mUris.size() > 0){
             // case 2
             String postfix = atts.getValue(POSTFIX);
@@ -115,24 +115,24 @@ public class DefaultDataHandler implements ContentInsertHandler {
                         postfix);
             } else {
                 uri = mUris.lastElement();
-            } 
+            }
         } else {
-            throw new SAXException("attribute parsing failure"); 
+            throw new SAXException("attribute parsing failure");
         }
-        
+
         mUris.push(uri);
-        
+
     }
-    
+
     private Uri insertRow() {
         Uri u = mContentResolver.insert(mUris.lastElement(), mValues);
         mValues = null;
         return u;
     }
-    
+
     public void startElement(String uri, String localName, String name,
             Attributes atts) throws SAXException {
-        if (ROW.equals(localName)) {            
+        if (ROW.equals(localName)) {
             if (mValues != null) {
                 // case 2, <Col> before <Row> insert last uri
                 if (mUris.empty()) {
@@ -140,7 +140,7 @@ public class DefaultDataHandler implements ContentInsertHandler {
                 }
                 Uri nextUri = insertRow();
                 if (nextUri == null) {
-                    throw new SAXException("insert to uri " + 
+                    throw new SAXException("insert to uri " +
                             mUris.lastElement().toString() + " failure");
                 } else {
                     // make sure the stack lastElement save uri for more than one row
@@ -156,7 +156,7 @@ public class DefaultDataHandler implements ContentInsertHandler {
                 } else {
                     parseRow(atts);
                 }
-            }                
+            }
         } else if (COL.equals(localName)) {
             int attrLen = atts.getLength();
             if (attrLen != 2) {
@@ -171,12 +171,12 @@ public class DefaultDataHandler implements ContentInsertHandler {
                 mValues.put(key, value);
             } else {
                 throw new SAXException("illegal attributes value");
-            }            
+            }
         } else if (DEL.equals(localName)){
             Uri u = Uri.parse(atts.getValue(URI_STR));
             if (u == null) {
                 throw new SAXException("attribute " +
-                        atts.getValue(URI_STR) + " parsing failure"); 
+                        atts.getValue(URI_STR) + " parsing failure");
             }
             int attrLen = atts.getLength() - 2;
             if (attrLen > 0) {
@@ -190,23 +190,23 @@ public class DefaultDataHandler implements ContentInsertHandler {
             } else {
                 mContentResolver.delete(u, null, null);
             }
-            
+
         } else {
             throw new SAXException("unknown element: " + localName);
         }
     }
-    
+
     public void endElement(String uri, String localName, String name)
             throws SAXException {
         if (ROW.equals(localName)) {
             if (mUris.empty()) {
-                throw new SAXException("uri mismatch"); 
+                throw new SAXException("uri mismatch");
             }
             if (mValues != null) {
                 insertRow();
             }
-            mUris.pop();                
-        } 
+            mUris.pop();
+        }
     }
 
 
@@ -258,5 +258,5 @@ public class DefaultDataHandler implements ContentInsertHandler {
         // TODO Auto-generated method stub
 
     }
-    
+
 }

@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2007-2008 The Android Open Source Project
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -43,12 +43,12 @@ import java.io.IOException;
  */
 public final class InputMethodInfo implements Parcelable {
     static final String TAG = "InputMethodInfo";
-    
+
     /**
      * The Service that implements this input method component.
      */
     final ResolveInfo mService;
-    
+
     /**
      * The unique string Id to identify the input method.  This is generated
      * from the input method component.
@@ -68,10 +68,10 @@ public final class InputMethodInfo implements Parcelable {
      * can change based on the configuration (in particular locale).
      */
     final int mIsDefaultResId;
-    
+
     /**
      * Constructor.
-     * 
+     *
      * @param context The Context in which we are parsing the input method.
      * @param service The ResolveInfo returned from the package manager about
      * this input method's component.
@@ -81,11 +81,11 @@ public final class InputMethodInfo implements Parcelable {
         mService = service;
         ServiceInfo si = service.serviceInfo;
         mId = new ComponentName(si.packageName, si.name).flattenToShortString();
-        
+
         PackageManager pm = context.getPackageManager();
         String settingsActivityComponent = null;
         int isDefaultResId = 0;
-        
+
         XmlResourceParser parser = null;
         try {
             parser = si.loadXmlMetaData(pm, InputMethod.SERVICE_META_DATA);
@@ -93,22 +93,22 @@ public final class InputMethodInfo implements Parcelable {
                 throw new XmlPullParserException("No "
                         + InputMethod.SERVICE_META_DATA + " meta-data");
             }
-        
+
             Resources res = pm.getResourcesForApplication(si.applicationInfo);
-            
+
             AttributeSet attrs = Xml.asAttributeSet(parser);
-            
+
             int type;
             while ((type=parser.next()) != XmlPullParser.END_DOCUMENT
                     && type != XmlPullParser.START_TAG) {
             }
-            
+
             String nodeName = parser.getName();
             if (!"input-method".equals(nodeName)) {
                 throw new XmlPullParserException(
                         "Meta-data does not start with input-method tag");
             }
-            
+
             TypedArray sa = res.obtainAttributes(attrs,
                     com.android.internal.R.styleable.InputMethod);
             settingsActivityComponent = sa.getString(
@@ -122,7 +122,7 @@ public final class InputMethodInfo implements Parcelable {
         } finally {
             if (parser != null) parser.close();
         }
-        
+
         mSettingsActivityName = settingsActivityComponent;
         mIsDefaultResId = isDefaultResId;
     }
@@ -133,7 +133,7 @@ public final class InputMethodInfo implements Parcelable {
         mIsDefaultResId = source.readInt();
         mService = ResolveInfo.CREATOR.createFromParcel(source);
     }
-    
+
     /**
      * Temporary API for creating a built-in input method.
      */
@@ -156,7 +156,7 @@ public final class InputMethodInfo implements Parcelable {
         mSettingsActivityName = settingsActivity;
         mIsDefaultResId = 0;
     }
-    
+
     /**
      * Return a unique ID for this input method.  The ID is generated from
      * the package and class name implementing the method.
@@ -164,14 +164,14 @@ public final class InputMethodInfo implements Parcelable {
     public String getId() {
         return mId;
     }
-    
+
     /**
      * Return the .apk package that implements this input method.
      */
     public String getPackageName() {
         return mService.serviceInfo.packageName;
     }
-    
+
     /**
      * Return the class name of the service component that implements
      * this input method.
@@ -196,41 +196,41 @@ public final class InputMethodInfo implements Parcelable {
         return new ComponentName(mService.serviceInfo.packageName,
                 mService.serviceInfo.name);
     }
-    
+
     /**
      * Load the user-displayed label for this input method.
-     * 
+     *
      * @param pm Supply a PackageManager used to load the input method's
      * resources.
      */
     public CharSequence loadLabel(PackageManager pm) {
         return mService.loadLabel(pm);
     }
-    
+
     /**
      * Load the user-displayed icon for this input method.
-     * 
+     *
      * @param pm Supply a PackageManager used to load the input method's
      * resources.
      */
     public Drawable loadIcon(PackageManager pm) {
         return mService.loadIcon(pm);
     }
-    
+
     /**
      * Return the class name of an activity that provides a settings UI for
      * the input method.  You can launch this activity be starting it with
      * an {@link android.content.Intent} whose action is MAIN and with an
      * explicit {@link android.content.ComponentName}
      * composed of {@link #getPackageName} and the class name returned here.
-     * 
+     *
      * <p>A null will be returned if there is no settings activity associated
      * with the input method.
      */
     public String getSettingsActivity() {
         return mSettingsActivityName;
     }
-    
+
     /**
      * Return the resource identifier of a resource inside of this input
      * method's .apk that determines whether it should be considered a
@@ -239,7 +239,7 @@ public final class InputMethodInfo implements Parcelable {
     public int getIsDefaultResourceId() {
         return mIsDefaultResId;
     }
-    
+
     public void dump(Printer pw, String prefix) {
         pw.println(prefix + "mId=" + mId
                 + " mSettingsActivityName=" + mSettingsActivityName);
@@ -248,7 +248,7 @@ public final class InputMethodInfo implements Parcelable {
         pw.println(prefix + "Service:");
         mService.dump(pw, prefix + "  ");
     }
-    
+
     @Override
     public String toString() {
         return "InputMethodInfo{" + mId
@@ -259,7 +259,7 @@ public final class InputMethodInfo implements Parcelable {
     /**
      * Used to test whether the given parameter object is an
      * {@link InputMethodInfo} and its Id is the same to this one.
-     * 
+     *
      * @return true if the given parameter object is an
      *         {@link InputMethodInfo} and its Id is the same to this one.
      */
@@ -273,10 +273,10 @@ public final class InputMethodInfo implements Parcelable {
         InputMethodInfo obj = (InputMethodInfo) o;
         return mId.equals(obj.mId);
     }
-    
+
     /**
      * Used to package this object into a {@link Parcel}.
-     * 
+     *
      * @param dest The {@link Parcel} to be written.
      * @param flags The flags used for parceling.
      */

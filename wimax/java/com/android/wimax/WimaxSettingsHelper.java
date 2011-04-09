@@ -22,11 +22,11 @@ import java.lang.reflect.Method;
 
 /* @hide */
 public class WimaxSettingsHelper {
-    
+
     private static final String TAG = "WimaxSettingsHelper";
-    
+
     private final Object mWimaxController;
-    
+
     public WimaxSettingsHelper(Context context) {
         mWimaxController = context.getSystemService(Context.WIMAX_SERVICE);
     }
@@ -67,7 +67,7 @@ public class WimaxSettingsHelper {
         }
         return ret;
     }
-    
+
     private Object getWimaxInfo() {
         Object wimaxInfo = null;
         try {

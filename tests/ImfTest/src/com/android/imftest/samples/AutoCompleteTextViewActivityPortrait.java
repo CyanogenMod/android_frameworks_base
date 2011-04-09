@@ -34,16 +34,16 @@ import com.android.internal.R;
 /*
  * Activity with AutoCompleteTextView (Candidate bar should not appear)
  */
-public class AutoCompleteTextViewActivityPortrait extends Activity 
+public class AutoCompleteTextViewActivityPortrait extends Activity
 {
    @Override
-   public void onCreate(Bundle savedInstanceState) 
+   public void onCreate(Bundle savedInstanceState)
    {
        super.onCreate(savedInstanceState);
-       
+
        setContentView(R.layout.auto_complete_list);
 
-       ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, 
+       ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                android.R.layout.simple_dropdown_item_1line, COUNTRIES);
        AutoCompleteTextView textView = (AutoCompleteTextView) findViewById(R.id.edit);
        textView.setAdapter(adapter);

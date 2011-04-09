@@ -200,7 +200,7 @@ public class IntentResolver<F extends IntentFilter, R extends Object> {
         return Collections.unmodifiableSet(mFilters);
     }
 
-    public List<R> queryIntentFromList(Intent intent, String resolvedType, 
+    public List<R> queryIntentFromList(Intent intent, String resolvedType,
             boolean defaultOnly, ArrayList<ArrayList<F>> listCut) {
         ArrayList<R> resultList = new ArrayList<R>();
 
@@ -325,7 +325,7 @@ public class IntentResolver<F extends IntentFilter, R extends Object> {
     protected String packageForFilter(F filter) {
         return null;
     }
-    
+
     protected R newResult(F filter, int match) {
         return (R)filter;
     }

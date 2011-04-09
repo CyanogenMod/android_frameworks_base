@@ -32,12 +32,12 @@ public class FeatureInfo implements Parcelable {
      * in {@link #reqGlEsVersion}.
      */
     public String name;
-    
+
     /**
      * Default value for {@link #reqGlEsVersion};
      */
     public static final int GL_ES_VERSION_UNDEFINED = 0;
-    
+
     /**
      * The GLES version used by an application. The upper order 16 bits represent the
      * major version and the lower order 16 bits the minor version.  Only valid
@@ -49,12 +49,12 @@ public class FeatureInfo implements Parcelable {
      * Set on {@link #flags} if this feature has been required by the application.
      */
     public static final int FLAG_REQUIRED = 0x0001;
-    
+
     /**
      * Additional flags.  May be zero or more of {@link #FLAG_REQUIRED}.
      */
     public int flags;
-    
+
     public FeatureInfo() {
     }
 

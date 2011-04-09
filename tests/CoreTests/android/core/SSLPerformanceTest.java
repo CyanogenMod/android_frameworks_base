@@ -155,7 +155,7 @@ public class SSLPerformanceTest extends AndroidTestCase {
         byte[] sessionData = cache.getSessionData("foo", 443);
 
         stopwatch.stop();
-        
+
         assertTrue(Arrays.equals(SESSION_DATA, sessionData));
     }
 

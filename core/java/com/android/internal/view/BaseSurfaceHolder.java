@@ -35,7 +35,7 @@ public abstract class BaseSurfaceHolder implements SurfaceHolder {
             = new ArrayList<SurfaceHolder.Callback>();
     SurfaceHolder.Callback[] mGottenCallbacks;
     boolean mHaveGottenCallbacks;
-    
+
     public final ReentrantLock mSurfaceLock = new ReentrantLock();
     public Surface mSurface = new Surface();
 
@@ -46,35 +46,35 @@ public abstract class BaseSurfaceHolder implements SurfaceHolder {
     int mRequestedType = -1;
 
     long mLastLockTime = 0;
-    
+
     int mType = -1;
     final Rect mSurfaceFrame = new Rect();
-    
+
     public abstract void onUpdateSurface();
     public abstract void onRelayoutContainer();
     public abstract boolean onAllowLockCanvas();
-    
+
     public int getRequestedWidth() {
         return mRequestedWidth;
     }
-    
+
     public int getRequestedHeight() {
         return mRequestedHeight;
     }
-    
+
     public int getRequestedFormat() {
         return mRequestedFormat;
     }
-    
+
     public int getRequestedType() {
         return mRequestedType;
     }
-    
+
     public void addCallback(Callback callback) {
         synchronized (mCallbacks) {
-            // This is a linear search, but in practice we'll 
+            // This is a linear search, but in practice we'll
             // have only a couple callbacks, so it doesn't matter.
-            if (mCallbacks.contains(callback) == false) {      
+            if (mCallbacks.contains(callback) == false) {
                 mCallbacks.add(callback);
             }
         }
@@ -85,12 +85,12 @@ public abstract class BaseSurfaceHolder implements SurfaceHolder {
             mCallbacks.remove(callback);
         }
     }
-    
+
     public SurfaceHolder.Callback[] getCallbacks() {
         if (mHaveGottenCallbacks) {
             return mGottenCallbacks;
         }
-        
+
         synchronized (mCallbacks) {
             final int N = mCallbacks.size();
             if (N > 0) {
@@ -103,14 +103,14 @@ public abstract class BaseSurfaceHolder implements SurfaceHolder {
             }
             mHaveGottenCallbacks = true;
         }
-        
+
         return mGottenCallbacks;
     }
-    
+
     public void ungetCallbacks() {
         mHaveGottenCallbacks = false;
     }
-    
+
     public void setFixedSize(int width, int height) {
         if (mRequestedWidth != width || mRequestedHeight != height) {
             mRequestedWidth = width;
@@ -184,7 +184,7 @@ public abstract class BaseSurfaceHolder implements SurfaceHolder {
             mLastLockTime = SystemClock.uptimeMillis();
             return c;
         }
-        
+
         // If the Surface is not ready to be drawn, then return null,
         // but throttle calls to this function so it isn't called more
         // than every 100ms.
@@ -199,7 +199,7 @@ public abstract class BaseSurfaceHolder implements SurfaceHolder {
         }
         mLastLockTime = now;
         mSurfaceLock.unlock();
-        
+
         return null;
     }
 

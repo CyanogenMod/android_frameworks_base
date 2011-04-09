@@ -113,7 +113,7 @@ public class DatabaseLocaleTest extends TestCase {
             String expectedString = new String(new int[] {0xFE000}, 0, 1);
             mDatabase.execSQL("INSERT INTO test(id, data) VALUES(1, '" + expectedString + "')");
             cursor = mDatabase.rawQuery("SELECT data FROM test WHERE id = 1", null);
-            
+
             assertNotNull(cursor);
             assertTrue(cursor.moveToFirst());
             String actualString = cursor.getString(0);

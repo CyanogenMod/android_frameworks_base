@@ -27,8 +27,8 @@ public class GLJNIActivity extends Activity {
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         mView = new GLJNIView(getApplication());
-	    mView.setFocusableInTouchMode(true);
-	    setContentView(mView);
+            mView.setFocusableInTouchMode(true);
+            setContentView(mView);
     }
 
     @Override

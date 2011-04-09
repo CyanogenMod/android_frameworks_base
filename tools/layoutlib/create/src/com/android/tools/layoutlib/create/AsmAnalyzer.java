@@ -45,7 +45,7 @@ import java.util.zip.ZipFile;
 public class AsmAnalyzer {
 
     // Note: a bunch of stuff has package-level access for unit tests. Consider it private.
-    
+
     /** Output logger. */
     private final Log mLog;
     /** The input source JAR to parse. */
@@ -59,11 +59,11 @@ public class AsmAnalyzer {
 
     /**
      * Creates a new analyzer.
-     * 
+     *
      * @param log The log output.
      * @param osJarPath The input source JARs to parse.
      * @param gen The generator to fill with the class list and dependency list.
-     * @param deriveFrom Keep all classes that derive from these one (these included). 
+     * @param deriveFrom Keep all classes that derive from these one (these included).
      * @param includeGlobs Glob patterns of classes to keep, e.g. "com.foo.*"
      *        ("*" does not matches dots whilst "**" does, "." and "$" are interpreted as-is)
      */
@@ -83,14 +83,14 @@ public class AsmAnalyzer {
     public void analyze() throws IOException, LogAbortException {
 
         AsmAnalyzer visitor = this;
-        
+
         Map<String, ClassReader> zipClasses = parseZip(mOsSourceJar);
         mLog.info("Found %d classes in input JAR%s.", zipClasses.size(),
                 mOsSourceJar.size() > 1 ? "s" : "");
-        
+
         Map<String, ClassReader> found = findIncludes(zipClasses);
         Map<String, ClassReader> deps = findDeps(zipClasses, found);
-        
+
         if (mGen != null) {
             mGen.setKeep(found);
             mGen.setDeps(deps);
@@ -117,10 +117,10 @@ public class AsmAnalyzer {
                 }
             }
         }
-        
+
         return classes;
     }
-    
+
     /**
      * Utility that returns the fully qualified binary class name for a ClassReader.
      * E.g. it returns something like android.view.View.
@@ -132,7 +132,7 @@ public class AsmAnalyzer {
             return classReader.getClassName().replace('/', '.');
         }
     }
-    
+
     /**
      * Utility that returns the fully qualified binary class name from a path-like FQCN.
      * E.g. it returns android.view.View from android/view/View.
@@ -144,7 +144,7 @@ public class AsmAnalyzer {
             return className.replace('/', '.');
         }
     }
-    
+
     /**
      * Process the "includes" arrays.
      * <p/>
@@ -162,11 +162,11 @@ public class AsmAnalyzer {
         for (String s : mDeriveFrom) {
             findClassesDerivingFrom(s, zipClasses, found);
         }
-        
+
         return found;
     }
 
-    
+
     /**
      * Uses ASM to find the class reader for the given FQCN class name.
      * If found, insert it in the in_out_found map.
@@ -215,7 +215,7 @@ public class AsmAnalyzer {
         globPattern += "$";
 
         Pattern regexp = Pattern.compile(globPattern);
-        
+
         for (Entry<String, ClassReader> entry : zipClasses.entrySet()) {
             String class_name = entry.getKey();
             if (regexp.matcher(class_name).matches()) {
@@ -284,7 +284,7 @@ public class AsmAnalyzer {
         for (ClassReader cr : inOutKeepClasses.values()) {
             cr.accept(visitor, 0 /* flags */);
         }
-        
+
         while (new_deps.size() > 0 || new_keep.size() > 0) {
             deps.putAll(new_deps);
             inOutKeepClasses.putAll(new_keep);
@@ -308,12 +308,12 @@ public class AsmAnalyzer {
         return deps;
     }
 
-    
+
 
     // ----------------------------------
-    
+
     /**
-     * Visitor to collect all the type dependencies from a class. 
+     * Visitor to collect all the type dependencies from a class.
      */
     public class DependencyVisitor
         implements ClassVisitor, FieldVisitor, MethodVisitor, SignatureVisitor, AnnotationVisitor {
@@ -333,7 +333,7 @@ public class AsmAnalyzer {
          * Creates a new visitor that will find all the dependencies for the visited class.
          * Types which are already in the zipClasses, keepClasses or inDeps are not marked.
          * New dependencies are marked in outDeps.
-         * 
+         *
          * @param zipClasses All classes found in the source JAR.
          * @param inKeep Classes from which dependencies are to be found.
          * @param inDeps Dependencies already known.
@@ -350,7 +350,7 @@ public class AsmAnalyzer {
             mInDeps = inDeps;
             mOutDeps = outDeps;
         }
-        
+
         /**
          * Considers the given class name as a dependency.
          * If it does, add to the mOutDeps map.
@@ -361,7 +361,7 @@ public class AsmAnalyzer {
             }
 
             className = internalToBinaryClassName(className);
-            
+
             // exclude classes that have already been found
             if (mInKeep.containsKey(className) ||
                     mOutKeep.containsKey(className) ||
@@ -384,7 +384,7 @@ public class AsmAnalyzer {
             } catch (ClassNotFoundException e) {
                 // ignore
             }
-            
+
             // accept this class:
             // - android classes are added to dependencies
             // - non-android classes are added to the list of classes to keep as-is (they don't need
@@ -395,7 +395,7 @@ public class AsmAnalyzer {
                 mOutKeep.put(className, cr);
             }
         }
-        
+
         /**
          * Considers this array of names using considerName().
          */
@@ -450,7 +450,7 @@ public class AsmAnalyzer {
             }
         }
 
-        
+
         // ---------------------------------------------------
         // --- ClassVisitor, FieldVisitor
         // ---------------------------------------------------
@@ -460,7 +460,7 @@ public class AsmAnalyzer {
                 String signature, String superName, String[] interfaces) {
             // signature is the signature of this class. May be null if the class is not a generic
             // one, and does not extend or implement generic classes or interfaces.
-            
+
             if (signature != null) {
                 considerSignature(signature);
             }
@@ -468,7 +468,7 @@ public class AsmAnalyzer {
             // superName is the internal of name of the super class (see getInternalName).
             // For interfaces, the super class is Object. May be null but only for the Object class.
             considerName(superName);
-            
+
             // interfaces is the internal names of the class's interfaces (see getInternalName).
             // May be null.
             considerNames(interfaces);
@@ -513,7 +513,7 @@ public class AsmAnalyzer {
             // signature is the method's signature. May be null if the method parameters, return
             // type and exceptions do not use generic types.
             considerSignature(signature);
-            
+
             return this; // returns this to visit the method
         }
 
@@ -525,7 +525,7 @@ public class AsmAnalyzer {
             // pass
         }
 
-        
+
         // ---------------------------------------------------
         // --- MethodVisitor
         // ---------------------------------------------------
@@ -601,7 +601,7 @@ public class AsmAnalyzer {
 
         // instruction that invokes a method
         public void visitMethodInsn(int opcode, String owner, String name, String desc) {
-            
+
             // owner is the internal name of the method's owner class
             considerName(owner);
             // desc is the method's descriptor (see Type).
@@ -610,7 +610,7 @@ public class AsmAnalyzer {
 
         // instruction multianewarray, whatever that is
         public void visitMultiANewArrayInsn(String desc, int dims) {
-            
+
             // desc an array type descriptor.
             considerDesc(desc);
         }
@@ -624,7 +624,7 @@ public class AsmAnalyzer {
 
         public void visitTableSwitchInsn(int min, int max, Label dflt, Label[] labels) {
             // pass -- table switch instruction
-            
+
         }
 
         public void visitTryCatchBlock(Label start, Label end, Label handler, String type) {
@@ -641,10 +641,10 @@ public class AsmAnalyzer {
         }
 
         public void visitVarInsn(int opcode, int var) {
-            // pass -- local variable instruction 
+            // pass -- local variable instruction
         }
 
-        
+
         // ---------------------------------------------------
         // --- SignatureVisitor
         // ---------------------------------------------------
@@ -716,8 +716,8 @@ public class AsmAnalyzer {
         public void visitTypeArgument() {
             // pass
         }
-        
-        
+
+
         // ---------------------------------------------------
         // --- AnnotationVisitor
         // ---------------------------------------------------
@@ -746,6 +746,6 @@ public class AsmAnalyzer {
             // desc is the class descriptor of the enumeration class.
             considerDesc(desc);
         }
-        
+
     }
 }

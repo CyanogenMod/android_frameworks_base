@@ -28,7 +28,7 @@ public class PlatLogoActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         final String text;
         final int resource;
         if (getIntent().getBooleanExtra("special", false)) {
@@ -38,13 +38,13 @@ public class PlatLogoActivity extends Activity {
             text = "Zombie art by Jack Larson";
             resource = com.android.internal.R.drawable.platlogo;
         }
-        
+
         mToast = Toast.makeText(this, text, Toast.LENGTH_SHORT);
 
         ImageView content = new ImageView(this);
         content.setImageResource(resource);
         content.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        
+
         setContentView(content);
     }
 

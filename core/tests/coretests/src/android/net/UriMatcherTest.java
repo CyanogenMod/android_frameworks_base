@@ -37,21 +37,21 @@ public class UriMatcherTest extends TestCase
     static final int CALLERID = 11;
     static final int CALLERID_TEXT = 12;
     static final int FILTERRECENT = 13;
-    
+
     @SmallTest
     public void testContentUris() {
         check("content://asdf", UriMatcher.NO_MATCH);
         check("content://people", PEOPLE);
         check("content://people/1", PEOPLE_ID);
         check("content://people/asdf", UriMatcher.NO_MATCH);
-        check("content://people/2/phones", PEOPLE_PHONES); 
-        check("content://people/2/phones/3", PEOPLE_PHONES_ID); 
+        check("content://people/2/phones", PEOPLE_PHONES);
+        check("content://people/2/phones/3", PEOPLE_PHONES_ID);
         check("content://people/2/phones/asdf", UriMatcher.NO_MATCH);
-        check("content://people/2/addresses", PEOPLE_ADDRESSES); 
-        check("content://people/2/addresses/3", PEOPLE_ADDRESSES_ID); 
+        check("content://people/2/addresses", PEOPLE_ADDRESSES);
+        check("content://people/2/addresses/3", PEOPLE_ADDRESSES_ID);
         check("content://people/2/addresses/asdf", UriMatcher.NO_MATCH);
-        check("content://people/2/contact-methods", PEOPLE_CONTACTMETH); 
-        check("content://people/2/contact-methods/3", PEOPLE_CONTACTMETH_ID); 
+        check("content://people/2/contact-methods", PEOPLE_CONTACTMETH);
+        check("content://people/2/contact-methods/3", PEOPLE_CONTACTMETH_ID);
         check("content://people/2/contact-methods/asdf", UriMatcher.NO_MATCH);
         check("content://calls", CALLS);
         check("content://calls/1", CALLS_ID);

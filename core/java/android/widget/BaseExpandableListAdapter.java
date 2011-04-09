@@ -30,10 +30,10 @@ import android.database.DataSetObserver;
  * @see SimpleExpandableListAdapter
  * @see SimpleCursorTreeAdapter
  */
-public abstract class BaseExpandableListAdapter implements ExpandableListAdapter, 
+public abstract class BaseExpandableListAdapter implements ExpandableListAdapter,
         HeterogeneousExpandableList {
     private final DataSetObservable mDataSetObservable = new DataSetObservable();
-    
+
     public void registerDataSetObserver(DataSetObserver observer) {
         mDataSetObservable.registerObserver(observer);
     }
@@ -41,14 +41,14 @@ public abstract class BaseExpandableListAdapter implements ExpandableListAdapter
     public void unregisterDataSetObserver(DataSetObserver observer) {
         mDataSetObservable.unregisterObserver(observer);
     }
-    
+
     /**
      * @see DataSetObservable#notifyInvalidated()
      */
     public void notifyDataSetInvalidated() {
         mDataSetObservable.notifyInvalidated();
     }
-    
+
     /**
      * @see DataSetObservable#notifyChanged()
      */
@@ -74,7 +74,7 @@ public abstract class BaseExpandableListAdapter implements ExpandableListAdapter
      *             this bit will be 1.
      * <li> bit 1-31: Lower 31 bits of the groupId
      * <li> bit 32-63: Lower 32 bits of the childId.
-     * <p> 
+     * <p>
      * {@inheritDoc}
      */
     public long getCombinedChildId(long groupId, long childId) {
@@ -89,7 +89,7 @@ public abstract class BaseExpandableListAdapter implements ExpandableListAdapter
      *             this bit will be 0.
      * <li> bit 1-31: Lower 31 bits of the groupId
      * <li> bit 32-63: Lower 32 bits of the childId.
-     * <p> 
+     * <p>
      * {@inheritDoc}
      */
     public long getCombinedGroupId(long groupId) {

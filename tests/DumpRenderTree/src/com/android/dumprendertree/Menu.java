@@ -35,15 +35,15 @@ public class Menu extends FileList {
     }
 
     boolean fileFilter(File f) {
-    	if (f.getName().startsWith("."))
-    		return false;
-    	if (f.getName().equalsIgnoreCase("resources"))
-    		return false;
-    	if (f.isDirectory())
-    		return true;
-    	if (f.getPath().toLowerCase().endsWith("ml"))
-    		return true;
-    	return false;
+        if (f.getName().startsWith("."))
+                return false;
+        if (f.getName().equalsIgnoreCase("resources"))
+                return false;
+        if (f.isDirectory())
+                return true;
+        if (f.getPath().toLowerCase().endsWith("ml"))
+                return true;
+        return false;
     }
 
     void processFile(String filename, boolean selection) {

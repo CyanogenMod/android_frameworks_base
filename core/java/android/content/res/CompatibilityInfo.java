@@ -30,13 +30,13 @@ import android.view.WindowManager.LayoutParams;
 /**
  * CompatibilityInfo class keeps the information about compatibility mode that the application is
  * running under.
- * 
- *  {@hide} 
+ *
+ *  {@hide}
  */
 public class CompatibilityInfo {
     private static final boolean DBG = false;
     private static final String TAG = "CompatibilityInfo";
-    
+
     /** default compatibility info object for compatible applications */
     public static final CompatibilityInfo DEFAULT_COMPATIBILITY_INFO = new CompatibilityInfo() {
         @Override
@@ -46,25 +46,25 @@ public class CompatibilityInfo {
     };
 
     /**
-     * The default width of the screen in portrait mode. 
+     * The default width of the screen in portrait mode.
      */
     public static final int DEFAULT_PORTRAIT_WIDTH = 320;
 
     /**
-     * The default height of the screen in portrait mode. 
-     */    
+     * The default height of the screen in portrait mode.
+     */
     public static final int DEFAULT_PORTRAIT_HEIGHT = 480;
 
     /**
      *  A compatibility flags
      */
     private int mCompatibilityFlags;
-    
+
     /**
      * A flag mask to tell if the application needs scaling (when mApplicationScale != 1.0f)
      * {@see compatibilityFlag}
      */
-    private static final int SCALING_REQUIRED = 1; 
+    private static final int SCALING_REQUIRED = 1;
 
     /**
      * A flag mask to indicates that the application can expand over the original size.
@@ -74,13 +74,13 @@ public class CompatibilityInfo {
      * {@see compatibilityFlag}
      */
     private static final int EXPANDABLE = 2;
-    
+
     /**
      * A flag mask to tell if the application is configured to be expandable. This differs
-     * from EXPANDABLE in that the application that is not expandable will be 
+     * from EXPANDABLE in that the application that is not expandable will be
      * marked as expandable if Configuration.SCREENLAYOUT_COMPAT_NEEDED is not set.
      */
-    private static final int CONFIGURED_EXPANDABLE = 4; 
+    private static final int CONFIGURED_EXPANDABLE = 4;
 
     /**
      * A flag mask to indicates that the application supports large screens.
@@ -90,14 +90,14 @@ public class CompatibilityInfo {
      * {@see compatibilityFlag}
      */
     private static final int LARGE_SCREENS = 8;
-    
+
     /**
      * A flag mask to tell if the application supports large screens. This differs
      * from LARGE_SCREENS in that the application that does not support large
      * screens will be marked as supporting them if the current screen is not
      * large.
      */
-    private static final int CONFIGURED_LARGE_SCREENS = 16; 
+    private static final int CONFIGURED_LARGE_SCREENS = 16;
 
     /**
      * A flag mask to indicates that the application supports xlarge screens.
@@ -107,7 +107,7 @@ public class CompatibilityInfo {
      * {@see compatibilityFlag}
      */
     private static final int XLARGE_SCREENS = 32;
-    
+
     /**
      * A flag mask to tell if the application supports xlarge screens. This differs
      * from XLARGE_SCREENS in that the application that does not support xlarge
@@ -120,7 +120,7 @@ public class CompatibilityInfo {
      * The effective screen density we have selected for this application.
      */
     public final int applicationDensity;
-    
+
     /**
      * Application's scale.
      */
@@ -135,7 +135,7 @@ public class CompatibilityInfo {
      * The flags from ApplicationInfo.
      */
     public final int appFlags;
-    
+
     /**
      * Whether the application supports third-party theming.
      */
@@ -144,7 +144,7 @@ public class CompatibilityInfo {
     public CompatibilityInfo(ApplicationInfo appInfo) {
         isThemeable = appInfo.isThemeable;
         appFlags = appInfo.flags;
-        
+
         if ((appInfo.flags & ApplicationInfo.FLAG_SUPPORTS_LARGE_SCREENS) != 0) {
             // Saying you support large screens also implies you support xlarge
             // screens; there is no compatibility mode for a large app on an
@@ -160,7 +160,7 @@ public class CompatibilityInfo {
         if ((appInfo.flags & ApplicationInfo.FLAG_RESIZEABLE_FOR_SCREENS) != 0) {
             mCompatibilityFlags |= EXPANDABLE | CONFIGURED_EXPANDABLE;
         }
-        
+
         if ((appInfo.flags & ApplicationInfo.FLAG_SUPPORTS_SCREEN_DENSITIES) != 0) {
             applicationDensity = DisplayMetrics.DENSITY_DEVICE;
             applicationScale = 1.0f;
@@ -205,7 +205,7 @@ public class CompatibilityInfo {
                 applicationDensity, applicationScale, applicationInvertedScale, isThemeable);
         return info;
     }
- 
+
     /**
      * Sets expandable bit in the compatibility flag.
      */
@@ -266,12 +266,12 @@ public class CompatibilityInfo {
     public boolean isScalingRequired() {
         return (mCompatibilityFlags & SCALING_REQUIRED) != 0;
     }
-    
+
     public boolean supportsScreen() {
         return (mCompatibilityFlags & (EXPANDABLE|LARGE_SCREENS))
                 == (EXPANDABLE|LARGE_SCREENS);
     }
-    
+
     @Override
     public String toString() {
         return "CompatibilityInfo{scale=" + applicationScale +
@@ -293,10 +293,10 @@ public class CompatibilityInfo {
     public class Translator {
         final public float applicationScale;
         final public float applicationInvertedScale;
-        
+
         private Rect mContentInsetsBuffer = null;
         private Rect mVisibleInsetsBuffer = null;
-        
+
         Translator(float applicationScale, float applicationInvertedScale) {
             this.applicationScale = applicationScale;
             this.applicationInvertedScale = applicationInvertedScale;
@@ -315,7 +315,7 @@ public class CompatibilityInfo {
         }
 
         /**
-         * Translate the region in window to screen. 
+         * Translate the region in window to screen.
          */
         public void translateRegionInWindowToScreen(Region transparentRegion) {
             transparentRegion.scale(applicationScale);
@@ -330,11 +330,11 @@ public class CompatibilityInfo {
                     bitmaps and ninepatches on exacty 1/2 pixel boundaries,
                     which can give us inconsistent drawing due to imperfect
                     float precision in the graphics engine's inverse matrix.
-                 
+
                     As a work-around, we translate by a tiny amount to avoid
                     landing on exact pixel centers and boundaries, giving us
                     the slop we need to draw consistently.
-                 
+
                     This constant is meant to resolve to 1/255 after it is
                     scaled by 1.5 (applicationScale). Note, this is just a guess
                     as to what is small enough not to create its own artifacts,
@@ -361,14 +361,14 @@ public class CompatibilityInfo {
         public void translateWindowLayout(WindowManager.LayoutParams params) {
             params.scale(applicationScale);
         }
-        
+
         /**
          * Translate a Rect in application's window to screen.
          */
         public void translateRectInAppWindowToScreen(Rect rect) {
             rect.scale(applicationScale);
         }
- 
+
         /**
          * Translate a Rect in screen coordinates into the app window's coordinates.
          */

@@ -24,7 +24,7 @@ public class LogPrinter implements Printer {
     private final int mPriority;
     private final String mTag;
     private final int mBuffer;
-    
+
     /**
      * Create a new Printer that sends to the log with the given priority
      * and tag.
@@ -52,7 +52,7 @@ public class LogPrinter implements Printer {
         mTag = tag;
         mBuffer = buffer;
     }
-    
+
     public void println(String x) {
         Log.println_native(mBuffer, mPriority, mTag, x);
     }

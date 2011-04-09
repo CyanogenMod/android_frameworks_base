@@ -38,19 +38,19 @@ public class MergeCursor extends AbstractCursor
             mPos = -1;
         }
     };
-    
+
     public MergeCursor(Cursor[] cursors)
     {
         mCursors = cursors;
         mCursor = cursors[0];
-        
+
         for (int i = 0; i < mCursors.length; i++) {
             if (mCursors[i] == null) continue;
-            
+
             mCursors[i].registerDataSetObserver(mObserver);
         }
     }
-    
+
     @Override
     public int getCount()
     {
@@ -75,7 +75,7 @@ public class MergeCursor extends AbstractCursor
             if (mCursors[i] == null) {
                 continue;
             }
-            
+
             if (newPosition < (cursorStartPos + mCursors[i].getCount())) {
                 mCursor = mCursors[i];
                 break;
@@ -101,7 +101,7 @@ public class MergeCursor extends AbstractCursor
     {
         return mCursor.deleteRow();
     }
-    
+
     /**
      * @hide
      * @deprecated
@@ -163,7 +163,7 @@ public class MergeCursor extends AbstractCursor
     @Override
     public byte[] getBlob(int column)
     {
-        return mCursor.getBlob(column);   
+        return mCursor.getBlob(column);
     }
 
     @Override
@@ -175,7 +175,7 @@ public class MergeCursor extends AbstractCursor
             return new String[0];
         }
     }
-    
+
     @Override
     public void deactivate()
     {
@@ -216,7 +216,7 @@ public class MergeCursor extends AbstractCursor
             }
         }
     }
-    
+
     @Override
     public void registerDataSetObserver(DataSetObserver observer) {
         int length = mCursors.length;
@@ -226,7 +226,7 @@ public class MergeCursor extends AbstractCursor
             }
         }
     }
-    
+
     @Override
     public void unregisterDataSetObserver(DataSetObserver observer) {
         int length = mCursors.length;

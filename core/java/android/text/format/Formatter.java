@@ -26,7 +26,7 @@ public final class Formatter {
 
     /**
      * Formats a content size to be in the form of bytes, kilobytes, megabytes, etc
-     * 
+     *
      * @param context Context to use to load the localized units
      * @param number size value to be formated
      * @return formated string with the number
@@ -34,7 +34,7 @@ public final class Formatter {
     public static String formatFileSize(Context context, long number) {
         return formatFileSize(context, number, false);
     }
-    
+
     /**
      * Like {@link #formatFileSize}, but trying to generate shorter numbers
      * (showing fewer digits of precisin).
@@ -42,7 +42,7 @@ public final class Formatter {
     public static String formatShortFileSize(Context context, long number) {
         return formatFileSize(context, number, true);
     }
-    
+
     private static String formatFileSize(Context context, long number, boolean shorter) {
         if (context == null) {
             return "";
@@ -92,12 +92,12 @@ public final class Formatter {
             getString(com.android.internal.R.string.fileSizeSuffix,
                       value, context.getString(suffix));
     }
-    
+
     /**
      * Returns a string in the canonical IP format ###.###.###.### from a packed integer containing
      * the IP address.  The IP address is expected to be in little-endian format (LSB first). That
      * is, 0x01020304 will return "4.3.2.1".
-     * 
+     *
      * @param addr the IP address as a packed integer with LSB first.
      * @return string with canonical IP address format.
      */

@@ -75,15 +75,15 @@ public class FileUtilsTest extends AndroidTestCase {
         } catch (IOException e) {
             Assert.fail("Unexpected IOException: " + e);
         }
-        
+
         Assert.assertTrue(mTestFile.exists());
         Assert.assertTrue(FileUtils.getFileStatus(mTestFile.getPath(), null));
-        
+
         FileStatus status1 = new FileStatus();
         FileUtils.getFileStatus(mTestFile.getPath(), status1);
-        
+
         Assert.assertEquals(4, status1.size);
-        
+
         // Sleep for at least one second so that the modification time will be different.
         try {
             Thread.sleep(1000);
@@ -101,15 +101,15 @@ public class FileUtilsTest extends AndroidTestCase {
         } catch (IOException e) {
             Assert.fail("Unexpected IOException: " + e);
         }
-        
+
         FileStatus status2 = new FileStatus();
         FileUtils.getFileStatus(mTestFile.getPath(), status2);
-        
+
         Assert.assertEquals(8, status2.size);
         Assert.assertTrue(status2.mtime > status1.mtime);
-        
+
         mTestFile.delete();
-        
+
         Assert.assertFalse(mTestFile.exists());
         Assert.assertFalse(FileUtils.getFileStatus(mTestFile.getPath(), null));
     }

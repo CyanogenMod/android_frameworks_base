@@ -17,10 +17,10 @@
 package android.widget;
 
 /**
- * Interface that should be implemented on Adapters to enable fast scrolling 
+ * Interface that should be implemented on Adapters to enable fast scrolling
  * in an {@link AbsListView} between sections of the list. A section is a group of list items
  * to jump to that have something in common. For example, they may begin with the
- * same letter or they may be songs from the same artist. 
+ * same letter or they may be songs from the same artist.
  */
 public interface SectionIndexer {
     /**
@@ -32,7 +32,7 @@ public interface SectionIndexer {
      * @return the array of objects that indicate the different sections of the list.
      */
     Object[] getSections();
-    
+
     /**
      * Provides the starting index in the list for a given section.
      * @param section the index of the section to jump to.
@@ -40,7 +40,7 @@ public interface SectionIndexer {
      * position must be clipped to fall within the size of the list.
      */
     int getPositionForSection(int section);
-    
+
     /**
      * This is a reverse mapping to fetch the section index for a given position
      * in the list.
@@ -48,5 +48,5 @@ public interface SectionIndexer {
      * @return the section index. If the position is out of bounds, the section index
      * must be clipped to fall within the size of the section array.
      */
-    int getSectionForPosition(int position);    
+    int getSectionForPosition(int position);
 }

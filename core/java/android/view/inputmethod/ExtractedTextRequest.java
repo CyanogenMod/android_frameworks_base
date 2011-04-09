@@ -30,27 +30,27 @@ public class ExtractedTextRequest implements Parcelable {
      * delivered back when reporting updates.
      */
     public int token;
-    
+
     /**
      * Additional request flags, having the same possible values as the
      * flags parameter of {@link InputConnection#getTextBeforeCursor
      * InputConnection.getTextBeforeCursor()}.
      */
     public int flags;
-    
+
     /**
      * Hint for the maximum number of lines to return.
      */
     public int hintMaxLines;
-    
+
     /**
      * Hint for the maximum number of characters to return.
      */
     public int hintMaxChars;
-    
+
     /**
      * Used to package this object into a {@link Parcel}.
-     * 
+     *
      * @param dest The {@link Parcel} to be written.
      * @param flags The flags used for parceling.
      */

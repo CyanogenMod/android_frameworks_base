@@ -47,7 +47,7 @@ public class DatePicker extends FrameLayout {
 
     private static final int DEFAULT_START_YEAR = 1900;
     private static final int DEFAULT_END_YEAR = 2100;
-    
+
     /* UI Components */
     private final NumberPicker mDayPicker;
     private final NumberPicker mMonthPicker;
@@ -57,7 +57,7 @@ public class DatePicker extends FrameLayout {
      * How we notify users the date has changed.
      */
     private OnDateChangedListener mOnDateChangedListener;
-    
+
     private int mDay;
     private int mMonth;
     private int mYear;
@@ -80,7 +80,7 @@ public class DatePicker extends FrameLayout {
     public DatePicker(Context context) {
         this(context, null);
     }
-    
+
     public DatePicker(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -122,7 +122,7 @@ public class DatePicker extends FrameLayout {
         mMonthPicker.setSpeed(200);
         mMonthPicker.setOnChangeListener(new OnChangedListener() {
             public void onChanged(NumberPicker picker, int oldVal, int newVal) {
-                
+
                 /* We display the month 1-12 but store it 0-11 so always
                  * subtract by one to ensure our internal state is always 0-11
                  */
@@ -144,28 +144,28 @@ public class DatePicker extends FrameLayout {
                 updateDaySpinner();
             }
         });
-        
+
         // attributes
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DatePicker);
 
         int mStartYear = a.getInt(R.styleable.DatePicker_startYear, DEFAULT_START_YEAR);
         int mEndYear = a.getInt(R.styleable.DatePicker_endYear, DEFAULT_END_YEAR);
         mYearPicker.setRange(mStartYear, mEndYear);
-        
+
         a.recycle();
-        
+
         // initialize to current date
         Calendar cal = Calendar.getInstance();
         init(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), null);
-        
+
         // re-order the number pickers to match the current date format
         reorderPickers(months);
-        
+
         if (!isEnabled()) {
             setEnabled(false);
         }
     }
-    
+
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
@@ -266,7 +266,7 @@ public class DatePicker extends FrameLayout {
             mMonth = month;
             mDay = day;
         }
-        
+
         /**
          * Constructor called from {@link #CREATOR}
          */
@@ -322,7 +322,7 @@ public class DatePicker extends FrameLayout {
     @Override
     protected Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
-        
+
         return new SavedState(superState, mYear, mMonth, mDay);
     }
 
@@ -355,7 +355,7 @@ public class DatePicker extends FrameLayout {
     private void updateSpinners() {
         updateDaySpinner();
         mYearPicker.setCurrent(mYear);
-        
+
         /* The month display uses 1-12 but our internal state stores it
          * 0-11 so add one when setting the display.
          */

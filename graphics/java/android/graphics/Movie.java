@@ -21,7 +21,7 @@ import java.io.FileInputStream;
 
 public class Movie {
     private final int mNativeMovie;
-    
+
     private Movie(int nativeMovie) {
         if (nativeMovie == 0) {
             throw new RuntimeException("native movie creation failed");
@@ -34,10 +34,10 @@ public class Movie {
     public native boolean isOpaque();
     public native int duration();
 
-    public native boolean setTime(int relativeMilliseconds);    
+    public native boolean setTime(int relativeMilliseconds);
 
     public native void draw(Canvas canvas, float x, float y, Paint paint);
-    
+
     public void draw(Canvas canvas, float x, float y) {
         draw(canvas, x, y, null);
     }

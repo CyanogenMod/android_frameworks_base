@@ -100,7 +100,7 @@ public final class Rect implements Parcelable {
     public String toShortString() {
         return toShortString(new StringBuilder(32));
     }
-    
+
     /**
      * Return a string representation of the rectangle in a compact form.
      * @hide
@@ -118,7 +118,7 @@ public final class Rect implements Parcelable {
      *
      * <p>You can later recover the Rect from this string through
      * {@link #unflattenFromString(String)}.
-     * 
+     *
      * @return Returns a new String of the form "left top right bottom"
      */
     public String flattenToString() {
@@ -149,7 +149,7 @@ public final class Rect implements Parcelable {
                 Integer.parseInt(matcher.group(3)),
                 Integer.parseInt(matcher.group(4)));
     }
-    
+
     /**
      * Print short representation to given writer.
      * @hide
@@ -159,7 +159,7 @@ public final class Rect implements Parcelable {
         pw.print(top); pw.print("]["); pw.print(right);
         pw.print(','); pw.print(bottom); pw.print(']');
     }
-    
+
     /**
      * Returns true if the rectangle is empty (left >= right or top >= bottom)
      */
@@ -182,7 +182,7 @@ public final class Rect implements Parcelable {
     public final int height() {
         return bottom - top;
     }
-    
+
     /**
      * @return the horizontal center of the rectangle. If the computed value
      *         is fractional, this method returns the largest integer that is
@@ -191,7 +191,7 @@ public final class Rect implements Parcelable {
     public final int centerX() {
         return (left + right) >> 1;
     }
-    
+
     /**
      * @return the vertical center of the rectangle. If the computed value
      *         is fractional, this method returns the largest integer that is
@@ -200,14 +200,14 @@ public final class Rect implements Parcelable {
     public final int centerY() {
         return (top + bottom) >> 1;
     }
-    
+
     /**
      * @return the exact horizontal center of the rectangle as a float.
      */
     public final float exactCenterX() {
         return (left + right) * 0.5f;
     }
-    
+
     /**
      * @return the exact vertical center of the rectangle as a float.
      */
@@ -385,7 +385,7 @@ public final class Rect implements Parcelable {
         }
         return false;
     }
-    
+
     /**
      * If the specified rectangle intersects this rectangle, return true and set
      * this rectangle to that intersection, otherwise return false and do not
@@ -499,7 +499,7 @@ public final class Rect implements Parcelable {
     public void union(Rect r) {
         union(r.left, r.top, r.right, r.bottom);
     }
-    
+
     /**
      * Update this Rect to enclose itself and the [x,y] coordinate. There is no
      * check to see that this rectangle is non-empty.

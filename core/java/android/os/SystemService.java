@@ -23,7 +23,7 @@ public class SystemService
     public static void start(String name) {
         SystemProperties.set("ctl.start", name);
     }
-    
+
         /** Request that the init daemon stop a named service. */
     public static void stop(String name) {
         SystemProperties.set("ctl.stop", name);

@@ -88,11 +88,11 @@ public abstract class UEventObserver {
          *  an ArrayList where even elements are the String match and odd
          *  elements the corresponding UEventObserver observer */
         private ArrayList<Object> mObservers = new ArrayList<Object>();
-        
+
         UEventThread() {
             super("UEventObserver");
         }
-        
+
         public void run() {
             native_setup();
 

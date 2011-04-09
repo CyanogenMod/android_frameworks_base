@@ -124,7 +124,7 @@ public final class NfcAdapter {
      * Intent to start an activity when a tag is discovered.
      *
      * <p>This intent will not be started when a tag is discovered if any activities respond to
-     * {@link #ACTION_NDEF_DISCOVERED} or {@link #ACTION_TECH_DISCOVERED} for the current tag. 
+     * {@link #ACTION_NDEF_DISCOVERED} or {@link #ACTION_TECH_DISCOVERED} for the current tag.
      */
     @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
     public static final String ACTION_TAG_DISCOVERED = "android.nfc.action.TAG_DISCOVERED";

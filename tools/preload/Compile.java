@@ -25,7 +25,7 @@ import java.util.List;
  * Parses and analyzes a log, pulling our PRELOAD information. If you have
  * an emulator or device running in the background, this class will use it
  * to measure and record the memory usage of each class.
- * 
+ *
  * TODO: Should analyze lines and select substring dynamically (instead of hardcoded 19)
  */
 public class Compile {

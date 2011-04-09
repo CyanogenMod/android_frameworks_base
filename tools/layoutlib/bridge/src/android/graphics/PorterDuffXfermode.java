@@ -29,12 +29,12 @@ public class PorterDuffXfermode extends Xfermode {
     public PorterDuffXfermode(PorterDuff.Mode mode) {
         mMode = mode;
     }
-    
+
     //---------- Custom Methods
-    
+
     public PorterDuff.Mode getMode() {
         return mMode;
     }
-    
+
     //----------
 }

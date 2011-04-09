@@ -32,11 +32,11 @@ public final class MicrophoneInputStream extends InputStream {
     static {
         System.loadLibrary("srec_jni");
     }
-    
+
     private final static String TAG = "MicrophoneInputStream";
     private int mAudioRecord = 0;
     private byte[] mOneByte = new byte[1];
-    
+
     /**
      * MicrophoneInputStream constructor.
      * @param sampleRate sample rate of the microphone, typically 11025 or 8000.
@@ -65,14 +65,14 @@ public final class MicrophoneInputStream extends InputStream {
         if (mAudioRecord == 0) throw new IllegalStateException("not open");
         return AudioRecordRead(mAudioRecord, b, 0, b.length);
     }
-    
+
     @Override
     public int read(byte[] b, int offset, int length) throws IOException {
         if (mAudioRecord == 0) throw new IllegalStateException("not open");
         // TODO: should we force all reads to be a multiple of the sample size?
         return AudioRecordRead(mAudioRecord, b, offset, length);
     }
-    
+
     /**
      * Closes this stream.
      */
@@ -90,7 +90,7 @@ public final class MicrophoneInputStream extends InputStream {
             }
         }
     }
-    
+
     @Override
     protected void finalize() throws Throwable {
         if (mAudioRecord != 0) {
@@ -98,7 +98,7 @@ public final class MicrophoneInputStream extends InputStream {
             throw new IOException("someone forgot to close MicrophoneInputStream");
         }
     }
-    
+
     //
     // AudioRecord JNI interface
     //

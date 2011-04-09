@@ -224,7 +224,7 @@ public class KeyCharacterMap
          */
         public char[] meta = new char[META_LENGTH];
     }
-    
+
     /**
      * Get the characters conversion data for a given keyCode.
      *
@@ -249,7 +249,7 @@ public class KeyCharacterMap
      * could plausibly generate the provided sequence of characters.  It is
      * not guaranteed that the sequence is the only way to generate these
      * events or that it is optimal.
-     * 
+     *
      * @return an array of KeyEvent objects, or null if the given char array
      *         can not be generated using the current key character map.
      */
@@ -382,7 +382,7 @@ public class KeyCharacterMap
         boolean[] ret = deviceHasKeys(codeArray);
         return ret[0];
     }
-    
+
     public static boolean[] deviceHasKeys(int[] keyCodes) {
         boolean[] ret = new boolean[keyCodes.length];
         IWindowManager wm = IWindowManager.Stub.asInterface(ServiceManager.getService("window"));
@@ -424,7 +424,7 @@ public class KeyCharacterMap
 
     /*
      * TODO: Change the table format to support full 21-bit-wide
-     * accent characters and combined characters if ever necessary.    
+     * accent characters and combined characters if ever necessary.
      */
     private static final int ACUTE = '\u00B4' << 16;
     private static final int GRAVE = '`' << 16;

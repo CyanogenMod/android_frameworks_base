@@ -37,11 +37,11 @@ public class WifiNative {
     static final int BLUETOOTH_COEXISTENCE_MODE_ENABLED = 0;
     static final int BLUETOOTH_COEXISTENCE_MODE_DISABLED = 1;
     static final int BLUETOOTH_COEXISTENCE_MODE_SENSE = 2;
-    
+
     public native static String getErrorString(int errorCode);
 
     public native static boolean loadDriver();
-    
+
     public native static boolean unloadDriver();
 
     public native static boolean loadHotspotDriver();
@@ -49,7 +49,7 @@ public class WifiNative {
     public native static boolean unloadHotspotDriver();
 
     public native static boolean startSupplicant();
-    
+
     public native static boolean stopSupplicant();
 
     public native static boolean connectToSupplicant();
@@ -59,7 +59,7 @@ public class WifiNative {
     public native static boolean pingCommand();
 
     public native static boolean scanCommand(boolean forceActive);
-    
+
     public native static boolean setScanModeCommand(boolean setActive);
 
     public native static String listNetworksCommand();
@@ -73,7 +73,7 @@ public class WifiNative {
     public native static boolean removeNetworkCommand(int netId);
 
     public native static boolean enableNetworkCommand(int netId, boolean disableOthers);
-    
+
     public native static boolean disableNetworkCommand(int netId);
 
     public native static boolean reconnectCommand();
@@ -121,7 +121,7 @@ public class WifiNative {
 
     /**
      * Sets the bluetooth coexistence mode.
-     * 
+     *
      * @param mode One of {@link #BLUETOOTH_COEXISTENCE_MODE_DISABLED},
      *            {@link #BLUETOOTH_COEXISTENCE_MODE_ENABLED}, or
      *            {@link #BLUETOOTH_COEXISTENCE_MODE_SENSE}.
@@ -138,7 +138,7 @@ public class WifiNative {
      * @return {@code true} if the command succeeded, {@code false} otherwise.
      */
     public native static boolean setBluetoothCoexistenceScanModeCommand(boolean setCoexScanMode);
-    
+
     public native static boolean saveConfigCommand();
 
     public native static boolean reloadConfigCommand();

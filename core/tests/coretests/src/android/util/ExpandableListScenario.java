@@ -35,13 +35,13 @@ import android.widget.TextView;
  * WARNING: A lot of the features are mixed between ListView's expected position
  * (flat list position) and an ExpandableListView's expected position.  You must add/change
  * features as you need them.
- * 
+ *
  * @see ListScenario
  */
 public abstract class ExpandableListScenario extends ListScenario {
-    protected ExpandableListAdapter mAdapter; 
+    protected ExpandableListAdapter mAdapter;
     protected List<MyGroup> mGroups;
-    
+
     @Override
     protected ListView createListView() {
         return new ExpandableListView(this);
@@ -56,24 +56,24 @@ public abstract class ExpandableListScenario extends ListScenario {
     protected void setAdapter(ListView listView) {
         ((ExpandableListView) listView).setAdapter(mAdapter = createAdapter());
     }
-    
+
     protected ExpandableListAdapter createAdapter() {
         return new MyAdapter();
     }
-    
+
     @Override
     protected void readAndValidateParams(Params params) {
         ExpandableParams expandableParams = (ExpandableParams) params;
-        
+
         int[] numChildren = expandableParams.mNumChildren;
-        
+
         mGroups = new ArrayList<MyGroup>(numChildren.length);
         for (int i = 0; i < numChildren.length; i++) {
             mGroups.add(new MyGroup(numChildren[i]));
         }
-        
+
         expandableParams.superSetNumItems();
-        
+
         super.readAndValidateParams(params);
     }
 
@@ -87,10 +87,10 @@ public abstract class ExpandableListScenario extends ListScenario {
 
     public static class ExpandableParams extends Params {
         private int[] mNumChildren;
-        
+
         /**
          * Sets the number of children per group.
-         *  
+         *
          * @param numChildrenPerGroup The number of children per group.
          */
         public ExpandableParams setNumChildren(int[] numChildren) {
@@ -104,18 +104,18 @@ public abstract class ExpandableListScenario extends ListScenario {
          */
         private ExpandableParams superSetNumItems() {
             int numItems = 0;
-            
+
             if (mNumChildren != null) {
                 for (int i = mNumChildren.length - 1; i >= 0; i--) {
                     numItems += mNumChildren[i];
                 }
             }
-            
+
             super.setNumItems(numItems);
-            
+
             return this;
         }
-        
+
         @Override
         public Params setNumItems(int numItems) {
             throw new IllegalStateException("Use setNumGroups and setNumChildren instead.");
@@ -174,7 +174,7 @@ public abstract class ExpandableListScenario extends ListScenario {
      */
     public final String getValueAtPosition(long packedPosition) {
         final int type = ExpandableListView.getPackedPositionType(packedPosition);
-        
+
         if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
             return mGroups.get(ExpandableListView.getPackedPositionGroup(packedPosition))
                     .children.get(ExpandableListView.getPackedPositionChild(packedPosition))
@@ -189,35 +189,35 @@ public abstract class ExpandableListScenario extends ListScenario {
 
     /**
      * Whether a particular position is out of bounds.
-     * 
+     *
      * @param packedPosition The packed position.
      * @return Whether it's out of bounds.
      */
     private boolean isOutOfBounds(long packedPosition) {
         final int type = ExpandableListView.getPackedPositionType(packedPosition);
-        
+
         if (type == ExpandableListView.PACKED_POSITION_TYPE_NULL) {
             throw new IllegalStateException("packedPosition is not a valid position.");
         }
 
-        final int group = ExpandableListView.getPackedPositionGroup(packedPosition); 
+        final int group = ExpandableListView.getPackedPositionGroup(packedPosition);
         if (group >= mGroups.size() || group < 0) {
             return true;
         }
-        
+
         if (type == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
-            final int child = ExpandableListView.getPackedPositionChild(packedPosition); 
+            final int child = ExpandableListView.getPackedPositionChild(packedPosition);
             if (child >= mGroups.get(group).children.size() || child < 0) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Gets a view for the packed position, possibly reusing the convertView.
-     * 
+     *
      * @param packedPosition The position to get a view for.
      * @param convertView Optional view to convert.
      * @param parent The future parent.
@@ -227,10 +227,10 @@ public abstract class ExpandableListScenario extends ListScenario {
         if (isOutOfBounds(packedPosition)) {
             throw new IllegalStateException("position out of range for adapter!");
         }
-        
+
         final ExpandableListView elv = getExpandableListView();
-        final int flPos = elv.getFlatListPosition(packedPosition); 
-        
+        final int flPos = elv.getFlatListPosition(packedPosition);
+
         if (convertView != null) {
             ((TextView) convertView).setText(getValueAtPosition(packedPosition));
             convertView.setId(flPos);
@@ -240,10 +240,10 @@ public abstract class ExpandableListScenario extends ListScenario {
         int desiredHeight = getHeightForPosition(flPos);
         return createView(packedPosition, flPos, parent, desiredHeight);
     }
-    
+
     /**
      * Create a view for a group or child position.
-     * 
+     *
      * @param packedPosition The packed position (has type, group pos, and optionally child pos).
      * @param flPos The flat list position (the position that the ListView goes by).
      * @param parent The parent view.
@@ -263,11 +263,11 @@ public abstract class ExpandableListScenario extends ListScenario {
         result.setId(flPos);
         return result;
     }
-    
+
     /**
      * Returns a group index containing either the number of children or at
      * least one child.
-     * 
+     *
      * @param numChildren The group must have this amount, or -1 if using
      *            atLeastOneChild.
      * @param atLeastOneChild The group must have at least one child, or false
@@ -276,22 +276,22 @@ public abstract class ExpandableListScenario extends ListScenario {
      */
     public int findGroupWithNumChildren(int numChildren, boolean atLeastOneChild) {
         final ExpandableListAdapter adapter = mAdapter;
-        
+
         for (int i = adapter.getGroupCount() - 1; i >= 0; i--) {
             final int curNumChildren = adapter.getChildrenCount(i);
-            
+
             if (numChildren == curNumChildren || atLeastOneChild && curNumChildren > 0) {
                 return i;
             }
         }
-        
+
         return -1;
     }
-    
+
     public List<MyGroup> getGroups() {
         return mGroups;
     }
-    
+
     public ExpandableListAdapter getAdapter() {
         return mAdapter;
     }
@@ -344,16 +344,16 @@ public abstract class ExpandableListScenario extends ListScenario {
         public boolean hasStableIds() {
             return true;
         }
-        
+
     }
 
     public static class MyGroup {
         private static long mNextId = 1000;
-        
+
         String name;
         long id = mNextId++;
         List<MyChild> children;
-        
+
         public MyGroup(int numChildren) {
             name = "Group " + id;
             children = new ArrayList<MyChild>(numChildren);
@@ -362,18 +362,18 @@ public abstract class ExpandableListScenario extends ListScenario {
             }
         }
     }
-    
+
     public static class MyChild {
         private static long mNextId = 2000;
-        
+
         String name;
         long id = mNextId++;
-        
+
         public MyChild() {
             name = "Child " + id;
         }
     }
-    
+
     @Override
     protected final void init(Params params) {
         init((ExpandableParams) params);

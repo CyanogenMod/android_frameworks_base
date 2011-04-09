@@ -171,7 +171,7 @@ public class PowerProfile {
 
                 String element = parser.getName();
                 if (element == null) break;
-                
+
                 if (parsingArray && !element.equals(TAG_ARRAYITEM)) {
                     // Finish array
                     sPowerMap.put(arrayName, array.toArray(new Double[array.size()]));
@@ -212,7 +212,7 @@ public class PowerProfile {
     }
 
     /**
-     * Returns the average current in mA consumed by the subsystem 
+     * Returns the average current in mA consumed by the subsystem
      * @param type the subsystem type
      * @return the average current in milliAmps.
      */
@@ -228,7 +228,7 @@ public class PowerProfile {
             return 0;
         }
     }
-    
+
     /**
      * Returns the average current in mA consumed by the subsystem for the given level.
      * @param type the subsystem type

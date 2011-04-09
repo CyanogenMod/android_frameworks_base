@@ -34,7 +34,7 @@ public final class Bitmap implements Parcelable {
      * @see Bitmap#setDensity(int)
      */
     public static final int DENSITY_NONE = 0;
-    
+
     // Note:  mNativeBitmap is used by FaceDetector_jni.cpp
     // Don't change/rename without updating FaceDetector_jni.cpp
     private final int mNativeBitmap;
@@ -51,7 +51,7 @@ public final class Bitmap implements Parcelable {
     private static volatile Matrix sScaleMatrix;
 
     private static volatile int sDefaultDensity = -1;
-    
+
     /**
      * For backwards compatibility, allows the app layer to change the default
      * density when running old apps.
@@ -60,7 +60,7 @@ public final class Bitmap implements Parcelable {
     public static void setDefaultDensity(int density) {
         sDefaultDensity = density;
     }
-    
+
     /*package*/ static int getDefaultDensity() {
         if (sDefaultDensity >= 0) {
             return sDefaultDensity;
@@ -68,7 +68,7 @@ public final class Bitmap implements Parcelable {
         sDefaultDensity = DisplayMetrics.DENSITY_DEVICE;
         return sDefaultDensity;
     }
-    
+
     /**
      * @noinspection UnusedDeclaration
      */
@@ -132,7 +132,7 @@ public final class Bitmap implements Parcelable {
     public void setDensity(int density) {
         mDensity = density;
     }
-    
+
     /**
      * Sets the nine patch chunk.
      *
@@ -453,11 +453,11 @@ public final class Bitmap implements Parcelable {
                 paint.setAntiAlias(true);
             }
         }
-        
+
         // The new bitmap was created from a known bitmap source so assume that
         // they use the same density
         bitmap.mDensity = source.mDensity;
-        
+
         canvas.setBitmap(bitmap);
         canvas.drawBitmap(source, srcR, dstR, paint);
 
@@ -660,7 +660,7 @@ public final class Bitmap implements Parcelable {
     public int getScaledHeight(int targetDensity) {
         return scaleFromDensity(getHeight(), mDensity, targetDensity);
     }
-    
+
     /**
      * @hide
      */
@@ -668,11 +668,11 @@ public final class Bitmap implements Parcelable {
         if (sdensity == DENSITY_NONE || sdensity == tdensity) {
             return size;
         }
-        
+
         // Scale by tdensity / sdensity, rounding up.
         return ( (size * tdensity) + (sdensity >> 1) ) / sdensity;
     }
-    
+
     /**
      * Return the number of bytes between rows in the bitmap's pixels. Note that
      * this refers to the pixels as stored natively by the bitmap. If you call
@@ -956,9 +956,9 @@ public final class Bitmap implements Parcelable {
      * -2, -2, so that drawing the alpha bitmap offset by (-2, -2) and then
      * drawing the original would result in the blur visually aligning with
      * the original.
-     * 
+     *
      * <p>The initial density of the returned bitmap is the same as the original's.
-     * 
+     *
      * @param paint Optional paint used to modify the alpha values in the
      *              resulting bitmap. Pass null for default behavior.
      * @param offsetXY Optional array that returns the X (index 0) and Y

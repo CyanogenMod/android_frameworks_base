@@ -84,10 +84,10 @@ public class ViewAnimator extends FrameLayout {
         setMeasureAllChildren(measureAllChildren);
         a.recycle();
     }
-    
+
     /**
      * Sets which child view will be displayed.
-     * 
+     *
      * @param whichChild the index of the child view to display
      */
     public void setDisplayedChild(int whichChild) {
@@ -105,14 +105,14 @@ public class ViewAnimator extends FrameLayout {
             requestFocus(FOCUS_FORWARD);
         }
     }
-    
+
     /**
      * Returns the index of the currently displayed child view.
      */
     public int getDisplayedChild() {
         return mWhichChild;
     }
-    
+
     /**
      * Manually shows the next child.
      */

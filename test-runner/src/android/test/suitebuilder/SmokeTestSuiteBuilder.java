@@ -18,7 +18,7 @@ package android.test.suitebuilder;
 
 /**
  * A suite builder that runs smoke tests.
- * 
+ *
  * {@hide} Not needed for 1.0 SDK.
  */
 public class SmokeTestSuiteBuilder extends TestSuiteBuilder {

@@ -31,7 +31,7 @@ public class PositionTesterContextMenuListener implements OnCreateContextMenuLis
     private static final int ADAPTER_TYPE = -1;
     private int testType; // as returned by getPackedPositionType
 
-    // Will be set to null by each call to onCreateContextMenu, unless an error occurred. 
+    // Will be set to null by each call to onCreateContextMenu, unless an error occurred.
     private String errorMessage;
 
     public void expectGroupContextMenu(int groupPosition) {

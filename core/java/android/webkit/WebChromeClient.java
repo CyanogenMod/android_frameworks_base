@@ -91,7 +91,7 @@ public class WebChromeClient {
      * @param userGesture True if the request was initiated by a user gesture
      *                    such as clicking a link.
      * @param resultMsg The message to send when done creating a new WebView.
-     *                  Set the new WebView through resultMsg.obj which is 
+     *                  Set the new WebView through resultMsg.obj which is
      *                  WebView.WebViewTransport() and then call
      *                  resultMsg.sendToTarget();
      * @return Similar to javscript dialogs, this method should return true if

@@ -64,7 +64,7 @@ class Instance {
 
     /**
      * create a learning instance for a single stroke gesture
-     * 
+     *
      * @param gesture
      * @param label
      * @return the instance

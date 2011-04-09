@@ -62,7 +62,7 @@ public abstract class TestBrowserActivity extends ListActivity
         super.onStart();
         TestSuite testSuite = getTestSuiteToBrowse();
         mTestBrowserController.setTestSuite(testSuite);
-        
+
         String name = testSuite.getName();
         if (name != null) {
             setTitle(name.substring(name.lastIndexOf(".") + 1));

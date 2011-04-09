@@ -30,7 +30,7 @@ import android.view.View;
 public class SubMenuBuilder extends MenuBuilder implements SubMenu {
     private MenuBuilder mParentMenu;
     private MenuItemImpl mItem;
-    
+
     public SubMenuBuilder(Context context, MenuBuilder parentMenu, MenuItemImpl item) {
         super(context);
 
@@ -47,7 +47,7 @@ public class SubMenuBuilder extends MenuBuilder implements SubMenu {
     public boolean isQwertyMode() {
         return mParentMenu.isQwertyMode();
     }
-    
+
     @Override
     public void setShortcutsVisible(boolean shortcutsVisible) {
         mParentMenu.setShortcutsVisible(shortcutsVisible);
@@ -110,5 +110,5 @@ public class SubMenuBuilder extends MenuBuilder implements SubMenu {
     public SubMenu setHeaderView(View view) {
         return (SubMenu) super.setHeaderViewInt(view);
     }
-    
+
 }

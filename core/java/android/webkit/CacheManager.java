@@ -75,14 +75,14 @@ public final class CacheManager {
 
     // trimCacheIfNeeded() is called when a page is fully loaded. But JavaScript
     // can load the content, e.g. in a slideshow, continuously, so we need to
-    // trim the cache on a timer base too. endCacheTransaction() is called on a 
+    // trim the cache on a timer base too. endCacheTransaction() is called on a
     // timer base. We share the same timer with less frequent update.
     private static int mTrimCacheCount = 0;
     private static final int TRIM_CACHE_INTERVAL = 5;
 
     private static WebViewDatabase mDataBase;
     private static File mBaseDir;
-    
+
     // Flag to clear the cache when the CacheManager is initialized
     private static boolean mClearCacheOnInit = false;
 
@@ -177,7 +177,7 @@ public final class CacheManager {
 
     /**
      * initialize the CacheManager. WebView should handle this for each process.
-     * 
+     *
      * @param context The application context.
      */
     static void init(Context context) {
@@ -192,10 +192,10 @@ public final class CacheManager {
         CACHE_TRIM_AMOUNT = SystemProperties.getLong("nw.cache.trimamount", CACHE_TRIM_AMOUNT_DEF);
         CACHE_MAX_SIZE = (CACHE_THRESHOLD - CACHE_TRIM_AMOUNT) / 2;
     }
-    
+
     /**
      * Create the cache directory if it does not already exist.
-     * 
+     *
      * @return true if the cache directory didn't exist and was created.
      */
     static private boolean createCacheDirectory() {
@@ -208,7 +208,7 @@ public final class CacheManager {
                     mBaseDir.toString(),
                     FileUtils.S_IRWXU|FileUtils.S_IRWXG|FileUtils.S_IXOTH,
                     -1, -1);
-            // If we did create the directory, we need to flush 
+            // If we did create the directory, we need to flush
             // the cache database. The directory could be recreated
             // because the system flushed all the data/cache directories
             // to free up disk space.
@@ -223,7 +223,7 @@ public final class CacheManager {
     /**
      * get the base directory of the cache. With localPath of the CacheResult,
      * it identifies the cache file.
-     * 
+     *
      * @return File The base directory of the cache.
      */
     public static File getCacheFileBaseDir() {
@@ -232,7 +232,7 @@ public final class CacheManager {
 
     /**
      * set the flag to control whether cache is enabled or disabled
-     * 
+     *
      * @param disabled true to disable the cache
      */
     static void setCacheDisabled(boolean disabled) {
@@ -247,7 +247,7 @@ public final class CacheManager {
 
     /**
      * get the state of the current cache, enabled or disabled
-     * 
+     *
      * @return return if it is disabled
      */
     public static boolean cacheDisabled() {
@@ -316,7 +316,7 @@ public final class CacheManager {
      * If headers are provided and a cache needs validation,
      * HEADER_KEY_IFNONEMATCH or HEADER_KEY_IFMODIFIEDSINCE will be set in the
      * cached headers.
-     * 
+     *
      * @return the CacheResult for a given url
      */
     public static CacheResult getCacheFile(String url,
@@ -508,7 +508,7 @@ public final class CacheManager {
 
     /**
      * remove all cache files
-     * 
+     *
      * @return true if it succeeds
      */
     static boolean removeAllCacheFiles() {
@@ -613,8 +613,8 @@ public final class CacheManager {
             // Note: SHA1 is much stronger hash. But the cost of setupFiles() is
             // 3.2% cpu time for a fresh load of nytimes.com. While a simple
             // String.hashCode() is only 0.6%. If adding the collision resolving
-            // to String.hashCode(), it makes the cpu time to be 1.6% for a 
-            // fresh load, but 5.3% for the worst case where all the files 
+            // to String.hashCode(), it makes the cpu time to be 1.6% for a
+            // fresh load, but 5.3% for the worst case where all the files
             // already exist in the file system, but database is gone. So it
             // needs to resolve collision for every file at least once.
             int hashCode = url.hashCode();
@@ -626,9 +626,9 @@ public final class CacheManager {
                 boolean checkOldPath = true;
                 // Check hash collision. If the hash file doesn't exist, just
                 // continue. There is a chance that the old cache file is not
-                // same as the hash file. As mDataBase.getCache() is more 
+                // same as the hash file. As mDataBase.getCache() is more
                 // expansive than "leak" a file until clear cache, don't bother.
-                // If the hash file exists, make sure that it is same as the 
+                // If the hash file exists, make sure that it is same as the
                 // cache file. If it is not, resolve the collision.
                 while (file.exists()) {
                     if (checkOldPath) {

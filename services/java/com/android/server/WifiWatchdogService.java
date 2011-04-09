@@ -67,19 +67,19 @@ import java.util.Random;
  * callbacks can come in on other threads, so we must queue messages to the main
  * watchdog thread's handler. Most (if not all) state is only written to from
  * the main thread.
- * 
+ *
  * {@hide}
  */
 public class WifiWatchdogService {
     private static final String TAG = "WifiWatchdogService";
     private static final boolean V = false || Config.LOGV;
     private static final boolean D = true || Config.LOGD;
-    
+
     private Context mContext;
     private ContentResolver mContentResolver;
     private WifiStateTracker mWifiStateTracker;
     private WifiManager mWifiManager;
-    
+
     /**
      * The main watchdog thread.
      */
@@ -107,21 +107,21 @@ public class WifiWatchdogService {
     private int mNumApsChecked;
     /** Whether the current AP check should be canceled. */
     private boolean mShouldCancel;
-    
+
     WifiWatchdogService(Context context, WifiStateTracker wifiStateTracker) {
         mContext = context;
         mContentResolver = context.getContentResolver();
         mWifiStateTracker = wifiStateTracker;
         mWifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        
+
         createThread();
-        
+
         // The content observer to listen needs a handler, which createThread creates
         registerForSettingsChanges();
         if (isWatchdogEnabled()) {
             registerForWifiBroadcasts();
         }
-        
+
         if (V) {
             myLogV("WifiWatchdogService: Created");
         }
@@ -155,7 +155,7 @@ public class WifiWatchdogService {
     private boolean isWatchdogEnabled() {
         return Settings.Secure.getInt(mContentResolver, Settings.Secure.WIFI_WATCHDOG_ON, 1) == 1;
     }
-    
+
     /**
      * @see android.provider.Settings.Secure#WIFI_WATCHDOG_AP_COUNT
      */
@@ -163,7 +163,7 @@ public class WifiWatchdogService {
         return Settings.Secure.getInt(mContentResolver,
             Settings.Secure.WIFI_WATCHDOG_AP_COUNT, 2);
     }
-    
+
     /**
      * @see android.provider.Settings.Secure#WIFI_WATCHDOG_INITIAL_IGNORED_PING_COUNT
      */
@@ -179,7 +179,7 @@ public class WifiWatchdogService {
         return Settings.Secure.getInt(mContentResolver,
             Settings.Secure.WIFI_WATCHDOG_PING_COUNT, 4);
     }
-    
+
     /**
      * @see android.provider.Settings.Secure#WIFI_WATCHDOG_PING_TIMEOUT_MS
      */
@@ -187,7 +187,7 @@ public class WifiWatchdogService {
         return Settings.Secure.getInt(mContentResolver,
             Settings.Secure.WIFI_WATCHDOG_PING_TIMEOUT_MS, 500);
     }
-    
+
     /**
      * @see android.provider.Settings.Secure#WIFI_WATCHDOG_PING_DELAY_MS
      */
@@ -195,7 +195,7 @@ public class WifiWatchdogService {
         return Settings.Secure.getInt(mContentResolver,
             Settings.Secure.WIFI_WATCHDOG_PING_DELAY_MS, 250);
     }
-    
+
     /**
      * @see android.provider.Settings.Secure#WIFI_WATCHDOG_ACCEPTABLE_PACKET_LOSS_PERCENTAGE
      */
@@ -203,7 +203,7 @@ public class WifiWatchdogService {
         return Settings.Secure.getInt(mContentResolver,
             Settings.Secure.WIFI_WATCHDOG_ACCEPTABLE_PACKET_LOSS_PERCENTAGE, 25);
     }
-    
+
     /**
      * @see android.provider.Settings.Secure#WIFI_WATCHDOG_MAX_AP_CHECKS
      */
@@ -211,7 +211,7 @@ public class WifiWatchdogService {
         return Settings.Secure.getInt(mContentResolver,
             Settings.Secure.WIFI_WATCHDOG_MAX_AP_CHECKS, 7);
     }
-    
+
     /**
      * @see android.provider.Settings.Secure#WIFI_WATCHDOG_BACKGROUND_CHECK_ENABLED
      */
@@ -219,7 +219,7 @@ public class WifiWatchdogService {
         return Settings.Secure.getInt(mContentResolver,
             Settings.Secure.WIFI_WATCHDOG_BACKGROUND_CHECK_ENABLED, 1) == 1;
     }
-    
+
     /**
      * @see android.provider.Settings.Secure#WIFI_WATCHDOG_BACKGROUND_CHECK_DELAY_MS
      */
@@ -227,7 +227,7 @@ public class WifiWatchdogService {
         return Settings.Secure.getInt(mContentResolver,
             Settings.Secure.WIFI_WATCHDOG_BACKGROUND_CHECK_DELAY_MS, 60000);
     }
-    
+
     /**
      * @see android.provider.Settings.Secure#WIFI_WATCHDOG_BACKGROUND_CHECK_TIMEOUT_MS
      */
@@ -244,7 +244,7 @@ public class WifiWatchdogService {
         return Settings.Secure.getString(mContentResolver,
                 Settings.Secure.WIFI_WATCHDOG_WATCH_LIST);
     }
-    
+
     /**
      * Registers to receive the necessary Wi-Fi broadcasts.
      */
@@ -299,21 +299,21 @@ public class WifiWatchdogService {
     }
 
     // Utility methods
-    
+
     /**
      * Logs with the current thread.
      */
     private static void myLogV(String message) {
         Slog.v(TAG, "(" + Thread.currentThread().getName() + ") " + message);
     }
-    
+
     private static void myLogD(String message) {
         Slog.d(TAG, "(" + Thread.currentThread().getName() + ") " + message);
     }
-    
+
     /**
      * Gets the DNS of the current AP.
-     * 
+     *
      * @return The DNS of the current AP.
      */
     private int getDns() {
@@ -324,11 +324,11 @@ public class WifiWatchdogService {
             return -1;
         }
     }
-    
+
     /**
      * Checks whether the DNS can be reached using multiple attempts according
      * to the current setting values.
-     * 
+     *
      * @return Whether the DNS is reachable
      */
     private boolean checkDnsConnectivity() {
@@ -339,7 +339,7 @@ public class WifiWatchdogService {
             }
             return false;
         }
-        
+
         if (V) {
             myLogV("checkDnsConnectivity: Checking 0x" +
                     Integer.toHexString(Integer.reverseBytes(dns)) + " for connectivity");
@@ -349,12 +349,12 @@ public class WifiWatchdogService {
         int numPings = getPingCount();
         int pingDelay = getPingDelayMs();
         int acceptableLoss = getAcceptablePacketLossPercentage();
-        
+
         /** See {@link Secure#WIFI_WATCHDOG_INITIAL_IGNORED_PING_COUNT} */
         int ignoredPingCounter = 0;
         int pingCounter = 0;
         int successCounter = 0;
-        
+
         // No connectivity check needed
         if (numPings == 0) {
             return true;
@@ -373,20 +373,20 @@ public class WifiWatchdogService {
                 pingCounter++;
                 successCounter++;
             }
-            
+
             if (V) {
                 Slog.v(TAG, (dnsAlive ? "  +" : "  Ignored: -"));
             }
 
             if (shouldCancel()) return false;
-            
+
             try {
                 Thread.sleep(pingDelay);
             } catch (InterruptedException e) {
                 Slog.w(TAG, "Interrupted while pausing between pings", e);
             }
         }
-        
+
         // Do the pings that we use to measure packet loss
         for (; pingCounter < numPings; pingCounter++) {
             if (shouldCancel()) return false;
@@ -403,20 +403,20 @@ public class WifiWatchdogService {
             }
 
             if (shouldCancel()) return false;
-            
+
             try {
                 Thread.sleep(pingDelay);
             } catch (InterruptedException e) {
                 Slog.w(TAG, "Interrupted while pausing between pings", e);
             }
         }
-        
+
         int packetLossPercentage = 100 * (numPings - successCounter) / numPings;
         if (D) {
             Slog.d(TAG, packetLossPercentage
                     + "% packet loss (acceptable is " + acceptableLoss + "%)");
         }
-        
+
         return !shouldCancel() && (packetLossPercentage <= acceptableLoss);
     }
 
@@ -426,43 +426,43 @@ public class WifiWatchdogService {
             myLogV("backgroundCheckDnsConnectivity: Background checking " + dns +
                     " for connectivity");
         }
-        
+
         if (dns == -1) {
             if (V) {
                 myLogV("backgroundCheckDnsConnectivity: DNS is empty, returning false");
             }
             return false;
         }
-        
+
         return DnsPinger.isDnsReachable(dns, getBackgroundCheckTimeoutMs());
     }
-    
+
     /**
      * Signals the current action to cancel.
      */
     private void cancelCurrentAction() {
         mShouldCancel = true;
     }
-    
+
     /**
-     * Helper to check whether to cancel. 
-     * 
+     * Helper to check whether to cancel.
+     *
      * @return Whether to cancel processing the action.
      */
     private boolean shouldCancel() {
         if (V && mShouldCancel) {
             myLogV("shouldCancel: Cancelling");
         }
-        
+
         return mShouldCancel;
     }
-    
+
     // Wi-Fi initiated callbacks (could be executed in another thread)
 
     /**
      * Called when connected to an AP (this can be the next AP in line, or
      * it can be a completely different network).
-     * 
+     *
      * @param ssid The SSID of the access point.
      * @param bssid The BSSID of the access point.
      */
@@ -476,7 +476,7 @@ public class WifiWatchdogService {
          * stale, so cancel it.
          */
         cancelCurrentAction();
-        
+
         if ((mSsid == null) || !mSsid.equals(ssid)) {
             /*
              * This is a different network than what the main watchdog thread is
@@ -484,7 +484,7 @@ public class WifiWatchdogService {
              */
             mHandler.dispatchNetworkChanged(ssid);
         }
-        
+
         if (requiresWatchdog(ssid, bssid)) {
             if (D) {
                 myLogD(ssid + " (" + bssid + ") requires the watchdog");
@@ -492,7 +492,7 @@ public class WifiWatchdogService {
 
             // This access point requires a watchdog, so queue the check on the main thread
             mHandler.checkAp(new AccessPoint(ssid, bssid));
-            
+
         } else {
             if (D) {
                 myLogD(ssid + " (" + bssid + ") does not require the watchdog");
@@ -502,7 +502,7 @@ public class WifiWatchdogService {
             mHandler.idle();
         }
     }
-    
+
     /**
      * Called when Wi-Fi is enabled.
      */
@@ -511,7 +511,7 @@ public class WifiWatchdogService {
         // Queue a hard-reset of the state on the main thread
         mHandler.reset();
     }
-    
+
     /**
      * Called when disconnected (or some other event similar to being disconnected).
      */
@@ -519,7 +519,7 @@ public class WifiWatchdogService {
         if (V) {
             myLogV("onDisconnected");
         }
-        
+
         /*
          * Disconnected from an access point, the action being processed by the
          * watchdog thread is now stale, so cancel it.
@@ -533,7 +533,7 @@ public class WifiWatchdogService {
 
     /**
      * Checks whether an access point requires watchdog monitoring.
-     * 
+     *
      * @param ssid The SSID of the access point.
      * @param bssid The BSSID of the access point.
      * @return Whether the access point/network should be monitored by the
@@ -543,7 +543,7 @@ public class WifiWatchdogService {
         if (V) {
             myLogV("requiresWatchdog: SSID: " + ssid + ", BSSID: " + bssid);
         }
-        
+
         WifiInfo info = null;
         if (ssid == null) {
             /*
@@ -560,7 +560,7 @@ public class WifiWatchdogService {
                 return false;
             }
         }
-        
+
         if (TextUtils.isEmpty(bssid)) {
             // Similar as above
             if (info == null) {
@@ -608,10 +608,10 @@ public class WifiWatchdogService {
 
         return false;
     }
-    
+
     /**
      * Checks if the current scan results have multiple access points with an SSID.
-     * 
+     *
      * @param ssid The SSID to check.
      * @return Whether the SSID has multiple access points.
      */
@@ -623,7 +623,7 @@ public class WifiWatchdogService {
             }
             return false;
         }
-        
+
         int numApsRequired = getApCount();
         int numApsFound = 0;
         int resultsSize = results.size();
@@ -631,10 +631,10 @@ public class WifiWatchdogService {
             ScanResult result = results.get(i);
             if (result == null) continue;
             if (result.SSID == null) continue;
-            
+
             if (result.SSID.equals(ssid)) {
                 numApsFound++;
-                
+
                 if (numApsFound >= numApsRequired) {
                     if (V) {
                         myLogV("hasRequiredNumberOfAps: SSID: " + ssid + ", returning true");
@@ -643,38 +643,38 @@ public class WifiWatchdogService {
                 }
             }
         }
-        
+
         if (V) {
             myLogV("hasRequiredNumberOfAps: SSID: " + ssid + ", returning false");
         }
         return false;
     }
-    
+
     // Watchdog logic (assume all of these methods will be in our main thread)
-    
+
     /**
      * Handles a Wi-Fi network change (for example, from networkA to networkB).
      */
     private void handleNetworkChanged(String ssid) {
-        // Set the SSID being monitored to the new SSID 
+        // Set the SSID being monitored to the new SSID
         mSsid = ssid;
-        // Set various state to that when being idle 
+        // Set various state to that when being idle
         setIdleState(true);
     }
-    
+
     /**
      * Handles checking whether an AP is a "good" AP.  If not, it will be blacklisted.
-     * 
+     *
      * @param ap The access point to check.
      */
     private void handleCheckAp(AccessPoint ap) {
         // Reset the cancel state since this is the entry point of this action
         mShouldCancel = false;
-        
+
         if (V) {
             myLogV("handleCheckAp: AccessPoint: " + ap);
         }
-        
+
         // Make sure we are not sleeping
         if (mState == WatchdogState.SLEEP) {
             if (V) {
@@ -682,9 +682,9 @@ public class WifiWatchdogService {
             }
             return;
         }
-        
+
         mState = WatchdogState.CHECKING_AP;
-        
+
         /*
          * Checks to make sure we haven't exceeded the max number of checks
          * we're allowed per network
@@ -701,7 +701,7 @@ public class WifiWatchdogService {
 
         // Do the check
         boolean isApAlive = checkDnsConnectivity();
-        
+
         if (V) {
             Slog.v(TAG, "  Is it alive: " + isApAlive);
         }
@@ -716,7 +716,7 @@ public class WifiWatchdogService {
 
     /**
      * Handles the case when an access point is alive.
-     * 
+     *
      * @param ap The access point.
      */
     private void handleApAlive(AccessPoint ap) {
@@ -724,18 +724,18 @@ public class WifiWatchdogService {
         if (shouldCancel()) return;
         // We're satisfied with this AP, so go idle
         setIdleState(false);
-        
+
         if (D) {
             myLogD("AP is alive: " + ap.toString());
         }
-        
+
         // Queue the next action to be a background check
         mHandler.backgroundCheckAp(ap);
     }
-    
+
     /**
      * Handles an unresponsive AP by blacklisting it.
-     * 
+     *
      * @param ap The access point.
      */
     private void handleApUnresponsive(AccessPoint ap) {
@@ -747,7 +747,7 @@ public class WifiWatchdogService {
         if (D) {
             myLogD("AP is dead: " + ap.toString());
         }
-        
+
         // Black list this "bad" AP, this will cause an attempt to connect to another
         blacklistAp(ap.bssid);
         // Initiate an association to an alternate AP
@@ -758,10 +758,10 @@ public class WifiWatchdogService {
         if (TextUtils.isEmpty(bssid)) {
             return;
         }
-        
+
         // Before taking action, make sure we should not cancel our processing
         if (shouldCancel()) return;
-        
+
         if (!mWifiStateTracker.addToBlacklist(bssid)) {
             // There's a known bug where this method returns failure on success
             //Slog.e(TAG, "Blacklisting " + bssid + " failed");
@@ -775,7 +775,7 @@ public class WifiWatchdogService {
     /**
      * Handles a single background check. If it fails, it should trigger a
      * normal check. If it succeeds, it should queue another background check.
-     * 
+     *
      * @param ap The access point to do a background check for. If this is no
      *        longer the current AP, it is okay to return without any
      *        processing.
@@ -783,11 +783,11 @@ public class WifiWatchdogService {
     private void handleBackgroundCheckAp(AccessPoint ap) {
         // Reset the cancel state since this is the entry point of this action
         mShouldCancel = false;
-        
+
         if (false && V) {
             myLogV("handleBackgroundCheckAp: AccessPoint: " + ap);
         }
-        
+
         // Make sure we are not sleeping
         if (mState == WatchdogState.SLEEP) {
             if (V) {
@@ -795,7 +795,7 @@ public class WifiWatchdogService {
             }
             return;
         }
-        
+
         // Make sure the AP we're supposed to be background checking is still the active one
         WifiInfo info = mWifiManager.getConnectionInfo();
         if (info.getSSID() == null || !info.getSSID().equals(ap.ssid)) {
@@ -805,7 +805,7 @@ public class WifiWatchdogService {
             }
             return;
         }
-        
+
         if (info.getBSSID() == null || !info.getBSSID().equals(ap.bssid)) {
             if (V) {
                 myLogV("handleBackgroundCheckAp: We are no longer connected to "
@@ -816,7 +816,7 @@ public class WifiWatchdogService {
 
         // Do the check
         boolean isApAlive = backgroundCheckDnsConnectivity();
-        
+
         if (V && !isApAlive) {
             Slog.v(TAG, "  handleBackgroundCheckAp: Is it alive: " + isApAlive);
         }
@@ -824,26 +824,26 @@ public class WifiWatchdogService {
         if (shouldCancel()) {
             return;
         }
-        
+
         // Take action based on results
         if (isApAlive) {
             // Queue another background check
             mHandler.backgroundCheckAp(ap);
-            
+
         } else {
             if (D) {
                 myLogD("Background check failed for " + ap.toString());
             }
-            
+
             // Queue a normal check, so it can take proper action
             mHandler.checkAp(ap);
         }
     }
-    
+
     /**
      * Handles going to sleep for this network. Going to sleep means we will not
      * monitor this network anymore.
-     * 
+     *
      * @param ssid The network that will not be monitored anymore.
      */
     private void handleSleep(String ssid) {
@@ -854,7 +854,7 @@ public class WifiWatchdogService {
             if (D) {
                 myLogD("Going to sleep for " + ssid);
             }
-            
+
             /*
              * Before deciding to go to sleep, we may have checked a few APs
              * (and blacklisted them). Clear the blacklist so the AP with best
@@ -864,7 +864,7 @@ public class WifiWatchdogService {
                 // There's a known bug where this method returns failure on success
                 //Slog.e(TAG, "Clearing blacklist failed");
             }
-            
+
             if (V) {
                 myLogV("handleSleep: Set state to SLEEP and cleared blacklist");
             }
@@ -884,8 +884,8 @@ public class WifiWatchdogService {
          * we would have gotten a disconnected event which would then set mSsid
          * = null. This is bad, since the following connect would cause us to do
          * the "network is good?" check all over again. */
-        
-        /* 
+
+        /*
          * Set the state as if we were idle (don't come out of sleep, only
          * hard reset and network changed should do that.
          */
@@ -899,25 +899,25 @@ public class WifiWatchdogService {
     private void handleIdle() {
         // Reset the cancel state since this is the entry point for this action
         mShouldCancel = false;
-        
+
         if (V) {
             myLogV("handleSwitchToIdle");
         }
-        
+
         // If we're sleeping, don't do anything
         if (mState == WatchdogState.SLEEP) {
             Slog.v(TAG, "  Sleeping (in " + mSsid + "), so returning");
             return;
         }
-        
+
         // Set the idle state
         setIdleState(false);
-        
+
         if (V) {
             Slog.v(TAG, "  Set state to IDLE");
         }
     }
-    
+
     /**
      * Sets the state as if we are going idle.
      */
@@ -937,7 +937,7 @@ public class WifiWatchdogService {
         mWifiStateTracker.clearBlacklist();
         setIdleState(true);
     }
-    
+
     // Inner classes
 
     /**
@@ -962,26 +962,26 @@ public class WifiWatchdogService {
         WifiWatchdogThread() {
             super("WifiWatchdogThread");
         }
-        
+
         @Override
         public void run() {
             // Set this thread up so the handler will work on it
             Looper.prepare();
-            
+
             synchronized(WifiWatchdogService.this) {
                 mHandler = new WifiWatchdogHandler();
 
                 // Notify that the handler has been created
                 WifiWatchdogService.this.notify();
             }
-            
+
             // Listen for messages to the handler
             Looper.loop();
         }
     }
 
     /**
-     * The main thread's handler. There are 'actions', and just general 
+     * The main thread's handler. There are 'actions', and just general
      * 'messages'. There should only ever be one 'action' in the queue (aside
      * from the one being processed, if any). There may be multiple messages in
      * the queue. So, actions are replaced by more recent actions, where as
@@ -1021,35 +1021,35 @@ public class WifiWatchdogService {
         static final int MESSAGE_DISCONNECTED = 104;
         /** Performs a hard-reset on the watchdog state. */
         static final int MESSAGE_RESET = 105;
-        
+
         void checkAp(AccessPoint ap) {
             removeAllActions();
             sendMessage(obtainMessage(ACTION_CHECK_AP, ap));
         }
-        
+
         void backgroundCheckAp(AccessPoint ap) {
             if (!isBackgroundCheckEnabled()) return;
-            
+
             removeAllActions();
             sendMessageDelayed(obtainMessage(ACTION_BACKGROUND_CHECK_AP, ap),
                     getBackgroundCheckDelayMs());
         }
-        
+
         void idle() {
             removeAllActions();
             sendMessage(obtainMessage(ACTION_IDLE));
         }
-        
+
         void sleep(String ssid) {
             removeAllActions();
             sendMessage(obtainMessage(MESSAGE_SLEEP, ssid));
         }
-        
+
         void disableWatchdog() {
             removeAllActions();
             sendMessage(obtainMessage(MESSAGE_DISABLE_WATCHDOG));
         }
-        
+
         void dispatchNetworkChanged(String ssid) {
             removeAllActions();
             sendMessage(obtainMessage(MESSAGE_NETWORK_CHANGED, ssid));
@@ -1064,13 +1064,13 @@ public class WifiWatchdogService {
             removeAllActions();
             sendMessage(obtainMessage(MESSAGE_RESET));
         }
-        
+
         private void removeAllActions() {
             removeMessages(ACTION_CHECK_AP);
             removeMessages(ACTION_IDLE);
             removeMessages(ACTION_BACKGROUND_CHECK_AP);
         }
-        
+
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -1127,7 +1127,7 @@ public class WifiWatchdogService {
                 myLogV("Receiver.handleNetworkStateChanged: NetworkInfo: "
                         + info);
             }
-            
+
             switch (info.getState()) {
                 case CONNECTED:
                     WifiInfo wifiInfo = mWifiManager.getConnectionInfo();
@@ -1164,7 +1164,7 @@ public class WifiWatchdogService {
     private static class AccessPoint {
         String ssid;
         String bssid;
-        
+
         AccessPoint(String ssid, String bssid) {
             this.ssid = ssid;
             this.bssid = bssid;
@@ -1173,18 +1173,18 @@ public class WifiWatchdogService {
         private boolean hasNull() {
             return ssid == null || bssid == null;
         }
-        
+
         @Override
         public boolean equals(Object o) {
             if (!(o instanceof AccessPoint)) return false;
             AccessPoint otherAp = (AccessPoint) o;
             boolean iHaveNull = hasNull();
             // Either we both have a null, or our SSIDs and BSSIDs are equal
-            return (iHaveNull && otherAp.hasNull()) || 
+            return (iHaveNull && otherAp.hasNull()) ||
                     (otherAp.bssid != null && ssid.equals(otherAp.ssid)
                     && bssid.equals(otherAp.bssid));
         }
-        
+
         @Override
         public int hashCode() {
             if (ssid == null || bssid == null) return 0;
@@ -1206,27 +1206,27 @@ public class WifiWatchdogService {
      * (which we really care about).
      */
     private static class DnsPinger {
-        
+
         /** Number of bytes for the query */
         private static final int DNS_QUERY_BASE_SIZE = 33;
-        
+
         /** The DNS port */
         private static final int DNS_PORT = 53;
-        
+
         /** Used to generate IDs */
         private static Random sRandom = new Random();
-        
+
         static boolean isDnsReachable(int dns, int timeout) {
             DatagramSocket socket = null;
             try {
                 socket = new DatagramSocket();
-                
+
                 // Set some socket properties
                 socket.setSoTimeout(timeout);
-                
+
                 byte[] buf = new byte[DNS_QUERY_BASE_SIZE];
                 fillQuery(buf);
-                
+
                 // Send the DNS query
                 byte parts[] = new byte[4];
                 parts[0] = (byte)(dns & 0xff);
@@ -1238,20 +1238,20 @@ public class WifiWatchdogService {
                 DatagramPacket packet = new DatagramPacket(buf,
                         buf.length, dnsAddress, DNS_PORT);
                 socket.send(packet);
-                
+
                 // Wait for reply (blocks for the above timeout)
                 DatagramPacket replyPacket = new DatagramPacket(buf, buf.length);
                 socket.receive(replyPacket);
 
                 // If a timeout occurred, an exception would have been thrown.  We got a reply!
                 return true;
-                
+
             } catch (SocketException e) {
                 if (V) {
                     Slog.v(TAG, "DnsPinger.isReachable received SocketException", e);
                 }
                 return false;
-                
+
             } catch (UnknownHostException e) {
                 if (V) {
                     Slog.v(TAG, "DnsPinger.isReachable is unable to resolve the DNS host", e);
@@ -1260,13 +1260,13 @@ public class WifiWatchdogService {
 
             } catch (SocketTimeoutException e) {
                 return false;
-                
+
             } catch (IOException e) {
                 if (V) {
                     Slog.v(TAG, "DnsPinger.isReachable got an IOException", e);
                 }
                 return false;
-                
+
             } catch (Exception e) {
                 if (V || Config.LOGD) {
                     Slog.d(TAG, "DnsPinger.isReachable got an unknown exception", e);
@@ -1278,7 +1278,7 @@ public class WifiWatchdogService {
                 }
             }
         }
-        
+
         private static void fillQuery(byte[] buf) {
 
             /*
@@ -1291,38 +1291,38 @@ public class WifiWatchdogService {
             for (int i = 0; i < buf.length; i++) buf[i] = 0;
 
             // Form a query for www.android.com
-            
+
             // [0-1] bytes are an ID, generate random ID for this query
-            buf[0] = (byte) sRandom.nextInt(256); 
-            buf[1] = (byte) sRandom.nextInt(256); 
-            
+            buf[0] = (byte) sRandom.nextInt(256);
+            buf[1] = (byte) sRandom.nextInt(256);
+
             // [2-3] bytes are for flags.
             buf[2] = 1; // Recursion desired
 
             // [4-5] bytes are for the query count
-            buf[5] = 1; // One query 
-            
+            buf[5] = 1; // One query
+
             // [6-7] [8-9] [10-11] are all counts of other fields we don't use
 
             // [12-15] for www
             writeString(buf, 12, "www");
-            
+
             // [16-23] for android
             writeString(buf, 16, "android");
-            
+
             // [24-27] for com
             writeString(buf, 24, "com");
-            
-            // [29-30] bytes are for QTYPE, set to 1 
+
+            // [29-30] bytes are for QTYPE, set to 1
             buf[30] = 1;
 
-            // [31-32] bytes are for QCLASS, set to 1 
+            // [31-32] bytes are for QCLASS, set to 1
             buf[32] = 1;
         }
-        
+
         private static void writeString(byte[] buf, int startPos, String string) {
             int pos = startPos;
-            
+
             // Write the length first
             buf[pos++] = (byte) string.length();
             for (int i = 0; i < string.length(); i++) {

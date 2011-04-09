@@ -514,7 +514,7 @@ public class AsecTests extends AndroidTestCase {
             }
         }
     }
-    
+
     class ShutdownObserver extends  IMountShutdownObserver.Stub{
         private boolean doneFlag = false;
         int statusCode;
@@ -533,7 +533,7 @@ public class AsecTests extends AndroidTestCase {
             this.statusCode = statusCode;
             action();
         }
-        
+
     }
 
     boolean invokeShutdown() {

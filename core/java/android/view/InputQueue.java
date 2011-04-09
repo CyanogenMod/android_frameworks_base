@@ -25,9 +25,9 @@ import android.util.Slog;
  */
 public final class InputQueue {
     private static final String TAG = "InputQueue";
-    
+
     private static final boolean DEBUG = false;
-    
+
     /**
      * Interface to receive notification of when an InputQueue is associated
      * and dissociated with a thread.
@@ -38,7 +38,7 @@ public final class InputQueue {
          * thread making this call, so it can start receiving events from it.
          */
         void onInputQueueCreated(InputQueue queue);
-        
+
         /**
          * Called when the given InputQueue is no longer associated with
          * the thread and thus not dispatching events.
@@ -47,24 +47,24 @@ public final class InputQueue {
     }
 
     final InputChannel mChannel;
-    
+
     private static final Object sLock = new Object();
-    
+
     private static native void nativeRegisterInputChannel(InputChannel inputChannel,
             InputHandler inputHandler, MessageQueue messageQueue);
     private static native void nativeUnregisterInputChannel(InputChannel inputChannel);
     private static native void nativeFinished(long finishedToken);
-    
+
     /** @hide */
     public InputQueue(InputChannel channel) {
         mChannel = channel;
     }
-    
+
     /** @hide */
     public InputChannel getInputChannel() {
         return mChannel;
     }
-    
+
     /**
      * Registers an input channel and handler.
      * @param inputChannel The input channel to register.
@@ -83,16 +83,16 @@ public final class InputQueue {
         if (messageQueue == null) {
             throw new IllegalArgumentException("messageQueue must not be null");
         }
-        
+
         synchronized (sLock) {
             if (DEBUG) {
                 Slog.d(TAG, "Registering input channel '" + inputChannel + "'");
             }
-            
+
             nativeRegisterInputChannel(inputChannel, inputHandler, messageQueue);
         }
     }
-    
+
     /**
      * Unregisters an input channel.
      * Does nothing if the channel is not currently registered.
@@ -108,11 +108,11 @@ public final class InputQueue {
             if (DEBUG) {
                 Slog.d(TAG, "Unregistering input channel '" + inputChannel + "'");
             }
-            
+
             nativeUnregisterInputChannel(inputChannel);
         }
     }
-    
+
     @SuppressWarnings("unused")
     private static void dispatchKeyEvent(InputHandler inputHandler,
             KeyEvent event, long finishedToken) {
@@ -126,21 +126,21 @@ public final class InputQueue {
         Runnable finishedCallback = FinishedCallback.obtain(finishedToken);
         inputHandler.handleMotion(event, finishedCallback);
     }
-    
+
     private static class FinishedCallback implements Runnable {
         private static final boolean DEBUG_RECYCLING = false;
-        
+
         private static final int RECYCLE_MAX_COUNT = 4;
-        
+
         private static FinishedCallback sRecycleHead;
         private static int sRecycleCount;
-        
+
         private FinishedCallback mRecycleNext;
         private long mFinishedToken;
-        
+
         private FinishedCallback() {
         }
-        
+
         public static FinishedCallback obtain(long finishedToken) {
             synchronized (sLock) {
                 FinishedCallback callback = sRecycleHead;
@@ -155,13 +155,13 @@ public final class InputQueue {
                 return callback;
             }
         }
-        
+
         public void run() {
             synchronized (sLock) {
                 if (mFinishedToken == -1) {
                     throw new IllegalStateException("Event finished callback already invoked.");
                 }
-                
+
                 nativeFinished(mFinishedToken);
                 mFinishedToken = -1;
 
@@ -169,7 +169,7 @@ public final class InputQueue {
                     mRecycleNext = sRecycleHead;
                     sRecycleHead = this;
                     sRecycleCount += 1;
-                    
+
                     if (DEBUG_RECYCLING) {
                         Slog.d(TAG, "Recycled finished callbacks: " + sRecycleCount);
                     }

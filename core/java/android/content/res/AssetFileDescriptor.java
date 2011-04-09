@@ -40,11 +40,11 @@ public class AssetFileDescriptor implements Parcelable {
      * the data extends to the end of the file.
      */
     public static final long UNKNOWN_LENGTH = -1;
-    
+
     private final ParcelFileDescriptor mFd;
     private final long mStartOffset;
     private final long mLength;
-    
+
     /**
      * Create a new AssetFileDescriptor from the given values.
      * @param fd The underlying file descriptor.
@@ -63,7 +63,7 @@ public class AssetFileDescriptor implements Parcelable {
         mStartOffset = startOffset;
         mLength = length;
     }
-    
+
     /**
      * The AssetFileDescriptor contains its own ParcelFileDescriptor, which
      * in addition to the normal FileDescriptor object also allows you to close
@@ -72,7 +72,7 @@ public class AssetFileDescriptor implements Parcelable {
     public ParcelFileDescriptor getParcelFileDescriptor() {
         return mFd;
     }
-    
+
     /**
      * Returns the FileDescriptor that can be used to read the data in the
      * file.
@@ -80,14 +80,14 @@ public class AssetFileDescriptor implements Parcelable {
     public FileDescriptor getFileDescriptor() {
         return mFd.getFileDescriptor();
     }
-    
+
     /**
      * Returns the byte offset where this asset entry's data starts.
      */
     public long getStartOffset() {
         return mStartOffset;
     }
-    
+
     /**
      * Returns the total number of bytes of this asset entry's data.  May be
      * {@link #UNKNOWN_LENGTH} if the asset extends to the end of the file.
@@ -96,7 +96,7 @@ public class AssetFileDescriptor implements Parcelable {
      * ParcelFileDescriptor.getStatSize()} to find the total size of the file,
      * returning that number if found or {@link #UNKNOWN_LENGTH} if it could
      * not be determined.
-     * 
+     *
      * @see #getDeclaredLength()
      */
     public long getLength() {
@@ -106,26 +106,26 @@ public class AssetFileDescriptor implements Parcelable {
         long len = mFd.getStatSize();
         return len >= 0 ? len : UNKNOWN_LENGTH;
     }
-    
+
     /**
      * Return the actual number of bytes that were declared when the
      * AssetFileDescriptor was constructed.  Will be
      * {@link #UNKNOWN_LENGTH} if the length was not declared, meaning data
      * should be read to the end of the file.
-     * 
+     *
      * @see #getDeclaredLength()
      */
     public long getDeclaredLength() {
         return mLength;
     }
-    
+
     /**
      * Convenience for calling <code>getParcelFileDescriptor().close()</code>.
      */
     public void close() throws IOException {
         mFd.close();
     }
-    
+
     /**
      * Checks whether this file descriptor is for a memory file.
      */
@@ -157,7 +157,7 @@ public class AssetFileDescriptor implements Parcelable {
         }
         return new AutoCloseInputStream(this);
     }
-    
+
     /**
      * Create and return a new auto-close output stream for this asset.  This
      * will either return a full asset {@link AutoCloseOutputStream}, or
@@ -172,13 +172,13 @@ public class AssetFileDescriptor implements Parcelable {
         }
         return new AutoCloseOutputStream(this);
     }
-    
+
     @Override
     public String toString() {
         return "{AssetFileDescriptor: " + mFd
                 + " start=" + mStartOffset + " len=" + mLength + "}";
     }
-    
+
     /**
      * An InputStream you can create on a ParcelFileDescriptor, which will
      * take care of calling {@link ParcelFileDescriptor#close
@@ -187,7 +187,7 @@ public class AssetFileDescriptor implements Parcelable {
     public static class AutoCloseInputStream
             extends ParcelFileDescriptor.AutoCloseInputStream {
         private long mRemaining;
-        
+
         public AutoCloseInputStream(AssetFileDescriptor fd) throws IOException {
             super(fd.getParcelFileDescriptor());
             super.skip(fd.getStartOffset());
@@ -209,7 +209,7 @@ public class AssetFileDescriptor implements Parcelable {
                 if (res >= 0) mRemaining--;
                 return res;
             }
-            
+
             return super.read();
         }
 
@@ -222,7 +222,7 @@ public class AssetFileDescriptor implements Parcelable {
                 if (res >= 0) mRemaining -= res;
                 return res;
             }
-            
+
             return super.read(buffer, offset, count);
         }
 
@@ -236,7 +236,7 @@ public class AssetFileDescriptor implements Parcelable {
                 if (res >= 0) mRemaining -= res;
                 return res;
             }
-            
+
             return super.read(buffer);
         }
 
@@ -249,7 +249,7 @@ public class AssetFileDescriptor implements Parcelable {
                 if (res >= 0) mRemaining -= res;
                 return res;
             }
-            
+
             // TODO Auto-generated method stub
             return super.skip(count);
         }
@@ -280,7 +280,7 @@ public class AssetFileDescriptor implements Parcelable {
             super.reset();
         }
     }
-    
+
     /**
      * An input stream that reads from a MemoryFile and closes it when the stream is closed.
      * This extends FileInputStream just because {@link #createInputStream} returns
@@ -349,7 +349,7 @@ public class AssetFileDescriptor implements Parcelable {
     public static class AutoCloseOutputStream
             extends ParcelFileDescriptor.AutoCloseOutputStream {
         private long mRemaining;
-        
+
         public AutoCloseOutputStream(AssetFileDescriptor fd) throws IOException {
             super(fd.getParcelFileDescriptor());
             if (fd.getParcelFileDescriptor().seekTo(fd.getStartOffset()) < 0) {
@@ -367,7 +367,7 @@ public class AssetFileDescriptor implements Parcelable {
                 mRemaining -= count;
                 return;
             }
-            
+
             super.write(buffer, offset, count);
         }
 
@@ -381,7 +381,7 @@ public class AssetFileDescriptor implements Parcelable {
                 mRemaining -= count;
                 return;
             }
-            
+
             super.write(buffer);
         }
 
@@ -393,12 +393,12 @@ public class AssetFileDescriptor implements Parcelable {
                 mRemaining--;
                 return;
             }
-            
+
             super.write(oneByte);
         }
     }
-    
-    
+
+
     /* Parcelable interface */
     public int describeContents() {
         return mFd.describeContents();
@@ -415,7 +415,7 @@ public class AssetFileDescriptor implements Parcelable {
         mStartOffset = src.readLong();
         mLength = src.readLong();
     }
-    
+
     public static final Parcelable.Creator<AssetFileDescriptor> CREATOR
             = new Parcelable.Creator<AssetFileDescriptor>() {
         public AssetFileDescriptor createFromParcel(Parcel in) {

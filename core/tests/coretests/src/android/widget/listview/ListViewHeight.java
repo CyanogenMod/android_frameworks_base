@@ -30,7 +30,7 @@ public class ListViewHeight extends Activity {
     private View mButton1;
     private View mButton2;
     private View mButton3;
-    
+
     private View mOuterLayout;
     private ListView mInnerList;
 
@@ -47,18 +47,18 @@ public class ListViewHeight extends Activity {
         mButton1 = findViewById(R.id.button1);
         mButton2 = findViewById(R.id.button2);
         mButton3 = findViewById(R.id.button3);
-        
+
         mOuterLayout = findViewById(R.id.layout);
         mInnerList = (ListView)findViewById(R.id.inner_list);
-        
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line, 
+
+        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line,
                                             mStrings);
 
         // Clicking this button will show the list view and set it to a fixed height
         // If you then hide the views, there is no problem.
         mButton1.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // set listview to fixed height 
+                // set listview to fixed height
                 ViewGroup.MarginLayoutParams lp;
                 lp = (ViewGroup.MarginLayoutParams) mInnerList.getLayoutParams();
                 lp.height = 200;

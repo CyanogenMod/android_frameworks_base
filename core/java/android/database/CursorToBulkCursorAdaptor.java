@@ -32,7 +32,7 @@ import java.util.Map;
  *
  * {@hide}
  */
-public final class CursorToBulkCursorAdaptor extends BulkCursorNative 
+public final class CursorToBulkCursorAdaptor extends BulkCursorNative
         implements IBinder.DeathRecipient {
     private static final String TAG = "Cursor";
     private final CrossProcessCursor mCursor;
@@ -41,7 +41,7 @@ public final class CursorToBulkCursorAdaptor extends BulkCursorNative
     private final boolean mReadOnly;
     private ContentObserverProxy mObserver;
 
-    private static final class ContentObserverProxy extends ContentObserver 
+    private static final class ContentObserverProxy extends ContentObserver
             {
         protected IContentObserver mRemote;
 
@@ -54,7 +54,7 @@ public final class CursorToBulkCursorAdaptor extends BulkCursorNative
                 // Do nothing, the far side is dead
             }
         }
-        
+
         public boolean unlinkToDeath(DeathRecipient recipient) {
             return mRemote.asBinder().unlinkToDeath(recipient, 0);
         }
@@ -102,22 +102,22 @@ public final class CursorToBulkCursorAdaptor extends BulkCursorNative
 
         createAndRegisterObserverProxy(observer);
     }
-    
+
     public void binderDied() {
         mCursor.close();
         if (mWindow != null) {
             mWindow.close();
         }
     }
-    
+
     public CursorWindow getWindow(int startPos) {
         mCursor.moveToPosition(startPos);
-        
+
         if (mWindow != null) {
             if (startPos < mWindow.getStartPosition() ||
                     startPos >= (mWindow.getStartPosition() + mWindow.getNumRows())) {
                 mCursor.fillWindow(startPos, mWindow);
-            }            
+            }
             return mWindow;
         } else {
             return ((AbstractWindowedCursor)mCursor).getWindow();
@@ -160,7 +160,7 @@ public final class CursorToBulkCursorAdaptor extends BulkCursorNative
                     mCursor.isClosed(), e);
             throw leakProgram;
         }
-        
+
         if (mWindow != null) {
             mCursor.fillWindow(0, window);
             mWindow = window;

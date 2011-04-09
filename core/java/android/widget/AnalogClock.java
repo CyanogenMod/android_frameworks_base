@@ -239,7 +239,7 @@ public class AnalogClock extends View {
             }
 
             onTimeChanged();
-            
+
             invalidate();
         }
     };

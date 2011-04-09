@@ -24,14 +24,14 @@ import android.text.TextUtils;
 public class SubscriptSpan extends MetricAffectingSpan implements ParcelableSpan {
     public SubscriptSpan() {
     }
-    
+
     public SubscriptSpan(Parcel src) {
     }
-    
+
     public int getSpanTypeId() {
         return TextUtils.SUBSCRIPT_SPAN;
     }
-    
+
     public int describeContents() {
         return 0;
     }

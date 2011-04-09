@@ -146,7 +146,7 @@ class DeviceMonitor {
      */
     private void dump(File from, OutputStream out) throws IOException {
         writeHeader(from, out);
-        
+
         FileInputStream in = null;
         try {
             in = new FileInputStream(from);
@@ -195,7 +195,7 @@ class DeviceMonitor {
      * Stops dumping.
      */
     private synchronized void stop() {
-        running = false;        
+        running = false;
     }
 
     /**

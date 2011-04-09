@@ -44,29 +44,29 @@ public class MenuTest extends AndroidTestCase {
     public void testItemId() {
         final int id = 512;
         final MenuItem item = mMenu.add(0, id, 0, "test");
-        
+
         Assert.assertEquals(id, item.getItemId());
         Assert.assertEquals(item, mMenu.findItem(id));
         Assert.assertEquals(0, mMenu.findItemIndex(id));
     }
-    
+
     @SmallTest
     public void testGroupId() {
         final int groupId = 541;
         final int item1Index = 1;
         final int item2Index = 3;
-        
+
         mMenu.add(0, 0, item1Index - 1, "ignore");
         final MenuItem item = mMenu.add(groupId, 0, item1Index, "test");
         mMenu.add(0, 0, item2Index - 1, "ignore");
         final MenuItem item2 = mMenu.add(groupId, 0, item2Index, "test2");
-        
+
         Assert.assertEquals(groupId, item.getGroupId());
         Assert.assertEquals(groupId, item2.getGroupId());
         Assert.assertEquals(item1Index, mMenu.findGroupIndex(groupId));
         Assert.assertEquals(item2Index, mMenu.findGroupIndex(groupId, item1Index + 1));
     }
-    
+
     @SmallTest
     public void testGroup() {
         // This test does the following
@@ -133,7 +133,7 @@ public class MenuTest extends AndroidTestCase {
                                               makeKeyEvent(KeyEvent.KEYCODE_A,
                                                            KeyEvent.META_SYM_ON)));
     }
-    
+
     @SmallTest
     public void testIsShortcutWithUpperCaseAlpha() throws Exception {
         mMenu.setQwertyMode(true);
@@ -157,16 +157,16 @@ public class MenuTest extends AndroidTestCase {
         Assert.assertTrue(mMenu.isShortcutKey(KeyEvent.KEYCODE_ENTER,
                                               makeKeyEvent(KeyEvent.KEYCODE_ENTER,  0)));
     }
-    
+
     @SmallTest
     public void testOrder() {
         final String a = "a", b = "b", c = "c";
         final int firstOrder = 7, midOrder = 8, lastOrder = 9;
-        
+
         mMenu.add(0, 0, lastOrder, c);
         mMenu.add(0, 0, firstOrder, a);
         mMenu.add(0, 0, midOrder, b);
-        
+
         Assert.assertEquals(firstOrder, mMenu.getItem(0).getOrder());
         Assert.assertEquals(a, mMenu.getItem(0).getTitle());
         Assert.assertEquals(midOrder, mMenu.getItem(1).getOrder());
@@ -180,7 +180,7 @@ public class MenuTest extends AndroidTestCase {
         final String title = "test";
         final MenuItem stringItem = mMenu.add(title);
         final MenuItem resItem = mMenu.add(R.string.menu_test);
-        
+
         Assert.assertEquals(title, stringItem.getTitle());
         Assert.assertEquals(getContext().getResources().getString(R.string.menu_test), resItem
                 .getTitle());
@@ -191,7 +191,7 @@ public class MenuTest extends AndroidTestCase {
         final int groupId = 1;
         final MenuItem item1 = mMenu.add(groupId, 1, 0, "item1");
         final MenuItem item2 = mMenu.add(groupId, 2, 0, "item2");
-        
+
         // Set to exclusive
         mMenu.setGroupCheckable(groupId, true, true);
         Assert.assertTrue("Item was not set to checkable", item1.isCheckable());
@@ -201,7 +201,7 @@ public class MenuTest extends AndroidTestCase {
         mMenu.findItem(2).setChecked(true);
         Assert.assertTrue("Item did not get checked", item2.isChecked());
         Assert.assertFalse("Item was not unchecked due to exclusive checkable", item1.isChecked());
-        
+
         // Multiple non-exlusive checkable items
         mMenu.setGroupCheckable(groupId, true, false);
         Assert.assertTrue("Item was not set to checkable", item1.isCheckable());
@@ -213,12 +213,12 @@ public class MenuTest extends AndroidTestCase {
         Assert.assertTrue("Item did not get checked", item2.isChecked());
         Assert.assertTrue("Item was unchecked when it shouldnt have been", item1.isChecked());
     }
-    
+
     @SmallTest
     public void testVisibility() {
         final MenuItem item1 = mMenu.add(0, 1, 0, "item1");
         final MenuItem item2 = mMenu.add(0, 2, 0, "item2");
-        
+
         // Should start as visible
         Assert.assertTrue("Item did not start as visible", item1.isVisible());
         Assert.assertTrue("Item did not start as visible", item2.isVisible());
@@ -229,19 +229,19 @@ public class MenuTest extends AndroidTestCase {
         mMenu.findItem(2).setVisible(false);
         Assert.assertFalse("Item did not become invisible", item2.isVisible());
     }
-    
+
     @SmallTest
     public void testSubMenu() {
         final SubMenu subMenu = mMenu.addSubMenu(0, 0, 0, "submenu");
         final MenuItem subMenuItem = subMenu.getItem();
         final MenuItem item1 = subMenu.add(0, 1, 0, "item1");
         final MenuItem item2 = subMenu.add(0, 2, 0, "item2");
-        
+
         // findItem should recurse into submenus
         Assert.assertEquals(item1, mMenu.findItem(1));
         Assert.assertEquals(item2, mMenu.findItem(2));
     }
-    
+
     @SmallTest
     public void testRemove() {
         final int groupId = 1;
@@ -251,15 +251,15 @@ public class MenuTest extends AndroidTestCase {
         final MenuItem item4 = mMenu.add(groupId, 4, 0, "item4");
         final MenuItem item5 = mMenu.add(groupId, 5, 0, "item5");
         final MenuItem item6 = mMenu.add(0, 6, 0, "item6");
-        
+
         Assert.assertEquals(item1, mMenu.findItem(1));
         mMenu.removeItemAt(0);
         Assert.assertNull(mMenu.findItem(1));
-        
+
         Assert.assertEquals(item2, mMenu.findItem(2));
         mMenu.removeItem(2);
         Assert.assertNull(mMenu.findItem(2));
-        
+
         Assert.assertEquals(item3, mMenu.findItem(3));
         Assert.assertEquals(item4, mMenu.findItem(4));
         Assert.assertEquals(item5, mMenu.findItem(5));
@@ -267,12 +267,12 @@ public class MenuTest extends AndroidTestCase {
         Assert.assertNull(mMenu.findItem(3));
         Assert.assertNull(mMenu.findItem(4));
         Assert.assertNull(mMenu.findItem(5));
-        
+
         Assert.assertEquals(item6, mMenu.findItem(6));
         mMenu.clear();
         Assert.assertNull(mMenu.findItem(6));
     }
-    
+
     private KeyEvent makeKeyEvent(int keyCode, int metaState) {
         return new KeyEvent(0L, 0L, KeyEvent.ACTION_DOWN, keyCode, 0, metaState);
     }

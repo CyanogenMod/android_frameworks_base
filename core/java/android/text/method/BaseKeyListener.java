@@ -34,7 +34,7 @@ implements KeyListener {
      * if any;
      * ALT+DEL deletes everything on the line the cursor is on.
      *
-     * @return true if anything was deleted; false otherwise.   
+     * @return true if anything was deleted; false otherwise.
      */
     public boolean backspace(View view, Editable content, int keyCode,
                              KeyEvent event) {
@@ -116,17 +116,17 @@ implements KeyListener {
         }
         return contentType;
     }
-    
+
     public boolean onKeyDown(View view, Editable content,
                              int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_DEL) {
             backspace(view, content, keyCode, event);
             return true;
         }
-        
+
         return super.onKeyDown(view, content, keyCode, event);
     }
-    
+
     /**
      * Base implementation handles ACTION_MULTIPLE KEYCODE_UNKNOWN by inserting
      * the event's text into the content.
@@ -137,7 +137,7 @@ implements KeyListener {
             // Not something we are interested in.
             return false;
         }
-        
+
         int selStart, selEnd;
 
         {
@@ -152,7 +152,7 @@ implements KeyListener {
         if (text == null) {
             return false;
         }
-        
+
         content.replace(selStart, selEnd, text);
         return true;
     }

@@ -2388,11 +2388,11 @@ final class WebViewCore {
 
     // called by JNI
     private Class<?> getPluginClass(String libName, String clsName) {
-        
+
         if (mWebView == null) {
             return null;
         }
-        
+
         PluginManager pluginManager = PluginManager.getInstance(null);
 
         String pkgName = pluginManager.getPluginsAPKName(libName);
@@ -2400,7 +2400,7 @@ final class WebViewCore {
             Log.w(LOGTAG, "Unable to resolve " + libName + " to a plugin APK");
             return null;
         }
-        
+
         try {
             return pluginManager.getPluginClass(pkgName, clsName);
         } catch (NameNotFoundException e) {

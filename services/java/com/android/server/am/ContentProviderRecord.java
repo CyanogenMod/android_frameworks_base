@@ -35,7 +35,7 @@ class ContentProviderRecord extends ContentProviderHolder {
     ProcessRecord app; // if non-null, hosting application
     ProcessRecord launchingApp; // if non-null, waiting for this app to be launched.
     String stringName;
-    
+
     public ContentProviderRecord(ProviderInfo _info, ApplicationInfo ai) {
         super(_info);
         uid = ai.uid;

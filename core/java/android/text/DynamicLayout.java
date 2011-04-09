@@ -75,10 +75,10 @@ extends Layout
                          float spacingmult, float spacingadd,
                          boolean includepad,
                          TextUtils.TruncateAt ellipsize, int ellipsizedWidth) {
-        super((ellipsize == null) 
-                ? display 
-                : (display instanceof Spanned) 
-                    ? new SpannedEllipsizer(display) 
+        super((ellipsize == null)
+                ? display
+                : (display instanceof Spanned)
+                    ? new SpannedEllipsizer(display)
                     : new Ellipsizer(display),
               paint, width, align, spacingmult, spacingadd);
 

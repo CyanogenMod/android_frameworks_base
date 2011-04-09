@@ -32,16 +32,16 @@ public class P2pInitiator extends P2pDevice {
 
     private static final String TAG = "P2pInitiator";
 
-	/**
+        /**
      * The entry point for P2P tag operations.
      */
-	private final IP2pInitiator mService;
+        private final IP2pInitiator mService;
 
     /**
      * Internal constructor for the P2pInitiator class.
      *
      * @param handle The handle returned by the NFC service and used to identify
-     * 				 the tag in subsequent calls.
+     *                           the tag in subsequent calls.
      */
     P2pInitiator(IP2pInitiator service, int handle) {
         this.mService = service;
@@ -57,10 +57,10 @@ public class P2pInitiator extends P2pDevice {
      */
     public byte[] receive() throws IOException {
         try {
-        	byte[] result = mService.receive(mHandle);
-        	if (result == null) {
-        		throw new IOException("Tag has been lost");
-        	}
+                byte[] result = mService.receive(mHandle);
+                if (result == null) {
+                        throw new IOException("Tag has been lost");
+                }
             return result;
         } catch (RemoteException e) {
             Log.e(TAG, "RemoteException in receive(): ", e);
@@ -77,10 +77,10 @@ public class P2pInitiator extends P2pDevice {
      */
     public void send(byte[] data) throws IOException {
         try {
-        	boolean isSuccess = mService.send(mHandle, data);
-        	if (!isSuccess) {
-        		throw new IOException("Tag has been lost");
-        	}
+                boolean isSuccess = mService.send(mHandle, data);
+                if (!isSuccess) {
+                        throw new IOException("Tag has been lost");
+                }
         } catch (RemoteException e) {
             Log.e(TAG, "RemoteException in send(): ", e);
         }

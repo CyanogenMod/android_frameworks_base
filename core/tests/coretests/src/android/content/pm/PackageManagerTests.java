@@ -2446,7 +2446,7 @@ public class PackageManagerTests extends AndroidTestCase {
                     false, -1, PackageInfo.INSTALL_LOCATION_UNSPECIFIED);
             mountMedia();
             // Verify that the app installed is on internal storage.
-            assertInstall(pkg, 0, PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY);            
+            assertInstall(pkg, 0, PackageInfo.INSTALL_LOCATION_INTERNAL_ONLY);
         } catch (Exception e) {
             failStr(e.getMessage());
         } finally {

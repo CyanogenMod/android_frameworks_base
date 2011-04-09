@@ -31,22 +31,22 @@ import java.lang.ref.WeakReference;
  */
 public abstract class DynamicDrawableSpan extends ReplacementSpan {
     private static final String TAG = "DynamicDrawableSpan";
-    
+
     /**
      * A constant indicating that the bottom of this span should be aligned
      * with the bottom of the surrounding text, i.e., at the same level as the
      * lowest descender in the text.
      */
     public static final int ALIGN_BOTTOM = 0;
-    
+
     /**
      * A constant indicating that the bottom of this span should be aligned
      * with the baseline of the surrounding text.
      */
     public static final int ALIGN_BASELINE = 1;
-    
+
     protected final int mVerticalAlignment;
-    
+
     public DynamicDrawableSpan() {
         mVerticalAlignment = ALIGN_BOTTOM;
     }
@@ -67,7 +67,7 @@ public abstract class DynamicDrawableSpan extends ReplacementSpan {
     }
 
     /**
-     * Your subclass must implement this method to provide the bitmap   
+     * Your subclass must implement this method to provide the bitmap
      * to be drawn.  The dimensions of the bitmap must be the same
      * from each call to the next.
      */
@@ -81,8 +81,8 @@ public abstract class DynamicDrawableSpan extends ReplacementSpan {
         Rect rect = d.getBounds();
 
         if (fm != null) {
-            fm.ascent = -rect.bottom; 
-            fm.descent = 0; 
+            fm.ascent = -rect.bottom;
+            fm.descent = 0;
 
             fm.top = fm.ascent;
             fm.bottom = 0;
@@ -93,11 +93,11 @@ public abstract class DynamicDrawableSpan extends ReplacementSpan {
 
     @Override
     public void draw(Canvas canvas, CharSequence text,
-                     int start, int end, float x, 
+                     int start, int end, float x,
                      int top, int y, int bottom, Paint paint) {
         Drawable b = getCachedDrawable();
         canvas.save();
-        
+
         int transY = bottom - b.getBounds().bottom;
         if (mVerticalAlignment == ALIGN_BASELINE) {
             transY -= paint.getFontMetricsInt().descent;

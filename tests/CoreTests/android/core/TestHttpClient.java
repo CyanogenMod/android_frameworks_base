@@ -64,7 +64,7 @@ public class TestHttpClient {
     private final HttpRequestExecutor httpexecutor;
     private final ConnectionReuseStrategy connStrategy;
     private final HttpContext context;
-    
+
     public TestHttpClient() {
         super();
         this.params = new BasicHttpParams();
@@ -91,7 +91,7 @@ public class TestHttpClient {
     public HttpParams getParams() {
         return this.params;
     }
-    
+
     public HttpResponse execute(
             final HttpRequest request,
             final HttpHost targetHost,
@@ -108,9 +108,9 @@ public class TestHttpClient {
         this.httpexecutor.postProcess(response, this.httpproc, this.context);
         return response;
     }
-    
+
     public boolean keepAlive(final HttpResponse response) {
         return this.connStrategy.keepAlive(response, this.context);
     }
-    
+
 }

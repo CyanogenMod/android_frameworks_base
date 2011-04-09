@@ -20,12 +20,12 @@ import android.app.Application;
 import android.content.res.Configuration;
 
 /**
- * A mock {@link android.app.Application} class.  All methods are non-functional and throw 
- * {@link java.lang.UnsupportedOperationException}.  Override it as necessary to provide the 
+ * A mock {@link android.app.Application} class.  All methods are non-functional and throw
+ * {@link java.lang.UnsupportedOperationException}.  Override it as necessary to provide the
  * operations that you need.
  */
 public class MockApplication extends Application {
-    
+
     public MockApplication() {
     }
 
@@ -38,7 +38,7 @@ public class MockApplication extends Application {
     public void onTerminate() {
         throw new UnsupportedOperationException();
     }
-    
+
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         throw new UnsupportedOperationException();

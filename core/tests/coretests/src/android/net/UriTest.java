@@ -52,20 +52,20 @@ public class UriTest extends TestCase {
 
     private void parcelAndUnparcel(Uri u) {
         Parcel p = Parcel.obtain();
-	try {
-		Uri.writeToParcel(p, u);
-		p.setDataPosition(0);
-		assertEquals(u, Uri.CREATOR.createFromParcel(p));
+        try {
+                Uri.writeToParcel(p, u);
+                p.setDataPosition(0);
+                assertEquals(u, Uri.CREATOR.createFromParcel(p));
 
-		p.setDataPosition(0);
-		u = u.buildUpon().build();        
-		Uri.writeToParcel(p, u);
-		p.setDataPosition(0);
-		assertEquals(u, Uri.CREATOR.createFromParcel(p));
-	}
-	finally {
-		p.recycle();
-	}
+                p.setDataPosition(0);
+                u = u.buildUpon().build();
+                Uri.writeToParcel(p, u);
+                p.setDataPosition(0);
+                assertEquals(u, Uri.CREATOR.createFromParcel(p));
+        }
+        finally {
+                p.recycle();
+        }
     }
 
     @SmallTest
@@ -192,7 +192,7 @@ public class UriTest extends TestCase {
         Uri b = a.buildUpon().fragment("new").build();
         assertEquals("new", b.getFragment());
         assertEquals("bar", b.getSchemeSpecificPart());
-        assertEquals("foo", b.getScheme());        
+        assertEquals("foo", b.getScheme());
     }
 
     @SmallTest

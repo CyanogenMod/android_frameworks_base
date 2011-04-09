@@ -59,7 +59,7 @@ public class PermissionInfo extends PackageItemInfo implements Parcelable {
      * {@link android.R.attr#permissionGroup}.
      */
     public String group;
-    
+
     /**
      * A string resource identifier (in the package's resources) of this
      * permission's description.  From the "description" attribute or,

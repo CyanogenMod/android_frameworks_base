@@ -30,7 +30,7 @@ class FactoryErrorDialog extends BaseErrorDialog {
                 mHandler.obtainMessage(0));
         getWindow().setTitle("Factory Error");
     }
-    
+
     public void onStop() {
     }
 

@@ -39,7 +39,7 @@ public abstract class OrientationEventListener {
     private Sensor mSensor;
     private SensorEventListener mSensorEventListener;
     private OrientationListener mOldListener;
-    
+
     /**
      * Returned from onOrientationChanged when the device orientation cannot be determined
      * (typically when the device is in a close to flat position).
@@ -50,20 +50,20 @@ public abstract class OrientationEventListener {
 
     /**
      * Creates a new OrientationEventListener.
-     * 
+     *
      * @param context for the OrientationEventListener.
      */
     public OrientationEventListener(Context context) {
         this(context, SensorManager.SENSOR_DELAY_NORMAL);
     }
-    
+
     /**
      * Creates a new OrientationEventListener.
-     * 
+     *
      * @param context for the OrientationEventListener.
      * @param rate at which sensor events are processed (see also
      * {@link android.hardware.SensorManager SensorManager}). Use the default
-     * value of {@link android.hardware.SensorManager#SENSOR_DELAY_NORMAL 
+     * value of {@link android.hardware.SensorManager#SENSOR_DELAY_NORMAL
      * SENSOR_DELAY_NORMAL} for simple screen orientation change detection.
      */
     public OrientationEventListener(Context context, int rate) {
@@ -75,7 +75,7 @@ public abstract class OrientationEventListener {
             mSensorEventListener = new SensorEventListenerImpl();
         }
     }
-    
+
     void registerListener(OrientationListener lis) {
         mOldListener = lis;
     }
@@ -115,13 +115,13 @@ public abstract class OrientationEventListener {
         private static final int _DATA_X = 0;
         private static final int _DATA_Y = 1;
         private static final int _DATA_Z = 2;
-        
+
         public void onSensorChanged(SensorEvent event) {
             float[] values = event.values;
             int orientation = ORIENTATION_UNKNOWN;
             float X = -values[_DATA_X];
             float Y = -values[_DATA_Y];
-            float Z = -values[_DATA_Z];        
+            float Z = -values[_DATA_Z];
             float magnitude = X*X + Y*Y;
             // Don't trust the angle if the magnitude is small compared to the y value
             if (magnitude * 4 >= Z*Z) {
@@ -131,7 +131,7 @@ public abstract class OrientationEventListener {
                 // normalize to 0 - 359 range
                 while (orientation >= 360) {
                     orientation -= 360;
-                } 
+                }
                 while (orientation < 0) {
                     orientation += 360;
                 }
@@ -149,7 +149,7 @@ public abstract class OrientationEventListener {
 
         }
     }
-    
+
     /*
      * Returns true if sensor is enabled and false otherwise
      */
@@ -161,7 +161,7 @@ public abstract class OrientationEventListener {
      * Called when the orientation of the device has changed.
      * orientation parameter is in degrees, ranging from 0 to 359.
      * orientation is 0 degrees when the device is oriented in its natural position,
-     * 90 degrees when its left side is at the top, 180 degrees when it is upside down, 
+     * 90 degrees when its left side is at the top, 180 degrees when it is upside down,
      * and 270 degrees when its right side is to the top.
      * {@link #ORIENTATION_UNKNOWN} is returned when the device is close to flat
      * and the orientation cannot be determined.

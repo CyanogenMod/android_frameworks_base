@@ -101,7 +101,7 @@ public class LockPatternView extends View {
     private boolean mInStealthMode = false;
     private boolean mTactileFeedbackEnabled = true;
     private boolean mPatternInProgress = false;
-    
+
     private boolean mVisibleDots = true;
     private boolean mShowErrorPath = true;
     private int mDelay = 2000;
@@ -336,19 +336,19 @@ public class LockPatternView extends View {
     public void setInStealthMode(boolean inStealthMode) {
         mInStealthMode = inStealthMode;
     }
-    
+
     public void setVisibleDots(boolean visibleDots) {
         mVisibleDots = visibleDots;
     }
-    
+
     public boolean isVisibleDots() {
         return mVisibleDots;
     }
-    
+
     public void setShowErrorPath(boolean showErrorPath) {
         mShowErrorPath = showErrorPath;
     }
-    
+
     public boolean isShowErrorPath() {
         return mShowErrorPath;
     }
@@ -453,11 +453,11 @@ public class LockPatternView extends View {
     public void enableInput() {
         mInputEnabled = true;
     }
-    
+
     public int getIncorrectDelay() {
         return mDelay;
     }
-    
+
     public void setIncorrectDelay(int delay) {
         mDelay = delay;
     }
@@ -868,7 +868,7 @@ public class LockPatternView extends View {
         // we are in stealth mode)
         final boolean drawPath = ((!mInStealthMode && mPatternDisplayMode != DisplayMode.Wrong)
                                     || (mPatternDisplayMode == DisplayMode.Wrong && mShowErrorPath));
-        
+
         //final boolean drawPath = (!mInStealthMode || mPatternDisplayMode == DisplayMode.Wrong);
         if (drawPath) {
             boolean anyCircles = false;
@@ -903,7 +903,7 @@ public class LockPatternView extends View {
         // draw the circles
         final int paddingTop = mPaddingTop;
         final int paddingLeft = mPaddingLeft;
-        
+
         if (mVisibleDots) {
             for (int i = 0; i < 3; i++) {
                 float topY = paddingTop + i * squareHeight;
@@ -992,7 +992,7 @@ public class LockPatternView extends View {
             innerCircle = mBitmapBtnTouched;
         } else if (mPatternDisplayMode == DisplayMode.Wrong) {
             // the pattern is wrong
-            
+
             if (mShowErrorPath) {
                 outerCircle = mBitmapCircleRed;
                 innerCircle = mBitmapBtnDefault;
@@ -1000,7 +1000,7 @@ public class LockPatternView extends View {
             else {
                 outerCircle = mBitmapCircleDefault;
                 innerCircle = mBitmapBtnDefault;
-            }            
+            }
         } else if (mPatternDisplayMode == DisplayMode.Correct ||
                 mPatternDisplayMode == DisplayMode.Animate) {
             // the pattern is correct
@@ -1108,11 +1108,11 @@ public class LockPatternView extends View {
         public boolean isTactileFeedbackEnabled(){
             return mTactileFeedbackEnabled;
         }
-        
+
         public boolean isVisibleDots() {
             return mVisibleDots;
         }
-        
+
         public boolean isShowErrorPath() {
             return mShowErrorPath;
         }

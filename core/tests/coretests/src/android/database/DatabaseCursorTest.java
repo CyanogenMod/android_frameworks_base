@@ -56,8 +56,8 @@ public class DatabaseCursorTest extends AndroidTestCase implements PerformanceTe
     @Override
     protected void setUp() throws Exception {
         super.setUp();
-	File dbDir = getContext().getDir("tests", Context.MODE_PRIVATE);
-	mDatabaseFile = new File(dbDir, "database_test.db");
+        File dbDir = getContext().getDir("tests", Context.MODE_PRIVATE);
+        mDatabaseFile = new File(dbDir, "database_test.db");
 
         if (mDatabaseFile.exists()) {
             mDatabaseFile.delete();
@@ -96,38 +96,38 @@ public class DatabaseCursorTest extends AndroidTestCase implements PerformanceTe
         mDatabase.execSQL(
             "CREATE TABLE test (_id INTEGER PRIMARY KEY, d INTEGER, s INTEGER);");
         for(int i = 0; i < 20; i++) {
-            mDatabase.execSQL("INSERT INTO test (d, s) VALUES (" + i + 
+            mDatabase.execSQL("INSERT INTO test (d, s) VALUES (" + i +
                 "," + i%2 + ");");
         }
-        
+
         Cursor c = mDatabase.query("test", null, "s = 0", null, null, null, null);
         int dCol = c.getColumnIndexOrThrow("d");
         int sCol = c.getColumnIndexOrThrow("s");
-        
+
         int count = 0;
         while (c.moveToNext()) {
             assertTrue(c.updateInt(dCol, 3));
             count++;
         }
         assertEquals(10, count);
-        
+
         assertTrue(c.commitUpdates());
-        
+
         assertTrue(c.requery());
-        
+
         count = 0;
         while (c.moveToNext()) {
             assertEquals(3, c.getInt(dCol));
             count++;
         }
-        
+
         assertEquals(10, count);
         assertTrue(c.moveToFirst());
         assertTrue(c.deleteRow());
         assertEquals(9, c.getCount());
         c.close();
     }
-    
+
     @MediumTest
     public void testBlob() throws Exception {
         // create table
@@ -135,27 +135,27 @@ public class DatabaseCursorTest extends AndroidTestCase implements PerformanceTe
             "CREATE TABLE test (_id INTEGER PRIMARY KEY, s TEXT, d REAL, l INTEGER, b BLOB);");
         // insert blob
         Object[] args = new Object[4];
-        
+
         byte[] blob = new byte[1000];
         byte value = 99;
-        Arrays.fill(blob, value);        
+        Arrays.fill(blob, value);
         args[3] = blob;
-        
-        String s = new String("text");        
+
+        String s = new String("text");
         args[0] = s;
         Double d = 99.9;
         args[1] = d;
         Long l = (long)1000;
         args[2] = l;
-        
+
         String sql = "INSERT INTO test (s, d, l, b) VALUES (?,?,?,?)";
         mDatabase.execSQL(sql, args);
         // use cursor to access blob
-        Cursor c = mDatabase.query("test", null, null, null, null, null, null);        
+        Cursor c = mDatabase.query("test", null, null, null, null, null, null);
         c.moveToNext();
         ContentValues cv = new ContentValues();
         DatabaseUtils.cursorRowToContentValues(c, cv);
-        
+
         int bCol = c.getColumnIndexOrThrow("b");
         int sCol = c.getColumnIndexOrThrow("s");
         int dCol = c.getColumnIndexOrThrow("d");
@@ -165,25 +165,25 @@ public class DatabaseCursorTest extends AndroidTestCase implements PerformanceTe
         assertEquals(s, c.getString(sCol));
         assertEquals((double)d, c.getDouble(dCol));
         assertEquals((long)l, c.getLong(lCol));
-        
+
         // new byte[]
         byte[] newblob = new byte[1000];
         value = 98;
-        Arrays.fill(blob, value);        
-        
+        Arrays.fill(blob, value);
+
         c.updateBlob(bCol, newblob);
         cBlob =  c.getBlob(bCol);
         assertTrue(Arrays.equals(newblob, cBlob));
-        
+
         // commit
         assertTrue(c.commitUpdates());
         assertTrue(c.requery());
         c.moveToNext();
         cBlob =  c.getBlob(bCol);
-        assertTrue(Arrays.equals(newblob, cBlob));        
+        assertTrue(Arrays.equals(newblob, cBlob));
         c.close();
     }
-    
+
     @MediumTest
     public void testRealColumns() throws Exception {
         mDatabase.execSQL("CREATE TABLE test (_id INTEGER PRIMARY KEY, data REAL);");
@@ -326,7 +326,7 @@ public class DatabaseCursorTest extends AndroidTestCase implements PerformanceTe
             c = cursor;
             total = total_;
         }
-        
+
         @Override
         public void onChanged() {
             int count = c.getCount();
@@ -346,13 +346,13 @@ public class DatabaseCursorTest extends AndroidTestCase implements PerformanceTe
         public void onInvalidated() {
         }
     }
-    
+
     //@Large
     @Suppress
     public void testLoadingThreadDelayRegisterData() throws Exception {
         mDatabase.execSQL("CREATE TABLE test (_id INTEGER PRIMARY KEY, data INT);");
-        
-        final int count = 505; 
+
+        final int count = 505;
         String sql = "INSERT INTO test (data) VALUES (?);";
         SQLiteStatement s = mDatabase.compileStatement(sql);
         for (int i = 0; i < count; i++) {
@@ -364,7 +364,7 @@ public class DatabaseCursorTest extends AndroidTestCase implements PerformanceTe
         int initialRead = 5;
         SQLiteCursor c = (SQLiteCursor)mDatabase.rawQuery("select * from test;",
                 null, initialRead, maxRead);
-        
+
         TestObserver observer = new TestObserver(count, c);
         c.getCount();
         c.registerDataSetObserver(observer);
@@ -373,14 +373,14 @@ public class DatabaseCursorTest extends AndroidTestCase implements PerformanceTe
         }
         c.close();
     }
-    
+
     //@LargeTest
     @BrokenTest("Consistently times out")
     @Suppress
     public void testLoadingThread() throws Exception {
         mDatabase.execSQL("CREATE TABLE test (_id INTEGER PRIMARY KEY, data INT);");
-        
-        final int count = 50000; 
+
+        final int count = 50000;
         String sql = "INSERT INTO test (data) VALUES (?);";
         SQLiteStatement s = mDatabase.compileStatement(sql);
         for (int i = 0; i < count; i++) {
@@ -392,22 +392,22 @@ public class DatabaseCursorTest extends AndroidTestCase implements PerformanceTe
         int initialRead = 5;
         SQLiteCursor c = (SQLiteCursor)mDatabase.rawQuery("select * from test;",
                 null, initialRead, maxRead);
-        
+
         TestObserver observer = new TestObserver(count, c);
         c.registerDataSetObserver(observer);
         c.getCount();
-        
+
         Looper.loop();
         c.close();
-    } 
-    
+    }
+
     //@LargeTest
     @BrokenTest("Consistently times out")
     @Suppress
     public void testLoadingThreadClose() throws Exception {
         mDatabase.execSQL("CREATE TABLE test (_id INTEGER PRIMARY KEY, data INT);");
-        
-        final int count = 1000; 
+
+        final int count = 1000;
         String sql = "INSERT INTO test (data) VALUES (?);";
         SQLiteStatement s = mDatabase.compileStatement(sql);
         for (int i = 0; i < count; i++) {
@@ -419,18 +419,18 @@ public class DatabaseCursorTest extends AndroidTestCase implements PerformanceTe
         int initialRead = 5;
         SQLiteCursor c = (SQLiteCursor)mDatabase.rawQuery("select * from test;",
                 null, initialRead, maxRead);
-        
+
         TestObserver observer = new TestObserver(count, c);
         c.registerDataSetObserver(observer);
-        c.getCount();       
+        c.getCount();
         c.close();
     }
-    
+
     @LargeTest
     public void testLoadingThreadDeactivate() throws Exception {
         mDatabase.execSQL("CREATE TABLE test (_id INTEGER PRIMARY KEY, data INT);");
-        
-        final int count = 1000; 
+
+        final int count = 1000;
         String sql = "INSERT INTO test (data) VALUES (?);";
         SQLiteStatement s = mDatabase.compileStatement(sql);
         for (int i = 0; i < count; i++) {
@@ -442,19 +442,19 @@ public class DatabaseCursorTest extends AndroidTestCase implements PerformanceTe
         int initialRead = 5;
         SQLiteCursor c = (SQLiteCursor)mDatabase.rawQuery("select * from test;",
                 null, initialRead, maxRead);
-        
+
         TestObserver observer = new TestObserver(count, c);
         c.registerDataSetObserver(observer);
-        c.getCount();       
+        c.getCount();
         c.deactivate();
         c.close();
     }
-    
+
     @LargeTest
     public void testManyRowsLong() throws Exception {
         mDatabase.execSQL("CREATE TABLE test (_id INTEGER PRIMARY KEY, data INT);");
-        
-        final int count = 36799; 
+
+        final int count = 36799;
         mDatabase.execSQL("BEGIN Transaction;");
         for (int i = 0; i < count; i++) {
             mDatabase.execSQL("INSERT INTO test (data) VALUES (" + i + ");");
@@ -489,7 +489,7 @@ public class DatabaseCursorTest extends AndroidTestCase implements PerformanceTe
         sql.append(randomString);
         sql.append("');");
 
-        // if cursor window size changed, adjust this value too  
+        // if cursor window size changed, adjust this value too
         final int count = 600; // more than two fillWindow needed
         mDatabase.execSQL("BEGIN Transaction;");
         for (int i = 0; i < count; i++) {
@@ -509,18 +509,18 @@ public class DatabaseCursorTest extends AndroidTestCase implements PerformanceTe
         assertEquals(count, c.getCount());
         c.close();
     }
-    
+
     @LargeTest
     public void testManyRowsTxtLong() throws Exception {
         mDatabase.execSQL("CREATE TABLE test (_id INTEGER PRIMARY KEY, txt TEXT, data INT);");
-        
+
         Random random = new Random(System.currentTimeMillis());
         StringBuilder randomString = new StringBuilder(1979);
         for (int i = 0; i < 1979; i++) {
             randomString.append((random.nextInt() & 0xf) % 10);
         }
 
-        // if cursor window size changed, adjust this value too  
+        // if cursor window size changed, adjust this value too
         final int count = 600;
         mDatabase.execSQL("BEGIN Transaction;");
         for (int i = 0; i < count; i++) {
@@ -547,7 +547,7 @@ public class DatabaseCursorTest extends AndroidTestCase implements PerformanceTe
         assertEquals(count, c.getCount());
         c.close();
     }
-   
+
     @MediumTest
     public void testRequery() throws Exception {
         populateDefaultTable();

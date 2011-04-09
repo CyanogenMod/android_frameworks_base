@@ -24,7 +24,7 @@ import android.content.Context;
  * of whether the keyguard instance is around or not.
  */
 public interface KeyguardViewProperties {
-    
+
     /**
      * Create a keyguard view.
      * @param context the context to use when creating the view.

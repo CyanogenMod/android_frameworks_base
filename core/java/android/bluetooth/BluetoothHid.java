@@ -267,7 +267,7 @@ public class BluetoothHid {
         case BluetoothClass.Device.PERIPHERAL_KEYBORD:
         case BluetoothClass.Device.PERIPHERAL_POINTING_DEVICE:
         case BluetoothClass.Device.PERIPHERAL_COMBO_KEYBORD_POINTING:
-	    return true;
+            return true;
         default:
             return false;
         }

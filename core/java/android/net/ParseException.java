@@ -17,7 +17,7 @@
 package android.net;
 
 /**
- * 
+ *
  *
  * When WebAddress Parser Fails, this exception is thrown
  */

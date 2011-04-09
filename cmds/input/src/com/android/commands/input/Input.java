@@ -82,7 +82,7 @@ public class Input {
                     buff.setCharAt(i, ' ');
                     buff.deleteCharAt(--i);
                 }
-            } 
+            }
             if (buff.charAt(i) == '%') {
                 escapeFlag = true;
             }
@@ -132,7 +132,7 @@ public class Input {
         }
     }
 
-    private void sendMotionEvent(long downTime, int action, float x, float y, 
+    private void sendMotionEvent(long downTime, int action, float x, float y,
             float pressure, float size) {
     }
 

@@ -77,7 +77,7 @@ public class MultiTapKeyListener extends BaseKeyListener
     public int getInputType() {
         return makeTextContentType(mCapitalize, mAutoText);
     }
-    
+
     public boolean onKeyDown(View view, Editable content,
                              int keyCode, KeyEvent event) {
         int selStart, selEnd;
@@ -194,7 +194,7 @@ public class MultiTapKeyListener extends BaseKeyListener
             if (selEnd != oldStart) {
                 Selection.setSelection(content, oldStart, selEnd);
 
-                content.setSpan(TextKeyListener.LAST_TYPED, 
+                content.setSpan(TextKeyListener.LAST_TYPED,
                                 oldStart, selEnd,
                                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 

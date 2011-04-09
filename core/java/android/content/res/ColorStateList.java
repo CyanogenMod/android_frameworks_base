@@ -231,7 +231,7 @@ public class ColorStateList implements Parcelable {
             if (listSize == 0 || stateSpec.length == 0) {
                 mDefaultColor = color;
             }
-            
+
             if (listSize + 1 >= listAllocated) {
                 listAllocated = ArrayUtils.idealIntArraySize(listSize + 1);
 
@@ -259,7 +259,7 @@ public class ColorStateList implements Parcelable {
     public boolean isStateful() {
         return mStateSpecs.length > 1;
     }
-    
+
     /**
      * Return the color associated with the given set of {@link android.view.View} states.
      *

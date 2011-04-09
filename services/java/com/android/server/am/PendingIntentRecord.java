@@ -38,7 +38,7 @@ class PendingIntentRecord extends IIntentSender.Stub {
     boolean canceled = false;
 
     String stringName;
-    
+
     final static class Key {
         final int type;
         final String packageName;
@@ -49,9 +49,9 @@ class PendingIntentRecord extends IIntentSender.Stub {
         final String requestResolvedType;
         final int flags;
         final int hashCode;
-        
+
         private static final int ODD_PRIME_NUMBER = 37;
-        
+
         Key(int _t, String _p, ActivityRecord _a, String _w,
                 int _r, Intent _i, String _it, int _f) {
             type = _t;
@@ -62,7 +62,7 @@ class PendingIntentRecord extends IIntentSender.Stub {
             requestIntent = _i;
             requestResolvedType = _it;
             flags = _f;
-            
+
             int hash = 23;
             hash = (ODD_PRIME_NUMBER*hash) + _f;
             hash = (ODD_PRIME_NUMBER*hash) + _r;
@@ -84,7 +84,7 @@ class PendingIntentRecord extends IIntentSender.Stub {
             //Slog.i(ActivityManagerService.TAG, this + " hashCode=0x"
             //        + Integer.toHexString(hashCode));
         }
-        
+
         public boolean equals(Object otherObj) {
             if (otherObj == null) {
                 return false;
@@ -142,14 +142,14 @@ class PendingIntentRecord extends IIntentSender.Stub {
         public int hashCode() {
             return hashCode;
         }
-        
+
         public String toString() {
             return "Key{" + typeName() + " pkg=" + packageName
                 + " intent="
                 + (requestIntent != null ? requestIntent.toShortString(true, false) : "<null>")
                 + " flags=0x" + Integer.toHexString(flags) + "}";
         }
-        
+
         String typeName() {
             switch (type) {
                 case IActivityManager.INTENT_SENDER_ACTIVITY:
@@ -164,7 +164,7 @@ class PendingIntentRecord extends IIntentSender.Stub {
             return Integer.toString(type);
         }
     }
-    
+
     PendingIntentRecord(ActivityManagerService _owner, Key _k, int _u) {
         owner = _owner;
         key = _k;
@@ -177,7 +177,7 @@ class PendingIntentRecord extends IIntentSender.Stub {
         return sendInner(code, intent, resolvedType, finishedReceiver,
                 null, null, 0, 0, 0);
     }
-    
+
     int sendInner(int code, Intent intent, String resolvedType,
             IIntentReceiver finishedReceiver,
             IBinder resultTo, String resultWho, int requestCode,
@@ -202,9 +202,9 @@ class PendingIntentRecord extends IIntentSender.Stub {
                 flagsMask &= ~Intent.IMMUTABLE_FLAGS;
                 flagsValues &= flagsMask;
                 finalIntent.setFlags((finalIntent.getFlags()&~flagsMask) | flagsValues);
-                
+
                 final long origId = Binder.clearCallingIdentity();
-                
+
                 boolean sendFinish = finishedReceiver != null;
                 switch (key.type) {
                     case IActivityManager.INTENT_SENDER_ACTIVITY:
@@ -245,7 +245,7 @@ class PendingIntentRecord extends IIntentSender.Stub {
                         }
                         break;
                 }
-                
+
                 if (sendFinish) {
                     try {
                         finishedReceiver.performReceive(new Intent(finalIntent), 0,
@@ -253,15 +253,15 @@ class PendingIntentRecord extends IIntentSender.Stub {
                     } catch (RemoteException e) {
                     }
                 }
-                
+
                 Binder.restoreCallingIdentity(origId);
-                
+
                 return 0;
             }
         }
         return IActivityManager.START_CANCELED;
     }
-    
+
     protected void finalize() throws Throwable {
         try {
             if (!canceled) {
@@ -282,7 +282,7 @@ class PendingIntentRecord extends IIntentSender.Stub {
             }
         }
     }
-    
+
     void dump(PrintWriter pw, String prefix) {
         pw.print(prefix); pw.print("uid="); pw.print(uid);
                 pw.print(" packageName="); pw.print(key.packageName);

@@ -45,7 +45,7 @@ public class ListSetSelectionTest extends ActivityInstrumentationTestCase2<ListS
         assertNotNull(mActivity);
         assertNotNull(mListView);
     }
-    
+
     /** Confirm that we can set the selection to each specific position */
     @MediumTest
     @UiThreadTest
@@ -57,7 +57,7 @@ public class ListSetSelectionTest extends ActivityInstrumentationTestCase2<ListS
             assertEquals("Set selection", i, mListView.getSelectedItemPosition());
         }
     }
-    
+
     /** Confirm that you cannot unset the selection using the same API */
     @MediumTest
     @UiThreadTest

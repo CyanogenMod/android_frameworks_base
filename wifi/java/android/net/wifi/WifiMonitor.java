@@ -155,7 +155,7 @@ public class WifiMonitor {
         public MonitorThread() {
             super("WifiMonitor");
         }
-        
+
         public void run() {
 
             if (connectToSupplicant()) {

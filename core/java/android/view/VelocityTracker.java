@@ -39,7 +39,7 @@ public final class VelocityTracker implements Poolable<VelocityTracker> {
 
     private static final int NUM_PAST = 10;
     private static final int MAX_AGE_MILLISECONDS = 200;
-    
+
     private static final int POINTER_POOL_CAPACITY = 20;
 
     private static final Pool<VelocityTracker> sPool = Pools.synchronizedPool(
@@ -55,24 +55,24 @@ public final class VelocityTracker implements Poolable<VelocityTracker> {
                     element.clear();
                 }
             }, 2));
-    
+
     private static Pointer sRecycledPointerListHead;
     private static int sRecycledPointerCount;
-    
+
     private static final class Pointer {
         public Pointer next;
-        
+
         public int id;
         public float xVelocity;
         public float yVelocity;
-        
+
         public final float[] pastX = new float[NUM_PAST];
         public final float[] pastY = new float[NUM_PAST];
         public final long[] pastTime = new long[NUM_PAST]; // uses Long.MIN_VALUE as a sentinel
-        
+
         public int generation;
     }
-    
+
     private Pointer mPointerListHead; // sorted by id in increasing order
     private int mLastTouchIndex;
     private int mGeneration;
@@ -116,24 +116,24 @@ public final class VelocityTracker implements Poolable<VelocityTracker> {
     private VelocityTracker() {
         clear();
     }
-    
+
     /**
      * Reset the velocity tracker back to its initial state.
      */
     public void clear() {
         releasePointerList(mPointerListHead);
-        
+
         mPointerListHead = null;
         mLastTouchIndex = 0;
     }
-    
+
     /**
      * Add a user's movement to the tracker.  You should call this for the
      * initial {@link MotionEvent#ACTION_DOWN}, the following
      * {@link MotionEvent#ACTION_MOVE} events that you receive, and the
      * final {@link MotionEvent#ACTION_UP}.  You can, however, call this
      * for whichever events you desire.
-     * 
+     *
      * @param ev The MotionEvent you received and would like to track.
      */
     public void addMovement(MotionEvent ev) {
@@ -143,14 +143,14 @@ public final class VelocityTracker implements Poolable<VelocityTracker> {
         final int nextTouchIndex = (lastTouchIndex + 1) % NUM_PAST;
         final int finalTouchIndex = (nextTouchIndex + historySize) % NUM_PAST;
         final int generation = mGeneration++;
-        
+
         mLastTouchIndex = finalTouchIndex;
 
         // Update pointer data.
         Pointer previousPointer = null;
         for (int i = 0; i < pointerCount; i++){
             final int pointerId = ev.getPointerId(i);
-            
+
             // Find the pointer data for this pointer id.
             // This loop is optimized for the common case where pointer ids in the event
             // are in sorted order.  However, we check for this case explicitly and
@@ -162,7 +162,7 @@ public final class VelocityTracker implements Poolable<VelocityTracker> {
             } else {
                 nextPointer = previousPointer.next;
             }
-            
+
             final Pointer pointer;
             for (;;) {
                 if (nextPointer != null) {
@@ -176,7 +176,7 @@ public final class VelocityTracker implements Poolable<VelocityTracker> {
                         continue;
                     }
                 }
-                
+
                 // Pointer went down.  Add it to the list.
                 // Write a sentinel at the end of the pastTime trace so we will be able to
                 // tell when the trace started.
@@ -191,14 +191,14 @@ public final class VelocityTracker implements Poolable<VelocityTracker> {
                 }
                 break;
             }
-            
+
             pointer.generation = generation;
             previousPointer = pointer;
-            
+
             final float[] pastX = pointer.pastX;
             final float[] pastY = pointer.pastY;
             final long[] pastTime = pointer.pastTime;
-            
+
             for (int j = 0; j < historySize; j++) {
                 final int touchIndex = (nextTouchIndex + j) % NUM_PAST;
                 pastX[touchIndex] = ev.getHistoricalX(i, j);
@@ -209,7 +209,7 @@ public final class VelocityTracker implements Poolable<VelocityTracker> {
             pastY[finalTouchIndex] = ev.getY(i);
             pastTime[finalTouchIndex] = ev.getEventTime();
         }
-        
+
         // Find removed pointers.
         previousPointer = null;
         for (Pointer pointer = mPointerListHead; pointer != null; ) {
@@ -232,8 +232,8 @@ public final class VelocityTracker implements Poolable<VelocityTracker> {
     /**
      * Equivalent to invoking {@link #computeCurrentVelocity(int, float)} with a maximum
      * velocity of Float.MAX_VALUE.
-     * 
-     * @see #computeCurrentVelocity(int, float) 
+     *
+     * @see #computeCurrentVelocity(int, float)
      */
     public void computeCurrentVelocity(int units) {
         computeCurrentVelocity(units, Float.MAX_VALUE);
@@ -245,7 +245,7 @@ public final class VelocityTracker implements Poolable<VelocityTracker> {
      * information, as it is relatively expensive.  You can then retrieve
      * the velocity with {@link #getXVelocity()} and
      * {@link #getYVelocity()}.
-     * 
+     *
      * @param units The units you would like the velocity in.  A value of 1
      * provides pixels per millisecond, 1000 provides pixels per second, etc.
      * @param maxVelocity The maximum velocity that can be computed by this method.
@@ -254,10 +254,10 @@ public final class VelocityTracker implements Poolable<VelocityTracker> {
      */
     public void computeCurrentVelocity(int units, float maxVelocity) {
         final int lastTouchIndex = mLastTouchIndex;
-        
+
         for (Pointer pointer = mPointerListHead; pointer != null; pointer = pointer.next) {
             final long[] pastTime = pointer.pastTime;
-            
+
             // Search backwards in time for oldest acceptable time.
             // Stop at the beginning of the trace as indicated by the sentinel time Long.MIN_VALUE.
             int oldestTouchIndex = lastTouchIndex;
@@ -272,87 +272,87 @@ public final class VelocityTracker implements Poolable<VelocityTracker> {
                 oldestTouchIndex = nextOldestTouchIndex;
                 numTouches += 1;
             }
-            
+
             // If we have a lot of samples, skip the last received sample since it is
             // probably pretty noisy compared to the sum of all of the traces already acquired.
             if (numTouches > 3) {
                 numTouches -= 1;
             }
-            
+
             // Kind-of stupid.
             final float[] pastX = pointer.pastX;
             final float[] pastY = pointer.pastY;
-            
+
             final float oldestX = pastX[oldestTouchIndex];
             final float oldestY = pastY[oldestTouchIndex];
             final long oldestTime = pastTime[oldestTouchIndex];
-            
+
             float accumX = 0;
             float accumY = 0;
-            
+
             for (int i = 1; i < numTouches; i++) {
                 final int touchIndex = (oldestTouchIndex + i) % NUM_PAST;
                 final int duration = (int)(pastTime[touchIndex] - oldestTime);
-                
+
                 if (duration == 0) continue;
-                
+
                 float delta = pastX[touchIndex] - oldestX;
                 float velocity = (delta / duration) * units; // pixels/frame.
                 accumX = (accumX == 0) ? velocity : (accumX + velocity) * .5f;
-            
+
                 delta = pastY[touchIndex] - oldestY;
                 velocity = (delta / duration) * units; // pixels/frame.
                 accumY = (accumY == 0) ? velocity : (accumY + velocity) * .5f;
             }
-            
+
             if (accumX < -maxVelocity) {
                 accumX = - maxVelocity;
             } else if (accumX > maxVelocity) {
                 accumX = maxVelocity;
             }
-            
+
             if (accumY < -maxVelocity) {
                 accumY = - maxVelocity;
             } else if (accumY > maxVelocity) {
                 accumY = maxVelocity;
             }
-            
+
             pointer.xVelocity = accumX;
             pointer.yVelocity = accumY;
-            
+
             if (localLOGV) {
                 Log.v(TAG, "Pointer " + pointer.id
                     + ": Y velocity=" + accumX +" X velocity=" + accumY + " N=" + numTouches);
             }
         }
     }
-    
+
     /**
      * Retrieve the last computed X velocity.  You must first call
      * {@link #computeCurrentVelocity(int)} before calling this function.
-     * 
+     *
      * @return The previously computed X velocity.
      */
     public float getXVelocity() {
         Pointer pointer = getPointer(0);
         return pointer != null ? pointer.xVelocity : 0;
     }
-    
+
     /**
      * Retrieve the last computed Y velocity.  You must first call
      * {@link #computeCurrentVelocity(int)} before calling this function.
-     * 
+     *
      * @return The previously computed Y velocity.
      */
     public float getYVelocity() {
         Pointer pointer = getPointer(0);
         return pointer != null ? pointer.yVelocity : 0;
     }
-    
+
     /**
      * Retrieve the last computed X velocity.  You must first call
      * {@link #computeCurrentVelocity(int)} before calling this function.
-     * 
+     *
      * @param id Which pointer's velocity to return.
      * @return The previously computed X velocity.
      */
@@ -360,11 +360,11 @@ public final class VelocityTracker implements Poolable<VelocityTracker> {
         Pointer pointer = getPointer(id);
         return pointer != null ? pointer.xVelocity : 0;
     }
-    
+
     /**
      * Retrieve the last computed Y velocity.  You must first call
      * {@link #computeCurrentVelocity(int)} before calling this function.
-     * 
+     *
      * @param id Which pointer's velocity to return.
      * @return The previously computed Y velocity.
      */
@@ -372,7 +372,7 @@ public final class VelocityTracker implements Poolable<VelocityTracker> {
         Pointer pointer = getPointer(id);
         return pointer != null ? pointer.yVelocity : 0;
     }
-    
+
     private final Pointer getPointer(int id) {
         for (Pointer pointer = mPointerListHead; pointer != null; pointer = pointer.next) {
             if (pointer.id == id) {
@@ -381,7 +381,7 @@ public final class VelocityTracker implements Poolable<VelocityTracker> {
         }
         return null;
     }
-    
+
     private static final Pointer obtainPointer() {
         synchronized (sPool) {
             if (sRecycledPointerCount != 0) {
@@ -394,7 +394,7 @@ public final class VelocityTracker implements Poolable<VelocityTracker> {
         }
         return new Pointer();
     }
-    
+
     private static final void releasePointer(Pointer pointer) {
         synchronized (sPool) {
             if (sRecycledPointerCount < POINTER_POOL_CAPACITY) {
@@ -404,7 +404,7 @@ public final class VelocityTracker implements Poolable<VelocityTracker> {
             }
         }
     }
-    
+
     private static final void releasePointerList(Pointer pointer) {
         if (pointer != null) {
             synchronized (sPool) {
@@ -412,14 +412,14 @@ public final class VelocityTracker implements Poolable<VelocityTracker> {
                 if (count >= POINTER_POOL_CAPACITY) {
                     return;
                 }
-                
+
                 Pointer tail = pointer;
                 for (;;) {
                     count += 1;
                     if (count >= POINTER_POOL_CAPACITY) {
                         break;
                     }
-                    
+
                     Pointer next = tail.next;
                     if (next == null) {
                         break;

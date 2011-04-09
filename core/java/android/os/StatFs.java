@@ -26,11 +26,11 @@ public class StatFs {
      * filesystem at <var>path</var>.  Upon construction, the stat of
      * the file system will be performed, and the values retrieved available
      * from the methods on this class.
-     * 
+     *
      * @param path A path in the desired file system to state.
      */
     public StatFs(String path) { native_setup(path); }
-    
+
     /**
      * Perform a restat of the file system referenced by this object.  This
      * is the same as re-constructing the object with the same file system
@@ -65,8 +65,8 @@ public class StatFs {
      * The number of blocks that are free on the file system and available to
      * applications.  This corresponds to the Unix statfs.f_bavail field.
      */
-    public native int getAvailableBlocks();    
-    
+    public native int getAvailableBlocks();
+
     private int mNativeContext;
     private native void native_restat(String path);
     private native void native_setup(String path);

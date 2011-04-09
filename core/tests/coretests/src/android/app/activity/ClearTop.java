@@ -23,7 +23,7 @@ import android.util.Log;
 
 public class ClearTop extends Activity {
     public static final String WAIT_CLEAR_TASK = "waitClearTask";
-    
+
     public ClearTop() {
     }
 
@@ -35,7 +35,7 @@ public class ClearTop extends Activity {
                 .setClass(this, LocalScreen.class);
         startActivity(intent);
     }
-    
+
     @Override
     public void onNewIntent(Intent intent) {
         //Log.i("foo", "New intent in " + this + ": " + intent);

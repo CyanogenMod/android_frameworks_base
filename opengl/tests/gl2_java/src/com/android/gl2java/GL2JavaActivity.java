@@ -31,7 +31,7 @@ public class GL2JavaActivity extends Activity {
     @Override protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         mView = new GL2JavaView(getApplication());
-	setContentView(mView);
+        setContentView(mView);
     }
 
     @Override protected void onPause() {

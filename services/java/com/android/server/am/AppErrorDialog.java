@@ -37,12 +37,12 @@ class AppErrorDialog extends BaseErrorDialog {
 
     // 5-minute timeout, then we automatically dismiss the crash dialog
     static final long DISMISS_TIMEOUT = 1000 * 60 * 5;
-    
+
     public AppErrorDialog(Context context, AppErrorResult result, ProcessRecord app) {
         super(context);
-        
+
         Resources res = context.getResources();
-        
+
         mProc = app;
         mResult = result;
         CharSequence name;

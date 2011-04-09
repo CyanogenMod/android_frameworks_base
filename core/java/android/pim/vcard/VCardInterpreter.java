@@ -48,7 +48,7 @@ public interface VCardInterpreter {
      */
     void end();
 
-    /** 
+    /**
      * Called when parsing one vCard entry started.
      * More specifically, this method is called when "BEGIN:VCARD" is read.
      */

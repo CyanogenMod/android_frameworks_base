@@ -28,7 +28,7 @@ public class SimUtilsTest extends TestCase {
     public void testBasic() throws Exception {
         byte[] data, data2;
 
-        /* 
+        /*
          * bcdToString()
          */
 

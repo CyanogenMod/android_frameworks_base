@@ -41,7 +41,7 @@ public final class LayoutResult implements ILayoutResult {
         mRootView = rootView;
         mImage = image;
     }
-    
+
     /**
      * Creates a LayoutResult with a specific success code and associated message
      * @param code
@@ -69,7 +69,7 @@ public final class LayoutResult implements ILayoutResult {
     public ILayoutViewInfo getRootView() {
         return mRootView;
     }
-    
+
     /**
      * Implementation of {@link ILayoutResult.ILayoutViewInfo}
      */
@@ -90,7 +90,7 @@ public final class LayoutResult implements ILayoutResult {
             mTop = top;
             mBottom = bottom;
         }
-        
+
         public void setChildren(ILayoutViewInfo[] children) {
             mChildren = children;
         }

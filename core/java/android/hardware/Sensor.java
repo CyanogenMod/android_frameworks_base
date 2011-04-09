@@ -97,7 +97,7 @@ public class Sensor {
      */
     public static final int TYPE_ROTATION_VECTOR = 11;
 
-    /** 
+    /**
      * A constant describing all sensor types.
      */
     public static final int TYPE_ALL = -1;

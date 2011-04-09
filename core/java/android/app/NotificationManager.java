@@ -82,7 +82,7 @@ public class NotificationManager
     }
 
     /**
-     * Persistent notification on the status bar, 
+     * Persistent notification on the status bar,
      *
      * @param id An identifier for this notification unique within your
      *        application.
@@ -95,18 +95,18 @@ public class NotificationManager
     }
 
     private void updatePackageList() {
-    	try {
-    		if(mContext.getPackageName().equals("com.cyanogenmod.cmparts")) {
-    			return;
-    		}
-    		//File file = new File(appContext.getFilesDir(), "trackball_lights");
-    		FileOutputStream fos = mContext.openFileOutput("trackball_lights", Context.MODE_WORLD_READABLE);
-    		String blank = "yes";
-    		fos.write(blank.getBytes());
-    		fos.close();
-    	} catch(Exception e) {
-    		Log.d("WriteApps", "Error: " + e.toString() );
-    	}
+        try {
+                if(mContext.getPackageName().equals("com.cyanogenmod.cmparts")) {
+                        return;
+                }
+                //File file = new File(appContext.getFilesDir(), "trackball_lights");
+                FileOutputStream fos = mContext.openFileOutput("trackball_lights", Context.MODE_WORLD_READABLE);
+                String blank = "yes";
+                fos.write(blank.getBytes());
+                fos.close();
+        } catch(Exception e) {
+                Log.d("WriteApps", "Error: " + e.toString() );
+        }
     }
 
     /**
@@ -125,8 +125,8 @@ public class NotificationManager
         INotificationManager service = getService();
         String pkg = mContext.getPackageName();
         if(((notification.flags & Notification.FLAG_ONGOING_EVENT) == 0)
-	|| ((notification.flags & Notification.FLAG_FOREGROUND_SERVICE) == 0)) {
-		updatePackageList();
+        || ((notification.flags & Notification.FLAG_FOREGROUND_SERVICE) == 0)) {
+                updatePackageList();
         }
         if (localLOGV) Log.v(TAG, pkg + ": notify(" + id + ", " + notification + ")");
         try {

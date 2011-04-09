@@ -23,7 +23,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 /**
  * Unit test class to test the set of valid and invalid states that
  * MediaPlayer.setVolume() method can be called.
- */          
+ */
 public class MediaPlayerSetVolumeStateUnitTest extends AndroidTestCase implements MediaPlayerMethodUnderTest {
     private MediaPlayerStateUnitTestTemplate mTestTemplate = new MediaPlayerStateUnitTestTemplate();
 
@@ -32,7 +32,7 @@ public class MediaPlayerSetVolumeStateUnitTest extends AndroidTestCase implement
      *    {Idle, Initialized, Stopped, Prepared, Started, Paused, PlaybackComplted}.
      * 2. It is invalid to call setVolume() in the following states:
      *    {Error}
-     *    
+     *
      * @param stateErrors the MediaPlayerStateErrors to check against.
      */
     public void checkStateErrors(MediaPlayerStateErrors stateErrors) {
@@ -47,7 +47,7 @@ public class MediaPlayerSetVolumeStateUnitTest extends AndroidTestCase implement
         assertTrue(!stateErrors.errorInInitializedState);
         assertTrue(!stateErrors.errorInStoppedState);
         assertTrue(!stateErrors.errorInIdleState);
-        
+
         // Invalid states.
         assertTrue(stateErrors.errorInErrorState);
     }
@@ -60,7 +60,7 @@ public class MediaPlayerSetVolumeStateUnitTest extends AndroidTestCase implement
     public void testSetVolume() {
         mTestTemplate.runTestOnMethod(this);
     }
-    
+
     @Override
     public String toString() {
         return "setVolume()";

@@ -71,14 +71,14 @@ public class TextToSpeech {
 
 
     /**
-     * Denotes the language is available for the language and country specified 
+     * Denotes the language is available for the language and country specified
      * by the locale, but not the variant.
      */
     public static final int LANG_COUNTRY_AVAILABLE = 1;
 
 
     /**
-     * Denotes the language is available for the language by the locale, 
+     * Denotes the language is available for the language by the locale,
      * but not the country and variant.
      */
     public static final int LANG_AVAILABLE = 0;

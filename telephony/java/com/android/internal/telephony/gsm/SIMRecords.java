@@ -1019,7 +1019,7 @@ public final class SIMRecords extends IccRecords {
             case EVENT_SIM_REFRESH:
                 isRecordLoadResponse = false;
                 ar = (AsyncResult)msg.obj;
-		if (DBG) log("Sim REFRESH with exception: " + ar.exception);
+                if (DBG) log("Sim REFRESH with exception: " + ar.exception);
                 if (ar.exception == null) {
                     handleSimRefresh((int[])(ar.result));
                 }
@@ -1102,25 +1102,25 @@ public final class SIMRecords extends IccRecords {
 
     private void handleSimRefresh(int[] result) {
         if (result == null || result.length == 0) {
-	    if (DBG) log("handleSimRefresh without input");
+            if (DBG) log("handleSimRefresh without input");
             return;
         }
 
         switch ((result[0])) {
             case CommandsInterface.SIM_REFRESH_FILE_UPDATED:
- 		if (DBG) log("handleSimRefresh with SIM_REFRESH_FILE_UPDATED");
+                if (DBG) log("handleSimRefresh with SIM_REFRESH_FILE_UPDATED");
                 // result[1] contains the EFID of the updated file.
                 int efid = result[1];
                 handleFileUpdate(efid);
                 break;
             case CommandsInterface.SIM_REFRESH_INIT:
-		if (DBG) log("handleSimRefresh with SIM_REFRESH_INIT");
+                if (DBG) log("handleSimRefresh with SIM_REFRESH_INIT");
                 // need to reload all files (that we care about)
                 adnCache.reset();
                 fetchSimRecords();
                 break;
             case CommandsInterface.SIM_REFRESH_RESET:
-		if (DBG) log("handleSimRefresh with SIM_REFRESH_RESET");
+                if (DBG) log("handleSimRefresh with SIM_REFRESH_RESET");
                 phone.mCM.setRadioPower(false, null);
                 /* Note: no need to call setRadioPower(true).  Assuming the desired
                 * radio power state is still ON (as tracked by ServiceStateTracker),
@@ -1132,7 +1132,7 @@ public final class SIMRecords extends IccRecords {
                 break;
             default:
                 // unknown refresh operation
-		if (DBG) log("handleSimRefresh with unknown operation");
+                if (DBG) log("handleSimRefresh with unknown operation");
                 break;
         }
     }

@@ -21,9 +21,9 @@ package com.android.internal.telephony;
  */
 public interface MmiCode
 {
-	/**
-	 * {@hide}
-	 */
+        /**
+         * {@hide}
+         */
     public enum State {
         PENDING,
         CANCELLED,

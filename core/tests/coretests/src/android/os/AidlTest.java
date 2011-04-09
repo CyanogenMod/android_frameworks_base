@@ -194,7 +194,7 @@ public class AidlTest extends TestCase {
                 TestParcelable[] a1, TestParcelable[] a2) {
             return null;
         }
-        
+
         public void voidSecurityException() {
             throw new SecurityException("gotcha!");
         }
@@ -396,7 +396,7 @@ public class AidlTest extends TestCase {
         assertEquals("s2[1]", s2[1]);
         assertEquals("s2[2]", s2[2]);
     }
-    
+
     @SmallTest
     public void testVoidSecurityException() throws Exception {
         boolean good = false;
@@ -407,7 +407,7 @@ public class AidlTest extends TestCase {
         }
         assertEquals(good, true);
     }
-    
+
     @SmallTest
     public void testIntSecurityException() throws Exception {
         boolean good = false;

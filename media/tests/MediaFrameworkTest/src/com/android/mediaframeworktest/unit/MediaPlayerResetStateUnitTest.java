@@ -26,13 +26,13 @@ import android.test.suitebuilder.annotation.LargeTest;
  */
 public class MediaPlayerResetStateUnitTest extends AndroidTestCase implements MediaPlayerMethodUnderTest {
     private MediaPlayerStateUnitTestTemplate mTestTemplate = new MediaPlayerStateUnitTestTemplate();
-    
+
     /**
      * 1. It is valid to call reset() in the following states:
      *    {Idle, Initialized, Prepared, Started, Paused, Stopped, PlaybackCompleted}.
      * 2. It is invalid to call reset() in the following states:
      *    {Error}
-     *    
+     *
      * @param stateErrors the MediaPlayerStateErrors to check against.
      */
     public void checkStateErrors(MediaPlayerStateErrors stateErrors) {

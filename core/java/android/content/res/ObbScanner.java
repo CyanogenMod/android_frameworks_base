@@ -29,7 +29,7 @@ public class ObbScanner {
 
     /**
      * Scan a file for OBB information.
-     * 
+     *
      * @param filePath path to the OBB file to be scanned.
      * @return ObbInfo object information corresponding to the file path
      * @throws IllegalArgumentException if the OBB file couldn't be found

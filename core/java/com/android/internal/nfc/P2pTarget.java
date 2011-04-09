@@ -32,20 +32,20 @@ public class P2pTarget extends P2pDevice {
 
     private static final String TAG = "P2pTarget";
 
-	/**
+        /**
      * The entry point for P2P tag operations.
      */
-	private final IP2pTarget mService;
+        private final IP2pTarget mService;
 
     /**
      * Flag set when the object is closed and thus not usable any more.
      */
-	private final boolean isClosed = false;
+        private final boolean isClosed = false;
 
     /**
      * Flag set when the tag is connected.
      */
-	private boolean isConnected = false;
+        private boolean isConnected = false;
 
     /**
      * Check if tag is still opened.
@@ -54,16 +54,16 @@ public class P2pTarget extends P2pDevice {
      * @throws NfcException if accessing a closed target.
      */
     public void checkState() throws NfcException {
-    	if(isClosed) {
-    		throw new NfcException("Tag has been closed.");
-    	}
+        if(isClosed) {
+                throw new NfcException("Tag has been closed.");
+        }
     }
 
     /**
      * Internal constructor for the P2pTarget class.
      *
      * @param handle The handle returned by the NFC service and used to identify
-     * 				 the tag in subsequent calls.
+     *                           the tag in subsequent calls.
      */
     P2pTarget(IP2pTarget service, int handle) {
         this.mService = service;
@@ -77,13 +77,13 @@ public class P2pTarget extends P2pDevice {
      * @throws NfcException
      */
     public void connect() throws NfcException {
-    	// Check state
-    	checkState();
-    	if (isConnected) {
-    		throw new NfcException("Already connected");
-    	}
+        // Check state
+        checkState();
+        if (isConnected) {
+                throw new NfcException("Already connected");
+        }
 
-    	// Perform connect
+        // Perform connect
         try {
             int result = mService.connect(mHandle);
             if (ErrorCodes.isError(result)) {
@@ -127,10 +127,10 @@ public class P2pTarget extends P2pDevice {
      * @throws NfcException in case of failure within the stack
      */
     public byte[] transceive(byte[] data) throws IOException, NfcException {
-    	// Check state
-    	checkState();
+        // Check state
+        checkState();
 
-    	// Perform transceive
+        // Perform transceive
         try {
             byte[] response = mService.transceive(mHandle, data);
             if (response == null) {

@@ -34,7 +34,7 @@ import java.util.zip.ZipFile;
 
 /**
  * Generate {@link ClassPathPackageInfo}s by scanning apk paths.
- * 
+ *
  * {@hide} Not needed for 1.0 SDK.
  */
 public class ClassPathPackageInfoSource {
@@ -83,7 +83,7 @@ public class ClassPathPackageInfoSource {
                 // Don't try to load classes that are generated. They usually aren't in test apks.
                 continue;
             }
-            
+
             try {
                 // We get errors in the emulator if we don't use the caller's class loader.
                 topLevelClasses.add(Class.forName(className, false,
@@ -121,7 +121,7 @@ public class ClassPathPackageInfoSource {
                         findClassesInApk(entryName, packageName, classNames, subpackageNames);
                     } else if ("true".equals(System.getProperty("android.vm.dexfile", "false"))) {
                         // If the vm supports dex files then scan the directories that contain
-                        // apk files. 
+                        // apk files.
                         for (String apkPath : apkPaths) {
                             File file = new File(apkPath);
                             scanForApkFiles(file, packageName, classNames, subpackageNames);

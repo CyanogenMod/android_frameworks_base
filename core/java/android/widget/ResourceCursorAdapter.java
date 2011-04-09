@@ -31,12 +31,12 @@ public abstract class ResourceCursorAdapter extends CursorAdapter {
     private int mLayout;
 
     private int mDropDownLayout;
-    
+
     private LayoutInflater mInflater;
-    
+
     /**
      * Constructor.
-     * 
+     *
      * @param context The context where the ListView associated with this
      *            SimpleListItemFactory is running
      * @param layout resource identifier of a layout file that defines the views
@@ -48,10 +48,10 @@ public abstract class ResourceCursorAdapter extends CursorAdapter {
         mLayout = mDropDownLayout = layout;
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
-    
+
     /**
      * Constructor.
-     * 
+     *
      * @param context The context where the ListView associated with this
      *            SimpleListItemFactory is running
      * @param layout resource identifier of a layout file that defines the views
@@ -70,7 +70,7 @@ public abstract class ResourceCursorAdapter extends CursorAdapter {
 
     /**
      * Inflates view(s) from the specified XML file.
-     * 
+     *
      * @see android.widget.CursorAdapter#newView(android.content.Context,
      *      android.database.Cursor, ViewGroup)
      */
@@ -92,7 +92,7 @@ public abstract class ResourceCursorAdapter extends CursorAdapter {
     public void setViewResource(int layout) {
         mLayout = layout;
     }
-    
+
     /**
      * <p>Sets the layout resource of the drop down views.</p>
      *

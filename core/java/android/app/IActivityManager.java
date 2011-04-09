@@ -171,13 +171,13 @@ public interface IActivityManager extends IInterface {
     public void serviceDoneExecuting(IBinder token, int type, int startId,
             int res) throws RemoteException;
     public IBinder peekService(Intent service, String resolvedType) throws RemoteException;
-    
+
     public boolean bindBackupAgent(ApplicationInfo appInfo, int backupRestoreMode)
             throws RemoteException;
     public void backupAgentCreated(String packageName, IBinder agent) throws RemoteException;
     public void unbindBackupAgent(ApplicationInfo appInfo) throws RemoteException;
     public void killApplicationProcess(String processName, int uid) throws RemoteException;
-    
+
     public boolean startInstrumentation(ComponentName className, String profileFile,
             int flags, Bundle arguments, IInstrumentationWatcher watcher)
             throws RemoteException;
@@ -189,7 +189,7 @@ public interface IActivityManager extends IInterface {
     public void setRequestedOrientation(IBinder token,
             int requestedOrientation) throws RemoteException;
     public int getRequestedOrientation(IBinder token) throws RemoteException;
-    
+
     public ComponentName getActivityClassForToken(IBinder token) throws RemoteException;
     public String getPackageForToken(IBinder token) throws RemoteException;
 
@@ -204,12 +204,12 @@ public interface IActivityManager extends IInterface {
     public boolean clearApplicationUserData(final String packageName,
             final IPackageDataObserver observer) throws RemoteException;
     public String getPackageForIntentSender(IIntentSender sender) throws RemoteException;
-    
+
     public void setProcessLimit(int max) throws RemoteException;
     public int getProcessLimit() throws RemoteException;
-    
+
     public void setProcessForeground(IBinder token, int pid, boolean isForeground) throws RemoteException;
-    
+
     public int checkPermission(String permission, int pid, int uid)
             throws RemoteException;
 
@@ -219,19 +219,19 @@ public interface IActivityManager extends IInterface {
             Uri uri, int mode) throws RemoteException;
     public void revokeUriPermission(IApplicationThread caller, Uri uri,
             int mode) throws RemoteException;
-    
+
     public void showWaitingForDebugger(IApplicationThread who, boolean waiting)
             throws RemoteException;
-    
+
     public void getMemoryInfo(ActivityManager.MemoryInfo outInfo) throws RemoteException;
-    
+
     public void killBackgroundProcesses(final String packageName) throws RemoteException;
     public void forceStopPackage(final String packageName) throws RemoteException;
-    
+
     // Note: probably don't want to allow applications access to these.
     public void goingToSleep() throws RemoteException;
     public void wakingUp() throws RemoteException;
-    
+
     public void unhandledBack() throws RemoteException;
     public ParcelFileDescriptor openContentUri(Uri uri) throws RemoteException;
     public void setDebugApp(
@@ -242,11 +242,11 @@ public interface IActivityManager extends IInterface {
         throws RemoteException;
 
     public void enterSafeMode() throws RemoteException;
-    
+
     public void noteWakeupAlarm(IIntentSender sender) throws RemoteException;
-    
+
     public boolean killPids(int[] pids, String reason) throws RemoteException;
-    
+
     // Special low-level communication with activity manager.
     public void startRunning(String pkg, String cls, String action,
             String data) throws RemoteException;
@@ -263,7 +263,7 @@ public interface IActivityManager extends IInterface {
             StrictMode.ViolationInfo crashInfo) throws RemoteException;
 
     /*
-     * This will deliver the specified signal to all the persistent processes. Currently only 
+     * This will deliver the specified signal to all the persistent processes. Currently only
      * SIGUSR1 is delivered. All others are ignored.
      */
     public void signalPersistentProcesses(int signal) throws RemoteException;
@@ -276,16 +276,16 @@ public interface IActivityManager extends IInterface {
             throws RemoteException;
     // Get device configuration
     public ConfigurationInfo getDeviceConfigurationInfo() throws RemoteException;
-    
+
     // Turn on/off profiling in a particular process.
     public boolean profileControl(String process, boolean start,
             String path, ParcelFileDescriptor fd) throws RemoteException;
-    
+
     public boolean shutdown(int timeout) throws RemoteException;
-    
+
     public void stopAppSwitches() throws RemoteException;
     public void resumeAppSwitches() throws RemoteException;
-    
+
     public void registerActivityWatcher(IActivityWatcher watcher)
             throws RemoteException;
     public void unregisterActivityWatcher(IActivityWatcher watcher)
@@ -297,24 +297,24 @@ public interface IActivityManager extends IInterface {
             throws RemoteException;
 
     public void killApplicationWithUid(String pkg, int uid) throws RemoteException;
-    
+
     public void closeSystemDialogs(String reason) throws RemoteException;
-    
+
     public Debug.MemoryInfo[] getProcessMemoryInfo(int[] pids)
             throws RemoteException;
-    
+
     public void overridePendingTransition(IBinder token, String packageName,
             int enterAnim, int exitAnim) throws RemoteException;
-    
+
     public boolean isUserAMonkey() throws RemoteException;
-    
+
     public void finishHeavyWeightApp() throws RemoteException;
 
     public void crashApplication(int uid, int initialPid, String packageName,
             String message) throws RemoteException;
 
     public String getProviderMimeType(Uri uri) throws RemoteException;
-    
+
     public IBinder newUriPermissionOwner(String name) throws RemoteException;
     public void grantUriPermissionFromOwner(IBinder owner, int fromUid, String targetPkg,
             Uri uri, int mode) throws RemoteException;
@@ -325,7 +325,7 @@ public interface IActivityManager extends IInterface {
      * Private non-Binder interfaces
      */
     /* package */ boolean testIsSystemReady();
-    
+
     /** Information you can retrieve about a particular application. */
     public static class ContentProviderHolder implements Parcelable {
         public final ProviderInfo info;
@@ -443,7 +443,7 @@ public interface IActivityManager extends IInterface {
     int REPORT_THUMBNAIL_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+27;
     int GET_CONTENT_PROVIDER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+28;
     int PUBLISH_CONTENT_PROVIDERS_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+29;
-    
+
     int FINISH_SUB_ACTIVITY_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+31;
     int GET_RUNNING_SERVICE_CONTROL_PANEL_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+32;
     int START_SERVICE_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+33;

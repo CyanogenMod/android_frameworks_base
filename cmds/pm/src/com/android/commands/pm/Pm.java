@@ -259,7 +259,7 @@ public final class Pm {
             for (int i=0; i<rawList.length; i++) {
                 list.add(rawList[i]);
             }
-                    
+
 
             // Sort by name
             Collections.sort(list, new Comparator<FeatureInfo>() {

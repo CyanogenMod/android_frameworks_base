@@ -123,7 +123,7 @@ public class TextKeyListener extends BaseKeyListener implements SpanWatcher {
     public int getInputType() {
         return makeTextContentType(mAutoCap, mAutoText);
     }
-    
+
     @Override
     public boolean onKeyDown(View view, Editable content,
                              int keyCode, KeyEvent event) {
@@ -201,7 +201,7 @@ public class TextKeyListener extends BaseKeyListener implements SpanWatcher {
         public int getInputType() {
             return InputType.TYPE_NULL;
         }
-        
+
         public boolean onKeyDown(View view, Editable content,
                                  int keyCode, KeyEvent event) {
             return false;
@@ -218,7 +218,7 @@ public class TextKeyListener extends BaseKeyListener implements SpanWatcher {
 
         public void clearMetaKeyState(View view, Editable content, int states) {
         }
-        
+
         public static NullKeyListener getInstance() {
             if (sInstance != null)
                 return sInstance;

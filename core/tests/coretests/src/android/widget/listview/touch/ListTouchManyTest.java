@@ -50,35 +50,35 @@ public class ListTouchManyTest extends ActivityInstrumentationTestCase<ListTopGr
     public void testPreconditions() {
         assertNotNull(mActivity);
         assertNotNull(mListView);
-        
+
         // First item should be selected
         assertEquals(0, mListView.getSelectedItemPosition());
     }
-    
+
     @MediumTest
     public void testPullDown() {
         TouchUtils.scrollToTop(this, mListView);
-        
+
         // Nothing should be selected
-        assertEquals("Selection still available after touch", -1, 
+        assertEquals("Selection still available after touch", -1,
                 mListView.getSelectedItemPosition());
-        
+
         View firstChild = mListView.getChildAt(0);
-        
+
         assertEquals("Item zero not the first child in the list", 0, firstChild.getId());
-        
+
         assertEquals("Item zero not at the top of the list", mListView.getListPaddingTop(),
                 firstChild.getTop());
     }
-    
+
     @LargeTest
     public void testPushUp() {
         int originalCount = mListView.getChildCount();
-        
+
         TouchUtils.scrollToBottom(this, mListView);
 
         // Nothing should be selected
-        assertEquals("Selection still available after touch", -1, 
+        assertEquals("Selection still available after touch", -1,
                 mListView.getSelectedItemPosition());
 
         View lastChild = mListView.getChildAt(mListView.getChildCount() - 1);
@@ -86,11 +86,11 @@ public class ListTouchManyTest extends ActivityInstrumentationTestCase<ListTopGr
         assertEquals("List is not scrolled to the bottom", mListView.getAdapter().getCount() - 1,
                 lastChild.getId());
 
-        assertEquals("Last item is not touching the bottom edge",  
+        assertEquals("Last item is not touching the bottom edge",
                 mListView.getHeight() - mListView.getListPaddingBottom(), lastChild.getBottom());
-        
-        assertTrue(String.format("Too many children created: %d expected no more than %d", 
-                mListView.getChildCount(), originalCount + 1), 
+
+        assertTrue(String.format("Too many children created: %d expected no more than %d",
+                mListView.getChildCount(), originalCount + 1),
                 mListView.getChildCount() <= originalCount + 1);
     }
 
@@ -100,17 +100,17 @@ public class ListTouchManyTest extends ActivityInstrumentationTestCase<ListTopGr
         int count = mListView.getChildCount();
         mActivity.setClickedPosition(-1);
         mActivity.setLongClickedPosition(-1);
-        
+
         for (i = 0; i < count; i++) {
             View child = mListView.getChildAt(i);
             if ((child.getTop() >= mListView.getListPaddingTop())
-                    && (child.getBottom() <= 
+                    && (child.getBottom() <=
                         mListView.getHeight() - mListView.getListPaddingBottom())) {
                 TouchUtils.clickView(this, child);
-                
-                assertEquals("Incorrect view position reported being clicked", i, 
+
+                assertEquals("Incorrect view position reported being clicked", i,
                         mActivity.getClickedPosition());
-                assertEquals("View falsely reported being long clicked", -1, 
+                assertEquals("View falsely reported being long clicked", -1,
                         mActivity.getLongClickedPosition());
                 try {
                     Thread.sleep((long)(ViewConfiguration.getLongPressTimeout() * 1.25f));
@@ -120,7 +120,7 @@ public class ListTouchManyTest extends ActivityInstrumentationTestCase<ListTopGr
             }
         }
     }
-    
+
     @LargeTest
     public void testLongPress() {
         int i;
@@ -128,67 +128,67 @@ public class ListTouchManyTest extends ActivityInstrumentationTestCase<ListTopGr
         mActivity.enableLongPress();
         mActivity.setClickedPosition(-1);
         mActivity.setLongClickedPosition(-1);
-        
+
         for (i = 0; i < count; i++) {
             View child = mListView.getChildAt(i);
             if ((child.getTop() >= mListView.getListPaddingTop())
-                    && (child.getBottom() <= 
+                    && (child.getBottom() <=
                         mListView.getHeight() - mListView.getListPaddingBottom())) {
                 TouchUtils.longClickView(this, child);
-                assertEquals("Incorrect view position reported being long clicked", i, 
+                assertEquals("Incorrect view position reported being long clicked", i,
                         mActivity.getLongClickedPosition());
-                assertEquals("View falsely reported being clicked", -1, 
+                assertEquals("View falsely reported being clicked", -1,
                         mActivity.getClickedPosition());
             }
         }
     }
-    
+
     @MediumTest
     public void testNoScroll() {
         View firstChild = mListView.getChildAt(0);
         View lastChild = mListView.getChildAt(mListView.getChildCount() - 1);
-        
+
         int firstTop = firstChild.getTop();
-        
-        TouchUtils.dragViewBy(this, lastChild, Gravity.TOP | Gravity.LEFT, 
+
+        TouchUtils.dragViewBy(this, lastChild, Gravity.TOP | Gravity.LEFT,
                 0, -(ViewConfiguration.getTouchSlop()));
-        
+
         View newFirstChild = mListView.getChildAt(0);
-        
+
         assertEquals("View scrolled too early", firstTop, newFirstChild.getTop());
         assertEquals("Wrong view in first position", 0, newFirstChild.getId());
     }
-    
+
     // TODO: needs to be adjusted to pass on non-HVGA displays
     // @LargeTest
     public void testShortScroll() {
         View firstChild = mListView.getChildAt(0);
         View lastChild = mListView.getChildAt(mListView.getChildCount() - 1);
-        
+
         int firstTop = firstChild.getTop();
-        
+
         TouchUtils.dragViewBy(this, lastChild, Gravity.TOP | Gravity.LEFT,
                 0, -(ViewConfiguration.getTouchSlop() + 1 + 10));
-        
+
         View newFirstChild = mListView.getChildAt(0);
-        
+
         assertEquals("View scrolled too early", firstTop, newFirstChild.getTop() + 10);
         assertEquals("Wrong view in first position", 0, newFirstChild.getId());
     }
-    
+
     // TODO: needs to be adjusted to pass on non-HVGA displays
     // @LargeTest
     public void testLongScroll() {
         View lastChild = mListView.getChildAt(mListView.getChildCount() - 1);
-        
-        int lastTop = lastChild.getTop();
-        
-        int distance = TouchUtils.dragViewToY(this, lastChild, 
-                Gravity.TOP | Gravity.LEFT, mListView.getTop());
-        
-        assertEquals("View scrolled to wrong position", 
-                lastTop - (distance - ViewConfiguration.getTouchSlop() - 1), lastChild.getTop());
-    } 
 
-    
+        int lastTop = lastChild.getTop();
+
+        int distance = TouchUtils.dragViewToY(this, lastChild,
+                Gravity.TOP | Gravity.LEFT, mListView.getTop());
+
+        assertEquals("View scrolled to wrong position",
+                lastTop - (distance - ViewConfiguration.getTouchSlop() - 1), lastChild.getTop());
+    }
+
+
 }

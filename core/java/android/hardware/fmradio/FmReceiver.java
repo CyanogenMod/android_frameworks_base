@@ -842,7 +842,7 @@ public class FmReceiver extends FmTransceiver
       {
          if ( (mode == FM_RX_SRCHLIST_MODE_STRONGEST) || (mode == FM_RX_SRCHLIST_MODE_WEAKEST) )
            re = mControl.searchStationList(sFd, mode, 0, direction, pty);
-	 else
+         else
            re = mControl.searchStationList(sFd, mode, maximumStations, direction, pty);
       }
 

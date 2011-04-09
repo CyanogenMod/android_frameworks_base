@@ -82,7 +82,7 @@ public class GridTouchStackFromBottomTest extends ActivityInstrumentationTestCas
         assertEquals("Last item not at the bottom of the grid",
                 mGridView.getHeight() - mGridView.getListPaddingBottom(), lastChild.getBottom());
     }
-    
+
     @MediumTest
     public void testPushUpFast() {
         TouchUtils.dragViewToTop(this, mGridView.getChildAt(mGridView.getChildCount() - 1), 2);

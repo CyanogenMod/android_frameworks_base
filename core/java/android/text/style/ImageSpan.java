@@ -65,7 +65,7 @@ public class ImageSpan extends DynamicDrawableSpan {
                 : new BitmapDrawable(b);
         int width = mDrawable.getIntrinsicWidth();
         int height = mDrawable.getIntrinsicHeight();
-        mDrawable.setBounds(0, 0, width > 0 ? width : 0, height > 0 ? height : 0); 
+        mDrawable.setBounds(0, 0, width > 0 ? width : 0, height > 0 ? height : 0);
     }
 
     public ImageSpan(Drawable d) {
@@ -127,7 +127,7 @@ public class ImageSpan extends DynamicDrawableSpan {
     @Override
     public Drawable getDrawable() {
         Drawable drawable = null;
-        
+
         if (mDrawable != null) {
             drawable = mDrawable;
         } else  if (mContentUri != null) {
@@ -150,7 +150,7 @@ public class ImageSpan extends DynamicDrawableSpan {
                         drawable.getIntrinsicHeight());
             } catch (Exception e) {
                 Log.e("sms", "Unable to find resource: " + mResourceId);
-            }                
+            }
         }
 
         return drawable;

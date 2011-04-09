@@ -151,21 +151,21 @@ public abstract class PackageManager {
      * {@link PackageInfo#permissions}.
      */
     public static final int GET_PERMISSIONS               = 0x00001000;
-    
+
     /**
      * Flag parameter to retrieve all applications(even uninstalled ones) with data directories.
-     * This state could have resulted if applications have been deleted with flag 
+     * This state could have resulted if applications have been deleted with flag
      * DONT_DELETE_DATA
      * with a possibility of being replaced or reinstalled in future
      */
     public static final int GET_UNINSTALLED_PACKAGES = 0x00002000;
-    
+
     /**
      * {@link PackageInfo} flag: return information about
      * hardware preferences in
      * {@link PackageInfo#configPreferences PackageInfo.configPreferences} and
      * requested features in {@link PackageInfo#reqFeatures
-     * PackageInfo.reqFeatures}. 
+     * PackageInfo.reqFeatures}.
      */
     public static final int GET_CONFIGURATIONS = 0x00004000;
 
@@ -245,7 +245,7 @@ public abstract class PackageManager {
     public static final int INSTALL_REPLACE_EXISTING = 0x00000002;
 
     /**
-     * Flag parameter for {@link #installPackage} to indicate that you want to 
+     * Flag parameter for {@link #installPackage} to indicate that you want to
      * allow test packages (those that have set android:testOnly in their
      * manifest) to be installed.
      * @hide
@@ -613,7 +613,7 @@ public abstract class PackageManager {
      * {@link #movePackage(android.net.Uri, IPackageMoveObserver)} if the
      * specified package already has an operation pending in the
      * {@link PackageHandler} queue.
-     * 
+     *
      * @hide
      */
     public static final int MOVE_FAILED_OPERATION_PENDING = -7;
@@ -761,7 +761,7 @@ public abstract class PackageManager {
      */
     @SdkConstant(SdkConstantType.FEATURE)
     public static final String FEATURE_SENSOR_PROXIMITY = "android.hardware.sensor.proximity";
-    
+
     /**
      * Feature for {@link #getSystemAvailableFeatures} and
      * {@link #hasSystemFeature}: The device has a telephony radio with data
@@ -769,14 +769,14 @@ public abstract class PackageManager {
      */
     @SdkConstant(SdkConstantType.FEATURE)
     public static final String FEATURE_TELEPHONY = "android.hardware.telephony";
-    
+
     /**
      * Feature for {@link #getSystemAvailableFeatures} and
      * {@link #hasSystemFeature}: The device has a CDMA telephony stack.
      */
     @SdkConstant(SdkConstantType.FEATURE)
     public static final String FEATURE_TELEPHONY_CDMA = "android.hardware.telephony.cdma";
-    
+
     /**
      * Feature for {@link #getSystemAvailableFeatures} and
      * {@link #hasSystemFeature}: The device has a GSM telephony stack.
@@ -804,8 +804,8 @@ public abstract class PackageManager {
      */
     @SdkConstant(SdkConstantType.FEATURE)
     public static final String FEATURE_TOUCHSCREEN = "android.hardware.touchscreen";
-    
-    
+
+
     /**
      * Feature for {@link #getSystemAvailableFeatures} and
      * {@link #hasSystemFeature}: The device's touch screen supports
@@ -813,7 +813,7 @@ public abstract class PackageManager {
      */
     @SdkConstant(SdkConstantType.FEATURE)
     public static final String FEATURE_TOUCHSCREEN_MULTITOUCH = "android.hardware.touchscreen.multitouch";
-    
+
     /**
      * Feature for {@link #getSystemAvailableFeatures} and
      * {@link #hasSystemFeature}: The device's touch screen is capable of
@@ -877,11 +877,11 @@ public abstract class PackageManager {
      * @return Returns a PackageInfo object containing information about the package.
      *         If flag GET_UNINSTALLED_PACKAGES is set and  if the package is not
      *         found in the list of installed applications, the package information is
-     *         retrieved from the list of uninstalled applications(which includes 
+     *         retrieved from the list of uninstalled applications(which includes
      *         installed applications as well as applications
      *         with data directory ie applications which had been
      *         deleted with DONT_DELTE_DATA flag set).
-     *         
+     *
      * @see #GET_ACTIVITIES
      * @see #GET_GIDS
      * @see #GET_CONFIGURATIONS
@@ -892,7 +892,7 @@ public abstract class PackageManager {
      * @see #GET_SERVICES
      * @see #GET_SIGNATURES
      * @see #GET_UNINSTALLED_PACKAGES
-     *                  
+     *
      */
     public abstract PackageInfo getPackageInfo(String packageName, int flags)
             throws NameNotFoundException;
@@ -905,7 +905,7 @@ public abstract class PackageManager {
      * the canonical name for each package.
      */
     public abstract String[] currentToCanonicalPackageNames(String[] names);
-    
+
     /**
      * Map from a packages canonical name to the current name in use on the device.
      * @param names Array of new names to be mapped.
@@ -913,7 +913,7 @@ public abstract class PackageManager {
      * the current name for each package.
      */
     public abstract String[] canonicalToCurrentPackageNames(String[] names);
-    
+
     /**
      * Return a "good" intent to launch a front-door activity in a package,
      * for use for example to implement an "open" button when browsing through
@@ -921,12 +921,12 @@ public abstract class PackageManager {
      * activity in the category {@link Intent#CATEGORY_INFO}, next for a
      * main activity in the category {@link Intent#CATEGORY_LAUNCHER}, or return
      * null if neither are found.
-     * 
+     *
      * <p>Throws {@link NameNotFoundException} if a package with the given
      * name can not be found on the system.
      *
      * @param packageName The name of the package to inspect.
-     * 
+     *
      * @return Returns either a fully-qualified Intent that can be used to
      * launch the main activity in the package, or null if the package does
      * not contain such an activity.
@@ -1022,16 +1022,16 @@ public abstract class PackageManager {
      *
      * @param packageName The full name (i.e. com.google.apps.contacts) of an
      *                    application.
-     * @param flags Additional option flags. Use any combination of 
+     * @param flags Additional option flags. Use any combination of
      * {@link #GET_META_DATA}, {@link #GET_SHARED_LIBRARY_FILES},
      * {@link #GET_UNINSTALLED_PACKAGES} to modify the data returned.
      *
-     * @return  {@link ApplicationInfo} Returns ApplicationInfo object containing 
+     * @return  {@link ApplicationInfo} Returns ApplicationInfo object containing
      *         information about the package.
      *         If flag GET_UNINSTALLED_PACKAGES is set and  if the package is not
-     *         found in the list of installed applications, 
-     *         the application information is retrieved from the 
-     *         list of uninstalled applications(which includes 
+     *         found in the list of installed applications,
+     *         the application information is retrieved from the
+     *         list of uninstalled applications(which includes
      *         installed applications as well as applications
      *         with data directory ie applications which had been
      *         deleted with DONT_DELTE_DATA flag set).
@@ -1053,7 +1053,7 @@ public abstract class PackageManager {
      * @param component The full component name (i.e.
      * com.google.apps.contacts/com.google.apps.contacts.ContactsList) of an Activity
      * class.
-     * @param flags Additional option flags. Use any combination of 
+     * @param flags Additional option flags. Use any combination of
      * {@link #GET_META_DATA}, {@link #GET_SHARED_LIBRARY_FILES},
      * to modify the data (in ApplicationInfo) returned.
      *
@@ -1076,7 +1076,7 @@ public abstract class PackageManager {
      * @param component The full component name (i.e.
      * com.google.apps.calendar/com.google.apps.calendar.CalendarAlarm) of a Receiver
      * class.
-     * @param flags Additional option flags.  Use any combination of 
+     * @param flags Additional option flags.  Use any combination of
      * {@link #GET_META_DATA}, {@link #GET_SHARED_LIBRARY_FILES},
      * to modify the data returned.
      *
@@ -1099,12 +1099,12 @@ public abstract class PackageManager {
      * @param component The full component name (i.e.
      * com.google.apps.media/com.google.apps.media.BackgroundPlayback) of a Service
      * class.
-     * @param flags Additional option flags.  Use any combination of 
+     * @param flags Additional option flags.  Use any combination of
      * {@link #GET_META_DATA}, {@link #GET_SHARED_LIBRARY_FILES},
      * to modify the data returned.
      *
      * @return ServiceInfo containing information about the service.
-     * 
+     *
      * @see #GET_META_DATA
      * @see #GET_SHARED_LIBRARY_FILES
      */
@@ -1151,7 +1151,7 @@ public abstract class PackageManager {
      *
      * @return A List of PackageInfo objects, one for each package that is
      *         installed on the device.  In the unlikely case of there being no
-     *         installed packages, an empty list is returned. 
+     *         installed packages, an empty list is returned.
      *         If flag GET_UNINSTALLED_PACKAGES is set, a list of all
      *         applications including those deleted with DONT_DELETE_DATA
      *         (partially installed apps with data directory) will be returned.
@@ -1166,7 +1166,7 @@ public abstract class PackageManager {
      * @see #GET_SERVICES
      * @see #GET_SIGNATURES
      * @see #GET_UNINSTALLED_PACKAGES
-     * 
+     *
      */
     public abstract List<PackageInfo> getInstalledPackages(int flags);
 
@@ -1239,7 +1239,7 @@ public abstract class PackageManager {
      * the device is rebooted before it is written.
      */
     public abstract boolean addPermissionAsync(PermissionInfo info);
-    
+
     /**
      * Removes a permission that was previously added with
      * {@link #addPermission(PermissionInfo)}.  The same ownership rules apply
@@ -1326,7 +1326,7 @@ public abstract class PackageManager {
      * user id is not currently assigned.
      */
     public abstract String getNameForUid(int uid);
-    
+
     /**
      * Return the user id associated with a shared user name. Multiple
      * applications can specify a shared user name in their manifest and thus
@@ -1347,38 +1347,38 @@ public abstract class PackageManager {
      * device. If flag GET_UNINSTALLED_PACKAGES has been set, a list of all
      * applications including those deleted with DONT_DELETE_DATA(partially
      * installed apps with data directory) will be returned.
-     * 
-     * @param flags Additional option flags. Use any combination of 
+     *
+     * @param flags Additional option flags. Use any combination of
      * {@link #GET_META_DATA}, {@link #GET_SHARED_LIBRARY_FILES},
      * {link #GET_UNINSTALLED_PACKAGES} to modify the data returned.
      *
      * @return A List of ApplicationInfo objects, one for each application that
      *         is installed on the device.  In the unlikely case of there being
-     *         no installed applications, an empty list is returned. 
+     *         no installed applications, an empty list is returned.
      *         If flag GET_UNINSTALLED_PACKAGES is set, a list of all
      *         applications including those deleted with DONT_DELETE_DATA
      *         (partially installed apps with data directory) will be returned.
-     *         
+     *
      * @see #GET_META_DATA
      * @see #GET_SHARED_LIBRARY_FILES
      * @see #GET_UNINSTALLED_PACKAGES
      */
     public abstract List<ApplicationInfo> getInstalledApplications(int flags);
-    
+
     /**
      * Get a list of shared libraries that are available on the
      * system.
-     * 
+     *
      * @return An array of shared library names that are
      * available on the system, or null if none are installed.
-     * 
+     *
      */
     public abstract String[] getSystemSharedLibraryNames();
 
     /**
      * Get a list of features that are available on the
      * system.
-     * 
+     *
      * @return An array of FeatureInfo classes describing the features
      * that are available on the system, or null if there are none(!!).
      */
@@ -1387,7 +1387,7 @@ public abstract class PackageManager {
     /**
      * Check whether the given feature name is one of the available
      * features as returned by {@link #getSystemAvailableFeatures()}.
-     * 
+     *
      * @return Returns true if the devices supports the feature, else
      * false.
      */
@@ -1404,7 +1404,7 @@ public abstract class PackageManager {
      * that {@link android.content.Context#startActivity(Intent)} and
      * {@link android.content.Intent#resolveActivity(PackageManager)
      * Intent.resolveActivity(PackageManager)} do.</p>
-     * 
+     *
      * @param intent An intent containing all of the desired specification
      *               (action, data, type, category, and/or component).
      * @param flags Additional option flags.  The most important is
@@ -1703,7 +1703,7 @@ public abstract class PackageManager {
      *
      * @return Returns the image of the logo or null if the activity has no
      * logo specified.
-     * 
+     *
      * @throws NameNotFoundException Thrown if the resources for the given
      * activity could not be loaded.
      *
@@ -1724,7 +1724,7 @@ public abstract class PackageManager {
      *
      * @return Returns the image of the logo, or null if the activity has no
      * logo specified.
-     * 
+     *
      * @throws NameNotFoundException Thrown if the resources for application
      * matching the given intent could not be loaded.
      *
@@ -1757,7 +1757,7 @@ public abstract class PackageManager {
      *
      * @return Returns the image of the logo, or null if no application logo
      * has been specified.
-     * 
+     *
      * @throws NameNotFoundException Thrown if the resources for the given
      * application could not be loaded.
      *
@@ -1891,7 +1891,7 @@ public abstract class PackageManager {
      * @see #GET_RECEIVERS
      * @see #GET_SERVICES
      * @see #GET_SIGNATURES
-     * 
+     *
      */
     public PackageInfo getPackageArchiveInfo(String archiveFilePath, int flags) {
         PackageParser packageParser = new PackageParser(archiveFilePath);
@@ -1908,7 +1908,7 @@ public abstract class PackageManager {
 
     /**
      * @hide
-     * 
+     *
      * Install a package. Since this may take a little while, the result will
      * be posted back to the given observer.  An installation will fail if the calling context
      * lacks the {@link android.Manifest.permission#INSTALL_PACKAGES} permission, if the
@@ -1950,11 +1950,11 @@ public abstract class PackageManager {
     /**
      * Retrieve the package name of the application that installed a package. This identifies
      * which market the package came from.
-     * 
+     *
      * @param packageName The name of the package to query
      */
     public abstract String getInstallerPackageName(String packageName);
-    
+
     /**
      * Attempts to clear the user data directory of an application.
      * Since this may take a little while, the result will
@@ -2009,7 +2009,7 @@ public abstract class PackageManager {
      * of bytes if possible.
      * @param observer call back used to notify when
      * the operation is completed
-     * 
+     *
      * @hide
      */
     public abstract void freeStorageAndNotify(long freeStorageSize, IPackageDataObserver observer);
@@ -2034,7 +2034,7 @@ public abstract class PackageManager {
      * @param pi IntentSender call back used to
      * notify when the operation is completed.May be null
      * to indicate that no call back is desired.
-     * 
+     *
      * @hide
      */
     public abstract void freeStorage(long freeStorageSize, IntentSender pi);
@@ -2110,7 +2110,7 @@ public abstract class PackageManager {
      * @deprecated This is a protected API that should not have been available
      * to third party applications.  It is the platform's responsibility for
      * assigning preferred activities and this can not be directly modified.
-     * 
+     *
      * Add a new preferred activity mapping to the system.  This will be used
      * to automatically select the given activity component when
      * {@link Context#startActivity(Intent) Context.startActivity()} finds
@@ -2133,7 +2133,7 @@ public abstract class PackageManager {
      * @deprecated This is a protected API that should not have been available
      * to third party applications.  It is the platform's responsibility for
      * assigning preferred activities and this can not be directly modified.
-     * 
+     *
      * Replaces an existing preferred activity mapping to the system, and if that were not present
      * adds a new preferred activity.  This will be used
      * to automatically select the given activity component when
@@ -2242,7 +2242,7 @@ public abstract class PackageManager {
      */
     public abstract void setApplicationEnabledSetting(String packageName,
             int newState, int flags);
-    
+
     /**
      * Return the the enabled setting for an application.  This returns
      * the last value set by

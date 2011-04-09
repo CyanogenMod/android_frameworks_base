@@ -23,7 +23,7 @@ import java.util.Set;
  * Basic implementation parsing vCard 4.0.
  * </p>
  * <p>
- * vCard 4.0 is not published yet. Also this implementation is premature. 
+ * vCard 4.0 is not published yet. Also this implementation is premature.
  * </p>
  * @hide
  */

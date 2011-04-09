@@ -1,4 +1,4 @@
-/* 
+/*
  * Copyright (C) 2008 Google Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,7 @@ import android.widget.TextView;
  * the text to the available space.
  */
 public class DialogTitle extends TextView {
-    
+
     public DialogTitle(Context context, AttributeSet attrs,
             int defStyle) {
         super(context, attrs, defStyle);
@@ -41,7 +41,7 @@ public class DialogTitle extends TextView {
     public DialogTitle(Context context) {
         super(context);
     }
-    
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -53,7 +53,7 @@ public class DialogTitle extends TextView {
                 final int ellipsisCount = layout.getEllipsisCount(lineCount - 1);
                 if (ellipsisCount > 0) {
                     setSingleLine(false);
-                    
+
                     TypedArray a = mContext.obtainStyledAttributes(
                             android.R.style.TextAppearance_Medium,
                             android.R.styleable.TextAppearance);
@@ -64,7 +64,7 @@ public class DialogTitle extends TextView {
                     // textSize is already expressed in pixels
                     setTextSize(TypedValue.COMPLEX_UNIT_PX, textSize);
                     setMaxLines(2);
-                    super.onMeasure(widthMeasureSpec, heightMeasureSpec);      
+                    super.onMeasure(widthMeasureSpec, heightMeasureSpec);
                 }
             }
         }

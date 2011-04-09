@@ -113,7 +113,7 @@ public final class ViewTreeObserver {
 
     /**
      * Parameters used with OnComputeInternalInsetsListener.
-     * 
+     *
      * We are not yet ready to commit to this API and support it, so
      * @hide
      */
@@ -123,46 +123,46 @@ public final class ViewTreeObserver {
          * windows behind it should be placed.
          */
         public final Rect contentInsets = new Rect();
-        
+
         /**
          * Offsets from the fram of the window at which windows behind it
          * are visible.
          */
         public final Rect visibleInsets = new Rect();
-        
+
         /**
          * Option for {@link #setTouchableInsets(int)}: the entire window frame
          * can be touched.
          */
         public static final int TOUCHABLE_INSETS_FRAME = 0;
-        
+
         /**
          * Option for {@link #setTouchableInsets(int)}: the area inside of
          * the content insets can be touched.
          */
         public static final int TOUCHABLE_INSETS_CONTENT = 1;
-        
+
         /**
          * Option for {@link #setTouchableInsets(int)}: the area inside of
          * the visible insets can be touched.
          */
         public static final int TOUCHABLE_INSETS_VISIBLE = 2;
-        
+
         /**
          * Set which parts of the window can be touched: either
          * {@link #TOUCHABLE_INSETS_FRAME}, {@link #TOUCHABLE_INSETS_CONTENT},
-         * or {@link #TOUCHABLE_INSETS_VISIBLE}. 
+         * or {@link #TOUCHABLE_INSETS_VISIBLE}.
          */
         public void setTouchableInsets(int val) {
             mTouchableInsets = val;
         }
-        
+
         public int getTouchableInsets() {
             return mTouchableInsets;
         }
-        
+
         int mTouchableInsets;
-        
+
         void reset() {
             final Rect givenContent = contentInsets;
             final Rect givenVisible = visibleInsets;
@@ -171,7 +171,7 @@ public final class ViewTreeObserver {
                     = givenVisible.right = givenVisible.bottom = 0;
             mTouchableInsets = TOUCHABLE_INSETS_FRAME;
         }
-        
+
         @Override public boolean equals(Object o) {
             try {
                 if (o == null) {
@@ -189,18 +189,18 @@ public final class ViewTreeObserver {
                 return false;
             }
         }
-        
+
         void set(InternalInsetsInfo other) {
             contentInsets.set(other.contentInsets);
             visibleInsets.set(other.visibleInsets);
             mTouchableInsets = other.mTouchableInsets;
         }
     }
-    
+
     /**
      * Interface definition for a callback to be invoked when layout has
      * completed and the client can compute its interior insets.
-     * 
+     *
      * We are not yet ready to commit to this API and support it, so
      * @hide
      */
@@ -452,7 +452,7 @@ public final class ViewTreeObserver {
      * @param listener The callback to add
      *
      * @throws IllegalStateException If {@link #isAlive()} returns false
-     * 
+     *
      * We are not yet ready to commit to this API and support it, so
      * @hide
      */
@@ -475,7 +475,7 @@ public final class ViewTreeObserver {
      * @throws IllegalStateException If {@link #isAlive()} returns false
      *
      * @see #addOnComputeInternalInsetsListener(OnComputeInternalInsetsListener)
-     * 
+     *
      * We are not yet ready to commit to this API and support it, so
      * @hide
      */
@@ -617,7 +617,7 @@ public final class ViewTreeObserver {
                 mOnComputeInternalInsetsListeners;
         return (listeners != null && listeners.size() > 0);
     }
-    
+
     /**
      * Calls all listeners to compute the current insets.
      */

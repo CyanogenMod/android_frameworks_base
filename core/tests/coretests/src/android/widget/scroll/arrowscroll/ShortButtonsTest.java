@@ -66,7 +66,7 @@ public class ShortButtonsTest extends ActivityInstrumentationTestCase<ShortButto
 
         assertEquals("should be fully scrolled to bottom",
                 getActivity().getLinearLayout().getHeight() - mScrollView.getHeight(),
-                mScrollView.getScrollY());        
+                mScrollView.getScrollY());
     }
 
     @LargeTest
@@ -95,7 +95,7 @@ public class ShortButtonsTest extends ActivityInstrumentationTestCase<ShortButto
 
         assertEquals("should be fully scrolled to top",
                 0,
-                mScrollView.getScrollY());        
+                mScrollView.getScrollY());
     }
 
     private Rect mTempRect = new Rect();

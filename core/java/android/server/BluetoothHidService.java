@@ -91,17 +91,17 @@ public class BluetoothHidService extends IBluetoothHid.Stub {
                     break;
                 }
             } else if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
-		synchronized (this) {
+                synchronized (this) {
                     if (mHidDevices.containsKey(device)) {
-			int state = mHidDevices.get(device);
-			handleHIDStateChange(device, state, BluetoothHid.STATE_CONNECTED);
+                        int state = mHidDevices.get(device);
+                        handleHIDStateChange(device, state, BluetoothHid.STATE_CONNECTED);
                     }
                 }
             } else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
                 synchronized (this) {
                     if (mHidDevices.containsKey(device)) {
-			int state = mHidDevices.get(device);
-			handleHIDStateChange(device, state, BluetoothHid.STATE_DISCONNECTED);
+                        int state = mHidDevices.get(device);
+                        handleHIDStateChange(device, state, BluetoothHid.STATE_DISCONNECTED);
                     }
                 }
             }
@@ -121,7 +121,7 @@ public class BluetoothHidService extends IBluetoothHid.Stub {
             throw new RuntimeException("Could not init BluetoothHidService");
         }
 
-	mAdapter = BluetoothAdapter.getDefaultAdapter();
+        mAdapter = BluetoothAdapter.getDefaultAdapter();
         mIntentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
         mIntentFilter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
         mIntentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
@@ -164,10 +164,10 @@ public class BluetoothHidService extends IBluetoothHid.Stub {
         Integer state = null;
         String name = propValues[0];
         if (name.equals("Connected")) {
-	    state =  BluetoothHid.STATE_DISCONNECTED;
-	    if (propValues[1].equals("true"))
-		state = BluetoothHid.STATE_CONNECTED;
-	}
+            state =  BluetoothHid.STATE_DISCONNECTED;
+            if (propValues[1].equals("true"))
+                state = BluetoothHid.STATE_CONNECTED;
+        }
         mHidDevices.put(device, state);
         handleHIDStateChange(device, BluetoothHid.STATE_DISCONNECTED, state);
         return true;
@@ -175,7 +175,7 @@ public class BluetoothHidService extends IBluetoothHid.Stub {
 
 
     private synchronized void onBluetoothEnable() {
-	String devices = mBluetoothService.getProperty("Devices");
+        String devices = mBluetoothService.getProperty("Devices");
 
         if (devices != null) {
             String [] paths = devices.split(",");
@@ -189,7 +189,7 @@ public class BluetoothHidService extends IBluetoothHid.Stub {
                         addHidDevice(device);
                     }
                 }
-	}
+        }
     }
 
     private synchronized void onBluetoothDisable() {
@@ -300,8 +300,8 @@ public class BluetoothHidService extends IBluetoothHid.Stub {
         mContext.enforceCallingOrSelfPermission(BLUETOOTH_PERM, "Need BLUETOOTH permission");
         Integer state = mHidDevices.get(device);
         if (state == null){
-	    return BluetoothHid.STATE_DISCONNECTED;
-	}
+            return BluetoothHid.STATE_DISCONNECTED;
+        }
         return state;
     }
 
@@ -342,10 +342,10 @@ public class BluetoothHidService extends IBluetoothHid.Stub {
         if (DBG) log("HID Device property changed: " + address + " property: " + name);
 
         if (name.equals("Connected")) {
-	    int state =  BluetoothHid.STATE_DISCONNECTED;
-	    if (propValues[1].equals("true")) {
-		state = BluetoothHid.STATE_CONNECTED;
-	    }
+            int state =  BluetoothHid.STATE_DISCONNECTED;
+            if (propValues[1].equals("true")) {
+                state = BluetoothHid.STATE_CONNECTED;
+            }
             if (mHidDevices.get(device) == null) {
                 // This is for an incoming connection for a device not known to us.
                 // We have authorized it and bluez state has changed.
@@ -360,12 +360,12 @@ public class BluetoothHidService extends IBluetoothHid.Stub {
 
     private void handleHIDStateChange(BluetoothDevice device, int prevState, int state) {
 
-	if(DBG) log("HID device: " + device + " State:" + prevState + "->" + state);
+        if(DBG) log("HID device: " + device + " State:" + prevState + "->" + state);
 
-	if (state != prevState) {
-	    mHidDevices.put(device, state);
+        if (state != prevState) {
+            mHidDevices.put(device, state);
 
-	    if (getHidDevicePriority(device) > BluetoothHid.PRIORITY_OFF &&
+            if (getHidDevicePriority(device) > BluetoothHid.PRIORITY_OFF &&
                     state == BluetoothHid.STATE_CONNECTING ||
                     state == BluetoothHid.STATE_CONNECTED) {
                 setHidDevicePriority(device, BluetoothHid.PRIORITY_AUTO_CONNECT);
@@ -410,10 +410,10 @@ public class BluetoothHidService extends IBluetoothHid.Stub {
 
         BluetoothDevice device = mAdapter.getRemoteDevice(address);
         if(DBG) log(" onHidDeviceConnected device = " + device);
-	if (mHidDevices.containsKey(device)) {
-	    int prevState = mHidDevices.get(device);
-	    handleHIDStateChange(device, prevState, BluetoothHid.STATE_CONNECTED);
-	}
+        if (mHidDevices.containsKey(device)) {
+            int prevState = mHidDevices.get(device);
+            handleHIDStateChange(device, prevState, BluetoothHid.STATE_CONNECTED);
+        }
 
     }
 
@@ -433,9 +433,9 @@ public class BluetoothHidService extends IBluetoothHid.Stub {
         BluetoothDevice device = mAdapter.getRemoteDevice(address);
         if(DBG) log(" onHidDeviceDisconnected device = " + device);
         if (mHidDevices.containsKey(device)) {
-	    int prevState = mHidDevices.get(device);
-	    handleHIDStateChange(device, prevState, BluetoothHid.STATE_DISCONNECTED);
-	}
+            int prevState = mHidDevices.get(device);
+            handleHIDStateChange(device, prevState, BluetoothHid.STATE_DISCONNECTED);
+        }
     }
 
     @Override

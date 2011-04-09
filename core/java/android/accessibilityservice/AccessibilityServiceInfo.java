@@ -77,7 +77,7 @@ public class AccessibilityServiceInfo implements Parcelable {
 
     /**
      * The package names an {@link AccessibilityService} is interested in. Setting
-     * to null is equivalent to all packages. 
+     * to null is equivalent to all packages.
      */
     public String[] packageNames;
 

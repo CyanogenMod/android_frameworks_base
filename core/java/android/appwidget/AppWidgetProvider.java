@@ -43,7 +43,7 @@ public class AppWidgetProvider extends BroadcastReceiver {
 
     /**
      * Implements {@link BroadcastReceiver#onReceive} to dispatch calls to the various
-     * other methods on AppWidgetProvider.  
+     * other methods on AppWidgetProvider.
      *
      * @param context The Context in which the receiver is running.
      * @param intent The Intent being received.
@@ -77,14 +77,14 @@ public class AppWidgetProvider extends BroadcastReceiver {
         }
     }
     // END_INCLUDE(onReceive)
-    
+
     /**
      * Called in response to the {@link AppWidgetManager#ACTION_APPWIDGET_UPDATE} broadcast when
      * this AppWidget provider is being asked to provide {@link android.widget.RemoteViews RemoteViews}
      * for a set of AppWidgets.  Override this method to implement your own AppWidget functionality.
      *
      * {@more}
-     * 
+     *
      * @param context   The {@link android.content.Context Context} in which this receiver is
      *                  running.
      * @param appWidgetManager A {@link AppWidgetManager} object you can call {@link
@@ -97,14 +97,14 @@ public class AppWidgetProvider extends BroadcastReceiver {
      */
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
     }
-    
+
     /**
      * Called in response to the {@link AppWidgetManager#ACTION_APPWIDGET_DELETED} broadcast when
      * one or more AppWidget instances have been deleted.  Override this method to implement
      * your own AppWidget functionality.
      *
      * {@more}
-     * 
+     *
      * @param context   The {@link android.content.Context Context} in which this receiver is
      *                  running.
      * @param appWidgetIds The appWidgetIds that have been deleted from their host.
@@ -139,7 +139,7 @@ public class AppWidgetProvider extends BroadcastReceiver {
      * to implement your own AppWidget functionality.
      *
      * {@more}
-     * 
+     *
      * @param context   The {@link android.content.Context Context} in which this receiver is
      *                  running.
      *

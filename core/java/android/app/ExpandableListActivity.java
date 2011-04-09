@@ -60,31 +60,31 @@ import java.util.Map;
  * The following code demonstrates an (ugly) custom screen layout. It has a list
  * with a green background, and an alternate red "no data" message.
  * </p>
- * 
+ *
  * <pre>
  * &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
  * &lt;LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
  *         android:orientation=&quot;vertical&quot;
- *         android:layout_width=&quot;match_parent&quot; 
+ *         android:layout_width=&quot;match_parent&quot;
  *         android:layout_height=&quot;match_parent&quot;
  *         android:paddingLeft=&quot;8dp&quot;
  *         android:paddingRight=&quot;8dp&quot;&gt;
- * 
+ *
  *     &lt;ExpandableListView android:id=&quot;@id/android:list&quot;
- *               android:layout_width=&quot;match_parent&quot; 
+ *               android:layout_width=&quot;match_parent&quot;
  *               android:layout_height=&quot;match_parent&quot;
  *               android:background=&quot;#00FF00&quot;
  *               android:layout_weight=&quot;1&quot;
  *               android:drawSelectorOnTop=&quot;false&quot;/&gt;
- * 
+ *
  *     &lt;TextView android:id=&quot;@id/android:empty&quot;
- *               android:layout_width=&quot;match_parent&quot; 
+ *               android:layout_width=&quot;match_parent&quot;
  *               android:layout_height=&quot;match_parent&quot;
  *               android:background=&quot;#FF0000&quot;
  *               android:text=&quot;No data&quot;/&gt;
  * &lt;/LinearLayout&gt;
  * </pre>
- * 
+ *
  * <p>
  * <strong>Row Layout</strong>
  * </p>
@@ -110,27 +110,27 @@ import java.util.Map;
  * source for the resource two_line_list_item, which displays two data
  * fields,one above the other, for each list row.
  * </p>
- * 
+ *
  * <pre>
  * &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
  * &lt;LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
  *     android:layout_width=&quot;match_parent&quot;
  *     android:layout_height=&quot;wrap_content&quot;
  *     android:orientation=&quot;vertical&quot;&gt;
- * 
+ *
  *     &lt;TextView android:id=&quot;@+id/text1&quot;
  *         android:textSize=&quot;16sp&quot;
  *         android:textStyle=&quot;bold&quot;
  *         android:layout_width=&quot;match_parent&quot;
  *         android:layout_height=&quot;wrap_content&quot;/&gt;
- * 
+ *
  *     &lt;TextView android:id=&quot;@+id/text2&quot;
  *         android:textSize=&quot;16sp&quot;
  *         android:layout_width=&quot;match_parent&quot;
  *         android:layout_height=&quot;wrap_content&quot;/&gt;
  * &lt;/LinearLayout&gt;
  * </pre>
- * 
+ *
  * <p>
  * You must identify the data bound to each TextView object in this layout. The
  * syntax for this is discussed in the next section.
@@ -148,14 +148,14 @@ import java.util.Map;
  * {@link android.widget.SimpleCursorTreeAdapter SimpleCursorTreeAdapter} for
  * Cursor query results.
  * </p>
- * 
+ *
  * @see #setListAdapter
  * @see android.widget.ExpandableListView
  */
 public class ExpandableListActivity extends Activity implements
         OnCreateContextMenuListener,
         ExpandableListView.OnChildClickListener, ExpandableListView.OnGroupCollapseListener,
-        ExpandableListView.OnGroupExpandListener {   
+        ExpandableListView.OnGroupExpandListener {
     ExpandableListAdapter mAdapter;
     ExpandableListView mList;
     boolean mFinishedStart = false;
@@ -198,7 +198,7 @@ public class ExpandableListActivity extends Activity implements
     /**
      * Ensures the expandable list view has been created before Activity restores all
      * of the view states.
-     * 
+     *
      *@see Activity#onRestoreInstanceState(Bundle)
      */
     @Override
@@ -210,7 +210,7 @@ public class ExpandableListActivity extends Activity implements
     /**
      * Updates the screen state (current list and other views) when the
      * content changes.
-     * 
+     *
      * @see Activity#onContentChanged()
      */
     @Override
@@ -229,7 +229,7 @@ public class ExpandableListActivity extends Activity implements
         mList.setOnChildClickListener(this);
         mList.setOnGroupExpandListener(this);
         mList.setOnGroupCollapseListener(this);
-        
+
         if (mFinishedStart) {
             setListAdapter(mAdapter);
         }
@@ -250,14 +250,14 @@ public class ExpandableListActivity extends Activity implements
     /**
      * Get the activity's expandable list view widget.  This can be used to get the selection,
      * set the selection, and many other useful functions.
-     * 
+     *
      * @see ExpandableListView
      */
     public ExpandableListView getExpandableListView() {
         ensureList();
         return mList;
     }
-    
+
     /**
      * Get the ExpandableListAdapter associated with this activity's
      * ExpandableListView.
@@ -275,7 +275,7 @@ public class ExpandableListActivity extends Activity implements
 
     /**
      * Gets the ID of the currently selected group or child.
-     * 
+     *
      * @return The ID of the currently selected group or child.
      */
     public long getSelectedId() {
@@ -289,7 +289,7 @@ public class ExpandableListActivity extends Activity implements
      * {@link ExpandableListView#getPackedPositionGroup}, and
      * {@link ExpandableListView#getPackedPositionChild} to unpack the returned
      * packed position.
-     * 
+     *
      * @return A packed position representation containing the currently
      *         selected group or child's position and type.
      */
@@ -301,7 +301,7 @@ public class ExpandableListActivity extends Activity implements
      * Sets the selection to the specified child. If the child is in a collapsed
      * group, the group will only be expanded and child subsequently selected if
      * shouldExpandGroup is set to true, otherwise the method will return false.
-     * 
+     *
      * @param groupPosition The position of the group that contains the child.
      * @param childPosition The position of the child within the group.
      * @param shouldExpandGroup Whether the child's group should be expanded if

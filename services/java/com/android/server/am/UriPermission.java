@@ -37,14 +37,14 @@ class UriPermission {
     int globalModeFlags = 0;
     final HashSet<UriPermissionOwner> readOwners = new HashSet<UriPermissionOwner>();
     final HashSet<UriPermissionOwner> writeOwners = new HashSet<UriPermissionOwner>();
-    
+
     String stringName;
-    
+
     UriPermission(int _uid, Uri _uri) {
         uid = _uid;
         uri = _uri;
     }
-    
+
     void clearModes(int modeFlagsToClear) {
         if ((modeFlagsToClear&Intent.FLAG_GRANT_READ_URI_PERMISSION) != 0) {
             globalModeFlags &= ~Intent.FLAG_GRANT_READ_URI_PERMISSION;
@@ -67,7 +67,7 @@ class UriPermission {
             }
         }
     }
-    
+
     public String toString() {
         if (stringName != null) {
             return stringName;
@@ -84,7 +84,7 @@ class UriPermission {
     void dump(PrintWriter pw, String prefix) {
         pw.print(prefix); pw.print("modeFlags=0x");
                 pw.print(Integer.toHexString(modeFlags));
-                pw.print(" uid="); pw.print(uid); 
+                pw.print(" uid="); pw.print(uid);
                 pw.print(" globalModeFlags=0x");
                 pw.println(Integer.toHexString(globalModeFlags));
         if (readOwners.size() != 0) {

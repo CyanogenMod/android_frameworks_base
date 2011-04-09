@@ -32,27 +32,27 @@ import java.util.ArrayList;
 
 public class PointerLocationView extends View {
     private static final String TAG = "Pointer";
-    
+
     public static class PointerState {
         // Trace of previous points.
         private float[] mTraceX = new float[32];
         private float[] mTraceY = new float[32];
         private int mTraceCount;
-        
+
         // True if the pointer is down.
         private boolean mCurDown;
-        
+
         // Most recent coordinates.
         private MotionEvent.PointerCoords mCoords = new MotionEvent.PointerCoords();
-        
+
         // Most recent velocity.
         private float mXVelocity;
         private float mYVelocity;
-        
+
         public void clearTrace() {
             mTraceCount = 0;
         }
-        
+
         public void addTrace(float x, float y) {
             int traceCapacity = mTraceX.length;
             if (mTraceCount == traceCapacity) {
@@ -60,12 +60,12 @@ public class PointerLocationView extends View {
                 float[] newTraceX = new float[traceCapacity];
                 System.arraycopy(mTraceX, 0, newTraceX, 0, mTraceCount);
                 mTraceX = newTraceX;
-                
+
                 float[] newTraceY = new float[traceCapacity];
                 System.arraycopy(mTraceY, 0, newTraceY, 0, mTraceCount);
                 mTraceY = newTraceY;
             }
-            
+
             mTraceX[mTraceCount] = x;
             mTraceY[mTraceCount] = y;
             mTraceCount += 1;
@@ -86,13 +86,13 @@ public class PointerLocationView extends View {
     private int mMaxNumPointers;
     private int mActivePointerId;
     private final ArrayList<PointerState> mPointers = new ArrayList<PointerState>();
-    
+
     private final VelocityTracker mVelocity;
-    
+
     private final FasterStringBuilder mText = new FasterStringBuilder();
-    
+
     private boolean mPrintCoords = true;
-    
+
     public PointerLocationView(Context c) {
         super(c);
         setFocusable(true);
@@ -121,16 +121,16 @@ public class PointerLocationView extends View {
         mPathPaint.setARGB(255, 0, 96, 255);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setStrokeWidth(1);
-        
+
         PointerState ps = new PointerState();
         mPointers.add(ps);
         mActivePointerId = 0;
-        
+
         mVelocity = VelocityTracker.obtain();
-        
+
         logInputDeviceCapabilities();
     }
-    
+
     private void logInputDeviceCapabilities() {
         int[] deviceIds = InputDevice.getDeviceIds();
         for (int i = 0; i < deviceIds.length; i++) {
@@ -144,7 +144,7 @@ public class PointerLocationView extends View {
     public void setPrintCoords(boolean state) {
         mPrintCoords = state;
     }
-    
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -158,7 +158,7 @@ public class PointerLocationView extends View {
                     + " bottom=" + mTextMetrics.bottom);
         }
     }
-    
+
     // Draw an oval.  When angle is 0 radians, orients the major axis vertically,
     // angles less than or greater than 0 radians rotate the major axis left or right.
     private RectF mReusableOvalRect = new RectF();
@@ -181,13 +181,13 @@ public class PointerLocationView extends View {
             final int itemW = w/7;
             final int base = -mTextMetrics.ascent+1;
             final int bottom = mHeaderBottom;
-            
+
             final int NP = mPointers.size();
-            
+
             // Labels
             if (mActivePointerId >= 0) {
                 final PointerState ps = mPointers.get(mActivePointerId);
-                
+
                 canvas.drawRect(0, 0, itemW-1, bottom,mTextBackgroundPaint);
                 canvas.drawText(mText.clear()
                         .append("P: ").append(mCurNumPointers)
@@ -220,24 +220,24 @@ public class PointerLocationView extends View {
                             .append("dY: ").append(dy, 1)
                             .toString(), 1 + itemW * 2, base, mTextPaint);
                 }
-                
+
                 canvas.drawRect(itemW * 3, 0, (itemW * 4) - 1, bottom, mTextBackgroundPaint);
                 canvas.drawText(mText.clear()
                         .append("Xv: ").append(ps.mXVelocity, 3)
                         .toString(), 1 + itemW * 3, base, mTextPaint);
-                
+
                 canvas.drawRect(itemW * 4, 0, (itemW * 5) - 1, bottom, mTextBackgroundPaint);
                 canvas.drawText(mText.clear()
                         .append("Yv: ").append(ps.mYVelocity, 3)
                         .toString(), 1 + itemW * 4, base, mTextPaint);
-                
+
                 canvas.drawRect(itemW * 5, 0, (itemW * 6) - 1, bottom, mTextBackgroundPaint);
                 canvas.drawRect(itemW * 5, 0, (itemW * 5) + (ps.mCoords.pressure * itemW) - 1,
                         bottom, mTextLevelPaint);
                 canvas.drawText(mText.clear()
                         .append("Prs: ").append(ps.mCoords.pressure, 2)
                         .toString(), 1 + itemW * 5, base, mTextPaint);
-                
+
                 canvas.drawRect(itemW * 6, 0, w, bottom, mTextBackgroundPaint);
                 canvas.drawRect(itemW * 6, 0, (itemW * 6) + (ps.mCoords.size * itemW) - 1,
                         bottom, mTextLevelPaint);
@@ -245,11 +245,11 @@ public class PointerLocationView extends View {
                         .append("Size: ").append(ps.mCoords.size, 2)
                         .toString(), 1 + itemW * 6, base, mTextPaint);
             }
-            
+
             // Pointer trace.
             for (int p = 0; p < NP; p++) {
                 final PointerState ps = mPointers.get(p);
-                
+
                 // Draw path.
                 final int N = ps.mTraceCount;
                 float lastX = 0, lastY = 0;
@@ -272,7 +272,7 @@ public class PointerLocationView extends View {
                     lastY = y;
                     haveLast = true;
                 }
-                
+
                 // Draw velocity vector.
                 if (drawn) {
                     mPaint.setARGB(255, 255, 64, 128);
@@ -280,22 +280,22 @@ public class PointerLocationView extends View {
                     float yVel = ps.mYVelocity * (1000 / 60);
                     canvas.drawLine(lastX, lastY, lastX + xVel, lastY + yVel, mPaint);
                 }
-                
+
                 if (mCurDown && ps.mCurDown) {
                     // Draw crosshairs.
                     canvas.drawLine(0, ps.mCoords.y, getWidth(), ps.mCoords.y, mTargetPaint);
                     canvas.drawLine(ps.mCoords.x, 0, ps.mCoords.x, getHeight(), mTargetPaint);
-                    
+
                     // Draw current point.
                     int pressureLevel = (int)(ps.mCoords.pressure * 255);
                     mPaint.setARGB(255, pressureLevel, 255, 255 - pressureLevel);
                     canvas.drawPoint(ps.mCoords.x, ps.mCoords.y, mPaint);
-                    
+
                     // Draw current touch ellipse.
                     mPaint.setARGB(255, pressureLevel, 255 - pressureLevel, 128);
                     drawOval(canvas, ps.mCoords.x, ps.mCoords.y, ps.mCoords.touchMajor,
                             ps.mCoords.touchMinor, ps.mCoords.orientation, mPaint);
-                    
+
                     // Draw current tool ellipse.
                     mPaint.setARGB(255, pressureLevel, 128, 255 - pressureLevel);
                     drawOval(canvas, ps.mCoords.x, ps.mCoords.y, ps.mCoords.toolMajor,
@@ -304,7 +304,7 @@ public class PointerLocationView extends View {
             }
         }
     }
-    
+
     private void logPointerCoords(MotionEvent.PointerCoords coords, int id) {
         Log.i(TAG, mText.clear()
                 .append("Pointer ").append(id + 1)
@@ -322,12 +322,12 @@ public class PointerLocationView extends View {
     public void addTouchEvent(MotionEvent event) {
         synchronized (mPointers) {
             int action = event.getAction();
-            
+
             //Log.i(TAG, "Motion: action=0x" + Integer.toHexString(action)
             //        + " pointers=" + event.getPointerCount());
-            
+
             int NP = mPointers.size();
-            
+
             //mRect.set(0, 0, getWidth(), mHeaderBottom+1);
             //invalidate(mRect);
             //if (mCurDown) {
@@ -350,19 +350,19 @@ public class PointerLocationView extends View {
                     mMaxNumPointers = 0;
                     mVelocity.clear();
                 }
-                
+
                 final int id = event.getPointerId(index);
                 while (NP <= id) {
                     PointerState ps = new PointerState();
                     mPointers.add(ps);
                     NP++;
                 }
-                
+
                 if (mActivePointerId < 0 ||
                         ! mPointers.get(mActivePointerId).mCurDown) {
                     mActivePointerId = id;
                 }
-                
+
                 final PointerState ps = mPointers.get(id);
                 ps.mCurDown = true;
                 if (mPrintCoords) {
@@ -370,9 +370,9 @@ public class PointerLocationView extends View {
                             .append(id + 1).append(": DOWN").toString());
                 }
             }
-            
+
             final int NI = event.getPointerCount();
-            
+
             mCurDown = action != MotionEvent.ACTION_UP
                     && action != MotionEvent.ACTION_CANCEL;
             mCurNumPointers = mCurDown ? NI : 0;
@@ -382,7 +382,7 @@ public class PointerLocationView extends View {
 
             mVelocity.addMovement(event);
             mVelocity.computeCurrentVelocity(1);
-            
+
             for (int i=0; i<NI; i++) {
                 final int id = event.getPointerId(i);
                 final PointerState ps = mPointers.get(id);
@@ -402,13 +402,13 @@ public class PointerLocationView extends View {
                 ps.mXVelocity = mVelocity.getXVelocity(id);
                 ps.mYVelocity = mVelocity.getYVelocity(id);
             }
-            
+
             if (action == MotionEvent.ACTION_UP
                     || action == MotionEvent.ACTION_CANCEL
                     || (action & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_POINTER_UP) {
                 final int index = (action & MotionEvent.ACTION_POINTER_INDEX_MASK)
                         >> MotionEvent.ACTION_POINTER_INDEX_SHIFT; // will be 0 for UP
-                
+
                 final int id = event.getPointerId(index);
                 final PointerState ps = mPointers.get(id);
                 ps.mCurDown = false;
@@ -416,7 +416,7 @@ public class PointerLocationView extends View {
                     Log.i(TAG, mText.clear().append("Pointer ")
                             .append(id + 1).append(": UP").toString());
                 }
-                
+
                 if (action == MotionEvent.ACTION_UP
                         || action == MotionEvent.ACTION_CANCEL) {
                     mCurDown = false;
@@ -427,7 +427,7 @@ public class PointerLocationView extends View {
                     ps.addTrace(Float.NaN, Float.NaN);
                 }
             }
-            
+
             //if (mCurDown) {
             //    mRect.union(mCurX-mCurWidth-3, mCurY-mCurWidth-3,
             //            mCurX+mCurWidth+3, mCurY+mCurWidth+3);
@@ -436,7 +436,7 @@ public class PointerLocationView extends View {
             postInvalidate();
         }
     }
-    
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         addTouchEvent(event);
@@ -448,7 +448,7 @@ public class PointerLocationView extends View {
         Log.i(TAG, "Trackball: " + event);
         return super.onTrackballEvent(event);
     }
-    
+
     // HACK
     // A quick and dirty string builder implementation optimized for GC.
     // Using String.format causes the application grind to a halt when
@@ -457,16 +457,16 @@ public class PointerLocationView extends View {
     private static final class FasterStringBuilder {
         private char[] mChars;
         private int mLength;
-        
+
         public FasterStringBuilder() {
             mChars = new char[64];
         }
-        
+
         public FasterStringBuilder clear() {
             mLength = 0;
             return this;
         }
-        
+
         public FasterStringBuilder append(String value) {
             final int valueLength = value.length();
             final int index = reserve(valueLength);
@@ -474,11 +474,11 @@ public class PointerLocationView extends View {
             mLength += valueLength;
             return this;
         }
-        
+
         public FasterStringBuilder append(int value) {
             return append(value, 0);
         }
-        
+
         public FasterStringBuilder append(int value, int zeroPadWidth) {
             final boolean negative = value < 0;
             if (negative) {
@@ -488,16 +488,16 @@ public class PointerLocationView extends View {
                     return this;
                 }
             }
-            
+
             int index = reserve(11);
             final char[] chars = mChars;
-            
+
             if (value == 0) {
                 chars[index++] = '0';
                 mLength += 1;
                 return this;
             }
-            
+
             if (negative) {
                 chars[index++] = '-';
             }
@@ -511,25 +511,25 @@ public class PointerLocationView extends View {
                     chars[index++] = '0';
                 }
             }
-            
+
             do {
                 int digit = value / divisor;
                 value -= digit * divisor;
                 divisor /= 10;
                 chars[index++] = (char) (digit + '0');
             } while (divisor != 0);
-            
+
             mLength = index;
             return this;
         }
-        
+
         public FasterStringBuilder append(float value, int precision) {
             int scale = 1;
             for (int i = 0; i < precision; i++) {
                 scale *= 10;
             }
             value = (float) (Math.rint(value * scale) / scale);
-            
+
             append((int) value);
 
             if (precision != 0) {
@@ -538,15 +538,15 @@ public class PointerLocationView extends View {
                 value -= Math.floor(value);
                 append((int) (value * scale), precision);
             }
-            
+
             return this;
         }
-        
+
         @Override
         public String toString() {
             return new String(mChars, 0, mLength);
         }
-        
+
         private int reserve(int length) {
             final int oldLength = mLength;
             final int newLength = mLength + length;

@@ -63,7 +63,7 @@ public class CursorWindowTest extends TestCase implements PerformanceTestCase {
             }
         }
 
-        // test cursor window handle startpos != 0 
+        // test cursor window handle startpos != 0
         window.clear();
         cursor.fillWindow(1, window);
         // read from cursor from window
@@ -86,12 +86,12 @@ public class CursorWindowTest extends TestCase implements PerformanceTestCase {
     public void testValuesLocalWindow() {
         doTestValues(new CursorWindow(true));
     }
-    
+
     @SmallTest
     public void testValuesRemoteWindow() {
         doTestValues(new CursorWindow(false));
     }
-    
+
     private void doTestValues(CursorWindow window) {
         assertTrue(window.setNumColumns(7));
         assertTrue(window.allocRow());
@@ -112,11 +112,11 @@ public class CursorWindowTest extends TestCase implements PerformanceTestCase {
         assertTrue(window.putString(Long.toString(1198032740000L), 0, 3));
         assertEquals(Long.toString(1198032740000L), window.getString(0, 3));
         assertEquals(1198032740000L, window.getLong(0, 3));
-        
+
         assertTrue(window.putString(Double.toString(42.0), 0, 4));
         assertEquals(Double.toString(42.0), window.getString(0, 4));
         assertEquals(42.0, window.getDouble(0, 4));
-        
+
         // put blob
         byte[] blob = new byte[1000];
         byte value = 99;
@@ -154,7 +154,7 @@ public class CursorWindowTest extends TestCase implements PerformanceTestCase {
         assertTrue(window.allocRow());
         return window;
     }
-    
+
     private static ArrayList<ArrayList> createTestList(int rows, int cols) {
         ArrayList<ArrayList> list = Lists.newArrayList();
         Random generator = new Random();

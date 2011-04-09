@@ -23,7 +23,7 @@ import android.util.AttributeSet;
 /**
  * An animation that controls the scale of an object. You can specify the point
  * to use for the center of scaling.
- * 
+ *
  */
 public class ScaleAnimation extends Animation {
     private float mFromX;
@@ -41,7 +41,7 @@ public class ScaleAnimation extends Animation {
 
     /**
      * Constructor used when a ScaleAnimation is loaded from a resource.
-     * 
+     *
      * @param context Application context to use
      * @param attrs Attribute set from which to read values
      */
@@ -72,7 +72,7 @@ public class ScaleAnimation extends Animation {
 
     /**
      * Constructor to use when building a ScaleAnimation from code
-     * 
+     *
      * @param fromX Horizontal scaling factor to apply at the start of the
      *        animation
      * @param toX Horizontal scaling factor to apply at the end of the animation
@@ -91,7 +91,7 @@ public class ScaleAnimation extends Animation {
 
     /**
      * Constructor to use when building a ScaleAnimation from code
-     * 
+     *
      * @param fromX Horizontal scaling factor to apply at the start of the
      *        animation
      * @param toX Horizontal scaling factor to apply at the end of the animation
@@ -120,7 +120,7 @@ public class ScaleAnimation extends Animation {
 
     /**
      * Constructor to use when building a ScaleAnimation from code
-     * 
+     *
      * @param fromX Horizontal scaling factor to apply at the start of the
      *        animation
      * @param toX Horizontal scaling factor to apply at the end of the animation

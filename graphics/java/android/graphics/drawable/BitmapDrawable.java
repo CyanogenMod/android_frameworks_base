@@ -44,8 +44,8 @@ import java.io.IOException;
  * information, see the guide to <a
  * href="{@docRoot}guide/topics/resources/drawable-resource.html">Drawable Resources</a>.</p>
  * <p>
- * Also see the {@link android.graphics.Bitmap} class, which handles the management and 
- * transformation of raw bitmap graphics, and should be used when drawing to a 
+ * Also see the {@link android.graphics.Bitmap} class, which handles the management and
+ * transformation of raw bitmap graphics, and should be used when drawing to a
  * {@link android.graphics.Canvas}.
  * </p>
  *
@@ -69,11 +69,11 @@ public class BitmapDrawable extends Drawable {
     private boolean mApplyGravity;
     private boolean mRebuildShader;
     private boolean mMutated;
-    
+
      // These are scaled to match the target density.
     private int mBitmapWidth;
     private int mBitmapHeight;
-    
+
     /**
      * Create an empty drawable, not dealing with density.
      * @deprecated Use {@link #BitmapDrawable(Resources)} to ensure
@@ -163,7 +163,7 @@ public class BitmapDrawable extends Drawable {
     public final Paint getPaint() {
         return mBitmapState.mPaint;
     }
-    
+
     public final Bitmap getBitmap() {
         return mBitmap;
     }
@@ -172,7 +172,7 @@ public class BitmapDrawable extends Drawable {
         mBitmapWidth = mBitmap.getScaledWidth(mTargetDensity);
         mBitmapHeight = mBitmap.getScaledHeight(mTargetDensity);
     }
-    
+
     private void setBitmap(Bitmap bitmap) {
         mBitmap = bitmap;
         if (bitmap != null) {
@@ -233,7 +233,7 @@ public class BitmapDrawable extends Drawable {
     public int getGravity() {
         return mBitmapState.mGravity;
     }
-    
+
     /** Set the gravity used to position/stretch the bitmap within its bounds.
         See android.view.Gravity
      * @param gravity the gravity
@@ -246,7 +246,7 @@ public class BitmapDrawable extends Drawable {
     public void setAntiAlias(boolean aa) {
         mBitmapState.mPaint.setAntiAlias(aa);
     }
-    
+
     @Override
     public void setFilterBitmap(boolean filter) {
         mBitmapState.mPaint.setFilterBitmap(filter);
@@ -287,7 +287,7 @@ public class BitmapDrawable extends Drawable {
     public int getChangingConfigurations() {
         return super.getChangingConfigurations() | mBitmapState.mChangingConfigurations;
     }
-    
+
     @Override
     protected void onBoundsChange(Rect bounds) {
         super.onBoundsChange(bounds);
@@ -458,12 +458,12 @@ public class BitmapDrawable extends Drawable {
         public Drawable newDrawable() {
             return new BitmapDrawable(this, null);
         }
-        
+
         @Override
         public Drawable newDrawable(Resources res) {
             return new BitmapDrawable(this, res);
         }
-        
+
         @Override
         public int getChangingConfigurations() {
             return mChangingConfigurations;

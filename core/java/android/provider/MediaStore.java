@@ -89,7 +89,7 @@ public final class MediaStore {
      */
     public static final String INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH =
             "android.media.action.MEDIA_PLAY_FROM_SEARCH";
-    
+
     /**
      * The name of the Intent-extra used to define the artist
      */

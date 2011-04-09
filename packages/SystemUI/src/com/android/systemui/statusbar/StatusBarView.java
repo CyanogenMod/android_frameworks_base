@@ -42,7 +42,7 @@ public class StatusBarView extends FrameLayout {
     private static final String TAG = "StatusBarView";
 
     static final int DIM_ANIM_TIME = 400;
-    
+
     StatusBarService mService;
     boolean mTracking;
     int mStartX, mStartY;

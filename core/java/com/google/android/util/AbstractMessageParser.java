@@ -602,7 +602,7 @@ public abstract class AbstractMessageParser {
    */
   private static boolean isSmileyBreak(char c1, char c2) {
     switch (c1) {
-      /*    
+      /*
        * These characters can end smileys, but don't normally end words.
        */
       case '$': case '&': case '*': case '+': case '-':

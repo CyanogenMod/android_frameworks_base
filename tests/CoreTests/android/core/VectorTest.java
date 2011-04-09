@@ -100,7 +100,7 @@ public class VectorTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      */
     public void testVectorSize() {
         Vector<Integer> vector = mVector;

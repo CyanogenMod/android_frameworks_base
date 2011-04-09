@@ -56,7 +56,7 @@ public class ExpandableListTester {
         mInstrumentation.waitForIdleSync();
         mActivityInstrumentation.sendKeys(KeyEvent.KEYCODE_DPAD_CENTER);
         mActivityInstrumentation.getInstrumentation().waitForIdleSync();
-        Assert.assertTrue("Group did not expand " + groupIndex, 
+        Assert.assertTrue("Group did not expand " + groupIndex,
                 mExpandableListView.isGroupExpanded(groupIndex));
     }
 

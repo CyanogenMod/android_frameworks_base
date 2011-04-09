@@ -17,7 +17,7 @@
 package android.view;
 
 /**
- * Constants to be used to play sound effects via {@link View#playSoundEffect(int)} 
+ * Constants to be used to play sound effects via {@link View#playSoundEffect(int)}
  */
 public class SoundEffectConstants {
 

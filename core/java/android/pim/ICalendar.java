@@ -233,7 +233,7 @@ public class ICalendar {
         public static final String EXRULE = "EXRULE";
         public static final String EXDATE = "EXDATE";
         // ... need to add more.
-        
+
         private final String mName;
         private LinkedHashMap<String, ArrayList<Parameter>> mParamsMap =
                 new LinkedHashMap<String, ArrayList<Parameter>>();
@@ -279,7 +279,7 @@ public class ICalendar {
          */
         public void setValue(String value) {
             mValue = value;
-        }        
+        }
 
         /**
          * Adds a {@link Parameter} to this property.
@@ -442,7 +442,7 @@ public class ICalendar {
                 current = parseLine(line, state, current);
                 // if the provided component was null, we will return the root
                 // NOTE: in this case, if the first line is not a BEGIN, a
-                // FormatException will get thrown.   
+                // FormatException will get thrown.
                 if (component == null) {
                     component = current;
                 }

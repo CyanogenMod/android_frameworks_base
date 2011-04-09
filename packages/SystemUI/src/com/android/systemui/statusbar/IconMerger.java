@@ -93,7 +93,7 @@ public class IconMerger extends LinearLayout {
                     + " startIndex=" + startIndex);
             */
         }
-        
+
         // if it fits without the more icon, then hide the more icon and update fitLeft
         // so everything gets pushed left
         int adjust = 0;

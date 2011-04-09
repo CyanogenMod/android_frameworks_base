@@ -55,7 +55,7 @@ public class VCardConstants {
     public static final String PROPERTY_DEATH = "DEATH";  // Place of death (4.0)
 
     // Available in vCard 3.0. Shoud not use when composing vCard 2.1 file.
-    
+
     // De-fact property values expressing phonetic names.
     public static final String PROPERTY_X_PHONETIC_FIRST_NAME = "X-PHONETIC-FIRST-NAME";
     public static final String PROPERTY_X_PHONETIC_MIDDLE_NAME = "X-PHONETIC-MIDDLE-NAME";

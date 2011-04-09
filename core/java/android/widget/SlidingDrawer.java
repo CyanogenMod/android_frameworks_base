@@ -243,7 +243,7 @@ public class SlidingDrawer extends ViewGroup {
 
         mContent = findViewById(mContentId);
         if (mContent == null) {
-            throw new IllegalArgumentException("The content attribute is must refer to an" 
+            throw new IllegalArgumentException("The content attribute is must refer to an"
                     + " existing child.");
         }
         mContent.setVisibility(View.GONE);
@@ -291,7 +291,7 @@ public class SlidingDrawer extends ViewGroup {
                 if (isVertical) {
                     canvas.drawBitmap(cache, 0, handle.getBottom(), null);
                 } else {
-                    canvas.drawBitmap(cache, handle.getRight(), 0, null);                    
+                    canvas.drawBitmap(cache, handle.getRight(), 0, null);
                 }
             } else {
                 canvas.save();
@@ -336,7 +336,7 @@ public class SlidingDrawer extends ViewGroup {
 
             content.layout(mTopOffset + childWidth, 0,
                     mTopOffset + childWidth + content.getMeasuredWidth(),
-                    content.getMeasuredHeight());            
+                    content.getMeasuredHeight());
         }
 
         handle.layout(childLeft, childTop, childLeft + childWidth, childTop + childHeight);
@@ -654,7 +654,7 @@ public class SlidingDrawer extends ViewGroup {
         content.getViewTreeObserver().dispatchOnPreDraw();
         content.buildDrawingCache();
 
-        content.setVisibility(View.GONE);        
+        content.setVisibility(View.GONE);
     }
 
     private void stopTracking() {
@@ -893,7 +893,7 @@ public class SlidingDrawer extends ViewGroup {
     /**
      * Unlocks the SlidingDrawer so that touch events are processed.
      *
-     * @see #lock() 
+     * @see #lock()
      */
     public void unlock() {
         mLocked = false;

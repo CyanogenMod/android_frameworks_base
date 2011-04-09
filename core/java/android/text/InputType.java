@@ -51,19 +51,19 @@ public interface InputType {
      * or flags.
      */
     public static final int TYPE_MASK_CLASS = 0x0000000f;
-    
+
     /**
      * Mask of bits that determine the variation of
      * the base content class.
      */
     public static final int TYPE_MASK_VARIATION = 0x00000ff0;
-    
+
     /**
      * Mask of bits that provide addition bit flags
      * of options.
      */
     public static final int TYPE_MASK_FLAGS = 0x00fff000;
-    
+
     /**
      * Special content type for when no explicit type has been specified.
      * This should be interpreted to mean that the target input connection
@@ -72,11 +72,11 @@ public interface InputType {
      * limited "generate key events" mode.
      */
     public static final int TYPE_NULL = 0x00000000;
-    
+
     // ----------------------------------------------------------------------
     // ----------------------------------------------------------------------
     // ----------------------------------------------------------------------
-    
+
     /**
      * Class for normal text.  This class supports the following flags (only
      * one of which should be set):
@@ -89,7 +89,7 @@ public interface InputType {
      * variation, normal should be assumed.
      */
     public static final int TYPE_CLASS_TEXT = 0x00000001;
-    
+
     /**
      * Flag for {@link #TYPE_CLASS_TEXT}: capitalize all characters.  Overrides
      * {@link #TYPE_TEXT_FLAG_CAP_WORDS} and
@@ -97,7 +97,7 @@ public interface InputType {
      * to be the same as {@link TextUtils#CAP_MODE_CHARACTERS}.
      */
     public static final int TYPE_TEXT_FLAG_CAP_CHARACTERS = 0x00001000;
-    
+
     /**
      * Flag for {@link #TYPE_CLASS_TEXT}: capitalize first character of
      * all words.  Overrides {@link #TYPE_TEXT_FLAG_CAP_SENTENCES}.  This
@@ -105,20 +105,20 @@ public interface InputType {
      * to be the same as {@link TextUtils#CAP_MODE_WORDS}.
      */
     public static final int TYPE_TEXT_FLAG_CAP_WORDS = 0x00002000;
-    
+
     /**
      * Flag for {@link #TYPE_CLASS_TEXT}: capitalize first character of
      * each sentence.  This value is explicitly defined
      * to be the same as {@link TextUtils#CAP_MODE_SENTENCES}.
      */
     public static final int TYPE_TEXT_FLAG_CAP_SENTENCES = 0x00004000;
-    
+
     /**
      * Flag for {@link #TYPE_CLASS_TEXT}: the user is entering free-form
      * text that should have auto-correction applied to it.
      */
     public static final int TYPE_TEXT_FLAG_AUTO_CORRECT = 0x00008000;
-    
+
     /**
      * Flag for {@link #TYPE_CLASS_TEXT}: the text editor is performing
      * auto-completion of the text being entered based on its own semantics,
@@ -131,21 +131,21 @@ public interface InputType {
      * InputMethodManager.displayCompletions()}.
      */
     public static final int TYPE_TEXT_FLAG_AUTO_COMPLETE = 0x00010000;
-    
+
     /**
      * Flag for {@link #TYPE_CLASS_TEXT}: multiple lines of text can be
-     * entered into the field.  If this flag is not set, the text field 
+     * entered into the field.  If this flag is not set, the text field
      * will be constrained to a single line.
      */
     public static final int TYPE_TEXT_FLAG_MULTI_LINE = 0x00020000;
-    
+
     /**
      * Flag for {@link #TYPE_CLASS_TEXT}: the regular text view associated
      * with this should not be multi-line, but when a fullscreen input method
      * is providing text it should use multiple lines if it can.
      */
     public static final int TYPE_TEXT_FLAG_IME_MULTI_LINE = 0x00040000;
-    
+
     /**
      * Flag for {@link #TYPE_CLASS_TEXT}: the input method does not need to
      * display any dictionary-based candidates. This is useful for text views that
@@ -156,36 +156,36 @@ public interface InputType {
     public static final int TYPE_TEXT_FLAG_NO_SUGGESTIONS = 0x00080000;
 
     // ----------------------------------------------------------------------
-    
+
     /**
      * Default variation of {@link #TYPE_CLASS_TEXT}: plain old normal text.
      */
     public static final int TYPE_TEXT_VARIATION_NORMAL = 0x00000000;
-    
+
     /**
      * Variation of {@link #TYPE_CLASS_TEXT}: entering a URI.
      */
     public static final int TYPE_TEXT_VARIATION_URI = 0x00000010;
-    
+
     /**
      * Variation of {@link #TYPE_CLASS_TEXT}: entering an e-mail address.
      */
     public static final int TYPE_TEXT_VARIATION_EMAIL_ADDRESS = 0x00000020;
-    
+
     /**
      * Variation of {@link #TYPE_CLASS_TEXT}: entering the subject line of
      * an e-mail.
      */
     public static final int TYPE_TEXT_VARIATION_EMAIL_SUBJECT = 0x00000030;
-    
+
     /**
      * Variation of {@link #TYPE_CLASS_TEXT}: entering a short, possibly informal
      * message such as an instant message or a text message.
      */
     public static final int TYPE_TEXT_VARIATION_SHORT_MESSAGE = 0x00000040;
-    
+
     /**
-     * Variation of {@link #TYPE_CLASS_TEXT}: entering the content of a long, possibly 
+     * Variation of {@link #TYPE_CLASS_TEXT}: entering the content of a long, possibly
      * formal message such as the body of an e-mail.
      */
     public static final int TYPE_TEXT_VARIATION_LONG_MESSAGE = 0x00000050;
@@ -194,77 +194,77 @@ public interface InputType {
      * Variation of {@link #TYPE_CLASS_TEXT}: entering the name of a person.
      */
     public static final int TYPE_TEXT_VARIATION_PERSON_NAME = 0x00000060;
-    
+
     /**
      * Variation of {@link #TYPE_CLASS_TEXT}: entering a postal mailing address.
      */
     public static final int TYPE_TEXT_VARIATION_POSTAL_ADDRESS = 0x00000070;
-    
+
     /**
      * Variation of {@link #TYPE_CLASS_TEXT}: entering a password.
      */
     public static final int TYPE_TEXT_VARIATION_PASSWORD = 0x00000080;
-    
+
     /**
      * Variation of {@link #TYPE_CLASS_TEXT}: entering a password, which should
      * be visible to the user.
      */
     public static final int TYPE_TEXT_VARIATION_VISIBLE_PASSWORD = 0x00000090;
-    
+
     /**
      * Variation of {@link #TYPE_CLASS_TEXT}: entering text inside of a web form.
      */
     public static final int TYPE_TEXT_VARIATION_WEB_EDIT_TEXT = 0x000000a0;
-    
+
     /**
      * Variation of {@link #TYPE_CLASS_TEXT}: entering text to filter contents
      * of a list etc.
      */
     public static final int TYPE_TEXT_VARIATION_FILTER = 0x000000b0;
-    
+
     /**
      * Variation of {@link #TYPE_CLASS_TEXT}: entering text for phonetic
      * pronunciation, such as a phonetic name field in contacts.
      */
     public static final int TYPE_TEXT_VARIATION_PHONETIC = 0x000000c0;
-    
+
     // ----------------------------------------------------------------------
     // ----------------------------------------------------------------------
     // ----------------------------------------------------------------------
-    
+
     /**
      * Class for numeric text.  This class supports the following flag:
      * {@link #TYPE_NUMBER_FLAG_SIGNED} and
      * {@link #TYPE_NUMBER_FLAG_DECIMAL}.
      */
     public static final int TYPE_CLASS_NUMBER = 0x00000002;
-    
+
     /**
      * Flag of {@link #TYPE_CLASS_NUMBER}: the number is signed, allowing
      * a positive or negative sign at the start.
      */
     public static final int TYPE_NUMBER_FLAG_SIGNED = 0x00001000;
-    
+
     /**
      * Flag of {@link #TYPE_CLASS_NUMBER}: the number is decimal, allowing
      * a decimal point to provide fractional values.
      */
     public static final int TYPE_NUMBER_FLAG_DECIMAL = 0x00002000;
-    
+
     // ----------------------------------------------------------------------
     // ----------------------------------------------------------------------
     // ----------------------------------------------------------------------
-    
+
     /**
      * Class for a phone number.  This class currently supports no variations
      * or flags.
      */
     public static final int TYPE_CLASS_PHONE = 0x00000003;
-    
+
     // ----------------------------------------------------------------------
     // ----------------------------------------------------------------------
     // ----------------------------------------------------------------------
-    
+
     /**
      * Class for dates and times.  It supports the
      * following variations:
@@ -273,19 +273,19 @@ public interface InputType {
      * {@link #TYPE_DATETIME_VARIATION_TIME},.
      */
     public static final int TYPE_CLASS_DATETIME = 0x00000004;
-    
+
     /**
      * Default variation of {@link #TYPE_CLASS_DATETIME}: allows entering
      * both a date and time.
      */
     public static final int TYPE_DATETIME_VARIATION_NORMAL = 0x00000000;
-    
+
     /**
      * Default variation of {@link #TYPE_CLASS_DATETIME}: allows entering
      * only a date.
      */
     public static final int TYPE_DATETIME_VARIATION_DATE = 0x00000010;
-    
+
     /**
      * Default variation of {@link #TYPE_CLASS_DATETIME}: allows entering
      * only a time.

@@ -74,7 +74,7 @@ public class VpnTest extends AndroidTestCase {
     public void testGetType() {
         assertEquals(VpnType.L2TP, new L2tpProfile().getType());
         assertEquals(VpnType.L2TP_IPSEC, new L2tpIpsecProfile().getType());
-        assertEquals(VpnType.L2TP_IPSEC_PSK, 
+        assertEquals(VpnType.L2TP_IPSEC_PSK,
                 new L2tpIpsecPskProfile().getType());
         assertEquals(VpnType.PPTP, new PptpProfile().getType());
     }

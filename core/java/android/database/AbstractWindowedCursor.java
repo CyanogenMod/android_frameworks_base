@@ -48,18 +48,18 @@ public abstract class AbstractWindowedCursor extends AbstractCursor
 
         return mWindow.getString(mPos, columnIndex);
     }
-    
+
     @Override
     public void copyStringToBuffer(int columnIndex, CharArrayBuffer buffer)
     {
         checkPosition();
-        
+
         synchronized(mUpdatedRows) {
             if (isFieldUpdated(columnIndex)) {
                 super.copyStringToBuffer(columnIndex, buffer);
             }
         }
-        
+
         mWindow.copyStringToBuffer(mPos, columnIndex, buffer);
     }
 
@@ -212,7 +212,7 @@ public abstract class AbstractWindowedCursor extends AbstractCursor
     protected void checkPosition()
     {
         super.checkPosition();
-        
+
         if (mWindow == null) {
             throw new StaleDataException("Access closed cursor");
         }
@@ -222,7 +222,7 @@ public abstract class AbstractWindowedCursor extends AbstractCursor
     public CursorWindow getWindow() {
         return mWindow;
     }
-    
+
     /**
      * Set a new cursor window to cursor, usually set a remote cursor window
      * @param window cursor window
@@ -233,7 +233,7 @@ public abstract class AbstractWindowedCursor extends AbstractCursor
         }
         mWindow = window;
     }
-    
+
     public boolean hasWindow() {
         return mWindow != null;
     }

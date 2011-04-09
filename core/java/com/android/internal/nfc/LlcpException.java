@@ -17,7 +17,7 @@
 package com.android.internal.nfc;
 
 /**
- * Generic exception thrown in case something unexpected happened during a 
+ * Generic exception thrown in case something unexpected happened during a
  * LLCP communication.
  */
 public class LlcpException extends Exception {

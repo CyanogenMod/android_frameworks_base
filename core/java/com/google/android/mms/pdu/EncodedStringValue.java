@@ -141,10 +141,10 @@ public class EncodedStringValue implements Cloneable {
                 String name = CharacterSets.getMimeName(mCharacterSet);
                 return new String(mData, name);
             } catch (UnsupportedEncodingException e) {
-            	if (LOCAL_LOGV) {
-            		Log.v(TAG, e.getMessage(), e);
-            	}
-            	try {
+                if (LOCAL_LOGV) {
+                        Log.v(TAG, e.getMessage(), e);
+                }
+                try {
                     return new String(mData, CharacterSets.MIMENAME_ISO_8859_1);
                 } catch (UnsupportedEncodingException _) {
                     return new String(mData); // system default encoding.
@@ -269,7 +269,7 @@ public class EncodedStringValue implements Cloneable {
 
         return new EncodedStringValue(value.mCharacterSet, value.mData);
     }
-    
+
     public static EncodedStringValue[] encodeStrings(String[] array) {
         int count = array.length;
         if (count > 0) {

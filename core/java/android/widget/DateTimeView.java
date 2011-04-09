@@ -82,7 +82,7 @@ public class DateTimeView extends TextView {
         registerReceivers();
         mAttachedToWindow = true;
     }
-        
+
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();

@@ -28,7 +28,7 @@ import android.hardware.SensorListener;
 @Deprecated
 public abstract class OrientationListener implements SensorListener {
     private OrientationEventListener mOrientationEventLis;
-    
+
     /**
      * Returned from onOrientationChanged when the device orientation cannot be determined
      * (typically when the device is in a close to flat position).
@@ -39,7 +39,7 @@ public abstract class OrientationListener implements SensorListener {
 
     /**
      * Creates a new OrientationListener.
-     * 
+     *
      * @param context for the OrientationListener.
      */
     public OrientationListener(Context context) {
@@ -48,33 +48,33 @@ public abstract class OrientationListener implements SensorListener {
 
     /**
      * Creates a new OrientationListener.
-     * 
+     *
      * @param context for the OrientationListener.
      * @param rate at which sensor events are processed (see also
      * {@link android.hardware.SensorManager SensorManager}). Use the default
-     * value of {@link android.hardware.SensorManager#SENSOR_DELAY_NORMAL 
+     * value of {@link android.hardware.SensorManager#SENSOR_DELAY_NORMAL
      * SENSOR_DELAY_NORMAL} for simple screen orientation change detection.
      */
     public OrientationListener(Context context, int rate) {
         mOrientationEventLis = new OrientationEventListenerInternal(context, rate);
     }
-    
+
     class OrientationEventListenerInternal extends OrientationEventListener {
         OrientationEventListenerInternal(Context context) {
             super(context);
         }
-        
+
         OrientationEventListenerInternal(Context context, int rate) {
             super(context, rate);
             // register so that onSensorChanged gets invoked
             registerListener(OrientationListener.this);
         }
-                
+
         public void onOrientationChanged(int orientation) {
             OrientationListener.this.onOrientationChanged(orientation);
         }
     }
-    
+
     /**
      * Enables the OrientationListener so it will monitor the sensor and call
      * {@link #onOrientationChanged} when the device orientation changes.
@@ -89,10 +89,10 @@ public abstract class OrientationListener implements SensorListener {
     public void disable() {
         mOrientationEventLis.disable();
     }
-    
+
     public void onAccuracyChanged(int sensor, int accuracy) {
     }
-    
+
     public void onSensorChanged(int sensor, float[] values) {
         // just ignore the call here onOrientationChanged is invoked anyway
     }
@@ -106,5 +106,5 @@ public abstract class OrientationListener implements SensorListener {
      *  @see #ORIENTATION_UNKNOWN
      */
     abstract public void onOrientationChanged(int orientation);
-    
+
 }

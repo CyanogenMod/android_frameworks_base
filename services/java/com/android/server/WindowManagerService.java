@@ -200,11 +200,11 @@ public class WindowManagerService extends IWindowManager.Stub
     /** Adjustment to time to perform a dim, to make it more dramatic.
      */
     static final int DIM_DURATION_MULTIPLIER = 6;
-    
+
     // Maximum number of milliseconds to wait for input event injection.
     // FIXME is this value reasonable?
     private static final int INJECTION_TIMEOUT_MILLIS = 30 * 1000;
-    
+
     // Default input dispatching timeout in nanoseconds.
     private static final long DEFAULT_INPUT_DISPATCHING_TIMEOUT_NANOS = 5000 * 1000000L;
 
@@ -399,12 +399,12 @@ public class WindowManagerService extends IWindowManager.Stub
     int mAppsFreezingScreen = 0;
 
     int mLayoutSeq = 0;
-    
+
     // State while inside of layoutAndPlaceSurfacesLocked().
     boolean mFocusMayChange;
-    
+
     Configuration mCurConfiguration = new Configuration();
-    
+
     // This is held as long as we have the screen frozen, to give us time to
     // perform a rotation animation when turning off shows the lock screen which
     // changes the orientation.
@@ -580,7 +580,7 @@ public class WindowManagerService extends IWindowManager.Stub
         public void run() {
             Looper.prepare();
             WindowManagerPolicyThread.set(this, Looper.myLooper());
-            
+
             //Looper.myLooper().setMessageLogging(new LogPrinter(
             //        Log.VERBOSE, "WindowManagerPolicy", Log.LOG_ID_SYSTEM));
             android.os.Process.setThreadPriority(
@@ -1778,7 +1778,7 @@ public class WindowManagerService extends IWindowManager.Stub
             }
         }
     }
-    
+
     public int addWindow(Session session, IWindow client,
             WindowManager.LayoutParams attrs, int viewVisibility,
             Rect outContentInsets, InputChannel outInputChannel) {
@@ -1893,13 +1893,13 @@ public class WindowManagerService extends IWindowManager.Stub
             if (res != WindowManagerImpl.ADD_OKAY) {
                 return res;
             }
-            
+
             if (outInputChannel != null) {
                 String name = win.makeInputChannelName();
                 InputChannel[] inputChannels = InputChannel.openInputChannelPair(name);
                 win.mInputChannel = inputChannels[0];
                 inputChannels[1].transferToBinderOutParameter(outInputChannel);
-                
+
                 mInputManager.registerInputChannel(win.mInputChannel);
             }
 
@@ -1974,11 +1974,11 @@ public class WindowManagerService extends IWindowManager.Stub
             if (focusChanged) {
                 finishUpdateFocusedWindowAfterAssignLayersLocked();
             }
-            
+
             if (localLOGV) Slog.v(
                 TAG, "New client " + client.asBinder()
                 + ": window=" + win);
-            
+
             if (win.isVisibleOrAdding() && updateOrientationFromAppTokensLocked()) {
                 reportNewConfig = true;
             }
@@ -2016,7 +2016,7 @@ public class WindowManagerService extends IWindowManager.Stub
             + ", surface=" + win.mSurface);
 
         final long origId = Binder.clearCallingIdentity();
-        
+
         win.disposeInputChannel();
 
         if (DEBUG_APP_TRANSITIONS) Slog.v(
@@ -2156,7 +2156,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 win.mAppToken.updateReportedVisibilityLocked();
             }
         }
-        
+
         mInputMonitor.updateInputWindowsLw();
     }
 
@@ -2169,7 +2169,7 @@ public class WindowManagerService extends IWindowManager.Stub
             Slog.i(TAG, str);
         }
     }
-    
+
     private void setTransparentRegionWindow(Session session, IWindow client, Region region) {
         long origId = Binder.clearCallingIdentity();
         try {
@@ -2402,7 +2402,7 @@ public class WindowManagerService extends IWindowManager.Stub
                     }
                 } catch (Exception e) {
                     mInputMonitor.updateInputWindowsLw();
-                    
+
                     Slog.w(TAG, "Exception thrown when creating surface for client "
                              + client + " (" + win.mAttrs.getTitle() + ")",
                              e);
@@ -2543,7 +2543,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 TAG, "Relayout of " + win + ": focusMayChange=" + focusMayChange);
 
             inTouchMode = mInTouchMode;
-            
+
             mInputMonitor.updateInputWindowsLw();
         }
 
@@ -2942,7 +2942,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 "addAppToken()")) {
             throw new SecurityException("Requires MANAGE_APP_TOKENS permission");
         }
-        
+
         // Get the dispatching timeout here while we are not holding any locks so that it
         // can be cached by the AppWindowToken.  The timeout value is used later by the
         // input dispatcher in code that does hold locks.  If we did not cache the value
@@ -3086,7 +3086,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
         Configuration config = null;
         long ident = Binder.clearCallingIdentity();
-        
+
         synchronized(mWindowMap) {
             if (updateOrientationFromAppTokensLocked()) {
                 if (freezeThisOneIfNeeded != null) {
@@ -3098,7 +3098,7 @@ public class WindowManagerService extends IWindowManager.Stub
                     }
                 }
                 config = computeNewConfigurationLocked();
-                
+
             } else if (currentConfig != null) {
                 // No obvious action we need to take, but if our current
                 // state mismatches the activity manager's, update it,
@@ -3116,7 +3116,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 }
             }
         }
-        
+
         Binder.restoreCallingIdentity(ident);
         return config;
     }
@@ -3128,7 +3128,7 @@ public class WindowManagerService extends IWindowManager.Stub
      * setNewConfiguration() TO TELL THE WINDOW MANAGER IT CAN UNFREEZE THE
      * SCREEN.  This will typically be done for you if you call
      * sendNewConfiguration().
-     * 
+     *
      * The orientation is computed from non-application windows first. If none of
      * the non-application windows specify orientation, the orientation is computed from
      * application tokens.
@@ -3187,7 +3187,7 @@ public class WindowManagerService extends IWindowManager.Stub
             performLayoutAndPlaceSurfacesLocked();
         }
     }
-    
+
     public void setAppOrientation(IApplicationToken token, int requestedOrientation) {
         if (!checkCallingPermission(android.Manifest.permission.MANAGE_APP_TOKENS,
                 "setAppOrientation()")) {
@@ -4157,7 +4157,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
     private boolean shouldAllowDisableKeyguard()
     {
-        // We fail safe and prevent disabling keyguard in the unlikely event this gets 
+        // We fail safe and prevent disabling keyguard in the unlikely event this gets
         // called before DevicePolicyManagerService has started.
         if (mAllowDisableKeyguard == ALLOW_DISABLE_UNKNOWN) {
             DevicePolicyManager dpm = (DevicePolicyManager) mContext.getSystemService(
@@ -4381,7 +4381,7 @@ public class WindowManagerService extends IWindowManager.Stub
         }
         return mInputManager.getKeyCodeState(-1, InputDevice.SOURCE_DPAD, sw);
     }
-    
+
     public boolean hasKeys(int[] keycodes, boolean[] keyExists) {
         return mInputManager.hasKeys(-1, InputDevice.SOURCE_ANY, keycodes, keyExists);
     }
@@ -4511,7 +4511,7 @@ public class WindowManagerService extends IWindowManager.Stub
      * Apply a new rotation to the screen, respecting the requests of
      * applications.  Use WindowManagerPolicy.USE_LAST_ROTATION to simply
      * re-evaluate the desired rotation.
-     * 
+     *
      * Returns null if the rotation has been changed.  In this case YOU
      * MUST CALL setNewConfiguration() TO UNFREEZE THE SCREEN.
      */
@@ -4976,7 +4976,7 @@ public class WindowManagerService extends IWindowManager.Stub
         if (mDisplay == null) {
             return false;
         }
-        
+
         mInputManager.getInputConfiguration(config);
 
         // Use the effective "visual" dimensions based on current rotation
@@ -5032,7 +5032,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 } else {
                     mScreenLayout = Configuration.SCREENLAYOUT_SIZE_NORMAL;
                 }
-                
+
                 // If this screen is wider than normal HVGA, or taller
                 // than FWVGA, then for old apps we want to run in size
                 // compatibility mode.
@@ -5056,34 +5056,34 @@ public class WindowManagerService extends IWindowManager.Stub
         mPolicy.adjustConfigurationLw(config);
         return true;
     }
-    
+
     // -------------------------------------------------------------
     // Input Events and Focus Management
     // -------------------------------------------------------------
-    
+
     InputMonitor mInputMonitor = new InputMonitor();
-    
+
     /* Tracks the progress of input dispatch and ensures that input dispatch state
      * is kept in sync with changes in window focus, visibility, registration, and
      * other relevant Window Manager state transitions. */
     final class InputMonitor {
         // Current window with input focus for keys and other non-touch events.  May be null.
         private WindowState mInputFocus;
-        
+
         // When true, prevents input dispatch from proceeding until set to false again.
         private boolean mInputDispatchFrozen;
-        
+
         // When true, input dispatch proceeds normally.  Otherwise all events are dropped.
         private boolean mInputDispatchEnabled = true;
 
         // Temporary list of windows information to provide to the input dispatcher.
         private InputWindowList mTempInputWindows = new InputWindowList();
-        
+
         // Temporary input application object to provide to the input dispatcher.
         private InputApplication mTempInputApplication = new InputApplication();
-        
+
         /* Notifies the window manager about a broken input channel.
-         * 
+         *
          * Called by the InputManager.
          */
         public void notifyInputChannelBroken(InputChannel inputChannel) {
@@ -5092,15 +5092,15 @@ public class WindowManagerService extends IWindowManager.Stub
                 if (windowState == null) {
                     return; // irrelevant
                 }
-                
+
                 Slog.i(TAG, "WINDOW DIED " + windowState);
                 removeWindowLocked(windowState.mSession, windowState);
             }
         }
-        
+
         /* Notifies the window manager about an application that is not responding.
          * Returns a new timeout to continue waiting in nanoseconds, or 0 to abort dispatch.
-         * 
+         *
          * Called by the InputManager.
          */
         public long notifyANR(Object token, InputChannel inputChannel) {
@@ -5115,7 +5115,7 @@ public class WindowManagerService extends IWindowManager.Stub
                     }
                 }
             }
-            
+
             if (appWindowToken == null && token != null) {
                 appWindowToken = (AppWindowToken) token;
                 Slog.i(TAG, "Input event dispatching timed out sending to application "
@@ -5137,13 +5137,13 @@ public class WindowManagerService extends IWindowManager.Stub
             }
             return 0; // abort dispatching
         }
-        
+
         private WindowState getWindowStateForInputChannel(InputChannel inputChannel) {
             synchronized (mWindowMap) {
                 return getWindowStateForInputChannelLocked(inputChannel);
             }
         }
-        
+
         private WindowState getWindowStateForInputChannelLocked(InputChannel inputChannel) {
             int windowCount = mWindows.size();
             for (int i = 0; i < windowCount; i++) {
@@ -5152,10 +5152,10 @@ public class WindowManagerService extends IWindowManager.Stub
                     return windowState;
                 }
             }
-            
+
             return null;
         }
-        
+
         /* Updates the cached window information provided to the input dispatcher. */
         public void updateInputWindowsLw() {
             // Populate the input window list with information about all of the windows that
@@ -5171,15 +5171,15 @@ public class WindowManagerService extends IWindowManager.Stub
                     // Skip this window because it cannot possibly receive input.
                     continue;
                 }
-                
+
                 final int flags = child.mAttrs.flags;
                 final int type = child.mAttrs.type;
-                
+
                 final boolean hasFocus = (child == mInputFocus);
                 final boolean isVisible = child.isVisibleLw();
                 final boolean hasWallpaper = (child == mWallpaperTarget)
                         && (type != WindowManager.LayoutParams.TYPE_KEYGUARD);
-                
+
                 // Add a window to our list of input windows.
                 final InputWindow inputWindow = mTempInputWindows.add();
                 inputWindow.inputChannel = child.mInputChannel;
@@ -5195,19 +5195,19 @@ public class WindowManagerService extends IWindowManager.Stub
                 inputWindow.layer = child.mLayer;
                 inputWindow.ownerPid = child.mSession.mPid;
                 inputWindow.ownerUid = child.mSession.mUid;
-                
+
                 final Rect frame = child.mFrame;
                 inputWindow.frameLeft = frame.left;
                 inputWindow.frameTop = frame.top;
                 inputWindow.frameRight = frame.right;
                 inputWindow.frameBottom = frame.bottom;
-                
+
                 final Rect visibleFrame = child.mVisibleFrame;
                 inputWindow.visibleFrameLeft = visibleFrame.left;
                 inputWindow.visibleFrameTop = visibleFrame.top;
                 inputWindow.visibleFrameRight = visibleFrame.right;
                 inputWindow.visibleFrameBottom = visibleFrame.bottom;
-                
+
                 switch (child.mTouchableInsets) {
                     default:
                     case ViewTreeObserver.InternalInsetsInfo.TOUCHABLE_INSETS_FRAME:
@@ -5216,7 +5216,7 @@ public class WindowManagerService extends IWindowManager.Stub
                         inputWindow.touchableAreaRight = frame.right;
                         inputWindow.touchableAreaBottom = frame.bottom;
                         break;
-                        
+
                     case ViewTreeObserver.InternalInsetsInfo.TOUCHABLE_INSETS_CONTENT: {
                         Rect inset = child.mGivenContentInsets;
                         inputWindow.touchableAreaLeft = frame.left + inset.left;
@@ -5225,7 +5225,7 @@ public class WindowManagerService extends IWindowManager.Stub
                         inputWindow.touchableAreaBottom = frame.bottom - inset.bottom;
                         break;
                     }
-                        
+
                     case ViewTreeObserver.InternalInsetsInfo.TOUCHABLE_INSETS_VISIBLE: {
                         Rect inset = child.mGivenVisibleInsets;
                         inputWindow.touchableAreaLeft = frame.left + inset.left;
@@ -5239,17 +5239,17 @@ public class WindowManagerService extends IWindowManager.Stub
 
             // Send windows to native code.
             mInputManager.setInputWindows(mTempInputWindows.toNullTerminatedArray());
-            
+
             // Clear the list in preparation for the next round.
             // Also avoids keeping InputChannel objects referenced unnecessarily.
             mTempInputWindows.clear();
         }
-        
+
         /* Notifies that the lid switch changed state. */
         public void notifyLidSwitchChanged(long whenNanos, boolean lidOpen) {
             mPolicy.notifyLidSwitchChanged(whenNanos, lidOpen);
         }
-        
+
         /* Provides an opportunity for the window manager policy to intercept early key
          * processing as soon as the key has been read from the device. */
         public int interceptKeyBeforeQueueing(long whenNanos, int action, int flags,
@@ -5257,7 +5257,7 @@ public class WindowManagerService extends IWindowManager.Stub
             return mPolicy.interceptKeyBeforeQueueing(whenNanos, action, flags,
                     keyCode, scanCode, policyFlags, isScreenOn);
         }
-        
+
         /* Provides an opportunity for the window manager policy to process a key before
          * ordinary dispatch. */
         public boolean interceptKeyBeforeDispatching(InputChannel focus,
@@ -5267,7 +5267,7 @@ public class WindowManagerService extends IWindowManager.Stub
             return mPolicy.interceptKeyBeforeDispatching(windowState, action, flags,
                     keyCode, scanCode, metaState, repeatCount, policyFlags);
         }
-        
+
         /* Called when the current input focus changes.
          * Layer assignment is assumed to be complete by the time this is called.
          */
@@ -5283,12 +5283,12 @@ public class WindowManagerService extends IWindowManager.Stub
                     // forgets to resume.
                     newWindow.mToken.paused = false;
                 }
-            
+
                 mInputFocus = newWindow;
                 updateInputWindowsLw();
             }
         }
-        
+
         public void setFocusedAppLw(AppWindowToken newApp) {
             // Focused app has changed.
             if (newApp == null) {
@@ -5298,66 +5298,66 @@ public class WindowManagerService extends IWindowManager.Stub
                 mTempInputApplication.dispatchingTimeoutNanos =
                         newApp.inputDispatchingTimeoutNanos;
                 mTempInputApplication.token = newApp;
-                
+
                 mInputManager.setFocusedApplication(mTempInputApplication);
             }
         }
-        
+
         public void pauseDispatchingLw(WindowToken window) {
             if (! window.paused) {
                 if (DEBUG_INPUT) {
                     Slog.v(TAG, "Pausing WindowToken " + window);
                 }
-                
+
                 window.paused = true;
                 updateInputWindowsLw();
             }
         }
-        
+
         public void resumeDispatchingLw(WindowToken window) {
             if (window.paused) {
                 if (DEBUG_INPUT) {
                     Slog.v(TAG, "Resuming WindowToken " + window);
                 }
-                
+
                 window.paused = false;
                 updateInputWindowsLw();
             }
         }
-        
+
         public void freezeInputDispatchingLw() {
             if (! mInputDispatchFrozen) {
                 if (DEBUG_INPUT) {
                     Slog.v(TAG, "Freezing input dispatching");
                 }
-                
+
                 mInputDispatchFrozen = true;
                 updateInputDispatchModeLw();
             }
         }
-        
+
         public void thawInputDispatchingLw() {
             if (mInputDispatchFrozen) {
                 if (DEBUG_INPUT) {
                     Slog.v(TAG, "Thawing input dispatching");
                 }
-                
+
                 mInputDispatchFrozen = false;
                 updateInputDispatchModeLw();
             }
         }
-        
+
         public void setEventDispatchingLw(boolean enabled) {
             if (mInputDispatchEnabled != enabled) {
                 if (DEBUG_INPUT) {
                     Slog.v(TAG, "Setting event dispatching to " + enabled);
                 }
-                
+
                 mInputDispatchEnabled = enabled;
                 updateInputDispatchModeLw();
             }
         }
-        
+
         private void updateInputDispatchModeLw() {
             mInputManager.setInputDispatchMode(mInputDispatchEnabled, mInputDispatchFrozen);
         }
@@ -5423,7 +5423,7 @@ public class WindowManagerService extends IWindowManager.Stub
         int deviceId = ev.getDeviceId();
         int scancode = ev.getScanCode();
         int source = ev.getSource();
-        
+
         if (source == InputDevice.SOURCE_UNKNOWN) {
             source = InputDevice.SOURCE_KEYBOARD;
         }
@@ -5437,12 +5437,12 @@ public class WindowManagerService extends IWindowManager.Stub
         final int pid = Binder.getCallingPid();
         final int uid = Binder.getCallingUid();
         final long ident = Binder.clearCallingIdentity();
-        
+
         final int result = mInputManager.injectInputEvent(newEvent, pid, uid,
                 sync ? InputManager.INPUT_EVENT_INJECTION_SYNC_WAIT_FOR_FINISH
                         : InputManager.INPUT_EVENT_INJECTION_SYNC_WAIT_FOR_RESULT,
                 INJECTION_TIMEOUT_MILLIS);
-        
+
         Binder.restoreCallingIdentity(ident);
         return reportInjectionResult(result);
     }
@@ -5462,17 +5462,17 @@ public class WindowManagerService extends IWindowManager.Stub
         final int pid = Binder.getCallingPid();
         final int uid = Binder.getCallingUid();
         final long ident = Binder.clearCallingIdentity();
-        
+
         MotionEvent newEvent = MotionEvent.obtain(ev);
         if ((newEvent.getSource() & InputDevice.SOURCE_CLASS_POINTER) == 0) {
             newEvent.setSource(InputDevice.SOURCE_TOUCHSCREEN);
         }
-        
+
         final int result = mInputManager.injectInputEvent(newEvent, pid, uid,
                 sync ? InputManager.INPUT_EVENT_INJECTION_SYNC_WAIT_FOR_FINISH
                         : InputManager.INPUT_EVENT_INJECTION_SYNC_WAIT_FOR_RESULT,
                 INJECTION_TIMEOUT_MILLIS);
-        
+
         Binder.restoreCallingIdentity(ident);
         return reportInjectionResult(result);
     }
@@ -5492,21 +5492,21 @@ public class WindowManagerService extends IWindowManager.Stub
         final int pid = Binder.getCallingPid();
         final int uid = Binder.getCallingUid();
         final long ident = Binder.clearCallingIdentity();
-        
+
         MotionEvent newEvent = MotionEvent.obtain(ev);
         if ((newEvent.getSource() & InputDevice.SOURCE_CLASS_TRACKBALL) == 0) {
             newEvent.setSource(InputDevice.SOURCE_TRACKBALL);
         }
-        
+
         final int result = mInputManager.injectInputEvent(newEvent, pid, uid,
                 sync ? InputManager.INPUT_EVENT_INJECTION_SYNC_WAIT_FOR_FINISH
                         : InputManager.INPUT_EVENT_INJECTION_SYNC_WAIT_FOR_RESULT,
                 INJECTION_TIMEOUT_MILLIS);
-        
+
         Binder.restoreCallingIdentity(ident);
         return reportInjectionResult(result);
     }
-    
+
     /**
      * Inject an input event into the UI without waiting for dispatch to commence.
      * This variant is useful for fire-and-forget input event injection.  It does not
@@ -5519,15 +5519,15 @@ public class WindowManagerService extends IWindowManager.Stub
         final int pid = Binder.getCallingPid();
         final int uid = Binder.getCallingUid();
         final long ident = Binder.clearCallingIdentity();
-        
+
         final int result = mInputManager.injectInputEvent(ev, pid, uid,
                 InputManager.INPUT_EVENT_INJECTION_SYNC_NONE,
                 INJECTION_TIMEOUT_MILLIS);
-        
+
         Binder.restoreCallingIdentity(ident);
         return reportInjectionResult(result);
     }
-    
+
     private boolean reportInjectionResult(int result) {
         switch (result) {
             case InputManager.INPUT_EVENT_INJECTION_PERMISSION_DENIED:
@@ -5660,7 +5660,7 @@ public class WindowManagerService extends IWindowManager.Stub
             return addWindow(this, window, attrs, viewVisibility, outContentInsets,
                     outInputChannel);
         }
-        
+
         public int addWithoutInputChannel(IWindow window, WindowManager.LayoutParams attrs,
                 int viewVisibility, Rect outContentInsets) {
             return addWindow(this, window, attrs, viewVisibility, outContentInsets, null);
@@ -5856,9 +5856,9 @@ public class WindowManagerService extends IWindowManager.Stub
         boolean mTurnOnScreen;
 
         int mLayoutSeq = -1;
-        
+
         Configuration mConfiguration = null;
-        
+
         // Actual frame shown on-screen (may be modified by animation)
         final Rect mShownFrame = new Rect();
         final Rect mLastShownFrame = new Rect();
@@ -5868,7 +5868,7 @@ public class WindowManagerService extends IWindowManager.Stub
          * we must tell them application to resize (and thus redraw itself).
          */
         boolean mSurfaceResized;
-        
+
         /**
          * Insets that determine the actually visible area
          */
@@ -6001,10 +6001,10 @@ public class WindowManagerService extends IWindowManager.Stub
         int mSurfaceX, mSurfaceY, mSurfaceW, mSurfaceH;
         int mSurfaceLayer;
         float mSurfaceAlpha;
-        
+
         // Input channel
         InputChannel mInputChannel;
-        
+
         // Used to improve performance of toString()
         String mStringNameCache;
         CharSequence mLastTitle;
@@ -6237,7 +6237,7 @@ public class WindowManagerService extends IWindowManager.Stub
         public IApplicationToken getAppToken() {
             return mAppToken != null ? mAppToken.appToken : null;
         }
-        
+
         public long getInputDispatchingTimeoutNanos() {
             return mAppToken != null
                     ? mAppToken.inputDispatchingTimeoutNanos
@@ -6996,7 +6996,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
         void removeLocked() {
             disposeInputChannel();
-            
+
             if (mAttachedWindow != null) {
                 mAttachedWindow.mChildWindows.remove(this);
             }
@@ -7009,11 +7009,11 @@ public class WindowManagerService extends IWindowManager.Stub
                 // we are doing this as part of processing a death note.)
             }
         }
-        
+
         void disposeInputChannel() {
             if (mInputChannel != null) {
                 mInputManager.unregisterInputChannel(mInputChannel);
-                
+
                 mInputChannel.dispose();
                 mInputChannel = null;
             }
@@ -7259,7 +7259,7 @@ public class WindowManagerService extends IWindowManager.Stub
                         pw.print(" mWallpaperYStep="); pw.println(mWallpaperYStep);
             }
         }
-        
+
         String makeInputChannelName() {
             return Integer.toHexString(System.identityHashCode(this))
                 + " " + mAttrs.getTitle();
@@ -7371,7 +7371,7 @@ public class WindowManagerService extends IWindowManager.Stub
         int groupId = -1;
         boolean appFullscreen;
         int requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
-        
+
         // The input dispatching timeout for this application token in nanoseconds.
         long inputDispatchingTimeoutNanos;
 
@@ -8299,7 +8299,7 @@ public class WindowManagerService extends IWindowManager.Stub
             // applications.  Don't do any window layout until we have it.
             return;
         }
-        
+
         if (mDisplay == null) {
             // Not yet initialized, nothing to do.
             return;
@@ -8363,9 +8363,9 @@ public class WindowManagerService extends IWindowManager.Stub
         if (!mLayoutNeeded) {
             return 0;
         }
-        
+
         mLayoutNeeded = false;
-        
+
         final int dw = mDisplay.getWidth();
         final int dh = mDisplay.getHeight();
 
@@ -8374,13 +8374,13 @@ public class WindowManagerService extends IWindowManager.Stub
 
         if (DEBUG_LAYOUT) Slog.v(TAG, "performLayout: needed="
                 + mLayoutNeeded + " dw=" + dw + " dh=" + dh);
-        
+
         mPolicy.beginLayoutLw(dw, dh);
 
         int seq = mLayoutSeq+1;
         if (seq < 0) seq = 0;
         mLayoutSeq = seq;
-        
+
         // First perform layout of any root windows (not attached
         // to another window).
         int topAttached = -1;
@@ -8409,7 +8409,7 @@ public class WindowManagerService extends IWindowManager.Stub
                         + (atoken != null && atoken.hiddenRequested)
                         + " mAttachedHidden=" + win.mAttachedHidden);
             }
-            
+
             // If this view is GONE, then skip it -- keep the current
             // frame, and let the caller know so they can ignore it
             // if they want.  (We do the normal layout for INVISIBLE
@@ -8457,7 +8457,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 }
             }
         }
-        
+
         // Window frames may have changed.  Tell the input dispatcher about it.
         mInputMonitor.updateInputWindowsLw();
 
@@ -8476,7 +8476,7 @@ public class WindowManagerService extends IWindowManager.Stub
             mFocusMayChange = false;
             updateFocusedWindowLocked(UPDATE_FOCUS_WILL_PLACE_SURFACES);
         }
-        
+
         // Initialize state of exiting tokens.
         for (i=mExitingTokens.size()-1; i>=0; i--) {
             mExitingTokens.get(i).hasVisible = false;
@@ -8515,7 +8515,7 @@ public class WindowManagerService extends IWindowManager.Stub
             boolean wallpaperForceHidingChanged = false;
             int repeats = 0;
             int changes = 0;
-            
+
             do {
                 repeats++;
                 if (repeats > 6) {
@@ -8523,7 +8523,7 @@ public class WindowManagerService extends IWindowManager.Stub
                     mLayoutNeeded = false;
                     break;
                 }
-                
+
                 if ((changes&(WindowManagerPolicy.FINISH_LAYOUT_REDO_WALLPAPER
                         | WindowManagerPolicy.FINISH_LAYOUT_REDO_CONFIG
                         | WindowManagerPolicy.FINISH_LAYOUT_REDO_LAYOUT)) != 0) {
@@ -8544,7 +8544,7 @@ public class WindowManagerService extends IWindowManager.Stub
                         mLayoutNeeded = true;
                     }
                 }
-                
+
                 // FIRST LOOP: Perform a layout, if needed.
                 if (repeats < 4) {
                     changes = performLayoutLockedInner();
@@ -8555,7 +8555,7 @@ public class WindowManagerService extends IWindowManager.Stub
                     Slog.w(TAG, "Layout repeat skipped after too many iterations");
                     changes = 0;
                 }
-                
+
                 final int transactionSequence = ++mTransactionSequence;
 
                 // Update animations of all applications, including those
@@ -8575,11 +8575,11 @@ public class WindowManagerService extends IWindowManager.Stub
                 }
 
                 // SECOND LOOP: Execute animations and update visibility of windows.
-                
+
                 if (DEBUG_APP_TRANSITIONS) Slog.v(TAG, "*** ANIM STEP: seq="
                         + transactionSequence + " tokensAnimating="
                         + tokensAnimating);
-                        
+
                 animating = tokensAnimating;
 
                 boolean tokenMayBeDrawn = false;
@@ -8918,7 +8918,7 @@ public class WindowManagerService extends IWindowManager.Stub
                         if (!mPolicy.allowAppAnimationsLw()) {
                             animLp = null;
                         }
-                        
+
                         NN = mOpeningApps.size();
                         for (i=0; i<NN; i++) {
                             AppWindowToken wtoken = mOpeningApps.get(i);
@@ -9073,7 +9073,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
                 if (DEBUG_APP_TRANSITIONS) Slog.v(TAG, "*** ANIM STEP: changes=0x"
                         + Integer.toHexString(changes));
-                
+
                 mInputMonitor.updateInputWindowsLw();
             } while (changes != 0);
 
@@ -9111,7 +9111,7 @@ public class WindowManagerService extends IWindowManager.Stub
                     // difficult because we do need to resize surfaces in some
                     // cases while they are hidden such as when first showing a
                     // window.
-                    
+
                     w.computeShownFrameLocked();
                     if (localLOGV) Slog.v(
                             TAG, "Placing surface #" + i + " " + w.mSurface
@@ -9531,7 +9531,7 @@ public class WindowManagerService extends IWindowManager.Stub
         }
 
         mInputMonitor.updateInputWindowsLw();
-        
+
         Surface.closeTransaction();
 
         if (mWatermark != null) {
@@ -9660,9 +9660,9 @@ public class WindowManagerService extends IWindowManager.Stub
         } else if (animating) {
             requestAnimationLocked(currentTime+(1000/60)-SystemClock.uptimeMillis());
         }
-        
+
         mInputMonitor.updateInputWindowsLw();
-        
+
         if (DEBUG_FREEZE) Slog.v(TAG, "Layout: mDisplayFrozen=" + mDisplayFrozen
                 + " holdScreen=" + holdScreen);
         if (!mDisplayFrozen) {
@@ -9692,12 +9692,12 @@ public class WindowManagerService extends IWindowManager.Stub
                     LocalPowerManager.BUTTON_EVENT, true);
             mTurnOnScreen = false;
         }
-        
+
         // Check to see if we are now in a state where the screen should
         // be enabled, because the window obscured flags have changed.
         enableScreenIfNeededLocked();
     }
-    
+
     /**
      * Must be called with the main window manager lock held.
      */
@@ -9868,7 +9868,7 @@ public class WindowManagerService extends IWindowManager.Stub
                     assignLayersLocked();
                 }
             }
-            
+
             if (mode != UPDATE_FOCUS_WILL_ASSIGN_LAYERS) {
                 // If we defer assigning layers, then the caller is responsible for
                 // doing this part.
@@ -9878,7 +9878,7 @@ public class WindowManagerService extends IWindowManager.Stub
         }
         return false;
     }
-    
+
     private void finishUpdateFocusedWindowAfterAssignLayersLocked() {
         mInputMonitor.setInputFocusLw(mCurrentFocus);
     }
@@ -9973,11 +9973,11 @@ public class WindowManagerService extends IWindowManager.Stub
         }
 
         if (DEBUG_FREEZE) Slog.v(TAG, "*** FREEZING DISPLAY", new RuntimeException());
-        
+
         mDisplayFrozen = true;
-        
+
         mInputMonitor.freezeInputDispatchingLw();
-        
+
         if (mNextAppTransition != WindowManagerPolicy.TRANSIT_UNSET) {
             mNextAppTransition = WindowManagerPolicy.TRANSIT_UNSET;
             mNextAppTransitionPackage = null;
@@ -9999,9 +9999,9 @@ public class WindowManagerService extends IWindowManager.Stub
         if (mWaitingForConfig || mAppsFreezingScreen > 0 || mWindowsFreezingScreen) {
             return;
         }
-        
+
         if (DEBUG_FREEZE) Slog.v(TAG, "*** UNFREEZING DISPLAY", new RuntimeException());
-        
+
         mDisplayFrozen = false;
         mH.removeMessages(H.APP_FREEZE_TIMEOUT);
         if (PROFILE_ORIENTATION) {
@@ -10231,7 +10231,7 @@ public class WindowManagerService extends IWindowManager.Stub
 
         mInputManager.dump(pw);
         pw.println(" ");
-        
+
         synchronized(mWindowMap) {
             pw.println("Current Window Manager state:");
             for (int i=mWindows.size()-1; i>=0; i--) {
@@ -10466,7 +10466,7 @@ public class WindowManagerService extends IWindowManager.Stub
         float mDimTargetAlpha;
         float mDimDeltaPerMs;
         long mLastDimAnimTime;
-        
+
         int mLastDimWidth, mLastDimHeight;
 
         DimAnimator (SurfaceSession session) {

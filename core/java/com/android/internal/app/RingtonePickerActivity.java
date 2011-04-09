@@ -47,46 +47,46 @@ public final class RingtonePickerActivity extends AlertActivity implements
     private static final String TAG = "RingtonePickerActivity";
 
     private static final int DELAY_MS_SELECTION_PLAYED = 300;
-    
+
     private RingtoneManager mRingtoneManager;
-    
+
     private Cursor mCursor;
     private Handler mHandler;
 
     /** The position in the list of the 'Silent' item. */
     private int mSilentPos = -1;
-    
+
     /** The position in the list of the 'Default' item. */
     private int mDefaultRingtonePos = -1;
 
     /** The position in the list of the last clicked item. */
     private int mClickedPos = -1;
-    
+
     /** The position in the list of the ringtone to sample. */
     private int mSampleRingtonePos = -1;
 
     /** Whether this list has the 'Silent' item. */
     private boolean mHasSilentItem;
-    
+
     /** The Uri to place a checkmark next to. */
     private Uri mExistingUri;
-    
+
     /** The number of static items in the list. */
     private int mStaticItemCount;
-    
+
     /** Whether this list has the 'Default' item. */
     private boolean mHasDefaultItem;
-    
+
     /** The Uri to play when the 'Default' item is clicked. */
     private Uri mUriForDefaultItem;
-    
+
     /**
      * A Ringtone for the default ringtone. In most cases, the RingtoneManager
      * will stop the previous ringtone. However, the RingtoneManager doesn't
      * manage the default ringtone for us, so we should stop this one manually.
      */
     private Ringtone mDefaultRingtone;
-    
+
     private DialogInterface.OnClickListener mRingtoneClickListener =
             new DialogInterface.OnClickListener() {
 
@@ -96,11 +96,11 @@ public final class RingtonePickerActivity extends AlertActivity implements
         public void onClick(DialogInterface dialog, int which) {
             // Save the position of most recently clicked item
             mClickedPos = which;
-            
+
             // Play clip
             playRingtone(which, 0);
         }
-        
+
     };
 
     @Override
@@ -120,10 +120,10 @@ public final class RingtonePickerActivity extends AlertActivity implements
         if (mUriForDefaultItem == null) {
             mUriForDefaultItem = Settings.System.DEFAULT_RINGTONE_URI;
         }
-        
+
         // Get whether to show the 'Silent' item
         mHasSilentItem = intent.getBooleanExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
-        
+
         // Give the Activity so it can do managed queries
         mRingtoneManager = new RingtoneManager(this);
 
@@ -131,15 +131,15 @@ public final class RingtonePickerActivity extends AlertActivity implements
         boolean includeDrm = intent.getBooleanExtra(RingtoneManager.EXTRA_RINGTONE_INCLUDE_DRM,
                 true);
         mRingtoneManager.setIncludeDrm(includeDrm);
-        
+
         // Get the types of ringtones to show
         int types = intent.getIntExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, -1);
         if (types != -1) {
             mRingtoneManager.setType(types);
         }
-        
+
         mCursor = mRingtoneManager.getCursor();
-        
+
         // The volume keys will control the stream that we are choosing a ringtone for
         setVolumeControlStream(mRingtoneManager.inferStreamType());
 
@@ -163,23 +163,23 @@ public final class RingtonePickerActivity extends AlertActivity implements
         if (p.mTitle == null) {
             p.mTitle = getString(com.android.internal.R.string.ringtone_picker_title);
         }
-        
+
         setupAlert();
     }
 
     public void onPrepareListView(ListView listView) {
-        
+
         if (mHasDefaultItem) {
             mDefaultRingtonePos = addDefaultRingtoneItem(listView);
-            
+
             if (RingtoneManager.isDefault(mExistingUri)) {
                 mClickedPos = mDefaultRingtonePos;
             }
         }
-        
+
         if (mHasSilentItem) {
             mSilentPos = addSilentItem(listView);
-            
+
             // The 'Silent' item should use a null Uri
             if (mExistingUri == null) {
                 mClickedPos = mSilentPos;
@@ -189,7 +189,7 @@ public final class RingtonePickerActivity extends AlertActivity implements
         if (mClickedPos == -1) {
             mClickedPos = getListPosition(mRingtoneManager.getRingtonePosition(mExistingUri));
         }
-        
+
         // Put a checkmark next to an item.
         mAlertParams.mCheckedItem = mClickedPos;
     }
@@ -197,7 +197,7 @@ public final class RingtonePickerActivity extends AlertActivity implements
     /**
      * Adds a static item to the top of the list. A static item is one that is not from the
      * RingtoneManager.
-     * 
+     *
      * @param listView The ListView to add to.
      * @param textResId The resource ID of the text for the item.
      * @return The position of the inserted item.
@@ -210,28 +210,28 @@ public final class RingtonePickerActivity extends AlertActivity implements
         mStaticItemCount++;
         return listView.getHeaderViewsCount() - 1;
     }
-    
+
     private int addDefaultRingtoneItem(ListView listView) {
         return addStaticItem(listView, com.android.internal.R.string.ringtone_default);
     }
-    
+
     private int addSilentItem(ListView listView) {
         return addStaticItem(listView, com.android.internal.R.string.ringtone_silent);
     }
-    
+
     /*
      * On click of Ok/Cancel buttons
      */
     public void onClick(DialogInterface dialog, int which) {
         boolean positiveResult = which == DialogInterface.BUTTON_POSITIVE;
-        
+
         // Stop playing the previous ringtone
         mRingtoneManager.stopPreviousRingtone();
-        
+
         if (positiveResult) {
             Intent resultIntent = new Intent();
             Uri uri = null;
-            
+
             if (mClickedPos == mDefaultRingtonePos) {
                 // Set it to the default Uri that they originally gave us
                 uri = mUriForDefaultItem;
@@ -256,7 +256,7 @@ public final class RingtonePickerActivity extends AlertActivity implements
 
         finish();
     }
-    
+
     /*
      * On item selected via keys
      */
@@ -272,14 +272,14 @@ public final class RingtonePickerActivity extends AlertActivity implements
         mSampleRingtonePos = position;
         mHandler.postDelayed(this, delayMs);
     }
-    
+
     public void run() {
-        
+
         if (mSampleRingtonePos == mSilentPos) {
             mRingtoneManager.stopPreviousRingtone();
             return;
         }
-        
+
         /*
          * Stop the default ringtone, if it's playing (other ringtones will be
          * stopped by the RingtoneManager when we get another Ringtone from it.
@@ -288,14 +288,14 @@ public final class RingtonePickerActivity extends AlertActivity implements
             mDefaultRingtone.stop();
             mDefaultRingtone = null;
         }
-        
+
         Ringtone ringtone;
         if (mSampleRingtonePos == mDefaultRingtonePos) {
             if (mDefaultRingtone == null) {
                 mDefaultRingtone = RingtoneManager.getRingtone(this, mUriForDefaultItem);
             }
             ringtone = mDefaultRingtone;
-            
+
             /*
              * Normally the non-static RingtoneManager.getRingtone stops the
              * previous ringtone, but we're getting the default ringtone outside
@@ -303,11 +303,11 @@ public final class RingtonePickerActivity extends AlertActivity implements
              * ringtone manually.
              */
             mRingtoneManager.stopPreviousRingtone();
-            
+
         } else {
             ringtone = mRingtoneManager.getRingtone(getRingtoneManagerPosition(mSampleRingtonePos));
         }
-        
+
         if (ringtone != null) {
             ringtone.play();
         }
@@ -330,22 +330,22 @@ public final class RingtonePickerActivity extends AlertActivity implements
         if (mDefaultRingtone != null && mDefaultRingtone.isPlaying()) {
             mDefaultRingtone.stop();
         }
-        
+
         if (mRingtoneManager != null) {
             mRingtoneManager.stopPreviousRingtone();
         }
     }
-    
+
     private int getRingtoneManagerPosition(int listPos) {
         return listPos - mStaticItemCount;
     }
-    
+
     private int getListPosition(int ringtoneManagerPos) {
-        
+
         // If the manager position is -1 (for not found), return that
         if (ringtoneManagerPos < 0) return ringtoneManagerPos;
-        
+
         return ringtoneManagerPos + mStaticItemCount;
     }
-    
+
 }

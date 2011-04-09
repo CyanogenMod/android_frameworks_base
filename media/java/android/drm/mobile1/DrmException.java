@@ -24,10 +24,10 @@ import java.io.IOException;
 public class DrmException extends Exception
 {
     // TODO: add more specific DRM error codes.
-    
+
     private DrmException() {
     }
-    
+
     public DrmException(String message) {
         super(message);
     }

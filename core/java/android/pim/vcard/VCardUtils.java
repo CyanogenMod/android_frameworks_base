@@ -48,7 +48,7 @@ public class VCardUtils {
 
     // Note that not all types are included in this map/set, since, for example, TYPE_HOME_FAX is
     // converted to two parameter Strings. These only contain some minor fields valid in both
-    // vCard and current (as of 2009-08-07) Contacts structure. 
+    // vCard and current (as of 2009-08-07) Contacts structure.
     private static final Map<Integer, String> sKnownPhoneTypesMap_ItoS;
     private static final Set<String> sPhoneTypesUnknownToContactsSet;
     private static final Map<String, Integer> sKnownPhoneTypeMap_StoI;
@@ -65,11 +65,11 @@ public class VCardUtils {
         sKnownPhoneTypeMap_StoI.put(VCardConstants.PARAM_TYPE_PAGER, Phone.TYPE_PAGER);
         sKnownPhoneTypesMap_ItoS.put(Phone.TYPE_ISDN, VCardConstants.PARAM_TYPE_ISDN);
         sKnownPhoneTypeMap_StoI.put(VCardConstants.PARAM_TYPE_ISDN, Phone.TYPE_ISDN);
-        
+
         sKnownPhoneTypeMap_StoI.put(VCardConstants.PARAM_TYPE_HOME, Phone.TYPE_HOME);
         sKnownPhoneTypeMap_StoI.put(VCardConstants.PARAM_TYPE_WORK, Phone.TYPE_WORK);
         sKnownPhoneTypeMap_StoI.put(VCardConstants.PARAM_TYPE_CELL, Phone.TYPE_MOBILE);
-                
+
         sKnownPhoneTypeMap_StoI.put(VCardConstants.PARAM_PHONE_EXTRA_TYPE_OTHER, Phone.TYPE_OTHER);
         sKnownPhoneTypeMap_StoI.put(VCardConstants.PARAM_PHONE_EXTRA_TYPE_CALLBACK,
                 Phone.TYPE_CALLBACK);
@@ -114,7 +114,7 @@ public class VCardUtils {
 
     /**
      * Returns Interger when the given types can be parsed as known type. Returns String object
-     * when not, which should be set to label. 
+     * when not, which should be set to label.
      */
     public static Object getPhoneTypeFromStrings(Collection<String> types,
             String number) {
@@ -125,7 +125,7 @@ public class VCardUtils {
         String label = null;
         boolean isFax = false;
         boolean hasPref = false;
-        
+
         if (types != null) {
             for (String typeString : types) {
                 if (typeString == null) {
@@ -442,7 +442,7 @@ public class VCardUtils {
      * This is useful since vCard 3.0 often requires the ("X-") properties and groups
      * should contain only alphabets, digits, and hyphen.
      * </p>
-     * <p> 
+     * <p>
      * Note: It is already known some devices (wrongly) outputs properties with characters
      *       which should not be in the field. One example is "X-GOOGLE TALK". We accept
      *       such kind of input but must never output it unless the target is very specific
@@ -735,7 +735,7 @@ public class VCardUtils {
 
         byte[] rawBytes = null;
         try {
-            rawBytes = rawString.getBytes(sourceCharset); 
+            rawBytes = rawString.getBytes(sourceCharset);
         } catch (UnsupportedEncodingException e) {
             Log.w(LOG_TAG, "Failed to decode: " + sourceCharset);
             rawBytes = rawString.getBytes();

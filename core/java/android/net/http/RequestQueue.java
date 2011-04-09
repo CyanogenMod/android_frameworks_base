@@ -212,7 +212,7 @@ public class RequestQueue implements RequestFeeder {
      * and pipelining.
      *
      * @param context application context
-     * @param connectionCount The number of simultaneous connections 
+     * @param connectionCount The number of simultaneous connections
      */
     public RequestQueue(Context context, int connectionCount) {
         mContext = context;

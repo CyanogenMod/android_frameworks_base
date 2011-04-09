@@ -97,7 +97,7 @@ public class ArrowKeyMovementMethod implements MovementMethod {
             if (alt) {
                 return Selection.moveToLeftEdge(buffer, layout);
             } else {
-                return Selection.moveLeft(buffer, layout); 
+                return Selection.moveLeft(buffer, layout);
             }
         }
     }
@@ -117,7 +117,7 @@ public class ArrowKeyMovementMethod implements MovementMethod {
             if (alt) {
                 return Selection.moveToRightEdge(buffer, layout);
             } else {
-                return Selection.moveRight(buffer, layout); 
+                return Selection.moveRight(buffer, layout);
             }
         }
     }
@@ -202,7 +202,7 @@ public class ArrowKeyMovementMethod implements MovementMethod {
               boolean cap = isCap(buffer);
               if (cap) {
                   int offset = widget.getOffset((int) event.getX(), (int) event.getY());
-                  
+
                   buffer.setSpan(LAST_TAP_DOWN, offset, offset, Spannable.SPAN_POINT_POINT);
 
                   // Disallow intercepting of the touch events, so that

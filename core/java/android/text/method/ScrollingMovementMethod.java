@@ -32,7 +32,7 @@ implements MovementMethod
      */
     protected boolean left(TextView widget, Spannable buffer) {
         Layout layout = widget.getLayout();
-        
+
         int scrolly = widget.getScrollY();
         int scr = widget.getScrollX();
         int em = Math.round(layout.getPaint().getFontSpacing());
@@ -194,12 +194,12 @@ implements MovementMethod
         }
         return false;
     }
-    
+
     public boolean onTrackballEvent(TextView widget, Spannable text,
             MotionEvent event) {
         return false;
     }
-    
+
     public boolean onTouchEvent(TextView widget, Spannable buffer,
                                  MotionEvent event) {
         return Touch.onTouchEvent(widget, buffer, event);

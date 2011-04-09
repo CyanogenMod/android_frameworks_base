@@ -31,7 +31,7 @@ public class TestedScreen extends Activity
     public static final String WAIT_BEFORE_FINISH = "TestedScreen.WAIT_BEFORE_FINISH";
     public static final String DELIVER_RESULT = "TestedScreen.DELIVER_RESULT";
     public static final String CLEAR_TASK = "TestedScreen.CLEAR_TASK";
-    
+
     public TestedScreen() {
     }
 
@@ -93,7 +93,7 @@ public class TestedScreen extends Activity
         setClass(this, ClearTop.class);
         startActivity(intent);
     }
-    
+
     private Handler mHandler = new Handler() {
         public void handleMessage(Message msg) {
             if (CLEAR_TASK.equals(getIntent().getAction())) {

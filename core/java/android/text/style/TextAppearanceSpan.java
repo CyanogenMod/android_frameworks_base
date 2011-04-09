@@ -56,7 +56,7 @@ public class TextAppearanceSpan extends MetricAffectingSpan implements Parcelabl
     public TextAppearanceSpan(Context context, int appearance,
                               int colorList) {
         ColorStateList textColor;
-        
+
         TypedArray a =
             context.obtainStyledAttributes(appearance,
                                            com.android.internal.R.styleable.TextAppearance);
@@ -83,7 +83,7 @@ public class TextAppearanceSpan extends MetricAffectingSpan implements Parcelabl
             case 3:
                 mTypeface = "monospace";
                 break;
-                
+
             default:
                 mTypeface = null;
                 break;
@@ -98,7 +98,7 @@ public class TextAppearanceSpan extends MetricAffectingSpan implements Parcelabl
             textColor = a.getColorStateList(colorList);
             a.recycle();
         }
-        
+
         mTextColor = textColor;
     }
 
@@ -130,11 +130,11 @@ public class TextAppearanceSpan extends MetricAffectingSpan implements Parcelabl
             mTextColorLink = null;
         }
     }
-    
+
     public int getSpanTypeId() {
         return TextUtils.TEXT_APPEARANCE_SPAN;
     }
-    
+
     public int describeContents() {
         return 0;
     }

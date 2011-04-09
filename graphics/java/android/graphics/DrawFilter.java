@@ -30,7 +30,7 @@ public class DrawFilter {
     protected void finalize() throws Throwable {
         nativeDestructor(mNativeInt);
     }
-    
+
     private static native void nativeDestructor(int nativeDrawFilter);
 }
 

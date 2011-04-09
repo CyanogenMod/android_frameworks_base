@@ -16,8 +16,8 @@
 
 package android.os;
 
-import android.os.Handler;         
-import android.os.Message;         
+import android.os.Handler;
+import android.os.Message;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,9 +38,9 @@ public class RegistrantList
     {
         // if the handler is already in the registrant list, remove it
         remove(h);
-        add(new Registrant(h, what, obj));        
+        add(new Registrant(h, what, obj));
     }
-    
+
     public synchronized void
     add(Registrant r)
     {
@@ -53,7 +53,7 @@ public class RegistrantList
     {
         for (int i = registrants.size() - 1; i >= 0 ; i--) {
             Registrant  r = (Registrant) registrants.get(i);
-            
+
             if (r.refH == null) {
                 registrants.remove(i);
             }
@@ -80,7 +80,7 @@ public class RegistrantList
             r.internalNotifyRegistrant(result, exception);
        }
     }
-    
+
     public /*synchronized*/ void
     notifyRegistrants()
     {
@@ -99,13 +99,13 @@ public class RegistrantList
         internalNotifyRegistrants (result, null);
     }
 
-    
+
     public /*synchronized*/ void
     notifyRegistrants(AsyncResult ar)
     {
         internalNotifyRegistrants(ar.result, ar.exception);
     }
-    
+
     public synchronized void
     remove(Handler h)
     {

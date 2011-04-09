@@ -24,7 +24,7 @@ import android.widget.ExpandableListView;
 public class ExpandableListWithHeaders extends ExpandableListScenario {
     private static final int[] sNumChildren = {1, 4, 3, 2, 6};
     private static final int sNumOfHeadersAndFooters = 12;
-    
+
     @Override
     protected void init(ExpandableParams params) {
         params.setStackFromBottom(false)
@@ -52,11 +52,11 @@ public class ExpandableListWithHeaders extends ExpandableListScenario {
             footer.setText("Footer View " + i);
             expandableListView.addFooterView(footer);
         }
-        
+
         // Set adapter here AFTER we set header and footer views
         setAdapter(expandableListView);
     }
-    
+
     /**
      * @return The number of headers (and the same number of footers)
      */

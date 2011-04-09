@@ -39,7 +39,7 @@ public class PrintPsTree {
 
         for (Proc proc : root.processes.values()) {
             if (proc.parent == null) {
-                proc.print();                                
+                proc.print();
             }
         }
     }

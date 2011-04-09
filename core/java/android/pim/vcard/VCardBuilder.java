@@ -1715,7 +1715,7 @@ public class VCardBuilder {
     }
 
     /**
-     * @param encodedValue Must be encoded by BASE64 
+     * @param encodedValue Must be encoded by BASE64
      * @param photoType
      */
     public void appendPhotoLine(final String encodedValue, final String photoType) {
@@ -1837,7 +1837,7 @@ public class VCardBuilder {
     }
 
     /**
-     * Appends one line with a given property name and value.  
+     * Appends one line with a given property name and value.
      */
     public void appendLine(final String propertyName, final String rawValue) {
         appendLine(propertyName, rawValue, false, false);

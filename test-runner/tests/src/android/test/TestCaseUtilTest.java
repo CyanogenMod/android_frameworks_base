@@ -33,7 +33,7 @@ public class TestCaseUtilTest extends TestCase {
         assertTrue(testCaseNames.get(0).endsWith("OneTestTestCase"));
         assertTrue(testCaseNames.get(1).endsWith("OneTestTestSuite"));
     }
-    
+
     public void testGetTestCaseNamesForTestCaseWithSuiteMethod() throws Exception {
         TestCase testCase = new OneTestTestCaseWithSuite();
 
@@ -47,7 +47,7 @@ public class TestCaseUtilTest extends TestCase {
         Test test = TestCaseUtil.createTestSuite(OneTestTestCase.class);
         assertEquals(1, test.countTestCases());
     }
-    
+
     public void testCreateTestForTestSuiteWithSuiteMethod() throws Exception {
         Test test = TestCaseUtil.createTestSuite(TwoTestsInTestSuite.class);
         assertEquals(2, test.countTestCases());
@@ -57,7 +57,7 @@ public class TestCaseUtilTest extends TestCase {
         Test test = TestCaseUtil.createTestSuite(OneTestTestCaseWithSuite.class);
         assertEquals(1, test.countTestCases());
     }
-    
+
     public void testReturnEmptyStringForTestSuiteWithNoName() throws Exception {
         assertEquals("", TestCaseUtil.getTestName(new TestSuite()));
     }

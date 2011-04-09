@@ -20,7 +20,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * <p>Various utilities for debugging and logging.</p> 
+ * <p>Various utilities for debugging and logging.</p>
  */
 public class DebugUtils {
     /**

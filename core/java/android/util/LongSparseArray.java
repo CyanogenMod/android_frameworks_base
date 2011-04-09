@@ -48,7 +48,7 @@ public class LongSparseArray<E> {
         mValues = new Object[initialCapacity];
         mSize = 0;
     }
-    
+
     /**
      * @return A copy of all keys contained in the sparse array.
      */
@@ -58,7 +58,7 @@ public class LongSparseArray<E> {
         System.arraycopy(mKeys, 0, result, 0, length);
         return result;
     }
-    
+
     /**
      * Sets all supplied keys to the given unique value.
      * @param keys Keys to set

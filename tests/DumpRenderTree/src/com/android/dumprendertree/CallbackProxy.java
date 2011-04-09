@@ -48,7 +48,7 @@ public class CallbackProxy extends Handler implements EventSender, LayoutTestCon
     private static final int EVENT_CLEAR_TOUCH_POINTS = 17;
     private static final int EVENT_CANCEL_TOUCH_POINT = 18;
     private static final int EVENT_SET_TOUCH_MODIFIER = 19;
-    
+
     private static final int LAYOUT_CLEAR_LIST = 20;
     private static final int LAYOUT_DISPLAY = 21;
     private static final int LAYOUT_DUMP_TEXT = 22;
@@ -74,13 +74,13 @@ public class CallbackProxy extends Handler implements EventSender, LayoutTestCon
     private static final int LAYOUT_SET_CAN_OPEN_WINDOWS = 42;
     private static final int SET_GEOLOCATION_PERMISSION = 43;
     private static final int OVERRIDE_PREFERENCE = 44;
-    
-    CallbackProxy(EventSender eventSender, 
+
+    CallbackProxy(EventSender eventSender,
             LayoutTestController layoutTestController) {
         mEventSender = eventSender;
         mLayoutTestController = layoutTestController;
     }
-    
+
     public void handleMessage(Message msg) {
         switch (msg.what) {
         case EVENT_DOM_LOG:
@@ -91,7 +91,7 @@ public class CallbackProxy extends Handler implements EventSender, LayoutTestCon
             break;
         case EVENT_KEY_DOWN_1:
             HashMap map = (HashMap) msg.obj;
-            mEventSender.keyDown((String) map.get("character"), 
+            mEventSender.keyDown((String) map.get("character"),
                     (String[]) map.get("withModifiers"));
             break;
 
@@ -215,9 +215,9 @@ public class CallbackProxy extends Handler implements EventSender, LayoutTestCon
             break;
 
         case LAYOUT_QUEUE_LOAD:
-            HashMap<String, String> loadMap = 
+            HashMap<String, String> loadMap =
                 (HashMap<String, String>) msg.obj;
-            mLayoutTestController.queueLoad(loadMap.get("Url"), 
+            mLayoutTestController.queueLoad(loadMap.get("Url"),
                     loadMap.get("frameTarget"));
             break;
 
@@ -277,7 +277,7 @@ public class CallbackProxy extends Handler implements EventSender, LayoutTestCon
     }
 
     // EventSender Methods
-    
+
     public void enableDOMUIEventLogging(int DOMNode) {
         obtainMessage(EVENT_DOM_LOG, DOMNode, 0).sendToTarget();
     }
@@ -299,7 +299,7 @@ public class CallbackProxy extends Handler implements EventSender, LayoutTestCon
     }
 
     public void leapForward(int milliseconds) {
-        obtainMessage(EVENT_LEAP, milliseconds, 0).sendToTarget(); 
+        obtainMessage(EVENT_LEAP, milliseconds, 0).sendToTarget();
     }
 
     public void mouseClick() {
@@ -365,7 +365,7 @@ public class CallbackProxy extends Handler implements EventSender, LayoutTestCon
     public void cancelTouchPoint(int id) {
         obtainMessage(EVENT_CANCEL_TOUCH_POINT, id, 0).sendToTarget();
     }
-    
+
     // LayoutTestController Methods
 
     public void clearBackForwardList() {
@@ -389,11 +389,11 @@ public class CallbackProxy extends Handler implements EventSender, LayoutTestCon
     }
 
     public void dumpEditingCallbacks() {
-        obtainMessage(LAYOUT_DUMP_EDIT_CB).sendToTarget(); 
+        obtainMessage(LAYOUT_DUMP_EDIT_CB).sendToTarget();
     }
 
     public void dumpSelectionRect() {
-        obtainMessage(LAYOUT_DUMP_SEL_RECT).sendToTarget(); 
+        obtainMessage(LAYOUT_DUMP_SEL_RECT).sendToTarget();
     }
 
     public void dumpTitleChanges() {
@@ -428,7 +428,7 @@ public class CallbackProxy extends Handler implements EventSender, LayoutTestCon
     }
 
     public void queueScript(String scriptToRunInCurrentContext) {
-        obtainMessage(LAYOUT_QUEUE_SCRIPT, 
+        obtainMessage(LAYOUT_QUEUE_SCRIPT,
                 scriptToRunInCurrentContext).sendToTarget();
     }
 
@@ -449,7 +449,7 @@ public class CallbackProxy extends Handler implements EventSender, LayoutTestCon
     }
 
     public void testRepaint() {
-        obtainMessage(LAYOUT_TEST_REPAINT).sendToTarget(); 
+        obtainMessage(LAYOUT_TEST_REPAINT).sendToTarget();
     }
 
     public void waitUntilDone() {

@@ -24,7 +24,7 @@ import java.io.Serializable;
 class Operation implements Serializable {
 
     private static final long serialVersionUID = 0;
-    
+
     /**
      * Type of operation.
      */
@@ -115,7 +115,7 @@ class Operation implements Serializable {
         }
         return microsInt;
     }
-    
+
     /**
      * Primarily for debugger support
      */

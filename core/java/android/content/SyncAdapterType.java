@@ -31,7 +31,7 @@ public class SyncAdapterType implements Parcelable {
     private final boolean userVisible;
     private final boolean supportsUploading;
 
-    public SyncAdapterType(String authority, String accountType, boolean userVisible, 
+    public SyncAdapterType(String authority, String accountType, boolean userVisible,
             boolean supportsUploading) {
         if (TextUtils.isEmpty(authority)) {
             throw new IllegalArgumentException("the authority must not be empty: " + authority);

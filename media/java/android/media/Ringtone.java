@@ -36,7 +36,7 @@ import java.io.IOException;
  * <p>
  * For ways of retrieving {@link Ringtone} objects or to show a ringtone
  * picker, see {@link RingtoneManager}.
- * 
+ *
  * @see RingtoneManager
  */
 public class Ringtone {
@@ -73,12 +73,12 @@ public class Ringtone {
 
     /**
      * Sets the stream type where this ringtone will be played.
-     * 
+     *
      * @param streamType The stream, see {@link AudioManager}.
      */
     public void setStreamType(int streamType) {
         mStreamType = streamType;
-        
+
         if (mAudio != null) {
             /*
              * The stream type has to be set before the media player is
@@ -94,7 +94,7 @@ public class Ringtone {
 
     /**
      * Gets the stream type where this ringtone will be played.
-     * 
+     *
      * @return The stream type, see {@link AudioManager}.
      */
     public int getStreamType() {
@@ -104,8 +104,8 @@ public class Ringtone {
     /**
      * Returns a human-presentable title for ringtone. Looks in media and DRM
      * content providers. If not in either, uses the filename
-     * 
-     * @param context A context used for querying. 
+     *
+     * @param context A context used for querying.
      */
     public String getTitle(Context context) {
         if (mTitle != null) return mTitle;
@@ -128,7 +128,7 @@ public class Ringtone {
     private static String getTitle(Context context, Uri uri, boolean followSettingsUri) {
         Cursor cursor = null;
         ContentResolver res = context.getContentResolver();
-        
+
         String title = null;
 
         if (uri != null) {
@@ -157,7 +157,7 @@ public class Ringtone {
                 } else if (MediaStore.AUTHORITY.equals(authority)) {
                     cursor = res.query(uri, MEDIA_COLUMNS, null, null, null);
                 }
-                
+
                 try {
                     if (cursor != null && cursor.getCount() == 1) {
                         cursor.moveToFirst();
@@ -175,15 +175,15 @@ public class Ringtone {
 
         if (title == null) {
             title = context.getString(com.android.internal.R.string.ringtone_unknown);
-            
+
             if (title == null) {
                 title = "";
             }
         }
-        
+
         return title;
     }
-    
+
     private void openMediaPlayer() throws IOException {
         stop();
         mAudio = new MediaPlayer();
@@ -223,7 +223,7 @@ public class Ringtone {
         mUri = uri;
         openMediaPlayer();
     }
-    
+
     /**
      * Plays the ringtone.
      */
@@ -258,7 +258,7 @@ public class Ringtone {
 
     /**
      * Whether this ringtone is currently playing.
-     * 
+     *
      * @return True if playing, false otherwise.
      */
     public boolean isPlaying() {

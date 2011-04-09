@@ -21,42 +21,42 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Base class for producing a message digest from different hash encryptions.
  */
-public abstract class MessageDigest 
-{    
+public abstract class MessageDigest
+{
     /**
      * Returns a digest object of the specified type.
-     * 
+     *
      * @param algorithm  The type of hash function to use. Valid values are
      *                   <em>SHA-1</em> and <em>MD5</em>.
-     * @return The respective MessageDigest object. Either a 
+     * @return The respective MessageDigest object. Either a
      *         {@link android.security.Sha1MessageDigest} or
      *         {@link android.security.Md5MessageDigest} object.
      * @throws NoSuchAlgorithmException If an invalid <var>algorithm</var>
      *                                  is given.
      */
-    public static MessageDigest getInstance(String algorithm) 
+    public static MessageDigest getInstance(String algorithm)
         throws NoSuchAlgorithmException
     {
         if (algorithm == null) {
             return null;
         }
-        
+
         if (algorithm.equals("SHA-1")) {
             return new Sha1MessageDigest();
         }
         else if (algorithm.equals("MD5")) {
             return new Md5MessageDigest();
         }
-        
+
         throw new NoSuchAlgorithmException();
     }
-    
-    public abstract void update(byte[] input);    
+
+    public abstract void update(byte[] input);
     public abstract byte[] digest();
-    
+
     /**
      * Produces a message digest for the given input.
-     * 
+     *
      * @param input  The message to encrypt.
      * @return The digest (hash sum).
      */

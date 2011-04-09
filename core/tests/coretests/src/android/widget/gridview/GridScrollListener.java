@@ -37,7 +37,7 @@ public class GridScrollListener extends Activity implements AbsListView.OnScroll
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        
+
         setContentView(R.layout.grid_scroll_listener);
 
         String values[] = new String[1000];
@@ -45,7 +45,7 @@ public class GridScrollListener extends Activity implements AbsListView.OnScroll
         for(i=0; i<1000; i++) {
             values[i] = ((Integer)i).toString();
         }
-        
+
         mText = (TextView) findViewById(R.id.text);
         mGridView = (GridView) findViewById(R.id.grid);
         mGridView.setAdapter(new ArrayAdapter<String>(this,
@@ -53,7 +53,7 @@ public class GridScrollListener extends Activity implements AbsListView.OnScroll
 
         mGridView.setOnScrollListener(this);
     }
-    
+
     public GridView getGridView() {
         return mGridView;
     }
@@ -63,6 +63,6 @@ public class GridScrollListener extends Activity implements AbsListView.OnScroll
         mText.setText("Showing " + firstVisibleItem + "-" + lastItem + "/" + totalItemCount);
     }
 
-    public void onScrollStateChanged(AbsListView view, int scrollState) {        
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
     }
 }

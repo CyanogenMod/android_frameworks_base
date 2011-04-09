@@ -1004,7 +1004,7 @@ public final class Bridge implements ILayoutBridge {
             // pass for now.
             return 0;
         }
-        
+
         @SuppressWarnings("unused")
         public void finishDrawing(IWindow arg0) throws RemoteException {
             // pass for now.

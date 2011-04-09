@@ -39,7 +39,7 @@ public class LocalService extends Service {
                 return super.onTransact(code, data, reply, flags);
             }
         }
-        
+
     };
 
     private IBinder mReportObject;
@@ -88,7 +88,7 @@ public class LocalService extends Service {
         Log.i("LocalService", "onBind: " + intent);
         return mBinder;
     }
-    
+
     @Override
     public boolean onUnbind(Intent intent) {
         Log.i("LocalService", "onUnbind: " + intent);
@@ -104,7 +104,7 @@ public class LocalService extends Service {
         }
         return true;
     }
-    
+
     @Override
     public void onRebind(Intent intent) {
         Log.i("LocalService", "onUnbind: " + intent);

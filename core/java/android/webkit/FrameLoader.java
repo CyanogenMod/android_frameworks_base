@@ -49,7 +49,7 @@ class FrameLoader {
             "application/xhtml+xml, image/png, text/plain, */*;q=0.8";
 
     private static final String LOGTAG = "webkit";
-    
+
     FrameLoader(LoadListener listener, WebSettings settings,
             String method) {
         mListener = listener;
@@ -231,7 +231,7 @@ class FrameLoader {
 
         boolean ret = false;
         int error = EventHandler.ERROR_UNSUPPORTED_SCHEME;
-        
+
         try {
             ret = mNetwork.requestURL(mMethod, mHeaders,
                     mPostData, mListener);
@@ -283,8 +283,8 @@ class FrameLoader {
             // loader to not use the cached content.
             case WebSettings.LOAD_NO_CACHE:
                 break;
-                
-                
+
+
             // This mode is used when the content should only be loaded from
             // the cache. If it is not there, then fail the load. This is used
             // to load POST content in a history navigation.
@@ -308,7 +308,7 @@ class FrameLoader {
 
             // This mode is for when the user is doing a history navigation
             // in the browser and should returned cached content regardless
-            // of it's state. If it is not in the cache, then go to the 
+            // of it's state. If it is not in the cache, then go to the
             // network.
             case WebSettings.LOAD_CACHE_ELSE_NETWORK: {
                 if (DebugFlags.FRAME_LOADER) {
@@ -337,7 +337,7 @@ class FrameLoader {
 
         return false;
     }
-    
+
     /**
      * Add the static headers that don't change with each request.
      */
@@ -354,7 +354,7 @@ class FrameLoader {
         if (acceptLanguage.length() > 0) {
             mHeaders.put("Accept-Language", acceptLanguage);
         }
-        
+
         mHeaders.put("User-Agent", mSettings.getUserAgentString());
     }
 
@@ -363,7 +363,7 @@ class FrameLoader {
      * and is not used when we are proxying an untrusted request.
      */
     private void populateHeaders() {
-        
+
         if (mReferrer != null) mHeaders.put("Referer", mReferrer);
         if (mContentType != null) mHeaders.put(CONTENT_TYPE, mContentType);
 

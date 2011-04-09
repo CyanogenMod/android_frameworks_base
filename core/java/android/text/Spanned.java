@@ -30,7 +30,7 @@ extends CharSequence
      * of spans.
      */
     public static final int SPAN_POINT_MARK_MASK = 0x33;
-    
+
     /**
      * 0-length spans with type SPAN_MARK_MARK behave like text marks:
      * they remain at their original offset when text is inserted
@@ -104,7 +104,7 @@ extends CharSequence
      * replaced.
      */
     public static final int SPAN_COMPOSING = 0x100;
-    
+
     /**
      * This flag will be set for intermediate span changes, meaning there
      * is guaranteed to be another change following it.  Typically it is
@@ -112,7 +112,7 @@ extends CharSequence
      * offset it sets when updating the selection.
      */
     public static final int SPAN_INTERMEDIATE = 0x200;
-    
+
     /**
      * The bits numbered SPAN_USER_SHIFT and above are available
      * for callers to use to store scalar data associated with their

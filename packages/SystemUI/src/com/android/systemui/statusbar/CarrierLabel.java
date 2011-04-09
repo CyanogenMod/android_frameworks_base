@@ -111,7 +111,7 @@ public class CarrierLabel extends TextView {
         }
     }
 
-    
+
 }
 
 

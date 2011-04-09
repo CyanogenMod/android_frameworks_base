@@ -197,7 +197,7 @@ public class DefaultContainerService extends IntentService {
         }
         path.delete();
     }
-    
+
     public IBinder onBind(Intent intent) {
         return mBinder;
     }
@@ -457,7 +457,7 @@ public class DefaultContainerService extends IntentService {
 
         File apkFile = new File(archiveFilePath);
         long pkgLen = apkFile.length();
-        
+
         // To make final copy
         long reqInstallSize = pkgLen;
         // For dex files. Just ignore and fail when extracting. Max limit of 2Gig for now.

@@ -287,18 +287,18 @@ class ContextImpl extends Context {
     public Looper getMainLooper() {
         return mMainThread.getLooper();
     }
-    
+
     @Override
     public Context getApplicationContext() {
         return (mPackageInfo != null) ?
                 mPackageInfo.getApplication() : mMainThread.getApplication();
     }
-    
+
     @Override
     public void setTheme(int resid) {
         mThemeResource = resid;
     }
-    
+
     @Override
     public Resources.Theme getTheme() {
         if (mTheme == null) {
@@ -475,7 +475,7 @@ class ContextImpl extends Context {
             return mFilesDir;
         }
     }
-    
+
     @Override
     public File getExternalFilesDir(String type) {
         synchronized (mSync) {
@@ -507,7 +507,7 @@ class ContextImpl extends Context {
             return dir;
         }
     }
-    
+
     @Override
     public File getCacheDir() {
         synchronized (mSync) {
@@ -527,7 +527,7 @@ class ContextImpl extends Context {
         }
         return mCacheDir;
     }
-    
+
     @Override
     public File getExternalCacheDir() {
         synchronized (mSync) {
@@ -549,7 +549,7 @@ class ContextImpl extends Context {
             return mExternalCacheDir;
         }
     }
-    
+
     @Override
     public File getFileStreamPath(String name) {
         return makeFilename(getFilesDir(), name);
@@ -590,7 +590,7 @@ class ContextImpl extends Context {
         return (list != null) ? list : EMPTY_FILE_LIST;
     }
 
-    
+
     private File getDatabasesDir() {
         synchronized (mSync) {
             if (mDatabasesDir == null) {
@@ -602,7 +602,7 @@ class ContextImpl extends Context {
             return mDatabasesDir;
         }
     }
-    
+
     @Override
     public Drawable getWallpaper() {
         return getWallpaperManager().getDrawable();
@@ -670,7 +670,7 @@ class ContextImpl extends Context {
         } catch (RemoteException e) {
         }
     }
-    
+
     @Override
     public void sendBroadcast(Intent intent) {
         String resolvedType = intent.resolveTypeIfNeeded(getContentResolver());
@@ -1639,15 +1639,15 @@ class ContextImpl extends Context {
     final void setActivityToken(IBinder token) {
         mActivityToken = token;
     }
-    
+
     final void setOuterContext(Context context) {
         mOuterContext = context;
     }
-    
+
     final Context getOuterContext() {
         return mOuterContext;
     }
-    
+
     final IBinder getActivityToken() {
         return mActivityToken;
     }
@@ -1725,7 +1725,7 @@ class ContextImpl extends Context {
         public boolean releaseProvider(IContentProvider provider) {
             return mMainThread.releaseProvider(provider);
         }
-        
+
         private final ActivityThread mMainThread;
     }
 
@@ -1758,7 +1758,7 @@ class ContextImpl extends Context {
                 throw new RuntimeException("Package manager has died", e);
             }
         }
-        
+
         @Override
         public String[] canonicalToCurrentPackageNames(String[] names) {
             try {
@@ -1767,7 +1767,7 @@ class ContextImpl extends Context {
                 throw new RuntimeException("Package manager has died", e);
             }
         }
-        
+
         @Override
         public Intent getLaunchIntentForPackage(String packageName) {
             // First see if the package has an INFO activity; the existence of
@@ -1957,7 +1957,7 @@ class ContextImpl extends Context {
                 throw new RuntimeException("Package manager has died", e);
             }
         }
-        
+
         @Override
         public boolean hasSystemFeature(String name) {
             try {
@@ -1966,7 +1966,7 @@ class ContextImpl extends Context {
                 throw new RuntimeException("Package manager has died", e);
             }
         }
-        
+
         @Override
         public int checkPermission(String permName, String pkgName) {
             try {
@@ -2038,9 +2038,9 @@ class ContextImpl extends Context {
                 throw new RuntimeException("Package manager has died", e);
             }
         }
-        
+
         @Override
-        public int getUidForSharedUser(String sharedUserName) 
+        public int getUidForSharedUser(String sharedUserName)
                 throws NameNotFoundException {
             try {
                 int uid = mPM.getUidForSharedUser(sharedUserName);
@@ -2297,8 +2297,8 @@ class ContextImpl extends Context {
                 throws NameNotFoundException {
             return getApplicationIcon(getApplicationInfo(packageName, 0));
         }
-        
-        @Override 
+
+        @Override
         public Drawable getActivityLogo(ComponentName activityName)
                 throws NameNotFoundException {
             return getActivityInfo(activityName, 0).loadLogo(this);
@@ -2453,7 +2453,7 @@ class ContextImpl extends Context {
                 }
             }
         }
-        
+
         private static final class ResourceName {
             final String packageName;
             final int iconId;
@@ -2625,7 +2625,7 @@ class ContextImpl extends Context {
             }
         }
         @Override
-        public void clearApplicationUserData(String packageName, 
+        public void clearApplicationUserData(String packageName,
                 IPackageDataObserver observer) {
             try {
                 mPM.clearApplicationUserData(packageName, observer);
@@ -2634,7 +2634,7 @@ class ContextImpl extends Context {
             }
         }
         @Override
-        public void deleteApplicationCacheFiles(String packageName, 
+        public void deleteApplicationCacheFiles(String packageName,
                 IPackageDataObserver observer) {
             try {
                 mPM.deleteApplicationCacheFiles(packageName, observer);
@@ -2659,9 +2659,9 @@ class ContextImpl extends Context {
                 // Should never happen!
             }
         }
-        
+
         @Override
-        public void getPackageSizeInfo(String packageName, 
+        public void getPackageSizeInfo(String packageName,
                 IPackageStatsObserver observer) {
             try {
                 mPM.getPackageSizeInfo(packageName, observer);
@@ -2706,7 +2706,7 @@ class ContextImpl extends Context {
                 // Should never happen!
             }
         }
-        
+
         @Override
         public void replacePreferredActivity(IntentFilter filter,
                 int match, ComponentName[] set, ComponentName activity) {
@@ -2725,7 +2725,7 @@ class ContextImpl extends Context {
                 // Should never happen!
             }
         }
-        
+
         @Override
         public int getPreferredActivities(List<IntentFilter> outFilters,
                 List<ComponentName> outActivities, String packageName) {
@@ -2736,7 +2736,7 @@ class ContextImpl extends Context {
             }
             return 0;
         }
-        
+
         @Override
         public void setComponentEnabledSetting(ComponentName componentName,
                 int newState, int flags) {
@@ -2766,7 +2766,7 @@ class ContextImpl extends Context {
                 // Should never happen!
             }
         }
-        
+
         @Override
         public int getApplicationEnabledSetting(String packageName) {
             try {

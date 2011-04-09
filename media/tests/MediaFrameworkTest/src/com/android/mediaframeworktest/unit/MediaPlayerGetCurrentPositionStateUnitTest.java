@@ -26,13 +26,13 @@ import android.test.suitebuilder.annotation.LargeTest;;
  */
 public class MediaPlayerGetCurrentPositionStateUnitTest extends AndroidTestCase implements MediaPlayerMethodUnderTest {
     private MediaPlayerStateUnitTestTemplate mTestTemplate = new MediaPlayerStateUnitTestTemplate();
- 
+
     /**
      * 1. It is valid to call getCurrentPosition() in the following states:
      *    {Idle, Initialized, Prepared, Started, Paused, Stopped, PlaybackCompleted}.
      * 2. It is invalid to call getCurrentPosition() in the following states:
      *    {Error}
-     *    
+     *
      * @param stateErrors the MediaPlayerStateErrors to check against.
      */
     public void checkStateErrors(MediaPlayerStateErrors stateErrors) {
@@ -46,16 +46,16 @@ public class MediaPlayerGetCurrentPositionStateUnitTest extends AndroidTestCase 
         assertTrue(!stateErrors.errorInStoppedState);
         assertTrue(!stateErrors.errorInPlaybackCompletedState);
         assertTrue(!stateErrors.errorInIdleStateAfterReset);
-        
+
         // Invalid states.
         assertTrue(stateErrors.errorInErrorState);
         assertTrue(!stateErrors.errorInIdleState);  // onError() won't be called
     }
-    
+
     public void invokeMethodUnderTest(MediaPlayer player) {
         player.getCurrentPosition();
     }
-    
+
     @LargeTest
     public void testGetCurrentPosition() {
         mTestTemplate.runTestOnMethod(this);

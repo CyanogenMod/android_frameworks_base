@@ -42,12 +42,12 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * IMSI MCC (Mobile Country Code).  0 if undefined.
      */
     public int mcc;
-    
+
     /**
      * IMSI MNC (Mobile Network Code).  0 if undefined.
      */
     public int mnc;
-    
+
     /**
      * Current user preference for the locale.
      */
@@ -71,12 +71,12 @@ public final class Configuration implements Parcelable, Comparable<Configuration
     public static final int SCREENLAYOUT_SIZE_NORMAL = 0x02;
     public static final int SCREENLAYOUT_SIZE_LARGE = 0x03;
     public static final int SCREENLAYOUT_SIZE_XLARGE = 0x04;
-    
+
     public static final int SCREENLAYOUT_LONG_MASK = 0x30;
     public static final int SCREENLAYOUT_LONG_UNDEFINED = 0x00;
     public static final int SCREENLAYOUT_LONG_NO = 0x10;
     public static final int SCREENLAYOUT_LONG_YES = 0x20;
-    
+
     /**
      * Special flag we generate to indicate that the screen layout requires
      * us to use a compatibility mode for apps that are not modern layout
@@ -84,7 +84,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * @hide
      */
     public static final int SCREENLAYOUT_COMPAT_NEEDED = 0x10000000;
-    
+
     /**
      * Bit mask of overall layout of the screen.  Currently there are two
      * fields:
@@ -92,43 +92,43 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * of the screen.  They may be one of
      * {@link #SCREENLAYOUT_SIZE_SMALL}, {@link #SCREENLAYOUT_SIZE_NORMAL},
      * {@link #SCREENLAYOUT_SIZE_LARGE}.
-     * 
+     *
      * <p>The {@link #SCREENLAYOUT_LONG_MASK} defines whether the screen
      * is wider/taller than normal.  They may be one of
      * {@link #SCREENLAYOUT_LONG_NO} or {@link #SCREENLAYOUT_LONG_YES}.
      */
     public int screenLayout;
-    
+
     public static final int TOUCHSCREEN_UNDEFINED = 0;
     public static final int TOUCHSCREEN_NOTOUCH = 1;
     public static final int TOUCHSCREEN_STYLUS = 2;
     public static final int TOUCHSCREEN_FINGER = 3;
-    
+
     /**
      * The kind of touch screen attached to the device.
-     * One of: {@link #TOUCHSCREEN_NOTOUCH}, {@link #TOUCHSCREEN_STYLUS}, 
-     * {@link #TOUCHSCREEN_FINGER}. 
+     * One of: {@link #TOUCHSCREEN_NOTOUCH}, {@link #TOUCHSCREEN_STYLUS},
+     * {@link #TOUCHSCREEN_FINGER}.
      */
     public int touchscreen;
-    
+
     public static final int KEYBOARD_UNDEFINED = 0;
     public static final int KEYBOARD_NOKEYS = 1;
     public static final int KEYBOARD_QWERTY = 2;
     public static final int KEYBOARD_12KEY = 3;
-    
+
     /**
      * The kind of keyboard attached to the device.
      * One of: {@link #KEYBOARD_NOKEYS}, {@link #KEYBOARD_QWERTY},
      * {@link #KEYBOARD_12KEY}.
      */
     public int keyboard;
-    
+
     public static final int KEYBOARDHIDDEN_UNDEFINED = 0;
     public static final int KEYBOARDHIDDEN_NO = 1;
     public static final int KEYBOARDHIDDEN_YES = 2;
     /** Constant matching actual resource implementation. {@hide} */
     public static final int KEYBOARDHIDDEN_SOFT = 3;
-    
+
     /**
      * A flag indicating whether any keyboard is available.  Unlike
      * {@link #hardKeyboardHidden}, this also takes into account a soft
@@ -137,11 +137,11 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * {@link #KEYBOARDHIDDEN_NO}, {@link #KEYBOARDHIDDEN_YES}.
      */
     public int keyboardHidden;
-    
+
     public static final int HARDKEYBOARDHIDDEN_UNDEFINED = 0;
     public static final int HARDKEYBOARDHIDDEN_NO = 1;
     public static final int HARDKEYBOARDHIDDEN_YES = 2;
-    
+
     /**
      * A flag indicating whether the hard keyboard has been hidden.  This will
      * be set on a device with a mechanism to hide the keyboard from the
@@ -149,24 +149,24 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * {@link #HARDKEYBOARDHIDDEN_NO}, {@link #HARDKEYBOARDHIDDEN_YES}.
      */
     public int hardKeyboardHidden;
-    
+
     public static final int NAVIGATION_UNDEFINED = 0;
     public static final int NAVIGATION_NONAV = 1;
     public static final int NAVIGATION_DPAD = 2;
     public static final int NAVIGATION_TRACKBALL = 3;
     public static final int NAVIGATION_WHEEL = 4;
-    
+
     /**
      * The kind of navigation method available on the device.
      * One of: {@link #NAVIGATION_NONAV}, {@link #NAVIGATION_DPAD},
      * {@link #NAVIGATION_TRACKBALL}, {@link #NAVIGATION_WHEEL}.
      */
     public int navigation;
-    
+
     public static final int NAVIGATIONHIDDEN_UNDEFINED = 0;
     public static final int NAVIGATIONHIDDEN_NO = 1;
     public static final int NAVIGATIONHIDDEN_YES = 2;
-    
+
     /**
      * A flag indicating whether any 5-way or DPAD navigation available.
      * This will be set on a device with a mechanism to hide the navigation
@@ -174,7 +174,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * {@link #NAVIGATIONHIDDEN_NO}, {@link #NAVIGATIONHIDDEN_YES}.
      */
     public int navigationHidden;
-    
+
     public static final int ORIENTATION_UNDEFINED = 0;
     public static final int ORIENTATION_PORTRAIT = 1;
     public static final int ORIENTATION_LANDSCAPE = 2;
@@ -230,7 +230,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
      * @hide Internal book-keeping.
      */
     public int seq;
-    
+
     /**
      * Construct an invalid Configuration.  You must call {@link #setToDefaults}
      * for this object to be valid.  {@more}
@@ -268,7 +268,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             customTheme = (CustomTheme) o.customTheme.clone();
         }
     }
-    
+
     public String toString() {
         StringBuilder sb = new StringBuilder(128);
         sb.append("{ scale=");
@@ -332,7 +332,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
     @Deprecated public void makeDefault() {
         setToDefaults();
     }
-    
+
     /**
      * Copy the fields from delta into this Configuration object, keeping
      * track of which ones have changed.  Any undefined fields in
@@ -418,11 +418,11 @@ public final class Configuration implements Parcelable, Comparable<Configuration
                         | (delta.uiMode&UI_MODE_NIGHT_MASK);
             }
         }
-        
+
         if (delta.seq != 0) {
             seq = delta.seq;
         }
-        
+
         if (delta.customTheme != null
                 && (customTheme == null || !customTheme.equals(delta.customTheme))) {
             changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
@@ -512,19 +512,19 @@ public final class Configuration implements Parcelable, Comparable<Configuration
                 (customTheme == null || !customTheme.equals(delta.customTheme))) {
             changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
         }
-        
+
         return changed;
     }
 
     /**
      * Determine if a new resource needs to be loaded from the bit set of
      * configuration changes returned by {@link #updateFrom(Configuration)}.
-     * 
+     *
      * @param configChanges The mask of changes configurations as returned by
      * {@link #updateFrom(Configuration)}.
      * @param interestingChanges The configuration changes that the resource
      * can handled, as given in {@link android.util.TypedValue#changingConfigurations}.
-     * 
+     *
      * @return Return true if the resource needs to be loaded, else false.
      */
     public static boolean needNewResources(int configChanges, int interestingChanges) {
@@ -532,7 +532,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
                 ActivityInfo.CONFIG_FONT_SCALE |
                 ActivityInfo.CONFIG_THEME_RESOURCE)) != 0;
     }
-    
+
     /**
      * @hide Return true if the sequence of 'other' is better than this.  Assumes
      * that 'this' is your current sequence and 'other' is a new one you have
@@ -561,7 +561,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         }
         return diff > 0;
     }
-    
+
     /**
      * Parcelable methods
      */
@@ -632,7 +632,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             customTheme = new CustomTheme(themeId, themePackage);
         }
     }
-    
+
     public static final Parcelable.Creator<Configuration> CREATOR
             = new Parcelable.Creator<Configuration>() {
         public Configuration createFromParcel(Parcel source) {
@@ -718,7 +718,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         }
         return false;
     }
-    
+
     public int hashCode() {
         return ((int)this.fontScale) + this.mcc + this.mnc
                 + (this.locale != null ? this.locale.hashCode() : 0)

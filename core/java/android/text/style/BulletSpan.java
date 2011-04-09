@@ -55,11 +55,11 @@ public class BulletSpan implements LeadingMarginSpan, ParcelableSpan {
         mWantColor = src.readInt() != 0;
         mColor = src.readInt();
     }
-    
+
     public int getSpanTypeId() {
         return TextUtils.BULLET_SPAN;
     }
-    
+
     public int describeContents() {
         return 0;
     }

@@ -33,7 +33,7 @@ import java.util.Random;
 /**
  * Junit / Instrumentation test case for the media player
  */
-public class MediaPlayerStressTest extends ActivityInstrumentationTestCase2<MediaFrameworkTest> {    
+public class MediaPlayerStressTest extends ActivityInstrumentationTestCase2<MediaFrameworkTest> {
     private String TAG = "MediaPlayerStressTest";
     private MediaRecorder mRecorder;
     private Camera mCamera;
@@ -56,7 +56,7 @@ public class MediaPlayerStressTest extends ActivityInstrumentationTestCase2<Medi
     @LargeTest
     public void testStressHWDecoderRelease() throws Exception {
         SurfaceHolder mSurfaceHolder;
-        long randomseed = System.currentTimeMillis(); 
+        long randomseed = System.currentTimeMillis();
         Random generator = new Random(randomseed);
         Log.v(TAG, "Random seed: " + randomseed);
         int video_duration = MediaNames.STREAM_H264_480_360_1411k_DURATION;
@@ -93,7 +93,7 @@ public class MediaPlayerStressTest extends ActivityInstrumentationTestCase2<Medi
     @LargeTest
     public void testStressGetCurrentPosition() throws Exception {
         SurfaceHolder mSurfaceHolder;
-        long randomseed = System.currentTimeMillis(); 
+        long randomseed = System.currentTimeMillis();
         Random generator = new Random(randomseed);
         Log.v(TAG, "Random seed: " + randomseed);
         int video_duration = MediaNames.VIDEO_H263_AMR_DURATION;

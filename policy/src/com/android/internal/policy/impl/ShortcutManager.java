@@ -34,9 +34,9 @@ import java.net.URISyntaxException;
  * <li> Returning a shortcut-matching intent to clients
  */
 class ShortcutManager extends ContentObserver {
-    
+
     private static final String TAG = "ShortcutManager";
-    
+
     private static final int COLUMN_SHORTCUT = 0;
     private static final int COLUMN_INTENT = 1;
     private static final String[] sProjection = new String[] {
@@ -47,10 +47,10 @@ class ShortcutManager extends ContentObserver {
     private Cursor mCursor;
     /** Map of a shortcut to its intent. */
     private SparseArray<Intent> mShortcutIntents;
-    
+
     public ShortcutManager(Context context, Handler handler) {
         super(handler);
-        
+
         mContext = context;
         mShortcutIntents = new SparseArray<Intent>();
     }
@@ -67,7 +67,7 @@ class ShortcutManager extends ContentObserver {
     public void onChange(boolean selfChange) {
         updateShortcuts();
     }
-    
+
     private void updateShortcuts() {
         Cursor c = mCursor;
         if (!c.requery()) {
@@ -90,7 +90,7 @@ class ShortcutManager extends ContentObserver {
             mShortcutIntents.put(shortcut, intent);
         }
     }
-    
+
     /**
      * Gets the shortcut intent for a given keycode+modifier. Make sure you
      * strip whatever modifier is used for invoking shortcuts (for example,
@@ -99,7 +99,7 @@ class ShortcutManager extends ContentObserver {
      * <p>
      * This will first try an exact match (with modifiers), and then try a
      * match without modifiers (primary character on a key).
-     * 
+     *
      * @param keyCode The keycode of the key pushed.
      * @param modifiers The modifiers without any that are used for chording
      *            to invoke a shortcut.
@@ -109,9 +109,9 @@ class ShortcutManager extends ContentObserver {
         KeyCharacterMap kcm = KeyCharacterMap.load(KeyCharacterMap.BUILT_IN_KEYBOARD);
         // First try the exact keycode (with modifiers)
         int shortcut = kcm.get(keyCode, modifiers);
-        Intent intent = shortcut != 0 ? mShortcutIntents.get(shortcut) : null; 
+        Intent intent = shortcut != 0 ? mShortcutIntents.get(shortcut) : null;
         if (intent != null) return intent;
-        
+
         // Next try the keycode without modifiers (the primary character on that key)
         shortcut = Character.toLowerCase(kcm.get(keyCode, 0));
         return shortcut != 0 ? mShortcutIntents.get(shortcut) : null;

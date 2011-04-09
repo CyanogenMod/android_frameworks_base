@@ -143,7 +143,7 @@ public abstract class Object3D {
         mTextures.put(name, texture);
     }
 
-    private static void verifyByte(DataInputStream dis, int b) 
+    private static void verifyByte(DataInputStream dis, int b)
     throws IOException {
         int x = dis.read() & 0xff;
         if (x != b) {

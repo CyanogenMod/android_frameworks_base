@@ -62,7 +62,7 @@ public class LocalActivityManager {
     static final int STARTED = 3;       // Created and started, not resumed.
     static final int RESUMED = 4;       // Created started and resumed.
     static final int DESTROYED = 5;     // No longer with us.
-    
+
     /** Thread our activities are running in. */
     private final ActivityThread mActivityThread;
     /** The containing activity that owns the activities we create. */
@@ -79,13 +79,13 @@ public class LocalActivityManager {
 
     /** True if only one activity can be resumed at a time */
     private boolean mSingleMode;
-    
+
     /** Set to true once we find out the container is finishing. */
     private boolean mFinishing;
-    
+
     /** Current state the owner (ActivityGroup) is in */
     private int mCurState = INITIALIZING;
-    
+
     /** String ids of running activities starting with least recently used. */
     // TODO: put back in stopping of activities.
     //private List<LocalActivityRecord>  mLRU = new ArrayList();
@@ -93,7 +93,7 @@ public class LocalActivityManager {
     /**
      * Create a new LocalActivityManager for holding activities running within
      * the given <var>parent</var>.
-     * 
+     *
      * @param parent the host of the embedded activities
      * @param singleMode True if the LocalActivityManger should keep a maximum
      * of one activity resumed
@@ -109,7 +109,7 @@ public class LocalActivityManager {
             // startActivity() has not yet been called, so nothing to do.
             return;
         }
-        
+
         if (r.curState == INITIALIZING) {
             // Get the lastNonConfigurationInstance for the activity
             HashMap<String,Object> lastNonConfigurationInstances =
@@ -118,7 +118,7 @@ public class LocalActivityManager {
             if (lastNonConfigurationInstances != null) {
                 instance = lastNonConfigurationInstances.get(r.id);
             }
-            
+
             // We need to have always created the activity.
             if (localLOGV) Log.v(TAG, r.id + ": starting " + r.intent);
             if (r.activityInfo == null) {
@@ -132,13 +132,13 @@ public class LocalActivityManager {
             r.window = r.activity.getWindow();
             r.instanceState = null;
             r.curState = STARTED;
-            
+
             if (desiredState == RESUMED) {
                 if (localLOGV) Log.v(TAG, r.id + ": resuming");
                 mActivityThread.performResumeActivity(r, true);
                 r.curState = RESUMED;
             }
-            
+
             // Don't do anything more here.  There is an important case:
             // if this is being done as part of onCreate() of the group, then
             // the launching of the activity gets its state a little ahead
@@ -147,7 +147,7 @@ public class LocalActivityManager {
             // group's state catches up.
             return;
         }
-        
+
         switch (r.curState) {
             case CREATED:
                 if (desiredState == STARTED) {
@@ -162,7 +162,7 @@ public class LocalActivityManager {
                     r.curState = RESUMED;
                 }
                 return;
-                
+
             case STARTED:
                 if (desiredState == RESUMED) {
                     // Need to resume it...
@@ -177,7 +177,7 @@ public class LocalActivityManager {
                     r.curState = CREATED;
                 }
                 return;
-                
+
             case RESUMED:
                 if (desiredState == STARTED) {
                     if (localLOGV) Log.v(TAG, r.id + ": pausing");
@@ -194,7 +194,7 @@ public class LocalActivityManager {
                 return;
         }
     }
-    
+
     private void performPause(LocalActivityRecord r, boolean finishing) {
         boolean needState = r.instanceState == null;
         Bundle instanceState = mActivityThread.performPauseActivity(r,
@@ -203,17 +203,17 @@ public class LocalActivityManager {
             r.instanceState = instanceState;
         }
     }
-    
+
     /**
      * Start a new activity running in the group.  Every activity you start
      * must have a unique string ID associated with it -- this is used to keep
      * track of the activity, so that if you later call startActivity() again
      * on it the same activity object will be retained.
-     * 
+     *
      * <p>When there had previously been an activity started under this id,
      * it may either be destroyed and a new one started, or the current
      * one re-used, based on these conditions, in order:</p>
-     * 
+     *
      * <ul>
      * <li> If the Intent maps to a different activity component than is
      * currently running, the current activity is finished and a new one
@@ -231,22 +231,22 @@ public class LocalActivityManager {
      * <li> Otherwise, the current activity will be finished and a new
      * one started.
      * </ul>
-     * 
+     *
      * <p>If the given Intent can not be resolved to an available Activity,
      * this method throws {@link android.content.ActivityNotFoundException}.
-     * 
+     *
      * <p>Warning: There is an issue where, if the Intent does not
      * include an explicit component, we can restore the state for a different
      * activity class than was previously running when the state was saved (if
      * the set of available activities changes between those points).
-     * 
+     *
      * @param id Unique identifier of the activity to be started
      * @param intent The Intent describing the activity to be started
-     * 
+     *
      * @return Returns the window of the activity.  The caller needs to take
      * care of adding this window to a view hierarchy, and likewise dealing
      * with removing the old window if the activity has changed.
-     * 
+     *
      * @throws android.content.ActivityNotFoundException
      */
     public Window startActivity(String id, Intent intent) {
@@ -254,12 +254,12 @@ public class LocalActivityManager {
             throw new IllegalStateException(
                     "Activities can't be added until the containing group has been created.");
         }
-        
+
         boolean adding = false;
         boolean sameIntent = false;
 
         ActivityInfo aInfo = null;
-        
+
         // Already have information about the new activity id?
         LocalActivityRecord r = mActivities.get(id);
         if (r == null) {
@@ -267,7 +267,7 @@ public class LocalActivityManager {
             r = new LocalActivityRecord(id, intent);
             adding = true;
         } else if (r.intent != null) {
-            sameIntent = r.intent.filterEquals(intent); 
+            sameIntent = r.intent.filterEquals(intent);
             if (sameIntent) {
                 // We are starting the same activity.
                 aInfo = r.activityInfo;
@@ -276,12 +276,12 @@ public class LocalActivityManager {
         if (aInfo == null) {
             aInfo = mActivityThread.resolveActivityInfo(intent);
         }
-        
+
         // Pause the currently running activity if there is one and only a single
         // activity is allowed to be running at a time.
         if (mSingleMode) {
             LocalActivityRecord old = mResumed;
-    
+
             // If there was a previous activity, and it is not the current
             // activity, we need to stop it.
             if (old != null && old != r && mCurState == RESUMED) {
@@ -325,13 +325,13 @@ public class LocalActivityManager {
                     return r.window;
                 }
             }
-            
+
             // The new activity is different than the current one, or it
             // is a multiple launch activity, so we need to destroy what
             // is currently there.
             performDestroy(r, true);
         }
-        
+
         r.intent = intent;
         r.curState = INITIALIZING;
         r.activityInfo = aInfo;
@@ -361,16 +361,16 @@ public class LocalActivityManager {
         r.curState = DESTROYED;
         return win;
     }
-    
+
     /**
      * Destroy the activity associated with a particular id.  This activity
      * will go through the normal lifecycle events and fine onDestroy(), and
      * then the id removed from the group.
-     * 
+     *
      * @param id Unique identifier of the activity to be destroyed
      * @param finish If true, this activity will be finished, so its id and
      * all state are removed from the group.
-     * 
+     *
      * @return Returns the window that was used to display the activity, or
      * null if there was none.
      */
@@ -385,13 +385,13 @@ public class LocalActivityManager {
         }
         return win;
     }
-    
+
     /**
      * Retrieve the Activity that is currently running.
-     * 
+     *
      * @return the currently running (resumed) Activity, or null if there is
      *         not one
-     * 
+     *
      * @see #startActivity
      * @see #getCurrentId
      */
@@ -401,10 +401,10 @@ public class LocalActivityManager {
 
     /**
      * Retrieve the ID of the activity that is currently running.
-     * 
+     *
      * @return the ID of the currently running (resumed) Activity, or null if
      *         there is not one
-     * 
+     *
      * @see #startActivity
      * @see #getCurrentActivity
      */
@@ -414,9 +414,9 @@ public class LocalActivityManager {
 
     /**
      * Return the Activity object associated with a string ID.
-     * 
+     *
      * @see #startActivity
-     * 
+     *
      * @return the associated Activity object, or null if the id is unknown or
      *         its activity is not currently instantiated
      */
@@ -430,13 +430,13 @@ public class LocalActivityManager {
      * adds to the activity group information about all activity IDs that had
      * previously been saved, even if they have not been started yet, so if the
      * user later navigates to them the correct state will be restored.
-     * 
+     *
      * <p>Note: This does <b>not</b> change the current running activity, or
      * start whatever activity was previously running when the state was saved.
      * That is up to the client to do, in whatever way it thinks is best.
-     * 
+     *
      * @param state a previously saved state; does nothing if this is null
-     * 
+     *
      * @see #saveInstanceState
      */
     public void dispatchCreate(Bundle state) {
@@ -463,7 +463,7 @@ public class LocalActivityManager {
                 }
             }
         }
-        
+
         mCurState = CREATED;
     }
 
@@ -472,9 +472,9 @@ public class LocalActivityManager {
      * activities that have previously run and are now stopped or finished, the
      * last saved state is used.  For the current running activity, its
      * {@link Activity#onSaveInstanceState} is called to retrieve its current state.
-     * 
+     *
      * @return a Bundle holding the newly created state of all known activities
-     * 
+     *
      * @see #dispatchCreate
      */
     public Bundle saveInstanceState() {
@@ -508,7 +508,7 @@ public class LocalActivityManager {
      * Called by the container activity in its {@link Activity#onResume} so
      * that LocalActivityManager can perform the corresponding action on the
      * activities it holds.
-     * 
+     *
      * @see Activity#onResume
      */
     public void dispatchResume() {
@@ -529,11 +529,11 @@ public class LocalActivityManager {
      * Called by the container activity in its {@link Activity#onPause} so
      * that LocalActivityManager can perform the corresponding action on the
      * activities it holds.
-     * 
+     *
      * @param finishing set to true if the parent activity has been finished;
      *                  this can be determined by calling
      *                  Activity.isFinishing()
-     * 
+     *
      * @see Activity#onPause
      * @see Activity#isFinishing
      */
@@ -561,7 +561,7 @@ public class LocalActivityManager {
      * Called by the container activity in its {@link Activity#onStop} so
      * that LocalActivityManager can perform the corresponding action on the
      * activities it holds.
-     * 
+     *
      * @see Activity#onStop
      */
     public void dispatchStop() {
@@ -572,17 +572,17 @@ public class LocalActivityManager {
             moveToState(r, CREATED);
         }
     }
-    
+
     /**
      * Call onRetainNonConfigurationInstance on each child activity and store the
      * results in a HashMap by id.  Only construct the HashMap if there is a non-null
      * object to store.  Note that this does not support nested ActivityGroups.
-     * 
+     *
      * {@hide}
      */
     public HashMap<String,Object> dispatchRetainNonConfigurationInstance() {
         HashMap<String,Object> instanceMap = null;
-        
+
         final int N = mActivityArray.size();
         for (int i=0; i<N; i++) {
             LocalActivityRecord r = mActivityArray.get(i);
@@ -611,7 +611,7 @@ public class LocalActivityManager {
      * Called by the container activity in its {@link Activity#onDestroy} so
      * that LocalActivityManager can perform the corresponding action on the
      * activities it holds.
-     * 
+     *
      * @see Activity#onDestroy
      */
     public void dispatchDestroy(boolean finishing) {

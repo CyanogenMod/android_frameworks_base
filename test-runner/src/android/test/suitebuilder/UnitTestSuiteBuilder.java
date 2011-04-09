@@ -18,7 +18,7 @@ package android.test.suitebuilder;
 
 /**
  * A suite builder that finds unit tests.
- * 
+ *
  * {@hide} Not needed for 1.0 SDK.
  */
 public class UnitTestSuiteBuilder extends TestSuiteBuilder {

@@ -53,10 +53,10 @@ class ApplicationLoaders
                 if (loader != null) {
                     return loader;
                 }
-    
+
                 PathClassLoader pathClassloader =
                     new PathClassLoader(zip, libPath, parent);
-                
+
                 mLoaders.put(zip, pathClassloader);
                 return pathClassloader;
             }

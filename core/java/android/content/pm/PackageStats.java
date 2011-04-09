@@ -30,7 +30,7 @@ public class PackageStats implements Parcelable {
     public long codeSize;
     public long dataSize;
     public long cacheSize;
-    
+
     public static final Parcelable.Creator<PackageStats> CREATOR
     = new Parcelable.Creator<PackageStats>() {
         public PackageStats createFromParcel(Parcel in) {
@@ -41,24 +41,24 @@ public class PackageStats implements Parcelable {
             return new PackageStats[size];
         }
     };
-    
+
     public String toString() {
         return "PackageStats{"
         + Integer.toHexString(System.identityHashCode(this))
         + " " + packageName + "}";
     }
-    
+
     public PackageStats(String pkgName) {
         packageName = pkgName;
     }
-    
+
     public PackageStats(Parcel source) {
         packageName = source.readString();
         codeSize = source.readLong();
         dataSize = source.readLong();
         cacheSize = source.readLong();
     }
-    
+
     public PackageStats(PackageStats pStats) {
         packageName = pStats.packageName;
         codeSize = pStats.codeSize;

@@ -28,27 +28,27 @@ import java.util.Vector;
 public class WebViewEventSender implements EventSender {
 
     private static final String LOGTAG = "WebViewEventSender";
-	
+
     WebViewEventSender(WebView webView) {
         mWebView = webView;
         mTouchPoints = new Vector<TouchPoint>();
     }
-	
-	public void resetMouse() {
-		mouseX = mouseY = 0;
-	}
 
-	public void enableDOMUIEventLogging(int DOMNode) {
-		// TODO Auto-generated method stub
+        public void resetMouse() {
+                mouseX = mouseY = 0;
+        }
 
-	}
+        public void enableDOMUIEventLogging(int DOMNode) {
+                // TODO Auto-generated method stub
 
-	public void fireKeyboardEventsToElement(int DOMNode) {
-		// TODO Auto-generated method stub
+        }
 
-	}
+        public void fireKeyboardEventsToElement(int DOMNode) {
+                // TODO Auto-generated method stub
 
-	public void keyDown(String character, String[] withModifiers) {
+        }
+
+        public void keyDown(String character, String[] withModifiers) {
         Log.e("EventSender", "KeyDown: " + character + "("
                 + character.getBytes()[0] + ") Modifiers: "
                 + Arrays.toString(withModifiers));
@@ -65,20 +65,20 @@ public class WebViewEventSender implements EventSender {
         mWebView.onKeyDown(event.getKeyCode(), event);
 
     }
-	
-	public void keyDown(String character) {
+
+        public void keyDown(String character) {
         keyDown(character, null);
-	}
+        }
 
-	public void leapForward(int milliseconds) {
-		// TODO Auto-generated method stub
+        public void leapForward(int milliseconds) {
+                // TODO Auto-generated method stub
 
-	}
+        }
 
-	public void mouseClick() {
-		mouseDown();
-		mouseUp();
-	}
+        public void mouseClick() {
+                mouseDown();
+                mouseUp();
+        }
 
     public void mouseDown() {
         long ts = SystemClock.uptimeMillis();
@@ -97,77 +97,77 @@ public class WebViewEventSender implements EventSender {
         mWebView.onTouchEvent(event);
     }
 
-	// Assumes lowercase chars, case needs to be
-	// handled by calling function.
-	static int keyMapper(char c) {
-		// handle numbers
-		if (c >= '0' && c<= '9') {
-			int offset = c - '0';
-			return KeyEvent.KEYCODE_0 + offset;
-		}
+        // Assumes lowercase chars, case needs to be
+        // handled by calling function.
+        static int keyMapper(char c) {
+                // handle numbers
+                if (c >= '0' && c<= '9') {
+                        int offset = c - '0';
+                        return KeyEvent.KEYCODE_0 + offset;
+                }
 
-		// handle characters
-		if (c >= 'a' && c <= 'z') {
-			int offset = c - 'a';
-			return KeyEvent.KEYCODE_A + offset;
-		}
+                // handle characters
+                if (c >= 'a' && c <= 'z') {
+                        int offset = c - 'a';
+                        return KeyEvent.KEYCODE_A + offset;
+                }
 
-		// handle all others
-		switch (c) {
-		case '*':
-			return KeyEvent.KEYCODE_STAR;
-		case '#':
-			return KeyEvent.KEYCODE_POUND;
-		case ',':
-			return KeyEvent.KEYCODE_COMMA;
-		case '.':
-			return KeyEvent.KEYCODE_PERIOD;
-		case '\t':
-			return KeyEvent.KEYCODE_TAB;
-		case ' ':
-			return KeyEvent.KEYCODE_SPACE;
-		case '\n':
-			return KeyEvent.KEYCODE_ENTER;
-		case '\b':
+                // handle all others
+                switch (c) {
+                case '*':
+                        return KeyEvent.KEYCODE_STAR;
+                case '#':
+                        return KeyEvent.KEYCODE_POUND;
+                case ',':
+                        return KeyEvent.KEYCODE_COMMA;
+                case '.':
+                        return KeyEvent.KEYCODE_PERIOD;
+                case '\t':
+                        return KeyEvent.KEYCODE_TAB;
+                case ' ':
+                        return KeyEvent.KEYCODE_SPACE;
+                case '\n':
+                        return KeyEvent.KEYCODE_ENTER;
+                case '\b':
         case 0x7F:
-			return KeyEvent.KEYCODE_DEL;
-		case '~':
-			return KeyEvent.KEYCODE_GRAVE;
-		case '-':
-			return KeyEvent.KEYCODE_MINUS;
-		case '=':
-			return KeyEvent.KEYCODE_EQUALS;
-		case '(':
-			return KeyEvent.KEYCODE_LEFT_BRACKET;
-		case ')':
-			return KeyEvent.KEYCODE_RIGHT_BRACKET;
-		case '\\':
-			return KeyEvent.KEYCODE_BACKSLASH;
-		case ';':
-			return KeyEvent.KEYCODE_SEMICOLON;
-		case '\'':
-			return KeyEvent.KEYCODE_APOSTROPHE;
-		case '/':
-			return KeyEvent.KEYCODE_SLASH;
-		default:
-			break;
-		}
+                        return KeyEvent.KEYCODE_DEL;
+                case '~':
+                        return KeyEvent.KEYCODE_GRAVE;
+                case '-':
+                        return KeyEvent.KEYCODE_MINUS;
+                case '=':
+                        return KeyEvent.KEYCODE_EQUALS;
+                case '(':
+                        return KeyEvent.KEYCODE_LEFT_BRACKET;
+                case ')':
+                        return KeyEvent.KEYCODE_RIGHT_BRACKET;
+                case '\\':
+                        return KeyEvent.KEYCODE_BACKSLASH;
+                case ';':
+                        return KeyEvent.KEYCODE_SEMICOLON;
+                case '\'':
+                        return KeyEvent.KEYCODE_APOSTROPHE;
+                case '/':
+                        return KeyEvent.KEYCODE_SLASH;
+                default:
+                        break;
+                }
 
-		return c;
-	}
-	
-	static int modifierMapper(String modifier) {
-		if (modifier.equals("ctrlKey")) {
-			return KeyEvent.KEYCODE_ALT_LEFT;
-		} else if (modifier.equals("shiftKey")) {
-			return KeyEvent.KEYCODE_SHIFT_LEFT;
-		} else if (modifier.equals("altKey")) {
-			return KeyEvent.KEYCODE_SYM;
-		} else if (modifier.equals("metaKey")) {
-			return KeyEvent.KEYCODE_UNKNOWN;
-		}
-		return KeyEvent.KEYCODE_UNKNOWN;
-	}
+                return c;
+        }
+
+        static int modifierMapper(String modifier) {
+                if (modifier.equals("ctrlKey")) {
+                        return KeyEvent.KEYCODE_ALT_LEFT;
+                } else if (modifier.equals("shiftKey")) {
+                        return KeyEvent.KEYCODE_SHIFT_LEFT;
+                } else if (modifier.equals("altKey")) {
+                        return KeyEvent.KEYCODE_SYM;
+                } else if (modifier.equals("metaKey")) {
+                        return KeyEvent.KEYCODE_UNKNOWN;
+                }
+                return KeyEvent.KEYCODE_UNKNOWN;
+        }
 
     public void touchStart() {
         // We only support single touch so examine the first touch point only.

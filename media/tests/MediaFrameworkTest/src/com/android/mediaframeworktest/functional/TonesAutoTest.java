@@ -25,8 +25,8 @@ import android.media.AudioManager;
 
 /**
  * Junit / Instrumentation test case for the Sim tones tests
- 
- */  
+
+ */
     public class TonesAutoTest {
         private static String TAG = "TonesAutoTest";
 
@@ -62,7 +62,7 @@ import android.media.AudioManager;
       boolean result = true;
 
       toneGen = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
-      
+
       for (type = ToneGenerator.TONE_SUP_DIAL;
       type <= ToneGenerator.TONE_SUP_RINGTONE; type++) {
           if (toneGen.startTone(type)) {
@@ -146,7 +146,7 @@ import android.media.AudioManager;
         return result;
     }
 
-    // Test start of new tone without stopping previous one 
+    // Test start of new tone without stopping previous one
     public static boolean tonesStressTest() throws Exception {
         Log.v(TAG, "Stress tones test");
         ToneGenerator toneGen;
@@ -167,8 +167,8 @@ import android.media.AudioManager;
         toneGen.release();
         return result;
     }
-   
-    // Perform all tones tests 
+
+    // Perform all tones tests
     public static boolean tonesAllTest() throws Exception {
         Log.v(TAG, "All tones tests");
 

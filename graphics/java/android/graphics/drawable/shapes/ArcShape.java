@@ -30,19 +30,19 @@ import android.graphics.RectF;
 public class ArcShape extends RectShape {
     private float mStart;
     private float mSweep;
-    
+
     /**
-     * ArcShape constructor. 
-     * 
+     * ArcShape constructor.
+     *
      * @param startAngle the angle (in degrees) where the arc begins
-     * @param sweepAngle the sweep angle (in degrees). Anything equal to or 
+     * @param sweepAngle the sweep angle (in degrees). Anything equal to or
      *                   greater than 360 results in a complete circle/oval.
      */
     public ArcShape(float startAngle, float sweepAngle) {
         mStart = startAngle;
         mSweep = sweepAngle;
     }
-    
+
     @Override
     public void draw(Canvas canvas, Paint paint) {
         canvas.drawArc(rect(), mStart, mSweep, true, paint);

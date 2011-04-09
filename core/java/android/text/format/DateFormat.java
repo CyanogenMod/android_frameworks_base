@@ -82,11 +82,11 @@ public class DateFormat {
         the output text then use two in a row.
      */
     public  static final char    QUOTE                  =    '\'';
-    
+
     /**
         This designator indicates whether the <code>HOUR</code> field is before
         or after noon.  The output is lower-case.
-     
+
         Examples:
         a -> a or p
         aa -> am or pm
@@ -96,7 +96,7 @@ public class DateFormat {
     /**
         This designator indicates whether the <code>HOUR</code> field is before
         or after noon.  The output is capitalized.
-     
+
         Examples:
         A -> A or P
         AA -> AM or PM
@@ -105,7 +105,7 @@ public class DateFormat {
 
     /**
         This designator indicates the day of the month.
-         
+
         Examples for the 9th of the month:
         d -> 9
         dd -> 09
@@ -114,7 +114,7 @@ public class DateFormat {
 
     /**
         This designator indicates the name of the day of the week.
-     
+
         Examples for Sunday:
         E -> Sun
         EEEE -> Sunday
@@ -123,7 +123,7 @@ public class DateFormat {
 
     /**
         This designator indicates the hour of the day in 12 hour format.
-     
+
         Examples for 3pm:
         h -> 3
         hh -> 03
@@ -132,7 +132,7 @@ public class DateFormat {
 
     /**
         This designator indicates the hour of the day in 24 hour format.
-     
+
         Example for 3pm:
         k -> 15
 
@@ -144,7 +144,7 @@ public class DateFormat {
 
     /**
         This designator indicates the minute of the hour.
-     
+
         Examples for 7 minutes past the hour:
         m -> 7
         mm -> 07
@@ -153,7 +153,7 @@ public class DateFormat {
 
     /**
         This designator indicates the month of the year
-     
+
         Examples for September:
         M -> 9
         MM -> 09
@@ -164,7 +164,7 @@ public class DateFormat {
 
     /**
         This designator indicates the seconds of the minute.
-     
+
         Examples for 7 seconds past the minute:
         s -> 7
         ss -> 07
@@ -173,7 +173,7 @@ public class DateFormat {
 
     /**
         This designator indicates the offset of the timezone from GMT.
-     
+
         Example for US/Pacific timezone:
         z -> -0800
         zz -> PST
@@ -182,7 +182,7 @@ public class DateFormat {
 
     /**
         This designator indicates the year.
-     
+
         Examples for 2006
         y -> 06
         yyyy -> 2006
@@ -260,7 +260,7 @@ public class DateFormat {
     }
 
     /**
-     * Returns a {@link java.text.DateFormat} object that can format the date 
+     * Returns a {@link java.text.DateFormat} object that can format the date
      * in short form (such as 12/31/1999) according
      * to the current locale and the user's date-order preference.
      * @param context the application context
@@ -329,7 +329,7 @@ public class DateFormat {
         value = context.getString(R.string.numeric_date_format);
         return value;
     }
-    
+
     /**
      * Returns a {@link java.text.DateFormat} object that can format the date
      * in long form (such as December 31, 1999) for the current locale.
@@ -352,13 +352,13 @@ public class DateFormat {
 
     /**
      * Gets the current date format stored as a char array. The array will contain
-     * 3 elements ({@link #DATE}, {@link #MONTH}, and {@link #YEAR}) in the order    
+     * 3 elements ({@link #DATE}, {@link #MONTH}, and {@link #YEAR}) in the order
      * specified by the user's format preference.  Note that this order is
      * only appropriate for all-numeric dates; spelled-out (MEDIUM and LONG)
      * dates will generally contain other punctuation, spaces, or words,
      * not just the day, month, and year, and not necessarily in the same
      * order returned here.
-     */    
+     */
     public static final char[] getDateFormatOrder(Context context) {
         char[] order = new char[] {DATE, MONTH, YEAR};
         String value = getDateFormatString(context);
@@ -388,7 +388,7 @@ public class DateFormat {
         }
         return order;
     }
-    
+
     private static String getDateFormatString(Context context) {
         String value = Settings.System.getString(context.getContentResolver(),
                 Settings.System.DATE_FORMAT);
@@ -397,7 +397,7 @@ public class DateFormat {
     }
 
     /**
-     * Given a format string and a time in milliseconds since Jan 1, 1970 GMT, returns a 
+     * Given a format string and a time in milliseconds since Jan 1, 1970 GMT, returns a
      * CharSequence containing the requested date.
      * @param inFormat the format string, as described in {@link android.text.format.DateFormat}
      * @param inTimeInMillis in milliseconds since Jan 1, 1970 GMT
@@ -416,14 +416,14 @@ public class DateFormat {
      */
     public static final CharSequence format(CharSequence inFormat, Date inDate) {
         Calendar    c = new GregorianCalendar();
-        
+
         c.setTime(inDate);
-        
+
         return format(inFormat, c);
     }
 
     /**
-     * Given a format string and a {@link java.util.Calendar} object, returns a CharSequence 
+     * Given a format string and a {@link java.util.Calendar} object, returns a CharSequence
      * containing the requested date.
      * @param inFormat the format string, as described in {@link android.text.format.DateFormat}
      * @param inDate the date to format
@@ -458,53 +458,53 @@ public class DateFormat {
                 case AM_PM:
                     replacement = DateUtils.getAMPMString(inDate.get(Calendar.AM_PM));
                     break;
-                                        
+
                 case CAPITAL_AM_PM:
                     //FIXME: this is the same as AM_PM? no capital?
                     replacement = DateUtils.getAMPMString(inDate.get(Calendar.AM_PM));
                     break;
-                
+
                 case DATE:
                     replacement = zeroPad(inDate.get(Calendar.DATE), count);
                     break;
-                    
+
                 case DAY:
                     temp = inDate.get(Calendar.DAY_OF_WEEK);
                     replacement = DateUtils.getDayOfWeekString(temp,
-                                                               count < 4 ? 
-                                                               DateUtils.LENGTH_MEDIUM : 
+                                                               count < 4 ?
+                                                               DateUtils.LENGTH_MEDIUM :
                                                                DateUtils.LENGTH_LONG);
                     break;
-                    
+
                 case HOUR:
                     temp = inDate.get(Calendar.HOUR);
 
                     if (0 == temp)
                         temp = 12;
-                    
+
                     replacement = zeroPad(temp, count);
                     break;
-                    
+
                 case HOUR_OF_DAY:
                     replacement = zeroPad(inDate.get(Calendar.HOUR_OF_DAY), count);
                     break;
-                    
+
                 case MINUTE:
                     replacement = zeroPad(inDate.get(Calendar.MINUTE), count);
                     break;
-                    
+
                 case MONTH:
                     replacement = getMonthString(inDate, count);
                     break;
-                    
+
                 case SECONDS:
                     replacement = zeroPad(inDate.get(Calendar.SECOND), count);
                     break;
-                    
+
                 case TIME_ZONE:
                     replacement = getTimeZoneString(inDate, count);
                     break;
-                    
+
                 case YEAR:
                     replacement = getYearString(inDate, count);
                     break;
@@ -513,23 +513,23 @@ public class DateFormat {
                     replacement = null;
                     break;
             }
-            
+
             if (replacement != null) {
                 s.replace(i, i + count, replacement);
                 count = replacement.length(); // CARE: count is used in the for loop above
                 len = s.length();
             }
         }
-        
+
         if (inFormat instanceof Spanned)
             return new SpannedString(s);
         else
             return s.toString();
     }
-    
+
     private static final String getMonthString(Calendar inDate, int count) {
         int month = inDate.get(Calendar.MONTH);
-        
+
         if (count >= 4)
             return DateUtils.getMonthString(month, DateUtils.LENGTH_LONG);
         else if (count == 3)
@@ -539,10 +539,10 @@ public class DateFormat {
             return zeroPad(month+1, count);
         }
     }
-        
+
     private static final String getTimeZoneString(Calendar inDate, int count) {
         TimeZone tz = inDate.getTimeZone();
-        
+
         if (count < 2) { // FIXME: shouldn't this be <= 2 ?
             return formatZoneOffset(inDate.get(Calendar.DST_OFFSET) +
                                     inDate.get(Calendar.ZONE_OFFSET),
@@ -571,12 +571,12 @@ public class DateFormat {
         tb.append(zeroPad(minutes, 2));
         return tb.toString();
     }
-    
+
     private static final String getYearString(Calendar inDate, int count) {
         int year = inDate.get(Calendar.YEAR);
         return (count <= 2) ? zeroPad(year % 100, 2) : String.valueOf(year);
     }
-   
+
     private static final int appendQuotedText(SpannableStringBuilder s, int i, int len) {
         if (i + 1 < len && s.charAt(i + 1) == QUOTE) {
             s.delete(i, i + 1);

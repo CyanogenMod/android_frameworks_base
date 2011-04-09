@@ -61,6 +61,6 @@ public class ButtonAboveTallInternalSelectionViewTest extends
                 getActivity().getScrollView().getScrollY());
     }
 
-    
+
 
 }

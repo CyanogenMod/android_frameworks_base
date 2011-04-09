@@ -40,7 +40,7 @@ public class Paint {
     private boolean     mHasCompatScaling;
     private float       mCompatScaling;
     private float       mInvCompatScaling;
-    
+
     private static final Style[] sStyleArray = {
         Style.FILL, Style.STROKE, Style.FILL_AND_STROKE
     };
@@ -97,7 +97,7 @@ public class Paint {
          * the paint.
          */
         FILL_AND_STROKE (2);
-        
+
         Style(int nativeInt) {
             this.nativeInt = nativeInt;
         }
@@ -123,7 +123,7 @@ public class Paint {
          * of the path.
          */
         SQUARE  (2);
-        
+
         private Cap(int nativeInt) {
             this.nativeInt = nativeInt;
         }
@@ -147,7 +147,7 @@ public class Paint {
          * The outer edges of a join meet with a straight line
          */
         BEVEL   (2);
-        
+
         private Join(int nativeInt) {
             this.nativeInt = nativeInt;
         }
@@ -171,7 +171,7 @@ public class Paint {
          * The text is drawn to the left of the x,y origin
          */
         RIGHT   (2);
-        
+
         private Align(int nativeInt) {
             this.nativeInt = nativeInt;
         }
@@ -184,7 +184,7 @@ public class Paint {
     public Paint() {
         this(0);
     }
-    
+
     /**
      * Create a new paint with the specified flags. Use setFlags() to change
      * these after the paint is created.
@@ -218,7 +218,7 @@ public class Paint {
         mHasCompatScaling = false;
         mCompatScaling = mInvCompatScaling = 1;
     }
-    
+
     /**
      * Copy the fields from src into this paint. This is equivalent to calling
      * get() on all of the src fields, and calling the corresponding set()
@@ -253,7 +253,7 @@ public class Paint {
             mInvCompatScaling = 1.0f/factor;
         }
     }
-    
+
     /**
      * Return the paint's flags. Use the Flag enum to test flag values.
      *
@@ -279,7 +279,7 @@ public class Paint {
     public final boolean isAntiAlias() {
         return (getFlags() & ANTI_ALIAS_FLAG) != 0;
     }
-    
+
     /**
      * Helper for setFlags(), setting or clearing the ANTI_ALIAS_FLAG bit
      * AntiAliasing smooths out the edges of what is being drawn, but is has
@@ -289,7 +289,7 @@ public class Paint {
      * @param aa true to set the antialias bit in the flags, false to clear it
      */
     public native void setAntiAlias(boolean aa);
-    
+
     /**
      * Helper for getFlags(), returning true if DITHER_FLAG bit is set
      * Dithering affects how colors that are higher precision than the device
@@ -303,7 +303,7 @@ public class Paint {
     public final boolean isDither() {
         return (getFlags() & DITHER_FLAG) != 0;
     }
-    
+
     /**
      * Helper for setFlags(), setting or clearing the DITHER_FLAG bit
      * Dithering affects how colors that are higher precision than the device
@@ -315,7 +315,7 @@ public class Paint {
      * @param dither true to set the dithering bit in flags, false to clear it
      */
     public native void setDither(boolean dither);
-    
+
     /**
      * Helper for getFlags(), returning true if LINEAR_TEXT_FLAG bit is set
      *
@@ -341,7 +341,7 @@ public class Paint {
     public final boolean isSubpixelText() {
         return (getFlags() & SUBPIXEL_TEXT_FLAG) != 0;
     }
-    
+
     /**
      * Helper for setFlags(), setting or clearing the SUBPIXEL_TEXT_FLAG bit
      *
@@ -349,7 +349,7 @@ public class Paint {
      *                     flags, false to clear it.
      */
     public native void setSubpixelText(boolean subpixelText);
-    
+
     /**
      * Helper for getFlags(), returning true if UNDERLINE_TEXT_FLAG bit is set
      *
@@ -400,7 +400,7 @@ public class Paint {
      *                     flags, false to clear it.
      */
     public native void setFakeBoldText(boolean fakeBoldText);
-    
+
     /**
      * Whether or not the bitmap filter is activated.
      * Filtering affects the sampling of bitmaps when they are transformed.
@@ -412,13 +412,13 @@ public class Paint {
     public final boolean isFilterBitmap() {
         return (getFlags() & FILTER_BITMAP_FLAG) != 0;
     }
-    
+
     /**
      * Helper for setFlags(), setting or clearing the FILTER_BITMAP_FLAG bit.
      * Filtering affects the sampling of bitmaps when they are transformed.
      * Filtering does not affect how the colors in the bitmap are converted into
      * device pixels. That is dependent on dithering and xfermodes.
-     * 
+     *
      * @param filter true to set the FILTER_BITMAP_FLAG bit in the paint's
      *               flags, false to clear it.
      */
@@ -465,7 +465,7 @@ public class Paint {
      * @param color The new color (including alpha) to set in the paint.
      */
     public native void setColor(int color);
-    
+
     /**
      * Helper to getColor() that just returns the color's alpha value. This is
      * the same as calling getColor() >>> 24. It always returns a value between
@@ -755,7 +755,7 @@ public class Paint {
         mTypeface = typeface;
         return typeface;
     }
-    
+
     /**
      * Get the paint's rasterizer (or null).
      * <p />
@@ -786,7 +786,7 @@ public class Paint {
         mRasterizer = rasterizer;
         return rasterizer;
     }
-    
+
     /**
      * Temporary API to expose layer drawing. This draws a shadow layer below
      * the main layer, with the specified offset and color, and blur radius.
@@ -899,7 +899,7 @@ public class Paint {
      */
     public static class FontMetrics {
         /**
-         * The maximum distance above the baseline for the tallest glyph in 
+         * The maximum distance above the baseline for the tallest glyph in
          * the font at a given text size.
          */
         public float   top;
@@ -912,7 +912,7 @@ public class Paint {
          */
         public float   descent;
         /**
-         * The maximum distance below the baseline for the lowest glyph in 
+         * The maximum distance below the baseline for the lowest glyph in
          * the font at a given text size.
          */
         public float   bottom;
@@ -921,7 +921,7 @@ public class Paint {
          */
         public float   leading;
     }
-    
+
     /**
      * Return the font's recommended interline spacing, given the Paint's
      * settings for typeface, textSize, etc. If metrics is not null, return the
@@ -932,7 +932,7 @@ public class Paint {
      * @return the font's recommended interline spacing.
      */
     public native float getFontMetrics(FontMetrics metrics);
-    
+
     /**
      * Allocates a new FontMetrics object, and then calls getFontMetrics(fm)
      * with it, returning the object.
@@ -942,7 +942,7 @@ public class Paint {
         getFontMetrics(fm);
         return fm;
     }
-    
+
     /**
      * Convenience method for callers that want to have FontMetrics values as
      * integers.
@@ -953,7 +953,7 @@ public class Paint {
         public int   descent;
         public int   bottom;
         public int   leading;
-        
+
         @Override public String toString() {
             return "FontMetricsInt: top=" + top + " ascent=" + ascent +
                     " descent=" + descent + " bottom=" + bottom +
@@ -978,7 +978,7 @@ public class Paint {
         getFontMetricsInt(fm);
         return fm;
     }
-    
+
     /**
      * Return the recommend line spacing based on the current typeface and
      * text size.
@@ -1396,7 +1396,7 @@ public class Paint {
 
         nativeGetCharArrayBounds(mNativePaint, text2, index, count, bounds);
     }
-    
+
     protected void finalize() throws Throwable {
         finalizer(mNativePaint);
     }

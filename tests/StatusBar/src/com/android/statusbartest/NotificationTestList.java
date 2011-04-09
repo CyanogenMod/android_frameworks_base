@@ -55,7 +55,7 @@ public class NotificationTestList extends TestActivity
     @Override
     protected Test[] tests() {
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-        
+
         return mTests;
     }
 
@@ -63,7 +63,7 @@ public class NotificationTestList extends TestActivity
         new Test("Off and sound") {
             public void run() {
                 PowerManager pm = (PowerManager)NotificationTestList.this.getSystemService(Context.POWER_SERVICE);
-                PowerManager.WakeLock wl = 
+                PowerManager.WakeLock wl =
                             pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "sound");
                 wl.acquire();
 
@@ -225,7 +225,7 @@ public class NotificationTestList extends TestActivity
                 n.defaults |= Notification.DEFAULT_SOUND ;
                 n.vibrate = new long[] {
                         300, 400, 300, 400, 300, 400, 300, 400, 300, 400, 300, 400,
-                        300, 400, 300, 400, 300, 400, 300, 400, 300, 400, 300, 400, 
+                        300, 400, 300, 400, 300, 400, 300, 400, 300, 400, 300, 400,
                         300, 400, 300, 400, 300, 400, 300, 400, 300, 400, 300, 400 };
                 mNM.notify(1, n);
             }
@@ -604,7 +604,7 @@ public class NotificationTestList extends TestActivity
                 }
             }
         },
-        
+
         new Test("Cancel eight notifications") {
             public void run() {
                 for (int i = 1; i < 9; i++) {
@@ -612,7 +612,7 @@ public class NotificationTestList extends TestActivity
                 }
             }
         },
-        
+
         new Test("Persistent with numbers 1") {
             public void run() {
                 mNM.notify(1, notificationWithNumbers(1));
@@ -640,7 +640,7 @@ public class NotificationTestList extends TestActivity
         new Test("Ticker") {
             public void run() {
                 Notification not = new Notification(
-                    R.drawable.app_gmail, 
+                    R.drawable.app_gmail,
                     "New mail from joeo@example.com, on the topic of very long ticker texts",
                     System.currentTimeMillis());
                 not.setLatestEventInfo(NotificationTestList.this,

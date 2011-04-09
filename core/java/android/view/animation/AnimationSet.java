@@ -26,8 +26,8 @@ import java.util.List;
 
 /**
  * Represents a group of Animations that should be played together.
- * The transformation of each individual animation are composed 
- * together into a single transform. 
+ * The transformation of each individual animation are composed
+ * together into a single transform.
  * If AnimationSet sets any properties that its children also set
  * (for example, duration or fillBefore), the values of AnimationSet
  * override the child values.
@@ -53,28 +53,28 @@ public class AnimationSet extends Animation {
     private long[] mStoredOffsets;
 
     /**
-     * Constructor used when an AnimationSet is loaded from a resource. 
-     * 
+     * Constructor used when an AnimationSet is loaded from a resource.
+     *
      * @param context Application context to use
      * @param attrs Attribute set from which to read values
      */
     public AnimationSet(Context context, AttributeSet attrs) {
         super(context, attrs);
-        
+
         TypedArray a =
             context.obtainStyledAttributes(attrs, com.android.internal.R.styleable.AnimationSet);
-        
+
         setFlag(PROPERTY_SHARE_INTERPOLATOR_MASK,
                 a.getBoolean(com.android.internal.R.styleable.AnimationSet_shareInterpolator, true));
         init();
-        
+
         a.recycle();
     }
-    
-    
+
+
     /**
      * Constructor to use when building an AnimationSet from code
-     * 
+     *
      * @param shareInterpolator Pass true if all of the animations in this set
      *        should use the interpolator assocciated with this AnimationSet.
      *        Pass false if each animation should use its own interpolator.
@@ -176,10 +176,10 @@ public class AnimationSet extends Animation {
             mDuration = mLastEnd - mStartOffset;
         }
     }
-    
+
     /**
      * Sets the start time of this animation and all child animations
-     * 
+     *
      * @see android.view.animation.Animation#setStartTime(long)
      */
     @Override
@@ -221,11 +221,11 @@ public class AnimationSet extends Animation {
             animations.get(i).restrictDuration(durationMillis);
         }
     }
-    
+
     /**
-     * The duration of an AnimationSet is defined to be the 
+     * The duration of an AnimationSet is defined to be the
      * duration of the longest child animation.
-     * 
+     *
      * @see android.view.animation.Animation#getDuration()
      */
     @Override
@@ -249,7 +249,7 @@ public class AnimationSet extends Animation {
     /**
      * The duration hint of an animation set is the maximum of the duration
      * hints of all of its component animations.
-     * 
+     *
      * @see android.view.animation.Animation#computeDurationHint
      */
     public long computeDurationHint() {
@@ -293,7 +293,7 @@ public class AnimationSet extends Animation {
     /**
      * The transformation of an animation set is the concatenation of all of its
      * component animations.
-     * 
+     *
      * @see android.view.animation.Animation#getTransformation
      */
     @Override
@@ -335,7 +335,7 @@ public class AnimationSet extends Animation {
 
         return more;
     }
-    
+
     /**
      * @see android.view.animation.Animation#scaleCurrentDuration(float)
      */

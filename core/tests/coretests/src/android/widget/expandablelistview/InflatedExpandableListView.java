@@ -33,9 +33,9 @@ public class InflatedExpandableListView extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         setContentView(R.layout.inflated_expandablelistview);
-        
+
         ExpandableListView elv = (ExpandableListView) findViewById(R.id.elv);
         elv.setAdapter(new MyExpandableListAdapter());
     }
@@ -49,7 +49,7 @@ public class InflatedExpandableListView extends Activity {
                 { "Fluffy", "Snuggles" },
                 { "Goldy", "Bubbles" }
         };
-        
+
         public Object getChild(int groupPosition, int childPosition) {
             return children[groupPosition][childPosition];
         }
@@ -75,7 +75,7 @@ public class InflatedExpandableListView extends Activity {
             textView.setPadding(36, 0, 0, 0);
             return textView;
         }
-        
+
         public View getChildView(int groupPosition, int childPosition, boolean isLastChild,
                 View convertView, ViewGroup parent) {
             TextView textView = getGenericView();
@@ -111,5 +111,5 @@ public class InflatedExpandableListView extends Activity {
         }
 
     }
-    
+
 }

@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2007-2008 The Android Open Source Project
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -26,12 +26,12 @@ import android.text.TextUtils;
  */
 public final class CompletionInfo implements Parcelable {
     static final String TAG = "CompletionInfo";
-    
+
     final long mId;
     final int mPosition;
     final CharSequence mText;
     final CharSequence mLabel;
-    
+
     /**
      * Create a simple completion with just text, no label.
      */
@@ -58,7 +58,7 @@ public final class CompletionInfo implements Parcelable {
         mText = TextUtils.CHAR_SEQUENCE_CREATOR.createFromParcel(source);
         mLabel = TextUtils.CHAR_SEQUENCE_CREATOR.createFromParcel(source);
     }
-    
+
     /**
      * Return the abstract identifier for this completion, typically
      * corresponding to the id associated with it in the original adapter.
@@ -66,7 +66,7 @@ public final class CompletionInfo implements Parcelable {
     public long getId() {
         return mId;
     }
-    
+
     /**
      * Return the original position of this completion, typically
      * corresponding to its position in the original adapter.
@@ -74,7 +74,7 @@ public final class CompletionInfo implements Parcelable {
     public int getPosition() {
         return mPosition;
     }
-    
+
     /**
      * Return the actual text associated with this completion.  This is the
      * real text that will be inserted into the editor if the user selects it.
@@ -82,7 +82,7 @@ public final class CompletionInfo implements Parcelable {
     public CharSequence getText() {
         return mText;
     }
-    
+
     /**
      * Return the user-visible label for the completion, or null if the plain
      * text should be shown.  If non-null, this will be what the user sees as
@@ -91,7 +91,7 @@ public final class CompletionInfo implements Parcelable {
     public CharSequence getLabel() {
         return mLabel;
     }
-    
+
     @Override
     public String toString() {
         return "CompletionInfo{#" + mPosition + " \"" + mText
@@ -100,7 +100,7 @@ public final class CompletionInfo implements Parcelable {
 
     /**
      * Used to package this object into a {@link Parcel}.
-     * 
+     *
      * @param dest The {@link Parcel} to be written.
      * @param flags The flags used for parceling.
      */

@@ -23,14 +23,14 @@ import android.test.suitebuilder.annotation.SmallTest;
  * {@hide}
  */
 public class AdnRecordTest extends TestCase {
-    
+
     @SmallTest
     public void testBasic() throws Exception {
         AdnRecord adn;
 
         //
         // Typical record
-        // 
+        //
         adn = new AdnRecord(
                 IccUtils.hexStringToBytes("566F696365204D61696C07918150367742F3FFFFFFFFFFFF"));
 
@@ -40,7 +40,7 @@ public class AdnRecordTest extends TestCase {
 
         //
         // Empty records, empty strings
-        // 
+        //
         adn = new AdnRecord(
                 IccUtils.hexStringToBytes("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"));
 
@@ -50,7 +50,7 @@ public class AdnRecordTest extends TestCase {
 
         //
         // Record too short
-        // 
+        //
         adn = new AdnRecord(IccUtils.hexStringToBytes( "FF"));
 
         assertEquals("", adn.getAlphaTag());
@@ -59,7 +59,7 @@ public class AdnRecordTest extends TestCase {
 
         //
         // TOA = 0xff ("control string")
-        // 
+        //
         adn = new AdnRecord(
                 IccUtils.hexStringToBytes("566F696365204D61696C07FF8150367742F3FFFFFFFFFFFF"));
 
@@ -69,7 +69,7 @@ public class AdnRecordTest extends TestCase {
 
         //
         // TOA = 0x81 (unknown)
-        // 
+        //
         adn = new AdnRecord(
                 IccUtils.hexStringToBytes("566F696365204D61696C07818150367742F3FFFFFFFFFFFF"));
 
@@ -79,7 +79,7 @@ public class AdnRecordTest extends TestCase {
 
         //
         // Number Length is too long
-        // 
+        //
         adn = new AdnRecord(
                 IccUtils.hexStringToBytes("566F696365204D61696C0F918150367742F3FFFFFFFFFFFF"));
 
@@ -89,7 +89,7 @@ public class AdnRecordTest extends TestCase {
 
         //
         // Number Length is zero (invalid)
-        // 
+        //
         adn = new AdnRecord(
                 IccUtils.hexStringToBytes("566F696365204D61696C00918150367742F3FFFFFFFFFFFF"));
 
@@ -99,7 +99,7 @@ public class AdnRecordTest extends TestCase {
 
         //
         // Number Length is 2, first number byte is FF, TOA is international
-        // 
+        //
         adn = new AdnRecord(
                 IccUtils.hexStringToBytes("566F696365204D61696C0291FF50367742F3FFFFFFFFFFFF"));
 
@@ -109,7 +109,7 @@ public class AdnRecordTest extends TestCase {
 
         //
         // Number Length is 2, first number digit is valid, TOA is international
-        // 
+        //
         adn = new AdnRecord(
                 IccUtils.hexStringToBytes("566F696365204D61696C0291F150367742F3FFFFFFFFFFFF"));
 
@@ -119,7 +119,7 @@ public class AdnRecordTest extends TestCase {
 
         //
         // An extended record
-        // 
+        //
         adn = new AdnRecord(
                 IccUtils.hexStringToBytes(
                         "4164676A6DFFFFFFFFFFFFFFFFFFFFFF0B918188551512C221436587FF01"));
@@ -137,7 +137,7 @@ public class AdnRecordTest extends TestCase {
 
         //
         // An extended record with an invalid extension
-        // 
+        //
         adn = new AdnRecord(
                 IccUtils.hexStringToBytes(
                         "4164676A6DFFFFFFFFFFFFFFFFFFFFFF0B918188551512C221436587FF01"));
@@ -155,7 +155,7 @@ public class AdnRecordTest extends TestCase {
 
         //
         // An extended record with an invalid extension
-        // 
+        //
         adn = new AdnRecord(
                 IccUtils.hexStringToBytes(
                         "4164676A6DFFFFFFFFFFFFFFFFFFFFFF0B918188551512C221436587FF01"));

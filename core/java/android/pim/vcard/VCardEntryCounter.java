@@ -59,5 +59,5 @@ public class VCardEntryCounter implements VCardInterpreter {
     }
 
     public void propertyValues(List<String> values) {
-    }    
+    }
 }

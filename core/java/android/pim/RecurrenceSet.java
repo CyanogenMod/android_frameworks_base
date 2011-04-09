@@ -186,7 +186,7 @@ public class RecurrenceSet {
         if (inUtc || allDay) {
             tzid = Time.TIMEZONE_UTC;
         }
-                
+
         String duration = computeDuration(start, component);
         String rrule = flattenProperties(component, "RRULE");
         String rdate = extractDates(component.getFirstProperty("RDATE"));
@@ -204,12 +204,12 @@ public class RecurrenceSet {
                 }
                 return false;
         }
-        
+
         if (allDay) {
-        	// TODO: also change tzid to be UTC?  that would be consistent, but
-        	// that would not reflect the original timezone value back to the
-        	// server.
-        	start.timezone = Time.TIMEZONE_UTC;
+                // TODO: also change tzid to be UTC?  that would be consistent, but
+                // that would not reflect the original timezone value back to the
+                // server.
+                start.timezone = Time.TIMEZONE_UTC;
         }
         long millis = start.toMillis(false /* use isDst */);
         values.put(Calendar.Events.DTSTART, millis);
@@ -219,7 +219,7 @@ public class RecurrenceSet {
             }
             return false;
         }
-        
+
         values.put(Calendar.Events.RRULE, rrule);
         values.put(Calendar.Events.RDATE, rdate);
         values.put(Calendar.Events.EXRULE, exrule);
@@ -233,7 +233,7 @@ public class RecurrenceSet {
     // This can be removed when the old CalendarSyncAdapter is removed.
     public static boolean populateComponent(Cursor cursor,
                                             ICalendar.Component component) {
-        
+
         int dtstartColumn = cursor.getColumnIndex(Calendar.Events.DTSTART);
         int durationColumn = cursor.getColumnIndex(Calendar.Events.DURATION);
         int tzidColumn = cursor.getColumnIndex(Calendar.Events.EVENT_TIMEZONE);
@@ -275,7 +275,7 @@ public class RecurrenceSet {
             // use the "floating" timezone
             dtstartTime = new Time(Time.TIMEZONE_UTC);
         }
-        
+
         dtstartTime.set(dtstart);
         // make sure the time is printed just as a date, if all day.
         // TODO: android.pim.Time really should take care of this for us.
@@ -439,7 +439,7 @@ public static boolean populateComponent(ContentValues values,
         prop.setValue(dateStr);
         component.addProperty(prop);
     }
-    
+
     private static String computeDuration(Time start,
                                           ICalendar.Component component) {
         // see if a duration is defined

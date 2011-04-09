@@ -28,7 +28,7 @@ public class SystemPropertiesTest extends TestCase {
     public void testProperties() throws Exception {
         if (false) {
         String value;
-       
+
         SystemProperties.set(KEY, "");
         value = SystemProperties.get(KEY, "default");
         assertEquals("default", value);

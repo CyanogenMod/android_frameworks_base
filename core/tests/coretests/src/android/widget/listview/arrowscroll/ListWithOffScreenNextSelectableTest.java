@@ -66,7 +66,7 @@ public class ListWithOffScreenNextSelectableTest
                 listBottom - mListView.getVerticalFadingEdgeLength(), lastVisibleView.getBottom());
         assertEquals("selection should not have moved yet",
                 0, mListView.getSelectedItemPosition());
-        
+
         sendKeys(KeyEvent.KEYCODE_DPAD_DOWN);
         assertEquals("selection should have moved",
                 4, mListView.getSelectedItemPosition());

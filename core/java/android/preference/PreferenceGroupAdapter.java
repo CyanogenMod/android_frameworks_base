@@ -43,25 +43,25 @@ import android.widget.ListView;
  * <p>
  * This adapter does not include this {@link PreferenceGroup} in the returned
  * adapter, use {@link PreferenceCategoryAdapter} instead.
- * 
+ *
  * @see PreferenceCategoryAdapter
  */
 class PreferenceGroupAdapter extends BaseAdapter implements OnPreferenceChangeInternalListener {
-    
+
     private static final String TAG = "PreferenceGroupAdapter";
 
     /**
      * The group that we are providing data from.
      */
     private PreferenceGroup mPreferenceGroup;
-    
+
     /**
      * Maps a position into this adapter -> {@link Preference}. These
      * {@link Preference}s don't have to be direct children of this
      * {@link PreferenceGroup}, they can be grand children or younger)
      */
     private List<Preference> mPreferenceList;
-    
+
     /**
      * List of unique Preference and its subclasses' names. This is used to find
      * out how many types of views this adapter can return. Once the count is
@@ -77,11 +77,11 @@ class PreferenceGroupAdapter extends BaseAdapter implements OnPreferenceChangeIn
      * Blocks the mPreferenceClassNames from being changed anymore.
      */
     private boolean mHasReturnedViewTypeCount = false;
-    
+
     private volatile boolean mIsSyncing = false;
-    
-    private Handler mHandler = new Handler(); 
-    
+
+    private Handler mHandler = new Handler();
+
     private Runnable mSyncRunnable = new Runnable() {
         public void run() {
             syncMyPreferences();
@@ -134,7 +134,7 @@ class PreferenceGroupAdapter extends BaseAdapter implements OnPreferenceChangeIn
         List<Preference> newPreferenceList = new ArrayList<Preference>(mPreferenceList.size());
         flattenPreferenceGroup(newPreferenceList, mPreferenceGroup);
         mPreferenceList = newPreferenceList;
-        
+
         notifyDataSetChanged();
 
         synchronized(this) {
@@ -142,7 +142,7 @@ class PreferenceGroupAdapter extends BaseAdapter implements OnPreferenceChangeIn
             notifyAll();
         }
     }
-    
+
     private void flattenPreferenceGroup(List<Preference> preferences, PreferenceGroup group) {
         // TODO: shouldn't always?
         group.sortPreferences();
@@ -150,13 +150,13 @@ class PreferenceGroupAdapter extends BaseAdapter implements OnPreferenceChangeIn
         final int groupSize = group.getPreferenceCount();
         for (int i = 0; i < groupSize; i++) {
             final Preference preference = group.getPreference(i);
-            
+
             preferences.add(preference);
-            
+
             if (!mHasReturnedViewTypeCount && !preference.hasSpecifiedLayout()) {
                 addPreferenceClassName(preference);
             }
-            
+
             if (preference instanceof PreferenceGroup) {
                 final PreferenceGroup preferenceAsGroup = (PreferenceGroup) preference;
                 if (preferenceAsGroup.isOnSameScreenAsChildren()) {
@@ -192,7 +192,7 @@ class PreferenceGroupAdapter extends BaseAdapter implements OnPreferenceChangeIn
             mPreferenceLayouts.add(insertPos, pl);
         }
     }
-    
+
     public int getCount() {
         return mPreferenceList.size();
     }
@@ -212,7 +212,7 @@ class PreferenceGroupAdapter extends BaseAdapter implements OnPreferenceChangeIn
         // Build a PreferenceLayout to compare with known ones that are cacheable.
         mTempPreferenceLayout = createPreferenceLayout(preference, mTempPreferenceLayout);
 
-        // If it's not one of the cached ones, set the convertView to null so that 
+        // If it's not one of the cached ones, set the convertView to null so that
         // the layout gets re-created by the Preference.
         if (Collections.binarySearch(mPreferenceLayouts, mTempPreferenceLayout) < 0) {
             convertView = null;
@@ -253,7 +253,7 @@ class PreferenceGroupAdapter extends BaseAdapter implements OnPreferenceChangeIn
         if (!mHasReturnedViewTypeCount) {
             mHasReturnedViewTypeCount = true;
         }
-        
+
         final Preference preference = this.getItem(position);
         if (preference.hasSpecifiedLayout()) {
             return IGNORE_ITEM_VIEW_TYPE;
@@ -276,7 +276,7 @@ class PreferenceGroupAdapter extends BaseAdapter implements OnPreferenceChangeIn
         if (!mHasReturnedViewTypeCount) {
             mHasReturnedViewTypeCount = true;
         }
-        
+
         return Math.max(1, mPreferenceLayouts.size());
     }
 

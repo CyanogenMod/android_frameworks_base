@@ -120,7 +120,7 @@ public class ListView extends AbsListView {
 
     Drawable mDivider;
     int mDividerHeight;
-    
+
     Drawable mOverScrollHeader;
     Drawable mOverScrollFooter;
 
@@ -150,7 +150,7 @@ public class ListView extends AbsListView {
 
     // Keeps focused children visible through resizes
     private FocusSelector mFocusSelector;
-    
+
     public ListView(Context context) {
         this(context, null);
     }
@@ -177,7 +177,7 @@ public class ListView extends AbsListView {
             // If a divider is specified use its intrinsic height for divider height
             setDivider(d);
         }
-        
+
         final Drawable osHeader = a.getDrawable(
                 com.android.internal.R.styleable.ListView_overScrollHeader);
         if (osHeader != null) {
@@ -198,7 +198,7 @@ public class ListView extends AbsListView {
         }
 
         setChoiceMode(a.getInt(R.styleable.ListView_choiceMode, CHOICE_MODE_NONE));
-        
+
         mHeaderDividersEnabled = a.getBoolean(R.styleable.ListView_headerDividersEnabled, true);
         mFooterDividersEnabled = a.getBoolean(R.styleable.ListView_footerDividersEnabled, true);
 
@@ -429,7 +429,7 @@ public class ListView extends AbsListView {
      *        data backing this list and for producing a view to represent an
      *        item in that data set.
      *
-     * @see #getAdapter() 
+     * @see #getAdapter()
      */
     @Override
     public void setAdapter(ListAdapter adapter) {
@@ -489,7 +489,7 @@ public class ListView extends AbsListView {
         if (mCheckStates != null) {
             mCheckStates.clear();
         }
-        
+
         if (mCheckedIdStates != null) {
             mCheckedIdStates.clear();
         }
@@ -1053,18 +1053,18 @@ public class ListView extends AbsListView {
     private class FocusSelector implements Runnable {
         private int mPosition;
         private int mPositionTop;
-        
+
         public FocusSelector setup(int position, int top) {
             mPosition = position;
             mPositionTop = top;
             return this;
         }
-        
+
         public void run() {
             setSelectionFromTop(mPosition, mPositionTop);
         }
     }
-    
+
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         if (getChildCount() > 0) {
@@ -1128,7 +1128,7 @@ public class ListView extends AbsListView {
         }
 
         setMeasuredDimension(widthSize, heightSize);
-        mWidthMeasureSpec = widthMeasureSpec;        
+        mWidthMeasureSpec = widthMeasureSpec;
     }
 
     private void measureScrapChild(View child, int position, int widthMeasureSpec) {
@@ -1422,7 +1422,7 @@ public class ListView extends AbsListView {
                         adjustViewsUpOrDown();
                     }
                 } else if (lastPosition == mItemCount - 1) {
-                    adjustViewsUpOrDown();                    
+                    adjustViewsUpOrDown();
                 }
             }
         }
@@ -1510,7 +1510,7 @@ public class ListView extends AbsListView {
                 throw new IllegalStateException("The content of the adapter has changed but "
                         + "ListView did not receive a notification. Make sure the content of "
                         + "your adapter is not modified from a background thread, but only "
-                        + "from the UI thread. [in ListView(" + getId() + ", " + getClass() 
+                        + "from the UI thread. [in ListView(" + getId() + ", " + getClass()
                         + ") with Adapter(" + mAdapter.getClass() + ")]");
             }
 
@@ -1663,7 +1663,7 @@ public class ListView extends AbsListView {
                     && focusLayoutRestoreView.getWindowToken() != null) {
                 focusLayoutRestoreView.onFinishTemporaryDetach();
             }
-            
+
             mLayoutMode = LAYOUT_NORMAL;
             mDataChanged = false;
             mNeedSync = false;
@@ -1896,7 +1896,7 @@ public class ListView extends AbsListView {
 
     /**
      * Makes the item at the supplied position selected.
-     * 
+     *
      * @param position the position of the item to select
      */
     @Override
@@ -2631,7 +2631,7 @@ public class ListView extends AbsListView {
             if (startPos < firstPosition) {
                 startPos = firstPosition;
             }
-            
+
             final int lastVisiblePos = getLastVisiblePosition();
             final ListAdapter adapter = getAdapter();
             for (int pos = startPos; pos <= lastVisiblePos; pos++) {
@@ -2800,7 +2800,7 @@ public class ListView extends AbsListView {
     /**
      * Determine the distance to the nearest edge of a view in a particular
      * direction.
-     * 
+     *
      * @param descendant A descendant of this list.
      * @return The distance, or 0 if the nearest edge is already on screen.
      */
@@ -3035,7 +3035,7 @@ public class ListView extends AbsListView {
             final int listBottom = mBottom - mTop - mListPadding.bottom + mScrollY;
             if (!mStackFromBottom) {
                 int bottom = 0;
-                
+
                 // Draw top divider or header for overscroll
                 final int scrollY = mScrollY;
                 if (count > 0 && scrollY < 0) {
@@ -3118,7 +3118,7 @@ public class ListView extends AbsListView {
                         }
                     }
                 }
-                
+
                 if (count > 0 && scrollY > 0) {
                     if (drawOverscrollFooter) {
                         final int absListBottom = mBottom;
@@ -3200,7 +3200,7 @@ public class ListView extends AbsListView {
     public int getDividerHeight() {
         return mDividerHeight;
     }
-    
+
     /**
      * Sets the height of the divider that will be drawn between each item in the list. Calling
      * this will override the intrinsic height as set by {@link #setDivider(Drawable)}
@@ -3237,7 +3237,7 @@ public class ListView extends AbsListView {
         mFooterDividersEnabled = footerDividersEnabled;
         invalidate();
     }
-    
+
     /**
      * Sets the drawable that will be drawn above all other list content.
      * This area can become visible when the user overscrolls the list.
@@ -3502,7 +3502,7 @@ public class ListView extends AbsListView {
                         mCheckedIdStates.clear();
                         mCheckedIdStates.put(mAdapter.getItemId(position), Boolean.TRUE);
                     }
-                } 
+                }
             }
 
             mDataChanged = true;
@@ -3519,7 +3519,7 @@ public class ListView extends AbsListView {
      * Sets the checked state of the specified position. The is only valid if
      * the choice mode has been set to {@link #CHOICE_MODE_SINGLE} or
      * {@link #CHOICE_MODE_MULTIPLE}.
-     * 
+     *
      * @param position The item whose checked state is to be checked
      * @param value The new checked state for the item
      */
@@ -3620,10 +3620,10 @@ public class ListView extends AbsListView {
     /**
      * Returns the set of checked items ids. The result is only valid if the
      * choice mode has not been set to {@link #CHOICE_MODE_NONE}.
-     * 
+     *
      * @return A new array which contains the id of each checked item in the
      *         list.
-     *         
+     *
      * @deprecated Use {@link #getCheckedItemIds()} instead.
      */
     @Deprecated
@@ -3661,12 +3661,12 @@ public class ListView extends AbsListView {
         }
         return new long[0];
     }
-    
+
     /**
      * Returns the set of checked items ids. The result is only valid if the
      * choice mode has not been set to {@link #CHOICE_MODE_NONE} and the adapter
      * has stable IDs. ({@link ListAdapter#hasStableIds()} == {@code true})
-     * 
+     *
      * @return A new array which contains the id of each checked item in the
      *         list.
      */
@@ -3674,15 +3674,15 @@ public class ListView extends AbsListView {
         if (mChoiceMode == CHOICE_MODE_NONE || mCheckedIdStates == null || mAdapter == null) {
             return new long[0];
         }
-        
+
         final LongSparseArray<Boolean> idStates = mCheckedIdStates;
         final int count = idStates.size();
         final long[] ids = new long[count];
-        
+
         for (int i = 0; i < count; i++) {
             ids[i] = idStates.keyAt(i);
         }
-        
+
         return ids;
     }
 

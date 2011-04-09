@@ -42,7 +42,7 @@ public class Shader {
          * mirror images so that adjacent images always seam
          */
         MIRROR  (2);
-    
+
         TileMode(int nativeInt) {
             this.nativeInt = nativeInt;
         }

@@ -35,7 +35,7 @@ import android.widget.RemoteViews;
  * the user using the {@link android.app.NotificationManager}.
  *
  * <p>For a guide to creating notifications, see the
- * <a href="{@docRoot}guide/topics/ui/notifiers/notifications.html">Creating Status 
+ * <a href="{@docRoot}guide/topics/ui/notifiers/notifications.html">Creating Status
  * Bar Notifications</a> document in the Dev Guide.</p>
  */
 public class Notification implements Parcelable
@@ -44,33 +44,33 @@ public class Notification implements Parcelable
      * Use all default values (where applicable).
      */
     public static final int DEFAULT_ALL = ~0;
-    
+
     /**
      * Use the default notification sound. This will ignore any given
      * {@link #sound}.
-     * 
+     *
      * @see #defaults
-     */ 
+     */
     public static final int DEFAULT_SOUND = 1;
 
     /**
      * Use the default notification vibrate. This will ignore any given
-     * {@link #vibrate}. Using phone vibration requires the 
+     * {@link #vibrate}. Using phone vibration requires the
      * {@link android.Manifest.permission#VIBRATE VIBRATE} permission.
-     * 
+     *
      * @see #defaults
-     */ 
+     */
     public static final int DEFAULT_VIBRATE = 2;
-    
+
     /**
      * Use the default notification lights. This will ignore the
      * {@link #FLAG_SHOW_LIGHTS} bit, and {@link #ledARGB}, {@link #ledOffMS}, or
      * {@link #ledOnMS}.
-     * 
+     *
      * @see #defaults
-     */ 
+     */
     public static final int DEFAULT_LIGHTS = 4;
-    
+
     /**
      * The timestamp for the notification.  The icons and expanded views
      * are sorted by this key.
@@ -95,7 +95,7 @@ public class Notification implements Parcelable
      * this is an activity, it must include the
      * {@link android.content.Intent#FLAG_ACTIVITY_NEW_TASK} flag, which requires
      * that you take care of task management as described in the <em>Activities and Tasks</em>
-     * section of the <a href="{@docRoot}guide/topics/fundamentals.html#acttask">Application 
+     * section of the <a href="{@docRoot}guide/topics/fundamentals.html#acttask">Application
      * Fundamentals</a> document.
      */
     public PendingIntent contentIntent;
@@ -141,9 +141,9 @@ public class Notification implements Parcelable
 
     /**
      * The sound to play.
-     * 
+     *
      * <p>
-     * To play the default notification sound, see {@link #defaults}. 
+     * To play the default notification sound, see {@link #defaults}.
      * </p>
      */
     public Uri sound;
@@ -162,14 +162,14 @@ public class Notification implements Parcelable
      */
     public int audioStreamType = STREAM_DEFAULT;
 
-    
+
     /**
-     * The pattern with which to vibrate. 
-     * 
+     * The pattern with which to vibrate.
+     *
      * <p>
      * To vibrate the default pattern, see {@link #defaults}.
      * </p>
-     * 
+     *
      * @see android.os.Vibrator#vibrate(long[],int)
      */
     public long[] vibrate;
@@ -227,7 +227,7 @@ public class Notification implements Parcelable
      * because they will be set to values that work on any given hardware.
      * <p>
      * The alpha channel must be set for forward compatibility.
-     * 
+     *
      */
     public static final int FLAG_SHOW_LIGHTS        = 0x00000001;
 
@@ -257,7 +257,7 @@ public class Notification implements Parcelable
     /**
      * Bit to be bitwise-ored into the {@link #flags} field that should be
      * set if the notification should be canceled when it is clicked by the
-     * user. 
+     * user.
      */
     public static final int FLAG_AUTO_CANCEL        = 0x00000010;
 
@@ -389,7 +389,7 @@ public class Notification implements Parcelable
         that.ledOnMS = this.ledOnMS;
         that.ledOffMS = this.ledOffMS;
         that.defaults = this.defaults;
-        
+
         that.flags = this.flags;
 
         return that;
@@ -487,7 +487,7 @@ public class Notification implements Parcelable
      * @param contentIntent The intent to launch when the user clicks the expanded notification.
      * If this is an activity, it must include the
      * {@link android.content.Intent#FLAG_ACTIVITY_NEW_TASK} flag, which requires
-     * that you take care of task management as described in 
+     * that you take care of task management as described in
      * <a href="{@docRoot}guide/topics/fundamentals.html#lcycles">Application Fundamentals: Activities and Tasks</a>.
      */
     public void setLatestEventInfo(Context context,

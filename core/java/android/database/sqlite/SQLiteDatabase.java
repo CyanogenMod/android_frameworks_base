@@ -2163,7 +2163,7 @@ public class SQLiteDatabase extends SQLiteClosable {
 
     /**
      * this method is used to collect data about ALL open databases in the current process.
-     * bugreport is a user of this data. 
+     * bugreport is a user of this data.
      */
     /* package */ static ArrayList<DbStats> getDbStats() {
         ArrayList<DbStats> dbStatsList = new ArrayList<DbStats>();

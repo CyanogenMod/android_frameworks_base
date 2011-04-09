@@ -23,13 +23,13 @@ import java.util.HashMap;
 public class ProcessMap<E> {
     final HashMap<String, SparseArray<E>> mMap
             = new HashMap<String, SparseArray<E>>();
-    
+
     public E get(String name, int uid) {
         SparseArray<E> uids = mMap.get(name);
         if (uids == null) return null;
         return uids.get(uid);
     }
-    
+
     public E put(String name, int uid, E value) {
         SparseArray<E> uids = mMap.get(name);
         if (uids == null) {
@@ -39,7 +39,7 @@ public class ProcessMap<E> {
         uids.put(uid, value);
         return value;
     }
-    
+
     public void remove(String name, int uid) {
         SparseArray<E> uids = mMap.get(name);
         if (uids != null) {
@@ -49,7 +49,7 @@ public class ProcessMap<E> {
             }
         }
     }
-    
+
     public HashMap<String, SparseArray<E>> getMap() {
         return mMap;
     }

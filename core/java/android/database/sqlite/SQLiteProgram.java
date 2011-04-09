@@ -141,7 +141,7 @@ public abstract class SQLiteProgram extends SQLiteClosable {
                 // it is in compiled-sql cache. reset its CompiledSql#mInUse flag
                 mCompiledSql.release();
             }
-        } 
+        }
     }
 
     /**

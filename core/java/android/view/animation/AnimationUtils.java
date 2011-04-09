@@ -49,7 +49,7 @@ public class AnimationUtils {
 
     /**
      * Loads an {@link Animation} object from a resource
-     * 
+     *
      * @param context Application context used to access resources
      * @param id The resource id of the animation to load
      * @return The animation object reference by the specified id
@@ -82,12 +82,12 @@ public class AnimationUtils {
 
         return createAnimationFromXml(c, parser, null, Xml.asAttributeSet(parser));
     }
-    
+
     private static Animation createAnimationFromXml(Context c, XmlPullParser parser,
             AnimationSet parent, AttributeSet attrs) throws XmlPullParserException, IOException {
-        
+
         Animation anim = null;
- 
+
         // Make sure we are on a start tag.
         int type;
         int depth = parser.getDepth();
@@ -100,7 +100,7 @@ public class AnimationUtils {
             }
 
             String  name = parser.getName();
-    
+
             if (name.equals("set")) {
                 anim = new AnimationSet(c, attrs);
                 createAnimationFromXml(c, parser, (AnimationSet)anim, attrs);
@@ -120,14 +120,14 @@ public class AnimationUtils {
                 parent.addAnimation(anim);
             }
         }
-    
+
         return anim;
 
     }
 
     public static LayoutAnimationController loadLayoutAnimation(Context context, int id)
             throws NotFoundException {
-        
+
         XmlResourceParser parser = null;
         try {
             parser = context.getResources().getAnimation(id);
@@ -185,7 +185,7 @@ public class AnimationUtils {
     /**
      * Make an animation for objects becoming visible. Uses a slide and fade
      * effect.
-     * 
+     *
      * @param c Context for loading resources
      * @param fromLeft is the object to be animated coming from the left
      * @return The new animation
@@ -202,11 +202,11 @@ public class AnimationUtils {
         a.setStartTime(currentAnimationTimeMillis());
         return a;
     }
-    
+
     /**
      * Make an animation for objects becoming invisible. Uses a slide and fade
      * effect.
-     * 
+     *
      * @param c Context for loading resources
      * @param toRight is the object to be animated exiting to the right
      * @return The new animation
@@ -218,17 +218,17 @@ public class AnimationUtils {
         } else {
             a = AnimationUtils.loadAnimation(c, com.android.internal.R.anim.slide_out_left);
         }
-        
+
         a.setInterpolator(new AccelerateInterpolator());
         a.setStartTime(currentAnimationTimeMillis());
         return a;
     }
 
-    
+
     /**
      * Make an animation for objects becoming visible. Uses a slide up and fade
      * effect.
-     * 
+     *
      * @param c Context for loading resources
      * @return The new animation
      */
@@ -239,10 +239,10 @@ public class AnimationUtils {
         a.setStartTime(currentAnimationTimeMillis());
         return a;
     }
-    
+
     /**
      * Loads an {@link Interpolator} object from a resource
-     * 
+     *
      * @param context Application context used to access resources
      * @param id The resource id of the animation to load
      * @return The animation object reference by the specified id
@@ -268,12 +268,12 @@ public class AnimationUtils {
         }
 
     }
-    
+
     private static Interpolator createInterpolatorFromXml(Context c, XmlPullParser parser)
             throws XmlPullParserException, IOException {
-        
+
         Interpolator interpolator = null;
- 
+
         // Make sure we are on a start tag.
         int type;
         int depth = parser.getDepth();
@@ -286,10 +286,10 @@ public class AnimationUtils {
             }
 
             AttributeSet attrs = Xml.asAttributeSet(parser);
-            
+
             String  name = parser.getName();
-    
-            
+
+
             if (name.equals("linearInterpolator")) {
                 interpolator = new LinearInterpolator(c, attrs);
             } else if (name.equals("accelerateInterpolator")) {
@@ -313,7 +313,7 @@ public class AnimationUtils {
             }
 
         }
-    
+
         return interpolator;
 
     }

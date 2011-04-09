@@ -24,7 +24,7 @@ import java.lang.annotation.Annotation;
 /**
  * A predicate that checks to see if a the method represented by {@link TestMethod} has a certain
  * annotation on it. Consider using the public {@link HasAnnotation} class instead of this class.
- * 
+ *
  * {@hide} Not needed for 1.0 SDK.
  */
 class HasMethodAnnotation implements Predicate<TestMethod> {

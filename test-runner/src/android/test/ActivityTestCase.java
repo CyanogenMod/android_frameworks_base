@@ -22,7 +22,7 @@ import java.lang.reflect.Field;
 
 /**
  * This is common code used to support Activity test cases.  For more useful classes, please see
- * {@link android.test.ActivityUnitTestCase} and 
+ * {@link android.test.ActivityUnitTestCase} and
  * {@link android.test.ActivityInstrumentationTestCase}.
  */
 public abstract class ActivityTestCase extends InstrumentationTestCase {
@@ -38,7 +38,7 @@ public abstract class ActivityTestCase extends InstrumentationTestCase {
     protected Activity getActivity() {
         return mActivity;
     }
-    
+
     /**
      * Set the activity under test.
      * @param testActivity The activity under test
@@ -46,15 +46,15 @@ public abstract class ActivityTestCase extends InstrumentationTestCase {
     protected void setActivity(Activity testActivity) {
         mActivity = testActivity;
     }
-    
+
     /**
      * This function is called by various TestCase implementations, at tearDown() time, in order
      * to scrub out any class variables.  This protects against memory leaks in the case where a
      * test case creates a non-static inner class (thus referencing the test case) and gives it to
      * someone else to hold onto.
-     * 
+     *
      * @param testCaseClass The class of the derived TestCase implementation.
-     * 
+     *
      * @throws IllegalAccessException
      */
     protected void scrubClass(final Class<?> testCaseClass)
@@ -77,6 +77,6 @@ public abstract class ActivityTestCase extends InstrumentationTestCase {
         }
     }
 
-    
+
 
 }

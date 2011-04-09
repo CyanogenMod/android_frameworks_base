@@ -57,7 +57,7 @@ public class VpnServiceBinder extends Service {
     private static String getStateFilePath() {
         // This call will return the correcu directory whether Encrypted FS is enabled or not
         // Disabled: /data/misc/vpn/.states   Enabled: /data/secure/misc/vpn/.states
-	return Environment.getSecureDataDirectory().getPath() + STATES_FILE_RELATIVE_PATH;
+        return Environment.getSecureDataDirectory().getPath() + STATES_FILE_RELATIVE_PATH;
     }
 
     private final IBinder mBinder = new IVpnService.Stub() {

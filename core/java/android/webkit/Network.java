@@ -37,17 +37,17 @@ class Network {
      * Static instance of a Network object.
      */
     private static Network sNetwork;
-    
+
     /**
      * Flag to store the state of platform notifications, for the case
      * when the Network object has not been constructed yet
      */
     private static boolean sPlatformNotifications;
-    
+
     /**
-     * Reference count for platform notifications as the network class is a 
-     * static and can exist over multiple activities, thus over multiple 
-     * onPause/onResume pairs. 
+     * Reference count for platform notifications as the network class is a
+     * static and can exist over multiple activities, thus over multiple
+     * onPause/onResume pairs.
      */
     private static int sPlatformNotificationEnableRefCount;
 
@@ -84,15 +84,15 @@ class Network {
     public static synchronized Network getInstance(Context context) {
         if (sNetwork == null) {
             // Note Context of the Application is used here, rather than
-            // the what is passed in (usually a Context derived from an 
+            // the what is passed in (usually a Context derived from an
             // Activity) so the intent receivers belong to the application
-            // rather than an activity - this fixes the issue where 
+            // rather than an activity - this fixes the issue where
             // Activities are created and destroyed during the lifetime of
             // an Application
             sNetwork = new Network(context.getApplicationContext());
             if (sPlatformNotifications) {
                 // Adjust the ref count before calling enable as it is already
-                // taken into account when the static function was called 
+                // taken into account when the static function was called
                 // directly
                 --sPlatformNotificationEnableRefCount;
                 enablePlatformNotifications();

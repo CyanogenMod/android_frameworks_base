@@ -48,7 +48,7 @@ import java.util.List;
 
 /**
  * A mock {@link android.content.pm.PackageManager} class.  All methods are non-functional and throw
- * {@link java.lang.UnsupportedOperationException}. Override it to provide the operations that you 
+ * {@link java.lang.UnsupportedOperationException}. Override it to provide the operations that you
  * need.
  */
 public class MockPackageManager extends PackageManager {
@@ -63,12 +63,12 @@ public class MockPackageManager extends PackageManager {
     public String[] currentToCanonicalPackageNames(String[] names) {
         throw new UnsupportedOperationException();
     }
-    
+
     @Override
     public String[] canonicalToCurrentPackageNames(String[] names) {
         throw new UnsupportedOperationException();
     }
-    
+
     @Override
     public Intent getLaunchIntentForPackage(String packageName) {
         throw new UnsupportedOperationException();
@@ -101,7 +101,7 @@ public class MockPackageManager extends PackageManager {
     public List<PermissionGroupInfo> getAllPermissionGroups(int flags) {
         throw new UnsupportedOperationException();
     }
-    
+
     @Override
     public ApplicationInfo getApplicationInfo(String packageName, int flags)
     throws NameNotFoundException {
@@ -176,7 +176,7 @@ public class MockPackageManager extends PackageManager {
     public String getNameForUid(int uid) {
         throw new UnsupportedOperationException();
     }
-    
+
     /**
      * @hide - to match hiding in superclass
      */
@@ -273,7 +273,7 @@ public class MockPackageManager extends PackageManager {
     public Drawable getApplicationIcon(String packageName) throws NameNotFoundException {
         throw new UnsupportedOperationException();
     }
-    
+
     @Override
     public Drawable getActivityLogo(ComponentName activityName) throws NameNotFoundException {
         throw new UnsupportedOperationException();
@@ -348,7 +348,7 @@ public class MockPackageManager extends PackageManager {
     public void movePackage(String packageName, IPackageMoveObserver observer, int flags) {
         throw new UnsupportedOperationException();
     }
-    
+
     @Override
     public String getInstallerPackageName(String packageName) {
         throw new UnsupportedOperationException();
@@ -362,7 +362,7 @@ public class MockPackageManager extends PackageManager {
             String packageName, IPackageDataObserver observer) {
         throw new UnsupportedOperationException();
     }
-    
+
     /**
      * @hide - to match hiding in superclass
      */
@@ -371,7 +371,7 @@ public class MockPackageManager extends PackageManager {
             String packageName, IPackageDataObserver observer) {
         throw new UnsupportedOperationException();
     }
-    
+
     /**
      * @hide - to match hiding in superclass
      */
@@ -429,7 +429,7 @@ public class MockPackageManager extends PackageManager {
     public void setApplicationEnabledSetting(String packageName, int newState, int flags) {
         throw new UnsupportedOperationException();
     }
-    
+
     @Override
     public int getApplicationEnabledSetting(String packageName) {
         throw new UnsupportedOperationException();
@@ -440,7 +440,7 @@ public class MockPackageManager extends PackageManager {
             int match, ComponentName[] set, ComponentName activity) {
         throw new UnsupportedOperationException();
     }
-    
+
     /**
      * @hide - to match hiding in superclass
      */
@@ -469,22 +469,22 @@ public class MockPackageManager extends PackageManager {
             List<ComponentName> outActivities, String packageName) {
         throw new UnsupportedOperationException();
     }
-    
+
     @Override
     public String[] getSystemSharedLibraryNames() {
         throw new UnsupportedOperationException();
     }
-    
+
     @Override
     public FeatureInfo[] getSystemAvailableFeatures() {
         throw new UnsupportedOperationException();
     }
-    
+
     @Override
     public boolean hasSystemFeature(String name) {
         throw new UnsupportedOperationException();
     }
-    
+
     @Override
     public boolean isSafeMode() {
         throw new UnsupportedOperationException();

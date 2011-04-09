@@ -46,9 +46,9 @@ public class HashSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance for the HashSet method Add(Object arg 0)
-     * 
+     *
      */
 
     @SuppressWarnings("unchecked")
@@ -70,9 +70,9 @@ public class HashSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance of HashSet method contains(Object arg 0)
-     * 
+     *
      */
 
     public void testHashSetContains() {
@@ -93,9 +93,9 @@ public class HashSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance of HashSet method size()
-     * 
+     *
      */
 
     public void testHashSetSize() {
@@ -115,9 +115,9 @@ public class HashSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance of the HashSet method -iterator()
-     * 
+     *
      */
 
     public void testHashSetIterator() {
@@ -137,9 +137,9 @@ public class HashSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance for the HashSet method Remove(Object arg 0)
-     * 
+     *
      */
 
     @SuppressWarnings("unchecked")
@@ -160,9 +160,9 @@ public class HashSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance for the HashSet method isEmpty(Object arg 0)
-     * 
+     *
      */
 
     public void testHashSetIsEmpty() {
@@ -183,9 +183,9 @@ public class HashSetTest extends PerformanceTestBase {
     }
 
     /**
-     * 
+     *
      * Tests performance for the HashSet method clone()
-     * 
+     *
      */
 
     public void testHashSetClone() {

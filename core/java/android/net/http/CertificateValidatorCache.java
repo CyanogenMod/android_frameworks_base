@@ -36,7 +36,7 @@ import java.util.Random;
  * hash of the certificate chain successfully used to validate the domain. If
  * we establish connection with the domain more than once and each time receive
  * the same list of certificates, we do not have to re-validate.
- * 
+ *
  * {@hide}
  */
 class CertificateValidatorCache {

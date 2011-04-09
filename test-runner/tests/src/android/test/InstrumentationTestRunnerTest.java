@@ -75,19 +75,19 @@ public class InstrumentationTestRunnerTest extends TestCase {
         assertTestRunnerCalledWithExpectedParameters(
                 PlaceHolderTest.class.getName(), "testPlaceHolder");
     }
-    
+
     public void testMultipleTestClass() throws Exception {
-        String classArg = PlaceHolderTest.class.getName() + "," + 
+        String classArg = PlaceHolderTest.class.getName() + "," +
             PlaceHolderTest2.class.getName();
         mInstrumentationTestRunner.onCreate(createBundle(
                 InstrumentationTestRunner.ARGUMENT_TEST_CLASS, classArg));
-        
+
         Test test = mStubAndroidTestRunner.getTest();
 
         assertContentsInOrder(ListTestCaseNames.getTestNames((TestSuite) test),
-            new TestDescriptor(PlaceHolderTest.class.getName(), "testPlaceHolder"), 
+            new TestDescriptor(PlaceHolderTest.class.getName(), "testPlaceHolder"),
             new TestDescriptor(PlaceHolderTest2.class.getName(), "testPlaceHolder2"));
-        
+
     }
 
     /**
@@ -158,7 +158,7 @@ public class InstrumentationTestRunnerTest extends TestCase {
         mInstrumentationTestRunner.onCreate(args);
         assertTestRunnerCalledWithExpectedParameters(expectedTestClassName, "testAnnotated");
     }
-    
+
     /**
      * Test that the -e {@link InstrumentationTestRunner.ARGUMENT_NOT_ANNOTATION} parameter
      * properly excludes tests.
@@ -187,7 +187,7 @@ public class InstrumentationTestRunnerTest extends TestCase {
             String expectedTestClassName, String expectedTestMethodName) {
         Test test = mStubAndroidTestRunner.getTest();
         assertContentsInOrder(ListTestCaseNames.getTestNames((TestSuite) test),
-                new TestDescriptor(expectedTestClassName, expectedTestMethodName));  
+                new TestDescriptor(expectedTestClassName, expectedTestMethodName));
         assertTrue(mInstrumentationTestRunner.isStarted());
         assertFalse(mInstrumentationTestRunner.isFinished());
     }
@@ -252,7 +252,7 @@ public class InstrumentationTestRunnerTest extends TestCase {
         public void setAllTestsSuite(TestSuite testSuite) {
             mTestSuite = testSuite;
         }
-        
+
         public void setDefaultTestsSuite(TestSuite testSuite) {
             mDefaultTestSuite = testSuite;
         }
@@ -326,7 +326,7 @@ public class InstrumentationTestRunnerTest extends TestCase {
 
         }
     }
-    
+
     /**
      * Empty test used for validation
      */

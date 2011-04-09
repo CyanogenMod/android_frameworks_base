@@ -37,7 +37,7 @@ public class MenuScenario extends Activity implements MenuItem.OnMenuItemClickLi
     private MenuItem[] mItems;
     private boolean[] mWasItemClicked;
     private MenuAdapter[] mMenuAdapters = new MenuAdapter[MenuBuilder.NUM_TYPES];
-    
+
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -49,24 +49,24 @@ public class MenuScenario extends Activity implements MenuItem.OnMenuItemClickLi
         onInitParams(mParams);
         onParamsChanged();
     }
-    
+
     public void setParams(Params params) {
         mParams = params;
         onParamsChanged();
     }
-    
+
     public void onParamsChanged() {
         mItems = new MenuItem[mParams.numItems];
         mWasItemClicked = new boolean[mParams.numItems];
     }
-    
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Safe to hold on to
         mMenu = menu;
-        
+
         if (!mParams.shouldShowMenu) return false;
-        
+
         MenuItem item;
         for (int i = 0; i < mParams.numItems; i++) {
             if ((item = onAddMenuItem(menu, i)) == null) {
@@ -75,17 +75,17 @@ public class MenuScenario extends Activity implements MenuItem.OnMenuItemClickLi
                 CharSequence givenTitle = mParams.itemTitles.get(i);
                 item = menu.add(0, 0, 0, (givenTitle != null) ? givenTitle : ("Item " + i));
             }
-    
+
             if (item != null) {
                 mItems[i] = item;
-                
+
                 if (mParams.listenForClicks) {
                     item.setOnMenuItemClickListener(this);
                 }
             }
-                
+
         }
-        
+
         return true;
     }
 
@@ -99,7 +99,7 @@ public class MenuScenario extends Activity implements MenuItem.OnMenuItemClickLi
 
     /**
      * Override this to add an item to the menu.
-     * 
+     *
      * @param itemPosition The position of the item to add (only for your
      *            reference).
      * @return The item that was added to the menu, or null if nothing was
@@ -108,25 +108,25 @@ public class MenuScenario extends Activity implements MenuItem.OnMenuItemClickLi
     protected MenuItem onAddMenuItem(Menu menu, int itemPosition) {
         return null;
     }
-    
+
     /**
      * Override this to set the parameters for the scenario. Call through to super first.
-     * 
+     *
      * @param params
      */
     protected void onInitParams(Params params) {
     }
-    
+
     public Menu getMenu() {
         return mMenu;
     }
-    
+
     public boolean onMenuItemClick(MenuItem item) {
         final int position = findItemPosition(item);
         if (position < 0) return false;
-        
+
         mWasItemClicked[position] = true;
-        
+
         return true;
     }
 
@@ -136,7 +136,7 @@ public class MenuScenario extends Activity implements MenuItem.OnMenuItemClickLi
 
     /**
      * Finds the position for a given Item.
-     * 
+     *
      * @param item The item to find.
      * @return The position, or -1 if not found.
      */
@@ -145,10 +145,10 @@ public class MenuScenario extends Activity implements MenuItem.OnMenuItemClickLi
         for (int i = 0; i < mParams.numItems; i++) {
             if (mItems[i] == item) return i;
         }
-        
+
         return -1;
     }
-    
+
     /**
      * @see MenuBuilder#getMenuAdapter(int)
      */
@@ -156,24 +156,24 @@ public class MenuScenario extends Activity implements MenuItem.OnMenuItemClickLi
         if (mMenuAdapters[menuType] == null) {
             mMenuAdapters[menuType] = ((MenuBuilder) mMenu).getMenuAdapter(menuType);
         }
-        
+
         return mMenuAdapters[menuType];
     }
 
     /**
      * Gets a menu view. Call this after you're sure it has been shown,
      * otherwise it may not have the proper layout_* attributes set.
-     * 
+     *
      * @param menuType The type of menu.
      * @return The MenuView for that type.
      */
     public View getMenuView(int menuType) {
         return ((MenuBuilder) mMenu).getMenuView(menuType, null);
     }
-    
+
     /**
      * Gets the menu item view for a given position.
-     * 
+     *
      * @param menuType The type of menu.
      * @param position The position of the item.
      * @return The menu item view for the given item in the given menu type.
@@ -181,7 +181,7 @@ public class MenuScenario extends Activity implements MenuItem.OnMenuItemClickLi
     public View getItemView(int menuType, int position) {
         return getMenuAdapter(menuType).getView(position, null, null);
     }
-    
+
     public static class Params {
         // Using as data structure, so no m prefix
         private boolean shouldShowMenu = true;
@@ -193,17 +193,17 @@ public class MenuScenario extends Activity implements MenuItem.OnMenuItemClickLi
             this.shouldShowMenu = shouldShowMenu;
             return this;
         }
-        
+
         public Params setNumItems(int numItems) {
             this.numItems = numItems;
             return this;
         }
-        
+
         public Params setListenForClicks(boolean listenForClicks) {
             this.listenForClicks = listenForClicks;
             return this;
         }
-        
+
         public Params setItemTitle(int itemPos, CharSequence title) {
             itemTitles.put(itemPos, title);
             return this;

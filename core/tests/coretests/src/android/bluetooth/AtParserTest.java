@@ -28,7 +28,7 @@ public class AtParserTest extends TestCase {
     /* An AtCommandHandler instrumented for testing purposes
      */
     private class HandlerTest extends AtCommandHandler {
-        boolean mBasicCalled, mActionCalled, mReadCalled, mTestCalled, 
+        boolean mBasicCalled, mActionCalled, mReadCalled, mTestCalled,
                 mSetCalled;
         int mBasicReturn, mActionReturn, mReadReturn, mTestReturn, mSetReturn;
         Object[] mSetArgs;

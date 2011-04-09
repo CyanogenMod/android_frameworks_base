@@ -69,5 +69,5 @@ public abstract class TestActivity extends ListActivity
         Log.d(tag(), "Test: " + t.name);
         t.run();
     }
-    
+
 }

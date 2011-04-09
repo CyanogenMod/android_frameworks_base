@@ -40,11 +40,11 @@ public class TypefaceSpan extends MetricAffectingSpan implements ParcelableSpan 
     public TypefaceSpan(Parcel src) {
         mFamily = src.readString();
     }
-    
+
     public int getSpanTypeId() {
         return TextUtils.TYPEFACE_SPAN;
     }
-    
+
     public int describeContents() {
         return 0;
     }

@@ -37,7 +37,7 @@ class IInputMethodSessionWrapper extends IInputMethodSession.Stub
         implements HandlerCaller.Callback {
     private static final String TAG = "InputMethodWrapper";
     private static final boolean DEBUG = false;
-    
+
     private static final int DO_FINISH_INPUT = 60;
     private static final int DO_DISPLAY_COMPLETIONS = 65;
     private static final int DO_UPDATE_EXTRACTED_TEXT = 67;
@@ -51,7 +51,7 @@ class IInputMethodSessionWrapper extends IInputMethodSession.Stub
 
     HandlerCaller mCaller;
     InputMethodSession mInputMethodSession;
-    
+
     // NOTE: we should have a cache of these.
     static class InputMethodEventCallbackWrapper implements InputMethodSession.EventCallback {
         final IInputMethodCallback mCb;
@@ -65,7 +65,7 @@ class IInputMethodSessionWrapper extends IInputMethodSession.Stub
             }
         }
     }
-    
+
     public IInputMethodSessionWrapper(Context context,
             InputMethodSession inputMethodSession) {
         mCaller = new HandlerCaller(context, this);
@@ -135,7 +135,7 @@ class IInputMethodSessionWrapper extends IInputMethodSession.Stub
         }
         Log.w(TAG, "Unhandled message code: " + msg.what);
     }
-    
+
     public void finishInput() {
         mCaller.executeOrSendMessage(mCaller.obtainMessage(DO_FINISH_INPUT));
     }
@@ -144,12 +144,12 @@ class IInputMethodSessionWrapper extends IInputMethodSession.Stub
         mCaller.executeOrSendMessage(mCaller.obtainMessageO(
                 DO_DISPLAY_COMPLETIONS, completions));
     }
-    
+
     public void updateExtractedText(int token, ExtractedText text) {
         mCaller.executeOrSendMessage(mCaller.obtainMessageIO(
                 DO_UPDATE_EXTRACTED_TEXT, token, text));
     }
-    
+
     public void dispatchKeyEvent(int seq, KeyEvent event, IInputMethodCallback callback) {
         mCaller.executeOrSendMessage(mCaller.obtainMessageIOO(DO_DISPATCH_KEY_EVENT, seq,
                 event, callback));
@@ -166,16 +166,16 @@ class IInputMethodSessionWrapper extends IInputMethodSession.Stub
                 oldSelStart, oldSelEnd, newSelStart, newSelEnd,
                 candidatesStart, candidatesEnd));
     }
-    
+
     public void updateCursor(Rect newCursor) {
         mCaller.executeOrSendMessage(mCaller.obtainMessageO(DO_UPDATE_CURSOR,
                 newCursor));
     }
-    
+
     public void appPrivateCommand(String action, Bundle data) {
         mCaller.executeOrSendMessage(mCaller.obtainMessageOO(DO_APP_PRIVATE_COMMAND, action, data));
     }
-    
+
     public void toggleSoftInput(int showFlags, int hideFlags) {
         mCaller.executeOrSendMessage(mCaller.obtainMessageII(DO_TOGGLE_SOFT_INPUT, showFlags, hideFlags));
     }

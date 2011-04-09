@@ -83,7 +83,7 @@ public class ArrayAdapter<T> extends BaseAdapter implements Filterable {
      */
     private boolean mNotifyOnChange = true;
 
-    private Context mContext;    
+    private Context mContext;
 
     private ArrayList<T> mOriginalValues;
     private ArrayFilter mFilter;
@@ -236,7 +236,7 @@ public class ArrayAdapter<T> extends BaseAdapter implements Filterable {
      */
     public void sort(Comparator<? super T> comparator) {
         Collections.sort(mObjects, comparator);
-        if (mNotifyOnChange) notifyDataSetChanged();        
+        if (mNotifyOnChange) notifyDataSetChanged();
     }
 
     /**

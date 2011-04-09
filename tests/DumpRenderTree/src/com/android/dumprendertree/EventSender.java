@@ -17,8 +17,8 @@
 package com.android.dumprendertree;
 
 public interface EventSender {
-    	public void mouseDown();
-    	public void mouseUp();
+        public void mouseDown();
+        public void mouseUp();
         public void mouseClick();
         public void mouseMoveTo(int X, int Y);
         public void leapForward(int milliseconds);

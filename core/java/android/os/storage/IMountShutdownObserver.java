@@ -24,7 +24,7 @@ import android.os.RemoteException;
 
 /**
  * Callback class for receiving events related to shutdown.
- * 
+ *
  * @hide - For internal consumption only.
  */
 public interface IMountShutdownObserver extends IInterface {
@@ -94,7 +94,7 @@ public interface IMountShutdownObserver extends IInterface {
             /**
              * This method is called when the shutdown of MountService
              * completed.
-             * 
+             *
              * @param statusCode indicates success or failure of the shutdown.
              */
             public void onShutDownComplete(int statusCode) throws RemoteException {
@@ -117,7 +117,7 @@ public interface IMountShutdownObserver extends IInterface {
 
     /**
      * This method is called when the shutdown of MountService completed.
-     * 
+     *
      * @param statusCode indicates success or failure of the shutdown.
      */
     public void onShutDownComplete(int statusCode) throws RemoteException;

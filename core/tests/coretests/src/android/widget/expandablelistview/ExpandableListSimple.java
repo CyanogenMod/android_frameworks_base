@@ -42,8 +42,8 @@ public class ExpandableListSimple extends ExpandableListScenario {
                 return true;
             }
         });
-        
+
         return true;
     }
-    
+
 }

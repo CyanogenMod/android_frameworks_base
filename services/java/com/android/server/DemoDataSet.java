@@ -49,7 +49,7 @@ public class DemoDataSet
 
         // Add the new data
         addDefaultData();
-        
+
         // Add images from /android/images
         addDefaultImages();
     }
@@ -70,7 +70,7 @@ public class DemoDataSet
         {
             String name = files[i];
             String path = rootDirectory + "/" + name;
-            
+
             try {
                 Images.Media.insertImage(mContentResolver, path, name, null);
             } catch (FileNotFoundException e) {
@@ -78,7 +78,7 @@ public class DemoDataSet
             }
         }
     }
-    
+
     private final void addDefaultData()
     {
         Slog.i(LOG_TAG, "Adding default data...");
@@ -102,7 +102,7 @@ public class DemoDataSet
         AssetManager ass = AssetManager.getSystem();
         InputStream in = null;
         OutputStream out = null;
-        
+
         try
         {
             in = ass.open(file.toString());

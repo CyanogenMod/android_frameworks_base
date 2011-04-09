@@ -37,7 +37,7 @@ public class ListItemFocusablesClose extends ListScenario {
         return ((ViewGroup) getListView().getChildAt(listIndex)).getChildAt(index);
 
     }
-        
+
     @Override
     protected void init(Params params) {
         params.setItemsFocusable(true)

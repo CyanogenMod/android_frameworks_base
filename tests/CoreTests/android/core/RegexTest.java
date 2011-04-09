@@ -226,7 +226,7 @@ public class RegexTest extends TestCase {
         assertEquals("", strings[1]);
         assertEquals(":and:f", strings[2]);
     }
-    
+
     // -------------------------------------------------------------------
     // Regression test for #1172774: Bug in Regex.java
     // Regression test for #1216887: Regular expression match is very slow
@@ -258,16 +258,16 @@ public class RegexTest extends TestCase {
             + "|z[amw])");
 
     public static final Pattern EMAIL_ADDRESS_PATTERN = Pattern.compile(
-            "[\\+a-zA-Z0-9\\.\\_\\%\\-]+\\@" 
+            "[\\+a-zA-Z0-9\\.\\_\\%\\-]+\\@"
             + "(("
             + "[a-zA-Z0-9]\\.|"
             + "([a-zA-Z0-9][a-zA-Z0-9\\-]*[a-zA-Z0-9]\\.)+)"
             + TOP_LEVEL_DOMAIN_PATTERN
             + ")");
-    
+
     @SmallTest
     public void testMonsterRegexCorrectness() {
-        assertTrue(EMAIL_ADDRESS_PATTERN.matcher("a+b@gmail.com").matches());        
+        assertTrue(EMAIL_ADDRESS_PATTERN.matcher("a+b@gmail.com").matches());
     }
 
     @SmallTest
@@ -283,5 +283,5 @@ public class RegexTest extends TestCase {
 
     //
     // -------------------------------------------------------------------
-    
+
 }

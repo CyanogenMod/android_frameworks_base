@@ -82,7 +82,7 @@ public class Matrix {
             native_set(native_instance, src.native_instance);
         }
     }
-    
+
     /** Returns true iff obj is a Matrix and its values equal our values.
     */
     public boolean equals(Object obj) {
@@ -327,7 +327,7 @@ public class Matrix {
          */
         END     (3);
 
-        // the native values must match those in SkMatrix.h 
+        // the native values must match those in SkMatrix.h
         ScaleToFit(int nativeInt) {
             this.nativeInt = nativeInt;
         }
@@ -350,7 +350,7 @@ public class Matrix {
         }
         return native_setRectToRect(native_instance, src, dst, stf.nativeInt);
     }
-    
+
     // private helper to perform range checks on arrays of "points"
     private static void checkPointArrays(float[] src, int srcIndex,
                                          float[] dst, int dstIndex,
@@ -413,7 +413,7 @@ public class Matrix {
         native_mapPoints(native_instance, dst, dstIndex, src, srcIndex,
                          pointCount, true);
     }
-    
+
     /**
     * Apply this matrix to the array of 2D vectors specified by src, and write
      * the transformed vectors into the array of vectors specified by dst. The
@@ -431,7 +431,7 @@ public class Matrix {
         native_mapPoints(native_instance, dst, dstIndex, src, srcIndex,
                          vectorCount, false);
     }
-    
+
     /**
      * Apply this matrix to the array of 2D points specified by src, and write
      * the transformed points into the array of points specified by dst. The
@@ -517,7 +517,7 @@ public class Matrix {
     public float mapRadius(float radius) {
         return native_mapRadius(native_instance, radius);
     }
-    
+
     /** Copy 9 values from the matrix into the array.
     */
     public void getValues(float[] values) {
@@ -546,7 +546,7 @@ public class Matrix {
         toShortString(sb);
         sb.append('}');
         return sb.toString();
-                
+
     }
 
     public String toShortString() {
@@ -584,13 +584,13 @@ public class Matrix {
                 pw.print(values[5]); pw.print("][");
         pw.print(values[6]); pw.print(", "); pw.print(values[7]); pw.print(", ");
                 pw.print(values[8]); pw.print(']');
-                
+
     }
 
     protected void finalize() throws Throwable {
         finalizer(native_instance);
     }
-    
+
     /*package*/ final int ni() {
         return native_instance;
     }

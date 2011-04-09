@@ -143,7 +143,7 @@ public class ResolverActivity extends AlertActivity implements
                         || (!"file".equals(data.getScheme())
                                 && !"content".equals(data.getScheme()))) {
                     filter.addDataScheme(data.getScheme());
-    
+
                     // Look through the resolved filter to determine which part
                     // of it matched the original Intent.
                     Iterator<IntentFilter.AuthorityEntry> aIt = ri.filter.authoritiesIterator();
@@ -252,9 +252,9 @@ public class ResolverActivity extends AlertActivity implements
                             new ResolveInfo.DisplayNameComparator(mPm);
                     Collections.sort(rList, rComparator);
                 }
-                
+
                 mList = new ArrayList<DisplayResolveInfo>();
-                
+
                 // First put the initial items at the top.
                 if (initialIntents != null) {
                     for (int i=0; i<initialIntents.length; i++) {
@@ -282,7 +282,7 @@ public class ResolverActivity extends AlertActivity implements
                                 ri.loadLabel(getPackageManager()), null, ii));
                     }
                 }
-                
+
                 // Check for applications with same name and use application name or
                 // package name if necessary
                 r0 = rList.get(0);
@@ -370,7 +370,7 @@ public class ResolverActivity extends AlertActivity implements
             }
 
             DisplayResolveInfo dri = mList.get(position);
-            
+
             Intent intent = new Intent(dri.origIntent != null
                     ? dri.origIntent : mIntent);
             intent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT

@@ -73,7 +73,7 @@ implements CharSequence, GetChars, Spannable, Editable, Appendable,
                 if (spans[i] instanceof NoCopySpan) {
                     continue;
                 }
-                
+
                 int st = sp.getSpanStart(spans[i]) - start;
                 int en = sp.getSpanEnd(spans[i]) - start;
                 int fl = sp.getSpanFlags(spans[i]);
@@ -219,7 +219,7 @@ implements CharSequence, GetChars, Spannable, Editable, Appendable,
 
         if (mGapLength > 2 * length())
             resizeFor(length());
-        
+
         return ret; // == this
     }
 
@@ -227,7 +227,7 @@ implements CharSequence, GetChars, Spannable, Editable, Appendable,
     public void clear() {
         replace(0, length(), "", 0, 0);
     }
-    
+
     // Documentation from interface
     public void clearSpans() {
         for (int i = mSpanCount - 1; i >= 0; i--) {
@@ -502,7 +502,7 @@ implements CharSequence, GetChars, Spannable, Editable, Appendable,
             sendTextChange(recipients, start, origlen, inserted);
             sendTextHasChanged(recipients);
         }
-        return this; 
+        return this;
     }
 
     /**
@@ -576,7 +576,7 @@ implements CharSequence, GetChars, Spannable, Editable, Appendable,
                 mSpanEnds[i] = end;
                 mSpanFlags[i] = flags;
 
-                if (send) 
+                if (send)
                     sendSpanChanged(what, ostart, oend, nstart, nend);
 
                 return;
@@ -699,7 +699,7 @@ implements CharSequence, GetChars, Spannable, Editable, Appendable,
             }
         }
 
-        return 0; 
+        return 0;
     }
 
     /**

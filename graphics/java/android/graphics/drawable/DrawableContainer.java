@@ -55,7 +55,7 @@ public class DrawableContainer extends Drawable implements Drawable.Callback {
                 | mDrawableContainerState.mChangingConfigurations
                 | mDrawableContainerState.mChildrenChangingConfigurations;
     }
-    
+
     @Override
     public boolean getPadding(Rect padding) {
         final Rect r = mDrawableContainerState.getConstantPadding();
@@ -99,19 +99,19 @@ public class DrawableContainer extends Drawable implements Drawable.Callback {
             }
         }
     }
-    
+
     @Override
     protected void onBoundsChange(Rect bounds) {
         if (mCurrDrawable != null) {
             mCurrDrawable.setBounds(bounds);
         }
     }
-    
+
     @Override
     public boolean isStateful() {
         return mDrawableContainerState.isStateful();
     }
-    
+
     @Override
     protected boolean onStateChange(int[] state) {
         if (mCurrDrawable != null) {
@@ -143,7 +143,7 @@ public class DrawableContainer extends Drawable implements Drawable.Callback {
         }
         return mCurrDrawable != null ? mCurrDrawable.getIntrinsicHeight() : -1;
     }
-    
+
     @Override
     public int getMinimumWidth() {
         if (mDrawableContainerState.isConstantSize()) {
@@ -227,7 +227,7 @@ public class DrawableContainer extends Drawable implements Drawable.Callback {
         invalidateSelf();
         return true;
     }
-    
+
     @Override
     public Drawable getCurrent() {
         return mCurrDrawable;
@@ -260,7 +260,7 @@ public class DrawableContainer extends Drawable implements Drawable.Callback {
 
         int         mChangingConfigurations;
         int         mChildrenChangingConfigurations;
-        
+
         Drawable[]  mDrawables;
         int         mNumChildren;
 
@@ -284,8 +284,8 @@ public class DrawableContainer extends Drawable implements Drawable.Callback {
         boolean     mCanConstantState;
 
         boolean     mPaddingChecked = false;
-        
-        boolean     mDither = DEFAULT_DITHER;        
+
+        boolean     mDither = DEFAULT_DITHER;
 
         DrawableContainerState(DrawableContainerState orig, DrawableContainer owner,
                 Resources res) {
@@ -294,7 +294,7 @@ public class DrawableContainer extends Drawable implements Drawable.Callback {
             if (orig != null) {
                 mChangingConfigurations = orig.mChangingConfigurations;
                 mChildrenChangingConfigurations = orig.mChildrenChangingConfigurations;
-                
+
                 final Drawable[] origDr = orig.mDrawables;
 
                 mDrawables = new Drawable[origDr.length];
@@ -319,12 +319,12 @@ public class DrawableContainer extends Drawable implements Drawable.Callback {
                 mComputedConstantSize = orig.mComputedConstantSize;
                 mConstantWidth = orig.mConstantWidth;
                 mConstantHeight = orig.mConstantHeight;
-                
+
                 mHaveOpacity = orig.mHaveOpacity;
                 mOpacity = orig.mOpacity;
                 mHaveStateful = orig.mHaveStateful;
                 mStateful = orig.mStateful;
-                
+
                 mDither = orig.mDither;
 
             } else {
@@ -333,7 +333,7 @@ public class DrawableContainer extends Drawable implements Drawable.Callback {
                 mCheckedConstantState = mCanConstantState = false;
             }
         }
-        
+
         @Override
         public int getChangingConfigurations() {
             return mChangingConfigurations;
@@ -370,9 +370,9 @@ public class DrawableContainer extends Drawable implements Drawable.Callback {
             return mDrawables;
         }
 
-        /** A boolean value indicating whether to use the maximum padding value of 
-          * all frames in the set (false), or to use the padding value of the frame 
-          * being shown (true). Default value is false. 
+        /** A boolean value indicating whether to use the maximum padding value of
+          * all frames in the set (false), or to use the padding value of the frame
+          * being shown (true). Default value is false.
           */
         public final void setVariablePadding(boolean variable) {
             mVariablePadding = variable;
@@ -483,7 +483,7 @@ public class DrawableContainer extends Drawable implements Drawable.Callback {
             if (mHaveStateful) {
                 return mStateful;
             }
-            
+
             boolean stateful = false;
             final int N = getChildCount();
             for (int i = 0; i < N; i++) {
@@ -492,7 +492,7 @@ public class DrawableContainer extends Drawable implements Drawable.Callback {
                     break;
                 }
             }
-            
+
             mStateful = stateful;
             mHaveStateful = true;
             return stateful;

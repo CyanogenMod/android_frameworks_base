@@ -32,7 +32,7 @@ public class MediaPlayerIsPlayingStateUnitTest extends AndroidTestCase implement
      *    {Idle, Initialized, Prepared, Started, Paused, Stopped, PlaybackCompleted}.
      * 2. It is invalid to call isPlaying() in the following states:
      *    {Error}
-     *    
+     *
      * @param stateErrors the MediaPlayerStateErrors to check against.
      */
     public void checkStateErrors(MediaPlayerStateErrors stateErrors) {
@@ -47,7 +47,7 @@ public class MediaPlayerIsPlayingStateUnitTest extends AndroidTestCase implement
         assertTrue(!stateErrors.errorInIdleStateAfterReset);
         assertTrue(!stateErrors.errorInInitializedState);
         assertTrue(!stateErrors.errorInStoppedState);
-        
+
         // Invalid states.
         assertTrue(stateErrors.errorInErrorState);
     }

@@ -254,7 +254,7 @@ public abstract class ContentProvider implements ComponentCallbacks {
             if (uid == mMyUid) {
                 return;
             }
-            
+
             final Context context = getContext();
             final String rperm = getReadPermission();
             final int pid = Binder.getCallingPid();
@@ -263,7 +263,7 @@ public abstract class ContentProvider implements ComponentCallbacks {
                     == PackageManager.PERMISSION_GRANTED)) {
                 return;
             }
-            
+
             PathPermission[] pps = getPathPermissions();
             if (pps != null) {
                 final String path = uri.getPath();
@@ -280,13 +280,13 @@ public abstract class ContentProvider implements ComponentCallbacks {
                     }
                 }
             }
-            
+
             if (context.checkUriPermission(uri, pid, uid,
                     Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     == PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            
+
             String msg = "Permission Denial: reading "
                     + ContentProvider.this.getClass().getName()
                     + " uri " + uri + " from pid=" + Binder.getCallingPid()
@@ -300,7 +300,7 @@ public abstract class ContentProvider implements ComponentCallbacks {
             if (uid == mMyUid) {
                 return true;
             }
-            
+
             final Context context = getContext();
             final String wperm = getWritePermission();
             final int pid = Binder.getCallingPid();
@@ -309,7 +309,7 @@ public abstract class ContentProvider implements ComponentCallbacks {
                     == PackageManager.PERMISSION_GRANTED)) {
                 return true;
             }
-            
+
             PathPermission[] pps = getPathPermissions();
             if (pps != null) {
                 final String path = uri.getPath();
@@ -326,21 +326,21 @@ public abstract class ContentProvider implements ComponentCallbacks {
                     }
                 }
             }
-            
+
             if (context.checkUriPermission(uri, pid, uid,
                     Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
                     == PackageManager.PERMISSION_GRANTED) {
                 return true;
             }
-            
+
             return false;
         }
-        
+
         private void enforceWritePermission(Uri uri) {
             if (hasWritePermission(uri)) {
                 return;
             }
-            
+
             String msg = "Permission Denial: writing "
                     + ContentProvider.this.getClass().getName()
                     + " uri " + uri + " from pid=" + Binder.getCallingPid()
@@ -703,7 +703,7 @@ public abstract class ContentProvider implements ComponentCallbacks {
      * no file associated with the given URI or the mode is invalid.
      * @throws SecurityException Throws SecurityException if the caller does
      * not have permission to access the file.
-     * 
+     *
      * @see #openFile(Uri, String)
      * @see #openFileHelper(Uri, String)
      */

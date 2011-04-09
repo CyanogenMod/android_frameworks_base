@@ -62,7 +62,7 @@ public class SslLoad extends Activity implements OnClickListener, Runnable {
 
         setContentView(button);
     }
-    
+
     @Override
     protected void onStop() {
         super.onStop();
@@ -112,7 +112,7 @@ public class SslLoad extends Activity implements OnClickListener, Runnable {
             }
 
             client.close();
-            
+
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) { /* ignored */ }

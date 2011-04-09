@@ -30,18 +30,18 @@ public class PathShape extends Shape {
     private Path    mPath;
     private float   mStdWidth;
     private float   mStdHeight;
-    
+
     private float   mScaleX;    // cached from onResize
     private float   mScaleY;    // cached from onResize
-    
+
     /**
      * PathShape constructor.
-     * 
+     *
      * @param path       a Path that defines the geometric paths for this shape
-     * @param stdWidth   the standard width for the shape. Any changes to the 
+     * @param stdWidth   the standard width for the shape. Any changes to the
      *                   width with resize() will result in a width scaled based
      *                   on the new width divided by this width.
-     * @param stdHeight  the standard height for the shape. Any changes to the 
+     * @param stdHeight  the standard height for the shape. Any changes to the
      *                   height with resize() will result in a height scaled based
      *                   on the new height divided by this height.
      */
@@ -50,7 +50,7 @@ public class PathShape extends Shape {
         mStdWidth = stdWidth;
         mStdHeight = stdHeight;
     }
-    
+
     @Override
     public void draw(Canvas canvas, Paint paint) {
         canvas.save();
@@ -58,7 +58,7 @@ public class PathShape extends Shape {
         canvas.drawPath(mPath, paint);
         canvas.restore();
     }
-    
+
     @Override
     protected void onResize(float width, float height) {
         mScaleX = width / mStdWidth;

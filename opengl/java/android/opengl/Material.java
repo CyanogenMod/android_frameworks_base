@@ -110,7 +110,7 @@ public class Material {
         "kd={" + kd[0] + "," + kd[1] + "," + kd[2] + "}," +
         "ks={" + ks[0] + "," + ks[1] + "," + ks[2] + "}," +
         "ns=" + ns + "," +
-        "map_kd=\"" + 
+        "map_kd=\"" +
         (map_kd == null ? "" : map_kd) +
         "\"," +
         "illum=" + illum + "," +

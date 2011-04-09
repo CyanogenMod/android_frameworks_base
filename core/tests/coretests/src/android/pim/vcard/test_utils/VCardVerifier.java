@@ -173,7 +173,7 @@ public class VCardVerifier {
         }
         return mPropertyNodesVerifier.addPropertyNodesVerifierElem();
     }
-    
+
     public PropertyNodesVerifierElem addPropertyNodesVerifierElem() {
         final PropertyNodesVerifierElem elem = addPropertyNodesVerifierElemWithoutVersion();
         final String versionString;

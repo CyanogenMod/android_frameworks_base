@@ -65,7 +65,7 @@ public class ListWithSeparatorsTest extends ActivityInstrumentationTestCase<List
                 3,
                 mListView.getSelectedItemPosition());
     }
-        
+
     @MediumTest
     public void testGoingUpSkippingOverUnselectable() {
         sendKeys(KeyEvent.KEYCODE_DPAD_DOWN);

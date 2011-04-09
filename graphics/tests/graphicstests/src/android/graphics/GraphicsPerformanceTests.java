@@ -32,39 +32,39 @@ import com.android.frameworks.graphicstests.R;
 
 /**
  * Graphics Performance Tests
- * 
+ *
  */
 //We don't want to run these perf tests in the continuous build.
-@Suppress 
+@Suppress
 public class GraphicsPerformanceTests {
     private static final String TAG = "GfxPerf";
     public static String[] children() {
         return new String[] {
                 // test decoding bitmaps of various sizes
                 DecodeBitmapTest.class.getName(),
-                
+
                 // odd-sized bitmap drawing tests
-                DrawBitmap7x7.class.getName(), 
+                DrawBitmap7x7.class.getName(),
                 DrawBitmap15x15.class.getName(),
-                DrawBitmap31x31.class.getName(), 
+                DrawBitmap31x31.class.getName(),
                 DrawBitmap63x63.class.getName(),
                 DrawBitmap127x127.class.getName(),
                 DrawBitmap319x239.class.getName(),
                 DrawBitmap319x479.class.getName(),
-                
+
                 // even-sized bitmap drawing tests
-                DrawBitmap8x8.class.getName(), 
+                DrawBitmap8x8.class.getName(),
                 DrawBitmap16x16.class.getName(),
-                DrawBitmap32x32.class.getName(), 
+                DrawBitmap32x32.class.getName(),
                 DrawBitmap64x64.class.getName(),
-                DrawBitmap128x128.class.getName(), 
+                DrawBitmap128x128.class.getName(),
                 DrawBitmap320x240.class.getName(),
                 DrawBitmap320x480.class.getName()};
     }
 
     /**
      * Base class for all graphics tests
-     * 
+     *
      */
     public static abstract class GraphicsTestBase extends AndroidTestCase
             implements PerformanceTestCase {
@@ -72,19 +72,19 @@ public class GraphicsPerformanceTests {
         private static final int DEFAULT_ITERATIONS = 1;
         private static final int SCREEN_WIDTH = 320;
         private static final int SCREEN_HEIGHT = 480;
-        
+
         /** Number of iterations to pass back to harness. Subclass should override */
         protected int mIterations = 1;
-        
+
         /** Bitmap we allocate and draw to */
         protected Bitmap mDestBitmap;
-        
+
         /** Canvas of drawing routines */
         protected Canvas mCanvas;
-        
+
         /** Style and color information (uses defaults) */
         protected Paint mPaint;
-     
+
         @Override
         public void setUp() throws Exception {
             super.setUp();
@@ -98,7 +98,7 @@ public class GraphicsPerformanceTests {
             // Ask subclass for number of iterations
             mIterations = getIterations();
         }
-        
+
         // A reasonable default
         public int getIterations() {
             return DEFAULT_ITERATIONS;
@@ -120,21 +120,21 @@ public class GraphicsPerformanceTests {
     public static class DecodeBitmapTest extends GraphicsTestBase {
         /** Number of times to run this test */
         private static final int DECODE_ITERATIONS = 10;
-        
+
         /** Used to access package bitmap images */
         private Resources mResources;
 
         @Override
         public void setUp() throws Exception {
             super.setUp();
-            
+
             // For bitmap resources
             Context context = getContext();
             Assert.assertNotNull(context);
             mResources = context.getResources();
-            Assert.assertNotNull(mResources); 
+            Assert.assertNotNull(mResources);
         }
-        
+
         @Override
         public int getIterations() {
             return DECODE_ITERATIONS;
@@ -151,34 +151,34 @@ public class GraphicsPerformanceTests {
             }
         }
     }
-    
+
     /**
      * Base class for bitmap drawing tests
-     * 
+     *
      */
     public static abstract class DrawBitmapTest extends GraphicsTestBase {
         /** Number of times to run each draw test */
         private static final int ITERATIONS = 1000;
-        
+
         /** Bitmap to draw. Allocated by subclass's createBitmap() function. */
         private Bitmap mBitmap;
-        
+
         @Override
         public void setUp() throws Exception {
             super.setUp();
-            
+
             // Invoke subclass's method to create the bitmap
             mBitmap = createBitmap();
         }
-        
+
         public int getIterations() {
             return ITERATIONS;
         }
-       
+
         // Generic abstract function to create bitmap for any given subclass
         public abstract Bitmap createBitmap();
-        
-        // Provide convenience test code for all subsequent classes. 
+
+        // Provide convenience test code for all subsequent classes.
         // Note: Though it would be convenient to declare all of the test*() methods here
         // and just inherit them, our test harness doesn't support it. So we replicate
         // a bit of code in each derived test case.
@@ -200,7 +200,7 @@ public class GraphicsPerformanceTests {
      * Test drawing of 7x7 image
      */
     public static class DrawBitmap7x7 extends DrawBitmapTest {
-        
+
         public Bitmap createBitmap() {
             return Bitmap.createBitmap(7, 7, Bitmap.Config.RGB_565);
         }
@@ -208,7 +208,7 @@ public class GraphicsPerformanceTests {
         public void testDrawBitmapEven() {
             drawBitmapEven();
         }
-        
+
         public void testDrawBitmapOdd() {
             drawBitmapOdd();
         }
@@ -218,7 +218,7 @@ public class GraphicsPerformanceTests {
      * Test drawing of 15x15 image
      */
     public static class DrawBitmap15x15 extends DrawBitmapTest {
-        
+
         public Bitmap createBitmap() {
             return Bitmap.createBitmap(15, 15, Bitmap.Config.RGB_565);
         }
@@ -226,7 +226,7 @@ public class GraphicsPerformanceTests {
         public void testDrawBitmapEven() {
             drawBitmapEven();
         }
-        
+
         public void testDrawBitmapOdd() {
             drawBitmapOdd();
         }
@@ -236,7 +236,7 @@ public class GraphicsPerformanceTests {
      * Test drawing of 31x31 image
      */
     public static class DrawBitmap31x31 extends DrawBitmapTest {
-        
+
         public Bitmap createBitmap() {
             return Bitmap.createBitmap(31, 31, Bitmap.Config.RGB_565);
         }
@@ -244,7 +244,7 @@ public class GraphicsPerformanceTests {
         public void testDrawBitmapEven() {
             drawBitmapEven();
         }
-        
+
         public void testDrawBitmapOdd() {
             drawBitmapOdd();
         }
@@ -254,7 +254,7 @@ public class GraphicsPerformanceTests {
      * Test drawing of 63x63 image
      */
     public static class DrawBitmap63x63 extends DrawBitmapTest {
-        
+
         public Bitmap createBitmap() {
             return Bitmap.createBitmap(63, 63, Bitmap.Config.RGB_565);
         }
@@ -262,7 +262,7 @@ public class GraphicsPerformanceTests {
         public void testDrawBitmapEven() {
             drawBitmapEven();
         }
-        
+
         public void testDrawBitmapOdd() {
             drawBitmapOdd();
         }
@@ -272,15 +272,15 @@ public class GraphicsPerformanceTests {
      * Test drawing of 127x127 image
      */
     public static class DrawBitmap127x127 extends DrawBitmapTest {
-        
+
         public Bitmap createBitmap() {
             return Bitmap.createBitmap(127, 127, Bitmap.Config.RGB_565);
         }
-        
+
         public void testDrawBitmapEven() {
             drawBitmapEven();
         }
-        
+
         public void testDrawBitmapOdd() {
             drawBitmapOdd();
         }
@@ -290,33 +290,33 @@ public class GraphicsPerformanceTests {
      * Test drawing of 319x239 image
      */
     public static class DrawBitmap319x239 extends DrawBitmapTest {
-        
+
         public Bitmap createBitmap() {
             return Bitmap.createBitmap(319, 239, Bitmap.Config.RGB_565);
         }
-        
+
         public void testDrawBitmapEven() {
             drawBitmapEven();
         }
-        
+
         public void testDrawBitmapOdd() {
             drawBitmapOdd();
         }
     }
-    
+
     /**
      * Test drawing of 319x479 image
      */
     public static class DrawBitmap319x479 extends DrawBitmapTest {
-        
+
         public Bitmap createBitmap() {
             return Bitmap.createBitmap(319, 479, Bitmap.Config.RGB_565);
         }
-        
+
         public void testDrawBitmapEven() {
             drawBitmapEven();
         }
-        
+
         public void testDrawBitmapOdd() {
             drawBitmapOdd();
         }
@@ -326,7 +326,7 @@ public class GraphicsPerformanceTests {
      * Test drawing of 8x8 image
      */
     public static class DrawBitmap8x8 extends DrawBitmapTest {
-        
+
         public Bitmap createBitmap() {
             return Bitmap.createBitmap(8, 8, Bitmap.Config.RGB_565);
         }
@@ -334,7 +334,7 @@ public class GraphicsPerformanceTests {
         public void testDrawBitmapEven() {
             drawBitmapEven();
         }
-        
+
         public void testDrawBitmapOdd() {
             drawBitmapOdd();
         }
@@ -344,15 +344,15 @@ public class GraphicsPerformanceTests {
      * Test drawing of 16x16 image
      */
     public static class DrawBitmap16x16 extends DrawBitmapTest {
-        
+
         public Bitmap createBitmap() {
             return Bitmap.createBitmap(16, 16, Bitmap.Config.RGB_565);
         }
-        
+
         public void testDrawBitmapEven() {
             drawBitmapEven();
         }
-        
+
         public void testDrawBitmapOdd() {
             drawBitmapOdd();
         }
@@ -362,7 +362,7 @@ public class GraphicsPerformanceTests {
      * Test drawing of 32x32 image
      */
     public static class DrawBitmap32x32 extends DrawBitmapTest {
-        
+
         public Bitmap createBitmap() {
             return Bitmap.createBitmap(32, 32, Bitmap.Config.RGB_565);
         }
@@ -370,7 +370,7 @@ public class GraphicsPerformanceTests {
         public void testDrawBitmapEven() {
             drawBitmapEven();
         }
-        
+
         public void testDrawBitmapOdd() {
             drawBitmapOdd();
         }
@@ -388,7 +388,7 @@ public class GraphicsPerformanceTests {
         public void testDrawBitmapEven() {
             drawBitmapEven();
         }
-        
+
         public void testDrawBitmapOdd() {
             drawBitmapOdd();
         }
@@ -406,7 +406,7 @@ public class GraphicsPerformanceTests {
         public void testDrawBitmapEven() {
             drawBitmapEven();
         }
-        
+
         public void testDrawBitmapOdd() {
             drawBitmapOdd();
         }
@@ -424,12 +424,12 @@ public class GraphicsPerformanceTests {
         public void testDrawBitmapEven() {
             drawBitmapEven();
         }
-        
+
         public void testDrawBitmapOdd() {
             drawBitmapOdd();
         }
     }
-    
+
     /**
      * Test drawing of 320x480 image
      */
@@ -442,7 +442,7 @@ public class GraphicsPerformanceTests {
         public void testDrawBitmapEven() {
             drawBitmapEven();
         }
-        
+
         public void testDrawBitmapOdd() {
             drawBitmapOdd();
         }

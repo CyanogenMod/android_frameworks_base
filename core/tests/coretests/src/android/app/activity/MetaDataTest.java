@@ -90,7 +90,7 @@ public class MetaDataTest extends AndroidTestCase {
         String styledAttr = a.getString(android.R.styleable.TextView_text);
         assertEquals("text", styledAttr);
         a.recycle();
-        
+
         xml.close();
     }
 

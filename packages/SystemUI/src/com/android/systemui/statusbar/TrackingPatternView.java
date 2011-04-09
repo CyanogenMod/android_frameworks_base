@@ -31,11 +31,11 @@ public class TrackingPatternView extends View {
     private Paint mPaint;
     private int mTextureWidth;
     private int mTextureHeight;
-    
+
     public TrackingPatternView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        mTexture = BitmapFactory.decodeResource(getResources(), 
+        mTexture = BitmapFactory.decodeResource(getResources(),
                 com.android.internal.R.drawable.status_bar_background);
         mTextureWidth = mTexture.getWidth();
         mTextureHeight = mTexture.getHeight();

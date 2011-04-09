@@ -191,7 +191,7 @@ public class MimeTypeMap {
             sMimeTypeMap.loadEntry("application/rdf+xml", "rdf");
             sMimeTypeMap.loadEntry("application/rss+xml", "rss");
             sMimeTypeMap.loadEntry("application/zip", "zip");
-            sMimeTypeMap.loadEntry("application/vnd.android.package-archive", 
+            sMimeTypeMap.loadEntry("application/vnd.android.package-archive",
                     "apk");
             sMimeTypeMap.loadEntry("application/vnd.cinderella", "cdy");
             sMimeTypeMap.loadEntry("application/vnd.ms-pki.stl", "stl");

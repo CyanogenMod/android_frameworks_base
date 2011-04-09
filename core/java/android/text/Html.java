@@ -160,7 +160,7 @@ public class Html {
 
             for(int j = 0; j < style.length; j++) {
                 if (style[j] instanceof AlignmentSpan) {
-                    Layout.Alignment align = 
+                    Layout.Alignment align =
                         ((AlignmentSpan) style[j]).getAlignment();
                     needDiv = true;
                     if (align == Layout.Alignment.ALIGN_CENTER) {

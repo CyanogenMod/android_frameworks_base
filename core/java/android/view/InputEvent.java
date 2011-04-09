@@ -27,12 +27,12 @@ public abstract class InputEvent implements Parcelable {
     protected int mDeviceId;
     /** @hide */
     protected int mSource;
-    
+
     /** @hide */
     protected static final int PARCEL_TOKEN_MOTION_EVENT = 1;
     /** @hide */
     protected static final int PARCEL_TOKEN_KEY_EVENT = 2;
-    
+
     /*package*/ InputEvent() {
     }
 
@@ -41,59 +41,59 @@ public abstract class InputEvent implements Parcelable {
      * zero indicates that the event didn't come from a physical device
      * and maps to the default keymap.  The other numbers are arbitrary and
      * you shouldn't depend on the values.
-     * 
+     *
      * @return The device id.
      * @see InputDevice#getDevice
      */
     public final int getDeviceId() {
         return mDeviceId;
     }
-    
+
     /**
      * Gets the device that this event came from.
-     * 
+     *
      * @return The device, or null if unknown.
      */
     public final InputDevice getDevice() {
         return InputDevice.getDevice(mDeviceId);
     }
-    
+
     /**
      * Gets the source of the event.
-     * 
+     *
      * @return The event source or {@link InputDevice#SOURCE_UNKNOWN} if unknown.
      * @see InputDevice#getSourceInfo
      */
     public final int getSource() {
         return mSource;
     }
-    
+
     /**
      * Modifies the source of the event.
      * @param source The source.
-     * 
+     *
      * @hide
      */
     public final void setSource(int source) {
         mSource = source;
     }
-    
+
     public int describeContents() {
         return 0;
     }
-    
+
     /** @hide */
     protected final void readBaseFromParcel(Parcel in) {
         mDeviceId = in.readInt();
         mSource = in.readInt();
     }
-    
+
     /** @hide */
     protected final void writeBaseToParcel(Parcel out) {
         out.writeInt(mDeviceId);
         out.writeInt(mSource);
     }
-    
+
     public static final Parcelable.Creator<InputEvent> CREATOR
             = new Parcelable.Creator<InputEvent>() {
         public InputEvent createFromParcel(Parcel in) {
@@ -106,7 +106,7 @@ public abstract class InputEvent implements Parcelable {
                 throw new IllegalStateException("Unexpected input event type token in parcel.");
             }
         }
-        
+
         public InputEvent[] newArray(int size) {
             return new InputEvent[size];
         }

@@ -34,14 +34,14 @@ import com.android.internal.R;
 /*
  * Full screen of EditTexts (Scrollable, Pan&Scan)
  */
-public class ManyEditTextActivityScrollPanScan extends Activity 
+public class ManyEditTextActivityScrollPanScan extends Activity
 {
     public static final int NUM_EDIT_TEXTS = 12;
 
     private View mRootView;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) 
+    public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         mRootView = new ScrollView(this);
@@ -49,7 +49,7 @@ public class ManyEditTextActivityScrollPanScan extends Activity
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
 
-        for (int i=0; i<NUM_EDIT_TEXTS; i++) 
+        for (int i=0; i<NUM_EDIT_TEXTS; i++)
         {
             final EditText editText = new EditText(this);
             editText.setText(String.valueOf(i));
@@ -60,7 +60,7 @@ public class ManyEditTextActivityScrollPanScan extends Activity
         ((ScrollView) mRootView).addView(layout);
         setContentView(mRootView);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-    }   
+    }
 
     public View getRootView() {
         return mRootView;

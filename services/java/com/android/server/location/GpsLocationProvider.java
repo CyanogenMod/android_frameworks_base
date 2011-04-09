@@ -196,7 +196,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
 
     // true if we are enabled
     private volatile boolean mEnabled;
-    
+
     // true if we have network connectivity
     private boolean mNetworkAvailable;
 
@@ -210,7 +210,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
 
     // true if GPS engine is on
     private boolean mEngineOn;
-    
+
     // requested frequency of fixes, in milliseconds
     private int mFixInterval = 1000;
 
@@ -259,7 +259,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
     private String mAGpsApn;
     private int mAGpsDataConnectionState;
     private final ConnectivityManager mConnMgr;
-    private final GpsNetInitiatedHandler mNIHandler; 
+    private final GpsNetInitiatedHandler mNIHandler;
 
     // Wakelocks
     private final static String WAKELOCK_KEY = "GpsLocationProvider";
@@ -801,7 +801,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
 
     public void setMinTime(long minTime, WorkSource ws) {
         if (DEBUG) Log.d(TAG, "setMinTime " + minTime);
-        
+
         if (minTime >= 0) {
             mFixInterval = (int)minTime;
 
@@ -820,13 +820,13 @@ public class GpsLocationProvider implements LocationProviderInterface {
 
     private final class Listener implements IBinder.DeathRecipient {
         final IGpsStatusListener mListener;
-        
+
         int mSensors = 0;
-        
+
         Listener(IGpsStatusListener listener) {
             mListener = listener;
         }
-        
+
         public void binderDied() {
             if (DEBUG) Log.d(TAG, "GPS status listener died");
 
@@ -896,7 +896,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
     }
 
     public boolean sendExtraCommand(String command, Bundle extras) {
-        
+
         long identity = Binder.clearCallingIdentity();
         boolean result = false;
 
@@ -913,7 +913,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
         } else {
             Log.w(TAG, "sendExtraCommand: unknown command " + command);
         }
-        
+
         Binder.restoreCallingIdentity(identity);
         return result;
     }
@@ -1075,7 +1075,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
                 for (int i = 0; i < size; i++) {
                     Listener listener = mListeners.get(i);
                     try {
-                        listener.mListener.onFirstFix(mTTFF); 
+                        listener.mListener.onFirstFix(mTTFF);
                     } catch (RemoteException e) {
                         Log.w(TAG, "RemoteException in stopNavigating");
                         mListeners.remove(listener);
@@ -1181,15 +1181,15 @@ public class GpsLocationProvider implements LocationProviderInterface {
     private void reportSvStatus() {
 
         int svCount = native_read_sv_status(mSvs, mSnrs, mSvElevations, mSvAzimuths, mSvMasks);
-        
+
         synchronized(mListeners) {
             int size = mListeners.size();
             for (int i = 0; i < size; i++) {
                 Listener listener = mListeners.get(i);
                 try {
-                    listener.mListener.onSvStatusChanged(svCount, mSvs, mSnrs, 
-                            mSvElevations, mSvAzimuths, mSvMasks[EPHEMERIS_MASK], 
-                            mSvMasks[ALMANAC_MASK], mSvMasks[USED_FOR_FIX_MASK]); 
+                    listener.mListener.onSvStatusChanged(svCount, mSvs, mSnrs,
+                            mSvElevations, mSvAzimuths, mSvMasks[EPHEMERIS_MASK],
+                            mSvMasks[ALMANAC_MASK], mSvMasks[USED_FOR_FIX_MASK]);
                 } catch (RemoteException e) {
                     Log.w(TAG, "RemoteException in reportSvInfo");
                     mListeners.remove(listener);
@@ -1337,7 +1337,7 @@ public class GpsLocationProvider implements LocationProviderInterface {
             return true;
         }
     };
-        
+
     public INetInitiatedListener getNetInitiatedListener() {
         return mNetInitiatedListener;
     }

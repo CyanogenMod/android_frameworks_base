@@ -366,7 +366,7 @@ import java.util.Set;
      * The arguments useCache and allowGarbase are usually true and false
      * accordingly when this function is called outside this function itself.
      * </p>
-     * 
+     *
      * @param useCache When true, line is obtained from mPreviousline.
      *            Otherwise, getLine() is used.
      * @param allowGarbage When true, ignore non "END:VCARD" line.
@@ -534,7 +534,7 @@ import java.util.Set;
                             mInterpreter.propertyGroup(groupName);
                         }
                         nameIndex = i + 1;  // Next should be another group or a property name.
-                    } else if (ch == ';') {  // End of property name and beginneng of parameters.  
+                    } else if (ch == ';') {  // End of property name and beginneng of parameters.
                         final String propertyName = line.substring(nameIndex, i);
                         if (propertyName.equalsIgnoreCase("END")) {
                             mPreviousLine = line;

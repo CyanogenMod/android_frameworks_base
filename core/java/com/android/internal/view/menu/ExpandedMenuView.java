@@ -38,14 +38,14 @@ public final class ExpandedMenuView extends ListView implements ItemInvoker, Men
 
     /** Default animations for this menu */
     private int mAnimations;
-    
+
     /**
      * Instantiates the ExpandedMenuView that is linked with the provided MenuBuilder.
      * @param menu The model for the menu which this MenuView will display
      */
     public ExpandedMenuView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        
+
         TypedArray a = context.obtainStyledAttributes(attrs, com.android.internal.R.styleable.MenuView, 0, 0);
         mAnimations = a.getResourceId(com.android.internal.R.styleable.MenuView_windowAnimationStyle, 0);
         a.recycle();
@@ -75,7 +75,7 @@ public final class ExpandedMenuView extends ListView implements ItemInvoker, Men
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        
+
         // Clear the cached bitmaps of children
         setChildrenDrawingCacheEnabled(false);
     }
@@ -96,5 +96,5 @@ public final class ExpandedMenuView extends ListView implements ItemInvoker, Men
     public int getWindowAnimations() {
         return mAnimations;
     }
-    
+
 }

@@ -261,7 +261,7 @@ public final class AndroidHttpClient implements HttpClient {
         return delegate.execute(target, request, context);
     }
 
-    public <T> T execute(HttpUriRequest request, 
+    public <T> T execute(HttpUriRequest request,
             ResponseHandler<? extends T> responseHandler)
             throws IOException, ClientProtocolException {
         return delegate.execute(request, responseHandler);
@@ -361,7 +361,7 @@ public final class AndroidHttpClient implements HttpClient {
         }
         if (level < Log.VERBOSE || level > Log.ASSERT) {
             throw new IllegalArgumentException("Level is out of range ["
-                + Log.VERBOSE + ".." + Log.ASSERT + "]");    
+                + Log.VERBOSE + ".." + Log.ASSERT + "]");
         }
 
         curlConfiguration = new LoggingConfiguration(name, level);

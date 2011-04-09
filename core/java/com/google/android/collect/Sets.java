@@ -28,14 +28,14 @@ import java.util.TreeSet;
  *
  */
 public class Sets {
-    
+
     /**
      * Creates an empty {@code HashSet} instance.
      *
      * <p><b>Note:</b> if {@code E} is an {@link Enum} type, use {@link
      * EnumSet#noneOf} instead.
      *
-     * <p><b>Note:</b> if you only need an <i>immutable</i> empty Set, 
+     * <p><b>Note:</b> if you only need an <i>immutable</i> empty Set,
      * use {@link Collections#emptySet} instead.
      *
      * @return a newly-created, initially-empty {@code HashSet}

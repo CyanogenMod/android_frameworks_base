@@ -74,19 +74,19 @@ public abstract class Animation implements Cloneable {
      * order.
      */
     public static final int ZORDER_NORMAL = 0;
-    
+
     /**
      * Requests that the content being animated be forced on top of all other
      * content for the duration of the animation.
      */
     public static final int ZORDER_TOP = 1;
-    
+
     /**
      * Requests that the content being animated be forced under all other
      * content for the duration of the animation.
      */
     public static final int ZORDER_BOTTOM = -1;
-    
+
     /**
      * Set by {@link #getTransformation(long, Transformation)} when the animation ends.
      */
@@ -124,7 +124,7 @@ public abstract class Animation implements Cloneable {
     /**
      * Indicates whether fillAfter should be taken into account.
      */
-    boolean mFillEnabled = false;    
+    boolean mFillEnabled = false;
 
     /**
      * The time in milliseconds at which the animation must start;
@@ -174,7 +174,7 @@ public abstract class Animation implements Cloneable {
      * Desired Z order mode during animation.
      */
     private int mZAdjustment;
-    
+
     /**
      * Don't animate the wallpaper.
      */
@@ -208,7 +208,7 @@ public abstract class Animation implements Cloneable {
 
         setDuration((long) a.getInt(com.android.internal.R.styleable.Animation_duration, 0));
         setStartOffset((long) a.getInt(com.android.internal.R.styleable.Animation_startOffset, 0));
-        
+
         setFillEnabled(a.getBoolean(com.android.internal.R.styleable.Animation_fillEnabled, mFillEnabled));
         setFillBefore(a.getBoolean(com.android.internal.R.styleable.Animation_fillBefore, mFillBefore));
         setFillAfter(a.getBoolean(com.android.internal.R.styleable.Animation_fillAfter, mFillAfter));
@@ -222,9 +222,9 @@ public abstract class Animation implements Cloneable {
         setRepeatMode(a.getInt(com.android.internal.R.styleable.Animation_repeatMode, RESTART));
 
         setZAdjustment(a.getInt(com.android.internal.R.styleable.Animation_zAdjustment, ZORDER_NORMAL));
-        
+
         setDetachWallpaper(a.getBoolean(com.android.internal.R.styleable.Animation_detachWallpaper, false));
-        
+
         ensureInterpolator();
 
         a.recycle();
@@ -258,13 +258,13 @@ public abstract class Animation implements Cloneable {
     /**
      * Cancel the animation. Cancelling an animation invokes the animation
      * listener, if set, to notify the end of the animation.
-     * 
+     *
      * If you cancel an animation manually, you must call {@link #reset()}
      * before starting the animation again.
-     * 
-     * @see #reset() 
-     * @see #start() 
-     * @see #startNow() 
+     *
+     * @see #reset()
+     * @see #start()
+     * @see #startNow()
      */
     public void cancel() {
         if (mStarted && !mEnded) {
@@ -354,7 +354,7 @@ public abstract class Animation implements Cloneable {
 
     /**
      * How long this animation should last. The duration cannot be negative.
-     * 
+     *
      * @param durationMillis Duration in milliseconds
      *
      * @throws java.lang.IllegalArgumentException if the duration is < 0
@@ -373,7 +373,7 @@ public abstract class Animation implements Cloneable {
      * than <var>durationMillis</var>.  In addition to adjusting the duration
      * itself, this ensures that the repeat count also will not make it run
      * longer than the given time.
-     * 
+     *
      * @param durationMillis The maximum duration the animation is allowed
      * to run.
      */
@@ -385,7 +385,7 @@ public abstract class Animation implements Cloneable {
             mRepeatCount = 0;
             return;
         }
-        
+
         long dur = mDuration + mStartOffset;
         if (dur > durationMillis) {
             mDuration = durationMillis-mStartOffset;
@@ -410,7 +410,7 @@ public abstract class Animation implements Cloneable {
             }
         }
     }
-    
+
     /**
      * How much to scale the duration by.
      *
@@ -457,7 +457,7 @@ public abstract class Animation implements Cloneable {
     /**
      * Defines what this animation should do when it reaches the end. This
      * setting is applied only when the repeat count is either greater than
-     * 0 or {@link #INFINITE}. Defaults to {@link #RESTART}. 
+     * 0 or {@link #INFINITE}. Defaults to {@link #RESTART}.
      *
      * @param repeatMode {@link #RESTART} or {@link #REVERSE}
      * @attr ref android.R.styleable#Animation_repeatMode
@@ -535,7 +535,7 @@ public abstract class Animation implements Cloneable {
      * @param fillAfter true if the animation should apply its transformation after it ends
      * @attr ref android.R.styleable#Animation_fillAfter
      *
-     * @see #setFillEnabled(boolean) 
+     * @see #setFillEnabled(boolean)
      */
     public void setFillAfter(boolean fillAfter) {
         mFillAfter = fillAfter;
@@ -543,7 +543,7 @@ public abstract class Animation implements Cloneable {
 
     /**
      * Set the Z ordering mode to use while running the animation.
-     * 
+     *
      * @param zAdjustment The desired mode, one of {@link #ZORDER_NORMAL},
      * {@link #ZORDER_TOP}, or {@link #ZORDER_BOTTOM}.
      * @attr ref android.R.styleable#Animation_zAdjustment
@@ -551,7 +551,7 @@ public abstract class Animation implements Cloneable {
     public void setZAdjustment(int zAdjustment) {
         mZAdjustment = zAdjustment;
     }
-    
+
     /**
      * If detachWallpaper is true, and this is a window animation of a window
      * that has a wallpaper background, then the window will be detached from
@@ -652,7 +652,7 @@ public abstract class Animation implements Cloneable {
     /**
      * Returns the Z ordering mode to use while running the animation as
      * previously set by {@link #setZAdjustment}.
-     * 
+     *
      * @return Returns one of {@link #ZORDER_NORMAL},
      * {@link #ZORDER_TOP}, or {@link #ZORDER_BOTTOM}.
      * @attr ref android.R.styleable#Animation_zAdjustment
@@ -723,7 +723,7 @@ public abstract class Animation implements Cloneable {
     public long computeDurationHint() {
         return (getStartOffset() + getDuration()) * (getRepeatCount() + 1);
     }
-    
+
     /**
      * Gets the transformation to apply at a specified point in time. Implementations of this
      * method should always replace the specified Transformation or document they are doing
@@ -830,7 +830,7 @@ public abstract class Animation implements Cloneable {
      * their transforms given an interpolation value.  Implementations of this
      * method should always replace the specified Transformation or document
      * they are doing otherwise.
-     * 
+     *
      * @param interpolatedTime The value of the normalized time (0.0 to 1.0)
      *        after it has been run through the interpolation function.
      * @param t The Transofrmation object to fill in with the current
@@ -870,7 +870,7 @@ public abstract class Animation implements Cloneable {
      * @param bottom
      * @param invalidate
      * @param transformation
-     * 
+     *
      * @hide
      */
     public void getInvalidateRegion(int left, int top, int right, int bottom,

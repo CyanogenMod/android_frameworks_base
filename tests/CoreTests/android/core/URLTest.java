@@ -214,7 +214,7 @@ public class URLTest extends TestCase {
         }
     }
 
-    /** 
+    /**
      * Regression test for issue 1158780 where using '{' and '}' in an URL threw
      * an NPE. The RI accepts this URL and returns the status 404.
      */
