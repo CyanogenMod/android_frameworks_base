@@ -1432,7 +1432,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     }
 
     void setDateViewVisibility(boolean visible, int anim) {
-        if(mButtonsLeft)
+        if(mHasSoftButtons && mButtonsLeft)
             return;
 
         mDateView.setUpdates(visible);
