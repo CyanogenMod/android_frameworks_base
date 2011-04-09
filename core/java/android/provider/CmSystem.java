@@ -21,6 +21,10 @@ import android.view.KeyEvent;
 
 import com.android.internal.R;
 
+/**
+ * CmSystem
+ * @hide
+ */
 public final class CmSystem {
     // explaination of each default value in detail at
     // frameworks/base/core/res/res/value/config.xml

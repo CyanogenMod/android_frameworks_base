@@ -2164,13 +2164,33 @@ public final class Settings {
         public static final String STATUS_BAR_DEAD_ZONE = "status_bar_dead_zone";
 
         /**
-         * 4 options which decide, which soft-buttons to show.
+         * Whether or not home is displayed in soft buttons.
          * @hide
          */
         public static final String SOFT_BUTTON_SHOW_HOME = "soft_button_show_home";
+
+        /**
+         * Whether or not menu is displayed in soft buttons.
+         * @hide
+         */
         public static final String SOFT_BUTTON_SHOW_MENU = "soft_button_show_menu";
+
+        /**
+         * Whether or not back is displayed in soft buttons.
+         * @hide
+         */
         public static final String SOFT_BUTTON_SHOW_BACK = "soft_button_show_back";
+
+        /**
+         * Whether or not search is displayed in soft buttons.
+         * @hide
+         */
         public static final String SOFT_BUTTON_SHOW_SEARCH = "soft_button_show_search";
+
+        /**
+         * Whether or not QUICK_NA is displayed in soft buttons.
+         * @hide
+         */
         public static final String SOFT_BUTTON_SHOW_QUICK_NA = "soft_button_show_quick_na";
 
         /**
@@ -2218,11 +2238,21 @@ public final class Settings {
         public static final String EXTEND_PM = "extend_pm";
 
         /**
-         * 3 options which decide, which contents extended power menu should include
+         * Whether or not home is displayed in the extended power menu.
          * @hide
          */
         public static final String EXTEND_PM_SHOW_HOME = "extend_pm_show_home";
+
+        /**
+         * Whether or not menu is displayed in the extended power menu.
+         * @hide
+         */
         public static final String EXTEND_PM_SHOW_MENU = "extend_pm_show_menu";
+
+        /**
+         * Whether or not back is displayed in the extended power menu.
+         * @hide
+         */
         public static final String EXTEND_PM_SHOW_BACK = "extend_pm_show_back";
 
         /**

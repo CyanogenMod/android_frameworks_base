@@ -1685,7 +1685,9 @@ public class TextUtils {
         return false;
     }
 
-
+    /**
+     * @hide
+     */
     public static boolean isRTLCharacter(char c) {
         //range of RTL characters per unicode specification
         return (c >= 0x0590 && c <= 0x05FF) ||
@@ -1697,6 +1699,7 @@ public class TextUtils {
 
     /**
      * function to check if text range has RTL characters.
+     * @hide
      */
     public static boolean hasRTLCharacters(final char[] text, int start, int end) {
         if (text == null)
@@ -1713,6 +1716,7 @@ public class TextUtils {
 
     /**
      * function to check if text range has RTL characters.
+     * @hide
      */
     public static boolean hasRTLCharacters(CharSequence text, int start, int end) {
         if (text == null)
@@ -1731,6 +1735,7 @@ public class TextUtils {
      * function to process bidi on the given text
      * @param src
      * @return String
+     * @hide
      */
     public static String processBidi (final String src) {
         return (TextUtils.processBidi(src, 0, src.length()));
@@ -1740,6 +1745,7 @@ public class TextUtils {
      * function to process bidi the given text
      * @param src
      * @return char[]
+     * @hide
      */
     public static char[] processBidi (final char[] src) {
 
@@ -1752,6 +1758,7 @@ public class TextUtils {
      * @param begin
      * @param end
      * @return String
+     * @hide
      */
     public static String processBidi (final String src, int start, int end) {
 
@@ -1761,12 +1768,13 @@ public class TextUtils {
     }
 
     /**
-     * @author: Eyad Aboulouz
      * function to process bidi on the given text
+     * @author: Eyad Aboulouz
      * @param src
      * @param start
      * @param end
      * @return char[]
+     * @hide
      */
     public static char[] processBidi (final char[] src, int start, int end) {
 

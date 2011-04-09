@@ -1095,7 +1095,10 @@ public abstract class Window {
      * @see android.app.Activity#getVolumeControlStream()
      */
     public abstract int getVolumeControlStream();
-    
+
+    /**
+     * @hide
+     */
     protected int interceptFsRequest(int inFlags){
         int result=inFlags;
 
