@@ -209,6 +209,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
     private static final boolean DBG = false;
     static final boolean RILJ_LOGD = Config.LOGD;
     static final boolean RILJ_LOGV = DBG ? Config.LOGD : Config.LOGV;
+    private boolean rilNeedsNullPath = false;
 
     /**
      * Wake lock timeout should be longer than the longest timeout in
@@ -621,6 +622,7 @@ public final class RIL extends BaseCommands implements CommandsInterface {
         super(context);
         mCdmaSubscription  = cdmaSubscription;
         mNetworkMode = networkMode;
+        rilNeedsNullPath = context.getResources().getBoolean(com.android.internal.R.bool.config_rilNeedsNullPath);
         //At startup mPhoneType is first set from networkMode
         switch(networkMode) {
             case RILConstants.NETWORK_MODE_WCDMA_PREF:
@@ -1461,6 +1463,11 @@ public final class RIL extends BaseCommands implements CommandsInterface {
 
         rr.mp.writeInt(command);
         rr.mp.writeInt(fileid);
+        // MB501 (zeppelin) and other phones (motus, morrison, etc) require this
+        // to get data working
+        if (rilNeedsNullPath) {
+            path = null;
+        }
         rr.mp.writeString(path);
         rr.mp.writeInt(p1);
         rr.mp.writeInt(p2);
