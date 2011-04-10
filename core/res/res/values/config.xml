@@ -497,4 +497,7 @@
     <integer name="cm_default_remapped_long_vol_down_index">0</integer>
     <integer name="cm_default_remapped_both_vol_index">0</integer>
     <integer name="cm_default_remapped_long_both_vol_index">0</integer>
+
+    <!-- Set this to true to get data working on some Motorola phones -->
+    <bool name="config_rilNeedsNullPath">false</bool>
 </resources>
