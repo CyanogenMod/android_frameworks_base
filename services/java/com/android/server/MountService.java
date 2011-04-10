@@ -1012,23 +1012,29 @@ class MountService extends IMountService.Stub
             mSendUmsConnectedOnBoot = avail;
         }
 
-        final String path = Environment.getExternalStorageDirectory().getPath();
-        if (avail == false && getVolumeState(path).equals(Environment.MEDIA_SHARED)) {
+        final ArrayList<String> volumes = getShareableVolumes();
+        boolean mediaShared = false;
+        for (String path: volumes) {
+            if (getVolumeState(path).equals(Environment.MEDIA_SHARED))
+                mediaShared = true;
+        }
+        if (avail == false && mediaShared) {
             /*
              * USB mass storage disconnected while enabled
              */
-            final ArrayList<String> volumes = getShareableVolumes();
             new Thread() {
                 public void run() {
                     try {
                         int rc;
                         Slog.w(TAG, "Disabling UMS after cable disconnect");
                         for (String path: volumes) {
-                            doShareUnshareVolume(path, "ums", false);
-                            if ((rc = doMountVolume(path)) != StorageResultCode.OperationSucceeded) {
-                                Slog.e(TAG, String.format(
+                            if (getVolumeState(path).equals(Environment.MEDIA_SHARED)) {
+                                doShareUnshareVolume(path, "ums", false);
+                                if ((rc = doMountVolume(path)) != StorageResultCode.OperationSucceeded) {
+                                    Slog.e(TAG, String.format(
                                         "Failed to remount {%s} on UMS enabled-disconnect (%d)",
-                                                path, rc));
+                                        path, rc));
+                                }
                             }
                         }
                     } catch (Exception ex) {
@@ -1125,53 +1131,56 @@ class MountService extends IMountService.Stub
 
         Slog.i(TAG, "Shutting down");
 
-        String path = Environment.getExternalStorageDirectory().getPath();
-        String state = getVolumeState(path);
+        ArrayList<String> volumesToShare = getShareableVolumes();
 
-        if (state.equals(Environment.MEDIA_SHARED)) {
-            /*
-             * If the media is currently shared, unshare it.
-             * XXX: This is still dangerous!. We should not
-             * be rebooting at *all* if UMS is enabled, since
-             * the UMS host could have dirty FAT cache entries
-             * yet to flush.
-             */
-            setUsbMassStorageEnabled(false);
-        } else if (state.equals(Environment.MEDIA_CHECKING)) {
-            /*
-             * If the media is being checked, then we need to wait for
-             * it to complete before being able to proceed.
-             */
-            // XXX: @hackbod - Should we disable the ANR timer here?
-            int retries = 30;
-            while (state.equals(Environment.MEDIA_CHECKING) && (retries-- >=0)) {
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException iex) {
-                    Slog.e(TAG, "Interrupted while waiting for media", iex);
-                    break;
+        for (String path: volumesToShare) {
+            String state = getVolumeState(path);
+
+            if (state.equals(Environment.MEDIA_SHARED)) {
+                /*
+                 * If the media is currently shared, unshare it.
+                 * XXX: This is still dangerous!. We should not
+                 * be rebooting at *all* if UMS is enabled, since
+                 * the UMS host could have dirty FAT cache entries
+                 * yet to flush.
+                 */
+                setUsbMassStorageEnabled(false);
+            } else if (state.equals(Environment.MEDIA_CHECKING)) {
+                /*
+                 * If the media is being checked, then we need to wait for
+                 * it to complete before being able to proceed.
+                 */
+                // XXX: @hackbod - Should we disable the ANR timer here?
+                int retries = 30;
+                while (state.equals(Environment.MEDIA_CHECKING) && (retries-- >=0)) {
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException iex) {
+                        Slog.e(TAG, "Interrupted while waiting for media", iex);
+                        break;
+                    }
+                    state = getVolumeState(path);
                 }
-                state = Environment.getExternalStorageState();
+                if (retries == 0) {
+                    Slog.e(TAG, "Timed out waiting for media to check");
+                }
             }
-            if (retries == 0) {
-                Slog.e(TAG, "Timed out waiting for media to check");
-            }
-        }
 
-        if (state.equals(Environment.MEDIA_MOUNTED)) {
-            // Post a unmount message.
-            ShutdownCallBack ucb = new ShutdownCallBack(path, observer);
-            mHandler.sendMessage(mHandler.obtainMessage(H_UNMOUNT_PM_UPDATE, ucb));
-        } else if (observer != null) {
-            /*
-             * Observer is waiting for onShutDownComplete when we are done.
-             * Since nothing will be done send notification directly so shutdown
-             * sequence can continue.
-             */
-            try {
-                observer.onShutDownComplete(StorageResultCode.OperationSucceeded);
-            } catch (RemoteException e) {
-                Slog.w(TAG, "RemoteException when shutting down");
+            if (state.equals(Environment.MEDIA_MOUNTED)) {
+                // Post a unmount message.
+                ShutdownCallBack ucb = new ShutdownCallBack(path, observer);
+                mHandler.sendMessage(mHandler.obtainMessage(H_UNMOUNT_PM_UPDATE, ucb));
+            } else if (observer != null) {
+                /*
+                 * Observer is waiting for onShutDownComplete when we are done.
+                 * Since nothing will be done send notification directly so shutdown
+                 * sequence can continue.
+                 */
+                try {
+                    observer.onShutDownComplete(StorageResultCode.OperationSucceeded);
+                } catch (RemoteException e) {
+                    Slog.w(TAG, "RemoteException when shutting down");
+                }
             }
         }
     }
@@ -1260,7 +1269,14 @@ class MountService extends IMountService.Stub
 
     public boolean isUsbMassStorageEnabled() {
         waitForReady();
-        return doGetVolumeShared(Environment.getExternalStorageDirectory().getPath(), "ums");
+
+        ArrayList<String> volumesToShare = getShareableVolumes();
+        for (String path: volumesToShare) {
+            if (doGetVolumeShared(path, "ums"))
+                return true;
+        }
+        // no volume is shared
+        return false;
     }
     
     /**
