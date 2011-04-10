@@ -32,6 +32,7 @@ import android.content.IntentFilter;
 import android.net.LocalSocket;
 import android.net.LocalSocketAddress;
 import android.os.AsyncResult;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -1461,6 +1462,9 @@ public final class RIL extends BaseCommands implements CommandsInterface {
 
         rr.mp.writeInt(command);
         rr.mp.writeInt(fileid);
+        /* MB501 (zeppelin) and other phones (motus, morrison, etc) require this
+        to get data working */
+        if (Build.DEVICE.contains("zepp")) path = null;
         rr.mp.writeString(path);
         rr.mp.writeInt(p1);
         rr.mp.writeInt(p2);
