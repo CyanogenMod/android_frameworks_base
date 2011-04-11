@@ -348,6 +348,9 @@ status_t AudioPolicyService::getStreamVolumeIndex(AudioSystem::stream_type strea
 
 uint32_t AudioPolicyService::getStrategyForStream(AudioSystem::stream_type stream)
 {
+#ifdef FROYO_AUDIOPOLICY
+    return 0;
+#endif
     if (mpPolicyManager == NULL) {
         return 0;
     }
@@ -356,6 +359,9 @@ uint32_t AudioPolicyService::getStrategyForStream(AudioSystem::stream_type strea
 
 audio_io_handle_t AudioPolicyService::getOutputForEffect(effect_descriptor_t *desc)
 {
+#ifdef FROYO_AUDIOPOLICY
+    return NO_INIT;
+#endif
     if (mpPolicyManager == NULL) {
         return NO_INIT;
     }
@@ -369,6 +375,9 @@ status_t AudioPolicyService::registerEffect(effect_descriptor_t *desc,
                                 int session,
                                 int id)
 {
+#ifdef FROYO_AUDIOPOLICY
+    return NO_INIT;
+#endif
     if (mpPolicyManager == NULL) {
         return NO_INIT;
     }
@@ -377,6 +386,9 @@ status_t AudioPolicyService::registerEffect(effect_descriptor_t *desc,
 
 status_t AudioPolicyService::unregisterEffect(int id)
 {
+#ifdef FROYO_AUDIOPOLICY
+    return NO_INIT;
+#endif
     if (mpPolicyManager == NULL) {
         return NO_INIT;
     }
