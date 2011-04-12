@@ -1038,7 +1038,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
                 // We are expanded, but they didn't move sufficiently to cause
                 // us to retract.  Animate back to the expanded position.
                 mAnimAccel = 2000.0f;
-                if ((mBottomBar && vel > 0) || (!mBottomBar && vel < 0)) {
+                if (vel < 0) {
                     mAnimVel = 0;
                 }
             }
@@ -1056,7 +1056,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
                 // We are collapsed, and they moved enough to allow us to
                 // expand.  Animate in the notifications.
                 mAnimAccel = 2000.0f;
-                if ((mBottomBar && vel < 0) || (!mBottomBar && vel > 0)) {
+                if (vel < 0) {
                     mAnimVel = 0;
                 }
             }
