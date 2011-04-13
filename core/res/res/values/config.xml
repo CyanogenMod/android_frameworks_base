@@ -412,6 +412,10 @@
     <string-array name="config_twoDigitNumberPattern">
     </string-array>
 
+    <!-- Camera orientation direction. Use this if your portrait snapshots come out
+         upside-down even though the preview is correct -->
+    <bool name="config_cameraRotatesCounterClockwise">false</bool>
+
     <!-- ************************************************
          *                                              *
          *    GLOBAL DEFAULT VALUES FOR CM SETTINGS     *

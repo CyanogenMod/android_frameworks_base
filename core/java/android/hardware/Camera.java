@@ -31,6 +31,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 
+import android.content.res.Resources;
+
 /**
  * The Camera class is used to set image capture settings, start/stop preview,
  * snap pictures, and retrieve frames for encoding for video.  This class is a
@@ -1911,6 +1913,11 @@ public class Camera {
         public void setRotation(int rotation) {
             if (rotation == 0 || rotation == 90 || rotation == 180
                     || rotation == 270) {
+                if (Resources.getSystem().getBoolean(
+                            com.android.internal.R.bool.config_cameraRotatesCounterClockwise)
+                            && (rotation == 270 || rotation == 90)) {
+                        rotation = (rotation + 180) % 360;
+                }
                 set(KEY_ROTATION, Integer.toString(rotation));
             } else {
                 throw new IllegalArgumentException(
