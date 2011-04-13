@@ -31,6 +31,8 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.TextUtils;
 
+import android.content.res.Resources;
+
 /**
  * The Camera class is used to set image capture settings, start/stop preview,
  * snap pictures, and retrieve frames for encoding for video.  This class is a
@@ -138,6 +140,7 @@ public class Camera {
     private ErrorCallback mErrorCallback;
     private boolean mOneShot;
     private boolean mWithBuffer;
+    private int mCameraId;
 
     /**
      * Returns the number of physical cameras available on this device.
@@ -245,6 +248,7 @@ public class Camera {
         mPreviewCallback = null;
         mPostviewCallback = null;
         mZoomListener = null;
+        mCameraId = cameraId;
 
         Looper looper;
         if ((looper = Looper.myLooper()) != null) {
@@ -1909,6 +1913,17 @@ public class Camera {
          * @see #getCameraInfo(int, CameraInfo)
          */
         public void setRotation(int rotation) {
+            CameraInfo info = new CameraInfo();
+            getCameraInfo(mCameraId, info);
+            if (info.orientation < 0) { /* Camera rotates counterclockwise */
+
+                if (rotation < 0 || rotation >= 360)
+                    rotation = (rotation + 360) % 360;
+
+                if (rotation == 0 || rotation == 180) {
+                    rotation = (rotation + 180) % 360;
+                }
+            }
             if (rotation == 0 || rotation == 90 || rotation == 180
                     || rotation == 270) {
                 set(KEY_ROTATION, Integer.toString(rotation));

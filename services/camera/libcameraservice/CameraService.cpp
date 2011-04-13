@@ -1315,11 +1315,19 @@ void CameraService::Client::copyFrameAndPostCopiedFrame(
     client->dataCallback(CAMERA_MSG_PREVIEW_FRAME, frame);
 }
 
+#ifdef BOARD_HAS_LGE_FFC
+#define HAVE_COUNTERCLOCKWISE_CAMERA
+#endif
+
 #define FFC_VENDOR_HTC 0x1
 #define FFC_VENDOR_LGE 0x2
 int mFrontCameraType = 0;
 
 int CameraService::Client::getOrientation(int degrees, bool mirror) {
+#ifdef HAVE_COUNTERCLOCKWISE_CAMERA
+    if (!mirror)
+        degrees = (degrees + 180) % 360;
+#endif
     if (!mirror || mFrontCameraType == FFC_VENDOR_LGE) {
         if (degrees == 0) return 0;
         else if (degrees == 90) return HAL_TRANSFORM_ROT_90;
@@ -1427,7 +1435,11 @@ status_t CameraService::dump(int fd, const Vector<String16>& args) {
 static const CameraInfo sCameraInfo[] = {
     {
         FIRST_CAMERA_FACING,
+#ifdef HAVE_COUNTERCLOCKWISE_CAMERA
+        -FIRST_CAMERA_ORIENTATION,  /* orientation */
+#else
         FIRST_CAMERA_ORIENTATION,  /* orientation */
+#endif
     },
     {
         CAMERA_FACING_FRONT,
