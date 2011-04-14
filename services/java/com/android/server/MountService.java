@@ -339,6 +339,13 @@ class MountService extends IMountService.Stub
                 case H_UNMOUNT_PM_UPDATE: {
                     if (DEBUG_UNMOUNT) Slog.i(TAG, "H_UNMOUNT_PM_UPDATE");
                     UnmountCallBack ucb = (UnmountCallBack) msg.obj;
+                    if (!mUpdatingStatus && !isExternalStorage(ucb.path)) {
+                        // If PM isn't already updating, and this isn't an ASEC
+                        // mount, then go ahead and do the unmount immediately.
+                        if (DEBUG_UNMOUNT) Slog.i(TAG, " skipping PackageManager for " + ucb.path);
+                        ucb.handleFinished();
+                        break;
+                    }
                     mForceUnmounts.add(ucb);
                     if (DEBUG_UNMOUNT) Slog.i(TAG, " registered = " + mUpdatingStatus);
                     // Register only if needed.
@@ -1244,8 +1251,7 @@ class MountService extends IMountService.Stub
                 // Override for isUsbMassStorageEnabled()
                 setUmsEnabling(enable);
                 UmsEnableCallBack umscb = new UmsEnableCallBack(path, method, true);
-                int msg = isExternalStorage(path) ? H_UNMOUNT_PM_UPDATE : H_UNMOUNT_MS;
-                mHandler.sendMessage(mHandler.obtainMessage(msg, umscb));
+                mHandler.sendMessage(mHandler.obtainMessage(H_UNMOUNT_PM_UPDATE, umscb));
                 // Clear override
                 setUmsEnabling(false);
             }
@@ -1318,8 +1324,7 @@ class MountService extends IMountService.Stub
             return;
         }
         UnmountCallBack ucb = new UnmountCallBack(path, force);
-        int msg = isExternalStorage(path) ? H_UNMOUNT_PM_UPDATE : H_UNMOUNT_MS;
-        mHandler.sendMessage(mHandler.obtainMessage(msg, ucb));
+        mHandler.sendMessage(mHandler.obtainMessage(H_UNMOUNT_PM_UPDATE, ucb));
     }
 
     public int formatVolume(String path) {
