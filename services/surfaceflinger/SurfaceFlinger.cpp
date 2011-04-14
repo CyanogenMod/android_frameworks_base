@@ -487,7 +487,7 @@ void SurfaceFlinger::handleTransaction(uint32_t transactionFlags)
 {
     Vector< sp<LayerBase> > ditchedLayers;
 
-    /*
+    /*#ifdef NO_RGBX_8888
      * Perform and commit the transaction
      */
 
@@ -1270,7 +1270,12 @@ sp<Layer> SurfaceFlinger::createNormalSurface(
         format = PIXEL_FORMAT_RGBA_8888;
         break;
     case PIXEL_FORMAT_OPAQUE:
-        format = PIXEL_FORMAT_RGBX_8888;
+
+#ifdef RGB_565
+     format = PIXEL_FORMAT_RGB_565;
+#else
+     format = PIXEL_FORMAT_RGBX_8888;
+#endif
         break;
     }
 
