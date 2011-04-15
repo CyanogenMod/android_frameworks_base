@@ -159,6 +159,7 @@ static sp<MediaSource> InstantiateSoftwareCodec(
 
 static const CodecInfo kDecoderInfo[] = {
     { MEDIA_MIMETYPE_IMAGE_JPEG, "OMX.TI.JPEG.decode" },
+    //{ MEDIA_MIMETYPE_AUDIO_MPEG, "OMX.Nvidia.mp3.decoder" },
 //    { MEDIA_MIMETYPE_AUDIO_MPEG, "OMX.TI.MP3.decode" },
     { MEDIA_MIMETYPE_AUDIO_MPEG, "MP3Decoder" },
 //    { MEDIA_MIMETYPE_AUDIO_MPEG, "OMX.PV.mp3dec" },
@@ -168,28 +169,34 @@ static const CodecInfo kDecoderInfo[] = {
     { MEDIA_MIMETYPE_AUDIO_AMR_WB, "OMX.TI.WBAMR.decode" },
     { MEDIA_MIMETYPE_AUDIO_AMR_WB, "AMRWBDecoder" },
 //    { MEDIA_MIMETYPE_AUDIO_AMR_WB, "OMX.PV.amrdec" },
+    { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.Nvidia.aac.decoder" },
     { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.TI.AAC.decode" },
     { MEDIA_MIMETYPE_AUDIO_AAC, "AACDecoder" },
 //    { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.PV.aacdec" },
+    //{ MEDIA_MIMETYPE_AUDIO_WMA, "OMX.Nvidia.wma.decoder" },
     { MEDIA_MIMETYPE_AUDIO_G711_ALAW, "G711Decoder" },
     { MEDIA_MIMETYPE_AUDIO_G711_MLAW, "G711Decoder" },
+    { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.Nvidia.mp4.decode" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.qcom.7x30.video.decoder.mpeg4" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.qcom.video.decoder.mpeg4" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.TI.Video.Decoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.SEC.MPEG4.Decoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "M4vH263Decoder" },
+    { MEDIA_MIMETYPE_VIDEO_H263, "OMX.Nvidia.h263.decode" },
 //    { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.PV.mpeg4dec" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.qcom.7x30.video.decoder.h263" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.qcom.video.decoder.h263" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.SEC.H263.Decoder" },
     { MEDIA_MIMETYPE_VIDEO_H263, "M4vH263Decoder" },
 //    { MEDIA_MIMETYPE_VIDEO_H263, "OMX.PV.h263dec" },
+    { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.Nvidia.h264.decode" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.qcom.7x30.video.decoder.avc" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.qcom.video.decoder.avc" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.TI.Video.Decoder" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.SEC.AVC.Decoder" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "AVCDecoder" },
 //    { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.PV.avcdec" },
+    //{MEDIA_MIMETYPE_VIDEO_WMV, "OMX.Nvidia.vc1.decode" },
     { MEDIA_MIMETYPE_AUDIO_VORBIS, "VorbisDecoder" },
     { MEDIA_MIMETYPE_VIDEO_VPX, "VPXDecoder" },
 };
@@ -202,18 +209,21 @@ static const CodecInfo kEncoderInfo[] = {
     { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.TI.AAC.encode" },
     { MEDIA_MIMETYPE_AUDIO_AAC, "AACEncoder" },
 //    { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.PV.aacenc" },
+    { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.Nvidia.mp4.encoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.qcom.7x30.video.encoder.mpeg4" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.qcom.video.encoder.mpeg4" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.TI.Video.encoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.SEC.MPEG4.Encoder" },
     { MEDIA_MIMETYPE_VIDEO_MPEG4, "M4vH263Encoder" },
 //    { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.PV.mpeg4enc" },
+    { MEDIA_MIMETYPE_VIDEO_H263, "OMX.Nvidia.h263.encoder" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.qcom.7x30.video.encoder.h263" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.qcom.video.encoder.h263" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.TI.Video.encoder" },
     { MEDIA_MIMETYPE_VIDEO_H263, "OMX.SEC.H263.Encoder" },
     { MEDIA_MIMETYPE_VIDEO_H263, "M4vH263Encoder" },
 //    { MEDIA_MIMETYPE_VIDEO_H263, "OMX.PV.h263enc" },
+    { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.Nvidia.h264.encoder" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.qcom.7x30.video.encoder.avc" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.qcom.video.encoder.avc" },
     { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.TI.Video.encoder" },
@@ -2163,7 +2173,9 @@ void OMXCodec::onCmdComplete(OMX_COMMANDTYPE cmd, OMX_U32 data) {
                 CHECK_EQ(portIndex, kPortIndexOutput);
 
                 sp<MetaData> oldOutputFormat = mOutputFormat;
-                initOutputFormat(mSource->getFormat());
+                if (strncmp(mComponentName, "OMX.Nvidia.h26",14)) {
+                    initOutputFormat(mSource->getFormat());
+                }
 
                 // Don't notify clients if the output port settings change
                 // wasn't of importance to them, i.e. it may be that just the
