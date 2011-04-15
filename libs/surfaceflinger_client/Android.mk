@@ -1,6 +1,10 @@
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
+ifeq ($(TARGET_OVERLAY_ALWAYS_DETERMINES_FORMAT),true)
+    LOCAL_CFLAGS += -DOVERLAY_ALWAYS_DEFAULT
+endif
+
 LOCAL_SRC_FILES:= \
 	ISurfaceComposer.cpp \
 	ISurface.cpp \
