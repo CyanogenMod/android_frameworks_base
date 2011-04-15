@@ -1732,7 +1732,7 @@ public class TextUtils {
     /**
      * @hide
      */
-    public static boolean isRTLCharacter(char c) {
+    private static boolean isRTLCharacter(char c) {
         //range of RTL characters per unicode specification
         return (c >= 0x0590 && c <= 0x05FF) ||
                (c >= 0xFB1D && c <= 0xFB4F) ||
@@ -1745,12 +1745,12 @@ public class TextUtils {
      * function to check if text range has RTL characters.
      * @hide
      */
-    public static boolean hasRTLCharacters(final char[] text, int start, int end) {
+    private static boolean hasRTLCharacters(final char[] text, int start, int end) {
         if (text == null)
             return false;
 
         //go through all characters
-        for (int i=start; i<end; i++) {
+        for (int i = start; i < end; i++) {
             if (isRTLCharacter(text[i]))
                 return true;
         }
@@ -1767,7 +1767,7 @@ public class TextUtils {
             return false;
 
         //go through all characters
-        for (int i=start; i<end; i++) {
+        for (int i = start; i < end; i++) {
             if (isRTLCharacter(text.charAt(i)))
                 return true;
         }
@@ -1781,8 +1781,8 @@ public class TextUtils {
      * @return String
      * @hide
      */
-    public static String processBidi (final String src) {
-        return (TextUtils.processBidi(src, 0, src.length()));
+    public static String processBidi(final String src) {
+        return src == null ? null : TextUtils.processBidi(src, 0, src.length());
     }
 
     /**
@@ -1791,9 +1791,8 @@ public class TextUtils {
      * @return char[]
      * @hide
      */
-    public static char[] processBidi (final char[] src) {
-
-        return (TextUtils.processBidi(src, 0, src.length));
+    public static char[] processBidi(final char[] src) {
+        return src == null ? null : TextUtils.processBidi(src, 0, src.length);
     }
 
     /**
@@ -1804,11 +1803,8 @@ public class TextUtils {
      * @return String
      * @hide
      */
-    public static String processBidi (final String src, int start, int end) {
-
-        char[] chars2 = TextUtils.processBidi(src.toCharArray(), start, end);
-
-        return (new String(chars2));
+    public static String processBidi(final String src, int start, int end) {
+        return src != null && hasRTLCharacters(src, start, end) ? String.valueOf(TextUtils.processBidi(src.toCharArray(), start, end)) : src;
     }
 
     /**
@@ -1820,14 +1816,20 @@ public class TextUtils {
      * @return char[]
      * @hide
      */
-    public static char[] processBidi (final char[] src, int start, int end) {
+    public static char[] processBidi(final char[] src, int start, int end) {
+        return src != null && hasRTLCharacters(src, start, end) ? processBidiChars(src, start, end) : src;
+    }
 
-        if (src == null)
-            return (src);
-
-        //if there are no right-to-left characters
-        if (!hasRTLCharacters(src,start,end))
-            return (src);
+    /**
+     * function to process bidi on the given text
+     * @author: Eyad Aboulouz
+     * @param src
+     * @param start
+     * @param end
+     * @return char[]
+     * @hide
+     */
+    private static char[] processBidiChars(final char[] src, int start, int end) {
 
         try {
             char[] outputTxt = new char[end-start];
