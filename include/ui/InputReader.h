@@ -504,6 +504,68 @@ private:
     void sync(nsecs_t when);
 };
 
+class MouseInputMapper : public InputMapper {
+public:
+    MouseInputMapper(InputDevice* device, int32_t associatedDisplayId);
+    virtual ~MouseInputMapper();
+
+    virtual uint32_t getSources();
+    virtual void populateDeviceInfo(InputDeviceInfo* deviceInfo);
+    virtual void dump(String8& dump);
+    virtual void reset();
+    virtual void process(const RawEvent* rawEvent);
+
+    virtual int32_t getScanCodeState(uint32_t sourceMask, int32_t scanCode);
+
+private:
+    Mutex mLock;
+
+    int32_t mAssociatedDisplayId;
+
+    struct Accumulator {
+        enum {
+            FIELD_BTN_MOUSE = 1,
+            FIELD_REL_X = 2,
+            FIELD_REL_Y = 4,
+            FIELD_BTN_RIGHT = 8,
+            FIELD_BTN_MIDDLE = 16, 
+            FIELD_BTN_SIDE = 32, 
+            FIELD_BTN_EXTRA = 64, 
+            FIELD_BTN_FORWARD = 128, 
+            FIELD_BTN_BACK = 256,
+	    FIELD_REL_WHEEL = 512,
+        };
+
+        uint32_t fields;
+
+        bool btnMouse;
+        bool btnRight;
+        bool btnMiddle; 
+	bool btnSide;
+	bool btnExtra;
+	bool btnForward;
+	bool btnBack;
+	bool btnScrollUp;
+	bool btnScrollDown;
+        int32_t relX;
+        int32_t relY;
+        int32_t absX;
+        int32_t absY;
+
+        inline void clear() {
+            fields = 0;
+        }
+    } mAccumulator;
+
+    struct LockedState {
+        bool down;
+        nsecs_t downTime;
+    } mLocked;
+
+    void initializeLocked();
+
+    void sync(nsecs_t when);
+};
 
 class TouchInputMapper : public InputMapper {
 public:
