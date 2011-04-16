@@ -58,6 +58,7 @@ import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.telephony.ITelephony;
 import com.android.internal.view.BaseInputHandler;
 import com.android.internal.widget.PointerLocationView;
+import com.android.internal.widget.MousePointerView;
 
 import android.util.Config;
 import android.util.EventLog;
@@ -239,13 +240,30 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     static final int DEFAULT_ACCELEROMETER_ROTATION = 0;
     int mAccelerometerDefault = DEFAULT_ACCELEROMETER_ROTATION;
     boolean mHasSoftInput = false;
-    
-    int mPointerLocationMode = 0;
-    PointerLocationView mPointerLocationView = null;
-    InputChannel mPointerLocationInputChannel;
     boolean mCameraKeyPressable = false;
     static final long NEXT_DURATION = 400;
     private boolean mBottomBar;
+    
+    int mousePointerMode = 0;
+    MousePointerView mousePointerView = null;
+    InputChannel mousePointerInputChannel;
+
+    private final InputHandler mousePointerInputHandler = new BaseInputHandler() {
+        @Override
+        public void handleMotion(MotionEvent event, Runnable finishedCallback) {
+            finishedCallback.run();
+            
+            synchronized (mLock) {
+                if ((mousePointerView != null) && ((event.getSource() & InputDevice.SOURCE_MOUSE) == InputDevice.SOURCE_MOUSE)) {
+                    mousePointerView.addTouchEvent(event);
+                }
+            }
+        }
+    };
+
+    int mPointerLocationMode = 0;
+    PointerLocationView mPointerLocationView = null;
+    InputChannel mPointerLocationInputChannel;
 
     private final InputHandler mPointerLocationInputHandler = new BaseInputHandler() {
         @Override
@@ -343,6 +361,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.SCREEN_OFF_TIMEOUT), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.POINTER_LOCATION), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.MOUSE_POINTER), false, this);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.DEFAULT_INPUT_METHOD), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -747,6 +767,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         boolean updateRotation = false;
         View addView = null;
         View removeView = null;
+        View addMouseView = null;
+        View removeMouseView = null;
         synchronized (mLock) {
             mEndcallBehavior = Settings.System.getInt(resolver,
                     Settings.System.END_BUTTON_BEHAVIOR,
@@ -770,6 +792,22 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (mAccelerometerDefault != accelerometerDefault) {
                 mAccelerometerDefault = accelerometerDefault;
                 updateOrientationListenerLp();
+            }
+            if (mSystemReady) {
+                int mousePointer = Settings.System.getInt(resolver,
+                        Settings.System.MOUSE_POINTER, 0);
+                if (mousePointerMode != mousePointer) {
+                    mousePointerMode = mousePointer;
+                    if (mousePointer != 0) {
+                        if (mousePointerView == null) {
+                            mousePointerView = new MousePointerView(mContext);
+                            addMouseView = mousePointerView;
+                        }
+                    } else {
+                        removeMouseView = mousePointerView;
+                        mousePointerView = null;
+                    }
+                }
             }
             if (mSystemReady) {
                 int pointerLocation = Settings.System.getInt(resolver,
@@ -801,6 +839,44 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
         if (updateRotation) {
             updateRotation(0);
+        }
+        if (addMouseView != null) {
+            WindowManager.LayoutParams lpMouse = new WindowManager.LayoutParams(
+                    WindowManager.LayoutParams.MATCH_PARENT,
+                    WindowManager.LayoutParams.MATCH_PARENT);
+            lpMouse.type = WindowManager.LayoutParams.TYPE_SECURE_SYSTEM_OVERLAY;
+            lpMouse.flags = 
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE|
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE|
+                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+            lpMouse.format = PixelFormat.TRANSLUCENT;
+            lpMouse.setTitle("MousePointer");
+            WindowManagerImpl wmMouse = (WindowManagerImpl)
+                    mContext.getSystemService(Context.WINDOW_SERVICE);
+            wmMouse.addView(addMouseView, lpMouse);
+            
+            if (mousePointerInputChannel == null) {
+                try {
+                    mousePointerInputChannel =
+                        mWindowManager.monitorInput("MousePointerView");
+                    InputQueue.registerInputChannel(mousePointerInputChannel,
+                            mousePointerInputHandler, mHandler.getLooper().getQueue());
+                } catch (RemoteException ex) {
+                    Slog.e(TAG, "Could not set up input monitoring channel for MousePointer.",
+                            ex);
+                }
+            }
+        }
+        if (removeMouseView != null) {
+            if (mousePointerInputChannel != null) {
+                InputQueue.unregisterInputChannel(mousePointerInputChannel);
+                mousePointerInputChannel.dispose();
+                mousePointerInputChannel = null;
+            }
+            
+            WindowManagerImpl wmMouse = (WindowManagerImpl)
+                    mContext.getSystemService(Context.WINDOW_SERVICE);
+            wmMouse.removeView(removeMouseView);
         }
         if (addView != null) {
             WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
