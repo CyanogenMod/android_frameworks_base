@@ -719,7 +719,10 @@ int EventHub::openDevice(const char *deviceName) {
         LOGV("Getting relative controllers...");
         if (ioctl(fd, EVIOCGBIT(EV_REL, sizeof(rel_bitmask)), rel_bitmask) >= 0) {
             if (test_bit(REL_X, rel_bitmask) && test_bit(REL_Y, rel_bitmask)) {
-                device->classes |= INPUT_DEVICE_CLASS_TRACKBALL;
+                if (test_bit(BTN_LEFT, key_bitmask) && test_bit(BTN_RIGHT, key_bitmask))
+                    device->classes |= INPUT_DEVICE_CLASS_MOUSE;
+                else
+                    device->classes |= INPUT_DEVICE_CLASS_TRACKBALL;
             }
         }
     }
