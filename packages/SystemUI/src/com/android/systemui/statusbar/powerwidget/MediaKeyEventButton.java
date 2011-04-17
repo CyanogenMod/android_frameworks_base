@@ -38,4 +38,11 @@ public abstract class MediaKeyEventButton extends PowerButton {
 
         return AUDIO_MANAGER;
     }
+    
+    @Override
+    protected boolean handleLongPress() {
+    	// If there was a 3rd party player friendly way to launch the "now playing" screen,
+    	// that's what I'd do here.  I'm not aware of one though (looked at the manifest of Mixzing, for example)
+    	return false;
+    }
 }

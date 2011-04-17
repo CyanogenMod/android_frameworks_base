@@ -1,13 +1,12 @@
 package com.android.systemui.statusbar.powerwidget;
 
-import com.android.systemui.R;
-
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
+
+import com.android.systemui.R;
 
 public class BluetoothButton extends PowerButton {
 
@@ -119,5 +118,11 @@ public class BluetoothButton extends PowerButton {
         IntentFilter filter = new IntentFilter();
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED);
         return filter;
+    }
+    
+    @Override
+    protected boolean handleLongPress() {
+    	startActivity("com.android.settings", "com.android.settings.bluetooth.BluetoothSettings");
+    	return true;
     }
 }

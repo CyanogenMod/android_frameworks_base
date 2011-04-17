@@ -23,4 +23,9 @@ public class SleepButton extends PowerButton {
                 .getSystemService(Context.POWER_SERVICE);
         pm.goToSleep(SystemClock.uptimeMillis() + 1);
     }
+
+	@Override
+	protected boolean handleLongPress() {
+		return false;
+	}
 }

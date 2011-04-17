@@ -45,4 +45,10 @@ public class FlashlightButton extends PowerButton {
     protected List<Uri> getObservedUris() {
         return OBSERVED_URIS;
     }
+
+	@Override
+	protected boolean handleLongPress() {
+		startActivity("net.cactii.flash2", "net.cactii.flash2.MainActivity");
+		return true;
+	}
 }

@@ -74,5 +74,11 @@ public class LockScreenButton extends PowerButton {
         }
         return LOCK_SCREEN_STATE;
     }
+
+	@Override
+	protected boolean handleLongPress() {
+		startActivity("com.android.settings", "com.android.settings.ChooseLockGeneric");
+		return true;
+	}
 }
 

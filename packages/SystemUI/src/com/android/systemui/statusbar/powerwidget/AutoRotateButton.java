@@ -53,4 +53,10 @@ public class AutoRotateButton extends PowerButton {
                 context.getContentResolver(),
                 Settings.System.ACCELEROMETER_ROTATION, 0);
     }
+
+	@Override
+	protected boolean handleLongPress() {
+		startActivity("com.android.settings", "com.android.settings.DisplaySettings");
+		return true;
+	}
 }

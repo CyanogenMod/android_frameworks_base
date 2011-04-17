@@ -1,26 +1,28 @@
 package com.android.systemui.statusbar.powerwidget;
 
-import com.android.systemui.R;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.graphics.PorterDuff.Mode;
-import android.net.Uri;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.provider.Settings;
-import android.view.View;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import android.app.StatusBarManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.res.Resources;
+import android.graphics.PorterDuff.Mode;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
+import android.os.ServiceManager;
+import android.provider.Settings;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
+
+import com.android.systemui.R;
 
 public abstract class PowerButton {
     public static final String TAG = "PowerButton";
@@ -85,6 +87,8 @@ public abstract class PowerButton {
     protected int mState;
     protected View mView;
     protected String mType = BUTTON_UNKNOWN;
+    protected StatusBarManager mStatusBarMgr;
+
 
     // a static onclicklistener that can be set to register a callback when ANY button is clicked
     private static View.OnClickListener GLOBAL_ON_CLICK_LISTENER = null;
@@ -129,6 +133,23 @@ public abstract class PowerButton {
 
     protected abstract void updateState();
     protected abstract void toggleState();
+   
+    protected abstract boolean handleLongPress();
+
+    protected void startActivity(String activityPackageName, String activityClassName) {
+		Intent intent = new Intent(Intent.ACTION_MAIN); 
+		intent.setClassName(activityPackageName, activityClassName);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+		mView.getContext().startActivity(intent);
+		mStatusBarMgr.collapse();
+    }
+    
+    protected void startActivity(String intentAction) {
+		Intent intent = new Intent(intentAction); 
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
+		mView.getContext().startActivity(intent);
+		mStatusBarMgr.collapse();
+    }
 
     protected void update() {
         updateState();
@@ -158,6 +179,8 @@ public abstract class PowerButton {
         if(mView != null) {
             mView.setTag(mType);
             mView.setOnClickListener(mClickListener);
+            mView.setOnLongClickListener(mLongClickListener);
+            mStatusBarMgr = (StatusBarManager)mView.getContext().getSystemService(Context.STATUS_BAR_SERVICE);
         }
     }
 
@@ -191,6 +214,21 @@ public abstract class PowerButton {
             if(GLOBAL_ON_CLICK_LISTENER != null) {
                 GLOBAL_ON_CLICK_LISTENER.onClick(v);
             }
+        }
+    };
+    
+    private View.OnLongClickListener mLongClickListener = new View.OnLongClickListener() {
+		
+		@Override
+		public boolean onLongClick(View v) {
+            String type = (String)v.getTag();
+
+            for(Map.Entry<String, PowerButton> entry : BUTTONS_LOADED.entrySet()) {
+                if(entry.getKey().equals(type)) {
+                    return entry.getValue().handleLongPress();
+                }
+            }
+            return false;
         }
     };
 

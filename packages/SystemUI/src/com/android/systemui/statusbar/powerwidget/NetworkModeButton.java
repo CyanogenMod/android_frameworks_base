@@ -190,4 +190,10 @@ public class NetworkModeButton extends PowerButton{
                 Settings.System.EXPANDED_NETWORK_MODE,
                 CM_MODE_3G2G);
     }
+
+	@Override
+	protected boolean handleLongPress() {
+		startActivity("com.android.settings", "com.android.settings.WirelessSettings");
+		return true;
+	}
 }

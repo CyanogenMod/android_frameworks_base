@@ -235,4 +235,10 @@ public class BrightnessButton extends PowerButton {
                 Settings.System.EXPANDED_BRIGHTNESS_MODE,
                 CM_MODE_AUTO_MIN_DEF_MAX);
     }
+    
+    @Override
+	protected boolean handleLongPress() {
+    	startActivity("com.android.settings", "com.android.settings.DisplaySettings");
+		return true;
+	}
 }

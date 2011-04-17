@@ -50,4 +50,10 @@ public class GPSButton extends PowerButton {
         return Settings.Secure.isLocationProviderEnabled(resolver,
                 LocationManager.GPS_PROVIDER);
     }
+
+	@Override
+	protected boolean handleLongPress() {
+		startActivity("com.android.settings", "com.android.settings.SecuritySettings");
+		return true;
+	}
 }

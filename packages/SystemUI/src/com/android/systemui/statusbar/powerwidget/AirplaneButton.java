@@ -52,5 +52,11 @@ public class AirplaneButton extends PowerButton {
         return Settings.System.getInt(context.getContentResolver(),
                  Settings.System.AIRPLANE_MODE_ON,0) == 1;
     }
+
+	@Override
+	protected boolean handleLongPress() {
+		startActivity("com.android.settings", "com.android.settings.WirelessSettings");
+		return true;
+	}
 }
 

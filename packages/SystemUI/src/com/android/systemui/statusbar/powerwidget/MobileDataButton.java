@@ -72,5 +72,11 @@ public class MobileDataButton extends PowerButton {
             STATE_CHANGE_REQUEST=false;
         }
     }
+    
+	@Override
+	protected boolean handleLongPress() {
+		startActivity("com.android.settings", "com.android.settings.WirelessSettings");
+		return true;
+	}
 
 }

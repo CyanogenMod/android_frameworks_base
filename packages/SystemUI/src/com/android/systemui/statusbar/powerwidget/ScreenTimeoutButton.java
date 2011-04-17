@@ -141,6 +141,12 @@ public class ScreenTimeoutButton extends PowerButton {
                 Settings.System.EXPANDED_SCREENTIMEOUT_MODE,
                 CM_MODE_15_60_300);
     }
+    
+    @Override
+	protected boolean handleLongPress() {
+    	startActivity("com.android.settings", "com.android.settings.DisplaySettings");
+		return true;
+	}
 }
 
 

@@ -269,4 +269,10 @@ public class SoundButton extends PowerButton {
                 Settings.System.EXPANDED_RING_MODE,
                 CM_MODE_SOUNDVIB_SOUND_VIB_SILENT);
     }
+
+	@Override
+	protected boolean handleLongPress() {
+		startActivity("com.android.settings", "com.android.settings.SoundSettings");
+		return true;
+	}
 }

@@ -1,14 +1,13 @@
 package com.android.systemui.statusbar.powerwidget;
 
-import com.android.systemui.R;
-
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.android.systemui.R;
 
 public class WifiButton extends PowerButton{
 
@@ -134,5 +133,11 @@ public class WifiButton extends PowerButton{
         IntentFilter filter = new IntentFilter();
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         return filter;
+    }
+    
+    @Override
+    protected boolean handleLongPress() {
+    	startActivity("com.android.settings", "com.android.settings.wifi.WifiSettings");
+    	return true;
     }
 }

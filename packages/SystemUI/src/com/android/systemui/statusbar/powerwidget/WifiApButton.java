@@ -139,4 +139,10 @@ public class WifiApButton extends PowerButton {
         filter.addAction(WifiManager.WIFI_AP_STATE_CHANGED_ACTION);
         return filter;
     }
+
+	@Override
+	protected boolean handleLongPress() {
+		startActivity("com.android.settings", "com.android.settings.wifi.WifiApSettings");
+		return true;
+	}
 }
