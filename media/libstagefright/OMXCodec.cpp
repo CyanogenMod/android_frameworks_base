@@ -3802,8 +3802,15 @@ void OMXCodec::initOutputFormat(const sp<MetaData> &inputFormat) {
                 else {
                     LOGV("video_def->nStride = %d, video_def->nSliceHeight = %d", video_def->nStride,
                             video_def->nSliceHeight );
-                    mOutputFormat->setInt32(kKeyWidth, video_def->nStride);
-                    mOutputFormat->setInt32(kKeyHeight, video_def->nSliceHeight);
+                    if (video_def->nStride && video_def->nSliceHeight) {
+                        /* Make sure we actually got the values from the decoder */
+                        mOutputFormat->setInt32(kKeyWidth, video_def->nStride);
+                        mOutputFormat->setInt32(kKeyHeight, video_def->nSliceHeight);
+                    } else {
+                        /* We didn't. Use the old behavior */
+                        mOutputFormat->setInt32(kKeyWidth, video_def->nFrameWidth);
+                        mOutputFormat->setInt32(kKeyHeight, video_def->nFrameHeight);
+                    }
                 }
 #else
                 //Some hardware expects the old behavior
