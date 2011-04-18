@@ -342,6 +342,8 @@ bool MediaPlayer::isPlaying()
             LOGE("internal/external state mismatch corrected");
             mCurrentState = MEDIA_PLAYER_PAUSED;
         }
+        if ((mCurrentState & MEDIA_PLAYER_PAUSED) && temp)
+            mCurrentState = MEDIA_PLAYER_STARTED;
         return temp;
     }
     LOGV("isPlaying: no active player");
