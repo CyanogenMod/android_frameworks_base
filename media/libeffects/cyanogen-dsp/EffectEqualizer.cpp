@@ -47,6 +47,15 @@ typedef struct {
 	int16_t data;
 } reply2x4_1x2_t;
 
+typedef struct {
+	int32_t status;
+	uint32_t psize;
+	uint32_t vsize;
+	int32_t cmd;
+	int32_t arg;
+	int32_t data;
+} reply2x4_1x4_t;
+
 static int64_t toFixedPoint(float in) {
     return (int64_t) (0.5 + in * ((int64_t) 1 << 32));
 }
@@ -129,11 +138,11 @@ int32_t EffectEqualizer::command(uint32_t cmdCode, uint32_t cmdSize, void* pCmdD
 			}
 			if (cmd == EQ_PARAM_CENTER_FREQ && arg >= 0 && arg < 5) {
 				float centerFrequency = 62.5f * powf(4, arg);
-				reply2x4_1x2_t *replyData = (reply2x4_1x2_t *) pReplyData;
+				reply2x4_1x4_t *replyData = (reply2x4_1x4_t *) pReplyData;
 				replyData->status = 0;
-				replyData->vsize = 2;
-				replyData->data = centerFrequency;
-				*replySize = sizeof(reply2x4_1x2_t);
+				replyData->vsize = 4;//from 2 to 4 bytes to do 32bit instead of 16bit so that we can pass milliHertz instead of Hertz
+				replyData->data = int32_t(centerFrequency * 1000);//x 1000 to convert to milliHertz as per API spec
+				*replySize = sizeof(reply2x4_1x4_t);
 				return 0;
 			}
 		}
