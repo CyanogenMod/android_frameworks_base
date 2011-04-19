@@ -21,6 +21,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.util.Log;
 
 public class ProfileManager
 {
@@ -43,7 +44,8 @@ public class ProfileManager
         return sService;
     }
 
-    /* package */ProfileManager(Context context, Handler handler)
+    /** @hide */
+    ProfileManager(Context context, Handler handler)
     {
         mContext = context;
     }
@@ -53,6 +55,7 @@ public class ProfileManager
             getService().setActiveProfile(profileName);
             getService().persist();
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
     }
 
@@ -60,22 +63,27 @@ public class ProfileManager
         try {
             return getService().getActiveProfile();
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
         return null;
     }
 
+    /** @hide */
     public void addProfile(Profile profile){
         try {
             getService().addProfile(profile);
             getService().persist();
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
     }
 
+    /** @hide */
     public void removeProfile(Profile profile){
         try {
             getService().removeProfile(profile);
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
     }
 
@@ -83,6 +91,22 @@ public class ProfileManager
         try {
             return getService().getProfile(profileName);
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return null;
+    }
+
+    public String[] getProfileNames(){
+        try {
+            Profile[] profiles = getService().getProfiles();
+            String[] names = new String[profiles.length];
+            int i=0;
+            for(Profile profile : profiles){
+                names[i++] = profile.getName();
+            }
+            return names;
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
         return null;
     }
@@ -91,53 +115,67 @@ public class ProfileManager
         try {
             return getService().getProfiles();
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
         return null;
     }
 
+    /** @hide */
     public NotificationGroup[] getNotificationGroups(){
         try {
             return getService().getNotificationGroups();
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
         return null;
     }
 
+    /** @hide */
     public void addNotificationGroup(NotificationGroup group){
         try {
             getService().addNotificationGroup(group);
             getService().persist();
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
     }
 
+    /** @hide */
     public void removeNotificationGroup(NotificationGroup group){
         try {
             getService().removeNotificationGroup(group);
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
     }
 
+    /** @hide */
     public NotificationGroup getNotificationGroupForPackage(String pkg){
         try {
             return getService().getNotificationGroupForPackage(pkg);
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
         return null;
     }
 
+    /** @hide */
     public NotificationGroup getNotificationGroup(String name){
         try {
             return getService().getNotificationGroup(name);
         } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
         }
         return null;
     }
 
+    /** @hide */
     public ProfileGroup getActiveProfileGroup(String packageName) {
         NotificationGroup notificationGroup = getNotificationGroupForPackage(packageName);
         if(notificationGroup == null){
-            return getActiveProfile().getDefaultGroup();
+            ProfileGroup defaultGroup = getActiveProfile().getDefaultGroup();
+            Log.v(TAG, "No active group, returning default: " + (defaultGroup == null ? "null" : defaultGroup.getName()));
+            return defaultGroup;
         }
         String notificationGroupName = notificationGroup.getName();
         return getActiveProfile().getProfileGroup(notificationGroupName);

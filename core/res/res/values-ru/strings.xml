@@ -943,4 +943,13 @@
     <!-- Name of wildcard profile. -->
     <string name="wildcardProfile">Другой</string>
 
+    <!-- label for item that emulates the hardware button: home -->
+    <string name="global_action_home">Домой</string>
+
+    <!-- label for item that emulates the hardware button: menu -->
+    <string name="global_action_menu">Меню</string>
+
+    <!-- label for item that emulates the hardware button: back -->
+    <string name="global_action_back">Назад</string>
+
 </resources>

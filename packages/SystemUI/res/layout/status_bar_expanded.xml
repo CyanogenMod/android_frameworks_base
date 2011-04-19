@@ -3,6 +3,7 @@
 /* apps/common/assets/default/default/skins/StatusBar.xml
 **
 ** Copyright 2006, The Android Open Source Project
+** Patched by Sven Dawitz; Copyright (C) 2011 CyanogenMod Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License"); 
 ** you may not use this file except in compliance with the License. 
@@ -24,7 +25,8 @@
     android:descendantFocusability="afterDescendants"
     >
 
-    <LinearLayout android:id="@+id/exp_view_lin_layout"
+    <LinearLayout
+        android:id="@+id/power_and_carrier"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -54,7 +56,7 @@
                 android:paddingBottom="1dp"
                 android:paddingLeft="4dp"
                 android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textColor="#ffdfdfdf"
+                android:textColor="@color/carrier_label_text_color"
                 />
             <TextView android:id="@+id/clear_all_button"
                 android:layout_width="wrap_content"
@@ -73,7 +75,7 @@
         </LinearLayout>
     </LinearLayout>
 
-    <FrameLayout
+    <FrameLayout android:id="@+id/notifications"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"

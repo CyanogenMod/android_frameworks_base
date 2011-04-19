@@ -26,6 +26,35 @@ namespace android {
 struct OMXMaster;
 class OMXNodeInstance;
 
+// data structures for tunneling buffers
+typedef struct PLATFORM_PRIVATE_PMEM_INFO
+{
+    /* pmem file descriptor */
+    size_t pmem_fd;
+    size_t offset;
+} PLATFORM_PRIVATE_PMEM_INFO;
+
+typedef struct PLATFORM_PRIVATE_ENTRY
+{
+    /* Entry type */
+    size_t type;
+
+    /* Pointer to platform specific entry */
+    void* entry;
+} PLATFORM_PRIVATE_ENTRY;
+
+typedef struct PLATFORM_PRIVATE_LIST
+{
+    /* Number of entries */
+    size_t nEntries;
+
+    /* Pointer to array of platform specific entries *
+     * Contiguous block of PLATFORM_PRIVATE_ENTRY elements */
+    PLATFORM_PRIVATE_ENTRY* entryList;
+} PLATFORM_PRIVATE_LIST;
+
+#define PLATFORM_PRIVATE_PMEM 1
+
 class OMX : public BnOMX,
             public IBinder::DeathRecipient {
 public:

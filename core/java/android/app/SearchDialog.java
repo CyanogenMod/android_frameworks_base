@@ -239,6 +239,15 @@ public class SearchDialog extends Dialog implements OnItemClickListener, OnItemS
             // Display the drop down as soon as possible instead of waiting for the rest of the
             // pending UI stuff to get done, so that things appear faster to the user.
             mSearchAutoComplete.showDropDownAfterLayout();
+
+            mSearchAutoComplete.post(new Runnable() {
+                public void run() {
+                    // Restore default value for selection on-focus when avery things are draw
+                    mSearchAutoComplete.setSelectAllOnFocus(true);
+                }
+            });
+
+
         }
         return success;
     }
@@ -483,6 +492,10 @@ public class SearchDialog extends Dialog implements OnItemClickListener, OnItemS
         mSearchAutoComplete.setDropDownDismissedOnCompletion(false);
 
         mSearchAutoComplete.setForceIgnoreOutsideTouch(true);
+
+        // Don't select text on first focus, because if user have hard keyboard, first letter will selected when UI are shown
+        // we reenable it after all view are loaded
+        mSearchAutoComplete.setSelectAllOnFocus(false);
 
         // attach the suggestions adapter, if suggestions are available
         // The existence of a suggestions authority is the proxy for "suggestions available here"

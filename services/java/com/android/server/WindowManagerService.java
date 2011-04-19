@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
+ * Patched by Sven Dawitz; Copyright (C) 2011 CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +39,7 @@ import static android.view.WindowManager.LayoutParams.TYPE_WALLPAPER;
 
 import com.android.internal.app.IBatteryStats;
 import com.android.internal.policy.PolicyManager;
+import com.android.internal.policy.impl.CmPhoneWindowManager;
 import com.android.internal.policy.impl.PhoneWindowManager;
 import com.android.internal.view.IInputContext;
 import com.android.internal.view.IInputMethodClient;
@@ -8738,7 +8740,7 @@ public class WindowManagerService extends IWindowManager.Stub
                                         + " interesting=" + numInteresting
                                         + " drawn=" + wtoken.numDrawnWindows);
                                 wtoken.allDrawn = true;
-                                changes |= PhoneWindowManager.FINISH_LAYOUT_REDO_ANIM;
+                                changes |= CmPhoneWindowManager.FINISH_LAYOUT_REDO_ANIM;
 
                                 // We can now show all of the drawn windows!
                                 if (!mOpeningApps.contains(wtoken)) {

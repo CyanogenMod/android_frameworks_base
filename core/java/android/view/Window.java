@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2006 The Android Open Source Project
+ * Patched by Sven Dawitz; Copyright (C) 2011 CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +17,10 @@
 
 package android.view;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.PixelFormat;
@@ -24,7 +28,12 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.CmSystem;
+import android.provider.Settings;
 import android.view.accessibility.AccessibilityEvent;
+
+import static android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN;
+import static android.view.WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN;;
 
 /**
  * Abstract base class for a top-level window look and behavior policy.  An
@@ -108,7 +117,32 @@ public abstract class Window {
     private int mDefaultWindowFormat = PixelFormat.OPAQUE;
 
     private boolean mHasSoftInputMode = false;
-    
+    private Intent mFullscreenAttemptIntent = null;
+    private FullscreenReceiver mFullscreenReceiver=null;
+    private String mForceFullscreenIntent = "android.intent.action.FORCE_FULLSCREEN";
+    private String mRemoveFullscreenIntent = "android.intent.action.REMOVE_FULLSCREEN";
+
+    class FullscreenReceiver extends BroadcastReceiver {
+        public void onReceive(Context context, Intent intent){
+            final WindowManager.LayoutParams attrs = getAttributes();
+
+            if(mForceFullscreenIntent.compareTo(intent.getAction())==0){
+                context.sendBroadcast(new Intent("android.intent.action.FULLSCREEN_REAL_ON"));
+                attrs.flags &= ~FLAG_FORCE_NOT_FULLSCREEN;
+                attrs.flags |= FLAG_FULLSCREEN;
+            }
+            if(mRemoveFullscreenIntent.compareTo(intent.getAction())==0){
+                context.sendBroadcast(new Intent("android.intent.action.FULLSCREEN_REAL_OFF"));
+                attrs.flags &= ~FLAG_FULLSCREEN;
+                attrs.flags |= FLAG_FORCE_NOT_FULLSCREEN;
+            }
+
+            if (mCallback != null) {
+                mCallback.onWindowAttributesChanged(attrs);
+            }
+        }
+    }
+
     // The current window attributes.
     private final WindowManager.LayoutParams mWindowAttributes =
         new WindowManager.LayoutParams();
@@ -296,6 +330,13 @@ public abstract class Window {
 
     public Window(Context context) {
         mContext = context;
+    }
+
+    @Override
+    protected void finalize() throws Throwable {
+        if(mFullscreenReceiver!=null)
+            mContext.unregisterReceiver(mFullscreenReceiver);
+        super.finalize();
     }
 
     /**
@@ -647,6 +688,9 @@ public abstract class Window {
      */
     public void setFlags(int flags, int mask) {
         final WindowManager.LayoutParams attrs = getAttributes();
+
+        flags=interceptFsRequest(flags);
+
         attrs.flags = (attrs.flags&~mask) | (flags&mask);
         mForcedWindowFlags |= mask;
         if (mCallback != null) {
@@ -665,6 +709,7 @@ public abstract class Window {
      *          current values.
      */
     public void setAttributes(WindowManager.LayoutParams a) {
+        a.flags=interceptFsRequest(a.flags);
         mWindowAttributes.copyFrom(a);
         if (mCallback != null) {
             mCallback.onWindowAttributesChanged(mWindowAttributes);
@@ -1050,5 +1095,35 @@ public abstract class Window {
      * @see android.app.Activity#getVolumeControlStream()
      */
     public abstract int getVolumeControlStream();
-    
+
+    /**
+     * @hide
+     */
+    protected int interceptFsRequest(int inFlags){
+        int result=inFlags;
+
+        // override fullscreen if selected in tablet tweaks
+        if((result&FLAG_FULLSCREEN) == FLAG_FULLSCREEN){
+            int defValue=(CmSystem.getDefaultBool(mContext, CmSystem.CM_DEFAULT_DISABLE_FULLSCREEN) ? 1 : 0);
+            boolean disableFullscreen=(Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.FULLSCREEN_DISABLED, defValue) == 1);
+            if(disableFullscreen){
+                // modify flags
+                result&= ~FLAG_FULLSCREEN;
+                result|= FLAG_FORCE_NOT_FULLSCREEN;
+                // broadcast to StatusBarView
+                if(mFullscreenAttemptIntent==null)
+                    mFullscreenAttemptIntent=new Intent("android.intent.action.FULLSCREEN_ATTEMPT");
+                mContext.sendBroadcast(mFullscreenAttemptIntent);
+                // set up the receiver for fullscreen callback from status bar and phonewindowmanager
+                if(mFullscreenReceiver==null){
+                    mFullscreenReceiver=new FullscreenReceiver();
+                    mContext.registerReceiver(mFullscreenReceiver, new IntentFilter(mForceFullscreenIntent));
+                    mContext.registerReceiver(mFullscreenReceiver, new IntentFilter(mRemoveFullscreenIntent));
+                }
+            }
+        }
+
+        return result;
+    }
 }

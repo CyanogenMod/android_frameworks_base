@@ -49,10 +49,10 @@ public class CmBatteryMiniIcon extends ImageView {
     static final int BATTERY_MINI_ICON_MARGIN_RIGHT_DIP = 6;
 
     // duration of each frame in charging animation in millis
-    static final int ANIM_FRAME_DURATION = (1000 / 3);
+    static final int ANIM_FRAME_DURATION = 750;
 
     // duration of each fake-timer call to update animation in millis
-    static final int ANIM_TIMER_DURATION = (1000 / 6);
+    static final int ANIM_TIMER_DURATION = 333;
 
     // contains the current bat level, values: 0-100
     private int mBatteryLevel = 0;
@@ -207,14 +207,14 @@ public class CmBatteryMiniIcon extends ImageView {
             if (mLastMillis == 0) {
                 // just got plugged - setup animation
                 mLastMillis = SystemClock.uptimeMillis();
-                mCurrentFrame = 1;
+                mCurrentFrame = mBatteryLevel / 10;
             }
             long now = SystemClock.uptimeMillis();
 
             while (now - mLastMillis > ANIM_FRAME_DURATION) {
                 mCurrentFrame++;
                 if (mCurrentFrame > 10)
-                    mCurrentFrame = 1;
+                    mCurrentFrame = mBatteryLevel / 10;
                 mLastMillis += ANIM_FRAME_DURATION;
             }
         } else {

@@ -17,7 +17,9 @@
 package com.android.internal.widget;
 
 import android.os.Bundle;
+import android.text.AndroidCharacter;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.method.KeyListener;
 import android.util.Log;
 import android.view.inputmethod.BaseInputConnection;
@@ -104,7 +106,7 @@ public class EditableInputConnection extends BaseInputConnection {
         }
         return null;
     }
-    
+
     public boolean performPrivateCommand(String action, Bundle data) {
         mTextView.onPrivateIMECommand(action, data);
         return true;
@@ -112,9 +114,16 @@ public class EditableInputConnection extends BaseInputConnection {
 
     @Override
     public boolean commitText(CharSequence text, int newCursorPosition) {
+
         if (mTextView == null) {
             return super.commitText(text, newCursorPosition);
         }
+
+        //if text is in RTL mode then mirror symbols
+        //we only want to process single characters because that's what gets sent when you use the keyboard
+        //if you process everything in the text parameter, you'll end up mirroring things like emoticons!
+        if (TextUtils.hasRTLCharacters(mTextView.getText(), 0, mTextView.getText().length()) && text.length() == 1)
+            text = String.valueOf(AndroidCharacter.getMirror(text.charAt(0)));
 
         CharSequence errorBefore = mTextView.getError();
         boolean success = super.commitText(text, newCursorPosition);

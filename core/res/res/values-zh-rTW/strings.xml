@@ -317,6 +317,15 @@
     <!-- Title of the Global Actions Dialog -->
     <string name="global_actions" msgid="2406416831541615258">"電話選項"</string>
 
+    <!-- label for item that emulates the hardware button: home -->
+    <string name="global_action_home">主頁</string>
+
+    <!-- label for item that emulates the hardware button: menu -->
+    <string name="global_action_menu">選單</string>
+
+    <!-- label for item that emulates the hardware button: back -->
+    <string name="global_action_back">返回</string>
+
     <!-- label for item that locks the phone in the phone options dialog -->
     <string name="global_action_lock" msgid="2844945191792119712">"螢幕鎖定"</string>
 

@@ -1,4 +1,5 @@
 /*
+ * Patched by Sven Dawitz; Copyright (C) 2011 CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2823,11 +2824,11 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
     }
 
     void sendCloseSystemWindows() {
-        PhoneWindowManager.sendCloseSystemWindows(getContext(), null);
+        CmPhoneWindowManager.sendCloseSystemWindows(getContext(), null);
     }
 
     void sendCloseSystemWindows(String reason) {
-        PhoneWindowManager.sendCloseSystemWindows(getContext(), reason);
+        CmPhoneWindowManager.sendCloseSystemWindows(getContext(), reason);
     }
 
     void runCustomApp(String uri) {

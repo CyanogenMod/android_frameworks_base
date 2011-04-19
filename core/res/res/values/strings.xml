@@ -316,6 +316,15 @@
     <!-- Title of the Global Actions Dialog -->
     <string name="global_actions">Phone options</string>
 
+    <!-- label for item that emulates the hardware button: home -->
+    <string name="global_action_home">Home</string>
+
+    <!-- label for item that emulates the hardware button: menu -->
+    <string name="global_action_menu">Menu</string>
+
+    <!-- label for item that emulates the hardware button: back -->
+    <string name="global_action_back">Back</string>
+
     <!-- label for item that locks the phone in the phone options dialog -->
     <string name="global_action_lock">Screen lock</string>
 

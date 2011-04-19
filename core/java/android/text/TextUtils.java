@@ -43,10 +43,14 @@ import android.text.style.TextAppearanceSpan;
 import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
+import android.util.Log;
 import android.util.Printer;
 
 import com.android.internal.util.ArrayUtils;
 
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.Charset;
 import java.util.regex.Pattern;
 import java.util.Iterator;
 
@@ -523,6 +527,50 @@ public class TextUtils {
                 dest[destoff + i] = dest[destoff + len - i - 1];
                 dest[destoff + len - i - 1] = tmp;
             }
+        }
+
+        private CharSequence mSource;
+        private int mStart;
+        private int mEnd;
+    }
+
+    public static CharSequence getMirror(CharSequence source,
+                                          int start, int end) {
+        return new Mirrorer(source, start, end);
+    }
+
+    private static class Mirrorer
+    implements CharSequence, GetChars
+    {
+        public Mirrorer(CharSequence source, int start, int end) {
+            mSource = source;
+            mStart = start;
+            mEnd = end;
+        }
+
+        public int length() {
+            return mEnd - mStart;
+        }
+
+        public CharSequence subSequence(int start, int end) {
+            char[] buf = new char[end - start];
+
+            getChars(start, end, buf, 0);
+            return new String(buf);
+        }
+
+        public String toString() {
+            return subSequence(0, length()).toString();
+        }
+
+        public char charAt(int off) {
+            return AndroidCharacter.getMirror(mSource.charAt(mEnd - 1 - off));
+        }
+
+        public void getChars(int start, int end, char[] dest, int destoff) {
+            TextUtils.getChars(mSource, start + mStart, end + mStart,
+                               dest, destoff);
+            AndroidCharacter.mirror(dest, 0, end - start);
         }
 
         private CharSequence mSource;
@@ -1679,6 +1727,127 @@ public class TextUtils {
             }
         }
         return false;
+    }
+
+    /**
+     * @hide
+     */
+    private static boolean isRTLCharacter(char c) {
+        //range of RTL characters per unicode specification
+        return (c >= 0x0590 && c <= 0x05FF) ||
+               (c >= 0xFB1D && c <= 0xFB4F) ||
+               (c >= 0x0600 && c <= 0x07BF) ||
+               (c >= 0xFB50 && c <= 0xFDFF) ||
+               (c >= 0xFE70 && c <= 0xFEFE)    ;
+    }
+
+    /**
+     * function to check if text range has RTL characters.
+     * @hide
+     */
+    private static boolean hasRTLCharacters(final char[] text, int start, int end) {
+        if (text == null)
+            return false;
+
+        //go through all characters
+        for (int i = start; i < end; i++) {
+            if (isRTLCharacter(text[i]))
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * function to check if text range has RTL characters.
+     * @hide
+     */
+    public static boolean hasRTLCharacters(CharSequence text, int start, int end) {
+        if (text == null)
+            return false;
+
+        //go through all characters
+        for (int i = start; i < end; i++) {
+            if (isRTLCharacter(text.charAt(i)))
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * function to process bidi on the given text
+     * @param src
+     * @return String
+     * @hide
+     */
+    public static String processBidi(final String src) {
+        return src == null ? null : TextUtils.processBidi(src, 0, src.length());
+    }
+
+    /**
+     * function to process bidi the given text
+     * @param src
+     * @return char[]
+     * @hide
+     */
+    public static char[] processBidi(final char[] src) {
+        return src == null ? null : TextUtils.processBidi(src, 0, src.length);
+    }
+
+    /**
+     * function to process bidi on the given text
+     * @param src
+     * @param begin
+     * @param end
+     * @return String
+     * @hide
+     */
+    public static String processBidi(final String src, int start, int end) {
+        return src != null && hasRTLCharacters(src, start, end) ? String.valueOf(TextUtils.processBidi(src.toCharArray(), start, end)) : src;
+    }
+
+    /**
+     * function to process bidi on the given text
+     * @author: Eyad Aboulouz
+     * @param src
+     * @param start
+     * @param end
+     * @return char[]
+     * @hide
+     */
+    public static char[] processBidi(final char[] src, int start, int end) {
+        return src != null && hasRTLCharacters(src, start, end) ? processBidiChars(src, start, end) : src;
+    }
+
+    /**
+     * function to process bidi on the given text
+     * @author: Eyad Aboulouz
+     * @param src
+     * @param start
+     * @param end
+     * @return char[]
+     * @hide
+     */
+    private static char[] processBidiChars(final char[] src, int start, int end) {
+
+        try {
+            char[] outputTxt = new char[end-start];
+            char[] ret = src.clone();
+
+            int outputSize = AndroidBidi.reorderAndReshapeBidiText(ret, outputTxt, start, end-start);
+
+            if (outputSize != (end-start))
+                throw new Exception ("Error Processing Bidi Reordering And Reshaping");
+
+            System.arraycopy(outputTxt, 0, ret, start, end-start);
+
+            return (ret);
+
+        } catch (Exception e) {
+
+            return (src);
+        }
     }
 
     private static Object sLock = new Object();

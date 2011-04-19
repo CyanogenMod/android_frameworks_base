@@ -1216,15 +1216,6 @@ class MountService extends IMountService.Stub
                 }
             }
         }
-        additionalVolumesProperty = SystemProperties.get("ro.removablemounts");
-        if (null != additionalVolumesProperty) {
-            String[] additionalVolumes = additionalVolumesProperty.split(";");
-            for (String additionalVolume: additionalVolumes) {
-                if (!"".equals(additionalVolume)) {
-                    volumesToMount.add(additionalVolume);
-                }
-            }
-        }
         return volumesToMount;
     }
 
@@ -1562,7 +1553,8 @@ class MountService extends IMountService.Stub
         } catch (NativeDaemonConnectorException e) {
             int code = e.getCode();
             if (code == VoldResponseCode.OpFailedStorageNotFound) {
-                throw new IllegalArgumentException(String.format("Container '%s' not found", id));
+                Slog.i(TAG, String.format("Container '%s' not found", id));
+                return null;
             } else {
                 throw new IllegalStateException(String.format("Unexpected response code %d", code));
             }

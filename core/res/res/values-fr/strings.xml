@@ -35,6 +35,17 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"Problème de connexion ou code IHM non valide."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"Opération réservée aux numéros autorisés"</string>
+    <string name="profileNameDefault">"Défaut"</string>
+    <string name="profileNameWork">"Travail"</string>
+    <string name="profileNameHome">"Maison"</string>
+    <string name="profileNameSilent">"Silencieux"</string>
+    <string name="profileNameNight">"Nuit"</string>
+    <string name="profileGroupPhone">"Téléphone"</string>
+    <string name="profileGroupCalendar">"Calendrier"</string>
+    <string name="profileGroupGmail">"Gmail"</string>
+    <string name="profileGroupEmail">"Email"</string>
+    <string name="profileGroupSMS">"SMS"</string>
+    <string name="wildcardProfile">"Autre"</string>
     <string name="serviceEnabled" msgid="8147278346414714315">"Le service a été activé."</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"Ce service a été activé pour :"</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"Ce service a été désactivé."</string>
@@ -144,6 +155,7 @@
     <string name="global_action_lock" msgid="2844945191792119712">"Verrouillage de l\'écran"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Éteindre"</string>
     <string name="global_action_reboot">"Redémarrer"</string>
+    <string name="global_action_choose_profile">"Choisir un profil"</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Mode silencieux"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Le son est désactivé."</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Le son est activé."</string>
