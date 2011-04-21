@@ -506,21 +506,29 @@ public class LockPatternUtils {
             byte[] saltedPassword = (password + getSalt()).getBytes();
             byte[] sha1 = MessageDigest.getInstance(algo = "SHA-1").digest(saltedPassword);
             byte[] md5 = MessageDigest.getInstance(algo = "MD5").digest(saltedPassword);
-            hashed = (toHex(sha1) + toHex(md5)).getBytes();
+            hashed = toHex(sha1, md5);
         } catch (NoSuchAlgorithmException e) {
             Log.w(TAG, "Failed to encode string because of missing algorithm: " + algo);
         }
         return hashed;
     }
 
-    private static String toHex(byte[] ary) {
-        final String hex = "0123456789ABCDEF";
-        String ret = "";
-        for (int i = 0; i < ary.length; i++) {
-            ret += hex.charAt((ary[i] >> 4) & 0xf);
-            ret += hex.charAt(ary[i] & 0xf);
+    private static final byte[] HEX_CHARS = new byte[]{
+            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
+    };
+
+    private static byte[] toHex(final byte[] array1, final byte[] array2) {
+        final byte[] result = new byte[(array1.length + array2.length) * 2];
+        int i = 0;
+        for (final byte b : array1) {
+            result[i++] = HEX_CHARS[(b >> 4) & 0xf];
+            result[i++] = HEX_CHARS[b & 0xf];
         }
-        return ret;
+        for (final byte b : array2) {
+            result[i++] = HEX_CHARS[(b >> 4) & 0xf];
+            result[i++] = HEX_CHARS[b & 0xf];
+        }
+        return result;
     }
 
     /**
