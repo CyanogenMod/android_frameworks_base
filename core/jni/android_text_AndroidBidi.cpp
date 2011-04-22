@@ -73,6 +73,8 @@ static jint reorderReshapeBidiText (JNIEnv* env, jclass c, jcharArray srcArray, 
 
     UBiDi *para = ubidi_openSized(n, 0, &status);
 
+    ubidi_setReorderingMode(para, UBIDI_REORDER_INVERSE_LIKE_DIRECT);
+
     jchar* src = env->GetCharArrayElements(srcArray, NULL);
 
     if (src != NULL && para != NULL && U_SUCCESS(status)) {
