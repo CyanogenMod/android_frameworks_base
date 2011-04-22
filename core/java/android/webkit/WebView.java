@@ -6907,7 +6907,7 @@ public class WebView extends AbsoluteLayout
 
                             if (mInitialScaleInPercent > 0) {
                                 setNewZoomScale(mInitialScaleInPercent / 100.0f,
-                                    mInitialScaleInPercent != ((int)mTextWrapScale * 100),
+                                    mInitialScaleInPercent != (int)(mTextWrapScale * 100),
                                     false);
                             } else if (restoreState.mViewScale > 0) {
                                 mTextWrapScale = restoreState.mTextWrapScale;
