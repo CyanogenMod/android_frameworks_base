@@ -45,15 +45,17 @@ M4vH263Decoder::M4vH263Decoder(const sp<MediaSource> &source)
     mFormat = new MetaData;
     mFormat->setCString(kKeyMIMEType, MEDIA_MIMETYPE_VIDEO_RAW);
 
-    // CHECK(mSource->getFormat()->findInt32(kKeyWidth, &mWidth));
-    // CHECK(mSource->getFormat()->findInt32(kKeyHeight, &mHeight));
-
+#ifdef TARGET_SF_NEEDS_REAL_DIMENSIONS
+    CHECK(mSource->getFormat()->findInt32(kKeyWidth, &mWidth));
+    CHECK(mSource->getFormat()->findInt32(kKeyHeight, &mHeight));
+#else
     // We'll ignore the dimension advertised by the source, the decoder
     // appears to require us to always start with the default dimensions
     // of 352 x 288 to operate correctly and later react to changes in
     // the dimensions as needed.
     mWidth = 352;
     mHeight = 288;
+#endif
 
     mFormat->setInt32(kKeyWidth, mWidth);
     mFormat->setInt32(kKeyHeight, mHeight);
