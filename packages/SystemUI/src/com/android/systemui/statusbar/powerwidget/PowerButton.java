@@ -89,6 +89,9 @@ public abstract class PowerButton {
     // a static onclicklistener that can be set to register a callback when ANY button is clicked
     private static View.OnClickListener GLOBAL_ON_CLICK_LISTENER = null;
 
+    // a static onlongclicklistener that can be set to register a callback when ANY button is long clicked
+    private static View.OnLongClickListener GLOBAL_ON_LONG_CLICK_LISTENER = null;
+
     // we use this to ensure we update our views on the UI thread
     private Handler mViewUpdateHandler = new Handler() {
             public void handleMessage(Message msg) {
@@ -129,6 +132,7 @@ public abstract class PowerButton {
 
     protected abstract void updateState();
     protected abstract void toggleState();
+    protected abstract boolean handleLongClick();
 
     protected void update() {
         updateState();
@@ -158,6 +162,7 @@ public abstract class PowerButton {
         if(mView != null) {
             mView.setTag(mType);
             mView.setOnClickListener(mClickListener);
+            mView.setOnLongClickListener(mLongClickListener);
         }
     }
 
@@ -191,6 +196,24 @@ public abstract class PowerButton {
             if(GLOBAL_ON_CLICK_LISTENER != null) {
                 GLOBAL_ON_CLICK_LISTENER.onClick(v);
             }
+        }
+    };
+
+    private View.OnLongClickListener mLongClickListener = new View.OnLongClickListener() {
+        public boolean onLongClick(View v) {
+            boolean result = false;
+            String type = (String)v.getTag();
+            for (Map.Entry<String, PowerButton> entry : BUTTONS_LOADED.entrySet()) {
+                if(entry.getKey().endsWith(type)) {
+                    result = entry.getValue().handleLongClick();
+                    break;
+                }
+            }
+
+            if(result && GLOBAL_ON_LONG_CLICK_LISTENER != null) {
+                GLOBAL_ON_LONG_CLICK_LISTENER.onLongClick(v);
+            }
+            return result;
         }
     };
 
@@ -321,6 +344,10 @@ public abstract class PowerButton {
 
     public static void setGlobalOnClickListener(View.OnClickListener listener) {
         GLOBAL_ON_CLICK_LISTENER = listener;
+    }
+
+    public static void setGlobalOnLongClickListener(View.OnLongClickListener listener) {
+        GLOBAL_ON_LONG_CLICK_LISTENER = listener;
     }
 
     protected static PowerButton getLoadedButton(String key) {

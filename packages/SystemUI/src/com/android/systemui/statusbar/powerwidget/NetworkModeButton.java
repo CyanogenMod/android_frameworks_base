@@ -120,6 +120,17 @@ public class NetworkModeButton extends PowerButton{
     }
 
     @Override
+    protected boolean handleLongClick() {
+        // it may be better to make an Intent action for this or find the appropriate one
+        // we may want to look at that option later
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setClassName("com.android.phone", "com.android.phone.Settings");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mView.getContext().startActivity(intent);
+        return true;
+    }
+
+    @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getExtras() != null) {
             NETWORK_MODE = intent.getExtras().getInt(EXTRA_NETWORK_MODE);
