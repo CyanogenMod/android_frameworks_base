@@ -118,6 +118,10 @@ ifeq ($(BOARD_USE_BROADCOM_FM_VOLUME_HACK),true)
   LOCAL_CFLAGS += -DUSE_BROADCOM_FM_VOLUME_HACK
 endif
 
+ifeq ($(BOARD_USES_FROYO_AUDIOPOLICY),true)
+  LOCAL_CFLAGS += -DFROYO_AUDIOPOLICY
+endif
+
 ifeq ($(TARGET_SIMULATOR),true)
     ifeq ($(HOST_OS),linux)
         LOCAL_LDLIBS += -lrt -lpthread
