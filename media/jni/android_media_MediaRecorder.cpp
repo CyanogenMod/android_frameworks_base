@@ -119,9 +119,11 @@ static bool process_media_recorder_call(JNIEnv *env, status_t opStatus, const ch
     if (opStatus == (status_t)INVALID_OPERATION) {
         jniThrowException(env, "java/lang/IllegalStateException", NULL);
         return true;
+#ifndef USE_BOARD_MEDIARECORDER
     } else if (opStatus != (status_t)OK) {
         jniThrowException(env, exception, message);
         return true;
+#endif
     }
     return false;
 }

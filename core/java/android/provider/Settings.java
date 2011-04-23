@@ -1584,6 +1584,13 @@ public final class Settings {
         public static final String VOLUME_CONTROL_SILENT = "volume_contol_silent";
 
         /**
+         * Whether notifications should vibrate during phone calls or not.
+         *
+         * @hide
+         */
+        public static final String VIBRATE_IN_CALL = "vibrate-in-call";
+
+        /**
          * The mapping of stream type (integer) to its setting.
          */
         public static final String[] VOLUME_SETTINGS = {
@@ -2301,6 +2308,13 @@ public final class Settings {
         public static final String LONG_VOL_BOTH_ACTION = "long_vol_both_action";
 
         /**
+         * Whether to use compact carrier label layout
+         *
+         * @hide
+         */
+        public static final String STATUS_BAR_COMPACT_CARRIER = "status_bar_compact_carrier";
+
+        /**
          * Whether to wake the screen with the trackball. The value is boolean (1 or 0).
          * @hide
          */
@@ -2521,6 +2535,13 @@ public final class Settings {
          * @hide
          */
         public static final String EXPANDED_HIDE_ONCHANGE = "expanded_hide_onchange";
+
+        /**
+         * Hide scroll bar in power widget
+         *
+         * @hide
+         */
+        public static final String EXPANDED_HIDE_SCROLLBAR = "expanded_hide_scrollbar";
 
         /**
          * Notification Indicator Color

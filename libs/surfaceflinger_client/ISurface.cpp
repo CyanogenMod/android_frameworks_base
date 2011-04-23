@@ -132,6 +132,9 @@ public:
     virtual sp<OverlayRef> createOverlay(
              uint32_t w, uint32_t h, int32_t format, int32_t orientation)
     {
+#ifdef OVERLAY_ALWAYS_DEFAULT
+	format = OVERLAY_FORMAT_DEFAULT;
+#endif
         Parcel data, reply;
         data.writeInterfaceToken(ISurface::getInterfaceDescriptor());
         data.writeInt32(w);

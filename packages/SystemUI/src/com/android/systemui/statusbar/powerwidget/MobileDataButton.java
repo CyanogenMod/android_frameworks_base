@@ -3,6 +3,7 @@ package com.android.systemui.statusbar.powerwidget;
 import com.android.systemui.R;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -44,6 +45,17 @@ public class MobileDataButton extends PowerButton {
         } else {
             cm.setMobileDataEnabled(true);
         }
+    }
+
+    @Override
+    protected boolean handleLongClick() {
+        // it may be better to make an Intent action for this or find the appropriate one
+        // we may want to look at that option later
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.setClassName("com.android.phone", "com.android.phone.Settings");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mView.getContext().startActivity(intent);
+        return true;
     }
 
     @Override

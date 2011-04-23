@@ -44,6 +44,15 @@ public class AirplaneButton extends PowerButton {
     }
 
     @Override
+    protected boolean handleLongClick() {
+        Intent intent = new Intent("android.settings.AIRPLANE_MODE_SETTINGS");
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        mView.getContext().startActivity(intent);
+        return true;
+    }
+
+    @Override
     protected List<Uri> getObservedUris() {
         return OBSERVED_URIS;
     }
