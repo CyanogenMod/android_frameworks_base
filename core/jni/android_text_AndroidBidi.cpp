@@ -114,11 +114,59 @@ static jint reorderReshapeBidiText (JNIEnv* env, jclass c, jcharArray srcArray, 
     return outputSize;
 }
 
+/*
+Native Arabic text reshaping
+by: Eyad Aboulouz
+*/
+static jint reshapeArabicText (JNIEnv* env, jclass c, jcharArray srcArray, jcharArray destArray, jint offset, jint n) {
+
+    bool hasErrors = false;
+    jint outputSize = 0;
+    UChar *intermediate = new UChar[n];
+    UChar *intermediate2 = new UChar[n];
+    UChar *output = new UChar[n];
+    UErrorCode status = U_ZERO_ERROR;
+
+    jchar* src = env->GetCharArrayElements(srcArray, NULL);
+
+    if (src != NULL) {
+
+        ubidi_writeReverse (src+offset, n, intermediate, n, UBIDI_DO_MIRRORING | UBIDI_REMOVE_BIDI_CONTROLS, &status);
+
+        if (U_SUCCESS(status)) {
+            outputSize = u_shapeArabic(intermediate, n, intermediate2, n, U_SHAPE_TEXT_DIRECTION_VISUAL_LTR | U_SHAPE_LETTERS_SHAPE | U_SHAPE_LENGTH_FIXED_SPACES_AT_END, &status);
+
+            if (U_SUCCESS(status)) {
+
+                ubidi_writeReverse (intermediate2, n, output, n, UBIDI_REMOVE_BIDI_CONTROLS, &status);
+
+                env->SetCharArrayRegion(destArray, 0, outputSize, output);
+            } else
+                hasErrors = true;
+        } else
+            hasErrors = true;
+    } else
+        hasErrors = true;
+
+    delete [] intermediate;
+    delete [] intermediate2;
+    delete [] output;
+
+    env->ReleaseCharArrayElements(srcArray, src, JNI_ABORT);
+
+    if (hasErrors)
+        jniThrowException(env, "java/lang/RuntimeException", NULL);
+
+    return outputSize;
+}
+
 static JNINativeMethod gMethods[] = {
         { "runBidi", "(I[C[BIZ)I",
         (void*) runBidi },
         { "reorderReshapeBidiText", "([C[CII)I",
-        (void*) reorderReshapeBidiText }
+        (void*) reorderReshapeBidiText },
+        { "reshapeArabicText", "([C[CII)I",
+        (void*) reshapeArabicText }
 };
 
 int register_android_text_AndroidBidi(JNIEnv* env)
