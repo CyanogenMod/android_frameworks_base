@@ -67,6 +67,13 @@
 
 #define DISPLAY_COUNT       1
 
+#ifdef USE_LGE_HDMI
+extern "C" void MainRegisterHPD();
+extern "C" void MainUnRegisterHPD();
+extern "C" void NvDispMgrPreAutoOrientation(int rotation);
+extern "C" void NvDispMgrAutoOrientation(int rotation);
+#endif
+
 namespace android {
 // ---------------------------------------------------------------------------
 
@@ -103,6 +110,9 @@ SurfaceFlinger::SurfaceFlinger()
         mUseDithering(true)
 {
     init();
+#ifdef USE_LGE_HDMI
+    MainRegisterHPD();
+#endif
 }
 
 void SurfaceFlinger::init()
@@ -136,6 +146,9 @@ void SurfaceFlinger::init()
 SurfaceFlinger::~SurfaceFlinger()
 {
     glDeleteTextures(1, &mWormholeTexName);
+#ifdef USE_LGE_HDMI
+    MainUnRegisterHPD();
+#endif
 }
 
 overlay_control_device_t* SurfaceFlinger::getOverlayEngine() const
@@ -414,8 +427,16 @@ bool SurfaceFlinger::threadLoop()
         logger.log(GraphicLog::SF_COMPOSITION_COMPLETE, index);
         hw.compositionComplete();
 
+#ifdef USE_LGE_HDMI
+        NvDispMgrPreAutoOrientation(mCurrentState.orientation);
+#endif
+
         logger.log(GraphicLog::SF_SWAP_BUFFERS, index);
         postFramebuffer();
+
+#ifdef USE_LGE_HDMI
+        NvDispMgrAutoOrientation(mCurrentState.orientation);
+#endif
 
         logger.log(GraphicLog::SF_REPAINT_DONE, index);
     } else {
