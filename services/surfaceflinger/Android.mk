@@ -48,6 +48,12 @@ LOCAL_SHARED_LIBRARIES := \
 # this is only needed for DDMS debugging
 LOCAL_SHARED_LIBRARIES += libdvm libandroid_runtime
 
+ifeq ($(BOARD_USES_LGE_HDMI_ROTATION),true)
+LOCAL_CFLAGS += -DUSE_LGE_HDMI
+LOCAL_SHARED_LIBRARIES += \
+	libnvdispmgr_d
+endif
+
 LOCAL_C_INCLUDES := \
 	$(call include-path-for, corecg graphics)
 
