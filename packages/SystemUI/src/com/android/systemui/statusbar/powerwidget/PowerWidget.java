@@ -160,6 +160,7 @@ public class PowerWidget extends FrameLayout {
         if(mObserver != null) {
             mObserver.observe();
         }
+        updateVisibility();
     }
 
     public void updateWidget() {
@@ -214,7 +215,6 @@ public class PowerWidget extends FrameLayout {
         public void onReceive(Context context, Intent intent) {
             if(intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
                 setupWidget();
-                updateVisibility();
             } else if(intent.getAction().equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
                 updateButtonLayoutWidth();
                 setupWidget();
