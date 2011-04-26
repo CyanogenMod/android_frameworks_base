@@ -66,6 +66,36 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
     private int   mTargetA2dpState;
     private BluetoothDevice mPlayingA2dpDevice;
 
+    /* AVRCP1.3 Metadata variables */
+    private String mTrackName = DEFAULT_METADATA_STRING;
+    private String mArtistName = DEFAULT_METADATA_STRING;
+    private String mAlbumName = DEFAULT_METADATA_STRING;
+    private String mMediaNumber = DEFAULT_METADATA_NUMBER;
+    private String mMediaCount = DEFAULT_METADATA_NUMBER;
+    private String mDuration = DEFAULT_METADATA_NUMBER;
+    private int mPlayStatus = (int)Integer.valueOf(DEFAULT_METADATA_NUMBER);
+    private long mPosition = (long)Long.valueOf(DEFAULT_METADATA_NUMBER);
+
+    /* AVRCP1.3 Events */
+    private final static int EVENT_PLAYSTATUS_CHANGED = 0x1;
+    private final static int EVENT_TRACK_CHANGED = 0x2;
+
+    /*AVRCP 1.3 Music App Intents */
+    private static final String PLAYSTATE_CHANGED = "com.android.music.playstatechanged";
+    private static final String META_CHANGED = "com.android.music.metachanged";
+
+    private final static String DEFAULT_METADATA_STRING = "Unknown";
+    private final static String DEFAULT_METADATA_NUMBER = "0";
+
+    /* AVRCP 1.3 PlayStatus */
+    private final static int STATUS_STOPPED = 0X00;
+    private final static int STATUS_PLAYING = 0X01;
+    private final static int STATUS_PAUSED = 0X02;
+    private final static int STATUS_FWD_SEEK = 0X03;
+    private final static int STATUS_REV_SEEK = 0X04;
+    private final static int STATUS_ERROR = 0XFF;
+
+
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -109,9 +139,121 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
                         }
                     }
                 }
+            } else if (action.equals(META_CHANGED)) {
+                mTrackName = intent.getStringExtra("track");
+                mArtistName = intent.getStringExtra("artist");
+                mAlbumName = intent.getStringExtra("album");
+                if (mTrackName == null)
+                    mTrackName = DEFAULT_METADATA_STRING;
+                if (mArtistName == null)
+                    mArtistName = DEFAULT_METADATA_STRING;
+                if (mAlbumName == null)
+                    mAlbumName = DEFAULT_METADATA_STRING;
+                long extra = intent.getLongExtra("id", 0);
+                if (extra < 0)
+                    extra = 0;
+                mMediaNumber = String.valueOf(extra);
+                extra = intent.getLongExtra("ListSize", 0);;
+                if (extra < 0)
+                    extra = 0;
+                mMediaCount = String.valueOf(extra);
+                extra = intent.getLongExtra("duration", 0);
+                if (extra < 0)
+                    extra = 0;
+                mDuration = String.valueOf(extra);
+                extra = intent.getLongExtra("position", 0);
+                if (extra < 0)
+                    extra = 0;
+                mPosition = extra;
+                if(DBG) {
+                    Log.d(TAG, "Meta data info is trackname: "+ mTrackName+" artist: "+mArtistName);
+                    Log.d(TAG, "mMediaNumber: "+mMediaNumber+" mediaCount "+mMediaCount);
+                    Log.d(TAG, "mPostion "+ mPosition+" album: "+mAlbumName+ "duration "+mDuration);
+                }
+                for (String path: getConnectedSinksPaths()) {
+                    sendMetaData(path);
+                    sendEvent(path, EVENT_TRACK_CHANGED, Long.valueOf(mMediaNumber));
+                }
+            } else if (action.equals(PLAYSTATE_CHANGED)) {
+                String currentTrackName = intent.getStringExtra("track");
+                if ((currentTrackName != null) && (!currentTrackName.equals(mTrackName))) {
+                    mTrackName = currentTrackName;
+                    mArtistName = intent.getStringExtra("artist");
+                    mAlbumName = intent.getStringExtra("album");
+                    if (mTrackName == null)
+                        mTrackName = DEFAULT_METADATA_STRING;
+                    if (mArtistName == null)
+                        mArtistName = DEFAULT_METADATA_STRING;
+                    if (mAlbumName == null)
+                        mAlbumName = DEFAULT_METADATA_STRING;
+                    long extra = intent.getLongExtra("id", 0);
+                    if (extra < 0)
+                        extra = 0;
+                    mMediaNumber = String.valueOf(extra);
+                    extra = intent.getLongExtra("ListSize", 0);;
+                    if (extra < 0)
+                        extra = 0;
+                    mMediaCount = String.valueOf(extra);
+                    extra = intent.getLongExtra("duration", 0);
+                    if (extra < 0)
+                        extra = 0;
+                    mDuration = String.valueOf(extra);
+                    extra = intent.getLongExtra("position", 0);
+                    if (extra < 0)
+                        extra = 0;
+                    mPosition = extra;
+                    for (String path: getConnectedSinksPaths())
+                        sendMetaData(path);
+                }
+                boolean playStatus = intent.getBooleanExtra("playing", false);
+                mPosition = intent.getLongExtra("position", 0);
+                if (mPosition < 0)
+                    mPosition = 0;
+                mPlayStatus = convertedPlayStatus(playStatus, mPosition);
+                if(DBG) Log.d(TAG, "PlayState changed "+ mPlayStatus);
+                for (String path: getConnectedSinksPaths()) {
+                    sendEvent(path, EVENT_PLAYSTATUS_CHANGED, (long)mPlayStatus);
+                }
             }
         }
     };
+
+    private synchronized int convertedPlayStatus(boolean playing, long position) {
+        if (playing == false && position == 0)
+            return STATUS_STOPPED;
+        if (playing == false)
+            return STATUS_PAUSED;
+        if (playing == true)
+            return STATUS_PLAYING;
+        return STATUS_ERROR;
+    }
+
+    private synchronized void sendMetaData(String path) {
+        if(DBG) {
+            Log.d(TAG, "sendMetaData "+ path);
+            Log.d(TAG, "Meta data info is trackname: "+ mTrackName+" artist: "+mArtistName);
+            Log.d(TAG, "mMediaNumber: "+mMediaNumber+" mediaCount "+mMediaCount);
+            Log.d(TAG, "mPostion "+ mPosition+" album: "+mAlbumName+ "duration "+mDuration);
+        }
+        sendMetaDataNative(path);
+    }
+
+    private synchronized void sendEvent(String path, int eventId, long data) {
+        if(DBG) Log.d(TAG, "sendEvent "+path+ " data "+ data);
+        sendEventNative(path, eventId, data);
+    }
+
+    private synchronized void sendPlayStatus(String path) {
+        if(DBG) Log.d(TAG, "sendPlayStatus"+ path);
+        sendPlayStatusNative(path, (int)Integer.valueOf(mDuration), (int)mPosition, mPlayStatus);
+    }
+
+    private void onGetPlayStatusRequest() {
+        if(DBG) Log.d(TAG, "onGetPlayStatusRequest");
+        for (String path: getConnectedSinksPaths()) {
+            sendPlayStatus(path);
+        }
+    }
 
     private boolean isPhoneDocked(BluetoothDevice device) {
         // This works only because these broadcast intents are "sticky"
@@ -148,6 +290,8 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
         mIntentFilter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
         mIntentFilter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
         mIntentFilter.addAction(AudioManager.VOLUME_CHANGED_ACTION);
+        mIntentFilter.addAction(PLAYSTATE_CHANGED);
+        mIntentFilter.addAction(META_CHANGED);
         mContext.registerReceiver(mReceiver, mIntentFilter);
 
         mAudioDevices = new HashMap<BluetoothDevice, Integer>();
@@ -397,6 +541,16 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
         return state;
     }
 
+    public synchronized List<String> getConnectedSinksPaths() {
+        mContext.enforceCallingOrSelfPermission(BLUETOOTH_PERM, "Need BLUETOOTH permission");
+        List<BluetoothDevice> btDevices = getConnectedDevices();
+        ArrayList<String> paths = new ArrayList<String>();
+        for(BluetoothDevice device:btDevices) {
+            paths.add(mBluetoothService.getObjectPathFromAddress(device.getAddress()));
+        }
+        return paths;
+    }
+
     public synchronized List<BluetoothDevice> getConnectedDevices() {
         mContext.enforceCallingOrSelfPermission(BLUETOOTH_PERM, "Need BLUETOOTH permission");
         List<BluetoothDevice> sinks = getDevicesMatchingConnectionStates(
@@ -526,6 +680,13 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
             mBluetoothService.sendConnectionStateChange(device, BluetoothProfile.A2DP, state,
                                                         prevState);
         }
+        if (prevState == BluetoothA2dp.STATE_CONNECTING &&
+             state == BluetoothA2dp.STATE_CONNECTED) {
+            for (String path: getConnectedSinksPaths()) {
+                sendMetaData(path);
+                sendEvent(path, EVENT_PLAYSTATUS_CHANGED, (long)mPlayStatus);
+            }
+        }
     }
 
     private void handleSinkPlayingStateChange(BluetoothDevice device, int state, int prevState) {
@@ -609,4 +770,8 @@ public class BluetoothA2dpService extends IBluetoothA2dp.Stub {
     private synchronized native Object []getSinkPropertiesNative(String path);
     private synchronized native boolean avrcpVolumeUpNative(String path);
     private synchronized native boolean avrcpVolumeDownNative(String path);
+    private synchronized native boolean sendMetaDataNative(String path);
+    private synchronized native boolean sendEventNative(String path, int eventId, long data);
+    private synchronized native boolean sendPlayStatusNative(String path, int duration,
+                                                             int position, int playStatus);
 }
