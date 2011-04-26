@@ -2565,28 +2565,52 @@ public final class Settings {
          */
         public static final String WIDGET_BUTTONS = "expanded_widget_buttons";
 
-        /** @hide */
+        /** 
+        * Notification Power Widget - Custom Brightness Mode
+        * @hide
+        */
         public static final String EXPANDED_BRIGHTNESS_MODE = "expanded_brightness_mode";
 
-        /** @hide */
+        /** 
+        * Notification Power Widget - Custom Network Mode
+        * @hide
+        */
         public static final String EXPANDED_NETWORK_MODE = "expanded_network_mode";
 
-        /** @hide */
+        /** 
+        * Notification Power Widget - Custom Screen Timeout
+        * @hide
+        */
         public static final String EXPANDED_SCREENTIMEOUT_MODE = "expanded_screentimeout_mode";
 
-        /** @hide */
+        /** 
+        * Notification Power Widget - Custom Ring Mode
+        * @hide
+        */
         public static final String EXPANDED_RING_MODE = "expanded_ring_mode";
 
-        /** @hide */
+        /** 
+        * Notification Power Widget - Custom Torch Mode
+        * @hide
+        */
         public static final String EXPANDED_FLASH_MODE = "expanded_flash_mode";
 
-        /** @hide */
+        /** 
+        * Enables the Screen-on animation
+        * @hide
+        */
         public static final String ELECTRON_BEAM_ANIMATION_ON = "electron_beam_animation_on";
 
-        /** @hide */
+        /** 
+        * Enables the Screen-off animation
+        * @hide
+        */
         public static final String ELECTRON_BEAM_ANIMATION_OFF = "electron_beam_animation_off";
 
-        /** @hide */
+        /**
+         * Enables the overscroller (edge bounce effect on lists)
+         * @hide
+         */
         public static final String OVERSCROLL_EFFECT = "overscroll_effect";
 
         /**
