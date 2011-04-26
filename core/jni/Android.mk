@@ -249,6 +249,10 @@ endif
 
 LOCAL_MODULE:= libandroid_runtime
 
+ifneq ($(TARGET_RECOVERY_WRITE_MISC_PART),)
+        LOCAL_CFLAGS += -DRECOVERY_WRITE_MISC_PART='$(TARGET_RECOVERY_WRITE_MISC_PART)'
+endif
+
 include $(BUILD_SHARED_LIBRARY)
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
