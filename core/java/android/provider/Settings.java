@@ -2315,6 +2315,13 @@ public final class Settings {
         public static final String STATUS_BAR_COMPACT_CARRIER = "status_bar_compact_carrier";
 
         /**
+         * Whether to force PLMN display for SPDI networks
+         *
+         * @hide
+         */
+        public static final String STATUS_BAR_FORCE_PLMN_DISPLAY = "status_bar_force_plmn_display";
+
+        /**
          * Whether to wake the screen with the trackball. The value is boolean (1 or 0).
          * @hide
          */
