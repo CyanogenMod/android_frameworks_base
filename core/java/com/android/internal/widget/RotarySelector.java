@@ -15,9 +15,9 @@
  */
 
 package com.android.internal.widget;
-
+import android.content.ContentResolver;
 import java.util.Date;
-
+import android.provider.Settings;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -720,23 +720,27 @@ public class RotarySelector extends View {
                 if (mLenseMode){
                     setGrabbedState(MID_HANDLE_GRABBED);
                     invalidate();
-                    vibrate(VIBRATE_SHORT);
+		    vibrate(Integer.parseInt((Settings.System.getString(getContext().getContentResolver(),Settings.System.HAPTIC_DOWN_ARRAY)).split( ",\\s*" )[0]));
+                    //vibrate(VIBRATE_SHORT);
                     break;
                 }
                 if (eventX < mLeftHandleX + hitWindow) {
                     mRotaryOffsetX = eventX - mLeftHandleX;
                     setGrabbedState(LEFT_HANDLE_GRABBED);
                     invalidate();
-                    vibrate(VIBRATE_SHORT);
+		    vibrate(Integer.parseInt((Settings.System.getString(getContext().getContentResolver(),Settings.System.HAPTIC_DOWN_ARRAY)).split( ",\\s*" )[0]));
+		    //vibrate(VIBRATE_SHORT);
                 } else if (eventX > mMidHandleX - hitWindow && eventX <= mRightHandleX - hitWindow && mCustomAppDimple) {
                     setGrabbedState(MID_HANDLE_GRABBED);
                     invalidate();
-                    vibrate(VIBRATE_SHORT);
+		    vibrate(Integer.parseInt((Settings.System.getString(getContext().getContentResolver(),Settings.System.HAPTIC_DOWN_ARRAY)).split( ",\\s*" )[0]));
+                    //vibrate(VIBRATE_SHORT);
                 } else if (eventX > mRightHandleX - hitWindow) {
                     mRotaryOffsetX = eventX - mRightHandleX;
                     setGrabbedState(RIGHT_HANDLE_GRABBED);
                     invalidate();
-                    vibrate(VIBRATE_SHORT);
+		    vibrate(Integer.parseInt((Settings.System.getString(getContext().getContentResolver(),Settings.System.HAPTIC_DOWN_ARRAY)).split( ",\\s*" )[0]));
+                    //vibrate(VIBRATE_SHORT);
                 }
 
                 break;
@@ -961,7 +965,8 @@ public class RotarySelector extends View {
      * Dispatches a trigger event to our listener.
      */
     private void dispatchTriggerEvent(int whichHandle) {
-        vibrate(VIBRATE_LONG);
+        vibrate(Integer.parseInt((Settings.System.getString(getContext().getContentResolver(),Settings.System.HAPTIC_DOWN_ARRAY)).split( ",\\s*" )[0]));        
+        //vibrate(VIBRATE_LONG);
         if (mOnDialTriggerListener != null) {
             mOnDialTriggerListener.onDialTrigger(this, whichHandle);
         }
