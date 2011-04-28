@@ -17,7 +17,7 @@
 package com.android.internal.widget;
 
 import java.util.Date;
-
+import android.provider.Settings;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -808,7 +808,7 @@ public class RotarySelector extends View {
                 if (DBG) log("touch-up");
                 // handle animating back to start if they didn't trigger
                 if (mGrabbedState == LEFT_HANDLE_GRABBED
-                        && Math.abs(eventX - mLeftHandleX) > 5) {
+                        && Math.abs(eventX - mLeftHandleX) > 5) {import android.provider.Settings;
                     // set up "snap back" animation
                     startAnimation(eventX - mLeftHandleX, 0, SNAP_BACK_ANIMATION_DURATION_MILLIS);
                 } else if (mGrabbedState == MID_HANDLE_GRABBED) {
@@ -931,7 +931,8 @@ public class RotarySelector extends View {
             mVibrator = (android.os.Vibrator)
                     getContext().getSystemService(Context.VIBRATOR_SERVICE);
         }
-        mVibrator.vibrate(duration);
+        //mVibrator.vibrate(duration);
+        mVibrator.vibrate(Integer.parseInt((Settings.System.getString(getContext().getContentResolver(),Settings.System.HAPTIC_DOWN_ARRAY)).split( ",\\s*" )[0]));
     }
 
     /**
