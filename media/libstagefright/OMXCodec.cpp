@@ -689,7 +689,9 @@ status_t OMXCodec::configureCodec(const sp<MetaData> &meta, uint32_t flags) {
         CHECK(meta->findInt32(kKeyChannelCount, &numChannels));
         CHECK(meta->findInt32(kKeySampleRate, &sampleRate));
 
+#ifndef DONT_SET_AUDIO_AAC_FORMAT
         setAACFormat(numChannels, sampleRate, bitRate);
+#endif
     }
 
     if (!strncasecmp(mMIME, "video/", 6)) {
