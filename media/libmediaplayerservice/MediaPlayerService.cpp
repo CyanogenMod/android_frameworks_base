@@ -203,6 +203,9 @@ extmap FILE_EXTS [] =  {
         {".rtttl", SONIVOX_PLAYER},
         {".rtx", SONIVOX_PLAYER},
         {".ota", SONIVOX_PLAYER},
+#ifdef USE_BOARD_MEDIAPLUGIN
+        {".ogg", STAGEFRIGHT_PLAYER},
+#endif
 #ifndef NO_OPENCORE
         {".wma", PV_PLAYER},
         {".wmv", PV_PLAYER},
