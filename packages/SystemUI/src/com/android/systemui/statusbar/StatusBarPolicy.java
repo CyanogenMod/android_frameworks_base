@@ -1482,6 +1482,7 @@ public class StatusBarPolicy {
                 mService.setIcon("wimax", iconId, 0);
             }
         }
+    }
 
     private final void updateWiMAX(Intent intent) {
         final String action = intent.getAction();
