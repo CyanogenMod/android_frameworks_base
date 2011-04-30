@@ -50,7 +50,7 @@
     <string name="needPuk2" msgid="4526033371987193070">"Wprowadź kod PUK2, aby odblokować kartę SIM."</string>
     <string name="ClipMmi" msgid="6952821216480289285">"Identyfikator rozmówcy przy połączeniach przychodzących"</string>
     <string name="ClirMmi" msgid="7784673673446833091">"Identyfikator rozmówcy przy połączeniach wychodzących"</string>
-    <string name="CfMmi" msgid="5123218989141573515">"Przekierowania połączeń"</string>
+    <string name="CfMmi" msgid="5123218989141573515">"Przekazywanie połączeń"</string>
     <string name="CwMmi" msgid="9129678056795016867">"Połączenia oczekujące"</string>
     <string name="BaMmi" msgid="455193067926770581">"Blokada dzwonienia"</string>
     <string name="PwdMmi" msgid="7043715687905254199">"Zmiana hasła"</string>
@@ -241,8 +241,8 @@
     <string name="permdesc_injectEvents" msgid="3946098050410874715">"Pozwala aplikacjom na dostarczanie własnych zdarzeń wprowadzania danych (naciśnięcie klawisza itp.) do innych aplikacji. Szkodliwe aplikacje mogą to wykorzystać do przejęcia kontroli nad telefonem."</string>
     <string name="permlab_readInputState" msgid="469428900041249234">"zapamiętywanie wpisywanych znaków oraz wykonywanych czynności"</string>
     <string name="permdesc_readInputState" msgid="5132879321450325445">"Pozwala aplikacjom na śledzenie naciskanych klawiszy, nawet podczas pracy z innym programem (na przykład podczas wpisywania hasła). Nigdy nie powinno być potrzebne normalnym aplikacjom."</string>
-    <string name="permlab_bindInputMethod" msgid="3360064620230515776">"tworzenie powiązania z metodą wejściową"</string>
-    <string name="permdesc_bindInputMethod" msgid="3734838321027317228">"Pozwala na tworzenie powiązania z interfejsem najwyższego poziomu metody wejściowej. To uprawnienie nie powinno być nigdy wymagane przez zwykłe aplikacje."</string>
+    <string name="permlab_bindInputMethod" msgid="3360064620230515776">"powiązanie ze sposobem wprowadzania tekstu"</string>
+    <string name="permdesc_bindInputMethod" msgid="3734838321027317228">"Pozwala na powiązanie wybranego sposobu wprowadzania tekstu z interfejsem najwyższego poziomu. To uprawnienie nie powinno być nigdy wymagane przez zwykłe aplikacje."</string>
     <string name="permlab_bindWallpaper" msgid="8716400279937856462">"powiązanie z tapetą"</string>
     <string name="permdesc_bindWallpaper" msgid="5287754520361915347">"Umożliwia posiadaczowi powiązać interfejs najwyższego poziomu dla tapety. Nie powinno być nigdy potrzebne w przypadku zwykłych aplikacji."</string>
     <string name="permlab_bindDeviceAdmin" msgid="8704986163711455010">"interakcja z administratorem urządzenia"</string>
@@ -335,8 +335,8 @@
     <string name="permdesc_vibrate" msgid="2886677177257789187">"Pozwala aplikacjom na kontrolowanie wibracji."</string>
     <string name="permlab_flashlight" msgid="2155920810121984215">"kontrolowanie latarki"</string>
     <string name="permdesc_flashlight" msgid="6433045942283802309">"Pozwala aplikacji kontrolować latarkę."</string>
-    <string name="permlab_accessUsb" msgid="7362327818655760496">"dostęp do urządzeń USB"</string>
-    <string name="permdesc_accessUsb" msgid="2414271762914049292">"Zezwala aplikacji na dostęp do urządzeń USB."</string>
+    <string name="permlab_manageUsb" msgid="1113453430645402723">"zarządzanie ustawieniami i uprawnieniami urządzeń USB"</string>
+    <string name="permdesc_manageUsb" msgid="6148489202092166164">"Umożliwia aplikacji zarządzanie ustawieniami i uprawnieniami urządzeń USB."</string>
     <string name="permlab_hardware_test" msgid="4148290860400659146">"testowanie sprzętu"</string>
     <string name="permdesc_hardware_test" msgid="3668894686500081699">"Pozwala aplikacji na kontrolowanie różnych urządzeń peryferyjnych w celu testowania sprzętu."</string>
     <string name="permlab_callPhone" msgid="3925836347681847954">"bezpośrednie wybieranie numerów telefonów"</string>
@@ -399,6 +399,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Pozwala aplikacji na łączenie i rozłączanie z punktami dostępowymi Wi-Fi oraz na dokonywanie zmian skonfigurowanych sieci Wi-Fi."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"zezwolenie na odbiór grupowych połączeń Wi-Fi"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Umożliwia aplikacji odbieranie pakietów nieskierowanych bezpośrednio do Twojego urządzenia. Może to być przydatne przy wykrywaniu usług oferowanych w okolicy. Powoduje większe zapotrzebowanie na energię niż w trybie innym niż grupowy."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"wyświetlanie stanu WiMAX"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"Zezwala aplikacji na dostęp do informacji o stanie połączenia WiMAX."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"zmiana stanu WiMAX"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"Zezwala aplikacji na łączenie się i rozłączanie z siecią WiMAX."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"administrowanie Bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" msgid="7256289774667054555">"Pozwala aplikacji na konfigurowanie lokalnego telefonu Bluetooth, wyszukiwanie urządzeń zdalnych i łączenie się z nimi."</string>
     <string name="permlab_bluetooth" msgid="8361038707857018732">"tworzenie połączeń Bluetooth"</string>
@@ -717,7 +721,7 @@
     <string name="copy" msgid="2681946229533511987">"Kopiuj"</string>
     <string name="paste" msgid="5629880836805036433">"Wklej"</string>
     <string name="copyUrl" msgid="2538211579596067402">"Kopiuj adres URL"</string>
-    <string name="inputMethod" msgid="1653630062304567879">"Metoda wprowadzania"</string>
+    <string name="inputMethod" msgid="1653630062304567879">"Sposób wprowadzania tekstu"</string>
     <string name="addToDictionary" msgid="8793624991686948709">"Dodaj termin „<xliff:g id="WORD">%s</xliff:g>” do słownika"</string>
     <string name="editTextMenuTitle" msgid="1672989176958581452">"Edytuj tekst"</string>
     <string name="low_internal_storage_view_title" msgid="1399732408701697546">"Mało miejsca"</string>
@@ -733,6 +737,7 @@
     <string name="alwaysUse" msgid="4583018368000610438">"Używaj domyślnie dla tej czynności."</string>
     <string name="clearDefaultHintMsg" msgid="4815455344600932173">"Wyczyść domyślne w: Ustawienia strony głównej &gt; Aplikacje &gt; Zarządzaj aplikacjami."</string>
     <string name="chooseActivity" msgid="1009246475582238425">"Wybierz czynność"</string>
+    <string name="chooseUsbActivity" msgid="7892597146032121735">"Wybierz aplikację dla urządzenia USB"</string>
     <string name="noApplications" msgid="1691104391758345586">"Żadna z aplikacji nie może wykonać tej czynności."</string>
     <string name="aerr_title" msgid="653922989522758100">"Przepraszamy!"</string>
     <string name="aerr_application" msgid="4683614104336409186">"Aplikacja <xliff:g id="APPLICATION">%1$s</xliff:g> (proces <xliff:g id="PROCESS">%2$s</xliff:g>) została niespodziewanie zatrzymana. Spróbuj ponownie."</string>
@@ -819,7 +824,7 @@
     <string name="extmedia_format_button_format" msgid="4131064560127478695">"Formatuj"</string>
     <string name="adb_active_notification_title" msgid="6729044778949189918">"Podłączono moduł debugowania USB"</string>
     <string name="adb_active_notification_message" msgid="8470296818270110396">"Wybierz, aby wyłączyć debugowanie USB."</string>
-    <string name="select_input_method" msgid="6865512749462072765">"Wybierz metodę wprowadzania"</string>
+    <string name="select_input_method" msgid="6865512749462072765">"Wybierz sposób wprowadzania tekstu"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" AĄBCĆDEĘFGHIJKLŁMNŃOÓPQRSŚTUVWXYZŹŻ"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="candidates_style" msgid="4333913089637062257"><u>"kandydaci"</u></string>
@@ -870,7 +875,7 @@
     <string name="deny" msgid="2081879885755434506">"Odmów"</string>
     <string name="permission_request_notification_title" msgid="5390555465778213840">"Żądane pozwolenie"</string>
     <string name="permission_request_notification_with_subtitle" msgid="4325409589686688000">"Prośba o pozwolenie"\n"dotyczące konta <xliff:g id="ACCOUNT">%s</xliff:g>"</string>
-    <string name="input_method_binding_label" msgid="1283557179944992649">"Metoda wprowadzania"</string>
+    <string name="input_method_binding_label" msgid="1283557179944992649">"Sposób wprowadzania tekstu"</string>
     <string name="sync_binding_label" msgid="3687969138375092423">"Synchronizacja"</string>
     <string name="accessibility_binding_label" msgid="4148120742096474641">"Ułatwienia dostępu"</string>
     <string name="wallpaper_binding_label" msgid="1240087844304687662">"Tapeta"</string>

@@ -28,4 +28,14 @@
     <string name="battery_low_subtitle" msgid="7388781709819722764">"Батарея виснажується:"</string>
     <string name="battery_low_percent_format" msgid="696154104579022959">"Залиш-ся <xliff:g id="NUMBER">%d%%</xliff:g> або менше."</string>
     <string name="battery_low_why" msgid="7279169609518386372">"Викор. батареї"</string>
+    <!-- no translation found for usb_accessory_permission_prompt (3969745913539898765) -->
+    <skip />
+    <!-- no translation found for usb_device_confirm_prompt (2727793581411868504) -->
+    <skip />
+    <!-- no translation found for usb_accessory_confirm_prompt (3947430407252730383) -->
+    <skip />
+    <string name="usb_accessory_uri_prompt" msgid="6332150684964235705">"Установлені прогр. не працюють із цим аксесуаром USB. Більше про цей аксесуар: <xliff:g id="URL">%1$s</xliff:g>"</string>
+    <string name="title_usb_accessory" msgid="4966265263465181372">"Пристрій USB"</string>
+    <string name="label_view" msgid="6304565553218192990">"Переглянути"</string>
+    <string name="always_use_accessory" msgid="1210954576979621596">"Використовувати за умовчанням для аксесуара USB"</string>
 </resources>

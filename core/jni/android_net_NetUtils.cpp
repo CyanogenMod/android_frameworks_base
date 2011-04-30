@@ -44,6 +44,15 @@ int dhcp_do_request(const char *ifname,
 int dhcp_stop(const char *ifname);
 int dhcp_release_lease(const char *ifname);
 char *dhcp_get_errmsg();
+
+int dhcp_do_request_renew(const char *ifname,
+                    in_addr_t *ipaddr,
+                    in_addr_t *gateway,
+                    in_addr_t *mask,
+                    in_addr_t *dns1,
+                    in_addr_t *dns2,
+                    in_addr_t *server,
+                    uint32_t  *lease);
 }
 
 #define NETUTILS_PKG_NAME "android/net/NetworkUtils"
@@ -224,6 +233,28 @@ static jint android_net_utils_addRoutingRule(JNIEnv* env,
 }
 #endif
 
+static jboolean android_net_utils_runDhcpRenew(JNIEnv* env, jobject clazz, jstring ifname, jobject info)
+{
+    int result = -1;
+    in_addr_t ipaddr, gateway, mask, dns1, dns2, server;
+    uint32_t lease;
+
+    const char *nameStr = env->GetStringUTFChars(ifname, NULL);
+    result = ::dhcp_do_request_renew(nameStr, &ipaddr, &gateway, &mask,
+            &dns1, &dns2, &server, &lease);
+    env->ReleaseStringUTFChars(ifname, nameStr);
+    if (result == 0 && dhcpInfoFieldIds.dhcpInfoClass != NULL) {
+        env->SetIntField(info, dhcpInfoFieldIds.ipaddress, ipaddr);
+        env->SetIntField(info, dhcpInfoFieldIds.gateway, gateway);
+        env->SetIntField(info, dhcpInfoFieldIds.netmask, mask);
+        env->SetIntField(info, dhcpInfoFieldIds.dns1, dns1);
+        env->SetIntField(info, dhcpInfoFieldIds.dns2, dns2);
+        env->SetIntField(info, dhcpInfoFieldIds.serverAddress, server);
+        env->SetIntField(info, dhcpInfoFieldIds.leaseDuration, lease);
+    }
+
+    return (jboolean)(result == 0);
+}
 // ----------------------------------------------------------------------------
 
 /*
@@ -248,6 +279,7 @@ static JNINativeMethod gNetworkUtilMethods[] = {
 #ifdef BOARD_HAVE_SQN_WIMAX
     { "addRoutingRule", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)I", (void*) android_net_utils_addRoutingRule },
 #endif
+    { "runDhcpRenew", "(Ljava/lang/String;Landroid/net/DhcpInfo;)Z",  (void *)android_net_utils_runDhcpRenew}
 };
 
 int register_android_net_NetworkUtils(JNIEnv* env)

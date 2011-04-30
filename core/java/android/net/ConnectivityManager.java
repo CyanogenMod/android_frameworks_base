@@ -220,10 +220,10 @@ public class ConnectivityManager
     public static final int TYPE_DUMMY       = 8;
     /** {@hide} */
     public static final int TYPE_ETHERNET    = 9;
-    /** {@hide} */
-    public static final int MAX_RADIO_TYPE   = TYPE_WIMAX;
-    /** {@hide} */
-    public static final int MAX_NETWORK_TYPE = TYPE_WIMAX;
+    /** {@hide} TODO: Need to adjust this for WiMAX. */
+    public static final int MAX_RADIO_TYPE   = TYPE_ETHERNET;
+    /** {@hide} TODO: Need to adjust this for WiMAX. */
+    public static final int MAX_NETWORK_TYPE = TYPE_ETHERNET;
 
     public static final int DEFAULT_NETWORK_PREFERENCE = TYPE_WIFI;
 

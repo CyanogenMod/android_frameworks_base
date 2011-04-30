@@ -647,6 +647,12 @@ bool InputDispatcher::dispatchKeyLocked(
             resetKeyRepeatLocked();
         }
 
+        if (entry->repeatCount == 1) {
+            entry->flags |= AKEY_EVENT_FLAG_LONG_PRESS;
+        } else {
+            entry->flags &= ~AKEY_EVENT_FLAG_LONG_PRESS;
+        }
+
         entry->dispatchInProgress = true;
         resetTargetsLocked();
 

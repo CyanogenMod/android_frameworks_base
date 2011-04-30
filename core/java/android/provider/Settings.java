@@ -1129,6 +1129,12 @@ public final class Settings {
         public static final String RADIO_CELL = "cell";
 
         /**
+         * Constant for use in AIRPLANE_MODE_RADIOS to specify WiMAX radio.
+         * @hide
+         */
+        public static final String RADIO_WIMAX = "wimax";
+
+        /**
          * A comma separated list of radios that need to be disabled when airplane mode
          * is on. This overrides WIFI_ON and BLUETOOTH_ON, if Wi-Fi and bluetooth are
          * included in the comma separated list.
@@ -3595,6 +3601,14 @@ public final class Settings {
                 "wifi_networks_available_repeat_delay";
 
         /**
+         * Whether to nofity the user of WiMAX network.
+         * If WiMAX is connected or disconnected, we will put this notification up.
+         * @hide
+         */
+        public static final String WIMAX_NETWORKS_AVAILABLE_NOTIFICATION_ON =
+                "wimax_networks_available_notification_on";
+
+        /**
          * The number of radio channels that are allowed in the local
          * 802.11 regulatory domain.
          * @hide
@@ -3731,7 +3745,8 @@ public final class Settings {
             "wifi_mobile_data_transition_wakelock_timeout_ms";
 
         /**
-         * Whether the Wimax should be on.  Only the Wimax service should touch this.
+         * Whether the Wimax should be on.  Only the WiMAX service should touch this.
+         * @hide
          */
         public static final String WIMAX_ON = "wimax_on";
 

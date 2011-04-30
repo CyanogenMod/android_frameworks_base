@@ -213,7 +213,6 @@ public:
     
     /** always call base class first */
     virtual void dump(String8& result, char* scratch, size_t size) const;
-    virtual void shortDump(String8& result, char* scratch, size_t size) const;
 
 
     enum { // flags for doTransaction()
@@ -335,7 +334,6 @@ public:
 
 protected:
     virtual void dump(String8& result, char* scratch, size_t size) const;
-    virtual void shortDump(String8& result, char* scratch, size_t size) const;
 
 private:
     mutable Mutex mLock;

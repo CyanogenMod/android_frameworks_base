@@ -42,7 +42,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.database.ContentObserver;
-import android.hardware.Usb;
+import android.hardware.usb.UsbManager;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.BatteryManager;
@@ -406,14 +406,12 @@ public class NotificationManagerService extends INotificationManager.Stub
                         updateRGBLights();
                     }
                 }
-            } else if (action.equals(Usb.ACTION_USB_STATE)) {
+            } else if (action.equals(UsbManager.ACTION_USB_STATE)) {
                 Bundle extras = intent.getExtras();
-                mUsbConnected = extras.getBoolean(Usb.USB_CONNECTED);
-                boolean adbEnabled = (Usb.USB_FUNCTION_ENABLED.equals(
-                                    extras.getString(Usb.USB_FUNCTION_ADB)));
-                updateAdbNotification(mUsbConnected && adbEnabled);
-            } else if (action.equals(Usb.ACTION_USB_DISCONNECTED)) {
-                updateAdbNotification(false);
+                boolean usbConnected = extras.getBoolean(UsbManager.USB_CONNECTED);
+                boolean adbEnabled = (UsbManager.USB_FUNCTION_ENABLED.equals(
+                                    extras.getString(UsbManager.USB_FUNCTION_ADB)));
+                updateAdbNotification(usbConnected && adbEnabled);
             } else if (action.equals(Intent.ACTION_PACKAGE_REMOVED)
                     || action.equals(Intent.ACTION_PACKAGE_RESTARTED)
                     || (queryRestart=action.equals(Intent.ACTION_QUERY_PACKAGE_RESTART))
@@ -617,7 +615,7 @@ public class NotificationManagerService extends INotificationManager.Stub
         // register for battery changed notifications
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_BATTERY_CHANGED);
-        filter.addAction(Usb.ACTION_USB_STATE);
+        filter.addAction(UsbManager.ACTION_USB_STATE);
         filter.addAction(Intent.ACTION_SCREEN_ON);
         filter.addAction(Intent.ACTION_SCREEN_OFF);
         filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
