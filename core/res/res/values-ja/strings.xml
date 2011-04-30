@@ -928,10 +928,4 @@
 
     <string name="wildcardProfile">他</string>
     <string name="global_action_choose_profile">プロファイル選択</string>
-    <string name="permlab_accessWimaxState">WiMAX状態の表示</string>
-
-    <string name="permdesc_accessWimaxState">WiMAX状態に関する情報の表示をアプリケーションに許可します。</string>
-    <string name="permlab_changeWimaxState">WiMAX状態の変更</string>
-    <string name="permdesc_changeWimaxState">Wi-Fiアクセスポイントへの接続や接続の切断、設定されたWi-Fiネットワークの変更をアプリケーションに許可します。</string>
-
 </resources>

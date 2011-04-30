@@ -413,10 +413,6 @@
     <string name="permdesc_accessWifiState" msgid="485796529139236346">"Tillåter att ett program visar information om statusen för Wi-Fi."</string>
     <string name="permlab_changeWifiState" msgid="7280632711057112137">"byta Wi-Fi-status"</string>
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Tillåter att ett program ansluter till och kopplar från Wi-Fi-åtkomstpunkter och gör ändringar i konfigurerade Wi-Fi-nätverk."</string>
-    <string name="permlab_accessWimaxState">visa WiMax-status</string>
-    <string name="permdesc_accessWimaxState">Tillåter att ett program visar information om statusen för WiMax.</string>
-    <string name="permlab_changeWimaxState">ändra WiMax-status</string>
-    <string name="permdesc_changeWimaxState">Tillåter att ett program ansluter till och kopplar från WiMax-nätverk.</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"tillåt Wi-Fi multicast-mottagning"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Tillåter att ett program tar emot paket som inte är adresserade direkt till din enhet. Detta är användbart om du vill upptäcka tillgängliga tjänster i närheten. Det drar mer batteri än om telefonen inte är i multicast-läge."</string>
     <string name="permlab_accessWimaxState" msgid="2800410363171809280">"visa WiMAX-status"</string>

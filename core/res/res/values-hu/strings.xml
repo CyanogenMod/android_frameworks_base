@@ -914,10 +914,6 @@
     <string name="reboot_progress">Újraindítás...</string>
     <string name="reboot_confirm">A telefon újra fog indulni.</string>
     <string name="global_action_reboot">Újraindítás</string>
-    <string name="permlab_accessWimaxState">WiMax állapotának megtekintése</string>
-    <string name="permdesc_accessWimaxState">Lehetővé teszi egy alkalmazás számára a WiMax állapotával kapcsolatos információk megtekintését.</string>
-    <string name="permlab_changeWimaxState">WiMax állapotának módosítása</string>
-    <string name="permdesc_changeWimaxState">Lehetővé teszi egy alkalmazás számára WiMax hozzáférési pontok használatát, valamint módosítások végrehajtását a konfigurált WiMax hálózatokban.</string>
     <string name="lockscreen_discharging">Akkumulátor (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
     <string name="lockscreen_phone_label">Telefon</string>
     <string name="lockscreen_messaging_label">Üzenetek</string>
