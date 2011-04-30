@@ -259,16 +259,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 }
             }
         }
-        @Override
-        public void handleKey(KeyEvent event, Runnable finishedCallback) {
-            finishedCallback.run();
-            
-            synchronized (mLock) {
-                if (mousePointerView != null && (event.getKeyCode() == 0x5c || event.getKeyCode() == 0x5d)) {
-                    mousePointerView.addKeyEvent(event);
-                }
-            }
-        }
     };
 
     int mPointerLocationMode = 0;
