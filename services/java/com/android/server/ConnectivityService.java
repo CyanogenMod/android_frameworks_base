@@ -234,7 +234,11 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 sServiceInstance = new ConnectivityService(mContext);
                 notifyAll();
             }
-            Looper.loop();
+                try {
+                    Looper.loop();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+           }
         }
 
         public static ConnectivityService getServiceInstance(Context context) {
