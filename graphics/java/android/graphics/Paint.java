@@ -1000,7 +1000,7 @@ public class Paint {
      */
     public float measureText(char[] text, int index, int count) {
 
-        char[] text2 = TextUtils.processBidi(text, index, index+count);
+        char[] text2 = TextUtils.reshapeArabic(text, index, index+count);
 
         if (!mHasCompatScaling) return native_measureText(text2, index, count);
         final float oldSize = getTextSize();
@@ -1022,7 +1022,7 @@ public class Paint {
      */
     public float measureText(String text, int start, int end) {
 
-        String text2 = TextUtils.processBidi(text, start, end);
+        String text2 = TextUtils.reshapeArabic(text, start, end);
 
         if (!mHasCompatScaling) return native_measureText(text2, start, end);
         final float oldSize = getTextSize();
@@ -1042,7 +1042,7 @@ public class Paint {
      */
     public float measureText(String text) {
 
-        String text2 = TextUtils.processBidi(text);
+        String text2 = TextUtils.reshapeArabic(text);
 
         if (!mHasCompatScaling) return native_measureText(text2);
         final float oldSize = getTextSize();
@@ -1101,7 +1101,7 @@ public class Paint {
     public int breakText(char[] text, int index, int count,
                                 float maxWidth, float[] measuredWidth) {
 
-        char[] text2 = TextUtils.processBidi(text);
+        char[] text2 = TextUtils.reshapeArabic(text);
 
         if (!mHasCompatScaling) {
             return native_breakText(text2, index, count, maxWidth, measuredWidth);
@@ -1176,7 +1176,7 @@ public class Paint {
     public int breakText(String text, boolean measureForwards,
                                 float maxWidth, float[] measuredWidth) {
 
-        String text2 = TextUtils.processBidi(text);
+        String text2 = TextUtils.reshapeArabic(text);
 
         if (!mHasCompatScaling) {
             return native_breakText(text2, measureForwards, maxWidth, measuredWidth);
@@ -1210,7 +1210,7 @@ public class Paint {
             throw new ArrayIndexOutOfBoundsException();
         }
 
-        char[] text2 = TextUtils.processBidi(text, index, index+count);
+        char[] text2 = TextUtils.reshapeArabic(text, index, index+count);
 
         if (!mHasCompatScaling) {
             return native_getTextWidths(mNativePaint, text2, index, count, widths);
@@ -1275,7 +1275,7 @@ public class Paint {
             throw new ArrayIndexOutOfBoundsException();
         }
 
-        String text2 = TextUtils.processBidi(text, start, end);
+        String text2 = TextUtils.reshapeArabic(text, start, end);
 
         if (!mHasCompatScaling) {
             return native_getTextWidths(mNativePaint, text2, start, end, widths);
