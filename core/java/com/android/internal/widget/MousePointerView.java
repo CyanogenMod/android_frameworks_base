@@ -16,13 +16,10 @@
 
 package com.android.internal.widget;
 
-import android.app.Instrumentation;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.os.SystemClock;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -50,7 +47,7 @@ public class MousePointerView extends View {
 	if (mouseX == 0 && mouseY == 0) {
 	}
 	else if ((lastX == 0 && lastY == 0) || lastX - mouseX < 10.0f || lastY - mouseY < 10.0f) {
-            // Draw mouse cursor
+            // Draw mouse pointer
 	    mPath.rewind();
             mPath.moveTo(mouseX, mouseY);
             mPath.lineTo(mouseX + 12.0f, mouseY + 12.0f);
@@ -72,54 +69,6 @@ public class MousePointerView extends View {
 	}
     }
     
-    private void mouseScrollUp()
-    {
-	long downTime = SystemClock.uptimeMillis();
-	long eventTime = SystemClock.uptimeMillis();
-	Instrumentation inst = new Instrumentation();
-	MotionEvent event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, mouseX, mouseY, 0);
-	inst.sendPointerSync(event);
-	eventTime = SystemClock.uptimeMillis();
-	event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_MOVE, mouseX, mouseY + 5.0f, 0);
-	inst.sendPointerSync(event);
-	event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_MOVE, mouseX, mouseY + 10.0f, 0);
-	inst.sendPointerSync(event);
-	event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_MOVE, mouseX, mouseY + 15.0f, 0);
-	inst.sendPointerSync(event);
-	event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_MOVE, mouseX, mouseY + 25.0f, 0);
-	inst.sendPointerSync(event);
-	event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_MOVE, mouseX, mouseY + 35.0f, 0);
-	inst.sendPointerSync(event);
-	event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_MOVE, mouseX, mouseY + 45.0f, 0);
-	inst.sendPointerSync(event);
-	event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_UP, mouseX, mouseY + 60.0f, 0);
-	inst.sendPointerSync(event);
-    }
-
-    private void mouseScrollDown()
-    {
-	long downTime = SystemClock.uptimeMillis();
-	long eventTime = SystemClock.uptimeMillis();
-	Instrumentation inst = new Instrumentation();
-	MotionEvent event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_DOWN, mouseX, mouseY, 0);
-	inst.sendPointerSync(event);
-	eventTime = SystemClock.uptimeMillis();
-	event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_MOVE, mouseX, mouseY - 5.0f, 0);
-	inst.sendPointerSync(event);
-	event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_MOVE, mouseX, mouseY - 10.0f, 0);
-	inst.sendPointerSync(event);
-	event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_MOVE, mouseX, mouseY - 15.0f, 0);
-	inst.sendPointerSync(event);
-	event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_MOVE, mouseX, mouseY - 25.0f, 0);
-	inst.sendPointerSync(event);
-	event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_MOVE, mouseX, mouseY - 35.0f, 0);
-	inst.sendPointerSync(event);
-	event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_MOVE, mouseX, mouseY - 45.0f, 0);
-	inst.sendPointerSync(event);
-	event = MotionEvent.obtain(downTime, eventTime, MotionEvent.ACTION_UP, mouseX, mouseY - 60.0f, 0);
-	inst.sendPointerSync(event);
-    }
-
     public void addTouchEvent(MotionEvent event) {
 	lastX = mouseX;
 	lastY = mouseY;
@@ -128,36 +77,9 @@ public class MousePointerView extends View {
 	postInvalidate();
     }
 
-    public void addKeyEvent(KeyEvent event) {
-	if (event.getKeyCode() == 0x5c) {
-		mouseScrollUp();
-	}
-	else if (event.getKeyCode() == 0x5d) {
-		mouseScrollDown();
-	}
-	postInvalidate();
-    }
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         addTouchEvent(event);
         return true;
     }
-
-    @Override
-    public boolean onTrackballEvent(MotionEvent event) {
-        return super.onTrackballEvent(event);
-    }
- 
-    @Override
-    public boolean onKeyUp(int keyCode, KeyEvent event) {
-        addKeyEvent(event);
-        return true;
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        return true;
-    }
-
 }

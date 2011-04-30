@@ -3338,7 +3338,29 @@ void MouseInputMapper::sync(nsecs_t when) {
     { // acquire lock
         AutoMutex _l(mLock);
 
-        if (fields & Accumulator::FIELD_BTN_RIGHT) {
+       bool downChanged = fields & Accumulator::FIELD_BTN_MOUSE;
+       if (downChanged) {
+           if (mAccumulator.btnMouse) {
+               mLocked.down = true;
+               mLocked.downTime = when;
+           } else {
+               mLocked.down = false;
+           }
+           motionEventAction = mLocked.down ? AMOTION_EVENT_ACTION_DOWN : AMOTION_EVENT_ACTION_UP;
+        } else {
+            motionEventAction = AMOTION_EVENT_ACTION_MOVE;
+        }
+
+
+        if (fields & Accumulator::FIELD_BTN_RIGHT && mLocked.down) {
+            getDispatcher()->notifyKey(when, getDeviceId(),
+            AINPUT_SOURCE_DPAD, 0, mAccumulator.btnRight ?
+            AKEY_EVENT_ACTION_DOWN : AKEY_EVENT_ACTION_UP,
+            AKEY_EVENT_FLAG_FROM_SYSTEM,
+            0x03/*Keycode for home*/, 0x20 /*Scancode*/,
+            mContext->getGlobalMetaState(), when);
+        }
+        else if (fields & Accumulator::FIELD_BTN_RIGHT) {
             getDispatcher()->notifyKey(when, getDeviceId(),
             AINPUT_SOURCE_DPAD, 0, mAccumulator.btnRight ?
             AKEY_EVENT_ACTION_DOWN : AKEY_EVENT_ACTION_UP,
@@ -3347,7 +3369,15 @@ void MouseInputMapper::sync(nsecs_t when) {
             mContext->getGlobalMetaState(), when);
         }
 
-        if (fields & Accumulator::FIELD_BTN_MIDDLE) {
+        if (fields & Accumulator::FIELD_BTN_MIDDLE && mLocked.down) {
+            getDispatcher()->notifyKey(when, getDeviceId(),
+            AINPUT_SOURCE_DPAD, 0, mAccumulator.btnMiddle ?
+            AKEY_EVENT_ACTION_DOWN : AKEY_EVENT_ACTION_UP,
+            AKEY_EVENT_FLAG_FROM_SYSTEM,
+            0x42/*Keycode for enter key*/, 0x27 /*Scancode*/,
+            mContext->getGlobalMetaState(), when);
+        }
+        else if (fields & Accumulator::FIELD_BTN_MIDDLE) {
             getDispatcher()->notifyKey(when, getDeviceId(),
             AINPUT_SOURCE_DPAD, 0, mAccumulator.btnMiddle ?
             AKEY_EVENT_ACTION_DOWN : AKEY_EVENT_ACTION_UP,
@@ -3356,7 +3386,15 @@ void MouseInputMapper::sync(nsecs_t when) {
             mContext->getGlobalMetaState(), when);
         }
 
-       if (fields & Accumulator::FIELD_BTN_SIDE) {
+       if (fields & Accumulator::FIELD_BTN_SIDE && mLocked.down) {
+            getDispatcher()->notifyKey(when, getDeviceId(),
+            AINPUT_SOURCE_DPAD, 0, mAccumulator.btnSide ?
+            AKEY_EVENT_ACTION_DOWN : AKEY_EVENT_ACTION_UP,
+            AKEY_EVENT_FLAG_FROM_SYSTEM,
+            0x16 /*Keycode for right key*/, 0x30 /*Scancode*/,
+            mContext->getGlobalMetaState(), when);
+       }
+       else if (fields & Accumulator::FIELD_BTN_SIDE) {
             getDispatcher()->notifyKey(when, getDeviceId(),
             AINPUT_SOURCE_DPAD, 0, mAccumulator.btnSide ?
             AKEY_EVENT_ACTION_DOWN : AKEY_EVENT_ACTION_UP,
@@ -3365,12 +3403,20 @@ void MouseInputMapper::sync(nsecs_t when) {
             mContext->getGlobalMetaState(), when);
         }
 
-        if (fields & Accumulator::FIELD_BTN_EXTRA) {
+        if (fields & Accumulator::FIELD_BTN_EXTRA && mLocked.down) {
             getDispatcher()->notifyKey(when, getDeviceId(),
             AINPUT_SOURCE_DPAD, 0, mAccumulator.btnExtra ?
             AKEY_EVENT_ACTION_DOWN : AKEY_EVENT_ACTION_UP,
             AKEY_EVENT_FLAG_FROM_SYSTEM,
-            0x54/*Keycode for search key*/, 0x21 /*Scancode*/,
+            0x15 /*Keycode for left key*/, 0x31 /*Scancode*/,
+            mContext->getGlobalMetaState(), when);
+        }
+        else if (fields & Accumulator::FIELD_BTN_EXTRA) {
+            getDispatcher()->notifyKey(when, getDeviceId(),
+            AINPUT_SOURCE_DPAD, 0, mAccumulator.btnExtra ?
+            AKEY_EVENT_ACTION_DOWN : AKEY_EVENT_ACTION_UP,
+            AKEY_EVENT_FLAG_FROM_SYSTEM,
+            0x42/*Keycode for enter key*/, 0x27 /*Scancode*/,
             mContext->getGlobalMetaState(), when);
         }
 
@@ -3392,43 +3438,54 @@ void MouseInputMapper::sync(nsecs_t when) {
             mContext->getGlobalMetaState(), when);
         }
 
-       bool downChanged = fields & Accumulator::FIELD_BTN_MOUSE;
-       if (downChanged) {
-           if (mAccumulator.btnMouse) {
-               mLocked.down = true;
-               mLocked.downTime = when;
-           } else {
-               mLocked.down = false;
-           }
-           motionEventAction = mLocked.down ? AMOTION_EVENT_ACTION_DOWN : AMOTION_EVENT_ACTION_UP;
-        } else {
-            motionEventAction = AMOTION_EVENT_ACTION_MOVE;
-        }
-
 	bool scrollChanged = fields & Accumulator::FIELD_REL_WHEEL;
-        if (mAccumulator.btnScrollUp && scrollChanged) {
+        if (mAccumulator.btnScrollUp && scrollChanged && mLocked.down) {
             getDispatcher()->notifyKey(when, getDeviceId(),
                 AINPUT_SOURCE_DPAD, 0, AKEY_EVENT_ACTION_DOWN,
                 AKEY_EVENT_FLAG_FROM_SYSTEM,
-                0x5c/*Keycode for page up key*/, 0x24 /*Scancode*/,
+                0x57/*Keycode for next key*/, 0x28 /*Scancode*/,
                 mContext->getGlobalMetaState(), when);
-            getDispatcher()->notifyKey(when + (10 * 1000000LL), getDeviceId(),
+            getDispatcher()->notifyKey(when, getDeviceId(),
                 AINPUT_SOURCE_DPAD, 0, AKEY_EVENT_ACTION_UP,
                 AKEY_EVENT_FLAG_FROM_SYSTEM,
-                0x5c/*Keycode for page up key*/, 0x24 /*Scancode*/,
-                mContext->getGlobalMetaState(), when + (10 * 1000000LL));
+                0x57/*Keycode for next key*/, 0x28 /*Scancode*/,
+                mContext->getGlobalMetaState(), when);
+        }
+        else if (mAccumulator.btnScrollUp && scrollChanged) {
+            getDispatcher()->notifyKey(when, getDeviceId(),
+                AINPUT_SOURCE_DPAD, 0, AKEY_EVENT_ACTION_DOWN,
+                AKEY_EVENT_FLAG_FROM_SYSTEM,
+                0x13/*Keycode for up key*/, 0x24 /*Scancode*/,
+                mContext->getGlobalMetaState(), when);
+            getDispatcher()->notifyKey(when, getDeviceId(),
+                AINPUT_SOURCE_DPAD, 0, AKEY_EVENT_ACTION_UP,
+                AKEY_EVENT_FLAG_FROM_SYSTEM,
+                0x13/*Keycode for up key*/, 0x24 /*Scancode*/,
+                mContext->getGlobalMetaState(), when);
+        }
+        else if (mAccumulator.btnScrollDown && scrollChanged && mLocked.down) {
+            getDispatcher()->notifyKey(when, getDeviceId(),
+                AINPUT_SOURCE_DPAD, 0, AKEY_EVENT_ACTION_DOWN,
+                AKEY_EVENT_FLAG_FROM_SYSTEM,
+                0x58/*Keycode for previous key*/, 0x29 /*Scancode*/,
+                mContext->getGlobalMetaState(), when);
+            getDispatcher()->notifyKey(when, getDeviceId(),
+                AINPUT_SOURCE_DPAD, 0, AKEY_EVENT_ACTION_UP,
+                AKEY_EVENT_FLAG_FROM_SYSTEM,
+                0x58/*Keycode for previous key*/, 0x29 /*Scancode*/,
+                mContext->getGlobalMetaState(), when);
         }
         else if (mAccumulator.btnScrollDown && scrollChanged) {
             getDispatcher()->notifyKey(when, getDeviceId(),
                 AINPUT_SOURCE_DPAD, 0, AKEY_EVENT_ACTION_DOWN,
                 AKEY_EVENT_FLAG_FROM_SYSTEM,
-                0x5d/*Keycode for page down key*/, 0x25 /*Scancode*/,
+                0x14/*Keycode for down key*/, 0x25 /*Scancode*/,
                 mContext->getGlobalMetaState(), when);
-            getDispatcher()->notifyKey(when + (10 * 1000000LL), getDeviceId(),
+            getDispatcher()->notifyKey(when, getDeviceId(),
                 AINPUT_SOURCE_DPAD, 0, AKEY_EVENT_ACTION_UP,
                 AKEY_EVENT_FLAG_FROM_SYSTEM,
-                0x5d/*Keycode for page down key*/, 0x25 /*Scancode*/,
-                mContext->getGlobalMetaState(), when + (10 * 1000000LL));
+                0x14/*Keycode for down key*/, 0x25 /*Scancode*/,
+                mContext->getGlobalMetaState(), when);
         }
 
         downTime = mLocked.downTime;
