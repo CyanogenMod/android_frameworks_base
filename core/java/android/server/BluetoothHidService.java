@@ -365,19 +365,19 @@ public class BluetoothHidService extends IBluetoothHid.Stub {
 
 	if (state != prevState) {
 	    mHidDevices.put(device, state);
-
+	    if (((device.getBluetoothClass().getDeviceClass() == BluetoothClass.Device.PERIPHERAL_POINTING_DEVICE) || 
+		    (device.getBluetoothClass().getDeviceClass() == BluetoothClass.Device.PERIPHERAL_COMBO_KEYBORD_POINTING))
+		    && state == BluetoothHid.STATE_CONNECTED) {
+		Settings.System.putInt(mContext.getContentResolver(), Settings.System.MOUSE_POINTER, 1);
+	    }
+	    else {
+	        Settings.System.putInt(mContext.getContentResolver(), Settings.System.MOUSE_POINTER, 0);
+	    }
 	    if (getHidDevicePriority(device) > BluetoothHid.PRIORITY_OFF &&
                     state == BluetoothHid.STATE_CONNECTING ||
                     state == BluetoothHid.STATE_CONNECTED) {
                 setHidDevicePriority(device, BluetoothHid.PRIORITY_AUTO_CONNECT);
-		if ((device.getBluetoothClass().getDeviceClass() == BluetoothClass.Device.PERIPHERAL_POINTING_DEVICE) || 
-		    (device.getBluetoothClass().getDeviceClass() == BluetoothClass.Device.PERIPHERAL_COMBO_KEYBORD_POINTING)) {
-		    Settings.System.putInt(mContext.getContentResolver(), Settings.System.MOUSE_POINTER, 1);
-		}		
             }
-	    else if (device.getBluetoothClass().getDeviceClass() == BluetoothClass.Device.PERIPHERAL_POINTING_DEVICE) {
-		    Settings.System.putInt(mContext.getContentResolver(), Settings.System.MOUSE_POINTER, 0);
-	    }
             Intent intent = new Intent(BluetoothHid.HID_DEVICE_STATE_CHANGED_ACTION);
             intent.putExtra(BluetoothDevice.EXTRA_DEVICE, device);
             intent.putExtra(BluetoothHid.HID_DEVICE_PREVIOUS_STATE, prevState);
