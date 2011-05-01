@@ -2118,11 +2118,12 @@ class PowerManagerService extends IPowerManager.Stub
         }
 
         public void run() {
-            if (mAnimateScreenLights ||
-                    (!mAnimateScreenLights && Settings.System.getInt(mContext.getContentResolver(),
-                            ELECTRON_BEAM_ANIMATION_OFF,
-                            mContext.getResources().getBoolean(
-                                    com.android.internal.R.bool.config_enableScreenOffAnimation) ? 1 : 0) == 0)) {
+            // Check for the electron beam for fully on/off transitions.
+            // Otherwise, allow it to fade the brightness as normal.
+            final boolean electrifying = animating &&
+                ((mElectronBeamAnimationOff && targetValue == Power.BRIGHTNESS_OFF) ||
+                 (mElectronBeamAnimationOn && (int)curValue == Power.BRIGHTNESS_OFF));
+            if (mAnimateScreenLights || !electrifying) {
                 synchronized (mLocks) {
                     long now = SystemClock.uptimeMillis();
                     boolean more = mScreenBrightness.stepLocked();
@@ -2132,9 +2133,7 @@ class PowerManagerService extends IPowerManager.Stub
                 }
             } else {
                 synchronized (mLocks) {
-                    // we're turning off
-                    final boolean animate = animating && targetValue == Power.BRIGHTNESS_OFF;
-                    if (animate) {
+                    if (electrifying) {
                         // It's pretty scary to hold mLocks for this long, and we should
                         // redesign this, but it works for now.
                         nativeStartSurfaceFlingerAnimation(
