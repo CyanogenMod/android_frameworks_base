@@ -156,11 +156,6 @@ ifeq ($(BOARD_WLAN_DEVICE),wl1271)
 endif
 endif
 
-ifeq ($(BOARD_HAVE_SQN_WIMAX),true)
-	LOCAL_SRC_FILES += android_net_wimax_WimaxCommonAPI.cpp
-	LOCAL_CFLAGS += -DBOARD_HAVE_SQN_WIMAX
-endif
-
 LOCAL_C_INCLUDES += \
 	$(JNI_H_INCLUDE) \
 	$(LOCAL_PATH)/android/graphics \

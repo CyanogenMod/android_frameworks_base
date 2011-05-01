@@ -208,20 +208,6 @@ public final class Settings {
             "android.settings.WIFI_IP_SETTINGS";
 
     /**
-     * Activity Action: Show settings to allow configuration of Wimax.
-     * <p>
-     * In some cases, a matching Activity may not exist, so ensure you
-     * safeguard against this.
-     * <p>
-     * Input: Nothing.
-     * <p>
-     * Output: Nothing.
-     */
-    @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
-    public static final String ACTION_WIMAX_SETTINGS =
-            "android.settings.WIMAX_SETTINGS";
-
-    /**
      * Activity Action: Show settings to allow configuration of Bluetooth.
      * <p>
      * In some cases, a matching Activity may not exist, so ensure you
@@ -1119,14 +1105,15 @@ public final class Settings {
         public static final String RADIO_WIFI = "wifi";
 
         /**
-         * Constant for use in AIRPLANE_MODE_RADIOS to specify Wimax radio.
-         */
-        public static final String RADIO_WIMAX = "wimax";
-
-        /**
          * Constant for use in AIRPLANE_MODE_RADIOS to specify Cellular radio.
          */
         public static final String RADIO_CELL = "cell";
+
+        /**
+         * Constant for use in AIRPLANE_MODE_RADIOS to specify WiMAX radio.
+         * @hide
+         */
+        public static final String RADIO_WIMAX = "wimax";
 
         /**
          * A comma separated list of radios that need to be disabled when airplane mode
@@ -3743,22 +3730,6 @@ public final class Settings {
          * @hide
          */
         public static final String WIMAX_ON = "wimax_on";
-
-        /**
-         * Whether to auto connect to the last connected network.
-         * <p>
-         * If not connected and the scan results have the last connected network
-         * available then connect to the network.
-         * see {@link android.provider.Settings.Secure#WIMAX_LAST_CONNECTED_NETWORK}.
-         */
-        public static final String WIMAX_AUTO_CONNECT_ON =
-                "wimax_auto_connect_on";
-
-        /**
-         * The last connected wimax network name.
-         */
-        public static final String WIMAX_LAST_CONNECTED_NETWORK =
-                "wimax_last_connected_network";
 
         /**
          * Whether background data usage is allowed by the user. See
