@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 The Android Open Source Project
+* Copyright (C) 2010 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
 
 package com.android.systemui.statusbar;
 
-import com.android.systemui.R;
-
 import android.content.Context;
+import android.graphics.Point;
 import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.ViewConfiguration;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
+
+import com.android.systemui.R;
 
 public class LatestItemContainer extends LinearLayout {
     private final GestureDetector mGestureDetector;
@@ -34,6 +34,8 @@ public class LatestItemContainer extends LinearLayout {
     private Runnable mSwipeCallback = null;
 
     private final Handler mHandler = new Handler();
+
+    private final Point mStartPoint = new Point();
 
     public LatestItemContainer(final Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -58,21 +60,37 @@ public class LatestItemContainer extends LinearLayout {
                         }
                         return false;
                     }
-                });
+        });
     }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        boolean handled = mGestureDetector.onTouchEvent(event);
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_UP:
-                if (handled) {
-                    return true;
-                } else {
-                    return super.onInterceptTouchEvent(event);
-                }
+        if (mSwipeCallback != null) {
+            boolean handled = mGestureDetector.onTouchEvent(event);
+            switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                case MotionEvent.ACTION_OUTSIDE:
+                case MotionEvent.ACTION_CANCEL:
+                    reset();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    if (!handled) {
+                        reset();
+                    }
+                    return handled;
+                case MotionEvent.ACTION_MOVE:
+                    int diffX = ((int) event.getX()) - mStartPoint.x;
+                    scrollTo(-diffX, 0);
+                    break;
+                case MotionEvent.ACTION_DOWN:
+                    mStartPoint.x = (int) event.getX();
+                    break;
+            }
         }
-        return false;
+        return super.onInterceptTouchEvent(event);
+    }
+
+    private void reset() {
+        scrollTo(0, 0);
     }
 
     public void setOnSwipeCallback(Runnable callback) {
