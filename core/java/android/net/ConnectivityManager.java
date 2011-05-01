@@ -209,8 +209,6 @@ public class ConnectivityManager
      * default connections.
      */
     public static final int TYPE_WIMAX       = 6;
-    public static final int TYPE_MOBILE_WIMAX = 6; 
-
     /**
      * Bluetooth data connection.
      * @hide
@@ -230,8 +228,8 @@ public class ConnectivityManager
     private IConnectivityManager mService;
 
     static public boolean isNetworkTypeValid(int networkType) {
-
-        return (networkType >= 0 && networkType <= MAX_NETWORK_TYPE);
+	// HACK! Accept TYPE_WIMAX even though we don't support it yet
+        return TYPE_WIMAX == networkType || (networkType >= 0 && networkType <= MAX_NETWORK_TYPE);
     }
 
     public void setNetworkPreference(int preference) {
