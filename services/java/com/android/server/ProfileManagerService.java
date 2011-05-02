@@ -46,7 +46,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
 
     private Map<String, NotificationGroup> mGroups = new HashMap<String, NotificationGroup>();
 
-    private String mActiveProfile;
+    private Profile mActiveProfile;
 
     private Context mContext;
 
@@ -77,7 +77,8 @@ public class ProfileManagerService extends IProfileManager.Stub {
     public void setActiveProfile(String profileName) throws RemoteException {
         if(mProfiles.containsKey(profileName)){
             Log.d(TAG, "Set active profile to: " + profileName);
-            mActiveProfile = profileName;
+            mActiveProfile = getProfile(profileName);
+            mActiveProfile.doSelect(mContext);
         }else{
             Log.e(TAG, "Cannot set active profile to: " + profileName + " - does not exist.");
         }
@@ -106,7 +107,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
 
     @Override
     public Profile getActiveProfile() throws RemoteException {
-        return mProfiles.get(mActiveProfile);
+        return mActiveProfile;
     }
 
     @Override
