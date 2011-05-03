@@ -22,7 +22,7 @@ import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.RotarySelector;
 import com.android.internal.widget.SlidingTab;
 import com.android.internal.widget.SlidingTab.OnTriggerListener;
-
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -337,7 +337,17 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         if (mSelector2 != null) {
             mSelector2.setHoldAfterTrigger(true, false);
             mSelector2.setLeftHintText(R.string.lockscreen_phone_label);
-            mSelector2.setRightHintText(R.string.lockscreen_messaging_label);
+            if (mCustomAppActivity!=null){
+                String packageName = mCustomAppActivity.split("component=")[1].split("/")[0];
+                try {
+                    CharSequence label = getContext().getPackageManager().getApplicationLabel(getContext().getPackageManager().getApplicationInfo(packageName, getContext().getPackageManager().GET_META_DATA));
+                    mSelector2.setRightHintText(label);
+                }catch (NameNotFoundException e) {
+                    mSelector2.setRightHintText(R.string.lockscreen_messaging_label);
+                }
+           }else{
+                mSelector2.setRightHintText(R.string.lockscreen_messaging_label);
+           }
         }
         mEmergencyCallText = (TextView) findViewById(R.id.emergencyCallText);
         mEmergencyCallButton = (Button) findViewById(R.id.emergencyCallButton);
@@ -412,13 +422,40 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mAudioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
         mSilentMode = isSilentMode();
 
-
         //Rotary setup
         if(!mRotaryUnlockDown){
             mRotarySelector.setLeftHandleResource(R.drawable.ic_jog_dial_unlock);
-            mRotarySelector.setMidHandleResource((mCustomIconStyle == 1) ? R.drawable.ic_jog_dial_custom : R.drawable.ic_jog_dial_messaging);
+            if (mCustomAppActivity!=null){
+                String packageName = mCustomAppActivity.split("component=")[1].split("/")[0];
+                try{
+                    if (mCustomIconStyle == 2) {
+                        mRotarySelector.setMidHandleResource(R.drawable.ic_jog_dial_custom);
+                    }else{
+                        Drawable icon = getContext().getPackageManager().getApplicationIcon(packageName);
+                        mRotarySelector.setMidHandleResource(icon);
+                    }
+                }catch (NameNotFoundException e) {
+                    mRotarySelector.setMidHandleResource(R.drawable.ic_jog_dial_custom);
+                }
+           }else{
+                    mRotarySelector.setMidHandleResource(R.drawable.ic_jog_dial_custom);
+           }
         }else{
-            mRotarySelector.setLeftHandleResource((mCustomIconStyle == 1) ? R.drawable.ic_jog_dial_custom : R.drawable.ic_jog_dial_messaging);
+           if (mCustomAppActivity!=null){
+                    String packageName = mCustomAppActivity.split("component=")[1].split("/")[0];
+                    try{
+                            if (mCustomIconStyle == 2) {
+                                mRotarySelector.setLeftHandleResource(R.drawable.ic_jog_dial_custom);
+                            }else{
+                                Drawable icon = getContext().getPackageManager().getApplicationIcon(packageName);
+                                mRotarySelector.setLeftHandleResource(icon);
+                            }
+                    }catch (NameNotFoundException e) {
+                                mRotarySelector.setLeftHandleResource(R.drawable.ic_jog_dial_custom);
+                    }
+          }else{
+                    mRotarySelector.setLeftHandleResource(R.drawable.ic_jog_dial_custom);
+          }
             mRotarySelector.setMidHandleResource(R.drawable.ic_jog_dial_unlock);
         }
         mRotarySelector.enableCustomAppDimple(mCustomAppToggle);
@@ -448,12 +485,21 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             mSelector2.setLeftTabResources(R.drawable.ic_jog_dial_answer,
                     R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_left_generic,
                     R.drawable.jog_tab_left_generic);
-
-            mSelector2.setRightTabResources((mCustomIconStyle == 1) ? R.drawable.ic_jog_dial_custom
-                         : R.drawable.ic_jog_dial_messaging,
-                    R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_right_generic,
-                    R.drawable.jog_tab_right_generic);
-
+           if (mCustomAppActivity!=null){
+                    String packageName = mCustomAppActivity.split("component=")[1].split("/")[0];
+                    try{
+                            if (mCustomIconStyle == 2) {
+                                mSelector2.setRightTabResources(R.drawable.ic_jog_dial_custom, R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_right_generic, R.drawable.jog_tab_right_generic);
+                            }else{
+                                Drawable icon = getContext().getPackageManager().getApplicationIcon(packageName);
+                                mSelector2.setRightTabResources(icon, R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_right_generic, R.drawable.jog_tab_right_generic);
+                            }
+                    }catch (NameNotFoundException e) {
+                            mSelector2.setRightTabResources(R.drawable.ic_jog_dial_custom, R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_right_generic, R.drawable.jog_tab_right_generic);
+                    }
+          }else{
+                    mSelector2.setRightTabResources(R.drawable.ic_jog_dial_custom, R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_right_generic, R.drawable.jog_tab_right_generic);
+          }
             mSelector2.setOnTriggerListener(new OnTriggerListener() {
                 public void onTrigger(View v, int whichHandle) {
                     if (whichHandle == SlidingTab.OnTriggerListener.LEFT_HANDLE) {
