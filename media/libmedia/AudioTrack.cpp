@@ -356,7 +356,7 @@ void AudioTrack::start()
         }
 
         if (mCblk->flags & CBLK_INVALID_MSK) {
-            LOGW("start() track %p invalidated, creating a new one", this);
+            LOGE("start() track %p invalidated, creating a new one", this);
             // no need to clear the invalid flag as this cblk will not be used anymore
             // force new track creation
             status = DEAD_OBJECT;
@@ -364,7 +364,8 @@ void AudioTrack::start()
             status = mAudioTrack->start();
         }
         if (status == DEAD_OBJECT) {
-            LOGV("start() dead IAudioTrack: creating a new one");
+            LOGE("start() dead IAudioTrack: creating a new one");
+            mSessionId = 0;
             status = createTrack(mStreamType, mCblk->sampleRate, mFormat, mChannelCount,
                                  mFrameCount, mFlags, mSharedBuffer, getOutput(), false);
             if (status == NO_ERROR) {
@@ -848,8 +849,9 @@ status_t AudioTrack::obtainBuffer(Buffer* audioBuffer, int32_t waitCount)
                         cblk->lock.unlock();
                         result = mAudioTrack->start();
                         if (result == DEAD_OBJECT) {
-                            LOGW("obtainBuffer() dead IAudioTrack: creating a new one");
+                            LOGE("obtainBuffer() dead IAudioTrack: creating a new one");
 create_new_track:
+                            mSessionId = 0;
                             result = createTrack(mStreamType, cblk->sampleRate, mFormat, mChannelCount,
                                                  mFrameCount, mFlags, mSharedBuffer, getOutput(), false);
                             if (result == NO_ERROR) {
