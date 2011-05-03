@@ -64,12 +64,16 @@ public class UsbService extends IUsbManager.Stub {
             "DEVPATH=/devices/virtual/switch/usb_configuration";
     private static final String USB_FUNCTIONS_MATCH =
             "DEVPATH=/devices/virtual/usb_composite/";
+    private static final String USB_LEGACY_MATCH =
+            "DEVPATH=/devices/virtual/switch/usb_mass_storage";
     private static final String USB_CONNECTED_PATH =
             "/sys/class/switch/usb_connected/state";
     private static final String USB_CONFIGURATION_PATH =
             "/sys/class/switch/usb_configuration/state";
     private static final String USB_COMPOSITE_CLASS_PATH =
             "/sys/class/usb_composite";
+    private static final String USB_LEGACY_PATH =
+            "/sys/class/switch/usb_mass_storage/state";
 
     private static final int MSG_UPDATE_STATE = 0;
     private static final int MSG_FUNCTION_ENABLED = 1;
@@ -83,6 +87,7 @@ public class UsbService extends IUsbManager.Stub {
     // current connected and configuration state
     private int mConnected;
     private int mConfiguration;
+    private boolean mLegacy = false;
 
     // last broadcasted connected and configuration state
     private int mLastConnected = -1;
@@ -154,19 +159,31 @@ public class UsbService extends IUsbManager.Stub {
                 String state = event.get("SWITCH_STATE");
                 if (name != null && state != null) {
                     try {
-                        int intState = Integer.parseInt(state);
-                        if ("usb_connected".equals(name)) {
-                            mConnected = intState;
-                            // trigger an Intent broadcast
-                            if (mSystemReady) {
-                                // debounce disconnects to avoid problems bringing up USB tethering
-                                update(mConnected == 0);
+                        if (mLegacy) {
+                            int intState = (state == "offline" ? 0 : 1);
+                            if ("usb_mass_storage".equals(name)) {
+                                mConnected = intState;
+                                // trigger an Intent broadcast
+                                if (mSystemReady) {
+                                    // debounce disconnects to avoid problems b$
+                                    update(mConnected == 0);
+                                }
                             }
-                        } else if ("usb_configuration".equals(name)) {
-                            mConfiguration = intState;
-                            // trigger an Intent broadcast
-                            if (mSystemReady) {
-                                update(mConnected == 0);
+                        } else {
+                            int intState = Integer.parseInt(state);
+                            if ("usb_connected".equals(name)) {
+                                mConnected = intState;
+                                // trigger an Intent broadcast
+                                if (mSystemReady) {
+                                    // debounce disconnects to avoid problems bringing up USB tethering
+                                    update(mConnected == 0);
+                                }
+                            } else if ("usb_configuration".equals(name)) {
+                                mConfiguration = intState;
+                                // trigger an Intent broadcast
+                                if (mSystemReady) {
+                                    update(mConnected == 0);
+                                }
                             }
                         }
                     } catch (NumberFormatException e) {
@@ -237,6 +254,19 @@ public class UsbService extends IUsbManager.Stub {
 
         } catch (FileNotFoundException e) {
             Slog.i(TAG, "This kernel does not have USB configuration switch support");
+            Slog.i(TAG, "Trying legacy USB configuration switch support");
+            try {
+                FileReader file = new FileReader(USB_LEGACY_PATH);
+                int len = file.read(buffer, 0, 1024);
+                file.close();
+                mConnected = ((new String(buffer, 0, len)).trim() == "offline" ? 0 : 1);
+                mLegacy = true;
+
+            } catch (FileNotFoundException f) {
+                Slog.i(TAG, "This kernel does not have legacy USB configuration switch support");
+            } catch (Exception f) {
+                Slog.e(TAG, "" , f);
+            }
         } catch (Exception e) {
             Slog.e(TAG, "" , e);
         }
@@ -245,40 +275,44 @@ public class UsbService extends IUsbManager.Stub {
             return;
         }
 
-        // Read initial list of enabled and disabled functions (device mode)
-        try {
-            File[] files = new File(USB_COMPOSITE_CLASS_PATH).listFiles();
-            for (int i = 0; i < files.length; i++) {
-                File file = new File(files[i], "enable");
-                FileReader reader = new FileReader(file);
-                int len = reader.read(buffer, 0, 1024);
-                reader.close();
-                int value = Integer.valueOf((new String(buffer, 0, len)).trim());
-                String functionName = files[i].getName();
-                if (value == 1) {
-                    mEnabledFunctions.add(functionName);
-                if (UsbManager.USB_FUNCTION_ACCESSORY.equals(functionName)) {
-                        // The USB accessory driver is on by default, but it might have been
-                        // enabled before the USB service has initialized.
-                        inAccessoryMode = true;
-                    } else if (!UsbManager.USB_FUNCTION_ADB.equals(functionName)) {
-                        // adb is enabled/disabled automatically by the adbd daemon,
-                        // so don't treat it as a default function.
-                        mDefaultFunctions.add(functionName);
+        if (mLegacy) {
+            mEnabledFunctions.add(UsbManager.USB_FUNCTION_MASS_STORAGE);
+        } else {
+            // Read initial list of enabled and disabled functions (device mode)
+            try {
+                File[] files = new File(USB_COMPOSITE_CLASS_PATH).listFiles();
+                for (int i = 0; i < files.length; i++) {
+                    File file = new File(files[i], "enable");
+                    FileReader reader = new FileReader(file);
+                    int len = reader.read(buffer, 0, 1024);
+                    reader.close();
+                    int value = Integer.valueOf((new String(buffer, 0, len)).trim());
+                    String functionName = files[i].getName();
+                    if (value == 1) {
+                        mEnabledFunctions.add(functionName);
+                    if (UsbManager.USB_FUNCTION_ACCESSORY.equals(functionName)) {
+                            // The USB accessory driver is on by default, but it might have been
+                            // enabled before the USB service has initialized.
+                            inAccessoryMode = true;
+                        } else if (!UsbManager.USB_FUNCTION_ADB.equals(functionName)) {
+                            // adb is enabled/disabled automatically by the adbd daemon,
+                            // so don't treat it as a default function.
+                            mDefaultFunctions.add(functionName);
+                        }
+                    } else {
+                        mDisabledFunctions.add(functionName);
                     }
-                } else {
-                    mDisabledFunctions.add(functionName);
                 }
+            } catch (FileNotFoundException e) {
+                Slog.w(TAG, "This kernel does not have USB composite class support");
+            } catch (Exception e) {
+                Slog.e(TAG, "" , e);
             }
-        } catch (FileNotFoundException e) {
-            Slog.w(TAG, "This kernel does not have USB composite class support");
-        } catch (Exception e) {
-            Slog.e(TAG, "" , e);
         }
 
         // handle the case where an accessory switched the driver to accessory mode
         // before the framework finished booting
-        if (inAccessoryMode) {
+        if (inAccessoryMode && !mLegacy) {
             readCurrentAccessoryLocked();
 
             // FIXME - if we booted in accessory mode, then we have no way to figure out
