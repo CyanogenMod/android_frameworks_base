@@ -574,7 +574,10 @@ public class StatusBarPolicy {
             }
             else if (action.equals(WimaxManagerConstants.WIMAX_ENABLED_STATUS_CHANGED) ||
                      action.equals(WimaxManagerConstants.SIGNAL_LEVEL_CHANGED_ACTION) ||
-                     action.equals(WimaxManagerConstants.WIMAX_STATE_CHANGED_ACTION)) {
+                     action.equals(WimaxManagerConstants.WIMAX_STATE_CHANGED_ACTION) ||
+                     action.equals(WimaxManagerConstants.NETWORK_STATE_CHANGED_ACTION) ||
+                     action.equals(WimaxManagerConstants.WIMAX_ENABLED_CHANGED_ACTION) ||
+                     action.equals(WimaxManagerConstants.RSSI_CHANGED_ACTION)) {
                 updateWiMAX(intent);
             }
         }
@@ -606,7 +609,6 @@ public class StatusBarPolicy {
         mService = (StatusBarManager)context.getSystemService(Context.STATUS_BAR_SERVICE);
         mSignalStrength = new SignalStrength();
         mBatteryStats = BatteryStatsService.getService();
-        mWimaxSettingsHelper = new WimaxSettingsHelper(context);
 
         // settings observer for cm-battery change
         SettingsObserver settingsObserver = new SettingsObserver(mHandler);
@@ -740,6 +742,9 @@ public class StatusBarPolicy {
         filter.addAction(WimaxManagerConstants.WIMAX_STATE_CHANGED_ACTION);
         filter.addAction(WimaxManagerConstants.SIGNAL_LEVEL_CHANGED_ACTION);
         filter.addAction(WimaxManagerConstants.WIMAX_ENABLED_STATUS_CHANGED);
+        filter.addAction(WimaxManagerConstants.WIMAX_ENABLED_CHANGED_ACTION);
+        filter.addAction(WimaxManagerConstants.NETWORK_STATE_CHANGED_ACTION);
+        filter.addAction(WimaxManagerConstants.RSSI_CHANGED_ACTION);
 
         mContext.registerReceiver(mIntentReceiver, filter, null, mHandler);
 
@@ -1396,8 +1401,22 @@ public class StatusBarPolicy {
                     mIsWimaxEnabled = false;
                     break;
             }
+        } else if (action.equals(WimaxManagerConstants.WIMAX_ENABLED_CHANGED_ACTION)) {
+            int wimaxStatus = intent.getIntExtra(WimaxManagerConstants.CURRENT_WIMAX_ENABLED_STATE,
+                    WimaxManagerConstants.WIMAX_ENABLED_STATE_UNKNOWN);
+            mIsWimaxEnabled = (wimaxStatus == WimaxManagerConstants.WIMAX_ENABLED_STATE_ENABLED);
         } else if (action.equals(WimaxManagerConstants.SIGNAL_LEVEL_CHANGED_ACTION)) {
             mWimaxSignal = intent.getIntExtra(WimaxManagerConstants.EXTRA_NEW_SIGNAL_LEVEL, 0);
+        } else if (action.equals(WimaxManagerConstants.RSSI_CHANGED_ACTION)) {
+            int rssi = intent.getIntExtra(WimaxManagerConstants.EXTRA_NEW_RSSI_LEVEL, -200);
+            Slog.d(TAG, "WiMAX RSSI: " + rssi);
+            if (rssi >= 3) {
+                mWimaxSignal = 3;
+            } else if (rssi <= 0) {
+                mWimaxSignal = 0;
+            } else {
+                mWimaxSignal = rssi;
+            }
         } else if (action.equals(WimaxManagerConstants.WIMAX_STATE_CHANGED_ACTION)) {
             mWimaxState = intent.getIntExtra(WimaxManagerConstants.EXTRA_WIMAX_STATE,
                     WimaxManagerConstants.WIMAX_STATE_UNKNOWN);
@@ -1417,6 +1436,16 @@ public class StatusBarPolicy {
                         iconId = sWimaxSignalImages[mInetCondition][mWimaxSignal];
                     }
                     break;
+            }
+            mService.setIcon("wimax", iconId, 0);
+        } else if (action.equals(WimaxManagerConstants.NETWORK_STATE_CHANGED_ACTION)) {
+            final NetworkInfo networkInfo = (NetworkInfo) intent.getParcelableExtra(WimaxManagerConstants.EXTRA_NETWORK_INFO);
+            if (networkInfo != null && networkInfo.isConnected()) {
+                iconId = sWimaxSignalImages[mInetCondition][mWimaxSignal];
+            } else if (networkInfo != null && networkInfo.isAvailable()) {
+                iconId = sWimaxIdleImg;
+            } else {
+                iconId = sWimaxDisconnectedImg;
             }
             mService.setIcon("wimax", iconId, 0);
         }

@@ -1,17 +1,32 @@
+/*
+ * Copyright (C) 2011 The CyanogenMod Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.android.systemui.statusbar.powerwidget;
 
 import com.android.systemui.R;
-import com.android.wimax.WimaxConstants;
-import com.android.wimax.WimaxSettingsHelper;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.wifi.WifiManager;
+import android.net.wimax.WimaxHelper;
+import android.net.wimax.WimaxManagerConstants;
 import android.os.AsyncTask;
 import android.util.Log;
 
-public class WimaxButton extends PowerButton{
+public class WimaxButton extends PowerButton {
 
     private static final StateTracker sWimaxState = new WimaxStateTracker();
 
@@ -21,18 +36,16 @@ public class WimaxButton extends PowerButton{
     private static final class WimaxStateTracker extends StateTracker {
         @Override
         public int getActualState(Context context) {
-            final WimaxSettingsHelper helper = new WimaxSettingsHelper(context);
-            if (helper.isWimaxSupported()) {
-                return wimaxStateToFiveState(helper.getWimaxState());
+            if (WimaxHelper.isWimaxSupported(context)) {
+                return wimaxStateToFiveState(WimaxHelper.getWimaxState(context));
             }
             return STATE_UNKNOWN;
         }
 
         @Override
-        protected void requestStateChange(Context context,
+        protected void requestStateChange(final Context context,
                 final boolean desiredState) {
-            final WimaxSettingsHelper helper = new WimaxSettingsHelper(context);
-            if (!helper.isWimaxSupported()) {
+            if (!WimaxHelper.isWimaxSupported(context)) {
                 Log.e(TAG, "WiMAX is not supported");
                 return;
             }
@@ -44,7 +57,7 @@ public class WimaxButton extends PowerButton{
             new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... args) {
-                    helper.setWimaxEnabled(desiredState);
+                    WimaxHelper.setWimaxEnabled(context, desiredState);
                     return null;
                 }
             }.execute();
@@ -52,10 +65,10 @@ public class WimaxButton extends PowerButton{
 
         @Override
         public void onActualStateChange(Context context, Intent intent) {
-            if (!WimaxConstants.WIMAX_ENABLED_CHANGED_ACTION.equals(intent.getAction())) {
+            if (!WimaxManagerConstants.WIMAX_ENABLED_CHANGED_ACTION.equals(intent.getAction())) {
                 return;
             }
-            int wimaxState = intent.getIntExtra(WimaxConstants.CURRENT_WIMAX_ENABLED_STATE, WimaxConstants.WIMAX_ENABLED_STATE_UNKNOWN);
+            int wimaxState = intent.getIntExtra(WimaxManagerConstants.CURRENT_WIMAX_ENABLED_STATE, WimaxManagerConstants.WIMAX_ENABLED_STATE_UNKNOWN);
             int widgetState = wimaxStateToFiveState(wimaxState);
             setCurrentState(context, widgetState);
         }
@@ -66,13 +79,13 @@ public class WimaxButton extends PowerButton{
          */
         private static int wimaxStateToFiveState(int wimaxState) {
             switch (wimaxState) {
-                case WimaxConstants.WIMAX_ENABLED_STATE_DISABLED:
+                case WimaxManagerConstants.WIMAX_ENABLED_STATE_DISABLED:
                     return STATE_DISABLED;
-                case WimaxConstants.WIMAX_ENABLED_STATE_ENABLED:
+                case WimaxManagerConstants.WIMAX_ENABLED_STATE_ENABLED:
                     return STATE_ENABLED;
-                case WimaxConstants.WIMAX_ENABLED_STATE_ENABLING:
+                case WimaxManagerConstants.WIMAX_ENABLED_STATE_ENABLING:
                     return STATE_TURNING_ON;
-                case WimaxConstants.WIMAX_ENABLED_STATE_DISABLING:
+                case WimaxManagerConstants.WIMAX_ENABLED_STATE_DISABLING:
                     return STATE_TURNING_OFF;
                 default:
                     return STATE_UNKNOWN;
@@ -129,7 +142,7 @@ public class WimaxButton extends PowerButton{
     @Override
     protected IntentFilter getBroadcastIntentFilter() {
         IntentFilter filter = new IntentFilter();
-        filter.addAction(WimaxConstants.WIMAX_ENABLED_CHANGED_ACTION);
+        filter.addAction(WimaxManagerConstants.WIMAX_ENABLED_CHANGED_ACTION);
         return filter;
     }
 }
