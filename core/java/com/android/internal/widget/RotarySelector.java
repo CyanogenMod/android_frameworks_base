@@ -15,9 +15,8 @@
  */
 
 package com.android.internal.widget;
-
 import java.util.Date;
-
+import android.provider.Settings;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -25,6 +24,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
@@ -359,6 +360,11 @@ public class RotarySelector extends View {
         invalidate();
     }
 
+    public void setLeftHandleResource(Drawable temp) {
+        mLeftHandleIcon = ((BitmapDrawable)temp).getBitmap();
+        invalidate();
+    }
+
     /**
      * Sets the right handle icon to a given resource.
      *
@@ -386,6 +392,11 @@ public class RotarySelector extends View {
         if (resId != 0) {
             mMidHandleIcon = getBitmapFor(resId);
         }
+        invalidate();
+    }
+
+    public void setMidHandleResource(Drawable temp){
+        mMidHandleIcon = ((BitmapDrawable)temp).getBitmap();
         invalidate();
     }
 
@@ -514,7 +525,10 @@ public class RotarySelector extends View {
                     throw new IllegalStateException("invalid mGrabbedState: " + mGrabbedState);
             }
         }
-
+        boolean mRotaryUnlockDown = (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_ROTARY_UNLOCK_DOWN, 0) == 1);
+        int mCustomIconStyle = Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_CUSTOM_ICON_STYLE, 1);
         if (VISUAL_DEBUG) {
             // draw circle bounding arc drawable: good sanity check we're doing the math correctly
             float or = mRotaryOuterRadiusDIP * mDensity;
@@ -541,7 +555,11 @@ public class RotarySelector extends View {
             if (mRevampedMode || (mGrabbedState != RIGHT_HANDLE_GRABBED
                     && mGrabbedState != MID_HANDLE_GRABBED)) {
                 drawCentered(mDimple, canvas, x, y);
-                drawCentered(mLeftHandleIcon, canvas, x, y);
+                if ((mRotaryUnlockDown) && (mCustomIconStyle != 2)){
+                        drawCentered(getRoundedCornerBitmap(mLeftHandleIcon), canvas, x, y);
+                }else{
+                        drawCentered(mLeftHandleIcon, canvas, x, y);
+                }
             } else {
                 drawCentered(mDimpleDim, canvas, x, y);
             }
@@ -561,7 +579,11 @@ public class RotarySelector extends View {
             if ((mRevampedMode || (mGrabbedState != LEFT_HANDLE_GRABBED
                     && mGrabbedState != RIGHT_HANDLE_GRABBED)) && mCustomAppDimple) {
                 drawCentered(mDimple, canvas, x, y);
-                drawCentered(mMidHandleIcon, canvas, x, y);
+                if ((!mRotaryUnlockDown) && (mCustomIconStyle != 2)){
+                        drawCentered(getRoundedCornerBitmap(mMidHandleIcon), canvas, x, y);
+                }else{
+                        drawCentered(mMidHandleIcon, canvas, x, y);
+                }
             } else {
                 drawCentered(mDimpleDim, canvas, x, y);
             }
@@ -644,6 +666,9 @@ public class RotarySelector extends View {
         }
     }
 
+    public Bitmap getRoundedCornerBitmap(Bitmap bitmap){
+        return Bitmap.createScaledBitmap(bitmap, mDimple.getWidth()-30, mDimple.getHeight()-30, true);
+    }
     /**
      * Assuming bitmap is a bounding box around a piece of an arc drawn by two concentric circles
      * (as the background drawable for the rotary widget is), and given an x coordinate along the
