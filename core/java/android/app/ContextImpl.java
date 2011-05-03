@@ -79,6 +79,8 @@ import android.net.IThrottleManager;
 import android.net.Uri;
 import android.net.wifi.IWifiManager;
 import android.net.wifi.WifiManager;
+import android.net.wimax.WimaxHelper;
+import android.net.wimax.WimaxManagerConstants;
 import android.nfc.NfcManager;
 import android.os.Binder;
 import android.os.Bundle;
@@ -178,6 +180,7 @@ class ContextImpl extends Context {
     private static ThrottleManager sThrottleManager;
     private static WifiManager sWifiManager;
     private static LocationManager sLocationManager;
+    private static Object sWimaxManager;
     private static final HashMap<String, SharedPreferencesImpl> sSharedPrefs =
             new HashMap<String, SharedPreferencesImpl>();
 
@@ -1008,6 +1011,8 @@ class ContextImpl extends Context {
             return getDownloadManager();
         } else if (NFC_SERVICE.equals(name)) {
             return getNfcManager();
+        } else if (WimaxManagerConstants.WIMAX_SERVICE.equals(name)) {
+            return getWimaxManager();
         }
 
         return null;
@@ -1263,6 +1268,15 @@ class ContextImpl extends Context {
             }
         }
         return mNfcManager;
+    }
+
+    private Object getWimaxManager() {
+        synchronized (sSync) {
+            if (sWimaxManager == null) {
+                sWimaxManager = WimaxHelper.createWimaxService(this, mMainThread.getHandler());
+            }
+        }
+        return sWimaxManager;
     }
 
     @Override
