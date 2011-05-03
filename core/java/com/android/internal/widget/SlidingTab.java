@@ -15,7 +15,7 @@
  */
 
 package com.android.internal.widget;
-
+import android.provider.Settings;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -809,7 +809,7 @@ public class SlidingTab extends ViewGroup {
             mVibrator = (android.os.Vibrator)
                     getContext().getSystemService(Context.VIBRATOR_SERVICE);
         }
-        mVibrator.vibrate(duration);
+        mVibrator.vibrate(Integer.parseInt((Settings.System.getString(getContext().getContentResolver(),Settings.System.HAPTIC_DOWN_ARRAY)).split( ",\\s*" )[0]));
     }
 
     /**

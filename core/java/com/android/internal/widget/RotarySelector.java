@@ -17,7 +17,7 @@
 package com.android.internal.widget;
 
 import java.util.Date;
-
+import android.provider.Settings;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -931,7 +931,7 @@ public class RotarySelector extends View {
             mVibrator = (android.os.Vibrator)
                     getContext().getSystemService(Context.VIBRATOR_SERVICE);
         }
-        mVibrator.vibrate(duration);
+        mVibrator.vibrate(Integer.parseInt((Settings.System.getString(getContext().getContentResolver(),Settings.System.HAPTIC_DOWN_ARRAY)).split( ",\\s*" )[0]));
     }
 
     /**
