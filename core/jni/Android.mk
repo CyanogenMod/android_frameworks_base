@@ -242,6 +242,10 @@ endif
 
 LOCAL_MODULE:= libandroid_runtime
 
+ifneq ($(BOARD_MOBILEDATA_INTERFACE_NAME),)
+	LOCAL_CFLAGS += -DMOBILE_IFACE_NAME='$(BOARD_MOBILEDATA_INTERFACE_NAME)'
+endif
+
 include $(BUILD_SHARED_LIBRARY)
 
 include $(call all-makefiles-under,$(LOCAL_PATH))
