@@ -64,6 +64,9 @@ static jlong readNumber(char const* filename) {
 }
 
 static const char* mobile_iface_list[] = {
+#ifdef MOBILE_IFACE_NAME
+    MOBILE_IFACE_NAME,
+#endif
     "rmnet0",
     "rmnet1",
     "rmnet2",
