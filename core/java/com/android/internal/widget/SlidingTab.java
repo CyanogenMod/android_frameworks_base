@@ -15,7 +15,11 @@
  */
 
 package com.android.internal.widget;
-
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.BitmapFactory;
+import android.provider.Settings;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -219,6 +223,10 @@ public class SlidingTab extends ViewGroup {
             tab.setImageResource(iconId);
         }
 
+	void setIcon(Bitmap bitmap){
+	    tab.setImageBitmap(bitmap);
+	}
+
         void setTabBackgroundResource(int tabId) {
             tab.setBackgroundResource(tabId);
         }
@@ -229,6 +237,10 @@ public class SlidingTab extends ViewGroup {
 
         void setHintText(int resId) {
             text.setText(resId);
+        }
+
+        void setHintText(CharSequence label){
+            text.setText(label);
         }
 
         void hide() {
@@ -785,6 +797,19 @@ public class SlidingTab extends ViewGroup {
         mRightSlider.updateDrawableStates();
     }
 
+    public void setRightTabResources(Drawable icon, int targetId, int barId, int tabId) {
+        mRightSlider.setIcon(getRoundedCornerBitmap(((BitmapDrawable)icon).getBitmap()));
+        mRightSlider.setTarget(targetId);
+        mRightSlider.setBarBackgroundResource(barId);
+        mRightSlider.setTabBackgroundResource(tabId);
+        mRightSlider.updateDrawableStates();
+    }
+        
+    public Bitmap getRoundedCornerBitmap(Bitmap bitmap) {  
+        int mDimpleWidth = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.jog_dial_dimple).getWidth();
+        return Bitmap.createScaledBitmap(bitmap, mDimpleWidth-30, mDimpleWidth-30, true);
+    }
+
     /**
      * Sets the left handle hint text to a given resource string.
      *
@@ -793,6 +818,12 @@ public class SlidingTab extends ViewGroup {
     public void setRightHintText(int resId) {
         if (isHorizontal()) {
             mRightSlider.setHintText(resId);
+        }
+    }
+
+    public void setRightHintText(CharSequence label) {
+        if (isHorizontal()) {
+            mRightSlider.setHintText(label);
         }
     }
 
