@@ -2311,6 +2311,13 @@ public final class Settings {
          */
         public static final String STATUS_BAR_COMPACT_CARRIER = "status_bar_compact_carrier";
 
+         /**
+         * Whether to control brightness from status bar
+         *
+         * @hide
+         */
+        public static final String STATUS_BAR_BRIGHTNESS_TOGGLE = "status_bar_brightness_toggle";
+
         /**
          * Whether to wake the screen with the trackball. The value is boolean (1 or 0).
          * @hide
