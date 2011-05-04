@@ -35,6 +35,7 @@
 #include <ctype.h>
 
 #include <stdio.h>
+#include <libgen.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -93,6 +94,26 @@ static void registerLoggingFunc(const char *path) {
     loggingFuncSet = true;
 }
 
+static int use_wal_mode (char const *path8)
+{
+    char *temp = basename(path8);
+    int i;
+    const char *wal_dbs[] = {
+         "database_test.db","contacts2.db","calendar.db",\
+         "telephony.db","launcher.db","user_dict.db",\
+         "downloads.db", "mmssms.db", "internal.db", \
+         "EmailProvider.db","alarms.db","EmailProviderBody.db",\
+         "btopp.db","picasa.db","webview.db",\
+         "webviewCache.db","browser.db","quadrant.db", NULL};
+
+    for (i = 0 ; wal_dbs[i]!= NULL ; i++) {
+        if(strcmp(temp, wal_dbs[i]) == 0)
+            return 1;
+    }
+
+    return 0;
+}
+
 /* public native void dbopen(String path, int flags, String locale); */
 static void dbopen(JNIEnv* env, jobject object, jstring pathString, jint flags)
 {
@@ -123,23 +144,34 @@ static void dbopen(JNIEnv* env, jobject object, jstring pathString, jint flags)
         goto done;
     }
 
-    // Configure databases to run in WAL mode.
-    if(!(flags & OPEN_READONLY)) {
+    // WAL is a new rollback method available in SQLite v3.7+. WAL speeds up writes to
+    // SQLite databases. WAL cannot be used with Read Only databases or databases opened
+    // in read only mode.
+
+    // Check if DB can use WAL mode; Open in WAL mode for non-ReadOnly DBs
+    if(!(flags & OPEN_READONLY) && (use_wal_mode(path8))) {
+        // Configure databases to run in WAL mode.
         err = sqlite3_exec(handle,"PRAGMA journal_mode = WAL;",
                            NULL, NULL,&zErrMsg);
-        if (SQLITE_OK != err ){
-           LOGE("sqlite3_exec to set journal_mode = WAL failed\n");
-           throw_sqlite3_exception(env, handle);
-           goto done;
+        if (SQLITE_OK != err) {
+           LOGE("sqlite3_exec - Failed to set WAL mode for [%s] \n", path8);
+           err = sqlite3_exec(handle,"PRAGMA journal_mode = DELETE;",
+                           NULL, NULL,&zErrMsg);
+           if(SQLITE_OK != err) {
+               LOGE("sqlite3_exec - Failed to set DELETE mode for [%s] \n", path8);
+               throw_sqlite3_exception(env, handle);
+               goto done;
+           }
         }
-
-        // Set autocheckpoint = 100 pages
-        err = sqlite3_wal_autocheckpoint(handle,
-                                         100);
-        if (SQLITE_OK != err ){
-           LOGE("sqlite3_exec to set WAL autocheckpoint failed\n");
-           throw_sqlite3_exception(env, handle);
-           goto done;
+        else {
+            // Set autocheckpoint = 100 pages
+            err = sqlite3_wal_autocheckpoint(handle,
+                                             100);
+            if (SQLITE_OK != err) {
+               LOGE("sqlite3_exec to set WAL autocheckpoint failed\n");
+               throw_sqlite3_exception(env, handle);
+               goto done;
+            }
         }
     }
 
