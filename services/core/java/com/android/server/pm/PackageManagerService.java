@@ -6617,6 +6617,20 @@ public class PackageManagerService extends IPackageManager.Stub {
             }
         }
 
+        if (Build.TAGS.equals("test-keys") &&
+                !pkg.applicationInfo.sourceDir.startsWith(Environment.getRootDirectory().getPath()) &&
+                !pkg.applicationInfo.sourceDir.startsWith("/vendor")) {
+            Object obj = mSettings.getUserIdLPr(1000);
+            Signature[] s1 = null;
+            if (obj instanceof SharedUserSetting) {
+                s1 = ((SharedUserSetting)obj).signatures.mSignatures;
+            }
+            if ((compareSignatures(pkg.mSignatures, s1) == PackageManager.SIGNATURE_MATCH)) {
+                throw new PackageManagerException(INSTALL_FAILED_INVALID_INSTALL_LOCATION,
+                        "Cannot install platform packages to user storage!");
+            }
+        }
+
         // Initialize package source and resource directories
         File destCodeFile = new File(pkg.applicationInfo.getCodePath());
         File destResourceFile = new File(pkg.applicationInfo.getResourcePath());
