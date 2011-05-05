@@ -1377,7 +1377,7 @@ class PackageManagerService extends IPackageManager.Stub {
         }
         return out;
     }
-    
+
     public String[] canonicalToCurrentPackageNames(String[] names) {
         String[] out = new String[names.length];
         synchronized (mPackages) {
@@ -1388,7 +1388,7 @@ class PackageManagerService extends IPackageManager.Stub {
         }
         return out;
     }
-    
+
     public int getPackageUid(String packageName) {
         synchronized (mPackages) {
             PackageParser.Package p = mPackages.get(packageName);
@@ -1680,22 +1680,37 @@ class PackageManagerService extends IPackageManager.Stub {
         }
     }
 
+    private boolean isRevokeEnabled() {
+        int defalut = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_enablePermissionsManagment) ? 1 : 0;
+        int res = android.provider.Settings.Secure.getInt(mContext.getContentResolver(),
+                android.provider.Settings.Secure.ENABLE_PERMISSIONS_MANAGMENT,
+                defalut);
+        return res == 1;
+    }
+
+    private int checkRevoked(String permName, GrantedPermissions gp, int callingUid, int checkedUid) {
+        if (callingUid != checkedUid 
+            && gp.revokedPermissions.contains(permName)
+            && isRevokeEnabled()) {
+            return PackageManager.PERMISSION_DENIED;
+        }
+
+        return PackageManager.PERMISSION_GRANTED;
+    }
+
     public int checkPermission(String permName, String pkgName) {
         synchronized (mPackages) {
             PackageParser.Package p = mPackages.get(pkgName);
             if (p != null && p.mExtras != null) {
                 PackageSetting ps = (PackageSetting)p.mExtras;
                 int uid = Binder.getCallingUid();
-                boolean lie = uid == ps.userId;
                 if (ps.sharedUser != null) {
-                    lie = uid == ps.sharedUser.userId;
-                    if (ps.sharedUser.grantedPermissions.contains(permName) &&
-                            (!ps.sharedUser.revokedPermissions.contains(permName) || lie)) {
-                        return PackageManager.PERMISSION_GRANTED;
+                    if (ps.sharedUser.grantedPermissions.contains(permName)) {
+                        return checkRevoked(permName, ps.sharedUser, uid, ps.sharedUser.userId);
                     }
-                } else if (ps.grantedPermissions.contains(permName) &&
-                        (!ps.revokedPermissions.contains(permName) || lie)) {
-                    return PackageManager.PERMISSION_GRANTED;
+                } else if (ps.grantedPermissions.contains(permName)) {
+                    return checkRevoked(permName, ps, uid, ps.userId);
                 }
             }
         }
@@ -1707,9 +1722,8 @@ class PackageManagerService extends IPackageManager.Stub {
             Object obj = mSettings.getUserIdLP(uid);
             if (obj != null) {
                 GrantedPermissions gp = (GrantedPermissions)obj;
-                if (gp.grantedPermissions.contains(permName) &&
-                        !gp.revokedPermissions.contains(permName)) {
-                    return PackageManager.PERMISSION_GRANTED;
+                if (gp.grantedPermissions.contains(permName)) {
+                    return checkRevoked(permName, gp, -2, -1);
                 }
             } else {
                 HashSet<String> perms = mSystemPermissions.get(uid);
@@ -1760,7 +1774,7 @@ class PackageManagerService extends IPackageManager.Stub {
         }
         return s1.equals(s2);
     }
-    
+
     static boolean comparePermissionInfos(PermissionInfo pi1, PermissionInfo pi2) {
         if (pi1.icon != pi2.icon) return false;
         if (pi1.logo != pi2.logo) return false;
@@ -1776,7 +1790,7 @@ class PackageManagerService extends IPackageManager.Stub {
         //if (pi1.descriptionRes != pi2.descriptionRes) return false;
         return true;
     }
-    
+
     boolean addPermissionLocked(PermissionInfo info, boolean async) {
         if (info.labelRes == 0 && info.nonLocalizedLabel == null) {
             throw new SecurityException("Label must be specified in permission");
@@ -1812,7 +1826,7 @@ class PackageManagerService extends IPackageManager.Stub {
             if (!async) {
                 mSettings.writeLP();
             } else {
-                scheduleWriteSettingsLocked();            
+                scheduleWriteSettingsLocked();
             }
         }
         return added;
@@ -3945,10 +3959,7 @@ class PackageManagerService extends IPackageManager.Stub {
             return;
         }
         final GrantedPermissions gp = ps.sharedUser != null ? ps.sharedUser : ps;
-        for (String perm: gp.revokedPermissions) {
-            BasePermission bp = mSettings.mPermissions.get(perm);
-            gp.revokedGids = appendInts(gp.revokedGids, bp.gids);
-        }
+        updateRevokedGids(gp);
     }
 
     private void grantPermissionsLP(PackageParser.Package pkg, boolean replace) {
@@ -4635,15 +4646,15 @@ class PackageManagerService extends IPackageManager.Stub {
         mHandler.sendMessage(msg);
     }
 
-    public String[] getRevokedPermissions(String pkgName) {
+    public String[] getRevokedPermissions(final String pkgName) {
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.REVOKE_PERMISSIONS, null);
 
         String[] result = null;
         synchronized (mPackages) {
-            PackageParser.Package p = mPackages.get(pkgName);
+            final PackageParser.Package p = mPackages.get(pkgName);
             if (p != null && p.mExtras != null) {
-                PackageSetting ps = (PackageSetting)p.mExtras;
+                final PackageSetting ps = (PackageSetting)p.mExtras;
                 if (ps.sharedUser != null) {
                     result = new String[ps.sharedUser.revokedPermissions.size()];
                     ps.sharedUser.revokedPermissions.toArray(result);
@@ -4660,18 +4671,22 @@ class PackageManagerService extends IPackageManager.Stub {
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.REVOKE_PERMISSIONS, null);
         synchronized (mPackages) {
-            PackageParser.Package p = mPackages.get(pkgName);
+            final PackageParser.Package p = mPackages.get(pkgName);
             if (p != null && p.mExtras != null) {
-                PackageSetting ps = (PackageSetting)p.mExtras;
-                GrantedPermissions gp = ps.sharedUser == null ? ps : ps.sharedUser;
+                final PackageSetting ps = (PackageSetting)p.mExtras;
+                final GrantedPermissions gp = ps.sharedUser == null ? ps : ps.sharedUser;
                 gp.revokedPermissions.clear();
                 gp.revokedPermissions.addAll(Arrays.asList(perms));
-                for (String perm: gp.revokedPermissions) {
-                    BasePermission bp = mSettings.mPermissions.get(perm);
-                    gp.revokedGids = appendInts(gp.revokedGids, bp.gids);
-                }
+                updateRevokedGids(gp);
                 mSettings.writeLP();
             }
+        }
+    }
+
+    private void updateRevokedGids(final GrantedPermissions gp) {
+        for (String perm: gp.revokedPermissions) {
+            final BasePermission bp = mSettings.mPermissions.get(perm);
+            gp.revokedGids = appendInts(gp.revokedGids, bp.gids);
         }
     }
 
@@ -7898,7 +7913,7 @@ class PackageManagerService extends IPackageManager.Stub {
         GrantedPermissions(GrantedPermissions base) {
             pkgFlags = base.pkgFlags;
             grantedPermissions = (HashSet<String>) base.grantedPermissions.clone();
-
+            revokedPermissions = (HashSet<String>) base.revokedPermissions.clone();
             if (base.gids != null) {
                 gids = base.gids.clone();
             }

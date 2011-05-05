@@ -426,6 +426,6 @@ public class MockContext extends Context {
 
     @Override
     public boolean isRestricted() {
-        throw new UnsupportedOperationException();        
+        throw new UnsupportedOperationException();
     }
 }

@@ -56,7 +56,7 @@ import java.util.Set;
  * 
  * {@hide}
  */
-public class AppSecurityEditablePermissions  implements View.OnClickListener {
+public class AppSecurityEditablePermissions extends AppSecurityPermissionsBase{
 
     private enum State {
         NO_PERMS,
@@ -64,37 +64,33 @@ public class AppSecurityEditablePermissions  implements View.OnClickListener {
         NORMAL_ONLY,
         BOTH
     }
-      
-    private class EditableListener implements OnClickListener {
-    	
-    	@Override
-		public void onClick(View v) {
-			PermissionInfo pi = (PermissionInfo) v.getTag();
-			TextView text = (TextView) v.findViewById(R.id.editable_permission);
-			SpannableString ss = (SpannableString) text.getText();
 
-			if (mRevokedPerms.contains(pi.name)) {
-				mRevokedPerms.remove(pi.name);
-				StrikethroughSpan[] spans = ss.getSpans(0, text.length(), StrikethroughSpan.class);
-				for (StrikethroughSpan span: spans) {
-					ss.removeSpan(span);
-				}
-			}
-			else {
-				mRevokedPerms.add(pi.name);
-				ss.setSpan(new StrikethroughSpan(), 0, text.length(), 0);
-			}
-			String[] rp = new String[mRevokedPerms.size()];
-			mRevokedPerms.toArray(rp);
-			mPm.setRevokedPermissions(mPackageName, rp);
-			
-			
-		}
-    	
+    private class EditableListener implements OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            PermissionInfo pi = (PermissionInfo) v.getTag();
+            TextView text = (TextView) v.findViewById(R.id.editable_permission);
+            SpannableString ss = (SpannableString) text.getText();
+
+            if (mRevokedPerms.contains(pi.name)) {
+                mRevokedPerms.remove(pi.name);
+                StrikethroughSpan[] spans = ss.getSpans(0, text.length(), StrikethroughSpan.class);
+                for (StrikethroughSpan span: spans) {
+                    ss.removeSpan(span);
+                }
+            } else {
+                mRevokedPerms.add(pi.name);
+                ss.setSpan(new StrikethroughSpan(), 0, text.length(), 0);
+            }
+            String[] rp = new String[mRevokedPerms.size()];
+            mRevokedPerms.toArray(rp);
+            mPm.setRevokedPermissions(mPackageName, rp);
+        }
     }
 
     private final static String TAG = "AppSecurityEditablePermissions";
-	private EditableListener mEditableListener = new EditableListener();
+    private EditableListener mEditableListener = new EditableListener();
     private boolean localLOGV = false;
     private Context mContext;
     private LayoutInflater mInflater;
@@ -121,7 +117,7 @@ public class AppSecurityEditablePermissions  implements View.OnClickListener {
     private HashSet<String> mRevokedPerms;
     private View mNoPermsView;
     private String mPackageName;
-       
+
     public AppSecurityEditablePermissions(Context context, String packageName) {
         mContext = context;
         mPm = mContext.getPackageManager();
@@ -170,7 +166,7 @@ public class AppSecurityEditablePermissions  implements View.OnClickListener {
             extractPerms(pkgInfo.requestedPermissions, permSet);
         }
     }
-    
+
     private void extractPerms(String strList[], Set<PermissionInfo> permSet) {
         if((strList == null) || (strList.length == 0)) {
             return;
@@ -186,13 +182,12 @@ public class AppSecurityEditablePermissions  implements View.OnClickListener {
             }
         }
     }
-    
+
     public int getPermissionCount() {
         return mPermsList.size();
     }
 
     public View getPermissionsView() {
-        
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mPermsView = (LinearLayout) mInflater.inflate(R.layout.app_perms_summary, null);
         mShowMore = mPermsView.findViewById(R.id.show_more);
@@ -216,7 +211,6 @@ public class AppSecurityEditablePermissions  implements View.OnClickListener {
         mShowMaxIcon = mContext.getResources().getDrawable(R.drawable.expander_ic_maximized);
         mShowMinIcon = mContext.getResources().getDrawable(R.drawable.expander_ic_minimized);
 
-        
         // Set permissions view
         setPermissions(mPermsList);
         return mPermsView;
@@ -303,24 +297,24 @@ public class AppSecurityEditablePermissions  implements View.OnClickListener {
         if(grpName != null) {
             permGrpView.setText(grpName + " group");
             for (PermissionInfo pi: list) {
-            	View ePermView = mInflater.inflate(R.layout.app_editable_permission, null);           
-            	TextView editablePermView = (TextView) ePermView.findViewById(R.id.editable_permission);
-            	ImageView editableImgView = (ImageView) ePermView.findViewById(R.id.editable_permission_icon);
-            	editableImgView.setImageDrawable(icon);
-            	
-            	CharSequence permDesc = pi.loadLabel(mPm);
-            	SpannableString text = new SpannableString(permDesc + " (" + pi.name + ")");
-            	if (mRevokedPerms.contains(pi.name)) {
-            		text.setSpan(new StrikethroughSpan(), 0, text.length(), 0);
-            	}
-            	editablePermView.setText(text, TextView.BufferType.SPANNABLE);
-            	ePermView.setVisibility(View.VISIBLE);
-            	editablePermView.setVisibility(View.VISIBLE);
-            	editableImgView.setVisibility(View.GONE);
-            	ePermView.setClickable(true);
-            	ePermView.setTag(pi);
-            	ePermView.setOnClickListener(mEditableListener);
-            	permDescView.addView(ePermView);
+                View ePermView = mInflater.inflate(R.layout.app_editable_permission, null);           
+                TextView editablePermView = (TextView) ePermView.findViewById(R.id.editable_permission);
+                ImageView editableImgView = (ImageView) ePermView.findViewById(R.id.editable_permission_icon);
+                editableImgView.setImageDrawable(icon);
+
+                CharSequence permDesc = pi.loadLabel(mPm);
+                SpannableString text = new SpannableString(permDesc + " (" + pi.name + ")");
+                if (mRevokedPerms.contains(pi.name)) {
+                    text.setSpan(new StrikethroughSpan(), 0, text.length(), 0);
+                }
+                editablePermView.setText(text, TextView.BufferType.SPANNABLE);
+                ePermView.setVisibility(View.VISIBLE);
+                editablePermView.setVisibility(View.VISIBLE);
+                editableImgView.setVisibility(View.GONE);
+                ePermView.setClickable(true);
+                ePermView.setTag(pi);
+                ePermView.setOnClickListener(mEditableListener);
+                permDescView.addView(ePermView);
             }
             permDescView.setVisibility(View.VISIBLE);
         } else {
@@ -361,7 +355,7 @@ public class AppSecurityEditablePermissions  implements View.OnClickListener {
             break;
         }
     }
-    
+
     private boolean isDisplayablePermission(PermissionInfo pInfo) {
         if(pInfo.protectionLevel == PermissionInfo.PROTECTION_DANGEROUS ||
                 pInfo.protectionLevel == PermissionInfo.PROTECTION_NORMAL) {
@@ -387,13 +381,13 @@ public class AppSecurityEditablePermissions  implements View.OnClickListener {
         mGroupLabelCache = new HashMap<String, CharSequence>();
         //add the default label so that uncategorized permissions can go here
         mGroupLabelCache.put(mDefaultGrpName, mDefaultGrpLabel);
-                
+
         // Additional structures needed to ensure that permissions are unique under 
         // each group
         mDangerousMap = new HashMap<String,  List<PermissionInfo>>();
         mNormalMap = new HashMap<String,  List<PermissionInfo>>();
         PermissionInfoComparator permComparator = new PermissionInfoComparator(mPm);
-        
+
         if (permList != null) {
             // First pass to group permissions
             for (PermissionInfo pInfo : permList) {
