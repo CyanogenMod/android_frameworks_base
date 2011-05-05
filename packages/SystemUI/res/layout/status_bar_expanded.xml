@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             />
 
-        <LinearLayout
+        <LinearLayout android:id="@+id/carrier_label_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -127,8 +127,35 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     />
+                <TextView android:id="@+id/compact_clear_all_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="1dp"
+                    android:text="@string/status_bar_clear_all_button"
+                    style="@style/StatusBar.ClearButton"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    />
             </com.android.systemui.statusbar.NotificationLinearLayout>
         </ScrollView>
+
+        <LinearLayout android:id="@+id/compact_carrier_layout"
+            android:orientation="horizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            >
+            <com.android.systemui.statusbar.CarrierLabel
+                 android:gravity="bottom|right|center"
+                 android:textAppearance="@style/TextAppearance.StatusBar.Title"
+                 android:background="@android:color/transparent"
+                 android:layout_marginRight="6.0dip"
+                 android:layout_width="fill_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_alignParentRight="true"
+                 />
+        </LinearLayout>
 
         <ImageView
             android:layout_width="match_parent"

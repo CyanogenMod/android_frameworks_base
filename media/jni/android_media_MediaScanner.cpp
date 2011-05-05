@@ -14,7 +14,6 @@
 ** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
-
 #define LOG_TAG "MediaScanner"
 #include "utils/Log.h"
 
@@ -32,6 +31,11 @@
 #include "android_runtime/AndroidRuntime.h"
 
 #include <media/stagefright/StagefrightMediaScanner.h>
+#ifdef USE_BOARD_MEDIASCANNER
+#include <media/stagefright/StagefrightMediaScanner.h>
+#include <hardware_legacy/MediaPlayerHardwareInterface.h>
+#endif
+
 
 // ----------------------------------------------------------------------------
 
@@ -280,10 +284,20 @@ android_media_MediaScanner_native_init(JNIEnv *env)
     }
 }
 
+static MediaScanner *createMediaScanner() {
+LOGV("MediaScanner *createMediaScanner\n");
+#ifdef USE_BOARD_MEDIASCANNER
+LOGV("MediaScanner *createMediaScannerHardware\n");
+        return createMediaScannerHardware();
+#endif
+        return new StagefrightMediaScanner;
+}
+
+
 static void
 android_media_MediaScanner_native_setup(JNIEnv *env, jobject thiz)
 {
-    MediaScanner *mp = new StagefrightMediaScanner;
+    MediaScanner *mp = createMediaScanner();
 
     if (mp == NULL) {
         jniThrowException(env, "java/lang/RuntimeException", "Out of memory");

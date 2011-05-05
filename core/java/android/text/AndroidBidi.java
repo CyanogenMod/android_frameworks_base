@@ -52,6 +52,7 @@ package android.text;
      * @param off
      * @param len
      * @return int
+     * @hide
      */
     public static int reorderAndReshapeBidiText(char[] chs, char[] outputChs, int off, int len) {
 
@@ -64,7 +65,30 @@ package android.text;
         return reorderReshapeBidiText(chs, outputChs, off, len);
     }
 
+    /**
+     * @author: Eyad Aboulouz
+     * Arabic text reshaping by by calling native reshapeArabicText function
+     * @param chs
+     * @param map
+     * @param off
+     * @param len
+     * @return int
+     * @hide
+     */
+    public static int reshapeReversedArabicText(char[] chs, char[] outputChs, int off, int len) {
+
+        if (chs == null)
+            throw new NullPointerException();
+
+        if (off < 0 || len < 0 || off + len > chs.length)
+            throw new IndexOutOfBoundsException();
+
+        return reshapeArabicText(chs, outputChs, off, len);
+    }
+
     private native static int runBidi(int dir, char[] chs, byte[] chInfo, int n, boolean haveInfo);
 
     private native static int reorderReshapeBidiText(char[] chs, char[] outputChs, int off, int len);
+
+    private native static int reshapeArabicText(char[] chs, char[] outputChs, int off, int len);
 }

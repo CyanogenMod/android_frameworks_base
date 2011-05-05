@@ -108,11 +108,12 @@ public class NetworkInfo implements Parcelable {
     private String mExtraInfo;
     private boolean mIsFailover;
     private boolean mIsRoaming;
-    private String mInterfaceName;
     /**
      * Indicates whether network connectivity is possible:
      */
     private boolean mIsAvailable;
+
+    private String mInterfaceName;
 
     /**
      * @param type network type
@@ -134,20 +135,6 @@ public class NetworkInfo implements Parcelable {
         mState = State.UNKNOWN;
         mIsAvailable = false; // until we're told otherwise, assume unavailable
         mIsRoaming = false;
-    }
-
-    /**
-     * @hide
-     */
-    public void setInterface(String paramString) {
-        this.mInterfaceName = paramString;
-    }
-
-    /**
-     * @hide
-     */
-    public String getInterface() {
-        return this.mInterfaceName;
     }
 
     /**
@@ -323,13 +310,26 @@ public class NetworkInfo implements Parcelable {
         return mExtraInfo;
     }
 
+    /**
+     * @hide
+     */
+    public void setInterface(String paramString) {
+        this.mInterfaceName = paramString;
+    }
+
+    /**
+     * @hide
+     */
+    public String getInterface() {
+        return this.mInterfaceName;
+    }
+
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder("NetworkInfo: ");
         builder.append("type: ").append(getTypeName()).append("[").append(getSubtypeName()).
                 append("], state: ").append(mState).append("/").append(mDetailedState).
                 append(", reason: ").append(mReason == null ? "(unspecified)" : mReason).
-                append(", interface: ").append(mInterfaceName == null ? "(unspecified)" : mInterfaceName).
                 append(", extra: ").append(mExtraInfo == null ? "(none)" : mExtraInfo).
                 append(", roaming: ").append(mIsRoaming).
                 append(", failover: ").append(mIsFailover).
@@ -391,5 +391,13 @@ public class NetworkInfo implements Parcelable {
                 return new NetworkInfo[size];
             }
         };
+
+    /**
+     * HACK! Get an empty NetworkInfo object for WIMAX stub
+     * @hide
+     */
+    public static final NetworkInfo getEmptyWimaxNetworkInfo() {
+        return new NetworkInfo(ConnectivityManager.TYPE_WIMAX, 0, "", "");
+    }
     
 }

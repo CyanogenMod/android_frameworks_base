@@ -63,6 +63,12 @@
 
 #include <OMX.h>
 
+#ifdef USE_BOARD_MEDIAPLUGIN
+#define NO_OPENCORE 1
+#include <hardware_legacy/MediaPlayerHardwareInterface.h>
+#endif
+
+
 /* desktop Linux needs a little help with gettid() */
 #if defined(HAVE_GETTID) && !defined(HAVE_ANDROID_OS)
 #define __KERNEL__
@@ -197,6 +203,9 @@ extmap FILE_EXTS [] =  {
         {".rtttl", SONIVOX_PLAYER},
         {".rtx", SONIVOX_PLAYER},
         {".ota", SONIVOX_PLAYER},
+#ifdef USE_BOARD_MEDIAPLUGIN
+        {".ogg", STAGEFRIGHT_PLAYER},
+#endif
 #ifndef NO_OPENCORE
         {".wma", PV_PLAYER},
         {".wmv", PV_PLAYER},
@@ -677,6 +686,9 @@ void MediaPlayerService::Client::disconnect()
 }
 
 static player_type getDefaultPlayerType() {
+#ifdef USE_BOARD_MEDIAPLUGIN
+    return BOARD_HW_PLAYER;
+#endif
     return STAGEFRIGHT_PLAYER;
 }
 
@@ -782,6 +794,12 @@ static sp<MediaPlayerBase> createPlayer(player_type playerType, void* cookie,
             LOGV(" create FLACPlayer");
             p = new FLACPlayer();
             break;
+#ifdef USE_BOARD_MEDIAPLUGIN
+        case BOARD_HW_PLAYER:
+            LOGE(" create BoardHWPlayer");
+            p = createMediaPlayerHardware();
+            break;
+#endif
     }
     if (p != NULL) {
         if (p->initCheck() == NO_ERROR) {

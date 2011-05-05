@@ -1970,7 +1970,8 @@ public class SensorManager
         if (rotationVector.length == 4) {
             q0 = rotationVector[3];
         } else {
-            q0 = (float)Math.sqrt(1 - q1*q1 - q2*q2 - q3*q3);
+            q0 = 1 - q1*q1 - q2*q2 - q3*q3;
+            q0 = (q0 > 0) ? (float)Math.sqrt(q0) : 0;
         }
 
         float sq_q1 = 2 * q1 * q1;
@@ -2026,8 +2027,8 @@ public class SensorManager
         if (rv.length == 4) {
             Q[0] = rv[3];
         } else {
-            //In this case, the w component of the quaternion is known to be a positive number
-            Q[0] = (float)Math.sqrt(1 - rv[0]*rv[0] - rv[1]*rv[1] - rv[2]*rv[2]);
+            Q[0] = 1 - rv[0]*rv[0] - rv[1]*rv[1] - rv[2]*rv[2];
+            Q[0] = (Q[0] > 0) ? (float)Math.sqrt(Q[0]) : 0;
         }
         Q[1] = rv[0];
         Q[2] = rv[1];

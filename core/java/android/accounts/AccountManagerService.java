@@ -91,6 +91,8 @@ public class AccountManagerService
 
     private final Context mContext;
 
+    private final PackageManager mPackageManager;
+
     private HandlerThread mMessageThread;
     private final MessageHandler mMessageHandler;
 
@@ -99,7 +101,6 @@ public class AccountManagerService
 
     private final AccountAuthenticatorCache mAuthenticatorCache;
     private final DatabaseHelper mOpenHelper;
-    private final SimWatcher mSimWatcher;
 
     private static final String TABLE_ACCOUNTS = "accounts";
     private static final String ACCOUNTS_ID = "_id";
@@ -214,6 +215,7 @@ public class AccountManagerService
 
     public AccountManagerService(Context context) {
         mContext = context;
+        mPackageManager = context.getPackageManager();
 
         mOpenHelper = new DatabaseHelper(mContext);
 
@@ -224,7 +226,6 @@ public class AccountManagerService
         mAuthenticatorCache = new AccountAuthenticatorCache(mContext);
         mAuthenticatorCache.setListener(this, null /* Handler */);
 
-        mSimWatcher = new SimWatcher(mContext);
         sThis.set(this);
 
         validateAccounts();
@@ -520,6 +521,18 @@ public class AccountManagerService
         if (account == null) throw new IllegalArgumentException("account is null");
         checkManageAccountsPermission();
         long identityToken = clearCallingIdentity();
+
+        cancelNotification(getSigninRequiredNotificationId(account));
+        synchronized(mCredentialsPermissionNotificationIds) {
+            for (Pair<Pair<Account, String>, Integer> pair:
+                mCredentialsPermissionNotificationIds.keySet()) {
+                if (account.equals(pair.first.first)) {
+                    int id = mCredentialsPermissionNotificationIds.get(pair);
+                    cancelNotification(id);
+                }
+            }
+        }
+
         try {
             new RemoveAccountSession(response, account).bind();
         } finally {
@@ -842,19 +855,49 @@ public class AccountManagerService
 
     public void getAuthToken(IAccountManagerResponse response, final Account account,
             final String authTokenType, final boolean notifyOnAuthFailure,
-            final boolean expectActivityLaunch, final Bundle loginOptions) {
+            final boolean expectActivityLaunch, Bundle loginOptionsIn) {
+        if (Log.isLoggable(TAG, Log.VERBOSE)) {
+            Log.v(TAG, "getAuthToken: " + account
+                    + ", response " + response
+                    + ", authTokenType " + authTokenType
+                    + ", notifyOnAuthFailure " + notifyOnAuthFailure
+                    + ", expectActivityLaunch " + expectActivityLaunch
+                    + ", caller's uid " + Binder.getCallingUid()
+                    + ", pid " + Binder.getCallingPid());
+        }
         if (response == null) throw new IllegalArgumentException("response is null");
         if (account == null) throw new IllegalArgumentException("account is null");
         if (authTokenType == null) throw new IllegalArgumentException("authTokenType is null");
         checkBinderPermission(Manifest.permission.USE_CREDENTIALS);
         final int callerUid = Binder.getCallingUid();
-        final boolean permissionGranted = permissionIsGranted(account, authTokenType, callerUid);
+        final int callerPid = Binder.getCallingPid();
+
+        AccountAuthenticatorCache.ServiceInfo<AuthenticatorDescription> authenticatorInfo =
+            mAuthenticatorCache.getServiceInfo(
+                    AuthenticatorDescription.newKey(account.type));
+        final boolean customTokens =
+            authenticatorInfo != null && authenticatorInfo.type.customTokens;
+
+        // skip the check if customTokens
+        final boolean permissionGranted = customTokens ||
+            permissionIsGranted(account, authTokenType, callerUid);
+
+        final Bundle loginOptions = (loginOptionsIn == null) ? new Bundle() :
+            loginOptionsIn;
+        if (customTokens) {
+            // let authenticator know the identity of the caller
+            loginOptions.putInt(AccountManager.KEY_CALLER_UID, callerUid);
+            loginOptions.putInt(AccountManager.KEY_CALLER_PID, callerPid);
+            if (notifyOnAuthFailure) {
+                loginOptions.putBoolean(AccountManager.KEY_NOTIFY_ON_FAILURE, true);
+            }
+        }
 
         long identityToken = clearCallingIdentity();
         try {
             // if the caller has permission, do the peek. otherwise go the more expensive
             // route of starting a Session
-            if (permissionGranted) {
+            if (!customTokens && permissionGranted) {
                 String authToken = readAuthTokenFromDatabase(account, authTokenType);
                 if (authToken != null) {
                     Bundle result = new Bundle();
@@ -908,12 +951,14 @@ public class AccountManagerService
                                         "the type and name should not be empty");
                                 return;
                             }
-                            saveAuthTokenToDatabase(new Account(name, type),
-                                    authTokenType, authToken);
+                            if (!customTokens) {
+                                saveAuthTokenToDatabase(new Account(name, type),
+                                        authTokenType, authToken);
+                            }
                         }
 
                         Intent intent = result.getParcelable(AccountManager.KEY_INTENT);
-                        if (intent != null && notifyOnAuthFailure) {
+                        if (intent != null && notifyOnAuthFailure && !customTokens) {
                             doNotification(
                                     account, result.getString(AccountManager.KEY_AUTH_FAILED_MESSAGE),
                                     intent);
@@ -972,6 +1017,10 @@ public class AccountManagerService
             AccountAuthenticatorResponse response, String authTokenType, String authTokenLabel) {
 
         Intent intent = new Intent(mContext, GrantCredentialsPermissionActivity.class);
+        // See FLAG_ACTIVITY_NEW_TASK docs for limitations and benefits of the flag.
+        // Since it was set in Eclair+ we can't change it without breaking apps using
+        // the intent from a non-Activity context.
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addCategory(
                 String.valueOf(getCredentialPermissionNotificationId(account, authTokenType, uid)));
 
@@ -1640,95 +1689,6 @@ public class AccountManagerService
         }
     }
 
-    private class SimWatcher extends BroadcastReceiver {
-        public SimWatcher(Context context) {
-            // Re-scan the SIM card when the SIM state changes, and also if
-            // the disk recovers from a full state (we may have failed to handle
-            // things properly while the disk was full).
-            final IntentFilter filter = new IntentFilter();
-            filter.addAction(TelephonyIntents.ACTION_SIM_STATE_CHANGED);
-            filter.addAction(Intent.ACTION_DEVICE_STORAGE_OK);
-            context.registerReceiver(this, filter);
-        }
-
-        /**
-         * Compare the IMSI to the one stored in the login service's
-         * database.  If they differ, erase all passwords and
-         * authtokens (and store the new IMSI).
-         */
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            // Check IMSI on every update; nothing happens if the IMSI
-            // is missing or unchanged.
-            TelephonyManager telephonyManager =
-                (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-            if (telephonyManager == null) {
-                Log.w(TAG, "failed to get TelephonyManager");
-                return;
-            }
-            String imsi = telephonyManager.getSubscriberId();
-
-            // If the subscriber ID is an empty string, don't do anything.
-            if (TextUtils.isEmpty(imsi)) return;
-
-            // If the current IMSI matches what's stored, don't do anything.
-            String storedImsi = getMetaValue("imsi");
-            if (Log.isLoggable(TAG, Log.VERBOSE)) {
-                Log.v(TAG, "current IMSI=" + imsi + "; stored IMSI=" + storedImsi);
-            }
-            if (imsi.equals(storedImsi)) return;
-
-            // If a CDMA phone is unprovisioned, getSubscriberId()
-            // will return a different value, but we *don't* erase the
-            // passwords.  We only erase them if it has a different
-            // subscriber ID once it's provisioned.
-            if (telephonyManager.getPhoneType() == TelephonyManager.PHONE_TYPE_CDMA) {
-                IBinder service = ServiceManager.checkService(Context.TELEPHONY_SERVICE);
-                if (service == null) {
-                    Log.w(TAG, "call to checkService(TELEPHONY_SERVICE) failed");
-                    return;
-                }
-                ITelephony telephony = ITelephony.Stub.asInterface(service);
-                if (telephony == null) {
-                    Log.w(TAG, "failed to get ITelephony interface");
-                    return;
-                }
-                boolean needsProvisioning;
-                try {
-                    needsProvisioning = telephony.getCdmaNeedsProvisioning();
-                } catch (RemoteException e) {
-                    Log.w(TAG, "exception while checking provisioning", e);
-                    // default to NOT wiping out the passwords
-                    needsProvisioning = true;
-                }
-                if (needsProvisioning) {
-                    // if the phone needs re-provisioning, don't do anything.
-                    if (Log.isLoggable(TAG, Log.VERBOSE)) {
-                        Log.v(TAG, "current IMSI=" + imsi + " (needs provisioning); stored IMSI=" +
-                              storedImsi);
-                    }
-                    return;
-                }
-            }
-
-            if (!imsi.equals(storedImsi) && !TextUtils.isEmpty(storedImsi)) {
-                Log.w(TAG, "wiping all passwords and authtokens because IMSI changed ("
-                        + "stored=" + storedImsi + ", current=" + imsi + ")");
-                SQLiteDatabase db = mOpenHelper.getWritableDatabase();
-                db.beginTransaction();
-                try {
-                    db.execSQL("DELETE from " + TABLE_AUTHTOKENS);
-                    db.execSQL("UPDATE " + TABLE_ACCOUNTS + " SET " + ACCOUNTS_PASSWORD + " = ''");
-                    sendAccountsChangedBroadcast();
-                    db.setTransactionSuccessful();
-                } finally {
-                    db.endTransaction();
-                }
-            }
-            setMetaValue("imsi", imsi);
-        }
-    }
-
     public IBinder onBind(Intent intent) {
         return asBinder();
     }
@@ -1849,12 +1809,12 @@ public class AccountManagerService
     }
 
     private boolean inSystemImage(int callerUid) {
-        String[] packages = mContext.getPackageManager().getPackagesForUid(callerUid);
+        String[] packages = mPackageManager.getPackagesForUid(callerUid);
         for (String name : packages) {
             try {
-                PackageInfo packageInfo =
-                        mContext.getPackageManager().getPackageInfo(name, 0 /* flags */);
-                if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+                PackageInfo packageInfo = mPackageManager.getPackageInfo(name, 0 /* flags */);
+                if (packageInfo != null
+                        && (packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
                     return true;
                 }
             } catch (PackageManager.NameNotFoundException e) {
@@ -1872,7 +1832,7 @@ public class AccountManagerService
                 && hasExplicitlyGrantedPermission(account, authTokenType);
         if (Log.isLoggable(TAG, Log.VERBOSE)) {
             Log.v(TAG, "checkGrantsOrCallingUidAgainstAuthenticator: caller uid "
-                    + callerUid + ", account " + account
+                    + callerUid + ", " + account
                     + ": is authenticator? " + fromAuthenticator
                     + ", has explicit permission? " + hasExplicitGrants);
         }
@@ -1884,7 +1844,7 @@ public class AccountManagerService
                 mAuthenticatorCache.getAllServices()) {
             if (serviceInfo.type.type.equals(accountType)) {
                 return (serviceInfo.uid == callingUid) ||
-                        (mContext.getPackageManager().checkSignatures(serviceInfo.uid, callingUid)
+                        (mPackageManager.checkSignatures(serviceInfo.uid, callingUid)
                                 == PackageManager.SIGNATURE_MATCH);
             }
         }

@@ -28,6 +28,10 @@
 #include <utils/misc.h>
 #include <utils/Log.h>
 
+#ifndef MOBILE_IFACE_NAME
+ #define MOBILE_IFACE_NAME "rmnet0"
+#endif
+
 namespace android {
 
 // Returns an ASCII decimal number read from the specified file, -1 on error.
@@ -96,26 +100,34 @@ static jlong readTotal(char const* suffix) {
 // each file every time (rather than caching which ones exist).
 
 static jlong getMobileTxPackets(JNIEnv* env, jobject clazz) {
+    char filename[80];
+    sprintf(filename, "/sys/class/net/%s/statistics/tx_packets", MOBILE_IFACE_NAME);
     return tryBoth(
-            "/sys/class/net/rmnet0/statistics/tx_packets",
+            filename,
             "/sys/class/net/ppp0/statistics/tx_packets");
 }
 
 static jlong getMobileRxPackets(JNIEnv* env, jobject clazz) {
+    char filename[80];
+    sprintf(filename, "/sys/class/net/%s/statistics/rx_packets", MOBILE_IFACE_NAME);
     return tryBoth(
-            "/sys/class/net/rmnet0/statistics/rx_packets",
+            filename,
             "/sys/class/net/ppp0/statistics/rx_packets");
 }
 
 static jlong getMobileTxBytes(JNIEnv* env, jobject clazz) {
+    char filename[80];
+    sprintf(filename, "/sys/class/net/%s/statistics/tx_bytes", MOBILE_IFACE_NAME);
     return tryBoth(
-            "/sys/class/net/rmnet0/statistics/tx_bytes",
+            filename,
             "/sys/class/net/ppp0/statistics/tx_bytes");
 }
 
 static jlong getMobileRxBytes(JNIEnv* env, jobject clazz) {
+    char filename[80];
+    sprintf(filename, "/sys/class/net/%s/statistics/rx_bytes", MOBILE_IFACE_NAME);
     return tryBoth(
-            "/sys/class/net/rmnet0/statistics/rx_bytes",
+            filename,
             "/sys/class/net/ppp0/statistics/rx_bytes");
 }
 

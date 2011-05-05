@@ -25,6 +25,11 @@ LOCAL_SHARED_LIBRARIES := \
 
 LOCAL_STATIC_LIBRARIES :=
 
+ifeq ($(strip $(BOARD_USES_HW_MEDIASCANNER)),true)
+  LOCAL_SHARED_LIBRARIES += libhwmediaplugin
+  LOCAL_CFLAGS += -DUSE_BOARD_MEDIASCANNER
+endif
+
 LOCAL_C_INCLUDES += \
     external/tremor/Tremor \
     frameworks/base/core/jni \

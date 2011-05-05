@@ -149,9 +149,6 @@ extern int register_android_net_LocalSocketImpl(JNIEnv* env);
 extern int register_android_net_NetworkUtils(JNIEnv* env);
 extern int register_android_net_TrafficStats(JNIEnv* env);
 extern int register_android_net_wifi_WifiManager(JNIEnv* env);
-#ifdef BOARD_HAVE_SQN_WIMAX
-extern int register_com_htc_net_wimax_WimaxController(JNIEnv* env);
-#endif
 extern int register_android_security_Md5MessageDigest(JNIEnv *env);
 extern int register_android_text_AndroidCharacter(JNIEnv *env);
 extern int register_android_text_AndroidBidi(JNIEnv *env);
@@ -1271,9 +1268,6 @@ static const RegJNIRec gRegJNI[] = {
     REG_JNI(register_android_net_NetworkUtils),
     REG_JNI(register_android_net_TrafficStats),
     REG_JNI(register_android_net_wifi_WifiManager),
-#ifdef BOARD_HAVE_SQN_WIMAX
-    REG_JNI(register_com_htc_net_wimax_WimaxController),
-#endif
     REG_JNI(register_android_nfc_NdefMessage),
     REG_JNI(register_android_nfc_NdefRecord),
     REG_JNI(register_android_os_MemoryFile),

@@ -18,16 +18,21 @@ package com.android.server;
 
 import android.app.Notification;
 import android.app.NotificationManager;
-import android.content.ContentResolver;
 import android.content.Context;
+import android.content.ContentResolver;
+import android.content.ContextWrapper;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.content.res.Resources.NotFoundException;
 import android.net.ConnectivityManager;
 import android.net.IConnectivityManager;
 import android.net.MobileDataStateTracker;
 import android.net.NetworkInfo;
 import android.net.NetworkStateTracker;
 import android.net.wifi.WifiStateTracker;
+import android.net.wimax.WimaxHelper;
+import android.net.wimax.WimaxManagerConstants;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
@@ -40,18 +45,20 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.EventLog;
 import android.util.Slog;
-
 import com.android.internal.telephony.Phone;
-
 import com.android.server.connectivity.Tethering;
-
+import dalvik.system.DexClassLoader;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+
 
 /**
  * @hide
@@ -102,10 +109,6 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
     private boolean mTestMode;
     private static ConnectivityService sServiceInstance;
-
-    private boolean mWimaxConnected = false;
-    private IBinder mWimaxService;
-    private NetworkStateTracker mWimaxStateTracker;
 
     private static final int ENABLED  = 1;
     private static final int DISABLED = 0;
@@ -373,9 +376,6 @@ public class ConnectivityService extends IConnectivityManager.Stub {
          */
         boolean noMobileData = !getMobileDataEnabled();
         for (int netType : mPriorityList) {
-            //System.out.println("ConnectivityService::constructor() - netType = " + netType);
-            //System.out.println("ConnectivityService::constructor() - mNetAttributes["
-            //        + netType + "].mRadio = " + mNetAttributes[netType].mRadio);
             switch (mNetAttributes[netType].mRadio) {
             case ConnectivityManager.TYPE_WIFI:
                 if (DBG) Slog.v(TAG, "Starting Wifi Service.");
@@ -387,25 +387,23 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 wst.startMonitoring();
 
                 break;
-            case ConnectivityManager.TYPE_WIMAX:
-                // SystemProperties.set("wimax.dualmode", "1");
-                // SystemProperties.set("wimax.dualmode.connect", "1");
-                // SystemProperties.set("wimax.dualmode.1xrtt","0");
-                // SystemProperties.set("wimax.wifi.disable","1");
-                // SystemProperties.set("wimax.disable.delay","1");
-
-                // start with wimax disabled for now
-                final ContentResolver cr = mContext.getContentResolver();
-                Settings.Secure.putInt(cr, Settings.Secure.WIMAX_ON, 0);
-                startWimaxService();
-                break;
-
             case ConnectivityManager.TYPE_MOBILE:
                 mNetTrackers[netType] = new MobileDataStateTracker(context, mHandler,
                     netType, mNetAttributes[netType].mName);
                 mNetTrackers[netType].startMonitoring();
                 if (noMobileData) {
                     if (DBG) Slog.d(TAG, "tearing down Mobile networks due to setting");
+                    mNetTrackers[netType].teardown();
+                }
+                break;
+            case ConnectivityManager.TYPE_WIMAX:
+                NetworkStateTracker nst = makeWimaxStateTracker();
+                if (nst != null) {
+                    nst.startMonitoring();
+                }
+                mNetTrackers[netType] = nst;
+                if (noMobileData) {
+                    if (DBG) Slog.d(TAG, "tearing down WiMAX networks due to setting");
                     mNetTrackers[netType].teardown();
                 }
                 break;
@@ -428,17 +426,86 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         }
     }
 
-    private void startWimaxService() {
-        Slog.v(TAG, "Starting Wimax Service.");
-        mWimaxStateTracker = createWimaxStateTracker(mContext, mHandler);
-        if (mWimaxStateTracker != null) {
-            mWimaxService = createWimaxService(mContext, mWimaxStateTracker);
-            if (mWimaxService != null) {
-                ServiceManager.addService(Context.WIMAX_SERVICE, mWimaxService);
-                mNetTrackers[ConnectivityManager.TYPE_WIMAX] = mWimaxStateTracker;
-                mWimaxStateTracker.startMonitoring();
+
+    private NetworkStateTracker makeWimaxStateTracker() {
+        //Initialize Wimax
+        DexClassLoader wimaxClassLoader;
+        Class wimaxStateTrackerClass = null;
+        Class wimaxServiceClass = null;
+        Class wimaxManagerClass;
+        String wimaxManagerClassName;
+        String wimaxServiceClassName;
+        String wimaxStateTrackerClassName;
+
+        NetworkStateTracker wimaxStateTracker = null;
+
+        boolean isWimaxEnabled = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_wimaxEnabled);
+
+        if (isWimaxEnabled) {
+            try {
+                wimaxManagerClassName = mContext.getResources().getString(
+                        com.android.internal.R.string.config_wimaxManagerClassname);
+                wimaxServiceClassName = mContext.getResources().getString(
+                        com.android.internal.R.string.config_wimaxServiceClassname);
+                wimaxStateTrackerClassName = mContext.getResources().getString(
+                        com.android.internal.R.string.config_wimaxStateTrackerClassname);
+
+                wimaxClassLoader = WimaxHelper.getWimaxClassLoader(mContext);
+
+                try {
+                    wimaxManagerClass = wimaxClassLoader.loadClass(wimaxManagerClassName);
+                    wimaxStateTrackerClass = wimaxClassLoader.loadClass(wimaxStateTrackerClassName);
+                    wimaxServiceClass = wimaxClassLoader.loadClass(wimaxServiceClassName);
+                } catch (ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                    return null;
+                }
+            } catch(Resources.NotFoundException ex) {
+                Slog.e(TAG, "Wimax Resources does not exist!!! ");
+                return null;
             }
+
+            try {
+                Slog.v(TAG, "Starting Wimax Service... ");
+
+                Constructor wmxStTrkrConst = wimaxStateTrackerClass.getConstructor
+                        (new Class[] {Context.class,Handler.class});
+                wimaxStateTracker = (NetworkStateTracker)wmxStTrkrConst.newInstance(mContext,mHandler);
+
+                Constructor wmxSrvConst = wimaxServiceClass.getDeclaredConstructor
+                        (new Class[] {Context.class,wimaxStateTrackerClass});
+                wmxSrvConst.setAccessible(true);
+                IBinder svcInvoker = (IBinder) wmxSrvConst.newInstance(mContext,wimaxStateTracker);
+                wmxSrvConst.setAccessible(false);
+
+                ServiceManager.addService(WimaxManagerConstants.WIMAX_SERVICE, svcInvoker);
+
+            } catch(ClassCastException ex) {
+                ex.printStackTrace();
+                return null;
+            } catch (NoSuchMethodException ex) {
+                ex.printStackTrace();
+                return null;
+            } catch (InstantiationException ex) {
+                ex.printStackTrace();
+                return null;
+            } catch(IllegalAccessException ex) {
+                ex.printStackTrace();
+                return null;
+            } catch(InvocationTargetException ex) {
+                ex.printStackTrace();
+                return null;
+            } catch(Exception ex) {
+                ex.printStackTrace();
+                return null;
+            }
+        } else {
+            Slog.e(TAG, "Wimax is not enabled or not added to the network attributes!!! ");
+            return null;
         }
+
+        return wimaxStateTracker;
     }
 
     /**
@@ -532,29 +599,14 @@ public class ConnectivityService extends IConnectivityManager.Stub {
      */
     public NetworkInfo getActiveNetworkInfo() {
         enforceAccessPermission();
-        for (int type=0; type <= ConnectivityManager.MAX_NETWORK_TYPE; type++) {
-            if (mNetAttributes[type] == null || !mNetAttributes[type].isDefault()) {
-                continue;
-            }
-            NetworkStateTracker t = mNetTrackers[type];
-            if (t != null) {
-                NetworkInfo info = t.getNetworkInfo();
-                if (info.isConnected()) {
-                    if (DBG && type != mActiveDefaultNetwork) Slog.e(TAG,
-                            "connected default network is not " +
-                            "mActiveDefaultNetwork!");
-                    return info;
-                }
-            } else {
-                Slog.e(TAG, "Unable to get NetworkStateTracker for type=" + type);
-            }
+        if (mActiveDefaultNetwork != -1) {
+            return mNetTrackers[mActiveDefaultNetwork].getNetworkInfo();
         }
         return null;
     }
 
     public NetworkInfo getNetworkInfo(int networkType) {
         enforceAccessPermission();
-
         if (ConnectivityManager.isNetworkTypeValid(networkType)) {
             NetworkStateTracker t = mNetTrackers[networkType];
             if (t != null)
@@ -915,9 +967,6 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         enforceAccessPermission();
         boolean retVal = Settings.Secure.getInt(mContext.getContentResolver(),
                 Settings.Secure.MOBILE_DATA, 1) == 1;
-        if (mWimaxConnected) {
-            retVal = true;
-        }
         if (DBG) Slog.d(TAG, "getMobileDataEnabled returning " + retVal);
         return retVal;
     }
@@ -946,6 +995,12 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                 }
                 mNetTrackers[ConnectivityManager.TYPE_MOBILE].reconnect();
             }
+            if (mNetTrackers[ConnectivityManager.TYPE_WIMAX] != null) {
+                if (DBG) {
+                    Slog.d(TAG, "starting up " + mNetTrackers[ConnectivityManager.TYPE_WIMAX]);
+                }
+                mNetTrackers[ConnectivityManager.TYPE_WIMAX].reconnect();
+            }
         } else {
             for (NetworkStateTracker nt : mNetTrackers) {
                 if (nt == null) continue;
@@ -954,6 +1009,9 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                     if (DBG) Slog.d(TAG, "tearing down " + nt);
                     nt.teardown();
                 }
+            }
+            if (mNetTrackers[ConnectivityManager.TYPE_WIMAX] != null) {
+                mNetTrackers[ConnectivityManager.TYPE_WIMAX].teardown();
             }
         }
     }
@@ -1005,30 +1063,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private void handleDisconnect(NetworkInfo info) {
 
         int prevNetType = info.getType();
-        Slog.d(TAG, "ConnectivityService::handleDisconnect() - disconnecting netType(" + prevNetType + ")");
+
         mNetTrackers[prevNetType].setTeardownRequested(false);
-
-        if (prevNetType == ConnectivityManager.TYPE_WIMAX || prevNetType == ConnectivityManager.TYPE_WIFI) {
-            mWimaxConnected = false;
-
-            if (mNetTrackers[ConnectivityManager.TYPE_MOBILE] != null && getMobileDataEnabled()) {
-                if (DBG) {
-                    Slog.d(TAG, "starting up " + mNetTrackers[ConnectivityManager.TYPE_MOBILE]);
-                }
-                mNetTrackers[ConnectivityManager.TYPE_MOBILE].reconnect();
-            }
-            if (mWimaxStateTracker != null) {
-                try {
-                    Method wimaxRescan = mWimaxStateTracker.getClass().getMethod("wimaxRescan");
-                    if (wimaxRescan != null) {
-                        wimaxRescan.invoke(mWimaxStateTracker);
-                    }
-                } catch (Exception e) {
-                    Slog.d(TAG, "Unable to perform WiMAX rescan!");
-                }
-            }
-        }
-
         /*
          * If the disconnected network is not the active one, then don't report
          * this as a loss of connectivity. What probably happened is that we're
@@ -1036,7 +1072,6 @@ public class ConnectivityService extends IConnectivityManager.Stub {
          * in accordance with network preference policies.
          */
         if (!mNetAttributes[prevNetType].isDefault()) {
-            Slog.d(TAG, "ConnectivityService::handleDisconnect() - netType(" + prevNetType + ") is not default");
             List pids = mNetRequestersPids[prevNetType];
             for (int i = 0; i<pids.size(); i++) {
                 Integer pid = (Integer)pids.get(i);
@@ -1050,49 +1085,24 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         Intent intent = new Intent(ConnectivityManager.CONNECTIVITY_ACTION);
         intent.putExtra(ConnectivityManager.EXTRA_NETWORK_INFO, info);
         if (info.isFailover()) {
-            Slog.d(TAG, "ConnectivityService::handleDisconnect() - netType("
-                + prevNetType + ") is fail over");
             intent.putExtra(ConnectivityManager.EXTRA_IS_FAILOVER, true);
             info.setFailover(false);
         }
         if (info.getReason() != null) {
-            Slog.d(TAG, "ConnectivityService::handleDisconnect() - netType("
-                + prevNetType + ") reason: " + info.getReason());
             intent.putExtra(ConnectivityManager.EXTRA_REASON, info.getReason());
         }
         if (info.getExtraInfo() != null) {
-            Slog.d(TAG, "ConnectivityService::handleDisconnect() - netType("
-                + prevNetType + ") extra info: " + info.getExtraInfo());
+            intent.putExtra(ConnectivityManager.EXTRA_REASON, info.getReason());
+        }
+        if (info.getExtraInfo() != null) {
             intent.putExtra(ConnectivityManager.EXTRA_EXTRA_INFO,
                     info.getExtraInfo());
         }
 
-        NetworkStateTracker newNet = null;
         if (mNetAttributes[prevNetType].isDefault()) {
-            Slog.d(TAG, "ConnectivityService::handleDisconnect() - netType("
-                + prevNetType + ") attempting failover");
-        /*if (prevNetType == ConnectivityManager.TYPE_WIMAX) {
-            System.out.println("ConnectivityService::handleDisconnect() - netType("
-                + prevNetType + ") attempting to up 3g...");
-            // hack to get rmnet0 back up
-            setMobileDataEnabled(false);
-            System.out.println("ConnectivityService::handleDisconnect() - netType("
-                + prevNetType + ") data disabled...");
-            setMobileDataEnabled(true);
-            System.out.println("ConnectivityService::handleDisconnect() - netType("
-                + prevNetType + ") data enabled...");
-        } else*/
-            newNet = tryFailover(prevNetType);
-            if (newNet != null) {
-            Slog.d(TAG, "ConnectivityService::handleDisconnect() - netType(" + prevNetType + ") failed over");
-                NetworkInfo switchTo = newNet.getNetworkInfo();
-                if (!switchTo.isConnected()) {
-                    // if the other net is connected they've already reset this and perhaps even gotten
-                    // a positive report we don't want to overwrite, but if not we need to clear this now
-                    // to turn our cellular sig strength white
-                    mDefaultInetConditionPublished = 0;
-                    intent.putExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, true);
-                }
+            tryFailover(prevNetType);
+            if (mActiveDefaultNetwork != -1) {
+                NetworkInfo switchTo = mNetTrackers[mActiveDefaultNetwork].getNetworkInfo();
                 intent.putExtra(ConnectivityManager.EXTRA_OTHER_NETWORK_INFO, switchTo);
             } else {
                 mDefaultInetConditionPublished = 0; // we're not connected anymore
@@ -1108,103 +1118,47 @@ public class ConnectivityService extends IConnectivityManager.Stub {
          * If the failover network is already connected, then immediately send
          * out a followup broadcast indicating successful failover
          */
-        if (newNet != null && newNet.getNetworkInfo().isConnected()) {
-            sendConnectedBroadcast(newNet.getNetworkInfo());
+        if (mActiveDefaultNetwork != -1) {
+            sendConnectedBroadcast(mNetTrackers[mActiveDefaultNetwork].getNetworkInfo());
         }
     }
 
-    // returns null if no failover available
-    private NetworkStateTracker tryFailover(int prevNetType) {
+    private void tryFailover(int prevNetType) {
         /*
          * If this is a default network, check if other defaults are available
          * or active
          */
-        NetworkStateTracker newNet = null;
         if (mNetAttributes[prevNetType].isDefault()) {
             if (mActiveDefaultNetwork == prevNetType) {
                 mActiveDefaultNetwork = -1;
             }
 
-            int newType = -1;
-            int newPriority = -1;
             boolean noMobileData = !getMobileDataEnabled();
             for (int checkType=0; checkType <= ConnectivityManager.MAX_NETWORK_TYPE; checkType++) {
                 if (checkType == prevNetType) continue;
                 if (mNetAttributes[checkType] == null) continue;
+                if (mNetAttributes[checkType].isDefault() == false) continue;
                 if (mNetAttributes[checkType].mRadio == ConnectivityManager.TYPE_MOBILE &&
                         noMobileData) {
-                    /*if (wimaxDisconnected) {
-                        wimaxDisconnected = false;
-                        System.out.println("ConnectivityService::tryFailover() - mobile data off");
-                        setMobileDataEnabled(false);
-                        System.out.println("ConnectivityService::tryFailover() - mobile data on");
-                        setMobileDataEnabled(true);
-                        //resetWimaxService();
-                        /*if (SystemProperties.get("wimax.restart_service").equalsIgnoreCase("1")) {
-                            SystemProperties.set("wimax.restart_service", "0");
-                        }*/
-                    //} else {
                         Slog.e(TAG, "not failing over to mobile type " + checkType +
                                 " because Mobile Data Disabled");
                         continue;
-                    //}
                 }
-                if (mNetAttributes[checkType].isDefault()) {
-                    Slog.d(TAG, "ConnectivityService::tryFailover() - checkType[" + checkType
-                        + " is default, network pref = " + mNetworkPreference);
-                    /* TODO - if we have multiple nets we could use
-                     * we may want to put more thought into which we choose
-                     */
-                    if (checkType == mNetworkPreference) {
-                        newType = checkType;
-                        break;
-                    }
-                    if (mNetAttributes[checkType].mPriority > newPriority) {
-                        newType = checkType;
-                        newPriority = mNetAttributes[newType].mPriority;
-                    }
+                if (mNetAttributes[checkType].mRadio == ConnectivityManager.TYPE_WIMAX &&
+                        noMobileData) {
+                    Slog.e(TAG, "not failing over to mobile type " + checkType +
+                            " because Mobile Data Disabled");
+                    continue;
                 }
-            }
-
-            if (newType != -1) {
-                newNet = mNetTrackers[newType];
-                /**
-                 * See if the other network is available to fail over to.
-                 * If is not available, we enable it anyway, so that it
-                 * will be able to connect when it does become available,
-                 * but we report a total loss of connectivity rather than
-                 * report that we are attempting to fail over.
-                 */
-                if (newNet.isAvailable()) {
-                    Slog.d(TAG, "ConnectivityService::tryFailover() - newNet is available");
-                    NetworkInfo switchTo = newNet.getNetworkInfo();
-                    switchTo.setFailover(true);
-                    if (!switchTo.isConnectedOrConnecting() ||
-                            newNet.isTeardownRequested()) {
-                        newNet.reconnect();
-                    }
-                    if (DBG) {
-                        if (switchTo.isConnected()) {
-                            Slog.v(TAG, "Switching to already connected " +
-                                    switchTo.getTypeName());
-                        } else {
-                            Slog.v(TAG, "Attempting to switch to " +
-                                    switchTo.getTypeName());
-                        }
-                    }
-                } else {
-                    Slog.d(TAG, "ConnectivityService::tryFailover() - newNet NOT available!");
-                    newNet.reconnect();
-                    if (prevNetType != ConnectivityManager.TYPE_WIMAX) {
-                        newNet = null; // not officially avail..  try anyway, but report no failover
-                    }
+                NetworkStateTracker checkTracker = mNetTrackers[checkType];
+                NetworkInfo checkInfo = checkTracker.getNetworkInfo();
+                if (!checkInfo.isConnectedOrConnecting() || checkTracker.isTeardownRequested()) {
+                    checkInfo.setFailover(true);
+                    checkTracker.reconnect();
                 }
-            } else {
-                Slog.e(TAG, "Network failover failing.");
+                if (DBG) Slog.d(TAG, "Attempting to switch to " + checkInfo.getTypeName());
             }
         }
-
-        return newNet;
     }
 
     private void sendConnectedBroadcast(NetworkInfo info) {
@@ -1267,17 +1221,10 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             info.setFailover(false);
         }
 
-        NetworkStateTracker newNet = null;
         if (mNetAttributes[info.getType()].isDefault()) {
-            newNet = tryFailover(info.getType());
-            if (newNet != null) {
-                NetworkInfo switchTo = newNet.getNetworkInfo();
-                if (!switchTo.isConnected()) {
-                    // if the other net is connected they've already reset this and perhaps
-                    // even gotten a positive report we don't want to overwrite, but if not
-                    // we need to clear this now to turn our cellular sig strength white
-                    mDefaultInetConditionPublished = 0;
-                }
+            tryFailover(info.getType());
+            if (mActiveDefaultNetwork != -1) {
+                NetworkInfo switchTo = mNetTrackers[mActiveDefaultNetwork].getNetworkInfo();
                 intent.putExtra(ConnectivityManager.EXTRA_OTHER_NETWORK_INFO, switchTo);
             } else {
                 mDefaultInetConditionPublished = 0;
@@ -1291,8 +1238,8 @@ public class ConnectivityService extends IConnectivityManager.Stub {
          * If the failover network is already connected, then immediately send
          * out a followup broadcast indicating successful failover
          */
-        if (newNet != null && newNet.getNetworkInfo().isConnected()) {
-            sendConnectedBroadcast(newNet.getNetworkInfo());
+        if (mActiveDefaultNetwork != -1) {
+            sendConnectedBroadcast(mNetTrackers[mActiveDefaultNetwork].getNetworkInfo());
         }
     }
 
@@ -1318,19 +1265,14 @@ public class ConnectivityService extends IConnectivityManager.Stub {
 
     private void handleConnect(NetworkInfo info) {
         int type = info.getType();
-        Slog.d(TAG, "ConnectivityService::handleConnect() - type = " + type);
+
         // snapshot isFailover, because sendConnectedBroadcast() resets it
         boolean isFailover = info.isFailover();
-        Slog.d(TAG, "ConnectivityService::handleConnect() - is failover = " + isFailover);
         NetworkStateTracker thisNet = mNetTrackers[type];
-        if (type == ConnectivityManager.TYPE_WIMAX) {
-            mWimaxConnected = true;
-        }
+
         // if this is a default net and other default is running
         // kill the one not preferred
         if (mNetAttributes[type].isDefault()) {
-            Slog.d(TAG, "ConnectivityService::handleConnect() - type[" + type
-                    + "] is default, current active default = " + mActiveDefaultNetwork);
             if (mActiveDefaultNetwork != -1 && mActiveDefaultNetwork != type) {
                 if ((type != mNetworkPreference &&
                         mNetAttributes[mActiveDefaultNetwork].mPriority >
@@ -1350,6 +1292,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
                             " teardown");
                     if (!teardown(otherNet)) {
                         Slog.e(TAG, "Network declined teardown request");
+                        teardown(thisNet);
                         return;
                     }
                     if (isFailover) {
@@ -1412,6 +1355,15 @@ public class ConnectivityService extends IConnectivityManager.Stub {
             if (mNetAttributes[netType].isDefault()) {
                 mNetTrackers[netType].addDefaultRoute();
             } else {
+                // many radios add a default route even when we don't want one.
+                // remove the default interface unless we need it for our active network
+                if (mActiveDefaultNetwork != -1) {
+                    String defaultIface = mNetTrackers[mActiveDefaultNetwork].getInterfaceName();
+                    if (defaultIface != null &&
+                            !defaultIface.equals(mNetTrackers[netType].getInterfaceName())) {
+                        mNetTrackers[netType].removeDefaultRoute();
+                    }
+                }
                 mNetTrackers[netType].addPrivateDnsRoutes();
             }
         } else {
@@ -1878,29 +1830,5 @@ public class ConnectivityService extends IConnectivityManager.Stub {
         mDefaultInetConditionPublished = mDefaultInetCondition;
         sendInetConditionBroadcast(networkInfo);
         return;
-    }
-
-    private NetworkStateTracker createWimaxStateTracker(Context context, Handler handler) {
-        NetworkStateTracker ret = null;
-        try {
-            Class<?> klass = Class.forName("com.htc.net.wimax.WimaxStateTracker");
-            Constructor<?> ctor = klass.getConstructor(Context.class, Handler.class);
-            ret = (NetworkStateTracker)ctor.newInstance(context, handler);
-        } catch (Exception e) {
-            Slog.e(TAG, "No WimaxStateTracker available", e);
-        }
-        return ret;
-    }
-
-    private IBinder createWimaxService(Context context, NetworkStateTracker wimaxStateTracker) {
-        IBinder service = null;
-        try {
-            Class<?> klass = Class.forName("com.android.server.WimaxService");
-            Constructor<?> ctor = klass.getDeclaredConstructors()[0];
-            service = (IBinder)ctor.newInstance(context, wimaxStateTracker);
-        } catch (Exception e) {
-            Slog.e(TAG, "No WimaxService available", e);
-        }
-        return service;
     }
 }

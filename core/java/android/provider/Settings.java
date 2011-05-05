@@ -208,20 +208,6 @@ public final class Settings {
             "android.settings.WIFI_IP_SETTINGS";
 
     /**
-     * Activity Action: Show settings to allow configuration of Wimax.
-     * <p>
-     * In some cases, a matching Activity may not exist, so ensure you
-     * safeguard against this.
-     * <p>
-     * Input: Nothing.
-     * <p>
-     * Output: Nothing.
-     */
-    @SdkConstant(SdkConstantType.ACTIVITY_INTENT_ACTION)
-    public static final String ACTION_WIMAX_SETTINGS =
-            "android.settings.WIMAX_SETTINGS";
-
-    /**
      * Activity Action: Show settings to allow configuration of Bluetooth.
      * <p>
      * In some cases, a matching Activity may not exist, so ensure you
@@ -1119,14 +1105,15 @@ public final class Settings {
         public static final String RADIO_WIFI = "wifi";
 
         /**
-         * Constant for use in AIRPLANE_MODE_RADIOS to specify Wimax radio.
-         */
-        public static final String RADIO_WIMAX = "wimax";
-
-        /**
          * Constant for use in AIRPLANE_MODE_RADIOS to specify Cellular radio.
          */
         public static final String RADIO_CELL = "cell";
+
+        /**
+         * Constant for use in AIRPLANE_MODE_RADIOS to specify WiMAX radio.
+         * @hide
+         */
+        public static final String RADIO_WIMAX = "wimax";
 
         /**
          * A comma separated list of radios that need to be disabled when airplane mode
@@ -2020,6 +2007,14 @@ public final class Settings {
         public static final String POINTER_LOCATION = "pointer_location";
 
         /**
+         * Show mouse pointer on screen?
+         * 0 = no
+         * 1 = yes
+         * @hide
+         */
+        public static final String MOUSE_POINTER = "mouse_pointer";
+
+        /**
          * Whether to play a sound for low-battery alerts.
          * @hide
          */
@@ -2557,28 +2552,52 @@ public final class Settings {
          */
         public static final String WIDGET_BUTTONS = "expanded_widget_buttons";
 
-        /** @hide */
+        /** 
+        * Notification Power Widget - Custom Brightness Mode
+        * @hide
+        */
         public static final String EXPANDED_BRIGHTNESS_MODE = "expanded_brightness_mode";
 
-        /** @hide */
+        /** 
+        * Notification Power Widget - Custom Network Mode
+        * @hide
+        */
         public static final String EXPANDED_NETWORK_MODE = "expanded_network_mode";
 
-        /** @hide */
+        /** 
+        * Notification Power Widget - Custom Screen Timeout
+        * @hide
+        */
         public static final String EXPANDED_SCREENTIMEOUT_MODE = "expanded_screentimeout_mode";
 
-        /** @hide */
+        /** 
+        * Notification Power Widget - Custom Ring Mode
+        * @hide
+        */
         public static final String EXPANDED_RING_MODE = "expanded_ring_mode";
 
-        /** @hide */
+        /** 
+        * Notification Power Widget - Custom Torch Mode
+        * @hide
+        */
         public static final String EXPANDED_FLASH_MODE = "expanded_flash_mode";
 
-        /** @hide */
+        /** 
+        * Enables the Screen-on animation
+        * @hide
+        */
         public static final String ELECTRON_BEAM_ANIMATION_ON = "electron_beam_animation_on";
 
-        /** @hide */
+        /** 
+        * Enables the Screen-off animation
+        * @hide
+        */
         public static final String ELECTRON_BEAM_ANIMATION_OFF = "electron_beam_animation_off";
 
-        /** @hide */
+        /**
+         * Enables the overscroller (edge bounce effect on lists)
+         * @hide
+         */
         public static final String OVERSCROLL_EFFECT = "overscroll_effect";
 
         /**
@@ -3563,6 +3582,14 @@ public final class Settings {
                 "wifi_networks_available_repeat_delay";
 
         /**
+         * Whether to nofity the user of WiMAX network.
+         * If WiMAX is connected or disconnected, we will put this notification up.
+         * @hide
+         */
+        public static final String WIMAX_NETWORKS_AVAILABLE_NOTIFICATION_ON =
+                "wimax_networks_available_notification_on";
+
+        /**
          * The number of radio channels that are allowed in the local
          * 802.11 regulatory domain.
          * @hide
@@ -3699,25 +3726,10 @@ public final class Settings {
             "wifi_mobile_data_transition_wakelock_timeout_ms";
 
         /**
-         * Whether the Wimax should be on.  Only the Wimax service should touch this.
+         * Whether the Wimax should be on.  Only the WiMAX service should touch this.
+         * @hide
          */
         public static final String WIMAX_ON = "wimax_on";
-
-        /**
-         * Whether to auto connect to the last connected network.
-         * <p>
-         * If not connected and the scan results have the last connected network
-         * available then connect to the network.
-         * see {@link android.provider.Settings.Secure#WIMAX_LAST_CONNECTED_NETWORK}.
-         */
-        public static final String WIMAX_AUTO_CONNECT_ON =
-                "wimax_auto_connect_on";
-
-        /**
-         * The last connected wimax network name.
-         */
-        public static final String WIMAX_LAST_CONNECTED_NETWORK =
-                "wimax_last_connected_network";
 
         /**
          * Whether background data usage is allowed by the user. See

@@ -24,6 +24,10 @@ ifeq ($(TARGET_HAS_FOXCONN_SENSORS),true)
     LOCAL_CFLAGS += -DFOXCONN_SENSORS
 endif
 
+ifneq ($(filter p990 p999, $(TARGET_BOOTLOADER_BOARD_NAME)),)
+    LOCAL_CFLAGS += -DUSE_LGE_ALS_DUMMY
+endif
+
 # need "-lrt" on Linux simulator to pick up clock_gettime
 ifeq ($(TARGET_SIMULATOR),true)
 	ifeq ($(HOST_OS),linux)

@@ -156,11 +156,6 @@ ifeq ($(BOARD_WLAN_DEVICE),wl1271)
 endif
 endif
 
-ifeq ($(BOARD_HAVE_SQN_WIMAX),true)
-	LOCAL_SRC_FILES += android_net_wimax_WimaxCommonAPI.cpp
-	LOCAL_CFLAGS += -DBOARD_HAVE_SQN_WIMAX
-endif
-
 LOCAL_C_INCLUDES += \
 	$(JNI_H_INCLUDE) \
 	$(LOCAL_PATH)/android/graphics \
@@ -248,6 +243,14 @@ ifneq ($(TARGET_RECOVERY_PRE_COMMAND),)
 endif
 
 LOCAL_MODULE:= libandroid_runtime
+
+ifneq ($(TARGET_RECOVERY_WRITE_MISC_PART),)
+        LOCAL_CFLAGS += -DRECOVERY_WRITE_MISC_PART='$(TARGET_RECOVERY_WRITE_MISC_PART)'
+endif
+
+ifneq ($(BOARD_MOBILEDATA_INTERFACE_NAME),)
+        LOCAL_CFLAGS += -DMOBILE_IFACE_NAME='$(BOARD_MOBILEDATA_INTERFACE_NAME)'
+endif
 
 include $(BUILD_SHARED_LIBRARY)
 

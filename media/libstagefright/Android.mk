@@ -115,6 +115,14 @@ ifeq ($(BOARD_CAMERA_USE_GETBUFFERINFO),true)
         LOCAL_C_INCLUDES += $(TOP)/hardware/qcom/media/mm-core/omxcore/inc
 endif
 
+ifeq ($(TARGET_USE_SOFTWARE_AUDIO_AAC),true)
+	LOCAL_CFLAGS += -DUSE_SOFTWARE_AUDIO_AAC
+endif
+
+ifeq ($(TARGET_DONT_SET_AUDIO_AAC_FORMAT),true)
+        LOCAL_CFLAGS += -DDONT_SET_AUDIO_AAC_FORMAT
+endif
+
 ifeq ($(TARGET_OS)-$(TARGET_SIMULATOR),linux-true)
         LOCAL_LDLIBS += -lpthread
 endif
