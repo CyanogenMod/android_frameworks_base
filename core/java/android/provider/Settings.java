@@ -4530,6 +4530,12 @@ public final class Settings {
         public static final String MVNO_ROAMING = "button_mvno_roaming_key";
 
         /**
+         * Whether to enable permissions managment.
+         * @hide
+         */
+        public static final String ENABLE_PERMISSIONS_MANAGMENT = "enable_permissions_managment";
+
+        /**
          * @hide
          */
         public static final String[] SETTINGS_TO_BACKUP = {
