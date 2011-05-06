@@ -21,12 +21,14 @@ import org.xmlpull.v1.XmlPullParserException;
 
 import android.content.Context;
 import android.content.res.XmlResourceParser;
+import android.media.AudioManager;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +41,8 @@ public class Profile implements Parcelable {
     private ProfileGroup mDefaultGroup;
 
     private static final String TAG = "Profile";
+
+    private Map<Integer, StreamSettings> streams = new HashMap<Integer, StreamSettings>();
 
     /** @hide */
     public static final Parcelable.Creator<Profile> CREATOR = new Parcelable.Creator<Profile>() {
@@ -77,16 +81,16 @@ public class Profile implements Parcelable {
     /** @hide */
     private void addProfileGroup(ProfileGroup value) {
         profileGroups.put(value.getName(), value);
-        if(value.isDefaultGroup()){
+        if (value.isDefaultGroup()) {
             mDefaultGroup = value;
         }
     }
 
     /** @hide */
     public void removeProfileGroup(String name) {
-        if(!profileGroups.get(name).isDefaultGroup()){
+        if (!profileGroups.get(name).isDefaultGroup()) {
             profileGroups.remove(name);
-        }else{
+        } else {
             Log.e(TAG, "Cannot remove default group: " + name);
         }
     }
@@ -115,6 +119,8 @@ public class Profile implements Parcelable {
         dest.writeString(mName);
         dest.writeParcelableArray(
                 profileGroups.values().toArray(new Parcelable[profileGroups.size()]), flags);
+        dest.writeParcelableArray(
+                streams.values().toArray(new Parcelable[streams.size()]), flags);
     }
 
     /** @hide */
@@ -123,9 +129,13 @@ public class Profile implements Parcelable {
         for (Parcelable group : in.readParcelableArray(null)) {
             ProfileGroup grp = (ProfileGroup) group;
             profileGroups.put(grp.getName(), grp);
-            if(grp.isDefaultGroup()){
+            if (grp.isDefaultGroup()) {
                 mDefaultGroup = grp;
             }
+        }
+        for (Parcelable parcel : in.readParcelableArray(null)) {
+            StreamSettings stream = (StreamSettings) parcel;
+            streams.put(stream.streamId, stream);
         }
     }
 
@@ -140,7 +150,8 @@ public class Profile implements Parcelable {
 
     /** @hide */
     public Notification processNotification(String groupName, Notification notification) {
-        ProfileGroup profileGroupSettings = groupName == null ? mDefaultGroup : profileGroups.get(groupName);
+        ProfileGroup profileGroupSettings = groupName == null ? mDefaultGroup : profileGroups
+                .get(groupName);
         notification = profileGroupSettings.processNotification(notification);
         return notification;
     }
@@ -157,6 +168,9 @@ public class Profile implements Parcelable {
         builder.append("<profile name=\"" + TextUtils.htmlEncode(getName()) + "\">\n");
         for (ProfileGroup pGroup : profileGroups.values()) {
             pGroup.getXmlString(builder);
+        }
+        for (StreamSettings sd : streams.values()) {
+            sd.getXmlString(builder);
         }
         builder.append("</profile>\n");
     }
@@ -179,12 +193,8 @@ public class Profile implements Parcelable {
     }
 
     /** @hide */
-    public static Profile fromXml(XmlPullParser xpp) throws XmlPullParserException, IOException {
-        return fromXml(xpp, null);
-    }
-
-    /** @hide */
-    public static Profile fromXml(XmlPullParser xpp, Context context) throws XmlPullParserException, IOException {
+    public static Profile fromXml(XmlPullParser xpp, Context context)
+            throws XmlPullParserException, IOException {
         String attr = getAttrResString(xpp, context);
         Profile profile = new Profile(attr);
         int event = xpp.next();
@@ -195,10 +205,41 @@ public class Profile implements Parcelable {
                     ProfileGroup pg = ProfileGroup.fromXml(xpp, context);
                     profile.addProfileGroup(pg);
                 }
+                if (name.equals("streamDescriptor")) {
+                    StreamSettings sd = StreamSettings.fromXml(xpp, context);
+                    profile.streams.put(sd.streamId, sd);
+                }
             }
             event = xpp.next();
         }
         return profile;
     }
+
+    /** @hide */
+    public void doSelect(Context context) {
+        // Set stream volumes
+        AudioManager am = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        for (StreamSettings sd : streams.values()) {
+            if (sd.override) {
+                am.setStreamVolume(sd.streamId, sd.value, 0);
+            }
+        }
+    }
+
+    /** @hide */
+    public StreamSettings getSettingsForStream(int streamId){
+        return streams.get(streamId);
+    }
+
+    /** @hide */
+    public void setStreamSettings(StreamSettings descriptor){
+        streams.put(descriptor.streamId, descriptor);
+    }
+
+    /** @hide */
+    public Collection<StreamSettings> getStreamSettings(){
+        return streams.values();
+    }
+
 
 }
