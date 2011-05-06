@@ -26,12 +26,16 @@ import android.content.pm.PackageParser;
 import android.content.pm.PermissionGroupInfo;
 import android.content.pm.PermissionInfo;
 import android.graphics.drawable.Drawable;
+import android.text.SpannableString;
+import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 
 import java.text.Collator;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -52,7 +56,7 @@ import java.util.Set;
  * 
  * {@hide}
  */
-public class AppSecurityPermissions  extends AppSecurityPermissionsBase {
+public class AppSecurityEditablePermissions extends AppSecurityPermissionsBase{
 
     private enum State {
         NO_PERMS,
@@ -61,18 +65,43 @@ public class AppSecurityPermissions  extends AppSecurityPermissionsBase {
         BOTH
     }
 
-    private final static String TAG = "AppSecurityPermissions";
+    private class EditableListener implements OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            PermissionInfo pi = (PermissionInfo) v.getTag();
+            TextView text = (TextView) v.findViewById(R.id.editable_permission);
+            SpannableString ss = (SpannableString) text.getText();
+
+            if (mRevokedPerms.contains(pi.name)) {
+                mRevokedPerms.remove(pi.name);
+                StrikethroughSpan[] spans = ss.getSpans(0, text.length(), StrikethroughSpan.class);
+                for (StrikethroughSpan span: spans) {
+                    ss.removeSpan(span);
+                }
+            }
+            else {
+                mRevokedPerms.add(pi.name);
+                ss.setSpan(new StrikethroughSpan(), 0, text.length(), 0);
+            }
+            String[] rp = new String[mRevokedPerms.size()];
+            mRevokedPerms.toArray(rp);
+            mPm.setRevokedPermissions(mPackageName, rp);
+        }
+    }
+
+    private final static String TAG = "AppSecurityEditablePermissions";
+    private EditableListener mEditableListener = new EditableListener();
     private boolean localLOGV = false;
     private Context mContext;
     private LayoutInflater mInflater;
     private PackageManager mPm;
     private LinearLayout mPermsView;
-    private Map<String, String> mDangerousMap;
-    private Map<String, String> mNormalMap;
+    private Map<String, List<PermissionInfo>> mDangerousMap;
+    private Map<String, List<PermissionInfo>> mNormalMap;
     private List<PermissionInfo> mPermsList;
     private String mDefaultGrpLabel;
     private String mDefaultGrpName="DefaultGrp";
-    private String mPermFormat;
     private Drawable mNormalIcon;
     private Drawable mDangerousIcon;
     private boolean mExpanded;
@@ -85,17 +114,17 @@ public class AppSecurityPermissions  extends AppSecurityPermissionsBase {
     private LinearLayout mNonDangerousList;
     private LinearLayout mDangerousList;
     private HashMap<String, CharSequence> mGroupLabelCache;
+    private HashSet<String> mRevokedPerms;
     private View mNoPermsView;
-    
-    public AppSecurityPermissions(Context context, List<PermissionInfo> permList) {
+    private String mPackageName;
+
+    public AppSecurityEditablePermissions(Context context, String packageName) {
         mContext = context;
         mPm = mContext.getPackageManager();
-        mPermsList = permList;
-    }
-    
-    public AppSecurityPermissions(Context context, String packageName) {
-        mContext = context;
-        mPm = mContext.getPackageManager();
+        mPackageName = packageName;
+        mRevokedPerms = new HashSet<String>();
+        String[] revoked = mPm.getRevokedPermissions(packageName);
+        mRevokedPerms.addAll(Arrays.asList(revoked));
         mPermsList = new ArrayList<PermissionInfo>();
         Set<PermissionInfo> permSet = new HashSet<PermissionInfo>();
         PackageInfo pkgInfo;
@@ -113,52 +142,7 @@ public class AppSecurityPermissions  extends AppSecurityPermissionsBase {
             mPermsList.add(tmpInfo);
         }
     }
-    
-    public AppSecurityPermissions(Context context, PackageParser.Package pkg) {
-        mContext = context;
-        mPm = mContext.getPackageManager();
-        mPermsList = new ArrayList<PermissionInfo>();
-        Set<PermissionInfo> permSet = new HashSet<PermissionInfo>();
-        if(pkg == null) {
-            return;
-        }
-        // Get requested permissions
-        if (pkg.requestedPermissions != null) {
-            ArrayList<String> strList = pkg.requestedPermissions;
-            int size = strList.size();
-            if (size > 0) {
-                extractPerms(strList.toArray(new String[size]), permSet);
-            }
-        }
-        // Get permissions related to  shared user if any
-        if(pkg.mSharedUserId != null) {
-            int sharedUid;
-            try {
-                sharedUid = mPm.getUidForSharedUser(pkg.mSharedUserId);
-                getAllUsedPermissions(sharedUid, permSet);
-            } catch (NameNotFoundException e) {
-                Log.w(TAG, "Could'nt retrieve shared user id for:"+pkg.packageName);
-            }
-        }
-        // Retrieve list of permissions
-        for(PermissionInfo tmpInfo : permSet) {
-            mPermsList.add(tmpInfo);
-        }
-    }
-    
-    /**
-     * Utility to retrieve a view displaying a single permission.
-     */
-    public static View getPermissionItemView(Context context,
-            CharSequence grpName, CharSequence description, boolean dangerous) {
-        LayoutInflater inflater = (LayoutInflater)context.getSystemService(
-                Context.LAYOUT_INFLATER_SERVICE);
-        Drawable icon = context.getResources().getDrawable(dangerous
-                ? R.drawable.ic_bullet_key_permission : R.drawable.ic_text_dot);
-        return getPermissionItemView(context, inflater, grpName,
-                description, dangerous, icon);
-    }
-    
+
     private void getAllUsedPermissions(int sharedUid, Set<PermissionInfo> permSet) {
         String sharedPkgList[] = mPm.getPackagesForUid(sharedUid);
         if(sharedPkgList == null || (sharedPkgList.length == 0)) {
@@ -168,8 +152,8 @@ public class AppSecurityPermissions  extends AppSecurityPermissionsBase {
             getPermissionsForPackage(sharedPkg, permSet);
         }
     }
-    
-    private void getPermissionsForPackage(String packageName, 
+
+    private void getPermissionsForPackage(String packageName,
             Set<PermissionInfo> permSet) {
         PackageInfo pkgInfo;
         try {
@@ -182,7 +166,7 @@ public class AppSecurityPermissions  extends AppSecurityPermissionsBase {
             extractPerms(pkgInfo.requestedPermissions, permSet);
         }
     }
-    
+
     private void extractPerms(String strList[], Set<PermissionInfo> permSet) {
         if((strList == null) || (strList.length == 0)) {
             return;
@@ -198,13 +182,12 @@ public class AppSecurityPermissions  extends AppSecurityPermissionsBase {
             }
         }
     }
-    
+
     public int getPermissionCount() {
         return mPermsList.size();
     }
 
     public View getPermissionsView() {
-        
         mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mPermsView = (LinearLayout) mInflater.inflate(R.layout.app_perms_summary, null);
         mShowMore = mPermsView.findViewById(R.id.show_more);
@@ -222,12 +205,11 @@ public class AppSecurityPermissions  extends AppSecurityPermissionsBase {
 
         // Pick up from framework resources instead.
         mDefaultGrpLabel = mContext.getString(R.string.default_permission_group);
-        mPermFormat = mContext.getString(R.string.permissions_format);
         mNormalIcon = mContext.getResources().getDrawable(R.drawable.ic_text_dot);
         mDangerousIcon = mContext.getResources().getDrawable(R.drawable.ic_bullet_key_permission);
         mShowMaxIcon = mContext.getResources().getDrawable(R.drawable.expander_ic_maximized);
         mShowMinIcon = mContext.getResources().getDrawable(R.drawable.expander_ic_minimized);
-        
+
         // Set permissions view
         setPermissions(mPermsList);
         return mPermsView;
@@ -248,27 +230,6 @@ public class AppSecurityPermissions  extends AppSecurityPermissionsBase {
             groupDesc = groupDesc.substring(0, len-1);
         }
         return groupDesc;
-    }
-
-    /**
-     * Utility method that concatenates two strings defined by mPermFormat.
-     * a null value is returned if both str1 and str2 are null, if one of the strings
-     * is null the other non null value is returned without formatting
-     * this is to placate initial error checks
-     */
-    private String formatPermissions(String groupDesc, CharSequence permDesc) {
-        if(groupDesc == null) {
-            if(permDesc == null) {
-                return null;
-            }
-            return permDesc.toString();
-        }
-        groupDesc = canonicalizeGroupDesc(groupDesc);
-        if(permDesc == null) {
-            return groupDesc;
-        }
-        // groupDesc and permDesc are non null
-        return String.format(mPermFormat, groupDesc, permDesc.toString());
     }
 
     private CharSequence getGroupLabel(String grpName) {
@@ -297,7 +258,7 @@ public class AppSecurityPermissions  extends AppSecurityPermissionsBase {
      * list of permission descriptions.
      */
     private void displayPermissions(boolean dangerous) {
-        Map<String, String> permInfoMap = dangerous ? mDangerousMap : mNormalMap;
+        Map<String, List<PermissionInfo>> permInfoMap = dangerous ? mDangerousMap : mNormalMap;
         LinearLayout permListView = dangerous ? mDangerousList : mNonDangerousList;
         permListView.removeAllViews();
 
@@ -317,26 +278,46 @@ public class AppSecurityPermissions  extends AppSecurityPermissionsBase {
         mNoPermsView.setVisibility(View.VISIBLE);
     }
 
-    private View getPermissionItemView(CharSequence grpName, CharSequence permList,
+    private View getPermissionItemView(CharSequence grpName, List<PermissionInfo> list,
             boolean dangerous) {
-        return getPermissionItemView(mContext, mInflater, grpName, permList,
+        return getPermissionItemView(grpName, list,
                 dangerous, dangerous ? mDangerousIcon : mNormalIcon);
     }
 
-    private static View getPermissionItemView(Context context, LayoutInflater inflater,
-            CharSequence grpName, CharSequence permList, boolean dangerous, Drawable icon) {
-        View permView = inflater.inflate(R.layout.app_permission_item, null);
+    private View getPermissionItemView(CharSequence grpName, List<PermissionInfo> list,
+            boolean dangerous, Drawable icon) {
+        View permView = mInflater.inflate(R.layout.app_editable_permission_item, null);
 
-        TextView permGrpView = (TextView) permView.findViewById(R.id.permission_group);
-        TextView permDescView = (TextView) permView.findViewById(R.id.permission_list);
+        TextView permGrpView = (TextView) permView.findViewById(R.id.editable_permission_group);
+        LinearLayout permDescView = (LinearLayout) permView.findViewById(R.id.editable_permissions_list);
 
-        ImageView imgView = (ImageView)permView.findViewById(R.id.perm_icon);
+        ImageView imgView = (ImageView)permView.findViewById(R.id.editable_perm_icon);
         imgView.setImageDrawable(icon);
         if(grpName != null) {
             permGrpView.setText(grpName);
-            permDescView.setText(permList);
+            for (PermissionInfo pi: list) {
+                View ePermView = mInflater.inflate(R.layout.app_editable_permission, null);           
+                TextView editablePermView = (TextView) ePermView.findViewById(R.id.editable_permission);
+                ImageView editableImgView = (ImageView) ePermView.findViewById(R.id.editable_permission_icon);
+                editableImgView.setImageDrawable(icon);
+
+                CharSequence permDesc = pi.loadLabel(mPm);
+                SpannableString text = new SpannableString(permDesc + " (" + pi.name + ")");
+                if (mRevokedPerms.contains(pi.name)) {
+                    text.setSpan(new StrikethroughSpan(), 0, text.length(), 0);
+                }
+                editablePermView.setText(text, TextView.BufferType.SPANNABLE);
+                ePermView.setVisibility(View.VISIBLE);
+                editablePermView.setVisibility(View.VISIBLE);
+                editableImgView.setVisibility(View.GONE);
+                ePermView.setClickable(true);
+                ePermView.setTag(pi);
+                ePermView.setOnClickListener(mEditableListener);
+                permDescView.addView(ePermView);
+            }
+            permDescView.setVisibility(View.VISIBLE);
         } else {
-            permGrpView.setText(permList);
+            permGrpView.setText(list + " test");
             permDescView.setVisibility(View.GONE);
         }
         return permView;
@@ -373,7 +354,7 @@ public class AppSecurityPermissions  extends AppSecurityPermissionsBase {
             break;
         }
     }
-    
+
     private boolean isDisplayablePermission(PermissionInfo pInfo) {
         if(pInfo.protectionLevel == PermissionInfo.PROTECTION_DANGEROUS ||
                 pInfo.protectionLevel == PermissionInfo.PROTECTION_NORMAL) {
@@ -381,41 +362,7 @@ public class AppSecurityPermissions  extends AppSecurityPermissionsBase {
         }
         return false;
     }
-    
-    /*
-     * Utility method that aggregates all permission descriptions categorized by group
-     * Say group1 has perm11, perm12, perm13, the group description will be
-     * perm11_Desc, perm12_Desc, perm13_Desc
-     */
-    private void aggregateGroupDescs(
-            Map<String, List<PermissionInfo> > map, Map<String, String> retMap) {
-        if(map == null) {
-            return;
-        }
-        if(retMap == null) {
-           return;
-        }
-        Set<String> grpNames = map.keySet();
-        Iterator<String> grpNamesIter = grpNames.iterator();
-        while(grpNamesIter.hasNext()) {
-            String grpDesc = null;
-            String grpNameKey = grpNamesIter.next();
-            List<PermissionInfo> grpPermsList = map.get(grpNameKey);
-            if(grpPermsList == null) {
-                continue;
-            }
-            for(PermissionInfo permInfo: grpPermsList) {
-                CharSequence permDesc = permInfo.loadLabel(mPm);
-                grpDesc = formatPermissions(grpDesc, permDesc);
-            }
-            // Insert grpDesc into map
-            if(grpDesc != null) {
-                if(localLOGV) Log.i(TAG, "Group:"+grpNameKey+" description:"+grpDesc.toString());
-                retMap.put(grpNameKey, grpDesc.toString());
-            }
-        }
-    }
-    
+
     private static class PermissionInfoComparator implements Comparator<PermissionInfo> {
         private PackageManager mPm;
         private final Collator sCollator = Collator.getInstance();
@@ -428,27 +375,18 @@ public class AppSecurityPermissions  extends AppSecurityPermissionsBase {
             return sCollator.compare(sa, sb);
         }
     }
-    
+
     private void setPermissions(List<PermissionInfo> permList) {
         mGroupLabelCache = new HashMap<String, CharSequence>();
         //add the default label so that uncategorized permissions can go here
         mGroupLabelCache.put(mDefaultGrpName, mDefaultGrpLabel);
-        
-        // Map containing group names and a list of permissions under that group
-        // categorized as dangerous
-        mDangerousMap = new HashMap<String, String>();
-        // Map containing group names and a list of permissions under that group
-        // categorized as normal
-        mNormalMap = new HashMap<String, String>();
-        
+
         // Additional structures needed to ensure that permissions are unique under 
         // each group
-        Map<String, List<PermissionInfo>> dangerousMap = 
-            new HashMap<String,  List<PermissionInfo>>();
-        Map<String, List<PermissionInfo> > normalMap = 
-            new HashMap<String,  List<PermissionInfo>>();
+        mDangerousMap = new HashMap<String,  List<PermissionInfo>>();
+        mNormalMap = new HashMap<String,  List<PermissionInfo>>();
         PermissionInfoComparator permComparator = new PermissionInfoComparator(mPm);
-        
+
         if (permList != null) {
             // First pass to group permissions
             for (PermissionInfo pInfo : permList) {
@@ -459,7 +397,7 @@ public class AppSecurityPermissions  extends AppSecurityPermissionsBase {
                 }
                 Map<String, List<PermissionInfo> > permInfoMap =
                     (pInfo.protectionLevel == PermissionInfo.PROTECTION_DANGEROUS) ?
-                            dangerousMap : normalMap;
+                            mDangerousMap : mNormalMap;
                 String grpName = (pInfo.group == null) ? mDefaultGrpName : pInfo.group;
                 if(localLOGV) Log.i(TAG, "Permission:"+pInfo.name+" belongs to group:"+grpName);
                 List<PermissionInfo> grpPermsList = permInfoMap.get(grpName);
@@ -476,10 +414,6 @@ public class AppSecurityPermissions  extends AppSecurityPermissionsBase {
                     }
                 }
             }
-            // Second pass to actually form the descriptions
-            // Look at dangerous permissions first
-            aggregateGroupDescs(dangerousMap, mDangerousMap);
-            aggregateGroupDescs(normalMap, mNormalMap);
         }
 
         mCurrentState = State.NO_PERMS;

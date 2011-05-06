@@ -1279,6 +1279,13 @@
         android:description="@string/permlab_copyProtectedData"
         android:protectionLevel="signature" />
 
+    <!-- Permission for reading writeing revoked permissions
+         @hide -->
+    <permission android:name="android.permission.REVOKE_PERMISSIONS"
+        android:label="@string/permlab_revokePermissions"
+        android:description="@string/permlab_revokePermissions"
+        android:protectionLevel="signature" />
+
     <!-- C2DM permission. 
          @hide Used internally.
      -->
