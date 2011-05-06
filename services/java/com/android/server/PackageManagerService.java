@@ -1,4 +1,4 @@
-/*
+ /*
  * Copyright (C) 2006 The Android Open Source Project
  * This code has been modified.  Portions copyright (C) 2010, T-Mobile USA, Inc.
  *
@@ -1413,7 +1413,7 @@ class PackageManagerService extends IPackageManager.Stub {
             if (p != null) {
                 final PackageSetting ps = (PackageSetting)p.mExtras;
                 final SharedUserSetting suid = ps.sharedUser;
-                return suid != null ? suid.gids : ps.gids;
+                return suid != null ? removeInts(suid.gids, suid.revokedGids) : removeInts(ps.gids, ps.revokedGids);
             }
         }
         // stupid thing to indicate an error.
@@ -1432,7 +1432,7 @@ class PackageManagerService extends IPackageManager.Stub {
         pi.protectionLevel = bp.protectionLevel;
         return pi;
     }
-    
+
     public PermissionInfo getPermissionInfo(String name, int flags) {
         synchronized (mPackages) {
             final BasePermission p = mSettings.mPermissions.get(name);
@@ -1680,17 +1680,37 @@ class PackageManagerService extends IPackageManager.Stub {
         }
     }
 
+    private boolean isRevokeEnabled() {
+        int defalut = mContext.getResources().getBoolean(
+                com.android.internal.R.bool.config_enablePermissionsManagment) ? 1 : 0;
+        int res = android.provider.Settings.Secure.getInt(mContext.getContentResolver(),
+                android.provider.Settings.Secure.ENABLE_PERMISSIONS_MANAGMENT,
+                defalut);
+        return res == 1;
+    }
+
+    private int checkRevoked(String permName, GrantedPermissions gp, int callingUid, int checkedUid) {
+        if (callingUid != checkedUid)
+                if (gp.revokedPermissions.contains(permName))
+                   if (isRevokeEnabled()) {
+                       return PackageManager.PERMISSION_DENIED;
+                   }
+
+        return PackageManager.PERMISSION_GRANTED;
+    }
+
     public int checkPermission(String permName, String pkgName) {
         synchronized (mPackages) {
             PackageParser.Package p = mPackages.get(pkgName);
             if (p != null && p.mExtras != null) {
                 PackageSetting ps = (PackageSetting)p.mExtras;
+                int uid = Binder.getCallingUid();
                 if (ps.sharedUser != null) {
                     if (ps.sharedUser.grantedPermissions.contains(permName)) {
-                        return PackageManager.PERMISSION_GRANTED;
+                        return checkRevoked(permName, ps.sharedUser, uid, ps.sharedUser.userId);
                     }
                 } else if (ps.grantedPermissions.contains(permName)) {
-                    return PackageManager.PERMISSION_GRANTED;
+                    return checkRevoked(permName, ps, uid, ps.userId);
                 }
             }
         }
@@ -1703,7 +1723,7 @@ class PackageManagerService extends IPackageManager.Stub {
             if (obj != null) {
                 GrantedPermissions gp = (GrantedPermissions)obj;
                 if (gp.grantedPermissions.contains(permName)) {
-                    return PackageManager.PERMISSION_GRANTED;
+                    return checkRevoked(permName, gp, -2, -1);
                 }
             } else {
                 HashSet<String> perms = mSystemPermissions.get(uid);
@@ -1754,7 +1774,7 @@ class PackageManagerService extends IPackageManager.Stub {
         }
         return s1.equals(s2);
     }
-    
+
     static boolean comparePermissionInfos(PermissionInfo pi1, PermissionInfo pi2) {
         if (pi1.icon != pi2.icon) return false;
         if (pi1.logo != pi2.logo) return false;
@@ -1770,7 +1790,7 @@ class PackageManagerService extends IPackageManager.Stub {
         //if (pi1.descriptionRes != pi2.descriptionRes) return false;
         return true;
     }
-    
+
     boolean addPermissionLocked(PermissionInfo info, boolean async) {
         if (info.labelRes == 0 && info.nonLocalizedLabel == null) {
             throw new SecurityException("Label must be specified in permission");
@@ -3936,13 +3956,24 @@ class PackageManagerService extends IPackageManager.Stub {
             for (PackageParser.Package pkg : mPackages.values()) {
                 if (pkg != pkgInfo) {
                     grantPermissionsLP(pkg, replaceAll);
+                    updateRevokedGids(pkg);
                 }
             }
         }
         
         if (pkgInfo != null) {
             grantPermissionsLP(pkgInfo, replace);
+            updateRevokedGids(pkgInfo);
         }
+    }
+
+    private void updateRevokedGids(PackageParser.Package pkg) {
+        final PackageSetting ps = (PackageSetting)pkg.mExtras;
+        if (ps == null) {
+            return;
+        }
+        final GrantedPermissions gp = ps.sharedUser != null ? ps.sharedUser : ps;
+        updateRevokedGids(gp);
     }
 
     private void grantPermissionsLP(PackageParser.Package pkg, boolean replace) {
@@ -4627,6 +4658,52 @@ class PackageManagerService extends IPackageManager.Stub {
         if (DEBUG_INSTALL) Log.v(TAG, "BM finishing package install for " + token);
         Message msg = mHandler.obtainMessage(POST_INSTALL, token, 0);
         mHandler.sendMessage(msg);
+    }
+
+    public String[] getRevokedPermissions(final String pkgName) {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.REVOKE_PERMISSIONS, null);
+
+        String[] result = null;
+        synchronized (mPackages) {
+            final PackageParser.Package p = mPackages.get(pkgName);
+            if (p != null && p.mExtras != null) {
+                final PackageSetting ps = (PackageSetting)p.mExtras;
+                if (ps.sharedUser != null) {
+                    result = new String[ps.sharedUser.revokedPermissions.size()];
+                    ps.sharedUser.revokedPermissions.toArray(result);
+                } else {
+                    result = new String[ps.revokedPermissions.size()];
+                    ps.revokedPermissions.toArray(result);
+                }
+            }
+        }
+        return result;
+    }
+
+    public void setRevokedPermissions(final String pkgName, final String[] perms) {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.REVOKE_PERMISSIONS, null);
+        synchronized (mPackages) {
+            final PackageParser.Package p = mPackages.get(pkgName);
+            if ((p.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                if (p != null && p.mExtras != null) {
+                    final PackageSetting ps = (PackageSetting)p.mExtras;
+                    final GrantedPermissions gp = ps.sharedUser == null ? ps : ps.sharedUser;
+                    gp.revokedPermissions.clear();
+                    gp.revokedPermissions.addAll(Arrays.asList(perms));
+                    updateRevokedGids(gp);
+                    mSettings.writeLP();
+                }
+            }
+        }
+    }
+
+    private void updateRevokedGids(final GrantedPermissions gp) {
+        for (String perm: gp.revokedPermissions) {
+            final BasePermission bp = mSettings.mPermissions.get(perm);
+            gp.revokedGids = appendInts(gp.revokedGids, bp.gids);
+        }
     }
 
     private void processPendingInstall(final InstallArgs args, final int currentStatus) {
@@ -7842,6 +7919,10 @@ class PackageManagerService extends IPackageManager.Stub {
         HashSet<String> grantedPermissions = new HashSet<String>();
         int[] gids;
 
+        HashSet<String> revokedPermissions = new HashSet<String>();
+
+        int[] revokedGids;
+
         GrantedPermissions(int pkgFlags) {
             setFlags(pkgFlags);
         }
@@ -7849,6 +7930,7 @@ class PackageManagerService extends IPackageManager.Stub {
         GrantedPermissions(GrantedPermissions base) {
             pkgFlags = base.pkgFlags;
             grantedPermissions = (HashSet<String>) base.grantedPermissions.clone();
+            revokedPermissions = (HashSet<String>) base.revokedPermissions.clone();
 
             if (base.gids != null) {
                 gids = base.gids.clone();
@@ -7980,6 +8062,8 @@ class PackageManagerService extends IPackageManager.Stub {
         public void copyFrom(PackageSettingBase base) {
             grantedPermissions = base.grantedPermissions;
             gids = base.gids;
+            revokedPermissions = base.revokedPermissions;
+            revokedGids = base.revokedGids;
 
             timeStamp = base.timeStamp;
             firstInstallTime = base.firstInstallTime;
@@ -8782,6 +8866,14 @@ class PackageManagerService extends IPackageManager.Stub {
                         serializer.endTag(null, "item");
                     }
                     serializer.endTag(null, "perms");
+                    serializer.startTag(null, "revoked-perms");
+                    for (String name : usr.revokedPermissions) {
+                        serializer.startTag(null, "item");
+                        serializer.attribute(null, "name", name);
+                        serializer.endTag(null, "item");
+                    }
+                    serializer.endTag(null, "revoked-perms");
+
                     serializer.endTag(null, "shared-user");
                 }
 
@@ -8993,6 +9085,20 @@ class PackageManagerService extends IPackageManager.Stub {
                     }
                 }
                 serializer.endTag(null, "perms");
+                serializer.startTag(null, "revoked-perms");
+                if (pkg.sharedUser == null) {
+                    // If this is a shared user, the permissions will
+                    // be written there.  We still need to write an
+                    // empty permissions list so permissionsFixed will
+                    // be set.
+                    for (final String name : pkg.revokedPermissions) {
+                        serializer.startTag(null, "item");
+                        serializer.attribute(null, "name", name);
+                        serializer.endTag(null, "item");
+                    }
+                }
+                serializer.endTag(null, "revoked-perms");
+
             }
             if (pkg.disabledComponents.size() > 0) {
                 serializer.startTag(null, "disabled-components");
@@ -9361,6 +9467,9 @@ class PackageManagerService extends IPackageManager.Stub {
                 if (tagName.equals("perms")) {
                     readGrantedPermissionsLP(parser,
                             ps.grantedPermissions);
+                } else if (tagName.equals("revoked-perms")) {
+                    readGrantedPermissionsLP(parser,
+                            ps.revokedPermissions);
                 } else {
                     reportSettingsProblem(Log.WARN,
                             "Unknown element under <updated-package>: "
@@ -9570,6 +9679,9 @@ class PackageManagerService extends IPackageManager.Stub {
                         readGrantedPermissionsLP(parser,
                                 packageSetting.grantedPermissions);
                         packageSetting.permissionsFixed = true;
+                    } else if (tagName.equals("revoked-perms")) {
+                        readGrantedPermissionsLP(parser,
+                                packageSetting.revokedPermissions);
                     } else {
                         reportSettingsProblem(Log.WARN,
                                 "Unknown element under <package>: "
@@ -9698,6 +9810,8 @@ class PackageManagerService extends IPackageManager.Stub {
                         su.signatures.readXml(parser, mPastSignatures);
                     } else if (tagName.equals("perms")) {
                         readGrantedPermissionsLP(parser, su.grantedPermissions);
+                    } else if (tagName.equals("revoked-perms")) {
+                        readGrantedPermissionsLP(parser, su.revokedPermissions);
                     } else {
                         reportSettingsProblem(Log.WARN,
                                 "Unknown element under <shared-user>: "
