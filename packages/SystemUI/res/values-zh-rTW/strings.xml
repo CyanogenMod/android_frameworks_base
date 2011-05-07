@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
+<?xml version="1.0" encoding="utf-8"?>
+<!--
 /**
  * Copyright (c) 2009, The Android Open Source Project
  *
@@ -15,27 +15,61 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License.
  */
- -->
-
+-->
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Name of the status bar as seen in the applications info settings page. -->
     <string name="app_label" msgid="4489004083283879149">"狀態列"</string>
+
+    <!-- The text for the button in the notification window-shade that clears
+         all of the currently visible notifications. -->
     <string name="status_bar_clear_all_button" msgid="7774721344716731603">"清除"</string>
+
+    <!-- The label in the bar at the top of the status bar when there are no notifications
+         showing. -->
     <string name="status_bar_no_notifications_title" msgid="4755261167193833213">"沒有通知"</string>
+
+    <!-- The label for the group of notifications for ongoing events in the opened version of
+         the status bar.  An ongoing call is the prime example of this.  The MP3 music player
+         might be another example.  -->
     <string name="status_bar_ongoing_events_title" msgid="1682504513316879202">"進行中"</string>
+
+    <!-- The label for the group of notifications for recent events in the opened version of
+         the status bar.  Recently received text messsages (SMS), emails, calendar alerts, etc. -->
     <string name="status_bar_latest_events_title" msgid="6594767438577593172">"通知"</string>
+
+    <!-- When the battery is low, this is displayed to the user in a dialog.  The title of the low battery alert. -->
     <string name="battery_low_title" msgid="7923774589611311406">"請連接充電器"</string>
+
+    <!-- When the battery is low, this is displayed to the user in a dialog. The subtitle of the low battery alert. -->
     <string name="battery_low_subtitle" msgid="7388781709819722764">"電池電量即將不足："</string>
+
+    <!-- A message that appears when the battery level is getting low in a dialog.  This is appened to the subtitle of the low battery alert. -->
     <string name="battery_low_percent_format" msgid="696154104579022959">"還剩 <xliff:g id="NUMBER">%d%%</xliff:g> 以下。"</string>
+
+    <!-- When the battery is low, this is the label of the button to go to the
+         power usage activity to find out what drained the battery. -->
     <string name="battery_low_why" msgid="7279169609518386372">"電池使用狀況"</string>
-    <!-- no translation found for usb_accessory_permission_prompt (3969745913539898765) -->
-    <skip />
-    <!-- no translation found for usb_device_confirm_prompt (2727793581411868504) -->
-    <skip />
-    <!-- no translation found for usb_accessory_confirm_prompt (3947430407252730383) -->
-    <skip />
+
+    <!-- Prompt for the USB accessory permission dialog [CHAR LIMIT=80] -->
+    <string name="usb_accessory_permission_prompt">允許應用程式 %1$s 存取 USB 配件？</string>
+
+    <!-- Prompt for the USB device confirm dialog [CHAR LIMIT=80] -->
+    <string name="usb_device_confirm_prompt">每當連接至此 USB 裝置時閧啟 %1$s ？</string>
+
+    <!-- Prompt for the USB accessory confirm dialog [CHAR LIMIT=80] -->
+    <string name="usb_accessory_confirm_prompt">每當連接至此 USB 配件時閧啟 %1$s ？</string>
+
+    <!-- Prompt for the USB accessory URI dialog [CHAR LIMIT=80] -->
     <string name="usb_accessory_uri_prompt" msgid="6332150684964235705">"已安裝的應用程式均無法存取這類 USB 配件，如要進一步瞭解這個配件，請造訪 <xliff:g id="URL">%1$s</xliff:g>"</string>
+
+    <!-- Title for USB accessory dialog.  Used when the name of the accessory cannot be determined.  [CHAR LIMIT=50] -->
     <string name="title_usb_accessory" msgid="4966265263465181372">"USB 配件"</string>
+
+    <!-- View button label for USB dialogs.  [CHAR LIMIT=15] -->
     <string name="label_view" msgid="6304565553218192990">"查看"</string>
+
+    <!-- Checkbox label for USB accessory dialogs.  [CHAR LIMIT=50] -->
     <string name="always_use_accessory" msgid="1210954576979621596">"預設用於這個 USB 配件"</string>
+
 </resources>
