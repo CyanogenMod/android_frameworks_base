@@ -1011,7 +1011,7 @@ public final class Settings {
         public static void getConfiguration(ContentResolver cr, Configuration outConfig) {
             outConfig.fontScale = Settings.System.getFloat(
                 cr, FONT_SCALE, outConfig.fontScale);
-            if (!(outConfig.fontScale > 0)) {
+            if (outConfig.fontScale < 0) {
                 outConfig.fontScale = 1;
             }
         }
