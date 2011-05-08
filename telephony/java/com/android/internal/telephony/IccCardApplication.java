@@ -115,6 +115,7 @@ public class IccCardApplication {
             case 2: newType = AppType.APPTYPE_USIM;    break;
             case 3: newType = AppType.APPTYPE_RUIM;    break;
             case 4: newType = AppType.APPTYPE_CSIM;    break;
+            case 5: newType = AppType.APPTYPE_USIM;    break;
             default:
                 throw new RuntimeException(
                             "Unrecognized RIL_AppType: " +type);
