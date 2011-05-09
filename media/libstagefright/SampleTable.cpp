@@ -596,6 +596,11 @@ status_t SampleTable::findThumbnailSample(uint32_t *sample_index) {
     if (numSamplesToScan > kMaxNumSyncSamplesToScan) {
         numSamplesToScan = kMaxNumSyncSamplesToScan;
     }
+    else if(numSamplesToScan > 1)
+    {
+      //Ignore last sync sample, it may be the last sample at the end of the file
+      numSamplesToScan = (numSamplesToScan - 1);
+    }
 
     for (size_t i = 0; i < numSamplesToScan; ++i) {
         uint32_t x = mSyncSamples[i];
