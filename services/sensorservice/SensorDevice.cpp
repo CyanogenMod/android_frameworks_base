@@ -235,6 +235,7 @@ ssize_t SensorDevice::poll(sensors_event_t* buffer, size_t count) {
             sensors_data_t oldBuffer;
             long result =  mSensorDataDevice->poll(mSensorDataDevice, &oldBuffer);
             int sensorType = -1;
+            int maxRange = -1;
  
             if (result == 0x7FFFFFFF) {
                 continue;
@@ -244,6 +245,7 @@ ssize_t SensorDevice::poll(sensors_event_t* buffer, size_t count) {
                 for (size_t i=0 ; i<size_t(mOldSensorsCount) && sensorType < 0 ; i++) {
                     if (mOldSensorsList[i].handle == result) {
                         sensorType = mOldSensorsList[i].type;
+                        maxRange = mOldSensorsList[i].maxRange;
                         LOGV("mapped sensor type to %d",sensorType);
                     }
                 }
@@ -276,6 +278,9 @@ ssize_t SensorDevice::poll(sensors_event_t* buffer, size_t count) {
                 } else {
                     buffer[pollsDone].distance = 1;
                 }
+#elif defined(PROXIMITY_LIES)
+                if (buffer[pollsDone].distance >= PROXIMITY_LIES)
+			buffer[pollsDone].distance = maxRange;
 #endif
                 return pollsDone+1;
             } else if (sensorType == SENSOR_TYPE_LIGHT) {
