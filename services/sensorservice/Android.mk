@@ -24,6 +24,10 @@ ifeq ($(TARGET_HAS_FOXCONN_SENSORS),true)
     LOCAL_CFLAGS += -DFOXCONN_SENSORS
 endif
 
+ifneq ($(TARGET_PROXIMITY_SENSOR_LIMIT),)
+    LOCAL_CFLAGS += -DPROXIMITY_LIES=$(TARGET_PROXIMITY_SENSOR_LIMIT)
+endif
+
 # need "-lrt" on Linux simulator to pick up clock_gettime
 ifeq ($(TARGET_SIMULATOR),true)
 	ifeq ($(HOST_OS),linux)
