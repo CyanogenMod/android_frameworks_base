@@ -154,6 +154,37 @@ static jint android_hardware_fmradio_FmReceiverJNI_setControlNative
 }
 
 /* native interface */
+static jint android_hardware_fmradio_FmReceiverJNI_seek_FW
+    (JNIEnv * env, jobject thiz, jint fd)
+{
+    int retval = system("hcitool cmd 0x3f 0x135 0x0f 0x02 0x00 0x00 0x10");
+    retval = system("hcitool cmd 0x3f 0x135 0x1b 0x02 0x00 0x00 0x01");
+    retval = system("hcitool cmd 0x3f 0x135 0x2d 0x02 0x00 0x00 0x02");
+    LOGD("seek_FW() %d", retval);
+
+    return retval;
+}
+
+/* native interface */
+static jint android_hardware_fmradio_FmReceiverJNI_seek_BK
+    (JNIEnv * env, jobject thiz, jint fd)
+{
+    int retval = system("hcitool cmd 0x3f 0x135 0x0f 0x02 0x00 0x00 0x10");
+    retval = system("hcitool cmd 0x3f 0x135 0x1b 0x02 0x00 0x00 0x00");
+    retval = system("hcitool cmd 0x3f 0x135 0x2d 0x02 0x00 0x00 0x02");
+    LOGD("seek_BK() %d", retval);
+
+    return retval;
+}
+
+/* native interface */
+static jint android_hardware_fmradio_FmReceiverJNI_IsSeek
+    (JNIEnv * env, jobject thiz, jint fd)
+{
+    return 1;
+}
+
+/* native interface */
 static jint android_hardware_fmradio_FmReceiverJNI_getFreqNative
     (JNIEnv * env, jobject thiz, jint fd)
 {
