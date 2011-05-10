@@ -1013,8 +1013,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     
             loadBooleanSetting(stmt, Settings.System.DIM_SCREEN,
                     R.bool.def_dim_screen);
+
+            int stayOn =
+                mContext.getResources().getBoolean(R.bool.def_stay_on_while_plugged_in) ? 1 : 0;
+            if ("1".equals(SystemProperties.get("ro.kernel.qemu")))
+                stayOn = 1;
             loadSetting(stmt, Settings.System.STAY_ON_WHILE_PLUGGED_IN,
-                    "1".equals(SystemProperties.get("ro.kernel.qemu")) ? 1 : 0);
+                    stayOn);
+
             loadIntegerSetting(stmt, Settings.System.SCREEN_OFF_TIMEOUT,
                     R.integer.def_screen_off_timeout);
     
