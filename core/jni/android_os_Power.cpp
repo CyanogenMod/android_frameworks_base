@@ -124,14 +124,14 @@ static int init_mtd_info() {
 	while (nbytes-- > 0 && *(cursor++) != '\n'); // skip one line
 	while (nbytes > 0) {
 		int matches = sscanf(cursor, "mtd%d: %x %x \"%63s[^\"]", &mtdnum, &mtdsize, &mtderasesize, mtdname);
-		if (matches == ( RECOVERY_WRITE_MISC_PART )) {
+		if (mtdnum == ( RECOVERY_WRITE_MISC_PART )) {
 			if (strncmp("misc", mtdname, ( RECOVERY_WRITE_MISC_PART )) == 0) {
 				sprintf(mtddevname, "/dev/mtd/mtd%d", mtdnum);
 				//printf("Partition for parameters: %s\n", mtddevname);
 				return 0;
 			}
-			while (nbytes-- > 0 && *(cursor++) != '\n'); // skip a line
 		}
+		while (nbytes-- > 0 && *(cursor++) != '\n'); // skip a line
 	}
     return (mtdnum = -3);
 }
