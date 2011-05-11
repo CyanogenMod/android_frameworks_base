@@ -994,7 +994,8 @@ public abstract class PhoneBase extends Handler implements Phone {
         AsyncResult ar = new AsyncResult(null, cn, null);
         if (SystemProperties.getBoolean(
                 "ro.telephony.call_ring.absent", true)) {
-            sendIncomingCallRingNotification(mCallRingContinueToken);
+            sendMessageDelayed(
+                    obtainMessage(EVENT_CALL_RING_CONTINUE, mCallRingContinueToken, 0), mCallRingDelay);
         }
         mNewRingingConnectionRegistrants.notifyRegistrants(ar);
     }
