@@ -626,16 +626,10 @@ public class TextUtils {
         public  CharSequence createFromParcel(Parcel p) {
             int kind = p.readInt();
 
-            String string = p.readString();
-            if (string == null) {
-                return null;
-            }
+            if (kind == 1)
+                return p.readString();
 
-            if (kind == 1) {
-                return string;
-            }
-
-            SpannableString sp = new SpannableString(string);
+            SpannableString sp = new SpannableString(p.readString());
 
             while (true) {
                 kind = p.readInt();
@@ -1710,6 +1704,24 @@ public class TextUtils {
     }
 
     /**
+     * @hide
+     */
+    private static boolean isArabicLetter(char c) {
+        //range of Arabic letters per unicode specification
+        return (c >= 0x0610 && c <= 0x061A) ||
+               (c >= 0x0620 && c <= 0x063F) ||
+               (c >= 0x0641 && c <= 0x065C) ||
+               (c >= 0x065D && c <= 0x065F) ||
+               (c >= 0x066E && c <= 0x06D3) ||
+               (c >= 0x06D5 && c <= 0x06DC) ||
+               (c >= 0x06DF && c <= 0x06E8) ||
+               (c >= 0x06EA && c <= 0x06EF) ||
+               (c >= 0x0750 && c <= 0x077F) ||
+               (c >= 0xFB50 && c <= 0xFDFF) ||
+               (c >= 0xFE70 && c <= 0xFEFE)    ;
+    }
+
+    /**
      * function to check if text range has RTL characters.
      * @hide
      */
@@ -1794,7 +1806,7 @@ public class TextUtils {
      * @hide
      */
     public static String reshapeArabic(final String src) {
-        return src == null ? null : TextUtils.reshapeArabic(src, 0, src.length());
+        return src == null ? null : TextUtils.reshapeArabic(src, 0, src.length(), false);
     }
 
     /**
@@ -1814,7 +1826,7 @@ public class TextUtils {
      * @hide
      */
     public static char[] reshapeArabic(final char[] src) {
-        return src == null ? null : TextUtils.reshapeArabicChars(src, 0, src.length);
+        return src == null ? null : TextUtils.reshapeArabicChars(src, 0, src.length, false);
     }
 
     /**
@@ -1834,11 +1846,12 @@ public class TextUtils {
      * @param src
      * @param begin
      * @param end
+     * @param expandEdges
      * @return String
      * @hide
      */
-    public static String reshapeArabic(final String src, int start, int end) {
-        return src != null && hasArabicCharacters(src, start, end) ? String.valueOf(TextUtils.reshapeArabicChars(src.toCharArray(), start, end)) : src;
+    public static String reshapeArabic(final String src, int start, int end, boolean expandEdges) {
+        return src != null && hasArabicCharacters(src, start, end) ? String.valueOf(TextUtils.reshapeArabicChars(src.toCharArray(), start, end, expandEdges)) : src;
     }
 
     /**
@@ -1860,11 +1873,12 @@ public class TextUtils {
      * @param src
      * @param start
      * @param end
+     * @param expandEdges
      * @return char[]
      * @hide
      */
-    public static char[] reshapeArabic(final char[] src, int start, int end) {
-        return src != null && hasArabicCharacters(src, start, end) ? TextUtils.reshapeArabicChars(src, start, end) : src;
+    public static char[] reshapeArabic(final char[] src, int start, int end, boolean expandEdges) {
+        return src != null && hasArabicCharacters(src, start, end) ? TextUtils.reshapeArabicChars(src, start, end, expandEdges) : src;
     }
 
     /**
@@ -1898,17 +1912,29 @@ public class TextUtils {
     }
 
     /**
-     * function to reshape arabic text
+     * function to reshape Arabic text
      * @author: Eyad Aboulouz
      * @param src
      * @param start
      * @param end
+     * @param expandEdges
      * @return char[]
      * @hide
      */
-    private static char[] reshapeArabicChars(final char[] src, int start, int end) {
+    private static char[] reshapeArabicChars(final char[] src, int start, int end, boolean expandEdges) {
 
         try {
+            //For proper Arabic reshaping we must reshape whole words
+            if (expandEdges) {
+                //expand to beginning of first word from start index
+                while (start>0 && TextUtils.isArabicLetter(src[start-1]))
+                    start--;
+
+                //expand to end of last word
+                while (end<src.length && TextUtils.isArabicLetter(src[end]))
+                    end++;
+            }
+
             char[] outputTxt = new char[end-start];
             char[] ret = src.clone();
 
