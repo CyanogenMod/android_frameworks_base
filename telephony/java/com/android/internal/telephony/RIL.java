@@ -1117,8 +1117,13 @@ public final class RIL extends BaseCommands implements CommandsInterface {
 
     public void
     startDtmf(char c, Message result) {
-        RILRequest rr
-                = RILRequest.obtain(RIL_REQUEST_DTMF_START, result);
+        RILRequest rr;
+        if (SystemProperties.getBoolean(
+                 "ro.telephony.force_short_dtmf", false)) {
+            rr = RILRequest.obtain(RIL_REQUEST_DTMF, result);
+        } else {
+            rr = RILRequest.obtain(RIL_REQUEST_DTMF_START, result);
+        }
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
