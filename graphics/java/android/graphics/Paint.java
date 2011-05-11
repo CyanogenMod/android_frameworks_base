@@ -1000,7 +1000,7 @@ public class Paint {
      */
     public float measureText(char[] text, int index, int count) {
 
-        char[] text2 = TextUtils.reshapeArabic(text, index, index+count);
+        char[] text2 = TextUtils.reshapeArabic(text, index, index+count, true);
 
         if (!mHasCompatScaling) return native_measureText(text2, index, count);
         final float oldSize = getTextSize();
@@ -1022,7 +1022,7 @@ public class Paint {
      */
     public float measureText(String text, int start, int end) {
 
-        String text2 = TextUtils.reshapeArabic(text, start, end);
+        String text2 = TextUtils.reshapeArabic(text, start, end, true);
 
         if (!mHasCompatScaling) return native_measureText(text2, start, end);
         final float oldSize = getTextSize();
@@ -1047,7 +1047,7 @@ public class Paint {
         if (!mHasCompatScaling) return native_measureText(text2);
         final float oldSize = getTextSize();
         setTextSize(oldSize*mCompatScaling);
-        float w = native_measureText(text);
+        float w = native_measureText(text2);
         setTextSize(oldSize);
         return w*mInvCompatScaling;
     }
@@ -1210,7 +1210,7 @@ public class Paint {
             throw new ArrayIndexOutOfBoundsException();
         }
 
-        char[] text2 = TextUtils.reshapeArabic(text, index, index+count);
+        char[] text2 = TextUtils.reshapeArabic(text, index, index+count, true);
 
         if (!mHasCompatScaling) {
             return native_getTextWidths(mNativePaint, text2, index, count, widths);
@@ -1275,7 +1275,7 @@ public class Paint {
             throw new ArrayIndexOutOfBoundsException();
         }
 
-        String text2 = TextUtils.reshapeArabic(text, start, end);
+        String text2 = TextUtils.reshapeArabic(text, start, end, true);
 
         if (!mHasCompatScaling) {
             return native_getTextWidths(mNativePaint, text2, start, end, widths);
@@ -1448,4 +1448,3 @@ public class Paint {
                                 char[] text, int index, int count, Rect bounds);
     private static native void finalizer(int nativePaint);
 }
-
