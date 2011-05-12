@@ -685,24 +685,6 @@ extends Layout
 
         // dump(chInfo, n, "W1");
 
-        // W2 european numbers
-        byte cur = SOR;
-        for (int j = 0; j < n; j++) {
-            byte d = chInfo[j];
-
-            if (d == Character.DIRECTIONALITY_LEFT_TO_RIGHT ||
-                d == Character.DIRECTIONALITY_RIGHT_TO_LEFT ||
-                d == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC)
-                cur = d;
-            else if (d == Character.DIRECTIONALITY_EUROPEAN_NUMBER) {
-                 if (cur ==
-                    Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC)
-                    chInfo[j] = Character.DIRECTIONALITY_ARABIC_NUMBER;
-            }
-        }
-
-        // dump(chInfo, n, "W2");
-
         // W3 arabic letters
         for (int j = 0; j < n; j++) {
             if (chInfo[j] == Character.DIRECTIONALITY_RIGHT_TO_LEFT_ARABIC)
@@ -776,7 +758,7 @@ extends Layout
         // dump(chInfo, n, "W6");
 
         // N1, N2 neutrals
-        cur = SOR;
+        byte cur = SOR;
         for (int j = 0; j < n; j++) {
             byte d = chInfo[j];
 
@@ -804,7 +786,8 @@ extends Layout
                     dd = SOR;
 
                 for (int y = j; y < k; y++)
-                    if (chInfo[y]!=Character.DIRECTIONALITY_EUROPEAN_NUMBER)
+                    if (chInfo[y]!=Character.DIRECTIONALITY_EUROPEAN_NUMBER &&
+                        chInfo[y]!=Character.DIRECTIONALITY_ARABIC_NUMBER)
                         chInfo[y] = dd;
 
                 j = k - 1;
@@ -823,7 +806,8 @@ extends Layout
                 d == Character.DIRECTIONALITY_RIGHT_TO_LEFT)
                 cur = d;
 
-            if (d == Character.DIRECTIONALITY_EUROPEAN_NUMBER)
+            if (d == Character.DIRECTIONALITY_EUROPEAN_NUMBER ||
+                d == Character.DIRECTIONALITY_ARABIC_NUMBER)
                 chInfo[j] = Character.DIRECTIONALITY_LEFT_TO_RIGHT;
         }
 
