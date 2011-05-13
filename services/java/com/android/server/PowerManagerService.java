@@ -246,7 +246,7 @@ class PowerManagerService extends IPowerManager.Stub
     private int mScreenBrightnessOverride = -1;
     private int mButtonBrightnessOverride = -1;
     private boolean mUseSoftwareAutoBrightness;
-    private boolean mAutoBrightessEnabled = true;
+    private boolean mAutoBrightessEnabled;
     private int[] mAutoBrightnessLevels;
     private int[] mLcdBacklightValues;
     private int[] mButtonBacklightValues;
@@ -482,7 +482,6 @@ class PowerManagerService extends IPowerManager.Stub
         }
 
         public void update(Observable o, Object arg) {
-
             synchronized (mLocks) {
                 // STAY_ON_WHILE_PLUGGED_IN, default to when plugged into AC
                 mStayOnConditions = getInt(STAY_ON_WHILE_PLUGGED_IN,
@@ -1676,7 +1675,7 @@ class PowerManagerService extends IPowerManager.Stub
         if (err == 0) {
             mLastScreenOnTime = (on ? SystemClock.elapsedRealtime() : 0);
             if (mUseSoftwareAutoBrightness) {
-                enableLightSensor(on && mAutoBrightessEnabled);
+                enableLightSensor(on);
                 if (!on) {
                     // make sure button and key backlights are off too
                     mButtonLight.turnOff();
