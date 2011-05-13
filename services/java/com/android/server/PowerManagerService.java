@@ -52,6 +52,7 @@ import android.os.Process;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
+import android.os.SystemProperties;
 import android.os.WorkSource;
 import android.os.SystemProperties;
 import android.provider.Settings.SettingNotFoundException;
@@ -486,8 +487,13 @@ class PowerManagerService extends IPowerManager.Stub
 
             synchronized (mLocks) {
                 // STAY_ON_WHILE_PLUGGED_IN, default to when plugged into AC
-                mStayOnConditions = getInt(STAY_ON_WHILE_PLUGGED_IN,
+                if (SystemProperties.getBoolean("ro.pm.awake_on_usb", false)) {
+                    mStayOnConditions = BatteryManager.BATTERY_PLUGGED_AC |
+                        BatteryManager.BATTERY_PLUGGED_USB;
+                } else {
+                    mStayOnConditions = getInt(STAY_ON_WHILE_PLUGGED_IN,
                         BatteryManager.BATTERY_PLUGGED_AC);
+                }
                 updateWakeLockLocked();
 
                 // SCREEN_OFF_TIMEOUT, default to 15 seconds
