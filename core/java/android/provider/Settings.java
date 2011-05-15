@@ -2007,14 +2007,6 @@ public final class Settings {
         public static final String POINTER_LOCATION = "pointer_location";
 
         /**
-         * Show mouse pointer on screen?
-         * 0 = no
-         * 1 = yes
-         * @hide
-         */
-        public static final String MOUSE_POINTER = "mouse_pointer";
-
-        /**
          * Whether to play a sound for low-battery alerts.
          * @hide
          */
