@@ -1621,28 +1621,29 @@ public class PduParser {
                                 part.setContentDisposition(parseWapString(pduDataStream
                                         , TYPE_TEXT_STRING));
                             }
+                        }
 
-                            /* get filename parameter and skip other parameters */
-                            thisEndPos = pduDataStream.available();
-                            if (thisStartPos - thisEndPos < len) {
-                                value = pduDataStream.read();
-                                if (value == PduPart.P_FILENAME) { //filename is text-string
-                                    part.setFilename(parseWapString(pduDataStream
-                                            , TYPE_TEXT_STRING));
-                                }
-
-                                /* skip other parameters */
-                                thisEndPos = pduDataStream.available();
-                                if (thisStartPos - thisEndPos < len) {
-                                    int last = len - (thisStartPos - thisEndPos);
-                                    byte[] temp = new byte[last];
-                                    pduDataStream.read(temp, 0, last);
-                                }
+                        /* get filename parameter and skip other parameters */
+                        thisEndPos = pduDataStream.available();
+                        if (thisStartPos - thisEndPos < len) {
+                            value = pduDataStream.read();
+                            if (value == PduPart.P_FILENAME) { //filename is text-string
+                                part.setFilename(parseWapString(pduDataStream
+                                        , TYPE_TEXT_STRING));
                             }
 
-                            tempPos = pduDataStream.available();
-                            lastLen = length - (startPos - tempPos);
+                            /* skip other parameters */
+                            thisEndPos = pduDataStream.available();
+                            if (thisStartPos - thisEndPos < len) {
+                                int last = len - (thisStartPos - thisEndPos);
+                                byte[] temp = new byte[last];
+                                pduDataStream.read(temp, 0, last);
+                            }
                         }
+
+                        tempPos = pduDataStream.available();
+                        lastLen = length - (startPos - tempPos);
+
                         break;
                     default:
                         if (LOCAL_LOGV) {
