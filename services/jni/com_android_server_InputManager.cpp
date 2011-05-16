@@ -22,7 +22,7 @@
 #define DEBUG_INPUT_READER_POLICY 0
 
 // Log debug messages about InputDispatcherPolicy
-#define DEBUG_INPUT_DISPATCHER_POLICY 0
+#define DEBUG_INPUT_DISPATCHER_POLICY 1
 
 #include "JNIHelp.h"
 #include "jni.h"
@@ -48,6 +48,7 @@ static struct {
 
     jmethodID notifyConfigurationChanged;
     jmethodID notifyLidSwitchChanged;
+    jmethodID notifyMuteSwitchChanged;
     jmethodID notifyInputChannelBroken;
     jmethodID notifyANR;
     jmethodID interceptKeyBeforeQueueing;
@@ -574,6 +575,8 @@ void NativeInputManager::getExcludedDeviceNames(Vector<String8>& outExcludedDevi
     }
 }
 
+#define SW_MUTE 0x05
+
 void NativeInputManager::notifySwitch(nsecs_t when, int32_t switchCode,
         int32_t switchValue, uint32_t policyFlags) {
 #if DEBUG_INPUT_DISPATCHER_POLICY
@@ -584,6 +587,11 @@ void NativeInputManager::notifySwitch(nsecs_t when, int32_t switchCode,
     JNIEnv* env = jniEnv();
 
     switch (switchCode) {
+    case SW_MUTE:
+        env->CallVoidMethod(mCallbacksObj, gCallbacksClassInfo.notifyMuteSwitchChanged,
+                when, switchValue == 0);
+        checkAndClearExceptionFromCallback(env, "notifyMuteSwitchChanged");
+	break;
     case SW_LID:
         env->CallVoidMethod(mCallbacksObj, gCallbacksClassInfo.notifyLidSwitchChanged,
                 when, switchValue == 0);
@@ -1371,6 +1379,9 @@ int register_android_server_InputManager(JNIEnv* env) {
 
     GET_METHOD_ID(gCallbacksClassInfo.notifyLidSwitchChanged, gCallbacksClassInfo.clazz,
             "notifyLidSwitchChanged", "(JZ)V");
+
+    GET_METHOD_ID(gCallbacksClassInfo.notifyMuteSwitchChanged, gCallbacksClassInfo.clazz,
+            "notifyMuteSwitchChanged", "(JZ)V");
 
     GET_METHOD_ID(gCallbacksClassInfo.notifyInputChannelBroken, gCallbacksClassInfo.clazz,
             "notifyInputChannelBroken", "(Landroid/view/InputChannel;)V");

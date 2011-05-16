@@ -134,7 +134,7 @@ import java.util.List;
  */
 public class PhoneWindowManager implements WindowManagerPolicy {
     static final String TAG = "WindowManager";
-    static final boolean DEBUG = false;
+    static final boolean DEBUG = true;
     static final boolean localLOGV = DEBUG ? Config.LOGD : Config.LOGV;
     static final boolean DEBUG_LAYOUT = false;
     static final boolean SHOW_STARTING_ANIMATIONS = true;
@@ -2002,6 +2002,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                         LocalPowerManager.OTHER_EVENT);
             }
         }
+    }
+
+    /** {@inheritDoc} */
+    public void notifyMuteSwitchChanged(long whenNanos, boolean mute) {
+	AudioManager am = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+
+	am.setRingerMode(mute ? AudioManager.RINGER_MODE_VIBRATE
+			      : AudioManager.RINGER_MODE_NORMAL);
     }
 
     /**

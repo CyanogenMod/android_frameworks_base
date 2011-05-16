@@ -5254,6 +5254,11 @@ public class WindowManagerService extends IWindowManager.Stub
             mPolicy.notifyLidSwitchChanged(whenNanos, lidOpen);
         }
         
+        /* Notifies that the mute switch changed state. */
+        public void notifyMuteSwitchChanged(long whenNanos, boolean mute) {
+            mPolicy.notifyMuteSwitchChanged(whenNanos, mute);
+        }
+        
         /* Provides an opportunity for the window manager policy to intercept early key
          * processing as soon as the key has been read from the device. */
         public int interceptKeyBeforeQueueing(long whenNanos, int action, int flags,

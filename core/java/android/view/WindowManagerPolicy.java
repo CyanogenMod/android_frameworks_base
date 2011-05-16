@@ -697,7 +697,14 @@ public interface WindowManagerPolicy {
      * @param lidOpen True if the lid is now open.
      */
     public void notifyLidSwitchChanged(long whenNanos, boolean lidOpen);
-    
+
+    /**
+     * Tell the policy that the mute switch has changed state.
+     * @param whenNanos The time when the change occurred in uptime nanoseconds.
+     * @param lidOpen True if the mute switch is now on.
+     */
+    public void notifyMuteSwitchChanged(long whenNanos, boolean mute);
+
     /**
      * Tell the policy if anyone is requesting that keyguard not come on.
      *

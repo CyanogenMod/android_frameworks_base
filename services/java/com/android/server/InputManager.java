@@ -367,6 +367,11 @@ public class InputManager {
         public void notifyLidSwitchChanged(long whenNanos, boolean lidOpen) {
             mWindowManagerService.mInputMonitor.notifyLidSwitchChanged(whenNanos, lidOpen);
         }
+	
+        @SuppressWarnings("unused")
+        public void notifyMuteSwitchChanged(long whenNanos, boolean mute) {
+	    mWindowManagerService.mInputMonitor.notifyMuteSwitchChanged(whenNanos, mute);
+        }
         
         @SuppressWarnings("unused")
         public void notifyInputChannelBroken(InputChannel inputChannel) {
