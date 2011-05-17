@@ -104,6 +104,9 @@ static sp<MediaMetadataRetrieverBase> createRetriever(player_type playerType)
 {
     sp<MediaMetadataRetrieverBase> p;
     switch (playerType) {
+#ifdef USE_BOARD_MEDIAPLUGIN
+        case BOARD_HW_PLAYER:
+#endif
         case STAGEFRIGHT_PLAYER:
         case FLAC_PLAYER:
         {
@@ -120,7 +123,7 @@ static sp<MediaMetadataRetrieverBase> createRetriever(player_type playerType)
             LOGV("create midi metadata retriever");
             p = new MidiMetadataRetriever();
             break;
-#ifdef USE_BOARD_MEDIAPLUGIN
+#ifdef USE_BOARD_MEDIAPLUGIN_BROKEN
         case BOARD_HW_PLAYER:
             LOGV("create BoardHW metadata retriever");
             p = createMetadataRetrieverHardware();

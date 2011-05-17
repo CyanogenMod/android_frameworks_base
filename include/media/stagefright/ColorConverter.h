@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (c) 2010, Code Aurora Forum
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,6 +63,25 @@ private:
             size_t width, size_t height,
             const void *srcBits, size_t srcSkip,
             void *dstBits, size_t dstSkip);
+
+    void convertNV12Tile(
+        size_t width, size_t height,
+        const void *srcBits, size_t srcSkip,
+        void *dstBits, size_t dstSkip);
+
+    size_t nv12TileGetTiledMemBlockNum(
+        size_t bx, size_t by,
+        size_t nbx, size_t nby);
+
+    void nv12TileComputeRGB(
+        uint8_t **dstPtr,const uint8_t *blockUV,
+        const uint8_t *blockY, size_t blockWidth,
+        size_t dstSkip);
+
+    void nv12TileTraverseBlock(
+        uint8_t **dstPtr, const uint8_t *blockY,
+        const uint8_t *blockUV, size_t blockWidth,
+        size_t blockHeight, size_t dstSkip);
 
     ColorConverter(const ColorConverter &);
     ColorConverter &operator=(const ColorConverter &);

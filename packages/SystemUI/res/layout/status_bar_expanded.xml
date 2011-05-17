@@ -149,6 +149,7 @@
             <com.android.systemui.statusbar.CarrierLabel
                  android:gravity="bottom|right|center"
                  android:textAppearance="@style/TextAppearance.StatusBar.Title"
+                 android:singleLine="true"
                  android:background="@android:color/transparent"
                  android:layout_marginRight="6.0dip"
                  android:layout_width="fill_parent"
