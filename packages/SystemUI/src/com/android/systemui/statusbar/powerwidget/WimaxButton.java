@@ -24,6 +24,7 @@ import android.content.IntentFilter;
 import android.net.wimax.WimaxHelper;
 import android.net.wimax.WimaxManagerConstants;
 import android.os.AsyncTask;
+import android.provider.Settings;
 import android.util.Log;
 
 public class WimaxButton extends PowerButton {
@@ -71,6 +72,12 @@ public class WimaxButton extends PowerButton {
             int wimaxState = intent.getIntExtra(WimaxManagerConstants.CURRENT_WIMAX_ENABLED_STATE, WimaxManagerConstants.WIMAX_ENABLED_STATE_UNKNOWN);
             int widgetState = wimaxStateToFiveState(wimaxState);
             setCurrentState(context, widgetState);
+            if (widgetState == WimaxManagerConstants.WIMAX_ENABLED_STATE_ENABLED)
+                Settings.Secure.putInt(context.getContentResolver(),
+                    Settings.Secure.WIMAX_ON, 1);
+            else if (widgetState == WimaxManagerConstants.WIMAX_ENABLED_STATE_DISABLED)
+                Settings.Secure.putInt(context.getContentResolver(),
+                    Settings.Secure.WIMAX_ON, 0);
         }
 
         /**
