@@ -558,9 +558,15 @@
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_batteryStats" msgid="7863923071360031652">"編輯電池狀態"</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_batteryStats" msgid="5847319823772230560">"允修改收集到的電池用量統計資料。一般應用程式不應使用這項功能。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_backup" msgid="470013022865453920">"控制系統備份與還原"</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_backup" msgid="4837493065154256525">"允許應用程式控制系統的備份與還原機制。一般應用程式不應使用這項功能。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_internalSystemWindow" msgid="2148563628140193231">"顯示未授權視窗"</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_internalSystemWindow" msgid="5895082268284998469">"允許內部系統使用介面建立視窗。一般應用程式不會使用此功能。"</string>
@@ -607,14 +613,20 @@
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_setOrientation" msgid="3365947717163866844">"變更螢幕顯示方向"</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_setOrientation" msgid="6335814461615851863">"允許應用程式可隨時變更螢幕旋轉方向。一般應用不應使用這項功能。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_signalPersistentProcesses" msgid="4255467255488653854">"傳送 Linux 訊號到應用程式"</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_signalPersistentProcesses" msgid="3565530463215015289">"允許應用程式要求將支援的訊號傳送到所有持續的程序。"</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_persistentActivity" msgid="8659652042401085862">"設定應用程式持續執行"</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_persistentActivity" msgid="5037199778265006008">"允許應用程式部分持續執行，避免系統將它用於其他應用程式。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_deletePackages" msgid="3343439331576348805">"刪除應用程式"</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_deletePackages" msgid="3634943677518723314">"允許應用程式刪除 Android 程式。請注意：惡意程式可能利用此功能刪除重要應用程式。"</string>
@@ -753,7 +765,10 @@
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_recordAudio" msgid="3876049771427466323">"錄製音訊"</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_recordAudio" msgid="6493228261176552356">"允許應用程式存取錄音檔路徑。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_camera" msgid="3616391919559751192">"拍照和拍攝影片"</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_camera" msgid="6004878235852154239">"允許應用程式使用相機拍照和錄影，此功能可讓應用程式隨時透過相機收集圖片。"</string>
@@ -777,16 +792,33 @@
     <string name="permlab_mount_format_filesystems" msgid="5523285143576718981">"將外接式儲存裝置格式化"</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_mount_format_filesystems" msgid="574060044906047386">"允許應用程式將可移除式儲存裝置格式化。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_asec_access" msgid="3411338632002193846">"取得內部儲存空間的資訊"</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_asec_access" msgid="8820326551687285439">"允許應用程式取得內部儲存空間的資訊。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_asec_create" msgid="6414757234789336327">"建立內部儲存空間"</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_asec_create" msgid="2621346764995731250">"允許應用程式建立內部儲存空間。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_asec_destroy" msgid="526928328301618022">"銷毀內部儲存空間"</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_asec_destroy" msgid="2746706889208066256">"允許應用程式銷毀內部儲存空間。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_asec_mount_unmount" msgid="2456287623689029744">"掛接/卸載內部儲存空間"</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_asec_mount_unmount" msgid="5934375590189368200">"允許應用程式掛接/卸載內部儲存空間。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_asec_rename" msgid="7496633954080472417">"重新命名內部儲存空間"</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_asec_rename" msgid="2152829985238876790">"允許應用程式重新命名內部儲存空間。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_vibrate" msgid="7768356019980849603">"控制震動"</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_vibrate" msgid="2886677177257789187">"允許應用程式控制震動。"</string>
@@ -795,8 +827,13 @@
     <string name="permlab_flashlight" msgid="2155920810121984215">"控制閃光燈"</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_flashlight" msgid="6433045942283802309">"允許應用程式控制閃光燈。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_manageUsb" msgid="1113453430645402723">"管理 USB 裝置的偏好設定和權限"</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_manageUsb" msgid="6148489202092166164">"允許應用程式管理 USB 裝置的偏好設定和權限。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_hardware_test" msgid="4148290860400659146">"測試硬體"</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_hardware_test" msgid="3668894686500081699">"允許應用程式控制各種週邊設備，以供測試用。"</string>
@@ -808,16 +845,25 @@
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_callPrivileged" msgid="4198349211108497879">"直接撥打任何電話號碼"</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_callPrivileged" msgid="244405067160028452">"允許應用程式自行撥打任何電話號碼，包括緊急電話號碼。請注意：惡意應用程式可能會利用此權限，向緊急服務撥打騷擾甚至非法電話。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_performCdmaProvisioning" msgid="5604848095315421425">"直接起始 CDMA 手機設定程序"</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_performCdmaProvisioning" msgid="6457447676108355905">"允許應用程式啟動 CDMA 服務 (惡意應用程式可能會在非必要的情況下啟動 CDMA 服務)。"</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_locationUpdates" msgid="7785408253364335740">"控制位置更新通知"</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_locationUpdates" msgid="2300018303720930256">"允許從廣播中啟用/停用位置資訊更新通知。一般應用程式不應使用這項功能。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_checkinProperties" msgid="7855259461268734914">"存取登機選項"</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_checkinProperties" msgid="7150307006141883832">"允許讀取/寫入由登錄服務所更新的屬性存取權。一般應用程式不應使用這項功能。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_bindGadget" msgid="776905339015863471">"選擇小工具"</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_bindGadget" msgid="2098697834497452046">"允許應用程式告知系統哪個應用程式可以使用哪些小工具。開啟此權限後，應用程式會讓其他程式使用個人資料，但一般應用程式不適合使用此功能。"</string>
@@ -916,8 +962,13 @@
     <string name="permlab_changeNetworkState" msgid="958884291454327309">"變更網路連線"</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_changeNetworkState" msgid="4199958910396387075">"允許應用程式變更網路連線狀態。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_changeTetherState" msgid="2702121155761140799">"變更網路共用設定"</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the applicaiton to do this. -->
     <string name="permdesc_changeTetherState" msgid="8905815579146349568">"允許應用程式變更已共用網路的連線狀態。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_changeBackgroundDataSetting" msgid="1400666012671648741">"變更背景資料使用設定"</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_changeBackgroundDataSetting" msgid="1001482853266638864">"允許應用程式變更背景資料使用設定。"</string>
@@ -936,10 +987,18 @@
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"允許接收 Wi-Fi 多點傳播封包"</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"允許應用程式接收並非指定傳送給您裝置的封包，這在您發現附近有服務可使用時很有用，但消耗的電力比非多點傳播模式還要多。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_accessWimaxState" msgid="2800410363171809280">"查看 WiMAX 狀態"</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"允許應用程式查看 WiMAX 連線狀態相關資訊。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_changeWimaxState" msgid="340465839241528618">"變更 WiMAX 狀態"</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_changeWimaxState" msgid="474918005058989421">"允許應用程式建立或中斷 WiMAX 網路連線。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"藍牙管理"</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_bluetoothAdmin" msgid="7256289774667054555">"允許應用程式設定本機藍牙電話，以及偵測與配對其他遠端裝置。"</string>
@@ -1697,7 +1756,10 @@
     <string name="clearDefaultHintMsg" msgid="4815455344600932173">"清除首頁設定 (應用程式) 管理應用程式的預設值。"</string>
     <!-- Default title for the activity chooser, when one is not given. Android allows multiple activities to perform an action.  for example, there may be many ringtone pickers installed.  A dialog is shown to the user allowing him to pick which activity should be used.  This is the title. -->
     <string name="chooseActivity" msgid="1009246475582238425">"選取一項操作"</string>
+    <!-- title for the USB activity chooser. -->
     <string name="chooseUsbActivity" msgid="7892597146032121735">"選取要以 USB 裝置存取的應用程式"</string>
+    <!-- Text to display when there are no activities found to display in the
+         activity chooser. See the "Select an action" title. -->
     <string name="noApplications" msgid="1691104391758345586">"沒有應用程式可執行此項操作。"</string>
     <!-- Title of the alert when an application has crashed. -->
     <string name="aerr_title" msgid="653922989522758100">"很抱歉！"</string>
@@ -2069,6 +2131,9 @@
     <!-- Shown when car mode is enabled -->
     <string name="car_mode_disable_notification_title" msgid="3164768212003864316">"已啟用車用模式"</string>
     <string name="car_mode_disable_notification_message" msgid="668663626721675614">"選取結束車用模式。"</string>
+
+    <!-- Strings for tethered notification -->
+    <!-- Shown when the device is tethered -->
     <string name="tethered_notification_title" msgid="3146694234398202601">"網路共用或無線基地台已啟用"</string>
     <string name="tethered_notification_message" msgid="3067108323903048927">"輕觸以設定"</string>
 
