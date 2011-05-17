@@ -1131,6 +1131,56 @@ public final class ActivityThread {
         return sThreadLocal.get();
     }
 
+    private int mBigThumbnailWidth = -1;
+    private int mBigThumbnailHeight = -1;
+
+    private final Bitmap createBigThumbnailBitmap(ActivityClientRecord r) {
+        Bitmap bigThumbnail = null;
+        try {
+            int w = mBigThumbnailWidth;
+            int h;
+            if (w < 0) {
+                Resources res = r.activity.getResources();
+                mBigThumbnailHeight = h =
+                    res.getDimensionPixelSize(com.android.internal.R.dimen.big_thumbnail_height);
+
+                mBigThumbnailWidth = w =
+                    res.getDimensionPixelSize(com.android.internal.R.dimen.big_thumbnail_width);
+            } else {
+                h = mBigThumbnailHeight;
+            }
+
+            // On platforms where we don't want thumbnails, set dims to (0,0)
+            if ((w > 0) && (h > 0)) {
+                View topView = r.activity.getWindow().getDecorView();
+
+                // Maximize bitmap by capturing in native aspect.
+                if (topView.getWidth() >= topView.getHeight()) {
+                    bigThumbnail = Bitmap.createBitmap(w, h, THUMBNAIL_FORMAT);
+                } else {
+                    bigThumbnail = Bitmap.createBitmap(h, w, THUMBNAIL_FORMAT);
+                }
+
+                bigThumbnail.eraseColor(0);
+                Canvas cv = new Canvas(bigThumbnail);
+                if (!r.activity.onCreateThumbnail(bigThumbnail, cv)) {
+                    bigThumbnail = null;
+                }
+            }
+
+        } catch (Exception e) {
+            if (!mInstrumentation.onException(r.activity, e)) {
+                throw new RuntimeException(
+                        "Unable to create bigThumbnail of "
+                        + r.intent.getComponent().toShortString()
+                        + ": " + e.toString(), e);
+            }
+            bigThumbnail = null;
+        }
+
+        return bigThumbnail;
+    }
+
     public static final String currentPackageName() {
         ActivityThread am = currentActivityThread();
         return (am != null && am.mBoundApplication != null)
@@ -2541,6 +2591,21 @@ public final class ActivityThread {
                     }
                 }
             }
+            
+            Bitmap bigThumbnail = createBigThumbnailBitmap(r);
+                if (bigThumbnail != null){
+                    try {
+                        FileOutputStream fos= r.activity.openFileOutput("applicationThumbnail.png",
+                            Context.MODE_WORLD_READABLE);
+
+                        bigThumbnail.compress(Bitmap.CompressFormat.PNG, 90, fos);
+
+                        fos.flush();
+                        fos.close();
+                        } catch (Exception e) {
+                        Log.e("BigThumbnailAddon", e.toString());
+                    }
+                }
 
             if (!keepShown) {
                 try {
