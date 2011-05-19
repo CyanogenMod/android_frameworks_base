@@ -24,7 +24,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.ServiceManager;
 import android.util.Log;
-
+import android.provider.Settings;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
@@ -99,13 +99,17 @@ public class WimaxHelper {
     }
 
     public static boolean setWimaxEnabled(Context context, boolean enabled) {
+        boolean wimaxOn = Settings.Secure.getInt(context.getContentResolver(),
+            Settings.Secure.WIMAX_ON, 0) == 1;
         boolean ret = false;
-        try {
-            Object wimaxService = context.getSystemService(WimaxManagerConstants.WIMAX_SERVICE);
-            Method m = wimaxService.getClass().getMethod("setWimaxEnabled", boolean.class);
-            ret = (Boolean) m.invoke(wimaxService, enabled);
-        } catch (Exception e) {
-            Log.e(TAG, "Unable to set WiMAX state!", e);
+        if (wimaxOn == enabled) {
+            try {
+                Object wimaxService = context.getSystemService(WimaxManagerConstants.WIMAX_SERVICE);
+                Method m = wimaxService.getClass().getMethod("setWimaxEnabled", boolean.class);
+                ret = (Boolean) m.invoke(wimaxService, enabled);
+            } catch (Exception e) {
+                Log.e(TAG, "Unable to set WiMAX state!", e);
+            }
         }
         return ret;
     }
