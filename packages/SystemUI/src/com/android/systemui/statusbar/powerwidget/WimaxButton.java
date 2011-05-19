@@ -51,6 +51,9 @@ public class WimaxButton extends PowerButton {
                 return;
             }
 
+            Settings.Secure.putInt(context.getContentResolver(),
+                Settings.Secure.WIMAX_ON, desiredState ? 1 : 0);
+
             // Actually request the wifi change and persistent
             // settings write off the UI thread, as it can take a
             // user-noticeable amount of time, especially if there's
@@ -72,12 +75,6 @@ public class WimaxButton extends PowerButton {
             int wimaxState = intent.getIntExtra(WimaxManagerConstants.CURRENT_WIMAX_ENABLED_STATE, WimaxManagerConstants.WIMAX_ENABLED_STATE_UNKNOWN);
             int widgetState = wimaxStateToFiveState(wimaxState);
             setCurrentState(context, widgetState);
-            if (widgetState == WimaxManagerConstants.WIMAX_ENABLED_STATE_ENABLED)
-                Settings.Secure.putInt(context.getContentResolver(),
-                    Settings.Secure.WIMAX_ON, 1);
-            else if (widgetState == WimaxManagerConstants.WIMAX_ENABLED_STATE_DISABLED)
-                Settings.Secure.putInt(context.getContentResolver(),
-                    Settings.Secure.WIMAX_ON, 0);
         }
 
         /**

@@ -24,7 +24,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.ServiceManager;
 import android.util.Log;
-
+import android.provider.Settings;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
