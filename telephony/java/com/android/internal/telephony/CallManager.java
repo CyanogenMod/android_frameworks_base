@@ -100,6 +100,7 @@ public final class CallManager {
     // default phone as the first phone registered, which is PhoneBase obj
     private Phone mDefaultPhone;
 
+    private boolean acceptingRingingCall;
     // state registrants
     protected final RegistrantList mPreciseCallStateRegistrants
     = new RegistrantList();
@@ -170,6 +171,7 @@ public final class CallManager {
         mBackgroundCalls = new ArrayList<Call>();
         mForegroundCalls = new ArrayList<Call>();
         mDefaultPhone = null;
+        acceptingRingingCall = false;
     }
 
     /**
@@ -376,7 +378,12 @@ public final class CallManager {
         int mode = AudioManager.MODE_NORMAL;
         switch (getState()) {
             case RINGING:
-                mode = AudioManager.MODE_RINGTONE;
+                if (acceptingRingingCall) {
+                  mode = AudioManager.MODE_IN_CALL;
+                  acceptingRingingCall = false;
+                } else {
+                  mode = AudioManager.MODE_RINGTONE;
+                }
                 break;
             case OFFHOOK:
                 Phone fgPhone = getFgPhone();
@@ -510,6 +517,7 @@ public final class CallManager {
         }
 
         ringingPhone.acceptCall();
+        acceptingRingingCall = true;
 
         if (VDBG) {
             Log.d(LOG_TAG, "End acceptCall(" +ringingCall + ")");
