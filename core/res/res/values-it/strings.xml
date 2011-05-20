@@ -780,6 +780,10 @@
     <string name="aerr_title" msgid="653922989522758100">"Spiacenti."</string>
     <string name="aerr_application" msgid="4683614104336409186">"Interruzione imprevista dell\'applicazione <xliff:g id="APPLICATION">%1$s</xliff:g> (processo <xliff:g id="PROCESS">%2$s</xliff:g>). Riprova."</string>
     <string name="aerr_process" msgid="1551785535966089511">"Interruzione imprevista del processo <xliff:g id="PROCESS">%1$s</xliff:g>. Riprova."</string>
+    <!-- Title of the alert when an application is not responding. -->
+    <string name="aerr_revoked_application">Interruzione imprevista dell\'applicazione <xliff:g id="application">%1$s</xliff:g> (processo <xliff:g id="process">%2$s</xliff:g>).\nATTENZIONE!\nA questa applicazione sono state REVOCATE una o più autorizzazioni. Concedi le dovute autorizzazioni e riprova.</string>
+    <!-- Text of the alert that is displayed when an application has crashed. -->
+    <string name="aerr_revoked_process">Interruzione imprevista del processo <xliff:g id="process">%1$s</xliff:g>.\nATTENZIONE!\nA questo processo sono state REVOCATE una o più autorizzazioni. Concedi le dovute autorizzazioni e riprova.</string>
     <string name="anr_title" msgid="3100070910664756057">"Spiacenti."</string>
     <string name="anr_activity_application" msgid="3538242413112507636">"L\'attività <xliff:g id="ACTIVITY">%1$s</xliff:g> (nell\'applicazione <xliff:g id="APPLICATION">%2$s</xliff:g>) non risponde."</string>
     <string name="anr_activity_process" msgid="5420826626009561014">"L\'attività <xliff:g id="ACTIVITY">%1$s</xliff:g> (nel processo <xliff:g id="PROCESS">%2$s</xliff:g>) non risponde."</string>
@@ -787,6 +791,8 @@
     <string name="anr_process" msgid="1246866008169975783">"Il processo <xliff:g id="PROCESS">%1$s</xliff:g> non risponde."</string>
     <string name="force_close" msgid="3653416315450806396">"Termina"</string>
     <string name="report" msgid="4060218260984795706">"Segnala"</string>
+    <!-- Button allowing the user reset the revoked permissions for application which has encountered an error. -->
+    <string name="reset_perms">Ripristina autorizzazioni</string>
     <string name="wait" msgid="7147118217226317732">"Attendi"</string>
     <string name="launch_warning_title" msgid="8323761616052121936">"Applicazione reindirizzata"</string>
     <string name="launch_warning_replace" msgid="6202498949970281412">"<xliff:g id="APP_NAME">%1$s</xliff:g> è ora in esecuzione."</string>
@@ -958,4 +964,10 @@
         <item quantity="one">%d secondo rimasto</item>
         <item quantity="other">%d secondi rimasti</item>
     </plurals>
+
+    <!-- Title of an application permission that lets an application view/edit revoked permissions. -->
+    <string name="permlab_revokePermissions">Permette la visione e la modifica delle autorizzazioni revocate. Non destinata all\'uso da parte delle normali applicazioni.</string>
+    <!-- Description of an application permission that lets lets an application view/edit revoked permissions. -->
+    <string name="permdesc_revokePermissions">Permette la lettura e la scrittura delle autorizzazioni revocate. Non destinata all\'uso da parte delle normali applicazioni.</string>
+
 </resources>
