@@ -936,4 +936,11 @@
     <string name="profileGroupEmail">Email</string>
     <string name="profileGroupSMS">SMS</string>
     <string name="global_action_back">Voltar</string>
+    <string name="aerr_revoked_application">A aplicação %1$s
+        (processo %2$s) parou inexperadamente.\nAVISO!\nEsta aplicação tem uma ou mais permissões REVOGADAS que pode causar o seu mal funcionamento. Por favor conceda suas permissões e tente novamente.</string>
+    <string name="aerr_revoked_process">A aplicação %1$s
+        parou inexperadamente.\nAVISO!\nEsta aplicação tem uma ou mais de suas permissões REVOGADAS que pode causar o seu mal funcionamento. Por favor conceda suas permissões e tente novamente.</string>
+    <string name="reset_perms">Redefinir permissões</string>
+    <string name="permlab_revokePermissions">Permite visualizar e editar permissões revogas. Não é para uso em aplicações normais.</string>
+    <string name="permdesc_revokePermissions">Permite ler e escrever permissões revogas. Não é para uso em aplicações normais.</string>
 </resources>
