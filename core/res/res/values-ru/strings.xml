@@ -957,4 +957,10 @@
     <!-- label for item that emulates the hardware button: back -->
     <string name="global_action_back">Назад</string>
 
+    <!-- Title of the alert when an application is not responding. -->
+    <string name="aerr_revoked_application">Приложение <xliff:g id="application">%1$s</xliff:g>
+        (процесс <xliff:g id="process">%2$s</xliff:g>) было неожиданно остановлено.\nВнимание!\nЭто приложение имеет одно или несколько изменений в разрешениях, что может привести к его неисправности. Пожалуйста, предоставьте необходимые разрешения и попробуйте ещё раз.</string>
+    <!-- Text of the alert that is displayed when an application has crashed. -->
+    <string name="aerr_revoked_process">Процесс <xliff:g id="process">%1$s</xliff:g> был неожиданно остановлен.\nВнимание!\nЭтот процесс имеет одно или несколько изменений в разрешениях, что может привести к его неисправности. Пожалуйста, предоставьте необходимые разрешения и попробуйте ещё раз.</string>
+
 </resources>
