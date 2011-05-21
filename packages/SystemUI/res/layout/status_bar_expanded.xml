@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
-                
+
                 <TextView android:id="@+id/noNotificationsTitle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -139,6 +139,21 @@
                     android:paddingRight="15dp"
                     />
             </com.android.systemui.statusbar.NotificationLinearLayout>
+        </ScrollView>
+        <ScrollView
+            android:id="@+id/bottomScroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fadingEdge="none"
+            android:overScrollMode="ifContentScrolls"
+            >
+            <com.android.systemui.statusbar.NotificationLinearLayout
+                android:id="@+id/bottomNotificationLinearLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="bottom"
+                />
         </ScrollView>
 
         <LinearLayout android:id="@+id/compact_carrier_layout"
