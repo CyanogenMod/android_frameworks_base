@@ -2654,6 +2654,13 @@ public final class Settings {
         public static final String EXPANDED_HIDE_INDICATOR = "expanded_hide_indicator";
 
         /**
+         * Haptic feedback in power widget
+         *
+         * @hide
+         */
+        public static final String EXPANDED_HAPTIC_FEEDBACK = "expanded_haptic_feedback";
+
+        /**
          * Notification Indicator Color
          *
          * @hide

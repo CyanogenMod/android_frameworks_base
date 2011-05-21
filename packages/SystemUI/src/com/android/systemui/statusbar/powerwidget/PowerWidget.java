@@ -252,6 +252,11 @@ public class PowerWidget extends FrameLayout {
                     Settings.System.getUriFor(Settings.System.EXPANDED_HIDE_SCROLLBAR),
                             false, this);
 
+            // watch for haptic feedback
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.EXPANDED_HAPTIC_FEEDBACK),
+                            false, this);
+
             // watch for changes in buttons
             resolver.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.WIDGET_BUTTONS),
