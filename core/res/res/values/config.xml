@@ -408,7 +408,7 @@
     <!-- Configure lense unlock time label offset -->
     <integer name="config_lenseTimeLabelOffsetDIP">0</integer>
 
-    <!-- Enable mermissions managment -->
+    <!-- Enable permissions management -->
     <bool name="config_enablePermissionsManagment">false</bool>
 
     <!-- Do not translate. Defines the slots is Two Digit Number for dialing normally not USSD -->
