@@ -132,7 +132,9 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     ExpandedView mExpandedView;
     WindowManager.LayoutParams mExpandedParams;
     ScrollView mScrollView;
-    View mNotificationLinearLayout;
+    ScrollView mBottomScrollView;
+    LinearLayout mNotificationLinearLayout;
+    LinearLayout mBottomNotificationLinearLayout;
     View mExpandedContents;
     // top bar
     TextView mNoNotificationsTitle;
@@ -408,7 +410,9 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         mCompactClearButton.setOnClickListener(mClearButtonListener);
         mPowerAndCarrier = (LinearLayout)expanded.findViewById(R.id.power_and_carrier);
         mScrollView = (ScrollView)expanded.findViewById(R.id.scroll);
-        mNotificationLinearLayout = expanded.findViewById(R.id.notificationLinearLayout);
+        mBottomScrollView = (ScrollView)expanded.findViewById(R.id.bottomScroll);
+        mNotificationLinearLayout = (LinearLayout)expanded.findViewById(R.id.notificationLinearLayout);
+        mBottomNotificationLinearLayout = (LinearLayout)expanded.findViewById(R.id.bottomNotificationLinearLayout);
 
         mExpandedView.setVisibility(View.GONE);
         mOngoingTitle.setVisibility(View.GONE);
@@ -458,7 +462,10 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     private void updateCarrierLabel() {
         if (mCompactCarrier) {
             mCarrierLabelLayout.setVisibility(View.GONE);
-            mCompactCarrierLayout.setVisibility(View.VISIBLE);
+            // Disable compact carrier when bottom bar is enabled for now
+            // till we find a better solution (looks ugly alone at the top)
+            if (mBottomBar)
+                mCompactCarrierLayout.setVisibility(View.VISIBLE);
             if (mLatest.hasClearableItems())
                 mCompactClearButton.setVisibility(View.VISIBLE);
         } else {
@@ -489,6 +496,32 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         // readd in right order
         mExpandedView.addView(powerAndCarrier, mBottomBar ? 1 : 0);
         powerAndCarrier.addView(power, mBottomBar && !mCompactCarrier ? 1 : 0);
+
+        // Remove all notification views
+        mNotificationLinearLayout.removeAllViews();
+        mBottomNotificationLinearLayout.removeAllViews();
+
+        // Readd to correct scrollview depending on mBottomBar
+        if (mBottomBar) {
+            mScrollView.setVisibility(View.GONE);
+            mBottomNotificationLinearLayout.addView(mCompactClearButton);
+            mBottomNotificationLinearLayout.addView(mNoNotificationsTitle);
+            mBottomNotificationLinearLayout.addView(mOngoingTitle);
+            mBottomNotificationLinearLayout.addView(mOngoingItems);
+            mBottomNotificationLinearLayout.addView(mLatestTitle);
+            mBottomNotificationLinearLayout.addView(mLatestItems);
+            mBottomScrollView.setVisibility(View.VISIBLE);
+        } else {
+            mBottomScrollView.setVisibility(View.GONE);
+            mNotificationLinearLayout.addView(mNoNotificationsTitle);
+            mNotificationLinearLayout.addView(mOngoingTitle);
+            mNotificationLinearLayout.addView(mOngoingItems);
+            mNotificationLinearLayout.addView(mLatestTitle);
+            mNotificationLinearLayout.addView(mLatestItems);
+            mNotificationLinearLayout.addView(mCompactClearButton);
+            mScrollView.setVisibility(View.VISIBLE);
+            mCompactCarrierLayout.setVisibility(View.VISIBLE);
+        }
 
         //remove small ugly grey area if compactcarrier is enabled and power widget disabled
         boolean hideArea = mCompactCarrier &&
@@ -1457,7 +1490,10 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
             pw.println("  mTickerView: " + viewInfo(mTickerView));
             pw.println("  mScrollView: " + viewInfo(mScrollView)
                     + " scroll " + mScrollView.getScrollX() + "," + mScrollView.getScrollY());
+            pw.println("  mBottomScrollView: " + viewInfo(mBottomScrollView)
+                    + " scroll " + mBottomScrollView.getScrollX() + "," + mBottomScrollView.getScrollY());
             pw.println("mNotificationLinearLayout: " + viewInfo(mNotificationLinearLayout));
+            pw.println("mBottomNotificationLinearLayout: " + viewInfo(mBottomNotificationLinearLayout));
         }
 
         if (true) {
