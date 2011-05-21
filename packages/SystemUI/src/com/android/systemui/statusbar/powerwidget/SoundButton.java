@@ -78,7 +78,12 @@ public class SoundButton extends PowerButton {
                     AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
                             AudioManager.VIBRATE_SETTING_ONLY_SILENT);
                     AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    if(Settings.System.getInt(context.getContentResolver(),
+                            Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2) == 1 ||
+                            (Settings.System.getInt(context.getContentResolver(), Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2)==2 &&
+                            Settings.System.getInt(context.getContentResolver(),Settings.System.HAPTIC_FEEDBACK_ENABLED, 1)==1)) {
+                        VIBRATOR.vibrate(VIBRATE_DURATION);
+                    }
                 } else if (supports(RINGER_MODE_SILENT)) {
                     Settings.System.putInt(context.getContentResolver(),
                             Settings.System.VIBRATE_IN_SILENT, 0);
@@ -91,7 +96,12 @@ public class SoundButton extends PowerButton {
                     AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
                             AudioManager.VIBRATE_SETTING_ON);
                     AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    if(Settings.System.getInt(context.getContentResolver(),
+                            Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2) == 1 ||
+                            (Settings.System.getInt(context.getContentResolver(), Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2)==2 &&
+                            Settings.System.getInt(context.getContentResolver(),Settings.System.HAPTIC_FEEDBACK_ENABLED, 1)==1)) {
+                        VIBRATOR.vibrate(VIBRATE_DURATION);
+                    }
                 }
                 break;
             case RINGER_MODE_SOUND_ONLY:
@@ -101,7 +111,12 @@ public class SoundButton extends PowerButton {
                     AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
                             AudioManager.VIBRATE_SETTING_ONLY_SILENT);
                     AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    if(Settings.System.getInt(context.getContentResolver(),
+                            Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2) == 1 ||
+                            (Settings.System.getInt(context.getContentResolver(), Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2)==2 &&
+                            Settings.System.getInt(context.getContentResolver(),Settings.System.HAPTIC_FEEDBACK_ENABLED, 1)==1)) {
+                        VIBRATOR.vibrate(VIBRATE_DURATION);
+                    }
                 } else if (supports(RINGER_MODE_SILENT)) {
                     Settings.System.putInt(context.getContentResolver(),
                             Settings.System.VIBRATE_IN_SILENT, 0);
@@ -114,14 +129,24 @@ public class SoundButton extends PowerButton {
                     AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
                             AudioManager.VIBRATE_SETTING_ON);
                     AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    if(Settings.System.getInt(context.getContentResolver(),
+                            Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2) == 1 ||
+                            (Settings.System.getInt(context.getContentResolver(), Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2)==2 &&
+                            Settings.System.getInt(context.getContentResolver(),Settings.System.HAPTIC_FEEDBACK_ENABLED, 1)==1)) {
+                        VIBRATOR.vibrate(VIBRATE_DURATION);
+                    }
                 } else { // Fall back
                     Settings.System.putInt(context.getContentResolver(),
                             Settings.System.VIBRATE_IN_SILENT, 1);
                     AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                     AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
                             AudioManager.VIBRATE_SETTING_ON);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    if(Settings.System.getInt(context.getContentResolver(),
+                            Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2) == 1 ||
+                            (Settings.System.getInt(context.getContentResolver(), Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2)==2 &&
+                            Settings.System.getInt(context.getContentResolver(),Settings.System.HAPTIC_FEEDBACK_ENABLED, 1)==1)) {
+                        VIBRATOR.vibrate(VIBRATE_DURATION);
+                    }
                 }
                 break;
 
@@ -138,7 +163,12 @@ public class SoundButton extends PowerButton {
                     AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                     AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
                             AudioManager.VIBRATE_SETTING_ON);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    if(Settings.System.getInt(context.getContentResolver(),
+                            Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2) == 1 ||
+                            (Settings.System.getInt(context.getContentResolver(), Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2)==2 &&
+                            Settings.System.getInt(context.getContentResolver(),Settings.System.HAPTIC_FEEDBACK_ENABLED, 1)==1)) {
+                        VIBRATOR.vibrate(VIBRATE_DURATION);
+                    }
                 } else if (supports(RINGER_MODE_SOUND_ONLY)) {
                     Settings.System.putInt(context.getContentResolver(),
                             Settings.System.VIBRATE_IN_SILENT, 1);
@@ -151,7 +181,12 @@ public class SoundButton extends PowerButton {
                     AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                     AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
                             AudioManager.VIBRATE_SETTING_ON);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    if(Settings.System.getInt(context.getContentResolver(),
+                            Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2) == 1 ||
+                            (Settings.System.getInt(context.getContentResolver(), Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2)==2 &&
+                            Settings.System.getInt(context.getContentResolver(),Settings.System.HAPTIC_FEEDBACK_ENABLED, 1)==1)) {
+                        VIBRATOR.vibrate(VIBRATE_DURATION);
+                    }
                 }
                 break;
             case RINGER_MODE_SILENT:
@@ -161,7 +196,12 @@ public class SoundButton extends PowerButton {
                     AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                     AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
                             AudioManager.VIBRATE_SETTING_ON);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    if(Settings.System.getInt(context.getContentResolver(),
+                            Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2) == 1 ||
+                            (Settings.System.getInt(context.getContentResolver(), Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2)==2 &&
+                            Settings.System.getInt(context.getContentResolver(),Settings.System.HAPTIC_FEEDBACK_ENABLED, 1)==1)) {
+                        VIBRATOR.vibrate(VIBRATE_DURATION);
+                    }
                 } else if (supports(RINGER_MODE_SOUND_ONLY)) {
                     Settings.System.putInt(context.getContentResolver(),
                             Settings.System.VIBRATE_IN_SILENT, 1);
@@ -174,14 +214,24 @@ public class SoundButton extends PowerButton {
                     AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                     AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
                             AudioManager.VIBRATE_SETTING_ONLY_SILENT);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    if(Settings.System.getInt(context.getContentResolver(),
+                            Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2) == 1 ||
+                            (Settings.System.getInt(context.getContentResolver(), Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2)==2 &&
+                            Settings.System.getInt(context.getContentResolver(),Settings.System.HAPTIC_FEEDBACK_ENABLED, 1)==1)) {
+                        VIBRATOR.vibrate(VIBRATE_DURATION);
+                    }
                 } else { // Fall Back
                     Settings.System.putInt(context.getContentResolver(),
                             Settings.System.VIBRATE_IN_SILENT, 1);
                     AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                     AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
                             AudioManager.VIBRATE_SETTING_ON);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    if(Settings.System.getInt(context.getContentResolver(),
+                            Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2) == 1 ||
+                            (Settings.System.getInt(context.getContentResolver(), Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2)==2 &&
+                            Settings.System.getInt(context.getContentResolver(),Settings.System.HAPTIC_FEEDBACK_ENABLED, 1)==1)) {
+                        VIBRATOR.vibrate(VIBRATE_DURATION);
+                    }
                 }
                 break;
             default:
@@ -190,7 +240,12 @@ public class SoundButton extends PowerButton {
                 AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
                 AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
                         AudioManager.VIBRATE_SETTING_ON);
-                VIBRATOR.vibrate(VIBRATE_DURATION);
+                if(Settings.System.getInt(context.getContentResolver(),
+                        Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2) == 1 ||
+                        (Settings.System.getInt(context.getContentResolver(), Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2)==2 &&
+                        Settings.System.getInt(context.getContentResolver(),Settings.System.HAPTIC_FEEDBACK_ENABLED, 1)==1)) {
+                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                }
         }
     }
 
