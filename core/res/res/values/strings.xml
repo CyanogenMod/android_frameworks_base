@@ -1999,10 +1999,10 @@
         stopped unexpectedly. Please try again.</string>
     <!-- Title of the alert when an application is not responding. -->
     <string name="aerr_revoked_application">The application <xliff:g id="application">%1$s</xliff:g>
-        (process <xliff:g id="process">%2$s</xliff:g>) has stopped unexpectedly.\nWARNING!\nThis application has one or more of its permissions REVOKED which may couse it to malfunction. Please grant its permissions and try again.</string>
+        (process <xliff:g id="process">%2$s</xliff:g>) has stopped unexpectedly.\nWARNING!\nThis application has one or more of its permissions REVOKED which may cause it to malfunction. Please grant its permissions and try again.</string>
     <!-- Text of the alert that is displayed when an application has crashed. -->
     <string name="aerr_revoked_process">The process <xliff:g id="process">%1$s</xliff:g> has
-        stopped unexpectedly.\nWARINIG!\nThis process has one or more of its permissions REVOKED which may couse it to malfunction. Please grant its permissions and try again.</string>
+        stopped unexpectedly.\nWARNING!\nThis process has one or more of its permissions REVOKED which may cause it to malfunction. Please grant its permissions and try again.</string>
     <!-- Title of the alert when an application is not responding. -->
     <string name="anr_title">Sorry!</string>
     <!-- Text of the alert that is displayed when an application is not responding. -->
