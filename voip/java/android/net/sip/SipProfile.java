@@ -260,7 +260,7 @@ public class SipProfile implements Parcelable, Serializable, Cloneable {
         /**
          * Sets the send keep-alive interval.
          *
-         * @param keep-alive message interval in seconds
+         * @param interval in seconds
          * @return this builder object
          */
         public Builder setKeepAliveInterval(int interval) {
