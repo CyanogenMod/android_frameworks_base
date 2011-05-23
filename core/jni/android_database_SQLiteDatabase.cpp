@@ -103,12 +103,21 @@ static int use_wal_mode (char const *path8)
          "telephony.db","launcher.db","user_dict.db",\
          "downloads.db", "mmssms.db", "internal.db", \
          "EmailProvider.db","alarms.db","EmailProviderBody.db",\
-         "btopp.db","picasa.db","webview.db",\
-         "webviewCache.db","browser.db","quadrant.db", NULL};
+         "btopp.db","picasa.db",\
+         "webviewCache.db","browser.db", NULL};
+
+    const char *wal_dbs_nosync[] = {
+         "webview.db", "quadrant.db", \
+         "MyDatabase.db", NULL};
 
     for (i = 0 ; wal_dbs[i]!= NULL ; i++) {
         if(strcmp(temp, wal_dbs[i]) == 0)
             return 1;
+    }
+
+    for (i = 0 ; wal_dbs_nosync[i]!= NULL ; i++) {
+        if(strcmp(temp, wal_dbs_nosync[i]) == 0)
+            return 2;
     }
 
     return 0;
@@ -171,6 +180,10 @@ static void dbopen(JNIEnv* env, jobject object, jstring pathString, jint flags)
                LOGE("sqlite3_exec to set WAL autocheckpoint failed\n");
                throw_sqlite3_exception(env, handle);
                goto done;
+            } else if (use_wal_mode(path8) == 2) {
+                /* Try to disable fsyncs. We don't care if it fails */
+                sqlite3_exec(handle,"PRAGMA synchronous = OFF;",
+                           NULL, NULL,&zErrMsg);
             }
         }
     }
