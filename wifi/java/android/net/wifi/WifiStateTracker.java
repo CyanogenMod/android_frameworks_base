@@ -2527,10 +2527,13 @@ public class WifiStateTracker extends NetworkStateTracker {
                             //Do it a bit earlier than half the lease duration time
                             //to beat the native DHCP client and avoid extra packets
                             //48% for one hour lease time = 29 minutes
-                            mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                                    SystemClock.elapsedRealtime() +
-                                    mDhcpInfo.leaseDuration * 480, //in milliseconds
-                                    mDhcpRenewalIntent);
+                            //Don't do it if we're on an infinite lease
+                            if (mDhcpInfo.leaseDuration >= 0) {
+                                mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                                        SystemClock.elapsedRealtime() +
+                                        mDhcpInfo.leaseDuration * 480, //in milliseconds
+                                        mDhcpRenewalIntent);
+                            }
                         } else {
                             event = EVENT_INTERFACE_CONFIGURATION_FAILED;
                             Log.e(TAG, "DHCP request failed: " + NetworkUtils.getDhcpError());
