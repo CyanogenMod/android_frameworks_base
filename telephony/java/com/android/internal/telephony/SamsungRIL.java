@@ -431,7 +431,16 @@ public SamsungRIL(Context context, int networkMode, int cdmaSubscription) {
 
 	                Object[] result = new Object[2];
 
-	                result[0] = ret;
+			String nitz = (String)ret;
+			if (RILJ_LOGD) riljLog(" RIL_UNSOL_NITZ_TIME_RECEIVED length = "
+	                            + nitz.split("[/:,+-]").length);
+			//remove the tailing information that samsung added to the string
+			//it will screw the NITZ parser
+			if(nitz.split("[/:,+-]").length >= 9)
+			    nitz = nitz.substring(0,(nitz.lastIndexOf(",")));
+			if (RILJ_LOGD) riljLog(" RIL_UNSOL_NITZ_TIME_RECEIVED striped nitz = "
+	                            + nitz);
+	                result[0] = nitz;
 	                result[1] = Long.valueOf(nitzReceiveTime);
 
 	                if (mNITZTimeRegistrant != null) {
@@ -440,7 +449,7 @@ public SamsungRIL(Context context, int networkMode, int cdmaSubscription) {
 	                        .notifyRegistrant(new AsyncResult (null, result, null));
 	                } else {
 	                    // in case NITZ time registrant isnt registered yet
-	                    mLastNITZTimeInfo = result;
+	                    mLastNITZTimeInfo = nitz;
 	                }
 	            break;
 
