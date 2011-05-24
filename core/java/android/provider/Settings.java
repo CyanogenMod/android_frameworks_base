@@ -2557,7 +2557,7 @@ public final class Settings {
          *
          * @hide
          */
-        public static final String EXPANDED_HAPTIC_FEEDBACK = "expanded_pwrwid_haptic_feedback";
+        public static final String EXPANDED_HAPTIC_FEEDBACK = "expanded_haptic_feedback";
 
         /**
          * Notification Indicator Color
