@@ -1199,7 +1199,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
         ArrayList<Prediction> predictions = mLibrary.recognize(gesture);
         if (predictions.size() > 0 && predictions.get(0).score > mGestureSensitivity) {
-            String[] payload = predictions.get(0).name.split("___", 2);
+            String[] payload = predictions.get(0).name.split("___", 3);
             String uri = payload[1];
             if (uri != null) {
                 if ("UNLOCK".equals(uri)) {
@@ -1216,7 +1216,12 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                                 | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
                         mContext.startActivity(i);
-                        mCallback.goToUnlockScreen();
+                        // Run in background if requested
+                        if (payload.length > 2) {
+                        	mCallback.pokeWakelock();
+                        } else {
+                        	mCallback.goToUnlockScreen();
+                        }
                     } catch (URISyntaxException e) {
                     } catch (ActivityNotFoundException e) {
                     }
