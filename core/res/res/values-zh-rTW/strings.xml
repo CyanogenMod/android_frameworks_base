@@ -1768,6 +1768,10 @@
     <!-- Text of the alert that is displayed when an application has crashed. -->
     <string name="aerr_process" msgid="1551785535966089511">"<xliff:g id="PROCESS">%1$s</xliff:g> 異常終止。請再試一次。"</string>
     <!-- Title of the alert when an application is not responding. -->
+    <string name="aerr_revoked_application"><xliff:g id="application">%1$s</xliff:g> 應用程式 (程序：<xliff:g id="process">%2$s</xliff:g>) 異常終止。\n警告！\n此應用程式有一或多個權限被撤消了，有可能因此而無法運作。請授予其所需權限然後再試一次。</string>
+    <!-- Text of the alert that is displayed when an application has crashed. -->
+    <string name="aerr_revoked_process"><xliff:g id="process">%1$s</xliff:g> 異常終止。\n警告！\n此應用程式有一或多個權限被撤消了，有可能因此而無法運作。請授予其所需權限然後再試一次。</string>
+    <!-- Title of the alert when an application is not responding. -->
     <string name="anr_title" msgid="3100070910664756057">"很抱歉！"</string>
     <!-- Text of the alert that is displayed when an application is not responding. -->
     <string name="anr_activity_application" msgid="3538242413112507636">"<xliff:g id="ACTIVITY">%1$s</xliff:g> (應用程式：<xliff:g id="APPLICATION">%2$s</xliff:g>) 無回應。"</string>
@@ -1781,6 +1785,8 @@
     <string name="force_close" msgid="3653416315450806396">"強制關閉"</string>
     <!-- Button allowing the user to send a bug report for application which has encountered an error. -->
     <string name="report" msgid="4060218260984795706">"回報"</string>
+    <!-- Button allowing the user reset the revoked permissions for application which has encountered an error. -->
+    <string name="reset_perms">重設權限</string>
     <!-- Button allowing the user to choose to wait for an application that is not responding to become responsive again. -->
     <string name="wait" msgid="7147118217226317732">"等待"</string>
     <!-- [CHAR LIMIT=25] Title of the alert when application launches on top of another. -->
@@ -2185,4 +2191,10 @@
         <item quantity="one">剩餘 %d 秒</item>
         <item quantity="other">剩餘 %d 秒</item>
     </plurals>
+
+    <!-- Title of an application permission that lets an application view/edit revoked permissions. -->
+    <string name="permlab_revokePermissions">允許檢視及編輯被撤消的權限。不應使用於正常的應用程式。</string>
+    <!-- Description of an application permission that lets lets an application view/edit revoked permissions. -->
+    <string name="permdesc_revokePermissions">允許讀取及寫入被撤消的權限。不應使用於正常的應用程式。</string>
+
 </resources>
