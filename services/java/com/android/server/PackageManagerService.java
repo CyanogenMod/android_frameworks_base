@@ -1682,9 +1682,9 @@ class PackageManagerService extends IPackageManager.Stub {
 
     private boolean isRevokeEnabled() {
         int defalut = mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_enablePermissionsManagment) ? 1 : 0;
+                com.android.internal.R.bool.config_enablePermissionsManagement) ? 1 : 0;
         int res = android.provider.Settings.Secure.getInt(mContext.getContentResolver(),
-                android.provider.Settings.Secure.ENABLE_PERMISSIONS_MANAGMENT,
+                android.provider.Settings.Secure.ENABLE_PERMISSIONS_MANAGEMENT,
                 defalut);
         return res == 1;
     }
