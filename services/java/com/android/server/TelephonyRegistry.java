@@ -16,6 +16,7 @@
 
 package com.android.server;
 
+import android.app.AppGlobals;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -240,7 +241,17 @@ class TelephonyRegistry extends ITelephonyRegistry.Stub {
                 Record r = mRecords.get(i);
                 if ((r.events & PhoneStateListener.LISTEN_CALL_STATE) != 0) {
                     try {
-                        r.callback.onCallStateChanged(state, incomingNumber);
+                        long id = Binder.clearCallingIdentity();
+                        int res = AppGlobals.getPackageManager().pffCheckPermission(android.Manifest.permission.READ_PHONE_STATE, r.pkgForDebug);
+                        Binder.restoreCallingIdentity(id);
+                        switch (res) {
+                        case PackageManager.PERMISSION_GRANTED:
+                            r.callback.onCallStateChanged(state, incomingNumber);
+                            break;
+                        case PackageManager.PERMISSION_SPOOFED:
+                            r.callback.onCallStateChanged(state, "spoofed");
+                            break;
+                        }
                     } catch (RemoteException ex) {
                         remove(r.binder);
                     }

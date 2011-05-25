@@ -320,6 +320,8 @@ public interface IActivityManager extends IInterface {
             Uri uri, int mode) throws RemoteException;
     public void revokeUriPermissionFromOwner(IBinder owner, Uri uri,
             int mode) throws RemoteException;
+    public int pffCheckPermission(String permission, int pid, int uid)
+               throws RemoteException;
 
     /*
      * Private non-Binder interfaces
@@ -531,4 +533,5 @@ public interface IActivityManager extends IInterface {
     int NEW_URI_PERMISSION_OWNER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+115;
     int GRANT_URI_PERMISSION_FROM_OWNER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+116;
     int REVOKE_URI_PERMISSION_FROM_OWNER_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+117;
+    int PFF_CHECK_PERMISSION_TRANSACTION = IBinder.FIRST_CALL_TRANSACTION+118;
 }

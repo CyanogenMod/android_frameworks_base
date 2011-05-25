@@ -1,0 +1,8 @@
+<!--
+This file describes information protected by which permissions can be spoofed.
+If you add anything here make sure that the implementation DO support spoofing 
+--> 
+
+<spoofed-perms>
+  <item name="android.permission.READ_PHONE_STATE" />
+</spoofed-perms>

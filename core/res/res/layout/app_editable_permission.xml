@@ -22,7 +22,8 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:id="@+id/editable_permission_layout">
 
     <ImageView
         android:id="@+id/editable_permission_icon"
@@ -39,5 +40,37 @@
         android:layout_toRightOf="@id/editable_permission_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+    <LinearLayout
+        android:id="@+id/editable_permission_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="12dip"
+        android:paddingRight="12dip"
+        android:paddingTop="7dip"
+        android:paddingBottom="16dip"
+        android:layout_below="@id/editable_permission">
+        <Button
+            android:id="@+id/grant_button"
+            android:layout_height="match_parent"
+            android:text="@string/grant"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+        />
+        <Button
+            android:id="@+id/revoke_button"
+            android:layout_height="match_parent"
+            android:text="@string/revoke"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+        />
+        <Button
+            android:id="@+id/spoof_button"
+            android:layout_height="match_parent"
+            android:text="@string/spoof"
+            android:layout_width="0dip"
+            android:layout_weight="1"
+        />
 
+    </LinearLayout>
 </RelativeLayout>
