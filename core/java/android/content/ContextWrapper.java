@@ -464,4 +464,20 @@ public class ContextWrapper extends Context {
     public boolean isRestricted() {
         return mBase.isRestricted();
     }
+
+    /**
+     * @hide
+     */
+    @Override
+    public int pffEnforceCallingOrSelfPermission(String permission, String message) {
+        return mBase.pffEnforceCallingOrSelfPermission(permission, message);
+    }
+    /**
+     * @hide
+     */
+    @Override
+    public int pffCheckCallingOrSelfPermission(String permission) {
+        return mBase.pffCheckCallingOrSelfPermission(permission);
+    }
+
 }

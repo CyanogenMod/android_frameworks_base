@@ -190,6 +190,20 @@ public abstract class PackageManager {
     public static final int PERMISSION_DENIED = -1;
 
     /**
+     * Permission check result: this is returned by {@link #pffCheckPermission}
+     * if the permission has been granted to the given package.
+     * @hide
+     */
+    public static final int PERMISSION_REVOKED = 0xFF;
+
+    /**
+     * Permission check result: this is returned by {@link #pffCheckPermission}
+     * if the permission has not been granted to the given package.
+     * @hide
+     */
+    public static final int PERMISSION_SPOOFED = 0x1FF;
+
+    /**
      * Signature check result: this is returned by {@link #checkSignatures}
      * if all signatures on the two packages match.
      */
@@ -2313,5 +2327,29 @@ public abstract class PackageManager {
      * @hide
      */
     public abstract void setRevokedPermissions(String packageName, String[] perms);
+
+    /**
+     * Returns the spoofed permissions for given package.
+     * <p>
+     * NOTE: If the package has a shared uid then the spoofed permissions for that
+     * 			  uid will be returned.
+     *
+     * @param packageName Name of the package which revoked permissions are needed
+     * @hide
+     */
+
+    public abstract String[] getSpoofedPermissions(String packageName);
+
+    /**
+     * Sets the spoofed permissions for given package.
+     * <p>
+     * NOTE: If the package has a shared uid then this method will spoof the
+     * 			  permissions for that shared uid.
+     *
+     * @param packageName Name of the package which revoked permissions are needed
+     * @param the spoofed permissions.
+     * @hide
+     */
+    public abstract void setSpoofedPermissions(String packageName, String[] perms);
 
 }

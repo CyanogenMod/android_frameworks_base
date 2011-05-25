@@ -859,6 +859,17 @@ public abstract class ActivityManagerNative extends Binder implements IActivityM
             return true;
         }
 
+        case PFF_CHECK_PERMISSION_TRANSACTION: {
+            data.enforceInterface(IActivityManager.descriptor);
+            String perm = data.readString();
+            int pid = data.readInt();
+            int uid = data.readInt();
+            int res = pffCheckPermission(perm, pid, uid);
+            reply.writeNoException();
+            reply.writeInt(res);
+            return true;
+        }
+
         case CHECK_URI_PERMISSION_TRANSACTION: {
             data.enforceInterface(IActivityManager.descriptor);
             Uri uri = Uri.CREATOR.createFromParcel(data);
@@ -2896,5 +2907,21 @@ class ActivityManagerProxy implements IActivityManager
         reply.recycle();
     }
     
+    public int pffCheckPermission(String permission, int pid, int uid)
+    throws RemoteException {
+        Parcel data = Parcel.obtain();
+        Parcel reply = Parcel.obtain();
+        data.writeInterfaceToken(IActivityManager.descriptor);
+        data.writeString(permission);
+        data.writeInt(pid);
+        data.writeInt(uid);
+        mRemote.transact(PFF_CHECK_PERMISSION_TRANSACTION, data, reply, 0);
+        reply.readException();
+        int res = reply.readInt();
+        data.recycle();
+        reply.recycle();
+        return res;
+    }
+
     private IBinder mRemote;
 }

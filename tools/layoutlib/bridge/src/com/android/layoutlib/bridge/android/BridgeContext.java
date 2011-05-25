@@ -1128,4 +1128,13 @@ public final class BridgeContext extends Activity {
     public boolean isRestricted() {
         return false;
     }
+
+    @Override
+    public int pffEnforceCallingOrSelfPermission(String permission, String message) {
+        return 0;
+    }
+
+    public int pffCheckCallingOrSelfPermission(String permission) {
+        return 0;
+    }
 }
