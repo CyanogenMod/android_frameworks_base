@@ -239,7 +239,7 @@ public class RotarySelector extends View {
          * phones. keep in mind changing build.prop and density
          * isnt officially supported, but this should do for most cases
          */
-        if(densityDpi < 240 && densityDpi >180)
+        if(densityDpi < 240 && densityDpi >160)
             mDensityScaleFactor=(float)(240.0 / densityDpi);
         if(densityDpi < 160 && densityDpi >120)
             mDensityScaleFactor=(float)(160.0 / densityDpi);
