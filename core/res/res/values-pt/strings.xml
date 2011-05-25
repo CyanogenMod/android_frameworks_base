@@ -943,4 +943,5 @@
     <string name="reset_perms">Redefinir permissões</string>
     <string name="permlab_revokePermissions">Permite visualizar e editar permissões revogas. Não é para uso em aplicações normais.</string>
     <string name="permdesc_revokePermissions">Permite ler e escrever permissões revogas. Não é para uso em aplicações normais.</string>
+    <string name="copyAll">Copiar tudo</string>
 </resources>
