@@ -426,6 +426,21 @@ public class MockContext extends Context {
 
     @Override
     public boolean isRestricted() {
-        throw new UnsupportedOperationException();        
+        throw new UnsupportedOperationException();
     }
+    /**
+     * @hide
+     */
+    @Override
+    public int pffEnforceCallingOrSelfPermission(String permission, String message) {
+        throw new UnsupportedOperationException();
+    }
+    /**
+     * @hide
+     */
+    @Override
+    public int pffCheckCallingOrSelfPermission(String permission) {
+        throw new UnsupportedOperationException();
+    }
+
 }

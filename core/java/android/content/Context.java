@@ -1999,4 +1999,44 @@ public abstract class Context {
     public boolean isRestricted() {
         return false;
     }
+
+    /**
+     * If neither you nor the calling process of an IPC you are
+     * handling has been granted a particular permission or the permission is
+     * revoked , throw a {@link SecurityException}. If the calling
+     * process or you have the permission data protected.
+     * {@link PackageManager#PERMISSION_PRIVACY_MODE} is returned.
+     * If the permission is granted {@link PackageManager#PERMISSION_GRANTED}
+     * is returned.
+     *
+     * @param permission The name of the permission being checked.
+     * @param message A message to include in the exception if it is thrown.
+     *
+     * @see #pffCheckCallingOrSelfPermission(String)
+     * @hide
+     */
+    public abstract int pffEnforceCallingOrSelfPermission(
+            String permission, String message);
+
+    /**
+     * Determine whether the calling process of an IPC <em>or you</em> have been
+     * granted a particular permission.  This is the same as
+     * {@link #checkCallingPermission}, except it grants your own permissions
+     * if you are not currently processing an IPC.  Use with care!
+     *
+     * @param permission The name of the permission being checked.
+     *
+     * @return Returns {@link PackageManager#PERMISSION_GRANTED} if the calling
+     * pid/uid is allowed that permission, or
+     * {@link PackageManager#PERMISSION_DENIED} or
+     * {@link PackageManager#PERMISSION_REVOKED} if it is not,
+     * of {@link PackageManager#PERMISSION_PRIVACY_MODE} if the permission 
+     * has its data protected.
+     *
+     * @see PackageManager#checkPermission(String, String)
+     * @see #checkPermission
+     * @see #checkCallingPermission
+     * @hide
+     */
+    public abstract int pffCheckCallingOrSelfPermission(String permission);
 }

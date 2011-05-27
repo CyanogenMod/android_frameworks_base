@@ -11170,6 +11170,23 @@ public final class ActivityManagerService extends ActivityManagerNative
                             + " (uid " + r.callingUid + ")");
                     skip = true;
                 }
+
+                try {
+                    perm = AppGlobals.getPackageManager().
+                            pffCheckPermission(r.requiredPermission,
+                                    info.activityInfo.applicationInfo.packageName);
+                } catch (RemoteException e) {
+                    perm = PackageManager.PERMISSION_DENIED;
+                }
+                if (perm != PackageManager.PERMISSION_GRANTED) {
+                    Slog.w(TAG, "Permission Denial: receiving "
+                            + r.intent + " to "
+                            + info.activityInfo.applicationInfo.packageName
+                            + " requires " + r.requiredPermission
+                            + " due to sender " + r.callerPackage
+                            + " (uid " + r.callingUid + ")");
+                    skip = true;
+                }
             }
             if (r.curApp != null && r.curApp.crashing) {
                 // If the target process is crashing, just skip it.
@@ -12560,5 +12577,54 @@ public final class ActivityManagerService extends ActivityManagerNative
     /** In this method we try to acquire our lock to make sure that we have not deadlocked */
     public void monitor() {
         synchronized (this) { }
+    }
+
+    /**
+     * This can be called with or without the global lock held.
+     */
+    int pffCheckComponentPermission(String permission, int pid, int uid,
+            int reqUid) {
+        // We might be performing an operation on behalf of an indirect binder
+        // invocation, e.g. via {@link #openContentUri}.  Check and adjust the
+        // client identity accordingly before proceeding.
+        Identity tlsIdentity = sCallerIdentity.get();
+        if (tlsIdentity != null) {
+            Slog.d(TAG, "checkComponentPermission() adjusting {pid,uid} to {"
+                    + tlsIdentity.pid + "," + tlsIdentity.uid + "}");
+            uid = tlsIdentity.uid;
+            pid = tlsIdentity.pid;
+        }
+
+        // Root, system server and our own process get to do everything.
+        if (uid == 0 || uid == Process.SYSTEM_UID || pid == MY_PID ||
+            !Process.supportsProcesses()) {
+            return PackageManager.PERMISSION_GRANTED;
+        }
+        // If the target requires a specific UID, always fail for others.
+        if (reqUid >= 0 && uid != reqUid) {
+            Slog.w(TAG, "Permission denied: checkComponentPermission() reqUid=" + reqUid);
+            return PackageManager.PERMISSION_DENIED;
+        }
+        if (permission == null) {
+            return PackageManager.PERMISSION_GRANTED;
+        }
+        try {
+            return AppGlobals.getPackageManager()
+                    .pffCheckUidPermission(permission, uid);
+        } catch (RemoteException e) {
+            // Should never happen, but if it does... deny!
+            Slog.e(TAG, "PackageManager is dead?!?", e);
+        }
+        return PackageManager.PERMISSION_DENIED;
+    }
+
+    /*
+     * This can be called with or without the global lock held.
+     */
+    public int pffCheckPermission(String permission, int pid, int uid) throws RemoteException {
+        if (permission == null) {
+            return PackageManager.PERMISSION_DENIED;
+        }
+        return pffCheckComponentPermission(permission, pid, uid, -1);
     }
 }
