@@ -75,11 +75,13 @@ public class ExternalStorageFormatter extends Service
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        // We try to get the path from the intent
-        // If it isn't set, we default to Environment.getExternalStorageDirectory()
+        // We get the path from the intent and if it isn't set
+        // we do not default to Environment.getExternalStoragePath()
+        // because this can be the wrong sdcard in the case where
+        // the device has more than one sdcard (as is becoming more
+        // and more common). We will handle the null later when we
+        // try to actually use the extStoragePath.
         extStoragePath = intent.getStringExtra("path");
-        if (extStoragePath == null)
-            extStoragePath = Environment.getExternalStorageDirectory().toString();
         if (FORMAT_AND_FACTORY_RESET.equals(intent.getAction())) {
             mFactoryReset = true;
         }
@@ -123,6 +125,11 @@ public class ExternalStorageFormatter extends Service
     public void onCancel(DialogInterface dialog) {
         IMountService mountService = getMountService();
         try {
+            if (extStoragePath == null) {
+                Toast.makeText(this, "Invalid path: null", Toast.LENGTH_LONG).show();
+                stopSelf();
+                return;
+            }
             mountService.mountVolume(extStoragePath);
         } catch (RemoteException e) {
             Log.w(TAG, "Failed talking with mount service", e);
@@ -141,6 +148,11 @@ public class ExternalStorageFormatter extends Service
     void updateProgressState() {
         String status = Environment.MEDIA_CHECKING;
         try {
+            if (extStoragePath == null) {
+                Toast.makeText(this, "Invalid path: null", Toast.LENGTH_LONG).show();
+                stopSelf();
+                return;
+            }
             status = getMountService().getVolumeState(extStoragePath);
         } catch (RemoteException e) {
             Log.w(TAG, "Failed talking with mount service", e);
