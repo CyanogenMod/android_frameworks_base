@@ -558,7 +558,8 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
      */
     public final boolean onKeyDownPanel(int featureId, KeyEvent event) {
         final int keyCode = event.getKeyCode();
-        
+        boolean mCustomLongMenuSearchToggle = (Settings.System.getInt(getContext().getContentResolver(),Settings.System.USE_CUSTOM_LONG_MENU_APP_AS_SEARCH, 0) == 1);
+        boolean mCustomLongMenuAppToggle = (Settings.System.getInt(getContext().getContentResolver(),Settings.System.USE_CUSTOM_LONG_MENU_APP_TOGGLE, 0) == 1);
         if (event.getRepeatCount() == 0) {
             // The panel key was pushed, so set the chording key
             mPanelChordingKey = keyCode;
@@ -579,15 +580,19 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             // should be executed...  do it!
             mPanelChordingKey = 0;
             mPanelMayLongPress = false;
-            InputMethodManager imm = (InputMethodManager)
-                    getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                mDecor.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            if (!mCustomLongMenuSearchToggle && !mCustomLongMenuAppToggle) {
+                InputMethodManager imm = (InputMethodManager)
+                getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                        mDecor.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                }
+            }else if (mCustomLongMenuSearchToggle) {
+                launchDefaultSearch();
+            }else{
+                runCustomApp(Settings.System.getString(getContext().getContentResolver(),Settings.System.USE_CUSTOM_LONG_MENU_APP_ACTIVITY));
             }
-            
         }
-
         return false;
     }
 
@@ -2832,6 +2837,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
     }
 
     void runCustomApp(String uri) {
+        uri = Settings.System.formatContacts(uri);
         if (uri != null) {
             try {
                 Intent i = Intent.parseUri(uri, 0);
@@ -2845,6 +2851,5 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             }
         }
     }
-
-
 }
+

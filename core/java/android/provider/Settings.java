@@ -696,6 +696,25 @@ public final class Settings {
         }
     }
 
+        /** This function provides a patch to the api change in regards to QUICK_CONTACT.
+            In essence it just replaces the com.android.contacts.action.QUICK_CONTACT string
+            with android.intent.action.VIEW
+        **/
+        public static String formatContacts(String str) {
+                String beingReplaced = "com.android.contacts.action.QUICK_CONTACT";
+                String replaceWith = "android.intent.action.VIEW";
+                int index = 0;
+                StringBuffer result = new StringBuffer();
+                if ((index = str.indexOf(beingReplaced))!=-1){
+                        result.append(str.substring(0,index));
+                        result.append(replaceWith);
+                        result.append(str.substring(index+beingReplaced.length()));
+                        return result.toString();
+                }else{
+                        return str;
+                }
+        }
+
     /**
      * System settings, containing miscellaneous system preferences.  This
      * table holds simple name/value pairs.  There are convenience
@@ -1781,6 +1800,24 @@ public final class Settings {
          * @hide
          */
         public static final String USE_CUSTOM_SEARCH_APP_ACTIVITY = "use_custom_search_app_activity";
+
+        /**
+         * Specifies whether or not to use a custom app on long menu key press
+         * @hide
+         */
+        public static final String USE_CUSTOM_LONG_MENU_APP_TOGGLE = "use_custom_long_menu_app_toggle";
+
+        /**
+         * Contains activity to start on long menu key press
+         * @hide
+         */
+        public static final String USE_CUSTOM_LONG_MENU_APP_ACTIVITY = "use_custom_long_menu_app_activity";
+
+        /**
+         * Specifies whether or not to use long press menu as search
+         * @hide
+         */
+        public static final String USE_CUSTOM_LONG_MENU_APP_AS_SEARCH = "use_custom_long_menu_as_search";
 
         /**
          * Specifies whether or not to use a custom app on long search key press
