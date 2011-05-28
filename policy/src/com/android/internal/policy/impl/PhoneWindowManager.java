@@ -667,7 +667,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     void runCustomApp() {
         String uri = Settings.System.getString(mContext.getContentResolver(),
                 Settings.System.SELECTED_CUSTOM_APP);
-
         if (uri != null) {
             try {
                 Intent i = Intent.parseUri(uri, 0);
@@ -2886,5 +2885,4 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
         return workString;
     }
-
 }
