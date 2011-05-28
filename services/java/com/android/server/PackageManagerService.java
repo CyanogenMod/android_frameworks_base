@@ -67,6 +67,7 @@ import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.content.pm.Signature;
+import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
@@ -357,6 +358,22 @@ class PackageManagerService extends IPackageManager.Stub {
     // package uri's from external media onto secure containers
     // or internal storage.
     private IMediaContainerService mContainerService = null;
+
+    boolean mIsPermManagementEnabled = false;
+    SecureSettingsObserver mSecureSettingsObserver;
+
+    private final class SecureSettingsObserver extends ContentObserver {
+
+        public SecureSettingsObserver(final Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        public void onChange(final boolean selfChange) {
+            super.onChange(selfChange);
+            mIsPermManagementEnabled = isPermManagementEnabled();
+        }
+    }
 
     static final int SEND_PENDING_BROADCAST = 1;
     static final int MCS_BOUND = 3;
@@ -1680,7 +1697,7 @@ class PackageManagerService extends IPackageManager.Stub {
         }
     }
 
-    private boolean isRevokeEnabled() {
+    private boolean isPermManagementEnabled() {
         int defalut = mContext.getResources().getBoolean(
                 com.android.internal.R.bool.config_enablePermissionsManagement) ? 1 : 0;
         int res = android.provider.Settings.Secure.getInt(mContext.getContentResolver(),
@@ -1690,12 +1707,9 @@ class PackageManagerService extends IPackageManager.Stub {
     }
 
     private int checkRevoked(String permName, GrantedPermissions gp, int callingUid, int checkedUid) {
-        if (callingUid != checkedUid)
-                if (gp.revokedPermissions.contains(permName))
-                   if (isRevokeEnabled()) {
-                       return PackageManager.PERMISSION_DENIED;
-                   }
-
+        if (callingUid != checkedUid && gp.revokedPermissions.contains(permName)) {
+            return PackageManager.PERMISSION_DENIED;
+        }
         return PackageManager.PERMISSION_GRANTED;
     }
 
@@ -1707,10 +1721,14 @@ class PackageManagerService extends IPackageManager.Stub {
                 int uid = Binder.getCallingUid();
                 if (ps.sharedUser != null) {
                     if (ps.sharedUser.grantedPermissions.contains(permName)) {
-                        return checkRevoked(permName, ps.sharedUser, uid, ps.sharedUser.userId);
+                        return mIsPermManagementEnabled ?
+                                checkRevoked(permName, ps.sharedUser, uid, ps.sharedUser.userId)
+                                : PackageManager.PERMISSION_GRANTED;
                     }
                 } else if (ps.grantedPermissions.contains(permName)) {
-                    return checkRevoked(permName, ps, uid, ps.userId);
+                    return mIsPermManagementEnabled ?
+                            checkRevoked(permName, ps, uid, ps.userId)
+                            : PackageManager.PERMISSION_GRANTED;
                 }
             }
         }
@@ -1723,7 +1741,8 @@ class PackageManagerService extends IPackageManager.Stub {
             if (obj != null) {
                 GrantedPermissions gp = (GrantedPermissions)obj;
                 if (gp.grantedPermissions.contains(permName)) {
-                    return checkRevoked(permName, gp, -2, -1);
+                    return mIsPermManagementEnabled ? 
+                            checkRevoked(permName, gp, -2, -1) : PackageManager.PERMISSION_GRANTED;
                 }
             } else {
                 HashSet<String> perms = mSystemPermissions.get(uid);
@@ -3960,7 +3979,7 @@ class PackageManagerService extends IPackageManager.Stub {
                 }
             }
         }
-        
+
         if (pkgInfo != null) {
             grantPermissionsLP(pkgInfo, replace);
             updateRevokedGids(pkgInfo);
@@ -7131,6 +7150,10 @@ class PackageManagerService extends IPackageManager.Stub {
         if (DEBUG_SETTINGS) {
             Log.d(TAG, "compatibility mode:" + compatibilityModeEnabled);
         }
+        mIsPermManagementEnabled = isPermManagementEnabled();
+        mSecureSettingsObserver = new SecureSettingsObserver(new Handler());
+        Uri uri = android.provider.Settings.Secure.CONTENT_URI;
+        mContext.getContentResolver().registerContentObserver(uri, true, mSecureSettingsObserver);
     }
 
     public boolean isSafeMode() {
