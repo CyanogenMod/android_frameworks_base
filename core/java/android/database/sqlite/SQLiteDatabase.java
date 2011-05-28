@@ -349,18 +349,26 @@ public class SQLiteDatabase extends SQLiteClosable {
      */
     private boolean mLockingEnabled = true;
 
+    private static void handleCorruptFile(String path) {
+        File dbfile = new File(path);
+        File dbdest = new File(path + ".corrupt");
+
+        dbdest.delete();
+        dbfile.renameTo(dbdest);
+    }
+
     /* package */ void onCorruption() {
-        Log.e(TAG, "Removing corrupt database: " + mPath);
+        Log.e(TAG, "Handling corrupt database: " + mPath);
         EventLog.writeEvent(EVENT_DB_CORRUPT, mPath);
         try {
             // Close the database (if we can), which will cause subsequent operations to fail.
             close();
         } finally {
-            // Delete the corrupt file.  Don't re-create it now -- that would just confuse people
+            // Handle the corrupt file.  Don't re-create it now -- that would just confuse people
             // -- but the next time someone tries to open it, they can set it up from scratch.
             if (!mPath.equalsIgnoreCase(":memory")) {
-                // delete is only for non-memory database files
-                new File(mPath).delete();
+                // only for non-memory database files
+                handleCorruptFile(mPath);
             }
         }
     }
@@ -827,11 +835,11 @@ public class SQLiteDatabase extends SQLiteClosable {
         } catch (SQLiteDatabaseCorruptException e) {
             // Try to recover from this, if we can.
             // TODO: should we do this for other open failures?
-            Log.e(TAG, "Deleting and re-creating corrupt database " + path, e);
+            Log.e(TAG, "Handling and re-creating corrupt database " + path, e);
             EventLog.writeEvent(EVENT_DB_CORRUPT, path);
             if (!path.equalsIgnoreCase(":memory")) {
-                // delete is only for non-memory database files
-                new File(path).delete();
+                // only for non-memory database files
+                handleCorruptFile(path);
             }
             sqliteDatabase = new SQLiteDatabase(path, factory, flags);
         }
