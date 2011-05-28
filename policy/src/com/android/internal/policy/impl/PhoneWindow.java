@@ -558,7 +558,9 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
      */
     public final boolean onKeyDownPanel(int featureId, KeyEvent event) {
         final int keyCode = event.getKeyCode();
-        
+        int mCustomLongMenuApp = (Settings.System.getInt(getContext().getContentResolver(),
+        Settings.System.USE_CUSTOM_LONG_MENU, -1));
+
         if (event.getRepeatCount() == 0) {
             // The panel key was pushed, so set the chording key
             mPanelChordingKey = keyCode;
@@ -566,10 +568,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             
             PanelFeatureState st = getPanelState(featureId, true);
             if (!st.isOpen) {
-                if (getContext().getResources().getConfiguration().keyboard
-                        == Configuration.KEYBOARD_NOKEYS) {
-                    mPanelMayLongPress = true;
-                }
+                mPanelMayLongPress = true;
                 return preparePanel(st, event);
             }
             
@@ -579,15 +578,34 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             // should be executed...  do it!
             mPanelChordingKey = 0;
             mPanelMayLongPress = false;
-            InputMethodManager imm = (InputMethodManager)
-                    getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                mDecor.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            if (mCustomLongMenuApp == -1){
+                if (getContext().getResources().getConfiguration().keyboard ==
+                Configuration.KEYBOARD_NOKEYS) {
+                        mCustomLongMenuApp = 1;
+                } else {
+                        mCustomLongMenuApp = 0;
+                }
             }
-            
+            switch (mCustomLongMenuApp){
+                case 0:
+                    return false;
+                case 1:
+                    InputMethodManager imm = (InputMethodManager)
+                    getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if (imm != null) {
+                        mDecor.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                    }
+                    break;
+                case 2:
+                    launchDefaultSearch();
+                    break;
+                case 3:
+                    runCustomApp(Settings.System.getString(getContext().getContentResolver(),
+                    Settings.System.USE_CUSTOM_LONG_MENU_APP_ACTIVITY));
+                    break;
+            }
         }
-
         return false;
     }
 
