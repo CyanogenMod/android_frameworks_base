@@ -915,6 +915,25 @@ public final class Settings {
             }
         }
 
+        /** This function provides a patch to the api change in regards to QUICK_CONTACT.
+            In essence it just replaces the com.android.contacts.action.QUICK_CONTACT string
+            with android.intent.action.VIEW
+        */
+        public static String formatContacts(String str) {
+                String beingReplaced = "com.android.contacts.action.QUICK_CONTACT";
+                String replaceWith = "android.intent.action.VIEW";
+                int index = 0;
+                StringBuffer result = new StringBuffer();
+                if ((index = str.indexOf(beingReplaced))!=-1){
+                        result.append(str.substring(0,index));
+                        result.append(replaceWith);
+                        result.append(str.substring(index+beingReplaced.length()));
+                        return result.toString();
+                }else{
+                        return str;
+                }
+        }
+
         /**
          * Convenience function for updating a single settings value as a long
          * integer. This will either create a new entry in the table if the
@@ -1781,6 +1800,18 @@ public final class Settings {
          * @hide
          */
         public static final String USE_CUSTOM_SEARCH_APP_ACTIVITY = "use_custom_search_app_activity";
+
+        /**
+         * Contains what to do upon long press menu
+         * @hide
+         */
+        public static final String USE_CUSTOM_LONG_MENU = "use_custom_long_press_menu";
+
+        /**
+         * Contains activity to start on long menu key press
+         * @hide
+         */
+        public static final String USE_CUSTOM_LONG_MENU_APP_ACTIVITY = "use_custom_long_menu_app_activity";
 
         /**
          * Specifies whether or not to use a custom app on long search key press
