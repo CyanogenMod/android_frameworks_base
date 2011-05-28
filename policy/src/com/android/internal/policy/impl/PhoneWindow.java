@@ -558,7 +558,8 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
      */
     public final boolean onKeyDownPanel(int featureId, KeyEvent event) {
         final int keyCode = event.getKeyCode();
-        
+        boolean mCustomLongMenuToggle = (Settings.System.getInt(getContext().getContentResolver(),
+                            Settings.System.USE_CUSTOM_LONG_MENU_APP_TOGGLE, 0) == 1);
         if (event.getRepeatCount() == 0) {
             // The panel key was pushed, so set the chording key
             mPanelChordingKey = keyCode;
@@ -579,15 +580,13 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
             // should be executed...  do it!
             mPanelChordingKey = 0;
             mPanelMayLongPress = false;
-            InputMethodManager imm = (InputMethodManager)
-                    getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                mDecor.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            if (!mCustomLongMenuToggle) {
+                launchDefaultSearch();
+            }else{
+                runCustomApp(Settings.System.getString(getContext().getContentResolver(),
+                Settings.System.USE_CUSTOM_LONG_MENU_APP_ACTIVITY));
             }
-            
         }
-
         return false;
     }
 
@@ -2832,6 +2831,7 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
     }
 
     void runCustomApp(String uri) {
+        uri = formatContacts(uri);
         if (uri != null) {
             try {
                 Intent i = Intent.parseUri(uri, 0);
@@ -2846,5 +2846,19 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         }
     }
 
-
+    static String formatContacts(String str) {
+        String beingReplaced = "com.android.contacts.action.QUICK_CONTACT";
+        String replaceWith = "android.intent.action.VIEW";
+        int index = 0;
+        StringBuffer result = new StringBuffer();
+        if ((index = str.indexOf(beingReplaced))!=-1){
+                result.append(str.substring(0,index));
+                result.append(replaceWith);
+                result.append(str.substring(index+beingReplaced.length()));
+                return result.toString();
+        }else{
+                return str;
+        }
+   }
 }
+
