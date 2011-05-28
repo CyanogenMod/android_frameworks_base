@@ -667,7 +667,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     void runCustomApp() {
         String uri = Settings.System.getString(mContext.getContentResolver(),
                 Settings.System.SELECTED_CUSTOM_APP);
-
+        uri = uri.replaceAll("com.android.contacts.action.QUICK_CONTACT", "android.intent.action.VIEW");
         if (uri != null) {
             try {
                 Intent i = Intent.parseUri(uri, 0);
@@ -1448,6 +1448,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     }
                     String appUri = Settings.System.getString(mContext.getContentResolver(),
                             property);
+                    appUri = appUri.replaceAll("com.android.contacts.action.QUICK_CONTACT", "android.intent.action.VIEW");
                     if (appUri != null) {
                         try {
                             Intent qkIntent = Intent.parseUri(appUri, 0);
@@ -2886,5 +2887,4 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
         return workString;
     }
-
 }
