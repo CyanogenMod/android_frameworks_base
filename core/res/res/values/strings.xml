@@ -1929,6 +1929,9 @@
     <!-- Item on EditText context menu. This action is used to select all text in the edit field. -->
     <string name="selectAll">Select all</string>
 
+    <!-- Item on EditText context menu. This action is used to copy all text in the edit field. -->
+    <string name="copyAll">Copy all</string>
+
     <!-- Item on EditText context menu. This action is used to start selecting text in the edit field. [CHAR LIMIT=20] -->
     <string name="selectText">Select word</string>
 
