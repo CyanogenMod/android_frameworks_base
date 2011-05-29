@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * This activity is shown to the user to confirm formatting of external media.
@@ -95,7 +96,13 @@ public class ExternalMediaFormatActivity extends AlertActivity implements Dialog
         if (which == POSITIVE_BUTTON) {
             Intent intent = new Intent(ExternalStorageFormatter.FORMAT_ONLY);
             intent.setComponent(ExternalStorageFormatter.COMPONENT_NAME);
-            startService(intent);
+            if (getIntent().hasExtra("path")) {
+                String path = getIntent().getStringExtra("path");
+                intent.putExtra("path", path);
+                startService(intent);
+            } else {
+                Toast.makeText(this, "Invalid path: null", Toast.LENGTH_LONG).show();
+            }
         }
 
         // No matter what, finish the activity
