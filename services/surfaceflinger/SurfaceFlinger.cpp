@@ -1708,6 +1708,10 @@ status_t SurfaceFlinger::renderScreenToTextureLocked(DisplayID dpy,
 
 // ---------------------------------------------------------------------------
 
+#ifndef ELECTRONBEAM_FRAMES
+ #define ELECTRONBEAM_FRAMES 12
+#endif
+
 status_t SurfaceFlinger::electronBeamOffAnimationImplLocked()
 {
     status_t result = PERMISSION_DENIED;
@@ -1790,8 +1794,8 @@ status_t SurfaceFlinger::electronBeamOffAnimationImplLocked()
         }
     };
 
-    // the full animation is 24 frames
-    const int nbFrames = 12;
+    // the full animation is 2*ELECTRONBEAM_FRAMES frames
+    const int nbFrames = ELECTRONBEAM_FRAMES;
     s_curve_interpolator itr(nbFrames, 7.5f);
     s_curve_interpolator itg(nbFrames, 8.0f);
     s_curve_interpolator itb(nbFrames, 8.5f);

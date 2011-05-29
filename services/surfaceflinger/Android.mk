@@ -46,6 +46,10 @@ ifeq ($(BOARD_AVOID_DRAW_TEXTURE_EXTENSION), true)
 	LOCAL_CFLAGS += -DAVOID_DRAW_TEXTURE
 endif
 
+ifneq ($(TARGET_ELECTRONBEAM_FRAMES),)
+	LOCAL_CFLAGS += -DELECTRONBEAM_FRAMES=$(TARGET_ELECTRONBEAM_FRAMES)
+endif
+
 # need "-lrt" on Linux simulator to pick up clock_gettime
 ifeq ($(TARGET_SIMULATOR),true)
 	ifeq ($(HOST_OS),linux)

@@ -749,7 +749,8 @@
     <string name="anr_application_process" msgid="4185842666452210193">"Приложение <xliff:g id="APPLICATION">%1$s</xliff:g> (в процессе <xliff:g id="PROCESS">%2$s</xliff:g>) не отвечает."</string>
     <string name="anr_process" msgid="1246866008169975783">"Процесс <xliff:g id="PROCESS">%1$s</xliff:g> не отвечает."</string>
     <string name="force_close" msgid="3653416315450806396">"Закрыть"</string>
-    <string name="report" msgid="4060218260984795706">"Отзыв"</string>
+    <string name="report" msgid="4060218260984795706">"Отчёт"</string>
+    <string name="reset_perms">Сбросить разрешения</string>
     <string name="wait" msgid="7147118217226317732">"Подождать"</string>
     <string name="launch_warning_title" msgid="8323761616052121936">"Приложение перенаправлено"</string>
     <string name="launch_warning_replace" msgid="6202498949970281412">"Приложение <xliff:g id="APP_NAME">%1$s</xliff:g> выполняется."</string>
@@ -956,5 +957,16 @@
 
     <!-- label for item that emulates the hardware button: back -->
     <string name="global_action_back">Назад</string>
+
+    <!-- Title of the alert when an application is not responding. -->
+    <string name="aerr_revoked_application">Приложение <xliff:g id="application">%1$s</xliff:g>
+        (процесс <xliff:g id="process">%2$s</xliff:g>) было неожиданно остановлено.\nВнимание!\nЭто приложение имеет одно или несколько изменений в разрешениях, что может привести к его неисправности. Пожалуйста, предоставьте необходимые разрешения и попробуйте ещё раз.</string>
+    <!-- Text of the alert that is displayed when an application has crashed. -->
+    <string name="aerr_revoked_process">Процесс <xliff:g id="process">%1$s</xliff:g> был неожиданно остановлен.\nВнимание!\nЭтот процесс имеет одно или несколько изменений в разрешениях, что может привести к его неисправности. Пожалуйста, предоставьте необходимые разрешения и попробуйте ещё раз.</string>
+
+    <!-- Title of an application permission that lets an application view/edit revoked permissions. -->
+    <string name="permlab_revokePermissions">Позволяет просматривать и редактировать изменённые разрешения. Не для использования обычными приложениями.</string>
+    <!-- Description of an application permission that lets lets an application view/edit revoked permissions. -->
+    <string name="permdesc_revokePermissions">Позволяет читать и записывать изменённые разрешения. Не для использования обычными приложениями.</string>
 
 </resources>

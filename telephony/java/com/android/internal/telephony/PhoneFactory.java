@@ -21,6 +21,7 @@ import android.net.LocalServerSocket;
 import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
+import android.os.SystemProperties;
 
 import com.android.internal.telephony.cdma.CDMAPhone;
 import com.android.internal.telephony.gsm.GSMPhone;
@@ -107,7 +108,17 @@ public class PhoneFactory {
                 Log.i(LOG_TAG, "Cdma Subscription set to " + Integer.toString(cdmaSubscription));
 
                 //reads the system properties and makes commandsinterface
-                sCommandsInterface = new RIL(context, networkMode, cdmaSubscription);
+
+                String sRILClassname = SystemProperties.get("ro.telephony.ril_class");
+                Log.i(LOG_TAG, "RILClassname is " + sRILClassname);
+
+                if("samsung".equals(sRILClassname))
+                {
+                    Log.i(LOG_TAG, "Using Samsung RIL");
+                    sCommandsInterface = new SamsungRIL(context, networkMode, cdmaSubscription);
+                } else {
+                    sCommandsInterface = new RIL(context, networkMode, cdmaSubscription);
+                }
 
                 int phoneType = getPhoneType(networkMode);
                 if (phoneType == Phone.PHONE_TYPE_GSM) {

@@ -7469,6 +7469,9 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
                 menu.add(0, ID_SELECT_ALL, 0, com.android.internal.R.string.selectAll).
                      setOnMenuItemClickListener(handler).
                      setAlphabeticShortcut('a');
+                menu.add(0, ID_COPY_ALL, 0, com.android.internal.R.string.copyAll).
+                setOnMenuItemClickListener(handler).
+                setAlphabeticShortcut('b');
                 added = true;
             }
 
@@ -7535,6 +7538,7 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
     private static final int ID_COPY_URL = android.R.id.copyUrl;
     private static final int ID_SWITCH_INPUT_METHOD = android.R.id.switchInputMethod;
     private static final int ID_ADD_TO_DICTIONARY = android.R.id.addToDictionary;
+    private static final int ID_COPY_ALL = com.android.internal.R.id.copyAll;
 
     private class MenuHandler implements MenuItem.OnMenuItemClickListener {
         public boolean onMenuItemClick(MenuItem item) {
@@ -7623,6 +7627,10 @@ public class TextView extends View implements ViewTreeObserver.OnPreDrawListener
                     i.setFlags(i.getFlags() | Intent.FLAG_ACTIVITY_NEW_TASK);
                     getContext().startActivity(i);
                 }
+                return true;
+
+            case ID_COPY_ALL:
+                clip.setText(mText);
                 return true;
             }
 

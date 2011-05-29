@@ -52,6 +52,7 @@ import android.os.ParcelFileDescriptor;
 import android.os.BatteryManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.os.Vibrator;
 import android.provider.Settings;
 
 import java.util.ArrayList;
@@ -1082,12 +1083,12 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     }
 
     static CharSequence getCarrierString(CharSequence telephonyPlmn, CharSequence telephonySpn) {
-        if (telephonyPlmn != null && telephonySpn == null) {
+        if (telephonyPlmn != null && (telephonySpn == null || "".contentEquals(telephonySpn))) {
             return telephonyPlmn;
+        } else if (telephonySpn != null && (telephonyPlmn == null || "".contentEquals(telephonyPlmn))) {
+            return telephonySpn;
         } else if (telephonyPlmn != null && telephonySpn != null) {
             return telephonyPlmn + "|" + telephonySpn;
-        } else if (telephonyPlmn == null && telephonySpn != null) {
-            return telephonySpn;
         } else {
             return "";
         }
@@ -1199,7 +1200,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     public void onGesturePerformed(GestureOverlayView overlay, Gesture gesture) {
         ArrayList<Prediction> predictions = mLibrary.recognize(gesture);
         if (predictions.size() > 0 && predictions.get(0).score > mGestureSensitivity) {
-            String[] payload = predictions.get(0).name.split("___", 2);
+            String[] payload = predictions.get(0).name.split("___", 3);
             String uri = payload[1];
             if (uri != null) {
                 if ("UNLOCK".equals(uri)) {
@@ -1216,7 +1217,20 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                         i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                                 | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
                         mContext.startActivity(i);
-                        mCallback.goToUnlockScreen();
+                        // Run in background if requested
+                        if (payload.length > 2) {
+                            // Define vibrator
+                            Vibrator v = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+                            // Vibrate pattern when gesture is correct
+                            long[] pattern = {
+                                0, 200
+                            };
+                            v.vibrate(pattern, -1);
+
+                            mCallback.pokeWakelock();
+                        } else {
+                            mCallback.goToUnlockScreen();
+                        }
                     } catch (URISyntaxException e) {
                     } catch (ActivityNotFoundException e) {
                     }
@@ -1225,7 +1239,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             mCallback.pokeWakelock(); // reset timeout - give them another chance to gesture
         }
     }
-// shameless kang of music widgets
+
+    // shameless kang of music widgets
     public static Uri getArtworkUri(Context context, long song_id, long album_id) {
 
         if (album_id < 0) {

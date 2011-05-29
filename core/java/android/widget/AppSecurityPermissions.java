@@ -52,7 +52,7 @@ import java.util.Set;
  * 
  * {@hide}
  */
-public class AppSecurityPermissions  implements View.OnClickListener {
+public class AppSecurityPermissions  extends AppSecurityPermissionsBase {
 
     private enum State {
         NO_PERMS,

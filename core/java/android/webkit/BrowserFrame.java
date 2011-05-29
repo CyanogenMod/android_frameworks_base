@@ -362,7 +362,8 @@ class BrowserFrame extends Handler {
             mFirstLayoutDone = true;
             // ensure {@link WebViewCore#webkitDraw} is called as we were
             // blocking the update in {@link #loadStarted}
-            mWebViewCore.contentDraw();
+            //we pass false as the parameter paintHeader to contentDraw since here we are not painting a cached header
+            mWebViewCore.contentDraw(false);
         }
     }
 

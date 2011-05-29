@@ -2771,6 +2771,25 @@ class ContextImpl extends Context {
             return PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
         }
 
+        @Override
+        public String[] getRevokedPermissions(String packageName) {
+            try {
+                return mPM.getRevokedPermissions(packageName);
+            } catch (RemoteException e) {
+                // Should never happen!
+            }
+            return new String[0];
+        }
+
+        @Override
+        public void setRevokedPermissions(String packageName, String[] perms) {
+            try {
+                mPM.setRevokedPermissions(packageName, perms);
+            } catch (RemoteException e) {
+                // Should never happen!
+            }
+        }
+
         private final ContextImpl mContext;
         private final IPackageManager mPM;
 

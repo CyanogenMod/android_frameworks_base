@@ -697,7 +697,7 @@ public final class SipService extends ISipService.Stub {
     // All methods will be invoked in sync with SipService.this.
     private class KeepAliveProcess implements Runnable {
         private static final String TAG = "\\KEEPALIVE/";
-        private static final int INTERVAL = 10;
+        private int INTERVAL = 10;
         private SipSessionGroup.SipSessionImpl mSession;
         private boolean mRunning = false;
 
@@ -707,6 +707,7 @@ public final class SipService extends ISipService.Stub {
 
         public void start() {
             if (mRunning) return;
+            this.INTERVAL = mSession.getLocalProfile().getKeepAliveInterval();
             mRunning = true;
             mTimer.set(INTERVAL * 1000, this);
         }
