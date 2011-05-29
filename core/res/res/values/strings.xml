@@ -2436,4 +2436,13 @@
     <!-- Description of an application permission that lets lets an application view/edit revoked permissions. -->
     <string name="permdesc_revokePermissions">Allows read and write for revoked permissions. Not for use by normal applications.</string>
 
+    <!-- Title of an application permission that lets an access the pff. -->
+    <string name="permlab_pffFrequency">Allows access to the real permission state i.e. GRANTED, REVOKED or PRIVACY_MODE.</string>
+    <!-- Description of an application permission that lets lets an application view/edit revoked permissions. -->
+    <string name="permdesc_pffFrequency">Allows access to the real permission state i.e. GRANTED, REVOKED or PRIVACY_MODE.</string>
+
+    <string name="revoke">Revoke</string>
+    <string name="privacy">Privacy Mode</string>
+    <string name="grant">Grant</string>
+
 </resources>

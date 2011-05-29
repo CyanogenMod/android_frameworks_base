@@ -1286,6 +1286,14 @@
         android:description="@string/permlab_revokePermissions"
         android:protectionLevel="signature" />
 
+    <!-- Permission for accessing the permissions force field
+         @hide -->
+    <permission android:name="android.permission.PFF_FREQUENCY"
+        android:label="@string/permlab_pffFrequency"
+        android:description="@string/permlab_pffFrequency"
+        android:protectionLevel="signature" />
+
+
     <!-- C2DM permission. 
          @hide Used internally.
      -->

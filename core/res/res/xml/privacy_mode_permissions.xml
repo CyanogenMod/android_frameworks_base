@@ -1,0 +1,8 @@
+<!--
+This file describes information protected by which permissions can be data protected.
+If you add anything here make sure that the implementation DO support protecting the data 
+--> 
+
+<protected-perms>
+
+</protected-perms>

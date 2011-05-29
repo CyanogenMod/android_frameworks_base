@@ -190,6 +190,20 @@ public abstract class PackageManager {
     public static final int PERMISSION_DENIED = -1;
 
     /**
+     * Permission check result: this is returned by {@link #pffCheckPermission}
+     * if the permission has been granted to the given package.
+     * @hide
+     */
+    public static final int PERMISSION_REVOKED = 0xFF;
+
+    /**
+     * Permission check result: this is returned by {@link #pffCheckPermission}
+     * if the permission has not been granted to the given package.
+     * @hide
+     */
+    public static final int PERMISSION_PRIVACY_MODE = 0x1FF;
+
+    /**
      * Signature check result: this is returned by {@link #checkSignatures}
      * if all signatures on the two packages match.
      */
@@ -2249,7 +2263,7 @@ public abstract class PackageManager {
      */
     public abstract void setApplicationEnabledSetting(String packageName,
             int newState, int flags);
-    
+
     /**
      * Return the the enabled setting for an application.  This returns
      * the last value set by
@@ -2313,5 +2327,29 @@ public abstract class PackageManager {
      * @hide
      */
     public abstract void setRevokedPermissions(String packageName, String[] perms);
+
+    /**
+     * Returns the permissions that have their data protected for given package.
+     * <p>
+     * NOTE: If the package has a shared uid then the data protected permissions 
+     *       for that uid will be returned.
+     *
+     * @param packageName Name of the package which revoked permissions are needed
+     * @hide
+     */
+
+    public abstract String[] getPrivacyModePermissions(String packageName);
+
+    /**
+     * Sets the permissions that have their data protected for given package.
+     * <p>
+     * NOTE: If the package has a shared uid then the data protected permissions 
+     *       for that uid will set.
+     *
+     * @param packageName Name of the package which revoked permissions are needed
+     * @param the data protected permissions.
+     * @hide
+     */
+    public abstract void setPrivacyModePermissions(String packageName, String[] perms);
 
 }

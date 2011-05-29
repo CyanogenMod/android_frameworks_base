@@ -330,4 +330,11 @@ interface IPackageManager {
 
     void setRevokedPermissions(String packageName, in String[] perms);
 
+    String[] getPrivacyModePermissions(String packageName);
+
+    void setPrivacyModePermissions(String packageName, in String[] perms);
+
+    int pffCheckPermission(String permName, String pkgName);
+
+    int pffCheckUidPermission(String pkgName, int uid);
 }

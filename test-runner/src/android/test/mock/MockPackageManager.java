@@ -514,4 +514,19 @@ public class MockPackageManager extends PackageManager {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * @hide
+     */
+    @Override
+    public String[] getPrivacyModePermissions(String packageName) {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * @hide
+     */
+    @Override
+    public void setPrivacyModePermissions(String packageName, String[] perms) {
+        throw new UnsupportedOperationException();
+    }
 }

@@ -17,6 +17,7 @@
 package android.widget;
 
 import com.android.internal.R;
+import com.android.internal.util.XmlUtils;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -27,12 +28,15 @@ import android.content.pm.PermissionGroupInfo;
 import android.content.pm.PermissionInfo;
 import android.graphics.drawable.Drawable;
 import android.text.SpannableString;
+import android.text.style.CharacterStyle;
 import android.text.style.StrikethroughSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 
+import java.io.IOException;
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,6 +48,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
 /**
  * This class contains the SecurityPermissions view implementation.
@@ -68,25 +75,105 @@ public class AppSecurityEditablePermissions extends AppSecurityPermissionsBase{
     private class EditableListener implements OnClickListener {
 
         @Override
-        public void onClick(View v) {
-            PermissionInfo pi = (PermissionInfo) v.getTag();
-            TextView text = (TextView) v.findViewById(R.id.editable_permission);
-            SpannableString ss = (SpannableString) text.getText();
+        public void onClick(final View v) {
+            final int id = v.getId();
+            final PermissionInfo pi = (PermissionInfo) v.getTag(); 
+            switch (id) {
+            case R.layout.app_editable_permission:
+                toggleRevoke(pi, (TextView)v.findViewById(R.id.editable_permission));
+                break;
+            case R.id.privacy_button:
+                protectPerm(pi, getTextViewFromButton(v));
+                break;
+            case R.id.revoke_button:
+                revokePerm(pi, getTextViewFromButton(v));
+                break;
+            case R.id.grant_button:
+                grantPerm(pi, getTextViewFromButton(v));
+                break;
+            }
+        }
+
+        private void protectPerm(final PermissionInfo pi, final TextView text) {
+            final SpannableString ss = (SpannableString) text.getText();
+            if (!mProtectedPerms.contains(pi.name)) {
+                replaceSpans(ss, new UnderlineSpan());
+                mPm.setPrivacyModePermissions(mPackageName,
+                        addPermToList(mProtectedPerms, pi));
+            }
+        }
+
+        private void revokePerm(final PermissionInfo pi, final TextView text) {
+            final SpannableString ss = (SpannableString) text.getText();
+            if (!mRevokedPerms.contains(pi.name)) {
+                replaceSpans(ss, new StrikethroughSpan());
+                mPm.setRevokedPermissions(mPackageName,
+                        addPermToList(mRevokedPerms, pi));
+            }
+        }
+
+        private void grantPerm(final PermissionInfo pi, final TextView text) {
+            final SpannableString ss = (SpannableString) text.getText();
+            replaceSpans(ss, null);
+            if (mRevokedPerms.contains(pi.name)) {
+                mPm.setRevokedPermissions(mPackageName, 
+                        removePermFromList(mRevokedPerms, pi));
+            }
+
+            if (mProtectedPerms.contains(pi.name)) {
+                mPm.setPrivacyModePermissions(mPackageName,
+                        removePermFromList(mProtectedPerms, pi));
+            }
+        }
+
+        private String[] removePermFromList(final HashSet<String> set, final PermissionInfo pi) {
+            set.remove(pi.name);
+            final String[] rp = new String[set.size()];
+            set.toArray(rp);
+            return rp;
+        }
+
+        private String[] addPermToList(final HashSet<String> set, final PermissionInfo pi) {
+            set.add(pi.name);
+            final String[] rp = new String[set.size()];
+            set.toArray(rp);
+            return rp;
+        }
+
+        private TextView getTextViewFromButton(final View from) {
+            final View llayout = (View)from.getParent();
+            final View rlayout = (View)llayout.getParent();
+            return (TextView) rlayout.findViewById(R.id.editable_permission);
+        }
+
+        private void toggleRevoke(final PermissionInfo pi, final TextView text) {
+            final SpannableString ss = (SpannableString) text.getText();
 
             if (mRevokedPerms.contains(pi.name)) {
-                mRevokedPerms.remove(pi.name);
-                StrikethroughSpan[] spans = ss.getSpans(0, text.length(), StrikethroughSpan.class);
-                for (StrikethroughSpan span: spans) {
-                    ss.removeSpan(span);
-                }
+                mPm.setRevokedPermissions(mPackageName,
+                        removePermFromList(mRevokedPerms, pi));
+                replaceSpans(ss, null);
             }
             else {
                 mRevokedPerms.add(pi.name);
-                ss.setSpan(new StrikethroughSpan(), 0, text.length(), 0);
+                mPm.setRevokedPermissions(mPackageName,
+                        addPermToList(mRevokedPerms, pi));
+                replaceSpans(ss, new StrikethroughSpan());
             }
-            String[] rp = new String[mRevokedPerms.size()];
-            mRevokedPerms.toArray(rp);
-            mPm.setRevokedPermissions(mPackageName, rp);
+        }
+
+        private void replaceSpans(final SpannableString ss, final Object newSpan) {
+            final StrikethroughSpan[] spans = ss.getSpans(0, ss.length(), StrikethroughSpan.class);
+            for (StrikethroughSpan span: spans) {
+                ss.removeSpan(span);
+            }
+            final UnderlineSpan[] uspans = ss.getSpans(0, ss.length(), UnderlineSpan.class);
+            for (UnderlineSpan span: uspans) {
+                ss.removeSpan(span);
+            }
+            if (newSpan != null) {
+                ss.setSpan(newSpan, 0, ss.length(), 0);
+            }
         }
     }
 
@@ -115,6 +202,8 @@ public class AppSecurityEditablePermissions extends AppSecurityPermissionsBase{
     private LinearLayout mDangerousList;
     private HashMap<String, CharSequence> mGroupLabelCache;
     private HashSet<String> mRevokedPerms;
+    private HashSet<String> mProtectedPerms;
+    private HashSet<String> mProtectablePerms;
     private View mNoPermsView;
     private String mPackageName;
 
@@ -125,6 +214,9 @@ public class AppSecurityEditablePermissions extends AppSecurityPermissionsBase{
         mRevokedPerms = new HashSet<String>();
         String[] revoked = mPm.getRevokedPermissions(packageName);
         mRevokedPerms.addAll(Arrays.asList(revoked));
+        mProtectedPerms = new HashSet<String>();
+        String[] protectedPerms = mPm.getPrivacyModePermissions(packageName);
+        mProtectedPerms.addAll(Arrays.asList(protectedPerms));
         mPermsList = new ArrayList<PermissionInfo>();
         Set<PermissionInfo> permSet = new HashSet<PermissionInfo>();
         PackageInfo pkgInfo;
@@ -140,6 +232,39 @@ public class AppSecurityEditablePermissions extends AppSecurityPermissionsBase{
         }
         for(PermissionInfo tmpInfo : permSet) {
             mPermsList.add(tmpInfo);
+        }
+        mProtectablePerms = new HashSet<String>();
+        readPrivacyModeEnabledPerms(mProtectablePerms);
+    }
+
+    private void readPrivacyModeEnabledPerms(HashSet<String> outPerms) {
+        XmlPullParser parser = mContext.getResources().getXml(R.xml.privacy_mode_permissions);
+        try {
+            int type;
+            while ((type=parser.next()) != XmlPullParser.START_TAG
+                       && type != XmlPullParser.END_DOCUMENT) {
+                ;
+            }
+            int outerDepth = parser.getDepth();
+            while ((type=parser.next()) != XmlPullParser.END_DOCUMENT
+                   && (type != XmlPullParser.END_TAG
+                           || parser.getDepth() > outerDepth)) {
+                if (type == XmlPullParser.END_TAG
+                        || type == XmlPullParser.TEXT) {
+                    continue;
+                }
+
+                String tagName = parser.getName();
+                if (tagName.equals("item")) {
+                    String name = parser.getAttributeValue(null, "name");
+                    if (name != null) {
+                        outPerms.add(name.intern());
+                    }
+                }
+                XmlUtils.skipCurrentTag(parser);
+            }
+        } catch (XmlPullParserException e) {
+        } catch (IOException e) {
         }
     }
 
@@ -296,15 +421,23 @@ public class AppSecurityEditablePermissions extends AppSecurityPermissionsBase{
         if(grpName != null) {
             permGrpView.setText(grpName);
             for (PermissionInfo pi: list) {
-                View ePermView = mInflater.inflate(R.layout.app_editable_permission, null);           
+                View ePermView = mInflater.inflate(R.layout.app_editable_permission, null);
                 TextView editablePermView = (TextView) ePermView.findViewById(R.id.editable_permission);
                 ImageView editableImgView = (ImageView) ePermView.findViewById(R.id.editable_permission_icon);
+                View protectButton = (TextView) ePermView.findViewById(R.id.privacy_button);
+                View grantButton = (TextView) ePermView.findViewById(R.id.grant_button);
+                View revokeButton = (TextView) ePermView.findViewById(R.id.revoke_button);
+                protectButton.setOnClickListener(mEditableListener);
+                grantButton.setOnClickListener(mEditableListener);
+                revokeButton.setOnClickListener(mEditableListener);
                 editableImgView.setImageDrawable(icon);
-
                 CharSequence permDesc = pi.loadLabel(mPm);
                 SpannableString text = new SpannableString(permDesc + " (" + pi.name + ")");
                 if (mRevokedPerms.contains(pi.name)) {
                     text.setSpan(new StrikethroughSpan(), 0, text.length(), 0);
+                }
+                else if (mProtectedPerms.contains(pi.name)) {
+                    text.setSpan(new UnderlineSpan(), 0, text.length(), 0);
                 }
                 editablePermView.setText(text, TextView.BufferType.SPANNABLE);
                 ePermView.setVisibility(View.VISIBLE);
@@ -313,7 +446,14 @@ public class AppSecurityEditablePermissions extends AppSecurityPermissionsBase{
                 ePermView.setClickable(true);
                 ePermView.setTag(pi);
                 ePermView.setOnClickListener(mEditableListener);
+                ePermView.setId(R.layout.app_editable_permission);
+                protectButton.setTag(pi);
+                grantButton.setTag(pi);
+                revokeButton.setTag(pi);
                 permDescView.addView(ePermView);
+                protectButton.setVisibility(mProtectablePerms.contains(pi.name) ? View.VISIBLE : View.GONE);
+                protectButton.setTag(pi);
+                revokeButton.setTag(pi);
             }
             permDescView.setVisibility(View.VISIBLE);
         } else {
