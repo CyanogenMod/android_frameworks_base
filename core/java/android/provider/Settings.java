@@ -2615,6 +2615,12 @@ public final class Settings {
         */
         public static final String ELECTRON_BEAM_ANIMATION_OFF = "electron_beam_animation_off";
 
+        /** 
+        * Animate screen lights
+        * @hide
+        */
+        public static final String ANIMATE_SCREEN_LIGHTS = "animate_screen_lights";
+
         /**
          * Enables the overscroller (edge bounce effect on lists)
          * @hide
