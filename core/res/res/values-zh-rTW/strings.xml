@@ -1701,6 +1701,9 @@
     <!-- Item on EditText context menu. This action is used to select all text in the edit field. -->
     <string name="selectAll" msgid="6876518925844129331">"全部選取"</string>
 
+    <!-- Item on EditText context menu. This action is used to copy all text in the edit field. -->
+    <string name="copyAll">全部複製</string>
+
     <!-- Item on EditText context menu. This action is used to start selecting text in the edit field. [CHAR LIMIT=20] -->
     <string name="selectText" msgid="4862359311088898878">"選取字詞"</string>
 
