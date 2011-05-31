@@ -26,7 +26,8 @@ copy_from :=                \
     DroidSerif-Italic.ttf   \
     DroidSerif-BoldItalic.ttf   \
     DroidSansMono.ttf        \
-    Clockopia.ttf
+    Clockopia.ttf           \
+    MTLmr3m.ttf
 
 ifneq ($(NO_FALLBACK_FONT),true)
 ifeq ($(filter %system/fonts/DroidSansFallback.ttf,$(PRODUCT_COPY_FILES)),)
