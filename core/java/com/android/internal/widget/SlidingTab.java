@@ -809,7 +809,8 @@ public class SlidingTab extends ViewGroup {
             mVibrator = (android.os.Vibrator)
                     getContext().getSystemService(Context.VIBRATOR_SERVICE);
         }
-        mVibrator.vibrate(Integer.parseInt((Settings.System.getString(getContext().getContentResolver(),Settings.System.HAPTIC_DOWN_ARRAY)).split( ",\\s*" )[0]));
+        long[] hapFeedback = stringToLongArray(Settings.System.getString(getContext().getContentResolver(),Settings.System.HAPTIC_DOWN_ARRAY));
+        mVibrator.vibrate(hapFeedback, -1);
     }
 
     /**
@@ -843,6 +844,22 @@ public class SlidingTab extends ViewGroup {
                 mOnTriggerListener.onGrabbedStateChange(this, mGrabbedState);
             }
         }
+    }
+
+     private long[] stringToLongArray(String inpString) {
+        if (inpString == null) {
+            long[] returnLong = new long[1];
+            returnLong[0] = 0;
+            return returnLong;
+        }
+        String[] splitStr = inpString.split(",");
+        int los = splitStr.length;
+        long[] returnLong = new long[los];
+        int i;
+        for (i = 0; i < los; i++) {
+            returnLong[i] = Long.parseLong(splitStr[i].trim());
+        }
+        return returnLong;
     }
 
     private void log(String msg) {
