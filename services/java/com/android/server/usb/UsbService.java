@@ -160,12 +160,13 @@ public class UsbService extends IUsbManager.Stub {
                 if (name != null && state != null) {
                     try {
                         if (mLegacy) {
-                            int intState = (state == "offline" ? 0 : 1);
+                            int intState = ("online".equals(state) ? 1 : 0);
                             if ("usb_mass_storage".equals(name)) {
                                 mConnected = intState;
+                                mConfiguration = intState;
                                 // trigger an Intent broadcast
                                 if (mSystemReady) {
-                                    // debounce disconnects to avoid problems b$
+                                    // debounce disconnects to avoid problems bringing up USB tethering
                                     update(mConnected == 0);
                                 }
                             }
@@ -228,9 +229,13 @@ public class UsbService extends IUsbManager.Stub {
 
             // Watch for USB configuration changes
             if (mConfiguration >= 0) {
-                mUEventObserver.startObserving(USB_CONNECTED_MATCH);
-                mUEventObserver.startObserving(USB_CONFIGURATION_MATCH);
-                mUEventObserver.startObserving(USB_FUNCTIONS_MATCH);
+                if (mLegacy) {
+                    mUEventObserver.startObserving(USB_LEGACY_MATCH);
+                } else {
+                    mUEventObserver.startObserving(USB_CONNECTED_MATCH);
+                    mUEventObserver.startObserving(USB_CONFIGURATION_MATCH);
+                    mUEventObserver.startObserving(USB_FUNCTIONS_MATCH);
+                }
             }
         }
     }
@@ -259,9 +264,9 @@ public class UsbService extends IUsbManager.Stub {
                 FileReader file = new FileReader(USB_LEGACY_PATH);
                 int len = file.read(buffer, 0, 1024);
                 file.close();
-                mConnected = ((new String(buffer, 0, len)).trim() == "offline" ? 0 : 1);
+                mConnected = ("online".equals((new String(buffer, 0, len))) ? 1 : 0);
                 mLegacy = true;
-
+                mConfiguration = 0;
             } catch (FileNotFoundException f) {
                 Slog.i(TAG, "This kernel does not have legacy USB configuration switch support");
             } catch (Exception f) {
@@ -276,7 +281,7 @@ public class UsbService extends IUsbManager.Stub {
         }
 
         if (mLegacy) {
-            mEnabledFunctions.add(UsbManager.USB_FUNCTION_MASS_STORAGE);
+            mDisabledFunctions.add(UsbManager.USB_FUNCTION_MASS_STORAGE);
         } else {
             // Read initial list of enabled and disabled functions (device mode)
             try {
