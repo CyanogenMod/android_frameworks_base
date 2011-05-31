@@ -931,8 +931,9 @@ public class RotarySelector extends View {
             mVibrator = (android.os.Vibrator)
                     getContext().getSystemService(Context.VIBRATOR_SERVICE);
         }
+        final boolean hapticsEnabled = Settings.System.getInt(mContext.getContentResolver(), Settings.System.HAPTIC_FEEDBACK_ENABLED, 0) == 1;
         long[] hapFeedback = stringToLongArray(Settings.System.getString(getContext().getContentResolver(),Settings.System.HAPTIC_DOWN_ARRAY));
-        mVibrator.vibrate(hapFeedback, -1);
+        if (hapticsEnabled) mVibrator.vibrate(hapFeedback, -1);
     }
 
     /**
