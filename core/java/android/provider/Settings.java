@@ -934,6 +934,74 @@ public final class Settings {
 
         /**
          * Convenience function for retrieving a single system settings value
+         * as an array of {@code long}.  Note that internally setting values are always
+         * stored as strings; this function converts the string to a {@code long}
+         * array for you.  The default value will be returned if the setting is
+         * not defined or not a {@code long} array.
+         *
+         * @param cr The ContentResolver to access.
+         * @param name The name of the setting to retrieve.
+         * @param def Value to return if the setting is not defined.
+         *
+         * @return The setting's current value, or 'def' if it is not defined
+         * or not a valid {@code long}.
+         */
+        public static long[] getLongArray(ContentResolver cr, String name, long[] def) {
+            String valString = getString(cr, name);
+            long[] value;
+
+            try {
+                value = valString != null ? stringToLongArray(valString) : def;
+            } catch (NumberFormatException e) {
+                value = def;
+            }
+            return value;
+        }
+
+        /**
+         * Convenience function for retrieving a single system settings value
+         * as an array of {@code long}.  Note that internally setting values are always
+         * stored as strings; this function converts the string to a {@code long} array
+         * for you.
+         * <p>
+         * This version does not take a default value.  If the setting has not
+         * been set, or the string value is not a number,
+         * it throws {@link SettingNotFoundException}.
+         *
+         * @param cr The ContentResolver to access.
+         * @param name The name of the setting to retrieve.
+         *
+         * @return The setting's current value.
+         * @throws SettingNotFoundException Thrown if a setting by the given
+         * name can't be found or the setting value is not a long array.
+         */
+        public static long[] getLongArray(ContentResolver cr, String name)
+                throws SettingNotFoundException {
+            String valString = getString(cr, name);
+            try {
+                return stringToLongArray(valString);
+            } catch (NumberFormatException e) {
+                throw new SettingNotFoundException(name);
+            }
+        }
+
+        private static long[] stringToLongArray(String inpString)
+                throws NumberFormatException {
+            if (inpString == null) {
+                throw new NumberFormatException();
+            }
+            String[] splitStr = inpString.split(",");
+            int los = splitStr.length;
+            long[] returnLong = new long[los];
+            int i;
+            for (i = 0; i < los; i++) {
+                returnLong[i] = Long.parseLong(splitStr[i].trim());
+            }
+            return returnLong;
+        }
+
+        /**
+         * Convenience function for retrieving a single system settings value
          * as a floating point number.  Note that internally setting values are
          * always stored as strings; this function converts the string to an
          * float for you. The default value will be returned if the setting
