@@ -154,14 +154,78 @@ static jint android_hardware_fmradio_FmReceiverJNI_setControlNative
 }
 
 /* native interface */
+static jint android_hardware_fmradio_FmReceiverJNI_seek_FW
+    (JNIEnv * env, jobject thiz, jint fd)
+{
+    int retval = system("hcitool cmd 0x3f 0x135 0x0f 0x02 0x00 0x00 0x10");
+    retval = system("hcitool cmd 0x3f 0x135 0x1b 0x02 0x00 0x00 0x01");
+    retval = system("hcitool cmd 0x3f 0x135 0x2d 0x02 0x00 0x00 0x02");
+    LOGD("seek_FW() %d", retval);
+
+    return retval;
+}
+
+/* native interface */
+static jint android_hardware_fmradio_FmReceiverJNI_seek_BK
+    (JNIEnv * env, jobject thiz, jint fd)
+{
+    int retval = system("hcitool cmd 0x3f 0x135 0x0f 0x02 0x00 0x00 0x10");
+    retval = system("hcitool cmd 0x3f 0x135 0x1b 0x02 0x00 0x00 0x00");
+    retval = system("hcitool cmd 0x3f 0x135 0x2d 0x02 0x00 0x00 0x02");
+    LOGD("seek_BK() %d", retval);
+
+    return retval;
+}
+
+/* native interface */
+static jint android_hardware_fmradio_FmReceiverJNI_IsSeek
+    (JNIEnv * env, jobject thiz, jint fd)
+{
+    return 1;
+}
+
+static int HexStr2Int(const char* szHexStr)
+{
+     unsigned long Result;
+     sscanf(szHexStr, "%lx", &Result);
+     return Result;
+}
+
+/* native interface */
 static jint android_hardware_fmradio_FmReceiverJNI_getFreqNative
     (JNIEnv * env, jobject thiz, jint fd)
 {
-    //TODO it actually never read the frequency, but this is not implemented correctly nevertheless
-    int retval = system("hcitool cmd 0x3f 0x133 0x0a 0x02 0x00");
-    LOGD("getFreqNative() %d", retval);
+FILE *pRunPipe=NULL;
+char sAux[200];
+char sLow[3];
+char sHigh[3];
+char sNoValid[3];
+char sResult[5];
 
-    return retval;
+    // Create a pipe and wait for tool answere
+    pRunPipe = popen("hcitool cmd 0x3F 0x133 0x0A 0x02 0x00", "r");
+    if (pRunPipe)
+    {
+        // Wait until pipe finish
+        while (!feof(pRunPipe))
+            fgets(sAux, 200, pRunPipe);
+        pclose(pRunPipe);
+
+        // Check if we get a valid answere
+        if ( strstr(sAux, "  01 33 FD 00 ") )
+        {
+            // Convert result data into HEX to get the freq.
+            sscanf(sAux,"  01 33 FD 00 %s %s%s",sLow,sHigh,sNoValid);
+            sprintf(sResult,"%s%s",sLow,sHigh);
+
+            // Return FM actual freq.
+            return (HexStr2Int( sResult ) * 50 + 87500);
+        }
+        else
+            return FM_JNI_FAILURE;
+    else
+        return FM_JNI_FAILURE;
+
 }
 
 /*native interface */

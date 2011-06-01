@@ -266,6 +266,27 @@ static jint android_hardware_fmradio_FmReceiverJNI_closeFdNative
  *******************************************************************/
 
 /* native interface */
+static jint android_hardware_fmradio_FmReceiverJNI_seek_FW
+    (JNIEnv * env, jobject thiz, jint fd)
+{
+    return 0;
+}
+
+/* native interface */
+static jint android_hardware_fmradio_FmReceiverJNI_seek_BK
+    (JNIEnv * env, jobject thiz, jint fd)
+{
+    return 0;
+}
+
+/* native interface */
+static jint android_hardware_fmradio_FmReceiverJNI_IsSeek
+    (JNIEnv * env, jobject thiz, jint fd)
+{
+    return 0;
+}
+
+/* native interface */
 static jint android_hardware_fmradio_FmReceiverJNI_getFreqNative
     (JNIEnv * env, jobject thiz, jint fd)
 {
