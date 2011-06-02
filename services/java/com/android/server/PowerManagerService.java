@@ -1012,8 +1012,11 @@ class PowerManagerService extends IPowerManager.Stub
             if ((wl.flags & LOCK_MASK) == PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK) {
                 mProximityWakeLockCount--;
                 if (mProximityWakeLockCount == 0) {
+                    int buggyProximity = Settings.System.getInt(mContext.getContentResolver(),
+                                                Settings.System.INACCURATE_PROXIMITY_WORKAROUND, 0);
                     if (mProximitySensorActive &&
-                            ((flags & PowerManager.WAIT_FOR_PROXIMITY_NEGATIVE) != 0)) {
+                            ((flags & PowerManager.WAIT_FOR_PROXIMITY_NEGATIVE) != 0) && 
+                            (buggyProximity == 0) ) {
                         // wait for proximity sensor to go negative before disabling sensor
                         if (mDebugProximitySensor) {
                             Slog.d(TAG, "waiting for proximity sensor to go negative");

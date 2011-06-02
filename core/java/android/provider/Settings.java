@@ -2185,6 +2185,14 @@ public final class Settings {
         public static final String UNLOCK_SOUND = "unlock_sound";
 
         /**
+         * Always turn on screen after call ignoring proximity?
+         * 0 = no
+         * 1 = yes
+         * @hide
+         */
+        public static final String INACCURATE_PROXIMITY_WORKAROUND = "inaccurate_proximity_sensor";
+
+        /**
          * Receive incoming SIP calls?
          * 0 = no
          * 1 = yes
