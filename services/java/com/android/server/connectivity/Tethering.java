@@ -50,6 +50,7 @@ import com.android.internal.telephony.Phone;
 import com.android.internal.util.HierarchicalState;
 import com.android.internal.util.HierarchicalStateMachine;
 
+import java.io.File;
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -111,6 +112,10 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
     private boolean mUsbMassStorageOff;  // track the status of USB Mass Storage
     private boolean mUsbConnected;       // track the status of USB connection
 
+
+    private boolean mLegacy = false;	// whether we need legacy tethering support or not
+    private int mProbing = 0;		// track RNDIS enable/disable disconnects
+
     public Tethering(Context context, Looper looper) {
         mContext = context;
         mLooper = looper;
@@ -171,6 +176,8 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         mDnsServers = new String[2];
         mDnsServers[0] = DNS_DEFAULT_SERVER1;
         mDnsServers[1] = DNS_DEFAULT_SERVER2;
+
+        mLegacy = (new File("/sys/devices/platform/msm_hsusb/composition")).exists();
     }
 
     public void interfaceLinkStatusChanged(String iface, boolean link) {
@@ -445,11 +452,25 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
 
     // used on cable insert/remove
     private void enableUsbIfaces(boolean enable) {
+        //If this is true, it indicates this is a RNDIS (re)connect event
+        if (mLegacy && mProbing > 0) {
+            mProbing--;
+            Log.d(TAG, "Skipping RNDIS reconnect, skips remaining: " + mProbing);
+            return;
+        }
+
         IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
         INetworkManagementService service = INetworkManagementService.Stub.asInterface(b);
         String[] ifaces = new String[0];
         try {
+            if (mLegacy) {
+                mProbing += 2;
+                Tethering.this.enableUsbRndis(true);
+            }
             ifaces = service.listInterfaces();
+            if (mLegacy) {
+                Tethering.this.enableUsbRndis(false);
+            }
         } catch (Exception e) {
             Log.e(TAG, "Error listing Interfaces :" + e);
             return;
@@ -500,6 +521,10 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
         // bring toggle the interfaces
         String[] ifaces = new String[0];
         try {
+            if (mLegacy && enabled) {
+                mProbing++;
+                Tethering.this.enableUsbRndis(true);
+            }
             ifaces = service.listInterfaces();
         } catch (Exception e) {
             Log.e(TAG, "Error listing Interfaces :" + e);
@@ -831,7 +856,7 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                     transitionTo(mInitialState);
                     return;
                 }
-                if (mUsb) Tethering.this.enableUsbRndis(true);
+                if (mUsb && !mLegacy) Tethering.this.enableUsbRndis(true);
                 Log.d(TAG, "Tethered " + mIfaceName);
                 setAvailable(false);
                 setTethered(true);
@@ -839,7 +864,7 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
             }
             @Override
             public void exit() {
-                if (mUsb) Tethering.this.enableUsbRndis(false);
+                if (mUsb || mLegacy) Tethering.this.enableUsbRndis(false);
             }
             @Override
             public boolean processMessage(Message message) {
