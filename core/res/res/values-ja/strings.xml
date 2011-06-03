@@ -931,4 +931,38 @@
 
     <string name="wildcardProfile">他</string>
     <string name="global_action_choose_profile">プロファイル選択</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">デフォルト</string>
+    <string name="profileNameWork">仕事</string>
+    <string name="profileNameHome">ホーム</string>
+    <string name="profileNameSilent">サイレント</string>
+    <string name="profileNameNight">夜間</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">電話</string>
+    <string name="profileGroupCalendar">カレンダー</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+
+    <!-- Item on EditText context menu. This action is used to copy all text in the edit field. -->
+    <string name="copyAll">全てコピー</string>
+
+    <!-- Title of the alert when an application is not responding. -->
+    <string name="aerr_revoked_application">アプリケーション <xliff:g id="application">%1$s</xliff:g>
+        (プロセス <xliff:g id="process">%2$s</xliff:g>) は予期せず終了しました。\n警告!\nこのアプリケーションは一つ以上の権限が取り消されているため、不安定です。必要な権限を与えてから再度お試しください。</string>
+    <!-- Text of the alert that is displayed when an application has crashed. -->
+    <string name="aerr_revoked_process">プロセス <xliff:g id="process">%1$s</xliff:g> は
+        予期せず終了しました。\n警告!\nこのプロセスは一つ以上の権限が取り消されているため、不安定です。必要な権限を与えてから再度お試しください。</string>
+
+    <!-- Button allowing the user reset the revoked permissions for application which has encountered an error. -->
+    <string name="reset_perms">権限をリセット</string>
+
+    <!-- Title of an application permission that lets an application view/edit revoked permissions. -->
+    <string name="permlab_revokePermissions">取り消された権限を閲覧/編集する。通常のアプリケーションでは不要です。</string>
+    <!-- Description of an application permission that lets lets an application view/edit revoked permissions. -->
+    <string name="permdesc_revokePermissions">取り消された権限を読み書きする。通常のアプリケーションでは不要です。</string>
+
+
 </resources>
