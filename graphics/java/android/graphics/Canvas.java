@@ -1249,8 +1249,9 @@ public class Canvas {
         }
 
         char[] text2 = TextUtils.processBidi(text, index, index+count);
+        int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2, index, index+count) : 0);
 
-        native_drawText(mNativeCanvas, text2, index, count, x, y,
+        native_drawText(mNativeCanvas, text2, index, count-lamAlefCount, x, y,
                         paint.mNativePaint);
     }
 
@@ -1264,7 +1265,14 @@ public class Canvas {
      * @param paint The paint used for the text (e.g. color, size, style)
      */
     public void drawText(String text, float x, float y, Paint paint) {
-        native_drawText (TextUtils.processBidi(text), x, y, paint);
+
+        String text2 = TextUtils.processBidi(text);
+        int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2) : 0);
+
+        if (lamAlefCount > 0)
+            text2 = text2.substring(0, text2.length()-lamAlefCount);
+
+        native_drawText (text2, x, y, paint);
     }
 
     /**
@@ -1294,10 +1302,11 @@ public class Canvas {
         if ((start | end | (end - start) | (text.length() - end)) < 0) {
             throw new IndexOutOfBoundsException();
         }
-
+        
         String text2 = TextUtils.processBidi(text, start, end);
+        int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2, start, end) : 0);
 
-        native_drawText(mNativeCanvas, text2, start, end, x, y,
+        native_drawText(mNativeCanvas, text2, start, end-lamAlefCount, x, y,
                         paint.mNativePaint);
     }
 
@@ -1320,8 +1329,9 @@ public class Canvas {
             text instanceof SpannableString) {
 
             String text2 = TextUtils.processBidi(text.toString(), start, end);
+            int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2, start, end) : 0);
 
-            native_drawText(mNativeCanvas, text2, start, end, x, y,
+            native_drawText(mNativeCanvas, text2, start, end-lamAlefCount, x, y,
                             paint.mNativePaint);
         }
         else if (text instanceof GraphicsOperations) {
@@ -1354,8 +1364,9 @@ public class Canvas {
         }
 
         char[] text2 = TextUtils.processBidi(text, index, index+count);
+        int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2, index, index+count) : 0);
 
-        native_drawPosText(mNativeCanvas, text2, index, count, pos,
+        native_drawPosText(mNativeCanvas, text2, index, count-lamAlefCount, pos,
                            paint.mNativePaint);
     }
 
@@ -1373,6 +1384,10 @@ public class Canvas {
         }
 
         String text2 = TextUtils.processBidi(text);
+        int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2) : 0);
+
+        if (lamAlefCount > 0)
+            text2 = text2.substring(0, text2.length()-lamAlefCount);
 
         native_drawPosText(mNativeCanvas, text2, pos, paint.mNativePaint);
     }
@@ -1397,8 +1412,9 @@ public class Canvas {
         }
 
         char[] text2 = TextUtils.processBidi(text, index, index+count);
+        int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2, index, index+count) : 0);
 
-        native_drawTextOnPath(mNativeCanvas, text2, index, count,
+        native_drawTextOnPath(mNativeCanvas, text2, index, count-lamAlefCount,
                               path.ni(), hOffset, vOffset,
                               paint.mNativePaint);
     }
@@ -1421,6 +1437,10 @@ public class Canvas {
         if (text.length() > 0) {
 
             String text2 = TextUtils.processBidi(text);
+            int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2) : 0);
+
+            if (lamAlefCount > 0)
+                text2 = text2.substring(0, text2.length()-lamAlefCount);
 
             native_drawTextOnPath(mNativeCanvas, text2, path.ni(),
                                   hOffset, vOffset, paint.mNativePaint);

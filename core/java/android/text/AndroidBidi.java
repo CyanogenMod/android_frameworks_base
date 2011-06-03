@@ -69,7 +69,7 @@ package android.text;
      * @author: Eyad Aboulouz
      * Arabic text reshaping by by calling native reshapeArabicText function
      * @param chs
-     * @param map
+     * @param outputChs
      * @param off
      * @param len
      * @return int
@@ -86,9 +86,39 @@ package android.text;
         return reshapeArabicText(chs, outputChs, off, len);
     }
 
+    /**
+     * @author: Eyad Aboulouz
+     * Gets Bidi logical position based on the given logical position shifted by moveBy visual positions
+     * @param chs
+     * @param off
+     * @param len
+     * @param logicalPos
+     * @param moveBy
+     * @return int
+     * @hide
+     */
+    public static int getNextBidiLogicalPosition(char[] chs, int off, int len, int logicalPos, int moveBy) {
+
+        if (chs == null)
+            throw new NullPointerException();
+
+        if (off < 0 || len < 0 || off + len > chs.length)
+            throw new IndexOutOfBoundsException();
+
+        //if (logicalPos < 0 || logicalPos >= len)
+        //    throw new IndexOutOfBoundsException();
+
+        //if (moveBy < -len || moveBy > len)
+        //    throw new IndexOutOfBoundsException();
+
+        return getBidiLogicalPosition(chs, off, len, logicalPos, moveBy);
+    }
+
     private native static int runBidi(int dir, char[] chs, byte[] chInfo, int n, boolean haveInfo);
 
     private native static int reorderReshapeBidiText(char[] chs, char[] outputChs, int off, int len);
 
     private native static int reshapeArabicText(char[] chs, char[] outputChs, int off, int len);
+
+    private native static int getBidiLogicalPosition(char[] chs, int off, int len, int logicalPos, int moveBy);
 }

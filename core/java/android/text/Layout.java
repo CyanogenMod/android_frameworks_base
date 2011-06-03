@@ -891,99 +891,9 @@ public abstract class Layout {
      * (possibly onto another line) from the specified offset.
      */
     public int getOffsetToLeftOf(int offset) {
-        int line = getLineForOffset(offset);
-        int start = getLineStart(line);
-        int end = getLineEnd(line);
-        Directions dirs = getLineDirections(line);
+        char[] text2 = mText.toString().toCharArray();
 
-        if (line != getLineCount() - 1)
-            end = TextUtils.getOffsetBefore(mText, end);
-
-        float horiz = getPrimaryHorizontal(offset);
-
-        int best = offset;
-        float besth = Integer.MIN_VALUE;
-        int candidate;
-
-        candidate = TextUtils.getOffsetBefore(mText, offset);
-        if (candidate >= start && candidate <= end) {
-            float h = getPrimaryHorizontal(candidate);
-
-            if (h < horiz && h > besth) {
-                best = candidate;
-                besth = h;
-            }
-        }
-
-        candidate = TextUtils.getOffsetAfter(mText, offset);
-        if (candidate >= start && candidate <= end) {
-            float h = getPrimaryHorizontal(candidate);
-
-            if (h < horiz && h > besth) {
-                best = candidate;
-                besth = h;
-            }
-        }
-
-        int here = start;
-        for (int i = 0; i < dirs.mDirections.length; i++) {
-            int there = here + dirs.mDirections[i];
-            if (there > end)
-                there = end;
-
-            float h = getPrimaryHorizontal(here);
-
-            if (h < horiz && h > besth) {
-                best = here;
-                besth = h;
-            }
-
-            candidate = TextUtils.getOffsetAfter(mText, here);
-            if (candidate >= start && candidate <= end) {
-                h = getPrimaryHorizontal(candidate);
-
-                if (h < horiz && h > besth) {
-                    best = candidate;
-                    besth = h;
-                }
-            }
-
-            candidate = TextUtils.getOffsetBefore(mText, there);
-            if (candidate >= start && candidate <= end) {
-                h = getPrimaryHorizontal(candidate);
-
-                if (h < horiz && h > besth) {
-                    best = candidate;
-                    besth = h;
-                }
-            }
-
-            here = there;
-        }
-
-        float h = getPrimaryHorizontal(end);
-
-        if (h < horiz && h > besth) {
-            best = end;
-            besth = h;
-        }
-
-        if (best != offset)
-            return best;
-
-        int dir = getParagraphDirection(line);
-
-        if (dir > 0) {
-            if (line == 0)
-                return best;
-            else
-                return getOffsetForHorizontal(line - 1, 10000);
-        } else {
-            if (line == getLineCount() - 1)
-                return best;
-            else
-                return getOffsetForHorizontal(line + 1, 10000);
-        }
+        return TextUtils.getBidiLogicalPosition(text2, 0, text2.length, offset, TextUtils.getOffsetBefore(mText, offset)-offset);
     }
 
     /**
@@ -991,99 +901,9 @@ public abstract class Layout {
      * (possibly onto another line) from the specified offset.
      */
     public int getOffsetToRightOf(int offset) {
-        int line = getLineForOffset(offset);
-        int start = getLineStart(line);
-        int end = getLineEnd(line);
-        Directions dirs = getLineDirections(line);
+        char[] text2 = mText.toString().toCharArray();
 
-        if (line != getLineCount() - 1)
-            end = TextUtils.getOffsetBefore(mText, end);
-
-        float horiz = getPrimaryHorizontal(offset);
-
-        int best = offset;
-        float besth = Integer.MAX_VALUE;
-        int candidate;
-
-        candidate = TextUtils.getOffsetBefore(mText, offset);
-        if (candidate >= start && candidate <= end) {
-            float h = getPrimaryHorizontal(candidate);
-
-            if (h > horiz && h < besth) {
-                best = candidate;
-                besth = h;
-            }
-        }
-
-        candidate = TextUtils.getOffsetAfter(mText, offset);
-        if (candidate >= start && candidate <= end) {
-            float h = getPrimaryHorizontal(candidate);
-
-            if (h > horiz && h < besth) {
-                best = candidate;
-                besth = h;
-            }
-        }
-
-        int here = start;
-        for (int i = 0; i < dirs.mDirections.length; i++) {
-            int there = here + dirs.mDirections[i];
-            if (there > end)
-                there = end;
-
-            float h = getPrimaryHorizontal(here);
-
-            if (h > horiz && h < besth) {
-                best = here;
-                besth = h;
-            }
-
-            candidate = TextUtils.getOffsetAfter(mText, here);
-            if (candidate >= start && candidate <= end) {
-                h = getPrimaryHorizontal(candidate);
-
-                if (h > horiz && h < besth) {
-                    best = candidate;
-                    besth = h;
-                }
-            }
-
-            candidate = TextUtils.getOffsetBefore(mText, there);
-            if (candidate >= start && candidate <= end) {
-                h = getPrimaryHorizontal(candidate);
-
-                if (h > horiz && h < besth) {
-                    best = candidate;
-                    besth = h;
-                }
-            }
-
-            here = there;
-        }
-
-        float h = getPrimaryHorizontal(end);
-
-        if (h > horiz && h < besth) {
-            best = end;
-            besth = h;
-        }
-
-        if (best != offset)
-            return best;
-
-        int dir = getParagraphDirection(line);
-
-        if (dir > 0) {
-            if (line == getLineCount() - 1)
-                return best;
-            else
-                return getOffsetForHorizontal(line + 1, -10000);
-        } else {
-            if (line == 0)
-                return best;
-            else
-                return getOffsetForHorizontal(line - 1, -10000);
-        }
+        return TextUtils.getBidiLogicalPosition(text2, 0, text2.length, offset, TextUtils.getOffsetAfter(mText, offset)-offset);
     }
 
     private int getOffsetAtStartOf(int offset) {
@@ -1957,8 +1777,8 @@ public abstract class Layout {
     private static final int TAB_INCREMENT = 20;
 
     /* package */ static final Directions DIRS_ALL_LEFT_TO_RIGHT =
-                                       new Directions(new short[] { 32767 });
+                                       new Directions(new short[] { Short.MAX_VALUE});
     /* package */ static final Directions DIRS_ALL_RIGHT_TO_LEFT =
-                                       new Directions(new short[] { 0, 32767 });
+                                       new Directions(new short[] { 0, Short.MAX_VALUE});
 
 }

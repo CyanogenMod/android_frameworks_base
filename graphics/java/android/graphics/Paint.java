@@ -1001,11 +1001,12 @@ public class Paint {
     public float measureText(char[] text, int index, int count) {
 
         char[] text2 = TextUtils.reshapeArabic(text, index, index+count);
+        int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2, index, index+count) : 0);
 
-        if (!mHasCompatScaling) return native_measureText(text2, index, count);
+        if (!mHasCompatScaling) return native_measureText(text2, index, count-lamAlefCount);
         final float oldSize = getTextSize();
         setTextSize(oldSize*mCompatScaling);
-        float w = native_measureText(text2, index, count);
+        float w = native_measureText(text2, index, count-lamAlefCount);
         setTextSize(oldSize);
         return w*mInvCompatScaling;
     }
@@ -1023,11 +1024,12 @@ public class Paint {
     public float measureText(String text, int start, int end) {
 
         String text2 = TextUtils.reshapeArabic(text, start, end);
+        int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2, start, end) : 0);
 
-        if (!mHasCompatScaling) return native_measureText(text2, start, end);
+        if (!mHasCompatScaling) return native_measureText(text2, start, end-lamAlefCount);
         final float oldSize = getTextSize();
         setTextSize(oldSize*mCompatScaling);
-        float w = native_measureText(text2, start, end);
+        float w = native_measureText(text2, start, end-lamAlefCount);
         setTextSize(oldSize);
         return w*mInvCompatScaling;
     }
@@ -1043,11 +1045,15 @@ public class Paint {
     public float measureText(String text) {
 
         String text2 = TextUtils.reshapeArabic(text);
+        int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2) : 0);
+
+        if (lamAlefCount > 0)
+            text2 = text2.substring(0, text2.length()-lamAlefCount);
 
         if (!mHasCompatScaling) return native_measureText(text2);
         final float oldSize = getTextSize();
         setTextSize(oldSize*mCompatScaling);
-        float w = native_measureText(text);
+        float w = native_measureText(text2);
         setTextSize(oldSize);
         return w*mInvCompatScaling;
     }
@@ -1101,14 +1107,15 @@ public class Paint {
     public int breakText(char[] text, int index, int count,
                                 float maxWidth, float[] measuredWidth) {
 
-        char[] text2 = TextUtils.reshapeArabic(text);
+        char[] text2 = TextUtils.reshapeArabic(text, ((count<0)?index+count:index), ((count<0)?index:index+count));
+        int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2, ((count<0)?index+count:index), ((count<0)?index:index+count)) : 0);
 
         if (!mHasCompatScaling) {
-            return native_breakText(text2, index, count, maxWidth, measuredWidth);
+            return native_breakText(text2, index, ((count<0)?count+lamAlefCount:count-lamAlefCount), maxWidth, measuredWidth);
         }
         final float oldSize = getTextSize();
         setTextSize(oldSize*mCompatScaling);
-        int res = native_breakText(text2, index, count, maxWidth*mCompatScaling,
+        int res = native_breakText(text2, index, ((count<0)?count+lamAlefCount:count-lamAlefCount), maxWidth*mCompatScaling,
                 measuredWidth);
         setTextSize(oldSize);
         if (measuredWidth != null) measuredWidth[0] *= mInvCompatScaling;
@@ -1177,7 +1184,11 @@ public class Paint {
                                 float maxWidth, float[] measuredWidth) {
 
         String text2 = TextUtils.reshapeArabic(text);
+        int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2) : 0);
 
+        if (lamAlefCount > 0)
+            text2 = text2.substring(0, text2.length()-lamAlefCount);
+        
         if (!mHasCompatScaling) {
             return native_breakText(text2, measureForwards, maxWidth, measuredWidth);
         }
@@ -1211,16 +1222,27 @@ public class Paint {
         }
 
         char[] text2 = TextUtils.reshapeArabic(text, index, index+count);
+        int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2, index, index+count) : 0);
 
         if (!mHasCompatScaling) {
-            return native_getTextWidths(mNativePaint, text2, index, count, widths);
+            int res = native_getTextWidths(mNativePaint, text2, index, count-lamAlefCount, widths);
+            
+            for (int i=0; i<res; i++) {
+                if (TextUtils.isDiacriticCharacter(text2[i]))
+                    widths[i] = 0;
+            }
+            
+            return res;
         }
         final float oldSize = getTextSize();
         setTextSize(oldSize*mCompatScaling);
-        int res = native_getTextWidths(mNativePaint, text2, index, count, widths);
+        int res = native_getTextWidths(mNativePaint, text2, index, count-lamAlefCount, widths);
         setTextSize(oldSize);
         for (int i=0; i<res; i++) {
-            widths[i] *= mInvCompatScaling;
+            if (TextUtils.isDiacriticCharacter(text2[i]))
+                widths[i] = 0;
+            else
+                widths[i] *= mInvCompatScaling;
         }
         return res;
     }
@@ -1276,16 +1298,25 @@ public class Paint {
         }
 
         String text2 = TextUtils.reshapeArabic(text, start, end);
+        int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2, start, end) : 0);
 
         if (!mHasCompatScaling) {
-            return native_getTextWidths(mNativePaint, text2, start, end, widths);
+            int res = native_getTextWidths(mNativePaint, text2, start, end-lamAlefCount, widths);
+            for (int i=0; i<res; i++) {
+                if (TextUtils.isDiacriticCharacter(text2.charAt(i)))
+                    widths[i] = 0;
+            }
+            return res;
         }
         final float oldSize = getTextSize();
         setTextSize(oldSize*mCompatScaling);
-        int res = native_getTextWidths(mNativePaint, text2, start, end, widths);
+        int res = native_getTextWidths(mNativePaint, text2, start, end-lamAlefCount, widths);
         setTextSize(oldSize);
         for (int i=0; i<res; i++) {
-            widths[i] *= mInvCompatScaling;
+            if (TextUtils.isDiacriticCharacter(text2.charAt(i)))
+                widths[i] = 0;
+            else
+                widths[i] *= mInvCompatScaling;
         }
         return res;
     }
@@ -1323,8 +1354,9 @@ public class Paint {
         }
 
         char[] text2 = TextUtils.processBidi(text, index, index+count);
+        int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2, index, index+count) : 0);
 
-        native_getTextPath(mNativePaint, text2, index, count, x, y, path.ni());
+        native_getTextPath(mNativePaint, text2, index, count-lamAlefCount, x, y, path.ni());
     }
 
     /**
@@ -1347,8 +1379,9 @@ public class Paint {
         }
 
         String text2 = TextUtils.processBidi(text, start, end);
+        int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2, start, end) : 0);
 
-        native_getTextPath(mNativePaint, text2, start, end, x, y, path.ni());
+        native_getTextPath(mNativePaint, text2, start, end-lamAlefCount, x, y, path.ni());
     }
 
     /**
@@ -1370,8 +1403,9 @@ public class Paint {
         }
 
         String text2 = TextUtils.processBidi(text, start, end);
+        int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2, start, end) : 0);
 
-        nativeGetStringBounds(mNativePaint, text2, start, end, bounds);
+        nativeGetStringBounds(mNativePaint, text2, start, end-lamAlefCount, bounds);
     }
 
     /**
@@ -1393,8 +1427,9 @@ public class Paint {
         }
 
         char[] text2 = TextUtils.processBidi(text, index, index+count);
+        int lamAlefCount = ((text != text2)?TextUtils.countShapedLamAlef(text2, index, index+count) : 0);
 
-        nativeGetCharArrayBounds(mNativePaint, text2, index, count, bounds);
+        nativeGetCharArrayBounds(mNativePaint, text2, index, count-lamAlefCount, bounds);
     }
     
     protected void finalize() throws Throwable {

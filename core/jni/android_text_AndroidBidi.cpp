@@ -134,10 +134,9 @@ static jint reshapeArabicText (JNIEnv* env, jclass c, jcharArray srcArray, jchar
         ubidi_writeReverse (src+offset, n, intermediate, n, UBIDI_DO_MIRRORING | UBIDI_REMOVE_BIDI_CONTROLS, &status);
 
         if (U_SUCCESS(status)) {
-            outputSize = u_shapeArabic(intermediate, n, intermediate2, n, U_SHAPE_TEXT_DIRECTION_VISUAL_LTR | U_SHAPE_LETTERS_SHAPE | U_SHAPE_LENGTH_FIXED_SPACES_AT_END, &status);
+            outputSize = u_shapeArabic(intermediate, n, intermediate2, n, U_SHAPE_TEXT_DIRECTION_VISUAL_LTR | U_SHAPE_LETTERS_SHAPE | U_SHAPE_LENGTH_FIXED_SPACES_AT_BEGINNING, &status);
 
             if (U_SUCCESS(status)) {
-
                 ubidi_writeReverse (intermediate2, n, output, n, UBIDI_REMOVE_BIDI_CONTROLS, &status);
 
                 env->SetCharArrayRegion(destArray, 0, outputSize, output);
@@ -160,13 +159,79 @@ static jint reshapeArabicText (JNIEnv* env, jclass c, jcharArray srcArray, jchar
     return outputSize;
 }
 
+/*
+Native Bidi get final logical position from given logical position shifted by x number of visual position moved
+by: Eyad Aboulouz
+*/
+static jint getBidiLogicalPosition (JNIEnv* env, jclass c, jcharArray srcArray, jint offset, jint n, jint logicalPos, jint moveBy) {
+
+    bool hasErrors = false;
+    UChar *intermediate = new UChar[n];
+    UErrorCode status = U_ZERO_ERROR;
+    jint retLogicalPos = logicalPos;
+
+    UBiDi *para = ubidi_openSized(n, 0, &status);
+
+    ubidi_setReorderingMode(para, UBIDI_REORDER_INVERSE_LIKE_DIRECT);
+
+    ubidi_setReorderingOptions(para, UBIDI_OPTION_INSERT_MARKS);
+
+    jchar* src = env->GetCharArrayElements(srcArray, NULL);
+
+    if (src != NULL && para != NULL && U_SUCCESS(status)) {
+
+        ubidi_setPara(para, src+offset, n, UBIDI_DEFAULT_RTL, NULL, &status);
+
+        if (U_SUCCESS(status)) {
+
+            ubidi_writeReordered(para, intermediate, n, UBIDI_DO_MIRRORING, &status);
+
+            if (U_SUCCESS(status)) {
+
+                if (U_SUCCESS(status)) {
+
+                	jint visualPos = ubidi_getVisualIndex(para, logicalPos, &status);
+
+                    if (U_SUCCESS(status)) {
+
+                    	retLogicalPos = ubidi_getLogicalIndex(para, visualPos+moveBy, &status);
+
+                    	if (U_FAILURE(status))
+                    		hasErrors = true;
+                    }
+                    else
+                    	hasErrors = true;
+                } else
+                    hasErrors = true;
+            } else
+                hasErrors = true;
+        } else
+            hasErrors = true;
+    } else
+        hasErrors = true;
+
+    delete [] intermediate;
+
+    if (para != NULL)
+        ubidi_close(para);
+
+    env->ReleaseCharArrayElements(srcArray, src, JNI_ABORT);
+
+    if (hasErrors)
+        jniThrowException(env, "java/lang/RuntimeException", NULL);
+
+    return retLogicalPos;
+}
+
 static JNINativeMethod gMethods[] = {
         { "runBidi", "(I[C[BIZ)I",
         (void*) runBidi },
         { "reorderReshapeBidiText", "([C[CII)I",
         (void*) reorderReshapeBidiText },
         { "reshapeArabicText", "([C[CII)I",
-        (void*) reshapeArabicText }
+        (void*) reshapeArabicText },
+        { "getBidiLogicalPosition", "([CIIII)I",
+        (void*) getBidiLogicalPosition }
 };
 
 int register_android_text_AndroidBidi(JNIEnv* env)
