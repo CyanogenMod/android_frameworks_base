@@ -69,7 +69,7 @@ package android.text;
      * @author: Eyad Aboulouz
      * Arabic text reshaping by by calling native reshapeArabicText function
      * @param chs
-     * @param map
+     * @param outputChs
      * @param off
      * @param len
      * @return int

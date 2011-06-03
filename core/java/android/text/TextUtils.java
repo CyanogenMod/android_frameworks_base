@@ -1687,33 +1687,168 @@ public class TextUtils {
     }
 
     /**
+     * @author Eyad Aboulouz
+     * @param c
+     * @return boolean
      * @hide
      */
     private static boolean isRTLCharacter(char c) {
         //range of RTL characters per unicode specification
-        return (c >= 0x0590 && c <= 0x05FF) ||
-               (c >= 0xFB1D && c <= 0xFB4F) ||
-               (c >= 0x0600 && c <= 0x07BF) ||
-               (c >= 0xFB50 && c <= 0xFDFF) ||
-               (c >= 0xFE70 && c <= 0xFEFE)    ;
+        return (c >= 0x0590 && c <= 0x05FF) || (c >= 0xFB1D && c <= 0xFB4F) || (c >= 0x0600 && c <= 0x07BF) ||
+               (c >= 0xFB50 && c <= 0xFDFF) || (c >= 0xFE70 && c <= 0xFEFE);
     }
 
     /**
+     * @author Eyad Aboulouz
+     * @param c
+     * @return boolean
      * @hide
      */
     private static boolean isArabicCharacter(char c) {
         //range of Arabic characters per unicode specification
-        return (c >= 0x0600 && c <= 0x06FF) ||
-               (c >= 0x0750 && c <= 0x077F) ||
-               (c >= 0xFB50 && c <= 0xFDFF) ||
-               (c >= 0xFE70 && c <= 0xFEFE)    ;
+        return (c >= 0x0600 && c <= 0x06FF) || (c >= 0x0750 && c <= 0x077F) || (c >= 0xFB50 && c <= 0xFDFF) || (c >= 0xFE70 && c <= 0xFEFE);
     }
 
     /**
+     * @author Eyad Aboulouz
+     * @param c
+     * @return boolean
+     * @hide
+     */
+    private static boolean isArabicUnshapedCharacter(char c) {
+        //range of Arabic characters per unicode specification
+        return (c >= 0x0600 && c <= 0x06FF) || (c >= 0x0750 && c <= 0x077F);
+    }
+
+    /**
+     * @author Eyad Aboulouz
+     * @param c
+     * @return boolean
+     * @hide
+     */
+    private static boolean isArabicTatweelCharacter(char c) {
+        return (c == 0xFE71) || (c == 0xFE77) || (c == 0xFE79) || (c == 0xFE7B) || (c == 0xFE7D)|| (c == 0xFE7F);
+    }
+
+    /**
+     * @author Eyad Aboulouz
+     * @param c
+     * @return boolean
+     * @hide
+     */
+    private static boolean isArabicTashkeelCharacter(char c) {
+        return (c >= 0x0610 && c <= 0x061A) || (c >= 0x064B && c <= 0x065F) || (c == 0x0670) || (c >= 0x06D6 && c <= 0x06DC) ||
+               (c >= 0x06DF && c <= 0x06E4) || (c >= 0x06E7 && c <= 0x06E8) || (c >= 0x06EA && c <= 0x06ED) || (c == 0xFE70) ||
+               (c == 0xFE72) || (c == 0xFE74) || (c == 0xFE76) || (c == 0xFE78) || (c == 0xFE7A) || (c == 0xFE7C) || (c == 0xFE7E);
+    }
+
+    /**
+     * @author Eyad Aboulouz
+     * @param c
+     * @return boolean
+     * @hide
+     */
+    private static boolean isHebrewNiqqudCharacter(char c) {
+        return (c >= 0x0591 && c <= 0x05BF) || (c >= 0x05C1 && c <= 0x05C2) || (c >= 0x05C4 && c <= 0x05C5) || (c == 0x05C7);      
+    }
+
+    /**
+     * @author Eyad Aboulouz
+     * @param c
+     * @return boolean
+     * @hide
+     */
+    public static boolean isDiacriticCharacter(char c) {
+        return (isArabicTashkeelCharacter(c) || isHebrewNiqqudCharacter(c));
+    }
+
+    /**
+     * @author Eyad Aboulouz
+     * function to check if the given character is a LamAlef
+     * @param a
+     * @return boolean
+     * @hide
+     */
+    private static boolean isShapedLamAlef(char c) {
+        return (c >= 0xFEF5 && c <= 0xFEFC);
+    }
+
+    /**
+     * @author Eyad Aboulouz
+     * function to check if the given two characters form a LamAlef
+     * @param a
+     * @param b
+     * @return boolean
+     * @hide
+     */
+    public static boolean isUnshapedLamAlef(char a, char b) {
+
+        boolean isLam = (a == 0x0644 || (a >= 0x06B5 && a <= 0x06B8));
+        boolean isAlef = ((b >= 0x0622 && b <= 0x0623) || b == 0x0625 || b == 0x0627 || b == 0x0625 || (b >= 0x0671 && b <= 0x0673) || b == 0x0675);
+        
+        return (isLam && isAlef);
+    }
+
+    /**
+     * @author Eyad Aboulouz
+     * function to count the number of shaped LamAlefs in the given text
+     * @param text
+     * @param start
+     * @param end
+     * @return int
+     * @hide
+     */
+    public static int countShapedLamAlef(final String text, int start, int end) {
+        
+        int count = 0;
+
+        for (int i=start; i<end; i++) {
+            if (isShapedLamAlef(text.charAt(i)))
+                count++;
+        }
+
+        return (count);
+    }
+
+    /**
+     * @author Eyad Aboulouz
+     * function to count the number of shaped LamAlefs in the given text
+     * @param text
+     * @return int
+     * @hide
+     */
+    public static int countShapedLamAlef(final String text) {
+        return (countShapedLamAlef(text, 0, text.length()));
+    }
+
+    /**
+     * @author Eyad Aboulouz
+     * function to count the number of shaped LamAlefs in the given text
+     * @param text
+     * @param start
+     * @param end
+     * @return int
+     * @hide
+     */
+    public static int countShapedLamAlef(final char[] text, int start, int end) {
+
+        int count = 0;
+
+        for (int i=start; i<end; i++) {
+            if (isShapedLamAlef(text[i]))
+                count++;
+        }
+
+        return (count);
+    }
+
+    /**
+     * @author Eyad Aboulouz
      * function to check if text range has RTL characters.
      * @hide
      */
     private static boolean hasRTLCharacters(final char[] text, int start, int end) {
+
         if (text == null)
             return false;
 
@@ -1727,10 +1862,50 @@ public class TextUtils {
     }
 
     /**
-     * function to check if text range has Arabic characters.
+     * @author Eyad Aboulouz
+     * function to check if text range has Arabic unshaped characters.
+     * @hide
+     */
+    private static boolean hasArabicUnshapedCharacters(final char[] text, int start, int end) {
+
+        if (text == null)
+            return false;
+
+        //go through all characters
+        for (int i = start; i < end; i++) {
+            if (isArabicUnshapedCharacter(text[i]))
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @author Eyad Aboulouz
+     * function to check if text range has Arabic unshaped characters.
+     * @hide
+     */
+    public static boolean hasArabicUnshapedCharacters(String text, int start, int end) {
+
+        if (text == null)
+            return false;
+
+        //go through all characters
+        for (int i = start; i < end; i++) {
+            if (isArabicUnshapedCharacter(text.charAt(i)))
+                return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @author Eyad Aboulouz
+     * function to check if text range has any Arabic characters
      * @hide
      */
     private static boolean hasArabicCharacters(final char[] text, int start, int end) {
+
         if (text == null)
             return false;
 
@@ -1748,6 +1923,7 @@ public class TextUtils {
      * @hide
      */
     public static boolean hasArabicCharacters(String text, int start, int end) {
+
         if (text == null)
             return false;
 
@@ -1765,6 +1941,7 @@ public class TextUtils {
      * @hide
      */
     public static boolean hasRTLCharacters(CharSequence text, int start, int end) {
+
         if (text == null)
             return false;
 
@@ -1804,7 +1981,7 @@ public class TextUtils {
      * @hide
      */
     public static char[] processBidi(final char[] src) {
-        return src == null ? null : TextUtils.processBidi(src, 0, src.length);
+        return src == null ? null : TextUtils.processBidi(src.clone(), 0, src.length);
     }
 
     /**
@@ -1814,7 +1991,7 @@ public class TextUtils {
      * @hide
      */
     public static char[] reshapeArabic(final char[] src) {
-        return src == null ? null : TextUtils.reshapeArabicChars(src, 0, src.length);
+        return src == null ? null : TextUtils.reshapeArabicChars(src.clone(), 0, src.length);
     }
 
     /**
@@ -1826,7 +2003,8 @@ public class TextUtils {
      * @hide
      */
     public static String processBidi(final String src, int start, int end) {
-        return src != null && hasRTLCharacters(src, start, end) ? String.valueOf(TextUtils.processBidi(src.toCharArray(), start, end)) : src;
+        return src != null && hasRTLCharacters(src, start, end) ?
+            String.valueOf(TextUtils.processBidi(src.toCharArray(), start, end)) : src;
     }
 
     /**
@@ -1838,12 +2016,13 @@ public class TextUtils {
      * @hide
      */
     public static String reshapeArabic(final String src, int start, int end) {
-        return src != null && hasArabicCharacters(src, start, end) ? String.valueOf(TextUtils.reshapeArabicChars(src.toCharArray(), start, end)) : src;
+        return src != null && hasArabicUnshapedCharacters(src, start, end) ?
+            String.valueOf(TextUtils.reshapeArabicChars(src.toCharArray(), start, end)) : src;
     }
 
     /**
      * function to process bidi on the given text
-     * @author: Eyad Aboulouz
+     * @author Eyad Aboulouz
      * @param src
      * @param start
      * @param end
@@ -1851,12 +2030,13 @@ public class TextUtils {
      * @hide
      */
     public static char[] processBidi(final char[] src, int start, int end) {
-        return src != null && hasRTLCharacters(src, start, end) ? TextUtils.processBidiChars(src, start, end) : src;
+        return src != null && hasRTLCharacters(src, start, end) ?
+            TextUtils.processBidiChars(src.clone(), start, end) : src;
     }
 
     /**
      * function to reshape the given text
-     * @author: Eyad Aboulouz
+     * @author Eyad Aboulouz
      * @param src
      * @param start
      * @param end
@@ -1864,67 +2044,91 @@ public class TextUtils {
      * @hide
      */
     public static char[] reshapeArabic(final char[] src, int start, int end) {
-        return src != null && hasArabicCharacters(src, start, end) ? TextUtils.reshapeArabicChars(src, start, end) : src;
+        return src != null && hasArabicUnshapedCharacters(src, start, end) ?
+            TextUtils.reshapeArabicChars(src.clone(), start, end) : src;
     }
 
     /**
      * function to process bidi on the given text
-     * @author: Eyad Aboulouz
-     * @param src
+     * @author Eyad Aboulouz
+     * @param buf
      * @param start
      * @param end
      * @return char[]
      * @hide
      */
-    private static char[] processBidiChars(final char[] src, int start, int end) {
+    private static char[] processBidiChars(char[] buf, int start, int end) {
 
         try {
-            char[] outputTxt = new char[end-start];
-            char[] ret = src.clone();
+            if (isArabicUnshapedCharacter(buf[start])) {
+                while (start>0 && TextUtils.isArabicUnshapedCharacter(buf[start-1]))
+                    start--;
+            }
 
-            int outputSize = AndroidBidi.reorderAndReshapeBidiText(ret, outputTxt, start, end-start);
+            if (isArabicUnshapedCharacter(buf[end-1])) {
+                while (end<buf.length && TextUtils.isArabicUnshapedCharacter(buf[end]))
+                    end++;
+            }
+
+            char[] outputTxt = new char[end-start];
+
+            int outputSize = AndroidBidi.reorderAndReshapeBidiText(buf, outputTxt, start, end-start);
 
             if (outputSize != (end-start))
                 throw new Exception ("Error Processing Bidi Reordering And Reshaping");
 
-            System.arraycopy(outputTxt, 0, ret, start, end-start);
-
-            return (ret);
-
-        } catch (Exception e) {
-
-            return (src);
+            System.arraycopy(outputTxt, 0, buf, start, end-start);
         }
+        catch (Exception e) {}
+
+        return buf;
     }
 
     /**
-     * function to reshape arabic text
-     * @author: Eyad Aboulouz
-     * @param src
+     * function to reshape Arabic text
+     * @author Eyad Aboulouz
+     * @param buf
      * @param start
      * @param end
      * @return char[]
      * @hide
      */
-    private static char[] reshapeArabicChars(final char[] src, int start, int end) {
+    private static char[] reshapeArabicChars(char[] buf, int start, int end) {
 
         try {
-            char[] outputTxt = new char[end-start];
-            char[] ret = src.clone();
+            if (isArabicUnshapedCharacter(buf[start])) {
+                while (start>0 && TextUtils.isArabicUnshapedCharacter(buf[start-1]))
+                    start--;
+            }
 
-            int outputSize = AndroidBidi.reshapeReversedArabicText(ret, outputTxt, start, end-start);
+            if (isArabicUnshapedCharacter(buf[end-1])) {
+                while (end<buf.length && TextUtils.isArabicUnshapedCharacter(buf[end]))
+                    end++;
+            }
+
+            char[] outputTxt = new char[end-start];
+
+            int outputSize = AndroidBidi.reshapeReversedArabicText(buf, outputTxt, start, end-start);
 
             if (outputSize != (end-start))
-                throw new Exception ("Error Processing Bidi Reordering And Reshaping");
+                throw new Exception ("Error Reshaping Arabic");
 
-            System.arraycopy(outputTxt, 0, ret, start, end-start);
-
-            return (ret);
-
-        } catch (Exception e) {
-
-            return (src);
+            System.arraycopy(outputTxt, 0, buf, start, end-start);
         }
+        catch (Exception e) {}
+
+        return buf;
+    }
+
+    //TODO: remove this function when done debugging
+    private static String arrayCharsToString(char[] buf, int start, int end) {
+        
+        StringBuilder str = new StringBuilder();
+        
+        for (int i=start; i<end; i++)
+            str.append("\t0x" + Integer.toHexString(Character.codePointAt(buf, i)));
+        
+        return (str.toString());
     }
 
     private static Object sLock = new Object();

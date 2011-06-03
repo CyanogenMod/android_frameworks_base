@@ -134,10 +134,9 @@ static jint reshapeArabicText (JNIEnv* env, jclass c, jcharArray srcArray, jchar
         ubidi_writeReverse (src+offset, n, intermediate, n, UBIDI_DO_MIRRORING | UBIDI_REMOVE_BIDI_CONTROLS, &status);
 
         if (U_SUCCESS(status)) {
-            outputSize = u_shapeArabic(intermediate, n, intermediate2, n, U_SHAPE_TEXT_DIRECTION_VISUAL_LTR | U_SHAPE_LETTERS_SHAPE | U_SHAPE_LENGTH_FIXED_SPACES_AT_END, &status);
+            outputSize = u_shapeArabic(intermediate, n, intermediate2, n, U_SHAPE_TEXT_DIRECTION_VISUAL_LTR | U_SHAPE_LETTERS_SHAPE | U_SHAPE_LENGTH_FIXED_SPACES_AT_BEGINNING, &status);
 
             if (U_SUCCESS(status)) {
-
                 ubidi_writeReverse (intermediate2, n, output, n, UBIDI_REMOVE_BIDI_CONTROLS, &status);
 
                 env->SetCharArrayRegion(destArray, 0, outputSize, output);

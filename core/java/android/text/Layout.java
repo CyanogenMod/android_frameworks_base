@@ -922,6 +922,12 @@ public abstract class Layout {
             if (h < horiz && h > besth) {
                 best = candidate;
                 besth = h;
+            } else if ((offset != mText.length()) && TextUtils.isDiacriticCharacter(mText.charAt(offset))) {
+                best = (((candidate+1) > end)? end : candidate+1);
+                besth = h;
+            } else if  ((offset < mText.length()-1) && TextUtils.isUnshapedLamAlef(mText.charAt(offset), mText.charAt(offset+1))) {
+                best = (((candidate+2) > end)? end : candidate+2);
+                besth = h;
             }
         }
 
@@ -1011,6 +1017,12 @@ public abstract class Layout {
 
             if (h > horiz && h < besth) {
                 best = candidate;
+                besth = h;
+            } else if ((offset != 0) && TextUtils.isDiacriticCharacter(mText.charAt(offset-1))) {
+                best = (((candidate-1) < 0)? 0 : candidate-1);
+                besth = h;
+            } else if ((offset != 0) && TextUtils.isUnshapedLamAlef(mText.charAt(offset-1), mText.charAt(offset))) {
+                best = (((candidate-2) < 0)? 0 : candidate-2);
                 besth = h;
             }
         }
@@ -1957,8 +1969,8 @@ public abstract class Layout {
     private static final int TAB_INCREMENT = 20;
 
     /* package */ static final Directions DIRS_ALL_LEFT_TO_RIGHT =
-                                       new Directions(new short[] { 32767 });
+                                       new Directions(new short[] { Short.MAX_VALUE});
     /* package */ static final Directions DIRS_ALL_RIGHT_TO_LEFT =
-                                       new Directions(new short[] { 0, 32767 });
+                                       new Directions(new short[] { 0, Short.MAX_VALUE});
 
 }
