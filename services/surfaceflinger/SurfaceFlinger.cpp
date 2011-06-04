@@ -421,10 +421,6 @@ bool SurfaceFlinger::threadLoop()
         logger.log(GraphicLog::SF_SWAP_BUFFERS, index);
         postFramebuffer();
 
-#ifdef USE_LGE_HDMI
-        NvDispMgrAutoOrientation(mCurrentState.orientation);
-#endif
-
         logger.log(GraphicLog::SF_REPAINT_DONE, index);
     } else {
         // pretend we did the post
@@ -1190,6 +1186,9 @@ int SurfaceFlinger::setOrientation(DisplayID dpy,
         if (uint32_t(orientation)<=eOrientation270 || orientation==42) {
             mCurrentState.orientationType = flags;
             mCurrentState.orientation = orientation;
+#ifdef USE_LGE_HDMI
+            NvDispMgrAutoOrientation(mCurrentState.orientation);
+#endif
             setTransactionFlags(eTransactionNeeded);
             mTransactionCV.wait(mStateLock);
         } else {
