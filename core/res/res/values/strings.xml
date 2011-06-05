@@ -337,6 +337,9 @@
     <!-- label for item that reboots the phone in phone options dialog -->
     <string name="global_action_choose_profile">Choose profile</string>
 
+    <!-- label for item that suspends device in phone options dialog (warmboot feature) -->
+    <string name="global_action_suspend">Suspend</string>
+
     <!-- label for item that enables silent mode in phone options dialog -->
     <string name="global_action_toggle_silent_mode">Silent mode</string>
 

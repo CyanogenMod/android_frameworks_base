@@ -1550,6 +1550,15 @@ public class Intent implements Parcelable, Cloneable {
      * {@hide}
      */
     public static final String ACTION_REQUEST_SHUTDOWN = "android.intent.action.ACTION_REQUEST_SHUTDOWN";
+    /** Warmboot feature which enables Device to enter into and resume from "suspend2ram" state
+     * Activity Action:  Start this activity to request system suspend
+     *
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system.
+     *
+     * {@hide}
+     */
+    public static final String ACTION_REQUEST_SUSPEND = "android.intent.action.ACTION_REQUEST_SUSPEND";
     /**
      * Broadcast Action:  A sticky broadcast that indicates low memory
      * condition on the device

@@ -367,6 +367,33 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                     }
                 });
 
+        boolean warmBootCapable = SystemProperties.getBoolean("ro.warmboot.capability", false);
+        Log.d(TAG, "Device WarmBoot Capability = " + warmBootCapable );
+
+        if ( warmBootCapable ) {
+            SinglePressAction suspendAction;
+            suspendAction = new SinglePressAction(
+                com.android.internal.R.drawable.ic_lock_power_off,
+                        R.string.global_action_suspend) {
+
+                public void onPress() {
+                    // Starts the SuspendActivity which enables Device to enter deep sleep "suspend2ram" state
+                    Intent intent = new Intent(Intent.ACTION_REQUEST_SUSPEND);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    mContext.startActivity(intent);
+                }
+
+                public boolean showDuringKeyguard() {
+                    return true;
+                }
+
+                public boolean showBeforeProvisioning() {
+                    return true;
+                }
+            };
+            mItems.add( suspendAction );
+        }
+
         mAdapter = new MyAdapter();
 
         final AlertDialog.Builder ab = new AlertDialog.Builder(mContext);
