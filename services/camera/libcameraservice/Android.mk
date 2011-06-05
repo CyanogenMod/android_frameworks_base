@@ -1,41 +1,44 @@
 LOCAL_PATH:= $(call my-dir)
 
-# Set USE_CAMERA_STUB if you don't want to use the hardware camera.
-
-# force these builds to use camera stub only
-ifneq ($(filter sooner generic sim,$(TARGET_DEVICE)),)
-  USE_CAMERA_STUB:=true
-endif
-
-ifeq ($(USE_CAMERA_STUB),)
-  USE_CAMERA_STUB:=false
-endif
-
-ifeq ($(USE_CAMERA_STUB),true)
 #
-# libcamerastub
+# libcamera
 #
 
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES:=               \
-    CameraHardwareStub.cpp      \
-    FakeCamera.cpp
+LOCAL_MODULE_TAGS := optional
 
-LOCAL_MODULE:= libcamerastub
+LOCAL_SRC_FILES:=               \
+    CameraHardware.cpp      \
+    V4L2Camera.cpp  \
+    converter.cpp
+
+LOCAL_MODULE:= libcamera
+
+LOCAL_SHARED_LIBRARIES:= \
+    libui \
+    libutils \
+    libbinder \
+    libcutils \
+    libjpeg \
+    libcamera_client \
+    libsurfaceflinger_client
 
 ifeq ($(TARGET_SIMULATOR),true)
 LOCAL_CFLAGS += -DSINGLE_PROCESS
 endif
 
-LOCAL_SHARED_LIBRARIES:= libui
+LOCAL_C_INCLUDES += external/jpeg
+
+#LOCAL_STATIC_LIBRARIES:= \
+        libjpeg
 
 ifeq ($(BOARD_CAMERA_USE_GETBUFFERINFO),true)
 LOCAL_CFLAGS += -DUSE_GETBUFFERINFO
 endif
 
-include $(BUILD_STATIC_LIBRARY)
-endif # USE_CAMERA_STUB
+include $(BUILD_SHARED_LIBRARY)
+#include $(BUILD_STATIC_LIBRARY)
 
 #
 # libcameraservice
@@ -61,11 +64,11 @@ ifeq ($(TARGET_SIMULATOR),true)
 LOCAL_CFLAGS += -DSINGLE_PROCESS
 endif
 
-ifeq ($(USE_CAMERA_STUB), true)
-LOCAL_STATIC_LIBRARIES += libcamerastub
-else
+#ifeq ($(USE_CAMERA_STUB), true)
+#LOCAL_STATIC_LIBRARIES += libcamerastub
+#else
 LOCAL_SHARED_LIBRARIES += libcamera 
-endif
+#endif
 
 ifeq ($(BOARD_USE_FROYO_LIBCAMERA), true)
 LOCAL_CFLAGS += -DBOARD_USE_FROYO_LIBCAMERA

@@ -1,5 +1,10 @@
 /*
 **
+** Copyright (C) 2010 SpectraCore Technologies
+** Author : Venkat Raju
+** Email  : codredruids@spectracoretech.com
+** Initial Code : Based on a code from http://code.google.com/p/android-m912/downloads/detail?name=v4l2_camera_v2.patch
+**
 ** Copyright (C) 2008, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -585,7 +590,8 @@ status_t CameraService::Client::registerPreviewBuffers() {
 
     // FIXME: don't use a hardcoded format here.
     ISurface::BufferHeap buffers(w, h, w, h,
-                                 HAL_PIXEL_FORMAT_YCrCb_420_SP,
+    //                             HAL_PIXEL_FORMAT_YCrCb_420_SP,
+				PIXEL_FORMAT_RGB_565,
                                  mOrientation,
                                  0,
                                  mHardware->getPreviewHeap());
