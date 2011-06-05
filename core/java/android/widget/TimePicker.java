@@ -24,6 +24,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.NumberPicker;
+import android.widget.NumberPicker.OnTextChangedListener;
 
 import com.android.internal.R;
 
@@ -126,6 +127,13 @@ public class TimePicker extends FrameLayout {
                 onTimeChanged();
             }
         });
+        mHourPicker.setOnTextChangeListener(new OnTextChangedListener() {
+			public void onTextChanged(String text) {
+				if (text.length() == 2) {
+					mMinutePicker.requestTextFocus();
+				}
+			}
+		});
 
         // digits of minute
         mMinutePicker = (NumberPicker) findViewById(R.id.minute);
