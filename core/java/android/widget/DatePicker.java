@@ -28,6 +28,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnChangedListener;
+import android.widget.NumberPicker.OnTextChangedListener;
 
 import com.android.internal.R;
 
@@ -57,6 +58,15 @@ public class DatePicker extends FrameLayout {
     private final NumberPicker mDayPicker;
     private final NumberPicker mMonthPicker;
     private final NumberPicker mYearPicker;
+
+    // Types of pickers
+    private final int DAY_PICKER = 1;
+    private final int MONTH_PICKER = 2;
+    private final int YEAR_PICKER = 3;
+
+    // List of pickers in the UI
+    private PickersList mPickersList = new PickersList();
+    private boolean isMediumDateFormat = true;
 
     /**
      * How we notify users the date has changed.
@@ -195,6 +205,7 @@ public class DatePicker extends FrameLayout {
 
         if (months[0].startsWith("1")) {
             format = DateFormat.getDateFormat(getContext());
+            isMediumDateFormat = false;
         } else {
             format = DateFormat.getMediumDateFormat(getContext());
         }
@@ -226,12 +237,15 @@ public class DatePicker extends FrameLayout {
                 if (c == DateFormat.DATE && !didDay) {
                     parent.addView(mDayPicker);
                     didDay = true;
+                    mPickersList.add(mDayPicker, DAY_PICKER);
                 } else if ((c == DateFormat.MONTH || c == 'L') && !didMonth) {
                     parent.addView(mMonthPicker);
                     didMonth = true;
+                    mPickersList.add(mMonthPicker, MONTH_PICKER);
                 } else if (c == DateFormat.YEAR && !didYear) {
                     parent.addView (mYearPicker);
                     didYear = true;
+                    mPickersList.add(mYearPicker, YEAR_PICKER);
                 }
             }
         }
@@ -239,12 +253,47 @@ public class DatePicker extends FrameLayout {
         // Shouldn't happen, but just in case.
         if (!didMonth) {
             parent.addView(mMonthPicker);
+            mPickersList.add(mMonthPicker, MONTH_PICKER);
         }
         if (!didDay) {
             parent.addView(mDayPicker);
+            mPickersList.add(mDayPicker, DAY_PICKER);
         }
         if (!didYear) {
             parent.addView(mYearPicker);
+            mPickersList.add(mYearPicker, YEAR_PICKER);
+        }
+    }
+
+    private class PickersList {
+        // Arrays where to store info about the pickers
+        private NumberPicker[] listOfNumberPickers = {null, null, null};
+        private NumberPicker[] listOfNumberPickersNext = {null, null, null};
+        private int[] listOfNumberPickersType = {0, 0, 0};
+
+        // Index of adding
+        private int listIndex = 0;
+
+        public void add(NumberPicker picker, int type) {
+            listOfNumberPickers[listIndex] = picker;
+            listOfNumberPickersType[listIndex] = type;
+
+            if (listIndex > 0) {
+                final int index = new Integer(listIndex-1);
+
+                listOfNumberPickersNext[index] = picker;
+
+                // Set the OnTextChangedListener to first two NumberPickers
+                listOfNumberPickers[index].setOnTextChangeListener(new OnTextChangedListener() {
+                    public void onTextChanged(String text) {
+                        if ((!isMediumDateFormat && text.length() == 2) || (isMediumDateFormat && (listOfNumberPickersType[index] == MONTH_PICKER && text.length() == 3) || (listOfNumberPickersType[index] != MONTH_PICKER && text.length() == 2))) {
+                            listOfNumberPickers[index+1].requestTextFocus();
+                        }
+                    }
+                });
+            }
+
+            listIndex++;
         }
     }
 
