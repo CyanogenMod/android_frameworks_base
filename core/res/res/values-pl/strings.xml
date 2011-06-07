@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!-- 
 /* //device/apps/common/assets/res/any/strings.xml
 **
@@ -17,9 +17,9 @@
 ** limitations under the License.
 */
  -->
-
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
     <string name="byteShort" msgid="8340973892742019101">"B"</string>
     <string name="kilobyteShort" msgid="5973789783504771878">"KB"</string>
     <string name="megabyteShort" msgid="6355851576770428922">"MB"</string>
@@ -35,6 +35,20 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"Problem z połączeniem lub błędny kod MMI."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"Operacja jest ograniczona wyłącznie do numerów ustalonych."</string>
+
+    <!-- Profiles -->
+    <string name="profileNameDefault">Domyślny</string>
+    <string name="profileNameWork">Praca</string>
+    <string name="profileNameHome">Dom</string>
+    <string name="profileNameSilent">Cichy</string>
+    <string name="profileNameNight">Noc</string>
+    <string name="profileGroupPhone">Telefon</string>
+    <string name="profileGroupCalendar">Kalendarz</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Inne</string>
+
     <string name="serviceEnabled" msgid="8147278346414714315">"Usługa była włączona."</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"Usługa została włączona dla:"</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"Usługa została wyłączona."</string>
@@ -133,13 +147,21 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Wyłącz połączenia bezprzewodowe"</string>
     <string name="screen_lock" msgid="799094655496098153">"Blokada ekranu"</string>
     <string name="power_off" msgid="4266614107412865048">"Wyłącz"</string>
+    <string name="reboot_system">Uruchom ponownie</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Wyłączanie..."</string>
-    <string name="shutdown_confirm" msgid="649792175242821353">"Telefon zostanie wyłączony"</string>
+    <string name="reboot_progress">Ponowne uruchamianie…</string>
+    <string name="shutdown_confirm" msgid="649792175242821353">"Telefon zostanie wyłączony."</string>
+    <string name="reboot_confirm">Telefon zostanie uruchomiony ponownie.</string>
     <string name="recent_tasks_title" msgid="3691764623638127888">"Najnowsze"</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"Brak ostatnio używanych aplikacji."</string>
     <string name="global_actions" msgid="2406416831541615258">"Opcje telefonu"</string>
+    <string name="global_action_home">Ekran główny</string>
+    <string name="global_action_menu">Menu</string>
+    <string name="global_action_back">Powrót</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Blokada ekranu"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Wyłącz"</string>
+    <string name="global_action_reboot">Uruchom ponownie</string>
+    <string name="global_action_choose_profile">Wybierz profil</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Tryb cichy"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Dźwięk jest wyłączony"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Dźwięk jest włączony"</string>
@@ -557,6 +579,7 @@
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Poprawnie!"</string>
     <string name="lockscreen_pattern_wrong" msgid="4817583279053112312">"Niestety, spróbuj ponownie"</string>
     <string name="lockscreen_plugged_in" msgid="613343852842944435">"Ładowanie (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
+    <string name="lockscreen_discharging">Bateria (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
     <string name="lockscreen_charged" msgid="4938930459620989972">"Naładowany."</string>
     <string name="lockscreen_battery_short" msgid="3617549178603354656">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Podłącz ładowarkę."</string>
@@ -584,6 +607,8 @@
     <string name="lockscreen_unlock_label" msgid="737440483220667054">"Odblokuj"</string>
     <string name="lockscreen_sound_on_label" msgid="9068877576513425970">"Włącz dźwięk"</string>
     <string name="lockscreen_sound_off_label" msgid="996822825154319026">"Wyłącz dźwięk"</string>
+    <string name="lockscreen_phone_label">Telefon</string>
+    <string name="lockscreen_messaging_label">Wiadomości</string>
     <string name="password_keyboard_label_symbol_key" msgid="992280756256536042">"?123"</string>
     <string name="password_keyboard_label_alpha_key" msgid="8001096175167485649">"ABC"</string>
     <string name="password_keyboard_label_alt_key" msgid="1284820942620288678">"ALT"</string>
@@ -622,14 +647,17 @@
     <string name="beforeOneMonthDurationPast" msgid="909134546836499826">"Ponad 1 miesiąc temu"</string>
   <plurals name="num_seconds_ago">
     <item quantity="one" msgid="4869870056547896011">"sekundę temu"</item>
+    <item quantity="few"><xliff:g id="COUNT">%d</xliff:g> sekundy temu</item>
     <item quantity="other" msgid="3903706804349556379">"<xliff:g id="COUNT">%d</xliff:g> sekund temu"</item>
   </plurals>
   <plurals name="num_minutes_ago">
-    <item quantity="one" msgid="3306787433088810191">"1 minutę temu"</item>
+    <item quantity="one" msgid="3306787433088810191">"minutę temu"</item>
+    <item quantity="few"><xliff:g id="COUNT">%d</xliff:g> minuty temu</item>
     <item quantity="other" msgid="2176942008915455116">"<xliff:g id="COUNT">%d</xliff:g> minut temu"</item>
   </plurals>
   <plurals name="num_hours_ago">
     <item quantity="one" msgid="9150797944610821849">"godzinę temu"</item>
+    <item quantity="few"><xliff:g id="COUNT">%d</xliff:g> godziny temu</item>
     <item quantity="other" msgid="2467273239587587569">"<xliff:g id="COUNT">%d</xliff:g> godzin temu"</item>
   </plurals>
   <plurals name="last_num_days">
@@ -639,22 +667,27 @@
     <string name="older" msgid="5211975022815554840">"Starsze"</string>
   <plurals name="num_days_ago">
     <item quantity="one" msgid="861358534398115820">"wczoraj"</item>
+    <item quantity="two">Przedwczoraj</item>
     <item quantity="other" msgid="2479586466153314633">"<xliff:g id="COUNT">%d</xliff:g> dni temu"</item>
   </plurals>
   <plurals name="in_num_seconds">
     <item quantity="one" msgid="2729745560954905102">"za sekundę"</item>
+    <item quantity="few">za <xliff:g id="COUNT">%d</xliff:g> sekundy</item>
     <item quantity="other" msgid="1241926116443974687">"za <xliff:g id="COUNT">%d</xliff:g> sekund"</item>
   </plurals>
   <plurals name="in_num_minutes">
     <item quantity="one" msgid="8793095251325200395">"za minutę"</item>
+    <item quantity="few">za <xliff:g id="COUNT">%d</xliff:g> minuty</item>
     <item quantity="other" msgid="3330713936399448749">"za <xliff:g id="COUNT">%d</xliff:g> minut"</item>
   </plurals>
   <plurals name="in_num_hours">
     <item quantity="one" msgid="7164353342477769999">"za godzinę"</item>
+    <item quantity="few">za <xliff:g id="COUNT">%d</xliff:g> godziny</item>
     <item quantity="other" msgid="547290677353727389">"za <xliff:g id="COUNT">%d</xliff:g> godzin"</item>
   </plurals>
   <plurals name="in_num_days">
     <item quantity="one" msgid="5413088743009839518">"jutro"</item>
+    <item quantity="two">pojutrze</item>
     <item quantity="other" msgid="5109449375100953247">"za <xliff:g id="COUNT">%d</xliff:g> dni"</item>
   </plurals>
   <plurals name="abbrev_num_seconds_ago">
@@ -671,6 +704,7 @@
   </plurals>
   <plurals name="abbrev_num_days_ago">
     <item quantity="one" msgid="8463161711492680309">"wczoraj"</item>
+    <item quantity="two">przedwczoraj</item>
     <item quantity="other" msgid="3453342639616481191">"<xliff:g id="COUNT">%d</xliff:g> dni temu"</item>
   </plurals>
   <plurals name="abbrev_in_num_seconds">
@@ -716,6 +750,7 @@
     <string name="elapsed_time_short_format_mm_ss" msgid="4431555943828711473">"<xliff:g id="MINUTES">%1$02d</xliff:g>:<xliff:g id="SECONDS">%2$02d</xliff:g>"</string>
     <string name="elapsed_time_short_format_h_mm_ss" msgid="1846071997616654124">"<xliff:g id="HOURS">%1$d</xliff:g>:<xliff:g id="MINUTES">%2$02d</xliff:g>:<xliff:g id="SECONDS">%3$02d</xliff:g>"</string>
     <string name="selectAll" msgid="6876518925844129331">"Zaznacz wszystko"</string>
+    <string name="copyAll">Kopiuj wszystko</string>
     <string name="selectText" msgid="4862359311088898878">"Zaznacz wyraz"</string>
     <string name="cut" msgid="3092569408438626261">"Wytnij"</string>
     <string name="copy" msgid="2681946229533511987">"Kopiuj"</string>
@@ -742,6 +777,8 @@
     <string name="aerr_title" msgid="653922989522758100">"Przepraszamy!"</string>
     <string name="aerr_application" msgid="4683614104336409186">"Aplikacja <xliff:g id="APPLICATION">%1$s</xliff:g> (proces <xliff:g id="PROCESS">%2$s</xliff:g>) została niespodziewanie zatrzymana. Spróbuj ponownie."</string>
     <string name="aerr_process" msgid="1551785535966089511">"Proces <xliff:g id="PROCESS">%1$s</xliff:g> został niespodziewanie zatrzymany. Spróbuj ponownie."</string>
+    <string name="aerr_revoked_application">Aplikacja: <xliff:g id="application">%1$s</xliff:g></string>
+    <string name="aerr_revoked_process">Proces: <xliff:g id="process">%1$s</xliff:g> has</string>
     <string name="anr_title" msgid="3100070910664756057">"Przepraszamy!"</string>
     <string name="anr_activity_application" msgid="3538242413112507636">"Działanie <xliff:g id="ACTIVITY">%1$s</xliff:g> (w aplikacji <xliff:g id="APPLICATION">%2$s</xliff:g>) nie odpowiada."</string>
     <string name="anr_activity_process" msgid="5420826626009561014">"Działanie <xliff:g id="ACTIVITY">%1$s</xliff:g> (w procesie <xliff:g id="PROCESS">%2$s</xliff:g>) nie odpowiada."</string>
@@ -749,6 +786,7 @@
     <string name="anr_process" msgid="1246866008169975783">"Proces <xliff:g id="PROCESS">%1$s</xliff:g> nie odpowiada."</string>
     <string name="force_close" msgid="3653416315450806396">"Wymuś zamknięcie"</string>
     <string name="report" msgid="4060218260984795706">"Zgłoś"</string>
+    <string name="reset_perms">Resetuj uprawnienia</string>
     <string name="wait" msgid="7147118217226317732">"Czekaj"</string>
     <string name="launch_warning_title" msgid="8323761616052121936">"Aplikacja przekierowana"</string>
     <string name="launch_warning_replace" msgid="6202498949970281412">"Aplikacja <xliff:g id="APP_NAME">%1$s</xliff:g> jest uruchomiona."</string>
@@ -884,6 +922,7 @@
     <string name="l2tp_vpn_description" msgid="3750692169378923304">"Protokół L2TP"</string>
     <string name="l2tp_ipsec_psk_vpn_description" msgid="3945043564008303239">"Sieć VPN L2TP/IPSec z kluczem PSK"</string>
     <string name="l2tp_ipsec_crt_vpn_description" msgid="5382714073103653577">"Sieć VPN L2TP/IPSec z certyfikatem"</string>
+    <string name="openvpn_vpn_description">OpenVPN SSL VPN</string>
     <string name="upload_file" msgid="2897957172366730416">"Wybierz plik"</string>
     <string name="reset" msgid="2448168080964209908">"Resetuj"</string>
     <string name="submit" msgid="1602335572089911941">"Prześlij"</string>
@@ -920,4 +959,8 @@
         <item quantity="one">Pozostała %d sekunda</item>
         <item quantity="other">Pozostało %d sekund</item>
     </plurals>
+
+    <string name="permlab_revokePermissions">Pozwala przeglądać i edytować cofnięte uprawnienia. Nie do użytku przez zwykłe aplikacje.</string>
+    <string name="permdesc_revokePermissions">Pozwala czytać i zapisywać cofnięte uprawnienia. Nie do użytku przez zwykłe aplikacje.</string>
+
 </resources>
