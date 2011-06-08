@@ -1807,12 +1807,17 @@ public final class Settings {
         public static final String ACCELEROMETER_ROTATION = "accelerometer_rotation";
 
          /**
-         * Control weather 180 degree rotation should be included if
-         * ACCELEROMETER_ROTATION is enabled. If 0 no 180 degree rotation will be
-         * executed, if 1 the 180 degree rotation is executed when ACCELEROMETER_ROTATION is true.
+         * Control the type of rotation which can be performed using the accelerometer
+         * if ACCELEROMETER_ROTATION is enabled.
+         * Value is a bitwise combination of
+         * 1 = 90 degrees (left)
+         * 2 = 180 degrees (inverted)
+         * 4 = 270 degrees (right)
+         * Normal portrait (0 degrees) is always enabled
+         * Default is 5 (90 & 270 degrees), like stock Android
          * @hide
          */
-        public static final String ACCELEROMETER_ROTATE_180 = "accelerometer_rotate_180";
+        public static final String ACCELEROMETER_ROTATION_MODE = "accelerometer_rotation_mode";
 
         /**
          * Specifies the number of recent apps to show (8, 12, 16)
@@ -2825,7 +2830,7 @@ public final class Settings {
             TIME_12_24,
             DATE_FORMAT,
             ACCELEROMETER_ROTATION,
-            ACCELEROMETER_ROTATE_180,
+            ACCELEROMETER_ROTATION_MODE,
             DTMF_TONE_WHEN_DIALING,
             DTMF_TONE_TYPE_WHEN_DIALING,
             EMERGENCY_TONE,
