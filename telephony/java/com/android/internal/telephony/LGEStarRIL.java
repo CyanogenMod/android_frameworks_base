@@ -815,19 +815,30 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
         String response;
         SimpleDateFormat dateFormatter;
         SimpleDateFormat dateParser;
+        boolean isP990 = SystemProperties.get("ro.build.product").equals("p990");
+        String[] tzIds;
 
         num = p.readInt(); // TZ diff in quarter-hours
 
         /* Get the actual date string */
         parceldata = p.readString();
-        /* Filter out whatever it is LG is attaching here */
-        if (SystemProperties.get("ro.build.product").equals("p990"))
+
+        /* P990 needs some additional hax... */
+        tzIds = TimeZone.getAvailableIDs((num/4)*3600*1000);
+        if (isP990) {
             parceldata = parceldata.substring(0,(parceldata.lastIndexOf(",")));
+        }
 
         /* WTH... Date may come with 4 digits in the year, reduce to 2 */
         try {
             dateFormatter = new SimpleDateFormat("yy/MM/dd,HH:mm:ss");
             dateParser = new SimpleDateFormat("yy/MM/dd,HH:mm:ss");
+
+            /* P990 delivers localtime, convert to UTC */
+            if (isP990) {
+                dateFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+                dateParser.setTimeZone(TimeZone.getTimeZone(tzIds[0]));
+            }
 
             response = dateFormatter.format(dateParser.parse(parceldata));
 
