@@ -24,6 +24,7 @@ import com.android.internal.widget.SlidingTab;
 import com.android.internal.widget.SlidingTab.OnTriggerListener;
 
 import android.content.ActivityNotFoundException;
+import android.app.admin.DevicePolicyManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ContentResolver;
@@ -53,6 +54,7 @@ import android.os.BatteryManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.Vibrator;
+import android.os.Handler;
 import android.provider.Settings;
 
 import java.util.ArrayList;
@@ -527,6 +529,30 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         }
 
         resetStatusInfo(updateMonitor);
+    }
+
+
+    private void checkLockScreenTimeout()
+    {
+        final boolean usingLockPattern = mLockPatternUtils.getKeyguardStoredPasswordQuality()
+                    == DevicePolicyManager.PASSWORD_QUALITY_SOMETHING;
+
+        if (mLockPatternUtils.isSecure() && usingLockPattern ) {
+
+            long nSecureLockTimeout = mUpdateMonitor.getUnlockedTimeout();
+
+            // timeout expired -- we have to switch to the secure lock screen
+            if (nSecureLockTimeout == 0) {
+                final IccCard.State simState = mUpdateMonitor.getSimState();
+
+                // not sure it is really neccessary here, but it always better to be very accurate with
+                // PIN and PUK locks screens - so if there is some of this stuff - just disable all
+                // the pattern lock timeout functionality for a little while
+                if (simState != IccCard.State.PIN_REQUIRED && simState != IccCard.State.PUK_REQUIRED) {
+                    mCallback.goToUnlockScreen();
+                }
+            }
+        }
     }
 
     private boolean isSilentMode() {
@@ -1149,6 +1175,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     /** {@inheritDoc} */
     public void onResume() {
+        checkLockScreenTimeout();
         resetStatusInfo(mUpdateMonitor);
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyCallButton);
     }

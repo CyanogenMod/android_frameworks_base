@@ -51,4 +51,7 @@ interface IPowerManager
     int getLightSensorKeyboardBrightness();
 
     void setKeyboardLight(boolean on, int key);
+
+    void setLastScreenUnlockTime(long time);
+    long getLastScreenUnlockTime();
 }
