@@ -53,6 +53,7 @@ import android.os.BatteryManager;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.Vibrator;
+import android.os.Handler;
 import android.provider.Settings;
 
 import java.util.ArrayList;
@@ -107,6 +108,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     private TextView mCustomMsg;
     private TextView mNowPlaying;
+
+    private Handler mHandler;
 
     // current configuration state of keyboard and display
     private int mKeyboardHidden;
@@ -193,6 +196,18 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private boolean mHideUnlockTab;
     private int mGestureColor;
 
+    /*
+     * Used only if secure lock is enabled - delayed action
+     * to switch to pattern/secure lock in a some given timeout
+     */
+    private Runnable mPendingSwitchToSecureLock = new Runnable() {
+        public void run() {
+            if (mCallback != null) {
+                mCallback.goToUnlockScreen();
+            }
+        }
+    };
+
     /**
      * The status of this lock screen.
      */
@@ -274,6 +289,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mLockPatternUtils = lockPatternUtils;
         mUpdateMonitor = updateMonitor;
         mCallback = callback;
+
+        mHandler = new Handler();
 
         mEnableMenuKeyInLockScreen = shouldEnableMenuKey();
 
@@ -399,6 +416,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 musicIntent.setClassName("com.android.music","com.android.music.MediaPlaybackActivity");
                 musicIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 getContext().startActivity(musicIntent);
+                cancelSecureLockTimeout();
                 mCallback.goToUnlockScreen();
             }
         });
@@ -461,6 +479,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                         Intent callIntent = new Intent(Intent.ACTION_DIAL);
                         callIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         getContext().startActivity(callIntent);
+                        cancelSecureLockTimeout();
                         mCallback.goToUnlockScreen();
                     } else if (whichHandle == SlidingTab.OnTriggerListener.RIGHT_HANDLE) {
                         if (mCustomAppActivity != null) {
@@ -469,6 +488,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                                         | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
                                 mContext.startActivity(i);
+                                cancelSecureLockTimeout();
                                 mCallback.goToUnlockScreen();
                             } catch (URISyntaxException e) {
                             } catch (ActivityNotFoundException e) {
@@ -529,6 +549,39 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         resetStatusInfo(updateMonitor);
     }
 
+
+    /*
+     * if security lock is enabled, and it has enabled security timeout
+     * - than schedule action to switch to secure lock screen after timeout
+     * expires.
+     * @hide
+     */
+    public void setupSecureLockTimeout() {
+        if (mLockPatternUtils.isSecure()) {
+
+            long nSecureLockTimeout = mUpdateMonitor.getUnlockedTimeout();
+
+            if (nSecureLockTimeout != 0) {
+                final IccCard.State simState = mUpdateMonitor.getSimState();
+
+                // not sure it is really neccessary here, but it always better to be very accurate with
+                // PIN and PUK locks screens - so if there is some of this stuff - just disable all
+                // the pattern lock timeout functionality for a little while
+                if (simState != IccCard.State.PIN_REQUIRED && simState != IccCard.State.PUK_REQUIRED) {
+                    mHandler.postDelayed(mPendingSwitchToSecureLock, nSecureLockTimeout);
+                }
+            }
+        }
+    }
+
+    /*
+     * Cancels the previously activated lock timeout
+     * @hide
+     */
+    public void cancelSecureLockTimeout() {
+        mHandler.removeCallbacks(mPendingSwitchToSecureLock);
+    }
+
     private boolean isSilentMode() {
         return mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL;
     }
@@ -578,6 +631,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 || (keyCode == KeyEvent.KEYCODE_MENU && mMenuUnlockScreen)
                 || (keyCode == KeyEvent.KEYCODE_MENU && mEnableMenuKeyInLockScreen)) {
 
+            cancelSecureLockTimeout();
             mCallback.goToUnlockScreen();
         }
         return false;
@@ -586,6 +640,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     /** {@inheritDoc} */
     public void onTrigger(View v, int whichHandle) {
         if (whichHandle == SlidingTab.OnTriggerListener.LEFT_HANDLE) {
+            cancelSecureLockTimeout();
             mCallback.goToUnlockScreen();
         } else if (whichHandle == SlidingTab.OnTriggerListener.RIGHT_HANDLE) {
             toggleSilentMode();
@@ -626,6 +681,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         }
 
         if (mUnlockTrigger) {
+            cancelSecureLockTimeout();
             mCallback.goToUnlockScreen();
         } else if (mCustomAppTrigger) {
             if (mCustomAppActivity != null) {
@@ -634,6 +690,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                     i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
                         | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
                     mContext.startActivity(i);
+                    cancelSecureLockTimeout();
                     mCallback.goToUnlockScreen();
                 } catch (URISyntaxException e) {
                 } catch (ActivityNotFoundException e) {
@@ -1109,6 +1166,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             mKeyboardHidden = newConfig.hardKeyboardHidden;
             final boolean isKeyboardOpen = mKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO;
             if (mUpdateMonitor.isKeyguardBypassEnabled() && isKeyboardOpen) {
+                cancelSecureLockTimeout();
                 mCallback.goToUnlockScreen();
             }
         }
@@ -1156,6 +1214,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     /** {@inheritDoc} */
     public void cleanUp() {
         mUpdateMonitor.removeCallback(this); // this must be first
+        cancelSecureLockTimeout();
         mLockPatternUtils = null;
         mUpdateMonitor = null;
         mCallback = null;
@@ -1204,6 +1263,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             String uri = payload[1];
             if (uri != null) {
                 if ("UNLOCK".equals(uri)) {
+                    cancelSecureLockTimeout();
                     mCallback.goToUnlockScreen();
                 } else if ("SOUND".equals(uri)) {
                     toggleSilentMode();
@@ -1229,6 +1289,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
                             mCallback.pokeWakelock();
                         } else {
+                            cancelSecureLockTimeout();
                             mCallback.goToUnlockScreen();
                         }
                     } catch (URISyntaxException e) {
