@@ -327,6 +327,8 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
             mScreenOn = false;
             if (DEBUG) Log.d(TAG, "onScreenTurnedOff(" + why + ")");
 
+            mUpdateMonitor.reportScreenOff();
+
             if (mExitSecureCallback != null) {
                 if (DEBUG) Log.d(TAG, "pending exit secure callback cancelled");
                 mExitSecureCallback.onKeyguardExitResult(false);
@@ -562,6 +564,11 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
      */
     private void doKeyguard() {
         synchronized (this) {
+            // notify update monitor about the screen is getting locked, 
+            // if pattern lock is active, then mUpdateMonitor will start countdown before the lock
+            // goes active
+            mUpdateMonitor.reportScreenLocked();
+
             // override lockscreen if selected in tablet tweaks
             int defValue=(CmSystem.getDefaultBool(mContext, CmSystem.CM_DEFAULT_DISABLE_LOCKSCREEN) ? 1 : 0);
             boolean disableLockscreen=(Settings.System.getInt(mContext.getContentResolver(),

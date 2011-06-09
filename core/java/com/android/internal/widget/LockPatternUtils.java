@@ -581,11 +581,19 @@ public class LockPatternUtils {
     public void setVisibleDotsEnabled(boolean enabled) {
         setBoolean(Settings.Secure.LOCK_DOTS_VISIBLE, enabled);        
     }
-    
+   
+    public void setPatternLockTimeout(int timeout) {
+    	setInt(Settings.Secure.PATTERN_LOCK_TIMEOUT, timeout);
+    }
+
     public boolean isVisibleDotsEnabled() {
         return getBoolean(Settings.Secure.LOCK_DOTS_VISIBLE, true);
     }
-    
+
+    public int getPatternLockTimeout() {
+	    return getInt(Settings.Secure.PATTERN_LOCK_TIMEOUT, 0);
+    }
+
     public void setShowErrorPath(boolean enabled) {
         setBoolean(Settings.Secure.LOCK_SHOW_ERROR_PATH, enabled);        
     }
