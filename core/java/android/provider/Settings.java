@@ -1795,6 +1795,18 @@ public final class Settings {
         public static final String USE_CUSTOM_LONG_SEARCH_APP_ACTIVITY = "use_custom_long_search_app_activity";
 
         /**
+         * Specifies whether or not to use a custom app on double tap home key press
+         * @hide
+         */
+        public static final String USE_CUSTOME_DOUBLE_TAP_KEY_TOGGLE = "use_custom_double_tap_home_app_toggle";
+
+        /**
+         * Contains activity to start on  double tap home key press
+         * @hide
+         */
+        public static final String USE_CUSTOME_DOUBLE_TAP_ACTIVITY = "use_custom_double_tap_home_app_activity";
+
+        /**
          * Stores the uri of the defined application for user key 1
          * @hide
          */
