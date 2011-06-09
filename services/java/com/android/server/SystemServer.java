@@ -67,16 +67,29 @@ class ServerThread extends Thread {
 
     private ContentResolver mContentResolver;
 
-    private class AdbSettingsObserver extends ContentObserver {
-        public AdbSettingsObserver() {
+    private class AdbEnabledObserver extends ContentObserver {
+        public AdbEnabledObserver() {
             super(null);
         }
         @Override
         public void onChange(boolean selfChange) {
             boolean enableAdb = (Settings.Secure.getInt(mContentResolver,
-                Settings.Secure.ADB_ENABLED, 0) > 0);
+		Settings.Secure.ADB_ENABLED, 0) > 0);
             // setting this secure property will start or stop adbd
-           SystemProperties.set("persist.service.adb.enable", enableAdb ? "1" : "0");
+	    SystemProperties.set("persist.service.adb.enable", enableAdb ? "1" : "0");
+        }
+    }
+
+    private class AdbPortObserver extends ContentObserver {
+        public AdbPortObserver() {
+            super(null);
+        }
+        @Override
+        public void onChange(boolean selfChange) {
+            int adbPort = Settings.Secure.getInt(mContentResolver,
+						     Settings.Secure.ADB_PORT, 0);
+            // setting this will control whether ADB runs on TCP/IP or USB
+	    SystemProperties.set("service.adb.tcp.port", Integer.toString(adbPort));
         }
     }
 
@@ -481,12 +494,18 @@ class ServerThread extends Thread {
         }
 
         // make sure the ADB_ENABLED setting value matches the secure property value
+        Settings.Secure.putInt(mContentResolver, Settings.Secure.ADB_PORT,
+                Integer.parseInt(SystemProperties.get("service.adb.tcp.port", "-1")));
+
         Settings.Secure.putInt(mContentResolver, Settings.Secure.ADB_ENABLED,
                 "1".equals(SystemProperties.get("persist.service.adb.enable")) ? 1 : 0);
 
         // register observer to listen for settings changes
+        mContentResolver.registerContentObserver(Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
+                false, new AdbPortObserver());
+
         mContentResolver.registerContentObserver(Settings.Secure.getUriFor(Settings.Secure.ADB_ENABLED),
-                false, new AdbSettingsObserver());
+                false, new AdbEnabledObserver());
 
         // Before things start rolling, be sure we have decided whether
         // we are in safe mode.
