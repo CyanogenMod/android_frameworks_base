@@ -131,10 +131,6 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private String mDateFormatString;
     private boolean mEnableMenuKeyInLockScreen;
 
-    // time format from system settings - contains 12 or 24
-    private int mTime12_24 = (Settings.System.getInt(mContext.getContentResolver(),
-            Settings.System.TIME_12_24, 12));
-
     private boolean mTrackballUnlockScreen = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.TRACKBALL_UNLOCK_SCREEN, 0) == 1);
 
@@ -427,7 +423,6 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mRotarySelector.setLenseSquare(mUseRotaryRevLockscreen);
         if(mRotaryHideArrows)
             mRotarySelector.hideArrows(true);
-        mRotarySelector.setTimeFormat(mTime12_24);
 
         //hide most items when we are in potrait lense mode
         mLensePortrait=(mUseLenseSquareLockscreen && mCreationOrientation != Configuration.ORIENTATION_LANDSCAPE);
@@ -1313,7 +1308,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mNowPlaying.setVisibility(visibility);
         mAlbumArt.setVisibility(visibility);
 
-        if (mTime12_24 == 24)
+        if (DateFormat.is24HourFormat(mContext))
             mAmPm.setVisibility(View.INVISIBLE);
 
         mNowPlayingToggle = false;
