@@ -901,6 +901,7 @@ class AppWidgetService extends IAppWidgetService.Stub
             out.endTag(null, "gs");
 
             out.endDocument();
+            stream.getFD().sync();
             stream.close();
             return true;
         } catch (IOException e) {
