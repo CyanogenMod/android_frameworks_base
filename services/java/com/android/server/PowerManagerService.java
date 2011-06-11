@@ -524,13 +524,11 @@ class PowerManagerService extends IPowerManager.Stub
                             mContext.getResources().getBoolean(
                                     com.android.internal.R.bool.config_enableScreenOffAnimation) ? 1 : 0) == 1;
 
-                final float windowScale = getFloat(WINDOW_ANIMATION_SCALE, 1.0f);
-                final float transitionScale = getFloat(TRANSITION_ANIMATION_SCALE, 1.0f);
                 mAnimationSetting = 0;
-                if (windowScale > 0.5f && mElectronBeamAnimationOff) {
+                if (mElectronBeamAnimationOff) {
                     mAnimationSetting |= ANIM_SETTING_OFF;
                 }
-                if (transitionScale > 0.5f && mElectronBeamAnimationOn) {
+                if (mElectronBeamAnimationOn) {
                     mAnimationSetting |= ANIM_SETTING_ON;
                 }
             }
