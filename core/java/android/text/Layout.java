@@ -886,103 +886,118 @@ public abstract class Layout {
         return getLineTop(line) - (getLineTop(line+1) - getLineDescent(line));
     }
 
-    /**
-     * Return the text offset that would be reached by moving left
-     * (possibly onto another line) from the specified offset.
+    /* This class is a helper for moving the cursor,
+     * therefore it actually finds the directional run for
+     * the character before the given cursor offset.
      */
-    public int getOffsetToLeftOf(int offset) {
-        int line = getLineForOffset(offset);
-        int start = getLineStart(line);
-        int end = getLineEnd(line);
-        Directions dirs = getLineDirections(line);
+    private class DirectionalRunFinder {
+        public int line;
+        public int lineDir;
+        public int runDir;
+        public int runStart;
+        public int runEnd;
+        public int runLength;
+        public boolean runDegenerate;
+        public int lineStart;
+        public int lineEnd;
+        public Directions lineDirs;
 
-        if (line != getLineCount() - 1)
-            end = TextUtils.getOffsetBefore(mText, end);
-
-        float horiz = getPrimaryHorizontal(offset);
-
-        int best = offset;
-        float besth = Integer.MIN_VALUE;
-        int candidate;
-
-        candidate = TextUtils.getOffsetBefore(mText, offset);
-        if (candidate >= start && candidate <= end) {
-            float h = getPrimaryHorizontal(candidate);
-
-            if (h < horiz && h > besth) {
-                best = candidate;
-                besth = h;
-            }
+        public DirectionalRunFinder(int offset) {
+            find(offset);
         }
 
-        candidate = TextUtils.getOffsetAfter(mText, offset);
-        if (candidate >= start && candidate <= end) {
-            float h = getPrimaryHorizontal(candidate);
-
-            if (h < horiz && h > besth) {
-                best = candidate;
-                besth = h;
-            }
+        private void initLine(int newLine) {
+            line = newLine;
+            lineStart = getLineStart(line);
+            lineEnd = getLineEnd(line);
+            lineDirs = getLineDirections(line);
+            lineDir = getParagraphDirection(line);
         }
 
-        int here = start;
-        for (int i = 0; i < dirs.mDirections.length; i++) {
-            int there = here + dirs.mDirections[i];
-            if (there > end)
-                there = end;
-
-            float h = getPrimaryHorizontal(here);
-
-            if (h < horiz && h > besth) {
-                best = here;
-                besth = h;
+        public void find(int offset) {
+            initLine(getLineForOffset(offset));
+            runDir = lineDir;
+            int runIndex = 0;
+            runStart = runEnd = lineStart;
+            if (offset == runStart) {
+                return;
             }
-
-            candidate = TextUtils.getOffsetAfter(mText, here);
-            if (candidate >= start && candidate <= end) {
-                h = getPrimaryHorizontal(candidate);
-
-                if (h < horiz && h > besth) {
-                    best = candidate;
-                    besth = h;
+            for (; runIndex < lineDirs.mDirections.length; ++runIndex) {
+                int length = lineDirs.mDirections[runIndex];
+                if (length <= 0)
+                    continue;
+                runStart = runEnd;
+                runEnd = runStart + length;
+                runLength = length;
+                if (offset <= runEnd) {
+                    runDir = (runIndex & 1) != 0 ? DIR_RIGHT_TO_LEFT : DIR_LEFT_TO_RIGHT;
+                    break;
                 }
             }
-
-            candidate = TextUtils.getOffsetBefore(mText, there);
-            if (candidate >= start && candidate <= end) {
-                h = getPrimaryHorizontal(candidate);
-
-                if (h < horiz && h > besth) {
-                    best = candidate;
-                    besth = h;
-                }
+            if (runEnd > lineEnd) {
+                runEnd = lineEnd;
+                runLength = runEnd - runStart;
             }
-
-            here = there;
+            runDegenerate = TextUtils.getOffsetAfter(mText,runStart) >= runEnd;
         }
 
-        float h = getPrimaryHorizontal(end);
-
-        if (h < horiz && h > besth) {
-            best = end;
-            besth = h;
+        public void findFirstRun(int newLine) {
+            initLine(newLine);
+            runDir = lineDir;
+            int runIndex = 0;
+            runStart = runEnd = lineStart;
+            for(; runIndex < lineDirs.mDirections.length && lineDirs.mDirections[runIndex]==0; ++runIndex);
+            if (runIndex < lineDirs.mDirections.length) {
+                runDir = (runIndex & 1) != 0 ? DIR_RIGHT_TO_LEFT : DIR_LEFT_TO_RIGHT;
+                runEnd = Math.min(runStart + lineDirs.mDirections[runIndex],lineEnd);
+            }
+            runLength = runEnd - runStart;
+            runDegenerate = TextUtils.getOffsetAfter(mText,runStart) >= runEnd;
         }
 
-        if (best != offset)
-            return best;
+        public void findLastRun(int newLine) {
+            initLine(newLine);
+            runDir = lineDir;
+            int runIndex = 0, lastRunIndex = -1;
+            runStart = runEnd = lineStart;
+            for(; runIndex < lineDirs.mDirections.length; ++runIndex) {
+                int length = lineDirs.mDirections[runIndex];
+                if (length <= 0)
+                    continue;
+                runStart = runEnd;
+                runEnd = runStart + length;
+                runLength = length;
+                lastRunIndex = runIndex;
+            }
+            if (runEnd > lineEnd) {
+                runEnd = lineEnd;
+                runLength = runEnd - runStart;
+            }
+            runDegenerate = TextUtils.getOffsetAfter(mText,runStart) >= runEnd;
+            if (lastRunIndex >= 0)
+                runDir = (lastRunIndex & 1) != 0 ? DIR_RIGHT_TO_LEFT : DIR_LEFT_TO_RIGHT;
+        }
 
-        int dir = getParagraphDirection(line);
+        public boolean containedInRun(int offset, boolean includeEdges) {
+            if (includeEdges)
+                return runStart <= offset && offset <= runEnd;
+            else
+                return runStart < offset && offset < runEnd;
+        }
 
-        if (dir > 0) {
-            if (line == 0)
-                return best;
-            else
-                return getOffsetForHorizontal(line - 1, 10000);
-        } else {
-            if (line == getLineCount() - 1)
-                return best;
-            else
-                return getOffsetForHorizontal(line + 1, 10000);
+        public int nextNonEmptyLine(int line) {
+            int lastLine = getLineCount()-1;
+            if (line < lastLine)
+                do { ++line; }
+                while (line < lastLine && getLineStart(line)==getLineEnd(line));
+            return line;
+        }
+
+        public int prevNonEmptyLine(int line) {
+            if (line > 0)
+                do { --line; }
+                while (line > 0 && getLineStart(line)==getLineEnd(line));
+            return line;
         }
     }
 
@@ -991,99 +1006,152 @@ public abstract class Layout {
      * (possibly onto another line) from the specified offset.
      */
     public int getOffsetToRightOf(int offset) {
-        int line = getLineForOffset(offset);
-        int start = getLineStart(line);
-        int end = getLineEnd(line);
-        Directions dirs = getLineDirections(line);
+        DirectionalRunFinder run = new DirectionalRunFinder(offset);
+        int runDir = run.runDir;
+        boolean mainDir = runDir==run.lineDir;
+        int line = run.line;
+        // If run is only one character or if this is the last character
+        // of a RTL run in a LTR paragraph, the use the paragraph direction:
+        boolean useLineDir = run.runDegenerate ||
+            offset==run.runEnd && runDir<0 && !mainDir;
 
-        if (line != getLineCount() - 1)
-            end = TextUtils.getOffsetBefore(mText, end);
+        int dir = useLineDir ? run.lineDir : runDir;
+        int res = dir > 0 ?
+            TextUtils.getOffsetAfter(mText, offset) :
+            TextUtils.getOffsetBefore(mText, offset) ;
 
-        float horiz = getPrimaryHorizontal(offset);
-
-        int best = offset;
-        float besth = Integer.MAX_VALUE;
-        int candidate;
-
-        candidate = TextUtils.getOffsetBefore(mText, offset);
-        if (candidate >= start && candidate <= end) {
-            float h = getPrimaryHorizontal(candidate);
-
-            if (h > horiz && h < besth) {
-                best = candidate;
-                besth = h;
-            }
-        }
-
-        candidate = TextUtils.getOffsetAfter(mText, offset);
-        if (candidate >= start && candidate <= end) {
-            float h = getPrimaryHorizontal(candidate);
-
-            if (h > horiz && h < besth) {
-                best = candidate;
-                besth = h;
-            }
-        }
-
-        int here = start;
-        for (int i = 0; i < dirs.mDirections.length; i++) {
-            int there = here + dirs.mDirections[i];
-            if (there > end)
-                there = end;
-
-            float h = getPrimaryHorizontal(here);
-
-            if (h > horiz && h < besth) {
-                best = here;
-                besth = h;
-            }
-
-            candidate = TextUtils.getOffsetAfter(mText, here);
-            if (candidate >= start && candidate <= end) {
-                h = getPrimaryHorizontal(candidate);
-
-                if (h > horiz && h < besth) {
-                    best = candidate;
-                    besth = h;
+        // if moved to a new run (or if stuck - i.e. end of text and going wrong way):
+        if (!run.containedInRun(res,mainDir)) {
+            if (mainDir) { // exiting directional run in same direction as paragraph:
+                // find the new directional run (notice it may be in a different line)
+                run.find(res);
+                if (run.runDir != runDir && run.line==line && !run.runDegenerate) {
+                    // if switched run direction:
+                    // go to the leftmost char of the new run:
+                    if (run.runDir > 0)
+                        // entering LTR run in RTL paragraph, so move right should
+                        // behave like backspace and move to the last character typed
+                        // which is the last character in the run:
+                        res = run.runEnd;
+                    else
+                        // continuing, the logic from the above comment, just this time
+                        // for RTL runs in LTR paragraphs, the last character will be handled
+                        // at the "end of movement" over this run, so when entering the run
+                        // we enter one before the last char:
+                        res = TextUtils.getOffsetBefore(mText,run.runEnd);
                 }
             }
-
-            candidate = TextUtils.getOffsetBefore(mText, there);
-            if (candidate >= start && candidate <= end) {
-                h = getPrimaryHorizontal(candidate);
-
-                if (h > horiz && h < besth) {
-                    best = candidate;
-                    besth = h;
-                }
+            else if (!useLineDir) {
+                // exiting directional run in oppisite direction as paragraph,
+                // so we either covered only the last letter of a LTR run in a
+                // RTL line and need to go to the start of this run (offset-runLength+1)
+                // or we went over all of a RTL run in a LTR line except its
+                // last letter so move to this letter (offset+runLength-1):
+                res = runDir > 0 ?
+                    TextUtils.getOffsetAfter(mText, offset-run.runLength) :
+                    TextUtils.getOffsetBefore(mText, offset+run.runLength) ;
             }
-
-            here = there;
         }
 
-        float h = getPrimaryHorizontal(end);
-
-        if (h > horiz && h < besth) {
-            best = end;
-            besth = h;
+        // Check if overflowed line to any direction:
+        int originalLine = line;
+        line = run.line; // run may have been updated above to a new line
+                         // if it has, we trust its new value, otherwise:
+        if (line==originalLine) {
+            if (res >= run.lineEnd)
+                line = run.nextNonEmptyLine(line);
+            if (res < run.lineStart)
+                line = run.prevNonEmptyLine(line);
+        }
+        if (line!=originalLine) { // if we did reach a new line, update position in new line:
+            int newLineDir = getParagraphDirection(line);
+            boolean lastLine = line == getLineCount()-1;
+            if (newLineDir>0) {
+                // go to leftmost position of new LTR line:
+                run.findFirstRun(line);
+                res = run.runDir>0 || run.runDegenerate ? run.runStart : TextUtils.getOffsetBefore(mText,run.runEnd);
+            } else {
+                // go to leftmost position of new RTL line:
+                run.findLastRun(line);
+                res = run.runDir>0 && !run.runDegenerate ? TextUtils.getOffsetAfter(mText,run.runStart) : run.runEnd;
+                if (res==run.runEnd && !lastLine)
+                    res = TextUtils.getOffsetBefore(mText,res);
+            }
         }
 
-        if (best != offset)
-            return best;
+        return res;
+    }
 
-        int dir = getParagraphDirection(line);
+    /**
+     * Return the text offset that would be reached by moving left
+     * (possibly onto another line) from the specified offset.
+     */
+    public int getOffsetToLeftOf(int offset) {
+        DirectionalRunFinder run = new DirectionalRunFinder(offset);
+        int runDir = run.runDir;
+        boolean mainDir = runDir==run.lineDir;
+        int line = run.line;
+        // If run is only one character or if this is the last character
+        // of a LTR run in a RTL paragraph, the use the paragraph direction:
+        boolean useLineDir = run.runDegenerate ||
+            offset==run.runEnd && runDir>0 && !mainDir;
 
-        if (dir > 0) {
-            if (line == getLineCount() - 1)
-                return best;
-            else
-                return getOffsetForHorizontal(line + 1, -10000);
-        } else {
-            if (line == 0)
-                return best;
-            else
-                return getOffsetForHorizontal(line - 1, -10000);
+        int dir = useLineDir ? run.lineDir : runDir;
+        int res = dir > 0 ?
+            TextUtils.getOffsetBefore(mText, offset) :
+            TextUtils.getOffsetAfter(mText, offset) ;
+
+        // if moved to a new run (or if stuck - i.e. end of text and going wrong way):
+        if (!run.containedInRun(res,mainDir)) {
+            if (mainDir) { // exiting directional run in same direction as paragraph:
+                // find the new directional run (notice it may be in a different line)
+                run.find(res);
+                if (run.runDir != runDir && run.line==line && !run.runDegenerate) {
+                    // if switched run direction:
+                    if (run.runDir > 0)
+                        // entering a LTR run in a RTL paragraph, actually move to one
+                        // before last character, complementary to the behaviour of
+                        // getOffsetToRightOf() above:
+                        res = TextUtils.getOffsetBefore(mText,run.runEnd);
+                    else
+                        // otherwise entering RTL run, move to its rightmost character:
+                        res = TextUtils.getOffsetAfter(mText,run.runStart);
+                }
+            } else if (!useLineDir) {
+                // exiting directional run in oppisite direction as paragraph,
+                // simlarly to the getOffsetAfterOf() implementation above:
+                res = runDir > 0 ?
+                    TextUtils.getOffsetBefore(mText, offset+run.runLength) :
+                    TextUtils.getOffsetAfter(mText, offset-run.runLength) ;
+            }
         }
+
+        // Check if overflowed line to any direction:
+        int originalLine = line;
+        line = run.line; // run may have been updated above to a new line
+                         // if it has, we trust its new value, otherwise:
+        if (line==originalLine) {
+            if (res >= run.lineEnd)
+                line = run.nextNonEmptyLine(line);
+            if (res < run.lineStart)
+                line = run.prevNonEmptyLine(line);
+        }
+        if (line!=originalLine) { // if we did reach a new line, update position in new line:
+            int newLineDir = getParagraphDirection(line);
+            boolean lastLine = line == getLineCount()-1;
+            if (newLineDir<0) {
+                // go to rightmost position of new RTL line:
+                res = getLineStart(line);
+            } else {
+                // go to rightmost position of new LTR line:
+                run.findLastRun(line);
+                res = run.runDir<0 && !run.runDegenerate ? TextUtils.getOffsetAfter(mText,run.runStart) : run.runEnd;
+                if (res==run.runEnd && !lastLine)
+                    res = TextUtils.getOffsetBefore(mText,res);
+            }
+        }
+
+        return res;
     }
 
     private int getOffsetAtStartOf(int offset) {

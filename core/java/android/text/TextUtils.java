@@ -846,10 +846,10 @@ public class TextUtils {
     }
 
     public static int getOffsetBefore(CharSequence text, int offset) {
-        if (offset == 0)
+        if (offset <= 1)
             return 0;
-        if (offset == 1)
-            return 0;
+        if (offset > text.length())
+            return text.length();
 
         char c = text.charAt(offset - 1);
 
@@ -883,10 +883,10 @@ public class TextUtils {
     public static int getOffsetAfter(CharSequence text, int offset) {
         int len = text.length();
 
-        if (offset == len)
+        if (offset >= len-1)
             return len;
-        if (offset == len - 1)
-            return len;
+        if (offset < 0)
+            return 0;
 
         char c = text.charAt(offset);
 
