@@ -64,8 +64,7 @@ public class DatePicker extends FrameLayout {
     private final int MONTH_PICKER = 2;
     private final int YEAR_PICKER = 3;
 
-    // List of pickers in the UI
-    private PickersList mPickersList = new PickersList();
+    // Format of the date
     private boolean isMediumDateFormat = true;
 
     /**
@@ -226,6 +225,9 @@ public class DatePicker extends FrameLayout {
         boolean quoted = false;
         boolean didDay = false, didMonth = false, didYear = false;
 
+        // List of pickers in the UI
+        PickersList mPickersList = new PickersList();
+
         for (int i = 0; i < order.length(); i++) {
             char c = order.charAt(i);
 
@@ -275,6 +277,11 @@ public class DatePicker extends FrameLayout {
         private int listIndex = 0;
 
         public void add(NumberPicker picker, int type) {
+            // Do not add more than three items
+            if (listIndex == 3) {
+                return;
+            }
+
             listOfNumberPickers[listIndex] = picker;
             listOfNumberPickersType[listIndex] = type;
 
