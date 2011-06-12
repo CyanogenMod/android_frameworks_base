@@ -582,4 +582,8 @@
     <string name="config_wimaxServiceClassname"></string>
     <!-- Name of the wimax state tracker clas -->
     <string name="config_wimaxStateTrackerClassname"></string>
+
+    <!-- Email Settings -->
+    <!-- Allow us to ignore the Exchange security policies this device doesn't support -->
+    <bool name="config_exchangePolicyIgnore">false</bool>
 </resources>
