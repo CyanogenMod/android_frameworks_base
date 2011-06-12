@@ -4637,6 +4637,12 @@ public final class Settings {
         public static final String ENABLE_PERMISSIONS_MANAGEMENT = "enable_permissions_management";
 
         /**
+         * Whether to ignore the unsupported Exchange security policies.
+         * @hide
+         */
+        public static final String EMAIL_EXCHANGE_POLICY_IGNORE = "email_exchange_policy_ignore";
+
+        /**
          * @hide
          */
         public static final String[] SETTINGS_TO_BACKUP = {
