@@ -38,7 +38,7 @@ public class FlashlightButton extends PowerButton {
                 Settings.System.EXPANDED_FLASH_MODE, 0) == 1;
         Intent i = new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT");
         i.putExtra("bright", bright);
-        context.sendBroadcast(new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT"));
+        context.sendBroadcast(i);
     }
 
     @Override
