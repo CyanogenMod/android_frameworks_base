@@ -40,6 +40,7 @@ import android.os.storage.IMountShutdownObserver;
 
 import com.android.internal.telephony.ITelephony;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.WindowManager;
 
 public final class ShutdownThread extends Thread {
@@ -129,6 +130,15 @@ public final class ShutdownThread extends Thread {
                             }
                         })
                         .create();
+                        dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                            public boolean onKey (DialogInterface dialog, int keyCode, KeyEvent event) {
+                                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                                    mReboot = false;
+                                    dialog.cancel();
+                                }
+                                return true;
+                            }
+                        });
             } else {
                 dialog = new AlertDialog.Builder(context)
                         .setIcon(android.R.drawable.ic_dialog_alert)
