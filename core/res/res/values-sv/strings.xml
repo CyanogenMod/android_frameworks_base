@@ -152,6 +152,9 @@
     <string name="recent_tasks_title" msgid="3691764623638127888">"Senaste"</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"Inga nya appar."</string>
     <string name="global_actions" msgid="2406416831541615258">"Telefonalternativ"</string>
+    <string name="global_action_home">Hem</string>
+    <string name="global_action_menu">Meny</string>
+    <string name="global_action_back">Tillbaka</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Skärmlås"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Stäng av"</string>
     <string name="global_action_reboot">Starta om</string>
@@ -735,6 +738,7 @@
     <string name="elapsed_time_short_format_mm_ss" msgid="4431555943828711473">"<xliff:g id="MINUTES">%1$02d</xliff:g>:<xliff:g id="SECONDS">%2$02d</xliff:g>"</string>
     <string name="elapsed_time_short_format_h_mm_ss" msgid="1846071997616654124">"<xliff:g id="HOURS">%1$d</xliff:g>:<xliff:g id="MINUTES">%2$02d</xliff:g>:<xliff:g id="SECONDS">%3$02d</xliff:g>"</string>
     <string name="selectAll" msgid="6876518925844129331">"Välj alla"</string>
+    <string name="copyAll">Kopiera alla</string>
     <string name="selectText" msgid="4862359311088898878">"Välj ord"</string>
     <string name="cut" msgid="3092569408438626261">"Klipp ut"</string>
     <string name="copy" msgid="2681946229533511987">"Kopiera"</string>
@@ -761,6 +765,9 @@
     <string name="aerr_title" msgid="653922989522758100">"Tyvärr!"</string>
     <string name="aerr_application" msgid="4683614104336409186">"Processen <xliff:g id="PROCESS">%2$s</xliff:g> för programmet <xliff:g id="APPLICATION">%1$s</xliff:g> stoppades oväntat. Försök igen."</string>
     <string name="aerr_process" msgid="1551785535966089511">"Processen <xliff:g id="PROCESS">%1$s</xliff:g> avslutades oväntat. Försök igen."</string>
+    <string name="aerr_revoked_application">Applikationen <xliff:g id="application">%1$s</xliff:g>
+        (processen <xliff:g id="process">%2$s</xliff:g>) har avslutats oväntat.\nVARNING!\nDenna applikation har en eller flera av dess rättigheter UPPHÄVD, vilket kan orsaka funktionsstörning. Prova att tillåta dess rättigheter och försök igen.</string>
+    <string name="aerr_revoked_process">Processen <xliff:g id="process">%1$s</xliff:g> har avslutats oväntat.\nVARNING!\nDenna process har en eller flera av dess rättigheter UPPHÄVD, vilket kan orsaka funktionsstörning. Prova att tillåta dess rättigheter och försök igen.</string>
     <string name="anr_title" msgid="3100070910664756057">"Tyvärr!"</string>
     <string name="anr_activity_application" msgid="3538242413112507636">"Aktiviteten <xliff:g id="ACTIVITY">%1$s</xliff:g> (i programmet <xliff:g id="APPLICATION">%2$s</xliff:g>) svarar inte."</string>
     <string name="anr_activity_process" msgid="5420826626009561014">"Aktiviteten <xliff:g id="ACTIVITY">%1$s</xliff:g> (i processen <xliff:g id="PROCESS">%2$s</xliff:g>) svarar inte."</string>
@@ -768,6 +775,7 @@
     <string name="anr_process" msgid="1246866008169975783">"Processen <xliff:g id="PROCESS">%1$s</xliff:g> svarar inte."</string>
     <string name="force_close" msgid="3653416315450806396">"Tvinga stängning"</string>
     <string name="report" msgid="4060218260984795706">"Rapportera"</string>
+    <string name="reset_perms">Återställ rättigheter</string>
     <string name="wait" msgid="7147118217226317732">"Vänta"</string>
     <string name="launch_warning_title" msgid="8323761616052121936">"Programmet omdirigerades"</string>
     <string name="launch_warning_replace" msgid="6202498949970281412">"<xliff:g id="APP_NAME">%1$s</xliff:g> körs."</string>
@@ -940,4 +948,7 @@
         <item quantity="one">%d sekund kvar</item>
         <item quantity="other">%d sekunder kvar</item>
     </plurals>
+    <string name="permlab_revokePermissions">Tillåter visning och ändring av upphävda rättigheter. Inte för användning av normala applikationer.</string>
+    <string name="permdesc_revokePermissions">Tillåter läsning och skrivning av upphävda rättigheter. Inte för användning av normala applikationer.</string>
+
 </resources>
