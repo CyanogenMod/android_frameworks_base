@@ -965,6 +965,9 @@
     <!-- Text of the alert that is displayed when an application has crashed. -->
     <string name="aerr_revoked_process">Процесс <xliff:g id="process">%1$s</xliff:g> был неожиданно остановлен.\nВнимание!\nЭтот процесс имеет одно или несколько изменений в разрешениях, что может привести к его неисправности. Пожалуйста, предоставьте необходимые разрешения и попробуйте ещё раз.</string>
 
+    <!--Application killed toast -->
+    <string name="app_killed_message">Приложение закрыто</string>
+
     <!-- Title of an application permission that lets an application view/edit revoked permissions. -->
     <string name="permlab_revokePermissions">Позволяет просматривать и редактировать изменённые разрешения. Не для использования обычными приложениями.</string>
     <!-- Description of an application permission that lets lets an application view/edit revoked permissions. -->
