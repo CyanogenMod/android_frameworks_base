@@ -43,6 +43,10 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.WindowManager;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.InputStreamReader;
+
 public final class ShutdownThread extends Thread {
     // constants
     private static final String TAG = "ShutdownThread";
@@ -61,6 +65,8 @@ public final class ShutdownThread extends Thread {
     
     private static boolean mReboot;
     private static String mRebootReason;
+
+    private static final String REBOOT_PREPARE_COMMAND = "/system/bin/reboot_prepare";
 
     // Provides shutdown assurance in case the system_server is killed
     public static final String SHUTDOWN_ACTION_PROPERTY = "sys.shutdown.requested";
@@ -416,6 +422,34 @@ public final class ShutdownThread extends Thread {
     public static void rebootOrShutdown(boolean reboot, String reason) {
         if (reboot) {
             Log.i(TAG, "Rebooting, reason: " + reason);
+
+            File rebootPrepareCommand = new File(REBOOT_PREPARE_COMMAND);
+            if (rebootPrepareCommand.exists()) {
+                Log.i(TAG, "Custom reboot command detected.  Executing: " + rebootPrepareCommand.getAbsolutePath() + " " + reason);
+                Process rebootPrepareProcess = null;
+
+                try {
+                    rebootPrepareProcess = new ProcessBuilder()
+                            .command(rebootPrepareCommand.getAbsolutePath(), reason)
+                            .redirectErrorStream(true)
+                            .start();
+                    BufferedReader in = new BufferedReader(new InputStreamReader(rebootPrepareProcess.getInputStream()));
+                    // the custom command has the option of returning a new reason (or the old one)
+                    // if nothing is returned we clear the reason
+                    reason = "";
+                    String line;
+                    while ((line = in.readLine()) != null) {
+                        reason = line;
+                    }
+                } catch(Exception e) {
+                    Log.e(TAG, "Something went wrong running the custom reboot command", e);
+                } finally {
+                    if (rebootPrepareProcess != null) {
+                        rebootPrepareProcess.destroy();
+                    }
+                }
+            }
+
             try {
                 Power.reboot(reason);
             } catch (Exception e) {
