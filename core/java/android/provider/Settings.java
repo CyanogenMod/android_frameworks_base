@@ -2193,6 +2193,12 @@ public final class Settings {
         public static final String LOCK_MMS_IN_MEMORY = "lock_mms_in_memory";
 
         /**
+         * Whether to keep the phone app at a higher OOM adjustement
+         * @hide
+         */
+        public static final String LOCK_PHONE_IN_MEMORY = "lock_phone_in_memory";
+
+        /**
          * Display style of AM/PM next to clock in status bar
          * 0: Normal display (Eclair stock)
          * 1: Small display (Froyo stock)
