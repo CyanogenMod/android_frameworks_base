@@ -20,6 +20,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.text.*;
 import android.text.method.TextKeyListener.Capitalize;
+import android.text.style.ReplacementSpan;
 import android.widget.TextView;
 
 public abstract class BaseKeyListener
@@ -54,7 +55,7 @@ implements KeyListener {
         } else if (altBackspace(view, content, keyCode, event)) {
             result = true;
         } else {
-            int to = TextUtils.getOffsetBefore(content, selEnd);
+            int to = (selEnd < 2) ? 0 : selEnd - 1;
 
             if (to != selEnd) {
                 content.delete(Math.min(to, selEnd), Math.max(to, selEnd));
