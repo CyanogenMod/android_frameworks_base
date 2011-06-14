@@ -214,6 +214,8 @@ LOCAL_SHARED_LIBRARIES := \
 	libjpeg \
 	libnfc_ndef
 
+LOCAL_STATIC_LIBRARIES := libreboot
+
 ifeq ($(BOARD_HAVE_BLUETOOTH),true)
 LOCAL_C_INCLUDES += \
 	external/dbus \
@@ -240,10 +242,6 @@ endif
 
 ifeq ($(WITH_MALLOC_LEAK_CHECK),true)
 	LOCAL_CFLAGS += -DMALLOC_LEAK_CHECK
-endif
-
-ifneq ($(TARGET_RECOVERY_PRE_COMMAND),)
-	LOCAL_CFLAGS += -DRECOVERY_PRE_COMMAND='$(TARGET_RECOVERY_PRE_COMMAND)'
 endif
 
 LOCAL_MODULE:= libandroid_runtime
