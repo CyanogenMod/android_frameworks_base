@@ -54,6 +54,8 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -334,8 +336,19 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         if (mSelector2 != null) {
             mSelector2.setHoldAfterTrigger(true, false);
             mSelector2.setLeftHintText(R.string.lockscreen_phone_label);
-            mSelector2.setRightHintText(R.string.lockscreen_messaging_label);
+
+            if (mCustomAppActivity != null) {
+                Intent i;
+                try {
+                    i = Intent.parseUri(mCustomAppActivity, 0);
+                    PackageManager pm = context.getPackageManager();
+                    ActivityInfo ai = i.resolveActivityInfo(pm,PackageManager.GET_ACTIVITIES);
+                    mSelector2.setRightHintText(ai.loadLabel(pm).toString());
+                } catch (URISyntaxException e) {
+                }
+            }
         }
+
         mEmergencyCallText = (TextView) findViewById(R.id.emergencyCallText);
         mEmergencyCallButton = (Button) findViewById(R.id.emergencyCallButton);
         mEmergencyCallButton.setText(R.string.lockscreen_emergency_call);
