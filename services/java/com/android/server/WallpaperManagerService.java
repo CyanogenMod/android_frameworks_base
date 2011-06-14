@@ -446,7 +446,7 @@ class WallpaperManagerService extends IWallpaperManager.Stub {
         if (name == null) name = "";
         try {
             ParcelFileDescriptor fd = ParcelFileDescriptor.open(WALLPAPER_FILE,
-                    MODE_CREATE|MODE_READ_WRITE);
+                    MODE_CREATE|MODE_READ_WRITE|MODE_TRUNCATE);
             mName = name;
             return fd;
         } catch (FileNotFoundException e) {
