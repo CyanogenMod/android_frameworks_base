@@ -92,11 +92,19 @@ static void android_os_Power_reboot(JNIEnv *env, jobject clazz, jstring reason)
     } else {
         const char *chars = env->GetStringUTFChars(reason, NULL);
 #ifdef RECOVERY_PRE_COMMAND
-	if (!strncmp(chars,"recovery",8))
-		system( RECOVERY_PRE_COMMAND );
+        if (!strncmp(chars,"recovery",8))
+            system( RECOVERY_PRE_COMMAND );
 #endif
+#ifdef RECOVERY_PRE_COMMAND_CLEAR_REASON
+        if (!strncmp(chars,"recovery",8))
+            reboot(RB_AUTOBOOT);
+        else
+            __reboot(LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2,
+                     LINUX_REBOOT_CMD_RESTART2, (char*) chars);
+#else
         __reboot(LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2,
                  LINUX_REBOOT_CMD_RESTART2, (char*) chars);
+#endif
         env->ReleaseStringUTFChars(reason, chars);  // In case it fails.
     }
     jniThrowIOException(env, errno);
