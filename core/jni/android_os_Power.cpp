@@ -21,6 +21,7 @@
 #include <utils/misc.h>
 #include <hardware_legacy/power.h>
 #include <sys/reboot.h>
+#include <reboot/reboot.h>
 
 namespace android
 {
@@ -88,15 +89,10 @@ static void android_os_Power_reboot(JNIEnv *env, jobject clazz, jstring reason)
     sync();
 #ifdef HAVE_ANDROID_OS
     if (reason == NULL) {
-        reboot(RB_AUTOBOOT);
+        reboot_wrapper(NULL);
     } else {
         const char *chars = env->GetStringUTFChars(reason, NULL);
-#ifdef RECOVERY_PRE_COMMAND
-	if (!strncmp(chars,"recovery",8))
-		system( RECOVERY_PRE_COMMAND );
-#endif
-        __reboot(LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2,
-                 LINUX_REBOOT_CMD_RESTART2, (char*) chars);
+        reboot_wrapper(chars);
         env->ReleaseStringUTFChars(reason, chars);  // In case it fails.
     }
     jniThrowIOException(env, errno);

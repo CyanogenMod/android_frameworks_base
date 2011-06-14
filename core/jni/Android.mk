@@ -214,6 +214,8 @@ LOCAL_SHARED_LIBRARIES := \
 	libjpeg \
 	libnfc_ndef
 
+LOCAL_STATIC_LIBRARIES := libreboot
+
 ifeq ($(BOARD_HAVE_BLUETOOTH),true)
 LOCAL_C_INCLUDES += \
 	external/dbus \
