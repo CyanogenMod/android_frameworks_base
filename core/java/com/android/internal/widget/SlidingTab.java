@@ -15,16 +15,14 @@
  */
 
 package com.android.internal.widget;
-import android.provider.Settings;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -33,12 +31,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.TranslateAnimation;
-import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.ImageView.ScaleType;
+import android.widget.TextView;
+
 import com.android.internal.R;
 
 /**
@@ -228,6 +227,10 @@ public class SlidingTab extends ViewGroup {
 
         void setHintText(int resId) {
             text.setText(resId);
+        }
+
+        void setHintText(CharSequence charText) {
+            text.setText(charText);
         }
 
         void hide() {
@@ -796,6 +799,12 @@ public class SlidingTab extends ViewGroup {
         }
     }
 
+    public void setRightHintText(CharSequence charText) {
+        if (isHorizontal()) {
+            mRightSlider.setHintText(charText);
+        }
+    }
+    
     public void setHoldAfterTrigger(boolean holdLeft, boolean holdRight) {
         mHoldLeftOnTransition = holdLeft;
         mHoldRightOnTransition = holdRight;
