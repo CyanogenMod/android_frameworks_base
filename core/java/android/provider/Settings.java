@@ -945,6 +945,7 @@ public final class Settings {
          *
          * @return The setting's current value, or 'def' if it is not defined
          * or not a valid {@code long}.
+         * @hide
          */
         public static long[] getLongArray(ContentResolver cr, String name, long[] def) {
             String valString = getString(cr, name);
@@ -974,6 +975,7 @@ public final class Settings {
          * @return The setting's current value.
          * @throws SettingNotFoundException Thrown if a setting by the given
          * name can't be found or the setting value is not a long array.
+         * @hide
          */
         public static long[] getLongArray(ContentResolver cr, String name)
                 throws SettingNotFoundException {
