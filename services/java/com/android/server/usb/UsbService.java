@@ -72,6 +72,8 @@ public class UsbService extends IUsbManager.Stub {
             "/sys/class/switch/usb_configuration/state";
     private static final String USB_COMPOSITE_CLASS_PATH =
             "/sys/class/usb_composite";
+    private static final String USB_LEGACY_FUNCTIONS_PATH =
+            "/sys/devices/platform/android_usb/functions";
     private static final String USB_LEGACY_PATH =
             "/sys/class/switch/usb_mass_storage/state";
 
@@ -264,7 +266,7 @@ public class UsbService extends IUsbManager.Stub {
                 FileReader file = new FileReader(USB_LEGACY_PATH);
                 int len = file.read(buffer, 0, 1024);
                 file.close();
-                mConnected = ("online".equals((new String(buffer, 0, len))) ? 1 : 0);
+                mConnected = ("online".equals((new String(buffer, 0, len)).trim()) ? 1 : 0);
                 mLegacy = true;
                 mConfiguration = 0;
             } catch (FileNotFoundException f) {
@@ -281,7 +283,38 @@ public class UsbService extends IUsbManager.Stub {
         }
 
         if (mLegacy) {
-            mDisabledFunctions.add(UsbManager.USB_FUNCTION_MASS_STORAGE);
+	    if((new File(USB_LEGACY_FUNCTIONS_PATH)).exists()) {
+		try {
+		    File[] files = new File(USB_LEGACY_FUNCTIONS_PATH).listFiles();
+		    for (int i = 0; i < files.length; i++) {
+			if(files[i].getPath().contains("ftm_mode") || files[i].getPath().contains("pidnv")) continue;
+			File file = new File(files[i].getPath());
+			FileReader reader = new FileReader(file);
+			int len = reader.read(buffer, 0, 1024);
+			reader.close();
+			int value = Integer.valueOf((new String(buffer, 0, len)).trim());
+			String functionName = files[i].getName();
+			if (value == 1) {
+			    mEnabledFunctions.add(functionName);
+			    if (UsbManager.USB_FUNCTION_ACCESSORY.equals(functionName)) {
+				// The USB accessory driver is on by default, but it might have been
+				// enabled before the USB service has initialized.
+				inAccessoryMode = true;
+			    } else if (!UsbManager.USB_FUNCTION_ADB.equals(functionName)) {
+				// adb is enabled/disabled automatically by the adbd daemon,
+				// so don't treat it as a default function.
+				mDefaultFunctions.add(functionName);
+			    }
+			} else {
+			    mDisabledFunctions.add(functionName);
+			}
+		    }
+		} catch (Exception e) {
+		    Slog.e(TAG, "" , e);
+		}
+	    }
+	    else
+		mDisabledFunctions.add(UsbManager.USB_FUNCTION_MASS_STORAGE);
         } else {
             // Read initial list of enabled and disabled functions (device mode)
             try {
