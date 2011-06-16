@@ -42,9 +42,14 @@
 int setFreq(int freq);
 int radioOn();
 int radioOff();
+int setBand(int iLow, int iHigh);
+int HexStr2Int(const char* szHexStr);
+int getFreq();
 
 bool radioEnabled = false;
 static int lastFreq = 0;
+static int giLow = 87500;
+static int giStep = 100;
 
 int radioOn()
 {
@@ -122,6 +127,68 @@ int setFreq(int freq)
     return FM_JNI_SUCCESS;
 }
 
+int setBand(int iLow, int iHigh)
+{
+    if (iLow == 76000) {
+        // Japan
+        system("hcitool cmd 0x3f 0x135 0x10 0x02 0x00 0x00 0x01");
+        giLow = iLow;
+    } else {
+        system("hcitool cmd 0x3f 0x135 0x10 0x02 0x00 0x00 0x00");
+    }
+
+    if (iLow == 87500 && iHigh == 107900) {
+        // spacing 200kHz for north america
+        system("hcitool cmd 0x3f 0x135 0x38 0x02 0x00 0x00 0x04");
+        giStep = 200;
+    } else {
+        // spacing 100kHz
+        system("hcitool cmd 0x3f 0x135 0x38 0x02 0x00 0x00 0x02");
+    }
+
+    return FM_JNI_SUCCESS;
+}
+
+int HexStr2Int(const char* szHexStr)
+{
+     unsigned long Result;
+     sscanf(szHexStr, "%lx", &Result);
+     return Result;
+}
+
+int getFreq(){
+     FILE *pRunPipe=NULL;
+     char sAux[200];
+     char sLow[3];
+     char sHigh[3];
+     char sNoValid[3];
+     char sResult[5];
+
+     // Create a pipe and wait for tool answere
+     pRunPipe = popen("hcitool cmd 0x3F 0x133 0x0A 0x02 0x00", "r");
+     if (pRunPipe)
+     {
+         // Wait until pipe finish
+         while (!feof(pRunPipe))
+             fgets(sAux, 200, pRunPipe);
+         pclose(pRunPipe);
+
+         // Check if we get a valid answere
+         if ( strstr(sAux, "  01 33 FD 00 ") )
+         {
+             // Convert result data into HEX to get the freq.
+             sscanf(sAux,"  01 33 FD 00 %s %s%s",sLow,sHigh,sNoValid);
+             sprintf(sResult,"%s%s",sLow,sHigh);
+
+             // Return FM actual freq.
+             return (HexStr2Int( sResult ) * 50 + 87500);
+         }
+         else
+              return FM_JNI_FAILURE;
+     }
+     else
+         return FM_JNI_FAILURE;
+}
 
 using namespace android;
 
@@ -153,49 +220,12 @@ static jint android_hardware_fmradio_FmReceiverJNI_setControlNative
     return FM_JNI_SUCCESS;
 }
 
-static int HexStr2Int(const char* szHexStr)
-{
-     unsigned long Result;
-     sscanf(szHexStr, "%lx", &Result);
-     return Result;
-}
 
 /* native interface */
 static jint android_hardware_fmradio_FmReceiverJNI_getFreqNative
     (JNIEnv * env, jobject thiz, jint fd)
 {
-FILE *pRunPipe=NULL;
-char sAux[200];
-char sLow[3];
-char sHigh[3];
-char sNoValid[3];
-char sResult[5];
-
-    // Create a pipe and wait for tool answere
-    pRunPipe = popen("hcitool cmd 0x3F 0x133 0x0A 0x02 0x00", "r");
-    if (pRunPipe)
-    {
-        // Wait until pipe finish
-        while (!feof(pRunPipe))
-            fgets(sAux, 200, pRunPipe);
-        pclose(pRunPipe);
-
-        // Check if we get a valid answere
-        if ( strstr(sAux, "  01 33 FD 00 ") )
-        {
-            // Convert result data into HEX to get the freq.
-            sscanf(sAux,"  01 33 FD 00 %s %s%s",sLow,sHigh,sNoValid);
-            sprintf(sResult,"%s%s",sLow,sHigh);
-
-            // Return FM actual freq.
-            return (HexStr2Int( sResult ) * 50 + 87500);
-        }
-        else
-            return FM_JNI_FAILURE;
-    }
-    else
-        return FM_JNI_FAILURE;
-
+        return getFreq();
 }
 
 /*native interface */
@@ -230,11 +260,28 @@ static jint android_hardware_fmradio_FmReceiverJNI_getControlNative
 static jint android_hardware_fmradio_FmReceiverJNI_startSearchNative
     (JNIEnv * env, jobject thiz, jint fd, jint dir)
 {
+int iCurrentFreq;
+
+    // Added in order to move before seek and control all the FM Limits depending on the country
+    iCurrentFreq = getFreq();
+    if(dir == 0)
+    {
+        if(iCurrentFreq == giLow)
+            iCurrentFreq = 18000 + giStep;
+        setFreq(iCurrentFreq-giStep);
+    }
+    else
+    {
+        if(iCurrentFreq == 17900)
+            iCurrentFreq = giLow - giStep;
+        setFreq(iCurrentFreq+giStep);
+    }
+
     int retval = system("hcitool cmd 0x3f 0x135 0x0f 0x02 0x00 0x00 0x10");
     if (dir == 0)
-        retval = system("hcitool cmd 0x3f 0x135 0x1b 0x02 0x00 0x00 0x01");
-    else
         retval = system("hcitool cmd 0x3f 0x135 0x1b 0x02 0x00 0x00 0x00");
+    else
+        retval = system("hcitool cmd 0x3f 0x135 0x1b 0x02 0x00 0x00 0x01");
     retval = system("hcitool cmd 0x3f 0x135 0x2d 0x02 0x00 0x00 0x02");
     LOGD("startSearchNative() %d", retval);
 
@@ -265,22 +312,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_getRSSINative
 static jint android_hardware_fmradio_FmReceiverJNI_setBandNative
     (JNIEnv * env, jobject thiz, jint fd, jint low, jint high)
 {
-    if (low == 76000) {
-        // Japan
-        system("hcitool cmd 0x3f 0x135 0x10 0x02 0x00 0x00 0x01");
-    } else {
-        system("hcitool cmd 0x3f 0x135 0x10 0x02 0x00 0x00 0x00");
-    }
-
-    if (low == 87500 && high == 107900) {
-        // spacing 200kHz for north america
-        system("hcitool cmd 0x3f 0x135 0x38 0x02 0x00 0x00 0x04");
-    } else {
-        // spacing 100kHz
-        system("hcitool cmd 0x3f 0x135 0x38 0x02 0x00 0x00 0x02");
-    }
-
-    return FM_JNI_SUCCESS;
+    return setBand(low,high);
 }
 
 /* native interface */
