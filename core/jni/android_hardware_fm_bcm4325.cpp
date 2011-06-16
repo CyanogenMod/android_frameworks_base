@@ -194,12 +194,14 @@ int hci_w(int reg, int val)
 
 int hci_r(int reg)
 {
-    int returnval = 0;
-
+    FILE* returnval;
+    int ulval;
     char s1[100] = "hcitool cmd 0x3f 0x15 ";
     char stemp[10] = "";
     char starget[100] = "";
+    char reading[200] = "";
     char *pstarget = starget;
+    char *returnv;
 
     sprintf(stemp, "0x%x ", reg);
     pstarget=strcat(s1, stemp);
@@ -209,11 +211,28 @@ int hci_r(int reg)
 
     sprintf(stemp, "0x%x ", 1);
     pstarget = strcat(pstarget, stemp);
-    returnval = system(pstarget);
-    returnval /= 0x100;
-    LOGD("hci_r 0x%x \n", returnval);
 
-    return returnval;
+    returnval = popen(pstarget,"r");
+
+    if(!returnval){
+      LOGE("Could not open pipe for output.\n");
+      return 0;
+    }
+
+    // Grab data from process execution
+    // Skip the first 3 lines
+    fgets(reading, 200 , returnval);
+    fgets(reading, 200 , returnval);
+    fgets(reading, 200 , returnval);
+    fgets(reading, 200 , returnval);
+
+    if (pclose(returnval) != 0)
+        fprintf(stderr," Error: Failed to close command stream \n");
+
+    returnv = strndup(reading + (strlen(reading)-4), 2);
+    ulval= strtoul(returnv, NULL, 16);
+    LOGD("hci_r 0x%x \n", ulval);
+    return ulval;
 }
 
 using namespace android;
@@ -335,6 +354,25 @@ static jint android_hardware_fmradio_FmReceiverJNI_getControlNative
 static jint android_hardware_fmradio_FmReceiverJNI_startSearchNative
     (JNIEnv * env, jobject thiz, jint fd, jint dir)
 {
+
+    android_hardware_fmradio_FmReceiverJNI_setFreqNative(NULL,NULL,NULL,
+        android_hardware_fmradio_FmReceiverJNI_getFreqNative(NULL,NULL,NULL)+(dir?200:-200));
+
+    if ( hci_w(BCM4325_I2C_FM_SEARCH_CTRL0, (dir ? BCM4325_FM_SEARCH_CTRL0_UP : BCM4325_FM_SEARCH_CTRL0_DOWN)) < 0){
+        LOGE("fail search up/down\n");
+    }
+
+    if ( hci_w(BCM4325_I2C_FM_SEARCH_METHOD, BCM4325_SEARCH_NORMAL) < 0){
+        LOGE("fail search method\n");
+    }
+
+    if ( hci_w(BCM4325_I2C_FM_SEARCH_STEPS, 1) < 0){
+        LOGE("fail steps\n");
+    }
+
+    if ( hci_w(BCM4325_I2C_FM_SEARCH_TUNE_MODE, BCM4325_FM_AUTO_SEARCH_MODE) < 0){
+        LOGE("fail tuning\n");
+    }
     return FM_JNI_SUCCESS;
 }
 
@@ -342,6 +380,10 @@ static jint android_hardware_fmradio_FmReceiverJNI_startSearchNative
 static jint android_hardware_fmradio_FmReceiverJNI_cancelSearchNative
     (JNIEnv * env, jobject thiz, jint fd)
 {
+    if ( hci_w(BCM4325_I2C_FM_SEARCH_TUNE_MODE, BCM4325_FM_TERMINATE_SEARCH_TUNE_MODE) < 0){
+        LOGE("fail cancel search\n");
+    }
+
     return FM_JNI_SUCCESS;
 }
 
