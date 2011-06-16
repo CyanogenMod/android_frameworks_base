@@ -194,12 +194,14 @@ int hci_w(int reg, int val)
 
 int hci_r(int reg)
 {
-    int returnval = 0;
-
+    FILE* returnval;
+    int ulval;
     char s1[100] = "hcitool cmd 0x3f 0x15 ";
     char stemp[10] = "";
     char starget[100] = "";
+    char reading[200] = "";
     char *pstarget = starget;
+    char *returnv;
 
     sprintf(stemp, "0x%x ", reg);
     pstarget=strcat(s1, stemp);
@@ -209,11 +211,28 @@ int hci_r(int reg)
 
     sprintf(stemp, "0x%x ", 1);
     pstarget = strcat(pstarget, stemp);
-    returnval = system(pstarget);
-    returnval /= 0x100;
-    LOGD("hci_r 0x%x \n", returnval);
 
-    return returnval;
+    returnval = popen(pstarget,"r");
+
+    if(!returnval){
+      LOGE("Could not open pipe for output.\n");
+      return 0;
+    }
+
+    // Grab data from process execution
+    // Skip the first 3 lines
+    fgets(reading, 200 , returnval);
+    fgets(reading, 200 , returnval);
+    fgets(reading, 200 , returnval);
+    fgets(reading, 200 , returnval);
+
+    if (pclose(returnval) != 0)
+        fprintf(stderr," Error: Failed to close command stream \n");
+
+    returnv = strndup(reading + (strlen(reading)-4), 2);
+    ulval= strtoul(returnv, NULL, 16);
+    LOGD("hci_r 0x%x \n", ulval);
+    return ulval;
 }
 
 using namespace android;
@@ -270,7 +289,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_getFreqNative
     (JNIEnv * env, jobject thiz, jint fd)
 {
     int retval;
-    int freq = 103900;
+    int freq = 0;
 
     retval = hci_r(BCM4325_I2C_FM_FREQ1);
     freq = retval << 8;
@@ -335,6 +354,37 @@ static jint android_hardware_fmradio_FmReceiverJNI_getControlNative
 static jint android_hardware_fmradio_FmReceiverJNI_startSearchNative
     (JNIEnv * env, jobject thiz, jint fd, jint dir)
 {
+    int oldFreq = android_hardware_fmradio_FmReceiverJNI_getFreqNative(NULL,NULL,NULL) ;
+
+    if ((oldFreq-100 <= 87500 && !dir) || (oldFreq+100 >= 108000 && dir)) {
+        LOGD("Can't seek %s. Already at end of band.",dir?"up":"down");
+        return FM_JNI_FAILURE;
+    }
+    else
+        android_hardware_fmradio_FmReceiverJNI_setFreqNative(NULL,NULL,NULL,oldFreq+(dir?100:-100));
+
+    if ( hci_w(BCM4325_I2C_FM_SEARCH_CTRL0, (dir ? BCM4325_FM_SEARCH_CTRL0_UP : BCM4325_FM_SEARCH_CTRL0_DOWN )  | BCM4325_FLAG_STEREO_ACTIVE  |  BCM4325_FLAG_STEREO_DETECTION ) < 0){
+        LOGE("fail search up/down\n");
+        return FM_JNI_FAILURE;
+    }
+
+    if ( hci_w(BCM4325_I2C_FM_SEARCH_METHOD, BCM4325_SEARCH_NORMAL) < 0){
+        LOGE("fail search method\n");
+        return FM_JNI_FAILURE;
+    }
+
+    if ( hci_w(BCM4325_I2C_FM_SEARCH_TUNE_MODE, BCM4325_FM_AUTO_SEARCH_MODE) < 0){
+        LOGE("fail tuning\n");
+        return FM_JNI_FAILURE;
+    }
+
+    // before returning wait for tuning to finish and seek to start.
+    // I have seen this go into an infinite loop once, so limit it to 20 iterations (usually takes 1-4).
+    for (int i=0; i < 20 && android_hardware_fmradio_FmReceiverJNI_getFreqNative(NULL,NULL,NULL) == oldFreq+(dir?100:-100); i++){
+        LOGD("waiting for seek to start");
+        usleep(100);
+    }
+
     return FM_JNI_SUCCESS;
 }
 
@@ -342,6 +392,10 @@ static jint android_hardware_fmradio_FmReceiverJNI_startSearchNative
 static jint android_hardware_fmradio_FmReceiverJNI_cancelSearchNative
     (JNIEnv * env, jobject thiz, jint fd)
 {
+    if ( hci_w(BCM4325_I2C_FM_SEARCH_TUNE_MODE, BCM4325_FM_TERMINATE_SEARCH_TUNE_MODE) < 0){
+        LOGE("fail cancel search\n");
+    }
+
     return FM_JNI_SUCCESS;
 }
 
