@@ -118,9 +118,6 @@ public final class RuimRecords extends IccRecords {
 
         adnCache.reset();
 
-        phone.setSystemProperty(PROPERTY_ICC_OPERATOR_NUMERIC, null);
-        phone.setSystemProperty(PROPERTY_ICC_OPERATOR_ISO_COUNTRY, null);
-
         // recordsRequested is set to false indicating that the SIM
         // read requests made so far are not valid. This is set to
         // true only when fresh set of read requests are made.
@@ -326,7 +323,10 @@ public final class RuimRecords extends IccRecords {
         // Further records that can be inserted are Operator/OEM dependent
 
         String operator = getRUIMOperatorNumeric();
-        SystemProperties.set(PROPERTY_ICC_OPERATOR_NUMERIC, operator);
+
+        if (operator != null) {
+            SystemProperties.set(PROPERTY_ICC_OPERATOR_NUMERIC, operator);
+        }
 
         if (mImsi != null) {
             SystemProperties.set(PROPERTY_ICC_OPERATOR_ISO_COUNTRY,
