@@ -821,8 +821,11 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
 
     /** {@inheritDoc} */
     public void pokeWakelock() {
+        int screenTimeout = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_SCREENON_TIMEOUT, AWAKE_INTERVAL_DEFAULT_MS);
         pokeWakelock(mKeyboardOpen ?
-                AWAKE_INTERVAL_DEFAULT_KEYBOARD_OPEN_MS : AWAKE_INTERVAL_DEFAULT_MS);
+                (screenTimeout > AWAKE_INTERVAL_DEFAULT_KEYBOARD_OPEN_MS ?
+                screenTimeout : AWAKE_INTERVAL_DEFAULT_KEYBOARD_OPEN_MS) : screenTimeout);
     }
 
     /** {@inheritDoc} */

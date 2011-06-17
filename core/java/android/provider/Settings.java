@@ -2625,6 +2625,12 @@ public final class Settings {
         public static final String LOCKSCREEN_GESTURES_COLOR = "lockscreen_gestures_color";
 
         /**
+         * The amount of time that the screen remains on when lockscreen is on and not unlocked
+         * @hide
+         */
+        public static final String LOCKSCREEN_SCREENON_TIMEOUT = "lockscreen_screenon_timeout";
+
+        /**
          * Use the Notification Power Widget? (Who wouldn't!)
          *
          * @hide
