@@ -21,6 +21,12 @@
 
 #include <math.h>
 
+typedef struct {
+        effect_param_t ep;
+        uint32_t code;
+        uint16_t value;
+} cmd1x4_1x2_t;
+
 static int32_t max(int32_t a, int32_t b)
 {
     return a > b ? a : b;
@@ -51,21 +57,37 @@ int32_t EffectCompression::command(uint32_t cmdCode, uint32_t cmdSize, void* pCm
 	return 0;
     }	
 
+    if (cmdCode == EFFECT_CMD_SET_PARAM) {
+        effect_param_t *cep = (effect_param_t *) pCmdData;
+        if (cep->psize == 6 && *replySize == 4) {
+	    int32_t *replyData = (int32_t *) pReplyData;
+            cmd1x4_1x2_t *strength = (cmd1x4_1x2_t *) pCmdData;
+            if (strength->code == 0) {
+                /* 1.0 .. 11.0 */
+                mCompressionRatio = 1.f + strength->value / 100.f;
+                LOGI("Compression factor set to: %f", mCompressionRatio);
+                *replyData = 0;
+                return 0;
+            }
+        }
+
+        LOGI("Unrecognized EFFECT_CMD_SET_PARAM: %d in, %d out requested", cmdSize, *replySize);
+        return -1;
+    }
+
     if (cmdCode == EFFECT_CMD_SET_VOLUME) {
 	LOGI("Setting volumes");
-	int32_t ret = Effect::configure(pCmdData);
-	if (ret != 0) {
-	    return ret;
-	}
-    
+
 	if (pReplyData != NULL) {
 	    int32_t *userVols = (int *) pCmdData;
 	    for (uint32_t i = 0; i < cmdSize / 4; i ++) {
-		 mUserVolumes[i] = userVols[i];
+                LOGI("user volume on channel %d: %d", i, userVols[i]);
+		mUserVolumes[i] = userVols[i];
 	    }
 
 	    int32_t *myVols = (int *) pReplyData;
 	    for (uint32_t i = 0; i < *replySize / 4; i ++) {
+                LOGI("Returning unity for our pre-requested volume on channel %d", i);
 		myVols[i] = 1 << 24; /* Unity gain */
 	    }
         } else {
@@ -97,6 +119,26 @@ uint64_t EffectCompression::estimateOneChannelLevel(audio_buffer_t *in, int32_t 
     return (power / in->frameCount);
 }
 
+/* Skipping a volume control effect is an ear-shattering experience.
+ * Android should automatically remove us after short delay, so we just
+ * apply the last volume we know while we are disabled. */
+int32_t EffectCompression::process(audio_buffer_t *in, audio_buffer_t *out)
+{
+    if (! mEnable) {
+        for (uint32_t i = 0; i < in->frameCount; i ++) {
+            int32_t tmpL = read(in, i * 2);
+            int32_t tmpR = read(in, i * 2 + 1);
+            tmpL = int64_t(tmpL) * mUserVolumes[0] >> 24;
+            tmpR = int64_t(tmpR) * mUserVolumes[1] >> 24;
+            write(out, i * 2, tmpL);
+            write(out, i * 2 + 1, tmpR);
+        }
+        return 0;
+    } else {
+        return process_effect(in, out);
+    }
+}
+
 int32_t EffectCompression::process_effect(audio_buffer_t *in, audio_buffer_t *out)
 {
     /* Analyze both channels separately, pick the maximum power measured. */
@@ -110,7 +152,6 @@ int32_t EffectCompression::process_effect(audio_buffer_t *in, audio_buffer_t *ou
 
     /* -100 .. 0 dB. */
     float signalPowerDb = logf(maximumPowerSquared / float(int64_t(1) << 48) + 1e-10f) / logf(10.0f) * 10.0f;
-    LOGI("Measured power: %f", signalPowerDb);
 
     /* target 83 dB SPL, and add 6 dB to compensate for the weighter, whose
      * peak is at -3 dB. */
@@ -132,18 +173,17 @@ int32_t EffectCompression::process_effect(audio_buffer_t *in, audio_buffer_t *ou
 
     /* Now we have correction factor and user-desired sound level. */
     for (uint32_t i = 0; i < mChannels; i ++) {
-	/* channel map hack: we support only stereo,
-	 * so we don't have to deal with full complexity for now.
-	 * 8.24 */
+	 /* 8.24 */
 	int32_t desiredLevel = mUserVolumes[i] * correctionFactor >> 24;
 
-	int32_t volAdj = mCurrentLevel[i] - desiredLevel;
+        /* 8.24 */
+	int32_t volAdj = desiredLevel - mCurrentLevel[i];
 	
 	/* I want volume adjustments to occur in about 0.1 seconds. 
 	 * However, if the input buffer would happen to be longer than
 	 * this, I'll just make sure that I am done with the adjustment
 	 * by the end of it. */
-	int adjLen = mSamplingRate / 10;
+	int32_t adjLen = mSamplingRate / 10;
 	/* Note: this adjustment should probably be piecewise linear
 	 * approximation of an exponential to keep perceptibly linear
 	 * correction rate. */
@@ -153,7 +193,7 @@ int32_t EffectCompression::process_effect(audio_buffer_t *in, audio_buffer_t *ou
 	 * This biases us against pumping effects and also tends to spare
 	 * our ears when some very loud sound begins suddenly. */
 	if (volAdj > 0) {
-	    volAdj /= 8;
+	    volAdj >>= 3;
 	}
 
 	for (uint32_t j = 0; j < in->frameCount; j ++) {
