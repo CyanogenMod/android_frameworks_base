@@ -1032,18 +1032,6 @@ public class NotificationManagerService extends INotificationManager.Stub
                 }
             }
 
-            // Adjust the LED for quiet hours
-            if (inQuietHours && mQuietHoursDim) {
-                // Cut all of the channels by a factor of 16 to dim on capable hardware.
-                // Note that this should fail gracefully on other hardware.
-                int argb = notification.ledARGB;
-                int red = (((argb & 0xFF0000) >>> 16) >>> 4);
-                int green = (((argb & 0xFF00) >>> 8 ) >>> 4);
-                int blue = ((argb & 0xFF) >>> 4);
-
-                notification.ledARGB = (0xFF000000 | (red << 16) | (green << 8) | blue);
-            }
-
             // light
             // the most recent thing gets the light
             mLights.remove(old);
@@ -1066,6 +1054,20 @@ public class NotificationManagerService extends INotificationManager.Stub
         }
 
         idOut[0] = id;
+    }
+
+    private int adjustForQuietHours(int color) {
+        if (inQuietHours() && mQuietHoursDim) {
+            // Cut all of the channels by a factor of 16 to dim on capable hardware.
+            // Note that this should fail gracefully on other hardware.
+            int red = (((color & 0xFF0000) >>> 16) >>> 4);
+            int green = (((color & 0xFF00) >>> 8 ) >>> 4);
+            int blue = ((color & 0xFF) >>> 4);
+
+            color = (0xFF000000 | (red << 16) | (green << 8) | blue);
+        }
+
+        return color;
     }
 
     private boolean inQuietHours() {
@@ -1441,20 +1443,7 @@ public class NotificationManagerService extends INotificationManager.Stub
             }
         }
 
-        // Adjust the LED for quiet hours
-        if (inQuietHours() && mQuietHoursDim) {
-            // Cut all of the channels by a factor of 16 to dim on capable
-            // hardware.
-            // Note that this should fail gracefully on other hardware.
-            int argb = rledARGB;
-            int red = (((argb & 0xFF0000) >>> 16) >>> 4);
-            int green = (((argb & 0xFF00) >>> 8) >>> 4);
-            int blue = ((argb & 0xFF) >>> 4);
-
-            rledARGB = (0xFF000000 | (red << 16) | (green << 8) | blue);
-        }
-
-        return rledARGB;
+        return adjustForQuietHours(rledARGB);
     }
 
     // lock on mNotificationList
@@ -1491,19 +1480,17 @@ public class NotificationManagerService extends INotificationManager.Stub
 
         // Battery low always shows, other states only show if charging.
         if (mBatteryLow) {
+	    int color = adjustForQuietHours(BATTERY_LOW_ARGB);
             if (mBatteryCharging) {
-                mBatteryLight.setColor(BATTERY_LOW_ARGB);
+                mBatteryLight.setColor(color);
             } else {
                 // Flash when battery is low and not charging
-                mBatteryLight.setFlashing(BATTERY_LOW_ARGB, LightsService.LIGHT_FLASH_TIMED,
+                mBatteryLight.setFlashing(color, LightsService.LIGHT_FLASH_TIMED,
                         BATTERY_BLINK_ON, BATTERY_BLINK_OFF);
             }
         } else if (mBatteryCharging) {
-            if (mBatteryFull) {
-                mBatteryLight.setColor(BATTERY_FULL_ARGB);
-            } else {
-                mBatteryLight.setColor(BATTERY_MEDIUM_ARGB);
-            }
+            int color = mBatteryFull ? BATTERY_FULL_ARGB : BATTERY_MEDIUM_ARGB;
+            mBatteryLight.setColor(adjustForQuietHours(color));
         } else {
             mBatteryLight.turnOff();
         }
