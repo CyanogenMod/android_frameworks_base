@@ -65,7 +65,7 @@ int32_t Effect::command(uint32_t cmdCode, uint32_t cmdSize, void *pCmdData, uint
     switch (cmdCode) {
     case EFFECT_CMD_ENABLE:
     case EFFECT_CMD_DISABLE: {
-	enable = cmdCode == EFFECT_CMD_ENABLE;
+	mEnable = cmdCode == EFFECT_CMD_ENABLE;
 	int32_t *replyData = (int32_t *) pReplyData;
 	*replyData = 0;
 	break;
@@ -110,7 +110,7 @@ int32_t Effect::command(uint32_t cmdCode, uint32_t cmdSize, void *pCmdData, uint
 
 int32_t Effect::process(audio_buffer_t *in, audio_buffer_t *out)
 {
-    if (! enable) {
+    if (! mEnable) {
         for (uint32_t i = 0; i < in->frameCount; i ++) {
 	    int32_t tmpL = read(in, i * 2);
 	    int32_t tmpR = read(in, i * 2 + 1);
