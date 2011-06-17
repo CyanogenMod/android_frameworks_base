@@ -1456,7 +1456,6 @@ public class NotificationManagerService extends INotificationManager.Stub
     }
 
     private void updateRGBLightsLocked() {
-        boolean SHOLES_DEVICE = Build.DEVICE.contains("sholes");
         int mPulseScreen = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.TRACKBALL_SCREEN_ON, 0);
         int mSuccession = Settings.System.getInt(mContext.getContentResolver(),
@@ -1472,10 +1471,6 @@ public class NotificationManagerService extends INotificationManager.Stub
             mSuccession = 0;
             mRandomColor = 0;
             mPulseAllColor = 0;
-        }
-
-        if (SHOLES_DEVICE) {
-            mBlendColor = 0;
         }
 
         // Battery low always shows, other states only show if charging.
