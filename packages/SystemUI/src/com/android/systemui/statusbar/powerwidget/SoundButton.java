@@ -76,7 +76,7 @@ public class SoundButton extends PowerButton {
                     Settings.System.putInt(context.getContentResolver(),
                             Settings.System.VIBRATE_IN_SILENT, 1);
                     AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_ONLY_SILENT);
+                            AudioManager.VIBRATE_SETTING_ON);
                     AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
                     VIBRATOR.vibrate(VIBRATE_DURATION);
                 } else if (supports(RINGER_MODE_SILENT)) {
@@ -214,6 +214,7 @@ public class SoundButton extends PowerButton {
     }
 
     private boolean supports(int ringerMode) {
+        // returns true if ringerMode is one of the modes in the selected sound option for the power widget
         int currentMode = getCurrentCMMode(mView.getContext());
 
         switch (ringerMode) {
