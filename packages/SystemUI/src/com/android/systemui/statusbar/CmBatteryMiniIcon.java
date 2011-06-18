@@ -48,11 +48,8 @@ public class CmBatteryMiniIcon extends ImageView {
     // the margin to the right of this widget
     static final int BATTERY_MINI_ICON_MARGIN_RIGHT_DIP = 6;
 
-    // duration of each frame in charging animation in millis
-    static final int ANIM_FRAME_DURATION = 750;
-
-    // duration of each fake-timer call to update animation in millis
-    static final int ANIM_TIMER_DURATION = 333;
+    // Duration of each frame during battery charging animation
+    private int mAnimDuration = 500;
 
     // contains the current bat level, values: 0-100
     private int mBatteryLevel = 0;
@@ -110,8 +107,11 @@ public class CmBatteryMiniIcon extends ImageView {
     // animating
     final Runnable onFakeTimer = new Runnable() {
         public void run() {
+            ++mCurrentFrame;
+            if (mCurrentFrame > 10)
+                mCurrentFrame = mBatteryLevel / 10;
             invalidate();
-            mHandler.postDelayed(onFakeTimer, ANIM_TIMER_DURATION);
+            mHandler.postDelayed(onFakeTimer, mAnimDuration);
         }
     };
 
@@ -163,6 +163,23 @@ public class CmBatteryMiniIcon extends ImageView {
         }
     }
 
+    protected void updateAnimDuration() {
+        mAnimDuration = 200 + mBatteryLevel * 5;
+    }
+
+    private void startTimer() {
+        mHandler.removeCallbacks(onFakeTimer);
+        updateAnimDuration();
+        mCurrentFrame = mBatteryLevel / 10;
+        invalidate();
+        mHandler.postDelayed(onFakeTimer, mAnimDuration);
+    }
+
+    private void stopTimer() {
+        mHandler.removeCallbacks(onFakeTimer);
+        invalidate();
+    }
+
     /**
      * Handles changes ins battery level and charger connection
      */
@@ -173,13 +190,16 @@ public class CmBatteryMiniIcon extends ImageView {
             if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
                 // mIconId = intent.getIntExtra("icon-small", 0);
                 mBatteryLevel = intent.getIntExtra("level", 0);
+                boolean oldPluggedState = mBatteryPlugged;
                 mBatteryPlugged = intent.getIntExtra("plugged", 0) != 0;
 
-                if (mBatteryPlugged && mBatteryLevel < 100)
-                    mHandler.postDelayed(onFakeTimer, ANIM_TIMER_DURATION);
-                else{
-                    mHandler.removeCallbacks(onFakeTimer);
-                    invalidate();
+                if (mBatteryPlugged && mBatteryLevel < 100) {
+                    if (!oldPluggedState)
+                        startTimer();
+                    if(mBatteryLevel % 10 == 0)
+                        updateAnimDuration();
+                } else {
+                    stopTimer();
                 }
             }
         }
@@ -197,31 +217,8 @@ public class CmBatteryMiniIcon extends ImageView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (!mAttached)
+        if (!mAttached || !mShowCmBattery)
             return;
-        if (!mShowCmBattery)
-            return;
-
-        // set up animation when charger plugged in
-        if (mBatteryPlugged && mBatteryLevel < 100) {
-            if (mLastMillis == 0) {
-                // just got plugged - setup animation
-                mLastMillis = SystemClock.uptimeMillis();
-                mCurrentFrame = mBatteryLevel / 10;
-            }
-            long now = SystemClock.uptimeMillis();
-
-            while (now - mLastMillis > ANIM_FRAME_DURATION) {
-                mCurrentFrame++;
-                if (mCurrentFrame > 10)
-                    mCurrentFrame = mBatteryLevel / 10;
-                mLastMillis += ANIM_FRAME_DURATION;
-            }
-        } else {
-            // reset the animation for next charger connection
-            mLastMillis = 0;
-            mCurrentFrame = 10;
-        }
 
         int frame = (mBatteryPlugged ? mCurrentFrame : mBatteryLevel / 10);
 
