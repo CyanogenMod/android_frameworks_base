@@ -3,6 +3,12 @@
 #include <stdint.h>
 #include <media/EffectApi.h>
 
+static inline uint16_t prng() {
+    static uint32_t seed;
+    seed = seed * 1664525 + 1013904223;
+    return seed >> 14;
+}
+
 class Effect {
     private:
     audio_format_e mFormatIn;
@@ -10,10 +16,19 @@ class Effect {
     effect_buffer_access_e mAccessMode;
 
     protected:
-    bool enable;
+    bool mEnable;
     float mSamplingRate;
     uint32_t mChannels;
-   
+    uint16_t mPreviousRandom;
+
+    /* High-passed triangular probability density function. */
+    inline int32_t triangularDither16() {
+        uint16_t newRandom = prng();
+        int32_t rnd = mPreviousRandom - newRandom;
+        mPreviousRandom = newRandom;
+        return rnd;
+    }
+
     inline int32_t read(audio_buffer_t *in, int32_t idx) {
 	switch (mFormatIn) {
 	case SAMPLE_FORMAT_PCM_S15:
@@ -51,10 +66,9 @@ class Effect {
 	    }
 	}
 
-	/* I should probably apply dithering for S15 / U8. */
 	switch (mFormatOut) {
 	case SAMPLE_FORMAT_PCM_S15:
-	    sample >>= 8;
+	    sample = (sample + (triangularDither16() >> 8)) >> 8;
 	    if (sample > 32767) {
 		sample = 32767;
 	    }
@@ -65,7 +79,7 @@ class Effect {
 	    break;
 
 	case SAMPLE_FORMAT_PCM_U8:
-	    sample >>= 16;
+	    sample = (sample + triangularDither16()) >> 16;
 	    sample += 128;
 	    if (sample > 255) {
 		sample = 255;
