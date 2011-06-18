@@ -103,11 +103,33 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
         send(rr);
 
         if(mPrepSetupPending) {
-            /* Not the nicest thing to do, but it prevents "Unknown type"
-               errors */
-            if (SystemProperties.get("ro.build.product").equals("p990"))
-                mNetworkMode = 0;
+            if (SystemProperties.get("ro.build.product").equals("p999")) {
+                /* Set radio access tech */
+                RILRequest rrSPR = RILRequest.obtain(
+                        296, null);
+                rrSPR.mp.writeInt(1);
+                rrSPR.mp.writeInt(1);
+                if (RILJ_LOGD) riljLog(rrSPR.serialString() + "> "
+                        + requestToString(rrSPR.mRequest));
+                send(rrSPR);
+            } else {
+                /* Set GPRS class */
+                RILRequest rrCs = RILRequest.obtain(
+                        273, null);
+                rrCs.mp.writeInt(2);
+                rrCs.mp.writeInt(1);
+                rrCs.mp.writeInt(1);
+                if (RILJ_LOGD) riljLog(rrCs.serialString() + "> "
+                        + requestToString(rrCs.mRequest));
+                send(rrCs);
+            }
 
+        }
+    }
+
+    protected void LGEswitchToRadioState(RadioState newState) {
+
+        if (newState.isOn() && mPrepSetupPending) {
             RILRequest rrPnt = RILRequest.obtain(
                     RIL_REQUEST_SET_PREFERRED_NETWORK_TYPE, null);
 
@@ -118,28 +140,29 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
 
             send(rrPnt);
 
-            /* Set GPRS class */
-            RILRequest rrCs = RILRequest.obtain(
-                    273, null);
-            rrCs.mp.writeInt(2);
-            rrCs.mp.writeInt(1);
-            rrCs.mp.writeInt(1);
-            if (RILJ_LOGD) riljLog(rrCs.serialString() + "> "
-                    + requestToString(rrCs.mRequest));
-            send(rrCs);
+            /* Request service line */
+            RILRequest rrSL = RILRequest.obtain(
+                    (SystemProperties.get("ro.build.product").equals("p999") ? 294 : 286), null);
+            rrSL.mp.writeInt(0);
+            if (RILJ_LOGD) riljLog(rrSL.serialString() + "> "
+                    + requestToString(rrSL.mRequest));
+            send(rrSL);
 
-            /* For the 2X, request service line */
-            if (SystemProperties.get("ro.build.product").equals("p990")) {
-                RILRequest rrSL = RILRequest.obtain(
-                        286, null);
-                rrSL.mp.writeInt(0);
-                if (RILJ_LOGD) riljLog(rrSL.serialString() + "> "
-                        + requestToString(rrSL.mRequest));
-                send(rrSL);
-            }
+            /* Set "ready" */
+            RILRequest rrSc = RILRequest.obtain(
+                    (SystemProperties.get("ro.build.product").equals("p999") ? 304 : 298), null);
+            rrSc.mp.writeInt(1);
+            rrSc.mp.writeInt(0);
+            if (RILJ_LOGD) riljLog(rrSc.serialString() + "> "
+                    + requestToString(rrSc.mRequest));
+            send(rrSc);
+
             mPrepSetupPending = false;
+
         }
+        switchToRadioState(newState);
     }
+
 
     /**
      * Request ID overwrites
@@ -401,8 +424,12 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
             case RIL_REQUEST_REPORT_SMS_MEMORY_STATUS: ret = responseVoid(p); break;
             case RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING: ret = responseVoid(p); break;
             case 161: ret =  responsePdpAddress(p); break; // SHOW_PDP_ADDRESS
-            case 273: ret =  responseVoid(p); break; // SHOW_PDP_ADDRESS
-            case 286: ret =  responseVoid(p); break; // SHOW_PDP_ADDRESS
+            case 273: ret =  responseVoid(p); break; // SET_GMM_ATTACH_MODE
+            case 286: ret =  responseVoid(p); break; // GET_SERVICE_LINE
+            case 294: ret =  responseVoid(p); break; // GET_SERVICE_LINE
+            case 296: ret =  responseVoid(p); break; // RIL_REQUEST_SET_PRODUCT_RAT
+            case 298: ret =  responseVoid(p); break; // SEND_COMMAND
+            case 304: ret =  responseVoid(p); break; // SEND_COMMAND
             default:
                 throw new RuntimeException("Unrecognized solicited response: " + rr.mRequest);
             //break;
@@ -500,7 +527,7 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
                 RadioState newState = getRadioStateFromInt(p.readInt());
                 if (RILJ_LOGD) unsljLogMore(response, newState.toString());
 
-                switchToRadioState(newState);
+                LGEswitchToRadioState(newState);
             break;
             case RIL_UNSOL_RESPONSE_CALL_STATE_CHANGED:
                 if (RILJ_LOGD) unsljLog(response);
@@ -962,7 +989,11 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
             case RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING: return "RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING";
             case 161: return "SHOW_PDP_ADDRESS";
             case 273: return "SET_GMM_ATTACH_MODE";
-            case 286: return "GET_SERVICE_LINE";
+            case 286: return "GET_SERVICE_LINE"; // p990
+            case 294: return "GET_SERVICE_LINE"; // p999
+            case 296: return "RIL_REQUEST_SET_PRODUCT_RAT";
+            case 298: return "SEND_COMMAND"; // p990
+            case 304: return "SEND_COMMAND"; // p999
             default: return "<unknown request>";
         }
     }
