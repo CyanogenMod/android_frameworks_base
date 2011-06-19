@@ -108,17 +108,12 @@ int32_t Effect::command(uint32_t cmdCode, uint32_t cmdSize, void *pCmdData, uint
     return 0;
 }
 
+/* This implementation removes the effect at earliest opportunity. */
 int32_t Effect::process(audio_buffer_t *in, audio_buffer_t *out)
 {
-    if (! mEnable) {
-        for (uint32_t i = 0; i < in->frameCount; i ++) {
-	    int32_t tmpL = read(in, i * 2);
-	    int32_t tmpR = read(in, i * 2 + 1);
-	    write(out, i * 2, tmpL);
-	    write(out, i * 2 + 1, tmpR);
-	}
-        return 0;
-    } else {
-	return process_effect(in, out);
+    int32_t status = process_effect(in, out);
+    if (! mEnable && status == 0) {
+        status = -ENODATA;
     }
+    return status;
 }

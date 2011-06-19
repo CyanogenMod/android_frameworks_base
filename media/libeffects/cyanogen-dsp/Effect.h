@@ -105,7 +105,7 @@ class Effect {
     public:
     Effect();
     virtual ~Effect();
-    virtual int32_t process(audio_buffer_t *in, audio_buffer_t *out);
+    int32_t process(audio_buffer_t *in, audio_buffer_t *out);
     virtual int32_t command(uint32_t cmdCode, uint32_t cmdSize, void* pCmdData, uint32_t* replySize, void* pReplyData) = 0;
     virtual int32_t process_effect(audio_buffer_t *in, audio_buffer_t *out) = 0;
 };
