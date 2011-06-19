@@ -326,6 +326,8 @@ status_t SensorDevice::activate(void* ident, int handle, int enabled)
 
     }
 #endif
+
+#ifndef OLD_ACTIVATE_BEHAVIOR
     Info& info( mActivationCount.editValueFor(handle) );
     if (enabled) {
         Mutex::Autolock _l(mLock);
@@ -345,6 +347,25 @@ status_t SensorDevice::activate(void* ident, int handle, int enabled)
             // sensor wasn't enabled for this ident
         }
     }
+#else
+    Info& info( mActivationCount.editValueFor(handle) );
+    int32_t& count(info.count);
+    if (enabled) {
+        if (android_atomic_inc(&count) == 0) {
+            actuateHardware = true;
+        }
+        Mutex::Autolock _l(mLock);
+        if (info.rates.indexOfKey(ident) < 0) {
+            info.rates.add(ident, DEFAULT_EVENTS_PERIOD);
+        }
+    } else {
+        if (android_atomic_dec(&count) == 1) {
+            actuateHardware = true;
+        }
+        Mutex::Autolock _l(mLock);
+        info.rates.removeItem(ident);
+    }
+#endif
 
     if (actuateHardware) {
         if (mOldSensorsCompatMode) {
