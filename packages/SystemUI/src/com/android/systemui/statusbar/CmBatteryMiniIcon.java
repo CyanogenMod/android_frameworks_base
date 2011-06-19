@@ -67,9 +67,6 @@ public class CmBatteryMiniIcon extends ImageView {
     private boolean mShowCmBattery = false;
 
     // used for animation
-    private long mLastMillis = 0;
-
-    // used for animation
     private int mCurrentFrame;
 
     private boolean mAttached;
@@ -200,6 +197,9 @@ public class CmBatteryMiniIcon extends ImageView {
                         updateAnimDuration();
                 } else {
                     stopTimer();
+                    // As it's charged set the full charged frame, else,
+                    // it might be shown as empty when fully charged.
+                    mCurrentFrame = 10;
                 }
             }
         }
