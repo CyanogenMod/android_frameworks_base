@@ -19,6 +19,15 @@
 #define LOG_TAG "AudioFlinger"
 //#define LOG_NDEBUG 0
 
+#if (BOARD_FM_DEVICE == wl1271)
+# define USE_MOTO_FM
+# define USE_HCI_FM_VOLUME
+#endif
+
+#ifdef USE_BROADCOM_FM_VOLUME_HACK
+# define USE_HCI_FM_VOLUME
+#endif
+
 #include <math.h>
 #include <signal.h>
 #include <sys/time.h>
@@ -668,27 +677,60 @@ status_t AudioFlinger::setParameters(int ioHandle, const String8& keyValuePairs)
         }
     }
 #endif
+
+// writable key=value
+String8 newKey = keyValuePairs;
+
 #ifdef HAVE_FM_RADIO
     AudioParameter param = AudioParameter(keyValuePairs);
     String8 key = String8(AudioParameter::keyRouting);
+    String8 FMkey = String8("routing");
     int device;
-    if (param.getInt(key, device) == NO_ERROR) {
-        if((device & AudioSystem::DEVICE_OUT_FM_ALL) && mFmOn == false){
-            mFmOn = true;
-         } else if (mFmOn == true && !(device & AudioSystem::DEVICE_OUT_FM_ALL)){
-            mFmOn = false;
+    if (param.getInt(key, device) == NO_ERROR || param.getInt(FMkey, device) == NO_ERROR) {
+        if((device & AudioSystem::DEVICE_OUT_FM_ALL) && mFmOn == false) {
+             mFmOn = true;
+         } else if (mFmOn == true && !(device & AudioSystem::DEVICE_OUT_FM_ALL)) {
+             mFmOn = false;
          }
+    #ifdef USE_MOTO_FM
+         //Motorola specific
+         if (device == AudioSystem::DEVICE_OUT_WIRED_HEADPHONE) {
+             newKey = "FM_routing=DEVICE_OUT_WIRED_HEADPHONE";
+             LOGD("MOTO io %d, keys %s, orig key %s", ioHandle, newKey.string(), keyValuePairs.string());
+             mAudioHardware->setParameters(newKey);
+         } else if (device == AudioSystem::DEVICE_OUT_SPEAKER) {
+             newKey = "FM_routing=DEVICE_OUT_SPEAKER";
+             LOGD("MOTO io %d, keys %s, orig key %s", ioHandle, newKey.string(), keyValuePairs.string());
+             mAudioHardware->setParameters(newKey);
+         } else {
+             LOGD("MOTO UNKNOWN : io %d, keys %s device=%d", ioHandle, newKey.string(), device);
+         }
+    #endif
     }
 
     String8 fmOnKey = String8(AudioParameter::keyFmOn);
     String8 fmOffKey = String8(AudioParameter::keyFmOff);
-    if (param.getInt(fmOnKey, device) == NO_ERROR) {
+    String8 fmFMKey = String8("FM_launch");
+    if (param.getInt(fmOnKey, device) == NO_ERROR || param.getInt(fmFMKey, device) == NO_ERROR) {
+    #ifdef USE_MOTO_FM
+        if (device & AudioSystem::DEVICE_OUT_FM_ALL) {
+            mFmOn = true;
+            newKey = "FM_launch=on";
+            LOGD("MOTO io %d, keys %s, orig key %s", ioHandle, newKey.string(), keyValuePairs.string());
+            mAudioHardware->setParameters(newKey);
+        } else {
+            mFmOn = false;
+            // seems not working on fast power off+power on, so we ignore that
+            //newKey = "FM_launch=off";
+            LOGD("MOTO IGNORE : io %d, keys %s device=%d", ioHandle, newKey.string(), device);
+        }
+    #else
         mFmOn = true;
-        // Call hardware to switch FM on/off
+        // Call hardware to switch FM on
         mAudioHardware->setParameters(keyValuePairs);
+    #endif
     } else if (param.getInt(fmOffKey, device) == NO_ERROR) {
         mFmOn = false;
-        // Call hardware to switch FM on/off
         mAudioHardware->setParameters(keyValuePairs);
     }
 #endif
@@ -800,7 +842,7 @@ status_t AudioFlinger::getRenderPosition(uint32_t *halFrames, uint32_t *dspFrame
 }
 
 #ifdef HAVE_FM_RADIO
-#ifdef USE_BROADCOM_FM_VOLUME_HACK
+#ifdef USE_HCI_FM_VOLUME
 /*
  * NASTY HACK: Send raw HCI data to adjust the FM volume.
  *
@@ -812,24 +854,33 @@ static status_t set_volume_fm(uint32_t volume)
     int returnval = 0;
     float ratio = 2.5;
 
-     char s1[100] = "hcitool cmd 0x3f 0xa 0x5 0xc0 0x41 0xf 0 0x20 0 0 0";
-     char s2[100] = "hcitool cmd 0x3f 0xa 0x5 0xe4 0x41 0xf 0 0x00 0 0 0";
-     char s3[100] = "hcitool cmd 0x3f 0xa 0x5 0xe0 0x41 0xf 0 ";
+#ifdef USE_MOTO_FM
+    char sv[64] = "hcitool cmd 0x3f 0x135 0x1c 0x2 0x0 ";
+#else
+    char s1[64] = "hcitool cmd 0x3f 0xa 0x5 0xc0 0x41 0xf 0 0x20 0 0 0";
+    char s2[64] = "hcitool cmd 0x3f 0xa 0x5 0xe4 0x41 0xf 0 0x00 0 0 0";
+    char sv[64] = "hcitool cmd 0x3f 0xa 0x5 0xe0 0x41 0xf 0 ";
+#endif
 
-     char stemp[10] = "";
-     char *pstarget = s3;
+    char stemp[8];
+    char *psvol = sv;
 
-     volume = (unsigned int)(volume * ratio);
+    volume = (unsigned int)(volume * ratio);
 
-     sprintf(stemp, "0x%x ", volume);
-     pstarget = strcat(s3, stemp);
-     pstarget = strcat(s3, "0 0 0");
+    sprintf(stemp, "0x%x ", volume);
+    psvol = strcat(sv, stemp);
 
-     system(s1);
-     system(s2);
-     system(s3);
+#ifdef USE_MOTO_FM
+    psvol = strcat(sv, "0xff");
+    system(sv);
+#else
+    psvol = strcat(sv, "0 0 0");
+    system(s1);
+    system(s2);
+    system(sv);
+#endif
 
-     return returnval;
+    return returnval;
 }
 #endif
 
@@ -844,7 +895,7 @@ status_t AudioFlinger::setFmVolume(float value)
 
     AutoMutex lock(mHardwareLock);
     mHardwareStatus = AUDIO_SET_FM_VOLUME;
-#ifdef USE_BROADCOM_FM_VOLUME_HACK
+#ifdef USE_HCI_FM_VOLUME
     int vol = AudioSystem::logToLinear(value);
     LOGI("setFmVolume %d", vol);
     ret = set_volume_fm(vol);
