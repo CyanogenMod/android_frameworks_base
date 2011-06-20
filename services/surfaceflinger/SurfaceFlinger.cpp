@@ -2022,7 +2022,9 @@ status_t SurfaceFlinger::turnElectronBeamOffImplLocked(int32_t mode)
     glEnable(GL_SCISSOR_TEST);
     hw.flip( Region(hw.bounds()) );
 
+#ifndef DO_NOT_SET_CAN_DRAW
     hw.setCanDraw(false);
+#endif
     return NO_ERROR;
 }
 
