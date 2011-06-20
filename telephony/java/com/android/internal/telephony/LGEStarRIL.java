@@ -271,8 +271,9 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
         RILRequest rr
                 = RILRequest.obtain(RIL_REQUEST_DEACTIVATE_DATA_CALL, result);
 
-        rr.mp.writeInt(1);
+        rr.mp.writeInt(2);
         rr.mp.writeInt(1); //cid
+        rr.mp.writeInt(cid); 
         rr.mp.writeString(Integer.toString(cid));
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " +
