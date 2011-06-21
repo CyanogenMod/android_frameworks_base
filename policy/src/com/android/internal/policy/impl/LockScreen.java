@@ -191,6 +191,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private boolean mHideUnlockTab;
     private int mGestureColor;
 
+    // custom App Icon for 2nd Tab
+    private Drawable mCustomAppIcon;
+
     /**
      * The status of this lock screen.
      */
@@ -344,6 +347,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                     PackageManager pm = context.getPackageManager();
                     ActivityInfo ai = i.resolveActivityInfo(pm,PackageManager.GET_ACTIVITIES);
                     mSelector2.setRightHintText(ai.loadLabel(pm).toString());
+                    mCustomAppIcon=ai.loadIcon(pm);
                 } catch (URISyntaxException e) {
                 }
             }
@@ -426,9 +430,15 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         //Rotary setup
         if(!mRotaryUnlockDown){
             mRotarySelector.setLeftHandleResource(R.drawable.ic_jog_dial_unlock);
-            mRotarySelector.setMidHandleResource((mCustomIconStyle == 1) ? R.drawable.ic_jog_dial_custom : R.drawable.ic_jog_dial_messaging);
+            if (mCustomIconStyle == 1)
+                mRotarySelector.setMidHandleResource(R.drawable.ic_jog_dial_custom);
+            else
+                mRotarySelector.setMidHandleResource(mCustomAppIcon);
         }else{
-            mRotarySelector.setLeftHandleResource((mCustomIconStyle == 1) ? R.drawable.ic_jog_dial_custom : R.drawable.ic_jog_dial_messaging);
+            if (mCustomIconStyle == 1)
+                mRotarySelector.setLeftHandleResource(R.drawable.ic_jog_dial_custom);
+            else
+                mRotarySelector.setLeftHandleResource(mCustomAppIcon);
             mRotarySelector.setMidHandleResource(R.drawable.ic_jog_dial_unlock);
         }
         mRotarySelector.enableCustomAppDimple(mCustomAppToggle);
@@ -458,10 +468,14 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                     R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_left_generic,
                     R.drawable.jog_tab_left_generic);
 
-            mSelector2.setRightTabResources((mCustomIconStyle == 1) ? R.drawable.ic_jog_dial_custom
-                         : R.drawable.ic_jog_dial_messaging,
-                    R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_right_generic,
-                    R.drawable.jog_tab_right_generic);
+            if (mCustomIconStyle == 1)
+                mSelector2.setRightTabResources(R.drawable.ic_jog_dial_custom,
+                   R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_right_generic,
+                   R.drawable.jog_tab_right_generic);
+            else           	
+	            mSelector2.setRightTabResources(mCustomAppIcon,
+	                    R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_right_generic,
+	                    R.drawable.jog_tab_right_generic);
 
             mSelector2.setOnTriggerListener(new OnTriggerListener() {
                 public void onTrigger(View v, int whichHandle) {
