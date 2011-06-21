@@ -29,6 +29,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Vibrator;
 import android.text.format.DateFormat;
 import android.text.format.Time;
@@ -357,6 +359,19 @@ public class RotarySelector extends View {
     }
 
     /**
+     * Sets the left handle icon to a given drawable.
+     *
+     * The argument should refer to a Drawable object, or use 0 to remove
+     * the icon.
+     *
+     * @param icon Drawable object.
+     */
+    public void setLeftHandleResource(Drawable icon) {
+        mLeftHandleIcon = ((BitmapDrawable)icon).getBitmap();
+        invalidate();
+    }
+
+    /**
      * Sets the right handle icon to a given resource.
      *
      * The resource should refer to a Drawable object, or use 0 to remove
@@ -383,6 +398,19 @@ public class RotarySelector extends View {
         if (resId != 0) {
             mMidHandleIcon = getBitmapFor(resId);
         }
+        invalidate();
+    }
+
+    /**
+     * Sets the middle handle icon to a given drawable.
+     *
+     * The argument should refer to a Drawable object, or use 0 to remove
+     * the icon.
+     *
+     * @param icon Drawable object.
+     */
+    public void setMidHandleResource(Drawable icon) {
+        mMidHandleIcon = ((BitmapDrawable)icon).getBitmap();
         invalidate();
     }
 
