@@ -61,7 +61,7 @@ static int64_t toFixedPoint(float in) {
 }
 
 EffectEqualizer::EffectEqualizer()
-    : mLoudnessAdjustment(10000.f), mLoudness(0.f)
+    : mLoudnessAdjustment(10000.f), mLoudness(50.f)
 {
     for (int32_t i = 0; i < 5; i ++) {
         mBand[i] = 0;
