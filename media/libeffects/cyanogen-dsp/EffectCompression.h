@@ -9,9 +9,9 @@ class EffectCompression : public Effect {
     float mCompressionRatio;
     
     int32_t mCurrentLevel[2];
-    Biquad mWeighter;
+    Biquad mWeighter[2];
 
-    uint64_t estimateOneChannelLevel(audio_buffer_t *in, int interleave, int offset);
+    uint64_t estimateOneChannelLevel(audio_buffer_t *in, int32_t interleave, int32_t offset, Biquad& weighter);
 
     public:
     EffectCompression();

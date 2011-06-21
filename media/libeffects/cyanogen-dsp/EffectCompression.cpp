@@ -35,7 +35,7 @@ static int32_t max(int32_t a, int32_t b)
 EffectCompression::EffectCompression()
     : mCompressionRatio(2.0)
 {
-    for (int i = 0; i < 2; i ++) {
+    for (int32_t i = 0; i < 2; i ++) {
 	mCurrentLevel[i] = 0;
 	mUserVolumes[i] = 1 << 24;
     }
@@ -51,7 +51,8 @@ int32_t EffectCompression::command(uint32_t cmdCode, uint32_t cmdSize, void* pCm
 	    return 0;
 	}
 
-	mWeighter.setBandPass(1700, mSamplingRate, sqrtf(2)/2);
+	mWeighter[0].setBandPass(1700, mSamplingRate, sqrtf(2)/2);
+	mWeighter[1].setBandPass(1700, mSamplingRate, sqrtf(2)/2);
 
 	*replyData = 0;
 	return 0;
@@ -79,20 +80,20 @@ int32_t EffectCompression::command(uint32_t cmdCode, uint32_t cmdSize, void* pCm
 	LOGI("Setting volumes");
 
 	if (pReplyData != NULL) {
-	    int32_t *userVols = (int *) pCmdData;
+	    int32_t *userVols = (int32_t *) pCmdData;
 	    for (uint32_t i = 0; i < cmdSize / 4; i ++) {
                 LOGI("user volume on channel %d: %d", i, userVols[i]);
 		mUserVolumes[i] = userVols[i];
 	    }
 
-	    int32_t *myVols = (int *) pReplyData;
+	    int32_t *myVols = (int32_t *) pReplyData;
 	    for (uint32_t i = 0; i < *replySize / 4; i ++) {
                 LOGI("Returning unity for our pre-requested volume on channel %d", i);
 		myVols[i] = 1 << 24; /* Unity gain */
 	    }
         } else {
 	    /* We don't control volume. */
-	    for (int i = 0; i < 2; i ++) {
+	    for (int32_t i = 0; i < 2; i ++) {
 		mUserVolumes[i] = 1 << 24;
 	    }
 	}
@@ -104,14 +105,13 @@ int32_t EffectCompression::command(uint32_t cmdCode, uint32_t cmdSize, void* pCm
 }
 
 /* Return fixed point 16.48 */
-uint64_t EffectCompression::estimateOneChannelLevel(audio_buffer_t *in, int32_t interleave, int32_t offset)
+uint64_t EffectCompression::estimateOneChannelLevel(audio_buffer_t *in, int32_t interleave, int32_t offset, Biquad& weighter)
 {
-    mWeighter.reset();
     uint64_t power = 0;
     for (uint32_t i = 0; i < in->frameCount; i ++) {
 	int32_t tmp = read(in, offset);
 	offset += interleave;
-        int64_t out = mWeighter.process(tmp);
+        int64_t out = weighter.process(tmp);
 	/* 2^24 * 2^24 = 48 */
         power += out * out;
     }
@@ -124,7 +124,7 @@ int32_t EffectCompression::process_effect(audio_buffer_t *in, audio_buffer_t *ou
     /* Analyze both channels separately, pick the maximum power measured. */
     uint64_t maximumPowerSquared = 0;
     for (uint32_t i = 0; i < mChannels; i ++) {
-        uint64_t candidatePowerSquared = estimateOneChannelLevel(in, mChannels, i);
+        uint64_t candidatePowerSquared = estimateOneChannelLevel(in, mChannels, i, mWeighter[i]);
         if (candidatePowerSquared > maximumPowerSquared) {
             maximumPowerSquared = candidatePowerSquared;
         }
