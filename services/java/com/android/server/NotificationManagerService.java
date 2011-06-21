@@ -330,6 +330,23 @@ public class NotificationManagerService extends INotificationManager.Stub
         }
 
         public void onNotificationClear(String pkg, String tag, int id) {
+            // Do this up here and not in cancelNotification, since that method is used more broadly. This gets called
+            // specifically when we're canceling a notification from the status bar without clicking on it.
+            synchronized (mNotificationList) {
+                int index = indexOfNotificationLocked(pkg, tag, id);
+                if (index >= 0) {
+                    NotificationRecord r = mNotificationList.get(index);
+                    if (r.notification.deleteIntent != null) {
+                        try {
+                            r.notification.deleteIntent.send();
+                        } catch (PendingIntent.CanceledException ex) {
+                            // do nothing - there's no relevant way to recover, and
+                            // no reason to let this propagate
+                            Slog.w(TAG, "canceled PendingIntent for " + r.pkg, ex);
+                        }
+                    }
+                }
+            }
             cancelNotification(pkg, tag, id, 0, Notification.FLAG_FOREGROUND_SERVICE);
         }
 
