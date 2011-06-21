@@ -20,6 +20,9 @@ class EffectEqualizer : public Effect {
 
     Biquad mWeigher;
     float mLoudness;
+    int32_t mNextUpdate;
+    int32_t mNextUpdateInterval;
+    int64_t mPowerSquared;
 
     void setBand(int32_t idx, float dB);   
     float getAdjustedBand(int32_t idx);
