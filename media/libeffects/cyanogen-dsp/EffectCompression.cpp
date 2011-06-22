@@ -51,8 +51,10 @@ int32_t EffectCompression::command(uint32_t cmdCode, uint32_t cmdSize, void* pCm
 	    return 0;
 	}
 
-	mWeighter[0].setBandPass(1700, mSamplingRate, sqrtf(2)/2);
-	mWeighter[1].setBandPass(1700, mSamplingRate, sqrtf(2)/2);
+        /* This filter gives a reasonable approximation of A- and C-weighting
+         * which is close to correct for 100 - 10 kHz. 10 dB gain must be added to result. */
+	mWeigherBP[0].setBandPass(2200, mSamplingRate, 0.33);
+	mWeigherBP[1].setBandPass(2200, mSamplingRate, 0.33);
 
 	*replyData = 0;
 	return 0;
@@ -105,15 +107,16 @@ int32_t EffectCompression::command(uint32_t cmdCode, uint32_t cmdSize, void* pCm
 }
 
 /* Return fixed point 16.48 */
-uint64_t EffectCompression::estimateOneChannelLevel(audio_buffer_t *in, int32_t interleave, int32_t offset, Biquad& weighter)
+uint64_t EffectCompression::estimateOneChannelLevel(audio_buffer_t *in, int32_t interleave, int32_t offset, Biquad& weigherBP)
 {
     uint64_t power = 0;
     for (uint32_t i = 0; i < in->frameCount; i ++) {
 	int32_t tmp = read(in, offset);
-	offset += interleave;
-        int64_t out = weighter.process(tmp);
+        tmp = weigherBP.process(tmp);
+
 	/* 2^24 * 2^24 = 48 */
-        power += out * out;
+        power += int64_t(tmp) * int64_t(tmp);
+	offset += interleave;
     }
 
     return (power / in->frameCount);
@@ -124,7 +127,7 @@ int32_t EffectCompression::process_effect(audio_buffer_t *in, audio_buffer_t *ou
     /* Analyze both channels separately, pick the maximum power measured. */
     uint64_t maximumPowerSquared = 0;
     for (uint32_t i = 0; i < mChannels; i ++) {
-        uint64_t candidatePowerSquared = estimateOneChannelLevel(in, mChannels, i, mWeighter[i]);
+        uint64_t candidatePowerSquared = estimateOneChannelLevel(in, mChannels, i, mWeigherBP[i]);
         if (candidatePowerSquared > maximumPowerSquared) {
             maximumPowerSquared = candidatePowerSquared;
         }
@@ -133,9 +136,8 @@ int32_t EffectCompression::process_effect(audio_buffer_t *in, audio_buffer_t *ou
     /* -100 .. 0 dB. */
     float signalPowerDb = logf(maximumPowerSquared / float(int64_t(1) << 48) + 1e-10f) / logf(10.0f) * 10.0f;
 
-    /* target 83 dB SPL, and add 6 dB to compensate for the weighter, whose
-     * peak is at -3 dB. */
-    signalPowerDb += 96.0f - 83.0f + 6.0f;
+    /* Target 83 dB SPL */
+    signalPowerDb += 96.0f - 83.0f + 10.0f;
 
     /* now we have an estimate of the signal power, with 0 level around 83 dB.
      * we now select the level to boost to. */
@@ -159,14 +161,14 @@ int32_t EffectCompression::process_effect(audio_buffer_t *in, audio_buffer_t *ou
         /* 8.24 */
 	int32_t volAdj = desiredLevel - mCurrentLevel[i];
 	
-	/* I want volume adjustments to occur in about 0.05 seconds. 
+	/* I want volume adjustments to occur in about 0.025 seconds. 
 	 * However, if the input buffer would happen to be longer than
 	 * this, I'll just make sure that I am done with the adjustment
 	 * by the end of it. */
-	int32_t adjLen = mSamplingRate / 20;
-	/* Note: this adjustment should probably be piecewise linear
-	 * approximation of an exponential to keep perceptibly linear
-	 * correction rate. */
+	int32_t adjLen = mSamplingRate / 40; // in practice, about 1100 frames
+        /* This formulation results in piecewise linear approximation of
+         * exponential because the rate of adjustment decreases from granule
+         * to granule. */
 	volAdj /= max(adjLen, in->frameCount);
 
 	/* Additionally, I want volume to increase only very slowly.
