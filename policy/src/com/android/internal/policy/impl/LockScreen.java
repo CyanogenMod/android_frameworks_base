@@ -341,9 +341,14 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 Intent i;
                 try {
                     i = Intent.parseUri(mCustomAppActivity, 0);
-                    PackageManager pm = context.getPackageManager();
-                    ActivityInfo ai = i.resolveActivityInfo(pm,PackageManager.GET_ACTIVITIES);
-                    mSelector2.setRightHintText(ai.loadLabel(pm).toString());
+                    String label = i.getStringExtra(Intent.EXTRA_SHORTCUT_NAME);
+                    if (label == null){
+                        PackageManager pm = context.getPackageManager();
+                        ActivityInfo ai = i.resolveActivityInfo(pm,PackageManager.GET_ACTIVITIES);
+                        mSelector2.setRightHintText(ai.loadLabel(pm).toString());
+                    }else{
+                        mSelector2.setRightHintText(label);
+                    }
                 } catch (URISyntaxException e) {
                 }
             }
