@@ -34,6 +34,7 @@ static struct {
     { AID_MEDIA, "media.player" },
     { AID_MEDIA, "media.camera" },
     { AID_MEDIA, "media.audio_policy" },
+    { AID_MEDIA, "media.yamahaplayer" },
     { AID_NFC,   "nfc" },
     { AID_RADIO, "radio.phone" },
     { AID_RADIO, "radio.sms" },
