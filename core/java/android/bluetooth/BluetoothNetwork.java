@@ -48,7 +48,7 @@ public final class BluetoothNetwork {
 
     /**
      * Create a BluetoothA2dp proxy object for interacting with the local
-     * Bluetooth A2DP service.
+     * Bluetooth Network service.
      * @param c Context
      */
     public BluetoothNetwork(Context c) {

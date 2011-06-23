@@ -79,12 +79,7 @@ static bool initNative(JNIEnv* env, jobject object) {
     }
     dbus_connection_set_exit_on_disconnect(nat->conn, FALSE);
 
-    const char *c_path = "/org/bluez/hci0";
-    bool ret = dbus_func_args_async(env, nat->conn, -1, NULL, NULL,
-                                        nat, c_path, "org.bluez.NetworkServer", "Register",
-                                        DBUS_TYPE_STRING, "gn");
-    //return ret ? JNI_TRUE : JNI_FALSE;
-
+    LOGE("init native");
 #endif  /*HAVE_BLUETOOTH*/
     return true;
 }
@@ -101,9 +96,39 @@ static void cleanupNative(JNIEnv* env, jobject object) {
 #endif
 }
 
+static void onBluetoothEnableNative(JNIEnv* env, jobject object) {
+    LOGV(__FUNCTION__);
+#ifdef HAVE_BLUETOOTH
+    if (nat) {
+    	LOGE("enable native");
+        char *ifc = "bnep0";
+        char *nap = "nap";
+
+    	DBusMessage *ret = dbus_func_args(env,nat->conn,
+    			 "/org/bluez/hci0","org.bluez.NetworkServer", "Register",
+    			 DBUS_TYPE_STRING, &nap,DBUS_TYPE_STRING, &ifc, DBUS_TYPE_INVALID);
+    	if(ret == NULL){
+    		LOGE("dbus error");
+    	}
+    	LOGE("enabled native");
+    }
+#endif
+}
+
+static void onBluetoothDisableNative(JNIEnv* env, jobject object) {
+#ifdef HAVE_BLUETOOTH
+    LOGV(__FUNCTION__);
+    if (nat) {
+    	LOGE("disable native");
+    }
+#endif
+}
+
 static JNINativeMethod sMethods[] = {
     {"initNative", "()Z", (void *)initNative},
     {"cleanupNative", "()V", (void *)cleanupNative},
+    {"onBluetoothEnableNative", "()V", (void *)onBluetoothEnableNative},
+    {"onBluetoothDisableNative", "()V", (void *)onBluetoothDisableNative},
 };
 
 int register_android_server_BluetoothNetworkService(JNIEnv *env) {

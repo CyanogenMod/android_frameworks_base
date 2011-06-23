@@ -22,14 +22,21 @@
 
 package android.server;
 
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothHid;
 import android.bluetooth.BluetoothNetwork;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothUuid;
 import android.bluetooth.IBluetoothNetwork;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.os.ParcelUuid;
 import android.util.Log;
 
 public class BluetoothNetworkService extends IBluetoothNetwork.Stub {
-    private static final String TAG = "BluetoothNetworkpService";
+    private static final String TAG = "BluetoothNetworkService";
     private static final boolean DBG = true;
 
     public static final String BLUETOOTH_NETWORK_SERVICE = "bluetooth_network";
@@ -41,24 +48,67 @@ public class BluetoothNetworkService extends IBluetoothNetwork.Stub {
     private final Context mContext;
     private final BluetoothService mBluetoothService;
     private final BluetoothAdapter mAdapter;
+    private final IntentFilter mIntentFilter;
     
     public BluetoothNetworkService(Context context, BluetoothService bluetoothService) {
         mContext = context;
-
+        log("starting...");
         mBluetoothService = bluetoothService;
         if (mBluetoothService == null) {
             throw new RuntimeException("Platform does not support Bluetooth");
         }
+        
 
         if (!initNative()) {
             throw new RuntimeException("Could not init BluetoothNetworkService");
         }
-
+        
+        log("passed init native.");
+        mIntentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        mContext.registerReceiver(mReceiver, mIntentFilter);
         mAdapter = BluetoothAdapter.getDefaultAdapter();
 
         if (mBluetoothService.isEnabled())
             onBluetoothEnable();
     }
+    
+    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            BluetoothDevice device =
+                    intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+            if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
+                int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
+                                               BluetoothAdapter.ERROR);
+                switch (state) {
+                case BluetoothAdapter.STATE_ON:
+                    onBluetoothEnable();
+                    break;
+                case BluetoothAdapter.STATE_TURNING_OFF:
+                    onBluetoothDisable();
+                    break;
+                }
+            } else if (action.equals(BluetoothDevice.ACTION_BOND_STATE_CHANGED)) {
+                int bondState = intent.getIntExtra(BluetoothDevice.EXTRA_BOND_STATE,
+                                                   BluetoothDevice.ERROR);
+                switch(bondState) {
+                case BluetoothDevice.BOND_BONDED:
+                    break;
+                case BluetoothDevice.BOND_BONDING:
+                case BluetoothDevice.BOND_NONE:
+                    break;
+                }
+            } else if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
+            	synchronized (this) {
+                    
+            	}
+            } else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
+                synchronized (this) {
+                }
+            }
+        }
+    };
 
     @Override
     protected void finalize() throws Throwable {
@@ -80,9 +130,19 @@ public class BluetoothNetworkService extends IBluetoothNetwork.Stub {
     }
 
     private synchronized void onBluetoothEnable() {
+        String devices = mBluetoothService.getProperty("Devices");
+
+        if (devices != null) {
+            String [] paths = devices.split(",");
+            for (String path: paths) {
+                log(path);
+            }
+        }
+        onBluetoothEnableNative();
     }
 
     private synchronized void onBluetoothDisable() {
+        onBluetoothDisableNative();
     }
 
     private static void log(String msg) {
@@ -91,4 +151,7 @@ public class BluetoothNetworkService extends IBluetoothNetwork.Stub {
 
     private native boolean initNative();
     private native void cleanupNative();
+    
+    private native void onBluetoothEnableNative();
+    private native void onBluetoothDisableNative();
 }
