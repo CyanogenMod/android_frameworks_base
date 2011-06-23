@@ -218,6 +218,10 @@ public class SlidingTab extends ViewGroup {
             tab.setImageResource(iconId);
         }
 
+        void setIcon(Drawable icon) {
+            tab.setImageDrawable(icon);
+        }
+
         void setTabBackgroundResource(int tabId) {
             tab.setBackgroundResource(tabId);
         }
@@ -783,6 +787,14 @@ public class SlidingTab extends ViewGroup {
      */
     public void setRightTabResources(int iconId, int targetId, int barId, int tabId) {
         mRightSlider.setIcon(iconId);
+        mRightSlider.setTarget(targetId);
+        mRightSlider.setBarBackgroundResource(barId);
+        mRightSlider.setTabBackgroundResource(tabId);
+        mRightSlider.updateDrawableStates();
+    }
+
+    public void setRightTabResources(Drawable icon, int targetId, int barId, int tabId) {
+        mRightSlider.setIcon(icon);
         mRightSlider.setTarget(targetId);
         mRightSlider.setBarBackgroundResource(barId);
         mRightSlider.setTabBackgroundResource(tabId);
