@@ -102,6 +102,7 @@ LOCAL_SRC_FILES += \
 	core/java/android/bluetooth/IBluetoothHeadset.aidl \
 	core/java/android/bluetooth/IBluetoothHid.aidl \
 	core/java/android/bluetooth/IBluetoothPbap.aidl \
+	core/java/android/bluetooth/IBluetoothNetwork.aidl \
 	core/java/android/content/IContentService.aidl \
 	core/java/android/content/IIntentReceiver.aidl \
 	core/java/android/content/IIntentSender.aidl \
