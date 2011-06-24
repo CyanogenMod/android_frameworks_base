@@ -22,62 +22,65 @@
 
 package android.server;
 
+import java.util.ArrayList;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothHid;
-import android.bluetooth.BluetoothNetwork;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothUuid;
 import android.bluetooth.IBluetoothNetwork;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.ParcelUuid;
+import android.net.ConnectivityManager;
+import android.net.InterfaceConfiguration;
+import android.os.IBinder;
+import android.os.INetworkManagementService;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.util.Log;
+import android.util.Slog;
 
 public class BluetoothNetworkService extends IBluetoothNetwork.Stub {
     private static final String TAG = "BluetoothNetworkService";
-    private static final boolean DBG = true;
 
     public static final String BLUETOOTH_NETWORK_SERVICE = "bluetooth_network";
-    
-    private static final String BLUETOOTH_ADMIN_PERM = android.Manifest.permission.BLUETOOTH_ADMIN;
-    private static final String BLUETOOTH_PERM = android.Manifest.permission.BLUETOOTH;
-    private static final String BLUETOOTH_ENABLED = "bluetooth_enabled";
-    
+
     private final Context mContext;
     private final BluetoothService mBluetoothService;
-    private final BluetoothAdapter mAdapter;
-    private final IntentFilter mIntentFilter;
-    
+
+    private INetworkManagementService mService;
+
     public BluetoothNetworkService(Context context, BluetoothService bluetoothService) {
         mContext = context;
-        log("starting...");
         mBluetoothService = bluetoothService;
         if (mBluetoothService == null) {
             throw new RuntimeException("Platform does not support Bluetooth");
         }
-        
+        IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
+        mService = INetworkManagementService.Stub.asInterface(b);
 
-        if (!initNative()) {
-            throw new RuntimeException("Could not init BluetoothNetworkService");
-        }
-        
-        log("passed init native.");
-        mIntentFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-        mContext.registerReceiver(mReceiver, mIntentFilter);
-        mAdapter = BluetoothAdapter.getDefaultAdapter();
+        mContext.registerReceiver(mReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+        mContext.registerReceiver(
+                new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+
+                      ArrayList<String> available = intent.getStringArrayListExtra(
+                              ConnectivityManager.EXTRA_AVAILABLE_TETHER);
+                      ArrayList<String> active = intent.getStringArrayListExtra(
+                              ConnectivityManager.EXTRA_ACTIVE_TETHER);
+                      updateTetherState(available, active);
+
+                    }
+                },new IntentFilter(ConnectivityManager.ACTION_TETHER_STATE_CHANGED));
 
         if (mBluetoothService.isEnabled())
             onBluetoothEnable();
     }
-    
+
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            BluetoothDevice device =
-                    intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             if (action.equals(BluetoothAdapter.ACTION_STATE_CHANGED)) {
                 int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
                                                BluetoothAdapter.ERROR);
@@ -101,7 +104,7 @@ public class BluetoothNetworkService extends IBluetoothNetwork.Stub {
                 }
             } else if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
             	synchronized (this) {
-                    
+
             	}
             } else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
                 synchronized (this) {
@@ -110,48 +113,80 @@ public class BluetoothNetworkService extends IBluetoothNetwork.Stub {
         }
     };
 
-    @Override
-    protected void finalize() throws Throwable {
-        try {
-            cleanupNative();
-        } finally {
-            super.finalize();
-        }
-    }
-
-    private int convertBluezSinkStringtoState(String value) {
-        if (value.equalsIgnoreCase("disconnected"))
-            return BluetoothNetwork.STATE_DISCONNECTED;
-        if (value.equalsIgnoreCase("connecting"))
-            return BluetoothNetwork.STATE_CONNECTING;
-        if (value.equalsIgnoreCase("connected"))
-            return BluetoothNetwork.STATE_CONNECTED;
-        return -1;
-    }
-
     private synchronized void onBluetoothEnable() {
-        String devices = mBluetoothService.getProperty("Devices");
-
-        if (devices != null) {
-            String [] paths = devices.split(",");
-            for (String path: paths) {
-                log(path);
-            }
+        if(mService == null){
+            IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
+            mService = INetworkManagementService.Stub.asInterface(b);
         }
-        onBluetoothEnableNative();
+
+        if(mService == null){
+            log("cannot start NetworkManagementService");
+            return;
+        }
+
+        try {
+            mService.startPan();
+        } catch (RemoteException e) {
+            Log.e(TAG, "", e);
+        }
     }
 
     private synchronized void onBluetoothDisable() {
-        onBluetoothDisableNative();
+        if(mService == null){
+            IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
+            mService = INetworkManagementService.Stub.asInterface(b);
+        }
+
+        if(mService == null){
+            log("cannot start NetworkManagementService");
+            return;
+        }
+
+        try {
+            mService.stopPan();
+        } catch (RemoteException e) {
+            Log.e(TAG, "", e);
+        }
+    }
+    
+    private void updateTetherState(ArrayList<String> available, ArrayList<String> tethered) {
+        log("updating tether state");
+        boolean wifiTethered = false;
+        boolean wifiAvailable = false;
+
+        IBinder b = ServiceManager.getService(Context.NETWORKMANAGEMENT_SERVICE);
+        INetworkManagementService service = INetworkManagementService.Stub.asInterface(b);
+
+        ConnectivityManager mCm = (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        for (String intf : available) {
+            log("interface " + intf);
+            if (intf.equals("bnep0")) {
+                log("configuring bnep0");
+                InterfaceConfiguration ifcg = null;
+                try {
+                    ifcg = service.getInterfaceConfig(intf);
+                    log("ifcg:" + ifcg.toString());
+                    if (ifcg != null) {
+                        /* IP/netmask: 192.168.43.1/255.255.255.0 */
+                        ifcg.ipAddr = (192 << 24) + (168 << 16) + (43 << 8) + 1;
+                        ifcg.netmask = (255 << 24) + (255 << 16) + (255 << 8) + 0;
+                        ifcg.interfaceFlags = "up";
+                        service.setInterfaceConfig(intf, ifcg);
+                    }
+                } catch (Exception e) {
+                    Slog.e(TAG, "Error configuring interface " + intf + ", :" + e);
+                    return;
+                }
+                log("about to tether");
+                if(mCm.tether(intf) != ConnectivityManager.TETHER_ERROR_NO_ERROR) {
+                    Slog.e(TAG, "Error tethering "+intf);
+                }
+            }
+        }
     }
 
     private static void log(String msg) {
         Log.d(TAG, msg);
     }
-
-    private native boolean initNative();
-    private native void cleanupNative();
-    
-    private native void onBluetoothEnableNative();
-    private native void onBluetoothDisableNative();
 }

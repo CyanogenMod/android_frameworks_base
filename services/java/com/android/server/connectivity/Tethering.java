@@ -235,7 +235,7 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
             found = true;
             usb = true;
         }
-        if(iface.equals("bnep0"){
+        if(iface.equals("bnep0")){
             found = true;
         }
         if (found == false) {
