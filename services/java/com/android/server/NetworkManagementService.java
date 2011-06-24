@@ -792,4 +792,26 @@ class NetworkManagementService extends INetworkManagementService.Stub {
     public int getInterfaceTxThrottle(String iface) {
         return getInterfaceThrottle(iface, false);
     }
+    
+    public void startPan() throws IllegalStateException {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.CHANGE_NETWORK_STATE, "NetworkManagementService");
+        try {
+            mConnector.doCommand(String.format("pan start"));
+            NetworkUtils.enableInterface("bnep0");
+        } catch (NativeDaemonConnectorException e) {
+            throw new IllegalStateException("Error communicating to native daemon to start pan", e);
+        }
+    }
+    
+    public void stopPan() throws IllegalStateException {
+        mContext.enforceCallingOrSelfPermission(
+                android.Manifest.permission.CHANGE_NETWORK_STATE, "NetworkManagementService");
+        try {
+            mConnector.doCommand("pan stop");
+        } catch (NativeDaemonConnectorException e) {
+            throw new IllegalStateException("Error communicating to native daemon to stop soft AP",
+                    e);
+        }
+    }
 }
