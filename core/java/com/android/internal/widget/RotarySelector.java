@@ -342,6 +342,16 @@ public class RotarySelector extends View {
     }
 
     /**
+     * Scales custom application icon to fit dimple.
+     *
+     * @param Bitmap for custom app icon.
+     */
+    private Bitmap scaleIconToDimple(Bitmap icon) {
+        double sqSide = Math.sqrt((Math.pow(mDimpleWidth,2)/2));
+        return Bitmap.createScaledBitmap(icon, (int) sqSide, (int) sqSide, true);
+    }
+
+    /**
      * Sets the left handle icon to a given resource.
      *
      * The resource should refer to a Drawable object, or use 0 to remove
@@ -353,6 +363,19 @@ public class RotarySelector extends View {
         if (resId != 0) {
             mLeftHandleIcon = getBitmapFor(resId);
         }
+        invalidate();
+    }
+
+    /**
+     * Sets the left handle icon to a given drawable.
+     *
+     * The argument should refer to a Drawable object, or use 0 to remove
+     * the icon.
+     *
+     * @param icon Bitmap object.
+     */
+    public void setLeftHandleResource(Bitmap icon) {
+        mLeftHandleIcon=scaleIconToDimple(icon);
         invalidate();
     }
 
@@ -383,6 +406,19 @@ public class RotarySelector extends View {
         if (resId != 0) {
             mMidHandleIcon = getBitmapFor(resId);
         }
+        invalidate();
+    }
+
+    /**
+     * Sets the middle handle icon to a given drawable.
+     *
+     * The argument should refer to a Drawable object, or use 0 to remove
+     * the icon.
+     *
+     * @param icon Bitmap object.
+     */
+    public void setMidHandleResource(Bitmap icon) {
+        mMidHandleIcon=scaleIconToDimple(icon);
         invalidate();
     }
 
