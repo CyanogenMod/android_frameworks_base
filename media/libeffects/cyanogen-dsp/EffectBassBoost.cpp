@@ -105,7 +105,7 @@ void EffectBassBoost::refreshStrength()
     mBoost.setLowPass(55.0f, mSamplingRate, 0.5f + mStrength / 666.0f);
 }
 
-int32_t EffectBassBoost::process_effect(audio_buffer_t* in, audio_buffer_t* out)
+int32_t EffectBassBoost::process(audio_buffer_t* in, audio_buffer_t* out)
 {
     for (uint32_t i = 0; i < in->frameCount; i ++) {
         int32_t dryL = read(in, i * 2);
@@ -131,6 +131,6 @@ int32_t EffectBassBoost::process_effect(audio_buffer_t* in, audio_buffer_t* out)
         write(out, i * 2 + 1, dryR + boost);
     }
 
-    return 0;
+    return mEnable ? 0 : -ENODATA;
 }
 
