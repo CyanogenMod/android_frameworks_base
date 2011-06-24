@@ -1472,6 +1472,32 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     /**
+     * Quick Keys for Motus (Backflip)
+     */
+        if ("motus".equals(Build.DEVICE) &&
+                (code == KeyEvent.KEYCODE_EXPLORER)) {
+                 String exppackageName = "com.android.browser";
+                 String expclassName = "com.android.browser.BrowserActivity";
+                 Intent explorerIntent = new Intent(Intent.ACTION_VIEW);
+                 explorerIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+                 explorerIntent.setClassName(exppackageName, expclassName);
+                 explorerIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                 mContext.startActivity(explorerIntent);
+            return true;
+        }
+
+        // Handle Envelope Key
+        if ("motus".equals(Build.DEVICE) &&
+                (code == KeyEvent.KEYCODE_ENVELOPE)) {
+                 Intent envelopeIntent = new Intent(Intent.ACTION_MAIN);
+                 envelopeIntent.addCategory(Intent.CATEGORY_DEFAULT);
+                 envelopeIntent.setType("vnd.android-dir/mms-sms");
+                 envelopeIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                 mContext.startActivity(envelopeIntent);
+            return true;
+        }
+
+    /**
      * A home key -> launch home action was detected.  Take the appropriate action
      * given the situation with the keyguard.
      */
