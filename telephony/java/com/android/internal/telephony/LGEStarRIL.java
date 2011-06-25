@@ -181,16 +181,18 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
     }
 
     /**
-     * long DTMF doesn't work with the regular syntax, convert to short
+     * long DTMF needs an additional int arg. -1 appears to act
+     * as a "backwards-compat" value.
      */
     public void
     startDtmf(char c, Message result) {
         RILRequest rr;
-        rr = RILRequest.obtain(RIL_REQUEST_DTMF, result);
+        rr = RILRequest.obtain(RIL_REQUEST_DTMF_START, result);
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
 
         rr.mp.writeString(Character.toString(c));
+        rr.mp.writeInt(-1);
 
         send(rr);
     }
@@ -232,7 +234,6 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
         RILRequest rr
                 = RILRequest.obtain(RIL_REQUEST_SETUP_DATA_CALL, result);
 
-        //rr.mp.writeInt(7);
         rr.mp.writeInt(1); // count becomes contextId
 
         rr.mp.writeString(radioTechnology);
@@ -242,7 +243,7 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
         rr.mp.writeString(password);
         rr.mp.writeString(authType);
         rr.mp.writeString(protocol);
-        rr.mp.writeInt(1); // cid
+        rr.mp.writeString("0");
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> "
                 + requestToString(rr.mRequest) + " " + radioTechnology + " "
@@ -272,8 +273,8 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
                 = RILRequest.obtain(RIL_REQUEST_DEACTIVATE_DATA_CALL, result);
 
         rr.mp.writeInt(2);
-        rr.mp.writeInt(1); //cid
         rr.mp.writeInt(cid); 
+        rr.mp.writeInt(1); //cid
         rr.mp.writeString(Integer.toString(cid));
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "> " +
