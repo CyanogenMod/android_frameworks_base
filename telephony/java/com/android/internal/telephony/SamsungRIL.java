@@ -7,6 +7,7 @@ import android.content.Context;
 import android.os.Message;
 import android.os.AsyncResult;
 import android.os.Parcel;
+import android.os.SystemProperties;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
@@ -29,6 +30,9 @@ import com.android.internal.telephony.cdma.CdmaInformationRecords;
 import android.util.Log;
 
 public class SamsungRIL extends RIL implements CommandsInterface {
+
+	private boolean mSignalbarCount = SystemProperties.getInt("ro.telephony.sends_barcount", 0) == 1 ? true : false;
+
 public SamsungRIL(Context context) {
 		super(context);
 	}
@@ -759,7 +763,14 @@ public SamsungRIL(Context context, int networkMode, int cdmaSubscription) {
 
 		/* Matching Samsung signal strength to asu.
 		   Method taken from Samsungs cdma/gsmSignalStateTracker */
-		response[0] = response[0] & 0xFF; //gsmDbm
+		if(mSignalbarCount)
+		{
+			//Samsung sends the count of bars that should be displayed instead of
+			//a real signal strength
+			response[0] = ((response[0] & 0xFF00) >> 8) * 3; //gsmDbm
+		} else {
+			response[0] = response[0] & 0xFF; //gsmDbm
+		}
 		response[1] = -1; //gsmEcio
 		response[2] = (response[2] < 0)?-120:-response[2]; //cdmaDbm
 		response[3] = (response[3] < 0)?-160:-response[3]; //cdmaEcio
