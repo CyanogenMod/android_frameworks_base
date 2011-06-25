@@ -43,6 +43,7 @@
 #define RENDER_EFFECT_N1_CALIBRATED_N 7
 #define RENDER_EFFECT_N1_CALIBRATED_R 8
 #define RENDER_EFFECT_N1_CALIBRATED_C 9
+#define RENDER_EFFECT_RED 10
 
 namespace android {
 
@@ -415,7 +416,7 @@ void LayerBase::drawWithOpenGL(const Region& clip, const Texture& texture) const
         const GGLfixed alpha = (s.alpha << 16)/255;
         switch (renderEffect) {
             case RENDER_EFFECT_NIGHT:
-                glColor4x(alpha, 0, 0, alpha);
+                glColor4x(alpha, alpha*0.6204, alpha*0.3018, alpha);
                 break;
             case RENDER_EFFECT_TERMINAL:
                 glColor4x(0, alpha, 0, alpha);
@@ -440,6 +441,9 @@ void LayerBase::drawWithOpenGL(const Region& clip, const Texture& texture) const
                 break;
             case RENDER_EFFECT_N1_CALIBRATED_C:
                 glColor4x(alpha*renderColorR/1000, alpha*renderColorG/1000, alpha*(renderColorB+30)/1000, alpha);
+                break;
+            case RENDER_EFFECT_RED:
+                glColor4x(alpha, 0, 0, alpha);
                 break;
         }
         glEnable(GL_BLEND);
