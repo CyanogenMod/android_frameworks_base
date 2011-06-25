@@ -44,7 +44,10 @@ import android.gesture.GestureLibrary;
 import android.gesture.GestureOverlayView;
 import android.gesture.GestureOverlayView.OnGesturePerformedListener;
 import android.gesture.Prediction;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
 import android.media.AudioManager;
 import android.os.Environment;
@@ -190,6 +193,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private boolean mGestureActive;
     private boolean mHideUnlockTab;
     private int mGestureColor;
+
+    private Bitmap mCustomAppIcon;
 
     /**
      * The status of this lock screen.
@@ -341,9 +346,18 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 Intent i;
                 try {
                     i = Intent.parseUri(mCustomAppActivity, 0);
+                    String label =  i.getStringExtra(Intent.EXTRA_SHORTCUT_NAME);
                     PackageManager pm = context.getPackageManager();
                     ActivityInfo ai = i.resolveActivityInfo(pm,PackageManager.GET_ACTIVITIES);
-                    mSelector2.setRightHintText(ai.loadLabel(pm).toString());
+                    if (ai != null) {
+                        if (label == null) label = ai.loadLabel(pm).toString();
+                        Bitmap bmp = ((BitmapDrawable)ai.loadIcon(pm)).getBitmap();
+
+                        int mDimpleWidth = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.jog_dial_dimple).getWidth();
+                        double sqSide = Math.sqrt((Math.pow(mDimpleWidth,2)/2));
+                        mCustomAppIcon = Bitmap.createScaledBitmap(bmp, (int) sqSide, (int) sqSide, true);
+                    }
+                    mSelector2.setRightHintText(label);
                 } catch (URISyntaxException e) {
                 }
             }
@@ -422,13 +436,15 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mAudioManager = (AudioManager) getContext().getSystemService(Context.AUDIO_SERVICE);
         mSilentMode = isSilentMode();
 
+        if (mCustomIconStyle == 1 || mCustomAppIcon == null)
+            mCustomAppIcon=BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_jog_dial_custom);
 
         //Rotary setup
         if(!mRotaryUnlockDown){
             mRotarySelector.setLeftHandleResource(R.drawable.ic_jog_dial_unlock);
-            mRotarySelector.setMidHandleResource((mCustomIconStyle == 1) ? R.drawable.ic_jog_dial_custom : R.drawable.ic_jog_dial_messaging);
+            mRotarySelector.setMidHandleResource(mCustomAppIcon);
         }else{
-            mRotarySelector.setLeftHandleResource((mCustomIconStyle == 1) ? R.drawable.ic_jog_dial_custom : R.drawable.ic_jog_dial_messaging);
+            mRotarySelector.setLeftHandleResource(mCustomAppIcon);
             mRotarySelector.setMidHandleResource(R.drawable.ic_jog_dial_unlock);
         }
         mRotarySelector.enableCustomAppDimple(mCustomAppToggle);
@@ -458,9 +474,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                     R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_left_generic,
                     R.drawable.jog_tab_left_generic);
 
-            mSelector2.setRightTabResources((mCustomIconStyle == 1) ? R.drawable.ic_jog_dial_custom
-                         : R.drawable.ic_jog_dial_messaging,
-                    R.drawable.jog_tab_target_green, R.drawable.jog_tab_bar_right_generic,
+            mSelector2.setRightTabResources(mCustomAppIcon,
+                    R.drawable.jog_tab_target_green,
+                    R.drawable.jog_tab_bar_right_generic,
                     R.drawable.jog_tab_right_generic);
 
             mSelector2.setOnTriggerListener(new OnTriggerListener() {

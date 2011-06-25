@@ -1409,8 +1409,6 @@
 
     <!-- Displayed on lock screen's extra left tab - phone -->
     <string name="lockscreen_phone_label">撥號</string>
-    <!-- Displayed on lock screen's extra right tab - messaging -->
-    <string name="lockscreen_messaging_label">簡訊</string>
 
     <!-- Password keyboard strings. Used by LockScreen and Settings --><skip />
     <!-- Label for "switch to symbols" key.  Must be short to fit on key! -->
