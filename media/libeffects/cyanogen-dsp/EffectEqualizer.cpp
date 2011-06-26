@@ -79,8 +79,6 @@ int32_t EffectEqualizer::command(uint32_t cmdCode, uint32_t cmdSize, void* pCmdD
 			return 0;
 		}
 
-                /* Weigher for estimating bass compensation. */
-                mWeigher.setBandPass(2200.0, mSamplingRate, 0.33);
                 /* 100 updates per second. */
                 mNextUpdateInterval = int32_t(mSamplingRate / 100.);
 
@@ -275,8 +273,9 @@ int32_t EffectEqualizer::process(audio_buffer_t *in, audio_buffer_t *out)
         int32_t tmpL = read(in, i * 2);
         int32_t tmpR = read(in, i * 2 + 1);
 
-        /* Calculate signal loudness estimate */
-        int64_t weight = mWeigher.process(tmpL + tmpR);
+        /* Calculate signal loudness estimate.
+         * XXX: should we be independent per channel? */
+        int64_t weight = tmpL + tmpR;
         mPowerSquared += weight * weight;
      
         /* first "shelve" is just gain */ 
