@@ -18,7 +18,6 @@ class EffectEqualizer : public Effect {
     /* Automatic equalizer */
     float mLoudnessAdjustment;
 
-    Biquad mWeigher;
     float mLoudness;
     int32_t mNextUpdate;
     int32_t mNextUpdateInterval;
