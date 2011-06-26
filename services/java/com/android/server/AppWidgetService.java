@@ -126,8 +126,10 @@ class AppWidgetService extends IAppWidgetService.Stub
     public void systemReady(boolean safeMode) {
         mSafeMode = safeMode;
 
-        loadAppWidgetList();
-        loadStateLocked();
+        synchronized (mAppWidgetIds) {
+            loadAppWidgetList();
+            loadStateLocked();
+        }
 
         // Register for the boot completed broadcast, so we can send the
         // ENABLE broacasts.  If we try to send them now, they time out,
