@@ -1627,8 +1627,6 @@
 
     <!-- Displayed on lock screen's extra left tab - phone -->
     <string name="lockscreen_phone_label">Phone</string>
-    <!-- Displayed on lock screen's extra right tab - messaging -->
-    <string name="lockscreen_messaging_label">Messaging</string>
 
     <!-- Password keyboard strings. Used by LockScreen and Settings --><skip />
     <!-- Label for "switch to symbols" key.  Must be short to fit on key! -->

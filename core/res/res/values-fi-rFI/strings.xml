@@ -425,7 +425,6 @@
     <string name="lockscreen_sound_off_label">Äänet pois päältä</string>
 
     <string name="lockscreen_phone_label">Puhelin</string>
-    <string name="lockscreen_messaging_label">Viestit</string>
 
     <string name="password_keyboard_label_symbol_key">\?123</string>
     <string name="password_keyboard_label_alpha_key">ABC</string>

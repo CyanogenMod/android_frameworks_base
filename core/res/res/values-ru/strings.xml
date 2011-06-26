@@ -920,7 +920,6 @@
     <string name="reboot_confirm">Телефон будет перезагружен.</string>
 
     <string name="lockscreen_phone_label">Телефон</string>
-    <string name="lockscreen_messaging_label">Сообщение</string>
 
    <!-- Phone goggles -->
     <string name="phone_goggles_problem_count">Задача #%1$d: </string>
