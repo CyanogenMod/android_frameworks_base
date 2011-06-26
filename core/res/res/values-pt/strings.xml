@@ -917,7 +917,6 @@
         <item quantity="other">%d segundos restando</item>
     </plurals>
     <string name="lockscreen_phone_label">Telefone</string>
-    <string name="lockscreen_messaging_label">Mensagem</string>
     <string name="lockscreen_discharging">Descarregando (%d%%)</string>
     <string name="global_action_reboot">Reiniciar</string>
     <string name="global_action_choose_profile">Escolher perfil</string>

@@ -918,7 +918,6 @@
     <string name="reboot_progress">"再起動中..."</string>
     <string name="reboot_confirm">"携帯電話を再起動します。"</string>
     <string name="lockscreen_phone_label">"電話"</string>
-    <string name="lockscreen_messaging_label">"メッセージ"</string>
     <string name="app_killed_message">"アプリケーションを終了しました"</string>
     <string name="lockscreen_discharging">放電中 (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
     <!-- Phone goggles -->
