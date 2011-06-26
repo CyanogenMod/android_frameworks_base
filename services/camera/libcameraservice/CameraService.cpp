@@ -226,6 +226,14 @@ sp<ICamera> CameraService::connect(
 
     CameraInfo info;
     HAL_getCameraInfo(cameraId, &info);
+
+    /* If the FFC claims standard back-facing orientation,
+     * treat it as such. This avoid all the mirroring and rotation
+     * hooks */
+    if (info.facing == CAMERA_FACING_FRONT && info.orientation == 90) {
+        info.facing = CAMERA_FACING_BACK;
+    }
+
     client = new Client(this, cameraClient, hardware, cameraId, info.facing,
                         callingPid);
     mClient[cameraId] = client;
