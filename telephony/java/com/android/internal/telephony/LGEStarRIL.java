@@ -475,7 +475,7 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
     }
 
     protected Object
-    responseDataCallList(Parcel p) {
+    responseDataCallListChanged(Parcel p) {
         int num;
         ArrayList<DataCallState> response;
 
@@ -520,7 +520,7 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
             case RIL_UNSOL_ON_USSD: ret =  responseStrings(p); break;
             case RIL_UNSOL_NITZ_TIME_RECEIVED: ret =  responseNitz(p); break;
             case RIL_UNSOL_SIGNAL_STRENGTH: ret = responseSignalStrength(p); break;
-            case RIL_UNSOL_DATA_CALL_LIST_CHANGED: ret = responseDataCallList(p);break;
+            case RIL_UNSOL_DATA_CALL_LIST_CHANGED: ret = responseDataCallListChanged(p);break;
             case RIL_UNSOL_SUPP_SVC_NOTIFICATION: ret = responseSuppServiceNotification(p); break;
             case RIL_UNSOL_STK_SESSION_END: ret = responseVoid(p); break;
             case RIL_UNSOL_STK_PROACTIVE_COMMAND: ret = responseString(p); break;
