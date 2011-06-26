@@ -916,7 +916,6 @@
     <string name="global_action_reboot">Újraindítás</string>
     <string name="lockscreen_discharging">Akkumulátor (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
     <string name="lockscreen_phone_label">Telefon</string>
-    <string name="lockscreen_messaging_label">Üzenetek</string>
     <string name="openvpn_vpn_description">OpenVPN SSL VPN</string>
     <string name="app_killed_message">Az alkalmazás bezáródott</string>
     <string name="phone_goggles_problem_count">#%1$d feladat: </string>

@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -216,6 +217,10 @@ public class SlidingTab extends ViewGroup {
 
         void setIcon(int iconId) {
             tab.setImageResource(iconId);
+        }
+
+        void setIcon(Bitmap icon) {
+            tab.setImageBitmap(icon);
         }
 
         void setTabBackgroundResource(int tabId) {
@@ -783,6 +788,14 @@ public class SlidingTab extends ViewGroup {
      */
     public void setRightTabResources(int iconId, int targetId, int barId, int tabId) {
         mRightSlider.setIcon(iconId);
+        mRightSlider.setTarget(targetId);
+        mRightSlider.setBarBackgroundResource(barId);
+        mRightSlider.setTabBackgroundResource(tabId);
+        mRightSlider.updateDrawableStates();
+    }
+
+    public void setRightTabResources(Bitmap icon, int targetId, int barId, int tabId) {
+        mRightSlider.setIcon(icon);
         mRightSlider.setTarget(targetId);
         mRightSlider.setBarBackgroundResource(barId);
         mRightSlider.setTabBackgroundResource(tabId);

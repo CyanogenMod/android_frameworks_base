@@ -620,8 +620,6 @@
     <string name="lockscreen_sound_off_label" msgid="996822825154319026">"Audio disattivato"</string>
     <!-- Displayed on lock screen's extra left tab - phone -->
     <string name="lockscreen_phone_label">Telefono</string>
-    <!-- Displayed on lock screen's extra right tab - messaging -->
-    <string name="lockscreen_messaging_label">Messaggi</string>
     <string name="password_keyboard_label_symbol_key" msgid="992280756256536042">"?123"</string>
     <string name="password_keyboard_label_alpha_key" msgid="8001096175167485649">"ABC"</string>
     <string name="password_keyboard_label_alt_key" msgid="1284820942620288678">"ALT"</string>
