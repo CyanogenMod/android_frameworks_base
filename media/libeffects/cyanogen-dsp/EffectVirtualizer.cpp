@@ -120,7 +120,7 @@ void EffectVirtualizer::refreshStrength()
     mLevel = int64_t(roomEcho * (int64_t(1) << 32));
 }
 
-int32_t EffectVirtualizer::process_effect(audio_buffer_t* in, audio_buffer_t* out)
+int32_t EffectVirtualizer::process(audio_buffer_t* in, audio_buffer_t* out)
 {
     for (uint32_t i = 0; i < in->frameCount; i ++) {
         /* calculate reverb wet into dataL, dataR */
@@ -176,6 +176,6 @@ int32_t EffectVirtualizer::process_effect(audio_buffer_t* in, audio_buffer_t* ou
         write(out, i * 2 + 1, dataR + localizedL);
     }
 
-    return 0;
+    return mEnable ? 0 : -ENODATA;
 }
 

@@ -61,7 +61,7 @@ static int64_t toFixedPoint(float in) {
 }
 
 EffectEqualizer::EffectEqualizer()
-    : mLoudnessAdjustment(10000.f), mLoudness(50.f), mNextUpdate(0), mNextUpdateInterval(1000), mPowerSquared(0)
+    : mLoudnessAdjustment(10000.f), mLoudness(50.f), mNextUpdate(0), mNextUpdateInterval(1000), mPowerSquared(0), mFade(0)
 {
     for (int32_t i = 0; i < 5; i ++) {
         mBand[i] = 0;
@@ -211,6 +211,9 @@ int32_t EffectEqualizer::command(uint32_t cmdCode, uint32_t cmdSize, void* pCmdD
 float EffectEqualizer::getAdjustedBand(int32_t band) {
     const float adj[5] = { 20.0, 8.0, 0.0, -3.0, 6.0 };
 
+    float f = mBand[band];
+
+    /* Add loudness adjustment */
     float loudnessLevel = mLoudness + mLoudnessAdjustment;
     if (loudnessLevel > 100.f) {
         loudnessLevel = 100.f;
@@ -218,11 +221,11 @@ float EffectEqualizer::getAdjustedBand(int32_t band) {
     if (loudnessLevel < 20.f) {
         loudnessLevel = 20.f;
     }
-
-    loudnessLevel = (loudnessLevel - 20) / (100.0 - 20.0);
-
     /* Maximum loudness = no adj (reference behavior at 100 dB) */
-    return mBand[band] + adj[band] * (1. - loudnessLevel);
+    loudnessLevel = (loudnessLevel - 20) / (100.0 - 20.0);
+    f += adj[band] * (1. - loudnessLevel);
+
+    return f * (mFade / 100.f);
 }
 
 void EffectEqualizer::refreshBands()
@@ -237,7 +240,7 @@ void EffectEqualizer::refreshBands()
     }
 }
 
-int32_t EffectEqualizer::process_effect(audio_buffer_t *in, audio_buffer_t *out)
+int32_t EffectEqualizer::process(audio_buffer_t *in, audio_buffer_t *out)
 {
     for (uint32_t i = 0; i < in->frameCount; i ++) {
         if (mNextUpdate == 0) {
@@ -252,6 +255,13 @@ int32_t EffectEqualizer::process_effect(audio_buffer_t *in, audio_buffer_t *out)
                 mLoudness -= .5;
             } else {
                 mLoudness = signalPowerDb;
+            }
+
+            if (mEnable && mFade < 100) {
+                mFade += 1;
+            }
+            if (! mEnable && mFade > 0) {
+                mFade -= 1;
             }
 
             /* Update EQ. */
@@ -283,6 +293,5 @@ int32_t EffectEqualizer::process_effect(audio_buffer_t *in, audio_buffer_t *out)
         write(out, i * 2 + 1, tmpR);
     }
 
-    return 0;
+    return mEnable || mFade != 0 ? 0 : -ENODATA;
 }
-

@@ -33,11 +33,11 @@ static int32_t max(int32_t a, int32_t b)
 }
 
 EffectCompression::EffectCompression()
-    : mCompressionRatio(2.0)
+    : mCompressionRatio(2.0), mFade(0)
 {
     for (int32_t i = 0; i < 2; i ++) {
 	mCurrentLevel[i] = 0;
-	mUserVolumes[i] = 1 << 24;
+	mUserLevel[i] = 1 << 24;
     }
 }
 
@@ -78,14 +78,14 @@ int32_t EffectCompression::command(uint32_t cmdCode, uint32_t cmdSize, void* pCm
         return -1;
     }
 
-    if (cmdCode == EFFECT_CMD_SET_VOLUME) {
+    if (cmdCode == EFFECT_CMD_SET_VOLUME && cmdSize == 8) {
 	LOGI("Setting volumes");
 
 	if (pReplyData != NULL) {
 	    int32_t *userVols = (int32_t *) pCmdData;
 	    for (uint32_t i = 0; i < cmdSize / 4; i ++) {
                 LOGI("user volume on channel %d: %d", i, userVols[i]);
-		mUserVolumes[i] = userVols[i];
+		mUserLevel[i] = userVols[i];
 	    }
 
 	    int32_t *myVols = (int32_t *) pReplyData;
@@ -96,11 +96,23 @@ int32_t EffectCompression::command(uint32_t cmdCode, uint32_t cmdSize, void* pCm
         } else {
 	    /* We don't control volume. */
 	    for (int32_t i = 0; i < 2; i ++) {
-		mUserVolumes[i] = 1 << 24;
+		mUserLevel[i] = 1 << 24;
 	    }
 	}
 
 	return 0;
+    }
+
+    /* Init to current volume level on enabling effect to prevent
+     * initial fade in / other shite */
+    if (cmdCode == EFFECT_CMD_ENABLE) {
+        LOGI("Copying user levels as initial loudness.");
+        /* Unfortunately Android calls SET_VOLUME after ENABLE for us.
+         * so we can't really use those volumes. It's safest just to fade in
+         * each time. */
+        for (int32_t i = 0; i < 2; i ++) {
+             mCurrentLevel[i] = 0;
+        }
     }
 
     return Effect::command(cmdCode, cmdSize, pCmdData, replySize, pReplyData);
@@ -122,7 +134,7 @@ uint64_t EffectCompression::estimateOneChannelLevel(audio_buffer_t *in, int32_t 
     return (power / in->frameCount);
 }
 
-int32_t EffectCompression::process_effect(audio_buffer_t *in, audio_buffer_t *out)
+int32_t EffectCompression::process(audio_buffer_t *in, audio_buffer_t *out)
 {
     /* Analyze both channels separately, pick the maximum power measured. */
     uint64_t maximumPowerSquared = 0;
@@ -145,6 +157,15 @@ int32_t EffectCompression::process_effect(audio_buffer_t *in, audio_buffer_t *ou
 
     /* turn back to multiplier */
     float correctionDb = desiredLevelDb - signalPowerDb;
+
+    if (mEnable && mFade != 100) {
+        mFade += 1;
+    }
+    if (!mEnable && mFade != 0) {
+        mFade -= 1;
+    }
+
+    correctionDb *= mFade / 100.f;
     
     /* Reduce extreme boost by a smooth ramp.
      * New range -50 .. 0 dB */
@@ -156,7 +177,7 @@ int32_t EffectCompression::process_effect(audio_buffer_t *in, audio_buffer_t *ou
     /* Now we have correction factor and user-desired sound level. */
     for (uint32_t i = 0; i < mChannels; i ++) {
 	 /* 8.24 */
-	int32_t desiredLevel = mUserVolumes[i] * correctionFactor >> 24;
+	int32_t desiredLevel = mUserLevel[i] * correctionFactor >> 24;
 
         /* 8.24 */
 	int32_t volAdj = desiredLevel - mCurrentLevel[i];
@@ -186,5 +207,5 @@ int32_t EffectCompression::process_effect(audio_buffer_t *in, audio_buffer_t *ou
 	}
     }
 
-    return 0;
+    return mEnable || mFade != 0 ? 0 : -ENODATA;
 }

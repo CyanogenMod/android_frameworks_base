@@ -24,6 +24,8 @@ class EffectEqualizer : public Effect {
     int32_t mNextUpdateInterval;
     int64_t mPowerSquared;
 
+    int32_t mFade;
+
     void setBand(int32_t idx, float dB);   
     float getAdjustedBand(int32_t idx);
     void refreshBands();
@@ -31,5 +33,5 @@ class EffectEqualizer : public Effect {
     public:
     EffectEqualizer();
     int32_t command(uint32_t cmdCode, uint32_t cmdSize, void* pCmdData, uint32_t* replySize, void* pReplyData);
-    int32_t process_effect(audio_buffer_t *in, audio_buffer_t *out);
+    int32_t process(audio_buffer_t *in, audio_buffer_t *out);
 };

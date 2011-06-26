@@ -107,13 +107,3 @@ int32_t Effect::command(uint32_t cmdCode, uint32_t cmdSize, void *pCmdData, uint
 
     return 0;
 }
-
-/* This implementation removes the effect at earliest opportunity. */
-int32_t Effect::process(audio_buffer_t *in, audio_buffer_t *out)
-{
-    int32_t status = process_effect(in, out);
-    if (! mEnable && status == 0) {
-        status = -ENODATA;
-    }
-    return status;
-}
