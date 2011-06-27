@@ -171,7 +171,7 @@ public class BluetoothNetworkService extends IBluetoothNetwork.Stub {
                         /* IP/netmask: 192.168.43.1/255.255.255.0 */
                         ifcg.ipAddr = (192 << 24) + (168 << 16) + (43 << 8) + 1;
                         ifcg.netmask = (255 << 24) + (255 << 16) + (255 << 8) + 0;
-                        ifcg.interfaceFlags = "up";
+                        ifcg.interfaceFlags = "[up broadcast multicast]";
                         service.setInterfaceConfig(intf, ifcg);
                     }
                 } catch (Exception e) {
