@@ -382,6 +382,10 @@ public final class CdmaDataConnectionTracker extends DataConnectionTracker {
         }
 
         setState(State.DISCONNECTING);
+        // Samsung CDMA devices require this property to be set
+        // so that pppd will be killed to stop 3G data
+        if (SystemProperties.get("ro.ril.samsung_cdma").equals("true"))
+            SystemProperties.set("ril.cdma.data_ready", "false");
 
         boolean notificationDeferred = false;
         for (DataConnection conn : dataConnectionList) {

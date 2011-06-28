@@ -1029,7 +1029,12 @@ public class CDMAPhone extends PhoneBase {
                 }
                 String[] respId = (String[])ar.result;
                 mEsn  =  respId[2];
-                mMeid =  respId[3];
+                // Samsung CDMA devices' MEID is not found in this parcel
+                // instead, extract it from system properties
+                if (SystemProperties.get("ro.ril.samsung_cdma").equals("true"))
+                    mMeid = SystemProperties.get("ro.ril.MEID");
+                else
+                    mMeid =  respId[3];
             }
             break;
 

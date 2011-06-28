@@ -443,6 +443,10 @@ public abstract class DataConnection extends HierarchicalStateMachine {
                 result = SetupResult.ERR_Other;
             }
         }
+        // Samsung CDMA devices require this property to be set
+        // so that pppd will be called to start 3G data
+        if (SystemProperties.get("ro.ril.samsung_cdma").equals("true"))
+            SystemProperties.set("ril.cdma.data_ready", "true");
 
         if (DBG) log("DataConnection setup result='" + result + "' on cid=" + cid);
         return result;
