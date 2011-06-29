@@ -67,6 +67,12 @@ public abstract class KeyguardViewBase extends FrameLayout {
     abstract public void reset();
 
     /**
+     * Called when entering/leaving an interstitial "locked but not yet secured"
+     * mode.
+     */
+    abstract public void onLockedButNotSecured(boolean lockedButNotSecured);
+
+    /**
      * Called when the screen turned off.
      */
     abstract public void onScreenTurnedOff();
