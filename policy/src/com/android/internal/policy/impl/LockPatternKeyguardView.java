@@ -90,6 +90,7 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
 
     private boolean mRequiresSim;
 
+    private boolean mLockedButNotYetSecured = false;
 
     /**
      * Either a lock screen (an informational keyguard screen), or an unlock
@@ -251,6 +252,10 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                 if (stuckOnLockScreenBecauseSimMissing()
                          || (simState == IccCard.State.PUK_REQUIRED)){
                     // stuck on lock screen when sim missing or puk'd
+
+                    // Clear IsSecure() override flag if we have entered a bad
+                    // SIM state.
+                    LockPatternKeyguardView.this.mLockedButNotYetSecured = false;
                     return;
                 }
                 if (!isSecure()) {
@@ -258,6 +263,13 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                 } else {
                     updateScreen(Mode.UnlockScreen);
                 }
+
+                // Modifying this flag state before now would cause IsSecure()
+                // to fail to short circuit (if flag were set) as intended,
+                // causing the keyguard to proceed to the unlock screen even if
+                // in the interstital locked-but-not-yet-secured state. Clearing
+                // now so that subsequent operations proceed without override.
+                LockPatternKeyguardView.this.mLockedButNotYetSecured = false;
             }
 
             public void forgotPattern(boolean isForgotten) {
@@ -542,6 +554,12 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
     }
 
     private boolean isSecure() {
+        // If the LockScreen has been enabled via its timeout and the security
+        // lock timeout has not been reached then we are not secure (prevents
+        // the LockScreen exit from immediately invoking the UnlockScreen)
+        if (mLockedButNotYetSecured)
+            return false;
+
         UnlockMode unlockMode = getUnlockMode();
         boolean secure = false;
         switch (unlockMode) {
@@ -562,6 +580,28 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                 throw new IllegalStateException("unknown unlock mode " + unlockMode);
         }
         return secure;
+    }
+
+    public void onLockedButNotSecured(boolean lockedButNotSecured) {
+        // Setting the flag ensures that IsSecure() will short-circuit and
+        // report false
+        mLockedButNotYetSecured = lockedButNotSecured;
+
+        // Pattern unlock screen shows immediately. All others follow the
+        // progression of Lock -> Unlock, so only Pattern lock requires this
+        // state to be changed.
+        if (!lockedButNotSecured && mMode != Mode.UnlockScreen
+                && this.mLockPatternUtils.isLockPatternEnabled()) {
+            updateScreen(Mode.UnlockScreen);
+        } else
+        if (lockedButNotSecured && mMode != Mode.LockScreen) {
+            // If lockedButNotSecured is enabled, frob the screen to lock
+            updateScreen(Mode.LockScreen);
+        } else {
+            if (DEBUG_CONFIGURATION)
+                Log.v(TAG, "onLockedButNotSecured() : nothing to do");
+        }
+
     }
 
     private void updateScreen(final Mode mode) {
