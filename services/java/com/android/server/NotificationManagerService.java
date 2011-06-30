@@ -1104,17 +1104,14 @@ public class NotificationManagerService extends INotificationManager.Stub
 
     private boolean checkLight(Notification notification, String pkg) {
         String[] mPackage = findPackage(pkg);
-        boolean flashLight = true;
-        if(((notification.flags & Notification.FLAG_ONGOING_EVENT) != 0)
-                || ((notification.flags & Notification.FLAG_FOREGROUND_SERVICE) != 0) ) {
-            flashLight = false;
-        } else if(mPackage != null) {
-            if(mPackage[1].equals("none"))
-                flashLight = false;
+        if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) == 0) {
+            return false;
         }
-        return flashLight;
-   }
-
+        if (mPackage != null && mPackage[1].equals("none")) {
+            return false;
+        }
+        return true;
+    }
 
     private void sendAccessibilityEvent(Notification notification, CharSequence packageName) {
         AccessibilityManager manager = AccessibilityManager.getInstance(mContext);
