@@ -587,9 +587,8 @@ public class NotificationManagerService extends INotificationManager.Stub
             ContentResolver resolver = mContext.getContentResolver();
             boolean adbEnabled = Settings.Secure.getInt(resolver,
                     Settings.Secure.ADB_ENABLED, 0) != 0;
-            boolean notifyEnabled = Settings.Secure.getInt(resolver,
-                    Settings.Secure.ADB_NOTIFY, 1) != 0;
-            updateAdbNotification(adbEnabled && notifyEnabled && mUsbConnected);
+            /* notify setting is checked inside updateAdbNotification() */
+            updateAdbNotification(adbEnabled && mUsbConnected);
         }
     }
 
@@ -1678,12 +1677,13 @@ public class NotificationManagerService extends INotificationManager.Stub
     // security feature that we don't want people customizing the platform
     // to accidentally lose.
     private void updateAdbNotification(boolean adbEnabled) {
+        if ("0".equals(SystemProperties.get("persist.adb.notify")) ||
+                        Settings.Secure.getInt(mContext.getContentResolver(),
+                        Settings.Secure.ADB_NOTIFY, 1) == 0) {
+            adbEnabled = false;
+        }
+
         if (adbEnabled) {
-            if ("0".equals(SystemProperties.get("persist.adb.notify")) ||
-                            Settings.Secure.getInt(mContext.getContentResolver(),
-                            Settings.Secure.ADB_NOTIFY, 1) == 0) {
-                return;
-            }
             if (!mAdbNotificationShown) {
                 NotificationManager notificationManager = (NotificationManager) mContext
                         .getSystemService(Context.NOTIFICATION_SERVICE);
