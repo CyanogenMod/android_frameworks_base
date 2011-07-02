@@ -605,7 +605,6 @@
     <string name="lockscreen_sound_on_label" msgid="9068877576513425970">"Ljud på"</string>
     <string name="lockscreen_sound_off_label" msgid="996822825154319026">"Ljud av"</string>
     <string name="lockscreen_phone_label">Telefon</string>
-    <string name="lockscreen_messaging_label">SMS</string>
     <string name="password_keyboard_label_symbol_key" msgid="992280756256536042">"?123"</string>
     <string name="password_keyboard_label_alpha_key" msgid="8001096175167485649">"ABC"</string>
     <string name="password_keyboard_label_alt_key" msgid="1284820942620288678">"ALT"</string>

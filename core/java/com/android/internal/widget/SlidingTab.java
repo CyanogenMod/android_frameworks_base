@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -218,6 +219,10 @@ public class SlidingTab extends ViewGroup {
             tab.setImageResource(iconId);
         }
 
+        void setIcon(Bitmap icon) {
+            tab.setImageBitmap(icon);
+        }
+
         void setTabBackgroundResource(int tabId) {
             tab.setBackgroundResource(tabId);
         }
@@ -228,6 +233,10 @@ public class SlidingTab extends ViewGroup {
 
         void setHintText(int resId) {
             text.setText(resId);
+        }
+
+        void setHintText(CharSequence charText) {
+            text.setText(charText);
         }
 
         void hide() {
@@ -785,6 +794,14 @@ public class SlidingTab extends ViewGroup {
         mRightSlider.updateDrawableStates();
     }
 
+    public void setRightTabResources(Bitmap icon, int targetId, int barId, int tabId) {
+        mRightSlider.setIcon(icon);
+        mRightSlider.setTarget(targetId);
+        mRightSlider.setBarBackgroundResource(barId);
+        mRightSlider.setTabBackgroundResource(tabId);
+        mRightSlider.updateDrawableStates();
+    }
+
     /**
      * Sets the left handle hint text to a given resource string.
      *
@@ -794,6 +811,12 @@ public class SlidingTab extends ViewGroup {
         if (isHorizontal()) {
             mRightSlider.setHintText(resId);
         }
+    }
+
+    public void setRightHintText(CharSequence charText) {
+       if (isHorizontal()) {
+           mRightSlider.setHintText(charText);
+       }
     }
 
     public void setHoldAfterTrigger(boolean holdLeft, boolean holdRight) {

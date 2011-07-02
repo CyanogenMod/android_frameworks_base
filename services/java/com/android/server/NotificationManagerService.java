@@ -425,10 +425,10 @@ public class NotificationManagerService extends INotificationManager.Stub
                 }
             } else if (action.equals(UsbManager.ACTION_USB_STATE)) {
                 Bundle extras = intent.getExtras();
-                boolean usbConnected = extras.getBoolean(UsbManager.USB_CONNECTED);
+                mUsbConnected = extras.getBoolean(UsbManager.USB_CONNECTED);
                 boolean adbEnabled = (UsbManager.USB_FUNCTION_ENABLED.equals(
                                     extras.getString(UsbManager.USB_FUNCTION_ADB)));
-                updateAdbNotification(usbConnected && adbEnabled);
+                updateAdbNotification(mUsbConnected && adbEnabled);
             } else if (action.equals(Intent.ACTION_PACKAGE_REMOVED)
                     || action.equals(Intent.ACTION_PACKAGE_RESTARTED)
                     || (queryRestart=action.equals(Intent.ACTION_QUERY_PACKAGE_RESTART))
@@ -587,9 +587,8 @@ public class NotificationManagerService extends INotificationManager.Stub
             ContentResolver resolver = mContext.getContentResolver();
             boolean adbEnabled = Settings.Secure.getInt(resolver,
                     Settings.Secure.ADB_ENABLED, 0) != 0;
-            boolean notifyEnabled = Settings.Secure.getInt(resolver,
-                    Settings.Secure.ADB_NOTIFY, 1) != 0;
-            updateAdbNotification(adbEnabled && notifyEnabled && mUsbConnected);
+            /* notify setting is checked inside updateAdbNotification() */
+            updateAdbNotification(adbEnabled && mUsbConnected);
         }
     }
 
@@ -1104,17 +1103,14 @@ public class NotificationManagerService extends INotificationManager.Stub
 
     private boolean checkLight(Notification notification, String pkg) {
         String[] mPackage = findPackage(pkg);
-        boolean flashLight = true;
-        if(((notification.flags & Notification.FLAG_ONGOING_EVENT) != 0)
-                || ((notification.flags & Notification.FLAG_FOREGROUND_SERVICE) != 0) ) {
-            flashLight = false;
-        } else if(mPackage != null) {
-            if(mPackage[1].equals("none"))
-                flashLight = false;
+        if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) == 0) {
+            return false;
         }
-        return flashLight;
-   }
-
+        if (mPackage != null && mPackage[1].equals("none")) {
+            return false;
+        }
+        return true;
+    }
 
     private void sendAccessibilityEvent(Notification notification, CharSequence packageName) {
         AccessibilityManager manager = AccessibilityManager.getInstance(mContext);
@@ -1678,12 +1674,13 @@ public class NotificationManagerService extends INotificationManager.Stub
     // security feature that we don't want people customizing the platform
     // to accidentally lose.
     private void updateAdbNotification(boolean adbEnabled) {
+        if ("0".equals(SystemProperties.get("persist.adb.notify")) ||
+                        Settings.Secure.getInt(mContext.getContentResolver(),
+                        Settings.Secure.ADB_NOTIFY, 1) == 0) {
+            adbEnabled = false;
+        }
+
         if (adbEnabled) {
-            if ("0".equals(SystemProperties.get("persist.adb.notify")) ||
-                            Settings.Secure.getInt(mContext.getContentResolver(),
-                            Settings.Secure.ADB_NOTIFY, 1) == 0) {
-                return;
-            }
             if (!mAdbNotificationShown) {
                 NotificationManager notificationManager = (NotificationManager) mContext
                         .getSystemService(Context.NOTIFICATION_SERVICE);

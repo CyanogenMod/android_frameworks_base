@@ -584,6 +584,7 @@ public class StatusBarPolicy {
     };
 
     private boolean mShowCmBattery;
+    private boolean mCmBatteryStatus;
 
     class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
@@ -773,8 +774,11 @@ public class StatusBarPolicy {
     private final void updateBattery(Intent intent) {
         final int id = intent.getIntExtra("icon-small", 0);
         int level = intent.getIntExtra("level", 0);
-        mService.setIcon("battery", id, level);
-        mService.setIconVisibility("battery", !mShowCmBattery);
+        if(!mShowCmBattery || mCmBatteryStatus != mShowCmBattery) {
+                mService.setIcon("battery", id, level);
+                mService.setIconVisibility("battery", !mShowCmBattery);
+                mCmBatteryStatus = mShowCmBattery;
+        }
 
         boolean plugged = intent.getIntExtra("plugged", 0) != 0;
         level = intent.getIntExtra("level", -1);
@@ -1555,6 +1559,7 @@ public class StatusBarPolicy {
 
         mShowCmBattery = (Settings.System.getInt(resolver,
                 Settings.System.STATUS_BAR_CM_BATTERY, 0) == 1);
+        mCmBatteryStatus = !mShowCmBattery;
         mService.setIconVisibility("battery", !mShowCmBattery);
     }
 }
