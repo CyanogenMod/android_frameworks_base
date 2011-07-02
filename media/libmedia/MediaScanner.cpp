@@ -127,11 +127,20 @@ status_t MediaScanner::doProcessDirectory(
 
     while ((entry = readdir(dir))) {
         const char* name = entry->d_name;
+        int nameLength = strlen(name);
 
         // ignore "." and ".."
         if (name[0] == '.' && (name[1] == 0 || (name[1] == '.' && name[2] == 0))) {
             continue;
         }
+
+        /* also keep space for '/' in case it's a directory */
+        if (nameLength + 1 > pathRemaining) {
+            // path too long!
+            continue;
+        }
+
+        strcpy(fileSpot, name);
 
         int type = entry->d_type;
         if (type == DT_UNKNOWN) {
@@ -149,37 +158,26 @@ status_t MediaScanner::doProcessDirectory(
                 LOGD("stat() failed for %s: %s", path, strerror(errno) );
             }
         }
-        if (type == DT_REG || type == DT_DIR) {
-            int nameLength = strlen(name);
-            bool isDirectory = (type == DT_DIR);
+        if (type == DT_DIR) {
+            // ignore directories with a name that starts with '.'
+            // for example, the Mac ".Trashes" directory
+            if (name[0] == '.') continue;
 
-            if (nameLength > pathRemaining || (isDirectory && nameLength + 1 > pathRemaining)) {
-                // path too long!
+            strcat(fileSpot, "/");
+            int err = doProcessDirectory(path, pathRemaining - nameLength - 1, extensions, client, exceptionCheck, exceptionEnv);
+            if (err) {
+                // pass exceptions up - ignore other errors
+                if (exceptionCheck && exceptionCheck(exceptionEnv)) goto failure;
+                LOGE("Error processing '%s' - skipping\n", path);
                 continue;
             }
-
-            strcpy(fileSpot, name);
-            if (isDirectory) {
-                // ignore directories with a name that starts with '.'
-                // for example, the Mac ".Trashes" directory
-                if (name[0] == '.') continue;
-
-                strcat(fileSpot, "/");
-                int err = doProcessDirectory(path, pathRemaining - nameLength - 1, extensions, client, exceptionCheck, exceptionEnv);
-                if (err) {
-                    // pass exceptions up - ignore other errors
-                    if (exceptionCheck && exceptionCheck(exceptionEnv)) goto failure;
-                    LOGE("Error processing '%s' - skipping\n", path);
-                    continue;
-                }
-            } else if (fileMatchesExtension(path, extensions)) {
-                struct stat statbuf;
-                stat(path, &statbuf);
-                if (statbuf.st_size > 0) {
-                    client.scanFile(path, statbuf.st_mtime, statbuf.st_size);
-                }
-                if (exceptionCheck && exceptionCheck(exceptionEnv)) goto failure;
+        } else if (type == DT_REG && fileMatchesExtension(path, extensions)) {
+            struct stat statbuf;
+            stat(path, &statbuf);
+            if (statbuf.st_size > 0) {
+                client.scanFile(path, statbuf.st_mtime, statbuf.st_size);
             }
+            if (exceptionCheck && exceptionCheck(exceptionEnv)) goto failure;
         }
     }
 
