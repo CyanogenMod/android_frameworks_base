@@ -2424,6 +2424,12 @@ public final class Settings {
         public static final String VOLUME_WAKE_SCREEN = "volume_wake_screen";
 
         /**
+         * Whether the lockscreen should be disabled if security is on
+         * @hide
+         */
+        public static final String LOCKSCREEN_DISABLE_ON_SECURITY = "lockscreen_disable_on_security";
+
+        /**
          * Whether to use the custom quick unlock screen control
          * @hide
          */
