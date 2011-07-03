@@ -39,6 +39,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.os.SystemProperties;
+import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -137,6 +138,11 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
     private Mode mMode = Mode.LockScreen;
 
     /**
+     * Whether the lockscreen should be disabled if security is on
+     */
+    private boolean mLockscreenDisableOnSecurity;
+
+    /**
      * Keeps track of what mode the current unlock screen is (cached from most recent computation in
      * {@link #getUnlockMode}).
      */
@@ -202,6 +208,9 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
         mUpdateMonitor = updateMonitor;
         mLockPatternUtils = lockPatternUtils;
         mWindowController = controller;
+
+        mLockscreenDisableOnSecurity = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_DISABLE_ON_SECURITY, 0) == 1);
 
         mMode = getInitialMode();
 
@@ -657,10 +666,8 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
         if (stuckOnLockScreenBecauseSimMissing() || (simState == IccCard.State.PUK_REQUIRED)) {
             return Mode.LockScreen;
         } else {
-            // Show LockScreen first for any screen other than Pattern unlock.
-            final boolean usingLockPattern = mLockPatternUtils.getKeyguardStoredPasswordQuality()
-                    == DevicePolicyManager.PASSWORD_QUALITY_SOMETHING;
-            if (isSecure() && usingLockPattern) {
+            // Disable LockScreen if security lockscreen is active and option in CMParts set
+            if (mLockscreenDisableOnSecurity && isSecure()) {
                 return Mode.UnlockScreen;
             } else {
                 return Mode.LockScreen;
