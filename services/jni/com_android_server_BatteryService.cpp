@@ -32,6 +32,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <dirent.h>
+#include <cutils/properties.h>
 
 #if HAVE_ANDROID_OS
 #include <linux/ioctl.h>
@@ -291,9 +292,27 @@ int register_android_server_BatteryService(JNIEnv* env)
                 snprintf(path, sizeof(path), "%s/%s/present", POWER_SUPPLY_PATH, name);
                 if (access(path, R_OK) == 0)
                     gPaths.batteryPresentPath = strdup(path);
-                snprintf(path, sizeof(path), "%s/%s/capacity", POWER_SUPPLY_PATH, name);
-                if (access(path, R_OK) == 0)
-                    gPaths.batteryCapacityPath = strdup(path);
+
+                /* For some weird, unknown reason Motorola phones provide
+                * capacity information only in 10% steps in the 'capacity'
+                * file. The 'charge_counter' file provides the 1% steps
+                * on those phones. Since using charge_counter has issues
+                * on some devices, we'll use ro.product.use_charge_counter
+                * in build.prop to decide which capacity file to use.
+                */
+
+                char valueChargeCounter[PROPERTY_VALUE_MAX];
+
+                if (property_get("ro.product.use_charge_counter", valueChargeCounter, NULL)
+                    && (!strcmp(valueChargeCounter, "1"))) {
+                   snprintf(path, sizeof(path), "%s/%s/charge_counter", POWER_SUPPLY_PATH, name);
+                   if (access(path, R_OK) == 0)
+                       gPaths.batteryCapacityPath = strdup(path);
+                }else{
+                   snprintf(path, sizeof(path), "%s/%s/capacity", POWER_SUPPLY_PATH, name);
+                   if (access(path, R_OK) == 0)
+                       gPaths.batteryCapacityPath = strdup(path);
+                }
 
                 snprintf(path, sizeof(path), "%s/%s/voltage_now", POWER_SUPPLY_PATH, name);
                 if (access(path, R_OK) == 0) {
