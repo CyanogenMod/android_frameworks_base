@@ -415,6 +415,11 @@
     <string-array name="config_twoDigitNumberPattern">
     </string-array>
 
+    <!-- Contains a list of vendor specific services to start via ServiceManager.
+         Format for each item is: <path_to_service_jar_file>:<service_class_name> -->
+    <string-array name="config_vendorServices">
+    </string-array>
+
     <!-- ************************************************
          *                                              *
          *    GLOBAL DEFAULT VALUES FOR CM SETTINGS     *
