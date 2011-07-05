@@ -356,6 +356,9 @@
     <!-- status message in phone options dialog for when airplane mode is off -->
     <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"飛航模式為 [關閉]"</string>
 
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">擷取螢幕畫面</string>
+
     <!-- Displayed to the user to tell them that they have started up the phone in "safe mode" -->
     <string name="safeMode" msgid="2788228061547930246">"安全模式"</string>
 
@@ -664,6 +667,11 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"讀取機密記錄資料"</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_readLogs" msgid="8896449437464867766">"允許應用程式讀取系統的各種記錄檔。這會允許應用程式搜尋一般性的電話使用資訊，可能包含您的個人或私人資訊。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_preventpower">抵制電源鍵</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_preventpower">允許應用程式凌駕電源鍵</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_diagnostic" msgid="8076743953908000342">"讀寫 diag 擁有的資源"</string>
