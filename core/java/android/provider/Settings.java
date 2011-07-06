@@ -1922,6 +1922,22 @@ public final class Settings {
         public static final String SCREEN_LOCK_SCREENOFF_DELAY = "screen_lock_screenoff_delay";
 
         /**
+        * How many ms to delay before enabling security screen lock when the screen
+        * goes off due to timeout
+        *
+        * @hide
+        */
+        public static final String SECURITY_LOCK_TIMEOUT_DELAY = "security_lock_timeout_delay";
+
+        /**
+         * How many ms to delay before enabling security screen lock when the screen
+         * is turned off by the user
+         *
+         * @hide
+         */
+        public static final String SECURITY_LOCK_SCREENOFF_DELAY = "security_lock_screenoff_delay";
+
+        /**
          * Whether the audible DTMF tones are played by the dialer when dialing. The value is
          * boolean (1 or 0).
          */
