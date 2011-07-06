@@ -23,6 +23,7 @@ LOCAL_SRC_FILES := \
 	EffectCompression.cpp \
 	EffectEqualizer.cpp \
 	EffectVirtualizer.cpp \
+	FIR16.cpp \
 # terminator
 
 LOCAL_C_INCLUDES += \

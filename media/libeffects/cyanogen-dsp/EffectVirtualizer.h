@@ -5,6 +5,7 @@
 #include "Biquad.h"
 #include "Delay.h"
 #include "Effect.h"
+#include "FIR16.h"
 
 class EffectVirtualizer : public Effect {
     private:
@@ -15,6 +16,7 @@ class EffectVirtualizer : public Effect {
 
     Delay mReverbDelayL, mReverbDelayR;
     int64_t mDelayDataL, mDelayDataR;
+    FIR16 mColorization;
     Biquad mLocalizationL, mLocalizationR;
 
     void refreshStrength();
