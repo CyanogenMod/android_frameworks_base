@@ -544,9 +544,11 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
     private boolean isSecure() {
         UnlockMode unlockMode = getUnlockMode();
         boolean secure = false;
+
+        boolean delayed = mUpdateMonitor.isKeyguardDelayed();
         switch (unlockMode) {
             case Pattern:
-                secure = mLockPatternUtils.isLockPatternEnabled();
+                secure = !delayed && mLockPatternUtils.isLockPatternEnabled();
                 break;
             case SimPin:
                 secure = mUpdateMonitor.getSimState() == IccCard.State.PIN_REQUIRED
@@ -556,7 +558,7 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
                 secure = true;
                 break;
             case Password:
-                secure = mLockPatternUtils.isLockPasswordEnabled();
+                secure = !delayed && mLockPatternUtils.isLockPasswordEnabled();
                 break;
             default:
                 throw new IllegalStateException("unknown unlock mode " + unlockMode);
