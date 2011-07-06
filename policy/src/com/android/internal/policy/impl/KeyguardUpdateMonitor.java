@@ -73,6 +73,8 @@ public class KeyguardUpdateMonitor {
 
     private boolean mDeviceProvisioned;
 
+    private boolean mLockPatternDelayed;
+
     private int mBatteryLevel;
 
     private int mBatteryStatus;
@@ -546,5 +548,13 @@ public class KeyguardUpdateMonitor {
 
     public void reportFailedAttempt() {
         mFailedAttempts++;
+    }
+
+    public void setLockPatternDelayed(boolean value) {
+        mLockPatternDelayed = value;
+    }
+
+    public boolean isLockPatternDelayed() {
+        return mLockPatternDelayed;
     }
 }
