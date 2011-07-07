@@ -1898,6 +1898,9 @@ public final class Settings {
          * @hide
          */
         public static final String USER_DEFINED_KEY3_APP = "user_defined_key3_app";
+        
+        public static final String USER_DEFINED_KEY_ENVELOPE = "user_defined_key_envelope";
+        public static final String USER_DEFINED_KEY_EXPLORER = "user_defined_key_explorer";
 
         /**
          * Specifies whether to prompt on the power dialog
