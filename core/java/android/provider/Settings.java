@@ -1898,6 +1898,18 @@ public final class Settings {
          * @hide
          */
         public static final String USER_DEFINED_KEY3_APP = "user_defined_key3_app";
+        
+        /**
+         * Stores the uri of the define application for the envelope key
+         * @hide
+         */
+        public static final String USER_DEFINED_KEY_ENVELOPE = "user_defined_key_envelope";
+
+        /**
+         * Stores the uri of the define application for the explorer key
+         * @hide
+         */
+        public static final String USER_DEFINED_KEY_EXPLORER = "user_defined_key_explorer";
 
         /**
          * Specifies whether to prompt on the power dialog
