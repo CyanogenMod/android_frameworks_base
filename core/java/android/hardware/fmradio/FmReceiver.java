@@ -424,6 +424,26 @@ public class FmReceiver extends FmTransceiver
       return true;
    }
 
+  /*==============================================================
+   FUNCTION:  release
+   ==============================================================*/
+   /**
+   *    Close the FM device file descriptor.
+   *    <p>
+   *    @return true if release succeeded, false if release
+   *            failed.
+
+   *    {@see #acquire}.
+   *    {@see #enable}.
+   *    {@see #disable}.
+   */
+   public boolean release(){
+      boolean status;
+      status = super.release("");
+
+      return status;
+   }
+
    /*==============================================================
    FUNCTION:  searchStations
    ==============================================================*/
