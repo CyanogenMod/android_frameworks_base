@@ -1390,14 +1390,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
 
-        // Handle "Quick Keys" on Vision
-        if ("vision".equals(Build.DEVICE)
-                && (keyCode == KeyEvent.KEYCODE_USER1 || keyCode == KeyEvent.KEYCODE_USER2 || keyCode == KeyEvent.KEYCODE_USER3)) {
-            return handleQuickKeys(win, keyCode, down, keyguardOn);
-        }
-
-        if ("motus".equals(Build.DEVICE)
-                && (keyCode == KeyEvent.KEYCODE_ENVELOPE || keyCode == KeyEvent.KEYCODE_EXPLORER)) {
+        if (keyCode == KeyEvent.KEYCODE_ENVELOPE || keyCode == KeyEvent.KEYCODE_EXPLORER
+                || keyCode == KeyEvent.KEYCODE_USER1 || keyCode == KeyEvent.KEYCODE_USER2 || keyCode == KeyEvent.KEYCODE_USER3) {
             return handleQuickKeys(win, keyCode, down, keyguardOn);
         }
 
