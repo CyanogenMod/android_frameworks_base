@@ -52,6 +52,7 @@ import com.android.internal.util.HierarchicalStateMachine;
 
 import java.io.File;
 import java.io.FileDescriptor;
+import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -454,8 +455,19 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
     private void enableUsbIfaces(boolean enable) {
         //If this is true, it indicates this is a RNDIS (re)connect event
         if (mLegacy && mProbing > 0) {
+            int usbState = 2;
+            // check if usb is mounted (path) or not (empty, returns -1)
+            try {
+                usbState = (new FileInputStream(new File("/sys/devices/platform/usb_mass_storage/lun0/file"))).read();
+                if (usbState != -1) {
+                    mProbing--;
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error reading usb ums state :" + e);
+            }
+
             mProbing--;
-            Log.d(TAG, "Skipping RNDIS reconnect, skips remaining: " + mProbing);
+            Log.d(TAG, "Skipping RNDIS reconnect, skips remaining: " + mProbing + ", usbState: " + usbState);
             return;
         }
 

@@ -181,11 +181,12 @@ public class FmTransceiver
       if (sFd!=0)
       {
          FmReceiverJNI.closeFdNative(sFd);
-         sFd =0;
          Log.d(TAG, "Turned off: " + sFd);
+         sFd =0;
       } else
       {
          Log.d(TAG, "Error turning off");
+         return false;
       }
       return true;
    }

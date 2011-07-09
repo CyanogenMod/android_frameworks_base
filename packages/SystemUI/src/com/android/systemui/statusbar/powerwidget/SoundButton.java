@@ -67,130 +67,68 @@ public class SoundButton extends PowerButton {
             // order of check: soundvib sound vib silent
             case RINGER_MODE_SOUND_AND_VIBRATE:
                 if (supports(RINGER_MODE_SOUND_ONLY)) {
-                    Settings.System.putInt(context.getContentResolver(),
-                            Settings.System.VIBRATE_IN_SILENT, 1);
-                    AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_ONLY_SILENT);
-                    AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                    updateSettings(context, 1, AudioManager.VIBRATE_SETTING_ONLY_SILENT,
+                            AudioManager.RINGER_MODE_NORMAL, false);
                 } else if (supports(RINGER_MODE_VIBRATE_ONLY)) {
-                    Settings.System.putInt(context.getContentResolver(),
-                            Settings.System.VIBRATE_IN_SILENT, 1);
-                    AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_ON);
-                    AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    updateSettings(context, 1, AudioManager.VIBRATE_SETTING_ON,
+                            AudioManager.RINGER_MODE_VIBRATE, true);
                 } else if (supports(RINGER_MODE_SILENT)) {
-                    Settings.System.putInt(context.getContentResolver(),
-                            Settings.System.VIBRATE_IN_SILENT, 0);
-                    AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_OFF);
-                    AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                    updateSettings(context, 0, AudioManager.VIBRATE_SETTING_OFF,
+                            AudioManager.RINGER_MODE_SILENT, false);
                 } else { // Fall Back
-                    Settings.System.putInt(context.getContentResolver(),
-                            Settings.System.VIBRATE_IN_SILENT, 1);
-                    AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_ON);
-                    AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    updateSettings(context, 1, AudioManager.VIBRATE_SETTING_ON,
+                            AudioManager.RINGER_MODE_VIBRATE, true);
                 }
                 break;
             case RINGER_MODE_SOUND_ONLY:
                 if (supports(RINGER_MODE_VIBRATE_ONLY)) {
-                    Settings.System.putInt(context.getContentResolver(),
-                            Settings.System.VIBRATE_IN_SILENT, 1);
-                    AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_ONLY_SILENT);
-                    AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    updateSettings(context, 1, AudioManager.VIBRATE_SETTING_ONLY_SILENT,
+                            AudioManager.RINGER_MODE_VIBRATE, true);
                 } else if (supports(RINGER_MODE_SILENT)) {
-                    Settings.System.putInt(context.getContentResolver(),
-                            Settings.System.VIBRATE_IN_SILENT, 0);
-                    AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_OFF);
-                    AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                    updateSettings(context, 0, AudioManager.VIBRATE_SETTING_OFF,
+                            AudioManager.RINGER_MODE_SILENT, false);
                 } else if (supports(RINGER_MODE_SOUND_AND_VIBRATE)) {
-                    Settings.System.putInt(context.getContentResolver(),
-                            Settings.System.VIBRATE_IN_SILENT, 1);
-                    AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_ON);
-                    AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    updateSettings(context, 1, AudioManager.VIBRATE_SETTING_ON,
+                            AudioManager.RINGER_MODE_NORMAL, true);
                 } else { // Fall back
-                    Settings.System.putInt(context.getContentResolver(),
-                            Settings.System.VIBRATE_IN_SILENT, 1);
-                    AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                    AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_ON);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    updateSettings(context, 1, AudioManager.VIBRATE_SETTING_ON,
+                            AudioManager.RINGER_MODE_VIBRATE, true);
                 }
                 break;
 
             case RINGER_MODE_VIBRATE_ONLY:
                 if (supports(RINGER_MODE_SILENT)) {
-                    Settings.System.putInt(context.getContentResolver(),
-                            Settings.System.VIBRATE_IN_SILENT, 0);
-                    AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-                    AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_OFF);
+                    updateSettings(context, 0, AudioManager.VIBRATE_SETTING_OFF,
+                            AudioManager.RINGER_MODE_SILENT, false);
                 } else if (supports(RINGER_MODE_SOUND_AND_VIBRATE)) {
-                    Settings.System.putInt(context.getContentResolver(),
-                            Settings.System.VIBRATE_IN_SILENT, 1);
-                    AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                    AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_ON);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    updateSettings(context, 1, AudioManager.VIBRATE_SETTING_ON,
+                            AudioManager.RINGER_MODE_NORMAL, true);
                 } else if (supports(RINGER_MODE_SOUND_ONLY)) {
-                    Settings.System.putInt(context.getContentResolver(),
-                            Settings.System.VIBRATE_IN_SILENT, 1);
-                    AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                    AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_ONLY_SILENT);
+                    updateSettings(context, 1, AudioManager.VIBRATE_SETTING_ONLY_SILENT,
+                            AudioManager.RINGER_MODE_NORMAL, false);
                 } else { // Fall Back
-                    Settings.System.putInt(context.getContentResolver(),
-                            Settings.System.VIBRATE_IN_SILENT, 1);
-                    AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                    AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_ON);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    updateSettings(context, 1, AudioManager.VIBRATE_SETTING_ON,
+                            AudioManager.RINGER_MODE_NORMAL, true);
                 }
                 break;
             case RINGER_MODE_SILENT:
                 if (supports(RINGER_MODE_SOUND_AND_VIBRATE)) {
-                    Settings.System.putInt(context.getContentResolver(),
-                            Settings.System.VIBRATE_IN_SILENT, 1);
-                    AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                    AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_ON);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    updateSettings(context, 1, AudioManager.VIBRATE_SETTING_ON,
+                            AudioManager.RINGER_MODE_NORMAL, true);
                 } else if (supports(RINGER_MODE_SOUND_ONLY)) {
-                    Settings.System.putInt(context.getContentResolver(),
-                            Settings.System.VIBRATE_IN_SILENT, 1);
-                    AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                    AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_ONLY_SILENT);
+                    updateSettings(context, 1, AudioManager.VIBRATE_SETTING_ONLY_SILENT,
+                            AudioManager.RINGER_MODE_NORMAL, false);
                 } else if (supports(RINGER_MODE_VIBRATE_ONLY)) {
-                    Settings.System.putInt(context.getContentResolver(),
-                            Settings.System.VIBRATE_IN_SILENT, 1);
-                    AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
-                    AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_ONLY_SILENT);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    updateSettings(context, 1, AudioManager.VIBRATE_SETTING_ONLY_SILENT,
+                            AudioManager.RINGER_MODE_VIBRATE, true);
                 } else { // Fall Back
-                    Settings.System.putInt(context.getContentResolver(),
-                            Settings.System.VIBRATE_IN_SILENT, 1);
-                    AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                    AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                            AudioManager.VIBRATE_SETTING_ON);
-                    VIBRATOR.vibrate(VIBRATE_DURATION);
+                    updateSettings(context, 1, AudioManager.VIBRATE_SETTING_ON,
+                            AudioManager.RINGER_MODE_NORMAL, true);
                 }
                 break;
             default:
-                Settings.System.putInt(context.getContentResolver(),
-                        Settings.System.VIBRATE_IN_SILENT, 1);
-                AUDIO_MANAGER.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-                AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
-                        AudioManager.VIBRATE_SETTING_ON);
-                VIBRATOR.vibrate(VIBRATE_DURATION);
+                updateSettings(context, 1, AudioManager.VIBRATE_SETTING_ON,
+                        AudioManager.RINGER_MODE_NORMAL, true);
         }
     }
 
@@ -279,5 +217,44 @@ public class SoundButton extends PowerButton {
         return Settings.System.getInt(context.getContentResolver(),
                 Settings.System.EXPANDED_RING_MODE,
                 CM_MODE_SOUNDVIB_SOUND_VIB_SILENT);
+    }
+
+    private static void updateSettings(Context context, int vibrateInSilence,
+            int amVibrateSetting, int amRingerMode, boolean doHapticFeedback)
+    {
+        Settings.System.putInt(context.getContentResolver(),
+                Settings.System.VIBRATE_IN_SILENT, vibrateInSilence);
+        AUDIO_MANAGER.setVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER,
+                amVibrateSetting);
+        AUDIO_MANAGER.setRingerMode(amRingerMode);
+
+        // Give haptic feedback if requested and enabled in settings
+        if(doHapticFeedback && hapticFeedbackEnabled(context)) {
+            VIBRATOR.vibrate(VIBRATE_DURATION);
+        }
+    }
+
+    // Helper function to determine if haptic feedback is enabled.
+    private static boolean hapticFeedbackEnabled(Context context)
+    {
+        int hfPwrWidg;
+        int hfGlobl;
+        boolean hf;
+
+        // Retrieve haptic feedback option from notification power widget's options
+        hfPwrWidg = Settings.System.getInt(context.getContentResolver(),
+                Settings.System.EXPANDED_HAPTIC_FEEDBACK, 2);
+
+        if(hfPwrWidg == 2) {    // Obey global setting
+            // Retrieve haptic feedback option from global settings
+            hfGlobl = Settings.System.getInt(context.getContentResolver(),
+                    Settings.System.HAPTIC_FEEDBACK_ENABLED, 1);
+
+            hf = (hfGlobl == 1);
+        } else {    // HF forced on/off in widget's settings
+            hf = (hfPwrWidg == 1);
+        }
+
+        return hf;
     }
 }
