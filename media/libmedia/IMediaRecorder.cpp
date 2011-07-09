@@ -47,6 +47,7 @@ enum {
     SET_VIDEO_FRAMERATE,
     SET_PARAMETERS,
     SET_CAMERA_PARAMETERS,
+    AUTOFOCUS_CAMERA,
     SET_PREVIEW_SURFACE,
     SET_CAMERA,
     SET_LISTENER
@@ -201,6 +202,15 @@ public:
         return reply.readInt32();
     }
 
+    status_t autoFocusCamera()
+    {
+        LOGV("autoFocusCamera");
+        Parcel data, reply;
+        data.writeInterfaceToken(IMediaRecorder::getInterfaceDescriptor());
+        remote()->transact(AUTOFOCUS_CAMERA, data, &reply);
+        return reply.readInt32();
+    }
+ 
     status_t setListener(const sp<IMediaRecorderClient>& listener)
     {
         LOGV("setListener(%p)", listener.get());
@@ -413,6 +423,12 @@ status_t BnMediaRecorder::onTransact(
             LOGV("SET_CAMERA_PARAMETER");
             CHECK_INTERFACE(IMediaRecorder, data, reply);
             reply->writeInt32(setCameraParameters(data.readString8()));
+            return NO_ERROR;
+        } break;
+        case AUTOFOCUS_CAMERA: {
+            LOGV("AUTOFOCUS_CAMERA");
+            CHECK_INTERFACE(IMediaRecorder, data, reply);
+            reply->writeInt32(autoFocusCamera());
             return NO_ERROR;
         } break;
         case SET_LISTENER: {

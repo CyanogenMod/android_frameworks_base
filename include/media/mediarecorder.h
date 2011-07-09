@@ -193,6 +193,7 @@ public:
     status_t    release();
     void        notify(int msg, int ext1, int ext2);
     status_t    setCameraParameters(const String8& params);
+    status_t    autoFocusCamera();
 
 private:
     void                    doCleanUp();

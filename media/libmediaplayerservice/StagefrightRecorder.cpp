@@ -622,6 +622,10 @@ status_t StagefrightRecorder::setParameters(const String8 &params) {
     return OK;
 }
 
+status_t StagefrightRecorder::autoFocusCamera() {
+    return OK;
+}
+
 status_t StagefrightRecorder::setListener(const sp<IMediaRecorderClient> &listener) {
     mListener = listener;
 
