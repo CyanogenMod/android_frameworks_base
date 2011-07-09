@@ -80,6 +80,17 @@ public class Environment {
         return SystemProperties.getBoolean(SYSTEM_PROPERTY_EFS_ENABLED, false);
     }
 
+    private static String getStorageVariable() {
+        if (System.getenv("PHONE_STORAGE") != null &&
+            SystemProperties.getBoolean("persist.storage.external", 
+                Resources.getSystem().getBoolean(
+                com.android.internal.R.bool.config_defaultToEMMC))) {
+            return "PHONE_STORAGE";
+        } else {
+            return "EXTERNAL_STORAGE";
+        }
+    }
+
     private static final File DATA_DIRECTORY
             = getDirectory("ANDROID_DATA", "/data");
 
@@ -90,14 +101,14 @@ public class Environment {
             = getDirectory("ANDROID_SECURE_DATA", "/data/secure");
 
     private static final File EXTERNAL_STORAGE_DIRECTORY
-            = getDirectory("EXTERNAL_STORAGE", "/sdcard");
+            = getDirectory(getStorageVariable(), "/sdcard");
 
     private static final File EXTERNAL_STORAGE_ANDROID_DATA_DIRECTORY
-            = new File (new File(getDirectory("EXTERNAL_STORAGE", "/sdcard"),
+            = new File (new File(getDirectory(getStorageVariable(), "/sdcard"),
                     "Android"), "data");
 
     private static final File EXTERNAL_STORAGE_ANDROID_MEDIA_DIRECTORY
-            = new File (new File(getDirectory("EXTERNAL_STORAGE", "/sdcard"),
+            = new File (new File(getDirectory(getStorageVariable(), "/sdcard"),
                     "Android"), "media");
 
     private static final File DOWNLOAD_CACHE_DIRECTORY

@@ -84,6 +84,10 @@
          removable. -->
     <bool name="config_externalStorageRemovable" product="default">true</bool>
 
+    <!-- For products with both internal and external storage, set default
+         to the external microSD -->
+    <bool name="config_defaultToEMMC">false</bool>
+
     <!-- XXXXX NOTE THE FOLLOWING RESOURCES USE THE WRONG NAMING CONVENTION.
          Please don't copy them, copy anything else. -->
 
