@@ -327,7 +327,17 @@ status_t AMRSource::read(
         mCurrentTimeUs = seekFrame * 20000ll;
         uint32_t framesize=0;
         uint64_t offset = 0, numframes = 0;
-        seekFrame = seekFrame + 1; //why seekframe+1, since the array starts from zero
+
+        if(seekFrame > (mTotalFrames + 1)) {
+            LOGE("Invalid seekTime");
+            return ERROR_OUT_OF_RANGE;
+        } else if(seekFrame >= mTotalFrames) {
+            LOGW("seekTime is equal to the duration");
+            return ERROR_END_OF_STREAM;
+        } else {
+            seekFrame = seekFrame + 1; //why seekframe+1, since the array starts from zero
+        }
+
         LOGI("seekframe %lld", seekFrame);
         for (List<AMRFrameTableEntry>::iterator it = mAMRFrameTableEntries.begin();
                it != mAMRFrameTableEntries.end(); ++it) {
