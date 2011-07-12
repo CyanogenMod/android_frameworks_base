@@ -31,6 +31,9 @@
 #include <errno.h>
 #include <limits.h>
 #include <math.h>
+#ifdef HAS_POINTERCAL
+#include <fcntl.h>
+#endif
 
 #define INDENT "  "
 #define INDENT2 "    "
@@ -3575,6 +3578,18 @@ void SingleTouchInputMapper::initialize() {
     mY = 0;
     mPressure = 0; // default to 0 for devices that don't report pressure
     mToolWidth = 0; // default to 0 for devices that don't report tool width
+
+#ifdef HAS_POINTERCAL
+    mXscale = 65536;
+//    mXymix = 0;
+    mXoffset = 0;
+//    mYxmix = 0;
+    mYscale = 65536;
+    mYoffset = 0;
+    mScaler = 65536;
+    loadPointercalData("/system/etc/pointercal");
+    loadPointercalData("/data/system/pointercal");
+#endif
 }
 
 void SingleTouchInputMapper::reset() {
@@ -3659,8 +3674,13 @@ void SingleTouchInputMapper::sync(nsecs_t when) {
     if (mDown) {
         mCurrentTouch.pointerCount = 1;
         mCurrentTouch.pointers[0].id = 0;
+#ifdef HAS_POINTERCAL
+        mCurrentTouch.pointers[0].x = (mX*mXscale + /* mY*mXymix + */ mXoffset + mScaler/2)/mScaler;
+        mCurrentTouch.pointers[0].y = (/* mX*mYxmix + */ mY*mYscale + mYoffset + mScaler/2)/mScaler;
+#else
         mCurrentTouch.pointers[0].x = mX;
         mCurrentTouch.pointers[0].y = mY;
+#endif
         mCurrentTouch.pointers[0].pressure = mPressure;
         mCurrentTouch.pointers[0].touchMajor = 0;
         mCurrentTouch.pointers[0].touchMinor = 0;
@@ -3685,6 +3705,81 @@ void SingleTouchInputMapper::configureRawAxes() {
     getEventHub()->getAbsoluteAxisInfo(getDeviceId(), ABS_TOOL_WIDTH, & mRawAxes.toolMajor);
 }
 
+#ifdef HAS_POINTERCAL
+void SingleTouchInputMapper::loadPointercalData(const char* filename)
+{
+    int fd = open(filename, O_RDONLY);
+    if (fd < 0) {
+        LOGE("error opening file=%s err=%s\n", filename, strerror(errno));
+        return;
+    }
+
+    off_t len = lseek(fd, 0, SEEK_END);
+    off_t errlen = lseek(fd, 0, SEEK_SET);
+    if (len < 0 || errlen < 0) {
+        close(fd);
+        LOGE("error seeking file=%s err=%s\n", filename, strerror(errno));
+        return;
+    }
+
+    char* buf = (char*)malloc(len+1);
+    if (read(fd, buf, len) != len) {
+        close(fd);
+        LOGE("error reading file=%s err=%s\n", filename, strerror(errno));
+        return;
+    }
+
+    close(fd);
+    buf[len] = '\0';
+
+    char delims[] = " ";
+    char *result = NULL;
+//xscale
+    result = strtok( buf, delims );
+    if(result == NULL)
+	return;
+    int32_t temp_mXscale = atoi(result);
+//xymix
+    result = strtok( NULL, delims );
+    if(result == NULL)
+	return;
+//    int32_t temp_mXymix = atoi(result);
+//xoffset
+    result = strtok( NULL, delims );
+    if(result == NULL)
+	return;
+    int32_t temp_mXoffset = atoi(result);
+//yxmix
+    result = strtok( NULL, delims );
+    if(result == NULL)
+	return;
+//    int32_t temp_mYxmix = atoi(result);
+//yscale
+    result = strtok( NULL, delims );
+    if(result == NULL)
+	return;
+    int32_t temp_mYscale = atoi(result);
+//yoffset
+    result = strtok( NULL, delims );
+    if(result == NULL)
+	return;
+    int32_t temp_mYoffset = atoi(result);
+//scaler
+    result = strtok( NULL, delims );
+    if(result == NULL)
+	return;
+
+    mXscale = temp_mXscale;
+//    mXymix = temp_mXymix;
+    mXoffset = temp_mXoffset;
+//    mYxmix = temp_mYxmix;
+    mYscale = temp_mYscale;
+    mYoffset = temp_mYoffset;
+    mScaler = atoi(result);
+
+    LOGI("Using %s (xscale:%d, xoffset:%d, yscale:%d, yoffset:%d, scaler: %d)", filename, mXscale, mXoffset, mYscale, mYoffset, mScaler);
+}
+#endif
 
 // --- MultiTouchInputMapper ---
 
@@ -3698,6 +3793,17 @@ MultiTouchInputMapper::~MultiTouchInputMapper() {
 
 void MultiTouchInputMapper::initialize() {
     mAccumulator.clear();
+#ifdef HAS_POINTERCAL
+    mXscale = 65536;
+//    mXymix = 0;
+    mXoffset = 0;
+//    mYxmix = 0;
+    mYscale = 65536;
+    mYoffset = 0;
+    mScaler = 65536;
+    loadPointercalData("/system/etc/pointercal");
+    loadPointercalData("/data/system/pointercal");
+#endif
 }
 
 void MultiTouchInputMapper::reset() {
@@ -3802,8 +3908,13 @@ void MultiTouchInputMapper::sync(nsecs_t when) {
         }
 
         PointerData& outPointer = mCurrentTouch.pointers[outCount];
+#ifdef HAS_POINTERCAL
+        outPointer.x = (inPointer.absMTPositionX*mXscale + /* inPointer.absMTPositionY*mXymix + */ mXoffset + mScaler/2)/mScaler;
+        outPointer.y = (/* inPointer.absMTPositionX*mYxmix + */ inPointer.absMTPositionY*mYscale + mYoffset + mScaler/2)/mScaler;
+#else
         outPointer.x = inPointer.absMTPositionX;
         outPointer.y = inPointer.absMTPositionY;
+#endif
 
         if (fields & Accumulator::FIELD_ABS_MT_PRESSURE) {
             if (inPointer.absMTPressure <= 0) {
@@ -3903,5 +4014,80 @@ void MultiTouchInputMapper::configureRawAxes() {
     getEventHub()->getAbsoluteAxisInfo(getDeviceId(), ABS_MT_PRESSURE, & mRawAxes.pressure);
 }
 
+#ifdef HAS_POINTERCAL
+void MultiTouchInputMapper::loadPointercalData(const char* filename)
+{
+    int fd = open(filename, O_RDONLY);
+    if (fd < 0) {
+        LOGE("error opening file=%s err=%s\n", filename, strerror(errno));
+        return;
+    }
+
+    off_t len = lseek(fd, 0, SEEK_END);
+    off_t errlen = lseek(fd, 0, SEEK_SET);
+    if (len < 0 || errlen < 0) {
+        close(fd);
+        LOGE("error seeking file=%s err=%s\n", filename, strerror(errno));
+        return;
+    }
+
+    char* buf = (char*)malloc(len+1);
+    if (read(fd, buf, len) != len) {
+        close(fd);
+        LOGE("error reading file=%s err=%s\n", filename, strerror(errno));
+        return;
+    }
+
+    close(fd);
+    buf[len] = '\0';
+
+    char delims[] = " ";
+    char *result = NULL;
+//xscale
+    result = strtok( buf, delims );
+    if(result == NULL)
+	return;
+    int32_t temp_mXscale = atoi(result);
+//xymix
+    result = strtok( NULL, delims );
+    if(result == NULL)
+	return;
+//    int32_t temp_mXymix = atoi(result);
+//xoffset
+    result = strtok( NULL, delims );
+    if(result == NULL)
+	return;
+    int32_t temp_mXoffset = atoi(result);
+//yxmix
+    result = strtok( NULL, delims );
+    if(result == NULL)
+	return;
+//    int32_t temp_mYxmix = atoi(result);
+//yscale
+    result = strtok( NULL, delims );
+    if(result == NULL)
+	return;
+    int32_t temp_mYscale = atoi(result);
+//yoffset
+    result = strtok( NULL, delims );
+    if(result == NULL)
+	return;
+    int32_t temp_mYoffset = atoi(result);
+//scaler
+    result = strtok( NULL, delims );
+    if(result == NULL)
+	return;
+
+    mXscale = temp_mXscale;
+//    mXymix = temp_mXymix;
+    mXoffset = temp_mXoffset;
+//    mYxmix = temp_mYxmix;
+    mYscale = temp_mYscale;
+    mYoffset = temp_mYoffset;
+    mScaler = atoi(result);
+
+    LOGI("Using %s (xscale:%d, xoffset:%d, yscale:%d, yoffset:%d, scaler: %d)", filename, mXscale, mXoffset, mYscale, mYoffset, mScaler);
+}
+#endif
 
 } // namespace android

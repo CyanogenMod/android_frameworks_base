@@ -910,6 +910,9 @@ public:
 
 protected:
     virtual void configureRawAxes();
+#ifdef HAS_POINTERCAL
+    virtual void loadPointercalData(const char* filename);
+#endif
 
 private:
     struct Accumulator {
@@ -940,6 +943,16 @@ private:
     int32_t mPressure;
     int32_t mToolWidth;
 
+#ifdef HAS_POINTERCAL
+    int32_t mXscale;
+//    int32_t mXymix;
+    int32_t mXoffset;
+//    int32_t mYxmix;
+    int32_t mYscale;
+    int32_t mYoffset;
+    int32_t mScaler;
+#endif
+
     void initialize();
 
     void sync(nsecs_t when);
@@ -956,6 +969,9 @@ public:
 
 protected:
     virtual void configureRawAxes();
+#ifdef HAS_POINTERCAL
+    virtual void loadPointercalData(const char* filename);
+#endif
 
 private:
     struct Accumulator {
@@ -995,6 +1011,16 @@ private:
             pointers[0].clear();
         }
     } mAccumulator;
+
+#ifdef HAS_POINTERCAL
+    int32_t mXscale;
+//    int32_t mXymix;
+    int32_t mXoffset;
+//    int32_t mYxmix;
+    int32_t mYscale;
+    int32_t mYoffset;
+    int32_t mScaler;
+#endif
 
     void initialize();
 

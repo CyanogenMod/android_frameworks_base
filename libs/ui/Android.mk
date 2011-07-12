@@ -50,6 +50,10 @@ ifeq ($(BOARD_NO_RGBX_8888),true)
 	LOCAL_CFLAGS += -DNO_RGBX_8888
 endif
 
+ifeq ($(TARGET_HAS_POINTERCAL),true)
+	LOCAL_CFLAGS += -DHAS_POINTERCAL
+endif
+
 include $(BUILD_SHARED_LIBRARY)
 
 
