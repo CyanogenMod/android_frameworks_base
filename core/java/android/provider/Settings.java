@@ -2236,6 +2236,16 @@ public final class Settings {
          */
         public static final String STATUS_BAR_CLOCK = "status_bar_clock";
 
+        
+        /**
+         * Whether to show the signal bars or signal text in the status bar 0:
+         * disable text, show signal bars 1: enable text, hide signal bars
+         * default: 0
+         * 
+         * @hide
+         */
+        public static final String STATUS_BAR_CM_SIGNAL_TEXT = "status_bar_cm_signal";
+        
         /**
          * Whether to display the status bar on top or bottom
          * 0: show status bar on top (default for most devices)

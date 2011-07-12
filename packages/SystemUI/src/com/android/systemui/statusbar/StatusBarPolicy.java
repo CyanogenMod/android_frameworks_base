@@ -585,6 +585,8 @@ public class StatusBarPolicy {
 
     private boolean mShowCmBattery;
     private boolean mCmBatteryStatus;
+    // need another var that superceding mPhoneSignalHidden
+    private boolean mShowCmSignal;
 
     class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
@@ -595,6 +597,8 @@ public class StatusBarPolicy {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_CM_BATTERY), false, this);
+            resolver.registerContentObserver(Settings.System
+                    .getUriFor(Settings.System.STATUS_BAR_CM_SIGNAL_TEXT), false, this);
         }
 
         @Override public void onChange(boolean selfChange) {
@@ -1097,6 +1101,10 @@ public class StatusBarPolicy {
     }
 
     private final void updateSignalStrength() {
+        if (mShowCmSignal) {
+            mService.setIconVisibility("phone_signal", false);
+            return;
+        }
         int iconLevel = -1;
         int[] iconList;
 
@@ -1554,12 +1562,17 @@ public class StatusBarPolicy {
         }
     }
 
-    private void updateSettings(){
+    private void updateSettings() {
         ContentResolver resolver = mContext.getContentResolver();
 
-        mShowCmBattery = (Settings.System.getInt(resolver,
-                Settings.System.STATUS_BAR_CM_BATTERY, 0) == 1);
+        mShowCmBattery = (Settings.System
+                .getInt(resolver, Settings.System.STATUS_BAR_CM_BATTERY, 0) == 1);
+
         mCmBatteryStatus = !mShowCmBattery;
         mService.setIconVisibility("battery", !mShowCmBattery);
+
+        mShowCmSignal = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.STATUS_BAR_CM_SIGNAL_TEXT, 0) == 1;
+        mService.setIconVisibility("phone_signal", !mShowCmSignal);
     }
 }
