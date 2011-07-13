@@ -1435,11 +1435,12 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
     //   (mSurface->getFlags() & ISurfaceComposer::eProtectedByApp))
     // will be true, but that part is already handled by SurfaceFlinger.
 
+    char value[PROPERTY_VALUE_MAX];
+
 #ifdef DEBUG_HDCP
     // For debugging, we allow a system property to control the protected usage.
     // In case of uninitialized or unexpected property, we default to "DRM only".
     bool setProtectionBit = false;
-    char value[PROPERTY_VALUE_MAX];
     if (property_get("persist.sys.hdcp_checking", value, NULL)) {
         if (!strcmp(value, "never")) {
             // nop
@@ -1470,6 +1471,13 @@ status_t AwesomePlayer::initVideoDecoder(uint32_t flags) {
         flags |= OMXCodec::kEnableGrallocUsageProtected;
     }
 #endif
+
+    property_get("sys.media.vdec.sw", value, "0");
+    if (atoi(value)) {
+        LOGW("Software Codec is preferred for Video");
+        flags |= OMXCodec::kPreferSoftwareCodecs;
+    }
+
     LOGV("initVideoDecoder flags=0x%x", flags);
     mVideoSource = OMXCodec::Create(
             mClient.interface(), mVideoTrack->getFormat(),
