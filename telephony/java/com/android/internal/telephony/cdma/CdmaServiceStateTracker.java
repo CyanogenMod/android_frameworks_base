@@ -146,6 +146,8 @@ final class CdmaServiceStateTracker extends ServiceStateTracker {
     private ContentResolver cr;
     private String currentCarrier = null;
 
+    private boolean mIsSamsungCdma = SystemProperties.getBoolean("ro.ril.samsung_cdma", false);
+
     private ContentObserver mAutoTimeObserver = new ContentObserver(new Handler()) {
         @Override
         public void onChange(boolean selfChange) {
@@ -364,14 +366,25 @@ final class CdmaServiceStateTracker extends ServiceStateTracker {
 
                 if (states.length > 9) {
                     try {
+                        // Samsung CDMA devices provide following states
+                        // in hex format as opposed to dec
                         if (states[4] != null) {
-                            baseStationId = Integer.parseInt(states[4]);
+                            if (mIsSamsungCdma)
+                                baseStationId = Integer.parseInt(states[4], 16);
+                            else
+                                baseStationId = Integer.parseInt(states[4]);
                         }
                         if (states[5] != null) {
-                            baseStationLatitude = Integer.parseInt(states[5]);
+                            if (mIsSamsungCdma)
+                                baseStationLatitude = Integer.parseInt(states[5], 16);
+                            else
+                                baseStationLatitude = Integer.parseInt(states[5]);
                         }
                         if (states[6] != null) {
-                            baseStationLongitude = Integer.parseInt(states[6]);
+                            if (mIsSamsungCdma)
+                                baseStationLongitude = Integer.parseInt(states[6], 16);
+                            else
+                                baseStationLongitude = Integer.parseInt(states[6]);
                         }
                         // Some carriers only return lat-lngs of 0,0
                         if (baseStationLatitude == 0 && baseStationLongitude == 0) {
@@ -410,7 +423,10 @@ final class CdmaServiceStateTracker extends ServiceStateTracker {
 
             if (ar.exception == null) {
                 String cdmaSubscription[] = (String[])ar.result;
-                if (cdmaSubscription != null && cdmaSubscription.length >= 5) {
+
+                // Samsung CDMA devices have shorter cdmaSubscription parcel
+                int SUB_LENGTH = (mIsSamsungCdma) ? 4 : 5;
+                if (cdmaSubscription != null && cdmaSubscription.length >= SUB_LENGTH) {
                     mMdn = cdmaSubscription[0];
                     if (cdmaSubscription[1] != null) {
                         String[] sid = cdmaSubscription[1].split(",");
@@ -438,7 +454,14 @@ final class CdmaServiceStateTracker extends ServiceStateTracker {
                     }
                     Log.d(LOG_TAG,"GET_CDMA_SUBSCRIPTION NID=" + cdmaSubscription[2] );
                     mMin = cdmaSubscription[3];
-                    mPrlVersion = cdmaSubscription[4];
+                    // Samsung CDMA devices' prl is not found in this parcel
+                    // instead, extract it from system properties
+                    if (mIsSamsungCdma) {
+                        String[] prl = (SystemProperties.get("ril.prl_ver_1").split(":"));
+                        mPrlVersion = prl[1];
+                    } else {
+                        mPrlVersion = cdmaSubscription[4];
+                    }
                     Log.d(LOG_TAG,"GET_CDMA_SUBSCRIPTION MDN=" + mMdn);
                     //Notify apps subscription info is ready
                     if (cdmaForSubscriptionInfoReadyRegistrants != null) {
@@ -708,14 +731,25 @@ final class CdmaServiceStateTracker extends ServiceStateTracker {
                         if (states[3] != null) {
                             radioTechnology = Integer.parseInt(states[3]);
                         }
+                        // Samsung CDMA devices provide following states
+                        // in hex format as opposed to dec
                         if (states[4] != null) {
-                            baseStationId = Integer.parseInt(states[4]);
+                            if (mIsSamsungCdma)
+                                baseStationId = Integer.parseInt(states[4], 16);
+                            else
+                                baseStationId = Integer.parseInt(states[4]);
                         }
                         if (states[5] != null) {
-                            baseStationLatitude = Integer.parseInt(states[5]);
+                            if (mIsSamsungCdma)
+                                baseStationLatitude = Integer.parseInt(states[5], 16);
+                            else
+                                baseStationLatitude = Integer.parseInt(states[5]);
                         }
                         if (states[6] != null) {
-                            baseStationLongitude = Integer.parseInt(states[6]);
+                            if (mIsSamsungCdma)
+                                baseStationLongitude = Integer.parseInt(states[6], 16);
+                            else
+                                baseStationLongitude = Integer.parseInt(states[6]);
                         }
                         // Some carriers only return lat-lngs of 0,0
                         if (baseStationLatitude == 0 && baseStationLongitude == 0) {
@@ -1226,7 +1260,16 @@ final class CdmaServiceStateTracker extends ServiceStateTracker {
         } else {
             int[] ints = (int[])ar.result;
             int offset = 2;
-            int cdmaDbm = (ints[offset] > 0) ? -ints[offset] : -120;
+
+            // Samsung CDMA devices only use cdmaDbm for signal strength
+            // parcel is different as well, pull cdmaDbm response correctly
+            // all other values are ignored
+            int cdmaDbm;
+            if (mIsSamsungCdma)
+                cdmaDbm = (ints[0] > 0 ) ? -ints[0] : -120;
+            else
+                cdmaDbm = (ints[offset] > 0) ? -ints[offset] : -120;
+
             int cdmaEcio = (ints[offset+1] > 0) ? -ints[offset+1] : -160;
             int evdoRssi = (ints[offset+2] > 0) ? -ints[offset+2] : -120;
             int evdoEcio = (ints[offset+3] > 0) ? -ints[offset+3] : -1;
