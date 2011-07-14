@@ -33,6 +33,8 @@ public class SamsungRIL extends RIL implements CommandsInterface {
 
 	private boolean mSignalbarCount = SystemProperties.getInt("ro.telephony.sends_barcount", 0) == 1 ? true : false;
 
+	private boolean mIsSamsungCdma = SystemProperties.getBoolean("ro.ril.samsung_cdma", false);
+
 public SamsungRIL(Context context) {
 		super(context);
 	}
@@ -679,7 +681,10 @@ public SamsungRIL(Context context, int networkMode, int cdmaSubscription) {
             response = new ArrayList<DriverCall>(num);
 
             for (int i = 0 ; i < num ; i++) {
-                dc = new DriverCall();
+                if (mIsSamsungCdma)
+                    dc = new SamsungDriverCall();
+                else
+                    dc = new DriverCall();
 
                 dc.state = DriverCall.stateFromCLCC(p.readInt());
                 Log.d(LOG_TAG, "state = " + dc.state);
@@ -782,5 +787,25 @@ public SamsungRIL(Context context, int networkMode, int cdmaSubscription) {
 	        return response;
 	    }
 
-
+    protected class SamsungDriverCall extends DriverCall {
+        @Override
+        public String
+        toString() {
+            // Samsung CDMA devices' call parcel is formatted differently
+            // fake unused data for video calls, and fix formatting
+            // so that voice calls' information can be correctly parsed
+            return "id=" + index + ","
+                    + state + ","
+                    + "toa=" + TOA + ","
+                    + (isMpty ? "conf" : "norm") + ","
+                    + (isMT ? "mt" : "mo") + ","
+                    + "als=" + als + ","
+                    + (isVoice ? "voc" : "nonvoc") + ","
+                    + "nonvid" + ","
+                    + number + ","
+                    + "cli=" + numberPresentation + ","
+                    + "name=" + name + ","
+                    + namePresentation;
+        }
+    }
 }
