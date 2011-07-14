@@ -24,6 +24,7 @@ public class SoundButton extends PowerButton {
     public static final int CM_MODE_SOUNDVIB_VIB_SILENT = 3;
     public static final int CM_MODE_SOUND_VIB_SILENT = 4;
     public static final int CM_MODE_SOUNDVIB_SOUND_VIB_SILENT = 5;
+    public static final int CM_MODE_VIB_SILENT = 6;
 
     public static final int VIBRATE_DURATION = 500; // 0.5s
 
@@ -159,14 +160,16 @@ public class SoundButton extends PowerButton {
             case RINGER_MODE_SILENT:
                 if (currentMode == CM_MODE_SOUND_SILENT || currentMode == CM_MODE_SOUNDVIB_VIB_SILENT
                         || currentMode == CM_MODE_SOUND_VIB_SILENT
-                        || currentMode == CM_MODE_SOUNDVIB_SOUND_VIB_SILENT)
+                        || currentMode == CM_MODE_SOUNDVIB_SOUND_VIB_SILENT
+                        || currentMode == CM_MODE_VIB_SILENT)
                     return true;
                 break;
             case RINGER_MODE_VIBRATE_ONLY:
                 if (currentMode == CM_MODE_SOUND_VIB || currentMode == CM_MODE_SOUNDVIB_VIB
                         || currentMode == CM_MODE_SOUNDVIB_VIB_SILENT
                         || currentMode == CM_MODE_SOUND_VIB_SILENT
-                        || currentMode == CM_MODE_SOUNDVIB_SOUND_VIB_SILENT)
+                        || currentMode == CM_MODE_SOUNDVIB_SOUND_VIB_SILENT
+                        || currentMode == CM_MODE_VIB_SILENT)
                     return true;
                 break;
             case RINGER_MODE_SOUND_ONLY:
