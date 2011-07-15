@@ -667,6 +667,17 @@ protected:
 
     // Immutable calibration parameters in parsed form.
     struct Calibration {
+
+#ifdef HAS_POINTERCAL
+        int32_t pointercalXscale;
+//        int32_t pointercalXymix;
+        int32_t pointercalXoffset;
+//        int32_t pointercalYxmix;
+        int32_t pointercalYscale;
+        int32_t pointercalYoffset;
+        int32_t pointercalScaler;
+#endif
+
         // Touch Size
         enum TouchSizeCalibration {
             TOUCH_SIZE_CALIBRATION_DEFAULT,
@@ -817,6 +828,10 @@ protected:
             int32_t scanCode;
         } currentVirtualKey;
     } mLocked;
+
+#ifdef HAS_POINTERCAL
+    virtual void loadPointercalData(Calibration& out, const char* filename);
+#endif
 
     virtual void configureParameters();
     virtual void dumpParameters(String8& dump);

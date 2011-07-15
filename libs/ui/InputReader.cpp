@@ -31,6 +31,9 @@
 #include <errno.h>
 #include <limits.h>
 #include <math.h>
+#ifdef HAS_POINTERCAL
+#include <fcntl.h>
+#endif
 
 #define INDENT "  "
 #define INDENT2 "    "
@@ -1707,9 +1710,97 @@ void TouchInputMapper::dumpVirtualKeysLocked(String8& dump) {
     }
 }
 
+#ifdef HAS_POINTERCAL
+void TouchInputMapper::loadPointercalData(Calibration& out, const char* filename)
+{
+    int fd = open(filename, O_RDONLY);
+    if (fd < 0) {
+        LOGE("error opening file=%s err=%s\n", filename, strerror(errno));
+        return;
+    }
+
+    off_t len = lseek(fd, 0, SEEK_END);
+    off_t errlen = lseek(fd, 0, SEEK_SET);
+    if (len < 0 || errlen < 0) {
+        close(fd);
+        LOGE("error seeking file=%s err=%s\n", filename, strerror(errno));
+        return;
+    }
+
+    char* buf = (char*)malloc(len+1);
+    if (read(fd, buf, len) != len) {
+        close(fd);
+        LOGE("error reading file=%s err=%s\n", filename, strerror(errno));
+        return;
+    }
+
+    close(fd);
+    buf[len] = '\0';
+
+    char delims[] = " ";
+    char *result = NULL;
+//xscale
+    result = strtok( buf, delims );
+    if(result == NULL)
+	return;
+    int32_t temp_pointercalXscale = atoi(result);
+//xymix
+    result = strtok( NULL, delims );
+    if(result == NULL)
+	return;
+//    int32_t temp_pointercalXymix = atoi(result);
+//xoffset
+    result = strtok( NULL, delims );
+    if(result == NULL)
+	return;
+    int32_t temp_pointercalXoffset = atoi(result);
+//yxmix
+    result = strtok( NULL, delims );
+    if(result == NULL)
+	return;
+//    int32_t temp_pointercalYxmix = atoi(result);
+//yscale
+    result = strtok( NULL, delims );
+    if(result == NULL)
+	return;
+    int32_t temp_pointercalYscale = atoi(result);
+//yoffset
+    result = strtok( NULL, delims );
+    if(result == NULL)
+	return;
+    int32_t temp_pointercalYoffset = atoi(result);
+//scaler
+    result = strtok( NULL, delims );
+    if(result == NULL)
+	return;
+
+    out.pointercalXscale = temp_pointercalXscale;
+//    out.pointercalXymix = temp_pointercalXymix;
+    out.pointercalXoffset = temp_pointercalXoffset;
+//    out.pointercalYxmix = temp_pointercalYxmix;
+    out.pointercalYscale = temp_pointercalYscale;
+    out.pointercalYoffset = temp_pointercalYoffset;
+    out.pointercalScaler = atoi(result);
+
+    LOGI("Using %s (xscale:%d, xoffset:%d, yscale:%d, yoffset:%d, scaler: %d)", filename, out.pointercalXscale, out.pointercalXoffset, out.pointercalYscale, out.pointercalYoffset, out.pointercalScaler);
+}
+#endif
+
 void TouchInputMapper::parseCalibration() {
     const InputDeviceCalibration& in = getDevice()->getCalibration();
     Calibration& out = mCalibration;
+
+#ifdef HAS_POINTERCAL
+    out.pointercalXscale = 1;				// Default value
+//    out.pointercalXymix = 0;
+    out.pointercalXoffset = 0;
+//    out.pointercalYxmix = 0;
+    out.pointercalYscale = 1;
+    out.pointercalYoffset = 0;
+    out.pointercalScaler = 1;
+    loadPointercalData(mCalibration, "/system/etc/pointercal");	// Read shipped values
+    loadPointercalData(mCalibration, "/data/system/pointercal");	// Override with user values if they exist
+#endif
 
     // Touch Size
     out.touchSizeCalibration = Calibration::TOUCH_SIZE_CALIBRATION_DEFAULT;
@@ -3659,8 +3750,13 @@ void SingleTouchInputMapper::sync(nsecs_t when) {
     if (mDown) {
         mCurrentTouch.pointerCount = 1;
         mCurrentTouch.pointers[0].id = 0;
+#ifdef HAS_POINTERCAL
+        mCurrentTouch.pointers[0].x = (mX*mCalibration.pointercalXscale + /* mY*mCalibration.pointercalXymix + */ mCalibration.pointercalXoffset + mCalibration.pointercalScaler/2)/mCalibration.pointercalScaler;
+        mCurrentTouch.pointers[0].y = (/* mX*mCalibration.pointercalYxmix + */ mY*mCalibration.pointercalYscale + mCalibration.pointercalYoffset + mCalibration.pointercalScaler/2)/mCalibration.pointercalScaler;
+#else
         mCurrentTouch.pointers[0].x = mX;
         mCurrentTouch.pointers[0].y = mY;
+#endif
         mCurrentTouch.pointers[0].pressure = mPressure;
         mCurrentTouch.pointers[0].touchMajor = 0;
         mCurrentTouch.pointers[0].touchMinor = 0;
@@ -3802,8 +3898,13 @@ void MultiTouchInputMapper::sync(nsecs_t when) {
         }
 
         PointerData& outPointer = mCurrentTouch.pointers[outCount];
+#ifdef HAS_POINTERCAL
+        outPointer.x = (inPointer.absMTPositionX*mCalibration.pointercalXscale + /* inPointer.absMTPositionY*mCalibration.pointercalXymix + */ mCalibration.pointercalXoffset + mCalibration.pointercalScaler/2)/mCalibration.pointercalScaler;
+        outPointer.y = (/* inPointer.absMTPositionX*mCalibration.pointercalYxmix + */ inPointer.absMTPositionY*mCalibration.pointercalYscale + mCalibration.pointercalYoffset + mCalibration.pointercalScaler/2)/mCalibration.pointercalScaler;
+#else
         outPointer.x = inPointer.absMTPositionX;
         outPointer.y = inPointer.absMTPositionY;
+#endif
 
         if (fields & Accumulator::FIELD_ABS_MT_PRESSURE) {
             if (inPointer.absMTPressure <= 0) {
