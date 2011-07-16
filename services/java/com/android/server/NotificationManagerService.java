@@ -534,19 +534,19 @@ public class NotificationManagerService extends INotificationManager.Stub
                 updateNotificationPulse();
             }
             boolean blinkEnabled = Settings.System.getInt(resolver,
-                    Settings.System.NOTIFICATION_LIGHT_BLINK, 0) != 0;
+                    Settings.System.NOTIFICATION_LIGHT_BLINK, 1) == 1;
             if (mNotificationBlinkEnabled != blinkEnabled) {
                 mNotificationBlinkEnabled = blinkEnabled;
                 updateGreenLight();
             }
             boolean alwaysOnEnabled = Settings.System.getInt(resolver,
-                    Settings.System.NOTIFICATION_LIGHT_ALWAYS_ON, 0) != 0;
+                    Settings.System.NOTIFICATION_LIGHT_ALWAYS_ON, 1) == 1;
             if (mNotificationAlwaysOnEnabled != alwaysOnEnabled) {
                 mNotificationAlwaysOnEnabled = alwaysOnEnabled;
                 updateGreenLight();
             }
             boolean chargingEnabled = Settings.System.getInt(resolver,
-                    Settings.System.NOTIFICATION_LIGHT_CHARGING, 0) != 0;
+                    Settings.System.NOTIFICATION_LIGHT_CHARGING, 1) == 1;
             if (mNotificationChargingEnabled != chargingEnabled) {
                 mNotificationChargingEnabled = chargingEnabled;
                 updateAmberLight();
