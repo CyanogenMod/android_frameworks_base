@@ -1305,6 +1305,9 @@ public class Resources {
                 mMetrics.updateMetrics(mCompatibilityInfo,
                         mConfiguration.orientation, mConfiguration.screenLayout);
             }
+            if (mConfiguration.fontScale <= 0 ) {
+                mConfiguration.fontScale = 1;
+            }
             mMetrics.scaledDensity = mMetrics.density * mConfiguration.fontScale;
 
             String locale = null;
