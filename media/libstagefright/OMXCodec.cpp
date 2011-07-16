@@ -4067,13 +4067,14 @@ void OMXCodec::drainInputBuffer(BufferInfo *info) {
         }
 
         size_t remainingBytes = info->mSize - offset;
+        size_t srcBufferLength = srcBuffer->range_length();
 
-        if (srcBuffer->range_length() > remainingBytes) {
+        if (srcBufferLength > remainingBytes) {
             if (offset == 0) {
                 CODEC_LOGE(
                      "Codec's input buffers are too small to accomodate "
                      "buffer read from source (info->mSize = %d, srcLength = %d)",
-                     info->mSize, srcBuffer->range_length());
+                     info->mSize, srcBufferLength);
 
                 srcBuffer->release();
                 srcBuffer = NULL;
@@ -4118,9 +4119,16 @@ void OMXCodec::drainInputBuffer(BufferInfo *info) {
                 tmpBuffer->release();
         }
 #else
-            memcpy((uint8_t *)info->mData + offset,
-                    (const uint8_t *)srcBuffer->data() + srcBuffer->range_offset(),
-                    srcBuffer->range_length());
+            if (srcBuffer->data()) {
+                memcpy((uint8_t *)info->mData + offset,
+                        (const uint8_t *)srcBuffer->data() + srcBuffer->range_offset(),
+                        srcBufferLength);
+            } else {
+                if (srcBufferLength != 0) {
+                    LOGW("Source buffer was NULL but the size wasn't 0 bytes (is %d bytes)", srcBufferLength);
+                    srcBufferLength = 0;
+                }
+            }
 #endif
         }
 
@@ -4132,7 +4140,7 @@ void OMXCodec::drainInputBuffer(BufferInfo *info) {
             timestampUs = lastBufferTimeUs;
         }
 
-        offset += srcBuffer->range_length();
+        offset += srcBufferLength;
 
         if (mIsEncoder && (mQuirks & kAvoidMemcopyInputRecordingFrames)) {
             info->mMediaBuffer = srcBuffer;
