@@ -71,7 +71,7 @@ import java.util.Collections;
 import android.os.SystemClock;
 
 /* NITZ stuffs */
-import java.util.TimeZone;
+import java.util.Date;
 import java.text.SimpleDateFormat;
 
 /**
@@ -867,13 +867,12 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
 
     protected Object
     responseNitz(Parcel p) {
-        int num;
-        String parceldata;
+        int num, dst=0;
+        String parceldata, parcelextra;
         String response;
         SimpleDateFormat dateFormatter;
         SimpleDateFormat dateParser;
         boolean isP990 = SystemProperties.get("ro.build.product").equals("p990");
-        String[] tzIds;
 
         num = p.readInt(); // TZ diff in quarter-hours
 
@@ -881,10 +880,14 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
         parceldata = p.readString();
 
         /* P990 needs some additional hax... */
-        tzIds = TimeZone.getAvailableIDs((num/4)*3600*1000);
         if (isP990) {
+            /* Store DST before cropping */
+            parcelextra = parceldata.substring(parceldata.lastIndexOf(",")+1);
+            if (parcelextra != null) dst = Integer.parseInt(parcelextra);
             parceldata = parceldata.substring(0,(parceldata.lastIndexOf(",")));
         }
+
+        int offset = num*15*60*1000;	// DST corrected
 
         /* WTH... Date may come with 4 digits in the year, reduce to 2 */
         try {
@@ -893,11 +896,13 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
 
             /* P990 delivers localtime, convert to UTC */
             if (isP990) {
-                dateFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
-                dateParser.setTimeZone(TimeZone.getTimeZone(tzIds[0]));
+                /* Directly calculate UTC time using DST Offset */
+                long when = dateParser.parse(parceldata).getTime() - offset;
+                Date d = new Date(when);
+                response = dateFormatter.format(d);
+            } else {
+                response = dateFormatter.format(dateParser.parse(parceldata));
             }
-
-            response = dateFormatter.format(dateParser.parse(parceldata));
 
         } catch (java.text.ParseException tpe) {
             Log.d(LOG_TAG, "NITZ TZ conversion failed: " + tpe);
@@ -905,8 +910,11 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
         }
 
         /* Append the timezone */
-        response = response + ((num < 0) ? "" : "+");
-        response = response + num;
+        response = response + ((num < 0) ? "" : "+") + num;
+        if (isP990) {
+            /* Add DST */
+            response = response + "," + dst;
+        }
 
         return response;
     }
