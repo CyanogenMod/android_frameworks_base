@@ -13,6 +13,10 @@ LOCAL_SRC_FILES:= 	       \
 	EGL/Loader.cpp 	       \
 #
 
+ifneq ($(TARGET_USES_GL_VENDOR_EXTENSIONS),false)
+    LOCAL_CFLAGS += -DENABLE_VENDOR_EXTENSIONS
+endif
+
 LOCAL_SHARED_LIBRARIES += libcutils libutils
 LOCAL_LDLIBS := -lpthread -ldl
 LOCAL_MODULE:= libEGL
