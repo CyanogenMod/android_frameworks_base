@@ -1,7 +1,9 @@
 package com.android.internal.telephony;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -37,6 +39,7 @@ import android.util.Log;
 public class SamsungRIL extends RIL implements CommandsInterface {
 
 	private boolean mSignalbarCount = SystemProperties.getInt("ro.telephony.sends_barcount", 0) == 1 ? true : false;
+	private String mAllowedNetworkmodes = SystemProperties.get("ro.telephony.sec.networktypes", "0,1,2,3,4,5,6,7");
 
 	private boolean mIsSamsungCdma = SystemProperties.getBoolean("ro.ril.samsung_cdma", false);
 
@@ -205,7 +208,7 @@ public SamsungRIL(Context context, int networkMode, int cdmaSubscription) {
             case RIL_REQUEST_STK_HANDLE_CALL_SETUP_REQUESTED_FROM_SIM: ret =  responseInts(p); break;
             case RIL_REQUEST_EXPLICIT_CALL_TRANSFER: ret =  responseVoid(p); break;
             case RIL_REQUEST_SET_PREFERRED_NETWORK_TYPE: ret =  responseVoid(p); break;
-            case RIL_REQUEST_GET_PREFERRED_NETWORK_TYPE: ret =  responseInts(p); break;
+            case RIL_REQUEST_GET_PREFERRED_NETWORK_TYPE: ret =  responseNetworktype(p); break;
             case RIL_REQUEST_GET_NEIGHBORING_CELL_IDS: ret = responseCellList(p); break;
             case RIL_REQUEST_SET_LOCATION_UPDATES: ret =  responseVoid(p); break;
             case RIL_REQUEST_CDMA_SET_SUBSCRIPTION: ret =  responseVoid(p); break;
@@ -286,6 +289,31 @@ public SamsungRIL(Context context, int networkMode, int cdmaSubscription) {
 
         rr.release();
     }
+
+	private Object responseNetworktype(Parcel p) {
+        int numInts;
+        int response[];
+
+        numInts = p.readInt();
+
+        response = new int[numInts];
+
+        for (int i = 0 ; i < numInts ; i++) {
+            response[i] = p.readInt();
+        }
+
+        List<String> modes = Arrays.asList(mAllowedNetworkmodes.split(","));
+
+        //return default stuff if the modem fails
+        //set everything to default and hope the best
+        if(!modes.contains(Integer.toString(response[0])));
+        {
+        	Log.w(LOG_TAG, "Modem send a unsupported networktype " + response[0] + " setting it to default value");
+        	this.setPreferredNetworkType(PREFERRED_NETWORK_MODE, null);
+        	response[0] = PREFERRED_NETWORK_MODE;
+        }
+        return response;
+	}
 
 	@Override
 	 protected void
