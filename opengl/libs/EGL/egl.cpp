@@ -52,7 +52,6 @@
 // There's also an extra subtlety with the EGLimage entry points in GL, which
 // can't work properly if they're called directly (they have to go through
 // a wrapper).
-#define ENABLE_VENDOR_EXTENSIONS
 
 #define MAKE_CONFIG(_impl, _index)  ((EGLConfig)(((_impl)<<24) | (_index)))
 #define setError(_e, _r) setErrorEtc(__FUNCTION__, __LINE__, _e, _r)
