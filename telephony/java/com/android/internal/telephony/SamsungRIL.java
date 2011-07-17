@@ -3,7 +3,12 @@ package com.android.internal.telephony;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.os.Handler;
 import android.os.Message;
 import android.os.AsyncResult;
 import android.os.Parcel;
@@ -808,4 +813,119 @@ public SamsungRIL(Context context, int networkMode, int cdmaSubscription) {
                     + namePresentation;
         }
     }
-}
+    @Override
+    public void setPreferredNetworkType(int networkType , Message response) {
+		/* Samsung modem implementation does bad things when a datacall is running
+		 * while switching the preferred networktype.
+		 */
+		ConnectivityManager cm =
+            (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+		if(cm.getMobileDataEnabled())
+		{
+			ConnectivityHandler handler = new ConnectivityHandler(mContext);
+			handler.setPreferedNetworkType(networkType, response);
+		} else {
+			sendPreferedNetworktype(networkType, response);
+		}
+    }
+
+
+	//Sends the real RIL request to the modem.
+	private void sendPreferedNetworktype(int networkType, Message response) {
+		RILRequest rr = RILRequest.obtain(
+                RILConstants.RIL_REQUEST_SET_PREFERRED_NETWORK_TYPE, response);
+
+        rr.mp.writeInt(1);
+        rr.mp.writeInt(networkType);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest)
+                + " : " + networkType);
+
+        send(rr);
+	}
+	/* private class that does the handling for the dataconnection
+	 * dataconnection is done async, so we send the request for disabling it,
+	 * wait for the response, set the prefered networktype and notify the
+	 * real sender with its result.
+	 */
+	private class ConnectivityHandler extends Handler{
+
+		private static final int MESSAGE_SET_PREFERRED_NETWORK_TYPE = 30;
+		private Context mContext;
+		private int mDesiredNetworkType;
+		//the original message, we need it for calling back the original caller when done
+		private Message mNetworktypeResponse;
+		private ConnectivityBroadcastReceiver mConnectivityReceiver =  new ConnectivityBroadcastReceiver();
+
+		public ConnectivityHandler(Context context)
+		{
+			mContext = context;
+		}
+
+		private void startListening() {
+	        IntentFilter filter = new IntentFilter();
+	        filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+	        mContext.registerReceiver(mConnectivityReceiver, filter);
+		}
+
+		private synchronized void stopListening() {
+	        mContext.unregisterReceiver(mConnectivityReceiver);
+		}
+
+		public void setPreferedNetworkType(int networkType, Message response)
+		{
+			Log.d(LOG_TAG, "Mobile Dataconnection is online setting it down");
+			 mDesiredNetworkType = networkType;
+			 mNetworktypeResponse = response;
+			 ConnectivityManager cm =
+                 (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+			 //start listening for the connectivity change broadcast
+			 startListening();
+			 cm.setMobileDataEnabled(false);
+		}
+
+		  @Override
+		  public void handleMessage(Message msg) {
+			  switch(msg.what) {
+			  //networktype was set, now we can enable the dataconnection again
+			  case MESSAGE_SET_PREFERRED_NETWORK_TYPE:
+					ConnectivityManager cm =
+			                   (ConnectivityManager)mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+					Log.d(LOG_TAG, "preferred NetworkType set upping Mobile Dataconnection");
+
+					cm.setMobileDataEnabled(true);
+					//everything done now call back that we have set the networktype
+					AsyncResult.forMessage(mNetworktypeResponse, null, null);
+					mNetworktypeResponse.sendToTarget();
+					mNetworktypeResponse = null;
+					break;
+			  default:
+			        throw new RuntimeException("unexpected event not handled");
+			  }
+		  }
+
+			private class ConnectivityBroadcastReceiver extends BroadcastReceiver {
+
+		        @Override
+		        public void onReceive(Context context, Intent intent) {
+		            String action = intent.getAction();
+		            if (!action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
+		                Log.w(LOG_TAG, "onReceived() called with " + intent);
+		                return;
+		            }
+		            boolean noConnectivity =
+		                intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false);
+
+		            if (noConnectivity) {
+						//Ok dataconnection is down, now set the networktype
+						Log.w(LOG_TAG, "Mobile Dataconnection is now down setting preferred NetworkType");
+						stopListening();
+						sendPreferedNetworktype(mDesiredNetworkType, obtainMessage(MESSAGE_SET_PREFERRED_NETWORK_TYPE));
+						mDesiredNetworkType = -1;
+		            }
+		        }
+		    }
+		}
+	}

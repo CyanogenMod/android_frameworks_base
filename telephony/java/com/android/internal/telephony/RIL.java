@@ -224,7 +224,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
     RILSender mSender;
     Thread mReceiverThread;
     RILReceiver mReceiver;
-    private Context mContext;
+    protected Context mContext;
     WakeLock mWakeLock;
     int mWakeLockTimeout;
     // The number of requests pending to be sent out, it increases before calling
