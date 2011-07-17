@@ -687,7 +687,7 @@ public abstract class Window {
      * @param mask Which of the window flag bits to modify.
      */
     public void setFlags(int flags, int mask) {
-        if ((flags & WindowManager.LayoutParams.PREVENT_POWER_KEY) != 0){
+        if ((flags & mask & WindowManager.LayoutParams.PREVENT_POWER_KEY) != 0){
             mContext.enforceCallingOrSelfPermission("android.permission.PREVENT_POWER_KEY", "No permission to prevent power key");
         }
         final WindowManager.LayoutParams attrs = getAttributes();
