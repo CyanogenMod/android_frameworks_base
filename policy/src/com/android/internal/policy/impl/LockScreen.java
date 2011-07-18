@@ -295,19 +295,21 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
         final LayoutInflater inflater = LayoutInflater.from(context);
         if (DBG) Log.v(TAG, "Creation orientation = " + mCreationOrientation);
-        if (mCreationOrientation != Configuration.ORIENTATION_LANDSCAPE) {
-            inflater.inflate(R.layout.keyguard_screen_tab_unlock, this, true);
-        } else {
-            inflater.inflate(R.layout.keyguard_screen_tab_unlock_land, this, true);
-        }
         try {
             LOCK_WALLPAPER = mContext.createPackageContext("com.cyanogenmod.cmparts", 0).getFilesDir()+"/lockwallpaper";
         } catch (NameNotFoundException e1) {
             LOCK_WALLPAPER = "";
         }
+        ViewGroup lockWallpaper = null;
+        if (mCreationOrientation != Configuration.ORIENTATION_LANDSCAPE) {
+            inflater.inflate(R.layout.keyguard_screen_tab_unlock, this, true);
+            lockWallpaper = (RelativeLayout) findViewById(R.id.root);
+        } else {
+            inflater.inflate(R.layout.keyguard_screen_tab_unlock_land, this, true);
+            lockWallpaper = (LinearLayout) findViewById(R.id.root);
+        }
         if (!LOCK_WALLPAPER.equals("")){
             String mLockBack = Settings.System.getString(context.getContentResolver(), Settings.System.LOCKSCREEN_BACKGROUND);
-            RelativeLayout lockWallpaper = (RelativeLayout) findViewById(R.id.root);
             if (mLockBack != null){
                 if (mLockBack.length() == 0){
                     Bitmap lockb = BitmapFactory.decodeFile(LOCK_WALLPAPER);
