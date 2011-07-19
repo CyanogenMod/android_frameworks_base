@@ -31,6 +31,14 @@ public:
     virtual ~OMXRenderer();
 
     virtual void render(IOMX::buffer_id buffer);
+#ifdef OMAP_ENHANCEMENT
+    virtual Vector< sp<IMemory> > getBuffers();
+    virtual bool setCallback(release_rendered_buffer_callback cb, void *cookie);
+
+    virtual void set_s3d_frame_layout(uint32_t s3d_mode, uint32_t s3d_fmt, uint32_t s3d_order, uint32_t s3d_subsampling);
+    virtual void resizeRenderer(void* resize_params);
+    virtual void requestRendererClone(bool enable);
+#endif
 
 private:
     VideoRenderer *mImpl;

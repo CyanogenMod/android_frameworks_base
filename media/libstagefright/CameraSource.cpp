@@ -30,6 +30,11 @@
 #include <utils/String8.h>
 #include <cutils/properties.h>
 
+#if defined(OMAP_ENHANCEMENT) && (TARGET_OMAP4)
+#include <TICameraParameters.h>
+#include "OMX_TI_Video.h"
+#endif
+
 namespace android {
 
 struct CameraSourceListener : public CameraListener {
@@ -37,9 +42,14 @@ struct CameraSourceListener : public CameraListener {
 
     virtual void notify(int32_t msgType, int32_t ext1, int32_t ext2);
     virtual void postData(int32_t msgType, const sp<IMemory> &dataPtr);
-
+#ifdef OMAP_ENHANCEMENT
+    virtual void postDataTimestamp(
+            nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr,
+            uint32_t offset=0, uint32_t stride=0);
+#else
     virtual void postDataTimestamp(
             nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr);
+#endif
 
 protected:
     virtual ~CameraSourceListener();
@@ -67,12 +77,23 @@ void CameraSourceListener::postData(int32_t msgType, const sp<IMemory> &dataPtr)
          msgType, dataPtr->pointer(), dataPtr->size());
 }
 
+#ifdef OMAP_ENHANCEMENT
 void CameraSourceListener::postDataTimestamp(
-        nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr) {
+        nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr,
+        uint32_t offset, uint32_t stride)
+#else
+void CameraSourceListener::postDataTimestamp(
+        nsecs_t timestamp, int32_t msgType, const sp<IMemory>& dataPtr)
+#endif
+{
 
     sp<CameraSource> source = mSource.promote();
     if (source.get() != NULL) {
+#ifdef OMAP_ENHANCEMENT
+        source->dataCallbackTimestamp(timestamp/1000, msgType, dataPtr, offset, stride);
+#else
         source->dataCallbackTimestamp(timestamp/1000, msgType, dataPtr);
+#endif
     }
 }
 
@@ -82,11 +103,19 @@ static int32_t getColorFormat(const char* colorFormat) {
     }
 
     if (!strcmp(colorFormat, CameraParameters::PIXEL_FORMAT_YUV420SP)) {
+#if defined(TARGET_OMAP4) && defined (OMAP_ENHANCEMENT)
+        return OMX_COLOR_FormatYUV420PackedSemiPlanar;
+#else
         return OMX_COLOR_FormatYUV420SemiPlanar;
+#endif
     }
 
     if (!strcmp(colorFormat, CameraParameters::PIXEL_FORMAT_YUV422I)) {
+#if defined(TARGET_OMAP3) && defined(OMAP_ENHANCEMENT)
+        return OMX_COLOR_FormatCbYCrY;
+#else
         return OMX_COLOR_FormatYCbYCr;
+#endif
     }
 
     if (!strcmp(colorFormat, CameraParameters::PIXEL_FORMAT_RGB565)) {
@@ -98,6 +127,27 @@ static int32_t getColorFormat(const char* colorFormat) {
 
     CHECK_EQ(0, "Unknown color format");
 }
+
+#if defined (OMAP_ENHANCEMENT) && defined (TARGET_OMAP4)
+static int32_t getSEIEncodingType(const char* seiEncodingType)
+{
+    if (!strcmp(seiEncodingType, TICameraParameters::SEI_ENCODING_2004)) {
+       return OMX_TI_Video_AVC_2004_StereoInfoType;
+    }
+
+    if (!strcmp(seiEncodingType, TICameraParameters::SEI_ENCODING_2010)) {
+        return OMX_TI_Video_AVC_2010_StereoFramePackingType;
+    }
+
+    if (!strcmp(seiEncodingType, TICameraParameters::SEI_ENCODING_NONE)) {
+        return OMX_TI_Video_Progressive;
+    }
+
+    LOGE("Unsupported SEI encoding type (%s), reverting back to progressive", seiEncodingType);
+
+    return OMX_TI_Video_Progressive;
+}
+#endif
 
 // static
 CameraSource *CameraSource::Create() {
@@ -174,6 +224,54 @@ CameraSource::CameraSource(const sp<Camera> &camera)
     mMeta->setInt32(kKeyStride, stride);
     mMeta->setInt32(kKeySliceHeight, sliceHeight);
 
+#if defined (OMAP_ENHANCEMENT) && defined (TARGET_OMAP4)
+    int32_t paddedFrameWidth, paddedFrameHeight;
+    if (mCamera != 0) {
+        // Since we may not honor the preview size that app has requested
+        // It is a good idea to get the actual preview size and use it for video recording.
+        paddedFrameWidth = atoi(params.get("padded-width"));
+        paddedFrameHeight = atoi(params.get("padded-height"));
+        if (paddedFrameWidth < 0 || paddedFrameHeight < 0) {
+            LOGE("Failed to get camera(%p) preview size", mCamera.get());
+        }
+        LOGV("CameraSource() : padded WxH=%dx%d", paddedFrameWidth, paddedFrameHeight);
+    }
+    else
+    {
+        LOGE("mCamera is NULL");
+        paddedFrameWidth = width;
+        paddedFrameHeight = height;
+    }
+
+    mMeta->setInt32(kKeyPaddedWidth, paddedFrameWidth);
+    mMeta->setInt32(kKeyPaddedHeight, paddedFrameHeight);
+
+    int32_t  mS3DCamera = false;
+    if (mCamera != 0) {
+
+        if(params.get("s3d-supported")!= NULL && CameraParameters::TRUE != NULL)
+            mS3DCamera = strcmp(params.get("s3d-supported"), CameraParameters::TRUE) == 0;
+
+        if(mS3DCamera)
+        {
+            const char *seiEncodingTypeStr = params.get(TICameraParameters::KEY_SEI_ENCODING_TYPE);
+            CHECK(seiEncodingTypeStr != NULL);
+            int32_t seiEncodingType = getSEIEncodingType(seiEncodingTypeStr);
+            mMeta->setInt32(kKeySEIEncodingType, seiEncodingType);
+
+            const char *frameLayoutStr = params.get(TICameraParameters::KEY_S3D_FRAME_LAYOUT);
+            CHECK(frameLayoutStr != NULL);
+            mMeta->setCString(kKeyFrameLayout, frameLayoutStr);
+        }
+
+    }
+    else
+    {
+        LOGE("mCamera is NULL");
+        mS3DCamera = false;
+    }
+    mMeta->setInt32(kKeyS3dSupported, mS3DCamera);
+#endif
 }
 
 CameraSource::~CameraSource() {
@@ -288,6 +386,9 @@ status_t CameraSource::read(
     sp<IMemory> frame;
     int64_t frameTime;
 
+#if defined(OMAP_ENHANCEMENT) && (TARGET_OMAP4)
+    uint32_t frameOffset;
+#endif
     {
         Mutex::Autolock autoLock(mLock);
         while (mStarted) {
@@ -302,6 +403,10 @@ status_t CameraSource::read(
             frame = *mFramesReceived.begin();
             mFramesReceived.erase(mFramesReceived.begin());
 
+#if defined(OMAP_ENHANCEMENT) && (TARGET_OMAP4)
+            frameOffset = *mFrameOffset.begin();
+            mFrameOffset.erase(mFrameOffset.begin());
+#endif
             frameTime = *mFrameTimes.begin();
             mFrameTimes.erase(mFrameTimes.begin());
             int64_t skipTimeUs;
@@ -326,6 +431,9 @@ status_t CameraSource::read(
                 (*buffer)->add_ref();
                 (*buffer)->meta_data()->setInt64(kKeyTime, frameTime);
 
+#if defined(OMAP_ENHANCEMENT) && (TARGET_OMAP4)
+                (*buffer)->meta_data()->setInt32(kKeyOffset, frameOffset);
+#endif
                 return OK;
             }
         }
@@ -333,8 +441,15 @@ status_t CameraSource::read(
     return OK;
 }
 
+#ifdef OMAP_ENHANCEMENT
 void CameraSource::dataCallbackTimestamp(int64_t timestampUs,
-        int32_t msgType, const sp<IMemory> &data) {
+        int32_t msgType, const sp<IMemory> &data,
+        uint32_t offset, uint32_t stride)
+#else
+void CameraSource::dataCallbackTimestamp(int64_t timestampUs,
+        int32_t msgType, const sp<IMemory> &data)
+#endif
+{
     LOGV("dataCallbackTimestamp: timestamp %lld us", timestampUs);
     Mutex::Autolock autoLock(mLock);
     if (!mStarted) {
@@ -373,6 +488,11 @@ void CameraSource::dataCallbackTimestamp(int64_t timestampUs,
     mFrameTimes.push_back(timeUs);
     LOGV("initial delay: %lld, current time stamp: %lld",
         mStartTimeUs, timeUs);
+
+#if defined(OMAP_ENHANCEMENT) && (TARGET_OMAP4)
+    mFrameOffset.push_back(offset);
+#endif
+
     mFrameAvailableCondition.signal();
 }
 

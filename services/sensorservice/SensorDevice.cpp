@@ -306,7 +306,15 @@ status_t SensorDevice::activate(void* ident, int handle, int enabled)
         int nwr, ret, fd;
         char value[2];
 
+#ifdef USE_LGE_ALS_OMAP3
+        fd = open("/sys/class/leds/lcd-backlight/als", O_RDWR);
+        if(fd < 0)
+            return -ENODEV;
 
+        nwr = sprintf(value, "%s\n", enabled ? "1" : "0");
+        write(fd, value, nwr);
+        close(fd);
+#else
         fd = open("/sys/devices/platform/star_aat2870.0/lsensor_onoff", O_RDWR);
         if(fd < 0)
             return -ENODEV;
@@ -321,6 +329,7 @@ status_t SensorDevice::activate(void* ident, int handle, int enabled)
         nwr = sprintf(value, "%s\n", enabled ? "2" : "0");
         write(fd, value, nwr);
         close(fd);
+#endif
 
         return 0;
 
