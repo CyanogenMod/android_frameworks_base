@@ -3359,6 +3359,13 @@ class PackageManagerService extends IPackageManager.Stub {
                     if (NativeLibraryHelper.removeNativeBinariesFromDirLI(nativeLibraryDir)) {
                         Log.i(TAG, "removed obsolete native libraries for system package " + path);
                     }
+                    pkg.mScanPath = path;
+                    if ((scanMode&SCAN_NO_DEX) == 0) {
+                        if (performDexOptLI(pkg, forceDex) == DEX_OPT_FAILED) {
+                        mLastScanError = PackageManager.INSTALL_FAILED_DEXOPT;
+                        return null;
+                        }
+                    }
                 } else if (nativeLibraryDir.getParent().equals(dataPathString)) {
                     /*
                      * If this is an internal application or our
@@ -3368,9 +3375,22 @@ class PackageManagerService extends IPackageManager.Stub {
                      * can happen for older apps that existed before an OTA to
                      * Gingerbread.
                      */
-                    Slog.i(TAG, "Unpacking native libraries for " + path);
-                    mInstaller.unlinkNativeLibraryDirectory(dataPathString);
-                    NativeLibraryHelper.copyNativeBinariesLI(scanFile, nativeLibraryDir);
+                    pkg.mScanPath = path;
+                    if ((scanMode&SCAN_NO_DEX) == 0) {	
+                        int DexStatus = (performDexOptLI(pkg, forceDex));	
+                        if (DexStatus == DEX_OPT_FAILED) {	
+                            mLastScanError = PackageManager.INSTALL_FAILED_DEXOPT;	
+                            return null;	
+                       /*
+                       * Only attempt to unpack native libraries if dexopt was perfomred	
+                        * TODO, fix for Odex	
+                        */
+                        } else if (DexStatus == DEX_OPT_PERFORMED) {
+                            Slog.i(TAG, "Unpacking native libraries for " + path);
+                            mInstaller.unlinkNativeLibraryDirectory(dataPathString);
+                            NativeLibraryHelper.copyNativeBinariesLI(scanFile, nativeLibraryDir);
+                        }
+                    }
                 } else {
                     Slog.i(TAG, "Linking native library dir for " + path);
                     mInstaller.linkNativeLibraryDirectory(dataPathString,
