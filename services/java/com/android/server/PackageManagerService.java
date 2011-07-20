@@ -3159,7 +3159,7 @@ class PackageManagerService extends IPackageManager.Stub {
             // that conflict with existing packages.  Only do this if the
             // package isn't already installed, since we don't want to break
             // things that are installed.
-            if ((scanMode&SCAN_NEW_INSTALL) != 0) {
+            if ((scanMode & SCAN_NEW_INSTALL) != 0) {
                 int N = pkg.providers.size();
                 int i;
                 for (i=0; i<N; i++) {
@@ -3202,7 +3202,7 @@ class PackageManagerService extends IPackageManager.Stub {
         }
         
         final long scanFileTime = scanFile.lastModified();
-        final boolean forceDex = (scanMode&SCAN_FORCE_DEX) != 0;
+        final boolean forceDex = (scanMode & SCAN_FORCE_DEX) != 0;
         final boolean scanFileNewer = forceDex || scanFileTime != pkgSetting.timeStamp;
         pkg.applicationInfo.processName = fixProcessName(
                 pkg.applicationInfo.packageName,
@@ -3359,6 +3359,13 @@ class PackageManagerService extends IPackageManager.Stub {
                     if (NativeLibraryHelper.removeNativeBinariesFromDirLI(nativeLibraryDir)) {
                         Log.i(TAG, "removed obsolete native libraries for system package " + path);
                     }
+                    pkg.mScanPath = path;
+                    if ((scanMode & SCAN_NO_DEX) == 0) {
+                        if (performDexOptLI(pkg, forceDex) == DEX_OPT_FAILED) {
+                            mLastScanError = PackageManager.INSTALL_FAILED_DEXOPT;
+                            return null;
+                        }
+                    }
                 } else if (nativeLibraryDir.getParent().equals(dataPathString)) {
                     /*
                      * If this is an internal application or our
@@ -3368,9 +3375,23 @@ class PackageManagerService extends IPackageManager.Stub {
                      * can happen for older apps that existed before an OTA to
                      * Gingerbread.
                      */
-                    Slog.i(TAG, "Unpacking native libraries for " + path);
-                    mInstaller.unlinkNativeLibraryDirectory(dataPathString);
-                    NativeLibraryHelper.copyNativeBinariesLI(scanFile, nativeLibraryDir);
+                    pkg.mScanPath = path;
+                    if ((scanMode & SCAN_NO_DEX) == 0) {
+                        int DexStatus = performDexOptLI(pkg, forceDex);
+                        if (DexStatus == DEX_OPT_FAILED) {
+                            mLastScanError = PackageManager.INSTALL_FAILED_DEXOPT;
+                            return null;
+                        }
+                        if (DexStatus == DEX_OPT_PERFORMED) {
+
+                            // Only attempt to unpack native libraries if dexopt was performed
+                            // TODO, fix this also for Odex
+
+                            Slog.i(TAG, "Unpacking native libraries for " + path);
+                            mInstaller.unlinkNativeLibraryDirectory(dataPathString);
+                            NativeLibraryHelper.copyNativeBinariesLI(scanFile, nativeLibraryDir);
+                        }
+                    }
                 } else {
                     Slog.i(TAG, "Linking native library dir for " + path);
                     mInstaller.linkNativeLibraryDirectory(dataPathString,
@@ -3379,7 +3400,7 @@ class PackageManagerService extends IPackageManager.Stub {
             }
             pkg.mScanPath = path;
 
-            if ((scanMode&SCAN_NO_DEX) == 0) {
+            if ((scanMode & SCAN_NO_DEX) == 0) {
                 if (performDexOptLI(pkg, forceDex) == DEX_OPT_FAILED) {
                     mLastScanError = PackageManager.INSTALL_FAILED_DEXOPT;
                     return null;
@@ -3402,7 +3423,7 @@ class PackageManagerService extends IPackageManager.Stub {
 
         synchronized (mPackages) {
             // We don't expect installation to fail beyond this point,
-            if ((scanMode&SCAN_MONITOR) != 0) {
+            if ((scanMode & SCAN_MONITOR) != 0) {
                 mAppDirs.put(pkg.mPath, pkg);
             }
             // Add the new setting to mSettings
@@ -3416,7 +3437,7 @@ class PackageManagerService extends IPackageManager.Stub {
             if (currentTime != 0) {
                 if (pkgSetting.firstInstallTime == 0) {
                     pkgSetting.firstInstallTime = pkgSetting.lastUpdateTime = currentTime;
-                } else if ((scanMode&SCAN_UPDATE_TIME) != 0) {
+                } else if ((scanMode & SCAN_UPDATE_TIME) != 0) {
                     pkgSetting.lastUpdateTime = currentTime;
                 }
             } else if (pkgSetting.firstInstallTime == 0) {
