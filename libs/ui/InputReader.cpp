@@ -1418,13 +1418,14 @@ bool TouchInputMapper::configureSurfaceLocked() {
     int32_t width, height;
     if (mAssociatedDisplayId >= 0) {
         // Note: getDisplayInfo is non-reentrant so we can continue holding the lock.
+        // getDisplayInfo returns the number of pixels
         if (! getPolicy()->getDisplayInfo(mAssociatedDisplayId, & width, & height, & orientation)) {
             return false;
         }
     } else {
         orientation = InputReaderPolicyInterface::ROTATION_0;
-        width = mRawAxes.x.getRange();
-        height = mRawAxes.y.getRange();
+        width = mRawAxes.x.getRange() + 1;	// range == max - min
+        height = mRawAxes.y.getRange() + 1;	// range == max - min
     }
 
     bool orientationChanged = mLocked.surfaceOrientation != orientation;
@@ -1444,8 +1445,8 @@ bool TouchInputMapper::configureSurfaceLocked() {
         if (mRawAxes.x.valid && mRawAxes.y.valid) {
             mLocked.xOrigin = mRawAxes.x.minValue;
             mLocked.yOrigin = mRawAxes.y.minValue;
-            mLocked.xScale = float(width) / mRawAxes.x.getRange();
-            mLocked.yScale = float(height) / mRawAxes.y.getRange();
+            mLocked.xScale = float(width - 1) / mRawAxes.x.getRange();	// range == max - min
+            mLocked.yScale = float(height - 1) / mRawAxes.y.getRange();	// range == max - min
             mLocked.xPrecision = 1.0f / mLocked.xScale;
             mLocked.yPrecision = 1.0f / mLocked.yScale;
 
@@ -1652,8 +1653,8 @@ void TouchInputMapper::configureVirtualKeysLocked() {
 
     int32_t touchScreenLeft = mRawAxes.x.minValue;
     int32_t touchScreenTop = mRawAxes.y.minValue;
-    int32_t touchScreenWidth = mRawAxes.x.getRange();
-    int32_t touchScreenHeight = mRawAxes.y.getRange();
+    int32_t touchScreenWidth = mRawAxes.x.getRange() + 1;	// range == max - min
+    int32_t touchScreenHeight = mRawAxes.y.getRange() + 1;	// range == max - min
 
     for (size_t i = 0; i < virtualKeyDefinitions.size(); i++) {
         const VirtualKeyDefinition& virtualKeyDefinition =
