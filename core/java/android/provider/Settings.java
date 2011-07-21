@@ -2522,6 +2522,12 @@ public final class Settings {
         public static final String LOCKSCREEN_BACKGROUND = "lockscreen_background";
 
         /**
+         * External BT GPS device
+         * @hide
+         */
+        public static final String EXTERNAL_GPS_BT_DEVICE = "0";
+
+        /**
          * Sets the incoming call accept/reject style
          * @hide
          */
@@ -2551,7 +2557,7 @@ public final class Settings {
           */
          public static final String TRACKBALL_NOTIFICATION_PULSE_ORDER = "trackball_pulse_in_order";
 
-	/**
+    /**
           * Beldn Notification Colors.  The value is boolean (1 or 0).
           * @hide
           */
