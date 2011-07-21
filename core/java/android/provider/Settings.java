@@ -2570,6 +2570,12 @@ public final class Settings {
         public static final String MENU_UNLOCK_SCREEN = "menu_unlock_screen";
 
         /**
+         * External BT GPS device
+         * @hide
+         */
+        public static final String EXTERNAL_GPS_BT_DEVICE = "0";
+
+        /**
          * Whether to enable quiet hours.
          * @hide
          */
