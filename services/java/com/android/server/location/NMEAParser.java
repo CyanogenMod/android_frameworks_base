@@ -77,6 +77,7 @@ public class NMEAParser {
     private float mFixSpeed = 0f;
     private float mFixBearing = 0f;
     private float mFixAccuracy = 0f;
+    private int mFixSatsTracked=0;
     private int mFixQuality = 0;
     /*
     private boolean mHasLongitude = false;
@@ -107,18 +108,21 @@ public class NMEAParser {
 	/**
 	 * resets fix variables
 	 */
-	private void reset() {
+	public void reset() {
 		mFixLongitude = 0.0;
 	    mFixLatitude = 0.0;
 	    mFixAltitude = 0f;
 	    mFixSpeed = 0f;
 	    mFixAccuracy = 0f;
 	    mFixQuality = 0;
+	    mFixSatsTracked = 0;
+	    mSvCount = 0;
 
 		java.util.Arrays.fill(mSvs, 0);
 	    java.util.Arrays.fill(mSnrs, 0f);
 	    java.util.Arrays.fill(mSvElevations, 0f);
 	    java.util.Arrays.fill(mSvAzimuths, 0f);
+	    isValid = false;
 	}
 	
 	
@@ -135,7 +139,7 @@ public class NMEAParser {
 			loc.setLatitude(mFixLatitude);
 			loc.setLongitude(mFixLongitude);
 			Bundle extras = new Bundle();
-			extras.putInt(BUNDLE_SATS, mSvCount);
+			extras.putInt(BUNDLE_SATS, mFixSatsTracked);
 			loc.setExtras(extras);
 			loc.setAccuracy(mFixAccuracy);
 			loc.setAltitude(mFixAltitude);
@@ -301,7 +305,7 @@ Where:
 				mFixDate = parseTimeToDate(tmp[1]);
 				mFixLatitude = parseCoordinate(tmp[2], tmp[3]);
 				mFixLongitude = parseCoordinate(tmp[4], tmp[5]);
-				mSvCount = parseStringToInt(tmp[7]);
+				mFixSatsTracked = parseStringToInt(tmp[7]);
 				mFixAccuracy = parseStringToFloat(tmp[8]);
 				mFixAltitude = parseStringToFloat(tmp[9]);
 				isValid = true;
@@ -403,7 +407,7 @@ Where:
 				int totalSentences = parseStringToInt(tmp[1]);
 				int currSentence = parseStringToInt(tmp[2]);
 				int idx = 0;
-				while ( (currSentence < totalSentences && idx < 4) || idx < (mSvCount % 4) ) {
+				while (currSentence <= totalSentences && idx < 4) {
 					int offset = idx<<2;
 					int base_offset = (currSentence-1)<<2;
 					if (offset+4 < tmp.length)
@@ -413,7 +417,7 @@ Where:
 					if (offset+6 < tmp.length)
 						mSvAzimuths[base_offset + idx] = parseStringToInt(tmp[6 + offset]);
 					if (offset+7 < tmp.length)
-						mSnrs[base_offset + idx] = parseStringToInt(tmp[7 + offset]);
+						mSnrs[base_offset + idx] = parseStringToInt(tmp[7 + offset]);						
 					idx++;
 				}
 			}			
@@ -541,4 +545,7 @@ Where:
 		return mSvMasks;
 	}
 
+	public int getmFixSatsTracked() {
+		return mFixSatsTracked;
+	}
 }

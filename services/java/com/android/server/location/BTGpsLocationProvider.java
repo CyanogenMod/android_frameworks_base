@@ -89,7 +89,6 @@ public class BTGpsLocationProvider  implements LocationProviderInterface {
     private int mTTFF = 0;
     // time we received our last fix
     private long mLastFixTime;
-    private boolean mLastFixStatus = false;
     
     // time for last status update
     private long mStatusUpdateTime = SystemClock.elapsedRealtime();
@@ -132,13 +131,13 @@ public class BTGpsLocationProvider  implements LocationProviderInterface {
         	switch (message) {
         	case GPS_DATA_AVAILABLE:
         		byte[] writeBuf = (byte[]) msg.obj;
+        		int bytes = msg.arg1;
         		String writeMessage = "";
-        		if (writeBuf != null && mEnabled)
-        			writeMessage = new String(writeBuf);
-        		//if (D) Log.d(TAG, writeMessage);
-        		handleNMEAMessages(writeMessage);
-        		//nmeaparser.parse(writeMessage);
-        		java.util.Arrays.fill(writeBuf, (byte) 0);
+        		if (writeBuf != null && mEnabled && bytes > 0) {
+        			writeMessage = new String(writeBuf, 0, bytes);
+        			handleNMEAMessages(writeMessage);
+        			java.util.Arrays.fill(writeBuf, (byte) 0);
+        		}
         		break;
         	case GPS_STATUS_UPDATE:
         		notifyEnableDisableGPS(msg.arg1 == 1);
@@ -272,7 +271,8 @@ public class BTGpsLocationProvider  implements LocationProviderInterface {
         if (D) Log.d(TAG, "mStatus -> temp unavailable");
         mStatus = LocationProvider.TEMPORARILY_UNAVAILABLE;
         if (D) Log.d(TAG, "btservice start");
-        btsvc.start();        
+        btsvc.start();
+        mFixRequestTime = System.currentTimeMillis();
     	String btDevice = Settings.System.getString(mContext.getContentResolver(), Settings.System.EXTERNAL_GPS_BT_DEVICE);
 
         if (D) Log.d(TAG, "Connecting to saved pref: " + btDevice);
@@ -463,10 +463,8 @@ public class BTGpsLocationProvider  implements LocationProviderInterface {
 
         if (!isValid) {
         	if (D) Log.v(TAG, "Waiting for sat fix...");
-        	mLastFixStatus = false;
         	return;
         }
-        mLastFixStatus = true;
         
         synchronized (mLocation) {
         	mLocation.set(loc);
@@ -494,7 +492,7 @@ public class BTGpsLocationProvider  implements LocationProviderInterface {
                     try {
                         listener.mListener.onFirstFix(mTTFF); 
                     } catch (RemoteException e) {
-                        Log.w(TAG, "RemoteException in stopNavigating");
+                        Log.w(TAG, "RemoteException in first fix notification");
                         mListeners.remove(listener);
                         // adjust for size of list changing
                         size--;
@@ -516,11 +514,11 @@ public class BTGpsLocationProvider  implements LocationProviderInterface {
     
     /* report sats status
 	*/ 
-    private void reportSvStatus(int mSvs[], float mSnrs[], 
+    private void reportSvStatus(int svCount, int mSvs[], float mSnrs[], 
             float mSvElevations[],  float mSvAzimuths[], int mSvMasks[], boolean isValid) {
 
-        int svCount = mSvCount;
         
+        if (D) Log.d(TAG,"About to report sat status svcount: " + svCount);
         synchronized(mListeners) {
             int size = mListeners.size();
             for (int i = 0; i < size; i++) {
@@ -542,14 +540,12 @@ public class BTGpsLocationProvider  implements LocationProviderInterface {
         updateStatus(mStatus, Integer.bitCount(mSvMasks[NMEAParser.USED_FOR_FIX_MASK]));
 
         
-        if (mStatus == LocationProvider.AVAILABLE && mLastFixTime > 0 
-        		&& mLastFixStatus && !isValid) {
+        if (mStatus == LocationProvider.AVAILABLE && mTTFF > 0 && !isValid) {
 	            // send an intent to notify that the GPS is no longer receiving fixes.
 	            Intent intent = new Intent(LocationManager.GPS_FIX_CHANGE_ACTION);
 	            intent.putExtra(LocationManager.EXTRA_GPS_ENABLED, false);
 	            mContext.sendBroadcast(intent);
 	            updateStatus(LocationProvider.TEMPORARILY_UNAVAILABLE, mSvCount);
-	            mLastFixStatus = false;
         }
         
         
@@ -646,16 +642,20 @@ public class BTGpsLocationProvider  implements LocationProviderInterface {
 	 */
 	private void handleNMEAMessages(String sentences) {
 		String sentenceArray[] = sentences.split("\r\n");
+		nmeaparser.reset();
 		for (int i = 0; i < sentenceArray.length; i++) {
-			nmeaparser.parseNMEALine(sentenceArray[i]);
+			boolean parsed = nmeaparser.parseNMEALine(sentenceArray[i]);
 			// handle nmea message
 			reportNmea(sentenceArray[i], System.currentTimeMillis());
+			if (D && parsed) Log.d(TAG, "Reported: " + sentenceArray[i]);
 		}
 		// handle location update if valid
 		reportLocation(nmeaparser.getLocation(), nmeaparser.isValid());
-		reportSvStatus(nmeaparser.getmSvs(), nmeaparser.getmSnrs(), 
+		
+		reportSvStatus(nmeaparser.getmSvCount(), nmeaparser.getmSvs(), nmeaparser.getmSnrs(), 
 				nmeaparser.getmSvElevations(), nmeaparser.getmSvAzimuths(), 
 				nmeaparser.getmSvMasks(), nmeaparser.isValid());
+				
 	}
 
 	

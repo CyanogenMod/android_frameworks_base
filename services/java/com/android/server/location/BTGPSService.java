@@ -296,6 +296,7 @@ public class BTGPSService {
                     } else {
                     	msg = mHandler.obtainMessage(BTGpsLocationProvider.GPS_DATA_AVAILABLE, null);
                     }
+                    msg.arg1 = bytes;
                 	mHandler.sendMessage(msg);
                 	
                     try {
