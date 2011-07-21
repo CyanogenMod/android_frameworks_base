@@ -256,6 +256,14 @@ public class LocationManager {
     public LocationManager(ILocationManager service) {
         mService = service;
     }
+    
+    public void setGPSSource(String device) {
+        try {
+            mService.setGPSSource(device);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getMessage());
+        }
+    }
 
     private LocationProvider createProvider(String name, Bundle info) {
         DummyLocationProvider provider =
