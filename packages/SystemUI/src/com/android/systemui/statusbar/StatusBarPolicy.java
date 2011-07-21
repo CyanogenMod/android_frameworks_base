@@ -589,6 +589,8 @@ public class StatusBarPolicy {
 
     private boolean mShowCmBattery;
     private boolean mCmBatteryStatus;
+    // need another var that superceding mPhoneSignalHidden
+    private boolean mShowCmSignal;
 
     class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
@@ -599,6 +601,9 @@ public class StatusBarPolicy {
             ContentResolver resolver = mContext.getContentResolver();
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.STATUS_BAR_CM_BATTERY), false, this);
+
+            resolver.registerContentObserver(Settings.System
+                    .getUriFor(Settings.System.STATUS_BAR_CM_SIGNAL_TEXT), false, this);
         }
 
         @Override public void onChange(boolean selfChange) {
@@ -1097,6 +1102,11 @@ public class StatusBarPolicy {
     }
 
     private final void updateSignalStrength() {
+        if (mShowCmSignal) {
+            mService.setIconVisibility("phone_signal", false);
+            return;
+        }
+
         int iconLevel = -1;
         int[] iconList;
 
@@ -1583,5 +1593,11 @@ public class StatusBarPolicy {
                 Settings.System.STATUS_BAR_CM_BATTERY, 0) == 1);
         mCmBatteryStatus = !mShowCmBattery;
         mService.setIconVisibility("battery", !mShowCmBattery);
+
+      //0 will hide the cmsignaltext and show the signal bars
+       mShowCmSignal = Settings.System.getInt(mContext.getContentResolver(),
+       Settings.System.STATUS_BAR_CM_SIGNAL_TEXT, 0) != 0;
+       mService.setIconVisibility("phone_signal", !mShowCmSignal);
+
     }
 }
