@@ -2551,18 +2551,29 @@ public final class Settings {
           */
          public static final String TRACKBALL_NOTIFICATION_PULSE_ORDER = "trackball_pulse_in_order";
 
-	/**
+    /**
           * Beldn Notification Colors.  The value is boolean (1 or 0).
           * @hide
           */
          public static final String TRACKBALL_NOTIFICATION_BLEND_COLOR = "trackball_blend_color";
 
         /**
-         * Trackball Notification Colors. The value is a String, containing a list of packages:
-         * pkg=color=blink=mode=category|pkg=color=blink=mode=category|...
+         * Trackball Notification Colors. The value is String  pkg=color|pkg=color
          * @hide
          */
-        public static final String NOTIFICATION_PACKAGE_COLORS = "notification_custom_led_colors";
+        public static final String NOTIFICATION_PACKAGE_COLORS = "|";
+
+        /**
+         * Trackball Notification List. The value is String  pkg|pkg
+         * @hide
+         */
+        public static final String NOTIFICATION_PACKAGE_LIST = "|";
+
+        /**
+         * Trackball Notification Colors Debugging. The value is boolean (1 or 0)
+         * @hide
+         */
+        public static final String NOTIFICATION_PACKAGE_COLORS_GET_PACK = "0";
 
         /**
          * Whether to unlock the menu key.  The value is boolean (1 or 0).
