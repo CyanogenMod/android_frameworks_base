@@ -706,6 +706,7 @@ void MatroskaExtractor::addTracks() {
 
     for (size_t index = 0; index < tracks->GetTracksCount(); ++index) {
         const mkvparser::Track *track = tracks->GetTrackByIndex(index);
+        if (!track) continue; // we can get back a NULL (it happens...)
 
         const char *const codecID = track->GetCodecId();
         LOGV("codec id = %s", codecID);
