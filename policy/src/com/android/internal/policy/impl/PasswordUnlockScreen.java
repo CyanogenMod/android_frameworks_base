@@ -91,7 +91,8 @@ public class PasswordUnlockScreen extends LinearLayout implements KeyguardScreen
             layoutInflater.inflate(R.layout.keyguard_screen_password_landscape, this, true);
         }
         ViewGroup lockWallpaper = (ViewGroup) findViewById(R.id.password);
-        LockScreen.setBackground(getContext(), lockWallpaper);
+        if(lockWallpaper != null)
+            LockScreen.setBackground(getContext(), lockWallpaper);
         final int quality = lockPatternUtils.getKeyguardStoredPasswordQuality();
         final boolean isAlpha = DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC == quality
                 || DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC == quality;

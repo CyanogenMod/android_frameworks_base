@@ -300,7 +300,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             inflater.inflate(R.layout.keyguard_screen_tab_unlock_land, this, true);
         }
         ViewGroup lockWallpaper = (ViewGroup) findViewById(R.id.root);
-        setBackground(mContext,lockWallpaper);
+        if(lockWallpaper != null)
+            setBackground(mContext,lockWallpaper);
         mCarrier = (TextView) findViewById(R.id.carrier);
         // Required for Marquee to work
         mCarrier.setSelected(true);

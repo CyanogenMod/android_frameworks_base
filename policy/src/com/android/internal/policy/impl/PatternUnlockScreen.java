@@ -186,7 +186,8 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
             inflater.inflate(R.layout.keyguard_screen_unlock_landscape, this, true);
         }
         ViewGroup lockWallpaper = (ViewGroup) findViewById(R.id.pattern);
-        LockScreen.setBackground(getContext(), lockWallpaper);
+        if(lockWallpaper != null)
+            LockScreen.setBackground(getContext(), lockWallpaper);
         mCarrier = (TextView) findViewById(R.id.carrier);
         mDate = (TextView) findViewById(R.id.date);
 
