@@ -796,9 +796,18 @@ int EventHub::openDevice(const char *deviceName) {
         if (!mHaveFirstKeyboard && !defaultKeymap && strstr(name, "-keypad")) {
             // the built-in keyboard has a well-known device ID of 0,
             // this device better not go away.
+            char keypad_type[PROPERTY_VALUE_MAX];
             mHaveFirstKeyboard = true;
             mFirstKeyboardId = device->id;
-            property_set("hw.keyboards.0.devname", name);
+            if(property_get("persist.sys.keypad_type", keypad_type, 0)) {
+                // append keypad type to the devname so that the correct kcm
+                // is loaded later on
+                snprintf(tmpfn, sizeof(tmpfn), "%s-%s", name, keypad_type);
+            } else {
+                // use devname unmodified
+                strcpy(tmpfn, name);
+            }
+            property_set("hw.keyboards.0.devname", tmpfn);
         } else {
             // ensure mFirstKeyboardId is set to -something-.
             if (mFirstKeyboardId == 0) {
