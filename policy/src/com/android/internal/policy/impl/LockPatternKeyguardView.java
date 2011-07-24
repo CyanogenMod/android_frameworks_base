@@ -685,7 +685,8 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
             return Mode.LockScreen;
         } else {
             // Disable LockScreen if security lockscreen is active and option in CMParts set
-            if (mLockscreenDisableOnSecurity && isSecure()) {
+            // Also don't show the slider lockscreen if pin is required
+            if (mLockscreenDisableOnSecurity && isSecure() || (simState == IccCard.State.PIN_REQUIRED)) {
                 return Mode.UnlockScreen;
             } else {
                 return Mode.LockScreen;
