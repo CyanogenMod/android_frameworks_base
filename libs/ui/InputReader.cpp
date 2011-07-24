@@ -551,10 +551,16 @@ int32_t InputReader::getState(int32_t deviceId, uint32_t sourceMask, int32_t cod
             size_t numDevices = mDevices.size();
             for (size_t i = 0; i < numDevices; i++) {
                 InputDevice* device = mDevices.valueAt(i);
+                InputDeviceInfo deviceInfo;
+                bool isKeyboard = false;
+                device->getDeviceInfo( &deviceInfo );
+                isKeyboard = (deviceInfo.getKeyboardType() == AINPUT_KEYBOARD_TYPE_ALPHABETIC);
                 if (! device->isIgnored() && sourcesMatchMask(device->getSources(), sourceMask)) {
                     int32_t state = (device->*getStateFunc)(sourceMask, code);
-                    if (state > result) {
+                    if (isKeyboard && state > result) {
                         result = state;
+                    } else if ( state >= AKEY_STATE_DOWN ) {
+                        return state;
                     }
                 }
             }
