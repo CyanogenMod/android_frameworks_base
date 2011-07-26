@@ -98,11 +98,11 @@ public final class CreateInfo implements ICreateInfo {
         "android.content.res.Resources$Theme#resolveAttribute",
         "android.graphics.BitmapFactory#finishDecode",
         "android.os.Handler#sendMessageAtTime",
+        "android.os.HandlerThread#run",
         "android.os.Build#getString",
         "android.view.LayoutInflater#parseInclude",
         "android.view.View#isInEditMode",
         "com.android.internal.util.XmlUtils#convertValueToInt",
-        // TODO: comment out once DelegateClass is working
     };
 
     /**

@@ -16,9 +16,11 @@
 
 package com.android.layoutlib.bridge.android;
 
+import com.android.ide.common.rendering.api.ILayoutPullParser;
 import com.android.ide.common.rendering.api.IProjectCallback;
 import com.android.ide.common.rendering.api.LayoutLog;
 import com.android.ide.common.rendering.api.RenderResources;
+import com.android.ide.common.rendering.api.ResourceReference;
 import com.android.ide.common.rendering.api.ResourceValue;
 import com.android.ide.common.rendering.api.StyleResourceValue;
 import com.android.layoutlib.bridge.Bridge;
@@ -26,6 +28,10 @@ import com.android.layoutlib.bridge.BridgeConstants;
 import com.android.layoutlib.bridge.impl.Stack;
 import com.android.resources.ResourceType;
 import com.android.util.Pair;
+
+import org.kxml2.io.KXmlParser;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -57,6 +63,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -265,6 +272,107 @@ public final class BridgeContext extends Activity {
     }
 
 
+    public ResourceReference resolveId(int id) {
+        // first get the String related to this id in the framework
+        Pair<ResourceType, String> resourceInfo = Bridge.resolveResourceId(id);
+
+        if (resourceInfo != null) {
+            return new ResourceReference(resourceInfo.getSecond(), true);
+        }
+
+        // didn't find a match in the framework? look in the project.
+        if (mProjectCallback != null) {
+            resourceInfo = mProjectCallback.resolveResourceId(id);
+
+            if (resourceInfo != null) {
+                return new ResourceReference(resourceInfo.getSecond(), false);
+            }
+        }
+
+        return null;
+    }
+
+    public Pair<View, Boolean> inflateView(ResourceReference resource, ViewGroup parent,
+            boolean attachToRoot, boolean skipCallbackParser) {
+        String layoutName = resource.getName();
+        boolean isPlatformLayout = resource.isFramework();
+
+        if (isPlatformLayout == false && skipCallbackParser == false) {
+            // check if the project callback can provide us with a custom parser.
+            ILayoutPullParser parser = mProjectCallback.getParser(layoutName);
+            if (parser != null) {
+                BridgeXmlBlockParser blockParser = new BridgeXmlBlockParser(parser,
+                        this, resource.isFramework());
+                try {
+                    pushParser(blockParser);
+                    return Pair.of(
+                            mBridgeInflater.inflate(blockParser, parent, attachToRoot),
+                            true);
+                } finally {
+                    popParser();
+                }
+            }
+        }
+
+        ResourceValue resValue;
+        if (resource instanceof ResourceValue) {
+            resValue = (ResourceValue) resource;
+        } else {
+            if (isPlatformLayout) {
+                resValue = mRenderResources.getFrameworkResource(ResourceType.LAYOUT,
+                        resource.getName());
+            } else {
+                resValue = mRenderResources.getProjectResource(ResourceType.LAYOUT,
+                        resource.getName());
+            }
+        }
+
+        if (resValue != null) {
+
+            File xml = new File(resValue.getValue());
+            if (xml.isFile()) {
+                // we need to create a pull parser around the layout XML file, and then
+                // give that to our XmlBlockParser
+                try {
+                    KXmlParser parser = new KXmlParser();
+                    parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
+                    parser.setInput(new FileInputStream(xml), "UTF-8"); //$NON-NLS-1$);
+
+                    // set the resource ref to have correct view cookies
+                    mBridgeInflater.setResourceReference(resource);
+
+                    BridgeXmlBlockParser blockParser = new BridgeXmlBlockParser(parser,
+                            this, resource.isFramework());
+                    try {
+                        pushParser(blockParser);
+                        return Pair.of(
+                                mBridgeInflater.inflate(blockParser, parent, attachToRoot),
+                                false);
+                    } finally {
+                        popParser();
+                    }
+                } catch (XmlPullParserException e) {
+                    Bridge.getLog().error(LayoutLog.TAG_BROKEN,
+                            "Failed to configure parser for " + xml, e, null /*data*/);
+                    // we'll return null below.
+                } catch (FileNotFoundException e) {
+                    // this shouldn't happen since we check above.
+                } finally {
+                    mBridgeInflater.setResourceReference(null);
+                }
+            } else {
+                Bridge.getLog().error(LayoutLog.TAG_BROKEN,
+                        String.format("File %s is missing!", xml), null);
+            }
+        } else {
+            Bridge.getLog().error(LayoutLog.TAG_BROKEN,
+                    String.format("Layout %s%s does not exist.", isPlatformLayout ? "android:" : "",
+                            layoutName), null);
+        }
+
+        return Pair.of(null, false);
+    }
+
     // ------------- Activity Methods
 
     @Override
@@ -400,14 +508,13 @@ public final class BridgeContext extends Activity {
         BridgeTypedArray ta = ((BridgeResources) mSystemResources).newTypeArray(attrs.length,
                 isPlatformFile);
 
-        // resolve the defStyleAttr value into a IStyleResourceValue
-        StyleResourceValue defStyleValues = null;
-
         // look for a custom style.
         String customStyle = null;
         if (set != null) {
             customStyle = set.getAttributeValue(null /* namespace*/, "style");
         }
+
+        StyleResourceValue customStyleValues = null;
         if (customStyle != null) {
             ResourceValue item = mRenderResources.findResValue(customStyle,
                     false /*forceFrameworkOnly*/);
@@ -416,75 +523,76 @@ public final class BridgeContext extends Activity {
             item = mRenderResources.resolveResValue(item);
 
             if (item instanceof StyleResourceValue) {
-                defStyleValues = (StyleResourceValue)item;
+                customStyleValues = (StyleResourceValue)item;
             }
         }
 
-        if (defStyleValues == null) {
-            if (defStyleAttr != 0) {
-                // get the name from the int.
-                String defStyleName = searchAttr(defStyleAttr);
+        // resolve the defStyleAttr value into a IStyleResourceValue
+        StyleResourceValue defStyleValues = null;
 
-                if (defaultPropMap != null) {
-                    defaultPropMap.put("style", defStyleName);
+        if (defStyleAttr != 0) {
+            // get the name from the int.
+            String defStyleName = searchAttr(defStyleAttr);
+
+            if (defaultPropMap != null) {
+                defaultPropMap.put("style", defStyleName);
+            }
+
+            // look for the style in the current theme, and its parent:
+            ResourceValue item = mRenderResources.findItemInTheme(defStyleName);
+
+            if (item != null) {
+                // item is a reference to a style entry. Search for it.
+                item = mRenderResources.findResValue(item.getValue(),
+                        false /*forceFrameworkOnly*/);
+
+                if (item instanceof StyleResourceValue) {
+                    defStyleValues = (StyleResourceValue)item;
                 }
+            } else {
+                Bridge.getLog().error(null,
+                        String.format(
+                                "Failed to find style '%s' in current theme", defStyleName),
+                        null /*data*/);
+            }
+        } else if (defStyleRes != 0) {
+            Pair<ResourceType, String> value = Bridge.resolveResourceId(defStyleRes);
+            if (value == null) {
+                value = mProjectCallback.resolveResourceId(defStyleRes);
+            }
 
-                // look for the style in the current theme, and its parent:
-                ResourceValue item = mRenderResources.findItemInTheme(defStyleName);
-
-                if (item != null) {
-                    // item is a reference to a style entry. Search for it.
-                    item = mRenderResources.findResValue(item.getValue(),
-                            false /*forceFrameworkOnly*/);
-
-                    if (item instanceof StyleResourceValue) {
-                        defStyleValues = (StyleResourceValue)item;
-                    }
-                } else {
-                    Bridge.getLog().error(null,
-                            String.format(
-                                    "Failed to find style '%s' in current theme", defStyleName),
-                            null /*data*/);
-                }
-            } else if (defStyleRes != 0) {
-                Pair<ResourceType, String> value = Bridge.resolveResourceId(defStyleRes);
-                if (value == null) {
-                    value = mProjectCallback.resolveResourceId(defStyleRes);
-                }
-
-                if (value != null) {
-                    if (value.getFirst() == ResourceType.STYLE) {
-                        // look for the style in the current theme, and its parent:
-                        ResourceValue item = mRenderResources.findItemInTheme(value.getSecond());
-                        if (item != null) {
-                            if (item instanceof StyleResourceValue) {
-                                if (defaultPropMap != null) {
-                                    defaultPropMap.put("style", item.getName());
-                                }
-
-                                defStyleValues = (StyleResourceValue)item;
+            if (value != null) {
+                if (value.getFirst() == ResourceType.STYLE) {
+                    // look for the style in the current theme, and its parent:
+                    ResourceValue item = mRenderResources.findItemInTheme(value.getSecond());
+                    if (item != null) {
+                        if (item instanceof StyleResourceValue) {
+                            if (defaultPropMap != null) {
+                                defaultPropMap.put("style", item.getName());
                             }
-                        } else {
-                            Bridge.getLog().error(null,
-                                    String.format(
-                                            "Style with id 0x%x (resolved to '%s') does not exist.",
-                                            defStyleRes, value.getSecond()),
-                                    null /*data*/);
+
+                            defStyleValues = (StyleResourceValue)item;
                         }
                     } else {
                         Bridge.getLog().error(null,
                                 String.format(
-                                        "Resouce id 0x%x is not of type STYLE (instead %s)",
-                                        defStyleRes, value.getFirst().toString()),
+                                        "Style with id 0x%x (resolved to '%s') does not exist.",
+                                        defStyleRes, value.getSecond()),
                                 null /*data*/);
                     }
                 } else {
                     Bridge.getLog().error(null,
                             String.format(
-                                    "Failed to find style with id 0x%x in current theme",
-                                    defStyleRes),
+                                    "Resouce id 0x%x is not of type STYLE (instead %s)",
+                                    defStyleRes, value.getFirst().toString()),
                             null /*data*/);
                 }
+            } else {
+                Bridge.getLog().error(null,
+                        String.format(
+                                "Failed to find style with id 0x%x in current theme",
+                                defStyleRes),
+                        null /*data*/);
             }
         }
 
@@ -509,8 +617,13 @@ public final class BridgeContext extends Activity {
                 if (value == null) {
                     ResourceValue resValue = null;
 
-                    // look for the value in the defStyle first (and its parent if needed)
-                    if (defStyleValues != null) {
+                    // look for the value in the custom style first (and its parent if needed)
+                    if (customStyleValues != null) {
+                        resValue = mRenderResources.findItemInStyle(customStyleValues, name);
+                    }
+
+                    // then look for the value in the default Style (and its parent if needed)
+                    if (resValue == null && defStyleValues != null) {
                         resValue = mRenderResources.findItemInStyle(defStyleValues, name);
                     }
 

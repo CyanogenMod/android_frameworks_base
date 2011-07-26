@@ -128,6 +128,7 @@
 
     <!-- Regex array of allowable upstream ifaces for tethering - for example if you want
          tethering on a new interface called "foo2" add <item>"foo\\d"</item> to the array -->
+    <!-- Interfaces will be prioritized according to the order listed -->
     <string-array translatable="false" name="config_tether_upstream_regexs">
     </string-array>
 
@@ -587,4 +588,15 @@
     <string name="config_wimaxServiceClassname"></string>
     <!-- Name of the wimax state tracker clas -->
     <string name="config_wimaxStateTrackerClassname"></string>
+
+    <!-- Set to true if the RSSI should always display CDMA signal strength
+         even on EVDO -->
+    <bool name="config_alwaysUseCdmaRssi">false</bool>
+
+    <!-- If this value is true, duplicate Source/Destination port fields
+         in WDP header of some carriers OMADM wap push are supported.
+         ex: MSGTYPE-TotalSegments-CurrentSegment
+             -SourcePortDestPort-SourcePortDestPort-OMADM PDU
+         If false, not supported. -->
+    <bool name="config_duplicate_port_omadm_wappush">false</bool>
 </resources>

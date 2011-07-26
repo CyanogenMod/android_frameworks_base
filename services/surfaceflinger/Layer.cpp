@@ -60,6 +60,7 @@ Layer::Layer(SurfaceFlinger* flinger,
         mWidth(0), mHeight(0), mNeedsScaling(false), mFixedSize(false),
         mBypassState(false)
 {
+    setDestroyer(this);
 }
 
 Layer::~Layer()
@@ -74,6 +75,10 @@ Layer::~Layer()
     if (ourClient != 0) {
         ourClient->detachLayer(this);
     }
+}
+
+void Layer::destroy(RefBase const* base) {
+    mFlinger->destroyLayer(static_cast<LayerBase const*>(base));
 }
 
 status_t Layer::setToken(const sp<UserClient>& userClient,
@@ -121,22 +126,6 @@ void Layer::onRemoved()
 sp<LayerBaseClient::Surface> Layer::createSurface() const
 {
     return mSurface;
-}
-
-status_t Layer::ditch()
-{
-    // NOTE: Called from the main UI thread
-
-    // the layer is not on screen anymore. free as much resources as possible
-    mFreezeLock.clear();
-
-    EGLDisplay dpy(mFlinger->graphicPlane(0).getEGLDisplay());
-    mBufferManager.destroy(dpy);
-    mSurface.clear();
-
-    Mutex::Autolock _l(mLock);
-    mWidth = mHeight = 0;
-    return NO_ERROR;
 }
 
 status_t Layer::setBuffers( uint32_t w, uint32_t h,
