@@ -30,6 +30,8 @@ import android.text.style.*;
 import android.text.method.TextKeyListener;
 import android.view.KeyEvent;
 
+import java.text.Normalizer;
+
 /**
  * A base class that manages text layout in visual elements on 
  * the screen. 
@@ -1159,14 +1161,37 @@ public abstract class Layout {
             return 0;
 
         CharSequence text = mText;
-        char c = text.charAt(offset);
 
-        if (c >= '\uDC00' && c <= '\uDFFF') {
-            char c1 = text.charAt(offset - 1);
+        do {
+            char c = text.charAt(offset);
+            int num;
 
-            if (c1 >= '\uD800' && c1 <= '\uDBFF')
+            if (c >= '\uDC00' && c <= '\uDFFF') {
+                char c1 = text.charAt(offset - 1);
+
+                if (c1 < '\uD800' || c1 > '\uDBFF') break;
                 offset -= 1;
-        }
+                if (offset == 0) break;
+
+                num = 2;
+            } else if (c >= '\uD800' && c <= '\uDBFF') {
+                if (offset == text.length() - 1) break;
+                char c1 = text.charAt(offset + 1);
+                if (c1 < '\uDC00' || c1 > '\uDFFF') break;
+                num = 2;
+            } else {
+                num = 1;
+            }
+
+            String normalized = Normalizer.normalize(text.subSequence(offset, offset + num),
+                                                        Normalizer.Form.NFKD);
+            int codePoint = normalized.codePointAt(0);
+
+            if (Character.getDirectionality(codePoint) != Character.DIRECTIONALITY_NONSPACING_MARK)
+                break;
+
+            offset -= 1;
+        } while (offset > 0);
 
         if (mSpannedText) {
             ReplacementSpan[] spans = ((Spanned) text).getSpans(offset, offset,
