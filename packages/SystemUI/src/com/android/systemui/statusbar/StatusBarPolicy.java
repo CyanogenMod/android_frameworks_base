@@ -1102,30 +1102,8 @@ public class StatusBarPolicy {
     }
 
     private final void updateSignalStrength() {
-        if (mShowCmSignal) {
-            mService.setIconVisibility("phone_signal", false);
-            return;
-        }
-
         int iconLevel = -1;
         int[] iconList;
-
-        // Display signal strength while in "emergency calls only" mode
-        if (mServiceState == null || (!hasService() && !mServiceState.isEmergencyOnly())) {
-            //Slog.d(TAG, "updateSignalStrength: no service");
-            if (Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.AIRPLANE_MODE_ON, 0) == 1) {
-                mPhoneSignalIconId = R.drawable.stat_sys_signal_flightmode;
-            } else {
-                mPhoneSignalIconId = R.drawable.stat_sys_signal_null;
-            }
-            mService.setIcon("phone_signal", mPhoneSignalIconId, 0);
-            // set phone_signal visibility false if hidden
-            if (mPhoneSignalHidden) {
-                mService.setIconVisibility("phone_signal", false);
-            }
-            return;
-        }
 
         if (!isCdma()) {
             int asu = mSignalStrength.getGsmSignalStrength();
@@ -1146,6 +1124,12 @@ public class StatusBarPolicy {
             } else {
                 iconList = sSignalImages[mInetCondition];
             }
+
+            int dbm = -113 + (2 * asu);
+            Intent dbmIntent = new Intent();
+            dbmIntent.putExtra("dbm", dbm);
+            dbmIntent.setAction(Intent.ACTION_SIGNAL_DBM_CHANGED);
+            mContext.sendBroadcast(dbmIntent);
         } else {
             iconList = sSignalImages[mInetCondition];
 
@@ -1169,6 +1153,32 @@ public class StatusBarPolicy {
                 }
             }
         }
+
+        // we move this right below the signal calculations so the
+        //    signal bars don't show up after a signal update
+        if (mShowCmSignal) {
+            mService.setIconVisibility("phone_signal", false);
+            return;
+        }
+
+        // then go on to change the icon into its respective state
+        // Display signal strength while in "emergency calls only" mode
+        if (mServiceState == null || (!hasService() && !mServiceState.isEmergencyOnly())) {
+            //Slog.d(TAG, "updateSignalStrength: no service");
+            if (Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.AIRPLANE_MODE_ON, 0) == 1) {
+                mPhoneSignalIconId = R.drawable.stat_sys_signal_flightmode;
+            } else {
+                mPhoneSignalIconId = R.drawable.stat_sys_signal_null;
+            }
+            mService.setIcon("phone_signal", mPhoneSignalIconId, 0);
+            // set phone_signal visibility false if hidden
+            if (mPhoneSignalHidden) {
+                mService.setIconVisibility("phone_signal", false);
+            }
+            return;
+        }
+
         mPhoneSignalIconId = iconList[iconLevel];
         mService.setIcon("phone_signal", mPhoneSignalIconId, 0);
     }
@@ -1192,6 +1202,11 @@ public class StatusBarPolicy {
         else if (cdmaEcio >= -150) levelEcio = 1;
         else levelEcio = 0;
 
+        Intent dbmIntent = new Intent();
+        dbmIntent.putExtra("dbm", cdmaDbm);
+        dbmIntent.setAction(Intent.ACTION_SIGNAL_DBM_CHANGED);
+        mContext.sendBroadcast(dbmIntent);
+
         return (levelDbm < levelEcio) ? levelDbm : levelEcio;
     }
 
@@ -1212,6 +1227,11 @@ public class StatusBarPolicy {
         else if (evdoSnr >= 3) levelEvdoSnr = 2;
         else if (evdoSnr >= 1) levelEvdoSnr = 1;
         else levelEvdoSnr = 0;
+
+        Intent dbmIntent = new Intent();
+        dbmIntent.putExtra("dbm", evdoDbm);
+        dbmIntent.setAction(Intent.ACTION_SIGNAL_DBM_CHANGED);
+        mContext.sendBroadcast(dbmIntent);
 
         return (levelEvdoDbm < levelEvdoSnr) ? levelEvdoDbm : levelEvdoSnr;
     }
