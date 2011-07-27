@@ -146,9 +146,7 @@ private:
     sp<MediaSource> mSource;
     Vector<CodecSpecificData *> mCodecSpecificData;
     size_t mCodecSpecificDataIndex;
-    sp<IMemoryHeap> mPmemInfo;
     sp<MemoryDealer> mDealer[2];
-
     State mState;
     Vector<BufferInfo> mPortBuffers[2];
     PortStatus mPortStatus[2];
@@ -161,13 +159,13 @@ private:
     ReadOptions::SeekMode mSeekMode;
     int64_t mTargetTimeUs;
     int64_t mSkipTimeUs;
-
     MediaBuffer *mLeftOverBuffer;
+    bool mPaused;
+    sp<IMemoryHeap> mPmemInfo;
 
     Mutex mLock;
-    Condition mAsyncCompletion;
 
-    bool mPaused;
+    Condition mAsyncCompletion;
 
     // A list of indices into mPortStatus[kPortIndexOutput] filled with data.
     List<size_t> mFilledBuffers;
