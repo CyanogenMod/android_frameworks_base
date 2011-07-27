@@ -1918,6 +1918,12 @@ public class Intent implements Parcelable, Cloneable {
      */
     public static final String ACTION_APP_LAUNCH_FAILURE_RESET = "com.tmobile.intent.action.APP_LAUNCH_FAILURE_RESET";
 
+    /**
+     * Broadcast Action: Broadcast a new dBm value
+     * @hide
+     */
+    public static final String ACTION_SIGNAL_DBM_CHANGED = "com.cyanogenmod.intent.action.DBM_SIGNAL_CHANGED";
+
     // ---------------------------------------------------------------------
     // ---------------------------------------------------------------------
     // Standard intent categories (see addCategory()).

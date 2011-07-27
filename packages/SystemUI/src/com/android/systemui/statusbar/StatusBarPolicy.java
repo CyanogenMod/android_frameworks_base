@@ -1102,6 +1102,7 @@ public class StatusBarPolicy {
     }
 
     private final void updateSignalStrength() {
+        updateSignalStrengthDbm();
         if (mShowCmSignal) {
             mService.setIconVisibility("phone_signal", false);
             return;
@@ -1214,6 +1215,24 @@ public class StatusBarPolicy {
         else levelEvdoSnr = 0;
 
         return (levelEvdoDbm < levelEvdoSnr) ? levelEvdoDbm : levelEvdoSnr;
+    }
+
+    public void updateSignalStrengthDbm() {
+        int dBm = -1;
+
+        if(!mSignalStrength.isGsm()) {
+            dBm = mSignalStrength.getCdmaDbm();
+        } else {
+            int gsmSignalStrength = mSignalStrength.getGsmSignalStrength();
+            int asu = (gsmSignalStrength == 99 ? -1 : gsmSignalStrength);
+            if (asu != -1) {
+                dBm = -113 + 2*asu;
+            }
+        }
+
+        Intent dbmIntent = new Intent(Intent.ACTION_SIGNAL_DBM_CHANGED);
+        dbmIntent.putExtra("dbm", dBm);
+        mContext.sendBroadcast(dbmIntent);
     }
 
     private final void updateDataNetType(int net) {
