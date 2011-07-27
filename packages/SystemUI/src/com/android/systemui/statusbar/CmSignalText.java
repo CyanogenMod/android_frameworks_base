@@ -14,8 +14,11 @@
 
 package com.android.systemui.statusbar;
 
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.ContentObserver;
 import android.os.Handler;
 import android.provider.Settings;
@@ -29,6 +32,9 @@ import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.TextView;
+
+import java.util.Calendar;
+import java.util.TimeZone;
 
 public class CmSignalText extends TextView {
 
@@ -57,10 +63,6 @@ public class CmSignalText extends TextView {
 
     public CmSignalText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).listen(
-                mPhoneStateListener, PhoneStateListener.LISTEN_SERVICE_STATE
-                        | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-
         mHandler = new Handler();
         SettingsObserver settingsObserver = new SettingsObserver(mHandler);
         settingsObserver.observe();
@@ -74,7 +76,10 @@ public class CmSignalText extends TextView {
 
         if (!mAttached) {
             mAttached = true;
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Intent.ACTION_SIGNAL_DBM_CHANGED);
 
+            getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
         }
     }
 
@@ -85,6 +90,17 @@ public class CmSignalText extends TextView {
             mAttached = false;
         }
     }
+
+    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(Intent.ACTION_SIGNAL_DBM_CHANGED)) {
+                dBm = intent.getIntExtra("dbm", 0);
+            }
+            updateSettings();
+        }
+    };
 
     class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
@@ -135,26 +151,4 @@ public class CmSignalText extends TextView {
             this.setVisibility(View.GONE);
         }
     }
-
-    /*
-     * Phone listener to update signal information
-     */
-    private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
-        @Override
-        public void onSignalStrengthsChanged(SignalStrength signalStrength) {
-            signal = signalStrength;
-
-            if (signal != null) {
-                ASU = signal.getGsmSignalStrength();
-            }
-            dBm = -113 + (2 * ASU);
-
-            // update text if it's visible
-            if (mAttached)
-                updateSignalText();
-
-        }
-
-    };
-
 }
