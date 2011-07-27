@@ -57,10 +57,6 @@ public class CmSignalText extends TextView {
 
     public CmSignalText(Context context, AttributeSet attrs) {
         super(context, attrs);
-        ((TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE)).listen(
-                mPhoneStateListener, PhoneStateListener.LISTEN_SERVICE_STATE
-                        | PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-
         mHandler = new Handler();
         SettingsObserver settingsObserver = new SettingsObserver(mHandler);
         settingsObserver.observe();
@@ -96,6 +92,9 @@ public class CmSignalText extends TextView {
             resolver.registerContentObserver(
                     Settings.System.getUriFor(Settings.System.STATUS_BAR_CM_SIGNAL_TEXT), false,
                     this);
+
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.PHONE_DBM_LEVEL), false, this);
         }
 
         @Override
@@ -112,6 +111,9 @@ public class CmSignalText extends TextView {
     final void updateSignalText() {
         style = Settings.System.getInt(getContext().getContentResolver(),
                 Settings.System.STATUS_BAR_CM_SIGNAL_TEXT, STYLE_HIDE);
+
+        dBm = Settings.System.getInt(getContext().getContentResolver(),
+                Settings.System.PHONE_DBM_LEVEL, 0);
 
         if (style == STYLE_SHOW) {
             this.setVisibility(View.VISIBLE);
@@ -135,26 +137,4 @@ public class CmSignalText extends TextView {
             this.setVisibility(View.GONE);
         }
     }
-
-    /*
-     * Phone listener to update signal information
-     */
-    private PhoneStateListener mPhoneStateListener = new PhoneStateListener() {
-        @Override
-        public void onSignalStrengthsChanged(SignalStrength signalStrength) {
-            signal = signalStrength;
-
-            if (signal != null) {
-                ASU = signal.getGsmSignalStrength();
-            }
-            dBm = -113 + (2 * ASU);
-
-            // update text if it's visible
-            if (mAttached)
-                updateSignalText();
-
-        }
-
-    };
-
 }

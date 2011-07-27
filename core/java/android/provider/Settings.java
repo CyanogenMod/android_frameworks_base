@@ -2782,6 +2782,12 @@ public final class Settings {
         public static final String CAMBTN_MUSIC_CONTROLS = "cambtn_music_controls";
 
         /**
+         * Stores the phones dBm level, used to show dBm text in the status bar.
+         * @hide
+         */
+        public static final String PHONE_DBM_LEVEL = "phone_cm_dbm_level";
+
+        /**
          * Whether the phone goggles mode is enabled or not.
          * @hide
          */
