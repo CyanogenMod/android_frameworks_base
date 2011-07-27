@@ -19,6 +19,7 @@ package android.app;
 import java.io.FileOutputStream;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Binder;
 import android.os.RemoteException;
 import android.os.Handler;
@@ -63,6 +64,15 @@ public class NotificationManager
     private static boolean DEBUG = false;
     private static boolean localLOGV = DEBUG || android.util.Config.LOGV;
 
+    /** @hide */
+    public static final String ACTION_NOTIFY = "android.app.NotificationManager.ACTION_NOTIFY";
+    /** @hide */
+    public static final String EXTRA_PACKAGE = "android.app.NotificationManager.EXTRA_PACKAGE";
+    /** @hide */
+    public static final String EXTRA_USES_LIGHT = "android.app.NotificationManager.EXTRA_USES_LIGHT";
+    /** @hide */
+    public static final String EXTRA_IS_ONGOING = "android.app.NotificationManager.EXTRA_IS_ONGOING";
+
     private static INotificationManager sService;
 
     /** @hide */
@@ -94,21 +104,6 @@ public class NotificationManager
         notify(null, id, notification);
     }
 
-    private void updatePackageList() {
-        try {
-            if (mContext.getPackageName().equals("com.cyanogenmod.cmparts")) {
-                return;
-            }
-            //File file = new File(appContext.getFilesDir(), "trackball_lights");
-            FileOutputStream fos = mContext.openFileOutput("trackball_lights", Context.MODE_WORLD_READABLE);
-            String blank = "yes";
-            fos.write(blank.getBytes());
-            fos.close();
-        } catch(Exception e) {
-            Log.d("WriteApps", "Error: " + e.toString());
-        }
-    }
-
     /**
      * Persistent notification on the status bar,
      *
@@ -124,9 +119,15 @@ public class NotificationManager
         int[] idOut = new int[1];
         INotificationManager service = getService();
         String pkg = mContext.getPackageName();
-        if ((notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0) {
-            updatePackageList();
-        }
+
+        boolean usesLight = (notification.flags & Notification.FLAG_SHOW_LIGHTS) != 0;
+        boolean isOngoing = (notification.flags & Notification.FLAG_ONGOING_EVENT) != 0;
+        Intent notifyIntent = new Intent(ACTION_NOTIFY);
+        notifyIntent.putExtra(EXTRA_PACKAGE, pkg);
+        notifyIntent.putExtra(EXTRA_USES_LIGHT, usesLight);
+        notifyIntent.putExtra(EXTRA_IS_ONGOING, isOngoing);
+        mContext.sendBroadcast(notifyIntent);
+
         if (localLOGV) Log.v(TAG, pkg + ": notify(" + id + ", " + notification + ")");
         try {
             service.enqueueNotificationWithTag(pkg, tag, id, notification, idOut);
