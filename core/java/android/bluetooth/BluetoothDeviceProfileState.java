@@ -116,7 +116,7 @@ public final class BluetoothDeviceProfileState extends HierarchicalStateMachine 
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-            if (!device.equals(mDevice)) return;
+            if (device == null || !device.equals(mDevice)) return;
 
             if (action.equals(BluetoothHeadset.ACTION_STATE_CHANGED)) {
                 int newState = intent.getIntExtra(BluetoothHeadset.EXTRA_STATE, 0);
