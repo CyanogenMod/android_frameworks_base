@@ -60,6 +60,7 @@ LayerBase::LayerBase(SurfaceFlinger* flinger, DisplayID display)
       mLeft(0), mTop(0),
       mTransactionFlags(0),
       mPremultipliedAlpha(true), mName("unnamed"), mDebug(false),
+      mIsScreenShot(false),
       mInvalidate(0)
 #ifdef AVOID_DRAW_TEXTURE
       ,mTransformed(false)
@@ -328,7 +329,10 @@ void LayerBase::draw(const Region& clip) const
 void LayerBase::drawForSreenShot() const
 {
     const DisplayHardware& hw(graphicPlane(0).displayHardware());
+
+    mIsScreenShot = true;
     onDraw( Region(hw.bounds()) );
+    mIsScreenShot = false;
 }
 
 void LayerBase::clearWithOpenGL(const Region& clip, GLclampf red,
@@ -387,7 +391,7 @@ void LayerBase::drawWithOpenGL(const Region& clip, const Texture& texture) const
     int renderColorG = mFlinger->getRenderColorG();
     int renderColorB = mFlinger->getRenderColorB();
 
-    bool noEffect = renderEffect == 0;
+    bool noEffect = renderEffect == 0 || mIsScreenShot;
 
     if (UNLIKELY(s.alpha < 0xFF) && noEffect) {
         const GLfloat alpha = s.alpha * (1.0f/255.0f);

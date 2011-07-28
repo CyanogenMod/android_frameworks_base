@@ -262,6 +262,8 @@ protected:
                 String8         mName;
     mutable     bool            mDebug;
 
+                // disable render effect if rendering for screenshot
+    mutable     bool            mIsScreenShot;
 
                 // atomic
     volatile    int32_t         mInvalidate;
