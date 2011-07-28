@@ -18,6 +18,7 @@ package com.android.internal.policy.impl;
 
 import com.android.internal.R;
 import com.android.internal.telephony.IccCard;
+import com.android.internal.widget.DigitalClock;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.RotarySelector;
 import com.android.internal.widget.SlidingTab;
@@ -94,6 +95,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private SlidingTab mTabSelector;
     private SlidingTab mSelector2;
     private RotarySelector mRotarySelector;
+    private DigitalClock mClock;
     private TextView mDate;
     private TextView mTime;
     private TextView mAmPm;
@@ -306,6 +308,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mCarrier.setSelected(true);
         mCarrier.setTextColor(0xffffffff);
 
+        mClock = (DigitalClock) findViewById(R.id.time);
         mTime = (TextView) findViewById(R.id.timeDisplay);
         mAmPm = (TextView) findViewById(R.id.am_pm);
         mDate = (TextView) findViewById(R.id.date);
@@ -1368,6 +1371,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
      * depending on lense status
      */
     private void setLenseWidgetsVisibility(int visibility){
+        mClock.setVisibility(visibility);
         mDate.setVisibility(visibility);
         mTime.setVisibility(visibility);
         mAmPm.setVisibility(visibility);
