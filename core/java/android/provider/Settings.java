@@ -1924,7 +1924,7 @@ public final class Settings {
          * lock
          * @hide
          */
-        public static final String SCREEN_LOCK_SLIDE_DELAY_TOGGLE = "lockscreen_custom_app_toggle";
+        public static final String SCREEN_LOCK_SLIDE_DELAY_TOGGLE = "screen_lock_slide_delay_toggle";
 
         /**
          * How many ms to delay before enabling the "slide to unlock" screen
