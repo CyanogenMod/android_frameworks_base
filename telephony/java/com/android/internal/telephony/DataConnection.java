@@ -395,6 +395,8 @@ public abstract class DataConnection extends HierarchicalStateMachine {
         String[] response = ((String[]) ar.result);
         ConnectionParams cp = (ConnectionParams) ar.userObj;
 
+        boolean mIsSamsungCdma = SystemProperties.getBoolean("ro.ril.samsung_cdma", false);
+
         if (ar.exception != null) {
             if (DBG) log("DataConnection Init failed " + ar.exception);
 
@@ -418,11 +420,21 @@ public abstract class DataConnection extends HierarchicalStateMachine {
 //            }
             if (response.length >= 2) {
                 cid = Integer.parseInt(response[0]);
-                interfaceName = response[1];
                 if (response.length > 2) {
-                    ipAddress = response[2];
-                    String prefix = "net." + interfaceName + ".";
-                    gatewayAddress = SystemProperties.get(prefix + "gw");
+                    // Samsung CDMA devices do not export gateway/ip to the framework correctly
+                    // if using FroYo RIL blobs, we can extract it from system properties
+                    String prefix;
+                    if (mIsSamsungCdma) {
+                        interfaceName = "ppp0";
+                        prefix = "net." + interfaceName + ".";
+                        ipAddress = SystemProperties.get(prefix + "local-ip");
+                        gatewayAddress = SystemProperties.get(prefix + "remote-ip");
+                    } else {
+                        interfaceName = response[1];
+                        prefix = "net." + interfaceName + ".";
+                        ipAddress = response[2];
+                        gatewayAddress = SystemProperties.get(prefix + "gw");
+                    }
                     dnsServers[0] = SystemProperties.get(prefix + "dns1");
                     dnsServers[1] = SystemProperties.get(prefix + "dns2");
                     if (DBG) {
@@ -445,7 +457,7 @@ public abstract class DataConnection extends HierarchicalStateMachine {
         }
         // Samsung CDMA devices require this property to be set
         // so that pppd will be called to start 3G data
-        if (SystemProperties.get("ro.ril.samsung_cdma").equals("true"))
+        if (mIsSamsungCdma)
             SystemProperties.set("ril.cdma.data_ready", "true");
 
         if (DBG) log("DataConnection setup result='" + result + "' on cid=" + cid);
