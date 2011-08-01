@@ -567,6 +567,9 @@ class BluetoothEventLoop {
             authorized = hid.getHidDevicePriority(device) > BluetoothHid.PRIORITY_OFF;
             if (authorized) {
                 Log.i(TAG, "Allowing incoming HID connection from " + address);
+                // This is not a typo. We need to tell the lower layer that we're accepting the
+                // connection and the method to do that is in BluetoothA2dp.
+                a2dp.allowIncomingConnect(device, authorized);
             } else {
                 Log.i(TAG, "Rejecting incoming HID connection from " + address);
             }
