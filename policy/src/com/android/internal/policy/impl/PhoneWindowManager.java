@@ -31,8 +31,10 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
@@ -2185,6 +2187,28 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
 
             case KeyEvent.KEYCODE_POWER: {
+                Context otherAppsContext = null;
+                try {
+                    otherAppsContext = mContext.createPackageContext("com.android.camera",0);
+                } catch (NameNotFoundException e) {
+                }
+                if (otherAppsContext!=null){
+                    SharedPreferences sharedPreferences = otherAppsContext.getSharedPreferences("com.android.camera_preferences", Context.MODE_WORLD_READABLE);
+                    if (sharedPreferences.getBoolean("power_shutter_enabled", false)){
+                        IActivityManager mgr = ActivityManagerNative.getDefault();
+                        List<RunningAppProcessInfo> apps;
+                        try {
+                            apps = mgr.getRunningAppProcesses();
+                            for(RunningAppProcessInfo appProcess : apps){
+                                if((appProcess.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND)&&(appProcess.processName.equals("com.android.camera"))){
+                                    return result;
+                                }
+                            }
+                        } catch (RemoteException e) {
+                        } catch (NullPointerException e){
+                        }
+                    }
+                }
                 result &= ~ACTION_PASS_TO_USER;
                 if (down) {
                     ITelephony telephonyService = getTelephonyService();
