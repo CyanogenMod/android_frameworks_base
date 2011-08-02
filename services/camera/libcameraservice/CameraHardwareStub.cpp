@@ -371,6 +371,20 @@ CameraParameters CameraHardwareStub::getParameters() const
     return mParameters;
 }
 
+#ifdef MOTO_CUSTOM_PARAMETERS
+status_t CameraHardwareStub::setCustomParameters(const CameraParameters& params)
+{
+    Mutex::Autolock lock(mLock);
+    return NO_ERROR;
+}
+
+CameraParameters CameraHardwareStub::getCustomParameters() const
+{
+    Mutex::Autolock lock(mLock);
+    return mParameters;
+}
+#endif
+
 status_t CameraHardwareStub::sendCommand(int32_t command, int32_t arg1,
                                          int32_t arg2)
 {

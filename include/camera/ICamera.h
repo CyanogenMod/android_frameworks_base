@@ -94,6 +94,14 @@ public:
     // get preview/capture parameters - key/value pairs
     virtual String8         getParameters() const = 0;
 
+    #ifdef MOTO_CUSTOM_PARAMETERS
+    // set preview/capture custom parameters - key/value pairs
+    virtual status_t        setCustomParameters(const String8& params) = 0;
+
+    // get preview/capture custom parameters - key/value pairs
+    virtual String8         getCustomParameters() const = 0;
+    #endif
+
     // send command to camera driver
     virtual status_t        sendCommand(int32_t cmd, int32_t arg1, int32_t arg2) = 0;
 

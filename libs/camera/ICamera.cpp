@@ -49,6 +49,10 @@ enum {
 #ifdef USE_GETBUFFERINFO
     GET_BUFFER_INFO,
 #endif
+#ifdef MOTO_CUSTOM_PARAMETERS
+    GET_CUSTOM_PARAMETERS,
+    SET_CUSTOM_PARAMETERS,
+#endif
 };
 
 class BpCamera: public BpInterface<ICamera>
@@ -226,6 +230,30 @@ public:
         remote()->transact(GET_PARAMETERS, data, &reply);
         return reply.readString8();
     }
+
+    #ifdef MOTO_CUSTOM_PARAMETERS
+    // set preview/capture custom parameters - key/value pairs
+    status_t setCustomParameters(const String8& params)
+    {
+        LOGV("setCustomParameters");
+        Parcel data, reply;
+        data.writeInterfaceToken(ICamera::getInterfaceDescriptor());
+        data.writeString8(params);
+        remote()->transact(SET_CUSTOM_PARAMETERS, data, &reply);
+        return reply.readInt32();
+    }
+
+    // get preview/capture custom parameters - key/value pairs
+    String8 getCustomParameters() const
+    {
+        LOGV("getCustomParameters");
+        Parcel data, reply;
+        data.writeInterfaceToken(ICamera::getInterfaceDescriptor());
+        remote()->transact(GET_CUSTOM_PARAMETERS, data, &reply);
+        return reply.readString8();
+    }
+    #endif
+
     virtual status_t sendCommand(int32_t cmd, int32_t arg1, int32_t arg2)
     {
         LOGV("sendCommand");
@@ -374,6 +402,21 @@ status_t BnCamera::onTransact(
              reply->writeString8(getParameters());
             return NO_ERROR;
          } break;
+        #ifdef MOTO_CUSTOM_PARAMETERS
+        case SET_CUSTOM_PARAMETERS: {
+            LOGV("SET_CUSTOM_PARAMETERS");
+            CHECK_INTERFACE(ICamera, data, reply);
+            String8 params(data.readString8());
+            reply->writeInt32(setCustomParameters(params));
+            return NO_ERROR;
+         } break;
+        case GET_CUSTOM_PARAMETERS: {
+            LOGV("GET_CUSTOM_PARAMETERS");
+            CHECK_INTERFACE(ICamera, data, reply);
+             reply->writeString8(getCustomParameters());
+            return NO_ERROR;
+         } break;
+        #endif
         case SEND_COMMAND: {
             LOGV("SEND_COMMAND");
             CHECK_INTERFACE(ICamera, data, reply);

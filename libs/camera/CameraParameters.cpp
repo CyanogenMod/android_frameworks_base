@@ -85,6 +85,7 @@ const char CameraParameters::KEY_CAF[] = "continuous-af";
 const char CameraParameters::KEY_CONTINUOUS_AF[] = "continuous-af";
 const char CameraParameters::KEY_SUPPORTED_CAF[] = "continuous-af-values";
 const char CameraParameters::KEY_SUPPORTED_CONTINUOUS_AF[] = "continuous-af-values";
+const char CameraParameters::KEY_VIDEO_SIZE[] = "video-size";
 
 const char CameraParameters::TRUE[] = "true";
 const char CameraParameters::FOCUS_DISTANCE_INFINITY[] = "Infinity";
@@ -148,6 +149,7 @@ const char CameraParameters::SCENE_MODE_BARCODE[] = "barcode";
 // Formats for setPreviewFormat and setPictureFormat.
 const char CameraParameters::PIXEL_FORMAT_YUV422SP[] = "yuv422sp";
 const char CameraParameters::PIXEL_FORMAT_YUV420SP[] = "yuv420sp";
+const char CameraParameters::PIXEL_FORMAT_YUV420P[] = "yuv420p";
 const char CameraParameters::PIXEL_FORMAT_YUV422I[] = "yuv422i-yuyv";
 const char CameraParameters::PIXEL_FORMAT_RGB565[] = "rgb565";
 const char CameraParameters::PIXEL_FORMAT_JPEG[] = "jpeg";
@@ -401,6 +403,21 @@ void CameraParameters::getSupportedPreviewSizes(Vector<Size> &sizes) const
 {
     const char *previewSizesStr = get(KEY_SUPPORTED_PREVIEW_SIZES);
     parseSizesList(previewSizesStr, sizes);
+}
+
+void CameraParameters::setVideoSize(int width, int height)
+{
+    char str[32];
+    sprintf(str, "%dx%d", width, height);
+    set(KEY_VIDEO_SIZE, str);
+}
+
+void CameraParameters::getVideoSize(int *width, int *height) const
+{
+    *width = *height = -1;
+    const char *p = get(KEY_VIDEO_SIZE);
+    if (p == 0) return;
+    parse_pair(p, width, height, 'x');
 }
 
 void CameraParameters::setPreviewFrameRate(int fps)
