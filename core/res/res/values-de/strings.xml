@@ -869,7 +869,7 @@
     <string name="extmedia_format_message" product="nosdcard" msgid="8296908079722897772">"USB-Speicher formatieren und alle darin befindlichen Dateien löschen? Diese Aktion kann nicht rückgängig gemacht werden!"</string>
     <string name="extmedia_format_message" product="default" msgid="3621369962433523619">"Möchten Sie die SD-Karte wirklich formatieren? Alle Daten auf Ihrer Karte gehen dann verloren."</string>
     <string name="extmedia_format_button_format" msgid="4131064560127478695">"Formatieren"</string>
-    <string name="adb_active_notification_title" msgid="6729044778949189918">"USB-Debugging verbunden"</string>
+    <string name="adb_active_notification_title" msgid="6729044778949189918">"ADB-Debugging verbunden"</string>
     <string name="adb_active_notification_message" msgid="8470296818270110396">"Zum deaktivieren auswählen"</string>
     <string name="select_input_method" msgid="6865512749462072765">"Eingabemethode auswählen"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
