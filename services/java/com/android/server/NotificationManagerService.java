@@ -449,10 +449,13 @@ public class NotificationManagerService extends INotificationManager.Stub
                 }
             } else if (action.equals(UsbManager.ACTION_USB_STATE)) {
                 Bundle extras = intent.getExtras();
+                ContentResolver resolver = mContext.getContentResolver();
                 mUsbConnected = extras.getBoolean(UsbManager.USB_CONNECTED);
                 boolean adbEnabled = (UsbManager.USB_FUNCTION_ENABLED.equals(
                                     extras.getString(UsbManager.USB_FUNCTION_ADB)));
-                updateAdbNotification(mUsbConnected && adbEnabled);
+                boolean adbOverNetwork = Settings.Secure.getInt(resolver,
+                                         Settings.Secure.ADB_PORT, 0) > 0;
+                updateAdbNotification((adbEnabled && mUsbConnected) || adbOverNetwork);
             } else if (action.equals(Intent.ACTION_PACKAGE_REMOVED)
                     || action.equals(Intent.ACTION_PACKAGE_RESTARTED)
                     || (queryRestart=action.equals(Intent.ACTION_QUERY_PACKAGE_RESTART))
@@ -601,14 +604,19 @@ public class NotificationManagerService extends INotificationManager.Stub
                     Settings.Secure.ADB_ENABLED), false, this);
             resolver.registerContentObserver(Settings.Secure.getUriFor(
                     Settings.Secure.ADB_NOTIFY), false, this);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.ADB_PORT), false, this);
         }
 
         @Override public void onChange(boolean selfChange) {
             ContentResolver resolver = mContext.getContentResolver();
             boolean adbEnabled = Settings.Secure.getInt(resolver,
                     Settings.Secure.ADB_ENABLED, 0) != 0;
+            boolean adbOverNetwork = Settings.Secure.getInt(resolver,
+                    Settings.Secure.ADB_PORT, 0) > 0;
+
             /* notify setting is checked inside updateAdbNotification() */
-            updateAdbNotification(adbEnabled && mUsbConnected);
+            updateAdbNotification(adbEnabled && (mUsbConnected || adbOverNetwork));
         }
     }
 
