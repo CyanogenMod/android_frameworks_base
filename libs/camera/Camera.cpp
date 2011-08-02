@@ -305,6 +305,17 @@ status_t Camera::setParameters(const String8& params)
     return c->setParameters(params);
 }
 
+#ifdef MOTO_CUSTOM_PARAMETERS
+// set preview/capture parameters - key/value pairs
+status_t Camera::setCustomParameters(const String8& params)
+{
+    LOGV("setCustomParameters");
+    sp <ICamera> c = mCamera;
+    if (c == 0) return NO_INIT;
+    return c->setParameters(params);
+}
+#endif
+
 // get preview/capture parameters - key/value pairs
 String8 Camera::getParameters() const
 {
@@ -314,6 +325,18 @@ String8 Camera::getParameters() const
     if (c != 0) params = mCamera->getParameters();
     return params;
 }
+
+#ifdef MOTO_CUSTOM_PARAMETERS
+// get preview/capture parameters - key/value pairs
+String8 Camera::getCustomParameters() const
+{
+    LOGV("getCustomParameters");
+    String8 params;
+    sp <ICamera> c = mCamera;
+    if (c != 0) params = mCamera->getParameters();
+    return params;
+}
+#endif
 
 // send command to camera driver
 status_t Camera::sendCommand(int32_t cmd, int32_t arg1, int32_t arg2)
