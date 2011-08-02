@@ -31,8 +31,10 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.database.ContentObserver;
@@ -190,6 +192,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     IWindowManager mWindowManager;
     LocalPowerManager mPowerManager;
     Vibrator mVibrator; // Vibrator for giving feedback of orientation changes
+    boolean isSnap = false;
 
     // Vibrator pattern for haptic feedback of a long press.
     long[] mLongPressVibePattern;
@@ -2185,6 +2188,27 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
 
             case KeyEvent.KEYCODE_POWER: {
+                Intent intent = new Intent("CHECK_SNAP", null);
+                mContext.sendOrderedBroadcast(intent, "android.permission.CAMERA", new BroadcastReceiver() {
+                    @Override
+                    public void onReceive(Context context, Intent intent) {
+                        isSnap = getResultExtras(true).getBoolean("snap");
+                    }
+                }, null, Activity.RESULT_OK, null, null);
+                if (isSnap){
+                    IActivityManager mgr = ActivityManagerNative.getDefault();
+                    List<RunningAppProcessInfo> apps;
+                    try {
+                        apps = mgr.getRunningAppProcesses();
+                        for(RunningAppProcessInfo appProcess : apps){
+                            if((appProcess.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND)&&(appProcess.processName.equals("com.android.camera"))){
+                                return result;
+                            }
+                        }
+                    } catch (RemoteException e) {
+                    } catch (NullPointerException e){
+                    }
+                }
                 result &= ~ACTION_PASS_TO_USER;
                 if (down) {
                     ITelephony telephonyService = getTelephonyService();
