@@ -501,7 +501,7 @@ public interface WindowManager extends ViewManager {
          * display space for itself -- the status bar will be hidden when
          * an app window with this flag set is on the top layer. */
         public static final int FLAG_FULLSCREEN      = 0x00000400;
-        
+
         /** Window flag: Override {@link #FLAG_FULLSCREEN and force the
          *  screen decorations (such as status bar) to be shown. */
         public static final int FLAG_FORCE_NOT_FULLSCREEN   = 0x00000800;
@@ -629,6 +629,9 @@ public interface WindowManager extends ViewManager {
          * it is created.
          * {@hide} */
         public static final int FLAG_SYSTEM_ERROR = 0x40000000;
+
+        /** Window flag: Overrides default power key behavior */
+        public static final int PREVENT_POWER_KEY = 0x80000000;
 
         /**
          * Given a particular set of window manager flags, determine whether
