@@ -63,8 +63,8 @@ public class ScrollView extends FrameLayout {
 
     private final Rect mTempRect = new Rect();
     private OverScroller mScroller;
-    private EdgeGlow mEdgeGlowTop;
-    private EdgeGlow mEdgeGlowBottom;
+    private OverscrollEdge mEdgeGlowTop;
+    private OverscrollEdge mEdgeGlowBottom;
 
     /**
      * Flag to indicate that we are moving focus ourselves. This is so the
@@ -1308,7 +1308,11 @@ public class ScrollView extends FrameLayout {
                 scrollToChild(mChildToScrollTo);
         }
         mChildToScrollTo = null;
-
+        if ((mOverScrollEffect == OVER_SCROLL_SETTING_EDGEGLOW ||
+                mOverScrollEffect == OVER_SCROLL_SETTING_BOUNCEGLOW)&&(getOverScrollMode() != OVER_SCROLL_NEVER)){
+            mEdgeGlowTop.updateOverscroll();
+            mEdgeGlowBottom.updateOverscroll();
+        }
         // Calling this with the present values causes it to re-clam them
         scrollTo(mScrollX, mScrollY);
     }
@@ -1402,8 +1406,8 @@ public class ScrollView extends FrameLayout {
                 final Resources res = getContext().getResources();
                 final Drawable edge = res.getDrawable(R.drawable.overscroll_edge);
                 final Drawable glow = res.getDrawable(R.drawable.overscroll_glow);
-                mEdgeGlowTop = new EdgeGlow(edge, glow);
-                mEdgeGlowBottom = new EdgeGlow(edge, glow);
+                mEdgeGlowTop = new OverscrollEdge(edge, glow, mContext);
+                mEdgeGlowBottom = new OverscrollEdge(edge, glow, mContext);
             }
         } else {
             mEdgeGlowTop = null;
