@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
@@ -665,6 +666,14 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                 final Resources res = getContext().getResources();
                 final Drawable edge = res.getDrawable(R.drawable.overscroll_edge);
                 final Drawable glow = res.getDrawable(R.drawable.overscroll_glow);
+                int overStatus = Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.OVERSCROLL_EFFECT,0);
+                int overColor = Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.OVERSCROLL_COLOR,0);
+                if ((overStatus == 1 || overStatus == 2) && overColor != 0){
+                    edge.setColorFilter(overColor, Mode.MULTIPLY);
+                    glow.setColorFilter(overColor, Mode.MULTIPLY);
+                }
                 mEdgeGlowTop = new EdgeGlow(edge, glow);
                 mEdgeGlowBottom = new EdgeGlow(edge, glow);
             }
