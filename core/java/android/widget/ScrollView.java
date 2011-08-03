@@ -63,8 +63,8 @@ public class ScrollView extends FrameLayout {
 
     private final Rect mTempRect = new Rect();
     private OverScroller mScroller;
-    private EdgeGlow mEdgeGlowTop;
-    private EdgeGlow mEdgeGlowBottom;
+    private OverscrollEdge mEdgeGlowTop;
+    private OverscrollEdge mEdgeGlowBottom;
 
     /**
      * Flag to indicate that we are moving focus ourselves. This is so the
@@ -1284,6 +1284,12 @@ public class ScrollView extends FrameLayout {
     }    
 
     @Override
+    protected void onDetachedFromWindow() {
+        mEdgeGlowTop.unregisterReceivers();
+        mEdgeGlowBottom.unregisterReceivers();
+    }
+
+    @Override
     public boolean requestChildRectangleOnScreen(View child, Rect rectangle,
             boolean immediate) {
         // offset into coordinate space of this scroll view
@@ -1402,8 +1408,8 @@ public class ScrollView extends FrameLayout {
                 final Resources res = getContext().getResources();
                 final Drawable edge = res.getDrawable(R.drawable.overscroll_edge);
                 final Drawable glow = res.getDrawable(R.drawable.overscroll_glow);
-                mEdgeGlowTop = new EdgeGlow(edge, glow);
-                mEdgeGlowBottom = new EdgeGlow(edge, glow);
+                mEdgeGlowTop = new OverscrollEdge(edge, glow, mContext);
+                mEdgeGlowBottom = new OverscrollEdge(edge, glow, mContext);
             }
         } else {
             mEdgeGlowTop = null;
