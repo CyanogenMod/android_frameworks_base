@@ -46,7 +46,6 @@ import android.view.ViewConfiguration;
 import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
@@ -506,12 +505,12 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
     /**
      * Tracks the state of the top edge glow.
      */
-    private EdgeGlow mEdgeGlowTop;
+    private OverscrollEdge mEdgeGlowTop;
 
     /**
      * Tracks the state of the bottom edge glow.
      */
-    private EdgeGlow mEdgeGlowBottom;
+    private OverscrollEdge mEdgeGlowBottom;
 
     /**
      * An estimate of how many pixels are between the top of the list and
@@ -665,8 +664,8 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                 final Resources res = getContext().getResources();
                 final Drawable edge = res.getDrawable(R.drawable.overscroll_edge);
                 final Drawable glow = res.getDrawable(R.drawable.overscroll_glow);
-                mEdgeGlowTop = new EdgeGlow(edge, glow);
-                mEdgeGlowBottom = new EdgeGlow(edge, glow);
+                mEdgeGlowTop = new OverscrollEdge(edge, glow, mContext);
+                mEdgeGlowBottom = new OverscrollEdge(edge, glow, mContext);
             }
         } else {
             mEdgeGlowTop = null;
@@ -1270,13 +1269,18 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         }
 
         mOverScrollMode = getOverScrollMode();
+        mOverscrollEffect = getOverscrollEffect();
         layoutChildren();
         mInLayout = false;
 
         mOverscrollMax = (b - t) / getOverscrollWeight();
 
-        mOverscrollEffect = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.OVERSCROLL_EFFECT, OVER_SCROLL_SETTING_EDGEGLOW);
+        if ((mOverScrollEffect == OVER_SCROLL_SETTING_EDGEGLOW ||
+                mOverScrollEffect == OVER_SCROLL_SETTING_BOUNCEGLOW)&&
+                (mOverScrollMode != OVER_SCROLL_NEVER)){
+            mEdgeGlowTop.updateOverscroll();
+            mEdgeGlowBottom.updateOverscroll();
+        }
 
         if (mOverscrollEffect >= OVER_SCROLL_SETTING_BOUNCEGLOW) {
             mOverscrollDistance = getOverscrollMax();
