@@ -46,7 +46,6 @@ import android.view.ViewConfiguration;
 import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.animation.AnimationUtils;
 import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
@@ -506,12 +505,12 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
     /**
      * Tracks the state of the top edge glow.
      */
-    private EdgeGlow mEdgeGlowTop;
+    private OverscrollEdge mEdgeGlowTop;
 
     /**
      * Tracks the state of the bottom edge glow.
      */
-    private EdgeGlow mEdgeGlowBottom;
+    private OverscrollEdge mEdgeGlowBottom;
 
     /**
      * An estimate of how many pixels are between the top of the list and
@@ -665,8 +664,8 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
                 final Resources res = getContext().getResources();
                 final Drawable edge = res.getDrawable(R.drawable.overscroll_edge);
                 final Drawable glow = res.getDrawable(R.drawable.overscroll_glow);
-                mEdgeGlowTop = new EdgeGlow(edge, glow);
-                mEdgeGlowBottom = new EdgeGlow(edge, glow);
+                mEdgeGlowTop = new OverscrollEdge(edge, glow, mContext,this.getHandler());
+                mEdgeGlowBottom = new OverscrollEdge(edge, glow, mContext,this.getHandler());
             }
         } else {
             mEdgeGlowTop = null;
@@ -1275,8 +1274,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
 
         mOverscrollMax = (b - t) / getOverscrollWeight();
 
-        mOverscrollEffect = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.OVERSCROLL_EFFECT, OVER_SCROLL_SETTING_EDGEGLOW);
+        mOverscrollEffect = getOverscrollEffect();
 
         if (mOverscrollEffect >= OVER_SCROLL_SETTING_BOUNCEGLOW) {
             mOverscrollDistance = getOverscrollMax();
@@ -1719,7 +1717,8 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-
+        mEdgeGlowTop.attach();
+        mEdgeGlowBottom.attach();
         final ViewTreeObserver treeObserver = getViewTreeObserver();
         if (treeObserver != null) {
             treeObserver.addOnTouchModeChangeListener(this);
@@ -1732,7 +1731,8 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-
+        mEdgeGlowTop.detach();
+        mEdgeGlowBottom.detach();
         // Dismiss the popup in case onSaveInstanceState() was not invoked
         dismissPopup();
 
