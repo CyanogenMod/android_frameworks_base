@@ -455,6 +455,11 @@
     <string name="permdesc_receiveMms" msgid="4563346832000174373">"允許應用程式接收、處理 MMS 簡訊。請注意：惡意程式可能使用此功能監控簡訊或在您讀取前擅自刪除。"</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_receiveEmergencyBroadcast">接收緊急廣播</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_receiveEmergencyBroadcast">允許應用程式接收、處理緊急廣播訊息。此權限只供系統應用程式使用。</string>
+
+     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_sendSms" msgid="5600830612147671529">"傳送 SMS 簡訊"</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_sendSms" msgid="1946540351763502120">"允許應用程式傳送 SMS 簡訊。請注意：惡意程式可能會擅自傳送簡訊，增加您的支出。"</string>
