@@ -64,6 +64,7 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.OverscrollEdge;
 import android.widget.ScrollBarDrawable;
 
 import android.provider.Settings;
@@ -8923,8 +8924,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * @return This view's over-scroll mode.
      */
     public int getOverScrollMode() {
-        final int overScrollEffect = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.OVERSCROLL_EFFECT, OVER_SCROLL_SETTING_EDGEGLOW);
+        final int overScrollEffect = OverscrollEdge.getmOverscrollEffect();
         if (overScrollEffect <= 0) {
             /* Disabled */
             return OVER_SCROLL_NEVER;
