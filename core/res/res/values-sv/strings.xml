@@ -165,6 +165,7 @@
     <string name="global_actions_toggle_airplane_mode" msgid="5884330306926307456">"Flygplansläge"</string>
     <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"Flygplansläge är AKTIVERAT"</string>
     <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"Flygplansläge är INAKTIVERAT"</string>
+    <string name="global_action_screenshot">Skärmdump</string>
     <string name="safeMode" msgid="2788228061547930246">"Säkert läge"</string>
     <string name="android_system_label" msgid="6577375335728551336">"Android-system"</string>
     <string name="permgrouplab_costMoney" msgid="5429808217861460401">"Tjänster som kostar pengar"</string>
@@ -202,6 +203,10 @@
     <string name="permdesc_receiveSms" msgid="6298292335965966117">"Tillåter att program tar emot och bearbetar SMS-meddelanden. Skadliga program kan övervaka dina meddelanden eller ta bort dem utan att visa dem för dig."</string>
     <string name="permlab_receiveMms" msgid="8894700916188083287">"ta emot MMS"</string>
     <string name="permdesc_receiveMms" msgid="4563346832000174373">"Tillåter att program tar emot och bearbetar MMS-meddelanden. Skadliga program kan övervaka dina meddelanden eller ta bort dem innan du har sett dem."</string>
+    <string name="permlab_receiveEmergencyBroadcast">ta emot akuta broadcasts</string>
+    <string name="permdesc_receiveEmergencyBroadcast">Tillåter att programmet tar emot
+      och bearbetar akuta broadcast-meddelanden. Denna rättighet är endast tillgänglig
+      för systemapplikationer.</string>
     <string name="permlab_sendSms" msgid="5600830612147671529">"skicka SMS"</string>
     <string name="permdesc_sendSms" msgid="1946540351763502120">"Tillåter att programmet skickar SMS-meddelanden. Skadliga program kan skicka meddelanden utan ditt godkännande vilket kan kosta pengar."</string>
     <string name="permlab_readSms" msgid="4085333708122372256">"läsa SMS eller MMS"</string>
@@ -288,6 +293,8 @@
     <string name="permdesc_movePackage" msgid="6323049291923925277">"Tillåter att ett program flyttar programresurser från interna till externa medier och tvärt om."</string>
     <string name="permlab_readLogs" msgid="6615778543198967614">"läsa känsliga loggdata"</string>
     <string name="permdesc_readLogs" msgid="8896449437464867766">"Tillåter att ett program läser från systemets olika loggfiler. Det innebär att programmet kan upptäcka allmän information om vad du gör med telefonen, vilket kan inkludera personlig eller privat information."</string>
+    <string name="permlab_preventpower">förhindra strömknapp</string>
+    <string name="permdesc_preventpower">Låter ett program åsidosätta strömknappen</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"läsa/skriva till resurser som ägs av diag"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"Tillåter att ett program läser och skriver till en resurs som ägs av diag-gruppen; till exempel filer i /dev. Detta kan eventuellt påverka systemets stabilitet och säkerhet. Detta bör ENDAST används av tillverkaren eller operatören för maskinvaruspecifik diagnostik."</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"aktivera eller inaktivera programkomponenter"</string>
