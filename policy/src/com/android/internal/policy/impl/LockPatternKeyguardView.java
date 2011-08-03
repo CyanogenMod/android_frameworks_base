@@ -587,14 +587,17 @@ public class LockPatternKeyguardView extends KeyguardViewBase {
         // report false
         mLockedButNotYetSecured = lockedButNotSecured;
 
-        // Pattern unlock screen shows immediately. All others follow the
-        // progression of Lock -> Unlock, so only Pattern lock requires this
-        // state to be changed.
-        if (!lockedButNotSecured && mMode != Mode.UnlockScreen
-                && this.mLockPatternUtils.isLockPatternEnabled()) {
-            updateScreen(Mode.UnlockScreen);
-        } else
-        if (lockedButNotSecured && mMode != Mode.LockScreen) {
+        if (!lockedButNotSecured) {
+            // At this point we are security locking the phone
+            // So get the initialMode and set it, if it's different
+            // to current mode.
+            // getInitialMode() handles, if there should be an slider-
+            // lock in front of security lock.
+            Mode initialMode = getInitialMode();
+            if (mMode != initialMode) {
+                updateScreen(initialMode);
+            }
+        } else if (lockedButNotSecured && mMode != Mode.LockScreen) {
             // If lockedButNotSecured is enabled, frob the screen to lock
             updateScreen(Mode.LockScreen);
         } else {
