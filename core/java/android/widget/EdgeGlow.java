@@ -54,8 +54,8 @@ public class EdgeGlow {
 
     private static final float EPSILON = 0.001f;
 
-    private final Drawable mEdge;
-    private final Drawable mGlow;
+    protected Drawable mEdge;
+    protected Drawable mGlow;
     private int mWidth;
     private int mHeight;
 

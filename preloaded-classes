@@ -743,6 +743,7 @@ android.widget.CheckBox
 android.widget.Checkable
 android.widget.CompoundButton
 android.widget.EdgeGlow
+android.widget.OverscrollEdge
 android.widget.EditText
 android.widget.Filter$FilterListener
 android.widget.Filterable
