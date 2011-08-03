@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
@@ -663,8 +664,20 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         if (mode != OVER_SCROLL_NEVER) {
             if (mEdgeGlowTop == null) {
                 final Resources res = getContext().getResources();
-                final Drawable edge = res.getDrawable(R.drawable.overscroll_edge);
-                final Drawable glow = res.getDrawable(R.drawable.overscroll_glow);
+                final Drawable edge,glow;
+                int overStatus = Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.OVERSCROLL_EFFECT,0);
+                int overColor = Settings.System.getInt(mContext.getContentResolver(),
+                        Settings.System.OVERSCROLL_COLOR,0);
+                if ((overStatus == 1 || overStatus == 2) && overColor != 0){
+                    edge = res.getDrawable(R.drawable.overscroll_edge_white);
+                    glow = res.getDrawable(R.drawable.overscroll_glow_white);
+                    edge.setColorFilter(overColor, Mode.MULTIPLY);
+                    glow.setColorFilter(overColor, Mode.MULTIPLY);
+                }else{
+                    edge = res.getDrawable(R.drawable.overscroll_edge);
+                    glow = res.getDrawable(R.drawable.overscroll_glow);
+                }
                 mEdgeGlowTop = new EdgeGlow(edge, glow);
                 mEdgeGlowBottom = new EdgeGlow(edge, glow);
             }
