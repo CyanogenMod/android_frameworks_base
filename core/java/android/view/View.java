@@ -1587,6 +1587,12 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
     private int mOverScrollMode;
 
     /**
+     * Controls the over-scroll effect.
+     * @hide
+     */
+    protected int mOverScrollEffect;
+
+    /**
      * The parent this view is attached to.
      * {@hide}
      *
@@ -8928,9 +8934,7 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
      * @return This view's over-scroll mode.
      */
     public int getOverScrollMode() {
-        final int overScrollEffect = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.OVERSCROLL_EFFECT, OVER_SCROLL_SETTING_EDGEGLOW);
-        if (overScrollEffect <= 0) {
+        if (mOverScrollEffect <= 0) {
             /* Disabled */
             return OVER_SCROLL_NEVER;
         } else if ( mOverScrollMode != OVER_SCROLL_ALWAYS &&
@@ -8939,6 +8943,14 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
             return OVER_SCROLL_NEVER;
         }
         return mOverScrollMode;
+    }
+
+    /**
+     * Returns the over-scroll effect for this view.
+     * @hide
+     */
+    public int getOverscrollEffect(){
+        return mOverScrollEffect;
     }
 
     /**
@@ -8958,6 +8970,8 @@ public class View implements Drawable.Callback, KeyEvent.Callback, Accessibility
                 overScrollMode != OVER_SCROLL_NEVER) {
             throw new IllegalArgumentException("Invalid overscroll mode " + overScrollMode);
         }
+        mOverScrollEffect = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.OVERSCROLL_EFFECT, OVER_SCROLL_SETTING_EDGEGLOW);
         mOverScrollMode = overScrollMode;
     }
 

@@ -2919,6 +2919,12 @@ public final class Settings {
         public static final String OVERSCROLL_WEIGHT = "overscroll_weight";
 
         /**
+         * Sets the overscroller color (edge bounce effect on lists)
+         * @hide
+         */
+        public static final String OVERSCROLL_COLOR = "overscroll_color";
+
+        /**
          * Whether or not volume button music controls should be enabled to seek media tracks
          * @hide
          */
