@@ -945,4 +945,8 @@
     <string name="copyAll">Copiar tudo</string>
     <string name="permdesc_preventpower">Permite que uma aplicação subtitua a tecla de ligar/desligar</string>
     <string name="permlab_preventpower">substituir botão liga/desliga</string>
+    <string name="permlab_receiveEmergencyBroadcast">receber transmissões de emergência</string>
+    <string name="permdesc_receiveEmergencyBroadcast">Permite à aplicação a receber
+      e processar messagens através de transmissões emergenciais. Esta permissão está somente disponível
+      para aplicações de sistema.</string>
 </resources>
