@@ -54,8 +54,8 @@ public class EdgeGlow {
 
     private static final float EPSILON = 0.001f;
 
-    private final Drawable mEdge;
-    private final Drawable mGlow;
+    private Drawable mEdge;
+    private Drawable mGlow;
     private int mWidth;
     private int mHeight;
 
@@ -105,6 +105,11 @@ public class EdgeGlow {
         mGlow = glow;
 
         mInterpolator = new DecelerateInterpolator();
+    }
+
+    public void setEdge(Drawable edge, Drawable glow){
+        mEdge = edge;
+        mGlow = glow;
     }
 
     public void setSize(int width, int height) {
