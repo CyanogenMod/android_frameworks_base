@@ -24,6 +24,7 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.FocusFinder;
 import android.view.KeyEvent;
@@ -63,8 +64,6 @@ public class ScrollView extends FrameLayout {
 
     private final Rect mTempRect = new Rect();
     private OverScroller mScroller;
-    private EdgeGlow mEdgeGlowTop;
-    private EdgeGlow mEdgeGlowBottom;
 
     /**
      * Flag to indicate that we are moving focus ourselves. This is so the
@@ -546,18 +545,18 @@ public class ScrollView extends FrameLayout {
                             (overscrollMode == OVER_SCROLL_IF_CONTENT_SCROLLS && range > 0)) {
                         final int pulledToY = oldY + deltaY;
                         if (pulledToY < 0) {
-                            mEdgeGlowTop.onPull((float) deltaY / getHeight());
-                            if (!mEdgeGlowBottom.isFinished()) {
-                                mEdgeGlowBottom.onRelease();
+                            AbsListView.mEdgeGlowTop.onPull((float) deltaY / getHeight());
+                            if (!AbsListView.mEdgeGlowBottom.isFinished()) {
+                                AbsListView.mEdgeGlowBottom.onRelease();
                             }
                         } else if (pulledToY > range) {
-                            mEdgeGlowBottom.onPull((float) deltaY / getHeight());
-                            if (!mEdgeGlowTop.isFinished()) {
-                                mEdgeGlowTop.onRelease();
+                            AbsListView.mEdgeGlowBottom.onPull((float) deltaY / getHeight());
+                            if (!AbsListView.mEdgeGlowTop.isFinished()) {
+                                AbsListView.mEdgeGlowTop.onRelease();
                             }
                         }
-                        if (mEdgeGlowTop != null
-                                && (!mEdgeGlowTop.isFinished() || !mEdgeGlowBottom.isFinished())) {
+                        if (AbsListView.mEdgeGlowTop != null
+                                && (!AbsListView.mEdgeGlowTop.isFinished() || !AbsListView.mEdgeGlowBottom.isFinished())) {
                             invalidate();
                         }
                     }
@@ -587,9 +586,9 @@ public class ScrollView extends FrameLayout {
                         mVelocityTracker.recycle();
                         mVelocityTracker = null;
                     }
-                    if (mEdgeGlowTop != null) {
-                        mEdgeGlowTop.onRelease();
-                        mEdgeGlowBottom.onRelease();
+                    if (AbsListView.mEdgeGlowTop != null) {
+                        AbsListView.mEdgeGlowTop.onRelease();
+                        AbsListView.mEdgeGlowBottom.onRelease();
                     }
                 }
                 break;
@@ -604,9 +603,9 @@ public class ScrollView extends FrameLayout {
                         mVelocityTracker.recycle();
                         mVelocityTracker = null;
                     }
-                    if (mEdgeGlowTop != null) {
-                        mEdgeGlowTop.onRelease();
-                        mEdgeGlowBottom.onRelease();
+                    if (AbsListView.mEdgeGlowTop != null) {
+                        AbsListView.mEdgeGlowTop.onRelease();
+                        AbsListView.mEdgeGlowBottom.onRelease();
                     }
                 }
                 break;
@@ -1116,9 +1115,9 @@ public class ScrollView extends FrameLayout {
                 if (overscrollMode == OVER_SCROLL_ALWAYS ||
                         (overscrollMode == OVER_SCROLL_IF_CONTENT_SCROLLS && range > 0)) {
                     if (y < 0 && oldY >= 0) {
-                        mEdgeGlowTop.onAbsorb((int) mScroller.getCurrVelocity());
+                        AbsListView.mEdgeGlowTop.onAbsorb((int) mScroller.getCurrVelocity());
                     } else if (y > range && oldY <= range) {
-                        mEdgeGlowBottom.onAbsorb((int) mScroller.getCurrVelocity());
+                        AbsListView.mEdgeGlowBottom.onAbsorb((int) mScroller.getCurrVelocity());
                     }
                 }
             }
@@ -1311,6 +1310,17 @@ public class ScrollView extends FrameLayout {
 
         // Calling this with the present values causes it to re-clam them
         scrollTo(mScrollX, mScrollY);
+
+        AbsListView.mOverscrollEffect = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.OVERSCROLL_EFFECT, OVER_SCROLL_SETTING_EDGEGLOW);
+
+        AbsListView.mOverscrollColor = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.OVERSCROLL_COLOR,0);
+
+        if ((AbsListView.mOverscrollColor != AbsListView.prevOverscroll)&&
+                (AbsListView.mOverscrollEffect == 1 || AbsListView.mOverscrollEffect == 2)){
+            AbsListView.setOverscroll(mContext);
+        }
     }
 
     @Override
@@ -1398,16 +1408,12 @@ public class ScrollView extends FrameLayout {
     @Override
     public void setOverScrollMode(int mode) {
         if (mode != OVER_SCROLL_NEVER) {
-            if (mEdgeGlowTop == null) {
-                final Resources res = getContext().getResources();
-                final Drawable edge = res.getDrawable(R.drawable.overscroll_edge);
-                final Drawable glow = res.getDrawable(R.drawable.overscroll_glow);
-                mEdgeGlowTop = new EdgeGlow(edge, glow);
-                mEdgeGlowBottom = new EdgeGlow(edge, glow);
+            if (AbsListView.mEdgeGlowTop == null) {
+                AbsListView.setOverscroll(mContext);
             }
         } else {
-            mEdgeGlowTop = null;
-            mEdgeGlowBottom = null;
+            AbsListView.mEdgeGlowTop = null;
+            AbsListView.mEdgeGlowBottom = null;
         }
         super.setOverScrollMode(mode);
     }
@@ -1415,28 +1421,28 @@ public class ScrollView extends FrameLayout {
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-        if (mEdgeGlowTop != null) {
+        if (AbsListView.mEdgeGlowTop != null) {
             final int scrollY = mScrollY;
-            if (!mEdgeGlowTop.isFinished()) {
+            if (!AbsListView.mEdgeGlowTop.isFinished()) {
                 final int restoreCount = canvas.save();
                 final int width = getWidth();
 
                 canvas.translate(-width / 2, Math.min(0, scrollY));
-                mEdgeGlowTop.setSize(width * 2, getHeight());
-                if (mEdgeGlowTop.draw(canvas)) {
+                AbsListView.mEdgeGlowTop.setSize(width * 2, getHeight());
+                if (AbsListView.mEdgeGlowTop.draw(canvas)) {
                     invalidate();
                 }
                 canvas.restoreToCount(restoreCount);
             }
-            if (!mEdgeGlowBottom.isFinished()) {
+            if (!AbsListView.mEdgeGlowBottom.isFinished()) {
                 final int restoreCount = canvas.save();
                 final int width = getWidth();
                 final int height = getHeight();
 
                 canvas.translate(-width / 2, Math.max(getScrollRange(), scrollY) + height);
                 canvas.rotate(180, width, 0);
-                mEdgeGlowBottom.setSize(width * 2, height);
-                if (mEdgeGlowBottom.draw(canvas)) {
+                AbsListView.mEdgeGlowBottom.setSize(width * 2, height);
+                if (AbsListView.mEdgeGlowBottom.draw(canvas)) {
                     invalidate();
                 }
                 canvas.restoreToCount(restoreCount);

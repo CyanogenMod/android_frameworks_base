@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.PorterDuff.Mode;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.TransitionDrawable;
@@ -391,7 +392,17 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
     /**
      * Preferred overscroll effect
      */
-    int mOverscrollEffect;
+    static int mOverscrollEffect;
+
+    /**
+     * Preferred overscroll color
+     */
+    static int mOverscrollColor;
+
+    /**
+     * Previous overscroll color state
+     */
+    static int prevOverscroll;
 
     /**
      * Content height divided by this is the overscroll limit.
@@ -506,12 +517,12 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
     /**
      * Tracks the state of the top edge glow.
      */
-    private EdgeGlow mEdgeGlowTop;
+    static EdgeGlow mEdgeGlowTop;
 
     /**
      * Tracks the state of the bottom edge glow.
      */
-    private EdgeGlow mEdgeGlowBottom;
+    static EdgeGlow mEdgeGlowBottom;
 
     /**
      * An estimate of how many pixels are between the top of the list and
@@ -662,17 +673,37 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
     public void setOverScrollMode(int mode) {
         if (mode != OVER_SCROLL_NEVER) {
             if (mEdgeGlowTop == null) {
-                final Resources res = getContext().getResources();
-                final Drawable edge = res.getDrawable(R.drawable.overscroll_edge);
-                final Drawable glow = res.getDrawable(R.drawable.overscroll_glow);
-                mEdgeGlowTop = new EdgeGlow(edge, glow);
-                mEdgeGlowBottom = new EdgeGlow(edge, glow);
+                setOverscroll(mContext);
             }
         } else {
             mEdgeGlowTop = null;
             mEdgeGlowBottom = null;
         }
         super.setOverScrollMode(mode);
+    }
+
+    static void setOverscroll(Context context){
+        final Resources res = context.getResources();
+        Drawable edge,glow;
+        mOverscrollColor = Settings.System.getInt(context.getContentResolver(),
+                Settings.System.OVERSCROLL_COLOR,0);
+        prevOverscroll = mOverscrollColor;
+        if (mOverscrollColor != 0){
+            edge = res.getDrawable(R.drawable.overscroll_edge_white);
+            glow = res.getDrawable(R.drawable.overscroll_glow_white);
+            edge.setColorFilter(mOverscrollColor, Mode.MULTIPLY);
+            glow.setColorFilter(mOverscrollColor, Mode.MULTIPLY);
+        }else{
+            edge = res.getDrawable(R.drawable.overscroll_edge);
+            glow = res.getDrawable(R.drawable.overscroll_glow);
+        }
+        if (mEdgeGlowTop == null && mEdgeGlowBottom == null){
+            mEdgeGlowTop = new EdgeGlow(edge, glow);
+            mEdgeGlowBottom = new EdgeGlow(edge, glow);
+        }else{
+            mEdgeGlowTop.setEdge(edge, glow);
+            mEdgeGlowBottom.setEdge(edge, glow);
+        }
     }
 
     /**
@@ -1277,6 +1308,14 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
 
         mOverscrollEffect = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.OVERSCROLL_EFFECT, OVER_SCROLL_SETTING_EDGEGLOW);
+
+        mOverscrollColor = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.OVERSCROLL_COLOR,0);
+
+        if ((mOverscrollColor != prevOverscroll)&&
+                (mOverscrollEffect == 1 || mOverscrollEffect == 2)){
+            setOverscroll(mContext);
+        }
 
         if (mOverscrollEffect >= OVER_SCROLL_SETTING_BOUNCEGLOW) {
             mOverscrollDistance = getOverscrollMax();
