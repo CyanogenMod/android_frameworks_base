@@ -33,6 +33,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
 import android.os.ParcelFileDescriptor;
+import android.os.SystemProperties;
 import android.os.UEventObserver;
 import android.provider.Settings;
 import android.util.Log;
@@ -89,6 +90,7 @@ public class UsbService extends IUsbManager.Stub {
     // current connected and configuration state
     private int mConnected;
     private int mConfiguration;
+    private boolean mHasUsbService = false;
     private boolean mLegacy = false;
 
     // last broadcasted connected and configuration state
@@ -146,6 +148,46 @@ public class UsbService extends IUsbManager.Stub {
         }
     }
 
+
+    private void updateFunctions(File dir, boolean useEnableFiles) {
+        try {
+            char[] buffer = new char[1024];
+            File[] files = dir.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                File file = useEnableFiles ? new File(files[i], "enable") : files[i];
+                FileReader reader = new FileReader(file);
+                int len = reader.read(buffer, 0, 1024);
+                reader.close();
+                try {
+                    int value = Integer.valueOf((new String(buffer, 0, len)).trim()) == 1 ?
+                            MSG_FUNCTION_ENABLED : MSG_FUNCTION_DISABLED;
+                    String functionName = files[i].getName();
+                    Message msg = Message.obtain(mHandler, value);
+                    msg.obj = functionName;
+                    mHandler.sendMessage(msg);
+                } catch (NumberFormatException nfe) {
+                    Slog.d(TAG, files[i].getName()+" contains non-numeric data");
+                }
+            }
+        } catch (Exception e) {
+            Slog.e(TAG, "" , e);
+        }
+    }
+
+    private void updateLegacyFunctionsLocked() {
+        if (mLegacy) {
+            File compositeDir = new File(USB_COMPOSITE_CLASS_PATH);
+            if (compositeDir.exists()) {
+                updateFunctions(compositeDir, true);
+            } else {
+                compositeDir = new File(USB_LEGACY_FUNCTIONS_PATH);
+                if (compositeDir.exists()) {
+                    updateFunctions(compositeDir, false);
+                }
+            }
+        }
+    }
+
     /*
      * Listens for uevent messages from the kernel to monitor the USB state (device mode)
      */
@@ -157,34 +199,13 @@ public class UsbService extends IUsbManager.Stub {
             }
 
             synchronized (mLock) {
-                char[] buffer = new char[1024];
-                if((new File(USB_LEGACY_FUNCTIONS_PATH)).exists()) {
-                    try {
-                        File[] files = new File(USB_LEGACY_FUNCTIONS_PATH).listFiles();
-                        for (int i = 0; i < files.length; i++) {
-                            FileReader reader = new FileReader(files[i]);
-                            int len = reader.read(buffer, 0, 1024);
-                            reader.close();
-                            try {
-                                int value = Integer.valueOf((new String(buffer, 0, len)).trim()) == 1 ?
-                                    MSG_FUNCTION_ENABLED : MSG_FUNCTION_DISABLED;
-                                String functionName = files[i].getName();
-                                Message msg = Message.obtain(mHandler, value);
-                                msg.obj = functionName;
-                                mHandler.sendMessage(msg);
-                            } catch(NumberFormatException nfe){
-                                Slog.d(TAG, files[i].getName()+" contains non-numeric data");
-                            }
-                        }
-                    } catch (Exception e) {
-                        Slog.e(TAG, "" , e);
-                    }
-                }
+                updateLegacyFunctionsLocked();
+
                 String name = event.get("SWITCH_NAME");
                 String state = event.get("SWITCH_STATE");
                 if (name != null && state != null) {
                     try {
-                        if (mLegacy) {
+                        if (mLegacy && !mHasUsbService) {
                             int intState = ("online".equals(state) ? 1 : 0);
                             if ("usb_mass_storage".equals(name)) {
                                 mConnected = intState;
@@ -195,7 +216,7 @@ public class UsbService extends IUsbManager.Stub {
                                     update(mConnected == 0);
                                 }
                             }
-                        } else {
+                        } else if (!mHasUsbService) {
                             int intState = Integer.parseInt(state);
                             if ("usb_connected".equals(name)) {
                                 mConnected = intState;
@@ -232,12 +253,30 @@ public class UsbService extends IUsbManager.Stub {
         }
     };
 
-   private final BroadcastReceiver mBootCompletedReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mBootCompletedReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             // handle accessories attached at boot time
             synchronized (mLock) {
                 if (mCurrentAccessory != null) {
                     mDeviceManager.accessoryAttached(mCurrentAccessory);
+                }
+            }
+        }
+    };
+
+    private final BroadcastReceiver mUsbReconfiguredReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            mConnected = intent.getBooleanExtra("connected", false) ? 1 : 0;
+            if (intent.hasExtra("configuration")) {
+                mConfiguration = intent.getIntExtra("configuration", 0);
+            }
+
+            Log.d(TAG, "Got USB reconfiguration event, connected " + mConnected);
+
+            synchronized (mLock) {
+                updateLegacyFunctionsLocked();
+                if (mSystemReady) {
+                    update(mConnected == 0);
                 }
             }
         }
@@ -253,7 +292,7 @@ public class UsbService extends IUsbManager.Stub {
             init();  // set initial status
 
             // Watch for USB configuration changes
-            if (mConfiguration >= 0) {
+            if (mConfiguration >= 0 && !mHasUsbService) {
                 if (mLegacy) {
                     mUEventObserver.startObserving(USB_LEGACY_MATCH);
                 } else {
@@ -268,6 +307,8 @@ public class UsbService extends IUsbManager.Stub {
     private final void init() {
         char[] buffer = new char[1024];
         boolean inAccessoryMode = false;
+
+        mHasUsbService = SystemProperties.getInt("ro.usb.use_custom_service", 0) != 0;
 
         // Read initial USB state (device mode)
         mConfiguration = -1;
@@ -305,73 +346,18 @@ public class UsbService extends IUsbManager.Stub {
             return;
         }
 
-        if((new File(USB_COMPOSITE_CLASS_PATH)).exists()){
-            // Read initial list of enabled and disabled functions (device mode)
-            try {
-                File[] files = new File(USB_COMPOSITE_CLASS_PATH).listFiles();
-                for (int i = 0; i < files.length; i++) {
-                    File file = new File(files[i], "enable");
-                    FileReader reader = new FileReader(file);
-                    int len = reader.read(buffer, 0, 1024);
-                    reader.close();
-                    int value = Integer.valueOf((new String(buffer, 0, len)).trim());
-                    String functionName = files[i].getName();
-                    if (value == 1) {
-                        mEnabledFunctions.add(functionName);
-                        if (UsbManager.USB_FUNCTION_ACCESSORY.equals(functionName)) {
-                            // The USB accessory driver is on by default, but it might have been
-                            // enabled before the USB service has initialized.
-                            inAccessoryMode = true;
-                        } else if (!UsbManager.USB_FUNCTION_ADB.equals(functionName)) {
-                            // adb is enabled/disabled automatically by the adbd daemon,
-                            // so don't treat it as a default function.
-                            mDefaultFunctions.add(functionName);
-                        }
-                    } else {
-                        mDisabledFunctions.add(functionName);
-                    }
-                }
-            } catch (FileNotFoundException e) {
-                Slog.w(TAG, "This kernel does not have USB composite class support");
-            } catch (Exception e) {
-                Slog.e(TAG, "" , e);
+        File compositeDir = new File(USB_COMPOSITE_CLASS_PATH);
+        if (compositeDir.exists()) {
+            inAccessoryMode |= initFunctions(compositeDir, true, buffer);
+        } else {
+            Slog.w(TAG, "This kernel does not have USB composite class support");
+            compositeDir = new File(USB_LEGACY_FUNCTIONS_PATH);
+            if (compositeDir.exists()) {
+                inAccessoryMode |= initFunctions(compositeDir, false, buffer);
+            } else if (mLegacy) {
+                mDisabledFunctions.add(UsbManager.USB_FUNCTION_MASS_STORAGE);
             }
         }
-        else if((new File(USB_LEGACY_FUNCTIONS_PATH)).exists()) {
-            try {
-                File[] files = new File(USB_LEGACY_FUNCTIONS_PATH).listFiles();
-                for (int i = 0; i < files.length; i++) {
-                    FileReader reader = new FileReader(files[i]);
-                    int len = reader.read(buffer, 0, 1024);
-                    reader.close();
-                    try{
-                        int value = Integer.valueOf((new String(buffer, 0, len)).trim());
-                        String functionName = files[i].getName();
-                        if (value == 1) {
-                            mEnabledFunctions.add(functionName);
-                            if (UsbManager.USB_FUNCTION_ACCESSORY.equals(functionName)) {
-                                // The USB accessory driver is on by default, but it might have been
-                                // enabled before the USB service has initialized.
-                                inAccessoryMode = true;
-                            } else if (!UsbManager.USB_FUNCTION_ADB.equals(functionName)) {
-                                // adb is enabled/disabled automatically by the adbd daemon,
-                                // so don't treat it as a default function.
-                                mDefaultFunctions.add(functionName);
-                            }
-                        } else {
-                            mDisabledFunctions.add(functionName);
-                        }
-                    }
-                    catch(NumberFormatException nfe){
-                        Slog.d(TAG, files[i].getName()+" contains non-numeric data");
-                    }
-                }
-            } catch (Exception e) {
-                Slog.e(TAG, "" , e);
-            }
-        }
-        else if (mLegacy)
-            mDisabledFunctions.add(UsbManager.USB_FUNCTION_MASS_STORAGE);
 
         // handle the case where an accessory switched the driver to accessory mode
         // before the framework finished booting
@@ -389,6 +375,39 @@ public class UsbService extends IUsbManager.Stub {
         }
     }
 
+    /* returns true if USB is in accessory mode */
+    private boolean initFunctions(File dir, boolean useEnableFiles, char[] buffer) {
+        boolean inAccessoryMode = false;
+        try {
+            File[] files = dir.listFiles();
+            for (int i = 0; i < files.length; i++) {
+                File file = useEnableFiles ? new File(files[i], "enable") : files[i];
+                FileReader reader = new FileReader(file);
+                int len = reader.read(buffer, 0, 1024);
+                reader.close();
+                int value = Integer.valueOf((new String(buffer, 0, len)).trim());
+                String functionName = files[i].getName();
+                if (value == 1) {
+                    mEnabledFunctions.add(functionName);
+                    if (UsbManager.USB_FUNCTION_ACCESSORY.equals(functionName)) {
+                        // The USB accessory driver is on by default, but it might have been
+                        // enabled before the USB service has initialized.
+                        inAccessoryMode = true;
+                    } else if (!UsbManager.USB_FUNCTION_ADB.equals(functionName)) {
+                        // adb is enabled/disabled automatically by the adbd daemon,
+                        // so don't treat it as a default function.
+                        mDefaultFunctions.add(functionName);
+                    }
+                } else {
+                    mDisabledFunctions.add(functionName);
+                }
+            }
+        } catch (Exception e) {
+            Slog.e(TAG, "" , e);
+        }
+        return inAccessoryMode;
+    }
+
     public void systemReady() {
         synchronized (mLock) {
             update(false);
@@ -399,6 +418,12 @@ public class UsbService extends IUsbManager.Stub {
                 mContext.registerReceiver(mBootCompletedReceiver,
                         new IntentFilter(Intent.ACTION_BOOT_COMPLETED));
             }
+
+            if (mHasUsbService) {
+                mContext.registerReceiver(mUsbReconfiguredReceiver,
+                        new IntentFilter("com.android.internal.usb.reconfigured"));
+            }
+
             mSystemReady = true;
         }
     }
