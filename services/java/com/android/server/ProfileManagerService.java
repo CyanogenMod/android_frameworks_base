@@ -94,9 +94,9 @@ public class ProfileManagerService extends IProfileManager.Stub {
     public void addProfile(Profile profile) throws RemoteException {
         // Make sure this profile has all of the correct groups.
         for (NotificationGroup group : mGroups.values()) {
-            profile.ensureProfleGroup(group.getName());
+            profile.ensureProfileGroup(group.getName());
         }
-        profile.ensureProfleGroup(
+        profile.ensureProfileGroup(
                 mContext.getString(com.android.internal.R.string.wildcardProfile), true);
         mProfiles.put(profile.getName(), profile);
     }
@@ -132,7 +132,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
             // If the above is true, then the ProfileGroup shouldn't exist in
             // the profile. Ensure it is added.
             for (Profile profile : mProfiles.values()) {
-                profile.ensureProfleGroup(group.getName());
+                profile.ensureProfileGroup(group.getName());
             }
         }
     }

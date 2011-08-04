@@ -66,12 +66,12 @@ public class Profile implements Parcelable {
     }
 
     /** @hide */
-    public void ensureProfleGroup(String groupName) {
-        ensureProfleGroup(groupName, false);
+    public void ensureProfileGroup(String groupName) {
+        ensureProfileGroup(groupName, false);
     }
 
     /** @hide */
-    public void ensureProfleGroup(String groupName, boolean defaultGroup) {
+    public void ensureProfileGroup(String groupName, boolean defaultGroup) {
         if (!profileGroups.containsKey(groupName)) {
             ProfileGroup value = new ProfileGroup(groupName, defaultGroup);
             addProfileGroup(value);
