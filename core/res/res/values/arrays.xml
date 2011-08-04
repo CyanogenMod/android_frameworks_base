@@ -118,7 +118,7 @@
 
     <!-- Do not translate. Defines the shutdown actions passed to the kernel.
          The first item should be empty for regular reboot. -->
-    <string-array name="shutdown_reboot_actions">
+    <string-array name="shutdown_reboot_actions" translatable="false">
         <item></item>
         <item>recovery</item>
         <item>bootloader</item>
