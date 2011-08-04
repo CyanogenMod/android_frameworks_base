@@ -441,7 +441,7 @@ public final class Bitmap implements Parcelable {
             m.mapRect(deviceR, dstR);
             neww = Math.round(deviceR.width());
             newh = Math.round(deviceR.height());
-            bitmap = createBitmap(neww, newh, hasAlpha ? Config.ARGB_8888 : Config.RGB_565);
+            bitmap = createBitmap(neww, newh, (hasAlpha || ( source.getConfig() == Config.ARGB_8888 )) ? Config.ARGB_8888 : Config.RGB_565);
             if (hasAlpha) {
                 bitmap.eraseColor(0);
             }
