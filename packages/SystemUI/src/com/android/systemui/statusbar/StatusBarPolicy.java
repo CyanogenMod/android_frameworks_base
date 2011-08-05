@@ -110,6 +110,9 @@ public class StatusBarPolicy {
     // phone
     private TelephonyManager mPhone;
     private int mPhoneSignalIconId;
+    public static final int PHONE_SIGNAL_IS_FLIGHTMODE = 1;
+    public static final int PHONE_SIGNAL_IS_NULL = 2;
+    public static final int PHONE_SIGNAL_IS_NORMAL = 0;
 
     //***** Signal strength icons
     //GSM/UMTS
@@ -652,6 +655,12 @@ public class StatusBarPolicy {
         if (mPhoneSignalHidden) {
             mService.setIconVisibility("phone_signal", false);
         }
+        
+        updateShowCmSignal();
+        if (!mPhoneSignalHidden) {
+        	mService.setIconVisibility("phone_signal", !mShowCmSignal);
+        }
+
 
         // register for phone state notifications.
         ((TelephonyManager)mContext.getSystemService(Context.TELEPHONY_SERVICE))
@@ -767,6 +776,12 @@ public class StatusBarPolicy {
         } catch (Exception e) {
             mHspaDataDistinguishable = false;
         }
+    }
+    
+    private final void updateShowCmSignal() {
+        // 0 will hide the cmsignaltext and show the signal bars
+        mShowCmSignal = Settings.System.getInt(mContext.getContentResolver(),
+        Settings.System.STATUS_BAR_CM_SIGNAL_TEXT, 0) != 0;
     }
 
     private final void updateAlarm(Intent intent) {
@@ -1102,12 +1117,6 @@ public class StatusBarPolicy {
     }
 
     private final void updateSignalStrength() {
-        updateSignalStrengthDbm();
-        if (mShowCmSignal) {
-            mService.setIconVisibility("phone_signal", false);
-            return;
-        }
-
         int iconLevel = -1;
         int[] iconList;
 
@@ -1117,14 +1126,40 @@ public class StatusBarPolicy {
             if (Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.AIRPLANE_MODE_ON, 0) == 1) {
                 mPhoneSignalIconId = R.drawable.stat_sys_signal_flightmode;
+                updateSignalStrengthDbm(PHONE_SIGNAL_IS_FLIGHTMODE);
+                // set phone_signal visibility false if hidden
+                if (mPhoneSignalHidden) {
+                    mService.setIconVisibility("phone_signal", false);
+                } else {
+    	                // Show the icon regardless of the CmShowCmSignal setting
+                	    // as we don't have a symbol to display in the CmSignalText
+    	                mService.setIconVisibility("phone_signal", true);
+                }
             } else {
                 mPhoneSignalIconId = R.drawable.stat_sys_signal_null;
-            }
+                updateSignalStrengthDbm(PHONE_SIGNAL_IS_NULL);
+                // set phone_signal visibility false if hidden
+                if (mPhoneSignalHidden) {
+                    mService.setIconVisibility("phone_signal", false);
+                } else {
+                	if (!mShowCmSignal) {
+    	                // Show the icon if it was hidden because of the mShowCmSignal member
+    	            	// but only in airplane mode. For no-signal mode, we have a CmSignalText display.
+    	                mService.setIconVisibility("phone_signal", true);
+                	} else {
+                		mService.setIconVisibility("phone_signal", false);
+                	}
+                }
+           }
             mService.setIcon("phone_signal", mPhoneSignalIconId, 0);
-            // set phone_signal visibility false if hidden
-            if (mPhoneSignalHidden) {
-                mService.setIconVisibility("phone_signal", false);
-            }
+            return;
+        }
+
+        // calculate and update the dBm value of the signal strength
+        updateSignalStrengthDbm(PHONE_SIGNAL_IS_NORMAL);
+        if (mShowCmSignal) {
+            // if we show the dBm value, hide the standard icon and quit this method.
+            mService.setIconVisibility("phone_signal", false);
             return;
         }
 
@@ -1217,7 +1252,7 @@ public class StatusBarPolicy {
         return (levelEvdoDbm < levelEvdoSnr) ? levelEvdoDbm : levelEvdoSnr;
     }
 
-    public void updateSignalStrengthDbm() {
+    public void updateSignalStrengthDbm(int phoneSignalStatus) {
         int dBm = -1;
 
         if(!mSignalStrength.isGsm()) {
@@ -1232,6 +1267,7 @@ public class StatusBarPolicy {
 
         Intent dbmIntent = new Intent(Intent.ACTION_SIGNAL_DBM_CHANGED);
         dbmIntent.putExtra("dbm", dBm);
+        dbmIntent.putExtra("signal_status", phoneSignalStatus);
         mContext.sendBroadcast(dbmIntent);
     }
 
@@ -1613,10 +1649,11 @@ public class StatusBarPolicy {
         mCmBatteryStatus = !mShowCmBattery;
         mService.setIconVisibility("battery", !mShowCmBattery);
 
-      //0 will hide the cmsignaltext and show the signal bars
-       mShowCmSignal = Settings.System.getInt(mContext.getContentResolver(),
-       Settings.System.STATUS_BAR_CM_SIGNAL_TEXT, 0) != 0;
-       mService.setIconVisibility("phone_signal", !mShowCmSignal);
-
+        updateShowCmSignal();
+        if (mPhoneSignalHidden) {
+    	    mService.setIconVisibility("phone_signal", false);
+        } else {
+            mService.setIconVisibility("phone_signal", !mShowCmSignal);
+        }
     }
 }
