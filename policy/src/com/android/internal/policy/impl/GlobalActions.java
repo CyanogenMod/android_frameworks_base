@@ -58,6 +58,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Helper to show the global actions dialog.  Each item is an {@link Action} that
@@ -423,12 +424,13 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         final ProfileManager profileManager = (ProfileManager)mContext.getSystemService(Context.PROFILE_SERVICE);
 
         final Profile[] profiles = profileManager.getProfiles();
-        String activeProfile = profileManager.getActiveProfile().getName();
+        UUID activeProfile = profileManager.getActiveProfile().getUuid();
         final CharSequence[] names = new CharSequence[profiles.length];
+
         int i=0;
         int checkedItem = 0;
         for(Profile profile : profiles){
-            if(profile.getName().equals(activeProfile)){
+            if(profile.getUuid().equals(activeProfile)){
                 checkedItem = i;
                 mChosenProfile = profile;
             }
@@ -448,7 +450,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 .setPositiveButton(com.android.internal.R.string.yes,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
-                                profileManager.setActiveProfile(mChosenProfile.getName());
+                                profileManager.setActiveProfile(mChosenProfile.getUuid());
                             }
                         })
                 .setNegativeButton(com.android.internal.R.string.no,
