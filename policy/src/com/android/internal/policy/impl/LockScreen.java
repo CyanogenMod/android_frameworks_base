@@ -726,9 +726,12 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     /** {@inheritDoc} */
     public void onGrabbedStateChange(View v, int grabbedState) {
         if (grabbedState == SlidingTab.OnTriggerListener.RIGHT_HANDLE) {
+            boolean vibe = mSilentMode
+                && (mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE);
             mSilentMode = isSilentMode();
-            mTabSelector.setRightHintText(mSilentMode ? R.string.lockscreen_sound_on_label
-                    : R.string.lockscreen_sound_off_label);
+            mTabSelector.setRightHintText(mSilentMode ?
+                (vibe ? R.string.lockscreen_sound_off_label : R.string.lockscreen_sound_on_label)
+                : R.string.lockscreen_vibrate_on_label);
         }
         // Don't poke the wake lock when returning to a state where the handle is
         // not grabbed since that can happen when the system (instead of the user)

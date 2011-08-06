@@ -1639,6 +1639,8 @@
     <string name="lockscreen_sound_on_label">Sound on</string>
     <!-- Displayed on lock screen's right tab - turn sound off -->
     <string name="lockscreen_sound_off_label">Sound off</string>
+    <!-- Displayed on lock screen's right tab - turn vibrate on -->
+    <string name="lockscreen_vibrate_on_label">Vibrate</string>
 
     <!-- Displayed on lock screen's extra left tab - phone -->
     <string name="lockscreen_phone_label">Phone</string>
