@@ -19,16 +19,24 @@ package android.app;
 
 import android.app.Profile;
 import android.app.NotificationGroup;
+import android.os.ParcelUuid;
 
 /** {@hide} */
 interface IProfileManager
 {
-    void setActiveProfile(in String profileName);
+    boolean setActiveProfile(in ParcelUuid profileParcelUuid);
+    boolean setActiveProfileByName(String profileName);
     Profile getActiveProfile();
-    void addProfile(in Profile profile);
-    void removeProfile(in Profile profile);
-    Profile getProfile(String profileName);
+
+    boolean addProfile(in Profile profile);
+    boolean removeProfile(in Profile profile);
+
+    Profile getProfile(in ParcelUuid profileParcelUuid);
+    Profile getProfileByName(String profileName);
     Profile[] getProfiles();
+    boolean profileExists(in ParcelUuid profileUuid);
+    boolean profileExistsByName(String profileName);
+
     void persist();
 
     NotificationGroup[] getNotificationGroups();
@@ -36,5 +44,4 @@ interface IProfileManager
     void removeNotificationGroup(in NotificationGroup group);
     NotificationGroup getNotificationGroupForPackage(in String pkg);
     NotificationGroup getNotificationGroup(in String name);
- }
-
+}
