@@ -18,13 +18,17 @@ package android.hardware;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.io.IOException;
 
+import com.android.internal.R;
+
 import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
+import android.content.res.Resources;
 import android.graphics.ImageFormat;
 import android.os.Handler;
 import android.os.Looper;
@@ -138,6 +142,7 @@ public class Camera {
     private ErrorCallback mErrorCallback;
     private boolean mOneShot;
     private boolean mWithBuffer;
+    private boolean mIsFrontFacing;
 
     /**
      * Returns the number of physical cameras available on this device.
@@ -256,6 +261,10 @@ public class Camera {
         }
 
         native_setup(new WeakReference<Camera>(this), cameraId);
+
+        CameraInfo camInfo = new CameraInfo();
+        getCameraInfo(cameraId, camInfo);
+        mIsFrontFacing = (camInfo.facing == CameraInfo.CAMERA_FACING_FRONT);
     }
 
     protected void finalize() {
@@ -1065,7 +1074,7 @@ public class Camera {
         private static final String KEY_MAX_EXPOSURE_COMPENSATION = "max-exposure-compensation";
         private static final String KEY_MIN_EXPOSURE_COMPENSATION = "min-exposure-compensation";
         private static final String KEY_EXPOSURE_COMPENSATION_STEP = "exposure-compensation-step";
-        private static final String KEY_AUTO_EXPOSURE = "meter-mode";
+        private /*static final*/ String KEY_AUTO_EXPOSURE = "meter-mode";
         private static final String KEY_ZOOM = "zoom";
         private static final String KEY_MAX_ZOOM = "max-zoom";
         private static final String KEY_ZOOM_RATIOS = "zoom-ratios";
@@ -1350,9 +1359,11 @@ public class Camera {
         public static final String CAF_ON = "caf-on";
 
         private HashMap<String, String> mMap;
+        private Resources mResources;
 
         private Parameters() {
             mMap = new HashMap<String, String>(64);
+            mResources = Resources.getSystem();
         }
 
         /**
@@ -2334,6 +2345,14 @@ public class Camera {
          * @see #getAntibanding()
          */
         public List<String> getSupportedAntibanding() {
+            if (!mIsFrontFacing) {
+                String[] modes = mResources.getStringArray(
+                        R.array.config_camera_supported_antibanding);
+                if (modes.length > 0) {
+                    return Arrays.asList(modes);
+                }
+            }
+
             String str = get(KEY_ANTIBANDING + SUPPORTED_VALUES_SUFFIX);
             return split(str);
         }
@@ -2417,6 +2436,14 @@ public class Camera {
          * @see #getSceneMode()
          */
         public List<String> getSupportedSceneModes() {
+            if (!mIsFrontFacing) {
+                String[] modes = mResources.getStringArray(
+                        R.array.config_camera_supported_scene_modes);
+                if (modes.length > 0) {
+                    return Arrays.asList(modes);
+                }
+            }
+
             String str = get(KEY_SCENE_MODE + SUPPORTED_VALUES_SUFFIX);
             return split(str);
         }
@@ -2494,6 +2521,14 @@ public class Camera {
          * @see #getFocusMode()
          */
         public List<String> getSupportedFocusModes() {
+            if (!mIsFrontFacing) {
+                String[] modes = mResources.getStringArray(
+                        R.array.config_camera_supported_focus_modes);
+                if (modes.length > 0) {
+                    return Arrays.asList(modes);
+                }
+            }
+
             String str = get(KEY_FOCUS_MODE + SUPPORTED_VALUES_SUFFIX);
             return split(str);
         }
@@ -2758,6 +2793,14 @@ public class Camera {
          *         setting is not supported.
          */
         public List<String> getSupportedIsoValues() {
+            if (!mIsFrontFacing) {
+                String[] modes = mResources.getStringArray(
+                        R.array.config_camera_supported_iso_values);
+                if (modes.length > 0) {
+                    return Arrays.asList(modes);
+                }
+            }
+
             String str = get(KEY_ISO_MODE + SUPPORTED_VALUES_SUFFIX);
             if (str == null && get("nv-mode-hint") != null) {
                 /* Support NV cams */
@@ -2822,6 +2865,21 @@ public class Camera {
          *         setting is not supported.
          */
         public List<String> getSupportedAutoexposure() {
+            if (!mIsFrontFacing) {
+                String key_auto_exposure = mResources.getString(
+                        R.string.config_camera_key_auto_exposure);
+                if (!key_auto_exposure.isEmpty()) {
+                    // Support Samsung phones
+                    KEY_AUTO_EXPOSURE = key_auto_exposure;
+                }
+
+                String[] modes = mResources.getStringArray(
+                        R.array.config_camera_supported_auto_exposure_modes);
+                if (modes.length > 0) {
+                    return Arrays.asList(modes);
+                }
+            }
+
             String str = get(KEY_AUTO_EXPOSURE + SUPPORTED_VALUES_SUFFIX);
             return split(str);
         }
