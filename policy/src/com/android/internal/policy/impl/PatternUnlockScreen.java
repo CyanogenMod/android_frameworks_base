@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -101,6 +102,17 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
 
     private ViewGroup mFooterNormal;
     private ViewGroup mFooterForgotPattern;
+
+    private static final int CARRIER_TYPE_DEFAULT = 0;
+    private static final int CARRIER_TYPE_SPN = 1;
+    private static final int CARRIER_TYPE_PLMN = 2;
+    private static final int CARRIER_TYPE_CUSTOM = 3;
+
+    private int mCarrierLabelType = (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.CARRIER_LABEL_TYPE, CARRIER_TYPE_DEFAULT));
+
+    private String mCarrierLabelCustom = (Settings.System.getString(mContext.getContentResolver(),
+            Settings.System.CARRIER_LABEL_CUSTOM_STRING));
 
     /**
      * Keeps track of the last time we poked the wake lock during dispatching
@@ -262,7 +274,9 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         mCarrier.setText(
                 LockScreen.getCarrierString(
                         mUpdateMonitor.getTelephonyPlmn(),
-                        mUpdateMonitor.getTelephonySpn()));
+                        mUpdateMonitor.getTelephonySpn(),
+                        mCarrierLabelType,
+                        mCarrierLabelCustom));
     }
 
     private void refreshEmergencyButtonText() {
@@ -400,7 +414,8 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
 
     /** {@inheritDoc} */
     public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn) {
-        mCarrier.setText(LockScreen.getCarrierString(plmn, spn));
+        mCarrier.setText(LockScreen.getCarrierString(plmn, spn,
+                mCarrierLabelType, mCarrierLabelCustom));
     }
 
     /** {@inheritDoc} */
