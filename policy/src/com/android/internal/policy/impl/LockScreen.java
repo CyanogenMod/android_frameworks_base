@@ -84,6 +84,13 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private static final String TAG = "LockScreen";
     private static final String ENABLE_MENU_KEY_FILE = "/data/local/enable_menu_key";
     private static final Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
+    private static final int CARRIER_TYPE_DEFAULT = 0;
+    private static final int CARRIER_TYPE_SPN = 1;
+    private static final int CARRIER_TYPE_PLMN = 2;
+    private static final int CARRIER_TYPE_CUSTOM = 3;
+
+    private CharSequence DEFAULT_PLMN = mContext.getResources().getText(
+            R.string.lockscreen_carrier_default);
 
     private Status mStatus = Status.Normal;
 
@@ -184,6 +191,12 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     private boolean mRotaryHideArrows = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_ROTARY_HIDE_ARROWS, 0) == 1);
+
+    private int mCarrierLabelType = (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.CARRIER_LABEL_TYPE, CARRIER_TYPE_DEFAULT));
+
+    private String mCarrierLabelCustom = (Settings.System.getString(mContext.getContentResolver(),
+            Settings.System.CARRIER_LABEL_CUSTOM_STRING));
 
     private boolean mUseRotaryLockscreen = (mLockscreenStyle == 2);
 
@@ -982,10 +995,21 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         switch (status) {
             case Normal:
                 // text
-                mCarrier.setText(
-                        getCarrierString(
-                                mUpdateMonitor.getTelephonyPlmn(),
-                                mUpdateMonitor.getTelephonySpn()));
+                if (mUpdateMonitor.getTelephonyPlmn().equals(DEFAULT_PLMN)) {
+                    mCarrier.setText(
+                            getCarrierString(
+                                    mUpdateMonitor.getTelephonyPlmn(),
+                                    mUpdateMonitor.getTelephonySpn(),
+                                    CARRIER_TYPE_DEFAULT,
+                                    ""));
+                } else {
+                    mCarrier.setText(
+                            getCarrierString(
+                                    mUpdateMonitor.getTelephonyPlmn(),
+                                    mUpdateMonitor.getTelephonySpn(),
+                                    mCarrierLabelType,
+                                    mCarrierLabelCustom));
+                }
 
                 // Empty now, but used for sliding tab feedback
                 mScreenLocked.setText("");
@@ -1019,7 +1043,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 mCarrier.setText(
                         getCarrierString(
                                 mUpdateMonitor.getTelephonyPlmn(),
-                                getContext().getText(R.string.lockscreen_network_locked_message)));
+                                getContext().getText(R.string.lockscreen_network_locked_message),
+                                CARRIER_TYPE_DEFAULT,
+                                ""));
                 mScreenLocked.setText(R.string.lockscreen_instructions_when_pattern_disabled);
 
                 // layout
@@ -1079,7 +1105,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 mCarrier.setText(
                         getCarrierString(
                                 mUpdateMonitor.getTelephonyPlmn(),
-                                getContext().getText(R.string.lockscreen_missing_sim_message_short)));
+                                getContext().getText(R.string.lockscreen_missing_sim_message_short),
+                                CARRIER_TYPE_DEFAULT,
+                                ""));
                 mScreenLocked.setText(R.string.lockscreen_missing_sim_instructions);
 
                 // layout
@@ -1097,7 +1125,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 mCarrier.setText(
                         getCarrierString(
                                 mUpdateMonitor.getTelephonyPlmn(),
-                                getContext().getText(R.string.lockscreen_sim_locked_message)));
+                                getContext().getText(R.string.lockscreen_sim_locked_message),
+                                CARRIER_TYPE_DEFAULT,
+                                ""));
 
                 // layout
                 mScreenLocked.setVisibility(View.INVISIBLE);
@@ -1127,7 +1157,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 mCarrier.setText(
                         getCarrierString(
                                 mUpdateMonitor.getTelephonyPlmn(),
-                                getContext().getText(R.string.lockscreen_sim_puk_locked_message)));
+                                getContext().getText(R.string.lockscreen_sim_puk_locked_message),
+                                CARRIER_TYPE_DEFAULT,
+                                ""));
                 mScreenLocked.setText(R.string.lockscreen_sim_puk_locked_instructions);
 
                 // layout
@@ -1147,16 +1179,30 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         }
     }
 
-    static CharSequence getCarrierString(CharSequence telephonyPlmn, CharSequence telephonySpn) {
-        if (telephonyPlmn != null && (telephonySpn == null || "".contentEquals(telephonySpn))) {
-            return telephonyPlmn;
-        } else if (telephonySpn != null && (telephonyPlmn == null || "".contentEquals(telephonyPlmn))) {
-            return telephonySpn;
-        } else if (telephonyPlmn != null && telephonySpn != null) {
-            return telephonyPlmn + "|" + telephonySpn;
-        } else {
-            return "";
+    static CharSequence getCarrierString(CharSequence telephonyPlmn, CharSequence telephonySpn, int carrierLabelType, String carrierLabelCustom) {
+        switch (carrierLabelType) {
+            default:
+            case CARRIER_TYPE_DEFAULT:
+                if (telephonyPlmn != null && (telephonySpn == null || "".contentEquals(telephonySpn))) {
+                    return telephonyPlmn;
+                } else if (telephonySpn != null && (telephonyPlmn == null || "".contentEquals(telephonyPlmn))) {
+                    return telephonySpn;
+                } else if (telephonyPlmn != null && telephonySpn != null) {
+                    return telephonyPlmn + "|" + telephonySpn;
+                }
+                return "";
+            case CARRIER_TYPE_SPN:
+                if (telephonySpn != null)
+                    return telephonySpn;
+                break;
+            case CARRIER_TYPE_PLMN:
+                if (telephonyPlmn != null)
+                    return telephonyPlmn;
+                break;
+            case CARRIER_TYPE_CUSTOM:
+                return carrierLabelCustom;
         }
+        return "";
     }
 
     public void onSimStateChanged(IccCard.State simState) {

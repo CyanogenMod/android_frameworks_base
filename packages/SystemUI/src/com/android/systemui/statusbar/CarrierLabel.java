@@ -17,9 +17,14 @@
 package com.android.systemui.statusbar;
 
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
+import android.os.Handler;
+import android.provider.CmSystem;
+import android.provider.Settings;
 import android.provider.Telephony;
 import android.util.AttributeSet;
 import android.util.Slog;
@@ -39,6 +44,47 @@ import com.android.internal.R;
 public class CarrierLabel extends TextView {
     private boolean mAttached;
 
+    private boolean mShowSpn;
+    private String mSpn;
+    private boolean mShowPlmn;
+    private String mPlmn;
+
+    private int mCarrierLabelType;
+    private String mCarrierLabelCustom;
+
+    private static final int TYPE_DEFAULT = 0;
+
+    private static final int TYPE_SPN = 1;
+
+    private static final int TYPE_PLMN = 2;
+
+    private static final int TYPE_CUSTOM = 3;
+
+    Handler mHandler;
+
+    class SettingsObserver extends ContentObserver {
+        SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.CARRIER_LABEL_TYPE),
+                    false, this);
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.CARRIER_LABEL_CUSTOM_STRING),
+                    false, this);
+            onChange(true);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+            updateNetworkName(mShowSpn, mSpn, mShowPlmn, mPlmn);
+        }
+    }
+
     public CarrierLabel(Context context) {
         this(context, null);
     }
@@ -49,6 +95,12 @@ public class CarrierLabel extends TextView {
 
     public CarrierLabel(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+
+        mHandler = new Handler();
+        SettingsObserver settingsObserver = new SettingsObserver(mHandler);
+        settingsObserver.observe();
+
+        updateSettings();
         updateNetworkName(false, null, false, null);
     }
 
@@ -86,26 +138,69 @@ public class CarrierLabel extends TextView {
         }
     };
 
+    void updateSettings() {
+        ContentResolver resolver = mContext.getContentResolver();
+
+        mCarrierLabelType = Settings.System.getInt(resolver,
+                Settings.System.CARRIER_LABEL_TYPE, TYPE_DEFAULT);
+        mCarrierLabelCustom = Settings.System.getString(resolver,
+                Settings.System.CARRIER_LABEL_CUSTOM_STRING);
+    }
+
     void updateNetworkName(boolean showSpn, String spn, boolean showPlmn, String plmn) {
         if (false) {
             Slog.d("CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
                     + " showPlmn=" + showPlmn + " plmn=" + plmn);
         }
-        StringBuilder str = new StringBuilder();
-        boolean something = false;
-        if (showPlmn && plmn != null) {
-            str.append(plmn);
-            something = true;
+
+        mShowSpn = showSpn;
+        mSpn = spn;
+        mShowPlmn = showPlmn;
+        mPlmn = plmn;
+
+        boolean haveSignal = false;
+        haveSignal = (showPlmn && plmn != null) || (showSpn && spn != null);
+
+        String label = "";
+
+        switch (mCarrierLabelType) {
+            default:
+            case TYPE_DEFAULT:
+                StringBuilder str = new StringBuilder();
+                boolean something = false;
+                if (showPlmn && plmn != null) {
+                    str.append(plmn);
+                    something = true;
+                }
+                if (showSpn && spn != null) {
+                    if (something) {
+                        str.append('\n');
+                    }
+                    str.append(spn);
+                    something = true;
+                }
+
+                label = str.toString();
+                break;
+
+            case TYPE_SPN:
+                if (spn != null)
+                    label = spn;
+                break;
+
+            case TYPE_PLMN:
+                if (plmn != null)
+                    label = plmn;
+                break;
+
+            case TYPE_CUSTOM:
+                if (mCarrierLabelCustom != null)
+                    label = mCarrierLabelCustom;
+                break;
         }
-        if (showSpn && spn != null) {
-            if (something) {
-                str.append('\n');
-            }
-            str.append(spn);
-            something = true;
-        }
-        if (something) {
-            setText(str.toString());
+
+        if (haveSignal) {
+            setText(label);
         } else {
             setText(com.android.internal.R.string.lockscreen_carrier_default);
         }
