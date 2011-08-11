@@ -562,8 +562,7 @@ public class StatusBarPolicy {
                 updateVolume();
             }
             else if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
-                int state = intent.getIntExtra("state", 0);
-                mService.setIconVisibility("headset", (state == 1));
+                updateHeadset(intent);
             }
             else if (action.equals(TelephonyIntents.ACTION_SIM_STATE_CHANGED)) {
                 updateSimState(intent);
@@ -1365,6 +1364,18 @@ public class StatusBarPolicy {
         if (visible != mVolumeVisible) {
             mService.setIconVisibility("volume", visible);
             mVolumeVisible = visible;
+        }
+    }
+
+    private final void updateHeadset(Intent intent) {
+        if (intent.getIntExtra("state", 0) == 1) {
+            final int iconId = (intent.getIntExtra("mic", 0) == 1)
+                    ? com.android.internal.R.drawable.stat_sys_headset
+                    : R.drawable.stat_sys_headset_no_mic;
+            mService.setIcon("headset", iconId, 0);
+            mService.setIconVisibility("headset", true);
+        } else {
+            mService.setIconVisibility("headset", false);
         }
     }
 
