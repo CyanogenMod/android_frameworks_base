@@ -137,6 +137,10 @@ public:
     virtual status_t setFmVolume(float volume, int delayMs = 0);
 #endif
 
+#ifdef OMAP_ENHANCEMENT
+    virtual status_t    setFMRxActive(bool status);
+#endif
+
 private:
                         AudioPolicyService();
     virtual             ~AudioPolicyService();

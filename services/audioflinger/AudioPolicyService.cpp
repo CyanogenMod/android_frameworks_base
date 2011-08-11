@@ -641,6 +641,12 @@ status_t AudioPolicyService::setFmVolume(float volume, int delayMs)
 }
 #endif
 
+#ifdef OMAP_ENHANCEMENT
+status_t AudioPolicyService::setFMRxActive(bool status) {
+    return NO_ERROR;
+}
+#endif
+
 // -----------  AudioPolicyService::AudioCommandThread implementation ----------
 
 AudioPolicyService::AudioCommandThread::AudioCommandThread(String8 name)
