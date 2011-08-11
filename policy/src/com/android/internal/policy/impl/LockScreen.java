@@ -149,6 +149,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private boolean mLockAlwaysBattery = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_ALWAYS_BATTERY, 0) == 1);
 
+    private boolean mLockCalendarAlarm = (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_CALENDAR_ALARM, 0) == 1);
+
     private boolean mLockMusicControls = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_MUSIC_CONTROLS, 1) == 1);
 
@@ -784,6 +787,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     private void refreshAlarmDisplay() {
         mNextAlarm = mLockPatternUtils.getNextAlarm();
+        if (mNextAlarm == null && mLockCalendarAlarm) {
+            mNextAlarm = mLockPatternUtils.getNextCalendarAlarm();
+        }
         if (mNextAlarm != null) {
             mAlarmIcon = getContext().getResources().getDrawable(R.drawable.ic_lock_idle_alarm);
         }
