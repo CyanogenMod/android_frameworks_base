@@ -19,10 +19,12 @@ package com.android.internal.widget;
 import android.app.admin.DevicePolicyManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.FileObserver;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
+import android.provider.Calendar;
 import android.provider.Settings;
 import android.security.MessageDigest;
 import android.telephony.TelephonyManager;
@@ -95,6 +97,14 @@ public class LockPatternUtils {
     private final static String PATTERN_EVER_CHOSEN_KEY = "lockscreen.patterneverchosen";
     public final static String PASSWORD_TYPE_KEY = "lockscreen.password_type";
     private final static String LOCK_PASSWORD_SALT_KEY = "lockscreen.password_salt";    
+    
+    private final static String DM12 = "%ta %tl:%tM %tp %s";
+    private final static String DM24 = "%ta %tk:%tM %s";
+    
+    /**
+     * The time in milliseconds to look ahead for calendar events. 
+     */
+    private final static long LOOK_AHEAD_MILLIS = 86400000; // 24 hours
 
     private final Context mContext;
     private final ContentResolver mContentResolver;
@@ -699,6 +709,36 @@ public class LockPatternUtils {
             return null;
         }
         return nextAlarm;
+    }
+    
+    /**
+     * @return A formatted string of the next calendar event with a reminder
+     * (for showing on the lock screen), or null if there is no next event
+     * within a certain look-ahead time.
+     */
+    public String getNextCalendarAlarm() {
+        long now = System.currentTimeMillis();
+        long lookahead = now + LOOK_AHEAD_MILLIS;
+        String nextCalendarAlarm = null;
+        Cursor cursor = null;
+        try {
+            cursor = Calendar.Instances.query(mContentResolver, new String[] {
+                    Calendar.EventsColumns.TITLE, Calendar.EventsColumns.DTSTART
+            }, now, lookahead, Calendar.EventsColumns.HAS_ALARM + "=1", null);
+            if (cursor.moveToFirst()) {
+                boolean is24 = android.text.format.DateFormat.is24HourFormat(mContext);
+                String format = is24 ? DM24 : DM12;
+                String title = cursor.getString(0);
+                long start = cursor.getLong(1);
+                nextCalendarAlarm = String.format(format, start, start, start, 
+                        is24 ? title : start, title);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return nextCalendarAlarm;
     }
 
     private boolean getBoolean(String secureSettingKey) {
