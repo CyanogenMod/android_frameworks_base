@@ -24,6 +24,7 @@ import android.content.res.XmlResourceParser;
 import android.media.AudioManager;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.ParcelUuid;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -31,14 +32,19 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Profile implements Parcelable {
 
     private String mName;
 
+    private UUID mUuid;
+
     private Map<String, ProfileGroup> profileGroups = new HashMap<String, ProfileGroup>();
 
     private ProfileGroup mDefaultGroup;
+
+    private boolean mStatusBarIndicator = false;
 
     private static final String TAG = "Profile";
 
@@ -59,6 +65,13 @@ public class Profile implements Parcelable {
     /** @hide */
     public Profile(String name) {
         this.mName = name;
+        // Generate a new UUID, since one was not specified.
+        this.mUuid = UUID.randomUUID();
+    }
+
+    public Profile(String name, UUID uuid) {
+        this.mName = name;
+        this.mUuid = uuid;
     }
 
     private Profile(Parcel in) {
@@ -117,6 +130,8 @@ public class Profile implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mName);
+        new ParcelUuid(mUuid).writeToParcel(dest, 0);
+        dest.writeInt(mStatusBarIndicator ? 1 : 0);
         dest.writeParcelableArray(
                 profileGroups.values().toArray(new Parcelable[profileGroups.size()]), flags);
         dest.writeParcelableArray(
@@ -126,6 +141,8 @@ public class Profile implements Parcelable {
     /** @hide */
     public void readFromParcel(Parcel in) {
         mName = in.readString();
+        mUuid = ParcelUuid.CREATOR.createFromParcel(in).getUuid();
+        mStatusBarIndicator = (in.readInt() == 1);
         for (Parcelable group : in.readParcelableArray(null)) {
             ProfileGroup grp = (ProfileGroup) group;
             profileGroups.put(grp.getName(), grp);
@@ -148,6 +165,19 @@ public class Profile implements Parcelable {
         this.mName = name;
     }
 
+    public UUID getUuid() {
+        if (this.mUuid == null) this.mUuid = UUID.randomUUID();
+        return this.mUuid;
+    }
+
+    public boolean getStatusBarIndicator() {
+        return mStatusBarIndicator;
+    }
+
+    public void setStatusBarIndicator(boolean newStatusBarIndicator) {
+        mStatusBarIndicator = newStatusBarIndicator;
+    }
+
     /** @hide */
     public Notification processNotification(String groupName, Notification notification) {
         ProfileGroup profileGroupSettings = groupName == null ? mDefaultGroup : profileGroups
@@ -165,7 +195,16 @@ public class Profile implements Parcelable {
 
     /** @hide */
     public void getXmlString(StringBuilder builder) {
-        builder.append("<profile name=\"" + TextUtils.htmlEncode(getName()) + "\">\n");
+        builder.append("<profile name=\"");
+        builder.append(TextUtils.htmlEncode(getName()));
+        builder.append("\" uuid=\"");
+        builder.append(TextUtils.htmlEncode(getUuid().toString()));
+        builder.append("\">\n");
+
+        builder.append("<statusbar>");
+        builder.append(getStatusBarIndicator() ? "yes" : "no");
+        builder.append("</statusbar>\n");
+
         for (ProfileGroup pGroup : profileGroups.values()) {
             pGroup.getXmlString(builder);
         }
@@ -177,30 +216,57 @@ public class Profile implements Parcelable {
 
     /** @hide */
     public static String getAttrResString(XmlPullParser xpp, Context context) {
-        String attr = null;
+        return Profile.getAttrResString(xpp, context, "name");
+    }
+
+    /** @hide */
+    public static String getAttrResString(XmlPullParser xpp, Context context, String attrib) {
+        String response = null;
+        if (attrib == null) attrib = "name";
         if (xpp instanceof XmlResourceParser && context != null) {
             XmlResourceParser xrp = (XmlResourceParser) xpp;
-            int resId = xrp.getAttributeResourceValue(null, "name", 0);
+            int resId = xrp.getAttributeResourceValue(null, attrib, 0);
             if (resId != 0) {
-                attr = context.getResources().getString(resId);
+                response = context.getResources().getString(resId);
             } else {
-                attr = xrp.getAttributeValue(null, "name");
+                response = xrp.getAttributeValue(null, attrib);
             }
         } else {
-            attr = xpp.getAttributeValue(null, "name");
+            response = xpp.getAttributeValue(null, attrib);
         }
-        return attr;
+        return response;
     }
 
     /** @hide */
     public static Profile fromXml(XmlPullParser xpp, Context context)
             throws XmlPullParserException, IOException {
-        String attr = getAttrResString(xpp, context);
-        Profile profile = new Profile(attr);
+        String profileName = getAttrResString(xpp, context, "name");
+        UUID profileUuid = UUID.randomUUID();
+        try {
+            profileUuid = UUID.fromString(xpp.getAttributeValue(null, "uuid"));
+        } catch (NullPointerException e) {
+            Log.w(TAG,
+                    "Null Pointer - UUID not found for "
+                    + profileName
+                    + ".  New UUID generated: "
+                    + profileUuid.toString()
+                    );
+        } catch (IllegalArgumentException e) {
+            Log.w(TAG,
+                    "UUID not recognized for "
+                    + profileName
+                    + ".  New UUID generated: "
+                    + profileUuid.toString()
+                    );
+        }
+        Profile profile = new Profile(profileName, profileUuid);
         int event = xpp.next();
         while (event != XmlPullParser.END_TAG) {
             if (event == XmlPullParser.START_TAG) {
                 String name = xpp.getName();
+                if (name.equals("statusbar")) {
+                    profile.setStatusBarIndicator(xpp.nextText() == "yes");
+                }
                 if (name.equals("profileGroup")) {
                     ProfileGroup pg = ProfileGroup.fromXml(xpp, context);
                     profile.addProfileGroup(pg);

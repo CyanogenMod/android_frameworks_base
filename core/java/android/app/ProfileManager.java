@@ -16,9 +16,12 @@
 
 package android.app;
 
+import java.util.UUID;
+
 import android.content.Context;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.ParcelUuid;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
@@ -50,9 +53,19 @@ public class ProfileManager
         mContext = context;
     }
 
+    @Deprecated
     public void setActiveProfile(String profileName) {
         try {
-            getService().setActiveProfile(profileName);
+            getService().setActiveProfileByName(profileName);
+            getService().persist();
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+    }
+
+    public void setActiveProfile(UUID profileUuid) {
+        try {
+            getService().setActiveProfile(new ParcelUuid(profileUuid));
             getService().persist();
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
@@ -87,9 +100,19 @@ public class ProfileManager
         }
     }
 
+    @Deprecated
     public Profile getProfile(String profileName){
         try {
-            return getService().getProfile(profileName);
+            return getService().getProfileByName(profileName);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+        return null;
+    }
+
+    public Profile getProfile(UUID profileUuid) {
+        try {
+            return getService().getProfile(new ParcelUuid(profileUuid));
         } catch (RemoteException e) {
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
@@ -118,6 +141,26 @@ public class ProfileManager
             Log.e(TAG, e.getLocalizedMessage(), e);
         }
         return null;
+    }
+
+    public boolean profileExists(String profileName) {
+        try {
+            return getService().profileExistsByName(profileName);
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+            // To be on the safe side, we'll return "true", to prevent duplicate profiles from being created.
+            return true;
+        }
+    }
+
+    public boolean profileExists(UUID profileUuid) {
+        try {
+            return getService().profileExists(new ParcelUuid(profileUuid));
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+            // To be on the safe side, we'll return "true", to prevent duplicate profiles from being created.
+            return true;
+        }
     }
 
     /** @hide */
