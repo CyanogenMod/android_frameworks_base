@@ -611,7 +611,9 @@ class NetworkManagementService extends INetworkManagementService.Stub {
                 mConnector.doCommand(String.format("softap startap " + softapIface));
                 NetworkUtils.enableInterface(softapIface);
             } else {
+                try {
                 mConnector.doCommand(String.format("softap stop " + wlanIface));
+                } catch (NativeDaemonConnectorException ignore) {}
                 mConnector.doCommand(String.format("softap fwreload " + wlanIface + " AP"));
                 mConnector.doCommand(String.format("softap start " + wlanIface));
             }
