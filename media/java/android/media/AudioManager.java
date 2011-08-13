@@ -161,6 +161,9 @@ public class AudioManager {
     public static final int STREAM_DTMF = AudioSystem.STREAM_DTMF;
     /** @hide The audio stream for text to speech (TTS) */
     public static final int STREAM_TTS = AudioSystem.STREAM_TTS;
+    /** @hide The audio stream for FM */
+    public static final int STREAM_FM = AudioSystem.STREAM_FM;
+
     /** Number of audio streams */
     /**
      * @deprecated Use AudioSystem.getNumStreamTypes() instead
@@ -996,6 +999,17 @@ public class AudioManager {
      * In communication audio mode. An audio/video chat or VoIP call is established.
      */
     public static final int MODE_IN_COMMUNICATION   = AudioSystem.MODE_IN_COMMUNICATION;
+
+
+//Fix Sami Masad
+    /**
+     * @hide
+     * In FM audio mode. FM audio path is established.
+     */
+    public static final int MODE_FMRADIO   = AudioSystem.MODE_FMRADIO;
+//
+
+
 
     /* Routing bits for setRouting/getRouting API */
     /**

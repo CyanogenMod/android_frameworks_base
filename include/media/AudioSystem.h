@@ -160,6 +160,9 @@ public:
         MODE_RINGTONE,
         MODE_IN_CALL,
         MODE_IN_COMMUNICATION,
+//Fix by Sami Masad
+	MODE_FMRADIO,
+//End of fix
         NUM_MODES  // not a valid entry, denotes end-of-list
     };
 

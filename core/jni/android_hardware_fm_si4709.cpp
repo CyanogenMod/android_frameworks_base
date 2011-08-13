@@ -192,7 +192,7 @@ struct radio_data_t
 #define Si4709_IOC_CUR_RSSI_GET                     _IOR(Si4709_IOC_MAGIC, 12, rssi_snr_t)
 #define Si4709_IOC_VOLEXT_ENB                       _IO(Si4709_IOC_MAGIC, 13)
 #define Si4709_IOC_VOLEXT_DISB                      _IO(Si4709_IOC_MAGIC, 14)
-#define Si4709_IOC_VOLUME_SET                       _IOW(Si4709_IOC_MAGIC, 15, u8)
+#define Si4709_IOC_VOLUME_SET                       _IOW(Si4709_IOC_MAGIC, 15, uint8_t)
 #define Si4709_IOC_VOLUME_GET                       _IOR(Si4709_IOC_MAGIC, 16, u8)
 #define Si4709_IOC_MUTE_ON                          _IO(Si4709_IOC_MAGIC, 17)
 #define Si4709_IOC_MUTE_OFF                         _IO(Si4709_IOC_MAGIC, 18)
@@ -232,12 +232,18 @@ static int lastFreq = 0;
 
 int radioOn(int fd)
 {
+
+
+ 
     LOGV("%s", __func__);
     if (radioEnabled) {
         return FM_JNI_SUCCESS;
     }
 
     int ret;
+   //Fix by Sami Masad , volume by default is zero , make it higher 
+    uint8_t volume_temp = 8 ;
+
 
     ret = ioctl(fd, Si4709_IOC_POWERUP);
 
@@ -252,6 +258,15 @@ int radioOn(int fd)
     if (lastFreq != 0) {
         setFreq(lastFreq, fd);
     }
+
+
+    //Fix by Sami Masad , volume by default is zero , make it higher 
+
+    ret = ioctl(fd, Si4709_IOC_VOLUME_SET, &volume_temp);
+
+
+
+    
 
     return FM_JNI_SUCCESS;
 }
@@ -282,6 +297,12 @@ int setFreq(int freq, int fd)
     LOGV("%s", __func__);
 
     int ret;
+    //Fix By Sami Masad
+    //devide the freq by 10 , as the sent value have to be compared with ref bottom values of 
+    //#define FREQ_87500_kHz      8750
+    //define FREQ_76000_kHz      7600
+    //while the sent value i.e. in case of 89.9 MHz is 89900
+    freq = freq / 10 ;//Fix by Sami Masad
 
     ret = ioctl(fd, Si4709_IOC_CHAN_SELECT, &freq);
 
@@ -456,7 +477,14 @@ static jint android_hardware_fmradio_FmReceiverJNI_getFreqNative
     int ret;
     uint32_t freq;
 
+
     ret = ioctl(fd, Si4709_IOC_CHAN_GET, &freq);
+    //Fix By Sami Masad
+    //multiply the freq by 10 , as the sent value have to be compared with ref bottom values of 
+    //#define FREQ_87500_kHz      8750
+    //define FREQ_76000_kHz      7600
+    //while the sent value i.e. in case of 89.9 MHz is 8990
+    freq = freq * 10 ;//Fix by Sami Masad
 
     if (ret < 0)
     {
@@ -547,7 +575,9 @@ static jint android_hardware_fmradio_FmReceiverJNI_setBandNative
 
     if (low == 76000 && high == 90000)
         band = BAND_76000_90000_kHz;
-    else if (low == 87500 && high == 107900)
+
+//    else if (low == 87500 && high == 107900)
+    else if (low == 87500 && high == 108000) //Fix by Sami Masad , 108000 is a valid freq for that band
         band = BAND_87500_108000_kHz;
     else
         band = BAND_76000_108000_kHz;

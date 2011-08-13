@@ -3450,7 +3450,15 @@
             <enum name="system" value="1" />
             <enum name="ring" value="2" />
             <enum name="music" value="3" />
-            <enum name="alarm" value="4" />
+	    <enum name="alarm" value="4" />
+            <enum name="notification" value="5" />
+            <enum name="bluetooth_sco" value="6" />
+            <enum name="system_enfored" value="7" />
+            <enum name="dtmf" value="8" />
+            <enum name="tts" value="9" />
+            <enum name="fm" value="10" />
+
+
         </attr>
     </declare-styleable>
 

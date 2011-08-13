@@ -134,7 +134,8 @@ public class FmTransceiver
       boolean bStatus;
       if (sFd == 0)
       {
-         sFd = FmReceiverJNI.acquireFdNative("/dev/radio0");
+         //sFd = FmReceiverJNI.acquireFdNative("/dev/radio0");
+	 sFd = FmReceiverJNI.acquireFdNative("/dev/fmradio"); //Fix by Sami Masad
          Log.d(TAG, "** Opened "+ sFd);
       } else
       {
