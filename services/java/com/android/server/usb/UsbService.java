@@ -385,21 +385,26 @@ public class UsbService extends IUsbManager.Stub {
                 FileReader reader = new FileReader(file);
                 int len = reader.read(buffer, 0, 1024);
                 reader.close();
-                int value = Integer.valueOf((new String(buffer, 0, len)).trim());
-                String functionName = files[i].getName();
-                if (value == 1) {
-                    mEnabledFunctions.add(functionName);
-                    if (UsbManager.USB_FUNCTION_ACCESSORY.equals(functionName)) {
-                        // The USB accessory driver is on by default, but it might have been
-                        // enabled before the USB service has initialized.
-                        inAccessoryMode = true;
-                    } else if (!UsbManager.USB_FUNCTION_ADB.equals(functionName)) {
-                        // adb is enabled/disabled automatically by the adbd daemon,
-                        // so don't treat it as a default function.
-                        mDefaultFunctions.add(functionName);
+                try {
+                    int value = Integer.valueOf((new String(buffer, 0, len)).trim());
+                    String functionName = files[i].getName();
+                    if (value == 1) {
+                        mEnabledFunctions.add(functionName);
+                        if (UsbManager.USB_FUNCTION_ACCESSORY.equals(functionName)) {
+                            // The USB accessory driver is on by default, but it might have been
+                            // enabled before the USB service has initialized.
+                            inAccessoryMode = true;
+                        } else if (!UsbManager.USB_FUNCTION_ADB.equals(functionName)) {
+                            // adb is enabled/disabled automatically by the adbd daemon,
+                            // so don't treat it as a default function.
+                            mDefaultFunctions.add(functionName);
+                        }
+                    } else {
+                        mDisabledFunctions.add(functionName);
                     }
-                } else {
-                    mDisabledFunctions.add(functionName);
+                }
+                catch(NumberFormatException nfe) {
+                    Slog.d(TAG, files[i].getName()+" contains non-numeric data");
                 }
             }
         } catch (Exception e) {
