@@ -378,9 +378,9 @@ public class UsbService extends IUsbManager.Stub {
     /* returns true if USB is in accessory mode */
     private boolean initFunctions(File dir, boolean useEnableFiles, char[] buffer) {
         boolean inAccessoryMode = false;
-        try {
-            File[] files = dir.listFiles();
-            for (int i = 0; i < files.length; i++) {
+        File[] files = dir.listFiles();
+        for (int i = 0; i < files.length; i++) {
+            try {
                 File file = useEnableFiles ? new File(files[i], "enable") : files[i];
                 FileReader reader = new FileReader(file);
                 int len = reader.read(buffer, 0, 1024);
@@ -402,8 +402,13 @@ public class UsbService extends IUsbManager.Stub {
                     mDisabledFunctions.add(functionName);
                 }
             }
-        } catch (Exception e) {
-            Slog.e(TAG, "" , e);
+            catch(NumberFormatException nfe) {
+                Slog.d(TAG, files[i].getName()+" contains non-numeric data");
+            }
+            catch (Exception e) {
+                Slog.e(TAG, "" , e);
+            }
+
         }
         return inAccessoryMode;
     }
