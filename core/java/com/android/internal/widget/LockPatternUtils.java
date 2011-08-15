@@ -16,23 +16,25 @@
 
 package com.android.internal.widget;
 
+import com.android.internal.R;
+import com.android.internal.telephony.ITelephony;
+import com.google.android.collect.Lists;
+
 import android.app.admin.DevicePolicyManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.FileObserver;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
+import android.provider.Calendar;
 import android.provider.Settings;
 import android.security.MessageDigest;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Button;
-
-import com.android.internal.R;
-import com.android.internal.telephony.ITelephony;
-import com.google.android.collect.Lists;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -94,7 +96,12 @@ public class LockPatternUtils {
     private final static String LOCKOUT_ATTEMPT_DEADLINE = "lockscreen.lockoutattemptdeadline";
     private final static String PATTERN_EVER_CHOSEN_KEY = "lockscreen.patterneverchosen";
     public final static String PASSWORD_TYPE_KEY = "lockscreen.password_type";
-    private final static String LOCK_PASSWORD_SALT_KEY = "lockscreen.password_salt";    
+    private final static String LOCK_PASSWORD_SALT_KEY = "lockscreen.password_salt";
+    
+    private final static String DM12 = "%ta %tl:%tM %tp %s";
+    private final static String DM24 = "%ta %tk:%tM %s";
+    
+    private final static String REMINDERS_ONLY_WHERE = Calendar.EventsColumns.HAS_ALARM + "=1";
 
     private final Context mContext;
     private final ContentResolver mContentResolver;
@@ -699,6 +706,42 @@ public class LockPatternUtils {
             return null;
         }
         return nextAlarm;
+    }
+    
+    /**
+     * @return A formatted string of the next calendar event either with or
+     * without a reminder (for showing on the lock screen), or null if
+     * there is no next event within a certain look-ahead time.
+     */
+    public String getNextCalendarAlarm(long lookahead, boolean remindersOnly) {
+        long now = System.currentTimeMillis();
+        long later = now + lookahead;
+        
+        StringBuilder where = new StringBuilder();
+        if (remindersOnly) {
+            where.append(REMINDERS_ONLY_WHERE);
+        }
+        
+        String nextCalendarAlarm = null;
+        Cursor cursor = null;
+        try {
+            cursor = Calendar.Instances.query(mContentResolver, new String[] {
+                    Calendar.EventsColumns.TITLE, Calendar.EventsColumns.DTSTART
+            }, now, later, where.toString(), null);
+            if (cursor.moveToFirst()) {
+                boolean is24 = android.text.format.DateFormat.is24HourFormat(mContext);
+                String format = is24 ? DM24 : DM12;
+                String title = cursor.getString(0);
+                long start = cursor.getLong(1);
+                nextCalendarAlarm = String.format(format, start, start, start, 
+                        is24 ? title : start, title);
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return nextCalendarAlarm;
     }
 
     private boolean getBoolean(String secureSettingKey) {
