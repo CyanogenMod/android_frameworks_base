@@ -19,14 +19,17 @@ package com.android.internal.widget;
 import android.app.admin.DevicePolicyManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.FileObserver;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.os.SystemClock;
+import android.provider.Calendar;
 import android.provider.Settings;
 import android.security.MessageDigest;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.Button;
 
@@ -41,6 +44,7 @@ import java.io.RandomAccessFile;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -94,7 +98,9 @@ public class LockPatternUtils {
     private final static String LOCKOUT_ATTEMPT_DEADLINE = "lockscreen.lockoutattemptdeadline";
     private final static String PATTERN_EVER_CHOSEN_KEY = "lockscreen.patterneverchosen";
     public final static String PASSWORD_TYPE_KEY = "lockscreen.password_type";
-    private final static String LOCK_PASSWORD_SALT_KEY = "lockscreen.password_salt";    
+    private final static String LOCK_PASSWORD_SALT_KEY = "lockscreen.password_salt";
+
+    private final static String REMINDERS_ONLY_WHERE = Calendar.EventsColumns.HAS_ALARM + "=1";
 
     private final Context mContext;
     private final ContentResolver mContentResolver;
@@ -699,6 +705,45 @@ public class LockPatternUtils {
             return null;
         }
         return nextAlarm;
+    }
+    
+    /**
+     * @return A formatted string of the next calendar event either with or
+     * without a reminder (for showing on the lock screen), or null if
+     * there is no next event within a certain look-ahead time.
+     */
+    public String getNextCalendarAlarm(long lookahead, boolean remindersOnly) {
+        long now = System.currentTimeMillis();
+        long later = now + lookahead;
+
+        StringBuilder where = new StringBuilder();
+        if (remindersOnly) {
+            where.append(REMINDERS_ONLY_WHERE);
+        }
+
+        String nextCalendarAlarm = null;
+        Cursor cursor = null;
+        try {
+            cursor = Calendar.Instances.query(mContentResolver, new String[] {
+                    Calendar.EventsColumns.TITLE, Calendar.EventsColumns.DTSTART
+            }, now, later, where.toString(), null);
+            if (cursor.moveToFirst()) {
+                String title = cursor.getString(0);
+                Date start = new Date(cursor.getLong(1));
+                StringBuilder sb = new StringBuilder();
+                sb.append(DateFormat.format("E", start));
+                sb.append(" ");
+                sb.append(DateFormat.getTimeFormat(mContext).format(start));
+                sb.append(" ");
+                sb.append(title);
+                nextCalendarAlarm = sb.toString();
+            }
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+        return nextCalendarAlarm;
     }
 
     private boolean getBoolean(String secureSettingKey) {
