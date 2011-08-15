@@ -2475,6 +2475,12 @@ public final class Settings {
         public static final String LOCKSCREEN_STYLE_PREF = "lockscreen_style_pref";
 
         /**
+         * Sets the lockscreen background style
+         * @hide
+         */
+        public static final String LOCKSCREEN_BACKGROUND = "lockscreen_background";
+
+        /**
          * Sets the incoming call accept/reject style
          * @hide
          */
