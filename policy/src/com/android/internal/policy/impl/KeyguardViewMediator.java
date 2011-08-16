@@ -104,6 +104,9 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
 
     private static final String DELAYED_KEYGUARD_ACTION = "com.android.internal.policy.impl.KeyguardViewMediator.DELAYED_KEYGUARD";
 
+    private static final String AMAZON_METACHANGED_ACTION = "com.amazon.mp3.metachanged";
+    private static final String AMAZON_PLAYSTATECHANGED_ACTION = "com.amazon.mp3.playstatechanged";
+
     // used for handler messages
     private static final int TIMEOUT = 1;
     private static final int SHOW_KEEP_CURRENT_STATE = 2;
@@ -308,6 +311,8 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
         IntentFilter iF = new IntentFilter();
         iF.addAction("com.android.music.metachanged");
         iF.addAction("com.android.music.playstatechanged");
+        iF.addAction(AMAZON_METACHANGED_ACTION);
+        iF.addAction(AMAZON_PLAYSTATECHANGED_ACTION);
         mContext.registerReceiver(mMusicReceiver, iF);
 
         mShowLockIcon = (Settings.System.getInt(cr, "show_status_bar_lock", 0) == 1);
@@ -1306,11 +1311,20 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            mArtist = intent.getStringExtra("artist");
-            mTrack = intent.getStringExtra("track");
-            mPlaying = intent.getBooleanExtra("playing", false);
-            mSongId = intent.getLongExtra("songid", 0);
-            mAlbumId = intent.getLongExtra("albumid", 0);
+            if (AMAZON_PLAYSTATECHANGED_ACTION.equals(action)) {
+                mPlaying = intent.getIntExtra("com.amazon.mp3.playstate", 0) == 3;
+            } else if (AMAZON_METACHANGED_ACTION.equals(action)) {
+                mArtist = intent.getStringExtra("com.amazon.mp3.artist");
+                mTrack = intent.getStringExtra("com.amazon.mp3.track");
+                mSongId = -1;
+                mAlbumId = -1;
+            } else {
+                mPlaying = intent.getBooleanExtra("playing", false);
+                mArtist = intent.getStringExtra("artist");
+                mTrack = intent.getStringExtra("track");
+                mSongId = intent.getLongExtra("songid", 0);
+                mAlbumId = intent.getLongExtra("albumid", 0);
+            }
             intent = new Intent("internal.policy.impl.updateSongStatus");
             context.sendBroadcast(intent);
         }
