@@ -112,6 +112,52 @@ public class TimeUtils {
     }
 
     /**
+     * Returns the ID of the specified country's primary time zone.
+     * Returns null if no suitable zone could be found.
+     * @hide
+     */
+    public static String getPrimaryTimeZoneID(String country) {
+        if (country == null) {
+            return null;
+        }
+
+        String id = null;
+
+        Resources r = Resources.getSystem();
+        XmlResourceParser parser = r.getXml(com.android.internal.R.xml.time_zones_by_country);
+
+        try {
+            XmlUtils.beginDocument(parser, "timezones");
+
+            while (true) {
+                XmlUtils.nextElement(parser);
+
+                String element = parser.getName();
+                if (element == null || !(element.equals("timezone"))) {
+                    break;
+                }
+
+                String code = parser.getAttributeValue(null, "code");
+
+                if (country.equals(code)) {
+                    if (parser.next() == XmlPullParser.TEXT) {
+                        id = parser.getText();
+                        break;
+                    }
+                }
+            }
+        } catch (XmlPullParserException e) {
+            Log.e(TAG, "Got exception while getting preferred time zone.", e);
+        } catch (IOException e) {
+            Log.e(TAG, "Got exception while getting preferred time zone.", e);
+        } finally {
+            parser.close();
+        }
+
+        return id;
+    }
+
+    /**
      * Returns a String indicating the version of the time zone database currently
      * in use.  The format of the string is dependent on the underlying time zone
      * database implementation, but will typically contain the year in which the database
