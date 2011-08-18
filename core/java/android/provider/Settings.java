@@ -2615,7 +2615,25 @@ public final class Settings {
          * Whether to show the next calendar event
          * @hide
          */
-        public static final String LOCKSCREEN_CALENDAR_ALARM = "lockscreen_calendar_alarm";
+        public static final String LOCKSCREEN_CALENDAR_ALARM = "lockscreen_calendar_alarm";        
+
+        /**
+         * Which calendars to look for events
+         * @hide
+         */
+        public static final String LOCKSCREEN_CALENDARS = "lockscreen_calendars";
+
+        /**
+         * How far in the future to look for events
+         * @hide
+         */
+        public static final String LOCKSCREEN_CALENDAR_LOOKAHEAD = "lockscreen_calendar_lookahead";
+
+        /**
+         * Whether to find only events with reminders
+         * @hide
+         */
+        public static final String LOCKSCREEN_CALENDAR_REMINDERS_ONLY = "lockscreen_calendar_reminders_only";
 
         /**
          * Whether to use lockscreen music controls
