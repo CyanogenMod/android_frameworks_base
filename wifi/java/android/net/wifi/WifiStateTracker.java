@@ -2527,12 +2527,14 @@ public class WifiStateTracker extends NetworkStateTracker {
                     }
 
                     if (msg.what == EVENT_DHCP_START) {
-                        if (runDhcp(false)) {
+                        Log.d(TAG, "DHCP request started");
+                        if (NetworkUtils.runDhcp(mInterfaceName, mDhcpInfo)) {
                             event = EVENT_INTERFACE_CONFIGURATION_SUCCEEDED;
                             Log.d(TAG, "DHCP succeeded with lease: " + mDhcpInfo.leaseDuration);
                             setDhcpRenewalAlarm(mDhcpInfo.leaseDuration);
                        } else {
                             event = EVENT_INTERFACE_CONFIGURATION_FAILED;
+                            Log.e(TAG, "DHCP request failed: " + NetworkUtils.getDhcpError());
                         }
                         synchronized (this) {
                             if (!mCancelCallback) {
@@ -2541,13 +2543,16 @@ public class WifiStateTracker extends NetworkStateTracker {
                         }
 
                     } else if (msg.what == EVENT_DHCP_RENEW) {
+                        Log.d(TAG, "DHCP renewal started");
                         int oIp = mDhcpInfo.ipAddress;
                         int oGw = mDhcpInfo.gateway;
                         int oMsk = mDhcpInfo.netmask;
                         int oDns1 = mDhcpInfo.dns1;
                         int oDns2 = mDhcpInfo.dns2;
 
-                        if (runDhcp(true)) {
+                        if (NetworkUtils.runDhcpRenew(mInterfaceName, mDhcpInfo)) {
+                            Log.d(TAG, "DHCP renewal with lease: " + mDhcpInfo.leaseDuration);
+
                             boolean changed =
                                 (oIp   != mDhcpInfo.ipAddress ||
                                  oGw   != mDhcpInfo.gateway ||
@@ -2591,35 +2596,6 @@ public class WifiStateTracker extends NetworkStateTracker {
             }
         }
 
-        private boolean runDhcp(boolean renew) {
-            final String action = renew ? "DHCP request" : "DHCP renewal";
-
-            Log.d(TAG, action + " started");
-
-            boolean result = renew ? NetworkUtils.runDhcpRenew(mInterfaceName, mDhcpInfo) :
-                                     NetworkUtils.runDhcp(mInterfaceName, mDhcpInfo);
-
-            if (!result) {
-                Log.e(TAG, action + " failed: " + NetworkUtils.getDhcpError());
-                return false;
-            }
-
-            Log.d(TAG, action + " succeeded with lease: " + mDhcpInfo.leaseDuration);
-            //Don't schedule renewal if we're on an infinite lease
-            if (mDhcpInfo.leaseDuration >= 0) {
-                //Do it a bit earlier than half the lease duration time
-                //to beat the native DHCP client and avoid extra packets
-                //48% for one hour lease time = 29 minutes
-                long nextRenewal = (long) mDhcpInfo.leaseDuration * 480; // in milliseconds;
-                nextRenewal += SystemClock.elapsedRealtime();
-
-                mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                                  nextRenewal, mDhcpRenewalIntent);
-            }
-
-            return true;
-        }
-
         public synchronized void setCancelCallback(boolean cancelCallback) {
             mCancelCallback = cancelCallback;
             if (cancelCallback) {
@@ -2642,6 +2618,10 @@ public class WifiStateTracker extends NetworkStateTracker {
         }
 
         private void setDhcpRenewalAlarm(long leaseDuration) {
+            //Skip renewal if we're on an infinite lease
+            if (leaseDuration < 0) {
+                return;
+            }
             //Do it a bit earlier than half the lease duration time
             //to beat the native DHCP client and avoid extra packets
             //48% for one hour lease time = 29 minutes
@@ -2655,7 +2635,7 @@ public class WifiStateTracker extends NetworkStateTracker {
         }
 
     }
-    
+
     private void checkUseStaticIp() {
         mUseStaticIp = false;
         final ContentResolver cr = mContext.getContentResolver();
