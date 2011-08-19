@@ -295,30 +295,13 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
         final LayoutInflater inflater = LayoutInflater.from(context);
         if (DBG) Log.v(TAG, "Creation orientation = " + mCreationOrientation);
-        try {
-            LOCK_WALLPAPER = mContext.createPackageContext("com.cyanogenmod.cmparts", 0).getFilesDir()+"/lockwallpaper";
-        } catch (NameNotFoundException e1) {
-            LOCK_WALLPAPER = "";
-        }
-        ViewGroup lockWallpaper = null;
         if (mCreationOrientation != Configuration.ORIENTATION_LANDSCAPE) {
             inflater.inflate(R.layout.keyguard_screen_tab_unlock, this, true);
-            lockWallpaper = (RelativeLayout) findViewById(R.id.root);
         } else {
             inflater.inflate(R.layout.keyguard_screen_tab_unlock_land, this, true);
-            lockWallpaper = (LinearLayout) findViewById(R.id.root);
         }
-        if (!LOCK_WALLPAPER.equals("")){
-            String mLockBack = Settings.System.getString(context.getContentResolver(), Settings.System.LOCKSCREEN_BACKGROUND);
-            if (mLockBack != null){
-                if (mLockBack.length() == 0){
-                    Bitmap lockb = BitmapFactory.decodeFile(LOCK_WALLPAPER);
-                    lockWallpaper.setBackgroundDrawable(new BitmapDrawable(lockb));
-                }else{
-                    lockWallpaper.setBackgroundColor(Integer.parseInt(mLockBack));
-                }
-            }
-        }
+	ViewGroup lockWallpaper = (ViewGroup) findViewById(R.id.root);
+        setBackground(mContext,lockWallpaper);
         mCarrier = (TextView) findViewById(R.id.carrier);
         // Required for Marquee to work
         mCarrier.setSelected(true);
@@ -585,6 +568,25 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         }
 
         resetStatusInfo(updateMonitor);
+    }
+
+    static void setBackground(Context bcontext, ViewGroup layout){
+        String LOCK_WALLPAPER = "";
+        try {
+            LOCK_WALLPAPER = bcontext.createPackageContext("com.cyanogenmod.cmparts", 0).getFilesDir()+"/lockwallpaper";
+        } catch (NameNotFoundException e1) {
+        }
+        if (!LOCK_WALLPAPER.isEmpty()){
+            String mLockBack = Settings.System.getString(bcontext.getContentResolver(), Settings.System.LOCKSCREEN_BACKGROUND);
+            if (mLockBack != null){
+                if (mLockBack.isEmpty()){
+                    Bitmap lockb = BitmapFactory.decodeFile(LOCK_WALLPAPER);
+                    layout.setBackgroundDrawable(new BitmapDrawable(lockb));
+                }else{
+                    layout.setBackgroundColor(Integer.parseInt(mLockBack));
+                }
+            }
+        }
     }
 
     private boolean isSilentMode() {
