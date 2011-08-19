@@ -35,7 +35,7 @@ import com.android.internal.widget.LinearLayoutWithDefaultTouchRecepient;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.LockPatternView;
 import com.android.internal.widget.LockPatternView.Cell;
-
+import android.view.ViewGroup;
 import java.util.List;
 import java.util.Date;
 
@@ -185,7 +185,8 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         } else {
             inflater.inflate(R.layout.keyguard_screen_unlock_landscape, this, true);
         }
-
+        ViewGroup lockWallpaper = (ViewGroup) findViewById(R.id.pattern);
+        LockScreen.setBackground(getContext(), lockWallpaper);
         mCarrier = (TextView) findViewById(R.id.carrier);
         mDate = (TextView) findViewById(R.id.date);
 

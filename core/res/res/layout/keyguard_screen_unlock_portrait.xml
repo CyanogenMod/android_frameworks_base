@@ -27,6 +27,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:background="#70000000"
+    android:id="@+id/pattern"
     >
 
     <RelativeLayout
