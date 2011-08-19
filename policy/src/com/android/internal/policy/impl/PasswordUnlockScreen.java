@@ -40,7 +40,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
-
+import android.view.ViewGroup;
 import com.android.internal.R;
 import com.android.internal.widget.PasswordEntryKeyboardHelper;
 
@@ -90,7 +90,8 @@ public class PasswordUnlockScreen extends LinearLayout implements KeyguardScreen
         } else {
             layoutInflater.inflate(R.layout.keyguard_screen_password_landscape, this, true);
         }
-
+        ViewGroup lockWallpaper = (ViewGroup) findViewById(R.id.password);
+        LockScreen.setBackground(getContext(), lockWallpaper);
         final int quality = lockPatternUtils.getKeyguardStoredPasswordQuality();
         final boolean isAlpha = DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC == quality
                 || DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC == quality;
