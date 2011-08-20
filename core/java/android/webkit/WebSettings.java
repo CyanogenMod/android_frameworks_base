@@ -22,6 +22,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemProperties;
 import android.util.EventLog;
 import java.lang.SecurityException;
 import java.util.Locale;
@@ -409,6 +410,9 @@ public class WebSettings {
             buffer.append(" Build/");
             buffer.append(id);
         }
+        final String modversion = SystemProperties.get("ro.modversion");
+        if (modversion != null && modversion.length() > 0)
+            buffer.append("; " + modversion.replaceAll("(.+?-.*?)-.*","$1"));
         final String base = mContext.getResources().getText(
                 com.android.internal.R.string.web_user_agent).toString();
         return String.format(base, buffer);
