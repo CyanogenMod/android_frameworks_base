@@ -1941,6 +1941,11 @@ public final class Settings {
         public static final String SCREEN_LOCK_SLIDE_SCREENOFF_DELAY = "screen_lock_slide_screenoff_delay";
 
         /**
+         * Whether media is also muted when silent mode is toggled
+         */
+        public static final String SILENT_MODE_MUTE_MEDIA = "silent_mode_mute_media";
+
+        /**
          * Whether the audible DTMF tones are played by the dialer when dialing. The value is
          * boolean (1 or 0).
          */
