@@ -211,8 +211,23 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                         Settings.System.VIBRATE_IN_SILENT, 1) == 1)
                         ? AudioManager.RINGER_MODE_VIBRATE
                         : AudioManager.RINGER_MODE_SILENT);
+                    if (Settings.System.getInt(mContext.getContentResolver(),
+                            Settings.System.SILENT_MODE_MUTE_MEDIA, 0) == 1) {
+                        Settings.System.putInt(mContext.getContentResolver(),
+                            Settings.System.OLD_MEDIA_VOLUME,
+                            mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC));
+                        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 0, AudioManager.FLAG_PLAY_SOUND);
+                    }
                 } else {
                     mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                    if (Settings.System.getInt(mContext.getContentResolver(),
+                            Settings.System.SILENT_MODE_MUTE_MEDIA, 0) == 1 &&
+                            mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC) == 0) {
+                        mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                            Settings.System.getInt(mContext.getContentResolver(),
+                                Settings.System.OLD_MEDIA_VOLUME, 0),
+                            AudioManager.FLAG_PLAY_SOUND);
+                    }
                 }
             }
 
