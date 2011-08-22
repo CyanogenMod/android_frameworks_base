@@ -281,6 +281,9 @@ int setFreq(int freq, int fd)
 {
     LOGV("%s", __func__);
 
+    //The driver expects the frequency to be in a different unit
+    freq = freq / 10;
+
     int ret;
 
     ret = ioctl(fd, Si4709_IOC_CHAN_SELECT, &freq);
@@ -463,6 +466,9 @@ static jint android_hardware_fmradio_FmReceiverJNI_getFreqNative
         LOGE("%s: IOCTL Si4709_IOC_CHAN_GET failed %d", __func__, ret);
         return FM_JNI_FAILURE;
     }
+
+    //convert the frquency to khz units for the application
+    freq = freq * 10;
 
     return freq;
 }
