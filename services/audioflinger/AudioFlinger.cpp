@@ -673,9 +673,9 @@ status_t AudioFlinger::setParameters(int ioHandle, const String8& keyValuePairs)
     String8 key = String8(AudioParameter::keyRouting);
     int device;
     if (param.getInt(key, device) == NO_ERROR) {
-        if((device & AudioSystem::DEVICE_OUT_FM_ALL) && mFmOn == false){
+        if((device & AudioSystem::DEVICE_OUT_FM) && mFmOn == false){
             mFmOn = true;
-         } else if (mFmOn == true && !(device & AudioSystem::DEVICE_OUT_FM_ALL)){
+         } else if (mFmOn == true && !(device & AudioSystem::DEVICE_OUT_FM)){
             mFmOn = false;
          }
     }
