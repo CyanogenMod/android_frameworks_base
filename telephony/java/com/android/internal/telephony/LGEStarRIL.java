@@ -87,6 +87,27 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
 
     public LGEStarRIL(Context context, int networkMode, int cdmaSubscription) {
         super(context, networkMode, cdmaSubscription);
+        /* The star needs to ignore SCREEN_X states, in order to keep the
+         * batt updates running. The cosmo doesn't need this */
+        if (!SystemProperties.get("ro.build.product").equals("p920")) {
+            context.unregisterReceiver(mIntentReceiver);
+            BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+                @Override
+                    public void onReceive(Context context, Intent intent) {
+                        if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+                            Log.d(LOG_TAG, "RIL received ACTION_SCREEN_ON Intent -> SKIP");
+                        } else if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                            Log.d(LOG_TAG, "RIL received ACTION_SCREEN_OFF Intent -> SKIP");
+                        } else {
+                            Log.w(LOG_TAG, "RIL received unexpected Intent: " + intent.getAction());
+                        }
+                    }
+            };
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Intent.ACTION_SCREEN_ON);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            context.registerReceiver(mIntentReceiver, filter);
+        }
     }
 
     protected boolean mPrepSetupPending = true;
