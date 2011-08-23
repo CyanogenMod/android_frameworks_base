@@ -178,6 +178,15 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
                     + requestToString(rrSc.mRequest));
             send(rrSc);
 
+            /* Use this to initialize network state trackers */
+            RILRequest rrSSt = RILRequest.obtain(
+                    RIL_REQUEST_SCREEN_STATE, null);
+            rrSSt.mp.writeInt(1);
+            rrSSt.mp.writeInt(1);
+            if (RILJ_LOGD) riljLog(rrSSt.serialString() + "> "
+                    + requestToString(rrSSt.mRequest));
+            send(rrSSt);
+
             mPrepSetupPending = false;
 
         }
