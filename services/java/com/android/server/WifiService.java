@@ -782,7 +782,7 @@ public class WifiService extends IWifiManager.Stub {
                     setWifiApConfiguration(wifiConfig);
                     return true;
                 } catch(Exception e) {
-                    Slog.e(TAG, "Exception in nwService during AP restart");
+                    Slog.e(TAG, "Exception in nwService during AP restart", e);
                     try {
                         nwService.stopAccessPoint();
                     } catch (Exception ee) {
@@ -835,7 +835,7 @@ public class WifiService extends IWifiManager.Stub {
                                                SOFTAP_IFACE);
                 }
             } catch(Exception e) {
-                Slog.e(TAG, "Exception in startAccessPoint()");
+                Slog.e(TAG, "Exception in startAccessPoint()", e);
                 setWifiApEnabledState(WIFI_AP_STATE_FAILED, uid, DriverAction.DRIVER_UNLOAD);
                 return false;
             }
@@ -847,7 +847,7 @@ public class WifiService extends IWifiManager.Stub {
             try {
                 nwService.stopAccessPoint();
             } catch(Exception e) {
-                Slog.e(TAG, "Exception in stopAccessPoint()");
+                Slog.e(TAG, "Exception in stopAccessPoint()", e);
                 setWifiApEnabledState(WIFI_AP_STATE_FAILED, uid, DriverAction.DRIVER_UNLOAD);
                 return false;
             }
