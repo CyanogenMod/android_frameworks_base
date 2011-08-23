@@ -893,15 +893,15 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
         String response;
         SimpleDateFormat dateFormatter;
         SimpleDateFormat dateParser;
-        boolean isP990 = SystemProperties.get("ro.build.product").equals("p990");
+        boolean isIfx = !SystemProperties.get("ro.build.product").equals("p999");
 
         num = p.readInt(); // TZ diff in quarter-hours
 
         /* Get the actual date string */
         parceldata = p.readString();
 
-        /* P990 needs some additional hax... */
-        if (isP990) {
+        /* Infineon modems need some additional hax... */
+        if (isIfx) {
             /* Store DST before cropping */
             parcelextra = parceldata.substring(parceldata.lastIndexOf(",")+1);
             if (parcelextra != null) dst = Integer.parseInt(parcelextra);
@@ -915,8 +915,8 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
             dateFormatter = new SimpleDateFormat("yy/MM/dd,HH:mm:ss");
             dateParser = new SimpleDateFormat("yy/MM/dd,HH:mm:ss");
 
-            /* P990 delivers localtime, convert to UTC */
-            if (isP990) {
+            /* Ifx delivers localtime, convert to UTC */
+            if (isIfx) {
                 /* Directly calculate UTC time using DST Offset */
                 long when = dateParser.parse(parceldata).getTime() - offset;
                 Date d = new Date(when);
@@ -932,7 +932,7 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
 
         /* Append the timezone */
         response = response + ((num < 0) ? "" : "+") + num;
-        if (isP990) {
+        if (isIfx) {
             /* Add DST */
             response = response + "," + dst;
         }
