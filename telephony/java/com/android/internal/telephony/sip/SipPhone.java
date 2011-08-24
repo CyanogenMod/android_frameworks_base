@@ -467,7 +467,7 @@ public class SipPhone extends SipPhoneBase {
             } else if (isSpeakerOn()) {
                 audioGroup.setMode(AudioGroup.MODE_ECHO_SUPPRESSION);
             } else {
-                audioGroup.setMode(AudioGroup.MODE_NORMAL);
+                audioGroup.setMode(AudioGroup.MODE_ECHO_SUPPRESSION);
             }
             if (DEBUG) Log.d(LOG_TAG, String.format(
                     "audioGroup mode change: %d --> %d", mode,
