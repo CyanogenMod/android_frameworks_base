@@ -48,6 +48,8 @@
 #define JAVA_FM_CHSPACE_100_KHZ 1
 #define JAVA_FM_CHSPACE_50_KHZ  2
 
+#define JAVA_FM_RX_SEARCHDIR_DOWN 0
+#define JAVA_FM_RX_SEARCHDIR_UP   1
 
 #define FM_RDS_STD_RBDS    0
 #define FM_RDS_STD_RDS     1
@@ -56,11 +58,28 @@
 #define FM_DE_EMP75 0
 #define FM_DE_EMP50 1
 
-#define V4L2_CID_PRIVATE_BASE               0x8000000
-#define V4L2_CID_PRIVATE_TAVARUA_REGION     V4L2_CID_PRIVATE_BASE + 7
-#define V4L2_CID_PRIVATE_TAVARUA_EMPHASIS   V4L2_CID_PRIVATE_BASE + 12
-#define V4L2_CID_PRIVATE_TAVARUA_RDS_STD    V4L2_CID_PRIVATE_BASE + 13
-#define V4L2_CID_PRIVATE_TAVARUA_SPACING    V4L2_CID_PRIVATE_BASE + 14
+#define V4L2_CID_PRIVATE_BASE                   0x8000000
+#define V4L2_CID_PRIVATE_TAVARUA_SRCHMODE       V4L2_CID_PRIVATE_BASE + 1
+#define V4L2_CID_PRIVATE_TAVARUA_SCANDWELL      V4L2_CID_PRIVATE_BASE + 2
+#define V4L2_CID_PRIVATE_TAVARUA_SRCHON         V4L2_CID_PRIVATE_BASE + 3
+#define V4L2_CID_PRIVATE_TAVARUA_STATE          V4L2_CID_PRIVATE_BASE + 4
+#define V4L2_CID_PRIVATE_TAVARUA_TRANSMIT_MODE  V4L2_CID_PRIVATE_BASE + 5
+#define V4L2_CID_PRIVATE_TAVARUA_RDSGROUP_MASK  V4L2_CID_PRIVATE_BASE + 6
+#define V4L2_CID_PRIVATE_TAVARUA_REGION         V4L2_CID_PRIVATE_BASE + 7
+#define V4L2_CID_PRIVATE_TAVARUA_SIGNAL_TH      V4L2_CID_PRIVATE_BASE + 8
+#define V4L2_CID_PRIVATE_TAVARUA_SRCH_PTY       V4L2_CID_PRIVATE_BASE + 9
+#define V4L2_CID_PRIVATE_TAVARUA_SRCH_PI        V4L2_CID_PRIVATE_BASE + 10
+#define V4L2_CID_PRIVATE_TAVARUA_SRCH_CNT       V4L2_CID_PRIVATE_BASE + 11
+#define V4L2_CID_PRIVATE_TAVARUA_EMPHASIS       V4L2_CID_PRIVATE_BASE + 12
+#define V4L2_CID_PRIVATE_TAVARUA_RDS_STD        V4L2_CID_PRIVATE_BASE + 13
+#define V4L2_CID_PRIVATE_TAVARUA_SPACING        V4L2_CID_PRIVATE_BASE + 14
+#define V4L2_CID_PRIVATE_TAVARUA_RDSON          V4L2_CID_PRIVATE_BASE + 15
+#define V4L2_CID_PRIVATE_TAVARUA_RDSGROUP_PROC  V4L2_CID_PRIVATE_BASE + 16
+#define V4L2_CID_PRIVATE_TAVARUA_LP_MODE        V4L2_CID_PRIVATE_BASE + 17
+
+#define V4L2_CTRL_CLASS_USER                    0x980000
+#define V4L2_CID_BASE                           (V4L2_CTRL_CLASS_USER | 0x900)
+#define V4L2_CID_AUDIO_MUTE                     V4L2_CID_BASE + 9
 
 struct dev_state_t
 {
@@ -279,7 +298,7 @@ int radioOff(int fd)
 
 int setFreq(int freq, int fd)
 {
-    LOGV("%s", __func__);
+    LOGV("%s %d", __func__, freq);
 
     int ret;
 
@@ -332,7 +351,7 @@ int setFreqSpacing(int spacing, int fd)
 
 int setMute(int mute, int fd)
 {
-    LOGV("%s", __func__);
+    LOGV("%s %d", __func__, mute);
 
     int ret;
 
@@ -412,6 +431,30 @@ static jint android_hardware_fmradio_FmReceiverJNI_setControlNative
     LOGV("%s : fd = %d id = %d value = %d", __func__, fd, id, value);
 
     switch(id) {
+        case V4L2_CID_AUDIO_MUTE:
+            if (value == 3) {
+                return setMute(1, fd);
+            }
+            else if (value == 4) {
+                return setMute(0, fd);
+            }
+            else {
+                return FM_JNI_FAILURE;
+            }
+            break;
+
+        case V4L2_CID_PRIVATE_TAVARUA_STATE:
+            if (value == 1) {
+                return radioOn(fd);
+            }
+            else if (value == 2) {
+                return radioOff(fd);
+            }
+            else {
+                return FM_JNI_FAILURE;
+            }
+            break;
+
         case V4L2_CID_PRIVATE_TAVARUA_SPACING:
             return setFreqSpacing(value, fd);
             break;
@@ -425,24 +468,6 @@ static jint android_hardware_fmradio_FmReceiverJNI_setControlNative
             break;
 
         default:
-            switch (value) {
-                case 1:
-                    return radioOn(fd);
-                    break;
-
-                case 2:
-                    return radioOff(fd);
-                    break;
-
-                case 3:
-                    return setMute(1, fd);
-                    break;
-
-                case 4:
-                    return setMute(0, fd);
-                    break;
-
-            }
             return FM_JNI_SUCCESS;
     }
 }
@@ -504,7 +529,20 @@ static jint android_hardware_fmradio_FmReceiverJNI_getControlNative
 static jint android_hardware_fmradio_FmReceiverJNI_startSearchNative
 (JNIEnv * env, jobject thiz, jint fd, jint dir)
 {
-    LOGD("startSearchNative() %d", dir);
+    int freq;
+    int retval;
+    if (dir == JAVA_FM_RX_SEARCHDIR_DOWN) {
+        retval = ioctl(fd, Si4709_IOC_SEEK_DOWN, &freq);
+    }
+    else {
+        retval = ioctl(fd, Si4709_IOC_SEEK_UP, &freq);
+    }
+
+    if (retval != 0) {
+        LOGE("Search failed");
+    }
+
+    LOGD("startSearchNative() %d freq=%d", retval, freq);
     return FM_JNI_SUCCESS;
 }
 
@@ -513,6 +551,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_cancelSearchNative
 (JNIEnv * env, jobject thiz, jint fd)
 {
     LOGD("cancelSearchNative()");
+    ioctl(fd, Si4709_IOC_SEEK_CANCEL);
     return FM_JNI_SUCCESS;
 }
 
