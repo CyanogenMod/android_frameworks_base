@@ -499,7 +499,7 @@ Int get_prog_config(
         /* rewind the pointer as implicit channel configuration maybe the case */
         pInputStream->usedBits -= (LEN_TAG + LEN_PROFILE + LEN_SAMP_IDX);
 
-        return (1); /*  mismatch cannot happen */
+        pScratchPCE->sampling_rate_idx = pVars->prog_config.sampling_rate_idx;
     }
 
 
