@@ -855,6 +855,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
             case DATA_ACCESS_HSPA:
                 ret = "HSPA";
                 break;
+            case DATA_ACCESS_HSPAP:
+                ret = "HSPA+";
+                break;
             default:
                 Log.e(LOG_TAG, "Wrong network type: " + Integer.toString(type));
                 break;

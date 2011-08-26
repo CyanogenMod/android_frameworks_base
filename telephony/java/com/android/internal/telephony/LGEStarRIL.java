@@ -113,21 +113,19 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
     protected boolean mPrepSetupPending = true;
     public void
     setRadioPower(boolean on, Message result) {
-        RILRequest rr
-                = RILRequest.obtain(RIL_REQUEST_RADIO_POWER, result);
-
-        rr.mp.writeInt(1);
-        rr.mp.writeInt(on ? 1 : 0);
-
-        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
-
-        send(rr);
-
         if(mPrepSetupPending) {
             if (SystemProperties.get("ro.build.product").equals("p999")) {
                 /* Set radio access tech */
                 RILRequest rrSPR = RILRequest.obtain(
                         296, null);
+                rrSPR.mp.writeInt(1);
+                rrSPR.mp.writeInt(1);
+                if (RILJ_LOGD) riljLog(rrSPR.serialString() + "> "
+                        + requestToString(rrSPR.mRequest));
+                send(rrSPR);
+                /* Set time zone reporting */
+                rrSPR = RILRequest.obtain(
+                        189, null);
                 rrSPR.mp.writeInt(1);
                 rrSPR.mp.writeInt(1);
                 if (RILJ_LOGD) riljLog(rrSPR.serialString() + "> "
@@ -144,8 +142,43 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
                         + requestToString(rrCs.mRequest));
                 send(rrCs);
             }
+            /* supp_svc notifications */
+            RILRequest rrGCS = RILRequest.obtain(
+                    RIL_REQUEST_SET_SUPP_SVC_NOTIFICATION, null);
+            if (RILJ_LOGD) riljLog(rrGCS.serialString() + "> "
+                    + requestToString(rrGCS.mRequest));
+            rrGCS.mp.writeInt(1);
+            rrGCS.mp.writeInt(1);
+            send(rrGCS);
+            /* Get charset */
+            rrGCS = RILRequest.obtain(
+                    152, null);
+            if (RILJ_LOGD) riljLog(rrGCS.serialString() + "> "
+                    + requestToString(rrGCS.mRequest));
+            send(rrGCS);
+            /* Disable TTY mode */
+            rrGCS = RILRequest.obtain(
+                    RIL_REQUEST_SET_TTY_MODE, null);
+            if (RILJ_LOGD) riljLog(rrGCS.serialString() + "> "
+                    + requestToString(rrGCS.mRequest));
+            rrGCS.mp.writeInt(1);
+            rrGCS.mp.writeInt(0);
+            send(rrGCS);
 
         }
+
+        RILRequest rr
+                = RILRequest.obtain(RIL_REQUEST_RADIO_POWER, result);
+
+        rr.mp.writeInt(3);
+        rr.mp.writeInt(on ? 1 : 0);
+        rr.mp.writeInt(0);
+        rr.mp.writeInt(0);
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+        send(rr);
+
     }
 
     protected void LGEswitchToRadioState(RadioState newState) {
@@ -455,7 +488,9 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
             case RIL_REQUEST_EXIT_EMERGENCY_CALLBACK_MODE: ret = responseVoid(p); break;
             case RIL_REQUEST_REPORT_SMS_MEMORY_STATUS: ret = responseVoid(p); break;
             case RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING: ret = responseVoid(p); break;
+            case 152: ret =  responseString(p); break; // RIL_REQUEST_GET_TE_CHARACTER_SET
             case 161: ret =  responsePdpAddress(p); break; // SHOW_PDP_ADDRESS
+            case 189: ret =  responseVoid(p); break; // RIL_REQUEST_SET_TIME_ZONE_REPORTING
             case 273: ret =  responseVoid(p); break; // SET_GMM_ATTACH_MODE
             case 286: ret =  responseVoid(p); break; // GET_SERVICE_LINE
             case 294: ret =  responseVoid(p); break; // GET_SERVICE_LINE
@@ -1055,7 +1090,9 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
             case RIL_REQUEST_EXIT_EMERGENCY_CALLBACK_MODE: return "REQUEST_EXIT_EMERGENCY_CALLBACK_MODE";
             case RIL_REQUEST_REPORT_SMS_MEMORY_STATUS: return "RIL_REQUEST_REPORT_SMS_MEMORY_STATUS";
             case RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING: return "RIL_REQUEST_REPORT_STK_SERVICE_IS_RUNNING";
+            case 152: return "RIL_REQUEST_GET_TE_CHARACTER_SET";
             case 161: return "SHOW_PDP_ADDRESS";
+            case 189: return "RIL_REQUEST_SET_TIME_ZONE_REPORTING";
             case 273: return "SET_GMM_ATTACH_MODE";
             case 286: return "GET_SERVICE_LINE"; // p990
             case 294: return "GET_SERVICE_LINE"; // p999
