@@ -44,4 +44,9 @@ interface IProfileManager
     void removeNotificationGroup(in NotificationGroup group);
     NotificationGroup getNotificationGroupForPackage(in String pkg);
     NotificationGroup getNotificationGroup(in String name);
+
+    /**
+     * Reset all profiles and application groups.
+     */
+    void resetAll();
 }

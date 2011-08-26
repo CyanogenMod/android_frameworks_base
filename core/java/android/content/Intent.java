@@ -1463,6 +1463,15 @@ public class Intent implements Parcelable, Cloneable {
     @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
     public static final String ACTION_LOCALE_CHANGED = "android.intent.action.LOCALE_CHANGED";
     /**
+     * Broadcast Action: The current device's locale has changed in setup wizard.
+     *
+     * <p class="note">This is a protected intent that can only be sent
+     * by the system.
+     * @hide
+     */
+    @SdkConstant(SdkConstantType.BROADCAST_INTENT_ACTION)
+    public static final String ACTION_LOCALE_CHANGED_IN_SETUP_WIZARD = "android.intent.action.LOCALE_CHANGED_IN_SETUP_WIZARD";
+    /**
      * Broadcast Action:  This is a <em>sticky broadcast</em> containing the
      * charging state, level, and other information about the battery.
      * See {@link android.os.BatteryManager} for documentation on the

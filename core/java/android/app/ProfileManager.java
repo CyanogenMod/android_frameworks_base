@@ -224,4 +224,17 @@ public class ProfileManager
         return getActiveProfile().getProfileGroup(notificationGroupName);
     }
 
+    /**
+     * Reset all profiles and application groups.
+     * @hide
+     */
+    public void resetAll() {
+        try {
+            getService().resetAll();
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        } catch (SecurityException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+    }
 }

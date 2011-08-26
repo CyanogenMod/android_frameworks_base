@@ -23,14 +23,17 @@ import org.xmlpull.v1.XmlPullParserFactory;
 import android.app.IProfileManager;
 import android.app.NotificationGroup;
 import android.app.Profile;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.XmlResourceParser;
 import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 import android.os.ParcelUuid;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -55,12 +58,12 @@ public class ProfileManagerService extends IProfileManager.Stub {
 
     private static final String TAG = "ProfileService";
 
-    private Map<UUID, Profile> mProfiles = new HashMap<UUID, Profile>();
+    private Map<UUID, Profile> mProfiles;
 
     // Match UUIDs and names, used for reverse compatibility
-    private Map<String, UUID> mProfileNames = new HashMap<String, UUID>();
+    private Map<String, UUID> mProfileNames;
 
-    private Map<String, NotificationGroup> mGroups = new HashMap<String, NotificationGroup>();
+    private Map<String, NotificationGroup> mGroups;
 
     private Profile mActiveProfile;
 
@@ -68,17 +71,71 @@ public class ProfileManagerService extends IProfileManager.Stub {
 
     public ProfileManagerService(Context context) {
         mContext = context;
-        try {
-            loadFromFile();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
-            try {
-                initialiseStructure();
-            } catch (Throwable ex) {
-                Log.e(TAG, "Error loading xml from resource: ", ex);
+        BroadcastReceiver receiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (action.equals(Intent.ACTION_LOCALE_CHANGED_IN_SETUP_WIZARD)) {
+                    resetAll();
+                }
             }
-        } catch (IOException e) {
+        };
+        IntentFilter filter = new IntentFilter(Intent.ACTION_LOCALE_CHANGED_IN_SETUP_WIZARD);
+        mContext.registerReceiver(receiver, filter);
+        refreshService();
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p> This will try to remove {@link #PROFILE_FILENAME}, then it
+     * calls {@link #refreshService(boolean)} to initialize data.
+     */
+    @Override
+    public void resetAll() {
+        enforceChangePermissions();
+        long token = clearCallingIdentity();
+        try {
+            File f = new File(PROFILE_FILENAME);
+            boolean forceInit = false;
+            if (f.exists()) {
+                forceInit = ! f.delete();
+            }
+            refreshService(forceInit);
+        } finally {
+            restoreCallingIdentity(token);
+        }
+    }
+
+    /**
+     * Initialize data of service
+     * <p>This is {@link #refreshService(boolean)} with arg value of false
+     */
+    private void refreshService() {
+        refreshService(false);
+    }
+
+    /**
+     * Initialize data of service
+     * @param forceInit - Try {@link #loadFromFile()} first when false,
+     *      then {@link #initialiseStructure()} if true, or if there is
+     *      any exception caught in loadFromFile()
+     */
+    private void refreshService(boolean forceInit) {
+        mProfiles = new HashMap<UUID, Profile>();
+        mProfileNames = new HashMap<String, UUID>();
+        mGroups = new HashMap<String, NotificationGroup>();
+        if (! forceInit) {
+            try {
+                loadFromFile();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            } catch (XmlPullParserException e) {
+                forceInit = true;
+            } catch (IOException e) {
+                forceInit = true;
+            }
+        }
+        if (forceInit) {
             try {
                 initialiseStructure();
             } catch (Throwable ex) {
