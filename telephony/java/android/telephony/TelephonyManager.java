@@ -397,6 +397,8 @@ public class TelephonyManager {
     public static final int NETWORK_TYPE_LTE = 13;
     /** @hide */
     public static final int NETWORK_TYPE_EHRPD = 14;
+    /** @hide */
+    public static final int NETWORK_TYPE_HSPAP = 15;
 
     /**
      * Returns a constant indicating the radio technology (network type)
@@ -417,6 +419,7 @@ public class TelephonyManager {
      * @see #NETWORK_TYPE_1xRTT
      * @see #NETWORK_TYPE_EHRPD
      * @see #NETWORK_TYPE_LTE
+     * @see #NETWORK_TYPE_HSPAP
      */
     public int getNetworkType() {
         try{
@@ -471,6 +474,8 @@ public class TelephonyManager {
                 return "CDMA - EHRPD";
             case NETWORK_TYPE_LTE:
                 return "LTE";
+            case NETWORK_TYPE_HSPAP:
+                return "HSPA+";
             default:
                 return "UNKNOWN";
         }
