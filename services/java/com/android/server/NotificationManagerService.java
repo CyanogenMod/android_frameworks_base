@@ -1597,8 +1597,15 @@ public class NotificationManagerService extends INotificationManager.Stub
                     mNotificationLight.notificationPulse(ledARGB, ledOnMS, ledOffMS);
                     mAlarmManager.set(AlarmManager.RTC_WAKEUP, scheduleTime, mLedUpdateIntent);
                 } else {
-                    mNotificationLight.setFlashing(ledARGB, LightsService.LIGHT_FLASH_TIMED,
-                            ledOnMS, ledOffMS);
+                    if (ledOnMS == 0 && ledOffMS == 0) {
+                        mNotificationLight.turnOff();
+                    } else {
+                        int mode = (ledOffMS == 0)
+                            ? LightsService.LIGHT_FLASH_NONE
+                            : LightsService.LIGHT_FLASH_TIMED;
+
+                        mNotificationLight.setFlashing(ledARGB, mode, ledOnMS, ledOffMS);
+                    }
                     mAlarmManager.cancel(mLedUpdateIntent);
                 }
             } else {
