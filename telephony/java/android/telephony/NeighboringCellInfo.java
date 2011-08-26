@@ -143,6 +143,7 @@ public class NeighboringCellInfo implements Parcelable
             case NETWORK_TYPE_HSDPA:
             case NETWORK_TYPE_HSUPA:
             case NETWORK_TYPE_HSPA:
+            case NETWORK_TYPE_HSPAP:
                 mNetworkType = radioType;
                 mPsc = Integer.valueOf(location, 16);
                 break;
