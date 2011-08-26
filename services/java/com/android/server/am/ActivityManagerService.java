@@ -11485,6 +11485,12 @@ public final class ActivityManagerService extends ActivityManagerNative
                             new Intent(Intent.ACTION_LOCALE_CHANGED),
                             null, null, 0, null, null,
                             null, false, false, MY_PID, Process.SYSTEM_UID);
+                    if (values.fromSetupWizard) {
+                        broadcastIntentLocked(null, null,
+                                new Intent(Intent.ACTION_LOCALE_CHANGED_IN_SETUP_WIZARD),
+                                null, null, 0, null, null,
+                                null, false, false, MY_PID, Process.SYSTEM_UID);
+                    }
                 }
             }
         }

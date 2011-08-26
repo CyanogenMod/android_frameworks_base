@@ -59,6 +59,14 @@ public final class Configuration implements Parcelable, Comparable<Configuration
     public CustomTheme customTheme;
 
     /**
+     * Change is made from setup wizard. Currently this is used for locale only.
+     * This field would be reset on next IActivityManager.getConfiguration() or
+     * {@link #Configuration(Configuration)}.
+     * @hide
+     */
+    public boolean fromSetupWizard;
+
+    /**
      * Locale should persist on setting.  This is hidden because it is really
      * questionable whether this is the right way to expose the functionality.
      * @hide
@@ -267,6 +275,8 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         if (o.customTheme != null) {
             customTheme = (CustomTheme) o.customTheme.clone();
         }
+        // this should not persist, so not copying the old value
+        fromSetupWizard = false;
     }
     
     public String toString() {
@@ -279,6 +289,8 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         sb.append(mnc);
         sb.append(" loc=");
         sb.append(locale);
+        sb.append(" fromSetupWizard=");
+        sb.append(fromSetupWizard);
         sb.append(" touch=");
         sb.append(touchscreen);
         sb.append(" keys=");
@@ -315,6 +327,7 @@ public final class Configuration implements Parcelable, Comparable<Configuration
         mcc = mnc = 0;
         locale = null;
         userSetLocale = false;
+        fromSetupWizard = false;
         touchscreen = TOUCHSCREEN_UNDEFINED;
         keyboard = KEYBOARD_UNDEFINED;
         keyboardHidden = KEYBOARDHIDDEN_UNDEFINED;
@@ -428,6 +441,10 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             changed |= ActivityInfo.CONFIG_THEME_RESOURCE;
             customTheme = (CustomTheme)delta.customTheme.clone();
         }
+
+        // let it last until next IActivityManager.getConfiguration()
+        // or new Configuration(Configuration)
+        fromSetupWizard = delta.fromSetupWizard;
 
         return changed;
     }
@@ -604,6 +621,12 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             dest.writeString(customTheme.getThemeId());
             dest.writeString(customTheme.getThemePackageName());
         }
+
+        if (fromSetupWizard) {
+            dest.writeInt(1);
+        } else {
+            dest.writeInt(0);
+        }
     }
 
     public void readFromParcel(Parcel source) {
@@ -631,6 +654,8 @@ public final class Configuration implements Parcelable, Comparable<Configuration
             String themePackage = source.readString();
             customTheme = new CustomTheme(themeId, themePackage);
         }
+
+        fromSetupWizard = (source.readInt()==1);
     }
     
     public static final Parcelable.Creator<Configuration> CREATOR
