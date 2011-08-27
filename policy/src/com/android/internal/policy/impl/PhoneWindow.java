@@ -44,6 +44,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
+import android.media.AudioSystem;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -1177,15 +1178,36 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                         Context.AUDIO_SERVICE);
                 if (audioManager != null) {
                     /*
-                     * Adjust the volume in on key down since it is more
-                     * responsive to the user.
+                     * Adjust the volume in on key down
+                     * since it is more responsive to the user.
+                     * (if volume key lock condition unsatisfied)
                      */
-                    audioManager.adjustSuggestedStreamVolume(
-                            keyCode == KeyEvent.KEYCODE_VOLUME_UP
-                                    ? AudioManager.ADJUST_RAISE
-                                    : AudioManager.ADJUST_LOWER,
-                            mVolumeControlStreamType,
-                            AudioManager.FLAG_SHOW_UI | AudioManager.FLAG_VIBRATE);
+                    boolean lockVolumeKeys = Settings.System.getInt(getContext().getContentResolver(),
+                            Settings.System.LOCK_VOLUME_KEYS, 0) == 1;
+                    /*
+                     * Volume key lock condition -
+                     * lockVolumeKeys is true, phone is in silent mode
+                     * and stream to be adjusted is the ringer.
+                     */
+                    if (!(lockVolumeKeys &&
+                          audioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL &&
+                          !(AudioSystem.getForceUse(AudioSystem.FOR_COMMUNICATION) == AudioSystem.FORCE_BT_SCO ||
+                            AudioSystem.isStreamActive(AudioSystem.STREAM_VOICE_CALL) ||
+                            AudioSystem.isStreamActive(AudioSystem.STREAM_MUSIC)))) {
+                        audioManager.adjustSuggestedStreamVolume(
+                                keyCode == KeyEvent.KEYCODE_VOLUME_UP
+                                        ? AudioManager.ADJUST_RAISE
+                                        : AudioManager.ADJUST_LOWER,
+                                mVolumeControlStreamType,
+                                AudioManager.FLAG_SHOW_UI | AudioManager.FLAG_VIBRATE);
+                    } else {
+                        //Show volume popup to acknowledge button press and
+                        //show that volume did not change
+                        audioManager.adjustSuggestedStreamVolume(
+                                AudioManager.ADJUST_SAME,
+                                mVolumeControlStreamType,
+                                AudioManager.FLAG_SHOW_UI | AudioManager.FLAG_VIBRATE);
+                    }
                 }
                 return true;
             }
