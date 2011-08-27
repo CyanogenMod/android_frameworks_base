@@ -44,6 +44,7 @@ import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
+import android.media.AudioSystem;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -1177,15 +1178,25 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                         Context.AUDIO_SERVICE);
                 if (audioManager != null) {
                     /*
-                     * Adjust the volume in on key down since it is more
-                     * responsive to the user.
+                     * Adjust the volume in on key down
+                     * since it is more responsive to the user.
+                     * (if volume key lock condition unsatisfied)
                      */
-                    audioManager.adjustSuggestedStreamVolume(
-                            keyCode == KeyEvent.KEYCODE_VOLUME_UP
-                                    ? AudioManager.ADJUST_RAISE
-                                    : AudioManager.ADJUST_LOWER,
-                            mVolumeControlStreamType,
-                            AudioManager.FLAG_SHOW_UI | AudioManager.FLAG_VIBRATE);
+                    if (shouldSuppressVolumeKey(audioManager)) {
+                        //Show volume popup to acknowledge button press and
+                        //show that volume did not change
+                        audioManager.adjustSuggestedStreamVolume(
+                                AudioManager.ADJUST_SAME,
+                                mVolumeControlStreamType,
+                                AudioManager.FLAG_SHOW_UI);
+                    } else {
+                        audioManager.adjustSuggestedStreamVolume(
+                                keyCode == KeyEvent.KEYCODE_VOLUME_UP
+                                        ? AudioManager.ADJUST_RAISE
+                                        : AudioManager.ADJUST_LOWER,
+                                mVolumeControlStreamType,
+                                AudioManager.FLAG_SHOW_UI | AudioManager.FLAG_VIBRATE);
+                    }
                 }
                 return true;
             }
@@ -1316,6 +1327,44 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         }
 
         return false;
+    }
+
+    private boolean shouldSuppressVolumeKey(AudioManager audioManager) {
+        boolean lockVolumeKeys = Settings.System.getInt(
+                getContext().getContentResolver(), Settings.System.LOCK_VOLUME_KEYS, 0) == 1;
+
+        if (!lockVolumeKeys) {
+            /* don't suppress if the user doesn't want it */
+            return false;
+        }
+        if (audioManager.getRingerMode() == AudioManager.RINGER_MODE_NORMAL) {
+            /* only suppress in silent mode */
+            return false;
+        }
+        if (mVolumeControlStreamType != AudioManager.USE_DEFAULT_STREAM_TYPE &&
+                mVolumeControlStreamType != AudioManager.STREAM_RING) {
+            /* only suppress ringtone volume changes */
+            return false;
+        }
+        if (AudioSystem.getForceUse(AudioSystem.FOR_COMMUNICATION) == AudioSystem.FORCE_BT_SCO) {
+            /* don't suppress BT volume changes */
+            return false;
+        }
+        if (AudioSystem.isStreamActive(AudioSystem.STREAM_MUSIC)) {
+            /* don't suppress music volume keys */
+            return false;
+        }
+        if (mTelephonyManager == null) {
+            mTelephonyManager = (TelephonyManager)
+                    getContext().getSystemService(Context.TELEPHONY_SERVICE);
+        }
+        if (AudioSystem.isStreamActive(AudioSystem.STREAM_VOICE_CALL) ||
+                mTelephonyManager.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK) {
+            /* don't suppress call volume changes */
+            return false;
+        }
+
+        return true;
     }
 
     /**
