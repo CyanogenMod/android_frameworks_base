@@ -1180,12 +1180,19 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
                      * Adjust the volume in on key down since it is more
                      * responsive to the user.
                      */
-                    audioManager.adjustSuggestedStreamVolume(
-                            keyCode == KeyEvent.KEYCODE_VOLUME_UP
-                                    ? AudioManager.ADJUST_RAISE
-                                    : AudioManager.ADJUST_LOWER,
-                            mVolumeControlStreamType,
-                            AudioManager.FLAG_SHOW_UI | AudioManager.FLAG_VIBRATE);
+                    boolean lockVolumeKeys = Settings.System.getInt(getContext().getContentResolver(),
+                            Settings.System.LOCK_VOLUME_KEYS, 0) == 1;
+                    if (!(lockVolumeKeys &&
+                            (mVolumeControlStreamType == AudioManager.STREAM_RING ||
+                             mVolumeControlStreamType == AudioManager.USE_DEFAULT_STREAM_TYPE) &&
+                            audioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL)) {
+                        audioManager.adjustSuggestedStreamVolume(
+                                keyCode == KeyEvent.KEYCODE_VOLUME_UP
+                                        ? AudioManager.ADJUST_RAISE
+                                        : AudioManager.ADJUST_LOWER,
+                                mVolumeControlStreamType,
+                                AudioManager.FLAG_SHOW_UI | AudioManager.FLAG_VIBRATE);
+                    }
                 }
                 return true;
             }
