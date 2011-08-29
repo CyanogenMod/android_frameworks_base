@@ -49,6 +49,7 @@ public SamsungRIL(Context context, int networkMode, int cdmaSubscription) {
 }
 
 //SAMSUNG SGS STATES
+    static final int RIL_REQUEST_DIAL_EMERGENCY = 10016;
     static final int RIL_UNSOL_STK_SEND_SMS_RESULT = 11002;
     static final int RIL_UNSOL_O2_HOME_ZONE_INFO = 11007;
     static final int RIL_UNSOL_DEVICE_READY_NOTI = 11008;
@@ -791,6 +792,36 @@ public SamsungRIL(Context context, int networkMode, int cdmaSubscription) {
 
 	        return response;
 	    }
+
+        @Override
+        public void
+        dial(String address, int clirMode, UUSInfo uusInfo, Message result) {
+            RILRequest rr;
+
+            if (SystemProperties.get("ro.ril.oem.nosim.ecclist").contains(address)) {
+                rr = RILRequest.obtain(RIL_REQUEST_DIAL_EMERGENCY, result);
+            }
+            else {
+                rr = RILRequest.obtain(RIL_REQUEST_DIAL, result);
+            }
+
+            rr.mp.writeString(address);
+            rr.mp.writeInt(clirMode);
+            rr.mp.writeInt(0); // UUS information is absent
+
+            if (uusInfo == null) {
+                rr.mp.writeInt(0); // UUS information is absent
+            } else {
+                rr.mp.writeInt(1); // UUS information is present
+                rr.mp.writeInt(uusInfo.getType());
+                rr.mp.writeInt(uusInfo.getDcs());
+                rr.mp.writeByteArray(uusInfo.getUserData());
+            }
+
+            if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+            send(rr);
+        }
 
     protected class SamsungDriverCall extends DriverCall {
         @Override
