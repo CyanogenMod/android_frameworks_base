@@ -17,42 +17,80 @@
 
 package com.android.systemui.statusbar;
 
+import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
-import android.content.res.Configuration;
-import android.graphics.Canvas;
-import android.os.SystemClock;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.database.ContentObserver;
+import android.os.Handler;
+import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.FrameLayout;
 
-import android.content.Intent;
-import android.os.RemoteException;
-import android.os.ServiceManager;
-import android.view.IWindowManager;
-import android.view.KeyEvent;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.util.Slog;
 import com.android.systemui.R;
 
 public class StatusBarView extends FrameLayout {
     private static final String TAG = "StatusBarView";
 
     static final int DIM_ANIM_TIME = 400;
-    
+
     StatusBarService mService;
+
     boolean mTracking;
+
     int mStartX, mStartY;
+
     ViewGroup mNotificationIcons;
+
     ViewGroup mStatusIcons;
+
     View mDate;
+
     FixedSizeDrawable mBackground;
+
+    View mBatteryIndicator;
+
+    View mBatteryChargingIndicator;
+
+    boolean mScreenOn = true;
+
+    private boolean mAttached = false;
+
+    Handler mHandler;
+
+    class SettingsObserver extends ContentObserver {
+
+        public SettingsObserver(Handler handler) {
+            super(handler);
+        }
+
+        void observer() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.STATUS_BAR_CM_BATTERY), false, this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            updateSettings();
+        }
+
+    }
 
     public StatusBarView(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        mHandler = new Handler();
+        SettingsObserver observer = new SettingsObserver(mHandler);
+        observer.observer();
     }
 
     @Override
@@ -65,13 +103,36 @@ public class StatusBarView extends FrameLayout {
         mBackground = new FixedSizeDrawable(mDate.getBackground());
         mBackground.setFixedBounds(0, 0, 0, 0);
         mDate.setBackgroundDrawable(mBackground);
+
+        mBatteryIndicator = findViewById(R.id.battery_indicator);
+        mBatteryChargingIndicator = findViewById(R.id.battery_indicator_charging);
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         mService.onBarViewAttached();
+
+        if (!mAttached) {
+            mAttached = true;
+            IntentFilter filter = new IntentFilter();
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            filter.addAction(Intent.ACTION_SCREEN_ON);
+            getContext().registerReceiver(mIntentReceiver, filter, null, getHandler());
+        }
     }
+
+    private final BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Intent.ACTION_SCREEN_OFF.equals(action)) {
+                mScreenOn = false;
+            } else if (Intent.ACTION_SCREEN_ON.equals(action)) {
+                mScreenOn = true;
+            }
+        }
+    };
 
     @Override
     protected void onDetachedFromWindow() {
@@ -113,6 +174,45 @@ public class StatusBarView extends FrameLayout {
 
         mDate.layout(mDate.getLeft(), mDate.getTop(), newDateRight, mDate.getBottom());
         mBackground.setFixedBounds(-mDate.getLeft(), -mDate.getTop(), (r-l), (b-t));
+
+        boolean batteryBar = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_CM_BATTERY, 0) == 2);
+        if (batteryBar) {
+            mBatteryIndicator.setVisibility(VISIBLE);
+
+            Intent batteryIntent = mContext.getApplicationContext().registerReceiver(null,
+                    new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+            int level = batteryIntent.getIntExtra("level", 0);
+            boolean plugged = batteryIntent.getIntExtra("plugged", 0) != 0;
+
+            if (level <= 15) {
+                mBatteryIndicator.setBackgroundColor(0xFFFF0000);
+            } else {
+                mBatteryIndicator.setBackgroundColor(0xFF33CC33);
+            }
+
+            mBatteryIndicator.layout(mBatteryIndicator.getLeft(), mBatteryIndicator.getTop(),
+                    ((r-l) * level) / 100, 2);
+
+            if (plugged) {
+                mBatteryChargingIndicator.setVisibility(VISIBLE);
+                mBatteryChargingIndicator.setBackgroundColor(0xFF33CC33);
+                int chargingWidth = Math.min(5, ((r-l) * (100 - level)) / 2);
+                mBatteryChargingIndicator.layout(r, t, (r + chargingWidth), t + 2);
+
+                Animation a = new TranslateAnimation(0, (float) level - (r-l), 0, 0);
+                a.setInterpolator(new AccelerateInterpolator());
+                a.setDuration(2000);
+                a.setRepeatCount(-1);
+                a.setRepeatMode(1);
+
+                if (mScreenOn) {
+                    mBatteryChargingIndicator.startAnimation(a);
+                } else {
+                    mBatteryChargingIndicator.clearAnimation();
+                }
+            }
+        }
     }
 
     /**
@@ -170,5 +270,23 @@ public class StatusBarView extends FrameLayout {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
         return onInterceptTouchEvent(event, false);
+    }
+
+    private void updateSettings() {
+        boolean batteryBar = (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_CM_BATTERY, 0) == 2);
+        if (batteryBar) {
+            Intent batteryIntent = mContext.getApplicationContext().registerReceiver(null,
+                    new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+            boolean plugged = batteryIntent.getIntExtra("plugged", 0) != 0;
+            mBatteryIndicator.setVisibility(VISIBLE);
+            if (plugged) {
+                mBatteryChargingIndicator.setVisibility(VISIBLE);
+            }
+        } else {
+            mBatteryIndicator.setVisibility(GONE);
+            mBatteryChargingIndicator.clearAnimation();
+            mBatteryChargingIndicator.setVisibility(GONE);
+        }
     }
 }

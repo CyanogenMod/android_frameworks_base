@@ -211,4 +211,13 @@
         android:paddingRight="6px"
         android:background="@drawable/statusbar_background"
         />
+
+    <View android:id="@+id/battery_indicator"
+        android:layout_width="0.0dip"
+        android:layout_height="0.0dip"
+        />
+    <View android:id="@+id/battery_indicator_charging"
+        android:layout_width="0.0dip"
+        android:layout_height="0.0dip"
+        />
 </com.android.systemui.statusbar.CmStatusBarView>
