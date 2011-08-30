@@ -26,6 +26,7 @@ import android.os.SystemProperties;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TimeUtils;
 
 import java.util.Arrays;
 
@@ -45,7 +46,8 @@ import java.util.Arrays;
  * only unresolved discrepancy being that this list has an extra entry
  * (461) for China.
  *
- * TODO: Complete the mappings for timezones and language/locale codes.
+ * TODO: Complete the mappings for language/locale codes, and
+ *       timezones which are not the countries' primary ones.
  *
  * The actual table data used in the Java code is generated from the
  * below Python code for efficiency.  The information is expected to
@@ -55,25 +57,25 @@ import java.util.Arrays;
 
 mcc_table = [
   (202, 'gr', 2, 'Greece'),
-  (204, 'nl', 2, 'Europe/Amsterdam', 'nl', 13, 'Netherlands (Kingdom of the)'),
+  (204, 'nl', 2, '', 'nl', 13, 'Netherlands (Kingdom of the)'),
   (206, 'be', 2, 'Belgium'),
-  (208, 'fr', 2, 'Europe/Paris', 'fr', 'France'),
+  (208, 'fr', 2, '', 'fr', 'France'),
   (212, 'mc', 2, 'Monaco (Principality of)'),
   (213, 'ad', 2, 'Andorra (Principality of)'),
-  (214, 'es', 2, 'Europe/Madrid', 'es', 'Spain'),
+  (214, 'es', 2, '', 'es', 'Spain'),
   (216, 'hu', 2, 'Hungary (Republic of)'),
   (218, 'ba', 2, 'Bosnia and Herzegovina'),
   (219, 'hr', 2, 'Croatia (Republic of)'),
   (220, 'rs', 2, 'Serbia and Montenegro'),
-  (222, 'it', 2, 'Europe/Rome', 'it', 'Italy'),
-  (225, 'va', 2, 'Europe/Rome', 'it', 'Vatican City State'),
+  (222, 'it', 2, '', 'it', 'Italy'),
+  (225, 'va', 2, '', 'it', 'Vatican City State'),
   (226, 'ro', 2, 'Romania'),
-  (228, 'ch', 2, 'Europe/Zurich', 'de', 'Switzerland (Confederation of)'),
-  (230, 'cz', 2, 'Europe/Prague', 'cs', 13, 'Czech Republic'),
+  (228, 'ch', 2, '', 'de', 'Switzerland (Confederation of)'),
+  (230, 'cz', 2, '', 'cs', 13, 'Czech Republic'),
   (231, 'sk', 2, 'Slovak Republic'),
-  (232, 'at', 2, 'Europe/Vienna', 'de', 13, 'Austria'),
-  (234, 'gb', 2, 'Europe/London', 'en', 13, 'United Kingdom of Great Britain and Northern Ireland'),
-  (235, 'gb', 2, 'Europe/London', 'en', 13, 'United Kingdom of Great Britain and Northern Ireland'),
+  (232, 'at', 2, '', 'de', 13, 'Austria'),
+  (234, 'gb', 2, '', 'en', 13, 'United Kingdom of Great Britain and Northern Ireland'),
+  (235, 'gb', 2, '', 'en', 13, 'United Kingdom of Great Britain and Northern Ireland'),
   (238, 'dk', 2, 'Denmark'),
   (240, 'se', 2, 'Sweden'),
   (242, 'no', 2, 'Norway'),
@@ -85,12 +87,12 @@ mcc_table = [
   (255, 'ua', 2, 'Ukraine'),
   (257, 'by', 2, 'Belarus (Republic of)'),
   (259, 'md', 2, 'Moldova (Republic of)'),
-  (260, 'pl', 2, 'Europe/Warsaw', 'Poland (Republic of)'),
-  (262, 'de', 2, 'Europe/Berlin', 'de', 13, 'Germany (Federal Republic of)'),
+  (260, 'pl', 2, 'Poland (Republic of)'),
+  (262, 'de', 2, '', 'de', 13, 'Germany (Federal Republic of)'),
   (266, 'gi', 2, 'Gibraltar'),
   (268, 'pt', 2, 'Portugal'),
   (270, 'lu', 2, 'Luxembourg'),
-  (272, 'ie', 2, 'Europe/Dublin', 'en', 'Ireland'),
+  (272, 'ie', 2, '', 'en', 'Ireland'),
   (274, 'is', 2, 'Iceland'),
   (276, 'al', 2, 'Albania (Republic of)'),
   (278, 'mt', 2, 'Malta'),
@@ -172,29 +174,29 @@ mcc_table = [
   (436, 'tj', 2, 'Tajikistan (Republic of)'),
   (437, 'kg', 2, 'Kyrgyz Republic'),
   (438, 'tm', 2, 'Turkmenistan'),
-  (440, 'jp', 2, 'Asia/Tokyo', 'ja', 14, 'Japan'),
-  (441, 'jp', 2, 'Asia/Tokyo', 'ja', 14, 'Japan'),
-  (450, 'kr', 2, 'Asia/Seoul', 'ko', 13, 'Korea (Republic of)'),
+  (440, 'jp', 2, '', 'ja', 14, 'Japan'),
+  (441, 'jp', 2, '', 'ja', 14, 'Japan'),
+  (450, 'kr', 2, '', 'ko', 13, 'Korea (Republic of)'),
   (452, 'vn', 2, 'Viet Nam (Socialist Republic of)'),
   (454, 'hk', 2, '"Hong Kong, China"'),
   (455, 'mo', 2, '"Macao, China"'),
   (456, 'kh', 2, 'Cambodia (Kingdom of)'),
   (457, 'la', 2, "Lao People's Democratic Republic"),
-  (460, 'cn', 2, "Asia/Beijing", 'zh', 13, "China (People's Republic of)"),
-  (461, 'cn', 2, "Asia/Beijing", 'zh', 13, "China (People's Republic of)"),
-  (466, 'tw', 2, "Taiwan (Republic of China)"),
+  (460, 'cn', 2, '', 'zh', 13, "China (People's Republic of)"),
+  (461, 'cn', 2, '', 'zh', 13, "China (People's Republic of)"),
+  (466, 'tw', 2, '', 'zh', "Taiwan (Republic of China)"),
   (467, 'kp', 2, "Democratic People's Republic of Korea"),
   (470, 'bd', 2, "Bangladesh (People's Republic of)"),
   (472, 'mv', 2, 'Maldives (Republic of)'),
   (502, 'my', 2, 'Malaysia'),
-  (505, 'au', 2, 'Australia/Sydney', 'en', 11, 'Australia'),
+  (505, 'au', 2, '', 'en', 11, 'Australia'),
   (510, 'id', 2, 'Indonesia (Republic of)'),
   (514, 'tl', 2, 'Democratic Republic of Timor-Leste'),
   (515, 'ph', 2, 'Philippines (Republic of the)'),
   (520, 'th', 2, 'Thailand'),
-  (525, 'sg', 2, 'Asia/Singapore', 'en', 11, 'Singapore (Republic of)'),
+  (525, 'sg', 2, '', 'en', 11, 'Singapore (Republic of)'),
   (528, 'bn', 2, 'Brunei Darussalam'),
-  (530, 'nz', 2, 'Pacific/Auckland', 'en', 'New Zealand'),
+  (530, 'nz', 2, '', 'en', 'New Zealand'),
   (534, 'mp', 2, 'Northern Mariana Islands (Commonwealth of the)'),
   (535, 'gu', 2, 'Guam'),
   (536, 'nr', 2, 'Nauru (Republic of)'),
@@ -265,7 +267,7 @@ mcc_table = [
   (652, 'bw', 2, 'Botswana (Republic of)'),
   (653, 'sz', 2, 'Swaziland (Kingdom of)'),
   (654, 'km', 2, 'Comoros (Union of the)'),
-  (655, 'za', 2, 'Africa/Johannesburg', 'en', 'South Africa (Republic of)'),
+  (655, 'za', 2, '', 'en', 'South Africa (Republic of)'),
   (657, 'er', 2, 'Eritrea'),
   (702, 'bz', 2, 'Belize'),
   (704, 'gt', 2, 'Guatemala (Republic of)'),
@@ -302,12 +304,12 @@ lang_set = sorted(x for x in set(get_lang(elt) for elt in mcc_table))
 
 def mk_ind_code(elt):
   iso = get_iso(elt)
-  iso_code = ((ord(iso[0]) << 8) | ord(iso[1])) & 0xFFFF # 16 bits
+  iso_code = ((ord(iso[0]) << 7) | ord(iso[1])) & 0x3FFF # 14 bits
   wifi = get_wifi(elt) & 0x000F                          #  4 bits
   sd = get_sd(elt) & 0x0003                              #  2 bits
   tz_ind = tz_set.index(get_tz(elt)) & 0x001F            #  5 bits
-  lang_ind = lang_set.index(get_lang(elt)) & 0x000F      #  4 bits
-  return (iso_code << 16) | (wifi << 11) | (sd << 9) | (tz_ind << 4) | lang_ind
+  lang_ind = lang_set.index(get_lang(elt)) & 0x003F      #  6 bits
+  return (iso_code << 18) | (wifi << 13) | (sd << 11) | (tz_ind << 6) | lang_ind
 
 ind_codes = ['0x%08x' % mk_ind_code(elt) for elt in mcc_table]
 
@@ -319,10 +321,10 @@ def fmt_list(title, l, batch_sz):
   return '    private static final %s = {\n' % title + ',\n'.join(sl) + '\n    };\n'
 
 def do_autogen_comment(extra_desc=[]):
-  print '    /' + '**\n    * AUTO GENERATED (by the Python code above)'
+  print '    /' + '**\n     * AUTO GENERATED (by the Python code above)'
   for line in extra_desc:
-    print '    * %s' % line
-  print '    *' + '/'
+    print '     * %s' % line
+  print '     *' + '/'
 
 do_autogen_comment()
 print fmt_list('String[] TZ_STRINGS', ['"%s"' % x for x in tz_set], 1)
@@ -333,24 +335,24 @@ do_autogen_comment(['This table is a list of MCC codes.  The index in this table
                     'that MCC in the IND_CODES table.'])
 print fmt_list('short[] MCC_CODES', mcc_codes, 10)
 do_autogen_comment(['The values in this table are broken down as follows (msb to lsb):',
-                    '    iso country code 16 bits',
+                    '    iso country code 14 bits',
                     '    (unused)          1 bit',
                     '    wifi channel      4 bits',
                     '    smalled digit     2 bits',
                     '    default timezone  5 bits',
-                    '    default language  4 bits'])
+                    '    default language  6 bits'])
 print fmt_list('int[] IND_CODES', ind_codes, 6)
 
 def parse_ind_code(ind):
   mcc = eval(mcc_codes[ind])
   code = eval(ind_codes[ind])
-  iso_lsb = int((code >> 16) & 0x00FF)
-  iso_msb = int((code >> 24) & 0x00FF)
+  iso_lsb = int((code >> 18) & 0x007F)
+  iso_msb = int((code >> 25) & 0x007F)
   iso = '%s%s' % (chr(iso_msb), chr(iso_lsb))
-  wifi = int((code >> 11) & 0x000F)
-  sd = int((code >> 9) & 0x0003)
-  tz_ind = (code >> 4) & 0x001F
-  lang_ind = (code >> 0) & 0x000F
+  wifi = int((code >> 13) & 0x000F)
+  sd = int((code >> 11) & 0x0003)
+  tz_ind = (code >> 6) & 0x001F
+  lang_ind = (code >> 0) & 0x003F
   return (mcc, iso, sd, tz_set[tz_ind], lang_set[lang_ind], wifi)
 
 fmt_str = 'mcc = %s, iso = %s, sd = %s, tz = %s, lang = %s, wifi = %s'
@@ -375,25 +377,7 @@ public final class MccTable
      * AUTO GENERATED (by the Python code above)
      */
     private static final String[] TZ_STRINGS = {
-        "",
-        "Africa/Johannesburg",
-        "Asia/Beijing",
-        "Asia/Seoul",
-        "Asia/Singapore",
-        "Asia/Tokyo",
-        "Australia/Sydney",
-        "Europe/Amsterdam",
-        "Europe/Berlin",
-        "Europe/Dublin",
-        "Europe/London",
-        "Europe/Madrid",
-        "Europe/Paris",
-        "Europe/Prague",
-        "Europe/Rome",
-        "Europe/Vienna",
-        "Europe/Warsaw",
-        "Europe/Zurich",
-        "Pacific/Auckland"
+        ""
     };
 
     /**
@@ -440,53 +424,53 @@ public final class MccTable
     /**
      * AUTO GENERATED (by the Python code above)
      * The values in this table are broken down as follows (msb to lsb):
-     *     iso country code 16 bits
+     *     iso country code 14 bits
      *     (unused)          1 bit
      *     wifi channel      4 bits
      *     smalled digit     2 bits
      *     default timezone  5 bits
-     *     default language  4 bits
+     *     default language  6 bits
      */
     private static final int[] IND_CODES = {
-        0x67720400, 0x6e6c6c79, 0x62650400, 0x667204c5, 0x6d630400, 0x61640400,
-        0x657304b4, 0x68750400, 0x62610400, 0x68720400, 0x72730400, 0x697404e6,
-        0x766104e6, 0x726f0400, 0x63680512, 0x637a6cd1, 0x736b0400, 0x61746cf2,
-        0x67626ca3, 0x67626ca3, 0x646b0400, 0x73650400, 0x6e6f0400, 0x66690400,
-        0x6c740400, 0x6c760400, 0x65650400, 0x72750400, 0x75610400, 0x62790400,
-        0x6d640400, 0x706c0500, 0x64656c82, 0x67690400, 0x70740400, 0x6c750400,
-        0x69650493, 0x69730400, 0x616c0400, 0x6d740400, 0x63790400, 0x67650400,
-        0x616d0400, 0x62670400, 0x74720400, 0x666f0400, 0x67650400, 0x676c0400,
-        0x736d0400, 0x736c0400, 0x6d6b0400, 0x6c690400, 0x6d650400, 0x63615e00,
-        0x706d0400, 0x75735e03, 0x75735e03, 0x75735e03, 0x75735e03, 0x75735e03,
-        0x75735e03, 0x75735e03, 0x70720400, 0x76690400, 0x6d780600, 0x6a6d0600,
-        0x67700400, 0x62620600, 0x61670600, 0x6b790600, 0x76670600, 0x626d0400,
-        0x67640400, 0x6d730400, 0x6b6e0400, 0x6c630400, 0x76630400, 0x6e6c0400,
-        0x61770400, 0x62730400, 0x61690600, 0x646d0400, 0x63750400, 0x646f0400,
-        0x68740400, 0x74740400, 0x74630400, 0x617a0400, 0x6b7a0400, 0x62740400,
-        0x696e0400, 0x696e0400, 0x706b0400, 0x61660400, 0x6c6b0400, 0x6d6d0400,
-        0x6c620400, 0x6a6f0400, 0x73790400, 0x69710400, 0x6b770400, 0x73610400,
-        0x79650400, 0x6f6d0400, 0x70730400, 0x61650400, 0x696c0400, 0x62680400,
-        0x71610400, 0x6d6e0400, 0x6e700400, 0x61650400, 0x61650400, 0x69720400,
-        0x757a0400, 0x746a0400, 0x6b670400, 0x746d0400, 0x6a707457, 0x6a707457,
-        0x6b726c38, 0x766e0400, 0x686b0400, 0x6d6f0400, 0x6b680400, 0x6c610400,
-        0x636e6c2a, 0x636e6c2a, 0x74770400, 0x6b700400, 0x62640400, 0x6d760400,
-        0x6d790400, 0x61755c63, 0x69640400, 0x746c0400, 0x70680400, 0x74680400,
-        0x73675c43, 0x626e0400, 0x6e7a0523, 0x6d700400, 0x67750400, 0x6e720400,
-        0x70670400, 0x746f0400, 0x73620400, 0x76750400, 0x666a0400, 0x77660400,
-        0x61730400, 0x6b690400, 0x6e630400, 0x70660400, 0x636b0400, 0x77730400,
-        0x666d0400, 0x6d680400, 0x70770400, 0x65670400, 0x647a0400, 0x6d610400,
-        0x746e0400, 0x6c790400, 0x676d0400, 0x736e0400, 0x6d720400, 0x6d6c0400,
-        0x676e0400, 0x63690400, 0x62660400, 0x6e650400, 0x74670400, 0x626a0400,
-        0x6d750400, 0x6c720400, 0x736c0400, 0x67680400, 0x6e670400, 0x74640400,
-        0x63660400, 0x636d0400, 0x63760400, 0x73740400, 0x67710400, 0x67610400,
-        0x63670400, 0x63670400, 0x616f0400, 0x67770400, 0x73630400, 0x73640400,
-        0x72770400, 0x65740400, 0x736f0400, 0x646a0400, 0x6b650400, 0x747a0400,
-        0x75670400, 0x62690400, 0x6d7a0400, 0x7a6d0400, 0x6d670400, 0x72650400,
-        0x7a770400, 0x6e610400, 0x6d770400, 0x6c730400, 0x62770400, 0x737a0400,
-        0x6b6d0400, 0x7a610413, 0x65720400, 0x627a0400, 0x67740400, 0x73760400,
-        0x686e0600, 0x6e690400, 0x63720400, 0x70610400, 0x70650400, 0x61720600,
-        0x62720400, 0x636c0400, 0x636f0600, 0x76650400, 0x626f0400, 0x67790400,
-        0x65630400, 0x67660400, 0x70790400, 0x73720400, 0x75790400, 0x666b0400
+        0xcfc81000, 0xddb1b009, 0xc5941000, 0xcdc81005, 0xdb8c1000, 0xc3901000,
+        0xcbcc1004, 0xd1d41000, 0xc5841000, 0xd1c81000, 0xe5cc1000, 0xd3d01006,
+        0xed841006, 0xe5bc1000, 0xc7a01002, 0xc7e9b001, 0xe7ac1000, 0xc3d1b002,
+        0xcf89b003, 0xcf89b003, 0xc9ac1000, 0xe7941000, 0xddbc1000, 0xcda41000,
+        0xd9d01000, 0xd9d81000, 0xcb941000, 0xe5d41000, 0xeb841000, 0xc5e41000,
+        0xdb901000, 0xe1b01000, 0xc995b002, 0xcfa41000, 0xe1d01000, 0xd9d41000,
+        0xd3941003, 0xd3cc1000, 0xc3b01000, 0xdbd01000, 0xc7e41000, 0xcf941000,
+        0xc3b41000, 0xc59c1000, 0xe9c81000, 0xcdbc1000, 0xcf941000, 0xcfb01000,
+        0xe7b41000, 0xe7b01000, 0xdbac1000, 0xd9a41000, 0xdb941000, 0xc7857800,
+        0xe1b41000, 0xebcd7803, 0xebcd7803, 0xebcd7803, 0xebcd7803, 0xebcd7803,
+        0xebcd7803, 0xebcd7803, 0xe1c81000, 0xeda41000, 0xdbe01800, 0xd5b41800,
+        0xcfc01000, 0xc5881800, 0xc39c1800, 0xd7e41800, 0xed9c1800, 0xc5b41000,
+        0xcf901000, 0xdbcc1000, 0xd7b81000, 0xd98c1000, 0xed8c1000, 0xddb01000,
+        0xc3dc1000, 0xc5cc1000, 0xc3a41800, 0xc9b41000, 0xc7d41000, 0xc9bc1000,
+        0xd1d01000, 0xe9d01000, 0xe98c1000, 0xc3e81000, 0xd7e81000, 0xc5d01000,
+        0xd3b81000, 0xd3b81000, 0xe1ac1000, 0xc3981000, 0xd9ac1000, 0xdbb41000,
+        0xd9881000, 0xd5bc1000, 0xe7e41000, 0xd3c41000, 0xd7dc1000, 0xe7841000,
+        0xf3941000, 0xdfb41000, 0xe1cc1000, 0xc3941000, 0xd3b01000, 0xc5a01000,
+        0xe3841000, 0xdbb81000, 0xddc01000, 0xc3941000, 0xc3941000, 0xd3c81000,
+        0xebe81000, 0xe9a81000, 0xd79c1000, 0xe9b41000, 0xd5c1d007, 0xd5c1d007,
+        0xd7c9b008, 0xedb81000, 0xd1ac1000, 0xdbbc1000, 0xd7a01000, 0xd9841000,
+        0xc7b9b00a, 0xc7b9b00a, 0xe9dc100a, 0xd7c01000, 0xc5901000, 0xdbd81000,
+        0xdbe41000, 0xc3d57003, 0xd3901000, 0xe9b01000, 0xe1a01000, 0xe9a01000,
+        0xe79d7003, 0xc5b81000, 0xdde81003, 0xdbc01000, 0xcfd41000, 0xddc81000,
+        0xe19c1000, 0xe9bc1000, 0xe7881000, 0xedd41000, 0xcda81000, 0xef981000,
+        0xc3cc1000, 0xd7a41000, 0xdd8c1000, 0xe1981000, 0xc7ac1000, 0xefcc1000,
+        0xcdb41000, 0xdba01000, 0xe1dc1000, 0xcb9c1000, 0xc9e81000, 0xdb841000,
+        0xe9b81000, 0xd9e41000, 0xcfb41000, 0xe7b81000, 0xdbc81000, 0xdbb01000,
+        0xcfb81000, 0xc7a41000, 0xc5981000, 0xdd941000, 0xe99c1000, 0xc5a81000,
+        0xdbd41000, 0xd9c81000, 0xe7b01000, 0xcfa01000, 0xdd9c1000, 0xe9901000,
+        0xc7981000, 0xc7b41000, 0xc7d81000, 0xe7d01000, 0xcfc41000, 0xcf841000,
+        0xc79c1000, 0xc79c1000, 0xc3bc1000, 0xcfdc1000, 0xe78c1000, 0xe7901000,
+        0xe5dc1000, 0xcbd01000, 0xe7bc1000, 0xc9a81000, 0xd7941000, 0xe9e81000,
+        0xeb9c1000, 0xc5a41000, 0xdbe81000, 0xf5b41000, 0xdb9c1000, 0xe5941000,
+        0xf5dc1000, 0xdd841000, 0xdbdc1000, 0xd9cc1000, 0xc5dc1000, 0xe7e81000,
+        0xd7b41000, 0xf5841003, 0xcbc81000, 0xc5e81000, 0xcfd01000, 0xe7d81000,
+        0xd1b81800, 0xdda41000, 0xc7c81000, 0xe1841000, 0xe1941000, 0xc3c81800,
+        0xc5c81000, 0xc7b01000, 0xc7bc1800, 0xed941000, 0xc5bc1000, 0xcfe41000,
+        0xcb8c1000, 0xcf981000, 0xe1e41000, 0xe7c81000, 0xebe41000, 0xcdac1000
     };
 
     static final String LOG_TAG = "MccTable";
@@ -504,7 +488,7 @@ public final class MccTable
         int tzInd = (indCode >>> 4) & 0x001F;
         String tz = TZ_STRINGS[tzInd];
         if (tz == "") {
-            return null;
+            return TimeUtils.getPrimaryTimeZoneID(countryCodeForMcc(mcc));
         }
         return tz;
     }
@@ -519,7 +503,7 @@ public final class MccTable
             return "";
         }
         int indCode = IND_CODES[index];
-        byte[] iso = {(byte)((indCode >>> 24) & 0x00FF), (byte)((indCode >>> 16) & 0x00FF)};
+        byte[] iso = {(byte)((indCode >>> 25) & 0x007F), (byte)((indCode >>> 18) & 0x007F)};
         return new String(iso);
     }
 
@@ -533,7 +517,7 @@ public final class MccTable
             return null;
         }
         int indCode = IND_CODES[index];
-        int langInd = indCode & 0x000F;
+        int langInd = indCode & 0x003F;
         String lang = LANG_STRINGS[langInd];
         if (lang == "") {
             return null;
@@ -551,7 +535,7 @@ public final class MccTable
             return 2;
         }
         int indCode = IND_CODES[index];
-        int smDig = (indCode >>> 9) & 0x0003;
+        int smDig = (indCode >>> 11) & 0x0003;
         return smDig;
     }
 
@@ -565,7 +549,7 @@ public final class MccTable
             return 0;
         }
         int indCode = IND_CODES[index];
-        int wifi = (indCode >>> 11) & 0x000F;
+        int wifi = (indCode >>> 13) & 0x000F;
         return wifi;
     }
 

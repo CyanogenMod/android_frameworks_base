@@ -1,0 +1,67 @@
+#!/bin/bash
+
+function gettop()
+{
+    echo $(dirname $0)/../../..
+}
+
+function genmcctable()
+{
+    local PYTHON=$(which python)
+    if [ ! -x "$PYTHON" ]; then
+        echo "Python not found"
+        return
+    fi
+    T=$(gettop)
+    if [ ! "$T" ]; then
+        echo "Couldn't locate the top of the tree.  Try setting TOP."
+        return
+    fi
+    local MCC="$T/frameworks/base/telephony/java/com/android/internal/telephony/MccTable.java"
+    if [ ! -f "$MCC" ]; then
+        echo "File not found: $MCC"
+        return
+    fi
+    local TMP=$(tempfile)
+    if [ -z "$TMP" ] || [ ! -f "$TMP" ]; then
+        echo "Couldn't create temporary file"
+        return
+    fi
+    trap "rm -f -- '$TMP'" EXIT
+    cat $MCC > $TMP
+    echo -n "" > $MCC
+    local LINE=
+    local PY=
+    local IFS=$'\n'
+    cat $TMP | while read -r LINE; do
+        if echo "$LINE" | grep -P '^\s*mcc_table\s*=\s*\[' > /dev/null; then
+            echo "$LINE" >> $MCC
+            PY="$LINE"
+            while read -r LINE; do
+                echo "$LINE" >> $MCC
+                if echo "$LINE" | grep -P '^\s*\*+/' > /dev/null; then
+                    break
+                else
+                    PY="$PY
+$LINE"
+                fi
+            done
+        elif echo "$LINE" | grep -P '^\s*public\s+final\s+class\s+MccTable' > /dev/null; then
+            echo "$LINE" >> $MCC
+            echo "{" >> $MCC
+            echo "$PY" | "$PYTHON" - >> $MCC
+            while read -r LINE; do
+                if echo "$LINE" | grep -P '^\s*static\s+final\s+String\s+LOG_TAG\s*=\s*"MccTable"' > /dev/null; then
+                    echo "$LINE" >> $MCC
+                    break
+                fi
+            done
+        else
+            echo "$LINE" >> $MCC
+        fi
+    done
+    rm -f -- "$TMP"
+    trap - EXIT
+}
+
+genmcctable
