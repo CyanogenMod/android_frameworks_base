@@ -2506,6 +2506,12 @@ public final class Settings {
         public static final String LOCKSCREEN_CUSTOM_ICON_STYLE = "lockscreen_custom_icon_style";
 
         /**
+         * Modify lockscreen widgets layout (time,date,carrier,msg,status)
+         * @hide
+         */
+        public static final String LOCKSCREEN_WIDGETS_LAYOUT = "lockscreen_widgets_layout";
+
+        /**
          * When enabled, rotary lockscreen switches app starter and unlock, so you can drag down to unlock
          * @hide
          */
