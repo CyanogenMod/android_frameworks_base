@@ -211,4 +211,10 @@
         android:paddingRight="6px"
         android:background="@drawable/statusbar_background"
         />
+
+    <com.android.systemui.statusbar.CmBatteryBar
+        style="@style/StatusBar.BatteryBar"
+        android:layout_width="match_parent"
+        android:layout_height="1dip"
+        />
 </com.android.systemui.statusbar.CmStatusBarView>
