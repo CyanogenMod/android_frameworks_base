@@ -2258,6 +2258,12 @@ public final class Settings {
         public static final String STATUS_BAR_CM_BATTERY = "status_bar_cm_battery";
 
         /**
+         * What color for the status bar battery style
+         * @hide
+         */
+        public static final String STATUS_BAR_CM_BATTERY_COLOR = "status_bar_cm_battery_color";
+
+        /**
          * Whether to show the clock in status bar
          * of the stock battery icon
          * 0: don't show the clock
