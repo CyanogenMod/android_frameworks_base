@@ -90,12 +90,14 @@ public class StreamSettings implements Parcelable{
     }
 
     /** @hide */
-    public void getXmlString(StringBuilder builder) {
-        builder.append("<streamDescriptor>\n");
-        builder.append("<streamId>" + streamId + "</streamId>\n");
-        builder.append("<value>" + value + "</value>\n");
-        builder.append("<override>" + override + "</override>\n");
-        builder.append("</streamDescriptor>\n");
+    public void getXmlString(StringBuilder builder, Context context) {
+        builder.append("<streamDescriptor>\n<streamId>");
+        builder.append(streamId);
+        builder.append("</streamId>\n<value>");
+        builder.append(value);
+        builder.append("</value>\n<override>");
+        builder.append(override);
+        builder.append("</override>\n</streamDescriptor>\n");
     }
 
     @Override

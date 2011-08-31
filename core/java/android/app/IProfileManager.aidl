@@ -30,6 +30,7 @@ interface IProfileManager
 
     boolean addProfile(in Profile profile);
     boolean removeProfile(in Profile profile);
+    void updateProfile(in Profile profile);
 
     Profile getProfile(in ParcelUuid profileParcelUuid);
     Profile getProfileByName(String profileName);
@@ -37,11 +38,10 @@ interface IProfileManager
     boolean profileExists(in ParcelUuid profileUuid);
     boolean profileExistsByName(String profileName);
 
-    void persist();
-
     NotificationGroup[] getNotificationGroups();
     void addNotificationGroup(in NotificationGroup group);
     void removeNotificationGroup(in NotificationGroup group);
+    void updateNotificationGroup(in NotificationGroup group);
     NotificationGroup getNotificationGroupForPackage(in String pkg);
-    NotificationGroup getNotificationGroup(in String name);
+    NotificationGroup getNotificationGroup(in ParcelUuid groupParcelUuid);
 }
