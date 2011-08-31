@@ -18,5 +18,6 @@
 <resources>
     <!-- Margin at the edge of the screen to ignore touch events for in the windowshade. -->
     <dimen name="status_bar_edge_ignore">5dp</dimen>
+    <dimen name="battery_bar_width">1dp</dimen>
 </resources>
 

@@ -52,6 +52,7 @@ import android.provider.CmSystem;
 import android.provider.Settings;
 import android.provider.Settings.SettingNotFoundException;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Pair;
 import android.util.Slog;
 import android.view.Display;
@@ -274,6 +275,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
     public void onCreate() {
         // First set up our views and stuff.
         mDisplay = ((WindowManager)getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+        makeBatteryBarView();
         makeStatusBarView(this);
 
         // reset vars for bottom bar
@@ -463,6 +465,28 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
         // set the inital view visibility
         setAreThereNotifications();
         mDateView.setVisibility(View.INVISIBLE);
+    }
+
+    private void makeBatteryBarView() {
+        CmBatteryBar batteryBar = (CmBatteryBar) View.inflate(this, R.layout.battery_bar, null);
+
+        WindowManagerImpl wm = WindowManagerImpl.getDefault();
+        DisplayMetrics metrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(metrics);
+
+        Resources res = getResources();
+        int width = res.getDimensionPixelSize(R.dimen.battery_bar_width);
+
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams(
+                width, metrics.heightPixels,
+                WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                PixelFormat.RGBX_8888);
+        lp.gravity = Gravity.RIGHT;
+        lp.setTitle("Battery Bar");
+
+        wm.addView(batteryBar, lp);
     }
 
     private void updateCarrierLabel() {
