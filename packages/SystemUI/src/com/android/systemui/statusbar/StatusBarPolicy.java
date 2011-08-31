@@ -1646,7 +1646,7 @@ public class StatusBarPolicy {
         ContentResolver resolver = mContext.getContentResolver();
 
         mShowCmBattery = (Settings.System.getInt(resolver,
-                Settings.System.STATUS_BAR_CM_BATTERY, 0) == 1);
+                Settings.System.STATUS_BAR_CM_BATTERY, 0) > 0);
         mCmBatteryStatus = !mShowCmBattery;
         mService.setIconVisibility("battery", !mShowCmBattery);
 
