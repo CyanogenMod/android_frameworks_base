@@ -13,12 +13,11 @@ import java.io.IOException;
 /** @hide */
 public class StreamSettings implements Parcelable{
 
-    int streamId;
+    private int mStreamId;
+    private int mValue;
+    private boolean mOverride;
+    private boolean mDirty;
 
-    int value;
-
-    boolean override;
-    
     /** @hide */
     public static final Parcelable.Creator<StreamSettings> CREATOR = new Parcelable.Creator<StreamSettings>() {
         public StreamSettings createFromParcel(Parcel in) {
@@ -32,40 +31,46 @@ public class StreamSettings implements Parcelable{
     };
 
 
-    public StreamSettings(Parcel parcel){
+    public StreamSettings(Parcel parcel) {
         readFromParcel(parcel);
     }
 
     public StreamSettings(int streamId) {
-        this.streamId = streamId;
-        this.value = 0;
-        this.override = false;
+        this(streamId, 0, false);
     }
 
     public StreamSettings(int streamId, int value, boolean override) {
-        this.streamId = streamId;
-        this.value = value;
-        this.override = override;
+        mStreamId = streamId;
+        mValue = value;
+        mOverride = override;
+        mDirty = false;
     }
 
     public int getStreamId() {
-        return streamId;
+        return mStreamId;
     }
 
     public int getValue() {
-        return value;
+        return mValue;
     }
 
     public void setValue(int value) {
-        this.value = value;
+        mValue = value;
+        mDirty = true;
     }
 
     public void setOverride(boolean override) {
-        this.override = override;
+        mOverride = override;
+        mDirty = true;
     }
 
     public boolean isOverride() {
-        return override;
+        return mOverride;
+    }
+
+    /** @hide */
+    public boolean isDirty() {
+        return mDirty;
     }
 
     /** @hide */
@@ -77,11 +82,11 @@ public class StreamSettings implements Parcelable{
             if (event == XmlPullParser.START_TAG) {
                 String name = xpp.getName();
                 if (name.equals("streamId")) {
-                    streamDescriptor.streamId = Integer.parseInt(xpp.nextText());
+                    streamDescriptor.mStreamId = Integer.parseInt(xpp.nextText());
                 } else if (name.equals("value")) {
-                    streamDescriptor.value = Integer.parseInt(xpp.nextText());
+                    streamDescriptor.mValue = Integer.parseInt(xpp.nextText());
                 } else if (name.equals("override")) {
-                    streamDescriptor.override = Boolean.parseBoolean(xpp.nextText());
+                    streamDescriptor.mOverride = Boolean.parseBoolean(xpp.nextText());
                 }
             }
             event = xpp.next();
@@ -90,12 +95,15 @@ public class StreamSettings implements Parcelable{
     }
 
     /** @hide */
-    public void getXmlString(StringBuilder builder) {
-        builder.append("<streamDescriptor>\n");
-        builder.append("<streamId>" + streamId + "</streamId>\n");
-        builder.append("<value>" + value + "</value>\n");
-        builder.append("<override>" + override + "</override>\n");
-        builder.append("</streamDescriptor>\n");
+    public void getXmlString(StringBuilder builder, Context context) {
+        builder.append("<streamDescriptor>\n<streamId>");
+        builder.append(mStreamId);
+        builder.append("</streamId>\n<value>");
+        builder.append(mValue);
+        builder.append("</value>\n<override>");
+        builder.append(mOverride);
+        builder.append("</override>\n</streamDescriptor>\n");
+        mDirty = false;
     }
 
     @Override
@@ -106,17 +114,17 @@ public class StreamSettings implements Parcelable{
     /** @hide */
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(streamId);
-        dest.writeValue(override);
-        dest.writeInt(value);
+        dest.writeInt(mStreamId);
+        dest.writeInt(mOverride ? 1 : 0);
+        dest.writeInt(mValue);
+        dest.writeInt(mDirty ? 1 : 0);
     }
 
     /** @hide */
     public void readFromParcel(Parcel in) {
-        streamId = in.readInt();
-        override = (Boolean)in.readValue(null);
-        value = in.readInt();
+        mStreamId = in.readInt();
+        mOverride = in.readInt() != 0;
+        mValue = in.readInt();
+        mDirty = in.readInt() != 0;
     }
-
-
 }

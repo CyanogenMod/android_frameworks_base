@@ -22,6 +22,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.ParcelUuid;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -29,13 +30,20 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /** @hide */
 public class NotificationGroup implements Parcelable {
+    private static final String TAG = "NotificationGroup";
 
     private String mName;
+    private int mNameResId;
+
+    private UUID mUuid;
 
     private Set<String> mPackages = new HashSet<String>();
+
+    private boolean mDirty;
 
     public static final Parcelable.Creator<NotificationGroup> CREATOR = new Parcelable.Creator<NotificationGroup>() {
         public NotificationGroup createFromParcel(Parcel in) {
@@ -49,7 +57,14 @@ public class NotificationGroup implements Parcelable {
     };
 
     public NotificationGroup(String name) {
-        this.mName = name;
+        this(name, -1, null);
+    }
+
+    public NotificationGroup(String name, int nameResId, UUID uuid) {
+        mName = name;
+        mNameResId = nameResId;
+        mUuid = (uuid != null) ? uuid : UUID.randomUUID();
+        mDirty = uuid == null;
     }
 
     private NotificationGroup(Parcel in) {
@@ -65,8 +80,13 @@ public class NotificationGroup implements Parcelable {
         return mName;
     }
 
+    public UUID getUuid() {
+        return mUuid;
+    }
+
     public void addPackage(String pkg) {
         mPackages.add(pkg);
+        mDirty = true;
     }
 
     public String[] getPackages() {
@@ -75,12 +95,17 @@ public class NotificationGroup implements Parcelable {
 
     public void removePackage(String pkg) {
         mPackages.remove(pkg);
+        mDirty = true;
     }
 
     public boolean hasPackage(String pkg) {
         boolean result = mPackages.contains(pkg);
-        Log.i("PROFILE", "Group: " + mName + " containing : " + pkg + " : " + result);
+        Log.i(TAG, "Group: " + mName + " containing : " + pkg + " : " + result);
         return result;
+    }
+
+    public boolean isDirty() {
+        return mDirty;
     }
 
     @Override
@@ -91,47 +116,81 @@ public class NotificationGroup implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mName);
+        dest.writeInt(mNameResId);
+        dest.writeInt(mDirty ? 1 : 0);
+        new ParcelUuid(mUuid).writeToParcel(dest, 0);
         dest.writeStringArray(getPackages());
     }
 
     public void readFromParcel(Parcel in) {
         mName = in.readString();
+        mNameResId = in.readInt();
+        mDirty = in.readInt() != 0;
+        mUuid = ParcelUuid.CREATOR.createFromParcel(in).getUuid();
         mPackages.addAll(Arrays.asList(in.readStringArray()));
     }
 
-    public String getXmlString() {
-        StringBuilder builder = new StringBuilder();
-        getXmlString(builder);
-        return builder.toString();
-    }
-
-    public void getXmlString(StringBuilder builder) {
-        builder.append("<notificationGroup name=\"" + TextUtils.htmlEncode(getName()) + "\">\n");
+    public void getXmlString(StringBuilder builder, Context context) {
+        builder.append("<notificationGroup ");
+        if (mNameResId > 0) {
+            builder.append("nameres=\"");
+            builder.append(context.getResources().getResourceEntryName(mNameResId));
+        } else {
+            builder.append("name=\"");
+            builder.append(TextUtils.htmlEncode(getName()));
+        }
+        builder.append("\" uuid=\"");
+        builder.append(TextUtils.htmlEncode(getUuid().toString()));
+        builder.append("\">\n");
         for (String pkg : mPackages) {
             builder.append("<package>" + TextUtils.htmlEncode(pkg) + "</package>\n");
         }
         builder.append("</notificationGroup>\n");
+        mDirty = false;
     }
 
-    public static NotificationGroup fromXml(XmlPullParser xpp) throws XmlPullParserException,
-            IOException {
-        return fromXml(xpp, null);
-    }
-    public static NotificationGroup fromXml(XmlPullParser xpp, Context context) throws XmlPullParserException,
-            IOException {
-        String attr = Profile.getAttrResString(xpp, context);
-        NotificationGroup notificationGroup = new NotificationGroup(attr);
+    public static NotificationGroup fromXml(XmlPullParser xpp, Context context)
+            throws XmlPullParserException, IOException {
+        String value = xpp.getAttributeValue(null, "nameres");
+        int nameResId = -1;
+        String name = null;
+        UUID uuid = null;
+
+        if (value != null) {
+            nameResId = context.getResources().getIdentifier(value, "string", "android");
+            if (nameResId > 0) {
+                name = context.getResources().getString(nameResId);
+            }
+        }
+
+        if (name == null) {
+            name = xpp.getAttributeValue(null, "name");
+        }
+
+        value = xpp.getAttributeValue(null, "uuid");
+        if (value != null) {
+            try {
+                uuid = UUID.fromString(value);
+            } catch (IllegalArgumentException e) {
+                Log.w(TAG, "UUID not recognized for " + name + ", using new one.");
+            }
+        }
+
+        NotificationGroup notificationGroup = new NotificationGroup(name, nameResId, uuid);
         int event = xpp.next();
         while (event != XmlPullParser.END_TAG || !xpp.getName().equals("notificationGroup")) {
             if (event == XmlPullParser.START_TAG) {
-                String name = xpp.getName();
-                if (name.equals("package")) {
+                if (xpp.getName().equals("package")) {
                     String pkg = xpp.nextText();
                     notificationGroup.addPackage(pkg);
                 }
             }
             event = xpp.next();
         }
+
+        /* we just loaded from XML, no need to save */
+        notificationGroup.mDirty = false;
+
         return notificationGroup;
     }
 }

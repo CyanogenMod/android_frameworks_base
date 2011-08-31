@@ -1,6 +1,6 @@
 <profiles>
-	<profile name="@string/profileNameDefault">
-		<profileGroup name="@string/profileGroupPhone">
+	<profile nameres="profileNameDefault">
+		<profileGroup uuid="d393035d-ea71-4f2a-bdbd-b65f6bf298f1">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>DEFAULT</soundMode>
@@ -8,7 +8,7 @@
 			<vibrateMode>DEFAULT</vibrateMode>
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupCalendar">
+		<profileGroup uuid="66bc93e4-775a-4ac2-9da1-752178fcdcaf">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>DEFAULT</soundMode>
@@ -16,7 +16,7 @@
 			<vibrateMode>DEFAULT</vibrateMode>
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupGmail">
+		<profileGroup uuid="d2ebb02a-5205-47c5-8e39-f55823d4082a">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>DEFAULT</soundMode>
@@ -24,7 +24,7 @@
 			<vibrateMode>DEFAULT</vibrateMode>
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupEmail">
+		<profileGroup uuid="db3318cd-1964-4732-b913-1f83d73a3dea">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>DEFAULT</soundMode>
@@ -32,7 +32,7 @@
 			<vibrateMode>DEFAULT</vibrateMode>
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupSMS">
+		<profileGroup uuid="da4f1e2d-0e50-4789-acd4-5ca2b53a981b">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>DEFAULT</soundMode>
@@ -40,7 +40,7 @@
 			<vibrateMode>DEFAULT</vibrateMode>
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/wildcardProfile" default="true">
+		<profileGroup uuid="a126d48a-aaef-47c4-baed-7f0e44aeffe5" default="true">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>DEFAULT</soundMode>
@@ -49,8 +49,8 @@
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
 	</profile>
-	<profile name="@string/profileNameWork">
-		<profileGroup name="@string/profileGroupPhone">
+	<profile nameres="profileNameWork">
+		<profileGroup uuid="d393035d-ea71-4f2a-bdbd-b65f6bf298f1">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>OVERRIDE</soundMode>
@@ -58,7 +58,7 @@
 			<vibrateMode>OVERRIDE</vibrateMode>
 			<lightsMode>OVERRIDE</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupCalendar">
+		<profileGroup uuid="66bc93e4-775a-4ac2-9da1-752178fcdcaf">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>SUPPRESS</soundMode>
@@ -66,7 +66,15 @@
 			<vibrateMode>OVERRIDE</vibrateMode>
 			<lightsMode>OVERRIDE</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupEmail">
+		<profileGroup uuid="d2ebb02a-5205-47c5-8e39-f55823d4082a">
+			<sound>content://settings/system/notification_sound</sound>
+			<ringer>content://settings/system/ringtone</ringer>
+			<soundMode>SUPPRESS</soundMode>
+			<ringerMode>SUPPRESS</ringerMode>
+			<vibrateMode>OVERRIDE</vibrateMode>
+			<lightsMode>DEFAULT</lightsMode>
+		</profileGroup>
+		<profileGroup uuid="db3318cd-1964-4732-b913-1f83d73a3dea">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>SUPPRESS</soundMode>
@@ -74,15 +82,7 @@
 			<vibrateMode>SUPPRESS</vibrateMode>
 			<lightsMode>SUPPRESS</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupGmail">
-			<sound>content://settings/system/notification_sound</sound>
-			<ringer>content://settings/system/ringtone</ringer>
-			<soundMode>SUPPRESS</soundMode>
-			<ringerMode>SUPPRESS</ringerMode>
-			<vibrateMode>OVERRIDE</vibrateMode>
-			<lightsMode>DEFAULT</lightsMode>
-		</profileGroup>
-		<profileGroup name="@string/profileGroupSMS">
+		<profileGroup uuid="da4f1e2d-0e50-4789-acd4-5ca2b53a981b">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>OVERRIDE</soundMode>
@@ -90,7 +90,7 @@
 			<vibrateMode>OVERRIDE</vibrateMode>
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/wildcardProfile" default="true">
+		<profileGroup uuid="a126d48a-aaef-47c4-baed-7f0e44aeffe5" default="true">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>DEFAULT</soundMode>
@@ -99,8 +99,8 @@
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
 	</profile>
-	<profile name="@string/profileNameHome">
-		<profileGroup name="@string/profileGroupPhone">
+	<profile nameres="profileNameHome">
+		<profileGroup uuid="d393035d-ea71-4f2a-bdbd-b65f6bf298f1">
 			<sound>content://media/external/audio/media/11</sound>
 			<ringer>content://media/external/audio/media/5</ringer>
 			<soundMode>OVERRIDE</soundMode>
@@ -108,7 +108,7 @@
 			<vibrateMode>OVERRIDE</vibrateMode>
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupCalendar">
+		<profileGroup uuid="66bc93e4-775a-4ac2-9da1-752178fcdcaf">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>OVERRIDE</soundMode>
@@ -116,7 +116,7 @@
 			<vibrateMode>OVERRIDE</vibrateMode>
 			<lightsMode>OVERRIDE</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupGmail">
+		<profileGroup uuid="d2ebb02a-5205-47c5-8e39-f55823d4082a">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>OVERRIDE</soundMode>
@@ -124,7 +124,7 @@
 			<vibrateMode>OVERRIDE</vibrateMode>
 			<lightsMode>OVERRIDE</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupEmail">
+		<profileGroup uuid="db3318cd-1964-4732-b913-1f83d73a3dea">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>SUPPRESS</soundMode>
@@ -132,7 +132,7 @@
 			<vibrateMode>OVERRIDE</vibrateMode>
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupSMS">
+		<profileGroup uuid="da4f1e2d-0e50-4789-acd4-5ca2b53a981b">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>OVERRIDE</soundMode>
@@ -140,7 +140,7 @@
 			<vibrateMode>OVERRIDE</vibrateMode>
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/wildcardProfile" default="true">
+		<profileGroup uuid="a126d48a-aaef-47c4-baed-7f0e44aeffe5" default="true">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>DEFAULT</soundMode>
@@ -149,8 +149,8 @@
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
 	</profile>
-	<profile name="@string/profileNameSilent">
-		<profileGroup name="@string/profileGroupPhone">
+	<profile nameres="profileNameSilent">
+		<profileGroup uuid="d393035d-ea71-4f2a-bdbd-b65f6bf298f1">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>SUPPRESS</soundMode>
@@ -158,7 +158,7 @@
 			<vibrateMode>SUPPRESS</vibrateMode>
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupCalendar">
+		<profileGroup uuid="66bc93e4-775a-4ac2-9da1-752178fcdcaf">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>SUPPRESS</soundMode>
@@ -166,7 +166,7 @@
 			<vibrateMode>DEFAULT</vibrateMode>
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupEmail">
+		<profileGroup uuid="d2ebb02a-5205-47c5-8e39-f55823d4082a">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>SUPPRESS</soundMode>
@@ -174,7 +174,7 @@
 			<vibrateMode>DEFAULT</vibrateMode>
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupGmail">
+		<profileGroup uuid="db3318cd-1964-4732-b913-1f83d73a3dea">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>SUPPRESS</soundMode>
@@ -182,7 +182,7 @@
 			<vibrateMode>DEFAULT</vibrateMode>
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupSMS">
+		<profileGroup uuid="da4f1e2d-0e50-4789-acd4-5ca2b53a981b">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>SUPPRESS</soundMode>
@@ -190,7 +190,7 @@
 			<vibrateMode>DEFAULT</vibrateMode>
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/wildcardProfile" default="true">
+		<profileGroup uuid="a126d48a-aaef-47c4-baed-7f0e44aeffe5" default="true">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>SUPPRESS</soundMode>
@@ -199,8 +199,8 @@
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
 	</profile>
-	<profile name="@string/profileNameNight">
-		<profileGroup name="@string/profileGroupPhone">
+	<profile nameres="profileNameNight">
+		<profileGroup uuid="d393035d-ea71-4f2a-bdbd-b65f6bf298f1">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>OVERRIDE</soundMode>
@@ -208,7 +208,7 @@
 			<vibrateMode>OVERRIDE</vibrateMode>
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupCalendar">
+		<profileGroup uuid="66bc93e4-775a-4ac2-9da1-752178fcdcaf">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>SUPPRESS</soundMode>
@@ -216,7 +216,7 @@
 			<vibrateMode>OVERRIDE</vibrateMode>
 			<lightsMode>SUPPRESS</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupGmail">
+		<profileGroup uuid="d2ebb02a-5205-47c5-8e39-f55823d4082a">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>SUPPRESS</soundMode>
@@ -224,7 +224,7 @@
 			<vibrateMode>SUPPRESS</vibrateMode>
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupEmail">
+		<profileGroup uuid="db3318cd-1964-4732-b913-1f83d73a3dea">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>SUPPRESS</soundMode>
@@ -232,7 +232,7 @@
 			<vibrateMode>SUPPRESS</vibrateMode>
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/profileGroupSMS">
+		<profileGroup uuid="da4f1e2d-0e50-4789-acd4-5ca2b53a981b">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>SUPPRESS</soundMode>
@@ -240,7 +240,7 @@
 			<vibrateMode>OVERRIDE</vibrateMode>
 			<lightsMode>SUPPRESS</lightsMode>
 		</profileGroup>
-		<profileGroup name="@string/wildcardProfile" default="true">
+		<profileGroup uuid="a126d48a-aaef-47c4-baed-7f0e44aeffe5" default="true">
 			<sound>content://settings/system/notification_sound</sound>
 			<ringer>content://settings/system/ringtone</ringer>
 			<soundMode>SUPPRESS</soundMode>
@@ -249,19 +249,19 @@
 			<lightsMode>DEFAULT</lightsMode>
 		</profileGroup>
 	</profile>
-	<notificationGroup name="@string/profileGroupPhone">
+	<notificationGroup nameres="profileGroupPhone" uuid="d393035d-ea71-4f2a-bdbd-b65f6bf298f1">
 		<package>com.android.phone</package>
 	</notificationGroup>
-	<notificationGroup name="@string/profileGroupCalendar">
+	<notificationGroup nameres="profileGroupCalendar" uuid="66bc93e4-775a-4ac2-9da1-752178fcdcaf">
 		<package>com.android.calendar</package>
 	</notificationGroup>
-	<notificationGroup name="@string/profileGroupGmail">
+	<notificationGroup nameres="profileGroupGmail" uuid="d2ebb02a-5205-47c5-8e39-f55823d4082a">
 		<package>com.google.android.gm</package>
 	</notificationGroup>
-	<notificationGroup name="@string/profileGroupEmail">
+	<notificationGroup nameres="profileGroupEmail" uuid="db3318cd-1964-4732-b913-1f83d73a3dea">
 		<package>com.android.email</package>
 	</notificationGroup>
-	<notificationGroup name="@string/profileGroupSMS">
+	<notificationGroup nameres="profileGroupSMS" uuid="da4f1e2d-0e50-4789-acd4-5ca2b53a981b">
 		<package>com.android.mms</package>
 	</notificationGroup>
 </profiles>
