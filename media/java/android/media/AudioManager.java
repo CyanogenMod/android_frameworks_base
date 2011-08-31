@@ -607,7 +607,8 @@ public class AudioManager {
         if(!packageName.equals("android")){
             ProfileGroup profileGroup = mProfileManager.getActiveProfileGroup(packageName);
             if(profileGroup != null){
-                Log.v(TAG, "shouldVibrate, group: " + profileGroup.getName() + " mode: " + profileGroup.getVibrateMode());
+                Log.v(TAG, "shouldVibrate, group: " + profileGroup.getUuid()
+                        + " mode: " + profileGroup.getVibrateMode());
                 switch(profileGroup.getVibrateMode()){
                     case OVERRIDE :
                         return true;
