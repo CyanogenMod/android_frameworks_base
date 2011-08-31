@@ -1096,16 +1096,14 @@ public class NotificationManagerService extends INotificationManager.Stub
                 }
             }
 
-            try{
-                final ProfileManager profileManager = (ProfileManager) mContext
-                .getSystemService(Context.PROFILE_SERVICE);
+            try {
+                final ProfileManager profileManager =
+                        (ProfileManager) mContext.getSystemService(Context.PROFILE_SERVICE);
 
-                Profile currentProfile = profileManager.getActiveProfile();
-                Log.v(TAG, "Active profile: " + currentProfile.getName());
                 ProfileGroup group = profileManager.getActiveProfileGroup(pkg);
-                Log.v(TAG, "Pkg: " + pkg + " group: " + group.getName());
-                notification = currentProfile.processNotification(group.getName(), notification);
-            }catch(Throwable th){
+                Log.v(TAG, "Pkg: " + pkg + " group: " + group.getUuid());
+                notification = group.processNotification(notification);
+            } catch(Throwable th) {
                 Log.e(TAG, "An error occurred profiling the notification.", th);
             }
 
