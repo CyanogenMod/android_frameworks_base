@@ -34,6 +34,7 @@ import android.content.res.Resources;
 import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -317,6 +318,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
         mCustomMsg = (TextView) findViewById(R.id.customMsg);
 
+        centerWidgets();
+
         if (mCustomMsg != null) {
             if (mLockPatternUtils.isShowCustomMsg()) {
                 mCustomMsg.setVisibility(View.VISIBLE);
@@ -570,6 +573,29 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         }
 
         resetStatusInfo(updateMonitor);
+    }
+
+    private void centerWidgets() {
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_CENTER_WIDGETS, 0) == 1) {
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
+            mCarrier.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, 1);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+            mCarrier.setLayoutParams(layoutParams);
+            layoutParams = (RelativeLayout.LayoutParams)mDate.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, 1);
+            mDate.setLayoutParams(layoutParams);
+            layoutParams = (RelativeLayout.LayoutParams)mStatus1.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, 1);
+            mStatus1.setLayoutParams(layoutParams);
+            layoutParams = (RelativeLayout.LayoutParams)mStatus2.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, 1);
+            mStatus2.setLayoutParams(layoutParams);
+            layoutParams = (RelativeLayout.LayoutParams)mClock.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, 1);
+            mClock.setLayoutParams(layoutParams);
+        }
     }
 
     static void setBackground(Context bcontext, ViewGroup layout){
