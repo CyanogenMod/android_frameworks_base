@@ -32,6 +32,11 @@
         <item name="android:background">@android:drawable/btn_default_small</item>
     </style>
 
+    <style name="StatusBar.BatteryBar" parent="@android:style/Widget.ProgressBar">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@drawable/battery_bar</item>
+    </style>
+
     <style name="TextAppearance.StatusBar.IntruderAlert"
         parent="@android:style/TextAppearance.StatusBar">
     </style>
