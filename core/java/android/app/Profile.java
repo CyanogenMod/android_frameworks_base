@@ -16,16 +16,16 @@
 
 package android.app;
 
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Parcel;
-import android.os.Parcelable;
 import android.os.ParcelUuid;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
+
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -50,6 +50,8 @@ public class Profile implements Parcelable {
     private static final String TAG = "Profile";
 
     private Map<Integer, StreamSettings> streams = new HashMap<Integer, StreamSettings>();
+
+    private Map<Integer, ConnectionSettings> connections = new HashMap<Integer, ConnectionSettings>();
 
     /** @hide */
     public static final Parcelable.Creator<Profile> CREATOR = new Parcelable.Creator<Profile>() {
@@ -127,6 +129,8 @@ public class Profile implements Parcelable {
                 profileGroups.values().toArray(new Parcelable[profileGroups.size()]), flags);
         dest.writeParcelableArray(
                 streams.values().toArray(new Parcelable[streams.size()]), flags);
+        dest.writeParcelableArray(
+                connections.values().toArray(new Parcelable[connections.size()]), flags);
     }
 
     /** @hide */
@@ -146,6 +150,10 @@ public class Profile implements Parcelable {
         for (Parcelable parcel : in.readParcelableArray(null)) {
             StreamSettings stream = (StreamSettings) parcel;
             streams.put(stream.getStreamId(), stream);
+        }
+        for (Parcelable parcel : in.readParcelableArray(null)) {
+            ConnectionSettings connection = (ConnectionSettings) parcel;
+            connections.put(connection.getConnectionId(), connection);
         }
     }
 
@@ -189,6 +197,11 @@ public class Profile implements Parcelable {
                 return true;
             }
         }
+        for (ConnectionSettings conn : connections.values()) {
+            if (conn.isDirty()) {
+                return true;
+            }
+        }
 
         return false;
     }
@@ -216,6 +229,9 @@ public class Profile implements Parcelable {
         }
         for (StreamSettings sd : streams.values()) {
             sd.getXmlString(builder, context);
+        }
+        for (ConnectionSettings cs : connections.values()) {
+            cs.getXmlString(builder, context);
         }
         builder.append("</profile>\n");
         mDirty = false;
@@ -274,6 +290,10 @@ public class Profile implements Parcelable {
                     StreamSettings sd = StreamSettings.fromXml(xpp, context);
                     profile.setStreamSettings(sd);
                 }
+                if (name.equals("connectionDescriptor")) {
+                    ConnectionSettings cs = ConnectionSettings.fromXml(xpp, context);
+                    profile.connections.put(cs.getConnectionId(), cs);
+                }
             }
             event = xpp.next();
         }
@@ -291,6 +311,12 @@ public class Profile implements Parcelable {
         for (StreamSettings sd : streams.values()) {
             if (sd.isOverride()) {
                 am.setStreamVolume(sd.getStreamId(), sd.getValue(), 0);
+            }
+        }
+        // Set connections
+        for (ConnectionSettings cs : connections.values()) {
+            if (cs.isOverride()) {
+                cs.processOverride(context);
             }
         }
     }
@@ -311,5 +337,19 @@ public class Profile implements Parcelable {
         return streams.values();
     }
 
+    /** @hide */
+    public ConnectionSettings getSettingsForConnection(int connectionId){
+        return connections.get(connectionId);
+    }
+
+    /** @hide */
+    public void setConnectionSettings(ConnectionSettings descriptor){
+        connections.put(descriptor.getConnectionId(), descriptor);
+    }
+
+    /** @hide */
+    public Collection<ConnectionSettings> getConnectionSettings(){
+        return connections.values();
+    }
 
 }
