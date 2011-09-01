@@ -1516,31 +1516,18 @@ public class StatusBarPolicy {
             mWimaxExtraState = intent.getIntExtra(
                     WimaxManagerConstants.EXTRA_WIMAX_STATE_DETAIL,
                     WimaxManagerConstants.WIMAX_DEREGISTRATION);
-
-            switch(mWimaxState) {
-                case WimaxManagerConstants.WIMAX_STATE_DISCONNECTED:
-                    iconId = sWimaxDisconnectedImg;
-                    break;
-                case WimaxManagerConstants.WIMAX_STATE_CONNECTED:
-                    if(mWimaxExtraState == WimaxManagerConstants.WIMAX_IDLE) {
-                        iconId = sWimaxIdleImg;
-                    }
-                    else {
-                        iconId = sWimaxSignalImages[mInetCondition][mWimaxSignal];
-                    }
-                    break;
-            }
-            mService.setIcon("wimax", iconId, 0);
         } else if (action.equals(WimaxManagerConstants.NETWORK_STATE_CHANGED_ACTION)) {
             final NetworkInfo networkInfo = (NetworkInfo) intent.getParcelableExtra(WimaxManagerConstants.EXTRA_NETWORK_INFO);
             if (networkInfo != null && networkInfo.isConnected()) {
-                iconId = sWimaxSignalImages[mInetCondition][mWimaxSignal];
+                mWimaxState = WimaxManagerConstants.WIMAX_STATE_CONNECTED;
+                mWimaxExtraState = WimaxManagerConstants.WIMAX_STATE_UNKNOWN;
             } else if (networkInfo != null && networkInfo.isAvailable()) {
-                iconId = sWimaxIdleImg;
+                mWimaxState = WimaxManagerConstants.WIMAX_STATE_CONNECTED;
+                mWimaxExtraState = WimaxManagerConstants.WIMAX_IDLE;
             } else {
-                iconId = sWimaxDisconnectedImg;
+                mWimaxState = WimaxManagerConstants.WIMAX_STATE_DISCONNECTED;
+                mWimaxExtraState = WimaxManagerConstants.WIMAX_STATE_UNKNOWN;
             }
-            mService.setIcon("wimax", iconId, 0);
         }
         switch(mWimaxState) {
             case WimaxManagerConstants.WIMAX_STATE_DISCONNECTED:
