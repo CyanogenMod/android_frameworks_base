@@ -467,7 +467,7 @@ public class StatusBarService extends Service implements CommandQueue.Callbacks 
             // Disable compact carrier when bottom bar is enabled for now
             // till we find a better solution (looks ugly alone at the top)
             if (mBottomBar)
-                mCompactCarrierLayout.setVisibility(View.VISIBLE);
+                mCompactCarrierLayout.setVisibility(View.GONE);
             if (mLatest.hasClearableItems())
                 mCompactClearButton.setVisibility(View.VISIBLE);
         } else {
