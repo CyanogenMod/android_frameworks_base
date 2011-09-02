@@ -2467,6 +2467,12 @@ public final class Settings {
         public static final String TRACKBALL_UNLOCK_SCREEN = "trackball_unlock_screen";
 
         /**
+         * Whether to unlock the screen with the slide-out keyboard. The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String SLIDER_UNLOCK_SCREEN = "slider_unlock_screen";
+
+        /**
          * Whether to wake the screen with the volume keys. The value is boolean (1 or 0).
          * @hide
          */
