@@ -1833,6 +1833,12 @@ public final class Settings {
          */
         public static final String RECENT_APPS_SHOW_TITLE = "recent_apps_show_title";
 
+	/**
+	 * Specifies whether to use the quick recent apps menu.  If set, USE_CUSTOM_APP is ignored.
+	 * @hide
+	 */
+        public static final String USE_QUICK_RECENT = "use_quick_recent";
+
         /**
          * Specifies whether or not to use a custom app instead of the recent applications dialog
          * @hide
