@@ -1193,6 +1193,12 @@ public final class Settings {
         public static final String AIRPLANE_MODE_RADIOS = "airplane_mode_radios";
 
         /**
+         * Whether Bluetooth fast connections are enabled.
+         * @hide
+         */
+        public static final String BLUETOOTH_FAST_CONNECT = "bluetooth_fast_connect";
+
+        /**
          * A comma separated list of radios that should to be disabled when airplane mode
          * is on, but can be manually reenabled by the user.  For example, if RADIO_WIFI is
          * added to both AIRPLANE_MODE_RADIOS and AIRPLANE_MODE_TOGGLEABLE_RADIOS, then Wifi
