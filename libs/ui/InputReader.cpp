@@ -342,6 +342,14 @@ InputDevice* InputReader::createDevice(int32_t deviceId, const String8& name, ui
 
     // Touchscreen-like devices.
     if (classes & INPUT_DEVICE_CLASS_TOUCHSCREEN_MT) {
+#ifdef ZEUS_TOUCHPADS
+        /* According to the Sony Ericsson SDK, the jogdials should be interpreted
+         * as an AINPUT_SOURCE_TOUCHPAD. According to getSources() above, a
+         * touchpad is simply a device with a negative associated display id.
+         */
+        if (deviceId == 0x10004)
+            associatedDisplayId = -1;
+#endif
         device->addMapper(new MultiTouchInputMapper(device, associatedDisplayId));
     } else if (classes & INPUT_DEVICE_CLASS_TOUCHSCREEN) {
         device->addMapper(new SingleTouchInputMapper(device, associatedDisplayId));
