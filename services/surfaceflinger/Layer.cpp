@@ -279,7 +279,10 @@ void Layer::onDraw(const Region& clip) const
     }
 #endif
 
-    drawWithOpenGL(clip, tex);
+    if (mFlags & DisplayHardware::SLOW_CONFIG)
+        drawWithOpenGL(clip, tex);
+    else
+        drawWithOpenGLOptimized(clip, tex);
 }
 
 bool Layer::needsFiltering() const
