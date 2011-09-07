@@ -1338,6 +1338,9 @@ status_t MPEG4Writer::Track::start(MetaData *params) {
 
     sp<MetaData> meta = new MetaData;
     meta->setInt64(kKeyTime, startTimeUs);
+    int32_t bitRate = 0;
+    params->findInt32(kKeyBitRate, &bitRate);
+    mMeta->setInt32(kKeyBitRate, bitRate);
     status_t err = mSource->start(meta.get());
     if (err != OK) {
         mDone = mReachedEOS = true;
@@ -2625,12 +2628,18 @@ void MPEG4Writer::Track::writeTrackHeader(
                         mOwner->writeInt8(0x20);  // objectTypeIndication ISO/IEC 14492-2
                         mOwner->writeInt8(0x11);  // streamType VisualStream
 
+                        CHECK(tkhdDuration > 0);
+                        int32_t avgBitRate = ((float(mEstimatedTrackSizeBytes) / float(tkhdDuration)) * 8 * 1000);
+                        int32_t maxBitRate = 0;
+                        mMeta->findInt32(kKeyBitRate, &maxBitRate);
+
                         static const uint8_t kData[] = {
-                            0x01, 0x77, 0x00,
-                            0x00, 0x03, 0xe8, 0x00,
-                            0x00, 0x03, 0xe8, 0x00
+                            0x01, 0x77, 0x00
                         };
+
                         mOwner->write(kData, sizeof(kData));
+                        mOwner->writeInt32(maxBitRate);
+                        mOwner->writeInt32(avgBitRate);
 
                         mOwner->writeInt8(0x05);  // DecoderSpecificInfoTag
 
