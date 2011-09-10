@@ -217,7 +217,6 @@ public class ProfileManager
         NotificationGroup notificationGroup = getNotificationGroupForPackage(packageName);
         if(notificationGroup == null){
             ProfileGroup defaultGroup = getActiveProfile().getDefaultGroup();
-            Log.v(TAG, "No active group, returning default: " + (defaultGroup == null ? "null" : defaultGroup.getName()));
             return defaultGroup;
         }
         String notificationGroupName = notificationGroup.getName();
