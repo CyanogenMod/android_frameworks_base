@@ -41,7 +41,7 @@ public:
     {
         Parcel data, reply;
         data.writeInterfaceToken(IOverlay::getInterfaceDescriptor());
-        remote()->transact(DESTROY, data, &reply, IBinder::FLAG_ONEWAY);
+        remote()->transact(DESTROY, data, &reply); // Make this call synchronous
     }
 };
 
