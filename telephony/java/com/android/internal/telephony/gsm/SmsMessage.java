@@ -1027,7 +1027,12 @@ public class SmsMessage extends SmsMessageBase{
                 case 3: // reserved
                     Log.w(LOG_TAG, "1 - Unsupported SMS data coding scheme "
                             + (dataCodingScheme & 0xff));
-                    encodingType = ENCODING_8BIT;
+                    if (SimRegionCache.getRegion() == SimRegionCache.MCC_KOREAN) {
+                        Log.w(LOG_TAG, "Korean SIM, using KSC5601 for decoding.");
+                        encodingType = ENCODING_KSC5601;
+                    } else {
+                        encodingType = ENCODING_8BIT;
+                    }
                     break;
                 }
             }
