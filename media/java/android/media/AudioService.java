@@ -41,6 +41,7 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.provider.Settings;
+import android.provider.Settings.SettingNotFoundException;
 import android.provider.Settings.System;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -191,6 +192,9 @@ public class AudioService extends IAudioService.Stub {
         AudioSystem.STREAM_MUSIC,  // STREAM_TTS
         AudioSystem.STREAM_MUSIC  // STREAM_FM
     };
+
+    private final static String SETTING_LAST_HEADSET_MEDIA_VOL = "android.media.AudioService.LAST_HEADSET_MEDIA_VOL";
+    private final static String SETTING_LAST_SPEAKER_MEDIA_VOL = "android.media.AudioService.LAST_SPEAKER_MEDIA_VOL";
 
     private AudioSystem.ErrorCallback mAudioSystemCallback = new AudioSystem.ErrorCallback() {
         public void onError(int error) {
@@ -1936,6 +1940,17 @@ public class AudioService extends IAudioService.Stub {
                 int microphone = intent.getIntExtra("microphone", 0);
                 String name = intent.getStringExtra("name");
                 
+                int lastHeadsetModeMusicVolume;
+                try {
+                    lastHeadsetModeMusicVolume = System.getInt(mContentResolver, state==1?SETTING_LAST_HEADSET_MEDIA_VOL:SETTING_LAST_SPEAKER_MEDIA_VOL);
+                } catch (SettingNotFoundException e) {
+                    lastHeadsetModeMusicVolume = -1;
+                }
+                System.putInt(mContentResolver, state==1?SETTING_LAST_SPEAKER_MEDIA_VOL:SETTING_LAST_HEADSET_MEDIA_VOL, getStreamVolume(AudioSystem.STREAM_MUSIC));
+                if (lastHeadsetModeMusicVolume >= 0) {
+                    setStreamVolume(AudioSystem.STREAM_MUSIC, lastHeadsetModeMusicVolume, AudioManager.FLAG_SHOW_UI);
+                }
+
                 if (name != null && !name.equalsIgnoreCase("1")) {
                     if (microphone != 0) {
                         boolean isConnected = mConnectedDevices.containsKey(AudioSystem.DEVICE_OUT_WIRED_HEADSET);
