@@ -312,7 +312,21 @@ public class VolumePreference extends SeekBarPreference implements
         }
         
         public void run() {
-            mAudioManager.setStreamVolume(mStreamType, mLastProgress, 0);
+            int newStreamVolume = mLastProgress;
+            if (mStreamType == AudioManager.STREAM_RING) {
+                int ringerMode = mAudioManager.getRingerMode();
+                int vibrateSetting = mAudioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
+
+                if (mLastProgress == 0) {
+                    if (ringerMode == AudioManager.RINGER_MODE_NORMAL) {
+                        mAudioManager.setRingerMode(vibrateSetting==AudioManager.VIBRATE_SETTING_OFF?AudioManager.RINGER_MODE_SILENT:AudioManager.RINGER_MODE_VIBRATE);
+                    }
+                } else if (ringerMode != AudioManager.RINGER_MODE_NORMAL) {
+                    mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+                }
+
+            }
+            mAudioManager.setStreamVolume(mStreamType, newStreamVolume, 0);
         }
         
         private void sample() {
