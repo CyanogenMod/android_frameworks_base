@@ -10,10 +10,10 @@
 class EffectEqualizer : public Effect {
     private:
     /* Equalizer */
-    float mBand[5];
+    float mBand[6];
 
     int64_t mGain;
-    Biquad mFilterL[4], mFilterR[4];
+    Biquad mFilterL[5], mFilterR[5];
 
     /* Automatic equalizer */
     float mLoudnessAdjustment;
@@ -23,6 +23,7 @@ class EffectEqualizer : public Effect {
     int32_t mNextUpdateInterval;
     int64_t mPowerSquared;
 
+    /* Smooth enable/disable */
     int32_t mFade;
 
     void setBand(int32_t idx, float dB);   
