@@ -63,7 +63,7 @@ static int64_t toFixedPoint(float in) {
 EffectEqualizer::EffectEqualizer()
     : mLoudnessAdjustment(10000.f), mLoudness(50.f), mNextUpdate(0), mNextUpdateInterval(1000), mPowerSquared(0), mFade(0)
 {
-    for (int32_t i = 0; i < 5; i ++) {
+    for (int32_t i = 0; i < 6; i ++) {
         mBand[i] = 0;
     }
 }
@@ -95,7 +95,7 @@ int32_t EffectEqualizer::command(uint32_t cmdCode, uint32_t cmdSize, void* pCmdD
 				reply1x4_1x2_t *replyData = (reply1x4_1x2_t *) pReplyData;
 				replyData->status = 0;
 				replyData->vsize = 2;
-				replyData->data = 5;
+				replyData->data = 6;
 				*replySize = sizeof(reply1x4_1x2_t);
 				LOGI("EQ_PARAM_NUM_BANDS OK");
 				return 0;
@@ -121,7 +121,7 @@ int32_t EffectEqualizer::command(uint32_t cmdCode, uint32_t cmdSize, void* pCmdD
 		} else if (cep->psize == 8) {
 			int32_t cmd = ((int32_t *) cep)[3];
 			int32_t arg = ((int32_t *) cep)[4];
-			if (cmd == EQ_PARAM_BAND_LEVEL && arg >= 0 && arg < 5) {
+			if (cmd == EQ_PARAM_BAND_LEVEL && arg >= 0 && arg < 6) {
 				reply2x4_1x2_t *replyData = (reply2x4_1x2_t *) pReplyData;
 				replyData->status = 0;
 				replyData->vsize = 2;
@@ -129,8 +129,8 @@ int32_t EffectEqualizer::command(uint32_t cmdCode, uint32_t cmdSize, void* pCmdD
 				*replySize = sizeof(reply2x4_1x2_t);
 				return 0;
 			}
-			if (cmd == EQ_PARAM_CENTER_FREQ && arg >= 0 && arg < 5) {
-				float centerFrequency = 62.5f * powf(4, arg);
+			if (cmd == EQ_PARAM_CENTER_FREQ && arg >= 0 && arg < 6) {
+				float centerFrequency = 15.625f * powf(4, arg);
 				reply2x4_1x4_t *replyData = (reply2x4_1x4_t *) pReplyData;
 				replyData->status = 0;
 				replyData->vsize = 4;//from 2 to 4 bytes to do 32bit instead of 16bit so that we can pass milliHertz instead of Hertz
@@ -168,7 +168,7 @@ int32_t EffectEqualizer::command(uint32_t cmdCode, uint32_t cmdSize, void* pCmdD
 			int32_t cmd = ((int32_t *) cep)[3];
 			int32_t arg = ((int32_t *) cep)[4];
 
-			if (cmd == EQ_PARAM_BAND_LEVEL && arg >= 0 && arg < 5) {
+			if (cmd == EQ_PARAM_BAND_LEVEL && arg >= 0 && arg < 6) {
 				LOGI("Setting band %d to %d", cmd, arg);
 				*replyData = 0;
 				int16_t value = ((int16_t *) cep)[10];
@@ -194,12 +194,12 @@ int32_t EffectEqualizer::command(uint32_t cmdCode, uint32_t cmdSize, void* pCmdD
  * sound pressure level.
  *
  * The boost can be calculated as linear scaling of the following adjustment:
- *     20 Hz +45 dB (unmodeled)
- *   62.5 Hz +24 dB
+ *     20 Hz +41 dB
+ *   62.5 Hz +28 dB
  *    250 Hz +10 dB
  *   1000 Hz   0 dB
  *   4000 Hz  -3 dB
- *  16000 Hz  +6 dB
+ *  16000 Hz  +8 dB
  *
  * The boost will be applied maximally for signals of 20 dB and less,
  * and linearly decreased for signals 20 dB ... 100 dB, and no adjustment is
@@ -207,8 +207,10 @@ int32_t EffectEqualizer::command(uint32_t cmdCode, uint32_t cmdSize, void* pCmdD
  * digital sound level against the audio.
  */
 float EffectEqualizer::getAdjustedBand(int32_t band) {
-    const float adj[5] = { 24.0, 10.0, 0.0, -3.0, 6.0 };
+    /* 1st derived by linear extrapolation from (62.5, 28) to (20, 41) */
+    const float adj[6] = { 42.3, 28.0, 10.0, 0.0, -3.0, 8.0 };
 
+    /* The 15.625 band is not exposed externally, so first point is duplicated. */
     float f = mBand[band];
 
     /* Add loudness adjustment */
@@ -220,7 +222,7 @@ float EffectEqualizer::getAdjustedBand(int32_t band) {
         loudnessLevel = 20.f;
     }
     /* Maximum loudness = no adj (reference behavior at 100 dB) */
-    loudnessLevel = (loudnessLevel - 20) / (100.0 - 20.0);
+    loudnessLevel = (loudnessLevel - 20) / (100 - 20);
     f += adj[band] * (1. - loudnessLevel);
 
     return f * (mFade / 100.f);
@@ -229,9 +231,10 @@ float EffectEqualizer::getAdjustedBand(int32_t band) {
 void EffectEqualizer::refreshBands()
 {
     mGain = toFixedPoint(powf(10.0f, getAdjustedBand(0) / 20.0f));
-    for (int32_t band = 0; band < 4; band ++) {
-        float centerFrequency = 62.5f * powf(4, band);
-        float dB = getAdjustedBand(band+1) - getAdjustedBand(band);
+    for (int32_t band = 0; band < 5; band ++) {
+	/* 15.625, 62.5, 250, 1000, 4000, 16000 */
+        float centerFrequency = 15.625f * powf(4, band);
+        float dB = getAdjustedBand(band + 1) - getAdjustedBand(band);
 
         mFilterL[band].setHighShelf(centerFrequency * 2.0f, mSamplingRate, dB, 1.0f);
         mFilterR[band].setHighShelf(centerFrequency * 2.0f, mSamplingRate, dB, 1.0f);
@@ -285,7 +288,7 @@ int32_t EffectEqualizer::process(audio_buffer_t *in, audio_buffer_t *out)
         tmpR = tmpR * mGain >> 32;
  
         /* evaluate the other filters. */
-        for (int32_t j = 0; j < 4; j ++) {
+        for (int32_t j = 0; j < 5; j ++) {
             tmpL = mFilterL[j].process(tmpL);
             tmpR = mFilterR[j].process(tmpR);
         }
