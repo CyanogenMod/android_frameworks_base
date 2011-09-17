@@ -92,6 +92,9 @@ public class StatusBarPolicy {
     private final Handler mHandler = new StatusBarHandler();
     private final IBatteryStats mBatteryStats;
 
+    // headset
+    private boolean mHeadsetPlugged = false;
+
     // storage
     private StorageManager mStorageManager;
 
@@ -604,6 +607,8 @@ public class StatusBarPolicy {
     // need another var that superceding mPhoneSignalHidden
     private boolean mShowCmSignal;
 
+    private boolean mShowHeadset;
+
     class SettingsObserver extends ContentObserver {
         SettingsObserver(Handler handler) {
             super(handler);
@@ -616,6 +621,9 @@ public class StatusBarPolicy {
 
             resolver.registerContentObserver(Settings.System
                     .getUriFor(Settings.System.STATUS_BAR_CM_SIGNAL_TEXT), false, this);
+
+            resolver.registerContentObserver(Settings.System
+                    .getUriFor(Settings.System.STATUS_BAR_HEADSET), false, this);
         }
 
         @Override public void onChange(boolean selfChange) {
@@ -1386,16 +1394,16 @@ public class StatusBarPolicy {
     }
 
     private final void updateHeadset(Intent intent) {
-        final boolean isConnected = intent.getIntExtra("state", 0) == 1;
+        mHeadsetPlugged = intent.getIntExtra("state", 0) == 1;
 
-        if (isConnected) {
+        if (mHeadsetPlugged) {
             final boolean hasMicrophone = intent.getIntExtra("microphone", 1) == 1;
             final int iconId = hasMicrophone
                     ? com.android.internal.R.drawable.stat_sys_headset
                     : R.drawable.stat_sys_headset_no_mic;
             mService.setIcon("headset", iconId, 0);
         }
-        mService.setIconVisibility("headset", isConnected);
+        mService.setIconVisibility("headset", mShowHeadset && mHeadsetPlugged);
     }
 
     private final void updateBluetooth(Intent intent) {
@@ -1655,10 +1663,13 @@ public class StatusBarPolicy {
         mCmBatteryStatus = !mShowCmBattery;
         mService.setIconVisibility("battery", !mShowCmBattery);
 
-      //0 will hide the cmsignaltext and show the signal bars
-       mShowCmSignal = Settings.System.getInt(mContext.getContentResolver(),
-       Settings.System.STATUS_BAR_CM_SIGNAL_TEXT, 0) != 0;
-       mService.setIconVisibility("phone_signal", !mShowCmSignal);
+        //0 will hide the cmsignaltext and show the signal bars
+        mShowCmSignal = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.STATUS_BAR_CM_SIGNAL_TEXT, 0) != 0;
+        mService.setIconVisibility("phone_signal", !mShowCmSignal);
 
+        mShowHeadset = (Settings.System.getInt(resolver,
+                Settings.System.STATUS_BAR_HEADSET, 1) == 1);
+        mService.setIconVisibility("headset", mShowHeadset && mHeadsetPlugged);
     }
 }
