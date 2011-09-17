@@ -296,8 +296,13 @@ public final class BatteryStatsService extends IBatteryStats.Stub {
     
     public void noteBluetoothOff() {
         enforceCallingPermission();
+        BluetoothHeadset headset = null;
         synchronized (mStats) {
             mStats.noteBluetoothOffLocked();
+            headset = mStats.getBtHeadset();
+        }
+        if (headset != null) {
+            headset.close();
         }
     }
     
