@@ -763,9 +763,17 @@ static void drawTexxOESImp(GLfixed x, GLfixed y, GLfixed z, GLfixed w, GLfixed h
 static void drawTexxOES(GLfixed x, GLfixed y, GLfixed z, GLfixed w, GLfixed h,
         ogles_context_t* c)
 {
+#ifdef LIBAGL_USE_GRALLOC_COPYBITS
+    if (drawTexiOESWithCopybit(gglFixedToIntRound(x),
+            gglFixedToIntRound(y), gglFixedToIntRound(z),
+            gglFixedToIntRound(w), gglFixedToIntRound(h), c)) {
+        return;
+    }
+#else
     // quickly reject empty rects
     if ((w|h) <= 0)
         return;
+#endif
     drawTexxOESImp(x, y, z, w, h, c);
 }
 
@@ -777,6 +785,11 @@ static void drawTexiOES(GLint x, GLint y, GLint z, GLint w, GLint h, ogles_conte
     // which is a lot faster.
 
     if (ggl_likely(c->rasterizer.state.enabled_tmu == 1)) {
+#ifdef LIBAGL_USE_GRALLOC_COPYBITS
+        if (drawTexiOESWithCopybit(x, y, z, w, h, c)) {
+            return;
+        }
+#endif
         const int tmu = 0;
         texture_unit_t& u(c->textures.tmu[tmu]);
         EGLTextureObject* textureObject = u.texture;
