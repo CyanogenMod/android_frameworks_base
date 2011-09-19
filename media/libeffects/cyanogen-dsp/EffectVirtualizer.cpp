@@ -72,7 +72,7 @@ int32_t EffectVirtualizer::command(uint32_t cmdCode, uint32_t cmdSize, void* pCm
 	/* Center channel forward direction adjustment filter. */
 	mColorization.setParameters(fir44100);
 	/* the -3 dB point is around 650 Hz, giving about 300 us to work with */
-	mLocalization.setHighShelf(800.0f, mSamplingRate, -11.0f, 0.72f);
+	mLocalization.setHighShelf(0, 800.0f, mSamplingRate, -11.0f, 0.72f, 0);
 
 	mDelayDataL = 0;
 	mDelayDataR = 0;

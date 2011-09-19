@@ -9,10 +9,7 @@
 
 class EffectEqualizer : public Effect {
     private:
-    /* Equalizer */
     float mBand[6];
-
-    int64_t mGain;
     Biquad mFilterL[5], mFilterR[5];
 
     /* Automatic equalizer */
