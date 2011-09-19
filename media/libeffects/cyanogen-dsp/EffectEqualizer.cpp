@@ -230,14 +230,15 @@ float EffectEqualizer::getAdjustedBand(int32_t band) {
 
 void EffectEqualizer::refreshBands()
 {
-    mGain = toFixedPoint(powf(10.0f, getAdjustedBand(0) / 20.0f));
     for (int32_t band = 0; band < 5; band ++) {
 	/* 15.625, 62.5, 250, 1000, 4000, 16000 */
         float centerFrequency = 15.625f * powf(4, band);
         float dB = getAdjustedBand(band + 1) - getAdjustedBand(band);
 
-        mFilterL[band].setHighShelf(centerFrequency * 2.0f, mSamplingRate, dB, 1.0f);
-        mFilterR[band].setHighShelf(centerFrequency * 2.0f, mSamplingRate, dB, 1.0f);
+	float overallGain = band == 0 ? getAdjustedBand(0) : 0.0f;
+
+        mFilterL[band].setHighShelf(mNextUpdateInterval, centerFrequency * 2.0f, mSamplingRate, dB, 1.0f, overallGain);
+        mFilterR[band].setHighShelf(mNextUpdateInterval, centerFrequency * 2.0f, mSamplingRate, dB, 1.0f, overallGain);
     }
 }
 
@@ -283,10 +284,6 @@ int32_t EffectEqualizer::process(audio_buffer_t *in, audio_buffer_t *out)
         int64_t weight = tmpL + tmpR;
         mPowerSquared += weight * weight;
      
-        /* first "shelve" is just gain */ 
-        tmpL = tmpL * mGain >> 32;
-        tmpR = tmpR * mGain >> 32;
- 
         /* evaluate the other filters. */
         for (int32_t j = 0; j < 5; j ++) {
             tmpL = mFilterL[j].process(tmpL);
