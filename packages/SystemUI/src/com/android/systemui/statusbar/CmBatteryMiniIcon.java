@@ -30,6 +30,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.os.BatteryManager;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
@@ -54,8 +55,8 @@ public class CmBatteryMiniIcon extends ImageView {
     // contains the current bat level, values: 0-100
     private int mBatteryLevel = 0;
 
-    // contains current charger plugged state
-    private boolean mBatteryPlugged = false;
+    // contains current charging state of the battery.
+    private boolean mBatteryCharging = false;
 
     // recalculation of BATTERY_MINI_ICON_WIDTH_DIP to pixels
     private int mWidthPx;
@@ -190,11 +191,11 @@ public class CmBatteryMiniIcon extends ImageView {
             if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
                 // mIconId = intent.getIntExtra("icon-small", 0);
                 mBatteryLevel = intent.getIntExtra("level", 0);
-                boolean oldPluggedState = mBatteryPlugged;
-                mBatteryPlugged = intent.getIntExtra("plugged", 0) != 0;
+                boolean oldChargingState = mBatteryCharging;
+                mBatteryCharging = intent.getIntExtra("status", 0) == BatteryManager.BATTERY_STATUS_CHARGING;
 
-                if (mBatteryPlugged && mBatteryLevel < 100) {
-                    if (!oldPluggedState)
+                if (mBatteryCharging && mBatteryLevel < 100) {
+                    if (!oldChargingState)
                         startTimer();
                     if(mBatteryLevel % 10 == 0)
                         updateAnimDuration();
