@@ -114,6 +114,12 @@ public class TimePicker extends FrameLayout {
             public void onChanged(NumberPicker spinner, int oldVal, int newVal) {
                 mCurrentHour = newVal;
                 if (!mIs24HourView) {
+                    // switch AM/PM if hour is wrapping around
+                    if ((mCurrentHour == 12 && oldVal == 11)
+                            || (mCurrentHour == 11 && oldVal == 12)) {
+                        mIsAm = !mIsAm;
+                        mAmPmButton.setText(mIsAm ? mAmText : mPmText);
+                    }
                     // adjust from [1-12] to [0-11] internally, with the times
                     // written "12:xx" being the start of the half-day
                     if (mCurrentHour == 12) {
@@ -143,6 +149,14 @@ public class TimePicker extends FrameLayout {
         mMinutePicker.setOnChangeListener(new NumberPicker.OnChangedListener() {
             public void onChanged(NumberPicker spinner, int oldVal, int newVal) {
                 mCurrentMinute = newVal;
+                // increment hour if minutes is wrapping around 59 -> 0
+                if (mCurrentMinute == 0 && oldVal == 59) {
+                    mHourPicker.changeCurrent(mHourPicker.getCurrent() + 1);
+                }
+                // decrement hour if minutes is wrapping around 0 -> 59
+                else if (mCurrentMinute == 59 && oldVal == 0) {
+                    mHourPicker.changeCurrent(mHourPicker.getCurrent() - 1);
+                }
                 onTimeChanged();
             }
         });
