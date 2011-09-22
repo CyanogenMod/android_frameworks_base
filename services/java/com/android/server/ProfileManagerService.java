@@ -105,28 +105,42 @@ public class ProfileManagerService extends IProfileManager.Stub {
     }
 
     private void initialize() {
+        initialize(false);
+    }
+
+    private void initialize(boolean skipFile) {
         mProfiles = new HashMap<UUID, Profile>();
         mProfileNames = new HashMap<String, UUID>();
         mGroups = new HashMap<UUID, NotificationGroup>();
         mDirty = false;
 
-        try {
-            loadFromFile();
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
+        boolean init = skipFile;
+
+        if (! skipFile) {
             try {
-                initialiseStructure();
-            } catch (Throwable ex) {
-                Log.e(TAG, "Error loading xml from resource: ", ex);
+                loadFromFile();
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            } catch (XmlPullParserException e) {
+                init = true;
+            } catch (IOException e) {
+                init = true;
             }
-        } catch (IOException e) {
+        }
+
+        if (init) {
             try {
                 initialiseStructure();
             } catch (Throwable ex) {
                 Log.e(TAG, "Error loading xml from resource: ", ex);
             }
         }
+    }
+
+    @Override
+    public void resetAll() {
+        enforceChangePermissions();
+        initialize(true);
     }
 
     @Override
