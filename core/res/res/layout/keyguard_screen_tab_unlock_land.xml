@@ -30,27 +30,20 @@
     android:eventsInterceptionEnabled="false"
     android:orientation="none">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tabunlock="http://schemas.android.com/apk/res/com.android.tabunlock"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:background="#70000000"
-    android:id="@+id/root">
-
-    <!-- left side -->
     <RelativeLayout
-            android:layout_width="0dip"
-            android:layout_height="match_parent"
-            android:layout_weight="1.0"
-            android:layout_marginLeft="24dip"
-            android:gravity="left">
+        xmlns:tabunlock="http://schemas.android.com/apk/res/com.android.tabunlock"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#70000000"
+        android:gravity="left"
+        android:id="@+id/root">
 
         <TextView
             android:id="@+id/carrier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_marginLeft="24dip"
             android:layout_marginTop="20dip"
             android:singleLine="true"
             android:ellipsize="marquee"
@@ -64,6 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
+            android:layout_marginLeft="24dip"
             android:layout_marginTop="20dip"
             android:text="@string/emergency_calls_only"
             android:textAppearance="?android:attr/textAppearanceSmall"
@@ -74,6 +68,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/carrier"
+            android:layout_marginLeft="24dip"
             android:layout_marginTop="56dip"
             android:layout_marginBottom="8dip"
             >
@@ -116,6 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/time"
+            android:layout_marginLeft="24dip"
             android:layout_marginTop="6dip"
             android:textAppearance="?android:attr/textAppearanceMedium"
             />
@@ -125,6 +121,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/date"
+            android:layout_marginLeft="24dip"
             android:layout_marginTop="6dip"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:drawablePadding="4dip"
@@ -135,6 +132,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/status1"
+            android:layout_marginLeft="24dip"
             android:layout_marginTop="6dip"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:drawablePadding="4dip"
@@ -144,6 +142,7 @@
             android:id="@+id/customMsg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="24dip"
             android:layout_marginTop="4.0dip"
             android:layout_below="@id/status2"
             android:textAppearance="?android:attr/textAppearanceSmall"
@@ -156,6 +155,7 @@
             android:layout_below="@id/customMsg"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:gravity="center"
+            android:layout_marginLeft="24dip"
             android:layout_marginTop="12dip"
             android:drawablePadding="4dip"
             />
@@ -172,7 +172,7 @@
             android:padding = "3px"
             android:visibility="gone"
             />
-	   <!-- music control buttons -->
+        <!-- music control buttons -->
         <ImageButton
             android:id="@+id/musicControlPlay"
             android:src="@drawable/ic_media_play"
@@ -233,44 +233,54 @@
             android:textAppearance="?android:attr/textAppearanceSmall"
             />
 
+        <!-- right side -->
+        <com.android.internal.widget.SlidingTab
+            android:id="@+id/tab_selector2"
+            android:orientation="vertical"
+            android:layout_toLeftOf="@+id/tab_selector"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            />
+
+        <com.android.internal.widget.SlidingTab
+            android:id="@+id/tab_selector"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="60dip"
+            />
+
+        <com.android.internal.widget.RotarySelector
+            android:id="@+id/rotary_selector"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            />
+
+        <!-- emergency call button shown when sim is PUKd and tab_selector is
+             hidden -->
+        <Button
+            android:id="@+id/emergencyCallButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableLeft="@drawable/ic_emergency"
+            style="@style/Widget.Button.Transparent"
+            android:drawablePadding="8dip"
+            android:layout_marginRight="80dip"
+            android:layout_alignParentRight="true"
+            android:visibility="gone"
+            />
+
+        <com.android.internal.widget.RingSelector
+            android:id="@+id/ring_selector"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            />
     </RelativeLayout>
 
-    <!-- right side -->
-    <com.android.internal.widget.SlidingTab
-        android:id="@+id/tab_selector2"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        />
-
-    <com.android.internal.widget.SlidingTab
-        android:id="@+id/tab_selector"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginRight="60dip"
-        />
-
-    <com.android.internal.widget.RotarySelector
-        android:id="@+id/rotary_selector"
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        />
-
-    <!-- emergency call button shown when sim is PUKd and tab_selector is
-         hidden -->
-    <Button
-        android:id="@+id/emergencyCallButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ic_emergency"
-        style="@style/Widget.Button.Transparent"
-        android:drawablePadding="8dip"
-        android:layout_marginRight="80dip"
-        android:visibility="gone"
-        />
-
-</LinearLayout>
 </android.gesture.GestureOverlayView>

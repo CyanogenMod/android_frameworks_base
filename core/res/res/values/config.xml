@@ -409,6 +409,24 @@
     <!-- Configure lense unlock time label offset -->
     <integer name="config_lenseTimeLabelOffsetDIP">0</integer>
 
+    <!-- Configure ring lockscreen threshold radius -->
+    <integer name="config_ringThresholdDIP">160</integer>
+
+    <!-- Configure ring lockscreen bottom margin -->
+    <integer name="config_ringBaselineBottomDIP">150</integer>
+
+    <!-- Configure ring lockscreen center offset -->
+    <integer name="config_ringCenterOffsetDIP">30</integer>
+
+    <!-- Configure ring lockscreen app icon size -->
+    <integer name="config_ringAppIconSizeDIP">64</integer>
+
+    <!-- Configure ring lockscreen app offset -->
+    <integer name="config_ringAppBaselineOffsetDIP">30</integer>
+
+    <!-- Configure ring lockscreen center app offset -->
+    <integer name="config_ringAppCenterOffsetDIP">30</integer>
+
     <!-- Enable permissions management -->
     <bool name="config_enablePermissionsManagement">false</bool>
 
