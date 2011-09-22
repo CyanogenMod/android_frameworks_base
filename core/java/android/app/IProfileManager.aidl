@@ -44,4 +44,6 @@ interface IProfileManager
     void updateNotificationGroup(in NotificationGroup group);
     NotificationGroup getNotificationGroupForPackage(in String pkg);
     NotificationGroup getNotificationGroup(in ParcelUuid groupParcelUuid);
+
+    void resetAll();
 }

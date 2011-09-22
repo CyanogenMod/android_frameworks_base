@@ -231,4 +231,15 @@ public class ProfileManager
         }
         return getActiveProfile().getProfileGroup(notificationGroup.getUuid());
     }
+
+    /** @hide */
+    public void resetAll() {
+        try {
+            getService().resetAll();
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        } catch (SecurityException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+    }
 }
