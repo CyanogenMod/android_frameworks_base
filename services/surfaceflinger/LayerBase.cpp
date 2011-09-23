@@ -742,7 +742,8 @@ void LayerBase::drawWithOpenGLOptimized(const Region& clip, const Texture& textu
     int tWidth = mTransformedBounds.right - mTransformedBounds.left;
     if (((mOrientation == HAL_TRANSFORM_ROT_90)
              || (mOrientation == HAL_TRANSFORM_ROT_270))
-             && (tWidth > getQuadWidth()) && !transform) {
+             && !(tWidth % getQuadWidth())
+             && (tWidth > getTexMinWidth()) && !transform) {
 
         /*
          * We divide the texture in vertical quads
