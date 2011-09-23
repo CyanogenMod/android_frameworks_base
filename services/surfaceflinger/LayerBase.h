@@ -233,8 +233,9 @@ protected:
           void clearWithOpenGL(const Region& clip) const;
           void drawWithOpenGL(const Region& clip, const Texture& texture) const;
           void drawWithOpenGLOptimized(const Region& clip, const Texture& texture) const;
-          enum { QUAD_WIDTH = 16 };
+          enum { QUAD_WIDTH = 16, TEXTURE_MIN_WIDTH = 480 };
           int getQuadWidth() const { return QUAD_WIDTH; }
+          int getTexMinWidth() const { return TEXTURE_MIN_WIDTH; }
           
           // these must be called from the post/drawing thread
           void setBufferCrop(const Rect& crop);
