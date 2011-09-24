@@ -154,7 +154,7 @@ public class SlidingTab extends ViewGroup {
      * {@link #target} is the target the user must drag the slider past to trigger the slider.
      *
      */
-    private static class Slider {
+    private class Slider {
         /**
          * Tab alignment - determines which side the tab should be drawn on
          */
@@ -307,12 +307,32 @@ public class SlidingTab extends ViewGroup {
             int dy = horiz ? 0 : (alignment == ALIGN_TOP ? alignment_value - tab.getTop()
                     : alignment_value - tab.getBottom());
             if (animate) {
-                TranslateAnimation trans = new TranslateAnimation(0, dx, 0, dy);
-                trans.setDuration(ANIM_DURATION);
-                trans.setFillAfter(false);
-                text.startAnimation(trans);
-                tab.startAnimation(trans);
+                mAnimating = true;
+                TranslateAnimation trans1 = new TranslateAnimation(0, dx, 0, dy);
+                TranslateAnimation trans2 = new TranslateAnimation(0, dx, 0, dy);
+                trans1.setDuration(ANIM_DURATION);
+                trans2.setDuration(ANIM_DURATION);
+                trans1.setFillAfter(true);
+                trans2.setFillAfter(true);
+                trans1.setAnimationListener(new AnimationListener() {
+                    public void onAnimationEnd(Animation animation) {
+                        mAnimating = false;
+                        reset(false);
+                    }
+
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+
+                    public void onAnimationStart(Animation animation) {
+
+                    }
+
+                });
+                text.startAnimation(trans1);
+                tab.startAnimation(trans2);
             } else {
+                mAnimating = false;
                 if (horiz) {
                     text.offsetLeftAndRight(dx);
                     tab.offsetLeftAndRight(dx);
@@ -620,7 +640,7 @@ public class SlidingTab extends ViewGroup {
                     mTracking = false;
                     mTriggered = false;
                     mOtherSlider.show(true);
-                    mCurrentSlider.reset(false);
+                    mCurrentSlider.reset(true);
                     mCurrentSlider.hideTarget();
                     mCurrentSlider = null;
                     mOtherSlider = null;
