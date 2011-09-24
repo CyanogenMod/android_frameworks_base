@@ -40,7 +40,7 @@
 
 #include "CameraService.h"
 
-#ifdef USE_OVERLAY_FORMAT_YCbCr_420_SP
+#if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) || defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
 #include "gralloc_priv.h"
 #endif
 
@@ -240,7 +240,7 @@ sp<ICamera> CameraService::connect(
     client = new Client(this, cameraClient, hardware, cameraId, info.facing,
                         callingPid);
     mClient[cameraId] = client;
-#ifdef USE_OVERLAY_FORMAT_YCbCr_420_SP
+#if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) || defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
     if (client->mHardware == NULL) {
         client = NULL;
         mClient[cameraId] = NULL;
@@ -410,7 +410,7 @@ CameraService::Client::Client(const sp<CameraService>& cameraService,
     mCameraFacing = cameraFacing;
     mClientPid = clientPid;
     mMsgEnabled = 0;
-#ifdef USE_OVERLAY_FORMAT_YCbCr_420_SP
+#if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) || defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
     if (mHardware != NULL) {
 #endif
         mUseOverlay = mHardware->useOverlay();
@@ -433,7 +433,7 @@ CameraService::Client::Client(const sp<CameraService>& cameraService,
         mOrientationChanged = false;
         cameraService->setCameraBusy(cameraId);
         cameraService->loadSound();
-#ifdef USE_OVERLAY_FORMAT_YCbCr_420_SP
+#if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) || defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
     }
 #endif
     LOG1("Client::Client X (pid %d)", callingPid);
@@ -578,7 +578,7 @@ void CameraService::Client::disconnect() {
     mHardware->release();
     // Release the held overlay resources.
     if (mUseOverlay) {
-#ifdef USE_OVERLAY_FORMAT_YCbCr_420_SP
+#if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) || defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
         /* Release previous overlay handle */
         if (mOverlay != NULL) {
             mOverlay->destroy();
@@ -626,17 +626,17 @@ status_t CameraService::Client::setPreviewDisplay(const sp<ISurface>& surface) {
     mOverlayRef = 0;
     // If preview has been already started, set overlay or register preview
     // buffers now.
-#ifdef USE_OVERLAY_FORMAT_YCbCr_420_SP
+#if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) || defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
     if (mHardware->previewEnabled() || mUseOverlay) {
 #else
     if (mHardware->previewEnabled()) {
 #endif
         if (mUseOverlay) {
-#ifdef USE_OVERLAY_FORMAT_YCbCr_420_SP
+#if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) || defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
             if (mSurface != NULL) {
 #endif
                 result = setOverlay();
-#ifdef USE_OVERLAY_FORMAT_YCbCr_420_SP
+#if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) || defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
             }
 #endif
         } else if (mSurface != 0) {
@@ -694,7 +694,7 @@ status_t CameraService::Client::setOverlay() {
         sp<Overlay> dummy;
         mHardware->setOverlay(dummy);
         mOverlayRef = 0;
-#ifdef USE_OVERLAY_FORMAT_YCbCr_420_SP
+#if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) || defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
         if (mOverlay != NULL) {
             mOverlay->destroy();
         }
@@ -715,8 +715,10 @@ status_t CameraService::Client::setOverlay() {
             // process of being destroyed.
             for (int retry = 0; retry < 50; ++retry) {
                 mOverlayRef = mSurface->createOverlay(w, h,
-#ifdef USE_OVERLAY_FORMAT_YCbCr_420_SP
+#if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP)
                                                       HAL_PIXEL_FORMAT_YCbCr_420_SP,
+#elif defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
+                                                      HAL_PIXEL_FORMAT_YCrCb_420_SP,
 #else
                                                       OVERLAY_FORMAT_DEFAULT,
 #endif
@@ -729,7 +731,7 @@ status_t CameraService::Client::setOverlay() {
                 LOGE("Overlay Creation Failed!");
                 return -EINVAL;
             }
-#ifdef USE_OVERLAY_FORMAT_YCbCr_420_SP
+#if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) || defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
             mOverlay = new Overlay(mOverlayRef);
             result = mHardware->setOverlay(mOverlay);
 #else
@@ -820,11 +822,11 @@ status_t CameraService::Client::startPreviewMode() {
         if (mSurface != 0) {
             result = setOverlay();
         }
-#ifdef USE_OVERLAY_FORMAT_YCbCr_420_SP
+#if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) || defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
         result = mHardware->startPreview();
 #endif
         if (result != NO_ERROR) return result;
-#ifndef USE_OVERLAY_FORMAT_YCbCr_420_SP
+#if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) || defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
         result = mHardware->startPreview();
 #endif
     } else {
@@ -893,7 +895,7 @@ void CameraService::Client::stopPreview() {
 
     if (mSurface != 0 && !mUseOverlay) {
         mSurface->unregisterBuffers();
-#ifdef USE_OVERLAY_FORMAT_YCbCr_420_SP
+#if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) || defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
     } else {
         mOverlayW = 0;
         mOverlayH = 0;
