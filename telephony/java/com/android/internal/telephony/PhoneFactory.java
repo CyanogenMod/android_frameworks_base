@@ -119,6 +119,9 @@ public class PhoneFactory {
                 } else if("lgestar".equals(sRILClassname)) {
                     Log.i(LOG_TAG, "Using LGE Star RIL");
                     sCommandsInterface = new LGEStarRIL(context, networkMode, cdmaSubscription);
+                } else if ("semc".equals(sRILClassname)) {
+                    Log.i(LOG_TAG, "Using Semc RIL");
+                    sCommandsInterface = new SemcRIL(context, networkMode, cdmaSubscription);
                 } else {
                     sCommandsInterface = new RIL(context, networkMode, cdmaSubscription);
                 }
