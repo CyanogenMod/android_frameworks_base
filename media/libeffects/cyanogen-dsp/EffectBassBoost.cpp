@@ -102,7 +102,7 @@ int32_t EffectBassBoost::command(uint32_t cmdCode, uint32_t cmdSize, void* pCmdD
 void EffectBassBoost::refreshStrength()
 {
     /* Q = 0.5 .. 2.0 */
-    mBoost.setLowPass(55.0f, mSamplingRate, 0.5f + mStrength / 666.0f);
+    mBoost.setLowPass(0, 55.0f, mSamplingRate, 0.5f + mStrength / 666.0f);
 }
 
 int32_t EffectBassBoost::process(audio_buffer_t* in, audio_buffer_t* out)
