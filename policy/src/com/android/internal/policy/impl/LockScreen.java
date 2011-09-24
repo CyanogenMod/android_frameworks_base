@@ -58,6 +58,7 @@ import android.os.ParcelFileDescriptor;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.Vibrator;
+import android.preference.MultiSelectListPreference;
 import android.provider.Settings;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -151,6 +152,15 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     private boolean mLockCalendarAlarm = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_CALENDAR_ALARM, 0) == 1);
+
+    private String[] mCalendars = MultiSelectListPreference.parseStoredValue(Settings.System.getString(
+            mContext.getContentResolver(), Settings.System.LOCKSCREEN_CALENDARS));
+
+    private boolean mLockCalendarRemindersOnly = (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_CALENDAR_REMINDERS_ONLY, 0) == 1);
+
+    private long mLockCalendarLookahead = Settings.System.getLong(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_CALENDAR_LOOKAHEAD, 10800000);
 
     private boolean mLockMusicControls = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_MUSIC_CONTROLS, 1) == 1);
@@ -788,7 +798,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private void refreshAlarmDisplay() {
         mNextAlarm = mLockPatternUtils.getNextAlarm();
         if (mNextAlarm == null && mLockCalendarAlarm) {
-            mNextAlarm = mLockPatternUtils.getNextCalendarAlarm();
+            mNextAlarm = mLockPatternUtils.getNextCalendarAlarm(mLockCalendarLookahead,
+                    mCalendars, mLockCalendarRemindersOnly);
         }
         if (mNextAlarm != null) {
             mAlarmIcon = getContext().getResources().getDrawable(R.drawable.ic_lock_idle_alarm);

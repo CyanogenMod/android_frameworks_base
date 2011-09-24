@@ -35,6 +35,7 @@ import android.widget.Button;
 
 import com.android.internal.R;
 import com.android.internal.telephony.ITelephony;
+
 import com.google.android.collect.Lists;
 
 import java.io.File;
@@ -99,11 +100,6 @@ public class LockPatternUtils {
     private final static String PATTERN_EVER_CHOSEN_KEY = "lockscreen.patterneverchosen";
     public final static String PASSWORD_TYPE_KEY = "lockscreen.password_type";
     private final static String LOCK_PASSWORD_SALT_KEY = "lockscreen.password_salt";
-
-    /**
-     * The time in milliseconds to look ahead for calendar events.
-     */
-    private final static long LOOK_AHEAD_MILLIS = 86400000; // 24 hours
 
     private final Context mContext;
     private final ContentResolver mContentResolver;
@@ -715,15 +711,34 @@ public class LockPatternUtils {
      * (for showing on the lock screen), or null if there is no next event
      * within a certain look-ahead time.
      */
-    public String getNextCalendarAlarm() {
+    public String getNextCalendarAlarm(long lookahead, String[] calendars,
+            boolean remindersOnly) {
         long now = System.currentTimeMillis();
-        long lookahead = now + LOOK_AHEAD_MILLIS;
+        long later = now + lookahead;
+
+        StringBuilder where = new StringBuilder();
+        if (remindersOnly) {
+            where.append(Calendar.EventsColumns.HAS_ALARM + "=1");
+        }
+        if (calendars != null && calendars.length > 0) {
+            if (remindersOnly) {
+                where.append(" AND ");
+            }
+            where.append(Calendar.EventsColumns.CALENDAR_ID + " in (");
+            for (int i = 0; i < calendars.length; i++) {
+                where.append(calendars[i]);
+                if (i != calendars.length - 1) {
+                    where.append(",");
+                }
+            }
+            where.append(") ");
+        }
         String nextCalendarAlarm = null;
         Cursor cursor = null;
         try {
             cursor = Calendar.Instances.query(mContentResolver, new String[] {
                     Calendar.EventsColumns.TITLE, Calendar.EventsColumns.DTSTART
-            }, now, lookahead, Calendar.EventsColumns.HAS_ALARM + "=1", null);
+            }, now, later, where.toString(), null);
             if (cursor.moveToFirst()) {
                 String title = cursor.getString(0);
                 Date start = new Date(cursor.getLong(1));
