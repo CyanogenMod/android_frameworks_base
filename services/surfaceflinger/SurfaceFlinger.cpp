@@ -1300,8 +1300,10 @@ sp<Layer> SurfaceFlinger::createNormalSurface(
 
 #ifdef USE_16BPPSURFACE_FOR_OPAQUE
         format = PIXEL_FORMAT_RGB_565;
+#elif defined(NO_RGBX_8888)
+        format = PIXEL_FORMAT_RGBA_8888;
 #else
-         format = PIXEL_FORMAT_RGBX_8888;
+        format = PIXEL_FORMAT_RGBX_8888;
 #endif
         break;
     }
