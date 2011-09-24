@@ -3277,11 +3277,11 @@ public class ActivityStack {
 
         // Shift all activities with this task up to the top
         // of the stack, keeping them in the same internal order.
+        boolean first = true;
         while (pos >= 0) {
             ActivityRecord r = (ActivityRecord)mHistory.get(pos);
             if (localLOGV) Slog.v(
                 TAG, "At " + pos + " ckp " + r.task + ": " + r);
-            boolean first = true;
             if (r.task.taskId == task) {
                 if (localLOGV) Slog.v(TAG, "Removing and adding at " + top);
                 mHistory.remove(pos);
