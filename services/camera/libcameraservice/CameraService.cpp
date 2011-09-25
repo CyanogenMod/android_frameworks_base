@@ -826,7 +826,7 @@ status_t CameraService::Client::startPreviewMode() {
         result = mHardware->startPreview();
 #endif
         if (result != NO_ERROR) return result;
-#if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) || defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
+#if !defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) && !defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
         result = mHardware->startPreview();
 #endif
     } else {
