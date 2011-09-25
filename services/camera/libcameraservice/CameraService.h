@@ -179,7 +179,7 @@ private:
         sp<CameraHardwareInterface>     mHardware;       // cleared after disconnect()
         bool                            mUseOverlay;     // immutable after constructor
         sp<OverlayRef>                  mOverlayRef;
-#ifdef USE_OVERLAY_FORMAT_YCbCr_420_SP
+#if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) || defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
         sp<Overlay>                     mOverlay;
 #endif
         int                             mOverlayW;

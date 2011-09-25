@@ -34,6 +34,7 @@ import android.content.res.Resources;
 import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +59,7 @@ import android.os.ParcelFileDescriptor;
 import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.Vibrator;
+import android.preference.MultiSelectListPreference;
 import android.provider.Settings;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
@@ -156,6 +158,18 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private boolean mLockAlwaysBattery = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_ALWAYS_BATTERY, 0) == 1);
 
+    private boolean mLockCalendarAlarm = (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_CALENDAR_ALARM, 0) == 1);
+
+    private String[] mCalendars = MultiSelectListPreference.parseStoredValue(Settings.System.getString(
+            mContext.getContentResolver(), Settings.System.LOCKSCREEN_CALENDARS));
+
+    private boolean mLockCalendarRemindersOnly = (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_CALENDAR_REMINDERS_ONLY, 0) == 1);
+
+    private long mLockCalendarLookahead = Settings.System.getLong(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_CALENDAR_LOOKAHEAD, 10800000);
+
     private boolean mLockMusicControls = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_MUSIC_CONTROLS, 1) == 1);
 
@@ -185,6 +199,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     private int mCustomIconStyle = Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_CUSTOM_ICON_STYLE, 1);
+
+    private int mWidgetLayout = Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_WIDGETS_LAYOUT, 0);
 
     private boolean mRotaryUnlockDown = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.LOCKSCREEN_ROTARY_UNLOCK_DOWN, 0) == 1);
@@ -481,7 +498,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
         //hide most items when we are in potrait lense mode
         mLensePortrait=(mUseLenseSquareLockscreen && mCreationOrientation != Configuration.ORIENTATION_LANDSCAPE);
-        if (mLensePortrait)
+        if (mLensePortrait || mWidgetLayout == 1 )
             setLenseWidgetsVisibility(View.INVISIBLE);
 
         mTabSelector.setLeftTabResources(
@@ -577,6 +594,29 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         }
 
         resetStatusInfo(updateMonitor);
+        centerWidgets();
+    }
+
+    private void centerWidgets() {
+        if (mWidgetLayout == 2) {
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
+            mCarrier.getLayoutParams();
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            mCarrier.setLayoutParams(layoutParams);
+            mCarrier.setGravity(Gravity.CENTER_HORIZONTAL);
+            layoutParams = (RelativeLayout.LayoutParams)mDate.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
+            mDate.setLayoutParams(layoutParams);
+            layoutParams = (RelativeLayout.LayoutParams)mStatus1.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
+            mStatus1.setLayoutParams(layoutParams);
+            layoutParams = (RelativeLayout.LayoutParams)mStatus2.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
+            mStatus2.setLayoutParams(layoutParams);
+            layoutParams = (RelativeLayout.LayoutParams)mClock.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
+            mClock.setLayoutParams(layoutParams);
+        }
     }
 
     static void setBackground(Context bcontext, ViewGroup layout){
@@ -818,6 +858,10 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     private void refreshAlarmDisplay() {
         mNextAlarm = mLockPatternUtils.getNextAlarm();
+        if (mNextAlarm == null && mLockCalendarAlarm) {
+            mNextAlarm = mLockPatternUtils.getNextCalendarAlarm(mLockCalendarLookahead,
+                    mCalendars, mLockCalendarRemindersOnly);
+        }
         if (mNextAlarm != null) {
             mAlarmIcon = getContext().getResources().getDrawable(R.drawable.ic_lock_idle_alarm);
         }
@@ -936,7 +980,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     private void updateStatusLines() {
         if (!mStatus.showStatusLines()
-                || (mCharging == null && mNextAlarm == null) || mLensePortrait) {
+                || (mCharging == null && mNextAlarm == null) || mLensePortrait || mWidgetLayout == 1) {
             mStatus1.setVisibility(View.INVISIBLE);
             mStatus2.setVisibility(View.INVISIBLE);
         } else if (mCharging != null && mNextAlarm == null) {

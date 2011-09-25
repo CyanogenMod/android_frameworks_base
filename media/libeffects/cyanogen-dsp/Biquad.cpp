@@ -24,34 +24,56 @@ static int64_t toFixedPoint(float in) {
 Biquad::Biquad()
 {
     reset();
-    setCoefficients(1, 0, 0, 0, 0, 0);
+    setCoefficients(0, 1, 0, 0, 1, 0, 0);
 }
 
 Biquad::~Biquad()
 {
 }
 
-void Biquad::setCoefficients(float a0, float a1, float a2, float b0, float b1, float b2)
+void Biquad::setCoefficients(int32_t steps, float a0, float a1, float a2, float b0, float b1, float b2)
 {
-    mA1 = -toFixedPoint(a1/a0);
-    mA2 = -toFixedPoint(a2/a0);
-    mB0 = toFixedPoint(b0/a0);
-    mB1 = toFixedPoint(b1/a0);
-    mB2 = toFixedPoint(b2/a0);
+    int64_t A1 = -toFixedPoint(a1/a0);
+    int64_t A2 = -toFixedPoint(a2/a0);
+    int64_t B0 = toFixedPoint(b0/a0);
+    int64_t B1 = toFixedPoint(b1/a0);
+    int64_t B2 = toFixedPoint(b2/a0);
+
+    if (steps == 0) {
+	mA1 = A1;
+	mA2 = A2;
+	mB0 = B0;
+	mB1 = B1;
+	mB2 = B2;
+	mInterpolationSteps = 0;
+    } else {
+	mA1dif = (A1 - mA1) / steps;
+	mA2dif = (A2 - mA2) / steps;
+	mB0dif = (B0 - mB0) / steps;
+	mB1dif = (B1 - mB1) / steps;
+	mB2dif = (B2 - mB2) / steps;
+	mInterpolationSteps = steps;
+    }
 }
 
 void Biquad::reset()
 {
+    mInterpolationSteps = 0;
+    mA1 = 0;
+    mA2 = 0;
+    mB0 = 0;
+    mB1 = 0;
+    mB2 = 0;
     mX1 = 0;
     mX2 = 0;
     mY1 = 0;
     mY2 = 0;
 }
 
-void Biquad::setHighShelf(float center_frequency, float sampling_frequency, float db_gain, float slope)
+void Biquad::setHighShelf(int32_t steps, float center_frequency, float sampling_frequency, float gainDb, float slope, float overallGainDb)
 {
     float w0 = 2 * (float) M_PI * center_frequency / sampling_frequency;
-    float A = powf(10, db_gain/40);
+    float A = powf(10, gainDb/40);
     float alpha = sinf(w0)/2 * sqrtf( (A + 1/A)*(1/slope - 1) + 2 );
 
     float b0 =    A*( (A+1) + (A-1)*cosf(w0) + 2*sqrtf(A)*alpha );
@@ -61,10 +83,15 @@ void Biquad::setHighShelf(float center_frequency, float sampling_frequency, floa
     float a1 =    2*( (A-1) - (A+1)*cosf(w0)                   );
     float a2 =        (A+1) - (A-1)*cosf(w0) - 2*sqrtf(A)*alpha  ;
 
-    setCoefficients(a0, a1, a2, b0, b1, b2);
+    float overallGain = powf(10, overallGainDb / 20);
+    b0 *= overallGain;
+    b1 *= overallGain;
+    b2 *= overallGain;
+
+    setCoefficients(steps, a0, a1, a2, b0, b1, b2);
 }
 
-void Biquad::setBandPass(float center_frequency, float sampling_frequency, float resonance)
+void Biquad::setBandPass(int32_t steps, float center_frequency, float sampling_frequency, float resonance)
 {
     float w0 = 2 * (float) M_PI * center_frequency / sampling_frequency;
     float alpha = sinf(w0) / (2*resonance);
@@ -76,10 +103,10 @@ void Biquad::setBandPass(float center_frequency, float sampling_frequency, float
     float a1 =  -2*cosf(w0);
     float a2 =   1 - alpha;
 
-    setCoefficients(a0, a1, a2, b0, b1, b2);
+    setCoefficients(steps, a0, a1, a2, b0, b1, b2);
 }
 
-void Biquad::setLowPass(float center_frequency, float sampling_frequency, float resonance)
+void Biquad::setLowPass(int32_t steps, float center_frequency, float sampling_frequency, float resonance)
 {
     float w0 = 2 * (float) M_PI * center_frequency / sampling_frequency;
     float alpha = sinf(w0) / (2*resonance);
@@ -91,7 +118,7 @@ void Biquad::setLowPass(float center_frequency, float sampling_frequency, float 
     float a1 =  -2*cosf(w0);
     float a2 =   1 - alpha;
 
-    setCoefficients(a0, a1, a2, b0, b1, b2);
+    setCoefficients(steps, a0, a1, a2, b0, b1, b2);
 }
 
 int32_t Biquad::process(int32_t x0)
@@ -108,6 +135,16 @@ int32_t Biquad::process(int32_t x0)
 
     mX2 = mX1;
     mX1 = x0;
+
+    /* Interpolate biquad parameters */
+    if (mInterpolationSteps != 0) {
+	mInterpolationSteps --;
+	mB0 += mB0dif;
+	mB1 += mB1dif;
+	mB2 += mB2dif;
+	mA1 += mA1dif;
+	mA2 += mA2dif;
+    }
 
     return y0;
 }

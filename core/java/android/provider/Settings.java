@@ -2506,6 +2506,12 @@ public final class Settings {
         public static final String LOCKSCREEN_CUSTOM_ICON_STYLE = "lockscreen_custom_icon_style";
 
         /**
+         * Modify lockscreen widgets layout (time,date,carrier,msg,status)
+         * @hide
+         */
+        public static final String LOCKSCREEN_WIDGETS_LAYOUT = "lockscreen_widgets_layout";
+
+        /**
          * When enabled, rotary lockscreen switches app starter and unlock, so you can drag down to unlock
          * @hide
          */
@@ -2619,6 +2625,30 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_ALWAYS_BATTERY = "lockscreen_always_battery";
+
+        /**
+         * Whether to show the next calendar event
+         * @hide
+         */
+        public static final String LOCKSCREEN_CALENDAR_ALARM = "lockscreen_calendar_alarm";
+
+        /**
+         * Which calendars to look for events
+         * @hide
+         */
+        public static final String LOCKSCREEN_CALENDARS = "lockscreen_calendars";
+
+        /**
+         * How far in the future to look for events
+         * @hide
+         */
+        public static final String LOCKSCREEN_CALENDAR_LOOKAHEAD = "lockscreen_calendar_lookahead";
+
+        /**
+         * Whether to find only events with reminders
+         * @hide
+         */
+        public static final String LOCKSCREEN_CALENDAR_REMINDERS_ONLY = "lockscreen_calendar_reminders_only";
 
         /**
          * Whether to use lockscreen music controls
