@@ -150,8 +150,7 @@ public class PowerDialog extends Dialog implements OnClickListener,
     public boolean onKey(View v, int keyCode, KeyEvent event) {
         // The activate keyguard button needs to put the device to sleep on the
         // key up event. If we try to put it to sleep on the click or down
-        // action
-        // the the up action will cause the device to wake back up.
+        // action the the up action will cause the device to wake back up.
 
         // Log.i(TAG, "keyCode: " + keyCode + " action: " + event.getAction());
         if (keyCode != KeyEvent.KEYCODE_DPAD_CENTER

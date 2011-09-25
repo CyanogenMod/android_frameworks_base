@@ -427,10 +427,10 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         UUID activeProfile = profileManager.getActiveProfile().getUuid();
         final CharSequence[] names = new CharSequence[profiles.length];
 
-        int i=0;
+        int i = 0;
         int checkedItem = 0;
-        for(Profile profile : profiles){
-            if(profile.getUuid().equals(activeProfile)){
+        for (Profile profile : profiles) {
+            if (profile.getUuid().equals(activeProfile)) {
                 checkedItem = i;
                 mChosenProfile = profile;
             }
@@ -473,12 +473,12 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
         mItems.remove(mExtendPmMenu);
         mItems.remove(mExtendPmBack);
 
-        if(mExtendPm){
-            if(mExtendPmShowBack && !mItems.contains(mExtendPmBack))
+        if (mExtendPm) {
+            if (mExtendPmShowBack && !mItems.contains(mExtendPmBack))
                 mItems.add(0, mExtendPmBack);
-            if(mExtendPmShowMenu && !mItems.contains(mExtendPmMenu))
+            if (mExtendPmShowMenu && !mItems.contains(mExtendPmMenu))
                 mItems.add(0, mExtendPmMenu);
-            if(mExtendPmShowHome && !mItems.contains(mExtendPmHome))
+            if (mExtendPmShowHome && !mItems.contains(mExtendPmHome))
                 mItems.add(0, mExtendPmHome);
         }
 
