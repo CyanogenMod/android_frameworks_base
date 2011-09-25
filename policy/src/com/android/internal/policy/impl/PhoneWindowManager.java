@@ -483,7 +483,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 //enable listener if not already enabled
                 if (!mOrientationSensorEnabled) {
                     mOrientationListener.enable();
-                    if(localLOGV) Log.v(TAG, "Enabling listeners");
+                    if (localLOGV) Log.v(TAG, "Enabling listeners");
                     mOrientationSensorEnabled = true;
                 }
             }
@@ -491,7 +491,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         //check if sensors need to be disabled
         if (disable && mOrientationSensorEnabled) {
             mOrientationListener.disable();
-            if(localLOGV) Log.v(TAG, "Disabling listeners");
+            if (localLOGV) Log.v(TAG, "Disabling listeners");
             mOrientationSensorEnabled = false;
         }
     }
@@ -582,9 +582,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             && appInfo.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
                         // Kill the entire pid
                         Toast.makeText(mContext, R.string.app_killed_message, Toast.LENGTH_SHORT).show();
-                        if (appInfo.pkgList!=null && (apps.size() > 0)){
+                        if (appInfo.pkgList!=null && (apps.size() > 0)) {
                                 mgr.forceStopPackage(appInfo.pkgList[0]);
-                        }else{
+                        } else {
                                 Process.killProcess(appInfo.pid);
                         }
                         break;
@@ -689,7 +689,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mContext = context;
         mWindowManager = windowManager;
         mPowerManager = powerManager;
-        if(mKeyguardMediator==null)
+        if (mKeyguardMediator==null)
             mKeyguardMediator = new KeyguardViewMediator(context, this, powerManager);
         mHandler = new Handler();
         mOrientationListener = new MyOrientationListener(mContext);
@@ -1540,7 +1540,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             pf.left = df.left = vf.left = 0;
             pf.top = df.top = vf.top = 0;
 
-            if(mBottomBar){
+            if (mBottomBar) {
                 //get status bar height from dimen.xml
                 final int statusbar_height= mContext.getResources().getDimensionPixelSize(com.android.internal.R.dimen.status_bar_height);
                 //setting status bar's top, to bottom of the screen, minus status bar height
@@ -1554,7 +1554,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (mStatusBar.isVisibleLw()) {
                 // If the status bar is hidden, we don't want to cause
                 // windows behind it to scroll.
-                if(mBottomBar)
+                if (mBottomBar)
                     //setting activites bottoms, to top of status bar
                     mDockBottom = mContentBottom = mCurBottom = mStatusBar.getFrameLw().top;
                 else
@@ -2077,7 +2077,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
 
             // make sure keyevent get's handled as power key on volume-wake
-            if(mVolumeWakeScreen && isWakeKey && ((keyCode == KeyEvent.KEYCODE_VOLUME_UP)
+            if (mVolumeWakeScreen && isWakeKey && ((keyCode == KeyEvent.KEYCODE_VOLUME_UP)
                     || (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)))
                 keyCode = KeyEvent.KEYCODE_POWER;
 
@@ -2097,8 +2097,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP: {
                 // cm71 nightlies: will be replaced by CmPhoneWindowManager's new volume handling
-                if(mVolBtnMusicControls && !down)
-                {
+                if (mVolBtnMusicControls && !down) {
                     handleVolumeLongPressAbort();
 
                     // delay handling volume events if mVolBtnMusicControls is desired
@@ -2143,7 +2142,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     // cm71 nightlies: will be replaced by CmPhoneWindowManager's new volume handling
                     if (isMusicActive() && (result & ACTION_PASS_TO_USER) == 0) {
                         // Care for long-press actions to skip tracks
-                        if(mVolBtnMusicControls) {
+                        if (mVolBtnMusicControls) {
                             // initialize long press flag to false for volume events
                             mIsLongPress = false;
 
@@ -2201,7 +2200,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
 
             case KeyEvent.KEYCODE_POWER: {
-                if ((mTopFullscreenOpaqueWindowState.getAttrs().flags & WindowManager.LayoutParams.PREVENT_POWER_KEY) != 0){
+                if ((mTopFullscreenOpaqueWindowState.getAttrs().flags & WindowManager.LayoutParams.PREVENT_POWER_KEY) != 0) {
                     return result;
                 }
                 result &= ~ACTION_PASS_TO_USER;

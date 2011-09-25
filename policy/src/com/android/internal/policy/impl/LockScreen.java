@@ -84,7 +84,6 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     private static final boolean DBG = false;
     private static final String TAG = "LockScreen";
-    private static final String ENABLE_MENU_KEY_FILE = "/data/local/enable_menu_key";
     private static final Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
 
     private Status mStatus = Status.Normal;
@@ -279,8 +278,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         final Resources res = getResources();
         final boolean configDisabled = res.getBoolean(R.bool.config_disableMenuKeyInLockScreen);
         final boolean isMonkey = SystemProperties.getBoolean("ro.monkey", false);
-        final boolean fileOverride = (new File(ENABLE_MENU_KEY_FILE)).exists();
-        return !configDisabled || isMonkey || fileOverride;
+        return !configDisabled || isMonkey;
     }
 
     /**
@@ -476,17 +474,17 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         mSilentMode = isSilentMode();
 
         //Rotary setup
-        if(!mRotaryUnlockDown){
+        if (!mRotaryUnlockDown) {
             mRotarySelector.setLeftHandleResource(R.drawable.ic_jog_dial_unlock);
             mRotarySelector.setMidHandleResource(mCustomAppIcon);
-        }else{
+        } else {
             mRotarySelector.setLeftHandleResource(mCustomAppIcon);
             mRotarySelector.setMidHandleResource(R.drawable.ic_jog_dial_unlock);
         }
         mRotarySelector.enableCustomAppDimple(mCustomAppToggle);
         mRotarySelector.setRevamped(mUseRotaryRevLockscreen);
         mRotarySelector.setLenseSquare(mUseRotaryRevLockscreen);
-        if(mRotaryHideArrows)
+        if (mRotaryHideArrows)
             mRotarySelector.hideArrows(true);
 
         //hide most items when we are in potrait lense mode
@@ -612,21 +610,21 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         }
     }
 
-    static void setBackground(Context bcontext, ViewGroup layout){
+    static void setBackground(Context bcontext, ViewGroup layout) {
         String mLockBack = Settings.System.getString(bcontext.getContentResolver(), Settings.System.LOCKSCREEN_BACKGROUND);
-        if (mLockBack!=null){
-            if (!mLockBack.isEmpty()){
+        if (mLockBack!=null) {
+            if (!mLockBack.isEmpty()) {
                 try {
                     layout.setBackgroundColor(Integer.parseInt(mLockBack));
-                }catch(NumberFormatException e){
+                }catch(NumberFormatException e) {
                 }
-            }else{
+            } else {
                 String lockWallpaper = "";
                 try {
                     lockWallpaper = bcontext.createPackageContext("com.cyanogenmod.cmparts", 0).getFilesDir()+"/lockwallpaper";
                 } catch (NameNotFoundException e1) {
                 }
-                if (!lockWallpaper.isEmpty()){
+                if (!lockWallpaper.isEmpty()) {
                     Bitmap lockb = BitmapFactory.decodeFile(lockWallpaper);
                     layout.setBackgroundDrawable(new BitmapDrawable(lockb));
                 }
@@ -714,20 +712,20 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     /** {@inheritDoc} */
     public void onDialTrigger(View v, int whichHandle) {
-        boolean mUnlockTrigger=false;
-        boolean mCustomAppTrigger=false;
+        boolean mUnlockTrigger = false;
+        boolean mCustomAppTrigger = false;
 
-        if(whichHandle == RotarySelector.OnDialTriggerListener.LEFT_HANDLE){
-            if(mRotaryUnlockDown)
-                mCustomAppTrigger=true;
+        if (whichHandle == RotarySelector.OnDialTriggerListener.LEFT_HANDLE) {
+            if (mRotaryUnlockDown)
+                mCustomAppTrigger = true;
             else
-                mUnlockTrigger=true;
+                mUnlockTrigger = true;
         }
-        if(whichHandle == RotarySelector.OnDialTriggerListener.MID_HANDLE){
-            if(mRotaryUnlockDown)
-                mUnlockTrigger=true;
+        if (whichHandle == RotarySelector.OnDialTriggerListener.MID_HANDLE) {
+            if (mRotaryUnlockDown)
+                mUnlockTrigger = true;
             else
-                mCustomAppTrigger=true;
+                mCustomAppTrigger = true;
         }
 
         if (mUnlockTrigger) {
@@ -1284,25 +1282,24 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     }
 
     private void toggleSilentMode() {
-            // tri state silent<->vibrate<->ring if silent mode is enabled, otherwise toggle silent mode
-            final boolean mVolumeControlSilent = Settings.System.getInt(mContext.getContentResolver(),
+        // tri state silent<->vibrate<->ring if silent mode is enabled, otherwise toggle silent mode
+        final boolean mVolumeControlSilent = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.VOLUME_CONTROL_SILENT, 0) != 0;
-            mSilentMode = mVolumeControlSilent
-                ? ((mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) || !mSilentMode)
+        mSilentMode = mVolumeControlSilent
+                ? ((mAudioManager.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) || !mSilentMode) 
                 : !mSilentMode;
-            if (mSilentMode) {
-                final boolean vibe = mVolumeControlSilent
-                ? (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_VIBRATE)
-                : (Settings.System.getInt(
-                    getContext().getContentResolver(),
-                    Settings.System.VIBRATE_IN_SILENT, 1) == 1);
+        if (mSilentMode) {
+            final boolean vibe = mVolumeControlSilent
+                    ? (mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_VIBRATE)
+                    : (Settings.System.getInt(getContext().getContentResolver(),
+                            Settings.System.VIBRATE_IN_SILENT, 1) == 1);
 
-                mAudioManager.setRingerMode(vibe
+            mAudioManager.setRingerMode(vibe
                     ? AudioManager.RINGER_MODE_VIBRATE
                     : AudioManager.RINGER_MODE_SILENT);
-            } else {
-                mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
-            }
+        } else {
+            mAudioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+        }
     }
 
     @Override
@@ -1405,7 +1402,6 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 }
             }
         } catch (FileNotFoundException ex) {
-            //
         }
         return null;
     }
@@ -1414,7 +1410,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
      * enables or disables visibility of most lockscreen widgets
      * depending on lense status
      */
-    private void setLenseWidgetsVisibility(int visibility){
+    private void setLenseWidgetsVisibility(int visibility) {
         mClock.setVisibility(visibility);
         mDate.setVisibility(visibility);
         mTime.setVisibility(visibility);
