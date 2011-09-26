@@ -24,27 +24,31 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.ParcelUuid;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.IOException;
+import java.util.UUID;
 
 public class ProfileGroup implements Parcelable {
+    private static final String TAG = "ProfileGroup";
 
     private String mName;
+    private int mNameResId;
+
+    private UUID mUuid;
 
     private Uri mSoundOverride = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-
     private Uri mRingerOverride = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
 
     private Mode mSoundMode = Mode.DEFAULT;
-
     private Mode mRingerMode = Mode.DEFAULT;
-
     private Mode mVibrateMode = Mode.DEFAULT;
-
     private Mode mLightsMode = Mode.DEFAULT;
 
     private boolean mDefaultGroup = false;
+    private boolean mDirty;
 
     /** @hide */
     public static final Parcelable.Creator<ProfileGroup> CREATOR = new Parcelable.Creator<ProfileGroup>() {
@@ -59,14 +63,15 @@ public class ProfileGroup implements Parcelable {
     };
 
     /** @hide */
-    public ProfileGroup(String name) {
-        this(name, false);
+    public ProfileGroup(UUID uuid, boolean defaultGroup) {
+        this(null, uuid, defaultGroup);
     }
 
-    /** @hide */
-    ProfileGroup(String name, boolean defaultGroup) {
+    private ProfileGroup(String name, UUID uuid, boolean defaultGroup) {
         mName = name;
+        mUuid = (uuid != null) ? uuid : UUID.randomUUID();
         mDefaultGroup = defaultGroup;
+        mDirty = uuid == null;
     }
 
     /** @hide */
@@ -74,8 +79,25 @@ public class ProfileGroup implements Parcelable {
         readFromParcel(in);
     }
 
-    public String getName() {
-        return mName;
+    /** @hide */
+    public boolean matches(NotificationGroup group) {
+        if (mUuid.equals(group.getUuid())) {
+            return true;
+        }
+
+        /* second try: match name for backwards compat */
+        if (mName != null && mName.equals(group.getName())) {
+            mName = null;
+            mUuid = group.getUuid();
+            mDirty = true;
+            return true;
+        }
+
+        return false;
+    }
+
+    public UUID getUuid() {
+        return mUuid;
     }
 
     public boolean isDefaultGroup() {
@@ -83,8 +105,14 @@ public class ProfileGroup implements Parcelable {
     }
 
     /** @hide */
+    public boolean isDirty() {
+        return mDirty;
+    }
+
+    /** @hide */
     public void setSoundOverride(Uri sound) {
-        this.mSoundOverride = sound;
+        mSoundOverride = sound;
+        mDirty = true;
     }
 
     public Uri getSoundOverride() {
@@ -93,7 +121,8 @@ public class ProfileGroup implements Parcelable {
 
     /** @hide */
     public void setRingerOverride(Uri ringer) {
-        this.mRingerOverride = ringer;
+        mRingerOverride = ringer;
+        mDirty = true;
     }
 
     public Uri getRingerOverride() {
@@ -102,7 +131,8 @@ public class ProfileGroup implements Parcelable {
 
     /** @hide */
     public void setSoundMode(Mode soundMode) {
-        this.mSoundMode = soundMode;
+        mSoundMode = soundMode;
+        mDirty = true;
     }
 
     public Mode getSoundMode() {
@@ -111,7 +141,8 @@ public class ProfileGroup implements Parcelable {
 
     /** @hide */
     public void setRingerMode(Mode ringerMode) {
-        this.mRingerMode = ringerMode;
+        mRingerMode = ringerMode;
+        mDirty = true;
     }
 
     public Mode getRingerMode() {
@@ -120,7 +151,8 @@ public class ProfileGroup implements Parcelable {
 
     /** @hide */
     public void setVibrateMode(Mode vibrateMode) {
-        this.mVibrateMode = vibrateMode;
+        mVibrateMode = vibrateMode;
+        mDirty = true;
     }
 
     public Mode getVibrateMode() {
@@ -129,7 +161,8 @@ public class ProfileGroup implements Parcelable {
 
     /** @hide */
     public void setLightsMode(Mode lightsMode) {
-        this.mLightsMode = lightsMode;
+        mLightsMode = lightsMode;
+        mDirty = true;
     }
 
     public Mode getLightsMode() {
@@ -139,7 +172,7 @@ public class ProfileGroup implements Parcelable {
     // TODO : add support for LEDs / screen etc.
 
     /** @hide */
-    Notification processNotification(Notification notification) {
+    public Notification processNotification(Notification notification) {
 
         switch (mSoundMode) {
             case OVERRIDE:
@@ -196,7 +229,9 @@ public class ProfileGroup implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mName);
-        dest.writeValue(mDefaultGroup);
+        new ParcelUuid(mUuid).writeToParcel(dest, 0);
+        dest.writeInt(mDefaultGroup ? 1 : 0);
+        dest.writeInt(mDirty ? 1 : 0);
         dest.writeParcelable(mSoundOverride, flags);
         dest.writeParcelable(mRingerOverride, flags);
 
@@ -209,7 +244,9 @@ public class ProfileGroup implements Parcelable {
     /** @hide */
     public void readFromParcel(Parcel in) {
         mName = in.readString();
-        mDefaultGroup = (Boolean)in.readValue(null);
+        mUuid = ParcelUuid.CREATOR.createFromParcel(in).getUuid();
+        mDefaultGroup = in.readInt() != 0;
+        mDirty = in.readInt() != 0;
         mSoundOverride = in.readParcelable(null);
         mRingerOverride = in.readParcelable(null);
 
@@ -224,43 +261,54 @@ public class ProfileGroup implements Parcelable {
     }
 
     /** @hide */
-    public String getXmlString() {
-        StringBuilder builder = new StringBuilder();
-        getXmlString(builder);
-        return builder.toString();
+    public void getXmlString(StringBuilder builder, Context context) {
+        builder.append("<profileGroup uuid=\"");
+        builder.append(TextUtils.htmlEncode(mUuid.toString()));
+        if (mName != null) {
+            builder.append("\" name=\"");
+            builder.append(mName);
+        }
+        builder.append("\" default=\"");
+        builder.append(isDefaultGroup());
+        builder.append("\">\n<sound>");
+        builder.append(TextUtils.htmlEncode(mSoundOverride.toString()));
+        builder.append("</sound>\n<ringer>");
+        builder.append(TextUtils.htmlEncode(mRingerOverride.toString()));
+        builder.append("</ringer>\n<soundMode>");
+        builder.append(mSoundMode);
+        builder.append("</soundMode>\n<ringerMode>");
+        builder.append(mRingerMode);
+        builder.append("</ringerMode>\n<vibrateMode>");
+        builder.append(mVibrateMode);
+        builder.append("</vibrateMode>\n<lightsMode>");
+        builder.append(mLightsMode);
+        builder.append("</lightsMode>\n</profileGroup>\n");
+        mDirty = false;
     }
 
     /** @hide */
-    public void getXmlString(StringBuilder builder) {
-        builder.append("<profileGroup name=\"" + TextUtils.htmlEncode(getName()) + "\" default=\""
-                + isDefaultGroup() + "\">\n");
-        builder.append("<sound>" + TextUtils.htmlEncode(mSoundOverride.toString()) + "</sound>\n");
-        builder.append("<ringer>" + TextUtils.htmlEncode(mRingerOverride.toString())
-                + "</ringer>\n");
-        builder.append("<soundMode>" + mSoundMode + "</soundMode>\n");
-        builder.append("<ringerMode>" + mRingerMode + "</ringerMode>\n");
-        builder.append("<vibrateMode>" + mVibrateMode + "</vibrateMode>\n");
-        builder.append("<lightsMode>" + mLightsMode + "</lightsMode>\n");
-        builder.append("</profileGroup>\n");
-    }
+    public static ProfileGroup fromXml(XmlPullParser xpp, Context context)
+            throws XmlPullParserException, IOException {
+        String name = xpp.getAttributeValue(null, "name");
+        UUID uuid = null;
+        String value = xpp.getAttributeValue(null, "uuid");
 
-    /** @hide */
-    public static ProfileGroup fromXml(XmlPullParser xpp) throws XmlPullParserException,
-            IOException {
-        return fromXml(xpp, null);
-    }
+        if (value != null) {
+            try {
+                uuid = UUID.fromString(value);
+            } catch (IllegalArgumentException e) {
+                Log.w(TAG, "UUID not recognized for " + name + ", using new one.");
+            }
+        }
 
-    /** @hide */
-    public static ProfileGroup fromXml(XmlPullParser xpp, Context context) throws XmlPullParserException,
-            IOException {
-        String defaultGroup = xpp.getAttributeValue(null, "default");
-        defaultGroup = defaultGroup == null ? "false" : defaultGroup;
-        String attr = Profile.getAttrResString(xpp, context);
-        ProfileGroup profileGroup = new ProfileGroup(attr, defaultGroup.equals("true"));
+        value = xpp.getAttributeValue(null, "default");
+        boolean defaultGroup = TextUtils.equals(value, "true");
+
+        ProfileGroup profileGroup = new ProfileGroup(name, uuid, defaultGroup);
         int event = xpp.next();
         while (event != XmlPullParser.END_TAG || !xpp.getName().equals("profileGroup")) {
             if (event == XmlPullParser.START_TAG) {
-                String name = xpp.getName();
+                name = xpp.getName();
                 if (name.equals("sound")) {
                     profileGroup.setSoundOverride(Uri.parse(xpp.nextText()));
                 } else if (name.equals("ringer")) {
@@ -277,7 +325,10 @@ public class ProfileGroup implements Parcelable {
             }
             event = xpp.next();
         }
+
+        /* we just loaded from XML, no need to save */
+        profileGroup.mDirty = false;
+
         return profileGroup;
     }
-
 }
