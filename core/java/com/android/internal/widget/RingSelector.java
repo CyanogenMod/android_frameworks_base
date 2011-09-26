@@ -87,7 +87,7 @@ public class RingSelector extends ViewGroup {
      * Either {@link #HORIZONTAL} or {@link #VERTICAL}.
      */
     private int mOrientation;
-
+    private int mLastHoveredSecRing = -1; //Keeps track of last hovered custom app
     private Ring mLeftRing;
     private Ring mRightRing;
     private Ring mMiddleRing;
@@ -987,8 +987,37 @@ public class RingSelector extends ViewGroup {
         int deltaY = (int) y - ring.getTop() - (ring.getHeight() / 2);
         ring.offsetLeftAndRight(deltaX);
         ring.offsetTopAndBottom(deltaY);
+        setHoverBackLight(x,y);
         invalidate();
     }
+
+    private void setHoverBackLight(float x, float y) {
+        if (!mUseMiddleRing) {
+            return;
+        }
+        boolean ringsTouched = false;
+        int q;
+        for (q = 0; q < 4; q++) {
+            if (!mSecRings[q].isHidden() && mSecRings[q].contains((int) x,(int) y)) {
+                ringsTouched = true;
+                break;
+            }
+        }
+        if (ringsTouched) {
+            if (mLastHoveredSecRing == -1) {
+                mLastHoveredSecRing = q;
+                mSecRings[q].setRingBackgroundResource(R.drawable.jog_ring_ring_pressed_green);
+            } else if (mLastHoveredSecRing != q) {
+                mSecRings[mLastHoveredSecRing].setRingBackgroundResource(R.drawable.jog_ring_ring_normal);
+                mLastHoveredSecRing = q;
+                mSecRings[q].setRingBackgroundResource(R.drawable.jog_ring_ring_pressed_green);
+            }
+        } else if (mLastHoveredSecRing != -1 && !mSecRings[mLastHoveredSecRing].isHidden()) {
+            mSecRings[mLastHoveredSecRing].setRingBackgroundResource(R.drawable.jog_ring_ring_normal);
+            mLastHoveredSecRing = -1;
+        }
+    }
+
 
     /**
      * Sets the left ring icon to a given resource.
