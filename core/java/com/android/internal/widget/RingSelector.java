@@ -525,6 +525,7 @@ public class RingSelector extends ViewGroup {
         private int alignCenterY;
 
         private boolean isHidden = false;
+        private boolean isActive = false;
 
         public SecRing(ViewGroup parent, int ringId) {
             ring = new ImageView(parent.getContext());
@@ -563,10 +564,33 @@ public class RingSelector extends ViewGroup {
             ring.setVisibility(View.VISIBLE);
         }
 
+        void activate() {
+            if (isActive) return;
+            isActive = true;
+
+            ScaleAnimation scaleAnim = new ScaleAnimation(1.0f, 1.5f, 1.0f, 1.5f,
+                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            scaleAnim.setInterpolator(new DecelerateInterpolator());
+            scaleAnim.setDuration(ANIM_CENTER_FADE_TIME);
+            scaleAnim.setFillAfter(true);
+            ring.startAnimation(scaleAnim);
+        }
+
+        void deactivate() {
+            if (!isActive) return;
+            isActive = false;
+
+            ScaleAnimation scaleAnim = new ScaleAnimation(1.5f, 1.0f, 1.5f, 1.0f,
+                    Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            scaleAnim.setInterpolator(new DecelerateInterpolator());
+            scaleAnim.setDuration(ANIM_CENTER_FADE_TIME);
+            scaleAnim.setFillAfter(true);
+            ring.startAnimation(scaleAnim);
+        }
+
         void reset(boolean animate) {
             if (animate) {
                 hide();
-                return;
             }
             ring.setVisibility(View.INVISIBLE);
         }
@@ -854,6 +878,15 @@ public class RingSelector extends ViewGroup {
             switch (action) {
                 case MotionEvent.ACTION_MOVE:
                     moveRing(x, y);
+                    if (mUseMiddleRing && mCurrentRing == mMiddleRing) {
+                        for (int q = 0; q < 4; q++) {
+                            if (!mSecRings[q].isHidden() && mSecRings[q].contains((int) x, (int) y)) {
+                                mSecRings[q].activate();
+                            } else {
+                                mSecRings[q].deactivate();
+                            }
+                        }
+                    }
                     break;
                 case MotionEvent.ACTION_UP:
                     int secIdx = -1;
