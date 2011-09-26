@@ -46,6 +46,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -736,18 +737,46 @@ public class LockPatternUtils {
         String nextCalendarAlarm = null;
         Cursor cursor = null;
         try {
-            cursor = Calendar.Instances.query(mContentResolver, new String[] {
-                    Calendar.EventsColumns.TITLE, Calendar.EventsColumns.DTSTART
-            }, now, later, where.toString(), null);
+            cursor = Calendar.Instances.query(mContentResolver, 
+                    new String[] {
+                        Calendar.EventsColumns.TITLE, 
+                        Calendar.EventsColumns.DTSTART,
+                        Calendar.EventsColumns.DESCRIPTION,
+                        Calendar.EventsColumns.EVENT_LOCATION,
+                        Calendar.EventsColumns.ALL_DAY,
+                    }, 
+                    now, 
+                    later, 
+                    where.toString(), 
+                    null);
             if (cursor.moveToFirst()) {
-                String title = cursor.getString(0);
-                Date start = new Date(cursor.getLong(1));
+                String  title       = cursor.getString(0);
+                Date    start       = new Date(cursor.getLong(1));
+                String  description = cursor.getString(2);
+                String  location    = cursor.getString(3);
+                int     allDay      = cursor.getInt(4);
+
                 StringBuilder sb = new StringBuilder();
-                sb.append(DateFormat.format("E", start));
-                sb.append(" ");
-                sb.append(DateFormat.getTimeFormat(mContext).format(start));
+
+                if(allDay != 0) {
+                    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("E MMM d");
+                    sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    sb.append(sdf.format(start));
+                } else {
+                    sb.append(DateFormat.format("E", start));
+                    sb.append(" ");
+                    sb.append(DateFormat.getTimeFormat(mContext).format(start));
+                }
+
                 sb.append(" ");
                 sb.append(title);
+
+                if(location != null && !TextUtils.isEmpty(location))
+                    sb.append("\n" + location);
+                
+                if(description != null && !TextUtils.isEmpty(description))
+                    sb.append("\n" + description);
+                
                 nextCalendarAlarm = sb.toString();
             }
         } finally {
