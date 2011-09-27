@@ -1622,6 +1622,13 @@ public final class Settings {
         public static final String NOTIFICATIONS_AUDIO_FOCUS = "notifications_audio_focus";
 
         /**
+         * Default volume control to media instead of ring (for tablets)
+         *
+         * @hide
+         */
+         public static final String DEFAULT_VOLUME_CONTROL_MEDIA = "default_volume_control_media";
+
+        /**
          * Whether silent mode should allow vibration feedback. This is used
          * internally in AudioService and the Sound settings activity to
          * coordinate decoupling of vibrate and silent modes. This setting
