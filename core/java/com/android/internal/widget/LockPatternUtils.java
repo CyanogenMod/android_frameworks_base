@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -736,18 +737,50 @@ public class LockPatternUtils {
         String nextCalendarAlarm = null;
         Cursor cursor = null;
         try {
-            cursor = Calendar.Instances.query(mContentResolver, new String[] {
-                    Calendar.EventsColumns.TITLE, Calendar.EventsColumns.DTSTART
-            }, now, later, where.toString(), null);
+            cursor = Calendar.Instances.query(mContentResolver, 
+                    new String[] {
+                        Calendar.EventsColumns.TITLE, 
+                        Calendar.EventsColumns.DTSTART,
+                        Calendar.EventsColumns.DESCRIPTION,
+                        Calendar.EventsColumns.EVENT_LOCATION,
+                        Calendar.EventsColumns.ALL_DAY,
+                    },
+                    now,
+                    later,
+                    where.toString(),
+                    null);
             if (cursor.moveToFirst()) {
-                String title = cursor.getString(0);
-                Date start = new Date(cursor.getLong(1));
+                String  title       = cursor.getString(0);
+                Date    start       = new Date(cursor.getLong(1));
+                String  description = cursor.getString(2);
+                String  location    = cursor.getString(3);
+                boolean allDay      = cursor.getInt(4) != 0;
+
                 StringBuilder sb = new StringBuilder();
-                sb.append(DateFormat.format("E", start));
-                sb.append(" ");
-                sb.append(DateFormat.getTimeFormat(mContext).format(start));
+
+                if (allDay == true) {
+                    SimpleDateFormat sdf = new SimpleDateFormat(mContext.getString(R.string.abbrev_wday_month_day_no_year));
+                    // Calendar stores all-day events in UTC -- setting the timezone ensures
+                    // the correct date is shown.
+                    sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    sb.append(sdf.format(start));
+                } else {
+                    sb.append(DateFormat.format("E", start));
+                    sb.append(" ");
+                    sb.append(DateFormat.getTimeFormat(mContext).format(start));
+                }
+
                 sb.append(" ");
                 sb.append(title);
+
+                if (!TextUtils.isEmpty(location)) {
+                    sb.append("\n" + location);
+                }
+
+                if (!TextUtils.isEmpty(description)) {
+                    sb.append("\n" + description);
+                }
+
                 nextCalendarAlarm = sb.toString();
             }
         } finally {
