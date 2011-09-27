@@ -44,10 +44,12 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.TimeZone;
 
 /**
  * Utilities for the lock patten and its settings.
@@ -736,18 +738,84 @@ public class LockPatternUtils {
         String nextCalendarAlarm = null;
         Cursor cursor = null;
         try {
-            cursor = Calendar.Instances.query(mContentResolver, new String[] {
-                    Calendar.EventsColumns.TITLE, Calendar.EventsColumns.DTSTART
-            }, now, later, where.toString(), null);
+            cursor = Calendar.Instances.query(mContentResolver,
+                    new String[] {
+                        Calendar.EventsColumns.TITLE,
+                        Calendar.EventsColumns.DTSTART,
+                        Calendar.EventsColumns.DESCRIPTION,
+                        Calendar.EventsColumns.EVENT_LOCATION,
+                        Calendar.EventsColumns.ALL_DAY,
+                    },
+                    now,
+                    later,
+                    where.toString(),
+                    null);
             if (cursor != null && cursor.moveToFirst()) {
-                String title = cursor.getString(0);
-                Date start = new Date(cursor.getLong(1));
+                String  title       = cursor.getString(0);
+                Date    start       = new Date(cursor.getLong(1));
+                String  description = cursor.getString(2);
+                String  location    = cursor.getString(3);
+                boolean allDay      = cursor.getInt(4) != 0;
+
                 StringBuilder sb = new StringBuilder();
-                sb.append(DateFormat.format("E", start));
-                sb.append(" ");
-                sb.append(DateFormat.getTimeFormat(mContext).format(start));
+
+                if (allDay == true) {
+                    SimpleDateFormat sdf = new SimpleDateFormat(mContext.getString(R.string.abbrev_wday_month_day_no_year));
+                    // Calendar stores all-day events in UTC -- setting the timezone ensures
+                    // the correct date is shown.
+                    sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+                    sb.append(sdf.format(start));
+                } else {
+                    sb.append(DateFormat.format("E", start));
+                    sb.append(" ");
+                    sb.append(DateFormat.getTimeFormat(mContext).format(start));
+                }
+
                 sb.append(" ");
                 sb.append(title);
+
+                int showLocation = Settings.System.getInt(mContext.getContentResolver(),
+                            Settings.System.LOCKSCREEN_CALENDAR_SHOW_LOCATION, 0);
+
+                if (showLocation != 0 && !TextUtils.isEmpty(location)) {
+                    switch(showLocation) {
+                        case 1:
+                            // Show first line
+                            int end = location.indexOf('\n');
+                            if(end == -1) {
+                                sb.append("\n" + location);
+                            } else {
+                                sb.append("\n" + location.substring(0, end));
+                            }
+                            break;
+                        case 2:
+                            // Show all
+                            sb.append("\n" + location);
+                            break;
+                    }
+                }
+
+                int showDescription = Settings.System.getInt(mContext.getContentResolver(),
+                            Settings.System.LOCKSCREEN_CALENDAR_SHOW_DESCRIPTION, 0);
+
+                if (showDescription != 0 && !TextUtils.isEmpty(description)) {
+                    switch(showDescription) {
+                        case 1:
+                            // Show first line
+                            int end = description.indexOf('\n');
+                            if(end == -1) {
+                                sb.append("\n" + description);
+                            } else {
+                                sb.append("\n" + description.substring(0, end));
+                            }
+                            break;
+                        case 2:
+                            // Show all
+                            sb.append("\n" + description);
+                            break;
+                    }
+                }
+
                 nextCalendarAlarm = sb.toString();
             }
         } finally {
