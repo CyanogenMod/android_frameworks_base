@@ -859,15 +859,16 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private void refreshAlarmDisplay() {
         mNextAlarm = mLockPatternUtils.getNextAlarm();
 
-        if (mNextAlarm == null && mLockCalendarAlarm) {
+        if (mNextAlarm != null) {
+            mAlarmIcon = getContext().getResources().getDrawable(R.drawable.ic_lock_idle_alarm);
+        } else if (mLockCalendarAlarm) {
             mNextAlarm = mLockPatternUtils.getNextCalendarAlarm(mLockCalendarLookahead,
                     mCalendars, mLockCalendarRemindersOnly);
             if (mNextAlarm != null) {
                 mAlarmIcon = getContext().getResources().getDrawable(R.drawable.ic_menu_my_calendar);
             }
-        } else if(mNextAlarm != null) {
-            mAlarmIcon = getContext().getResources().getDrawable(R.drawable.ic_lock_idle_alarm);
         }
+
         updateStatusLines();
     }
 

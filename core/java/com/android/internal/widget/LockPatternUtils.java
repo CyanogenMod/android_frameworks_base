@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.TimeZone;
@@ -744,22 +745,24 @@ public class LockPatternUtils {
                         Calendar.EventsColumns.DESCRIPTION,
                         Calendar.EventsColumns.EVENT_LOCATION,
                         Calendar.EventsColumns.ALL_DAY,
-                    }, 
-                    now, 
-                    later, 
-                    where.toString(), 
+                    },
+                    now,
+                    later,
+                    where.toString(),
                     null);
             if (cursor.moveToFirst()) {
                 String  title       = cursor.getString(0);
                 Date    start       = new Date(cursor.getLong(1));
                 String  description = cursor.getString(2);
                 String  location    = cursor.getString(3);
-                int     allDay      = cursor.getInt(4);
+                boolean allDay      = cursor.getInt(4) != 0;
 
                 StringBuilder sb = new StringBuilder();
 
-                if(allDay != 0) {
-                    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("E MMM d");
+                if (allDay == true) {
+                    SimpleDateFormat sdf = new SimpleDateFormat(mContext.getString(R.string.abbrev_wday_month_day_no_year));
+                    // Calendar stores all-day events in UTC -- setting the timezone ensures
+                    // the correct date is shown.
                     sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
                     sb.append(sdf.format(start));
                 } else {
@@ -771,12 +774,14 @@ public class LockPatternUtils {
                 sb.append(" ");
                 sb.append(title);
 
-                if(location != null && !TextUtils.isEmpty(location))
+                if (!TextUtils.isEmpty(location)) {
                     sb.append("\n" + location);
-                
-                if(description != null && !TextUtils.isEmpty(description))
+                }
+
+                if (!TextUtils.isEmpty(description)) {
                     sb.append("\n" + description);
-                
+                }
+
                 nextCalendarAlarm = sb.toString();
             }
         } finally {
