@@ -65,6 +65,7 @@ import android.provider.Settings;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.PowerManager;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -128,6 +129,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     // are we showing battery information?
     private boolean mShowingBatteryInfo = false;
 
+    // turn screen off on trackball keyUp?
+    private boolean mTurnScreenOff = false;
+
     // last known plugged in state
     private boolean mPluggedIn = false;
 
@@ -143,6 +147,9 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private AudioManager mAudioManager;
     private String mDateFormatString;
     private boolean mEnableMenuKeyInLockScreen;
+
+   // private boolean mTrackballTurnOffScreen = (Settings.System.getInt(mContext.getContentResolver(),
+   //         Settings.System.TRACKBALL_TURN_OFF_SCREEN, 0) == 1);
 
     private boolean mTrackballUnlockScreen = (Settings.System.getInt(mContext.getContentResolver(),
             Settings.System.TRACKBALL_UNLOCK_SCREEN, 0) == 1);
@@ -707,6 +714,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     }
 
     private void resetStatusInfo(KeyguardUpdateMonitor updateMonitor) {
+        mTurnScreenOff = false;
         mShowingBatteryInfo = updateMonitor.shouldShowBatteryInfo();
         mPluggedIn = updateMonitor.isDevicePluggedIn();
         mBatteryLevel = updateMonitor.getBatteryLevel();
@@ -726,15 +734,41 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
+      public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_DPAD_CENTER && mTrackballUnlockScreen)
-                || (keyCode == KeyEvent.KEYCODE_MENU && mMenuUnlockScreen)
-                || (keyCode == KeyEvent.KEYCODE_MENU && mEnableMenuKeyInLockScreen)) {
-
-            mCallback.goToUnlockScreen();
+            || (keyCode == KeyEvent.KEYCODE_MENU && mMenuUnlockScreen)
+            || (keyCode == KeyEvent.KEYCODE_MENU && mEnableMenuKeyInLockScreen)) {
+          mCallback.goToUnlockScreen();
         }
         return false;
-    }
+      }
+
+    @Override
+      public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if(keyCode != KeyEvent.KEYCODE_DPAD_CENTER) {
+          // Any other key that wakes device, have dpad center put it to sleep on first keyup
+          mTurnScreenOff = true;
+        } else if(keyCode == KeyEvent.KEYCODE_DPAD_CENTER && !mTrackballUnlockScreen) {
+          if(mTurnScreenOff == false) {
+            // Turn screen off next time dpad center is keyup
+            // This prevents screen from going off right away when the trackball button is
+            // lifted, if it was used to wake the device (since devices wakes on keyDown,
+            // the next immediate keyUp would put it back to sleep -- this avoids that).
+            //
+            // TODO: Add CMParts option to allow "Quick-check time/battery with Trackball 
+            // button" functionality in which device immediately sleeps when trackball is
+            // lifted.
+            mTurnScreenOff = true;
+          } else {
+            // Put device to sleep with dpad center
+            PowerManager pm = (PowerManager)getContext().getSystemService(Context.POWER_SERVICE);
+            pm.goToSleep(SystemClock.uptimeMillis() + 1);
+            return true;
+          }
+        }
+        return false;
+      }
+
 
     /** {@inheritDoc} */
     public void onTrigger(View v, int whichHandle) {
@@ -855,13 +889,17 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     private void refreshAlarmDisplay() {
         mNextAlarm = mLockPatternUtils.getNextAlarm();
-        if (mNextAlarm == null && mLockCalendarAlarm) {
-            mNextAlarm = mLockPatternUtils.getNextCalendarAlarm(mLockCalendarLookahead,
-                    mCalendars, mLockCalendarRemindersOnly);
-        }
+
         if (mNextAlarm != null) {
             mAlarmIcon = getContext().getResources().getDrawable(R.drawable.ic_lock_idle_alarm);
+        } else if (mLockCalendarAlarm) {
+            mNextAlarm = mLockPatternUtils.getNextCalendarAlarm(mLockCalendarLookahead,
+                    mCalendars, mLockCalendarRemindersOnly);
+            if (mNextAlarm != null) {
+                mAlarmIcon = getContext().getResources().getDrawable(R.drawable.ic_menu_my_calendar);
+            }
         }
+
         updateStatusLines();
     }
 
