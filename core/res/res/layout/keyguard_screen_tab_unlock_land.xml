@@ -43,8 +43,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="24dip"
-            android:layout_marginTop="20dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="10dip"
             android:singleLine="true"
             android:ellipsize="marquee"
             android:gravity="right|bottom"
@@ -57,8 +57,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="24dip"
-            android:layout_marginTop="20dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="10dip"
             android:text="@string/emergency_calls_only"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/white"
@@ -68,9 +68,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/carrier"
-            android:layout_marginLeft="24dip"
-            android:layout_marginTop="56dip"
-            android:layout_marginBottom="8dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="20dip"
+            android:layout_marginBottom="5dip"
             >
 
             <TextView android:id="@+id/timeDisplay"
@@ -111,8 +111,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/time"
-            android:layout_marginLeft="24dip"
-            android:layout_marginTop="6dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="3dip"
             android:textAppearance="?android:attr/textAppearanceMedium"
             />
 
@@ -121,8 +121,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/date"
-            android:layout_marginLeft="24dip"
-            android:layout_marginTop="6dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="3dip"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:drawablePadding="4dip"
             />
@@ -132,8 +132,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/status1"
-            android:layout_marginLeft="24dip"
-            android:layout_marginTop="6dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="3dip"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:drawablePadding="4dip"
             />
@@ -142,8 +142,8 @@
             android:id="@+id/customMsg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="24dip"
-            android:layout_marginTop="4.0dip"
+            android:layout_marginLeft="10dip"
+            android:layout_marginTop="3dip"
             android:layout_below="@id/status2"
             android:textAppearance="?android:attr/textAppearanceSmall"
             />
@@ -155,85 +155,12 @@
             android:layout_below="@id/customMsg"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:gravity="center"
-            android:layout_marginLeft="24dip"
+            android:layout_marginLeft="10dip"
             android:layout_marginTop="12dip"
             android:drawablePadding="4dip"
             />
 
-        <ImageButton android:id="@+id/albumArt"
-            android:layout_width="125dip"
-            android:layout_height="125dip"
-            android:layout_below="@+id/musicNowPlaying"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="45dip"
-            android:adjustViewBounds="true"
-            android:background="@color/transparent"
-            android:scaleType="fitCenter"
-            android:padding = "3px"
-            android:visibility="gone"
-            />
-        <!-- music control buttons -->
-        <ImageButton
-            android:id="@+id/musicControlPlay"
-            android:src="@drawable/ic_media_play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="6dip"
-            android:background="@color/transparent"
-            android:visibility="gone"
-            />
-        <ImageButton
-            android:id="@+id/musicControlPause"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_media_pause"
-            android:layout_centerInParent="true"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="6dip"
-            android:background="@color/transparent"
-            android:visibility="gone"
-            />
-        <ImageButton
-            android:id="@+id/musicControlPrevious"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_media_previous"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="6dip"
-            android:layout_marginRight="20dip"
-            android:layout_toLeftOf="@+id/musicControlPause"
-            android:background="@color/transparent"
-            android:visibility="gone"
-            />
-        <ImageButton
-            android:id="@+id/musicControlNext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_media_next"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="6dip"
-            android:layout_marginLeft="20dip"
-            android:layout_toRightOf="@+id/musicControlPause"
-            android:background="@color/transparent"
-            android:visibility="gone"
-            />
-        <TextView
-            android:id="@+id/musicNowPlaying"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:lines="1"
-            android:scrollHorizontally="true"
-            android:ellipsize="marquee"
-            android:paddingTop="40dip"
-            android:gravity="bottom"
-            android:layout_alignWithParentIfMissing="true"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            />
-
-        <!-- right side -->
+       <!-- right side -->
         <com.android.internal.widget.SlidingTab
             android:id="@+id/tab_selector2"
             android:orientation="vertical"
@@ -259,6 +186,15 @@
             android:layout_alignParentRight="true"
             />
 
+        <com.android.internal.widget.RingSelector
+            android:id="@+id/ring_selector"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            />
+
         <!-- emergency call button shown when sim is PUKd and tab_selector is
              hidden -->
         <Button
@@ -273,14 +209,92 @@
             android:visibility="gone"
             />
 
-        <com.android.internal.widget.RingSelector
-            android:id="@+id/ring_selector"
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
+        <!-- music control buttons -->
+        <ImageButton
+            android:id="@+id/musicControlPlay"
+            android:src="@drawable/ic_media_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="false"
+            android:layout_marginLeft="50dip"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="6dip"
+            android:background="@color/transparent"
+            android:visibility="gone"
             />
+
+        <ImageButton
+            android:id="@+id/musicControlPause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_media_pause"
+            android:layout_centerInParent="false"
+            android:layout_marginLeft="50dip"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="6dip"
+            android:background="@color/transparent"
+            android:visibility="gone"
+            />
+
+        <ImageButton
+            android:id="@+id/musicControlPrevious"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_media_previous"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="6dip"
+            android:layout_marginRight="20dip"
+            android:layout_toLeftOf="@+id/musicControlPause"
+            android:background="@color/transparent"
+            android:visibility="gone"
+            />
+
+        <ImageButton
+            android:id="@+id/musicControlNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_media_next"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="6dip"
+            android:layout_marginLeft="20dip"
+            android:layout_toRightOf="@+id/musicControlPause"
+            android:background="@color/transparent"
+            android:visibility="gone"
+            />
+
+        <ImageButton android:id="@+id/albumArt"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_toRightOf="@+id/musicControlNext"
+            android:layout_centerInParent="false"
+            android:layout_marginBottom="5dip"
+            android:layout_alignParentBottom="true"
+            android:adjustViewBounds="true"
+            android:background="@color/transparent"
+            android:scaleType="fitCenter"
+            android:padding = "3px"
+            android:visibility="gone"
+            />
+
+        <TextView
+            android:id="@+id/musicNowPlaying"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="false"
+            android:lines="1"
+            android:layout_marginBottom="12dip"
+            android:scrollHorizontally="true"
+            android:ellipsize="marquee"
+            android:layout_alignParentBottom="true"
+            android:layout_toRightOf="@+id/albumArt"
+            android:layout_alignWithParentIfMissing="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:singleLine="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            />
+
     </RelativeLayout>
 
 </android.gesture.GestureOverlayView>
