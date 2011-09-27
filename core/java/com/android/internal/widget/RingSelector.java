@@ -644,7 +644,7 @@ public class RingSelector extends ViewGroup {
                     alignCenterY -= mSecRingCenterOffset;
                 }
             } else if (orientation == VERTICAL) {
-                int spacing = parentHeight / (2 * totalRings);
+                int spacing = parentHeight / totalRings;
                 alignCenterX = parentWidth - mSecRingBottomOffset - mBottomOffset;
                 alignCenterY = parentHeight - (spacing / 2 + ringNum * spacing); //align on evenly-spaced horizontals
 
