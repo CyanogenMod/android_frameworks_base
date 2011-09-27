@@ -94,6 +94,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private KeyguardUpdateMonitor mUpdateMonitor;
     private KeyguardScreenCallback mCallback;
 
+    private GestureOverlayView mGestureOverlay;
     private TextView mCarrier;
     private SlidingTab mTabSelector;
     private SlidingTab mSelector2;
@@ -601,11 +602,11 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             mGestureTrail = false;
         }
 
-        GestureOverlayView gestures = (GestureOverlayView) findViewById(R.id.gestures);
-        gestures.setGestureVisible(mGestureTrail);
-        gestures.setGestureColor(mGestureColor);
+        mGestureOverlay = (GestureOverlayView) findViewById(R.id.gestures);
+        mGestureOverlay.setGestureVisible(mGestureTrail);
+        mGestureOverlay.setGestureColor(mGestureColor);
         boolean GestureCanUnlock = false;
-        if (gestures != null) {
+        if (mGestureOverlay != null) {
             if (mGestureActive) {
                 File mStoreFile = new File(Environment.getDataDirectory(),
                         "/misc/lockscreen_gestures");
@@ -613,7 +614,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                         Settings.System.LOCKSCREEN_GESTURES_SENSITIVITY, 3);
                 mLibrary = GestureLibraries.fromFile(mStoreFile);
                 if (mLibrary.load()) {
-                    gestures.addOnGesturePerformedListener(this);
+                    mGestureOverlay.addOnGesturePerformedListener(this);
                     for (String name : mLibrary.getGestureEntries()) {
                         String[] payload = name.split("___", 2);
                         if ("UNLOCK".equals(payload[1])) {
@@ -801,10 +802,16 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             mTabSelector.setRightHintText(mSilentMode ? R.string.lockscreen_sound_on_label
                     : R.string.lockscreen_sound_off_label);
         }
+
         // Don't poke the wake lock when returning to a state where the handle is
         // not grabbed since that can happen when the system (instead of the user)
         // cancels the grab.
-        if (grabbedState != SlidingTab.OnTriggerListener.NO_HANDLE || mUseRingLockscreen) {
+        if (grabbedState != SlidingTab.OnTriggerListener.NO_HANDLE) {
+            mGestureOverlay.cancelGesture();
+            mCallback.pokeWakelock();
+        }
+
+        if (mUseRingLockscreen) {
             mCallback.pokeWakelock();
         }
     }
