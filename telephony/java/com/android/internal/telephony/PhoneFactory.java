@@ -125,6 +125,9 @@ public class PhoneFactory {
                 } else if ("semc".equals(sRILClassname)) {
                     Log.i(LOG_TAG, "Using Semc RIL");
                     sCommandsInterface = new SemcRIL(context, networkMode, cdmaSubscription);
+                } else if ("mototegra".equals(sRILClassname)) {
+                    Log.i(LOG_TAG, "Using Motorola Tegra2 RIL");
+                    sCommandsInterface = new MotoTegraRIL(context, networkMode, cdmaSubscription);
                 } else {
                     sCommandsInterface = new RIL(context, networkMode, cdmaSubscription);
                 }
