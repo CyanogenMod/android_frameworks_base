@@ -160,6 +160,9 @@ public:
         MODE_RINGTONE,
         MODE_IN_CALL,
         MODE_IN_COMMUNICATION,
+#ifdef HAVE_FM_RADIO_PROP_MODE
+        MODE_FMRADIO,
+#endif
         NUM_MODES  // not a valid entry, denotes end-of-list
     };
 
@@ -237,6 +240,8 @@ public:
 #ifdef HAVE_FM_RADIO
     static status_t setFmVolume(float volume);
 #endif
+
+    static int hasFmPropMode();
 
     // return the number of audio frames written by AudioFlinger to audio HAL and
     // audio dsp to DAC since the output on which the specificed stream is playing

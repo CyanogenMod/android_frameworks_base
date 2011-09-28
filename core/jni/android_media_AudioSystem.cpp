@@ -72,6 +72,12 @@ android_media_AudioSystem_isStreamActive(JNIEnv *env, jobject thiz, jint stream)
 }
 
 static int
+android_media_AudioSystem_hasFmPropMode(JNIEnv *env, jobject thiz)
+{
+  return AudioSystem::hasFmPropMode();
+}
+
+static int
 android_media_AudioSystem_setParameters(JNIEnv *env, jobject thiz, jstring keyValuePairs)
 {
     const jchar* c_keyValuePairs = env->GetStringCritical(keyValuePairs, 0);
@@ -200,6 +206,7 @@ static JNINativeMethod gMethods[] = {
     {"muteMicrophone",      "(Z)I",     (void *)android_media_AudioSystem_muteMicrophone},
     {"isMicrophoneMuted",   "()Z",      (void *)android_media_AudioSystem_isMicrophoneMuted},
     {"isStreamActive",      "(I)Z",     (void *)android_media_AudioSystem_isStreamActive},
+    {"hasFmPropMode",       "()I",      (void *)android_media_AudioSystem_hasFmPropMode},
     {"setDeviceConnectionState", "(IILjava/lang/String;)I", (void *)android_media_AudioSystem_setDeviceConnectionState},
     {"getDeviceConnectionState", "(ILjava/lang/String;)I",  (void *)android_media_AudioSystem_getDeviceConnectionState},
     {"setPhoneState",       "(I)I",     (void *)android_media_AudioSystem_setPhoneState},

@@ -379,6 +379,15 @@ status_t AudioSystem::setFmVolume(float value)
 }
 #endif
 
+int AudioSystem::hasFmPropMode()
+{
+#ifdef HAVE_FM_RADIO_PROP_MODE
+    return 1;
+#else
+    return 0;
+#endif
+}
+
 // ---------------------------------------------------------------------------
 
 void AudioSystem::AudioFlingerClient::binderDied(const wp<IBinder>& who) {

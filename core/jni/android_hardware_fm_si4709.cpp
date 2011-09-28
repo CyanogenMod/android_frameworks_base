@@ -81,6 +81,8 @@
 #define V4L2_CID_BASE                           (V4L2_CTRL_CLASS_USER | 0x900)
 #define V4L2_CID_AUDIO_MUTE                     V4L2_CID_BASE + 9
 
+typedef unsigned char u8;
+
 struct dev_state_t
 {
     int power_state;
@@ -241,12 +243,12 @@ struct radio_data_t
 /*****************************************/
 
 
-int setFreq(int freq, int fd);
-int radioOn(int fd);
-int radioOff(int fd);
+static int setFreq(int freq, int fd);
+static int radioOn(int fd);
+static int radioOff(int fd);
 
 
-bool radioEnabled = false;
+static bool radioEnabled = false;
 static int lastFreq = 0;
 
 int radioOn(int fd)
@@ -271,6 +273,9 @@ int radioOn(int fd)
     if (lastFreq != 0) {
         setFreq(lastFreq, fd);
     }
+    
+    u8 volume_temp = 8;
+    ret = ioctl(fd, Si4709_IOC_VOLUME_SET, &volume_temp);
 
     return FM_JNI_SUCCESS;
 }
@@ -592,7 +597,7 @@ static jint android_hardware_fmradio_FmReceiverJNI_setBandNative
 
     if (low == 76000 && high == 90000)
         band = BAND_76000_90000_kHz;
-    else if (low == 87500 && high == 107900)
+    else if (low == 87500 && high == 108000)
         band = BAND_87500_108000_kHz;
     else
         band = BAND_76000_108000_kHz;

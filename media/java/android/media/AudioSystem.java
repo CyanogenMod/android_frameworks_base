@@ -109,8 +109,14 @@ public class AudioSystem
     public static final int MODE_RINGTONE           = 1;
     public static final int MODE_IN_CALL            = 2;
     public static final int MODE_IN_COMMUNICATION   = 3;
-    public static final int NUM_MODES               = 4;
 
+    /* If a propatary FM mode is required, increment the NUM_MODES to reflect this */
+    public static final int MODE_FMRADIO;
+    public static final int NUM_MODES;
+    static {
+        MODE_FMRADIO = (hasFmPropMode() == 1) ? 4 : 9999;
+        NUM_MODES    = (hasFmPropMode() == 1) ? 5 : 4;
+    }
 
     /* Routing bits for setRouting/getRouting API */
     /** @deprecated */
@@ -161,6 +167,13 @@ public class AudioSystem
      * return true if any track playing on this stream is active.
      */
     public static native boolean isStreamActive(int stream);
+
+    /*
+     * Checks whether a proprietary FM mode is needed.
+     *
+     * return true if a proprietary FM mode exists.
+     */
+    public static native int hasFmPropMode();
 
     /*
      * Sets a group generic audio configuration parameters. The use of these parameters
