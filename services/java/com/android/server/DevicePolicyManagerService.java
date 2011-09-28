@@ -503,6 +503,7 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
         switch (quality) {
             case DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED:
             case DevicePolicyManager.PASSWORD_QUALITY_SOMETHING:
+            case DevicePolicyManager.PASSWORD_QUALITY_FINGER:
             case DevicePolicyManager.PASSWORD_QUALITY_NUMERIC:
             case DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC:
             case DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC:
@@ -749,16 +750,31 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
             getActiveAdminForCallerLocked(null,
                     DeviceAdminInfo.USES_POLICY_RESET_PASSWORD);
             quality = getPasswordQuality(null);
-            if (quality != DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED) {
-                int realQuality = LockPatternUtils.computePasswordQuality(password);
-                if (realQuality < quality) {
-                    Slog.w(TAG, "resetPassword: password quality 0x"
-                            + Integer.toHexString(quality)
-                            + " does not meet required quality 0x"
-                            + Integer.toHexString(quality));
+
+            if ((flags == DevicePolicyManager.ENABLE_FINGER_LOCK) ||
+                (flags == DevicePolicyManager.DISABLE_FINGER_LOCK)) {
+                // Log.d("DevicePolicyManagerService", "Enable/Disable finger lock");
+                // do nothing.
+            } else {
+                if (quality != DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED) {
+                    int realQuality = LockPatternUtils.computePasswordQuality(password);
+
+                    if (realQuality < quality) {
+                        Slog.w(TAG, "resetPassword: password quality 0x"
+                                + Integer.toHexString(quality)
+                                + " does not meet required quality 0x"
+                                + Integer.toHexString(quality));
+                        return false;
+                    }
+                    quality = realQuality;
+                }
+
+                int length = getPasswordMinimumLength(null);
+                if (password.length() < length) {
+                    Slog.w(TAG, "resetPassword: password length " + password.length()
+                            + " does not meet required length " + length);
                     return false;
                 }
-                quality = realQuality;
             }
             int length = getPasswordMinimumLength(null);
             if (password.length() < length) {
@@ -773,19 +789,35 @@ public class DevicePolicyManagerService extends IDevicePolicyManager.Stub {
             Slog.w(TAG, "resetPassword: already set by another uid and not entered by user");
             return false;
         }
-        
+
         // Don't do this with the lock held, because it is going to call
         // back in to the service.
         long ident = Binder.clearCallingIdentity();
         try {
             LockPatternUtils utils = new LockPatternUtils(mContext);
-            utils.saveLockPassword(password, quality);
-            synchronized (this) {
-                int newOwner = (flags&DevicePolicyManager.RESET_PASSWORD_REQUIRE_ENTRY)
-                        != 0 ? callingUid : -1;
-                if (mPasswordOwner != newOwner) {
-                    mPasswordOwner = newOwner;
-                    saveSettingsLocked();
+
+            if ((flags == DevicePolicyManager.ENABLE_FINGER_LOCK) ||
+                (flags == DevicePolicyManager.DISABLE_FINGER_LOCK)) {
+                if ((flags == DevicePolicyManager.ENABLE_FINGER_LOCK) &&
+                    utils.savedFingerExists() &&
+                    !utils.isLockFingerEnabled()) {
+                    utils.setLockFingerEnabled(true);
+                } else if ((flags == DevicePolicyManager.DISABLE_FINGER_LOCK) &&
+                           utils.isLockFingerEnabled() &&
+                           !utils.savedFingerExists()) {
+                    utils.setLockFingerEnabled(false);
+                }
+
+                return true;
+            } else {
+                utils.saveLockPassword(password, quality);
+                synchronized (this) {
+                    int newOwner = (flags&DevicePolicyManager.RESET_PASSWORD_REQUIRE_ENTRY)
+                            != 0 ? callingUid : -1;
+                    if (mPasswordOwner != newOwner) {
+                        mPasswordOwner = newOwner;
+                        saveSettingsLocked();
+                    }
                 }
             }
         } finally {
