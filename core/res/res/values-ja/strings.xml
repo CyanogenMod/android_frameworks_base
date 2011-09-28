@@ -978,4 +978,20 @@
     <!-- Description of an application permission that lets lets an application view/edit revoked permissions. -->
     <string name="permdesc_revokePermissions">取り消された権限を読み書きする。通常のアプリケーションでは不要です。</string>
 
+    <string name="keyguard_finger_please_swipe">ロックを解除するには指をセンサー上で滑らせてください</string>
+    <string name="keyguard_finger_ui_timeout">UI がタイムアウトしました!</string>
+    <string name="keyguard_finger_failed_to_unlock">ロックを解除できませんでした!</string>
+    <string name="keyguard_finger_screen_off">画面オフ</string>
+    <string name="keyguard_finger_screen_on">画面オン</string>
+    <string name="keyguard_finger_match">指が一致しました。画面のロックを解除しています...</string>
+    <string name="keyguard_finger_not_match">指が一致しませんでした...</string>
+    <string name="keyguard_finger_swipe_too_far_right">中央で指を滑らせてください。</string>
+    <string name="keyguard_finger_swipe_too_far_left">中央で指を滑らせてください。</string>
+    <string name="keyguard_finger_swipe_too_fast">滑らせ方が速すぎます。</string>
+    <string name="keyguard_finger_swipe_too_short">滑らせる距離が短すぎます。</string>
+    <string name="keyguard_finger_swipe_too_slow">滑らせ方が遅すぎます。</string>
+    <string name="keyguard_finger_swipe_too_skewed">滑らせ方が傾きすぎです。</string>
+    <string name="lockscreen_too_many_failed_fingers_dialog_message">指紋の識別に %1$d 回失敗しました。\n\n%2$d 秒後に再試行してください。</string>
+    <string name="lockscreen_failed_fingers_almost_glogin">指紋の識別に %1$d 回失敗しました。識別にあと %2$d 回失敗すると、Google サインインを使用して電話のロックを解除するように求められます。\n\n%3$d 秒後に再試行してください。</string>
+    <string name="lockscreen_forgot_finger_button_text">どの指かわからなくなった場合</string>
 </resources>
