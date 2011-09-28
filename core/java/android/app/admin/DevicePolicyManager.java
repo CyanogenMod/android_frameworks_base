@@ -190,7 +190,15 @@ public class DevicePolicyManager {
      * are ordered so that higher values are more restrictive.
      */
     public static final int PASSWORD_QUALITY_SOMETHING = 0x10000;
-    
+
+    /**
+     * Constant for {@link #setPasswordQuality}: the user must swipe a finger
+     * to unlock the screen.  Note that quality constants are
+     * ordered so that higher values are more restrictive.
+     * @hide
+     */
+    public static final int PASSWORD_QUALITY_FINGER = 0x1FFFF;
+
     /**
      * Constant for {@link #setPasswordQuality}: the user must have entered a
      * password containing at least numeric characters.  Note that quality
@@ -418,7 +426,15 @@ public class DevicePolicyManager {
      * the password again until the user has entered it.
      */
     public static final int RESET_PASSWORD_REQUIRE_ENTRY = 0x0001;
-    
+
+    /**
+     * Flag for {@link #resetPassword}: Enable/Disable finger lock
+     */
+    /** @hide */
+    public static final int ENABLE_FINGER_LOCK = 0x1000;
+    /** @hide */
+    public static final int DISABLE_FINGER_LOCK = 0x1001;
+
     /**
      * Force a new device unlock password (the password needed to access the
      * entire device, not for individual accounts) on the user.  This takes
