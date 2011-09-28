@@ -362,7 +362,6 @@ private:
                 return (mFreezeDisplay || mFreezeCount>0) && mBootFinished;
             }
 
-            
             void        debugFlashRegions();
             void        debugShowFPS() const;
             void        drawWormhole() const;
@@ -399,7 +398,7 @@ private:
                 Permission                  mAccessSurfaceFlinger;
                 Permission                  mReadFramebuffer;
                 Permission                  mDump;
-                
+
                 // Can only accessed from the main thread, these members
                 // don't need synchronization
                 Region                      mDirtyRegion;
@@ -448,6 +447,7 @@ private:
    volatile     int32_t                     mSecureFrameBuffer;
 
                 bool                        mUseDithering;
+                bool                        mUse16bppAlpha;
 };
 
 // ---------------------------------------------------------------------------
