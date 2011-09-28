@@ -52,7 +52,7 @@ import android.view.KeyEvent;
 import android.view.WindowManagerImpl;
 import android.view.WindowManagerPolicy;
 import android.widget.TextView;
-
+import java.lang.StackTraceElement;
 
 /**
  * Mediates requests related to the keyguard.  This includes queries about the
@@ -374,7 +374,8 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
                         Settings.System.SCREEN_LOCK_SLIDE_DELAY_TOGGLE, 0) == 1;
 
                 boolean securityLockScreenEnabled = mLockPatternUtils.isLockPasswordEnabled()
-                        || mLockPatternUtils.isLockPatternEnabled();
+                        || mLockPatternUtils.isLockPatternEnabled()
+                        || mLockPatternUtils.isLockFingerEnabled();
 
                 boolean slideLockTimeoutShouldBeConsidered = separateSlideLockTimeoutEnabled
                         && securityLockScreenEnabled;
@@ -585,6 +586,11 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
                 mHidden = isHidden;
                 adjustUserActivityLocked();
                 adjustStatusBarLocked();
+		/** For Debuging
+		StackTraceElement[] element = Thread.currentThread().getStackTrace();
+		for(int i=0; i<element.length; i++) {
+			Log.d(TAG, element[i].toString()); } */
+               
             }
         }
     }

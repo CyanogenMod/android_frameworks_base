@@ -91,6 +91,10 @@ public class KeyguardViewManager implements KeyguardWindowController {
         LockScreen, UnlockScreen, KeepCurrentState
     }
 
+    public synchronized void show() {
+	show(ShowMode.KeepCurrentState);
+	}
+
     /**
      * Show the keyguard.  Will handle creating and attaching to the view manager
      * lazily.
@@ -119,6 +123,7 @@ public class KeyguardViewManager implements KeyguardWindowController {
             lp.softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN;
             lp.windowAnimations = com.android.internal.R.style.Animation_LockScreen;
             lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR;
+           // lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR;
             lp.setTitle("Keyguard");
             mWindowLayoutParams = lp;
 

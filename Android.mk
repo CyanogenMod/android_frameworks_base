@@ -195,7 +195,11 @@ LOCAL_SRC_FILES += \
 	voip/java/android/net/sip/ISipSession.aidl \
 	voip/java/android/net/sip/ISipSessionListener.aidl \
 	voip/java/android/net/sip/ISipService.aidl
-#
+
+ifeq ($(TARGET_HAS_FINGERPRINT_UNLOCK),true)
+    LOCAL_SRC_FILES += \
+        core/java/com/authentec/TrueSuiteMobile/RelayReceiverService.aidl
+endif
 
 
 # FRAMEWORKS_BASE_JAVA_SRC_DIRS comes from build/core/pathmap.mk
@@ -211,6 +215,10 @@ LOCAL_JAVA_LIBRARIES := bouncycastle core core-junit ext
 
 LOCAL_MODULE := framework
 LOCAL_MODULE_CLASS := JAVA_LIBRARIES
+
+ifeq ($(TARGET_HAS_FINGERPRINT_UNLOCK),true)
+    LOCAL_STATIC_JAVA_LIBRARIES := authentec-am2app
+endif
 
 LOCAL_NO_EMMA_INSTRUMENT := true
 LOCAL_NO_EMMA_COMPILE := true

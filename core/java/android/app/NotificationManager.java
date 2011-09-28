@@ -130,7 +130,8 @@ public class NotificationManager
 
         if (localLOGV) Log.v(TAG, pkg + ": notify(" + id + ", " + notification + ")");
         try {
-            service.enqueueNotificationWithTag(pkg, tag, id, notification, idOut);
+            if (service != null)
+                service.enqueueNotificationWithTag(pkg, tag, id, notification, idOut);
             //Log.i("NotificationManager", "Pulsing: " + pkg);
             if (id != idOut[0]) {
                 Log.w(TAG, "notify: id corrupted: sent " + id + ", got back " + idOut[0]);

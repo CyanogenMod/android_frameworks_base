@@ -1393,6 +1393,12 @@
                 android:permission="android.permission.BIND_WALLPAPER">
         </service>
 
+        <service android:name="com.android.internal.widget.GfxEngineRelayService">
+            <intent-filter>
+                <action android:name="com.authentec.Keyguard" />
+            </intent-filter>
+        </service>
+
         <receiver android:name="com.android.server.BootReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
