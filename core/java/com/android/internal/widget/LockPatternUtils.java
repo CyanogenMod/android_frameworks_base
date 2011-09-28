@@ -101,8 +101,9 @@ public class LockPatternUtils {
     private final static String LOCKOUT_PERMANENT_KEY = "lockscreen.lockedoutpermanently";
     private final static String LOCKOUT_ATTEMPT_DEADLINE = "lockscreen.lockoutattemptdeadline";
     private final static String PATTERN_EVER_CHOSEN_KEY = "lockscreen.patterneverchosen";
-    public final static String PASSWORD_TYPE_KEY = "lockscreen.password_type";
     private final static String LOCK_PASSWORD_SALT_KEY = "lockscreen.password_salt";
+    private final static String LOCK_FINGER_ENABLED = "lockscreen.lockfingerenabled";
+    public final static String PASSWORD_TYPE_KEY = "lockscreen.password_type";
 
     private final Context mContext;
     private final ContentResolver mContentResolver;
@@ -113,6 +114,12 @@ public class LockPatternUtils {
     private static final AtomicBoolean sHaveNonZeroPatternFile = new AtomicBoolean(false);
     private static final AtomicBoolean sHaveNonZeroPasswordFile = new AtomicBoolean(false);
     private static FileObserver sPasswordObserver;
+
+    private Object am = null;
+    private AuthentecLoader loader = null;
+    private Class AM_STATUS = null;
+    private Class AuthentecMobile = null;
+    private Class TSM = null;
 
     public DevicePolicyManager getDevicePolicyManager() {
         if (mDevicePolicyManager == null) {
@@ -156,6 +163,14 @@ public class LockPatternUtils {
                 };
             sPasswordObserver.startWatching();
         }
+
+        try {
+            loader = AuthentecLoader.getInstance(context);
+            AM_STATUS = loader.getAMStatus();
+            TSM = loader.getTSM();
+            AuthentecMobile = loader.getAuthentecMobile();
+            am = loader.getAuthentecMobileInstance();
+        } catch (Exception e){e.printStackTrace();}
     }
 
     public int getRequestedMinimumPasswordLength() {
@@ -251,6 +266,14 @@ public class LockPatternUtils {
     }
 
     /**
+     * Check to see if the user has stored a finger.
+     * @return Whether a saved finger exists.
+     */
+    public boolean savedFingerExists() {
+        return true;
+    }
+
+    /**
      * Return true if the user has ever chosen a pattern.  This is true even if the pattern is
      * currently cleared.
      *
@@ -285,6 +308,11 @@ public class LockPatternUtils {
             case DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC:
                 if (isLockPasswordEnabled()) {
                     activePasswordQuality = DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC;
+                }
+                break;
+            case DevicePolicyManager.PASSWORD_QUALITY_FINGER:
+                if (isLockFingerEnabled()) {
+                    activePasswordQuality = DevicePolicyManager.PASSWORD_QUALITY_FINGER;
                 }
                 break;
         }
@@ -514,29 +542,21 @@ public class LockPatternUtils {
             byte[] saltedPassword = (password + getSalt()).getBytes();
             byte[] sha1 = MessageDigest.getInstance(algo = "SHA-1").digest(saltedPassword);
             byte[] md5 = MessageDigest.getInstance(algo = "MD5").digest(saltedPassword);
-            hashed = toHex(sha1, md5);
+            hashed = (toHex(sha1) + toHex(md5)).getBytes();
         } catch (NoSuchAlgorithmException e) {
             Log.w(TAG, "Failed to encode string because of missing algorithm: " + algo);
         }
         return hashed;
     }
 
-    private static final byte[] HEX_CHARS = new byte[]{
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
-    };
-
-    private static byte[] toHex(final byte[] array1, final byte[] array2) {
-        final byte[] result = new byte[(array1.length + array2.length) * 2];
-        int i = 0;
-        for (final byte b : array1) {
-            result[i++] = HEX_CHARS[(b >> 4) & 0xf];
-            result[i++] = HEX_CHARS[b & 0xf];
+    private static String toHex(byte[] ary) {
+        final String hex = "0123456789ABCDEF";
+        String ret = "";
+        for (int i = 0; i < ary.length; i++) {
+            ret += hex.charAt((ary[i] >> 4) & 0xf);
+            ret += hex.charAt(ary[i] & 0xf);
         }
-        for (final byte b : array2) {
-            result[i++] = HEX_CHARS[(b >> 4) & 0xf];
-            result[i++] = HEX_CHARS[b & 0xf];
-        }
-        return result;
+        return ret;
     }
 
     /**
@@ -560,10 +580,31 @@ public class LockPatternUtils {
     }
 
     /**
+     * @return Whether the lock finger is enabled.
+     */
+    public boolean isLockFingerEnabled() {
+        return getBoolean(LOCK_FINGER_ENABLED)
+                && getLong(PASSWORD_TYPE_KEY, 0)
+                        == DevicePolicyManager.PASSWORD_QUALITY_FINGER;
+    }
+
+    /**
      * Set whether the lock pattern is enabled.
      */
     public void setLockPatternEnabled(boolean enabled) {
         setBoolean(Settings.Secure.LOCK_PATTERN_ENABLED, enabled);
+    }
+
+    /**
+     * Set whether the lock finger is enabled.
+     */
+    public void setLockFingerEnabled(boolean enabled) {
+        setBoolean(LOCK_FINGER_ENABLED, enabled);
+        if (enabled) {
+            setLong(PASSWORD_TYPE_KEY, DevicePolicyManager.PASSWORD_QUALITY_FINGER);
+        } else {
+            setLong(PASSWORD_TYPE_KEY, DevicePolicyManager.PASSWORD_QUALITY_SOMETHING);
+        }
     }
 
     /**
@@ -593,59 +634,59 @@ public class LockPatternUtils {
     public void setTactileFeedbackEnabled(boolean enabled) {
         setBoolean(Settings.Secure.LOCK_PATTERN_TACTILE_FEEDBACK_ENABLED, enabled);
     }
-    
+
     public void setVisibleDotsEnabled(boolean enabled) {
-        setBoolean(Settings.Secure.LOCK_DOTS_VISIBLE, enabled);        
+        setBoolean(Settings.Secure.LOCK_DOTS_VISIBLE, enabled);
     }
-    
+
     public boolean isVisibleDotsEnabled() {
         return getBoolean(Settings.Secure.LOCK_DOTS_VISIBLE, true);
     }
-    
+
     public void setShowErrorPath(boolean enabled) {
-        setBoolean(Settings.Secure.LOCK_SHOW_ERROR_PATH, enabled);        
+        setBoolean(Settings.Secure.LOCK_SHOW_ERROR_PATH, enabled);
     }
-    
+
     public boolean isShowErrorPath() {
         return getBoolean(Settings.Secure.LOCK_SHOW_ERROR_PATH, true);
     }
-    
+
     public void setShowCustomMsg(boolean enabled) {
         setBoolean(Settings.Secure.LOCK_SHOW_CUSTOM_MSG, enabled);
     }
-    
+
     public boolean isShowCustomMsg() {
         return getBoolean(Settings.Secure.LOCK_SHOW_CUSTOM_MSG, false);
     }
-    
+
     public void setCustomMsg(String msg) {
         setString(Settings.Secure.LOCK_CUSTOM_MSG, msg);
     }
-    
+
     public String getCustomMsg() {
         return getString(Settings.Secure.LOCK_CUSTOM_MSG);
     }
-    
+
     public int getIncorrectDelay() {
         return getInt(Settings.Secure.LOCK_INCORRECT_DELAY, 2000);
     }
-    
+
     public void setIncorrectDelay(int delay) {
         setInt(Settings.Secure.LOCK_INCORRECT_DELAY, delay);
     }
-    
+
     public void setShowUnlockMsg(boolean enabled) {
         setBoolean(Settings.Secure.SHOW_UNLOCK_TEXT, enabled);
     }
-    
+
     public boolean isShowUnlockMsg() {
         return getBoolean(Settings.Secure.SHOW_UNLOCK_TEXT, true);
     }
-    
+
     public void setShowUnlockErrMsg(boolean enabled) {
         setBoolean(Settings.Secure.SHOW_UNLOCK_ERR_TEXT, enabled);
     }
-    
+
     public boolean isShowUnlockErrMsg() {
         return getBoolean(Settings.Secure.SHOW_UNLOCK_ERR_TEXT, true);
     }
@@ -852,7 +893,7 @@ public class LockPatternUtils {
         return 1 ==
                 android.provider.Settings.Secure.getInt(mContentResolver, secureSettingKey, 0);
     }
-    
+
     private boolean getBoolean(String systemSettingKey, boolean defaultValue) {
         return 1 ==
                 android.provider.Settings.Secure.getInt(
@@ -872,7 +913,7 @@ public class LockPatternUtils {
     private void setLong(String secureSettingKey, long value) {
         android.provider.Settings.Secure.putLong(mContentResolver, secureSettingKey, value);
     }
-    
+
     private int getInt(String systemSettingKey, int def) {
         return android.provider.Settings.Secure.getInt(mContentResolver, systemSettingKey, def);
     }
@@ -880,16 +921,16 @@ public class LockPatternUtils {
     private void setInt(String systemSettingKey, int value) {
         android.provider.Settings.Secure.putInt(mContentResolver, systemSettingKey, value);
     }
-    
+
     private String getString(String systemSettingKey) {
         String s = android.provider.Settings.Secure.getString(mContentResolver, systemSettingKey);
-        
+
         if (s == null)
             return "";
-    
+
         return s;
     }
-    
+
     private void setString(String systemSettingKey, String value) {
         android.provider.Settings.Secure.putString(mContentResolver, systemSettingKey, value);
     }
@@ -897,10 +938,12 @@ public class LockPatternUtils {
     public boolean isSecure() {
         long mode = getKeyguardStoredPasswordQuality();
         final boolean isPattern = mode == DevicePolicyManager.PASSWORD_QUALITY_SOMETHING;
+        final boolean isFinger = mode == DevicePolicyManager.PASSWORD_QUALITY_FINGER;
         final boolean isPassword = mode == DevicePolicyManager.PASSWORD_QUALITY_NUMERIC
                 || mode == DevicePolicyManager.PASSWORD_QUALITY_ALPHABETIC
                 || mode == DevicePolicyManager.PASSWORD_QUALITY_ALPHANUMERIC;
         final boolean secure = isPattern && isLockPatternEnabled() && savedPatternExists()
+                || isFinger && isLockFingerEnabled() && savedFingerExists()
                 || isPassword && savedPasswordExists();
         return secure;
     }
@@ -942,5 +985,44 @@ public class LockPatternUtils {
             // What can we do?
         }
         return false;
+    }
+
+    public int fingerprintUnlock(String sScreen, Context ctx) {
+        int iResult = 0;
+
+        try {
+            if (! (Boolean) AuthentecMobile.getMethod("AM2ClientLibraryLoaded").invoke(am)) {
+                return AM_STATUS.getDeclaredField("eAM_STATUS_LIBRARY_NOT_AVAILABLE").getInt(AM_STATUS);
+            }
+
+            if(null == ctx){
+                return AM_STATUS.getDeclaredField("eAM_STATUS_INVALID_PARAMETER").getInt(AM_STATUS);
+            }
+
+            //int iResult = TSM.LAP(ctx).verify().viaGfxScreen(sScreen).exec();
+            Class partTypes[] = new Class[1];
+            Object argList[] = new Object[1];
+
+            partTypes[0] = Context.class;
+            argList[0] = ctx;
+            Object TSMi = TSM.getMethod("LAP", partTypes).invoke(null, argList);
+
+            TSM.getMethod("verify").invoke(TSMi);
+
+            partTypes[0] = String.class;
+            argList[0] = sScreen;
+            TSM.getMethod("viaGfxScreen", partTypes).invoke(TSMi, argList);
+
+            iResult = (Integer) TSM.getMethod("exec").invoke(TSMi);
+            TSMi = null;
+
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } catch (Exception e){e.printStackTrace();}
+
+        return iResult;
     }
 }
