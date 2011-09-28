@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- THIS FILE WAS AUTO-GENERATED, MANUAL MODIFICATIONS WILL BE LOST! -->
+<!-- resource category: keyguard -->
+<!-- file generated at 05:10:05 on 2011/08/12-->
+<resources>
+    <string name="keyguard_finger_please_swipe">Deslize o dedo sobre o sensor para desbloquear</string>
+    <string name="keyguard_finger_ui_timeout">O tempo limite da interface do usuário expirou!</string>
+    <string name="keyguard_finger_failed_to_unlock">Falha ao desbloquear!</string>
+    <string name="keyguard_finger_screen_off">Tela apagada</string>
+    <string name="keyguard_finger_screen_on">Tela acesa</string>
+    <string name="keyguard_finger_match">Correspondência encontrada para o dedo. Desbloqueando tela...</string>
+    <string name="keyguard_finger_not_match">Nenhuma correspondência encontrada para o dedo...</string>
+    <string name="keyguard_finger_swipe_too_far_right">Deslize o dedo pelo centro.</string>
+    <string name="keyguard_finger_swipe_too_far_left">Deslize o dedo pelo centro.</string>
+    <string name="keyguard_finger_swipe_too_fast">Movimento rápido demais.</string>
+    <string name="keyguard_finger_swipe_too_short">Movimento curto demais.</string>
+    <string name="keyguard_finger_swipe_too_slow">Movimento lento demais.</string>
+    <string name="keyguard_finger_swipe_too_skewed">Movimento inclinado demais.</string>
+    <string name="lockscreen_too_many_failed_fingers_dialog_message">Sua impressão digital não identificou você %1$d vezes.\n\nTente novamente em %2$d segundos.</string>
+    <string name="lockscreen_failed_fingers_almost_glogin">Sua impressão digital não identificou você %1$d vezes. Depois de mais %2$d identificação(ões) malsucedida(s), você será solicitado a desbloquear o telefone usando seu logon do Google.\n\n Tente novamente em %3$d segundos.</string>
+    <string name="lockscreen_forgot_finger_button_text">Esqueceu o dedo?</string>
+</resources>
