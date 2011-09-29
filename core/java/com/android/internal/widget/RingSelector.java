@@ -82,6 +82,7 @@ public class RingSelector extends ViewGroup {
     private final int mSecRingCenterOffset;
 
     private boolean mUseMiddleRing = true;
+    private boolean mUnlockMiddle = false;
 
     /**
      * Either {@link #HORIZONTAL} or {@link #VERTICAL}.
@@ -813,6 +814,11 @@ public class RingSelector extends ViewGroup {
                     mCurrentRing = mLeftRing;
                     mOtherRing1 = mRightRing;
                     mOtherRing2 = mMiddleRing;
+                    if (mUnlockMiddle) {
+                        for (SecRing secRing : mSecRings) {
+                            secRing.show();
+                        }
+                    }
                     setGrabbedState(OnRingTriggerListener.LEFT_RING);
                 } else if (rightHit) {
                     mCurrentRing = mRightRing;
@@ -823,11 +829,11 @@ public class RingSelector extends ViewGroup {
                     mCurrentRing = mMiddleRing;
                     mOtherRing1 = mLeftRing;
                     mOtherRing2 = mRightRing;
-
-                    for (SecRing secRing : mSecRings) {
-                        secRing.show();
+                    if (!mUnlockMiddle) {
+                        for (SecRing secRing : mSecRings) {
+                            secRing.show();
+                        }
                     }
-
                     setGrabbedState(OnRingTriggerListener.MIDDLE_RING);
                 }
                 mCurrentRing.setState(Ring.STATE_PRESSED);
@@ -878,7 +884,15 @@ public class RingSelector extends ViewGroup {
             switch (action) {
                 case MotionEvent.ACTION_MOVE:
                     moveRing(x, y);
-                    if (mUseMiddleRing && mCurrentRing == mMiddleRing) {
+                    if (!mUnlockMiddle && mUseMiddleRing && mCurrentRing == mMiddleRing) {
+                        for (int q = 0; q < 4; q++) {
+                            if (!mSecRings[q].isHidden() && mSecRings[q].contains((int) x, (int) y)) {
+                                mSecRings[q].activate();
+                            } else {
+                                mSecRings[q].deactivate();
+                            }
+                        }
+                    } else if (mUnlockMiddle && mUseMiddleRing && mCurrentRing == mLeftRing) {
                         for (int q = 0; q < 4; q++) {
                             if (!mSecRings[q].isHidden() && mSecRings[q].contains((int) x, (int) y)) {
                                 mSecRings[q].activate();
@@ -892,7 +906,21 @@ public class RingSelector extends ViewGroup {
                     mSelectedRingId = -1;
                     boolean thresholdReached = false;
 
-                    if (mCurrentRing != mMiddleRing) {
+                    if (mUnlockMiddle) {
+                        if (mCurrentRing != mLeftRing) {
+                            int dx = (int) x - mCurrentRing.alignCenterX;
+                            int dy = (int) y - mCurrentRing.alignCenterY;
+                            thresholdReached = (dx * dx + dy * dy) > mThresholdRadiusSq;
+                        } else if (mUseMiddleRing) {
+                            for (int q = 0; q < 4; q++) {
+                                if (!mSecRings[q].isHidden() && mSecRings[q].contains((int) x, (int) y)) {
+                                    thresholdReached = true;
+                                    mSelectedRingId = q;
+                                    break;
+                                }
+                            }
+                        }
+                    } else if (mCurrentRing != mMiddleRing) {
                         int dx = (int) x - mCurrentRing.alignCenterX;
                         int dy = (int) y - mCurrentRing.alignCenterY;
                         thresholdReached = (dx * dx + dy * dy) > mThresholdRadiusSq;
@@ -1144,6 +1172,9 @@ public class RingSelector extends ViewGroup {
         mMiddleRing.setHiddenState(!enable);
     }
 
+    public void enableUnlockMiddle(boolean enable) {
+        mUnlockMiddle = enable;
+    }
     /**
      * Triggers haptic feedback.
      */

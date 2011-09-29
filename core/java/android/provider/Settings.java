@@ -2535,6 +2535,13 @@ public final class Settings {
         public static final String LOCKSCREEN_ROTARY_HIDE_ARROWS = "lockscreen_rotary_hide_arrows";
 
         /**
+         * When enabled, ring style lockscreen switches app started and unlock, so the unlock ring
+         * is in the middle
+         * @hide
+         */
+        public static final String LOCKSCREEN_RING_UNLOCK_MIDDLE = "lockscreen_ring_unlock_middle";
+
+        /**
          * Sets the lockscreen style
          * @hide
          */
