@@ -24,6 +24,12 @@
         <item>39937795</item>
         <item>116387224</item>
     </integer-array>
+    <!-- Defines the shutdown options shown in the reboot dialog. -->
+    <array name="shutdown_reboot_options">
+        <item>重启模式</item>
+        <item>刷机模式</item>
+        <item>引导模式</item>
+    </array>
     <!-- Do not translate. -->
     <integer-array name="maps_starting_zoom">
         <item>2</item>
