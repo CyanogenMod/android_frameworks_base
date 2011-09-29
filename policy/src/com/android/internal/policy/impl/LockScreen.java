@@ -538,21 +538,36 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             setLenseWidgetsVisibility(View.INVISIBLE);
 
         mRingSelector.enableMiddleRing(mCustomAppToggle);
+        mRingSelector.enableUnlockMiddle(mRotaryUnlockDown);
+
+        //enable switching unlock and custom app for ring selector
+        if(mRotaryUnlockDown && mCustomAppToggle){
+            //make unlock the middle one
+            mRingSelector.setLeftRingResources(
+                R.drawable.ic_jog_dial_custom,
+                R.drawable.jog_tab_target_green,
+                R.drawable.jog_ring_ring_green);
+            mRingSelector.setMiddleRingResources(
+                R.drawable.ic_jog_dial_unlock,
+                R.drawable.jog_tab_target_green,
+                R.drawable.jog_ring_ring_green);
+        }else{
+            //default unlock on left
+            mRingSelector.setLeftRingResources(
+                R.drawable.ic_jog_dial_unlock,
+                R.drawable.jog_tab_target_green,
+                R.drawable.jog_ring_ring_green);
+            mRingSelector.setMiddleRingResources(
+                R.drawable.ic_jog_dial_custom,
+                R.drawable.jog_tab_target_green,
+                R.drawable.jog_ring_ring_green);
+        }
 
         mTabSelector.setLeftTabResources(
                 R.drawable.ic_jog_dial_unlock,
                 R.drawable.jog_tab_target_green,
                 R.drawable.jog_tab_bar_left_unlock,
                 R.drawable.jog_tab_left_unlock);
-
-        mRingSelector.setLeftRingResources(
-                R.drawable.ic_jog_dial_unlock,
-                R.drawable.jog_tab_target_green,
-                R.drawable.jog_ring_ring_green);
-        mRingSelector.setMiddleRingResources(
-                R.drawable.ic_jog_dial_custom,
-                R.drawable.jog_tab_target_green,
-                R.drawable.jog_ring_ring_green);
 
         updateRightTabResources();
 
@@ -782,16 +797,32 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
     /** {@inheritDoc} */
     public void onRingTrigger(View v, int whichRing, int whichApp) {
+        boolean mUnlockTrigger=false;
+        boolean mCustomAppTrigger=false;
+
         if (whichRing == RingSelector.OnRingTriggerListener.LEFT_RING) {
+            if(mRotaryUnlockDown)
+                mCustomAppTrigger=true;
+            else
+                mUnlockTrigger=true;
+        }
+        if (whichRing == RingSelector.OnRingTriggerListener.MIDDLE_RING) {
+            if(mRotaryUnlockDown)
+                mUnlockTrigger=true;
+            else
+                mCustomAppTrigger=true;
+        }
+
+        if (mUnlockTrigger) {
             mCallback.goToUnlockScreen();
-        } else if (whichRing == RingSelector.OnRingTriggerListener.RIGHT_RING) {
-            toggleSilentMode();
-            updateRightTabResources();
-            mCallback.pokeWakelock();
-        } else if (whichRing == RingSelector.OnRingTriggerListener.MIDDLE_RING) {
+        }else if (mCustomAppTrigger) {
             if (mCustomRingAppActivities[whichApp] != null) {
                 runActivity(mCustomRingAppActivities[whichApp]);
             }
+        }else if (whichRing == RingSelector.OnRingTriggerListener.RIGHT_RING) {
+            toggleSilentMode();
+            updateRightTabResources();
+            mCallback.pokeWakelock();
         }
     }
 
