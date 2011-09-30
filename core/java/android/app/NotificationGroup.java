@@ -99,9 +99,7 @@ public class NotificationGroup implements Parcelable {
     }
 
     public boolean hasPackage(String pkg) {
-        boolean result = mPackages.contains(pkg);
-        Log.i(TAG, "Group: " + mName + " containing : " + pkg + " : " + result);
-        return result;
+        return mPackages.contains(pkg);
     }
 
     public boolean isDirty() {
