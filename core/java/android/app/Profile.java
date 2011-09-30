@@ -83,10 +83,14 @@ public class Profile implements Parcelable {
 
     /** @hide */
     public void addProfileGroup(ProfileGroup value) {
-        profileGroups.put(value.getUuid(), value);
         if (value.isDefaultGroup()) {
+            /* we must not have more than one default group */
+            if (mDefaultGroup != null) {
+                return;
+            }
             mDefaultGroup = value;
         }
+        profileGroups.put(value.getUuid(), value);
         mDirty = true;
     }
 

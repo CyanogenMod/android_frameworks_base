@@ -239,7 +239,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
         /* enforce a matchup between profile and notification group, which not only
          * works by UUID, but also by name for backwards compatibility */
         for (ProfileGroup pg : profile.getProfileGroups()) {
-            if (pg.matches(group)) {
+            if (pg.matches(group, defaultGroup)) {
                 return;
             }
         }
