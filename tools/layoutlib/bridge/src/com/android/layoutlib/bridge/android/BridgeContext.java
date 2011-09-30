@@ -25,11 +25,11 @@ import com.android.ide.common.rendering.api.ResourceValue;
 import com.android.ide.common.rendering.api.StyleResourceValue;
 import com.android.layoutlib.bridge.Bridge;
 import com.android.layoutlib.bridge.BridgeConstants;
+import com.android.layoutlib.bridge.impl.ParserFactory;
 import com.android.layoutlib.bridge.impl.Stack;
 import com.android.resources.ResourceType;
 import com.android.util.Pair;
 
-import org.kxml2.io.KXmlParser;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
@@ -76,6 +76,8 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Map.Entry;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Custom implementation of Context/Activity to handle non compiled resources.
@@ -199,6 +201,9 @@ public final class BridgeContext extends Activity {
      * @param parser the parser to add.
      */
     public void pushParser(BridgeXmlBlockParser parser) {
+        if (ParserFactory.LOG_PARSER) {
+            System.out.println("PUSH " + parser.getParser().toString());
+        }
         mParserStack.push(parser);
     }
 
@@ -206,7 +211,10 @@ public final class BridgeContext extends Activity {
      * Removes the parser at the top of the stack
      */
     public void popParser() {
-        mParserStack.pop();
+        BridgeXmlBlockParser parser = mParserStack.pop();
+        if (ParserFactory.LOG_PARSER) {
+            System.out.println("POPD " + parser.getParser().toString());
+        }
     }
 
     /**
@@ -294,12 +302,17 @@ public final class BridgeContext extends Activity {
 
     public Pair<View, Boolean> inflateView(ResourceReference resource, ViewGroup parent,
             boolean attachToRoot, boolean skipCallbackParser) {
-        String layoutName = resource.getName();
         boolean isPlatformLayout = resource.isFramework();
 
         if (isPlatformLayout == false && skipCallbackParser == false) {
             // check if the project callback can provide us with a custom parser.
-            ILayoutPullParser parser = mProjectCallback.getParser(layoutName);
+            ILayoutPullParser parser;
+            if (resource instanceof ResourceValue) {
+                parser = mProjectCallback.getParser((ResourceValue) resource);
+            } else {
+                parser = mProjectCallback.getParser(resource.getName());
+            }
+
             if (parser != null) {
                 BridgeXmlBlockParser blockParser = new BridgeXmlBlockParser(parser,
                         this, resource.isFramework());
@@ -334,9 +347,7 @@ public final class BridgeContext extends Activity {
                 // we need to create a pull parser around the layout XML file, and then
                 // give that to our XmlBlockParser
                 try {
-                    KXmlParser parser = new KXmlParser();
-                    parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true);
-                    parser.setInput(new FileInputStream(xml), "UTF-8"); //$NON-NLS-1$);
+                    XmlPullParser parser = ParserFactory.create(xml);
 
                     // set the resource ref to have correct view cookies
                     mBridgeInflater.setResourceReference(resource);
@@ -367,7 +378,7 @@ public final class BridgeContext extends Activity {
         } else {
             Bridge.getLog().error(LayoutLog.TAG_BROKEN,
                     String.format("Layout %s%s does not exist.", isPlatformLayout ? "android:" : "",
-                            layoutName), null);
+                            resource.getName()), null);
         }
 
         return Pair.of(null, false);
@@ -502,11 +513,12 @@ public final class BridgeContext extends Activity {
             return null;
         }
 
-        boolean[] frameworkAttributes = new boolean[1];
-        TreeMap<Integer, String> styleNameMap = searchAttrs(attrs, frameworkAttributes);
+        AtomicBoolean frameworkAttributes = new AtomicBoolean();
+        AtomicReference<String> attrName = new AtomicReference<String>();
+        TreeMap<Integer, String> styleNameMap = searchAttrs(attrs, frameworkAttributes, attrName);
 
         BridgeTypedArray ta = ((BridgeResources) mSystemResources).newTypeArray(attrs.length,
-                isPlatformFile);
+                isPlatformFile, frameworkAttributes.get(), attrName.get());
 
         // look for a custom style.
         String customStyle = null;
@@ -597,7 +609,7 @@ public final class BridgeContext extends Activity {
         }
 
         String namespace = BridgeConstants.NS_RESOURCES;
-        if (frameworkAttributes[0] == false) {
+        if (frameworkAttributes.get() == false) {
             // need to use the application namespace
             namespace = mProjectCallback.getNamespace();
         }
@@ -674,23 +686,25 @@ public final class BridgeContext extends Activity {
      */
     private BridgeTypedArray createStyleBasedTypedArray(StyleResourceValue style, int[] attrs)
             throws Resources.NotFoundException {
-        TreeMap<Integer, String> styleNameMap = searchAttrs(attrs, null);
 
         BridgeTypedArray ta = ((BridgeResources) mSystemResources).newTypeArray(attrs.length,
-                false /* platformResourceFlag */);
+                false, true, null);
 
-        // loop through all the values in the style map, and init the TypedArray with
-        // the style we got from the dynamic id
-        for (Entry<Integer, String> styleAttribute : styleNameMap.entrySet()) {
-            int index = styleAttribute.getKey().intValue();
+        // for each attribute, get its name so that we can search it in the style
+        for (int i = 0 ; i < attrs.length ; i++) {
+            Pair<ResourceType, String> resolvedResource = Bridge.resolveResourceId(attrs[i]);
+            if (resolvedResource != null) {
+                String attrName = resolvedResource.getSecond();
+                // look for the value in the given style
+                ResourceValue resValue = mRenderResources.findItemInStyle(style, attrName);
 
-            String name = styleAttribute.getValue();
+                if (resValue != null) {
+                    // resolve it to make sure there are no references left.
+                    ta.bridgeSetValue(i, attrName, mRenderResources.resolveResValue(resValue));
 
-            // get the value from the style, or its parent styles.
-            ResourceValue resValue = mRenderResources.findItemInStyle(style, name);
-
-            // resolve it to make sure there are no references left.
-            ta.bridgeSetValue(index, name, mRenderResources.resolveResValue(resValue));
+                    resValue = mRenderResources.resolveResValue(resValue);
+                }
+            }
         }
 
         ta.sealArray();
@@ -709,10 +723,13 @@ public final class BridgeContext extends Activity {
      * that is used to reference the attribute later in the TypedArray.
      *
      * @param attrs An attribute array reference given to obtainStyledAttributes.
+     * @param outFrameworkFlag out value indicating if the attr array is a framework value
+     * @param outAttrName out value for the resolved attr name.
      * @return A sorted map Attribute-Value to Attribute-Name for all attributes declared by the
      *         attribute array. Returns null if nothing is found.
      */
-    private TreeMap<Integer,String> searchAttrs(int[] attrs, boolean[] outFrameworkFlag) {
+    private TreeMap<Integer,String> searchAttrs(int[] attrs, AtomicBoolean outFrameworkFlag,
+            AtomicReference<String> outAttrName) {
         // get the name of the array from the framework resources
         String arrayName = Bridge.resolveResourceId(attrs);
         if (arrayName != null) {
@@ -729,7 +746,10 @@ public final class BridgeContext extends Activity {
             }
 
             if (outFrameworkFlag != null) {
-                outFrameworkFlag[0] = true;
+                outFrameworkFlag.set(true);
+            }
+            if (outAttrName != null) {
+                outAttrName.set(arrayName);
             }
 
             return attributes;
@@ -751,7 +771,10 @@ public final class BridgeContext extends Activity {
             }
 
             if (outFrameworkFlag != null) {
-                outFrameworkFlag[0] = false;
+                outFrameworkFlag.set(false);
+            }
+            if (outAttrName != null) {
+                outAttrName.set(arrayName);
             }
 
             return attributes;

@@ -2458,6 +2458,7 @@ class PackageManagerService extends IPackageManager.Stub {
                 finalList.add(pi);
             }
         }
+
         return finalList;
     }
 
