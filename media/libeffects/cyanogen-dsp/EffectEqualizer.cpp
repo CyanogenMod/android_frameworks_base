@@ -249,17 +249,12 @@ int32_t EffectEqualizer::process(audio_buffer_t *in, audio_buffer_t *out)
             float signalPowerDb = logf(mPowerSquared / mNextUpdateInterval / float(int64_t(1) << 48) + 1e-10f) / logf(10.0f) * 10.0f;
             signalPowerDb += 96.0f - 6.0f;
 
-            /* Limit automatic EQ to small adjustments to limit the noise
-             * introduced by updates of EQ bands. Additionally, we bias
-	     * the loudness estimate strongly towards the highest seen
-	     * values, to avoid pumping artifacts. */
-            if (mLoudness < signalPowerDb - 1.0f) {
-                mLoudness += 1.0f;
-            } else if (mLoudness > signalPowerDb - 0.1f) {
-                mLoudness -= 0.1f;
+	    /* Immediate rise-time, and linear 10 dB/s decay */
+            if (mLoudness > signalPowerDb + 0.1) {
+                mLoudness -= 0.1;
             } else {
                 mLoudness = signalPowerDb;
-            }
+	    }
 
             if (mEnable && mFade < 100) {
                 mFade += 1;
