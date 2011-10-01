@@ -134,6 +134,7 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"关闭收音机"</string>
     <string name="screen_lock" msgid="799094655496098153">"屏幕锁定"</string>
     <string name="power_off" msgid="4266614107412865048">"关机"</string>
+    <string name="global_action_screenshot">截屏</string>
     <string name="reboot_system">重启</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"正在关机..."</string>
     <string name="reboot_progress">正在重启...</string>
@@ -141,6 +142,12 @@
     <string name="recent_tasks_title" msgid="3691764623638127888">"近期任务"</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"没有最近的应用程序。"</string>
     <string name="global_actions" msgid="2406416831541615258">"手机选项"</string>
+    <!-- label for item that emulates the hardware button: home -->
+    <string name="global_action_home">主页</string>
+    <!-- label for item that emulates the hardware button: menu -->
+    <string name="global_action_menu">菜单</string>
+    <!-- label for item that emulates the hardware button: back -->
+    <string name="global_action_back">返回</string>
     <string name="global_action_lock" msgid="2844945191792119712">"屏幕锁定"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"关机"</string>
     <string name="global_action_reboot">重启</string>
@@ -921,6 +928,20 @@
 
     <!--Application killed toast -->
     <string name="app_killed_message">应用程序已结束</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">默认</string>
+    <string name="profileNameWork">工作</string>
+    <string name="profileNameHome">家中</string>
+    <string name="profileNameSilent">静音</string>
+    <string name="profileNameNight">深夜</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">电话</string>
+    <string name="profileGroupCalendar">日历</string>
+    <string name="profileGroupGmail" translate="false">Gmail</string>
+    <string name="profileGroupEmail">电子邮件</string>
+    <string name="profileGroupSMS">短信</string>
 
     <!-- Phone goggles -->
     <string name="phone_goggles_problem_count">问题 #%1$d: </string>
