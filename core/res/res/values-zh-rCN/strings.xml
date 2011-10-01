@@ -134,6 +134,7 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"关闭收音机"</string>
     <string name="screen_lock" msgid="799094655496098153">"屏幕锁定"</string>
     <string name="power_off" msgid="4266614107412865048">"关机"</string>
+    <string name="global_action_screenshot">截屏</string>
     <string name="reboot_system">重启</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"正在关机..."</string>
     <string name="reboot_progress">正在重启...</string>
@@ -921,6 +922,20 @@
 
     <!--Application killed toast -->
     <string name="app_killed_message">应用程序已结束</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">默认</string>
+    <string name="profileNameWork">工作</string>
+    <string name="profileNameHome">家中</string>
+    <string name="profileNameSilent">静音</string>
+    <string name="profileNameNight">深夜</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">电话</string>
+    <string name="profileGroupCalendar">日历</string>
+    <string name="profileGroupGmail" translate="false">Gmail</string>
+    <string name="profileGroupEmail">电子邮件</string>
+    <string name="profileGroupSMS">短信</string>
 
     <!-- Phone goggles -->
     <string name="phone_goggles_problem_count">问题 #%1$d: </string>
