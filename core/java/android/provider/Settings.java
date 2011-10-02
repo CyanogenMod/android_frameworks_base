@@ -2473,6 +2473,12 @@ public final class Settings {
         public static final String VOLUME_WAKE_SCREEN = "volume_wake_screen";
 
         /**
+         * Whether to wake the screen with the front keys. The value is boolean (1 or 0).
+         * @hide
+         */
+        public static final String FRONTKEYS_WAKE_SCREEN = "frontkeys_wake_screen";
+
+        /**
          * Whether the lockscreen should be disabled if security is on
          * @hide
          */

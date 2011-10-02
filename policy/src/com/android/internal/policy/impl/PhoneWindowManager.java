@@ -307,6 +307,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // Behavior of volume wake
     boolean mVolumeWakeScreen;
 
+    // Behavior of front keys wake
+    boolean mFrontKeysWakeScreen;
+
     // Behavior of volbtn music controls
     boolean mVolBtnMusicControls;
     // Behavior of cambtn music controls
@@ -354,6 +357,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.TRACKBALL_WAKE_SCREEN), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.VOLUME_WAKE_SCREEN), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.FRONTKEYS_WAKE_SCREEN), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     Settings.System.VOLBTN_MUSIC_CONTROLS), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
@@ -769,6 +774,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.System.TRACKBALL_WAKE_SCREEN, 1) == 1);
             mVolumeWakeScreen = (Settings.System.getInt(resolver,
                     Settings.System.VOLUME_WAKE_SCREEN, 0) == 1);
+            mFrontKeysWakeScreen = (Settings.System.getInt(resolver,
+                    Settings.System.FRONTKEYS_WAKE_SCREEN, 0) == 1);
             mVolBtnMusicControls = (Settings.System.getInt(resolver,
                     Settings.System.VOLBTN_MUSIC_CONTROLS, 1) == 1);
             mCamBtnMusicControls = (Settings.System.getInt(resolver,
@@ -2064,7 +2071,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     & (WindowManagerPolicy.FLAG_WAKE | WindowManagerPolicy.FLAG_WAKE_DROPPED)) != 0
                     || ((keyCode == BTN_MOUSE) && mTrackballWakeScreen)
                     || ((keyCode == KeyEvent.KEYCODE_VOLUME_UP) && mVolumeWakeScreen)
-                    || ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) && mVolumeWakeScreen);
+                    || ((keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) && mVolumeWakeScreen)
+                    || ((keyCode == KeyEvent.KEYCODE_CALL) && mFrontKeysWakeScreen)
+                    || ((keyCode == KeyEvent.KEYCODE_ENDCALL) && mFrontKeysWakeScreen);
 
             // Don't wake the screen if we have not set the option "wake with volume" in CMParts
             // OR if "wake with volume" is set but screen is off due to proximity sensor
@@ -2079,6 +2088,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             // make sure keyevent get's handled as power key on volume-wake
             if(mVolumeWakeScreen && isWakeKey && ((keyCode == KeyEvent.KEYCODE_VOLUME_UP)
                     || (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN)))
+                keyCode = KeyEvent.KEYCODE_POWER;
+
+            // make sure keyevent get's handled as power key on frontkeys-wake
+            if(mFrontKeysWakeScreen && isWakeKey && ((keyCode == KeyEvent.KEYCODE_CALL)
+                    || (keyCode == KeyEvent.KEYCODE_ENDCALL)))
                 keyCode = KeyEvent.KEYCODE_POWER;
 
             if (down && isWakeKey) {
