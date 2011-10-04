@@ -919,6 +919,7 @@
     <!-- label for item that reboots the phone in phone options dialog -->
     <string name="global_action_reboot">Перезагрузить</string>
     <string name="reboot_system">Перезагрузить</string>
+    <string name="reboot_reboot">Перезагрузить</string>
     <string name="reboot_progress">Перезагрузка...</string>
     <string name="reboot_confirm">Телефон будет перезагружен.</string>
 
