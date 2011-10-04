@@ -152,6 +152,7 @@
     <string name="screen_lock" msgid="799094655496098153">"Blocco schermo"</string>
     <string name="power_off" msgid="4266614107412865048">"Spegni"</string>
     <string name="reboot_system">Riavvia</string>
+    <string name="reboot_reboot">Riavvia</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Spegnimento..."</string>
     <string name="reboot_progress">Riavvio in corso\u2026</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"Il telefono verrà spento."</string>

@@ -923,6 +923,8 @@
     <string name="global_action_reboot">Reiniciar</string>
     <string name="global_action_choose_profile">Escolher perfil</string>
     <string name="reboot_system">Reiniciar telefone</string>
+    <string name="reboot_reboot">Reiniciar</string>
+    <string name="reboot_recovery">Recuperação</string>
     <string name="reboot_progress">Reiniciando\u2026</string>
     <string name="reboot_confirm">Seu telefone irá reiniciar.</string>
     <string name="wildcardProfile">Outro</string>

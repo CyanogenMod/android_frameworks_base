@@ -155,6 +155,10 @@
 
     <!-- Button to reboot the phone, within the Phone Options dialog -->
     <string name="reboot_system">Neu starten</string>
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">Neu starten</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">Bootmenü</string>
     <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
     <string name="reboot_progress">Neu starten…</string>
     <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->

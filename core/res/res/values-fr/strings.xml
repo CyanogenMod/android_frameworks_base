@@ -145,6 +145,7 @@
     <string name="screen_lock" msgid="799094655496098153">"Verrouillage de l\'écran"</string>
     <string name="power_off" msgid="4266614107412865048">"Éteindre"</string>
     <string name="reboot_system">"Redémarrer"</string>
+    <string name="reboot_reboot">"Redémarrage"</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Arrêt en cours..."</string>
     <string name="reboot_progress">"Redémarrage en cours..."</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"Votre téléphone va s\'éteindre."</string>

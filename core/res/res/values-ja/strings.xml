@@ -918,6 +918,9 @@
     <!-- CM extra -->
     <string name="global_action_screenshot">"スクリーンショット"</string>
     <string name="reboot_system">"再起動する"</string>
+    <string name="reboot_reboot">"再起動"</string>
+    <string name="reboot_recovery">"リカバリ"</string>
+    <string name="reboot_bootloader">"ブートローダ"</string>
     <string name="reboot_progress">"再起動中..."</string>
     <string name="reboot_confirm">"携帯電話を再起動します。"</string>
     <string name="lockscreen_phone_label">"電話"</string>

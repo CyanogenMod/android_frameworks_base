@@ -151,6 +151,7 @@
     <string name="screen_lock">"Uzamknutie obrazovky"</string>
     <string name="power_off">"Vypnúť"</string>
     <string name="reboot_system">Reštartovať</string>
+    <string name="reboot_reboot">Reštart</string>
     <string name="shutdown_progress">"Prebieha vypínanie..."</string>
     <string name="reboot_progress">Reštartovanie\u2026</string>
     <string name="shutdown_confirm">"Váš telefón bude vypnutý."</string>
