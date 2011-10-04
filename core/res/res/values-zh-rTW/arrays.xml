@@ -29,12 +29,4 @@
         <item>3</item>
     </integer-array>
 
-
-    <!-- Defines the shutdown options shown in the reboot dialog. -->
-    <array name="shutdown_reboot_options">
-        <item>重新開機</item>
-        <item>Recovery</item>
-        <item>Bootloader</item>
-    </array>
-
 </resources>

@@ -145,6 +145,8 @@
     <string name="screen_lock" msgid="799094655496098153">"Заблок. екран"</string>
     <string name="power_off" msgid="4266614107412865048">"Вимкнути"</string>
     <string name="reboot_system">Перезавант. телефону</string>
+    <string name="reboot_reboot">Перезавантажити</string>
+    <string name="reboot_recovery">Реж. відновлення</string>
     <string name="shutdown_progress">"Завершення роботи\u2026"</string>
     <string name="reboot_progress">Перезавантаження\u2026</string>
     <string name="shutdown_confirm">"Ваш телефон буде вимкнений."</string>

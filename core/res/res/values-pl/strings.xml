@@ -148,6 +148,7 @@
     <string name="screen_lock" msgid="799094655496098153">"Blokada ekranu"</string>
     <string name="power_off" msgid="4266614107412865048">"Wyłącz"</string>
     <string name="reboot_system">Uruchom ponownie</string>
+    <string name="reboot_reboot">Uruchom ponownie</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Wyłączanie..."</string>
     <string name="reboot_progress">Ponowne uruchamianie…</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"Telefon zostanie wyłączony."</string>

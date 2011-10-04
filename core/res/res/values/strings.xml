@@ -295,6 +295,16 @@
     <string name="power_off">Power off</string>
     <!-- Button to reboot the phone, within the Phone Options dialog -->
     <string name="reboot_system">Reboot phone</string>
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">Reboot</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">Recovery</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">Bootloader</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">Fastboot</string>
 
     <!-- Shutdown Progress Dialog. This is shown if the user chooses to power off the phone. -->
     <string name="shutdown_progress">Shutting down\u2026</string>

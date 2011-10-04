@@ -153,6 +153,7 @@
     <string name="screen_lock">Näyttölukitus</string>
     <string name="power_off">Virta pois</string>
     <string name="reboot_system">Käynnistä uudelleen</string>
+    <string name="reboot_reboot">Käynnistä uudelleen</string>
 
     <string name="shutdown_progress">Sammutetaan\u2026</string>
 

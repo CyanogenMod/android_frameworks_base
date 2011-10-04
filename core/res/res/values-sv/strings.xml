@@ -145,6 +145,7 @@
     <string name="screen_lock" msgid="799094655496098153">"Skärmlås"</string>
     <string name="power_off" msgid="4266614107412865048">"Stäng av"</string>
     <string name="reboot_system">Starta om telefon</string>
+    <string name="reboot_reboot">Omstart</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Avslutar…"</string>
     <string name="reboot_progress">Startar om\u2026</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"Din telefon stängs av."</string>
