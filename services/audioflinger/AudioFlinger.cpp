@@ -138,6 +138,11 @@ AudioFlinger::AudioFlinger()
 
     mAudioHardware = AudioHardwareInterface::create();
 
+#ifdef WITH_STATIC_A2DP
+    mAudioHardware = new A2dpAudioInterface(mAudioHardware);
+#endif
+
+
     mHardwareStatus = AUDIO_HW_INIT;
     if (mAudioHardware->initCheck() == NO_ERROR) {
         // open 16-bit output stream for s/w mixer

@@ -103,11 +103,17 @@ else
  LOCAL_SHARED_LIBRARIES += libdl
 endif
 
+
 LOCAL_MODULE:= libaudioflinger
 
 ifeq ($(BOARD_HAVE_BLUETOOTH),true)
   LOCAL_CFLAGS += -DWITH_BLUETOOTH -DWITH_A2DP
   LOCAL_SHARED_LIBRARIES += liba2dp
+ifeq ($(BOARD_FORCE_STATIC_A2DP),true)
+  LOCAL_CFLAGS += -DWITH_STATIC_A2DP
+  LOCAL_SRC_FILES += A2dpAudioInterface.cpp
+  LOCAL_C_INCLUDES += $(call include-path-for, bluez)
+endif
 endif
 
 ifeq ($(AUDIO_POLICY_TEST),true)

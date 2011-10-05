@@ -21,7 +21,7 @@
 #include <utils/Log.h>
 #include <utils/String8.h>
 
-#include "A2dpAudioInterface.h"
+#include <A2dpAudioInterface.h>
 #include "audio/liba2dp.h"
 
 
