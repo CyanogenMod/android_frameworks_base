@@ -1648,6 +1648,13 @@ public final class Settings {
         public static final String VIBRATE_IN_CALL = "vibrate-in-call";
 
         /**
+         * Whether pressing the volume buttons should play a beep sound.
+         *
+         * @hide
+         */
+        public static final String VOLUME_KEY_BEEPS = "volume-key-beeps";
+
+        /**
          * The mapping of stream type (integer) to its setting.
          */
         public static final String[] VOLUME_SETTINGS = {

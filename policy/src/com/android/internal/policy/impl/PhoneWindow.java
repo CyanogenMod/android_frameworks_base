@@ -1356,7 +1356,9 @@ public class PhoneWindow extends Window implements MenuBuilder.Callback {
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_DOWN: {
-                if (!event.isCanceled()) {
+                if (!event.isCanceled()
+                        && (Settings.System.getInt(getContext().getContentResolver(),
+                        Settings.System.VOLUME_KEY_BEEPS, 1) == 1) ) {
                     AudioManager audioManager = (AudioManager) getContext().getSystemService(
                             Context.AUDIO_SERVICE);
                     if (audioManager != null) {
