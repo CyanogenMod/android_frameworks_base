@@ -59,7 +59,8 @@ class ScreenRotationAnimation {
     final Matrix mSnapshotFinalMatrix = new Matrix();
     final float[] mTmpFloats = new float[9];
 
-    public ScreenRotationAnimation(Context context, Display display, SurfaceSession session) {
+    public ScreenRotationAnimation(Context context, Display display, SurfaceSession session,
+            boolean inTransaction) {
         mContext = context;
         mDisplay = display;
 
@@ -84,46 +85,59 @@ class ScreenRotationAnimation {
         mOriginalWidth = mDisplayMetrics.widthPixels;
         mOriginalHeight = mDisplayMetrics.heightPixels;
 
-        Surface.openTransaction();
-        if (mSurface != null) {
-            mSurface.destroy();
-            mSurface = null;
+        if (!inTransaction) {
+            if (WindowManagerService.SHOW_TRANSACTIONS) Slog.i(WindowManagerService.TAG,
+                    ">>> OPEN TRANSACTION ScreenRotationAnimation");
+            Surface.openTransaction();
         }
+
         try {
-            mSurface = new Surface(session, 0, "FreezeSurface",
-                    -1, mWidth, mHeight, PixelFormat.OPAQUE, 0);
-        } catch (Surface.OutOfResourcesException e) {
-            Slog.w(TAG, "Unable to allocate freeze surface", e);
-        }
-        mSurface.setLayer(WindowManagerService.TYPE_LAYER_MULTIPLIER * 200);
-        setRotation(display.getRotation());
+            try {
+                mSurface = new Surface(session, 0, "FreezeSurface",
+                        -1, mWidth, mHeight, PixelFormat.OPAQUE, 0);
+                mSurface.setLayer(WindowManagerService.TYPE_LAYER_MULTIPLIER * 200);
+            } catch (Surface.OutOfResourcesException e) {
+                Slog.w(TAG, "Unable to allocate freeze surface", e);
+            }
 
-        Rect dirty = new Rect(0, 0, mWidth, mHeight);
-        Canvas c = null;
-        try {
-            c = mSurface.lockCanvas(dirty);
-        } catch (IllegalArgumentException e) {
-            Slog.w(TAG, "Unable to lock surface", e);
-            return;
-        } catch (Surface.OutOfResourcesException e) {
-            Slog.w(TAG, "Unable to lock surface", e);
-            return;
-        }
-        if (c == null) {
-            Slog.w(TAG, "Null surface");
-            return;
-        }
+            setRotation(display.getRotation());
 
-        if (screenshot != null) {
-            c.drawBitmap(screenshot, 0, 0, new Paint(0));
-        } else {
-            c.drawColor(Color.GREEN);
+            if (mSurface != null) {
+                Rect dirty = new Rect(0, 0, mWidth, mHeight);
+                Canvas c = null;
+                try {
+                    c = mSurface.lockCanvas(dirty);
+                } catch (IllegalArgumentException e) {
+                    Slog.w(TAG, "Unable to lock surface", e);
+                    return;
+                } catch (Surface.OutOfResourcesException e) {
+                    Slog.w(TAG, "Unable to lock surface", e);
+                    return;
+                }
+                if (c == null) {
+                    Slog.w(TAG, "Null surface");
+                    return;
+                }
+
+                if (screenshot != null) {
+                    c.drawBitmap(screenshot, 0, 0, new Paint(0));
+                } else {
+                    c.drawColor(Color.GREEN);
+                }
+
+                mSurface.unlockCanvasAndPost(c);
+            }
+        } finally {
+            if (!inTransaction) {
+                Surface.closeTransaction();
+                if (WindowManagerService.SHOW_TRANSACTIONS) Slog.i(WindowManagerService.TAG,
+                        "<<< CLOSE TRANSACTION ScreenRotationAnimation");
+            }
+
+            if (screenshot != null) {
+                screenshot.recycle();
+            }
         }
-
-        mSurface.unlockCanvasAndPost(c);
-        Surface.closeTransaction();
-
-        screenshot.recycle();
     }
 
     static int deltaRotation(int oldRotation, int newRotation) {
