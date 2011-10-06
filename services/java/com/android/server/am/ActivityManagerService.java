@@ -6964,6 +6964,7 @@ public final class ActivityManagerService extends ActivityManagerNative
         int res = result.get();
 
         Intent appErrorIntent = null;
+        Intent appSettingsIntent = null;
         synchronized (this) {
             if (r != null) {
                 mProcessCrashTimes.put(r.info.processName, r.info.uid,
@@ -6982,6 +6983,11 @@ public final class ActivityManagerService extends ActivityManagerNative
                     Binder.restoreCallingIdentity(oldId);
                 }
             }
+            else if (res == AppErrorDialog.FORCE_QUIT_AND_OPEN_APP_SETTINGS) {
+                appSettingsIntent = new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                        Uri.parse("package:" + r.info.packageName));
+                appSettingsIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            }
         }
 
         if (appErrorIntent != null) {
@@ -6989,6 +6995,13 @@ public final class ActivityManagerService extends ActivityManagerNative
                 mContext.startActivity(appErrorIntent);
             } catch (ActivityNotFoundException e) {
                 Slog.w(TAG, "bug report receiver dissappeared", e);
+            }
+        }
+        if (appSettingsIntent != null) {
+            try {
+                mContext.startActivity(appSettingsIntent);
+            } catch (ActivityNotFoundException e) {
+                Slog.w(TAG, "could not launch application settings", e);
             }
         }
     }
