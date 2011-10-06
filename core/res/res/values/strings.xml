@@ -2048,6 +2048,8 @@
     <string name="force_close">Force close</string>
     <!-- Button allowing the user to send a bug report for application which has encountered an error. -->
     <string name="report">Report</string>
+    <!-- Button allowing the user to open the application settings screen to edit permissions. -->
+    <string name="edit_perms">Edit permissions</string>
     <!-- Button allowing the user reset the revoked permissions for application which has encountered an error. -->
     <string name="reset_perms">Reset permissions</string>
     <!-- Button allowing the user to choose to wait for an application that is not responding to become responsive again. -->

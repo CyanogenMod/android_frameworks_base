@@ -35,6 +35,7 @@ class AppErrorDialog extends BaseErrorDialog {
     static final int FORCE_QUIT = 0;
     static final int FORCE_QUIT_AND_REPORT = 1;
     static final int FORCE_QUIT_AND_RESET_PERMS = 2;
+    static final int FORCE_QUIT_AND_OPEN_APP_SETTINGS = 3;
 
     // 5-minute timeout, then we automatically dismiss the crash dialog
     static final long DISMISS_TIMEOUT = 1000 * 60 * 5;
@@ -85,6 +86,9 @@ class AppErrorDialog extends BaseErrorDialog {
         }
 
         if (showRevoked) {
+            setButton(DialogInterface.BUTTON_NEUTRAL,
+                    res.getText(com.android.internal.R.string.edit_perms),
+                    mHandler.obtainMessage(FORCE_QUIT_AND_OPEN_APP_SETTINGS));
             setButton(DialogInterface.BUTTON_NEGATIVE,
                     res.getText(com.android.internal.R.string.reset_perms),
                     mHandler.obtainMessage(FORCE_QUIT_AND_RESET_PERMS));

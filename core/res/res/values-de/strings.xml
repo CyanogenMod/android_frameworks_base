@@ -981,5 +981,6 @@
     <string name="aerr_revoked_application">Die Anwendung <xliff:g id="application">%1$s</xliff:g> (Prozess <xliff:g id="process">%2$s</xliff:g>) wurde unerwartet beendet.\nACHTUNG!\nDer Anwendung wurden eine oder mehrere Berechtigungen entzogen, was zu Anwendungsfehlern führen kann. Bitte erteilen Sie ihr wieder Berechtigungen und versuchen es erneut.</string>
     <string name="aerr_revoked_process">Der Prozess <xliff:g id="process">%1$s</xliff:g> wurde unerwartet beendet.\nACHTUNG!\nDer Anwendung wurden eine oder mehrere Berechtigungen entzogen, was zu Anwendungsfehlern führen kann. Bitte erteilen Sie ihr wieder Berechtigungen und versuchen es erneut.</string>
     <string name="reset_perms">Berechtigungen zurücksetzen</string>
+    <string name="edit_perms">Berechtigungen ändern</string>
     <string name="openvpn_vpn_description">OpenVPN</string>
 </resources>
