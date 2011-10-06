@@ -136,6 +136,8 @@ public class NotificationManagerService extends INotificationManager.Stub
     private boolean mLedPulseAllColors;
     private boolean mLedBlendColors;
 
+    public static final String LED_CATEGORY_PACKAGE_PREFIX = "com.cyanogenmod.led.categories_settings.";
+
     enum LedForceMode {
         FORCED_ON,
         FORCED_ON_IF_EVENT,
@@ -147,6 +149,8 @@ public class NotificationManagerService extends INotificationManager.Stub
         public Integer onMs;
         public Integer offMs;
         public LedForceMode mode;
+        public boolean useCategory;
+        public String category;
     };
 
     private Map<String, LedPackageSettings> mLedPackageSettings;
@@ -692,10 +696,30 @@ public class NotificationManagerService extends INotificationManager.Stub
                 } else if (TextUtils.equals(values[3], "forceeventon")) {
                     settings.mode = LedForceMode.FORCED_ON_IF_EVENT;
                 }
+                if (values.length == 4) {
+                    settings.category = "";
+                } else {
+                    settings.category = values[4];
+                }
+                settings.useCategory = TextUtils.equals(values[3], "category");
 
                 mLedPackageSettings.put(values[0], settings);
             }
         }
+    }
+
+    private LedPackageSettings getLedPackageSetting(String pkgName) {
+        LedPackageSettings settings = mLedPackageSettings.get(pkgName);
+
+        if (settings == null) {
+            // Load default for "Unconfigured"
+            settings = mLedPackageSettings.get(LED_CATEGORY_PACKAGE_PREFIX + "unconf");
+        } else if (settings.useCategory) {
+            // Load category setting
+            settings = mLedPackageSettings.get(LED_CATEGORY_PACKAGE_PREFIX + settings.category);
+        }
+
+        return settings;
     }
 
     NotificationManagerService(Context context, StatusBarManagerService statusBar,
@@ -1235,7 +1259,7 @@ public class NotificationManagerService extends INotificationManager.Stub
     }
 
     private boolean checkLight(Notification notification, String pkgName) {
-        LedPackageSettings settings = mLedPackageSettings.get(pkgName);
+        LedPackageSettings settings = getLedPackageSetting(pkgName);
         LedForceMode mode = (settings != null) ? settings.mode : null;
 
         if (mode == LedForceMode.FORCED_OFF) {
@@ -1485,7 +1509,7 @@ public class NotificationManagerService extends INotificationManager.Stub
     }
 
     private Integer getColorForPackage(String pkg) {
-        LedPackageSettings settings = mLedPackageSettings.get(pkg);
+        LedPackageSettings settings = getLedPackageSetting(pkg);
         if (settings == null || settings.color == null) {
             return null;
         }
@@ -1601,7 +1625,7 @@ public class NotificationManagerService extends INotificationManager.Stub
             int ledOnMS = mLedNotification.notification.ledOnMS;
             int ledOffMS = mLedNotification.notification.ledOffMS;
 
-            LedPackageSettings settings = mLedPackageSettings.get(mLedNotification.pkg);
+            LedPackageSettings settings = getLedPackageSetting(mLedNotification.pkg);
             if (settings != null && settings.onMs != null && settings.offMs != null) {
                 ledOnMS = settings.onMs;
                 ledOffMS = settings.offMs;
