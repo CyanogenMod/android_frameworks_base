@@ -332,7 +332,7 @@ InputDevice* InputReader::createDevice(int32_t deviceId, const String8& name, ui
 
     if (keyboardSources != 0) {
         device->addMapper(new KeyboardInputMapper(device,
-                associatedDisplayId, keyboardSources, keyboardType));
+                associatedDisplayId, keyboardSources, keyboardType, mEventHub->getDeviceBluetooth(deviceId)));
     }
 
     // Trackball-like devices.
@@ -870,9 +870,9 @@ int32_t SwitchInputMapper::getSwitchState(uint32_t sourceMask, int32_t switchCod
 // --- KeyboardInputMapper ---
 
 KeyboardInputMapper::KeyboardInputMapper(InputDevice* device, int32_t associatedDisplayId,
-        uint32_t sources, int32_t keyboardType) :
+        uint32_t sources, int32_t keyboardType, bool bluetooth) :
         InputMapper(device), mAssociatedDisplayId(associatedDisplayId), mSources(sources),
-        mKeyboardType(keyboardType) {
+        mKeyboardType(keyboardType), mBluetooth(bluetooth) {
     initializeLocked();
 }
 
@@ -962,7 +962,7 @@ void KeyboardInputMapper::processKey(nsecs_t when, bool down, int32_t keyCode,
         if (down) {
             // Rotate key codes according to orientation if needed.
             // Note: getDisplayInfo is non-reentrant so we can continue holding the lock.
-            if (mAssociatedDisplayId >= 0) {
+            if (!mBluetooth && mAssociatedDisplayId >= 0) {
                 int32_t orientation;
                 if (! getPolicy()->getDisplayInfo(mAssociatedDisplayId, NULL, NULL, & orientation)) {
                     return;
