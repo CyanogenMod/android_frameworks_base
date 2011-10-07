@@ -988,6 +988,14 @@ status_t CameraService::Client::setParameters(const String8& params) {
 
     CameraParameters p(params);
 
+#ifdef BOARD_HAS_LGE_FFC
+    /* Do not set nvidia focus area to 0 */
+    if(p.get("nv-areas-to-focus")!= NULL &&
+       !strncmp(p.get("nv-areas-to-focus"),"0",1)) {
+        p.remove("nv-areas-to-focus");
+    }
+#endif
+
     return mHardware->setParameters(p);
 }
 
