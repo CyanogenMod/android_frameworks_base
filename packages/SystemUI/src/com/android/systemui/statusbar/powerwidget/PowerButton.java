@@ -25,6 +25,13 @@ import java.util.Map;
 public abstract class PowerButton {
     public static final String TAG = "PowerButton";
 
+    /**
+     * Broadcast intent action to indicate that a notification power widget has
+     * changed, handled by the Settings Power Control widget.
+     */
+    public static final Intent POWER_BUTTON_CHANGED_INTENT =
+            new Intent("com.android.systemui.statusbar.powerwidget.POWER_BUTTON_CHANGED");
+
     public static final int STATE_ENABLED = 1;
     public static final int STATE_DISABLED = 2;
     public static final int STATE_TURNING_ON = 3;
@@ -201,6 +208,9 @@ public abstract class PowerButton {
             if(GLOBAL_ON_CLICK_LISTENER != null) {
                 GLOBAL_ON_CLICK_LISTENER.onClick(v);
             }
+
+            // send intent notifying a change in power button state
+            mView.getContext().sendBroadcast(POWER_BUTTON_CHANGED_INTENT);
         }
     };
 
