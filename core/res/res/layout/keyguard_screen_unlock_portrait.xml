@@ -100,17 +100,18 @@
             />
 
     </RelativeLayout>
-    
+
     <TextView
-        android:id="@+id/customMsg" 
-		android:layout_width="wrap_content" 
-		android:layout_height="wrap_content"
-		android:layout_marginTop="4dip" 
-		android:layout_marginLeft="24dip"
+        android:id="@+id/customMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dip"
+        android:layout_marginLeft="24dip"
         android:layout_marginRight="24dip"
-		android:layout_below="@id/status2"
+        android:layout_below="@id/status2"
         android:textAppearance="?android:attr/textAppearanceSmall"
-		/>
+        android:visibility="gone"
+        />
 
     <View
         android:id="@+id/divider"

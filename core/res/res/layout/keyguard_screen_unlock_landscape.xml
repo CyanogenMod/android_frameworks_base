@@ -39,13 +39,6 @@
             android:layout_marginLeft="24dip"
             android:gravity="left"
             >
-        <TextView
-            android:id="@+id/status1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dip"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            />
 
         <TextView
             android:id="@+id/carrier"
@@ -118,13 +111,22 @@
             android:gravity="center"
             >
             <TextView
+                android:id="@+id/status1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="16sp"
+                android:drawablePadding="4dip"
+                android:gravity="bottom"
+                />
+            <TextView
                 android:id="@+id/statusSep"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dip"
                 android:layout_marginRight="5dip"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 />
             <TextView
                 android:id="@+id/status2"
@@ -132,16 +134,18 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 android:drawablePadding="4dip"
+                android:gravity="bottom"
                 />
         </LinearLayout>
-        
+
         <TextView
             android:id="@+id/customMsg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:visibility="gone"
             />
 
         <!-- fill space between header and button below -->
