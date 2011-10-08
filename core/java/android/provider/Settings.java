@@ -1918,6 +1918,13 @@ public final class Settings {
         public static final String POWER_DIALOG_PROMPT = "power_dialog_prompt";
 
         /**
+         * Specifies whether to show share dialog after
+         * taking screenshot
+         * @hide
+         */
+        public static final String SHARE_SCREENSHOT = "share_screenshot";
+
+        /**
          * How many ms to delay before enabling the security screen lock when
          * the screen goes off due to timeout
          * @hide
