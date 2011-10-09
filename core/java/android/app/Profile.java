@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class Profile implements Parcelable {
+public final class Profile implements Parcelable {
 
     private String mName;
     private int mNameResId;

@@ -14,7 +14,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 
 /** @hide */
-public class ConnectionSettings implements Parcelable {
+public final class ConnectionSettings implements Parcelable {
 
     private int mConnectionId;
     private int mValue;
