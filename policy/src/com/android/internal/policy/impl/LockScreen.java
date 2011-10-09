@@ -62,6 +62,7 @@ import android.os.SystemProperties;
 import android.os.Vibrator;
 import android.preference.MultiSelectListPreference;
 import android.provider.Settings;
+import android.provider.CmSystem.RinglockStyle;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -324,6 +325,14 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
         mKeyboardHidden = configuration.hardKeyboardHidden;
 
+        //Ringlock resource setup
+        int mRinglockStyle = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.RINGLOCK_STYLE_PREF, RinglockStyle.getIdByStyle(RinglockStyle.Bubble));
+        int resSecNorm=(mRinglockStyle == RinglockStyle.getIdByStyle(RinglockStyle.Bubble) ?
+                R.drawable.jog_ring_secback_normal : R.drawable.jog_ring_rev_secback_normal);
+        int resRingGreen=(mRinglockStyle == RinglockStyle.getIdByStyle(RinglockStyle.Bubble) ?
+                R.drawable.jog_ring_ring_green : R.drawable.jog_ring_rev_ring_green);
+
         if (LockPatternKeyguardView.DEBUG_CONFIGURATION) {
             Log.v(TAG, "***** CREATING LOCK SCREEN", new RuntimeException());
             Log.v(TAG, "Cur orient=" + mCreationOrientation
@@ -426,7 +435,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                         Bitmap iconBmp = ((BitmapDrawable) ai.loadIcon(pm)).getBitmap();
                         mCustomRingAppIcons[q] = Bitmap.createScaledBitmap(iconBmp,
                                 (int) (density * ringAppIconSize), (int) (density * ringAppIconSize), true);
-                        mRingSelector.setSecRingResources(q, mCustomRingAppIcons[q], R.drawable.jog_ring_secback_normal);
+                        mRingSelector.setSecRingResources(q, mCustomRingAppIcons[q], resSecNorm);
                     }
                 } catch (URISyntaxException e) {
                 }
@@ -537,28 +546,30 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         if (mLensePortrait || mWidgetLayout == 1 )
             setLenseWidgetsVisibility(View.INVISIBLE);
 
+        //Ringlock setup
         mRingSelector.enableMiddleRing(mCustomAppToggle);
-
-        mTabSelector.setLeftTabResources(
-                R.drawable.ic_jog_dial_unlock,
-                R.drawable.jog_tab_target_green,
-                R.drawable.jog_tab_bar_left_unlock,
-                R.drawable.jog_tab_left_unlock);
 
         mRingSelector.setLeftRingResources(
                 R.drawable.ic_jog_dial_unlock,
                 R.drawable.jog_tab_target_green,
-                R.drawable.jog_ring_ring_green);
+                resRingGreen);
         mRingSelector.setMiddleRingResources(
                 R.drawable.ic_jog_dial_custom,
                 R.drawable.jog_tab_target_green,
-                R.drawable.jog_ring_ring_green);
+                resRingGreen);
 
         updateRightTabResources();
 
         mRotarySelector.setOnDialTriggerListener(this);
         mTabSelector.setOnTriggerListener(this);
         mRingSelector.setOnRingTriggerListener(this);
+
+        //Standard slider setup
+        mTabSelector.setLeftTabResources(
+                R.drawable.ic_jog_dial_unlock,
+                R.drawable.jog_tab_target_green,
+                R.drawable.jog_tab_bar_left_unlock,
+                R.drawable.jog_tab_left_unlock);
 
         if (mSelector2 != null) {
             mSelector2.setLeftTabResources(R.drawable.ic_jog_dial_answer,
@@ -694,6 +705,14 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         int targetId = mSilentMode ? R.drawable.jog_tab_target_yellow
                 : R.drawable.jog_tab_target_gray;
 
+        //Ringlock resource setup
+        int mRinglockStyle = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.RINGLOCK_STYLE_PREF, RinglockStyle.getIdByStyle(RinglockStyle.Bubble));
+        int resRingGray=(mRinglockStyle == RinglockStyle.getIdByStyle(RinglockStyle.Bubble) ?
+                R.drawable.jog_ring_ring_gray : R.drawable.jog_ring_rev_ring_gray);
+        int resRingYellow=(mRinglockStyle == RinglockStyle.getIdByStyle(RinglockStyle.Bubble) ?
+                R.drawable.jog_ring_ring_yellow : R.drawable.jog_ring_rev_ring_yellow);
+
         mRotarySelector.setRightHandleResource(iconId);
 
         mTabSelector.setRightTabResources(iconId, targetId,
@@ -703,8 +722,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                             : R.drawable.jog_tab_right_sound_off);
 
         mRingSelector.setRightRingResources(iconId, targetId,
-                mSilentMode ? R.drawable.jog_ring_ring_yellow
-                        : R.drawable.jog_ring_ring_gray);
+                mSilentMode ? resRingYellow
+                        : resRingGray);
     }
 
     private void resetStatusInfo(KeyguardUpdateMonitor updateMonitor) {

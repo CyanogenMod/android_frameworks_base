@@ -39,6 +39,7 @@ import android.view.animation.TranslateAnimation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.provider.CmSystem.RinglockStyle;
 import com.android.internal.R;
 
 /**
@@ -695,6 +696,13 @@ public class RingSelector extends ViewGroup {
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SlidingTab);
         mOrientation = a.getInt(R.styleable.SlidingTab_orientation, HORIZONTAL);
+        int mRinglockStyle = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.RINGLOCK_STYLE_PREF, RinglockStyle.getIdByStyle(RinglockStyle.Bubble));
+        int resSecNorm=(mRinglockStyle == RinglockStyle.getIdByStyle(RinglockStyle.Bubble) ?
+                R.drawable.jog_ring_secback_normal : R.drawable.jog_ring_rev_secback_normal);
+        int resRingGray=(mRinglockStyle == RinglockStyle.getIdByStyle(RinglockStyle.Bubble) ?
+                R.drawable.jog_ring_ring_gray : R.drawable.jog_ring_rev_ring_gray);
+
         a.recycle();
 
         Resources r = getResources();
@@ -730,20 +738,20 @@ public class RingSelector extends ViewGroup {
         mSecRingCenterOffset = (int) (mDensity * mDensityScaleFactor * mSecRingCenterOffsetDIP);
 
         mSecRings = new SecRing[] {
-                new SecRing(this, R.drawable.jog_ring_secback_normal),
-                new SecRing(this, R.drawable.jog_ring_secback_normal),
-                new SecRing(this, R.drawable.jog_ring_secback_normal),
-                new SecRing(this, R.drawable.jog_ring_secback_normal)
+                new SecRing(this, resSecNorm),
+                new SecRing(this, resSecNorm),
+                new SecRing(this, resSecNorm),
+                new SecRing(this, resSecNorm)
         };
 
         mLeftRing = new Ring(this,
-                R.drawable.jog_ring_ring_gray,
+                resRingGray,
                 R.drawable.jog_tab_target_gray);
         mRightRing = new Ring(this,
-                R.drawable.jog_ring_ring_gray,
+                resRingGray,
                 R.drawable.jog_tab_target_gray);
         mMiddleRing = new Ring(this,
-                R.drawable.jog_ring_ring_gray,
+                resRingGray,
                 R.drawable.jog_tab_target_gray);
 
         mVibrator = (android.os.Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);

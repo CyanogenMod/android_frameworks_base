@@ -68,6 +68,124 @@ public final class CmSystem {
     public static final int KEYCODE_NONE = -1;
 
 
+    public enum LockscreenStyle{
+        Slider,
+        Rotary,
+        RotaryRevamped,
+        Lense,
+        Ring;
+
+        static public LockscreenStyle getStyleById(int id){
+            switch (id){
+                case 1:
+                    return Slider;
+                case 2:
+                    return Rotary;
+                case 3:
+                    return RotaryRevamped;
+                case 4:
+                    return Lense;
+                case 5:
+                    return Ring;
+                default:
+                    return Ring;
+            }
+        }
+
+        static public LockscreenStyle getStyleById(String id){
+            return getStyleById(Integer.valueOf(id));
+        }
+
+        static public int getIdByStyle(LockscreenStyle lockscreenstyle){
+            switch (lockscreenstyle){
+                case Slider:
+                    return 1;
+                case Rotary:
+                    return 2;
+                case RotaryRevamped:
+                    return 3;
+                case Lense:
+                    return 4;
+                case Ring:
+                    return 5;
+                default:
+                    return 5;
+            }
+        }
+    }
+
+    public enum InCallStyle {
+        Slider,
+        Rotary,
+        RotaryRevamped,
+        Ring;
+
+        static public InCallStyle getStyleById(int id){
+            switch (id){
+                case 1:
+                    return Slider;
+                case 2:
+                    return Rotary;
+                case 3:
+                    return RotaryRevamped;
+                case 4:
+                    return Ring;
+                default:
+                    return Ring;
+            }
+        }
+
+        static public InCallStyle getStyleById(String id){
+            return getStyleById(Integer.valueOf(id));
+        }
+
+        static public int getIdByStyle(InCallStyle inCallStyle){
+            switch (inCallStyle){
+                case Slider:
+                    return 1;
+                case Rotary:
+                    return 2;
+                case RotaryRevamped:
+                    return 3;
+                case Ring:
+                    return 4;
+                default:
+                    return 4;
+            }
+        }
+    }
+
+    public enum RinglockStyle{
+        Bubble,
+        Revamped;
+
+        static public RinglockStyle getStyleById(int id){
+            switch (id){
+                case 1:
+                    return Bubble;
+                case 2:
+                    return Revamped;
+                default:
+                    return Bubble;
+            }
+        }
+
+        static public RinglockStyle getStyleById(String id){
+            return getStyleById(Integer.valueOf(id));
+        }
+
+        static public int getIdByStyle(RinglockStyle lockscreenstyle){
+            switch (lockscreenstyle){
+                case Bubble:
+                    return 1;
+                case Revamped:
+                    return 2;
+                default:
+                    return 1;
+            }
+        }
+    }
+
     public CmSystem(){
         //nothing to be done, as long as only static functions in here
     }
