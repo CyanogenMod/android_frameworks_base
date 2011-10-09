@@ -218,6 +218,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
      */
     private static final int DEFAULT_WAKE_LOCK_TIMEOUT = 30000;
 
+    private boolean mNTmodeGlobal = SystemProperties.getBoolean("ro.ril.ntmodeglobal", false);
+
     //***** Instance Variables
 
     LocalSocket mSocket;
@@ -2260,7 +2262,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
             case RIL_REQUEST_STK_HANDLE_CALL_SETUP_REQUESTED_FROM_SIM: ret =  responseInts(p); break;
             case RIL_REQUEST_EXPLICIT_CALL_TRANSFER: ret =  responseVoid(p); break;
             case RIL_REQUEST_SET_PREFERRED_NETWORK_TYPE: ret =  responseVoid(p); break;
-            case RIL_REQUEST_GET_PREFERRED_NETWORK_TYPE: ret =  responseInts(p); break;
+            case RIL_REQUEST_GET_PREFERRED_NETWORK_TYPE: ret =  responseNetworkType(p); break;
             case RIL_REQUEST_GET_NEIGHBORING_CELL_IDS: ret = responseCellList(p); break;
             case RIL_REQUEST_SET_LOCATION_UPDATES: ret =  responseVoid(p); break;
             case RIL_REQUEST_CDMA_SET_SUBSCRIPTION: ret =  responseVoid(p); break;
@@ -3137,6 +3139,23 @@ public class RIL extends BaseCommands implements CommandsInterface {
         response = new int[numInts];
         for (int i = 0 ; i < numInts ; i++) {
             response[i] = p.readInt();
+        }
+
+        return response;
+    }
+
+    // When toggle from 3G to 2G in some devices you have enter infinite
+    // loop here with try to change mode 7. In that case we force
+    // the output to the loop and set 3G again. We cannot change
+    // this in samsungRIL since crespo is not using it.
+    protected Object
+    responseNetworkType(Parcel p) {
+        int response[] = (int[]) responseInts(p);
+
+        // When the modem responds Phone.NT_MODE_GLOBAL, it means Phone.NT_MODE_WCDMA_PREF
+        if (mNTmodeGlobal && response[0] == Phone.NT_MODE_GLOBAL) {
+            Log.d(LOG_TAG, "Overriding network type response from global to WCDMA preferred");
+            response[0] = Phone.NT_MODE_WCDMA_PREF;
         }
 
         return response;

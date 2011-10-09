@@ -11,7 +11,7 @@ import android.os.Parcelable;
 import java.io.IOException;
 
 /** @hide */
-public class StreamSettings implements Parcelable{
+public final class StreamSettings implements Parcelable{
 
     private int mStreamId;
     private int mValue;
