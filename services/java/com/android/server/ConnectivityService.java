@@ -653,7 +653,7 @@ public class ConnectivityService extends IConnectivityManager.Stub {
     private class FeatureUser implements IBinder.DeathRecipient {
         int mNetworkType;
         String mFeature;
-        IBinder mBinder;
+        final IBinder mBinder;
         int mPid;
         int mUid;
         long mCreateTime;
