@@ -39,6 +39,7 @@ import android.view.animation.TranslateAnimation;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
+import android.provider.CmSystem.RinglockStyle;
 import com.android.internal.R;
 
 /**
@@ -207,6 +208,8 @@ public class RingSelector extends ViewGroup {
         private int alignCenterX;
         private int alignCenterY;
 
+        private int backgroundId;
+
         /**
          * Constructor
          *
@@ -221,6 +224,8 @@ public class RingSelector extends ViewGroup {
             ring.setScaleType(ScaleType.CENTER);
             ring.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT,
                     LayoutParams.WRAP_CONTENT));
+
+            backgroundId = ringId;
 
             // Create target
             target = new ImageView(parent.getContext());
@@ -252,7 +257,15 @@ public class RingSelector extends ViewGroup {
         }
 
         void setRingBackgroundResource(int ringId) {
+            backgroundId = ringId;
             ring.setBackgroundResource(ringId);
+        }
+
+        void setHighlighted(int highlightId) {
+            if (highlightId == 0) {
+                highlightId = backgroundId;
+            }
+            ring.setBackgroundResource(highlightId);
         }
 
         void hide() {
@@ -670,6 +683,13 @@ public class RingSelector extends ViewGroup {
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SlidingTab);
         mOrientation = a.getInt(R.styleable.SlidingTab_orientation, HORIZONTAL);
+        int mRinglockStyle = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.RINGLOCK_STYLE_PREF, RinglockStyle.getIdByStyle(RinglockStyle.Bubble));
+        int resSecNorm = (mRinglockStyle == RinglockStyle.getIdByStyle(RinglockStyle.Bubble) ?
+                R.drawable.jog_ring_secback_normal : R.drawable.jog_ring_rev_secback_normal);
+        int resRingGray = (mRinglockStyle == RinglockStyle.getIdByStyle(RinglockStyle.Bubble) ?
+                R.drawable.jog_ring_ring_gray : R.drawable.jog_ring_rev_ring_gray);
+
         a.recycle();
 
         Resources r = getResources();
@@ -705,20 +725,20 @@ public class RingSelector extends ViewGroup {
         mSecRingCenterOffset = (int) (mDensity * mDensityScaleFactor * mSecRingCenterOffsetDIP);
 
         mSecRings = new SecRing[] {
-                new SecRing(this, R.drawable.jog_ring_secback_normal),
-                new SecRing(this, R.drawable.jog_ring_secback_normal),
-                new SecRing(this, R.drawable.jog_ring_secback_normal),
-                new SecRing(this, R.drawable.jog_ring_secback_normal)
+                new SecRing(this, resSecNorm),
+                new SecRing(this, resSecNorm),
+                new SecRing(this, resSecNorm),
+                new SecRing(this, resSecNorm)
         };
 
         mLeftRing = new Ring(this,
-                R.drawable.jog_ring_ring_gray,
+                resRingGray,
                 R.drawable.jog_tab_target_gray);
         mRightRing = new Ring(this,
-                R.drawable.jog_ring_ring_gray,
+                resRingGray,
                 R.drawable.jog_tab_target_gray);
         mMiddleRing = new Ring(this,
-                R.drawable.jog_ring_ring_gray,
+                resRingGray,
                 R.drawable.jog_tab_target_gray);
 
         mVibrator = (android.os.Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
@@ -982,7 +1002,7 @@ public class RingSelector extends ViewGroup {
             super.setVisibility(View.INVISIBLE);
             if ((mMiddlePrimary && isLeft) || (!mMiddlePrimary && !isRight && !isLeft)) {
                 if (mPrevTriggered) {
-                    mCurrentRing.setRingBackgroundResource(R.drawable.jog_ring_ring_green);
+                    mCurrentRing.setHighlighted(0);
                 }
                 mSecRings[mSelectedRingId].deactivate();
             }
@@ -1039,10 +1059,15 @@ public class RingSelector extends ViewGroup {
             }
         }
         if (ringsTouched && !mPrevTriggered) {
-            mCurrentRing.setRingBackgroundResource(R.drawable.jog_ring_ring_pressed_red);
+            int ringlockStyle = Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.RINGLOCK_STYLE_PREF, RinglockStyle.getIdByStyle(RinglockStyle.Bubble));
+            int resHighlight = (ringlockStyle == RinglockStyle.getIdByStyle(RinglockStyle.Bubble) ?
+                    R.drawable.jog_ring_ring_pressed_red : R.drawable.jog_ring_rev_ring_pressed_red);
+
+            mCurrentRing.setHighlighted(resHighlight);
             mPrevTriggered = true;
         } else if (!ringsTouched && mPrevTriggered) {
-            mCurrentRing.setRingBackgroundResource(R.drawable.jog_ring_ring_green);
+            mCurrentRing.setHighlighted(0);
             mPrevTriggered = false;
         }
     }
