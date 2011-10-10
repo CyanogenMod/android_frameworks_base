@@ -97,6 +97,7 @@ public class RingSelector extends ViewGroup {
     private Ring mOtherRing2;
     private boolean mTracking;
     private boolean mAnimating;
+    private boolean mPrevTriggered;
 
     private SecRing[] mSecRings;
 
@@ -1021,7 +1022,28 @@ public class RingSelector extends ViewGroup {
         int deltaY = (int) y - ring.getTop() - (ring.getHeight() / 2);
         ring.offsetLeftAndRight(deltaX);
         ring.offsetTopAndBottom(deltaY);
+        setHoverBackLight(x,y);
         invalidate();
+    }
+
+    private void setHoverBackLight(float x, float y) {
+        if (mCurrentRing != mMiddleRing) {
+            return;
+        }
+        boolean ringsTouched = false;
+        for (SecRing q : mSecRings) {
+            if (!q.isHidden() && q.contains((int) x,(int) y)) {
+                ringsTouched = true;
+                break;
+            }
+        }
+        if (ringsTouched && !mPrevTriggered) {
+            mCurrentRing.setRingBackgroundResource(R.drawable.jog_ring_ring_pressed_red);
+            mPrevTriggered = true;
+        } else if (!ringsTouched && mPrevTriggered) {
+            mCurrentRing.setRingBackgroundResource(R.drawable.jog_ring_ring_green);
+            mPrevTriggered = false;
+        }
     }
 
     /**
