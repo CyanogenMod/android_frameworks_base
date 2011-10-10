@@ -631,6 +631,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         };
     };
 
+    /**
+     * When a menu-key longpress expires, send KeyEvent.KEYCODE_SEARCH key press.
+     * This is usefull for devices without hardware search button, as example Samsung
+     * Galaxy phones. This is already implemented on Samsung devices in this way.
+     */
+    Runnable mMenuLongPress = new Runnable() {
+        public void run() {
+            // Shamelessly copied from Kmobs LockScreen controls, works for Pandora, etc...
+            sendHwButtonEvent(KeyEvent.KEYCODE_SEARCH);
+        };
+    };
+
+
     protected void sendMediaButtonEvent(int code) {
         long eventtime = SystemClock.uptimeMillis();
 
@@ -2014,6 +2027,15 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         mHandler.removeCallbacks(mCameraLongPress);
     }
 
+    void handleMenuKeyDown() {
+        mHandler.postDelayed(mMenuLongPress, ViewConfiguration.getLongPressTimeout());
+    }
+
+    void handleMenuKeyUp() {
+        mHandler.removeCallbacks(mMenuLongPress);
+    }
+
+
     /** {@inheritDoc} */
     @Override
     public int interceptKeyBeforeQueueing(long whenNanos, int action, int flags,
@@ -2092,6 +2114,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
         // Handle special keys.
         switch (keyCode) {
+            case KeyEvent.KEYCODE_MENU: {
+                if (down) {
+                    handleMenuKeyDown();
+                } else {
+                    handleMenuKeyUp();
+                }
+                break;
+            }
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP: {
                 // cm71 nightlies: will be replaced by CmPhoneWindowManager's new volume handling
