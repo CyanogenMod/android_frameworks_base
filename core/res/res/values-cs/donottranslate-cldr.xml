@@ -27,18 +27,18 @@
     <string name="month_long_november">listopadu</string>
     <string name="month_long_december">prosince</string>
 
-    <string name="month_medium_january">1.</string>
-    <string name="month_medium_february">2.</string>
-    <string name="month_medium_march">3.</string>
-    <string name="month_medium_april">4.</string>
-    <string name="month_medium_may">5.</string>
-    <string name="month_medium_june">6.</string>
-    <string name="month_medium_july">7.</string>
-    <string name="month_medium_august">8.</string>
-    <string name="month_medium_september">9.</string>
-    <string name="month_medium_october">10.</string>
-    <string name="month_medium_november">11.</string>
-    <string name="month_medium_december">12.</string>
+    <string name="month_medium_january">led</string>
+    <string name="month_medium_february">úno</string>
+    <string name="month_medium_march">bře</string>
+    <string name="month_medium_april">dub</string>
+    <string name="month_medium_may">kvě</string>
+    <string name="month_medium_june">čer</string>
+    <string name="month_medium_july">čec</string>
+    <string name="month_medium_august">srp</string>
+    <string name="month_medium_september">zář</string>
+    <string name="month_medium_october">říj</string>
+    <string name="month_medium_november">lis</string>
+    <string name="month_medium_december">pro</string>
 
     <string name="month_shortest_january">l</string>
     <string name="month_shortest_february">ú</string>
