@@ -43,10 +43,17 @@
             android:gravity="center_vertical"
             android:orientation="horizontal"/>  
             
-        <LinearLayout android:id="@+id/statusIcons"
+        <com.android.systemui.statusbar.CmProfileIndicator
+            android:textAppearance="@*android:style/TextAppearance.StatusBar.Icon"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"/>
+
+        <LinearLayout android:id="@+id/statusIcons"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:paddingRight="1dip"
             android:gravity="center_vertical"
             android:orientation="horizontal"/>    

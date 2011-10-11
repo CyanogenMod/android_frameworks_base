@@ -17,12 +17,20 @@
 package android.provider;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.KeyEvent;
 
 import com.android.internal.R;
 
 /**
- * CmSystem
+ * CmSystem is a class for collecting items that are needed at differen places.
+ * an good example would be default values which are needed in the CMParts settings
+ * app but also in the framework.
+ *
+ * right now, CmSystem is a pure static class, it does not yet get instanced,
+ * but that might changed when demand changes.
  * @hide
  */
 public final class CmSystem {
@@ -67,9 +75,18 @@ public final class CmSystem {
     public static final int VOLUME_ACTION_NONE = 0;
     public static final int KEYCODE_NONE = -1;
 
-
     public CmSystem(){
         //nothing to be done, as long as only static functions in here
+    }
+
+    /**
+     * Converts resource id to actual Bitmap
+     *
+     * @param resId the resource id
+     * @return resluting bitmap
+     */
+    public static Bitmap getBitmapFor(Resources res, int resID) {
+        return BitmapFactory.decodeResource(res, resID);
     }
 
     public static boolean getDefaultBool(Context context, int which){

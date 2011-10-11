@@ -192,14 +192,7 @@ public class ProfileManagerService extends IProfileManager.Stub {
                 // Call profile's "doSelect"
                 mActiveProfile.doSelect(mContext);
 
-                // Notify other applications of newly selected profile.
-                Intent broadcast = new Intent(INTENT_ACTION_PROFILE_SELECTED);
-                broadcast.putExtra("name", mActiveProfile.getName());
-                broadcast.putExtra("uuid", mActiveProfile.getUuid().toString());
-                broadcast.putExtra("lastName", lastProfile.getName());
-                broadcast.putExtra("lastUuid", lastProfile.getUuid().toString());
-                mContext.sendBroadcast(broadcast);
-
+                broadcastActiveProfile(lastProfile);
                 restoreCallingIdentity(token);
                 persistIfDirty();
             }
@@ -208,6 +201,17 @@ public class ProfileManagerService extends IProfileManager.Stub {
             ex.printStackTrace();
             return false;
         }
+    }
+
+    private void broadcastActiveProfile(Profile lastProfile) {
+        // Notify other applications of newly selected profile.
+        Intent broadcast = new Intent(INTENT_ACTION_PROFILE_SELECTED);
+        broadcast.putExtra("name", mActiveProfile.getName());
+        broadcast.putExtra("uuid", mActiveProfile.getUuid().toString());
+        broadcast.putExtra("showIndicator", mActiveProfile.getStatusBarIndicator());
+        broadcast.putExtra("lastName", lastProfile.getName());
+        broadcast.putExtra("lastUuid", lastProfile.getUuid().toString());
+        mContext.sendBroadcast(broadcast);
     }
 
     @Override
@@ -276,6 +280,11 @@ public class ProfileManagerService extends IProfileManager.Stub {
     @Override
     public Profile getActiveProfile() throws RemoteException {
         return mActiveProfile;
+    }
+
+    @Override
+    public void triggerProfileBroadcast() throws RemoteException {
+        broadcastActiveProfile(mActiveProfile);
     }
 
     @Override

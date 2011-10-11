@@ -231,4 +231,13 @@ public class ProfileManager
         }
         return getActiveProfile().getProfileGroup(notificationGroup.getUuid());
     }
+
+    /** @hide */
+    public void triggerProfileBroadcast() {
+        try {
+            getService().triggerProfileBroadcast();
+        } catch (RemoteException e) {
+            Log.e(TAG, e.getLocalizedMessage(), e);
+        }
+    }
 }

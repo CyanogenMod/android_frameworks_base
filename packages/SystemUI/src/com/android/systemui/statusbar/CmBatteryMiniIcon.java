@@ -31,6 +31,7 @@ import android.graphics.Paint;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.os.BatteryManager;
+import android.provider.CmSystem;
 import android.provider.Settings;
 import android.util.AttributeSet;
 import android.view.View;
@@ -69,6 +70,8 @@ public class CmBatteryMiniIcon extends ImageView {
 
     // used for animation and still values when not charging/fully charged
     private int mCurrentFrame = 0;
+
+    private Resources mRes = null;
 
     private boolean mAttached;
 
@@ -128,9 +131,9 @@ public class CmBatteryMiniIcon extends ImageView {
         SettingsObserver settingsObserver = new SettingsObserver(mHandler);
         settingsObserver.observe();
 
-        Resources r = getResources();
+        mRes = getContext().getResources();
 
-        mDensity = r.getDisplayMetrics().density;
+        mDensity = mRes.getDisplayMetrics().density;
         mWidthPx = (int) (BATTERY_MINI_ICON_WIDTH_DIP * mDensity);
         mMarginRightPx = (int) (BATTERY_MINI_ICON_MARGIN_RIGHT_DIP * mDensity);
 
@@ -254,16 +257,6 @@ public class CmBatteryMiniIcon extends ImageView {
     }
 
     /**
-     * Converts resource id to actual Bitmap
-     *
-     * @param resId the resource id
-     * @return resluting bitmap
-     */
-    private Bitmap getBitmapFor(int resId) {
-        return BitmapFactory.decodeResource(getContext().getResources(), resId);
-    }
-
-    /**
      * Invoked by SettingsObserver, this method keeps track of just changed
      * settings. Also does the initial call from constructor
      */
@@ -286,7 +279,7 @@ public class CmBatteryMiniIcon extends ImageView {
 
         for(int i=0; i<=10; i++){
             // get the original battery image
-            Bitmap bmBat = getBitmapFor(getBatResourceID(i));
+            Bitmap bmBat = CmSystem.getBitmapFor(mRes, getBatResourceID(i));
             // cut one slice of pixels from battery image
             mMiniIconCache[i] = Bitmap.createBitmap(bmBat, 4, 0, 1, bmBat.getHeight());
         }
