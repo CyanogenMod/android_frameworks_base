@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-/*
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/* //device/apps/common/assets/res/any/colors.xml
 **
-** Copyright 2008, The Android Open Source Project
+** Copyright 2006, The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
 ** you may not use this file except in compliance with the License.
@@ -16,8 +16,14 @@
 ** See the License for the specific language governing permissions and
 ** limitations under the License.
 */
- -->
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="service_name" msgid="4841491635055379553">"Pomocník přístupu k balíčkům"</string>
+    <!-- Defines the shutdown options shown in the reboot dialog. -->
+    <array name="shutdown_reboot_options">
+        <item>Restartovat</item>
+        <item>Zotavení</item>
+        <item>Zavaděč</item>
+    </array>
+
 </resources>
