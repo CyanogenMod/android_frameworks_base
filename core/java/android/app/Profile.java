@@ -284,7 +284,7 @@ public final class Profile implements Parcelable {
             if (event == XmlPullParser.START_TAG) {
                 String name = xpp.getName();
                 if (name.equals("statusbar")) {
-                    profile.setStatusBarIndicator(xpp.nextText() == "yes");
+                    profile.setStatusBarIndicator(xpp.nextText().equals("yes"));
                 }
                 if (name.equals("profileGroup")) {
                     ProfileGroup pg = ProfileGroup.fromXml(xpp, context);
