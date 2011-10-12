@@ -1236,6 +1236,9 @@ public class AudioService extends IAudioService.Stub {
         } else if (AudioSystem.isStreamActive(AudioSystem.STREAM_MUSIC)) {
             // Log.v(TAG, "getActiveStreamType: Forcing STREAM_MUSIC...");
             return AudioSystem.STREAM_MUSIC;
+        } else if (AudioSystem.isStreamActive(AudioSystem.STREAM_NOTIFICATION) && mNotificationsUseRingVolume == 0) {
+            // Log.v(TAG, "getActiveStreamType: Forcing STREAM_NOTIFICATION...");
+            return AudioSystem.STREAM_NOTIFICATION;
         } else if (suggestedStreamType == AudioManager.USE_DEFAULT_STREAM_TYPE) {
             // Log.v(TAG, "getActiveStreamType: Forcing STREAM_RING...");
             return AudioSystem.STREAM_RING;
@@ -1582,7 +1585,7 @@ public class AudioService extends IAudioService.Stub {
                     float musicVoldB = dBPerStep * (musicVolIndex - MAX_STREAM_VOLUME[AudioSystem.STREAM_MUSIC]);
                     volFloat = (float)Math.pow(10, (musicVoldB - 3)/20);
                 } else {
-                    volFloat = (float) volume / 1000.0f;
+                    volFloat = volume / 1000.0f;
                 }
 
                 if (SOUND_EFFECT_FILES_MAP[effectType][1] > 0) {
@@ -1843,7 +1846,7 @@ public class AudioService extends IAudioService.Stub {
                 BluetoothDevice btDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 String address = btDevice.getAddress();
                 boolean isConnected = (mConnectedDevices.containsKey(AudioSystem.DEVICE_OUT_BLUETOOTH_A2DP) &&
-                                       ((String)mConnectedDevices.get(AudioSystem.DEVICE_OUT_BLUETOOTH_A2DP)).equals(address));
+                                       (mConnectedDevices.get(AudioSystem.DEVICE_OUT_BLUETOOTH_A2DP)).equals(address));
 
                 if (isConnected &&
                     state != BluetoothA2dp.STATE_CONNECTED && state != BluetoothA2dp.STATE_PLAYING) {
@@ -1898,7 +1901,7 @@ public class AudioService extends IAudioService.Stub {
                 }
 
                 boolean isConnected = (mConnectedDevices.containsKey(device) &&
-                                       ((String)mConnectedDevices.get(device)).equals(address));
+                                       (mConnectedDevices.get(device)).equals(address));
 
                 if (isConnected && state != BluetoothHeadset.STATE_CONNECTED) {
                     AudioSystem.setDeviceConnectionState(device,
@@ -1918,7 +1921,7 @@ public class AudioService extends IAudioService.Stub {
                 int state = intent.getIntExtra("state", 0);
                 int microphone = intent.getIntExtra("microphone", 0);
                 String name = intent.getStringExtra("name");
-                
+
                 if (name != null && !name.equalsIgnoreCase("1")) {
                     if (microphone != 0) {
                         boolean isConnected = mConnectedDevices.containsKey(AudioSystem.DEVICE_OUT_WIRED_HEADSET);
@@ -2109,7 +2112,7 @@ public class AudioService extends IAudioService.Stub {
             // no need to update focus.
             Iterator<FocusStackEntry> stackIterator = mFocusStack.iterator();
             while(stackIterator.hasNext()) {
-                FocusStackEntry fse = (FocusStackEntry)stackIterator.next();
+                FocusStackEntry fse = stackIterator.next();
                 if(fse.mClientId.equals(clientToRemove)) {
                     Log.i(TAG, " AudioFocus  abandonAudioFocus(): removing entry for "
                             + fse.mClientId);
@@ -2129,7 +2132,7 @@ public class AudioService extends IAudioService.Stub {
                 mFocusStack.peek().mSourceRef.equals(cb);
         Iterator<FocusStackEntry> stackIterator = mFocusStack.iterator();
         while(stackIterator.hasNext()) {
-            FocusStackEntry fse = (FocusStackEntry)stackIterator.next();
+            FocusStackEntry fse = stackIterator.next();
             if(fse.mSourceRef.equals(cb)) {
                 Log.i(TAG, " AudioFocus  abandonAudioFocus(): removing entry for "
                         + fse.mClientId);
@@ -2409,7 +2412,7 @@ public class AudioService extends IAudioService.Stub {
         }
         Iterator<RemoteControlStackEntry> stackIterator = mRCStack.iterator();
         while(stackIterator.hasNext()) {
-            RemoteControlStackEntry rcse = (RemoteControlStackEntry)stackIterator.next();
+            RemoteControlStackEntry rcse = stackIterator.next();
             if(rcse.mReceiverComponent.equals(newReceiver)) {
                 mRCStack.remove(rcse);
                 break;
@@ -2425,7 +2428,7 @@ public class AudioService extends IAudioService.Stub {
     private void removeMediaButtonReceiver(ComponentName newReceiver) {
         Iterator<RemoteControlStackEntry> stackIterator = mRCStack.iterator();
         while(stackIterator.hasNext()) {
-            RemoteControlStackEntry rcse = (RemoteControlStackEntry)stackIterator.next();
+            RemoteControlStackEntry rcse = stackIterator.next();
             if(rcse.mReceiverComponent.equals(newReceiver)) {
                 mRCStack.remove(rcse);
                 break;
