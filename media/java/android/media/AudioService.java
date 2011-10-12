@@ -1236,6 +1236,9 @@ public class AudioService extends IAudioService.Stub {
         } else if (AudioSystem.isStreamActive(AudioSystem.STREAM_MUSIC)) {
             // Log.v(TAG, "getActiveStreamType: Forcing STREAM_MUSIC...");
             return AudioSystem.STREAM_MUSIC;
+        } else if (AudioSystem.isStreamActive(AudioSystem.STREAM_NOTIFICATION) && mNotificationsUseRingVolume == 0) {
+            // Log.v(TAG, "getActiveStreamType: Forcing STREAM_NOTIFICATION...");
+            return AudioSystem.STREAM_NOTIFICATION;
         } else if (suggestedStreamType == AudioManager.USE_DEFAULT_STREAM_TYPE) {
             // Log.v(TAG, "getActiveStreamType: Forcing STREAM_RING...");
             return AudioSystem.STREAM_RING;
@@ -1918,7 +1921,7 @@ public class AudioService extends IAudioService.Stub {
                 int state = intent.getIntExtra("state", 0);
                 int microphone = intent.getIntExtra("microphone", 0);
                 String name = intent.getStringExtra("name");
-                
+
                 if (name != null && !name.equalsIgnoreCase("1")) {
                     if (microphone != 0) {
                         boolean isConnected = mConnectedDevices.containsKey(AudioSystem.DEVICE_OUT_WIRED_HEADSET);
