@@ -384,8 +384,18 @@ public class SemcRIL extends QualcommNoSimReadyRIL implements CommandsInterface 
             ca.pin2           = p.readInt();
             status.addApplication(ca);
 
-            mAid = ca.aid;
         }
+        int appIndex = -1;
+        if (mPhoneType == RILConstants.CDMA_PHONE) {
+            appIndex = status.getCdmaSubscriptionAppIndex();
+            Log.d(LOG_TAG, "This is a CDMA PHONE " + appIndex);
+        } else {
+            appIndex = status.getGsmUmtsSubscriptionAppIndex();
+            Log.d(LOG_TAG, "This is a GSM PHONE " + appIndex);
+        }
+
+        IccCardApplication application = status.getApplication(appIndex);
+        mAid = application.aid;
 
         return status;
     }
