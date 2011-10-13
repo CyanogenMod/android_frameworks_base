@@ -55,6 +55,7 @@ public SamsungRIL(Context context, int networkMode, int cdmaSubscription) {
     static final int RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_2 = 11011;
     static final int RIL_UNSOL_HSDPA_STATE_CHANGED = 11016;
     static final int RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST = 11012;
+    static final int RIL_REQUEST_DIAL_EMERGENCY = 10016;
 
 @Override
  public void
@@ -285,6 +286,37 @@ public SamsungRIL(Context context, int networkMode, int cdmaSubscription) {
         }
 
         rr.release();
+    }
+
+    @Override
+    public void
+    dial(String address, int clirMode, UUSInfo uusInfo, Message result) {
+        RILRequest rr;
+        if (PhoneNumberUtils.isEmergencyNumber(address)) {
+            Log.v(LOG_TAG, "Emergency dial: " + address);
+            rr = RILRequest.obtain(RIL_REQUEST_DIAL_EMERGENCY, result);
+            rr.mp.writeString(address + "/");
+        }
+        else {
+            rr = RILRequest.obtain(RIL_REQUEST_DIAL, result);
+            rr.mp.writeString(address);
+        }
+
+        rr.mp.writeInt(clirMode);
+        rr.mp.writeInt(0); // UUS information is absent
+
+        if (uusInfo == null) {
+            rr.mp.writeInt(0); // UUS information is absent
+        } else {
+            rr.mp.writeInt(1); // UUS information is present
+            rr.mp.writeInt(uusInfo.getType());
+            rr.mp.writeInt(uusInfo.getDcs());
+            rr.mp.writeByteArray(uusInfo.getUserData());
+        }
+
+        if (RILJ_LOGD) riljLog(rr.serialString() + "> " + requestToString(rr.mRequest));
+
+        send(rr);
     }
 
 	@Override
