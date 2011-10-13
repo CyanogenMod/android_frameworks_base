@@ -2713,7 +2713,12 @@ public class RIL extends BaseCommands implements CommandsInterface {
                 break;
 
             case RIL_UNSOL_OEM_HOOK_RAW:
-                if (RILJ_LOGD) unsljLogvRet(response, IccUtils.bytesToHexString((byte[])ret));
+                String hexstr = IccUtils.bytesToHexString((byte[])ret);
+                if (RILJ_LOGD) unsljLogvRet(response, hexstr);
+                if (hexstr.equals("72656a656374")) {
+                    if (RILJ_LOGD) Log.i(LOG_TAG, "RIL got ~+FDORM=reject, let's use TelephonyManager to disable FastDormancy.");
+                    android.telephony.TelephonyManager.setDormancyRejected(true);
+                }
                 if (mUnsolOemHookRawRegistrant != null) {
                     mUnsolOemHookRawRegistrant.notifyRegistrant(new AsyncResult(null, ret, null));
                 }

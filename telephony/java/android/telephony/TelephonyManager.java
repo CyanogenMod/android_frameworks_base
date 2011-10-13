@@ -836,6 +836,18 @@ public class TelephonyManager {
         return ITelephony.Stub.asInterface(ServiceManager.getService(Context.TELEPHONY_SERVICE));
     }
 
+    /** FastDormancy get/setter */
+    private static boolean sDormancyRejected = false;
+
+    public static boolean isDormancyRejected() {
+        return getDefault().sDormancyRejected;
+    }
+
+    public static boolean setDormancyRejected(boolean rejected) {
+        getDefault().sDormancyRejected = rejected;
+        return true;
+    }
+
     //
     //
     // PhoneStateListener
