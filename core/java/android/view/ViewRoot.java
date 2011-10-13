@@ -68,7 +68,7 @@ import static javax.microedition.khronos.opengles.GL10.*;
  * {@hide}
  */
 @SuppressWarnings({"EmptyCatchBlock"})
-public final class ViewRoot extends Handler implements ViewParent,
+public final class ViewRoot extends Handler implements ViewParent, ViewOpacityManager,
         View.AttachInfo.Callbacks {
     private static final String TAG = "ViewRoot";
     private static final boolean DBG = false;
@@ -887,7 +887,7 @@ public final class ViewRoot extends Handler implements ViewParent,
             }
         }
 
-        if (params != null && (host.mPrivateFlags & View.REQUEST_TRANSPARENT_REGIONS) != 0) {
+        if ((params != null) && (host.mPrivateFlags & View.REQUEST_TRANSPARENT_REGIONS) != 0) {
             if (!PixelFormat.formatHasAlpha(params.format)) {
                 params.format = PixelFormat.TRANSLUCENT;
             }
@@ -1303,11 +1303,38 @@ public final class ViewRoot extends Handler implements ViewParent,
         // the test below should not fail unless someone is messing with us
         checkThread();
         if (mView == child) {
+            mView.mTransparentRequests++; /* Increment so we know when to release */
             mView.mPrivateFlags |= View.REQUEST_TRANSPARENT_REGIONS;
             // Need to make sure we re-evaluate the window attributes next
             // time around, to ensure the window has the correct format.
             mWindowAttributesChanged = true;
             requestLayout();
+        }
+    }
+
+    public void releaseTransparentRegion(View child) {
+        if (mView == child) {
+            if (mView.mTransparentRequests > 0) {
+                mView.mTransparentRequests--;
+                if (mView.mTransparentRequests == 0) {
+                    /* Clear transparency flag */
+                    mView.mPrivateFlags &= ~View.REQUEST_TRANSPARENT_REGIONS;
+
+                    /* Empty transparency state in view and windowmanager */
+                    mPreviousTransparentRegion.set(mTransparentRegion);
+                    mTransparentRegion.setEmpty();
+                    mView.gatherTransparentRegion(mTransparentRegion);
+                    try {
+                        sWindowSession.setTransparentRegion(mWindow, mTransparentRegion);
+                    } catch (RemoteException e) {
+                    }
+
+                    /* Invalidate current view and schedule redraw */
+                    mFullRedrawNeeded = true;
+                    mWindowAttributesChanged = true;
+                    requestLayout();
+                }
+            }
         }
     }
 
