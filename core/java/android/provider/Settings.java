@@ -2258,6 +2258,15 @@ public final class Settings {
         public static final String STATUS_BAR_CM_BATTERY = "status_bar_cm_battery";
 
         /**
+         * Whether to show the battery icon
+         * 0: don't show battery icon
+         * 1: show battery icon
+         * default: 1
+         * @hide
+         */
+        public static final String STATUS_BAR_CM_SHOW_BATTERY = "status_bar_cm_show_battery";
+
+        /**
          * Whether to show the clock in status bar
          * of the stock battery icon
          * 0: don't show the clock
