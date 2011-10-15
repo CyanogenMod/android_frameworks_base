@@ -105,7 +105,7 @@ import com.android.internal.R;
  */
 public class WifiService extends IWifiManager.Stub {
     private static final String TAG = "WifiService";
-    private static final boolean DBG = true;
+    private static final boolean DBG = SystemProperties.getBoolean("wifi.debug", false);
     private static final Pattern scanResultPattern = Pattern.compile("\t+");
     private final WifiStateTracker mWifiStateTracker;
     /* TODO: fetch a configurable interface */
@@ -1571,7 +1571,7 @@ public class WifiService extends IWifiManager.Stub {
                     if (scanResult != null) {
                         scanList.add(scanResult);
                     } else if (DBG) {
-                        Slog.w(TAG, "misformatted scan result for: " + line);
+                        Slog.d(TAG, "misformatted scan result for: " + line);
                     }
                 }
                 lineBeg = lineEnd + 1;
