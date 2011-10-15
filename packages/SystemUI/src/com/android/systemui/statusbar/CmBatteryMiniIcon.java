@@ -64,8 +64,8 @@ public class CmBatteryMiniIcon extends ImageView {
     // recalculation of BATTERY_MINI_ICON_MARGIN_RIGHT_DIP to pixels
     private int mMarginRightPx;
 
-    // weather to show this battery widget or not
-    private boolean mShowCmBattery = false;
+    private static final int BATTERY_STYLE_PERCENT   = 1;
+    private int mStatusBarCmBattery;
 
     // used for animation and still values when not charging/fully charged
     private int mCurrentFrame = 0;
@@ -218,7 +218,7 @@ public class CmBatteryMiniIcon extends ImageView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (!mAttached || !mShowCmBattery)
+        if (!mAttached || mStatusBarCmBattery != BATTERY_STYLE_PERCENT)
             return;
 
         canvas.drawBitmap(mMiniIconCache[mCurrentFrame], mMatrix, mPaint);
@@ -270,13 +270,15 @@ public class CmBatteryMiniIcon extends ImageView {
     private void updateSettings() {
         ContentResolver resolver = mContext.getContentResolver();
 
-        mShowCmBattery = (Settings.System
-                .getInt(resolver, Settings.System.STATUS_BAR_CM_BATTERY, 0) == 1);
+        int statusBarCmBattery = (Settings.System.getInt(resolver,
+                Settings.System.STATUS_BAR_CM_BATTERY, 2));
+        mStatusBarCmBattery = Integer.valueOf(statusBarCmBattery);
 
-        if (mShowCmBattery)
+        if (mStatusBarCmBattery == BATTERY_STYLE_PERCENT) {
             setVisibility(View.VISIBLE);
-        else
+        } else {
             setVisibility(View.GONE);
+        }
     }
 
     // should be toggled to private (or inlined at constructor), once StatusBarService.updateResources properly handles theme change
