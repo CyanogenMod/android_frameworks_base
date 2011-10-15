@@ -739,7 +739,7 @@ public class LockPatternUtils {
             cursor = Calendar.Instances.query(mContentResolver, new String[] {
                     Calendar.EventsColumns.TITLE, Calendar.EventsColumns.DTSTART
             }, now, later, where.toString(), null);
-            if (cursor.moveToFirst()) {
+            if (cursor != null && cursor.moveToFirst()) {
                 String title = cursor.getString(0);
                 Date start = new Date(cursor.getLong(1));
                 StringBuilder sb = new StringBuilder();
