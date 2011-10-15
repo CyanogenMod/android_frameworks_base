@@ -257,7 +257,7 @@ status_t AACEncoder::read(
             copy = mInputBuffer->range_length();
         }
 
-        memcpy(&mInputFrame[mNumInputSamples],
+        memcpy(&mInputFrame[mNumInputSamples * mChannels],
                (const uint8_t *) mInputBuffer->data()
                     + mInputBuffer->range_offset(),
                copy);
