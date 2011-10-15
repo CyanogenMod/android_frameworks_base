@@ -1571,7 +1571,7 @@ public class WifiService extends IWifiManager.Stub {
                     if (scanResult != null) {
                         scanList.add(scanResult);
                     } else if (DBG) {
-                        Slog.w(TAG, "misformatted scan result for: " + line);
+                        Slog.d(TAG, "misformatted scan result for: " + line);
                     }
                 }
                 lineBeg = lineEnd + 1;
