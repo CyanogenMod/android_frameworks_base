@@ -448,6 +448,12 @@
         android:label="@string/permlab_recordAudio"
         android:description="@string/permdesc_recordAudio" />
 
+    <permission android:name="android.permission.RAW_AUDIO"
+        android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
+        android:protectionLevel="dangerous"
+        android:label="@string/permlab_rawAudio"
+        android:description="@string/permdesc_rawAudio" />
+
     <!-- Required to be able to access the camera device.
          <p>This will automatically enforce the <a
          href="{@docRoot}guide/topics/manifest/uses-feature-element.html">{@code
