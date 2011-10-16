@@ -88,8 +88,8 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
     public LGEStarRIL(Context context, int networkMode, int cdmaSubscription) {
         super(context, networkMode, cdmaSubscription);
         /* The star needs to ignore SCREEN_X states, in order to keep the
-         * batt updates running. The cosmo doesn't need this */
-        if (!SystemProperties.get("ro.build.product").equals("p920")) {
+         * batt updates running. The others don't need this */
+        if (SystemProperties.get("ro.build.product").indexOf("p99") == 0) {
             context.unregisterReceiver(mIntentReceiver);
             BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
                 @Override
@@ -105,6 +105,23 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
             };
             IntentFilter filter = new IntentFilter();
             filter.addAction(Intent.ACTION_SCREEN_ON);
+            filter.addAction(Intent.ACTION_SCREEN_OFF);
+            context.registerReceiver(mIntentReceiver, filter);
+        } else {
+            BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
+                @Override
+                    public void onReceive(Context context, Intent intent) {
+                        if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+                            Log.d(LOG_TAG, "Enabling FAST_DORMANCY");
+                            RILRequest rrSPR = RILRequest.obtain(
+                                    279, null);
+                            rrSPR.mp.writeInt(1);
+                            rrSPR.mp.writeInt(1);
+                            send(rrSPR);
+                        }
+                    }
+            };
+            IntentFilter filter = new IntentFilter();
             filter.addAction(Intent.ACTION_SCREEN_OFF);
             context.registerReceiver(mIntentReceiver, filter);
         }
@@ -510,6 +527,7 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
             case 161: ret =  responsePdpAddress(p); break; // SHOW_PDP_ADDRESS
             case 189: ret =  responseVoid(p); break; // RIL_REQUEST_SET_TIME_ZONE_REPORTING
             case 273: ret =  responseVoid(p); break; // SET_GMM_ATTACH_MODE
+            case 279: ret =  responseVoid(p); break; // FAST_DORMANCY
             case 286: ret =  responseVoid(p); break; // GET_SERVICE_LINE
             case 294: ret =  responseVoid(p); break; // GET_SERVICE_LINE
             case 296: ret =  responseVoid(p); break; // RIL_REQUEST_SET_PRODUCT_RAT
