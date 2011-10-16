@@ -2018,8 +2018,12 @@ public class WifiService extends IWifiManager.Stub {
         synchronized (mWifiStateTracker) {
             mTmpWorkSource.clear();
             if (mDeviceIdle) {
-                for (int i=0; i<mLocks.mList.size(); i++) {
-                    mTmpWorkSource.add(mLocks.mList.get(i).mWorkSource);
+                try {
+                    for (int i=0; i<mLocks.mList.size(); i++) {
+                        mTmpWorkSource.add(mLocks.mList.get(i).mWorkSource);
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    //Oh well, it's gone
                 }
             }
             mWifiStateTracker.updateBatteryWorkSourceLocked(mTmpWorkSource);
