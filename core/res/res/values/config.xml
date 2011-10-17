@@ -467,11 +467,13 @@
 
     <!-- if true, status bar is shown on bottom by default -->
     <bool name="cm_default_bottom_status_bar">false</bool>
+
     <!-- if true, dead zone is activated, which disables pull
     out of the status bar on the middle area - i.e. for people
     who start drag-out events accidently while trying to hit
     the space key -->
     <bool name="cm_default_use_dead_zone">false</bool>
+
     <!-- if true, soft buttons shown on left, false show them on
     right side of status bar -->
     <bool name="cm_default_soft_buttons_left">true</bool>
@@ -489,6 +491,7 @@
     power button press to wake devices. usful for devices you
     dont carry in pockets -->
     <bool name="cm_default_disable_lockscreen">false</bool>
+
     <!--  option only available for devices with soft buttons.
     when enabled, fullscreen apps show the status bar. status
     bar then gets an adition hide button to switch to real
@@ -518,6 +521,7 @@
     volume change when pressing, user action when long-pressing. enabling
     (true) this option reverses this behavior -->
     <bool name="cm_default_reverse_volume_behavior">false</bool>
+
     <!-- defines the action of the volume buttons. for volume up,
     volume down, both press and both long-press. this is an
     index. to know, which index matches which button, see
@@ -527,6 +531,12 @@
     <integer name="cm_default_remapped_long_vol_down_index">0</integer>
     <integer name="cm_default_remapped_both_vol_index">0</integer>
     <integer name="cm_default_remapped_long_both_vol_index">0</integer>
+
+    <!-- Devices with WVGA resolution and mdpi density need this
+    workaround to prevent the recent applications dialog from randomly
+    using HVGA dimensions. It's likely that other high res/low dpi
+    combinations will need this too. -->
+    <bool name="cm_default_recentapps_tablet_workaround">false</bool>
 
     <!-- Set this to true to get data working on some Motorola phones -->
     <bool name="config_rilNeedsNullPath">false</bool>
