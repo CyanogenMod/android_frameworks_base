@@ -38,7 +38,7 @@ struct OMXCodec : public MediaSource,
         // The client wants to access the output buffer's video
         // data for example for thumbnail extraction.
         kClientNeedsFramebuffer  = 4,
-#ifdef OMAP_ENHANCEMENT
+#if defined(OMAP_ENHANCEMENT) || defined(OMAP_COMPAT)
         kPreferThumbnailMode               = 0x8,
         kPreferInterlacedOutputContent     = 0x10,
         MAX_RESOLUTION = 414720, // video resolution for TI Vid Dec
@@ -141,7 +141,7 @@ private:
         kStoreMetaDataInInputVideoBuffers     = 16384,
         kCanNotSetVideoParameters             = 32768,
         kDoesNotRequireMemcpyOnOutputPort     = 65536,
-#ifdef OMAP_ENHANCEMENT
+#if defined(OMAP_ENHANCEMENT) || defined(OMAP_COMPAT)
         kDecoderNeedsPortReconfiguration      = 131072,
         kDecoderCantRenderSmallClips          = 262144,
         kInterlacedOutputContent              = 524288,
@@ -309,7 +309,7 @@ public:
 #endif
     status_t configureCodec(const sp<MetaData> &meta, uint32_t flags);
 
-#ifdef OMAP_ENHANCEMENT
+#if defined(OMAP_ENHANCEMENT) || defined(OMAP_COMPAT)
 protected:
     static uint32_t getComponentQuirks(const char *componentName, bool isEncoder, uint32_t flags = 0);
     int32_t mVideoFPS;
