@@ -1153,9 +1153,9 @@ public class NotificationManagerService extends INotificationManager.Stub
                             // TODO: these constants need to be published somewhere in the framework
                             Intent fmmute = new Intent(FM_MUTE_CMD);
                             mContext.sendBroadcast(fmmute);
-                            mSound.play(mContext, uri, looping, audioStreamType);
                          }
-                        /* TI FM UI port -stop */
+                         /* TI FM UI port -stop */
+                         mSound.play(mContext, uri, looping, audioStreamType);
 
                         }
                         finally {
