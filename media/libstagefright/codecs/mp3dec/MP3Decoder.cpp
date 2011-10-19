@@ -535,7 +535,7 @@ status_t MP3Decoder::read(
             off_t syncOffset = 0;
             bool valid = resync(mConfig->pInputBuffer, mConfig->inputBufferCurrentLength,
                                 mFixedHeader, &syncOffset);
-            if (!valid) {
+            if (!valid || !syncOffset) {
                 // consume these bytes, we might find a frame header in next buffer
                 syncOffset = mConfig->inputBufferCurrentLength;
             }
