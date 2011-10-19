@@ -1373,13 +1373,13 @@ status_t AwesomePlayer::initAudioDecoder() {
          // TODO: extend this to a method that can include more
          // capabilities to evaluate
 
-#ifdef TARGET_OMAP4
+# ifdef TARGET_OMAP4
             //for OMAP4 720p,1080p videos, lets stick to OMX.PV audio codecs
             mAudioSource = OMXCodec::Create(
                     mClient.interface(), mAudioTrack->getFormat(),
                     false, // createEncoder
                     mAudioTrack);
-#else
+# else
         bool isIttiamAudioCodecRequired = false;
         bool is720PCodecRequired = (mVideoWidth*mVideoHeight > MAX_RESOLUTION) ? true : false;
 
@@ -1420,8 +1420,28 @@ status_t AwesomePlayer::initAudioDecoder() {
                         mAudioTrack);
             }
         }
-#endif
+# endif
         } else {
+            mAudioSource = OMXCodec::Create(
+                    mClient.interface(), mAudioTrack->getFormat(),
+                    false, // createEncoder
+                    mAudioTrack);
+        }
+
+#elif defined(USE_TI720P_DECODER)
+        const char *componentName;
+
+        // for video audio
+        if (!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_AAC)) {
+
+            componentName = "OMX.TI.AAC.decode";
+
+            mAudioSource = OMXCodec::Create(
+                    mClient.interface(), mAudioTrack->getFormat(),
+                    false,
+                    mAudioTrack, componentName);
+        } else {
+
             mAudioSource = OMXCodec::Create(
                     mClient.interface(), mAudioTrack->getFormat(),
                     false, // createEncoder
