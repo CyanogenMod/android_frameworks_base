@@ -1,5 +1,13 @@
 LOCAL_PATH:= $(call my-dir)
 
+# common CFLAGS
+cflags := -Wno-multichar
+
+# CFLAGS for includes
+ifeq ($(TARGET_USE_OMAP_COMPAT),true)
+	cflags += -DOMAP_COMPAT
+endif
+
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES:=       \
@@ -15,7 +23,7 @@ LOCAL_C_INCLUDES:= \
 	frameworks/base/media/libstagefright/include \
 	$(TOP)/frameworks/base/include/media/stagefright/openmax
 
-LOCAL_CFLAGS += -Wno-multichar
+LOCAL_CFLAGS += ${cflags}
 
 LOCAL_MODULE_TAGS := debug
 
@@ -39,7 +47,7 @@ LOCAL_C_INCLUDES:= \
 	frameworks/base/media/libstagefright \
 	$(TOP)/frameworks/base/include/media/stagefright/openmax
 
-LOCAL_CFLAGS += -Wno-multichar
+LOCAL_CFLAGS += ${cflags}
 
 LOCAL_MODULE_TAGS := debug
 
@@ -63,7 +71,7 @@ LOCAL_C_INCLUDES:= \
 	frameworks/base/media/libstagefright \
 	$(TOP)/frameworks/base/include/media/stagefright/openmax
 
-LOCAL_CFLAGS += -Wno-multichar
+LOCAL_CFLAGS += ${cflags}
 
 LOCAL_MODULE_TAGS := debug
 
