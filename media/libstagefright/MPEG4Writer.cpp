@@ -1911,7 +1911,7 @@ status_t MPEG4Writer::Track::threadEntry() {
             mGotAllCodecSpecificData = true;
             continue;
         }
-#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP3)
+#if (defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP3)) || defined(OMAP_COMPAT)
         else if (mIsAvc && count < 3) {
             size_t size = buffer->range_length();
             size_t start_code_size = 0;
