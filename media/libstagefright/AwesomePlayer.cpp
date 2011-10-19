@@ -1347,7 +1347,6 @@ void AwesomePlayer::setAudioSource(sp<MediaSource> source) {
 
 status_t AwesomePlayer::initAudioDecoder() {
     sp<MetaData> meta = mAudioTrack->getFormat();
-
     const char *mime;
     CHECK(meta->findCString(kKeyMIMEType, &mime));
 
@@ -1420,17 +1419,32 @@ status_t AwesomePlayer::initAudioDecoder() {
                         mAudioTrack);
             }
         }
-#endif
-        } else {
+#endif // OMAP_ENHANCEMENT
+    } else {
+#ifdef USE_TI720P_DECODER
+
+        const char *componentName;
+
+        // for video audio
+        if (!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_AAC)) {
+
+            componentName = "OMX.TI.AAC.decode";
+
             mAudioSource = OMXCodec::Create(
                     mClient.interface(), mAudioTrack->getFormat(),
-                    false, // createEncoder
+                    false,
+                    mAudioTrack, componentName);
+        } else {
+
+            mAudioSource = OMXCodec::Create(
+                    mClient.interface(), mAudioTrack->getFormat(),
+                    false,
                     mAudioTrack);
         }
 #else
         mAudioSource = OMXCodec::Create(
                 mClient.interface(), mAudioTrack->getFormat(),
-                false, // createEncoder
+                false, 
                 mAudioTrack);
 #endif
     }
