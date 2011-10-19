@@ -1047,17 +1047,28 @@ void AwesomePlayer::setAudioSource(sp<MediaSource> source) {
 
 status_t AwesomePlayer::initAudioDecoder() {
     sp<MetaData> meta = mAudioTrack->getFormat();
-
+    const char *componentName;
     const char *mime;
     CHECK(meta->findCString(kKeyMIMEType, &mime));
 
     if (!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_RAW)) {
         mAudioSource = mAudioTrack;
     } else {
-        mAudioSource = OMXCodec::Create(
-                mClient.interface(), mAudioTrack->getFormat(),
-                false, // createEncoder
-                mAudioTrack);
+
+        if (!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_AAC)) {
+            componentName = "OMX.TI.AAC.decode";
+
+            mAudioSource = OMXCodec::Create(
+                            mClient.interface(), mAudioTrack->getFormat(),
+                            false, // createEncoder
+                            mAudioTrack, componentName);
+        } else {
+
+            mAudioSource = OMXCodec::Create(
+                            mClient.interface(), mAudioTrack->getFormat(),
+                            false,
+                            mAudioTrack);
+        }
     }
 
     if (mAudioSource != NULL) {
