@@ -152,6 +152,10 @@ ifeq ($(TARGET_DONT_SET_AUDIO_AAC_FORMAT),true)
         LOCAL_CFLAGS += -DDONT_SET_AUDIO_AAC_FORMAT
 endif
 
+ifeq ($(TARGET_USE_OMAP_COMPAT),true)
+        LOCAL_CFLAGS += -DOMAP_COMPAT
+endif
+
 ifeq ($(TARGET_OS)-$(TARGET_SIMULATOR),linux-true)
         LOCAL_LDLIBS += -lpthread
 endif
