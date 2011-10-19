@@ -1854,7 +1854,7 @@ status_t MPEG4Writer::Track::threadEntry() {
     uint32_t previousSampleSize = 0;  // Size of the previous sample
     int64_t previousPausedDurationUs = 0;
     int64_t timestampUs;
-#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP3)
+#if (defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP3)) || defined(OMAP_COMPAT)
     uint8_t *copy_spspps;
     int32_t copy_spspps_size = 0;
 #endif
@@ -1914,7 +1914,7 @@ status_t MPEG4Writer::Track::threadEntry() {
             mGotAllCodecSpecificData = true;
             continue;
         }
-#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP3)
+#if (defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP3)) || defined(OMAP_COMPAT)
         else if (mIsAvc && count < 3) {
             size_t size = buffer->range_length();
             size_t start_code_size = 0;

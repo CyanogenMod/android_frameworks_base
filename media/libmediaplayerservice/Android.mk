@@ -48,6 +48,11 @@ else
 LOCAL_CFLAGS += -DNO_OPENCORE
 endif
 
+# CFLAGS for StagefrightRecorder includes
+ifeq ($(TARGET_USE_OMAP_COMPAT),true)
+	LOCAL_CFLAGS += -DOMAP_COMPAT
+endif
+
 ifneq ($(TARGET_SIMULATOR),true)
 LOCAL_SHARED_LIBRARIES += libdl
 endif
