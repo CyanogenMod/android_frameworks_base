@@ -156,6 +156,18 @@ ifeq ($(TARGET_OS)-$(TARGET_SIMULATOR),linux-true)
         LOCAL_LDLIBS += -lpthread
 endif
 
+############################################
+ifeq ($(TARGET_USE_OMAP_COMPAT),true)
+        LOCAL_CFLAGS += -DOMAP_COMPAT
+ifeq ($(TARGET_USE_OMX_720P_DEC),true)
+        LOCAL_CFLAGS += -DUSE_TI720P_DECODER
+endif
+ifeq ($(TARGET_USE_OMX_720P_ENC),true)
+        LOCAL_CFLAGS += -DUSE_TI720P_ENCODER
+endif
+endif # TARGET_USE_OMAP_COMPAT
+############################################
+
 LOCAL_CFLAGS += -Wno-multichar
 
 LOCAL_MODULE:= libstagefright
