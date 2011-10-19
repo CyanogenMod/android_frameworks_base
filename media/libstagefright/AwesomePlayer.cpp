@@ -1054,10 +1054,23 @@ status_t AwesomePlayer::initAudioDecoder() {
     if (!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_RAW)) {
         mAudioSource = mAudioTrack;
     } else {
-        mAudioSource = OMXCodec::Create(
-                mClient.interface(), mAudioTrack->getFormat(),
-                false, // createEncoder
-                mAudioTrack);
+            const char *componentName;
+            if (!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_AAC)) {
+                componentName = "OMX.TI.AAC.decode";
+
+                mAudioSource = OMXCodec::Create(
+                        mClient.interface(), mAudioTrack->getFormat(),
+                        false, // createEncoder
+                        mAudioTrack, componentName);
+            }
+            else {
+                componentName = "NoComponentAvailable";
+
+                mAudioSource = OMXCodec::Create(
+                        mClient.interface(), mAudioTrack->getFormat(),
+                        false,
+                        mAudioTrack);
+        }
     }
 
     if (mAudioSource != NULL) {
