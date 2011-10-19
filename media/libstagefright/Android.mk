@@ -127,6 +127,10 @@ ifeq ($(TARGET_OS)-$(TARGET_SIMULATOR),linux-true)
         LOCAL_LDLIBS += -lpthread
 endif
 
+ifeq ($(TARGET_BOOTLOADER_BOARD_NAME),jordan)
+LOCAL_FLAGS += -DUSE_TI720P_DECODER -DUSE_TI720P_ENCODER
+endif
+
 LOCAL_CFLAGS += -Wno-multichar
 
 LOCAL_MODULE:= libstagefright
