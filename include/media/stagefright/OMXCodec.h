@@ -38,6 +38,9 @@ struct OMXCodec : public MediaSource,
         // The client wants to access the output buffer's video
         // data for example for thumbnail extraction.
         kClientNeedsFramebuffer  = 4,
+        kPreferThumbnailMode               = 0x8,
+        kPreferInterlacedOutputContent     = 0x10,
+        MAX_RESOLUTION = 414720, // video resolution for TI Vid Dec
     };
     static sp<MediaSource> Create(
             const sp<IOMX> &omx,
