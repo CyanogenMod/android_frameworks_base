@@ -92,9 +92,9 @@ static inline const char* toString(bool value) {
     return value ? "true" : "false";
 }
 
-EventHub::device_t::device_t(int32_t _id, const char* _path, const char* name)
+EventHub::device_t::device_t(int32_t _id, const char* _path, const char* name, bool _bluetooth)
     : id(_id), path(_path), name(name), classes(0)
-    , keyBitmask(NULL), layoutMap(new KeyLayoutMap()), fd(-1), next(NULL) {
+    , keyBitmask(NULL), layoutMap(new KeyLayoutMap()), fd(-1), bluetooth(_bluetooth), next(NULL) {
 }
 
 EventHub::device_t::~device_t() {
@@ -135,6 +135,13 @@ String8 EventHub::getDeviceName(int32_t deviceId) const
     device_t* device = getDeviceLocked(deviceId);
     if (device == NULL) return String8();
     return device->name;
+}
+
+bool EventHub::getDeviceBluetooth(int32_t deviceId) const
+{
+    AutoMutex _l(mLock);
+    device_t* device = getDeviceLocked(deviceId);
+    return device->bluetooth;
 }
 
 uint32_t EventHub::getDeviceClasses(int32_t deviceId) const
@@ -669,7 +676,7 @@ int EventHub::openDevice(const char *deviceName) {
         version >> 16, (version >> 8) & 0xff, version & 0xff);
 #endif
 
-    device_t* device = new device_t(devid|mDevicesById[devid].seq, deviceName, name);
+    device_t* device = new device_t(devid|mDevicesById[devid].seq, deviceName, name, BUS_BLUETOOTH == id.bustype);
     if (device == NULL) {
         LOGE("out of memory");
         return -1;
