@@ -43,6 +43,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.RemoteException;
 import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.util.Log;
 
@@ -116,6 +117,7 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
 
     private boolean mLegacy = false;	// whether we need legacy tethering support or not
     private int mProbing = 0;		// track RNDIS enable/disable disconnects
+    private int kb_disconnect = 0;	// whether there is a kickback usb disconnection event when rndis is enabled
 
     public Tethering(Context context, Looper looper) {
         mContext = context;
@@ -505,7 +507,12 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                 if (enable) {
                     interfaceAdded(iface);
                 } else {
-                    interfaceRemoved(iface);
+                    if (kb_disconnect == 0) {
+                        interfaceRemoved(iface);
+                    }
+                    else {
+                        kb_disconnect--;
+                    }
                 }
             }
         }
@@ -1301,6 +1308,9 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
                     sm.sendMessage(TetherInterfaceSM.CMD_TETHER_CONNECTION_CHANGED,
                             ifaceName);
                 }
+                String kb_disc = SystemProperties.get("ro.tethering.kb_disconnect");
+                if("1".equals(kb_disc))
+                    kb_disconnect=1;
             }
         }
 
