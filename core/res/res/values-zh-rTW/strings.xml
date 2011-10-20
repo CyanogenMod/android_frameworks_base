@@ -304,6 +304,8 @@
     <string name="reboot_bootloader">Bootloader</string>
     <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
     <string name="reboot_bootmenu">Bootmenu</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">Fastboot</string>
 
     <!-- Shutdown Progress Dialog. This is shown if the user chooses to power off the phone. -->
     <string name="shutdown_progress" msgid="2281079257329981203">"關機中..."</string>
@@ -793,6 +795,11 @@
     <string name="permlab_camera" msgid="3616391919559751192">"拍照和拍攝影片"</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_camera" msgid="6004878235852154239">"允許應用程式使用相機拍照和錄影，此功能可讓應用程式隨時透過相機收集圖片。"</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_rawAudio">低階音訊存取</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_rawAudio">允許應用程式完全控制音訊硬體。</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_brick" msgid="8337817093326370537">"永久停用電話"</string>
@@ -1807,6 +1814,8 @@
     <string name="force_close" msgid="3653416315450806396">"強制關閉"</string>
     <!-- Button allowing the user to send a bug report for application which has encountered an error. -->
     <string name="report" msgid="4060218260984795706">"回報"</string>
+    <!-- Button allowing the user to open the application settings screen to edit permissions. -->
+    <string name="edit_perms">編輯權限</string>
     <!-- Button allowing the user reset the revoked permissions for application which has encountered an error. -->
     <string name="reset_perms">重設權限</string>
     <!-- Button allowing the user to choose to wait for an application that is not responding to become responsive again. -->
