@@ -809,12 +809,8 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         // Don't poke the wake lock when returning to a state where the handle is
         // not grabbed since that can happen when the system (instead of the user)
         // cancels the grab.
-        if (grabbedState != SlidingTab.OnTriggerListener.NO_HANDLE) {
+        if (grabbedState != 0) {
             mGestureOverlay.cancelGesture();
-            mCallback.pokeWakelock();
-        }
-
-        if (mUseRingLockscreen) {
             mCallback.pokeWakelock();
         }
     }
