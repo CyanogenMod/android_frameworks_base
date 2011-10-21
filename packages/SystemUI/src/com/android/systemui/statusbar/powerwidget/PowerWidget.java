@@ -80,6 +80,8 @@ public class PowerWidget extends FrameLayout {
 
         // get an initial width
         updateButtonLayoutWidth();
+        setupWidget();
+        updateVisibility();
     }
 
     public void setupWidget() {
@@ -155,8 +157,6 @@ public class PowerWidget extends FrameLayout {
         IntentFilter filter = PowerButton.getAllBroadcastIntentFilters();
         // we add this so we can update views and such if the settings for our widget change
         filter.addAction(Settings.SETTINGS_CHANGED);
-        // we need to re-setup our widget on boot complete to make sure it is visible if need be
-        filter.addAction(Intent.ACTION_BOOT_COMPLETED);
         // we need to detect orientation changes and update the static button width value appropriately
         filter.addAction(Intent.ACTION_CONFIGURATION_CHANGED);
         // register the receiver
@@ -217,10 +217,7 @@ public class PowerWidget extends FrameLayout {
     // our own broadcast receiver :D
     private class WidgetBroadcastReceiver extends BroadcastReceiver {
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
-                setupWidget();
-                updateVisibility();
-            } else if(intent.getAction().equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
+            if(intent.getAction().equals(Intent.ACTION_CONFIGURATION_CHANGED)) {
                 updateButtonLayoutWidth();
                 setupWidget();
             } else {
