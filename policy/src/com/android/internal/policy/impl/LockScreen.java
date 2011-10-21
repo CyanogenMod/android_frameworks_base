@@ -813,10 +813,6 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             mGestureOverlay.cancelGesture();
             mCallback.pokeWakelock();
         }
-
-        if (mUseRingLockscreen) {
-            mCallback.pokeWakelock();
-        }
     }
 
     /**
