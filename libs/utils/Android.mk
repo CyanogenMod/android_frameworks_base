@@ -50,6 +50,9 @@ commonSources:= \
 	../../tools/aapt/ZipEntry.cpp \
 	misc.cpp
 
+ifeq ($(BOARD_USES_SECURECLOCK),true)
+        commonSources += SecureClock.cpp
+endif
 
 # For the host
 # =====================================================
