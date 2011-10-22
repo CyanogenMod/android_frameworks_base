@@ -132,6 +132,13 @@ OSCL_EXPORT_REF AVCStatus AVCConfigureSequence(AVCHandle *avcHandle, AVCCommonOb
         {
             num_fs = MAX_FS;
         }
+
+        CleanUpDPB(avcHandle, video);
+        if (InitDPB(avcHandle, video, FrameHeightInMbs, PicWidthInMbs, padding) != AVC_SUCCESS)
+        {
+            return AVC_FAIL;
+        }
+        num_fs = dpb->num_fs;
 #ifdef PV_MEMORY_POOL
         if (padding)
         {
@@ -143,11 +150,6 @@ OSCL_EXPORT_REF AVCStatus AVCConfigureSequence(AVCHandle *avcHandle, AVCCommonOb
             avcHandle->CBAVC_DPBAlloc(avcHandle->userData, PicSizeInMapUnits, num_fs);
         }
 #endif
-        CleanUpDPB(avcHandle, video);
-        if (InitDPB(avcHandle, video, FrameHeightInMbs, PicWidthInMbs, padding) != AVC_SUCCESS)
-        {
-            return AVC_FAIL;
-        }
         /*  Allocate video->mblock upto PicSizeInMbs and populate the structure  such as the neighboring MB pointers.   */
         framesize = (FrameHeightInMbs * PicWidthInMbs);
         if (video->mblock)
