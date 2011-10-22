@@ -116,14 +116,25 @@ sp<MetaData> AMRWBDecoder::getFormat() {
 }
 
 static size_t getFrameSize(unsigned FT) {
-    static const size_t kFrameSizeWB[9] = {
-        132, 177, 253, 285, 317, 365, 397, 461, 477
+    static const size_t kFrameSizeWB[16] = { 18      // AMR-WB 6.60 Kbps
+          , 24        // AMR-WB 8.85 Kbps
+          , 33        // AMR-WB 12.65 Kbps
+          , 37        // AMR-WB 14.25 Kbps
+          , 41        // AMR-WB 15.85 Kbps
+          , 47        // AMR-WB 18.25 Kbps
+          , 51        // AMR-WB 19.85 Kbps
+          , 59        // AMR-WB 23.05 Kbps
+          , 61        // AMR-WB 23.85 Kbps
+          , 6     // AMR-WB SID
+          , 1
+          , 1
+          , 1
+          , 1
+          , 1     // WBAMR Frame No Data
+          , 1     // WBAMR Frame No Data
     };
 
     size_t frameSize = kFrameSizeWB[FT];
-
-    // Round up bits to bytes and add 1 for the header byte.
-    frameSize = (frameSize + 7) / 8 + 1;
 
     return frameSize;
 }
