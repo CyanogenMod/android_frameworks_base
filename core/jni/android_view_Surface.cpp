@@ -157,7 +157,13 @@ static void setSurfaceControl(JNIEnv* env, jobject clazz,
 
 static sp<Surface> getSurface(JNIEnv* env, jobject clazz)
 {
-    sp<Surface> result((Surface*)env->GetIntField(clazz, so.surface));
+    Surface* surface = (Surface*)env->GetIntField(clazz, so.surface);
+    RefBase* ref = (RefBase*)surface;
+
+    if (ref && ref->getWeakRefs() && (ref->getStrongCount() < 1))
+        return NULL; // dead surface
+
+    sp<Surface> result(surface);
     if (result == 0) {
         /*
          * if this method is called from the WindowManager's process, it means
