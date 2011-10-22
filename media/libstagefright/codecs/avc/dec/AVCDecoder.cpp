@@ -384,7 +384,10 @@ status_t AVCDecoder::read(
                 }
 
                 AVCDecObject *pDecVid = (AVCDecObject *)mHandle->AVCObject;
-
+                if(pDecVid->seqParams[0] == NULL) {
+                    LOGE("Sequence Parameter set at id 0 is invalid");
+                    break;
+                }
                 int32_t width =
                     (pDecVid->seqParams[0]->pic_width_in_mbs_minus1 + 1) * 16;
 
