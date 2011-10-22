@@ -125,7 +125,7 @@ ERROR_CODE pvmp3_decode_header(tmp3Bits  *inputStream,
      * Note that SYNC_WORD_LNGTH is in unit of bits, but inputBufferCurrentLength
      * is in unit of bytes.
      */
-    if (inputStream->inputBufferCurrentLength < ((SYNC_WORD_LNGTH + 21) >> 3))
+    if (inputStream->inputBufferCurrentLength < ((SYNC_WORD_LNGTH + 25) >> 3))
     {
         return NO_ENOUGH_MAIN_DATA_ERROR;
     }
