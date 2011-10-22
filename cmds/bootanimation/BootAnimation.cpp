@@ -59,6 +59,7 @@ BootAnimation::BootAnimation() : Thread(false)
 }
 
 BootAnimation::~BootAnimation() {
+    mSession->dispose();
 }
 
 void BootAnimation::onFirstRef() {
