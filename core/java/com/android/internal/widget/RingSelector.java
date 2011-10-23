@@ -952,18 +952,17 @@ public class RingSelector extends ViewGroup {
         trans1 = new ScaleAnimation(1.0f, 7.5f, 1.0f, 7.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         trans1.setDuration(ANIM_DURATION);
         trans1.setInterpolator(new AccelerateInterpolator());
-        trans1.setFillAfter(true);
 
         trans2 = new AlphaAnimation(1.0f, 0.2f);
         trans2.setDuration(ANIM_DURATION);
         trans2.setInterpolator(new AccelerateInterpolator());
-        trans2.setFillAfter(true);
 
         transSet = new AnimationSet(false);
         transSet.setDuration(ANIM_DURATION);
         transSet.setAnimationListener(mAnimationDoneListener);
         transSet.addAnimation(trans1);
         transSet.addAnimation(trans2);
+        transSet.setFillAfter(true);
 
         ring.hideTarget();
         ring.startAnimation(transSet);
