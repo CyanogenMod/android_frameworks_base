@@ -288,6 +288,18 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
             String user, String password, String authType, String protocol,
             Message result) {
 
+        if (SystemProperties.get("ro.build.product").equals("p970")) {
+            /* Set GPRS class */
+            RILRequest rrCs = RILRequest.obtain(
+                    273, null);
+            rrCs.mp.writeInt(2);
+            rrCs.mp.writeInt(1);
+                rrCs.mp.writeInt(1);
+            if (RILJ_LOGD) riljLog(rrCs.serialString() + "> "
+                    + requestToString(rrCs.mRequest));
+            send(rrCs);
+        }
+
         saveDataCall = result;
         RILRequest rr
                 = RILRequest.obtain(RIL_REQUEST_SETUP_DATA_CALL, result);
