@@ -415,7 +415,7 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
                     }
                     delayedScreenLockOn(delay, intent);
                 } else {
-                    doKeyguard(SHOW_SECURITY);
+                    doKeyguard(SHOW_SLIDE);
                 }
             } else if (why == WindowManagerPolicy.OFF_BECAUSE_OF_PROX_SENSOR) {
                 // Do not enable the keyguard if the prox sensor forced the screen off.
