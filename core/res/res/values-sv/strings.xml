@@ -146,6 +146,10 @@
     <string name="power_off" msgid="4266614107412865048">"Stäng av"</string>
     <string name="reboot_system">Starta om telefon</string>
     <string name="reboot_reboot">Omstart</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Boot-meny</string>
+    <string name="reboot_fastboot">Fastboot</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Avslutar…"</string>
     <string name="reboot_progress">Startar om\u2026</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"Din telefon stängs av."</string>
@@ -340,6 +344,8 @@
     <string name="permdesc_recordAudio" msgid="6493228261176552356">"Tillåter att program får åtkomst till sökvägen för ljudinspelning."</string>
     <string name="permlab_camera" msgid="3616391919559751192">"ta bilder och spela in videoklipp"</string>
     <string name="permdesc_camera" msgid="6004878235852154239">"Tillåter att program tar kort och spelar in video med kameran. Då kan programmet när som helst fotografera eller spela in det som visas i kameran."</string>
+    <string name="permlab_rawAudio">lågnivååtkomst till ljudsystemet</string>
+    <string name="permdesc_rawAudio">Ger applikationen fullständig tillgång till ljudhårdvaran.</string>
     <string name="permlab_brick" msgid="8337817093326370537">"inaktivera telefonen permanent"</string>
     <string name="permdesc_brick" msgid="5569526552607599221">"Tillåter att programmet inaktiverar hela telefonen permanent. Detta är mycket farligt."</string>
     <string name="permlab_reboot" msgid="2898560872462638242">"tvinga omstart av telefon"</string>
@@ -782,6 +788,7 @@
     <string name="anr_process" msgid="1246866008169975783">"Processen <xliff:g id="PROCESS">%1$s</xliff:g> svarar inte."</string>
     <string name="force_close" msgid="3653416315450806396">"Tvinga stängning"</string>
     <string name="report" msgid="4060218260984795706">"Rapportera"</string>
+    <string name="edit_perms">Justera rättigheter</string>
     <string name="reset_perms">Återställ rättigheter</string>
     <string name="wait" msgid="7147118217226317732">"Vänta"</string>
     <string name="launch_warning_title" msgid="8323761616052121936">"Programmet omdirigerades"</string>
