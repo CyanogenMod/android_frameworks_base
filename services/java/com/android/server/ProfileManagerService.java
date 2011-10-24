@@ -416,6 +416,8 @@ public class ProfileManagerService extends IProfileManager.Stub {
                     NotificationGroup ng = NotificationGroup.fromXml(xpp, context);
                     addNotificationGroupInternal(ng);
                 }
+            } else if (event == XmlPullParser.END_DOCUMENT) {
+                throw new IOException("Premature end of file while reading " + PROFILE_FILENAME);
             }
             event = xpp.next();
         }
