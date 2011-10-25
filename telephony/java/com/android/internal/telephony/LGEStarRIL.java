@@ -571,9 +571,12 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
         }
 
         if (rr.mRequest == RIL_REQUEST_SETUP_DATA_CALL) {
-            rr.release();
-            showPdpAddress(saveDataCall);
-            return;
+            String[] strings = (String[]) ret;
+            if (strings.length <=2 || strings[1].indexOf("vsnet") == 0) {
+                rr.release();
+                showPdpAddress(saveDataCall);
+                return;
+            }
         }
 
         if (RILJ_LOGD) riljLog(rr.serialString() + "< " + requestToString(rr.mRequest)
