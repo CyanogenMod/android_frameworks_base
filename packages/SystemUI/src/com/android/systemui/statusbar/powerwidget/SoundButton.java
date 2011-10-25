@@ -47,12 +47,12 @@ public class SoundButton extends PowerButton {
     private final Ringer[] mRingers = new Ringer[] {
             mSilentRinger, mVibrateRinger, mSoundRinger, mSoundVibrateRinger
     };
-    private int mRingersIndex = 0;
+    private int mRingersIndex = 2;
 
     private int[] mRingerValues = new int[] {
             0, 1, 2, 3
     };
-    private int mRingerValuesIndex = 0;
+    private int mRingerValuesIndex = 2;
 
     private boolean mHapticFeedbackEnabled = false;
 
@@ -149,15 +149,15 @@ public class SoundButton extends PowerButton {
 
         String[] modes = MultiSelectListPreference.parseStoredValue(Settings.System.getString(
                 resolver, Settings.System.EXPANDED_RING_MODE));
-        if (modes != null) {
+        if (modes == null || modes.length == 0) {
+            mRingerValues = new int[] {
+                    0, 1, 2, 3
+            };
+        } else {
             mRingerValues = new int[modes.length];
             for (int i = 0; i < modes.length; i++) {
                 mRingerValues[i] = Integer.valueOf(modes[i]);
             }
-        } else {
-            mRingerValues = new int[] {
-                2
-            };
         }
 
         updateState();

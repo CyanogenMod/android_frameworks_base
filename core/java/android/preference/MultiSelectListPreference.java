@@ -57,6 +57,22 @@ public class MultiSelectListPreference extends ListPreference {
         });
     }
 
+    @Override
+    public void setValue(String value) {
+        CharSequence[] entryValues = getEntryValues();
+        if (value == null && entryValues != null) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < entryValues.length; i++) {
+                if (sb.length() > 0) {
+                    sb.append(SEPARATOR);
+                }
+                sb.append(entryValues[i]);
+            }
+            value = sb.toString();
+        }
+        super.setValue(value);
+    }
+
     public static String[] parseStoredValue(CharSequence val) {
         if (TextUtils.isEmpty(val)) {
             return null;
