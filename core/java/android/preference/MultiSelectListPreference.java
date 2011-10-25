@@ -79,6 +79,10 @@ public class MultiSelectListPreference extends ListPreference {
                     }
                 }
             }
+        } else {
+            for (int i = 0; i < entryValues.length; i++) {
+                mClickedDialogEntryIndices[i] = true;
+            }
         }
     }
 
