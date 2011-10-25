@@ -173,16 +173,15 @@ public class BrightnessButton extends PowerButton {
 
         String[] modes = MultiSelectListPreference.parseStoredValue(Settings.System.getString(
                 resolver, Settings.System.EXPANDED_BRIGHTNESS_MODE));
-        if (modes != null) {
+        if (modes == null || modes.length == 0) {
+            mBacklightValues = new int[] {
+                    0, 1, 2, 3, 4, 5
+            };
+        } else {
             mBacklightValues = new int[modes.length];
             for (int i = 0; i < modes.length; i++) {
                 mBacklightValues[i] = Integer.valueOf(modes[i]);
             }
-        } else {
-            // If no modes configured default to just MAX_BACKLIGHT
-            mBacklightValues = new int[] {
-                5
-            };
         }
 
         mAutoBrightness = (Settings.System.getInt(resolver, Settings.System.SCREEN_BRIGHTNESS_MODE,
