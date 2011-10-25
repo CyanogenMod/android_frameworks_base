@@ -38,7 +38,7 @@ public class SoundButton extends PowerButton {
 
     private final Ringer mSilentRinger = new Ringer(false, AudioManager.VIBRATE_SETTING_OFF,
             AudioManager.RINGER_MODE_SILENT, false);
-    private final Ringer mVibrateRinger = new Ringer(true, AudioManager.VIBRATE_SETTING_ON,
+    private final Ringer mVibrateRinger = new Ringer(true, AudioManager.VIBRATE_SETTING_ONLY_SILENT,
             AudioManager.RINGER_MODE_VIBRATE, true);
     private final Ringer mSoundRinger = new Ringer(true, AudioManager.VIBRATE_SETTING_ONLY_SILENT,
             AudioManager.RINGER_MODE_NORMAL, false);
@@ -47,12 +47,12 @@ public class SoundButton extends PowerButton {
     private final Ringer[] mRingers = new Ringer[] {
             mSilentRinger, mVibrateRinger, mSoundRinger, mSoundVibrateRinger
     };
-    private int mRingersIndex = 0;
+    private int mRingersIndex = 2;
 
     private int[] mRingerValues = new int[] {
             0, 1, 2, 3
     };
-    private int mRingerValuesIndex = 0;
+    private int mRingerValuesIndex = 2;
 
     private boolean mHapticFeedbackEnabled = false;
 
@@ -94,6 +94,12 @@ public class SoundButton extends PowerButton {
                 mIcon = R.drawable.stat_ring_vibrate_on;
                 mState = STATE_ENABLED;
                 break;
+        }
+        for (int i = 0; i < mRingerValues.length; i++) {
+            if (mRingersIndex == mRingerValues[i]) {
+                mRingerValuesIndex = i;
+                break;
+            }
         }
     }
 
@@ -149,24 +155,18 @@ public class SoundButton extends PowerButton {
 
         String[] modes = MultiSelectListPreference.parseStoredValue(Settings.System.getString(
                 resolver, Settings.System.EXPANDED_RING_MODE));
-        if (modes != null) {
+        if (modes == null || modes.length == 0) {
+            mRingerValues = new int[] {
+                    0, 1, 2, 3
+            };
+        } else {
             mRingerValues = new int[modes.length];
             for (int i = 0; i < modes.length; i++) {
                 mRingerValues[i] = Integer.valueOf(modes[i]);
             }
-        } else {
-            mRingerValues = new int[] {
-                2
-            };
         }
 
         updateState();
-        for (int i = 0; i < mRingerValues.length; i++) {
-            if (mRingersIndex == mRingerValues[i]) {
-                mRingerValuesIndex = i;
-                break;
-            }
-        }
     }
 
     private void findCurrentState() {
@@ -175,6 +175,20 @@ public class SoundButton extends PowerButton {
                 Settings.System.VIBRATE_IN_SILENT, 0) == 1;
         int vibrateSetting = mAudioManager.getVibrateSetting(AudioManager.VIBRATE_TYPE_RINGER);
         int ringerMode = mAudioManager.getRingerMode();
+        // Sometimes the setting don't quite match up to the states we've defined.
+        // In that case, override the reported settings to get us "close" to the
+        // defined settings. This bit is a little ugly but oh well.
+        if (!vibrateInSilent && ringerMode == AudioManager.RINGER_MODE_SILENT) {
+            vibrateSetting = AudioManager.VIBRATE_SETTING_OFF; // match Silent ringer
+        } else if (!vibrateInSilent && ringerMode == AudioManager.RINGER_MODE_NORMAL) {
+            vibrateInSilent = true; // match either Sound or SoundVibrate ringer
+            if (vibrateSetting == AudioManager.VIBRATE_SETTING_OFF) {
+                vibrateSetting = AudioManager.VIBRATE_SETTING_ONLY_SILENT; // match Sound ringer
+            }
+        } else if (vibrateInSilent && ringerMode == AudioManager.RINGER_MODE_VIBRATE) {
+            vibrateSetting = AudioManager.VIBRATE_SETTING_ONLY_SILENT; // match Vibrate ringer 
+        }
+
         Ringer ringer = new Ringer(vibrateInSilent, vibrateSetting, ringerMode, false);
         for (int i = 0; i < mRingers.length; i++) {
             if (mRingers[i].equals(ringer)) {
