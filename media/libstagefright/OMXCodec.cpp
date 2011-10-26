@@ -3054,7 +3054,8 @@ status_t OMXCodec::allocateBuffersOnPort(OMX_U32 portIndex) {
                     temp_size, alignedSize, pFrame->pointer(), pFrameHeap->getSize());
                 err = mOMX->useBuffer(mNode, portIndex, pFrame, &buffer);
             } else
-#else
+#endif
+#if !defined(TARGET_OMAP4)
             {
                 err = mOMX->useBuffer(mNode, portIndex, mem, &buffer);
             }
