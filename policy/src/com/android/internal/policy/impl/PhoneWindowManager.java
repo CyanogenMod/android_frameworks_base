@@ -313,6 +313,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mCamBtnMusicControls;
     // keeps track of long press state
     boolean mIsLongPress;
+    // keeps track of headset button repeat count
+    int mHsetRepeats;
 
     // Behavior of POWER button while in-call and screen on.
     // (See Settings.Secure.INCALL_POWER_BUTTON_BEHAVIOR.)
@@ -619,6 +621,22 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
             // Shamelessly copied from Kmobs LockScreen controls, works for Pandora, etc...
             sendMediaButtonEvent(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+        };
+    };
+
+    /**
+     * When a headset hook longpress expires, pass new repeat event to user
+     */
+    Runnable mHsetHookLongPress = new Runnable() {
+        public void run() {
+            if (mScreenOn) return;
+            mHsetRepeats++;
+            long eventtime = SystemClock.uptimeMillis();
+            Intent downIntent = new Intent(Intent.ACTION_MEDIA_BUTTON, null);
+            KeyEvent downEvent = new KeyEvent(eventtime, eventtime, KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_HEADSETHOOK, mHsetRepeats);
+            downIntent.putExtra(Intent.EXTRA_KEY_EVENT, downEvent);
+            mContext.sendOrderedBroadcast(downIntent, null);
+            mHandler.postDelayed(mHsetHookLongPress, ViewConfiguration.getLongPressTimeout());
         };
     };
 
@@ -2251,6 +2269,17 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mBroadcastWakeLock.acquire();
                     mHandler.post(new PassHeadsetKey(keyEvent));
                 }
+
+                if (keyCode == KeyEvent.KEYCODE_HEADSETHOOK) {
+                    if (!down) {
+                        mHandler.removeCallbacks(mHsetHookLongPress);
+                    }
+                    else if ((result & ACTION_PASS_TO_USER) == 0) {
+                        mHsetRepeats = 0;
+                        mHandler.postDelayed(mHsetHookLongPress, ViewConfiguration.getLongPressTimeout());
+                    }
+                }
+
                 break;
             }
 
