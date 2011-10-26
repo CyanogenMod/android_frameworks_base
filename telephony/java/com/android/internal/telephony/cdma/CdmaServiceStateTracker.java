@@ -667,6 +667,20 @@ final class CdmaServiceStateTracker extends ServiceStateTracker {
     }
 
     /**
+     * Multi-mode radio indication facilitator
+     */
+    public boolean isMultiModeRadio() {
+        // If the device you seek to make work here has a multi-mode radio, for example
+        // a "world" CDMA/GSM/UMTS radio, this function is here to facilitate alternate
+        // code paths in some events.
+        if(SystemProperties.get("ro.telephony.ril_class").equalsIgnoreCase("mototegraworld"))
+            return true;
+
+        return false;
+    }
+
+
+    /**
      * Handle the result of one of the pollState()-related requests
      */
 
@@ -723,7 +737,12 @@ final class CdmaServiceStateTracker extends ServiceStateTracker {
                 int defaultRoamingIndicator = 0;  //[12] Is default roaming indicator from PRL
                 int reasonForDenial = 0;       //[13] Denial reason if registrationState = 3
 
-                if (states.length == 14) {
+                // in some rare cases, such as a CDMA/GSM/UMTS radio, the states array will
+                // contain 15 arguments, differring from the usual 14 contained in CDMA
+                // states packets.
+                boolean multimoderadio = isMultiModeRadio();
+
+                if (states.length == 14 || (multimoderadio && states.length == 15 )) {
                     try {
                         if (states[0] != null) {
                             registrationState = Integer.parseInt(states[0]);
@@ -777,13 +796,21 @@ final class CdmaServiceStateTracker extends ServiceStateTracker {
                         if (states[13] != null) {
                             reasonForDenial = Integer.parseInt(states[13]);
                         }
+                        if(states.length == 15 &&
+                           multimoderadio) {
+	                        if (states[14] != null) {
+	                            Log.w(LOG_TAG, "Multi-Mode RIL detected - Extraneous value: "
+                                           + String.valueOf(states[14]));
+	                        }
+                        }
                     } catch (NumberFormatException ex) {
                         Log.w(LOG_TAG, "error parsing RegistrationState: " + ex);
                     }
                 } else {
                     throw new RuntimeException("Warning! Wrong number of parameters returned from "
-                                         + "RIL_REQUEST_REGISTRATION_STATE: expected 14 got "
-                                         + states.length);
+                                         + "RIL_REQUEST_REGISTRATION_STATE: expected "
+                                         + (multimoderadio?String.valueOf(15):String.valueOf(14))
+                                         + ", got " + states.length);
                 }
 
                 mRegistrationState = registrationState;
