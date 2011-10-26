@@ -723,7 +723,7 @@ final class CdmaServiceStateTracker extends ServiceStateTracker {
                 int defaultRoamingIndicator = 0;  //[12] Is default roaming indicator from PRL
                 int reasonForDenial = 0;       //[13] Denial reason if registrationState = 3
 
-                if (states.length == 14) {
+                if (states.length == 14 || ( SystemProperties.get("ro.telephony.ril_class").equalsIgnoreCase("mototegraworld") && states.length == 15 )) {
                     try {
                         if (states[0] != null) {
                             registrationState = Integer.parseInt(states[0]);
@@ -777,13 +777,19 @@ final class CdmaServiceStateTracker extends ServiceStateTracker {
                         if (states[13] != null) {
                             reasonForDenial = Integer.parseInt(states[13]);
                         }
+                        if(states.length == 15 && SystemProperties.get("ro.telephony.ril_class").equalsIgnoreCase("mototegraworld")) {
+	                        if (states[14] != null) {
+	                            Log.w(LOG_TAG, "TegraWorldRIL detected - CDMA/GSM Hybrid. Extraneous value: " + String.valueOf(states[14]));
+	                        }
+                        }
                     } catch (NumberFormatException ex) {
                         Log.w(LOG_TAG, "error parsing RegistrationState: " + ex);
                     }
                 } else {
                     throw new RuntimeException("Warning! Wrong number of parameters returned from "
-                                         + "RIL_REQUEST_REGISTRATION_STATE: expected 14 got "
-                                         + states.length);
+                                         + "RIL_REQUEST_REGISTRATION_STATE: expected " 
+                                         + (SystemProperties.get("ro.telephony.ril_class").equalsIgnoreCase("mototegraworld")?String.valueOf(15):String.valueOf(14))
+                                         + ", got " + states.length);
                 }
 
                 mRegistrationState = registrationState;
