@@ -149,7 +149,9 @@ public class SoundButton extends PowerButton {
         if (modes != null) {
             mRingerValues = new int[modes.length];
             for (int i = 0; i < modes.length; i++) {
-                mRingerValues[i] = Integer.valueOf(modes[i]);
+                if (Integer.valueOf(modes[i]) <= mRingers.length - 1) {
+                        mRingerValues[i] = Integer.valueOf(modes[i]);
+                }
             }
         } else {
             mRingerValues = new int[] {
