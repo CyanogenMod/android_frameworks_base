@@ -731,7 +731,8 @@ public final class CacheManager {
             } catch (IllegalArgumentException ex) {
                 // Take care of the special "-1" and "0" cases
                 if ("-1".equals(ret.expiresString)
-                        || "0".equals(ret.expiresString)) {
+                        || "0".equals(ret.expiresString)
+                        || "now".equals(ret.expiresString)) {
                     // make it expired, but can be used for history navigation
                     ret.expires = 0;
                 } else {
