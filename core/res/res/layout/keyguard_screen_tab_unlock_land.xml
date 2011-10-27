@@ -69,6 +69,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/carrier"
             android:layout_marginLeft="24dip"
+            android:layout_marginRight="24dip"
             android:layout_marginTop="56dip"
             android:layout_marginBottom="8dip"
             >
@@ -112,6 +113,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/time"
             android:layout_marginLeft="24dip"
+            android:layout_marginRight="24dip"
             android:layout_marginTop="6dip"
             android:textAppearance="?android:attr/textAppearanceMedium"
             />
@@ -122,6 +124,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/date"
             android:layout_marginLeft="24dip"
+            android:layout_marginRight="24dip"
             android:layout_marginTop="6dip"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:drawablePadding="4dip"
@@ -133,6 +136,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/status1"
             android:layout_marginLeft="24dip"
+            android:layout_marginRight="24dip"
             android:layout_marginTop="6dip"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:drawablePadding="4dip"
