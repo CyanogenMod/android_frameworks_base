@@ -1663,6 +1663,11 @@ public final class Settings {
         public static final String APPEND_FOR_LAST_AUDIBLE = "_last_audible";
 
         /**
+         * Whether or not camera focus sound is played. 0 = played, 1 = not played.
+         */
+        public static final String CAMERA_FOCUS_MUTE = "camera_focus_mute";
+
+        /**
          * Persistent store for the system-wide default ringtone URI.
          * <p>
          * If you need to play the default ringtone at any given time, it is recommended
@@ -2778,43 +2783,43 @@ public final class Settings {
          */
         public static final String WIDGET_BUTTONS = "expanded_widget_buttons";
 
-        /** 
+        /**
         * Notification Power Widget - Custom Brightness Mode
         * @hide
         */
         public static final String EXPANDED_BRIGHTNESS_MODE = "expanded_brightness_mode";
 
-        /** 
+        /**
         * Notification Power Widget - Custom Network Mode
         * @hide
         */
         public static final String EXPANDED_NETWORK_MODE = "expanded_network_mode";
 
-        /** 
+        /**
         * Notification Power Widget - Custom Screen Timeout
         * @hide
         */
         public static final String EXPANDED_SCREENTIMEOUT_MODE = "expanded_screentimeout_mode";
 
-        /** 
+        /**
         * Notification Power Widget - Custom Ring Mode
         * @hide
         */
         public static final String EXPANDED_RING_MODE = "expanded_ring_mode";
 
-        /** 
+        /**
         * Notification Power Widget - Custom Torch Mode
         * @hide
         */
         public static final String EXPANDED_FLASH_MODE = "expanded_flash_mode";
 
-        /** 
+        /**
         * Enables the Screen-on animation
         * @hide
         */
         public static final String ELECTRON_BEAM_ANIMATION_ON = "electron_beam_animation_on";
 
-        /** 
+        /**
         * Enables the Screen-off animation
         * @hide
         */
