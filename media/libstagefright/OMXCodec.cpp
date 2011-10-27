@@ -3938,7 +3938,8 @@ void OMXCodec::drainInputBuffers() {
         //and camera will not give any more unless we give release
         if (mIsEncoder && (mQuirks & kAvoidMemcopyInputRecordingFrames) && (i == 4))
             break;
-#elif defined(OMAP_ENHANCEMENT)
+#endif
+#ifdef OMAP_ENHANCEMENT
         if (!(*buffers)[i].mOwnedByComponent) {
             drainInputBuffer(&buffers->editItemAt(i));
         }
