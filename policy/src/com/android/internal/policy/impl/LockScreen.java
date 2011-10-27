@@ -662,6 +662,27 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         }
     }
 
+private void rightWidgets() {
+        if (mWidgetLayout == 3) {
+            RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
+            mCarrier.getLayoutParams();
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            mCarrier.setLayoutParams(layoutParams);
+            layoutParams = (RelativeLayout.LayoutParams)mDate.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+            mDate.setLayoutParams(layoutParams);
+            layoutParams = (RelativeLayout.LayoutParams)mStatus1.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+            mStatus1.setLayoutParams(layoutParams);
+            layoutParams = (RelativeLayout.LayoutParams)mStatus2.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+            mStatus2.setLayoutParams(layoutParams);
+            layoutParams = (RelativeLayout.LayoutParams)mClock.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+            mClock.setLayoutParams(layoutParams);
+        }
+    }
+
     static void setBackground(Context bcontext, ViewGroup layout){
         String mLockBack = Settings.System.getString(bcontext.getContentResolver(), Settings.System.LOCKSCREEN_BACKGROUND);
         if (mLockBack!=null){
