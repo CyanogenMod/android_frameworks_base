@@ -104,6 +104,9 @@ public class SoundButton extends PowerButton {
             mRingerValuesIndex = 0;
         }
         mRingersIndex = mRingerValues[mRingerValuesIndex];
+        if (mRingersIndex > mRingers.length - 1) {
+            mRingersIndex = 0;
+        }
         Ringer ringer = mRingers[mRingersIndex];
         ringer.execute();
     }
