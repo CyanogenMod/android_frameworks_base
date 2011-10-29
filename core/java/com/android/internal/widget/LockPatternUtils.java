@@ -750,12 +750,33 @@ public class LockPatternUtils {
                     later,
                     where.toString(),
                     null);
+
+            // All day events are given in UTC. This can cause them to be sorted
+            // as earlier events compared to a normal event on the night before
+            // we can fix this by doing UTC time - offset => local time and then
+            // compare that to the next event on the cursor.
+            long offset = (new Date()).getTimezoneOffset() * 60000;
+            String title, description, location;
+            Date start;
+            boolean allDay;
+            int i = cursor.getCount() - 1;
+
             if (cursor != null && cursor.moveToFirst()) {
-                String  title       = cursor.getString(0);
-                Date    start       = new Date(cursor.getLong(1));
-                String  description = cursor.getString(2);
-                String  location    = cursor.getString(3);
-                boolean allDay      = cursor.getInt(4) != 0;
+                do {
+                    title       = cursor.getString(0);
+                    start       = new Date(cursor.getLong(1));
+                    description = cursor.getString(2);
+                    location    = cursor.getString(3);
+                    allDay      = cursor.getInt(4) != 0;
+
+                    // i prevents out of range comparisons
+                    // if it's not an all day event, we're sure it's the earliest event
+                    if (i == 0 || !allDay)
+                        break;
+
+                    cursor.moveToNext();
+                    i = i-1;
+                } while ((new Date(cursor.getLong(1) - offset)).before(start));
 
                 StringBuilder sb = new StringBuilder();
 
