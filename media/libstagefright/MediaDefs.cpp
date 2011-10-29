@@ -25,17 +25,13 @@ const char *MEDIA_MIMETYPE_VIDEO_AVC = "video/avc";
 const char *MEDIA_MIMETYPE_VIDEO_MPEG4 = "video/mp4v-es";
 const char *MEDIA_MIMETYPE_VIDEO_H263 = "video/3gpp";
 const char *MEDIA_MIMETYPE_VIDEO_RAW = "video/raw";
-#if defined(OMAP_ENHANCEMENT)
-#if  defined(TARGET_OMAP4)
 const char *MEDIA_MIMETYPE_VIDEO_VP6 = "video/x-vp6";
 const char *MEDIA_MIMETYPE_VIDEO_VP7 = "video/x-vp7";
-#endif
-const char *MEDIA_MIMETYPE_CONTAINER_ASF = "video/asf";
-const char *MEDIA_MIMETYPE_VIDEO_WMV  = "video/wmv9";
-const char *MEDIA_MIMETYPE_AUDIO_WMA = "audio/wma";
+const char *MEDIA_MIMETYPE_VIDEO_WMV  = "video/x-ms-wmv";
+
+const char *MEDIA_MIMETYPE_AUDIO_WMA = "audio/x-ms-mwa";
 const char *MEDIA_MIMETYPE_AUDIO_WMAPRO = "audio/wmapro";
 const char *MEDIA_MIMETYPE_AUDIO_WMALSL = "audio/wmalsl";
-#endif
 
 const char *MEDIA_MIMETYPE_AUDIO_AMR_NB = "audio/3gpp";
 const char *MEDIA_MIMETYPE_AUDIO_AMR_WB = "audio/amr-wb";
@@ -50,11 +46,9 @@ const char *MEDIA_MIMETYPE_AUDIO_RAW = "audio/raw";
 const char *MEDIA_MIMETYPE_CONTAINER_MPEG4 = "video/mpeg4";
 const char *MEDIA_MIMETYPE_CONTAINER_WAV = "audio/wav";
 const char *MEDIA_MIMETYPE_CONTAINER_OGG = "application/ogg";
-
 const char *MEDIA_MIMETYPE_CONTAINER_MATROSKA = "video/x-matroska";
 const char *MEDIA_MIMETYPE_CONTAINER_MPEG2TS = "video/mp2ts";
-
-#if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
+const char *MEDIA_MIMETYPE_CONTAINER_ASF = "video/x-ms-asf";
 const char *MEDIA_MIMETYPE_CONTAINER_AVI = "video/x-msvideo";
-#endif
+
 }  // namespace android
