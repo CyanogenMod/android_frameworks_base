@@ -713,25 +713,30 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         }
 
         resetStatusInfo(updateMonitor);
-        centerWidgets();
+        switch (mWidgetLayout) {
+            case 2:
+                centerWidgets();
+                break;
+            case 3:
+                alignWidgetsToRight();
+                break;
+        }
     }
 
     private void centerWidgets() {
-        if (mWidgetLayout == 2) {
-            RelativeLayout.LayoutParams layoutParams;
-            layoutParams = (RelativeLayout.LayoutParams) mCarrier.getLayoutParams();
-            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
-            mCarrier.setLayoutParams(layoutParams);
-            mCarrier.setGravity(Gravity.CENTER_HORIZONTAL);
+        RelativeLayout.LayoutParams layoutParams;
+        layoutParams = (RelativeLayout.LayoutParams) mCarrier.getLayoutParams();
+        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        mCarrier.setLayoutParams(layoutParams);
+        mCarrier.setGravity(Gravity.CENTER_HORIZONTAL);
 
-            mStatusBox.setGravity(Gravity.CENTER_HORIZONTAL);
+        mStatusBox.setGravity(Gravity.CENTER_HORIZONTAL);
 
-            centerWidget(mClock);
-            centerWidget(mDate);
-            centerWidget(mStatusCharging);
-            centerWidget(mStatusAlarm);
-            centerWidget(mStatusCalendar);
-        }
+        centerWidget(mClock);
+        centerWidget(mDate);
+        centerWidget(mStatusCharging);
+        centerWidget(mStatusAlarm);
+        centerWidget(mStatusCalendar);
     }
 
     private void centerWidget(View view) {
@@ -743,6 +748,34 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             p.gravity = Gravity.CENTER_HORIZONTAL;
             p.leftMargin = 0;
             p.rightMargin = 0;
+        }
+        view.setLayoutParams(params);
+    }
+
+    private void alignWidgetsToRight() {
+        RelativeLayout.LayoutParams layoutParams;
+        layoutParams = (RelativeLayout.LayoutParams) mCarrier.getLayoutParams();
+        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        mCarrier.setLayoutParams(layoutParams);
+        mCarrier.setGravity(Gravity.LEFT);
+
+        mStatusBox.setGravity(Gravity.LEFT);
+
+        alignWidgetToRight(mClock);
+        alignWidgetToRight(mDate);
+        alignWidgetToRight(mStatusCharging);
+        alignWidgetToRight(mStatusAlarm);
+        alignWidgetToRight(mStatusCalendar);
+    }
+
+    private void alignWidgetToRight(View view) {
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+        if (params instanceof RelativeLayout.LayoutParams) {
+            ((RelativeLayout.LayoutParams) params).addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+            ((RelativeLayout.LayoutParams) params).addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
+        } else if (params instanceof LinearLayout.LayoutParams) {
+            LinearLayout.LayoutParams p = (LinearLayout.LayoutParams) params;
+            p.gravity = Gravity.RIGHT;
         }
         view.setLayoutParams(params);
     }
