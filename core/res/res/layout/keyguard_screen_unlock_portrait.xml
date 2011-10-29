@@ -41,6 +41,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="6dip"
             android:layout_alignParentRight="true"
+            android:layout_marginLeft="8dip"
             android:layout_marginRight="8dip"
             android:layout_toRightOf="@+id/time"
             android:singleLine="true"
@@ -56,6 +57,7 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="15dip"
             android:layout_marginLeft="20dip"
+            android:layout_marginRight="20dip"
             >
 
             <TextView android:id="@+id/timeDisplay"
@@ -96,6 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/time"
             android:layout_marginLeft="24dip"
+            android:layout_marginRight="24dip"
             android:textAppearance="?android:attr/textAppearanceMedium"
             />
 
