@@ -1340,6 +1340,27 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 } else if ("FLASHLIGHT".equals(uri)) {
                     mContext.sendBroadcast(new Intent("net.cactii.flash2.TOGGLE_FLASHLIGHT"));
                     mCallback.pokeWakelock();
+                } else if ("NEXT".equals(uri)) {
+                    mCallback.pokeWakelock();
+                    sendMediaButtonEvent(KeyEvent.KEYCODE_MEDIA_NEXT);
+                } else if ("PREVIOUS".equals(uri)) {
+                    mCallback.pokeWakelock();
+                    sendMediaButtonEvent(KeyEvent.KEYCODE_MEDIA_PREVIOUS);
+                } else if ("PLAYPAUSE".equals(uri)) {
+                    mCallback.pokeWakelock();
+                    refreshMusicStatus();
+                    if (!am.isMusicActive()) {
+                        mPauseIcon.setVisibility(View.VISIBLE);
+                        mPlayIcon.setVisibility(View.GONE);
+                        mRewindIcon.setVisibility(View.VISIBLE);
+                        mForwardIcon.setVisibility(View.VISIBLE);
+                    } else {
+                        mPauseIcon.setVisibility(View.GONE);
+                        mPlayIcon.setVisibility(View.VISIBLE);
+                        mRewindIcon.setVisibility(View.GONE);
+                        mForwardIcon.setVisibility(View.GONE);
+                    }
+                    sendMediaButtonEvent(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
                 } else
                     try {
                         Intent i = Intent.parseUri(uri, 0);
