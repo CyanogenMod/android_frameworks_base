@@ -16,16 +16,19 @@
 
 package com.android.internal.policy.impl;
 
+import com.android.internal.widget.DigitalClock;
+
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.provider.Settings;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.MotionEvent;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.*;
 import android.text.format.DateFormat;
 import android.text.TextUtils;
 import android.util.Log;
@@ -46,6 +49,9 @@ import java.util.Date;
 class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         implements KeyguardScreen, KeyguardUpdateMonitor.InfoCallback,
         KeyguardUpdateMonitor.SimStateCallback {
+
+    private int mWidgetLayout = Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.LOCKSCREEN_WIDGETS_LAYOUT, 0);
 
     private static final boolean DEBUG = false;
     private static final String TAG = "UnlockScreen";
@@ -78,6 +84,7 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
     private String mDateFormatString;
 
     private TextView mCarrier;
+    private DigitalClock mClock;
     private TextView mDate;
 
     // are we showing battery information?
@@ -188,6 +195,7 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         ViewGroup lockWallpaper = (ViewGroup) findViewById(R.id.pattern);
         LockScreen.setBackground(getContext(), lockWallpaper);
         mCarrier = (TextView) findViewById(R.id.carrier);
+        mClock = (DigitalClock) findViewById(R.id.time);
         mDate = (TextView) findViewById(R.id.date);
 
         mDateFormatString = getContext().getString(R.string.full_wday_month_day_no_year);
@@ -263,6 +271,82 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
                 LockScreen.getCarrierString(
                         mUpdateMonitor.getTelephonyPlmn(),
                         mUpdateMonitor.getTelephonySpn()));
+
+        alignWidgets();
+    }
+
+    private void alignWidgets() {
+        switch (mWidgetLayout) {
+            case 2:
+            //center
+                if (mCreationOrientation != Configuration.ORIENTATION_LANDSCAPE) {
+                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
+                    mCarrier.getLayoutParams();
+                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    layoutParams.addRule(RelativeLayout.RIGHT_OF, 0);
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+                    mCarrier.setLayoutParams(layoutParams);
+                    mCarrier.setGravity(Gravity.CENTER_HORIZONTAL);
+                    layoutParams = (RelativeLayout.LayoutParams)mDate.getLayoutParams();
+                    layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
+                    mDate.setLayoutParams(layoutParams);
+                    layoutParams = (RelativeLayout.LayoutParams)mClock.getLayoutParams();
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+                    layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
+                    layoutParams.addRule(RelativeLayout.BELOW, R.id.carrier);
+                    mClock.setLayoutParams(layoutParams);
+                } else {
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)
+                    mCarrier.getLayoutParams();
+                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    mCarrier.setLayoutParams(layoutParams);
+                    mCarrier.setGravity(Gravity.CENTER_HORIZONTAL);
+                    layoutParams = (LinearLayout.LayoutParams)mDate.getLayoutParams();
+                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    mDate.setLayoutParams(layoutParams);
+                    mDate.setGravity(Gravity.CENTER_HORIZONTAL);
+                    layoutParams = (LinearLayout.LayoutParams)mClock.getLayoutParams();
+                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    mClock.setGravity(Gravity.CENTER_HORIZONTAL);
+                    mClock.setLayoutParams(layoutParams);
+                }
+                break;
+            case 3:
+            //right
+                if (mCreationOrientation != Configuration.ORIENTATION_LANDSCAPE) {
+                    RelativeLayout.LayoutParams layoutParams = (RelativeLayout.LayoutParams)
+                    mCarrier.getLayoutParams();
+                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    layoutParams.addRule(RelativeLayout.RIGHT_OF, 0);
+                    layoutParams.addRule(RelativeLayout.LEFT_OF, R.id.time);
+                    mCarrier.setLayoutParams(layoutParams);
+                    mCarrier.setGravity(Gravity.LEFT);
+                    layoutParams = (RelativeLayout.LayoutParams)mDate.getLayoutParams();
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+                    mDate.setLayoutParams(layoutParams);
+                    layoutParams = (RelativeLayout.LayoutParams)mClock.getLayoutParams();
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+                    mClock.setLayoutParams(layoutParams);
+                } else {
+                    LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams)
+                    mCarrier.getLayoutParams();
+                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    mCarrier.setLayoutParams(layoutParams);
+                    mCarrier.setGravity(Gravity.RIGHT);
+                    layoutParams = (LinearLayout.LayoutParams)mDate.getLayoutParams();
+                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    mDate.setLayoutParams(layoutParams);
+                    mDate.setGravity(Gravity.RIGHT);
+                    layoutParams = (LinearLayout.LayoutParams)mClock.getLayoutParams();
+                    layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+                    mClock.setGravity(Gravity.RIGHT);
+                    mClock.setLayoutParams(layoutParams);
+                }
+                break;
+        }
     }
 
     private void refreshEmergencyButtonText() {
