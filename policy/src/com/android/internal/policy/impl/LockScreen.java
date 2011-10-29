@@ -679,6 +679,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
 
         resetStatusInfo(updateMonitor);
         centerWidgets();
+        rightWidgets();
     }
 
     private void centerWidgets() {
@@ -711,6 +712,35 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         }
         view.setLayoutParams(params);
     }
+
+    private void rightWidgets() {
+        if (mWidgetLayout == 3 && mCreationOrientation != Configuration.ORIENTATION_LANDSCAPE) {
+            RelativeLayout.LayoutParams layoutParams;
+            layoutParams = (RelativeLayout.LayoutParams) mCarrier.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 1);
+            mCarrier.setLayoutParams(layoutParams);
+
+            mStatusBox.setGravity(Gravity.RIGHT);
+
+            rightWidget(mClock);
+            rightWidget(mDate);
+            rightWidget(mStatusCharging);
+            rightWidget(mStatusAlarm);
+            rightWidget(mStatusCalendar);
+        }
+    }
+
+    private void rightWidget(View view) {
+        ViewGroup.LayoutParams params = view.getLayoutParams();
+        if (params instanceof RelativeLayout.LayoutParams) {
+            ((RelativeLayout.LayoutParams) params).addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+        } else if (params instanceof LinearLayout.LayoutParams) {
+            LinearLayout.LayoutParams p = (LinearLayout.LayoutParams) params;
+            p.gravity = Gravity.RIGHT;
+        }
+        view.setLayoutParams(params);
+    } 
 
     static void setBackground(Context bcontext, ViewGroup layout){
         String mLockBack = Settings.System.getString(bcontext.getContentResolver(), Settings.System.LOCKSCREEN_BACKGROUND);
