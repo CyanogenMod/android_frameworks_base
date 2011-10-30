@@ -26,6 +26,7 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.os.ResultReceiver;
 import android.os.ServiceManager;
+import android.os.SystemProperties;
 import android.util.Log;
 import android.util.PrintWriterPrinter;
 import android.util.Printer;
@@ -1330,6 +1331,7 @@ public final class InputMethodManager {
                 return;
             }
     
+            if (!SystemProperties.get("ro.product.sym_ime_picker").equals("disabled")) {
             if (key.getAction() == KeyEvent.ACTION_DOWN
                     && key.getKeyCode() == KeyEvent.KEYCODE_SYM) {
                 showInputMethodPicker();
@@ -1339,6 +1341,7 @@ public final class InputMethodManager {
                 }
                 return;
             }
+            } // if ro.product.sym_ime_picker!=disabled
             try {
                 if (DEBUG) Log.v(TAG, "DISPATCH KEY: " + mCurMethod);
                 mCurMethod.dispatchKeyEvent(seq, key, callback);
