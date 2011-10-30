@@ -66,7 +66,6 @@ public class RingSelector extends ViewGroup {
 
     private OnRingTriggerListener mOnRingTriggerListener;
     private int mGrabbedState = OnRingTriggerListener.NO_RING;
-    private boolean mTriggered = false;
     private Vibrator mVibrator;
 
     private float mDensity; // used to scale dimensions for bitmaps.
@@ -97,7 +96,6 @@ public class RingSelector extends ViewGroup {
     private Ring mOtherRing2;
     private boolean mTracking;
     private boolean mAnimating;
-    private boolean mPrevTriggered;
 
     private SecRing[] mSecRings;
 
@@ -578,7 +576,7 @@ public class RingSelector extends ViewGroup {
             ring.startAnimation(scaleAnim);
         }
 
-        void deactivate() {
+        void deactivate(boolean fillAfter) {
             if (!isActive) return;
             isActive = false;
 
@@ -586,14 +584,24 @@ public class RingSelector extends ViewGroup {
                     Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
             scaleAnim.setInterpolator(new DecelerateInterpolator());
             scaleAnim.setDuration(ANIM_CENTER_FADE_TIME);
-            scaleAnim.setFillAfter(true);
+            scaleAnim.setFillAfter(fillAfter);
             ring.startAnimation(scaleAnim);
+        }
+
+        /**
+         * Start animating the ring.
+         *
+         * @param anim1
+         */
+        public void startAnimation(Animation anim1) {
+            ring.startAnimation(anim1);
         }
 
         void reset(boolean animate) {
             if (animate) {
                 hide();
             }
+            deactivate(false);
             ring.setVisibility(View.INVISIBLE);
         }
 
@@ -682,6 +690,32 @@ public class RingSelector extends ViewGroup {
             final int dy = y - centerY;
 
             return (dx * dx + dy * dy < r * r);
+        }
+
+        /**
+         * Calculate the distance between the intersecting edges of this ring and the one provided.
+         * A larger distance indicates a larger intersection; a negative distance is
+         * returned when there is no intersection.
+         *
+         * @param interRing the intersecting ring
+         * @param x the x coordinate of the center of the intersecting ring
+         * @param y the y coordinate of the center of the intersecting ring
+         */
+        public int ringIntersectDistance(Ring interRing, int x, int y) {
+            final Drawable ringBackground = ring.getBackground();
+            final int ringWidth = interRing.getRingWidth() + ringBackground.getIntrinsicWidth();
+            final int ringHeight = interRing.getRingHeight() + ringBackground.getIntrinsicHeight();
+            final int hRingWidth = ringWidth / 2;
+            final int hRingHeight = ringHeight / 2;
+            final int r = (hRingWidth + hRingHeight) / 2;
+
+            final int centerX = ring.getLeft() + (ring.getWidth() / 2);
+            final int centerY = ring.getTop() + (ring.getHeight() / 2);
+
+            final int dx = x - centerX;
+            final int dy = y - centerY;
+
+            return r * r - (dx * dx + dy * dy);
         }
     }
 
@@ -809,7 +843,6 @@ public class RingSelector extends ViewGroup {
         switch (action) {
             case MotionEvent.ACTION_DOWN: {
                 mTracking = true;
-                mTriggered = false;
                 vibrate();
                 if (leftHit) {
                     mCurrentRing = mLeftRing;
@@ -836,7 +869,7 @@ public class RingSelector extends ViewGroup {
                 mCurrentRing.showTarget();
                 mOtherRing1.hide();
                 mOtherRing2.hide();
-
+                mSelectedRingId = -1;
                 setKeepScreenOn(true);
 
                 break;
@@ -856,16 +889,21 @@ public class RingSelector extends ViewGroup {
         mLeftRing.reset(animate);
         mRightRing.reset(animate);
         mMiddleRing.reset(animate);
+        for (SecRing secRing : mSecRings) {
+            secRing.reset(animate);
+        }
         if (!animate) {
             mAnimating = false;
         }
+        mSelectedRingId = -1;
+        setHoverBackLight();
     }
 
     @Override
     public void setVisibility(int visibility) {
-        // Clear animations so sliders don't continue to animate when we show the widget again.
-        if (visibility != getVisibility() && visibility == View.INVISIBLE) {
-           reset(false);
+        // Reset rings so they are in the correct position when we show the widget again.
+        if (visibility != getVisibility() && visibility != View.GONE) {
+            reset(false);
         }
         super.setVisibility(visibility);
     }
@@ -881,17 +919,35 @@ public class RingSelector extends ViewGroup {
                 case MotionEvent.ACTION_MOVE:
                     moveRing(x, y);
                     if (mUseMiddleRing && mCurrentRing == mMiddleRing) {
+                        int selectedRingId = mSelectedRingId;
+                        mSelectedRingId = -1;
+                        int selectedRingDistance = -1;
                         for (int q = 0; q < 4; q++) {
-                            if (!mSecRings[q].isHidden() && mSecRings[q].contains((int) x, (int) y)) {
-                                mSecRings[q].activate();
-                            } else {
-                                mSecRings[q].deactivate();
+                            if (!mSecRings[q].isHidden()) {
+                                int ringDistance = mSecRings[q].ringIntersectDistance(mMiddleRing,
+                                        (int) x, (int) y);
+                                if (ringDistance > 0 && ringDistance > selectedRingDistance) {
+                                    mSelectedRingId = q;
+                                    selectedRingDistance = ringDistance;
+                                }
                             }
+                        }
+                        for (int q = 0; q < 4; q++) {
+                            if (!mSecRings[q].isHidden()) {
+                                if (q == mSelectedRingId) {
+                                    mSecRings[q].activate();
+                                } else {
+                                    mSecRings[q].deactivate(true);
+                                }
+                            }
+                        }
+                        setHoverBackLight();
+                        if (mSelectedRingId != selectedRingId) {
+                            vibrate();
                         }
                     }
                     break;
                 case MotionEvent.ACTION_UP:
-                    mSelectedRingId = -1;
                     boolean thresholdReached = false;
 
                     if (mCurrentRing != mMiddleRing) {
@@ -900,17 +956,12 @@ public class RingSelector extends ViewGroup {
                         thresholdReached = (dx * dx + dy * dy) > mThresholdRadiusSq;
                     }
                     else if (mUseMiddleRing) {
-                        for (int q = 0; q < 4; q++) {
-                            if (!mSecRings[q].isHidden() && mSecRings[q].contains((int) x, (int) y)) {
-                                thresholdReached = true;
-                                mSelectedRingId = q;
-                                break;
-                            }
+                        if (mSelectedRingId != -1) {
+                            thresholdReached = true;
                         }
                     }
 
-                    if (!mTriggered && thresholdReached) {
-                        mTriggered = true;
+                    if (thresholdReached) {
                         mTracking = false;
                         mCurrentRing.setState(Ring.STATE_ACTIVE);
                         startAnimating();
@@ -921,7 +972,6 @@ public class RingSelector extends ViewGroup {
                     //fall through -- released ring without triggerring
                 case MotionEvent.ACTION_CANCEL:
                     mTracking = false;
-                    mTriggered = false;
                     mOtherRing1.show(true);
                     mOtherRing2.show(true);
                     mCurrentRing.reset(true);
@@ -949,15 +999,19 @@ public class RingSelector extends ViewGroup {
         final AnimationSet transSet;
         final Ring ring = mCurrentRing;
 
-        trans1 = new ScaleAnimation(1.0f, 7.5f, 1.0f, 7.5f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        if (mCurrentRing == mMiddleRing) {
+            trans1 = new ScaleAnimation(1.5f, 13.5f, 1.5f, 13.5f, Animation.RELATIVE_TO_SELF,
+                    0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        } else {
+            trans1 = new ScaleAnimation(1.0f, 7.5f, 1.0f, 7.5f, Animation.RELATIVE_TO_SELF,
+                    0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        }
         trans1.setDuration(ANIM_DURATION);
         trans1.setInterpolator(new AccelerateInterpolator());
-        trans1.setFillAfter(true);
 
         trans2 = new AlphaAnimation(1.0f, 0.2f);
         trans2.setDuration(ANIM_DURATION);
         trans2.setInterpolator(new AccelerateInterpolator());
-        trans2.setFillAfter(true);
 
         transSet = new AnimationSet(false);
         transSet.setDuration(ANIM_DURATION);
@@ -965,8 +1019,19 @@ public class RingSelector extends ViewGroup {
         transSet.addAnimation(trans1);
         transSet.addAnimation(trans2);
 
-        ring.hideTarget();
-        ring.startAnimation(transSet);
+        if (mCurrentRing == mMiddleRing) {
+            ring.hide();
+            ring.hideTarget();
+            for (int q = 0; q < 4; q++) {
+                if (q != mSelectedRingId) {
+                    mSecRings[q].hide();
+                }
+            }
+            mSecRings[mSelectedRingId].startAnimation(transSet);
+        } else {
+            ring.hideTarget();
+            ring.startAnimation(transSet);
+        }
     }
 
     private void onAnimationDone() {
@@ -1022,27 +1087,17 @@ public class RingSelector extends ViewGroup {
         int deltaY = (int) y - ring.getTop() - (ring.getHeight() / 2);
         ring.offsetLeftAndRight(deltaX);
         ring.offsetTopAndBottom(deltaY);
-        setHoverBackLight(x,y);
         invalidate();
     }
 
-    private void setHoverBackLight(float x, float y) {
+    private void setHoverBackLight() {
         if (mCurrentRing != mMiddleRing) {
             return;
         }
-        boolean ringsTouched = false;
-        for (SecRing q : mSecRings) {
-            if (!q.isHidden() && q.contains((int) x,(int) y)) {
-                ringsTouched = true;
-                break;
-            }
-        }
-        if (ringsTouched && !mPrevTriggered) {
+        if (mSelectedRingId != -1) {
             mCurrentRing.setRingBackgroundResource(R.drawable.jog_ring_ring_pressed_red);
-            mPrevTriggered = true;
-        } else if (!ringsTouched && mPrevTriggered) {
+        } else {
             mCurrentRing.setRingBackgroundResource(R.drawable.jog_ring_ring_green);
-            mPrevTriggered = false;
         }
     }
 
