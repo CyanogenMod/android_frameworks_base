@@ -29,7 +29,7 @@ const char *MEDIA_MIMETYPE_VIDEO_VP6 = "video/x-vp6";
 const char *MEDIA_MIMETYPE_VIDEO_VP7 = "video/x-vp7";
 const char *MEDIA_MIMETYPE_VIDEO_WMV  = "video/x-ms-wmv";
 
-const char *MEDIA_MIMETYPE_AUDIO_WMA = "audio/x-ms-mwa";
+const char *MEDIA_MIMETYPE_AUDIO_WMA = "audio/x-ms-wma";
 const char *MEDIA_MIMETYPE_AUDIO_WMAPRO = "audio/wmapro";
 const char *MEDIA_MIMETYPE_AUDIO_WMALSL = "audio/wmalsl";
 
