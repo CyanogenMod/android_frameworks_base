@@ -983,15 +983,12 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
         /* Get the actual date string */
         parceldata = p.readString();
 
-        /* Infineon modems need some additional hax... */
-        if (isIfx) {
-            /* Store DST before cropping */
-            parcelextra = parceldata.substring(parceldata.lastIndexOf(",")+1);
-            if (parcelextra != null) dst = Integer.parseInt(parcelextra);
+        /* Store DST before cropping, regardless of isIfx. */
+        parcelextra = parceldata.substring(parceldata.lastIndexOf(",")+1);
+        if (parcelextra != null) {
+            dst = Integer.parseInt(parcelextra);
             parceldata = parceldata.substring(0,(parceldata.lastIndexOf(",")));
         }
-
-        int offset = num*15*60*1000;	// DST corrected
 
         /* WTH... Date may come with 4 digits in the year, reduce to 2 */
         try {
@@ -1000,6 +997,7 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
 
             /* Ifx delivers localtime, convert to UTC */
             if (isIfx) {
+                int offset = num*15*60*1000;	// DST corrected
                 /* Directly calculate UTC time using DST Offset */
                 long when = dateParser.parse(parceldata).getTime() - offset;
                 Date d = new Date(when);
@@ -1015,7 +1013,8 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
 
         /* Append the timezone */
         response = response + ((num < 0) ? "" : "+") + num;
-        if (isIfx) {
+        /* DST is needed to figure out the correct timezone depending on day light saving */
+        if (parcelextra != null) {
             /* Add DST */
             response = response + "," + dst;
         }
