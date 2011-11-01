@@ -87,6 +87,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private static final String TAG = "LockScreen";
     private static final String ENABLE_MENU_KEY_FILE = "/data/local/enable_menu_key";
     private static final Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
+    private static final String TOGGLE_FLASHLIGHT = "net.cactii.flash2.TOGGLE_FLASHLIGHT";
 
     private Status mStatus = Status.Normal;
 
@@ -729,6 +730,14 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         updateStatusLines();
     }
 
+    private void toggleFlashLight() {
+        Intent intent = new Intent(LockScreen.TOGGLE_FLASHLIGHT);
+        intent.putExtra("strobe", false);
+        intent.putExtra("period", 0);
+        intent.putExtra("bright", false);
+        getContext().sendBroadcast(intent);
+    }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if ((keyCode == KeyEvent.KEYCODE_DPAD_CENTER && mTrackballUnlockScreen)
@@ -736,6 +745,19 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 || (keyCode == KeyEvent.KEYCODE_MENU && mEnableMenuKeyInLockScreen)) {
 
             mCallback.goToUnlockScreen();
+            return false;
+
+        } else if (keyCode == KeyEvent.KEYCODE_HOME) {
+            event.startTracking();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_HOME) {
+          toggleFlashLight();
         }
         return false;
     }
