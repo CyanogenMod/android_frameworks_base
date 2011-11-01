@@ -142,4 +142,8 @@ ifeq ($(BOARD_USE_LVMX),true)
 #    LOCAL_SHARED_LIBRARIES += liblvmxipc
 endif
 
+ifeq ($(BOARD_USE_MOTO_DOCK_HACK),true)
+   LOCAL_CFLAGS += -DMOTO_DOCK_HACK
+endif
+
 include $(BUILD_SHARED_LIBRARY)
