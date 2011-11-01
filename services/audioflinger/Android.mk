@@ -30,4 +30,8 @@ LOCAL_STATIC_LIBRARIES := \
 
 LOCAL_MODULE:= libaudioflinger
 
+ifeq ($(BOARD_USE_MOTO_DOCK_HACK),true)
+   LOCAL_CFLAGS += -DMOTO_DOCK_HACK
+endif
+
 include $(BUILD_SHARED_LIBRARY)
