@@ -264,9 +264,7 @@ void AudioPolicyManagerBase::setPhoneState(int state)
     // store previous phone state for management of sonification strategy below
     int oldState = mPhoneState;
     mPhoneState = state;
-    // force routing command to audio hardware when starting call
-    // even if no device change is needed
-    bool force = (mPhoneState == AudioSystem::MODE_IN_CALL);
+    bool force = false;
 
     // are we entering or starting a call
     if (!isStateInCall(oldState) && isStateInCall(state)) {
@@ -300,7 +298,6 @@ void AudioPolicyManagerBase::setPhoneState(int state)
     // even if no device change is needed
     if (isStateInCall(oldState) && newDevice == 0) {
         newDevice = hwOutputDesc->device();
-        force = true;
     }
 
     // when changing from ring tone to in call mode, mute the ringing tone
@@ -702,13 +699,13 @@ audio_io_handle_t AudioPolicyManagerBase::getInput(int inputSource,
     // adapt channel selection to input source
     switch(inputSource) {
     case AUDIO_SOURCE_VOICE_UPLINK:
-        channels |= AudioSystem::CHANNEL_IN_VOICE_UPLINK;
+        channels = AudioSystem::CHANNEL_IN_VOICE_UPLINK;
         break;
     case AUDIO_SOURCE_VOICE_DOWNLINK:
-        channels |= AudioSystem::CHANNEL_IN_VOICE_DNLINK;
+        channels = AudioSystem::CHANNEL_IN_VOICE_DNLINK;
         break;
     case AUDIO_SOURCE_VOICE_CALL:
-        channels |= (AudioSystem::CHANNEL_IN_VOICE_UPLINK | AudioSystem::CHANNEL_IN_VOICE_DNLINK);
+        channels = (AudioSystem::CHANNEL_IN_VOICE_UPLINK | AudioSystem::CHANNEL_IN_VOICE_DNLINK);
         break;
     default:
         break;
@@ -1732,13 +1729,8 @@ uint32_t AudioPolicyManagerBase::getDeviceForStrategy(routing_strategy strategy,
 
         // device is DEVICE_OUT_SPEAKER if we come from case STRATEGY_SONIFICATION, 0 otherwise
         device |= device2;
-        // Do not play media stream if in call and the requested device would change the hardware
-        // output routing
-        if (mPhoneState == AudioSystem::MODE_IN_CALL &&
-            !AudioSystem::isA2dpDevice((AudioSystem::audio_devices)device) &&
-            device != getDeviceForStrategy(STRATEGY_PHONE)) {
-            device = 0;
-            LOGV("getDeviceForStrategy() incompatible media and phone devices");
+        if (device == 0) {
+            LOGE("getDeviceForStrategy() speaker device not found");
         }
         } break;
 
@@ -1969,11 +1961,11 @@ status_t AudioPolicyManagerBase::checkAndSetVolume(int stream, int index, audio_
     // We actually change the volume if:
     // - the float value returned by computeVolume() changed
     // - the force flag is set
-    if (volume != mOutputs.valueFor(output)->mCurVolume[stream] ||
+    if (volume != mOutputs.valueFor(output)->mCurVolume[stream] || 
 #ifdef HAVE_FM_RADIO
             (stream == AudioSystem::FM) ||
 #endif
-            (stream == AudioSystem::VOICE_CALL) || force) {
+            force) {
         mOutputs.valueFor(output)->mCurVolume[stream] = volume;
         LOGV("setStreamVolume() for output %d stream %d, volume %f, delay %d", output, stream, volume, delayMs);
         if (stream == AudioSystem::VOICE_CALL ||
