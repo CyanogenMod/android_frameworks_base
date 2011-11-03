@@ -145,6 +145,9 @@ LOCAL_SRC_FILES:= \
     android_content_res_Configuration.cpp
 
 ifeq ($(BOARD_HAVE_FM_RADIO),true)
+    ## There's a difference. BOARD_HAVE_FM_RADIO enabled the runtime
+    ## without modifying the audiosystem (which HAVE_FM_RADIO does)
+    LOCAL_CFLAGS += -DBOARD_HAVE_FM_RADIO
     ifeq ($(BOARD_FM_DEVICE),)
         BOARD_FM_DEVICE := $(BOARD_WLAN_DEVICE)
     endif
