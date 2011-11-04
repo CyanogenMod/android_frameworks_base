@@ -1029,6 +1029,8 @@
     <string name="extmedia_format_button_format" msgid="4131064560127478695">"格式化"</string>
     <string name="adb_active_notification_title" msgid="6729044778949189918">"已连接 USB 调试"</string>
     <string name="adb_active_notification_message" msgid="8470296818270110396">"选择停用 USB 调试。"</string>
+    <string name="adb_net_enabled_notification_title">已开启网络调试</string>
+    <string name="adb_net_enabled_notification_message">选择停用网络调试.</string>
     <string name="select_input_method" msgid="6865512749462072765">"选择输入法"</string>
     <string name="configure_input_methods" msgid="6324843080254191535">"配置输入法"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
