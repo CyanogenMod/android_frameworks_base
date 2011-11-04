@@ -102,6 +102,11 @@ public class UsbDeviceManager {
     private class AdbSettingsObserver extends ContentObserver {
         public AdbSettingsObserver() {
             super(null);
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.ADB_ENABLED), false, this);
+            resolver.registerContentObserver(Settings.Secure.getUriFor(
+                    Settings.Secure.ADB_PORT), false, this);
         }
         @Override
         public void onChange(boolean selfChange) {
