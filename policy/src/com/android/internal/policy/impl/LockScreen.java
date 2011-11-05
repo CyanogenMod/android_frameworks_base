@@ -688,9 +688,11 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
             mDate.setLayoutParams(layoutParams);
             layoutParams = (RelativeLayout.LayoutParams)mStatus1.getLayoutParams();
             layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
+            layoutParams.leftMargin = 0;
             mStatus1.setLayoutParams(layoutParams);
             layoutParams = (RelativeLayout.LayoutParams)mStatus2.getLayoutParams();
             layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
+            layoutParams.leftMargin = 0;
             mStatus2.setLayoutParams(layoutParams);
             layoutParams = (RelativeLayout.LayoutParams)mClock.getLayoutParams();
             layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);

@@ -123,6 +123,8 @@
             android:layout_below="@id/date"
             android:layout_marginTop="4dip"
             android:layout_marginLeft="24dip"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:drawablePadding="4dip"
             />
@@ -134,6 +136,8 @@
             android:layout_below="@id/status1"
             android:layout_marginTop="4dip"
             android:layout_marginLeft="24dip"
+            android:maxLines="2"
+            android:ellipsize="end"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:drawablePadding="4dip"
             />
