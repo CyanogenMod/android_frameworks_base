@@ -916,6 +916,8 @@
     <string name="reboot_progress">Újraindítás...</string>
     <string name="reboot_confirm">A telefon újra fog indulni.</string>
     <string name="global_action_reboot">Újraindítás</string>
+    <string name="global_action_choose_profile">Profil választása</string>
+    <string name="global_action_screenshot">Képmentés</string>
     <string name="lockscreen_discharging">Akkumulátor (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
     <string name="lockscreen_phone_label">Telefon</string>
     <string name="openvpn_vpn_description">OpenVPN SSL VPN</string>
@@ -926,4 +928,15 @@
         <item quantity="one">%d másodperc van hátra</item>
         <item quantity="other">%d másodperc van hátra</item>
     </plurals>
+    <string name="profileNameDefault">Alapértelmezett</string>
+    <string name="profileNameWork">Munka</string>
+    <string name="profileNameHome">Otthoni</string>
+    <string name="profileNameSilent">Csendes</string>
+    <string name="profileNameNight">Éjszakai</string>
+    <string name="profileGroupPhone">Telefon</string>
+    <string name="profileGroupCalendar">Naptár</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Egyéb</string>
 </resources>
