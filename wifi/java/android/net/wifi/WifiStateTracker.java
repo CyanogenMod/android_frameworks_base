@@ -1555,6 +1555,10 @@ public class WifiStateTracker extends NetworkStateTracker {
      */
     private synchronized void requestPolledInfo(WifiInfo info, boolean polling)
     {
+        if (polling && info.getBSSID() == null) {
+            Log.w(TAG, "Skip RssiApprox, not connected...");
+            return;
+        }
         int newRssi = (polling ? getRssiApprox() : getRssi());
         if (newRssi != -1 && -200 < newRssi && newRssi < 256) { // screen out invalid values
             /* some implementations avoid negative values by adding 256
@@ -2044,7 +2048,7 @@ public class WifiStateTracker extends NetworkStateTracker {
         if (mWifiState.get() != WIFI_STATE_ENABLED || isDriverStopped()) {
             return -1;
         }
-        return WifiNative.getRssiApproxCommand();
+        return WifiNative.getRssiCommand();
     }
 
     /**
