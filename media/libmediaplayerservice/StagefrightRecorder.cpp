@@ -697,9 +697,6 @@ sp<MediaSource> StagefrightRecorder::createAudioSource() {
     }
     encMeta->setCString(kKeyMIMEType, mime);
 
-    mSampleRate = mEncoderProfiles->getAudioEncoderParamByName(
-                   "enc.aud.hz.min", mAudioEncoder);
-
     sp<AudioSource> audioSource =
         new AudioSource(
                 mAudioSource,
