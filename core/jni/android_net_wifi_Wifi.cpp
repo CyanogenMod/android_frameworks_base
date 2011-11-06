@@ -15,6 +15,7 @@
  */
 
 #define LOG_TAG "wifi"
+#define LOG_NDEBUG 1
 
 #include "jni.h"
 #include <utils/misc.h>
@@ -49,16 +50,26 @@ static struct fieldIds {
 
 static int doCommand(const char *cmd, char *replybuf, int replybuflen)
 {
+    int err=0;
     size_t reply_len = replybuflen - 1;
 
-    if (::wifi_command(cmd, replybuf, &reply_len) != 0)
+    LOGV(LOG_TAG " doCommand: ->[[%s], buflen=%d", cmd, replybuflen);
+
+    if ((err = ::wifi_command(cmd, replybuf, &reply_len)) != 0) {
+
+        LOGD(LOG_TAG " doCommand: ret=%d", err);
         return -1;
-    else {
+
+    } else {
+
         // Strip off trailing newline
         if (reply_len > 0 && replybuf[reply_len-1] == '\n')
             replybuf[reply_len-1] = '\0';
         else
             replybuf[reply_len] = '\0';
+
+        LOGV(LOG_TAG " doCommand: <--[%s]], reply len=%d/%d", replybuf, reply_len, strlen(replybuf));
+
         return 0;
     }
 }
