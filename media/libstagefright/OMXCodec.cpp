@@ -3141,12 +3141,6 @@ void OMXCodec::on_message(const omx_message &msg) {
                 }
             }
 
-            if (mIsEncoder && (mQuirks & kAvoidMemcopyInputRecordingFrames) && (NULL != (*buffers)[i].mMediaBuffer)) {
-                CODEC_LOGV("EBD: %x %d", (*buffers)[i].mMediaBuffer, (*buffers)[i].mMediaBuffer->refcount() );
-                (*buffers)[i].mMediaBuffer->release();
-                buffers->editItemAt(i).mMediaBuffer = NULL;
-            }
-
             if (mPortStatus[kPortIndexInput] == DISABLING) {
                 CODEC_LOGV("Port is disabled, freeing buffer %p", buffer);
 
