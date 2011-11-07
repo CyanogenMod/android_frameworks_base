@@ -124,6 +124,16 @@ status_t AudioPolicyService::setDeviceConnectionState(AudioSystem::audio_devices
         return BAD_VALUE;
     }
 
+#ifdef HAS_LGE_STAR_FM_RADIO
+    if (device & AudioSystem::DEVICE_OUT_FM) {
+        if (state == AudioSystem::DEVICE_STATE_AVAILABLE) {
+            setPhoneState(AudioSystem::MODE_FM);
+        } else {
+            setPhoneState(AudioSystem::MODE_NORMAL);
+        }
+    }
+#endif
+
     LOGV("setDeviceConnectionState() tid %d", gettid());
     Mutex::Autolock _l(mLock);
     return mpPolicyManager->setDeviceConnectionState(device, state, device_address);
@@ -325,6 +335,13 @@ status_t AudioPolicyService::setStreamVolumeIndex(AudioSystem::stream_type strea
     if (!checkPermission()) {
         return PERMISSION_DENIED;
     }
+#ifdef HAS_LGE_STAR_FM_RADIO
+    /* The star's audio HAL has STREAM_FM as 8. The java layer
+     * sends CM's "standard" STREAM_FM as 10, convert it here */
+    if (stream == AudioSystem::FM) {
+        stream=(AudioSystem::stream_type)8;
+    }
+#endif
     if (stream < 0 || stream >= AudioSystem::NUM_STREAM_TYPES) {
         return BAD_VALUE;
     }
