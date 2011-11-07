@@ -3010,6 +3010,8 @@ status_t OMXCodec::allocateBuffersOnPort(OMX_U32 portIndex) {
         BufferInfo info;
         info.mData = NULL;
         info.mSize = def.nBufferSize;
+        info.mAllocatedBuffer = NULL;
+        info.mAllocatedSize = 0;
 #if defined(OMAP_ENHANCEMENT) && defined(TARGET_OMAP4)
         //Update Output buffers range as per 2D buffer requirement.
         //Doubling size to contain (nFilledLen + nOffset) check. Extra range is harmless here.
@@ -3167,8 +3169,7 @@ void OMXCodec::on_message(const omx_message &msg) {
             if (mPortStatus[kPortIndexInput] == DISABLING) {
                 CODEC_LOGV("Port is disabled, freeing buffer %p", buffer);
 
-                status_t err =
-                    mOMX->freeBuffer(mNode, kPortIndexInput, buffer);
+                status_t err = freeBuffer(kPortIndexInput, &buffers->editItemAt(i));
                 CHECK_EQ(err, OK);
 
                 buffers->removeAt(i);
@@ -3231,8 +3232,7 @@ void OMXCodec::on_message(const omx_message &msg) {
             if (mPortStatus[kPortIndexOutput] == DISABLING) {
                 CODEC_LOGV("Port is disabled, freeing buffer %p", buffer);
 
-                status_t err =
-                    mOMX->freeBuffer(mNode, kPortIndexOutput, buffer);
+                status_t err = freeBuffer(kPortIndexOutput, &buffers->editItemAt(i));
                 CHECK_EQ(err, OK);
 
                 buffers->removeAt(i);
@@ -3761,6 +3761,16 @@ size_t OMXCodec::countBuffersWeOwn(const Vector<BufferInfo> &buffers) {
     return n;
 }
 
+status_t OMXCodec::freeBuffer(OMX_U32 portIndex, BufferInfo *info) {
+    if (info->mAllocatedBuffer != NULL) {
+        OMX_BUFFERHEADERTYPE *header = (OMX_BUFFERHEADERTYPE *) info->mBuffer;
+        header->pBuffer = info->mAllocatedBuffer;
+        header->nAllocLen = info->mAllocatedSize;
+    }
+
+    return mOMX->freeBuffer(mNode, portIndex, info->mBuffer);
+}
+
 status_t OMXCodec::freeBuffersOnPort(
         OMX_U32 portIndex, bool onlyThoseWeOwn) {
     Vector<BufferInfo> *buffers = &mPortBuffers[portIndex];
@@ -3782,8 +3792,7 @@ status_t OMXCodec::freeBuffersOnPort(
 
         CODEC_LOGV("freeing buffer %p on port %ld", info->mBuffer, portIndex);
 
-        status_t err =
-            mOMX->freeBuffer(mNode, portIndex, info->mBuffer);
+        status_t err = freeBuffer(portIndex, info);
 
         if (err != OK) {
             stickyErr = err;
@@ -4117,7 +4126,12 @@ void OMXCodec::drainInputBuffer(BufferInfo *info) {
         if (mIsEncoder && (mQuirks & kAvoidMemcopyInputRecordingFrames)) {
             CHECK(mOMXLivesLocally && offset == 0);
             OMX_BUFFERHEADERTYPE *header = (OMX_BUFFERHEADERTYPE *) info->mBuffer;
+            if (info->mAllocatedBuffer == NULL) {
+                info->mAllocatedBuffer = header->pBuffer;
+                info->mAllocatedSize = header->nAllocLen;
+            }
             header->pBuffer = (OMX_U8 *) srcBuffer->data() + srcBuffer->range_offset();
+            header->nAllocLen = srcBuffer->size() - srcBuffer->range_offset();
 #if defined (OMAP_ENHANCEMENT) && defined (TARGET_OMAP4)
             //closed loop.
             if(!strcmp(mComponentName,"OMX.TI.DUCATI1.VIDEO.H264E")
