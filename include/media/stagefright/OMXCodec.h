@@ -159,6 +159,8 @@ private:
         size_t mSize;
         void *mData;
         MediaBuffer *mMediaBuffer;
+        OMX_U8 *mAllocatedBuffer;
+        size_t mAllocatedSize;
     };
 
     struct CodecSpecificData {
@@ -268,6 +270,8 @@ private:
     status_t allocateBuffers();
     status_t allocateBuffersOnPort(OMX_U32 portIndex);
 
+    status_t freeBuffer(
+            OMX_U32 portIndex, BufferInfo *info);
     status_t freeBuffersOnPort(
             OMX_U32 portIndex, bool onlyThoseWeOwn = false);
 
