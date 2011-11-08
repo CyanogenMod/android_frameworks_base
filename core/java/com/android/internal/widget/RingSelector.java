@@ -82,6 +82,7 @@ public class RingSelector extends ViewGroup {
     private final int mSecRingCenterOffset;
 
     private boolean mUseMiddleRing = true;
+    private boolean mMiddlePrimary = false;
 
     /**
      * Either {@link #HORIZONTAL} or {@link #VERTICAL}.
@@ -800,6 +801,7 @@ public class RingSelector extends ViewGroup {
 
         boolean leftHit = mLeftRing.contains((int) x, (int) y);
         boolean rightHit = mRightRing.contains((int) x, (int) y);
+        //DREW
         boolean middleHit = mUseMiddleRing ? mMiddleRing.contains((int) x, (int) y) : false;
 
         if (!mTracking && !(leftHit || rightHit || middleHit)) {
@@ -815,6 +817,11 @@ public class RingSelector extends ViewGroup {
                     mCurrentRing = mLeftRing;
                     mOtherRing1 = mRightRing;
                     mOtherRing2 = mMiddleRing;
+                    if (mMiddlePrimary) {
+                        for (SecRing secRing : mSecRings) {
+                            secRing.show();
+                        }
+                    }
                     setGrabbedState(OnRingTriggerListener.LEFT_RING);
                 } else if (rightHit) {
                     mCurrentRing = mRightRing;
@@ -825,11 +832,11 @@ public class RingSelector extends ViewGroup {
                     mCurrentRing = mMiddleRing;
                     mOtherRing1 = mLeftRing;
                     mOtherRing2 = mRightRing;
-
-                    for (SecRing secRing : mSecRings) {
-                        secRing.show();
+                    if (!mMiddlePrimary) {
+                        for (SecRing secRing : mSecRings) {
+                            secRing.show();
+                        }
                     }
-
                     setGrabbedState(OnRingTriggerListener.MIDDLE_RING);
                 }
                 mCurrentRing.setState(Ring.STATE_PRESSED);
@@ -880,7 +887,15 @@ public class RingSelector extends ViewGroup {
             switch (action) {
                 case MotionEvent.ACTION_MOVE:
                     moveRing(x, y);
-                    if (mUseMiddleRing && mCurrentRing == mMiddleRing) {
+                    if (!mMiddlePrimary && mUseMiddleRing && mCurrentRing == mMiddleRing) {
+                        for (int q = 0; q < 4; q++) {
+                            if (!mSecRings[q].isHidden() && mSecRings[q].contains((int) x, (int) y)) {
+                                mSecRings[q].activate();
+                            } else {
+                                mSecRings[q].deactivate();
+                            }
+                        }
+                    } else if (mMiddlePrimary && mUseMiddleRing && mCurrentRing == mLeftRing) {
                         for (int q = 0; q < 4; q++) {
                             if (!mSecRings[q].isHidden() && mSecRings[q].contains((int) x, (int) y)) {
                                 mSecRings[q].activate();
@@ -894,7 +909,21 @@ public class RingSelector extends ViewGroup {
                     mSelectedRingId = -1;
                     boolean thresholdReached = false;
 
-                    if (mCurrentRing != mMiddleRing) {
+                    if (mMiddlePrimary) {
+                        if (mCurrentRing != mLeftRing) {
+                            int dx = (int) x - mCurrentRing.alignCenterX;
+                            int dy = (int) y - mCurrentRing.alignCenterY;
+                            thresholdReached = (dx * dx + dy * dy) > mThresholdRadiusSq;
+                        } else if (mUseMiddleRing) {
+                            for (int q = 0; q < 4; q++) {
+                                if (!mSecRings[q].isHidden() && mSecRings[q].contains((int) x, (int) y)) {
+                                    thresholdReached = true;
+                                    mSelectedRingId = q;
+                                    break;
+                                }
+                            }
+                        }
+                    } else if (mCurrentRing != mMiddleRing) {
                         int dx = (int) x - mCurrentRing.alignCenterX;
                         int dy = (int) y - mCurrentRing.alignCenterY;
                         thresholdReached = (dx * dx + dy * dy) > mThresholdRadiusSq;
@@ -1027,7 +1056,9 @@ public class RingSelector extends ViewGroup {
     }
 
     private void setHoverBackLight(float x, float y) {
-        if (mCurrentRing != mMiddleRing) {
+        if (mMiddlePrimary && mCurrentRing != mLeftRing) {
+            return;
+        } else if (!mMiddlePrimary && mCurrentRing != mMiddleRing) {
             return;
         }
         boolean ringsTouched = false;
@@ -1167,6 +1198,17 @@ public class RingSelector extends ViewGroup {
     public void enableMiddleRing(boolean enable) {
         mUseMiddleRing = enable;
         mMiddleRing.setHiddenState(!enable);
+    }
+
+    public void enableMiddlePrimary(boolean enable) {
+        mMiddlePrimary = enable;
+        enableMiddleRing(enable);
+    }
+
+    public void enableRingMinimal(boolean enable) {
+        enableMiddlePrimary(enable);
+        mRightRing.setHiddenState(enable);
+        mLeftRing.setHiddenState(enable);
     }
 
     /**
