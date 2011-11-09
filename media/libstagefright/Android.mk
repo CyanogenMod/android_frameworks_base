@@ -5,6 +5,10 @@ include frameworks/base/media/libstagefright/codecs/common/Config.mk
 ifeq ($(TARGET_BOARD_PLATFORM),omap4)
 LOCAL_CFLAGS += -DTARGET_OMAP4 -DARM_4K_PAGE_SIZE=4096
 endif
+
+# Enable this flag to debug Stagefright
+# LOCAL_CFLAGS += -DDEBUG_OMX
+
 LOCAL_SRC_FILES:=                         \
         AMRExtractor.cpp                  \
         AMRWriter.cpp                     \
