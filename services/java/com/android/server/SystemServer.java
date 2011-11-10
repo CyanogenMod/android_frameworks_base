@@ -230,11 +230,10 @@ class ServerThread extends Thread {
                 bluetoothHid = new BluetoothHidService(context, bluetooth);
                 ServiceManager.addService(BluetoothHidService.BLUETOOTH_HID_SERVICE,
                                           bluetoothHid);
-                //Log.e(TAG, "Bluetooth HID Service");
                 bluetoothNetwork = new BluetoothNetworkService(context, bluetooth);
                 ServiceManager.addService(BluetoothNetworkService.BLUETOOTH_NETWORK_SERVICE,
                                           bluetoothNetwork);
-                Log.e(TAG, "Bluetooth Network Service");
+                Log.v(TAG, "Bluetooth Network Service");
 
                 int bluetoothOn = Settings.Secure.getInt(mContentResolver,
                     Settings.Secure.BLUETOOTH_ON, 0);
