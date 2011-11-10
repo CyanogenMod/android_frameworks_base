@@ -582,9 +582,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     }
 
     protected void updateSpnDisplay() {
-        int rule = phone.mSIMRecords.getDisplayRule(ss.getOperatorNumeric());
         String spn = phone.mSIMRecords.getServiceProviderName();
         String plmn = ss.getOperatorAlphaLong();
+        int rule = phone.mSIMRecords.getDisplayRule(ss.getOperatorNumeric());
 
         // For emergency calls only, pass the EmergencyCallsOnly string via EXTRA_PLMN
         if (mEmergencyOnly && cm.getRadioState().isOn()) {

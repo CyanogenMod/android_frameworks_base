@@ -19,7 +19,6 @@ package com.android.internal.telephony.gsm;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_ALPHA;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_ISO_COUNTRY;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC;
-import android.content.Context;
 import android.os.AsyncResult;
 import android.os.Message;
 import android.os.SystemProperties;
@@ -37,6 +36,7 @@ import com.android.internal.telephony.IccVmNotSupportedException;
 import com.android.internal.telephony.MccTable;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 /**
@@ -55,6 +55,8 @@ public final class SIMRecords extends IccRecords {
 
 
     SpnOverride mSpnOverride;
+
+    Locale mCurrentLocale = null;
 
     // ***** Cached SIM State; cleared on channel close
 
@@ -1232,11 +1234,29 @@ public final class SIMRecords extends IccRecords {
                 SimCard.INTENT_VALUE_ICC_LOADED, null);
     }
 
+    public String getServiceProviderName() {
+        setSpnFromConfig(getSIMOperatorNumeric());
+        return super.getServiceProviderName();
+    }
+
     //***** Private methods
 
     private void setSpnFromConfig(String carrier) {
-        if (mSpnOverride.containsCarrier(carrier)) {
-            spn = mSpnOverride.getSpn(carrier);
+        if (carrier == null) {
+            return;
+        }
+
+        Locale locale = phone.getContext().getResources().getConfiguration().locale;
+        locale = new Locale(locale.getLanguage(), locale.getCountry());
+
+        if ((mCurrentLocale == null || !mCurrentLocale.equals(locale))) {
+            if (mSpnOverride.containsCarrier(carrier) &&
+                    (spn = mSpnOverride.getSpn(carrier, locale)) == null &&
+                    (spn = mSpnOverride.getSpn(carrier)) == null &&
+                    (spn = SystemProperties.get(PROPERTY_ICC_OPERATOR_ALPHA)) == null) {
+                spn = "";
+            }
+            mCurrentLocale = locale;
         }
     }
 
@@ -1352,7 +1372,7 @@ public final class SIMRecords extends IccRecords {
      */
     protected int getDisplayRule(String plmn) {
         int rule;
-        if (spn == null || spnDisplayCondition == -1) {
+        if (spn == null || "".equals(spn) || spnDisplayCondition == -1) {
             // EF_SPN was not found on the SIM, or not yet loaded.  Just show ONS.
             rule = SPN_RULE_SHOW_PLMN;
         } else if (isOnMatchingPlmn(plmn)) {
@@ -1424,6 +1444,7 @@ public final class SIMRecords extends IccRecords {
         switch(spnState){
             case INIT:
                 spn = null;
+                mCurrentLocale = null;
 
                 phone.getIccFileHandler().loadEFTransparent( EF_SPN,
                         obtainMessage(EVENT_GET_SPN_DONE));
