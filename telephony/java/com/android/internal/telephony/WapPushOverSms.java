@@ -129,6 +129,9 @@ public class WapPushOverSms {
                 case WspTypeDecoder.CONTENT_TYPE_B_MMS:
                     mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_MMS;
                     break;
+                case WspTypeDecoder.CONTENT_TYPE_B_VND_WAP_EMN_WBXML:
+                    mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_VND_WAP_EMN_WBXML;
+                    break;
                 case WspTypeDecoder.CONTENT_TYPE_B_VND_DOCOMO_PF:
                     mimeType = WspTypeDecoder.CONTENT_MIME_TYPE_B_VND_DOCOMO_PF;
                     break;
@@ -158,6 +161,8 @@ public class WapPushOverSms {
                 binaryContentType = WspTypeDecoder.CONTENT_TYPE_B_PUSH_CO;
             } else if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_MMS)) {
                 binaryContentType = WspTypeDecoder.CONTENT_TYPE_B_MMS;
+            } else if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_VND_WAP_EMN_WBXML)) {
+                binaryContentType = WspTypeDecoder.CONTENT_TYPE_B_VND_WAP_EMN_WBXML;
             } else if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_VND_DOCOMO_PF)) {
                 binaryContentType = WspTypeDecoder.CONTENT_TYPE_B_VND_DOCOMO_PF;
             } else if (mimeType.equals(WspTypeDecoder.CONTENT_MIME_TYPE_B_SUPL_INIT)) {
