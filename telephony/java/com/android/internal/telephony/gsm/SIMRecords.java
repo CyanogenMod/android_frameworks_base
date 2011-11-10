@@ -19,7 +19,6 @@ package com.android.internal.telephony.gsm;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_ALPHA;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_ISO_COUNTRY;
 import static com.android.internal.telephony.TelephonyProperties.PROPERTY_ICC_OPERATOR_NUMERIC;
-import android.content.Context;
 import android.os.AsyncResult;
 import android.os.Message;
 import android.os.SystemProperties;
@@ -37,6 +36,7 @@ import com.android.internal.telephony.IccVmNotSupportedException;
 import com.android.internal.telephony.MccTable;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 
 /**
@@ -55,6 +55,8 @@ public final class SIMRecords extends IccRecords {
 
 
     SpnOverride mSpnOverride;
+
+    Locale mCurrentLocale = null;
 
     // ***** Cached SIM State; cleared on channel close
 
@@ -216,6 +218,9 @@ public final class SIMRecords extends IccRecords {
         pnnHomeName = null;
 
         adnCache.reset();
+
+        spn = null;
+        mCurrentLocale = null;
 
         phone.setSystemProperty(PROPERTY_ICC_OPERATOR_NUMERIC, null);
         phone.setSystemProperty(PROPERTY_ICC_OPERATOR_ALPHA, null);
@@ -1232,11 +1237,30 @@ public final class SIMRecords extends IccRecords {
                 SimCard.INTENT_VALUE_ICC_LOADED, null);
     }
 
+    public String getServiceProviderName() {
+        setSpnFromConfig(getSIMOperatorNumeric());
+        return super.getServiceProviderName();
+    }
+
     //***** Private methods
 
     private void setSpnFromConfig(String carrier) {
-        if (mSpnOverride.containsCarrier(carrier)) {
-            spn = mSpnOverride.getSpn(carrier);
+        if (carrier == null) return;
+
+        Locale locale = phone.getContext().getResources().getConfiguration().locale;
+        locale = new Locale(locale.getLanguage(), locale.getCountry());
+
+        if ((mCurrentLocale == null || !mCurrentLocale.equals(locale))) {
+            if (mSpnOverride.containsCarrier(carrier) &&
+                    (spn = mSpnOverride.getSpn(carrier, locale)) == null &&
+                    (spn = mSpnOverride.getSpn(carrier)) == null &&
+                    "".equals(spn = SystemProperties.get(PROPERTY_ICC_OPERATOR_ALPHA))) {
+                spn = null;
+            }
+            if (spn != null && "".equals(spn)) {
+                spn = null;
+            }
+            mCurrentLocale = locale;
         }
     }
 
@@ -1430,6 +1454,7 @@ public final class SIMRecords extends IccRecords {
         switch(spnState){
             case INIT:
                 spn = null;
+                mCurrentLocale = null;
 
                 phone.getIccFileHandler().loadEFTransparent( EF_SPN,
                         obtainMessage(EVENT_GET_SPN_DONE));

@@ -582,9 +582,11 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     }
 
     protected void updateSpnDisplay() {
-        int rule = phone.mSIMRecords.getDisplayRule(ss.getOperatorNumeric());
+        // getServiceProviderName() will trigger SPN locale update.
         String spn = phone.mSIMRecords.getServiceProviderName();
         String plmn = ss.getOperatorAlphaLong();
+        // getDisplayRule() should be done after getting SPN updated.
+        int rule = phone.mSIMRecords.getDisplayRule(ss.getOperatorNumeric());
 
         // For emergency calls only, pass the EmergencyCallsOnly string via EXTRA_PLMN
         if (mEmergencyOnly && cm.getRadioState().isOn()) {
