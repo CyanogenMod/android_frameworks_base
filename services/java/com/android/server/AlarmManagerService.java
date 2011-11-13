@@ -792,7 +792,7 @@ class AlarmManagerService extends IAlarmManager.Stub {
         }
         
         public void scheduleTimeTickEvent() {
-            // This integer division and subsequent multiplication sets the timestamp 
+            // This integer division and subsequent multiplication sets the timestamp
             // to <hours>:<minutes>:00.000. Adding a further 60000 milliseconds sets
             // the time to <hours>:<minutes + 1>::00.000. Avoiding java.util.Calendar
             // here works around certain DST related issues.
