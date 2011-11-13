@@ -792,13 +792,12 @@ class AlarmManagerService extends IAlarmManager.Stub {
         }
         
         public void scheduleTimeTickEvent() {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.add(Calendar.MINUTE, 1);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-      
-            set(AlarmManager.RTC, calendar.getTimeInMillis(), mTimeTickSender);
+			// This integer division and subsequent multiplication sets the timestamp 
+			// to <hours>:<minutes>:00.000. Adding a further 60000 milliseconds sets
+			// the time to <hours>:<minutes + 1>::00.000. Avoiding java.util.Calendar
+			// here works around certain DST related issues.
+			final long lastMinute = (System.currentTimeMillis() / 60000) * 60000;
+            set(AlarmManager.RTC, lastMinute + 60000, mTimeTickSender);
         }
 	
         public void scheduleDateChangedEvent() {
