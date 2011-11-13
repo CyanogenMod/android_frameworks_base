@@ -792,30 +792,11 @@ class AlarmManagerService extends IAlarmManager.Stub {
         }
         
         public void scheduleTimeTickEvent() {
-            final long now = System.currentTimeMillis();
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(now);
-            calendar.add(Calendar.MINUTE, 1);
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-
-            long timeOffset = calendar.getTimeInMillis() - now;
-            if (timeOffset > 60000) {
-                // This adjustment is required in the hour preceeding a switch from
-                // daylight savings time to normal time. Adding 1 to Calendar.MINUTE
-                // in the code above might advance the actual time by 61 minutes.
-                timeOffset -= (timeOffset / 60000) * 60000;
-                if (localLOGV) {
-                    Slog.v(ClockReceiver_TAG, "Adjusted timeOffset to " + timeOffset +
-                            " (was " + (calendar.getTimeInMillis() - now) + ")");
-                }
-            }
-
-            if (localLOGV) {
-                Slog.v(ClockReceiver_TAG, "Next alarm will fire in " + timeOffset + "ms");
-            }
-
-            set(AlarmManager.RTC, now + timeOffset, mTimeTickSender);
+            // This integer division and subsequent multiplication sets  
+            // the timestamp to <hours>:<minutes>:00.000. Adding 60000 
+            // gives us <hours>:<minutes + 1>:00.000
+            final long lastMinute = (System.currentTimeMillis() / 60000) * 60000;
+            set(AlarmManager.RTC, lastMinute + 60000, mTimeTickSender);
         }
 	
         public void scheduleDateChangedEvent() {
