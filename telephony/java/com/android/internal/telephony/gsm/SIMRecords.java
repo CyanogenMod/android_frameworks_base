@@ -1352,19 +1352,25 @@ public final class SIMRecords extends IccRecords {
      */
     protected int getDisplayRule(String plmn) {
         int rule;
-        if (spn == null || spnDisplayCondition == -1) {
-            // EF_SPN was not found on the SIM, or not yet loaded.  Just show ONS.
+        if (spn == null || spnDisplayCondition == -1 || plmn == null) {
+            // EF_SPN was not found on the SIM, or not yet loaded, or
+            // currently not registered to any PLMN. Just show ONS or
+            // the "(No service)" string.
             rule = SPN_RULE_SHOW_PLMN;
         } else if (isOnMatchingPlmn(plmn)) {
+            // registered PLMN is either HPLMN or a PLMN in the EF_SPDI list.
             rule = SPN_RULE_SHOW_SPN;
             if ((spnDisplayCondition & 0x01) == 0x01) {
-                // ONS required when registered to HPLMN or PLMN in EF_SPDI
+                // b1=0: ONS is not required
+                // b1=1: ONS is required
                 rule |= SPN_RULE_SHOW_PLMN;
             }
         } else {
+            // registered PLMN is neither HPLMN nor a PLMN in the EF_SPDI list.
             rule = SPN_RULE_SHOW_PLMN;
             if ((spnDisplayCondition & 0x02) == 0x00) {
-                // SPN required if not registered to HPLMN or PLMN in EF_SPDI
+                // b2=0: SPN is required
+                // b2=1: SPN is not required
                 rule |= SPN_RULE_SHOW_SPN;
             }
         }

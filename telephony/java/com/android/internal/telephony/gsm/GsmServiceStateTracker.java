@@ -593,6 +593,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         }
 
         if (rule != curSpnRule
+                || plmn == null
                 || !TextUtils.equals(spn, curSpn)
                 || !TextUtils.equals(plmn, curPlmn)) {
             boolean showSpn = !mEmergencyOnly
@@ -1016,6 +1017,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                 ss.getRoaming() ? "true" : "false");
 
             phone.notifyServiceStateChanged(ss);
+
+        } else if (hasDeregistered) {
+            updateSpnDisplay();
         }
 
         if (hasGprsAttached) {
