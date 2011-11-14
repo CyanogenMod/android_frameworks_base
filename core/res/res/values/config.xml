@@ -391,6 +391,9 @@
     <!-- Allows the light sensor to be ignored when flashlight is on -->
     <bool name="config_flashlight_affects_lightsensor">false</bool>
 
+    <!-- Enable the screen animation -->
+    <bool name="config_enableScreenAnimation">true</bool>
+
     <!-- Enable the screen-on animation -->
     <bool name="config_enableScreenOnAnimation">false</bool>
 
