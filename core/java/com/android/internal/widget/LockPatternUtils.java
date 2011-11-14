@@ -742,6 +742,7 @@ public class LockPatternUtils {
                     new String[] {
                         Calendar.EventsColumns.TITLE,
                         Calendar.EventsColumns.DTSTART,
+                        Calendar.EventsColumns.DTEND,
                         Calendar.EventsColumns.DESCRIPTION,
                         Calendar.EventsColumns.EVENT_LOCATION,
                         Calendar.EventsColumns.ALL_DAY,
@@ -749,13 +750,62 @@ public class LockPatternUtils {
                     now,
                     later,
                     where.toString(),
-                    null);
+                    Calendar.EventsColumns.DTSTART + " ASC");
+
+            // All day events are given in UTC. This can cause them to be sorted
+            // as earlier events compared to a normal event on the night before
+            // we can fix this by doing UTC time - offset => local time and then
+            // compare that to the next event on the cursor.
+            long offset = (new Date()).getTimezoneOffset() * 60000;
+            String title, description, location;
+            Date start;
+            boolean allDay, isRepeat;
+            int i = cursor.getCount() - 1;
+
             if (cursor != null && cursor.moveToFirst()) {
-                String  title       = cursor.getString(0);
-                Date    start       = new Date(cursor.getLong(1));
-                String  description = cursor.getString(2);
-                String  location    = cursor.getString(3);
-                boolean allDay      = cursor.getInt(4) != 0;
+                do {
+                    title       = cursor.getString(0);
+                    start       = new Date(cursor.getLong(1));
+                    isRepeat    = cursor.getLong(2) == 0;
+                    description = cursor.getString(3);
+                    location    = cursor.getString(4);
+                    allDay      = cursor.getInt(5) != 0;
+
+                    // repeat events always report the first day of the event as
+                    // start >.<' Fix the date then, to match today
+                    if (isRepeat) {
+                        java.util.Calendar today = java.util.Calendar.getInstance();
+                        java.util.Calendar startc = java.util.Calendar.getInstance();
+                        startc.setTime(start);
+
+                        // Event is repetitive in the future
+                        if (today.getTimeInMillis() < startc.getTimeInMillis()) {
+                            Log.i(TAG, "Repetitive event detected in the future");
+                        } else {
+                            startc.set(java.util.Calendar.DATE, today.get(java.util.Calendar.DATE));
+                            startc.set(java.util.Calendar.MONTH, today.get(java.util.Calendar.MONTH));
+                            startc.set(java.util.Calendar.YEAR, today.get(java.util.Calendar.YEAR));
+
+                            // Event already old, probably tomorrow is desired
+                            if (today.getTimeInMillis() > startc.getTimeInMillis()) {
+                                startc.roll(java.util.Calendar.DATE, true);
+                                Log.i(TAG, "Repetitive event hour already old, using tomorrow");
+                            }
+
+                            Log.i(TAG, "Repetitive event detected, date corrected (" +
+                                    start.getTime() + " -> " + startc.getTimeInMillis() + ")");
+                            start = startc.getTime();
+                        }
+                    }
+
+                    // i prevents out of range comparisons
+                    // if it's not an all day event, we're sure it's the earliest event
+                    if (i == 0 || !allDay)
+                        break;
+
+                    cursor.moveToNext();
+                    i = i-1;
+                } while ((new Date(cursor.getLong(1) - offset)).before(start));
 
                 StringBuilder sb = new StringBuilder();
 
