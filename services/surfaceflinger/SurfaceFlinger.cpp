@@ -440,8 +440,6 @@ bool SurfaceFlinger::threadLoop()
 
         logger.log(GraphicLog::SF_REPAINT_DONE, index);
     } else {
-        // pretend we did the post
-        hw.compositionComplete();
         usleep(16667); // 60 fps period
     }
     return true;
