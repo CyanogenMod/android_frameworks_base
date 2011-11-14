@@ -106,6 +106,9 @@ status_t MediaPlayer::setDataSource(const sp<IMediaPlayer>& player)
     { // scope for the lock
         Mutex::Autolock _l(mLock);
 
+        if (mCurrentState & MEDIA_PLAYER_PLAYBACK_COMPLETE)
+            return UNKNOWN_ERROR;
+
         if ( !( (mCurrentState & MEDIA_PLAYER_IDLE) ||
                 (mCurrentState == MEDIA_PLAYER_STATE_ERROR ) ) ) {
             LOGE("setDataSource called in state %d", mCurrentState);
@@ -216,6 +219,9 @@ status_t MediaPlayer::setVideoSurface(const sp<Surface>& surface)
 // must call with lock held
 status_t MediaPlayer::prepareAsync_l()
 {
+    if (mCurrentState & MEDIA_PLAYER_PLAYBACK_COMPLETE)
+        return UNKNOWN_ERROR;
+
     if ( (mPlayer != 0) && ( mCurrentState & ( MEDIA_PLAYER_INITIALIZED | MEDIA_PLAYER_STOPPED) ) ) {
         mPlayer->setAudioStreamType(mStreamType);
         mCurrentState = MEDIA_PLAYER_PREPARING;
