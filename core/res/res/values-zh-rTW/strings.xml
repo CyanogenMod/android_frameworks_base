@@ -306,6 +306,8 @@
     <string name="reboot_bootmenu">Bootmenu</string>
     <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
     <string name="reboot_fastboot">Fastboot</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">下載</string>
 
     <!-- Shutdown Progress Dialog. This is shown if the user chooses to power off the phone. -->
     <string name="shutdown_progress" msgid="2281079257329981203">"關機中..."</string>
