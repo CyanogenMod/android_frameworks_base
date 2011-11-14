@@ -34,7 +34,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.os.Handler;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -47,8 +46,6 @@ public class RecentApplicationsDialog extends Dialog implements OnClickListener 
     // Elements for debugging support
 //  private static final String LOG_TAG = "RecentApplicationsDialog";
     private static final boolean DBG_FORCE_EMPTY_LIST = false;
-
-    private static boolean mTabletWorkaroundEnabled = false;
 
     static private StatusBarManager sStatusBar;
 
@@ -100,9 +97,6 @@ public class RecentApplicationsDialog extends Dialog implements OnClickListener 
         window.setFlags(WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM,
                 WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM);
         window.setTitle("Recents");
-
-        mTabletWorkaroundEnabled = context.getResources().getBoolean(
-                com.android.internal.R.bool.cm_default_recentapps_tablet_workaround);
     }
 
     /**
@@ -176,11 +170,7 @@ public class RecentApplicationsDialog extends Dialog implements OnClickListener 
         mIconSize = (int) resources.getDimension(android.R.dimen.app_icon_size);
 
         if (currRecentAppsNum == NUM_BUTTONS) // No change
-        {
-            if (mTabletWorkaroundEnabled)
-                setWindowParams();
             return;
-        }
 
         if (NUM_BUTTONS != 8 && NUM_BUTTONS != 12 && NUM_BUTTONS != 15)
             NUM_BUTTONS = 8; // Load 8 by default
@@ -219,14 +209,10 @@ public class RecentApplicationsDialog extends Dialog implements OnClickListener 
     private void setWindowParams() {
         Window window = getWindow();
         final WindowManager.LayoutParams params = window.getAttributes();
-        if (mTabletWorkaroundEnabled) {
-            final Display display = window.getWindowManager().getDefaultDisplay();
-            params.width = display.getWidth();
-            params.height = display.getHeight();
-        } else {
-            params.width = WindowManager.LayoutParams.MATCH_PARENT;
-            params.height = WindowManager.LayoutParams.MATCH_PARENT;
-        }
+        params.width = WindowManager.LayoutParams.MATCH_PARENT;
+        params.height = WindowManager.LayoutParams.MATCH_PARENT;
+        params.horizontalWeight = 1;
+        params.verticalWeight = 1;
         window.setAttributes(params);
         window.setFlags(0, WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
