@@ -793,7 +793,6 @@ android.widget.TextView$HandleView
 android.widget.TextView$InsertionPointCursorController
 android.widget.TextView$InsertionPointCursorController$1
 android.widget.TextView$SelectionModifierCursorController
-android.widget.TextView$SelectionModifierCursorController$1
 android.widget.Toast
 android.widget.Toast$TN
 android.widget.Toast$TN$1
