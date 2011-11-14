@@ -2566,7 +2566,7 @@ void MPEG4Writer::Track::writeTrackHeader(
                       mOwner->writeInt8(0);         // decoder version
                       mOwner->writeInt16(0x83FF);   // mode set: all enabled
                       mOwner->writeInt8(0);         // mode change period
-                      mOwner->writeInt8(1);         // frames per sample
+                      mOwner->writeInt8(0x0F);      // frames per sample
                     mOwner->endBox();
                   }
                 mOwner->endBox();
