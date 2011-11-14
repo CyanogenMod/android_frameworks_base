@@ -980,7 +980,7 @@ public class RingSelector extends ViewGroup {
             reset(false);
         } else {
             super.setVisibility(View.INVISIBLE);
-            if (!isLeft && !isRight) {
+            if ((mMiddlePrimary && isLeft) || (!mMiddlePrimary && !isRight && !isLeft)) {
                 if (mPrevTriggered) {
                     mCurrentRing.setRingBackgroundResource(R.drawable.jog_ring_ring_green);
                 }
