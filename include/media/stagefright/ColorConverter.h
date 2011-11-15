@@ -83,6 +83,51 @@ private:
     ColorConverter &operator=(const ColorConverter &);
 };
 
+#ifdef QCOM_HARDWARE
+//------------------------------------------
+enum ColorConvertFormat {
+    RGB565 = 1,
+    YCbCr420Tile,
+    YCbCr420SP,
+    YCbCr420P,
+    YCrCb420P,
+};
+
+/* 64 bit flag variable, reserving bits as needed */
+enum ColorConvertFlags {
+    COLOR_CONVERT_ALIGN_NONE = 1,
+    COLOR_CONVERT_CENTER_OUTPUT = 1<<1,
+    COLOR_CONVERT_ALIGN_16 =   1<<4,
+    COLOR_CONVERT_ALIGN_2048 = 1<<11,
+    COLOR_CONVERT_ALIGN_8192 = 1<<13,
+};
+
+struct ColorConvertParams {
+    size_t width;
+    size_t height;
+
+    size_t cropWidth;
+    size_t cropHeight;
+
+    size_t cropLeft;
+    size_t cropRight;
+    size_t cropTop;
+    size_t cropBottom;
+
+    ColorConvertFormat colorFormat;
+    const void * data;
+    int fd;
+
+    uint64_t flags;
+};
+
+typedef int (* ConvertFn)(ColorConvertParams src,
+                          ColorConvertParams dst, uint8_t *adjustedClip);
+
+int convert(ColorConvertParams src, ColorConvertParams dst,
+            uint8_t *adjustedClip);
+#endif
+
 }  // namespace android
 
 #endif  // COLOR_CONVERTER_H_
