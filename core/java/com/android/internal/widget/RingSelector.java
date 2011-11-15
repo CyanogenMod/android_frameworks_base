@@ -771,7 +771,6 @@ public class RingSelector extends ViewGroup {
 
         boolean leftHit = mLeftRing.contains((int) x, (int) y);
         boolean rightHit = mRightRing.contains((int) x, (int) y);
-        //DREW
         boolean middleHit = mUseMiddleRing ? mMiddleRing.contains((int) x, (int) y) : false;
 
         if (!mTracking && !(leftHit || rightHit || middleHit)) {
