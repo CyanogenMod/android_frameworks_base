@@ -44,6 +44,12 @@
 #include <OMX_Audio.h>
 #include <OMX_Component.h>
 
+#ifdef QCOM_HARDWARE
+#include <cutils/properties.h>
+#include <OMX_QCOMExtns.h>
+
+#include <gralloc_priv.h>
+#endif
 #include "include/avc_utils.h"
 
 namespace android {
@@ -59,10 +65,65 @@ const static int64_t kBufferFilledEventTimeOutNs = 3000000000LL;
 // component in question is buggy or not.
 const static uint32_t kMaxColorFormatSupported = 1000;
 
+#ifdef QCOM_HARDWARE
+static const int QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka = 0x7FA30C03;
+#endif
+
 struct CodecInfo {
     const char *mime;
     const char *codec;
 };
+
+#ifdef QCOM_HARDWARE
+class ColorFormatInfo {
+    private:
+        enum {
+            LOCAL = 0,
+            REMOTE = 1,
+            END = 2
+        };
+        static const int32_t preferredColorFormat[END];
+    public:
+        static int32_t getPreferredColorFormat(bool isLocal) {
+            char colorformat[10]="";
+            if(!property_get("sf.debug.colorformat", colorformat, NULL)){
+                if(isLocal) {
+                    return preferredColorFormat[LOCAL];
+                }
+                return preferredColorFormat[REMOTE];
+            } else {
+                if(!strcmp(colorformat, "yamato")) {
+                    return QOMX_COLOR_FormatYVU420PackedSemiPlanar32m4ka;
+                }
+                return preferredColorFormat[LOCAL];
+            }
+        }
+};
+
+const int32_t ColorFormatInfo::preferredColorFormat[] = {
+#ifdef TARGET7x30
+    QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka,
+    QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka
+#endif
+#ifdef TARGET8x60
+    QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka,
+    QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka
+#endif
+#ifdef TARGET7x27
+    OMX_QCOM_COLOR_FormatYVU420SemiPlanar,
+    QOMX_COLOR_FormatYVU420PackedSemiPlanar32m4ka
+#endif
+#ifdef TARGET7x27A
+    OMX_QCOM_COLOR_FormatYVU420SemiPlanar,
+    OMX_QCOM_COLOR_FormatYVU420SemiPlanar
+#endif
+#ifdef TARGET8x50
+    OMX_QCOM_COLOR_FormatYVU420SemiPlanar,
+    QOMX_COLOR_FormatYVU420PackedSemiPlanar32m4ka
+#endif
+};
+#endif
+
 
 #define FACTORY_CREATE_ENCODER(name) \
 static sp<MediaSource> Make##name(const sp<MediaSource> &source, const sp<MetaData> &meta) { \
@@ -320,6 +381,9 @@ uint32_t OMXCodec::getComponentQuirks(
     if (!strncmp(componentName, "OMX.qcom.7x30.video.encoder.", 28)) {
     }
     if (!strncmp(componentName, "OMX.qcom.video.decoder.", 23)) {
+#ifdef QCOM_HARDWARE
+        quirks |= kRequiresAllocateBufferOnInputPorts;
+#endif
         quirks |= kRequiresAllocateBufferOnOutputPorts;
         quirks |= kDefersOutputBufferAllocation;
     }
@@ -680,6 +744,26 @@ status_t OMXCodec::configureCodec(const sp<MetaData> &meta) {
     }
 
     if (!strncasecmp(mMIME, "video/", 6)) {
+#ifdef QCOM_HARDWARE
+        if (mThumbnailMode) {
+            LOGV("Enabling thumbnail mode.");
+            QOMX_ENABLETYPE enableType;
+            OMX_INDEXTYPE indexType;
+
+            status_t err = mOMX->getExtensionIndex(
+                mNode, OMX_QCOM_INDEX_PARAM_VIDEO_SYNCFRAMEDECODINGMODE, &indexType);
+
+            CHECK_EQ(err, (status_t)OK);
+
+            enableType.bEnable = OMX_TRUE;
+
+            err = mOMX->setParameter(
+                    mNode, indexType, &enableType, sizeof(enableType));
+            CHECK_EQ(err, (status_t)OK);
+
+            LOGV("Thumbnail mode enabled.");
+        }
+#endif
 
         if (mIsEncoder) {
             setVideoInputFormat(mMIME, meta);
@@ -1004,8 +1088,16 @@ void OMXCodec::setVideoInputFormat(
             mNode, OMX_IndexParamPortDefinition, &def, sizeof(def));
     CHECK_EQ(err, (status_t)OK);
 
+#ifdef QCOM_HARDWARE
+    if(strncmp(mComponentName, "OMX.qcom", 8) != 0) {
+        def.nBufferSize = getFrameSize(colorFormat,
+                stride > 0? stride: -stride, sliceHeight);
+    }
+#else
     def.nBufferSize = getFrameSize(colorFormat,
             stride > 0? stride: -stride, sliceHeight);
+#endif
+
 
     CHECK_EQ((int)def.eDomain, (int)OMX_PortDomainVideo);
 
@@ -1013,7 +1105,11 @@ void OMXCodec::setVideoInputFormat(
     video_def->nFrameHeight = height;
     video_def->nStride = stride;
     video_def->nSliceHeight = sliceHeight;
+#ifdef QCOM_HARDWARE
     video_def->xFramerate = (frameRate << 16);  // Q16 format
+#else
+    video_def->xFramerate = 0;      // No need for output port
+#endif
     video_def->eCompressionFormat = OMX_VIDEO_CodingUnused;
     video_def->eColorFormat = colorFormat;
 
@@ -1036,7 +1132,7 @@ void OMXCodec::setVideoInputFormat(
 
     video_def->nFrameWidth = width;
     video_def->nFrameHeight = height;
-    video_def->xFramerate = 0;      // No need for output port
+    video_def->xFramerate = (frameRate << 16);
     video_def->nBitrate = bitRate;  // Q16 format
     video_def->eCompressionFormat = compressionFormat;
     video_def->eColorFormat = OMX_COLOR_FormatUnused;
@@ -1403,7 +1499,13 @@ status_t OMXCodec::setVideoOutputFormat(
                || format.eColorFormat == OMX_COLOR_FormatYUV420SemiPlanar
                || format.eColorFormat == OMX_COLOR_FormatCbYCrY
                || format.eColorFormat == OMX_TI_COLOR_FormatYUV420PackedSemiPlanar
+#ifdef QCOM_HARDWARE
+               || format.eColorFormat == OMX_QCOM_COLOR_FormatYVU420SemiPlanar
+               || format.eColorFormat == QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka);
+#else
                || format.eColorFormat == OMX_QCOM_COLOR_FormatYVU420SemiPlanar);
+#endif
+
 
         err = mOMX->setParameter(
                 mNode, OMX_IndexParamVideoPortFormat,
@@ -1502,10 +1604,18 @@ OMXCodec::OMXCodec(
       mOutputPortSettingsChangedPending(false),
       mLeftOverBuffer(NULL),
       mPaused(false),
+#ifdef QCOM_HARDWARE
       mNativeWindow(
               (!strncmp(componentName, "OMX.google.", 11)
               || !strcmp(componentName, "OMX.Nvidia.mpeg2v.decode"))
+                        ? NULL : nativeWindow),
+      mInterlaceFormatDetected(false),
+      mThumbnailMode(false) {
+#else
+      mNativeWindow(!strncmp(componentName, "OMX.google.", 11)
+                        ? NULL : nativeWindow),
                         ? NULL : nativeWindow) {
+#endif
     mPortStatus[kPortIndexInput] = ENABLED;
     mPortStatus[kPortIndexOutput] = ENABLED;
 
@@ -1842,11 +1952,22 @@ status_t OMXCodec::allocateOutputBuffersFromNativeWindow() {
         return err;
     }
 
+#ifdef QCOM_HARDWARE
+    int format = (def.format.video.eColorFormat ==
+                  QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka)?
+                 HAL_PIXEL_FORMAT_YCbCr_420_SP_TILED : def.format.video.eColorFormat;
+#endif
+
     err = native_window_set_buffers_geometry(
             mNativeWindow.get(),
             def.format.video.nFrameWidth,
             def.format.video.nFrameHeight,
+#ifdef QCOM_HARDWARE
+            format);
+#else
             def.format.video.eColorFormat);
+#endif
+
 
     if (err != 0) {
         LOGE("native_window_set_buffers_geometry failed: %s (%d)",
@@ -2991,16 +3112,27 @@ void OMXCodec::fillOutputBuffers() {
     // end-of-output-stream. If we own all input buffers and also own
     // all output buffers and we already signalled end-of-input-stream,
     // the end-of-output-stream is implied.
-    if (mSignalledEOS
+
+#ifdef QCOM_HARDWARE
+    // NOTE: Thumbnail mode needs a call to fillOutputBuffer in order
+    // to get the decoded frame from the component. Currently,
+    // thumbnail mode calls emptyBuffer with an EOS flag on its first
+    // frame and sets mSignalledEOS to true, so without the check for
+    // !mThumbnailMode, fillOutputBuffer will never be called.
+    if (!mThumbnailMode) {
+#endif
+        if (mSignalledEOS
             && countBuffersWeOwn(mPortBuffers[kPortIndexInput])
                 == mPortBuffers[kPortIndexInput].size()
             && countBuffersWeOwn(mPortBuffers[kPortIndexOutput])
                 == mPortBuffers[kPortIndexOutput].size()) {
-        mNoMoreOutputData = true;
-        mBufferFilled.signal();
-
-        return;
+            mNoMoreOutputData = true;
+            mBufferFilled.signal();
+            return;
+        }
+#ifdef QCOM_HARDWARE
     }
+#endif
 
     Vector<BufferInfo> *buffers = &mPortBuffers[kPortIndexOutput];
     for (size_t i = 0; i < buffers->size(); ++i) {
@@ -3217,6 +3349,8 @@ bool OMXCodec::drainInputBuffer(BufferInfo *info) {
             OMX_BUFFERHEADERTYPE *header =
                 (OMX_BUFFERHEADERTYPE *)info->mBuffer;
 
+            //not commenting this one for now. XXX - remove when memcopy can be avoided
+            //for encoder
             CHECK(header->pBuffer == info->mData);
 
             header->pBuffer =
@@ -3303,6 +3437,18 @@ bool OMXCodec::drainInputBuffer(BufferInfo *info) {
 
     if (signalEOS) {
         flags |= OMX_BUFFERFLAG_EOS;
+#ifdef QCOM_HARDWARE
+    } else if (mThumbnailMode) {
+        // Because we don't get an EOS after getting the first frame, we
+        // need to notify the component with OMX_BUFFERFLAG_EOS, set
+        // mNoMoreOutputData to false so fillOutputBuffer gets called on
+        // the first output buffer (see comment in fillOutputBuffer), and
+        // mSignalledEOS must be true so drainInputBuffer is not executed
+        // on extra frames.
+        flags |= OMX_BUFFERFLAG_EOS;
+        mNoMoreOutputData = false;
+        mSignalledEOS = true;
+#endif
     } else {
         mNoMoreOutputData = false;
     }
@@ -4132,7 +4278,19 @@ static const char *colorFormatString(OMX_COLOR_FORMATTYPE type) {
         return "OMX_TI_COLOR_FormatYUV420PackedSemiPlanar";
     } else if (type == OMX_QCOM_COLOR_FormatYVU420SemiPlanar) {
         return "OMX_QCOM_COLOR_FormatYVU420SemiPlanar";
+#ifdef QCOM_HARDWARE
+    } else if (type == QOMX_COLOR_FormatYVU420PackedSemiPlanar32m4ka) {
+        return "QOMX_COLOR_FormatYVU420PackedSemiPlanar32m4ka";
+    } else if (type == QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka) {
+        return "QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka";
+    }
+    /*else if (type ==  OMX_QCOM_COLOR_FormatYVU420SemiPlanarInterlace) {
+        return "OMX_QCOM_COLOR_FormatYVU420SemiPlanarInterlace";
+    } */
+    else if (type < 0 || (size_t)type >= numNames) {
+#else
     } else if (type < 0 || (size_t)type >= numNames) {
+#endif
         return "UNKNOWN";
     } else {
         return kNames[type];
@@ -4599,6 +4757,16 @@ void OMXCodec::initOutputFormat(const sp<MetaData> &inputFormat) {
                 if (mNativeWindow != NULL) {
                      initNativeWindowCrop();
                 }
+#ifdef QCOM_HARDWARE
+            } else {
+                int32_t width, height;
+                bool success = inputFormat->findInt32(kKeyWidth, &width) &&
+                               inputFormat->findInt32(kKeyHeight, &height);
+                CHECK(success);
+
+                mOutputFormat->setInt32(kKeyWidth, width);
+                mOutputFormat->setInt32(kKeyHeight, height);
+#endif
             }
             break;
         }
@@ -4626,6 +4794,14 @@ status_t OMXCodec::pause() {
 
     return OK;
 }
+
+#ifdef QCOM_HARDWARE
+void OMXCodec::parseFlags(uint32_t flags) {
+    //TODO - uncomment if needed
+    //    mGPUComposition = ((flags & kEnableGPUComposition) ? true : false);
+    mThumbnailMode = ((flags & kEnableThumbnailMode) ? true : false);
+}
+#endif
 
 ////////////////////////////////////////////////////////////////////////////////
 

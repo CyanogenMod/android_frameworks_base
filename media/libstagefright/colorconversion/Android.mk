@@ -10,6 +10,7 @@ LOCAL_C_INCLUDES := \
         $(TOP)/hardware/msm7k
 
 ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
+        LOCAL_C_INCLUDES += $(TOP)/hardware/qcom/media/mm-core/omxcore/inc
         LOCAL_CFLAGS += -DQCOM_HARDWARE
 endif
 

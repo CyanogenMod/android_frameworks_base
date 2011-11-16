@@ -15,12 +15,17 @@ LOCAL_C_INCLUDES:= \
 	frameworks/base/media/libstagefright \
 	frameworks/base/media/libstagefright/include \
 	$(TOP)/frameworks/base/include/media/stagefright/openmax \
-        external/skia/include/core \
-        external/skia/include/images \
+	external/skia/include/core \
+	external/skia/include/images \
 
 LOCAL_CFLAGS += -Wno-multichar
 
 LOCAL_MODULE_TAGS := debug
+
+ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
+	LOCAL_C_INCLUDES += $(TOP)/hardware/qcom/media/mm-core/omxcore/inc
+	LOCAL_CFLAGS += -DQCOM_HARDWARE
+endif
 
 LOCAL_MODULE:= stagefright
 
@@ -46,6 +51,10 @@ LOCAL_CFLAGS += -Wno-multichar
 
 LOCAL_MODULE_TAGS := debug
 
+ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
+	LOCAL_CFLAGS += -DQCOM_HARDWARE
+endif
+
 LOCAL_MODULE:= record
 
 include $(BUILD_EXECUTABLE)
@@ -69,6 +78,11 @@ LOCAL_C_INCLUDES:= \
 LOCAL_CFLAGS += -Wno-multichar
 
 LOCAL_MODULE_TAGS := debug
+
+ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
+	LOCAL_C_INCLUDES += $(TOP)/hardware/qcom/media/mm-core/omxcore/inc
+	LOCAL_CFLAGS += -DQCOM_HARDWARE
+endif
 
 LOCAL_MODULE:= recordvideo
 
@@ -95,6 +109,10 @@ LOCAL_CFLAGS += -Wno-multichar
 
 LOCAL_MODULE_TAGS := debug
 
+ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
+	LOCAL_CFLAGS += -DQCOM_HARDWARE
+endif
+
 LOCAL_MODULE:= audioloop
 
 include $(BUILD_EXECUTABLE)
@@ -119,6 +137,11 @@ LOCAL_CFLAGS += -Wno-multichar
 
 LOCAL_MODULE_TAGS := debug
 
+ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
+	LOCAL_C_INCLUDES += $(TOP)/hardware/qcom/media/mm-core/omxcore/inc
+	LOCAL_CFLAGS += -DQCOM_HARDWARE
+endif
+
 LOCAL_MODULE:= stream
 
 include $(BUILD_EXECUTABLE)
@@ -142,6 +165,11 @@ LOCAL_C_INCLUDES:= \
 LOCAL_CFLAGS += -Wno-multichar
 
 LOCAL_MODULE_TAGS := debug
+
+ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
+	LOCAL_C_INCLUDES += $(TOP)/hardware/qcom/media/mm-core/omxcore/inc
+	LOCAL_CFLAGS += -DQCOM_HARDWARE
+endif
 
 LOCAL_MODULE:= sf2
 
