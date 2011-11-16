@@ -578,7 +578,12 @@ uint32_t Layer::getEffectiveUsage(uint32_t usage) const
         // need a hardware-protected path to external video sink
         usage |= GraphicBuffer::USAGE_PROTECTED;
     }
+#ifdef MISSING_GRALLOC_BUFFERS
+    usage |= GraphicBuffer::USAGE_HW_TEXTURE;
+#else
     usage |= GraphicBuffer::USAGE_HW_COMPOSER;
+#endif
+
     return usage;
 }
 

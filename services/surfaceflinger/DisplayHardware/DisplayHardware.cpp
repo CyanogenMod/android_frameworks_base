@@ -184,8 +184,12 @@ void DisplayHardware::init(uint32_t dpy)
     eglGetConfigs(display, NULL, 0, &numConfigs);
 
     EGLConfig config = NULL;
+#ifdef FORCE_EGL_CONFIG
+    config = (EGLConfig)FORCE_EGL_CONFIG;
+#else
     err = selectConfigForPixelFormat(display, attribs, format, &config);
     LOGE_IF(err, "couldn't find an EGLConfig matching the screen format");
+#endif
     
     EGLint r,g,b,a;
     eglGetConfigAttrib(display, config, EGL_RED_SIZE,   &r);

@@ -62,6 +62,7 @@ SoftwareRenderer::SoftwareRenderer(
     size_t bufWidth, bufHeight;
 
     switch (mColorFormat) {
+#ifndef MISSING_EGL_PIXEL_FORMAT_YV12
         case OMX_COLOR_FormatYUV420Planar:
         case OMX_TI_COLOR_FormatYUV420PackedSemiPlanar:
         {
@@ -70,6 +71,7 @@ SoftwareRenderer::SoftwareRenderer(
             bufHeight = (mCropHeight + 1) & ~1;
             break;
         }
+#endif
 
         default:
             halFormat = HAL_PIXEL_FORMAT_RGB_565;
