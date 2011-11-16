@@ -256,6 +256,12 @@ static const char *FourCC2MIME(uint32_t fourcc) {
         case FOURCC('a', 'v', 'c', '1'):
             return MEDIA_MIMETYPE_VIDEO_AVC;
 
+#ifdef QCOM_HARDWARE
+        case FOURCC('s', 'q', 'c', 'p'):
+            return MEDIA_MIMETYPE_AUDIO_QCELP;
+        case FOURCC('s', 'e', 'v', 'c'):
+            return MEDIA_MIMETYPE_AUDIO_EVRC;
+#endif
         default:
             CHECK(!"should not be here.");
             return NULL;
@@ -917,6 +923,10 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
         case FOURCC('m', 'p', '4', 'a'):
         case FOURCC('s', 'a', 'm', 'r'):
         case FOURCC('s', 'a', 'w', 'b'):
+#ifdef QCOM_HARDWARE
+        case FOURCC('s', 'e', 'v', 'c'):
+        case FOURCC('s', 'q', 'c', 'p'):
+#endif
         {
             uint8_t buffer[8 + 20];
             if (chunk_data_size < (ssize_t)sizeof(buffer)) {
@@ -1348,6 +1358,25 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
             break;
         }
 
+#ifdef QCOM_HARDWARE
+         case FOURCC('d', 'q', 'c', 'p'):
+         case FOURCC('d', 'e', 'v', 'c'):
+         {
+            uint8_t buffer[20];
+
+            if (mDataSource->readAt(
+                 data_offset, buffer, sizeof(buffer)) < (ssize_t)sizeof(buffer)) {
+                 LOGE("Buffered returned error \n");
+                 return ERROR_IO;
+            }
+
+            uint32_t vendor = U32_AT(&buffer[0]);
+            uint8_t decoder_version = ((U16_AT(&buffer[4])) & 0xff00) >>8;
+            uint8_t frames_per_sample = (U16_AT(&buffer[4])) & 0x00ff;
+            *offset += chunk_size;
+            break;
+        }
+#endif
         case FOURCC('m', 'd', 'a', 't'):
         {
             if (!mIsDrm) {
@@ -1740,6 +1769,13 @@ status_t MPEG4Extractor::updateAudioTrackInfoFromESDS_MPEG4Audio(
         return ERROR_MALFORMED;
     }
 
+#ifdef QCOM_HARDWARE
+    if (objectTypeIndication == 0xA0) {
+        // This isn't MPEG4 audio at all, it's EVRC
+       mLastTrack->meta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_EVRC);
+       return OK;
+    }
+#endif
     if (objectTypeIndication == 0xe1) {
         // This isn't MPEG4 audio at all, it's QCELP 14k...
         mLastTrack->meta->setCString(kKeyMIMEType, MEDIA_MIMETYPE_AUDIO_QCELP);
@@ -2256,7 +2292,12 @@ static bool LegacySniffMPEG4(
         return false;
     }
 
+#ifdef QCOM_HARDWARE
+    if (!memcmp(header, "ftyp3g2a", 8) || !memcmp(header, "ftyp3g2b", 8) || !memcmp(header, "ftyp3g2c", 8)
+        || !memcmp(header, "ftyp3gp", 7) || !memcmp(header, "ftypmp42", 8)
+#else
     if (!memcmp(header, "ftyp3gp", 7) || !memcmp(header, "ftypmp42", 8)
+#endif
         || !memcmp(header, "ftyp3gr6", 8) || !memcmp(header, "ftyp3gs6", 8)
         || !memcmp(header, "ftyp3ge6", 8) || !memcmp(header, "ftyp3gg6", 8)
         || !memcmp(header, "ftypisom", 8) || !memcmp(header, "ftypM4V ", 8)
