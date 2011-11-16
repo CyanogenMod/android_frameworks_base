@@ -188,7 +188,7 @@ public class ServiceState implements Parcelable {
     private int mSystemId;
     private int mCdmaRoamingIndicator;
     private int mCdmaDefaultRoamingIndicator;
-    private int mCdmaEriIconIndex;
+    private int mCdmaEriIconIndex = 1; //EriInfo.ROAMING_INDICATOR_OFF;
     private int mCdmaEriIconMode;
 
     /**
