@@ -1298,4 +1298,8 @@
         <item>333</item>
         <item>353</item>
     </string-array>
+
+    <!-- set to false if we dont need to consider data
+         service state to display signal strength bars -->
+    <bool name="config_combined_signal">true</bool>
 </resources>
