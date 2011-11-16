@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (C) 2010-2011 Code Aurora Forum
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +30,9 @@
 #include "include/WVMExtractor.h"
 #include "include/FLACExtractor.h"
 #include "include/AACExtractor.h"
+#ifdef QCOM_HARDWARE
+#include "include/ExtendedExtractor.h"
+#endif
 
 #include "matroska/MatroskaExtractor.h"
 
@@ -125,7 +129,14 @@ sp<MediaExtractor> MediaExtractor::Create(
        }
     }
 
+#ifdef QCOM_HARDWARE
+    if (ret) return ret;
+
+        LOGV(" Using ExtendedExtractor\n");
+    return ExtendedExtractor::CreateExtractor(source, mime);
+#else
     return ret;
+#endif
 }
 
 }  // namespace android
