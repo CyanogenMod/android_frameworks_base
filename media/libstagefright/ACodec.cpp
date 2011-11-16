@@ -35,6 +35,9 @@
 #include <gui/SurfaceTextureClient.h>
 
 #include <OMX_Component.h>
+#ifdef QCOM_HARDWARE
+#include <OMX_QCOMExtns.h>
+#endif
 
 namespace android {
 

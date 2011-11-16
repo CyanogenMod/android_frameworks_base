@@ -146,6 +146,12 @@ enum {
 #endif
 
     kKeyRequiresSecureBuffers = 'secu',  // bool (int32_t)
+
+#ifdef QCOM_HARDWARE
+    // 3D Video Flag
+    kKey3D                = '3Dvf',  // bool (int32_t)
+    kKeyHFR               = 'hfr ',  // int32_t
+#endif
 };
 
 enum {
