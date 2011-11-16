@@ -2302,11 +2302,13 @@ status_t OMXCodec::allocateOutputBuffersFromNativeWindow() {
 #ifndef SAMSUNG_CODEC_SUPPORT
     err = native_window_set_buffers_geometry(
             mNativeWindow.get(),
-            def.format.video.nFrameWidth,
-            def.format.video.nFrameHeight,
 #ifdef QCOM_HARDWARE
+            def.format.video.nStride,
+            def.format.video.nSliceHeight,
             format);
 #else
+            def.format.video.nFrameWidth,
+            def.format.video.nFrameHeight,
             def.format.video.eColorFormat);
 #endif
 #else
@@ -2336,6 +2338,25 @@ status_t OMXCodec::allocateOutputBuffersFromNativeWindow() {
                 strerror(-err), -err);
         return err;
     }
+
+#ifdef QCOM_HARDWARE
+    // Crop the native window to the proper display resolution
+    int32_t left, top, right, bottom;
+    CHECK(mOutputFormat->findRect(
+                kKeyCropRect,
+                &left, &top, &right, &bottom));
+
+    android_native_rect_t crop;
+    crop.left = left;
+    crop.top = top;
+    crop.right = right;
+    crop.bottom = bottom;
+
+    err = native_window_set_crop(mNativeWindow.get(), &crop);
+    if (err != OK) {
+        LOGE("native_window_set_crop failed: %s (%d)", strerror(-err), -err);
+    }
+#endif
 
     err = applyRotation();
     if (err != OK) {
