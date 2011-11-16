@@ -52,6 +52,10 @@ LOCAL_SRC_FILES:=                         \
         XINGSeeker.cpp                    \
         avc_utils.cpp                     \
 
+ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
+        LOCAL_SRC_FILES += ExtendedExtractor.cpp
+endif
+
 LOCAL_C_INCLUDES:= \
 	$(JNI_H_INCLUDE) \
         $(TOP)/frameworks/base/include/media/stagefright/openmax \
@@ -147,6 +151,10 @@ LOCAL_SHARED_LIBRARIES += \
         libdl
 
 LOCAL_CFLAGS += -Wno-multichar
+
+ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
+        LOCAL_CFLAGS += -DQCOM_HARDWARE
+endif
 
 LOCAL_MODULE:= libstagefright
 
