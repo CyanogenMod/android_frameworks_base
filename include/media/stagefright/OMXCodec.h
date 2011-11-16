@@ -56,6 +56,10 @@ struct OMXCodec : public MediaSource,
 
         // Secure decoding mode
         kUseSecureInputBuffers = 256,
+
+#ifdef QCOM_HARDWARE
+        kEnableThumbnailMode = 512,
+#endif
     };
     static sp<MediaSource> Create(
             const sp<IOMX> &omx,
@@ -140,6 +144,9 @@ private:
         kAvoidMemcopyInputRecordingFrames     = 2048,
         kRequiresLargerEncoderOutputBuffer    = 4096,
         kOutputBuffersAreUnreadable           = 8192,
+#ifdef QCOM_HARDWARE
+        kStoreMetaDataInInputVideoBuffers     = 16384,
+#endif
     };
 
     enum BufferStatus {
@@ -193,6 +200,9 @@ private:
     ReadOptions::SeekMode mSeekMode;
     int64_t mTargetTimeUs;
     bool mOutputPortSettingsChangedPending;
+#ifdef QCOM_HARDWARE
+    bool mThumbnailMode;
+#endif
 
     MediaBuffer *mLeftOverBuffer;
 
@@ -211,6 +221,12 @@ private:
     // A list of indices into mPortStatus[kPortIndexOutput] filled with data.
     List<size_t> mFilledBuffers;
     Condition mBufferFilled;
+
+#ifdef QCOM_HARDWARE
+    bool mIsMetaDataStoredInVideoBuffers;
+    bool mOnlySubmitOneBufferAtOneTime;
+    bool mInterlaceFormatDetected;
+#endif
 
     // Used to record the decoding time for an output picture from
     // a video encoder.
@@ -339,6 +355,9 @@ private:
     status_t parseAVCCodecSpecificData(
             const void *data, size_t size,
             unsigned *profile, unsigned *level);
+#ifdef QCOM_HARDWARE
+    void parseFlags( uint32_t flags );
+#endif
 
     OMXCodec(const OMXCodec &);
     OMXCodec &operator=(const OMXCodec &);
