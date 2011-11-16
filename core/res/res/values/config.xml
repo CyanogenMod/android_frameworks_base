@@ -1448,4 +1448,8 @@
          for "perf_profile_values" array. Leave it blank if the device do not support
          performance profiles  -->
     <string name="config_perf_profile_default_entry" translatable="false"></string>
+
+    <!-- set to false if we dont need to consider data
+         service state to display signal strength bars -->
+    <bool name="config_combined_signal">true</bool>
 </resources>
