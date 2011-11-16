@@ -2309,7 +2309,8 @@ static bool LegacySniffMPEG4(
         || !memcmp(header, "ftypM4A ", 8) || !memcmp(header, "ftypf4v ", 8)
         || !memcmp(header, "ftypkddi", 8) || !memcmp(header, "ftypM4VP", 8)
         || !memcmp(header, "ftypMSNV", 8) || !memcmp(header, "ftypavc1", 8)
-        || !memcmp(header, "ftypmmp4", 8)) {
+        || !memcmp(header, "ftypmmp4", 8) || !memcmp(header, "ftypk3g1", 8)
+        || !memcmp(header, "ftypmp41", 8) || !memcmp(header, "ftypskm3", 8)) {
         *mimeType = MEDIA_MIMETYPE_CONTAINER_MPEG4;
         *confidence = 0.6;
 
