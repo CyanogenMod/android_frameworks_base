@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/*--------------------------------------------------------------------------
+Copyright (c) 2011, Code Aurora Forum. All rights reserved.
+--------------------------------------------------------------------------*/
 
 #ifndef OMX_NODE_INSTANCE_H_
 
