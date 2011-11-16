@@ -1135,12 +1135,17 @@ status_t MPEG4Extractor::parseChunk(off64_t *offset, int depth) {
 
         case FOURCC('s', 't', 's', 's'):
         {
-            status_t err =
-                mLastTrack->sampleTable->setSyncSampleParams(
-                        data_offset, chunk_data_size);
+            const char *mime;
+            CHECK(mLastTrack->meta->findCString(kKeyMIMEType, &mime));
+            if(strncmp(mime, "audio/", 6))
+            {
+                status_t err =
+                    mLastTrack->sampleTable->setSyncSampleParams(
+                           data_offset, chunk_data_size);
 
-            if (err != OK) {
-                return err;
+                if (err != OK) {
+                   return err;
+                }
             }
 
             *offset += chunk_size;
