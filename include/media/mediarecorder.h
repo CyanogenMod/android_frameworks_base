@@ -118,6 +118,9 @@ enum media_recorder_event_type {
     MEDIA_RECORDER_EVENT_LIST_START               = 1,
     MEDIA_RECORDER_EVENT_ERROR                    = 1,
     MEDIA_RECORDER_EVENT_INFO                     = 2,
+#ifdef QCOM_HARDWARE
+    MEDIA_RECORDER_MSG_COMPRESSED_IMAGE           = 8, // mzhu: TODO, where to put this?
+#endif
     MEDIA_RECORDER_EVENT_LIST_END                 = 99,
 
     // Track related event types
