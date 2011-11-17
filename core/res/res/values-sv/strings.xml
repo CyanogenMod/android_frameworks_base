@@ -150,6 +150,7 @@
     <string name="reboot_bootloader">Bootloader</string>
     <string name="reboot_bootmenu">Boot-meny</string>
     <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Nerladdning</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Avslutar…"</string>
     <string name="reboot_progress">Startar om\u2026</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"Din telefon stängs av."</string>
