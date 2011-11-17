@@ -1134,6 +1134,7 @@ public class StatusBarPolicy {
 
         // Display signal strength while in "emergency calls only" mode
         if (mServiceState == null || (!hasService() && !mServiceState.isEmergencyOnly())) {
+            boolean isVisible;
             //Slog.d(TAG, "updateSignalStrength: no service");
             if (Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.AIRPLANE_MODE_ON, 0) == 1) {
@@ -1141,15 +1142,16 @@ public class StatusBarPolicy {
                 updateSignalStrengthDbm(PHONE_SIGNAL_IS_AIRPLANE_MODE);
                 // show the icon depening on mPhoneSignalHidden (and regardless of
                 // the value of CmShowCmSignal)
-                mService.setIconVisibility("phone_signal", !mPhoneSignalHidden);
+                isVisible = !mPhoneSignalHidden;
             } else {
                 mPhoneSignalIconId = R.drawable.stat_sys_signal_null;
                 updateSignalStrengthDbm(PHONE_SIGNAL_IS_NULL);
                 // set phone_signal visibility false if hidden
                 // and hide it if CmSignalText is used
-                mService.setIconVisibility("phone_signal", !mPhoneSignalHidden && !mShowCmSignal);
+                isVisible = !mPhoneSignalHidden && !mShowCmSignal;
             }
             mService.setIcon("phone_signal", mPhoneSignalIconId, 0);
+            mService.setIconVisibility("phone_signal", isVisible);
             return;
         }
 
