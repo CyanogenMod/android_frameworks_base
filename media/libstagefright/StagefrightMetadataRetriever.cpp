@@ -348,19 +348,39 @@ VideoFrame *StagefrightMetadataRetriever::getFrameAtTime(
         memcpy(mAlbumArt->mData, data, dataSize);
     }
 
+#ifdef QCOM_HARDWARE
+    const char *mime;
+    bool success = trackMeta->findCString(kKeyMIMEType, &mime);
+    CHECK(success);
+    VideoFrame *frame = NULL;
+
+    if ((!strcmp(mime, MEDIA_MIMETYPE_VIDEO_DIVX))||
+            (!strcmp(mime, MEDIA_MIMETYPE_VIDEO_DIVX311))||
+            (!strcmp(mime, MEDIA_MIMETYPE_VIDEO_DIVX4))||
+            (!strcmp(mime, MEDIA_MIMETYPE_VIDEO_WMV)))
+    {
+        LOGV("Software codec is not being used for %s clips for thumbnail ",
+            mime);
+    } else {
+        frame = extractVideoFrameWithCodecFlags(
+#else
     VideoFrame *frame =
         extractVideoFrameWithCodecFlags(
+#endif
                 &mClient, trackMeta, source, OMXCodec::kPreferSoftwareCodecs,
                 timeUs, option);
+#ifdef QCOM_HARDWARE
+    }
+#endif
 
+#if defined(TARGET8x60) || !defined(QCOM_HARDWARE)
     if (frame == NULL) {
         LOGV("Software decoder failed to extract thumbnail, "
              "trying hardware decoder.");
-
-        frame = extractVideoFrameWithCodecFlags(&mClient, trackMeta, source, 0,
+            frame = extractVideoFrameWithCodecFlags(&mClient, trackMeta, source, 0,
                         timeUs, option);
     }
-
+#endif
     return frame;
 }
 
