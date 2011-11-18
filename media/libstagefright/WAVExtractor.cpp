@@ -435,7 +435,7 @@ bool SniffWAV(
     }
 
     *mimeType = MEDIA_MIMETYPE_CONTAINER_WAV;
-    *confidence = 0.3f;
+    *confidence = 0.6f;
 
     return true;
 }
