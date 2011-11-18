@@ -337,12 +337,12 @@ bool SniffAMR(
 
     if (!memcmp(header, "#!AMR\n", 6)) {
         *mimeType = MEDIA_MIMETYPE_AUDIO_AMR_NB;
-        *confidence = 0.5;
+        *confidence = 0.6;
 
         return true;
     } else if (!memcmp(header, "#!AMR-WB\n", 9)) {
         *mimeType = MEDIA_MIMETYPE_AUDIO_AMR_WB;
-        *confidence = 0.5;
+        *confidence = 0.6;
 
         return true;
     }

@@ -1019,7 +1019,7 @@ bool SniffOgg(
     }
 
     mimeType->setTo(MEDIA_MIMETYPE_CONTAINER_OGG);
-    *confidence = 0.2f;
+    *confidence = 0.6f;
 
     return true;
 }
