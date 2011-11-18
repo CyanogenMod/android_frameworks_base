@@ -90,12 +90,25 @@ public:
                 AudioCallback cb = NULL,
                 void *cookie = NULL) = 0;
 
+#ifdef WITH_QCOM_LPA
+        // API to open a routing session for tunneled audio playback
+        virtual status_t        openSession(
+                int format, int sessionId, uint32_t sampleRate = 44100, int channels = 2) {return 0;};
+#endif
+
         virtual void        start() = 0;
         virtual ssize_t     write(const void* buffer, size_t size) = 0;
         virtual void        stop() = 0;
         virtual void        flush() = 0;
         virtual void        pause() = 0;
+#ifdef WITH_QCOM_LPA
+        virtual void        pauseSession() {return;};
+        virtual void        resumeSession() {return;};
+#endif
         virtual void        close() = 0;
+#ifdef WITH_QCOM_LPA
+        virtual void        closeSession() {return;};
+#endif
     };
 
                         MediaPlayerBase() : mCookie(0), mNotify(0) {}

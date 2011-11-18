@@ -94,6 +94,10 @@ int JetPlayer::init()
             1, // format = PCM 16bits per sample,
             (pLibConfig->numChannels == 2) ? AUDIO_CHANNEL_OUT_STEREO : AUDIO_CHANNEL_OUT_MONO,
             mTrackBufferSize,
+#ifdef WITH_QCOM_LPA
+            0,
+            0,
+#endif
             0);
 
     // create render and playback thread
