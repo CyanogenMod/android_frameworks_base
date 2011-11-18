@@ -37,6 +37,12 @@ enum {
     SET_FORCE_USE,
     GET_FORCE_USE,
     GET_OUTPUT,
+#ifdef WITH_QCOM_LPA
+    GET_SESSION,
+    PAUSE_SESSION,
+    RESUME_SESSION,
+    CLOSE_SESSION,
+#endif
     START_OUTPUT,
     STOP_OUTPUT,
     RELEASE_OUTPUT,
@@ -146,7 +152,52 @@ public:
         remote()->transact(GET_OUTPUT, data, &reply);
         return static_cast <audio_io_handle_t> (reply.readInt32());
     }
+#ifdef WITH_QCOM_LPA
+    virtual audio_io_handle_t getSession(
+                                        audio_stream_type_t stream,
+                                        uint32_t format,
+                                        audio_policy_output_flags_t flags,
+                                        int32_t sessionId)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(IAudioPolicyService::getInterfaceDescriptor());
+        data.writeInt32(static_cast <uint32_t>(stream));
+        data.writeInt32(static_cast <uint32_t>(format));
+        data.writeInt32(static_cast <uint32_t>(flags));
+        data.writeInt32(static_cast <int32_t>(sessionId));
+        remote()->transact(GET_SESSION, data, &reply);
+        return static_cast <audio_io_handle_t> (reply.readInt32());
+    }
 
+    virtual status_t pauseSession(audio_io_handle_t output, audio_stream_type_t stream)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(IAudioPolicyService::getInterfaceDescriptor());
+        data.writeInt32(output);
+        data.writeInt32(static_cast <uint32_t>(stream));
+        remote()->transact(PAUSE_SESSION, data, &reply);
+        return static_cast <status_t> (reply.readInt32());
+    }
+
+    virtual status_t resumeSession(audio_io_handle_t output, audio_stream_type_t stream)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(IAudioPolicyService::getInterfaceDescriptor());
+        data.writeInt32(output);
+        data.writeInt32(static_cast <uint32_t>(stream));
+        remote()->transact(RESUME_SESSION, data, &reply);
+        return static_cast <status_t> (reply.readInt32());
+    }
+
+    virtual status_t closeSession(audio_io_handle_t output)
+    {
+        Parcel data, reply;
+        data.writeInterfaceToken(IAudioPolicyService::getInterfaceDescriptor());
+        data.writeInt32(output);
+        remote()->transact(CLOSE_SESSION, data, &reply);
+        return static_cast <audio_io_handle_t> (reply.readInt32());
+    }
+#endif
     virtual status_t startOutput(audio_io_handle_t output,
                                  audio_stream_type_t stream,
                                  int session)
@@ -440,7 +491,47 @@ status_t BnAudioPolicyService::onTransact(
             reply->writeInt32(static_cast <int>(output));
             return NO_ERROR;
         } break;
+#ifdef WITH_QCOM_LPA
+        case GET_SESSION: {
+            CHECK_INTERFACE(IAudioPolicyService, data, reply);
+            audio_stream_type_t stream = static_cast <audio_stream_type_t>(data.readInt32());
+            uint32_t format = data.readInt32();
+            audio_policy_output_flags_t flags = static_cast <audio_policy_output_flags_t>(data.readInt32());
+            int32_t sessionId = data.readInt32();
+            audio_io_handle_t output = getSession(stream,
+                                                 format,
+                                                 flags,
+                                                 sessionId);
+            reply->writeInt32(static_cast <int>(output));
+            return NO_ERROR;
+        } break;
 
+        case PAUSE_SESSION: {
+            CHECK_INTERFACE(IAudioPolicyService, data, reply);
+            audio_io_handle_t output = static_cast <audio_io_handle_t>(data.readInt32());
+            audio_stream_type_t stream = static_cast <audio_stream_type_t>(data.readInt32());
+            status_t status = pauseSession(output, stream);
+            reply->writeInt32(static_cast <int>(status));
+            return NO_ERROR;
+        } break;
+
+        case RESUME_SESSION: {
+            CHECK_INTERFACE(IAudioPolicyService, data, reply);
+            audio_io_handle_t output = static_cast <audio_io_handle_t>(data.readInt32());
+            audio_stream_type_t stream = static_cast <audio_stream_type_t>(data.readInt32());
+            status_t status = resumeSession(output, stream);
+            reply->writeInt32(static_cast <int>(status));
+            return NO_ERROR;
+        } break;
+
+        case CLOSE_SESSION: {
+            CHECK_INTERFACE(IAudioPolicyService, data, reply);
+            audio_io_handle_t output = static_cast <audio_io_handle_t>(data.readInt32());
+            status_t status = closeSession(output);
+            reply->writeInt32(static_cast <int>(status));
+            return NO_ERROR;
+        } break;
+#endif
         case START_OUTPUT: {
             CHECK_INTERFACE(IAudioPolicyService, data, reply);
             audio_io_handle_t output = static_cast <audio_io_handle_t>(data.readInt32());

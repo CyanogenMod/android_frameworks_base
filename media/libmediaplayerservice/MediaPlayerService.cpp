@@ -56,6 +56,7 @@
 #include <media/stagefright/MediaErrors.h>
 
 #include <system/audio.h>
+#include <system/audio_policy.h>
 
 #include <private/android_filesystem_config.h>
 
@@ -1262,6 +1263,9 @@ MediaPlayerService::AudioOutput::AudioOutput(int sessionId)
       mSessionId(sessionId) {
     LOGV("AudioOutput(%d)", sessionId);
     mTrack = 0;
+#ifdef WITH_QCOM_LPA
+    mSession = 0;
+#endif
     mStreamType = AUDIO_STREAM_MUSIC;
     mLeftVolume = 1.0;
     mRightVolume = 1.0;
@@ -1274,6 +1278,9 @@ MediaPlayerService::AudioOutput::AudioOutput(int sessionId)
 MediaPlayerService::AudioOutput::~AudioOutput()
 {
     close();
+#ifdef WITH_QCOM_LPA
+    closeSession();
+#endif
 }
 
 void MediaPlayerService::AudioOutput::setMinBufferCount()
@@ -1337,6 +1344,39 @@ status_t MediaPlayerService::AudioOutput::getPosition(uint32_t *position)
     if (mTrack == 0) return NO_INIT;
     return mTrack->getPosition(position);
 }
+#ifdef WITH_QCOM_LPA
+status_t MediaPlayerService::AudioOutput::openSession(
+        int format, int lpaSessionId, uint32_t sampleRate, int channels)
+{
+    uint32_t flags = 0;
+    mCallback = NULL;
+    mCallbackCookie = NULL;
+    if (mSession) closeSession();
+    mSession = NULL;
+
+    flags |= AUDIO_POLICY_OUTPUT_FLAG_DIRECT;
+
+    AudioTrack *t = new AudioTrack(
+                mStreamType,
+                sampleRate,
+                format,
+                channels,
+                flags,
+                mSessionId,
+                lpaSessionId);
+    LOGV("openSession: AudioTrack created successfully track(%p)",t);
+    if ((t == 0) || (t->initCheck() != NO_ERROR)) {
+        LOGE("Unable to create audio track");
+        delete t;
+        return NO_INIT;
+    }
+    LOGV("openSession: Out");
+    mSession = t;
+    LOGV("setVolume");
+    t->setVolume(mLeftVolume, mRightVolume);
+    return NO_ERROR;
+}
+#endif
 
 status_t MediaPlayerService::AudioOutput::open(
         uint32_t sampleRate, int channelCount, int format, int bufferCount,
@@ -1454,17 +1494,53 @@ void MediaPlayerService::AudioOutput::pause()
 void MediaPlayerService::AudioOutput::close()
 {
     LOGV("close");
-    delete mTrack;
-    mTrack = 0;
+    if(mTrack != NULL) {
+        delete mTrack;
+        mTrack = 0;
+    }
+}
+#ifdef WITH_QCOM_LPA
+void MediaPlayerService::AudioOutput::closeSession()
+{
+    LOGV("closeSession");
+    if(mSession != NULL) {
+        delete mSession;
+        mSession = 0;
+    }
 }
 
+void MediaPlayerService::AudioOutput::pauseSession()
+{
+    LOGV("pauseSession");
+    if(mSession != NULL) {
+        mSession->pause();
+    }
+}
+
+void MediaPlayerService::AudioOutput::resumeSession()
+{
+    LOGV("resumeSession");
+    if(mSession != NULL) {
+        mSession->start();
+    }
+}
+#endif
 void MediaPlayerService::AudioOutput::setVolume(float left, float right)
 {
+#ifdef WITH_QCOM_LPA
+    LOGV("setVolume(%f, %f): %p", left, right, mSession);
+#else
     LOGV("setVolume(%f, %f)", left, right);
+#endif
+
     mLeftVolume = left;
     mRightVolume = right;
     if (mTrack) {
         mTrack->setVolume(left, right);
+#ifdef WITH_QCOM_LPA
+    } else if(mSession) {
+        mSession->setVolume(left, right);
+#endif
     }
 }
 
