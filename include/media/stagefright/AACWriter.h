@@ -17,6 +17,7 @@
 #ifndef AAC_WRITER_H_
 #define AAC_WRITER_H_
 
+#include <media/stagefright/foundation/ABase.h> // DISALLOW_EVIL_CONSTRUCTORS
 #include <media/stagefright/MediaWriter.h>
 #include <utils/threads.h>
 

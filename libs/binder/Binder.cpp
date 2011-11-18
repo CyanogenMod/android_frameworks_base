@@ -142,7 +142,7 @@ void BBinder::attachObject(
     if (!e) {
         e = new Extras;
         if (android_atomic_cmpxchg(0, reinterpret_cast<int32_t>(e),
-                reinterpret_cast<volatile int32_t*>(&mExtras)) != 0) {
+                &mExtrasInt) != 0) {
             delete e;
             e = mExtras;
         }

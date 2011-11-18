@@ -234,7 +234,7 @@ static void Surface_init(
         surface = client->createSurface(dpy, w, h, format, flags);
     } else {
         const jchar* str = env->GetStringCritical(jname, 0);
-        const String8 name(str, env->GetStringLength(jname));
+        const String8 name((const char16_t*)str, env->GetStringLength(jname));
         env->ReleaseStringCritical(jname, str);
         surface = client->createSurface(name, dpy, w, h, format, flags);
     }

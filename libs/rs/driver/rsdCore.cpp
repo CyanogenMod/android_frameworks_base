@@ -274,10 +274,10 @@ void Shutdown(Context *rsc) {
     for (uint32_t ct = 0; ct < dc->mWorkers.mCount; ct++) {
         dc->mWorkers.mLaunchSignals[ct].set();
     }
-    int status;
+    //int status;
     void *res;
     for (uint32_t ct = 0; ct < dc->mWorkers.mCount; ct++) {
-        status = pthread_join(dc->mWorkers.mThreadId[ct], &res);
+        /*status =*/ pthread_join(dc->mWorkers.mThreadId[ct], &res);
     }
     rsAssert(android_atomic_acquire_load(&dc->mWorkers.mRunningCount) == 0);
 
