@@ -85,6 +85,25 @@ ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
 	LOCAL_C_INCLUDES += $(TOP)/hardware/qcom/display/libqcomui
 endif
 
+ifeq ($(TARGET_USES_QCOM_LPA),true)
+ifeq ($(BOARD_USES_ALSA_AUDIO),true)
+	LOCAL_SRC_FILES += LPAPlayerALSA.cpp
+	LOCAL_C_INCLUDES += $(TARGET_OUT_HEADERS)/mm-audio/libalsa-intf
+	LOCAL_C_INCLUDES += $(TOP)/kernel/include/sound
+	LOCAL_C_INCLUDES += $(TOP)/hardware/libhardware_legacy/include
+	LOCAL_SHARED_LIBRARIES += libalsa-intf
+	LOCAL_SHARED_LIBRARIES += libhardware_legacy
+	LOCAL_SHARED_LIBRARIES += libpowermanager
+else
+	LOCAL_SRC_FILES += LPAPlayer.cpp
+ifeq ($(TARGET_USES_ION_AUDIO),true)
+	LOCAL_SRC_FILES += LPAPlayerION.cpp
+else
+	LOCAL_SRC_FILES += LPAPlayerPMEM.cpp
+endif
+endif
+endif
+
 LOCAL_C_INCLUDES+= \
 	$(JNI_H_INCLUDE) \
         $(TOP)/frameworks/base/include/media/stagefright/openmax \
@@ -121,6 +140,12 @@ LOCAL_STATIC_LIBRARIES := \
         libstagefright_httplive \
         libstagefright_id3 \
         libFLAC \
+
+ifeq ($(TARGET_USES_QCOM_LPA),true)
+LOCAL_STATIC_LIBRARIES +=
+		libstagefright_aacdec \
+	    libstagefright_mp3dec
+endif
 
 ifeq ($(BOARD_HAVE_CODEC_SUPPORT),SAMSUNG_CODEC_SUPPORT)
 LOCAL_CFLAGS     += -DSAMSUNG_CODEC_SUPPORT

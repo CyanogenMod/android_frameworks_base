@@ -38,6 +38,9 @@
 #include <media/stagefright/foundation/hexdump.h>
 #include <media/stagefright/foundation/ADebug.h>
 #include <media/stagefright/AudioPlayer.h>
+#ifdef WITH_QCOM_LPA
+#include <media/stagefright/LPAPlayer.h>
+#endif
 #include <media/stagefright/DataSource.h>
 #include <media/stagefright/FileSource.h>
 #include <media/stagefright/MediaBuffer.h>
@@ -52,6 +55,9 @@
 #include <gui/SurfaceTextureClient.h>
 #include <surfaceflinger/ISurfaceComposer.h>
 
+#include <cutils/properties.h>
+
+#include <media/stagefright/foundation/ALooper.h>
 #include <media/stagefright/foundation/AMessage.h>
 
 #include <cutils/properties.h>
@@ -904,7 +910,51 @@ status_t AwesomePlayer::play_l() {
     if (mAudioSource != NULL) {
         if (mAudioPlayer == NULL) {
             if (mAudioSink != NULL) {
+#ifndef WITH_QCOM_LPA
                 mAudioPlayer = new AudioPlayer(mAudioSink, this);
+#else
+                sp<MetaData> format = mAudioTrack->getFormat();
+                const char *mime;
+                bool success = format->findCString(kKeyMIMEType, &mime);
+                CHECK(success);
+
+                int64_t durationUs;
+                success = format->findInt64(kKeyDuration, &durationUs);
+                /*
+                 * Some clips may not have kKeyDuration set, especially so for clips in a MP3
+                 * container with the Frames field absent in the Xing header.
+                 */
+                if (!success)
+                    durationUs = 0;
+
+                LOGV("LPAPlayer::getObjectsAlive() %d",LPAPlayer::objectsAlive);
+                int32_t isFormatAdif = 0;
+                format->findInt32(kkeyAacFormatAdif, &isFormatAdif);
+
+                char lpaDecode[128];
+                property_get("lpa.decode",lpaDecode,"0");
+                if(strcmp("true",lpaDecode) == 0)
+                {
+                    LOGV("LPAPlayer::getObjectsAlive() %d",LPAPlayer::objectsAlive);
+                    if ( durationUs > 60000000 && !isFormatAdif
+                         &&(!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_MPEG) || !strcasecmp(mime,MEDIA_MIMETYPE_AUDIO_AAC))
+                         && LPAPlayer::objectsAlive == 0 && mVideoSource == NULL) {
+                        LOGE("LPAPlayer created, LPA MODE detected mime %s duration %d\n", mime, durationUs);
+                        bool initCheck =  false;
+                        mAudioPlayer = new LPAPlayer(mAudioSink, initCheck, this);
+                        if(!initCheck) {
+                            delete mAudioPlayer;
+                            mAudioPlayer = NULL;
+                        }
+                    }
+                }
+                if(mAudioPlayer == NULL) {
+                    LOGE("AudioPlayer created, Non-LPA mode mime %s duration %d\n", mime, durationUs);
+                    mAudioPlayer = new AudioPlayer(mAudioSink, this);
+                }
+
+                LOGV("Setting Audio source");
+#endif
                 mAudioPlayer->setSource(mAudioSource);
 
                 mTimeSource = mAudioPlayer;
@@ -1430,10 +1480,42 @@ status_t AwesomePlayer::initAudioDecoder() {
     if (!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_RAW)) {
         mAudioSource = mAudioTrack;
     } else {
+#ifdef WITH_QCOM_LPA
+        // For LPA Playback use the decoder without OMX layer
+        char lpaDecode[128];
+        char *matchComponentName = NULL;
+        property_get("lpa.decode",lpaDecode,"0");
+        if(strcmp("true",lpaDecode) == 0 && mVideoSource == NULL) {
+            const char *mime;
+            bool success = meta->findCString(kKeyMIMEType, &mime);
+            CHECK(success);
+            int64_t durationUs;
+            success = meta->findInt64(kKeyDuration, &durationUs);
+            if (!success) durationUs = 0;
+            int32_t isFormatAdif = 0;
+            meta->findInt32(kkeyAacFormatAdif, &isFormatAdif);
+
+            if ( (durationUs > 60000000) && !isFormatAdif && LPAPlayer::objectsAlive == 0) {
+                if(!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_MPEG)) {
+                    LOGV("matchComponentName is set to MP3Decoder");
+                    matchComponentName= "MP3Decoder";
+                }
+                if(!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_AAC)) {
+                    LOGV("matchComponentName is set to AACDecoder");
+                    matchComponentName= "AACDecoder";
+                }
+            }
+        }
+#endif
         mAudioSource = OMXCodec::Create(
                 mClient.interface(), mAudioTrack->getFormat(),
                 false, // createEncoder
+#ifndef WITH_QCOM_LPA
                 mAudioTrack);
+#else
+                mAudioTrack,
+                matchComponentName);
+#endif
     }
 
     if (mAudioSource != NULL) {
