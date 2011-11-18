@@ -54,6 +54,15 @@ public:
                                         uint32_t format = AUDIO_FORMAT_DEFAULT,
                                         uint32_t channels = 0,
                                         audio_policy_output_flags_t flags = AUDIO_POLICY_OUTPUT_FLAG_INDIRECT) = 0;
+#ifdef WITH_QCOM_LPA
+    virtual audio_io_handle_t getSession(audio_stream_type_t stream,
+                                        uint32_t format = AUDIO_FORMAT_DEFAULT,
+                                        audio_policy_output_flags_t flags = AUDIO_POLICY_OUTPUT_FLAG_DIRECT,
+                                        int32_t  sessionId=-1) { return 0; }
+    virtual status_t pauseSession(audio_io_handle_t output, audio_stream_type_t stream) { return 0; }
+    virtual status_t resumeSession(audio_io_handle_t output, audio_stream_type_t stream) { return 0; }
+    virtual status_t closeSession(audio_io_handle_t output) = 0;
+#endif
     virtual status_t startOutput(audio_io_handle_t output,
                                  audio_stream_type_t stream,
                                  int session = 0) = 0;

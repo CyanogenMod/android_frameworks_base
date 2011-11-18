@@ -57,6 +57,22 @@ public:
                                 int *sessionId,
                                 status_t *status) = 0;
 
+#ifdef WITH_QCOM_LPA
+    virtual     void        createSession(
+                                pid_t pid,
+                                uint32_t sampleRate,
+                                int channelCount,
+                                int *sessionId,
+                                status_t *status) = 0;
+
+    virtual     void        deleteSession() = 0;
+
+    virtual     void        applyEffectsOn(
+                                int16_t *buffer1,
+                                int16_t *buffer2,
+                                int size) = 0;
+#endif
+
     virtual sp<IAudioRecord> openRecord(
                                 pid_t pid,
                                 int input,
@@ -86,6 +102,9 @@ public:
     virtual     float       masterVolume() const = 0;
     virtual     bool        masterMute() const = 0;
 
+#ifdef WITH_QCOM_LPA
+    virtual     status_t    setSessionVolume(int stream, float value, float right) = 0;
+#endif
     /* set/get stream type state. This will probably be used by
      * the preference panel, mostly.
      */
@@ -117,6 +136,16 @@ public:
                                     uint32_t *pChannels,
                                     uint32_t *pLatencyMs,
                                     uint32_t flags) = 0;
+#ifdef WITH_QCOM_LPA
+    virtual int openSession(uint32_t *pDevices,
+                                 uint32_t *pFormat,
+                                 uint32_t flags,
+                                 int32_t  stream,
+                                 int32_t  sessionId){return 0;};
+    virtual status_t pauseSession(int output, int32_t  stream) = 0;
+    virtual status_t resumeSession(int output, int32_t  stream) = 0;
+    virtual status_t closeSession(int output) = 0;
+#endif
     virtual int openDuplicateOutput(int output1, int output2) = 0;
     virtual status_t closeOutput(int output) = 0;
     virtual status_t suspendOutput(int output) = 0;
@@ -159,6 +188,9 @@ public:
                                     int *enabled) = 0;
 
     virtual status_t moveEffects(int session, int srcOutput, int dstOutput) = 0;
+#ifdef WITH_QCOM_LPA
+    virtual status_t deregisterClient(const sp<IAudioFlingerClient>& client) { return false; };
+#endif
 };
 
 
