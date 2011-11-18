@@ -125,9 +125,9 @@ static jobject android_emoji_EmojiFactory_newInstance(
     return NULL;
   }
 
-  const jchar* jchars = env->GetStringChars(name, NULL);
+  const jchar* jchars = (const jchar*)env->GetStringChars(name, NULL);
   jsize len = env->GetStringLength(name);
-  String8 str(String16(jchars, len));
+  String8 str(String16((const char16_t*)jchars, len));
 
   EmojiFactory *factory = gCaller->TryCallGetImplementation(str.string());
   // EmojiFactory *factory = EmojiFactory::GetImplementation(str.string());
@@ -152,7 +152,7 @@ static jobject android_emoji_EmojiFactory_newAvailableInstance(
     return NULL;
   }
   String16 name_16(String8(factory->Name()));
-  jstring jname = env->NewString(name_16.string(), name_16.size());
+  jstring jname = env->NewString((const jchar*)name_16.string(), name_16.size());
   if (NULL == jname) {
     return NULL;
   }

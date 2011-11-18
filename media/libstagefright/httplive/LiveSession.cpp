@@ -199,8 +199,9 @@ void LiveSession::onConnect(const sp<AMessage> &msg) {
             sp<AMessage> meta;
             playlist->itemAt(i, &item.mURI, &meta);
 
-            unsigned long bandwidth;
-            CHECK(meta->findInt32("bandwidth", (int32_t *)&item.mBandwidth));
+            int32_t bandwidth;
+            CHECK(meta->findInt32("bandwidth", &bandwidth));
+	    item.mBandwidth = bandwidth;
 
             mBandwidthItems.push(item);
         }

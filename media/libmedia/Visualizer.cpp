@@ -138,13 +138,17 @@ status_t Visualizer::setCaptureSize(uint32_t size)
         return INVALID_OPERATION;
     }
 
-    uint32_t buf32[sizeof(effect_param_t) / sizeof(uint32_t) + 2];
-    effect_param_t *p = (effect_param_t *)buf32;
+    union {
+        uint32_t buf32[sizeof(effect_param_t) / sizeof(uint32_t) + 2];
+	effect_param_t bufp;
+    };
+    effect_param_t *p = &bufp;
 
     p->psize = sizeof(uint32_t);
     p->vsize = sizeof(uint32_t);
-    *(int32_t *)p->data = VISUALIZER_PARAM_CAPTURE_SIZE;
-    *((int32_t *)p->data + 1)= size;
+    int32_t const vpcs = VISUALIZER_PARAM_CAPTURE_SIZE;
+    memcpy(&p->data, &vpcs, sizeof(vpcs));
+    memcpy(&p->data+sizeof(int32_t), &size, sizeof(size));
     status_t status = setParameter(p);
 
     LOGV("setCaptureSize size %d  status %d p->status %d", size, status, p->status);
@@ -271,21 +275,24 @@ void Visualizer::periodicCapture()
 
 uint32_t Visualizer::initCaptureSize()
 {
-    uint32_t buf32[sizeof(effect_param_t) / sizeof(uint32_t) + 2];
-    effect_param_t *p = (effect_param_t *)buf32;
+    union {
+        uint32_t buf32[sizeof(effect_param_t) / sizeof(uint32_t) + 2];
+        effect_param_t p;
+    };
 
-    p->psize = sizeof(uint32_t);
-    p->vsize = sizeof(uint32_t);
-    *(int32_t *)p->data = VISUALIZER_PARAM_CAPTURE_SIZE;
-    status_t status = getParameter(p);
+    p.psize = sizeof(uint32_t);
+    p.vsize = sizeof(uint32_t);
+    int32_t const vpcs = VISUALIZER_PARAM_CAPTURE_SIZE;
+    memcpy(&p.data, &vpcs, sizeof(vpcs));
+    status_t status = getParameter(&p);
 
     if (status == NO_ERROR) {
-        status = p->status;
+        status = p.status;
     }
 
     uint32_t size = 0;
     if (status == NO_ERROR) {
-        size = *((int32_t *)p->data + 1);
+        memcpy(&size, &p.data+sizeof(int32_t), sizeof(int32_t));
     }
     mCaptureSize = size;
 

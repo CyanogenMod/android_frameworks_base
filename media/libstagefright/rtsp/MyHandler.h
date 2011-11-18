@@ -197,9 +197,12 @@ struct MyHandler : public AHandler {
     }
 
     static void addSDES(int s, const sp<ABuffer> &buffer) {
-        struct sockaddr_in addr;
+        union {
+            struct sockaddr_in addr;
+            struct sockaddr addr_generic;
+        };
         socklen_t addrSize = sizeof(addr);
-        CHECK_EQ(0, getsockname(s, (sockaddr *)&addr, &addrSize));
+        CHECK_EQ(0, getsockname(s, &addr_generic, &addrSize));
 
         uint8_t *data = buffer->data() + buffer->size();
         data[0] = 0x80 | 1;
@@ -255,7 +258,10 @@ struct MyHandler : public AHandler {
     // rtp/rtcp ports to poke a hole into the firewall for future incoming
     // packets. We're going to send an RR/SDES RTCP packet to both of them.
     bool pokeAHole(int rtpSocket, int rtcpSocket, const AString &transport) {
-        struct sockaddr_in addr;
+        union {
+            struct sockaddr_in addr;
+            struct sockaddr addr_generic;
+        };
         memset(addr.sin_zero, 0, sizeof(addr.sin_zero));
         addr.sin_family = AF_INET;
 
@@ -324,7 +330,7 @@ struct MyHandler : public AHandler {
 
         ssize_t n = sendto(
                 rtpSocket, buf->data(), buf->size(), 0,
-                (const sockaddr *)&addr, sizeof(addr));
+                &addr_generic, sizeof(addr));
 
         if (n < (ssize_t)buf->size()) {
             LOGE("failed to poke a hole for RTP packets");
@@ -335,7 +341,7 @@ struct MyHandler : public AHandler {
 
         n = sendto(
                 rtcpSocket, buf->data(), buf->size(), 0,
-                (const sockaddr *)&addr, sizeof(addr));
+                &addr_generic, sizeof(addr));
 
         if (n < (ssize_t)buf->size()) {
             LOGE("failed to poke a hole for RTCP packets");

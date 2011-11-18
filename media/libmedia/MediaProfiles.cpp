@@ -518,16 +518,16 @@ void MediaProfiles::checkAndAddRequiredProfilesIfNecessary() {
         // Check high and low from either camcorder profile or timelapse profile
         // but not both. Default, check camcorder profile
         size_t j = 0;
-        size_t n = 2;
+        size_t n_ = 2;
         if (isTimelapseProfile(quality)) {
             // Check timelapse profile instead.
             j = 2;
-            n = kNumRequiredProfiles;
+            n_ = kNumRequiredProfiles;
         } else {
             // Must be camcorder profile.
             CHECK(isCamcorderProfile(quality));
         }
-        for (; j < n; ++j) {
+        for (; j < n_; ++j) {
             info = &(mRequiredProfileRefs[refIndex].mRefs[j]);
             if ((j % 2 == 0 && product > info->mResolutionProduct) ||  // low
                 (j % 2 != 0 && product < info->mResolutionProduct)) {  // high

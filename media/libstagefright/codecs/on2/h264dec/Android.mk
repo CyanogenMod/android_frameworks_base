@@ -96,6 +96,8 @@ ifeq ($(ARCH_ARM_HAVE_NEON),true)
                         $(LOCAL_PATH)/./omxdl/arm_neon/vc/m4p10/api
 endif
 
+LOCAL_CFLAGS += -fno-strict-aliasing
+
 LOCAL_SHARED_LIBRARIES := \
 	libstagefright libstagefright_omx libstagefright_foundation libutils \
 

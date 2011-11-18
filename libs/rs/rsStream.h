@@ -92,7 +92,8 @@ public:
     }
 
     void addF(float v) {
-        uint32_t uintV = *reinterpret_cast<uint32_t*> (&v);
+        uint32_t uintV;// = *reinterpret_cast<uint32_t*> (&v);
+        memcpy(&uintV, &v, sizeof(uint32_t));
         addU32(uintV);
     }
     void addI32(int32_t v) {

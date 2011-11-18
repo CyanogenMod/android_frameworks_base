@@ -161,7 +161,7 @@ sp<TextLayoutCacheValue> TextLayoutCache::getValue(SkPaint* paint,
                         "count=%d, entry size %d bytes, remaining space %d bytes"
                         " - Compute time in nanos: %d - Text='%s' ",
                         count, size, mMaxSize - mSize, value->getElapsedTime(),
-                        String8(text, count).string());
+                        String8((char16_t*)text, count).string());
             }
         } else {
             if (mDebugEnabled) {
@@ -170,7 +170,7 @@ sp<TextLayoutCacheValue> TextLayoutCache::getValue(SkPaint* paint,
                         "entry size %d bytes, remaining space %d bytes"
                         " - Compute time in nanos: %lld - Text='%s'",
                         start, count, contextCount, size, mMaxSize - mSize, endTime,
-                        String8(text, count).string());
+                        String8((char16_t*)text, count).string());
             }
         }
     } else {
@@ -188,7 +188,7 @@ sp<TextLayoutCacheValue> TextLayoutCache::getValue(SkPaint* paint,
                         "Cache get time in nanos: %lld - Gain in percent: %2.2f - Text='%s' ",
                         mCacheHitCount, start, count, contextCount,
                         value->getElapsedTime(), elapsedTimeThruCacheGet, deltaPercent,
-                        String8(text, count).string());
+                        String8((char16_t*)text, count).string());
             }
             if (mCacheHitCount % DEFAULT_DUMP_STATS_CACHE_HIT_INTERVAL == 0) {
                 dumpCacheStats();
@@ -248,7 +248,7 @@ TextLayoutCacheKey::TextLayoutCacheKey(const TextLayoutCacheKey& other) :
         flags(other.flags),
         hinting(other.hinting) {
     if (other.text) {
-        textCopy.setTo(other.text, other.contextCount);
+        textCopy.setTo((char16_t*)other.text, other.contextCount);
     }
 }
 
@@ -287,7 +287,7 @@ int TextLayoutCacheKey::compare(const TextLayoutCacheKey& lhs, const TextLayoutC
 }
 
 void TextLayoutCacheKey::internalTextCopy() {
-    textCopy.setTo(text, contextCount);
+    textCopy.setTo((char16_t*)text, contextCount);
     text = NULL;
 }
 

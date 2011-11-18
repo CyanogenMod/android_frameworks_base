@@ -49,7 +49,16 @@ void StartDebugServer(const unsigned short port, const bool forceUseFile,
         return;
 
     LOGD("GLESv2_dbg: StartDebugServer create socket");
-    struct sockaddr_in server = {}, client = {};
+    union {
+        sockaddr_in server;
+        sockaddr server_generic;
+    };
+    union {
+        sockaddr_in client;
+        sockaddr client_generic;
+    };
+    server = {};
+    client = {};
 
     /* Create the TCP socket */
     if (forceUseFile || (serverSock = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP)) < 0) {
@@ -66,7 +75,7 @@ void StartDebugServer(const unsigned short port, const bool forceUseFile,
 
     /* Bind the server socket */
     socklen_t sizeofSockaddr_in = sizeof(sockaddr_in);
-    if (bind(serverSock, (struct sockaddr *) &server,
+    if (bind(serverSock, &server_generic,
              sizeof(server)) < 0) {
         Die("Failed to bind the server socket");
     }
@@ -80,7 +89,7 @@ void StartDebugServer(const unsigned short port, const bool forceUseFile,
 
     /* Wait for client connection */
     if ((clientSock =
-                accept(serverSock, (struct sockaddr *) &client,
+                accept(serverSock, &client_generic,
                        &sizeofSockaddr_in)) < 0) {
         Die("Failed to accept client connection");
     }

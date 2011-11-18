@@ -199,12 +199,16 @@ private:
         NUM_REGIONS
     };
 
+#if __cplusplus < 201103L && !defined(__GXX_EXPERIMENTAL_CXX0X__)
+#define constexpr const
+#endif
+
     static const unsigned char sToneMappingTable[NUM_REGIONS-1][NUM_SUP_TONES];
 
-    static const unsigned int TONEGEN_MAX_WAVES = 3;     // Maximun number of sine waves in a tone segment
-    static const unsigned int TONEGEN_MAX_SEGMENTS = 12;  // Maximun number of segments in a tone descriptor
-    static const unsigned int TONEGEN_INF = 0xFFFFFFFF;  // Represents infinite time duration
-    static const float TONEGEN_GAIN = 0.9;  // Default gain passed to  WaveGenerator().
+    static constexpr unsigned int TONEGEN_MAX_WAVES = 3;     // Maximun number of sine waves in a tone segment
+    static constexpr unsigned int TONEGEN_MAX_SEGMENTS = 12;  // Maximun number of segments in a tone descriptor
+    static constexpr unsigned int TONEGEN_INF = 0xFFFFFFFF;  // Represents infinite time duration
+    static constexpr float TONEGEN_GAIN = 0.9;  // Default gain passed to  WaveGenerator().
 
     // ToneDescriptor class contains all parameters needed to generate a tone:
     //    - The array waveFreq[]:

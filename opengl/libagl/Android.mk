@@ -22,12 +22,19 @@ LOCAL_SRC_FILES:= \
 	primitives.cpp.arm	        \
 	vertex.cpp.arm
 
+FLTO_FLAG=$(call cc-option,"-flto", )
 LOCAL_CFLAGS += -DLOG_TAG=\"libagl\"
 LOCAL_CFLAGS += -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
 LOCAL_CFLAGS += -fvisibility=hidden
+LOCAL_CFLAGS += -ffast-math $(FLTO_FLAG)
+ifneq ($(findstring tune=cortex-a8,$(TARGET_GLOBAL_CFLAGS)),)
+	# Workaround for cortex-a8 specific linaro-gcc bug 879725
+	# FIXME remove once the bug is fixed
+	LOCAL_CFLAGS += -fno-modulo-sched
+endif
 
 LOCAL_SHARED_LIBRARIES := libcutils libhardware libutils libpixelflinger libETC1
-LOCAL_LDLIBS := -lpthread -ldl
+LOCAL_LDLIBS := $(FLTO_FLAG) -lpthread -ldl
 
 ifeq ($(TARGET_ARCH),arm)
 	LOCAL_SRC_FILES += fixed_asm.S iterators.S
