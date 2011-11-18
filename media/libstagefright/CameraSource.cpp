@@ -87,6 +87,10 @@ void CameraSourceListener::postDataTimestamp(
 }
 
 static int32_t getColorFormat(const char* colorFormat) {
+#ifdef QCOM_HARDWARE
+    return OMX_COLOR_FormatYUV420SemiPlanar;
+#endif
+
     if (!strcmp(colorFormat, CameraParameters::PIXEL_FORMAT_YUV420P)) {
        return OMX_COLOR_FormatYUV420Planar;
     }
