@@ -588,6 +588,9 @@ void NuPlayer::finishFlushIfPossible() {
 void NuPlayer::finishReset() {
     CHECK(mAudioDecoder == NULL);
     CHECK(mVideoDecoder == NULL);
+    // Make sure we don't continue to scan sources until we finish reset
+    ++mScanSourcesGeneration;
+    mScanSourcesPending = false;
 
     ++mScanSourcesGeneration;
     mScanSourcesPending = false;
