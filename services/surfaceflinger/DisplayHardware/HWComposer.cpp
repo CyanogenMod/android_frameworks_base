@@ -205,5 +205,10 @@ void HWComposer::dump(String8& result, char* buffer, size_t SIZE,
     }
 }
 
+void HWComposer::enableHDMIOutput(bool enable) {
+    if (mHwc) {
+        mHwc->enableHDMIOutput(mHwc, enable);
+    }
+}
 // ---------------------------------------------------------------------------
 }; // namespace android

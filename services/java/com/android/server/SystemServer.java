@@ -182,9 +182,11 @@ class ServerThread extends Thread {
                 Slog.e(TAG, "Failure starting Account Manager", e);
             }
 
+
             Slog.i(TAG, "Content Manager");
             ContentService.main(context,
                     factoryTest == SystemServer.FACTORY_TEST_LOW_LEVEL);
+
 
             Slog.i(TAG, "System Content Providers");
             ActivityManagerService.installSystemProviders();
@@ -414,6 +416,13 @@ class ServerThread extends Thread {
                 networkPolicy.bindNotificationManager(notification);
             } catch (Throwable e) {
                 reportWtf("starting Notification Manager", e);
+            }
+
+            try {
+                Slog.i(TAG, "HDMI Service");
+                ServiceManager.addService("hdmi", new HDMIService(context));
+            } catch (Throwable e) {
+                Slog.e(TAG, "Failure starting HDMI Service ", e);
             }
 
             try {

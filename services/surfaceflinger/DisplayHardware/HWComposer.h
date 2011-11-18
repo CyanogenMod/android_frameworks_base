@@ -67,6 +67,8 @@ public:
     // updated in preapre()
     size_t getLayerCount(int type) const;
 
+    void enableHDMIOutput(bool enable);
+
     // for debugging
     void dump(String8& out, char* scratch, size_t SIZE,
             const Vector< sp<LayerBase> >& visibleLayersSortedByZ) const;

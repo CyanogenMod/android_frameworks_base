@@ -416,3 +416,19 @@ void DisplayHardware::dump(String8& res) const
 {
     mNativeWindow->dump(res);
 }
+
+void DisplayHardware::orientationChanged(int orientation) const
+{
+    mNativeWindow->orientationChanged(orientation);
+}
+
+void DisplayHardware::setActionSafeWidthRatio(float asWidthRatio) const
+{
+    mNativeWindow->setActionSafeWidthRatio(asWidthRatio);
+}
+
+void DisplayHardware::setActionSafeHeightRatio(float asHeightRatio) const
+{
+    mNativeWindow->setActionSafeHeightRatio(asHeightRatio);
+}
+
