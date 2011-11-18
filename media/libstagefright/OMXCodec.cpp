@@ -423,7 +423,9 @@ uint32_t OMXCodec::getComponentQuirks(
             // the worst/least compression ratio is 0.5. It is found that
             // sometimes, the output buffer size is larger than
             // size advertised by the encoder.
+#ifndef QCOM_HARDWARE
             quirks |= kRequiresLargerEncoderOutputBuffer;
+#endif
         }
     }
     if (!strncmp(componentName, "OMX.qcom.7x30.video.encoder.", 28)) {
@@ -3449,6 +3451,9 @@ void OMXCodec::drainInputBuffers() {
             }
         }
     } else {
+#ifdef QCOM_HARDWARE
+        size_t CAMERA_BUFFERS = 4;
+#endif
         Vector<BufferInfo> *buffers = &mPortBuffers[kPortIndexInput];
         for (size_t i = 0; i < buffers->size(); ++i) {
             BufferInfo *info = &buffers->editItemAt(i);
@@ -3456,6 +3461,11 @@ void OMXCodec::drainInputBuffers() {
             if (info->mStatus != OWNED_BY_US) {
                 continue;
             }
+
+#ifdef QCOM_HARDWARE
+            if(mIsEncoder && (mQuirks & kAvoidMemcopyInputRecordingFrames) && (i == CAMERA_BUFFERS))
+                break;
+#endif
 
             if (!drainInputBuffer(info)) {
                 break;
