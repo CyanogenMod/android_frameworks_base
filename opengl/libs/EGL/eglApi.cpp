@@ -62,6 +62,7 @@ static char const * const sExtensionString  =
         "EGL_KHR_fence_sync "
         "EGL_ANDROID_image_native_buffer "
         "EGL_ANDROID_swap_rectangle "
+        "EGL_ANDROID_get_render_buffer "
         "EGL_NV_system_time "
         ;
 
@@ -81,6 +82,8 @@ static const extention_map_t sExtentionMap[] = {
             (__eglMustCastToProperFunctionPointerType)&eglDestroyImageKHR },
     { "eglSetSwapRectangleANDROID",
             (__eglMustCastToProperFunctionPointerType)&eglSetSwapRectangleANDROID },
+    { "eglGetRenderBufferANDROID",
+            (__eglMustCastToProperFunctionPointerType)&eglGetRenderBufferANDROID },
     { "eglGetSystemTimeFrequencyNV",
             (__eglMustCastToProperFunctionPointerType)&eglGetSystemTimeFrequencyNV },
     { "eglGetSystemTimeNV",
@@ -1458,6 +1461,24 @@ EGLBoolean eglSetSwapRectangleANDROID(EGLDisplay dpy, EGLSurface draw,
                 dp->disp[s->impl].dpy, s->surface, left, top, width, height);
     }
     return setError(EGL_BAD_DISPLAY, NULL);
+}
+
+EGLClientBuffer eglGetRenderBufferANDROID(EGLDisplay dpy, EGLSurface draw)
+{
+    clearError();
+
+    egl_display_t const * const dp = validate_display(dpy);
+    if (!dp) return EGL_FALSE;
+
+    SurfaceRef _s(draw);
+    if (!_s.get()) return setError(EGL_BAD_SURFACE, (EGLClientBuffer*)0);
+
+    egl_surface_t const * const s = get_surface(draw);
+    if (s->cnx->egl.eglGetRenderBufferANDROID) {
+        return s->cnx->egl.eglGetRenderBufferANDROID(
+                dp->disp[s->impl].dpy, s->surface);
+    }
+    return setError(EGL_BAD_DISPLAY, (EGLClientBuffer*)0);
 }
 
 // ----------------------------------------------------------------------------
