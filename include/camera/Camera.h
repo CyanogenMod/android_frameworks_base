@@ -46,6 +46,9 @@ struct CameraInfo {
      * right of the screen, the value should be 270.
      */
     int orientation;
+#ifdef QCOM_HARDWARE
+    int mode;
+#endif
 };
 
 class ICameraService;
