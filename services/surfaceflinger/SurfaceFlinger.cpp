@@ -2688,6 +2688,9 @@ void GraphicPlane::setDisplayHardware(DisplayHardware *hw)
         case 90:
             displayOrientation = ISurfaceComposer::eOrientation90;
             break;
+        case 180:
+            displayOrientation = ISurfaceComposer::eOrientation180;
+            break;
         case 270:
             displayOrientation = ISurfaceComposer::eOrientation270;
             break;
