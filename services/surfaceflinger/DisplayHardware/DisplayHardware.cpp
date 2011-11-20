@@ -173,6 +173,14 @@ void DisplayHardware::init(uint32_t dpy)
             LOGW("H/W composition disabled");
             attribs[2] = EGL_CONFIG_CAVEAT;
             attribs[3] = EGL_SLOW_CONFIG;
+        } else {
+            // We have hardware composition enabled. Check the composition type
+            if (property_get("debug.composition.type", property, NULL) > 0) {
+                if(((strncmp(property, "c2d", 3)) == 0) ||
+                   ((strncmp(property, "mdp", 3)) == 0)) {
+                        mFlags |= (((strncmp(property, "c2d", 3)) == 0)) ? C2D_COMPOSITION:0;
+                }
+            }
         }
     }
 
