@@ -182,11 +182,24 @@ void Layer::setGeometry(hwc_layer_t* hwcl)
 
     hwcl->flags &= ~HWC_SKIP_LAYER;
 
+#ifdef QCOM_HARDWARE
+    const DisplayHardware& hw(graphicPlane(0).displayHardware());
+    // we can't do alpha-fade with the hwc HAL. C2D composition
+    // can handle fade cases
+    const State& s(drawingState());
+    if ((s.alpha < 0xFF) &&
+        !(DisplayHardware::C2D_COMPOSITION & hw.getFlags())) {
+        hwcl->flags = HWC_SKIP_LAYER;
+    }
+
+    hwcl->alpha = s.alpha;
+#else
     // we can't do alpha-fade with the hwc HAL
     const State& s(drawingState());
     if (s.alpha < 0xFF) {
-        hwcl->flags = HWC_SKIP_LAYER;
+	hwcl->flags = HWC_SKIP_LAYER;
     }
+#endif
 
     /*
      * Transformations are applied in this order:
