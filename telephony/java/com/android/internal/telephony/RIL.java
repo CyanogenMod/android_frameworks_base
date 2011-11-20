@@ -3027,8 +3027,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
     protected Object
     responseDataCallList(Parcel p) {
         ArrayList<DataCallState> response;
-
-        int ver = p.readInt();
+        int oldRil = SystemProperties.getInt("ro.telephony.ril.v3", 0);
+        int ver = (oldRil!=0 ? 3 : p.readInt());
         int num = p.readInt();
         riljLog("responseDataCallList ver=" + ver + " num=" + num);
 
@@ -3042,7 +3042,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
     protected Object
     responseSetupDataCall(Parcel p) {
-        int ver = p.readInt();
+        int oldRil = SystemProperties.getInt("ro.telephony.ril.v3", 0);
+        int ver = (oldRil!=0 ? 3 : p.readInt());
         int num = p.readInt();
         if (RILJ_LOGV) riljLog("responseSetupDataCall ver=" + ver + " num=" + num);
 
