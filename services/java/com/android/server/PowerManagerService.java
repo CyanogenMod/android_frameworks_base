@@ -2013,12 +2013,25 @@ class PowerManagerService extends IPowerManager.Stub
         }
         if (onMask != 0) {
             int brightness = getPreferredBrightness();
+            int buttonBrightness = brightness;
+
+            if (mButtonBrightnessOverride >= 0) {
+                buttonBrightness = mButtonBrightnessOverride;
+            }
+
             if ((newState & BATTERY_LOW_BIT) != 0 &&
                     brightness > Power.BRIGHTNESS_LOW_BATTERY) {
                 brightness = Power.BRIGHTNESS_LOW_BATTERY;
+                buttonBrightness = brightness;
             }
-            if (mSpew) Slog.i(TAG, "Setting brightess on " + brightness + ": " + onMask);
-            setLightBrightness(onMask, brightness);
+
+            if (mSpew) {
+                Slog.i(TAG, "Setting brightess on " + brightness +
+                        "/" + buttonBrightness + ": " + onMask);
+            }
+
+            setLightBrightness(onMask & SCREEN_BRIGHT_BIT, brightness);
+            setLightBrightness(onMask & (BUTTON_BRIGHT_BIT | KEYBOARD_BRIGHT_BIT), buttonBrightness);
         }
     }
 
