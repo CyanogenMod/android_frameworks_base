@@ -953,6 +953,9 @@ void InputDevice::process(const RawEvent* rawEvents, size_t count) {
     // have side-effects that must be interleaved.  For example, joystick movement events and
     // gamepad button presses are handled by different mappers but they should be dispatched
     // in the order received.
+#ifdef LEGACY_TOUCHSCREEN
+    static int32_t touched, z_data;
+#endif
     size_t numMappers = mMappers.size();
     for (const RawEvent* rawEvent = rawEvents; count--; rawEvent++) {
 #if DEBUG_RAW_EVENTS
@@ -972,14 +975,68 @@ void InputDevice::process(const RawEvent* rawEvents, size_t count) {
                 ALOGD("Dropped input event while waiting for next input sync.");
 #endif
             }
+
         } else if (rawEvent->type == EV_SYN && rawEvent->code == SYN_DROPPED) {
             ALOGI("Detected input event buffer overrun for device %s.", getName().string());
             mDropUntilNextSync = true;
             reset(rawEvent->when);
         } else {
-            for (size_t i = 0; i < numMappers; i++) {
-                InputMapper* mapper = mMappers[i];
-                mapper->process(rawEvent);
+
+            if (!numMappers) continue;
+            InputMapper* mapper = NULL;
+
+#ifdef LEGACY_TOUCHSCREEN
+
+            // Old touchscreen sensors need to send a fake BTN_TOUCH (BTN_LEFT)
+
+            if (rawEvent->code == ABS_MT_TOUCH_MAJOR) {
+
+                z_data = rawEvent->value;
+                touched = (0 != z_data);
+            }
+            else if (rawEvent->scanCode == ABS_MT_POSITION_Y) {
+
+                RawEvent event;
+                memset(&event, 0, sizeof(event));
+                event.when = rawEvent->when;
+                event.deviceId = rawEvent->deviceId;
+                event.code = rawEvent->code;
+
+                event.type = rawEvent->type;
+                event.value = rawEvent->value;
+                for (size_t i = 0; i < numMappers; i++) {
+                    mapper = mMappers[i];
+                    mapper->process(&event);
+                }
+
+                /* Pressure on contact area from ABS_MT_TOUCH_MAJOR */
+                event.type = rawEvent->type;
+                event.code = ABS_MT_PRESSURE;
+                event.value = z_data;
+                for (size_t i = 0; i < numMappers; i++) {
+                    mapper = mMappers[i];
+                    mapper->process(&event);
+                }
+
+                event.type = EV_KEY;
+                event.code = BTN_TOUCH;
+                event.keyCode = BTN_LEFT;
+                event.value = touched;
+                for (size_t i = 0; i < numMappers; i++) {
+                    mapper = mMappers[i];
+                    mapper->process(&event);
+                }
+
+                LOGD("Fake event sent, touch=%d !", touched);
+            }
+            else
+#endif //LEGACY_TOUCHSCREEN
+            {
+                // just send the rawEvent
+                for (size_t i = 0; i < numMappers; i++) {
+                     mapper = mMappers[i];
+                     mapper->process(rawEvent);
+                }
             }
         }
     }
