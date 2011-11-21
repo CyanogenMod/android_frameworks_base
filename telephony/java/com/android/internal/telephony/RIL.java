@@ -2892,12 +2892,17 @@ public class RIL extends BaseCommands implements CommandsInterface {
     responseIccCardStatus(Parcel p) {
         IccCardApplication ca;
 
+        int oldRil = SystemProperties.getInt("ro.telephony.ril.v3", 0);
+
         IccCardStatus status = new IccCardStatus();
         status.setCardState(p.readInt());
         status.setUniversalPinState(p.readInt());
         status.setGsmUmtsSubscriptionAppIndex(p.readInt());
         status.setCdmaSubscriptionAppIndex(p.readInt());
-        status.setImsSubscriptionAppIndex(p.readInt());
+
+        if(oldRil == 0)
+            status.setImsSubscriptionAppIndex(p.readInt());
+
         int numApplications = p.readInt();
 
         // limit to maximum allowed applications
