@@ -129,8 +129,17 @@ const char CameraParameters::KEY_MAX_NUM_DETECTED_FACES_HW[] = "max-num-detected
 const char CameraParameters::KEY_MAX_NUM_DETECTED_FACES_SW[] = "max-num-detected-faces-sw";
 const char CameraParameters::KEY_RECORDING_HINT[] = "recording-hint";
 const char CameraParameters::KEY_VIDEO_SNAPSHOT_SUPPORTED[] = "video-snapshot-supported";
+const char CameraParameters::KEY_FULL_VIDEO_SNAP_SUPPORTED[] = "full-video-snap-supported";
 const char CameraParameters::KEY_VIDEO_STABILIZATION[] = "video-stabilization";
 const char CameraParameters::KEY_VIDEO_STABILIZATION_SUPPORTED[] = "video-stabilization-supported";
+#ifdef QCOM_HARDWARE
+const char CameraParameters::KEY_ZSL[] = "zsl";
+const char CameraParameters::KEY_SUPPORTED_ZSL_MODES[] = "zsl-values";
+const char CameraParameters::KEY_CAMERA_MODE[] = "camera-mode";
+#endif
+const char CameraParameters::KEY_AE_BRACKET_HDR[] = "ae-bracket-hdr";
+/*only effective when KEY_AE_BRACKET_HDR set to ae_bracketing*/
+//const char CameraParameters::KEY_AE_BRACKET_SETTING_KEY[] = "ae-bracket-setting";
 
 const char CameraParameters::TRUE[] = "true";
 const char CameraParameters::FALSE[] = "false";
@@ -180,7 +189,8 @@ const char CameraParameters::FLASH_MODE_RED_EYE[] = "red-eye";
 const char CameraParameters::FLASH_MODE_TORCH[] = "torch";
 
 // Values for scene mode settings.
-const char CameraParameters::SCENE_MODE_AUTO[] = "auto";
+const char CameraParameters::SCENE_MODE_AUTO[] = "auto"; // corresponds to CAMERA_BESTSHOT_OFF in HAL
+const char CameraParameters::SCENE_MODE_ASD[] = "asd";   // corresponds to CAMERA_BESTSHOT_AUTO in HAL
 const char CameraParameters::SCENE_MODE_ACTION[] = "action";
 const char CameraParameters::SCENE_MODE_PORTRAIT[] = "portrait";
 const char CameraParameters::SCENE_MODE_LANDSCAPE[] = "landscape";
@@ -222,7 +232,8 @@ const char CameraParameters::PIXEL_FORMAT_JPEG[] = "jpeg";
 const char CameraParameters::PIXEL_FORMAT_BAYER_RGGB[] = "bayer-rggb";
 #ifdef QCOM_HARDWARE
 const char CameraParameters::PIXEL_FORMAT_RAW[] = "raw";
-const char CameraParameters::PIXEL_FORMAT_YV12[] = "yv12";
+const char CameraParameters::PIXEL_FORMAT_YV12[] = "yuv420p";
+const char CameraParameters::PIXEL_FORMAT_NV12[] = "nv12";
 #endif
 
 // Values for focus mode settings.
@@ -232,9 +243,8 @@ const char CameraParameters::FOCUS_MODE_MACRO[] = "macro";
 const char CameraParameters::FOCUS_MODE_FIXED[] = "fixed";
 const char CameraParameters::FOCUS_MODE_EDOF[] = "edof";
 const char CameraParameters::FOCUS_MODE_CONTINUOUS_VIDEO[] = "continuous-video";
-#ifndef QCOM_HARDWARE
 const char CameraParameters::FOCUS_MODE_CONTINUOUS_PICTURE[] = "continuous-picture";
-#elif defined(QCOM_HARDWARE)
+#if defined(QCOM_HARDWARE)
 const char CameraParameters::FOCUS_MODE_NORMAL[] = "normal";
 
 
@@ -311,6 +321,15 @@ const char CameraParameters::REDEYE_REDUCTION_DISABLE[] = "disable";
 // Values for HDR settings.
 const char CameraParameters::HDR_ENABLE[] = "enable";
 const char CameraParameters::HDR_DISABLE[] = "disable";
+
+// Values for ZSL settings.
+const char CameraParameters::ZSL_OFF[] = "off";
+const char CameraParameters::ZSL_ON[] = "on";
+
+// Values for HDR Bracketing settings.
+const char CameraParameters::AE_BRACKET_HDR_OFF[] = "Off";
+const char CameraParameters::AE_BRACKET_HDR[] = "HDR";
+const char CameraParameters::AE_BRACKET[] = "AE-Bracket";
 
 static const char* portrait = "portrait";
 static const char* landscape = "landscape";
@@ -479,6 +498,32 @@ static int parse_pair(const char *str, int *first, int *second, char delim,
     return 0;
 }
 
+// Parse string like "(1, 2, 3, 4, ..., N)"
+// num is pointer to an allocated array of size N
+static int parseNDimVector(const char *str, int *num, int N, char delim = ',')
+{
+    char *start, *end;
+    if(num == NULL) {
+        LOGE("Invalid output array (num == NULL)");
+        return -1;
+    }
+    //check if string starts and ends with parantheses
+    if(str[0] != '(' || str[strlen(str)-1] != ')') {
+        LOGE("Invalid format of string %s, valid format is (n1, n2, n3, n4 ...)", str);
+        return -1;
+    }
+    start = (char*) str;
+    start++;
+    for(int i=0; i<N; i++) {
+        *(num+i) = (int) strtol(start, &end, 10);
+        if(*end != delim && i < N-1) {
+            LOGE("Cannot find delimeter '%c' in string \"%s\". end = %c", delim, str, *end);
+            return -1;
+        }
+        start = end+1;
+    }
+    return 0;
+}
 static void parseSizesList(const char *sizesStr, Vector<Size> &sizes)
 {
     if (sizesStr == 0) {
@@ -683,6 +728,21 @@ void CameraParameters::setTouchIndexAf(int x, int y)
     char str[32];
     snprintf(str, sizeof(str), "%dx%d", x, y);
     set(KEY_TOUCH_INDEX_AF, str);
+}
+
+void CameraParameters::getMeteringAreaCenter(int *x, int *y) const
+{
+    //Default invalid values
+    *x = -2000;
+    *y = -2000;
+
+    const char *p = get(KEY_METERING_AREAS);
+    if(p != NULL) {
+        int arr[5] = {-2000, -2000, -2000, -2000, 0};
+        parseNDimVector(p, arr, 5); //p = "(x1, y1, x2, y2, weight)"
+        *x = (arr[0] + arr[2])/2; //center_x = (x1+x2)/2
+        *y = (arr[1] + arr[3])/2; //center_y = (y1+y2)/2
+    }
 }
 
 void CameraParameters::getTouchIndexAf(int *x, int *y) const
