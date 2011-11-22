@@ -123,6 +123,8 @@ public:
     void getTouchIndexAf(int *x, int *y) const;
 #endif
 
+    void getMeteringAreaCenter(int * x, int *y) const;
+
     void dump() const;
     status_t dump(int fd, const Vector<String16>& args) const;
 
@@ -564,6 +566,7 @@ public:
     // captured pictures.
     // Example value: "true" or "false". Read only.
     static const char KEY_VIDEO_SNAPSHOT_SUPPORTED[];
+    static const char KEY_FULL_VIDEO_SNAP_SUPPORTED[];
 
 #ifdef QCOM_HARDWARE
     static const char KEY_ISO_MODE[];
@@ -599,6 +602,11 @@ public:
     static const char KEY_MEMORY_COLOR_ENHANCEMENT[];
     static const char KEY_SUPPORTED_MEM_COLOR_ENHANCE_MODES[];
 
+    static const char KEY_ZSL[];
+    static const char KEY_SUPPORTED_ZSL_MODES[];
+
+    static const char KEY_CAMERA_MODE[];
+
     static const char KEY_VIDEO_HIGH_FRAME_RATE[];
     static const char KEY_SUPPORTED_VIDEO_HIGH_FRAME_RATE_MODES[];
     static const char KEY_HIGH_DYNAMIC_RANGE_IMAGING[];
@@ -608,6 +616,8 @@ public:
     // can set KEY_VIDEO_STABILIZATION to true and have a stabilized preview
     // stream and record stabilized videos.
     static const char KEY_VIDEO_STABILIZATION_SUPPORTED[];
+
+    static const char KEY_AE_BRACKET_HDR[];
 
     // Value for KEY_ZOOM_SUPPORTED or KEY_SMOOTH_ZOOM_SUPPORTED.
     static const char TRUE[];
@@ -687,6 +697,7 @@ public:
 
     // Values for scene mode settings.
     static const char SCENE_MODE_AUTO[];
+    static const char SCENE_MODE_ASD[];
     static const char SCENE_MODE_ACTION[];
     static const char SCENE_MODE_PORTRAIT[];
     static const char SCENE_MODE_LANDSCAPE[];
@@ -732,6 +743,7 @@ public:
 #ifdef QCOM_HARDWARE
     static const char PIXEL_FORMAT_RAW[];
     static const char PIXEL_FORMAT_YV12[]; // NV21
+    static const char PIXEL_FORMAT_NV12[]; //NV12
 #endif
 
     // Values for focus mode settings.
@@ -839,6 +851,15 @@ public:
     // Values for MCE settings.
     static const char MCE_ENABLE[];
     static const char MCE_DISABLE[];
+
+    // Values for ZSL settings.
+    static const char ZSL_OFF[];
+    static const char ZSL_ON[];
+
+    // Values for HDR Bracketing settings.
+    static const char AE_BRACKET_HDR_OFF[];
+    static const char AE_BRACKET_HDR[];
+    static const char AE_BRACKET[];
 
     // Values for HFR settings.
     static const char VIDEO_HFR_OFF[];
