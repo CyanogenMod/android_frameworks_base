@@ -2236,7 +2236,7 @@ status_t OMXCodec::allocateOutputBuffersFromNativeWindow() {
                   QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka)?
                  HAL_PIXEL_FORMAT_YCbCr_420_SP_TILED : def.format.video.eColorFormat;
     if(def.format.video.eColorFormat == OMX_QCOM_COLOR_FormatYVU420SemiPlanar)
-        format = HAL_PIXEL_FORMAT_YCbCr_420_SP;
+        format = HAL_PIXEL_FORMAT_YCrCb_420_SP;
 #endif
 
     err = native_window_set_buffers_geometry(
