@@ -236,12 +236,18 @@ public class ZygoteInit {
     private static final int ROOT_UID = 0;
     private static final int ROOT_GID = 0;
 
+    private static final int EEXIST = 17;
+
     /**
      * Sets effective user ID.
      */
     private static void setEffectiveUser(int uid) {
         int errno = setreuid(ROOT_UID, uid);
-        if (errno != 0) {
+        if (errno == EEXIST) {
+            // reported if uid is already good
+            Log.d(TAG, "setreuid() error ignored, same uid.");
+        }
+        else if (errno != 0) {
             Log.e(TAG, "setreuid() failed. errno: " + errno);
         }
     }
