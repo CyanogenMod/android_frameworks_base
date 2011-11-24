@@ -98,10 +98,6 @@ status_t AudioPlayer::start(bool sourceAlreadyStarted) {
         CHECK(mFirstBuffer == NULL);
         mFirstBufferResult = OK;
         mIsFirstBuffer = false;
-    } else if(mFirstBufferResult != OK) {
-        mReachedEOS = true;
-        mFinalStatus = mFirstBufferResult;
-        return mFirstBufferResult;
     } else {
         mIsFirstBuffer = true;
     }

@@ -2056,11 +2056,6 @@ status_t MPEG4Source::read(
 
     if (!mIsAVC || mWantsNALFragments) {
         if (newBuffer) {
-            if (size > mBuffer->size()) {
-                mBuffer->release();
-                mBuffer = NULL;
-                return ERROR_IO;
-            }
             ssize_t num_bytes_read =
                 mDataSource->readAt(offset, (uint8_t *)mBuffer->data(), size);
 
