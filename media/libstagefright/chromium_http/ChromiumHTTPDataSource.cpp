@@ -59,6 +59,7 @@ status_t ChromiumHTTPDataSource::connect(
         const char *uri,
         const KeyedVector<String8, String8> *headers,
         off64_t offset) {
+    Mutex::Autolock autoSerializer(mSerializer);
     Mutex::Autolock autoLock(mLock);
 
     uid_t uid;
@@ -127,6 +128,7 @@ void ChromiumHTTPDataSource::onConnectionFailed(status_t err) {
 }
 
 void ChromiumHTTPDataSource::disconnect() {
+    Mutex::Autolock autoSerializer(mSerializer);
     Mutex::Autolock autoLock(mLock);
     disconnect_l();
 }

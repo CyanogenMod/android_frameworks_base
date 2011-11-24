@@ -153,7 +153,16 @@ void AnotherPacketSource::queueAccessUnit(const sp<ABuffer> &buffer) {
 void AnotherPacketSource::queueDiscontinuity(
         ATSParser::DiscontinuityType type,
         const sp<AMessage> &extra) {
+
     Mutex::Autolock autoLock(mLock);
+
+    if (type == ATSParser::DISCONTINUITY_SEEK ) {
+        LOGI("Flushing all Access units for seek");
+        mBuffers.clear();
+        mEOSResult = OK;
+        mCondition.signal();
+        return;
+    }
 
     // Leave only discontinuities in the queue.
     List<sp<ABuffer> >::iterator it = mBuffers.begin();
