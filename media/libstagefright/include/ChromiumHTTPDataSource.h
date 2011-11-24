@@ -92,6 +92,8 @@ private:
     sp<DecryptHandle> mDecryptHandle;
     DrmManagerClient *mDrmManagerClient;
 
+    Mutex mSerializer;
+
     void disconnect_l();
 
     status_t connect_l(
