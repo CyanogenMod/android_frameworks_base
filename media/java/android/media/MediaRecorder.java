@@ -291,6 +291,8 @@ public class MediaRecorder
     public native void setCameraParameters(String params)
             throws IllegalStateException;
 
+    public native void autoFocusCamera() throws IllegalStateException;
+
     /**
      * Uses the settings from a CamcorderProfile object for recording. This method should
      * be called after the video AND audio sources are set, and before setOutputFile().

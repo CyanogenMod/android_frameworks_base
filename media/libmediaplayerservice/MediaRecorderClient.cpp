@@ -208,6 +208,17 @@ status_t MediaRecorderClient::setCameraParameters(const String8& params) {
     return mRecorder->setCameraParameters(params);
 }
 
+status_t MediaRecorderClient::autoFocusCamera()
+{
+    LOGV("autoFocusCamera");
+    Mutex::Autolock lock(mLock);
+    if (mRecorder == NULL) {
+        LOGE("recorder is not initialized");
+        return NO_INIT;
+    }
+    return mRecorder->autoFocusCamera();
+}
+
 status_t MediaRecorderClient::prepare()
 {
     LOGV("prepare");

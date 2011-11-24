@@ -628,6 +628,13 @@ status_t StagefrightRecorder::setListener(const sp<IMediaRecorderClient> &listen
     return OK;
 }
 
+status_t StagefrightRecorder::autoFocusCamera() {
+    int64_t token = IPCThreadState::self()->clearCallingIdentity();
+    mCamera->autoFocus();
+    IPCThreadState::self()->restoreCallingIdentity(token);
+    return OK;
+}
+
 status_t StagefrightRecorder::setCameraParameters(const String8 &params) {
 
     CameraParameters cp(params);

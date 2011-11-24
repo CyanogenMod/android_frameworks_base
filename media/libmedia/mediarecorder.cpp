@@ -407,6 +407,28 @@ status_t MediaRecorder::setCameraParameters(const String8& params) {
     return ret;
 }
 
+status_t MediaRecorder::autoFocusCamera() {
+    LOGV("autoFocusCamera");
+    if(mMediaRecorder == NULL) {
+        LOGE("media recorder is not initialized yet");
+        return INVALID_OPERATION;
+    }
+
+    bool isInvalidState = (mCurrentState &
+                            MEDIA_RECORDER_ERROR);
+    if (isInvalidState) {
+        LOGE("autoFocusCamera is called in an invalid state: %d", mCurrentState);
+        return INVALID_OPERATION;
+    }
+
+    status_t ret = mMediaRecorder->autoFocusCamera();
+    if (OK != ret) {
+        LOGE("autoFocusCamera failed: %d", ret);
+    }
+
+    return ret;
+}
+
 status_t MediaRecorder::prepare()
 {
     LOGV("prepare");

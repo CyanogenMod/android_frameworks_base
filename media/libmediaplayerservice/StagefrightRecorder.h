@@ -46,6 +46,7 @@ struct StagefrightRecorder : public MediaRecorderBase {
     virtual status_t setOutputFile(const char *path);
     virtual status_t setOutputFile(int fd, int64_t offset, int64_t length);
     virtual status_t setParameters(const String8& params);
+    virtual status_t autoFocusCamera();
     virtual status_t setListener(const sp<IMediaRecorderClient>& listener);
     virtual status_t prepare();
     virtual status_t start();

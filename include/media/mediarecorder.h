@@ -187,6 +187,7 @@ public:
     status_t    setVideoSize(int width, int height);
     status_t    setVideoFrameRate(int frames_per_second);
     status_t    setParameters(const String8& params);
+    status_t    autoFocusCamera();
     status_t    setListener(const sp<MediaRecorderListener>& listener);
     status_t    prepare();
     status_t    getMaxAmplitude(int* max);
