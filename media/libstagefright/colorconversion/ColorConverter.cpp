@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (c) 2011, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +22,7 @@
 #include <media/stagefright/ColorConverter.h>
 #include <media/stagefright/MediaDebug.h>
 #include <media/stagefright/MediaErrors.h>
+#include <dlfcn.h>
 
 #ifdef QCOM_HARDWARE
 #include <OMX_QCOMExtns.h>
@@ -52,6 +54,7 @@ bool ColorConverter::isValid() const {
         case OMX_QCOM_COLOR_FormatYVU420SemiPlanar:
         case OMX_COLOR_FormatYUV420SemiPlanar:
         case OMX_TI_COLOR_FormatYUV420PackedSemiPlanar:
+        case QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka:
             return true;
 
         default:
@@ -125,6 +128,45 @@ status_t ColorConverter::convert(
 
         case OMX_TI_COLOR_FormatYUV420PackedSemiPlanar:
             err = convertTIYUV420PackedSemiPlanar(src, dst);
+            break;
+
+        case QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka:
+            {
+                void * lib = dlopen("libmm-color-convertor.so", RTLD_NOW);
+                typedef int (*convertFn)(ColorConvertParams src, ColorConvertParams dst, uint8_t *adjustedClip);
+
+                convertFn convertNV12Tile = (convertFn)dlsym(lib, "_Z7convertN7android18ColorConvertParamsES0_Ph");
+
+                struct ColorConvertParams srcTemp;
+                srcTemp.width = srcWidth;
+                srcTemp.height = srcHeight;
+                srcTemp.cropWidth = src.cropWidth();
+                srcTemp.cropHeight = src.cropHeight();
+                srcTemp.cropLeft = src.mCropLeft;
+                srcTemp.cropRight = src.mCropRight;
+                srcTemp.cropTop = src.mCropTop;
+                srcTemp.cropBottom = src.mCropBottom;
+                srcTemp.data = src.mBits;
+                srcTemp.colorFormat = YCbCr420Tile;
+                srcTemp.flags = 0;
+
+                struct ColorConvertParams dstTemp;
+                dstTemp.width = dstWidth;
+                dstTemp.height = dstHeight;
+                dstTemp.cropWidth = dst.cropWidth();
+                dstTemp.cropHeight = dst.cropHeight();
+                dstTemp.cropLeft = dst.mCropLeft;
+                dstTemp.cropRight = dst.mCropRight;
+                dstTemp.cropTop = dst.mCropTop;
+                dstTemp.cropBottom = dst.mCropBottom;
+                dstTemp.data = dst.mBits;
+                dstTemp.colorFormat = RGB565;
+                dstTemp.flags = 0;
+
+                uint8_t * adjustedClip = initClip();
+                err = convertNV12Tile(srcTemp, dstTemp, adjustedClip);
+                dlclose(lib);
+            }
             break;
 
         default:
