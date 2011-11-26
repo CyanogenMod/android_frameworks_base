@@ -2888,11 +2888,20 @@ public class RIL extends BaseCommands implements CommandsInterface {
         return new IccIoResult(sw1, sw2, s);
     }
 
+    private boolean needsOldRilFeature(String feature) {
+        String[] features = SystemProperties.get("ro.telephony.ril.v3", "").split(",");
+        for (String found: features) {
+            if (found.equals(feature))
+                return true;
+        }
+        return false;
+    }
+
     protected Object
     responseIccCardStatus(Parcel p) {
         IccCardApplication ca;
 
-        int oldRil = SystemProperties.getInt("ro.telephony.ril.v3", 0);
+        boolean oldRil = needsOldRilFeature("icccardstatus");
 
         IccCardStatus status = new IccCardStatus();
         status.setCardState(p.readInt());
@@ -2900,7 +2909,7 @@ public class RIL extends BaseCommands implements CommandsInterface {
         status.setGsmUmtsSubscriptionAppIndex(p.readInt());
         status.setCdmaSubscriptionAppIndex(p.readInt());
 
-        if(oldRil == 0)
+        if (!oldRil)
             status.setImsSubscriptionAppIndex(p.readInt());
 
         int numApplications = p.readInt();
@@ -3032,8 +3041,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
     protected Object
     responseDataCallList(Parcel p) {
         ArrayList<DataCallState> response;
-        int oldRil = SystemProperties.getInt("ro.telephony.ril.v3", 0);
-        int ver = (oldRil!=0 ? 3 : p.readInt());
+        boolean oldRil = needsOldRilFeature("datacall");
+        int ver = (oldRil ? 3 : p.readInt());
         int num = p.readInt();
         riljLog("responseDataCallList ver=" + ver + " num=" + num);
 
@@ -3047,8 +3056,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
 
     protected Object
     responseSetupDataCall(Parcel p) {
-        int oldRil = SystemProperties.getInt("ro.telephony.ril.v3", 0);
-        int ver = (oldRil!=0 ? 3 : p.readInt());
+        boolean oldRil = needsOldRilFeature("datacall");
+        int ver = (oldRil ? 3 : p.readInt());
         int num = p.readInt();
         if (RILJ_LOGV) riljLog("responseSetupDataCall ver=" + ver + " num=" + num);
 
@@ -3238,13 +3247,12 @@ public class RIL extends BaseCommands implements CommandsInterface {
         int numInts = 12;
         int response[];
 
-        int oldRil = SystemProperties.getInt("ro.telephony.ril.v3",
-                0);
+        boolean oldRil = needsOldRilFeature("signalstrength");
 
         /* TODO: Add SignalStrength class to match RIL_SignalStrength */
         response = new int[numInts];
         for (int i = 0 ; i < numInts ; i++) {
-            if (oldRil!=0 && i>6 && i<12) {
+            if (oldRil && i > 6 && i < 12) {
                 response[i] = -1;
             } else {
                 response[i] = p.readInt();
