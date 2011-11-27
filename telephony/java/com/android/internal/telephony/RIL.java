@@ -207,6 +207,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
      */
     private static final int DEFAULT_WAKE_LOCK_TIMEOUT = 60000;
 
+    private Context mContext;
+
     //***** Instance Variables
 
     LocalSocket mSocket;
@@ -3044,6 +3046,8 @@ public class RIL extends BaseCommands implements CommandsInterface {
             if (!TextUtils.isEmpty(addresses)) {
                 dataCall.addresses = addresses.split(" ");
             }
+            // DataCallState needs an ifname. Since we don't have one use the name from the ThrottleService resource (default=rmnet0).
+	    dataCall.ifname = mContext.getResources().getString(com.android.internal.R.string.config_datause_iface);
         } else {
             dataCall.status = p.readInt();
             dataCall.suggestedRetryTime = p.readInt();
