@@ -110,7 +110,7 @@ public class WifiService extends IWifiManager.Stub {
     private final WifiStateTracker mWifiStateTracker;
     /* TODO: fetch a configurable interface */
     private static final String SOFTAP_IFACE = "wl0.1";
-    private static final String TI_SOFTAP_IFACE = "tiap0";
+    private static final String ALT_SOFTAP_IFACE = "softap.0";
 
     private Context mContext;
     private int mWifiApState;
@@ -772,9 +772,9 @@ public class WifiService extends IWifiManager.Stub {
             /* Configuration changed on a running access point */
             if(enable && (wifiConfig != null)) {
                 try {
-                    if (SystemProperties.getBoolean("wifi.hotspot.ti", false)) {
+                    if (SystemProperties.getBoolean("wifi.hotspot.custom", false)) {
                         nwService.setAccessPoint(wifiConfig, mWifiStateTracker.getInterfaceName(),
-                                                 TI_SOFTAP_IFACE);
+                                                 ALT_SOFTAP_IFACE);
                     } else {
                         nwService.setAccessPoint(wifiConfig, mWifiStateTracker.getInterfaceName(),
                                                  SOFTAP_IFACE);
@@ -812,7 +812,7 @@ public class WifiService extends IWifiManager.Stub {
             /* Use default config if there is no existing config */
             if (wifiConfig == null) wifiConfig = getWifiApConfiguration();
 
-            if (SystemProperties.getBoolean("wifi.hotspot.ti", false)) {
+            if (SystemProperties.getBoolean("wifi.hotspot.custom", false)) {
                 if (!mWifiStateTracker.loadHotspotDriver()) {
                     Slog.e(TAG, "Failed to load Wi-Fi driver for AP mode");
                     setWifiApEnabledState(WIFI_AP_STATE_FAILED, uid, DriverAction.NO_DRIVER_UNLOAD);
@@ -827,9 +827,9 @@ public class WifiService extends IWifiManager.Stub {
             }
 
             try {
-                if (SystemProperties.getBoolean("wifi.hotspot.ti", false)) {
+                if (SystemProperties.getBoolean("wifi.hotspot.custom", false)) {
                     nwService.startAccessPoint(wifiConfig, mWifiStateTracker.getInterfaceName(),
-                                               TI_SOFTAP_IFACE);
+                                               ALT_SOFTAP_IFACE);
                 } else {
                     nwService.startAccessPoint(wifiConfig, mWifiStateTracker.getInterfaceName(),
                                                SOFTAP_IFACE);
@@ -852,7 +852,7 @@ public class WifiService extends IWifiManager.Stub {
                 return false;
             }
 
-            if (SystemProperties.getBoolean("wifi.hotspot.ti", false)) {
+            if (SystemProperties.getBoolean("wifi.hotspot.custom", false)) {
                 if (!mWifiStateTracker.unloadHotspotDriver()) {
                     Slog.e(TAG, "Failed to unload Wi-Fi driver for AP mode");
                     setWifiApEnabledState(WIFI_AP_STATE_FAILED, uid, DriverAction.NO_DRIVER_UNLOAD);
@@ -891,7 +891,7 @@ public class WifiService extends IWifiManager.Stub {
          * Unload the driver if going to a failed state
          */
         if ((mWifiApState == WIFI_AP_STATE_FAILED) && (flag == DriverAction.DRIVER_UNLOAD)) {
-            if (SystemProperties.getBoolean("wifi.hotspot.ti", false)) {
+            if (SystemProperties.getBoolean("wifi.hotspot.custom", false)) {
                 mWifiStateTracker.unloadHotspotDriver();
             } else {
                 mWifiStateTracker.unloadDriver();
