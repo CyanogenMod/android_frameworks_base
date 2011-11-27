@@ -606,7 +606,8 @@ class NetworkManagementService extends INetworkManagementService.Stub {
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.CHANGE_WIFI_STATE, "NetworkManagementService");
         try {
-            if (SystemProperties.getBoolean("wifi.hotspot.ti", false)) {
+            if (SystemProperties.getBoolean("wifi.hotspot.ti", false) ||
+                SystemProperties.getBoolean("wifi.hotspot.libra", false)) {
                 mConnector.doCommand(String.format("softap start " + softapIface));
                 mConnector.doCommand(String.format("softap startap " + softapIface));
                 NetworkUtils.enableInterface(softapIface);
@@ -636,7 +637,8 @@ class NetworkManagementService extends INetworkManagementService.Stub {
                                            convertQuotedString(wifiConfig.preSharedKey));
                 mConnector.doCommand(str);
             }
-            if(!SystemProperties.getBoolean("wifi.hotspot.ti", false))
+            if(!SystemProperties.getBoolean("wifi.hotspot.ti", false) &&
+               !SystemProperties.getBoolean("wifi.hotspot.libra", false))
                 mConnector.doCommand(String.format("softap startap"));
         } catch (NativeDaemonConnectorException e) {
             throw new IllegalStateException("Error communicating to native daemon to start softap", e);
