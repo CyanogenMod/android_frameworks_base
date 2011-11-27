@@ -15363,6 +15363,12 @@ package android.preference {
     method public void setValueIndex(int);
   }
 
+  public class ListPreferenceMultiSelect extends android.preference.ListPreference {
+    ctor public ListPreferenceMultiSelect(android.content.Context);
+    ctor public ListPreferenceMultiSelect(android.content.Context, android.util.AttributeSet);
+    method public static java.lang.String[] parseStoredValue(java.lang.CharSequence);
+  }
+
   public class MultiSelectListPreference extends android.preference.DialogPreference {
     ctor public MultiSelectListPreference(android.content.Context, android.util.AttributeSet);
     ctor public MultiSelectListPreference(android.content.Context);
