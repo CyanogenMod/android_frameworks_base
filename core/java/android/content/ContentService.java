@@ -177,6 +177,7 @@ public final class ContentService extends IContentService.Stub {
                 ObserverCall oc = calls.get(i);
                 try {
                     oc.mObserver.onChange(oc.mSelfNotify);
+                    oc.mObserver.onChangeUri(uri, oc.mSelfNotify);
                     if (Log.isLoggable(TAG, Log.VERBOSE)) {
                         Log.v(TAG, "Notified " + oc.mObserver + " of " + "update at " + uri);
                     }
