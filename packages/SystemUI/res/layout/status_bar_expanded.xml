@@ -26,13 +26,24 @@
     android:descendantFocusability="afterDescendants"
     >
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/notification_header_bg"
+    >
+        <com.android.systemui.statusbar.powerwidget.PowerWidget android:id="@+id/exp_power_stat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+        />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="52dp"
         android:paddingTop="3dp"
         android:paddingBottom="5dp"
         android:paddingRight="3dp"
-        android:background="@drawable/notification_header_bg"
         >
         <com.android.systemui.statusbar.policy.DateView android:id="@+id/date"
             android:textAppearance="@style/TextAppearance.StatusBar.Date"
@@ -78,6 +89,7 @@
             android:contentDescription="@string/accessibility_clear_all"
             />            
     </RelativeLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
