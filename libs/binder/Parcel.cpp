@@ -479,11 +479,12 @@ status_t Parcel::writeInterfaceToken(const String16& interface)
     return writeString16(interface);
 }
 
-bool Parcel::enforceInterface(const String16& interface) const	
-{	
-    return enforceInterface(interface,NULL);	
-}	
- 	
+#ifdef _INTERNAL_BINDER_PARCEL_
+bool Parcel::enforceInterface(const String16& interface) const
+{
+    return enforceInterface(interface,NULL);
+}
+#endif
 
 bool Parcel::checkInterface(IBinder* binder) const
 {
