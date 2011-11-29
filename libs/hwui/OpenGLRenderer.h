@@ -66,6 +66,9 @@ public:
     virtual bool isDeferred();
 
     virtual void setViewport(int width, int height);
+#ifdef QCOM_HARDWARE
+    ANDROID_API void getViewport(int &width, int &height);
+#endif
 
     ANDROID_API int prepare(bool opaque);
     virtual int prepareDirty(float left, float top, float right, float bottom, bool opaque);
