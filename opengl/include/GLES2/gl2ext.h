@@ -16,6 +16,8 @@ extern "C" {
 #   define GL_APIENTRYP GL_APIENTRY*
 #endif
 
+#define GL_GLEXT_PROTOTYPES
+
 /*------------------------------------------------------------------------*
  * OES extension tokens
  *------------------------------------------------------------------------*/

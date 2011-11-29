@@ -61,6 +61,7 @@ public:
     virtual ~OpenGLRenderer();
 
     virtual void setViewport(int width, int height);
+    void getViewport(int &width, int &height);
 
     void prepare(bool opaque);
     virtual void prepareDirty(float left, float top, float right, float bottom, bool opaque);

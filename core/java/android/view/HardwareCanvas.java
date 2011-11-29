@@ -43,6 +43,8 @@ public abstract class HardwareCanvas extends Canvas {
      * @param dirty The dirty rectangle to update, can be null.
      */
     abstract void onPreDraw(Rect dirty);
+    abstract void startTileRendering(Rect dirty);
+    abstract void endTileRendering();
 
     /**
      * Invoked after all drawing operation have been performed.
