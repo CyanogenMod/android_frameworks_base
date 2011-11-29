@@ -1544,6 +1544,8 @@ status_t OMXCodec::getVideoProfileLevel(
             // via OMX_SetParameter call.
             profileLevel.mProfile = profile;
             profileLevel.mLevel = level;
+            CODEC_LOGV("profile: %d, level %d is supported",
+                       profile, level);
             return OK;
         }
     }
@@ -1660,6 +1662,13 @@ status_t OMXCodec::setupMPEG4EncoderParameters(const sp<MetaData>& meta) {
     mpeg4type.eProfile = static_cast<OMX_VIDEO_MPEG4PROFILETYPE>(profileLevel.mProfile);
     mpeg4type.eLevel = static_cast<OMX_VIDEO_MPEG4LEVELTYPE>(profileLevel.mLevel);
 
+#ifdef QCOM_HARDWARE
+    if (mpeg4type.eProfile > OMX_VIDEO_MPEG4ProfileSimple) {
+        mpeg4type.nAllowedPictureTypes |= OMX_VIDEO_PictureTypeB;
+        mpeg4type.nBFrames = 1;
+    }
+#endif
+
     err = mOMX->setParameter(
             mNode, OMX_IndexParamVideoMpeg4, &mpeg4type, sizeof(mpeg4type));
     CHECK_EQ(err, (status_t)OK);
@@ -1732,6 +1741,13 @@ status_t OMXCodec::setupAVCEncoderParameters(const sp<MetaData>& meta) {
         h264type.bDirectSpatialTemporal = OMX_FALSE;
         h264type.nCabacInitIdc = 0;
     }
+
+#ifdef QCOM_HARDWARE
+    if (h264type.eProfile > OMX_VIDEO_AVCProfileBaseline) {
+        h264type.nPFrames = setPFramesSpacing(iFramesInterval, frameRate);
+        h264type.nBFrames = 1;
+    }
+#endif
 
     if (h264type.nBFrames != 0) {
         h264type.nAllowedPictureTypes |= OMX_VIDEO_PictureTypeB;
