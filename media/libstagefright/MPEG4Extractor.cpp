@@ -39,6 +39,7 @@
 #include <media/stagefright/MetaData.h>
 #include <media/stagefright/Utils.h>
 #include <utils/String8.h>
+#include <cutils/properties.h>
 
 namespace android {
 
@@ -82,6 +83,12 @@ private:
     bool mWantsNALFragments;
 
     uint8_t *mSrcBuffer;
+
+    //For statistics profiling
+    uint32_t mNumSamplesReadError;
+    bool mStatistics;
+    void logExpectedFrames();
+    void logTrackStatistics();
 
     size_t parseNALSize(const uint8_t *data) const;
 
@@ -1897,10 +1904,17 @@ MPEG4Source::MPEG4Source(
       mGroup(NULL),
       mBuffer(NULL),
       mWantsNALFragments(false),
-      mSrcBuffer(NULL) {
+      mSrcBuffer(NULL),
+      mNumSamplesReadError(0){
     const char *mime;
     bool success = mFormat->findCString(kKeyMIMEType, &mime);
     CHECK(success);
+
+    //for statistics profiling
+    char value[PROPERTY_VALUE_MAX];
+    mStatistics = false;
+    property_get("persist.debug.sf.statistics", value, "0");
+    if(atoi(value)) mStatistics = true;
 
     mIsAVC = !strcasecmp(mime, MEDIA_MIMETYPE_VIDEO_AVC);
 
@@ -1918,6 +1932,8 @@ MPEG4Source::MPEG4Source(
         // The number of bytes used to encode the length of a NAL unit.
         mNALLengthSize = 1 + (ptr[4] & 3);
     }
+
+    if (mStatistics) logExpectedFrames();
 }
 
 MPEG4Source::~MPEG4Source() {
@@ -1930,6 +1946,9 @@ status_t MPEG4Source::start(MetaData *params) {
     Mutex::Autolock autoLock(mLock);
 
     CHECK(!mStarted);
+
+    if (mStatistics)
+        logTrackStatistics();
 
     int32_t val;
     if (params && params->findInt32(kKeyWantsNALFragments, &val)
@@ -2104,6 +2123,7 @@ status_t MPEG4Source::read(
                     mCurrentSampleIndex, &offset, &size, &cts, &isSyncSample);
 
         if (err != OK) {
+            if (mStatistics) mNumSamplesReadError++;
             return err;
         }
 
@@ -2111,6 +2131,7 @@ status_t MPEG4Source::read(
 
         if (err != OK) {
             CHECK(mBuffer == NULL);
+            if (mStatistics) mNumSamplesReadError++;
             return err;
         }
     }
@@ -2124,6 +2145,7 @@ status_t MPEG4Source::read(
                 mBuffer->release();
                 mBuffer = NULL;
 
+                if (mStatistics) mNumSamplesReadError++;
                 return ERROR_IO;
             }
 
@@ -2167,6 +2189,7 @@ status_t MPEG4Source::read(
             mBuffer->release();
             mBuffer = NULL;
 
+            if (mStatistics) mNumSamplesReadError++;
             return ERROR_MALFORMED;
         }
 
@@ -2204,6 +2227,7 @@ status_t MPEG4Source::read(
             mBuffer->release();
             mBuffer = NULL;
 
+            if (mStatistics) mNumSamplesReadError++;
             return ERROR_IO;
         }
 
@@ -2229,6 +2253,8 @@ status_t MPEG4Source::read(
                     LOGE("Video is malformed");
                     mBuffer->release();
                     mBuffer = NULL;
+
+                    if (mStatistics) mNumSamplesReadError++;
                     return ERROR_MALFORMED;
                 }
 
@@ -2475,6 +2501,34 @@ bool SniffMPEG4(
 
     return false;
 }
+
+void MPEG4Source::logTrackStatistics()
+{
+    const char *mime;
+    mFormat->findCString(kKeyMIMEType, &mime);
+    LOGW("=====================================================");
+    LOGW("Mime Type: %s",mime);
+    LOGW("Total number of samples in track: %u",mSampleTable->countSamples());
+    LOGW("Number of key samples: %u",mSampleTable->getNumSyncSamples());
+    LOGW("Number of corrupt samples: %u",mNumSamplesReadError ?
+           mNumSamplesReadError-1 : mNumSamplesReadError); //last sample reads error for EOS
+    LOGW("=====================================================");
+}
+
+void MPEG4Source::logExpectedFrames()
+{
+    const char *mime;
+    mFormat->findCString(kKeyMIMEType, &mime);
+    int64_t durationUs;
+    getFormat()->findInt64(kKeyDuration, &durationUs);
+    LOGW("=====================================================");
+    LOGW("Mime type: %s",mime);
+    LOGW("Track duration: %lld",durationUs/1000);
+    LOGW("Total number of samples in track: %u",mSampleTable->countSamples());
+    LOGW("Expected frames per second: %.2f",((float)mSampleTable->countSamples()*1000)/((float)durationUs/1000));
+    LOGW("=====================================================");
+}
+
 
 }  // namespace android
 
