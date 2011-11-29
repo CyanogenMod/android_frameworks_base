@@ -47,7 +47,9 @@
 #include <SkiaShader.h>
 #include <SkiaColorFilter.h>
 #include <Rect.h>
-
+#ifdef QCOM_HARDWARE
+#include <tilerenderer.h>
+#endif
 #include <TextLayout.h>
 #include <TextLayoutCache.h>
 
@@ -136,6 +138,24 @@ static void android_view_GLES20Canvas_setViewport(JNIEnv* env, jobject clazz,
 static int android_view_GLES20Canvas_prepare(JNIEnv* env, jobject clazz,
         OpenGLRenderer* renderer, jboolean opaque) {
     return renderer->prepare(opaque);
+}
+
+static void android_view_GLES20Canvas_startTileRendering(JNIEnv* env, jobject clazz,
+        OpenGLRenderer* renderer, jint left, jint top, jint right, jint bottom) {
+#ifdef QCOM_HARDWARE
+    int width = 0, height = 0;
+    if (renderer != NULL) {
+        renderer->getViewport(width, height);
+    }
+    TileRenderer::getInstance().startTileRendering(left, top, right, bottom, width, height);
+#endif
+}
+
+static void android_view_GLES20Canvas_endTileRendering(JNIEnv* env, jobject clazz,
+        OpenGLRenderer* renderer) {
+#ifdef QCOM_HARDWARE
+    TileRenderer::getInstance().endTileRendering();
+#endif
 }
 
 static int android_view_GLES20Canvas_prepareDirty(JNIEnv* env, jobject clazz,
@@ -870,6 +890,8 @@ static JNINativeMethod gMethods[] = {
     { "nSetViewport",       "(III)V",          (void*) android_view_GLES20Canvas_setViewport },
     { "nPrepare",           "(IZ)I",           (void*) android_view_GLES20Canvas_prepare },
     { "nPrepareDirty",      "(IIIIIZ)I",       (void*) android_view_GLES20Canvas_prepareDirty },
+    { "nStartTileRendering","(IIIII)V",        (void*) android_view_GLES20Canvas_startTileRendering},
+    { "nEndTileRendering",  "(I)V",            (void*) android_view_GLES20Canvas_endTileRendering},
     { "nFinish",            "(I)V",            (void*) android_view_GLES20Canvas_finish },
 
     { "nGetStencilSize",    "()I",             (void*) android_view_GLES20Canvas_getStencilSize },

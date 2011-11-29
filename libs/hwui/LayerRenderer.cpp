@@ -23,6 +23,9 @@
 #include "Matrix.h"
 #include "Properties.h"
 #include "Rect.h"
+#ifdef QCOM_HARDWARE
+#include "tilerenderer.h"
+#endif
 
 namespace android {
 namespace uirenderer {
@@ -38,13 +41,19 @@ LayerRenderer::~LayerRenderer() {
 }
 
 int LayerRenderer::prepareDirty(float left, float top, float right, float bottom, bool opaque) {
+#ifdef QCOM_HARDWARE
+    GLuint previousFbo;
+    glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint*) &previousFbo);
+#endif
     LAYER_RENDERER_LOGD("Rendering into layer, fbo = %d", mLayer->getFbo());
 
+#ifdef QCOM_HARDWARE
+    TILERENDERING_END(previousFbo);
+#endif
     glBindFramebuffer(GL_FRAMEBUFFER, mLayer->getFbo());
 
     const float width = mLayer->layer.getWidth();
     const float height = mLayer->layer.getHeight();
-
 #if RENDER_LAYERS_AS_REGIONS
     Rect dirty(left, top, right, bottom);
     if (dirty.isEmpty() || (dirty.left <= 0 && dirty.top <= 0 &&
@@ -56,9 +65,15 @@ int LayerRenderer::prepareDirty(float left, float top, float right, float bottom
         android::Rect r(dirty.left, dirty.top, dirty.right, dirty.bottom);
         mLayer->region.subtractSelf(r);
     }
-
+#ifdef QCOM_HARDWARE
+    TILERENDERING_START(mLayer->getFbo(), dirty.left, dirty.top,
+                        dirty.right, dirty.bottom, width, height);
+#endif
     return OpenGLRenderer::prepareDirty(dirty.left, dirty.top, dirty.right, dirty.bottom, opaque);
 #else
+#ifdef QCOM_HARDWARE
+    TILERENDERING_START(mLayer->getFbo(), 0, 0, width, height, width, height);
+#endif
     return OpenGLRenderer::prepareDirty(0.0f, 0.0f, width, height, opaque);
 #endif
 }
@@ -208,6 +223,9 @@ Layer* LayerRenderer::createLayer(uint32_t width, uint32_t height, bool isOpaque
     GLuint previousFbo;
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint*) &previousFbo);
 
+#ifdef QCOM_HARDWARE
+    TILERENDERING_END(previousFbo);
+#endif
     glBindFramebuffer(GL_FRAMEBUFFER, layer->getFbo());
     layer->bindTexture();
 
@@ -219,8 +237,11 @@ Layer* LayerRenderer::createLayer(uint32_t width, uint32_t height, bool isOpaque
         if (glGetError() != GL_NO_ERROR) {
             ALOGD("Could not allocate texture for layer (fbo=%d %dx%d)",
                     fbo, width, height);
-
             glBindFramebuffer(GL_FRAMEBUFFER, previousFbo);
+#ifdef QCOM_HARDWARE
+            TILERENDERING_START(previousFbo);
+            TILERENDERING_CLEARCACHE(fbo);
+#endif
             caches.fboCache.put(fbo);
 
             layer->deleteTexture();
@@ -238,6 +259,9 @@ Layer* LayerRenderer::createLayer(uint32_t width, uint32_t height, bool isOpaque
     glEnable(GL_SCISSOR_TEST);
 
     glBindFramebuffer(GL_FRAMEBUFFER, previousFbo);
+#ifdef QCOM_HARDWARE
+    TILERENDERING_START(previousFbo, true);
+#endif
 
     return layer;
 }
@@ -308,6 +332,9 @@ void LayerRenderer::destroyLayer(Layer* layer) {
         GLuint fbo = layer->getFbo();
         if (fbo) {
             flushLayer(layer);
+#ifdef QCOM_HARDWARE
+            TILERENDERING_CLEARCACHE(layer->getFbo());
+#endif
             Caches::getInstance().fboCache.put(fbo);
             layer->setFbo(0);
         }
@@ -403,8 +430,14 @@ bool LayerRenderer::copyLayer(Layer* layer, SkBitmap* bitmap) {
         layer->setFbo(fbo);
 
         glGetIntegerv(GL_FRAMEBUFFER_BINDING, (GLint*) &previousFbo);
+#ifdef QCOM_HARDWARE
+        TILERENDERING_END(previousFbo);
+#endif
         glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
+#ifdef QCOM_HARDWARE
+        TILERENDERING_START(fbo, 0, 0, bitmap->width(), bitmap->height(),
+                            bitmap->width(), bitmap->height());
+#endif
         glGenTextures(1, &texture);
         if ((error = glGetError()) != GL_NO_ERROR) goto error;
 
@@ -467,8 +500,13 @@ error:
             ALOGD("GL error while copying layer into bitmap = 0x%x", error);
         }
 #endif
-
+#ifdef QCOM_HARDWARE
+        TILERENDERING_END(fbo, true);
+#endif
         glBindFramebuffer(GL_FRAMEBUFFER, previousFbo);
+#ifdef QCOM_HARDWARE
+        TILERENDERING_START(previousFbo);
+#endif
         layer->setAlpha(alpha, mode);
         layer->setFbo(0);
         glDeleteTextures(1, &texture);

@@ -168,6 +168,7 @@ LOCAL_C_INCLUDES += \
 	$(JNI_H_INCLUDE) \
 	$(LOCAL_PATH)/android/graphics \
 	$(LOCAL_PATH)/../../libs/hwui \
+	hardware/qcom/display/libtilerenderer \
 	$(LOCAL_PATH)/../../../native/opengl/libs \
 	$(call include-path-for, bluedroid) \
 	$(call include-path-for, libhardware)/hardware \
@@ -226,7 +227,7 @@ LOCAL_SHARED_LIBRARIES := \
 	libz
 
 ifeq ($(USE_OPENGL_RENDERER),true)
-	LOCAL_SHARED_LIBRARIES += libhwui
+	LOCAL_SHARED_LIBRARIES += libtilerenderer libhwui
 endif
 
 ifeq ($(BOARD_HAVE_BLUETOOTH),true)
