@@ -139,7 +139,6 @@ class HDMIService extends IHDMIService.Stub {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
 
-            String targetDevice = SystemProperties.get("ro.product.device");
             if (action.equals(Intent.ACTION_BOOT_COMPLETED) &&
                     (SystemProperties.getBoolean("ro.hdmi.enable", false))
 
