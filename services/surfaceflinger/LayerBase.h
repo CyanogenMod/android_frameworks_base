@@ -232,9 +232,6 @@ protected:
                                GLclampf b, GLclampf alpha) const;
           void clearWithOpenGL(const Region& clip) const;
           void drawWithOpenGL(const Region& clip, const Texture& texture) const;
-          void drawWithOpenGLOptimized(const Region& clip, const Texture& texture) const;
-          enum { QUAD_WIDTH = 16 };
-          int getQuadWidth() const { return QUAD_WIDTH; }
           
           // these must be called from the post/drawing thread
           void setBufferCrop(const Rect& crop);
