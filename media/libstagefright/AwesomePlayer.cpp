@@ -941,16 +941,13 @@ status_t AwesomePlayer::play_l() {
         }
 }
 #endif
+    bool deferredAudioSeek = false;
 
     if (mAudioSource != NULL) {
         if (mAudioPlayer == NULL) {
             if (mAudioSink != NULL) {
                 mAudioPlayer = new AudioPlayer(mAudioSink, this);
                 mAudioPlayer->setSource(mAudioSource);
-
-                // If there was a seek request while we were paused
-                // and we're just starting up again, honor the request now.
-                seekAudioIfNecessary_l();
 
                 // We've already started the MediaSource in order to enable
                 // the prefetcher to read its data.
@@ -972,6 +969,8 @@ status_t AwesomePlayer::play_l() {
                 }
 
                 mTimeSource = mAudioPlayer;
+
+                deferredAudioSeek = true;
 
                 mWatchForAudioSeekComplete = false;
                 mWatchForAudioEOS = true;
@@ -1006,6 +1005,12 @@ status_t AwesomePlayer::play_l() {
     if (mVideoSource != NULL) {
         // Kick off video playback
         postVideoEvent_l();
+    }
+
+    if (deferredAudioSeek) {
+        // If there was a seek request while we were paused
+        // and we're just starting up again, honor the request now.
+        seekAudioIfNecessary_l();
     }
 
     if (mFlags & AT_EOS) {
