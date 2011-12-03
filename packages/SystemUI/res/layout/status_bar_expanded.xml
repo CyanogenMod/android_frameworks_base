@@ -63,9 +63,18 @@
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/date"
             android:paddingLeft="8dp"
-            android:paddingRight="8dp"
+            android:paddingRight="2dp"
             android:src="@drawable/ic_notify_quicksettings"
             android:contentDescription="@string/accessibility_settings_button"
+            />
+
+        <ImageView android:id="@+id/cmsettings_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/settings_button"
+            android:paddingLeft="2dp"
+            android:paddingRight="8dp"
+            android:src="@drawable/ic_notify_cm_quicksettings"
             />
 
         <ImageView android:id="@+id/clear_all_button"
