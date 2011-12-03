@@ -752,17 +752,18 @@ public class LockPatternUtils {
                     where.toString(),
                     Calendar.EventsColumns.DTSTART + " ASC");
 
-            // All day events are given in UTC. This can cause them to be sorted
-            // as earlier events compared to a normal event on the night before
-            // we can fix this by doing UTC time - offset => local time and then
-            // compare that to the next event on the cursor.
-            long offset = (new Date()).getTimezoneOffset() * 60000;
-            String title, description, location;
-            Date start;
-            boolean allDay, isRepeat;
-            int i = cursor.getCount() - 1;
-
             if (cursor != null && cursor.moveToFirst()) {
+
+                // All day events are given in UTC. This can cause them to be sorted
+                // as earlier events compared to a normal event on the night before
+                // we can fix this by doing UTC time - offset => local time and then
+                // compare that to the next event on the cursor.
+                long offset = (new Date()).getTimezoneOffset() * 60000;
+                String title, description, location;
+                Date start;
+                boolean allDay, isRepeat;
+                int i = cursor.getCount() - 1;
+
                 do {
                     title       = cursor.getString(0);
                     start       = new Date(cursor.getLong(1));
