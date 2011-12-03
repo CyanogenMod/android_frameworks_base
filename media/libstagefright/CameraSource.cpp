@@ -393,7 +393,22 @@ status_t CameraSource::read(
         Mutex::Autolock autoLock(mLock);
         while (mStarted) {
             while(mFramesReceived.empty()) {
-                mFrameAvailableCondition.wait(mLock);
+                if (mNumFramesReceived == 0) {
+                    /*
+                     * It's perfectly normal that we don't receive frames for quite some
+                     * time at record start, so don't use a timeout in that case.
+                     */
+                    mFrameAvailableCondition.wait(mLock);
+                } else {
+                    /*
+                     * Don't wait indefinitely for camera frames, buggy HALs may
+                     * fail to provide them in a timely manner under some conditions.
+                     */
+                    status_t err = mFrameAvailableCondition.waitRelative(mLock, 250000000);
+                    if (err) {
+                        return err;
+                    }
+                }
             }
 
             if (!mStarted) {
