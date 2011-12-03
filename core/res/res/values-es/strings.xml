@@ -28,7 +28,7 @@
     <string name="petabyteShort" msgid="5637816680144990219">"PB"</string>
     <string name="fileSizeSuffix" msgid="7670819340156489359">"<xliff:g id="NUMBER">%1$s</xliff:g> <xliff:g id="UNIT">%2$s</xliff:g>"</string>
     <string name="untitled" msgid="6071602020171759109">"&lt;sin título&gt;"</string>
-    <string name="ellipsis" msgid="7899829516048813237">"…"</string>
+    <string name="ellipsis" msgid="7899829516048813237">"\u2026"</string>
     <string name="emptyPhoneNumber" msgid="7694063042079676517">"(Sin número de teléfono)"</string>
     <string name="unknownName" msgid="2277556546742746522">"Desconocido"</string>
     <string name="defaultVoiceMailAlphaTag" msgid="2660020990097733077">"Buzón de voz"</string>
@@ -43,7 +43,7 @@
     <string name="profileGroupPhone">Telefono</string>
     <string name="profileGroupCalendar">Calendario</string>
     <string name="profileGroupGmail">Gmail</string>
-    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupEmail">Correo-e</string>
     <string name="profileGroupSMS">SMS</string>
     <string name="wildcardProfile">Otro</string>
     <string name="serviceEnabled" msgid="8147278346414714315">"El servicio se ha habilitado."</string>
@@ -144,11 +144,11 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Desactivar función inalámbrica"</string>
     <string name="screen_lock" msgid="799094655496098153">"Bloqueo de pantalla"</string>
     <string name="power_off" msgid="4266614107412865048">"Apagar"</string>
-        <string name="reboot_system">Reiniciar teléfono</string>
-    <string name="shutdown_progress" msgid="2281079257329981203">"Apagando..."</string>
-        <string name="reboot_progress">Reiniciando...</string>
+    <string name="reboot_system">Reiniciar teléfono</string>
+    <string name="shutdown_progress" msgid="2281079257329981203">"Apagando\u2026"</string>
+    <string name="reboot_progress">Reiniciando\u2026</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"El teléfono se apagará."</string>
-        <string name="reboot_confirm">El teléfono se reiniciará.</string>
+    <string name="reboot_confirm">El teléfono se reiniciará.</string>
     <string name="recent_tasks_title" msgid="3691764623638127888">"Reciente"</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"No hay aplicaciones recientes"</string>
     <string name="global_actions" msgid="2406416831541615258">"Opciones del teléfono"</string>
@@ -181,7 +181,7 @@
     <string name="permgrouplab_phoneCalls" msgid="9067173988325865923">"Llamadas de teléfono"</string>
     <string name="permgroupdesc_phoneCalls" msgid="7489701620446183770">"Controlar, registrar y procesar llamadas telefónicas"</string>
     <string name="permgrouplab_systemTools" msgid="4652191644082714048">"Herramientas del sistema"</string>
-    <string name="permgroupdesc_systemTools" msgid="8162102602190734305">"Acceso de nivel inferior y control del sistema"</string>
+    <string name="permgroupdesc_systemTools" msgid="8162102602190734305">"Acceso de bajo nivel y control del sistema"</string>
     <string name="permgrouplab_developmentTools" msgid="3446164584710596513">"Herramientas de desarrollo"</string>
     <string name="permgroupdesc_developmentTools" msgid="9056431193893809814">"Funciones necesarias solo para desarrolladores de aplicaciones"</string>
     <string name="permgrouplab_storage" msgid="1971118770546336966">"Almacenamiento"</string>
@@ -587,7 +587,7 @@
     <string name="lockscreen_sim_puk_locked_message" msgid="7441797339976230">"La tarjeta SIM está bloqueada con el código PUK."</string>
     <string name="lockscreen_sim_puk_locked_instructions" msgid="635967534992394321">"Consulta la guía del usuario o ponte en contacto con el servicio de atención al cliente."</string>
     <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"Introduce el código PIN."</string>
-    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"Desbloqueando tarjeta SIM..."</string>
+    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"Desbloqueando tarjeta SIM\u2026"</string>
     <string name="lockscreen_too_many_failed_attempts_dialog_message" msgid="3514742106066877476">"Has realizado <xliff:g id="NUMBER_0">%d</xliff:g> intentos fallidos de creación de un patrón de desbloqueo. "\n\n"Inténtalo de nuevo dentro de <xliff:g id="NUMBER_1">%d</xliff:g> segundos."</string>
     <string name="lockscreen_failed_attempts_almost_glogin" msgid="3351013842320127827">"Has realizado <xliff:g id="NUMBER_0">%d</xliff:g> intentos fallidos de creación del patrón de desbloqueo. Si realizas <xliff:g id="NUMBER_1">%d</xliff:g> intentos fallidos más, se te pedirá que desbloquees el teléfono con tus credenciales de acceso de Google."\n\n" Espera <xliff:g id="NUMBER_2">%d</xliff:g> segundos e inténtalo de nuevo."</string>
     <string name="lockscreen_too_many_failed_attempts_countdown" msgid="6251480343394389665">"Espera <xliff:g id="NUMBER">%d</xliff:g> segundos y vuelve a intentarlo."</string>
@@ -599,7 +599,7 @@
     <string name="lockscreen_glogin_password_hint" msgid="5958028383954738528">"Contraseña"</string>
     <string name="lockscreen_glogin_submit_button" msgid="7130893694795786300">"Acceder"</string>
     <string name="lockscreen_glogin_invalid_input" msgid="1364051473347485908">"Nombre de usuario o contraseña no válido"</string>
-    <string name="lockscreen_glogin_checking_password" msgid="6758890536332363322">"Comprobando..."</string>
+    <string name="lockscreen_glogin_checking_password" msgid="6758890536332363322">"Comprobando\u2026"</string>
     <string name="lockscreen_unlock_label" msgid="737440483220667054">"Desbloquear"</string>
     <string name="lockscreen_sound_on_label" msgid="9068877576513425970">"Activar sonido"</string>
     <string name="lockscreen_sound_off_label" msgid="996822825154319026">"Desactivar sonido"</string>
@@ -736,6 +736,7 @@
     <string name="elapsed_time_short_format_mm_ss" msgid="4431555943828711473">"<xliff:g id="MINUTES">%1$02d</xliff:g>:<xliff:g id="SECONDS">%2$02d</xliff:g>"</string>
     <string name="elapsed_time_short_format_h_mm_ss" msgid="1846071997616654124">"<xliff:g id="HOURS">%1$d</xliff:g>:<xliff:g id="MINUTES">%2$02d</xliff:g>:<xliff:g id="SECONDS">%3$02d</xliff:g>"</string>
     <string name="selectAll" msgid="6876518925844129331">"Seleccionar todo"</string>
+    <string name="copyAll">Copiar todo</string>
     <string name="selectText" msgid="4862359311088898878">"Seleccionar palabra"</string>
     <string name="cut" msgid="3092569408438626261">"Cortar"</string>
     <string name="copy" msgid="2681946229533511987">"Copiar"</string>
@@ -748,8 +749,8 @@
     <string name="low_internal_storage_view_text" msgid="635106544616378836">"Se está agotando el espacio de almacenamiento del teléfono."</string>
     <string name="ok" msgid="5970060430562524910">"Aceptar"</string>
     <string name="cancel" msgid="6442560571259935130">"Cancelar"</string>
-    <string name="yes" msgid="5362982303337969312">"Aceptar"</string>
-    <string name="no" msgid="5141531044935541497">"Cancelar"</string>
+    <string name="yes" msgid="5362982303337969312">"Sí"</string>
+    <string name="no" msgid="5141531044935541497">"No"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Atención"</string>
     <string name="capital_on" msgid="1544682755514494298">"SÍ"</string>
     <string name="capital_off" msgid="6815870386972805832">"NO"</string>
@@ -808,7 +809,7 @@
   </plurals>
     <string name="select_character" msgid="3365550120617701745">"Insertar carácter"</string>
     <string name="sms_control_default_app_name" msgid="7630529934366549163">"Aplicación desconocida"</string>
-    <string name="sms_control_title" msgid="7296612781128917719">"Enviando mensajes SMS..."</string>
+    <string name="sms_control_title" msgid="7296612781128917719">"Enviando mensajes SMS\u2026"</string>
     <string name="sms_control_message" msgid="1289331457999236205">"Se ha enviado un número elevado de mensajes SMS. Selecciona \"Aceptar\" para continuar o \"Cancelar\" para interrumpir el envío."</string>
     <string name="sms_control_yes" msgid="2532062172402615953">"Aceptar"</string>
     <string name="sms_control_no" msgid="1715320703137199869">"Cancelar"</string>
@@ -850,7 +851,7 @@
     <string name="candidates_style" msgid="4333913089637062257"><u>"candidatos"</u></string>
     <string name="ext_media_checking_notification_title" product="nosdcard" msgid="3449816005351468560">"Preparando almacenamiento USB"</string>
     <string name="ext_media_checking_notification_title" product="default" msgid="5457603418970994050">"Preparando tarjeta SD"</string>
-    <string name="ext_media_checking_notification_message" msgid="8287319882926737053">"Comprobando errores..."</string>
+    <string name="ext_media_checking_notification_message" msgid="8287319882926737053">"Comprobando errores\u2026"</string>
     <string name="ext_media_nofs_notification_title" product="nosdcard" msgid="7788040745686229307">"Almacenamiento USB vacío"</string>
     <string name="ext_media_nofs_notification_title" product="default" msgid="780477838241212997">"Tarjeta SD vacía"</string>
     <string name="ext_media_nofs_notification_message" product="nosdcard" msgid="8623130522556087311">"Almacenamiento USB vacío o con sistema de archivos no admitido"</string>
@@ -917,10 +918,10 @@
     <string name="throttle_warning_notification_message" msgid="2609734763845705708">"Más información sobre uso de datos"</string>
     <string name="throttled_notification_title" msgid="6269541897729781332">"Límite datos superado"</string>
     <string name="throttled_notification_message" msgid="4712369856601275146">"Más información sobre uso de datos"</string>
-    <string name="progress_unmounting" product="nosdcard" msgid="535863554318797377">"Desactivando almacenamiento USB..."</string>
-    <string name="progress_unmounting" product="default" msgid="5556813978958789471">"Desactivando tarjeta SD..."</string>
-    <string name="progress_erasing" product="nosdcard" msgid="4183664626203056915">"Borrando almacenamiento USB..."</string>
-    <string name="progress_erasing" product="default" msgid="2115214724367534095">"Borrando tarjeta SD..."</string>
+    <string name="progress_unmounting" product="nosdcard" msgid="535863554318797377">"Desactivando almacenamiento USB\u2026"</string>
+    <string name="progress_unmounting" product="default" msgid="5556813978958789471">"Desactivando tarjeta SD\u2026"</string>
+    <string name="progress_erasing" product="nosdcard" msgid="4183664626203056915">"Borrando almacenamiento USB\u2026"</string>
+    <string name="progress_erasing" product="default" msgid="2115214724367534095">"Borrando tarjeta SD\u2026"</string>
     <string name="format_error" product="nosdcard" msgid="4320339096529911637">"Error al borrar almacenamiento USB"</string>
     <string name="format_error" product="default" msgid="1343380371925238343">"Error al borrar la tarjeta SD"</string>
     <string name="media_bad_removal" msgid="7960864061016603281">"La tarjeta SD se ha extraído antes de desactivarla."</string>
@@ -937,4 +938,10 @@
         <item quantity="one">falta %d segundo</item>
         <item quantity="other">faltan %d segundos</item>
     </plurals>
+
+    <!-- Title of an application permission that lets an application view/edit revoked permissions. -->
+    <string name="permlab_revokePermissions">Permitir ver y editar los permisos revocados</string>
+    <!-- Description of an application permission that lets lets an application view/edit revoked permissions. -->
+    <string name="permdesc_revokePermissions">Permitir ver y editar los permisos revocados a las aplicaciones. No utilizar para aplicaciones normales.</string>
+
 </resources>
