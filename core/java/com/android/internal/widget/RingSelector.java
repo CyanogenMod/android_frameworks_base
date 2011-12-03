@@ -83,6 +83,7 @@ public class RingSelector extends ViewGroup {
 
     private boolean mUseMiddleRing = true;
     private boolean mMiddlePrimary = false;
+    private boolean mUseRingMinimal = false;
 
     /**
      * Either {@link #HORIZONTAL} or {@link #VERTICAL}.
@@ -769,8 +770,8 @@ public class RingSelector extends ViewGroup {
             return false;
         }
 
-        boolean leftHit = mLeftRing.contains((int) x, (int) y);
-        boolean rightHit = mRightRing.contains((int) x, (int) y);
+        boolean leftHit = !mUseRingMinimal ? mLeftRing.contains((int) x, (int) y) : false;
+        boolean rightHit = !mUseRingMinimal ? mRightRing.contains((int) x, (int) y) : false;
         boolean middleHit = mUseMiddleRing ? mMiddleRing.contains((int) x, (int) y) : false;
 
         if (!mTracking && !(leftHit || rightHit || middleHit)) {
@@ -1175,6 +1176,7 @@ public class RingSelector extends ViewGroup {
     }
 
     public void enableRingMinimal(boolean enable) {
+        mUseRingMinimal = enable;
         enableMiddlePrimary(enable);
         mRightRing.setHiddenState(enable);
         mLeftRing.setHiddenState(enable);
