@@ -19,6 +19,7 @@ package com.android.server.usb;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.hardware.usb.IUsbManager;
 import android.hardware.usb.UsbAccessory;
 import android.hardware.usb.UsbDevice;
@@ -53,6 +54,8 @@ public class UsbService extends IUsbManager.Stub {
         if (new File("/sys/class/android_usb").exists()) {
             mDeviceManager = new UsbDeviceManager(context, mSettingsManager);
         }
+        else if(Resources.getSystem().getBoolean(com.android.internal.R.bool.config_usesLegacyUsbDeviceManager))
+            mDeviceManager = new LegacyUsbDeviceManager(context, mSettingsManager);
     }
 
     public void systemReady() {
