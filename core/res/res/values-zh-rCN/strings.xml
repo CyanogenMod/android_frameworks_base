@@ -137,6 +137,16 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"关闭收音机"</string>
     <string name="screen_lock" msgid="799094655496098153">"屏幕锁定"</string>
     <string name="power_off" msgid="4266614107412865048">"关机"</string>
+    <string name="reboot_system">"重启手机"</string>
+    <string name="global_action_screenshot">"屏幕截图"</string>
+    <string name="reboot_reboot">"重启"</string>
+    <string name="reboot_recovery">"恢复"</string>
+    <string name="reboot_bootloader">"引导"</string>
+    <string name="reboot_bootmenu">"引导菜单"</string>
+    <string name="reboot_fastboot">"快速启动"</string>
+    <string name="reboot_download">"下载"</string>
+    <string name="reboot_progress">"正在重启..."</string>
+    <string name="reboot_confirm">"您的手机会重启。"</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"正在关机..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"您的平板电脑会关闭。"</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"您的手机会关机。"</string>
@@ -147,6 +157,7 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"手机选项"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"屏幕锁定"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"关机"</string>
+    <string name="global_action_reboot">"重启"</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"静音模式"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"声音已关闭"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"声音已开启"</string>
