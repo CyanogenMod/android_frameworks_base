@@ -1822,6 +1822,7 @@
   <!-- Config.xml entries -->
   <java-symbol type="bool" name="config_forceDisableHardwareKeyboard" />
   <java-symbol type="bool" name="config_hasRotationLockSwitch" />
+  <java-symbol type="string" name="config_legacyUmsLunFile" />
 
   <!-- Notification and battery light -->
   <java-symbol type="bool" name="config_intrusiveBatteryLed" />
