@@ -116,52 +116,31 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             />
 
-        <LinearLayout
-            android:id="@+id/status_box"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/status1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_below="@id/date">
+            android:layout_below="@id/date"
+            android:layout_marginTop="4dip"
+            android:layout_marginLeft="24dip"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:drawablePadding="4dip"
+            />
 
-            <TextView
-                android:id="@+id/status_charging"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dip"
-                android:layout_marginLeft="24dip"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:drawablePadding="4dip"
-                />
-
-            <TextView
-                android:id="@+id/status_alarm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dip"
-                android:layout_marginLeft="24dip"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:drawablePadding="4dip"
-                android:drawableLeft="@drawable/ic_lock_idle_alarm"
-                />
-
-            <TextView
-                android:id="@+id/status_calendar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dip"
-                android:layout_marginLeft="24dip"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:drawablePadding="4dip"
-                android:drawableLeft="@drawable/ic_lock_idle_calendar"
-                />
-
-        </LinearLayout>
+        <TextView
+            android:id="@+id/status2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/status1"
+            android:layout_marginTop="4dip"
+            android:layout_marginLeft="24dip"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:drawablePadding="4dip"
+            />
 
         <TextView
             android:id="@+id/customMsg"
@@ -170,7 +149,7 @@
             android:layout_marginTop="4.0dip"
             android:layout_marginLeft="24dip"
             android:layout_marginRight="24dip"
-            android:layout_below="@id/status_box"
+            android:layout_below="@id/status2"
             android:textAppearance="?android:attr/textAppearanceSmall"
             />
 
