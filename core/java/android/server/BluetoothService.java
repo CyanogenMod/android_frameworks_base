@@ -121,7 +121,8 @@ public class BluetoothService extends IBluetooth.Stub {
     private static final ParcelUuid[] RFCOMM_UUIDS = {
             BluetoothUuid.Handsfree,
             BluetoothUuid.HSP,
-            BluetoothUuid.ObexObjectPush };
+            BluetoothUuid.ObexObjectPush,
+            BluetoothUuid.MessageNotificationServer };
 
     // TODO(): Optimize all these string handling
     private final Map<String, String> mAdapterProperties;
@@ -492,6 +493,12 @@ public class BluetoothService extends IBluetooth.Stub {
                             mHandler.obtainMessage(MESSAGE_REGISTER_SDP_RECORDS, 4, -1), 500);
                     break;
                 case 4:
+		    Log.d(TAG, "Registering map record");
+		    SystemService.start("map");
+		    mHandler.sendMessageDelayed(
+		    	    mHandler.obtainMessage(MESSAGE_REGISTER_SDP_RECORDS, 5, -1), 500);
+		    break;
+		case 5:
                     Log.d(TAG, "Registering pbap record");
                     SystemService.start("pbap");
                     break;
