@@ -701,7 +701,17 @@ rinse_repeat:
     }
 
     if ((size_t)mPrevBandwidthIndex != bandwidthIndex) {
-        bandwidthChanged = true;
+        char value[PROPERTY_VALUE_MAX];
+        if(property_get("httplive.enable.discontinuity", value, NULL) &&
+           (!strcasecmp(value, "true") || !strcmp(value, "1")) ) {
+           bandwidthChanged = true;
+           LOGV("discontinuity property set, queue discontinuity");
+        }
+        else {
+           LOGV("BW changed, but do not queue discontinuity");
+           bandwidthChanged = false;
+        }
+
     }
 
     if (mPrevBandwidthIndex < 0) {
