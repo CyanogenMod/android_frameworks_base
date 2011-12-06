@@ -34,6 +34,9 @@
 #include <media/stagefright/MetaData.h>
 #include <media/IStreamSource.h>
 #include <utils/KeyedVector.h>
+#ifdef QCOM_HARDWARE
+#include <cutils/properties.h>
+#endif
 
 namespace android {
 
@@ -307,10 +310,44 @@ status_t ATSParser::Program::parseProgramMap(ABitReader *br) {
 
         // The only case we can recover from is if we have two streams
         // and they switched PIDs.
-
         bool success = false;
+#ifdef QCOM_HARDWARE
+        bool bDiscontinuityOn = false;
+        char value[PROPERTY_VALUE_MAX];
+        if (property_get("httplive.enable.discontinuity", value, NULL) &&
+           (!strcasecmp(value, "true") || !strcmp(value, "1")) ) {
+           LOGI("discontinuity property is set");
+           bDiscontinuityOn = true;
+        }
 
-        if (mStreams.size() == 2 && infos.size() == 2) {
+        if (!bDiscontinuityOn) {
+            LOGI("Discontinuity is not enabled, handle PID change");
+            //PIDs can change in between due to BW switches
+            //Set PID based on stream type
+            for (int i = 0; i < infos.size(); i++) {
+                for (int j = 0; j < mStreams.size(); j++){
+
+                    sp<Stream> stream = mStreams.editValueAt(j);
+                    if (infos.itemAt(i).mType == stream->type() &&
+                        infos.itemAt(i).mPID != stream->pid()) {
+
+                        LOGI("PID change for stream %d to %d stream type %x",
+                           stream->pid(), infos.itemAt(i).mPID, infos.itemAt(i).mType);
+                        mStreams.removeItem(stream->pid());
+                        stream->setPID(infos.itemAt(i).mPID);
+                        mStreams.add(stream->pid(), stream);
+                    }
+                }
+            }
+            success = true;
+        }
+#endif
+
+        if (
+#ifdef QCOM_HARDWARE
+                !success &&
+#endif
+                mStreams.size() == 2 && infos.size() == 2) {
             const StreamInfo &info1 = infos.itemAt(0);
             const StreamInfo &info2 = infos.itemAt(1);
 
