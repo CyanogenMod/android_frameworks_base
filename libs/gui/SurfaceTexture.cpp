@@ -36,6 +36,10 @@
 #include <utils/Log.h>
 #include <utils/String8.h>
 
+#ifdef QCOM_HARDWARE
+#include <qcom_ui.h>
+#endif
+
 // This compile option causes SurfaceTexture to return the buffer that is currently
 // attached to the GL texture from dequeueBuffer when no other buffers are
 // available.  It requires the drivers (Gralloc, GL, OMX IL, and Camera) to do
@@ -138,6 +142,9 @@ SurfaceTexture::SurfaceTexture(GLuint tex, bool allowSynchronousMode,
     mUseFenceSync(false),
 #endif
     mTexTarget(texTarget),
+#ifdef QCOM_HARDWARE
+    mReqSize(0),
+#endif
     mFrameCounter(0) {
     // Choose a name using the PID and a process-unique ID.
     mName = String8::format("unnamed-%d-%d", getpid(), createProcessUniqueId());
@@ -489,6 +496,9 @@ status_t SurfaceTexture::dequeueBuffer(int *outBuf, uint32_t w, uint32_t h,
             if (updateFormat) {
                 mPixelFormat = format;
             }
+#ifdef QCOM_HARDWARE
+	    checkBuffer((native_handle_t *)graphicBuffer->handle, mReqSize, usage);
+#endif
             mSlots[buf].mGraphicBuffer = graphicBuffer;
             mSlots[buf].mRequestBufferCalled = false;
             mSlots[buf].mFence = EGL_NO_SYNC_KHR;
@@ -761,6 +771,11 @@ status_t SurfaceTexture::performQcomOperation(int operation, int arg1, int arg2,
      ST_LOGV("SurfaceTexture::performQcomOperation operation=%d", operation);
 
      switch(operation) {
+#ifdef QCOM_HARDWARE
+	case NATIVE_WINDOW_SET_BUFFERS_SIZE:
+	    mReqSize = arg1;
+	    break;
+#endif
         default: return BAD_VALUE;
      };
      return OK;

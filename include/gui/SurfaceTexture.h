@@ -512,6 +512,11 @@ private:
     // with the surface Texture.
     uint64_t mFrameCounter;
 
+#ifdef QCOM_HARDWARE
+    // mReqSize is the required buffer size speficied by the client.
+    int mReqSize;
+#endif
+
 };
 
 // ----------------------------------------------------------------------------
