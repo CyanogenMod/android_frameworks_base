@@ -71,6 +71,9 @@ private:
     int dispatchSetUsage(va_list args);
     int dispatchLock(va_list args);
     int dispatchUnlockAndPost(va_list args);
+#ifdef QCOM_HARDWARE
+    int dispatchPerformQcomOperation(int operation, va_list args);
+#endif
 
 protected:
     virtual int cancelBuffer(ANativeWindowBuffer* buffer);
@@ -93,6 +96,9 @@ protected:
     virtual int setUsage(uint32_t reqUsage);
     virtual int lock(ANativeWindow_Buffer* outBuffer, ARect* inOutDirtyBounds);
     virtual int unlockAndPost();
+#ifdef QCOM_HARDWARE
+    virtual int performQcomOperation(int operation, int arg1, int arg2, int arg3);
+#endif
 
     enum { MIN_UNDEQUEUED_BUFFERS = SurfaceTexture::MIN_UNDEQUEUED_BUFFERS };
     enum { NUM_BUFFER_SLOTS = SurfaceTexture::NUM_BUFFER_SLOTS };

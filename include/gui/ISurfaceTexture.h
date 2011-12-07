@@ -127,6 +127,20 @@ protected:
     // This method will fail if the the SurfaceTexture is not currently
     // connected to the specified client API.
     virtual status_t disconnect(int api) = 0;
+
+#ifdef QCOM_HARDWARE
+    // performQcomOperation performs Qcom specific operations. The actual
+    // operation to be performed depends on the operation specified.
+    //
+    // The argument list is filled by the client based on the operation that
+    // the client wants to specify.
+    //
+    // This method will fail if the operation is invalid or the arguments
+    // specified in the operation are invalid.
+    virtual status_t performQcomOperation(int operation, int arg1, int  arg2,
+                                          int arg3) = 0;
+#endif
+
 };
 
 // ----------------------------------------------------------------------------

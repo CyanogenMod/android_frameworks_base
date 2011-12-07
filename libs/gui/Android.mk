@@ -27,8 +27,14 @@ LOCAL_SHARED_LIBRARIES := \
 	libhardware_legacy \
 	libui \
 	libEGL \
-	libGLESv2 \
+	libGLESv2
 
+ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
+LOCAL_SHARED_LIBRARIES := \
+        libQcomUI
+LOCAL_C_INCLUDES := hardware/qcom/display/libqcomui
+LOCAL_CFLAGS += -DQCOM_HARDWARE
+endif
 
 LOCAL_MODULE:= libgui
 

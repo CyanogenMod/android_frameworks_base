@@ -755,6 +755,18 @@ status_t SurfaceTexture::disconnect(int api) {
     return err;
 }
 
+#ifdef QCOM_HARDWARE
+status_t SurfaceTexture::performQcomOperation(int operation, int arg1, int arg2, int arg3)
+{
+     ST_LOGV("SurfaceTexture::performQcomOperation operation=%d", operation);
+
+     switch(operation) {
+        default: return BAD_VALUE;
+     };
+     return OK;
+}
+#endif
+
 status_t SurfaceTexture::setScalingMode(int mode) {
     ST_LOGV("setScalingMode: mode=%d", mode);
 
