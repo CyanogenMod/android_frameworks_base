@@ -56,6 +56,7 @@ Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
 #include <OMX_QCOMExtns.h>
 
 #include <gralloc_priv.h>
+#include <qcom_ui.h>
 #include <QOMX_AudioExtensions.h>
 #endif
 #include "include/avc_utils.h"
@@ -2297,6 +2298,8 @@ status_t OMXCodec::allocateOutputBuffersFromNativeWindow() {
                  HAL_PIXEL_FORMAT_YCbCr_420_SP_TILED : def.format.video.eColorFormat;
     if(def.format.video.eColorFormat == OMX_QCOM_COLOR_FormatYVU420SemiPlanar)
         format = HAL_PIXEL_FORMAT_YCrCb_420_SP;
+
+    format ^= (mInterlaceFormatDetected ? HAL_PIXEL_FORMAT_INTERLACE : 0);
 #endif
 
 #ifndef SAMSUNG_CODEC_SUPPORT
@@ -2438,6 +2441,16 @@ status_t OMXCodec::allocateOutputBuffersFromNativeWindow() {
                 -err);
         return err;
     }
+
+#ifdef QCOM_HARDWARE
+    err = mNativeWindow.get()->perform(mNativeWindow.get(),
+                             NATIVE_WINDOW_SET_BUFFERS_SIZE, def.nBufferSize);
+    if (err != 0) {
+        LOGE("native_window_set_buffers_size failed: %s (%d)", strerror(-err),
+                -err);
+        return err;
+    }
+#endif
 
     CODEC_LOGV("allocating %lu buffers from a native window of size %lu on "
             "output port", def.nBufferCountActual, def.nBufferSize);
@@ -3107,7 +3120,19 @@ void OMXCodec::onEvent(OMX_EVENTTYPE event, OMX_U32 data1, OMX_U32 data2) {
             }
             break;
         }
-
+#ifdef QCOM_HARDWARE
+        case OMX_EventIndexsettingChanged:
+        {
+            OMX_INTERLACETYPE format = (OMX_INTERLACETYPE)data1;
+            if (format == OMX_InterlaceInterleaveFrameTopFieldFirst ||
+                format == OMX_InterlaceInterleaveFrameBottomFieldFirst)
+            {
+                mInterlaceFormatDetected = true;
+                LOGW("Interlace detected");
+            }
+            break;
+        }
+#endif
 #if 0
         case OMX_EventBufferFlag:
         {

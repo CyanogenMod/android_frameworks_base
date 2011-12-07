@@ -84,7 +84,7 @@ LOCAL_C_INCLUDES+= \
         $(TOP)/frameworks/base/include/media/stagefright/openmax \
         $(TOP)/external/flac/include \
         $(TOP)/external/tremolo \
-        $(TOP)/external/openssl/include \
+        $(TOP)/external/openssl/include
 
 LOCAL_SHARED_LIBRARIES := \
         libbinder         \
