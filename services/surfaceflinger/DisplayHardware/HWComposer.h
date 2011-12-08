@@ -67,6 +67,9 @@ public:
     // updated in preapre()
     size_t getLayerCount(int type) const;
 
+    // gets the list flags
+    uint32_t getFlags() const;
+
     void enableHDMIOutput(bool enable);
 
     // for debugging

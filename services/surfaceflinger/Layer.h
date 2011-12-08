@@ -71,6 +71,7 @@ public:
     virtual bool needsDithering() const     { return mNeedsDithering; }
     virtual bool isSecure() const           { return mSecure; }
     virtual bool isProtected() const;
+    virtual void setIsUpdating(bool isUpdating);
     virtual void onRemoved();
     virtual sp<Layer> getLayer() const { return const_cast<Layer*>(this); }
     virtual void setName(const String8& name);
@@ -124,6 +125,9 @@ private:
 
     // binder thread, transaction thread
     mutable Mutex mLock;
+
+    // Qcom specific flags for this layer.
+    int mLayerQcomFlags;
 };
 
 // ---------------------------------------------------------------------------

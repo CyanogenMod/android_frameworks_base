@@ -98,6 +98,8 @@ status_t HWComposer::createWorkList(size_t numLayers) {
 }
 
 status_t HWComposer::prepare() const {
+    // Reset the Skip composition flag
+    mList->flags &= ~HWC_SKIP_COMPOSITION;
     int err = mHwc->prepare(mHwc, mList);
     if (err == NO_ERROR) {
         size_t numOVLayers = 0;
@@ -165,6 +167,10 @@ size_t HWComposer::getNumLayers() const {
 
 hwc_layer_t* HWComposer::getLayers() const {
     return mList ? mList->hwLayers : 0;
+}
+
+uint32_t HWComposer::getFlags() const {
+    return mList ? mList->flags : 0;
 }
 
 void HWComposer::dump(String8& result, char* buffer, size_t SIZE,

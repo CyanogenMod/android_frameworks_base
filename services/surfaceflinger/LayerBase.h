@@ -205,6 +205,8 @@ public:
     /** called with the state lock when the surface is removed from the
      *  current list */
     virtual void onRemoved() { };
+    /** Called from surfaceFlinger to update the layer */
+    virtual void setIsUpdating(bool isUpdating) { };
     
     /** always call base class first */
     virtual void dump(String8& result, char* scratch, size_t size) const;

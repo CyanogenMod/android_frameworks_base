@@ -400,6 +400,7 @@ private:
                 bool                        mHDMIOutput;
                 Mutex                       mHDMILock;
                 bool                        mOrientationChanged;
+                bool                        mCanSkipComposition;
 
                 // these are thread safe
     mutable     Barrier                     mReadyToRunBarrier;
