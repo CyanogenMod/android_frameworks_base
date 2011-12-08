@@ -3729,6 +3729,12 @@ bool OMXCodec::drainInputBuffer(BufferInfo *info) {
             err = mSource->read(&srcBuffer);
         }
 
+#ifdef QCOM_HARDWARE
+        if (err == ERROR_CORRUPT_NAL) {
+            LOGW("Ignore Corrupt NAL");
+            continue;
+        } else 
+#endif
         if (err != OK) {
             signalEOS = true;
             mFinalStatus = err;
