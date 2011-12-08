@@ -2250,13 +2250,23 @@ status_t MPEG4Source::read(
                 }
 
                 if (isMalFormed) {
+                    //If NAL Length is corrupt,
+                    //return custom error ERROR_CORRUPT_NAL
                     LOGE("Video is malformed");
                     mBuffer->release();
                     mBuffer = NULL;
 
                     if (mStatistics) mNumSamplesReadError++;
+#ifndef QCOM_HARDWARE
                     return ERROR_MALFORMED;
+#else
+                    srcOffset -= mNALLengthSize;
+                    srcOffset += size;
+                    ++mCurrentSampleIndex;
+                    return ERROR_CORRUPT_NAL;
+#endif
                 }
+
 
                 if (nalLength == 0) {
                     continue;
