@@ -36,6 +36,8 @@
 #include <cutils/properties.h>
 #include <cutils/memory.h>
 
+#include <pixelflinger/format.h>
+
 #include <utils/SortedVector.h>
 #include <utils/KeyedVector.h>
 #include <utils/String8.h>
@@ -988,9 +990,36 @@ EGLBoolean eglGetConfigAttrib(EGLDisplay dpy, EGLConfig config,
         *value = dp->configs[intptr_t(config)].configId;
         return EGL_TRUE;
     }
-    return cnx->egl.eglGetConfigAttrib(
-            dp->disp[ dp->configs[intptr_t(config)].impl ].dpy,
-            dp->configs[intptr_t(config)].config, attribute, value);
+    EGLDisplay iDpy = dp->disp[ dp->configs[intptr_t(config)].impl ].dpy;
+    EGLConfig iConfig = dp->configs[intptr_t(config)].config;
+    EGLBoolean result = cnx->egl.eglGetConfigAttrib(iDpy, iConfig, attribute, value);
+#ifdef NO_RGBX_8888
+    if (attribute == EGL_NATIVE_VISUAL_ID && *value == 0) {
+        EGLint g,a;
+        cnx->egl.eglGetConfigAttrib(iDpy, iConfig, EGL_GREEN_SIZE, &g);
+        cnx->egl.eglGetConfigAttrib(iDpy, iConfig, EGL_ALPHA_SIZE, &a);
+        if (g == 6 && a == 0) {
+            *value = GGL_PIXEL_FORMAT_RGB_565;
+            return EGL_TRUE;
+        } else if (g == 8 && a == 8) {
+            *value = GGL_PIXEL_FORMAT_RGBA_8888;
+            return EGL_TRUE;
+        } else if (g == 0 && a == 8) {
+            *value = GGL_PIXEL_FORMAT_A_8;
+            return EGL_TRUE;
+        } else if (g == 4 && a == 4) {
+            *value = GGL_PIXEL_FORMAT_RGBA_4444;
+            return EGL_TRUE;
+        } else if (g == 5 && a == 1) {
+            *value = GGL_PIXEL_FORMAT_RGBA_5551;
+            return EGL_TRUE;
+        } else if (g == 8 && a == 0) {
+            *value = GGL_PIXEL_FORMAT_RGB_888;
+            return EGL_TRUE;
+        }
+    }
+#endif
+    return result;
 }
 
 // ----------------------------------------------------------------------------
@@ -1009,8 +1038,7 @@ EGLSurface eglCreateWindowSurface(  EGLDisplay dpy, EGLConfig config,
         EGLint format;
 
         // set the native window's buffers format to match this config
-        if (cnx->egl.eglGetConfigAttrib(iDpy,
-                iConfig, EGL_NATIVE_VISUAL_ID, &format)) {
+        if (eglGetConfigAttrib(dpy, config, EGL_NATIVE_VISUAL_ID, &format)) {
             if (format != 0) {
                 native_window_set_buffers_geometry(window, 0, 0, format);
             }

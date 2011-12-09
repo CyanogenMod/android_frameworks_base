@@ -17,6 +17,10 @@ ifneq ($(TARGET_USES_GL_VENDOR_EXTENSIONS),false)
     LOCAL_CFLAGS += -DENABLE_VENDOR_EXTENSIONS
 endif
 
+ifeq ($(BOARD_NO_RGBX_8888),true)
+  LOCAL_CFLAGS += -DNO_RGBX_8888
+endif
+
 LOCAL_SHARED_LIBRARIES += libcutils libutils
 LOCAL_LDLIBS := -lpthread -ldl
 LOCAL_MODULE:= libEGL
