@@ -235,6 +235,7 @@ private:
     bool mIsMetaDataStoredInVideoBuffers;
     bool mOnlySubmitOneBufferAtOneTime;
     bool mInterlaceFormatDetected;
+    bool mSPSParsed;
 #endif
 
     // Used to record the decoding time for an output picture from
@@ -369,7 +370,7 @@ private:
 
     status_t parseAVCCodecSpecificData(
             const void *data, size_t size,
-            unsigned *profile, unsigned *level);
+            unsigned *profile, unsigned *level, const sp<MetaData> &meta);
 #ifdef QCOM_HARDWARE
     void parseFlags( uint32_t flags );
 #endif

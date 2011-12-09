@@ -1933,6 +1933,12 @@ MPEG4Source::MPEG4Source(
         mNALLengthSize = 1 + (ptr[4] & 3);
     }
 
+#ifdef QCOM_HARDWARE
+    //MPEG4 extractor can give complete frames,
+    //set arbitrary mode to false
+    format->setInt32(kKeyUseArbitraryMode, 0);
+#endif
+
     if (mStatistics) logExpectedFrames();
 }
 
