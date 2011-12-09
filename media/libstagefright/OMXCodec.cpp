@@ -704,7 +704,7 @@ sp<MediaSource> OMXCodec::Create(
 
 status_t OMXCodec::parseAVCCodecSpecificData(
         const void *data, size_t size,
-        unsigned *profile, unsigned *level) {
+        unsigned *profile, unsigned *level, const sp<MetaData> &meta) {
     const uint8_t *ptr = (const uint8_t *)data;
 
     // verify minimum size and configurationVersion == 1.
@@ -726,6 +726,28 @@ status_t OMXCodec::parseAVCCodecSpecificData(
     // CHECK((ptr[5] >> 5) == 7);  // reserved
 
     size_t numSeqParameterSets = ptr[5] & 31;
+#ifdef QCOM_HARDWARE
+    uint16_t spsSize = (((uint16_t)ptr[6]) << 8)
+        + (uint16_t)(ptr[7]);
+    CODEC_LOGV(" numSeqParameterSets = %d , spsSize = %d",numSeqParameterSets,spsSize);
+    SpsInfo info;
+    if ( parseSps( spsSize, ptr + 9, &info ) == OK ) {
+        mSPSParsed = true;
+        CODEC_LOGV("SPS parsed");
+        if (info.mInterlaced) {
+            mInterlaceFormatDetected = true;
+            meta->setInt32(kKeyUseArbitraryMode, 1);
+            CODEC_LOGI("Interlace format detected");
+        } else {
+            CODEC_LOGI("Non-Interlaced format detected");
+        }
+    }
+    else {
+        CODEC_LOGI("ParseSPS could not find if content is interlaced");
+        mSPSParsed = false;
+        mInterlaceFormatDetected = false;
+    }
+#endif
 
     ptr += 6;
     size -= 6;
@@ -806,7 +828,7 @@ status_t OMXCodec::configureCodec(const sp<MetaData> &meta) {
             unsigned profile, level;
             status_t err;
             if ((err = parseAVCCodecSpecificData(
-                            data, size, &profile, &level)) != OK) {
+                            data, size, &profile, &level, meta)) != OK) {
                 LOGE("Malformed AVC codec specific data.");
                 return err;
             }
@@ -842,7 +864,13 @@ status_t OMXCodec::configureCodec(const sp<MetaData> &meta) {
         }
 
     }
+#ifndef QCOM_HARDWARE
     if (!strcasecmp(MEDIA_MIMETYPE_VIDEO_DIVX, mMIME) || !strcasecmp(MEDIA_MIMETYPE_VIDEO_DIVX4, mMIME)) {
+#else
+    if (!strcasecmp(MEDIA_MIMETYPE_VIDEO_DIVX, mMIME) ||
+        !strcasecmp(MEDIA_MIMETYPE_VIDEO_DIVX4, mMIME) ||
+        !strcasecmp(MEDIA_MIMETYPE_VIDEO_DIVX311, mMIME)) {
+#endif
         LOGV("Setting the QOMX_VIDEO_PARAM_DIVXTYPE params ");
         QOMX_VIDEO_PARAM_DIVXTYPE paramDivX;
         InitOMXParams(&paramDivX);
@@ -857,6 +885,8 @@ status_t OMXCodec::configureCodec(const sp<MetaData> &meta) {
             paramDivX.eFormat = QOMX_VIDEO_DIVXFormat5;
         } else if(DivxVersion == kTypeDivXVer_6) {
             paramDivX.eFormat = QOMX_VIDEO_DIVXFormat6;
+        } else if(DivxVersion == kTypeDivXVer_3_11 ) {
+            paramDivX.eFormat = QOMX_VIDEO_DIVXFormat311;
         } else {
             paramDivX.eFormat = QOMX_VIDEO_DIVXFormatUnused;
         }
@@ -911,39 +941,6 @@ status_t OMXCodec::configureCodec(const sp<MetaData> &meta) {
         if(err!=OK){
            return err;
         }
-    } else if(!strcasecmp(MEDIA_MIMETYPE_VIDEO_WMV, mMIME)) {
-	        OMX_QCOM_PARAM_PORTDEFINITIONTYPE portdef;
-	        portdef.nSize = sizeof(OMX_QCOM_PARAM_PORTDEFINITIONTYPE);
-	        portdef.nPortIndex = 0; //Input port.
-	        portdef.nMemRegion = OMX_QCOM_MemRegionInvalid;
-	        portdef.nCacheAttr = OMX_QCOM_CacheAttrNone;
-        int32_t WMVProfile = 0;
-        CHECK(meta->findInt32(kKeyWMVProfile,&WMVProfile));
-
-        if(WMVProfile == kTypeWMVAdvance)
-        {
-            portdef.nFramePackingFormat = OMX_QCOM_FramePacking_Arbitrary;
-            LOGV("Setting decoder in Arbitary Mode --- ADVANCE PROFILE");
-        }
-        else
-        {
-            portdef.nFramePackingFormat = OMX_QCOM_FramePacking_OnlyOneCompleteFrame;
-            LOGV("Setting decoder in Frame-By-Frame Mode --- SIMPLE Profile");
-        }
-
-        char value[PROPERTY_VALUE_MAX];
-        status_t err = mOMX->setParameter(mNode, (OMX_INDEXTYPE)OMX_QcomIndexPortDefn, &portdef, sizeof(OMX_QCOM_PARAM_PORTDEFINITIONTYPE));
-        if (!property_get("ro.product.device", value, "1")
-            || !strcmp(value, "msm7627_surf") || !strcmp(value, "msm7627_ffa")
-            || !strcmp(value, "msm7627_7x_surf") || !strcmp(value, "msm7627_7x_ffa")
-            || !strcmp(value, "msm7625_surf") || !strcmp(value, "msm7625_ffa"))
-        {
-            LOGE("OMX_QCOM_FramePacking_OnlyOneCompleteFrame not supported by component err: %d", err);
-        } else {
-            if(err!=OK){
-               return err;
-            }
-        }
 #endif
     } else if (!strcasecmp(MEDIA_MIMETYPE_AUDIO_G711_ALAW, mMIME)
             || !strcasecmp(MEDIA_MIMETYPE_AUDIO_G711_MLAW, mMIME)) {
@@ -991,6 +988,26 @@ status_t OMXCodec::configureCodec(const sp<MetaData> &meta) {
             if (err != OK) {
                 return err;
             }
+
+#ifdef QCOM_HARDWARE
+            int32_t useArbitraryMode = 0;
+            success = meta->findInt32(kKeyUseArbitraryMode, &useArbitraryMode);
+            if (success && useArbitraryMode == 1) {
+                CODEC_LOGI("Decoder should be in arbitrary mode");
+                // Is it required to set OMX_QCOM_FramePacking_Arbitrary ??
+            }
+            else{
+                CODEC_LOGI("Enable frame by frame mode");
+                OMX_QCOM_PARAM_PORTDEFINITIONTYPE portFmt;
+                portFmt.nPortIndex = kPortIndexInput;
+                portFmt.nFramePackingFormat = OMX_QCOM_FramePacking_OnlyOneCompleteFrame;
+                err = mOMX->setParameter(
+                        mNode, (OMX_INDEXTYPE)OMX_QcomIndexPortDefn, (void *)&portFmt, sizeof(portFmt));
+                if(err != OK) {
+                    LOGW("Failed to set frame packing format on component");
+                }
+            }
+#endif
         }
     }
 
@@ -1893,6 +1910,7 @@ OMXCodec::OMXCodec(
               || !strcmp(componentName, "OMX.Nvidia.mpeg2v.decode"))
                         ? NULL : nativeWindow),
       mInterlaceFormatDetected(false),
+      mSPSParsed(false),
       mThumbnailMode(false) {
 #else
       mNativeWindow(!strncmp(componentName, "OMX.google.", 11)
