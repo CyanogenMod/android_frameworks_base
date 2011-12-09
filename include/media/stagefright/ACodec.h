@@ -22,6 +22,7 @@
 #include <android/native_window.h>
 #include <media/IOMX.h>
 #include <media/stagefright/foundation/AHierarchicalStateMachine.h>
+#include <OMX_Component.h>
 
 namespace android {
 
@@ -174,6 +175,11 @@ private:
     void sendFormatChange();
 
     void signalError(OMX_ERRORTYPE error = OMX_ErrorUndefined);
+
+    //Smooth streaming related
+    status_t InitSmoothStreaming();
+    OMX_PARAM_PORTDEFINITIONTYPE mOutputPortDef;
+    bool mSmoothStreaming;
 
     DISALLOW_EVIL_CONSTRUCTORS(ACodec);
 };
