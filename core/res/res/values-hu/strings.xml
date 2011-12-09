@@ -139,6 +139,8 @@
     <string name="no_recent_tasks" msgid="279702952298056674">"Nincs új alkalmazás."</string>
     <string name="global_actions" msgid="2406416831541615258">"Telefonbeállítások"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Képernyő lezárása"</string>
+    <string name="global_action_menu">Menü</string>
+    <string name="global_action_back">Vissza</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Kikapcsolás"</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Néma üzemmód"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Hang kikapcsolva"</string>
@@ -718,6 +720,7 @@
     <string name="elapsed_time_short_format_mm_ss" msgid="4431555943828711473">"<xliff:g id="MINUTES">%1$02d</xliff:g>:<xliff:g id="SECONDS">%2$02d</xliff:g>"</string>
     <string name="elapsed_time_short_format_h_mm_ss" msgid="1846071997616654124">"<xliff:g id="HOURS">%1$d</xliff:g>:<xliff:g id="MINUTES">%2$02d</xliff:g>:<xliff:g id="SECONDS">%3$02d</xliff:g>"</string>
     <string name="selectAll" msgid="6876518925844129331">"Összes kijelölése"</string>
+    <string name="copyAll">Összes másolása</string>
     <string name="selectText" msgid="4862359311088898878">"Szó kiválasztása"</string>
     <string name="cut" msgid="3092569408438626261">"Kivágás"</string>
     <string name="copy" msgid="2681946229533511987">"Másolás"</string>
@@ -744,6 +747,8 @@
     <string name="aerr_title" msgid="653922989522758100">"Sajnáljuk!"</string>
     <string name="aerr_application" msgid="4683614104336409186">"A(z) <xliff:g id="APPLICATION">%1$s</xliff:g> alkalmazás <xliff:g id="PROCESS">%2$s</xliff:g> folyamata váratlanul leállt. Kérjük, próbálja újra."</string>
     <string name="aerr_process" msgid="1551785535966089511">"A(z) <xliff:g id="PROCESS">%1$s</xliff:g> folyamat váratlanul leállt. Kérjük, próbálja újra."</string>
+    <string name="aerr_revoked_application">"Az alkalmazás %1$s (folyamat %2$s) váratlanul leállt. FIGYELEM! Ennek az alkalmazásnak több olyan VISSZAVONT engedélyezési azonosítója van, ami miatt leállhatott. Kérem ellenőrizze az engedélyeket és próbálja újra!"</string>
+    <string name="aerr_revoked_process">"A(z) %1$s folyamat váratlanul leállt. FIGYELEM! Ennek az alkalmazásnak több olyan VISSZAVONT engedélyezési azonosítója van, ami miatt leállhatott. Kérem ellenőrizze az engedélyeket és próbálja újra!"</string>
     <string name="anr_title" msgid="3100070910664756057">"Sajnáljuk!"</string>
     <string name="anr_activity_application" msgid="3538242413112507636">"A(z) <xliff:g id="APPLICATION">%2$s</xliff:g> alkalmazásban levő <xliff:g id="ACTIVITY">%1$s</xliff:g> tevékenység nem válaszol."</string>
     <string name="anr_activity_process" msgid="5420826626009561014">"A(z) <xliff:g id="PROCESS">%2$s</xliff:g> folyamatban levő <xliff:g id="ACTIVITY">%1$s</xliff:g> tevékenység nem válaszol."</string>
@@ -751,6 +756,8 @@
     <string name="anr_process" msgid="1246866008169975783">"A(z) <xliff:g id="PROCESS">%1$s</xliff:g> folyamat nem válaszol."</string>
     <string name="force_close" msgid="3653416315450806396">"Bezárás most"</string>
     <string name="report" msgid="4060218260984795706">"Jelentés"</string>
+    <string name="edit_perms">Engedélyek szerkesztése</string>
+    <string name="reset_perms">Engedélyek visszaállítása</string>
     <string name="wait" msgid="7147118217226317732">"Várakozás"</string>
     <string name="launch_warning_title" msgid="8323761616052121936">"Alk. átirányítva"</string>
     <string name="launch_warning_replace" msgid="6202498949970281412">"<xliff:g id="APP_NAME">%1$s</xliff:g> éppen fut."</string>
@@ -829,7 +836,7 @@
     <string name="select_input_method" msgid="6865512749462072765">"Válassza ki a beviteli módszert"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
-    <string name="candidates_style" msgid="4333913089637062257"><u>"jelöltek"</u></string>
+    <string name="candidates_style" msgid="4333913089637062257"><u>"Jelöltek"</u></string>
     <string name="ext_media_checking_notification_title" product="nosdcard" msgid="3449816005351468560">"Az USB-tár előkészítése"</string>
     <string name="ext_media_checking_notification_title" product="default" msgid="5457603418970994050">"SD-kártya előkészítése"</string>
     <string name="ext_media_checking_notification_message" msgid="8287319882926737053">"Hibakeresés."</string>
@@ -889,7 +896,7 @@
     <string name="upload_file" msgid="2897957172366730416">"Fájl kiválasztása"</string>
     <string name="reset" msgid="2448168080964209908">"Alaphelyzet"</string>
     <string name="submit" msgid="1602335572089911941">"Elküldés"</string>
-    <string name="description_star" msgid="2654319874908576133">"kedvenc"</string>
+    <string name="description_star" msgid="2654319874908576133">"Kedvenc"</string>
     <string name="car_mode_disable_notification_title" msgid="3164768212003864316">"Gépkocsi üzemmód bekapcsolva"</string>
     <string name="car_mode_disable_notification_message" msgid="668663626721675614">"Válassza ezt a kilépéshez a gépkocsi üzemmódból."</string>
     <string name="tethered_notification_title" msgid="3146694234398202601">"Megosztás vagy aktív hotspot"</string>
@@ -913,6 +920,7 @@
     <string name="media_unknown_state" msgid="729192782197290385">"A külső meghajtó állapota ismeretlen."</string>
 
     <string name="reboot_system">Újraindítás</string>
+    <string name="reboot_reboot">Újraindítás</string>
     <string name="reboot_progress">Újraindítás...</string>
     <string name="reboot_confirm">A telefon újra fog indulni.</string>
     <string name="global_action_reboot">Újraindítás</string>
@@ -939,4 +947,6 @@
     <string name="profileGroupEmail">Email</string>
     <string name="profileGroupSMS">SMS</string>
     <string name="wildcardProfile">Egyéb</string>
+    <string name="permlab_revokePermissions">Engedélyezi a visszavont jogoultságok megtekintését és szerkesztését. Normál alkalmazásoknál nem használják.</string>
+    <string name="permdesc_revokePermissions">Engedélyezi a visszavont jogoultságok olvasását és szerkesztését. Normál alkalmazásoknál nem használják.</string>
 </resources>
