@@ -20,6 +20,7 @@ import android.app.admin.DevicePolicyManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.FileObserver;
 import android.os.RemoteException;
 import android.os.ServiceManager;
@@ -735,83 +736,50 @@ public class LockPatternUtils {
             }
             where.append(") ");
         }
+        String[] projection = new String[] {
+            Calendar.EventsColumns.TITLE,
+            "begin",
+            Calendar.EventsColumns.DESCRIPTION,
+            Calendar.EventsColumns.EVENT_LOCATION,
+            Calendar.EventsColumns.ALL_DAY
+        };
+        String path = "instances/when/" + now + "/" + later;
+        String sort = "begin ASC";
+        Uri uri = Uri.parse("content://com.android.calendar/" + path);
         String nextCalendarAlarm = null;
         Cursor cursor = null;
         try {
-            cursor = Calendar.Instances.query(mContentResolver,
-                    new String[] {
-                        Calendar.EventsColumns.TITLE,
-                        Calendar.EventsColumns.DTSTART,
-                        Calendar.EventsColumns.DTEND,
-                        Calendar.EventsColumns.DESCRIPTION,
-                        Calendar.EventsColumns.EVENT_LOCATION,
-                        Calendar.EventsColumns.ALL_DAY,
-                    },
-                    now,
-                    later,
-                    where.toString(),
-                    Calendar.EventsColumns.DTSTART + " ASC");
+            cursor = mContentResolver.query(uri,
+                    projection, where.toString(), null, sort);
 
             if (cursor != null && cursor.moveToFirst()) {
 
-                // All day events are given in UTC. This can cause them to be sorted
-                // as earlier events compared to a normal event on the night before
-                // we can fix this by doing UTC time - offset => local time and then
-                // compare that to the next event on the cursor.
-                long offset = (new Date()).getTimezoneOffset() * 60000;
-                String title, description, location;
-                Date start;
-                boolean allDay, isRepeat;
-                int i = cursor.getCount() - 1;
+                String title = cursor.getString(0);
+                long begin = cursor.getLong(1);
+                String description = cursor.getString(2);
+                String location = cursor.getString(3);
+                boolean allDay = cursor.getInt(4) != 0;
 
-                do {
-                    title       = cursor.getString(0);
-                    start       = new Date(cursor.getLong(1));
-                    isRepeat    = cursor.getLong(2) == 0;
-                    description = cursor.getString(3);
-                    location    = cursor.getString(4);
-                    allDay      = cursor.getInt(5) != 0;
-
-                    // repeat events always report the first day of the event as
-                    // start >.<' Fix the date then, to match today
-                    if (isRepeat) {
-                        java.util.Calendar today = java.util.Calendar.getInstance();
-                        java.util.Calendar startc = java.util.Calendar.getInstance();
-                        startc.setTime(start);
-
-                        // Event is repetitive in the future
-                        if (today.getTimeInMillis() < startc.getTimeInMillis()) {
-                            Log.i(TAG, "Repetitive event detected in the future");
-                        } else {
-                            startc.set(java.util.Calendar.DATE, today.get(java.util.Calendar.DATE));
-                            startc.set(java.util.Calendar.MONTH, today.get(java.util.Calendar.MONTH));
-                            startc.set(java.util.Calendar.YEAR, today.get(java.util.Calendar.YEAR));
-
-                            // Event already old, probably tomorrow is desired
-                            if (today.getTimeInMillis() > startc.getTimeInMillis()) {
-                                startc.roll(java.util.Calendar.DATE, true);
-                                Log.i(TAG, "Repetitive event hour already old, using tomorrow");
-                            }
-
-                            Log.i(TAG, "Repetitive event detected, date corrected (" +
-                                    start.getTime() + " -> " + startc.getTimeInMillis() + ")");
-                            start = startc.getTime();
-                        }
-                    }
-
-                    // i prevents out of range comparisons
-                    // if it's not an all day event, we're sure it's the earliest event
-                    if (i == 0 || !allDay)
-                        break;
-
+                // Check the next event in the case of allday event. As UTC is used for allday
+                // events, the next event may be the one that actually starts sooner
+                if (allDay && !cursor.isLast()) {
                     cursor.moveToNext();
-                    i = i-1;
-                } while ((new Date(cursor.getLong(1) - offset)).before(start));
+                    long nextBegin = cursor.getLong(1);
+                    if (nextBegin < begin + TimeZone.getDefault().getOffset(begin)) {
+                        title = cursor.getString(0);
+                        begin = nextBegin;
+                        description = cursor.getString(2);
+                        location = cursor.getString(3);
+                        allDay = cursor.getInt(4) != 0;
+                    }
+                }
 
+                Date start = new Date(begin);
                 StringBuilder sb = new StringBuilder();
 
-                if (allDay == true) {
-                    SimpleDateFormat sdf = new SimpleDateFormat(mContext.getString(R.string.abbrev_wday_month_day_no_year));
+                if (allDay) {
+                    SimpleDateFormat sdf = new SimpleDateFormat(
+                            mContext.getString(R.string.abbrev_wday_month_day_no_year));
                     // Calendar stores all-day events in UTC -- setting the timezone ensures
                     // the correct date is shown.
                     sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
