@@ -456,6 +456,8 @@ public abstract class HardwareRenderer {
         }
 
         boolean mDirtyRegionsEnabled;
+        boolean mUpdateDirtyRegions;
+
         final boolean mVsyncDisabled;
 
         final int mGlVersion;
@@ -690,6 +692,12 @@ public abstract class HardwareRenderer {
             
             initCaches();
 
+            enableDirtyRegions();
+
+            return mEglContext.getGL();
+        }
+
+        private void enableDirtyRegions() {
             // If mDirtyRegions is set, this means we have an EGL configuration
             // with EGL_SWAP_BEHAVIOR_PRESERVED_BIT set
             if (sDirtyRegions) {
@@ -705,8 +713,6 @@ public abstract class HardwareRenderer {
                 // configuration (see RENDER_DIRTY_REGIONS)
                 mDirtyRegionsEnabled = GLES20Canvas.isBackBufferPreserved();
             }
-
-            return mEglContext.getGL();
         }
 
         abstract void initCaches();
@@ -760,6 +766,9 @@ public abstract class HardwareRenderer {
                 if (!createSurface(holder)) {
                     return;
                 }
+
+                mUpdateDirtyRegions = true;
+
                 if (mCanvas != null) {
                     setEnabled(true);
                 }
@@ -930,6 +939,10 @@ public abstract class HardwareRenderer {
                     fallback(true);
                     return SURFACE_STATE_ERROR;
                 } else {
+                    if (mUpdateDirtyRegions) {
+                        enableDirtyRegions();
+                        mUpdateDirtyRegions = false;
+                    }
                     return SURFACE_STATE_UPDATED;
                 }
             }
