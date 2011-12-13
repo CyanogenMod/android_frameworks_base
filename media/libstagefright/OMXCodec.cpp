@@ -2640,6 +2640,7 @@ status_t OMXCodec::setVideoOutputFormat(
             //def.nBufferCountMin    => minimum no of buffers required on a port (communicated by codec)
             //def.nBufferCountActual => actual no. of buffers allocated on a port (communicated to codec)
             def.nBufferCountActual = def.nBufferCountMin + (2 * NUM_BUFFERS_TO_BE_QUEUED_FOR_OPTIMAL_PERFORMANCE);
+            if (def.nBufferCountActual > 20) def.nBufferCountActual = 20;
     }
 #elif defined(TARGET_OMAP3)
     // Suppress output buffer count for OMAP3
