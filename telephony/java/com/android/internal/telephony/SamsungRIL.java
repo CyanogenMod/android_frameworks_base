@@ -16,6 +16,7 @@ import android.os.SystemProperties;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
+import android.telephony.TelephonyManager;
 import static com.android.internal.telephony.RILConstants.*;
 
 import com.android.internal.telephony.CallForwardInfo;
@@ -291,6 +292,11 @@ public SamsungRIL(Context context, int networkMode, int cdmaSubscription) {
     @Override
     public void
     dial(String address, int clirMode, UUSInfo uusInfo, Message result) {
+        if (TelephonyManager.getDefault().getPhoneType() != TelephonyManager.PHONE_TYPE_GSM) {
+            super.dial(address, clirMode, uusInfo, result);
+            return;
+        }
+
         RILRequest rr;
         if (PhoneNumberUtils.isEmergencyNumber(address)) {
             Log.v(LOG_TAG, "Emergency dial: " + address);
