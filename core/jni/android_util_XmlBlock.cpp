@@ -264,19 +264,19 @@ static jint android_content_XmlBlock_nativeGetAttributeIndex(JNIEnv* env, jobjec
     const char16_t* ns16 = NULL;
     jsize nsLen = 0;
     if (ns) {
-        ns16 = env->GetStringChars(ns, NULL);
+        ns16 = (char16_t*)env->GetStringChars(ns, NULL);
         nsLen = env->GetStringLength(ns);
     }
 
-    const char16_t* name16 = env->GetStringChars(name, NULL);
+    const char16_t* name16 = (char16_t*)env->GetStringChars(name, NULL);
     jsize nameLen = env->GetStringLength(name);
 
     jint idx = (jint)st->indexOfAttribute(ns16, nsLen, name16, nameLen);
 
     if (ns) {
-        env->ReleaseStringChars(ns, ns16);
+        env->ReleaseStringChars(ns, (jchar*)ns16);
     }
-    env->ReleaseStringChars(name, name16);
+    env->ReleaseStringChars(name, (jchar*)name16);
 
     return idx;
 }

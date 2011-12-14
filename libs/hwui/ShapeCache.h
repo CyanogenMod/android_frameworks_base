@@ -90,9 +90,9 @@ struct ShapeCacheEntry {
         cap = SkPaint::kDefault_Cap;
         style = SkPaint::kFill_Style;
         float v = 4.0f;
-        miter = *(uint32_t*) &v;
+        memcpy(&miter, &v, sizeof(miter));
         v = 1.0f;
-        strokeWidth = *(uint32_t*) &v;
+        memcpy(&strokeWidth, &v, sizeof(strokeWidth));
         pathEffect = NULL;
     }
 
@@ -101,9 +101,9 @@ struct ShapeCacheEntry {
         join = paint->getStrokeJoin();
         cap = paint->getStrokeCap();
         float v = paint->getStrokeMiter();
-        miter = *(uint32_t*) &v;
+        memcpy(&miter, &v, sizeof(miter));
         v = paint->getStrokeWidth();
-        strokeWidth = *(uint32_t*) &v;
+        memcpy(&strokeWidth, &v, sizeof(strokeWidth));
         style = paint->getStyle();
         pathEffect = paint->getPathEffect();
     }
@@ -148,10 +148,10 @@ protected:
 struct RoundRectShapeCacheEntry: public ShapeCacheEntry {
     RoundRectShapeCacheEntry(float width, float height, float rx, float ry, SkPaint* paint):
             ShapeCacheEntry(ShapeCacheEntry::kShapeRoundRect, paint) {
-        mWidth = *(uint32_t*) &width;
-        mHeight = *(uint32_t*) &height;
-        mRx = *(uint32_t*) &rx;
-        mRy = *(uint32_t*) &ry;
+        memcpy(&mWidth, &width, sizeof(mWidth));
+        memcpy(&mHeight, &height, sizeof(mHeight));
+        memcpy(&mRx, &rx, sizeof(mRx));
+        memcpy(&mRy, &ry, sizeof(mRy));
     }
 
     RoundRectShapeCacheEntry(): ShapeCacheEntry() {
@@ -185,7 +185,7 @@ private:
 struct CircleShapeCacheEntry: public ShapeCacheEntry {
     CircleShapeCacheEntry(float radius, SkPaint* paint):
             ShapeCacheEntry(ShapeCacheEntry::kShapeCircle, paint) {
-        mRadius = *(uint32_t*) &radius;
+        memcpy(&mRadius, &radius, sizeof(mRadius));
     }
 
     CircleShapeCacheEntry(): ShapeCacheEntry() {
@@ -207,8 +207,8 @@ private:
 struct OvalShapeCacheEntry: public ShapeCacheEntry {
     OvalShapeCacheEntry(float width, float height, SkPaint* paint):
             ShapeCacheEntry(ShapeCacheEntry::kShapeOval, paint) {
-        mWidth = *(uint32_t*) &width;
-        mHeight = *(uint32_t*) &height;
+        memcpy(&mWidth, &width, sizeof(mWidth));
+        memcpy(&mHeight, &height, sizeof(mHeight));
     }
 
     OvalShapeCacheEntry(): ShapeCacheEntry() {
@@ -233,8 +233,8 @@ private:
 struct RectShapeCacheEntry: public ShapeCacheEntry {
     RectShapeCacheEntry(float width, float height, SkPaint* paint):
             ShapeCacheEntry(ShapeCacheEntry::kShapeRect, paint) {
-        mWidth = *(uint32_t*) &width;
-        mHeight = *(uint32_t*) &height;
+        memcpy(&mWidth, &width, sizeof(mWidth));
+        memcpy(&mHeight, &height, sizeof(mHeight));
     }
 
     RectShapeCacheEntry(): ShapeCacheEntry() {
@@ -260,10 +260,10 @@ struct ArcShapeCacheEntry: public ShapeCacheEntry {
     ArcShapeCacheEntry(float width, float height, float startAngle, float sweepAngle,
             bool useCenter, SkPaint* paint):
             ShapeCacheEntry(ShapeCacheEntry::kShapeArc, paint) {
-        mWidth = *(uint32_t*) &width;
-        mHeight = *(uint32_t*) &height;
-        mStartAngle = *(uint32_t*) &startAngle;
-        mSweepAngle = *(uint32_t*) &sweepAngle;
+        memcpy(&mWidth, &width, sizeof(mWidth));
+        memcpy(&mHeight, &height, sizeof(mHeight));
+        memcpy(&mStartAngle, &startAngle, sizeof(mStartAngle));
+        memcpy(&mSweepAngle, &sweepAngle, sizeof(mSweepAngle));
         mUseCenter = useCenter ? 1 : 0;
     }
 

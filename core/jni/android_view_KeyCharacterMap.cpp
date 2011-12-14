@@ -148,7 +148,7 @@ static jchar nativeGetMatch(JNIEnv *env, jobject clazz, jint ptr, jint keyCode,
         return 0;
     }
 
-    char16_t result = map->getMap()->getMatch(keyCode, chars, size_t(numChars), metaState);
+    char16_t result = map->getMap()->getMatch(keyCode, (const char16_t*)chars, size_t(numChars), metaState);
 
     env->ReleasePrimitiveArrayCritical(charsArray, chars, JNI_ABORT);
     return result;
@@ -176,7 +176,7 @@ static jobjectArray nativeGetEvents(JNIEnv *env, jobject clazz, jint ptr,
 
     Vector<KeyEvent> events;
     jobjectArray result = NULL;
-    if (map->getMap()->getEvents(map->getDeviceId(), chars, size_t(numChars), events)) {
+    if (map->getMap()->getEvents(map->getDeviceId(), (const char16_t*)chars, size_t(numChars), events)) {
         result = env->NewObjectArray(jsize(events.size()), gKeyEventClassInfo.clazz, NULL);
         if (result) {
             for (size_t i = 0; i < events.size(); i++) {

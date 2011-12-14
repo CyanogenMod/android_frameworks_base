@@ -102,7 +102,7 @@ private:
     uint32_t flags;
     SkPaint::Hinting hinting;
 
-    inline const UChar* getText() const { return text ? text : textCopy.string(); }
+    inline const UChar* getText() const { return text ? text : (UChar*)textCopy.string(); }
 
 }; // TextLayoutCacheKey
 
