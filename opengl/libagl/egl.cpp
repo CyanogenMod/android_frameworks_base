@@ -41,6 +41,10 @@
 
 #include <private/ui/android_natives_priv.h>
 
+#ifdef LIBAGL_USE_GRALLOC_COPYBITS
+#include <hardware/copybit.h>
+#endif
+
 #include "context.h"
 #include "state.h"
 #include "texture.h"
@@ -252,6 +256,9 @@ private:
     ANativeWindowBuffer*   buffer;
     ANativeWindowBuffer*   previousBuffer;
     gralloc_module_t const*    module;
+#ifdef LIBAGL_USE_GRALLOC_COPYBITS
+    copybit_device_t*          blitengine;
+#endif
     int width;
     int height;
     void* bits;
@@ -337,6 +344,26 @@ private:
         ssize_t count;
     };
     
+#ifdef LIBAGL_USE_GRALLOC_COPYBITS
+    struct region_iterator : public copybit_region_t {
+        region_iterator(const Region& region)
+            : b(region.begin()), e(region.end()) {
+            this->next = iterate;
+        }
+    private:
+        static int iterate(copybit_region_t const * self, copybit_rect_t* rect) {
+            region_iterator const* me = static_cast<region_iterator const*>(self);
+            if (me->b != me->e) {
+                *reinterpret_cast<Rect*>(rect) = *me->b++;
+                return 1;
+            }
+            return 0;
+        }
+        mutable Region::const_iterator b;
+        Region::const_iterator const e;
+    };
+#endif
+
     void copyBlt(
             ANativeWindowBuffer* dst, void* dst_vaddr,
             ANativeWindowBuffer* src, void const* src_vaddr,
@@ -352,11 +379,21 @@ egl_window_surface_v2_t::egl_window_surface_v2_t(EGLDisplay dpy,
         ANativeWindow* window)
     : egl_surface_t(dpy, config, depthFormat), 
     nativeWindow(window), buffer(0), previousBuffer(0), module(0),
+#ifdef LIBAGL_USE_GRALLOC_COPYBITS
+    blitengine(0), bits(NULL)
+#else
     bits(NULL)
+#endif
 {
     hw_module_t const* pModule;
     hw_get_module(GRALLOC_HARDWARE_MODULE_ID, &pModule);
     module = reinterpret_cast<gralloc_module_t const*>(pModule);
+
+#ifdef LIBAGL_USE_GRALLOC_COPYBITS
+    if (hw_get_module(COPYBIT_HARDWARE_MODULE_ID, &pModule) == 0) {
+        copybit_open(pModule, &blitengine);
+    }
+#endif
 
     pixelFormatTable = gglGetPixelFormatTable();
     
@@ -374,6 +411,11 @@ egl_window_surface_v2_t::~egl_window_surface_v2_t() {
         previousBuffer->common.decRef(&previousBuffer->common); 
     }
     nativeWindow->common.decRef(&nativeWindow->common);
+#ifdef LIBAGL_USE_GRALLOC_COPYBITS
+    if (blitengine) {
+        copybit_close(blitengine);
+    }
+#endif
 }
 
 EGLBoolean egl_window_surface_v2_t::connect() 
@@ -462,33 +504,64 @@ void egl_window_surface_v2_t::copyBlt(
 {
     // NOTE: dst and src must be the same format
     
-    Region::const_iterator cur = clip.begin();
-    Region::const_iterator end = clip.end();
+#ifdef LIBAGL_USE_GRALLOC_COPYBITS
+    status_t err = NO_ERROR;
+    copybit_device_t* const copybit = blitengine;
+    if (copybit)  {
+        copybit_image_t simg;
+        simg.w = src->stride;
+        simg.h = src->height;
+        simg.format = src->format;
+        simg.handle = const_cast<native_handle_t*>(src->handle);
 
-    const size_t bpp = pixelFormatTable[src->format].size;
-    const size_t dbpr = dst->stride * bpp;
-    const size_t sbpr = src->stride * bpp;
+        copybit_image_t dimg;
+        dimg.w = dst->stride;
+        dimg.h = dst->height;
+        dimg.format = dst->format;
+        dimg.handle = const_cast<native_handle_t*>(dst->handle);
 
-    uint8_t const * const src_bits = (uint8_t const *)src_vaddr;
-    uint8_t       * const dst_bits = (uint8_t       *)dst_vaddr;
+        copybit->set_parameter(copybit, COPYBIT_TRANSFORM, 0);
+        copybit->set_parameter(copybit, COPYBIT_PLANE_ALPHA, 255);
+        copybit->set_parameter(copybit, COPYBIT_DITHER, COPYBIT_DISABLE);
+        region_iterator it(clip);
+        err = copybit->blit(copybit, &dimg, &simg, &it);
+        if (err != NO_ERROR) {
+            LOGE("copybit failed (%s)", strerror(err));
+         }
+    }
 
-    while (cur != end) {
-        const Rect& r(*cur++);
-        ssize_t w = r.right - r.left;
-        ssize_t h = r.bottom - r.top;
-        if (w <= 0 || h<=0) continue;
-        size_t size = w * bpp;
-        uint8_t const * s = src_bits + (r.left + src->stride * r.top) * bpp;
-        uint8_t       * d = dst_bits + (r.left + dst->stride * r.top) * bpp;
-        if (dbpr==sbpr && size==sbpr) {
-            size *= h;
-            h = 1;
+    if (!copybit || err) {
+#endif
+        Region::const_iterator cur = clip.begin();
+        Region::const_iterator end = clip.end();
+
+        const size_t bpp = pixelFormatTable[src->format].size;
+        const size_t dbpr = dst->stride * bpp;
+        const size_t sbpr = src->stride * bpp;
+
+        uint8_t const * const src_bits = (uint8_t const *)src_vaddr;
+        uint8_t       * const dst_bits = (uint8_t       *)dst_vaddr;
+
+        while (cur != end) {
+            const Rect& r(*cur++);
+            ssize_t w = r.right - r.left;
+            ssize_t h = r.bottom - r.top;
+            if (w <= 0 || h<=0) continue;
+            size_t size = w * bpp;
+            uint8_t const * s = src_bits + (r.left + src->stride * r.top) * bpp;
+            uint8_t       * d = dst_bits + (r.left + dst->stride * r.top) * bpp;
+            if (dbpr==sbpr && size==sbpr) {
+                size *= h;
+                h = 1;
+            }
+            do {
+                memcpy(d, s, size);
+                d += dbpr;
+                s += sbpr;
+            } while (--h > 0);
+#ifdef LIBAGL_USE_GRALLOC_COPYBITS
         }
-        do {
-            memcpy(d, s, size);
-            d += dbpr;
-            s += sbpr;
-        } while (--h > 0);
+#endif
     }
 }
 
@@ -589,6 +662,22 @@ EGLClientBuffer egl_window_surface_v2_t::getRenderBuffer() const
 }
 #endif
 
+#ifdef LIBAGL_USE_GRALLOC_COPYBITS
+static bool supportedCopybitsDestinationFormat(int format) {
+    // Hardware supported
+    switch (format) {
+    case HAL_PIXEL_FORMAT_RGB_565:
+    case HAL_PIXEL_FORMAT_RGBA_8888:
+    case HAL_PIXEL_FORMAT_RGBX_8888:
+    case HAL_PIXEL_FORMAT_RGBA_4444:
+    case HAL_PIXEL_FORMAT_RGBA_5551:
+    case HAL_PIXEL_FORMAT_BGRA_8888:
+        return true;
+    }
+    return false;
+}
+#endif
+
 EGLBoolean egl_window_surface_v2_t::bindDrawSurface(ogles_context_t* gl)
 {
     GGLSurface buffer;
@@ -601,6 +690,18 @@ EGLBoolean egl_window_surface_v2_t::bindDrawSurface(ogles_context_t* gl)
     gl->rasterizer.procs.colorBuffer(gl, &buffer);
     if (depth.data != gl->rasterizer.state.buffers.depth.data)
         gl->rasterizer.procs.depthBuffer(gl, &depth);
+
+#ifdef LIBAGL_USE_GRALLOC_COPYBITS
+    gl->copybits.drawSurfaceBuffer = 0;
+    if (gl->copybits.blitEngine != NULL) {
+        if (supportedCopybitsDestinationFormat(buffer.format)) {
+            buffer_handle_t handle = this->buffer->handle;
+            if (handle != NULL) {
+                gl->copybits.drawSurfaceBuffer = this->buffer;
+            }
+        }
+    }
+#endif // LIBAGL_USE_GRALLOC_COPYBITS
 
     return EGL_TRUE;
 }
