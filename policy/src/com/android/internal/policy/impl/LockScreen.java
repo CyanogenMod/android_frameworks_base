@@ -666,7 +666,7 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         }
         // Safety check in case our preferences in CMParts for hiding the unlock
         // tab don't properly update system settings... ALWAYS provide a way to unlock the phone
-        if (prefHideUnlockTab && (GestureCanUnlock || mSliderUnlockScreen || mTrackballUnlockScreen || mMenuUnlockScreen)) {
+        if (prefHideUnlockTab && (GestureCanUnlock || mTrackballUnlockScreen || mMenuUnlockScreen)) {
             mHideUnlockTab = true;
         } else {
             mHideUnlockTab = false;
@@ -1542,3 +1542,4 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         }
     }
 }
+
