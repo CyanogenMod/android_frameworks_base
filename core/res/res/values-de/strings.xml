@@ -137,6 +137,16 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Funk ausschalten"</string>
     <string name="screen_lock" msgid="799094655496098153">"Display-Sperre"</string>
     <string name="power_off" msgid="4266614107412865048">"Ausschalten"</string>
+    <string name="reboot_system">Telefon Neustarten</string>
+    <string name="global_action_screenshot">Bildschirmfoto</string>
+    <string name="reboot_reboot">Neustart</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Bootmenü</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
+    <string name="reboot_progress">Wird neugestartet...</string>
+    <string name="reboot_confirm">Telefon wird neugestartet.</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Wird heruntergefahren..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Ihr Tablet wird heruntergefahren."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Telefon wird heruntergefahren."</string>
