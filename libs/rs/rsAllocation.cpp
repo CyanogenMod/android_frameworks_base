@@ -130,7 +130,7 @@ void Allocation::elementData(Context *rsc, uint32_t x, const void *data,
         return;
     }
 
-    rsc->mHal.funcs.allocation.elementData1D(rsc, this, x, data, cIdx, sizeBytes);
+    rsc->mHal.funcs.allocation.elementData1D(rsc, this, x, data, sizeBytes, cIdx);
     sendDirty(rsc);
 }
 
@@ -164,7 +164,7 @@ void Allocation::elementData(Context *rsc, uint32_t x, uint32_t y,
         return;
     }
 
-    rsc->mHal.funcs.allocation.elementData2D(rsc, this, x, y, data, cIdx, sizeBytes);
+    rsc->mHal.funcs.allocation.elementData2D(rsc, this, x, y, data, sizeBytes, cIdx);
     sendDirty(rsc);
 }
 
@@ -429,13 +429,13 @@ void rsi_Allocation1DData(Context *rsc, RsAllocation va, uint32_t xoff, uint32_t
 }
 
 void rsi_Allocation2DElementData(Context *rsc, RsAllocation va, uint32_t x, uint32_t y, uint32_t lod, RsAllocationCubemapFace face,
-                                 const void *data, size_t eoff, uint32_t sizeBytes) { // TODO: this seems wrong, eoff and sizeBytes may be swapped
+                                 const void *data, uint32_t sizeBytes, size_t eoff) { 
     Allocation *a = static_cast<Allocation *>(va);
     a->elementData(rsc, x, y, data, eoff, sizeBytes);
 }
 
 void rsi_Allocation1DElementData(Context *rsc, RsAllocation va, uint32_t x, uint32_t lod,
-                                 const void *data, size_t eoff, uint32_t sizeBytes) { // TODO: this seems wrong, eoff and sizeBytes may be swapped
+                                 const void *data, uint32_t sizeBytes, size_t eoff) {
     Allocation *a = static_cast<Allocation *>(va);
     a->elementData(rsc, x, data, eoff, sizeBytes);
 }
