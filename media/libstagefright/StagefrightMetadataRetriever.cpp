@@ -396,6 +396,15 @@ VideoFrame *StagefrightMetadataRetriever::getFrameAtTime(
             frame = extractVideoFrameWithCodecFlags(
                 &mClient, trackMeta, source, OMXCodec::kSoftwareCodecsOnly,
                 timeUs, option);
+            if (frame == NULL){
+                // remake source to ensure its stopped before we start it
+                source.clear();
+                source = mExtractor->getTrack(i);
+                if (source.get() == NULL) {
+                    LOGV("unable to instantiate video track.");
+                    return NULL;
+                }
+            }
         }
     }
 #else
