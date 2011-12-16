@@ -137,6 +137,16 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Désactiver le mode sans fil"</string>
     <string name="screen_lock" msgid="799094655496098153">"Verrouillage de l\'écran"</string>
     <string name="power_off" msgid="4266614107412865048">"Éteindre"</string>
+    <string name="global_action_screenshot">Capture d\'écran</string>
+    <string name="reboot_system">Redémarrer</string>
+    <string name="reboot_reboot">Redémarrer</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
+    <string name="reboot_confirm">Votre appareil va redémarrer</string>
+    <string name="reboot_progress">Redémarrage en cours...</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Arrêt en cours..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Votre tablette va s\'éteindre."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Votre téléphone va s\'éteindre."</string>
