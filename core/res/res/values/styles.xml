@@ -216,8 +216,8 @@ please see styles_device_defaults.xml.
         <item name="windowEnterAnimation">@null</item>
         <item name="windowExitAnimation">@anim/fade_out</item>
     </style>
-    <!-- Status Bar Styles -->
 
+    <!-- Status Bar Styles -->
     <style name="TextAppearance.StatusBar">
         <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
     </style>
@@ -229,17 +229,24 @@ please see styles_device_defaults.xml.
 
     <style name="TextAppearance.StatusBar.Icon">
     </style>
+    <!-- Notification content styles -->
     <style name="TextAppearance.StatusBar.EventContent">
         <item name="android:textColor">?android:attr/textColorSecondary</item>
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">12sp</item>
     </style>
     <style name="TextAppearance.StatusBar.EventContent.Title">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
     </style>
-    <style name="TextAppearance.StatusBar.EventContent.Info">
+    <style name="TextAppearance.StatusBar.EventContent.Line2">
         <item name="android:textSize">13sp</item>
+    </style>
+    <style name="TextAppearance.StatusBar.EventContent.Info">
+        <!-- inherit all -->
+    </style>
+    <style name="TextAppearance.StatusBar.EventContent.Time">
+        <!-- inherit all -->
     </style>
 
     <style name="TextAppearance.Small.CalendarViewWeekDayView">
@@ -1161,8 +1168,9 @@ please see styles_device_defaults.xml.
         <item name="android:background">?android:attr/actionBarItemBackground</item>
         <item name="android:paddingLeft">12dip</item>
         <item name="android:paddingRight">12dip</item>
-        <item name="android:minWidth">56dip</item>
+        <item name="android:minWidth">@android:dimen/action_button_min_width</item>
         <item name="android:minHeight">?android:attr/actionBarSize</item>
+        <item name="android:gravity">center</item>
     </style>
 
     <style name="Widget.ActionButton.Overflow">
@@ -1359,7 +1367,7 @@ please see styles_device_defaults.xml.
         <item name="android:textSize">12sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">?android:attr/actionMenuTextColor</item>
-        <item name="android:textAllCaps">true</item>
+        <item name="android:textAllCaps">@android:bool/config_actionMenuItemAllCaps</item>
     </style>
 
     <style name="TextAppearance.Holo.Widget.ActionMode">
@@ -1646,6 +1654,8 @@ please see styles_device_defaults.xml.
         <item name="android:flingable">true</item>
         <item name="android:selectionDivider">@android:drawable/numberpicker_selection_divider</item>
         <item name="android:selectionDividerHeight">2dip</item>
+        <item name="android:minWidth">48dip</item>
+        <item name="android:maxHeight">200dip</item>
     </style>
 
     <style name="Widget.Holo.TimePicker" parent="Widget.TimePicker">
@@ -1661,19 +1671,21 @@ please see styles_device_defaults.xml.
         <item name="android:background">@null</item>
         <item name="android:src">@android:drawable/numberpicker_up_btn_holo_dark</item>
         <item name="android:paddingTop">16dip</item>
-        <item name="android:paddingBottom">36dip</item>
+        <item name="android:paddingBottom">22dip</item>
     </style>
 
     <style name="Widget.Holo.ImageButton.NumberPickerDownButton">
         <item name="android:background">@null</item>
         <item name="android:src">@android:drawable/numberpicker_down_btn_holo_dark</item>
-        <item name="android:paddingTop">36dip</item>
+        <item name="android:paddingTop">22dip</item>
         <item name="android:paddingBottom">16dip</item>
     </style>
 
     <style name="Widget.Holo.EditText.NumberPickerInputText">
         <item name="android:paddingTop">13sp</item>
         <item name="android:paddingBottom">13sp</item>
+        <item name="android:paddingLeft">2sp</item>
+        <item name="android:paddingRight">2sp</item>
         <item name="android:gravity">center</item>
         <item name="android:singleLine">true</item>
         <item name="android:textSize">18sp</item>
@@ -1786,6 +1798,7 @@ please see styles_device_defaults.xml.
         <item name="android:dropDownWidth">wrap_content</item>
         <item name="android:popupPromptView">@android:layout/simple_dropdown_hint</item>
         <item name="android:gravity">left|center_vertical</item>
+        <item name="android:disableChildrenWhenDisabled">true</item>
     </style>
 
     <style name="Widget.Holo.Spinner.DropDown">
@@ -1811,6 +1824,7 @@ please see styles_device_defaults.xml.
     </style>
 
     <style name="Widget.Holo.Tab" parent="Widget.Holo.ActionBar.TabView">
+        <item name="android:background">@android:drawable/tab_indicator_holo</item>
         <item name="android:layout_width">0dip</item>
         <item name="android:layout_weight">1</item>
         <item name="android:minWidth">80dip</item>
@@ -1881,7 +1895,7 @@ please see styles_device_defaults.xml.
     </style>
 
     <style name="Widget.Holo.ActionButton" parent="Widget.ActionButton">
-        <item name="android:minWidth">56dip</item>
+        <item name="android:minWidth">@android:dimen/action_button_min_width</item>
         <item name="android:gravity">center</item>
         <item name="android:paddingLeft">12dip</item>
         <item name="android:paddingRight">12dip</item>
@@ -1898,7 +1912,7 @@ please see styles_device_defaults.xml.
     </style>
 
     <style name="Widget.Holo.ActionBar.TabView" parent="Widget.ActionBar.TabView">
-        <item name="android:background">@drawable/tab_indicator_holo</item>
+        <item name="android:background">@drawable/tab_indicator_ab_holo</item>
         <item name="android:paddingLeft">16dip</item>
         <item name="android:paddingRight">16dip</item>
     </style>
@@ -2265,6 +2279,10 @@ please see styles_device_defaults.xml.
     </style>
 
     <style name="Widget.Holo.Light.Tab" parent="Widget.Holo.Light.ActionBar.TabView">
+        <item name="android:background">@android:drawable/tab_indicator_holo</item>
+        <item name="android:layout_width">0dip</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:minWidth">80dip</item>
     </style>
 
     <style name="Widget.Holo.Light.ActionBar.TabBar" parent="Widget.Holo.ActionBar.TabBar">

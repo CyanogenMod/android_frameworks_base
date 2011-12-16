@@ -123,6 +123,8 @@ public class WifiStateMachine extends StateMachine {
     private final LruCache<String, ScanResult> mScanResultCache;
 
     private String mInterfaceName;
+    /* Tethering interface could be seperate from wlan interface */
+    private String mTetherInterfaceName;
 
     private int mLastSignalLevel = -1;
     private String mLastBssid;
@@ -156,6 +158,14 @@ public class WifiStateMachine extends StateMachine {
     /* Tracks sequence number on stop failure message */
     private int mSupplicantStopFailureToken = 0;
 
+    /**
+     * Tether state change notification time out
+     */
+    private static final int TETHER_NOTIFICATION_TIME_OUT_MSECS = 5000;
+
+    /* Tracks sequence number on a tether notification time out */
+    private int mTetherToken = 0;
+
     private LinkProperties mLinkProperties;
 
     // Wakelock held during wifi start/stop and driver load/unload
@@ -184,6 +194,7 @@ public class WifiStateMachine extends StateMachine {
     private WifiP2pManager mWifiP2pManager;
     //Used to initiate a connection with WifiP2pService
     private AsyncChannel mWifiP2pChannel = new AsyncChannel();
+    private AsyncChannel mWifiApConfigChannel = new AsyncChannel();
 
     // Event log tags (must be in sync with event-log-tags)
     private static final int EVENTLOG_WIFI_STATE_CHANGED        = 50021;
@@ -211,7 +222,7 @@ public class WifiStateMachine extends StateMachine {
     static final int CMD_STOP_SUPPLICANT                  = BASE + 12;
     /* Start the driver */
     static final int CMD_START_DRIVER                     = BASE + 13;
-    /* Start the driver */
+    /* Stop the driver */
     static final int CMD_STOP_DRIVER                      = BASE + 14;
     /* Indicates Static IP succeded */
     static final int CMD_STATIC_IP_SUCCESS                = BASE + 15;
@@ -219,6 +230,9 @@ public class WifiStateMachine extends StateMachine {
     static final int CMD_STATIC_IP_FAILURE                = BASE + 16;
     /* Indicates supplicant stop failed */
     static final int CMD_STOP_SUPPLICANT_FAILED           = BASE + 17;
+    /* Delayed stop to avoid shutting down driver too quick*/
+    static final int CMD_DELAYED_STOP_DRIVER              = BASE + 18;
+
 
     /* Start the soft access point */
     static final int CMD_START_AP                         = BASE + 21;
@@ -230,12 +244,18 @@ public class WifiStateMachine extends StateMachine {
     static final int CMD_STOP_AP                          = BASE + 24;
     /* Set the soft access point configuration */
     static final int CMD_SET_AP_CONFIG                    = BASE + 25;
-    /* Get the soft access point configuration */
-    static final int CMD_GET_AP_CONFIG                    = BASE + 26;
-    /* Set configuration on tether interface */
-    static final int CMD_TETHER_INTERFACE                 = BASE + 27;
+    /* Soft access point configuration set completed */
+    static final int CMD_SET_AP_CONFIG_COMPLETED          = BASE + 26;
+    /* Request the soft access point configuration */
+    static final int CMD_REQUEST_AP_CONFIG                = BASE + 27;
+    /* Response to access point configuration request */
+    static final int CMD_RESPONSE_AP_CONFIG               = BASE + 28;
+    /* Invoked when getting a tether state change notification */
+    static final int CMD_TETHER_STATE_CHANGE              = BASE + 29;
+    /* A delayed message sent to indicate tether state change failed to arrive */
+    static final int CMD_TETHER_NOTIFICATION_TIMED_OUT    = BASE + 30;
 
-    static final int CMD_BLUETOOTH_ADAPTER_STATE_CHANGE   = BASE + 28;
+    static final int CMD_BLUETOOTH_ADAPTER_STATE_CHANGE   = BASE + 31;
 
     /* Supplicant commands */
     /* Is supplicant alive ? */
@@ -286,8 +306,6 @@ public class WifiStateMachine extends StateMachine {
     static final int CMD_SET_HIGH_PERF_MODE               = BASE + 77;
     /* Set the country code */
     static final int CMD_SET_COUNTRY_CODE                 = BASE + 80;
-    /* Request connectivity manager wake lock before driver stop */
-    static final int CMD_REQUEST_CM_WAKELOCK              = BASE + 81;
     /* Enables RSSI poll */
     static final int CMD_ENABLE_RSSI_POLL                 = BASE + 82;
     /* RSSI poll */
@@ -350,6 +368,10 @@ public class WifiStateMachine extends StateMachine {
     private static final int SUCCESS = 1;
     private static final int FAILURE = -1;
 
+    /* Phone in emergency call back mode */
+    private static final int IN_ECM_STATE = 1;
+    private static final int NOT_IN_ECM_STATE = 0;
+
     /**
      * The maximum number of times we will retry a connection to an access point
      * for which we have failed in acquiring an IP address from DHCP. A value of
@@ -389,6 +411,13 @@ public class WifiStateMachine extends StateMachine {
     private static final int MIN_INTERVAL_ENABLE_ALL_NETWORKS_MS = 10 * 60 * 1000; /* 10 minutes */
     private long mLastEnableAllNetworksTime;
 
+    /**
+     * Starting and shutting down driver too quick causes problems leading to driver
+     * being in a bad state. Delay driver stop.
+     */
+    private static final int DELAYED_DRIVER_STOP_MS = 2 * 60 * 1000; /* 2 minutes */
+    private int mDelayedStopCounter;
+    private boolean mInDelayedStop = false;
 
     private static final int MIN_RSSI = -200;
     private static final int MAX_RSSI = 256;
@@ -440,11 +469,24 @@ public class WifiStateMachine extends StateMachine {
     private State mSoftApStartingState = new SoftApStartingState();
     /* Soft ap is running */
     private State mSoftApStartedState = new SoftApStartedState();
+    /* Soft ap is running and we are waiting for tether notification */
+    private State mTetheringState = new TetheringState();
     /* Soft ap is running and we are tethered through connectivity service */
     private State mTetheredState = new TetheredState();
+    /* Waiting for untether confirmation to stop soft Ap */
+    private State mSoftApStoppingState = new SoftApStoppingState();
 
     /* Wait till p2p is disabled */
     private State mWaitForP2pDisableState = new WaitForP2pDisableState();
+
+    private class TetherStateChange {
+        ArrayList<String> available;
+        ArrayList<String> active;
+        TetherStateChange(ArrayList<String> av, ArrayList<String> ac) {
+            available = av;
+            active = ac;
+        }
+    }
 
 
     /**
@@ -520,6 +562,11 @@ public class WifiStateMachine extends StateMachine {
         mWpsStateMachine = new WpsStateMachine(context, this, getHandler());
         mLinkProperties = new LinkProperties();
 
+        WifiApConfigStore wifiApConfigStore = WifiApConfigStore.makeWifiApConfigStore(
+                context, getHandler());
+        wifiApConfigStore.loadApConfiguration();
+        mWifiApConfigChannel.connectSync(mContext, getHandler(), wifiApConfigStore.getMessenger());
+
         mNetworkInfo.setIsAvailable(false);
         mLinkProperties.clear();
         mLastBssid = null;
@@ -542,7 +589,9 @@ public class WifiStateMachine extends StateMachine {
                 public void onReceive(Context context, Intent intent) {
                     ArrayList<String> available = intent.getStringArrayListExtra(
                             ConnectivityManager.EXTRA_AVAILABLE_TETHER);
-                    sendMessage(CMD_TETHER_INTERFACE, available);
+                    ArrayList<String> active = intent.getStringArrayListExtra(
+                            ConnectivityManager.EXTRA_ACTIVE_TETHER);
+                    sendMessage(CMD_TETHER_STATE_CHANGE, new TetherStateChange(available, active));
                 }
             },new IntentFilter(ConnectivityManager.ACTION_TETHER_STATE_CHANGED));
 
@@ -583,7 +632,9 @@ public class WifiStateMachine extends StateMachine {
             addState(mSupplicantStoppingState, mDefaultState);
             addState(mSoftApStartingState, mDefaultState);
             addState(mSoftApStartedState, mDefaultState);
+                addState(mTetheringState, mSoftApStartedState);
                 addState(mTetheredState, mSoftApStartedState);
+            addState(mSoftApStoppingState, mDefaultState);
             addState(mWaitForP2pDisableState, mDefaultState);
 
         setInitialState(mInitialState);
@@ -649,11 +700,11 @@ public class WifiStateMachine extends StateMachine {
     }
 
     public void setWifiApConfiguration(WifiConfiguration config) {
-        sendMessage(obtainMessage(CMD_SET_AP_CONFIG, config));
+        mWifiApConfigChannel.sendMessage(CMD_SET_AP_CONFIG, config);
     }
 
-    public WifiConfiguration syncGetWifiApConfiguration(AsyncChannel channel) {
-        Message resultMsg = channel.sendMessageSynchronously(CMD_GET_AP_CONFIG);
+    public WifiConfiguration syncGetWifiApConfiguration() {
+        Message resultMsg = mWifiApConfigChannel.sendMessageSynchronously(CMD_REQUEST_AP_CONFIG);
         WifiConfiguration ret = (WifiConfiguration) resultMsg.obj;
         resultMsg.recycle();
         return ret;
@@ -731,11 +782,11 @@ public class WifiStateMachine extends StateMachine {
     /**
      * TODO: doc
      */
-    public void setDriverStart(boolean enable) {
+    public void setDriverStart(boolean enable, boolean ecm) {
         if (enable) {
             sendMessage(CMD_START_DRIVER);
         } else {
-            sendMessage(CMD_STOP_DRIVER);
+            sendMessage(obtainMessage(CMD_STOP_DRIVER, ecm ? IN_ECM_STATE : NOT_IN_ECM_STATE, 0));
         }
     }
 
@@ -1012,15 +1063,6 @@ public class WifiStateMachine extends StateMachine {
         return result;
     }
 
-    /**
-     * Request a wakelock with connectivity service to
-     * keep the device awake until we hand-off from wifi
-     * to an alternate network
-     */
-    public void requestCmWakeLock() {
-        sendMessage(CMD_REQUEST_CM_WAKELOCK);
-    }
-
     public void updateBatteryWorkSource(WorkSource newSource) {
         synchronized (mRunningWifiUids) {
             try {
@@ -1119,6 +1161,7 @@ public class WifiStateMachine extends StateMachine {
                         loge("Error tethering on " + intf);
                         return false;
                     }
+                    mTetherInterfaceName = intf;
                     return true;
                 }
             }
@@ -1145,9 +1188,25 @@ public class WifiStateMachine extends StateMachine {
             loge("Error resetting interface " + mInterfaceName + ", :" + e);
         }
 
-        if (mCm.untether(mInterfaceName) != ConnectivityManager.TETHER_ERROR_NO_ERROR) {
+        if (mCm.untether(mTetherInterfaceName) != ConnectivityManager.TETHER_ERROR_NO_ERROR) {
             loge("Untether initiate failed!");
         }
+    }
+
+    private boolean isWifiTethered(ArrayList<String> active) {
+
+        checkAndSetConnectivityInstance();
+
+        String[] wifiRegexs = mCm.getTetherableWifiRegexs();
+        for (String intf : active) {
+            for (String regex : wifiRegexs) {
+                if (intf.matches(regex)) {
+                    return true;
+                }
+            }
+        }
+        // We found no interfaces that are tethered
+        return false;
     }
 
     /**
@@ -1651,6 +1710,7 @@ public class WifiStateMachine extends StateMachine {
             mDhcpInfoInternal = dhcpInfoInternal;
         }
         mLastSignalLevel = -1; // force update of signal strength
+        mReconnectCount = 0; //Reset IP failure tracking
         WifiConfigStore.setIpConfiguration(mLastNetworkId, dhcpInfoInternal);
         InetAddress addr = NetworkUtils.numericToInetAddress(dhcpInfoInternal.ipAddress);
         mWifiInfo.setInetAddress(addr);
@@ -1703,25 +1763,27 @@ public class WifiStateMachine extends StateMachine {
      * TODO: Add control channel setup through hostapd that allows changing config
      * on a running daemon
      */
-    private boolean startSoftApWithConfig(WifiConfiguration config) {
-        if (config == null) {
-            config = WifiApConfigStore.getApConfiguration();
-        } else {
-            WifiApConfigStore.setApConfiguration(config);
-        }
-        try {
-            mNwService.startAccessPoint(config, mInterfaceName, SOFTAP_IFACE);
-        } catch (Exception e) {
-            loge("Exception in softap start " + e);
-            try {
-                mNwService.stopAccessPoint(mInterfaceName);
-                mNwService.startAccessPoint(config, mInterfaceName, SOFTAP_IFACE);
-            } catch (Exception e1) {
-                loge("Exception in softap re-start " + e1);
-                return false;
+    private void startSoftApWithConfig(final WifiConfiguration config) {
+        // start hostapd on a seperate thread
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    mNwService.startAccessPoint(config, mInterfaceName, SOFTAP_IFACE);
+                } catch (Exception e) {
+                    loge("Exception in softap start " + e);
+                    try {
+                        mNwService.stopAccessPoint(mInterfaceName);
+                        mNwService.startAccessPoint(config, mInterfaceName, SOFTAP_IFACE);
+                    } catch (Exception e1) {
+                        loge("Exception in softap re-start " + e1);
+                        sendMessage(CMD_START_AP_FAILURE);
+                        return;
+                    }
+                }
+                if (DBG) log("Soft AP start successful");
+                sendMessage(CMD_START_AP_SUCCESS);
             }
-        }
-        return true;
+        }).start();
     }
 
     /********************************************************
@@ -1764,13 +1826,6 @@ public class WifiStateMachine extends StateMachine {
                 case CMD_ENABLE_BACKGROUND_SCAN:
                     mEnableBackgroundScan = (message.arg1 == 1);
                     break;
-                case CMD_SET_AP_CONFIG:
-                    WifiApConfigStore.setApConfiguration((WifiConfiguration) message.obj);
-                    break;
-                case CMD_GET_AP_CONFIG:
-                    WifiConfiguration config = WifiApConfigStore.getApConfiguration();
-                    mReplyChannel.replyToMessage(message, message.what, config);
-                    break;
                     /* Discard */
                 case CMD_LOAD_DRIVER:
                 case CMD_UNLOAD_DRIVER:
@@ -1779,11 +1834,13 @@ public class WifiStateMachine extends StateMachine {
                 case CMD_STOP_SUPPLICANT_FAILED:
                 case CMD_START_DRIVER:
                 case CMD_STOP_DRIVER:
+                case CMD_DELAYED_STOP_DRIVER:
                 case CMD_START_AP:
                 case CMD_START_AP_SUCCESS:
                 case CMD_START_AP_FAILURE:
                 case CMD_STOP_AP:
-                case CMD_TETHER_INTERFACE:
+                case CMD_TETHER_STATE_CHANGE:
+                case CMD_TETHER_NOTIFICATION_TIMED_OUT:
                 case CMD_START_SCAN:
                 case CMD_DISCONNECT:
                 case CMD_RECONNECT:
@@ -1803,7 +1860,6 @@ public class WifiStateMachine extends StateMachine {
                 case CMD_SET_HIGH_PERF_MODE:
                 case CMD_SET_COUNTRY_CODE:
                 case CMD_SET_FREQUENCY_BAND:
-                case CMD_REQUEST_CM_WAKELOCK:
                 case CMD_CONNECT_NETWORK:
                 case CMD_SAVE_NETWORK:
                 case CMD_FORGET_NETWORK:
@@ -1811,6 +1867,11 @@ public class WifiStateMachine extends StateMachine {
                 case CMD_ENABLE_ALL_NETWORKS:
                 case DhcpStateMachine.CMD_PRE_DHCP_ACTION:
                 case DhcpStateMachine.CMD_POST_DHCP_ACTION:
+                /* Handled by WifiApConfigStore */
+                case CMD_SET_AP_CONFIG:
+                case CMD_SET_AP_CONFIG_COMPLETED:
+                case CMD_REQUEST_AP_CONFIG:
+                case CMD_RESPONSE_AP_CONFIG:
                     break;
                 case WifiMonitor.DRIVER_HUNG_EVENT:
                     setWifiEnabled(false);
@@ -1843,8 +1904,6 @@ public class WifiStateMachine extends StateMachine {
             // [7 - 0] HSM state change
             // 50021 wifi_state_changed (custom|1|5)
             EventLog.writeEvent(EVENTLOG_WIFI_STATE_CHANGED, getName());
-
-            WifiApConfigStore.initialize(mContext);
 
             if (WifiNative.isDriverLoaded()) {
                 transitionTo(mDriverLoadedState);
@@ -2441,6 +2500,7 @@ public class WifiStateMachine extends StateMachine {
             EventLog.writeEvent(EVENTLOG_WIFI_STATE_CHANGED, getName());
 
             mIsRunning = true;
+            mInDelayedStop = false;
             updateBatteryWorkSource(null);
 
             /**
@@ -2520,6 +2580,39 @@ public class WifiStateMachine extends StateMachine {
                     WifiNative.setBluetoothCoexistenceScanModeCommand(mBluetoothConnectionActive);
                     break;
                 case CMD_STOP_DRIVER:
+                    int mode = message.arg1;
+
+                    /* Already doing a delayed stop && not in ecm state */
+                    if (mInDelayedStop && mode != IN_ECM_STATE) {
+                        if (DBG) log("Already in delayed stop");
+                        break;
+                    }
+                    mInDelayedStop = true;
+                    mDelayedStopCounter++;
+                    if (DBG) log("Delayed stop message " + mDelayedStopCounter);
+
+                    if (mode == IN_ECM_STATE) {
+                        /* send a shut down immediately */
+                        sendMessage(obtainMessage(CMD_DELAYED_STOP_DRIVER, mDelayedStopCounter, 0));
+                    } else {
+                        /* send regular delayed shut down */
+                        sendMessageDelayed(obtainMessage(CMD_DELAYED_STOP_DRIVER,
+                                mDelayedStopCounter, 0), DELAYED_DRIVER_STOP_MS);
+                    }
+                    break;
+                case CMD_START_DRIVER:
+                    if (mInDelayedStop) {
+                        mInDelayedStop = false;
+                        mDelayedStopCounter++;
+                        if (DBG) log("Delayed stop ignored due to start");
+                    }
+                    break;
+                case CMD_DELAYED_STOP_DRIVER:
+                    if (message.arg1 != mDelayedStopCounter) break;
+                    if (getCurrentState() != mDisconnectedState) {
+                        WifiNative.disconnectCommand();
+                        handleNetworkDisconnect();
+                    }
                     mWakeLock.acquire();
                     WifiNative.stopDriverCommand();
                     transitionTo(mDriverStoppingState);
@@ -2878,10 +2971,6 @@ public class WifiStateMachine extends StateMachine {
                   /* Ignore */
               case WifiMonitor.NETWORK_CONNECTION_EVENT:
                   break;
-              case CMD_STOP_DRIVER:
-                  sendMessage(CMD_DISCONNECT);
-                  deferMessage(message);
-                  break;
               case CMD_SET_SCAN_MODE:
                   if (message.arg1 == SCAN_ONLY_MODE) {
                       sendMessage(CMD_DISCONNECT);
@@ -2935,14 +3024,6 @@ public class WifiStateMachine extends StateMachine {
                 case CMD_DISCONNECT:
                     WifiNative.disconnectCommand();
                     transitionTo(mDisconnectingState);
-                    break;
-                case CMD_STOP_DRIVER:
-                    sendMessage(CMD_DISCONNECT);
-                    deferMessage(message);
-                    break;
-                case CMD_REQUEST_CM_WAKELOCK:
-                    checkAndSetConnectivityInstance();
-                    mCm.requestNetworkTransitionWakelock(TAG);
                     break;
                 case CMD_SET_SCAN_MODE:
                     if (message.arg1 == SCAN_ONLY_MODE) {
@@ -3016,6 +3097,11 @@ public class WifiStateMachine extends StateMachine {
         }
         @Override
         public void exit() {
+
+            /* Request a CS wakelock during transition to mobile */
+            checkAndSetConnectivityInstance();
+            mCm.requestNetworkTransitionWakelock(TAG);
+
             /* If a scan result is pending in connected state, the supplicant
              * is in SCAN_ONLY_MODE. Restore CONNECT_MODE on exit
              */
@@ -3035,9 +3121,6 @@ public class WifiStateMachine extends StateMachine {
         public boolean processMessage(Message message) {
             if (DBG) log(getName() + message.toString() + "\n");
             switch (message.what) {
-                case CMD_STOP_DRIVER: /* Stop driver only after disconnect handled */
-                    deferMessage(message);
-                    break;
                 case CMD_SET_SCAN_MODE:
                     if (message.arg1 == SCAN_ONLY_MODE) {
                         deferMessage(message);
@@ -3217,21 +3300,19 @@ public class WifiStateMachine extends StateMachine {
             if (DBG) log(getName() + "\n");
             EventLog.writeEvent(EVENTLOG_WIFI_STATE_CHANGED, getName());
 
-            final Message message = Message.obtain(getCurrentMessage());
-            final WifiConfiguration config = (WifiConfiguration) message.obj;
+            final Message message = getCurrentMessage();
+            if (message.what == CMD_START_AP) {
+                final WifiConfiguration config = (WifiConfiguration) message.obj;
 
-            // start hostapd on a seperate thread
-            new Thread(new Runnable() {
-                public void run() {
-                    if (startSoftApWithConfig(config)) {
-                        if (DBG) log("Soft AP start successful");
-                        sendMessage(CMD_START_AP_SUCCESS);
-                    } else {
-                        loge("Soft AP start failed");
-                        sendMessage(CMD_START_AP_FAILURE);
-                    }
+                if (config == null) {
+                    mWifiApConfigChannel.sendMessage(CMD_REQUEST_AP_CONFIG);
+                } else {
+                    mWifiApConfigChannel.sendMessage(CMD_SET_AP_CONFIG, config);
+                    startSoftApWithConfig(config);
                 }
-            }).start();
+            } else {
+                throw new RuntimeException("Illegal transition to SoftApStartingState: " + message);
+            }
         }
         @Override
         public boolean processMessage(Message message) {
@@ -3252,9 +3333,18 @@ public class WifiStateMachine extends StateMachine {
                 case CMD_SET_FREQUENCY_BAND:
                 case CMD_START_PACKET_FILTERING:
                 case CMD_STOP_PACKET_FILTERING:
-                case CMD_TETHER_INTERFACE:
+                case CMD_TETHER_STATE_CHANGE:
                 case WifiP2pService.P2P_ENABLE_PENDING:
                     deferMessage(message);
+                    break;
+                case WifiStateMachine.CMD_RESPONSE_AP_CONFIG:
+                    WifiConfiguration config = (WifiConfiguration) message.obj;
+                    if (config != null) {
+                        startSoftApWithConfig(config);
+                    } else {
+                        loge("Softap config is null!");
+                        sendMessage(CMD_START_AP_FAILURE);
+                    }
                     break;
                 case CMD_START_AP_SUCCESS:
                     setWifiApState(WIFI_AP_STATE_ENABLED);
@@ -3285,7 +3375,8 @@ public class WifiStateMachine extends StateMachine {
                 case CMD_STOP_AP:
                     if (DBG) log("Stopping Soft AP");
                     setWifiApState(WIFI_AP_STATE_DISABLING);
-                    stopTethering();
+
+                    /* We have not tethered at this point, so we just shutdown soft Ap */
                     try {
                         mNwService.stopAccessPoint(mInterfaceName);
                     } catch(Exception e) {
@@ -3301,10 +3392,10 @@ public class WifiStateMachine extends StateMachine {
                    loge("Cannot start supplicant with a running soft AP");
                     setWifiState(WIFI_STATE_UNKNOWN);
                     break;
-                case CMD_TETHER_INTERFACE:
-                    ArrayList<String> available = (ArrayList<String>) message.obj;
-                    if (startTethering(available)) {
-                        transitionTo(mTetheredState);
+                case CMD_TETHER_STATE_CHANGE:
+                    TetherStateChange stateChange = (TetherStateChange) message.obj;
+                    if (startTethering(stateChange.available)) {
+                        transitionTo(mTetheringState);
                     }
                     break;
                 case WifiP2pService.P2P_ENABLE_PENDING:
@@ -3364,6 +3455,58 @@ public class WifiStateMachine extends StateMachine {
         }
     }
 
+    class TetheringState extends State {
+        @Override
+        public void enter() {
+            if (DBG) log(getName() + "\n");
+            EventLog.writeEvent(EVENTLOG_WIFI_STATE_CHANGED, getName());
+
+            /* Send ourselves a delayed message to shut down if tethering fails to notify */
+            sendMessageDelayed(obtainMessage(CMD_TETHER_NOTIFICATION_TIMED_OUT,
+                    ++mTetherToken, 0), TETHER_NOTIFICATION_TIME_OUT_MSECS);
+        }
+        @Override
+        public boolean processMessage(Message message) {
+            if (DBG) log(getName() + message.toString() + "\n");
+            switch(message.what) {
+                case CMD_TETHER_STATE_CHANGE:
+                    TetherStateChange stateChange = (TetherStateChange) message.obj;
+                    if (isWifiTethered(stateChange.active)) {
+                        transitionTo(mTetheredState);
+                    }
+                    return HANDLED;
+                case CMD_TETHER_NOTIFICATION_TIMED_OUT:
+                    if (message.arg1 == mTetherToken) {
+                        loge("Failed to get tether update, shutdown soft access point");
+                        setWifiApEnabled(null, false);
+                    }
+                    break;
+                case CMD_LOAD_DRIVER:
+                case CMD_UNLOAD_DRIVER:
+                case CMD_START_SUPPLICANT:
+                case CMD_STOP_SUPPLICANT:
+                case CMD_START_AP:
+                case CMD_STOP_AP:
+                case CMD_START_DRIVER:
+                case CMD_STOP_DRIVER:
+                case CMD_SET_SCAN_MODE:
+                case CMD_SET_SCAN_TYPE:
+                case CMD_SET_HIGH_PERF_MODE:
+                case CMD_SET_COUNTRY_CODE:
+                case CMD_SET_FREQUENCY_BAND:
+                case CMD_START_PACKET_FILTERING:
+                case CMD_STOP_PACKET_FILTERING:
+                case WifiP2pService.P2P_ENABLE_PENDING:
+                    deferMessage(message);
+                    break;
+                default:
+                    return NOT_HANDLED;
+            }
+            EventLog.writeEvent(EVENTLOG_WIFI_EVENT_HANDLED, message.what);
+            return HANDLED;
+        }
+    }
+
     class TetheredState extends State {
         @Override
         public void enter() {
@@ -3374,13 +3517,89 @@ public class WifiStateMachine extends StateMachine {
         public boolean processMessage(Message message) {
             if (DBG) log(getName() + message.toString() + "\n");
             switch(message.what) {
-               case CMD_TETHER_INTERFACE:
-                    // Ignore any duplicate interface available notifications
-                    // when in tethered state
+                case CMD_TETHER_STATE_CHANGE:
+                    TetherStateChange stateChange = (TetherStateChange) message.obj;
+                    if (!isWifiTethered(stateChange.active)) {
+                        loge("Tethering reports wifi as untethered!, shut down soft Ap");
+                        setWifiApEnabled(null, false);
+                    }
                     return HANDLED;
+                case CMD_STOP_AP:
+                    if (DBG) log("Untethering before stopping AP");
+                    setWifiApState(WIFI_AP_STATE_DISABLING);
+                    stopTethering();
+                    transitionTo(mSoftApStoppingState);
+                    break;
                 default:
                     return NOT_HANDLED;
             }
+            EventLog.writeEvent(EVENTLOG_WIFI_EVENT_HANDLED, message.what);
+            return HANDLED;
+        }
+    }
+
+    class SoftApStoppingState extends State {
+        @Override
+        public void enter() {
+            if (DBG) log(getName() + "\n");
+            EventLog.writeEvent(EVENTLOG_WIFI_STATE_CHANGED, getName());
+
+            /* Send ourselves a delayed message to shut down if tethering fails to notify */
+            sendMessageDelayed(obtainMessage(CMD_TETHER_NOTIFICATION_TIMED_OUT,
+                    ++mTetherToken, 0), TETHER_NOTIFICATION_TIME_OUT_MSECS);
+
+        }
+        @Override
+        public boolean processMessage(Message message) {
+            if (DBG) log(getName() + message.toString() + "\n");
+            switch(message.what) {
+                case CMD_TETHER_STATE_CHANGE:
+                    TetherStateChange stateChange = (TetherStateChange) message.obj;
+
+                    /* Wait till wifi is untethered */
+                    if (isWifiTethered(stateChange.active)) break;
+
+                    try {
+                        mNwService.stopAccessPoint(mInterfaceName);
+                    } catch(Exception e) {
+                        loge("Exception in stopAccessPoint()");
+                    }
+                    transitionTo(mDriverLoadedState);
+                    break;
+                case CMD_TETHER_NOTIFICATION_TIMED_OUT:
+                    if (message.arg1 == mTetherToken) {
+                        loge("Failed to get tether update, force stop access point");
+                        try {
+                            mNwService.stopAccessPoint(mInterfaceName);
+                        } catch(Exception e) {
+                            loge("Exception in stopAccessPoint()");
+                        }
+                        transitionTo(mDriverLoadedState);
+                    }
+                    break;
+                case CMD_LOAD_DRIVER:
+                case CMD_UNLOAD_DRIVER:
+                case CMD_START_SUPPLICANT:
+                case CMD_STOP_SUPPLICANT:
+                case CMD_START_AP:
+                case CMD_STOP_AP:
+                case CMD_START_DRIVER:
+                case CMD_STOP_DRIVER:
+                case CMD_SET_SCAN_MODE:
+                case CMD_SET_SCAN_TYPE:
+                case CMD_SET_HIGH_PERF_MODE:
+                case CMD_SET_COUNTRY_CODE:
+                case CMD_SET_FREQUENCY_BAND:
+                case CMD_START_PACKET_FILTERING:
+                case CMD_STOP_PACKET_FILTERING:
+                case WifiP2pService.P2P_ENABLE_PENDING:
+                    deferMessage(message);
+                    break;
+                default:
+                    return NOT_HANDLED;
+            }
+            EventLog.writeEvent(EVENTLOG_WIFI_EVENT_HANDLED, message.what);
+            return HANDLED;
         }
     }
 

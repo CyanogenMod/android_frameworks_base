@@ -286,7 +286,8 @@ bool SensorService::threadLoop()
         }
     } while (count >= 0 || Thread::exitPending());
 
-    LOGW("Exiting SensorService::threadLoop!");
+    LOGW("Exiting SensorService::threadLoop => aborting...");
+    abort();
     return false;
 }
 
@@ -471,14 +472,21 @@ status_t SensorService::setEventRate(const sp<SensorEventConnection>& connection
     if (mInitCheck != NO_ERROR)
         return mInitCheck;
 
+    SensorInterface* sensor = mSensorMap.valueFor(handle);
+    if (!sensor)
+        return BAD_VALUE;
+
     if (ns < 0)
         return BAD_VALUE;
+
+    nsecs_t minDelayNs = sensor->getSensor().getMinDelayNs();
+    if (ns < minDelayNs) {
+        ns = minDelayNs;
+    }
 
     if (ns < MINIMUM_EVENTS_PERIOD)
         ns = MINIMUM_EVENTS_PERIOD;
 
-    SensorInterface* sensor = mSensorMap.valueFor(handle);
-    if (!sensor) return BAD_VALUE;
     return sensor->setDelay(connection.get(), handle, ns);
 }
 

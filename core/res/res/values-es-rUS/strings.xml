@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Apagar el teléfono inalámbrico"</string>
     <string name="screen_lock" msgid="799094655496098153">"Bloqueo de pantalla"</string>
     <string name="power_off" msgid="4266614107412865048">"Apagar"</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"Apagando…"</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Tu tablet se apagará."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Tu teléfono se apagará."</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"lee los datos confidenciales del registro"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"Permite que una aplicación lea diversos archivos de registro del sistema. Esto le permite descubrir información general acerca de lo que haces con el tablet, y puede potencialmente incluir información personal o privada."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"Permite que una aplicación lea los diversos archivos de registro del sistema. Esto le permite descubrir información general acerca de lo que haces con el teléfono, y puede potencialmente incluir información personal o privada."</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"Usar cualquier decodificador de medios para la reproducción"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"Permite que una aplicación use cualquier codificador de medios instalado para decodificar archivos para su reproducción."</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"leer y escribir a recursos dentro del grupo de diagnóstico"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"Admite una aplicación que lee y escribe a cualquier recurso dentro del grupo de diagnóstico; por ejemplo, archivos con /dev. Esto puede afectar potencialmente la estabilidad y la seguridad del sistema. Debe utilizarlo SÓLO el fabricante o el operador en los diagnósticos específicos del hardware."</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"activar o desactivar componentes de la aplicación"</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Admite una aplicación que se conecta y desconecta de los puntos de acceso de Wi-Fi y que hace cambios en las redes de Wi-Fi configuradas."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"permitir recepción de multidifusión Wi-Fi"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Permite a una aplicación recibir paquetes que no están dirigidos directamente a tu dispositivo. Esta opción puede ser útil al descubrir servicios ofrecidos. Además, ejerce más potencia que el modo que no es de multidifusión."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"ver el estado de WiMAX"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"Permite que una aplicación vea la información acerca del estado de WiMAX."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"cambiar estado de WiMAX"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"Permite que una aplicación se conecte a una red WiMAX y se desconecte de esta."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"administración de bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"Permite que una aplicación configure el Bluetooth local del tablet y descubra y se vincule con dispositivos remotos."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"Admite una aplicación que configura el teléfono Bluetooth local y descubre y se vincula con dispositivos remotos."</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"Abrir red disponible de Wi-Fi"</item>
     <item quantity="other" msgid="7915895323644292768">"Abrir redes disponibles de Wi-Fi"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Accede a una red Wi-Fi."</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"No se pudo conectar a la red Wi-Fi."</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" tiene una mala conexión a Internet."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -1024,7 +1039,7 @@
     <string name="ext_media_checking_notification_message" msgid="8287319882926737053">"Verificando errores"</string>
     <string name="ext_media_nofs_notification_title" product="nosdcard" msgid="7788040745686229307">"Almacenamiento USB en blanco"</string>
     <string name="ext_media_nofs_notification_title" product="default" msgid="780477838241212997">"Tarjeta SD vacía"</string>
-    <string name="ext_media_nofs_notification_message" product="nosdcard" msgid="8623130522556087311">"Almacenamiento USB en blanco o sistema de archivos no compatible."</string>
+    <string name="ext_media_nofs_notification_message" product="nosdcard" msgid="8623130522556087311">"Almacenamiento USB vacío o sistema de archivos no compatible"</string>
     <string name="ext_media_nofs_notification_message" product="default" msgid="3817704088027829380">"Tarjeta SD en blanco o el sistema de archivos no es compatible."</string>
     <string name="ext_media_unmountable_notification_title" product="nosdcard" msgid="2090046769532713563">"Almacenamiento USB dañado"</string>
     <string name="ext_media_unmountable_notification_title" product="default" msgid="6410723906019100189">"Tarjeta SD dañada"</string>
@@ -1032,7 +1047,7 @@
     <string name="ext_media_unmountable_notification_message" product="default" msgid="6902531775948238989">"Tarjeta SD dañada. Es posible que debas reformatearla."</string>
     <string name="ext_media_badremoval_notification_title" product="nosdcard" msgid="1661683031330951073">"Almacenamiento USB extraído inesperadamente"</string>
     <string name="ext_media_badremoval_notification_title" product="default" msgid="6872152882604407837">"Almacenamiento USB extraído de forma imprevista"</string>
-    <string name="ext_media_badremoval_notification_message" product="nosdcard" msgid="4329848819865594241">"Desmontar el almacenamiento USB antes de extraerlo para evitar la pérdida de datos."</string>
+    <string name="ext_media_badremoval_notification_message" product="nosdcard" msgid="4329848819865594241">"Desactivar el almacenamiento USB antes de extraerlo para evitar la pérdida de datos."</string>
     <string name="ext_media_badremoval_notification_message" product="default" msgid="7260183293747448241">"Desmontar la tarjeta SD antes de extraerla para evitar la pérdida de datos."</string>
     <string name="ext_media_safe_unmount_notification_title" product="nosdcard" msgid="3967973893270360230">"Es seguro extraer el almacenamiento USB"</string>
     <string name="ext_media_safe_unmount_notification_title" product="default" msgid="6729801130790616200">"Es seguro extraer la tarjeta SD"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"Cámara"</string>
     <string name="description_target_silent" msgid="893551287746522182">"Silencioso"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"Sonido activado"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"Desliza el dedo para desbloquear."</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"Conecta un auricular para escuchar las contraseñas en voz alta."</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"Punto"</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"Desplazarse hasta la página principal"</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"Compartir con..."</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Dispositivo bloqueado"</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
+    <string name="sending" msgid="8715108995741758718">"Envío en curso..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"¿Deseas iniciar el navegador?"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"¿Deseas aceptar la llamada?"</string>
 </resources>

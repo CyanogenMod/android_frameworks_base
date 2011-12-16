@@ -19,7 +19,6 @@ package com.android.server.net;
 import static android.Manifest.permission.ACCESS_NETWORK_STATE;
 import static android.Manifest.permission.CONNECTIVITY_INTERNAL;
 import static android.Manifest.permission.DUMP;
-import static android.Manifest.permission.MANAGE_APP_TOKENS;
 import static android.Manifest.permission.MANAGE_NETWORK_POLICY;
 import static android.Manifest.permission.READ_NETWORK_USAGE_HISTORY;
 import static android.Manifest.permission.READ_PHONE_STATE;
@@ -93,6 +92,7 @@ import android.os.HandlerThread;
 import android.os.INetworkManagementService;
 import android.os.IPowerManager;
 import android.os.Message;
+import android.os.MessageQueue.IdleHandler;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.provider.Settings;
@@ -190,6 +190,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
     private static final int MSG_METERED_IFACES_CHANGED = 2;
     private static final int MSG_FOREGROUND_ACTIVITIES_CHANGED = 3;
     private static final int MSG_PROCESS_DIED = 4;
+    private static final int MSG_LIMIT_REACHED = 5;
 
     private final Context mContext;
     private final IActivityManager mActivityManager;
@@ -225,8 +226,6 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
 
     /** Set of currently active {@link Notification} tags. */
     private HashSet<String> mActiveNotifs = Sets.newHashSet();
-    /** Current values from {@link #setPolicyDataEnable(int, boolean)}. */
-    private SparseBooleanArray mActiveNetworkEnabled = new SparseBooleanArray();
 
     /** Foreground at both UID and PID granularity. */
     private SparseBooleanArray mUidForeground = new SparseBooleanArray();
@@ -394,6 +393,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
             // on background handler thread, and verified
             // READ_NETWORK_USAGE_HISTORY permission above.
 
+            maybeRefreshTrustedTime();
             synchronized (mRulesLock) {
                 updateNetworkEnabledLocked();
                 updateNotificationsLocked();
@@ -424,19 +424,8 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
             // only someone like NMS should be calling us
             mContext.enforceCallingOrSelfPermission(CONNECTIVITY_INTERNAL, TAG);
 
-            synchronized (mRulesLock) {
-                if (mMeteredIfaces.contains(iface) && !LIMIT_GLOBAL_ALERT.equals(limitName)) {
-                    try {
-                        // force stats update to make sure we have numbers that
-                        // caused alert to trigger.
-                        mNetworkStats.forceUpdate();
-                    } catch (RemoteException e) {
-                        // ignored; service lives in system_server
-                    }
-
-                    updateNetworkEnabledLocked();
-                    updateNotificationsLocked();
-                }
+            if (!LIMIT_GLOBAL_ALERT.equals(limitName)) {
+                mHandler.obtainMessage(MSG_LIMIT_REACHED, iface).sendToTarget();
             }
         }
     };
@@ -457,7 +446,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
         // cycle boundary to recompute notifications.
 
         // examine stats for each active policy
-        final long currentTime = currentTimeMillis(true);
+        final long currentTime = currentTimeMillis();
         for (NetworkPolicy policy : mNetworkPolicy.values()) {
             // ignore policies that aren't relevant to user
             if (!isTemplateRelevant(policy.template)) continue;
@@ -695,6 +684,8 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
         public void onReceive(Context context, Intent intent) {
             // on background handler thread, and verified CONNECTIVITY_INTERNAL
             // permission above.
+
+            maybeRefreshTrustedTime();
             synchronized (mRulesLock) {
                 ensureActiveMobilePolicyLocked();
                 updateNetworkEnabledLocked();
@@ -714,7 +705,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
         // TODO: reset any policy-disabled networks when any policy is removed
         // completely, which is currently rare case.
 
-        final long currentTime = currentTimeMillis(true);
+        final long currentTime = currentTimeMillis();
         for (NetworkPolicy policy : mNetworkPolicy.values()) {
             // shortcut when policy has no limit
             if (policy.limitBytes == LIMIT_DISABLED) {
@@ -814,7 +805,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
 
         // apply each policy that we found ifaces for; compute remaining data
         // based on current cycle and historical stats, and push to kernel.
-        final long currentTime = currentTimeMillis(true);
+        final long currentTime = currentTimeMillis();
         for (NetworkPolicy policy : mNetworkRules.keySet()) {
             final String[] ifaces = mNetworkRules.get(policy);
 
@@ -1104,6 +1095,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
     public void setNetworkPolicies(NetworkPolicy[] policies) {
         mContext.enforceCallingOrSelfPermission(MANAGE_NETWORK_POLICY, TAG);
 
+        maybeRefreshTrustedTime();
         synchronized (mRulesLock) {
             mNetworkPolicy.clear();
             for (NetworkPolicy policy : policies) {
@@ -1131,7 +1123,8 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
     public void snoozePolicy(NetworkTemplate template) {
         mContext.enforceCallingOrSelfPermission(MANAGE_NETWORK_POLICY, TAG);
 
-        final long currentTime = currentTimeMillis(true);
+        maybeRefreshTrustedTime();
+        final long currentTime = currentTimeMillis();
         synchronized (mRulesLock) {
             // find and snooze local policy that matches
             final NetworkPolicy policy = mNetworkPolicy.get(template);
@@ -1152,6 +1145,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
     public void setRestrictBackground(boolean restrictBackground) {
         mContext.enforceCallingOrSelfPermission(MANAGE_NETWORK_POLICY, TAG);
 
+        maybeRefreshTrustedTime();
         synchronized (mRulesLock) {
             mRestrictBackground = restrictBackground;
             updateRulesForRestrictBackgroundLocked();
@@ -1205,7 +1199,7 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
             return null;
         }
 
-        final long currentTime = currentTimeMillis(false);
+        final long currentTime = currentTimeMillis();
 
         // find total bytes used under policy
         final long start = computeLastCycleBoundary(currentTime, policy);
@@ -1481,6 +1475,26 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
                     }
                     return true;
                 }
+                case MSG_LIMIT_REACHED: {
+                    final String iface = (String) msg.obj;
+
+                    maybeRefreshTrustedTime();
+                    synchronized (mRulesLock) {
+                        if (mMeteredIfaces.contains(iface)) {
+                            try {
+                                // force stats update to make sure we have
+                                // numbers that caused alert to trigger.
+                                mNetworkStats.forceUpdate();
+                            } catch (RemoteException e) {
+                                // ignored; service lives in system_server
+                            }
+
+                            updateNetworkEnabledLocked();
+                            updateNotificationsLocked();
+                        }
+                    }
+                    return true;
+                }
                 default: {
                     return false;
                 }
@@ -1519,21 +1533,13 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
     }
 
     /**
-     * Control {@link IConnectivityManager#setPolicyDataEnable(int, boolean)},
-     * dispatching only when actually changed.
+     * Control {@link IConnectivityManager#setPolicyDataEnable(int, boolean)}.
      */
     private void setPolicyDataEnable(int networkType, boolean enabled) {
-        synchronized (mActiveNetworkEnabled) {
-            final boolean prevEnabled = mActiveNetworkEnabled.get(networkType, true);
-            if (prevEnabled == enabled) return;
-
-            try {
-                mConnManager.setPolicyDataEnable(networkType, enabled);
-            } catch (RemoteException e) {
-                // ignored; service lives in system_server
-            }
-
-            mActiveNetworkEnabled.put(networkType, enabled);
+        try {
+            mConnManager.setPolicyDataEnable(networkType, enabled);
+        } catch (RemoteException e) {
+            // ignored; service lives in system_server
         }
     }
 
@@ -1552,12 +1558,16 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
         }
     }
 
-    private long currentTimeMillis(boolean allowRefresh) {
-        // try refreshing time source when stale
-        if (mTime.getCacheAge() > TIME_CACHE_MAX_AGE && allowRefresh) {
+    /**
+     * Try refreshing {@link #mTime} when stale.
+     */
+    private void maybeRefreshTrustedTime() {
+        if (mTime.getCacheAge() > TIME_CACHE_MAX_AGE) {
             mTime.forceRefresh();
         }
+    }
 
+    private long currentTimeMillis() {
         return mTime.hasCache() ? mTime.currentTimeMillis() : System.currentTimeMillis();
     }
 
@@ -1581,6 +1591,11 @@ public class NetworkPolicyManagerService extends INetworkPolicyManager.Stub {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(EXTRA_NETWORK_TEMPLATE, template);
         return intent;
+    }
+
+    // @VisibleForTesting
+    public void addIdleHandler(IdleHandler handler) {
+        mHandler.getLooper().getQueue().addIdleHandler(handler);
     }
 
     private static void collectKeys(SparseIntArray source, SparseBooleanArray target) {

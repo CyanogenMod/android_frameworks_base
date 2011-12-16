@@ -28,6 +28,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.ActionMode;
 import android.view.ContextMenu;
@@ -77,6 +78,7 @@ import java.lang.ref.WeakReference;
  */
 public class Dialog implements DialogInterface, Window.Callback,
         KeyEvent.Callback, OnCreateContextMenuListener {
+    private static final String TAG = "Dialog";
     private Activity mOwnerActivity;
     
     final Context mContext;
@@ -109,6 +111,8 @@ public class Dialog implements DialogInterface, Window.Callback,
     private static final int SHOW = 0x45;
 
     private Handler mListenersHandler;
+
+    private ActionMode mActionMode;
 
     private final Runnable mDismissAction = new Runnable() {
         public void run() {
@@ -298,18 +302,27 @@ public class Dialog implements DialogInterface, Window.Callback,
         if (Thread.currentThread() != mUiThread) {
             mHandler.post(mDismissAction);
         } else {
+            mHandler.removeCallbacks(mDismissAction);
             mDismissAction.run();
         }
     }
 
-    private void dismissDialog() {
+    void dismissDialog() {
         if (mDecor == null || !mShowing) {
+            return;
+        }
+
+        if (mWindow.isDestroyed()) {
+            Log.e(TAG, "Tried to dismissDialog() but the Dialog's window was already destroyed!");
             return;
         }
 
         try {
             mWindowManager.removeView(mDecor);
         } finally {
+            if (mActionMode != null) {
+                mActionMode.finish();
+            }
             mDecor = null;
             mWindow.closeAllPanels();
             onStop();
@@ -952,10 +965,26 @@ public class Dialog implements DialogInterface, Window.Callback,
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Note that if you override this method you should always call through
+     * to the superclass implementation by calling super.onActionModeStarted(mode).
+     */
     public void onActionModeStarted(ActionMode mode) {
+        mActionMode = mode;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * Note that if you override this method you should always call through
+     * to the superclass implementation by calling super.onActionModeFinished(mode).
+     */
     public void onActionModeFinished(ActionMode mode) {
+        if (mode == mActionMode) {
+            mActionMode = null;
+        }
     }
 
     /**

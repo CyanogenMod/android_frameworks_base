@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Izklopi brezžično omrežje"</string>
     <string name="screen_lock" msgid="799094655496098153">"Zaklep zaslona"</string>
     <string name="power_off" msgid="4266614107412865048">"Izklopi"</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"Se zaustavlja ..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Tablični računalnik se bo zaustavil."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Telefon bo zaustavljen."</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"branje občutljivih dnevniških podatkov"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"Programu omogoča branje različnih sistemskih dnevniških datotek. To mu omogoča dostop do splošnih podatkov v tabličnem računalniku, lahko tudi do osebnih podatkov."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"Programu omogoča branje različnih sistemskih dnevniških datotek. To mu omogoča dostop do splošnih podatkov v telefonu, lahko tudi do osebnih podatkov."</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"uporaba katerega koli predstavnostnega dekodirnika za predvajanje"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"Programu dovoljuje uporabo katerega koli nameščenega predstavnostnega dekodirnika za dekodiranje pri predvajanju."</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"branje/pisanje v sredstva, ki so v lasti skupine za diagnostiko"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"Programu dovoljuje branje in pisanje na poljuben vir, ki je v lasti skupine za diagnostiko; na primer datoteke v mapi /dev. To lahko vpliva na stabilnost in varnost sistema. To naj uporablja SAMO izdelovalec ali operater za diagnostiko, specifično za strojno opremo."</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"omogočanje ali onemogočanje komponent programa"</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Programu dovoljuje vzpostavljanje povezave z dostopnimi točkami brezžičnega omrežja in prekinitev povezave z njimi ter spreminjanje konfiguriranih brezžičnih omrežij."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"dovoljevanje sprejema večvrstnega brezžičnega oddajanja"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Programu dovoljuje prejemanje paketov, ki niso naslovljeni neposredno na vašo napravo. To je lahko uporabno, ko odkrivate storitve, ki so dane na voljo v bližini. Poraba je večja od načina delovanja brez večvrstnega oddajanja."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"prikaz stanja omrežja WiMAX"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"Programu omogoča prikaz podatkov o stanju omrežja WiMAX."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"sprememba stanja omrežja WiMAX"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"Programu omogoča povezovanje v omrežje WiMAX in prekinitev povezave."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"skrbništvo storitve Bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"Programu omogoča konfiguriranje lokalnega tabličnega računalnika Bluetooth ter zaznavanje oddaljenih naprav in združevanje z njimi."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"Programu dovoljuje konfiguriranje lokalnega telefona s tehnologijo Bluetooth ter odkrivanje oddaljenih naprav in povezovanje z njimi."</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"Odpiranje razpoložljivega brezžičnega omrežja"</item>
     <item quantity="other" msgid="7915895323644292768">"Odpiranje razpoložljivih brezžičnih omrežij"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Prijavite se v omrežje Wi-Fi"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Z omrežjem Wi-Fi se ni mogoče povezati"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" ima slabo internetno povezavo."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"Fotoaparat"</string>
     <string name="description_target_silent" msgid="893551287746522182">"Tiho"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"Vklopljen zvok"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"Povlecite, če želite odkleniti."</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"Priključite slušalke, če želite slišati zvok tipkanja gesla."</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"Pika."</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"Krmarjenje domov"</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"Skupna raba z ..."</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Naprava zaklenjena."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
+    <string name="sending" msgid="8715108995741758718">"Pošiljanje ..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"Ali želite odpreti brskalnik?"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"Ali želite sprejeti klic?"</string>
 </resources>

@@ -20,7 +20,7 @@
 
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="byteShort" msgid="8340973892742019101">"O"</string>
+    <string name="byteShort" msgid="8340973892742019101">"o"</string>
     <string name="kilobyteShort" msgid="5973789783504771878">"Ko"</string>
     <string name="megabyteShort" msgid="6355851576770428922">"Mo"</string>
     <string name="gigabyteShort" msgid="3259882455212193214">"Go"</string>
@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Désactiver le mode sans fil"</string>
     <string name="screen_lock" msgid="799094655496098153">"Verrouillage de l\'écran"</string>
     <string name="power_off" msgid="4266614107412865048">"Éteindre"</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"Arrêt en cours..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Votre tablette va s\'éteindre."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Votre téléphone va s\'éteindre."</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"lire les données des journaux à caractère confidentiel"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"Permet à une application de lire les différents fichiers journaux du système afin d\'obtenir des informations générales sur la façon dont vous utilisez votre tablette. Celles-ci peuvent éventuellement inclure des informations d\'ordre personnel ou privé."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"Permet à une application de lire les différents fichiers journaux du système afin d\'obtenir des informations générales sur la façon dont vous utilisez votre téléphone (celles-ci peuvent éventuellement inclure des informations d\'ordre personnel ou privé)."</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"utiliser n\'importe quel décodeur pour lire les fichiers multimédias"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"Permet à une application d\'utiliser n\'importe quel décodeur installé pour lire les fichiers multimédias."</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"Lecture/écriture dans les ressources appartenant aux diagnostics"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"Permet à une application de lire et d\'éditer toute ressource appartenant au groupe de diagnostics (par exemple, les fichiers in/dev). Ceci peut affecter la stabilité et la sécurité du système. Cette fonctionnalité est UNIQUEMENT réservée aux diagnostics matériels effectués par le fabricant ou l\'opérateur."</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"Activer ou désactiver des éléments de l\'application"</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Permet à une application de se connecter à des points d\'accès Wi-Fi, de s\'en déconnecter et de modifier des réseaux Wi-Fi configurés."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"autoriser la réception de données en Wi-Fi multidiffusion"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Autorise une application à recevoir des paquets qui ne sont pas directement adressés à votre mobile. Cela peut être utile pour la recherche de services disponibles à proximité. Consomme plus que le mode non multidiffusion."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"afficher l\'état du WiMAX"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"Permet à une application d\'afficher les informations concernant l\'état du WiMAX."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"modifier l\'état du WiMAX"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"Permet à une application de se connecter au réseau WiMAX et de s\'en déconnecter."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"Gestion Bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"Permet à une application de configurer la tablette Bluetooth locale, d\'identifier des appareils distants et de les associer à la tablette."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"Permet à une application de configurer le téléphone Bluetooth local, d\'identifier des périphériques distants et de les associer au téléphone."</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"Réseau Wi-Fi ouvert disponible"</item>
     <item quantity="other" msgid="7915895323644292768">"Réseaux Wi-Fi ouverts disponibles"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Connectez-vous au réseau Wi-Fi"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Impossible de se connecter au Wi-Fi."</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" dispose d\'une mauvaise connexion Internet."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"Appareil photo"</string>
     <string name="description_target_silent" msgid="893551287746522182">"Mode silencieux"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"Son activé"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"Faites glisser votre doigt pour déverrouiller l\'appareil."</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"Branchez des écouteurs pour entendre l\'énoncé à haute voix des touches du mot de passe."</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"Point."</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"Retour à l\'accueil"</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"Partager avec..."</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Appareil verrouillé"</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
+    <string name="sending" msgid="8715108995741758718">"Envoi en cours…"</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"Lancer le navigateur ?"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"Prendre l\'appel ?"</string>
 </resources>

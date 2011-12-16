@@ -106,7 +106,7 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
         mHeaderText.setSelected(true);
 
         mKeyguardStatusViewManager = new KeyguardStatusViewManager(this, updateMonitor,
-                lockpatternutils, callback, true);
+                lockpatternutils, callback, false);
 
         mPinText.setFocusableInTouchMode(true);
         mPinText.setOnFocusChangeListener(this);
@@ -242,20 +242,24 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
 
         new CheckSimPuk(mPukText.getText().toString(),
                 mPinText.getText().toString()) {
-            void onSimLockChangedResponse(boolean success) {
-                if (mSimUnlockProgressDialog != null) {
-                    mSimUnlockProgressDialog.hide();
-                }
-                if (success) {
-                    // before closing the keyguard, report back that
-                    // the sim is unlocked so it knows right away
-                    mUpdateMonitor.reportSimUnlocked();
-                    mCallback.goToUnlockScreen();
-                } else {
-                    mHeaderText.setText(R.string.badPuk);
-                    mPukText.setText("");
-                    mPinText.setText("");
-                }
+            void onSimLockChangedResponse(final boolean success) {
+                mPinText.post(new Runnable() {
+                    public void run() {
+                        if (mSimUnlockProgressDialog != null) {
+                            mSimUnlockProgressDialog.hide();
+                        }
+                        if (success) {
+                            // before closing the keyguard, report back that
+                            // the sim is unlocked so it knows right away
+                            mUpdateMonitor.reportSimUnlocked();
+                            mCallback.goToUnlockScreen();
+                        } else {
+                            mHeaderText.setText(R.string.badPuk);
+                            mPukText.setText("");
+                            mPinText.setText("");
+                        }
+                    }
+                });
             }
         }.start();
     }
@@ -379,6 +383,9 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
 
         public void onClick(View v) {
             if (v == mCancelButton) {
+                // clear the PIN/PUK entry fields if the user cancels
+                mPinText.setText("");
+                mPukText.setText("");
                 mCallback.goToLockScreen();
                 return;
             }

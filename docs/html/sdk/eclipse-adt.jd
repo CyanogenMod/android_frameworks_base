@@ -1,8 +1,8 @@
 page.title=ADT Plugin for Eclipse
-adt.zip.version=15.0.0
-adt.zip.download=ADT-15.0.0.zip
-adt.zip.bytes=6750682
-adt.zip.checksum=264f40a89a1107b0c422adae4e1ce0d1
+adt.zip.version=16.0.1
+adt.zip.download=ADT-16.0.1.zip
+adt.zip.bytes=7000078
+adt.zip.checksum=03a2a23650ddac128c8b9e8aaf0aa433
 
 @jd:body
 
@@ -113,6 +113,104 @@ padding: .25em 1em;
   <a href="#" onclick="return toggleDiv(this)">
         <img src="{@docRoot}assets/images/triangle-opened.png" class="toggle-img" height="9px"
 width="9px" />
+ADT 16.0.1</a> <em>(December 2011)</em>
+  <div class="toggleme">
+<dl>
+  <dt>Dependencies:</dt>
+
+  <dd>
+    <ul>
+      <li>Eclipse Helios (Version 3.6) or higher is required for ADT 16.0.1.</li>
+      <li>ADT 16.0.1 is designed for use with <a href="{@docRoot}sdk/tools-notes.html">SDK Tools
+        r16</a>. If you haven't already installed SDK Tools r16 into your SDK, use the Android SDK
+        Manager to do so.</li>
+    </ul>
+  </dd>
+
+  <dt>Bug fixes:</dt>
+  <dd>
+    <ul>
+      <li>Fixed build issue where the 9-patch could be packaged as normal bitmap in some cases.</li>
+      <li>Fixed minor issues in the <a href="http://tools.android.com/recent/lint">Lint</a>
+        tool.</li>
+      <li>Fixed minor issues in the SDK Manager.</li>
+    </ul>
+  </dd>
+</dl>
+
+</div>
+</div>
+
+
+<div class="toggleable closed">
+  <a href="#" onclick="return toggleDiv(this)">
+        <img src="{@docRoot}assets/images/triangle-closed.png" class="toggle-img" height="9px"
+width="9px" />
+ADT 16.0.0</a> <em>(December 2011)</em>
+  <div class="toggleme">
+<dl>
+  <dt>Dependencies:</dt>
+
+  <dd>
+    <ul>
+      <li>Eclipse Helios (Version 3.6) or higher is required for ADT
+16.0.0.</li>
+      <li>ADT 16.0.0 is designed for use with <a
+href="{@docRoot}sdk/tools-notes.html">SDK Tools r16</a>. If you haven't already installed SDK Tools
+r16 into your SDK, use the Android SDK Manager to do so.</li>
+    </ul>
+  </dd>
+
+  <dt>General improvements:</dt>
+  <dd>
+    <ul>
+      <li>Added Lint tool to detect common errors in Android projects. (<a
+href="http://tools.android.com/recent/lint">more info</a>)</li>
+    </ul>
+  </dd>
+</dl>
+
+</div>
+</div>
+
+
+<div class="toggleable closed">
+  <a href="#" onclick="return toggleDiv(this)">
+        <img src="{@docRoot}assets/images/triangle-closed.png" class="toggle-img" height="9px"
+width="9px" />
+ADT 15.0.1</a> <em>(November 2011)</em>
+  <div class="toggleme">
+<dl>
+  <dt>Dependencies:</dt>
+  
+  <dd>ADT 15.0.1 is designed for use with <a href="{@docRoot}sdk/tools-notes.html">SDK Tools r15</a>.
+  If you haven't already installed SDK Tools r15 into your SDK, use the Android SDK Manager to
+  do so.</dd>
+  
+  <dt>Bug fixes:</dt>
+  <dd>
+    <ul>
+      <li>Fixed how source files are attached to library project <code>.jar</code> files.</li>
+      <li>Fixed how the <code>bin/</code> folder for library projects are refreshed. This ensures that parent projects pick up changes in library projects.</li>
+      <li>Fixed how a parent project's library container is updated when a library project is recompiled. This ensures that parent projects are
+      recompiled when code in a library project changes.</li>
+      <li>Fixed how <code>res/</code> folders are checked in library projects. This ensures that all <code>res</code> folders are properly included
+      even if Eclipse is not aware of them due to refresh issues.</li>
+      <li>Fixed issue that prevented <code>aapt</code> from running when editing certain XML files.</li>
+      <li>Fixed minor XML formatting issues.</li>
+    </ul>
+  </dd>
+</dl>
+
+</div>
+</div>
+
+
+
+<div class="toggleable closed">
+  <a href="#" onclick="return toggleDiv(this)">
+        <img src="{@docRoot}assets/images/triangle-closed.png" class="toggle-img" height="9px"
+width="9px" />
 ADT 15.0.0</a> <em>(October 2011)</em>
   <div class="toggleme">
 <dl>
@@ -120,7 +218,7 @@ ADT 15.0.0</a> <em>(October 2011)</em>
 <dt>Dependencies:</dt>
 
 <dd>ADT 15.0.0 is designed for use with <a href="{@docRoot}sdk/tools-notes.html">SDK Tools r15</a>.
-If you haven't already installed SDK Tools r15 into your SDK, use the Android SDK and AVD Manager to
+If you haven't already installed SDK Tools r15 into your SDK, use the Android SDK Manager to
 do so.</dd>
 
 <dt>Bug fixes:</dt>
@@ -151,10 +249,10 @@ ADT 14.0.0</a> <em>(October 2011)</em>
 <dt>Dependencies:</dt>
 
 <dd>ADT 14.0.0 is designed for use with <a href="{@docRoot}sdk/tools-notes.html">SDK Tools r14</a>.
-If you haven't already installed SDK Tools r14 into your SDK, use the Android SDK and AVD Manager to
+If you haven't already installed SDK Tools r14 into your SDK, use the Android SDK Manager to
 do so.</dd>
 
-<dt>Build system</dt>
+<dt>Build system:</dt>
 <dd>
   <ul>
     <li>Changed <code>default.properties</code> to <code>project.properties</code> and
@@ -177,7 +275,7 @@ see the <a href="http://tools.android.com/recent/buildchangesinrevision14">Andro
 site</a>.</p>
 </dd>
 
-<dt>General improvements</dt>
+<dt>General improvements:</dt>
 <dd>
   <ul>
 
@@ -202,7 +300,7 @@ and deleted without affecting the master copy
 </ul>
 </dd>
 
-<dt>XML and Java editors</dt>
+<dt>XML and Java editors:</dt>
 <dd>
   <ul>
     <li>Added a new XML formatter that formats all XML files according to the
@@ -221,7 +319,7 @@ href="http://tools.android.com/recent/xmleditingimprovements">more info</a>).</l
   </ul>
 </dd>
 
-<dt>Layout editor</dt>
+<dt>Layout editor:</dt>
 <dd>
   <ul>
     <li>Added tooltip feedback for dragging and resizing operations. For
@@ -247,7 +345,7 @@ href="http://tools.android.com/recent/layouteditorcontextmenuimprovements">more 
   </ul>
 </dd>
 
-<dt>Bug fixes</dt>
+<dt>Bug fixes:</dt>
 <dd>Fixed many bugs and added <a
 href="http://tools.android.com/recent/miscellaneousrecentfixes">minor improvements</a>, in
 particular some <a href="http://tools.android.com/recent/linuxfixes">critical bug fixes on
@@ -290,7 +388,7 @@ the Android SDK and AVD Manager to do so.</dd>
 </ul>
 </dd>
 
-<dt>Build system</dt>
+<dt>Build system:</dt>
 <dd>
 <ul>
   <li id="build-option">A new option lets you disable the packaging step in the automatic
@@ -302,7 +400,7 @@ the Android SDK and AVD Manager to do so.</dd>
 </ul>
 </dd>
 
-<dt>Bug fixes</dt>
+<dt>Bug fixes:</dt>
 <dd>Many bug fixes are part of this release
 (<a href="http://tools.android.com/recent/adt12bugfixroundup">more info</a>).</dd>
 
@@ -894,7 +992,7 @@ Manager to download the latest SDK Tools into your SDK. For more information,
 see <a href="{@docRoot}sdk/adding-components.html">Adding SDK Components</a>.</p>
 </dd>
 
-<dt>General Notes:</dt>
+<dt>General notes:</dt>
 <dd>
 <ul>
 <li>AVD Launch dialog now shows scale value.</li>
@@ -940,7 +1038,7 @@ bigger than the screen.</li>
 </ul>
 </dd>
 
-<dt>DDMS Integration:</dt>
+<dt>DDMS integration:</dt>
 <dd>
 <ul>
 <li>Includes the improvements from the standlone DDMS, revision 3.</li>

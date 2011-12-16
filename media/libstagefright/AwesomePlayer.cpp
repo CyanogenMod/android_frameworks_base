@@ -22,7 +22,6 @@
 
 #include <dlfcn.h>
 
-#include "include/ARTSPController.h"
 #include "include/AwesomePlayer.h"
 #include "include/DRMExtractor.h"
 #include "include/SoftwareRenderer.h"
@@ -53,7 +52,6 @@
 #include <gui/SurfaceTextureClient.h>
 #include <surfaceflinger/ISurfaceComposer.h>
 
-#include <media/stagefright/foundation/ALooper.h>
 #include <media/stagefright/foundation/AMessage.h>
 
 #include <cutils/properties.h>
@@ -65,7 +63,6 @@ namespace android {
 
 static int64_t kLowWaterMarkUs = 2000000ll;  // 2secs
 static int64_t kHighWaterMarkUs = 5000000ll;  // 5secs
-static int64_t kHighWaterMarkRTSPUs = 4000000ll;  // 4secs
 static const size_t kLowWaterMarkBytes = 40000;
 static const size_t kHighWaterMarkBytes = 200000;
 
@@ -227,17 +224,18 @@ AwesomePlayer::~AwesomePlayer() {
     mClient.disconnect();
 }
 
-void AwesomePlayer::cancelPlayerEvents(bool keepBufferingGoing) {
+void AwesomePlayer::cancelPlayerEvents(bool keepNotifications) {
     mQueue.cancelEvent(mVideoEvent->eventID());
     mVideoEventPending = false;
-    mQueue.cancelEvent(mStreamDoneEvent->eventID());
-    mStreamDoneEventPending = false;
-    mQueue.cancelEvent(mCheckAudioStatusEvent->eventID());
-    mAudioStatusEventPending = false;
     mQueue.cancelEvent(mVideoLagEvent->eventID());
     mVideoLagEventPending = false;
 
-    if (!keepBufferingGoing) {
+    if (!keepNotifications) {
+        mQueue.cancelEvent(mStreamDoneEvent->eventID());
+        mStreamDoneEventPending = false;
+        mQueue.cancelEvent(mCheckAudioStatusEvent->eventID());
+        mAudioStatusEventPending = false;
+
         mQueue.cancelEvent(mBufferingEvent->eventID());
         mBufferingEventPending = false;
     }
@@ -388,10 +386,12 @@ status_t AwesomePlayer::setDataSource_l(const sp<MediaExtractor> &extractor) {
     for (size_t i = 0; i < extractor->countTracks(); ++i) {
         sp<MetaData> meta = extractor->getTrackMetaData(i);
 
-        const char *mime;
-        CHECK(meta->findCString(kKeyMIMEType, &mime));
+        const char *_mime;
+        CHECK(meta->findCString(kKeyMIMEType, &_mime));
 
-        if (!haveVideo && !strncasecmp(mime, "video/", 6)) {
+        String8 mime = String8(_mime);
+
+        if (!haveVideo && !strncasecmp(mime.string(), "video/", 6)) {
             setVideoSource(extractor->getTrack(i));
             haveVideo = true;
 
@@ -412,9 +412,9 @@ status_t AwesomePlayer::setDataSource_l(const sp<MediaExtractor> &extractor) {
                 mStats.mTracks.push();
                 TrackStat *stat =
                     &mStats.mTracks.editItemAt(mStats.mVideoTrackIndex);
-                stat->mMIME = mime;
+                stat->mMIME = mime.string();
             }
-        } else if (!haveAudio && !strncasecmp(mime, "audio/", 6)) {
+        } else if (!haveAudio && !strncasecmp(mime.string(), "audio/", 6)) {
             setAudioSource(extractor->getTrack(i));
             haveAudio = true;
 
@@ -424,10 +424,10 @@ status_t AwesomePlayer::setDataSource_l(const sp<MediaExtractor> &extractor) {
                 mStats.mTracks.push();
                 TrackStat *stat =
                     &mStats.mTracks.editItemAt(mStats.mAudioTrackIndex);
-                stat->mMIME = mime;
+                stat->mMIME = mime.string();
             }
 
-            if (!strcasecmp(mime, MEDIA_MIMETYPE_AUDIO_VORBIS)) {
+            if (!strcasecmp(mime.string(), MEDIA_MIMETYPE_AUDIO_VORBIS)) {
                 // Only do this for vorbis audio, none of the other audio
                 // formats even support this ringtone specific hack and
                 // retrieving the metadata on some extractors may turn out
@@ -439,7 +439,7 @@ status_t AwesomePlayer::setDataSource_l(const sp<MediaExtractor> &extractor) {
                     modifyFlags(AUTO_LOOPING, SET);
                 }
             }
-        } else if (!strcasecmp(mime, MEDIA_MIMETYPE_TEXT_3GPP)) {
+        } else if (!strcasecmp(mime.string(), MEDIA_MIMETYPE_TEXT_3GPP)) {
             addTextSource(extractor->getTrack(i));
         }
     }
@@ -485,9 +485,6 @@ void AwesomePlayer::reset_l() {
         if (mConnectingDataSource != NULL) {
             LOGI("interrupting the connection process");
             mConnectingDataSource->disconnect();
-        } else if (mConnectingRTSPController != NULL) {
-            LOGI("interrupting the connection process");
-            mConnectingRTSPController->disconnect();
         }
 
         if (mFlags & PREPARING_CONNECTED) {
@@ -533,11 +530,6 @@ void AwesomePlayer::reset_l() {
     }
 
     mVideoRenderer.clear();
-
-    if (mRTSPController != NULL) {
-        mRTSPController->disconnect();
-        mRTSPController.clear();
-    }
 
     if (mVideoSource != NULL) {
         shutdownVideoDecoder_l();
@@ -612,10 +604,7 @@ bool AwesomePlayer::getBitrate(int64_t *bitrate) {
 bool AwesomePlayer::getCachedDuration_l(int64_t *durationUs, bool *eos) {
     int64_t bitrate;
 
-    if (mRTSPController != NULL) {
-        *durationUs = mRTSPController->getQueueDurationUs(eos);
-        return true;
-    } else if (mCachedSource != NULL && getBitrate(&bitrate)) {
+    if (mCachedSource != NULL && getBitrate(&bitrate)) {
         status_t finalStatus;
         size_t cachedDataRemaining = mCachedSource->approxDataRemaining(&finalStatus);
         *durationUs = cachedDataRemaining * 8000000ll / bitrate;
@@ -751,9 +740,6 @@ void AwesomePlayer::onBufferingUpdate() {
         LOGV("cachedDurationUs = %.2f secs, eos=%d",
              cachedDurationUs / 1E6, eos);
 
-        int64_t highWaterMarkUs =
-            (mRTSPController != NULL) ? kHighWaterMarkRTSPUs : kHighWaterMarkUs;
-
         if ((mFlags & PLAYING) && !eos
                 && (cachedDurationUs < kLowWaterMarkUs)) {
             LOGI("cache is running low (%.2f secs) , pausing.",
@@ -763,7 +749,7 @@ void AwesomePlayer::onBufferingUpdate() {
             ensureCacheIsFetching_l();
             sendCacheStats();
             notifyListener_l(MEDIA_INFO, MEDIA_INFO_BUFFERING_START);
-        } else if (eos || cachedDurationUs > highWaterMarkUs) {
+        } else if (eos || cachedDurationUs > kHighWaterMarkUs) {
             if (mFlags & CACHE_UNDERRUN) {
                 LOGI("cache has filled up (%.2f secs), resuming.",
                      cachedDurationUs / 1E6);
@@ -1081,7 +1067,8 @@ void AwesomePlayer::initRenderer_l() {
 
     if (USE_SURFACE_ALLOC
             && !strncmp(component, "OMX.", 4)
-            && strncmp(component, "OMX.google.", 11)) {
+            && strncmp(component, "OMX.google.", 11)
+            && strcmp(component, "OMX.Nvidia.mpeg2v.decode")) {
         // Hardware decoders avoid the CPU color conversion by decoding
         // directly to ANativeBuffers, so we must use a renderer that
         // just pushes those buffers to the ANativeWindow.
@@ -1109,7 +1096,7 @@ status_t AwesomePlayer::pause_l(bool at_eos) {
         return OK;
     }
 
-    cancelPlayerEvents(true /* keepBufferingGoing */);
+    cancelPlayerEvents(true /* keepNotifications */);
 
     if (mAudioPlayer != NULL && (mFlags & AUDIO_RUNNING)) {
         if (at_eos) {
@@ -1153,17 +1140,8 @@ bool AwesomePlayer::isPlaying() const {
     return (mFlags & PLAYING) || (mFlags & CACHE_UNDERRUN);
 }
 
-status_t AwesomePlayer::setSurface(const sp<Surface> &surface) {
-    Mutex::Autolock autoLock(mLock);
-
-    mSurface = surface;
-    return setNativeWindow_l(surface);
-}
-
 status_t AwesomePlayer::setSurfaceTexture(const sp<ISurfaceTexture> &surfaceTexture) {
     Mutex::Autolock autoLock(mLock);
-
-    mSurface.clear();
 
     status_t err;
     if (surfaceTexture != NULL) {
@@ -1263,10 +1241,7 @@ status_t AwesomePlayer::getDuration(int64_t *durationUs) {
 }
 
 status_t AwesomePlayer::getPosition(int64_t *positionUs) {
-    if (mRTSPController != NULL) {
-        *positionUs = mRTSPController->getNormalPlayTimeUs();
-    }
-    else if (mSeeking != NO_SEEK) {
+    if (mSeeking != NO_SEEK) {
         *positionUs = mSeekTimeUs;
     } else if (mVideoSource != NULL
             && (mAudioPlayer == NULL || !(mFlags & VIDEO_AT_EOS))) {
@@ -1316,25 +1291,7 @@ status_t AwesomePlayer::setTimedTextTrackIndex(int32_t index) {
     }
 }
 
-// static
-void AwesomePlayer::OnRTSPSeekDoneWrapper(void *cookie) {
-    static_cast<AwesomePlayer *>(cookie)->onRTSPSeekDone();
-}
-
-void AwesomePlayer::onRTSPSeekDone() {
-    if (!mSeekNotificationSent) {
-        notifyListener_l(MEDIA_SEEK_COMPLETE);
-        mSeekNotificationSent = true;
-    }
-}
-
 status_t AwesomePlayer::seekTo_l(int64_t timeUs) {
-    if (mRTSPController != NULL) {
-        mSeekNotificationSent = false;
-        mRTSPController->seekAsync(timeUs, OnRTSPSeekDoneWrapper, this);
-        return OK;
-    }
-
     if (mFlags & CACHE_UNDERRUN) {
         modifyFlags(CACHE_UNDERRUN, CLEAR);
         play_l();
@@ -1770,7 +1727,6 @@ void AwesomePlayer::onVideoEvent() {
         int64_t latenessUs = nowUs - timeUs;
 
         if (latenessUs > 500000ll
-                && mRTSPController == NULL
                 && mAudioPlayer != NULL
                 && mAudioPlayer->getMediaTimeMapping(
                     &realTimeUs, &mediaTimeUs)) {
@@ -1993,6 +1949,8 @@ status_t AwesomePlayer::finishSetDataSource_l() {
         mUri = newURI;
     }
 
+    AString sniffedMIME;
+
     if (!strncasecmp("http://", mUri.string(), 7)
             || !strncasecmp("https://", mUri.string(), 8)
             || isWidevineStreaming) {
@@ -2042,7 +2000,6 @@ status_t AwesomePlayer::finishSetDataSource_l() {
 
         mConnectingDataSource.clear();
 
-
         String8 contentType = dataSource->getMIMEType();
 
         if (strncasecmp(contentType.string(), "audio/", 6)) {
@@ -2064,14 +2021,49 @@ status_t AwesomePlayer::finishSetDataSource_l() {
 
                 mLock.unlock();
 
+                // Initially make sure we have at least 192 KB for the sniff
+                // to complete without blocking.
+                static const size_t kMinBytesForSniffing = 192 * 1024;
+
+                off64_t metaDataSize = -1ll;
                 for (;;) {
                     status_t finalStatus;
                     size_t cachedDataRemaining =
                         mCachedSource->approxDataRemaining(&finalStatus);
 
-                    if (finalStatus != OK || cachedDataRemaining >= kHighWaterMarkBytes
+                    if (finalStatus != OK
+                            || (metaDataSize >= 0
+                                && cachedDataRemaining >= metaDataSize)
                             || (mFlags & PREPARE_CANCELLED)) {
                         break;
+                    }
+
+                    LOGV("now cached %d bytes of data", cachedDataRemaining);
+
+                    if (metaDataSize < 0
+                            && cachedDataRemaining >= kMinBytesForSniffing) {
+                        String8 tmp;
+                        float confidence;
+                        sp<AMessage> meta;
+                        if (!dataSource->sniff(&tmp, &confidence, &meta)) {
+                            mLock.lock();
+                            return UNKNOWN_ERROR;
+                        }
+
+                        // We successfully identified the file's extractor to
+                        // be, remember this mime type so we don't have to
+                        // sniff it again when we call MediaExtractor::Create()
+                        // below.
+                        sniffedMIME = tmp.string();
+
+                        if (meta == NULL
+                                || !meta->findInt64(
+                                    "meta-data-size", &metaDataSize)) {
+                            metaDataSize = kHighWaterMarkBytes;
+                        }
+
+                        CHECK_GE(metaDataSize, 0ll);
+                        LOGV("metaDataSize = %lld bytes", metaDataSize);
                     }
 
                     usleep(200000);
@@ -2085,34 +2077,6 @@ status_t AwesomePlayer::finishSetDataSource_l() {
                 return UNKNOWN_ERROR;
             }
         }
-    } else if (!strncasecmp("rtsp://", mUri.string(), 7)) {
-        if (mLooper == NULL) {
-            mLooper = new ALooper;
-            mLooper->setName("rtsp");
-            mLooper->start();
-        }
-        mRTSPController = new ARTSPController(mLooper);
-        mConnectingRTSPController = mRTSPController;
-
-        if (mUIDValid) {
-            mConnectingRTSPController->setUID(mUID);
-        }
-
-        mLock.unlock();
-        status_t err = mRTSPController->connect(mUri.string());
-        mLock.lock();
-
-        mConnectingRTSPController.clear();
-
-        LOGI("ARTSPController::connect returned %d", err);
-
-        if (err != OK) {
-            mRTSPController.clear();
-            return err;
-        }
-
-        sp<MediaExtractor> extractor = mRTSPController.get();
-        return setDataSource_l(extractor);
     } else {
         dataSource = DataSource::CreateFromURI(mUri.string(), &mUriHeaders);
     }
@@ -2139,7 +2103,8 @@ status_t AwesomePlayer::finishSetDataSource_l() {
         mWVMExtractor->setAdaptiveStreamingMode(true);
         extractor = mWVMExtractor;
     } else {
-        extractor = MediaExtractor::Create(dataSource);
+        extractor = MediaExtractor::Create(
+                dataSource, sniffedMIME.empty() ? NULL : sniffedMIME.c_str());
 
         if (extractor == NULL) {
             return UNKNOWN_ERROR;
@@ -2224,7 +2189,7 @@ void AwesomePlayer::onPrepareAsyncEvent() {
 
     modifyFlags(PREPARING_CONNECTED, SET);
 
-    if (isStreamingHTTP() || mRTSPController != NULL) {
+    if (isStreamingHTTP()) {
         postBufferingEvent_l();
     } else {
         finishAsyncPrepare_l();

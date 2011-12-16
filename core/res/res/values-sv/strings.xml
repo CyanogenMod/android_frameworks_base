@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Inaktivera trådlöst"</string>
     <string name="screen_lock" msgid="799094655496098153">"Skärmlås"</string>
     <string name="power_off" msgid="4266614107412865048">"Stäng av"</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"Avslutar…"</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Din pekdator stängs av."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Din telefon stängs av."</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"läsa känsliga loggdata"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"Tillåter att ett program läser från systemets olika loggfiler. Det innebär att programmet kan upptäcka allmän information om vad du gör med pekdatorn, vilket kan inkludera personlig eller privat information."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"Tillåter att ett program läser från systemets olika loggfiler. Det innebär att programmet kan upptäcka allmän information om vad du gör med telefonen, vilket kan inkludera personlig eller privat information."</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"använda alla medieavkodare för uppspelning"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"Tillåter att ett program använder installerade medieavkodare för att avkoda media för uppspelning."</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"läsa/skriva till resurser som ägs av diag"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"Tillåter att ett program läser och skriver till en resurs som ägs av diag-gruppen; till exempel filer i /dev. Detta kan eventuellt påverka systemets stabilitet och säkerhet. Detta bör ENDAST används av tillverkaren eller operatören för maskinvaruspecifik diagnostik."</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"aktivera eller inaktivera programkomponenter"</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Tillåter att ett program ansluter till och kopplar från Wi-Fi-åtkomstpunkter och gör ändringar i konfigurerade Wi-Fi-nätverk."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"tillåt Wi-Fi multicast-mottagning"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Tillåter att ett program tar emot paket som inte är adresserade direkt till din enhet. Detta är användbart om du vill upptäcka tillgängliga tjänster i närheten. Det drar mer batteri än om telefonen inte är i multicast-läge."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"visa WiMAX-status"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"Gör att en app kan visa information om WiMAX-status."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"ändra WiMAX-status"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"Gör att en app kan anslutas till och kopplas ifrån WiMAX-nätverk."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"administrera bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"Tillåter att ett program konfigurerar den lokala Bluetooth-pekdatorn samt upptäcker och parkopplar den med fjärrenheter."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"Tillåter att ett program konfigurerar den lokala Bluetooth-telefonen samt upptäcker och parkopplar den med fjärranslutna enheter."</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"Öppna Wi-Fi-nätverk är tillgängliga"</item>
     <item quantity="other" msgid="7915895323644292768">"Öppna Wi-Fi-nätverk är tillgängliga"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Logga in på ett Wi-Fi-nätverk"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Det gick inte att ansluta till Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" har en dålig Internetanslutning."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi direkt"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"Kamera"</string>
     <string name="description_target_silent" msgid="893551287746522182">"Tyst"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"Ljud på"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"Lås upp genom att dra."</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"Anslut hörlurar om du vill höra lösenorden läsas upp."</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"Punkt."</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"Visa startsidan"</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"Dela med..."</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Enheten är låst."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
+    <string name="sending" msgid="8715108995741758718">"Skickas ..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"Vill du öppna webbläsaren?"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"Vill du ta emot samtal?"</string>
 </resources>

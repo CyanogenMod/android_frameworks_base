@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Draadloos uitschakelen"</string>
     <string name="screen_lock" msgid="799094655496098153">"Schermvergrendeling"</string>
     <string name="power_off" msgid="4266614107412865048">"Uitschakelen"</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"Uitschakelen..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Uw tablet wordt uitgeschakeld."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Uw telefoon wordt uitgeschakeld."</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"gevoelige logbestandsgegevens lezen"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"Hiermee kan een app de verschillende logbestanden van het systeem lezen. De app kan op deze manier algemene informatie achterhalen over uw tabletgebruik, mogelijk inclusief persoonlijke of privé-informatie."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"Hiermee kan een app de verschillende logbestanden van het systeem lezen. De app kan op deze manier algemene informatie achterhalen over uw telefoongebruik, mogelijk inclusief persoonlijke of privé-informatie."</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"elke mediadecoder gebruiken voor afspelen"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"Hiermee kan een app alle geïnstalleerde mediadecoders gebruiken om te decoderen voor het afspelen."</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"lezen/schrijven naar bronnen van diag"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"Hiermee kan een app lezen en schrijven naar elke bron die hoort bij de diagnostische groep, zoals bestanden in /dev. Hierdoor kan de systeemstabiliteit en -veiligheid worden beïnvloed. Dit mag ALLEEN worden gebruikt voor hardwarespecifieke diagnostiek door de fabrikant of operator."</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"toepassingscomponenten in- of uitschakelen"</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Hiermee kan een app zich koppelen aan en loskoppelen van Wi-Fi toegangspunten en wijzigingen aanbrengen in geconfigureerde Wi-Fi-netwerken."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"Wi-Fi Multicast-ontvangst toestaan"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Hiermee kan een app pakketten ontvangen die niet rechtstreeks zijn geadresseerd aan uw apparaat. Dit kan handig zijn wanneer services in de buurt worden ontdekt. Dit verbruikt meer energie dan de niet-multicastmodus."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"WiMAX-status bekijken"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"Hiermee kan een app informatie over de WiMAX-status bekijken."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"WiMAX-status wijzigen"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"Hiermee kan een app verbinding maken met een WiMAX-netwerk en deze verbreken."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"bluetooth-beheer"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"Hiermee kan een app de lokale Bluetooth-tablet configureren en externe apparaten zoeken en aansluiten."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"Hiermee kan een app de lokale Bluetooth-telefoon configureren en externe apparaten zoeken en aansluiten."</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"Open Wi-Fi-netwerk beschikbaar"</item>
     <item quantity="other" msgid="7915895323644292768">"Open Wi-Fi-netwerken beschikbaar"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Aanmelden bij wifi-netwerk"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Kan geen verbinding maken met Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" heeft een slechte internetverbinding."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"Camera"</string>
     <string name="description_target_silent" msgid="893551287746522182">"Stil"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"Geluid aan"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"Vegen om te ontgrendelen"</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"Sluit een headset aan om wachtwoordtoetsen hardop te laten voorlezen."</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"Stip."</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"Navigeren naar startpositie"</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"Delen met..."</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Apparaat vergrendeld."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
+    <string name="sending" msgid="8715108995741758718">"Verzenden..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"Browser starten?"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"Oproep accepteren?"</string>
 </resources>

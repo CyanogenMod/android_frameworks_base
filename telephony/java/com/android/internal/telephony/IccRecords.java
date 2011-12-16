@@ -22,6 +22,7 @@ import android.os.Message;
 import android.os.Registrant;
 import android.os.RegistrantList;
 
+import com.android.internal.telephony.gsm.UsimServiceTable;
 import com.android.internal.telephony.ims.IsimRecords;
 
 /**
@@ -57,7 +58,6 @@ public abstract class IccRecords extends Handler implements IccConstants {
     protected int mailboxIndex = 0; // 0 is no mailbox dailing number associated
 
     protected String spn;
-    protected int spnDisplayCondition;
 
     // ***** Constants
 
@@ -361,6 +361,10 @@ public abstract class IccRecords extends Handler implements IccConstants {
      * @return the interface to retrieve the ISIM records, or null if not supported
      */
     public IsimRecords getIsimRecords() {
+        return null;
+    }
+
+    public UsimServiceTable getUsimServiceTable() {
         return null;
     }
 }

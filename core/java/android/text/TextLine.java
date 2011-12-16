@@ -59,6 +59,12 @@ class TextLine {
     private boolean mCharsValid;
     private Spanned mSpanned;
     private final TextPaint mWorkPaint = new TextPaint();
+    private final SpanSet<MetricAffectingSpan> mMetricAffectingSpanSpanSet =
+            new SpanSet<MetricAffectingSpan>(MetricAffectingSpan.class);
+    private final SpanSet<CharacterStyle> mCharacterStyleSpanSet =
+            new SpanSet<CharacterStyle>(CharacterStyle.class);
+    private final SpanSet<ReplacementSpan> mReplacementSpanSpanSet =
+            new SpanSet<ReplacementSpan>(ReplacementSpan.class);
 
     private static final TextLine[] sCached = new TextLine[3];
 
@@ -96,6 +102,11 @@ class TextLine {
         tl.mText = null;
         tl.mPaint = null;
         tl.mDirections = null;
+
+        tl.mMetricAffectingSpanSpanSet.recycle();
+        tl.mCharacterStyleSpanSet.recycle();
+        tl.mReplacementSpanSpanSet.recycle();
+
         synchronized(sCached) {
             for (int i = 0; i < sCached.length; ++i) {
                 if (sCached[i] == null) {
@@ -136,9 +147,8 @@ class TextLine {
         boolean hasReplacement = false;
         if (text instanceof Spanned) {
             mSpanned = (Spanned) text;
-            ReplacementSpan[] spans = mSpanned.getSpans(start, limit, ReplacementSpan.class);
-            spans = TextUtils.removeEmptySpans(spans, mSpanned, ReplacementSpan.class);
-            hasReplacement = spans.length > 0;
+            mReplacementSpanSpanSet.init(mSpanned, start, limit);
+            hasReplacement = mReplacementSpanSpanSet.numberOfSpans > 0;
         }
 
         mCharsValid = hasReplacement || hasTabs || directions != Layout.DIRS_ALL_LEFT_TO_RIGHT;
@@ -156,10 +166,8 @@ class TextLine {
                 // zero-width characters.
                 char[] chars = mChars;
                 for (int i = start, inext; i < limit; i = inext) {
-                    inext = mSpanned.nextSpanTransition(i, limit, ReplacementSpan.class);
-                    ReplacementSpan[] spans = mSpanned.getSpans(i, inext, ReplacementSpan.class);
-                    spans = TextUtils.removeEmptySpans(spans, mSpanned, ReplacementSpan.class);
-                    if (spans.length > 0) {
+                    inext = mReplacementSpanSpanSet.getNextTransition(i, limit);
+                    if (mReplacementSpanSpanSet.hasSpansIntersecting(i, inext)) {
                         // transition into a span
                         chars[i - start] = '\ufffc';
                         for (int j = i - start + 1, e = inext - start; j < e; ++j) {
@@ -853,23 +861,32 @@ class TextLine {
     }
 
     private static class SpanSet<E> {
-        final int numberOfSpans;
-        final E[] spans;
-        final int[] spanStarts;
-        final int[] spanEnds;
-        final int[] spanFlags;
+        int numberOfSpans;
+        E[] spans;
+        int[] spanStarts;
+        int[] spanEnds;
+        int[] spanFlags;
+        final Class<? extends E> classType;
+
+        SpanSet(Class<? extends E> type) {
+            classType = type;
+            numberOfSpans = 0;
+        }
 
         @SuppressWarnings("unchecked")
-        SpanSet(Spanned spanned, int start, int limit, Class<? extends E> type) {
-            final E[] allSpans = spanned.getSpans(start, limit, type);
+        public void init(Spanned spanned, int start, int limit) {
+            final E[] allSpans = spanned.getSpans(start, limit, classType);
             final int length = allSpans.length;
-            // These arrays may end up being too large because of empty spans
-            spans = (E[]) Array.newInstance(type, length);
-            spanStarts = new int[length];
-            spanEnds = new int[length];
-            spanFlags = new int[length];
 
-            int count = 0;
+            if (length > 0 && (spans == null || spans.length < length)) {
+                // These arrays may end up being too large because of empty spans
+                spans = (E[]) Array.newInstance(classType, length);
+                spanStarts = new int[length];
+                spanEnds = new int[length];
+                spanFlags = new int[length];
+            }
+
+            numberOfSpans = 0;
             for (int i = 0; i < length; i++) {
                 final E span = allSpans[i];
 
@@ -878,34 +895,23 @@ class TextLine {
                 if (spanStart == spanEnd) continue;
 
                 final int spanFlag = spanned.getSpanFlags(span);
-                final int priority = spanFlag & Spanned.SPAN_PRIORITY;
-                if (priority != 0 && count != 0) {
-                    int j;
 
-                    for (j = 0; j < count; j++) {
-                        final int otherPriority = spanFlags[j] & Spanned.SPAN_PRIORITY;
-                        if (priority > otherPriority) break;
-                    }
+                spans[numberOfSpans] = span;
+                spanStarts[numberOfSpans] = spanStart;
+                spanEnds[numberOfSpans] = spanEnd;
+                spanFlags[numberOfSpans] = spanFlag;
 
-                    System.arraycopy(spans, j, spans, j + 1, count - j);
-                    System.arraycopy(spanStarts, j, spanStarts, j + 1, count - j);
-                    System.arraycopy(spanEnds, j, spanEnds, j + 1, count - j);
-                    System.arraycopy(spanFlags, j, spanFlags, j + 1, count - j);
-
-                    spans[j] = span;
-                    spanStarts[j] = spanStart;
-                    spanEnds[j] = spanEnd;
-                    spanFlags[j] = spanFlag;
-                } else {
-                    spans[i] = span;
-                    spanStarts[i] = spanStart;
-                    spanEnds[i] = spanEnd;
-                    spanFlags[i] = spanFlag;
-                }
-
-                count++;
+                numberOfSpans++;
             }
-            numberOfSpans = count;
+        }
+
+        public boolean hasSpansIntersecting(int start, int end) {
+            for (int i = 0; i < numberOfSpans; i++) {
+                // equal test is valid since both intervals are not empty by construction
+                if (spanStarts[i] >= end || spanEnds[i] <= start) continue;
+                return true;
+            }
+            return false;
         }
 
         int getNextTransition(int start, int limit) {
@@ -916,6 +922,13 @@ class TextLine {
                 if (spanEnd > start && spanEnd < limit) limit = spanEnd;
             }
             return limit;
+        }
+
+        public void recycle() {
+            // The spans array is guaranteed to be not null when numberOfSpans is > 0
+            for (int i = 0; i < numberOfSpans; i++) {
+                spans[i] = null; // prevent a leak: no reference kept when TextLine is recycled
+            }
         }
     }
 
@@ -960,10 +973,8 @@ class TextLine {
                     y, bottom, fmi, needWidth || mlimit < measureLimit);
         }
 
-        final SpanSet<MetricAffectingSpan> metricAffectingSpans = new SpanSet<MetricAffectingSpan>(
-                mSpanned, mStart + start, mStart + limit, MetricAffectingSpan.class);
-        final SpanSet<CharacterStyle> characterStyleSpans = new SpanSet<CharacterStyle>(
-                    mSpanned, mStart + start, mStart + limit, CharacterStyle.class);
+        mMetricAffectingSpanSpanSet.init(mSpanned, mStart + start, mStart + limit);
+        mCharacterStyleSpanSet.init(mSpanned, mStart + start, mStart + limit);
 
         // Shaping needs to take into account context up to metric boundaries,
         // but rendering needs to take into account character style boundaries.
@@ -975,17 +986,18 @@ class TextLine {
             TextPaint wp = mWorkPaint;
             wp.set(mPaint);
 
-            inext = metricAffectingSpans.getNextTransition(mStart + i, mStart + limit) - mStart;
+            inext = mMetricAffectingSpanSpanSet.getNextTransition(mStart + i, mStart + limit) -
+                    mStart;
             int mlimit = Math.min(inext, measureLimit);
 
             ReplacementSpan replacement = null;
 
-            for (int j = 0; j < metricAffectingSpans.numberOfSpans; j++) {
+            for (int j = 0; j < mMetricAffectingSpanSpanSet.numberOfSpans; j++) {
                 // Both intervals [spanStarts..spanEnds] and [mStart + i..mStart + mlimit] are NOT
                 // empty by construction. This special case in getSpans() explains the >= & <= tests
-                if ((metricAffectingSpans.spanStarts[j] >= mStart + mlimit) ||
-                        (metricAffectingSpans.spanEnds[j] <= mStart + i)) continue;
-                MetricAffectingSpan span = metricAffectingSpans.spans[j];
+                if ((mMetricAffectingSpanSpanSet.spanStarts[j] >= mStart + mlimit) ||
+                        (mMetricAffectingSpanSpanSet.spanEnds[j] <= mStart + i)) continue;
+                MetricAffectingSpan span = mMetricAffectingSpanSpanSet.spans[j];
                 if (span instanceof ReplacementSpan) {
                     replacement = (ReplacementSpan)span;
                 } else {
@@ -1006,16 +1018,16 @@ class TextLine {
                         y, bottom, fmi, needWidth || mlimit < measureLimit);
             } else {
                 for (int j = i, jnext; j < mlimit; j = jnext) {
-                    jnext = characterStyleSpans.getNextTransition(mStart + j, mStart + mlimit) -
+                    jnext = mCharacterStyleSpanSet.getNextTransition(mStart + j, mStart + mlimit) -
                             mStart;
 
                     wp.set(mPaint);
-                    for (int k = 0; k < characterStyleSpans.numberOfSpans; k++) {
+                    for (int k = 0; k < mCharacterStyleSpanSet.numberOfSpans; k++) {
                         // Intentionally using >= and <= as explained above
-                        if ((characterStyleSpans.spanStarts[k] >= mStart + jnext) ||
-                                (characterStyleSpans.spanEnds[k] <= mStart + j)) continue;
+                        if ((mCharacterStyleSpanSet.spanStarts[k] >= mStart + jnext) ||
+                                (mCharacterStyleSpanSet.spanEnds[k] <= mStart + j)) continue;
 
-                        CharacterStyle span = characterStyleSpans.spans[k];
+                        CharacterStyle span = mCharacterStyleSpanSet.spans[k];
                         span.updateDrawState(wp);
                     }
 

@@ -151,6 +151,14 @@ public class SearchView extends LinearLayout implements CollapsibleActionView {
         }
     };
 
+    private Runnable mReleaseCursorRunnable = new Runnable() {
+        public void run() {
+            if (mSuggestionsAdapter != null && mSuggestionsAdapter instanceof SuggestionsAdapter) {
+                mSuggestionsAdapter.changeCursor(null);
+            }
+        }
+    };
+
     // For voice searching
     private final Intent mVoiceWebSearchIntent;
     private final Intent mVoiceAppSearchIntent;
@@ -720,7 +728,8 @@ public class SearchView extends LinearLayout implements CollapsibleActionView {
 
     private void updateSubmitButton(boolean hasText) {
         int visibility = GONE;
-        if (isSubmitAreaEnabled() && hasFocus() && (hasText || !mVoiceButtonEnabled)) {
+        if (mSubmitButtonEnabled && isSubmitAreaEnabled() && hasFocus()
+                && (hasText || !mVoiceButtonEnabled)) {
             visibility = VISIBLE;
         }
         mSubmitButton.setVisibility(visibility);
@@ -759,6 +768,7 @@ public class SearchView extends LinearLayout implements CollapsibleActionView {
     @Override
     protected void onDetachedFromWindow() {
         removeCallbacks(mUpdateDrawableStateRunnable);
+        post(mReleaseCursorRunnable);
         super.onDetachedFromWindow();
     }
 
@@ -1028,7 +1038,9 @@ public class SearchView extends LinearLayout implements CollapsibleActionView {
             }
         }
         mQueryTextView.setInputType(inputType);
-
+        if (mSuggestionsAdapter != null) {
+            mSuggestionsAdapter.changeCursor(null);
+        }
         // attach the suggestions adapter, if suggestions are available
         // The existence of a suggestions authority is the proxy for "suggestions available here"
         if (mSearchable.getSuggestAuthority() != null) {
@@ -1071,9 +1083,7 @@ public class SearchView extends LinearLayout implements CollapsibleActionView {
         CharSequence text = mQueryTextView.getText();
         mUserQuery = text;
         boolean hasText = !TextUtils.isEmpty(text);
-        if (isSubmitButtonEnabled()) {
-            updateSubmitButton(hasText);
-        }
+        updateSubmitButton(hasText);
         updateVoiceButton(!hasText);
         updateCloseButton();
         updateSubmitArea();
@@ -1177,7 +1187,6 @@ public class SearchView extends LinearLayout implements CollapsibleActionView {
     public void onActionViewCollapsed() {
         clearFocus();
         updateViewsVisibility(true);
-        mQueryTextView.setText("");
         mQueryTextView.setImeOptions(mCollapsedImeOptions);
         mExpandedInActionView = false;
     }
@@ -1187,9 +1196,12 @@ public class SearchView extends LinearLayout implements CollapsibleActionView {
      */
     @Override
     public void onActionViewExpanded() {
+        if (mExpandedInActionView) return;
+
         mExpandedInActionView = true;
         mCollapsedImeOptions = mQueryTextView.getImeOptions();
         mQueryTextView.setImeOptions(mCollapsedImeOptions | EditorInfo.IME_FLAG_NO_FULLSCREEN);
+        mQueryTextView.setText("");
         setIconified(false);
     }
 

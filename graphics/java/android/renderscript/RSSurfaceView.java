@@ -30,7 +30,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 /**
- * The Surface View for a graphics renderscript (RenderScriptGL) to draw on. 
+ * The Surface View for a graphics renderscript (RenderScriptGL) to draw on.
  */
 public class RSSurfaceView extends SurfaceView implements SurfaceHolder.Callback {
     private SurfaceHolder mSurfaceHolder;
@@ -78,9 +78,11 @@ public class RSSurfaceView extends SurfaceView implements SurfaceHolder.Callback
      * not normally called or subclassed by clients of RSSurfaceView.
      */
     public void surfaceDestroyed(SurfaceHolder holder) {
-        // Surface will be destroyed when we return
-        if (mRS != null) {
-            mRS.setSurface(null, 0, 0);
+        synchronized (this) {
+            // Surface will be destroyed when we return
+            if (mRS != null) {
+                mRS.setSurface(null, 0, 0);
+            }
         }
     }
 
@@ -89,8 +91,10 @@ public class RSSurfaceView extends SurfaceView implements SurfaceHolder.Callback
      * not normally called or subclassed by clients of RSSurfaceView.
      */
     public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-        if (mRS != null) {
-            mRS.setSurface(holder, w, h);
+        synchronized (this) {
+            if (mRS != null) {
+                mRS.setSurface(holder, w, h);
+            }
         }
     }
 
@@ -126,8 +130,10 @@ public class RSSurfaceView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void destroyRenderScriptGL() {
-        mRS.destroy();
-        mRS = null;
+        synchronized (this) {
+            mRS.destroy();
+            mRS = null;
+        }
     }
 
     public void setRenderScriptGL(RenderScriptGL rs) {

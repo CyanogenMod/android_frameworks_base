@@ -776,7 +776,7 @@ private:
 
         virtual int             getTrackName_l() = 0;
         virtual void            deleteTrackName_l(int name) = 0;
-        virtual uint32_t        activeSleepTimeUs() = 0;
+        virtual uint32_t        activeSleepTimeUs();
         virtual uint32_t        idleSleepTimeUs() = 0;
         virtual uint32_t        suspendSleepTimeUs() = 0;
 
@@ -833,7 +833,6 @@ private:
                                                 Vector< sp<Track> > *tracksToRemove);
         virtual     int         getTrackName_l();
         virtual     void        deleteTrackName_l(int name);
-        virtual     uint32_t    activeSleepTimeUs();
         virtual     uint32_t    idleSleepTimeUs();
         virtual     uint32_t    suspendSleepTimeUs();
 
@@ -1247,6 +1246,10 @@ private:
         // corresponding to a suspend all request.
         static const int        kKeyForSuspendAll = 0;
 
+        // minimum duration during which we force calling effect process when last track on
+        // a session is stopped or removed to allow effect tail to be rendered
+        static const int        kProcessTailDurationMs = 1000;
+
         void process_l();
 
         void lock() {
@@ -1287,7 +1290,8 @@ private:
         void decTrackCnt() { android_atomic_dec(&mTrackCnt); }
         int32_t trackCnt() { return mTrackCnt;}
 
-        void incActiveTrackCnt() { android_atomic_inc(&mActiveTrackCnt); }
+        void incActiveTrackCnt() { android_atomic_inc(&mActiveTrackCnt);
+                                   mTailBufferCount = mMaxTailBuffers; }
         void decActiveTrackCnt() { android_atomic_dec(&mActiveTrackCnt); }
         int32_t activeTrackCnt() { return mActiveTrackCnt;}
 
@@ -1338,6 +1342,8 @@ private:
         int16_t *mOutBuffer;        // chain output buffer
         volatile int32_t mActiveTrackCnt;  // number of active tracks connected
         volatile int32_t mTrackCnt;        // number of tracks connected
+        int32_t mTailBufferCount;   // current effect tail buffer count
+        int32_t mMaxTailBuffers;    // maximum effect tail buffers
         bool mOwnInBuffer;          // true if the chain owns its input buffer
         int mVolumeCtrlIdx;         // index of insert effect having control over volume
         uint32_t mLeftVolume;       // previous volume on left channel

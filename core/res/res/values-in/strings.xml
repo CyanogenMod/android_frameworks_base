@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Matikan nirkabel"</string>
     <string name="screen_lock" msgid="799094655496098153">"Kunci layar"</string>
     <string name="power_off" msgid="4266614107412865048">"Matikan daya"</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"Sedang mematikan..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Tablet Anda akan dimatikan."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Ponsel Anda akan dimatikan."</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"baca data log sensitif"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"Mengizinkan aplikasi membaca dari berbagai berkas log sistem. Ini memungkinkan aplikasi menemukan informasi umum tentang apa yang Anda lakukan dengan tablet, kemungkinan termasuk informasi pribadi."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"Mengizinkan aplikasi membaca dari berbagai berkas log sistem. Ini memungkinkan aplikasi menemukan informasi umum tentang apa yang Anda lakukan dengan ponsel, kemungkinan termasuk informasi pribadi."</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"menggunakan media pengawasandi apa pun untuk pemutaran"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"Mengizinkan aplikasi menggunakan pengawasandi media apa pun yang terpasang guna mengawasandikan media untuk diputar."</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"baca/tulis ke sumber daya yang dimiliki oleh diag"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"Mengizinkan aplikasi membaca dan menulis ke sumber daya yang dimiliki oleh grup diag; misalnya, berkas dalam /dev. Ini berisiko mempengaruhi kestabilan dan keamanan sistem. Ini sebaiknya HANYA digunakan untuk diagnostik khusus perangkat keras oleh pabrik atau operator."</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"aktifkan atau nonaktifkan komponen aplikasi"</string>
@@ -444,7 +452,7 @@
     <string name="permdesc_manageAccounts" msgid="8804114016661104517">"Mengizinkan aplikasi melakukan operasi seperti menambah dan menghapus akun, serta menghapus sandinya."</string>
     <string name="permlab_useCredentials" msgid="6401886092818819856">"gunakan kredensial autentikasi dari suatu akun"</string>
     <string name="permdesc_useCredentials" msgid="7416570544619546974">"Mengizinkan aplikasi meminta token autentikasi."</string>
-    <string name="permlab_accessNetworkState" msgid="6865575199464405769">"lihat kondisi jaringan"</string>
+    <string name="permlab_accessNetworkState" msgid="6865575199464405769">"melihat keadaan jaringan"</string>
     <string name="permdesc_accessNetworkState" msgid="558721128707712766">"Mengizinkan aplikasi melihat kondisi semua jaringan."</string>
     <string name="permlab_createNetworkSockets" msgid="9121633680349549585">"akses internet penuh"</string>
     <string name="permdesc_createNetworkSockets" msgid="4593339106921772192">"Mengizinkan aplikasi membuat soket jaringan."</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Mengizinkan aplikasi tersambung dan diputus dari titik akses Wi-Fi, dan melakukan perubahan pada jaringan Wi-Fi yang dikonfigurasi."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"Izinkan penerimaan Wi-Fi Multicast"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Mengizinkan aplikasi menerima paket yang tidak langsung dialamatkan ke perangkat Anda. Ini dapat bermanfaat ketika mencari perangkat yang ditawarkan di dekat Anda. Aplikasi ini menggunakan lebih banyak daya ketimbang mode selain multicast."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"lihat status WiMAX"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"Mengizinkan aplikasi melihat informasi tentang status WiMAX."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"Ganti status WiMAX"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"Mengizinkan aplikasi menyambung ke dan memutus dari jaringan WiMAX."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"Administrasi bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"Mengizinkan aplikasi untuk mengonfigurasi tablet Bluetooth lokal, dan menemukan serta memasang dengan perangkat jarak jauh."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"Mengizinkan aplikasi mengonfigurasi ponsel Bluetooth lokal, dan menemukan dan menyandingkan perangkat jarak jauh."</string>
@@ -903,7 +915,7 @@
     <string name="anr_application_process" msgid="7208175830253210526">"<xliff:g id="APPLICATION">%1$s</xliff:g> tidak merespons. Apakah Anda ingin menutupnya?"</string>
     <string name="anr_process" msgid="306819947562555821">"Proses <xliff:g id="PROCESS">%1$s</xliff:g> tidak merespons."\n\n"Apakah Anda ingin menutupnya?"</string>
     <string name="force_close" msgid="8346072094521265605">"OK"</string>
-    <string name="report" msgid="4060218260984795706">"Laporkan sebagai"</string>
+    <string name="report" msgid="4060218260984795706">"Laporkan"</string>
     <string name="wait" msgid="7147118217226317732">"Tunggu"</string>
     <string name="launch_warning_title" msgid="8323761616052121936">"Aplikasi dialihkan"</string>
     <string name="launch_warning_replace" msgid="6202498949970281412">"<xliff:g id="APP_NAME">%1$s</xliff:g> sedang berjalan."</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"Jaringan Wi-Fi terbuka tersedia"</item>
     <item quantity="other" msgid="7915895323644292768">"Jaringan Wi-Fi terbuka tersedia"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Masuk ke jaringan Wi-Fi"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Tidak dapat tersambung ke Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" memiliki sambungan internet yang buruk."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Langsung"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"Kamera"</string>
     <string name="description_target_silent" msgid="893551287746522182">"Senyap"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"Suara hidup"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"Gesek untuk membuka kunci."</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"Pasang headset untuk mendengar tombol sandi yang diucapkan dengan keras."</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"Titik."</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"Navigasi ke beranda"</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"Berbagi dengan..."</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Perangkat tergembok."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
+    <string name="sending" msgid="8715108995741758718">"Mengirim..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"Luncurkan Peramban?"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"Terima Panggilan?"</string>
 </resources>

@@ -2162,6 +2162,9 @@ public class PackageManagerService extends IPackageManager.Stub {
             int flags, List<ResolveInfo> query, int priority) {
         // writer
         synchronized (mPackages) {
+            if (intent.getSelector() != null) {
+                intent = intent.getSelector(); 
+            }
             if (DEBUG_PREFERRED) intent.addFlags(Intent.FLAG_DEBUG_LOG_RESOLUTION);
             List<PreferredActivity> prefs =
                     mSettings.mPreferredActivities.queryIntent(intent, resolvedType,
@@ -2242,7 +2245,13 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     public List<ResolveInfo> queryIntentActivities(Intent intent,
             String resolvedType, int flags) {
-        final ComponentName comp = intent.getComponent();
+        ComponentName comp = intent.getComponent();
+        if (comp == null) {
+            if (intent.getSelector() != null) {
+                intent = intent.getSelector(); 
+                comp = intent.getComponent();
+            }
+        }
         if (comp != null) {
             final List<ResolveInfo> list = new ArrayList<ResolveInfo>(1);
             final ActivityInfo ai = getActivityInfo(comp, flags);
@@ -2440,6 +2449,12 @@ public class PackageManagerService extends IPackageManager.Stub {
 
     public List<ResolveInfo> queryIntentReceivers(Intent intent, String resolvedType, int flags) {
         ComponentName comp = intent.getComponent();
+        if (comp == null) {
+            if (intent.getSelector() != null) {
+                intent = intent.getSelector(); 
+                comp = intent.getComponent();
+            }
+        }
         if (comp != null) {
             List<ResolveInfo> list = new ArrayList<ResolveInfo>(1);
             ActivityInfo ai = getReceiverInfo(comp, flags);
@@ -2478,7 +2493,13 @@ public class PackageManagerService extends IPackageManager.Stub {
     }
 
     public List<ResolveInfo> queryIntentServices(Intent intent, String resolvedType, int flags) {
-        final ComponentName comp = intent.getComponent();
+        ComponentName comp = intent.getComponent();
+        if (comp == null) {
+            if (intent.getSelector() != null) {
+                intent = intent.getSelector(); 
+                comp = intent.getComponent();
+            }
+        }
         if (comp != null) {
             final List<ResolveInfo> list = new ArrayList<ResolveInfo>(1);
             final ServiceInfo si = getServiceInfo(comp, flags);
@@ -7961,7 +7982,7 @@ public class PackageManagerService extends IPackageManager.Stub {
 
             if (dumpState.isDumping(DumpState.DUMP_PROVIDERS)) {
                 boolean printedSomething = false;
-                for (PackageParser.Provider p : mProviders.values()) {
+                for (PackageParser.Provider p : mProvidersByComponent.values()) {
                     if (packageName != null && !packageName.equals(p.info.packageName)) {
                         continue;
                     }
@@ -7971,8 +7992,23 @@ public class PackageManagerService extends IPackageManager.Stub {
                         pw.println("Registered ContentProviders:");
                         printedSomething = true;
                     }
-                    pw.print("  ["); pw.print(p.info.authority); pw.print("]: ");
-                            pw.println(p.toString());
+                    pw.print("  "); pw.print(p.getComponentShortName()); pw.println(":");
+                    pw.print("    "); pw.println(p.toString());
+                }
+                printedSomething = false;
+                for (Map.Entry<String, PackageParser.Provider> entry : mProviders.entrySet()) {
+                    PackageParser.Provider p = entry.getValue();
+                    if (packageName != null && !packageName.equals(p.info.packageName)) {
+                        continue;
+                    }
+                    if (!printedSomething) {
+                        if (dumpState.onTitlePrinted())
+                            pw.println(" ");
+                        pw.println("ContentProvider Authorities:");
+                        printedSomething = true;
+                    }
+                    pw.print("  ["); pw.print(entry.getKey()); pw.println("]:");
+                    pw.print("    "); pw.println(p.toString());
                 }
             }
             

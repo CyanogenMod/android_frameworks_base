@@ -124,6 +124,7 @@ public final class WebViewCore {
      */
     private int mViewportDensityDpi = -1;
 
+    private boolean mIsRestored = false;
     private float mRestoredScale = 0;
     private float mRestoredTextWrapScale = 0;
     private int mRestoredX = 0;
@@ -518,7 +519,12 @@ public final class WebViewCore {
     /**
      * Update the layers' content
      */
-    private native boolean nativeUpdateLayers(int baseLayer);
+    private native boolean nativeUpdateLayers(int nativeClass, int baseLayer);
+
+    /**
+     * Notify webkit that animations have begun (on the hardware accelerated content)
+     */
+    private native void nativeNotifyAnimationStarted(int nativeClass);
 
     private native boolean nativeFocusBoundsChanged();
 
@@ -1033,6 +1039,8 @@ public final class WebViewCore {
         static final int EXECUTE_JS = 194;
 
         static final int PLUGIN_SURFACE_READY = 195;
+
+        static final int NOTIFY_ANIMATION_STARTED = 196;
 
         // private message ids
         private static final int DESTROY =     200;
@@ -1593,6 +1601,10 @@ public final class WebViewCore {
                             nativePluginSurfaceReady();
                             break;
 
+                        case NOTIFY_ANIMATION_STARTED:
+                            nativeNotifyAnimationStarted(mNativeClass);
+                            break;
+
                         case ADD_PACKAGE_NAMES:
                             if (BrowserFrame.sJavaBridge == null) {
                                 throw new IllegalStateException("No WebView " +
@@ -1981,6 +1993,7 @@ public final class WebViewCore {
         int mScrollY;
         boolean mMobileSite;
         boolean mIsRestored;
+        boolean mShouldStartScrolledRight;
     }
 
     static class DrawData {
@@ -2013,7 +2026,7 @@ public final class WebViewCore {
             return;
         }
         // Directly update the layers we last passed to the UI side
-        if (nativeUpdateLayers(mLastDrawData.mBaseLayer)) {
+        if (nativeUpdateLayers(mNativeClass, mLastDrawData.mBaseLayer)) {
             // If anything more complex than position has been touched, let's do a full draw
             webkitDraw();
         }
@@ -2254,7 +2267,7 @@ public final class WebViewCore {
 
         if (mWebView == null) return;
 
-        boolean updateViewState = standardLoad || mRestoredScale > 0;
+        boolean updateViewState = standardLoad || mIsRestored;
         setupViewport(updateViewState);
         // if updateRestoreState is true, ViewManager.postReadyToDrawAll() will
         // be called after the WebView updates its state. If updateRestoreState
@@ -2271,6 +2284,7 @@ public final class WebViewCore {
 
         // reset the scroll position, the restored offset and scales
         mRestoredX = mRestoredY = 0;
+        mIsRestored = false;
         mRestoredScale = mRestoredTextWrapScale = 0;
     }
 
@@ -2287,6 +2301,18 @@ public final class WebViewCore {
         }
         // set the viewport settings from WebKit
         setViewportSettingsFromNative();
+
+        // clamp initial scale
+        if (mViewportInitialScale > 0) {
+            if (mViewportMinimumScale > 0) {
+                mViewportInitialScale = Math.max(mViewportInitialScale,
+                        mViewportMinimumScale);
+            }
+            if (mViewportMaximumScale > 0) {
+                mViewportInitialScale = Math.min(mViewportInitialScale,
+                        mViewportMaximumScale);
+            }
+        }
 
         if (mSettings.forceUserScalable()) {
             mViewportUserScalable = true;
@@ -2320,6 +2346,10 @@ public final class WebViewCore {
         } else if (mViewportDensityDpi > 0) {
             adjust = (float) mContext.getResources().getDisplayMetrics().densityDpi
                     / mViewportDensityDpi;
+        }
+        if (adjust != mWebView.getDefaultZoomScale()) {
+            Message.obtain(mWebView.mPrivateHandler,
+                    WebView.UPDATE_ZOOM_DENSITY, adjust).sendToTarget();
         }
         int defaultScale = (int) (adjust * 100);
 
@@ -2368,6 +2398,7 @@ public final class WebViewCore {
             viewState.mMobileSite = false;
             // for non-mobile site, we don't need minPrefWidth, set it as 0
             viewState.mScrollX = 0;
+            viewState.mShouldStartScrolledRight = false;
             Message.obtain(mWebView.mPrivateHandler,
                     WebView.UPDATE_ZOOM_RANGE, viewState).sendToTarget();
             return;
@@ -2398,8 +2429,13 @@ public final class WebViewCore {
         mInitialViewState.mDefaultScale = adjust;
         mInitialViewState.mScrollX = mRestoredX;
         mInitialViewState.mScrollY = mRestoredY;
+        mInitialViewState.mShouldStartScrolledRight = (mRestoredX == 0)
+                && (mRestoredY == 0)
+                && (mBrowserFrame != null)
+                && mBrowserFrame.getShouldStartScrolledRight();
+
         mInitialViewState.mMobileSite = (0 == mViewportWidth);
-        if (mRestoredScale > 0) {
+        if (mIsRestored) {
             mInitialViewState.mIsRestored = true;
             mInitialViewState.mViewScale = mRestoredScale;
             if (mRestoredTextWrapScale > 0) {
@@ -2525,13 +2561,10 @@ public final class WebViewCore {
     // called by JNI
     private void restoreScale(float scale, float textWrapScale) {
         if (mBrowserFrame.firstLayoutDone() == false) {
-            // If restored scale and textWrapScale are 0, set them to
-            // overview and reading level scale respectively.
-            mRestoredScale = (scale <= 0.0)
-                ? mWebView.getZoomOverviewScale() : scale;
+            mIsRestored = true;
+            mRestoredScale = scale;
             if (mSettings.getUseWideViewPort()) {
-                mRestoredTextWrapScale = (textWrapScale <= 0.0)
-                    ? mWebView.getReadingLevelScale() : textWrapScale;
+                mRestoredTextWrapScale = textWrapScale;
             }
         }
     }

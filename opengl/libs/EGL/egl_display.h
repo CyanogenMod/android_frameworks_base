@@ -29,6 +29,7 @@
 
 #include <utils/SortedVector.h>
 #include <utils/threads.h>
+#include <utils/String8.h>
 
 #include "egldefs.h"
 #include "hooks.h"
@@ -59,7 +60,7 @@ struct egl_config_t {
 
 // ----------------------------------------------------------------------------
 
-class egl_display_t {
+class EGLAPI egl_display_t { // marked as EGLAPI for testing purposes
     static egl_display_t sDisplay[NUM_DISPLAYS];
     EGLDisplay getDisplay(EGLNativeDisplayType display);
 
@@ -81,7 +82,7 @@ public:
     // remove object from this display's list
     void removeObject(egl_object_t* object);
     // add reference to this object. returns true if this is a valid object.
-    bool getObject(egl_object_t* object);
+    bool getObject(egl_object_t* object) const;
 
 
     static egl_display_t* get(EGLDisplay dpy);
@@ -90,6 +91,13 @@ public:
     inline bool isReady() const { return (refs > 0); }
     inline bool isValid() const { return magic == '_dpy'; }
     inline bool isAlive() const { return isValid(); }
+
+    char const * getVendorString() const { return mVendorString.string(); }
+    char const * getVersionString() const { return mVersionString.string(); }
+    char const * getClientApiString() const { return mClientApiString.string(); }
+    char const * getExtensionString() const { return mExtensionString.string(); }
+
+    inline uint32_t getRefsCount() const { return refs; }
 
     struct strings_t {
         char const * vendor;
@@ -117,9 +125,13 @@ public:
     egl_config_t*   configs;
 
 private:
-    uint32_t        refs;
-    Mutex           lock;
-    SortedVector<egl_object_t*> objects;
+            uint32_t                    refs;
+    mutable Mutex                       lock;
+            SortedVector<egl_object_t*> objects;
+            String8 mVendorString;
+            String8 mVersionString;
+            String8 mClientApiString;
+            String8 mExtensionString;
 };
 
 // ----------------------------------------------------------------------------
@@ -141,4 +153,3 @@ EGLBoolean validate_display_surface(EGLDisplay dpy, EGLSurface surface);
 // ----------------------------------------------------------------------------
 
 #endif // ANDROID_EGL_DISPLAY_H
-

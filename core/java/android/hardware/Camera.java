@@ -303,7 +303,7 @@ public class Camera {
     }
 
     protected void finalize() {
-        native_release();
+        release();
     }
 
     private native final void native_setup(Object camera_this, int cameraId);
@@ -1098,9 +1098,21 @@ public class Camera {
      * Parameters#getMaxNumDetectedFaces()} returns a number larger than 0.
      * If the face detection has started, apps should not call this again.
      *
-     * When the face detection is running, {@link Parameters#setWhiteBalance(String)},
+     * <p>When the face detection is running, {@link Parameters#setWhiteBalance(String)},
      * {@link Parameters#setFocusAreas(List)}, and {@link Parameters#setMeteringAreas(List)}
-     * have no effect.
+     * have no effect. The camera uses the detected faces to do auto-white balance,
+     * auto exposure, and autofocus.
+     *
+     * <p>If the apps call {@link #autoFocus(AutoFocusCallback)}, the camera
+     * will stop sending face callbacks. The last face callback indicates the
+     * areas used to do autofocus. After focus completes, face detection will
+     * resume sending face callbacks. If the apps call {@link
+     * #cancelAutoFocus()}, the face callbacks will also resume.</p>
+     *
+     * <p>After calling {@link #takePicture(Camera.ShutterCallback, Camera.PictureCallback,
+     * Camera.PictureCallback)} or {@link #stopPreview()}, and then resuming
+     * preview with {@link #startPreview()}, the apps should call this method
+     * again to resume face detection.</p>
      *
      * @throws IllegalArgumentException if the face detection is unsupported.
      * @throws RuntimeException if the method fails or the face detection is
@@ -1150,14 +1162,31 @@ public class Camera {
          * camera field of view, and (1000, 1000) represents the bottom-right of
          * the field of view. For example, suppose the size of the viewfinder UI
          * is 800x480. The rect passed from the driver is (-1000, -1000, 0, 0).
-         * The corresponding viewfinder rect should be (0, 0, 400, 240). The
-         * width and height of the rect will not be 0 or negative. The
-         * coordinates can be smaller than -1000 or bigger than 1000. But at
-         * least one vertex will be within (-1000, -1000) and (1000, 1000).
+         * The corresponding viewfinder rect should be (0, 0, 400, 240). It is
+         * guaranteed left < right and top < bottom. The coordinates can be
+         * smaller than -1000 or bigger than 1000. But at least one vertex will
+         * be within (-1000, -1000) and (1000, 1000).
          *
          * <p>The direction is relative to the sensor orientation, that is, what
          * the sensor sees. The direction is not affected by the rotation or
-         * mirroring of {@link #setDisplayOrientation(int)}.</p>
+         * mirroring of {@link #setDisplayOrientation(int)}. The face bounding
+         * rectangle does not provide any information about face orientation.</p>
+         *
+         * <p>Here is the matrix to convert driver coordinates to View coordinates
+         * in pixels.</p>
+         * <pre>
+         * Matrix matrix = new Matrix();
+         * CameraInfo info = CameraHolder.instance().getCameraInfo()[cameraId];
+         * // Need mirror for front camera.
+         * boolean mirror = (info.facing == CameraInfo.CAMERA_FACING_FRONT);
+         * matrix.setScale(mirror ? -1 : 1, 1);
+         * // This is the value for android.hardware.Camera.setDisplayOrientation.
+         * matrix.postRotate(displayOrientation);
+         * // Camera driver coordinates range from (-1000, -1000) to (1000, 1000).
+         * // UI coordinates range from (0, 0) to (width, height).
+         * matrix.postScale(view.getWidth() / 2000f, view.getHeight() / 2000f);
+         * matrix.postTranslate(view.getWidth() / 2f, view.getHeight() / 2f);
+         * </pre>
          *
          * @see #startFaceDetection()
          */
@@ -2354,7 +2383,7 @@ public class Camera {
          *
          * <p>The reference code is as follows.
          *
-	 * <pre>
+         * <pre>
          * public void onOrientationChanged(int orientation) {
          *     if (orientation == ORIENTATION_UNKNOWN) return;
          *     android.hardware.Camera.CameraInfo info =
@@ -2369,7 +2398,7 @@ public class Camera {
          *     }
          *     mParameters.setRotation(rotation);
          * }
-	 * </pre>
+         * </pre>
          *
          * @param rotation The rotation angle in degrees relative to the
          *                 orientation of the camera. Rotation can only be 0,
@@ -2470,13 +2499,16 @@ public class Camera {
 
         /**
          * Sets the white balance. Changing the setting will release the
-         * auto-white balance lock.
+         * auto-white balance lock. It is recommended not to change white
+         * balance and AWB lock at the same time.
          *
          * @param value new white balance.
          * @see #getWhiteBalance()
          * @see #setAutoWhiteBalanceLock(boolean)
          */
         public void setWhiteBalance(String value) {
+            String oldValue = get(KEY_WHITE_BALANCE);
+            if (same(value, oldValue)) return;
             set(KEY_WHITE_BALANCE, value);
             set(KEY_AUTO_WHITEBALANCE_LOCK, FALSE);
         }
@@ -3259,7 +3291,6 @@ public class Camera {
          * disable video stabilization.
          * @see #isVideoStabilizationSupported()
          * @see #getVideoStabilization()
-         * @hide
          */
         public void setVideoStabilization(boolean toggle) {
             set(KEY_VIDEO_STABILIZATION, toggle ? TRUE : FALSE);
@@ -3272,7 +3303,6 @@ public class Camera {
          * @return true if video stabilization is enabled
          * @see #isVideoStabilizationSupported()
          * @see #setVideoStabilization(boolean)
-         * @hide
          */
         public boolean getVideoStabilization() {
             String str = get(KEY_VIDEO_STABILIZATION);
@@ -3286,7 +3316,6 @@ public class Camera {
          * @return true if video stabilization is supported
          * @see #setVideoStabilization(boolean)
          * @see #getVideoStabilization()
-         * @hide
          */
         public boolean isVideoStabilizationSupported() {
             String str = get(KEY_VIDEO_STABILIZATION_SUPPORTED);
@@ -3453,6 +3482,12 @@ public class Camera {
             }
 
             return result;
+        }
+
+        private boolean same(String s1, String s2) {
+            if (s1 == null && s2 == null) return true;
+            if (s1 != null && s1.equals(s2)) return true;
+            return false;
         }
     };
 }

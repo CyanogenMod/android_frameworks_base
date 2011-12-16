@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Отключить беспроводное соединение"</string>
     <string name="screen_lock" msgid="799094655496098153">"Блокировка экрана"</string>
     <string name="power_off" msgid="4266614107412865048">"Выключение"</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"Выключение..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Планшетный ПК будет отключен."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Телефон будет выключен."</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"считывать конфиденциальные данные журнала"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"Позволяет приложению считывать информацию из различных файлов журналов системы. Приложение может получать сведения о работе пользователя на планшетном ПК, которые могут содержать личную или конфиденциальную информацию."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"Позволяет приложению считывать информацию из различных журналов системы. Приложение может получать сведения о работе пользователя с телефоном, которые могут содержать личную или конфиденциальную информацию."</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"Использование любых дешифраторов"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"Приложение сможет использовать любой установленный дешифратор."</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"считывать/записывать данные в ресурсы, принадлежащие группе диагностики"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"Позволяет приложению считывать и записывать данные в любые ресурсы, принадлежащие группе диагностики (например, файлы в каталоге /dev). Это может повлиять на стабильность и безопасность системы. Эта возможность может быть использована ТОЛЬКО производителем или оператором для диагностики аппаратного обеспечения."</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"включать или отключать компоненты приложения"</string>
@@ -348,7 +356,7 @@
     <string name="permlab_accessFineLocation" msgid="8116127007541369477">"точное местоположение (GPS)"</string>
     <string name="permdesc_accessFineLocation" product="tablet" msgid="243973693233359681">"Получать доступ к источникам точного местоположения, таким как GPS, когда это возможно. Вредоносные приложения могут использовать это разрешение для определения вашего местоположения и расходовать ресурс батареи."</string>
     <string name="permdesc_accessFineLocation" product="default" msgid="7411213317434337331">"Получать доступ к источникам точного местоположения, таким как GPS, если возможно. Вредоносные приложения могут использовать это разрешение для определения вашего местоположения и расходовать ресурс батареи."</string>
-    <string name="permlab_accessCoarseLocation" msgid="4642255009181975828">"отслеживать местоположение по сигналам сети"</string>
+    <string name="permlab_accessCoarseLocation" msgid="4642255009181975828">"примерное местоположение по координатам сети"</string>
     <string name="permdesc_accessCoarseLocation" product="tablet" msgid="3704633168985466045">"Получать доступ к источникам данных о местоположении, таким как база данных сотовой сети, для определения приблизительного местоположения планшетного ПК, когда это возможно. Вредоносные приложения могут использовать это разрешение для определения вашего приблизительного местоположения."</string>
     <string name="permdesc_accessCoarseLocation" product="default" msgid="8235655958070862293">"Получать доступ к источникам данных о местоположении, таким как база данных сотовой сети, для определения приблизительного местоположения телефона, если возможно. Вредоносные приложения могут использовать эту возможность для определения вашего приблизительного местоположения."</string>
     <string name="permlab_accessSurfaceFlinger" msgid="2363969641792388947">"получать доступ к SurfaceFlinger"</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Позволяет приложению подключаться к точкам доступа Wi-Fi и отключаться от них, а также вносить изменения в конфигурацию сетей Wi-Fi."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"разрешить принимать многоадресный сигнал Wi-Fi"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Разрешает приложению получать пакеты, не адресованные напрямую вашему устройству. Это может быть полезно при поиске находящихся рядом служб. Расход заряда батареи при этом выше, чем при одноадресной передаче."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"получать сведения о состоянии WiMAX"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"Позволяет приложению получать сведения о состоянии WiMAX."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"изменять состояние WiMAX"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"Позволяет приложению подключаться к сети WiMAX и отключаться от нее."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"управление Bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"Позволяет приложению настраивать локальный планшетный ПК через Bluetooth, а также обнаруживать и выполнять сопряжение удаленных устройств."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"Позволяет приложению настраивать локальный телефон Bluetooth, обнаруживать и выполнять сопряжение удаленных устройств."</string>
@@ -785,7 +797,7 @@
     <item quantity="other" msgid="3069992808164318268">"Последние <xliff:g id="COUNT">%d</xliff:g> дн."</item>
   </plurals>
     <string name="last_month" msgid="3959346739979055432">"Прошлый месяц"</string>
-    <string name="older" msgid="5211975022815554840">"Пред."</string>
+    <string name="older" msgid="5211975022815554840">"Еще раньше"</string>
   <plurals name="num_days_ago">
     <item quantity="one" msgid="861358534398115820">"вчера"</item>
     <item quantity="other" msgid="2479586466153314633">"<xliff:g id="COUNT">%d</xliff:g> дн. назад"</item>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"Найдена доступная сеть Wi-Fi"</item>
     <item quantity="other" msgid="7915895323644292768">"Найдены доступные сети Wi-Fi"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Подключение к Wi-Fi"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Не удалось подключиться к сети Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" – плохое интернет-соединение."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"Камера"</string>
     <string name="description_target_silent" msgid="893551287746522182">"Без звука"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"Включить звук"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"Проведите по экрану, чтобы разблокировать устройство."</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"Подключите гарнитуру, чтобы услышать пароль."</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"Точка"</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"Перейти на главную"</string>
@@ -1182,7 +1198,7 @@
     <string name="data_usage_warning_body" msgid="7217480745540055170">"Проверить трафик и настройки"</string>
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"Передача данных 2G/3G отключена"</string>
     <string name="data_usage_4g_limit_title" msgid="7636489436819470761">"Передача данных 4G отключена"</string>
-    <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Мобильный Интернет отключен"</string>
+    <string name="data_usage_mobile_limit_title" msgid="7869402519391631884">"Моб. Интернет отключен"</string>
     <string name="data_usage_wifi_limit_title" msgid="8992154736441284865">"Передача данных через Wi-Fi отключена"</string>
     <string name="data_usage_limit_body" msgid="4313857592916426843">"Нажмите, чтобы включить"</string>
     <string name="data_usage_3g_limit_snoozed_title" msgid="7026739121138005231">"Превышен лимита трафика 2G и 3G"</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"Настройка доступа"</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Устройство заблокировано."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
+    <string name="sending" msgid="8715108995741758718">"Отправка..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"Запустить браузер?"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"Принять вызов?"</string>
 </resources>

@@ -17,7 +17,7 @@ package android.speech.tts;
 
 import android.media.AudioFormat;
 import android.media.AudioTrack;
-import android.speech.tts.TextToSpeechService.UtteranceCompletedDispatcher;
+import android.speech.tts.TextToSpeechService.UtteranceProgressDispatcher;
 
 import java.util.LinkedList;
 
@@ -51,12 +51,13 @@ final class SynthesisMessageParams extends MessageParams {
     int mAudioBufferSize;
     // Always synchronized on "this".
     int mUnconsumedBytes;
+    volatile boolean mIsError;
 
     private final LinkedList<ListEntry> mDataBufferList = new LinkedList<ListEntry>();
 
     SynthesisMessageParams(int streamType, int sampleRate,
             int audioFormat, int channelCount,
-            float volume, float pan, UtteranceCompletedDispatcher dispatcher,
+            float volume, float pan, UtteranceProgressDispatcher dispatcher,
             String callingApp, EventLogger logger) {
         super(dispatcher, callingApp);
 
@@ -74,6 +75,7 @@ final class SynthesisMessageParams extends MessageParams {
         mAudioTrack = null;
         mBytesWritten = 0;
         mAudioBufferSize = 0;
+        mIsError = false;
     }
 
     @Override
@@ -118,6 +120,14 @@ final class SynthesisMessageParams extends MessageParams {
 
     AudioTrack getAudioTrack() {
         return mAudioTrack;
+    }
+
+    void setIsError(boolean isError) {
+        mIsError = isError;
+    }
+
+    boolean isError() {
+        return mIsError;
     }
 
     // Must be called synchronized on this.

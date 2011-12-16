@@ -31,10 +31,13 @@ import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -147,7 +150,25 @@ public class TextToSpeech {
     }
 
     /**
-     * Constants and parameter names for controlling text-to-speech.
+     * Constants and parameter names for controlling text-to-speech. These include:
+     *
+     * <ul>
+     *     <li>
+     *         Intents to ask engine to install data or check its data and
+     *         extras for a TTS engine's check data activity.
+     *     </li>
+     *     <li>
+     *         Keys for the parameters passed with speak commands, e.g.
+     *         {@link Engine#KEY_PARAM_UTTERANCE_ID}, {@link Engine#KEY_PARAM_STREAM}.
+     *     </li>
+     *     <li>
+     *         A list of feature strings that engines might support, e.g
+     *         {@link Engine#KEY_FEATURE_NETWORK_SYNTHESIS}). These values may be passed in to
+     *         {@link TextToSpeech#speak} and {@link TextToSpeech#synthesizeToFile} to modify
+     *         engine behaviour. The engine can be queried for the set of features it supports
+     *         through {@link TextToSpeech#getFeatures(java.util.Locale)}.
+     *     </li>
+     * </ul>
      */
     public class Engine {
 
@@ -435,6 +456,25 @@ public class TextToSpeech {
          */
         public static final String KEY_PARAM_PAN = "pan";
 
+        /**
+         * Feature key for network synthesis. See {@link TextToSpeech#getFeatures(Locale)}
+         * for a description of how feature keys work. If set (and supported by the engine
+         * as per {@link TextToSpeech#getFeatures(Locale)}, the engine must
+         * use network based synthesis.
+         *
+         * @see TextToSpeech#speak(String, int, java.util.HashMap)
+         * @see TextToSpeech#synthesizeToFile(String, java.util.HashMap, String)
+         * @see TextToSpeech#getFeatures(java.util.Locale)
+         */
+        public static final String KEY_FEATURE_NETWORK_SYNTHESIS = "networkTts";
+
+        /**
+         * Feature key for embedded synthesis. See {@link TextToSpeech#getFeatures(Locale)}
+         * for a description of how feature keys work. If set and supported by the engine
+         * as per {@link TextToSpeech#getFeatures(Locale)}, the engine must synthesize
+         * text on-device (without making network requests).
+         */
+        public static final String KEY_FEATURE_EMBEDDED_SYNTHESIS = "embeddedTts";
     }
 
     private final Context mContext;
@@ -442,7 +482,7 @@ public class TextToSpeech {
     private OnInitListener mInitListener;
     // Written from an unspecified application thread, read from
     // a binder thread.
-    private volatile OnUtteranceCompletedListener mUtteranceCompletedListener;
+    private volatile UtteranceProgressListener mUtteranceProgressListener;
     private final Object mStartLock = new Object();
 
     private String mRequestedEngine;
@@ -450,6 +490,7 @@ public class TextToSpeech {
     private final Map<String, Uri> mUtterances;
     private final Bundle mParams = new Bundle();
     private final TtsEngines mEnginesHelper;
+    private final String mPackageName;
     private volatile String mCurrentEngine = null;
 
     /**
@@ -478,19 +519,36 @@ public class TextToSpeech {
      * @param engine Package name of the TTS engine to use.
      */
     public TextToSpeech(Context context, OnInitListener listener, String engine) {
+        this(context, listener, engine, null);
+    }
+
+    /**
+     * Used by the framework to instantiate TextToSpeech objects with a supplied
+     * package name, instead of using {@link android.content.Context#getPackageName()}
+     *
+     * @hide
+     */
+    public TextToSpeech(Context context, OnInitListener listener, String engine,
+            String packageName) {
         mContext = context;
         mInitListener = listener;
         mRequestedEngine = engine;
 
         mEarcons = new HashMap<String, Uri>();
         mUtterances = new HashMap<String, Uri>();
+        mUtteranceProgressListener = null;
 
         mEnginesHelper = new TtsEngines(mContext);
+        if (packageName != null) {
+            mPackageName = packageName;
+        } else {
+            mPackageName = mContext.getPackageName();
+        }
         initTts();
     }
 
     private String getPackageName() {
-        return mContext.getPackageName();
+        return mPackageName;
     }
 
     private <R> R runActionNoReconnect(Action<R> action, R errorResult, String method) {
@@ -812,6 +870,36 @@ public class TextToSpeech {
     }
 
     /**
+     * Queries the engine for the set of features it supports for a given locale.
+     * Features can either be framework defined, e.g.
+     * {@link TextToSpeech.Engine#KEY_FEATURE_NETWORK_SYNTHESIS} or engine specific.
+     * Engine specific keys must be prefixed by the name of the engine they
+     * are intended for. These keys can be used as parameters to
+     * {@link TextToSpeech#speak(String, int, java.util.HashMap)} and
+     * {@link TextToSpeech#synthesizeToFile(String, java.util.HashMap, String)}.
+     *
+     * Features are boolean flags, and their values in the synthesis parameters
+     * must be behave as per {@link Boolean#parseBoolean(String)}.
+     *
+     * @param locale The locale to query features for.
+     */
+    public Set<String> getFeatures(final Locale locale) {
+        return runAction(new Action<Set<String>>() {
+            @Override
+            public Set<String> run(ITextToSpeechService service) throws RemoteException {
+                String[] features = service.getFeaturesForLanguage(
+                        locale.getISO3Language(), locale.getISO3Country(), locale.getVariant());
+                if (features != null) {
+                    final Set<String> featureSet = new HashSet<String>();
+                    Collections.addAll(featureSet, features);
+                    return featureSet;
+                }
+                return null;
+            }
+        }, null, "getFeatures");
+    }
+
+    /**
      * Checks whether the TTS engine is busy speaking. Note that a speech item is
      * considered complete once it's audio data has been sent to the audio mixer, or
      * written to a file. There might be a finite lag between this point, and when
@@ -1017,6 +1105,10 @@ public class TextToSpeech {
             copyFloatParam(bundle, params, Engine.KEY_PARAM_VOLUME);
             copyFloatParam(bundle, params, Engine.KEY_PARAM_PAN);
 
+            // Copy feature strings defined by the framework.
+            copyStringParam(bundle, params, Engine.KEY_FEATURE_NETWORK_SYNTHESIS);
+            copyStringParam(bundle, params, Engine.KEY_FEATURE_EMBEDDED_SYNTHESIS);
+
             // Copy over all parameters that start with the name of the
             // engine that we are currently connected to. The engine is
             // free to interpret them as it chooses.
@@ -1072,9 +1164,28 @@ public class TextToSpeech {
      * @param listener The listener to use.
      *
      * @return {@link #ERROR} or {@link #SUCCESS}.
+     *
+     * @deprecated Use {@link #setOnUtteranceProgressListener(UtteranceProgressListener)}
+     *        instead.
      */
+    @Deprecated
     public int setOnUtteranceCompletedListener(final OnUtteranceCompletedListener listener) {
-        mUtteranceCompletedListener = listener;
+        mUtteranceProgressListener = UtteranceProgressListener.from(listener);
+        return TextToSpeech.SUCCESS;
+    }
+
+    /**
+     * Sets the listener that will be notified of various events related to the
+     * synthesis of a given utterance.
+     *
+     * See {@link UtteranceProgressListener} and
+     * {@link TextToSpeech.Engine#KEY_PARAM_UTTERANCE_ID}.
+     *
+     * @param listener the listener to use.
+     * @return {@link #ERROR} or {@link #SUCCESS}
+     */
+    public int setOnUtteranceProgressListener(UtteranceProgressListener listener) {
+        mUtteranceProgressListener = listener;
         return TextToSpeech.SUCCESS;
     }
 
@@ -1130,10 +1241,26 @@ public class TextToSpeech {
         private ITextToSpeechService mService;
         private final ITextToSpeechCallback.Stub mCallback = new ITextToSpeechCallback.Stub() {
             @Override
-            public void utteranceCompleted(String utteranceId) {
-                OnUtteranceCompletedListener listener = mUtteranceCompletedListener;
+            public void onDone(String utteranceId) {
+                UtteranceProgressListener listener = mUtteranceProgressListener;
                 if (listener != null) {
-                    listener.onUtteranceCompleted(utteranceId);
+                    listener.onDone(utteranceId);
+                }
+            }
+
+            @Override
+            public void onError(String utteranceId) {
+                UtteranceProgressListener listener = mUtteranceProgressListener;
+                if (listener != null) {
+                    listener.onError(utteranceId);
+                }
+            }
+
+            @Override
+            public void onStart(String utteranceId) {
+                UtteranceProgressListener listener = mUtteranceProgressListener;
+                if (listener != null) {
+                    listener.onStart(utteranceId);
                 }
             }
         };

@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Izslēgt bezvadu tīklu"</string>
     <string name="screen_lock" msgid="799094655496098153">"Bloķēt ekrānu"</string>
     <string name="power_off" msgid="4266614107412865048">"Strāvas padeve ir izslēgta."</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"Notiek izslēgšana..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Planšetdators tiks beidzēts."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Tālrunis tiks izslēgts."</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"lasīt sensitīvus žurnāla datus"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"Ļauj lietojumprogrammai lasīt no sistēmas dažādiem žurnālfailiem. Šādi lietojumprogramma var atrast vispārīgu informāciju par jūsu darbībām planšetdatorā, tostarp, iespējams, arī personisku vai privātu informāciju."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"Ļauj lietojumprogrammai lasīt no sistēmas dažādiem žurnālfailiem. Šādi lietojumprogramma var atrast vispārīgu informāciju par jūsu darbībām tālrunī, tostarp, iespējams, arī personisku vai privātu informāciju."</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"multivides failu atskaņošanai izmantot jebkuru dekodētāju"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"Ļauj lietojumprogrammai izmantot jebkuru instalētu multivides failu dekodētāju, lai dekodētu failus atskaņošanai."</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"lasīt grupas “diag” resursus un rakstīt tajos"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"Ļauj lietojumprogrammai lasīt jebkuru resursu, kas pieder grupai “diag”, un rakstīt tajos; piemēram, failus direktorijā /dev. Tas var ietekmēt sistēmas stabilitāti un drošību. Tas ir jāizmanto TIKAI aparatūrai specifiskas diagnostikas veikšanai, ko izpilda ražotājs vai operators."</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"iespējot vai atspējot lietojumprogrammas komponentus"</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Ļauj lietojumprogrammai izveidot savienojumu ar Wi-Fi piekļuves punktiem un atvienot to, kā arī veikt izmaiņas konfigurētajos Wi-Fi tīklos."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"atļaut Wi-Fi multiraides uztveršanu"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Ļauj lietojumprogrammai saņemt paketes, kas nav tieši adresētas ierīcei. Tas var būt noderīgi, atklājot pakalpojumus, kas tiek piedāvāti tuvākajā apkārtnē. Tas izmanto vairāk jaudas nekā režīmā, kas nav multiraides režīms."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"WiMAX statusa skatīšana"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"Ļauj lietojumprogrammai skatīt informāciju par WiMAX statusu."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"WiMAX statusa mainīšana"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"Ļauj lietojumprogrammai izveidot un pārtraukt savienojumu ar WiMAX tīklu."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"Bluetooth administrēšana"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"Ļauj lietojumprogrammai konfigurēt vietējo Bluetooth planšetdatoru, kā arī atklāt attālas ierīces un savienot tās pārī."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"Ļauj lietojumprogrammai konfigurēt vietējo Bluetooth tālruni un atklāt attālās ierīces, un izveidot pāri ar tām."</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"Ir pieejams atvērts Wi-Fi tīkls"</item>
     <item quantity="other" msgid="7915895323644292768">"Ir pieejami atvērti Wi-Fi tīkli."</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Pierakstieties Wi-Fi tīklā"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Nevarēja izveidot savienojumu ar Wi-Fi."</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" ir slikts interneta savienojums."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"Kamera"</string>
     <string name="description_target_silent" msgid="893551287746522182">"Klusums"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"Skaņa ieslēgta"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"Velciet ar pirkstu, lai atbloķētu."</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"Pievienojiet austiņas, lai dzirdētu paroles rakstzīmes."</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"Punkts."</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"Pārvietoties uz sākuma ekrānu"</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"Koplietot ar..."</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Ierīce ir bloķēta."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
+    <string name="sending" msgid="8715108995741758718">"Notiek sūtīšana..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"Vai palaist pārlūkprogrammu?"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"Vai pieņemt zvanu?"</string>
 </resources>

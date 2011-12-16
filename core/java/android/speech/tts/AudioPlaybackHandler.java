@@ -118,12 +118,26 @@ class AudioPlaybackHandler {
         if (current != null && TextUtils.equals(callingApp, current.getCallingApp())) {
             stop(current);
         }
+
+        final MessageParams lastSynthesis = mLastSynthesisRequest;
+
+        if (lastSynthesis != null && lastSynthesis != current &&
+                TextUtils.equals(callingApp, lastSynthesis.getCallingApp())) {
+            stop(lastSynthesis);
+        }
     }
 
     synchronized public void removeAllItems() {
         if (DBG_THREADING) Log.d(TAG, "Removing all items");
         removeAllMessages();
-        stop(getCurrentParams());
+
+        final MessageParams current = getCurrentParams();
+        final MessageParams lastSynthesis = mLastSynthesisRequest;
+        stop(current);
+
+        if (lastSynthesis != null && lastSynthesis != current) {
+            stop(lastSynthesis);
+        }
     }
 
     /**
@@ -312,10 +326,11 @@ class AudioPlaybackHandler {
     private void handleSilence(MessageParams msg) {
         if (DBG) Log.d(TAG, "handleSilence()");
         SilenceMessageParams params = (SilenceMessageParams) msg;
+        params.getDispatcher().dispatchOnStart();
         if (params.getSilenceDurationMs() > 0) {
             params.getConditionVariable().block(params.getSilenceDurationMs());
         }
-        params.getDispatcher().dispatchUtteranceCompleted();
+        params.getDispatcher().dispatchOnDone();
         if (DBG) Log.d(TAG, "handleSilence() done.");
     }
 
@@ -323,11 +338,12 @@ class AudioPlaybackHandler {
     private void handleAudio(MessageParams msg) {
         if (DBG) Log.d(TAG, "handleAudio()");
         AudioMessageParams params = (AudioMessageParams) msg;
+        params.getDispatcher().dispatchOnStart();
         // Note that the BlockingMediaPlayer spawns a separate thread.
         //
         // TODO: This can be avoided.
         params.getPlayer().startAndWait();
-        params.getDispatcher().dispatchUtteranceCompleted();
+        params.getDispatcher().dispatchOnDone();
         if (DBG) Log.d(TAG, "handleAudio() done.");
     }
 
@@ -348,7 +364,7 @@ class AudioPlaybackHandler {
         // extra trouble to clean the data to prevent the AudioTrack resources
         // from being leaked.
         if (mLastSynthesisRequest != null) {
-            Log.w(TAG, "Error : Missing call to done() for request : " +
+            Log.e(TAG, "Error : Missing call to done() for request : " +
                     mLastSynthesisRequest);
             handleSynthesisDone(mLastSynthesisRequest);
         }
@@ -361,6 +377,7 @@ class AudioPlaybackHandler {
         if (DBG) Log.d(TAG, "Created audio track [" + audioTrack.hashCode() + "]");
 
         param.setAudioTrack(audioTrack);
+        msg.getDispatcher().dispatchOnStart();
     }
 
     // More data available to be flushed to the audio track.
@@ -411,6 +428,8 @@ class AudioPlaybackHandler {
         final AudioTrack audioTrack = params.getAudioTrack();
 
         if (audioTrack == null) {
+            // There was already a call to handleSynthesisDone for
+            // this token.
             return;
         }
 
@@ -439,7 +458,11 @@ class AudioPlaybackHandler {
             audioTrack.release();
             params.setAudioTrack(null);
         }
-        params.getDispatcher().dispatchUtteranceCompleted();
+        if (params.isError()) {
+            params.getDispatcher().dispatchOnError();
+        } else {
+            params.getDispatcher().dispatchOnDone();
+        }
         mLastSynthesisRequest = null;
         params.mLogger.onWriteData();
     }

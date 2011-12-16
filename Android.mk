@@ -329,20 +329,36 @@ non_base_dirs := \
 	../../external/apache-http/src/org/apache/http
 
 # These are relative to frameworks/base
-dirs_to_document := \
-	$(fwbase_dirs_to_document) \
+dirs_to_check_apis := \
+  $(fwbase_dirs_to_document) \
 	$(non_base_dirs)
 
+# These are relative to frameworks/base
+# FRAMEWORKS_BASE_SUBDIRS comes from build/core/pathmap.mk
+dirs_to_document := \
+	$(dirs_to_check_apis) \
+  $(addprefix ../../, $(FRAMEWORKS_SUPPORT_JAVA_SRC_DIRS))
+
+# These are relative to frameworks/base
 html_dirs := \
 	$(FRAMEWORKS_BASE_SUBDIRS) \
 	$(non_base_dirs)
 
+# Common sources for doc check and api check
+common_src_files := \
+	$(call find-other-html-files, $(html_dirs)) \
+	$(addprefix ../../libcore/, $(call libcore_to_document, $(LOCAL_PATH)/../../libcore)) \
+	$(addprefix ../../system/media/mca/, $(call libfilterfw_to_document, $(LOCAL_PATH)/../../system/media/mca)) \
+
 # These are relative to frameworks/base
 framework_docs_LOCAL_SRC_FILES := \
 	$(call find-other-java-files, $(dirs_to_document)) \
-	$(call find-other-html-files, $(html_dirs)) \
-	$(addprefix ../../libcore/, $(call libcore_to_document, $(LOCAL_PATH)/../../libcore)) \
-	$(addprefix ../../system/media/mca/, $(call libfilterfw_to_document, $(LOCAL_PATH)/../../system/media/mca))
+	$(common_src_files)
+
+# These are relative to frameworks/base
+framework_docs_LOCAL_API_CHECK_SRC_FILES := \
+	$(call find-other-java-files, $(dirs_to_check_apis)) \
+	$(common_src_files)
 
 # This is used by ide.mk as the list of source files that are
 # always included.
@@ -382,6 +398,7 @@ framework_docs_LOCAL_DROIDDOC_OPTIONS := \
     -since ./frameworks/base/api/12.xml 12 \
     -since ./frameworks/base/api/13.xml 13 \
     -since ./frameworks/base/api/14.txt 14 \
+    -since ./frameworks/base/api/15.txt 15 \
 		-werror -hide 113 \
 		-overview $(LOCAL_PATH)/core/java/overview.html
 
@@ -412,6 +429,8 @@ web_docs_sample_code_flags := \
 		            resources/samples/BackupRestore "Backup and Restore" \
 		-samplecode $(sample_dir)/BluetoothChat \
 		            resources/samples/BluetoothChat "Bluetooth Chat" \
+		-samplecode $(sample_dir)/BluetoothHDP \
+		            resources/samples/BluetoothHDP "Bluetooth HDP Demo" \
 		-samplecode $(sample_dir)/BusinessCard \
 		            resources/samples/BusinessCard "Business Card" \
 		-samplecode $(sample_dir)/ContactManager \
@@ -426,10 +445,14 @@ web_docs_sample_code_flags := \
 		            resources/samples/JetBoy "JetBoy" \
 		-samplecode $(sample_dir)/LunarLander \
 		            resources/samples/LunarLander "Lunar Lander" \
+		-samplecode $(sample_dir)/training/ads-and-ux \
+		            resources/samples/training/ads-and-ux "Mobile Advertisement Integration" \
 		-samplecode $(sample_dir)/MultiResolution \
 		            resources/samples/MultiResolution "Multiple Resolutions" \
 		-samplecode $(sample_dir)/NFCDemo \
 		            resources/samples/NFCDemo "NFC Demo" \
+		-samplecode $(sample_dir)/training/multiscreen/newsreader \
+		            resources/samples/newsreader "News Reader" \
 		-samplecode $(sample_dir)/NotePad \
 		            resources/samples/NotePad "Note Pad" \
 		-samplecode $(sample_dir)/SpellChecker/SampleSpellCheckerService \
@@ -460,6 +483,8 @@ web_docs_sample_code_flags := \
 		            resources/samples/TicTacToeLib "TicTacToeLib" \
 		-samplecode $(sample_dir)/TicTacToeMain \
 		            resources/samples/TicTacToeMain "TicTacToeMain" \
+		-samplecode $(sample_dir)/ToyVpn \
+		            resources/samples/ToyVpn "Toy VPN Client" \
 		-samplecode $(sample_dir)/USB \
 		            resources/samples/USB "USB" \
 		-samplecode $(sample_dir)/WeatherListWidget \
@@ -477,7 +502,10 @@ web_docs_sample_code_flags := \
 		-samplecode $(sample_dir)/XmlAdapters \
 		            resources/samples/XmlAdapters "XML Adapters" \
 		-samplecode $(sample_dir)/TtsEngine \
-		            resources/samples/TtsEngine "Text To Speech Engine"
+		            resources/samples/TtsEngine "Text To Speech Engine" \
+		-samplecode $(sample_dir)/training/device-management-policy \
+		            resources/samples/training/device-management-policy "Device Management Policy"
+
 
 ## SDK version identifiers used in the published docs
   # major[.minor] version for current SDK. (full releases only)
@@ -493,7 +521,7 @@ framework_docs_LOCAL_DROIDDOC_OPTIONS += \
 # ====  the api stubs and current.xml ===========================
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES:=$(framework_docs_LOCAL_SRC_FILES)
+LOCAL_SRC_FILES:=$(framework_docs_LOCAL_API_CHECK_SRC_FILES)
 LOCAL_INTERMEDIATE_SOURCES:=$(framework_docs_LOCAL_INTERMEDIATE_SOURCES)
 LOCAL_JAVA_LIBRARIES:=$(framework_docs_LOCAL_JAVA_LIBRARIES)
 LOCAL_MODULE_CLASS:=$(framework_docs_LOCAL_MODULE_CLASS)

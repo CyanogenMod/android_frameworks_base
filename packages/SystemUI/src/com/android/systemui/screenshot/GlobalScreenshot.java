@@ -34,25 +34,21 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.PixelFormat;
 import android.graphics.PointF;
+import android.hardware.CameraSound;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Process;
-import android.os.ServiceManager;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.view.Display;
-import android.view.IWindowManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.Surface;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.android.systemui.R;
@@ -79,7 +75,6 @@ class SaveImageInBackgroundData {
  */
 class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Void,
         SaveImageInBackgroundData> {
-    private static final String TAG = "SaveImageInBackgroundTask";
     private static final String SCREENSHOTS_DIR_NAME = "Screenshots";
     private static final String SCREENSHOT_FILE_NAME_TEMPLATE = "Screenshot_%s.png";
     private static final String SCREENSHOT_FILE_PATH_TEMPLATE = "%s/%s/%s";
@@ -87,11 +82,8 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
     private int mNotificationId;
     private NotificationManager mNotificationManager;
     private Notification.Builder mNotificationBuilder;
-    private Intent mLaunchIntent;
-    private String mImageDir;
     private String mImageFileName;
     private String mImageFilePath;
-    private String mImageDate;
     private long mImageTime;
 
     // WORKAROUND: We want the same notification across screenshots that we update so that we don't
@@ -107,11 +99,11 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
 
         // Prepare all the output metadata
         mImageTime = System.currentTimeMillis();
-        mImageDate = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date(mImageTime));
-        mImageDir = Environment.getExternalStoragePublicDirectory(
+        String imageDate = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss").format(new Date(mImageTime));
+        String imageDir = Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_PICTURES).getAbsolutePath();
-        mImageFileName = String.format(SCREENSHOT_FILE_NAME_TEMPLATE, mImageDate);
-        mImageFilePath = String.format(SCREENSHOT_FILE_PATH_TEMPLATE, mImageDir,
+        mImageFileName = String.format(SCREENSHOT_FILE_NAME_TEMPLATE, imageDate);
+        mImageFilePath = String.format(SCREENSHOT_FILE_PATH_TEMPLATE, imageDir,
                 SCREENSHOTS_DIR_NAME, mImageFileName);
 
         // Create the large notification icon
@@ -131,8 +123,8 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
         // Show the intermediate notification
         mTickerAddSpace = !mTickerAddSpace;
         mNotificationId = nId;
+        mNotificationManager = nManager;
         mNotificationBuilder = new Notification.Builder(context)
-            .setLargeIcon(croppedIcon)
             .setTicker(r.getString(R.string.screenshot_saving_ticker)
                     + (mTickerAddSpace ? " " : ""))
             .setContentTitle(r.getString(R.string.screenshot_saving_title))
@@ -141,9 +133,12 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
             .setWhen(System.currentTimeMillis());
         Notification n = mNotificationBuilder.getNotification();
         n.flags |= Notification.FLAG_NO_CLEAR;
-
-        mNotificationManager = nManager;
         mNotificationManager.notify(nId, n);
+
+        // On the tablet, the large icon makes the notification appear as if it is clickable (and
+        // on small devices, the large icon is not shown) so defer showing the large icon until
+        // we compose the final post-save notification below.
+        mNotificationBuilder.setLargeIcon(croppedIcon);
     }
 
     @Override
@@ -189,7 +184,7 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
         }
 
         return params[0];
-    };
+    }
 
     @Override
     protected void onPostExecute(SaveImageInBackgroundData params) {
@@ -201,14 +196,14 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
             Resources r = params.context.getResources();
 
             // Create the intent to show the screenshot in gallery
-            mLaunchIntent = new Intent(Intent.ACTION_VIEW);
-            mLaunchIntent.setDataAndType(params.imageUri, "image/png");
-            mLaunchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            Intent launchIntent = new Intent(Intent.ACTION_VIEW);
+            launchIntent.setDataAndType(params.imageUri, "image/png");
+            launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             mNotificationBuilder
                 .setContentTitle(r.getString(R.string.screenshot_saved_title))
                 .setContentText(r.getString(R.string.screenshot_saved_text))
-                .setContentIntent(PendingIntent.getActivity(params.context, 0, mLaunchIntent, 0))
+                .setContentIntent(PendingIntent.getActivity(params.context, 0, launchIntent, 0))
                 .setWhen(System.currentTimeMillis())
                 .setAutoCancel(true);
 
@@ -217,7 +212,7 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
             mNotificationManager.notify(mNotificationId, n);
         }
         params.finisher.run();
-    };
+    }
 }
 
 /**
@@ -227,7 +222,6 @@ class SaveImageInBackgroundTask extends AsyncTask<SaveImageInBackgroundData, Voi
  *     type of gallery?
  */
 class GlobalScreenshot {
-    private static final String TAG = "GlobalScreenshot";
     private static final int SCREENSHOT_NOTIFICATION_ID = 789;
     private static final int SCREENSHOT_FLASH_TO_PEAK_DURATION = 130;
     private static final int SCREENSHOT_DROP_IN_DURATION = 430;
@@ -243,8 +237,6 @@ class GlobalScreenshot {
     private static final float SCREENSHOT_DROP_OUT_MIN_SCALE_OFFSET = 0f;
 
     private Context mContext;
-    private LayoutInflater mLayoutInflater;
-    private IWindowManager mIWindowManager;
     private WindowManager mWindowManager;
     private WindowManager.LayoutParams mWindowLayoutParams;
     private NotificationManager mNotificationManager;
@@ -255,7 +247,6 @@ class GlobalScreenshot {
     private Bitmap mScreenBitmap;
     private View mScreenshotLayout;
     private ImageView mBackgroundView;
-    private FrameLayout mScreenshotContainerView;
     private ImageView mScreenshotView;
     private ImageView mScreenshotFlash;
 
@@ -265,6 +256,8 @@ class GlobalScreenshot {
     private float mBgPadding;
     private float mBgPaddingScale;
 
+    private CameraSound mCameraSound;
+
 
     /**
      * @param context everything needs a context :(
@@ -272,14 +265,13 @@ class GlobalScreenshot {
     public GlobalScreenshot(Context context) {
         Resources r = context.getResources();
         mContext = context;
-        mLayoutInflater = (LayoutInflater)
+        LayoutInflater layoutInflater = (LayoutInflater)
                 context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         // Inflate the screenshot layout
         mDisplayMatrix = new Matrix();
-        mScreenshotLayout = mLayoutInflater.inflate(R.layout.global_screenshot, null);
+        mScreenshotLayout = layoutInflater.inflate(R.layout.global_screenshot, null);
         mBackgroundView = (ImageView) mScreenshotLayout.findViewById(R.id.global_screenshot_background);
-        mScreenshotContainerView = (FrameLayout) mScreenshotLayout.findViewById(R.id.global_screenshot_container);
         mScreenshotView = (ImageView) mScreenshotLayout.findViewById(R.id.global_screenshot);
         mScreenshotFlash = (ImageView) mScreenshotLayout.findViewById(R.id.global_screenshot_flash);
         mScreenshotLayout.setFocusable(true);
@@ -292,8 +284,6 @@ class GlobalScreenshot {
         });
 
         // Setup the window that we are going to use
-        mIWindowManager = IWindowManager.Stub.asInterface(
-                ServiceManager.getService(Context.WINDOW_SERVICE));
         mWindowLayoutParams = new WindowManager.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 0, 0,
                 WindowManager.LayoutParams.TYPE_SECURE_SYSTEM_OVERLAY,
@@ -317,6 +307,9 @@ class GlobalScreenshot {
         // Scale has to account for both sides of the bg
         mBgPadding = (float) r.getDimensionPixelSize(R.dimen.global_screenshot_bg_padding);
         mBgPaddingScale = mBgPadding /  mDisplayMetrics.widthPixels;
+
+        // Setup the Camera shutter sound
+        mCameraSound = new CameraSound();
     }
 
     /**
@@ -427,8 +420,11 @@ class GlobalScreenshot {
         mScreenshotLayout.post(new Runnable() {
             @Override
             public void run() {
-                mScreenshotContainerView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
-                mScreenshotContainerView.buildLayer();
+                // Play the shutter sound to notify that we've taken a screenshot
+                mCameraSound.playSound(CameraSound.SHUTTER_CLICK);
+
+                mScreenshotView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+                mScreenshotView.buildLayer();
                 mScreenshotAnimation.start();
             }
         });
@@ -464,12 +460,12 @@ class GlobalScreenshot {
             public void onAnimationStart(Animator animation) {
                 mBackgroundView.setAlpha(0f);
                 mBackgroundView.setVisibility(View.VISIBLE);
-                mScreenshotContainerView.setAlpha(0f);
-                mScreenshotContainerView.setTranslationX(0f);
-                mScreenshotContainerView.setTranslationY(0f);
-                mScreenshotContainerView.setScaleX(SCREENSHOT_SCALE + mBgPaddingScale);
-                mScreenshotContainerView.setScaleY(SCREENSHOT_SCALE + mBgPaddingScale);
-                mScreenshotContainerView.setVisibility(View.VISIBLE);
+                mScreenshotView.setAlpha(0f);
+                mScreenshotView.setTranslationX(0f);
+                mScreenshotView.setTranslationY(0f);
+                mScreenshotView.setScaleX(SCREENSHOT_SCALE + mBgPaddingScale);
+                mScreenshotView.setScaleY(SCREENSHOT_SCALE + mBgPaddingScale);
+                mScreenshotView.setVisibility(View.VISIBLE);
                 mScreenshotFlash.setAlpha(0f);
                 mScreenshotFlash.setVisibility(View.VISIBLE);
             }
@@ -481,14 +477,14 @@ class GlobalScreenshot {
         anim.addUpdateListener(new AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animation) {
-                float t = ((Float) animation.getAnimatedValue()).floatValue();
+                float t = (Float) animation.getAnimatedValue();
                 float scaleT = (SCREENSHOT_SCALE + mBgPaddingScale)
-                    - (float) scaleInterpolator.getInterpolation(t)
+                    - scaleInterpolator.getInterpolation(t)
                         * (SCREENSHOT_SCALE - SCREENSHOT_DROP_IN_MIN_SCALE);
                 mBackgroundView.setAlpha(scaleInterpolator.getInterpolation(t) * BACKGROUND_ALPHA);
-                mScreenshotContainerView.setAlpha(t);
-                mScreenshotContainerView.setScaleX(scaleT);
-                mScreenshotContainerView.setScaleY(scaleT);
+                mScreenshotView.setAlpha(t);
+                mScreenshotView.setScaleX(scaleT);
+                mScreenshotView.setScaleY(scaleT);
                 mScreenshotFlash.setAlpha(flashAlphaInterpolator.getInterpolation(t));
             }
         });
@@ -502,8 +498,8 @@ class GlobalScreenshot {
             @Override
             public void onAnimationEnd(Animator animation) {
                 mBackgroundView.setVisibility(View.GONE);
-                mScreenshotContainerView.setVisibility(View.GONE);
-                mScreenshotContainerView.setLayerType(View.LAYER_TYPE_NONE, null);
+                mScreenshotView.setVisibility(View.GONE);
+                mScreenshotView.setLayerType(View.LAYER_TYPE_NONE, null);
             }
         });
 
@@ -513,14 +509,13 @@ class GlobalScreenshot {
             anim.addUpdateListener(new AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
-                    float t = ((Float) animation.getAnimatedValue()).floatValue();
+                    float t = (Float) animation.getAnimatedValue();
                     float scaleT = (SCREENSHOT_DROP_IN_MIN_SCALE + mBgPaddingScale)
-                            - (float) t * (SCREENSHOT_DROP_IN_MIN_SCALE
-                                    - SCREENSHOT_FAST_DROP_OUT_MIN_SCALE);
+                            - t * (SCREENSHOT_DROP_IN_MIN_SCALE - SCREENSHOT_FAST_DROP_OUT_MIN_SCALE);
                     mBackgroundView.setAlpha((1f - t) * BACKGROUND_ALPHA);
-                    mScreenshotContainerView.setAlpha(1f - t);
-                    mScreenshotContainerView.setScaleX(scaleT);
-                    mScreenshotContainerView.setScaleY(scaleT);
+                    mScreenshotView.setAlpha(1f - t);
+                    mScreenshotView.setScaleX(scaleT);
+                    mScreenshotView.setScaleY(scaleT);
                 }
             });
         } else {
@@ -551,16 +546,16 @@ class GlobalScreenshot {
             anim.addUpdateListener(new AnimatorUpdateListener() {
                 @Override
                 public void onAnimationUpdate(ValueAnimator animation) {
-                    float t = ((Float) animation.getAnimatedValue()).floatValue();
+                    float t = (Float) animation.getAnimatedValue();
                     float scaleT = (SCREENSHOT_DROP_IN_MIN_SCALE + mBgPaddingScale)
-                        - (float) scaleInterpolator.getInterpolation(t)
+                        - scaleInterpolator.getInterpolation(t)
                             * (SCREENSHOT_DROP_IN_MIN_SCALE - SCREENSHOT_DROP_OUT_MIN_SCALE);
                     mBackgroundView.setAlpha((1f - t) * BACKGROUND_ALPHA);
-                    mScreenshotContainerView.setAlpha(1f - scaleInterpolator.getInterpolation(t));
-                    mScreenshotContainerView.setScaleX(scaleT);
-                    mScreenshotContainerView.setScaleY(scaleT);
-                    mScreenshotContainerView.setTranslationX(t * finalPos.x);
-                    mScreenshotContainerView.setTranslationY(t * finalPos.y);
+                    mScreenshotView.setAlpha(1f - scaleInterpolator.getInterpolation(t));
+                    mScreenshotView.setScaleX(scaleT);
+                    mScreenshotView.setScaleY(scaleT);
+                    mScreenshotView.setTranslationX(t * finalPos.x);
+                    mScreenshotView.setTranslationY(t * finalPos.y);
                 }
             });
         }

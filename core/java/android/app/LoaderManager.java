@@ -36,7 +36,8 @@ import java.lang.reflect.Modifier;
  *
  * While the LoaderManager API was introduced in
  * {@link android.os.Build.VERSION_CODES#HONEYCOMB}, a version of the API
- * is also available for use on older platforms.  See the blog post
+ * at is also available for use on older platforms through
+ * {@link android.support.v4.app.FragmentActivity}.  See the blog post
  * <a href="http://android-developers.blogspot.com/2011/03/fragments-for-all.html">
  * Fragments For All</a> for more details.
  *
@@ -418,6 +419,10 @@ class LoaderManagerImpl extends LoaderManager {
                 info.destroy();
                 mInactiveLoaders.remove(mId);
             }
+
+            if (mActivity != null && !hasRunningLoaders()) {
+                mActivity.mFragments.startPendingDeferredFragments();
+            }
         }
 
         void callOnLoadFinished(Loader<Object> loader, Object data) {
@@ -677,6 +682,9 @@ class LoaderManagerImpl extends LoaderManager {
             mInactiveLoaders.removeAt(idx);
             info.destroy();
         }
+        if (mActivity != null && !hasRunningLoaders()) {
+            mActivity.mFragments.startPendingDeferredFragments();
+        }
     }
 
     /**
@@ -819,5 +827,15 @@ class LoaderManagerImpl extends LoaderManager {
                 li.dump(innerPrefix, fd, writer, args);
             }
         }
+    }
+
+    public boolean hasRunningLoaders() {
+        boolean loadersRunning = false;
+        final int count = mLoaders.size();
+        for (int i = 0; i < count; i++) {
+            final LoaderInfo li = mLoaders.valueAt(i);
+            loadersRunning |= li.mStarted && !li.mDeliveredData;
+        }
+        return loadersRunning;
     }
 }

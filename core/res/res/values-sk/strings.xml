@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Vypnúť bezdrôtové pripojenie"</string>
     <string name="screen_lock" msgid="799094655496098153">"Uzamknutie obrazovky"</string>
     <string name="power_off" msgid="4266614107412865048">"Vypnúť"</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"Prebieha vypínanie..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Váš tablet bude vypnutý."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Váš telefón bude vypnutý."</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"čítať citlivé údaje denníkov"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"Umožňuje aplikácii čítať rôzne systémové súbory denníkov. Toto nastavenie aplikácie umožňuje získať všeobecné informácie o činnostiach s tabletom, ktoré by mohli obsahovať osobné alebo súkromné informácie."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"Umožňuje aplikácii čítať rôzne systémové súbory denníkov. Toto nastavenie aplikácii umožňuje získať všeobecné informácie o činnostiach s telefónom, ktoré by mohli obsahovať osobné alebo súkromné informácie."</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"použiť ľubovoľný dekódovač médií na reprodukciu"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"Povoľuje aplikácii používať ľubovoľný nainštalovaný dekódovač na dekódovanie pre reprodukciu."</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"čítanie alebo zápis do prostriedkov funkcie diag"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"Umožňuje aplikácii čítať ľubovoľné prostriedky v skupine diag, napr. súbory v priečinku /dev, a zapisovať do nich. Môže dôjsť k ovplyvneniu stability a bezpečnosti systému. Toto nastavenie by mal používať IBA výrobca či operátor na diagnostiku hardvéru."</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"povolenie a zakázanie súčastí aplikácií"</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Umožňuje aplikácii pripojiť sa k prístupovým bodom Wi-Fi alebo sa od nich odpojiť a uskutočňovať zmeny nakonfigurovaných sietí Wi-Fi."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"Povoliť príjem viacsmerového vysielania Wi-Fi"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Umožňuje aplikácii prijímať pakety, ktoré neboli adresované priamo vášmu zariadeniu. Pomocou tejto možnosti môžete objaviť služby ponúkané vo vašej blízkosti. Spotreba energie je vyššia ako v režime bez viacsmerového vysielania."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"zobraziť stav WiMAX"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"Umožňuje aplikácii zobraziť informácie o stave siete WiMAX."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"zmeniť stav WiMAX"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"Umožňuje aplikácii pripojiť sa a odpojiť zo siete WiMAX."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"správa rozhrania Bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"Umožňuje aplikácii konfigurovať miestny tablet s rozhraním Bluetooth a vyhľadávať a párovať vzdialené zariadenia."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"Umožňuje aplikácii konfigurovať miestny telefón s rozhraním Bluetooth a vyhľadávať a párovať vzdialené zariadenia."</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"K dispozícii je verejná sieť Wi-Fi"</item>
     <item quantity="other" msgid="7915895323644292768">"K dispozícii sú verejné siete Wi-Fi"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Prihlásiť sa do siete Wi-Fi"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Nepodarilo sa pripojiť k sieti Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" má nekvalitné internetové pripojenie."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Priame pripojenie Wi-Fi"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"Fotoaparát"</string>
     <string name="description_target_silent" msgid="893551287746522182">"Tichý"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"Zapnúť zvuk"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"Posunom odomknúť."</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"Ak si chcete vypočuť nahlas vyslovené klávesy hesla, pripojte náhlavnú súpravu."</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"Bodka."</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"Prejsť na plochu"</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"Zdieľať s..."</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Zariadenie je zamknuté."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
+    <string name="sending" msgid="8715108995741758718">"Prebieha odosielanie..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"Spustiť prehliadač?"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"Prijať hovor?"</string>
 </resources>

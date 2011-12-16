@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"关闭收音机"</string>
     <string name="screen_lock" msgid="799094655496098153">"屏幕锁定"</string>
     <string name="power_off" msgid="4266614107412865048">"关机"</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"正在关机..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"您的平板电脑会关闭。"</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"您的手机会关机。"</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"查阅敏感日志数据"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"允许应用程序从系统的各种日志文件中读取信息。这样，应用程序就可以发现关于您平板电脑使用情况的一般信息，其中可能包含个人信息或私密信息。"</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"允许应用程序从系统的各个日志文件中读取信息。这样，应用程序就可以发现关于您手机使用情况的一般信息，其中可能包含个人信息或私密信息。"</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"使用任何媒体解码器进行播放"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"允许应用程序使用任何已安装的媒体解码器进行解码，以便播放。"</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"读取/写入诊断所拥有的资源"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"允许应用程序读取/写入诊断组所拥有的任何资源（例如，/dev 中的文件）。这可能会影响系统稳定性和安全性。此权限仅供制造商或运营商诊断硬件问题。"</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"启用或停用应用程序组件"</string>
@@ -317,7 +325,7 @@
     <string name="permlab_receiveBootCompleted" msgid="7776779842866993377">"开机时自动启动"</string>
     <string name="permdesc_receiveBootCompleted" product="tablet" msgid="7530977064379338199">"允许应用程序在系统完成启动后立即自行启动。这样会延长平板电脑的启动时间，而且如果应用程序一直运行，会降低平板电脑的整体速度。"</string>
     <string name="permdesc_receiveBootCompleted" product="default" msgid="698336728415008796">"允许应用程序在系统完成启动后即自行启动。这样会延长手机的启动时间，而且如果应用程序一直运行，会降低手机的整体速度。"</string>
-    <string name="permlab_broadcastSticky" msgid="7919126372606881614">"发送置顶广播"</string>
+    <string name="permlab_broadcastSticky" msgid="7919126372606881614">"发送持久广播"</string>
     <string name="permdesc_broadcastSticky" product="tablet" msgid="6322249605930062595">"允许应用程序发送顽固广播，这些广播在结束后仍会保留。恶意应用程序可借此让平板电脑耗用太多内存，从而降低其速度或稳定性。"</string>
     <string name="permdesc_broadcastSticky" product="default" msgid="1920045289234052219">"允许应用程序发送顽固广播，这些广播在结束后仍会保留。恶意应用程序可能会借此使手机耗用太多内存，从而降低其速度或稳定性。"</string>
     <string name="permlab_readContacts" msgid="6219652189510218240">"读取联系人数据"</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"允许应用程序连接到 Wi-Fi 接入点以及与 Wi-Fi 接入点断开连接，并对配置的 Wi-Fi 网络进行更改。"</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"允许接收 Wi-Fi 多播"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"允许应用程序接收并非直接向您的设备发送的数据包。这样在查找附近提供的服务时很有用。这种操作所耗电量大于非多播模式。"</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"查看 WiMAX 状态"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"允许应用程序查看有关 WiMAX 状态的信息。"</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"更改 WiMAX 状态"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"允许应用程序连接到 WiMAX 网络以及从 WiMAX 网络断开连接。"</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"蓝牙管理"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"允许应用程序配置本地蓝牙平板电脑，以及发现远程设备并与其配对。"</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"允许应用程序配置本地蓝牙手机，以及发现远程设备并与其配对。"</string>
@@ -898,9 +910,9 @@
     <string name="aerr_application" msgid="932628488013092776">"很抱歉，“<xliff:g id="APPLICATION">%1$s</xliff:g>”已停止运行。"</string>
     <string name="aerr_process" msgid="4507058997035697579">"抱歉，进程“<xliff:g id="PROCESS">%1$s</xliff:g>”已停止运行。"</string>
     <string name="anr_title" msgid="4351948481459135709"></string>
-    <string name="anr_activity_application" msgid="8339738283149696827">"“<xliff:g id="APPLICATION">%2$s</xliff:g>”无响应。"\n\n"要将它关闭吗？"</string>
-    <string name="anr_activity_process" msgid="7018289416670457797">"活动“<xliff:g id="ACTIVITY">%1$s</xliff:g>”无响应。"\n\n"要将它关闭吗？"</string>
-    <string name="anr_application_process" msgid="7208175830253210526">"“<xliff:g id="APPLICATION">%1$s</xliff:g>”无响应。要将它关闭吗？"</string>
+    <string name="anr_activity_application" msgid="8339738283149696827">"<xliff:g id="APPLICATION">%2$s</xliff:g> 无响应。"\n\n"要将它关闭吗？"</string>
+    <string name="anr_activity_process" msgid="7018289416670457797">"活动 <xliff:g id="ACTIVITY">%1$s</xliff:g> 无响应。"\n\n"要将它关闭吗？"</string>
+    <string name="anr_application_process" msgid="7208175830253210526">"<xliff:g id="APPLICATION">%1$s</xliff:g> 无响应。要将它关闭吗？"</string>
     <string name="anr_process" msgid="306819947562555821">"进程 <xliff:g id="PROCESS">%1$s</xliff:g> 无响应。"\n\n"要将它关闭吗？"</string>
     <string name="force_close" msgid="8346072094521265605">"确定"</string>
     <string name="report" msgid="4060218260984795706">"报告"</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"打开可用的 Wi-Fi 网络"</item>
     <item quantity="other" msgid="7915895323644292768">"打开可用的 Wi-Fi 网络"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"连接到 Wi-Fi 网络"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"无法连接到 Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" 互联网连接状况不佳。"</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -1169,12 +1184,13 @@
     <string name="description_target_camera" msgid="969071997552486814">"相机"</string>
     <string name="description_target_silent" msgid="893551287746522182">"静音"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"打开声音"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"滑动解锁。"</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"需要插入耳机才能听到密码的按键声。"</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"点。"</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"导航首页"</string>
     <string name="action_bar_up_description" msgid="2237496562952152589">"向上导航"</string>
     <string name="action_menu_overflow_description" msgid="2295659037509008453">"更多选项"</string>
-    <string name="storage_internal" msgid="7556050805474115618">"内存空间"</string>
+    <string name="storage_internal" msgid="7556050805474115618">"内部存储空间"</string>
     <string name="storage_sd_card" msgid="8921771478629812343">"SD 卡"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB 存储器"</string>
     <string name="extract_edit_menu_button" msgid="302060189057163906">"编辑..."</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"分享方式..."</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"设备已锁定。"</string>
     <string name="list_delimeter" msgid="3975117572185494152">"、 "</string>
+    <string name="sending" msgid="8715108995741758718">"正在发送..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"要启动浏览器吗？"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"要接听电话吗？"</string>
 </resources>

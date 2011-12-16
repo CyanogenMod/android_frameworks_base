@@ -234,6 +234,7 @@ status_t SensorDevice::initCheck() const {
 }
 
 ssize_t SensorDevice::poll(sensors_event_t* buffer, size_t count) {
+    ssize_t c;
     if (!mSensorDevice && !mOldSensorsCompatMode) return NO_INIT;
     if (mOldSensorsCompatMode) {
         size_t pollsDone = 0;
@@ -301,7 +302,10 @@ ssize_t SensorDevice::poll(sensors_event_t* buffer, size_t count) {
         }
         return pollsDone;
     } else {
-        return mSensorDevice->poll(mSensorDevice, buffer, count);
+        do {
+            c = mSensorDevice->poll(mSensorDevice, buffer, count);
+        } while (c == -EINTR);
+        return c;
     }
 }
 

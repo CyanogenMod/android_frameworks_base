@@ -60,10 +60,16 @@ public:
         virtual void onFrameAvailable() = 0;
     };
 
-    // tex indicates the name OpenGL texture to which images are to be streamed.
-    // This texture name cannot be changed once the SurfaceTexture is created.
+    // SurfaceTexture constructs a new SurfaceTexture object. tex indicates the
+    // name of the OpenGL ES texture to which images are to be streamed. This
+    // texture name cannot be changed once the SurfaceTexture is created.
+    // allowSynchronousMode specifies whether or not synchronous mode can be
+    // enabled. texTarget specifies the OpenGL ES texture target to which the
+    // texture will be bound in updateTexImage. useFenceSync specifies whether
+    // fences should be used to synchronize access to buffers if that behavior
+    // is enabled at compile-time.
     SurfaceTexture(GLuint tex, bool allowSynchronousMode = true,
-            GLenum texTarget = GL_TEXTURE_EXTERNAL_OES);
+            GLenum texTarget = GL_TEXTURE_EXTERNAL_OES, bool useFenceSync = true);
 
     virtual ~SurfaceTexture();
 
@@ -79,7 +85,11 @@ public:
     // pointed to by the buf argument and a status of OK is returned.  If no
     // slot is available then a status of -EBUSY is returned and buf is
     // unmodified.
-    virtual status_t dequeueBuffer(int *buf, uint32_t w, uint32_t h,
+    // The width and height parameters must be no greater than the minimum of
+    // GL_MAX_VIEWPORT_DIMS and GL_MAX_TEXTURE_SIZE (see: glGetIntegerv).
+    // An error due to invalid dimensions might not be reported until
+    // updateTexImage() is called.
+    virtual status_t dequeueBuffer(int *buf, uint32_t width, uint32_t height,
             uint32_t format, uint32_t usage);
 
     // queueBuffer returns a filled buffer to the SurfaceTexture. In addition, a
@@ -176,7 +186,11 @@ public:
     // requestBuffers when a with and height of zero is requested.
     // A call to setDefaultBufferSize() may trigger requestBuffers() to
     // be called from the client.
-    status_t setDefaultBufferSize(uint32_t w, uint32_t h);
+    // The width and height parameters must be no greater than the minimum of
+    // GL_MAX_VIEWPORT_DIMS and GL_MAX_TEXTURE_SIZE (see: glGetIntegerv).
+    // An error due to invalid dimensions might not be reported until
+    // updateTexImage() is called.
+    status_t setDefaultBufferSize(uint32_t width, uint32_t height);
 
     // getCurrentBuffer returns the buffer associated with the current image.
     sp<GraphicBuffer> getCurrentBuffer() const;
@@ -193,6 +207,10 @@ public:
 
     // getCurrentScalingMode returns the scaling mode of the current buffer
     uint32_t getCurrentScalingMode() const;
+
+    // isSynchronousMode returns whether the SurfaceTexture is currently in
+    // synchronous mode.
+    bool isSynchronousMode() const;
 
     // abandon frees all the buffers and puts the SurfaceTexture into the
     // 'abandoned' state.  Once put in this state the SurfaceTexture can never
@@ -263,7 +281,9 @@ private:
               mRequestBufferCalled(false),
               mTransform(0),
               mScalingMode(NATIVE_WINDOW_SCALING_MODE_FREEZE),
-              mTimestamp(0) {
+              mTimestamp(0),
+              mFrameNumber(0),
+              mFence(EGL_NO_SYNC_KHR) {
             mCrop.makeInvalid();
         }
 
@@ -332,6 +352,15 @@ private:
         // mTimestamp is the current timestamp for this buffer slot. This gets
         // to set by queueBuffer each time this slot is queued.
         int64_t mTimestamp;
+
+        // mFrameNumber is the number of the queued frame for this slot.
+        uint64_t mFrameNumber;
+
+        // mFence is the EGL sync object that must signal before the buffer
+        // associated with this buffer slot may be dequeued. It is initialized
+        // to EGL_NO_SYNC_KHR when the buffer is created and (optionally, based
+        // on a compile-time option) set to a new sync object in updateTexImage.
+        EGLSyncKHR mFence;
     };
 
     // mSlots is the array of buffer slots that must be mirrored on the client
@@ -455,6 +484,12 @@ private:
     // It is set by the setName method.
     String8 mName;
 
+    // mUseFenceSync indicates whether creation of the EGL_KHR_fence_sync
+    // extension should be used to prevent buffers from being dequeued before
+    // it's safe for them to be written. It gets set at construction time and
+    // never changes.
+    const bool mUseFenceSync;
+
     // mMutex is the mutex used to prevent concurrent access to the member
     // variables of SurfaceTexture objects. It must be locked whenever the
     // member variables are accessed.
@@ -468,6 +503,12 @@ private:
     // around a GL driver limitation on the number of FBO attachments, which the
     // browser's tile cache exceeds.
     const GLenum mTexTarget;
+
+    // mFrameCounter is the free running counter, incremented for every buffer queued
+    // with the surface Texture.
+    uint64_t mFrameCounter;
+
+
 };
 
 // ----------------------------------------------------------------------------

@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Slå trådløs fra"</string>
     <string name="screen_lock" msgid="799094655496098153">"Skærmlås"</string>
     <string name="power_off" msgid="4266614107412865048">"Sluk"</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"Lukker ned ..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Din tabletcomputer slukkes nu."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Din telefon slukkes nu."</string>
@@ -159,7 +165,7 @@
     <string name="permgrouplab_costMoney" msgid="5429808217861460401">"Tjenester, der koster dig penge"</string>
     <string name="permgroupdesc_costMoney" msgid="8193824940620517189">"Tillader, at en applikation kan gøre ting, som kan koste penge."</string>
     <string name="permgrouplab_messages" msgid="7521249148445456662">"Dine beskeder"</string>
-    <string name="permgroupdesc_messages" msgid="7045736972019211994">"Læs og skriv dine sms-, e-mail- og andre beskeder."</string>
+    <string name="permgroupdesc_messages" msgid="7045736972019211994">"Læs og skriv dine sms-, e-mail og andre beskeder."</string>
     <string name="permgrouplab_personalInfo" msgid="3519163141070533474">"Dine personlige oplysninger"</string>
     <string name="permgroupdesc_personalInfo" product="tablet" msgid="6975389054186265786">"Få direkte adgang til dine kontakter og din kalender, der er gemt på tabletcomputeren."</string>
     <string name="permgroupdesc_personalInfo" product="default" msgid="5488050357388806068">"Få direkte adgang til dine kontakter og din kalender, der er gemt på telefonen."</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"læse følsomme logdata"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"Tillader, at en applikation læser fra systemets forskellige logfiler. Dermed kan generelle oplysninger om, hvad du laver med tabletcomputeren, registreres, også personlige eller private oplysninger."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"Tillader, at en applikation læser fra systemets forskellige logfiler. Dermed kan generelle oplysninger om, hvad du laver med telefonen, registreres, også personlige eller private oplysninger."</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"brug enhver mediedekoder til afspilning"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"Tillader, at en applikation bruger enhver installeret mediedekoder til at afkode til afspilning."</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"læs/skriv til ressourcer ejet af diag"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"Tillader, at en applikation læser og skriver til alle ressourcer, der ejes af diag-gruppen, som f.eks. flier i /dev. Dette kan muligvis påvirke systemets stabilitet og sikkerhed. Dette bør KUN bruges til hardwarespecifikke diagnosticeringer foretaget af producent eller udbyder."</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"aktiver eller deaktiver programkomponenter"</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Tillader, at en applikation opretter og afbryder forbindelsen fra Wi-Fi-adgangspunkter og foretager ændringer i konfigurerede Wi-Fi-netværk."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"tillad Wi-Fi-multicastmodtagelse"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Tillader, at en applikation modtager pakker, der ikke er direkte adresseret til din enhed. Dette kan være nyttigt, hvis du finder tjenester, der tilbydes i nærheden. Det bruger mere strøm end multicasttilstanden."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"vise WiMAX-tilstand"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"Tillader, at en applikation viser oplysninger om WiMAX-tilstanden."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"skifte WiMAX-tilstand"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"Tillader, at en applikation opretter og afbryder forbindelsen til WiMAX-netværk."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"bluetooth-administration"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"Tillader, at en applikation konfigurerer den lokale Bluetooth-tabletcomputer samt opdager og parrer med fjerne enheder."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"Tillader, at en applikation konfigurerer den lokale Bluetooth-telefon samt opdager og parrer med fjerne enheder."</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"Åbent Wi-Fi-netværk tilgængeligt"</item>
     <item quantity="other" msgid="7915895323644292768">"Der er åbne Wi-Fi-netværk tilgængelige"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Log ind på Wi-Fi-netværk"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Kunne ikke oprette forbindelse til Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" har en dårlig internetforbindelse."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"Kamera"</string>
     <string name="description_target_silent" msgid="893551287746522182">"Lydløs"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"Lyd slået til"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"Glid hurtigt henover for at låse op."</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"Tilslut et headset for at få læst taster højt, når du indtaster en adgangskode."</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"Punktum."</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"Naviger hjem"</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"Del med:"</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Enhed låst."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
+    <string name="sending" msgid="8715108995741758718">"Sender..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"Vil du starte browseren?"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"Vil du besvare opkaldet?"</string>
 </resources>

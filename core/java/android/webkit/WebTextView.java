@@ -16,16 +16,16 @@
 
 package android.webkit;
 
-import com.android.internal.widget.EditableInputConnection;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
+import android.graphics.Paint.Style;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -60,11 +60,11 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 
+import junit.framework.Assert;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-
-import junit.framework.Assert;
 
 /**
  * WebTextView is a specialized version of EditText used by WebView
@@ -75,6 +75,8 @@ import junit.framework.Assert;
         implements AdapterView.OnItemClickListener {
 
     static final String LOGTAG = "webtextview";
+
+    private int mRingInset;
 
     private WebView         mWebView;
     private boolean         mSingle;
@@ -207,12 +209,62 @@ import junit.framework.Assert;
             }
         };
         mReceiver = new MyResultReceiver(mHandler);
+        float ringWidth = 2f * context.getResources().getDisplayMetrics().density;
+        mRingInset = (int) ringWidth;
+        setBackgroundDrawable(new BackgroundDrawable(mRingInset));
+        setPadding(getPaddingLeft(), getPaddingTop(), getPaddingRight(),
+                getPaddingBottom());
+    }
+
+    private static class BackgroundDrawable extends Drawable {
+
+        private Paint mPaint = new Paint();
+        private int mBorderWidth;
+        private Rect mInsetRect = new Rect();
+
+        public BackgroundDrawable(int width) {
+            mPaint = new Paint();
+            mPaint.setStrokeWidth(width);
+            mBorderWidth = width;
+        }
+
+        @Override
+        public void draw(Canvas canvas) {
+            mPaint.setColor(0x6633b5e5);
+            canvas.drawRect(getBounds(), mPaint);
+            mInsetRect.left = getBounds().left + mBorderWidth;
+            mInsetRect.top = getBounds().top + mBorderWidth;
+            mInsetRect.right = getBounds().right - mBorderWidth;
+            mInsetRect.bottom = getBounds().bottom - mBorderWidth;
+            mPaint.setColor(Color.WHITE);
+            canvas.drawRect(mInsetRect, mPaint);
+        }
+
+        @Override
+        public void setAlpha(int alpha) {
+        }
+
+        @Override
+        public void setColorFilter(ColorFilter cf) {
+        }
+
+        @Override
+        public int getOpacity() {
+            return PixelFormat.TRANSLUCENT;
+        }
+
     }
 
     public void setAutoFillable(int queryId) {
         mAutoFillable = mWebView.getSettings().getAutoFillEnabled()
                 && (queryId != FORM_NOT_AUTOFILLABLE);
         mQueryId = queryId;
+    }
+
+    @Override
+    public void setPadding(int left, int top, int right, int bottom) {
+        super.setPadding(left + mRingInset, top + mRingInset,
+                right + mRingInset, bottom + mRingInset);
     }
 
     @Override
@@ -572,7 +624,6 @@ import junit.framework.Assert;
                 mPreChange.substring(0, mMaxLength).equals(postChange))) {
             return;
         }
-        mPreChange = postChange;
         if (0 == count) {
             if (before > 0) {
                 // For this and all changes to the text, update our cache
@@ -610,9 +661,9 @@ import junit.framework.Assert;
         // Prefer sending javascript events, so when adding one character,
         // don't replace the unchanged text.
         if (count > 1 && before == count - 1) {
-            String replaceButOne =  s.subSequence(start,
+            String replaceButOne =  mPreChange.subSequence(start,
                     start + before).toString();
-            String replacedString = getText().subSequence(start,
+            String replacedString = s.subSequence(start,
                     start + before).toString();
             if (replaceButOne.equals(replacedString)) {
                 // we're just adding one character
@@ -621,6 +672,7 @@ import junit.framework.Assert;
                 count = 1;
             }
         }
+        mPreChange = postChange;
         // Find the last character being replaced.  If it can be represented by
         // events, we will pass them to native so we can see javascript events.
         // Otherwise, replace the text being changed in the textfield.
@@ -926,18 +978,27 @@ import junit.framework.Assert;
      */
     /* package */ void setRect(int x, int y, int width, int height) {
         LayoutParams lp = (LayoutParams) getLayoutParams();
+        x -= mRingInset;
+        y -= mRingInset;
+        width += 2 * mRingInset;
+        height += 2 * mRingInset;
+        boolean needsUpdate = false;
         if (null == lp) {
             lp = new LayoutParams(width, height, x, y);
         } else {
-            lp.x = x;
-            lp.y = y;
-            lp.width = width;
-            lp.height = height;
+            if ((lp.x != x) || (lp.y != y) || (lp.width != width)
+                    || (lp.height != height)) {
+                needsUpdate = true;
+                lp.x = x;
+                lp.y = y;
+                lp.width = width;
+                lp.height = height;
+            }
         }
         if (getParent() == null) {
             // Insert the view so that it's drawn first (at index 0)
             mWebView.addView(this, 0, lp);
-        } else {
+        } else if (needsUpdate) {
             setLayoutParams(lp);
         }
         // Set up a measure spec so a layout can always be recreated.

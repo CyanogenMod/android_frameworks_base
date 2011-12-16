@@ -181,7 +181,8 @@ final class FragmentState implements Parcelable {
  *
  * While the Fragment API was introduced in
  * {@link android.os.Build.VERSION_CODES#HONEYCOMB}, a version of the API
- * is also available for use on older platforms.  See the blog post
+ * at is also available for use on older platforms through
+ * {@link android.support.v4.app.FragmentActivity}.  See the blog post
  * <a href="http://android-developers.blogspot.com/2011/03/fragments-for-all.html">
  * Fragments For All</a> for more details.
  *
@@ -339,6 +340,7 @@ public class Fragment implements ComponentCallbacks2, OnCreateContextMenuListene
     private static final HashMap<String, Class<?>> sClassMap =
             new HashMap<String, Class<?>>();
     
+    static final int INVALID_STATE = -1;   // Invalid state used as a null value.
     static final int INITIALIZING = 0;     // Not yet created.
     static final int CREATED = 1;          // Created.
     static final int ACTIVITY_CREATED = 2; // The activity has finished its creation.
@@ -403,7 +405,7 @@ public class Fragment implements ComponentCallbacks2, OnCreateContextMenuListene
     // The fragment manager we are associated with.  Set as soon as the
     // fragment is used in a transaction; cleared after it has been removed
     // from all transactions.
-    FragmentManager mFragmentManager;
+    FragmentManagerImpl mFragmentManager;
 
     // Activity this fragment is attached to.
     Activity mActivity;
@@ -453,6 +455,13 @@ public class Fragment implements ComponentCallbacks2, OnCreateContextMenuListene
     // The View generated for this fragment.
     View mView;
     
+    // Whether this fragment should defer starting until after other fragments
+    // have been started and their loaders are finished.
+    boolean mDeferStart;
+
+    // Hint provided by the app that this fragment is currently visible to the user.
+    boolean mUserVisibleHint = true;
+
     LoaderManagerImpl mLoaderManager;
     boolean mLoadersStarted;
     boolean mCheckedForLoaderManager;
@@ -907,6 +916,35 @@ public class Fragment implements ComponentCallbacks2, OnCreateContextMenuListene
                 mFragmentManager.invalidateOptionsMenu();
             }
         }
+    }
+
+    /**
+     * Set a hint to the system about whether this fragment's UI is currently visible
+     * to the user. This hint defaults to true and is persistent across fragment instance
+     * state save and restore.
+     *
+     * <p>An app may set this to false to indicate that the fragment's UI is
+     * scrolled out of visibility or is otherwise not directly visible to the user.
+     * This may be used by the system to prioritize operations such as fragment lifecycle updates
+     * or loader ordering behavior.</p>
+     *
+     * @param isVisibleToUser true if this fragment's UI is currently visible to the user (default),
+     *                        false if it is not.
+     */
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        if (!mUserVisibleHint && isVisibleToUser && mState < STARTED) {
+            mFragmentManager.performPendingDeferredStart(this);
+        }
+        mUserVisibleHint = isVisibleToUser;
+        mDeferStart = !isVisibleToUser;
+    }
+
+    /**
+     * @return The current value of the user-visible hint on this fragment.
+     * @see #setUserVisibleHint(boolean)
+     */
+    public boolean getUserVisibleHint() {
+        return mUserVisibleHint;
     }
 
     /**
@@ -1444,7 +1482,8 @@ public class Fragment implements ComponentCallbacks2, OnCreateContextMenuListene
                 writer.print(" mMenuVisible="); writer.print(mMenuVisible);
                 writer.print(" mHasMenu="); writer.println(mHasMenu);
         writer.print(prefix); writer.print("mRetainInstance="); writer.print(mRetainInstance);
-                writer.print(" mRetaining="); writer.println(mRetaining);
+                writer.print(" mRetaining="); writer.print(mRetaining);
+                writer.print(" mUserVisibleHint="); writer.println(mUserVisibleHint);
         if (mFragmentManager != null) {
             writer.print(prefix); writer.print("mFragmentManager=");
                     writer.println(mFragmentManager);

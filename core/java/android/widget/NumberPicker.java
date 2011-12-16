@@ -165,6 +165,11 @@ public class NumberPicker extends LinearLayout {
     };
 
     /**
+     * Constant for unspecified size.
+     */
+    private static final int SIZE_UNSPECIFIED = -1;
+
+    /**
      * Use a custom NumberPicker formatting callback to use two-digit minutes
      * strings like "01". Keeping a static formatter etc. is the most efficient
      * way to do this; it avoids creating temporary objects on every call to
@@ -201,6 +206,31 @@ public class NumberPicker extends LinearLayout {
      * The text for showing the current value.
      */
     private final EditText mInputText;
+
+    /**
+     * The min height of this widget.
+     */
+    private final int mMinHeight;
+
+    /**
+     * The max height of this widget.
+     */
+    private final int mMaxHeight;
+
+    /**
+     * The max width of this widget.
+     */
+    private final int mMinWidth;
+
+    /**
+     * The max width of this widget.
+     */
+    private int mMaxWidth;
+
+    /**
+     * Flag whether to compute the max width.
+     */
+    private final boolean mComputeMaxWidth;
 
     /**
      * The height of the text.
@@ -517,6 +547,23 @@ public class NumberPicker extends LinearLayout {
                 getResources().getDisplayMetrics());
         mSelectionDividerHeight = attributesArray.getDimensionPixelSize(
                 R.styleable.NumberPicker_selectionDividerHeight, defSelectionDividerHeight);
+        mMinHeight = attributesArray.getDimensionPixelSize(R.styleable.NumberPicker_minHeight,
+                SIZE_UNSPECIFIED);
+        mMaxHeight = attributesArray.getDimensionPixelSize(R.styleable.NumberPicker_maxHeight,
+                SIZE_UNSPECIFIED);
+        if (mMinHeight != SIZE_UNSPECIFIED && mMaxHeight != SIZE_UNSPECIFIED
+                && mMinHeight > mMaxHeight) {
+            throw new IllegalArgumentException("minHeight > maxHeight");
+        }
+        mMinWidth = attributesArray.getDimensionPixelSize(R.styleable.NumberPicker_minWidth,
+                SIZE_UNSPECIFIED);
+        mMaxWidth = attributesArray.getDimensionPixelSize(R.styleable.NumberPicker_maxWidth,
+                SIZE_UNSPECIFIED);
+        if (mMinWidth != SIZE_UNSPECIFIED && mMaxWidth != SIZE_UNSPECIFIED
+                && mMinWidth > mMaxWidth) {
+            throw new IllegalArgumentException("minWidth > maxWidth");
+        }
+        mComputeMaxWidth = (mMaxWidth == Integer.MAX_VALUE);
         attributesArray.recycle();
 
         mShowInputControlsAnimimationDuration = getResources().getInteger(
@@ -665,13 +712,54 @@ public class NumberPicker extends LinearLayout {
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
-        super.onLayout(changed, left, top, right, bottom);
+        final int msrdWdth = getMeasuredWidth();
+        final int msrdHght = getMeasuredHeight();
+
+        // Increment button at the top.
+        final int inctBtnMsrdWdth = mIncrementButton.getMeasuredWidth();
+        final int incrBtnLeft = (msrdWdth - inctBtnMsrdWdth) / 2;
+        final int incrBtnTop = 0;
+        final int incrBtnRight = incrBtnLeft + inctBtnMsrdWdth;
+        final int incrBtnBottom = incrBtnTop + mIncrementButton.getMeasuredHeight();
+        mIncrementButton.layout(incrBtnLeft, incrBtnTop, incrBtnRight, incrBtnBottom);
+
+        // Input text centered horizontally.
+        final int inptTxtMsrdWdth = mInputText.getMeasuredWidth();
+        final int inptTxtMsrdHght = mInputText.getMeasuredHeight();
+        final int inptTxtLeft = (msrdWdth - inptTxtMsrdWdth) / 2;
+        final int inptTxtTop = (msrdHght - inptTxtMsrdHght) / 2;
+        final int inptTxtRight = inptTxtLeft + inptTxtMsrdWdth;
+        final int inptTxtBottom = inptTxtTop + inptTxtMsrdHght;
+        mInputText.layout(inptTxtLeft, inptTxtTop, inptTxtRight, inptTxtBottom);
+
+        // Decrement button at the top.
+        final int decrBtnMsrdWdth = mIncrementButton.getMeasuredWidth();
+        final int decrBtnLeft = (msrdWdth - decrBtnMsrdWdth) / 2;
+        final int decrBtnTop = msrdHght - mDecrementButton.getMeasuredHeight();
+        final int decrBtnRight = decrBtnLeft + decrBtnMsrdWdth;
+        final int decrBtnBottom = msrdHght;
+        mDecrementButton.layout(decrBtnLeft, decrBtnTop, decrBtnRight, decrBtnBottom);
+
         if (!mScrollWheelAndFadingEdgesInitialized) {
             mScrollWheelAndFadingEdgesInitialized = true;
             // need to do all this when we know our size
             initializeSelectorWheel();
             initializeFadingEdges();
         }
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        // Try greedily to fit the max width and height.
+        final int newWidthMeasureSpec = makeMeasureSpec(widthMeasureSpec, mMaxWidth);
+        final int newHeightMeasureSpec = makeMeasureSpec(heightMeasureSpec, mMaxHeight);
+        super.onMeasure(newWidthMeasureSpec, newHeightMeasureSpec);
+        // Flag if we are measured with width or height less than the respective min.
+        final int widthSize = resolveSizeAndStateRespectingMinSize(mMinWidth, getMeasuredWidth(),
+                widthMeasureSpec);
+        final int heightSize = resolveSizeAndStateRespectingMinSize(mMinHeight, getMeasuredHeight(),
+                heightMeasureSpec);
+        setMeasuredDimension(widthSize, heightSize);
     }
 
     @Override
@@ -688,6 +776,7 @@ public class NumberPicker extends LinearLayout {
                 mBeginEditOnUpEvent = false;
                 mAdjustScrollerOnUpEvent = true;
                 if (mSelectorWheelState == SELECTOR_WHEEL_STATE_LARGE) {
+                    mSelectorWheelPaint.setAlpha(SELECTOR_WHEEL_BRIGHT_ALPHA);
                     boolean scrollersFinished = mFlingScroller.isFinished()
                             && mAdjustScroller.isFinished();
                     if (!scrollersFinished) {
@@ -700,17 +789,14 @@ public class NumberPicker extends LinearLayout {
                     hideInputControls();
                     return true;
                 }
-                if (isEventInViewHitRect(event, mInputText)
-                        || (!mIncrementButton.isShown()
-                                && isEventInViewHitRect(event, mIncrementButton))
-                        || (!mDecrementButton.isShown()
-                                && isEventInViewHitRect(event, mDecrementButton))) {
-                    mAdjustScrollerOnUpEvent = false;
-                    setSelectorWheelState(SELECTOR_WHEEL_STATE_LARGE);
-                    hideInputControls();
-                    return true;
+                if (isEventInVisibleViewHitRect(event, mIncrementButton)
+                        || isEventInVisibleViewHitRect(event, mDecrementButton)) {
+                    return false;
                 }
-                break;
+                mAdjustScrollerOnUpEvent = false;
+                setSelectorWheelState(SELECTOR_WHEEL_STATE_LARGE);
+                hideInputControls();
+                return true;
             case MotionEvent.ACTION_MOVE:
                 float currentMoveY = event.getY();
                 int deltaDownY = (int) Math.abs(currentMoveY - mLastDownEventY);
@@ -976,6 +1062,49 @@ public class NumberPicker extends LinearLayout {
     }
 
     /**
+     * Computes the max width if no such specified as an attribute.
+     */
+    private void tryComputeMaxWidth() {
+        if (!mComputeMaxWidth) {
+            return;
+        }
+        int maxTextWidth = 0;
+        if (mDisplayedValues == null) {
+            float maxDigitWidth = 0;
+            for (int i = 0; i <= 9; i++) {
+                final float digitWidth = mSelectorWheelPaint.measureText(String.valueOf(i));
+                if (digitWidth > maxDigitWidth) {
+                    maxDigitWidth = digitWidth;
+                }
+            }
+            int numberOfDigits = 0;
+            int current = mMaxValue;
+            while (current > 0) {
+                numberOfDigits++;
+                current = current / 10;
+            }
+            maxTextWidth = (int) (numberOfDigits * maxDigitWidth);
+        } else {
+            final int valueCount = mDisplayedValues.length;
+            for (int i = 0; i < valueCount; i++) {
+                final float textWidth = mSelectorWheelPaint.measureText(mDisplayedValues[i]);
+                if (textWidth > maxTextWidth) {
+                    maxTextWidth = (int) textWidth;
+                }
+            }
+        }
+        maxTextWidth += mInputText.getPaddingLeft() + mInputText.getPaddingRight();
+        if (mMaxWidth != maxTextWidth) {
+            if (maxTextWidth > mMinWidth) {
+                mMaxWidth = maxTextWidth;
+            } else {
+                mMaxWidth = mMinWidth;
+            }
+            invalidate();
+        }
+    }
+
+    /**
      * Gets whether the selector wheel wraps when reaching the min/max value.
      *
      * @return True if the selector wheel wraps.
@@ -1061,6 +1190,7 @@ public class NumberPicker extends LinearLayout {
         setWrapSelectorWheel(wrapSelectorWheel);
         initializeSelectorWheelIndices();
         updateInputTextView();
+        tryComputeMaxWidth();
     }
 
     /**
@@ -1092,6 +1222,7 @@ public class NumberPicker extends LinearLayout {
         setWrapSelectorWheel(wrapSelectorWheel);
         initializeSelectorWheelIndices();
         updateInputTextView();
+        tryComputeMaxWidth();
     }
 
     /**
@@ -1122,6 +1253,7 @@ public class NumberPicker extends LinearLayout {
         }
         updateInputTextView();
         initializeSelectorWheelIndices();
+        tryComputeMaxWidth();
     }
 
     @Override
@@ -1240,6 +1372,51 @@ public class NumberPicker extends LinearLayout {
     }
 
     /**
+     * Makes a measure spec that tries greedily to use the max value.
+     *
+     * @param measureSpec The measure spec.
+     * @param maxSize The max value for the size.
+     * @return A measure spec greedily imposing the max size.
+     */
+    private int makeMeasureSpec(int measureSpec, int maxSize) {
+        if (maxSize == SIZE_UNSPECIFIED) {
+            return measureSpec;
+        }
+        final int size = MeasureSpec.getSize(measureSpec);
+        final int mode = MeasureSpec.getMode(measureSpec);
+        switch (mode) {
+            case MeasureSpec.EXACTLY:
+                return measureSpec;
+            case MeasureSpec.AT_MOST:
+                return MeasureSpec.makeMeasureSpec(Math.min(size, maxSize), MeasureSpec.EXACTLY);
+            case MeasureSpec.UNSPECIFIED:
+                return MeasureSpec.makeMeasureSpec(maxSize, MeasureSpec.EXACTLY);
+            default:
+                throw new IllegalArgumentException("Unknown measure mode: " + mode);
+        }
+    }
+
+    /**
+     * Utility to reconcile a desired size and state, with constraints imposed by
+     * a MeasureSpec. Tries to respect the min size, unless a different size is
+     * imposed by the constraints.
+     *
+     * @param minSize The minimal desired size.
+     * @param measuredSize The currently measured size.
+     * @param measureSpec The current measure spec.
+     * @return The resolved size and state.
+     */
+    private int resolveSizeAndStateRespectingMinSize(int minSize, int measuredSize,
+            int measureSpec) {
+        if (minSize != SIZE_UNSPECIFIED) {
+            final int desiredWidth = Math.max(minSize, measuredSize);
+            return resolveSizeAndState(desiredWidth, measureSpec, 0);
+        } else {
+            return measuredSize;
+        }
+    }
+
+    /**
      * Resets the selector indices and clear the cached
      * string representation of these indices.
      */
@@ -1335,11 +1512,14 @@ public class NumberPicker extends LinearLayout {
     }
 
     /**
-     * @return If the <code>event</code> is in the <code>view</code>.
+     * @return If the <code>event</code> is in the visible <code>view</code>.
      */
-    private boolean isEventInViewHitRect(MotionEvent event, View view) {
-        view.getHitRect(mTempRect);
-        return mTempRect.contains((int) event.getX(), (int) event.getY());
+    private boolean isEventInVisibleViewHitRect(MotionEvent event, View view) {
+        if (view.getVisibility() == VISIBLE) {
+            view.getHitRect(mTempRect);
+            return mTempRect.contains((int) event.getX(), (int) event.getY());
+        }
+        return false;
     }
 
     /**
@@ -1418,23 +1598,11 @@ public class NumberPicker extends LinearLayout {
      */
     private void fling(int velocityY) {
         mPreviousScrollerY = 0;
-        Scroller flingScroller = mFlingScroller;
 
-        if (mWrapSelectorWheel) {
-            if (velocityY > 0) {
-                flingScroller.fling(0, 0, 0, velocityY, 0, 0, 0, Integer.MAX_VALUE);
-            } else {
-                flingScroller.fling(0, Integer.MAX_VALUE, 0, velocityY, 0, 0, 0, Integer.MAX_VALUE);
-            }
+        if (velocityY > 0) {
+            mFlingScroller.fling(0, 0, 0, velocityY, 0, 0, 0, Integer.MAX_VALUE);
         } else {
-            if (velocityY > 0) {
-                int maxY = mTextSize * (mValue - mMinValue);
-                flingScroller.fling(0, 0, 0, velocityY, 0, 0, 0, maxY);
-            } else {
-                int startY = mTextSize * (mMaxValue - mValue);
-                int maxY = startY;
-                flingScroller.fling(0, startY, 0, velocityY, 0, 0, 0, maxY);
-            }
+            mFlingScroller.fling(0, Integer.MAX_VALUE, 0, velocityY, 0, 0, 0, Integer.MAX_VALUE);
         }
 
         invalidate();

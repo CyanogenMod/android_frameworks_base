@@ -106,7 +106,8 @@ public class DigitalClock extends RelativeLayout {
         private String mAmString, mPmString;
 
         AmPm(View parent, Typeface tf) {
-            mAmPmTextView = (TextView) parent.findViewById(R.id.am_pm);
+            // No longer used, uncomment if we decide to use AM/PM indicator again
+            // mAmPmTextView = (TextView) parent.findViewById(R.id.am_pm);
             if (mAmPmTextView != null && tf != null) {
                 mAmPmTextView.setTypeface(tf);
             }
@@ -168,6 +169,8 @@ public class DigitalClock extends RelativeLayout {
         /* The time display consists of two tones. That's why we have two overlapping text views. */
         mTimeDisplayBackground = (TextView) findViewById(R.id.timeDisplayBackground);
         mTimeDisplayBackground.setTypeface(sBackgroundFont);
+        mTimeDisplayBackground.setVisibility(View.INVISIBLE);
+
         mTimeDisplayForeground = (TextView) findViewById(R.id.timeDisplayForeground);
         mTimeDisplayForeground.setTypeface(sForegroundFont);
         mAmPm = new AmPm(this, null);

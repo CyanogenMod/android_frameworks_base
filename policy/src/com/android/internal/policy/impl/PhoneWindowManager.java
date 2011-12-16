@@ -39,7 +39,7 @@ import android.database.ContentObserver;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.RectF;
-import android.os.Binder;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -68,8 +68,10 @@ import android.util.DisplayMetrics;
 import android.util.EventLog;
 import android.util.Log;
 import android.util.Slog;
+import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
+import android.view.IApplicationToken;
 import android.view.IWindowManager;
 import android.view.InputChannel;
 import android.view.InputDevice;
@@ -157,6 +159,11 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     static final boolean SHOW_STARTING_ANIMATIONS = true;
     static final boolean SHOW_PROCESSES_ON_ALT_MENU = false;
 
+    // Whether to allow dock apps with METADATA_DOCK_HOME to temporarily take over the Home key.
+    // No longer recommended for desk docks; still useful in car docks.
+    static final boolean ENABLE_CAR_DOCK_HOME_CAPTURE = true;
+    static final boolean ENABLE_DESK_DOCK_HOME_CAPTURE = false;
+
     static final int LONG_PRESS_POWER_NOTHING = 0;
     static final int LONG_PRESS_POWER_GLOBAL_ACTIONS = 1;
     static final int LONG_PRESS_POWER_SHUT_OFF = 2;
@@ -221,7 +228,30 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     // Useful scan codes.
     private static final int SW_LID = 0x00;
     private static final int BTN_MOUSE = 0x110;
-    
+
+    /* Table of Application Launch keys.  Maps from key codes to intent categories.
+     *
+     * These are special keys that are used to launch particular kinds of applications,
+     * such as a web browser.  HID defines nearly a hundred of them in the Consumer (0x0C)
+     * usage page.  We don't support quite that many yet...
+     */
+    static SparseArray<String> sApplicationLaunchKeyCategories;
+    static {
+        sApplicationLaunchKeyCategories = new SparseArray<String>();
+        sApplicationLaunchKeyCategories.append(
+                KeyEvent.KEYCODE_EXPLORER, Intent.CATEGORY_APP_BROWSER);
+        sApplicationLaunchKeyCategories.append(
+                KeyEvent.KEYCODE_ENVELOPE, Intent.CATEGORY_APP_EMAIL);
+        sApplicationLaunchKeyCategories.append(
+                KeyEvent.KEYCODE_CONTACTS, Intent.CATEGORY_APP_CONTACTS);
+        sApplicationLaunchKeyCategories.append(
+                KeyEvent.KEYCODE_CALENDAR, Intent.CATEGORY_APP_CALENDAR);
+        sApplicationLaunchKeyCategories.append(
+                KeyEvent.KEYCODE_MUSIC, Intent.CATEGORY_APP_MUSIC);
+        sApplicationLaunchKeyCategories.append(
+                KeyEvent.KEYCODE_CALCULATOR, Intent.CATEGORY_APP_CALCULATOR);
+    }
+
     /**
      * Lock protecting internal state.  Must not call out into window
      * manager with lock held.  (This lock will be acquired in places
@@ -268,8 +298,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     GlobalActions mGlobalActions;
     volatile boolean mPowerKeyHandled; // accessed from input reader and handler thread
     boolean mPendingPowerKeyUpCanceled;
-    RecentApplicationsDialog mRecentAppsDialog;
     Handler mHandler;
+
+    static final int RECENT_APPS_BEHAVIOR_SHOW_OR_DISMISS = 0;
+    static final int RECENT_APPS_BEHAVIOR_EXIT_TOUCH_MODE_AND_SHOW = 1;
+    static final int RECENT_APPS_BEHAVIOR_DISMISS_AND_SWITCH = 2;
+
+    RecentApplicationsDialog mRecentAppsDialog;
+    int mRecentAppsDialogHeldModifiers;
 
     private static final int LID_ABSENT = -1;
     private static final int LID_CLOSED = 0;
@@ -310,6 +346,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     // The last window we were told about in focusChanged.
     WindowState mFocusedWindow;
+    IApplicationToken mFocusedApp;
 
     private final InputHandler mPointerLocationInputHandler = new BaseInputHandler() {
         @Override
@@ -360,6 +397,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     int mResettingSystemUiFlags = 0;
     // Bits that we are currently always keeping cleared.
     int mForceClearedSystemUiFlags = 0;
+    // What we last reported to system UI about whether the compatibility
+    // menu needs to be displayed.
+    boolean mLastFocusNeedsMenu = false;
 
     FakeWindow mHideNavFakeWindow = null;
 
@@ -370,8 +410,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     static final Rect mTmpNavigationFrame = new Rect();
     
     WindowState mTopFullscreenOpaqueWindowState;
-    WindowState mTopAppWindowState;
-    WindowState mLastTopAppWindowState;
     boolean mTopIsFullscreen;
     boolean mForceStatusBar;
     boolean mHideLockScreen;
@@ -387,10 +425,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     boolean mAllowLockscreenWhenOn;
     int mLockScreenTimeout;
     boolean mLockScreenTimerActive;
-
-    // visual screen saver support
-    int mScreenSaverTimeout;
-    boolean mScreenSaverEnabled = false;
 
     // Behavior of ENDCALL Button.  (See Settings.System.END_BUTTON_BEHAVIOR.)
     int mEndcallBehavior;
@@ -454,8 +488,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.Secure.DEFAULT_INPUT_METHOD), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     "fancy_rotation_anim"), false, this);
-            resolver.registerContentObserver(Settings.System.getUriFor(
-                    Settings.Secure.DREAM_TIMEOUT), false, this);
             updateSettings();
         }
 
@@ -493,7 +525,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             return true;
         }
         if ((mCarDockEnablesAccelerometer && mDockMode == Intent.EXTRA_DOCK_STATE_CAR) ||
-                (mDeskDockEnablesAccelerometer && mDockMode == Intent.EXTRA_DOCK_STATE_DESK)) {
+                (mDeskDockEnablesAccelerometer && (mDockMode == Intent.EXTRA_DOCK_STATE_DESK
+                        || mDockMode == Intent.EXTRA_DOCK_STATE_LE_DESK
+                        || mDockMode == Intent.EXTRA_DOCK_STATE_HE_DESK))) {
             // enable accelerometer if we are docked in a dock that enables accelerometer
             // orientation management,
             return true;
@@ -665,7 +699,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
         if (mLongPressOnHomeBehavior == LONG_PRESS_HOME_RECENT_DIALOG) {
-            showOrHideRecentAppsDialog(0, true /*dismissIfShown*/);
+            showOrHideRecentAppsDialog(RECENT_APPS_BEHAVIOR_SHOW_OR_DISMISS);
         } else if (mLongPressOnHomeBehavior == LONG_PRESS_HOME_RECENT_SYSTEM_UI) {
             try {
                 mStatusBarService.toggleRecentApps();
@@ -676,10 +710,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     /**
-     * Create (if necessary) and launch the recent apps dialog, or hide it if it is
-     * already shown.
+     * Create (if necessary) and show or dismiss the recent apps dialog according
+     * according to the requested behavior.
      */
-    void showOrHideRecentAppsDialog(final int heldModifiers, final boolean dismissIfShown) {
+    void showOrHideRecentAppsDialog(final int behavior) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
@@ -687,12 +721,33 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mRecentAppsDialog = new RecentApplicationsDialog(mContext);
                 }
                 if (mRecentAppsDialog.isShowing()) {
-                    if (dismissIfShown) {
-                        mRecentAppsDialog.dismiss();
+                    switch (behavior) {
+                        case RECENT_APPS_BEHAVIOR_SHOW_OR_DISMISS:
+                            mRecentAppsDialog.dismiss();
+                            break;
+                        case RECENT_APPS_BEHAVIOR_DISMISS_AND_SWITCH:
+                            mRecentAppsDialog.dismissAndSwitch();
+                            break;
+                        case RECENT_APPS_BEHAVIOR_EXIT_TOUCH_MODE_AND_SHOW:
+                        default:
+                            break;
                     }
                 } else {
-                    mRecentAppsDialog.setHeldModifiers(heldModifiers);
-                    mRecentAppsDialog.show();
+                    switch (behavior) {
+                        case RECENT_APPS_BEHAVIOR_SHOW_OR_DISMISS:
+                            mRecentAppsDialog.show();
+                            break;
+                        case RECENT_APPS_BEHAVIOR_EXIT_TOUCH_MODE_AND_SHOW:
+                            try {
+                                mWindowManager.setInTouchMode(false);
+                            } catch (RemoteException e) {
+                            }
+                            mRecentAppsDialog.show();
+                            break;
+                        case RECENT_APPS_BEHAVIOR_DISMISS_AND_SWITCH:
+                        default:
+                            break;
+                    }
                 }
             }
         });
@@ -760,6 +815,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mDockMode = intent.getIntExtra(Intent.EXTRA_DOCK_STATE,
                     Intent.EXTRA_DOCK_STATE_UNDOCKED);
         }
+
         mVibrator = new Vibrator();
         mLongPressVibePattern = getLongIntArray(mContext.getResources(),
                 com.android.internal.R.array.config_longPressVibePattern);
@@ -908,11 +964,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 mHasSoftInput = hasSoftInput;
                 updateRotation = true;
             }
-
-            mScreenSaverTimeout = Settings.System.getInt(resolver,
-                    Settings.Secure.DREAM_TIMEOUT, 0);
-            mScreenSaverEnabled = true;
-            updateScreenSaverTimeoutLocked();
         }
         if (updateRotation) {
             updateRotation(true);
@@ -1183,7 +1234,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     public int getConfigDisplayHeight(int fullWidth, int fullHeight, int rotation) {
-        return getNonDecorDisplayHeight(fullWidth, fullHeight, rotation);
+        // This is the same as getNonDecorDisplayHeight, unless the status bar
+        // can hide.  If the status bar can hide, we don't count that as part
+        // of the decor; however for purposes of configurations, we do want to
+        // exclude it since applications can't generally use that part of the
+        // screen.
+        return getNonDecorDisplayHeight(fullWidth, fullHeight, rotation)
+                - (mStatusBarCanHide ? mStatusBarHeight : 0);
     }
 
     public boolean doesForceHide(WindowState win, WindowManager.LayoutParams attrs) {
@@ -1568,7 +1625,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             return 0;
         } else if (keyCode == KeyEvent.KEYCODE_APP_SWITCH) {
             if (down && repeatCount == 0) {
-                showOrHideRecentAppsDialog(0, true /*dismissIfShown*/);
+                showOrHideRecentAppsDialog(RECENT_APPS_BEHAVIOR_SHOW_OR_DISMISS);
             }
             return -1;
         }
@@ -1604,6 +1661,62 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
         }
 
+        // Invoke shortcuts using Meta.
+        if (down && repeatCount == 0
+                && (metaState & KeyEvent.META_META_ON) != 0) {
+            final KeyCharacterMap kcm = event.getKeyCharacterMap();
+            Intent shortcutIntent = mShortcutManager.getIntent(kcm, keyCode,
+                    metaState & ~(KeyEvent.META_META_ON
+                            | KeyEvent.META_META_LEFT_ON | KeyEvent.META_META_RIGHT_ON));
+            if (shortcutIntent != null) {
+                shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                try {
+                    mContext.startActivity(shortcutIntent);
+                } catch (ActivityNotFoundException ex) {
+                    Slog.w(TAG, "Dropping shortcut key combination because "
+                            + "the activity to which it is registered was not found: "
+                            + "META+" + KeyEvent.keyCodeToString(keyCode), ex);
+                }
+                return -1;
+            }
+        }
+
+        // Handle application launch keys.
+        if (down && repeatCount == 0) {
+            String category = sApplicationLaunchKeyCategories.get(keyCode);
+            if (category != null) {
+                Intent intent = Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, category);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                try {
+                    mContext.startActivity(intent);
+                } catch (ActivityNotFoundException ex) {
+                    Slog.w(TAG, "Dropping application launch key because "
+                            + "the activity to which it is registered was not found: "
+                            + "keyCode=" + keyCode + ", category=" + category, ex);
+                }
+                return -1;
+            }
+        }
+
+        // Display task switcher for ALT-TAB or Meta-TAB.
+        if (down && repeatCount == 0 && keyCode == KeyEvent.KEYCODE_TAB) {
+            if (mRecentAppsDialogHeldModifiers == 0) {
+                final int shiftlessModifiers = event.getModifiers() & ~KeyEvent.META_SHIFT_MASK;
+                if (KeyEvent.metaStateHasModifiers(shiftlessModifiers, KeyEvent.META_ALT_ON)
+                        || KeyEvent.metaStateHasModifiers(
+                                shiftlessModifiers, KeyEvent.META_META_ON)) {
+                    mRecentAppsDialogHeldModifiers = shiftlessModifiers;
+                    showOrHideRecentAppsDialog(RECENT_APPS_BEHAVIOR_EXIT_TOUCH_MODE_AND_SHOW);
+                    return -1;
+                }
+            }
+        } else if (!down && mRecentAppsDialogHeldModifiers != 0
+                && (metaState & mRecentAppsDialogHeldModifiers) == 0) {
+            mRecentAppsDialogHeldModifiers = 0;
+            showOrHideRecentAppsDialog(RECENT_APPS_BEHAVIOR_DISMISS_AND_SWITCH);
+        }
+
+        // Let the application handle the key.
         return 0;
     }
 
@@ -1625,39 +1738,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             final KeyCharacterMap kcm = event.getKeyCharacterMap();
             final int keyCode = event.getKeyCode();
             final int metaState = event.getMetaState();
-            final boolean initialDown = event.getAction() == KeyEvent.ACTION_DOWN
-                    && event.getRepeatCount() == 0;
-
-            if (initialDown) {
-                // Invoke shortcuts using Meta as a fallback.
-                if ((metaState & KeyEvent.META_META_ON) != 0) {
-                    Intent shortcutIntent = mShortcutManager.getIntent(kcm, keyCode,
-                            metaState & ~(KeyEvent.META_META_ON
-                                    | KeyEvent.META_META_LEFT_ON | KeyEvent.META_META_RIGHT_ON));
-                    if (shortcutIntent != null) {
-                        shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        try {
-                            mContext.startActivity(shortcutIntent);
-                        } catch (ActivityNotFoundException ex) {
-                            Slog.w(TAG, "Dropping shortcut key combination because "
-                                    + "the activity to which it is registered was not found: "
-                                    + "META+" + KeyEvent.keyCodeToString(keyCode), ex);
-                        }
-                        return null;
-                    }
-                }
-
-                // Display task switcher for ALT-TAB or Meta-TAB.
-                if (keyCode == KeyEvent.KEYCODE_TAB) {
-                    final int shiftlessModifiers = event.getModifiers() & ~KeyEvent.META_SHIFT_MASK;
-                    if (KeyEvent.metaStateHasModifiers(shiftlessModifiers, KeyEvent.META_ALT_ON)
-                            || KeyEvent.metaStateHasModifiers(
-                                    shiftlessModifiers, KeyEvent.META_META_ON)) {
-                        showOrHideRecentAppsDialog(shiftlessModifiers, false /*dismissIfShown*/);
-                        return null;
-                    }
-                }
-            }
 
             // Check for fallback actions specified by the key character map.
             if (getFallbackAction(kcm, keyCode, metaState, mFallbackAction)) {
@@ -2243,7 +2323,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     /** {@inheritDoc} */
     public void beginAnimationLw(int displayWidth, int displayHeight) {
         mTopFullscreenOpaqueWindowState = null;
-        mTopAppWindowState = null;
         mForceStatusBar = false;
         
         mHideLockScreen = false;
@@ -2279,12 +2358,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 if ((attrs.flags & FLAG_ALLOW_LOCK_WHILE_SCREEN_ON) != 0) {
                     mAllowLockscreenWhenOn = true;
                 }
-            }
-        }
-        if (mTopAppWindowState == null && win.isVisibleOrBehindKeyguardLw()) {
-            if (attrs.type >= FIRST_APPLICATION_WINDOW
-                    && attrs.type <= LAST_APPLICATION_WINDOW) {
-                mTopAppWindowState = win;
             }
         }
     }
@@ -2341,35 +2414,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         }
 
         mTopIsFullscreen = topIsFullscreen;
-
-        if (mTopAppWindowState != null && mTopAppWindowState != mLastTopAppWindowState) {
-            mLastTopAppWindowState = mTopAppWindowState;
-
-            final boolean topNeedsMenu = (mTopAppWindowState.getAttrs().flags
-                    & WindowManager.LayoutParams.FLAG_NEEDS_MENU_KEY) != 0;
-
-            mHandler.post(new Runnable() {
-                    public void run() {
-                        if (mStatusBarService == null) {
-                            // This is the one that can not go away, but it doesn't come up
-                            // before the window manager does, so don't fail if it doesn't
-                            // exist. This works as long as no fullscreen windows come up
-                            // before the status bar service does.
-                            mStatusBarService = IStatusBarService.Stub.asInterface(
-                                    ServiceManager.getService("statusbar"));
-                        }
-                        final IStatusBarService sbs = mStatusBarService;
-                        if (mStatusBarService != null) {
-                            try {
-                                sbs.topAppWindowChanged(topNeedsMenu);
-                            } catch (RemoteException e) {
-                                // This should be impossible because we're in the same process.
-                                mStatusBarService = null;
-                            }
-                        }
-                    }
-                });
-        }
 
         // Hide the key guard if a visible window explicitly specifies that it wants to be displayed
         // when the screen is locked
@@ -2479,7 +2523,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // keyguard, then we need to have it turn on the
                 // screen once it is shown.
                 mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(
-                        KeyEvent.KEYCODE_POWER);
+                        KeyEvent.KEYCODE_POWER, mDockMode != Intent.EXTRA_DOCK_STATE_UNDOCKED);
             }
         } else {
             // Light up the keyboard if we are sliding up.
@@ -2699,7 +2743,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (down && isWakeKey) {
                 if (keyguardActive) {
                     // If the keyguard is showing, let it decide what to do with the wake key.
-                    mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(keyCode);
+                    mKeyguardMediator.onWakeKeyWhenKeyguardShowingTq(keyCode,
+                            mDockMode != Intent.EXTRA_DOCK_STATE_UNDOCKED);
                 } else {
                     // Otherwise, wake the device ourselves.
                     result |= ACTION_POKE_USER_ACTIVITY;
@@ -2987,7 +3032,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
         synchronized (mLock) {
             updateOrientationListenerLp();
             updateLockScreenTimeout();
-            updateScreenSaverTimeoutLocked();
         }
     }
 
@@ -3034,7 +3078,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mScreenOnEarly = true;
             updateOrientationListenerLp();
             updateLockScreenTimeout();
-            updateScreenSaverTimeoutLocked();
         }
     }
 
@@ -3124,11 +3167,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 sensorRotation = lastRotation;
             }
 
-            int preferredRotation = -1;
-            if (mHdmiPlugged) {
-                // Ignore sensor when plugged into HDMI.
-                preferredRotation = mHdmiRotation;
-            } else if (mLidOpen == LID_OPEN && mLidOpenRotation >= 0) {
+            final int preferredRotation;
+            if (mLidOpen == LID_OPEN && mLidOpenRotation >= 0) {
                 // Ignore sensor when lid switch is open and rotation is forced.
                 preferredRotation = mLidOpenRotation;
             } else if (mDockMode == Intent.EXTRA_DOCK_STATE_CAR
@@ -3138,13 +3178,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // enable 180 degree rotation while docked.
                 preferredRotation = mCarDockEnablesAccelerometer
                         ? sensorRotation : mCarDockRotation;
-            } else if (mDockMode == Intent.EXTRA_DOCK_STATE_DESK
+            } else if ((mDockMode == Intent.EXTRA_DOCK_STATE_DESK
+                    || mDockMode == Intent.EXTRA_DOCK_STATE_LE_DESK
+                    || mDockMode == Intent.EXTRA_DOCK_STATE_HE_DESK)
                     && (mDeskDockEnablesAccelerometer || mDeskDockRotation >= 0)) {
                 // Ignore sensor when in desk dock unless explicitly enabled.
                 // This case can override the behavior of NOSENSOR, and can also
                 // enable 180 degree rotation while docked.
                 preferredRotation = mDeskDockEnablesAccelerometer
                         ? sensorRotation : mDeskDockRotation;
+            } else if (mHdmiPlugged) {
+                // Ignore sensor when plugged into HDMI.
+                // Note that the dock orientation overrides the HDMI orientation.
+                preferredRotation = mHdmiRotation;
             } else if ((mAccelerometerDefault != 0 /* implies not rotation locked */
                             && (orientation == ActivityInfo.SCREEN_ORIENTATION_USER
                                     || orientation == ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED))
@@ -3171,28 +3217,39 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             } else if (mUserRotationMode == WindowManagerPolicy.USER_ROTATION_LOCKED) {
                 // Apply rotation lock.
                 preferredRotation = mUserRotation;
+            } else {
+                // No overriding preference.
+                // We will do exactly what the application asked us to do.
+                preferredRotation = -1;
             }
-
-            // TODO: Sometimes, we might want to override the application-requested
-            //       orientation, such as when HDMI is plugged in or when docked.
-            //       We can do that by modifying the appropriate cases above to return
-            //       the preferred orientation directly instead of continuing on down here.
 
             switch (orientation) {
                 case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
-                    // Always return portrait if orientation set to portrait.
+                    // Return portrait unless overridden.
+                    if (isAnyPortrait(preferredRotation)) {
+                        return preferredRotation;
+                    }
                     return mPortraitRotation;
 
                 case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
-                    // Always return landscape if orientation set to landscape.
+                    // Return landscape unless overridden.
+                    if (isLandscapeOrSeascape(preferredRotation)) {
+                        return preferredRotation;
+                    }
                     return mLandscapeRotation;
 
                 case ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
-                    // Always return portrait if orientation set to portrait.
+                    // Return reverse portrait unless overridden.
+                    if (isAnyPortrait(preferredRotation)) {
+                        return preferredRotation;
+                    }
                     return mUpsideDownRotation;
 
                 case ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
-                    // Always return seascape if orientation set to reverse landscape.
+                    // Return seascape unless overridden.
+                    if (isLandscapeOrSeascape(preferredRotation)) {
+                        return preferredRotation;
+                    }
                     return mSeascapeRotation;
 
                 case ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE:
@@ -3376,6 +3433,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                             WindowManager.LayoutParams.FLAG_DIM_BEHIND
                             | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN);
                     mBootMsgDialog.getWindow().setDimAmount(1);
+                    WindowManager.LayoutParams lp = mBootMsgDialog.getWindow().getAttributes();
+                    lp.screenOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR;
+                    mBootMsgDialog.getWindow().setAttributes(lp);
                     mBootMsgDialog.setCancelable(false);
                     mBootMsgDialog.show();
                 }
@@ -3414,73 +3474,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // reset the timer
                 mHandler.removeCallbacks(mScreenLockTimeout);
                 mHandler.postDelayed(mScreenLockTimeout, mLockScreenTimeout);
-            }
-        }
-
-        // Turn this off for now, screen savers not currently enabled.
-        if (false) {
-            synchronized (mLock) {
-                updateScreenSaverTimeoutLocked();
-            }
-        }
-    }
-
-    Runnable mScreenSaverActivator = null;
-    /*new Runnable() {
-        public void run() {
-            synchronized (this) {
-                if (!(mScreenSaverEnabled && mScreenOn)) {
-                    Log.w(TAG, "mScreenSaverActivator ran, but the screensaver should not be showing. Who's driving this thing?");
-                    return;
-                }
-
-                if (localLOGV) Log.v(TAG, "mScreenSaverActivator entering dreamland");
-                try {
-                    String component = Settings.System.getString(
-                            mContext.getContentResolver(), Settings.Secure.DREAM_COMPONENT);
-                    if (component != null) {
-                        ComponentName cn = ComponentName.unflattenFromString(component);
-                        Intent intent = new Intent(Intent.ACTION_MAIN)
-                            .setComponent(cn)
-                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                                | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS
-                                | Intent.FLAG_ACTIVITY_NO_USER_ACTION
-                                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                        mContext.startActivity(intent);
-                    } else {
-                        Log.e(TAG, "Couldn't start screen saver: none selected");
-                    }
-                } catch (android.content.ActivityNotFoundException exc) {
-                    // no screensaver? give up
-                    Log.e(TAG, "Couldn't start screen saver: none installed");
-                }
-            }
-        }
-    };
-    */
-
-    // Must call while holding mLock
-    private void updateScreenSaverTimeoutLocked() {
-        if (mScreenSaverActivator == null) return;
-
-        // GAH...  acquiring a lock within a lock?  Please let's fix this.
-        // (Also note this is called from userActivity, with the power manager
-        // lock  held.  Not good.)
-        synchronized (mScreenSaverActivator) {
-            mHandler.removeCallbacks(mScreenSaverActivator);
-            if (mScreenSaverEnabled && mScreenOnEarly && mScreenSaverTimeout > 0) {
-                if (localLOGV)
-                    Log.v(TAG, "scheduling screensaver for " + mScreenSaverTimeout + "ms from now");
-                mHandler.postDelayed(mScreenSaverActivator, mScreenSaverTimeout);
-            } else {
-                if (localLOGV) {
-                    if (mScreenSaverTimeout == 0)
-                        Log.v(TAG, "screen saver disabled by user");
-                    else if (!mScreenOnEarly)
-                        Log.v(TAG, "screen saver disabled while screen off");
-                    else
-                        Log.v(TAG, "screen saver disabled by wakelock");
-                }
             }
         }
     }
@@ -3533,21 +3526,35 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
 
     /**
-     * Return an Intent to launch the currently active dock as home.  Returns
-     * null if the standard home should be launched.
+     * Return an Intent to launch the currently active dock app as home.  Returns
+     * null if the standard home should be launched, which is the case if any of the following is
+     * true:
+     * <ul>
+     *  <li>The device is not in either car mode or desk mode
+     *  <li>The device is in car mode but ENABLE_CAR_DOCK_HOME_CAPTURE is false
+     *  <li>The device is in desk mode but ENABLE_DESK_DOCK_HOME_CAPTURE is false
+     *  <li>The device is in car mode but there's no CAR_DOCK app with METADATA_DOCK_HOME
+     *  <li>The device is in desk mode but there's no DESK_DOCK app with METADATA_DOCK_HOME
+     * </ul>
      * @return
      */
     Intent createHomeDockIntent() {
-        Intent intent;
+        Intent intent = null;
         
         // What home does is based on the mode, not the dock state.  That
         // is, when in car mode you should be taken to car home regardless
         // of whether we are actually in a car dock.
         if (mUiMode == Configuration.UI_MODE_TYPE_CAR) {
-            intent = mCarDockIntent;
+            if (ENABLE_CAR_DOCK_HOME_CAPTURE) {
+                intent = mCarDockIntent;
+            }
         } else if (mUiMode == Configuration.UI_MODE_TYPE_DESK) {
-            intent = mDeskDockIntent;
-        } else {
+            if (ENABLE_DESK_DOCK_HOME_CAPTURE) {
+                intent = mDeskDockIntent;
+            }
+        }
+
+        if (intent == null) {
             return null;
         }
         
@@ -3674,11 +3681,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     }
     
     public void screenOnStartedLw() {
-        // The window manager has just grabbed a wake lock. This is our cue to disable the screen
-        // saver.
-        synchronized (mLock) {
-            mScreenSaverEnabled = false;
-        }
     }
 
     public void screenOnStoppedLw() {
@@ -3686,13 +3688,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             if (!mKeyguardMediator.isShowingAndNotHidden()) {
                 long curTime = SystemClock.uptimeMillis();
                 mPowerManager.userActivity(curTime, false, LocalPowerManager.OTHER_EVENT);
-            }
-
-            synchronized (mLock) {
-                // even if the keyguard is up, now that all the wakelocks have been released, we
-                // should re-enable the screen saver
-                mScreenSaverEnabled = true;
-                updateScreenSaverTimeoutLocked();
             }
         }
     }
@@ -3712,10 +3707,14 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 & ~mResettingSystemUiFlags
                 & ~mForceClearedSystemUiFlags;
         int diff = visibility ^ mLastSystemUiFlags;
-        if (diff == 0) {
+        final boolean needsMenu = mFocusedWindow.getNeedsMenuLw(mTopFullscreenOpaqueWindowState);
+        if (diff == 0 && mLastFocusNeedsMenu == needsMenu
+                && mFocusedApp == mFocusedWindow.getAppToken()) {
             return 0;
         }
         mLastSystemUiFlags = visibility;
+        mLastFocusNeedsMenu = needsMenu;
+        mFocusedApp = mFocusedWindow.getAppToken();
         mHandler.post(new Runnable() {
                 public void run() {
                     if (mStatusBarService == null) {
@@ -3725,6 +3724,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     if (mStatusBarService != null) {
                         try {
                             mStatusBarService.setSystemUiVisibility(visibility);
+                            mStatusBarService.topAppWindowChanged(needsMenu);
                         } catch (RemoteException e) {
                             // not much to be done
                             mStatusBarService = null;
@@ -3756,6 +3756,10 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     pw.print(Integer.toHexString(mResettingSystemUiFlags));
                     pw.print(" mForceClearedSystemUiFlags=0x");
                     pw.println(Integer.toHexString(mForceClearedSystemUiFlags));
+        }
+        if (mLastFocusNeedsMenu) {
+            pw.print(prefix); pw.print("mLastFocusNeedsMenu=");
+                    pw.println(mLastFocusNeedsMenu);
         }
         pw.print(prefix); pw.print("mUiMode="); pw.print(mUiMode);
                 pw.print(" mDockMode="); pw.print(mDockMode);

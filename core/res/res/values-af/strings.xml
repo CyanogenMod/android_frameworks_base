@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Skakel draadloos af"</string>
     <string name="screen_lock" msgid="799094655496098153">"Skermslot"</string>
     <string name="power_off" msgid="4266614107412865048">"Sit af"</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"Sit tans af…"</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Jou tablet gaan nou afskakel."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Jou foon gaan nou afsit."</string>
@@ -171,7 +177,7 @@
     <string name="permgroupdesc_accounts" msgid="4948732641827091312">"Kry toegang tot beskikbare rekeninge."</string>
     <string name="permgrouplab_hardwareControls" msgid="7998214968791599326">"Hardewarekontroles"</string>
     <string name="permgroupdesc_hardwareControls" msgid="4357057861225462702">"Direkte toegang tot hardeware op die selfoon."</string>
-    <string name="permgrouplab_phoneCalls" msgid="9067173988325865923">"foonoproepe"</string>
+    <string name="permgrouplab_phoneCalls" msgid="9067173988325865923">"Foonoproepe"</string>
     <string name="permgroupdesc_phoneCalls" msgid="7489701620446183770">"Monitor, neem op, en verwerk foonoproepe."</string>
     <string name="permgrouplab_systemTools" msgid="4652191644082714048">"Stelselhulpmiddels"</string>
     <string name="permgroupdesc_systemTools" msgid="8162102602190734305">"Laervlak-toegang en -beheer van die stelsel."</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"lees sensitiewe logdata"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"Laat \'n program toe om die stelsel se verskeie loglêers te lees. Dit maak dit moontlik om algemene inligting te ontdek oor wat jy met die tablet doen en bevat potensieel persoonlike of private inligting."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"Laat \'n program toe om van die stelsel se verskillende loglêers te lees. Dit maak dit moontlik om algemene inligting te ontdek oor wat jy met die foon doen, wat potensieel persoonlike of private inligting kan bevat."</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"gebruik enige mediadekodeerder vir terugspeel"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"Hiermee kan \'n program enige geïnstalleerde mediadekodeerder gebruik om te dekodeer vir terugspeel."</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"lees/skryf na bronne wat diag besit"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"Laat \'n program toe om enige hulpbron te lees en na toe te skryf wat deur die diag-groep besit word; byvoorbeeld lêers in /dev. Dit kan potensieel stelselstabiliteit en -sekuriteit beïnvloed. Dit behoort net gebruik word vir hardewarespesifieke diagnose deur die vervaardiger of operateur."</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"aktiveer of deaktiveer programkomponente"</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Laat \'n program toe om aan Wi-Fi-toegangspunte te koppel of van te ontkoppel, en om wysigings aan opgestelde Wi-Fi-netwerke aan te bring."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"laat Wi-Fi-multisendontvangs toe"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Laat \'n program toe om pakkies te ontvang wat nie direk aan jou toestel gestuur is nie. Dit kan handig wees wanneer jy dienste wat naby is, wil opspoor. Dit gebruik meer krag as die niemultisaai-modus."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"sien WiMAX-status"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"Laat \'n program toe om die inligting oor die status van WiMAX te sien."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"verander WiMAX-status"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"Laat \'n program toe om aan die WiMAX-netwerk te koppel en te ontkoppel."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"bluetooth-administrasie"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"Laat \'n program toe om die plaaslike Bluetooth-tablet op te stel en om afgeleë toestelle te ontdek en daarmee saam te bind."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"Laat \'n program toe om die plaaslike Bluetooth-foon op te stel, en om afgeleë toestelle te ontdek en daarmee saam te bind."</string>
@@ -628,7 +640,7 @@
     <string name="relationTypeParent" msgid="4755635567562925226">"Ouer"</string>
     <string name="relationTypePartner" msgid="7266490285120262781">"Vennoot"</string>
     <string name="relationTypeReferredBy" msgid="101573059844135524">"Verwys deur"</string>
-    <string name="relationTypeRelative" msgid="1799819930085610271">"Relatief"</string>
+    <string name="relationTypeRelative" msgid="1799819930085610271">"Familielid"</string>
     <string name="relationTypeSister" msgid="1735983554479076481">"Suster"</string>
     <string name="relationTypeSpouse" msgid="394136939428698117">"Eggenoot"</string>
     <string name="sipAddressTypeCustom" msgid="2473580593111590945">"Gepasmaakte"</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"Oop Wi-Fi-netwerke beskikbaar"</item>
     <item quantity="other" msgid="7915895323644292768">"Oop Wi-Fi-netwerke beskikbaar"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Meld aan by Wi-Fi-netwerk"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Kon nie aan Wi-Fikoppel nie"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" het \'n swak internetverbinding."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -991,8 +1006,8 @@
     <string name="usb_storage_error_message" product="default" msgid="120810397713773275">"Kon nie jou SD-kaart vir USB-massaberging gebruik nie."</string>
     <string name="usb_storage_notification_title" msgid="8175892554757216525">"USB gekoppel"</string>
     <string name="usb_storage_notification_message" msgid="7380082404288219341">"Kies om lêers na/van jou rekenaar te kopieer."</string>
-    <string name="usb_storage_stop_notification_title" msgid="2336058396663516017">"Skakel USB-geheue af"</string>
-    <string name="usb_storage_stop_notification_message" msgid="2591813490269841539">"Kies om USB-geheue af te skakel."</string>
+    <string name="usb_storage_stop_notification_title" msgid="2336058396663516017">"Skakel USB-berging af"</string>
+    <string name="usb_storage_stop_notification_message" msgid="2591813490269841539">"Kies om USB-berging af te skakel."</string>
     <string name="usb_storage_stop_title" msgid="660129851708775853">"USB-berging in gebruik"</string>
     <string name="usb_storage_stop_message" product="nosdcard" msgid="1368842269463745067">"Voordat jy USB-berging afskakel, maak seker dat jy jou Android se USB-berging van jou rekenaar ontheg (\"uitgestoot\") het."</string>
     <string name="usb_storage_stop_message" product="default" msgid="3613713396426604104">"Voordat jy die USB-berging afskakel, maak seker dat jy jou Android se SD-kaart uit die rekenaar ontheg (uitgeskiet) het."</string>
@@ -1009,7 +1024,7 @@
     <string name="usb_notification_message" msgid="4447869605109736382">"Raak vir ander USB-opsies"</string>
     <string name="extmedia_format_title" product="nosdcard" msgid="7980995592595097841">"Formateer USB-berging"</string>
     <string name="extmedia_format_title" product="default" msgid="8663247929551095854">"Formateer SD-kaart"</string>
-    <string name="extmedia_format_message" product="nosdcard" msgid="8296908079722897772">"Vee USB-berging uit, wat alle lêers wat daar gestoor word, sal uitvee? Handeling kan nie omgekeer word nie!"</string>
+    <string name="extmedia_format_message" product="nosdcard" msgid="8296908079722897772">"Vee USB-berging uit, wat alle lêers wat daar gestoor word, sal uitvee? Handeling kan nie ontdoen word nie!"</string>
     <string name="extmedia_format_message" product="default" msgid="3621369962433523619">"Is jy seker jy wil die SD-kaart formateer? Alle data op jou kaart sal verlore gaan."</string>
     <string name="extmedia_format_button_format" msgid="4131064560127478695">"Formaat"</string>
     <string name="adb_active_notification_title" msgid="6729044778949189918">"USB-ontfouter gekoppel"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"Kamera"</string>
     <string name="description_target_silent" msgid="893551287746522182">"Stil"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"Klank aan"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"Sleep om te ontsluit."</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"Koppel \'n kopstuk om te hoor hoe wagwoordsleutels hardop gesê word."</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"Punt."</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"Navigeer tuis"</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"Deel met..."</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Toestel gesluit."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
+    <string name="sending" msgid="8715108995741758718">"Stuur tans..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"Begin webblaaier?"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"Aanvaar oproep?"</string>
 </resources>

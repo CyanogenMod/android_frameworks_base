@@ -244,8 +244,14 @@ public class LockPatternKeyguardView extends KeyguardViewBase implements Handler
             // TODO: examine all widgets to derive clock status
             mUpdateMonitor.reportClockVisible(false);
 
-            // TODO: We should disable the wallpaper instead
-            setBackgroundColor(0xff000000);
+            // If there's not a bg protection view containing the transport, then show a black
+            // background. Otherwise, allow the normal background to show.
+            if (findViewById(R.id.transport_bg_protect) == null) {
+                // TODO: We should disable the wallpaper instead
+                setBackgroundColor(0xff000000);
+            } else {
+                resetBackground();
+            }
         }
 
         public void requestHide(View view) {
@@ -552,9 +558,12 @@ public class LockPatternKeyguardView extends KeyguardViewBase implements Handler
         mScreenOn = false;
         mForgotPattern = false;
         mHasOverlay = mUpdateMonitor.getPhoneState() != TelephonyManager.CALL_STATE_IDLE;
-        if (mMode == Mode.LockScreen) {
+
+        // Emulate activity life-cycle for both lock and unlock screen.
+        if (mLockScreen != null) {
             ((KeyguardScreen) mLockScreen).onPause();
-        } else {
+        }
+        if (mUnlockScreen != null) {
             ((KeyguardScreen) mUnlockScreen).onPause();
         }
 
@@ -645,9 +654,11 @@ public class LockPatternKeyguardView extends KeyguardViewBase implements Handler
 
     @Override
     public void show() {
-        if (mMode == Mode.LockScreen) {
+        // Emulate activity life-cycle for both lock and unlock screen.
+        if (mLockScreen != null) {
             ((KeyguardScreen) mLockScreen).onResume();
-        } else {
+        }
+        if (mUnlockScreen != null) {
             ((KeyguardScreen) mUnlockScreen).onResume();
         }
 

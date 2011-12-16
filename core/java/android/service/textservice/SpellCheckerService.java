@@ -24,6 +24,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Process;
 import android.os.RemoteException;
 import android.util.Log;
 import android.view.textservice.SuggestionsInfo;
@@ -146,6 +147,14 @@ public abstract class SpellCheckerService extends Service {
         public void onCancel() {}
 
         /**
+         * Request to close this session.
+         * This function will run on the incoming IPC thread.
+         * So, this is not called on the main thread,
+         * but will be called in series on another thread.
+         */
+        public void onClose() {}
+
+        /**
          * @return Locale for this session
          */
         public String getLocale() {
@@ -162,7 +171,7 @@ public abstract class SpellCheckerService extends Service {
 
     // Preventing from exposing ISpellCheckerSession.aidl, create an internal class.
     private static class InternalISpellCheckerSession extends ISpellCheckerSession.Stub {
-        private final ISpellCheckerSessionListener mListener;
+        private ISpellCheckerSessionListener mListener;
         private final Session mSession;
         private final String mLocale;
         private final Bundle mBundle;
@@ -179,17 +188,39 @@ public abstract class SpellCheckerService extends Service {
         @Override
         public void onGetSuggestionsMultiple(
                 TextInfo[] textInfos, int suggestionsLimit, boolean sequentialWords) {
+            int pri = Process.getThreadPriority(Process.myTid());
             try {
+                Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
                 mListener.onGetSuggestions(
                         mSession.onGetSuggestionsMultiple(
                                 textInfos, suggestionsLimit, sequentialWords));
             } catch (RemoteException e) {
+            } finally {
+                Process.setThreadPriority(pri);
             }
         }
 
         @Override
         public void onCancel() {
-            mSession.onCancel();
+            int pri = Process.getThreadPriority(Process.myTid());
+            try {
+                Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+                mSession.onCancel();
+            } finally {
+                Process.setThreadPriority(pri);
+            }
+        }
+
+        @Override
+        public void onClose() {
+            int pri = Process.getThreadPriority(Process.myTid());
+            try {
+                Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND);
+                mSession.onClose();
+            } finally {
+                Process.setThreadPriority(pri);
+                mListener = null;
+            }
         }
 
         public String getLocale() {

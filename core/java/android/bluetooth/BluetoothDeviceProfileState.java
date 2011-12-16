@@ -86,7 +86,7 @@ public final class BluetoothDeviceProfileState extends StateMachine {
     private static final int CONNECTION_ACCESS_REQUEST_REPLY = 104;
     private static final int CONNECTION_ACCESS_REQUEST_EXPIRY = 105;
 
-    private static final int CONNECT_OTHER_PROFILES_DELAY = 4000; // 4 secs
+    public static final int CONNECT_OTHER_PROFILES_DELAY = 4000; // 4 secs
     private static final int CONNECTION_ACCESS_REQUEST_EXPIRY_TIMEOUT = 7000; // 7 secs
     private static final int CONNECTION_ACCESS_UNDEFINED = -1;
     private static final long INIT_INCOMING_REJECT_TIMER = 1000; // 1 sec
@@ -109,6 +109,8 @@ public final class BluetoothDeviceProfileState extends StateMachine {
     private BluetoothA2dpService mA2dpService;
     private BluetoothHeadset  mHeadsetService;
     private BluetoothPbap     mPbapService;
+    private PbapServiceListener mPbap;
+    private BluetoothAdapter mAdapter;
     private boolean mPbapServiceConnected;
     private boolean mAutoConnectionPending;
     private static final String BLUETOOTH_ADMIN_PERM = android.Manifest.permission.BLUETOOTH_ADMIN;
@@ -249,11 +251,11 @@ public final class BluetoothDeviceProfileState extends StateMachine {
 
         mContext.registerReceiver(mBroadcastReceiver, filter);
 
-        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-        adapter.getProfileProxy(mContext, mBluetoothProfileServiceListener,
+        mAdapter = BluetoothAdapter.getDefaultAdapter();
+        mAdapter.getProfileProxy(mContext, mBluetoothProfileServiceListener,
                                 BluetoothProfile.HEADSET);
         // TODO(): Convert PBAP to the new Profile APIs.
-        PbapServiceListener p = new PbapServiceListener();
+        mPbap = new PbapServiceListener();
 
         mIncomingConnections = mService.getIncomingState(address);
         mIncomingRejectTimer = readTimerValue();
@@ -414,6 +416,26 @@ public final class BluetoothDeviceProfileState extends StateMachine {
                 case TRANSITION_TO_STABLE:
                     // ignore.
                     break;
+                case SM_QUIT_CMD:
+                    mContext.unregisterReceiver(mBroadcastReceiver);
+                    mBroadcastReceiver = null;
+                    mAdapter.closeProfileProxy(BluetoothProfile.HEADSET, mHeadsetService);
+                    mBluetoothProfileServiceListener = null;
+                    mOutgoingHandsfree = null;
+                    mPbap = null;
+                    mPbapService.close();
+                    mPbapService = null;
+                    mIncomingHid = null;
+                    mOutgoingHid = null;
+                    mIncomingHandsfree = null;
+                    mOutgoingHandsfree = null;
+                    mIncomingA2dp = null;
+                    mOutgoingA2dp = null;
+                    mBondedDevice = null;
+                    // There is a problem in the State Machine code
+                    // where things are not cleaned up properly, when quit message
+                    // is handled so return NOT_HANDLED as a workaround.
+                    return NOT_HANDLED;
                 default:
                     return NOT_HANDLED;
             }

@@ -120,6 +120,12 @@ static void dumpstate() {
 
     dump_file("NETWORK ROUTES", "/proc/net/route");
     dump_file("NETWORK ROUTES IPV6", "/proc/net/ipv6_route");
+    run_command("IP RULES", 10, "ip", "rule", "show", NULL);
+    run_command("IP RULES v6", 10, "ip", "-6", "rule", "show", NULL);
+    run_command("ROUTE TABLE 60", 10, "ip", "route", "show", "table", "60", NULL);
+    run_command("ROUTE TABLE 61 v6", 10, "ip", "-6", "route", "show", "table", "60", NULL);
+    run_command("ROUTE TABLE 61", 10, "ip", "route", "show", "table", "61", NULL);
+    run_command("ROUTE TABLE 61 v6", 10, "ip", "-6", "route", "show", "table", "61", NULL);
     dump_file("ARP CACHE", "/proc/net/arp");
     run_command("IPTABLES", 10, "su", "root", "iptables", "-L", "-nvx", NULL);
     run_command("IP6TABLES", 10, "su", "root", "ip6tables", "-L", "-nvx", NULL);
@@ -145,8 +151,7 @@ static void dumpstate() {
             "su", "root", "wlutil", "counters", NULL);
 #endif
 
-#ifdef BROKEN_VRIL_IS_FIXED_B_4442803
-   char ril_dumpstate_timeout[PROPERTY_VALUE_MAX] = {0};
+    char ril_dumpstate_timeout[PROPERTY_VALUE_MAX] = {0};
     property_get("ril.dumpstate.timeout", ril_dumpstate_timeout, "30");
     if (strnlen(ril_dumpstate_timeout, PROPERTY_VALUE_MAX - 1) > 0) {
         if (0 == strncmp(build_type, "user", PROPERTY_VALUE_MAX - 1)) {
@@ -160,7 +165,6 @@ static void dumpstate() {
                     "su", "root", "vril-dump", NULL);
         }
     }
-#endif
 
     print_properties();
 

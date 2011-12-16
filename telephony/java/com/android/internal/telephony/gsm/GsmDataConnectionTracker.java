@@ -549,7 +549,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
     @Override
     public boolean getAnyDataEnabled() {
         synchronized (mDataEnabledLock) {
-            if (!(mInternalDataEnabled && mUserDataEnabled && mPolicyDataEnabled)) return false;
+            if (!(mInternalDataEnabled && mUserDataEnabled && sPolicyDataEnabled)) return false;
             for (ApnContext apnContext : mApnContexts.values()) {
                 // Make sure we dont have a context that going down
                 // and is explicitly disabled.
@@ -914,10 +914,16 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                         cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.NUMERIC)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.NAME)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.APN)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.PROXY)),
+                        NetworkUtils.trimV4AddrZeros(
+                                cursor.getString(
+                                cursor.getColumnIndexOrThrow(Telephony.Carriers.PROXY))),
                         cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.PORT)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.MMSC)),
-                        cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.MMSPROXY)),
+                        NetworkUtils.trimV4AddrZeros(
+                                cursor.getString(
+                                cursor.getColumnIndexOrThrow(Telephony.Carriers.MMSC))),
+                        NetworkUtils.trimV4AddrZeros(
+                                cursor.getString(
+                                cursor.getColumnIndexOrThrow(Telephony.Carriers.MMSPROXY))),
                         cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.MMSPORT)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.USER)),
                         cursor.getString(cursor.getColumnIndexOrThrow(Telephony.Carriers.PASSWORD)),
@@ -1054,10 +1060,8 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
      * Handles changes to the APN database.
      */
     private void onApnChanged() {
-        // TODO: How to handle when multiple APNs are active?
-
-        ApnContext defaultApnContext = mApnContexts.get(Phone.APN_TYPE_DEFAULT);
-        boolean defaultApnIsDisconnected = defaultApnContext.isDisconnected();
+        State overallState = getOverallState();
+        boolean isDisconnected = (overallState == State.IDLE || overallState == State.FAILED);
 
         if (mPhone instanceof GSMPhone) {
             // The "current" may no longer be valid.  MMS depends on this to send properly. TBD
@@ -1068,8 +1072,8 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
         // match the current operator.
         if (DBG) log("onApnChanged: createAllApnList and cleanUpAllConnections");
         createAllApnList();
-        cleanUpAllConnections(!defaultApnIsDisconnected, Phone.REASON_APN_CHANGED);
-        if (defaultApnIsDisconnected) {
+        cleanUpAllConnections(!isDisconnected, Phone.REASON_APN_CHANGED);
+        if (isDisconnected) {
             setupDataOnReadyApns(Phone.REASON_APN_CHANGED);
         }
     }
@@ -1722,11 +1726,25 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
     private DataConnection checkForConnectionForApnContext(ApnContext apnContext) {
         // Loop through all apnContexts looking for one with a conn that satisfies this apnType
         String apnType = apnContext.getApnType();
+        ApnSetting dunSetting = null;
+
+        if (Phone.APN_TYPE_DUN.equals(apnType)) {
+            dunSetting = fetchDunApn();
+        }
+
         for (ApnContext c : mApnContexts.values()) {
             DataConnection conn = c.getDataConnection();
             if (conn != null) {
                 ApnSetting apnSetting = c.getApnSetting();
-                if (apnSetting != null && apnSetting.canHandleType(apnType)) {
+                if (dunSetting != null) {
+                    if (dunSetting.equals(apnSetting)) {
+                        if (DBG) {
+                            log("checkForConnectionForApnContext: apnContext=" + apnContext +
+                                    " found conn=" + conn);
+                        }
+                        return conn;
+                    }
+                } else if (apnSetting != null && apnSetting.canHandleType(apnType)) {
                     if (DBG) {
                         log("checkForConnectionForApnContext: apnContext=" + apnContext +
                                 " found conn=" + conn);
@@ -1850,8 +1868,14 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             DataConnection dc = apnContext.getDataConnection();
 
             if (DBG) {
-                log(String.format("onDataSetupComplete: success apn=%s",
-                    apnContext.getWaitingApns().get(0).apn));
+                // TODO We may use apnContext.getApnSetting() directly
+                // instead of getWaitingApns().get(0)
+                String apnStr = "<unknown>";
+                if (apnContext.getWaitingApns() != null
+                        && !apnContext.getWaitingApns().isEmpty()){
+                    apnStr = apnContext.getWaitingApns().get(0).apn;
+                }
+                log("onDataSetupComplete: success apn=" + apnStr);
             }
             ApnSetting apn = apnContext.getApnSetting();
             if (apn.proxy != null && apn.proxy.length() != 0) {

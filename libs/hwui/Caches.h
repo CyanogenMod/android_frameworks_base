@@ -23,6 +23,8 @@
 
 #include <utils/Singleton.h>
 
+#include <cutils/compiler.h>
+
 #include "Extensions.h"
 #include "FontRenderer.h"
 #include "GammaFontRenderer.h"
@@ -82,9 +84,8 @@ struct CacheLogger {
 // Caches
 ///////////////////////////////////////////////////////////////////////////////
 
-class Caches: public Singleton<Caches> {
+class ANDROID_API Caches: public Singleton<Caches> {
     Caches();
-    ~Caches();
 
     friend class Singleton<Caches>;
 
@@ -107,11 +108,22 @@ public:
     };
 
     /**
+     * Initializes the cache.
+     */
+    void init();
+
+    /**
      * Flush the cache.
      *
      * @param mode Indicates how much of the cache should be flushed
      */
     void flush(FlushMode mode);
+
+    /**
+     * Destroys all resources associated with this cache. This should
+     * be called after a flush(kFlushMode_Full).
+     */
+    void terminate();
 
     /**
      * Indicates whether the renderer is in debug mode.
@@ -192,6 +204,7 @@ public:
 
 private:
     DebugLevel mDebugLevel;
+    bool mInitialized;
 }; // class Caches
 
 }; // namespace uirenderer

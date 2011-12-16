@@ -9,7 +9,6 @@ LOCAL_SRC_FILES:=                         \
         AACWriter.cpp                     \
         AMRExtractor.cpp                  \
         AMRWriter.cpp                     \
-        AVIExtractor.cpp                  \
         AudioPlayer.cpp                   \
         AudioSource.cpp                   \
         AwesomePlayer.cpp                 \
@@ -58,7 +57,6 @@ LOCAL_C_INCLUDES:= \
         $(TOP)/frameworks/base/include/media/stagefright/openmax \
         $(TOP)/external/flac/include \
         $(TOP)/external/tremolo \
-        $(TOP)/frameworks/base/media/libstagefright/rtsp \
         $(TOP)/external/openssl/include \
 
 LOCAL_SHARED_LIBRARIES := \
@@ -88,7 +86,6 @@ LOCAL_STATIC_LIBRARIES := \
         libvpx \
         libstagefright_mpeg2ts \
         libstagefright_httplive \
-        libstagefright_rtsp \
         libstagefright_id3 \
         libFLAC \
 

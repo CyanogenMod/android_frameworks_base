@@ -34,61 +34,6 @@ import com.android.internal.telephony.IccRecords;
 import java.io.ByteArrayOutputStream;
 import java.util.Locale;
 
-/**
- * Enumeration for representing the tag value of COMPREHENSION-TLV objects. If
- * you want to get the actual value, call {@link #value() value} method.
- *
- * {@hide}
- */
-enum ComprehensionTlvTag {
-  COMMAND_DETAILS(0x01),
-  DEVICE_IDENTITIES(0x02),
-  RESULT(0x03),
-  DURATION(0x04),
-  ALPHA_ID(0x05),
-  USSD_STRING(0x0a),
-  TEXT_STRING(0x0d),
-  TONE(0x0e),
-  ITEM(0x0f),
-  ITEM_ID(0x10),
-  RESPONSE_LENGTH(0x11),
-  FILE_LIST(0x12),
-  HELP_REQUEST(0x15),
-  DEFAULT_TEXT(0x17),
-  EVENT_LIST(0x19),
-  ICON_ID(0x1e),
-  ITEM_ICON_ID_LIST(0x1f),
-  IMMEDIATE_RESPONSE(0x2b),
-  LANGUAGE(0x2d),
-  URL(0x31),
-  BROWSER_TERMINATION_CAUSE(0x34),
-  TEXT_ATTRIBUTE(0x50);
-
-    private int mValue;
-
-    ComprehensionTlvTag(int value) {
-        mValue = value;
-    }
-
-    /**
-     * Returns the actual value of this COMPREHENSION-TLV object.
-     *
-     * @return Actual tag value of this object
-     */
-        public int value() {
-            return mValue;
-        }
-
-    public static ComprehensionTlvTag fromInt(int value) {
-        for (ComprehensionTlvTag e : ComprehensionTlvTag.values()) {
-            if (e.mValue == value) {
-                return e;
-            }
-        }
-        return null;
-    }
-}
-
 class RilMessage {
     int mId;
     Object mData;
@@ -148,6 +93,8 @@ public class CatService extends Handler implements AppInterface {
     private static final int DEV_ID_UICC        = 0x81;
     private static final int DEV_ID_TERMINAL    = 0x82;
     private static final int DEV_ID_NETWORK     = 0x83;
+
+    static final String STK_DEFAULT = "Defualt Message";
 
     /* Intentionally private for singleton */
     private CatService(CommandsInterface ci, IccRecords ir, Context context,
@@ -212,7 +159,15 @@ public class CatService extends Handler implements AppInterface {
             }
             break;
         case MSG_ID_PROACTIVE_COMMAND:
-            cmdParams = (CommandParams) rilMsg.mData;
+            try {
+                cmdParams = (CommandParams) rilMsg.mData;
+            } catch (ClassCastException e) {
+                // for error handling : cast exception
+                CatLog.d(this, "Fail to parse proactive command");
+                sendTerminalResponse(mCurrntCmd.mCmdDet, ResultCode.CMD_DATA_NOT_UNDERSTOOD,
+                                     false, 0x00, null);
+                break;
+            }
             if (cmdParams != null) {
                 if (rilMsg.mResCode == ResultCode.OK) {
                     handleProactiveCommand(cmdParams);
@@ -249,6 +204,7 @@ public class CatService extends Handler implements AppInterface {
     private void handleProactiveCommand(CommandParams cmdParams) {
         CatLog.d(this, cmdParams.getCommandType().name());
 
+        CharSequence message;
         CatCmdMessage cmdMsg = new CatCmdMessage(cmdParams);
         switch (cmdParams.getCommandType()) {
             case SET_UP_MENU:
@@ -279,26 +235,44 @@ public class CatService extends Handler implements AppInterface {
                     case CommandParamsFactory.DTTZ_SETTING:
                         resp = new DTTZResponseData(null);
                         sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false, 0, resp);
-                        break;
+                        return;
                     case CommandParamsFactory.LANGUAGE_SETTING:
                         resp = new LanguageResponseData(Locale.getDefault().getLanguage());
                         sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false, 0, resp);
-                        break;
+                        return;
                     default:
                         sendTerminalResponse(cmdParams.cmdDet, ResultCode.OK, false, 0, null);
                         return;
                 }
             case LAUNCH_BROWSER:
+                if ((((LaunchBrowserParams) cmdParams).confirmMsg.text != null)
+                        && (((LaunchBrowserParams) cmdParams).confirmMsg.text.equals(STK_DEFAULT))) {
+                    message = mContext.getText(com.android.internal.R.string.launchBrowserDefault);
+                    ((LaunchBrowserParams) cmdParams).confirmMsg.text = message.toString();
+                }
+                break;
             case SELECT_ITEM:
             case GET_INPUT:
             case GET_INKEY:
+                break;
             case SEND_DTMF:
             case SEND_SMS:
             case SEND_SS:
             case SEND_USSD:
+                if ((((DisplayTextParams)cmdParams).textMsg.text != null)
+                        && (((DisplayTextParams)cmdParams).textMsg.text.equals(STK_DEFAULT))) {
+                    message = mContext.getText(com.android.internal.R.string.sending);
+                    ((DisplayTextParams)cmdParams).textMsg.text = message.toString();
+                }
+                break;
             case PLAY_TONE:
+                break;
             case SET_UP_CALL:
-                // nothing to do on telephony!
+                if ((((CallSetupParams) cmdParams).confirmMsg.text != null)
+                        && (((CallSetupParams) cmdParams).confirmMsg.text.equals(STK_DEFAULT))) {
+                    message = mContext.getText(com.android.internal.R.string.SetupCallDefault);
+                    ((CallSetupParams) cmdParams).confirmMsg.text = message.toString();
+                }
                 break;
             default:
                 CatLog.d(this, "Unsupported command");

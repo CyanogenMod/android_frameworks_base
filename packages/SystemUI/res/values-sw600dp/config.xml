@@ -18,8 +18,11 @@
 -->
 
 <resources>
-
     <!-- Whether we're using the tablet-optimized recents interface (we use this
      value at runtime for some things) -->
     <bool name="config_recents_interface_for_tablets">true</bool>
+
+    <!-- Whether recents thumbnails should stretch in both x and y to fill their
+     ImageView -->
+    <bool name="config_recents_thumbnail_image_fits_to_xy">true</bool>
 </resources>

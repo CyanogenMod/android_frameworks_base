@@ -286,6 +286,7 @@
     <string name="screen_lock">Screen lock</string>
     <!-- Button to turn off the phone, within the Phone Options dialog -->
     <string name="power_off">Power off</string>
+
     <!-- Button to reboot the phone, within the Phone Options dialog -->
     <string name="reboot_system">Reboot phone</string>
 
@@ -310,6 +311,12 @@
     <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
     <string name="reboot_confirm">Your phone will reboot.</string>
 
+    <!-- Spoken description for ringer silent option. [CHAR LIMIT=NONE] -->
+    <string name="silent_mode_silent">Ringer off</string>
+    <!-- Spoken description for ringer vibrate option. [CHAR LIMIT=NONE] -->
+    <string name="silent_mode_vibrate">Ringer vibrate</string>
+    <!-- Spoken description for ringer normal option. [CHAR LIMIT=NONE] -->
+    <string name="silent_mode_ring">Ringer on</string>
 
     <!-- Shutdown Progress Dialog. This is shown if the user chooses to power off the phone. -->
     <string name="shutdown_progress">Shutting down\u2026</string>
@@ -858,6 +865,12 @@
         including personal or private information.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_anyCodecForPlayback">use any media decoder for playback</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_anyCodecForPlayback">Allows an application to use any installed
+        media decoder to decode for playback.</string>
+
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permlab_diagnostic">read/write to resources owned by diag</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_diagnostic">Allows an application to read and write to
@@ -1389,6 +1402,12 @@
       than the non-multicast mode.</string>
 
     <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_accessWimaxState">view WiMAX state</string>
+    <string name="permdesc_accessWimaxState">Allows an application to view
+      the information about the state of WiMAX.</string>
+    <string name="permlab_changeWimaxState">change WiMAX state</string>
+    <string name="permdesc_changeWimaxState">Allows an application to connect
+      to and disconnect from WiMAX network.</string>
     <string name="permlab_bluetoothAdmin">bluetooth administration</string>
     <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
     <string name="permdesc_bluetoothAdmin" product="tablet">Allows an application to configure
@@ -2736,6 +2755,12 @@
         <item quantity="other">Open Wi-Fi networks available</item>
     </plurals>
 
+    <!-- A notification is shown when a captive portal network is detected.  This is the notification's title. -->
+    <string name="wifi_available_sign_in">Sign in to Wi-Fi network</string>
+
+    <!-- A notification is shown when a captive portal network is detected.  This is the notification's message. -->
+    <string name="wifi_available_sign_in_detailed"><xliff:g id="wifi_network_ssid">%1$s</xliff:g></string>
+
      <!-- A notification is shown when a user's selected SSID is later disabled due to connectivity problems.  This is the notification's title / ticker. -->
      <string name="wifi_watchdog_network_disabled">Couldn\'t connect to Wi-Fi</string>
      <!-- A notification is shown when a user's selected SSID is later disabled due to connectivity problems.  The complete alert msg is: <hotspot name> + this string, i.e. "Linksys has a poor internet connection" -->
@@ -3275,6 +3300,9 @@
     <!-- Description of the sound on target in the Slide unlock screen. [CHAR LIMIT=NONE] -->
     <string name="description_target_soundon">Sound on</string>
 
+    <!-- Description of the unlock handle in the Slide unlock screen for tablets. [CHAR LIMIT=NONE] -->
+    <string name="description_target_unlock_tablet">Swipe to unlock.</string>
+
     <!-- Announce that a headset is required to hear keyboard keys while typing a password. [CHAR LIMIT=NONE] -->
     <string name="keyboard_headset_required_to_hear_password">Plug in a headset to hear password keys spoken aloud.</string>
     <!-- The value of a keyboard key announced when accessibility is enabled and no headsed is used. [CHAR LIMIT=NONE] -->
@@ -3376,5 +3404,14 @@
 
     <!-- Delimeter used between each item in a textual list; for example "Alpha, Beta". [CHAR LIMIT=3] -->
     <string name="list_delimeter">", "</string>
+
+    <!-- STK sending DTMF, SMS, USSD, SS -->
+    <string name="sending">Sending...</string>
+
+    <!-- STK launch Browser -->
+    <string name="launchBrowserDefault">Launch Browser?</string>
+
+    <!-- STK setup Call -->
+    <string name="SetupCallDefault">Accept Call?</string>
 
 </resources>

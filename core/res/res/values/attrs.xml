@@ -1493,6 +1493,10 @@
         <enum name="KEYCODE_LANGUAGE_SWITCH" value="204" />
         <enum name="KEYCODE_MANNER_MODE" value="205" />
         <enum name="KEYCODE_3D_MODE" value="206" />
+        <enum name="KEYCODE_CONTACTS" value="207" />
+        <enum name="KEYCODE_CALENDAR" value="208" />
+        <enum name="KEYCODE_MUSIC" value="209" />
+        <enum name="KEYCODE_CALCULATOR" value="210" />
     </attr>
 
     <!-- ***************************************************************** -->
@@ -2392,6 +2396,10 @@
         <attr name="canRetrieveWindowContent" format="boolean" />
         <!-- Short description of the accessibility serivce purpose or behavior.-->
         <attr name="description" />
+    </declare-styleable>
+
+    <declare-styleable name="ActionMenuItemView">
+        <attr name="minWidth" />
     </declare-styleable>
 
     <!-- =============================== -->
@@ -3327,6 +3335,9 @@
         <attr name="popupPromptView" format="reference" />
         <!-- Gravity setting for positioning the currently selected item. -->
         <attr name="gravity" />
+        <!-- Whether this spinner should mark child views as enabled/disabled when
+             the spinner itself is enabled/disabled. -->
+        <attr name="disableChildrenWhenDisabled" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="DatePicker">
@@ -3572,6 +3583,16 @@
         <attr name="selectionDivider" format="reference" />
         <!-- @hide The height of the selection divider. -->
         <attr name="selectionDividerHeight" format="dimension" />
+        <!-- @hide The min height of the NumberPicker. -->
+        <attr name="minHeight" />
+        <!-- @hide The max height of the NumberPicker. -->
+        <attr name="maxHeight" />
+        <!-- @hide The min width of the NumberPicker. -->
+        <attr name="minWidth" />
+        <!-- @hide The max width of the NumberPicker. -->
+        <attr name="maxWidth" />
+        <!-- @hide The max width of the NumberPicker. -->
+        <attr name="maxWidth" />
     </declare-styleable>
 
     <declare-styleable name="TimePicker">

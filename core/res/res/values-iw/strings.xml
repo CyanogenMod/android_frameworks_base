@@ -137,7 +137,13 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"כבה אלחוטי"</string>
     <string name="screen_lock" msgid="799094655496098153">"נעילת מסך"</string>
     <string name="power_off" msgid="4266614107412865048">"כיבוי"</string>
-    <string name="shutdown_progress" msgid="2281079257329981203">"מבצע כיבוי..."</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
+    <string name="shutdown_progress" msgid="2281079257329981203">"מכבה..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"הטבלט שלך יכבה."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"הטלפון שלך יכובה."</string>
     <string name="shutdown_confirm_question" msgid="6656441286856415014">"האם ברצונך לבצע כיבוי?"</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"קרא נתונים רגישים של יומן רישום"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"מאפשר ליישום לקרוא מקובצי היומן השונים של המערכת. כך הוא יכול לגלות מידע כללי על הפעולות שלך בטבלט, שעשוי לכלול מידע אישי או פרטי."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"מאפשר ליישום לקרוא מקובצי יומני הרישום השונים של המערכת. כך הוא יכול לגלות מידע כללי על הפעולות שלך בטלפון, מידע שעשוי לכלול מידע אישי או פרטי."</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"שימוש בכל מפענח מדיה שהוא להפעלה"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"אפשרות ליישום להשתמש בכל מפענח מדיה מותקן לצורך פענוח להפעלה."</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"קרא/כתוב במשאבים בבעלות diag"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"מאפשר ליישום לקרוא ולכתוב בכל משאב שבבעלות קבוצת diag; לדוגמה, קבצים ב-‎/dev. פעולה זו עשויה להשפיע על היציבות והאבטחה של המערכת. היצרן או המפעיל בלבד יכולים להשתמש באפשרות זו לצורך אבחונים ספציפיים לחומרה."</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"הפעל או השבת רכיבי יישום"</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"מאפשר ליישום להתחבר לנקודות גישה מסוג Wi-Fi ולהתנתק מהן, ולבצע שינויים ברשתות Wi-Fi מוגדרות."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"אפשר קבלת שידורים מרובים ב-Wi-Fi"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"מאפשר ליישום לקבל חבילות שלא ממוענות ישירות למכשיר שלך. יכולת זו שימושית בעת גילוי שירותים המוצעים בקרבת מקום. היא צורכת יותר חשמל לעומת מצב שאינו כולל ריבוי שידורים."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"הצג את מצב WiMAX"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"מאפשר ליישום להציג את המידע על המצב של WiMAX."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"שנה את מצב WiMAX"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"מאפשר ליישום להתחבר ולהתנתק מרשת WiMAX."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"ניהול Bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"מאפשר ליישום להגדיר את הטבלט המקומי מסוג Bluetooth, וכן לגלות מכשירים מרוחקים ולבצע התאמה איתם."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"מאפשר ליישום להגדיר את טלפון Bluetooth המקומי, ולגלות מכשירים מרוחקים ולבצע התאמה איתם."</string>
@@ -740,7 +752,7 @@
     <string name="permlab_writeHistoryBookmarks" msgid="9009434109836280374">"כתוב את ההיסטוריה והסימניות של הדפדפן"</string>
     <string name="permdesc_writeHistoryBookmarks" product="tablet" msgid="7193514090469945307">"מאפשר ליישום לשנות את ההיסטוריה או את הסימניות של הדפדפן המאוחסנות בטבלט. יישומים זדוניים עלולים להשתמש ביכולת זו כדי למחוק או לשנות את הנתונים בדפדפן."</string>
     <string name="permdesc_writeHistoryBookmarks" product="default" msgid="945571990357114950">"מאפשר ליישום לשנות את ההיסטוריה או הסימניות של הדפדפן המאוחסנות בטלפון. יישומים זדוניים עלולים להשתמש ביכולת זו כדי למחוק או לשנות את נתוני הדפדפן."</string>
-    <string name="permlab_setAlarm" msgid="5924401328803615165">"הגדר התראה בשעון המעורר"</string>
+    <string name="permlab_setAlarm" msgid="5924401328803615165">"הגדר צלצול בשעון המעורר"</string>
     <string name="permdesc_setAlarm" msgid="5966966598149875082">"מאפשר ליישום להגדיר התראה ביישום מותקן של שעון מעורר. ייתכן שיישומי שעון מעורר מסוימים לא יישמו תכונה זו."</string>
     <string name="permlab_addVoicemail" msgid="5525660026090959044">"הוסף דואר קולי"</string>
     <string name="permdesc_addVoicemail" msgid="4828507394878206682">"מאפשר ליישום להוסיף הודעות לתיבת הדואר הנכנס של הדואר הקולי."</string>
@@ -895,8 +907,8 @@
     <string name="chooseUsbActivity" msgid="7892597146032121735">"בחר יישום עבור מכשיר ה-USB"</string>
     <string name="noApplications" msgid="1691104391758345586">"אין יישומים שיכולים לבצע פעולה זו."</string>
     <string name="aerr_title" msgid="1905800560317137752"></string>
-    <string name="aerr_application" msgid="932628488013092776">"למרבה הצער, <xliff:g id="APPLICATION">%1$s</xliff:g> הפסיק לפעול."</string>
-    <string name="aerr_process" msgid="4507058997035697579">"למרבה הצער, התהליך <xliff:g id="PROCESS">%1$s</xliff:g> הופסק."</string>
+    <string name="aerr_application" msgid="932628488013092776">"לצערנו, פעולת ה<xliff:g id="APPLICATION">%1$s</xliff:g> הופסקה."</string>
+    <string name="aerr_process" msgid="4507058997035697579">"לצערנו, התהליך <xliff:g id="PROCESS">%1$s</xliff:g> הופסק."</string>
     <string name="anr_title" msgid="4351948481459135709"></string>
     <string name="anr_activity_application" msgid="8339738283149696827">"<xliff:g id="APPLICATION">%2$s</xliff:g> אינו מגיב."\n\n" האם ברצונך לסגור אותו?"</string>
     <string name="anr_activity_process" msgid="7018289416670457797">"פעילות <xliff:g id="ACTIVITY">%1$s</xliff:g> אינה מגיבה."\n\n"האם ברצונך לסגור אותה?"</string>
@@ -940,8 +952,8 @@
     <string name="volume_icon_description_incall" msgid="8890073218154543397">"עוצמת קול של שיחות"</string>
     <string name="volume_icon_description_media" msgid="4217311719665194215">"עוצמת קול של מדיה"</string>
     <string name="volume_icon_description_notification" msgid="7044986546477282274">"עוצמת קול של התראות"</string>
-    <string name="ringtone_default" msgid="3789758980357696936">"רינגטון המוגדר כברירת מחדל"</string>
-    <string name="ringtone_default_with_actual" msgid="8129563480895990372">"רינגטון המוגדר כברירת מחדל (<xliff:g id="ACTUAL_RINGTONE">%1$s</xliff:g>)"</string>
+    <string name="ringtone_default" msgid="3789758980357696936">"רינגטון ברירת מחדל"</string>
+    <string name="ringtone_default_with_actual" msgid="8129563480895990372">"רינגטון ברירת מחדל (<xliff:g id="ACTUAL_RINGTONE">%1$s</xliff:g>)"</string>
     <string name="ringtone_silent" msgid="4440324407807468713">"שקט"</string>
     <string name="ringtone_picker_title" msgid="3515143939175119094">"רינגטונים"</string>
     <string name="ringtone_unknown" msgid="5477919988701784788">"רינגטון לא ידוע"</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"רשת Wi-Fi פתוחה זמינה"</item>
     <item quantity="other" msgid="7915895323644292768">"רשתות Wi-Fi פתוחות זמינות"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"היכנס לרשת WiFi"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"אין אפשרות להתחבר ל-Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" בעל חיבור גרוע לאינטרנט."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi ישיר"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"מצלמה"</string>
     <string name="description_target_silent" msgid="893551287746522182">"שקט"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"הקול פועל"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"החלק לביטול נעילה."</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"חבר אוזניות כדי לשמוע הקראה של מפתחות סיסמה."</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"נקודה."</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"נווט לדף הבית"</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"שתף עם..."</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"המכשיר נעול."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
+    <string name="sending" msgid="8715108995741758718">"שולח..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"להפעיל את הדפדפן?"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"לקבל את השיחה?"</string>
 </resources>

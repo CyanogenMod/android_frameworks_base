@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"ปิดระบบไร้สาย"</string>
     <string name="screen_lock" msgid="799094655496098153">"ล็อกหน้าจอ"</string>
     <string name="power_off" msgid="4266614107412865048">"ปิดเครื่อง"</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"กำลังปิดระบบ..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"แท็บเล็ตของคุณจะปิดการทำงาน"</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"โทรศัพท์ของคุณจะปิดเครื่อง"</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"อ่านข้อมูลบันทึกที่สำคัญ"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"อนุญาตให้แอปพลิเคชันอ่านจากไฟล์บันทึกต่างๆ ของระบบ เพื่อค้นหาข้อมูลทั่วไปเกี่ยวกับสิ่งที่คุณกำลังทำอยู่กับแท็บเล็ต ซึ่งอาจรวมไปถึงข้อมูลส่วนบุคคลหรือส่วนตัว"</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"อนุญาตให้แอปพลิเคชันอ่านจากไฟล์บันทึกต่างๆ ของระบบ เพื่อค้นหาข้อมูลทั่วไปเกี่ยวกับสิ่งที่คุณกำลังทำอยู่กับโทรศัพท์ ซึ่งอาจรวมไปถึงข้อมูลส่วนบุคคลหรือส่วนตัว"</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"ใช้ตัวถอดรหัสสื่อใดๆ ก็ได้สำหรับการเล่น"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"อนุญาตให้แอปพลิเคชันใช้ตัวถอดรหัสสื่อใดก็ได้ที่ติดตั้งไว้เพื่อถอดรหัสสำหรับการเล่น"</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"อ่าน/เขียนไปยังรีซอร์สที่เป็นเจ้าของโดยกลุ่มวินิจฉัย"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"อนุญาตให้แอปพลิเคชันอ่านและเขียนไปยังรีซอร์สที่เป็นของกลุ่มวินิจฉัย เช่น ไฟล์ใน /dev การทำเช่นนี้อาจส่งผลต่อความเสถียรและความปลอดภัยของระบบ และควรใช้สำหรับการวินิจฉัยเกี่ยวกับฮาร์ดแวร์โดยเฉพาะที่ทำโดยผู้ผลิตหรือผู้ให้บริการเท่านั้น"</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"เปิดหรือปิดการใช้งานส่วนประกอบของแอปพลิเคชัน"</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"อนุญาตให้แอปพลิเคชันเชื่อมต่อและตัดการเชื่อมต่อจากจุดเข้าใช้งาน Wi-Fi และเปลี่ยนแปลงเครือข่าย Wi-Fi ที่กำหนดค่าไว้"</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"อนุญาตให้รับมัลติแคสต์ผ่าน Wi-Fi"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"อนุญาตให้แอปพลิเคชันรับแพ็คเก็ตที่ไม่ได้ส่งถึงอุปกรณ์ของคุณโดยตรง วิธีนี้อาจเป็นประโยชน์เมื่อพบบริการที่นำเสนออยู่ใกล้ๆ แต่จะใช้พลังงานมากกว่าโหมดที่ไม่ใช่มัลติแคสต์"</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"ดูสถานะของ WiMAX"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"อนุญาตให้แอปพลิเคชันดูข้อมูลเกี่ยวกับสถานะของ WiMAX"</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"เปลี่ยนสถานะของ WiMAX"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"อนุญาตให้แอปพลิเคชันเชื่อมต่อและยกเลิกการเชื่อมต่อกับเครือข่าย WiMAX"</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"การใช้บลูทูธ"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"อนุญาตให้แอปพลิเคชันกำหนดค่าแท็บเล็ตบลูทูธในพื้นที่ รวมทั้งค้นหาและจับคู่กับอุปกรณ์รีโมต"</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"อนุญาตให้แอปพลิเคชันกำหนดค่าโทรศัพท์บลูทูธในพื้นที่ ตลอดจนค้นหาและจับคู่กับอุปกรณ์ที่อยู่ระยะไกล"</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"เปิดเครือข่าย Wi-Fi ที่ใช้งานได้"</item>
     <item quantity="other" msgid="7915895323644292768">"เปิดเครือข่าย Wi-Fi ที่ใช้งานได้"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"ลงชื่อเข้าใช้เครือข่าย WiFi"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"ไม่สามารถเชื่อมต่อ Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" มีสัญญาณอินเทอร์เน็ตไม่ดี"</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"กล้องถ่ายรูป"</string>
     <string name="description_target_silent" msgid="893551287746522182">"ปิดเสียง"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"เปิดเสียง"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"กวาดเพื่อปลดล็อก"</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"เสียบชุดหูฟังเพื่อฟังเสียงเมื่อพิมพ์รหัสผ่าน"</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"เครื่องหมายจุด"</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"นำทางไปหน้าแรก"</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"แบ่งปันกับ..."</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"ล็อกอุปกรณ์อยู่"</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
+    <string name="sending" msgid="8715108995741758718">"กำลังส่ง..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"เปิดเบราว์เซอร์หรือไม่"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"รับสายหรือไม่"</string>
 </resources>

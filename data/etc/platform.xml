@@ -137,6 +137,7 @@
     <assign-permission name="android.permission.SET_ALWAYS_FINISH" uid="shell" />
     <assign-permission name="android.permission.DUMP" uid="shell" />
     <assign-permission name="android.permission.SIGNAL_PERSISTENT_PROCESSES" uid="shell" />
+    <assign-permission name="android.permission.KILL_BACKGROUND_PROCESSES" uid="shell" />
     <!-- Internal permissions granted to the shell. -->
     <assign-permission name="android.permission.FORCE_BACK" uid="shell" />
     <assign-permission name="android.permission.BATTERY_STATS" uid="shell" />
@@ -156,6 +157,7 @@
     <assign-permission name="android.permission.INSTALL_LOCATION_PROVIDER" uid="shell" />
     <assign-permission name="android.permission.BACKUP" uid="shell" />
     <assign-permission name="android.permission.FORCE_STOP_PACKAGES" uid="shell" />
+    <assign-permission name="android.permission.STOP_APP_SWITCHES" uid="shell" />
 
     <assign-permission name="android.permission.MODIFY_AUDIO_SETTINGS" uid="media" />
     <assign-permission name="android.permission.ACCESS_DRM" uid="media" />

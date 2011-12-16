@@ -66,6 +66,9 @@
     <!-- Default vertical gap between keys in the password keyboard (used by keyguard) -->
     <dimen name="password_keyboard_verticalGap">9dip</dimen>
 
+    <!-- Size of lockscreen outerring on unsecure unlock LockScreen -->
+    <dimen name="keyguard_lockscreen_outerring_diameter">270dp</dimen>
+
     <!-- Default target placement radius for MultiWaveView -->
     <dimen name="multiwaveview_target_placement_radius">135dip</dimen>
 
@@ -152,16 +155,22 @@
     <dimen name="action_bar_subtitle_bottom_margin">5dip</dimen>
 
     <!-- Size of clock font in LockScreen on Unsecure unlock screen. -->
-    <dimen name="keyguard_lockscreen_clock_font_size">80sp</dimen>
+    <dimen name="keyguard_lockscreen_clock_font_size">80dip</dimen>
 
     <!-- Size of status line font on Unsecure unlock LockScreen. -->
-    <dimen name="keyguard_lockscreen_status_line_font_size">14sp</dimen>
+    <dimen name="keyguard_lockscreen_status_line_font_size">14dip</dimen>
 
     <!-- Size of right margin on Unsecure unlock LockScreen -->
     <dimen name="keyguard_lockscreen_status_line_font_right_margin">42dip</dimen>
 
     <!-- Size of top margin on Clock font to edge on unlock LockScreen -->
-    <dimen name="keyguard_lockscreen_status_line_clockfont_top_margin">24dip</dimen>
+    <dimen name="keyguard_lockscreen_status_line_clockfont_top_margin">22dip</dimen>
+
+    <!-- Size of top margin on Clock font to edge on unlock LockScreen -->
+    <dimen name="keyguard_lockscreen_status_line_clockfont_bottom_margin">12dip</dimen>
+
+    <!-- Padding on left margin of PIN text entry field to center it when del button is showing -->
+    <dimen name="keyguard_lockscreen_pin_margin_left">40dip</dimen>
 
     <!-- Minimum popup width for selecting an activity in ActivityChooserDialog/ActivityChooserView. -->
     <dimen name="activity_chooser_popup_min_width">200dip</dimen>
@@ -189,4 +198,7 @@
     <dimen name="default_app_widget_padding_top">8dp</dimen>
     <dimen name="default_app_widget_padding_right">8dp</dimen>
     <dimen name="default_app_widget_padding_bottom">8dp</dimen>
+
+    <!-- Minimum width for an action button in the menu area of an action bar -->
+    <dimen name="action_button_min_width">56dip</dimen>
 </resources>

@@ -589,6 +589,10 @@ player_type getPlayerType(const char* url)
         }
     }
 
+    if (!strncasecmp("rtsp://", url, 7)) {
+        return NU_PLAYER;
+    }
+
     // use MidiFile for MIDI extensions
     int lenURL = strlen(url);
     for (int i = 0; i < NELEM(FILE_EXTS); ++i) {
@@ -782,14 +786,6 @@ status_t MediaPlayerService::Client::setDataSource(
     }
 
     return mStatus;
-}
-
-status_t MediaPlayerService::Client::setVideoSurface(const sp<Surface>& surface)
-{
-    LOGV("[%d] setVideoSurface(%p)", mConnId, surface.get());
-    sp<MediaPlayerBase> p = getPlayer();
-    if (p == 0) return UNKNOWN_ERROR;
-    return p->setVideoSurface(surface);
 }
 
 void MediaPlayerService::Client::disconnectNativeWindow() {

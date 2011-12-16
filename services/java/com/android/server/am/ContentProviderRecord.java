@@ -73,11 +73,14 @@ class ContentProviderRecord extends ContentProviderHolder {
                     pw.print("multiprocess="); pw.print(info.multiprocess);
                     pw.print(" initOrder="); pw.println(info.initOrder);
         }
-        if (clients.size() > 0) {
-            pw.print(prefix); pw.print("clients="); pw.println(clients);
-        }
         if (externals != 0) {
             pw.print(prefix); pw.print("externals="); pw.println(externals);
+        }
+        if (clients.size() > 0) {
+            pw.print(prefix); pw.println("Clients:");
+            for (ProcessRecord cproc : clients) {
+                pw.print(prefix); pw.print("  - "); pw.println(cproc.toShortString());
+            }
         }
     }
 

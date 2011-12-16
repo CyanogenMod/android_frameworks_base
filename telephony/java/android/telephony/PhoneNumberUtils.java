@@ -1575,6 +1575,17 @@ public class PhoneNumberUtils
         // If the number passed in is null, just return false:
         if (number == null) return false;
 
+        // If the number passed in is a SIP address, return false, since the
+        // concept of "emergency numbers" is only meaningful for calls placed
+        // over the cell network.
+        // (Be sure to do this check *before* calling extractNetworkPortionAlt(),
+        // since the whole point of extractNetworkPortionAlt() is to filter out
+        // any non-dialable characters (which would turn 'abc911def@example.com'
+        // into '911', for example.))
+        if (isUriNumber(number)) {
+            return false;
+        }
+
         // Strip the separators from the number before comparing it
         // to the list.
         number = extractNetworkPortionAlt(number);
@@ -2104,6 +2115,31 @@ public class PhoneNumberUtils
         // the passed-in string is URI-escaped.  (Neither "@" nor "%40"
         // will ever be found in a legal PSTN number.)
         return number != null && (number.contains("@") || number.contains("%40"));
+    }
+
+    /**
+     * @return the "username" part of the specified SIP address,
+     *         i.e. the part before the "@" character (or "%40").
+     *
+     * @param number SIP address of the form "username@domainname"
+     *               (or the URI-escaped equivalent "username%40domainname")
+     * @see isUriNumber
+     *
+     * @hide
+     */
+    public static String getUsernameFromUriNumber(String number) {
+        // The delimiter between username and domain name can be
+        // either "@" or "%40" (the URI-escaped equivalent.)
+        int delimiterIndex = number.indexOf('@');
+        if (delimiterIndex < 0) {
+            delimiterIndex = number.indexOf("%40");
+        }
+        if (delimiterIndex < 0) {
+            Log.w(LOG_TAG,
+                  "getUsernameFromUriNumber: no delimiter found in SIP addr '" + number + "'");
+            delimiterIndex = number.length();
+        }
+        return number.substring(0, delimiterIndex);
     }
 
     /**

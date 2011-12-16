@@ -43,7 +43,13 @@
     <dimen name="action_bar_subtitle_bottom_margin">9dip</dimen>
 
     <!-- Size of clock font in LockScreen. -->
-    <dimen name="keyguard_pattern_unlock_clock_font_size">98sp</dimen>
+    <dimen name="keyguard_pattern_unlock_clock_font_size">112sp</dimen>
+
+    <!-- Size of lockscreen outerring on unsecure unlock LockScreen -->
+    <dimen name="keyguard_lockscreen_outerring_diameter">364dp</dimen>
+
+    <!-- target placement radius for MultiWaveView -->
+    <dimen name="multiwaveview_target_placement_radius">182dip</dimen>
 
     <!-- Size of status line font in LockScreen. -->
     <dimen name="keyguard_pattern_unlock_status_line_font_size">14sp</dimen>
@@ -54,5 +60,13 @@
     <!-- Compensate for double margin : preference_screen_side_margin + 4 (frame background shadow) = -preference_screen_side_margin_negative -->
     <dimen name="preference_screen_side_margin_negative">-4dp</dimen>
 
+    <!-- Default padding to apply to AppWidgetHostViews containing widgets targeting API level 14 and up. -->
+    <dimen name="default_app_widget_padding_left">12dp</dimen>
+    <dimen name="default_app_widget_padding_top">4dp</dimen>
+    <dimen name="default_app_widget_padding_right">12dp</dimen>
+    <dimen name="default_app_widget_padding_bottom">20dp</dimen>
+
+    <!-- Minimum width for an action button in the menu area of an action bar -->
+    <dimen name="action_button_min_width">64dip</dimen>
 </resources>
 

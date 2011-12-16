@@ -25,6 +25,7 @@
 #include "NuPlayerDriver.h"
 #include "NuPlayerRenderer.h"
 #include "NuPlayerSource.h"
+#include "RTSPSource.h"
 #include "StreamingSource.h"
 
 #include "ATSParser.h"
@@ -53,6 +54,7 @@ NuPlayer::NuPlayer()
       mVideoEOS(false),
       mScanSourcesPending(false),
       mScanSourcesGeneration(0),
+      mTimeDiscontinuityPending(false),
       mFlushingAudio(NONE),
       mFlushingVideo(NONE),
       mResetInProgress(false),
@@ -87,13 +89,14 @@ void NuPlayer::setDataSource(
         const char *url, const KeyedVector<String8, String8> *headers) {
     sp<AMessage> msg = new AMessage(kWhatSetDataSource, id());
 
-    msg->setObject("source", new HTTPLiveSource(url, headers, mUIDValid, mUID));
-    msg->post();
-}
+    if (!strncasecmp(url, "rtsp://", 7)) {
+        msg->setObject(
+                "source", new RTSPSource(url, headers, mUIDValid, mUID));
+    } else {
+        msg->setObject(
+                "source", new HTTPLiveSource(url, headers, mUIDValid, mUID));
+    }
 
-void NuPlayer::setVideoSurface(const sp<Surface> &surface) {
-    sp<AMessage> msg = new AMessage(kWhatSetVideoNativeWindow, id());
-    msg->setObject("native-window", new NativeWindowWrapper(surface));
     msg->post();
 }
 
@@ -460,11 +463,24 @@ void NuPlayer::onMessageReceived(const sp<AMessage> &msg) {
         {
             LOGV("kWhatReset");
 
+            if (mRenderer != NULL) {
+                // There's an edge case where the renderer owns all output
+                // buffers and is paused, therefore the decoder will not read
+                // more input data and will never encounter the matching
+                // discontinuity. To avoid this, we resume the renderer.
+
+                if (mFlushingAudio == AWAITING_DISCONTINUITY
+                        || mFlushingVideo == AWAITING_DISCONTINUITY) {
+                    mRenderer->resume();
+                }
+            }
+
             if (mFlushingAudio != NONE || mFlushingVideo != NONE) {
                 // We're currently flushing, postpone the reset until that's
                 // completed.
 
-                LOGV("postponing reset");
+                LOGV("postponing reset mFlushingAudio=%d, mFlushingVideo=%d",
+                        mFlushingAudio, mFlushingVideo);
 
                 mResetPostponed = true;
                 break;
@@ -474,6 +490,8 @@ void NuPlayer::onMessageReceived(const sp<AMessage> &msg) {
                 finishReset();
                 break;
             }
+
+            mTimeDiscontinuityPending = true;
 
             if (mAudioDecoder != NULL) {
                 flushDecoder(true /* audio */, true /* needShutdown */);
@@ -538,7 +556,10 @@ void NuPlayer::finishFlushIfPossible() {
 
     LOGV("both audio and video are flushed now.");
 
-    mRenderer->signalTimeDiscontinuity();
+    if (mTimeDiscontinuityPending) {
+        mRenderer->signalTimeDiscontinuity();
+        mTimeDiscontinuityPending = false;
+    }
 
     if (mAudioDecoder != NULL) {
         mAudioDecoder->signalResume();
@@ -568,8 +589,15 @@ void NuPlayer::finishReset() {
     CHECK(mAudioDecoder == NULL);
     CHECK(mVideoDecoder == NULL);
 
+    ++mScanSourcesGeneration;
+    mScanSourcesPending = false;
+
     mRenderer.clear();
-    mSource.clear();
+
+    if (mSource != NULL) {
+        mSource->stop();
+        mSource.clear();
+    }
 
     if (mDriver != NULL) {
         sp<NuPlayerDriver> driver = mDriver.promote();
@@ -654,10 +682,15 @@ status_t NuPlayer::feedDecoderInputData(bool audio, const sp<AMessage> &msg) {
                 CHECK(accessUnit->meta()->findInt32("discontinuity", &type));
 
                 bool formatChange =
-                    type == ATSParser::DISCONTINUITY_FORMATCHANGE;
+                    (audio &&
+                     (type & ATSParser::DISCONTINUITY_AUDIO_FORMAT))
+                    || (!audio &&
+                            (type & ATSParser::DISCONTINUITY_VIDEO_FORMAT));
 
-                LOGV("%s discontinuity (formatChange=%d)",
-                     audio ? "audio" : "video", formatChange);
+                bool timeChange = (type & ATSParser::DISCONTINUITY_TIME) != 0;
+
+                LOGI("%s discontinuity (formatChange=%d, time=%d)",
+                     audio ? "audio" : "video", formatChange, timeChange);
 
                 if (audio) {
                     mSkipRenderingAudioUntilMediaTimeUs = -1;
@@ -665,26 +698,45 @@ status_t NuPlayer::feedDecoderInputData(bool audio, const sp<AMessage> &msg) {
                     mSkipRenderingVideoUntilMediaTimeUs = -1;
                 }
 
-                sp<AMessage> extra;
-                if (accessUnit->meta()->findMessage("extra", &extra)
-                        && extra != NULL) {
-                    int64_t resumeAtMediaTimeUs;
-                    if (extra->findInt64(
-                                "resume-at-mediatimeUs", &resumeAtMediaTimeUs)) {
-                        LOGI("suppressing rendering of %s until %lld us",
-                                audio ? "audio" : "video", resumeAtMediaTimeUs);
+                if (timeChange) {
+                    sp<AMessage> extra;
+                    if (accessUnit->meta()->findMessage("extra", &extra)
+                            && extra != NULL) {
+                        int64_t resumeAtMediaTimeUs;
+                        if (extra->findInt64(
+                                    "resume-at-mediatimeUs", &resumeAtMediaTimeUs)) {
+                            LOGI("suppressing rendering of %s until %lld us",
+                                    audio ? "audio" : "video", resumeAtMediaTimeUs);
 
-                        if (audio) {
-                            mSkipRenderingAudioUntilMediaTimeUs =
-                                resumeAtMediaTimeUs;
-                        } else {
-                            mSkipRenderingVideoUntilMediaTimeUs =
-                                resumeAtMediaTimeUs;
+                            if (audio) {
+                                mSkipRenderingAudioUntilMediaTimeUs =
+                                    resumeAtMediaTimeUs;
+                            } else {
+                                mSkipRenderingVideoUntilMediaTimeUs =
+                                    resumeAtMediaTimeUs;
+                            }
                         }
                     }
                 }
 
-                flushDecoder(audio, formatChange);
+                mTimeDiscontinuityPending =
+                    mTimeDiscontinuityPending || timeChange;
+
+                if (formatChange || timeChange) {
+                    flushDecoder(audio, formatChange);
+                } else {
+                    // This stream is unaffected by the discontinuity
+
+                    if (audio) {
+                        mFlushingAudio = FLUSHED;
+                    } else {
+                        mFlushingVideo = FLUSHED;
+                    }
+
+                    finishFlushIfPossible();
+
+                    return -EWOULDBLOCK;
+                }
             }
 
             reply->setInt32("err", err);
@@ -781,10 +833,15 @@ void NuPlayer::notifyListener(int msg, int ext1, int ext2) {
         return;
     }
 
-    driver->sendEvent(msg, ext1, ext2);
+    driver->notifyListener(msg, ext1, ext2);
 }
 
 void NuPlayer::flushDecoder(bool audio, bool needShutdown) {
+    if ((audio && mAudioDecoder == NULL) || (!audio && mVideoDecoder == NULL)) {
+        LOGI("flushDecoder %s without decoder present",
+             audio ? "audio" : "video");
+    }
+
     // Make sure we don't continue to scan sources until we finish flushing.
     ++mScanSourcesGeneration;
     mScanSourcesPending = false;

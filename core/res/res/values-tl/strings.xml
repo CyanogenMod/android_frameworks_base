@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"I-off ang wireless"</string>
     <string name="screen_lock" msgid="799094655496098153">"Pag-lock sa screen"</string>
     <string name="power_off" msgid="4266614107412865048">"I-off"</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"Nagsa-shut down…"</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Mag-shut down ang iyong tablet."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Magsa-shut down ang iyong telepono."</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"magbasa ng sensitibong data ng tala"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"Pinapayagan ang application na magbasa mula sa iba\'t ibang file ng tala ng system. Pinapayagan ito nito na tumuklas ng pangkalahatang impormasyon tungkol sa kung ano ang iyong ginagawa sa tablet, potensyal na kabilang ang personal o pribadong impormasyon."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"Pinapayagan ang application na magbasa mula sa iba\'t ibang file ng tala ng system. Pinapayagan ito nito na tumuklas ng pangkalahatang impormasyon tungkol sa kung ano ang iyong ginagawa sa telepono, potensyal na kabilang ang personal o pribadong impormasyon."</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"gumamit ng anumang media decoder para sa pag-playback"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"Pinapayagan ka ng application na gumamit ng anumang naka-install na media decoder upang mag-decode para sa pag-playback."</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"magbasa/magsulat sa mga mapagkukunang pag-aari ng diag"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"Pinapayagan ang isang application na magbasa at magsulat ng anumang mapagkukunang pag-aari ng pangkat ng diag; halimbawa, mga file sa /dev. Posibleng maapektuhan nito ang katatagan at seguridad ng system. Dapat LANG itong gamitin sa mga tukoy sa hardware na diagnostic ng manufacturer o operator."</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"paganahin o huwag paganahin ang mga nilalaman ng application"</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Pinapayagan ang isang application na kumonekta sa at i-disconnect mula sa mga Wi-Fi access point, at magsagawa ng mga pagbabago sa mga na-configure na Wi-Fi network."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"payagan ang pagtanggap ng Wi-Fi Multicast"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Pinapayagan ang isang application na tumanggap ng mga packet na hindi direktang nakatugon sa iyong device. Magiging kapaki-pakinabang ito kapag tumutuklas ng mga serbisyong inaalok sa malapit. Gumagamit ito ng higit pang baterya kaysa sa non-multicast mode."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"tingnan ang katayuan ng WiMAX"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"Pinapayagan ang application na tingnan ang impormasyon tungkol sa katayuan ng WiMAX."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"baguhin ang katayuan ng WiMAX"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"Pinapayagan ang isang application na makakonekta sa at maalis sa pagkakakonekta mula sa network ng WiMAX."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"pangangasiwa ng bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"Pinapayagan ang application na i-configure ang lokal na Bluetooth tablet, at tumuklas at ipares sa mga malayuang device."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"Pinapayagan ang isang application na i-configure ang lokal na Bluetooth na telepono, at upang tumuklas at mapareha sa mga remote na device."</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"Available ang bukas na Wi-Fi network"</item>
     <item quantity="other" msgid="7915895323644292768">"Buksan ang mga available na Wi-Fi network"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Mag-sign in sa Wi-Fi network"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Hindi makakonekta sa Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" ay mayroong mahinang koneksyon sa internet."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"Camera"</string>
     <string name="description_target_silent" msgid="893551287746522182">"Tahimik"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"I-on ang tunog"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"Mag-swipe upang i-unlock."</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"Mag-plug in ng isang headset upang marinig ang mga password key na binabanggit nang malakas."</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"Dot."</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"Magnabiga sa home"</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"Ibahagi kay..."</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Naka-lock ang device."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
+    <string name="sending" msgid="8715108995741758718">"Ipinapadala..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"Ilunsad ang Browser?"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"Tanggapin ang Tawag?"</string>
 </resources>

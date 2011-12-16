@@ -31,6 +31,12 @@ namespace uirenderer {
 // Rendering
 ///////////////////////////////////////////////////////////////////////////////
 
+LayerRenderer::LayerRenderer(Layer* layer): mLayer(layer) {
+}
+
+LayerRenderer::~LayerRenderer() {
+}
+
 void LayerRenderer::prepareDirty(float left, float top, float right, float bottom, bool opaque) {
     LAYER_RENDERER_LOGD("Rendering into layer, fbo = %d", mLayer->getFbo());
 
@@ -210,7 +216,8 @@ Layer* LayerRenderer::createLayer(uint32_t width, uint32_t height, bool isOpaque
         layer->allocateTexture(GL_RGBA, GL_UNSIGNED_BYTE);
 
         if (glGetError() != GL_NO_ERROR) {
-            LOGD("Could not allocate texture");
+            LOGD("Could not allocate texture for layer (fbo=%d %dx%d)",
+                    fbo, width, height);
 
             glBindFramebuffer(GL_FRAMEBUFFER, previousFbo);
             Caches::getInstance().fboCache.put(fbo);
@@ -264,7 +271,7 @@ Layer* LayerRenderer::createTextureLayer(bool isOpaque) {
     layer->setFbo(0);
     layer->setAlpha(255, SkXfermode::kSrcOver_Mode);
     layer->layer.set(0.0f, 0.0f, 0.0f, 0.0f);
-    layer->texCoords.set(0.0f, 1.0f, 0.0f, 1.0f);
+    layer->texCoords.set(0.0f, 1.0f, 1.0f, 0.0f);
     layer->region.clear();
     layer->setRenderTarget(GL_NONE); // see ::updateTextureLayer()
 
@@ -400,6 +407,18 @@ bool LayerRenderer::copyLayer(Layer* layer, SkBitmap* bitmap) {
             renderer.setViewport(bitmap->width(), bitmap->height());
             renderer.OpenGLRenderer::prepareDirty(0.0f, 0.0f,
                     bitmap->width(), bitmap->height(), !layer->isBlend());
+
+            glDisable(GL_SCISSOR_TEST);
+            renderer.translate(0.0f, bitmap->height());
+            renderer.scale(1.0f, -1.0f);
+
+            mat4 texTransform(layer->getTexTransform());
+
+            mat4 invert;
+            invert.translate(0.0f, 1.0f, 0.0f);
+            invert.scale(1.0f, -1.0f, 1.0f);
+            layer->getTexTransform().multiply(invert);
+
             if ((error = glGetError()) != GL_NO_ERROR) goto error;
 
             {
@@ -413,6 +432,7 @@ bool LayerRenderer::copyLayer(Layer* layer, SkBitmap* bitmap) {
                 if ((error = glGetError()) != GL_NO_ERROR) goto error;
             }
 
+            layer->getTexTransform().load(texTransform);
             status = true;
         }
 

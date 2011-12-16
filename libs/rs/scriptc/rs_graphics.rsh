@@ -22,7 +22,6 @@
  */
 #ifndef __RS_GRAPHICS_RSH__
 #define __RS_GRAPHICS_RSH__
-
 #if (defined(RS_VERSION) && (RS_VERSION >= 14))
 /**
  * Set the color target used for all subsequent rendering calls

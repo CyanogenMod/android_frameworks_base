@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Kablosuzu kapat"</string>
     <string name="screen_lock" msgid="799094655496098153">"Ekran kilidi"</string>
     <string name="power_off" msgid="4266614107412865048">"Kapat"</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"Kapanıyor…"</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Tabletiniz kapanacak."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Telefonunuz kapanacak."</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"hassas günlük verilerini okuma"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"Uygulamaya, sistemin çeşitli günlük dosyalarındaki bilgileri okuma izni verir. Bu izin, uygulamanın, tablette yaptıklarınızla ilgili genel bilgileri bulmasına olanak sağlar. Bu bilgiler arasında kişisel ve gizli bilgileriniz de olabilir."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"Bir uygulamanın, sistemin çeşitli günlük dosyalarındaki bilgileri okumasına izin verir. Bu izin, uygulamanın, telefonda yaptıklarınızla ilgili genel bilgileri bulmasına olanak sağlar ve bunlar kişisel ve gizli bilgilerinizi de içerebilir."</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"oynatma için herhangi bir medya kod çözücüyü kullan"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"Uygulamaya, oynatma kodunu çözmek için herhangi bir yüklü medya kod çözücüyü kullanma izni verir."</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"sahibi tanılama olan kaynakları oku/bunlara yaz"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"Uygulamanın tanılama grubundaki bir kaynağa ait herhangi bir kaynağı; örneğin /dev içindeki dosyaları okumasına ve bunlara yazmasına izin verir. Bu işlevin sistem kararlılığını ve güvenliğini olumsuz etkileme olasılığı vardır. Üretici veya operatör tarafından YALNIZCA donanıma özgü tanılama için kullanılmalıdır."</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"uygulama bileşenlerini etkinleştir veya devre dışı bırak"</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Uygulamaların kablosuz erişim noktalarına bağlanıp bunlarla bağlantısını kesmesine ve yapılandırılmış kablosuz ağlarda değişiklikler yapmasına izin verir."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"Kablosuz Çoklu Yayın alımına izin ver"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Bir uygulamaya doğrudan cihazınıza yönlendirilmemiş paketleri alma izni verir. Yakın yerlerde sunulan hizmetlerin keşfedilmesi sırasında faydalı olabilir. Birden fazla noktaya yayın yapmayan moda göre daha fazla güç harcar."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"WiMAX durumunu görüntüle"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"Uygulamanın, WiMAX\'ın durumuyla ilgili bilgileri görüntülemesine izin verir."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"WiMAX durumunu değiştir"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"Uygulamanın, WiMAX ağına bağlanmasına veya bağlantısını kesmesine izin verir."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"bluetooth yönetimi"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"Uygulamaya, yerel Bluetooth tabletini yapılandırma ve uzak cihazları keşfedip bunlar ile eşleşme izni verir."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"Uygulamaların yerel Bluetooth telefonunu yapılandırmasına ve uzak cihazları keşfedip bunlar ile eşleşmesine izin verir."</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"Kullanılabilir kablosuz ağı aç"</item>
     <item quantity="other" msgid="7915895323644292768">"Kullanılabilir kablosuz ağları aç"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Kablosuz ağda oturum açın"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Kablosuz bağlantısı kurulamadı"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" internet bağlantısı zayıf."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Kablosuz Doğrudan Bağlantı"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"Kamera"</string>
     <string name="description_target_silent" msgid="893551287746522182">"Sessiz"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"Ses açık"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"Kilidi açmak için kaydırın."</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"Şifre tuşlarının sesli okunmasını dinlemek için mikrofonlu kulaklık takın."</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"Nokta."</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"Ana sayfaya git"</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"Şununla paylaş..."</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Cihaz kilitli."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
+    <string name="sending" msgid="8715108995741758718">"Gönderiliyor..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"Tarayıcı Başlatılsın mı?"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"Çağrı Kabul Edilsin mi?"</string>
 </resources>

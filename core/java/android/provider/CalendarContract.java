@@ -72,7 +72,7 @@ import android.util.Log;
  * {@link Calendars#MAX_REMINDERS} which is set by the Sync Adapter that owns
  * the given calendar. Reminders are specified in minutes before the event and
  * have a type.</li>
- * <li>The {@link ExtendedProperties} table hold opaque data fields used by the
+ * <li>The {@link ExtendedProperties} table holds opaque data fields used by the
  * sync adapter. The provider takes no action with items in this table except to
  * delete them when their related events are deleted.</li>
  * </ul>
@@ -300,8 +300,23 @@ public final class CalendarContract {
         public static final String CALENDAR_COLOR = "calendar_color";
 
         /**
+         * A key for looking up a color from the {@link Colors} table. NULL or
+         * an empty string are reserved for indicating that the calendar does
+         * not use a key for looking up the color. The provider will update
+         * {@link #CALENDAR_COLOR} automatically when a valid key is written to
+         * this column. The key must reference an existing row of the
+         * {@link Colors} table. @see Colors
+         * <P>
+         * Type: TEXT
+         * </P>
+         */
+        public static final String CALENDAR_COLOR_KEY = "calendar_color_index";
+
+        /**
          * The display name of the calendar. Column name.
-         * <P>Type: TEXT</P>
+         * <P>
+         * Type: TEXT
+         * </P>
          */
         public static final String CALENDAR_DISPLAY_NAME = "calendar_displayName";
 
@@ -392,6 +407,28 @@ public final class CalendarContract {
          * <P>Type: TEXT</P>
          */
         public static final String ALLOWED_REMINDERS = "allowedReminders";
+
+        /**
+         * A comma separated list of availability types supported for this
+         * calendar in the format "#,#,#". Valid types are
+         * {@link Events#AVAILABILITY_BUSY}, {@link Events#AVAILABILITY_FREE},
+         * {@link Events#AVAILABILITY_TENTATIVE}. Setting this field to only
+         * {@link Events#AVAILABILITY_BUSY} should be used to indicate that
+         * changing the availability is not supported.
+         *
+         */
+        public static final String ALLOWED_AVAILABILITY = "allowedAvailability";
+
+        /**
+         * A comma separated list of attendee types supported for this calendar
+         * in the format "#,#,#". Valid types are {@link Attendees#TYPE_NONE},
+         * {@link Attendees#TYPE_OPTIONAL}, {@link Attendees#TYPE_REQUIRED},
+         * {@link Attendees#TYPE_RESOURCE}. Setting this field to only
+         * {@link Attendees#TYPE_NONE} should be used to indicate that changing
+         * the attendee type is not supported.
+         *
+         */
+        public static final String ALLOWED_ATTENDEE_TYPES = "allowedAttendeeTypes";
     }
 
     /**
@@ -527,6 +564,8 @@ public final class CalendarContract {
      * <li>{@link #SYNC_EVENTS} set to 1</li>
      * <li>{@link #CALENDAR_TIME_ZONE}</li>
      * <li>{@link #ALLOWED_REMINDERS}</li>
+     * <li>{@link #ALLOWED_AVAILABILITY}</li>
+     * <li>{@link #ALLOWED_ATTENDEE_TYPES}</li>
      * </ul>
      * <dt><b>Update</b></dt>
      * <dd>To perform an update on a calendar the {@link #_ID} of the calendar
@@ -566,6 +605,8 @@ public final class CalendarContract {
      * <li>{@link #OWNER_ACCOUNT}</li>
      * <li>{@link #MAX_REMINDERS}</li>
      * <li>{@link #ALLOWED_REMINDERS}</li>
+     * <li>{@link #ALLOWED_AVAILABILITY}</li>
+     * <li>{@link #ALLOWED_ATTENDEE_TYPES}</li>
      * <li>{@link #CAN_MODIFY_TIME_ZONE}</li>
      * <li>{@link #CAN_ORGANIZER_RESPOND}</li>
      * <li>{@link #CAN_PARTIALLY_UPDATE}</li>
@@ -688,13 +729,21 @@ public final class CalendarContract {
 
         /**
          * The type of attendee. Column name.
-         * <P>Type: Integer (one of {@link #TYPE_REQUIRED}, {@link #TYPE_OPTIONAL})</P>
+         * <P>
+         * Type: Integer (one of {@link #TYPE_NONE}, {@link #TYPE_REQUIRED},
+         * {@link #TYPE_OPTIONAL}, {@link #TYPE_RESOURCE})
+         * </P>
          */
         public static final String ATTENDEE_TYPE = "attendeeType";
 
         public static final int TYPE_NONE = 0;
         public static final int TYPE_REQUIRED = 1;
         public static final int TYPE_OPTIONAL = 2;
+        /**
+         * This specifies that an attendee is a resource, like a room, a
+         * cabbage, or something and not an actual person.
+         */
+        public static final int TYPE_RESOURCE = 3;
 
         /**
          * The attendance status of the attendee. Column name.
@@ -787,11 +836,24 @@ public final class CalendarContract {
         public static final String EVENT_LOCATION = "eventLocation";
 
         /**
-         * A secondary color for the individual event. Reserved for future use.
-         * Column name.
+         * A secondary color for the individual event. This should only be
+         * updated by the sync adapter for a given account.
          * <P>Type: INTEGER</P>
          */
         public static final String EVENT_COLOR = "eventColor";
+
+        /**
+         * A secondary color key for the individual event. NULL or an empty
+         * string are reserved for indicating that the event does not use a key
+         * for looking up the color. The provider will update
+         * {@link #EVENT_COLOR} automatically when a valid key is written to
+         * this column. The key must reference an existing row of the
+         * {@link Colors} table. @see Colors
+         * <P>
+         * Type: TEXT
+         * </P>
+         */
+        public static final String EVENT_COLOR_KEY = "eventColor_index";
 
         /**
          * The event status. Column name.
@@ -949,8 +1011,10 @@ public final class CalendarContract {
         /**
          * If this event counts as busy time or is still free time that can be
          * scheduled over. Column name.
-         * <P>Type: INTEGER (One of {@link #AVAILABILITY_BUSY},
-         * {@link #AVAILABILITY_FREE})</P>
+         * <P>
+         * Type: INTEGER (One of {@link #AVAILABILITY_BUSY},
+         * {@link #AVAILABILITY_FREE}, {@link #AVAILABILITY_TENTATIVE})
+         * </P>
          */
         public static final String AVAILABILITY = "availability";
 
@@ -964,6 +1028,11 @@ public final class CalendarContract {
          * other events.
          */
         public static final int AVAILABILITY_FREE = 1;
+        /**
+         * Indicates that the owner's availability may change, but should be
+         * considered busy time that will conflict.
+         */
+        public static final int AVAILABILITY_TENTATIVE = 2;
 
         /**
          * Whether the event has an alarm or not. Column name.
@@ -1335,7 +1404,10 @@ public final class CalendarContract {
      * <dd>When inserting a new event the following fields must be included:
      * <ul>
      * <li>dtstart</li>
-     * <li>dtend -or- a (rrule or rdate) and a duration</li>
+     * <li>dtend if the event is non-recurring</li>
+     * <li>duration if the event is recurring</li>
+     * <li>rrule or rdate if the event is recurring</li>
+     * <li>eventTimezone</li>
      * <li>a calendar_id</li>
      * </ul>
      * There are also further requirements when inserting or updating an event.
@@ -1473,6 +1545,8 @@ public final class CalendarContract {
                 CAL_SYNC9,
                 CAL_SYNC10,
                 ALLOWED_REMINDERS,
+                ALLOWED_ATTENDEE_TYPES,
+                ALLOWED_AVAILABILITY,
                 CALENDAR_ACCESS_LEVEL,
                 CALENDAR_COLOR,
                 CALENDAR_TIME_ZONE,
@@ -2224,6 +2298,76 @@ public final class CalendarContract {
         }
     }
 
+    protected interface ColorsColumns extends SyncStateContract.Columns {
+
+        /**
+         * The type of color, which describes how it should be used. Valid types
+         * are {@link #TYPE_CALENDAR} and {@link #TYPE_EVENT}. Column name.
+         * <P>
+         * Type: INTEGER (NOT NULL)
+         * </P>
+         */
+        public static final String COLOR_TYPE = "color_type";
+
+        /**
+         * This indicateds a color that can be used for calendars.
+         */
+        public static final int TYPE_CALENDAR = 0;
+        /**
+         * This indicates a color that can be used for events.
+         */
+        public static final int TYPE_EVENT = 1;
+
+        /**
+         * The key used to reference this color. This can be any non-empty
+         * string, but must be unique for a given {@link #ACCOUNT_TYPE} and
+         * {@link #ACCOUNT_NAME}. Column name.
+         * <P>
+         * Type: TEXT
+         * </P>
+         */
+        public static final String COLOR_KEY = "color_index";
+
+        /**
+         * The color as an 8-bit ARGB integer value. Colors should specify alpha
+         * as fully opaque (eg 0xFF993322) as the alpha may be ignored or
+         * modified for display. It is reccomended that colors be usable with
+         * light (near white) text. Apps should not depend on that assumption,
+         * however. Column name.
+         * <P>
+         * Type: INTEGER (NOT NULL)
+         * </P>
+         */
+        public static final String COLOR = "color";
+
+    }
+
+    /**
+     * Fields for accessing colors available for a given account. Colors are
+     * referenced by {@link #COLOR_KEY} which must be unique for a given
+     * account name/type. These values can only be updated by the sync
+     * adapter. Only {@link #COLOR} may be updated after the initial insert. In
+     * addition, a row can only be deleted once all references to that color
+     * have been removed from the {@link Calendars} or {@link Events} tables.
+     */
+    public static final class Colors implements ColorsColumns {
+        /**
+         * @hide
+         */
+        public static final String TABLE_NAME = "Colors";
+        /**
+         * The Uri for querying color information
+         */
+        @SuppressWarnings("hiding")
+        public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/colors");
+
+        /**
+         * This utility class cannot be instantiated
+         */
+        private Colors() {
+        }
+    }
+
     protected interface ExtendedPropertiesColumns {
         /**
          * The event the extended property belongs to. Column name.
@@ -2247,7 +2391,7 @@ public final class CalendarContract {
 
     /**
      * Fields for accessing the Extended Properties. This is a generic set of
-     * name/value pairs for use by sync adapters or apps to add extra
+     * name/value pairs for use by sync adapters to add extra
      * information to events. There are three writable columns and all three
      * must be present when inserting a new value. They are:
      * <ul>

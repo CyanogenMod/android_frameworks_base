@@ -429,6 +429,18 @@ public class WindowManagerService extends IWindowManager.Stub
     boolean mSystemBooted = false;
     boolean mForceDisplayEnabled = false;
     boolean mShowingBootMessages = false;
+
+    // This protects the following display size properties, so that
+    // getDisplaySize() doesn't need to acquire the global lock.  This is
+    // needed because the window manager sometimes needs to use ActivityThread
+    // while it has its global state locked (for example to load animation
+    // resources), but the ActivityThread also needs get the current display
+    // size sometimes when it has its package lock held.
+    //
+    // These will only be modified with both mWindowMap and mDisplaySizeLock
+    // held (in that order) so the window manager doesn't need to acquire this
+    // lock when needing these values in its normal operation.
+    final Object mDisplaySizeLock = new Object();
     int mInitialDisplayWidth = 0;
     int mInitialDisplayHeight = 0;
     int mBaseDisplayWidth = 0;
@@ -437,6 +449,7 @@ public class WindowManagerService extends IWindowManager.Stub
     int mCurDisplayHeight = 0;
     int mAppDisplayWidth = 0;
     int mAppDisplayHeight = 0;
+
     int mRotation = 0;
     int mForcedAppOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED;
     boolean mAltOrientation = false;
@@ -1836,7 +1849,8 @@ public class WindowManagerService extends IWindowManager.Stub
             rawChanged = true;
         }
 
-        if (rawChanged) {
+        if (rawChanged && (wallpaperWin.getAttrs().privateFlags &
+                    WindowManager.LayoutParams.PRIVATE_FLAG_WANTS_OFFSET_NOTIFICATIONS) != 0) {
             try {
                 if (DEBUG_WALLPAPER) Slog.v(TAG, "Report new wp offset "
                         + wallpaperWin + " x=" + wallpaperWin.mWallpaperX
@@ -1886,11 +1900,9 @@ public class WindowManagerService extends IWindowManager.Stub
         }
     }
 
-    boolean updateWallpaperOffsetLocked(WindowState changingTarget, boolean sync) {
+    void updateWallpaperOffsetLocked(WindowState changingTarget, boolean sync) {
         final int dw = mAppDisplayWidth;
         final int dh = mAppDisplayHeight;
-
-        boolean changed = false;
 
         WindowState target = mWallpaperTarget;
         if (target != null) {
@@ -1916,14 +1928,31 @@ public class WindowManagerService extends IWindowManager.Stub
                 WindowState wallpaper = token.windows.get(curWallpaperIndex);
                 if (updateWallpaperOffsetLocked(wallpaper, dw, dh, sync)) {
                     wallpaper.computeShownFrameLocked();
-                    changed = true;
+                    // No need to lay out the windows - we can just set the wallpaper position
+                    // directly.
+                    if (wallpaper.mSurfaceX != wallpaper.mShownFrame.left
+                            || wallpaper.mSurfaceY != wallpaper.mShownFrame.top) {
+                        Surface.openTransaction();
+                        try {
+                            if (SHOW_TRANSACTIONS) logSurface(wallpaper,
+                                    "POS " + wallpaper.mShownFrame.left
+                                    + ", " + wallpaper.mShownFrame.top, null);
+                            wallpaper.mSurfaceX = wallpaper.mShownFrame.left;
+                            wallpaper.mSurfaceY = wallpaper.mShownFrame.top;
+                            wallpaper.mSurface.setPosition(wallpaper.mShownFrame.left,
+                                    wallpaper.mShownFrame.top);
+                        } catch (RuntimeException e) {
+                            Slog.w(TAG, "Error positioning surface of " + wallpaper
+                                    + " pos=(" + wallpaper.mShownFrame.left
+                                    + "," + wallpaper.mShownFrame.top + ")", e);
+                        }
+                        Surface.closeTransaction();
+                    }
                     // We only want to be synchronous with one wallpaper.
                     sync = false;
                 }
             }
         }
-
-        return changed;
     }
 
     void updateWallpaperVisibilityLocked() {
@@ -2436,9 +2465,7 @@ public class WindowManagerService extends IWindowManager.Stub
             window.mWallpaperY = y;
             window.mWallpaperXStep = xStep;
             window.mWallpaperYStep = yStep;
-            if (updateWallpaperOffsetLocked(window, true)) {
-                performLayoutAndPlaceSurfacesLocked();
-            }
+            updateWallpaperOffsetLocked(window, true);
         }
     }
 
@@ -2485,12 +2512,13 @@ public class WindowManagerService extends IWindowManager.Stub
 
     public int relayoutWindow(Session session, IWindow client, int seq,
             WindowManager.LayoutParams attrs, int requestedWidth,
-            int requestedHeight, int viewVisibility, boolean insetsPending,
+            int requestedHeight, int viewVisibility, int flags,
             Rect outFrame, Rect outContentInsets, Rect outVisibleInsets,
             Configuration outConfig, Surface outSurface) {
         boolean displayed = false;
         boolean inTouchMode;
         boolean configChanged;
+        boolean surfaceChanged = false;
 
         // if they don't have this permission, mask out the status bar bits
         int systemUiVisibility = 0;
@@ -2519,6 +2547,9 @@ public class WindowManagerService extends IWindowManager.Stub
             if (attrs != null) {
                 mPolicy.adjustWindowParamsLw(attrs);
             }
+
+            win.mSurfaceDestroyDeferred =
+                    (flags&WindowManagerImpl.RELAYOUT_DEFER_SURFACE_DESTROY) != 0;
 
             int attrChanges = 0;
             int flagChanges = 0;
@@ -2578,11 +2609,7 @@ public class WindowManagerService extends IWindowManager.Stub
                     (win.mAppToken == null || !win.mAppToken.clientHidden)) {
                 displayed = !win.isVisibleLw();
                 if (win.mExiting) {
-                    win.mExiting = false;
-                    if (win.mAnimation != null) {
-                        win.mAnimation.cancel();
-                        win.mAnimation = null;
-                    }
+                    win.cancelExitAnimationForNextAnimationLocked();
                 }
                 if (win.mDestroying) {
                     win.mDestroying = false;
@@ -2620,8 +2647,12 @@ public class WindowManagerService extends IWindowManager.Stub
                     // To change the format, we need to re-build the surface.
                     win.destroySurfaceLocked();
                     displayed = true;
+                    surfaceChanged = true;
                 }
                 try {
+                    if (win.mSurface == null) {
+                        surfaceChanged = true;
+                    }
                     Surface surface = win.createSurfaceLocked();
                     if (surface != null) {
                         outSurface.copyFrom(surface);
@@ -2673,6 +2704,7 @@ public class WindowManagerService extends IWindowManager.Stub
                     // If we are not currently running the exit animation, we
                     // need to see about starting one.
                     if (!win.mExiting || win.mSurfacePendingDestroy) {
+                        surfaceChanged = true;
                         // Try starting an animation; if there isn't one, we
                         // can destroy the surface right away.
                         int transit = WindowManagerPolicy.TRANSIT_EXIT;
@@ -2705,10 +2737,10 @@ public class WindowManagerService extends IWindowManager.Stub
                 if (win.mSurface == null || (win.getAttrs().flags
                         & WindowManager.LayoutParams.FLAG_KEEP_SURFACE_WHILE_ANIMATING) == 0
                         || win.mSurfacePendingDestroy) {
-                    // We are being called from a local process, which
+                    // We could be called from a local process, which
                     // means outSurface holds its current surface.  Ensure the
-                    // surface object is cleared, but we don't want it actually
-                    // destroyed at this point.
+                    // surface object is cleared, but we don't necessarily want
+                    // it actually destroyed at this point.
                     win.mSurfacePendingDestroy = false;
                     outSurface.release();
                     if (DEBUG_VISIBILITY) Slog.i(TAG, "Releasing surface in: " + win);
@@ -2750,7 +2782,7 @@ public class WindowManagerService extends IWindowManager.Stub
             }
 
             mLayoutNeeded = true;
-            win.mGivenInsetsPending = insetsPending;
+            win.mGivenInsetsPending = (flags&WindowManagerImpl.RELAYOUT_INSETS_PENDING) != 0;
             if (assignLayers) {
                 assignLayersLocked();
             }
@@ -2787,8 +2819,25 @@ public class WindowManagerService extends IWindowManager.Stub
 
         Binder.restoreCallingIdentity(origId);
 
-        return (inTouchMode ? WindowManagerImpl.RELAYOUT_IN_TOUCH_MODE : 0)
-                | (displayed ? WindowManagerImpl.RELAYOUT_FIRST_TIME : 0);
+        return (inTouchMode ? WindowManagerImpl.RELAYOUT_RES_IN_TOUCH_MODE : 0)
+                | (displayed ? WindowManagerImpl.RELAYOUT_RES_FIRST_TIME : 0)
+                | (surfaceChanged ? WindowManagerImpl.RELAYOUT_RES_SURFACE_CHANGED : 0);
+    }
+
+    public void performDeferredDestroyWindow(Session session, IWindow client) {
+        long origId = Binder.clearCallingIdentity();
+
+        try {
+            synchronized(mWindowMap) {
+                WindowState win = windowForClientLocked(session, client, false);
+                if (win == null) {
+                    return;
+                }
+                win.destroyDeferredSurfaceLocked();
+            }
+        } finally {
+            Binder.restoreCallingIdentity(origId);
+        }
     }
 
     public boolean outOfMemoryWindow(Session session, IWindow client) {
@@ -3060,7 +3109,7 @@ public class WindowManagerService extends IWindowManager.Stub
     // Application Window Tokens
     // -------------------------------------------------------------
 
-    public void validateAppTokens(List tokens) {
+    public void validateAppTokens(List<IBinder> tokens) {
         int v = tokens.size()-1;
         int m = mAppTokens.size()-1;
         while (v >= 0 && m >= 0) {
@@ -3728,7 +3777,7 @@ public class WindowManagerService extends IWindowManager.Stub
                 return;
             }
 
-            // If this is a translucent or wallpaper window, then don't
+            // If this is a translucent window, then don't
             // show a starting window -- the current effect (a full-screen
             // opaque starting window that fades away to the real contents
             // when it is ready) does not work for this.
@@ -3745,7 +3794,16 @@ public class WindowManagerService extends IWindowManager.Stub
                 }
                 if (ent.array.getBoolean(
                         com.android.internal.R.styleable.Window_windowShowWallpaper, false)) {
-                    return;
+                    if (mWallpaperTarget == null) {
+                        // If this theme is requesting a wallpaper, and the wallpaper
+                        // is not curently visible, then this effectively serves as
+                        // an opaque window and our starting window transition animation
+                        // can still work.  We just need to make sure the starting window
+                        // is also showing the wallpaper.
+                        windowFlags |= WindowManager.LayoutParams.FLAG_SHOW_WALLPAPER;
+                    } else {
+                        return;
+                    }
                 }
             }
 
@@ -5080,10 +5138,22 @@ public class WindowManagerService extends IWindowManager.Stub
 
             // Constrain thumbnail to smaller of screen width or height. Assumes aspect
             // of thumbnail is the same as the screen (in landscape) or square.
+            float targetWidthScale = width / (float) fw;
+            float targetHeightScale = height / (float) fh;
             if (dw <= dh) {
-                scale = width / (float) fw; // portrait
+                scale = targetWidthScale;
+                // If aspect of thumbnail is the same as the screen (in landscape),
+                // select the slightly larger value so we fill the entire bitmap
+                if (targetHeightScale > scale && (int) (targetHeightScale * fw) == width) {
+                    scale = targetHeightScale;
+                }
             } else {
-                scale = height / (float) fh; // landscape
+                scale = targetHeightScale;
+                // If aspect of thumbnail is the same as the screen (in landscape),
+                // select the slightly larger value so we fill the entire bitmap
+                if (targetWidthScale > scale && (int) (targetWidthScale * fh) == height) {
+                    scale = targetWidthScale;
+                }
             }
 
             // The screen shot will contain the entire screen.
@@ -5799,7 +5869,87 @@ public class WindowManagerService extends IWindowManager.Stub
         return curSize;
     }
 
-    private int computeSmallestWidth(boolean rotated, int dw, int dh, float density) {
+    private int reduceConfigLayout(int curLayout, int rotation, float density,
+            int dw, int dh) {
+        // Get the app screen size at this rotation.
+        int w = mPolicy.getNonDecorDisplayWidth(dw, dh, rotation);
+        int h = mPolicy.getNonDecorDisplayHeight(dw, dh, rotation);
+
+        // Compute the screen layout size class for this rotation.
+        int screenLayoutSize;
+        boolean screenLayoutLong;
+        boolean screenLayoutCompatNeeded;
+        int longSize = w;
+        int shortSize = h;
+        if (longSize < shortSize) {
+            int tmp = longSize;
+            longSize = shortSize;
+            shortSize = tmp;
+        }
+        longSize = (int)(longSize/density);
+        shortSize = (int)(shortSize/density);
+
+        // These semi-magic numbers define our compatibility modes for
+        // applications with different screens.  These are guarantees to
+        // app developers about the space they can expect for a particular
+        // configuration.  DO NOT CHANGE!
+        if (longSize < 470) {
+            // This is shorter than an HVGA normal density screen (which
+            // is 480 pixels on its long side).
+            screenLayoutSize = Configuration.SCREENLAYOUT_SIZE_SMALL;
+            screenLayoutLong = false;
+            screenLayoutCompatNeeded = false;
+        } else {
+            // What size is this screen screen?
+            if (longSize >= 960 && shortSize >= 720) {
+                // 1.5xVGA or larger screens at medium density are the point
+                // at which we consider it to be an extra large screen.
+                screenLayoutSize = Configuration.SCREENLAYOUT_SIZE_XLARGE;
+            } else if (longSize >= 640 && shortSize >= 480) {
+                // VGA or larger screens at medium density are the point
+                // at which we consider it to be a large screen.
+                screenLayoutSize = Configuration.SCREENLAYOUT_SIZE_LARGE;
+            } else {
+                screenLayoutSize = Configuration.SCREENLAYOUT_SIZE_NORMAL;
+            }
+
+            // If this screen is wider than normal HVGA, or taller
+            // than FWVGA, then for old apps we want to run in size
+            // compatibility mode.
+            if (shortSize > 321 || longSize > 570) {
+                screenLayoutCompatNeeded = true;
+            } else {
+                screenLayoutCompatNeeded = false;
+            }
+
+            // Is this a long screen?
+            if (((longSize*3)/5) >= (shortSize-1)) {
+                // Anything wider than WVGA (5:3) is considering to be long.
+                screenLayoutLong = true;
+            } else {
+                screenLayoutLong = false;
+            }
+        }
+
+        // Now reduce the last screenLayout to not be better than what we
+        // have found.
+        if (!screenLayoutLong) {
+            curLayout = (curLayout&~Configuration.SCREENLAYOUT_LONG_MASK)
+                    | Configuration.SCREENLAYOUT_LONG_NO;
+        }
+        if (screenLayoutCompatNeeded) {
+            curLayout |= Configuration.SCREENLAYOUT_COMPAT_NEEDED;
+        }
+        int curSize = curLayout&Configuration.SCREENLAYOUT_SIZE_MASK;
+        if (screenLayoutSize < curSize) {
+            curLayout = (curLayout&~Configuration.SCREENLAYOUT_SIZE_MASK)
+                    | screenLayoutSize;
+        }
+        return curLayout;
+    }
+
+    private void computeSmallestWidthAndScreenLayout(boolean rotated, int dw, int dh,
+            float density, Configuration outConfig) {
         // We need to determine the smallest width that will occur under normal
         // operation.  To this, start with the base screen size and compute the
         // width under the different possible rotations.  We need to un-rotate
@@ -5816,7 +5966,14 @@ public class WindowManagerService extends IWindowManager.Stub
         sw = reduceConfigWidthSize(sw, Surface.ROTATION_90, density, unrotDh, unrotDw);
         sw = reduceConfigWidthSize(sw, Surface.ROTATION_180, density, unrotDw, unrotDh);
         sw = reduceConfigWidthSize(sw, Surface.ROTATION_270, density, unrotDh, unrotDw);
-        return sw;
+        int sl = Configuration.SCREENLAYOUT_SIZE_XLARGE
+                | Configuration.SCREENLAYOUT_LONG_YES;
+        sl = reduceConfigLayout(sl, Surface.ROTATION_0, density, unrotDw, unrotDh);
+        sl = reduceConfigLayout(sl, Surface.ROTATION_90, density, unrotDh, unrotDw);
+        sl = reduceConfigLayout(sl, Surface.ROTATION_180, density, unrotDw, unrotDh);
+        sl = reduceConfigLayout(sl, Surface.ROTATION_270, density, unrotDh, unrotDw);
+        outConfig.smallestScreenWidthDp = sw;
+        outConfig.screenLayout = sl;
     }
 
     private int reduceCompatConfigWidthSize(int curSize, int rotation, DisplayMetrics dm,
@@ -5862,25 +6019,27 @@ public class WindowManagerService extends IWindowManager.Stub
         final int realdw = rotated ? mBaseDisplayHeight : mBaseDisplayWidth;
         final int realdh = rotated ? mBaseDisplayWidth : mBaseDisplayHeight;
 
-        if (mAltOrientation) {
-            mCurDisplayWidth = realdw;
-            mCurDisplayHeight = realdh;
-            if (realdw > realdh) {
-                // Turn landscape into portrait.
-                int maxw = (int)(realdh/1.3f);
-                if (maxw < realdw) {
-                    mCurDisplayWidth = maxw;
+        synchronized(mDisplaySizeLock) {
+            if (mAltOrientation) {
+                mCurDisplayWidth = realdw;
+                mCurDisplayHeight = realdh;
+                if (realdw > realdh) {
+                    // Turn landscape into portrait.
+                    int maxw = (int)(realdh/1.3f);
+                    if (maxw < realdw) {
+                        mCurDisplayWidth = maxw;
+                    }
+                } else {
+                    // Turn portrait into landscape.
+                    int maxh = (int)(realdw/1.3f);
+                    if (maxh < realdh) {
+                        mCurDisplayHeight = maxh;
+                    }
                 }
             } else {
-                // Turn portrait into landscape.
-                int maxh = (int)(realdw/1.3f);
-                if (maxh < realdh) {
-                    mCurDisplayHeight = maxh;
-                }
+                mCurDisplayWidth = realdw;
+                mCurDisplayHeight = realdh;
             }
-        } else {
-            mCurDisplayWidth = realdw;
-            mCurDisplayHeight = realdh;
         }
 
         final int dw = mCurDisplayWidth;
@@ -5899,8 +6058,12 @@ public class WindowManagerService extends IWindowManager.Stub
 
         // Update application display metrics.
         final DisplayMetrics dm = mDisplayMetrics;
-        mAppDisplayWidth = mPolicy.getNonDecorDisplayWidth(dw, dh, mRotation);
-        mAppDisplayHeight = mPolicy.getNonDecorDisplayHeight(dw, dh, mRotation);
+        final int appWidth = mPolicy.getNonDecorDisplayWidth(dw, dh, mRotation);
+        final int appHeight = mPolicy.getNonDecorDisplayHeight(dw, dh, mRotation);
+        synchronized(mDisplaySizeLock) {
+            mAppDisplayWidth = appWidth;
+            mAppDisplayHeight = appHeight;
+        }
         if (false) {
             Slog.i(TAG, "Set app display size: " + mAppDisplayWidth
                     + " x " + mAppDisplayHeight);
@@ -5914,63 +6077,11 @@ public class WindowManagerService extends IWindowManager.Stub
                 / dm.density);
         config.screenHeightDp = (int)(mPolicy.getConfigDisplayHeight(dw, dh, mRotation)
                 / dm.density);
-        config.smallestScreenWidthDp = computeSmallestWidth(rotated, dw, dh, dm.density);
+        computeSmallestWidthAndScreenLayout(rotated, dw, dh, dm.density, config);
 
         config.compatScreenWidthDp = (int)(config.screenWidthDp / mCompatibleScreenScale);
         config.compatScreenHeightDp = (int)(config.screenHeightDp / mCompatibleScreenScale);
         config.compatSmallestScreenWidthDp = computeCompatSmallestWidth(rotated, dm, dw, dh);
-
-        // Compute the screen layout size class.
-        int screenLayout;
-        int longSize = mAppDisplayWidth;
-        int shortSize = mAppDisplayHeight;
-        if (longSize < shortSize) {
-            int tmp = longSize;
-            longSize = shortSize;
-            shortSize = tmp;
-        }
-        longSize = (int)(longSize/dm.density);
-        shortSize = (int)(shortSize/dm.density);
-
-        // These semi-magic numbers define our compatibility modes for
-        // applications with different screens.  These are guarantees to
-        // app developers about the space they can expect for a particular
-        // configuration.  DO NOT CHANGE!
-        if (longSize < 470) {
-            // This is shorter than an HVGA normal density screen (which
-            // is 480 pixels on its long side).
-            screenLayout = Configuration.SCREENLAYOUT_SIZE_SMALL
-                    | Configuration.SCREENLAYOUT_LONG_NO;
-        } else {
-            // What size is this screen screen?
-            if (longSize >= 960 && shortSize >= 720) {
-                // 1.5xVGA or larger screens at medium density are the point
-                // at which we consider it to be an extra large screen.
-                screenLayout = Configuration.SCREENLAYOUT_SIZE_XLARGE;
-            } else if (longSize >= 640 && shortSize >= 480) {
-                // VGA or larger screens at medium density are the point
-                // at which we consider it to be a large screen.
-                screenLayout = Configuration.SCREENLAYOUT_SIZE_LARGE;
-            } else {
-                screenLayout = Configuration.SCREENLAYOUT_SIZE_NORMAL;
-            }
-
-            // If this screen is wider than normal HVGA, or taller
-            // than FWVGA, then for old apps we want to run in size
-            // compatibility mode.
-            if (shortSize > 321 || longSize > 570) {
-                screenLayout |= Configuration.SCREENLAYOUT_COMPAT_NEEDED;
-            }
-
-            // Is this a long screen?
-            if (((longSize*3)/5) >= (shortSize-1)) {
-                // Anything wider than WVGA (5:3) is considering to be long.
-                screenLayout |= Configuration.SCREENLAYOUT_LONG_YES;
-            } else {
-                screenLayout |= Configuration.SCREENLAYOUT_LONG_NO;
-            }
-        }
-        config.screenLayout = screenLayout;
 
         // Determine whether a hard keyboard is available and enabled.
         boolean hardKeyboardAvailable = config.keyboard == Configuration.KEYBOARD_NOKEYS;
@@ -6322,18 +6433,20 @@ public class WindowManagerService extends IWindowManager.Stub
             }
             WindowManager wm = (WindowManager)mContext.getSystemService(Context.WINDOW_SERVICE);
             mDisplay = wm.getDefaultDisplay();
-            mInitialDisplayWidth = mDisplay.getRawWidth();
-            mInitialDisplayHeight = mDisplay.getRawHeight();
-            int rot = mDisplay.getRotation();
-            if (rot == Surface.ROTATION_90 || rot == Surface.ROTATION_270) {
-                // If the screen is currently rotated, we need to swap the
-                // initial width and height to get the true natural values.
-                int tmp = mInitialDisplayWidth;
-                mInitialDisplayWidth = mInitialDisplayHeight;
-                mInitialDisplayHeight = tmp;
+            synchronized(mDisplaySizeLock) {
+                mInitialDisplayWidth = mDisplay.getRawWidth();
+                mInitialDisplayHeight = mDisplay.getRawHeight();
+                int rot = mDisplay.getRotation();
+                if (rot == Surface.ROTATION_90 || rot == Surface.ROTATION_270) {
+                    // If the screen is currently rotated, we need to swap the
+                    // initial width and height to get the true natural values.
+                    int tmp = mInitialDisplayWidth;
+                    mInitialDisplayWidth = mInitialDisplayHeight;
+                    mInitialDisplayHeight = tmp;
+                }
+                mBaseDisplayWidth = mCurDisplayWidth = mAppDisplayWidth = mInitialDisplayWidth;
+                mBaseDisplayHeight = mCurDisplayHeight = mAppDisplayHeight = mInitialDisplayHeight;
             }
-            mBaseDisplayWidth = mCurDisplayWidth = mAppDisplayWidth = mInitialDisplayWidth;
-            mBaseDisplayHeight = mCurDisplayHeight = mAppDisplayHeight = mInitialDisplayHeight;
             mInputManager.setDisplaySize(Display.DEFAULT_DISPLAY,
                     mDisplay.getRawWidth(), mDisplay.getRawHeight(),
                     mDisplay.getRawExternalWidth(), mDisplay.getRawExternalHeight());
@@ -6376,6 +6489,7 @@ public class WindowManagerService extends IWindowManager.Stub
         public static final int REMOVE_STARTING = 6;
         public static final int FINISHED_STARTING = 7;
         public static final int REPORT_APPLICATION_TOKEN_WINDOWS = 8;
+        public static final int REPORT_APPLICATION_TOKEN_DRAWN = 9;
         public static final int WINDOW_FREEZE_TIMEOUT = 11;
         public static final int HOLD_SCREEN_CHANGED = 12;
         public static final int APP_TRANSITION_TIMEOUT = 13;
@@ -6586,6 +6700,17 @@ public class WindowManagerService extends IWindowManager.Stub
                         } catch (Exception e) {
                             Slog.w(TAG, "Exception when removing starting window", e);
                         }
+                    }
+                } break;
+
+                case REPORT_APPLICATION_TOKEN_DRAWN: {
+                    final AppWindowToken wtoken = (AppWindowToken)msg.obj;
+
+                    try {
+                        if (DEBUG_VISIBILITY) Slog.v(
+                                TAG, "Reporting drawn in " + wtoken);
+                        wtoken.appToken.windowsDrawn();
+                    } catch (RemoteException ex) {
                     }
                 } break;
 
@@ -6859,28 +6984,28 @@ public class WindowManagerService extends IWindowManager.Stub
     }
 
     public void getDisplaySize(Point size) {
-        synchronized(mWindowMap) {
+        synchronized(mDisplaySizeLock) {
             size.x = mAppDisplayWidth;
             size.y = mAppDisplayHeight;
         }
     }
 
     public void getRealDisplaySize(Point size) {
-        synchronized(mWindowMap) {
+        synchronized(mDisplaySizeLock) {
             size.x = mCurDisplayWidth;
             size.y = mCurDisplayHeight;
         }
     }
 
     public void getInitialDisplaySize(Point size) {
-        synchronized(mWindowMap) {
+        synchronized(mDisplaySizeLock) {
             size.x = mInitialDisplayWidth;
             size.y = mInitialDisplayHeight;
         }
     }
 
     public int getMaximumSizeDimension() {
-        synchronized(mWindowMap) {
+        synchronized(mDisplaySizeLock) {
             // Do this based on the raw screen size, until we are smarter.
             return mBaseDisplayWidth > mBaseDisplayHeight
                     ? mBaseDisplayWidth : mBaseDisplayHeight;
@@ -6973,8 +7098,10 @@ public class WindowManagerService extends IWindowManager.Stub
     private void setForcedDisplaySizeLocked(int width, int height) {
         Slog.i(TAG, "Using new display size: " + width + "x" + height);
 
-        mBaseDisplayWidth = width;
-        mBaseDisplayHeight = height;
+        synchronized(mDisplaySizeLock) {
+            mBaseDisplayWidth = width;
+            mBaseDisplayHeight = height;
+        }
         mPolicy.setInitialDisplaySize(mBaseDisplayWidth, mBaseDisplayHeight);
 
         mLayoutNeeded = true;
@@ -7590,7 +7717,8 @@ public class WindowManagerService extends IWindowManager.Stub
                         // a detached wallpaper animation.
                         if (nowAnimating) {
                             if (w.mAnimation != null) {
-                                if (w.mAnimation.getDetachWallpaper()) {
+                                if ((w.mAttrs.flags&FLAG_SHOW_WALLPAPER) != 0
+                                        && w.mAnimation.getDetachWallpaper()) {
                                     windowDetachedWallpaper = w;
                                 }
                                 if (w.mAnimation.getBackgroundColor() != 0) {
@@ -7610,7 +7738,8 @@ public class WindowManagerService extends IWindowManager.Stub
                         // displayed behind it.
                         if (w.mAppToken != null && w.mAppToken.animation != null
                                 && w.mAppToken.animating) {
-                            if (w.mAppToken.animation.getDetachWallpaper()) {
+                            if ((w.mAttrs.flags&FLAG_SHOW_WALLPAPER) != 0
+                                    && w.mAppToken.animation.getDetachWallpaper()) {
                                 windowDetachedWallpaper = w;
                             }
                             if (w.mAppToken.animation.getBackgroundColor() != 0) {

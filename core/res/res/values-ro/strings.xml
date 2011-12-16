@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Dezactivaţi funcţia wireless"</string>
     <string name="screen_lock" msgid="799094655496098153">"Blocaţi ecranul"</string>
     <string name="power_off" msgid="4266614107412865048">"Opriţi alimentarea"</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"Se închide..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Computerul dvs. tablet PC se va închide."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Telefonul dvs. se va închide."</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"citire date de jurnal problematice"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"Permite unei aplicaţii să citească din diverse fişiere jurnal ale sistemului. În acest mod poate descoperi informaţii generale cu privire la utilizarea computerului tablet PC de către dvs., şi probabil informaţii personale sau confidenţiale."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"Permite unei aplicaţii să citească din diverse fişiere jurnal ale sistemului. În acest mod poate descoperi informaţii generale cu privire la utilizarea telefonului de către dvs., dar nu şi informaţii personale sau confidenţiale."</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"utilizaţi orice decodor media pentru redare"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"Permite unei aplicaţii să utilizeze orice decodor media instalat pentru a decodifica redarea."</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"citire/scriere în resursele deţinute de diag"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"Permite unei aplicaţii să citească şi să scrie în orice resursă deţinută de grupul diag, de ex., fişierele din /dev. Această permisiune ar putea să afecteze stabilitatea şi securitatea sistemului. Permisiunea trebuie utilizată DOAR de producător sau de operator pentru diagnostice specifice pentru hardware."</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"activare sau dezactivare a componentelor aplicaţiei"</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Permite unei aplicaţii să se conecteze la şi să se deconecteze de la punctele de acces Wi-Fi, precum şi să efectueze modificări în reţelele Wi-Fi configurate."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"permitere recepţionare difuzare multiplă Wi-Fi"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Permite unei aplicaţii să primească pachete care nu sunt direct adresate dispozitivului dvs. Această permisiune poate fi utilă la descoperirea serviciilor oferite în apropiere. Consumă mai multă energie decât modul fără difuzare multiplă."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"vizualizaţi starea WiMAX"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"Permite unei aplicaţii să vizualizeze informaţiile despre starea WiMAX."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"schimbaţi starea WiMAX"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"Permite unei aplicaţii să se conecteze şi să se deconecteze de la reţeaua WiMAX."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"administrare bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"Permite unei aplicaţii să configureze computerul tablet PC Bluetooth local, să descopere şi să se asocieze cu dispozitive la distanţă."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"Permite unei aplicaţii să configureze telefonul Bluetooth local, să descopere şi să se asocieze cu dispozitive la distanţă."</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"Reţea Wi-Fi deschisă disponibilă"</item>
     <item quantity="other" msgid="7915895323644292768">"Reţele Wi-Fi deschise disponibile"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Conectaţi-vă la reţeaua Wi-Fi"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Nu se poate conecta la Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" are o conexiune la internet slabă."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"Cameră foto"</string>
     <string name="description_target_silent" msgid="893551287746522182">"Silenţios"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"Sunet activat"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"Glisaţi pentru a debloca."</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"Conectaţi un set căşti-microfon pentru a auzi tastele apăsate când introduceţi parola."</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"Punct."</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"Navigaţi la ecranul de pornire"</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"Distribuiţi cu..."</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Dispozitiv blocat."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
+    <string name="sending" msgid="8715108995741758718">"Se trimite..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"Lansaţi browserul?"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"Acceptaţi apelul?"</string>
 </resources>

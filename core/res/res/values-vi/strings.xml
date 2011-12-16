@@ -32,15 +32,15 @@
     <string name="ellipsis_two_dots" msgid="1228078994866030736">"‥"</string>
     <string name="emptyPhoneNumber" msgid="7694063042079676517">"(Không có số điện thoại nào)"</string>
     <string name="unknownName" msgid="2277556546742746522">"(Không xác định)"</string>
-    <string name="defaultVoiceMailAlphaTag" msgid="2660020990097733077">"Thư thoại"</string>
+    <string name="defaultVoiceMailAlphaTag" msgid="2660020990097733077">"Thư thoại"</string>
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"Sự cố kết nối hoặc mã MMI không hợp lệ."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"Chỉ hạn chế thao tác đối với số quay số định sẵn."</string>
     <string name="serviceEnabled" msgid="8147278346414714315">"Dịch vụ đã được bật."</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"Dịch vụ đã được bật cho:"</string>
-    <string name="serviceDisabled" msgid="1937553226592516411">"Dịch vụ đã bị vô hiệu hoá."</string>
+    <string name="serviceDisabled" msgid="1937553226592516411">"Dịch vụ đã bị vô hiệu hóa."</string>
     <string name="serviceRegistered" msgid="6275019082598102493">"Đăng ký thành công."</string>
-    <string name="serviceErased" msgid="1288584695297200972">"Xoá thành công."</string>
+    <string name="serviceErased" msgid="1288584695297200972">"Xóa thành công."</string>
     <string name="passwordIncorrect" msgid="7612208839450128715">"Mật khẩu không chính xác."</string>
     <string name="mmiComplete" msgid="8232527495411698359">"MMI hoàn tất."</string>
     <string name="badPin" msgid="5085454289896032547">"Mã PIN cũ bạn đã nhập không chính xác."</string>
@@ -48,7 +48,7 @@
     <string name="mismatchPin" msgid="3695902225843339274">"Mã PIN bạn đã nhập không khớp."</string>
     <string name="invalidPin" msgid="3850018445187475377">"Nhập mã PIN có từ 4 đến 8 số."</string>
     <string name="invalidPuk" msgid="8761456210898036513">"Nhập PUK có từ 8 số trở lên."</string>
-    <string name="needPuk" msgid="919668385956251611">"Thẻ SIM của bạn đã bị khoá PUK. Nhập mã PUK để mở khoá thẻ SIM đó."</string>
+    <string name="needPuk" msgid="919668385956251611">"Thẻ SIM của bạn đã bị khóa PUK. Nhập mã PUK để mở khóa thẻ SIM đó."</string>
     <string name="needPuk2" msgid="4526033371987193070">"Nhập mã PUK2 để bỏ chặn thẻ SIM."</string>
     <string name="ClipMmi" msgid="6952821216480289285">"Số gọi đến"</string>
     <string name="ClirMmi" msgid="7784673673446833091">"Số gọi đi"</string>
@@ -83,7 +83,7 @@
     <string name="serviceClassFAX" msgid="5566624998840486475">"FAX"</string>
     <string name="serviceClassSMS" msgid="2015460373701527489">"SMS"</string>
     <string name="serviceClassDataAsync" msgid="4523454783498551468">"Không đồng bộ"</string>
-    <string name="serviceClassDataSync" msgid="7530000519646054776">"Đồng bộ hoá"</string>
+    <string name="serviceClassDataSync" msgid="7530000519646054776">"Đồng bộ hóa"</string>
     <string name="serviceClassPacket" msgid="6991006557993423453">"Gói"</string>
     <string name="serviceClassPAD" msgid="3235259085648271037">"PAD"</string>
     <string name="roamingText0" msgid="7170335472198694945">"Chỉ báo Chuyển vùng Bật"</string>
@@ -124,11 +124,11 @@
     <string name="httpErrorFileNotFound" msgid="5588380756326017105">"Không tìm thấy tệp được yêu cầu."</string>
     <string name="httpErrorTooManyRequests" msgid="1235396927087188253">"Quá nhiều yêu cầu đang được xử lý. Hãy thử lại sau."</string>
     <string name="notification_title" msgid="1259940370369187045">"Lỗi đăng nhập đối với <xliff:g id="ACCOUNT">%1$s</xliff:g>"</string>
-    <string name="contentServiceSync" msgid="8353523060269335667">"Đồng bộ hoá"</string>
-    <string name="contentServiceSyncNotificationTitle" msgid="397743349191901458">"Đồng bộ hoá"</string>
-    <string name="contentServiceTooManyDeletesNotificationDesc" msgid="8100981435080696431">"Quá nhiều lần xoá <xliff:g id="CONTENT_TYPE">%s</xliff:g>."</string>
+    <string name="contentServiceSync" msgid="8353523060269335667">"Đồng bộ hóa"</string>
+    <string name="contentServiceSyncNotificationTitle" msgid="397743349191901458">"Đồng bộ hóa"</string>
+    <string name="contentServiceTooManyDeletesNotificationDesc" msgid="8100981435080696431">"Quá nhiều lần xóa <xliff:g id="CONTENT_TYPE">%s</xliff:g>."</string>
     <string name="low_memory" product="tablet" msgid="2292820184396262278">"Bộ nhớ máy tính bảng đã đầy! Hãy xóa một số tệp để giải phóng dung lượng."</string>
-    <string name="low_memory" product="default" msgid="6632412458436461203">"Bộ nhớ điện thoại đã đầy! Hãy xoá một số tệp để tạo thêm dung lượng."</string>
+    <string name="low_memory" product="default" msgid="6632412458436461203">"Bộ nhớ điện thoại đã đầy! Hãy xóa một số tệp để tạo thêm dung lượng."</string>
     <string name="me" msgid="6545696007631404292">"Tôi"</string>
     <string name="power_dialog" product="tablet" msgid="8545351420865202853">"Tùy chọn máy tính bảng"</string>
     <string name="power_dialog" product="default" msgid="1319919075463988638">"Tùy chọn điện thoại"</string>
@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Tắt không dây"</string>
     <string name="screen_lock" msgid="799094655496098153">"Khoá màn hình"</string>
     <string name="power_off" msgid="4266614107412865048">"Tắt nguồn"</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"Đang tắt…"</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Máy tính bảng của bạn sẽ tắt."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Điện thoại của bạn sẽ tắt."</string>
@@ -180,8 +186,8 @@
     <string name="permgrouplab_storage" msgid="1971118770546336966">"Dung lượng"</string>
     <string name="permgroupdesc_storage" product="nosdcard" msgid="7442318502446874999">"Truy cập bộ nhớ USB."</string>
     <string name="permgroupdesc_storage" product="default" msgid="9203302214915355774">"Truy cập thẻ SD."</string>
-    <string name="permlab_statusBar" msgid="7417192629601890791">"vô hiệu hoá hoặc sửa đổi thanh trạng thái"</string>
-    <string name="permdesc_statusBar" msgid="1365473595331989732">"Cho phép ứng dụng vô hiệu hoá thanh trạng thái hoặc thêm và xoá biểu tượng hệ thống."</string>
+    <string name="permlab_statusBar" msgid="7417192629601890791">"vô hiệu hóa hoặc sửa đổi thanh trạng thái"</string>
+    <string name="permdesc_statusBar" msgid="1365473595331989732">"Cho phép ứng dụng vô hiệu hóa thanh trạng thái hoặc thêm và xóa biểu tượng hệ thống."</string>
     <string name="permlab_statusBarService" msgid="7247281911387931485">"thanh trạng thái"</string>
     <string name="permdesc_statusBarService" msgid="4097605867643520920">"Cho phép ứng dụng là thanh trạng thái."</string>
     <string name="permlab_expandStatusBar" msgid="1148198785937489264">"mở rộng/thu gọn thanh trạng thái"</string>
@@ -189,9 +195,9 @@
     <string name="permlab_processOutgoingCalls" msgid="1136262550878335980">"chặn các cuộc gọi đi"</string>
     <string name="permdesc_processOutgoingCalls" msgid="2228988201852654461">"Cho phép ứng dụng xử lý cuộc gọi đi và thay đổi số đã được quay số. Các ứng dụng độc hại có thể giám sát, chuyển hướng hoặc chặn các cuộc gọi đi."</string>
     <string name="permlab_receiveSms" msgid="2697628268086208535">"nhận SMS"</string>
-    <string name="permdesc_receiveSms" msgid="6298292335965966117">"Cho phép ứng dụng nhận và xử lý tin nhắn SMS. Các ứng dụng độc hại có thể giám sát tin nhắn của bạn hoặc xoá chúng mà không cần hiển thị tin nhắn đó cho bạn."</string>
+    <string name="permdesc_receiveSms" msgid="6298292335965966117">"Cho phép ứng dụng nhận và xử lý tin nhắn SMS. Các ứng dụng độc hại có thể giám sát tin nhắn của bạn hoặc xóa chúng mà không cần hiển thị tin nhắn đó cho bạn."</string>
     <string name="permlab_receiveMms" msgid="8894700916188083287">"nhận MMS"</string>
-    <string name="permdesc_receiveMms" msgid="4563346832000174373">"Cho phép ứng dụng nhận và xử lý tin nhắn MMS. Các ứng dụng độc hại có thể giám sát tin nhắn của bạn hoặc xoá chúng mà không cần hiển thị tin nhắn đó cho bạn."</string>
+    <string name="permdesc_receiveMms" msgid="4563346832000174373">"Cho phép ứng dụng nhận và xử lý tin nhắn MMS. Các ứng dụng độc hại có thể giám sát tin nhắn của bạn hoặc xóa chúng mà không cần hiển thị tin nhắn đó cho bạn."</string>
     <string name="permlab_receiveEmergencyBroadcast" msgid="1803477660846288089">"nhận các truyền phát khẩn cấp"</string>
     <string name="permdesc_receiveEmergencyBroadcast" msgid="7118393393716546131">"Cho phép ứng dụng truy xuất và xử lý các thư phát khẩn cấp. Quyền này chỉ khả dụng đối với các ứng dụng hệ thống."</string>
     <string name="permlab_sendSms" msgid="5600830612147671529">"gửi tin nhắn SMS"</string>
@@ -203,9 +209,9 @@
     <string name="permdesc_readSms" product="default" msgid="3002170087197294591">"Cho phép ứng dụng đọc tin nhắn SMS được lưu trữ trên điện thoại hoặc thẻ SIM của bạn. Các ứng dụng độc hại có thể đọc tin nhắn bí mật của bạn."</string>
     <string name="permlab_writeSms" msgid="6881122575154940744">"chỉnh sửa SMS hoặc MMS"</string>
     <string name="permdesc_writeSms" product="tablet" msgid="5332124772918835437">"Cho phép ứng dụng ghi vào tin nhắn SMS được lưu trữ trên máy tính bảng hoặc thẻ SIM của bạn. Các ứng dụng độc hại có thể xóa tin nhắn của bạn."</string>
-    <string name="permdesc_writeSms" product="default" msgid="6299398896177548095">"Cho phép ứng dụng ghi vào tin nhắn SMS được lưu trữ trên điện thoại hoặc thẻ SIM của bạn. Các ứng dụng độc hại có thể xoá tin nhắn của bạn."</string>
+    <string name="permdesc_writeSms" product="default" msgid="6299398896177548095">"Cho phép ứng dụng ghi vào tin nhắn SMS được lưu trữ trên điện thoại hoặc thẻ SIM của bạn. Các ứng dụng độc hại có thể xóa tin nhắn của bạn."</string>
     <string name="permlab_receiveWapPush" msgid="8258226427716551388">"nhận WAP"</string>
-    <string name="permdesc_receiveWapPush" msgid="5979623826128082171">"Cho phép ứng dụng nhận và xử lý tin nhắn WAP. Các ứng dụng độc hại có thể giám sát tin nhắn của bạn hoặc xoá chúng mà không cần hiển thị tin nhắn đó cho bạn."</string>
+    <string name="permdesc_receiveWapPush" msgid="5979623826128082171">"Cho phép ứng dụng nhận và xử lý tin nhắn WAP. Các ứng dụng độc hại có thể giám sát tin nhắn của bạn hoặc xóa chúng mà không cần hiển thị tin nhắn đó cho bạn."</string>
     <string name="permlab_getTasks" msgid="5005277531132573353">"truy xuất các ứng dụng đang chạy"</string>
     <string name="permdesc_getTasks" msgid="7048711358713443341">"Cho phép ứng dụng truy xuất thông tin về các công việc hiện đang chạy. Có thể cho phép các ứng dụng độc hại phát hiện thông tin riêng tư về các ứng dụng khác."</string>
     <string name="permlab_reorderTasks" msgid="5669588525059921549">"sắp xếp lại các ứng dụng đang chạy"</string>
@@ -234,8 +240,8 @@
     <string name="permdesc_stopAppSwitches" msgid="3857886086919033794">"Ngăn người dùng chuyển sang ứng dụng khác."</string>
     <string name="permlab_runSetActivityWatcher" msgid="7811586187574696296">"giám sát và kiểm soát tất cả khởi chạy ứng dụng"</string>
     <string name="permdesc_runSetActivityWatcher" msgid="2149363027173451218">"Cho phép ứng dụng giám sát và kiểm soát cách hệ thống khởi chạy các hoạt động. Các ứng dụng độc hại có thể làm tổn hại hoàn toàn hệ thống. Quyền này chỉ cần cho việc phát triển, không bao giờ dùng cho việc sử dụng thông thường."</string>
-    <string name="permlab_broadcastPackageRemoved" msgid="2576333434893532475">"gửi truyền phát đã xoá của gói"</string>
-    <string name="permdesc_broadcastPackageRemoved" msgid="3453286591439891260">"Cho phép ứng dụng truyền phát thông báo rằng gói ứng dụng đã bị xoá. Các ứng dụng độc hại có thể sử dụng quyền này để loại bỏ mọi ứng dụng đang chạy khác."</string>
+    <string name="permlab_broadcastPackageRemoved" msgid="2576333434893532475">"gửi truyền phát đã xóa của gói"</string>
+    <string name="permdesc_broadcastPackageRemoved" msgid="3453286591439891260">"Cho phép ứng dụng truyền phát thông báo rằng gói ứng dụng đã bị xóa. Các ứng dụng độc hại có thể sử dụng quyền này để loại bỏ mọi ứng dụng đang chạy khác."</string>
     <string name="permlab_broadcastSmsReceived" msgid="5689095009030336593">"gửi truyền phát SMS nhận được"</string>
     <string name="permdesc_broadcastSmsReceived" msgid="9122419277306740155">"Cho phép ứng dụng truyền phát thông báo rằng đã nhận được tin nhắn SMS. Các ứng dụng độc hại có thẻ sử dụng quyền này để giả mạo tin nhắn SMS đến."</string>
     <string name="permlab_broadcastWapPush" msgid="3145347413028582371">"gửi truyền phát WAP-PUSH nhận được"</string>
@@ -283,27 +289,29 @@
     <string name="permdesc_signalPersistentProcesses" msgid="3565530463215015289">"Cho phép ứng dụng yêu cầu tín hiệu đã cung cấp được gửi đến tất cả các quá trình liên tục."</string>
     <string name="permlab_persistentActivity" msgid="8659652042401085862">"đặt ứng dụng luôn chạy"</string>
     <string name="permdesc_persistentActivity" msgid="5037199778265006008">"Cho phép ứng dụng tạo sự đồng nhất cho các phần của mình để hệ thống không thể sử dụng ứng dụng đó cho các ứng dụng khác."</string>
-    <string name="permlab_deletePackages" msgid="3343439331576348805">"xoá ứng dụng"</string>
-    <string name="permdesc_deletePackages" msgid="3634943677518723314">"Cho phép ứng dụng xoá các gói Android. Các ứng dụng độc hại có thể sử dụng quyền này để xoá các ứng dụng quan trọng."</string>
-    <string name="permlab_clearAppUserData" msgid="2192134353540277878">"xoá dữ liệu của ứng dụng khác"</string>
-    <string name="permdesc_clearAppUserData" msgid="7546345080434325456">"Cho phép ứng dụng xoá dữ liệu của người dùng."</string>
-    <string name="permlab_deleteCacheFiles" msgid="1518556602634276725">"xoá bộ nhớ cache của các ứng dụng khác"</string>
-    <string name="permdesc_deleteCacheFiles" msgid="2283074077168165971">"Cho phép ứng dụng xoá các tệp bộ nhớ cache."</string>
+    <string name="permlab_deletePackages" msgid="3343439331576348805">"xóa ứng dụng"</string>
+    <string name="permdesc_deletePackages" msgid="3634943677518723314">"Cho phép ứng dụng xóa các gói Android. Các ứng dụng độc hại có thể sử dụng quyền này để xóa các ứng dụng quan trọng."</string>
+    <string name="permlab_clearAppUserData" msgid="2192134353540277878">"xóa dữ liệu của ứng dụng khác"</string>
+    <string name="permdesc_clearAppUserData" msgid="7546345080434325456">"Cho phép ứng dụng xóa dữ liệu của người dùng."</string>
+    <string name="permlab_deleteCacheFiles" msgid="1518556602634276725">"xóa bộ nhớ cache của các ứng dụng khác"</string>
+    <string name="permdesc_deleteCacheFiles" msgid="2283074077168165971">"Cho phép ứng dụng xóa các tệp bộ nhớ cache."</string>
     <string name="permlab_getPackageSize" msgid="4799785352306641460">"đo dung lượng lưu trữ ứng dụng"</string>
     <string name="permdesc_getPackageSize" msgid="5557253039670753437">"Cho phép ứng dụng truy xuất mã, dữ liệu và kích thước bộ nhớ cache của nó"</string>
     <string name="permlab_installPackages" msgid="335800214119051089">"cài đặt trực tiếp ứng dụng"</string>
     <string name="permdesc_installPackages" msgid="526669220850066132">"Cho phép ứng dụng cài đặt các gói Android mới hoặc đã được cập nhật. Các ứng dụng độc hại có thể sử dụng quyền này để thêm ứng dụng mới có quyền mạnh mẽ tùy ý."</string>
-    <string name="permlab_clearAppCache" msgid="4747698311163766540">"xoá tất cả dữ liệu bộ nhớ cache của ứng dụng"</string>
+    <string name="permlab_clearAppCache" msgid="4747698311163766540">"xóa tất cả dữ liệu bộ nhớ cache của ứng dụng"</string>
     <string name="permdesc_clearAppCache" product="tablet" msgid="3097119797652477973">"Cho phép ứng dụng giải phóng bộ nhớ máy tính bảng bằng cách xóa các tệp trong thư mục bộ nhớ cache ứng dụng. Quyền truy cập thường rất hạn chế đối với quy trình hệ thống."</string>
-    <string name="permdesc_clearAppCache" product="default" msgid="7740465694193671402">"Cho phép ứng dụng tạo thêm dung lượng điện thoại bằng cách xoá các tệp trong thư mục bộ nhớ cache ứng dụng. Quyền truy cập thường rất hạn chế đối với quy trình hệ thống."</string>
+    <string name="permdesc_clearAppCache" product="default" msgid="7740465694193671402">"Cho phép ứng dụng tạo thêm dung lượng điện thoại bằng cách xóa các tệp trong thư mục bộ nhớ cache ứng dụng. Quyền truy cập thường rất hạn chế đối với quy trình hệ thống."</string>
     <string name="permlab_movePackage" msgid="728454979946503926">"Chuyển tài nguyên của ứng dụng"</string>
     <string name="permdesc_movePackage" msgid="6323049291923925277">"Cho phép ứng dụng di chuyển các tài nguyên của ứng dụng từ phương tiện truyền thông bên trong ra phương tiện bên ngoài và ngược lại."</string>
     <string name="permlab_readLogs" msgid="6615778543198967614">"đọc dữ liệu nhật ký nhạy cảm"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"Cho phép ứng dụng đọc từ nhiều tệp nhật ký khác nhau của hệ thống. Quyền này cho phép ứng dụng phát hiện thông tin chung về những gì bạn đang thực hiện với máy tính bảng, có thể bao gồm thông tin cá nhân hoặc riêng tư."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"Cho phép ứng dụng đọc từ nhiều tệp nhật ký khác nhau của hệ thống. Quyền này cho phép ứng dụng phát hiện thông tin chung về những gì bạn đang thực hiện với điện thoại, có thể bao gồm thông tin cá nhân hoặc riêng tư."</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"sử dụng bất kỳ bộ giải mã phương tiện nào để phát lại"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"Cho phép ứng dụng sử dụng bất kỳ bộ giải mã phương tiện đã cài đặt nào để giải mã phát lại."</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"đọc/ghi vào tài nguyên do chẩn đoán sở hữu"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"Cho phép ứng dụng đọc và ghi vào bất kỳ tài nguyên nào do nhóm chẩn đoán sở hữu; ví dụ: các tệp trong /dev. Quyền này có thể ảnh hưởng đến sự ổn định và bảo mật của hệ thống. CHỈ nên sử dụng quyền này cho các chẩn đoán phần cứng cụ thể bởi nhà sản xuất hoặc nhà cung cấp dịch vụ."</string>
-    <string name="permlab_changeComponentState" msgid="79425198834329406">"bật hoặc vô hiệu hoá các thành phần ứng dụng"</string>
+    <string name="permlab_changeComponentState" msgid="79425198834329406">"bật hoặc vô hiệu hóa các thành phần ứng dụng"</string>
     <string name="permdesc_changeComponentState" product="tablet" msgid="4647419365510068321">"Cho phép ứng dụng thay đổi việc có nên bật thành phần của ứng dụng khác hay không. Các ứng dụng độc hại có thể sử dụng quyền này để vô hiệu hóa các tính năng quan trọng của máy tính bảng. Phải cẩn thận khi sử dụng quyền này vì nó có thể khiến các thành phần rơi vào trạng thái không sử dụng được, không đồng nhất hoặc không ổn định."</string>
     <string name="permdesc_changeComponentState" product="default" msgid="3443473726140080761">"Cho phép ứng dụng thay đổi việc có nên bật thành phần của ứng dụng khác hay không. Các ứng dụng độc hại có thể sử dụng quyền này để vô hiệu hóa các tính năng quan trọng của điện thoại. Phải cẩn thận khi sử dụng quyền này vì quyền này có thể khiến các thành phần ứng dụng rơi vào trạng thái không sử dụng được, không đồng nhất hoặc không ổn định."</string>
     <string name="permlab_setPreferredApplications" msgid="3393305202145172005">"đặt ứng dụng ưa thích"</string>
@@ -325,7 +333,7 @@
     <string name="permdesc_readContacts" product="default" msgid="3371591512896545975">"Cho phép ứng dụng đọc tất cả dữ liệu liên hệ (địa chỉ) được lưu trữ trên điện thoại của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để gửi dữ liệu của bạn cho những người khác."</string>
     <string name="permlab_writeContacts" msgid="644616215860933284">"ghi dữ liệu liên hệ"</string>
     <string name="permdesc_writeContacts" product="tablet" msgid="7782689510038568495">"Cho phép ứng dụng sửa đổi dữ liệu (địa chỉ) liên hệ được lưu trữ trên máy tính bảng của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để xóa hoặc sửa đổi dữ liệu liên hệ của bạn."</string>
-    <string name="permdesc_writeContacts" product="default" msgid="3924383579108183601">"Cho phép ứng dụng sửa đổi dữ liệu liên hệ (địa chỉ) được lưu trữ trên điện thoại của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để xoá hoặc sửa đổi dữ liệu liên hệ của bạn."</string>
+    <string name="permdesc_writeContacts" product="default" msgid="3924383579108183601">"Cho phép ứng dụng sửa đổi dữ liệu liên hệ (địa chỉ) được lưu trữ trên điện thoại của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để xóa hoặc sửa đổi dữ liệu liên hệ của bạn."</string>
     <string name="permlab_readProfile" msgid="6824681438529842282">"đọc d.liệu t.sử của bạn"</string>
     <string name="permdesc_readProfile" product="default" msgid="6335739730324727203">"Cho phép ứng dụng đọc thông tin tiểu sử cá nhân được lưu trên thiết bị của bạn, ví dụ như tên và thông tin liên hệ của bạn. Điều này nghĩa là ứng dụng có thể nhận dạng bạn và gửi thông tin tiểu sử của bạn cho những người khác."</string>
     <string name="permlab_writeProfile" msgid="4679878325177177400">"ghi dữ liệu t.sử của bạn"</string>
@@ -357,14 +365,14 @@
     <string name="permdesc_readFrameBuffer" msgid="7530020370469942528">"Cho phép ứng dụng đọc nội dung của bộ đệm khung."</string>
     <string name="permlab_modifyAudioSettings" msgid="6095859937069146086">"thay đổi cài đặt âm thanh của bạn"</string>
     <string name="permdesc_modifyAudioSettings" msgid="5793461287365991922">"Cho phép ứng dụng sửa đổi cài đặt âm thanh chung chẳng hạn như âm lượng và định tuyến."</string>
-    <string name="permlab_recordAudio" msgid="3876049771427466323">"ghi âm thanh"</string>
-    <string name="permdesc_recordAudio" msgid="6493228261176552356">"Cho phép ứng dụng truy cập vào đường dẫn bản ghi âm thanh."</string>
+    <string name="permlab_recordAudio" msgid="3876049771427466323">"ghi âm"</string>
+    <string name="permdesc_recordAudio" msgid="6493228261176552356">"Cho phép ứng dụng truy cập vào đường dẫn bản ghi âm."</string>
     <string name="permlab_camera" msgid="3616391919559751192">"chụp ảnh và quay video"</string>
     <string name="permdesc_camera" msgid="6004878235852154239">"Cho phép ứng dụng chụp ảnh và quay video bằng máy ảnh. Quyền này cho phép ứng dụng thu thập ảnh mà máy ảnh chụp vào bất kỳ thời điểm nào."</string>
     <string name="permlab_brick" product="tablet" msgid="2961292205764488304">"vô hiệu hóa vĩnh viễn máy tính bảng"</string>
-    <string name="permlab_brick" product="default" msgid="8337817093326370537">"vĩnh viễn vô hiệu hoá điện thoại"</string>
+    <string name="permlab_brick" product="default" msgid="8337817093326370537">"vĩnh viễn vô hiệu hóa điện thoại"</string>
     <string name="permdesc_brick" product="tablet" msgid="7379164636920817963">"Cho phép ứng dụng vô hiệu hóa vĩnh viễn toàn bộ máy tính bảng. Việc này rất nguy hiểm."</string>
-    <string name="permdesc_brick" product="default" msgid="5569526552607599221">"Cho phép ứng dụng vô hiệu hoá vĩnh viễn toàn bộ điện thoại. Việc này rất nguy hiểm."</string>
+    <string name="permdesc_brick" product="default" msgid="5569526552607599221">"Cho phép ứng dụng vô hiệu hóa vĩnh viễn toàn bộ điện thoại. Việc này rất nguy hiểm."</string>
     <string name="permlab_reboot" product="tablet" msgid="3436634972561795002">"buộc máy tính bảng khởi động lại"</string>
     <string name="permlab_reboot" product="default" msgid="2898560872462638242">"buộc khởi động lại điện thoại"</string>
     <string name="permdesc_reboot" product="tablet" msgid="4555793623560701557">"Cho phép ứng dụng buộc máy tính bảng khởi động lại."</string>
@@ -394,7 +402,7 @@
     <string name="permlab_hardware_test" msgid="4148290860400659146">"kiểm tra phần cứng"</string>
     <string name="permdesc_hardware_test" msgid="3668894686500081699">"Cho phép ứng dụng kiểm soát các thiết bị ngoại vi khác nhau nhằm mục đích kiểm tra phần cứng."</string>
     <string name="permlab_callPhone" msgid="3925836347681847954">"gọi trực tiếp số điện thoại"</string>
-    <string name="permdesc_callPhone" msgid="3369867353692722456">"Cho phép ứng dụng gọi các số điện thoại mà không cần sự can thiệp của bạn. Các ứng dụng độc hại có thể dẫn đến các cuộc gọi không mong muốn trên hoá đơn điện thoại của bạn. Lưu ý rằng quyền này không cho phép ứng dụng gọi các số khẩn cấp."</string>
+    <string name="permdesc_callPhone" msgid="3369867353692722456">"Cho phép ứng dụng gọi các số điện thoại mà không cần sự can thiệp của bạn. Các ứng dụng độc hại có thể dẫn đến các cuộc gọi không mong muốn trên hóa đơn điện thoại của bạn. Lưu ý rằng quyền này không cho phép ứng dụng gọi các số khẩn cấp."</string>
     <string name="permlab_callPrivileged" msgid="4198349211108497879">"gọi trực tiếp số điện thoại bất kỳ"</string>
     <string name="permdesc_callPrivileged" msgid="244405067160028452">"Cho phép ứng dụng gọi bất kỳ số điện thoại nào, kể cả số khẩn cấp mà không cần sự can thiệp của bạn. Các ứng dụng độc hại có thể thực hiện các cuộc gọi không cần thiết và bất hợp pháp vào dịch vụ khẩn cấp."</string>
     <string name="permlab_performCdmaProvisioning" product="tablet" msgid="4842576994144604821">"trực tiếp bắt đầu thiết lập máy tính bảng CDMA"</string>
@@ -426,7 +434,7 @@
     <string name="permlab_setWallpaperHints" msgid="3600721069353106851">"Đặt gợi ý kích thước hình nền"</string>
     <string name="permdesc_setWallpaperHints" msgid="6019479164008079626">"Cho phép ứng dụng đặt gợi ý kích thước hình nền của hệ thống."</string>
     <string name="permlab_masterClear" msgid="2315750423139697397">"đặt lại hệ thống về mặc định ban đầu"</string>
-    <string name="permdesc_masterClear" msgid="5033465107545174514">"Cho phép ứng dụng đặt lại toàn bộ hệ thống về cài đặt ban đầu, xoá tất cả dữ liệu, cấu hình và ứng dụng đã cài đặt."</string>
+    <string name="permdesc_masterClear" msgid="5033465107545174514">"Cho phép ứng dụng đặt lại toàn bộ hệ thống về cài đặt ban đầu, xóa tất cả dữ liệu, cấu hình và ứng dụng đã cài đặt."</string>
     <string name="permlab_setTime" msgid="2021614829591775646">"đặt giờ"</string>
     <string name="permdesc_setTime" product="tablet" msgid="209693136361006073">"Cho phép ứng dụng thay đổi giờ trên đồng hồ của máy tính bảng."</string>
     <string name="permdesc_setTime" product="default" msgid="667294309287080045">"Cho phép ứng dụng thay đổi giờ trên đồng hồ của điện thoại."</string>
@@ -441,7 +449,7 @@
     <string name="permlab_authenticateAccounts" msgid="3940505577982882450">"hoạt động như trình xác thực tài khoản"</string>
     <string name="permdesc_authenticateAccounts" msgid="4006839406474208874">"Cho phép ứng dụng sử dụng các tính năng của trình xác thực tài khoản của AccountManager, bao gồm tạo tài khoản, nhận và đặt mật khẩu của các tài khoản đó."</string>
     <string name="permlab_manageAccounts" msgid="4440380488312204365">"quản lý danh sách tài khoản"</string>
-    <string name="permdesc_manageAccounts" msgid="8804114016661104517">"Cho phép ứng dụng thực hiện các thao tác như thêm và xoá tài khoản cũng như xoá mật khẩu của các tài khoản đó."</string>
+    <string name="permdesc_manageAccounts" msgid="8804114016661104517">"Cho phép ứng dụng thực hiện các thao tác như thêm và xóa tài khoản cũng như xóa mật khẩu của các tài khoản đó."</string>
     <string name="permlab_useCredentials" msgid="6401886092818819856">"sử dụng thông tin xác thực tài khoản"</string>
     <string name="permdesc_useCredentials" msgid="7416570544619546974">"Cho phép ứng dụng yêu cầu mã thông báo xác thực."</string>
     <string name="permlab_accessNetworkState" msgid="6865575199464405769">"xem trạng thái mạng"</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Cho phép ứng dụng kết nối và ngắt kết nối khỏi điểm truy cập Wi-Fi cũng như thực hiện các thay đổi đối với mạng Wi-Fi đã được định cấu hình."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"cho phép thu tín hiệu Wi-Fi Đa hướng"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"Cho phép ứng dụng nhận các gói không được gửi trực tiếp đến thiết bị của bạn. Quyền này có thể hữu ích khi phát hiện các dịch vụ được cung cấp gần đó. Thiết bị của bạn sử dụng nhiều năng lượng hơn chế độ không phát đa hướng."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"xem trạng thái WiMAX"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"Cho phép ứng dụng xem thông tin về trạng thái của WiMAX."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"thay đổi trạng thái WiMAX"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"Cho phép ứng dụng kết nối và ngắt kết nối khỏi mạng WiMAX."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"quản trị bluetooth"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"Cho phép ứng dụng định cấu hình máy tính bảng Bluetooth nội hạt cũng như phát hiện và ghép nối với các thiết bị từ xa."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"Cho phép ứng dụng định cấu hình điện thoại Bluetooth nội hạt cũng như phát hiện và ghép nối với các thiết bị từ xa."</string>
@@ -470,24 +482,24 @@
     <string name="permdesc_bluetooth" product="default" msgid="762515380679392945">"Cho phép ứng dụng xem cấu hình của điện thoại Bluetooth nội hạt cũng như tạo và chấp nhận các kết nối với các thiết bị được ghép nối."</string>
     <string name="permlab_nfc" msgid="4423351274757876953">"kiểm soát Liên lạc trường gần"</string>
     <string name="permdesc_nfc" msgid="9171401851954407226">"Cho phép ứng dụng liên lạc với thẻ Liên lạc trường gần (NFC), thẻ và trình đọc."</string>
-    <string name="permlab_disableKeyguard" msgid="4977406164311535092">"vô hiệu hoá khoá phím"</string>
-    <string name="permdesc_disableKeyguard" msgid="3189763479326302017">"Cho phép ứng dụng vô hiệu hoá khoá phím và bất kỳ bảo mật mật khẩu được liên kết nào. Ví dụ thích hợp của việc này là điện thoại vô hiệu hoá khoá phím khi nhận được cuộc gọi đến sau đó bật lại khoá phím khi cuộc gọi kết thúc."</string>
-    <string name="permlab_readSyncSettings" msgid="6201810008230503052">"đọc cài đặt đồng bộ hoá"</string>
-    <string name="permdesc_readSyncSettings" msgid="5315925706353341823">"Cho phép ứng dụng đọc cài đặt đồng bộ hoá, chẳng hạn như liệu đồng bộ hoá đã được bật cho Danh bạ hay chưa."</string>
-    <string name="permlab_writeSyncSettings" msgid="6297138566442486462">"ghi cài đặt đồng bộ hoá"</string>
-    <string name="permdesc_writeSyncSettings" msgid="2498201614431360044">"Cho phép ứng dụng sửa đổi cài đặt đồng bộ hoá, chẳng hạn như liệu đồng bộ hoá đã được bật cho Danh bạ chưa."</string>
-    <string name="permlab_readSyncStats" msgid="7396577451360202448">"đọc thống kê đồng bộ hoá"</string>
-    <string name="permdesc_readSyncStats" msgid="7511448343374465000">"Cho phép ứng dụng đọc thống kê đồng bộ hoá, ví dụ: lịch sử đồng bộ hoá đã diễn ra."</string>
+    <string name="permlab_disableKeyguard" msgid="4977406164311535092">"vô hiệu hóa khóa phím"</string>
+    <string name="permdesc_disableKeyguard" msgid="3189763479326302017">"Cho phép ứng dụng vô hiệu hóa khóa phím và bất kỳ bảo mật mật khẩu được liên kết nào. Ví dụ thích hợp của việc này là điện thoại vô hiệu hóa khóa phím khi nhận được cuộc gọi đến sau đó bật lại khóa phím khi cuộc gọi kết thúc."</string>
+    <string name="permlab_readSyncSettings" msgid="6201810008230503052">"đọc cài đặt đồng bộ hóa"</string>
+    <string name="permdesc_readSyncSettings" msgid="5315925706353341823">"Cho phép ứng dụng đọc cài đặt đồng bộ hóa, chẳng hạn như liệu đồng bộ hóa đã được bật cho Danh bạ hay chưa."</string>
+    <string name="permlab_writeSyncSettings" msgid="6297138566442486462">"ghi cài đặt đồng bộ hóa"</string>
+    <string name="permdesc_writeSyncSettings" msgid="2498201614431360044">"Cho phép ứng dụng sửa đổi cài đặt đồng bộ hóa, chẳng hạn như liệu đồng bộ hóa đã được bật cho Danh bạ chưa."</string>
+    <string name="permlab_readSyncStats" msgid="7396577451360202448">"đọc thống kê đồng bộ hóa"</string>
+    <string name="permdesc_readSyncStats" msgid="7511448343374465000">"Cho phép ứng dụng đọc thống kê đồng bộ hóa, ví dụ: lịch sử đồng bộ hóa đã diễn ra."</string>
     <string name="permlab_subscribedFeedsRead" msgid="4756609637053353318">"đọc nguồn cấp dữ liệu đã đăng ký"</string>
-    <string name="permdesc_subscribedFeedsRead" msgid="3622200625634207660">"Cho phép ứng dụng nhận các chi tiết về nguồn cấp dữ liệu hiện đã được đồng bộ hoá."</string>
+    <string name="permdesc_subscribedFeedsRead" msgid="3622200625634207660">"Cho phép ứng dụng nhận các chi tiết về nguồn cấp dữ liệu hiện đã được đồng bộ hóa."</string>
     <string name="permlab_subscribedFeedsWrite" msgid="9015246325408209296">"ghi nguồn cấp dữ liệu đã đăng ký"</string>
-    <string name="permdesc_subscribedFeedsWrite" msgid="8121607099326533878">"Cho phép ứng dụng sửa đổi nguồn cấp dữ liệu hiện đã được đồng bộ hoá. Quyền này có thể cho phép ứng dụng độc hại thay đổi nguồn cấp dữ liệu đã đồng bộ hoá của bạn."</string>
+    <string name="permdesc_subscribedFeedsWrite" msgid="8121607099326533878">"Cho phép ứng dụng sửa đổi nguồn cấp dữ liệu hiện đã được đồng bộ hóa. Quyền này có thể cho phép ứng dụng độc hại thay đổi nguồn cấp dữ liệu đã đồng bộ hóa của bạn."</string>
     <string name="permlab_readDictionary" msgid="432535716804748781">"đọc từ điển do người dùng xác định"</string>
     <string name="permdesc_readDictionary" msgid="1082972603576360690">"Cho phép ứng dụng đọc bất kỳ từ, tên và cụm từ riêng nào mà người dùng có thể đã lưu trữ trong từ điển của người dùng."</string>
     <string name="permlab_writeDictionary" msgid="6703109511836343341">"ghi vào từ điển do người dùng xác định"</string>
     <string name="permdesc_writeDictionary" msgid="2241256206524082880">"Cho phép ứng dụng ghi từ mới vào từ điển của người dùng."</string>
     <string name="permlab_sdcardWrite" product="nosdcard" msgid="85430876310764752">"sửa đổi/xóa nội dung bộ nhớ USB"</string>
-    <string name="permlab_sdcardWrite" product="default" msgid="8079403759001777291">"sửa đổi/xoá nội dung thẻ SD"</string>
+    <string name="permlab_sdcardWrite" product="default" msgid="8079403759001777291">"sửa đổi/xóa nội dung thẻ SD"</string>
     <string name="permdesc_sdcardWrite" product="nosdcard" msgid="6594393334785738252">"C.phép ứ.dụng ghi vào b.nhớ USB."</string>
     <string name="permdesc_sdcardWrite" product="default" msgid="6643963204976471878">"Cho phép ứng dụng ghi vào thẻ SD."</string>
     <string name="permlab_mediaStorageWrite" product="default" msgid="6859839199706879015">"sửa đổi/xóa nội dung trên bộ nhớ phương tiện cục bộ"</string>
@@ -511,7 +523,7 @@
     <string name="policydesc_resetPassword" msgid="5391240616981297361">"Thay đổi mật khẩu mở khóa màn hình"</string>
     <string name="policylab_forceLock" msgid="2274085384704248431">"Khóa màn hình"</string>
     <string name="policydesc_forceLock" msgid="5696964126226028442">"Kiểm tra cách và thời điểm khóa màn hình"</string>
-    <string name="policylab_wipeData" msgid="3910545446758639713">"Xoá tất cả dữ liệu"</string>
+    <string name="policylab_wipeData" msgid="3910545446758639713">"Xóa tất cả dữ liệu"</string>
     <string name="policydesc_wipeData" product="tablet" msgid="314455232799486222">"Xóa dữ liệu trên máy tính bảng mà không cần cảnh báo, bằng cách thực hiện đặt lại về dữ liệu gốc"</string>
     <string name="policydesc_wipeData" product="default" msgid="7669895333814222586">"Xóa dữ liệu trên điện thoại mà không cần cảnh báo, bằng cách thực hiện đặt lại về dữ liệu gốc"</string>
     <string name="policylab_setGlobalProxy" msgid="2784828293747791446">"Đặt proxy chung của điện thoại"</string>
@@ -526,34 +538,34 @@
     <item msgid="8901098336658710359">"Nhà riêng"</item>
     <item msgid="869923650527136615">"ĐT di động"</item>
     <item msgid="7897544654242874543">"Cơ quan"</item>
-    <item msgid="1103601433382158155">"Số fax Cơ quan"</item>
-    <item msgid="1735177144948329370">"Số fax Nhà riêng"</item>
-    <item msgid="603878674477207394">"Số máy nhắn tin"</item>
+    <item msgid="1103601433382158155">"Số fax Cơ quan"</item>
+    <item msgid="1735177144948329370">"Số fax Nhà riêng"</item>
+    <item msgid="603878674477207394">"Số máy nhắn tin"</item>
     <item msgid="1650824275177931637">"Khác"</item>
-    <item msgid="9192514806975898961">"Tùy chỉnh"</item>
+    <item msgid="9192514806975898961">"Tùy chỉnh"</item>
   </string-array>
   <string-array name="emailAddressTypes">
     <item msgid="8073994352956129127">"Nhà riêng"</item>
     <item msgid="7084237356602625604">"Cơ quan"</item>
     <item msgid="1112044410659011023">"Khác"</item>
-    <item msgid="2374913952870110618">"Tùy chỉnh"</item>
+    <item msgid="2374913952870110618">"Tùy chỉnh"</item>
   </string-array>
   <string-array name="postalAddressTypes">
     <item msgid="6880257626740047286">"Nhà riêng"</item>
     <item msgid="5629153956045109251">"Cơ quan"</item>
     <item msgid="4966604264500343469">"Khác"</item>
-    <item msgid="4932682847595299369">"Tùy chỉnh"</item>
+    <item msgid="4932682847595299369">"Tùy chỉnh"</item>
   </string-array>
   <string-array name="imAddressTypes">
     <item msgid="1738585194601476694">"Nhà riêng"</item>
     <item msgid="1359644565647383708">"Cơ quan"</item>
     <item msgid="7868549401053615677">"Khác"</item>
-    <item msgid="3145118944639869809">"Tùy chỉnh"</item>
+    <item msgid="3145118944639869809">"Tùy chỉnh"</item>
   </string-array>
   <string-array name="organizationTypes">
     <item msgid="7546335612189115615">"Cơ quan"</item>
     <item msgid="4378074129049520373">"Khác"</item>
-    <item msgid="3455047468583965104">"Tùy chỉnh"</item>
+    <item msgid="3455047468583965104">"Tùy chỉnh"</item>
   </string-array>
   <string-array name="imProtocols">
     <item msgid="8595261363518459565">"AIM"</item>
@@ -565,13 +577,13 @@
     <item msgid="2506857312718630823">"ICQ"</item>
     <item msgid="1648797903785279353">"Jabber"</item>
   </string-array>
-    <string name="phoneTypeCustom" msgid="1644738059053355820">"Tùy chỉnh"</string>
+    <string name="phoneTypeCustom" msgid="1644738059053355820">"Tùy chỉnh"</string>
     <string name="phoneTypeHome" msgid="2570923463033985887">"Nhà riêng"</string>
     <string name="phoneTypeMobile" msgid="6501463557754751037">"ĐT di động"</string>
     <string name="phoneTypeWork" msgid="8863939667059911633">"Cơ quan"</string>
-    <string name="phoneTypeFaxWork" msgid="3517792160008890912">"Số fax Cơ quan"</string>
-    <string name="phoneTypeFaxHome" msgid="2067265972322971467">"Số fax Nhà riêng"</string>
-    <string name="phoneTypePager" msgid="7582359955394921732">"Số máy nhắn tin"</string>
+    <string name="phoneTypeFaxWork" msgid="3517792160008890912">"Số fax Cơ quan"</string>
+    <string name="phoneTypeFaxHome" msgid="2067265972322971467">"Số fax Nhà riêng"</string>
+    <string name="phoneTypePager" msgid="7582359955394921732">"Số máy nhắn tin"</string>
     <string name="phoneTypeOther" msgid="1544425847868765990">"Khác"</string>
     <string name="phoneTypeCallback" msgid="2712175203065678206">"Số gọi lại"</string>
     <string name="phoneTypeCar" msgid="8738360689616716982">"Ô tô"</string>
@@ -586,24 +598,24 @@
     <string name="phoneTypeWorkPager" msgid="649938731231157056">"Số Máy nhắn tin tại Cơ quan"</string>
     <string name="phoneTypeAssistant" msgid="5596772636128562884">"Số điện thoại Hỗ trợ"</string>
     <string name="phoneTypeMms" msgid="7254492275502768992">"MMS"</string>
-    <string name="eventTypeCustom" msgid="7837586198458073404">"Tùy chỉnh"</string>
+    <string name="eventTypeCustom" msgid="7837586198458073404">"Tùy chỉnh"</string>
     <string name="eventTypeBirthday" msgid="2813379844211390740">"Ngày sinh"</string>
     <string name="eventTypeAnniversary" msgid="3876779744518284000">"Ngày kỷ niệm"</string>
     <string name="eventTypeOther" msgid="7388178939010143077">"Khác"</string>
-    <string name="emailTypeCustom" msgid="8525960257804213846">"Tùy chỉnh"</string>
+    <string name="emailTypeCustom" msgid="8525960257804213846">"Tùy chỉnh"</string>
     <string name="emailTypeHome" msgid="449227236140433919">"Nhà riêng"</string>
     <string name="emailTypeWork" msgid="3548058059601149973">"Cơ quan"</string>
     <string name="emailTypeOther" msgid="2923008695272639549">"Khác"</string>
     <string name="emailTypeMobile" msgid="119919005321166205">"ĐT di động"</string>
-    <string name="postalTypeCustom" msgid="8903206903060479902">"Tùy chỉnh"</string>
+    <string name="postalTypeCustom" msgid="8903206903060479902">"Tùy chỉnh"</string>
     <string name="postalTypeHome" msgid="8165756977184483097">"Nhà riêng"</string>
     <string name="postalTypeWork" msgid="5268172772387694495">"Cơ quan"</string>
     <string name="postalTypeOther" msgid="2726111966623584341">"Khác"</string>
-    <string name="imTypeCustom" msgid="2074028755527826046">"Tùy chỉnh"</string>
+    <string name="imTypeCustom" msgid="2074028755527826046">"Tùy chỉnh"</string>
     <string name="imTypeHome" msgid="6241181032954263892">"Nhà riêng"</string>
     <string name="imTypeWork" msgid="1371489290242433090">"Cơ quan"</string>
     <string name="imTypeOther" msgid="5377007495735915478">"Khác"</string>
-    <string name="imProtocolCustom" msgid="6919453836618749992">"Tùy chỉnh"</string>
+    <string name="imProtocolCustom" msgid="6919453836618749992">"Tùy chỉnh"</string>
     <string name="imProtocolAim" msgid="7050360612368383417">"AIM"</string>
     <string name="imProtocolMsn" msgid="144556545420769442">"Windows Live"</string>
     <string name="imProtocolYahoo" msgid="8271439408469021273">"Yahoo"</string>
@@ -615,8 +627,8 @@
     <string name="imProtocolNetMeeting" msgid="8287625655986827971">"NetMeeting"</string>
     <string name="orgTypeWork" msgid="29268870505363872">"Cơ quan"</string>
     <string name="orgTypeOther" msgid="3951781131570124082">"Khác"</string>
-    <string name="orgTypeCustom" msgid="225523415372088322">"Tùy chỉnh"</string>
-    <string name="relationTypeCustom" msgid="3542403679827297300">"Tùy chỉnh"</string>
+    <string name="orgTypeCustom" msgid="225523415372088322">"Tùy chỉnh"</string>
+    <string name="relationTypeCustom" msgid="3542403679827297300">"Tùy chỉnh"</string>
     <string name="relationTypeAssistant" msgid="6274334825195379076">"Trợ lý"</string>
     <string name="relationTypeBrother" msgid="8757913506784067713">"Anh em trai"</string>
     <string name="relationTypeChild" msgid="1890746277276881626">"Con cái"</string>
@@ -631,8 +643,8 @@
     <string name="relationTypeRelative" msgid="1799819930085610271">"Họ hàng"</string>
     <string name="relationTypeSister" msgid="1735983554479076481">"Chị em gái"</string>
     <string name="relationTypeSpouse" msgid="394136939428698117">"Vợ/chồng"</string>
-    <string name="sipAddressTypeCustom" msgid="2473580593111590945">"Tùy chỉnh"</string>
-    <string name="sipAddressTypeHome" msgid="6093598181069359295">"Nhà riêng"</string>
+    <string name="sipAddressTypeCustom" msgid="2473580593111590945">"Tùy chỉnh"</string>
+    <string name="sipAddressTypeHome" msgid="6093598181069359295">"Nhà riêng"</string>
     <string name="sipAddressTypeWork" msgid="6920725730797099047">"Cơ quan"</string>
     <string name="sipAddressTypeOther" msgid="4408436162950119849">"Khác"</string>
     <string name="keyguard_password_enter_pin_code" msgid="3731488827218876115">"Nhập mã PIN"</string>
@@ -640,16 +652,16 @@
     <string name="keyguard_password_enter_puk_prompt" msgid="1341112146710087048">"Mã PUK"</string>
     <string name="keyguard_password_enter_pin_prompt" msgid="2987350144349051286">"Mã Pin mới"</string>
     <string name="keyguard_password_entry_touch_hint" msgid="7906561917570259833"><font size="17">"Chạm để nhập mật khẩu"</font></string>
-    <string name="keyguard_password_enter_password_code" msgid="9138158344813213754">"Nhập mật khẩu để mở khoá"</string>
+    <string name="keyguard_password_enter_password_code" msgid="9138158344813213754">"Nhập mật khẩu để mở khóa"</string>
     <string name="keyguard_password_enter_pin_password_code" msgid="638347075625491514">"Nhập PIN để mở khóa"</string>
     <string name="keyguard_password_wrong_pin_code" msgid="1295984114338107718">"Mã PIN không chính xác!"</string>
-    <string name="keyguard_label_text" msgid="861796461028298424">"Để mở khoá, hãy nhấn vào Trình đơn sau đó nhấn 0."</string>
+    <string name="keyguard_label_text" msgid="861796461028298424">"Để mở khóa, hãy nhấn vào Trình đơn sau đó nhấn 0."</string>
     <string name="emergency_call_dialog_number_for_display" msgid="696192103195090970">"Số khẩn cấp"</string>
     <string name="lockscreen_carrier_default" msgid="8963839242565653192">"Không có dịch vụ nào."</string>
-    <string name="lockscreen_screen_locked" msgid="7288443074806832904">"Màn hình đã khoá."</string>
-    <string name="lockscreen_instructions_when_pattern_enabled" msgid="46154051614126049">"Nhấn vào Trình đơn để mở khoá hoặc thực hiện cuộc gọi khẩn cấp."</string>
-    <string name="lockscreen_instructions_when_pattern_disabled" msgid="686260028797158364">"Nhấn vào Trình đơn để mở khoá."</string>
-    <string name="lockscreen_pattern_instructions" msgid="7478703254964810302">"Vẽ hình để mở khoá"</string>
+    <string name="lockscreen_screen_locked" msgid="7288443074806832904">"Màn hình đã khóa."</string>
+    <string name="lockscreen_instructions_when_pattern_enabled" msgid="46154051614126049">"Nhấn vào Trình đơn để mở khóa hoặc thực hiện cuộc gọi khẩn cấp."</string>
+    <string name="lockscreen_instructions_when_pattern_disabled" msgid="686260028797158364">"Nhấn vào Trình đơn để mở khóa."</string>
+    <string name="lockscreen_pattern_instructions" msgid="7478703254964810302">"Vẽ hình để mở khóa"</string>
     <string name="lockscreen_emergency_call" msgid="5347633784401285225">"Cuộc gọi khẩn cấp"</string>
     <string name="lockscreen_return_to_call" msgid="5244259785500040021">"Quay lại cuộc gọi"</string>
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Chính xác!"</string>
@@ -671,32 +683,32 @@
     <string name="lockscreen_transport_play_description" msgid="5888422938351019426">"Nút phát"</string>
     <string name="lockscreen_transport_stop_description" msgid="4562318378766987601">"Nút dừng"</string>
     <string name="emergency_calls_only" msgid="6733978304386365407">"Chỉ cuộc gọi khẩn cấp"</string>
-    <string name="lockscreen_network_locked_message" msgid="143389224986028501">"Mạng đã khoá"</string>
-    <string name="lockscreen_sim_puk_locked_message" msgid="7441797339976230">"Thẻ SIM đã bị khoá PUK."</string>
+    <string name="lockscreen_network_locked_message" msgid="143389224986028501">"Mạng đã khóa"</string>
+    <string name="lockscreen_sim_puk_locked_message" msgid="7441797339976230">"Thẻ SIM đã bị khóa PUK."</string>
     <string name="lockscreen_sim_puk_locked_instructions" msgid="635967534992394321">"Vui lòng xem Hướng dẫn Người dùng hoặc liên hệ với Trung tâm Chăm sóc Khách hàng."</string>
-    <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"Thẻ SIM đã bị khoá."</string>
-    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"Đang mở khoá thẻ SIM…"</string>
-    <string name="lockscreen_too_many_failed_attempts_dialog_message" msgid="3514742106066877476">"Bạn đã vẽ không chính xác hình mở khoá của mình <xliff:g id="NUMBER_0">%d</xliff:g> lần. "\n\n"Vui lòng thử lại sau <xliff:g id="NUMBER_1">%d</xliff:g> giây."</string>
+    <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"Thẻ SIM đã bị khóa."</string>
+    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"Đang mở khóa thẻ SIM…"</string>
+    <string name="lockscreen_too_many_failed_attempts_dialog_message" msgid="3514742106066877476">"Bạn đã vẽ không chính xác hình mở khóa của mình <xliff:g id="NUMBER_0">%d</xliff:g> lần. "\n\n"Vui lòng thử lại sau <xliff:g id="NUMBER_1">%d</xliff:g> giây."</string>
     <string name="lockscreen_too_many_failed_password_attempts_dialog_message" msgid="4906034376425175381">"Bạn đã nhập sai mật khẩu <xliff:g id="NUMBER_0">%d</xliff:g> lần. "\n\n"Vui lòng thử lại trong <xliff:g id="NUMBER_1">%d</xliff:g> giấy."</string>
     <string name="lockscreen_too_many_failed_pin_attempts_dialog_message" msgid="6827749231465145590">"Bạn đã nhập sai PIN <xliff:g id="NUMBER_0">%d</xliff:g> lần. "\n\n"Vui lòng thử lại trong <xliff:g id="NUMBER_1">%d</xliff:g> giây."</string>
     <string name="lockscreen_failed_attempts_almost_glogin" product="tablet" msgid="8687762517114904651">"Bạn đã vẽ không chính xác hình mở khóa của mình <xliff:g id="NUMBER_0">%d</xliff:g> lần. Sau <xliff:g id="NUMBER_1">%d</xliff:g> lần thử không thành công khác, bạn sẽ được yêu cầu mở khóa máy tính bảng bằng thông tin đăng nhập Google của mình."\n\n" Vui lòng thử lại trong <xliff:g id="NUMBER_2">%d</xliff:g> giây."</string>
-    <string name="lockscreen_failed_attempts_almost_glogin" product="default" msgid="3351013842320127827">"Bạn đã vẽ không chính xác hình mở khoá của mình <xliff:g id="NUMBER_0">%d</xliff:g> lần. Sau <xliff:g id="NUMBER_1">%d</xliff:g> lần thử không thành công khác, bạn sẽ được yêu cầu mở khoá điện thoại bằng thông tin đăng nhập Google của mình."\n\n" Vui lòng thử lại trong <xliff:g id="NUMBER_2">%d</xliff:g> giây."</string>
+    <string name="lockscreen_failed_attempts_almost_glogin" product="default" msgid="3351013842320127827">"Bạn đã vẽ không chính xác hình mở khóa của mình <xliff:g id="NUMBER_0">%d</xliff:g> lần. Sau <xliff:g id="NUMBER_1">%d</xliff:g> lần thử không thành công khác, bạn sẽ được yêu cầu mở khóa điện thoại bằng thông tin đăng nhập Google của mình."\n\n" Vui lòng thử lại trong <xliff:g id="NUMBER_2">%d</xliff:g> giây."</string>
     <string name="lockscreen_failed_attempts_almost_at_wipe" product="tablet" msgid="6128106399745755604">"Bạn đã mở khóa máy tính bảng không đúng cách <xliff:g id="NUMBER_0">%d</xliff:g> lần. Sau <xliff:g id="NUMBER_1">%d</xliff:g> lần mở khóa không thành công nữa, máy tính bảng sẽ được đặt lại về mặc định ban đầu và tất cả dữ liệu người dùng sẽ bị mất."</string>
     <string name="lockscreen_failed_attempts_almost_at_wipe" product="default" msgid="8603565142156826565">"Bạn đã mở khóa điện thoại không đúng cách <xliff:g id="NUMBER_0">%d</xliff:g> lần. Sau <xliff:g id="NUMBER_1">%d</xliff:g> lần mở khóa không thành công nữa, điện thoại sẽ được đặt lại về mặc định ban đầu và tất cả dữ liệu người dùng sẽ bị mất."</string>
     <string name="lockscreen_failed_attempts_now_wiping" product="tablet" msgid="280873516493934365">"Bạn đã mở khóa máy tính bảng không đúng cách <xliff:g id="NUMBER">%d</xliff:g> lần. Bây giờ, máy tính bảng sẽ được đặt lại về mặc định ban đầu."</string>
     <string name="lockscreen_failed_attempts_now_wiping" product="default" msgid="3025504721764922246">"Bạn đã mở khóa điện thoại không đúng cách <xliff:g id="NUMBER">%d</xliff:g> lần. Bây giờ, điện thoại sẽ được đặt lại về mặc định ban đầu."</string>
     <string name="lockscreen_too_many_failed_attempts_countdown" msgid="6251480343394389665">"Hãy thử lại sau <xliff:g id="NUMBER">%d</xliff:g> giây."</string>
     <string name="lockscreen_forgot_pattern_button_text" msgid="2626999449610695930">"Đã quên hình?"</string>
-    <string name="lockscreen_glogin_forgot_pattern" msgid="2588521501166032747">"Mở khoá tài khoản"</string>
+    <string name="lockscreen_glogin_forgot_pattern" msgid="2588521501166032747">"Mở khóa tài khoản"</string>
     <string name="lockscreen_glogin_too_many_attempts" msgid="2446246026221678244">"Quá nhiều lần nhập hình!"</string>
-    <string name="lockscreen_glogin_instructions" msgid="1816635201812207709">"Để mở khoá, hãy đăng nhập bằng tài khoản Google của bạn"</string>
+    <string name="lockscreen_glogin_instructions" msgid="1816635201812207709">"Để mở khóa, hãy đăng nhập bằng tài khoản Google của bạn"</string>
     <string name="lockscreen_glogin_username_hint" msgid="8846881424106484447">"Tên người dùng (email)"</string>
     <string name="lockscreen_glogin_password_hint" msgid="5958028383954738528">"Mật khẩu"</string>
     <string name="lockscreen_glogin_submit_button" msgid="7130893694795786300">"Đăng nhập"</string>
     <string name="lockscreen_glogin_invalid_input" msgid="1364051473347485908">"Tên người dùng hoặc mật khẩu không hợp lệ."</string>
     <string name="lockscreen_glogin_account_recovery_hint" msgid="8253152905532900548">"Bạn quên tên người dùng hoặc mật khẩu?"\n"Hãy truy cập "<b>"google.com/accounts/recovery"</b></string>
-    <string name="lockscreen_glogin_checking_password" msgid="6758890536332363322">"Đang kiểm tra..."</string>
-    <string name="lockscreen_unlock_label" msgid="737440483220667054">"Mở khoá"</string>
+    <string name="lockscreen_glogin_checking_password" msgid="6758890536332363322">"Đang kiểm tra..."</string>
+    <string name="lockscreen_unlock_label" msgid="737440483220667054">"Mở khóa"</string>
     <string name="lockscreen_sound_on_label" msgid="9068877576513425970">"Bật âm thanh"</string>
     <string name="lockscreen_sound_off_label" msgid="996822825154319026">"Tắt âm thanh"</string>
     <string name="lockscreen_access_pattern_start" msgid="3941045502933142847">"Đã bắt đầu vẽ hình"</string>
@@ -739,7 +751,7 @@
     <string name="permdesc_readHistoryBookmarks" msgid="4981489815467617191">"Cho phép ứng dụng đọc tất cả các URL mà Trình duyệt đã truy cập và tất cả các dấu trang của Trình duyệt."</string>
     <string name="permlab_writeHistoryBookmarks" msgid="9009434109836280374">"xem lịch sử và dấu trang của Trình duyệt"</string>
     <string name="permdesc_writeHistoryBookmarks" product="tablet" msgid="7193514090469945307">"Cho phép ứng dụng sửa đổi lịch sử hoặc dấu trang của Trình duyệt được lưu trữ trên máy tính bảng của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để xóa hoặc sửa đổi dữ liệu Trình duyệt của bạn."</string>
-    <string name="permdesc_writeHistoryBookmarks" product="default" msgid="945571990357114950">"Cho phép ứng dụng sửa đổi lịch sử hoặc dấu trang của Trình duyệt được lưu trữ trên điện thoại của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để xoá hoặc sửa đổi dữ liệu Trình duyệt của bạn."</string>
+    <string name="permdesc_writeHistoryBookmarks" product="default" msgid="945571990357114950">"Cho phép ứng dụng sửa đổi lịch sử hoặc dấu trang của Trình duyệt được lưu trữ trên điện thoại của bạn. Các ứng dụng độc hại có thể sử dụng quyền này để xóa hoặc sửa đổi dữ liệu Trình duyệt của bạn."</string>
     <string name="permlab_setAlarm" msgid="5924401328803615165">"đặt báo thức trong đồng hồ báo thức"</string>
     <string name="permdesc_setAlarm" msgid="5966966598149875082">"Cho phép ứng dụng đặt báo thức trong ứng dụng đồng hồ báo thức được cài đặt. Một số ứng dụng đồng hồ báo thức có thể không sử dụng tính năng này."</string>
     <string name="permlab_addVoicemail" msgid="5525660026090959044">"thêm thư thoại"</string>
@@ -760,12 +772,12 @@
     <string name="prepend_shortcut_label" msgid="2572214461676015642">"Trình đơn+"</string>
     <string name="menu_space_shortcut_label" msgid="2410328639272162537">"dấu cách"</string>
     <string name="menu_enter_shortcut_label" msgid="2743362785111309668">"nhập"</string>
-    <string name="menu_delete_shortcut_label" msgid="3658178007202748164">"xoá"</string>
+    <string name="menu_delete_shortcut_label" msgid="3658178007202748164">"xóa"</string>
     <string name="search_go" msgid="8298016669822141719">"Tìm kiếm"</string>
     <string name="searchview_description_search" msgid="6749826639098512120">"Tìm kiếm"</string>
     <string name="searchview_description_query" msgid="5911778593125355124">"Truy vấn tìm kiếm"</string>
     <string name="searchview_description_clear" msgid="1330281990951833033">"Xóa truy vấn"</string>
-    <string name="searchview_description_submit" msgid="2688450133297983542">"Gửi truy vấn"</string>
+    <string name="searchview_description_submit" msgid="2688450133297983542">"Gửi truy vấn"</string>
     <string name="searchview_description_voice" msgid="2453203695674994440">"Tìm kiếm bằng giọng nói"</string>
     <string name="oneMonthDurationPast" msgid="7396384508953779925">"1 tháng trước"</string>
     <string name="beforeOneMonthDurationPast" msgid="909134546836499826">"Trước 1 tháng trước"</string>
@@ -775,7 +787,7 @@
   </plurals>
   <plurals name="num_minutes_ago">
     <item quantity="one" msgid="3306787433088810191">"1 phút trước"</item>
-    <item quantity="other" msgid="2176942008915455116">"<xliff:g id="COUNT">%d</xliff:g> phút trước"</item>
+    <item quantity="other" msgid="2176942008915455116">"<xliff:g id="COUNT">%d</xliff:g> phút trước"</item>
   </plurals>
   <plurals name="num_hours_ago">
     <item quantity="one" msgid="9150797944610821849">"1 giờ trước"</item>
@@ -839,7 +851,7 @@
     <item quantity="other" msgid="2973062968038355991">"trong <xliff:g id="COUNT">%d</xliff:g> ngày"</item>
   </plurals>
     <string name="preposition_for_date" msgid="9093949757757445117">"vào <xliff:g id="DATE">%s</xliff:g>"</string>
-    <string name="preposition_for_time" msgid="5506831244263083793">"vào lúc <xliff:g id="TIME">%s</xliff:g>"</string>
+    <string name="preposition_for_time" msgid="5506831244263083793">"vào lúc <xliff:g id="TIME">%s</xliff:g>"</string>
     <string name="preposition_for_year" msgid="5040395640711867177">"trong <xliff:g id="YEAR">%s</xliff:g>"</string>
     <string name="day" msgid="8144195776058119424">"ngày"</string>
     <string name="days" msgid="4774547661021344602">"ngày"</string>
@@ -849,7 +861,7 @@
     <string name="minutes" msgid="5646001005827034509">"phút"</string>
     <string name="second" msgid="3184235808021478">"giây"</string>
     <string name="seconds" msgid="3161515347216589235">"giây"</string>
-    <string name="week" msgid="5617961537173061583">"tuần"</string>
+    <string name="week" msgid="5617961537173061583">"tuần"</string>
     <string name="weeks" msgid="6509623834583944518">"tuần"</string>
     <string name="year" msgid="4001118221013892076">"năm"</string>
     <string name="years" msgid="6881577717993213522">"năm"</string>
@@ -864,7 +876,7 @@
     <string name="Midnight" msgid="5630806906897892201">"Nửa đêm"</string>
     <string name="elapsed_time_short_format_mm_ss" msgid="4431555943828711473">"<xliff:g id="MINUTES">%1$02d</xliff:g>:<xliff:g id="SECONDS">%2$02d</xliff:g>"</string>
     <string name="elapsed_time_short_format_h_mm_ss" msgid="1846071997616654124">"<xliff:g id="HOURS">%1$d</xliff:g>:<xliff:g id="MINUTES">%2$02d</xliff:g>:<xliff:g id="SECONDS">%3$02d</xliff:g>"</string>
-    <string name="selectAll" msgid="6876518925844129331">"Chọn tất cả"</string>
+    <string name="selectAll" msgid="6876518925844129331">"Chọn tất cả"</string>
     <string name="cut" msgid="3092569408438626261">"Cắt"</string>
     <string name="copy" msgid="2681946229533511987">"Sao chép"</string>
     <string name="paste" msgid="5629880836805036433">"Dán"</string>
@@ -885,12 +897,12 @@
     <string name="yes" msgid="5362982303337969312">"OK"</string>
     <string name="no" msgid="5141531044935541497">"Hủy"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Chú ý"</string>
-    <string name="loading" msgid="1760724998928255250">"Đang tải..."</string>
+    <string name="loading" msgid="1760724998928255250">"Đang tải..."</string>
     <string name="capital_on" msgid="1544682755514494298">"BẬT"</string>
     <string name="capital_off" msgid="6815870386972805832">"TẮT"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Hoàn tất tác vụ đang sử dụng"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Sử dụng theo mặc định đối với tác vụ này."</string>
-    <string name="clearDefaultHintMsg" msgid="4815455344600932173">"Xoá mặc định trong Cài đặt Màn hình trang chủ &gt; Ứng dụng&gt; Quản lý ứng dụng."</string>
+    <string name="clearDefaultHintMsg" msgid="4815455344600932173">"Xóa mặc định trong Cài đặt Màn hình trang chủ &gt; Ứng dụng&gt; Quản lý ứng dụng."</string>
     <string name="chooseActivity" msgid="1009246475582238425">"Chọn tác vụ"</string>
     <string name="chooseUsbActivity" msgid="7892597146032121735">"Chọn ứng dụng cho thiết bị USB"</string>
     <string name="noApplications" msgid="1691104391758345586">"Không ứng dụng nào có thể thực hiện tác vụ này."</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"Mở mạng Wi-Fi khả dụng"</item>
     <item quantity="other" msgid="7915895323644292768">"Mở mạng Wi-Fi khả dụng"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Đăng nhập vào mạng Wi-Fi"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Không thể kết nối với Wi-Fi"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" có kết nối internet kém."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -1013,7 +1028,7 @@
     <string name="extmedia_format_message" product="default" msgid="3621369962433523619">"Bạn có chắc chắn muốn định dạng thẻ SD không? Tất cả dữ liệu trên thẻ của bạn sẽ bị mất."</string>
     <string name="extmedia_format_button_format" msgid="4131064560127478695">"Định dạng"</string>
     <string name="adb_active_notification_title" msgid="6729044778949189918">"Gỡ lỗi USB đã được kết nối"</string>
-    <string name="adb_active_notification_message" msgid="8470296818270110396">"Chọn để vô hiệu hoá gỡ lỗi USB."</string>
+    <string name="adb_active_notification_message" msgid="8470296818270110396">"Chọn để vô hiệu hóa gỡ lỗi USB."</string>
     <string name="select_input_method" msgid="6865512749462072765">"Chọn phương thức nhập"</string>
     <string name="configure_input_methods" msgid="6324843080254191535">"Định cấu hình phương thức nhập liệu"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
@@ -1051,7 +1066,7 @@
     <string name="gadget_host_error_inflating" msgid="2613287218853846830">"Lỗi khi gia tăng tiện ích"</string>
     <string name="ime_action_go" msgid="8320845651737369027">"Đến"</string>
     <string name="ime_action_search" msgid="658110271822807811">"Tìm kiếm"</string>
-    <string name="ime_action_send" msgid="2316166556349314424">"Gửi"</string>
+    <string name="ime_action_send" msgid="2316166556349314424">"Gửi"</string>
     <string name="ime_action_next" msgid="3138843904009813834">"Tiếp theo"</string>
     <string name="ime_action_done" msgid="8971516117910934605">"Xong"</string>
     <string name="ime_action_previous" msgid="1443550039250105948">"Trước"</string>
@@ -1066,7 +1081,7 @@
     <string name="permission_request_notification_title" msgid="5390555465778213840">"Yêu cầu Quyền"</string>
     <string name="permission_request_notification_with_subtitle" msgid="4325409589686688000">"Yêu cầu Quyền"\n"cho tài khoản <xliff:g id="ACCOUNT">%s</xliff:g>"</string>
     <string name="input_method_binding_label" msgid="1283557179944992649">"Phương thức nhập"</string>
-    <string name="sync_binding_label" msgid="3687969138375092423">"Đồng bộ hoá"</string>
+    <string name="sync_binding_label" msgid="3687969138375092423">"Đồng bộ hóa"</string>
     <string name="accessibility_binding_label" msgid="4148120742096474641">"Khả năng truy cập"</string>
     <string name="wallpaper_binding_label" msgid="1240087844304687662">"Hình nền"</string>
     <string name="chooser_wallpaper" msgid="7873476199295190279">"Thay đổi hình nền"</string>
@@ -1077,7 +1092,7 @@
     <string name="upload_file" msgid="2897957172366730416">"Chọn tệp"</string>
     <string name="no_file_chosen" msgid="6363648562170759465">"Không có tệp nào được chọn"</string>
     <string name="reset" msgid="2448168080964209908">"Đặt lại"</string>
-    <string name="submit" msgid="1602335572089911941">"Gửi"</string>
+    <string name="submit" msgid="1602335572089911941">"Gửi"</string>
     <string name="car_mode_disable_notification_title" msgid="3164768212003864316">"Chế độ trên ô tô đã được bật"</string>
     <string name="car_mode_disable_notification_message" msgid="668663626721675614">"Chọn để thoát khỏi chế độ trên ô tô."</string>
     <string name="tethered_notification_title" msgid="3146694234398202601">"Chức năng điểm truy cập Internet hoặc điểm phát sóng đang hoạt động"</string>
@@ -1122,7 +1137,7 @@
     <string name="sync_really_delete" msgid="8933566316059338692">"Xóa mục."</string>
     <string name="sync_undo_deletes" msgid="8610996708225006328">"Hoàn tác các tác vụ xóa."</string>
     <string name="sync_do_nothing" msgid="8717589462945226869">"Ngay bây giờ bạn không cần làm gì cả."</string>
-    <string name="choose_account_label" msgid="4191313562041125787">"Chọn tài khoản"</string>
+    <string name="choose_account_label" msgid="4191313562041125787">"Chọn tài khoản"</string>
     <string name="add_account_label" msgid="2935267344849993553">"Thêm tài khoản"</string>
     <string name="choose_account_text" msgid="6891230675141555481">"Bạn muốn sử dụng tài khoản nào?"</string>
     <string name="add_account_button_label" msgid="3611982894853435874">"Thêm tài khoản"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"Máy ảnh"</string>
     <string name="description_target_silent" msgid="893551287746522182">"Im lặng"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"Bật âm thanh"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"Trượt để mở khóa."</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"Hãy cắm tai nghe để nghe mật khẩu."</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"Dấu chấm."</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"Điều hướng về trang chủ"</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"Chia sẻ với..."</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Thiết bị đã bị khóa."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
+    <string name="sending" msgid="8715108995741758718">"Đang gửi..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"Khởi chạy trình duyệt?"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"Chấp nhận cuộc gọi?"</string>
 </resources>

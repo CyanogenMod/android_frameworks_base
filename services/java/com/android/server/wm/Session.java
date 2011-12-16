@@ -151,16 +151,20 @@ final class Session extends IWindowSession.Stub
 
     public int relayout(IWindow window, int seq, WindowManager.LayoutParams attrs,
             int requestedWidth, int requestedHeight, int viewFlags,
-            boolean insetsPending, Rect outFrame, Rect outContentInsets,
+            int flags, Rect outFrame, Rect outContentInsets,
             Rect outVisibleInsets, Configuration outConfig, Surface outSurface) {
         if (false) Slog.d(WindowManagerService.TAG, ">>>>>> ENTERED relayout from "
                 + Binder.getCallingPid());
         int res = mService.relayoutWindow(this, window, seq, attrs,
-                requestedWidth, requestedHeight, viewFlags, insetsPending,
+                requestedWidth, requestedHeight, viewFlags, flags,
                 outFrame, outContentInsets, outVisibleInsets, outConfig, outSurface);
         if (false) Slog.d(WindowManagerService.TAG, "<<<<<< EXITING relayout to "
                 + Binder.getCallingPid());
         return res;
+    }
+
+    public void performDeferredDestroy(IWindow window) {
+        mService.performDeferredDestroyWindow(this, window);
     }
 
     public boolean outOfMemory(IWindow window) {
@@ -306,7 +310,15 @@ final class Session extends IWindowSession.Stub
         synchronized (mService.mWindowMap) {
             long ident = Binder.clearCallingIdentity();
             try {
-                if (mService.mDragState == null || mService.mDragState.mToken != token) {
+                if (mService.mDragState == null) {
+                    // Most likely the drop recipient ANRed and we ended the drag
+                    // out from under it.  Log the issue and move on.
+                    Slog.w(WindowManagerService.TAG, "Drop result given but no drag in progress");
+                    return;
+                }
+
+                if (mService.mDragState.mToken != token) {
+                    // We're in a drag, but the wrong window has responded.
                     Slog.w(WindowManagerService.TAG, "Invalid drop-result claim by " + window);
                     throw new IllegalStateException("reportDropResult() by non-recipient");
                 }

@@ -100,7 +100,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         mOkButton.setOnClickListener(this);
 
         mKeyguardStatusViewManager = new KeyguardStatusViewManager(this, updateMonitor,
-                lockpatternutils, callback, true);
+                lockpatternutils, callback, false);
 
         setFocusableInTouchMode(true);
     }
@@ -214,21 +214,25 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         getSimUnlockProgressDialog().show();
 
         new CheckSimPin(mPinText.getText().toString()) {
-            void onSimLockChangedResponse(boolean success) {
-                if (mSimUnlockProgressDialog != null) {
-                    mSimUnlockProgressDialog.hide();
-                }
-                if (success) {
-                    // before closing the keyguard, report back that
-                    // the sim is unlocked so it knows right away
-                    mUpdateMonitor.reportSimUnlocked();
-                    mCallback.goToUnlockScreen();
-                } else {
-                    mHeaderText.setText(R.string.keyguard_password_wrong_pin_code);
-                    mPinText.setText("");
-                    mEnteredDigits = 0;
-                }
-                mCallback.pokeWakelock();
+            void onSimLockChangedResponse(final boolean success) {
+                mPinText.post(new Runnable() {
+                    public void run() {
+                        if (mSimUnlockProgressDialog != null) {
+                            mSimUnlockProgressDialog.hide();
+                        }
+                        if (success) {
+                            // before closing the keyguard, report back that
+                            // the sim is unlocked so it knows right away
+                            mUpdateMonitor.reportSimUnlocked();
+                            mCallback.goToUnlockScreen();
+                        } else {
+                            mHeaderText.setText(R.string.keyguard_password_wrong_pin_code);
+                            mPinText.setText("");
+                            mEnteredDigits = 0;
+                        }
+                        mCallback.pokeWakelock();
+                    }
+                });
             }
         }.start();
     }
@@ -355,6 +359,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 
         public void onClick(View v) {
             if (v == mCancelButton) {
+                mPinText.setText(""); // clear the PIN entry field if the user cancels
                 mCallback.goToLockScreen();
                 return;
             }

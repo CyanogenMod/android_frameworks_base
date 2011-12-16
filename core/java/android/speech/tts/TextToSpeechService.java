@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Set;
 
 
 /**
@@ -67,7 +68,6 @@ import java.util.Locale;
  * any. Any pending data from the current synthesis will be discarded.
  *
  */
-// TODO: Add a link to the sample TTS engine once it's done.
 public abstract class TextToSpeechService extends Service {
 
     private static final boolean DBG = false;
@@ -196,6 +196,18 @@ public abstract class TextToSpeechService extends Service {
     protected abstract void onSynthesizeText(SynthesisRequest request,
             SynthesisCallback callback);
 
+    /**
+     * Queries the service for a set of features supported for a given language.
+     *
+     * @param lang ISO-3 language code.
+     * @param country ISO-3 country code. May be empty or null.
+     * @param variant Language variant. May be empty or null.
+     * @return A list of features supported for the given language.
+     */
+    protected Set<String> onGetFeaturesForLanguage(String lang, String country, String variant) {
+        return null;
+    }
+
     private int getDefaultSpeechRate() {
         return getSecureSettingInt(Settings.Secure.TTS_DEFAULT_RATE, Engine.DEFAULT_RATE);
     }
@@ -294,6 +306,7 @@ public abstract class TextToSpeechService extends Service {
          */
         public int enqueueSpeechItem(int queueMode, final SpeechItem speechItem) {
             if (!speechItem.isValid()) {
+                speechItem.dispatchOnError();
                 return TextToSpeech.ERROR;
             }
 
@@ -320,6 +333,7 @@ public abstract class TextToSpeechService extends Service {
                 return TextToSpeech.SUCCESS;
             } else {
                 Log.w(TAG, "SynthThread has quit");
+                speechItem.dispatchOnError();
                 return TextToSpeech.ERROR;
             }
         }
@@ -369,14 +383,16 @@ public abstract class TextToSpeechService extends Service {
         }
     }
 
-    interface UtteranceCompletedDispatcher {
-        public void dispatchUtteranceCompleted();
+    interface UtteranceProgressDispatcher {
+        public void dispatchOnDone();
+        public void dispatchOnStart();
+        public void dispatchOnError();
     }
 
     /**
      * An item in the synth thread queue.
      */
-    private abstract class SpeechItem implements UtteranceCompletedDispatcher {
+    private abstract class SpeechItem implements UtteranceProgressDispatcher {
         private final String mCallingApp;
         protected final Bundle mParams;
         private boolean mStarted = false;
@@ -431,10 +447,27 @@ public abstract class TextToSpeechService extends Service {
             stopImpl();
         }
 
-        public void dispatchUtteranceCompleted() {
+        @Override
+        public void dispatchOnDone() {
             final String utteranceId = getUtteranceId();
-            if (!TextUtils.isEmpty(utteranceId)) {
-                mCallbacks.dispatchUtteranceCompleted(getCallingApp(), utteranceId);
+            if (utteranceId != null) {
+                mCallbacks.dispatchOnDone(getCallingApp(), utteranceId);
+            }
+        }
+
+        @Override
+        public void dispatchOnStart() {
+            final String utteranceId = getUtteranceId();
+            if (utteranceId != null) {
+                mCallbacks.dispatchOnStart(getCallingApp(), utteranceId);
+            }
+        }
+
+        @Override
+        public void dispatchOnError() {
+            final String utteranceId = getUtteranceId();
+            if (utteranceId != null) {
+                mCallbacks.dispatchOnError(getCallingApp(), utteranceId);
             }
         }
 
@@ -476,6 +509,7 @@ public abstract class TextToSpeechService extends Service {
     }
 
     class SynthesisSpeechItem extends SpeechItem {
+        // Never null.
         private final String mText;
         private final SynthesisRequest mSynthesisRequest;
         private final String[] mDefaultLocale;
@@ -499,8 +533,8 @@ public abstract class TextToSpeechService extends Service {
 
         @Override
         public boolean isValid() {
-            if (TextUtils.isEmpty(mText)) {
-                Log.w(TAG, "Got empty text");
+            if (mText == null) {
+                Log.wtf(TAG, "Got null text");
                 return false;
             }
             if (mText.length() >= MAX_SPEECH_ITEM_CHAR_LENGTH) {
@@ -605,9 +639,12 @@ public abstract class TextToSpeechService extends Service {
 
         @Override
         protected int playImpl() {
+            dispatchOnStart();
             int status = super.playImpl();
             if (status == TextToSpeech.SUCCESS) {
-                dispatchUtteranceCompleted();
+                dispatchOnDone();
+            } else {
+                dispatchOnError();
             }
             return status;
         }
@@ -778,6 +815,18 @@ public abstract class TextToSpeechService extends Service {
             return onIsLanguageAvailable(lang, country, variant);
         }
 
+        public String[] getFeaturesForLanguage(String lang, String country, String variant) {
+            Set<String> features = onGetFeaturesForLanguage(lang, country, variant);
+            String[] featuresArray = null;
+            if (features != null) {
+                featuresArray = new String[features.size()];
+                features.toArray(featuresArray);
+            } else {
+                featuresArray = new String[0];
+            }
+            return featuresArray;
+        }
+
         /*
          * There is no point loading a non default language if defaults
          * are enforced.
@@ -832,16 +881,34 @@ public abstract class TextToSpeechService extends Service {
             }
         }
 
-        public void dispatchUtteranceCompleted(String packageName, String utteranceId) {
-            ITextToSpeechCallback cb;
-            synchronized (mAppToCallback) {
-                cb = mAppToCallback.get(packageName);
-            }
+        public void dispatchOnDone(String packageName, String utteranceId) {
+            ITextToSpeechCallback cb = getCallbackFor(packageName);
             if (cb == null) return;
             try {
-                cb.utteranceCompleted(utteranceId);
+                cb.onDone(utteranceId);
             } catch (RemoteException e) {
-                Log.e(TAG, "Callback failed: " + e);
+                Log.e(TAG, "Callback onDone failed: " + e);
+            }
+        }
+
+        public void dispatchOnStart(String packageName, String utteranceId) {
+            ITextToSpeechCallback cb = getCallbackFor(packageName);
+            if (cb == null) return;
+            try {
+                cb.onStart(utteranceId);
+            } catch (RemoteException e) {
+                Log.e(TAG, "Callback onStart failed: " + e);
+            }
+
+        }
+
+        public void dispatchOnError(String packageName, String utteranceId) {
+            ITextToSpeechCallback cb = getCallbackFor(packageName);
+            if (cb == null) return;
+            try {
+                cb.onError(utteranceId);
+            } catch (RemoteException e) {
+                Log.e(TAG, "Callback onError failed: " + e);
             }
         }
 
@@ -860,6 +927,15 @@ public abstract class TextToSpeechService extends Service {
                 mAppToCallback.clear();
                 super.kill();
             }
+        }
+
+        private ITextToSpeechCallback getCallbackFor(String packageName) {
+            ITextToSpeechCallback cb;
+            synchronized (mAppToCallback) {
+                cb = mAppToCallback.get(packageName);
+            }
+
+            return cb;
         }
 
     }

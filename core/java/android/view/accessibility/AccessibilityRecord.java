@@ -16,7 +16,6 @@
 
 package android.view.accessibility;
 
-import android.accessibilityservice.IAccessibilityServiceConnection;
 import android.os.Parcelable;
 import android.view.View;
 
@@ -78,8 +77,8 @@ public class AccessibilityRecord {
 
     int mAddedCount= UNDEFINED;
     int mRemovedCount = UNDEFINED;
-    int mSourceViewId = View.NO_ID;
-    int mSourceWindowId = View.NO_ID;
+    int mSourceViewId = UNDEFINED;
+    int mSourceWindowId = UNDEFINED;
 
     CharSequence mClassName;
     CharSequence mContentDescription;
@@ -87,7 +86,8 @@ public class AccessibilityRecord {
     Parcelable mParcelableData;
 
     final List<CharSequence> mText = new ArrayList<CharSequence>();
-    IAccessibilityServiceConnection mConnection;
+
+    int mConnectionId = UNDEFINED;
 
     /*
      * Hide constructor.
@@ -108,8 +108,8 @@ public class AccessibilityRecord {
             mSourceWindowId = source.getAccessibilityWindowId();
             mSourceViewId = source.getAccessibilityViewId();
         } else {
-            mSourceWindowId = View.NO_ID;
-            mSourceViewId = View.NO_ID;
+            mSourceWindowId = UNDEFINED;
+            mSourceViewId = UNDEFINED;
         }
     }
 
@@ -119,30 +119,18 @@ public class AccessibilityRecord {
      *   <strong>Note:</strong> It is a client responsibility to recycle the received info
      *   by calling {@link AccessibilityNodeInfo#recycle() AccessibilityNodeInfo#recycle()}
      *   to avoid creating of multiple instances.
-     *
      * </p>
      * @return The info of the source.
      */
     public AccessibilityNodeInfo getSource() {
         enforceSealed();
-        if (mSourceWindowId == View.NO_ID || mSourceViewId == View.NO_ID || mConnection == null) {
+        if (mConnectionId == UNDEFINED || mSourceWindowId == UNDEFINED
+                || mSourceViewId == UNDEFINED) {
             return null;
         }
         AccessibilityInteractionClient client = AccessibilityInteractionClient.getInstance();
-        return client.findAccessibilityNodeInfoByAccessibilityId(mConnection, mSourceWindowId,
+        return client.findAccessibilityNodeInfoByAccessibilityId(mConnectionId, mSourceWindowId,
                 mSourceViewId);
-    }
-
-    /**
-     * Sets the connection for interacting with the AccessibilityManagerService.
-     *
-     * @param connection The connection.
-     *
-     * @hide
-     */
-    public void setConnection(IAccessibilityServiceConnection connection) {
-        enforceNotSealed();
-        mConnection = connection;
     }
 
     /**
@@ -391,8 +379,6 @@ public class AccessibilityRecord {
      * Gets the max scroll offset of the source left edge in pixels.
      *
      * @return The max scroll.
-     *
-     * @hide
      */
     public int getMaxScrollX() {
         return mMaxScrollX;
@@ -401,8 +387,6 @@ public class AccessibilityRecord {
      * Sets the max scroll offset of the source left edge in pixels.
      *
      * @param maxScrollX The max scroll.
-     *
-     * @hide
      */
     public void setMaxScrollX(int maxScrollX) {
         enforceNotSealed();
@@ -413,8 +397,6 @@ public class AccessibilityRecord {
      * Gets the max scroll offset of the source top edge in pixels.
      *
      * @return The max scroll.
-     *
-     * @hide
      */
     public int getMaxScrollY() {
         return mMaxScrollY;
@@ -424,8 +406,6 @@ public class AccessibilityRecord {
      * Sets the max scroll offset of the source top edge in pixels.
      *
      * @param maxScrollY The max scroll.
-     *
-     * @hide
      */
     public void setMaxScrollY(int maxScrollY) {
         enforceNotSealed();
@@ -566,6 +546,19 @@ public class AccessibilityRecord {
     public void setParcelableData(Parcelable parcelableData) {
         enforceNotSealed();
         mParcelableData = parcelableData;
+    }
+
+    /**
+     * Sets the unique id of the IAccessibilityServiceConnection over which
+     * this instance can send requests to the system.
+     *
+     * @param connectionId The connection id.
+     *
+     * @hide
+     */
+    public void setConnectionId(int connectionId) {
+        enforceNotSealed();
+        mConnectionId = connectionId;
     }
 
     /**
@@ -716,7 +709,7 @@ public class AccessibilityRecord {
         mText.addAll(record.mText);
         mSourceWindowId = record.mSourceWindowId;
         mSourceViewId = record.mSourceViewId;
-        mConnection = record.mConnection;
+        mConnectionId = record.mConnectionId;
     }
 
     /**
@@ -740,8 +733,9 @@ public class AccessibilityRecord {
         mBeforeText = null;
         mParcelableData = null;
         mText.clear();
-        mSourceViewId = View.NO_ID;
-        mSourceWindowId = View.NO_ID;
+        mSourceViewId = UNDEFINED;
+        mSourceWindowId = UNDEFINED;
+        mConnectionId = UNDEFINED;
     }
 
     @Override

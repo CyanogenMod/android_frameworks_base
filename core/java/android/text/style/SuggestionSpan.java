@@ -60,7 +60,6 @@ public class SuggestionSpan extends CharacterStyle implements ParcelableSpan {
      * Sets this flag if the auto correction is about to be applied to a word/text
      * that the user is typing/composing. This type of suggestion is rendered differently
      * to indicate the auto correction is happening.
-     * @hide
      */
     public static final int FLAG_AUTO_CORRECTION = 0x0004;
 
@@ -92,11 +91,6 @@ public class SuggestionSpan extends CharacterStyle implements ParcelableSpan {
 
     private float mAutoCorrectionUnderlineThickness;
     private int mAutoCorrectionUnderlineColor;
-
-    /*
-     * TODO: If switching IME is required, needs to add parameters for ids of InputMethodInfo
-     * and InputMethodSubtype.
-     */
 
     /**
      * @param context Context for the application
@@ -147,6 +141,16 @@ public class SuggestionSpan extends CharacterStyle implements ParcelableSpan {
     }
 
     private void initStyle(Context context) {
+        if (context == null) {
+            mMisspelledUnderlineThickness = 0;
+            mEasyCorrectUnderlineThickness = 0;
+            mAutoCorrectionUnderlineThickness = 0;
+            mMisspelledUnderlineColor = Color.BLACK;
+            mEasyCorrectUnderlineColor = Color.BLACK;
+            mAutoCorrectionUnderlineColor = Color.BLACK;
+            return;
+        }
+
         int defStyle = com.android.internal.R.attr.textAppearanceMisspelledSuggestion;
         TypedArray typedArray = context.obtainStyledAttributes(
                 null, com.android.internal.R.styleable.SuggestionSpan, defStyle, 0);
@@ -170,7 +174,6 @@ public class SuggestionSpan extends CharacterStyle implements ParcelableSpan {
                 com.android.internal.R.styleable.SuggestionSpan_textUnderlineThickness, 0);
         mAutoCorrectionUnderlineColor = typedArray.getColor(
                 com.android.internal.R.styleable.SuggestionSpan_textUnderlineColor, Color.BLACK);
-
     }
 
     public SuggestionSpan(Parcel src) {

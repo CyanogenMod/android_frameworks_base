@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"ワイヤレス接続をOFFにする"</string>
     <string name="screen_lock" msgid="799094655496098153">"画面をロック"</string>
     <string name="power_off" msgid="4266614107412865048">"電源を切る"</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"シャットダウン中..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"タブレットの電源をOFFにします。"</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"携帯電話の電源を切ります。"</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"機密ログデータの読み取り"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"システムの各種ログファイルの読み取りをアプリケーションに許可します。許可するとタブレットの使用状況に関する全般的な情報が読み取られます。この情報には個人情報や機密情報が含まれる場合があります。"</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"システムの各種ログファイルの読み取りをアプリケーションに許可します。許可すると端末の使用状況に関する全般的な情報が読み取られます。この情報には個人情報や機密情報が含まれる場合があります。"</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"再生用にメディア デコーダーを使用"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"インストール済みのメディア デコーダーを使用して再生用にデコードすることをアプリケーションに許可します。"</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"diagが所有するリソースの読み書き"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"diagグループが所有するリソース（例:/dev内のファイル）への読み書きをアプリケーションに許可します。システムの安定性とセキュリティに影響する恐れがあります。メーカー/通信事業者によるハードウェア固有の診断以外には使用しないでください。"</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"アプリケーションのコンポーネントを有効/無効にする"</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"Wi-Fiアクセスポイントへの接続や接続の切断、設定されたWi-Fiネットワークの変更をアプリケーションに許可します。"</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"Wi-Fiマルチキャストの受信を許可する"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"端末を直接の宛先とはしていないパケットの受信をアプリケーションに許可します。近隣で提供中のサービスを検出したい場合に便利です。マルチキャスト以外のモードよりも電力を消費します。"</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"WiMAX状態の表示"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"WiMAX状態に関する情報の表示をアプリケーションに許可します。"</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"WiMAX状態の変更"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"WiMAXネットワークへの接続と接続解除をアプリケーションに許可します。"</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"Bluetoothの管理"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"このBluetoothタブレットを設定することや、リモート端末を検出してペアに設定することをアプリケーションに許可します。"</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"このBluetooth端末の設定、およびリモート端末を検出してペアに設定することをアプリケーションに許可します。"</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"Wi-Fiオープンネットワークが利用できます"</item>
     <item quantity="other" msgid="7915895323644292768">"Wi-Fiオープンネットワークが利用できます"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Wi-Fiネットワークにログイン"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Wi-Fiに接続できませんでした"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" はインターネット接続に問題があります。"</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"カメラ"</string>
     <string name="description_target_silent" msgid="893551287746522182">"マナーモード"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"サウンドON"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"ロック解除するにはスワイプします。"</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"パスワードのキーが音声出力されるのでヘッドセットを接続してください。"</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"ドット。"</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"ホームへ移動"</string>
@@ -1211,4 +1227,7 @@
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"共有相手..."</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"端末がロックされています。"</string>
     <string name="list_delimeter" msgid="3975117572185494152">"、 "</string>
+    <string name="sending" msgid="8715108995741758718">"送信しています..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"ブラウザを起動しますか？"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"通話を受けますか？"</string>
 </resources>

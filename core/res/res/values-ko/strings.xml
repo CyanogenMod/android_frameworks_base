@@ -137,6 +137,12 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"무선 끄기"</string>
     <string name="screen_lock" msgid="799094655496098153">"화면 잠금"</string>
     <string name="power_off" msgid="4266614107412865048">"종료"</string>
+    <!-- no translation found for silent_mode_silent (319298163018473078) -->
+    <skip />
+    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
+    <skip />
+    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
+    <skip />
     <string name="shutdown_progress" msgid="2281079257329981203">"종료 중..."</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"태블릿이 종료됩니다."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"휴대전화가 종료됩니다."</string>
@@ -223,7 +229,7 @@
     <string name="permlab_forceStopPackages" msgid="1447830113260156236">"다른 애플리케이션 강제 종료"</string>
     <string name="permdesc_forceStopPackages" msgid="7263036616161367402">"애플리케이션이 다른 애플리케이션을 강제로 종료할 수 있도록 합니다."</string>
     <string name="permlab_forceBack" msgid="1804196839880393631">"강제로 애플리케이션 닫기"</string>
-    <string name="permdesc_forceBack" msgid="6534109744159919013">"애플리케이션이 포그라운드에 있는 활동을 강제로 닫고 되돌아갈 수 있도록 합니다. 일반 애플리케이션에는 절대로 필요하지 않습니다."</string>
+    <string name="permdesc_forceBack" msgid="6534109744159919013">"애플리케이션이 포그라운드에 있는 작업을 강제로 닫고 되돌아갈 수 있도록 합니다. 일반 애플리케이션에는 절대로 필요하지 않습니다."</string>
     <string name="permlab_dump" msgid="1681799862438954752">"시스템 내부 상태 검색"</string>
     <string name="permdesc_dump" msgid="2198776174276275220">"애플리케이션이 시스템의 내부 상태를 검색할 수 있도록 합니다. 단, 악성 애플리케이션이 이 기능을 이용하여 일반적으로 필요하지 않은 다양한 개인정보와 보안정보를 검색할 수 있습니다."</string>
     <string name="permlab_retrieve_window_content" msgid="8022588608994589938">"화면 콘텐츠 검색"</string>
@@ -301,6 +307,8 @@
     <string name="permlab_readLogs" msgid="6615778543198967614">"중요한 로그 데이터 읽기"</string>
     <string name="permdesc_readLogs" product="tablet" msgid="4077356893924755294">"애플리케이션이 시스템의 다양한 로그 파일을 읽을 수 있도록 합니다. 이렇게 되면 애플리케이션은 개인정보 또는 비공개 정보를 포함하여 태블릿으로 수행하는 작업에 대한 일반적인 정보를 검색할 수 있습니다."</string>
     <string name="permdesc_readLogs" product="default" msgid="8896449437464867766">"애플리케이션이 시스템의 다양한 로그 파일을 읽을 수 있도록 합니다. 이렇게 되면 애플리케이션은 개인정보 또는 비공개 정보를 포함하여 휴대전화로 수행하는 작업에 대한 일반적인 정보를 검색할 수 있습니다."</string>
+    <string name="permlab_anyCodecForPlayback" msgid="715805555823881818">"재생에 모든 미디어 디코더 사용"</string>
+    <string name="permdesc_anyCodecForPlayback" msgid="2101444559995480174">"애플리케이션에서 설치된 모든 미디어 디코더를 사용하여 디코딩 후 재생할 수 있도록 허용합니다."</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"진단 그룹 소유의 리소스 읽기/쓰기"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"애플리케이션이 진단 그룹 소유의 리소스(예: /dev에 있는 파일)를 읽고 쓸 수 있도록 합니다. 이 기능은 시스템 안정성 및 보안에 영향을 미칠 수 있으므로 제조업체 또는 사업자가 하드웨어 관련 진단을 수행하는 경우에만 사용해야 합니다."</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"애플리케이션 구성 요소 사용 또는 사용 안함"</string>
@@ -446,7 +454,7 @@
     <string name="permdesc_useCredentials" msgid="7416570544619546974">"애플리케이션이 인증 토큰을 요청하도록 합니다."</string>
     <string name="permlab_accessNetworkState" msgid="6865575199464405769">"네트워크 상태 보기"</string>
     <string name="permdesc_accessNetworkState" msgid="558721128707712766">"애플리케이션이 모든 네트워크의 상태를 볼 수 있도록 합니다."</string>
-    <string name="permlab_createNetworkSockets" msgid="9121633680349549585">"인터넷에 최대한 액세스"</string>
+    <string name="permlab_createNetworkSockets" msgid="9121633680349549585">"인터넷 액세스"</string>
     <string name="permdesc_createNetworkSockets" msgid="4593339106921772192">"애플리케이션이 네트워크 소켓을 만들 수 있도록 합니다."</string>
     <string name="permlab_writeApnSettings" msgid="505660159675751896">"네트워크 설정 및 트래픽 차단/변경"</string>
     <string name="permdesc_writeApnSettings" msgid="2369786339323021771">"애플리케이션이 모든 네트워크 트래픽을 가로채고 검사하거나 네트워크 설정을 변경하도록 허용합니다. 예를 들어 프록시나 APN의 포트를 변경할 수 있습니다. 악성 애플리케이션이 사용자 모르게 네트워크 패킷을 모니터링하고 리디렉션하며 수정할 수도 있습니다."</string>
@@ -462,6 +470,10 @@
     <string name="permdesc_changeWifiState" msgid="2950383153656873267">"애플리케이션이 Wi-Fi 액세스포인트에 연결하거나 연결을 끊고, 구성된 Wi-Fi 네트워크를 변경할 수 있도록 합니다."</string>
     <string name="permlab_changeWifiMulticastState" msgid="1368253871483254784">"Wi-Fi 멀티캐스트 수신 허용"</string>
     <string name="permdesc_changeWifiMulticastState" msgid="8199464507656067553">"애플리케이션이 휴대기기로 직접 주소가 지정되지 않은 패킷을 받을 수 있도록 합니다. 이 기능은 가까운 곳에서 제공되는 서비스를 검색할 때 유용하며 비멀티캐스트 모드보다 전원을 더 많이 소비합니다."</string>
+    <string name="permlab_accessWimaxState" msgid="2800410363171809280">"WiMAX 상태 보기"</string>
+    <string name="permdesc_accessWimaxState" msgid="8298035866227524023">"애플리케이션이 WiMAX의 상태에 대한 정보를 볼 수 있도록 합니다."</string>
+    <string name="permlab_changeWimaxState" msgid="340465839241528618">"WiMAX 상태 변경"</string>
+    <string name="permdesc_changeWimaxState" msgid="474918005058989421">"애플리케이션이 WiMAX 네트워크에 연결하거나 연결을 끊을 수 있도록 합니다."</string>
     <string name="permlab_bluetoothAdmin" msgid="1092209628459341292">"블루투스 관리"</string>
     <string name="permdesc_bluetoothAdmin" product="tablet" msgid="3511795757324345837">"애플리케이션이 로컬 블루투스 태블릿을 구성한 다음 원격 기기를 검색하여 페어링할 수 있도록 합니다."</string>
     <string name="permdesc_bluetoothAdmin" product="default" msgid="7256289774667054555">"애플리케이션이 로컬 블루투스 휴대전화를 구성한 다음 원격 장치를 검색하여 페어링할 수 있도록 합니다."</string>
@@ -899,7 +911,7 @@
     <string name="aerr_process" msgid="4507058997035697579">"<xliff:g id="PROCESS">%1$s</xliff:g> 프로세스가 중지되었습니다."</string>
     <string name="anr_title" msgid="4351948481459135709"></string>
     <string name="anr_activity_application" msgid="8339738283149696827">"<xliff:g id="APPLICATION">%2$s</xliff:g>이(가) 응답하지 않습니다."\n\n"닫으시겠습니까?"</string>
-    <string name="anr_activity_process" msgid="7018289416670457797">"<xliff:g id="ACTIVITY">%1$s</xliff:g> 활동이 응답하지 않습니다."\n\n"닫으시겠습니까?"</string>
+    <string name="anr_activity_process" msgid="7018289416670457797">"<xliff:g id="ACTIVITY">%1$s</xliff:g>이(가) 응답하지 않습니다."\n\n"닫으시겠습니까?"</string>
     <string name="anr_application_process" msgid="7208175830253210526">"<xliff:g id="APPLICATION">%1$s</xliff:g>이(가) 응답하지 않습니다. 닫으시겠습니까?"</string>
     <string name="anr_process" msgid="306819947562555821">"<xliff:g id="PROCESS">%1$s</xliff:g> 프로세스가 응답하지 않습니다."\n\n"닫으시겠습니까?"</string>
     <string name="force_close" msgid="8346072094521265605">"확인"</string>
@@ -953,6 +965,9 @@
     <item quantity="one" msgid="1634101450343277345">"개방형 Wi-Fi 네트워크 사용 가능"</item>
     <item quantity="other" msgid="7915895323644292768">"개방형 Wi-Fi 네트워크 사용 가능"</item>
   </plurals>
+    <string name="wifi_available_sign_in" msgid="9157196203958866662">"Wi-Fi 네트워크에 로그인"</string>
+    <!-- no translation found for wifi_available_sign_in_detailed (6797764740339907572) -->
+    <skip />
     <string name="wifi_watchdog_network_disabled" msgid="7904214231651546347">"Wi-Fi에 연결할 수 없습니다"</string>
     <string name="wifi_watchdog_network_disabled_detailed" msgid="4917472096696322767">" 인터넷 연결 상태가 좋지 않습니다."</string>
     <string name="wifi_p2p_dialog_title" msgid="97611782659324517">"Wi-Fi Direct"</string>
@@ -1169,6 +1184,7 @@
     <string name="description_target_camera" msgid="969071997552486814">"카메라"</string>
     <string name="description_target_silent" msgid="893551287746522182">"무음"</string>
     <string name="description_target_soundon" msgid="30052466675500172">"사운드 켜기"</string>
+    <string name="description_target_unlock_tablet" msgid="3833195335629795055">"스와이프하여 잠급니다."</string>
     <string name="keyboard_headset_required_to_hear_password" msgid="5913502399391940888">"비밀번호 키를 음성으로 들으려면 헤드셋을 연결하세요."</string>
     <string name="keyboard_password_character_no_headset" msgid="2859873770886153678">"점"</string>
     <string name="action_bar_home_description" msgid="5293600496601490216">"홈 탐색"</string>
@@ -1207,8 +1223,11 @@
     <string name="sha256_fingerprint" msgid="4391271286477279263">"SHA-256 지문:"</string>
     <string name="sha1_fingerprint" msgid="7930330235269404581">"SHA-1 지문:"</string>
     <string name="activity_chooser_view_see_all" msgid="180268188117163072">"전체 보기..."</string>
-    <string name="activity_chooser_view_dialog_title_default" msgid="3325054276356556835">"활동 선택"</string>
+    <string name="activity_chooser_view_dialog_title_default" msgid="3325054276356556835">"작업 선택"</string>
     <string name="share_action_provider_share_with" msgid="1791316789651185229">"공유 대상..."</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"기기가 잠겼습니다."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
+    <string name="sending" msgid="8715108995741758718">"보내는 중..."</string>
+    <string name="launchBrowserDefault" msgid="2057951947297614725">"브라우저를 실행하시겠습니까?"</string>
+    <string name="SetupCallDefault" msgid="6870275517518479651">"통화를 수락하시겠습니까?"</string>
 </resources>

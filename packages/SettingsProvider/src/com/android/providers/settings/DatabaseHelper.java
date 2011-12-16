@@ -63,7 +63,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     // database gets upgraded properly. At a minimum, please confirm that 'upgradeVersion'
     // is properly propagated through your change.  Not doing so will result in a loss of user
     // settings.
-    private static final int DATABASE_VERSION = 70;
+    private static final int DATABASE_VERSION = 74;
 
     private Context mContext;
 
@@ -723,6 +723,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             upgradeVersion = 57;
         }
 
+        /************* The following are Honeycomb changes ************/
+
         if (upgradeVersion == 57) {
             /*
              * New settings to:
@@ -751,13 +753,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         if (upgradeVersion == 58) {
             /* Add default for new Auto Time Zone */
+            int autoTimeValue = getIntValueFromSystem(db, Settings.System.AUTO_TIME, 0);
             db.beginTransaction();
             SQLiteStatement stmt = null;
             try {
-                stmt = db.compileStatement("INSERT INTO secure(name,value)"
-                        + " VALUES(?,?);");
-                loadBooleanSetting(stmt, Settings.System.AUTO_TIME_ZONE,
-                        R.bool.def_auto_time_zone); // Sync timezone to NITZ
+                stmt = db.compileStatement("INSERT INTO system(name,value)" + " VALUES(?,?);");
+                loadSetting(stmt, Settings.System.AUTO_TIME_ZONE,
+                        autoTimeValue); // Sync timezone to NITZ if auto_time was enabled
                 db.setTransactionSuccessful();
             } finally {
                 db.endTransaction();
@@ -784,18 +786,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
 
         if (upgradeVersion == 60) {
-            upgradeScreenTimeout(db);
+            // Don't do this for upgrades from Gingerbread
+            // Were only required for intra-Honeycomb upgrades for testing
+            // upgradeScreenTimeout(db);
             upgradeVersion = 61;
         }
 
         if (upgradeVersion == 61) {
-            upgradeScreenTimeout(db);
+            // Don't do this for upgrades from Gingerbread
+            // Were only required for intra-Honeycomb upgrades for testing
+            // upgradeScreenTimeout(db);
             upgradeVersion = 62;
         }
 
         // Change the default for screen auto-brightness mode
         if (upgradeVersion == 62) {
-            upgradeAutoBrightness(db);
+            // Don't do this for upgrades from Gingerbread
+            // Were only required for intra-Honeycomb upgrades for testing
+            // upgradeAutoBrightness(db);
             upgradeVersion = 63;
         }
 
@@ -838,6 +846,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             }
             upgradeVersion = 65;
         }
+
+        /************* The following are Ice Cream Sandwich changes ************/
 
         if (upgradeVersion == 65) {
             /*
@@ -934,6 +944,52 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 db.endTransaction();
             }
             upgradeVersion = 70;
+        }
+
+        if (upgradeVersion == 70) {
+            // Update all built-in bookmarks.  Some of the package names have changed.
+            loadBookmarks(db);
+            upgradeVersion = 71;
+        }
+
+        if (upgradeVersion == 71) {
+             // New setting to specify whether to speak passwords in accessibility mode.
+            db.beginTransaction();
+            SQLiteStatement stmt = null;
+            try {
+                stmt = db.compileStatement("INSERT INTO secure(name,value)"
+                        + " VALUES(?,?);");
+                loadBooleanSetting(stmt, Settings.Secure.ACCESSIBILITY_SPEAK_PASSWORD,
+                        R.bool.def_accessibility_speak_password);
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+                if (stmt != null) stmt.close();
+            }
+            upgradeVersion = 72;
+        }
+
+        if (upgradeVersion == 72) {
+            // update vibration settings
+            db.beginTransaction();
+            SQLiteStatement stmt = null;
+            try {
+                stmt = db.compileStatement("INSERT OR REPLACE INTO system(name,value)"
+                        + " VALUES(?,?);");
+                loadBooleanSetting(stmt, Settings.System.VIBRATE_IN_SILENT,
+                        R.bool.def_vibrate_in_silent);
+                db.setTransactionSuccessful();
+            } finally {
+                db.endTransaction();
+                if (stmt != null) stmt.close();
+            }
+            upgradeVersion = 73;
+        }
+
+        if (upgradeVersion == 73) {
+            // update vibration settings
+            upgradeVibrateSettingFromNone(db);
+            upgradeVersion = 74;
         }
 
         // *** Remember to update DATABASE_VERSION above!
@@ -1041,6 +1097,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
     }
 
+    private void upgradeVibrateSettingFromNone(SQLiteDatabase db) {
+        int vibrateSetting = getIntValueFromSystem(db, Settings.System.VIBRATE_ON, 0);
+        // If the ringer vibrate value is invalid, set it to the default
+        if ((vibrateSetting & 3) == AudioManager.VIBRATE_SETTING_OFF) {
+            vibrateSetting = AudioService.getValueForVibrateSetting(0,
+                    AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_ONLY_SILENT);
+        }
+        // Apply the same setting to the notification vibrate value
+        vibrateSetting = AudioService.getValueForVibrateSetting(vibrateSetting,
+                AudioManager.VIBRATE_TYPE_NOTIFICATION, vibrateSetting);
+
+        SQLiteStatement stmt = null;
+        try {
+            stmt = db.compileStatement("INSERT OR REPLACE INTO system(name,value)"
+                    + " VALUES(?,?);");
+            loadSetting(stmt, Settings.System.VIBRATE_ON, vibrateSetting);
+        } finally {
+            if (stmt != null)
+                stmt.close();
+        }
+    }
+
     private void upgradeScreenTimeout(SQLiteDatabase db) {
         // Change screen timeout to current default
         db.beginTransaction();
@@ -1076,16 +1154,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * Loads the default set of bookmarked shortcuts from an xml file.
      *
      * @param db The database to write the values into
-     * @param startingIndex The zero-based position at which bookmarks in this file should begin
      */
-    private int loadBookmarks(SQLiteDatabase db, int startingIndex) {
-        Intent intent = new Intent(Intent.ACTION_MAIN, null);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+    private void loadBookmarks(SQLiteDatabase db) {
         ContentValues values = new ContentValues();
 
         PackageManager packageManager = mContext.getPackageManager();
-        int i = startingIndex;
-
         try {
             XmlResourceParser parser = mContext.getResources().getXml(R.xml.bookmarks);
             XmlUtils.beginDocument(parser, "bookmarks");
@@ -1108,54 +1181,59 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 String pkg = parser.getAttributeValue(null, "package");
                 String cls = parser.getAttributeValue(null, "class");
                 String shortcutStr = parser.getAttributeValue(null, "shortcut");
+                String category = parser.getAttributeValue(null, "category");
 
                 int shortcutValue = shortcutStr.charAt(0);
                 if (TextUtils.isEmpty(shortcutStr)) {
                     Log.w(TAG, "Unable to get shortcut for: " + pkg + "/" + cls);
+                    continue;
                 }
 
-                ActivityInfo info = null;                
-                ComponentName cn = new ComponentName(pkg, cls);
-                try {
-                    info = packageManager.getActivityInfo(cn, 0);
-                } catch (PackageManager.NameNotFoundException e) {
-                    String[] packages = packageManager.canonicalToCurrentPackageNames(
-                            new String[] { pkg });
-                    cn = new ComponentName(packages[0], cls);
+                final Intent intent;
+                final String title;
+                if (pkg != null && cls != null) {
+                    ActivityInfo info = null;
+                    ComponentName cn = new ComponentName(pkg, cls);
                     try {
                         info = packageManager.getActivityInfo(cn, 0);
-                    } catch (PackageManager.NameNotFoundException e1) {
-                        Log.w(TAG, "Unable to add bookmark: " + pkg + "/" + cls, e);
+                    } catch (PackageManager.NameNotFoundException e) {
+                        String[] packages = packageManager.canonicalToCurrentPackageNames(
+                                new String[] { pkg });
+                        cn = new ComponentName(packages[0], cls);
+                        try {
+                            info = packageManager.getActivityInfo(cn, 0);
+                        } catch (PackageManager.NameNotFoundException e1) {
+                            Log.w(TAG, "Unable to add bookmark: " + pkg + "/" + cls, e);
+                            continue;
+                        }
                     }
-                }
-                
-                if (info != null) {
+
+                    intent = new Intent(Intent.ACTION_MAIN, null);
+                    intent.addCategory(Intent.CATEGORY_LAUNCHER);
                     intent.setComponent(cn);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    values.put(Settings.Bookmarks.INTENT, intent.toUri(0));
-                    values.put(Settings.Bookmarks.TITLE,
-                            info.loadLabel(packageManager).toString());
-                    values.put(Settings.Bookmarks.SHORTCUT, shortcutValue);
-                    db.insert("bookmarks", null, values);
-                    i++;
+                    title = info.loadLabel(packageManager).toString();
+                } else if (category != null) {
+                    intent = Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, category);
+                    title = "";
+                } else {
+                    Log.w(TAG, "Unable to add bookmark for shortcut " + shortcutStr
+                            + ": missing package/class or category attributes");
+                    continue;
                 }
+
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                values.put(Settings.Bookmarks.INTENT, intent.toUri(0));
+                values.put(Settings.Bookmarks.TITLE, title);
+                values.put(Settings.Bookmarks.SHORTCUT, shortcutValue);
+                db.delete("bookmarks", "shortcut = ?",
+                        new String[] { Integer.toString(shortcutValue) });
+                db.insert("bookmarks", null, values);
             }
         } catch (XmlPullParserException e) {
             Log.w(TAG, "Got execption parsing bookmarks.", e);
         } catch (IOException e) {
             Log.w(TAG, "Got execption parsing bookmarks.", e);
         }
-
-        return i;
-    }
-
-    /**
-     * Loads the default set of bookmark packages.
-     *
-     * @param db The database to write the values into
-     */
-    private void loadBookmarks(SQLiteDatabase db) {
-        loadBookmarks(db, 0);
     }
 
     /**
@@ -1232,12 +1310,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             stmt = db.compileStatement("INSERT OR IGNORE INTO system(name,value)"
                     + " VALUES(?,?);");
     
-            // Vibrate off by default for ringer, on for notification
+            // Vibrate on by default for ringer, on for notification
             int vibrate = 0;
             vibrate = AudioService.getValueForVibrateSetting(vibrate,
-                    AudioManager.VIBRATE_TYPE_NOTIFICATION, AudioManager.VIBRATE_SETTING_ON);
+                    AudioManager.VIBRATE_TYPE_NOTIFICATION,
+                    AudioManager.VIBRATE_SETTING_ONLY_SILENT);
             vibrate |= AudioService.getValueForVibrateSetting(vibrate,
-                    AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_OFF);
+                    AudioManager.VIBRATE_TYPE_RINGER, AudioManager.VIBRATE_SETTING_ONLY_SILENT);
             loadSetting(stmt, Settings.System.VIBRATE_ON, vibrate);
         } finally {
             if (stmt != null) stmt.close();
@@ -1472,6 +1551,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
             loadBooleanSetting(stmt, Settings.Secure.TOUCH_EXPLORATION_ENABLED,
                     R.bool.def_touch_exploration_enabled);
+
+            loadBooleanSetting(stmt, Settings.Secure.ACCESSIBILITY_SPEAK_PASSWORD,
+                    R.bool.def_accessibility_speak_password);
         } finally {
             if (stmt != null) stmt.close();
         }
@@ -1508,5 +1590,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private void loadFractionSetting(SQLiteStatement stmt, String key, int resid, int base) {
         loadSetting(stmt, key,
                 Float.toString(mContext.getResources().getFraction(resid, base, base)));
+    }
+
+    private int getIntValueFromSystem(SQLiteDatabase db, String name, int defaultValue) {
+        int value = defaultValue;
+        Cursor c = null;
+        try {
+            c = db.query("system", new String[] { Settings.System.VALUE }, "name='" + name + "'",
+                    null, null, null, null);
+            if (c != null && c.moveToFirst()) {
+                String val = c.getString(0);
+                value = val == null ? defaultValue : Integer.parseInt(val);
+            }
+        } finally {
+            if (c != null) c.close();
+        }
+        return value;
     }
 }
