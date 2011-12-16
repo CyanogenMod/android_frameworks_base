@@ -149,6 +149,17 @@
     <string name="shutdown_confirm_question" msgid="6656441286856415014">"Éteindre votre appareil ?"</string>
     <string name="recent_tasks_title" msgid="3691764623638127888">"Récentes"</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"Aucune application récente"</string>
+    <string name="reboot_system">Redémarrage</string>
+    <string name="reboot_reboot">Redémarrer</string>
+    <string name="reboot_recovery">Recovery</string>
+    <string name="reboot_bootloader">Bootloader</string>
+    <string name="reboot_bootmenu">Bootmenu</string>
+    <string name="reboot_fastboot">Fastboot</string>
+    <string name="reboot_download">Download</string>
+    <string name="reboot_confirm">Votre appareil va redémarrer</string>
+    <string name="reboot_progress">Redémarrage en cours...</string>
+    <string name="global_action_reboot">Redémarrer</string>
+    <string name="global_action_screenshot">Capture d\'écran</string>
     <string name="global_actions" product="tablet" msgid="408477140088053665">"Options de la tablette"</string>
     <string name="global_actions" product="default" msgid="2406416831541615258">"Options du téléphone"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Verrouillage de l\'écran"</string>
