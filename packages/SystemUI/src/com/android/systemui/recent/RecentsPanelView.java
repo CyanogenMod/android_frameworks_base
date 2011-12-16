@@ -198,6 +198,7 @@ public class RecentsPanelView extends RelativeLayout implements OnItemClickListe
             } else {
                 if (noApps) {
                     if (DEBUG) Log.v(TAG, "Nothing to show");
+                    mRecentTasksDirty = true;
                     return;
                 }
             }
