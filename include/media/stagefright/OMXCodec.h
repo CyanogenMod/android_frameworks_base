@@ -62,6 +62,7 @@ struct OMXCodec : public MediaSource,
 
 #ifdef QCOM_HARDWARE
         kEnableThumbnailMode = 512,
+        kUseMinBufferCount = 32768,
 #endif
     };
     static sp<MediaSource> Create(
