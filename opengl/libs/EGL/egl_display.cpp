@@ -51,6 +51,7 @@ static char const * const sExtensionString  =
         "EGL_KHR_fence_sync "
         "EGL_NV_system_time "
         "EGL_ANDROID_image_native_buffer "      // mandatory
+        "EGL_ANDROID_get_render_buffer "
         ;
 
 // extensions not exposed to applications but used by the ANDROID system
