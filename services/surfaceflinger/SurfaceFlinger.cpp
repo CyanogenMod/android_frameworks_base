@@ -25,6 +25,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <sys/ioctl.h>
+#include <linux/fb.h>
 
 #include <cutils/log.h>
 #include <cutils/properties.h>
@@ -1675,6 +1676,7 @@ status_t SurfaceFlinger::onTransact(
 status_t SurfaceFlinger::renderScreenToTextureLocked(DisplayID dpy,
         GLuint* textureName, GLfloat* uOut, GLfloat* vOut)
 {
+#ifndef DEVICE_STOTEX_DONT_USE_FBO
     if (!GLExtensions::getInstance().haveFramebufferObject())
         return INVALID_OPERATION;
 
@@ -1727,6 +1729,97 @@ status_t SurfaceFlinger::renderScreenToTextureLocked(DisplayID dpy,
     *uOut = u;
     *vOut = v;
     return NO_ERROR;
+#else
+    const DisplayHardware& hw(graphicPlane(dpy).displayHardware());
+
+    // redraw screen in screenshot mode
+    const Vector< sp<LayerBase> >& layers(mVisibleLayersSortedByZ);
+    const size_t count = layers.size();
+    for (size_t i=0 ; i<count ; ++i) {
+        const sp<LayerBase>& layer(layers[i]);
+        layer->drawForSreenShot();
+    }
+
+    hw.compositionComplete();
+
+
+    // use device framebuffer in /dev/graphics/fb0
+    struct fb_var_screeninfo vinfo;
+    unsigned int r,l,c,rowlen,bytespp,offset;
+    FILE* fb_in = fopen("/dev/graphics/fb0", "r");
+    int fb = fileno(fb_in);
+
+    if (fb < 0) {
+        LOGE("Failed to open framebuffer");
+        return INVALID_OPERATION;
+    }
+
+    fb_in = fdopen(fb, "rb");
+    if (ioctl(fb, FBIOGET_VSCREENINFO, &vinfo) < 0) {
+        LOGE("Failed to get framebuffer info");
+        return INVALID_OPERATION;
+    }
+    fcntl(fb, F_SETFD, FD_CLOEXEC);
+
+    bytespp = vinfo.bits_per_pixel / 8;
+    rowlen = vinfo.xres * bytespp;
+
+    offset = vinfo.xoffset * bytespp + vinfo.xres * vinfo.yoffset * bytespp;
+    fseek(fb_in, offset, SEEK_SET);
+
+    // we have what we need to get the fb
+    // now, build that damn texture!
+    GLuint texture;
+    *uOut = 1;
+    *vOut = 1;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+            vinfo.xres, vinfo.yres, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+    if (glGetError() != GL_NO_ERROR) {
+        while ( glGetError() != GL_NO_ERROR ) ;
+        GLint tw = (2 << (31 - clz(vinfo.xres)));
+        GLint th = (2 << (31 - clz(vinfo.yres)));
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
+                tw, th, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+        *uOut = GLfloat(vinfo.xres) / tw;
+        *vOut = GLfloat(vinfo.yres) / th;
+    }
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+    // write fb data to texture
+    GLubyte imgbuf[32];
+    GLubyte* imageData = (GLubyte*)malloc(vinfo.xres * vinfo.yres * 3);
+
+    for (l = vinfo.yres; l > 0; l--) {
+        for (r = 0; r < vinfo.xres; r += 8) {
+            // We assume here that buffer format is BGRA. We skip alpha channel
+            // because we don't need it. GL texture format in the end is RGB.
+            fread(imgbuf, 1, bytespp * 8, fb_in);
+
+            // We read 8 pixels at a time to speed things up
+            for (c = 0; c < 8; c++) {
+                imageData[(l*vinfo.xres)*3 + r*3 + c*3] = imgbuf[c*4 + 2];
+                imageData[(l*vinfo.xres)*3 + r*3 + c*3 + 1] = imgbuf[c*4 + 1];
+                imageData[(l*vinfo.xres)*3 + r*3 + c*3 + 2] = imgbuf[c*4];
+            }
+        }
+    }
+
+    // copy imageData to the texture
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, vinfo.xres, vinfo.yres, 0, GL_RGB, GL$
+
+    // we're done !
+    fclose(fb_in);
+
+    *textureName = texture;
+
+    // free buffer memory
+    free(imageData);
+
+    return NO_ERROR;
+#endif
 }
 
 // ---------------------------------------------------------------------------
