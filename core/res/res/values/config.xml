@@ -619,6 +619,10 @@
     <string name="config_wimaxServiceClassname"></string>
     <!-- Name of the wimax state tracker clas -->
     <string name="config_wimaxStateTrackerClassname"></string>
+    <!-- The orientation in which case volume keys should be swapped.
+         See ROTATION_0, ROTATION_90, ROTATION_180, ROTATION_270 in android.view.Surface
+         for more details about values -->
+    <integer name="swap_volume_keys_orientation">-1</integer>
 
     <!-- Set to true if the RSSI should always display CDMA signal strength
          even on EVDO -->

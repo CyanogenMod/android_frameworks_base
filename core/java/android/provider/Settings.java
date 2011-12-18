@@ -1111,6 +1111,9 @@ public final class Settings {
             putInt(cr, SHOW_GTALK_SERVICE_STATUS, flag ? 1 : 0);
         }
 
+        /** @hide */
+        public static final String SWAP_VOLUME_KEYS_ORIENTATION = "swap_volume_keys_orientation";
+
         /**
          * The content:// style URL for this table
          */
