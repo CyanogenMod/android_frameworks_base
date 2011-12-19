@@ -989,7 +989,7 @@ void InputDevice::process(const RawEvent* rawEvents, size_t count) {
 
             // Old touchscreen sensors need to send a fake BTN_TOUCH (BTN_LEFT)
 
-            if (rawEvent->code == ABS_MT_TOUCH_MAJOR) {
+            if (rawEvent->code == ABS_MT_TOUCH_MAJOR && rawEvent->type == EV_ABS) {
 
                 z_data = rawEvent->value;
                 touched = (0 != z_data);
