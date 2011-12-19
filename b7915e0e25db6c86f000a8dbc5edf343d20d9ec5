@@ -1,0 +1,10 @@
+Change-Id: Ib7915e0e25db6c86f000a8dbc5edf343d20d9ec5
+Code-Review+2: Steve Kondik <shade@chemlab.org>
+Verified+1: Steve Kondik <shade@chemlab.org>
+Code-Review+1: djMesias <djmesias@terra.es>
+Code-Review+1: Kasper Hettinga <kasper.hettinga@gmail.com>
+Submitted-by: Steve Kondik <shade@chemlab.org>
+Submitted-at: Mon, 19 Dec 2011 03:41:05 +0300
+Reviewed-on: http://review.cyanogenmod.com/10783
+Project: CyanogenMod/android_frameworks_base
+Branch: refs/heads/gingerbread
