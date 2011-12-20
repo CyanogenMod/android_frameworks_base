@@ -125,8 +125,8 @@ status_t DisplayHardwareBase::DisplayEventThread::readyToRun()
 
 status_t DisplayHardwareBase::DisplayEventThread::initCheck() const
 {
-    return access(kSleepFileName, R_OK) == 0 && access(kWakeFileName, R_OK) == 0) ||
-           access(kOldSleepFileName, R_OK) == 0 && access(kOldWakeFileName, R_OK) == 0 ? NO_ERROR : NO_INIT;
+    return (access(kSleepFileName, R_OK) == 0 && access(kWakeFileName, R_OK) == 0)) ||
+           (access(kOldSleepFileName, R_OK) == 0 && access(kOldWakeFileName, R_OK) == 0) ? NO_ERROR : NO_INIT;
 }
 
 // ----------------------------------------------------------------------------
