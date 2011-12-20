@@ -45,7 +45,6 @@ static char const * kWakeFileName  = "/sys/power/wait_for_fb_wake";
 static char const * const kOldSleepFileName = "/sys/android_power/wait_for_fb_sleep";
 static char const * const kOldWakeFileName = "/sys/android_power/wait_for_fb_wake";
 
-
 // ----------------------------------------------------------------------------
 
 DisplayHardwareBase::DisplayEventThreadBase::DisplayEventThreadBase(
