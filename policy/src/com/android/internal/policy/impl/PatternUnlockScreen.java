@@ -28,6 +28,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.text.format.DateFormat;
 import android.text.TextUtils;
+import android.view.KeyEvent;
+import android.content.Intent;
+import android.provider.Settings;
 import android.util.Log;
 import com.android.internal.R;
 import com.android.internal.telephony.IccCard;
@@ -69,6 +72,10 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
     private LockPatternUtils mLockPatternUtils;
     private KeyguardUpdateMonitor mUpdateMonitor;
     private KeyguardScreenCallback mCallback;
+
+    private static final String TOGGLE_FLASHLIGHT = "net.cactii.flash2.TOGGLE_FLASHLIGHT";
+    private boolean mLockFlashlight = (Settings.System.getInt(mContext.getContentResolver(),
+			Settings.System.LOCKSCREEN_FLASHLIGHT, 0) == 1);
 
     /**
      * whether there is a fallback option available when the pattern is forgotten.
@@ -367,6 +374,30 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         mDate.setText(DateFormat.format(mDateFormatString, new Date()));
     }
 
+    private void toggleFlashLight() {
+        Intent intent = new Intent(PatternUnlockScreen.TOGGLE_FLASHLIGHT);
+        intent.putExtra("strobe", false);
+        intent.putExtra("period", 0);
+        intent.putExtra("bright", false);
+        getContext().sendBroadcast(intent);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_HOME) && mLockFlashlight) {
+            event.startTracking();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_HOME) {
+          toggleFlashLight();
+        }
+        return false;
+    }
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {

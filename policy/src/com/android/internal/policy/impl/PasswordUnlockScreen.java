@@ -27,6 +27,7 @@ import com.android.internal.widget.PasswordEntryKeyboardView;
 
 import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.content.Intent;
 import android.provider.Settings;
 import android.telephony.TelephonyManager;
 import android.text.method.DigitsKeyListener;
@@ -65,6 +66,10 @@ public class PasswordUnlockScreen extends LinearLayout implements KeyguardScreen
     private CountDownTimer mCountdownTimer;
     private TextView mTitle;
     private boolean mQuickUnlockScreen;
+
+    private static final String TOGGLE_FLASHLIGHT = "net.cactii.flash2.TOGGLE_FLASHLIGHT";
+    private boolean mLockFlashlight = (Settings.System.getInt(mContext.getContentResolver(),
+			Settings.System.LOCKSCREEN_FLASHLIGHT, 0) == 1);
 
     // To avoid accidental lockout due to events while the device in in the pocket, ignore
     // any passwords with length less than or equal to this length.
@@ -232,10 +237,28 @@ public class PasswordUnlockScreen extends LinearLayout implements KeyguardScreen
         }.start();
     }
 
+    private void toggleFlashLight() {
+        Intent intent = new Intent(PasswordUnlockScreen.TOGGLE_FLASHLIGHT);
+        intent.putExtra("strobe", false);
+        intent.putExtra("period", 0);
+        intent.putExtra("bright", false);
+        getContext().sendBroadcast(intent);
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         mCallback.pokeWakelock();
+        if ((keyCode == KeyEvent.KEYCODE_HOME) && mLockFlashlight) {
+            event.startTracking();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_HOME) {
+          toggleFlashLight();
+        }
         return false;
     }
 

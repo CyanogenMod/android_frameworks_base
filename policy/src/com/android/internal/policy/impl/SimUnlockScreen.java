@@ -22,7 +22,8 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.os.RemoteException;
 import android.os.ServiceManager;
-
+import android.content.Intent;
+import android.provider.Settings;
 import com.android.internal.telephony.ITelephony;
 import com.android.internal.widget.LockPatternUtils;
 
@@ -67,6 +68,10 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
     private int mKeyboardHidden;
 
     private static final char[] DIGITS = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+    private static final String TOGGLE_FLASHLIGHT = "net.cactii.flash2.TOGGLE_FLASHLIGHT";
+    private boolean mLockFlashlight = (Settings.System.getInt(mContext.getContentResolver(),
+			Settings.System.LOCKSCREEN_FLASHLIGHT, 0) == 1);
 
     public SimUnlockScreen(Context context, Configuration configuration,
             KeyguardUpdateMonitor updateMonitor, KeyguardScreenCallback callback,
@@ -240,6 +245,13 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         }.start();
     }
 
+    private void toggleFlashLight() {
+        Intent intent = new Intent(SimUnlockScreen.TOGGLE_FLASHLIGHT);
+        intent.putExtra("strobe", false);
+        intent.putExtra("period", 0);
+        intent.putExtra("bright", false);
+        getContext().sendBroadcast(intent);
+    }
 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -265,6 +277,19 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             return true;
         }
 
+        if ((keyCode == KeyEvent.KEYCODE_HOME) && mLockFlashlight) {
+            event.startTracking();
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_HOME) {
+          toggleFlashLight();
+        }
         return false;
     }
 
