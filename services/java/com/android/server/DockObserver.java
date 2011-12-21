@@ -16,6 +16,9 @@
 
 package com.android.server;
 
+import android.app.Activity;
+import android.app.KeyguardManager;
+import android.app.KeyguardManager.KeyguardLock;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.ContentResolver;
@@ -58,12 +61,27 @@ class DockObserver extends UEventObserver {
 
     private PowerManagerService mPowerManager;
 
+    private KeyguardLock mLock = null; 
+
+    private static boolean mBluetoothStartState;
+
     public DockObserver(Context context, PowerManagerService pm) {
         mContext = context;
         mPowerManager = pm;
         init();  // set initial status
 
+        getLock(context);
+
         startObserving(DOCK_UEVENT_MATCH);
+    }
+
+    private KeyguardLock getLock(Context context) {
+        if (mLock == null) {
+            KeyguardManager keyguardManager = (KeyguardManager)context.
+                    getSystemService(Activity.KEYGUARD_SERVICE);
+            mLock = keyguardManager.newKeyguardLock(Context.KEYGUARD_SERVICE);
+        }
+        return mLock;
     }
 
     @Override
@@ -182,6 +200,36 @@ class DockObserver extends UEventObserver {
                                             sfx.play();
                                         }
                                     }
+                                }
+                            }
+                        }
+
+                        if(Settings.System.getInt(cr,
+                               Settings.System.DOCK_NOLOCK, 0) == 1)
+                        {
+                            if(mDockState > 0) {
+                                mLock.disableKeyguard();
+                                Log.i(TAG, "DOCK; no_lock");
+                            } else {
+                                mLock.reenableKeyguard();
+                                Log.i(TAG, "DOCK; relock");
+                            }
+                        }
+
+                        if(Settings.System.getInt(cr,
+                               Settings.System.DOCK_BLUETOOTH, 0) == 1)
+                        {
+                            BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                            if(mDockState > 0) {
+                                mBluetoothStartState = mBluetoothAdapter.isEnabled();
+                                if(!mBluetoothAdapter.isEnabled()) {
+                                    mBluetoothAdapter.enable();
+                                    Log.i(TAG, "DOCK: Bluetooth activated");
+                                }
+                            } else {
+                                if(mBluetoothAdapter.isEnabled() && !mBluetoothStartState) {
+                                    mBluetoothAdapter.disable();
+                                    Log.i(TAG, "DOCK: Bluetooth disabled");
                                 }
                             }
                         }

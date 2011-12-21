@@ -2945,6 +2945,16 @@ public final class Settings {
         public static final String PHONE_GOGGLES_OTHER_FILTERED = "phone_goggles_other_filtered";
 
         /**
+         * @hide
+         */
+        public static final String DOCK_NOLOCK = "dock_nolock";
+
+        /**
+         * @hide
+         */
+        public static final String DOCK_BLUETOOTH = "dock_bluetooth";
+
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          * @hide
