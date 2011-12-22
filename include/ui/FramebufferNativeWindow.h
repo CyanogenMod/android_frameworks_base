@@ -54,6 +54,7 @@ public:
 
     framebuffer_device_t const * getDevice() const { return fbDev; } 
 
+#ifdef QCOM_HDMI_OUT
     void orientationChanged(int orientation) {
         if (fbDev->orientationChanged)
             fbDev->orientationChanged(fbDev, orientation);
@@ -66,6 +67,7 @@ public:
         if (fbDev->setActionSafeHeightRatio)
             fbDev->setActionSafeHeightRatio(fbDev, asHeightRatio);
     }
+#endif
 
     bool isUpdateOnDemand() const { return mUpdateOnDemand; }
     status_t setUpdateRectangle(const Rect& updateRect);

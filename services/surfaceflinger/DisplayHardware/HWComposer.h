@@ -70,7 +70,9 @@ public:
     // gets the list flags
     uint32_t getFlags() const;
 
+#ifdef QCOM_HDMI_OUT
     void enableHDMIOutput(bool enable);
+#endif
 
     // for debugging
     void dump(String8& out, char* scratch, size_t SIZE,

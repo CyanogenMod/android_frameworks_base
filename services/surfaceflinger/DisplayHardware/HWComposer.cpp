@@ -211,10 +211,13 @@ void HWComposer::dump(String8& result, char* buffer, size_t SIZE,
     }
 }
 
+#ifdef QCOM_HDMI_OUT
 void HWComposer::enableHDMIOutput(bool enable) {
     if (mHwc) {
         mHwc->enableHDMIOutput(mHwc, enable);
     }
 }
+#endif
+
 // ---------------------------------------------------------------------------
 }; // namespace android

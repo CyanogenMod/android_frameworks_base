@@ -104,8 +104,10 @@ SurfaceFlinger::SurfaceFlinger()
         mBootFinished(false),
         mConsoleSignals(0),
         mCanSkipComposition(false),
-        mSecureFrameBuffer(0),
-        mHDMIOutput(false)
+#ifdef QCOM_HDMI_OUT
+        mHDMIOutput(false),
+#endif
+        mSecureFrameBuffer(0)
 {
     init();
 }
@@ -410,12 +412,15 @@ bool SurfaceFlinger::threadLoop()
         handleConsoleEvents();
     }
 
+#ifdef QCOM_HDMI_OUT
     //Serializes HDMI event handling and drawing.
     //Necessary for race-free overlay channel management.
     //Must always be held only after handleConsoleEvents() since
     //that could enable / disable HDMI based on suspend resume
     Mutex::Autolock _l(mHDMILock);
-
+#else
+    // if we're in a global transaction, don't do anything.
+#endif
     const uint32_t mask = eTransactionNeeded | eTraversalNeeded;
     uint32_t transactionFlags = peekTransactionFlags(mask);
     if (UNLIKELY(transactionFlags)) {
@@ -473,14 +478,18 @@ void SurfaceFlinger::postFramebuffer()
     LOGW_IF(mSwapRegion.isEmpty(), "mSwapRegion is empty");
     const DisplayHardware& hw(graphicPlane(0).displayHardware());
     const nsecs_t now = systemTime();
+#ifdef QCOM_HDMI_OUT
     const GraphicPlane& plane(graphicPlane(0));
     const Transform& planeTransform(plane.transform());
+#endif
     mDebugInSwapBuffers = now;
+#ifdef QCOM_HDMI_OUT
     //If orientation has changed, inform gralloc for HDMI mirroring
     if(mOrientationChanged) {
         mOrientationChanged = false;
         hw.orientationChanged(planeTransform.getOrientation());
     }
+#endif
     hw.flip(mSwapRegion);
     mLastSwapBufferTime = systemTime() - now;
     mDebugInSwapBuffers = 0;
@@ -495,7 +504,9 @@ void SurfaceFlinger::handleConsoleEvents()
     int what = android_atomic_and(0, &mConsoleSignals);
     if (what & eConsoleAcquired) {
         hw.acquireScreen();
+#ifdef QCOM_HDMI_OUT
         updateHwcHDMI(mHDMIOutput);
+#endif
         // this is a temporary work-around, eventually this should be called
         // by the power-manager
         SurfaceFlinger::turnElectronBeamOn(mElectronBeamAnimationMode);
@@ -504,7 +515,9 @@ void SurfaceFlinger::handleConsoleEvents()
     if (what & eConsoleReleased) {
         if (hw.isScreenAcquired()) {
             hw.releaseScreen();
+#ifdef QCOM_HDMI_OUT
             updateHwcHDMI(false);
+#endif
         }
     }
 
@@ -570,7 +583,9 @@ void SurfaceFlinger::handleTransactionLocked(uint32_t transactionFlags)
             // Currently unused: const uint32_t flags = mCurrentState.orientationFlags;
             GraphicPlane& plane(graphicPlane(dpy));
             plane.setOrientation(orientation);
+#ifdef QCOM_HDMI_OUT
             mOrientationChanged = true;
+#endif
 
             // update the shared control block
             const DisplayHardware& hw(plane.displayHardware());
@@ -1299,6 +1314,7 @@ int SurfaceFlinger::setOrientation(DisplayID dpy,
     return orientation;
 }
 
+#ifdef QCOM_HDMI_OUT
 void SurfaceFlinger::updateHwcHDMI(bool enable)
 {
     invalidateHwcGeometry();
@@ -1324,6 +1340,7 @@ void SurfaceFlinger::setActionSafeHeightRatio(float asHeightRatio){
     const DisplayHardware& hw(graphicPlane(0).displayHardware());
     hw.setActionSafeHeightRatio(asHeightRatio);
 }
+#endif
 
 sp<ISurface> SurfaceFlinger::createSurface(
         ISurfaceComposerClient::surface_data_t* params,

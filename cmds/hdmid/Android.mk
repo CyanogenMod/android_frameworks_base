@@ -13,7 +13,7 @@
 #  limitations under the License
 #
 
-ifeq ($(TARGET_HAVE_HDMI_OUT),true)
+ifeq ($(TARGET_QCOM_HDMI_OUT),true)
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 

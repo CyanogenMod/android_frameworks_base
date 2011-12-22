@@ -417,6 +417,7 @@ void DisplayHardware::dump(String8& res) const
     mNativeWindow->dump(res);
 }
 
+#ifdef QCOM_HDMI_OUT
 void DisplayHardware::orientationChanged(int orientation) const
 {
     mNativeWindow->orientationChanged(orientation);
@@ -431,4 +432,4 @@ void DisplayHardware::setActionSafeHeightRatio(float asHeightRatio) const
 {
     mNativeWindow->setActionSafeHeightRatio(asHeightRatio);
 }
-
+#endif

@@ -175,6 +175,7 @@ public:
         return result != 0;
     }
 
+#ifdef QCOM_HDMI_OUT
     virtual void enableHDMIOutput(int enable)
     {
         Parcel data, reply;
@@ -198,6 +199,7 @@ public:
         data.writeFloat(asHeightRatio);
         remote()->transact(BnSurfaceComposer::SET_ACTIONSAFE_HEIGHT_RATIO, data, &reply);
     }
+#endif
 
 };
 
@@ -279,6 +281,7 @@ status_t BnSurfaceComposer::onTransact(
             int32_t result = authenticateSurfaceTexture(surfaceTexture) ? 1 : 0;
             reply->writeInt32(result);
         } break;
+#ifdef QCOM_HDMI_OUT
         case ENABLE_HDMI_OUTPUT: {
             CHECK_INTERFACE(ISurfaceComposer, data, reply);
             int enable = data.readInt32();
@@ -294,7 +297,7 @@ status_t BnSurfaceComposer::onTransact(
             float asHeightRatio = data.readFloat();
             setActionSafeHeightRatio(asHeightRatio);
         } break;
-
+#endif
         default:
             return BBinder::onTransact(code, data, reply, flags);
     }

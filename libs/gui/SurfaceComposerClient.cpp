@@ -280,6 +280,7 @@ status_t Composer::setFreezeTint(const sp<SurfaceComposerClient>& client,
     return NO_ERROR;
 }
 
+#ifdef QCOM_HDMI_OUT
 void SurfaceComposerClient::enableHDMIOutput(int enable)
 {
     sp<ISurfaceComposer> sm(getComposerService());
@@ -295,6 +296,7 @@ void SurfaceComposerClient::setActionSafeHeightRatio(float asHeightRatio){
     sp<ISurfaceComposer> sm(getComposerService());
     return sm->setActionSafeHeightRatio(asHeightRatio);
 }
+#endif
 
 status_t Composer::setOrientation(int orientation) {
     Mutex::Autolock _l(mLock);
