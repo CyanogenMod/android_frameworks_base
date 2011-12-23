@@ -939,10 +939,12 @@ public abstract class HardwareRenderer {
                     fallback(true);
                     return SURFACE_STATE_ERROR;
                 } else {
-                    if (mUpdateDirtyRegions) {
-                        enableDirtyRegions();
-                        mUpdateDirtyRegions = false;
-                    }
+                    if (SystemProperties.QCOM_HARDWARE ) {
+                        if (mUpdateDirtyRegions) {
+                            enableDirtyRegions();
+                            mUpdateDirtyRegions = false;
+                        }
+                     }
                     return SURFACE_STATE_UPDATED;
                 }
             }
