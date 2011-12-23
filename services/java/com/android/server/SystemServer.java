@@ -419,7 +419,7 @@ class ServerThread extends Thread {
             }
 
 	    //QCOM HDMI OUT
-	    if (SystemProperties.QCOM_HDMI_OUT ) {
+            if (SystemProperties.QCOM_HDMI_OUT ) {
                 try {
                     Slog.i(TAG, "HDMI Service");
                     ServiceManager.addService("hdmi", new HDMIService(context));
