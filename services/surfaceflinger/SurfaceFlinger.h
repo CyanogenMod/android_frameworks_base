@@ -405,7 +405,9 @@ private:
                 Mutex                       mHDMILock;
                 bool                        mOrientationChanged;
 #endif
+#ifdef QCOM_HARDWARE
                 bool                        mCanSkipComposition;
+#endif
 
                 // these are thread safe
     mutable     Barrier                     mReadyToRunBarrier;

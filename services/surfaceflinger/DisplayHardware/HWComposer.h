@@ -67,9 +67,10 @@ public:
     // updated in preapre()
     size_t getLayerCount(int type) const;
 
+#ifdef QCOM_HARDWARE
     // gets the list flags
     uint32_t getFlags() const;
-
+#endif
 #ifdef QCOM_HDMI_OUT
     void enableHDMIOutput(bool enable);
 #endif

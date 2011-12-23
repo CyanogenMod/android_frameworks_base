@@ -98,8 +98,10 @@ status_t HWComposer::createWorkList(size_t numLayers) {
 }
 
 status_t HWComposer::prepare() const {
+#ifdef QCOM_HARDWARE
     // Reset the Skip composition flag
     mList->flags &= ~HWC_SKIP_COMPOSITION;
+#endif
     int err = mHwc->prepare(mHwc, mList);
     if (err == NO_ERROR) {
         size_t numOVLayers = 0;
@@ -169,9 +171,11 @@ hwc_layer_t* HWComposer::getLayers() const {
     return mList ? mList->hwLayers : 0;
 }
 
+#ifdef QCOM_HARDWARE
 uint32_t HWComposer::getFlags() const {
     return mList ? mList->flags : 0;
 }
+#endif
 
 void HWComposer::dump(String8& result, char* buffer, size_t SIZE,
         const Vector< sp<LayerBase> >& visibleLayersSortedByZ) const {
