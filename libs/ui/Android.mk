@@ -66,6 +66,10 @@ LOCAL_SHARED_LIBRARIES := \
 LOCAL_C_INCLUDES := \
     external/skia/include/core
 
+ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
+LOCAL_CFLAGS += -DQCOM_HARDWARE
+endif
+
 LOCAL_MODULE:= libui
 
 include $(BUILD_SHARED_LIBRARY)
