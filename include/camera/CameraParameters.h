@@ -371,6 +371,50 @@ public:
     static const char KEY_SUPPORTED_CAF[];
     static const char KEY_SUPPORTED_CONTINUOUS_AF[];
 
+    //Face Detection
+    static const char KEY_FACE_DETECTION[];
+    static const char KEY_SUPPORTED_FACE_DETECTION[];
+
+    //Continuous AF.
+    static const char KEY_SELECTABLE_ZONE_AF[];
+    static const char KEY_SUPPORTED_SELECTABLE_ZONE_AF[];
+
+    static const char KEY_SHUTTER_SOUND[];
+    static const char KEY_BRIGHTNESS_MODE[];
+
+    static const char KEY_HISTOGRAM[] ;
+    static const char KEY_SUPPORTED_HISTOGRAM_MODES[] ;
+    // Values for HISTOGRAM
+    static const char HISTOGRAM_ENABLE[] ;
+    static const char HISTOGRAM_DISABLE[] ;
+
+    static const char KEY_SKIN_TONE_ENHANCEMENT[] ;
+    static const char KEY_SUPPORTED_SKIN_TONE_ENHANCEMENT_MODES[] ;
+    // Values for SKIN TONE ENHANCEMENT
+    static const char SKIN_TONE_ENHANCEMENT_ENABLE[] ;
+    static const char SKIN_TONE_ENHANCEMENT_DISABLE[] ;
+
+    // Values for auto scene detection settings.
+    static const char SCENE_DETECT_OFF[];
+    static const char SCENE_DETECT_ON[];
+
+    // Values for auto exposure settings.
+    static const char SELECTABLE_ZONE_AF_AUTO[];
+    static const char SELECTABLE_ZONE_AF_SPOT_METERING[];
+    static const char SELECTABLE_ZONE_AF_CENTER_WEIGHTED[];
+    static const char SELECTABLE_ZONE_AF_FRAME_AVERAGE[];
+
+    // Values for Face Detection settings.
+    static const char FACE_DETECTION_OFF[];
+    static const char FACE_DETECTION_ON[];
+
+ 
+    // Current auto scene detection mode.
+    // Example value: "off" or SCENE_DETECT_XXX constants. Read/write.
+    static const char KEY_SCENE_DETECT[];
+    // Supported auto scene detection settings.
+    // Example value: "off,backlight,snow/cloudy". Read only.
+    static const char KEY_SUPPORTED_SCENE_DETECT[];
     // Values for white balance settings.
     static const char WHITE_BALANCE_AUTO[];
     static const char WHITE_BALANCE_INCANDESCENT[];
@@ -436,6 +480,9 @@ public:
     // Applications are looking for a barcode. Camera driver will be optimized
     // for barcode reading.
     static const char SCENE_MODE_BARCODE[];
+    static const char SCENE_MODE_BACKLIGHT[];
+    static const char SCENE_MODE_FLOWERS[];
+    static const char SCENE_MODE_AR[];
 
     // Formats for setPreviewFormat and setPictureFormat.
     static const char PIXEL_FORMAT_YUV422SP[];
@@ -445,7 +492,7 @@ public:
     static const char PIXEL_FORMAT_RGB565[];
     static const char PIXEL_FORMAT_JPEG[];
     static const char PIXEL_FORMAT_RAW[];
-
+    static const char PIXEL_FORMAT_YUV420SP_ADRENO[]; // ADRENO
 
     // Values for focus mode settings.
     // Auto-focus mode. Applications should call
@@ -475,6 +522,7 @@ public:
     // CameraHardwareInterface.autoFocus in this mode. To stop continuous focus,
     // applications should change the focus mode to other modes.
     static const char FOCUS_MODE_CONTINUOUS_VIDEO[];
+    static const char FOCUS_MODE_CONTINUOUS_CAMERA[];
 
     // Values for Continuous AF
     static const char CAF_OFF[] ;
