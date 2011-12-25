@@ -133,7 +133,16 @@ public class PhoneFactory {
                 Log.i(LOG_TAG, "Cdma Subscription set to " + cdmaSubscription);
 
                 //reads the system properties and makes commandsinterface
-                sCommandsInterface = new RIL(context, networkMode, cdmaSubscription);
+                String sRILClassname = SystemProperties.get("ro.telephony.ril_class");
+                Log.i(LOG_TAG, "RILClassname is " + sRILClassname);
+
+                if("smdk4210".equals(sRILClassname)) {
+                    // Samsung Galaxy S II - Exynos4210
+                    Log.i(LOG_TAG, "Using Smdk4210 RIL");
+                    sCommandsInterface = new Smdk4210RIL(context, networkMode, cdmaSubscription);
+                } else {
+                    sCommandsInterface = new RIL(context, networkMode, cdmaSubscription);
+                }
 
                 int phoneType = getPhoneType(networkMode);
                 if (phoneType == Phone.PHONE_TYPE_GSM) {
