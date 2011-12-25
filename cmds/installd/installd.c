@@ -270,6 +270,11 @@ int initialize_globals() {
         return -1;
     }
 
+    // Get the android datadata directory.
+    if (copy_and_append(&android_datadata_dir, &android_data_dir, DATA_SUBDIR) < 0) {
+        return -1;
+    }
+
     // Get the android app directory.
     if (copy_and_append(&android_app_dir, &android_data_dir, APP_SUBDIR) < 0) {
         return -1;
