@@ -37,12 +37,14 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.IBinder;
+import android.os.IPowerManager;
 import android.os.RemoteException;
 import android.os.Handler;
 import android.os.Message;
 import android.os.ServiceManager;
 import android.os.SystemClock;
 import android.provider.Settings;
+import android.provider.Settings.SettingNotFoundException;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Slog;
@@ -223,6 +225,7 @@ public class PhoneStatusBar extends StatusBar {
     boolean mAnimatingReveal = false;
     int mViewDelta;
     int[] mAbsPos = new int[2];
+    int mLinger = 0;
     Runnable mPostCollapseCleanup = null;
 
 
@@ -1487,6 +1490,7 @@ public class PhoneStatusBar extends StatusBar {
         final int hitSize = statusBarSize*2;
         final int y = (int)event.getRawY();
         if (action == MotionEvent.ACTION_DOWN) {
+            mLinger = 0;
             if (!mExpanded) {
                 mViewDelta = statusBarSize - y;
             } else {
@@ -1511,7 +1515,62 @@ public class PhoneStatusBar extends StatusBar {
             final int minY = statusBarSize + mCloseView.getHeight();
             if (action == MotionEvent.ACTION_MOVE) {
                 if (mAnimatingReveal && y < minY) {
-                    // nothing
+                    try {
+                        if (Settings.System.getInt(mStatusBarView.getContext().getContentResolver(),Settings.System.STATUS_BAR_BRIGHTNESS_TOGGLE) == 1){
+                            //Credit for code goes to daryelv github : https://github.com/daryelv/android_frameworks_base
+                            // See if finger is moving left/right an adequate amount
+                            mVelocityTracker.computeCurrentVelocity(1000);
+                            float yVel = mVelocityTracker.getYVelocity();
+                            if (yVel < 0) {
+                                yVel = -yVel;
+                            }
+                            if (yVel < 50.0f) {
+                                if (mLinger > 50) {
+                                    // Check that Auto-Brightness not enabled
+                                    Context context = mStatusBarView.getContext();
+                                    boolean auto_brightness = false;
+                                    int brightness_mode = 0;
+                                    try {
+                                        brightness_mode = Settings.System.getInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE);
+                                    }catch (SettingNotFoundException e){
+                                        auto_brightness = false;
+                                    }
+                                    auto_brightness = (brightness_mode == Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC);
+                                    if (auto_brightness)
+                                    {
+                                        // do nothing - Don't manually set brightness from statusbar
+                                    }
+                                    else
+                                    {
+                                        // set brightness according to x position on statusbar
+                                        float x = (float)event.getRawX();
+                                        float screen_width = (float)(context.getResources().getDisplayMetrics().widthPixels);
+                                        // Brightness set from the 90% of pixels in the middle of screen, can't always get to the edges
+                                        int new_brightness = (int)(((x - (screen_width * 0.05f))/(screen_width * 0.9f)) * (float)android.os.Power.BRIGHTNESS_ON );
+                                        // don't let screen go completely dim or past 100% bright
+                                        if (new_brightness < 10) new_brightness = 10;
+                                        if (new_brightness > android.os.Power.BRIGHTNESS_ON ) new_brightness = android.os.Power.BRIGHTNESS_ON;
+                                        // Set the brightness
+                                        try {
+                                            IPowerManager.Stub.asInterface(ServiceManager.getService("power")).setBacklightBrightness(new_brightness);
+                                            Settings.System.putInt(context.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, new_brightness);
+                                        }catch (Exception e){
+                                            Slog.w(TAG, "Setting Brightness failed: " + e);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    mLinger++;
+                                }
+                            }
+                            else
+                            {
+                                mLinger = 0;
+                            }
+                        }
+                    }catch (SettingNotFoundException e){
+                    }
                 } else  {
                     mAnimatingReveal = false;
                     updateExpandedViewPos(y + mViewDelta);

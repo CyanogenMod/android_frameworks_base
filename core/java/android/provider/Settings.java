@@ -2056,6 +2056,13 @@ public final class Settings {
         public static final String EXPANDED_HIDE_INDICATOR = "expanded_hide_indicator";
 
         /**
+         * Whether to control brightness from status bar
+         *
+         * @hide
+         */
+         public static final String STATUS_BAR_BRIGHTNESS_TOGGLE = "status_bar_brightness_toggle";
+
+        /**
          * Haptic feedback in power widget
          *
          * @hide
