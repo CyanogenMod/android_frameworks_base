@@ -1,0 +1,11 @@
+Change-Id: Ia8f3a5ea357dab684b92f5d0ef4aada2d0a2527f
+Code-Review+2: Steve Kondik <shade@chemlab.org>
+Verified+1: Steve Kondik <shade@chemlab.org>
+Code-Review+1: Twisted Playground <twistedumbrella@gmail.com>
+Code-Review+1: Miquel Martos <miquelmartos@gmail.com>
+Code-Review+1: Tomasz Zajac <biterman@gmail.com>
+Submitted-by: Steve Kondik <shade@chemlab.org>
+Submitted-at: Mon, 26 Dec 2011 23:55:39 +0300
+Reviewed-on: http://review.cyanogenmod.com/11120
+Project: CyanogenMod/android_frameworks_base
+Branch: refs/heads/ics
