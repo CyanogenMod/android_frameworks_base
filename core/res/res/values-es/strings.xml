@@ -157,11 +157,12 @@
     <string name="global_action_reboot">Reiniciar</string>
     <string name="global_action_choose_profile">Cambiar Perfil</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Modo silencio"</string>
-    <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"El sonido está desactivado. Activar."</string>
-    <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"El sonido está activado. Desactivar."</string>
+    <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"El sonido está desactivado"</string>
+    <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"El sonido está activado"</string>
     <string name="global_actions_toggle_airplane_mode" msgid="5884330306926307456">"Modo avión"</string>
-    <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"Modo avión activado. Desactivar."</string>
-    <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"Modo avión desactivado. Activar."</string>
+    <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"Modo avión activado"</string>
+    <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"Modo avión desactivado"</string>
+    <string name="global_action_screenshot">Capturar pantalla</string>
     <string name="safeMode" msgid="2788228061547930246">"Modo seguro"</string>
     <string name="android_system_label" msgid="6577375335728551336">"Sistema Android"</string>
     <string name="permgrouplab_costMoney" msgid="5429808217861460401">"Servicios por los que tienes que pagar"</string>
@@ -763,6 +764,8 @@
     <string name="aerr_title" msgid="653922989522758100">"Lo sentimos."</string>
     <string name="aerr_application" msgid="4683614104336409186">"La aplicación <xliff:g id="APPLICATION">%1$s</xliff:g> (proceso <xliff:g id="PROCESS">%2$s</xliff:g>) se ha interrumpido inesperadamente. Inténtalo de nuevo."</string>
     <string name="aerr_process" msgid="1551785535966089511">"El proceso <xliff:g id="PROCESS">%1$s</xliff:g> se ha interrumpido inesperadamente. Inténtalo de nuevo."</string>
+    <string name="aerr_revoked_application">La aplicación <xliff:g id="application">%1$s</xliff:g> (proceso <xliff:g id="process">%2$s</xliff:g>) se ha interrumpido inesperadamente.\n¡AVISO!\nEsta aplicación tiene uno o más permisos RESTRINGIDOS que pueden ser la causa de su mal funcionamiento. Por favor, restaura los permisos e inténtalo de nuevo.</string>
+    <string name="aerr_revoked_process">El proceso <xliff:g id="process">%1$s</xliff:g> se ha interrumpido inesperadamente.\n¡AVISO!\nEste proceso tiene uno o más permisos RESTRINGIDOS que pueden ser la causa de su mal funcionamiento. Por favor, restaura los permisos e inténtalo de nuevo.</string>
     <string name="anr_title" msgid="3100070910664756057">"Lo sentimos."</string>
     <string name="anr_activity_application" msgid="3538242413112507636">"La actividad <xliff:g id="ACTIVITY">%1$s</xliff:g> (<xliff:g id="APPLICATION">%2$s</xliff:g> en aplicación) no está respondiendo."</string>
     <string name="anr_activity_process" msgid="5420826626009561014">"La actividad <xliff:g id="ACTIVITY">%1$s</xliff:g> (<xliff:g id="PROCESS">%2$s</xliff:g> en curso) no está respondiendo."</string>
@@ -770,6 +773,8 @@
     <string name="anr_process" msgid="1246866008169975783">"El proceso <xliff:g id="PROCESS">%1$s</xliff:g> no está respondiendo."</string>
     <string name="force_close" msgid="3653416315450806396">"Forzar cierre"</string>
     <string name="report" msgid="4060218260984795706">"Informe"</string>
+    <string name="edit_perms">Editar permisos</string>
+    <string name="reset_perms">Restablecer permisos</string>
     <string name="wait" msgid="7147118217226317732">"Esperar"</string>
     <string name="launch_warning_title" msgid="8323761616052121936">"Aplicación redireccionada"</string>
     <string name="launch_warning_replace" msgid="6202498949970281412">"<xliff:g id="APP_NAME">%1$s</xliff:g> se está ejecutando."</string>
