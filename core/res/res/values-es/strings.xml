@@ -157,11 +157,12 @@
     <string name="global_action_reboot">Reiniciar</string>
     <string name="global_action_choose_profile">Cambiar Perfil</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Modo silencio"</string>
-    <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"El sonido está desactivado. Activar."</string>
-    <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"El sonido está activado. Desactivar."</string>
+    <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"El sonido está desactivado"</string>
+    <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"El sonido está activado"</string>
     <string name="global_actions_toggle_airplane_mode" msgid="5884330306926307456">"Modo avión"</string>
-    <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"Modo avión activado. Desactivar."</string>
-    <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"Modo avión desactivado. Activar."</string>
+    <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"Modo avión activado"</string>
+    <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"Modo avión desactivado"</string>
+    <string name="global_action_screenshot">Capturar pantalla</string>
     <string name="safeMode" msgid="2788228061547930246">"Modo seguro"</string>
     <string name="android_system_label" msgid="6577375335728551336">"Sistema Android"</string>
     <string name="permgrouplab_costMoney" msgid="5429808217861460401">"Servicios por los que tienes que pagar"</string>
