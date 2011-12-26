@@ -84,6 +84,9 @@ public:
 
     uint32_t getPageFlipCount() const;
     EGLDisplay getEGLDisplay() const { return mDisplay; }
+#ifdef QCOM_HARDWARE
+    EGLDisplay getEGLSurface() const { return mSurface; }
+#endif
 
     void dump(String8& res) const;
 

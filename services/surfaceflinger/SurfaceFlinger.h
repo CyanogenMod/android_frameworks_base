@@ -346,6 +346,9 @@ private:
             //HDMI Specific
             void updateHwcHDMI(bool enable);
 #endif
+#ifdef QCOM_HARDWARE
+            bool isGPULayerPresent();
+#endif
 
     mutable     MessageQueue    mEventQueue;
 
