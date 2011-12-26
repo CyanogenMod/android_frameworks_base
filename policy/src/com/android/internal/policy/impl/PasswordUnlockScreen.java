@@ -236,6 +236,17 @@ public class PasswordUnlockScreen extends LinearLayout implements KeyguardScreen
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         mCallback.pokeWakelock();
+        if ((keyCode == KeyEvent.KEYCODE_HOME)) {
+            event.startTracking();
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_HOME) {
+            LockScreen.toggleFlashLight(getContext());
+        }
         return false;
     }
 
