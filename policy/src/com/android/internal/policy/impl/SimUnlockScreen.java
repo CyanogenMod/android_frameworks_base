@@ -265,6 +265,19 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             return true;
         }
 
+        if ((keyCode == KeyEvent.KEYCODE_HOME)) {
+            event.startTracking();
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_HOME) {
+            LockScreen.toggleFlashLight(getContext());
+        }
         return false;
     }
 

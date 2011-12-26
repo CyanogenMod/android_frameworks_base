@@ -1204,6 +1204,12 @@ public final class Settings {
         public static final String AIRPLANE_MODE_TOGGLEABLE_RADIOS = "airplane_mode_toggleable_radios";
 
         /**
+         * Whether Bluetooth fast connections are enabled.
+         * @hide
+         */
+        public static final String BLUETOOTH_FAST_CONNECT = "bluetooth_fast_connect";
+
+        /**
          * The policy for deciding when Wi-Fi should go to sleep (which will in
          * turn switch to using the mobile data as an Internet connection).
          * <p>
@@ -1646,6 +1652,13 @@ public final class Settings {
          * @hide
          */
         public static final String VOLUME_CONTROL_SILENT = "volume_contol_silent";
+
+        /**
+         * Whether to lock ringer volume changes in silent mode.
+         *
+         * @hide
+         */
+        public static final String LOCK_VOLUME_KEYS = "lock_volume_keys";
 
         /**
          * Whether notifications should vibrate during phone calls or not.
@@ -2252,6 +2265,23 @@ public final class Settings {
         public static final String LOCK_MMS_IN_MEMORY = "lock_mms_in_memory";
 
         /**
+         * What text to show as carrier label
+         * 0: use system default
+         * 1: show spn
+         * 2: show plmn
+         * 3: show custom string
+         * default: 0
+         * @hide
+         */
+        public static final String CARRIER_LABEL_TYPE = "carrier_label_type";
+
+        /**
+         * The custom string to show as carrier label
+         * @hide
+         */
+        public static final String CARRIER_LABEL_CUSTOM_STRING = "carrier_label_custom_string";
+
+        /**
          * Display style of AM/PM next to clock in status bar
          * 0: Normal display (Eclair stock)
          * 1: Small display (Froyo stock)
@@ -2586,6 +2616,18 @@ public final class Settings {
         public static final String IN_CALL_STYLE_PREF = "in_call_style_pref";
 
         /**
+         * Sets the rotary lock style
+         * @hide
+         */
+        public static final String ROTARY_STYLE_PREF = "rotary_style_pref";
+
+        /**
+         * Sets the ringlock style
+         * @hide
+         */
+        public static final String RINGLOCK_STYLE_PREF = "ringlock_style_pref";
+
+        /**
          * Pulse the Trackball with Screen On.  The value is boolean (1 or 0).
          * @hide
          */
@@ -2675,6 +2717,12 @@ public final class Settings {
          * @hide
          */
         public static final String LOCKSCREEN_ALWAYS_BATTERY = "lockscreen_always_battery";
+
+        /**
+         * Whether to toggle the flashlight when HOME button is long pressed while at the lockscreen
+         * @hide
+         */
+        public static final String LOCKSCREEN_LONG_HOME_ACTION = "lockscreen_flashlight";
 
         /**
          * Whether to show the next calendar event
@@ -2845,6 +2893,12 @@ public final class Settings {
         * @hide
         */
         public static final String EXPANDED_FLASH_MODE = "expanded_flash_mode";
+
+        /**
+        * Notification Power Widget - Mobile Data Auto 2G/3G Toggle
+        * @hide
+        */
+        public static final String EXPANDED_MOBILEDATANETWORK_MODE = "expanded_mobiledatanetwork_mode";
 
         /** 
         * Enables the Screen-on animation
@@ -3528,6 +3582,11 @@ public final class Settings {
         public static final String ADB_ENABLED = "adb_enabled";
 
         /**
+         * The TCP/IP port to run ADB on, or -1 for USB
+         */
+        public static final String ADB_PORT = "adb_port";
+
+        /**
          * Whether to show ADB notifications.
          * @hide
          */
@@ -3698,6 +3757,12 @@ public final class Settings {
          * @hide
          */
         public static final String ASSISTED_GPS_ENABLED = "assisted_gps_enabled";
+        
+         /**
+         * External BT GPS device
+         * @hide
+         */
+        public static final String EXTERNAL_GPS_BT_DEVICE = "0";
 
         /**
          * The Logging ID (a unique 64-bit value) as a hex string.
@@ -5065,4 +5130,5 @@ public final class Settings {
     public static String getGTalkDeviceId(long androidId) {
         return "android-" + Long.toHexString(androidId);
     }
+    
 }
