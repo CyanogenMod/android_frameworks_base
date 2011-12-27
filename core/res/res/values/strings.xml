@@ -3592,6 +3592,9 @@
     <!-- STK setup Call -->
     <string name="SetupCallDefault">Accept call?</string>
 
+    <!-- Long-press back kill application -->
+    <string name="app_killed_message">Application killed</string>
+
     <!-- Title for a button to choose the currently selected activity
          as the default in the activity resolver. [CHAR LIMIT=25] -->
     <string name="activity_resolver_use_always">Always</string>
