@@ -328,6 +328,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     int mUserRotationMode = WindowManagerPolicy.USER_ROTATION_FREE;
     int mUserRotation = Surface.ROTATION_0;
+    int mUserRotationAngles = -1;
 
     int mAllowAllRotations = -1;
     boolean mCarDockEnablesAccelerometer;
@@ -491,6 +492,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     Settings.Secure.DEFAULT_INPUT_METHOD), false, this);
             resolver.registerContentObserver(Settings.System.getUriFor(
                     "fancy_rotation_anim"), false, this);
+            resolver.registerContentObserver(Settings.System.getUriFor(
+                    Settings.System.ACCELEROMETER_ROTATION_ANGLES), false, this);
             updateSettings();
         }
 
@@ -952,6 +955,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mUserRotation = Settings.System.getInt(resolver,
                     Settings.System.USER_ROTATION,
                     Surface.ROTATION_0);
+            mUserRotationAngles = Settings.System.getInt(resolver,
+                    Settings.System.ACCELEROMETER_ROTATION_ANGLES, -1);
 
             if (mAccelerometerDefault != accelerometerDefault) {
                 mAccelerometerDefault = accelerometerDefault;
@@ -3243,9 +3248,36 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mAllowAllRotations = mContext.getResources().getBoolean(
                             com.android.internal.R.bool.config_allowAllRotations) ? 1 : 0;
                 }
-                if (sensorRotation != Surface.ROTATION_180
+                // No need to introduce undocumented public constants for these
+                // locally used magic numbers (bit mask). It's as simple as:
+                // 1=0 2=90 4=180 8=270
+                boolean allowed = true;
+                boolean allowed180 = false; // Ugly, used to mimic stock defaults
+                if (mUserRotationAngles < 0) {
+                    // Not set by user so use these defaults
+                    mUserRotationAngles = mAllowAllRotations == 1 ?
+                        (1 | 2 | 4 | 8) : // All angles
+                        (1 | 2 | 8); // All except 180
+                }
+                switch (sensorRotation) {
+                    case Surface.ROTATION_0:
+                      allowed = (mUserRotationAngles & 1) != 0;
+                      break;
+                    case Surface.ROTATION_90:
+                      allowed = (mUserRotationAngles & 2) != 0;
+                      break;
+                    case Surface.ROTATION_180:
+                      allowed = (mUserRotationAngles & 4) != 0;
+                      allowed180 = true;
+                      break;
+                    case Surface.ROTATION_270:
+                      allowed = (mUserRotationAngles & 8) != 0;
+                      break;
+                }
+                if (allowed && (sensorRotation != Surface.ROTATION_180
+                        || (sensorRotation == Surface.ROTATION_180 && allowed180)
                         || mAllowAllRotations == 1
-                        || orientation == ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR) {
+                        || orientation == ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR)) {
                     preferredRotation = sensorRotation;
                 } else {
                     preferredRotation = lastRotation;
