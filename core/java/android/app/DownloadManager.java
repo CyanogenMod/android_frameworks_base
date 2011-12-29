@@ -344,6 +344,7 @@ public class DownloadManager {
         /**
          * Bit flag for {@link #setAllowedNetworkTypes} corresponding to
          * {@link ConnectivityManager#TYPE_WIMAX}.
+         * @hide
          */
         public static final int NETWORK_WIMAX = 1 << 6;
 
