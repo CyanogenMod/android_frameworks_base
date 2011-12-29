@@ -425,6 +425,7 @@ static void android_media_visualizer_native_finalize(JNIEnv *env,  jobject thiz)
     Visualizer* lpVisualizer = (Visualizer *)env->GetLongField(
         thiz, fields.fidNativeVisualizer);
     if (lpVisualizer) {
+        lpVisualizer->cancelCaptureCallBack();
         ALOGV("deleting Visualizer: %p\n", lpVisualizer);
         delete lpVisualizer;
     }
