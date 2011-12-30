@@ -35,10 +35,11 @@ ifeq ($(TARGET_QCOM_HDMI_RESOLUTION_AUTO),true)
 endif
 
 LOCAL_SHARED_LIBRARIES := \
-	libcutils \
-	libutils \
-	libbinder \
-	libgui \
+    libcutils \
+    libutils \
+    libbinder \
+    libgui \
+    libmedia \
 
 LOCAL_C_INCLUDES := \
 	$(call include-path-for, corecg graphics)

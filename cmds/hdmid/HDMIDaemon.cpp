@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
- * Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2010-2012, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,9 @@
 #include <signal.h>
 
 #include <binder/IPCThreadState.h>
+#include <binder/IServiceManager.h>
+#include <media/IAudioPolicyService.h>
+#include <media/AudioSystem.h>
 #include <utils/threads.h>
 #include <utils/Atomic.h>
 #include <utils/Errors.h>
@@ -46,7 +49,7 @@ namespace android {
 
 // ---------------------------------------------------------------------------
 
-#define DEVICE_ROOT "/sys/class/graphics"
+#define DEVICE_ROOT "/sys/devices/virtual/graphics"
 #define DEVICE_NODE "fb1"
 
 #define HDMI_SOCKET_NAME        "hdmid"
@@ -55,7 +58,6 @@ namespace android {
 #define HDMI_EVT_DISCONNECTED   "hdmi_disconnected"
 #define HDMI_EVT_AUDIO_ON       "hdmi_audio_on"
 #define HDMI_EVT_AUDIO_OFF      "hdmi_audio_off"
-#define HDMI_EVT_NO_BROADCAST_ONLINE "hdmi_no_broadcast_online"
 
 #define HDMI_CMD_ENABLE_HDMI    "enable_hdmi"
 #define HDMI_CMD_DISABLE_HDMI   "disable_hdmi"
@@ -68,6 +70,7 @@ namespace android {
 #define SYSFS_EDID_MODES        DEVICE_ROOT "/" DEVICE_NODE "/edid_modes"
 #define SYSFS_HPD               DEVICE_ROOT "/" DEVICE_NODE "/hpd"
 #define SYSFS_HDCP_PRESENT      DEVICE_ROOT "/" DEVICE_NODE "/hdcp_present"
+#define SYSFS_HDMI_MODE         DEVICE_ROOT "/" DEVICE_NODE "/hdmi_mode"
 
 #ifdef QCOM_HARDWARE
 //Should match to the external_display_type HDMI in QComUI
@@ -95,11 +98,6 @@ HDMIDaemon::~HDMIDaemon() {
 void HDMIDaemon::onFirstRef() {
     run("HDMIDaemon", PRIORITY_AUDIO);
 }
-
-sp<SurfaceComposerClient> HDMIDaemon::session() const {
-    return mSession;
-}
-
 
 void HDMIDaemon::binderDied(const wp<IBinder>& who)
 {
@@ -133,7 +131,7 @@ status_t HDMIDaemon::readyToRun() {
     }
 
     int uevent_sz = 64 * 1024;
-    if (setsockopt(mUeventSock, SOL_SOCKET, SO_RCVBUFFORCE, &uevent_sz,
+    if (setsockopt(mUeventSock, SOL_SOCKET, SO_RCVBUF, &uevent_sz,
                    sizeof(uevent_sz)) < 0) {
         LOGE("Unable to set uevent socket options: %s", strerror(errno));
         return -1;
@@ -204,13 +202,6 @@ bool HDMIDaemon::threadLoop()
                 strerror(errno));
         }
         else {
-            // Check if HDCP Keys are present
-            if(checkHDCPPresent()) {
-                LOGD("threadLoop: HDCP keys are present, delay Broadcast.");
-                sendCommandToFramework(action_no_broadcast_online);
-            }
-
-            mSession = new SurfaceComposerClient();
             processUeventQueue();
 
             if (!mDriverOnline) {
@@ -232,7 +223,7 @@ bool HDMIDaemon::threadLoop()
     return true;
 }
 
-bool HDMIDaemon::checkHDCPPresent() {
+bool HDMIDaemon::isHDCPPresent() {
     char present = '0';
     //Open the hdcp file - to know if HDCP is supported
     int hdcpFile = open(SYSFS_HDCP_PRESENT, O_RDONLY, 0);
@@ -248,6 +239,63 @@ bool HDMIDaemon::checkHDCPPresent() {
     close(hdcpFile);
     return (present == '1') ? true : false;
 }
+
+bool HDMIDaemon::isHDMIMode() {
+    bool ret = false;
+    char mode = '0';
+    int modeFile = open (SYSFS_HDMI_MODE, O_RDONLY, 0);
+    if(modeFile < 0) {
+        LOGE("%s:hdmi_mode_file '%s' not found", __func__, SYSFS_HDMI_MODE);
+    } else {
+        //Read from the hdmi_mode file
+        int r = read(modeFile, &mode, 1);
+        if (r <= 0) {
+            LOGE("%s: hdmi_mode file empty '%s'", __func__, SYSFS_HDMI_MODE);
+        }
+    }
+    close(modeFile);
+    return (mode == '1') ? true : false;
+}
+
+void HDMIDaemon::enableAudio() {
+    sp<IServiceManager> sm = defaultServiceManager();
+    sp<IAudioPolicyService> binder;
+    binder = interface_cast<IAudioPolicyService>(
+            sm->getService(String16("media.audio_policy")));
+    if(binder != 0) {
+        binder->setDeviceConnectionState(AUDIO_DEVICE_OUT_AUX_DIGITAL,
+            AUDIO_POLICY_DEVICE_STATE_AVAILABLE, "");
+    } else {
+        LOGE("%s: Failed to contact audio service", __FUNCTION__);
+    }
+}
+
+void HDMIDaemon::disableAudio() {
+    sp<IServiceManager> sm = defaultServiceManager();
+    sp<IAudioPolicyService> binder;
+    binder = interface_cast<IAudioPolicyService>(
+            sm->getService(String16("media.audio_policy")));
+    if(binder != 0) {
+        binder->setDeviceConnectionState(AUDIO_DEVICE_OUT_AUX_DIGITAL,
+            AUDIO_POLICY_DEVICE_STATE_UNAVAILABLE, "");
+    } else {
+        LOGE("%s: Failed to contact audio service", __FUNCTION__);
+    }
+}
+
+bool isAudioEnabled() {
+    sp<IServiceManager> sm = defaultServiceManager();
+    sp<IAudioPolicyService> binder;
+    binder = interface_cast<IAudioPolicyService>(
+            sm->getService(String16("media.audio_policy")));
+    if(binder != 0) {
+        if(binder->getDeviceConnectionState(AUDIO_DEVICE_OUT_AUX_DIGITAL, "")
+                == AUDIO_POLICY_DEVICE_STATE_AVAILABLE)
+            return true;
+    }
+    return false;
+}
+
 bool HDMIDaemon::cableConnected(bool defaultValue) const
 {
     int hdmiStateFile = open(SYSFS_CONNECTED, O_RDONLY, 0);
@@ -587,7 +635,16 @@ int HDMIDaemon::processFrameworkCommand()
         LOGD(HDMI_CMD_ENABLE_HDMI);
         if(mNxtMode != -1) {
             LOGD("processFrameworkCommand: setResolution with =%d", mNxtMode);
-            setResolution(mNxtMode);
+            if(isAudioEnabled()) {
+                //If Audio is enabled, turn it off because setResolution() will
+                //call power off. Also treat the following as a single
+                //transaction
+                disableAudio();
+                setResolution(mNxtMode);
+                enableAudio();
+            } else {
+                setResolution(mNxtMode);
+            }
         }
     } else if (!strcmp(buffer, HDMI_CMD_DISABLE_HDMI)) {
         LOGD(HDMI_CMD_DISABLE_HDMI);
@@ -661,7 +718,16 @@ int HDMIDaemon::processFrameworkCommand()
             }
             // If we have a valid fd1 - setresolution
             if(fd1 > 0) {
-                setResolution(mode);
+                if(isAudioEnabled()) {
+                    // Disable audio before changing resolution, since that calls
+                    // a poweroff, which could time out audio output.
+                    disableAudio();
+                    setResolution(mode);
+                    // Enable audio once we are done with resolution change.
+                    enableAudio();
+                } else {
+                    setResolution(mode);
+                }
             } else {
             // Store the mode
                 mNxtMode = mode;
@@ -678,30 +744,19 @@ bool HDMIDaemon::sendCommandToFramework(uevent_action action)
 
     switch (action)
     {
-    //Disconnect
     case action_offline:
         strncpy(message, HDMI_EVT_DISCONNECTED, sizeof(message));
         break;
-    //Connect
     case action_online:
         readResolution();
         snprintf(message, sizeof(message), "%s: %s", HDMI_EVT_CONNECTED, mEDIDs);
         break;
-    //action_audio_on
     case action_audio_on:
-        strncpy(message, HDMI_EVT_AUDIO_ON, sizeof(message));
-        break;
-    //action_audio_off
     case action_audio_off:
-        strncpy(message, HDMI_EVT_AUDIO_OFF, sizeof(message));
-        break;
-    //action_no_broadcast_online
-    case action_no_broadcast_online:
-        strncpy(message, HDMI_EVT_NO_BROADCAST_ONLINE, sizeof(message));
-        break;
+        return true;
     default:
         LOGE("sendCommandToFramework: Unknown event received");
-        break;
+        return false;
     }
     int result = write(mAcceptedConnection, message, strlen(message) + 1);
     LOGD("sendCommandToFramework: '%s' %s", message, result >= 0 ? "successful" : "failed");
