@@ -172,6 +172,13 @@ public:
     virtual int                         setOrientation(DisplayID dpy, int orientation, uint32_t flags);
     virtual bool                        authenticateSurfaceTexture(const sp<ISurfaceTexture>& surface) const;
 
+#ifdef QCOM_HDMI_OUT
+    //HDMI Specific
+    virtual void                        enableHDMIOutput(int enable);
+    virtual void                        setActionSafeWidthRatio(float asWidthRatio);
+    virtual void                        setActionSafeHeightRatio(float asHeightRatio);
+#endif
+
     virtual status_t captureScreen(DisplayID dpy,
             sp<IMemoryHeap>* heap,
             uint32_t* width, uint32_t* height,
@@ -334,7 +341,14 @@ private:
             void        debugFlashRegions();
             void        debugShowFPS() const;
             void        drawWormhole() const;
-           
+
+#ifdef QCOM_HDMI_OUT
+            //HDMI Specific
+            void updateHwcHDMI(bool enable);
+#endif
+#ifdef QCOM_HARDWARE
+            bool isGPULayerPresent();
+#endif
 
     mutable     MessageQueue    mEventQueue;
 
@@ -387,6 +401,16 @@ private:
                 volatile nsecs_t            mDebugInTransaction;
                 nsecs_t                     mLastTransactionTime;
                 bool                        mBootFinished;
+
+#ifdef QCOM_HDMI_OUT
+                //HDMI specific
+                bool                        mHDMIOutput;
+                Mutex                       mHDMILock;
+                bool                        mOrientationChanged;
+#endif
+#ifdef QCOM_HARDWARE
+                bool                        mCanSkipComposition;
+#endif
 
                 // these are thread safe
     mutable     Barrier                     mReadyToRunBarrier;

@@ -16,6 +16,10 @@ extern "C" {
 #   define GL_APIENTRYP GL_APIENTRY*
 #endif
 
+#ifdef QCOM_HARDWARE
+#define GL_GLEXT_PROTOTYPES
+#endif
+
 /*------------------------------------------------------------------------*
  * OES extension tokens
  *------------------------------------------------------------------------*/

@@ -106,6 +106,10 @@ public:
 
     virtual int query(int what, int* value);
 
+#ifdef QCOM_HARDWARE
+    virtual int performQcomOperation(int operation, int arg1, int arg2, int arg3);
+#endif
+
     // setSynchronousMode set whether dequeueBuffer is synchronous or
     // asynchronous. In synchronous mode, dequeueBuffer blocks until
     // a buffer is available, the currently bound buffer can be dequeued and
@@ -508,6 +512,18 @@ private:
     // with the surface Texture.
     uint64_t mFrameCounter;
 
+#ifdef QCOM_HARDWARE
+    // mReqSize is the required buffer size speficied by the client.
+    int mReqSize;
+
+    struct BufferInfo {
+         int width;
+         int height;
+         int format;
+     };
+ 
+     BufferInfo mNextBufferInfo;
+#endif
 
 };
 

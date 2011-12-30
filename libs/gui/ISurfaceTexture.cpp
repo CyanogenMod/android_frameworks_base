@@ -43,6 +43,9 @@ enum {
     CONNECT,
     DISCONNECT,
     SET_SCALING_MODE,
+#ifdef QCOM_HARDWARE
+    PERFORM_QCOM_OPERATION,
+#endif
 };
 
 
@@ -216,6 +219,24 @@ public:
         result = reply.readInt32();
         return result;
     }
+
+#ifdef QCOM_HARDWARE
+    virtual status_t performQcomOperation(int operation, int arg1, int arg2, int arg3) {
+        Parcel data, reply;
+        data.writeInterfaceToken(ISurfaceTexture::getInterfaceDescriptor());
+
+        data.writeInt32(operation);
+        data.writeInt32(arg1);
+        data.writeInt32(arg2);
+        data.writeInt32(arg3);
+        status_t result =remote()->transact(PERFORM_QCOM_OPERATION, data, &reply);
+        if (result != NO_ERROR) {
+            return result;
+        }
+        result = reply.readInt32();
+        return result;
+    }
+#endif
 };
 
 IMPLEMENT_META_INTERFACE(SurfaceTexture, "android.gui.SurfaceTexture");
@@ -336,6 +357,18 @@ status_t BnSurfaceTexture::onTransact(
             reply->writeInt32(res);
             return NO_ERROR;
         } break;
+#ifdef QCOM_HARDWARE
+        case PERFORM_QCOM_OPERATION: {
+            CHECK_INTERFACE(ISurfaceTexture, data, reply);
+            int operation = data.readInt32();
+            int arg1 = data.readInt32();
+            int arg2 = data.readInt32();
+            int arg3 = data.readInt32();
+            status_t res = performQcomOperation(operation, arg1, arg2, arg3);
+            reply->writeInt32(res);
+            return NO_ERROR;
+        } break;
+#endif
     }
     return BBinder::onTransact(code, data, reply, flags);
 }

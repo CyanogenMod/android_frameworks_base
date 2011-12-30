@@ -57,6 +57,9 @@
 #include "DisplayHardware/HWComposer.h"
 
 #include <private/surfaceflinger/SharedBufferStack.h>
+#ifdef QCOM_HARDWARE
+#include <qcom_ui.h>
+#endif
 
 /* ideally AID_GRAPHICS would be in a semi-public header
  * or there would be a way to map a user/group name to its id
@@ -103,6 +106,12 @@ SurfaceFlinger::SurfaceFlinger()
         mLastTransactionTime(0),
         mBootFinished(false),
         mConsoleSignals(0),
+#ifdef QCOM_HARDWARE
+        mCanSkipComposition(false),
+#endif
+#ifdef QCOM_HDMI_OUT
+        mHDMIOutput(false),
+#endif
         mSecureFrameBuffer(0)
 {
     init();
@@ -408,7 +417,15 @@ bool SurfaceFlinger::threadLoop()
         handleConsoleEvents();
     }
 
+#ifdef QCOM_HDMI_OUT
+    //Serializes HDMI event handling and drawing.
+    //Necessary for race-free overlay channel management.
+    //Must always be held only after handleConsoleEvents() since
+    //that could enable / disable HDMI based on suspend resume
+    Mutex::Autolock _l(mHDMILock);
+#else
     // if we're in a global transaction, don't do anything.
+#endif
     const uint32_t mask = eTransactionNeeded | eTraversalNeeded;
     uint32_t transactionFlags = peekTransactionFlags(mask);
     if (UNLIKELY(transactionFlags)) {
@@ -437,13 +454,26 @@ bool SurfaceFlinger::threadLoop()
 
         logger.log(GraphicLog::SF_REPAINT, index);
         handleRepaint();
+#ifdef QCOM_HARDWARE
+        if (!mCanSkipComposition) {
+            // inform the h/w that we're done compositing
+            logger.log(GraphicLog::SF_COMPOSITION_COMPLETE, index);
+            hw.compositionComplete();
 
-        // inform the h/w that we're done compositing
-        logger.log(GraphicLog::SF_COMPOSITION_COMPLETE, index);
-        hw.compositionComplete();
+            logger.log(GraphicLog::SF_SWAP_BUFFERS, index);
+            postFramebuffer();
+        } else {
+            HWComposer& hwc(graphicPlane(0).displayHardware().getHwComposer());
+            hwc.commit();
+        }
+#else
+	// inform the h/w that we're done compositing
+	logger.log(GraphicLog::SF_COMPOSITION_COMPLETE, index);
+	hw.compositionComplete();
 
-        logger.log(GraphicLog::SF_SWAP_BUFFERS, index);
-        postFramebuffer();
+	logger.log(GraphicLog::SF_SWAP_BUFFERS, index);
+	postFramebuffer();
+#endif
 
         logger.log(GraphicLog::SF_REPAINT_DONE, index);
     } else {
@@ -461,7 +491,18 @@ void SurfaceFlinger::postFramebuffer()
     LOGW_IF(mSwapRegion.isEmpty(), "mSwapRegion is empty");
     const DisplayHardware& hw(graphicPlane(0).displayHardware());
     const nsecs_t now = systemTime();
+#ifdef QCOM_HDMI_OUT
+    const GraphicPlane& plane(graphicPlane(0));
+    const Transform& planeTransform(plane.transform());
+#endif
     mDebugInSwapBuffers = now;
+#ifdef QCOM_HDMI_OUT
+    //If orientation has changed, inform gralloc for HDMI mirroring
+    if(mOrientationChanged) {
+        mOrientationChanged = false;
+        hw.orientationChanged(planeTransform.getOrientation());
+    }
+#endif
     hw.flip(mSwapRegion);
     mLastSwapBufferTime = systemTime() - now;
     mDebugInSwapBuffers = 0;
@@ -476,6 +517,9 @@ void SurfaceFlinger::handleConsoleEvents()
     int what = android_atomic_and(0, &mConsoleSignals);
     if (what & eConsoleAcquired) {
         hw.acquireScreen();
+#ifdef QCOM_HDMI_OUT
+        updateHwcHDMI(mHDMIOutput);
+#endif
         // this is a temporary work-around, eventually this should be called
         // by the power-manager
         SurfaceFlinger::turnElectronBeamOn(mElectronBeamAnimationMode);
@@ -484,6 +528,9 @@ void SurfaceFlinger::handleConsoleEvents()
     if (what & eConsoleReleased) {
         if (hw.isScreenAcquired()) {
             hw.releaseScreen();
+#ifdef QCOM_HDMI_OUT
+            updateHwcHDMI(false);
+#endif
         }
     }
 
@@ -549,6 +596,9 @@ void SurfaceFlinger::handleTransactionLocked(uint32_t transactionFlags)
             // Currently unused: const uint32_t flags = mCurrentState.orientationFlags;
             GraphicPlane& plane(graphicPlane(dpy));
             plane.setOrientation(orientation);
+#ifdef QCOM_HDMI_OUT
+            mOrientationChanged = true;
+#endif
 
             // update the shared control block
             const DisplayHardware& hw(plane.displayHardware());
@@ -666,6 +716,9 @@ void SurfaceFlinger::computeVisibleRegions(
             // as well, as the old visible region
             dirty.orSelf(layer->visibleRegionScreen);
             layer->contentDirty = false;
+#ifdef QCOM_HARDWARE
+            layer->setIsUpdating(true);
+#endif
         } else {
             /* compute the exposed region:
              *   the exposed region consists of two components:
@@ -855,12 +908,40 @@ void SurfaceFlinger::handleRepaint()
     }
 
     setupHardwareComposer(mDirtyRegion);
+#ifdef QCOM_HARDWARE
+    if (!mCanSkipComposition)
+        composeSurfaces(mDirtyRegion);
+#else
     composeSurfaces(mDirtyRegion);
+#endif
 
     // update the swap region and clear the dirty region
     mSwapRegion.orSelf(mDirtyRegion);
     mDirtyRegion.clear();
 }
+
+#ifdef QCOM_HARDWARE
+bool SurfaceFlinger::isGPULayerPresent()
+{
+    bool isGPULayerPresent = false;
+    const DisplayHardware& hw(graphicPlane(0).displayHardware());
+    HWComposer& hwc(hw.getHwComposer());
+    hwc_layer_t* const cur(hwc.getLayers());
+    if (!cur) {
+        isGPULayerPresent = true;
+    }
+
+    const Vector< sp<LayerBase> >& layers(mVisibleLayersSortedByZ);
+    size_t count = layers.size();
+    for (size_t i = 0; i<count; i++) {
+        if (HWC_FRAMEBUFFER == cur[i].compositionType) {
+            isGPULayerPresent = true;
+            break;
+        }
+    }
+    return isGPULayerPresent;
+}
+#endif
 
 void SurfaceFlinger::setupHardwareComposer(Region& dirtyInOut)
 {
@@ -895,6 +976,9 @@ void SurfaceFlinger::setupHardwareComposer(Region& dirtyInOut)
     status_t err = hwc.prepare();
     LOGE_IF(err, "HWComposer::prepare failed (%s)", strerror(-err));
 
+#ifdef QCOM_HARDWARE
+    mCanSkipComposition = (hwc.getFlags() & HWC_SKIP_COMPOSITION) ? true : false;
+#endif
     if (err == NO_ERROR) {
         // what's happening here is tricky.
         // we want to clear all the layers with the CLEAR_FB flags
@@ -947,7 +1031,19 @@ void SurfaceFlinger::setupHardwareComposer(Region& dirtyInOut)
         /*
          *  clear the area of the FB that need to be transparent
          */
-        if (!transparent.isEmpty()) {
+#ifdef QCOM_HARDWARE
+        if (!transparent.isEmpty() && !mCanSkipComposition) {
+            // If we have any GPU layers present, don't use libQcomUI's
+            // clearRegion
+            if (false == isGPULayerPresent()) {
+                if (0 == qcomuiClearRegion(transparent, hw.getEGLDisplay(),
+                                        hw.getEGLSurface())) {
+                    return;
+                }
+            }
+#else
+	if (!transparent.isEmpty()) {
+#endif
             glClearColor(0,0,0,0);
             Region::const_iterator it = transparent.begin();
             Region::const_iterator const end = transparent.end();
@@ -971,7 +1067,22 @@ void SurfaceFlinger::composeSurfaces(const Region& dirty)
     if (UNLIKELY(fbLayerCount && !mWormholeRegion.isEmpty())) {
         // should never happen unless the window manager has a bug
         // draw something...
+#ifdef QCOM_HARDWARE
+        if (false == isGPULayerPresent()) {
+            // Use libQcomUI to draw the wormhole since there are no GPU layers
+            const Region region(mWormholeRegion.intersect(mDirtyRegion));
+            if (!region.isEmpty()) {
+                if (0 != qcomuiClearRegion(region, hw.getEGLDisplay(),
+                                             hw.getEGLSurface())) {
+                    drawWormhole();
+                }
+            }
+        } else {
+            drawWormhole();
+        }
+#else
         drawWormhole();
+#endif
     }
 
     /*
@@ -1273,6 +1384,34 @@ int SurfaceFlinger::setOrientation(DisplayID dpy,
     }
     return orientation;
 }
+
+#ifdef QCOM_HDMI_OUT
+void SurfaceFlinger::updateHwcHDMI(bool enable)
+{
+    invalidateHwcGeometry();
+    const DisplayHardware& hw(graphicPlane(0).displayHardware());
+    HWComposer& hwc(hw.getHwComposer());
+    hwc.enableHDMIOutput(enable);
+}
+
+void SurfaceFlinger::enableHDMIOutput(int enable)
+{
+    Mutex::Autolock _l(mHDMILock);
+    mHDMIOutput = enable;
+    updateHwcHDMI(enable);
+    signalEvent();
+}
+
+void SurfaceFlinger::setActionSafeWidthRatio(float asWidthRatio){
+    const DisplayHardware& hw(graphicPlane(0).displayHardware());
+    hw.setActionSafeWidthRatio(asWidthRatio);
+}
+
+void SurfaceFlinger::setActionSafeHeightRatio(float asHeightRatio){
+    const DisplayHardware& hw(graphicPlane(0).displayHardware());
+    hw.setActionSafeHeightRatio(asHeightRatio);
+}
+#endif
 
 sp<ISurface> SurfaceFlinger::createSurface(
         ISurfaceComposerClient::surface_data_t* params,

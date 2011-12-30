@@ -28,6 +28,10 @@ public class SystemProperties
     public static final int PROP_NAME_MAX = 31;
     public static final int PROP_VALUE_MAX = 91;
 
+    //QCOM
+    public static final boolean QCOM_HARDWARE = native_get_boolean("com.qc.hardware", false);
+    public static final boolean QCOM_HDMI_OUT = native_get_boolean("com.qc.hdmi_out", false);
+
     private static native String native_get(String key);
     private static native String native_get(String key, String def);
     private static native int native_get_int(String key, int def);

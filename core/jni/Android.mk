@@ -222,6 +222,14 @@ ifeq ($(USE_OPENGL_RENDERER),true)
 	LOCAL_SHARED_LIBRARIES += libhwui
 endif
 
+ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
+ifeq ($(USE_OPENGL_RENDERER),true)
+LOCAL_SHARED_LIBRARIES += libtilerenderer
+endif
+LOCAL_C_INCLUDES += hardware/qcom/display/libtilerenderer
+LOCAL_CFLAGS += -DQCOM_HARDWARE
+endif
+
 ifeq ($(BOARD_HAVE_BLUETOOTH),true)
 LOCAL_C_INCLUDES += \
 	external/dbus \
