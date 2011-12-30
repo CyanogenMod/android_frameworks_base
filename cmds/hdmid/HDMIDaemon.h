@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 2007 The Android Open Source Project
- * Copyright (c) 2010-2011, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2010-2012, Code Aurora Forum. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,7 +53,7 @@
 namespace android {
 
 enum uevent_action { action_add, action_remove, action_change,
-                                  action_online, action_offline, action_audio_on, action_audio_off, action_no_broadcast_online };
+                                  action_online, action_offline, action_audio_on, action_audio_off };
 const int ueventParamMax = 32;
 struct uevent {
     char *path;
@@ -83,10 +83,12 @@ struct HDMIUeventQueue {
 
 class HDMIDaemon : public Thread, public IBinder::DeathRecipient
 {
+    /*Overrides*/
     virtual bool        threadLoop();
     virtual status_t    readyToRun();
     virtual void        onFirstRef();
     virtual void        binderDied(const wp<IBinder>& who);
+
     bool processUeventMessage(uevent& event);
     void queueUevent();
     void processUeventQueue();
@@ -98,14 +100,17 @@ class HDMIDaemon : public Thread, public IBinder::DeathRecipient
     void setResolution(int ID);
     bool openFramebuffer();
     bool writeHPDOption(int userOption) const;
-    inline bool isValidMode(int ID);
-    bool checkHDCPPresent();
+    bool isValidMode(int ID);
+
+    static bool isHDCPPresent();
+    static bool isHDMIMode();
+    static void enableAudio();
+    static void disableAudio();
 
     int mFrameworkSock;
     int mAcceptedConnection;
     int mUeventSock;
     HDMIUeventQueue* mHDMIUeventQueueHead;
-    sp<SurfaceComposerClient> mSession;
     int fd1;
     bool mDriverOnline;
     int mCurrentID;
@@ -113,10 +118,8 @@ class HDMIDaemon : public Thread, public IBinder::DeathRecipient
     char mEDIDs[128];
 
 public:
-                HDMIDaemon();
-    virtual     ~HDMIDaemon();
-
-    sp<SurfaceComposerClient> session() const;
+    HDMIDaemon();
+    virtual ~HDMIDaemon();
 };
 
 // ---------------------------------------------------------------------------

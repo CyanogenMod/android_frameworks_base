@@ -23,6 +23,8 @@
 #include <stdint.h>
 
 #include <sys/time.h>
+#include <sys/types.h>
+#include <fcntl.h>
 #include <binder/IServiceManager.h>
 #include <utils/Log.h>
 #include <cutils/properties.h>
@@ -56,6 +58,27 @@ static bool checkPermission() {
     if (!ok) LOGE("Request requires android.permission.MODIFY_AUDIO_SETTINGS");
     return ok;
 }
+
+/* Returns true if HDMI mode, false if DVI or on errors */
+#ifdef QCOM_HARDWARE
+static bool isHDMIMode() {
+    char mode = '0';
+    const char* SYSFS_HDMI_MODE =
+        "/sys/devices/virtual/graphics/fb1/hdmi_mode";
+    int modeFile = open (SYSFS_HDMI_MODE, O_RDONLY, 0);
+    if(modeFile < 0) {
+        LOGE("%s: Node %s not found", __func__, SYSFS_HDMI_MODE);
+    } else {
+        //Read from the hdmi_mode file
+        int r = read(modeFile, &mode, 1);
+        if (r <= 0) {
+            LOGE("%s: hdmi_mode file empty '%s'", __func__, SYSFS_HDMI_MODE);
+        }
+    }
+    close(modeFile);
+    return (mode == '1') ? true : false;
+}
+#endif
 
 namespace {
     extern struct audio_policy_service_ops aps_ops;
@@ -168,7 +191,12 @@ status_t AudioPolicyService::setDeviceConnectionState(audio_devices_t device,
             state != AUDIO_POLICY_DEVICE_STATE_UNAVAILABLE) {
         return BAD_VALUE;
     }
-
+#ifdef QCOM_HARDWARE
+    /* On HDMI connection, return if we are not in HDMI mode */
+    if(device == AUDIO_DEVICE_OUT_AUX_DIGITAL && !isHDMIMode()) {
+        return NO_ERROR;
+    }
+#endif
     LOGV("setDeviceConnectionState() tid %d", gettid());
     Mutex::Autolock _l(mLock);
     return mpAudioPolicy->set_device_connection_state(mpAudioPolicy, device,
@@ -182,6 +210,7 @@ audio_policy_dev_state_t AudioPolicyService::getDeviceConnectionState(
     if (mpAudioPolicy == NULL) {
         return AUDIO_POLICY_DEVICE_STATE_UNAVAILABLE;
     }
+    Mutex::Autolock _l(mLock);
     return mpAudioPolicy->get_device_connection_state(mpAudioPolicy, device,
                                                       device_address);
 }
