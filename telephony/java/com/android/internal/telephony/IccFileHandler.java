@@ -104,7 +104,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
 
         LoadLinearFixedContext(int efid, int recordNum, Message onLoaded) {
             this.efid = efid;
-            this.recordNum = recordNum;
+            this.recordNum = java.lang.Math.max(recordNum, 1); // Clamp to 1 since the index is 1 based, just in case
             this.onLoaded = onLoaded;
             this.loadAll = false;
         }
@@ -283,6 +283,125 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
         response.sendToTarget();
     }
 
+    /**
+     * Fills a 3 integer array. This is necessary for many canadian carriers for which
+     * UICC contains commands in TLV format (Refer 11.1.1.3 of ETSI TS 102 221)
+     *
+     * @param data
+     * @param arrayToReturn : [0] = Record Size; [1] = File Size; [2] = Number of Records
+     */
+    private void ParseUICCTLVData(byte[] data, int[] arrayToReturn) throws IccFileTypeMismatch {
+        int curByte = 0;
+        int curTag;
+        int curSectionLen;
+        if (((short)data[curByte++] & 0xFF) == 0x62) {
+            logd("TLV format detected");
+            curSectionLen = data[curByte++];
+            int dataLenLeft = data.length-2;
+            if (curSectionLen != dataLenLeft) {
+                logd("Unexpected TLV length of " + curSectionLen + "; we have " + dataLenLeft + "bytes of data left");
+                // ... It sometimes happens, even if mandatory parts are missing and length > than the actual size. Data is truncated?
+                // throw new IccFileTypeMismatch();
+            }
+
+            // File Descriptor '0x82' (mandatory)
+            curTag = ((int)data[curByte++]) & 0xFF;
+            if (curTag != 0x82) {
+                logd("Unexpected TLV data, expecting file descriptor tag, but got " + curTag);
+                throw new IccFileTypeMismatch();
+            }
+            curSectionLen = data[curByte++];
+            if (curSectionLen != 5) {
+                // TODO : Currently, a length of 2 is not handled
+                logd("TLV File Description length of " + curSectionLen + " is not handled yet");
+                throw new IccFileTypeMismatch();
+            }
+            arrayToReturn[0] = ((data[curByte+2] & 0xff) << 8) +
+                                (data[curByte+3] & 0xff); // Length of 1 record
+            arrayToReturn[2] = data[curByte+4]; // Number of records
+
+            // File size is normally set later, but for some reason, sometimes the data
+            // is missing mandatory section. For this reason, set the information here
+            // it should match anyway... (honestly, I'm not sure)
+            arrayToReturn[1] = arrayToReturn[0] * arrayToReturn[2];
+            curByte += curSectionLen;
+
+            // File Identifier '0x83' (mandatory)
+            curTag = ((int)data[curByte++]) & 0xFF;
+            if (curTag != 0x83) {
+                logd("Unexpected TLV data, expecting file identifier tag, but got " + curTag);
+                throw new IccFileTypeMismatch();
+            }
+            curSectionLen = data[curByte++];
+            curByte += curSectionLen;
+
+            // Proprietary info '0xA5' (optional)
+            curTag = ((int)data[curByte++]) & 0xFF;
+            if (curTag == 0xA5) {
+                // Not needed, just skip it...
+                curSectionLen = data[curByte++];
+                curByte += curSectionLen;
+            }
+
+            // Data is sometimes truncated!? Mandatory parts are sometimes missing and TLV length > than the actual data size.
+            // Do not throw exception, try to do our best
+            if (data.length > curByte) {
+                // Life Cycle Status Integer '0x8A' (mandatory)
+                curTag = ((int)data[curByte++]) & 0xFF;
+                if (curTag != 0x8A) {
+                    logd("Unexpected TLV data, expecting Life Cycle Status Integer tag, but got " + curTag);
+                    throw new IccFileTypeMismatch();
+                }
+                // Not needed, just skip it...
+                curSectionLen = data[curByte++];
+                curByte += curSectionLen;
+            }
+
+            // Data is sometimes truncated!? Mandatory parts are sometimes missing and TLV length > than the actual data size. 
+            // Do not throw exception, try to do our best
+            if (data.length > curByte) {
+                // Security Attributes '0x8B' / '0x8C' / '0xAB'  (exactly one of them is mandatory)
+                curTag = ((int)data[curByte++]) & 0xFF;
+                if (curTag != 0x8B &&
+                    curTag != 0x8C &&
+                    curTag != 0xAB) {
+                    logd("Unexpected TLV data, expecting Security Attributes tag, but got " + curTag);
+                    throw new IccFileTypeMismatch();
+                }
+                // Not needed, just skip it...
+                curSectionLen = data[curByte++];
+                curByte += curSectionLen;
+            }
+
+            // Data is sometimes truncated!? Mandatory parts are sometimes missing and TLV length > than the actual data size. 
+            // Do not throw exception, try to do our best
+            if (data.length > curByte) {
+                // File Size '0x80'  (mandatory)
+                curTag = ((int)data[curByte++]) & 0xFF;
+                if (curTag != 0x80) {
+                    logd("Unexpected TLV data, expecting File Size tag, but got " + curTag);
+                    throw new IccFileTypeMismatch();
+                }
+                curSectionLen = data[curByte++];
+                arrayToReturn[1] = 0;
+                for (int i = 0; i < curSectionLen; i++) {
+                    arrayToReturn[1] += ((data[i] & 0xff) << (8*i)); // File size
+                }
+                curByte += curSectionLen;
+            }
+
+            logd("ParseUICCTLVData result: Record Size = " + arrayToReturn[0] + "; File Size = " + arrayToReturn[1] + "; Number of Records = " + arrayToReturn[2]);
+
+            // Total File Size '0x81' (optional)
+            // Short File Identifier '0x88' (optional)
+            // --> not used...
+        }
+        else {
+            logd("Throwing exception : Expecting a TLV tag!");
+            throw new IccFileTypeMismatch();
+        }
+    }
+
     //***** Overridden from Handler
 
     public void handleMessage(Message msg) {
@@ -297,7 +416,7 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
         int size;
         int fileid;
         int recordNum;
-        int recordSize[];
+        int recordSize[] = new int[3];
 
         try {
             switch (msg.what) {
@@ -341,16 +460,21 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
 
                 data = result.payload;
 
-                if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE] ||
-                    EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]) {
-                    throw new IccFileTypeMismatch();
+                if (data[0] == 0x62) {
+                    ParseUICCTLVData(data, recordSize);
                 }
+                else {
+                    if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE] ||
+                        EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]) {
+                        logd("Exception in EVENT_GET_EF_LINEAR_RECORD_SIZE_DONE");
+                        throw new IccFileTypeMismatch();
+                    }
 
-                recordSize = new int[3];
-                recordSize[0] = data[RESPONSE_DATA_RECORD_LENGTH] & 0xFF;
-                recordSize[1] = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
-                       + (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
-                recordSize[2] = recordSize[1] / recordSize[0];
+                    recordSize[0] = data[RESPONSE_DATA_RECORD_LENGTH] & 0xFF;
+                    recordSize[1] = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
+                                    + (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
+                    recordSize[2] = recordSize[1] / recordSize[0];
+                }
 
                 sendResult(response, recordSize, null);
                 break;
@@ -376,31 +500,41 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
                 fileid = lc.efid;
                 recordNum = lc.recordNum;
 
-                if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]) {
-                    throw new IccFileTypeMismatch();
+                if (data[0] == 0x62) {
+                    ParseUICCTLVData(data, recordSize);
+                    lc.recordSize = recordSize[0];
+                    size = recordSize[1];
+                    lc.countRecords = recordSize[2];
+                }
+                else {
+                    if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]) {
+                        logd("Exception in EVENT_GET_RECORD_SIZE_DONE");
+                        throw new IccFileTypeMismatch();
+                    }
+
+                    if (EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]) {
+                        logd("Exception in EVENT_GET_RECORD_SIZE_DONE");
+                        throw new IccFileTypeMismatch();
+                    }
+
+                    lc.recordSize = data[RESPONSE_DATA_RECORD_LENGTH] & 0xFF;
+
+                    size = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
+                           + (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
+                    lc.countRecords = size / lc.recordSize;
                 }
 
-                if (EF_TYPE_LINEAR_FIXED != data[RESPONSE_DATA_STRUCTURE]) {
-                    throw new IccFileTypeMismatch();
+
+                if (lc.loadAll) {
+                    lc.results = new ArrayList<byte[]>(lc.countRecords);
                 }
 
-                lc.recordSize = data[RESPONSE_DATA_RECORD_LENGTH] & 0xFF;
-
-                size = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
-                       + (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
-
-                lc.countRecords = size / lc.recordSize;
-
-                 if (lc.loadAll) {
-                     lc.results = new ArrayList<byte[]>(lc.countRecords);
-                 }
-
-                 phone.mCM.iccIO(COMMAND_READ_RECORD, lc.efid, getEFPath(lc.efid),
-                         lc.recordNum,
-                         READ_RECORD_MODE_ABSOLUTE,
-                         lc.recordSize, null, null,
-                         obtainMessage(EVENT_READ_RECORD_DONE, lc));
-                 break;
+                phone.mCM.iccIO(COMMAND_READ_RECORD, lc.efid, getEFPath(lc.efid),
+                                lc.recordNum,
+                                READ_RECORD_MODE_ABSOLUTE,
+                                lc.recordSize, null, null,
+                                obtainMessage(EVENT_READ_RECORD_DONE, lc));
+                break;
             case EVENT_GET_BINARY_SIZE_DONE:
                 ar = (AsyncResult)msg.obj;
                 response = (Message) ar.userObj;
@@ -422,16 +556,24 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
 
                 fileid = msg.arg1;
 
-                if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]) {
-                    throw new IccFileTypeMismatch();
+                if (data[0] == 0x62) {
+                    ParseUICCTLVData(data, recordSize);
+                    size = recordSize[1];
                 }
+                else {
+                    if (TYPE_EF != data[RESPONSE_DATA_FILE_TYPE]) {
+                        logd("Exception in EVENT_GET_BINARY_SIZE_DONE");
+                        throw new IccFileTypeMismatch();
+                    }
 
-                if (EF_TYPE_TRANSPARENT != data[RESPONSE_DATA_STRUCTURE]) {
-                    throw new IccFileTypeMismatch();
+                    if (EF_TYPE_TRANSPARENT != data[RESPONSE_DATA_STRUCTURE]) {
+                        logd("Exception in EVENT_GET_BINARY_SIZE_DONE");
+                        throw new IccFileTypeMismatch();
+                    }
+
+                    size = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
+                           + (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
                 }
-
-                size = ((data[RESPONSE_DATA_FILE_SIZE_1] & 0xff) << 8)
-                       + (data[RESPONSE_DATA_FILE_SIZE_2] & 0xff);
 
                 phone.mCM.iccIO(COMMAND_READ_BINARY, fileid, getEFPath(fileid),
                                 0, 0, size, null, null,
