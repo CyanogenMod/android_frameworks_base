@@ -16,30 +16,35 @@
 
 package com.android.systemui.statusbar.phone;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Rect;
-import android.os.ServiceManager;
-import android.util.AttributeSet;
-import android.util.Slog;
-import android.view.animation.AccelerateInterpolator;
-import android.view.Display;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Surface;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
-
 import java.io.FileDescriptor;
 import java.io.PrintWriter;
-import java.lang.StringBuilder;
+
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.database.ContentObserver;
+import android.graphics.Rect;
+import android.os.Handler;
+import android.os.ServiceManager;
+import android.provider.Settings;
+import android.util.AttributeSet;
+import android.util.Slog;
+import android.view.Display;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
+import android.view.Surface;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
+import android.widget.LinearLayout;
 
 import com.android.internal.statusbar.IStatusBarService;
-
 import com.android.systemui.R;
+import com.android.systemui.statusbar.policy.KeyButtonView;
 
 public class NavigationBarView extends LinearLayout {
     final static boolean DEBUG = false;
@@ -59,11 +64,75 @@ public class NavigationBarView extends LinearLayout {
     int mBarSize;
     boolean mVertical;
 
-    boolean mHidden, mLowProfile, mShowMenu;
+    boolean mHidden, mLowProfile, mShowMenu, mHideSearch;
     int mDisabledFlags = 0;
 
+    public void updateButtons() {
+        String saved = Settings.System.getString(mContext.getContentResolver(), Settings.System.NAV_BUTTONS);
+        if (saved == null) {
+            saved = "back|home|recent|search0";
+        }
+        boolean isPortrait = mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+        int[] ids = {R.id.one,R.id.two,R.id.three,R.id.four};
+        mHideSearch = saved.contains("search0");
+        int cc =0;
+        //Reset all paddings to invisible
+        ViewGroup navPanel = ((ViewGroup) mCurrentView.findViewById(R.id.nav_buttons));
+        for (int cv = 0; cv < navPanel.getChildCount(); cv++) {
+            if (!(navPanel.getChildAt(cv) instanceof KeyButtonView)) {
+                navPanel.getChildAt(cv).setVisibility(View.INVISIBLE);
+            }
+        }
+        for (String buttons : saved.split("\\|") ){
+            KeyButtonView cView = (KeyButtonView) mCurrentView.findViewById(ids[cc]);
+            if (buttons.equals("back")){
+                cView.setTag("back");
+                cView.setContentDescription(mContext.getResources().getString(R.string.accessibility_back));
+                cView.setMCode(KeyEvent.KEYCODE_BACK);
+                if (isPortrait) {
+                    cView.setImageResource(R.drawable.ic_sysbar_back);
+                } else {
+                    cView.setImageResource(R.drawable.ic_sysbar_back_land);
+                }
+            } else if (buttons.equals("home")){
+                cView.setTag("home");
+                cView.setContentDescription(mContext.getResources().getString(R.string.accessibility_home));
+                cView.setMCode(KeyEvent.KEYCODE_HOME);
+                if (isPortrait) {
+                    cView.setImageResource(R.drawable.ic_sysbar_home);
+                } else {
+                    cView.setImageResource(R.drawable.ic_sysbar_home_land);
+                }
+            } else if (buttons.equals("recent")){
+                cView.setTag("recent");
+                cView.setContentDescription(mContext.getResources().getString(R.string.accessibility_recent));
+                cView.setMCode(0);
+                if (isPortrait) {
+                    cView.setImageResource(R.drawable.ic_sysbar_recent);
+                } else {
+                    cView.setImageResource(R.drawable.ic_sysbar_recent_land);
+                }
+            } else {
+                cView.setTag("search");
+                cView.setContentDescription(mContext.getResources().getString(R.string.accessibility_search));
+                cView.setMCode(KeyEvent.KEYCODE_SEARCH);
+                if (isPortrait) {
+                    cView.setImageResource(R.drawable.ic_sysbar_search);
+                } else {
+                    cView.setImageResource(R.drawable.ic_sysbar_search_land);
+                }
+                //Hide search button padding
+                if (mHideSearch) {
+                    navPanel.getChildAt(navPanel.indexOfChild(cView) - 1).setVisibility(View.GONE);
+                }
+            }
+            cc++;
+        }
+        mCurrentView.invalidate();
+    }
+
     public View getRecentsButton() {
-        return mCurrentView.findViewById(R.id.recent_apps);
+        return mCurrentView.findViewWithTag("recent");
     }
 
     public View getMenuButton() {
@@ -71,11 +140,15 @@ public class NavigationBarView extends LinearLayout {
     }
 
     public View getBackButton() {
-        return mCurrentView.findViewById(R.id.back);
+        return mCurrentView.findViewWithTag("back");
     }
 
     public View getHomeButton() {
-        return mCurrentView.findViewById(R.id.home);
+        return mCurrentView.findViewWithTag("home");
+    }
+
+    public View getSearchButton() {
+        return mCurrentView.findViewWithTag("search");
     }
 
     public NavigationBarView(Context context, AttributeSet attrs) {
@@ -128,6 +201,11 @@ public class NavigationBarView extends LinearLayout {
         getBackButton()   .setVisibility(disableBack       ? View.INVISIBLE : View.VISIBLE);
         getHomeButton()   .setVisibility(disableHome       ? View.INVISIBLE : View.VISIBLE);
         getRecentsButton().setVisibility(disableRecent     ? View.INVISIBLE : View.VISIBLE);
+        if (!mHideSearch) {
+            getSearchButton() .setVisibility(disableRecent ? View.INVISIBLE : View.VISIBLE);
+        } else {
+            getSearchButton() .setVisibility(View.GONE);
+        }
     }
 
     public void setMenuVisibility(final boolean show) {
@@ -139,7 +217,7 @@ public class NavigationBarView extends LinearLayout {
 
         mShowMenu = show;
 
-        getMenuButton().setVisibility(mShowMenu ? View.VISIBLE : View.INVISIBLE);
+        getMenuButton().setVisibility(mShowMenu ? View.VISIBLE : View.GONE);
     }
 
     public void setLowProfile(final boolean lightsOut) {
@@ -228,7 +306,7 @@ public class NavigationBarView extends LinearLayout {
         mCurrentView = mRotatedViews[rot];
         mCurrentView.setVisibility(View.VISIBLE);
         mVertical = (rot == Surface.ROTATION_90 || rot == Surface.ROTATION_270);
-
+        updateButtons();
         // force the low profile & disabled states into compliance
         setLowProfile(mLowProfile, false, true /* force */);
         setDisabledFlags(mDisabledFlags, true /* force */);
