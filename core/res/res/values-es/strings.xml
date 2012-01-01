@@ -144,13 +144,13 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Desactivar función inalámbrica"</string>
     <string name="screen_lock" msgid="799094655496098153">"Bloqueo de pantalla"</string>
     <string name="power_off" msgid="4266614107412865048">"Apagar"</string>
-+    <string name="reboot_system">Reiniciar</string>
-+    <string name="reboot_reboot">Modo Normal</string>
-+    <string name="reboot_recovery">Modo Recovery</string>
-+    <string name="reboot_bootloader">Modo Bootloader</string>
-+    <string name="reboot_bootmenu">Modo Bootmenu</string>
-+    <string name="reboot_fastboot">Modo Fastboot</string>
-+    <string name="reboot_download">Modo Download</string>
+    <string name="reboot_system">Reiniciar</string>
+    <string name="reboot_reboot">Modo Normal</string>
+    <string name="reboot_recovery">Modo Recovery</string>
+    <string name="reboot_bootloader">Modo Bootloader</string>
+    <string name="reboot_bootmenu">Modo Bootmenu</string>
+    <string name="reboot_fastboot">Modo Fastboot</string>
+    <string name="reboot_download">Modo Download</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Apagando\u2026"</string>
     <string name="reboot_progress">Reiniciando\u2026</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"El teléfono se apagará."</string>
