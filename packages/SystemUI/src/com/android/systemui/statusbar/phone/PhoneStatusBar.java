@@ -33,6 +33,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.content.res.Configuration;
+import android.database.ContentObserver;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
@@ -310,6 +311,8 @@ public class PhoneStatusBar extends StatusBar {
                     (NavigationBarView) View.inflate(context, R.layout.navigation_bar, null);
 
                 mNavigationBarView.setDisabledFlags(mDisabled);
+                NavPanelObserver settingsObserver = new NavPanelObserver(new Handler());
+                settingsObserver.observe();
             }
         } catch (RemoteException ex) {
             // no window manager? good luck with that
@@ -401,6 +404,25 @@ public class PhoneStatusBar extends StatusBar {
 	mPowerWidget.setupWidget();
 
         return sb;
+    }
+
+    protected class NavPanelObserver extends ContentObserver {
+        public NavPanelObserver(Handler handler) {
+            super(handler);
+        }
+
+        public void observe() {
+            ContentResolver resolver = mContext.getContentResolver();
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.NAV_BUTTONS),
+                            false, this);
+            onChange(true);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            prepareNavigationBarView();
+        }
     }
 
     protected WindowManager.LayoutParams getRecentsLayoutParams(LayoutParams layoutParams) {

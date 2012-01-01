@@ -131,6 +131,10 @@ public class KeyButtonView extends ImageView {
         invalidate();
     }
 
+    public void setMCode(int x) {
+        mCode = x;
+    }
+
     public float getGlowAlpha() {
         if (mGlowBG == null) return 0;
         return mGlowAlpha;
