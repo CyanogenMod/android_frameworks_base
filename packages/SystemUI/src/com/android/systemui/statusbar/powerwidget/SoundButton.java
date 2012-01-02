@@ -233,6 +233,13 @@ public class SoundButton extends PowerButton {
             }
 
             Ringer r = (Ringer) o;
+            // Silent mode docs: "Ringer mode that will be silent and will not
+            // vibrate. (This overrides the vibrate setting.)" If silent mode is
+            // set, don't bother checking vibrate since silent overrides. This
+            // fixes cases where silent mode is not detected because of "wrong"
+            // vibrate state.
+            if (mRingerMode == AudioManager.RINGER_MODE_SILENT && (r.mRingerMode == mRingerMode))
+                return true;
             return r.mVibrateInSilent == mVibrateInSilent && r.mVibrateSetting == mVibrateSetting
                     && r.mRingerMode == mRingerMode;
         }
