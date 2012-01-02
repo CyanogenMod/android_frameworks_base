@@ -3465,7 +3465,7 @@ public class PowerManagerService extends IPowerManager.Stub
                 if (mDebugLightSensor) {
                     Slog.d(TAG, "onSensorChanged: light value: " + value);
                 }
-                mHandler.removeCallbacks(mAutoBrightnessTask);
+
                 mLightFilterSample = value;
                 if (mAutoBrightessEnabled && mLightFilterEnabled) {
                     if (mLightFilterRunning && mLightSensorValue != -1) {
@@ -3501,12 +3501,18 @@ public class PowerManagerService extends IPowerManager.Stub
                     return;
                 }
 
-                if (mLightSensorValue != value) {
-                    if (mLightSensorValue == -1 ||
-                            milliseconds < mLastScreenOnTime + mLightSensorWarmupTime) {
-                        // process the value immediately if screen has just turned on
-                        lightSensorChangedLocked(value);
-                    } else {
+                if (mLightSensorValue == -1 ||
+                        milliseconds < mLastScreenOnTime + mLightSensorWarmupTime) {
+                    // process the value immediately if screen has just turned on
+                    mHandler.removeCallbacks(mAutoBrightnessTask);
+                    mLightSensorPendingDecrease = false;
+                    mLightSensorPendingIncrease = false;
+                    lightSensorChangedLocked(value);
+                } else {
+                    if ((value > mLightSensorValue && mLightSensorPendingDecrease) ||
+                            (value < mLightSensorValue && mLightSensorPendingIncrease) ||
+                            (value == mLightSensorValue) ||
+                            (!mLightSensorPendingDecrease && !mLightSensorPendingIncrease)) {
                         // delay processing to debounce the sensor
                         mHandler.removeCallbacks(mAutoBrightnessTask);
                         mLightSensorPendingDecrease = (value < mLightSensorValue);
@@ -3515,9 +3521,9 @@ public class PowerManagerService extends IPowerManager.Stub
                             mLightSensorPendingValue = value;
                             mHandler.postDelayed(mAutoBrightnessTask, LIGHT_SENSOR_DELAY);
                         }
-                    }                    
-                } else {
+                    } else {
                         mLightSensorPendingValue = value;
+                    }
                 }
             }
         }
