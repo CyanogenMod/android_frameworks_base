@@ -2,15 +2,23 @@ package com.android.systemui.statusbar.powerwidget;
 
 import com.android.systemui.R;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.RemoteException;
+import android.os.ServiceManager;
 import android.provider.Settings;
+import android.util.Log;
+import android.view.IWindowManager;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AutoRotateButton extends PowerButton {
+
+    private static final String TAG = "AutoRotateButton";
 
     private static final List<Uri> OBSERVED_URIS = new ArrayList<Uri>();
     static {
@@ -21,7 +29,7 @@ public class AutoRotateButton extends PowerButton {
 
     @Override
     protected void updateState() {
-        if (getOrientationState(mView.getContext()) == 1) {
+        if (getAutoRotation()) {
             mIcon = R.drawable.stat_orientation_on;
             mState = STATE_ENABLED;
         } else {
@@ -32,18 +40,8 @@ public class AutoRotateButton extends PowerButton {
 
     @Override
     protected void toggleState() {
-        Context context = mView.getContext();
-        if(getOrientationState(context) == 0) {
-            Settings.System.putInt(
-                    context.getContentResolver(),
-                    Settings.System.ACCELEROMETER_ROTATION, 1);
-        } else {
-            Settings.System.putInt(
-                    context.getContentResolver(),
-                    Settings.System.ACCELEROMETER_ROTATION, 0);
-        }
+        setAutoRotation(!getAutoRotation());
     }
-
 
     @Override
     protected boolean handleLongClick() {
@@ -59,9 +57,26 @@ public class AutoRotateButton extends PowerButton {
         return OBSERVED_URIS;
     }
 
-    private static int getOrientationState(Context context) {
-        return Settings.System.getInt(
-                context.getContentResolver(),
-                Settings.System.ACCELEROMETER_ROTATION, 0);
+    private boolean getAutoRotation() {
+        ContentResolver cr = mView.getContext().getContentResolver();
+        return 0 != Settings.System.getInt(cr, Settings.System.ACCELEROMETER_ROTATION, 0);
+    }
+
+    private void setAutoRotation(final boolean autorotate) {
+        AsyncTask.execute(new Runnable() {
+                public void run() {
+                    try {
+                        IWindowManager wm = IWindowManager.Stub.asInterface(
+                                ServiceManager.getService(Context.WINDOW_SERVICE));
+                        if (autorotate) {
+                            wm.thawRotation();
+                        } else {
+                            wm.freezeRotation(-1);
+                        }
+                    } catch (RemoteException exc) {
+                        Log.w(TAG, "Unable to save auto-rotate setting");
+                    }
+                }
+            });
     }
 }
