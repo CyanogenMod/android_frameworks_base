@@ -137,6 +137,15 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"关闭收音机"</string>
     <string name="screen_lock" msgid="799094655496098153">"屏幕锁定"</string>
     <string name="power_off" msgid="4266614107412865048">"关机"</string>
+    <string name="global_action_screenshot">屏幕截图</string>
+    <string name="reboot_reboot">"重启"</string>
+    <string name="reboot_recovery">"恢复"</string>
+    <string name="reboot_bootloader">"引导"</string>
+    <string name="reboot_bootmenu">"引导菜单"</string>
+    <string name="reboot_fastboot">"快速启动"</string>
+    <string name="reboot_download">"下载"</string>
+    <string name="reboot_progress">"正在重启..."</string>
+    <string name="reboot_confirm">"您的手机会重启。"</string>
     <!-- no translation found for silent_mode_silent (319298163018473078) -->
     <skip />
     <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
@@ -1230,4 +1239,5 @@
     <string name="sending" msgid="8715108995741758718">"正在发送..."</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"要启动浏览器吗？"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"要接听电话吗？"</string>
+    <string name="app_killed_message">应用程序已被杀死</string>
 </resources>
