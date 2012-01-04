@@ -57,7 +57,6 @@ import java.util.Map;
  * The Settings provider contains global system-level device preferences.
  */
 public final class Settings {
-
     /**
      * Intent actions for Settings
      *
@@ -2614,6 +2613,12 @@ public final class Settings {
           * @hide
           */
          public static final String TRACKBALL_NOTIFICATION_BLEND_COLOR = "trackball_blend_color";
+
+	/**
+          * Turn on button-backlight on new Notification.  The value is boolean (1 or 0).
+          * @hide
+          */
+         public static final String USE_BUTTONS = "use_buttons_on_notification";
 
         /**
          * Trackball Notification Colors. The value is a String, containing a list of packages:
