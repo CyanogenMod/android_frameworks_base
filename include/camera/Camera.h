@@ -85,7 +85,14 @@ enum {
 
 #endif
 
+#ifdef CAF_CAMERA_GB_REL
+    CAMERA_MSG_STATS_DATA       = 0x200,
+    CAMERA_MSG_META_DATA        = 0x400,
+    CAMERA_MSG_ALL_MSGS         = 0x7FF
+#else
     CAMERA_MSG_ALL_MSGS         = 0x1FF
+#endif
+
 };
 
 // cmdType in sendCommand functions
@@ -105,11 +112,18 @@ enum {
     // or CAMERA_MSG_COMPRESSED_IMAGE. This is not allowed to be set during
     // preview.
     CAMERA_CMD_SET_DISPLAY_ORIENTATION = 3,
+    CAMERA_CMD_HISTOGRAM_ON     = 4,
+    CAMERA_CMD_HISTOGRAM_OFF     = 5,
+    CAMERA_CMD_HISTOGRAM_SEND_DATA  = 6,
+    CAMERA_CMD_FACE_DETECTION_ON     = 7,
+    CAMERA_CMD_FACE_DETECTION_OFF     = 8,
+    CAMERA_CMD_SEND_META_DATA  = 9,
 };
 
 // camera fatal errors
 enum {
     CAMERA_ERROR_UKNOWN  = 1,
+    CAMERA_ERROR_RESOURCE = 2,
     CAMERA_ERROR_SERVER_DIED = 100
 };
 
@@ -187,6 +201,10 @@ public:
 #ifdef USE_GETBUFFERINFO
             // query the recording buffer information from HAL layer.
             status_t    getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize);
+#endif
+#ifdef CAF_CAMERA_GB_REL
+            //encode the YUV data
+            void        encodeData();
 #endif
 
             // start preview mode, must call setPreviewDisplay first

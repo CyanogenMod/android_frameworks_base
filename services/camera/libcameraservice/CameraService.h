@@ -103,6 +103,11 @@ private:
         // get the recording buffers information from HAL Layer.
         virtual status_t        getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize);
 #endif
+#ifdef CAF_CAMERA_GB_REL
+        // encode the YUV data
+        virtual void            encodeData();
+#endif
+
         virtual status_t        startPreview();
         virtual void            stopPreview();
         virtual bool            previewEnabled();
@@ -139,7 +144,11 @@ private:
 
         // these are internal functions used to set up preview buffers
         status_t                registerPreviewBuffers();
+#ifdef CAF_CAMERA_GB_REL
+        status_t                setOverlay(int w = 0, int h = 0);
+#else
         status_t                setOverlay();
+#endif
 
         // camera operation mode
         enum camera_mode {
@@ -204,11 +213,12 @@ private:
         sp<CameraHardwareInterface>     mHardware;       // cleared after disconnect()
         bool                            mUseOverlay;     // immutable after constructor
         sp<OverlayRef>                  mOverlayRef;
-#if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) || defined(USE_OVERLAY_FORMAT_YCrCb_420_SP)
+#if defined(USE_OVERLAY_FORMAT_YCbCr_420_SP) || defined(USE_OVERLAY_FORMAT_YCrCb_420_SP) || defined(CAF_CAMERA_GB_REL)
         sp<Overlay>                     mOverlay;
 #endif
         int                             mOverlayW;
         int                             mOverlayH;
+        int                             mPixelFormat;
         int                             mPreviewCallbackFlag;
         int                             mOrientation;     // Current display orientation
         // True if display orientation has been changed. This is only used in overlay.
