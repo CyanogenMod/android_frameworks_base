@@ -208,6 +208,16 @@ status_t Camera::getBufferInfo(sp<IMemory>& Frame, size_t *alignedSize)
 }
 #endif
 
+#ifdef CAF_CAMERA_GB_REL
+void Camera::encodeData()
+{
+    LOGV("encodeData");
+    sp <ICamera> c = mCamera;
+    if (c == 0) return;
+    c->encodeData();
+}
+#endif
+
 // start preview mode
 status_t Camera::startPreview()
 {
@@ -305,6 +315,7 @@ status_t Camera::setParameters(const String8& params)
     return c->setParameters(params);
 }
 
+
 #ifdef MOTO_CUSTOM_PARAMETERS
 // set preview/capture custom parameters - key/value pairs
 status_t Camera::setCustomParameters(const String8& params)
@@ -316,7 +327,7 @@ status_t Camera::setCustomParameters(const String8& params)
 }
 #endif
 
-// get preview/capture custom parameters - key/value pairs
+// get preview/capture parameters - key/value pairs
 String8 Camera::getParameters() const
 {
     LOGV("getParameters");

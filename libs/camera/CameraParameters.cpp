@@ -252,6 +252,33 @@ const char CameraParameters::CAF_ON[] = "caf-on";
 const char CameraParameters::CONTINUOUS_AF_OFF[] = "caf-off";
 const char CameraParameters::CONTINUOUS_AF_ON[] = "caf-on";
 
+//LGE Victor
+const char CameraParameters::FOCUS_MODE_MANUAL[] = "manual";
+const char CameraParameters::KEY_MANUAL_FOCUS[] = "manual-focus";
+const char CameraParameters::KEY_LUMA_ADAPTION[] = "luma-adaption";
+const char CameraParameters::KEY_VT_MODE[] = "vt-mode";
+
+#ifdef CAF_CAMERA_GB_REL
+static const char* portrait = "portrait";
+static const char* landscape = "landscape";
+
+int CameraParameters::getOrientation() const
+{
+    const char* orientation = get("orientation");
+    if (orientation && !strcmp(orientation, portrait))
+        return CAMERA_ORIENTATION_PORTRAIT;
+    return CAMERA_ORIENTATION_LANDSCAPE;
+}
+void CameraParameters::setOrientation(int orientation)
+{
+    if (orientation == CAMERA_ORIENTATION_PORTRAIT) {
+        set("orientation", portrait);
+    } else {
+         set("orientation", landscape);
+    }
+}
+#endif
+
 CameraParameters::CameraParameters()
                 : mMap()
 {
@@ -460,6 +487,13 @@ void CameraParameters::getVideoSize(int *width, int *height) const
     parse_pair(p, width, height, 'x');
 }
 
+void CameraParameters::setPreviewFpsRange(int minFPS, int maxFPS)
+{
+    char str[32];
+    sprintf(str,"%d,%d",minFPS,maxFPS);
+    set(KEY_PREVIEW_FPS_RANGE,str);
+}
+
 void CameraParameters::setPreviewFrameRate(int fps)
 {
     set(KEY_PREVIEW_FRAME_RATE, fps);
@@ -588,6 +622,12 @@ void CameraParameters::getTouchIndexAf(int *x, int *y) const
         *y = tempY;
     }
 }
+
+// LGE Victor
+extern "C" status_t _ZNK7android16CameraParameters14getManualfocusEv () {
+    return NO_ERROR;
+}
+// LGE Victor
 
 status_t CameraParameters::dump(int fd, const Vector<String16>& args) const
 {
