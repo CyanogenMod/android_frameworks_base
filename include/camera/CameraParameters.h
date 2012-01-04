@@ -542,6 +542,19 @@ public:
     static const char LENSSHADE_ENABLE[] ;
     static const char LENSSHADE_DISABLE[] ;
 
+    static const char KEY_LUMA_ADAPTION[];
+    static const char FOCUS_MODE_MANUAL[];
+    static const char KEY_MANUAL_FOCUS[];
+    static const char KEY_VT_MODE[];
+
+    enum {
+        CAMERA_ORIENTATION_UNKNOWN = 0,
+        CAMERA_ORIENTATION_PORTRAIT = 1,
+        CAMERA_ORIENTATION_LANDSCAPE = 2,
+    };
+    int getOrientation() const;
+    void setOrientation(int orientation);
+    void setPreviewFpsRange(int minFPS,int maxFPS);
 
 private:
     DefaultKeyedVector<String8,String8>    mMap;
