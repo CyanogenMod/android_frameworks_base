@@ -38,6 +38,14 @@ public:
      */
     virtual sp<GraphicBuffer> createGraphicBuffer(uint32_t w, uint32_t h,
             PixelFormat format, uint32_t usage, status_t* error) = 0;
+
+#ifdef QCOM_HARDWARE
+    /* Free all but one of the GraphicBuffer objects that the server is
+     * currently referencing. If bufIndex is not a valid index of the buffers
+     * the server is referencing, then all buffers are freed.
+     */
+    virtual void freeAllGraphicBuffersExcept(int bufIndex) = 0;
+#endif
 };
 
 // ----------------------------------------------------------------------------
