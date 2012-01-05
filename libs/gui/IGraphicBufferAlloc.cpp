@@ -32,6 +32,9 @@ namespace android {
 
 enum {
     CREATE_GRAPHIC_BUFFER = IBinder::FIRST_CALL_TRANSACTION,
+#ifdef QCOM_HARDWARE
+    FREE_ALL_GRAPHIC_BUFFERS_EXCEPT,
+#endif
 };
 
 class BpGraphicBufferAlloc : public BpInterface<IGraphicBufferAlloc>
@@ -63,6 +66,16 @@ public:
         *error = result;
         return graphicBuffer;
     }
+
+#ifdef QCOM_HARDWARE
+    virtual void freeAllGraphicBuffersExcept(int bufIdx) {
+        Parcel data, reply;
+        data.writeInterfaceToken(
+                IGraphicBufferAlloc::getInterfaceDescriptor());
+        data.writeInt32(bufIdx);
+        remote()->transact(FREE_ALL_GRAPHIC_BUFFERS_EXCEPT, data, &reply);
+    }
+#endif
 };
 
 IMPLEMENT_META_INTERFACE(GraphicBufferAlloc, "android.ui.IGraphicBufferAlloc");
@@ -108,6 +121,14 @@ status_t BnGraphicBufferAlloc::onTransact(
             }
             return NO_ERROR;
         } break;
+#ifdef QCOM_HARDWARE
+        case FREE_ALL_GRAPHIC_BUFFERS_EXCEPT: {
+            CHECK_INTERFACE(IGraphicBufferAlloc, data, reply);
+            int bufIdx = data.readInt32();
+            freeAllGraphicBuffersExcept(bufIdx);
+            return NO_ERROR;
+        } break;
+#endif
         default:
             return BBinder::onTransact(code, data, reply, flags);
     }

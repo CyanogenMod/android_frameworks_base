@@ -2724,9 +2724,25 @@ sp<GraphicBuffer> GraphicBufferAlloc::createGraphicBuffer(uint32_t w, uint32_t h
                 w, h, strerror(-err), graphicBuffer->handle);
         return 0;
     }
+#ifdef QCOM_HARDWARE
+    Mutex::Autolock _l(mLock);
+    mBuffers.add(graphicBuffer);
+#endif
     return graphicBuffer;
 }
 
+#ifdef QCOM_HARDWARE
+void GraphicBufferAlloc::freeAllGraphicBuffersExcept(int bufIdx) {
+    Mutex::Autolock _l(mLock);
+    if (0 <= bufIdx && bufIdx < mBuffers.size()) {
+        sp<GraphicBuffer> b(mBuffers[bufIdx]);
+        mBuffers.clear();
+        mBuffers.add(b);
+    } else {
+        mBuffers.clear();
+    }
+}
+#endif
 // ---------------------------------------------------------------------------
 
 GraphicPlane::GraphicPlane()
