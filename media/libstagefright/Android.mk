@@ -76,9 +76,10 @@ LOCAL_SRC_FILES:=                         \
 ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
         LOCAL_SRC_FILES += ExtendedExtractor.cpp
         LOCAL_SRC_FILES += ExtendedWriter.cpp
+	LOCAL_C_INCLUDES += $(TOP)/hardware/qcom/display/libqcomui
 endif
 
-LOCAL_C_INCLUDES:= \
+LOCAL_C_INCLUDES+= \
 	$(JNI_H_INCLUDE) \
         $(TOP)/frameworks/base/include/media/stagefright/openmax \
         $(TOP)/external/flac/include \
