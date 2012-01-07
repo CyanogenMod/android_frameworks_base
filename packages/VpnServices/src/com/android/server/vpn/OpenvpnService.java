@@ -124,6 +124,14 @@ class OpenvpnService extends VpnService<OpenvpnProfile> {
             args.add("--keysize");
             args.add(p.getKeySize());
         }
+
+        if (p.getUseTlsAuth() && !p.getTlsAuthKey().equals("") && !p.getTlsAuthKeyDirection().equals("")) {
+            args.add("--tls-auth");
+            args.add(p.getTlsAuthKey());
+            if (!p.getTlsAuthKeyDirection().equals("None")) {
+                args.add(p.getTlsAuthKeyDirection());
+            }
+        }
         args.add("--up");
         args.add("/system/xbin/openvpn-up.sh");
         args.add("--script-security");

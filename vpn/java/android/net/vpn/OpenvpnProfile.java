@@ -63,6 +63,12 @@ public class OpenvpnProfile extends VpnProfile {
 
     private String mExtra;
 
+    private boolean mUseTlsAuth;
+
+    private String mTlsAuthKey;
+
+    private String mTlsAuthKeyDirection;
+
     @Override
     public VpnType getType() {
         return VpnType.OPENVPN;
@@ -203,6 +209,30 @@ public class OpenvpnProfile extends VpnProfile {
         return Integer.toString(mKeySize);
     }
 
+    public void setUseTlsAuth(boolean t) {
+        mUseTlsAuth = t;
+    }
+
+    public boolean getUseTlsAuth() {
+        return mUseTlsAuth;
+    }
+
+    public void setTlsAuthKey(String k) {
+        mTlsAuthKey = k;
+    }
+
+    public String getTlsAuthKey() {
+        return mTlsAuthKey;
+    }
+
+    public void setTlsAuthKeyDirection(String d) {
+        mTlsAuthKeyDirection = d;
+    }
+
+    public String getTlsAuthKeyDirection() {
+        return mTlsAuthKeyDirection;
+    }
+
     public void setExtra(String extra) {
         mExtra = extra;
     }
@@ -228,6 +258,9 @@ public class OpenvpnProfile extends VpnProfile {
         mCipher = in.readString();
         mKeySize = in.readInt();
         mExtra = in.readString();
+        mUseTlsAuth = in.readInt() == 1;
+        mTlsAuthKey = in.readString();
+        mTlsAuthKeyDirection = in.readString();
     }
 
     @Override
@@ -247,5 +280,8 @@ public class OpenvpnProfile extends VpnProfile {
         parcel.writeString(mCipher);
         parcel.writeInt(mKeySize);
         parcel.writeString(mExtra);
+        parcel.writeInt(mUseTlsAuth ? 1 : 0);
+        parcel.writeString(mTlsAuthKey);
+        parcel.writeString(mTlsAuthKeyDirection);
     }
 }
