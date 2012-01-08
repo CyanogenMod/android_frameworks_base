@@ -2699,12 +2699,7 @@ public class PowerManagerService extends IPowerManager.Stub
         if (mLightSensorValue != value) {
             mLightSensorValue = value;
             if ((mPowerState & BATTERY_LOW_BIT) == 0) {
-                // use maximum light sensor value seen since screen went on for LCD to avoid flicker
-                // we only do this if we are docked, since lighting should be stable when
-                // stationary in a dock.
-                int lcdValue = getAutoBrightnessValue(
-                        (!mIsDocked ? value : mHighestLightSensorValue),
-                        mLastLcdValue,
+                int lcdValue = getAutoBrightnessValue(value, mLastLcdValue,
                         (mCustomLightEnabled ? mCustomLightLevels : mAutoBrightnessLevels),
                         (mCustomLightEnabled ? mCustomLcdValues : mLcdBacklightValues));
 
