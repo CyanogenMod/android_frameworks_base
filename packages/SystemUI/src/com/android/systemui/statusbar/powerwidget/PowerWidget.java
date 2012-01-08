@@ -266,6 +266,11 @@ public class PowerWidget extends FrameLayout {
                     Settings.System.getUriFor(Settings.System.EXPANDED_VIEW_WIDGET_COLOR),
                             false, this);
 
+            // watch for changes in indicator visibility
+            resolver.registerContentObserver(
+                    Settings.System.getUriFor(Settings.System.EXPANDED_HIDE_INDICATOR),
+                            false, this);
+
             // watch for power-button specifc stuff that has been loaded
             for(Uri uri : PowerButton.getAllObservedUris()) {
                 resolver.registerContentObserver(uri, false, this);
