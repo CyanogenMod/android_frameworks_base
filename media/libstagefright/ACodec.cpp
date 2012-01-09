@@ -136,6 +136,37 @@ private:
     DISALLOW_EVIL_CONSTRUCTORS(CodecObserver);
 };
 
+#ifdef QCOM_HARDWARE
+static const int QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka = 0x7FA30C03;
+static const int OMX_QCOM_COLOR_FormatYVU420SemiPlanar = 0x7FA30C00;
+
+class ColorFormatInfo {
+    private:
+          static const int32_t preferredFormat;
+    public:
+          static int32_t getPreferredFormat() {
+          return preferredFormat;
+          }
+};
+
+const int32_t ColorFormatInfo::preferredFormat =
+#ifdef TARGET7x30
+    QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka;
+#endif
+#ifdef TARGET8x60
+    QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka;
+#endif
+#ifdef TARGET7x27
+    OMX_QCOM_COLOR_FormatYVU420SemiPlanar;
+#endif
+#ifdef TARGET7x27A
+    OMX_QCOM_COLOR_FormatYVU420SemiPlanar;
+#endif
+#ifdef TARGET8x50
+    OMX_QCOM_COLOR_FormatYVU420SemiPlanar;
+#endif
+#endif //QCOM_HARDWARE
+
 ////////////////////////////////////////////////////////////////////////////////
 
 struct ACodec::BaseState : public AState {
@@ -471,6 +502,8 @@ status_t ACodec::allocateOutputBuffersFromNativeWindow() {
 #ifdef QCOM_HARDWARE
     int format = (def.format.video.eColorFormat == (OMX_COLOR_FORMATTYPE)QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka)?
                  HAL_PIXEL_FORMAT_YCbCr_420_SP_TILED : def.format.video.eColorFormat;
+    if(def.format.video.eColorFormat == OMX_QCOM_COLOR_FormatYVU420SemiPlanar)
+        format = HAL_PIXEL_FORMAT_YCrCb_420_SP;
 #endif
 
     err = native_window_set_buffers_geometry(
@@ -1051,6 +1084,21 @@ status_t ACodec::setSupportedOutputFormat() {
     InitOMXParams(&format);
     format.nPortIndex = kPortIndexOutput;
     format.nIndex = 0;
+
+#ifdef QCOM_HARDWARE
+    if (!strncmp(mComponentName.c_str(), "OMX.qcom",8)) {
+        int32_t reqdColorFormat = ColorFormatInfo::getPreferredFormat();
+        for(format.nIndex = 0;
+                (OK == mOMX->getParameter(mNode, OMX_IndexParamVideoPortFormat, &format, sizeof(format)));
+                format.nIndex++) {
+            if(format.eColorFormat == reqdColorFormat)
+                break;
+        }
+    }
+
+    LOGV("Video O/P format.nIndex 0x%x",format.nIndex);
+    LOGW("Video O/P format.eColorFormat 0x%x",format.eColorFormat);
+#endif
 
     status_t err = mOMX->getParameter(
             mNode, OMX_IndexParamVideoPortFormat,
