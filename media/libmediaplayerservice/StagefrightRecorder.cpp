@@ -1438,11 +1438,21 @@ status_t StagefrightRecorder::setupVideoEncoder(
     sp<MetaData> meta = cameraSource->getFormat();
 
     int32_t width, height, stride, sliceHeight, colorFormat;
+#ifdef QCOM_HARDWARE
+    int32_t hfr;
+#endif
     CHECK(meta->findInt32(kKeyWidth, &width));
     CHECK(meta->findInt32(kKeyHeight, &height));
     CHECK(meta->findInt32(kKeyStride, &stride));
     CHECK(meta->findInt32(kKeySliceHeight, &sliceHeight));
     CHECK(meta->findInt32(kKeyColorFormat, &colorFormat));
+#ifdef QCOM_HARDWARE
+    CHECK(meta->findInt32(kKeyHFR, &hfr));
+
+    if(hfr) {
+      mMaxFileDurationUs = mMaxFileDurationUs * (hfr/mFrameRate);
+    }
+#endif
 
     enc_meta->setInt32(kKeyWidth, width);
     enc_meta->setInt32(kKeyHeight, height);
@@ -1450,9 +1460,80 @@ status_t StagefrightRecorder::setupVideoEncoder(
     enc_meta->setInt32(kKeyStride, stride);
     enc_meta->setInt32(kKeySliceHeight, sliceHeight);
     enc_meta->setInt32(kKeyColorFormat, colorFormat);
+#ifdef QCOM_HARDWARE
+    enc_meta->setInt32(kKeyHFR, hfr);
+#endif
     if (mVideoTimeScale > 0) {
         enc_meta->setInt32(kKeyTimeScale, mVideoTimeScale);
     }
+
+#ifdef QCOM_HARDWARE
+    char mDeviceName[100];
+    property_get("ro.board.platform",mDeviceName,"0");
+    if(!strncmp(mDeviceName, "msm7627a", 8)) {
+      if(hfr && (width * height > 432*240)) {
+        LOGE("HFR mode is supported only upto WQVGA resolution");
+        return INVALID_OPERATION;
+      }
+    }
+    else {
+      if(hfr && ((mVideoEncoder != VIDEO_ENCODER_H264) || (width * height > 800*480))) {
+        LOGE("HFR mode is supported only upto WVGA and H264 codec.");
+        return INVALID_OPERATION;
+      }
+    }
+#endif
+
+    /*
+     * can set profile from the app as a parameter.
+     * For the mean time, set from shell
+     */
+
+    char value[PROPERTY_VALUE_MAX];
+    bool customProfile = false;
+
+    if (property_get("encoder.video.profile", value, NULL) > 0) {
+        customProfile = true;
+    }
+
+    if (customProfile) {
+        switch ( mVideoEncoder ) {
+        case VIDEO_ENCODER_H264:
+            if (strncmp("base", value, 4) == 0) {
+                mVideoEncoderProfile = OMX_VIDEO_AVCProfileBaseline;
+                LOGI("H264 Baseline Profile");
+            }
+            else if (strncmp("main", value, 4) == 0) {
+                mVideoEncoderProfile = OMX_VIDEO_AVCProfileMain;
+                LOGI("H264 Main Profile");
+            }
+            else if (strncmp("high", value, 4) == 0) {
+                mVideoEncoderProfile = OMX_VIDEO_AVCProfileHigh;
+                LOGI("H264 High Profile");
+            }
+            else {
+               LOGW("Unsupported H264 Profile");
+            }
+            break;
+        case VIDEO_ENCODER_MPEG_4_SP:
+            if (strncmp("simple", value, 5) == 0 ) {
+                mVideoEncoderProfile = OMX_VIDEO_MPEG4ProfileSimple;
+                LOGI("MPEG4 Simple profile");
+            }
+            else if (strncmp("asp", value, 3) == 0 ) {
+                mVideoEncoderProfile = OMX_VIDEO_MPEG4ProfileAdvancedSimple;
+                LOGI("MPEG4 Advanced Simple Profile");
+            }
+            else {
+                LOGW("Unsupported MPEG4 Profile");
+            }
+            break;
+        default:
+            LOGW("No custom profile support for other codecs");
+            break;
+        }
+    }
+
     if (mVideoEncoderProfile != -1) {
         enc_meta->setInt32(kKeyVideoProfile, mVideoEncoderProfile);
     }
