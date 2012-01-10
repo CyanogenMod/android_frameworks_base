@@ -136,9 +136,21 @@ status_t ColorConverter::convert(
         case QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka:
             {
                 void * lib = dlopen("libmm-color-convertor.so", RTLD_NOW);
+
+                if (!lib) {
+                    LOGE("dlopen for libmm-color-convertor failed with errno %d", errno);
+                    return ERROR_UNSUPPORTED;
+                }
+
+
                 typedef int (*convertFn)(ColorConvertParams src, ColorConvertParams dst, uint8_t *adjustedClip);
 
-                convertFn convertNV12Tile = (convertFn)dlsym(lib, "_Z7convertN7android18ColorConvertParamsES0_Ph");
+                convertFn convertNV12Tile = (convertFn)dlsym(lib, "_ZN7android7convertENS_18ColorConvertParamsES0_Ph");
+                if (!convertNV12Tile) {
+                    dlclose(lib);
+                    LOGE("dlsym on libmm-color-convertor failed with errno %d", errno);
+                    return ERROR_UNSUPPORTED;
+                }
 
                 struct ColorConvertParams srcTemp;
                 srcTemp.width = srcWidth;
