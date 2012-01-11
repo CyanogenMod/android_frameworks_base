@@ -330,12 +330,27 @@ public abstract class DataConnection extends StateMachine {
         if (DBG) log("NotifyDisconnectCompleted DisconnectParams=" + dp);
     }
 
+    protected boolean needsOldRilFeature(String feature) {
+        String[] features = SystemProperties.get("ro.telephony.ril.v3", "").split(",");
+        for (String found: features) {
+            if (found.equals(feature))
+                return true;
+        }
+        return false;
+    }
+
     protected int getRadioTechnology(int defaultRadioTechnology) {
         int radioTechnology;
         if (mRilVersion < 6) {
             radioTechnology = defaultRadioTechnology;
         } else {
-            radioTechnology = phone.getServiceState().getRadioTechnology() + 2;
+             if (needsOldRilFeature("usehcradio") ) {
+               radioTechnology = phone.getServiceState().getRadioTechnology() - 2;
+               if (radioTechnology != 1) // in reality if it is not 1 something is wrong for hc ??
+		   radioTechnology = 1;
+	       }
+               else
+		  radioTechnology = phone.getServiceState().getRadioTechnology() + 2; // orginal code
         }
         return radioTechnology;
     }
