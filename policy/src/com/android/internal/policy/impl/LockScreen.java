@@ -540,15 +540,33 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         int ringlockStyle = Settings.System.getInt(mContext.getContentResolver(),
                 Settings.System.RINGLOCK_STYLE_PREF, RinglockStyle.getIdByStyle(RinglockStyle.Bubble));
         int resSecNorm, resRingGreen, resRingHighlight;
+        int resUnlock, resCustom, resTarget;
 
-        if (ringlockStyle == RinglockStyle.getIdByStyle(RinglockStyle.Revamped)) {
-            resSecNorm = R.drawable.jog_ring_rev_secback_normal;
-            resRingGreen = R.drawable.jog_ring_rev_ring_green;
-            resRingHighlight = R.drawable.jog_ring_rev_ring_pressed_red;
-        } else {
-            resSecNorm = R.drawable.jog_ring_secback_normal;
-            resRingGreen = R.drawable.jog_ring_ring_green;
-            resRingHighlight = R.drawable.jog_ring_ring_pressed_red;
+        switch (RinglockStyle.getStyleById(ringlockStyle)) {
+            case Revamped:
+                resSecNorm = R.drawable.jog_ring_rev_secback_normal;
+                resRingGreen = R.drawable.jog_ring_rev_ring_green;
+                resRingHighlight = R.drawable.jog_ring_rev_ring_pressed_red;
+                resUnlock = R.drawable.ic_jog_dial_unlock;
+                resCustom = R.drawable.ic_jog_dial_custom;
+                resTarget = R.drawable.jog_tab_target_green;
+                break;
+            case Holo:
+                resSecNorm = R.drawable.jog_ring_holo_secback_normal;
+                resRingGreen = R.drawable.jog_ring_holo_ring;
+                resRingHighlight = R.drawable.jog_ring_holo_ring_pressed;
+                resUnlock = R.drawable.ic_jog_dial_holo_unlock;
+                resCustom = R.drawable.ic_jog_dial_holo_custom;
+                resTarget = R.drawable.jog_tab_target_holo;
+                break;
+            default:
+                resSecNorm = R.drawable.jog_ring_secback_normal;
+                resRingGreen = R.drawable.jog_ring_ring_green;
+                resRingHighlight = R.drawable.jog_ring_ring_pressed_red;
+                resUnlock = R.drawable.ic_jog_dial_unlock;
+                resCustom = R.drawable.ic_jog_dial_custom;
+                resTarget = R.drawable.jog_tab_target_green;
+                break;
         }
 
         mRingSelector.setHighlightBackgroundResource(resRingHighlight);
@@ -578,40 +596,22 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         if (mRingMinimal) {
             mRingSelector.enableRingMinimal(mRingMinimal);
             //unlock with middle - left and right are hidden
-            mRingSelector.setMiddleRingResources(
-                R.drawable.ic_jog_dial_unlock,
-                R.drawable.jog_tab_target_green,
-                resRingGreen);
-        }else if(mCustomAppToggle) {
+            mRingSelector.setMiddleRingResources(resUnlock, resTarget, resRingGreen);
+        } else if (mCustomAppToggle) {
             mRingSelector.enableMiddleRing(mCustomAppToggle);
-            if(mRingUnlockMiddle) {
+            if (mRingUnlockMiddle) {
                 mRingSelector.enableMiddlePrimary(mRingUnlockMiddle);
-                mRingSelector.setLeftRingResources(
-                    R.drawable.ic_jog_dial_custom,
-                    R.drawable.jog_tab_target_green,
-                    resRingGreen);
+                mRingSelector.setLeftRingResources(resCustom, resTarget, resRingGreen);
                 //unlock with middle
-                mRingSelector.setMiddleRingResources(
-                    R.drawable.ic_jog_dial_unlock,
-                    R.drawable.jog_tab_target_green,
-                    resRingGreen);
-                }else{
+                mRingSelector.setMiddleRingResources(resUnlock, resTarget, resRingGreen);
+            } else {
                 //unlock on left
-                mRingSelector.setLeftRingResources(
-                    R.drawable.ic_jog_dial_unlock,
-                    R.drawable.jog_tab_target_green,
-                    resRingGreen);
-                mRingSelector.setMiddleRingResources(
-                    R.drawable.ic_jog_dial_custom,
-                    R.drawable.jog_tab_target_green,
-                    resRingGreen);
-                }
-        }else{
+                mRingSelector.setLeftRingResources(resUnlock, resTarget, resRingGreen);
+                mRingSelector.setMiddleRingResources(resCustom, resTarget, resRingGreen);
+            }
+        } else {
             //no middle ring
-            mRingSelector.setLeftRingResources(
-                R.drawable.ic_jog_dial_unlock,
-                R.drawable.jog_tab_target_green,
-                resRingGreen);
+            mRingSelector.setLeftRingResources(resUnlock, resTarget, resRingGreen);
             mRingSelector.enableRingMinimal(false);
         }
 
@@ -770,14 +770,6 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         int targetId = mSilentMode ? R.drawable.jog_tab_target_yellow
                 : R.drawable.jog_tab_target_gray;
 
-        //Ringlock resource setup
-        int mRinglockStyle = Settings.System.getInt(mContext.getContentResolver(),
-                Settings.System.RINGLOCK_STYLE_PREF, RinglockStyle.getIdByStyle(RinglockStyle.Bubble));
-        int resRingGray=(mRinglockStyle == RinglockStyle.getIdByStyle(RinglockStyle.Bubble) ?
-                R.drawable.jog_ring_ring_gray : R.drawable.jog_ring_rev_ring_gray);
-        int resRingYellow=(mRinglockStyle == RinglockStyle.getIdByStyle(RinglockStyle.Bubble) ?
-                R.drawable.jog_ring_ring_yellow : R.drawable.jog_ring_rev_ring_yellow);
-
         mRotarySelector.setRightHandleResource(iconId);
 
         mTabSelector.setRightTabResources(iconId, targetId,
@@ -786,9 +778,35 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 mSilentMode ? R.drawable.jog_tab_right_sound_on
                             : R.drawable.jog_tab_right_sound_off);
 
-        mRingSelector.setRightRingResources(iconId, targetId,
-                mSilentMode ? resRingYellow
-                        : resRingGray);
+        //Ringlock resource setup
+        int ringlockStyle = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.RINGLOCK_STYLE_PREF, RinglockStyle.getIdByStyle(RinglockStyle.Bubble));
+
+        int ringResource;
+
+        switch (RinglockStyle.getStyleById(ringlockStyle)) {
+            case Revamped:
+                ringResource = mSilentMode ? R.drawable.jog_ring_rev_ring_yellow :
+                                             R.drawable.jog_ring_rev_ring_gray;
+                break;
+            case Holo:
+                ringResource = R.drawable.jog_ring_holo_ring;
+                targetId = R.drawable.jog_tab_target_holo;
+                if (mSilentMode && vibe) {
+                    iconId = R.drawable.ic_jog_dial_holo_vibrate_on;
+                } else if (mSilentMode) {
+                    iconId = R.drawable.ic_jog_dial_holo_sound_off;
+                } else {
+                    iconId = R.drawable.ic_jog_dial_holo_sound_on;
+                }
+                break;
+            default:
+                ringResource = mSilentMode ? R.drawable.jog_ring_ring_yellow :
+                                             R.drawable.jog_ring_ring_gray;
+                break;
+        }
+
+        mRingSelector.setRightRingResources(iconId, targetId, ringResource);
     }
 
     private void resetStatusInfo(KeyguardUpdateMonitor updateMonitor) {

@@ -184,7 +184,8 @@ public final class CmSystem {
 
     public enum RinglockStyle {
         Bubble,
-        Revamped;
+        Revamped,
+        Holo;
 
         static public RinglockStyle getStyleById(int id) {
             switch (id) {
@@ -192,6 +193,8 @@ public final class CmSystem {
                     return Bubble;
                 case 2:
                     return Revamped;
+                case 3:
+                    return Holo;
                 default:
                     return Bubble;
             }
@@ -207,6 +210,8 @@ public final class CmSystem {
                     return 1;
                 case Revamped:
                     return 2;
+                case Holo:
+                    return 3;
                 default:
                     return 1;
             }
