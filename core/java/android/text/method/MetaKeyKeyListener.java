@@ -215,6 +215,23 @@ public abstract class MetaKeyKeyListener {
             content.removeSpan(what);
     }
 
+    public static void lockMeta(Spannable content, int keyCode) {
+        Object what = null;
+        switch(keyCode) {
+            case KeyEvent.KEYCODE_SHIFT_LEFT:
+            case KeyEvent.KEYCODE_SHIFT_RIGHT:
+                what = CAP; break;
+            case KeyEvent.KEYCODE_ALT_LEFT:
+            case KeyEvent.KEYCODE_ALT_RIGHT:
+                what = ALT; break;
+            case KeyEvent.KEYCODE_SYM:
+                what = SYM; break;
+            default:
+                return;
+        }
+        content.setSpan(what, 0, 0, LOCKED);
+    }
+
     /**
      * Handles presses of the meta keys.
      */

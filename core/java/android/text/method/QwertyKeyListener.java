@@ -112,6 +112,20 @@ public class QwertyKeyListener extends BaseKeyListener {
             return true;
         }
 
+        if (i == KeyCharacterMap.ALT_LOCK_INPUT) {
+            if (getMetaState(content, MetaKeyKeyListener.META_ALT_ON) < 2) {
+                lockMeta(content, KeyEvent.KEYCODE_ALT_LEFT);
+            } else {
+                clearMetaKeyState(content, MetaKeyKeyListener.META_ALT_ON);
+            }
+            return true;
+        }
+
+        if (i == KeyCharacterMap.VOICE_INPUT) {
+            // TODO: Actually do something
+            return true;
+        }
+
         if (i == KeyCharacterMap.HEX_INPUT) {
             int start;
 

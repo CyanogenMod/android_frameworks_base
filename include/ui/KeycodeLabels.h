@@ -160,6 +160,9 @@ static const KeycodeLabel KEYCODES[] = {
     { "FUNC_7", 98 },
     { "FUNC_8", 99 },
     { "QUECHAR", 100 },
+#elif defined(DROID2_KEYPAD)
+    { "ALT_LOCK", 125 },
+    { "VOICE", 167 },
 #endif
 
     // NOTE: If you add a new keycode here you must also add it to several other files.

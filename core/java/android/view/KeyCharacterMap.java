@@ -70,6 +70,17 @@ public class KeyCharacterMap
      */
     public static final char DOT_WWW_INPUT = '\uEF04';
 
+    /**
+     * Private use character for alt-lock
+     * @hide
+     */
+    public static final char ALT_LOCK_INPUT = '\uEF05';
+
+    /**
+     * Private use character indicating the voice input should be activated
+     */
+    public static final char VOICE_INPUT = '\uEF06';
+
     private static Object sLock = new Object();
     private static SparseArray<WeakReference<KeyCharacterMap>> sInstances
         = new SparseArray<WeakReference<KeyCharacterMap>>();

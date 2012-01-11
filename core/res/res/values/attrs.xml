@@ -969,6 +969,8 @@
         <enum name="KEYCODE_USER3" value="94" />
         <enum name="KEYCODE_USER4" value="95" />
         <enum name="KEYCODE_USER5" value="96" />
+        <enum name="KEYCODE_ALT_LOCK" value="125" />
+        <enum name="KEYCODE_VOICE" value="167" />
     </attr>
 
     <!-- ***************************************************************** -->

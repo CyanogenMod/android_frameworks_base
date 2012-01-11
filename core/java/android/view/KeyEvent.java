@@ -402,6 +402,16 @@ public class KeyEvent extends InputEvent implements Parcelable {
      */
     public static final int KEYCODE_USER5           = 96;
 
+    /**
+     * @hide
+     */
+    public static final int KEYCODE_ALT_LOCK        = 125;
+
+    /**
+     * @hide
+     */
+    public static final int KEYCODE_VOICE           = 167;
+
     // NOTE: If you add a new keycode here you must also add it to:
     //  isSystem()
     //  native/include/android/keycodes.h
