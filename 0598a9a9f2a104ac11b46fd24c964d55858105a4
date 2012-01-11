@@ -1,0 +1,16 @@
+Change-Id: I0598a9a9f2a104ac11b46fd24c964d55858105a4
+Code-Review+2: Ricardo Cerqueira <cyanogenmod@cerqueira.org>
+Verified+1: Ricardo Cerqueira <cyanogenmod@cerqueira.org>
+Code-Review+1: Adnan Begovic <decad3nce@gmail.com>
+Code-Review+1: Jerpelea <jerpelea@gmail.com>
+Code-Review+1: John Camey <makelegs@gmail.com>
+Code-Review+1: Renaud Lepage <root@cybikbase.com>
+Code-Review+1: djMesias <djmesias@terra.es>
+Code-Review+1: Kasper Hettinga <kasper.hettinga@gmail.com>
+Code-Review+1: Janson Kang <temasek71@gmail.com>
+Code-Review+1: Davor <slovenec88@gmail.com>
+Submitted-by: Ricardo Cerqueira <cyanogenmod@cerqueira.org>
+Submitted-at: Wed, 11 Jan 2012 12:15:01 +0300
+Reviewed-on: http://review.cyanogenmod.com/11624
+Project: CyanogenMod/android_frameworks_base
+Branch: refs/heads/gingerbread
