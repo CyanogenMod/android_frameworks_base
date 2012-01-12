@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2012, Code Aurora Forum. All rights reserved.
 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -135,9 +135,15 @@ void ExtendedExtractor::RegisterSniffers() {
         return;
     }
 
+    bool flag= true;
     //Register the remote sniffers with the DataSource.
     for(int i=0; i<snifferCount; i++) {
+#ifdef QCOM_HARDWARE
+        DataSource::RegisterSniffer(snifferArray[i],flag);
+        flag = false;
+#else
         DataSource::RegisterSniffer(snifferArray[i]);
+#endif
     }
 }
 

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (C) 2010-2012 Code Aurora Forum
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,10 +63,9 @@ const char *MEDIA_MIMETYPE_CONTAINER_AAC = "audio/aac";
 const char *MEDIA_MIMETYPE_CONTAINER_QCP = "audio/vnd.qcelp";
 const char *MEDIA_MIMETYPE_VIDEO_DIVX311 = "video/divx311";
 const char *MEDIA_MIMETYPE_VIDEO_DIVX4 = "video/divx4";
+const char *MEDIA_MIMETYPE_CONTAINER_MPEG2 = "video/mp2";
+const char *MEDIA_MIMETYPE_CONTAINER_3G2 = "video/3g2";
 #endif
 const char *MEDIA_MIMETYPE_TEXT_3GPP = "text/3gpp-tt";
 
-#ifdef QCOM_HARDWARE
-const char *MEDIA_MIMETYPE_CONTAINER_MPEG2 = "video/mp2";
-#endif
 }  // namespace android

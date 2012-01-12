@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (C) 2010-2012 Code Aurora Forum
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,6 +69,7 @@ extern const char *MEDIA_MIMETYPE_CONTAINER_QCP;
 extern const char *MEDIA_MIMETYPE_VIDEO_DIVX311;
 extern const char *MEDIA_MIMETYPE_VIDEO_DIVX4;
 extern const char *MEDIA_MIMETYPE_CONTAINER_MPEG2;
+extern const char *MEDIA_MIMETYPE_CONTAINER_3G2;
 #endif
 }  // namespace android
 
