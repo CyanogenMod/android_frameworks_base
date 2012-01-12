@@ -2627,6 +2627,12 @@ public final class Settings {
           */
          public static final String TRACKBALL_NOTIFICATION_BLEND_COLOR = "trackball_blend_color";
 
+	/**
+          * Turn on button-backlight on new Notification.  The value is boolean (1 or 0).
+          * @hide
+          */
+         public static final String USE_BUTTONS = "use_buttons_on_notification";
+
         /**
          * Trackball Notification Colors. The value is a String, containing a list of packages:
          * pkg=color=blink=mode=category|pkg=color=blink=mode=category|...
@@ -2681,6 +2687,12 @@ public final class Settings {
          * @hide
          */
         public static final String QUIET_HOURS_DIM = "quiet_hours_dim";
+
+	/**
+         * Whether to use button-backlight during quiet hours.
+         * @hide
+         */
+        public static final String QUIET_HOURS_BLN = "quiet_hours_bln";
 
         /**
          * Whether to always show battery status
