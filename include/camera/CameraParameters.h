@@ -435,6 +435,9 @@ public:
     static const char EFFECT_WHITEBOARD[];
     static const char EFFECT_BLACKBOARD[];
     static const char EFFECT_AQUA[];
+    static const char EFFECT_NEGATIVE_SEPIA[];
+    static const char EFFECT_PASTEL[];
+    static const char EFFECT_BLUE[];
 
     // Values for Touch AF/AEC
     static const char TOUCH_AF_AEC_OFF[] ;

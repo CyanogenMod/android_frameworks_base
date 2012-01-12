@@ -110,6 +110,9 @@ const char CameraParameters::EFFECT_POSTERIZE[] = "posterize";
 const char CameraParameters::EFFECT_WHITEBOARD[] = "whiteboard";
 const char CameraParameters::EFFECT_BLACKBOARD[] = "blackboard";
 const char CameraParameters::EFFECT_AQUA[] = "aqua";
+const char CameraParameters::EFFECT_NEGATIVE_SEPIA[] = "negative-sepia";
+const char CameraParameters::EFFECT_PASTEL[] = "pastel";
+const char CameraParameters::EFFECT_BLUE[] = "blue";
 
 // Values for auto exposure settings.
 const char CameraParameters::TOUCH_AF_AEC_OFF[] = "touch-off";
