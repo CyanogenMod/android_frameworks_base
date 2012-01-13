@@ -506,6 +506,11 @@ status_t SurfaceTexture::dequeueBuffer(int *outBuf, uint32_t w, uint32_t h,
 #endif
 	   ((uint32_t(buffer->usage) & usage) != usage))
 	{
+#ifdef QCOM_HARDWARE
+            if (buffer != NULL) {
+                mGraphicBufferAlloc->freeGraphicBufferAtIndex(buf);
+            }
+#endif
             usage |= GraphicBuffer::USAGE_HW_TEXTURE;
             status_t error;
             sp<GraphicBuffer> graphicBuffer(
