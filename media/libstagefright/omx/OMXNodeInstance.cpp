@@ -455,7 +455,9 @@ status_t OMXNodeInstance::useGraphicBuffer2_l(
         return UNKNOWN_ERROR;
     }
 
+#ifndef QCOM_HARDWARE
     CHECK_EQ(header->pBuffer, bufferHandle);
+#endif
     CHECK_EQ(header->pAppPrivate, bufferMeta);
 
     *buffer = header;
