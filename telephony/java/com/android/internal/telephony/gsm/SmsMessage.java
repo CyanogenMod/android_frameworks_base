@@ -22,6 +22,7 @@ import android.util.Log;
 
 import com.android.internal.telephony.EncodeException;
 import com.android.internal.telephony.GsmAlphabet;
+import com.android.internal.telephony.SimRegionCache;
 import com.android.internal.telephony.IccUtils;
 import com.android.internal.telephony.SmsHeader;
 import com.android.internal.telephony.SmsMessageBase;
@@ -1043,6 +1044,10 @@ public class SmsMessage extends SmsMessageBase {
                     Log.w(LOG_TAG, "1 - Unsupported SMS data coding scheme "
                             + (dataCodingScheme & 0xff));
                     encodingType = ENCODING_8BIT;
+                    if (SimRegionCache.getRegion() == SimRegionCache.MCC_KOREAN) {
+                        Log.w(LOG_TAG, "Korean SIM, using KSC5601 for decoding.");
+                        encodingType = ENCODING_KSC5601;
+                    }
                     break;
                 }
             }
@@ -1101,6 +1106,10 @@ public class SmsMessage extends SmsMessageBase {
         } else {
             Log.w(LOG_TAG, "3 - Unsupported SMS data coding scheme "
                     + (dataCodingScheme & 0xff));
+            if (SimRegionCache.getRegion() == SimRegionCache.MCC_KOREAN) {
+                Log.w(LOG_TAG, "Korean SIM, using KSC5601 for decoding.");
+                encodingType = ENCODING_KSC5601;
+            }
         }
 
         // set both the user data and the user data header.
