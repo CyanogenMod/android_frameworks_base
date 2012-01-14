@@ -878,9 +878,9 @@ public final class BearerData {
             paramBits -= EXPECTED_PARAM_SIZE;
             decodeSuccess = true;
             bData.messageType = inStream.read(4);
-            // Samsung Fascinate parses messageId differently than other devices
+            // Samsung CDMA devices parses messageId differently than other devices
             // fix it here so that incoming sms works correctly
-            if ("fascinatemtd".equals(SystemProperties.get("ro.product.device"))) {
+            if ("true".equals(SystemProperties.get("ro.ril.samsung_cdma"))) {
                 inStream.skip(4);
                 bData.messageId = inStream.read(8) << 8;
                 bData.messageId |= inStream.read(8);
