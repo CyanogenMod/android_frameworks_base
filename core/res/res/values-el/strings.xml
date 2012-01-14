@@ -137,13 +137,17 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Απενεργοποίηση ασύρματου"</string>
     <string name="screen_lock" msgid="799094655496098153">"Κλείδωμα οθόνης"</string>
     <string name="power_off" msgid="4266614107412865048">"Απενεργοποίηση"</string>
+    <string name="reboot_system">Επανεκκίνηση τηλεφώνου</string>
+    <string name="reboot_reboot">Επανεκκίνηση</string>
+    <string name="reboot_progress">Επανεκκίνηση\u2026</string>
+    <string name="reboot_confirm">Το τηλέφωνό σας θα επανεκκινηθεί.</string>
     <!-- no translation found for silent_mode_silent (319298163018473078) -->
     <skip />
     <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
     <skip />
     <!-- no translation found for silent_mode_ring (8592241816194074353) -->
     <skip />
-    <string name="shutdown_progress" msgid="2281079257329981203">"Απενεργοποίηση..."</string>
+    <string name="shutdown_progress" msgid="2281079257329981203">"Απενεργοποίηση\u2026"</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Το tablet σας θα απενεργοποιηθεί."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Το τηλέφωνό σας θα απενεργοποιηθεί."</string>
     <string name="shutdown_confirm_question" msgid="6656441286856415014">"Θέλετε να γίνει τερματισμός λειτουργίας;"</string>
@@ -153,6 +157,7 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"Επιλογές τηλεφώνου"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Κλείδωμα οθόνης"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Απενεργοποίηση"</string>
+    <string name="global_action_reboot">Επανεκκίνηση</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Λειτουργία σίγασης"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Ο ήχος είναι απενεργοποιημένος"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Ο ήχος είναι ενεργοποιημένος"</string>
