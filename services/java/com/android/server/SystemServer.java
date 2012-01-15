@@ -76,19 +76,6 @@ class ServerThread extends Thread {
         Log.wtf(TAG, "BOOT FAILURE " + msg, e);
     }
 
-    private class AdbSettingsObserver extends ContentObserver {
-        public AdbSettingsObserver() {
-            super(null);
-        }
-        @Override
-        public void onChange(boolean selfChange) {
-            boolean enableAdb = (Settings.Secure.getInt(mContentResolver,
-                Settings.Secure.ADB_ENABLED, 0) > 0);
-            // setting this secure property will start or stop adbd
-            SystemProperties.set("persist.service.adb.enable", enableAdb ? "1" : "0");
-        }
-    }
-
     private class AdbPortObserver extends ContentObserver {
         public AdbPortObserver() {
             super(null);
@@ -598,17 +585,10 @@ class ServerThread extends Thread {
         Settings.Secure.putInt(mContentResolver, Settings.Secure.ADB_PORT,
                 Integer.parseInt(SystemProperties.get("service.adb.tcp.port", "-1")));
 
-        Settings.Secure.putInt(mContentResolver, Settings.Secure.ADB_ENABLED,
-                "1".equals(SystemProperties.get("persist.service.adb.enable")) ? 1 : 0);
-
         // register observer to listen for settings changes
         mContentResolver.registerContentObserver(
             Settings.Secure.getUriFor(Settings.Secure.ADB_PORT),
             false, new AdbPortObserver());
-
-        mContentResolver.registerContentObserver(
-            Settings.Secure.getUriFor(Settings.Secure.ADB_ENABLED),
-            false, new AdbSettingsObserver());
 
         // Before things start rolling, be sure we have decided whether
         // we are in safe mode.
