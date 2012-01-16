@@ -29,6 +29,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.systemui.R;
+import com.android.systemui.statusbar.policy.WiFiController;
+import com.android.systemui.statusbar.policy.BluetoothToggleController;
+import com.android.systemui.statusbar.policy.GPSController;
 import com.android.systemui.statusbar.policy.AirplaneModeController;
 import com.android.systemui.statusbar.policy.AutoRotateController;
 import com.android.systemui.statusbar.policy.BrightnessController;
@@ -39,6 +42,9 @@ import com.android.systemui.statusbar.policy.VolumeController;
 public class SettingsView extends LinearLayout implements View.OnClickListener {
     static final String TAG = "SettingsView";
 
+    WiFiController mWiFi;
+    BluetoothToggleController mBluetooth;
+    GPSController mGPS;
     AirplaneModeController mAirplane;
     AutoRotateController mRotate;
     BrightnessController mBrightness;
@@ -60,7 +66,15 @@ public class SettingsView extends LinearLayout implements View.OnClickListener {
 
         mAirplane = new AirplaneModeController(context,
                 (CompoundButton)findViewById(R.id.airplane_checkbox));
+        mWiFi = new WiFiController(context,
+                (CompoundButton)findViewById(R.id.wifi_checkbox));
         findViewById(R.id.network).setOnClickListener(this);
+        mBluetooth = new BluetoothToggleController(context,
+                (CompoundButton)findViewById(R.id.bluetooth_checkbox));
+        findViewById(R.id.bluetooth).setOnClickListener(this);
+        mGPS = new GPSController(context,
+                (CompoundButton)findViewById(R.id.gps_checkbox));
+        findViewById(R.id.gps).setOnClickListener(this);
         mRotate = new AutoRotateController(context,
                 (CompoundButton)findViewById(R.id.rotate_checkbox));
         mBrightness = new BrightnessController(context,
@@ -74,6 +88,9 @@ public class SettingsView extends LinearLayout implements View.OnClickListener {
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
         mAirplane.release();
+        mWiFi.release();
+        mBluetooth.release();
+        mGPS.release();
         mDoNotDisturb.release();
     }
 
@@ -84,6 +101,12 @@ public class SettingsView extends LinearLayout implements View.OnClickListener {
                 break;
             case R.id.settings:
                 onClickSettings();
+                break;
+            case R.id.bluetooth:
+                onClickBluetooth();
+                break;
+            case R.id.gps:
+                onClickGPS();
                 break;
         }
     }
@@ -107,5 +130,20 @@ public class SettingsView extends LinearLayout implements View.OnClickListener {
                 .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         getStatusBarManager().collapse();
     }
-}
 
+    // Bluetooth
+    // ----------------------------
+    private void onClickBluetooth() {
+            getContext().startActivity(new Intent(Settings.ACTION_BLUETOOTH_SETTINGS)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            getStatusBarManager().collapse();
+    }
+
+    // GPS
+    // ----------------------------
+    private void onClickGPS() {
+            getContext().startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            getStatusBarManager().collapse();
+    }
+}
