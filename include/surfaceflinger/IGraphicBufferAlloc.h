@@ -48,6 +48,9 @@ public:
 
     /* Free the GraphicBuffer at the specified index */
     virtual void freeGraphicBufferAtIndex(int bufIndex) = 0;
+
+    /* Sets the required size of the Graphic Buffers */
+    virtual void setGraphicBufferSize(int size) = 0;
 #endif
 };
 
