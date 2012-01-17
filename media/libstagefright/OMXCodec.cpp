@@ -2029,6 +2029,10 @@ status_t OMXCodec::init() {
 
     err = allocateBuffers();
     if (err != (status_t)OK) {
+#ifdef QCOM_HARDWARE
+        CODEC_LOGE("Allocate Buffer failed - error = %d", err);
+        setState(ERROR);
+#endif
         return err;
     }
 
