@@ -32,6 +32,9 @@
 #include "LayerBase.h"
 #include "SurfaceFlinger.h"
 #include "DisplayHardware/DisplayHardware.h"
+#ifdef QCOM_HARDWARE
+#include "qcom_ui.h"
+#endif
 
 namespace android {
 
@@ -52,10 +55,16 @@ LayerBase::LayerBase(SurfaceFlinger* flinger, DisplayID display)
 {
     const DisplayHardware& hw(flinger->graphicPlane(0).displayHardware());
     mFlags = hw.getFlags();
+#ifdef QCOM_HARDWARE
+    mQCLayer = new QCBaseLayer;
+#endif
 }
 
 LayerBase::~LayerBase()
 {
+#ifdef QCOM_HARDWARE
+    delete mQCLayer;
+#endif
 }
 
 void LayerBase::setName(const String8& name) {
@@ -467,6 +476,125 @@ void LayerBase::drawWithOpenGL(const Region& clip) const
     glDisableClientState(GL_TEXTURE_COORD_ARRAY);
     glDisable(GL_BLEND);
 }
+
+#ifdef QCOM_HARDWARE
+void LayerBase::drawS3DUIWithOpenGL(const Region& clip) const
+{
+    const DisplayHardware& hw(graphicPlane(0).displayHardware());
+    const uint32_t fbHeight = hw.getHeight();
+    const uint32_t fbWidth = hw.getWidth();
+    const State& s(drawingState());
+
+    GLfloat tmpVertices[8][2];
+
+    GLenum src = mPremultipliedAlpha ? GL_ONE : GL_SRC_ALPHA;
+    if (UNLIKELY(s.alpha < 0xFF)) {
+        const GLfloat alpha = s.alpha * (1.0f/255.0f);
+        if (mPremultipliedAlpha) {
+            glColor4f(alpha, alpha, alpha, alpha);
+        } else {
+            glColor4f(1, 1, 1, alpha);
+        }
+        glEnable(GL_BLEND);
+        glBlendFunc(src, GL_ONE_MINUS_SRC_ALPHA);
+        glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    } else {
+        glColor4f(1, 1, 1, 1);
+        glTexEnvx(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+        if (!isOpaque()) {
+            glEnable(GL_BLEND);
+            glBlendFunc(src, GL_ONE_MINUS_SRC_ALPHA);
+        } else {
+            glDisable(GL_BLEND);
+        }
+    }
+
+    struct TexCoords {
+        GLfloat u;
+        GLfloat v;
+    };
+
+    TexCoords texCoords[4];
+    texCoords[0].u = 0;
+    texCoords[0].v = 1;
+    texCoords[1].u = 0;
+    texCoords[1].v = 0;
+    texCoords[2].u = 1;
+    texCoords[2].v = 0;
+    texCoords[3].u = 1;
+    texCoords[3].v = 1;
+
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    Region::const_iterator it = clip.begin();
+    Region::const_iterator const end = clip.end();
+
+    // Check if layer needs to be converted to S3D format
+    int composeS3DFormat = mQCLayer->needsS3DCompose();
+    int xoffset = fbWidth/2 ;
+    int yoffset = fbHeight/2;
+    // Calculate the new vertices for S3D conversion
+    switch (composeS3DFormat) {
+        case QCBaseLayer::eS3D_SIDE_BY_SIDE:
+            for (int i = 0; i < 4; i++) {
+                tmpVertices[i][0] = mVertices[i][0]/2;
+                tmpVertices[i][1] = mVertices[i][1];
+                tmpVertices[i+4][0] = xoffset + mVertices[i][0]/2;
+                tmpVertices[i+4][1] = mVertices[i][1];
+            }
+            glVertexPointer(2, GL_FLOAT, 0, tmpVertices);
+            glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+            while (it != end) {
+                const Rect& r = *it++;
+                const GLint sy = fbHeight - (r.top + r.height());
+                glScissor(r.left/2, sy, r.width()/2, r.height());
+                glDrawArrays(GL_TRIANGLE_FAN, 0, 4);//glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, pindices);
+            }
+
+            glVertexPointer(2, GL_FLOAT, 0, tmpVertices[4]);
+            glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+            it = clip.begin();
+            while (it != end) {
+                const Rect& r = *it++;
+                const GLint sy = fbHeight - (r.top + r.height());
+                glScissor(xoffset+r.left/2, sy, r.width()/2, r.height());
+                glDrawArrays(GL_TRIANGLE_FAN, 0, 4);//glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, pindices);
+            }
+            break;
+        case QCBaseLayer::eS3D_TOP_BOTTOM:
+            for (int i = 0; i < 4; i++) {
+                tmpVertices[i][0] = mVertices[i][0];
+                tmpVertices[i][1] = mVertices[i][1]/2;
+                tmpVertices[i+4][0] = mVertices[i][0];
+                tmpVertices[i+4][1] = yoffset + mVertices[i][1]/2;
+            }
+            glVertexPointer(2, GL_FLOAT, 0, tmpVertices);
+            glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+            while (it != end) {
+                const Rect& r = *it++;
+                const GLint sy = fbHeight - (r.top + r.height());
+                glScissor(r.left, yoffset + sy/2, r.width(), r.height()/2);
+                glDrawArrays(GL_TRIANGLE_FAN, 0, 4);//glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, pindices);
+            }
+
+            glVertexPointer(2, GL_FLOAT, 0, tmpVertices[4]);
+            glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+            it = clip.begin();
+            while (it != end) {
+                const Rect& r = *it++;
+                const GLint sy = fbHeight - (r.top + r.height());
+                glScissor(r.left, sy/2, r.width(), r.height()/2);
+                glDrawArrays(GL_TRIANGLE_FAN, 0, 4);//glDrawElements(GL_TRIANGLE_STRIP, 4, GL_UNSIGNED_BYTE, pindices);
+            }
+            break;
+        default:
+            LOGE("%s: Unknown S3D format", __FUNCTION__);
+            break;
+    }
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+    glDisable(GL_BLEND);
+}
+#endif
 
 void LayerBase::dump(String8& result, char* buffer, size_t SIZE) const
 {
