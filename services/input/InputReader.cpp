@@ -931,9 +931,6 @@ void InputDevice::process(const RawEvent* rawEvents, size_t count) {
     // have side-effects that must be interleaved.  For example, joystick movement events and
     // gamepad button presses are handled by different mappers but they should be dispatched
     // in the order received.
-#ifdef LEGACY_TOUCHSCREEN
-    static int32_t touched, z_data;
-#endif
     size_t numMappers = mMappers.size();
     for (const RawEvent* rawEvent = rawEvents; count--; rawEvent++) {
 #if DEBUG_RAW_EVENTS
@@ -969,23 +966,14 @@ void InputDevice::process(const RawEvent* rawEvents, size_t count) {
 
             if (rawEvent->scanCode == ABS_MT_TOUCH_MAJOR && rawEvent->type == EV_ABS) {
 
+                int32_t touched, z_data;
                 z_data = rawEvent->value;
                 touched = (0 != z_data);
-            }
-            else if (rawEvent->scanCode == ABS_MT_POSITION_Y) {
 
                 RawEvent event;
                 memset(&event, 0, sizeof(event));
                 event.when = rawEvent->when;
                 event.deviceId = rawEvent->deviceId;
-                event.scanCode = rawEvent->scanCode;
-
-                event.type = rawEvent->type;
-                event.value = rawEvent->value;
-                for (size_t i = 0; i < numMappers; i++) {
-                    mapper = mMappers[i];
-                    mapper->process(&event);
-                }
 
                 /* Pressure on contact area from ABS_MT_TOUCH_MAJOR */
                 event.type = rawEvent->type;
