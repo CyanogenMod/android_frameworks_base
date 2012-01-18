@@ -1093,6 +1093,17 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
     }
 
     private TimeZone findTimeZone(int offset, boolean dst, long when) {
+        /**
+         * http://wtogami.blogspot.com/2012/01/hawaii-android-automatic-time-zone-bug.html
+         * NITZ UTC-10 without DST can only be Hawaii
+         * Impossible to differentiate America/Adak from Honolulu/Pacific
+         * from NITZ alone.
+         **/
+        if (offset == -36000000 && dst == false) {
+            Log.d(LOG_TAG, "findTimeZone() Forcing Hawaii Timezone for UTC-10");
+            return TimeZone.getTimeZone("Pacific/Honolulu");
+        }
+
         int rawOffset = offset;
         if (dst) {
             rawOffset -= 3600000;
