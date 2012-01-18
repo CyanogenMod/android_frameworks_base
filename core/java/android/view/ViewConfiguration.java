@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.RemoteException;
+import android.os.SystemProperties;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.SparseArray;
@@ -184,7 +185,8 @@ public class ViewConfiguration {
     /**
      * Maximum velocity to initiate a fling, as measured in pixels per second
      */
-    private static final int MAXIMUM_FLING_VELOCITY = 8000;
+    private static final int MAXIMUM_FLING_VELOCITY
+            = SystemProperties.getInt("ro.max.fling_velocity", 8000);
 
     /**
      * Distance between a touch up event denoting the end of a touch exploration
