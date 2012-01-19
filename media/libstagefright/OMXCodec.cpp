@@ -3381,6 +3381,9 @@ void OMXCodec::onStateChange(OMX_STATETYPE newState) {
 
         case OMX_StateLoaded:
         {
+            if (mState == ERROR)
+                CODEC_LOGE("We are in error state, should have been in idle->loaded");
+
             CHECK_EQ((int)mState, (int)IDLE_TO_LOADED);
 
             CODEC_LOGV("Now Loaded.");
@@ -4653,9 +4656,51 @@ status_t OMXCodec::stop() {
 
         case ERROR:
         {
+            CODEC_LOGE("in error state, check omx il state and decide whether to free or skip");
+
             OMX_STATETYPE state = OMX_StateInvalid;
             status_t err = mOMX->getState(mNode, &state);
             CHECK_EQ(err, (status_t)OK);
+
+#ifdef QCOM_HARDWARE
+            CODEC_LOGE("OMX IL is in state %d", state);
+
+            /* OMX IL spec page 98
+               The call should be performed under the following conditions:
+               . While the component is in the OMX_StateIdle state and the IL client has
+                 already sent a request for the state transition to OMX_StateLoaded
+                 (e.g., during the stopping of the component)
+               . On a disabled port when the component is in the OMX_StateExecuting,
+                 the OMX_StatePause, or the OMX_StateIdle state.
+            */
+
+            bool canFree = true;
+            if (!strncmp(mComponentName, "OMX.qcom.video.decoder.", 23)) {
+                if (state == OMX_StateInvalid) {
+                    canFree = true;
+                }
+                else if ((state == OMX_StateIdle) && mState == IDLE_TO_LOADED) {
+                    canFree = true;
+                }
+                else if ((state == OMX_StateExecuting || state == OMX_StatePause ||
+                          state == OMX_StateIdle) &&
+                         (mPortStatus[kPortIndexOutput] == DISABLED ||
+                          mPortStatus[kPortIndexOutput] == DISABLING)) {
+                    canFree = true;
+                }
+                else
+                    canFree = false;
+            }
+
+            if (canFree) {
+                err = freeBuffersOnPort(kPortIndexOutput, true);
+                CHECK_EQ(err, (status_t)OK);
+            }
+            else {
+                LOGW("%s IL component does not match conditions for free, skip freeing for later",
+                     mComponentName);
+            }
+#endif
 
             if (state != OMX_StateExecuting) {
                 break;
