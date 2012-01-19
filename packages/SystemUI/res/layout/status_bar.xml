@@ -203,12 +203,12 @@
 
     <com.android.systemui.statusbar.DateView android:id="@+id/date"
         android:textAppearance="@*android:style/TextAppearance.StatusBar.Icon"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:singleLine="true"
         android:gravity="center_vertical|left"
         android:paddingLeft="6px"
         android:paddingRight="6px"
-        android:background="@drawable/statusbar_background"
+        android:background="@drawable/statusbar_background2"
         />
 </com.android.systemui.statusbar.CmStatusBarView>
