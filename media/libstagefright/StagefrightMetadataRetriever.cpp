@@ -229,7 +229,11 @@ static VideoFrame *extractVideoFrameWithCodecFlags(
 
     sp<MetaData> meta = decoder->getFormat();
 
+#ifdef QCOM_HARDWARE
+    int32_t width, height, frame_width_rounded;
+#else
     int32_t width, height;
+#endif
     CHECK(meta->findInt32(kKeyWidth, &width));
     CHECK(meta->findInt32(kKeyHeight, &height));
 
@@ -252,7 +256,12 @@ static VideoFrame *extractVideoFrameWithCodecFlags(
     frame->mHeight = crop_bottom - crop_top + 1;
     frame->mDisplayWidth = frame->mWidth;
     frame->mDisplayHeight = frame->mHeight;
+#ifdef QCOM_HARDWARE
+    frame_width_rounded = ((frame->mWidth + 3)/4)*4;
+    frame->mSize = frame_width_rounded * frame->mHeight * 2;
+#else
     frame->mSize = frame->mWidth * frame->mHeight * 2;
+#endif
     frame->mData = new uint8_t[frame->mSize];
     frame->mRotationAngle = rotationAngle;
 
@@ -282,7 +291,11 @@ static VideoFrame *extractVideoFrameWithCodecFlags(
             width, height,
             crop_left, crop_top, crop_right, crop_bottom,
             frame->mData,
+#ifdef QCOM_HARDWARE
+            frame_width_rounded,
+#else
             frame->mWidth,
+#endif
             frame->mHeight,
             0, 0, frame->mWidth - 1, frame->mHeight - 1);
 #ifdef QCOM_HARDWARE
