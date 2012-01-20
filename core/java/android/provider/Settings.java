@@ -2107,6 +2107,21 @@ public final class Settings {
         public static final String EXPANDED_FLASH_MODE = "expanded_flash_mode";
 
         /**
+         * Performance settings - Lock launcher in memory
+         *
+         * @hide
+         */
+        public static final String LOCK_LAUNCHER_IN_MEMORY = "lock_launcher_in_memory";
+
+        /**
+         * Performance settings - Lock messaging in memory
+         * 
+         * @hide
+         */
+        public static final String LOCK_MESSAGING_IN_MEMORY = "lock_messaging_in_memory";
+
+        
+        /**
          * Settings to backup. This is here so that it's in the same place as the settings
          * keys and easy to update.
          *
