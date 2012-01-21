@@ -50,8 +50,18 @@ public class ItemTouchDispatcher {
         mItem = item;
     }
 
+    public void releaseItem(LatestItemContainer item) {
+        if (item == mItem) {
+            mItem = null;
+        }
+    }
+
     public boolean needsInterceptTouch() {
-        return mItem != null;
+        if (mItem != null) {
+            mItem.setEventsControlledByDispatcher();
+            return true;
+        }
+        return false;
     }
 
     public boolean handleTouchEvent(MotionEvent event) {
