@@ -807,7 +807,6 @@ status_t SurfaceTexture::performQcomOperation(int operation, int arg1, int arg2,
      ST_LOGV("SurfaceTexture::performQcomOperation operation=%d", operation);
 
      switch(operation) {
-#ifdef QCOM_HARDWARE
 	case NATIVE_WINDOW_SET_BUFFERS_SIZE:
 	    mReqSize = arg1;
 	    break;
@@ -816,7 +815,6 @@ status_t SurfaceTexture::performQcomOperation(int operation, int arg1, int arg2,
             mNextBufferInfo.height = arg2;
             mNextBufferInfo.format = arg3;
             break;
-#endif
         default: return BAD_VALUE;
      };
      return OK;
