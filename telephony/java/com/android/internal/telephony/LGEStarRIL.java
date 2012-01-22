@@ -94,7 +94,7 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
         super(context, networkMode, cdmaSubscription);
         /* The star needs to ignore SCREEN_X states, in order to keep the
          * batt updates running. The others don't need this */
-        if (SystemProperties.get("ro.build.product").indexOf("p99") == 0) {
+        if (SystemProperties.get("ro.cm.device").indexOf("p99") == 0) {
             context.unregisterReceiver(mIntentReceiver);
             BroadcastReceiver mIntentReceiver = new BroadcastReceiver() {
                 @Override
@@ -151,7 +151,7 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
     public void
     setRadioPower(boolean on, Message result) {
         if(mPrepSetupPending) {
-            if (SystemProperties.get("ro.build.product").equals("p999")) {
+            if (SystemProperties.get("ro.cm.device").equals("p999")) {
                 /* Set radio access tech */
                 RILRequest rrSPR = RILRequest.obtain(
                         296, null);
@@ -219,7 +219,7 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
 
             /* Set "ready" */
             RILRequest rrSc = RILRequest.obtain(
-                    (SystemProperties.get("ro.build.product").equals("p999") ? 304 : 298), null);
+                    (SystemProperties.get("ro.cm.device").equals("p999") ? 304 : 298), null);
             rrSc.mp.writeInt(1);
             rrSc.mp.writeInt(0);
             if (RILJ_LOGD) riljLog(rrSc.serialString() + "> "
@@ -411,7 +411,7 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
 
         /* Request service line */
         RILRequest rrSL = RILRequest.obtain(
-                (SystemProperties.get("ro.build.product").equals("p999") ? 294 : 286), null);
+                (SystemProperties.get("ro.cm.device").equals("p999") ? 294 : 286), null);
         rrSL.mp.writeInt(0);
         if (RILJ_LOGD) riljLog(rrSL.serialString() + "> "
                 + requestToString(rrSL.mRequest));
@@ -999,7 +999,8 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
         String response;
         SimpleDateFormat dateFormatter;
         SimpleDateFormat dateParser;
-        boolean isIfx = !SystemProperties.get("ro.build.product").equals("p999");
+        boolean isIfx = !SystemProperties.get("ro.cm.device").equals("p999");
+        boolean usesLocalTime = isIfx && !SystemProperties.get("ro.cm.device").equals("p920");
 
         num = p.readInt(); // TZ diff in quarter-hours
 
@@ -1022,7 +1023,7 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
             dateParser = new SimpleDateFormat("yy/MM/dd,HH:mm:ss");
 
             /* Ifx delivers localtime, convert to UTC */
-            if (isIfx) {
+            if (usesLocalTime) {
                 /* Directly calculate UTC time using DST Offset */
                 long when = dateParser.parse(parceldata).getTime() - offset;
                 Date d = new Date(when);
