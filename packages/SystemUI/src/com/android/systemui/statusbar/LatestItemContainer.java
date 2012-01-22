@@ -30,7 +30,7 @@ import android.widget.LinearLayout;
 import com.android.systemui.R;
 
 public class LatestItemContainer extends LinearLayout {
-    private boolean mIsDragged = false;
+    private boolean mEventsControlledByDispatcher = false;
     private ItemTouchDispatcher mDispatcher = null;
     private Runnable mSwipeCallback = null;
     private final Handler mHandler = new Handler();
@@ -48,12 +48,16 @@ public class LatestItemContainer extends LinearLayout {
         Animation animation = AnimationUtils.loadAnimation(getContext(), id);
         startAnimation(animation);
         mHandler.postDelayed(mSwipeCallback, animation.getDuration());
-        mIsDragged = false;
+        mEventsControlledByDispatcher = false;
     }
 
     public void stopSwipe() {
         reset();
-        mIsDragged = false;
+        mEventsControlledByDispatcher = false;
+    }
+
+    public void setEventsControlledByDispatcher() {
+        mEventsControlledByDispatcher = true;
     }
 
     @Override
@@ -65,7 +69,7 @@ public class LatestItemContainer extends LinearLayout {
              * Only call into dispatcher when we're not registered with it yet,
              * otherwise we get into a loop
              */
-            if (!mIsDragged) {
+            if (!mEventsControlledByDispatcher) {
                 handled = mDispatcher.handleTouchEvent(event);
             }
 
@@ -77,7 +81,6 @@ public class LatestItemContainer extends LinearLayout {
                     int diffX = ((int) event.getX()) - mStartPoint.x;
                     int diffY = ((int) event.getY()) - mStartPoint.y;
                     if (Math.abs(diffX) > mTouchSlop && Math.abs(diffX) > Math.abs(diffY)) {
-                        mIsDragged = true;
                         mDispatcher.setItem(this);
                     }
                     scrollTo(-diffX, 0);
@@ -94,7 +97,8 @@ public class LatestItemContainer extends LinearLayout {
                      * event control). The dispatcher will call stopSwipe() when
                      * the gesture is aborted.
                      */
-                    if (!mIsDragged) {
+                    if (!mEventsControlledByDispatcher) {
+                        mDispatcher.releaseItem(this);
                         reset();
                     }
                     break;
