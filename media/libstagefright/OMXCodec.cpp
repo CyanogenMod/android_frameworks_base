@@ -807,7 +807,7 @@ sp<MediaSource> OMXCodec::Create(
             CHECK(success);
             // We need this for 720p video without AVC profile
             // Not a good solution, but ..
-            if (width*height > 409920) {  //854*480
+            if (width*height > 412800) {  //860*480
                componentName = "OMX.TI.720P.Decoder";
                LOGE("Format exceed the decoder's capabilities.");
                continue;
