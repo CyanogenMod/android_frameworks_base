@@ -1648,6 +1648,13 @@ public final class Settings {
         public static final String VOLUME_CONTROL_SILENT = "volume_contol_silent";
 
         /**
+         * Whether to lock ringer volume changes in silent mode.
+         *
+         * @hide
+         */
+        public static final String LOCK_VOLUME_KEYS = "lock_volume_keys";
+
+        /**
          * Whether notifications should vibrate during phone calls or not.
          *
          * @hide
