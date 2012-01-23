@@ -1001,6 +1001,9 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
         SimpleDateFormat dateParser;
         boolean isIfx = !SystemProperties.get("ro.cm.device").equals("p999");
         boolean usesLocalTime = isIfx && !SystemProperties.get("ro.cm.device").equals("p920");
+        /* override NITZ format if system property exists */
+        if (SystemProperties.get("ro.telephony.nitz").equals("GMT")) usesLocalTime = false;
+        if (SystemProperties.get("ro.telephony.nitz").equals("local")) usesLocalTime = true;
 
         num = p.readInt(); // TZ diff in quarter-hours
 
