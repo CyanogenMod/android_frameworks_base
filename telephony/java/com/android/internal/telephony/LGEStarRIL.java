@@ -1001,6 +1001,9 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
         SimpleDateFormat dateParser;
         boolean isIfx = !SystemProperties.get("ro.cm.device").equals("p999");
         boolean usesLocalTime = isIfx && !SystemProperties.get("ro.cm.device").equals("p920");
+        /* override NITZ format if system property exists */
+        if (SystemProperties.get("ro.telephony.nitz").equals("GMT")) usesLocalTime = false;
+        if (SystemProperties.get("ro.telephony.nitz").equals("local")) usesLocalTime = true;
 
         num = p.readInt(); // TZ diff in quarter-hours
 
@@ -1015,8 +1018,6 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
             parceldata = parceldata.substring(0,(parceldata.lastIndexOf(",")));
         }
 
-        int offset = num*15*60*1000;	// DST corrected
-
         /* WTH... Date may come with 4 digits in the year, reduce to 2 */
         try {
             dateFormatter = new SimpleDateFormat("yy/MM/dd,HH:mm:ss");
@@ -1024,6 +1025,7 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
 
             /* Ifx delivers localtime, convert to UTC */
             if (usesLocalTime) {
+                int offset = num*15*60*1000;	// DST corrected
                 /* Directly calculate UTC time using DST Offset */
                 long when = dateParser.parse(parceldata).getTime() - offset;
                 Date d = new Date(when);
