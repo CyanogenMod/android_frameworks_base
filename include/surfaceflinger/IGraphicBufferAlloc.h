@@ -45,6 +45,9 @@ public:
      * the server is referencing, then all buffers are freed.
      */
     virtual void freeAllGraphicBuffersExcept(int bufIndex) = 0;
+
+    /* Free the GraphicBuffer at the specified index */
+    virtual void freeGraphicBufferAtIndex(int bufIndex) = 0;
 #endif
 };
 
