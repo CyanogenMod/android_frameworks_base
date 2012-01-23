@@ -1001,6 +1001,9 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
         SimpleDateFormat dateParser;
         boolean isIfx = !SystemProperties.get("ro.cm.device").equals("p999");
         boolean usesLocalTime = isIfx && !SystemProperties.get("ro.cm.device").equals("p920");
+        /* override NITZ format if system property exists */
+        if (SystemProperties.get("ro.telephony.nitz").equals("GMT")) usesLocalTime = false;
+        if (SystemProperties.get("ro.telephony.nitz").equals("local")) usesLocalTime = true;
 
         num = p.readInt(); // TZ diff in quarter-hours
 
@@ -1009,13 +1012,11 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
 
         /* Infineon modems need some additional hax... */
         if (isIfx) {
-            /* Store DST before cropping */
-            parcelextra = parceldata.substring(parceldata.lastIndexOf(",")+1);
-            if (parcelextra != null) dst = Integer.parseInt(parcelextra);
-            parceldata = parceldata.substring(0,(parceldata.lastIndexOf(",")));
+            String [] parcelitem = parceldata.split(",");
+            parceldata = parcelitem[0] + "," + parcelitem[1]; // assuming there is always one comma at least
+            parcelextra = (parcelitem.length > 2 ? parcelitem[2] : "0");
+            dst = Integer.parseInt(parcelextra);
         }
-
-        int offset = num*15*60*1000;	// DST corrected
 
         /* WTH... Date may come with 4 digits in the year, reduce to 2 */
         try {
@@ -1025,6 +1026,7 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
             /* Ifx delivers localtime, convert to UTC */
             if (usesLocalTime) {
                 /* Directly calculate UTC time using DST Offset */
+                int offset = num*15*60*1000;	// DST corrected
                 long when = dateParser.parse(parceldata).getTime() - offset;
                 Date d = new Date(when);
                 response = dateFormatter.format(d);
