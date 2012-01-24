@@ -14,8 +14,7 @@ LOCAL_SRC_FILES:= \
     MessageQueue.cpp 						\
     SurfaceFlinger.cpp 						\
     SurfaceTextureLayer.cpp 				\
-    Transform.cpp 							\
-    
+    Transform.cpp
 
 LOCAL_CFLAGS:= -DLOG_TAG=\"SurfaceFlinger\"
 LOCAL_CFLAGS += -DGL_GLEXT_PROTOTYPES -DEGL_EGLEXT_PROTOTYPES
