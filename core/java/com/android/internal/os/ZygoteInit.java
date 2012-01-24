@@ -66,7 +66,10 @@ public class ZygoteInit {
     private static final int LOG_BOOT_PROGRESS_PRELOAD_END = 3030;
 
     /** when preloading, GC after allocating this many bytes */
-    private static final int PRELOAD_GC_THRESHOLD = 50000;
+    private static final String heapgrowthlimit =
+                    SystemProperties.get("dalvik.vm.heapgrowthlimit", "16m");
+    private static final int PRELOAD_GC_THRESHOLD = Integer.parseInt(
+                    heapgrowthlimit.substring(0, heapgrowthlimit.length()-1))*1024*1024/2;
 
     public static final String USAGE_STRING =
             " <\"start-system-server\"|\"\" for startSystemServer>";
