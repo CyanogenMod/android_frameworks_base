@@ -174,6 +174,8 @@ class ScreenRotationAnimation {
         // to the snapshot to make it stay in the same original position
         // with the current screen rotation.
         int delta = deltaRotation(rotation, mSnapshotRotation);
+        // Allow for abnormal hardware orientation
+        delta = (delta + (android.os.SystemProperties.getInt("ro.sf.hwrotation",0) / 90 )) % 4;
         createRotationMatrix(delta, mWidth, mHeight, mSnapshotInitialMatrix);
 
         if (DEBUG) Slog.v(TAG, "**** ROTATION: " + delta);
