@@ -1690,6 +1690,11 @@ public final class Settings {
         public static final String APPEND_FOR_LAST_AUDIBLE = "_last_audible";
 
         /**
+        * Whether or not camera focus sound is played. 0 = played, 1 = not played.
+        */
+        public static final String CAMERA_FOCUS_MUTE = "camera_focus_mute";
+
+        /**
          * Persistent store for the system-wide default ringtone URI.
          * <p>
          * If you need to play the default ringtone at any given time, it is recommended
