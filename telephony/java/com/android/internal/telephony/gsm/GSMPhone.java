@@ -342,6 +342,10 @@ public class GSMPhone extends PhoneBase {
                 case DATAINANDOUT:
                     ret = DataActivityState.DATAINANDOUT;
                 break;
+
+                case DORMANT:
+                    ret = DataActivityState.DORMANT;
+                break;
             }
         }
 

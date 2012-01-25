@@ -155,6 +155,14 @@ public abstract class DataConnectionTracker extends Handler {
     public static final int DISABLED = 0;
     public static final int ENABLED = 1;
 
+    /**
+     * Constants for the data connection activity:
+     * physical link down/up
+     */
+    protected static final int DATA_CONNECTION_ACTIVE_PH_LINK_INACTIVE = 0;
+    protected static final int DATA_CONNECTION_ACTIVE_PH_LINK_DOWN = 1;
+    protected static final int DATA_CONNECTION_ACTIVE_PH_LINK_UP = 2;
+
     public static final String APN_TYPE_KEY = "apnType";
 
     /** Delay between APN attempts.
