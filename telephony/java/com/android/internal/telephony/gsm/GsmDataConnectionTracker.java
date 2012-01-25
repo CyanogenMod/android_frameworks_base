@@ -1211,6 +1211,9 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
 
         dataCallStates = clearDuplicates(dataCallStates);
 
+        boolean isAnyDataCallDormant = false;
+        boolean isAnyDataCallActive = false;
+
         // Create a hash map to store the dataCallState of each DataConnectionAc
         HashMap<DataCallState, DataConnectionAc> dataCallStateToDcac;
         dataCallStateToDcac = new HashMap<DataCallState, DataConnectionAc>();
@@ -1231,6 +1234,9 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                 loge("onDataStateChanged(ar): No associated DataConnection ignore");
                 continue;
             }
+
+            if (newState.active == DATA_CONNECTION_ACTIVE_PH_LINK_UP) isAnyDataCallActive = true;
+            if (newState.active == DATA_CONNECTION_ACTIVE_PH_LINK_DOWN) isAnyDataCallDormant = true;
 
             // The list of apn's associated with this DataConnection
             Collection<ApnContext> apns = dcac.getApnListSync();
@@ -1311,6 +1317,28 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
                 }
             }
         }
+
+        if (isAnyDataCallDormant && !isAnyDataCallActive) {
+            // There is no way to indicate link activity per APN right now. So
+            // Link Activity will be considered dormant only when all data calls
+            // are dormant.
+            // If a single data call is in dormant state and none of the data
+            // calls are active broadcast overall link state as dormant.
+            mActivity = Activity.DORMANT;
+            if (DBG) {
+                log("onDataStateChanged: Data Activity updated to DORMANT. stopNetStatePoll");
+            }
+            stopNetStatPoll();
+        } else {
+            mActivity = Activity.NONE;
+            if (DBG) {
+                log("onDataStateChanged: Data Activity updated to NONE. " +
+                         "isAnyDataCallActive = " + isAnyDataCallActive +
+                         " isAnyDataCallDormant = " + isAnyDataCallDormant);
+            }
+            if (isAnyDataCallActive) startNetStatPoll();
+        }
+        mPhone.notifyDataActivity();
 
         if (apnsToCleanup.size() != 0) {
             // Add an event log when the network drops PDP
@@ -1546,7 +1574,7 @@ public final class GsmDataConnectionTracker extends DataConnectionTracker {
             } else if (sent == 0 && received > 0) {
                 newActivity = Activity.DATAIN;
             } else {
-                newActivity = Activity.NONE;
+                newActivity = (mActivity == Activity.DORMANT) ? mActivity : Activity.NONE;
             }
 
             if (mActivity != newActivity && mIsScreenOn) {
