@@ -951,8 +951,6 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         if (hasChanged) {
             String operatorNumeric;
 
-            updateSpnDisplay();
-
             phone.setSystemProperty(TelephonyProperties.PROPERTY_OPERATOR_ALPHA,
                 ss.getOperatorAlphaLong());
 
@@ -1017,6 +1015,8 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
 
             phone.setSystemProperty(TelephonyProperties.PROPERTY_OPERATOR_ISROAMING,
                 ss.getRoaming() ? "true" : "false");
+
+            updateSpnDisplay();
 
             phone.notifyServiceStateChanged(ss);
 
