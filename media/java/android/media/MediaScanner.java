@@ -475,6 +475,16 @@ public class MediaScanner
                 key = path.toLowerCase();
             }
             FileCacheEntry entry = mFileCache.get(key);
+            if (noMedia) {
+                // In case the file is known and now is under a
+                // .nomedia folder mark as not seen in order to
+                // be removed from files table in the post scan.
+                if (entry != null) {
+                    entry.mSeenInFileSystem = false;
+                }
+                return null;
+            }
+
             // add some slack to avoid a rounding error
             long delta = (entry != null) ? (lastModified - entry.mLastModified) : 0;
             boolean wasModified = delta > 1 || delta < -1;
