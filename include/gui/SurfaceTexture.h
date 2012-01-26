@@ -513,9 +513,6 @@ private:
     uint64_t mFrameCounter;
 
 #ifdef QCOM_HARDWARE
-    // mReqSize is the required buffer size speficied by the client.
-    int mReqSize;
-
     struct BufferInfo {
          int width;
          int height;
