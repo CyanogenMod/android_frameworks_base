@@ -68,8 +68,9 @@ class ScreenRotationAnimation {
         Bitmap screenshot = Surface.screenshot(0, 0);
 
         if (screenshot != null) {
-            // Screenshot does NOT include rotation!
-            mSnapshotRotation = 0;
+            // Screenshot does NOT include rotation but we need to consider ro.sf.hwrotation!
+            mSnapshotRotation = (
+                    (4 - android.os.SystemProperties.getInt("ro.sf.hwrotation",0) / 90) % 4);
             mWidth = screenshot.getWidth();
             mHeight = screenshot.getHeight();
         } else {
