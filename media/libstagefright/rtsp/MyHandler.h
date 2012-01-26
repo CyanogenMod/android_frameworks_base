@@ -40,7 +40,11 @@
 #include <sys/socket.h>
 #include <netdb.h>
 
+#if CHROMIUM_AVAILABLE
 #include "HTTPBase.h"
+#else
+#include "HTTPStream.h"
+#endif
 
 // If no access units are received within 5 secs, assume that the rtp
 // stream has ended and signal end of stream.
@@ -580,11 +584,13 @@ struct MyHandler : public AHandler {
                 if (result != OK) {
                     if (track) {
                         if (!track->mUsingInterleavedTCP) {
+#if CHROMIUM_AVAILABLE
                             // Clear the tag
                             if (mUIDValid) {
                                 HTTPBase::UnRegisterSocketUserTag(track->mRTPSocket);
                                 HTTPBase::UnRegisterSocketUserTag(track->mRTCPSocket);
                             }
+#endif
 
                             close(track->mRTPSocket);
                             close(track->mRTCPSocket);
@@ -709,11 +715,13 @@ struct MyHandler : public AHandler {
                     if (!info->mUsingInterleavedTCP) {
                         mRTPConn->removeStream(info->mRTPSocket, info->mRTCPSocket);
 
+#if CHROMIUM_AVAILABLE
                         // Clear the tag
                         if (mUIDValid) {
                             HTTPBase::UnRegisterSocketUserTag(info->mRTPSocket);
                             HTTPBase::UnRegisterSocketUserTag(info->mRTCPSocket);
                         }
+#endif
 
                         close(info->mRTPSocket);
                         close(info->mRTCPSocket);
@@ -1294,10 +1302,15 @@ private:
                     &info->mRTPSocket, &info->mRTCPSocket, &rtpPort);
 
             if (mUIDValid) {
+#if CHROMIUM_AVAILABLE
                 HTTPBase::RegisterSocketUserTag(info->mRTPSocket, mUID,
                                                 (uint32_t)*(uint32_t*) "RTP_");
                 HTTPBase::RegisterSocketUserTag(info->mRTCPSocket, mUID,
                                                 (uint32_t)*(uint32_t*) "RTP_");
+#else
+                HTTPStream::RegisterSocketUser(info->mRTPSocket, mUID);
+                HTTPStream::RegisterSocketUser(info->mRTCPSocket, mUID);
+#endif
             }
 
             request.append("Transport: RTP/AVP/UDP;unicast;client_port=");

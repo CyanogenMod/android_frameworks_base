@@ -99,6 +99,11 @@ LOCAL_STATIC_LIBRARIES := \
 # use the Chrome http stack either.
 ifneq ($(strip $(ARCH_ARM_HAVE_ARMV7A)),true)
   USE_ALT_HTTP := true
+  LOCAL_SRC_FILES += \
+        HTTPStream.cpp                    \
+        NuHTTPDataSource.cpp              \
+        ShoutcastSource.cpp               \
+
 endif
 
 # See if the user has specified a stack they want to use

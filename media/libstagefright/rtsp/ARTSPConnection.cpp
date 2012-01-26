@@ -34,7 +34,11 @@
 #include <openssl/md5.h>
 #include <sys/socket.h>
 
+#if CHROMIUM_AVAILABLE
 #include "HTTPBase.h"
+#else
+#include "HTTPStream.h"
+#endif
 
 namespace android {
 
@@ -57,7 +61,11 @@ ARTSPConnection::~ARTSPConnection() {
     if (mSocket >= 0) {
         LOGE("Connection is still open, closing the socket.");
         if (mUIDValid) {
+#if CHROMIUM_AVAILABLE
             HTTPBase::UnRegisterSocketUserTag(mSocket);
+#else
+            HTTPStream::RegisterSocketUser(mSocket, mUID);
+#endif
         }
         close(mSocket);
         mSocket = -1;
@@ -210,9 +218,11 @@ void ARTSPConnection::onConnect(const sp<AMessage> &msg) {
     ++mConnectionID;
 
     if (mState != DISCONNECTED) {
+#if CHROMIUM_AVAILABLE
         if (mUIDValid) {
             HTTPBase::UnRegisterSocketUserTag(mSocket);
         }
+#endif
         close(mSocket);
         mSocket = -1;
 
@@ -262,8 +272,12 @@ void ARTSPConnection::onConnect(const sp<AMessage> &msg) {
     mSocket = socket(AF_INET, SOCK_STREAM, 0);
 
     if (mUIDValid) {
+#if CHROMIUM_AVAILABLE
         HTTPBase::RegisterSocketUserTag(mSocket, mUID,
                                         (uint32_t)*(uint32_t*) "RTSP");
+#else
+        HTTPStream::RegisterSocketUser(mSocket, mUID);
+#endif
     }
 
     MakeSocketBlocking(mSocket, false);
@@ -291,9 +305,11 @@ void ARTSPConnection::onConnect(const sp<AMessage> &msg) {
         reply->setInt32("result", -errno);
         mState = DISCONNECTED;
 
+#if CHROMIUM_AVAILABLE
         if (mUIDValid) {
             HTTPBase::UnRegisterSocketUserTag(mSocket);
         }
+#endif
         close(mSocket);
         mSocket = -1;
     } else {
@@ -308,9 +324,11 @@ void ARTSPConnection::onConnect(const sp<AMessage> &msg) {
 }
 
 void ARTSPConnection::performDisconnect() {
+#if CHROMIUM_AVAILABLE
     if (mUIDValid) {
         HTTPBase::UnRegisterSocketUserTag(mSocket);
     }
+#endif
     close(mSocket);
     mSocket = -1;
 
@@ -381,9 +399,11 @@ void ARTSPConnection::onCompleteConnection(const sp<AMessage> &msg) {
         reply->setInt32("result", -err);
 
         mState = DISCONNECTED;
+#if CHROMIUM_AVAILABLE
         if (mUIDValid) {
             HTTPBase::UnRegisterSocketUserTag(mSocket);
         }
+#endif
         close(mSocket);
         mSocket = -1;
     } else {
