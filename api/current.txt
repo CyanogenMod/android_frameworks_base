@@ -12722,6 +12722,18 @@ package android.nfc.tech {
     method public byte[] transceive(byte[]) throws java.io.IOException;
   }
 
+  public final class IsoPcdA extends android.nfc.tech.BasicTagTechnology {
+    method public static android.nfc.tech.IsoPcdA get(android.nfc.Tag);
+    method public int getMaxTransceiveLength();
+    method public byte[] transceive(byte[]) throws java.io.IOException;
+  }
+
+  public final class IsoPcdB extends android.nfc.tech.BasicTagTechnology {
+    method public static android.nfc.tech.IsoPcdB get(android.nfc.Tag);
+    method public int getMaxTransceiveLength();
+    method public byte[] transceive(byte[]) throws java.io.IOException;
+  }
+
   public final class MifareClassic extends android.nfc.tech.BasicTagTechnology {
     method public boolean authenticateSectorWithKeyA(int, byte[]) throws java.io.IOException;
     method public boolean authenticateSectorWithKeyB(int, byte[]) throws java.io.IOException;
