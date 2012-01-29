@@ -2164,6 +2164,12 @@ public final class Settings {
         public static final String DOCK_SOUNDS_ENABLED = "dock_sounds_enabled";
 
         /**
+         * Start adb over network on desktop dock plug (for standalone charge docks)
+         * @hide
+         */
+        public static final String DOCK_ADB_NET_ENABLED = "dock_adb_net_enabled";
+
+        /**
          * Whether to play sounds when the keyguard is shown and dismissed.
          * @hide
          */
@@ -3042,6 +3048,7 @@ public final class Settings {
             CALL_AUTO_RETRY,
             HEARING_AID,
             TTY_MODE,
+            DOCK_ADB_NET_ENABLED,
             SOUND_EFFECTS_ENABLED,
             HAPTIC_FEEDBACK_ENABLED,
             POWER_SOUNDS_ENABLED,

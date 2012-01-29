@@ -185,11 +185,29 @@ class DockObserver extends UEventObserver {
                                 }
                             }
                         }
-
                         mContext.sendStickyBroadcast(intent);
+
+                        if (Settings.System.getInt(cr, Settings.System.DOCK_ADB_NET_ENABLED, 0) == 1)
+                        {
+                            boolean adbAllowed = (Settings.Secure.getInt(cr,
+                                                         Settings.Secure.ADB_ENABLED, 0) != 0);
+
+                            // both ADB and Dock setting must be active to allow the adb network switch
+                            Slog.i(TAG, "DockChange: adb allowed=" + adbAllowed);
+                            if (adbAllowed) {
+                                switch (mDockState) {
+                                case Intent.EXTRA_DOCK_STATE_DESK:
+                                    Settings.Secure.putInt(cr, Settings.Secure.ADB_PORT, 5555);
+                                    break;
+                                case Intent.EXTRA_DOCK_STATE_UNDOCKED:
+                                    Settings.Secure.putInt(cr, Settings.Secure.ADB_PORT, -1);
+                                    break;
+                                }
+                            }
+                        }
                     }
                     break;
-            }
+            } // switch
         }
     };
 }
