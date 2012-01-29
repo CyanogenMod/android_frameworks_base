@@ -2409,7 +2409,6 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     public int finishAnimationLw() {
         int changes = 0;
         boolean topIsFullscreen = false;
-
         final WindowManager.LayoutParams lp = (mTopFullscreenOpaqueWindowState != null)
                 ? mTopFullscreenOpaqueWindowState.getAttrs()
                 : null;
@@ -2434,7 +2433,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                 // case though.
                 if (topIsFullscreen) {
                     if (mStatusBarCanHide ||
-                        (((updateSystemUiVisibilityLw() & View.SYSTEM_UI_FLAG_LOW_PROFILE) == 1) &&
+                        (((mFocusedWindow != null) && (mFocusedWindow.getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LOW_PROFILE) == 1) &&
                          (Settings.System.getInt(mContext.getContentResolver(),
                                                  Settings.System.COMBINED_BAR_AUTO_HIDE, 0) == 1))) {
                         if (DEBUG_LAYOUT) Log.v(TAG, "Hiding status bar");
@@ -2449,7 +2448,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                                 }
                             }});
                         }
-                    } else if (DEBUG_LAYOUT) {
+                    }
+                    else if (((mFocusedWindow != null) && (mFocusedWindow.getSystemUiVisibility() & View.SYSTEM_UI_FLAG_LOW_PROFILE) == 0) &&
+                             (Settings.System.getInt(mContext.getContentResolver(),
+                                                     Settings.System.COMBINED_BAR_AUTO_HIDE, 0) == 1)) {
+                        if (mStatusBar.showLw(true)) changes |= FINISH_LAYOUT_REDO_LAYOUT;
+                    }
+                    else if (DEBUG_LAYOUT) {
                         Log.v(TAG, "Preventing status bar from hiding by policy");
                     }
                 } else {
