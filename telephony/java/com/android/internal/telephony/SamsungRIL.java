@@ -123,7 +123,7 @@ public class SamsungRIL extends RIL implements CommandsInterface {
             case RIL_REQUEST_UDUB: ret =  responseVoid(p); break;
             case RIL_REQUEST_LAST_CALL_FAIL_CAUSE: ret =  responseInts(p); break;
             case RIL_REQUEST_SIGNAL_STRENGTH: ret =  responseSignalStrength(p); break;
-            case RIL_REQUEST_VOICE_REGISTRATION_STATE: ret =  responseStrings(p); break;
+            case RIL_REQUEST_VOICE_REGISTRATION_STATE: ret =  responseVoiceRegistrationState(p); break;
             case RIL_REQUEST_DATA_REGISTRATION_STATE: ret =  responseStrings(p); break;
             case RIL_REQUEST_OPERATOR: ret =  responseStrings(p); break;
             case RIL_REQUEST_RADIO_POWER: ret =  responseVoid(p); break;
@@ -144,7 +144,7 @@ public class SamsungRIL extends RIL implements CommandsInterface {
             case RIL_REQUEST_GET_IMEI: ret =  responseString(p); break;
             case RIL_REQUEST_GET_IMEISV: ret =  responseString(p); break;
             case RIL_REQUEST_ANSWER: ret =  responseVoid(p); break;
-            case RIL_REQUEST_DEACTIVATE_DATA_CALL: ret =  responseVoid(p); break;
+            case RIL_REQUEST_DEACTIVATE_DATA_CALL: ret =  responseDeactivateDataCall(p); break;
             case RIL_REQUEST_QUERY_FACILITY_LOCK: ret =  responseInts(p); break;
             case RIL_REQUEST_SET_FACILITY_LOCK: ret =  responseInts(p); break;
             case RIL_REQUEST_CHANGE_BARRING_PASSWORD: ret =  responseVoid(p); break;
@@ -198,7 +198,7 @@ public class SamsungRIL extends RIL implements CommandsInterface {
             case RIL_REQUEST_CDMA_SET_BROADCAST_CONFIG: ret =  responseVoid(p); break;
             case RIL_REQUEST_CDMA_BROADCAST_ACTIVATION: ret =  responseVoid(p); break;
             case RIL_REQUEST_CDMA_VALIDATE_AND_WRITE_AKEY: ret =  responseVoid(p); break;
-            case RIL_REQUEST_CDMA_SUBSCRIPTION: ret =  responseStrings(p); break;
+            case RIL_REQUEST_CDMA_SUBSCRIPTION: ret =  responseCdmaSubscription(p); break;
             case RIL_REQUEST_CDMA_WRITE_SMS_TO_RUIM: ret =  responseInts(p); break;
             case RIL_REQUEST_CDMA_DELETE_SMS_ON_RUIM: ret =  responseVoid(p); break;
             case RIL_REQUEST_DEVICE_IDENTITY: ret =  responseStrings(p); break;
@@ -792,6 +792,10 @@ public class SamsungRIL extends RIL implements CommandsInterface {
             response[i] = -1;
         }
 
+        if (mIsSamsungCdma)
+            // Framework takes care of the rest for us.
+            return response;
+
         /* Matching Samsung signal strength to asu.
 		   Method taken from Samsungs cdma/gsmSignalStateTracker */
         if(mSignalbarCount)
@@ -809,6 +813,20 @@ public class SamsungRIL extends RIL implements CommandsInterface {
         response[5] = (response[5] < 0)?-1:-response[5]; //evdoEcio
         if(response[6] < 0 || response[6] > 8)
             response[6] = -1;
+
+        return response;
+    }
+
+    protected Object
+    responseVoiceRegistrationState(Parcel p) {
+        String response[] = (String[])responseStrings(p);
+
+        if (mIsSamsungCdma && response.length > 6) {
+            // These values are provided in hex, convert to dec.
+            response[4] = Integer.toString(Integer.parseInt(response[4], 16)); // baseStationId
+            response[5] = Integer.toString(Integer.parseInt(response[5], 16)); // baseStationLatitude
+            response[6] = Integer.toString(Integer.parseInt(response[6], 16)); // baseStationLongitude
+        }
 
         return response;
     }
@@ -834,16 +852,95 @@ public class SamsungRIL extends RIL implements CommandsInterface {
 
         if (strings.length >= 2) {
             dataCall.cid = Integer.parseInt(strings[0]);
-            dataCall.ifname = strings[1];
 
-            if (strings.length >= 3) {
-                dataCall.addresses = strings[2].split(" ");
+            if (mIsSamsungCdma) {
+                // We're responsible for starting/stopping the pppd_cdma service.
+                if (!startPppdCdmaService(strings[1])) {
+                    // pppd_cdma service didn't respond timely.
+                    dataCall.status = FailCause.ERROR_UNSPECIFIED.getErrorCode();
+                    return dataCall;
+                }
+
+                // pppd_cdma service responded, pull network parameters set by ip-up script.
+                dataCall.ifname = SystemProperties.get("net.cdma.ppp.interface");
+                String   ifprop = "net." + dataCall.ifname;
+
+                dataCall.addresses = new String[] {SystemProperties.get(ifprop + ".local-ip")};
+                dataCall.gateways  = new String[] {SystemProperties.get(ifprop + ".remote-ip")};
+                dataCall.dnses     = new String[] {SystemProperties.get(ifprop + ".dns1"),
+                                                   SystemProperties.get(ifprop + ".dns2")};
+            } else {
+                dataCall.ifname = strings[1];
+
+                if (strings.length >= 3) {
+                    dataCall.addresses = strings[2].split(" ");
+                }
             }
         } else {
             dataCall.status = FailCause.ERROR_UNSPECIFIED.getErrorCode(); // Who knows?
         }
 
         return dataCall;
+    }
+
+    private boolean startPppdCdmaService(String ttyname) {
+        SystemProperties.set("net.cdma.datalinkinterface", ttyname);
+
+        // Connecting: Set ril.cdma.data_state=1 to (re)start pppd_cdma service,
+        // which responds by setting ril.cdma.data_state=2 once connection is up.
+        SystemProperties.set("ril.cdma.data_state", "1");
+        Log.d(LOG_TAG, "Set ril.cdma.data_state=1, waiting for ril.cdma.data_state=2.");
+
+        // Typically takes < 200 ms on my Epic, so sleep in 100 ms intervals.
+        for (int i = 0; i < 10; i++) {
+            try {Thread.sleep(100);} catch (InterruptedException e) {}
+
+            if (SystemProperties.getInt("ril.cdma.data_state", 1) == 2) {
+                Log.d(LOG_TAG, "Got ril.cdma.data_state=2, connected.");
+                return true;
+            }
+        }
+
+        // Taking > 1 s here, try up to 10 s, which is hopefully long enough.
+        for (int i = 1; i < 10; i++) {
+            try {Thread.sleep(1000);} catch (InterruptedException e) {}
+
+            if (SystemProperties.getInt("ril.cdma.data_state", 1) == 2) {
+                Log.d(LOG_TAG, "Got ril.cdma.data_state=2, connected.");
+                return true;
+            }
+        }
+
+        // Disconnect: Set ril.cdma.data_state=0 to stop pppd_cdma service.
+        Log.d(LOG_TAG, "Didn't get ril.cdma.data_state=2 timely, aborting.");
+        SystemProperties.set("ril.cdma.data_state", "0");
+
+        return false;
+    }
+
+    protected Object
+    responseDeactivateDataCall(Parcel p) {
+        if (mIsSamsungCdma) {
+            // Disconnect: Set ril.cdma.data_state=0 to stop pppd_cdma service.
+            Log.d(LOG_TAG, "Set ril.cdma.data_state=0.");
+            SystemProperties.set("ril.cdma.data_state", "0");
+        }
+
+        return null;
+    }
+
+    protected Object
+    responseCdmaSubscription(Parcel p) {
+        String response[] = (String[])responseStrings(p);
+
+        if (/* mIsSamsungCdma && */ response.length == 4) {
+            // PRL version is missing in subscription parcel, add it from properties.
+            String prlVersion = SystemProperties.get("ril.prl_ver_1").split(":")[1];
+            response          = new String[] {response[0], response[1], response[2],
+                                              response[3], prlVersion};
+        }
+
+        return response;
     }
 
     protected class SamsungDriverCall extends DriverCall {
