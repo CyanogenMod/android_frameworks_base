@@ -1200,6 +1200,12 @@
         android:description="@string/permdesc_bindWallpaper"
         android:protectionLevel="signatureOrSystem" />
 
+    <service android:name="com.android.internal.widget.GfxEngineRelayService">
+             <intent-filter>
+                 <action android:name="com.authentec.Keyguard" />
+             </intent-filter>
+    </service>
+
     <!-- Must be required by device administration receiver, to ensure that only the
          system can interact with it. -->
     <permission android:name="android.permission.BIND_DEVICE_ADMIN"
