@@ -10078,7 +10078,13 @@ public class WindowManagerService extends IWindowManager.Stub
         if (mDisplayFrozen) {
             return;
         }
-
+        
+        /* We might have a null mFxSession here if the user has
+           the lock-screen disabled.*/
+        if (mFxSession == null) {
+            mFxSession = new SurfaceSession();
+        }
+        
         mScreenFrozenLock.acquire();
 
         long now = SystemClock.uptimeMillis();
