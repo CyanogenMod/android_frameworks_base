@@ -29,6 +29,7 @@ import android.os.Debug;
 import android.os.Handler;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.os.SystemProperties;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -618,7 +619,22 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         boolean stackFromBottom = a.getBoolean(R.styleable.AbsListView_stackFromBottom, false);
         setStackFromBottom(stackFromBottom);
 
-        boolean scrollingCacheEnabled = a.getBoolean(R.styleable.AbsListView_scrollingCache, true);
+        int scrollingCacheProp = SystemProperties.getInt("persist.sys.scrollingcache",1);
+        boolean scrollingCacheEnabled = true;
+        switch(scrollingCacheProp) {
+        case 0:
+            scrollingCacheEnabled = true;
+            break;
+        default:
+            scrollingCacheEnabled = a.getBoolean(R.styleable.AbsListView_scrollingCache, true);
+            break;
+        case 2:
+            scrollingCacheEnabled = a.getBoolean(R.styleable.AbsListView_scrollingCache, false);
+            break;
+        case 3:
+            scrollingCacheEnabled = false;
+            break;
+        }
         setScrollingCacheEnabled(scrollingCacheEnabled);
 
         boolean useTextFilter = a.getBoolean(R.styleable.AbsListView_textFilterEnabled, false);
@@ -646,7 +662,9 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
         setFocusableInTouchMode(true);
         setWillNotDraw(false);
         setAlwaysDrawnWithCacheEnabled(false);
-        setScrollingCacheEnabled(true);
+        int scrollingCacheProp = SystemProperties.getInt("persist.sys.scrollingcache",1);
+        boolean scrollingCacheEnabled = ((scrollingCacheProp == 2 || scrollingCacheProp == 3) ? false : true);
+        setScrollingCacheEnabled(scrollingCacheEnabled);
 
         final ViewConfiguration configuration = ViewConfiguration.get(mContext);
         mTouchSlop = configuration.getScaledTouchSlop();
@@ -817,6 +835,7 @@ public abstract class AbsListView extends AdapterView<ListAdapter> implements Te
             clearScrollingCache();
         }
         mScrollingCacheEnabled = enabled;
+        Log.d(ViewDebug.CONSISTENCY_LOG_TAG, "AbsListView " + this + " enabled= " + enabled);
     }
 
     /**
