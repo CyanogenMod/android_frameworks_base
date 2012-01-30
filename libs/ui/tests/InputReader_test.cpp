@@ -490,6 +490,10 @@ private:
         return false;
     }
 
+    virtual bool getDeviceUSB(int32_t deviceId) const {
+        return false;
+    }
+
     virtual status_t getAbsoluteAxisInfo(int32_t deviceId, int axis,
             RawAbsoluteAxisInfo* outAxisInfo) const {
         Device* device = getDevice(deviceId);

@@ -405,7 +405,7 @@ private:
 class KeyboardInputMapper : public InputMapper {
 public:
     KeyboardInputMapper(InputDevice* device, int32_t associatedDisplayId, uint32_t sources,
-            int32_t keyboardType, bool bluetooth = false);
+            int32_t keyboardType, bool bluetooth = false, bool usb = false);
     virtual ~KeyboardInputMapper();
 
     virtual uint32_t getSources();
@@ -433,6 +433,7 @@ private:
     uint32_t mSources;
     int32_t mKeyboardType;
     bool mBluetooth;
+    bool mUSB;
 
     struct LockedState {
         Vector<KeyDown> keyDowns; // keys that are down
