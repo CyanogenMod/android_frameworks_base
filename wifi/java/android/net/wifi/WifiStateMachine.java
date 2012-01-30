@@ -110,7 +110,7 @@ public class WifiStateMachine extends StateMachine {
     private static final boolean DBG = false;
 
     /* TODO: This is no more used with the hostapd code. Clean up */
-    private static final String SOFTAP_IFACE = "wl0.1";
+    private String mSoftApIface;
 
     private WifiMonitor mWifiMonitor;
     private INetworkManagementService mNwService;
@@ -582,6 +582,8 @@ public class WifiStateMachine extends StateMachine {
 
         mDefaultSupplicantScanIntervalMs = mContext.getResources().getInteger(
                 com.android.internal.R.integer.config_wifi_supplicant_scan_interval);
+
+        mSoftApIface = SystemProperties.get("wifi.ap.interface", "wl0.1");
 
         mContext.registerReceiver(
             new BroadcastReceiver() {
@@ -1768,12 +1770,12 @@ public class WifiStateMachine extends StateMachine {
         new Thread(new Runnable() {
             public void run() {
                 try {
-                    mNwService.startAccessPoint(config, mInterfaceName, SOFTAP_IFACE);
+                    mNwService.startAccessPoint(config, mInterfaceName, mSoftApIface);
                 } catch (Exception e) {
                     loge("Exception in softap start " + e);
                     try {
                         mNwService.stopAccessPoint(mInterfaceName);
-                        mNwService.startAccessPoint(config, mInterfaceName, SOFTAP_IFACE);
+                        mNwService.startAccessPoint(config, mInterfaceName, mSoftApIface);
                     } catch (Exception e1) {
                         loge("Exception in softap re-start " + e1);
                         sendMessage(CMD_START_AP_FAILURE);
