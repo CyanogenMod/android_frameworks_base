@@ -486,6 +486,10 @@ private:
         return device ? device->name : String8("unknown");
     }
 
+    virtual uint32_t getDeviceBusType(int32_t deviceId) const {
+        return 0;
+    }
+
     virtual bool getDeviceBluetooth(int32_t deviceId) const {
         return false;
     }
