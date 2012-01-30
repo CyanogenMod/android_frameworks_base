@@ -30,6 +30,7 @@ import static com.android.server.NetworkManagementSocketTagger.PROP_QTAGUID_ENAB
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.net.INetworkManagementEventObserver;
 import android.net.InterfaceConfiguration;
 import android.net.LinkAddress;
@@ -968,10 +969,16 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.CHANGE_WIFI_STATE, "NetworkManagementService");
         try {
-            wifiFirmwareReload(wlanIface, "AP");
-            mConnector.doCommand(String.format("softap start " + wlanIface));
+            Resources resources = mContext.getResources();
+            String mainIface = resources.getBoolean(
+                    com.android.internal.R.bool.config_wifi_ap_use_single_interface)
+                    ? softapIface : wlanIface;
+
+            if (resources.getBoolean(com.android.internal.R.bool.config_wifi_ap_firmware_reload))
+                wifiFirmwareReload(wlanIface, "AP");
+            mConnector.doCommand(String.format("softap start " + mainIface));
             if (wifiConfig == null) {
-                mConnector.doCommand(String.format("softap set " + wlanIface + " " + softapIface));
+                mConnector.doCommand(String.format("softap set " + mainIface + " " + softapIface));
             } else {
                 /**
                  * softap set arg1 arg2 arg3 [arg4 arg5 arg6 arg7 arg8]
@@ -984,7 +991,7 @@ public class NetworkManagementService extends INetworkManagementService.Stub
                  * argv7 - Preamble
                  * argv8 - Max SCB
                  */
-                 String str = String.format("softap set " + wlanIface + " " + softapIface +
+                 String str = String.format("softap set " + mainIface + " " + softapIface +
                                        " %s %s %s", convertQuotedString(wifiConfig.SSID),
                                        getSecurityType(wifiConfig),
                                        convertQuotedString(wifiConfig.preSharedKey));
