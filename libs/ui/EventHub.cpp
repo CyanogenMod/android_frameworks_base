@@ -77,6 +77,9 @@
 #define INDENT2 "    "
 #define INDENT3 "      "
 
+//#define DEBUG_SHOW_DEVICES
+//#define DEBUG_SHOW_KEYSDOWN
+
 namespace android {
 
 static const char *WAKE_LOCK_ID = "KeyEvents";
@@ -217,16 +220,13 @@ int32_t EventHub::getKeyCodeStateLocked(device_t* device, int32_t keyCode) const
     uint8_t key_bitmask[sizeof_bit_array(KEY_MAX + 1)];
     memset(key_bitmask, 0, sizeof(key_bitmask));
     if (ioctl(device->fd, EVIOCGKEY(sizeof(key_bitmask)), key_bitmask) >= 0) {
-        #if 0
-        for (size_t i=0; i<=KEY_MAX; i++) {
-            LOGI("(Scan code %d: down=%d)", i, test_bit(i, key_bitmask));
-        }
-        #endif
         const size_t N = scanCodes.size();
         for (size_t i=0; i<N && i<=KEY_MAX; i++) {
             int32_t sc = scanCodes.itemAt(i);
-            //LOGI("Code %d: down=%d", sc, test_bit(sc, key_bitmask));
             if (sc >= 0 && sc <= KEY_MAX && test_bit(sc, key_bitmask)) {
+                #ifdef DEBUG_SHOW_KEYSDOWN
+                LOGI("Code %d: down=%d", sc, test_bit(sc, key_bitmask));
+                #endif
                 return AKEY_STATE_DOWN;
             }
         }
@@ -662,7 +662,7 @@ int EventHub::openDevice(const char *deviceName) {
     mFDs = new_mFDs;
     mDevices = new_devices;
 
-#if 0
+#ifdef DEBUG_SHOW_DEVICES
     LOGI("add device %d: %s\n", mFDCount, deviceName);
     LOGI("  bus:      %04x\n"
          "  vendor    %04x\n"
