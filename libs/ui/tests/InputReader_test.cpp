@@ -486,8 +486,8 @@ private:
         return device ? device->name : String8("unknown");
     }
 
-    virtual bool getDeviceBluetooth(int32_t deviceId) const {
-        return false;
+    virtual uint32_t getDeviceBusType(int32_t deviceId) const {
+        return 0;
     }
 
     virtual status_t getAbsoluteAxisInfo(int32_t deviceId, int axis,
