@@ -541,6 +541,13 @@
         android:label="@string/permlab_camera"
         android:description="@string/permdesc_camera" />
 
+    <!-- Allows an application to override the power key action -->
+    <permission android:name="android.permission.PREVENT_POWER_KEY"
+        android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
+        android:protectionLevel="dangerous"
+        android:label="@string/permlab_preventpower"
+        android:description="@string/permdesc_preventpower" />
+
     <!-- Allows access to the vibrator -->
     <permission android:name="android.permission.VIBRATE"
         android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
