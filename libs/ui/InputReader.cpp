@@ -22,6 +22,9 @@
 // Log debug messages about pointer assignment calculations.
 #define DEBUG_POINTER_ASSIGNMENT 0
 
+// Log mouse events
+#define DEBUG_MOUSE_EVENTS 0
+
 #include <cutils/log.h>
 #include <ui/InputReader.h>
 
@@ -3514,10 +3517,14 @@ void MouseInputMapper::sync(nsecs_t when) {
         float x = fields & Accumulator::FIELD_REL_X ? mAccumulator.relX : 0.0f;
         float y = fields & Accumulator::FIELD_REL_Y ? mAccumulator.relY : 0.0f;
  
-        int32_t screenWidth;
-        int32_t screenHeight;
-        int32_t orientation;
+        static int32_t screenWidth;
+        static int32_t screenHeight;
+        static int32_t orientation;
 
+#if DEBUG_MOUSE_EVENTS
+        LOGI("MouseInputMapper: x,y=%.1f,%.1f abs %dx%d, screen %dx%d",
+                x, y, mAccumulator.absX, mAccumulator.absY, screenWidth, screenHeight);
+#endif
         mAccumulator.absX = (mAccumulator.absX + x) > screenWidth ? screenWidth -1 : ((mAccumulator.absX + x) < 0 ? 0 : mAccumulator.absX + x);
         mAccumulator.absY = (mAccumulator.absY + y) > screenHeight ? screenHeight -1 : ((mAccumulator.absY + y) < 0 ? 0 : mAccumulator.absY + y);
         pointerCoords.x = mAccumulator.absX;
