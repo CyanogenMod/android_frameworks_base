@@ -379,7 +379,7 @@
     <string name="lockscreen_charged">Ladattu.</string>
     <string name="lockscreen_battery_short"><xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g></string>
 
-    <string name="lockscreen_low_battery">Liitä laturi (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
+    <string name="lockscreen_low_battery">Liitä laturi</string>
 
     <string name="lockscreen_missing_sim_message_short">Ei SIM-korttia.</string>
     <string name="lockscreen_missing_sim_message">Puhelimessa ei ole SIM-korttia.</string>
