@@ -677,20 +677,46 @@ status_t SurfaceTextureClient::lock(
                     backBuffer->height == frontBuffer->height &&
                     backBuffer->format == frontBuffer->format);
 
+#ifdef QCOM_HARDWARE
+            int bufferCount;
+
+            mSurfaceTexture->query(NATIVE_WINDOW_NUM_BUFFERS, &bufferCount);
+            const int backBufferidx = getSlotFromBufferLocked(out);
+#endif
+
             if (canCopyBack) {
                 // copy the area that is invalid and not repainted this round
+#ifdef QCOM_HARDWARE
+                Region oldDirtyRegion;
+                for(int i = 0 ; i < bufferCount; i++ ) {
+                    if(i != backBufferidx  && !mOldDirtyRegion[i].isEmpty())
+                        oldDirtyRegion.orSelf(mOldDirtyRegion[i]);
+                }
+
+                const Region copyback(oldDirtyRegion.subtract(newDirtyRegion));
+#else
                 const Region copyback(mOldDirtyRegion.subtract(newDirtyRegion));
+#endif
                 if (!copyback.isEmpty())
                     copyBlt(backBuffer, frontBuffer, copyback);
             } else {
                 // if we can't copy-back anything, modify the user's dirty
                 // region to make sure they redraw the whole buffer
                 newDirtyRegion.set(bounds);
+#ifdef QCOM_HARDWARE
+                for(int i = 0 ; i < bufferCount; i++ ) {
+                     mOldDirtyRegion[i].clear();
+                }
+#endif
             }
 
             // keep track of the are of the buffer that is "clean"
             // (ie: that will be redrawn)
+#ifdef QCOM_HARDWARE
+            mOldDirtyRegion[backBufferidx] = newDirtyRegion;
+#else
             mOldDirtyRegion = newDirtyRegion;
+#endif
 
             if (inOutDirtyBounds) {
                 *inOutDirtyBounds = newDirtyRegion.getBounds();

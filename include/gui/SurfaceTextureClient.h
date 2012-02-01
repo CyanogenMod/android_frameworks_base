@@ -162,7 +162,11 @@ private:
     // must be used from the lock/unlock thread
     sp<GraphicBuffer>           mLockedBuffer;
     sp<GraphicBuffer>           mPostedBuffer;
+#ifdef QCOM_HARDWARE
+    mutable Region              mOldDirtyRegion[NUM_BUFFER_SLOTS];
+#else
     mutable Region              mOldDirtyRegion;
+#endif
     bool                        mConnectedToCpu;
 };
 

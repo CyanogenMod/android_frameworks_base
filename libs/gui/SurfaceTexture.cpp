@@ -1211,6 +1211,11 @@ int SurfaceTexture::query(int what, int* outValue)
         value = mSynchronousMode ?
                 (MIN_UNDEQUEUED_BUFFERS-1) : MIN_UNDEQUEUED_BUFFERS;
         break;
+#ifdef QCOM_HARDWARE
+    case NATIVE_WINDOW_NUM_BUFFERS:
+        value = mBufferCount;
+        break;
+#endif
     default:
         return BAD_VALUE;
     }
