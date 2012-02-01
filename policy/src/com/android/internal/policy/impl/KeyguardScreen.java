@@ -42,4 +42,9 @@ public interface KeyguardScreen {
      * This view is going away; a hook to do cleanup.
      */
     void cleanUp();
+
+    /**
+     * Return true if a PIN/PUK check is in progress
+     */
+    boolean checkInProgress();
 }
