@@ -43,6 +43,8 @@ import com.android.internal.R;
 public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
         View.OnClickListener, View.OnFocusChangeListener {
 
+    private boolean mCheckInProgress;
+
     private static final int DIGIT_PRESS_WAKE_MILLIS = 5000;
 
     private final KeyguardUpdateMonitor mUpdateMonitor;
@@ -112,6 +114,11 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
         mPinText.setOnFocusChangeListener(this);
         mPukText.setFocusableInTouchMode(true);
         mPukText.setOnFocusChangeListener(this);
+    }
+
+    /** {@inheritDoc} */
+    public boolean checkInProgress() {
+        return mCheckInProgress;
     }
 
     /** {@inheritDoc} */
@@ -238,6 +245,7 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
             return;
         }
 
+        mCheckInProgress = true;
         getSimUnlockProgressDialog().show();
 
         new CheckSimPuk(mPukText.getText().toString(),
@@ -245,6 +253,7 @@ public class SimPukUnlockScreen extends LinearLayout implements KeyguardScreen,
             void onSimLockChangedResponse(final boolean success) {
                 mPinText.post(new Runnable() {
                     public void run() {
+                        mCheckInProgress = false;
                         if (mSimUnlockProgressDialog != null) {
                             mSimUnlockProgressDialog.hide();
                         }

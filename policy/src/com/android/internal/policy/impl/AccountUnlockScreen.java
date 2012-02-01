@@ -144,6 +144,11 @@ public class AccountUnlockScreen extends RelativeLayout implements KeyguardScree
     }
 
     /** {@inheritDoc} */
+    public boolean checkInProgress() {
+        return false;
+    }
+
+    /** {@inheritDoc} */
     public boolean needsInput() {
         return true;
     }
