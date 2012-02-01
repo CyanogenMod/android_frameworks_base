@@ -227,7 +227,7 @@ public class LockPatternKeyguardView extends KeyguardViewBase implements Handler
 
     private Runnable mRecreateRunnable = new Runnable() {
         public void run() {
-            updateScreen(mMode, true);
+            updateScreen(mMode, false);
             restoreWidgetState();
         }
     };
