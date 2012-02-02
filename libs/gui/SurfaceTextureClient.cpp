@@ -63,6 +63,9 @@ void SurfaceTextureClient::init() {
     mReqHeight = 0;
     mReqFormat = 0;
     mReqUsage = 0;
+#ifdef QCOM_HARDWARE
+    mReqExtUsage = 0;
+#endif
     mTimestamp = NATIVE_WINDOW_TIMESTAMP_AUTO;
     mDefaultWidth = 0;
     mDefaultHeight = 0;
@@ -473,7 +476,25 @@ int SurfaceTextureClient::setUsage(uint32_t reqUsage)
 {
     LOGV("SurfaceTextureClient::setUsage");
     Mutex::Autolock lock(mMutex);
+#ifdef QCOM_HARDWARE
+    if (reqUsage & GRALLOC_USAGE_EXTERNAL_ONLY) {
+        //Set explicitly, since reqUsage may have other values.
+        mReqExtUsage = GRALLOC_USAGE_EXTERNAL_ONLY;
+        //This flag is never independent. Always an add-on to
+        //GRALLOC_USAGE_EXTERNAL_ONLY
+        if(reqUsage & GRALLOC_USAGE_EXTERNAL_BLOCK) {
+            mReqExtUsage |= GRALLOC_USAGE_EXTERNAL_BLOCK;
+        }
+    }
+    // For most cases mReqExtUsage will be 0.
+    // reqUsage could come from app or driver. When it comes from app
+    // and subsequently from driver, the latter ends up overwriting
+    // the existing values. We cache certain values in mReqExtUsage
+    // to avoid being overwritten.
+    mReqUsage = reqUsage | mReqExtUsage;
+#else
     mReqUsage = reqUsage;
+#endif
     return OK;
 }
 
