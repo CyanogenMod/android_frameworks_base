@@ -1233,7 +1233,11 @@ String8 CameraService::Client::getParameters() const {
     Mutex::Autolock lock(mLock);
     if (checkPidAndHardware() != NO_ERROR) return String8();
 
-    String8 params(mHardware->getParameters().flatten());
+    CameraParameters p(mHardware->getParameters());
+#ifdef BROKEN_SMOOTH_ZOOM
+    p.set(CameraParameters::KEY_SMOOTH_ZOOM_SUPPORTED, "false");
+#endif
+    String8 params(p.flatten());
     LOG1("getParameters (pid %d) (%s)", getCallingPid(), params.string());
     return params;
 }
