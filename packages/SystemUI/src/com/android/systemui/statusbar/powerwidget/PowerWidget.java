@@ -24,7 +24,7 @@ import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.net.Uri;
-/* import android.net.wimax.WimaxHelper; */
+import android.net.wimax.WimaxHelper;
 import android.os.Handler;
 import android.provider.Settings;
 import android.util.AttributeSet;
@@ -108,11 +108,9 @@ public class PowerWidget extends FrameLayout {
             Log.i(TAG, "Default buttons being loaded");
             buttons = BUTTONS_DEFAULT;
             // Add the WiMAX button if it's supported
-            /* TODO: Fix after WiMax Fixed
             if (WimaxHelper.isWimaxSupported(mContext)) {
                 buttons += BUTTON_DELIMITER + PowerButton.BUTTON_WIMAX;
             }
-            */
         }
         Log.i(TAG, "Button list: " + buttons);
 
