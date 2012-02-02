@@ -65,27 +65,36 @@ public class WimaxButton extends PowerButton {
 
         @Override
         public void onActualStateChange(Context context, Intent intent) {
-            if (!WimaxManagerConstants.WIMAX_ENABLED_CHANGED_ACTION.equals(intent.getAction())) {
+            String action = intent.getAction();
+            int wimaxState;
+
+            if (action.equals(WimaxManagerConstants.NET_4G_STATE_CHANGED_ACTION)) {
+                wimaxState = intent.getIntExtra(WimaxManagerConstants.EXTRA_4G_STATE,
+                                                WimaxManagerConstants.NET_4G_STATE_UNKNOWN);
+            } else if (action.equals(WimaxManagerConstants.WIMAX_ENABLED_CHANGED_ACTION)) {
+                wimaxState = intent.getIntExtra(WimaxManagerConstants.CURRENT_WIMAX_ENABLED_STATE,
+                                                WimaxManagerConstants.NET_4G_STATE_UNKNOWN);
+            } else {
                 return;
             }
-            int wimaxState = intent.getIntExtra(WimaxManagerConstants.CURRENT_WIMAX_ENABLED_STATE, WimaxManagerConstants.WIMAX_ENABLED_STATE_UNKNOWN);
             int widgetState = wimaxStateToFiveState(wimaxState);
             setCurrentState(context, widgetState);
         }
 
         /**
-         * Converts WimaxController's state values into our
+         * Converts Wimax4GManager's state values into our
          * WiMAX-common state values.
+         * Also compatible with WimaxController state values.
          */
         private static int wimaxStateToFiveState(int wimaxState) {
             switch (wimaxState) {
-                case WimaxManagerConstants.WIMAX_ENABLED_STATE_DISABLED:
+                case WimaxManagerConstants.NET_4G_STATE_DISABLED:
                     return STATE_DISABLED;
-                case WimaxManagerConstants.WIMAX_ENABLED_STATE_ENABLED:
+                case WimaxManagerConstants.NET_4G_STATE_ENABLED:
                     return STATE_ENABLED;
-                case WimaxManagerConstants.WIMAX_ENABLED_STATE_ENABLING:
+                case WimaxManagerConstants.NET_4G_STATE_ENABLING:
                     return STATE_TURNING_ON;
-                case WimaxManagerConstants.WIMAX_ENABLED_STATE_DISABLING:
+                case WimaxManagerConstants.NET_4G_STATE_DISABLING:
                     return STATE_TURNING_OFF;
                 default:
                     return STATE_UNKNOWN;
@@ -142,6 +151,7 @@ public class WimaxButton extends PowerButton {
     @Override
     protected IntentFilter getBroadcastIntentFilter() {
         IntentFilter filter = new IntentFilter();
+        filter.addAction(WimaxManagerConstants.NET_4G_STATE_CHANGED_ACTION);
         filter.addAction(WimaxManagerConstants.WIMAX_ENABLED_CHANGED_ACTION);
         return filter;
     }
