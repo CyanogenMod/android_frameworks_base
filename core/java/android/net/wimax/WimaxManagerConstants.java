@@ -24,7 +24,7 @@ public class WimaxManagerConstants
      * The lookup key for an int that indicates whether Wimax is enabled,
      * disabled, enabling, disabling, or unknown.
      */
-    public static final String EXTRA_WIMAX_STATUS = "wimax_status";
+    public static final String EXTRA_4G_STATE = "4g_state";
 
     /**
      * Broadcast intent action indicating that Wimax state has been changed
@@ -48,7 +48,6 @@ public class WimaxManagerConstants
      * initializing, initialized, unknown and ready.
      */
     public static final String EXTRA_WIMAX_STATE = "WimaxState";
-    public static final String EXTRA_4G_STATE = "4g_state";
     public static final String EXTRA_WIMAX_STATE_INT = "WimaxStateInt";
     /**
      * The lookup key for an int that indicates whether state of Wimax
