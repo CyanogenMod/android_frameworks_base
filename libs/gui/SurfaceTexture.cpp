@@ -838,7 +838,11 @@ status_t SurfaceTexture::setScalingMode(int mode) {
     return OK;
 }
 
+#ifdef QCOM_HARDWARE
+status_t SurfaceTexture::updateTexImage(bool avoidBindTexture) {
+#else
 status_t SurfaceTexture::updateTexImage() {
+#endif
     ST_LOGV("updateTexImage");
     Mutex::Autolock lock(mMutex);
 
@@ -857,8 +861,10 @@ status_t SurfaceTexture::updateTexImage() {
         EGLImageKHR image = mSlots[buf].mEglImage;
         EGLDisplay dpy = eglGetCurrentDisplay();
 #ifdef QCOM_HARDWARE
-	if (isGPUSupportedFormat(mSlots[buf].mGraphicBuffer->format)) {
-            // Update the GL texture object.
+        if (isGPUSupportedFormat(mSlots[buf].mGraphicBuffer->format) &&
+            (avoidBindTexture == false) ||
+            (isGPUSupportedFormatInHW(mSlots[buf].mGraphicBuffer->format))) {
+
             EGLImageKHR image = mSlots[buf].mEglImage;
 #else
         if (image == EGL_NO_IMAGE_KHR) {
