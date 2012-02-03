@@ -47,6 +47,7 @@ public class SamsungRIL extends RIL implements CommandsInterface {
     static final int RIL_UNSOL_STK_SEND_SMS_RESULT = 11002;
     static final int RIL_UNSOL_O2_HOME_ZONE_INFO = 11007;
     static final int RIL_UNSOL_DEVICE_READY_NOTI = 11008;
+    static final int RIL_UNSOL_GPS_NOTI = 11009;
     static final int RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_3 = 11010;
     static final int RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_2 = 11011;
     static final int RIL_UNSOL_HSDPA_STATE_CHANGED = 11016;
@@ -121,7 +122,7 @@ public class SamsungRIL extends RIL implements CommandsInterface {
             case RIL_REQUEST_SWITCH_WAITING_OR_HOLDING_AND_ACTIVE: ret =  responseVoid(p); break;
             case RIL_REQUEST_CONFERENCE: ret =  responseVoid(p); break;
             case RIL_REQUEST_UDUB: ret =  responseVoid(p); break;
-            case RIL_REQUEST_LAST_CALL_FAIL_CAUSE: ret =  responseInts(p); break;
+            case RIL_REQUEST_LAST_CALL_FAIL_CAUSE: ret =  responseLastCallFailCause(p); break;
             case RIL_REQUEST_SIGNAL_STRENGTH: ret =  responseSignalStrength(p); break;
             case RIL_REQUEST_VOICE_REGISTRATION_STATE: ret =  responseVoiceRegistrationState(p); break;
             case RIL_REQUEST_DATA_REGISTRATION_STATE: ret =  responseStrings(p); break;
@@ -343,6 +344,7 @@ public class SamsungRIL extends RIL implements CommandsInterface {
         case RIL_UNSOL_O2_HOME_ZONE_INFO: ret = responseVoid(p); break;
         case RIL_UNSOL_STK_SEND_SMS_RESULT: ret = responseVoid(p); break;
         case RIL_UNSOL_DEVICE_READY_NOTI: ret = responseVoid(p); break;
+        case RIL_UNSOL_GPS_NOTI: ret = responseVoid(p); break; // Ignored in TW RIL.
         case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST: ret = responseVoid(p); break;
         case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_2: ret = responseVoid(p); break;
         case RIL_UNSOL_SAMSUNG_UNKNOWN_MAGIC_REQUEST_3: ret = responseVoid(p); break;
@@ -776,6 +778,22 @@ public class SamsungRIL extends RIL implements CommandsInterface {
 
         return response;
     }
+
+    protected Object
+    responseLastCallFailCause(Parcel p) {
+        int response[] = (int[])responseInts(p);
+
+        if (mIsSamsungCdma && response.length > 0 &&
+            response[0] == com.android.internal.telephony.cdma.CallFailCause.ERROR_UNSPECIFIED) {
+
+            // Far-end hangup returns ERROR_UNSPECIFIED, which shows "Call Lost" dialog.
+            Log.d(LOG_TAG, "Overriding ERROR_UNSPECIFIED fail cause with NORMAL_CLEARING.");
+            response[0] = com.android.internal.telephony.cdma.CallFailCause.NORMAL_CLEARING;
+        }
+
+        return response;
+    }
+
     @Override
     protected Object
     responseSignalStrength(Parcel p) {
