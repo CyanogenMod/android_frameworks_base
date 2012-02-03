@@ -336,9 +336,10 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
             curByte += curSectionLen;
 
             // Proprietary info '0xA5' (optional)
-            curTag = ((int)data[curByte++]) & 0xFF;
+            curTag = ((int)data[curByte]) & 0xFF;
             if (curTag == 0xA5) {
                 // Not needed, just skip it...
+                curByte++;
                 curSectionLen = data[curByte++];
                 curByte += curSectionLen;
             }
