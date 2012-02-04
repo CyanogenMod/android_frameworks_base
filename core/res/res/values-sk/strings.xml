@@ -591,7 +591,7 @@
     <string name="lockscreen_discharging">Batéria (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
     <string name="lockscreen_charged">"Nabité."</string>
     <string name="lockscreen_battery_short">"<xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="lockscreen_low_battery">"Pripojte nabíjačku"</string>
+    <string name="lockscreen_low_battery">"Pripojte nabíjačku (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)"</string>
     <string name="lockscreen_missing_sim_message_short">"Nie je vložená karta SIM."</string>
     <string name="lockscreen_missing_sim_message">"V telefóne nie je žiadna karta SIM."</string>
     <string name="lockscreen_missing_sim_instructions">"Vložte kartu SIM."</string>
