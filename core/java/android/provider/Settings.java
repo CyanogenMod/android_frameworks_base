@@ -1529,6 +1529,30 @@ public final class Settings {
         public static final String LIGHT_FILTER_INTERVAL = "light_filter_interval";
 
         /**
+         * Whether CyanogenMod (CMStats) Anonymous statistics is enabled or not.
+         * The value is boolean (1 or 0).
+         *
+         * @hide
+         */
+        public static final String ANONYMOUS_REPORTING = "anonymous_reporting";
+
+        /**
+         * CyanogenMod (CMStats) Anonymous statistics - First boot ?
+         * The value is boolean (1 or 0).
+         *
+         * @hide
+         */
+        public static final String FIRST_BOOT = "first_boot";
+
+        /**
+         * CyanogenMod (CMStats) Anonymous statistics - Already checked in ?
+         * The value is boolean (1 or 0).
+         *
+         * @hide
+         */
+        public static final String CHECKED_IN = "checked_in";
+
+        /**
          * Control whether the process CPU usage meter should be shown.
          */
         public static final String SHOW_PROCESSES = "show_processes";
