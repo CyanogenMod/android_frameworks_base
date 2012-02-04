@@ -1529,6 +1529,33 @@ public final class Settings {
         public static final String LIGHT_FILTER_INTERVAL = "light_filter_interval";
 
         /**
+         * Whether CyanogenMod (CMStats) whether statistics reporting is enabled or not.
+         * The value is boolean (1 or 0).
+         *
+         * @hide
+         */
+        public static final String STATS_REPORTING = "stats_reporting";
+
+        /**
+         * CyanogenMod (CMStats) Anonymous statistics - Is this the first boot?
+         * initial value set to 1, in order to display the notification and give
+         * the user the option to opt-in to reporting
+         * The value is boolean (1 or 0).
+         *
+         * @hide
+         */
+        public static final String STATS_FIRST_BOOT = "stats_first_boot";
+
+        /**
+         * CyanogenMod (CMStats) Anonymous statistics - Has the stats been reported already?
+         * If 1 then the report has been sent.  This is used by cmstats.ReportingService
+         * The value is boolean (1 or 0).
+         *
+         * @hide
+         */
+        public static final String STATS_CHECKED_IN = "stats_checked_in";
+
+        /**
          * Control whether the process CPU usage meter should be shown.
          */
         public static final String SHOW_PROCESSES = "show_processes";
