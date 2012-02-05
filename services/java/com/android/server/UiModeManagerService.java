@@ -546,9 +546,10 @@ class UiModeManagerService extends IUiModeManager.Stub {
             updateConfigurationLocked(true);
 
             // keep screen on when charging and in car mode
+            // or when on a desk dock
             boolean keepScreenOn = mCharging &&
                     ((mCarModeEnabled && mCarModeKeepsScreenOn) ||
-                     (mCurUiMode == Configuration.UI_MODE_TYPE_DESK && mDeskModeKeepsScreenOn));
+                    ((mCurUiMode&Configuration.UI_MODE_TYPE_DESK)!=0 && mDeskModeKeepsScreenOn));
             if (keepScreenOn != mWakeLock.isHeld()) {
                 if (keepScreenOn) {
                     mWakeLock.acquire();
