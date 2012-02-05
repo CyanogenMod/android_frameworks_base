@@ -1,0 +1,9 @@
+Change-Id: Ic94b4980189da5d996a743acb8b231ecf8cff1e5
+Code-Review+2: Ricardo Cerqueira <cyanogenmod@cerqueira.org>
+Verified+1: Ricardo Cerqueira <cyanogenmod@cerqueira.org>
+Code-Review+1: Emilio López <turl@tuxfamily.org>
+Submitted-by: Ricardo Cerqueira <cyanogenmod@cerqueira.org>
+Submitted-at: Sun, 05 Feb 2012 20:18:08 +0300
+Reviewed-on: http://review.cyanogenmod.com/12471
+Project: CyanogenMod/android_frameworks_base
+Branch: refs/heads/gingerbread
