@@ -4588,7 +4588,7 @@ public class WindowManagerService extends IWindowManager.Stub
             Slog.i(TAG, "Setting rotation to " + rotation + ", animFlags=" + animFlags);
             mInputManager.setDisplayOrientation(0, rotation);
             if (mDisplayEnabled) {
-                if (CUSTOM_SCREEN_ROTATION) {
+                if (CUSTOM_SCREEN_ROTATION && mPolicy.isScreenOn()) {
                     Surface.freezeDisplay(0);
                     Surface.openTransaction();
                     if (mScreenRotationAnimation != null) {
@@ -10118,7 +10118,7 @@ public class WindowManagerService extends IWindowManager.Stub
             Debug.startMethodTracing(file.toString(), 8 * 1024 * 1024);
         }
 
-        if (CUSTOM_SCREEN_ROTATION) {
+        if (CUSTOM_SCREEN_ROTATION && mPolicy.isScreenOn()) {
             if (mScreenRotationAnimation != null && mScreenRotationAnimation.isAnimating()) {
                 mScreenRotationAnimation.kill();
                 mScreenRotationAnimation = null;
@@ -10149,7 +10149,7 @@ public class WindowManagerService extends IWindowManager.Stub
             Debug.stopMethodTracing();
         }
 
-        if (CUSTOM_SCREEN_ROTATION) {
+        if (CUSTOM_SCREEN_ROTATION && mPolicy.isScreenOn()) {
             if (mScreenRotationAnimation != null) {
                 if (mScreenRotationAnimation.dismiss(MAX_ANIMATION_DURATION,
                         mTransitionAnimationScale)) {
