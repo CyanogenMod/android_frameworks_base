@@ -640,4 +640,10 @@ public class LegacyUsbDeviceManager extends UsbDeviceManager {
             }
         }
     }
+
+    @Override
+    public void setCurrentFunction(String function, boolean makeDefault) {
+        if (DEBUG) Slog.d(TAG, "setCurrentFunction(" + function + ") default: " + makeDefault);
+        mHandler.sendMessage(MSG_SET_CURRENT_FUNCTION, function, makeDefault);
+    }
 }
