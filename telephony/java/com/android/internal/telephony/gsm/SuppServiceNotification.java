@@ -35,6 +35,9 @@ public class SuppServiceNotification {
     /** TS 27.007 7.17 "number" (MT only) */
     public String number;
 
+    static public final int NOTIFICATION_TYPE_MO = 0;
+    static public final int NOTIFICATION_TYPE_MT = 1;
+
     static public final int MO_CODE_UNCONDITIONAL_CF_ACTIVE     = 0;
     static public final int MO_CODE_SOME_CF_ACTIVE              = 1;
     static public final int MO_CODE_CALL_FORWARDED              = 2;
