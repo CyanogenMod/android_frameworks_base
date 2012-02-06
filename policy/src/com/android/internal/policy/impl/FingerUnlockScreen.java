@@ -377,19 +377,19 @@ class FingerUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         mCarrier.setTextColor(0xffffffff);
 
         // until we get an update...
-	// Changing - ICS doesnt have LocksScreen.getCarrierString
-    	android.telephony.TelephonyManager manager = (android.telephony.TelephonyManager)getContext().getSystemService(Context.TELEPHONY_SERVICE);
-	String carrierName = manager.getNetworkOperatorName() + " - " + manager.getSimOperatorName() ;
-	
+        // Changing - ICS doesnt have LocksScreen.getCarrierString
+        android.telephony.TelephonyManager manager = (android.telephony.TelephonyManager)getContext().getSystemService(Context.TELEPHONY_SERVICE);
+        String carrierName = manager.getNetworkOperatorName() + " - " + manager.getSimOperatorName() ;
+
         mCarrier.setText( carrierName );
                /** LockScreen.getCarrierString(
                         mUpdateMonitor.getTelephonyPlmn(),
                         mUpdateMonitor.getTelephonySpn()); **/
-		
+
     }
 
     private void refreshEmergencyButtonText() {
-    	android.telephony.TelephonyManager manager = (android.telephony.TelephonyManager)getContext().getSystemService(Context.TELEPHONY_SERVICE);
+        android.telephony.TelephonyManager manager = (android.telephony.TelephonyManager)getContext().getSystemService(Context.TELEPHONY_SERVICE);
 
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyAlone,manager.getCallState(), true);
         mLockPatternUtils.updateEmergencyCallButtonState(mEmergencyTogether,manager.getCallState(), true);
@@ -537,8 +537,8 @@ class FingerUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
 
     /** {@inheritDoc} */
     public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn) {
-    	android.telephony.TelephonyManager manager = (android.telephony.TelephonyManager)getContext().getSystemService(Context.TELEPHONY_SERVICE);
-	String carrierName = manager.getNetworkOperatorName() + " - " + manager.getSimOperatorName() ;
+        android.telephony.TelephonyManager manager = (android.telephony.TelephonyManager)getContext().getSystemService(Context.TELEPHONY_SERVICE);
+        String carrierName = manager.getNetworkOperatorName() + " - " + manager.getSimOperatorName() ;
         mCarrier.setText(carrierName);
         //mCarrier.setText(LockScreen.getCarrierString(plmn, spn));
     }
@@ -636,7 +636,7 @@ class FingerUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         }
         
          // Finally interrupt the thread
-	 if (mExecutionThread != null) 
+         if (mExecutionThread != null) 
             mExecutionThread.interrupt();
             Log.w (TAG, "onPause: Verified GfxEngine thread exited");
             mUpdateMonitor.removeCallback(this);
@@ -963,8 +963,7 @@ class FingerUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
                     iResult = AM_STATUS.getDeclaredField("eAM_STATUS_USER_CANCELED").getInt(AM_STATUS);
                     } catch (Exception e) {  e.printStackTrace();}
                 Log.w (TAG, "VerifyRunner: Caught InterruptedException in run() - " + ie.toString() );
-            
-            } catch (Exception e) {
+                } catch (Exception e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
