@@ -59,7 +59,11 @@ static inline MtpServer* getMtpServer(JNIEnv *env, jobject thiz) {
 static void
 android_mtp_MtpServer_setup(JNIEnv *env, jobject thiz, jobject javaDatabase, jboolean usePtp)
 {
+#ifdef USB_MTP_DEVICE
+    int fd = open(USB_MTP_DEVICE, O_RDWR);
+#else
     int fd = open("/dev/mtp_usb", O_RDWR);
+#endif
     if (fd >= 0) {
         MtpServer* server = new MtpServer(fd, getMtpDatabase(env, javaDatabase),
                 usePtp, AID_MEDIA_RW, 0664, 0775);
