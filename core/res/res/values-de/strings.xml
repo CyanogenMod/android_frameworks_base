@@ -137,6 +137,28 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Funk ausschalten"</string>
     <string name="screen_lock" msgid="799094655496098153">"Display-Sperre"</string>
     <string name="power_off" msgid="4266614107412865048">"Ausschalten"</string>
+
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system">Neu starten</string>
+
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">Neu starten</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">Recovery</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">Bootloader</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">Bootmenü</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">Fastboot</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">Download</string>
+
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">Neu starten\u2026</string>
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
+    <string name="reboot_confirm">Telefon wird neu gestartet.</string>
+
     <!-- no translation found for silent_mode_silent (319298163018473078) -->
     <skip />
     <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
@@ -153,6 +175,8 @@
     <string name="global_actions" product="default" msgid="2406416831541615258">"Telefonoptionen"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Display-Sperre"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Ausschalten"</string>
+    <string name="global_action_reboot">Neu starten</string>
+    <string name="global_action_screenshot">Bildschirmfoto</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Lautlos-Modus"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Ton ist AUS."</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Ton ist AN."</string>
