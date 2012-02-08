@@ -139,7 +139,8 @@
     <string name="power_off" msgid="4266614107412865048">"Ausschalten"</string>
 
     <!-- Button to reboot the phone, within the Phone Options dialog -->
-    <string name="reboot_system">Neu starten</string>
+    <string name="reboot_system" product="tablet">Tablet neu starten</string>
+    <string name="reboot_system" product="default">Telefon neu starten</string>
 
     <!-- Button to reboot the phone, within the Reboot Options dialog -->
     <string name="reboot_reboot">Neu starten</string>
@@ -1051,8 +1052,8 @@
     <string name="extmedia_format_message" product="nosdcard" msgid="8296908079722897772">"USB-Speicher formatieren und alle darin befindlichen Dateien löschen? Diese Aktion kann nicht rückgängig gemacht werden!"</string>
     <string name="extmedia_format_message" product="default" msgid="3621369962433523619">"Möchten Sie die SD-Karte wirklich formatieren? Alle Daten auf Ihrer Karte gehen dann verloren."</string>
     <string name="extmedia_format_button_format" msgid="4131064560127478695">"Format"</string>
-    <string name="adb_active_notification_title" msgid="6729044778949189918">"USB-Debugging"</string>
-    <string name="adb_active_notification_message" msgid="8470296818270110396">"USB-Debugging deaktivieren: auswählen"</string>
+    <string name="adb_active_notification_title" msgid="6729044778949189918">"Android-Debugging eingeschaltet"</string>
+    <string name="adb_active_notification_message" msgid="8470296818270110396">"Android-Debugging deaktivieren: auswählen"</string>
     <string name="select_input_method" msgid="6865512749462072765">"Eingabemethode auswählen"</string>
     <string name="configure_input_methods" msgid="6324843080254191535">"Eingabemethoden konfigurieren"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
@@ -1254,4 +1255,7 @@
     <string name="sending" msgid="8715108995741758718">"Wird gesendet..."</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"Browser starten?"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"Anruf annehmen?"</string>
+
+    <!--Application killed toast -->
+    <string name="app_killed_message">Anwendung beendet</string>
 </resources>
