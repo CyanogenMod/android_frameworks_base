@@ -858,8 +858,8 @@ status_t SurfaceTexture::updateTexImage() {
         EGLDisplay dpy = eglGetCurrentDisplay();
 #ifdef QCOM_HARDWARE
         if (isGPUSupportedFormat(mSlots[buf].mGraphicBuffer->format) &&
-           (avoidBindTexture == false) ||
-           (isGPUSupportedFormatInHW(mSlots[buf].mGraphicBuffer->format))) {
+            ((avoidBindTexture == false) ||
+            (isGPUSupportedFormatInHW(mSlots[buf].mGraphicBuffer->format)))) {
 #endif
         if (image == EGL_NO_IMAGE_KHR) {
             if (mSlots[buf].mGraphicBuffer == 0) {
