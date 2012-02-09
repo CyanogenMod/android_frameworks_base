@@ -527,6 +527,9 @@ private:
     uint64_t mFrameCounter;
 
 #ifdef QCOM_HARDWARE
+    // s3dFormat is the S3D format specified by the client.
+    int mS3DFormat;
+
     struct BufferInfo {
          int width;
          int height;

@@ -692,7 +692,16 @@ public class SurfaceView extends View {
         }
 
         public void setFormat(int format) {
-
+            switch (format) {
+                case STEREOSCOPIC_3D_FORMAT_SIDE_BY_SIDE_HALF_L_R:
+                case STEREOSCOPIC_3D_FORMAT_SIDE_BY_SIDE_R_L:
+                case STEREOSCOPIC_3D_FORMAT_TOP_BOTTOM:
+                case STEREOSCOPIC_3D_FORMAT_INTERLEAVED:
+                    mSurface.setStereoscopic3DFormat(format);
+                    return;
+                default:
+                    break;
+            }
             // for backward compatibility reason, OPAQUE always
             // means 565 for SurfaceView
             if (format == PixelFormat.OPAQUE)
