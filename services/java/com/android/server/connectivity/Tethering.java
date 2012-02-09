@@ -218,18 +218,18 @@ public class Tethering extends INetworkManagementEventObserver.Stub {
             if (found == false) return;
 
             TetherInterfaceSM sm = mIfaces.get(iface);
-            if (up) {
+            if (up || usb) {
+                // Present-at-boot USB interfaces are discovered here, and only go up after
+                // RNDIS is enabled and a link is established.  Keep track of USB
+                // interfaces even if they're in the down state, to avoid a race between
+                // tetherUsb(true) and when the link actually goes up.
                 if (sm == null) {
                     sm = new TetherInterfaceSM(iface, mLooper, usb);
                     mIfaces.put(iface, sm);
                     sm.start();
                 }
             } else {
-                if (isUsb(iface)) {
-                    // ignore usb0 down after enabling RNDIS
-                    // we will handle disconnect in interfaceRemoved instead
-                    if (VDBG) Log.d(TAG, "ignore interface down for " + iface);
-                } else if (sm != null) {
+                if (sm != null) {
                     sm.sendMessage(TetherInterfaceSM.CMD_INTERFACE_DOWN);
                     mIfaces.remove(iface);
                 }
