@@ -61,7 +61,6 @@ public:
     virtual void*       getBase() const;
     virtual size_t      getSize() const;
     virtual uint32_t    getFlags() const;
-    virtual uint32_t      getOffset() const;
 
     const char*         getDevice() const;
 
@@ -91,7 +90,6 @@ private:
     uint32_t    mFlags;
     const char* mDevice;
     bool        mNeedUnmap;
-    uint32_t    mOffset;
 };
 
 // ---------------------------------------------------------------------------

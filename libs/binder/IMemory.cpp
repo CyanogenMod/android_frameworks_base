@@ -81,7 +81,6 @@ public:
     virtual void* getBase() const;
     virtual size_t getSize() const;
     virtual uint32_t getFlags() const;
-    virtual uint32_t getOffset() const;
 
 private:
     friend class IMemory;
@@ -108,7 +107,6 @@ private:
     mutable void*       mBase;
     mutable size_t      mSize;
     mutable uint32_t    mFlags;
-    mutable uint32_t    mOffset;
     mutable bool        mRealHeap;
     mutable Mutex       mLock;
 };
@@ -231,7 +229,7 @@ status_t BnMemory::onTransact(
 
 BpMemoryHeap::BpMemoryHeap(const sp<IBinder>& impl)
     : BpInterface<IMemoryHeap>(impl),
-        mHeapId(-1), mBase(MAP_FAILED), mSize(0), mFlags(0), mOffset(0), mRealHeap(false)
+        mHeapId(-1), mBase(MAP_FAILED), mSize(0), mFlags(0), mRealHeap(false)
 {
 }
 
@@ -272,7 +270,6 @@ void BpMemoryHeap::assertMapped() const
             if (mHeapId == -1) {
                 mBase   = heap->mBase;
                 mSize   = heap->mSize;
-                mOffset = heap->mOffset;
                 android_atomic_write( dup( heap->mHeapId ), &mHeapId );
             }
         } else {
@@ -296,7 +293,6 @@ void BpMemoryHeap::assertReallyMapped() const
         int parcel_fd = reply.readFileDescriptor();
         ssize_t size = reply.readInt32();
         uint32_t flags = reply.readInt32();
-        uint32_t offset = reply.readInt32();
 
         LOGE_IF(err, "binder=%p transaction failed fd=%d, size=%ld, err=%d (%s)",
                 asBinder().get(), parcel_fd, size, err, strerror(-err));
@@ -313,7 +309,7 @@ void BpMemoryHeap::assertReallyMapped() const
         Mutex::Autolock _l(mLock);
         if (mHeapId == -1) {
             mRealHeap = true;
-            mBase = mmap(0, size, access, MAP_SHARED, fd, offset);
+            mBase = mmap(0, size, access, MAP_SHARED, fd, 0);
             if (mBase == MAP_FAILED) {
                 LOGE("cannot map BpMemoryHeap (binder=%p), size=%ld, fd=%d (%s)",
                         asBinder().get(), size, fd, strerror(errno));
@@ -321,7 +317,6 @@ void BpMemoryHeap::assertReallyMapped() const
             } else {
                 mSize = size;
                 mFlags = flags;
-                mOffset = offset;
                 android_atomic_write(fd, &mHeapId);
             }
         }
@@ -348,11 +343,6 @@ uint32_t BpMemoryHeap::getFlags() const {
     return mFlags;
 }
 
-uint32_t BpMemoryHeap::getOffset() const {
-    assertMapped();
-    return mOffset;
-}
-
 // ---------------------------------------------------------------------------
 
 IMPLEMENT_META_INTERFACE(MemoryHeap, "android.utils.IMemoryHeap");
@@ -372,7 +362,6 @@ status_t BnMemoryHeap::onTransact(
             reply->writeFileDescriptor(getHeapID());
             reply->writeInt32(getSize());
             reply->writeInt32(getFlags());
-            reply->writeInt32(getOffset());
             return NO_ERROR;
         } break;
         default:
