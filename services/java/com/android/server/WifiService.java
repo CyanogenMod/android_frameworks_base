@@ -239,6 +239,9 @@ public class WifiService extends IWifiManager.Stub {
     private WifiConfiguration mWifiApConfig = new WifiConfiguration();
     private final Object mWifiApConfigLock = new Object();
 
+    private static final String WIFI_SLEEP_POLICY_DEFAULT_PROP = "wifi.sleep_policy_default";
+    private int mWifiSleepPolicyDefault = SystemProperties.getInt(WIFI_SLEEP_POLICY_DEFAULT_PROP, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+
     WifiService(Context context, WifiStateTracker tracker) {
         mContext = context;
         mWifiStateTracker = tracker;
@@ -1950,7 +1953,7 @@ public class WifiService extends IWifiManager.Stub {
          */
         private boolean shouldWifiStayAwake(int stayAwakeConditions, int pluggedType) {
             int wifiSleepPolicy = Settings.System.getInt(mContext.getContentResolver(),
-                    Settings.System.WIFI_SLEEP_POLICY, Settings.System.WIFI_SLEEP_POLICY_DEFAULT);
+                    Settings.System.WIFI_SLEEP_POLICY, mWifiSleepPolicyDefault);
 
             if (wifiSleepPolicy == Settings.System.WIFI_SLEEP_POLICY_NEVER) {
                 // Never sleep
