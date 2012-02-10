@@ -17,6 +17,7 @@
 package com.android.systemui.statusbar;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
@@ -24,6 +25,8 @@ import android.view.ViewConfiguration;
 import com.android.systemui.R;
 
 public class ItemTouchDispatcher {
+    private static final String TAG = "NotificationTouchDispatcher";
+
     private final GestureDetector mGestureDetector;
     private LatestItemContainer mItem;
     /* stored as class member to avoid garbage creation */
@@ -56,7 +59,18 @@ public class ItemTouchDispatcher {
         }
     }
 
-    public boolean needsInterceptTouch() {
+    public boolean needsInterceptTouch(MotionEvent event) {
+        if ((event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
+            if (mItem != null) {
+                /*
+                 * If we get a DOWN event and still have an item, we must have missed unregistering
+                 * the item on the last UP event. In that case, do it here to preserve sanity.
+                 */
+                Log.w(TAG, "Clearing stale item " + mItem);
+                mItem.stopSwipe();
+                mItem = null;
+            }
+        }
         if (mItem != null) {
             mItem.setEventsControlledByDispatcher();
             return true;

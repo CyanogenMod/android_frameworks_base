@@ -89,6 +89,9 @@ public class LatestItemContainer extends LinearLayout {
                     if (!handled) {
                         reset();
                     }
+                    if (!mEventsControlledByDispatcher) {
+                        mDispatcher.releaseItem(this);
+                    }
                     break;
                 case MotionEvent.ACTION_CANCEL:
                     /*
