@@ -2810,15 +2810,19 @@ status_t GraphicPlane::orientationToTransfrom(
     switch (orientation) {
     case ISurfaceComposer::eOrientationDefault:
         flags = Transform::ROT_0;
+	property_set("sys.orientation.landscape", "0");
         break;
     case ISurfaceComposer::eOrientation90:
         flags = Transform::ROT_90;
+	property_set("sys.orientation.landscape", "1"); // only 90 degree button rotation
         break;
     case ISurfaceComposer::eOrientation180:
         flags = Transform::ROT_180;
+	property_set("sys.orientation.landscape", "0");
         break;
     case ISurfaceComposer::eOrientation270:
         flags = Transform::ROT_270;
+	property_set("sys.orientation.landscape", "0");
         break;
     default:
         return BAD_VALUE;
