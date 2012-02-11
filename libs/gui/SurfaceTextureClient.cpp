@@ -134,6 +134,10 @@ int SurfaceTextureClient::setSwapInterval(int interval) {
     if (interval > maxSwapInterval)
         interval = maxSwapInterval;
 
+#ifdef EGL_ALWAYS_ASYNC
+    if (mReqUsage != 0)
+        interval = 0;
+#endif
     status_t res = mSurfaceTexture->setSynchronousMode(interval ? true : false);
 
     return res;
