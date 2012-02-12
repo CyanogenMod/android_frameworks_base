@@ -646,8 +646,6 @@ public class Camera {
      */
     public final void autoFocus(AutoFocusCallback cb)
     {
-        mAutoFocusCallback = cb;
-        native_autoFocus();
     }
     private native final void native_autoFocus();
 
@@ -661,8 +659,6 @@ public class Camera {
      */
     public final void cancelAutoFocus()
     {
-        mAutoFocusCallback = null;
-        native_cancelAutoFocus();
     }
     private native final void native_cancelAutoFocus();
 
