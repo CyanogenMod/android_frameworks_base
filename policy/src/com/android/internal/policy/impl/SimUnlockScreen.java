@@ -82,6 +82,9 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
         LayoutInflater inflater = LayoutInflater.from(context);
         if (mKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) {
             inflater.inflate(R.layout.keyguard_screen_sim_pin_landscape, this, true);
+        } else if (mCreationOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+            inflater.inflate(R.layout.keyguard_screen_sim_pin_land_nokey, this, true);
+            new TouchInput();
         } else {
             inflater.inflate(R.layout.keyguard_screen_sim_pin_portrait, this, true);
             new TouchInput();
