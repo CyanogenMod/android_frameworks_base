@@ -882,4 +882,8 @@
     <!-- Workaround for devices with broken keyboards -->
     <bool name="config_forceDisableHardwareKeyboard">false</bool>
 
+    <!-- Flag indicating whether we should enable automatic brightness for
+         the button and keyboard backlights. -->
+    <bool name="config_autoBrightnessButtonKeyboard">true</bool>
+
 </resources>
