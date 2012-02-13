@@ -1840,7 +1840,7 @@ status_t MPEG4Writer::Track::threadEntry() {
     int32_t sampleCount = 1;          // Sample count in the current stts table entry
     int64_t currCttsDurTicks = 0;     // Timescale based ticks
     int64_t lastCttsDurTicks = 0;     // Timescale based ticks
-    int32_t cttsSampleCount = 1;      // Sample count in the current ctts table entry
+    int32_t cttsSampleCount = 0;      // Sample count in the current ctts table entry
     uint32_t previousSampleSize = 0;      // Size of the previous sample
     int64_t previousPausedDurationUs = 0;
     int64_t timestampUs = 0;
@@ -1944,10 +1944,14 @@ status_t MPEG4Writer::Track::threadEntry() {
 
         if (mOwner->exceedsFileSizeLimit()) {
             mOwner->notify(MEDIA_RECORDER_EVENT_INFO, MEDIA_RECORDER_INFO_MAX_FILESIZE_REACHED, 0);
+            copy->release();
+            copy = NULL;
             break;
         }
         if (mOwner->exceedsFileDurationLimit()) {
             mOwner->notify(MEDIA_RECORDER_EVENT_INFO, MEDIA_RECORDER_INFO_MAX_DURATION_REACHED, 0);
+            copy->release();
+            copy = NULL;
             break;
         }
 
@@ -1959,7 +1963,7 @@ status_t MPEG4Writer::Track::threadEntry() {
 #ifdef QCOM_HARDWARE
         if(!mIsAudio) {
           int32_t frameRate, hfr, multiple;
-          bool success = mMeta->findInt32(kKeySampleRate, &frameRate);
+          bool success = mMeta->findInt32(kKeyFrameRate, &frameRate);
           CHECK(success);
           success = mMeta->findInt32(kKeyHFR, &hfr);
           if (!success) {
@@ -2000,6 +2004,17 @@ status_t MPEG4Writer::Track::threadEntry() {
              */
             int64_t decodingTimeUs;
             CHECK(meta_data->findInt64(kKeyDecodingTime, &decodingTimeUs));
+#ifdef QCOM_HARDWARE
+            {
+              int32_t frameRate, hfr, multiple;
+              bool success = mMeta->findInt32(kKeyHFR, &hfr);
+              CHECK(success);
+              success = mMeta->findInt32(kKeyFrameRate, &frameRate);
+              CHECK(success);
+              multiple = hfr?(hfr/frameRate):1;
+              decodingTimeUs = multiple * decodingTimeUs;
+            }
+#endif
             decodingTimeUs -= previousPausedDurationUs;
             int64_t timeUs = decodingTimeUs;
             cttsDeltaTimeUs = timestampUs - decodingTimeUs;
@@ -2045,18 +2060,23 @@ status_t MPEG4Writer::Track::threadEntry() {
                 ++sampleCount;
             }
 
-            if (!mIsAudio) {
-                currCttsDurTicks =
-                     ((cttsDeltaTimeUs * mTimeScale + 500000LL) / 1000000LL -
-                     (lastCttsTimeUs * mTimeScale + 500000LL) / 1000000LL);
-                if (currCttsDurTicks != lastCttsDurTicks) {
-                    addOneCttsTableEntry(cttsSampleCount, lastCttsDurTicks);
-                    cttsSampleCount = 1;
-                } else {
-                    ++cttsSampleCount;
-                }
-            }
         }
+
+        if (!mIsAudio && hasBFrames && (mNumSamples >= 2)) {
+            currCttsDurTicks = (cttsDeltaTimeUs * mTimeScale) / 1000000LL;
+            ++cttsSampleCount;
+            if (currCttsDurTicks != lastCttsDurTicks) {
+                LOGV("currCttsDurTicks (%lld) != lastCttsDurTicks (%lld) (%d), add one",
+                     currCttsDurTicks, lastCttsDurTicks, cttsSampleCount);
+                addOneCttsTableEntry(cttsSampleCount, lastCttsDurTicks);
+                cttsSampleCount = 0;
+            }
+
+            lastCttsDurTicks = currCttsDurTicks;
+            lastCttsTimeUs = cttsDeltaTimeUs;
+        }
+
+
         if (mSamplesHaveSameSize) {
             if (mNumSamples >= 2 && previousSampleSize != sampleSize) {
                 mSamplesHaveSameSize = false;
@@ -2068,11 +2088,6 @@ status_t MPEG4Writer::Track::threadEntry() {
         lastDurationUs = timestampUs - lastTimestampUs;
         lastDurationTicks = currDurationTicks;
         lastTimestampUs = timestampUs;
-
-        if (!mIsAudio) {
-            lastCttsDurTicks = currCttsDurTicks;
-            lastCttsTimeUs = cttsDeltaTimeUs;
-        }
 
         if (isSync != 0) {
             addOneStssTableEntry(mNumSamples);
@@ -2157,7 +2172,12 @@ status_t MPEG4Writer::Track::threadEntry() {
         addOneSttsTableEntry(sampleCount, lastDurationTicks);
     }
 
-    addOneCttsTableEntry(cttsSampleCount, lastCttsDurTicks);
+    if (!mIsAudio && hasBFrames) {
+        LOGV("Add ctts for last sample count = %d, ctts value = %lld", cttsSampleCount,
+             lastCttsDurTicks);
+        addOneCttsTableEntry(cttsSampleCount, lastCttsDurTicks);
+    }
+
     mTrackDurationUs += lastDurationUs;
     mReachedEOS = true;
 
@@ -2751,7 +2771,7 @@ void MPEG4Writer::Track::writeCttsBox() {
 
     mOwner->beginBox("ctts");
     if (mHasNegativeCttsDeltaDuration) {
-        mOwner->writeInt32(0x00010000);  // version=1, flags=0
+        mOwner->writeInt32(0x01000000);  // version=1 (1 byte), flags=0 (3 bytes)
     } else {
         mOwner->writeInt32(0);  // version=0, flags=0
     }
@@ -2764,6 +2784,7 @@ void MPEG4Writer::Track::writeCttsBox() {
         mOwner->writeInt32(it->sampleDuration);
         totalCount += it->sampleCount;
     }
+    LOGV("totalCount = %lld, mNumSamples = %d", totalCount, mNumSamples);
     CHECK(totalCount == mNumSamples);
     mOwner->endBox();  // ctts
 }
