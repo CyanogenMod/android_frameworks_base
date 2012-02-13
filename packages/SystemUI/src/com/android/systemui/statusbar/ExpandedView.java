@@ -56,8 +56,13 @@ public class ExpandedView extends LinearLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        mTouchDispatcher.handleTouchEvent(event);
-        return super.onTouchEvent(event);
+        boolean handled = mTouchDispatcher.handleTouchEvent(event);
+
+        if (super.onTouchEvent(event)) {
+            handled = true;
+        }
+
+        return handled;
     }
 
     @Override

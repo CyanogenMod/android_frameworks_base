@@ -26,6 +26,7 @@ import com.android.systemui.R;
 
 public class ItemTouchDispatcher {
     private static final String TAG = "NotificationTouchDispatcher";
+    /* package */ static final boolean DBG = false;
 
     private final GestureDetector mGestureDetector;
     private LatestItemContainer mItem;
@@ -39,12 +40,22 @@ public class ItemTouchDispatcher {
                 final ViewConfiguration vc = ViewConfiguration.get(context);
                 int minDistance = vc.getScaledTouchSlop();
                 int distance = (int) Math.abs(e2.getX() - e1.getX());
+                boolean result = false;
+
+                if (DBG) {
+                    Log.v(TAG, "Fling detected, distance " + distance + " vs. " +
+                        minDistance + " vX " + vX + " vY " + vY);
+                }
+
                 if (distance > minDistance && Math.abs(vX) > Math.abs(vY)) {
                     mItem.finishSwipe(vX > 0);
-                    mItem = null;
-                    return true;
+                    result = true;
+                } else {
+                    mItem.stopSwipe();
                 }
-                return false;
+
+                mItem = null;
+                return result;
             }
         });
     }
@@ -72,6 +83,7 @@ public class ItemTouchDispatcher {
             }
         }
         if (mItem != null) {
+            if (DBG) Log.v(TAG, "Need to intercept touch event " + event + " due to item " + mItem);
             mItem.setEventsControlledByDispatcher();
             return true;
         }
@@ -87,6 +99,7 @@ public class ItemTouchDispatcher {
         real.setLocation(event.getRawX(), event.getRawY());
 
         boolean handled = mGestureDetector.onTouchEvent(real);
+        if (DBG) Log.v(TAG, "Handling touch event " + event + " handled " + handled);
 
         if (mItem != null) {
             /*
@@ -95,12 +108,14 @@ public class ItemTouchDispatcher {
             mItem.getLocationOnScreen(mItemLocation);
             real.offsetLocation(mItemLocation[0], mItemLocation[1]);
             mItem.dispatchTouchEvent(real);
+            if (DBG) Log.v(TAG, "Converted event to " + real);
 
             switch (real.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_UP:
                 case MotionEvent.ACTION_CANCEL:
                     mItem.stopSwipe();
                     mItem = null;
+                    handled = true;
                     break;
             }
         }

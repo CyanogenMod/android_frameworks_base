@@ -20,6 +20,7 @@ import android.content.Context;
 import android.graphics.Point;
 import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
@@ -30,6 +31,9 @@ import android.widget.LinearLayout;
 import com.android.systemui.R;
 
 public class LatestItemContainer extends LinearLayout {
+    private static final String TAG = "NotificationContainer";
+    private static final boolean DBG = ItemTouchDispatcher.DBG;
+
     private boolean mEventsControlledByDispatcher = false;
     private ItemTouchDispatcher mDispatcher = null;
     private Runnable mSwipeCallback = null;
@@ -46,12 +50,15 @@ public class LatestItemContainer extends LinearLayout {
     public void finishSwipe(boolean toRight) {
         int id = toRight ? R.anim.slide_out_right_basic : R.anim.slide_out_left_basic;
         Animation animation = AnimationUtils.loadAnimation(getContext(), id);
+
+        if (DBG) Log.v(TAG, "Finishing swipe of item " + this + " to " + (toRight ? "right" : "left"));
         startAnimation(animation);
         mHandler.postDelayed(mSwipeCallback, animation.getDuration());
         mEventsControlledByDispatcher = false;
     }
 
     public void stopSwipe() {
+        if (DBG) Log.v(TAG, "Swipe of item " + this + "cancelled");
         reset();
         mEventsControlledByDispatcher = false;
     }
@@ -62,9 +69,9 @@ public class LatestItemContainer extends LinearLayout {
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
-        if (mDispatcher != null) {
-            boolean handled = false;
+        boolean handled = false;
 
+        if (mDispatcher != null) {
             /*
              * Only call into dispatcher when we're not registered with it yet,
              * otherwise we get into a loop
@@ -73,9 +80,15 @@ public class LatestItemContainer extends LinearLayout {
                 handled = mDispatcher.handleTouchEvent(event);
             }
 
+            if (DBG) {
+                Log.v(TAG, "Got touch event " + event + " dispatcher handled " +
+                        handled + " controlled " + mEventsControlledByDispatcher);
+            }
+
             switch (event.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
                     mStartPoint.set((int) event.getX(), (int) event.getY());
+                    handled = true;
                     break;
                 case MotionEvent.ACTION_MOVE:
                     int diffX = ((int) event.getX()) - mStartPoint.x;
@@ -84,6 +97,7 @@ public class LatestItemContainer extends LinearLayout {
                         mDispatcher.setItem(this);
                     }
                     scrollTo(-diffX, 0);
+                    handled = true;
                     break;
                  case MotionEvent.ACTION_UP:
                     if (!handled) {
@@ -92,6 +106,7 @@ public class LatestItemContainer extends LinearLayout {
                     if (!mEventsControlledByDispatcher) {
                         mDispatcher.releaseItem(this);
                     }
+                    handled = true;
                     break;
                 case MotionEvent.ACTION_CANCEL:
                     /*
@@ -104,11 +119,16 @@ public class LatestItemContainer extends LinearLayout {
                         mDispatcher.releaseItem(this);
                         reset();
                     }
+                    handled = true;
                     break;
             }
         }
 
-        return super.dispatchTouchEvent(event);
+        if (super.dispatchTouchEvent(event)) {
+            handled = true;
+        }
+
+        return handled;
     }
 
     private void reset() {
