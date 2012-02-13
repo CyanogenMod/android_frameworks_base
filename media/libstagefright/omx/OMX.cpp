@@ -251,10 +251,12 @@ status_t OMX::allocateNode(
 
 status_t OMX::freeNode(node_id node) {
     OMXNodeInstance *instance = findInstance(node);
-
-    ssize_t index = mLiveNodes.indexOfKey(instance->observer()->asBinder());
-    CHECK(index >= 0);
-    mLiveNodes.removeItemsAt(index);
+    {
+        Mutex::Autolock autoLock(mLock);
+        ssize_t index = mLiveNodes.indexOfKey(instance->observer()->asBinder());
+        CHECK(index >= 0);
+        mLiveNodes.removeItemsAt(index);
+    }
 
     instance->observer()->asBinder()->unlinkToDeath(this);
 
@@ -262,7 +264,7 @@ status_t OMX::freeNode(node_id node) {
 
     {
         Mutex::Autolock autoLock(mLock);
-        index = mDispatchers.indexOfKey(node);
+        ssize_t index = mDispatchers.indexOfKey(node);
         CHECK(index >= 0);
         mDispatchers.removeItemsAt(index);
     }
