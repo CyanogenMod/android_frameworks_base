@@ -60,6 +60,13 @@
         <item name="android:textColor">@android:color/holo_blue_light</item>
     </style>
 
+    <style name="TextAppearance.StatusBar.Signal" parent="@*android:style/TextAppearance.StatusBar.Icon">
+        <!-- Note: must be dp to fit in status bar -->
+        <item name="android:textSize">12dp</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">@android:color/holo_blue_light</item>
+    </style>
+
     <style name="Animation" />
 
     <style name="Animation.ShirtPocketPanel">
