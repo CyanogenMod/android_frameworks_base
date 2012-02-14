@@ -96,10 +96,13 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
     private static final String TAG = "LockScreen";
     private static final String ENABLE_MENU_KEY_FILE = "/data/local/enable_menu_key";
     private static final Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
+
     static final int CARRIER_TYPE_DEFAULT = 0;
     static final int CARRIER_TYPE_SPN = 1;
     static final int CARRIER_TYPE_PLMN = 2;
     static final int CARRIER_TYPE_CUSTOM = 3;
+
+    private static final String TOGGLE_FLASHLIGHT = "net.cactii.flash2.TOGGLE_FLASHLIGHT";
 
     private Status mStatus = Status.Normal;
 
@@ -829,6 +832,18 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
         }
     }
 
+    static void handleHomeLongPress(Context context) {
+        int homeLongAction = (Settings.System.getInt(fcontext.getContentResolver(),
+                Settings.System.LOCKSCREEN_LONG_HOME_ACTION, -1));
+        if (homeLongAction == 1) {
+            Intent intent = new Intent(LockScreen.TOGGLE_FLASHLIGHT);
+            intent.putExtra("strobe", false);
+            intent.putExtra("period", 0);
+            intent.putExtra("bright", false);
+            fcontext.sendBroadcast(intent);
+        }
+    }
+
     private boolean isSilentMode() {
         return mAudioManager.getRingerMode() != AudioManager.RINGER_MODE_NORMAL;
     }
@@ -912,6 +927,19 @@ class LockScreen extends LinearLayout implements KeyguardScreen, KeyguardUpdateM
                 || (keyCode == KeyEvent.KEYCODE_MENU && mEnableMenuKeyInLockScreen)) {
 
             mCallback.goToUnlockScreen();
+            return false;
+
+        } else if (keyCode == KeyEvent.KEYCODE_HOME) {
+            event.startTracking();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean onKeyLongPress(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_HOME) {
+          toggleFlashLight(mContext);
         }
         return false;
     }
