@@ -150,7 +150,7 @@ public:
     // GPU for composition). During these times "avoidBindTexture" can be
     // set to true. This will avoid binding textures for formats that are
     // not directly supported in hardware.
-    status_t updateTexImage(bool avoidBindTexture = false);
+    status_t updateTexImage(bool avoidBindTexture = false, bool isComposition  = false);
 #endif
 
     // setBufferCountServer set the buffer count. If the client has requested
@@ -516,7 +516,11 @@ private:
     // glCopyTexSubImage to read from the texture.  This is a hack to work
     // around a GL driver limitation on the number of FBO attachments, which the
     // browser's tile cache exceeds.
+#ifdef QCOM_HARDWARE
+    GLenum mTexTarget;
+#else
     const GLenum mTexTarget;
+#endif
 
     // mFrameCounter is the free running counter, incremented for every buffer queued
     // with the surface Texture.
