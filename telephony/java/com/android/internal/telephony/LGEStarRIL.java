@@ -1018,13 +1018,11 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
 
         /* Infineon modems need some additional hax... */
         if (isIfx) {
-            /* Store DST before cropping */
-            parcelextra = parceldata.substring(parceldata.lastIndexOf(",")+1);
-            if (parcelextra != null) dst = Integer.parseInt(parcelextra);
-            parceldata = parceldata.substring(0,(parceldata.lastIndexOf(",")));
+            String [] parcelarray = parceldata.split(",");
+            parceldata = parcelarray[0] + "," + parcelarray[1]; // assuming there is always one comma at least
+            parcelextra = (parcelarray.length > 2 ? parcelarray[2] : "0");
+            dst = Integer.parseInt(parcelextra);
         }
-
-        int offset = num*15*60*1000;	// DST corrected
 
         /* WTH... Date may come with 4 digits in the year, reduce to 2 */
         try {
@@ -1034,6 +1032,7 @@ public class LGEStarRIL extends RIL implements CommandsInterface {
             /* Ifx delivers localtime, convert to UTC */
             if (isIfx) {
                 /* Directly calculate UTC time using DST Offset */
+                int offset = num*15*60*1000;	// DST corrected
                 long when = dateParser.parse(parceldata).getTime() - offset;
                 Date d = new Date(when);
                 response = dateFormatter.format(d);
