@@ -1099,11 +1099,20 @@ public class NotificationManagerService extends INotificationManager.Stub
             int ledARGB = mLedNotification.notification.ledARGB;
             int ledOnMS = mLedNotification.notification.ledOnMS;
             int ledOffMS = mLedNotification.notification.ledOffMS;
-            if ((mLedNotification.notification.defaults & Notification.DEFAULT_LIGHTS) != 0) {
+
+            boolean defaultLights =
+                    (mLedNotification.notification.defaults & Notification.DEFAULT_LIGHTS) != 0;
+
+            if (defaultLights || ledARGB < 0) {
                 ledARGB = mDefaultNotificationColor;
+            }
+            if (defaultLights || ledOnMS < 0) {
                 ledOnMS = mDefaultNotificationLedOn;
+            }
+            if (defaultLights || ledOffMS < 0) {
                 ledOffMS = mDefaultNotificationLedOff;
             }
+
             if (mNotificationPulseEnabled) {
                 // pulse repeatedly
                 mNotificationLight.setFlashing(ledARGB, LightsService.LIGHT_FLASH_TIMED,
