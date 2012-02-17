@@ -305,6 +305,13 @@ public class Notification implements Parcelable
      */
     public static final int FLAG_HIGH_PRIORITY = 0x00000080;
 
+    /**
+     * Bit to be bitwise-ored into the {@link #flags} field that should be
+     * set if this notification should force the led to pulse even if the
+     * screen has been shut off while the notification was active.
+     */
+    public static final int FLAG_FORCE_LED_SCREEN_OFF = 0x00000100;
+
     public int flags;
 
     /**
