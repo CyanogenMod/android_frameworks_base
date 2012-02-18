@@ -15,6 +15,7 @@
  */
 
 #define LOG_TAG "wifi"
+//#define LOG_NDEBUG 0
 
 #include "jni.h"
 #include <ScopedUtfChars.h>
@@ -37,16 +38,23 @@ static jboolean sScanModeActive = false;
 
 static int doCommand(const char *cmd, char *replybuf, int replybuflen)
 {
+    int err=-1;
     size_t reply_len = replybuflen - 1;
 
-    if (::wifi_command(cmd, replybuf, &reply_len) != 0)
+    LOGV("CMD [%s]:", cmd);
+
+    if ((err = ::wifi_command(cmd, replybuf, &reply_len)) != 0) {
+        LOGD("ERR %d, returns -1", err);
         return -1;
+    }
     else {
         // Strip off trailing newline
         if (reply_len > 0 && replybuf[reply_len-1] == '\n')
             replybuf[reply_len-1] = '\0';
         else
             replybuf[reply_len] = '\0';
+
+        LOGV(" OK [%s]", replybuf);
         return 0;
     }
 }
@@ -117,6 +125,16 @@ static jboolean android_net_wifi_loadDriver(JNIEnv* env, jobject)
 static jboolean android_net_wifi_unloadDriver(JNIEnv* env, jobject)
 {
     return (jboolean)(::wifi_unload_driver() == 0);
+}
+
+static jboolean android_net_hotspot_loadDriver(JNIEnv* env, jobject clazz)
+{
+    return (jboolean)(::wifi_load_hotspot_driver() == 0);
+}
+
+static jboolean android_net_hotspot_unloadDriver(JNIEnv* env, jobject clazz)
+{
+    return (jboolean)(::wifi_unload_hotspot_driver() == 0);
 }
 
 static jboolean android_net_wifi_startSupplicant(JNIEnv* env, jobject)
@@ -561,6 +579,8 @@ static JNINativeMethod gWifiMethods[] = {
     { "loadDriver", "()Z",  (void *)android_net_wifi_loadDriver },
     { "isDriverLoaded", "()Z",  (void *)android_net_wifi_isDriverLoaded},
     { "unloadDriver", "()Z",  (void *)android_net_wifi_unloadDriver },
+    { "loadHotspotDriver", "()Z",  (void *)android_net_hotspot_loadDriver },
+    { "unloadHotspotDriver", "()Z",  (void *)android_net_hotspot_unloadDriver },
     { "startSupplicant", "()Z",  (void *)android_net_wifi_startSupplicant },
     { "startP2pSupplicant", "()Z",  (void *)android_net_wifi_startP2pSupplicant },
     { "stopSupplicant", "()Z", (void*) android_net_wifi_stopSupplicant },
