@@ -133,19 +133,26 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Draadloos uitschakelen"</string>
     <string name="screen_lock" msgid="799094655496098153">"Schermvergrendeling"</string>
     <string name="power_off" msgid="4266614107412865048">"Uitschakelen"</string>
-    <string name="shutdown_progress" msgid="2281079257329981203">"Uitschakelen..."</string>
-    <string name="shutdown_confirm" msgid="649792175242821353">"Uw telefoon wordt uitgeschakeld."</string>
+    <string name="reboot_system">Telefoon herstarten</string>
+    <string name="reboot_reboot">Herstarten</string>
+    <string name="shutdown_progress" msgid="2281079257329981203">"Uitschakelen\u2026"</string>
+    <string name="reboot_progress">Herstarten\u2026</string>
+    <string name="shutdown_confirm" msgid="649792175242821353">"De telefoon zal worden uitgeschakeld."</string>
+    <string name="reboot_confirm">De telefoon zal worden herstart.</string>
     <string name="recent_tasks_title" msgid="3691764623638127888">"Recent"</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"Geen recente apps."</string>
     <string name="global_actions" msgid="2406416831541615258">"Telefoonopties"</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Schermvergrendeling"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Uitschakelen"</string>
+    <string name="global_action_reboot">"Herstarten"</string>
+    <string name="global_action_choose_profile">"Kies profiel"</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Stille modus"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Geluid is UIT"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Geluid is AAN"</string>
     <string name="global_actions_toggle_airplane_mode" msgid="5884330306926307456">"Vliegmodus"</string>
     <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"Vliegmodus is AAN"</string>
     <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"Vliegmodus is UIT"</string>
+    <string name="global_action_screenshot">"Beeldschermafdruk"</string>
     <string name="safeMode" msgid="2788228061547930246">"Veilige modus"</string>
     <string name="android_system_label" msgid="6577375335728551336">"Android-systeem"</string>
     <string name="permgrouplab_costMoney" msgid="5429808217861460401">"Services waarvoor u moet betalen"</string>
@@ -559,6 +566,7 @@
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Juist!"</string>
     <string name="lockscreen_pattern_wrong" msgid="4817583279053112312">"Probeer het opnieuw"</string>
     <string name="lockscreen_plugged_in" msgid="613343852842944435">"Opladen (<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>)"</string>
+    <string name="lockscreen_discharging">Batterij (<xliff:g id="number">%d</xliff:g><xliff:g id="percent">%%</xliff:g>)</string>
     <string name="lockscreen_charged" msgid="4938930459620989972">"Opgeladen."</string>
     <string name="lockscreen_battery_short" msgid="3617549178603354656">"<xliff:g id="NUMBER">%d</xliff:g><xliff:g id="PERCENT">%%</xliff:g>"</string>
     <string name="lockscreen_low_battery" msgid="1482873981919249740">"Sluit de oplader aan."</string>
@@ -912,4 +920,16 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"USB-opslag wordt momenteel gebruikt door een computer."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"SD-kaart wordt momenteel gebruikt door een computer."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Extern medium heeft onbekende status."</string>
+
+    <string name="app_killed_message">Applicatie geforceerd afgesloten</string>
+
+    <string name="phone_goggles_problem_count">Probleem #%1$d: </string>
+    <string name="phone_goggles_description">Los de %1$d volgende wiskundeproblemen op in minder dan %2$d seconden om de communicatie uit te voeren.</string>
+    <plurals name="phone_goggles_countdown">
+        <item quantity="one">%d seconde over</item>
+        <item quantity="other">%d seconden over</item>
+    </plurals>
+
+    <string name="permlab_revokePermissions">Staat toe om ingetrokken machtigingen in te zien en te bewerken. Niet gebruiken bij normale applicaties.</string>
+    <string name="permdesc_revokePermissions">Staat toe om ingetrokken machtigingen te lezen en te schrijven. Niet gebruiken bij normale applicaties.</string>
 </resources>
