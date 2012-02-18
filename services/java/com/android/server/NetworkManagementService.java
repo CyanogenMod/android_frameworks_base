@@ -1046,8 +1046,9 @@ public class NetworkManagementService extends INetworkManagementService.Stub
         mContext.enforceCallingOrSelfPermission(
                 android.Manifest.permission.CHANGE_WIFI_STATE, "NetworkManagementService");
         try {
+            String softApIface = SystemProperties.get("wifi.ap.interface", wlanIface);
             mConnector.doCommand("softap stopap");
-            mConnector.doCommand("softap stop " + wlanIface);
+            mConnector.doCommand("softap stop " + softApIface);
             wifiFirmwareReload(wlanIface, "STA");
         } catch (NativeDaemonConnectorException e) {
             throw new IllegalStateException("Error communicating to native daemon to stop soft AP",
