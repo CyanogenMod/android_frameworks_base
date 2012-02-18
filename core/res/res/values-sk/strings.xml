@@ -898,8 +898,8 @@
     <string name="no" msgid="5141531044935541497">"Zrušiť"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Pozor"</string>
     <string name="loading" msgid="1760724998928255250">"Prebieha načítavanie..."</string>
-    <string name="capital_on" msgid="1544682755514494298">"ZAPNUTÉ"</string>
-    <string name="capital_off" msgid="6815870386972805832">"VYPNUTÉ"</string>
+    <string name="capital_on" msgid="1544682755514494298">"ZAP"</string>
+    <string name="capital_off" msgid="6815870386972805832">"VYP"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Dokončiť akciu pomocou aplikácie"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Použiť ako predvolené nastavenie pre túto akciu."</string>
     <string name="clearDefaultHintMsg" msgid="4815455344600932173">"Vymazanie predvolených hodnôt v časti Nastavenia plochy &gt; Aplikácie &gt; Správa aplikácií."</string>
