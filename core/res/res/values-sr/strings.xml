@@ -898,8 +898,8 @@
     <string name="no" msgid="5141531044935541497">"Откажи"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Пажња"</string>
     <string name="loading" msgid="1760724998928255250">"Учитавање..."</string>
-    <string name="capital_on" msgid="1544682755514494298">"УКЉУЧЕНО"</string>
-    <string name="capital_off" msgid="6815870386972805832">"ИСКЉУЧЕНО"</string>
+    <string name="capital_on" msgid="1544682755514494298">"УКЉ"</string>
+    <string name="capital_off" msgid="6815870386972805832">"ИСКЉ"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Довршавање радње помоћу"</string>
     <string name="alwaysUse" msgid="4583018368000610438">"Подразумевано користи за ову радњу."</string>
     <string name="clearDefaultHintMsg" msgid="4815455344600932173">"Обришите подразумевана подешавања у оквиру ставки Подешавања почетне странице &gt; Апликације &gt; Управљање апликацијама."</string>
