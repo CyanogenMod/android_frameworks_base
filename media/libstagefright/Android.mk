@@ -89,6 +89,62 @@ LOCAL_STATIC_LIBRARIES := \
         libstagefright_id3 \
         libFLAC \
 
+ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
+LOCAL_SRC_FILES += \
+        ExtendedExtractor.cpp             \
+        ExtendedWriter.cpp                \
+        FMA2DPWriter.cpp
+
+LOCAL_C_INCLUDES += \
+	$(TOP)/external/alsa-lib/include/sound \
+        $(TOP)/hardware/qcom/display/libgralloc \
+        $(TOP)/hardware/qcom/display/libqcomui \
+        $(TOP)/vendor/qcom-opensource/omx/mm-core/omxcore/inc \
+        $(TOP)/system/core/include \
+        $(TOP)/hardware/libhardware_legacy/include
+
+LOCAL_SHARED_LIBRARIES += \
+        libhardware_legacy
+
+LOCAL_STATIC_LIBRARIES += \
+        libstagefright_aacdec \
+        libstagefright_mp3dec
+
+LOCAL_CFLAGS += -DQCOM_HARDWARE
+
+#ifeq ($(BOARD_USES_ALSA_AUDIO),true)
+#        LOCAL_SRC_FILES += LPAPlayerALSA.cpp
+#        LOCAL_C_INCLUDES += $(TARGET_OUT_HEADERS)/mm-audio/libalsa-intf
+#        LOCAL_C_INCLUDES += $(TOP)/kernel/include/sound
+#        LOCAL_SHARED_LIBRARIES += libalsa-intf
+#else
+#        LOCAL_SRC_FILES += LPAPlayer.cpp
+#endif
+
+ifeq ($(call is-board-platform-in-list,msm7627a msm7627_surf),true)
+    LOCAL_CFLAGS += -DUSE_AAC_HW_DEC
+endif
+
+ifeq ($(call is-chipset-in-board-platform,msm7627),true)
+    LOCAL_CFLAGS += -DTARGET7x27
+endif
+ifeq ($(call is-board-platform,msm7627a),true)
+    LOCAL_CFLAGS += -DTARGET7x27A
+endif
+ifeq ($(call is-chipset-in-board-platform,msm7630),true)
+    LOCAL_CFLAGS += -DTARGET7x30
+endif
+ifeq ($(call is-board-platform-in-list,$(QSD8K_BOARD_PLATFORMS)),true)
+    LOCAL_CFLAGS += -DTARGET8x50
+endif
+ifeq ($(TARGET_BOARD_PLATFORM),msm8660)
+    LOCAL_CFLAGS += -DTARGET8x60
+endif
+ifeq ($(call is-board-platform-in-list,msm8660 msm8960),true)
+    LOCAL_CFLAGS += -DTARGET8x60
+endif
+endif
+
 ################################################################################
 
 # The following was shamelessly copied from external/webkit/Android.mk and
