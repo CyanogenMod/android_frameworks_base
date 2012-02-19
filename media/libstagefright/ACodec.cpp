@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/*--------------------------------------------------------------------------
+Copyright (c) 2010-2012, Code Aurora Forum. All rights reserved.
+--------------------------------------------------------------------------*/
 
 //#define LOG_NDEBUG 0
 #define LOG_TAG "ACodec"
@@ -35,6 +38,22 @@
 #include <gui/SurfaceTextureClient.h>
 
 #include <OMX_Component.h>
+#ifdef QCOM_HARDWARE
+#include <OMX_QCOMExtns.h>
+#include <gralloc_priv.h>
+#include <cutils/properties.h>
+#include <qcom_ui.h>
+
+//Smmoth streaming settings
+//Max resolution 1080p
+#define MAX_WIDTH 1920;
+#define MAX_HEIGHT 1080;
+
+//Min resolution QVGA
+#define MIN_WIDTH 480;
+#define MIN_HEIGHT 320;
+#endif
+
 
 namespace android {
 
@@ -117,6 +136,38 @@ private:
 
     DISALLOW_EVIL_CONSTRUCTORS(CodecObserver);
 };
+
+#ifdef QCOM_HARDWARE
+static const int QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka = 0x7FA30C03;
+static const int OMX_QCOM_COLOR_FormatYVU420SemiPlanar = 0x7FA30C00;
+
+class ColorFormatInfo {
+    private:
+          static const int32_t preferredFormat;
+    public:
+          static int32_t getPreferredFormat() {
+          return preferredFormat;
+          }
+};
+
+const int32_t ColorFormatInfo::preferredFormat =
+#ifdef TARGET7x30
+    QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka;
+#endif
+#ifdef TARGET8x60
+    QOMX_COLOR_FormatYUV420PackedSemiPlanar64x32Tile2m8ka;
+#endif
+#ifdef TARGET7x27
+    OMX_QCOM_COLOR_FormatYVU420SemiPlanar;
+#endif
+#ifdef TARGET7x27A
+    OMX_QCOM_COLOR_FormatYVU420SemiPlanar;
+#endif
+#ifdef TARGET8x50
+    OMX_QCOM_COLOR_FormatYVU420SemiPlanar;
+#endif
+#endif
+
 
 ////////////////////////////////////////////////////////////////////////////////
 
