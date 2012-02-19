@@ -19,6 +19,9 @@
 #define UTILS_H_
 
 #include <stdint.h>
+#ifdef QCOM_HARDWARE
+#include <utils/Errors.h>
+#endif
 
 namespace android {
 
@@ -35,6 +38,20 @@ uint64_t U64LE_AT(const uint8_t *ptr);
 
 uint64_t ntoh64(uint64_t x);
 uint64_t hton64(uint64_t x);
+
+#ifdef QCOM_HARDWARE
+typedef struct {
+    uint8_t mProfile;
+    uint8_t mLevel;
+    int32_t mHeightInMBs;
+    int32_t mWidthInMBs;
+    int32_t mNumRefFrames;
+    int32_t mInterlaced;
+} SpsInfo;
+
+status_t
+parseSps(uint16_t naluSize,const uint8_t *encodedBytes, SpsInfo *info);
+#endif
 
 }  // namespace android
 

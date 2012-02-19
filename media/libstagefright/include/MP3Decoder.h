@@ -53,13 +53,22 @@ private:
     void *mDecoderBuf;
     int64_t mAnchorTimeUs;
     int64_t mNumFramesOutput;
+#ifdef QCOM_HARDWARE
+    uint32_t mFixedHeader;
+#endif
 
     MediaBuffer *mInputBuffer;
+#ifdef QCOM_HARDWARE
+    MediaBuffer *mPartialBuffer;
+#endif
 
     void init();
 
     MP3Decoder(const MP3Decoder &);
     MP3Decoder &operator=(const MP3Decoder &);
+#ifdef QCOM_HARDWARE
+    status_t updatePartialFrame();
+#endif
 };
 
 }  // namespace android

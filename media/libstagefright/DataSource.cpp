@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (C) 2010-2012 Code Aurora Forum
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +27,11 @@
 #include "include/DRMExtractor.h"
 #include "include/FLACExtractor.h"
 #include "include/AACExtractor.h"
+#ifdef QCOM_HARDWARE
+#include "include/ExtendedExtractor.h"
+
+#include <media/stagefright/MediaDefs.h>
+#endif
 
 #include "matroska/MatroskaExtractor.h"
 
@@ -62,9 +68,13 @@ status_t DataSource::getSize(off64_t *size) {
 
 Mutex DataSource::gSnifferMutex;
 List<DataSource::SnifferFunc> DataSource::gSniffers;
+#ifdef QCOM_HARDWARE
+List<DataSource::SnifferFunc>::iterator DataSource::extendedSnifferPosition;
+#endif
 
 bool DataSource::sniff(
         String8 *mimeType, float *confidence, sp<AMessage> *meta) {
+
     *mimeType = "";
     *confidence = 0.0f;
     meta->clear();
@@ -72,6 +82,13 @@ bool DataSource::sniff(
     Mutex::Autolock autoLock(gSnifferMutex);
     for (List<SnifferFunc>::iterator it = gSniffers.begin();
          it != gSniffers.end(); ++it) {
+
+#ifdef QCOM_HARDWARE
+        //Dont call the first sniffer from extended extarctor
+        if(it == extendedSnifferPosition)
+            continue;
+#endif
+
         String8 newMimeType;
         float newConfidence;
         sp<AMessage> newMeta;
@@ -80,6 +97,34 @@ bool DataSource::sniff(
                 *mimeType = newMimeType;
                 *confidence = newConfidence;
                 *meta = newMeta;
+#ifdef QCOM_HARDWARE
+                if(*confidence >= 0.6f) {
+
+                    LOGV("Ignore other Sniffers - confidence = %f , mimeType = %s",*confidence,mimeType->string());
+
+                    char value[PROPERTY_VALUE_MAX];
+                    if( (!strcasecmp((*mimeType).string(), MEDIA_MIMETYPE_CONTAINER_MPEG4)) &&
+                        (property_get("mmp.enable.3g2", value, NULL)) &&
+                        (!strcasecmp(value, "true") || !strcmp(value, "1"))) {
+
+                        //Incase of mimeType MPEG4 call the extended parser sniffer to check
+                        //if this is fragmented or not.
+                        LOGV("calling Extended Sniff if mimeType = %s ",(*mimeType).string());
+                        String8 tmpMimeType;
+                        float tmpConfidence;
+                        sp<AMessage> tmpMeta;
+                        (*extendedSnifferPosition)(this, &tmpMimeType, &tmpConfidence, &tmpMeta);
+                        if (tmpConfidence > *confidence) {
+                            *mimeType = tmpMimeType;
+                            *confidence = tmpConfidence;
+                            *meta = tmpMeta;
+                            LOGV("Confidence of Extended sniffer greater than previous sniffer ");
+                        }
+                    }
+
+                    break;
+                }
+#endif
             }
         }
     }
@@ -88,7 +133,11 @@ bool DataSource::sniff(
 }
 
 // static
+#ifdef QCOM_HARDWARE
+void DataSource::RegisterSniffer(SnifferFunc func, bool isExtendedExtractor) {
+#else
 void DataSource::RegisterSniffer(SnifferFunc func) {
+#endif
     Mutex::Autolock autoLock(gSnifferMutex);
 
     for (List<SnifferFunc>::iterator it = gSniffers.begin();
@@ -99,6 +148,16 @@ void DataSource::RegisterSniffer(SnifferFunc func) {
     }
 
     gSniffers.push_back(func);
+
+#ifdef QCOM_HARDWARE
+    if(isExtendedExtractor)
+    {
+        extendedSnifferPosition = gSniffers.end();
+        extendedSnifferPosition--;
+    }
+
+    return;
+#endif
 }
 
 // static
@@ -113,6 +172,9 @@ void DataSource::RegisterDefaultSniffers() {
     RegisterSniffer(SniffMP3);
     RegisterSniffer(SniffAAC);
     RegisterSniffer(SniffMPEG2PS);
+#ifdef QCOM_HARDWARE
+    ExtendedExtractor::RegisterSniffers();
+#endif
 
     char value[PROPERTY_VALUE_MAX];
     if (property_get("drm.service.enabled", value, NULL)

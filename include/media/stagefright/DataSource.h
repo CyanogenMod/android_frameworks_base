@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (C) 2010-2012 Code Aurora Forum
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,7 +78,12 @@ public:
             const sp<DataSource> &source, String8 *mimeType,
             float *confidence, sp<AMessage> *meta);
 
+#ifdef QCOM_HARDWARE
+    //isExtendedExtractor if true, will store the location of the sniffer to register
+    static void RegisterSniffer(SnifferFunc func, bool isExtendedExtractor = false);
+#else
     static void RegisterSniffer(SnifferFunc func);
+#endif
     static void RegisterDefaultSniffers();
 
     // for DRM
@@ -98,6 +104,10 @@ protected:
 private:
     static Mutex gSnifferMutex;
     static List<SnifferFunc> gSniffers;
+
+#ifdef QCOM_HARDWARE
+    static List<SnifferFunc>::iterator extendedSnifferPosition;
+#endif
 
     DataSource(const DataSource &);
     DataSource &operator=(const DataSource &);

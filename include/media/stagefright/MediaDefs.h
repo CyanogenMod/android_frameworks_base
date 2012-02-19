@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2009 The Android Open Source Project
+ * Copyright (C) 2010-2012 Code Aurora Forum
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,6 +56,22 @@ extern const char *MEDIA_MIMETYPE_CONTAINER_WVM;
 
 extern const char *MEDIA_MIMETYPE_TEXT_3GPP;
 
+#ifdef QCOM_HARDWARE
+extern const char *MEDIA_MIMETYPE_AUDIO_EVRC;
+
+extern const char *MEDIA_MIMETYPE_VIDEO_WMV;
+extern const char *MEDIA_MIMETYPE_AUDIO_WMA;
+extern const char *MEDIA_MIMETYPE_CONTAINER_ASF;
+extern const char *MEDIA_MIMETYPE_VIDEO_DIVX;
+extern const char *MEDIA_MIMETYPE_AUDIO_AC3;
+extern const char *MEDIA_MIMETYPE_CONTAINER_AAC;
+extern const char *MEDIA_MIMETYPE_CONTAINER_QCP;
+extern const char *MEDIA_MIMETYPE_VIDEO_DIVX311;
+extern const char *MEDIA_MIMETYPE_VIDEO_DIVX4;
+extern const char *MEDIA_MIMETYPE_CONTAINER_MPEG2;
+
+extern const char *MEDIA_MIMETYPE_CONTAINER_3G2;
+#endif
 }  // namespace android
 
 #endif  // MEDIA_DEFS_H_

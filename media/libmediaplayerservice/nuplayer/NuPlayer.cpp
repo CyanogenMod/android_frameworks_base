@@ -146,6 +146,7 @@ bool NuPlayer::IsFlushingState(FlushStatus state, bool *needShutdown) {
             return true;
 
         case FLUSHING_DECODER_SHUTDOWN:
+        case SHUTTING_DOWN_DECODER:
             if (needShutdown != NULL) {
                 *needShutdown = true;
             }
@@ -294,6 +295,8 @@ void NuPlayer::onMessageReceived(const sp<AMessage> &msg) {
 
                 mRenderer->queueEOS(audio, err);
             } else if (what == ACodec::kWhatFlushCompleted) {
+
+                Mutex::Autolock autoLock(mLock);
                 bool needShutdown;
 
                 if (audio) {
@@ -369,6 +372,7 @@ void NuPlayer::onMessageReceived(const sp<AMessage> &msg) {
                 }
             } else if (what == ACodec::kWhatShutdownCompleted) {
                 LOGV("%s shutdown completed", audio ? "audio" : "video");
+                Mutex::Autolock autoLock(mLock);
                 if (audio) {
                     mAudioDecoder.clear();
 
@@ -462,6 +466,7 @@ void NuPlayer::onMessageReceived(const sp<AMessage> &msg) {
         case kWhatReset:
         {
             LOGV("kWhatReset");
+            Mutex::Autolock autoLock(mLock);
 
             if (mRenderer != NULL) {
                 // There's an edge case where the renderer owns all output
@@ -475,7 +480,8 @@ void NuPlayer::onMessageReceived(const sp<AMessage> &msg) {
                 }
             }
 
-            if (mFlushingAudio != NONE || mFlushingVideo != NONE) {
+            if ( (mAudioDecoder != NULL && IsFlushingState(mFlushingAudio)) ||
+                 (mVideoDecoder != NULL && IsFlushingState(mFlushingVideo)) ) {
                 // We're currently flushing, postpone the reset until that's
                 // completed.
 
@@ -507,18 +513,43 @@ void NuPlayer::onMessageReceived(const sp<AMessage> &msg) {
 
         case kWhatSeek:
         {
-            int64_t seekTimeUs;
+            Mutex::Autolock autoLock(mLock);
+            int64_t seekTimeUs = -1, newSeekTime = -1;
             CHECK(msg->findInt64("seekTimeUs", &seekTimeUs));
 
             LOGV("kWhatSeek seekTimeUs=%lld us (%.2f secs)",
                  seekTimeUs, seekTimeUs / 1E6);
 
-            mSource->seekTo(seekTimeUs);
+            mSource->seekTo(seekTimeUs, &newSeekTime);
+            LOGV("newSeekTime %lld", newSeekTime);
+
+            if( newSeekTime >= 0 ) {
+               if( (mAudioDecoder != NULL) &&
+                   (mFlushingAudio == NONE || mFlushingAudio == AWAITING_DISCONTINUITY) ) {
+                  flushDecoder( true, true );
+               }
+               if( (mVideoDecoder != NULL) &&
+                   (mFlushingVideo == NONE || mFlushingVideo == AWAITING_DISCONTINUITY) ) {
+                  flushDecoder( false, true );
+               }
+               if( mAudioDecoder == NULL ) {
+                   LOGV("Audio is not there, set it to shutdown");
+                   mFlushingAudio = SHUT_DOWN;
+
+               }
+               if( mVideoDecoder == NULL ) {
+                   LOGV("Video is not there, set it to shutdown");
+                   mFlushingVideo = SHUT_DOWN;
+               }
+            }
 
             if (mDriver != NULL) {
                 sp<NuPlayerDriver> driver = mDriver.promote();
                 if (driver != NULL) {
                     driver->notifySeekComplete();
+                    if( newSeekTime >= 0 ) {
+                        driver->notifyPosition( newSeekTime );
+                     }
                 }
             }
 
@@ -546,11 +577,27 @@ void NuPlayer::onMessageReceived(const sp<AMessage> &msg) {
 }
 
 void NuPlayer::finishFlushIfPossible() {
+    //If reset was postponed after one of the streams is flushed, complete it now
+    if (mResetPostponed) {
+        LOGV("finishFlushIfPossible Handle reset postpone ");
+        if ((mAudioDecoder != NULL) &&
+            (mFlushingAudio == NONE || mFlushingAudio == AWAITING_DISCONTINUITY )) {
+           flushDecoder( true, true );
+        }
+        if ((mVideoDecoder != NULL) &&
+            (mFlushingVideo == NONE || mFlushingVideo == AWAITING_DISCONTINUITY )) {
+           flushDecoder( false, true );
+        }
+    }
+
+    //Check if both audio & video are flushed
     if (mFlushingAudio != FLUSHED && mFlushingAudio != SHUT_DOWN) {
+        LOGV("Dont finish flush, audio is in state %d ", mFlushingAudio);
         return;
     }
 
     if (mFlushingVideo != FLUSHED && mFlushingVideo != SHUT_DOWN) {
+        LOGV("Dont finish flush, video is in state %d ", mFlushingVideo);
         return;
     }
 
@@ -562,10 +609,12 @@ void NuPlayer::finishFlushIfPossible() {
     }
 
     if (mAudioDecoder != NULL) {
+        LOGV("Resume Audio after flush");
         mAudioDecoder->signalResume();
     }
 
     if (mVideoDecoder != NULL) {
+        LOGV("Resume Video after flush");
         mVideoDecoder->signalResume();
     }
 
@@ -580,7 +629,9 @@ void NuPlayer::finishFlushIfPossible() {
     } else if (mResetPostponed) {
         (new AMessage(kWhatReset, id()))->post();
         mResetPostponed = false;
+        LOGE("Handle reset postpone");
     } else if (mAudioDecoder == NULL || mVideoDecoder == NULL) {
+        LOGV("Start scanning for sources after shutdown");
         postScanSources();
     }
 }
@@ -588,6 +639,9 @@ void NuPlayer::finishFlushIfPossible() {
 void NuPlayer::finishReset() {
     CHECK(mAudioDecoder == NULL);
     CHECK(mVideoDecoder == NULL);
+    // Make sure we don't continue to scan sources until we finish reset
+    ++mScanSourcesGeneration;
+    mScanSourcesPending = false;
 
     ++mScanSourcesGeneration;
     mScanSourcesPending = false;
@@ -644,6 +698,17 @@ status_t NuPlayer::instantiateDecoder(bool audio, sp<Decoder> *decoder) {
                        new Decoder(notify, mNativeWindow);
     looper()->registerHandler(*decoder);
 
+    {
+        //Set flushing state to none
+        Mutex::Autolock autoLock(mLock);
+        if( audio ) {
+            mFlushingAudio = NONE;
+        } else {
+            mFlushingVideo = NONE;
+
+        }
+    }
+
     (*decoder)->configure(meta);
 
     int64_t durationUs;
@@ -660,6 +725,8 @@ status_t NuPlayer::instantiateDecoder(bool audio, sp<Decoder> *decoder) {
 status_t NuPlayer::feedDecoderInputData(bool audio, const sp<AMessage> &msg) {
     sp<AMessage> reply;
     CHECK(msg->findMessage("reply", &reply));
+
+    Mutex::Autolock autoLock(mLock);
 
     if ((audio && IsFlushingState(mFlushingAudio))
             || (!audio && IsFlushingState(mFlushingVideo))) {
@@ -780,6 +847,7 @@ void NuPlayer::renderBuffer(bool audio, const sp<AMessage> &msg) {
     sp<AMessage> reply;
     CHECK(msg->findMessage("reply", &reply));
 
+    Mutex::Autolock autoLock(mLock);
     if (IsFlushingState(audio ? mFlushingAudio : mFlushingVideo)) {
         // We're currently attempting to flush the decoder, in order
         // to complete this, the decoder wants all its buffers back,
@@ -875,6 +943,7 @@ void NuPlayer::flushDecoder(bool audio, bool needShutdown) {
                 : FLUSHED;
         }
     }
+    LOGV("flushDecoder end states Audio %d, Video %d", mFlushingAudio, mFlushingVideo);
 }
 
 }  // namespace android
