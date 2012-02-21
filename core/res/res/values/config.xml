@@ -764,4 +764,8 @@
     <!-- Workaround for devices with broken keyboards -->
     <bool name="config_forceDisableHardwareKeyboard">false</bool>
 
+    <!-- Whether to set a system prop (sys.orientation.landscape)
+         when rotating for devices that have rotating buttons -->
+    <bool name="config_setLandscapeProp">false</bool>
+
 </resources>
