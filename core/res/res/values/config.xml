@@ -798,4 +798,8 @@
 
     <!-- Name of that key handler class -->
     <string name="config_deviceKeyHandlerClass"></string>
+
+    <!-- Whether to set a system prop (sys.orientation.landscape)
+         when rotating for devices that have rotating buttons -->
+    <bool name="config_setLandscapeProp">false</bool>
 </resources>
