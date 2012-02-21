@@ -443,7 +443,7 @@ void Layer::lockPageFlip(bool& recomputeVisibleRegions)
 #ifdef QCOM_HARDWARE
         const DisplayHardware& hw(graphicPlane(0).displayHardware());
 
-        bool avoidTex = (hw.getFlags() & DisplayHardware::C2D_COMPOSITION) ?
+        bool avoidTex = (hw.getFlags() & DisplayHardware::MDP_COMPOSITION) ?
                           true : false;
 
         if (mSurfaceTexture->updateTexImage(avoidTex) < NO_ERROR) {
