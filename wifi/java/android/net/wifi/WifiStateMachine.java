@@ -1180,14 +1180,14 @@ public class WifiStateMachine extends StateMachine {
            ip settings */
         InterfaceConfiguration ifcg = null;
         try {
-            ifcg = mNwService.getInterfaceConfig(mInterfaceName);
+            ifcg = mNwService.getInterfaceConfig(mTetherInterfaceName);
             if (ifcg != null) {
                 ifcg.addr = new LinkAddress(NetworkUtils.numericToInetAddress(
                             "0.0.0.0"), 0);
-                mNwService.setInterfaceConfig(mInterfaceName, ifcg);
+                mNwService.setInterfaceConfig(mTetherInterfaceName, ifcg);
             }
         } catch (Exception e) {
-            loge("Error resetting interface " + mInterfaceName + ", :" + e);
+            loge("Error resetting interface " + mTetherInterfaceName + ", :" + e);
         }
 
         if (mCm.untether(mTetherInterfaceName) != ConnectivityManager.TETHER_ERROR_NO_ERROR) {
