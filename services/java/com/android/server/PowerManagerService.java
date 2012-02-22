@@ -62,6 +62,8 @@ import android.util.Slog;
 import android.view.WindowManagerPolicy;
 import static android.view.WindowManagerPolicy.OFF_BECAUSE_OF_PROX_SENSOR;
 import static android.provider.Settings.System.DIM_SCREEN;
+import static android.provider.Settings.System.ELECTRON_BEAM_ANIMATION_ON;
+import static android.provider.Settings.System.ELECTRON_BEAM_ANIMATION_OFF;
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS;
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE;
 import static android.provider.Settings.System.SCREEN_AUTO_BRIGHTNESS_ADJ;
@@ -179,6 +181,9 @@ public class PowerManagerService extends IPowerManager.Stub
 
     // animate screen lights in PowerManager (as opposed to SurfaceFlinger)
     boolean mAnimateScreenLights = true;
+
+    boolean mElectronBeamAnimationOn = false;
+    boolean mElectronBeamAnimationOff = false;
 
     static final int ANIM_STEPS = 60; // nominal # of frames at 60Hz
     // Slower animation for autobrightness changes
@@ -355,7 +360,8 @@ public class PowerManagerService extends IPowerManager.Stub
 
     private native void nativeInit();
     private native void nativeSetPowerState(boolean screenOn, boolean screenBright);
-    private native void nativeStartSurfaceFlingerAnimation(int mode);
+    private native void nativeStartSurfaceFlingerOffAnimation(int mode);
+    private native void nativeStartSurfaceFlingerOnAnimation(int mode);
     private static native void nativeAcquireWakeLock(int lock, String id);
     private static native void nativeReleaseWakeLock(String id);
     private static native int nativeSetScreenState(boolean on);
@@ -566,15 +572,20 @@ public class PowerManagerService extends IPowerManager.Stub
                 // recalculate everything
                 setScreenOffTimeoutsLocked();
 
-                mWindowScaleAnimation = getFloat(WINDOW_ANIMATION_SCALE, 1.0f);
-                final float transitionScale = getFloat(TRANSITION_ANIMATION_SCALE, 1.0f);
+                //read user settings and device config to control animations availability
+                mElectronBeamAnimationOn = (Settings.System.getInt(mContext.getContentResolver(),
+                        ELECTRON_BEAM_ANIMATION_ON, 0) != 0) &&
+                        mContext.getResources().getInteger(com.android.internal.R.integer.config_screenOnAnimation) >= 0;
+                mElectronBeamAnimationOff = (Settings.System.getInt(mContext.getContentResolver(),
+                        ELECTRON_BEAM_ANIMATION_OFF, 1) != 0) &&
+                        mContext.getResources().getBoolean(com.android.internal.R.bool.config_screenOffAnimation);
+
                 mAnimationSetting = 0;
-                if (mWindowScaleAnimation > 0.5f) {
+                if (mElectronBeamAnimationOff) {
                     mAnimationSetting |= ANIM_SETTING_OFF;
                 }
-                if (transitionScale > 0.5f) {
-                    // Uncomment this if you want the screen-on animation.
-                    // mAnimationSetting |= ANIM_SETTING_ON;
+                if (mElectronBeamAnimationOn) {
+                    mAnimationSetting |= ANIM_SETTING_ON;
                 }
             }
         }
@@ -715,10 +726,13 @@ public class PowerManagerService extends IPowerManager.Stub
                         + Settings.System.NAME + "=?) or ("
                         + Settings.System.NAME + "=?) or ("
                         + Settings.System.NAME + "=?) or ("
+                        + Settings.System.NAME + "=?) or ("
+                        + Settings.System.NAME + "=?) or ("
                         + Settings.System.NAME + "=?)",
                 new String[]{STAY_ON_WHILE_PLUGGED_IN, SCREEN_OFF_TIMEOUT, DIM_SCREEN, SCREEN_BRIGHTNESS,
                         SCREEN_BRIGHTNESS_MODE, /*SCREEN_AUTO_BRIGHTNESS_ADJ,*/
-                        WINDOW_ANIMATION_SCALE, TRANSITION_ANIMATION_SCALE, Settings.System.LIGHTS_CHANGED},
+                        WINDOW_ANIMATION_SCALE, TRANSITION_ANIMATION_SCALE, Settings.System.LIGHTS_CHANGED,
+                        ELECTRON_BEAM_ANIMATION_ON, ELECTRON_BEAM_ANIMATION_OFF},
                 null);
         mSettings = new ContentQueryMap(settingsCursor, Settings.System.NAME, true, mHandler);
         SettingsObserver settingsObserver = new SettingsObserver();
@@ -2333,7 +2347,7 @@ public class PowerManagerService extends IPowerManager.Stub
                         animateInternal(mask, false, delay);
                     } else if (msg.what == ANIMATE_POWER_OFF) {
                         int mode = msg.arg1;
-                        nativeStartSurfaceFlingerAnimation(mode);
+                        nativeStartSurfaceFlingerOffAnimation(mode);
                     }
                 }
             };
