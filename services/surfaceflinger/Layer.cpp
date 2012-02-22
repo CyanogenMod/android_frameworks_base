@@ -41,10 +41,10 @@
 
 #ifdef QCOM_HARDWARE
 #include <qcom_ui.h>
+#define SHIFT_SRC_TRANSFORM 4
 #endif
 
 #define DEBUG_RESIZE    0
-
 
 namespace android {
 
@@ -239,6 +239,12 @@ void Layer::setGeometry(hwc_layer_t* hwcl)
         hwcl->flags = HWC_SKIP_LAYER;
     } else {
         hwcl->transform = finalTransform;
+#ifdef QCOM_HARDWARE
+        //mBufferTransform will have the srcTransform
+        //include src and final transform in the hwcl->transform
+        hwcl->transform = (( bufferOrientation.getOrientation() <<
+                                       SHIFT_SRC_TRANSFORM) | hwcl->transform);
+#endif
     }
 
     if (isCropped()) {
