@@ -798,4 +798,11 @@
 
     <!-- Name of that key handler class -->
     <string name="config_deviceKeyHandlerClass"></string>
+
+    <!-- Values greater or equal to 0 will enable electronbeam screen-on
+         animation with the specified delay (in milliseconds), -1 will disable the animation -->
+    <integer name="config_screenOnAnimation">-1</integer>
+
+    <!-- True will enable the electron beam screen-off animation. -->
+    <bool name="config_screenOffAnimation">true</bool>
 </resources>
