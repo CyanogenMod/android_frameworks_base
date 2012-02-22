@@ -143,10 +143,16 @@ static void nativeSetPowerState(JNIEnv* env,
     gScreenBright = screenBright;
 }
 
-static void nativeStartSurfaceFlingerAnimation(JNIEnv* env,
+static void nativeStartSurfaceFlingerOffAnimation(JNIEnv* env,
         jobject obj, jint mode) {
     sp<ISurfaceComposer> s(ComposerService::getComposerService());
     s->turnElectronBeamOff(mode);
+}
+
+static void nativeStartSurfaceFlingerOnAnimation(JNIEnv* env,
+        jobject obj, jint mode) {
+    sp<ISurfaceComposer> s(ComposerService::getComposerService());
+    s->turnElectronBeamOn(mode);
 }
 
 static void nativeAcquireWakeLock(JNIEnv *env, jobject clazz, jint lock, jstring idObj) {
@@ -223,8 +229,10 @@ static JNINativeMethod gPowerManagerServiceMethods[] = {
             (void*) nativeInit },
     { "nativeSetPowerState", "(ZZ)V",
             (void*) nativeSetPowerState },
-    { "nativeStartSurfaceFlingerAnimation", "(I)V",
-            (void*) nativeStartSurfaceFlingerAnimation },
+    { "nativeStartSurfaceFlingerOffAnimation", "(I)V",
+            (void*) nativeStartSurfaceFlingerOffAnimation },
+    { "nativeStartSurfaceFlingerOnAnimation", "(I)V",
+            (void*) nativeStartSurfaceFlingerOnAnimation },
     { "nativeAcquireWakeLock", "(ILjava/lang/String;)V",
             (void*) nativeAcquireWakeLock },
     { "nativeReleaseWakeLock", "(Ljava/lang/String;)V",
