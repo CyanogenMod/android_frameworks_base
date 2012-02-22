@@ -1220,7 +1220,9 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
         } catch (Exception e){
         }
 
-        return gsmRoaming && !(equalsMcc && (equalsOnsl || equalsOnss));
+        boolean mvnoRoaming = Settings.System.getInt(phone.getContext().getContentResolver(),
+            Settings.System.MVNO_ROAMING, 0) == 1;
+        return gsmRoaming && !(equalsMcc && (equalsOnsl || equalsOnss || mvnoRoaming));
     }
 
     private static int twoDigitsAt(String s, int offset) {

@@ -2232,6 +2232,10 @@ public final class Settings {
          */
         public static final String VOLUME_WAKE_SCREEN = "volume_wake_screen";
 
+        /**
+         * Whether national data Roming should be used.
+         */
+        public static final String MVNO_ROAMING = "mvno_roaming";
 
         /**
          * Settings to backup. This is here so that it's in the same place as the settings
