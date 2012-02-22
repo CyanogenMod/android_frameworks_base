@@ -2158,6 +2158,12 @@ public final class Settings {
          * @hide
          */
         public static final String STATUS_BAR_CM_SIGNAL_TEXT = "status_bar_cm_signal";
+        
+        /**
+         * Custom Carrier text on the systemui.
+         * @hide
+         */
+        public static final String CUSTOM_CARRIER_TEXT = "custom_carrier_text";
 
          /**
          * Whether to control brightness from status bar
