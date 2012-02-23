@@ -73,6 +73,7 @@ package android {
     field public static final java.lang.String MOUNT_UNMOUNT_FILESYSTEMS = "android.permission.MOUNT_UNMOUNT_FILESYSTEMS";
     field public static final java.lang.String NFC = "android.permission.NFC";
     field public static final deprecated java.lang.String PERSISTENT_ACTIVITY = "android.permission.PERSISTENT_ACTIVITY";
+    field public static final java.lang.String PREVENT_POWER_KEY = "android.permission.PREVENT_POWER_KEY";
     field public static final java.lang.String PROCESS_OUTGOING_CALLS = "android.permission.PROCESS_OUTGOING_CALLS";
     field public static final java.lang.String READ_CALENDAR = "android.permission.READ_CALENDAR";
     field public static final java.lang.String READ_CONTACTS = "android.permission.READ_CONTACTS";
@@ -3602,6 +3603,7 @@ package android.app {
     field public static final int DEFAULT_SOUND = 1; // 0x1
     field public static final int DEFAULT_VIBRATE = 2; // 0x2
     field public static final int FLAG_AUTO_CANCEL = 16; // 0x10
+    field public static final int FLAG_FORCE_LED_SCREEN_OFF = 256; // 0x100
     field public static final int FLAG_FOREGROUND_SERVICE = 64; // 0x40
     field public static final int FLAG_HIGH_PRIORITY = 128; // 0x80
     field public static final int FLAG_INSISTENT = 4; // 0x4
@@ -10251,6 +10253,7 @@ package android.location {
     method public void requestSingleUpdate(java.lang.String, android.app.PendingIntent);
     method public void requestSingleUpdate(android.location.Criteria, android.app.PendingIntent);
     method public boolean sendExtraCommand(java.lang.String, java.lang.String, android.os.Bundle);
+    method public void setGPSSource(java.lang.String);
     method public void setTestProviderEnabled(java.lang.String, boolean);
     method public void setTestProviderLocation(java.lang.String, android.location.Location);
     method public void setTestProviderStatus(java.lang.String, int, android.os.Bundle, long);
@@ -19252,6 +19255,7 @@ package android.telephony {
     method public boolean hasIccCard();
     method public boolean isNetworkRoaming();
     method public void listen(android.telephony.PhoneStateListener, int);
+    method public void toggleLTE(boolean);
     field public static final java.lang.String ACTION_PHONE_STATE_CHANGED = "android.intent.action.PHONE_STATE";
     field public static final int CALL_STATE_IDLE = 0; // 0x0
     field public static final int CALL_STATE_OFFHOOK = 2; // 0x2
@@ -24056,6 +24060,7 @@ package android.view {
     field public static final deprecated int MEMORY_TYPE_HARDWARE = 1; // 0x1
     field public static final deprecated int MEMORY_TYPE_NORMAL = 0; // 0x0
     field public static final deprecated int MEMORY_TYPE_PUSH_BUFFERS = 3; // 0x3
+    field public static final int PREVENT_POWER_KEY = -2147483648; // 0x80000000
     field public static final int SCREEN_BRIGHTNESS_CHANGED = 2048; // 0x800
     field public static final int SCREEN_ORIENTATION_CHANGED = 1024; // 0x400
     field public static final int SOFT_INPUT_ADJUST_NOTHING = 48; // 0x30
