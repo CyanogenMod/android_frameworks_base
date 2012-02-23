@@ -20,6 +20,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.provider.Settings;
 import android.provider.Telephony;
 import android.util.AttributeSet;
 import android.util.Slog;
@@ -91,23 +92,34 @@ public class CarrierLabel extends TextView {
             Slog.d("CarrierLabel", "updateNetworkName showSpn=" + showSpn + " spn=" + spn
                     + " showPlmn=" + showPlmn + " plmn=" + plmn);
         }
-        StringBuilder str = new StringBuilder();
-        boolean something = false;
-        if (showPlmn && plmn != null) {
-            str.append(plmn);
-            something = true;
-        }
-        if (showSpn && spn != null) {
-            if (something) {
-                str.append('\n');
+        boolean modifiedCarrier = Settings.System.getInt(mContext.getContentResolver(), Settings.System.MODIFY_CARRIER_TEXT, 0) == 1;
+        String customCarrier = null;
+        customCarrier = Settings.System.getString(mContext.getContentResolver(), Settings.System.CUSTOM_CARRIER_TEXT);
+
+        if (modifiedCarrier) {
+            if (customCarrier == null) {
+                customCarrier=" ";
             }
-            str.append(spn);
-            something = true;
-        }
-        if (something) {
-            setText(str.toString());
+            setText(customCarrier);
         } else {
-            setText(com.android.internal.R.string.lockscreen_carrier_default);
+            StringBuilder str = new StringBuilder();
+            boolean something = false;
+            if (showPlmn && plmn != null) {
+                str.append(plmn);
+                something = true;
+            }
+            if (showSpn && spn != null) {
+                if (something) {
+                    str.append('\n');
+                }
+                str.append(spn);
+                something = true;
+            }
+            if (something) {
+                setText(str.toString());
+            } else {
+                setText(com.android.internal.R.string.lockscreen_carrier_default);
+            }
         }
     }
 
