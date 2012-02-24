@@ -470,6 +470,9 @@ public class TelephonyManager {
         }
     }
 
+    /**
+     * {@hide}
+     */
     public void toggleLTE(boolean on) {
         try {
             getITelephony().toggleLTE(on);
