@@ -27,6 +27,9 @@
 #include "include/DRMExtractor.h"
 #include "include/FLACExtractor.h"
 #include "include/AACExtractor.h"
+#ifndef QCOM_HARDWARE
+#include "include/AVIExtractor.h"
+#endif
 #ifdef QCOM_HARDWARE
 #include "include/ExtendedExtractor.h"
 #endif

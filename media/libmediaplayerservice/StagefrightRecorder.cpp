@@ -952,8 +952,8 @@ status_t StagefrightRecorder::startAMRRecording() {
         LOGE("Invalid number of audio channels %d used for amr recording",
                 mAudioChannels);
         return BAD_VALUE;
-    }
 #endif
+    }
 
     mWriter = new AMRWriter(mOutputFd);
     status_t status = startRawAudioRecording();

@@ -70,8 +70,10 @@ const char CameraParameters::KEY_ANTIBANDING[] = "antibanding";
 const char CameraParameters::KEY_SUPPORTED_ANTIBANDING[] = "antibanding-values";
 const char CameraParameters::KEY_SCENE_MODE[] = "scene-mode";
 const char CameraParameters::KEY_SUPPORTED_SCENE_MODES[] = "scene-mode-values";
+#ifdef QCOM_HARDWARE
 const char CameraParameters::KEY_SCENE_DETECT[] = "scene-detect";
 const char CameraParameters::KEY_SUPPORTED_SCENE_DETECT[] = "scene-detect-values";
+#endif
 const char CameraParameters::KEY_FLASH_MODE[] = "flash-mode";
 const char CameraParameters::KEY_SUPPORTED_FLASH_MODES[] = "flash-mode-values";
 const char CameraParameters::KEY_FOCUS_MODE[] = "focus-mode";
