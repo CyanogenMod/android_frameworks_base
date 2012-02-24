@@ -272,6 +272,11 @@ public class LocationManager {
         return provider;
     }
 
+    /**
+     * Set the source from which to read gps info
+     *
+     * {@hide}
+     */
     public void setGPSSource(String device) {
         try {
             mService.setGPSSource(device);
