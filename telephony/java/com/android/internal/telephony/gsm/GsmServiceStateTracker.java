@@ -610,7 +610,7 @@ final class GsmServiceStateTracker extends ServiceStateTracker {
                             regState = Integer.parseInt(states[0]);
 
                             // states[3] (if present) is the current radio technology
-                            if (states.length >= 4 && states[3] != null) {
+                            if (states.length >= 4 && states[3] != null && !states[3].equals("")) {
                                 type = Integer.parseInt(states[3]);
                             }
                             if ((states.length >= 5 ) && (regState == 3)) {

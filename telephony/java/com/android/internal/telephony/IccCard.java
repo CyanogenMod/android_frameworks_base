@@ -765,7 +765,7 @@ public abstract class IccCard {
             return IccCard.State.PUK_REQUIRED;
         }
         if (app.app_state.isSubscriptionPersoEnabled() &&
-            (!(this.mPhone.mCM.getClass() == HuaweiRIL.class) ||
+            (!(this.mPhone.mCM.needsOldRilFeature("qcomuiccstack")) ||
                app.perso_substate.isPersoSubStateNetworkLocked())) {
             return IccCard.State.NETWORK_LOCKED;
         }
