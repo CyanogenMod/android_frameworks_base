@@ -1517,4 +1517,6 @@ public final class SimulatedCommands extends BaseCommands
     public void requestIsimAuthentication(String nonce, Message response) {
         unimplemented(response);
     }
+
+    public boolean needsOldRilFeature(String feature) { return false; }
 }
