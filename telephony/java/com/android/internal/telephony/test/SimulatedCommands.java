@@ -1522,4 +1522,6 @@ public final class SimulatedCommands extends BaseCommands
     public void getVoiceRadioTechnology(Message response) {
         unimplemented(response);
     }
+
+    public boolean needsOldRilFeature(String feature) { return false; }
 }
