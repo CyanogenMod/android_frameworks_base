@@ -35,7 +35,11 @@ public class WimaxHelper {
 
     private static final String TAG = "WimaxHelper";
 
+    private static final String WIMAX_CONTROLLER_CLASSNAME = "com.htc.net.wimax.WimaxController";
+    private static final String WIMAX_MANAGER_CLASSNAME    = "android.net.wimax.WimaxManager";
+
     private static DexClassLoader sWimaxClassLoader;
+    private static String sWimaxManagerClassname, sGetWimaxStateMethodname;
     
     public static boolean isWimaxSupported(Context context) {
         return context.getResources().getBoolean(
@@ -45,6 +49,17 @@ public class WimaxHelper {
     public static DexClassLoader getWimaxClassLoader(Context context) {
         if (isWimaxSupported(context)) {
             if (sWimaxClassLoader == null) {
+                sWimaxManagerClassname = context.getResources().getString(
+                    com.android.internal.R.string.config_wimaxManagerClassname);
+
+                // WimaxController::getWimaxState == WimaxManager::getWimaxStatus.
+                // However, WimaxManager also implements a different getWimaxState method,
+                // which returns a WimaxState object describing the connection state, not
+                // the enabled state.
+                if (sWimaxManagerClassname.equals(WIMAX_CONTROLLER_CLASSNAME))
+                    sGetWimaxStateMethodname = "getWimaxState";
+                else if (sWimaxManagerClassname.equals(WIMAX_MANAGER_CLASSNAME))
+                    sGetWimaxStateMethodname = "getWimaxStatus";
 
                 String wimaxJarLocation = context.getResources().getString(
                         com.android.internal.R.string.config_wimaxServiceJarLocation);
@@ -64,19 +79,32 @@ public class WimaxHelper {
         
         try {
             DexClassLoader wimaxClassLoader = getWimaxClassLoader(context);
-            IBinder b = ServiceManager.getService(WimaxManagerConstants.WIMAX_SERVICE);
-            if (b != null) {
-                Class<?> klass = wimaxClassLoader.loadClass("com.htc.net.wimax.IWimaxController$Stub");
-                if (klass != null) {
-                    Method asInterface = klass.getMethod("asInterface", IBinder.class);
-                    Object wc = asInterface.invoke(null, b);
-                    if (wc != null) {
-                        klass = wimaxClassLoader.loadClass("com.htc.net.wimax.WimaxController");
-                        if (klass != null) {
-                            Constructor<?> ctor = klass.getDeclaredConstructors()[1];
-                            controller = ctor.newInstance(wc, handler);
+            if (sWimaxManagerClassname.equals(WIMAX_CONTROLLER_CLASSNAME)) {
+                // Load supersonic's and speedy's WimaxController.
+                IBinder b = ServiceManager.getService(WimaxManagerConstants.WIMAX_SERVICE);
+                if (b != null) {
+                    Class<?> klass = wimaxClassLoader.loadClass("com.htc.net.wimax.IWimaxController$Stub");
+                    if (klass != null) {
+                        Method asInterface = klass.getMethod("asInterface", IBinder.class);
+                        Object wc = asInterface.invoke(null, b);
+                        if (wc != null) {
+                            klass = wimaxClassLoader.loadClass(WIMAX_CONTROLLER_CLASSNAME);
+                            if (klass != null) {
+                                Constructor<?> ctor = klass.getDeclaredConstructors()[1];
+                                controller = ctor.newInstance(wc, handler);
+                            }
                         }
                     }
+                }
+            } else if (sWimaxManagerClassname.equals(WIMAX_MANAGER_CLASSNAME)) {
+                // Load crespo4g's (and epicmtd's) WimaxManager.
+                // Note that crespo4g's implementation grabs WIMAX_SERVICE internally, so
+                // it doesn't need to be passed in.  Other implementations (may) require
+                // WIMAX_SERVICE to be grabbed externally, so check WimaxManager::<init>.
+                Class<?> klass = wimaxClassLoader.loadClass(WIMAX_MANAGER_CLASSNAME);
+                if (klass != null) {
+                    Constructor<?> ctor = klass.getDeclaredConstructors()[0];
+                    controller = ctor.newInstance();
                 }
             }
         } catch (Exception e) {
@@ -117,7 +145,7 @@ public class WimaxHelper {
         int ret = 0;
         try {
             Object wimaxService = context.getSystemService(WimaxManagerConstants.WIMAX_SERVICE);
-            Method m = wimaxService.getClass().getMethod("getWimaxState");
+            Method m = wimaxService.getClass().getMethod(sGetWimaxStateMethodname);
             ret = (Integer) m.invoke(wimaxService);
         } catch (Exception e) {
             Log.e(TAG, "Unable to get WiMAX state!", e);

@@ -64,6 +64,8 @@
     
     <!-- The duration (in milliseconds) of a short animation. -->
     <integer name="config_shortAnimTime">150</integer>
+    <integer name="config_activityShortDur">150</integer>
+    <integer name="config_activityDefaultDur">220</integer>
     
     <!-- The duration (in milliseconds) of a medium-length animation. -->
     <integer name="config_mediumAnimTime">300</integer>
@@ -164,6 +166,10 @@
     <bool name="config_animateScreenLights">true</bool>
     
     <!-- XXXXXX END OF RESOURCES USING WRONG NAMING CONVENTION -->
+
+    <!-- If true, the screen can be rotated via the accelerometer in all 4
+         rotations as the default behavior. -->
+    <bool name="config_allowAllRotations">true</bool>
 
     <!-- The number of degrees to rotate the display when the keyboard is open. -->
     <integer name="config_lidOpenRotation">90</integer>

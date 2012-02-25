@@ -48,7 +48,7 @@ public class ExpandedView extends LinearLayout {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        if (mTouchDispatcher.needsInterceptTouch()) {
+        if (mTouchDispatcher.needsInterceptTouch(event)) {
             return true;
         }
         return super.onInterceptTouchEvent(event);
@@ -56,8 +56,13 @@ public class ExpandedView extends LinearLayout {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        mTouchDispatcher.handleTouchEvent(event);
-        return super.onTouchEvent(event);
+        boolean handled = mTouchDispatcher.handleTouchEvent(event);
+
+        if (super.onTouchEvent(event)) {
+            handled = true;
+        }
+
+        return handled;
     }
 
     @Override

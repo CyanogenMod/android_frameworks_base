@@ -16,21 +16,29 @@
 
 package com.android.internal.policy.impl;
 
+import com.android.internal.widget.DigitalClock;
+
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.provider.Settings;
+import android.view.Gravity;
+import android.os.SystemProperties;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.MotionEvent;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.text.format.DateFormat;
 import android.text.TextUtils;
 import android.util.Log;
 import com.android.internal.R;
 import com.android.internal.telephony.IccCard;
+import com.android.internal.telephony.TelephonyProperties;
 import com.android.internal.widget.LinearLayoutWithDefaultTouchRecepient;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.LockPatternView;
@@ -78,6 +86,7 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
     private String mDateFormatString;
 
     private TextView mCarrier;
+    private DigitalClock mClock;
     private TextView mDate;
 
     // are we showing battery information?
@@ -101,6 +110,12 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
 
     private ViewGroup mFooterNormal;
     private ViewGroup mFooterForgotPattern;
+
+    private int mCarrierLabelType = (Settings.System.getInt(mContext.getContentResolver(),
+            Settings.System.CARRIER_LABEL_TYPE, LockScreen.CARRIER_TYPE_DEFAULT));
+
+    private String mCarrierLabelCustom = (Settings.System.getString(mContext.getContentResolver(),
+            Settings.System.CARRIER_LABEL_CUSTOM_STRING));
 
     /**
      * Keeps track of the last time we poked the wake lock during dispatching
@@ -188,6 +203,7 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         ViewGroup lockWallpaper = (ViewGroup) findViewById(R.id.pattern);
         LockScreen.setBackground(getContext(), lockWallpaper);
         mCarrier = (TextView) findViewById(R.id.carrier);
+        mClock = (DigitalClock) findViewById(R.id.time);
         mDate = (TextView) findViewById(R.id.date);
 
         mDateFormatString = getContext().getString(R.string.full_wday_month_day_no_year);
@@ -259,10 +275,90 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
         mCarrier.setTextColor(0xffffffff);
 
         // until we get an update...
-        mCarrier.setText(
-                LockScreen.getCarrierString(
-                        mUpdateMonitor.getTelephonyPlmn(),
-                        mUpdateMonitor.getTelephonySpn()));
+        String plmn = (String) mUpdateMonitor.getTelephonyPlmn();
+        String spn = (String) mUpdateMonitor.getTelephonySpn();
+        onRefreshCarrierInfo(plmn, spn);
+
+        int widgetLayout = Settings.System.getInt(mContext.getContentResolver(),
+                Settings.System.LOCKSCREEN_WIDGETS_LAYOUT, 0);
+
+        switch (widgetLayout) {
+            case 2:
+                centerWidgets();
+                break;
+            case 3:
+                alignWidgetsToRight();
+                break;
+        }
+    }
+
+    private void centerWidgets() {
+        if (mCreationOrientation != Configuration.ORIENTATION_LANDSCAPE) {
+            RelativeLayout.LayoutParams layoutParams =
+                    (RelativeLayout.LayoutParams) mCarrier.getLayoutParams();
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            layoutParams.addRule(RelativeLayout.RIGHT_OF, 0);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+            mCarrier.setLayoutParams(layoutParams);
+            mCarrier.setGravity(Gravity.CENTER_HORIZONTAL);
+            layoutParams = (RelativeLayout.LayoutParams) mDate.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
+            mDate.setLayoutParams(layoutParams);
+            layoutParams = (RelativeLayout.LayoutParams) mClock.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+            layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL, 1);
+            layoutParams.addRule(RelativeLayout.BELOW, R.id.carrier);
+            mClock.setLayoutParams(layoutParams);
+        } else {
+            LinearLayout.LayoutParams layoutParams =
+                    (LinearLayout.LayoutParams) mCarrier.getLayoutParams();
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            mCarrier.setLayoutParams(layoutParams);
+            mCarrier.setGravity(Gravity.CENTER_HORIZONTAL);
+            layoutParams = (LinearLayout.LayoutParams) mDate.getLayoutParams();
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            mDate.setLayoutParams(layoutParams);
+            mDate.setGravity(Gravity.CENTER_HORIZONTAL);
+            layoutParams = (LinearLayout.LayoutParams) mClock.getLayoutParams();
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            mClock.setGravity(Gravity.CENTER_HORIZONTAL);
+            mClock.setLayoutParams(layoutParams);
+        }
+    }
+
+    private void alignWidgetsToRight() {
+        if (mCreationOrientation != Configuration.ORIENTATION_LANDSCAPE) {
+            RelativeLayout.LayoutParams layoutParams =
+                    (RelativeLayout.LayoutParams) mCarrier.getLayoutParams();
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            layoutParams.addRule(RelativeLayout.RIGHT_OF, 0);
+            layoutParams.addRule(RelativeLayout.LEFT_OF, R.id.time);
+            mCarrier.setLayoutParams(layoutParams);
+            mCarrier.setGravity(Gravity.LEFT);
+            layoutParams = (RelativeLayout.LayoutParams) mDate.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+            mDate.setLayoutParams(layoutParams);
+            layoutParams = (RelativeLayout.LayoutParams) mClock.getLayoutParams();
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
+            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 1);
+            mClock.setLayoutParams(layoutParams);
+        } else {
+            LinearLayout.LayoutParams layoutParams =
+                    (LinearLayout.LayoutParams) mCarrier.getLayoutParams();
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            mCarrier.setLayoutParams(layoutParams);
+            mCarrier.setGravity(Gravity.RIGHT);
+            layoutParams = (LinearLayout.LayoutParams) mDate.getLayoutParams();
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            mDate.setLayoutParams(layoutParams);
+            mDate.setGravity(Gravity.RIGHT);
+            layoutParams = (LinearLayout.LayoutParams) mClock.getLayoutParams();
+            layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+            mClock.setGravity(Gravity.RIGHT);
+            mClock.setLayoutParams(layoutParams);
+        }
     }
 
     private void refreshEmergencyButtonText() {
@@ -400,7 +496,14 @@ class PatternUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
 
     /** {@inheritDoc} */
     public void onRefreshCarrierInfo(CharSequence plmn, CharSequence spn) {
-        mCarrier.setText(LockScreen.getCarrierString(plmn, spn));
+        String realPlmn = SystemProperties.get(TelephonyProperties.PROPERTY_OPERATOR_ALPHA);
+
+        if (plmn == null || plmn.equals(realPlmn)) {
+            mCarrier.setText(LockScreen.getCarrierString(
+                    plmn, spn, mCarrierLabelType, mCarrierLabelCustom));
+        } else {
+            mCarrier.setText(LockScreen.getCarrierString(plmn, spn));
+        }
     }
 
     /** {@inheritDoc} */

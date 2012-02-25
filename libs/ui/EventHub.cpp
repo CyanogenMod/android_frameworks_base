@@ -77,6 +77,9 @@
 #define INDENT2 "    "
 #define INDENT3 "      "
 
+//#define DEBUG_SHOW_DEVICES
+//#define DEBUG_SHOW_KEYSDOWN
+
 namespace android {
 
 static const char *WAKE_LOCK_ID = "KeyEvents";
@@ -92,9 +95,11 @@ static inline const char* toString(bool value) {
     return value ? "true" : "false";
 }
 
-EventHub::device_t::device_t(int32_t _id, const char* _path, const char* name, bool _bluetooth)
+EventHub::device_t::device_t(int32_t _id, const char* _path, const char* name, uint32_t _bustype)
     : id(_id), path(_path), name(name), classes(0)
-    , keyBitmask(NULL), layoutMap(new KeyLayoutMap()), fd(-1), bluetooth(_bluetooth), next(NULL) {
+    , keyBitmask(NULL), layoutMap(new KeyLayoutMap()), fd(-1), bustype(_bustype), next(NULL) {
+    bluetooth = (_bustype == BUS_BLUETOOTH);
+    usb = (_bustype == BUS_USB);
 }
 
 EventHub::device_t::~device_t() {
@@ -137,11 +142,11 @@ String8 EventHub::getDeviceName(int32_t deviceId) const
     return device->name;
 }
 
-bool EventHub::getDeviceBluetooth(int32_t deviceId) const
+uint32_t EventHub::getDeviceBusType(int32_t deviceId) const
 {
     AutoMutex _l(mLock);
     device_t* device = getDeviceLocked(deviceId);
-    return device->bluetooth;
+    return device->bustype;
 }
 
 uint32_t EventHub::getDeviceClasses(int32_t deviceId) const
@@ -217,16 +222,13 @@ int32_t EventHub::getKeyCodeStateLocked(device_t* device, int32_t keyCode) const
     uint8_t key_bitmask[sizeof_bit_array(KEY_MAX + 1)];
     memset(key_bitmask, 0, sizeof(key_bitmask));
     if (ioctl(device->fd, EVIOCGKEY(sizeof(key_bitmask)), key_bitmask) >= 0) {
-        #if 0
-        for (size_t i=0; i<=KEY_MAX; i++) {
-            LOGI("(Scan code %d: down=%d)", i, test_bit(i, key_bitmask));
-        }
-        #endif
         const size_t N = scanCodes.size();
         for (size_t i=0; i<N && i<=KEY_MAX; i++) {
             int32_t sc = scanCodes.itemAt(i);
-            //LOGI("Code %d: down=%d", sc, test_bit(sc, key_bitmask));
             if (sc >= 0 && sc <= KEY_MAX && test_bit(sc, key_bitmask)) {
+                #ifdef DEBUG_SHOW_KEYSDOWN
+                LOGI("Code %d: down=%d", sc, test_bit(sc, key_bitmask));
+                #endif
                 return AKEY_STATE_DOWN;
             }
         }
@@ -662,7 +664,7 @@ int EventHub::openDevice(const char *deviceName) {
     mFDs = new_mFDs;
     mDevices = new_devices;
 
-#if 0
+#ifdef DEBUG_SHOW_DEVICES
     LOGI("add device %d: %s\n", mFDCount, deviceName);
     LOGI("  bus:      %04x\n"
          "  vendor    %04x\n"
@@ -676,7 +678,7 @@ int EventHub::openDevice(const char *deviceName) {
         version >> 16, (version >> 8) & 0xff, version & 0xff);
 #endif
 
-    device_t* device = new device_t(devid|mDevicesById[devid].seq, deviceName, name, BUS_BLUETOOTH == id.bustype);
+    device_t* device = new device_t(devid|mDevicesById[devid].seq, deviceName, name, id.bustype);
     if (device == NULL) {
         LOGE("out of memory");
         return -1;

@@ -830,6 +830,10 @@
     <string name="extmedia_format_button_format" msgid="4131064560127478695">"フォーマット"</string>
     <string name="adb_active_notification_title" msgid="6729044778949189918">"USBデバッグが接続されました"</string>
     <string name="adb_active_notification_message" msgid="8470296818270110396">"USBデバッグを無効にする場合に選択します。"</string>
+
+    <string name="adb_net_enabled_notification_title">ネットワークデバッグが有効になりました</string>
+    <string name="adb_net_enabled_notification_message">ネットワークデバッグを無効にする場合に選択します。</string>
+
     <string name="select_input_method" msgid="6865512749462072765">"入力方法の選択"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>

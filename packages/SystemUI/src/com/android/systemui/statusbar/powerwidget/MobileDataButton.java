@@ -10,10 +10,15 @@ import android.net.ConnectivityManager;
 import android.provider.Settings;
 
 import com.android.internal.telephony.TelephonyIntents;
+import com.android.internal.telephony.Phone;
 
 public class MobileDataButton extends PowerButton {
 
     public static final String MOBILE_DATA_CHANGED = "com.android.internal.telephony.MOBILE_DATA_CHANGED";
+
+    public static final String ACTION_MODIFY_NETWORK_MODE = "com.android.internal.telephony.MODIFY_NETWORK_MODE";
+
+    public static final String EXTRA_NETWORK_MODE = "networkMode";
 
     public static boolean STATE_CHANGE_REQUEST = false;
 
@@ -36,13 +41,30 @@ public class MobileDataButton extends PowerButton {
     @Override
     protected void toggleState() {
         Context context = mView.getContext();
-        boolean enabled = getDataState(context);
+        boolean mobiledataEnabled = getDataState(context);
+
+        boolean toggleNetworkMode = Settings.System.getInt(context.getContentResolver(),
+                Settings.System.EXPANDED_MOBILEDATANETWORK_MODE, 0) == 1;
 
         ConnectivityManager cm = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-        if (enabled) {
+        if (mobiledataEnabled) {
+            if (toggleNetworkMode) {
+                // mobile data being disabled - switch network mode to 2g only
+                Intent intent = new Intent(ACTION_MODIFY_NETWORK_MODE);
+                intent.putExtra(EXTRA_NETWORK_MODE, Phone.NT_MODE_GSM_ONLY);
+                context.sendBroadcast(intent);
+            }
+            // disable mobile data
             cm.setMobileDataEnabled(false);
         } else {
+            if (toggleNetworkMode) {
+                // mobile data being enabled - switch network mode to 2g/3g
+                Intent intent = new Intent(ACTION_MODIFY_NETWORK_MODE);
+                intent.putExtra(EXTRA_NETWORK_MODE, Phone.NT_MODE_WCDMA_PREF);
+                context.sendBroadcast(intent);
+            }
+            // enable mobile data
             cm.setMobileDataEnabled(true);
         }
     }

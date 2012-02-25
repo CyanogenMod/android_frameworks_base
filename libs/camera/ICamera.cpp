@@ -53,6 +53,9 @@ enum {
     GET_CUSTOM_PARAMETERS,
     SET_CUSTOM_PARAMETERS,
 #endif
+#ifdef CAF_CAMERA_GB_REL
+    ENCODE_YUV_DATA,
+#endif
 };
 
 class BpCamera: public BpInterface<ICamera>
@@ -107,6 +110,17 @@ public:
         ret = reply.readInt32();
         *alignedSize = reply.readInt32();
         return ret;
+    }
+
+#endif
+#ifdef CAF_CAMERA_GB_REL
+    // encode the YUV data.
+    void encodeData()
+    {
+        LOGV("encodeData");
+        Parcel data, reply;
+        data.writeInterfaceToken(ICamera::getInterfaceDescriptor());
+        remote()->transact(ENCODE_YUV_DATA, data, &reply);
     }
 #endif
 
@@ -325,6 +339,14 @@ status_t BnCamera::onTransact(
             size_t alignedSize;
             reply->writeInt32(getBufferInfo(Frame, &alignedSize));
             reply->writeInt32(alignedSize);
+            return NO_ERROR;
+        } break;
+#endif
+#ifdef CAF_CAMERA_GB_REL
+        case ENCODE_YUV_DATA:{
+            LOGV("ENCODE_YUV_DATA");
+            CHECK_INTERFACE(ICamera, data, reply);
+            encodeData();
             return NO_ERROR;
         } break;
 #endif

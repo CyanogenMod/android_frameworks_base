@@ -19,7 +19,9 @@
 #include <stdio.h>
 
 #include "android_util_Binder.h"
+#include "android/graphics/GraphicsJNI.h"
 
+#include <binder/IMemory.h>
 #include <surfaceflinger/SurfaceComposerClient.h>
 #include <surfaceflinger/Surface.h>
 #include <ui/Region.h>
@@ -30,6 +32,7 @@
 #include <SkCanvas.h>
 #include <SkBitmap.h>
 #include <SkRegion.h>
+#include <SkPixelRef.h>
 
 #include "jni.h"
 #include <android_runtime/AndroidRuntime.h>
@@ -90,15 +93,6 @@ struct no_t {
 };
 static no_t no;
 
-
-static __attribute__((noinline))
-void doThrow(JNIEnv* env, const char* exc, const char* msg = NULL)
-{
-    if (!env->ExceptionOccurred()) {
-        jclass npeClazz = env->FindClass(exc);
-        env->ThrowNew(npeClazz, msg);
-    }
-}
 
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
@@ -450,6 +444,93 @@ static void Surface_unfreezeDisplay(
     }
 }
 
+class ScreenshotPixelRef : public SkPixelRef {
+public:
+    ScreenshotPixelRef(SkColorTable* ctable) {
+        fCTable = ctable;
+        ctable->safeRef();
+        setImmutable();
+    }
+    virtual ~ScreenshotPixelRef() {
+        SkSafeUnref(fCTable);
+    }
+
+    status_t update(int width, int height) {
+        status_t res = (width > 0 && height > 0)
+                ? mScreenshot.update(width, height)
+                : mScreenshot.update();
+        if (res != NO_ERROR) {
+            return res;
+        }
+
+        return NO_ERROR;
+    }
+
+    uint32_t getWidth() const {
+        return mScreenshot.getWidth();
+    }
+
+    uint32_t getHeight() const {
+        return mScreenshot.getHeight();
+    }
+
+    uint32_t getStride() const {
+        return mScreenshot.getStride();
+    }
+
+    uint32_t getFormat() const {
+        return mScreenshot.getFormat();
+    }
+
+protected:
+    // overrides from SkPixelRef
+    virtual void* onLockPixels(SkColorTable** ct) {
+        *ct = fCTable;
+        return (void*)mScreenshot.getPixels();
+    }
+
+    virtual void onUnlockPixels() {
+    }
+
+private:
+    ScreenshotClient mScreenshot;
+    SkColorTable*    fCTable;
+
+    typedef SkPixelRef INHERITED;
+};
+
+static jobject Surface_screenshot(JNIEnv* env, jobject clazz, jint width, jint height)
+{
+    ScreenshotPixelRef* pixels = new ScreenshotPixelRef(NULL);
+    if (pixels->update(width, height) != NO_ERROR) {
+        delete pixels;
+        return 0;
+    }
+
+    uint32_t w = pixels->getWidth();
+    uint32_t h = pixels->getHeight();
+    uint32_t s = pixels->getStride();
+    uint32_t f = pixels->getFormat();
+    ssize_t bpr = s * android::bytesPerPixel(f);
+
+    SkBitmap* bitmap = new SkBitmap();
+    bitmap->setConfig(convertPixelFormat(f), w, h, bpr);
+    if (f == PIXEL_FORMAT_RGBX_8888) {
+        bitmap->setIsOpaque(true);
+    }
+
+    if (w > 0 && h > 0) {
+        bitmap->setPixelRef(pixels)->unref();
+        bitmap->lockPixels();
+    } else {
+        // be safe with an empty bitmap.
+        delete pixels;
+        bitmap->setPixels(NULL);
+    }
+
+    return GraphicsJNI::createBitmap(env, bitmap, false, NULL);
+}
+
 static void Surface_setLayer(
         JNIEnv* env, jobject clazz, jint zorder)
 {
@@ -675,6 +756,7 @@ static JNINativeMethod gSurfaceMethods[] = {
     {"setOrientation",      "(III)V", (void*)Surface_setOrientation },
     {"freezeDisplay",       "(I)V", (void*)Surface_freezeDisplay },
     {"unfreezeDisplay",     "(I)V", (void*)Surface_unfreezeDisplay },
+    {"screenshot",          "(II)Landroid/graphics/Bitmap;", (void*)Surface_screenshot },
     {"setLayer",            "(I)V", (void*)Surface_setLayer },
     {"setPosition",         "(II)V",(void*)Surface_setPosition },
     {"setSize",             "(II)V",(void*)Surface_setSize },

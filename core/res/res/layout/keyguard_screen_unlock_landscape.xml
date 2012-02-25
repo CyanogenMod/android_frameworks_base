@@ -37,6 +37,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1.0"
             android:layout_marginLeft="24dip"
+            android:layout_marginRight="24dip"
             android:gravity="left"
             >
         <TextView

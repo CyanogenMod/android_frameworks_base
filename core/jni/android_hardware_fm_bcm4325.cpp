@@ -192,6 +192,31 @@ int hci_w(int reg, int val)
     return returnval;
 }
 
+int hci_w16(int reg, int val1, int val2)
+{
+    int returnval = 0;
+
+    char s1[100] = "hcitool cmd 0x3f 0x15 ";
+    char stemp[10] = "";
+    char starget[100] = "";
+    char *pstarget = starget;
+
+    sprintf(stemp, "0x%x ", reg);
+    pstarget = strcat(s1, stemp);
+
+    sprintf(stemp, "0x%x ", 0);
+    pstarget = strcat(pstarget, stemp);
+
+    sprintf(stemp, "0x%x ", val1);
+    pstarget = strcat(pstarget, stemp);
+
+    sprintf(stemp, "0x%x ", val2);
+    pstarget = strcat(pstarget, stemp);
+
+    returnval = system(pstarget);
+    return returnval;
+}
+
 int hci_r(int reg)
 {
     FILE* returnval;
@@ -258,13 +283,20 @@ static jint android_hardware_fmradio_FmReceiverJNI_acquireFdNative
     if(hci_w(BCM4325_I2C_FM_CTRL, BCM4325_FM_CTRL_MANUAL |BCM4325_FM_CTRL_STEREO) < 0){
         return FM_JNI_FAILURE;
     }
-
+#ifdef HAS_BCM20780
+    if (hci_w16(BCM4325_I2C_FM_AUDIO_CTRL0,
+        BCM4325_FM_AUDIO_CTRL0_RF_MUTE_ENABLE |
+        BCM4325_FM_AUDIO_CTRL0_DAC_OUT_LEFT_ON | BCM4325_FM_AUDIO_CTRL0_DAC_OUT_RIGHT_ON |
+        BCM4325_FM_AUDIO_CTRL0_ROUTE_DAC_ENABLE | BCM4325_FM_AUDIO_CTRL0_DEMPH_75US, 0) < 0) {
+        return FM_JNI_FAILURE;
+    }
+#else
     if (hci_w(BCM4325_I2C_FM_AUDIO_CTRL0,
         BCM4325_FM_AUDIO_CTRL0_DAC_OUT_LEFT_ON | BCM4325_FM_AUDIO_CTRL0_DAC_OUT_RIGHT_ON |
         BCM4325_FM_AUDIO_CTRL0_ROUTE_DAC_ENABLE | BCM4325_FM_AUDIO_CTRL0_DEMPH_75US) < 0) {
         return FM_JNI_FAILURE;
     }
-
+#endif
     return FM_JNI_SUCCESS;
 }
 
@@ -360,24 +392,29 @@ static jint android_hardware_fmradio_FmReceiverJNI_startSearchNative
         LOGD("Can't seek %s. Already at end of band.",dir?"up":"down");
         return FM_JNI_FAILURE;
     }
-    else
+    else {
+        if ( hci_w(BCM4325_I2C_FM_SEARCH_METHOD, BCM4325_SEARCH_NORMAL) < 0){
+            LOGE("fail search method\n");
+            return FM_JNI_FAILURE;
+        }
+        if ( hci_w(BCM4325_I2C_FM_SEARCH_CTRL1, BCM4325_I2C_FM_AF_FREQ0) < 0){
+            LOGE("fail search set SEARCH_CTRL1 reg\n");
+            return FM_JNI_FAILURE;
+        }
+        if ( hci_w(BCM4325_I2C_FM_MAX_PRESET, 0) < 0 ){
+            LOGE("fail search set MAX_PRESET reg\n");
+            return FM_JNI_FAILURE;
+        }
+        if ( hci_w(BCM4325_I2C_FM_SEARCH_CTRL0, (dir ? BCM4325_FM_SEARCH_CTRL0_UP : BCM4325_FM_SEARCH_CTRL0_DOWN )  | BCM4325_FLAG_STEREO_ACTIVE  |  BCM4325_FLAG_STEREO_DETECTION ) < 0){
+            LOGE("fail search set SEARCH_CTRL0 reg\n");
+            return FM_JNI_FAILURE;
+        }
         android_hardware_fmradio_FmReceiverJNI_setFreqNative(NULL,NULL,NULL,oldFreq+(dir?100:-100));
-
-    if ( hci_w(BCM4325_I2C_FM_SEARCH_CTRL0, (dir ? BCM4325_FM_SEARCH_CTRL0_UP : BCM4325_FM_SEARCH_CTRL0_DOWN )  | BCM4325_FLAG_STEREO_ACTIVE  |  BCM4325_FLAG_STEREO_DETECTION ) < 0){
-        LOGE("fail search up/down\n");
-        return FM_JNI_FAILURE;
+        if ( hci_w(BCM4325_I2C_FM_SEARCH_TUNE_MODE, BCM4325_FM_AUTO_SEARCH_MODE) < 0){
+            LOGE("fail tuning\n");
+            return FM_JNI_FAILURE;
+        }
     }
-
-    if ( hci_w(BCM4325_I2C_FM_SEARCH_METHOD, BCM4325_SEARCH_NORMAL) < 0){
-        LOGE("fail search method\n");
-        return FM_JNI_FAILURE;
-    }
-
-    if ( hci_w(BCM4325_I2C_FM_SEARCH_TUNE_MODE, BCM4325_FM_AUTO_SEARCH_MODE) < 0){
-        LOGE("fail tuning\n");
-        return FM_JNI_FAILURE;
-    }
-
     // before returning wait for tuning to finish and seek to start.
     // I have seen this go into an infinite loop once, so limit it to 20 iterations (usually takes 1-4).
     for (int i=0; i < 20 && android_hardware_fmradio_FmReceiverJNI_getFreqNative(NULL,NULL,NULL) == oldFreq+(dir?100:-100); i++){

@@ -357,6 +357,17 @@ public interface WindowManagerPolicy {
     /** Screen turned off because of proximity sensor */
     public final int OFF_BECAUSE_OF_PROX_SENSOR = 4;
 
+    /** When not otherwise specified by the activity's screenOrientation, rotation should be
+     * determined by the system (that is, using sensors).
+     * @hide
+     */
+    public final int USER_ROTATION_FREE = 0;
+    /** When not otherwise specified by the activity's screenOrientation, rotation is set by
+     * the user.
+     * @hide
+     */
+    public final int USER_ROTATION_LOCKED = 1;
+
     /**
      * Magic constant to {@link IWindowManager#setRotation} to not actually
      * modify the rotation.

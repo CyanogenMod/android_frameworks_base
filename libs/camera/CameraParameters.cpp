@@ -110,6 +110,9 @@ const char CameraParameters::EFFECT_POSTERIZE[] = "posterize";
 const char CameraParameters::EFFECT_WHITEBOARD[] = "whiteboard";
 const char CameraParameters::EFFECT_BLACKBOARD[] = "blackboard";
 const char CameraParameters::EFFECT_AQUA[] = "aqua";
+const char CameraParameters::EFFECT_NEGATIVE_SEPIA[] = "negative-sepia";
+const char CameraParameters::EFFECT_PASTEL[] = "pastel";
+const char CameraParameters::EFFECT_BLUE[] = "blue";
 
 // Values for auto exposure settings.
 const char CameraParameters::TOUCH_AF_AEC_OFF[] = "touch-off";
@@ -145,10 +148,14 @@ const char CameraParameters::SCENE_MODE_SPORTS[] = "sports";
 const char CameraParameters::SCENE_MODE_PARTY[] = "party";
 const char CameraParameters::SCENE_MODE_CANDLELIGHT[] = "candlelight";
 const char CameraParameters::SCENE_MODE_BARCODE[] = "barcode";
+const char CameraParameters::SCENE_MODE_BACKLIGHT[] = "backlight";
+const char CameraParameters::SCENE_MODE_FLOWERS[] = "flowers";
+const char CameraParameters::SCENE_MODE_AR[] = "AR";
 
 // Formats for setPreviewFormat and setPictureFormat.
 const char CameraParameters::PIXEL_FORMAT_YUV422SP[] = "yuv422sp";
 const char CameraParameters::PIXEL_FORMAT_YUV420SP[] = "yuv420sp";
+const char CameraParameters::PIXEL_FORMAT_YUV420SP_ADRENO[] = "yuv420sp-adreno";
 const char CameraParameters::PIXEL_FORMAT_YUV420P[] = "yuv420p";
 const char CameraParameters::PIXEL_FORMAT_YUV422I[] = "yuv422i-yuyv";
 const char CameraParameters::PIXEL_FORMAT_RGB565[] = "rgb565";
@@ -163,6 +170,7 @@ const char CameraParameters::FOCUS_MODE_FIXED[] = "fixed";
 const char CameraParameters::FOCUS_MODE_EDOF[] = "edof";
 const char CameraParameters::FOCUS_MODE_NORMAL[] = "normal";
 const char CameraParameters::FOCUS_MODE_CONTINUOUS_VIDEO[] = "continuous-video";
+const char CameraParameters::FOCUS_MODE_CONTINUOUS_CAMERA[] = "continuous-camera";
 
 const char CameraParameters::KEY_SUPPORTED_THUMBNAIL_SIZES[] = "jpeg-thumbnail-size-values";
 const char CameraParameters::KEY_GPS_LATITUDE_REF[] = "gps-latitude-ref";
@@ -185,6 +193,41 @@ const char CameraParameters::KEY_MAX_CONTRAST[] = "max-contrast";
 const char CameraParameters::KEY_SATURATION[] = "saturation";
 const char CameraParameters::KEY_MAX_SATURATION[] = "max-saturation";
 
+const char CameraParameters::KEY_FACE_DETECTION[] = "face-detection";
+const char CameraParameters::KEY_SUPPORTED_FACE_DETECTION[] = "face-detection-values";
+
+const char CameraParameters::KEY_SCENE_DETECT[] = "scene-detect";
+const char CameraParameters::KEY_SUPPORTED_SCENE_DETECT[] = "scene-detect-values";
+
+const char CameraParameters::KEY_SELECTABLE_ZONE_AF[] = "selectable-zone-af";
+const char CameraParameters::KEY_SUPPORTED_SELECTABLE_ZONE_AF[] = "selectable-zone-af-values";
+const char CameraParameters::KEY_SHUTTER_SOUND[] = "shutter-sound";
+const char CameraParameters::KEY_BRIGHTNESS_MODE[] = "brightness-mode";
+
+const char CameraParameters::KEY_HISTOGRAM[] = "histogram";
+const char CameraParameters::KEY_SUPPORTED_HISTOGRAM_MODES[] = "histogram-values";
+//Values for Histogram Shading
+const char CameraParameters::HISTOGRAM_ENABLE[] = "enable";
+const char CameraParameters::HISTOGRAM_DISABLE[] = "disable";
+
+const char CameraParameters::KEY_SKIN_TONE_ENHANCEMENT[] = "skinToneEnhancement";
+const char CameraParameters::KEY_SUPPORTED_SKIN_TONE_ENHANCEMENT_MODES[] = "skinToneEnhancement-values";
+//Values for Skin Tone Enhancement Modes
+const char CameraParameters::SKIN_TONE_ENHANCEMENT_ENABLE[] = "enable";
+const char CameraParameters::SKIN_TONE_ENHANCEMENT_DISABLE[] = "disable";
+
+const char CameraParameters::SELECTABLE_ZONE_AF_AUTO[] = "auto";
+const char CameraParameters::SELECTABLE_ZONE_AF_SPOT_METERING[] = "spot-metering";
+const char CameraParameters::SELECTABLE_ZONE_AF_CENTER_WEIGHTED[] = "center-weighted";
+const char CameraParameters::SELECTABLE_ZONE_AF_FRAME_AVERAGE[] = "frame-average";
+
+// Values for Face Detection settings.
+const char CameraParameters::FACE_DETECTION_OFF[] = "off";
+const char CameraParameters::FACE_DETECTION_ON[] = "on";
+
+// Values for auto scene detection settings.
+const char CameraParameters::SCENE_DETECT_OFF[] = "off";
+const char CameraParameters::SCENE_DETECT_ON[] = "on";
 
 // Values for auto exposure settings.
 const char CameraParameters::AUTO_EXPOSURE_FRAME_AVG[] = "frame-average";
@@ -211,6 +254,33 @@ const char CameraParameters::CAF_ON[] = "caf-on";
 //Same, for CodeAurora-based blobs
 const char CameraParameters::CONTINUOUS_AF_OFF[] = "caf-off";
 const char CameraParameters::CONTINUOUS_AF_ON[] = "caf-on";
+
+//LGE Victor
+const char CameraParameters::FOCUS_MODE_MANUAL[] = "manual";
+const char CameraParameters::KEY_MANUAL_FOCUS[] = "manual-focus";
+const char CameraParameters::KEY_LUMA_ADAPTION[] = "luma-adaption";
+const char CameraParameters::KEY_VT_MODE[] = "vt-mode";
+
+#ifdef CAF_CAMERA_GB_REL
+static const char* portrait = "portrait";
+static const char* landscape = "landscape";
+
+int CameraParameters::getOrientation() const
+{
+    const char* orientation = get("orientation");
+    if (orientation && !strcmp(orientation, portrait))
+        return CAMERA_ORIENTATION_PORTRAIT;
+    return CAMERA_ORIENTATION_LANDSCAPE;
+}
+void CameraParameters::setOrientation(int orientation)
+{
+    if (orientation == CAMERA_ORIENTATION_PORTRAIT) {
+        set("orientation", portrait);
+    } else {
+         set("orientation", landscape);
+    }
+}
+#endif
 
 CameraParameters::CameraParameters()
                 : mMap()
@@ -420,6 +490,13 @@ void CameraParameters::getVideoSize(int *width, int *height) const
     parse_pair(p, width, height, 'x');
 }
 
+void CameraParameters::setPreviewFpsRange(int minFPS, int maxFPS)
+{
+    char str[32];
+    sprintf(str,"%d,%d",minFPS,maxFPS);
+    set(KEY_PREVIEW_FPS_RANGE,str);
+}
+
 void CameraParameters::setPreviewFrameRate(int fps)
 {
     set(KEY_PREVIEW_FRAME_RATE, fps);
@@ -548,6 +625,12 @@ void CameraParameters::getTouchIndexAf(int *x, int *y) const
         *y = tempY;
     }
 }
+
+// LGE Victor
+extern "C" status_t _ZNK7android16CameraParameters14getManualfocusEv () {
+    return NO_ERROR;
+}
+// LGE Victor
 
 status_t CameraParameters::dump(int fd, const Vector<String16>& args) const
 {

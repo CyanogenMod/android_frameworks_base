@@ -25,6 +25,7 @@ import android.content.IntentFilter;
 import android.os.Message;
 import android.os.PowerManager;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.server.BluetoothA2dpService;
 import android.server.BluetoothService;
 import android.util.Log;
@@ -83,6 +84,7 @@ public final class BluetoothDeviceProfileState extends HierarchicalStateMachine 
 
     private static final int AUTO_CONNECT_DELAY = 6000; // 6 secs
     private static final int CONNECT_OTHER_PROFILES_DELAY = 4000; // 4 secs
+    private static final int CONNECT_OTHER_PROFILES_DELAY_FAST = 100; // 100ms
     private static final int CONNECTION_ACCESS_REQUEST_EXPIRY_TIMEOUT = 7000; // 7 secs
     private static final int CONNECTION_ACCESS_UNDEFINED = -1;
     private static final long INIT_INCOMING_REJECT_TIMER = 1000; // 1 sec
@@ -824,7 +826,16 @@ public final class BluetoothDeviceProfileState extends HierarchicalStateMachine 
         i.putExtra(BluetoothDevice.EXTRA_DEVICE, mDevice);
         i.putExtra(ACTION_CONNECT_TYPE, type);
         PendingIntent pi = PendingIntent.getBroadcast(mContext, 0, i, 0);
-        mgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + CONNECT_OTHER_PROFILES_DELAY, pi);
+
+        long delayTime = CONNECT_OTHER_PROFILES_DELAY;
+
+        // Many devices don't need the long delay.
+        if (Settings.System.getInt(mContext.getContentResolver(),
+                    Settings.System.BLUETOOTH_FAST_CONNECT, 0) != 0) {
+            delayTime = CONNECT_OTHER_PROFILES_DELAY_FAST;
+        }
+
+        mgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + delayTime, pi);
     }
 
     private int getTrust() {

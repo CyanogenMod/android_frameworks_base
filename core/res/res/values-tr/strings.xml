@@ -35,6 +35,17 @@
     <string name="defaultMsisdnAlphaTag" msgid="2850889754919584674">"MSISDN1"</string>
     <string name="mmiError" msgid="5154499457739052907">"Bağlantı sorunu veya geçersiz MMI kodu."</string>
     <string name="mmiFdnError" msgid="5224398216385316471">"İşlem sadece sabit arama numaralarıyla sınırlandırılmıştır."</string>
+    <string name="profileNameDefault">Normal</string>
+    <string name="profileNameWork">İş</string>
+    <string name="profileNameHome">Ev</string>
+    <string name="profileNameSilent">Sessiz</string>
+    <string name="profileNameNight">Gece</string>
+    <string name="profileGroupPhone">Telefon</string>
+    <string name="profileGroupCalendar">Takvim</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">E-Posta</string>
+    <string name="profileGroupSMS">SMS</string>
+    <string name="wildcardProfile">Diğer</string>
     <string name="serviceEnabled" msgid="8147278346414714315">"Hizmet etkindi."</string>
     <string name="serviceEnabledFor" msgid="6856228140453471041">"Hizmet şunun için etkinleştirildi:"</string>
     <string name="serviceDisabled" msgid="1937553226592516411">"Hizmet devre dışı bırakıldı."</string>
@@ -133,19 +144,34 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Kablosuzu kapat"</string>
     <string name="screen_lock" msgid="799094655496098153">"Ekran kilidi"</string>
     <string name="power_off" msgid="4266614107412865048">"Kapat"</string>
+    <string name="reboot_system">Telefonu yeniden başlat</string>
+    <string name="reboot_reboot">Yeniden başlat</string>
+    <string name="reboot_recovery">Kurtar</string>
+    <string name="reboot_bootloader">Boot yükleyici</string>
+    <string name="reboot_bootmenu">Boot menüsü</string>
+    <string name="reboot_fastboot">Hızlı boot</string>
+    <string name="reboot_download">Download</string>
     <string name="shutdown_progress" msgid="2281079257329981203">"Kapanıyor…"</string>
+    <string name="reboot_progress">Yeniden başlatılıyor\u2026</string>
     <string name="shutdown_confirm" msgid="649792175242821353">"Telefonunuz kapanacak."</string>
+    <string name="reboot_confirm">Telefonunuz yeniden başlatılacak.</string>
     <string name="recent_tasks_title" msgid="3691764623638127888">"En Son Görevler"</string>
     <string name="no_recent_tasks" msgid="279702952298056674">"Hiçbir yeni uygulama yok."</string>
     <string name="global_actions" msgid="2406416831541615258">"Telefon seçenekleri"</string>
+    <string name="global_action_home">Ana sayfa</string>
+    <string name="global_action_menu">Menü</string>
+    <string name="global_action_back">Geri</string>
     <string name="global_action_lock" msgid="2844945191792119712">"Ekran kilidi"</string>
     <string name="global_action_power_off" msgid="4471879440839879722">"Kapat"</string>
+    <string name="global_action_reboot">Yeniden başlat</string>
+    <string name="global_action_choose_profile">Profil seç</string>
     <string name="global_action_toggle_silent_mode" msgid="8219525344246810925">"Sessiz mod"</string>
     <string name="global_action_silent_mode_on_status" msgid="3289841937003758806">"Ses KAPALI"</string>
     <string name="global_action_silent_mode_off_status" msgid="1506046579177066419">"Ses AÇIK"</string>
     <string name="global_actions_toggle_airplane_mode" msgid="5884330306926307456">"Uçak modu"</string>
     <string name="global_actions_airplane_mode_on_status" msgid="2719557982608919750">"Uçak modu AÇIK"</string>
     <string name="global_actions_airplane_mode_off_status" msgid="5075070442854490296">"Uçak modu KAPALI"</string>
+    <string name="global_action_screenshot">Ekran görüntüsü</string>
     <string name="safeMode" msgid="2788228061547930246">"Güvenli mod"</string>
     <string name="android_system_label" msgid="6577375335728551336">"Android Sistemi"</string>
     <string name="permgrouplab_costMoney" msgid="5429808217861460401">"Size maliyet getiren hizmetler"</string>
@@ -271,8 +297,12 @@
     <string name="permdesc_movePackage" msgid="6323049291923925277">"Bir uygulamanın, uygulama kaynaklarını dahili ve harici ortamlar arasında taşımasına olanak tanır."</string>
     <string name="permlab_readLogs" msgid="6615778543198967614">"hassas günlük verilerini okuma"</string>
     <string name="permdesc_readLogs" msgid="8896449437464867766">"Bir uygulamanın, sistemin çeşitli günlük dosyalarındaki bilgileri okumasına izin verir. Bu izin, uygulamanın, telefonda yaptıklarınızla ilgili genel bilgileri bulmasına olanak sağlar ve bunlar kişisel ve gizli bilgilerinizi de içerebilir."</string>
+    <string name="permlab_preventpower">güç tuşunu değiştir</string>
+    <string name="permdesc_preventpower">Uygulamaya güç tuşunu değiştirme izni verir.</string>
     <string name="permlab_diagnostic" msgid="8076743953908000342">"sahibi tanılama olan kaynakları oku/bunlara yaz"</string>
     <string name="permdesc_diagnostic" msgid="3121238373951637049">"Uygulamanın tanılama grubundaki bir kaynağa ait herhangi bir kaynağı; örneğin /dev içindeki dosyaları okumasına ve bunlara yazmasına izin verir. Bu işlevin sistem kararlılığını ve güvenliğini olumsuz etkileme olasılığı vardır. Üretici veya operatör tarafından YALNIZCA donanıma özgü tanılama için kullanılmalıdır."</string>
+    <string name="permlab_rawAudio">ses donanımına eriş</string>
+    <string name="permdesc_rawAudio">Uygulamaya ses donanımına tam erişim izni verir.</string>
     <string name="permlab_changeComponentState" msgid="79425198834329406">"uygulama bileşenlerini etkinleştir veya devre dışı bırak"</string>
     <string name="permdesc_changeComponentState" msgid="4569107043246700630">"Uygulamaların başka bir uygulamanın bir bileşenini etkinleştirme ayarını değiştirmesine izin verir. Kötü amaçlı uygulamalar bu ayarı telefonun önemli yeteneklerini devre dışı bırakmak için kullanabilir. Bu iznin verilmesi uygulama bileşenlerini kullanılamaz, tutarsız veya kararsız bir duruma sokabileceği için izin verilirken dikkatli olunmalıdır."</string>
     <string name="permlab_setPreferredApplications" msgid="3393305202145172005">"tercih edilen uygulamaları ayarla"</string>
@@ -559,9 +589,10 @@
     <string name="lockscreen_pattern_correct" msgid="9039008650362261237">"Doğru!"</string>
     <string name="lockscreen_pattern_wrong" msgid="4817583279053112312">"Üzgünüz, lütfen yeniden deneyin"</string>
     <string name="lockscreen_plugged_in" msgid="613343852842944435">"Şarj oluyor (<xliff:g id="PERCENT">%%</xliff:g><xliff:g id="NUMBER">%d</xliff:g>)"</string>
+    <string name="lockscreen_discharging">Pil (<xliff:g id="percent">%%</xliff:g><xliff:g id="number">%d</xliff:g>)</string>
     <string name="lockscreen_charged" msgid="4938930459620989972">"Şarj oldu."</string>
     <string name="lockscreen_battery_short" msgid="3617549178603354656">"<xliff:g id="NUMBER">%d</xliff:g> <xliff:g id="PERCENT">%%</xliff:g>"</string>
-    <string name="lockscreen_low_battery" msgid="1482873981919249740">"Şarj cihazınızı bağlayın."</string>
+    <string name="lockscreen_low_battery">Şarj cihazını bağlayın (<xliff:g id="percent">%%</xliff:g><xliff:g id="number">%d</xliff:g>)</string>
     <string name="lockscreen_missing_sim_message_short" msgid="7381499217732227295">"SIM kart yok."</string>
     <string name="lockscreen_missing_sim_message" msgid="2186920585695169078">"Telefonda SIM kart yok."</string>
     <string name="lockscreen_missing_sim_instructions" msgid="8874620818937719067">"Lütfen SIM kart takın."</string>
@@ -586,6 +617,7 @@
     <string name="lockscreen_unlock_label" msgid="737440483220667054">"Kilit Aç"</string>
     <string name="lockscreen_sound_on_label" msgid="9068877576513425970">"Sesi aç"</string>
     <string name="lockscreen_sound_off_label" msgid="996822825154319026">"Sesi kapat"</string>
+    <string name="lockscreen_phone_label">Telefon</string>
     <string name="password_keyboard_label_symbol_key" msgid="992280756256536042">"?123"</string>
     <string name="password_keyboard_label_alpha_key" msgid="8001096175167485649">"ABC"</string>
     <string name="password_keyboard_label_alt_key" msgid="1284820942620288678">"ALT"</string>
@@ -718,6 +750,7 @@
     <string name="elapsed_time_short_format_mm_ss" msgid="4431555943828711473">"<xliff:g id="MINUTES">%1$02d</xliff:g>:<xliff:g id="SECONDS">%2$02d</xliff:g>"</string>
     <string name="elapsed_time_short_format_h_mm_ss" msgid="1846071997616654124">"<xliff:g id="HOURS">%1$d</xliff:g>:<xliff:g id="MINUTES">%2$02d</xliff:g>:<xliff:g id="SECONDS">%3$02d</xliff:g>"</string>
     <string name="selectAll" msgid="6876518925844129331">"Tümünü seç"</string>
+    <string name="copyAll">Tümünü kopyala</string>
     <string name="selectText" msgid="4862359311088898878">"Kelime seçin"</string>
     <string name="cut" msgid="3092569408438626261">"Kes"</string>
     <string name="copy" msgid="2681946229533511987">"Kopyala"</string>
@@ -744,6 +777,8 @@
     <string name="aerr_title" msgid="653922989522758100">"Üzgünüz!"</string>
     <string name="aerr_application" msgid="4683614104336409186">"<xliff:g id="APPLICATION">%1$s</xliff:g> uygulaması (<xliff:g id="PROCESS">%2$s</xliff:g> işlemi) beklenmedik biçimde durdu. Lütfen yeniden deneyin."</string>
     <string name="aerr_process" msgid="1551785535966089511">"<xliff:g id="PROCESS">%1$s</xliff:g> işlemi beklenmedik biçimde durdu. Lütfen yeniden deneyin."</string>
+    <string name="aerr_revoked_application"><xliff:g id="application">%1$s</xliff:g> uygulaması (<xliff:g id="process">%2$s</xliff:g> işlemi) beklenmedik biçimde durdu.\nUYARI!\nBu uygulamanın bir veya birden fazla izni ENGELLENDİĞİ için hata vermiş olabilir. Lütfen izni verin ve yeniden deneyin.</string>
+    <string name="aerr_revoked_process"><xliff:g id="process">%1$s</xliff:g> işlemi beklenmedik biçimde durdu.\nUYARI!\nBu işlemin bir veya birden fazla izni ENGELLENDİĞİ için hata vermiş olabilir. Lütfen izni verin ve yeniden deneyin.</string>
     <string name="anr_title" msgid="3100070910664756057">"Üzgünüz!"</string>
     <string name="anr_activity_application" msgid="3538242413112507636">"<xliff:g id="ACTIVITY">%1$s</xliff:g> etkinliği (<xliff:g id="APPLICATION">%2$s</xliff:g> uygulamasında) yanıt vermiyor."</string>
     <string name="anr_activity_process" msgid="5420826626009561014">"<xliff:g id="ACTIVITY">%1$s</xliff:g> etkinliği (<xliff:g id="PROCESS">%2$s</xliff:g> işleminde) yanıt vermiyor."</string>
@@ -751,6 +786,8 @@
     <string name="anr_process" msgid="1246866008169975783">"<xliff:g id="PROCESS">%1$s</xliff:g> işlemi yanıt vermiyor."</string>
     <string name="force_close" msgid="3653416315450806396">"Kapanmaya zorla"</string>
     <string name="report" msgid="4060218260984795706">"Bildir"</string>
+    <string name="edit_perms">İzinleri düzenle</string>
+    <string name="reset_perms">İzinleri sıfırla</string>
     <string name="wait" msgid="7147118217226317732">"Bekle"</string>
     <string name="launch_warning_title" msgid="8323761616052121936">"Uygulama yönlendirildi"</string>
     <string name="launch_warning_replace" msgid="6202498949970281412">"<xliff:g id="APP_NAME">%1$s</xliff:g> şimdi çalışıyor."</string>
@@ -826,26 +863,28 @@
     <string name="extmedia_format_button_format" msgid="4131064560127478695">"Biçimlendir"</string>
     <string name="adb_active_notification_title" msgid="6729044778949189918">"USB hata ayıklaması bağlandı"</string>
     <string name="adb_active_notification_message" msgid="8470296818270110396">"USB hata ayıklamasını devre dışı bırakmak için tıklayın."</string>
+    <string name="adb_net_enabled_notification_title">Ağ üzerinden hata ayıklama etkin</string>
+    <string name="adb_net_enabled_notification_message">Ağ üzerinden hata ayıklamayı kapatmak için seçin.</string>
     <string name="select_input_method" msgid="6865512749462072765">"Giriş yöntemini seç"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"</string>
     <string name="candidates_style" msgid="4333913089637062257"><u>"adaylar"</u></string>
-    <string name="ext_media_checking_notification_title" product="nosdcard" msgid="3449816005351468560">"USB depolm birimi hazırlanıyor"</string>
+    <string name="ext_media_checking_notification_title" product="nosdcard">"USB disk hazırlanıyor"</string>
     <string name="ext_media_checking_notification_title" product="default" msgid="5457603418970994050">"SD kart hazırlanıyor"</string>
     <string name="ext_media_checking_notification_message" msgid="8287319882926737053">"Hatalar denetleniyor."</string>
     <string name="ext_media_nofs_notification_title" product="nosdcard" msgid="7788040745686229307">"Boş USB depolama birimi"</string>
     <string name="ext_media_nofs_notification_title" product="default" msgid="780477838241212997">"Boş SD kart"</string>
     <string name="ext_media_nofs_notification_message" product="nosdcard" msgid="8623130522556087311">"USB depolama birimi boş veya desteklenmeyen bir dosya sistemine sahip."</string>
     <string name="ext_media_nofs_notification_message" product="default" msgid="3817704088027829380">"SD kart boş veya desteklenmeyen dosya sistemi içeriyor"</string>
-    <string name="ext_media_unmountable_notification_title" product="nosdcard" msgid="2090046769532713563">"USB depolm birimi zarar görmüş"</string>
+    <string name="ext_media_unmountable_notification_title" product="nosdcard">"USB disk zarar görmüş"</string>
     <string name="ext_media_unmountable_notification_title" product="default" msgid="6410723906019100189">"Hasarlı SD kart"</string>
     <string name="ext_media_unmountable_notification_message" product="nosdcard" msgid="529021299294450667">"USB depolama birimi zarar görmüş. Yeniden biçimlendirmeniz gerekebilir."</string>
     <string name="ext_media_unmountable_notification_message" product="default" msgid="6902531775948238989">"SD kart zarar gördü. Yeniden biçimlendirmeniz gerekebilir."</string>
-    <string name="ext_media_badremoval_notification_title" product="nosdcard" msgid="1661683031330951073">"USB dep br bklnmd şekl çıkarld"</string>
+    <string name="ext_media_badremoval_notification_title" product="nosdcard">"USB disk bklnmd şekl çıkarld"</string>
     <string name="ext_media_badremoval_notification_title" product="default" msgid="6872152882604407837">"SD kart beklenmedik biçimde çıkarıldı"</string>
     <string name="ext_media_badremoval_notification_message" product="nosdcard" msgid="4329848819865594241">"Veri kaybı olmaması için çıkarmadan önce USB depolama biriminin bağlantısını kesin."</string>
-    <string name="ext_media_badremoval_notification_message" product="default" msgid="7260183293747448241">"Veri kaybından kaçınmak için SD kartı çıkarmadan önce bağlantısını kesin."</string>
-    <string name="ext_media_safe_unmount_notification_title" product="nosdcard" msgid="3967973893270360230">"USB depl birm güvenle çıkrlblr"</string>
+    <string name="ext_media_badremoval_notification_message" product="default">"Veri kaybını önlemek için SD kartı çıkarmadan önce bağlantısını kesin."</string>
+    <string name="ext_media_safe_unmount_notification_title" product="nosdcard">"USB disk güvenle çıkrlblr"</string>
     <string name="ext_media_safe_unmount_notification_title" product="default" msgid="6729801130790616200">"SD kart güvenle çıkarılabilir"</string>
     <string name="ext_media_safe_unmount_notification_message" product="nosdcard" msgid="6142195361606493530">"USB depolama birimini güvenli bir şekilde çıkarabilirsiniz."</string>
     <string name="ext_media_safe_unmount_notification_message" product="default" msgid="568841278138377604">"SD kartı güvenle kaldırabilirsiniz."</string>
@@ -886,6 +925,7 @@
     <string name="l2tp_vpn_description" msgid="3750692169378923304">"Katman 2 Tünel Protokolü"</string>
     <string name="l2tp_ipsec_psk_vpn_description" msgid="3945043564008303239">"L2TP/IPSec VPN temelli önceden paylaşılmış anahtar"</string>
     <string name="l2tp_ipsec_crt_vpn_description" msgid="5382714073103653577">"L2TP/IPSec VPN temelli sertifika"</string>
+    <string name="openvpn_vpn_description">OpenVPN SSL VPN</string>
     <string name="upload_file" msgid="2897957172366730416">"Dosya seç"</string>
     <string name="reset" msgid="2448168080964209908">"Sıfırla"</string>
     <string name="submit" msgid="1602335572089911941">"Gönder"</string>
@@ -911,4 +951,14 @@
     <string name="media_shared" product="nosdcard" msgid="5830814349250834225">"USB depolama birimi, şu anda bir bilgisayar tarafından kullanılıyor."</string>
     <string name="media_shared" product="default" msgid="5706130568133540435">"SD kart şu anda bir bilgisayar tarafından kullanılıyor."</string>
     <string name="media_unknown_state" msgid="729192782197290385">"Harici medyanın durumu bilinmiyor."</string>
+    <string name="app_killed_message">Uygulama kapatıldı</string>
+    <string name="phone_goggles_problem_count">Problem #%1$d: </string>
+    <string name="phone_goggles_description">İletişiminizi devam ettirebilmek için aşağıdaki %1$d matematik problemini %2$d saniye içinde çözün.</string>
+    <plurals name="phone_goggles_countdown">
+        <item quantity="one">%d saniye kaldı</item>
+        <item quantity="other">%d saniye kaldı</item>
+    </plurals>
+    <string name="permlab_revokePermissions">Engellenmiş izinleri görmenize ve düzenlemenize izin verir. Normal uygulamalar tarafından kullanılmaz.</string>
+    <string name="permdesc_revokePermissions">Engellenmiş izinleri okuyup/yazmanıza izin verir. Normal uygulamalar tarafından kullanılmaz.</string>
 </resources>
+

@@ -144,10 +144,11 @@
     <string name="power_off" msgid="4266614107412865048">"Vypnout"</string>
     <string name="reboot_system">"Restartovat telefon"</string>
     <string name="reboot_reboot">"Restartovat"</string>
-    <string name="reboot_recovery">"Servisní nabídka"</string>
+    <string name="reboot_recovery">"Servisní oddíl"</string>
     <string name="reboot_bootloader">"Zavaděč"</string>
     <string name="reboot_bootmenu">"Nabídka startu"</string>
     <string name="reboot_fastboot">"Rychlý start"</string>
+    <string name="reboot_download">"Stažení"</string>
 
     <string name="shutdown_progress" msgid="2281079257329981203">"Vypínání\u2026"</string>
     <string name="reboot_progress">"Restart\u2026"</string>
@@ -861,6 +862,10 @@
     <string name="extmedia_format_button_format" msgid="4131064560127478695">"Formátovat"</string>
     <string name="adb_active_notification_title" msgid="6729044778949189918">"Ladění přes rozhraní USB připojeno"</string>
     <string name="adb_active_notification_message" msgid="8470296818270110396">"Vyberte, chcete-li zakázat ladění USB."</string>
+
+    <string name="adb_net_enabled_notification_title">Povoleno ladění po síti</string>
+    <string name="adb_net_enabled_notification_message">Zvolte pro zrušení ladění po síti.</string>
+
     <string name="select_input_method" msgid="6865512749462072765">"Výběr metody zadávání dat"</string>
     <string name="fast_scroll_alphabet" msgid="5433275485499039199">" AÁBCČDĎEÉĚFGHCHIÍJKLMNŇOÓPQRŘSŠTŤUÚVWXYÝZŽ"</string>
     <string name="fast_scroll_numeric_alphabet" msgid="4030170524595123610">" 0123456789AÁBCČDĎEÉĚFGHCHIÍJKLMNŇOÓPQRŘSŠTŤUÚVWXYÝZŽ"</string>
