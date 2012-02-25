@@ -28,6 +28,7 @@ import android.util.Log;
 import java.io.IOException;
 
 /**
+ * @hide
  * Provides access to ISO-PCD type A (ISO 14443-4) properties and I/O operations on a {@link Tag}.
  *
  * <p>Acquire an {@link IsoPcdA} object using {@link #get}.
