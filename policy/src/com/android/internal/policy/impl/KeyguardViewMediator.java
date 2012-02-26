@@ -374,7 +374,8 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
                         Settings.System.SCREEN_LOCK_SLIDE_DELAY_TOGGLE, 0) == 1;
 
                 boolean securityLockScreenEnabled = mLockPatternUtils.isLockPasswordEnabled()
-                        || mLockPatternUtils.isLockPatternEnabled();
+                        || mLockPatternUtils.isLockPatternEnabled()
+                        || mLockPatternUtils.isLockFingerEnabled();
 
                 boolean slideLockTimeoutShouldBeConsidered = separateSlideLockTimeoutEnabled
                         && securityLockScreenEnabled;

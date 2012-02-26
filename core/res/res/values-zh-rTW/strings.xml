@@ -2230,4 +2230,20 @@
     <!-- Description of an application permission that lets lets an application view/edit revoked permissions. -->
     <string name="permdesc_revokePermissions">允許讀取及寫入被撤消的權限。不應使用於正常的應用程式。</string>
 
+    <string name="keyguard_finger_please_swipe">在感應器上劃一下手指以解除鎖定</string>
+    <string name="keyguard_finger_ui_timeout">UI 逾時!</string>
+    <string name="keyguard_finger_failed_to_unlock">無法解除鎖定!</string>
+    <string name="keyguard_finger_screen_off">螢幕關閉</string>
+    <string name="keyguard_finger_screen_on">螢幕開啟</string>
+    <string name="keyguard_finger_match">手指符合，解除鎖定螢幕...</string>
+    <string name="keyguard_finger_not_match">手指不符合...</string>
+    <string name="keyguard_finger_swipe_too_far_right">在中心位置劃一下。</string>
+    <string name="keyguard_finger_swipe_too_far_left">在中心位置劃一下。</string>
+    <string name="keyguard_finger_swipe_too_fast">劃太快。</string>
+    <string name="keyguard_finger_swipe_too_short">劃太短。</string>
+    <string name="keyguard_finger_swipe_too_slow">劃太慢。</string>
+    <string name="keyguard_finger_swipe_too_skewed">劃太歪。</string>
+    <string name="lockscreen_too_many_failed_fingers_dialog_message">您的指紋無法識別您的身分達 %1$d 次。\n\n請在 %2$d 秒內再試一次。</string>
+    <string name="lockscreen_failed_fingers_almost_glogin">您的指紋無法識別您的身分達 %1$d 次。如果識別再失敗 %2$d 次，系統將要求您使用 Google 登入資訊來解除鎖定您的電話。\n\n請在 %3$d 秒內再試一次。</string>
+    <string name="lockscreen_forgot_finger_button_text">忘記手指?</string>
 </resources>

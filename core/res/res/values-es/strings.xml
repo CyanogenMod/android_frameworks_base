@@ -957,4 +957,20 @@
     <!-- Description of an application permission that lets lets an application view/edit revoked permissions. -->
     <string name="permdesc_revokePermissions">Permitir ver y editar los permisos revocados a las aplicaciones. No utilizar para aplicaciones normales.</string>
 
+    <string name="keyguard_finger_please_swipe">Pase el dedo sobre el sensor para desbloquear</string>
+    <string name="keyguard_finger_ui_timeout">La IU ha superado el tiempo de espera</string>
+    <string name="keyguard_finger_failed_to_unlock">No se ha podido desbloquear</string>
+    <string name="keyguard_finger_screen_off">Pantalla apagada</string>
+    <string name="keyguard_finger_screen_on">Pantalla encendida</string>
+    <string name="keyguard_finger_match">El dedo coincide, desbloqueando la pantalla...</string>
+    <string name="keyguard_finger_not_match">El dedo no coincide...</string>
+    <string name="keyguard_finger_swipe_too_far_right">Pase el dedo por el centro.</string>
+    <string name="keyguard_finger_swipe_too_far_left">Pase el dedo por el centro.</string>
+    <string name="keyguard_finger_swipe_too_fast">Pase demasiado rápido.</string>
+    <string name="keyguard_finger_swipe_too_short">Pase demasiado corto.</string>
+    <string name="keyguard_finger_swipe_too_slow">Pase demasiado lento.</string>
+    <string name="keyguard_finger_swipe_too_skewed">Pase demasiado fraccionado.</string>
+    <string name="lockscreen_too_many_failed_fingers_dialog_message">La huella dactilar ha dado error al identificarle %1$d veces. \n\nVuelva a intentarlo en %2$d segundos. </string>
+    <string name="lockscreen_failed_fingers_almost_glogin">La huella dactilar ha dado error al identificarle %1$d veces.  Tras %2$d identificaciones correctas más, se le pedirá que desbloquee el teléfono mediante el inicio de sesión de Google.\n\n Vuelva a intentarlo en %3$d segundos. </string>
+    <string name="lockscreen_forgot_finger_button_text">¿Ha olvidado el dedo?</string>
 </resources>

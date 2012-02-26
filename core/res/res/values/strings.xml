@@ -2471,4 +2471,20 @@
     <!-- Description of an application permission that lets lets an application view/edit revoked permissions. -->
     <string name="permdesc_revokePermissions">Allows read and write for revoked permissions. Not for use by normal applications.</string>
 
+    <string name="keyguard_finger_please_swipe">Swipe finger over sensor to unlock</string>
+    <string name="keyguard_finger_ui_timeout">UI timeout!</string>
+    <string name="keyguard_finger_failed_to_unlock">Failed to unlock!</string>
+    <string name="keyguard_finger_screen_off">Screen off</string>
+    <string name="keyguard_finger_screen_on">Screen on</string>
+    <string name="keyguard_finger_match">Finger match, unlock screen...</string>
+    <string name="keyguard_finger_not_match">Finger did not match...</string>
+    <string name="keyguard_finger_swipe_too_far_right">Swipe in the center.</string>
+    <string name="keyguard_finger_swipe_too_far_left">Swipe in the center.</string>
+    <string name="keyguard_finger_swipe_too_fast">Swipe was too fast.</string>
+    <string name="keyguard_finger_swipe_too_short">Swipe was too short.</string>
+    <string name="keyguard_finger_swipe_too_slow">Swipe was too slow.</string>
+    <string name="keyguard_finger_swipe_too_skewed">Swipe was too skewed.</string>
+    <string name="lockscreen_too_many_failed_fingers_dialog_message">Your fingerprint failed to identify you %1$d times.\n\nPlease try again in %2$d seconds.</string>
+    <string name="lockscreen_failed_fingers_almost_glogin">Your fingerprint failed to identify you %1$d times. After %2$d more unsuccessful identifications, you will be asked to unlock your phone using your Google sign-in.\n\n Please try again in %3$d seconds.</string>
+    <string name="lockscreen_forgot_finger_button_text">Forgot finger?</string>
 </resources>

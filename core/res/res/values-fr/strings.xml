@@ -943,4 +943,21 @@
         <item quantity="one">%d seconde restante</item>
         <item quantity="other">%d secondes restantes</item>
     </plurals>
+
+    <string name="keyguard_finger_please_swipe">Passez le doigt sur le capteur pour déverrouiller</string>
+    <string name="keyguard_finger_ui_timeout">Délai d\'attente de l\'interface utilisateur !</string>
+    <string name="keyguard_finger_failed_to_unlock">Échec du déverrouillage !</string>
+    <string name="keyguard_finger_screen_off">Écran désactivé</string>
+    <string name="keyguard_finger_screen_on">Écran activé</string>
+    <string name="keyguard_finger_match">Le doigt correspond, déverrouillage de l\'écran...</string>
+    <string name="keyguard_finger_not_match">Le doigt ne correspond pas...</string>
+    <string name="keyguard_finger_swipe_too_far_right">Faites glisser le doigt au centre.</string>
+    <string name="keyguard_finger_swipe_too_far_left">Faites glisser le doigt au centre.</string>
+    <string name="keyguard_finger_swipe_too_fast">Vous avez fait glisser votre doigt trop rapidement.</string>
+    <string name="keyguard_finger_swipe_too_short">La distance sur laquelle vous avez fait glisser votre doigt est trop courte.</string>
+    <string name="keyguard_finger_swipe_too_slow">Vous avez fait glisser votre doigt trop lentement.</string>
+    <string name="keyguard_finger_swipe_too_skewed">Vous avez fait glisser votre doigt de travers.</string>
+    <string name="lockscreen_too_many_failed_fingers_dialog_message">L\'identification avec votre empreinte digitale à échoué %1$d fois.\n\nVeuillez réessayer dans %2$d secondes.</string>
+    <string name="lockscreen_failed_fingers_almost_glogin">L\'identification avec votre empreinte digitale à échoué %1$d fois. Après %2$d autres échecs d\'identification, il vous sera demandé de déverrouiller votre téléphone à l\'aide de votre connexion Google.\n\n Veuillez réessayer dans %3$d secondes.</string>
+    <string name="lockscreen_forgot_finger_button_text">Vous ne vous souvenez plus du doigt utilisé ?</string>
 </resources>
