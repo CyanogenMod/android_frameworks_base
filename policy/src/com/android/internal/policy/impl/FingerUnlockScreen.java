@@ -924,6 +924,12 @@ class FingerUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
 
             try {
                 switch (iResult) {
+                    case AuthentecHelper.eAM_STATUS_NO_STORED_CREDENTIAL:
+                        // Might happen if the user wipes their database
+                        // and the fingerprint unlock method remains active.
+                        // Let it continue with the OK case so screen unlocks
+                        if (DEBUG) Log.d(TAG,"No stored credential");
+
                     case AuthentecHelper.eAM_STATUS_OK:
                         m_bVerifyied = true;
                         if (DEBUG) Log.d(TAG,"keyguardDone, m_bVerifyied=" + m_bVerifyied);
@@ -939,12 +945,6 @@ class FingerUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
 
                     case AuthentecHelper.eAM_STATUS_CREDENTIAL_LOCKED:
                         // When m_bPaused becomes true.
-                        bRetryAfterLockout = true;
-                        break;
-
-                    case AuthentecHelper.eAM_STATUS_NO_STORED_CREDENTIAL:
-                        // Should never happen.
-                        if (DEBUG) Log.d(TAG,"No stored credential");
                         bRetryAfterLockout = true;
                         break;
 
@@ -964,7 +964,7 @@ class FingerUnlockScreen extends LinearLayoutWithDefaultTouchRecepient
                         break;
 
                     case AuthentecHelper.eAM_STATUS_UNKNOWN_ERROR:
-                        Log.e(TAG, "Unkown error!");
+                        Log.e(TAG, "Unknown error!");
                         bRetryAfterLockout = true;
                         break;
 
