@@ -1114,12 +1114,17 @@ public class Camera {
         public static final String EFFECT_AQUA = "aqua";
 
         // Values for touch af/aec settings.
+        /* @hide */
         public static final String TOUCH_AF_AEC_OFF = "touch-off";
+        /* @hide */
         public static final String TOUCH_AF_AEC_ON = "touch-on";
 
         // Values for auto exposure settings.
+        /* @hide */
         public static final String AUTO_EXPOSURE_FRAME_AVG = "meter-average";
+        /* @hide */
         public static final String AUTO_EXPOSURE_CENTER_WEIGHTED = "meter-center";
+        /* @hide */
         public static final String AUTO_EXPOSURE_SPOT_METERING = "meter-spot";
 
         // Values for antibanding settings.
@@ -1128,21 +1133,27 @@ public class Camera {
         public static final String ANTIBANDING_60HZ = "60hz";
         public static final String ANTIBANDING_OFF = "off";
 
-        //Values for ISO settings
-
+        // Values for ISO settings
+        /* @hide */
         public static final String ISO_AUTO = "auto";
+        /* @hide */
         public static final String ISO_HJR = "deblur";
+        /* @hide */
         public static final String ISO_100 = "100";
+        /* @hide */
         public static final String ISO_200 = "200";
+        /* @hide */
         public static final String ISO_400 = "400";
+        /* @hide */
         public static final String ISO_800 = "800";
+        /* @hide */
         public static final String ISO_1250 = "1250";
         
-        //Values for Lens Shading
-
+        // Values for Lens Shading
+        /* @hide */
         public static final String LENSSHADE_ENABLE = "enable";
+        /* @hide */
         public static final String LENSSHADE_DISABLE= "disable";
-
 
 
         // Values for flash mode settings.
@@ -1344,9 +1355,10 @@ public class Camera {
         private static final String PIXEL_FORMAT_RGB565 = "rgb565";
         private static final String PIXEL_FORMAT_JPEG = "jpeg";
 
-        //Values for Continuous AF
-
+        // Values for Continuous AF
+        /* @hide */
         public static final String CAF_OFF = "caf-off";
+        /* @hide */
         public static final String CAF_ON = "caf-on";
 
         private HashMap<String, String> mMap;

@@ -127,6 +127,8 @@ import com.android.internal.R;
  *    }
  *
  */
+
+/* @hide */
 public class PhoneGoggles {
 
     public static final int CONFIRMATION_MODE_NONE = 0;

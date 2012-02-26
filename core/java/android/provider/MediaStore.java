@@ -94,6 +94,7 @@ public final class MediaStore {
     
     /**
      * The name of the Intent-extra used to define the artist
+     * @hide
      */
     public static final String EXTRA_MEDIA_ARTIST = "android.intent.extra.artist";
     /**
@@ -908,12 +909,14 @@ public final class MediaStore {
             /**
              * The id of the artist credited for the album that contains the audio file
              * <P>Type: INTEGER (long)</P>
+             * @hide
              */
             public static final String ALBUM_ARTIST_ID = "album_artist_id";
 
             /**
              * The artist credited for the album that contains the audio file
              * <P>Type: TEXT</P>
+             * @hide
              */
             public static final String ALBUM_ARTIST = "album_artist";
 
@@ -921,6 +924,7 @@ public final class MediaStore {
              * A non human readable key calculated from the ALBUM_ARTIST, used for
              * searching, sorting and grouping
              * <P>Type: TEXT</P>
+             * @hide
              */
             public static final String ALBUM_ARTIST_KEY = "album_artist_key";
 
@@ -1390,11 +1394,13 @@ public final class MediaStore {
 
             /**
              * The number of albums in the database for this artist
+             * @hide
              */
             public static final String NUMBER_OF_ALBUMS = "number_of_albums";
 
             /**
              * The number of albums in the database for this artist
+             * @hide
              */
             public static final String NUMBER_OF_TRACKS = "number_of_tracks";
         }
@@ -1463,6 +1469,8 @@ public final class MediaStore {
             /**
              * The artist credited for the album that contains the audio file
              * <P>Type: TEXT</P>
+             *
+             * @hide
              */
             public static final String ALBUM_ARTIST = "album_artist";
 
@@ -1470,16 +1478,20 @@ public final class MediaStore {
              * A non human readable key calculated from the ALBUM_ARTIST, used for
              * searching, sorting and grouping
              * <P>Type: TEXT</P>
+             *
+             * @hide
              */
             public static final String ALBUM_ARTIST_KEY = "album_artist_key";
 
             /**
              * The number of albums in the database for this artist
+             * @hide
              */
             public static final String NUMBER_OF_ALBUMS = "number_of_albums";
 
             /**
              * The number of albums in the database for this artist
+             * @hide
              */
             public static final String NUMBER_OF_TRACKS = "number_of_tracks";
         }
@@ -1494,6 +1506,7 @@ public final class MediaStore {
              *
              * @param volumeName the name of the volume to get the URI for
              * @return the URI to the audio album artists table on the given volume
+             * @hide
              */
             public static Uri getContentUri(String volumeName) {
                 return Uri.parse(CONTENT_AUTHORITY_SLASH + volumeName +
@@ -1502,6 +1515,7 @@ public final class MediaStore {
 
             /**
              * The content:// style URI for the internal storage.
+             * @hide
              */
             public static final Uri INTERNAL_CONTENT_URI =
                     getContentUri("internal");
@@ -1509,28 +1523,33 @@ public final class MediaStore {
             /**
              * The content:// style URI for the "primary" external storage
              * volume.
+             * @hide
              */
             public static final Uri EXTERNAL_CONTENT_URI =
                     getContentUri("external");
 
             /**
              * The MIME type for this table.
+             * @hide
              */
             public static final String CONTENT_TYPE = "vnd.android.cursor.dir/albumartists";
 
             /**
              * The MIME type for entries in this table.
+             * @hide
              */
             public static final String ENTRY_CONTENT_TYPE = "vnd.android.cursor.item/albumartist";
 
             /**
              * The default sort order for this table
+             * @hide
              */
             public static final String DEFAULT_SORT_ORDER = ALBUM_ARTIST_KEY;
 
             /**
              * Sub-directory of each album artist containing all albums on which
              * they are credited.
+             * @hide
              */
             public static final class Albums implements AlbumColumns {
                 public static final Uri getContentUri(String volumeName,
@@ -1567,6 +1586,7 @@ public final class MediaStore {
             /**
              * The album artist credited on this album
              * <P>Type: TEXT</P>
+             * @hide
              */
             public static final String ALBUM_ARTIST = "album_artist";
 
@@ -1589,6 +1609,7 @@ public final class MediaStore {
              * and indicates the number of songs on the album credited to the given
              * album artist.
              * <P>Type: INTEGER</P>
+             * @hide
              */
             public static final String NUMBER_OF_SONGS_FOR_ALBUM_ARTIST = "numsongs_by_album_artist";
 
