@@ -26,6 +26,9 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
 
+/**
+ * @hide
+*/
 public class ProfileManager
 {
 

@@ -202,9 +202,13 @@ public final class BluetoothClass implements Parcelable {
         public static final int AUDIO_VIDEO_VIDEO_GAMING_TOY        = 0x0448;
 
         // Devices in the PERIPHERAL major class
+        /** @hide */
         public static final int PERIPHERAL_UNCATEGORIZED           = 0x0500;
-        public static final int PERIPHERAL_KEYBORD                 = 0x0540;
+        /** @hide */
+        public static final int PERIPHERAL_KEYBOARD                = 0x0540;
+        /** @hide */
         public static final int PERIPHERAL_POINTING_DEVICE         = 0x0580;
+        /** @hide */
         public static final int PERIPHERAL_COMBO_KEYBORD_POINTING  = 0x05C0;
 
         // Devices in the WEARABLE major class

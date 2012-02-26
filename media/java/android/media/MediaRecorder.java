@@ -288,6 +288,7 @@ public class MediaRecorder
     public native void setVideoSource(int video_source)
             throws IllegalStateException;
 
+    /** @hide */
     public native void setCameraParameters(String params)
             throws IllegalStateException;
 

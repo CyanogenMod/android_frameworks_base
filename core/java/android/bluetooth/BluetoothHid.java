@@ -264,7 +264,7 @@ public class BluetoothHid {
      */
     public static boolean doesClassMatch(BluetoothClass btClass) {
        switch (btClass.getDeviceClass()) {
-        case BluetoothClass.Device.PERIPHERAL_KEYBORD:
+        case BluetoothClass.Device.PERIPHERAL_KEYBOARD:
         case BluetoothClass.Device.PERIPHERAL_POINTING_DEVICE:
         case BluetoothClass.Device.PERIPHERAL_COMBO_KEYBORD_POINTING:
 	    return true;

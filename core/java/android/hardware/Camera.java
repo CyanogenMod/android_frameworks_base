@@ -973,6 +973,7 @@ public class Camera {
 
     /**
      * Handles the Touch Co-ordinate.
+     * @hide
      */
     public class Coordinate {
         /**
@@ -1114,12 +1115,17 @@ public class Camera {
         public static final String EFFECT_AQUA = "aqua";
 
         // Values for touch af/aec settings.
+        /** @hide */
         public static final String TOUCH_AF_AEC_OFF = "touch-off";
+        /** @hide */
         public static final String TOUCH_AF_AEC_ON = "touch-on";
 
         // Values for auto exposure settings.
+        /** @hide */
         public static final String AUTO_EXPOSURE_FRAME_AVG = "meter-average";
+        /** @hide */
         public static final String AUTO_EXPOSURE_CENTER_WEIGHTED = "meter-center";
+        /** @hide */
         public static final String AUTO_EXPOSURE_SPOT_METERING = "meter-spot";
 
         // Values for antibanding settings.
@@ -1130,17 +1136,26 @@ public class Camera {
 
         //Values for ISO settings
 
+        /** @hide */
         public static final String ISO_AUTO = "auto";
+        /** @hide */
         public static final String ISO_HJR = "deblur";
+        /** @hide */
         public static final String ISO_100 = "100";
+        /** @hide */
         public static final String ISO_200 = "200";
+        /** @hide */
         public static final String ISO_400 = "400";
+        /** @hide */
         public static final String ISO_800 = "800";
+        /** @hide */
         public static final String ISO_1250 = "1250";
         
         //Values for Lens Shading
 
+        /** @hide */
         public static final String LENSSHADE_ENABLE = "enable";
+        /** @hide */
         public static final String LENSSHADE_DISABLE= "disable";
 
 
@@ -1346,7 +1361,9 @@ public class Camera {
 
         //Values for Continuous AF
 
+        /** @hide */
         public static final String CAF_OFF = "caf-off";
+        /** @hide */
         public static final String CAF_ON = "caf-on";
 
         private HashMap<String, String> mMap;
@@ -2067,6 +2084,7 @@ public class Camera {
          * @return one of TOUCH_AF_AEC_XXX string constant. null if Touch AF/AEC
          *         setting is not supported.
          *
+         * @hide
          */
         public String getTouchAfAec() {
             return get(KEY_TOUCH_AF_AEC);
@@ -2077,6 +2095,7 @@ public class Camera {
          *
          * @param value TOUCH_AF_AEC_XXX string constants.
          *
+         * @hide
          */
         public void setTouchAfAec(String value) {
             set(KEY_TOUCH_AF_AEC, value);
@@ -2088,6 +2107,7 @@ public class Camera {
          * @return a List of TOUCH_AF_AEC_XXX string constants. null if TOUCH AF/AEC
          *         setting is not supported.
          *
+         * @hide
          */
         public List<String> getSupportedTouchAfAec() {
             String str = get(KEY_TOUCH_AF_AEC + SUPPORTED_VALUES_SUFFIX);
@@ -2100,6 +2120,7 @@ public class Camera {
          * @param x  the x co-ordinate of the touch event
          * @param y the y co-ordinate of the touch event
          *
+         * @hide
          */
         public void setTouchIndexAec(int x, int y) {
             String v = Integer.toString(x) + "x" + Integer.toString(y);
@@ -2112,6 +2133,7 @@ public class Camera {
          * @return a Index object with the x and y co-ordinated
          *          for the touch event
          *
+         * @hide
          */
         public Coordinate getTouchIndexAec() {
             String pair = get(KEY_TOUCH_INDEX_AEC);
@@ -2124,6 +2146,7 @@ public class Camera {
          * @param x  the x co-ordinate of the touch event
          * @param y the y co-ordinate of the touch event
          *
+         * @hide
          */
         public void setTouchIndexAf(int x, int y) {
             String v = Integer.toString(x) + "x" + Integer.toString(y);
@@ -2136,6 +2159,7 @@ public class Camera {
          * @return a Index object with the x and y co-ordinated
          *          for the touch event
          *
+         * @hide
          */
         public Coordinate getTouchIndexAf() {
             String pair = get(KEY_TOUCH_INDEX_AF);
@@ -2146,6 +2170,7 @@ public class Camera {
          * Get Sharpness level
          *
          * @return sharpness level
+         * @hide
          */
         public int getSharpness(){
             return getInt(KEY_SHARPNESS, 0);
@@ -2155,6 +2180,7 @@ public class Camera {
          * Set Sharpness Level
          *
          * @param sharpness level
+         * @hide
          */
         public void setSharpness(int sharpness){
             if((sharpness < 0) || (sharpness > getMaxSharpness()) )
@@ -2168,6 +2194,7 @@ public class Camera {
          * Get Max Sharpness Level
          *
          * @return max sharpness level
+         * @hide
          */
         public int getMaxSharpness(){
             return getInt(KEY_MAX_SHARPNESS, 0);
@@ -2177,6 +2204,7 @@ public class Camera {
          * Get default sharpness level
          * 
          * @return default sharpness level
+         * @hide
          */
         public int getDefaultSharpness() {
             return getInt(KEY_DEFAULT_SHARPNESS, 0);
@@ -2186,6 +2214,7 @@ public class Camera {
          * Get Contrast level
          *
          * @return contrast level
+         * @hide
          */
         public int getContrast(){
             return getInt(KEY_CONTRAST, 0);
@@ -2195,6 +2224,7 @@ public class Camera {
          * Set Contrast Level
          *
          * @param contrast level
+         * @hide
          */
         public void setContrast(int contrast){
             if((contrast < 0 ) || (contrast > getMaxContrast()))
@@ -2208,6 +2238,7 @@ public class Camera {
          * Get Max Contrast Level
          *
          * @return max contrast level
+         * @hide
          */
         public int getMaxContrast(){
             return getInt(KEY_MAX_CONTRAST, 0);
@@ -2217,6 +2248,7 @@ public class Camera {
          * Get default contrast level
          * 
          * @return default contrast level
+         * @hide
          */
         public int getDefaultContrast() {
             return getInt(KEY_DEFAULT_CONTRAST, 0);
@@ -2226,6 +2258,7 @@ public class Camera {
          * Get Saturation level
          *
          * @return saturation level
+         * @hide
          */
         public int getSaturation(){
             return getInt(KEY_SATURATION, 0);
@@ -2235,6 +2268,7 @@ public class Camera {
          * Set Saturation Level
          *
          * @param saturation level
+         * @hide
          */
         public void setSaturation(int saturation){
             if((saturation < 0 ) || (saturation > getMaxSaturation()))
@@ -2248,6 +2282,7 @@ public class Camera {
          * Get Max Saturation Level
          *
          * @return max contrast level
+         * @hide
          */
         public int getMaxSaturation(){
             return getInt(KEY_MAX_SATURATION, 0);
@@ -2257,6 +2292,7 @@ public class Camera {
          * Get default saturation level
          * 
          * @return default saturation level
+         * @hide
          */
         public int getDefaultSaturation() {
             return getInt(KEY_DEFAULT_SATURATION, 0);
@@ -2266,6 +2302,7 @@ public class Camera {
          * Get brightness level
          *
          * @return brightness level
+         * @hide
          */
         public int getBrightness(){
             return getInt(KEY_BRIGHTNESS, 0);
@@ -2275,6 +2312,7 @@ public class Camera {
          * Set brightness level
          *
          * @param brightness level
+         * @hide
          */
         public void setBrightness(int brightness){
             if((brightness < 0 ) || (brightness > getMaxBrightness()))
@@ -2288,6 +2326,7 @@ public class Camera {
          * Get Max Brightness Level
          *
          * @return max brightness level
+         * @hide
          */
         public int getMaxBrightness(){
             return getInt(KEY_MAX_BRIGHTNESS, 0);
@@ -2297,6 +2336,7 @@ public class Camera {
          * Get default brightness level
          * 
          * @return default brightness level
+         * @hide
          */
         public int getDefaultBrightness() {
             return getInt(KEY_DEFAULT_BRIGHTNESS, 0);
@@ -2343,6 +2383,7 @@ public class Camera {
          *
          * @return one of FRAME_RATE_XXX_MODE string constant. null if this
          *         setting is not supported.
+         * @hide
          */
         public String getPreviewFrameRateMode() {
             return get(KEY_PREVIEW_FRAME_RATE_MODE);
@@ -2352,6 +2393,7 @@ public class Camera {
          * Sets the frame rate mode.
          *
          * @param value FRAME_RATE_XXX_MODE string constants.
+         * @hide
          */
         public void setPreviewFrameRateMode(String value) {
             set(KEY_PREVIEW_FRAME_RATE_MODE, value);
@@ -2362,6 +2404,7 @@ public class Camera {
          *
          * @return a List of FRAME_RATE_XXX_MODE string constant. null if this
          *         setting is not supported.
+         * @hide
          */
         public List<String> getSupportedPreviewFrameRateModes() {
             String str = get(KEY_PREVIEW_FRAME_RATE_MODE + SUPPORTED_VALUES_SUFFIX);
@@ -2706,6 +2749,7 @@ public class Camera {
          * @return one of CONTINUOUS_AF_XXX string constant. null if continuous AF
          *         setting is not supported.
          *
+         * @hide
          */
         public String getContinuousAf() {
             return get(KEY_CAF);
@@ -2715,6 +2759,7 @@ public class Camera {
          * Sets the current Continuous AF mode.
          * @param value CONTINUOUS_AF_XXX string constants.
          *
+         * @hide
          */
         public void setContinuousAf(String value) {
             set(KEY_CAF, value);
@@ -2726,6 +2771,7 @@ public class Camera {
          * @return a List of CONTINUOUS_AF_XXX string constant. null if continuous AF
          *         setting is not supported.
          *
+         * @hide
          */
         public List<String> getSupportedContinuousAfModes() {
             String str = get(KEY_CAF + SUPPORTED_VALUES_SUFFIX);
@@ -2737,6 +2783,7 @@ public class Camera {
          *
          * @return one of ISO_XXX string constant. null if ISO
          *         setting is not supported.
+         * @hide
          */
         public String getISOValue() {
             return get(KEY_ISO_MODE);
@@ -2746,6 +2793,7 @@ public class Camera {
          * Sets the ISO.
          *
          * @param iso ISO_XXX string constant.
+         * @hide
          */
         public void setISOValue(String iso) {
             set(KEY_ISO_MODE, iso);
@@ -2756,6 +2804,7 @@ public class Camera {
          *
          * @return a List of FLASH_MODE_XXX string constants. null if flash mode
          *         setting is not supported.
+         * @hide
          */
         public List<String> getSupportedIsoValues() {
             String str = get(KEY_ISO_MODE + SUPPORTED_VALUES_SUFFIX);
@@ -2775,6 +2824,7 @@ public class Camera {
          * Gets the current LensShade Mode.
          *
          * @return LensShade Mode
+         * @hide
          */
         public String getLensShade() {
             return get(KEY_LENSSHADE);
@@ -2784,6 +2834,7 @@ public class Camera {
          * Sets the current LensShade Mode.
          *
          * @return LensShade Mode
+         * @hide
          */
         public void setLensShade(String lensshade) {
             set(KEY_LENSSHADE, lensshade);
@@ -2794,6 +2845,7 @@ public class Camera {
          *
          * @return a List of LENS_MODE_XXX string constants. null if lens mode
          *         setting is not supported.
+         * @hide
          */
         public List<String> getSupportedLensShadeModes() {
             String str = get(KEY_LENSSHADE + SUPPORTED_VALUES_SUFFIX);
@@ -2805,6 +2857,7 @@ public class Camera {
          *
          * @return one of AUTO_EXPOSURE_XXX string constant. null if auto exposure
          *         setting is not supported.
+         * @hide
          */
         public String getAutoExposure() {
             return get(KEY_AUTO_EXPOSURE);
@@ -2814,6 +2867,7 @@ public class Camera {
          * Sets the current auto exposure setting.
          *
          * @param value AUTO_EXPOSURE_XXX string constants.
+         * @hide
          */
         public void setAutoExposure(String value) {
             set(KEY_AUTO_EXPOSURE, value);
@@ -2824,6 +2878,7 @@ public class Camera {
          *
          * @return a List of AUTO_EXPOSURE_XXX string constants. null if auto exposure
          *         setting is not supported.
+         * @hide
          */
         public List<String> getSupportedAutoexposure() {
             String str = get(KEY_AUTO_EXPOSURE + SUPPORTED_VALUES_SUFFIX);
@@ -2833,6 +2888,7 @@ public class Camera {
         /**
          * Sets the smart-contrast feature
          * @param enabled SMART_CONTRAST desired status.
+         * @hide
          */
         public void setSmartContrastEnabled(boolean enabled) {
             set(KEY_SMART_CONTRAST, enabled ? "on" : "off");
@@ -2842,6 +2898,7 @@ public class Camera {
          * Gets the value of smart-contrast
          *
          * @return if smart-contrast is enabled
+         * @hide
          */
         public boolean isSmartContrastEnabled() {
             return "on".equals(get(KEY_SMART_CONTRAST));

@@ -56,7 +56,9 @@ public class CamcorderProfile
      */
     public static final int QUALITY_LOW  = 0;
     public static final int QUALITY_HIGH = 1;
+    /** @hide */
     public static final int QUALITY_HD   = 2;
+    /** @hide */
     public static final int QUALITY_WIDE = 3;
 
     /**

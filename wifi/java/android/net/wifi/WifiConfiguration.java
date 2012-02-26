@@ -52,6 +52,7 @@ public class WifiConfiguration implements Parcelable {
     public static final String modeAdhoc = "1";
     /**
      * Channel Frequency Values, to be used for setting up Adhoc Networks
+     * @hide
      */
     public static class ChannelFrequency {
         private ChannelFrequency() { }
@@ -300,12 +301,14 @@ public class WifiConfiguration implements Parcelable {
 
     /**
      * This is a adhoc network
+     * @hide
      */
     public boolean adhocSSID;
 
     /**
      * If the signal is Adhoc, then frequency must be set
      * otherwise, we don't care what the frequency is
+     * @hide
      */
     public int frequency;
 

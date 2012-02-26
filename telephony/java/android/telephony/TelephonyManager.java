@@ -839,10 +839,12 @@ public class TelephonyManager {
     /** FastDormancy get/setter */
     private static boolean sDormancyRejected = false;
 
+    /** @hide */
     public static boolean isDormancyRejected() {
         return getDefault().sDormancyRejected;
     }
 
+    /** @hide */
     public static boolean setDormancyRejected(boolean rejected) {
         getDefault().sDormancyRejected = rejected;
         return true;

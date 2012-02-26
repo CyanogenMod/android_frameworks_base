@@ -98,6 +98,7 @@ public final class MediaStore {
     public static final String EXTRA_MEDIA_ARTIST = "android.intent.extra.artist";
     /**
      * The name of the Intent-extra used to define the album artist
+     * @hide
      */
     public static final String EXTRA_MEDIA_ALBUM_ARTIST = "android.intent.extra.albumartist";
     /**
@@ -908,12 +909,14 @@ public final class MediaStore {
             /**
              * The id of the artist credited for the album that contains the audio file
              * <P>Type: INTEGER (long)</P>
+             * @hide
              */
             public static final String ALBUM_ARTIST_ID = "album_artist_id";
 
             /**
              * The artist credited for the album that contains the audio file
              * <P>Type: TEXT</P>
+             * @hide
              */
             public static final String ALBUM_ARTIST = "album_artist";
 
@@ -921,6 +924,7 @@ public final class MediaStore {
              * A non human readable key calculated from the ALBUM_ARTIST, used for
              * searching, sorting and grouping
              * <P>Type: TEXT</P>
+             * @hide
              */
             public static final String ALBUM_ARTIST_KEY = "album_artist_key";
 
@@ -1458,6 +1462,7 @@ public final class MediaStore {
 
         /**
          * Columns representing an album artist
+         * @hide
          */
         public interface AlbumartistColumns {
             /**
@@ -1486,6 +1491,7 @@ public final class MediaStore {
 
         /**
          * Contains album artists for audio files
+         * @hide
          */
         public static final class Albumartists implements BaseColumns, AlbumartistColumns {
             /**
@@ -1567,6 +1573,7 @@ public final class MediaStore {
             /**
              * The album artist credited on this album
              * <P>Type: TEXT</P>
+             * @hide
              */
             public static final String ALBUM_ARTIST = "album_artist";
 
@@ -1589,6 +1596,7 @@ public final class MediaStore {
              * and indicates the number of songs on the album credited to the given
              * album artist.
              * <P>Type: INTEGER</P>
+             * @hide
              */
             public static final String NUMBER_OF_SONGS_FOR_ALBUM_ARTIST = "numsongs_by_album_artist";
 

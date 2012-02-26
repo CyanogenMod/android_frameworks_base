@@ -277,6 +277,7 @@ public class AlertDialog extends Dialog implements DialogInterface {
         /**
          * Constructor using a context and theme for this builder and
          * the {@link AlertDialog} it creates.
+         * @hide
          */
         public Builder(Context context, int theme) {
             P = new AlertController.AlertParams(context);
