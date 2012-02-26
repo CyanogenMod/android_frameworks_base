@@ -61,6 +61,7 @@ static const char   mName[] = "LPAPlayer";
 #define SIGNAL_EVENT_THREAD 2
 #define PCM_FORMAT 2
 #define NUM_FDS 2
+#define LPA_SESSION_ID 1
 namespace android {
 int LPAPlayer::objectsAlive = 0;
 
@@ -115,6 +116,7 @@ AudioPlayer(audioSink,observer) {
     a2dpThreadStarted = true;
     asyncReset = false;
 
+    sessionId = LPA_SESSION_ID;
     bEffectConfigChanged = false;
     initCheck = true;
 
@@ -378,7 +380,7 @@ status_t LPAPlayer::start(bool sourceAlreadyStarted) {
     if (!bIsA2DPEnabled) {
         LOGV("Opening a routing session for audio playback: sessionId = %d mSampleRate %d numChannels %d",
              sessionId, mSampleRate, numChannels);
-        status_t err = mAudioSink->openSession(AUDIO_FORMAT_PCM_16_BIT, 1, mSampleRate, numChannels);
+        status_t err = mAudioSink->openSession(AUDIO_FORMAT_PCM_16_BIT, sessionId, mSampleRate, numChannels);
         if (err != OK) {
             if (mFirstBuffer != NULL) {
                 mFirstBuffer->release();
