@@ -678,11 +678,13 @@ public class MediaRecorder
 
     public void start() throws IllegalStateException {
         try {
-            Application application = ActivityThread.systemMain().getApplication();
-            Intent ioBusyVoteIntent = new Intent(IOBUSY_VOTE);
-            // Vote for io_is_busy to be turned off.
-            ioBusyVoteIntent.putExtra("com.android.server.CpuGovernorService.voteType", 0);
-            application.sendBroadcast(ioBusyVoteIntent);
+            Application application = ActivityThread.currentApplication();
+            if (application != null) {
+                Intent ioBusyVoteIntent = new Intent(IOBUSY_VOTE);
+                // Vote for io_is_busy to be turned off.
+                ioBusyVoteIntent.putExtra("com.android.server.CpuGovernorService.voteType", 0);
+                application.sendBroadcast(ioBusyVoteIntent);
+            }
         } catch (Exception exception) {
             Log.e(TAG, "Unable to vote to turn io_is_busy off.");
         }
@@ -692,11 +694,13 @@ public class MediaRecorder
 
     public void stop() throws IllegalStateException {
         try {
-            Application application = ActivityThread.systemMain().getApplication();
-            Intent ioBusyUnVoteIntent = new Intent(IOBUSY_UNVOTE);
-            // Remove vote for io_is_busy to be turned off.
-            ioBusyUnVoteIntent.putExtra("com.android.server.CpuGovernorService.voteType", 0);
-            application.sendBroadcast(ioBusyUnVoteIntent);
+            Application application = ActivityThread.currentApplication();
+            if (application != null) {
+                Intent ioBusyUnVoteIntent = new Intent(IOBUSY_UNVOTE);
+                // Remove vote for io_is_busy to be turned off.
+                ioBusyUnVoteIntent.putExtra("com.android.server.CpuGovernorService.voteType", 0);
+                application.sendBroadcast(ioBusyUnVoteIntent);
+            }
         } catch (Exception exception) {
             Log.e(TAG, "Unable to withdraw io_is_busy off vote.");
         }
