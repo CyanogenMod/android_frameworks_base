@@ -505,6 +505,13 @@ void Layer::lockPageFlip(bool& recomputeVisibleRegions)
         // update the active buffer
         mActiveBuffer = mSurfaceTexture->getCurrentBuffer();
 
+#ifdef QCOM_HARDWARE
+        //Buffer validity changed. Reset HWC geometry flags.
+        if(oldActiveBuffer == NULL && mActiveBuffer != NULL) {
+            mFlinger->invalidateHwcGeometry();
+        }
+#endif
+
         const Rect crop(mSurfaceTexture->getCurrentCrop());
         const uint32_t transform(mSurfaceTexture->getCurrentTransform());
         const uint32_t scalingMode(mSurfaceTexture->getCurrentScalingMode());
