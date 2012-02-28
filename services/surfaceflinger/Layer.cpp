@@ -293,7 +293,11 @@ void Layer::onDraw(const Region& clip) const
         // if not everything below us is covered, we plug the holes!
         Region holes(clip.subtract(under));
         if (!holes.isEmpty()) {
+#ifdef SAMSUNG_CODEC_SUPPORT
+            clearWithOpenGL(holes, 0, 0, 0, 0);
+#else
             clearWithOpenGL(holes, 0, 0, 0, 1);
+#endif
         }
         return;
     }
