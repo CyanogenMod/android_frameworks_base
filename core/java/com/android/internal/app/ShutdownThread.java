@@ -66,6 +66,7 @@ public final class ShutdownThread extends Thread {
 
     // Provides shutdown assurance in case the system_server is killed
     public static final String SHUTDOWN_ACTION_PROPERTY = "sys.shutdown.requested";
+    public static final String RADIO_SHUTDOWN_PROPERTY = "sys.radio.shutdown";
 
     // static instance of this thread
     private static final ShutdownThread sInstance = new ShutdownThread();
@@ -364,6 +365,7 @@ public final class ShutdownThread extends Thread {
             radioOff = true;
         }
 
+        SystemProperties.set(RADIO_SHUTDOWN_PROPERTY, "true");
         Log.i(TAG, "Waiting for Bluetooth and Radio...");
         
         // Wait a max of 32 seconds for clean shutdown
