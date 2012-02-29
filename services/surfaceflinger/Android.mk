@@ -1,6 +1,10 @@
 LOCAL_PATH:= $(call my-dir)
 include $(CLEAR_VARS)
 
+ifeq ($(BOARD_HAVE_CODEC_SUPPORT),SAMSUNG_CODEC_SUPPORT)
+LOCAL_CFLAGS     += -DSAMSUNG_CODEC_SUPPORT
+endif
+
 LOCAL_SRC_FILES:= \
     Layer.cpp 								\
     LayerBase.cpp 							\
