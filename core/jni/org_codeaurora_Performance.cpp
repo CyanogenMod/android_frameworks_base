@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -46,8 +46,9 @@ namespace android
 
 // ----------------------------------------------------------------------------
 
-static void (*cpu_boost)(int) = NULL;
-static void *dlhandle         = NULL;
+static void (*cpu_boost)(int)           = NULL;
+static int  (*cpu_setoptions)(int, int) = NULL;
+static void *dlhandle                   = NULL;
 
 // ----------------------------------------------------------------------------
 
@@ -79,11 +80,15 @@ org_codeaurora_performance_native_init()
 
     dlerror();
 
-    *(void **) (&cpu_boost) = dlsym(dlhandle, "perf_cpu_boost");
+    cpu_boost = (void (*) (int))dlsym(dlhandle, "perf_cpu_boost");
     if ((rc = dlerror()) != NULL) {
         goto cleanup;
     }
-    *(void **) (&init) = dlsym(dlhandle, "libqc_opt_init");
+    cpu_setoptions = (int (*) (int, int))dlsym(dlhandle, "perf_cpu_setoptions");
+    if ((rc = dlerror()) != NULL) {
+        goto cleanup;
+    }
+    init = (void (*) ())dlsym(dlhandle, "libqc_opt_init");
     if ((rc = dlerror()) != NULL) {
         goto cleanup;
     }
@@ -91,7 +96,8 @@ org_codeaurora_performance_native_init()
     return;
 
 cleanup:
-    cpu_boost = NULL;
+    cpu_boost      = NULL;
+    cpu_setoptions = NULL;
     if (dlhandle) {
         dlclose(dlhandle);
         dlhandle = NULL;
@@ -104,9 +110,10 @@ org_codeaurora_performance_native_deinit(JNIEnv *env, jobject clazz)
     void (*deinit)(void);
 
     if (dlhandle) {
-        cpu_boost = NULL;
+        cpu_boost      = NULL;
+        cpu_setoptions = NULL;
 
-        *(void **) (&deinit) = dlsym(dlhandle, "libqc_opt_deinit");
+        deinit = (void (*) ())dlsym(dlhandle, "libqc_opt_deinit");
         if (deinit) {
             (*deinit)();
         }
@@ -124,10 +131,22 @@ org_codeaurora_performance_native_cpu_boost(JNIEnv *env, jobject clazz, jint nta
     }
 }
 
+static jint
+org_codeaurora_performance_native_cpu_setoptions(JNIEnv *env, jobject clazz,
+                                                 jint reqtype, jint reqvalue)
+{
+    if (cpu_setoptions) {
+        return (*cpu_setoptions)(reqtype, reqvalue);
+    }
+    return 0;
+}
+
+
 // ----------------------------------------------------------------------------
 
 static JNINativeMethod gMethods[] = {
     {"native_cpu_boost",      "(I)V",                  (void *)org_codeaurora_performance_native_cpu_boost},
+    {"native_cpu_setoptions", "(II)I",                 (int *)org_codeaurora_performance_native_cpu_setoptions},
     {"native_deinit",         "()V",                   (void *)org_codeaurora_performance_native_deinit},
 };
 

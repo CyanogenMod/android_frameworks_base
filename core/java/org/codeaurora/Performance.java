@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2011, Code Aurora Forum. All rights reserved.
+ * Copyright (c) 2011-2012, Code Aurora Forum. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -49,6 +49,15 @@ public class Performance
         native_cpu_boost(ntasks);
     }
 
+    /** @hide */ public static final int CPUOPT_CPU0_PWRCLSP = 1;
+    /** @hide */ public static final int CPUOPT_CPU0_FREQMIN = 2;
+
+    /** &hide */
+    public int cpuSetOptions(int reqType, int reqValue) {
+        return native_cpu_setoptions(reqType, reqValue);
+    }
+
     private native void native_cpu_boost(int ntasks);
+    private native int  native_cpu_setoptions(int reqtype, int reqvalue);
     private native void native_deinit();
 }
