@@ -1922,7 +1922,7 @@ public final class Settings {
          */
         public static final String BATTERY_LIGHT_PULSE = "battery_light_pulse";
 
-        /*
+        /**
          * What color to use for the notification LED by default
          * @hide
          */
@@ -2275,7 +2275,8 @@ public final class Settings {
         public static final String VOLUME_WAKE_SCREEN = "volume_wake_screen";
 
         /**
-         * Whether national data Roming should be used.
+         * Whether national data roaming should be used.
+         * @hide
          */
         public static final String MVNO_ROAMING = "mvno_roaming";
 
