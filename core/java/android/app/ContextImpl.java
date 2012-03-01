@@ -154,6 +154,7 @@ class ContextImpl extends Context {
     private int mThemeResource = 0;
     private Resources.Theme mTheme = null;
     private PackageManager mPackageManager;
+   private ProfileManager mProfileManager = null;
     private Context mReceiverRestrictedContext = null;
     private boolean mRestricted;
 
@@ -1179,8 +1180,22 @@ class ContextImpl extends Context {
 
     @Override
     public Object getSystemService(String name) {
-        ServiceFetcher fetcher = SYSTEM_SERVICE_MAP.get(name);
-        return fetcher == null ? null : fetcher.getService(this);
+        if (PROFILE_SERVICE.equals(name)) {
+            return getProfileManager();
+        } else {
+			ServiceFetcher fetcher = SYSTEM_SERVICE_MAP.get(name);
+	        return fetcher == null ? null : fetcher.getService(this);
+		}
+    }
+
+    private ProfileManager getProfileManager() {
+        synchronized (mSync) {
+            if (mProfileManager == null) {
+                mProfileManager = new ProfileManager(getOuterContext(),
+                        mMainThread.getHandler());
+            }
+        }
+        return mProfileManager;
     }
 
     private WallpaperManager getWallpaperManager() {
