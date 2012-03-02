@@ -190,6 +190,11 @@ public interface TelephonyProperties
     static final String PROPERTY_TEST_CSIM = "persist.radio.test-csim";
 
     /**
+     * Specify if Android supports VoLTE/VT calls on IMS
+     */
+    static final String CALLS_ON_IMS_ENABLED_PROPERTY = "persist.radio.calls.on.ims";
+
+    /**
      * Ignore RIL_UNSOL_NITZ_TIME_RECEIVED completely, used for debugging/testing.
      */
     static final String PROPERTY_IGNORE_NITZ = "telephony.test.ignore.nitz";
