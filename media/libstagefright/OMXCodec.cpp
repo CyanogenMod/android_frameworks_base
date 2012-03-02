@@ -116,6 +116,22 @@ static sp<MediaSource> InstantiateSoftwareEncoder(
 #undef FACTORY_CREATE
 
 static const CodecInfo kDecoderInfo[] = {
+#ifdef SAMSUNG_OMX
+    { MEDIA_MIMETYPE_AUDIO_MPEG, "OMX.SEC.mp3.dec" },
+    { MEDIA_MIMETYPE_AUDIO_AMR_NB, "OMX.SEC.amr.dec" },
+    { MEDIA_MIMETYPE_AUDIO_AMR_WB, "OMX.SEC.amr.dec" },
+    { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.SEC.aac.dec" },
+    { MEDIA_MIMETYPE_AUDIO_FLAC, "OMX.SEC.flac.dec" },
+    { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.SEC.mpeg4.dec" },
+    { MEDIA_MIMETYPE_VIDEO_H263, "OMX.SEC.h263.dec" },
+    { MEDIA_MIMETYPE_VIDEO_H263, "OMX.SEC.h263sr.dec" },
+    { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.SEC.avc.dec" },
+    { MEDIA_MIMETYPE_CONTAINER_WVM, "OMX.SEC.vc1.dec" },
+    { MEDIA_MIMETYPE_CONTAINER_WVM, "OMX.SEC.wma.dec" },
+    { MEDIA_MIMETYPE_CONTAINER_WVM, "OMX.SEC.wmv7.dec" },
+    { MEDIA_MIMETYPE_CONTAINER_WVM, "OMX.SEC.wmv8.dec" },
+    { MEDIA_MIMETYPE_VIDEO_VPX, "OMX.SEC.vp8.dec" },
+#endif
     { MEDIA_MIMETYPE_IMAGE_JPEG, "OMX.TI.JPEG.decode" },
 //    { MEDIA_MIMETYPE_AUDIO_MPEG, "OMX.TI.MP3.decode" },
     { MEDIA_MIMETYPE_AUDIO_MPEG, "OMX.google.mp3.decoder" },
@@ -158,6 +174,14 @@ static const CodecInfo kDecoderInfo[] = {
 };
 
 static const CodecInfo kEncoderInfo[] = {
+#ifdef SAMSUNG_OMX
+    { MEDIA_MIMETYPE_AUDIO_AMR_NB, "OMX.SEC.amr.enc" },
+    { MEDIA_MIMETYPE_AUDIO_AMR_WB, "OMX.SEC.amr.enc" },
+    { MEDIA_MIMETYPE_AUDIO_AAC, "OMX.SEC.aac.enc" },
+    { MEDIA_MIMETYPE_VIDEO_MPEG4, "OMX.SEC.mpeg4.enc" },
+    { MEDIA_MIMETYPE_VIDEO_H263, "OMX.SEC.h263.enc" },
+    { MEDIA_MIMETYPE_VIDEO_AVC, "OMX.SEC.avc.enc" },
+#endif
     { MEDIA_MIMETYPE_AUDIO_AMR_NB, "OMX.TI.AMR.encode" },
     { MEDIA_MIMETYPE_AUDIO_AMR_NB, "AMRNBEncoder" },
     { MEDIA_MIMETYPE_AUDIO_AMR_WB, "OMX.TI.WBAMR.encode" },

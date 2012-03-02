@@ -44,13 +44,18 @@ OMXMaster::~OMXMaster() {
 }
 
 void OMXMaster::addVendorPlugin() {
+#ifdef SAMSUNG_OMX
+    addPlugin("libsomxcore.so");
+#else
     addPlugin("libstagefrighthw.so");
+#endif
 }
 
 void OMXMaster::addPlugin(const char *libname) {
     mVendorLibHandle = dlopen(libname, RTLD_NOW);
 
     if (mVendorLibHandle == NULL) {
+        LOGE("dlopen() failed.");
         return;
     }
 
