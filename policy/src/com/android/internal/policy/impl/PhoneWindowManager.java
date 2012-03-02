@@ -56,6 +56,7 @@ import android.os.SystemClock;
 import android.os.SystemProperties;
 import android.os.UEventObserver;
 import android.os.Vibrator;
+import android.preference.ListPreferenceMultiSelect;
 import android.provider.Settings;
 
 import com.android.internal.R;
@@ -145,6 +146,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -329,7 +331,9 @@ public class PhoneWindowManager implements WindowManagerPolicy {
 
     int mUserRotationMode = WindowManagerPolicy.USER_ROTATION_FREE;
     int mUserRotation = Surface.ROTATION_0;
-    int mUserRotationAngles = -1;
+    int[] mUserRotationAngles = new int[] {
+            Surface.ROTATION_0, Surface.ROTATION_90, Surface.ROTATION_270
+    };
 
     int mAllowAllRotations = -1;
     boolean mCarDockEnablesAccelerometer;
@@ -969,8 +973,22 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mUserRotation = Settings.System.getInt(resolver,
                     Settings.System.USER_ROTATION,
                     Surface.ROTATION_0);
-            mUserRotationAngles = Settings.System.getInt(resolver,
-                    Settings.System.ACCELEROMETER_ROTATION_ANGLES, -1);
+            String[] modes = ListPreferenceMultiSelect.parseStoredValue(Settings.System.getString(
+                    resolver, Settings.System.ACCELEROMETER_ROTATION_ANGLES));
+            if (modes == null) {
+                mUserRotationAngles = new int[] {
+                        Surface.ROTATION_0, Surface.ROTATION_90, Surface.ROTATION_270
+                };
+            } else if (modes.length == 0) {
+                mUserRotationAngles = new int[] {
+                        Surface.ROTATION_0
+                };
+            } else {
+                mUserRotationAngles = new int[modes.length];
+                for (int i = 0; i < modes.length; i++) {
+                    mUserRotationAngles[i] = Integer.parseInt(modes[i]);
+                }
+            }
 
             if (mAccelerometerDefault != accelerometerDefault) {
                 mAccelerometerDefault = accelerometerDefault;
@@ -3281,34 +3299,19 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     mAllowAllRotations = mContext.getResources().getBoolean(
                             com.android.internal.R.bool.config_allowAllRotations) ? 1 : 0;
                 }
-                // Rotation setting bitmask
-                // 1=0 2=90 4=180 8=270
-                boolean allowed = true;
-                if (mUserRotationAngles < 0) {
-                    // Not set by user so use these defaults
-                    mUserRotationAngles = mAllowAllRotations == 1 ?
-                        (1 | 2 | 4 | 8) : // All angles
-                        (1 | 2 | 8); // All except 180
-                }
-                switch (sensorRotation) {
-                    case Surface.ROTATION_0:
-                      allowed = (mUserRotationAngles & 1) != 0;
-                      break;
-                    case Surface.ROTATION_90:
-                      allowed = (mUserRotationAngles & 2) != 0;
-                      break;
-                    case Surface.ROTATION_180:
-                      allowed = (mUserRotationAngles & 4) != 0;
-                      break;
-                    case Surface.ROTATION_270:
-                      allowed = (mUserRotationAngles & 8) != 0;
-                      break;
+
+                boolean allowed = false;
+                for (int i = 0; i < mUserRotationAngles.length; i++) {
+                    if (mUserRotationAngles[i] == sensorRotation) {
+                        allowed = true;
+                    }
                 }
                 if (allowed) {
                     preferredRotation = sensorRotation;
                 } else {
                     preferredRotation = lastRotation;
                 }
+
             } else if (mUserRotationMode == WindowManagerPolicy.USER_ROTATION_LOCKED) {
                 // Apply rotation lock.
                 preferredRotation = mUserRotation;
