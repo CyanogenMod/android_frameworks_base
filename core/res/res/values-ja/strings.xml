@@ -1230,4 +1230,44 @@
     <string name="sending" msgid="8715108995741758718">"送信しています..."</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"ブラウザを起動しますか？"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"通話を受けますか？"</string>
+
+    <!-- CM Extra entries -->
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system" product="tablet">タブレットを再起動</string>
+    <string name="reboot_system" product="default">携帯電話を再起動</string>
+
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">スクリーンショット</string>
+
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">再起動</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">リカバリー</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">ブートローダー</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">ブートメニュー</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">ファストブート</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">ダウンロード</string>
+
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">再起動中\u2026</string>
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
+    <string name="reboot_confirm">端末は再起動します</string>
+
+    <!-- Spoken description for ringer silent option. [CHAR LIMIT=NONE] -->
+    <string name="silent_mode_silent">着信音 OFF</string>
+    <!-- Spoken description for ringer vibrate option. [CHAR LIMIT=NONE] -->
+    <string name="silent_mode_vibrate">着信振動</string>
+    <!-- Spoken description for ringer normal option. [CHAR LIMIT=NONE] -->
+    <string name="silent_mode_ring">着信音 ON</string>
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">再起動</string>
+    <!-- Title of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permlab_preventpower">電源キーを保護</string>
+    <!-- Description of an application permission, listed so the user can choose whether they want to allow the application to do this. -->
+    <string name="permdesc_preventpower">アプリケーションが電源キーを置き換えるのを許可する</string>
+
 </resources>
