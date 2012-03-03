@@ -430,11 +430,17 @@ public class NotificationManagerService extends INotificationManager.Stub
             boolean queryRestart = false;
 
             if (action.equals(Intent.ACTION_BATTERY_CHANGED)) {
-                boolean batteryCharging = (intent.getIntExtra("plugged", 0) != 0);
-                int level = intent.getIntExtra("level", -1);
+                int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS,
+                        BatteryManager.BATTERY_STATUS_UNKNOWN);
+                int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+                boolean batteryCharging = status == BatteryManager.BATTERY_STATUS_CHARGING;
                 boolean batteryLow = (level >= 0 && level <= Power.LOW_BATTERY_THRESHOLD);
-                int status = intent.getIntExtra("status", BatteryManager.BATTERY_STATUS_UNKNOWN);
                 boolean batteryFull = (status == BatteryManager.BATTERY_STATUS_FULL || level >= 90);
+
+                /* also treat a full battery with connected charger as 'charging' */
+                if (batteryFull && intent.getIntExtra(BatteryManager.EXTRA_PLUGGED, 0) != 0) {
+                    batteryCharging = true;
+                }
 
                 if (batteryCharging != mBatteryCharging ||
                         batteryLow != mBatteryLow ||
@@ -1593,7 +1599,7 @@ public class NotificationManagerService extends INotificationManager.Stub
 
         // Battery low always shows, other states only show if charging.
         if (mBatteryLow) {
-	    int color = adjustForQuietHours(BATTERY_LOW_ARGB);
+            int color = adjustForQuietHours(BATTERY_LOW_ARGB);
             if (mBatteryCharging) {
                 mBatteryLight.setColor(color);
             } else {
