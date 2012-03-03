@@ -147,7 +147,7 @@ public class SamsungRIL extends RIL implements CommandsInterface {
             case RIL_REQUEST_GET_IMEI: ret =  responseString(p); break;
             case RIL_REQUEST_GET_IMEISV: ret =  responseString(p); break;
             case RIL_REQUEST_ANSWER: ret =  responseVoid(p); break;
-            case RIL_REQUEST_DEACTIVATE_DATA_CALL: ret =  responseDeactivateDataCall(p); break;
+            case RIL_REQUEST_DEACTIVATE_DATA_CALL: ret =  responseVoid(p); break;
             case RIL_REQUEST_QUERY_FACILITY_LOCK: ret =  responseInts(p); break;
             case RIL_REQUEST_SET_FACILITY_LOCK: ret =  responseInts(p); break;
             case RIL_REQUEST_CHANGE_BARRING_PASSWORD: ret =  responseVoid(p); break;
@@ -897,6 +897,14 @@ public class SamsungRIL extends RIL implements CommandsInterface {
                 }
             }
         } else {
+            if (mIsSamsungCdma) {
+                // On rare occasion the pppd_cdma service is left active from a stale
+                // session, causing the data call setup to fail.  Make sure that pppd_cdma
+                // is stopped now, so that the next setup attempt may succeed.
+                Log.d(LOG_TAG, "Set ril.cdma.data_state=0 to make sure pppd_cdma is stopped.");
+                SystemProperties.set("ril.cdma.data_state", "0");
+            }
+
             dataCall.status = FailCause.ERROR_UNSPECIFIED.getErrorCode(); // Who knows?
         }
 
@@ -938,15 +946,16 @@ public class SamsungRIL extends RIL implements CommandsInterface {
         return false;
     }
 
-    protected Object
-    responseDeactivateDataCall(Parcel p) {
+    @Override
+    public void
+    deactivateDataCall(int cid, int reason, Message result) {
         if (mIsSamsungCdma) {
             // Disconnect: Set ril.cdma.data_state=0 to stop pppd_cdma service.
             Log.d(LOG_TAG, "Set ril.cdma.data_state=0.");
             SystemProperties.set("ril.cdma.data_state", "0");
         }
 
-        return null;
+        super.deactivateDataCall(cid, reason, result);
     }
 
     protected Object
