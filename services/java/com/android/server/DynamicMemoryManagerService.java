@@ -45,7 +45,7 @@ import java.util.Calendar;
 import android.util.Log;
 
 class DynamicMemoryManagerService {
-    private final String TAG = "DMM Service";
+    private final String TAG = "DMMService";
     private Context mContext;
     private boolean SCREEN_ON = false;
     private boolean DPD_START = false;
@@ -64,7 +64,8 @@ class DynamicMemoryManagerService {
         "com.android.server.DMMService.action.DPD_START";
     private static final String ACTION_DPD_STOP =
         "com.android.server.DMMService.action.DPD_STOP";
-
+    private PowerManager.WakeLock mWakeLock = null;
+    private final static String WAKELOCK_NAME = "DynamicMemoryManagerServiceLock";
     private final boolean DEBUG = false;
 
     public DynamicMemoryManagerService(Context context) {
@@ -83,7 +84,8 @@ class DynamicMemoryManagerService {
                 mStopPendingIntent = PendingIntent.getBroadcast(mContext, 0, mStopIntent, 0);
                 mStartAlarmManager = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
                 mStopAlarmManager = (AlarmManager)mContext.getSystemService(Context.ALARM_SERVICE);
-
+                PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+                mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKELOCK_NAME);
                 Log.w(TAG, "DynamicMemoryManager Service Initialized");
         }
         else
@@ -290,19 +292,40 @@ class DynamicMemoryManagerService {
 
     private int enableUnstableMemory(boolean flag) {
         Log.w(TAG, "Enable Unstable Memory : " + flag);
-        if (flag) {
-            if(mState == DMM_MEM_STATE.DISABLED) {
-                if(Power.SetUnstableMemoryState(flag) < 0)
-                    Log.e(TAG, "Activating Unstable Memory: Failed !");
-                else
-                    mState = DMM_MEM_STATE.ACTIVE;
+        synchronized (mWakeLock) {
+            try {
+                mWakeLock.acquire();
+                if (DEBUG) Log.w(TAG, "Wakelock " + WAKELOCK_NAME + " Acquired");
             }
-        } else {
-            if(mState == DMM_MEM_STATE.ACTIVE) {
-                if(Power.SetUnstableMemoryState(flag) < 0)
-                    Log.e(TAG, "Disabling Unstable Memory: Failed !");
-                else
-                        mState = DMM_MEM_STATE.DISABLED;
+            catch (Exception e) {
+                Log.e(TAG, "Unable to Acquired Wakelock: " + WAKELOCK_NAME);
+            }
+            if (flag) {
+                if(mState == DMM_MEM_STATE.DISABLED) {
+                    if(Power.SetUnstableMemoryState(flag) < 0)
+                        Log.e(TAG, "Activating Unstable Memory: Failed !");
+                    else
+                        mState = DMM_MEM_STATE.ACTIVE;
+                }
+            } else {
+                if(mState == DMM_MEM_STATE.ACTIVE) {
+                    if(Power.SetUnstableMemoryState(flag) < 0)
+                        Log.e(TAG, "Disabling Unstable Memory: Failed !");
+                    else
+                            mState = DMM_MEM_STATE.DISABLED;
+                }
+            }
+            try {
+                if (mWakeLock.isHeld()) {
+                    mWakeLock.release();
+                    if (DEBUG) Log.w(TAG, "Wakelock " + WAKELOCK_NAME + " Released");
+                }
+                else {
+                    Log.e(TAG, "Error: Attempring to release unheld Wakelock: " + WAKELOCK_NAME);
+                }
+            }
+            catch (Exception e) {
+                Log.e(TAG, "Unable to release Wakelock: " + WAKELOCK_NAME);
             }
         }
         return 0;
