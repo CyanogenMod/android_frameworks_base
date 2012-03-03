@@ -89,8 +89,7 @@ status_t MemoryHeapIon::mapIonFd(int fd, size_t size, unsigned long memory_type,
     }
 
     if ((uflags & DONT_MAP_LOCALLY) == 0) {
-        int flags = (uflags & MAP_LOCKED_MAP_POPULATE) ?
-                    MAP_POPULATE|MAP_LOCKED : 0;
+        int flags = 0;
 
         fd_data.handle = data.handle;
 
