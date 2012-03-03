@@ -162,8 +162,8 @@ class DynamicMemoryManagerService {
 
     private int dpdEnabled() {
         if (DEBUG) Log.w(TAG, "DPD Enabled: " +
-                SystemProperties.getInt("persist.sys.dpd", 1));
-        return SystemProperties.getInt("persist.sys.dpd", 1);
+                SystemProperties.getInt("persist.sys.dpd", 0));
+        return SystemProperties.getInt("persist.sys.dpd", 0);
     }
 
     private boolean setStartAlarm() {
@@ -308,7 +308,7 @@ class DynamicMemoryManagerService {
                         mState = DMM_MEM_STATE.ACTIVE;
                 }
             } else {
-                if(mState == DMM_MEM_STATE.ACTIVE) {
+                if((mState == DMM_MEM_STATE.ACTIVE) && (dpdEnabled() == 1)) {
                     if(Power.SetUnstableMemoryState(flag) < 0)
                         Log.e(TAG, "Disabling Unstable Memory: Failed !");
                     else
