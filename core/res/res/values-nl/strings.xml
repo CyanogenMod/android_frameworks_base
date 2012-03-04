@@ -1,23 +1,19 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- 
-/* //device/apps/common/assets/res/any/strings.xml
-**
-** Copyright 2006, The Android Open Source Project
-**
-** Licensed under the Apache License, Version 2.0 (the "License");
-** you may not use this file except in compliance with the License.
-** You may obtain a copy of the License at
-**
-**     http://www.apache.org/licenses/LICENSE-2.0
-**
-** Unless required by applicable law or agreed to in writing, software
-** distributed under the License is distributed on an "AS IS" BASIS,
-** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-** See the License for the specific language governing permissions and
-** limitations under the License.
-*/
- -->
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012 The CyanogenMod Project
 
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<!--   //device/apps/common/assets/res/any/strings.xml -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="byteShort" msgid="8340973892742019101">"B"</string>
@@ -128,7 +124,7 @@
     <string name="contentServiceSyncNotificationTitle" msgid="397743349191901458">"Synchroniseren"</string>
     <string name="contentServiceTooManyDeletesNotificationDesc" msgid="8100981435080696431">"Te veel verwijderen voor <xliff:g id="CONTENT_TYPE">%s</xliff:g>."</string>
     <string name="low_memory" product="tablet" msgid="2292820184396262278">"Tabletgeheugen is vol. Verwijder enkele bestanden om ruimte vrij te maken."</string>
-    <string name="low_memory" product="default" msgid="6632412458436461203">"Telefoongeheugen is vol! Verwijder enkele bestanden om ruimte vrij te maken."</string>
+    <string name="low_memory" product="default" msgid="6632412458436461203">"Telefoongeheugen is vol. Verwijder enkele bestanden om ruimte vrij te maken."</string>
     <string name="me" msgid="6545696007631404292">"Ik"</string>
     <string name="power_dialog" product="tablet" msgid="8545351420865202853">"Tabletopties"</string>
     <string name="power_dialog" product="default" msgid="1319919075463988638">"Telefoonopties"</string>
@@ -137,13 +133,10 @@
     <string name="turn_off_radio" msgid="8198784949987062346">"Draadloos uitschakelen"</string>
     <string name="screen_lock" msgid="799094655496098153">"Schermvergrendeling"</string>
     <string name="power_off" msgid="4266614107412865048">"Uitschakelen"</string>
-    <!-- no translation found for silent_mode_silent (319298163018473078) -->
-    <skip />
-    <!-- no translation found for silent_mode_vibrate (7072043388581551395) -->
-    <skip />
-    <!-- no translation found for silent_mode_ring (8592241816194074353) -->
-    <skip />
-    <string name="shutdown_progress" msgid="2281079257329981203">"Uitschakelen..."</string>
+    <string name="silent_mode_silent" msgid="319298163018473078">Beltoon uit</string>
+    <string name="silent_mode_vibrate" msgid="7072043388581551395">Beltoon wordt trilsignaal</string>
+    <string name="silent_mode_ring" msgid="8592241816194074353">Beltoon aan</string>
+    <string name="shutdown_progress" msgid="2281079257329981203">"Uitschakelen\u2026"</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Uw tablet wordt uitgeschakeld."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"Uw telefoon wordt uitgeschakeld."</string>
     <string name="shutdown_confirm_question" msgid="6656441286856415014">"Wilt u afsluiten?"</string>
@@ -241,21 +234,21 @@
     <string name="permlab_runSetActivityWatcher" msgid="7811586187574696296">"alle startende apps bijhouden en beheren"</string>
     <string name="permdesc_runSetActivityWatcher" msgid="2149363027173451218">"Hiermee kan een app de manier waarop het systeem activiteiten start, bijhouden en beheren. Schadelijke apps kunnen het systeem volledig in gevaar brengen. Deze machtiging is alleen voor ontwikkeling vereist, nooit voor normaal gebruik."</string>
     <string name="permlab_broadcastPackageRemoved" msgid="2576333434893532475">"melding verzenden dat pakket is verwijderd"</string>
-    <string name="permdesc_broadcastPackageRemoved" msgid="3453286591439891260">"Hiermee kan een app een melding verzenden dat een applicatiepakket (APK) is verwijderd. Schadelijke apps kunnen hiervan gebruik maken om alle andere actieve apps af te sluiten."</string>
+    <string name="permdesc_broadcastPackageRemoved" msgid="3453286591439891260">"Hiermee kan een app een melding verzenden dat een app-pakket (APK) is verwijderd. Schadelijke apps kunnen hiervan gebruik maken om alle andere actieve apps af te sluiten."</string>
     <string name="permlab_broadcastSmsReceived" msgid="5689095009030336593">"melding over ontvangen SMS-bericht verzenden"</string>
     <string name="permdesc_broadcastSmsReceived" msgid="9122419277306740155">"Hiermee kan een app een melding verzenden dat een SMS-bericht is ontvangen. Schadelijke apps kunnen hiervan gebruik maken om inkomende SMS-berichten te vervalsen."</string>
     <string name="permlab_broadcastWapPush" msgid="3145347413028582371">"melding over ontvangen WAP-PUSH-bericht verzenden"</string>
     <string name="permdesc_broadcastWapPush" msgid="3955303669461378091">"Hiermee kan een app een melding verzenden dat een WAP PUSH-bericht is ontvangen. Schadelijke apps kunnen hiervan gebruik maken om een valse MMS-ontvangst te melden of de inhoud van willekeurige webpagina\'s door schadelijke varianten te vervangen."</string>
     <string name="permlab_setProcessLimit" msgid="2451873664363662666">"aantal actieve processen beperken"</string>
     <string name="permdesc_setProcessLimit" msgid="7824786028557379539">"Hiermee kan een app het maximum aantal processen bepalen dat wordt uitgevoerd. Nooit vereist voor normale apps."</string>
-    <string name="permlab_setAlwaysFinish" msgid="5342837862439543783">"alle achtergrondapplicaties sluiten"</string>
+    <string name="permlab_setAlwaysFinish" msgid="5342837862439543783">"alle achtergrondapps sluiten"</string>
     <string name="permdesc_setAlwaysFinish" msgid="8773936403987091620">"Hiermee kan een app bepalen of activiteiten altijd worden afgesloten zodra deze naar de achtergrond gaan. Nooit nodig voor normale apps."</string>
     <string name="permlab_batteryStats" msgid="7863923071360031652">"accustatistieken aanpassen"</string>
     <string name="permdesc_batteryStats" msgid="5847319823772230560">"Hiermee kunnen verzamelde accustatistieken worden gewijzigd. Niet voor gebruik door normale apps."</string>
     <string name="permlab_backup" msgid="470013022865453920">"systeemback-up en -herstel beheren"</string>
     <string name="permdesc_backup" msgid="4837493065154256525">"Hiermee kan de app het mechanisme voor systeemback-up en -herstel beheren. Niet voor gebruik door normale apps."</string>
     <string name="permlab_confirm_full_backup" msgid="5557071325804469102">"een volledige back-up- of herstelbewerking bevestigen"</string>
-    <string name="permdesc_confirm_full_backup" msgid="9005017754175897954">"Hiermee kan de applicatie de gebruikersinterface voor bevestiging van de volledige back-up starten. Moet niet worden gebruikt door een applicatie."</string>
+    <string name="permdesc_confirm_full_backup" msgid="9005017754175897954">"Hiermee kan een app de gebruikersinterface voor bevestiging van de volledige back-up starten. Moet niet worden gebruikt door een app."</string>
     <string name="permlab_internalSystemWindow" msgid="2148563628140193231">"niet-geautoriseerde vensters weergeven"</string>
     <string name="permdesc_internalSystemWindow" msgid="5895082268284998469">"Hiermee kunnen vensters worden gemaakt die door de interne systeemgebruikersinterface worden gebruikt. Niet voor gebruik door normale apps."</string>
     <string name="permlab_systemAlertWindow" msgid="3372321942941168324">"waarschuwingen op systeemniveau weergeven"</string>
@@ -373,10 +366,10 @@
     <string name="permlab_brick" product="default" msgid="8337817093326370537">"telefoon permanent uitschakelen"</string>
     <string name="permdesc_brick" product="tablet" msgid="7379164636920817963">"Hiermee kan de app de tablet permanent uitschakelen. Dit is erg gevaarlijk."</string>
     <string name="permdesc_brick" product="default" msgid="5569526552607599221">"Hiermee kan de app de telefoon permanent uitschakelen. Dit is erg gevaarlijk."</string>
-    <string name="permlab_reboot" product="tablet" msgid="3436634972561795002">"opnieuw opstarten van tablet afdwingen"</string>
-    <string name="permlab_reboot" product="default" msgid="2898560872462638242">"telefoon nu opnieuw opstarten"</string>
-    <string name="permdesc_reboot" product="tablet" msgid="4555793623560701557">"Hiermee kan de app de tablet opnieuw opstarten."</string>
-    <string name="permdesc_reboot" product="default" msgid="7914933292815491782">"Hiermee kan de app de telefoon nu opnieuw opstarten."</string>
+    <string name="permlab_reboot" product="tablet" msgid="3436634972561795002">"herstarten van tablet afdwingen"</string>
+    <string name="permlab_reboot" product="default" msgid="2898560872462638242">"telefoon nu herstarten"</string>
+    <string name="permdesc_reboot" product="tablet" msgid="4555793623560701557">"Hiermee kan de app de tablet herstarten."</string>
+    <string name="permdesc_reboot" product="default" msgid="7914933292815491782">"Hiermee kan de app de telefoon nu herstarten."</string>
     <string name="permlab_mount_unmount_filesystems" msgid="1761023272170956541">"bestandssystemen koppelen en ontkoppelen"</string>
     <string name="permdesc_mount_unmount_filesystems" msgid="6253263792535859767">"Hiermee kan de app bestandssystemen koppelen en ontkoppelen voor verwisselbare opslagruimte."</string>
     <string name="permlab_mount_format_filesystems" msgid="5523285143576718981">"externe opslag formatteren"</string>
@@ -513,7 +506,7 @@
     <string name="permlab_manageNetworkPolicy" msgid="2562053592339859990">"netwerkbeleid beheren"</string>
     <string name="permdesc_manageNetworkPolicy" msgid="3723795285132803958">"Hiermee kan een app het netwerkbeleid beheren en app-specifieke regels definiëren."</string>
     <string name="permlab_modifyNetworkAccounting" msgid="5088217309088729650">"verrekening van netwerkgebruik aanpassen"</string>
-    <string name="permdesc_modifyNetworkAccounting" msgid="8702285686629184404">"Toestaan dat de manier waarop het netwerkgebruik wordt verrekend met applicaties, wordt aangepast. Niet voor gebruik door normale applicaties."</string>
+    <string name="permdesc_modifyNetworkAccounting" msgid="8702285686629184404">"Toestaan dat de manier waarop het netwerkgebruik wordt verrekend met apps, wordt aangepast. Niet voor gebruik door normale apps."</string>
     <string name="policylab_limitPassword" msgid="4497420728857585791">"Wachtwoordregels instellen"</string>
     <string name="policydesc_limitPassword" msgid="9083400080861728056">"De lengte en tekens beheren die zijn toegestaan in wachtwoorden voor schermontgrendeling"</string>
     <string name="policylab_watchLogin" msgid="914130646942199503">"Pogingen voor schermontgrendeling bijhouden"</string>
@@ -687,7 +680,7 @@
     <string name="lockscreen_sim_puk_locked_message" msgid="7441797339976230">"SIM-kaart is vergrendeld met PUK-code."</string>
     <string name="lockscreen_sim_puk_locked_instructions" msgid="635967534992394321">"Raadpleeg de gebruikershandleiding of neem contact op met de klantenservice."</string>
     <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"SIM-kaart is vergrendeld."</string>
-    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"SIM-kaart ontgrendelen..."</string>
+    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"SIM-kaart ontgrendelen\u2026"</string>
     <string name="lockscreen_too_many_failed_attempts_dialog_message" msgid="3514742106066877476">"U heeft uw ontgrendelingspatroon <xliff:g id="NUMBER_0">%d</xliff:g> keer onjuist getekend. "\n\n"Probeer het over <xliff:g id="NUMBER_1">%d</xliff:g> seconden opnieuw."</string>
     <string name="lockscreen_too_many_failed_password_attempts_dialog_message" msgid="4906034376425175381">"U heeft uw wachtwoord <xliff:g id="NUMBER_0">%d</xliff:g> keer onjuist ingevoerd. "\n\n"Probeer het over <xliff:g id="NUMBER_1">%d</xliff:g> seconden opnieuw."</string>
     <string name="lockscreen_too_many_failed_pin_attempts_dialog_message" msgid="6827749231465145590">"U heeft uw PIN-code <xliff:g id="NUMBER_0">%d</xliff:g> keer onjuist ingevoerd. "\n\n"Probeer het over <xliff:g id="NUMBER_1">%d</xliff:g> seconden opnieuw."</string>
@@ -707,7 +700,7 @@
     <string name="lockscreen_glogin_submit_button" msgid="7130893694795786300">"Aanmelden"</string>
     <string name="lockscreen_glogin_invalid_input" msgid="1364051473347485908">"Gebruikersnaam of wachtwoord ongeldig."</string>
     <string name="lockscreen_glogin_account_recovery_hint" msgid="8253152905532900548">"Bent u uw gebruikersnaam of wachtwoord vergeten?"\n"Ga naar "<b>"https://www.google.com/accounts/recovery?hl=nl"</b></string>
-    <string name="lockscreen_glogin_checking_password" msgid="6758890536332363322">"Controleren..."</string>
+    <string name="lockscreen_glogin_checking_password" msgid="6758890536332363322">"Controleren\u2026"</string>
     <string name="lockscreen_unlock_label" msgid="737440483220667054">"Ontgrendelen"</string>
     <string name="lockscreen_sound_on_label" msgid="9068877576513425970">"Geluid aan"</string>
     <string name="lockscreen_sound_off_label" msgid="996822825154319026">"Geluid uit"</string>
@@ -723,7 +716,7 @@
     <string name="factorytest_failed" msgid="5410270329114212041">"Fabriekstest mislukt"</string>
     <string name="factorytest_not_system" msgid="4435201656767276723">"De actie FACTORY_TEST wordt alleen ondersteund voor pakketten die zijn geïnstalleerd in /system/app."</string>
     <string name="factorytest_no_action" msgid="872991874799998561">"Er is geen pakket gevonden dat de actie FACTORY_TEST levert."</string>
-    <string name="factorytest_reboot" msgid="6320168203050791643">"Opnieuw opstarten"</string>
+    <string name="factorytest_reboot" msgid="6320168203050791643">"Herstarten"</string>
     <string name="js_dialog_title" msgid="8143918455087008109">"De pagina op \'<xliff:g id="TITLE">%s</xliff:g>\' zegt:"</string>
     <string name="js_dialog_title_default" msgid="6961903213729667573">"JavaScript"</string>
     <string name="js_dialog_before_unload" msgid="1901675448179653089">"Wilt u deze pagina verlaten?"\n\n"<xliff:g id="MESSAGE">%s</xliff:g>"\n\n"Kies OK om door te gaan of Annuleren om op de huidige pagina te blijven."</string>
@@ -880,10 +873,10 @@
     <string name="cut" msgid="3092569408438626261">"Knippen"</string>
     <string name="copy" msgid="2681946229533511987">"Kopiëren"</string>
     <string name="paste" msgid="5629880836805036433">"Plakken"</string>
-    <string name="replace" msgid="5781686059063148930">"Vervangen..."</string>
+    <string name="replace" msgid="5781686059063148930">"Vervangen\u2026"</string>
     <string name="delete" msgid="6098684844021697789">"Verwijderen"</string>
     <string name="copyUrl" msgid="2538211579596067402">"URL kopiëren"</string>
-    <string name="selectTextMode" msgid="6738556348861347240">"Tekst selecteren..."</string>
+    <string name="selectTextMode" msgid="6738556348861347240">"Tekst selecteren\u2026"</string>
     <string name="textSelectionCABTitle" msgid="5236850394370820357">"Tekstselectie"</string>
     <string name="addToDictionary" msgid="9090375111134433012">"toevoegen aan woordenboek"</string>
     <string name="deleteText" msgid="7070985395199629156">"verwijderen"</string>
@@ -897,7 +890,7 @@
     <string name="yes" msgid="5362982303337969312">"OK"</string>
     <string name="no" msgid="5141531044935541497">"Annuleren"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Let op"</string>
-    <string name="loading" msgid="1760724998928255250">"Laden..."</string>
+    <string name="loading" msgid="1760724998928255250">"Laden\u2026"</string>
     <string name="capital_on" msgid="1544682755514494298">"AAN"</string>
     <string name="capital_off" msgid="6815870386972805832">"UIT"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Actie voltooien met"</string>
@@ -925,8 +918,8 @@
     <string name="screen_compat_mode_hint" msgid="2953716574198046484">"Dit opnieuw inschakelen via \'Instellingen\' &gt; \'Apps\' &gt; \'Apps beheren\'."</string>
     <string name="smv_application" msgid="295583804361236288">"De app <xliff:g id="APPLICATION">%1$s</xliff:g> (proces <xliff:g id="PROCESS">%2$s</xliff:g>) heeft het zelf afgedwongen StrictMode-beleid geschonden."</string>
     <string name="smv_process" msgid="5120397012047462446">"Het proces <xliff:g id="PROCESS">%1$s</xliff:g> heeft het zelf afgedwongen StrictMode-beleid geschonden."</string>
-    <string name="android_upgrading_title" msgid="378740715658358071">"Android wordt bijgewerkt..."</string>
-    <string name="android_upgrading_apk" msgid="274409861603566003">"Applicatie <xliff:g id="NUMBER_0">%1$d</xliff:g> van <xliff:g id="NUMBER_1">%2$d</xliff:g> optimaliseren."</string>
+    <string name="android_upgrading_title" msgid="378740715658358071">"Android wordt bijgewerkt\u2026"</string>
+    <string name="android_upgrading_apk" msgid="274409861603566003">"App <xliff:g id="NUMBER_0">%1$d</xliff:g> van <xliff:g id="NUMBER_1">%2$d</xliff:g> optimaliseren."</string>
     <string name="android_upgrading_starting_apps" msgid="7959542881906488763">"Apps starten."</string>
     <string name="android_upgrading_complete" msgid="1405954754112999229">"Opstarten afronden."</string>
     <string name="heavy_weight_notification" msgid="9087063985776626166">"<xliff:g id="APP">%1$s</xliff:g> wordt uitgevoerd"</string>
@@ -1111,10 +1104,10 @@
     <item quantity="other" msgid="4641872797067609177">"<xliff:g id="INDEX">%d</xliff:g> van <xliff:g id="TOTAL">%d</xliff:g>"</item>
   </plurals>
     <string name="action_mode_done" msgid="7217581640461922289">"Gereed"</string>
-    <string name="progress_unmounting" product="nosdcard" msgid="535863554318797377">"USB-opslag ontkoppelen..."</string>
-    <string name="progress_unmounting" product="default" msgid="5556813978958789471">"SD-kaart ontkoppelen..."</string>
-    <string name="progress_erasing" product="nosdcard" msgid="4183664626203056915">"USB-opslag wissen..."</string>
-    <string name="progress_erasing" product="default" msgid="2115214724367534095">"SD-kaart wissen..."</string>
+    <string name="progress_unmounting" product="nosdcard" msgid="535863554318797377">"USB-opslag ontkoppelen\u2026"</string>
+    <string name="progress_unmounting" product="default" msgid="5556813978958789471">"SD-kaart ontkoppelen\u2026"</string>
+    <string name="progress_erasing" product="nosdcard" msgid="4183664626203056915">"USB-opslag wissen\u2026"</string>
+    <string name="progress_erasing" product="default" msgid="2115214724367534095">"SD-kaart wissen\u2026"</string>
     <string name="format_error" product="nosdcard" msgid="6299769563624776948">"Kan USB-opslag niet wissen."</string>
     <string name="format_error" product="default" msgid="7315248696644510935">"Kan SD-kaart niet wissen."</string>
     <string name="media_bad_removal" msgid="7960864061016603281">"SD-kaart is verwijderd voordat deze is ontkoppeld."</string>
@@ -1172,7 +1165,7 @@
     <string name="keyboardview_keycode_mode_change" msgid="4547387741906537519">"Modus wijzigen"</string>
     <string name="keyboardview_keycode_shift" msgid="2270748814315147690">"Shift"</string>
     <string name="keyboardview_keycode_enter" msgid="2985864015076059467">"Enter"</string>
-    <string name="activitychooserview_choose_application" msgid="4540794444768613567">"Een applicatie kiezen"</string>
+    <string name="activitychooserview_choose_application" msgid="4540794444768613567">"Een app kiezen"</string>
     <string name="shareactionprovider_share_with" msgid="806688056141131819">"Delen met"</string>
     <string name="shareactionprovider_share_with_application" msgid="5627411384638389738">"Delen met <xliff:g id="APPLICATION_NAME">%s</xliff:g>"</string>
     <string name="content_description_sliding_handle" msgid="7311938669217173870">"Schuifgreep. Tikken en blijven aanraken."</string>
@@ -1193,7 +1186,7 @@
     <string name="storage_internal" msgid="7556050805474115618">"Interne opslag"</string>
     <string name="storage_sd_card" msgid="8921771478629812343">"SD-kaart"</string>
     <string name="storage_usb" msgid="3017954059538517278">"USB-opslag"</string>
-    <string name="extract_edit_menu_button" msgid="302060189057163906">"Bewerken..."</string>
+    <string name="extract_edit_menu_button" msgid="302060189057163906">"Bewerken\u2026"</string>
     <string name="data_usage_warning_title" msgid="1955638862122232342">"Waarschuwing v. gegevensgebruik"</string>
     <string name="data_usage_warning_body" msgid="7217480745540055170">"Aanraken: gebruik/inst. bekijken"</string>
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"2G-/3G-gegevens uitgeschakeld"</string>
@@ -1222,12 +1215,22 @@
     <string name="fingerprints" msgid="4516019619850763049">"Vingerafdrukken:"</string>
     <string name="sha256_fingerprint" msgid="4391271286477279263">"SHA-256-vingerafdruk"</string>
     <string name="sha1_fingerprint" msgid="7930330235269404581">"SHA-1-vingerafdruk:"</string>
-    <string name="activity_chooser_view_see_all" msgid="180268188117163072">"Alle bekijken..."</string>
+    <string name="activity_chooser_view_see_all" msgid="180268188117163072">"Alle bekijken\u2026"</string>
     <string name="activity_chooser_view_dialog_title_default" msgid="3325054276356556835">"Activiteit selecteren"</string>
-    <string name="share_action_provider_share_with" msgid="1791316789651185229">"Delen met..."</string>
+    <string name="share_action_provider_share_with" msgid="1791316789651185229">"Delen met\u2026"</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Apparaat vergrendeld."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
-    <string name="sending" msgid="8715108995741758718">"Verzenden..."</string>
+    <string name="sending" msgid="8715108995741758718">"Verzenden\u2026"</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"Browser starten?"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"Oproep accepteren?"</string>
+
+    <!-- CyanogenMod additions -->
+    <string name="reboot_system" product="tablet">Tablet herstarten</string>
+    <string name="reboot_system" product="default">Telefoon herstarten</string>
+    <string name="global_action_screenshot">Beeldschermafdruk</string>
+    <string name="reboot_reboot">Normaal herstarten</string>
+    <string name="reboot_progress">Herstarten\u2026</string>
+    <string name="reboot_confirm">Uw telefoon zal worden herstart.</string>
+    <string name="global_action_reboot">Herstarten</string>
+    <string name="app_killed_message">App geforceerd afgesloten</string>
 </resources>
