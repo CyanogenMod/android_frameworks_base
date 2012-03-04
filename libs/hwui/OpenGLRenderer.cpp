@@ -190,15 +190,19 @@ int OpenGLRenderer::prepareDirty(float left, float top, float right, float botto
 
     syncState();
 
+#ifndef QCOM_HARDWARE
     if (!opaque) {
+#endif
         mCaches.setScissor(left, mSnapshot->height - bottom, right - left, bottom - top);
         glClear(GL_COLOR_BUFFER_BIT);
         return DrawGlInfo::kStatusDrew;
+#ifndef QCOM_HARDWARE
     } else {
         mCaches.resetScissor();
     }
 
     return DrawGlInfo::kStatusDone;
+#endif
 }
 
 void OpenGLRenderer::syncState() {
