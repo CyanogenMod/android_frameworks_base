@@ -494,7 +494,7 @@ void rsdAllocationData3D_alloc(const android::renderscript::Context *rsc,
 
 void rsdAllocationElementData1D(const Context *rsc, const Allocation *alloc,
                                 uint32_t x,
-                                const void *data, uint32_t cIdx, uint32_t sizeBytes) {
+                                const void *data, uint32_t sizeBytes, uint32_t cIdx) {
     DrvAllocation *drv = (DrvAllocation *)alloc->mHal.drv;
 
     uint32_t eSize = alloc->mHal.state.elementSizeBytes;
@@ -515,7 +515,7 @@ void rsdAllocationElementData1D(const Context *rsc, const Allocation *alloc,
 
 void rsdAllocationElementData2D(const Context *rsc, const Allocation *alloc,
                                 uint32_t x, uint32_t y,
-                                const void *data, uint32_t cIdx, uint32_t sizeBytes) {
+                                const void *data, uint32_t sizeBytes, uint32_t cIdx) {
     DrvAllocation *drv = (DrvAllocation *)alloc->mHal.drv;
 
     uint32_t eSize = alloc->mHal.state.elementSizeBytes;
