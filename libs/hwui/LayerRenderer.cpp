@@ -221,6 +221,7 @@ Layer* LayerRenderer::createLayer(uint32_t width, uint32_t height, bool isOpaque
 
             glBindFramebuffer(GL_FRAMEBUFFER, previousFbo);
             Caches::getInstance().fboCache.put(fbo);
+            layer->setFbo(0);
 
             layer->deleteTexture();
             delete layer;
@@ -307,6 +308,7 @@ void LayerRenderer::destroyLayer(Layer* layer) {
 
         if (layer->getFbo()) {
             Caches::getInstance().fboCache.put(layer->getFbo());
+            layer->setFbo(0);
         }
 
         if (!Caches::getInstance().layerCache.put(layer)) {
