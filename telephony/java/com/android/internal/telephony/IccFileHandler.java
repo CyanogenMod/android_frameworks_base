@@ -294,110 +294,116 @@ public abstract class IccFileHandler extends Handler implements IccConstants {
         int curByte = 0;
         int curTag;
         int curSectionLen;
-        if (((short)data[curByte++] & 0xFF) == 0x62) {
-            logd("TLV format detected");
-            curSectionLen = data[curByte++];
-            int dataLenLeft = data.length-2;
-            if (curSectionLen != dataLenLeft) {
-                logd("Unexpected TLV length of " + curSectionLen + "; we have " + dataLenLeft + "bytes of data left");
-                // ... It sometimes happens, even if mandatory parts are missing and length > than the actual size. Data is truncated?
-                // throw new IccFileTypeMismatch();
-            }
-
-            // File Descriptor '0x82' (mandatory)
-            curTag = ((int)data[curByte++]) & 0xFF;
-            if (curTag != 0x82) {
-                logd("Unexpected TLV data, expecting file descriptor tag, but got " + curTag);
-                throw new IccFileTypeMismatch();
-            }
-            curSectionLen = data[curByte++];
-            if (curSectionLen != 5) {
-                // TODO : Currently, a length of 2 is not handled
-                logd("TLV File Description length of " + curSectionLen + " is not handled yet");
-                throw new IccFileTypeMismatch();
-            }
-            arrayToReturn[0] = ((data[curByte+2] & 0xff) << 8) +
-                                (data[curByte+3] & 0xff); // Length of 1 record
-            arrayToReturn[2] = data[curByte+4]; // Number of records
-
-            // File size is normally set later, but for some reason, sometimes the data
-            // is missing mandatory section. For this reason, set the information here
-            // it should match anyway... (honestly, I'm not sure)
-            arrayToReturn[1] = arrayToReturn[0] * arrayToReturn[2];
-            curByte += curSectionLen;
-
-            // File Identifier '0x83' (mandatory)
-            curTag = ((int)data[curByte++]) & 0xFF;
-            if (curTag != 0x83) {
-                logd("Unexpected TLV data, expecting file identifier tag, but got " + curTag);
-                throw new IccFileTypeMismatch();
-            }
-            curSectionLen = data[curByte++];
-            curByte += curSectionLen;
-
-            // Proprietary info '0xA5' (optional)
-            curTag = ((int)data[curByte++]) & 0xFF;
-            if (curTag == 0xA5) {
-                // Not needed, just skip it...
+        try {
+            if (((short)data[curByte++] & 0xFF) == 0x62) {
+                logd("TLV format detected");
                 curSectionLen = data[curByte++];
-                curByte += curSectionLen;
-            }
-
-            // Data is sometimes truncated!? Mandatory parts are sometimes missing and TLV length > than the actual data size.
-            // Do not throw exception, try to do our best
-            if (data.length > curByte) {
-                // Life Cycle Status Integer '0x8A' (mandatory)
-                curTag = ((int)data[curByte++]) & 0xFF;
-                if (curTag != 0x8A) {
-                    logd("Unexpected TLV data, expecting Life Cycle Status Integer tag, but got " + curTag);
-                    throw new IccFileTypeMismatch();
+                int dataLenLeft = data.length-2;
+                if (curSectionLen != dataLenLeft) {
+                    logd("Unexpected TLV length of " + curSectionLen + "; we have " + dataLenLeft + "bytes of data left");
+                    // ... It sometimes happens, even if mandatory parts are missing and length > than the actual size. Data is truncated?
+                    // throw new IccFileTypeMismatch();
                 }
-                // Not needed, just skip it...
-                curSectionLen = data[curByte++];
-                curByte += curSectionLen;
-            }
 
-            // Data is sometimes truncated!? Mandatory parts are sometimes missing and TLV length > than the actual data size.
-            // Do not throw exception, try to do our best
-            if (data.length > curByte) {
-                // Security Attributes '0x8B' / '0x8C' / '0xAB'  (exactly one of them is mandatory)
+                // File Descriptor '0x82' (mandatory)
                 curTag = ((int)data[curByte++]) & 0xFF;
-                if (curTag != 0x8B &&
-                    curTag != 0x8C &&
-                    curTag != 0xAB) {
-                    logd("Unexpected TLV data, expecting Security Attributes tag, but got " + curTag);
-                    throw new IccFileTypeMismatch();
-                }
-                // Not needed, just skip it...
-                curSectionLen = data[curByte++];
-                curByte += curSectionLen;
-            }
-
-            // Data is sometimes truncated!? Mandatory parts are sometimes missing and TLV length > than the actual data size.
-            // Do not throw exception, try to do our best
-            if (data.length > curByte) {
-                // File Size '0x80'  (mandatory)
-                curTag = ((int)data[curByte++]) & 0xFF;
-                if (curTag != 0x80) {
-                    logd("Unexpected TLV data, expecting File Size tag, but got " + curTag);
+                if (curTag != 0x82) {
+                    logd("Unexpected TLV data, expecting file descriptor tag, but got " + curTag);
                     throw new IccFileTypeMismatch();
                 }
                 curSectionLen = data[curByte++];
-                arrayToReturn[1] = 0;
-                for (int i = 0; i < curSectionLen; i++) {
-                    arrayToReturn[1] += ((data[i] & 0xff) << (8*i)); // File size
+                if (curSectionLen != 5) {
+                    // TODO : Currently, a length of 2 is not handled
+                    logd("TLV File Description length of " + curSectionLen + " is not handled yet");
+                    throw new IccFileTypeMismatch();
                 }
+                arrayToReturn[0] = ((data[curByte+2] & 0xff) << 8) +
+                                    (data[curByte+3] & 0xff); // Length of 1 record
+                arrayToReturn[2] = data[curByte+4]; // Number of records
+
+                // File size is normally set later, but for some reason, sometimes the data
+                // is missing mandatory section. For this reason, set the information here
+                // it should match anyway... (honestly, I'm not sure)
+                arrayToReturn[1] = arrayToReturn[0] * arrayToReturn[2];
                 curByte += curSectionLen;
+
+                // File Identifier '0x83' (mandatory)
+                curTag = ((int)data[curByte++]) & 0xFF;
+                if (curTag != 0x83) {
+                    logd("Unexpected TLV data, expecting file identifier tag, but got " + curTag);
+                    throw new IccFileTypeMismatch();
+                }
+                curSectionLen = data[curByte++];
+                curByte += curSectionLen;
+
+                // Proprietary info '0xA5' (optional)
+                curTag = ((int)data[curByte]) & 0xFF;
+                if (curTag == 0xA5) {
+                    // Not needed, just skip it...
+                    curByte++;
+                    curSectionLen = data[curByte++];
+                    curByte += curSectionLen;
+                }
+
+                // Data is sometimes truncated!? Mandatory parts are sometimes missing and TLV length > than the actual data size.
+                // Do not throw exception, try to do our best
+                if (data.length > curByte) {
+                    // Life Cycle Status Integer '0x8A' (mandatory)
+                    curTag = ((int)data[curByte++]) & 0xFF;
+                    if (curTag != 0x8A) {
+                        logd("Unexpected TLV data, expecting Life Cycle Status Integer tag, but got " + curTag);
+                        throw new IccFileTypeMismatch();
+                    }
+                    // Not needed, just skip it...
+                    curSectionLen = data[curByte++];
+                    curByte += curSectionLen;
+                }
+
+                // Data is sometimes truncated!? Mandatory parts are sometimes missing and TLV length > than the actual data size.
+                // Do not throw exception, try to do our best
+                if (data.length > curByte) {
+                    // Security Attributes '0x8B' / '0x8C' / '0xAB'  (exactly one of them is mandatory)
+                    curTag = ((int)data[curByte++]) & 0xFF;
+                    if (curTag != 0x8B &&
+                        curTag != 0x8C &&
+                        curTag != 0xAB) {
+                        logd("Unexpected TLV data, expecting Security Attributes tag, but got " + curTag);
+                        throw new IccFileTypeMismatch();
+                    }
+                    // Not needed, just skip it...
+                    curSectionLen = data[curByte++];
+                    curByte += curSectionLen;
+                }
+
+                // Data is sometimes truncated!? Mandatory parts are sometimes missing and TLV length > than the actual data size.
+                // Do not throw exception, try to do our best
+                if (data.length > curByte) {
+                    // File Size '0x80'  (mandatory)
+                    curTag = ((int)data[curByte++]) & 0xFF;
+                    if (curTag != 0x80) {
+                        logd("Unexpected TLV data, expecting File Size tag, but got " + curTag);
+                        throw new IccFileTypeMismatch();
+                    }
+                    curSectionLen = data[curByte++];
+                    arrayToReturn[1] = 0;
+                    for (int i = 0; i < curSectionLen; i++) {
+                        arrayToReturn[1] += ((data[i] & 0xff) << (8*i)); // File size
+                    }
+                    curByte += curSectionLen;
+                }
+
+                logd("ParseUICCTLVData result: Record Size = " + arrayToReturn[0] + "; File Size = " + arrayToReturn[1] + "; Number of Records = " + arrayToReturn[2]);
+
+                // Total File Size '0x81' (optional)
+                // Short File Identifier '0x88' (optional)
+                // --> not used...
             }
-
-            logd("ParseUICCTLVData result: Record Size = " + arrayToReturn[0] + "; File Size = " + arrayToReturn[1] + "; Number of Records = " + arrayToReturn[2]);
-
-            // Total File Size '0x81' (optional)
-            // Short File Identifier '0x88' (optional)
-            // --> not used...
-        }
-        else {
-            logd("Throwing exception : Expecting a TLV tag!");
+            else {
+                logd("Throwing exception : Expecting a TLV tag!");
+                throw new IccFileTypeMismatch();
+            }
+        } catch (Exception exc) {
+            loge("Exception in ParseUICCTLVData: " + exc);
             throw new IccFileTypeMismatch();
         }
     }
