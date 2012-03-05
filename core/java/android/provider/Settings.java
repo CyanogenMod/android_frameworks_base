@@ -2975,6 +2975,12 @@ public final class Settings {
         public static final String DEVICE_PROVISIONED = "device_provisioned";
 
         /**
+         * Whether the user has seen the cyanogenmod welcome screen (0 = false, 1 = true)
+         * @hide
+         */
+        public static final String CM_WELCOME_COMPLETE = "cm_welcome_complete";
+
+        /**
          * List of input methods that are currently enabled.  This is a string
          * containing the IDs of all enabled input methods, each ID separated
          * by ':'.
