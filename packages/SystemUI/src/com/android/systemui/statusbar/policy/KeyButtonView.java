@@ -20,14 +20,15 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.RemoteException;
-import android.os.SystemClock;
 import android.os.ServiceManager;
+import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.view.accessibility.AccessibilityEvent;
 import android.view.HapticFeedbackConstants;
 import android.view.IWindowManager;
 import android.view.InputDevice;
@@ -37,9 +38,14 @@ import android.view.MotionEvent;
 import android.view.SoundEffectConstants;
 import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.accessibility.AccessibilityEvent;
 import android.widget.ImageView;
 
+import com.android.internal.util.ArrayUtils;
 import com.android.systemui.R;
+import com.android.systemui.statusbar.phone.NavbarEditor;
+import com.android.systemui.statusbar.phone.NavbarEditor.ButtonInfo;
+import com.android.systemui.statusbar.phone.NavigationBarView;
 
 public class KeyButtonView extends ImageView {
     private static final String TAG = "StatusBar.KeyButtonView";
@@ -200,7 +206,40 @@ public class KeyButtonView extends ImageView {
         super.setPressed(pressed);
     }
 
+    public void setInfo (String itemKey, boolean isVertical) {
+        ButtonInfo item = NavbarEditor.buttonMap.get(itemKey);
+        setTag(itemKey);
+        setContentDescription(getResources().getString(item.contentDescription));
+        mCode = item.mCode;
+        //TODO Reason for setImageDrawable vs setImageResource is because setImageResource calls relayout() w/o
+        //any checks. setImageDrawable performs size checks and only calls relayout if necessary. We rely on this
+        //because otherwise the setX/setY attributes which are post layout cause it to mess up. A fix if desired,
+        //is to just reinflate on change.
+        Drawable keyD;
+
+        if (ArrayUtils.contains(NavbarEditor.smallButtonIds,getId())) {
+            keyD = getResources().getDrawable(item.sideResource);
+        } else if (!isVertical) {
+            keyD = getResources().getDrawable(item.portResource);
+        } else {
+            keyD = getResources().getDrawable(item.landResource);
+        }
+        setImageDrawable(keyD);
+        if (itemKey.equals("empty")) {
+            if (ArrayUtils.contains(NavbarEditor.smallButtonIds,getId())) {
+                setVisibility(NavigationBarView.getEditMode() ? View.VISIBLE : View.INVISIBLE);
+            } else {
+                setVisibility(NavigationBarView.getEditMode() ? View.VISIBLE : View.GONE);
+            }
+        } else if (itemKey.equals("menu0")) {
+            setVisibility(NavigationBarView.getEditMode() ? View.VISIBLE : View.INVISIBLE);
+        }
+    }
+
     public boolean onTouchEvent(MotionEvent ev) {
+        if (NavigationBarView.getEditMode()) {
+            return false;
+        }
         final int action = ev.getAction();
         int x, y;
 
