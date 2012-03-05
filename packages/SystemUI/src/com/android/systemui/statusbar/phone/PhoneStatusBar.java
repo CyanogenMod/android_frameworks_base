@@ -533,8 +533,12 @@ public class PhoneStatusBar extends StatusBar {
     private void prepareNavigationBarView() {
         mNavigationBarView.reorient();
 
-        mNavigationBarView.getRecentsButton().setOnClickListener(mRecentsClickListener);
-        mNavigationBarView.getRecentsButton().setOnTouchListener(mRecentsPanel);
+        mNavigationBarView.setListener(mRecentsClickListener,mRecentsPanel);
+        View recentView = mNavigationBarView.findViewWithTag("recent");
+        if (recentView != null) {
+            recentView.setOnClickListener(mRecentsClickListener);
+            recentView.setOnTouchListener(mRecentsPanel);
+        }
     }
 
     // For small-screen devices (read: phones) that lack hardware navigation buttons
@@ -2399,6 +2403,7 @@ public class PhoneStatusBar extends StatusBar {
         mNotificationData.clear();
 
         if (mNavigationBarView != null) {
+            mNavigationBarView.unregisterReceivers();
             WindowManagerImpl.getDefault().removeView(mNavigationBarView);
         }
         View newStatusBarView = makeStatusBarView();
