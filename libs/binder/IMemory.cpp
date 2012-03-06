@@ -81,7 +81,9 @@ public:
     virtual void* getBase() const;
     virtual size_t getSize() const;
     virtual uint32_t getFlags() const;
+#ifndef COMPAT_GINGERBREAD
     virtual uint32_t getOffset() const;
+#endif
 
 private:
     friend class IMemory;
@@ -231,7 +233,11 @@ status_t BnMemory::onTransact(
 
 BpMemoryHeap::BpMemoryHeap(const sp<IBinder>& impl)
     : BpInterface<IMemoryHeap>(impl),
-        mHeapId(-1), mBase(MAP_FAILED), mSize(0), mFlags(0), mOffset(0), mRealHeap(false)
+        mHeapId(-1), mBase(MAP_FAILED), mSize(0), mFlags(0),
+#ifndef COMPAT_GINGERBREAD
+        mOffset(0),
+#endif
+        mRealHeap(false)
 {
 }
 
@@ -272,7 +278,9 @@ void BpMemoryHeap::assertMapped() const
             if (mHeapId == -1) {
                 mBase   = heap->mBase;
                 mSize   = heap->mSize;
+#ifndef COMPAT_GINGERBREAD
                 mOffset = heap->mOffset;
+#endif
                 android_atomic_write( dup( heap->mHeapId ), &mHeapId );
             }
         } else {
@@ -296,7 +304,11 @@ void BpMemoryHeap::assertReallyMapped() const
         int parcel_fd = reply.readFileDescriptor();
         ssize_t size = reply.readInt32();
         uint32_t flags = reply.readInt32();
+#ifndef COMPAT_GINGERBREAD
         uint32_t offset = reply.readInt32();
+#else
+        uint32_t offset = 0;
+#endif
 
         LOGE_IF(err, "binder=%p transaction failed fd=%d, size=%ld, err=%d (%s)",
                 asBinder().get(), parcel_fd, size, err, strerror(-err));
@@ -348,10 +360,12 @@ uint32_t BpMemoryHeap::getFlags() const {
     return mFlags;
 }
 
+#ifndef COMPAT_GINGERBREAD
 uint32_t BpMemoryHeap::getOffset() const {
     assertMapped();
     return mOffset;
 }
+#endif
 
 // ---------------------------------------------------------------------------
 
@@ -372,7 +386,9 @@ status_t BnMemoryHeap::onTransact(
             reply->writeFileDescriptor(getHeapID());
             reply->writeInt32(getSize());
             reply->writeInt32(getFlags());
+#ifndef COMPAT_GINGERBREAD
             reply->writeInt32(getOffset());
+#endif
             return NO_ERROR;
         } break;
         default:
