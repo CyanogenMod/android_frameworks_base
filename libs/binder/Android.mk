@@ -33,10 +33,15 @@ sources := \
 
 LOCAL_PATH:= $(call my-dir)
 
+ifeq ($(BOARD_USE_GINGERBREAD_BINDER),true)
+    BINDER_CFLAGS += -DCOMPAT_GINGERBREAD
+endif
+
 include $(CLEAR_VARS)
 LOCAL_LDLIBS += -lpthread
 LOCAL_MODULE := libbinder
 LOCAL_SHARED_LIBRARIES := liblog libcutils libutils
+LOCAL_CFLAGS += ${BINDER_CFLAGS}
 LOCAL_SRC_FILES := $(sources)
 include $(BUILD_SHARED_LIBRARY)
 
@@ -44,4 +49,5 @@ include $(CLEAR_VARS)
 LOCAL_LDLIBS += -lpthread
 LOCAL_MODULE := libbinder
 LOCAL_SRC_FILES := $(sources)
+LOCAL_CFLAGS += ${BINDER_CFLAGS}
 include $(BUILD_STATIC_LIBRARY)
