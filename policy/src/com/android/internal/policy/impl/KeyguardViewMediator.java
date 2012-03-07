@@ -634,8 +634,7 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
             int defValue=(CmSystem.getDefaultBool(mContext, CmSystem.CM_DEFAULT_DISABLE_LOCKSCREEN) ? 1 : 0);
             boolean disableLockscreen=(Settings.System.getInt(mContext.getContentResolver(),
                     Settings.System.LOCKSCREEN_DISABLED, defValue) == 1);
-            if(disableLockscreen)
-                return;
+
             // if another app is disabling us, don't show
             if (!mExternallyEnabled) {
                 if (DEBUG) Log.d(TAG, "doKeyguard: not showing because externally disabled");
@@ -666,9 +665,11 @@ public class KeyguardViewMediator implements KeyguardViewCallback,
                 return;
             }
 
-            if (DEBUG)
-                Log.d(TAG, "doKeyguard: showing the applicable keyguard screen");
-            showLocked(handlerMessage);
+            if (!disableLockscreen || state.isPinLocked()) {
+                if (DEBUG)
+                    Log.d(TAG, "doKeyguard: showing the applicable keyguard screen");
+                showLocked(handlerMessage);
+            }
         }
     }
 
