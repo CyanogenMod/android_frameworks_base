@@ -494,18 +494,13 @@ void Layer::lockPageFlip(bool& recomputeVisibleRegions)
         }
 
 #ifdef QCOM_HARDWARE
-        const DisplayHardware& hw(graphicPlane(0).displayHardware());
-        
-        bool avoidTex = (hw.getFlags() & DisplayHardware::MDP_COMPOSITION) ?
-                          true : false;
-
         // While calling updateTexImage() from SurfaceFlinger, let it know
         // by passing an extra parameter
         // This will be true always.
 
         bool isComposition = true;
 
-        if (mSurfaceTexture->updateTexImage(avoidTex, isComposition) < NO_ERROR) {
+        if (mSurfaceTexture->updateTexImage(isComposition) < NO_ERROR) {
 #else
         if (mSurfaceTexture->updateTexImage() < NO_ERROR) {
 #endif
