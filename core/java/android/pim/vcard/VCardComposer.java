@@ -402,6 +402,19 @@ public class VCardComposer {
         return init(Contacts.CONTENT_URI, selection, selectionArgs, null);
     }
 
+    protected Cursor getCursor() {
+        return mCursor;
+    }
+
+    protected String[] getContactsProjection(final Uri contentUri) {
+        if (Contacts.CONTENT_URI.equals(contentUri) ||
+                CONTACTS_TEST_CONTENT_URI.equals(contentUri)) {
+            return sContactsProjection;
+        }
+
+        return null;
+    }
+
     /**
      * Note that this is unstable interface, may be deleted in the future.
      */
@@ -429,14 +442,12 @@ public class VCardComposer {
             }
         }
 
-        final String[] projection;
-        if (Contacts.CONTENT_URI.equals(contentUri) ||
-                CONTACTS_TEST_CONTENT_URI.equals(contentUri)) {
-            projection = sContactsProjection;
-        } else {
+        final String[] projection = getContactsProjection(contentUri);
+        if (projection == null) {
             mErrorReason = FAILURE_REASON_UNSUPPORTED_URI;
             return false;
         }
+
         mCursor = mContentResolver.query(
                 contentUri, projection, selection, selectionArgs, sortOrder);
 

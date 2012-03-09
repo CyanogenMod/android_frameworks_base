@@ -255,7 +255,7 @@ public class VCardBuilder {
                 TextUtils.isEmpty(displayName));
     }
 
-    private ContentValues getPrimaryContentValue(final List<ContentValues> contentValuesList) {
+    protected ContentValues getPrimaryContentValue(final List<ContentValues> contentValuesList) {
         ContentValues primaryContentValues = null;
         ContentValues subprimaryContentValues = null;
         for (ContentValues contentValues : contentValuesList) {
