@@ -72,7 +72,7 @@ public abstract class PowerButton {
         BUTTONS.put(BUTTON_NETWORKMODE, NetworkModeButton.class);
         BUTTONS.put(BUTTON_AUTOROTATE, AutoRotateButton.class);
         BUTTONS.put(BUTTON_AIRPLANE, AirplaneButton.class);
-//        BUTTONS.put(BUTTON_FLASHLIGHT, FlashlightButton.class);
+        BUTTONS.put(BUTTON_FLASHLIGHT, FlashlightButton.class);
         BUTTONS.put(BUTTON_SLEEP, SleepButton.class);
         BUTTONS.put(BUTTON_MEDIA_PLAY_PAUSE, MediaPlayPauseButton.class);
         BUTTONS.put(BUTTON_MEDIA_PREVIOUS, MediaPreviousButton.class);
