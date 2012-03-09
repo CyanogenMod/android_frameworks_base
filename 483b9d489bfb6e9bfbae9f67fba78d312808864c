@@ -1,0 +1,10 @@
+Change-Id: I483b9d489bfb6e9bfbae9f67fba78d312808864c
+Code-Review+2: Steve Kondik <shade@chemlab.org>
+Verified+1: Steve Kondik <shade@chemlab.org>
+Code-Review+1: Igor Sokolov <wildfatduck@gmail.com>
+Code-Review+1: Ilia Aksyonov <axel2033@gmail.com>
+Submitted-by: Steve Kondik <shade@chemlab.org>
+Submitted-at: Fri, 09 Mar 2012 09:59:36 +0300
+Reviewed-on: http://review.cyanogenmod.com/13339
+Project: CyanogenMod/android_frameworks_base
+Branch: refs/heads/ics
