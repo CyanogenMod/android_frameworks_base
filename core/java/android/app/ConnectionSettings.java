@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.location.LocationManager;
 import android.net.wifi.WifiManager;
+import android.net.wimax.WimaxHelper;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.Settings;
@@ -86,66 +87,57 @@ public final class ConnectionSettings implements Parcelable {
         BluetoothAdapter bta = BluetoothAdapter.getDefaultAdapter();
         LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         WifiManager wm = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
-        Boolean state;
+
+        boolean forcedState = getValue() == 1;
+        boolean currentState;
 
         switch (getConnectionId()) {
             case PROFILE_CONNECTION_BLUETOOTH:
-                state = bta.isEnabled();
-                if (getValue() == 1) {
-                    if (!state) {
-                        bta.enable();
-                    }
-                } else {
-                    if (state) {
-                        bta.disable();
-                    }
+                currentState = bta.isEnabled();
+                if (forcedState && !currentState) {
+                    bta.enable();
+                } else if (!forcedState && currentState) {
+                    bta.disable();
                 }
                 break;
             case PROFILE_CONNECTION_GPS:
-                state = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-                if (getValue() == 1) {
-                    if (!state) {
-                        Settings.Secure.setLocationProviderEnabled(context.getContentResolver(), LocationManager.GPS_PROVIDER, true);
-                    }
-                } else {
-                    if (state) {
-                        Settings.Secure.setLocationProviderEnabled(context.getContentResolver(), LocationManager.GPS_PROVIDER, false);
-                    }
+                currentState = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+                if (currentState != forcedState) {
+                    Settings.Secure.setLocationProviderEnabled(context.getContentResolver(),
+                            LocationManager.GPS_PROVIDER, forcedState);
                 }
                 break;
             case PROFILE_CONNECTION_WIFI:
                 int wifiApState = wm.getWifiApState();
-                state = wm.isWifiEnabled();
-                if (getValue() == 1) {
-                    if ((wifiApState == WifiManager.WIFI_AP_STATE_ENABLING) || (wifiApState == WifiManager.WIFI_AP_STATE_ENABLED)) {
+                currentState = wm.isWifiEnabled();
+                if (currentState != forcedState) {
+                    // Disable wifi tether
+                    if (forcedState && (wifiApState == WifiManager.WIFI_AP_STATE_ENABLING) ||
+                            (wifiApState == WifiManager.WIFI_AP_STATE_ENABLED)) {
                         wm.setWifiApEnabled(null, false);
                     }
-                    if (!state) {
-                        wm.setWifiEnabled(true);
-                    }
-                } else {
-                    if (state) {
-                        wm.setWifiEnabled(false);
-                    }
+                    wm.setWifiEnabled(forcedState);
                 }
                 break;
             case PROFILE_CONNECTION_WIFIAP:
                 int wifiState = wm.getWifiState();
-                state = wm.isWifiApEnabled();
-                if (getValue() == 1) {
-                    if ((wifiState == WifiManager.WIFI_STATE_ENABLING) || (wifiState == WifiManager.WIFI_STATE_ENABLED)) {
+                currentState = wm.isWifiApEnabled();
+                if (currentState != forcedState) {
+                    // Disable wifi
+                    if (forcedState && (wifiState == WifiManager.WIFI_STATE_ENABLING) || (wifiState == WifiManager.WIFI_STATE_ENABLED)) {
                         wm.setWifiEnabled(false);
                     }
-                    if (!state) {
-                        wm.setWifiApEnabled(null, true);
-                    }
-                } else {
-                    if (state) {
-                        wm.setWifiApEnabled(null, false);
+                    wm.setWifiApEnabled(null, forcedState);
+                }
+                break;
+            case PROFILE_CONNECTION_WIMAX:
+                if (WimaxHelper.isWimaxSupported(context)) {
+                    currentState = WimaxHelper.isWimaxEnabled(context);
+                    if (currentState != forcedState) {
+                        WimaxHelper.setWimaxEnabled(context, forcedState);
                     }
                 }
                 break;
-            default: break;
         }
     }
 
