@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.location.LocationManager;
 import android.net.wifi.WifiManager;
+import android.net.wimax.WimaxHelper;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.Settings;
@@ -142,6 +143,20 @@ public final class ConnectionSettings implements Parcelable {
                 } else {
                     if (state) {
                         wm.setWifiApEnabled(null, false);
+                    }
+                }
+                break;
+            case PROFILE_CONNECTION_WIMAX:
+                if (WimaxHelper.isWimaxSupported(context)) {
+                    state = WimaxHelper.isWimaxEnabled(context);
+                    if (getValue() == 1) {
+                        if (!state) {
+                            WimaxHelper.setWimaxEnabled(context, true);
+                        }
+                    } else {
+                        if (state) {
+                            WimaxHelper.setWimaxEnabled(context, false);
+                        }
                     }
                 }
                 break;
