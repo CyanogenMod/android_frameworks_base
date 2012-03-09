@@ -1230,4 +1230,5 @@
     <string name="sending" msgid="8715108995741758718">"Lähetetään..."</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"Käynnistetäänkö selain?"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"Vastataanko puheluun?"</string>
+    <string name="global_action_screenshot">Kuvakaappaus</string>
 </resources>
