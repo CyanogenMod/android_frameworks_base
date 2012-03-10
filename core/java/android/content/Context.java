@@ -1518,6 +1518,8 @@ public abstract class Context {
      *
      * @see #getSystemService
      * @see android.app.ProfileManager
+     *
+     * @hide
      */
     public static final String PROFILE_SERVICE = "profile";
 

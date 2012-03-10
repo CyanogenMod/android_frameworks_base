@@ -26,12 +26,14 @@ import android.os.RemoteException;
 import android.os.ServiceManager;
 import android.util.Log;
 
-public class ProfileManager
-{
+/**
+ * @hide
+ */
+public class ProfileManager {
 
     private static IProfileManager sService;
 
-    private Context                mContext;
+    private Context mContext;
 
     private static final String TAG = "ProfileManager";
 
