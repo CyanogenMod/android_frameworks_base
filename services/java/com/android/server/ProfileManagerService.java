@@ -37,6 +37,7 @@ import android.os.ParcelUuid;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -284,7 +285,9 @@ public class ProfileManagerService extends IProfileManager.Stub {
 
     @Override
     public Profile[] getProfiles() throws RemoteException {
-        return mProfiles.values().toArray(new Profile[mProfiles.size()]);
+        Profile[] tmpArr = mProfiles.values().toArray(new Profile[mProfiles.size()]);
+        Arrays.sort(tmpArr);
+        return tmpArr;
     }
 
     @Override
