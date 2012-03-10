@@ -328,7 +328,12 @@ public class ProfileManagerService extends IProfileManager.Stub {
 
     @Override
     public boolean profileExistsByName(String profileName) throws RemoteException {
-        return mProfileNames.containsKey(profileName);
+        for (Map.Entry<String, UUID> entry : mProfileNames.entrySet()) {
+            if (entry.getKey().equalsIgnoreCase(profileName)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
