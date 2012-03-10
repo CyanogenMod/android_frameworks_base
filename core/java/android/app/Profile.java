@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public final class Profile implements Parcelable {
+public final class Profile implements Parcelable, Comparable {
 
     private String mName;
 
@@ -88,6 +88,17 @@ public final class Profile implements Parcelable {
 
     private Profile(Parcel in) {
         readFromParcel(in);
+    }
+
+    public int compareTo(Object obj)
+    {
+        Profile tmp = (Profile) obj;
+        if (mName.compareTo(tmp.mName) < 0) {
+            return -1;
+        } else if (mName.compareTo(tmp.mName) > 0) {
+            return 1;
+        }
+        return 0;
     }
 
     /** @hide */
