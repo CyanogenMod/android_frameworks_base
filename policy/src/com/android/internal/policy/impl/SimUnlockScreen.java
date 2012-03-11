@@ -36,6 +36,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.android.internal.R;
 
+import android.provider.Settings;
+
 /**
  * Displays a dialer like interface to unlock the SIM PIN.
  */
@@ -46,6 +48,8 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
 
     private final KeyguardUpdateMonitor mUpdateMonitor;
     private final KeyguardScreenCallback mCallback;
+
+    private Context mContext;
 
     private TextView mHeaderText;
     private TextView mPinText;
@@ -72,6 +76,7 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             KeyguardUpdateMonitor updateMonitor, KeyguardScreenCallback callback,
             LockPatternUtils lockpatternutils) {
         super(context);
+        mContext = context;
         mUpdateMonitor = updateMonitor;
         mCallback = callback;
 
@@ -211,6 +216,27 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
     }
 
     private void checkPin() {
+    	int isEnabled;
+
+    	// airplane mode management (AC1953)
+    	try {
+            //get the current airplane mode
+    	    isEnabled = Settings.System.getInt(mContext.getContentResolver(),Settings.System.AIRPLANE_MODE_ON);
+    	}
+    	catch (Settings.SettingNotFoundException exc) {
+    	    //this path would never be executed 
+    	    isEnabled = 0;
+    	}
+    	
+    	// check airplane mode
+    	if (isEnabled == 1) {
+            // if the airplane mode is ON pin cannot be validated because SIM card is disabled, display a message to the user, and don't submit.
+            mHeaderText.setText(R.string.global_actions_airplane_mode_on_status);
+            mPinText.setText("");
+            mEnteredDigits = 0;
+            mCallback.pokeWakelock();
+            return;
+        }
 
         // make sure that the pin is at least 4 digits long.
         if (mEnteredDigits < 4) {
@@ -363,10 +389,27 @@ public class SimUnlockScreen extends LinearLayout implements KeyguardScreen, Vie
             mCancelButton.setOnClickListener(this);
         }
 
-
         public void onClick(View v) {
+            int isEnabled;
             if (v == mCancelButton) {
-                mCallback.goToLockScreen();
+    	        // airplane mode management (AC1953)
+                try {
+                    //get the current airplane mode
+    	            isEnabled = Settings.System.getInt(mContext.getContentResolver(),Settings.System.AIRPLANE_MODE_ON);
+    	        }
+    	        catch (Settings.SettingNotFoundException exc) {
+    	            //this path would never be executed 
+    	            isEnabled = 0;
+    	        }
+    	
+    	        // check airplane mode
+    	        if (isEnabled == 1) {
+                    mCallback.goToUnlockScreen();
+                }
+                else
+                {
+                    mCallback.goToLockScreen();
+                }
                 return;
             }
 
