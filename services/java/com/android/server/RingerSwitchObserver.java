@@ -17,7 +17,9 @@
 package com.android.server;
 
 import android.app.ActivityManagerNative;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.os.UEventObserver;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
@@ -31,6 +33,8 @@ import android.view.VolumePanel;
 import android.media.AudioService;
 import android.media.IAudioService;
 import android.media.AudioManager;
+
+import com.android.internal.app.ThemeUtils;
 
 import java.io.FileReader;
 import java.io.FileNotFoundException;
@@ -50,6 +54,7 @@ class RingerSwitchObserver extends UEventObserver {
     private String mRingerswitchName;
     private IAudioService mAudioService;
     private Context mContext;
+    private Context mUiContext;
     private VolumePanel mVolumePanel;
 
     private final WakeLock mWakeLock;  // held while there is a pending route change
@@ -57,6 +62,13 @@ class RingerSwitchObserver extends UEventObserver {
     public RingerSwitchObserver(Context context) {
 
         mContext = context;
+
+        ThemeUtils.registerThemeChangeReceiver(context, new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                mUiContext = null;
+            }
+        });
 
         PowerManager pm = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "RingerSwitchObserver");
@@ -100,7 +112,18 @@ class RingerSwitchObserver extends UEventObserver {
         }
 
         mAudioService = IAudioService.Stub.asInterface(ServiceManager.checkService(Context.AUDIO_SERVICE));
-        mVolumePanel = new VolumePanel(mContext, (AudioService) mAudioService);
+    }
+
+    private synchronized final VolumePanel getVolumePanel() {
+        if (mUiContext == null || mVolumePanel == null) {
+            if (mUiContext == null) {
+                mUiContext = ThemeUtils.createUiContext(mContext);
+            }
+            final Context context = mUiContext != null ? mUiContext : mContext;
+            mVolumePanel = new VolumePanel(mContext, (AudioService) mAudioService);
+        }
+
+        return mVolumePanel;
     }
 
     private synchronized final void update(String newName, int newState) {
@@ -130,7 +153,7 @@ class RingerSwitchObserver extends UEventObserver {
                 }
 
                 // Raise UI
-                mVolumePanel.postVolumeChanged(AudioManager.STREAM_RING,AudioManager.FLAG_SHOW_UI | AudioManager.FLAG_VIBRATE);
+                getVolumePanel().postVolumeChanged(AudioManager.STREAM_RING,AudioManager.FLAG_SHOW_UI | AudioManager.FLAG_VIBRATE);
 
             } catch (RemoteException e) {
             }
