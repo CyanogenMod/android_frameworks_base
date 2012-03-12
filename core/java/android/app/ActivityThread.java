@@ -3725,7 +3725,7 @@ public final class ActivityThread {
                 // We removed the old resources object from the mActiveResources
                 // cache, now we need to trigger an update for each application.
                 if ((diff & ActivityInfo.CONFIG_THEME_RESOURCE) != 0) {
-                    if (cb instanceof Activity || cb instanceof Application) {
+                    if (cb instanceof ContextWrapper) {
                         Context context = ((ContextWrapper)cb).getBaseContext();
                         if (context instanceof ContextImpl) {
                             ((ContextImpl)context).refreshResourcesIfNecessary();
