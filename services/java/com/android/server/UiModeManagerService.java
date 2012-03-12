@@ -56,6 +56,7 @@ import java.util.Iterator;
 
 import com.android.internal.R;
 import com.android.internal.app.DisableCarModeActivity;
+import com.android.internal.app.ThemeUtils;
 
 class UiModeManagerService extends IUiModeManager.Stub {
     private static final String TAG = UiModeManager.class.getSimpleName();
@@ -81,6 +82,7 @@ class UiModeManagerService extends IUiModeManager.Stub {
     private static final String ACTION_UPDATE_NIGHT_MODE = "com.android.server.action.UPDATE_NIGHT_MODE";
 
     private final Context mContext;
+    private Context mUiContext;
 
     final Object mLock = new Object();
 
@@ -249,6 +251,13 @@ class UiModeManagerService extends IUiModeManager.Stub {
         }
     };
 
+    private final BroadcastReceiver mThemeChangeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mUiContext = null;
+        }
+    };
+
     // A LocationListener to initialize the network location provider. The location updates
     // are handled through the passive location provider.
     private final LocationListener mEmptyLocationListener =  new LocationListener() {
@@ -341,6 +350,8 @@ class UiModeManagerService extends IUiModeManager.Stub {
         IntentFilter filter = new IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED);
         filter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
         mContext.registerReceiver(mUpdateLocationReceiver, filter);
+
+        ThemeUtils.registerThemeChangeReceiver(mContext, mThemeChangeReceiver);
 
         PowerManager powerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         mWakeLock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, TAG);
@@ -633,7 +644,7 @@ class UiModeManagerService extends IUiModeManager.Stub {
                 n.flags = Notification.FLAG_ONGOING_EVENT;
                 n.when = 0;
                 n.setLatestEventInfo(
-                        mContext,
+                        getUiContext(),
                         mContext.getString(R.string.car_mode_disable_notification_title),
                         mContext.getString(R.string.car_mode_disable_notification_message),
                         PendingIntent.getActivity(mContext, 0, carModeOffIntent, 0));
@@ -827,6 +838,13 @@ class UiModeManagerService extends IUiModeManager.Stub {
         mAlarmManager.set(AlarmManager.RTC_WAKEUP, nextUpdate, pendingIntent);
 
         mComputedNightMode = nightMode;
+    }
+
+    private Context getUiContext() {
+        if (mUiContext == null) {
+            mUiContext = ThemeUtils.createUiContext(mContext);
+        }
+        return mUiContext != null ? mUiContext : mContext;
     }
 
     @Override

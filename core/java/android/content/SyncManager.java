@@ -17,6 +17,7 @@
 package android.content;
 
 import com.android.internal.R;
+import com.android.internal.app.ThemeUtils;
 import com.android.internal.util.ArrayUtils;
 import com.google.android.collect.Lists;
 import com.google.android.collect.Maps;
@@ -131,6 +132,7 @@ public class SyncManager implements OnAccountsUpdateListener {
     private static final int MAX_SIMULTANEOUS_INITIALIZATION_SYNCS;
 
     private Context mContext;
+    private Context mUiContext;
 
     private volatile Account[] mAccounts = INITIAL_ACCOUNTS_ARRAY;
 
@@ -180,6 +182,12 @@ public class SyncManager implements OnAccountsUpdateListener {
     private BroadcastReceiver mBootCompletedReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             mSyncHandler.onBootCompleted();
+        }
+    };
+
+    private BroadcastReceiver mThemeChangeReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            mUiContext = null;
         }
     };
 
@@ -336,6 +344,8 @@ public class SyncManager implements OnAccountsUpdateListener {
         intentFilter = new IntentFilter(Intent.ACTION_SHUTDOWN);
         intentFilter.setPriority(100);
         context.registerReceiver(mShutdownIntentReceiver, intentFilter);
+
+        ThemeUtils.registerThemeChangeReceiver(mContext, mThemeChangeReceiver);
 
         if (!factoryTest) {
             mNotificationMgr = (NotificationManager)
@@ -889,6 +899,13 @@ public class SyncManager implements OnAccountsUpdateListener {
             Log.d(TAG, "not retrying sync operation because the error is a hard error: "
                     + operation);
         }
+    }
+
+    private Context getUiContext() {
+        if (mUiContext == null) {
+            mUiContext = ThemeUtils.createUiContext(mContext);
+        }
+        return mUiContext != null ? mUiContext : mContext;
     }
 
     /**
@@ -2402,7 +2419,7 @@ public class SyncManager implements OnAccountsUpdateListener {
                 new Notification(R.drawable.stat_notify_sync_error,
                         mContext.getString(R.string.contentServiceSync),
                         System.currentTimeMillis());
-            notification.setLatestEventInfo(mContext,
+            notification.setLatestEventInfo(getUiContext(),
                     mContext.getString(R.string.contentServiceSyncNotificationTitle),
                     String.format(tooManyDeletesDescFormat.toString(), authorityName),
                     pendingIntent);
