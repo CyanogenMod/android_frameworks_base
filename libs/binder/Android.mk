@@ -18,18 +18,26 @@ sources := \
     BpBinder.cpp \
     CursorWindow.cpp \
     IInterface.cpp \
-    IMemory.cpp \
     IPCThreadState.cpp \
     IPermissionController.cpp \
     IServiceManager.cpp \
     MemoryDealer.cpp \
     MemoryBase.cpp \
-    MemoryHeapBase.cpp \
     MemoryHeapPmem.cpp \
     Parcel.cpp \
     PermissionCache.cpp \
     ProcessState.cpp \
     Static.cpp
+
+ifeq ($(TARGET_SENSE_CAMERA),true)
+    LOCAL_SRC_FILES+= \
+        IMemoryHtc.cpp \
+        MemoryHeapBaseHtc.cpp
+else
+    LOCAL_SRC_FILES+= \
+        IMemory.cpp \
+        MemoryHeapBase.cpp
+endif
 
 LOCAL_PATH:= $(call my-dir)
 

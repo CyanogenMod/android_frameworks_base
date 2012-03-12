@@ -66,6 +66,10 @@ LOCAL_SHARED_LIBRARIES := \
 LOCAL_C_INCLUDES := \
     external/skia/include/core
 
+ifeq ($(TARGET_SENSE_CAMERA),true)
+    LOCAL_SRC_FILES+= OverlayHtc.cpp
+endif
+
 ifeq ($(BOARD_USES_QCOM_HARDWARE),true)
 LOCAL_CFLAGS += -DQCOM_HARDWARE
 endif
