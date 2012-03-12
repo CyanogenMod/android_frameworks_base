@@ -28,7 +28,7 @@
     <string name="petabyteShort" msgid="5637816680144990219">"PB"</string>
     <string name="fileSizeSuffix" msgid="7670819340156489359">"<xliff:g id="NUMBER">%1$s</xliff:g><xliff:g id="UNIT">%2$s</xliff:g>"</string>
     <string name="untitled" msgid="6071602020171759109">"&lt;sem título&gt;"</string>
-    <string name="ellipsis" msgid="7899829516048813237">"…"</string>
+    <string name="ellipsis" msgid="7899829516048813237">"\u2026"</string>
     <string name="ellipsis_two_dots" msgid="1228078994866030736">".."</string>
     <string name="emptyPhoneNumber" msgid="7694063042079676517">"(Nenhum número de telefone)"</string>
     <string name="unknownName" msgid="2277556546742746522">"(Desconhecido)"</string>
@@ -143,7 +143,7 @@
     <skip />
     <!-- no translation found for silent_mode_ring (8592241816194074353) -->
     <skip />
-    <string name="shutdown_progress" msgid="2281079257329981203">"Encerrando…"</string>
+    <string name="shutdown_progress" msgid="2281079257329981203">"Encerrando\u2026"</string>
     <string name="shutdown_confirm" product="tablet" msgid="3385745179555731470">"Seu tablet será desligado."</string>
     <string name="shutdown_confirm" product="default" msgid="649792175242821353">"O seu telefone será desligado."</string>
     <string name="shutdown_confirm_question" msgid="6656441286856415014">"Gostaria de desligar?"</string>
@@ -687,7 +687,7 @@
     <string name="lockscreen_sim_puk_locked_message" msgid="7441797339976230">"O cartão SIM está bloqueado pelo PUK."</string>
     <string name="lockscreen_sim_puk_locked_instructions" msgid="635967534992394321">"Consulte o Guia do Usuário ou entre em contato com o Serviço de atendimento ao cliente."</string>
     <string name="lockscreen_sim_locked_message" msgid="8066660129206001039">"O cartão SIM está bloqueado."</string>
-    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"Desbloqueando o cartão SIM…"</string>
+    <string name="lockscreen_sim_unlock_progress_dialog_message" msgid="595323214052881264">"Desbloqueando o cartão SIM\u2026"</string>
     <string name="lockscreen_too_many_failed_attempts_dialog_message" msgid="3514742106066877476">"Você desenhou incorretamente o seu padrão de desbloqueio <xliff:g id="NUMBER_0">%d</xliff:g> vezes. "\n\n"Tente novamente em <xliff:g id="NUMBER_1">%d</xliff:g> segundos."</string>
     <string name="lockscreen_too_many_failed_password_attempts_dialog_message" msgid="4906034376425175381">"Você inseriu incorretamente a sua senha <xliff:g id="NUMBER_0">%d</xliff:g> vezes. "\n\n"Tente novamente em <xliff:g id="NUMBER_1">%d</xliff:g> segundos."</string>
     <string name="lockscreen_too_many_failed_pin_attempts_dialog_message" msgid="6827749231465145590">"Você digitou incorretamente o seu PIN <xliff:g id="NUMBER_0">%d</xliff:g> vezes. "\n\n"Tente novamente em <xliff:g id="NUMBER_1">%d</xliff:g> segundos."</string>
@@ -707,7 +707,7 @@
     <string name="lockscreen_glogin_submit_button" msgid="7130893694795786300">"Fazer login"</string>
     <string name="lockscreen_glogin_invalid_input" msgid="1364051473347485908">"Nome de usuário ou senha inválidos."</string>
     <string name="lockscreen_glogin_account_recovery_hint" msgid="8253152905532900548">"Esqueceu seu nome de usuário ou senha?"\n"Acesse "<b>"google.com/accounts/recovery"</b></string>
-    <string name="lockscreen_glogin_checking_password" msgid="6758890536332363322">"Verificando..."</string>
+    <string name="lockscreen_glogin_checking_password" msgid="6758890536332363322">"Verificando\u2026"</string>
     <string name="lockscreen_unlock_label" msgid="737440483220667054">"Desbloquear"</string>
     <string name="lockscreen_sound_on_label" msgid="9068877576513425970">"Som ativado"</string>
     <string name="lockscreen_sound_off_label" msgid="996822825154319026">"Som desativado"</string>
@@ -880,10 +880,10 @@
     <string name="cut" msgid="3092569408438626261">"Recortar"</string>
     <string name="copy" msgid="2681946229533511987">"Copiar"</string>
     <string name="paste" msgid="5629880836805036433">"Colar"</string>
-    <string name="replace" msgid="5781686059063148930">"Substituir..."</string>
+    <string name="replace" msgid="5781686059063148930">"Substituir\u2026"</string>
     <string name="delete" msgid="6098684844021697789">"Excluir"</string>
     <string name="copyUrl" msgid="2538211579596067402">"Copiar URL"</string>
-    <string name="selectTextMode" msgid="6738556348861347240">"Selecionar texto..."</string>
+    <string name="selectTextMode" msgid="6738556348861347240">"Selecionar texto\u2026"</string>
     <string name="textSelectionCABTitle" msgid="5236850394370820357">"Seleção de texto"</string>
     <string name="addToDictionary" msgid="9090375111134433012">"adicionar ao dicionário"</string>
     <string name="deleteText" msgid="7070985395199629156">"excluir"</string>
@@ -897,7 +897,7 @@
     <string name="yes" msgid="5362982303337969312">"OK"</string>
     <string name="no" msgid="5141531044935541497">"Cancelar"</string>
     <string name="dialog_alert_title" msgid="2049658708609043103">"Atenção"</string>
-    <string name="loading" msgid="1760724998928255250">"Carregando..."</string>
+    <string name="loading" msgid="1760724998928255250">"Carregando\u2026"</string>
     <string name="capital_on" msgid="1544682755514494298">"LIG"</string>
     <string name="capital_off" msgid="6815870386972805832">"DESL"</string>
     <string name="whichApplication" msgid="4533185947064773386">"Complete a ação usando"</string>
@@ -925,7 +925,7 @@
     <string name="screen_compat_mode_hint" msgid="2953716574198046484">"Reativar em Configurações &gt; Aplicativos &gt; Gerenciar aplicativos."</string>
     <string name="smv_application" msgid="295583804361236288">"O aplicativo <xliff:g id="APPLICATION">%1$s</xliff:g> (processo <xliff:g id="PROCESS">%2$s</xliff:g>) violou a política StrictMode imposta automaticamente."</string>
     <string name="smv_process" msgid="5120397012047462446">"O processo <xliff:g id="PROCESS">%1$s</xliff:g> violou a política StrictMode imposta automaticamente."</string>
-    <string name="android_upgrading_title" msgid="378740715658358071">"O Android está sendo atualizado..."</string>
+    <string name="android_upgrading_title" msgid="378740715658358071">"O Android está sendo atualizado\u2026"</string>
     <string name="android_upgrading_apk" msgid="274409861603566003">"Otimizando aplicativo <xliff:g id="NUMBER_0">%1$d</xliff:g> de <xliff:g id="NUMBER_1">%2$d</xliff:g>."</string>
     <string name="android_upgrading_starting_apps" msgid="7959542881906488763">"Iniciando os aplicativos."</string>
     <string name="android_upgrading_complete" msgid="1405954754112999229">"Concluindo a inicialização."</string>
@@ -1111,10 +1111,10 @@
     <item quantity="other" msgid="4641872797067609177">"<xliff:g id="INDEX">%d</xliff:g> de <xliff:g id="TOTAL">%d</xliff:g>"</item>
   </plurals>
     <string name="action_mode_done" msgid="7217581640461922289">"Concluído"</string>
-    <string name="progress_unmounting" product="nosdcard" msgid="535863554318797377">"Desconectando armazenamento USB..."</string>
-    <string name="progress_unmounting" product="default" msgid="5556813978958789471">"Desconectando cartão SD..."</string>
-    <string name="progress_erasing" product="nosdcard" msgid="4183664626203056915">"Apagando o armazenamento USB..."</string>
-    <string name="progress_erasing" product="default" msgid="2115214724367534095">"Apagando cartão SD..."</string>
+    <string name="progress_unmounting" product="nosdcard" msgid="535863554318797377">"Desconectando armazenamento USB\u2026"</string>
+    <string name="progress_unmounting" product="default" msgid="5556813978958789471">"Desconectando cartão SD\u2026"</string>
+    <string name="progress_erasing" product="nosdcard" msgid="4183664626203056915">"Apagando o armazenamento USB\u2026"</string>
+    <string name="progress_erasing" product="default" msgid="2115214724367534095">"Apagando cartão SD\u2026"</string>
     <string name="format_error" product="nosdcard" msgid="6299769563624776948">"Não foi possível apagar o armazenamento USB."</string>
     <string name="format_error" product="default" msgid="7315248696644510935">"Não foi possível apagar o cartão SD."</string>
     <string name="media_bad_removal" msgid="7960864061016603281">"O cartão SD foi removido antes de ser desconectado."</string>
@@ -1193,7 +1193,7 @@
     <string name="storage_internal" msgid="7556050805474115618">"Armazenamento interno"</string>
     <string name="storage_sd_card" msgid="8921771478629812343">"Cartão SD"</string>
     <string name="storage_usb" msgid="3017954059538517278">"Armazenamento USB"</string>
-    <string name="extract_edit_menu_button" msgid="302060189057163906">"Editar..."</string>
+    <string name="extract_edit_menu_button" msgid="302060189057163906">"Editar\u2026"</string>
     <string name="data_usage_warning_title" msgid="1955638862122232342">"Aviso sobre uso de dados"</string>
     <string name="data_usage_warning_body" msgid="7217480745540055170">"Toque p/ ver uso e configurações"</string>
     <string name="data_usage_3g_limit_title" msgid="7093334419518706686">"Dados 2G e 3G desativados"</string>
@@ -1222,12 +1222,60 @@
     <string name="fingerprints" msgid="4516019619850763049">"Impressões digitais"</string>
     <string name="sha256_fingerprint" msgid="4391271286477279263">"Impressão digital SHA-256"</string>
     <string name="sha1_fingerprint" msgid="7930330235269404581">"Impressão digital SHA-1"</string>
-    <string name="activity_chooser_view_see_all" msgid="180268188117163072">"Ver todos..."</string>
+    <string name="activity_chooser_view_see_all" msgid="180268188117163072">"Ver todos\u2026"</string>
     <string name="activity_chooser_view_dialog_title_default" msgid="3325054276356556835">"Selecionar atividade"</string>
-    <string name="share_action_provider_share_with" msgid="1791316789651185229">"Compartilhar com..."</string>
+    <string name="share_action_provider_share_with" msgid="1791316789651185229">"Compartilhar com\u2026"</string>
     <string name="status_bar_device_locked" msgid="3092703448690669768">"Dispositivo bloqueado."</string>
     <string name="list_delimeter" msgid="3975117572185494152">", "</string>
-    <string name="sending" msgid="8715108995741758718">"Enviando..."</string>
+    <string name="sending" msgid="8715108995741758718">"Enviando\u2026"</string>
     <string name="launchBrowserDefault" msgid="2057951947297614725">"Abrir Navegador?"</string>
     <string name="SetupCallDefault" msgid="6870275517518479651">"Aceitar chamada?"</string>
+
+    <!-- Names of default profiles. -->
+    <string name="profileNameDefault">Padrão</string>
+    <string name="profileNameWork">Trabalho</string>
+    <string name="profileNameHome">Casa</string>
+    <string name="profileNameSilent">Silêncio</string>
+    <string name="profileNameNight">Noite</string>
+
+    <!-- Names of application groups. -->
+    <string name="profileGroupPhone">Telefone</string>
+    <string name="profileGroupCalendar">Agenda</string>
+    <string name="profileGroupGmail">Gmail</string>
+    <string name="profileGroupEmail">Email</string>
+    <string name="profileGroupSMS">SMS</string>
+
+    <!-- Name of wildcard profile. -->
+    <string name="wildcardProfile">Outro</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_choose_profile">Escolher perfil</string>
+
+    <!-- Button to reboot the phone, within the Phone Options dialog -->
+    <string name="reboot_system" product="tablet">Reiniciar tablet</string>
+    <string name="reboot_system" product="default">Reiniciar telefone</string>
+
+    <!-- label for item that screenshots in phone options dialog -->
+    <string name="global_action_screenshot">Capturar tela</string>
+
+    <!-- label for item that reboots the phone in phone options dialog -->
+    <string name="global_action_reboot">Reiniciar</string>
+
+    <!-- Button to reboot the phone, within the Reboot Options dialog -->
+    <string name="reboot_reboot">Reiniciar</string>
+    <!-- Button to reboot the phone into recovery, within the Reboot Options dialog -->
+    <string name="reboot_recovery">Recuperação</string>
+    <!-- Button to reboot the phone into bootloader, within the Reboot Options dialog -->
+    <string name="reboot_bootloader">Bootloader</string>
+    <!-- Button to reboot the phone into bootmenu, within the Reboot Options dialog -->
+    <string name="reboot_bootmenu">Menu de boot</string>
+    <!-- Button to reboot the phone into fastboot, within the Reboot Options dialog -->
+    <string name="reboot_fastboot">Fastboot</string>
+    <!-- Button to reboot the phone into download, within the Reboot Options dialog -->
+    <string name="reboot_download">Download</string>
+
+    <!-- Reboot Progress Dialog. This is shown if the user chooses to reboot the phone. -->
+    <string name="reboot_progress">Reiniciando\u2026</string>
+    <!-- Reboot Confirmation Dialog.  When the user chooses to reboot the phone, there will be a confirmation dialog.  This is the message. -->
+    <string name="reboot_confirm">Seu telefone vai reiniciar.</string>
 </resources>
