@@ -53,6 +53,7 @@ import android.os.Vibrator;
 import android.provider.CmSystem;
 import android.provider.Settings;
 
+import com.android.internal.app.ThemeUtils;
 import com.android.internal.policy.PolicyManager;
 import com.android.internal.statusbar.IStatusBarService;
 import com.android.internal.telephony.ITelephony;
@@ -187,6 +188,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
     final Object mLock = new Object();
 
     Context mContext;
+    Context mUiContext;
     IWindowManager mWindowManager;
     LocalPowerManager mPowerManager;
     Vibrator mVibrator; // Vibrator for giving feedback of orientation changes
@@ -588,7 +590,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
                     if (uid >= Process.FIRST_APPLICATION_UID && uid <= Process.LAST_APPLICATION_UID
                             && appInfo.importance == RunningAppProcessInfo.IMPORTANCE_FOREGROUND) {
                         // Kill the entire pid
-                        Toast.makeText(mContext, R.string.app_killed_message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getUiContext(), R.string.app_killed_message, Toast.LENGTH_SHORT).show();
                         if (appInfo.pkgList!=null && (apps.size() > 0)){
                                 mgr.forceStopPackage(appInfo.pkgList[0]);
                         }else{
@@ -657,6 +659,13 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             sendMediaButtonEvent(KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE);
         };
     };
+
+    private Context getUiContext() {
+        if (mUiContext == null) {
+            mUiContext = ThemeUtils.createUiContext(mContext);
+        }
+        return mUiContext != null ? mUiContext : mContext;
+    }
 
     protected void sendMediaButtonEvent(int code) {
         long eventtime = SystemClock.uptimeMillis();
@@ -768,6 +777,8 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             mDockMode = intent.getIntExtra(Intent.EXTRA_DOCK_STATE,
                     Intent.EXTRA_DOCK_STATE_UNDOCKED);
         }
+        // register for theme change events
+        ThemeUtils.registerThemeChangeReceiver(context, mThemeChangeReceiver);
         mVibrator = new Vibrator();
         mLongPressVibePattern = loadHaptic(HapticFeedbackConstants.LONG_PRESS);
         mVirtualKeyVibePattern = loadHaptic(HapticFeedbackConstants.VIRTUAL_KEY);
@@ -2358,6 +2369,12 @@ public class PhoneWindowManager implements WindowManagerPolicy {
             }
             updateRotation(Surface.FLAGS_ORIENTATION_ANIMATION_DISABLE);
             updateOrientationListenerLp();
+        }
+    };
+
+    BroadcastReceiver mThemeChangeReceiver = new BroadcastReceiver() {
+        public void onReceive(Context context, Intent intent) {
+            mUiContext = null;
         }
     };
 

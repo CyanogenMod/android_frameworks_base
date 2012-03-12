@@ -174,6 +174,20 @@ ifeq ($(BOARD_HAVE_FM_RADIO),true)
     ifeq ($(BOARD_FM_DEVICE),wl1271)
         LOCAL_SRC_FILES += android_hardware_fm_wl1271.cpp
     endif
+    ifeq ($(BOARD_FM_DEVICE),ti-st)
+        LOCAL_SRC_FILES += android_hardware_fm_ti-st.cpp
+        LOCAL_SHARED_LIBRARIES += libfmstack libmcphal
+        FMSTACK := hardware/ti/wpan/fmradio/fm_stack
+        LOCAL_C_INCLUDES += $(FMSTACK)/HSW_FMStack/stack/inc/ \
+                            $(FMSTACK)/MCP_Common/Platform/fmhal/LINUX/common/inc/ \
+                            $(FMSTACK)/MCP_Common/Platform/os/LINUX/common/inc \
+                            $(FMSTACK)/MCP_Common/inc/ \
+                            $(FMSTACK)/MCP_Common/Platform/inc/ \
+                            $(FMSTACK)/MCP_Common/Platform/os/LINUX/android_zoom2/inc/ \
+                            $(FMSTACK)/MCP_Common/Platform/fmhal/inc/int/ \
+                            $(FMSTACK)/MCP_Common/Platform/fmhal/inc \
+                            $(FMSTACK)/HSW_FMStack/stack/inc/int/
+    endif
 endif
 
 LOCAL_C_INCLUDES += \
@@ -199,7 +213,7 @@ LOCAL_C_INCLUDES += \
 	external/jpeg \
 	frameworks/opt/emoji
 
-LOCAL_SHARED_LIBRARIES := \
+LOCAL_SHARED_LIBRARIES += \
 	libexpat \
 	libnativehelper \
 	libcutils \
