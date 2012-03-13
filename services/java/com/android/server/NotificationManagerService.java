@@ -1820,11 +1820,11 @@ public class NotificationManagerService extends INotificationManager.Stub
                             intent, 0);
 
                     try {
-                    	//The service context doesn't contain the style needed to skin the notification in the Status Bar
-                    	Context c = mContext.createPackageContext("com.android.systemui",Context.CONTEXT_RESTRICTED);
+                        //The service context doesn't contain the style needed to skin the notification in the Status Bar
+                        Context c = mContext.createPackageContext("com.android.systemui",Context.CONTEXT_RESTRICTED);
                         mAdbNotification.setLatestEventInfo(c, title, message, pi);
                     } catch(Exception ex) {
-                    	//Program would NEVER follow this path. If so we use the current context
+                        //Program would NEVER follow this path. If so we use the current context
                         mAdbNotification.setLatestEventInfo(mContext, title, message, pi);
                     }
 
